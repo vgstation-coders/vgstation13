@@ -19,7 +19,6 @@ BSQL_PROTECT_DATUM(/datum/BSQL_Connection)
 	var/error = world._BSQL_Internal_Call("CreateConnection", connection_type, "[asyncTimeout]", "[blockingTimeout]", "[threadLimit]")
 	if(error)
 		BSQL_ERROR(error)
-		return
 
 	id = world._BSQL_Internal_Call("GetConnection")
 	if(!id)
@@ -37,12 +36,10 @@ BSQL_DEL_PROC(/datum/BSQL_Connection)
 	var/error = world._BSQL_Internal_Call("OpenConnection", id, ipaddress, "[port]", username, password, database)
 	if(error)
 		BSQL_ERROR(error)
-		return
 
 	var/op_id = world._BSQL_Internal_Call("GetOperation")
 	if(!op_id)
 		BSQL_ERROR("Library failed to provide connect operation for connection id [id]([connection_type])!")
-		return
 
 	return new /datum/BSQL_Operation(src, op_id)
 
@@ -51,15 +48,13 @@ BSQL_DEL_PROC(/datum/BSQL_Connection)
 	var/error = world._BSQL_Internal_Call("NewQuery", id, query)
 	if(error)
 		BSQL_ERROR(error)
-		return
 
 	var/op_id = world._BSQL_Internal_Call("GetOperation")
 	if(!op_id)
 		BSQL_ERROR("Library failed to provide query operation for connection id [id]([connection_type])!")
-		return
 
 	return new /datum/BSQL_Operation/Query(src, op_id)
-	
+
 /datum/BSQL_Connection/Quote(str)
 	if(!str)
 		return null;

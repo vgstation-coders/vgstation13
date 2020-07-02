@@ -5,7 +5,6 @@
 	icon_state = "doorctrl0"
 	desc = "A remote control-switch for a door."
 	power_channel = ENVIRON
-	var/id_tag = null
 	var/range = 10
 	var/normaldoorcontrol = 0
 	var/specialfunctions = 1

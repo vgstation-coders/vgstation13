@@ -5,7 +5,7 @@
 
 	anchored = 1
 
-	var/id_tag
+
 	var/frequency = 1439
 
 	var/on = 1
@@ -104,13 +104,15 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 
 /obj/machinery/air_sensor/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'

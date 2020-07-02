@@ -389,8 +389,8 @@
 			stance = HOSTILE_STANCE_ATTACK
 			alpha_stance = WOLF_ALPHAATTACK
 			alpha_target = target
-			add_attacklogs(pack_alpha, target, "set [src] (wolf) on")
-			log_admin("[key_name(pack_alpha)] has ordered a wolf named \[src] to attack [key_name(target)] @([src.x], [src.y], [src.z])", admin_warn = TRUE)
+			add_attacklogs(pack_alpha, target, "set [src] (wolf) on", admin_warn = TRUE)
+			log_admin("[key_name(pack_alpha)] has ordered a wolf named \[src] to attack [key_name(target)] @([src.x], [src.y], [src.z])")
 		if(istype (target, /turf)) //We go!
 			alpha_stance = WOLF_ALPHAMOVE
 			alpha_target = target

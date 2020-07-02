@@ -24,7 +24,7 @@
 	var/obj/machinery/smartglass_electronics/smartwindow
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
-	var/id_tag = null
+	 
 
 /obj/machinery/door/window/New()
 	..()

@@ -46,7 +46,7 @@ var/global/list/deadmins = list()
 var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
-var/global/list/type_instances[0]
+var/list/type_instances = list()
 
 /var/global/datum/map/active/map = new() //Current loaded map
 //Defined in its .dm, see maps/_map.dm for more info.
@@ -227,8 +227,6 @@ var/forum_authenticated_group = "10"
 	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0
 var/custom_event_msg = null
-
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
 
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000
@@ -436,6 +434,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
+		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		)
 
 //Boss monster list

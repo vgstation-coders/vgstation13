@@ -120,7 +120,6 @@ var/list/SPS_list = list()
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return TRUE
-		a = strict_ascii(a)
 		if(!a) //what a check
 			return TRUE
 		if(length(a) > 5)
@@ -203,6 +202,3 @@ var/list/SPS_list = list()
 			boop = TRUE
 	if (boop)
 		playsound(src,'sound/machines/radioboop.ogg',40,1)
-			
-		
-		

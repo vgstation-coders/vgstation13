@@ -20,6 +20,9 @@ var/savefile/panicfile
 	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
 		call(extools_path, "maptick_initialize")()
+		#if EXTOOLS_REFERENCE_TRACKING
+		call(extools_path, "ref_tracking_initialize")()
+		#endif
 	else
 		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet

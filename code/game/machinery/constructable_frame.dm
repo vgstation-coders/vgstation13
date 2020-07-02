@@ -1442,3 +1442,32 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/console_screen = 1,
 		/obj/item/weapon/stock_parts/micro_laser = 3,
 	)
+
+/obj/item/weapon/circuitboard/mind_machine_hub
+	name = "Circuit Board (Mind Machine Hub)"
+	desc = "A circuit board used to run a mind machine hub"
+	build_path = /obj/machinery/mind_machine/mind_machine_hub
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator/nano = 2,
+		/obj/item/weapon/stock_parts/subspace/analyzer = 1,
+		/obj/item/weapon/stock_parts/subspace/filter = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/console_screen = 1
+	)
+
+/obj/item/weapon/circuitboard/mind_machine_pod
+	name = "Circuit Board (Mind Machine Pod)"
+	desc = "A circuit board used to run a mind machine pod"
+	build_path = /obj/machinery/mind_machine/mind_machine_pod
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+		/obj/item/weapon/stock_parts/subspace/treatment = 1,
+		/obj/item/weapon/stock_parts/subspace/ansible = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/subspace/crystal = 1,
+		/obj/item/weapon/stock_parts/subspace/transmitter = 1
+		)

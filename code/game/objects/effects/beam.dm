@@ -404,10 +404,6 @@
 		returnToPool(src)
 		return
 
-	var/turf/T = get_turf(src)
-	if(T && T.on_density_change)
-		locDensity = T.on_density_change.Add(src, "turf_density_change")
-
 	if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] end of world")
@@ -452,6 +448,10 @@
 			src._re_emit = 0
 			returnToPool(src)
 			return
+
+	var/turf/T = get_turf(src)
+	if(T && T.on_density_change)
+		locDensity = T.on_density_change.Add(src, "turf_density_change")
 
 	next = spawn_child()
 	if(next)

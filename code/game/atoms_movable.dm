@@ -675,9 +675,8 @@
 /atom/movable/overlay/New()
 	. = ..()
 	if(!loc)
-		CRASH("[type] created in nullspace.")
 		qdel(src)
-		return
+		CRASH("[type] created in nullspace.")
 
 	master = loc
 	name = master.name

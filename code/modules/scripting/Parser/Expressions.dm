@@ -209,7 +209,7 @@
 	var/datum/stack/val = new
 	src.expecting = VALUE
 	var/loop = 0
-	for()
+	while(TRUE)
 		loop++
 		if(loop > 800)
 			errors += new/datum/scriptError("Too many nested tokens.")
@@ -327,7 +327,7 @@
 	NextToken() //skip open parenthesis, already found
 	var/loops = 0
 
-	for()
+	while(TRUE)
 		loops++
 		if(loops >= 800)
 			errors += new/datum/scriptError("Too many nested expressions.")

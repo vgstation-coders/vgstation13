@@ -34,7 +34,7 @@
 	density = 1
 	var/obj/machinery/compressor/compressor
 	var/list/obj/machinery/door/poddoor/doors
-	var/id_tag = 0
+	id_tag = 0
 	var/door_status = 0
 
 	light_color = LIGHT_COLOR_BLUE

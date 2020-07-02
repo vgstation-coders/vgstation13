@@ -22,7 +22,6 @@ BSQL_DEL_PROC(/datum/BSQL_Operation)
 	var/result = world._BSQL_Internal_Call("OpComplete", connection.id, id)
 	if(!result)
 		BSQL_ERROR("Error fetching operation [id] for connection [connection.id]!")
-		return
 	return result == "DONE"
 
 /datum/BSQL_Operation/GetError()
@@ -43,5 +42,4 @@ BSQL_DEL_PROC(/datum/BSQL_Operation)
 		if(error == "Operation timed out!")	//match this with the implementation
 			return FALSE
 		BSQL_ERROR("Error waiting for operation [id] for connection [connection.id]! [error]")
-		return
 	return TRUE

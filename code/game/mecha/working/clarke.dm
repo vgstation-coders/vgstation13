@@ -28,6 +28,7 @@
 	..()
 	thruster_overlay = image('icons/mecha/mecha.dmi', src, "[initial_icon]-thruster_overlay")
 	scrubber = new(src)
+	mech_parts.Add(scrubber)
 
 /obj/mecha/working/clarke/Destroy()
 	qdel(scrubber)
@@ -85,6 +86,7 @@
 	//Perform the connection
 	scrubber_port = new_port
 	scrubber.connect(new_port)
+	mech_parts.Add(scrubber_port)
 
 	log_message("Connected to gas port.")
 	return 1
@@ -95,6 +97,7 @@
 
 	scrubber.disconnect()
 
+	mech_parts.Remove(scrubber_port)
 	scrubber_port = null
 	src.log_message("Disconnected from gas port.")
 	return 1

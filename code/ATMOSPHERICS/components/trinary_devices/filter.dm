@@ -26,18 +26,18 @@ Filter types:
 
 	ex_node_offset = 5
 
-obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
-obj/machinery/atmospherics/trinary/filter/New()
-	if(radio_controller)
+/obj/machinery/atmospherics/trinary/filter/New()
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 	..()
 
-obj/machinery/atmospherics/trinary/filter/update_icon()
+/obj/machinery/atmospherics/trinary/filter/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "hintact_off"
 	else if(node2 && node3 && node1)
@@ -47,14 +47,14 @@ obj/machinery/atmospherics/trinary/filter/update_icon()
 		on = 0
 	..()
 
-obj/machinery/atmospherics/trinary/filter/power_change()
+/obj/machinery/atmospherics/trinary/filter/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
 		on = !on
 		update_icon()
 
-obj/machinery/atmospherics/trinary/filter/process()
+/obj/machinery/atmospherics/trinary/filter/process()
 	. = ..()
 	if(!on)
 		return
@@ -109,12 +109,14 @@ obj/machinery/atmospherics/trinary/filter/process()
 
 	return 1
 
-obj/machinery/atmospherics/trinary/filter/initialize()
+/obj/machinery/atmospherics/trinary/filter/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 	..()
 
 
-obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
+/obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 	if(..())
 		return
 
@@ -167,7 +169,7 @@ obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 	onclose(user, "atmo_filter")
 	return
 
-obj/machinery/atmospherics/trinary/filter/Topic(href, href_list) // -- TLE
+/obj/machinery/atmospherics/trinary/filter/Topic(href, href_list) // -- TLE
 	if(..())
 		return
 	usr.set_machine(src)

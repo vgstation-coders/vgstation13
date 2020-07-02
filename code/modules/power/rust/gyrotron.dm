@@ -12,7 +12,6 @@
 	var/emitting = 0
 	var/rate = 10
 	var/mega_energy = 0.001
-	var/id_tag
 
 	req_access = list(access_engine)
 

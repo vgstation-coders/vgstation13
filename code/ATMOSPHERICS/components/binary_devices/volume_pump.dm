@@ -25,7 +25,7 @@ Thus, the two variables affect pump operation are set in New():
 
 	var/frequency = 0
 	var/pump_stalled = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
@@ -59,7 +59,7 @@ Thus, the two variables affect pump operation are set in New():
 		return
 	else
 		pump_stalled = 0
-		update_icon() 
+		update_icon()
 
 	var/transfer_ratio = max(1, transfer_rate/air1.volume)
 

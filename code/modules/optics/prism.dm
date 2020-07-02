@@ -134,5 +134,6 @@ var/list/obj/machinery/prism/prism_list = list()
 		icon_state = "prism_on"
 	else
 		icon_state = "prism_off"
-		returnToPool(beam)
-		beam=null
+		if (beam)
+			returnToPool(beam)
+			beam=null

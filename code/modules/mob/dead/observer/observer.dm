@@ -272,7 +272,6 @@ Works together with spawning an observer, noted above.
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)

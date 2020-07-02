@@ -181,7 +181,7 @@
 	icon = 'icons/obj/atmospherics/digital_valve.dmi'
 
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	mirror = /obj/machinery/atmospherics/trinary/tvalve/digital/mirrored
@@ -202,7 +202,7 @@
 			id_tag = newid
 			initialize()
 		return MT_UPDATE
-		
+
 	if("set_freq" in href_list)
 		var/newfreq=frequency
 		if(href_list["set_freq"]!="-1")

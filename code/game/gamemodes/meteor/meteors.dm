@@ -275,10 +275,26 @@
 			new /obj/item/projectile/meteor(get_turf(src), c_pickedgoal)
 	qdel(src)
 
-//Placeholder for actual meteors of this kind, will be included SOON
+//Placeholder for actual meteors of this kind, will be included literally never
 /obj/item/projectile/meteor/boss
-	name = "apocalytic meteor"
+	name = "apocalyptic meteor"
 	desc = "And behold, a white meteor. And on that meteor..."
+	projectile_speed = 4 //slow, massive, apocalyptic
+	
+/obj/item/projectile/meteor/boss/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/boss = matrix()
+	boss.Scale(1.5,1.5)
+	transform = boss
+	
+/obj/item/projectile/meteor/boss/to_bump(atom/A)
+
+	if(loc == null)
+		return
+
+	explosion(get_turf(src), 7, 14, 28, 32, 0, 1, 0) //adios
+	qdel(src)	
 
 /obj/item/projectile/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pickaxe)) //Yeah, you can totally do that

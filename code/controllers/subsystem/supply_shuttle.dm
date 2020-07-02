@@ -266,7 +266,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				for(var/j=1,j<=SPR.num_contained,j++)
 					contains += pick(SPR.contains)
 		else
-			contains = SP.contains
+			contains = SP.contains.Copy()
+			if(SP.selection_from.len) //for adding a 'set' of items
+				contains += pick(SP.selection_from)
 
 		for(var/typepath in contains)
 			if(!typepath)

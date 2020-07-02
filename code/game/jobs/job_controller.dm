@@ -48,8 +48,8 @@ var/global/datum/controller/occupations/job_master
 	job_debug.Add(text)
 	return 1
 
-
 /datum/controller/occupations/proc/GetJob(var/rank)
+	RETURN_TYPE(/datum/job)
 	if(!rank)
 		return null
 	for(var/datum/job/J in occupations)

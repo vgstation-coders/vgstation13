@@ -162,3 +162,23 @@
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/centrifuge
 
+/datum/design/mind_machine_hub
+	name = "Circuit Design (Mind Machine Hub)"
+	desc = "Allows for the construction of circuit boards used to build a mind machine hub."
+	id = "mind_machine_hub"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_BIOTECH = 5, Tc_ANOMALY = 2, Tc_PROGRAMMING = 4, Tc_NANOTRASEN = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/mind_machine_hub
+
+/datum/design/mind_machine_pod
+	name = "Circuit Design (Mind Machine Pod)"
+	desc = "Allows for the construction of circuit boards used to build a mind machine pod."
+	id = "mind_machine_pod"
+	req_tech = list(Tc_BLUESPACE = 4, Tc_BIOTECH = 5, Tc_ANOMALY = 2, Tc_PROGRAMMING = 4, Tc_NANOTRASEN = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/mind_machine_pod
+

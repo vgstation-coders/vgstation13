@@ -8,7 +8,7 @@
 	anchored = 1.0
 	power_channel = ENVIRON
 	var/frequency = 1439
-	var/id_tag
+
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4

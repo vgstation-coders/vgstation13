@@ -1,6 +1,6 @@
 /world/proc/_BSQL_Internal_Call(func, ...)
 	var/list/call_args = args.Copy(2)
-	BSQL_Debug("[.....]: [args[1]]([call_args.Join(", ")])")
+	BSQL_Debug("_BSQL_Internal_Call: [args[1]]([call_args.Join(", ")])")
 	. = call(_BSQL_Library_Path(), func)(arglist(call_args))
 	BSQL_Debug("Result: [. == null ? "NULL" : "\"[.]\""]")
 
@@ -15,19 +15,16 @@
 	if(!fexists(libPath))
 		BSQL_DEL_CALL(caller)
 		BSQL_ERROR("Could not find [libPath]!")
-		return
 
 	var/version = _BSQL_Internal_Call("Version")
 	if(version != BSQL_VERSION)
 		BSQL_DEL_CALL(caller)
 		BSQL_ERROR("BSQL DMAPI version mismatch! Expected [BSQL_VERSION], got [version == null ? "NULL" : version]!")
-		return
 
 	var/result = _BSQL_Internal_Call("Initialize")
 	if(result)
 		BSQL_DEL_CALL(caller)
 		BSQL_ERROR(result)
-		return
 	_BSQL_Initialized(TRUE)
 
 /world/proc/_BSQL_Initialized(new_val)

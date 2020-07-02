@@ -14,6 +14,10 @@
   * Datum for generating a message overlay on the map
   * Ported from TGStation; https://github.com/tgstation/tgstation/pull/50608/, author:  bobbahbrown
   */
+
+// Cached runechat icon
+var/runechat_icon = null
+
 /datum/chatmessage
 	/// The visual element of the chat messsage
 	var/image/message
@@ -42,7 +46,7 @@
 		CRASH("Invalid target given for chatmessage")
 	if(!istype(owner) || owner.gcDestroyed || !owner.client)
 		stack_trace("/datum/chatmessage created with [isnull(owner) ? "null" : "invalid"] mob owner")
-		qdel(src)
+		returnToPool(src)
 		return
 	generate_image(text, target, owner, extra_classes, lifespan)
 
@@ -88,7 +92,7 @@
 	// Reject whitespace
 	var/static/regex/whitespace = new(@"^\s*$")
 	if (whitespace.Find(text))
-		qdel(src)
+		returnToPool(src)
 		return
 
 	// Non mobs speakers can be small
@@ -97,8 +101,10 @@
 
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
-		var/image/r_icon = image('icons/chat_icons.dmi', icon_state = "radio")
-		text =  "\icon[r_icon]&nbsp;" + text
+		if (!runechat_icon)
+			var/image/r_icon = image('icons/chat_icons.dmi', icon_state = "radio")
+			runechat_icon =  "\icon[r_icon]&nbsp;"
+		text = runechat_icon + text
 
 	// We dim italicized text to make it more distinguishable from regular text
 	var/tgt_color = extra_classes.Find("italics") ? target.chat_color_darkened : target.chat_color
@@ -129,7 +135,7 @@
 
 	// Build message image
 	message = image(loc = message_loc, layer = CHAT_LAYER)
-	message.plane = MOB_PLANE
+	message.plane = ABOVE_HUMAN_PLANE
 	message.appearance_flags = APPEARANCE_UI_IGNORE_ALPHA | KEEP_APART
 	message.alpha = 0
 	message.pixel_y = owner.bound_height * 0.95
@@ -138,9 +144,12 @@
 	message.maptext_x = (CHAT_MESSAGE_WIDTH - owner.bound_width) * -0.5
 	message.maptext = complete_text
 
+	if (is_holder_of(owner, target)) // Special case, holding an atom speaking (pAI, recorder...)
+		message.plane = ABOVE_HUD_PLANE
+
 	// View the message
 	owned_by.seen_messages.Add(src)
-	owned_by.images |= message
+	owned_by.images += message
 	animate(message, alpha = 255, time = CHAT_MESSAGE_SPAWN_TIME)
 
 	// Prepare for destruction
@@ -149,17 +158,17 @@
 		end_of_life()
 
 /datum/chatmessage/proc/qdel_self()
-	qdel(src)
+	returnToPool(src)
 
 /**
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
-	if (gcDestroyed)
+	if (gcDestroyed || disposed)
 		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
-		qdel(src)
+		returnToPool(src)
 
 /**
   * Creates a message overlay at a defined location for a given speaker
@@ -180,7 +189,7 @@
 	extra_classes += existing_extra_classes
 
 	if (mode == SPEECH_MODE_WHISPER)
-		extra_classes |= "small"
+		extra_classes += "small"
 
 	if (client.toggle_runechat_outlines)
 		extra_classes += "black_outline"
@@ -190,19 +199,19 @@
 		if (4 to 5)
 			extra_classes |= "small"
 		if (5 to 16)
-			extra_classes |= "very_small"
+			extra_classes += "very_small"
 
 	if (!say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
-	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
+	getFromPool(/datum/chatmessage, raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
-#define CM_COLOR_SAT_MAX	0.7
-#define CM_COLOR_LUM_MIN	0.65
-#define CM_COLOR_LUM_MAX	0.75
+#define CM_COLOR_SAT_MAX	0.95
+#define CM_COLOR_LUM_MIN	0.70
+#define CM_COLOR_LUM_MAX	0.90
 
 /**
   * Gets a color for a name, will return the same color for a given string consistently within a round.atom
@@ -238,17 +247,17 @@
 	m *= 255
 	switch(h_int)
 		if(0)
-			return "[rgb(c,x,m)]C8"
+			return rgb(c,x,m)
 		if(1)
-			return "[rgb(x,c,m)]C8"
+			return rgb(x,c,m)
 		if(2)
-			return "[rgb(m,c,x)]C8"
+			return rgb(m,c,x)
 		if(3)
-			return "[rgb(m,x,c)]C8"
+			return rgb(m,x,c)
 		if(4)
-			return "[rgb(x,m,c)]C8"
+			return rgb(x,m,c)
 		if(5)
-			return "[rgb(c,m,x)]C8"
+			return rgb(c,m,x)
 
 /client/verb/toggle_runechat_outline()
 	set category = "OOC"

@@ -10,7 +10,7 @@
 	var/open = FALSE
 
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 	machine_flags = MULTITOOL_MENU
 
