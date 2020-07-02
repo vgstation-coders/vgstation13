@@ -241,6 +241,7 @@
 				return TRUE
 		if(href_list["mind_swap"])
 			if((occupantScan) && (!currentlySwapping))
+				log_admin("[key_name(usr)] mind swap at [formatJumpTo(get_turf(usr))]")
 				playsound(src, 'sound/machines/twobeep.ogg', 35, 1)
 				swapOccupants()
 				return TRUE
@@ -252,6 +253,7 @@
 				return TRUE
 		if(href_list["delay_swap"])
 			if(!currentlySwapping)
+				log_admin("[key_name(usr)] delayed mind swap at [formatJumpTo(get_turf(usr))]")
 				currentlySwapping = TRUE
 				playsound(src, 'sound/machines/twobeep.ogg', 35, 1)
 				delayedSwap()
@@ -382,6 +384,8 @@
 			return
 		soulShardSafety = FALSE
 		errorMessage = MINDMACHINE_SHARD_REACTION
+	if(isobserver(occupantOne.mind) || isobserver(occupantTwo.mind))	//Probably safest
+		return
 	currentlySwapping = TRUE
 	icon_state = "mind_hub_active"
 	connectOne.icon_state = "mind_pod_active"
@@ -407,6 +411,7 @@
 			return
 		swapProgress += 1
 		nanomanager.update_uis(src)
+	log_admin("Mind machine swap: [occupantOne] and [occupantTwo] at [formatJumpTo(get_turf(src))]")
 	if(malfSwap) ///////////Swaps begin///////
 		malfunction()
 		return
@@ -619,6 +624,7 @@
 			for(var/spell/S in M.spell_list)
 				M.remove_spell(S)
 			M.mind.transfer_to(woopsTarget)
+			log_admin("Mind machine malfunction: [M] sent into [woopsTarget] at [formatJumpTo(get_turf(woopsTarget))]")
 			for(var/spell/S in M_spells)
 				woopsTarget.add_spell(S)
 			woopsMobs.len = 0	//Just to be safe
