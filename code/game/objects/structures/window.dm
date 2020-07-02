@@ -206,7 +206,7 @@ var/list/one_way_windows
 	return 1
 
 //Someone threw something at us, please advise
-/obj/structure/window/hitby(AM as mob|obj)
+/obj/structure/window/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return

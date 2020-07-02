@@ -62,7 +62,7 @@
 	if(ismob(user))
 		shock(user, 60) //Give the user the benifit of the doubt
 
-/obj/structure/grille/hitby(AM as mob|obj)
+/obj/structure/grille/hitby(var/atom/movable/AM)
 	. = ..()
 	if(.)
 		return
