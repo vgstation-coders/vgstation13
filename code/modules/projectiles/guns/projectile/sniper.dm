@@ -139,10 +139,7 @@
 	if(!is_holder_of(usr, src))
 		return
 	if(wielded && scoped)
-		if(scope_toggled)
-			scope_toggled = 0
-		else
-			scope_toggled = 1
+		scope_toggled = !scope_toggled
 		update_wield(usr)
 	else
 		if(scoped)
