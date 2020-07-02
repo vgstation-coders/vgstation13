@@ -117,6 +117,7 @@
 		connectTwo = null
 	. = ..()
 
+
 /obj/machinery/mind_machine/mind_machine_hub/attackby(var/obj/item/A, var/mob/user)
 	..()
 	if(istype(A, /obj/item/bluespace_crystal))
@@ -431,9 +432,7 @@
 		errorMessage = MINDMACHINE_SCANNER_INSUFF
 		swapProgress = 0
 		currentlySwapping = FALSE
-		connectOne.icon_state = "mind_pod_closed"
-		connectTwo.icon_state = "mind_pod_closed"
-		icon_state = "mind_hub"
+		iconReset()
 		return
 	if(mindTypeOne == MINDMACHINE_SILICON && mindTypeTwo == MINDMACHINE_SILICON)
 		higherSwap() //Silicon swaps, checks if their pod is upgraded enough then performs normal swap
@@ -515,13 +514,7 @@
 	else
 		errorMessage = MINDMACHINE_SUM_TOO_LOW //There's just nothing to swap for monkeymen
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
-	currentlySwapping = FALSE
-	occupantScan = FALSE
-	connectOne.icon_state = "mind_pod_closed"
-	connectTwo.icon_state = "mind_pod_closed"
-	icon_state = "mind_hub"
-	swapProgress = 0
-	beenSwapped = TRUE
+	mainReset()
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/higherSwap()
 	var/mob/living/HO = occupantOne
@@ -552,13 +545,7 @@
 	HT.confused += 8
 	HT.dizziness += 8
 	bluespaceConduit -= 1
-	currentlySwapping = FALSE
-	occupantScan = FALSE
-	connectOne.icon_state = "mind_pod_closed"
-	connectTwo.icon_state = "mind_pod_closed"
-	icon_state = "mind_hub"
-	swapProgress = 0
-	beenSwapped = TRUE
+	mainReset()
 
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/animorphsSwap()
@@ -582,13 +569,7 @@
 	for(var/spell/S in animorph_spells)
 		animorph.add_spell(S)
 	bluespaceConduit -= 1
-	currentlySwapping = FALSE
-	occupantScan = FALSE
-	connectOne.icon_state = "mind_pod_closed"
-	connectTwo.icon_state = "mind_pod_closed"
-	icon_state = "mind_hub"
-	swapProgress = 0
-	beenSwapped = TRUE
+	mainReset()
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/malfunction()
 	malfSwap = FALSE
@@ -600,11 +581,8 @@
 		soulShardSafety = FALSE
 		errorMessage = MINDMACHINE_SAFETY_CONSUMED
 	bluespaceConduit -= 1
-	currentlySwapping = FALSE
-	occupantScan = FALSE
-	connectOne.icon_state = "mind_pod_closed"
-	connectTwo.icon_state = "mind_pod_closed"
-	icon_state = "mind_hub"
+	scanSwapReset()
+	iconReset()
 	swapProgress = 0
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/malfSwap(var/mob/living/M, var/MT)
@@ -676,17 +654,30 @@
 		dummy.mind.transfer_to(nuYou)
 	qdel(dummy)
 	bluespaceConduit -= 1
-	currentlySwapping = FALSE
-	occupantScan = FALSE
+	mainReset()
 	theFly.len = 0
 	simpFly.len = 0
 	mindFly.len = 0
+	errorMessage = MINDMACHINE_TRANSPORT_ANOM
+
+/obj/machinery/mind_machine/mind_machine_hub/proc/mainReset()
+	scanSwapReset()
+	iconReset()
+	postSwapReset()
+
+/obj/machinery/mind_machine/mind_machine_hub/proc/iconReset()
 	connectOne.icon_state = "mind_pod_closed"
 	connectTwo.icon_state = "mind_pod_closed"
 	icon_state = "mind_hub"
+
+/obj/machinery/mind_machine/mind_machine_hub/proc/scanSwapReset()
+	currentlySwapping = FALSE
+	occupantScan = FALSE
+
+/obj/machinery/mind_machine/mind_machine_hub/proc/postSwapReset()
 	swapProgress = 0
-	errorMessage = MINDMACHINE_TRANSPORT_ANOM
 	beenSwapped = TRUE
+
 
 //Swaps over///////////////
 //Pod stuff//////////
