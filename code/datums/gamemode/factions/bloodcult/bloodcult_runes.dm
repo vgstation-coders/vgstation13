@@ -351,25 +351,25 @@
 /obj/effect/rune/proc/manage_diseases()
 	virus2 = list()
 
-	if (rune.blood1)
-		rune.blood1.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood1_diseases = rune.blood1.data["virus2"]
+	if (blood1)
+		blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood1_diseases = blood1.data["virus2"]
 		for (var/ID in blood1_diseases)
 			var/datum/disease2/disease/V = blood1_diseases[ID]
 			if(istype(V))
 				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
-	if (rune.blood2)
-		rune.blood2.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood2diseases = rune.blood2.data["virus2"]
+	if (blood2)
+		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood2diseases = blood2.data["virus2"]
 		for (var/ID in blood2_diseases)
 			if (ID in virus2)
 				continue
 			var/datum/disease2/disease/V = blood2_diseases[ID]
 			if(istype(V))
 				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
-	if (rune.blood3)
-		rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood3_diseases = rune.blood3.data["virus2"]
+	if (blood3)
+		blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood3_diseases = blood3.data["virus2"]
 		for (var/ID in blood3_diseases)
 			if (ID in virus2)
 				continue
