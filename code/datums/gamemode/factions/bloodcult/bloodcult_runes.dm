@@ -348,7 +348,7 @@
 		return 1
 	return 0
 
-/obj/effect/rune/proc/manage_diseases()
+/obj/effect/rune/proc/manage_diseases(var/datum/reagent/blood/source)
 	virus2 = list()
 
 	if (blood1)
@@ -360,7 +360,7 @@
 				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
 	if (blood2)
 		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
-		var/list/datum/disease2/disease/blood2diseases = blood2.data["virus2"]
+		var/list/datum/disease2/disease/blood2_diseases = blood2.data["virus2"]
 		for (var/ID in blood2_diseases)
 			if (ID in virus2)
 				continue
@@ -574,7 +574,7 @@
 		if (source.data["virus2"])
 			rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
 
-	rune.manage_diseases()
+	rune.manage_diseases(source)
 
 	rune.update_icon()
 	if (rune.blood3)
