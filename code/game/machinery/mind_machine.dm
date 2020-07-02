@@ -9,29 +9,29 @@
 	light_power_on = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EMAGGABLE | FIXED2WORK | WRENCHMOVE
 
-#define CURRENTLY_ACTIVE "Currently active: please wait"
-#define PODS_UNLOCKED "Pods already unlocked"
-#define PODS_LOCKED "Pods are locked"
-#define REQ_SCAN "Require scan"
-#define DELAY_CAUTION "Proceed with caution: supervisor advised"
-#define MISSING_OCC "Missing occupant"
-#define CONDUIT_CHARGE "Conduit requires charge"
-#define SHIELD_ERROR "Critical error, aborting"
-#define LIVING_REQUIRED "Living mind required"
-#define SHARD_REACTION "Warning: Unknown internal reaction"
-#define SCANNER_INSUFF "Scanners insufficient"
-#define UNKNOWN_INT "Unknown interruption"
-#define SUM_TOO_LOW "Sum intelligence too low"
-#define DELIVERY_ERROR "Error in mind delivery"
-#define MIND_DAMAGED "Mind sustained damage"
-#define SAFETY_CONSUMED "Safety consumed"
-#define TRANSPORT_ANOM "Mind transport anomaly"
-#define NOERROR "No errors"
+#define MINDMACHINE_CURRENTLY_ACTIVE "Currently active: please wait"
+#define MINDMACHINE_PODS_UNLOCKED "Pods already unlocked"
+#define MINDMACHINE_PODS_LOCKED "Pods are locked"
+#define MINDMACHINE_REQ_SCAN "Require scan"
+#define MINDMACHINE_DELAY_CAUTION "Proceed with caution: supervisor advised"
+#define MINDMACHINE_MISSING_OCC "Missing occupant"
+#define MINDMACHINE_CONDUIT_CHARGE "Conduit requires charge"
+#define MINDMACHINE_SHIELD_ERROR "Critical error, aborting"
+#define MINDMACHINE_LIVING_REQUIRED "Living mind required"
+#define MINDMACHINE_SHARD_REACTION "Warning: Unknown internal reaction"
+#define MINDMACHINE_SCANNER_INSUFF "Scanners insufficient"
+#define MINDMACHINE_UNKNOWN_INT "Unknown interruption"
+#define MINDMACHINE_SUM_TOO_LOW "Sum intelligence too low"
+#define MINDMACHINE_DELIVERY_ERROR "Error in mind delivery"
+#define MINDMACHINE_MIND_DAMAGED "Mind sustained damage"
+#define MINDMACHINE_SAFETY_CONSUMED "Safety consumed"
+#define MINDMACHINE_TRANSPORT_ANOM "Mind transport anomaly"
+#define MINDMACHINE_NOERROR "No errors"
 
-#define LOWER "Lower"
-#define HIGHER "Higher"
-#define SILICON "Artificial"
-#define SHIELDED "Shielded"
+#define MINDMACHINE_LOWER "Lower"
+#define MINDMACHINE_HIGHER "Higher"
+#define MINDMACHINE_SILICON "Artificial"
+#define MINDMACHINE_SHIELDED "Shielded"
 
 /obj/machinery/mind_machine/mind_machine_hub
 	name = "\improper Mind Machine Hub"
@@ -56,7 +56,7 @@
 	var/manipRating = 4 //Determines speed of swap/malfunction chance on delay swap
 	var/scanRatingOne = 6 //Determines if you can swap silicons
 	var/scanRatingTwo = 6
-	var/errorMessage = NOERROR
+	var/errorMessage = MINDMACHINE_NOERROR
 	var/beenSwapped = FALSE
 	var/malfSwap = FALSE //Triggers malfunction if true
 	var/list/illegalSwap = list() //Might break the game/remove the player from the round. If you get mechahitler in there you deserve your round, though
@@ -173,9 +173,9 @@
 //////UI stuff///////////////
 
 /obj/machinery/mind_machine/mind_machine_hub/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
-	if(errorMessage != NOERROR)
+	if(errorMessage != MINDMACHINE_NOERROR)
 		spawn(5 SECONDS)
-			errorMessage = NOERROR
+			errorMessage = MINDMACHINE_NOERROR
 
 	var/list/data = list(
 			"occupantScan" = occupantScan,
@@ -216,17 +216,17 @@
 				scanOccupants()
 				return TRUE
 			else
-				errorMessage = CURRENTLY_ACTIVE
+				errorMessage = MINDMACHINE_CURRENTLY_ACTIVE
 				return TRUE
 		if(href_list["unlock_pods"])
 			if(((!connectOne.contents.len) || (!connectTwo.contents.len)) && (currentlySwapping))
 				unlockPods() //Safeguard against the pod getting trapped in infinite scan
 				return TRUE
 			if(!lockedPods)
-				errorMessage = PODS_UNLOCKED
+				errorMessage = MINDMACHINE_PODS_UNLOCKED
 				return TRUE
 			if(currentlySwapping)
-				errorMessage = CURRENTLY_ACTIVE
+				errorMessage = MINDMACHINE_CURRENTLY_ACTIVE
 				return TRUE
 			else
 				unlockPods()
@@ -237,7 +237,7 @@
 				ejectPods()
 				return TRUE
 			if(lockedPods == TRUE)
-				errorMessage = PODS_LOCKED
+				errorMessage = MINDMACHINE_PODS_LOCKED
 				return TRUE
 		if(href_list["mind_swap"])
 			if((occupantScan) && (!currentlySwapping))
@@ -245,10 +245,10 @@
 				swapOccupants()
 				return TRUE
 			if(!occupantScan)
-				errorMessage = REQ_SCAN
+				errorMessage = MINDMACHINE_REQ_SCAN
 				return TRUE
 			if(currentlySwapping)
-				errorMessage = CURRENTLY_ACTIVE
+				errorMessage = MINDMACHINE_CURRENTLY_ACTIVE
 				return TRUE
 		if(href_list["delay_swap"])
 			if(!currentlySwapping)
@@ -283,7 +283,7 @@
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/delayedSwap()
 	if(!occupantScan)
-		errorMessage = DELAY_CAUTION
+		errorMessage = MINDMACHINE_DELAY_CAUTION
 		nanomanager.update_uis(src)
 		sleep(5 SECONDS)
 		if(gcDestroyed)
@@ -296,11 +296,11 @@
 			swapOccupants()
 			unlockPods()
 		else
-			errorMessage = MISSING_OCC
+			errorMessage = MINDMACHINE_MISSING_OCC
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/scanOccupants()
 	if((!locate(occupantOne,connectOne.contents)) || (!locate(occupantTwo, connectTwo.contents)))
-		errorMessage = MISSING_OCC
+		errorMessage = MINDMACHINE_MISSING_OCC
 		return
 	currentlySwapping = TRUE
 	lockedPods = TRUE
@@ -315,7 +315,7 @@
 	if(gcDestroyed)
 		return
 	if(!locate(occupantOne,connectOne.contents) || !locate(occupantTwo, connectTwo.contents) || !connectOne || !connectTwo)
-		errorMessage = MISSING_OCC
+		errorMessage = MINDMACHINE_MISSING_OCC
 		currentlySwapping = FALSE
 		occupantOne = null
 		occupantTwo = null
@@ -338,18 +338,18 @@
 		if(DEAD)
 			OS = "Dead"
 	if(!S.mind)
-		MT = LOWER //Simple mob
+		MT = MINDMACHINE_LOWER//Simple mob
 	if(S.mind)
 		if(isrobot(S))
-			MT = SILICON //Silicon player, obviously
+			MT = MINDMACHINE_SILICON //Silicon player, obviously
 		else
-			MT = HIGHER //Player controlled
+			MT = MINDMACHINE_HIGHER //Player controlled
 	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
-		MT = SHIELDED //Mostly to fix spell bugs but also tinfoil
+		MT = MINDMACHINE_SHIELDED //Mostly to fix spell bugs but also tinfoil
 	if((ishigherbeing(S)) || (ismonkey(S)))
 		var/mob/living/carbon/T = S
 		if(T.is_wearing_item(/obj/item/clothing/head/tinfoil))
-			MT = SHIELDED
+			MT = MINDMACHINE_SHIELDED
 	if(S == occupantOne)
 		mindTypeOne = MT
 		occupantStatOne = OS
@@ -361,16 +361,16 @@
 	if(!occupantScan || !lockedPods)
 		return
 	if(!locate(occupantOne,connectOne.contents) || (!locate(occupantTwo, connectTwo.contents)))
-		errorMessage = MISSING_OCC //sanity and wizards exist
+		errorMessage = MINDMACHINE_MISSING_OCC //sanity and wizards exist
 		occupantOne = null
 		occupantTwo = null
 		unlockPods()
 		return
 	if(bluespaceConduit <= 0)
-		errorMessage = CONDUIT_CHARGE
+		errorMessage = MINDMACHINE_CONDUIT_CHARGE
 		return
-	if(mindTypeOne == SHIELDED || mindTypeTwo == SHIELDED)
-		errorMessage = SHIELD_ERROR
+	if(mindTypeOne == MINDMACHINE_SHIELDED || mindTypeTwo == MINDMACHINE_SHIELDED)
+		errorMessage = MINDMACHINE_SHIELD_ERROR
 		spark(src)
 		spark(connectOne)
 		spark(connectTwo)
@@ -378,10 +378,10 @@
 		return
 	if(occupantStatOne == DEAD || occupantStatTwo == DEAD)	//Being able to swap if they die between scan and swap is intentional
 		if(!soulShardSafety) //Secrets
-			errorMessage = LIVING_REQUIRED
+			errorMessage = MINDMACHINE_LIVING_REQUIRED
 			return
 		soulShardSafety = FALSE
-		errorMessage = SHARD_REACTION
+		errorMessage = MINDMACHINE_SHARD_REACTION
 	currentlySwapping = TRUE
 	icon_state = "mind_hub_active"
 	connectOne.icon_state = "mind_pod_active"
@@ -399,7 +399,7 @@
 		if(gcDestroyed)
 			return
 		if(!locate(occupantOne,connectOne.contents) || !locate(occupantTwo, connectTwo.contents) || !connectOne || !connectTwo)
-			errorMessage = MISSING_OCC
+			errorMessage = MINDMACHINE_MISSING_OCC
 			swapProgress = 0
 			currentlySwapping = FALSE
 			occupantOne = null
@@ -410,45 +410,45 @@
 	if(malfSwap) ///////////Swaps begin///////
 		malfunction()
 		return
-	if(mindTypeOne == LOWER && mindTypeTwo == LOWER)
+	if(mindTypeOne == MINDMACHINE_LOWER && mindTypeTwo == MINDMACHINE_LOWER)
 		lowerSwap()
 		return
 	if(theFly.len > 0)
 		theFlySwap()
 		return
-	if(mindTypeOne == HIGHER && mindTypeTwo == HIGHER)
+	if(mindTypeOne == MINDMACHINE_HIGHER && mindTypeTwo == MINDMACHINE_HIGHER)
 		higherSwap()
 		return
-	if(mindTypeOne ==HIGHER && mindTypeTwo == LOWER || mindTypeOne == LOWER && mindTypeTwo == HIGHER)
+	if(mindTypeOne ==MINDMACHINE_HIGHER && mindTypeTwo == MINDMACHINE_LOWER || mindTypeOne == MINDMACHINE_LOWER && mindTypeTwo == MINDMACHINE_HIGHER)
 		animorphsSwap()
 		return
-	if(mindTypeOne == SILICON && scanRatingOne <7 || mindTypeTwo == SILICON && scanRatingTwo <7)
-		errorMessage = SCANNER_INSUFF
+	if(mindTypeOne == MINDMACHINE_SILICON && scanRatingOne <7 || mindTypeTwo == MINDMACHINE_SILICON && scanRatingTwo <7)
+		errorMessage = MINDMACHINE_SCANNER_INSUFF
 		swapProgress = 0
 		currentlySwapping = FALSE
 		connectOne.icon_state = "mind_pod_closed"
 		connectTwo.icon_state = "mind_pod_closed"
 		icon_state = "mind_hub"
 		return
-	if(mindTypeOne == SILICON && mindTypeTwo == SILICON)
+	if(mindTypeOne == MINDMACHINE_SILICON && mindTypeTwo == MINDMACHINE_SILICON)
 		higherSwap() //Silicon swaps, checks if their pod is upgraded enough then performs normal swap
 		return
-	if(mindTypeOne == SILICON && mindTypeTwo != SILICON)
-		if(mindTypeTwo == LOWER)
+	if(mindTypeOne == MINDMACHINE_SILICON && mindTypeTwo != MINDMACHINE_SILICON)
+		if(mindTypeTwo == MINDMACHINE_LOWER)
 			animorphsSwap()
 			return
-		if(mindTypeTwo == HIGHER && theFly.len == 0)
+		if(mindTypeTwo == MINDMACHINE_HIGHER && theFly.len == 0)
 			higherSwap()
 			return
-	if(mindTypeTwo == SILICON && mindTypeOne != SILICON)
-		if(mindTypeOne == LOWER)
+	if(mindTypeTwo == MINDMACHINE_SILICON && mindTypeOne != MINDMACHINE_SILICON)
+		if(mindTypeOne == MINDMACHINE_LOWER)
 			animorphsSwap()
 			return
-		if(mindTypeOne == HIGHER && !theFly.len)
+		if(mindTypeOne == MINDMACHINE_HIGHER && !theFly.len)
 			higherSwap()
 			return
 	else
-		errorMessage = UNKNOWN_INT
+		errorMessage = MINDMACHINE_UNKNOWN_INT
 		currentlySwapping = FALSE
 		swapProgress = 0
 		unlockPods()
@@ -464,13 +464,11 @@
 	..()
 	if(currentlySwapping)
 		malfSwap = TRUE
-		return
 
 /obj/machinery/mind_machine/mind_machine_hub/emag_act()
 	if(currentlySwapping)
 		spark(src)
 		malfSwap = TRUE
-		return
 
 //Procs for the mind swap//////////
 
@@ -510,7 +508,7 @@
 		ST.is_pet = occOnePet
 		bluespaceConduit -= 1
 	else
-		errorMessage = SUM_TOO_LOW //There's just nothing to swap for monkeymen
+		errorMessage = MINDMACHINE_SUM_TOO_LOW //There's just nothing to swap for monkeymen
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 1)
 	currentlySwapping = FALSE
 	occupantScan = FALSE
@@ -595,7 +593,7 @@
 		beenSwapped = TRUE
 	else
 		soulShardSafety = FALSE
-		errorMessage = SAFETY_CONSUMED
+		errorMessage = MINDMACHINE_SAFETY_CONSUMED
 	bluespaceConduit -= 1
 	currentlySwapping = FALSE
 	occupantScan = FALSE
@@ -605,7 +603,7 @@
 	swapProgress = 0
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/malfSwap(var/mob/living/M, var/MT)
-	if(MT == HIGHER || MT == SILICON)
+	if(MT == MINDMACHINE_HIGHER || MT == MINDMACHINE_SILICON)
 		var/list/woopsMobs = list()
 		var/mob/woopsTarget = null
 		for(var/mob/living/R in mob_list)
@@ -626,14 +624,14 @@
 			woopsMobs.len = 0	//Just to be safe
 			to_chat(M, "<span class='bdanger'>Your mind is thrown out of the machine and forced into a nearby vessel!</span>")
 			playsound(M, "sound/effects/phasein.ogg", 50, 1)
-			errorMessage = DELIVERY_ERROR
+			errorMessage = MINDMACHINE_DELIVERY_ERROR
 		else
 			to_chat(M, "<span class='bdanger'>Your mind is severely damaged by the feedback!</span>")
 			playsound(M, "sound/misc/balloon_pop.ogg", 50, 1)
 			if(ishuman(M))
 				M.adjustBrainLoss(75)
-			errorMessage = MIND_DAMAGED
-	if(MT == LOWER)
+			errorMessage = MINDMACHINE_MIND_DAMAGED
+	if(MT == MINDMACHINE_LOWER)
 		var/list/randFaction = list("hostile", "neutral", "carp", "necro", "wizard", "syndicate", "cult")
 		M.faction = pick(randFaction)
 
@@ -681,7 +679,7 @@
 	connectTwo.icon_state = "mind_pod_closed"
 	icon_state = "mind_hub"
 	swapProgress = 0
-	errorMessage = TRANSPORT_ANOM
+	errorMessage = MINDMACHINE_TRANSPORT_ANOM
 	beenSwapped = TRUE
 
 //Swaps over///////////////
@@ -807,8 +805,6 @@
 			connectedHub.occupantOne = occupant
 		if(2)
 			connectedHub.occupantTwo = occupant
-		else
-			return
 
 /obj/machinery/mind_machine/mind_machine_pod/proc/go_out(var/exit = src.loc, var/mob/ejector)
 	if(!occupant)
@@ -844,7 +840,6 @@
 			connectedHub.unlockPods()
 			return
 	src.go_out(ejector = user)
-	return
 
 /obj/machinery/mind_machine/mind_machine_pod/Exited(var/atom/movable/O)
 	if (O == occupant)
