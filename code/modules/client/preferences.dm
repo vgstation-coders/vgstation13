@@ -221,6 +221,9 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/obj_chat_on_map = FALSE
 	var/no_goonchat_for_obj = FALSE
 
+	var/tgui_fancy = TRUE
+	var/tgui_lock = TRUE
+
 	var/client/client
 	var/saveloaded = 0
 
