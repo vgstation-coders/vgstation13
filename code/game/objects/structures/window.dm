@@ -38,7 +38,7 @@ var/list/one_way_windows
 	var/one_way = 0 //If set to 1, it will act as a one-way window.
 	var/obj/machinery/smartglass_electronics/smartwindow //holds internal machinery
 	var/disperse_coeff = 0.95
-
+	var/is_fulltile = FALSE
 /obj/structure/window/New(loc)
 
 	..(loc)
@@ -131,11 +131,6 @@ var/list/one_way_windows
 	..()
 	healthcheck(Proj.firer)
 	return
-
-/obj/structure/window/proc/is_fulltile()
-
-
-	return 0
 
 //This ex_act just removes health to be fully modular with "bomb-proof" windows
 /obj/structure/window/ex_act(severity)
@@ -339,7 +334,7 @@ var/list/one_way_windows
 			return
 
 	if(iscrowbar(W) && one_way)
-		if(!is_fulltile() && get_turf(user) != get_turf(src))
+		if(!is_fulltile && get_turf(user) != get_turf(src))
 			to_chat(user, "<span class='warning'>You can't pry the sheet of plastic off from this side of \the [src]!</span>")
 		else
 			to_chat(user, "<span class='notice'>You pry the sheet of plastic off \the [src].</span>")
@@ -351,7 +346,7 @@ var/list/one_way_windows
 		if(one_way)
 			to_chat(user, "<span class='notice'>This window already has one-way tint on it.</span>")
 			return
-		if(is_fulltile())
+		if(is_fulltile)
 			update_nearby_tiles()
 			change_dir(turn(get_dir(get_turf(user),get_turf(src)),180))
 			if(!test_bitflag(dir))	//if its direction is diagonal
@@ -522,9 +517,7 @@ var/list/one_way_windows
 	return
 
 /obj/structure/window/proc/can_be_reached(mob/user)
-
-
-	if(!is_fulltile())
+	if(!is_fulltile)
 		if(get_dir(user, src) & dir)
 			for(var/obj/O in loc)
 				if(!O.Cross(user, user.loc, 1, 0))

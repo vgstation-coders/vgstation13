@@ -823,6 +823,7 @@
 #include "code\game\objects\effects\decals\posters\vgposters.dm"
 #include "code\game\objects\effects\spawners\bombspawner.dm"
 #include "code\game\objects\effects\spawners\gibspawner.dm"
+#include "code\game\objects\effects\spawners\grille_window_spawner.dm"
 #include "code\game\objects\effects\spawners\vaultspawner.dm"
 #include "code\game\objects\items\airbag.dm"
 #include "code\game\objects\items\ashtray.dm"
