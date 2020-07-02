@@ -214,13 +214,15 @@ var/list/one_way_windows
 		var/mob/M = AM //Duh
 		health -= 10 //We estimate just above a slam but under a crush, since mobs can't carry a throwforce variable
 		healthcheck(M)
-		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
-		"<span class='danger'>You slam into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+			"<span class='danger'>You slam into \the [src].</span>")
 	else if(isobj(AM))
 		var/obj/item/I = AM
 		health -= I.throwforce
 		healthcheck()
-		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
 /obj/structure/window/attack_hand(mob/living/user as mob)
 

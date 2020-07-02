@@ -70,13 +70,15 @@
 		var/mob/M = AM
 		health -= 10
 		healthcheck(TRUE)
-		visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
-		"<span class='danger'>You slam into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [M] slams into \the [src].</span>", \
+			"<span class='danger'>You slam into \the [src].</span>")
 	else if(isobj(AM))
 		var/obj/item/I = AM
 		health -= I.throwforce
 		healthcheck(TRUE)
-		visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
+		if (AM.invisibility < 101)
+			visible_message("<span class='danger'>\The [I] slams into \the [src].</span>")
 
 /obj/structure/grille/attack_paw(mob/user as mob)
 	attack_hand(user)
