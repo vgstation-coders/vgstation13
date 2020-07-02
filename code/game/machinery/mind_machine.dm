@@ -117,10 +117,6 @@
 		connectTwo = null
 	. = ..()
 
-/obj/machinery/mind_machine/mind_machine_hub/proc/resetVars(var/vOne, var/vTwo, var/vThree)
-	vOne = null
-	vTwo = null
-	vThree = null
 
 /obj/machinery/mind_machine/mind_machine_hub/attackby(var/obj/item/A, var/mob/user)
 	..()
