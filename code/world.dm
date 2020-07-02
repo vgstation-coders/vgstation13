@@ -1,5 +1,8 @@
 #define WORLD_ICON_SIZE 32
 #define PIXEL_MULTIPLIER WORLD_ICON_SIZE/32
+
+var/world_startup_time
+
 /world
 	mob = /mob/new_player
 	turf = /turf/space
@@ -7,11 +10,23 @@
 	cache_lifespan = 0	//stops player uploaded stuff from being kept in the rsc past the current session
 	//loop_checks = 0
 	icon_size = WORLD_ICON_SIZE
-#define RECOMMENDED_VERSION 512
+
+#define RECOMMENDED_VERSION 513
 
 
 var/savefile/panicfile
 /world/New()
+	world_startup_time = world.timeofday
+	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
+	if(fexists(extools_path))
+		call(extools_path, "maptick_initialize")()
+		#if EXTOOLS_REFERENCE_TRACKING
+		call(extools_path, "ref_tracking_initialize")()
+		#endif
+	else
+		// warn on missing library
+		// extools on linux does not exist and is not in the repository as of yet
+		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
@@ -61,11 +76,13 @@ var/savefile/panicfile
  */
 #ifdef BORDER_USE_TURF_EXIT
 	if(byond_version < RECOMMENDED_VERSION)
-		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 512.1426")
+		warning("Your server's byond version does not meet the recommended requirements for this code. Please update BYOND to atleast 513.")
 #endif
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 
 	load_configuration()
+	SSdbcore.Initialize(world.timeofday) // Get a database running, first thing
+
 	load_mode()
 	load_motd()
 	load_admins()
@@ -97,26 +114,16 @@ var/savefile/panicfile
 
 	paperwork_setup()
 
-	for(var/x in typesof(/datum/bee_species))
-		var/datum/bee_species/species = new x
-		bees_species[species.common_name] = species
+	global_deadchat_listeners = list()
 
+	initialize_runesets()
+
+	initialize_beespecies()
+	generate_radio_frequencies()
 	//sun = new /datum/sun()
 	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
-
-	if(!setup_database_connection())
-		world.log << "Your server failed to establish a connection with the feedback database."
-	else
-		world.log << "Feedback database connection established."
-	migration_controller_mysql = new
-	migration_controller_sqlite = new ("players2.sqlite", "players2_empty.sqlite")
-
-	if(!setup_old_database_connection())
-		world.log << "Your server failed to establish a connection with the tgstation database."
-	else
-		world.log << "Tgstation database connection established."
 
 	plmaster = new /obj/effect/overlay()
 	plmaster.icon = 'icons/effects/tile_effects.dmi'
@@ -193,6 +200,7 @@ var/savefile/panicfile
 		s["host"] = host ? host : null
 		s["players"] = list()
 		s["map_name"] = map.nameLong
+		s["station_time"] = worldtime2text()
 		s["gamestate"] = 1
 		if(ticker)
 			s["gamestate"] = ticker.current_state
@@ -224,6 +232,7 @@ var/savefile/panicfile
 
 
 /world/Reboot(reason)
+	testing("[time_stamp()] - World is rebooting. Reason: [reason]")
 	if(reason == REBOOT_HOST)
 		if(usr)
 			if (!check_rights(R_SERVER))
@@ -240,8 +249,6 @@ var/savefile/panicfile
 		..()
 		return
 
-	for(var/datum/html_interface/D in html_interfaces)
-		D.closeAll()
 	if(config.map_voting)
 		//testing("we have done a map vote")
 		if(fexists(vote.chosen_map))
@@ -264,29 +271,26 @@ var/savefile/panicfile
 				fcopy(vote.chosen_map, filename)
 			sleep(60)
 
+	pre_shutdown()
+
+	..()
+
+/world/proc/pre_shutdown()
+	for(var/datum/html_interface/D in html_interfaces)
+		D.closeAll()
+
 	Master.Shutdown()
 	paperwork_stop()
 
-	spawn()
-		world << sound(pick(
-			'sound/AI/newroundsexy.ogg',
-			'sound/misc/RoundEndSounds/apcdestroyed.ogg',
-			'sound/misc/RoundEndSounds/bangindonk.ogg',
-			'sound/misc/RoundEndSounds/slugmissioncomplete.ogg',
-			'sound/misc/RoundEndSounds/bayojingle.ogg',
-			'sound/misc/RoundEndSounds/gameoveryeah.ogg',
-			'sound/misc/RoundEndSounds/rayman.ogg',
-			'sound/misc/RoundEndSounds/marioworld.ogg',
-			'sound/misc/RoundEndSounds/soniclevelcomplete.ogg',
-			'sound/misc/RoundEndSounds/calamitytrigger.ogg',
-			'sound/misc/RoundEndSounds/duckgame.ogg',
-			'sound/misc/RoundEndSounds/FTLvictory.ogg',
-			'sound/misc/RoundEndSounds/tfvictory.ogg',
-			'sound/misc/RoundEndSounds/megamanX.ogg',
-			'sound/misc/RoundEndSounds/castlevania.ogg',
-			)) // random end sounds!! - LastyBatsy
+	stop_all_media()
 
-	sleep(5)//should fix the issue of players not hearing the restart sound.
+	end_credits.on_world_reboot_start()
+	testing("[time_stamp()] - World reboot is now sleeping.")
+
+	sleep(max(10, end_credits.audio_post_delay))
+
+	testing("[time_stamp()] - World reboot is done sleeping.")
+	end_credits.on_world_reboot_end()
 
 	for(var/client/C in clients)
 		if(config.server)	//if you set a server location in config.txt, it sends you there instead of trying to reconnect to the same world address. -- NeoFite
@@ -294,10 +298,6 @@ var/savefile/panicfile
 
 		else
 			C << link("byond://[world.address]:[world.port]")
-
-
-	..()
-
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
@@ -414,89 +414,3 @@ var/savefile/panicfile
 	/* does this help? I do not know */
 	if (src.status != s)
 		src.status = s
-
-#define FAILED_DB_CONNECTION_CUTOFF 5
-var/failed_db_connections = 0
-var/failed_old_db_connections = 0
-
-proc/setup_database_connection()
-
-
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
-		return 0
-
-	if(!dbcon)
-		dbcon = new()
-
-	var/user = sqlfdbklogin
-	var/pass = sqlfdbkpass
-	var/db = sqlfdbkdb
-	var/address = sqladdress
-	var/port = sqlport
-
-	dbcon.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon.IsConnected()
-	if ( . )
-		failed_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
-	else
-		world.log << "Database Error: [dbcon.ErrorMsg()]"
-		failed_db_connections++		//If it failed, increase the failed connections counter.
-
-	return .
-
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_db_connection()
-	if(failed_db_connections > FAILED_DB_CONNECTION_CUTOFF)
-		return 0
-
-	var/DBQuery/q
-	if(dbcon)
-		q = dbcon.NewQuery("show global variables like 'wait_timeout'")
-		q.Execute()
-		if(q && q.ErrorMsg())
-			dbcon.Disconnect()
-	if(!dbcon || !dbcon.IsConnected())
-		return setup_database_connection()
-	else
-		return 1
-
-
-
-
-//These two procs are for the old database, while it's being phased out. See the tgstation.sql file in the SQL folder for more information.
-proc/setup_old_database_connection()
-
-
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)	//If it failed to establish a connection more than 5 times in a row, don't bother attempting to conenct anymore.
-		return 0
-
-	if(!dbcon_old)
-		dbcon_old = new()
-
-	var/user = sqllogin
-	var/pass = sqlpass
-	var/db = sqldb
-	var/address = sqladdress
-	var/port = sqlport
-
-	dbcon_old.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
-	. = dbcon_old.IsConnected()
-	if ( . )
-		failed_old_db_connections = 0	//If this connection succeeded, reset the failed connections counter.
-	else
-		failed_old_db_connections++		//If it failed, increase the failed connections counter.
-		world.log << dbcon_old.ErrorMsg()
-
-	return .
-
-//This proc ensures that the connection to the feedback database (global variable dbcon) is established
-proc/establish_old_db_connection()
-	if(failed_old_db_connections > FAILED_DB_CONNECTION_CUTOFF)
-		return 0
-
-	if(!dbcon_old || !dbcon_old.IsConnected())
-		return setup_old_database_connection()
-	else
-		return 1
-
-#undef FAILED_DB_CONNECTION_CUTOFF

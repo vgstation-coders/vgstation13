@@ -52,16 +52,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	initialize_directions = dir
 	initialize()
 	build_network()
-	if (node)
-		node.initialize()
-		node.build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
 
 /obj/machinery/atmospherics/unary/cryo_cell/initialize()
-	if(node)
+	if(node1)
 		return
 	for(var/cdir in cardinal)
-		node = findConnecting(cdir)
-		if(node)
+		node1 = findConnecting(cdir)
+		if(node1)
 			break
 	update_icon()
 
@@ -152,7 +152,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 	if(stat & NOPOWER)
 		on = 0
 
-	if(!node)
+	if(!node1)
 		return
 	if(!on)
 		updateUsrDialog()
@@ -256,7 +256,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		occupantData["bodyTemperature"] = occupant.bodytemperature
 	data["occupant"] = occupantData;
 
-	data["cellTemperature"] = round(air_contents.temperature)
+	data["cellTemperature"] = air_contents.temperature
 	data["cellTemperatureStatus"] = "good"
 	if(air_contents.temperature > T0C) // if greater than 273.15 kelvin (0 celcius)
 		data["cellTemperatureStatus"] = "bad"
@@ -337,13 +337,13 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		beaker.forceMove(get_step(loc, SOUTH))
 		beaker = null
 
-/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user)
+/obj/machinery/atmospherics/unary/cryo_cell/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(on)
 		to_chat(user, "[src] is on.")
-		return
+		return FALSE
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant.name] is inside the [src]!</span>")
-		return
+		return FALSE
 	if(beaker) //special check to avoid destroying this
 		detach()
 	return ..()
@@ -360,9 +360,12 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			beaker =  G
 			user.visible_message("[user] adds \a [G] to \the [src]!", "You add \a [G] to \the [src]!")
 			investigation_log(I_CHEMS, "was loaded with \a [G] by [key_name(user)], containing [G.reagents.get_reagent_ids(1)]")
-	if(iswrench(G))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
+			update_icon()
+
+
+	if(G.is_wrench(user))//FUCK YOU PARENT, YOU AREN'T MY REAL DAD
 		return
-	if(isscrewdriver(G))
+	if(G.is_screwdriver(user))
 		if(occupant || on)
 			to_chat(user, "<span class='notice'>The maintenance panel is locked.</span>")
 			return
@@ -399,7 +402,6 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 
 	if(!src.occupant)
 		overlays += "lid[on]" //if no occupant, just put the lid overlay on, and ignore the rest
-		return
 
 	if(occupant)
 		var/image/pickle = image(occupant.icon, occupant.icon_state)
@@ -464,8 +466,16 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 									overlays += cryo_health_indicator["critworse"]
 								else //Shouldn't ever happen. I really hope it doesn't ever happen.
 									overlays += cryo_health_indicator["dead"]
+
+					if (beaker == null || beaker.reagents.total_volume == 0)
+						overlays += "nomix"
+
 					sleep(7) //don't want to jiggle violently, just slowly bob
 				running_bob_animation = 0
+
+	if (on && (beaker == null || beaker.reagents.total_volume == 0))
+		overlays += "nomix"
+
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/process_occupant()
 	if(air_contents.total_moles() < 10)
@@ -479,9 +489,9 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 			occupant.sleeping = max(5, (1/occupant.bodytemperature)*2000)
 			occupant.Paralyse(max(5, (1/occupant.bodytemperature)*3000))
 			var/mob/living/carbon/human/guy = occupant //Gotta cast to read this guy's species
-			if(istype(guy) && guy.species && guy.species.breath_type != "oxygen")
+			if(istype(guy) && guy.species && guy.species.breath_type != GAS_OXYGEN)
 				occupant.nobreath = 15 //Prevent them from suffocating until someone can get them internals. Also prevents plasmamen from combusting.
-			if(air_contents.oxygen > 2)
+			if(air_contents[GAS_OXYGEN] > 2)
 				if(occupant.getOxyLoss())
 					occupant.adjustOxyLoss(-1)
 			else
@@ -499,6 +509,8 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		if(beaker && !has_cryo_medicine)
 			beaker.reagents.trans_to(occupant, 1, 1)
 			beaker.reagents.reaction(occupant)
+			if (beaker.reagents.total_volume == 0)
+				update_icon() // Update icon so the "no mix" warning starts flashing.
 
 /obj/machinery/atmospherics/unary/cryo_cell/proc/modify_occupant_bodytemp()
 	if(!occupant)
@@ -585,7 +597,7 @@ var/global/list/cryo_health_indicator = list(	"full" = image("icon" = 'icons/obj
 		return*/
 	if(M.locked_to)
 		M.unlock_from()
-	if(!node)
+	if(!node1)
 		to_chat(usr, "<span class='warning'>The cell is not correctly connected to its pipe network!</span>")
 		return
 	if(usr.pulling == M)

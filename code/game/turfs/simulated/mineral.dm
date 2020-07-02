@@ -85,3 +85,56 @@
 /turf/simulated/floor/mineral/phazon/New()
 	floor_tile = getFromPool(/obj/item/stack/tile/mineral/phazon, null)
 	..()
+
+//BRASS
+
+/turf/simulated/floor/mineral/clockwork
+	name = "brass floor"
+	icon_state = "brass"
+
+/turf/simulated/floor/mineral/clockwork/New()
+	floor_tile = getFromPool(/obj/item/stack/tile/mineral/brass, null)
+	..()
+
+/turf/simulated/floor/mineral/clockwork/cultify()
+	return
+
+/turf/simulated/floor/mineral/clockwork/clockworkify()
+	return
+
+//GINGERBREAD
+/turf/simulated/floor/mineral/gingerbread_floor
+	name = "gingerbread floor"
+	icon_state = "gingerbread_floor1"
+
+
+/turf/simulated/floor/mineral/gingerbread_floor/New()
+	icon_state = "gingerbread_floor[rand(1,13)]"
+
+/turf/simulated/floor/mineral/gingerbread_tile
+	name = "gingerbread tile"
+	icon_state = "gingerbread_tile"
+
+/turf/simulated/floor/mineral/gingerbread_dirt_tile
+	name = "dirty gingerbread tile"
+	icon_state = "gingerbread_dirt_tile1"
+
+/turf/simulated/floor/mineral/gingerbread_dirt_tile/New()
+	icon_state = "gingerbread_dirt_tile[rand(1,3)]"
+
+/turf/simulated/floor/mineral/gingerbread_nest
+	name = "gingerbread nest"
+	icon_state = "gingerbread_nest1"
+
+/turf/simulated/floor/mineral/gingerbread_nest/New()
+	icon_state = "gingerbread_nest[rand(1,3)]"
+
+/turf/simulated/floor/mineral/gingerbread
+	name = "gingerbread panel floor"
+	icon_state = "gingerbread"
+	floor_tile
+	//I spent 10 hours trying to figure out how to make this use the nice randomized floors with the little peppermints I was so proud of. I give up, fuck floor tiles.
+
+/turf/simulated/floor/mineral/gingerbread/New()
+	floor_tile = getFromPool(/obj/item/stack/tile/mineral/gingerbread, null)
+	..()

@@ -16,7 +16,8 @@
 	                            /obj/item/clothing/mask/cigarette,
 	                            /obj/item/weapon/storage/fancy/cigarettes,
 	                            /obj/item/weapon/implantcase/chem,
-	                            /obj/item/weapon/reagent_containers/pill/time_release)
+	                            /obj/item/weapon/reagent_containers/pill/time_release,
+	                            /obj/item/weapon/fossil/egg)
 
 /obj/item/weapon/reagent_containers/dropper/update_icon()
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"

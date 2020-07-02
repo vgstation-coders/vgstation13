@@ -6,7 +6,7 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
@@ -29,7 +29,9 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	sterility = 100
+	clothing_flags = BLOCK_GAS_SMOKE_EFFECT
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
@@ -37,9 +39,7 @@
 	icon_state = "fake-moustache"
 	flags = FPRINT
 	body_parts_covered = BEARD
-
-/obj/item/clothing/mask/fakemoustache/is_hidden_identity()
-	return TRUE
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 //scarves (fit in in mask slot)
 /obj/item/clothing/mask/scarf
@@ -76,12 +76,11 @@
 	icon_state = "balaclava"
 	item_state = "balaclava"
 	flags = FPRINT
-	body_parts_covered = HEAD|MOUTH|EARS
+	body_parts_covered = HIDEHAIR | MOUTH
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-
-/obj/item/clothing/mask/balaclava/is_hidden_identity()
-	return TRUE
+	species_restricted = list("exclude", INSECT_SHAPED)
+	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
@@ -111,13 +110,14 @@
 	desc = "A mask made of soft vinyl and latex, representing the head of a horse."
 	icon_state = "horsehead"
 	item_state = "horsehead"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	var/voicechange = 0
 	siemens_coefficient = 0.9
 
-/obj/item/clothing/mask/horsehead/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/horsehead/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 
@@ -170,6 +170,7 @@ obj/item/clothing/mask/joy
 	desc = "For when you want people to think you're a vampire. Glows in the dark!"
 	icon_state = "fangs"
 	item_state = "fangs"
+	body_parts_covered = NONE
 	var/light_absorbed = 0
 	var/glowy_fangs
 	var/image/glow_fangs
@@ -229,3 +230,36 @@ obj/item/clothing/mask/joy
 
 /obj/item/clothing/mask/goldface/update_icon()
 	icon_state = pick("goldenmask","goldenmask_anger","goldenmask_joy","goldenmask_despair")
+
+
+/obj/item/clothing/mask/holopipe
+	name = "holo pipe"
+	desc = "It is not a pipe."
+	icon_state = "holopipe_off"
+	item_state = "holopipe_off"
+	var/activated = 0
+
+
+/obj/item/clothing/mask/holopipe/proc/activate(var/mob/user as mob)
+	if(!user.incapacitated())
+		src.activated = !src.activated
+		if(src.activated)
+			icon_state = "holopipe_on"
+			item_state = "holopipe_on"
+			to_chat(user, "You activate the holo pipe.")
+			user.update_inv_wear_mask()
+		else
+			icon_state = "holopipe_off"
+			item_state = "holopipe_off"
+			to_chat(user, "You deactivate the holo pipe.")
+			user.update_inv_wear_mask()
+
+/obj/item/clothing/mask/holopipe/attack_self(var/mob/user)
+	activate(user)
+
+/obj/item/clothing/mask/holopipe/verb/activate_pipe()
+	set category = "Object"
+	set name = "Toggle pipe"
+	set src in usr
+	if(!usr.incapacitated())
+		activate(usr)

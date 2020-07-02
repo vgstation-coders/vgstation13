@@ -37,6 +37,10 @@
 	add_max_amounts()
 	return
 
+/datum/construction/Destroy()
+	holder = null
+	return ..()
+
 /datum/construction/proc/next_step(mob/user as mob)
 	steps.len--
 	if(!steps.len)
@@ -71,25 +75,14 @@
 		return steps.len
 	return 0
 
-/datum/construction/proc/custom_action(step, used_atom, user)
-	if(iswelder(used_atom))
-		playsound(holder, 'sound/items/Welder2.ogg', 50, 1)
-
-	else if(iswrench(used_atom))
-		playsound(holder, 'sound/items/Ratchet.ogg', 50, 1)
-
-	else if(isscrewdriver(used_atom))
-		playsound(holder, 'sound/items/Screwdriver.ogg', 50, 1)
-
-	else if(iswirecutter(used_atom))
-		playsound(holder, 'sound/items/Wirecutter.ogg', 50, 1)
-
-	else if(istype(used_atom,/obj/item/weapon/circuitboard))
+/datum/construction/proc/custom_action(step, obj/item/used_atom, mob/user)
+	if(istype(used_atom,/obj/item/weapon/circuitboard))
 		playsound(holder, 'sound/items/Deconstruct.ogg', 50, 1)
-
-	else if(iscablecoil(used_atom))
-		playsound(holder, 'sound/items/zip.ogg', 50, 1)
-
+	else
+		if(iscablecoil(used_atom))
+			playsound(holder, 'sound/items/zip.ogg', 50, 1)
+		else
+			used_atom.playtoolsound(holder, 50)
 	construct_message(step, user)
 	return 1
 
@@ -251,7 +244,7 @@
 		assembling = 0
 	return 0
 
-/datum/construction/reversible/custom_action(index, diff, used_atom, user)
+/datum/construction/reversible/custom_action(index, diff, obj/item/used_atom, mob/user)
 	. = ..(index,used_atom,user)
 
 	if(.)
@@ -375,11 +368,6 @@
 	else
 		var/list/spawn_step
 		var/new_index = (diff == FORWARD ? index - 1 : index + 1)
-		if(new_index == 0)
-			message_admins("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [formatPlayerPanel(user,user.ckey)], itemused [used_atom], step [given_step]")
-			spawn_result(user)
-			return 1
-			//CRASH("Holy shit [src]/([src.type]) is trying to set its new index to 0! how the fuck did this happen? I don't know, our direction is [diff==FORWARD?"forward":"backward"] old index was [index]. User is [user], itemused [used_atom], step [given_step]")
 		if(diff == FORWARD)
 			spawn_step = get_backward_step(new_index)
 		else if(diff == BACKWARD)

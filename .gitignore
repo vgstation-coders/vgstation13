@@ -51,7 +51,8 @@ players2.sqlite
 
 # Map player count config
 /maps/voting/*/playercount.txt
-
+# Created by Dream Maker when opening maps that contain invalid type paths
+/maps/backup
 # Runtime condenser I/O files.
 /tools/Runtime\ Condenser/*.txt
 
@@ -60,6 +61,9 @@ players2.sqlite
 
 # Round-end statistics
 /data/statfiles/*
+
+# Persistence files
+/data/persistence/*
 
 cfg
 
@@ -70,3 +74,5 @@ cfg
 # Thumbs.db (windows image caching)
 Thumbs.db
 
+# Linux users can compile this themselves
+libvg.so

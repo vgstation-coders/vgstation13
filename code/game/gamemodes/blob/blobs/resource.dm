@@ -13,7 +13,8 @@
 	icon_new = "resource"
 	icon_classic = "blob_resource"
 
-/obj/effect/blob/resource/New(loc,newlook = "new")
+//obj/effect/blob/resource/New(loc,newlook = "new")
+/obj/effect/blob/resource/New(loc,newlook = null)
 	..()
 	blob_resources += src
 
@@ -43,7 +44,7 @@
 	if(resource_delay > world.time)
 		return 0
 
-	resource_delay = world.time + (4 SECONDS)
+	resource_delay = world.time + (8 SECONDS)
 
 	if(overmind)
 	/*	if(blob_looks[looks] == 64)

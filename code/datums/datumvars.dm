@@ -43,16 +43,15 @@
 
 		#ifdef VARSICON
 		if (A.icon)
-			body += debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)
+			body += "<li>"+debug_variable("icon", new/icon(A.icon, A.icon_state, A.dir), 0)+"<\li>"
 		#endif
 
-	var/icon/sprite
+	var/sprite
 
 	if(istype(D,/atom))
 		var/atom/AT = D
 		if(AT.icon && AT.icon_state)
-			sprite = new /icon(AT.icon, AT.icon_state)
-			usr << browse_rsc(sprite, "view_vars_sprite.png")
+			sprite = 1
 
 	title = "[D] (\ref[D]) = [D.type]"
 
@@ -60,7 +59,7 @@
 		<div align='center'><table width='100%'><tr><td width='50%'>
 		<table align='center' width='100%'><tr><td>"}
 	if(sprite)
-		body += "<img src='view_vars_sprite.png'></td><td>"
+		body += "[bicon(D)]</td><td>"
 
 	body += "<div align='center'>"
 
@@ -133,24 +132,28 @@
 		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
 
 	if(istype(D,/atom/movable))
+		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
 		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
 
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if(hasvar(D, "transform"))
+	if(istransformable(D))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
-	if(hasvar(D, "appearance_flags"))
+	if(isapperanceeditable(D))
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
-
+	#if EXTOOLS_REFERENCE_TRACKING
+	body += "<option value='?_src_=vars;view_references=\ref[D]'>View references</option>"
+	#endif
 	body += "<option value>---</option>"
 
 	if(ismob(D))
 
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
-			<option value='?_src_=vars;give_disease=\ref[D]'>Give Disease</option>
+			<option value='?_src_=vars;give_disease=\ref[D]'>Give Old Disease</option>
+			<option value='?_src_=vars;give_disease2=\ref[D]'>Give New Disease</option>
 			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
@@ -159,7 +162,8 @@
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
 			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
-			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>"}
+			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>
+			<option value='?_src_=vars;make_invisible=\ref[D]'>Make invisible</option>"}
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
@@ -197,12 +201,12 @@
 	names = sortList(names)
 
 	for (var/V in names)
-		body += debug_variable(V, D.vars[V], 0, D)
+		body += "<li>"+debug_variable(V, D.vars[V], 0, D)+"</li>"
 
 	body += "</ul>"
 	body = jointext(body,"")
 
-	var/html = "<html><head>"
+	var/html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><head>"
 	if (title)
 		html += "<title>[title]</title>"
 	html += {"<style>
@@ -363,7 +367,6 @@ function loadPage(list) {
 	var/html = ""
 
 	if(DA)
-		html += "<li style='backgroundColor:white'>"
 		if(name == "appearance")
 			html += {"
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>save</a> |
@@ -374,8 +377,6 @@ function loadPage(list) {
 			(<a href='?_src_=vars;datumchange=\ref[DA];varnamechange=[name]'>C</a>)
 			(<a href='?_src_=vars;datummass=\ref[DA];varnamemass=[name]'>M</a>)
 			(<a href='?_src_=vars;datumsave=\ref[DA];varnamesave=[name]'>S</a>) "}
-	else
-		html += "<li>"
 
 	if (isnull(value))
 		html += "[name] = <span class='value'>null</span>"
@@ -385,26 +386,18 @@ function loadPage(list) {
 
 	else if (isicon(value))
 		#ifdef VARSICON
-		var/icon/I = new/icon(value)
-		var/rnd = rand(1,10000)
-		var/rname = "tmp\ref[I][rnd].png"
-		usr << browse_rsc(I, rname)
-		html += "[name] = (<span class='value'>[value]</span>) <img class=icon src=\"[rname]\">"
+		html += "[name] = /icon (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
 		html += "[name] = /icon (<span class='value'>[value]</span>)"
 		#endif
 
-/*		else if (istype(value, /image))
+	else if(istype(value, /image))
 		#ifdef VARSICON
-		var/rnd = rand(1, 10000)
-		var/image/I = value
-
-		src << browse_rsc(I.icon, "tmp\ref[value][rnd].png")
-		html += "[name] = <img src=\"tmp\ref[value][rnd].png\">"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>) [bicon(value)]"
 		#else
-		html += "[name] = /image (<span class='value'>[value]</span>)"
+		html += "<a href='?_src_=vars;Vars=\ref[value]'>[name] \ref[value]</a> = /image (<span class='value'>[value]</span>)"
 		#endif
-*/
+
 	else if (isfile(value))
 		html += "[name] = <span class='value'>'[value]'</span>"
 
@@ -422,22 +415,16 @@ function loadPage(list) {
 
 		if (L.len > 0 && !(name == "underlays" || name == "overlays" || name == "vars" || L.len > 500))
 			// not sure if this is completely right...
-			if(0)   //(L.vars.len > 0)
-
-				html += {"<ol>
-					</ol>"}
-			else
-				html += "<ul>"
-				var/index = 1
-				for (var/entry in L)
-					if(istext(entry))
-						html += debug_variable(entry, L[entry], level + 1)
-					//html += debug_variable("[index]", L[index], level + 1)
-					else
-						html += debug_variable(index, L[index], level + 1)
-					html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a>"
-					index++
-				html += "</ul>"
+			html += "<ul>"
+			var/index = 1
+			for (var/entry in L)
+				if(istext(entry))
+					html += "<li>"+debug_variable(entry, L[entry], level + 1)
+				else
+					html += "<li>"+debug_variable(index, L[index], level + 1)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[DA]'>(Delete)</a></li>"
+				index++
+			html += "</ul>"
 
 	else
 		html += "[name] = <span class='value'>[value]</span>"
@@ -458,9 +445,29 @@ function loadPage(list) {
 				html += "</span>"
 			html += "</div>"
 		*/
-	html += "</li>"
 
 	return html
+
+/client/proc/debug_list(var/list/L)
+	if(!istype(L))
+		return
+
+	var/html = "<h1>List Viewer</h1><i>Length: [L.len]</i>"
+
+	if(L.len)
+		html += "<hr><ul>"
+		var/index = 1
+		for (var/entry in L)
+			if(istext(entry))
+				html += "<li>"+debug_variable(entry, L[entry], 0)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[entry]]'>(Delete)</a></li>"
+			else
+				html += "<li>"+debug_variable(index, L[index], 0)
+				html += " <a href='?_src_=vars;delValueFromList=1;list=\ref[L];index=[index];datum=\ref[L[index]]'>(Delete)</a></li>"
+			index++
+		html += "</ul>"
+
+	usr << browse(html, "window=listedit\ref[L];size=475x650")
 
 /client/proc/view_var_Topic(href, href_list, hsrc)
 	//This should all be moved over to datum/admins/Topic() or something ~Carn
@@ -468,6 +475,8 @@ function loadPage(list) {
 		return
 	if(href_list["Vars"])
 		debug_variables(locate(href_list["Vars"]))
+	else if(href_list["List"])
+		debug_list(locate(href_list["List"]))
 
 	//~CARN: for renaming mobs (updates their name, real_name, mind.name, their ID/PDA and datacore records).
 	else if(href_list["rename"])
@@ -597,6 +606,18 @@ function loadPage(list) {
 		src.give_spell(M)
 		href_list["datumrefresh"] = href_list["give_spell"]
 
+	else if(href_list["make_invisible"])
+		if(!check_rights(R_ADMIN|R_FUN))
+			return
+
+		var/mob/M = locate(href_list["make_invisible"])
+		if(!istype(M))
+			to_chat(usr, "This can only be used on instances of type /mob")
+			return
+
+		src.toggle_invisible(M)
+		href_list["datumrefresh"] = href_list["make_invisible"]
+
 	else if(href_list["give_disease"])
 		if(!check_rights(R_ADMIN|R_FUN))
 			return
@@ -607,7 +628,19 @@ function loadPage(list) {
 			return
 
 		src.give_disease(M)
-		href_list["datumrefresh"] = href_list["give_spell"]
+		href_list["datumrefresh"] = href_list["give_disease"]
+
+	else if(href_list["give_disease2"])
+		if(!check_rights(R_ADMIN|R_FUN|R_DEBUG))
+			return
+
+		var/mob/living/M = locate(href_list["give_disease2"])
+		if(!M.can_be_infected())
+			to_chat(usr, "This mob cannot be infected.")
+			return
+
+		virus2_make_custom(src,M)
+		href_list["datumrefresh"] = href_list["give_disease2"]
 
 	else if(href_list["addcancer"])
 		if(!check_rights(R_FUN))
@@ -782,12 +815,15 @@ function loadPage(list) {
 			to_chat(usr, "This can only be done to instances of movable atoms.")
 			return
 
+		var/turf/origin = get_turf(A)
 		var/turf/T = get_turf(usr)
+
 		if(istype(A,/mob))
 			var/mob/M = A
 			M.teleport_to(T)
 		else
 			A.forceMove(T)
+		log_admin("[key_name(usr)] has teleported [A] from [formatLocation(origin)] to [formatLocation(T)].")
 		switch(teleport_here_pref)
 			if("Flashy")
 				if(flashy_level > 0)
@@ -800,6 +836,48 @@ function loadPage(list) {
 			if("Stealthy")
 				A.alpha = 0
 				animate(A, alpha = 255, time = stealthy_level)
+
+	else if(href_list["throw_a_fucking_rod_at_it"])
+		if(!check_rights(R_FUN))
+			to_chat(usr, "<span class='warning'>You do not have sufficient permissions to do this.</span>")
+			return
+
+		var/atom/movable/A = locate(href_list["throw_a_fucking_rod_at_it"])
+		if(!istype(A))
+			to_chat(usr, "<span class='warning'>This can only be done to instances of movable atoms.</span>")
+			return
+
+		var/rod_size = input("What type of rod do you want to throw?","Throwing an Immovable Rod",null) as null|anything in list("Normal", "Pillar", "Monolith")
+		var/rod_type
+
+		if (!rod_size)
+			return
+
+		switch (rod_size)
+			if ("Normal")
+				rod_type = /obj/item/projectile/immovablerod
+			if ("Pillar")
+				rod_type = /obj/item/projectile/immovablerod/big
+			if ("Monolith")
+				rod_type = /obj/item/projectile/immovablerod/hyper
+
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")
+			return
+
+		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
+		rod.tracking = TRUE
+		rod.throw_at(A)
+
+		var/log_data = "[A]"
+		if (ismob(A))
+			var/mob/M = A
+			if (M.client)
+				log_data += " ([M.client.ckey])"
+
+		log_admin("[key_name(usr)] threw a rod at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)] threw a rod at [log_data].</span>")
+		to_chat(usr, "<span class='danger'>If you changed your mind, you can always stop the tracking by using the verb 'VIEW-ALL-RODS' and click the 'Untrack' link.</span>")
+		return
 
 	else if(href_list["teleport_to"])
 		if(!check_rights(0))
@@ -1072,12 +1150,6 @@ function loadPage(list) {
 			message_admins("<span class='notice'>[key_name(usr)] dealt [amount] amount of [Text] damage to [L] </span>")
 			href_list["datumrefresh"] = href_list["mobToDamage"]
 
-	else if(href_list["datumrefresh"])
-		var/datum/DAT = locate(href_list["datumrefresh"])
-		if(!istype(DAT, /datum))
-			return
-		src.debug_variables(DAT)
-
 	else if(href_list["proc_call"])
 		if(!check_rights(R_DEBUG))
 			return
@@ -1087,13 +1159,23 @@ function loadPage(list) {
 			return
 
 		callatomproc(DAT)	//Yes it could be a datum, technically but eh
+	#if EXTOOLS_REFERENCE_TRACKING
+	else if(href_list["view_references"])
+		if(!check_rights(R_DEBUG))
+			return
 
+		var/datum/target = locate(href_list["view_references"])
+		if(!target)
+			return
+
+		usr.client.view_refs(target)
+	#endif
 	else if (href_list["edit_transform"])
 		if (!check_rights(R_DEBUG))
 			return
 
 		var/datum/DAT = locate(href_list["edit_transform"])
-		if (!hasvar(DAT, "transform"))
+		if (!istransformable(DAT))
 			to_chat(src, "This object does not have a transform variable to edit!")
 			return
 
@@ -1110,7 +1192,7 @@ function loadPage(list) {
 			return
 
 		var/datum/DAT = locate(href_list["toggle_aliasing"])
-		if(!hasvar(DAT, "appearance_flags"))
+		if(!isapperanceeditable(DAT))
 			to_chat(src, "This object does not support appearance flags!")
 			return
 
@@ -1135,11 +1217,24 @@ function loadPage(list) {
 			return FALSE
 
 		var/index = text2num(href_list["index"])
+		if(!index)
+			if(istext(href_list["index"]))
+				index = href_list["index"]
+			else
+				return FALSE
 
-		if (!isnum(index) || index < 1)
+		if (index < 1 || index > L.len)
 			return FALSE
 
 		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
 		message_admins("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")
 
 		L -= L[index]
+		href_list["datumrefresh"] = href_list["datum"]
+
+	// No else, as it must be checked separatly, and at the end.
+	if(href_list["datumrefresh"])
+		var/datum/DAT = locate(href_list["datumrefresh"])
+		if(!istype(DAT, /datum))
+			return
+		src.debug_variables(DAT)

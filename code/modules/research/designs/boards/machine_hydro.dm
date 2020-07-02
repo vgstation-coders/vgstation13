@@ -47,3 +47,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
 	build_path = /obj/item/weapon/circuitboard/hydroponics
+
+/datum/design/oven_circuit
+	name = "Circuit Design (Electric Oven)"
+	desc = "Allows for the construction of an electric oven, for use in cooking and heating."
+	id = "kitchen oven"
+	req_tech = list(Tc_POWERSTORAGE = 2, Tc_ENGINEERING = 1)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Machine Boards"
+	build_path = /obj/item/weapon/circuitboard/oven

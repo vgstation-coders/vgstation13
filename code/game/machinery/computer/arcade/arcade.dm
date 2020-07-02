@@ -8,7 +8,13 @@
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
 	light_color = LIGHT_COLOR_GREEN
+	var/haunted = 0
 
+/obj/machinery/computer/arcade/haunted
+	desc = "Still doesn't support pinball, but does support spookiness."
+	light_color = LIGHT_COLOR_PURPLE
+	haunted = 1
+	icon_state = "arcadeh"
 
 /obj/machinery/computer/arcade/New()
 	..()

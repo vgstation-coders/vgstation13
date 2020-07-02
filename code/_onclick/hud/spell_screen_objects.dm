@@ -206,6 +206,13 @@
 
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/bloodcult
+	name = "Blood Magic"
+	icon_state = "cult_spell_ready"
+
+	open_state = "cult_open"
+	closed_state = "cult_closed"
+
 /obj/abstract/screen/movable/spell_master/mech
 	name = "Mech Modules"
 	icon_state = "mech_spell_ready"
@@ -315,6 +322,10 @@
 /obj/abstract/screen/spell/Click(location, control, params)
 	if(!usr || !spell)
 		returnToPool(src)
+		return
+
+	if(usr.is_pacified() && (spell.spell_flags & IS_HARMFUL))
+		to_chat(usr, "<span class='notice'>You really don't feel like casting that spell right now...</span>")
 		return
 
 	var/list/param_list = params2list(params)

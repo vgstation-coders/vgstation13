@@ -7,7 +7,7 @@
 	icon_state = "forensic1"
 	var/amount = 20.0
 	var/list/stored = list()
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -35,7 +35,7 @@
 
 /obj/item/device/detective_scanner/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	if (!ishuman(M))
-		to_chat(user, "<span class='warning'>[M] is not human and cannot have the fingerprints.</span>")
+		to_chat(user, "<span class='warning'>[M] is not human and cannot have fingerprints.</span>")
 		return 0
 	if (( !( istype(M.dna, /datum/dna) ) || M.gloves) )
 		to_chat(user, "<span class='notice'>No fingerprints found on [M]</span>")
@@ -107,15 +107,31 @@
 	var/list/fingerprints_found = src.extract_fingerprints(A)
 	var/list/fibers_found       = src.extract_fibers(A)
 
+	if (istype(A,/obj/effect/rune))
+		var/obj/effect/rune/R = A
+		if (R.blood1)
+			blood_DNA_found[R.blood1.data["blood_DNA"]] = R.blood1.data["blood_type"]
+		if (R.blood2)
+			blood_DNA_found[R.blood2.data["blood_DNA"]] = R.blood2.data["blood_type"]
+		if (R.blood3)
+			blood_DNA_found[R.blood3.data["blood_DNA"]] = R.blood3.data["blood_type"]
 	// Blood/vomit splatters no longer clickable, so scan the entire turf.
 	if (istype(A,/turf))
 		var/turf/T=A
 		for(var/atom/O in T)
 			// Blood splatters, runes.
-			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
+			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune_legacy))
 				blood_DNA_found    += extract_blood(O)
 				//fingerprints_found += extract_fingerprints(O)
 				//fibers_found       += extract_fibers(O)
+			if (istype(O,/obj/effect/rune))
+				var/obj/effect/rune/R = O
+				if (R.blood1)
+					blood_DNA_found[R.blood1.data["blood_DNA"]] = R.blood1.data["blood_type"]
+				if (R.blood2)
+					blood_DNA_found[R.blood2.data["blood_DNA"]] = R.blood2.data["blood_type"]
+				if (R.blood3)
+					blood_DNA_found[R.blood3.data["blood_DNA"]] = R.blood3.data["blood_type"]
 	//General
 	if (fingerprints_found.len == 0 && blood_DNA_found.len == 0 && fibers_found.len == 0)
 		user.visible_message("\The [user] scans \the [A] with \a [src], the air around [user.gender == MALE ? "him" : "her"] humming[prob(70) ? " gently." : "."]" ,\
@@ -167,7 +183,6 @@
 		"The results of the scan pique your interest.",\
 		"You hear a faint hum of electrical equipment, and someone making a thoughtful noise.")
 		return 0
-	return
 
 /obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
 	//I love associative lists.
@@ -294,7 +309,7 @@
 		var/turf/T=A
 		for(var/atom/O in T)
 			// Blood splatters, runes.
-			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune))
+			if (istype(O, /obj/effect/decal/cleanable/blood) || istype(O, /obj/effect/rune_legacy))
 				blood_DNA_found    += extract_blood(O)
 				//fingerprints_found += extract_fingerprints(O)
 				//fibers_found       += extract_fibers(O)

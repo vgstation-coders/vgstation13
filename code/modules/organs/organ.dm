@@ -83,13 +83,24 @@
 /mob/living/carbon/human/var/list/grasp_organs = list()
 
 /mob/living/carbon/human/proc/can_use_hand(var/this_hand = active_hand)
+	if(restrained()) // TODO: make a proper system for this ffs
+		return FALSE
 	if(hasorgans(src))
 		var/datum/organ/external/temp = src.find_organ_by_grasp_index(this_hand)
 		if(temp && !temp.is_usable())
-			return
+			return FALSE
 		else if (!temp)
-			return
-	return 1
+			return FALSE
+	return TRUE
+
+/mob/living/carbon/human/proc/can_use_hand_or_stump(var/this_hand = active_hand)
+	if(restrained()) // handcuffed stump is retarded but let's do that in another PR ok?
+		return FALSE
+	if(hasorgans(src))
+		var/datum/organ/external/hand = src.find_organ_by_grasp_index(this_hand)
+		if(hand && hand.can_grasp())
+			return TRUE
+	return FALSE
 
 //Takes care of organ related updates, such as broken and missing limbs
 /mob/living/carbon/human/proc/handle_organs(var/force_process = 0)
@@ -122,11 +133,23 @@
 		var/datum/organ/internal/liver = internal_organs_by_name["liver"]
 		if(!liver || liver.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+		else
+			liver.process()
 
 	if(species.has_organ["kidneys"])
 		var/datum/organ/internal/kidney = internal_organs_by_name["kidneys"]
 		if(!kidney || kidney.status & ORGAN_CUT_AWAY)
 			reagents.add_reagent(TOXIN, rand(1, 3))
+
+
+	var/datum/organ/internal/eyes/eyes = internal_organs_by_name["eyes"]
+	if(eyes)
+		eyes.process()
+
+
+	for(var/datum/organ/internal/I in internal_organs)
+		if(!(I.status & ORGAN_CUT_AWAY))
+			I.Life()
 
 	if(!force_process && !bad_external_organs.len) //Nothing to update, just drop it
 		return

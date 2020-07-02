@@ -245,7 +245,7 @@ Status: []<BR>"},
 
 	..()
 
-	if(iswrench(W) && !on && !raised && wrenchAnchor(user))
+	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user, W))
 		// This code handles moving the turret around. After all, it's a portable turret!
 
 		if(anchored)
@@ -571,7 +571,7 @@ Status: []<BR>"},
 
 			if (E.fields["name"] == perpname)
 				for (var/datum/data/record/R in data_core.security)
-					if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*"))
+					if ((R.fields["id"] == E.fields["id"]) && (R.fields["criminal"] == "*Arrest*" || R.fields["criminal"] == "*High Threat*"))
 						threatcount = PERP_LEVEL_ARREST
 						break
 
@@ -654,13 +654,13 @@ Status: []<BR>"},
 	// this is a bit unweildy but self-explanitory
 	switch(build_step)
 		if(0) // first step
-			if(iswrench(W) && !anchored && wrenchAnchor(user))
+			if(W.is_wrench(user) && !anchored && wrenchAnchor(user, W))
 				build_step = 1
 				anchored = 1
 				return
 
 			else if(iscrowbar(W) && !anchored)
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You dismantle the turret construction.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
 				qdel(src)
@@ -678,15 +678,15 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need at least 2 [stack] to add internal armor.</span>")
 					return
 
-			else if(iswrench(W) && wrenchAnchor(user))
+			else if(W.is_wrench(user) && wrenchAnchor(user, W))
 				build_step = 0
 				anchored = 0
 				return
 
 
 		if(2)
-			if(iswrench(W))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			if(W.is_wrench(user))
+				W.playtoolsound(src, 100)
 				to_chat(user, "<span class='notice'>You bolt the metal armor into place.</span>")
 				build_step = 3
 				return
@@ -714,8 +714,8 @@ Status: []<BR>"},
 				build_step = 4
 				return
 
-			else if(iswrench(W))
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			else if(W.is_wrench(user))
+				W.playtoolsound(src, 100)
 				to_chat(user, "You remove the turret's metal armor bolts.")
 				build_step = 2
 				return
@@ -734,8 +734,8 @@ Status: []<BR>"},
 			// attack_hand() removes the gun
 
 		if(5)
-			if(isscrewdriver(W))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+			if(W.is_screwdriver(user))
+				W.playtoolsound(src, 100)
 				build_step = 6
 				to_chat(user, "<span class='notice'>You close the internal access hatch.</span>")
 				return
@@ -753,8 +753,8 @@ Status: []<BR>"},
 					to_chat(user, "<span class='warning'>You need at least 2 [stack] to add external armor.</span>")
 					return
 
-			else if(isscrewdriver(W))
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+			else if(W.is_screwdriver(user))
+				W.playtoolsound(src, 100)
 				build_step = 5
 				to_chat(user, "You open the internal access hatch.")
 				return
@@ -775,7 +775,7 @@ Status: []<BR>"},
 					qdel(src)
 
 			else if(iscrowbar(W))
-				playsound(src, 'sound/items/Crowbar.ogg', 75, 1)
+				W.playtoolsound(src, 75)
 				to_chat(user, "You pry off the turret's exterior armor.")
 				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
 				build_step = 6
@@ -846,6 +846,6 @@ Status: []<BR>"},
 /obj/machinery/porta_turret/stationary
 	emagged = 1
 
-	New()
-		installed = new/obj/item/weapon/gun/energy/laser(src)
-		..()
+/obj/machinery/porta_turret/stationary/New()
+	installed = new/obj/item/weapon/gun/energy/laser(src)
+	..()

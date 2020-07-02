@@ -23,8 +23,8 @@ emp_act
 
 				return -1 // complete projectile permutation
 
-	if(check_shields(P.damage, "the [P.name]"))
-		P.on_hit(src, 2)
+	if(check_shields(P.damage, P))
+		P.on_hit(src, 100)
 		return 2
 	return (..(P , def_zone))
 
@@ -149,22 +149,13 @@ emp_act
 		body_coverage &= ~(C.body_parts_covered)
 	return body_coverage
 
-
-/mob/living/carbon/proc/check_shields(var/damage = 0, var/attack_text = "the attack")
-	if(!incapacitated())
-		for(var/obj/item/weapon/I in held_items)
-			if(I.IsShield() && I.on_block(damage, attack_text))
-				return 1
-
-	return 0
-
-/mob/living/carbon/human/check_shields(damage, attack_text = "the attack")
+/mob/living/carbon/human/check_shields(damage, atom/A)
 	if(..())
 		return 1
 
 	if(istype(wear_suit, /obj/item)) //Check armor
 		var/obj/item/I = wear_suit
-		if(I.IsShield() && I.on_block(damage, attack_text))
+		if(I.IsShield() && I.on_block(damage, A))
 			return 1
 
 /mob/living/carbon/human/emp_act(severity)
@@ -217,24 +208,15 @@ emp_act
 		return FALSE
 	var/hit_area = affecting.display_name
 
-	if(istype(I,/obj/item/weapon/card/emag))
-		if(!(affecting.status & ORGAN_ROBOT))
-			to_chat(user, "<span class='warning'>That limb isn't robotic.</span>")
-			return FALSE
-		if(affecting.sabotaged)
-			to_chat(user, "<span class='warning'>\The [src]'s [hit_area] is already sabotaged!</span>")
-		else
-			to_chat(user, "<span class='warning'>You sneakily slide [I] into the dataport on \the [src]'s [hit_area] and short out the safeties.</span>")
-			affecting.sabotaged = TRUE
-		return FALSE
-
-
 	if(istype(I.attack_verb, /list) && I.attack_verb.len && !(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>\The [user] [pick(I.attack_verb)] \the [src] in \the [hit_area] with \the [I]!</span>", \
 			"<span class='userdanger'>\The [user] [pick(I.attack_verb)] you in \the [hit_area] with \the [I]!</span>")
 	else if(!(I.flags & NO_ATTACK_MSG))
 		visible_message("<span class='danger'>\The [user] attacks \the [src] in \the [hit_area] with \the [I.name]!</span>", \
 			"<span class='userdanger'>\The [user] attacks you in \the [hit_area] with \the [I.name]!</span>")
+
+	//Contact diseases on the weapon?
+	I.disease_contact(src,get_part_from_limb(target_zone))
 
 	//Knocking teeth out!
 	var/knock_teeth = 0
@@ -276,9 +258,9 @@ emp_act
 				if(prob(final_force))
 					if(apply_effect(20, PARALYZE, armor))
 						visible_message("<span class='danger'>[src] has been knocked unconscious!</span>")
-						if(src != user && I.damtype == BRUTE && isrev(src))
-							ticker.mode.remove_revolutionary(mind)
-							add_attacklogs(user, src, "de-converted from Revolutionary!")
+						// if(src != user && I.damtype == BRUTE && isrev(src))
+						// 	ticker.mode.remove_revolutionary(mind)
+						// 	add_attacklogs(user, src, "de-converted from Revolutionary!")
 
 				if(bloody)//Apply blood
 					if(wear_mask)
@@ -298,6 +280,7 @@ emp_act
 
 				if(bloody)
 					bloody_body(src)
+
 	return TRUE
 
 /mob/living/carbon/human/proc/knock_out_teeth(var/mob/living/L)
@@ -335,10 +318,17 @@ emp_act
 			self_drugged_message = "<span class='info'>The tooth fairy takes some of your teeth out, and gives you a dollar.</span>")
 
 /mob/living/carbon/human/proc/bloody_hands(var/mob/living/source, var/amount = 2)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(HANDS)
+	var/bleeding = check_bodypart_bleeding(HANDS)
+	oneway_contact_diseases(source,block,bleeding)
+
 	if (gloves)
-		gloves.add_blood(source)
-		gloves:transfer_blood = amount
-		gloves:bloody_hands_mob = source
+		var/obj/item/clothing/gloves/G = gloves
+		G.add_blood(source)
+		if (istype(G))
+			G.transfer_blood = amount
+			G.bloody_hands_mob = source
 	else
 		add_blood(source)
 		bloody_hands = amount
@@ -346,11 +336,24 @@ emp_act
 	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
 
 /mob/living/carbon/human/proc/bloody_body(var/mob/living/source,var/update = 0)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(FULL_TORSO)
+	var/bleeding = check_bodypart_bleeding(FULL_TORSO)
+	oneway_contact_diseases(source,block,bleeding)
+
 	if(wear_suit)
 		wear_suit.add_blood(source)
 		update_inv_wear_suit(update)
 	if(w_uniform)
 		w_uniform.add_blood(source)
+		update_inv_w_uniform(update)
+
+/mob/living/carbon/human/apply_luminol(var/update = FALSE) //Despite what you might think with FALSE this will update things as normal.
+	if(wear_suit)
+		wear_suit.apply_luminol()
+		update_inv_wear_suit(update)
+	if(w_uniform)
+		w_uniform.apply_luminol()
 		update_inv_w_uniform(update)
 
 /mob/living/carbon/human/ex_act(var/severity, var/noblind = FALSE)
@@ -363,19 +366,25 @@ emp_act
 	var/shielded = 0
 	var/b_loss = null
 	var/f_loss = null
-
+	var/gotarmor = clamp(getarmor(null, "bomb"),0,100)
 	switch (severity)
 		if (BLOB_ACT_STRONG)
-			b_loss += 500
-			if (!prob(getarmor(null, "bomb")))
+			b_loss += 300
+			if(!prob(gotarmor)) //Percent chance equal to their armor resist to not gib instantly.
 				gib()
 				return
 			else
 				var/atom/target = get_edge_target_turf(src, get_dir(src, get_step_away(src, src)))
 				throw_at(target, 200, 4)
-			//return
-//				var/atom/target = get_edge_target_turf(user, get_dir(src, get_step_away(user, src)))
-				//user.throw_at(target, 200, 4)
+				b_loss *= (120-gotarmor)/100 //Reduce blast power by a function of bomb armor, but even 100 won't be enough.
+				//100 = 20%,  60  b_loss (bomb suit, advanced EOD suit)
+				//50  = 70%,  210 b_loss (captain's armor/rig, ancient space suit)
+				//45  = 65%,  225 b_loss (sec hardsuit)
+				//35  = 85%,  255 b_loss (eng hardsuit, blood red hardsuit, gem encrusted hardsuit)
+				//30  = 90%,  270 b_loss (ERT armor, red syndie suit)
+				//25  = 95%,  285 b_loss (security armor)
+				//20  = 100%, 300 b_loss (RD's labcoat)
+				//0   = 120%, 360 b_loss (most suits)
 
 		if (BLOB_ACT_MEDIUM)
 			if (stat == 2 && client)
@@ -383,7 +392,7 @@ emp_act
 				return
 
 			else if (stat == 2 && !client)
-				gibs(loc, viruses)
+				gibs(loc, virus2)
 				qdel(src)
 				return
 
@@ -392,9 +401,9 @@ emp_act
 
 			f_loss += 60
 
-			if (prob(getarmor(null, "bomb")))
-				b_loss = b_loss/1.5
-				f_loss = f_loss/1.5
+			if (gotarmor)
+				b_loss *= (100-gotarmor)/100 //reduce damage by percent equal to bomb armor
+				f_loss *= (100-gotarmor)/100
 
 			if (!earprot())
 				ear_damage += 30
@@ -404,10 +413,8 @@ emp_act
 
 		if(BLOB_ACT_WEAK)
 			b_loss += 30
-			var/gotarmor = min(100,max(0,getarmor(null, "bomb")))
-
-			if (prob(gotarmor))
-				b_loss = (b_loss*((gotarmor-100)*-1))/100//equipments with armor[bomb]=100 will fully negate the damage of light explosives.
+			if(gotarmor)
+				b_loss *= (100-gotarmor)/100 //reduce damage by percent equal to bomb armor
 			if (!earprot())
 				ear_damage += 15
 				ear_deaf += 60
@@ -485,4 +492,6 @@ emp_act
 			var/datum/organ/external/affecting = get_organ(ran_zone(dam_zone))
 
 			apply_damage(run_armor_absorb(affecting, "melee", rand(30,40)), BRUTE, affecting, run_armor_check(affecting, "melee"))
-	return
+
+/mob/living/carbon/human/acidable()
+	return !(species && species.anatomy_flags & ACID4WATER)

@@ -9,6 +9,7 @@
 	var/y_offset = 0
 	var/pixel_x_offset = 0
 	var/pixel_y_offset = 0
+	var/layer_override
 	var/rotate_offsets = FALSE
 
 // Modifies the new atom according to our flags.
@@ -29,6 +30,9 @@
 
 	AM.pixel_x += pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y += pixel_y_offset * PIXEL_MULTIPLIER
+
+	if(layer_override)
+		AM.layer = layer_override
 
 	update_lock(AM)
 	AM.change_dir(owner.dir, owner)
@@ -105,6 +109,9 @@
 
 	AM.pixel_x -= pixel_x_offset * PIXEL_MULTIPLIER
 	AM.pixel_y -= pixel_y_offset * PIXEL_MULTIPLIER
+
+	if(layer_override)
+		AM.layer = initial(AM.layer)
 
 /datum/locking_category/New(var/atom/new_owner)
 	locked = list()

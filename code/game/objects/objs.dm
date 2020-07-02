@@ -29,7 +29,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-	var/quality = NORMAL //What level of quality this object is.
+	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -44,6 +44,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 	var/impactsound
+	var/current_glue_state = GLUE_STATE_NONE
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -77,6 +78,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+/obj/proc/blocks_doors()
+	return 0
 
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -211,6 +215,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/cultify()
 	qdel(src)
 
+/obj/proc/clockworkify()
+	return
+
 /obj/proc/wrenchable()
 	return 0
 
@@ -220,10 +227,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/is_sharp()
 	return sharpness
 
-/obj/proc/is_hot() //This returns the temperature of the object if possible
+/obj/is_hot() //This returns the temperature of the object if possible
 	return source_temperature
 
-/obj/proc/thermal_energy_transfer()
+/obj/thermal_energy_transfer()
 	if(is_hot())
 		return heat_production
 	return 0
@@ -250,13 +257,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	else
 		return null
 
-/obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_request)
-	//Return: (NONSTANDARD)
-	//		null if object handles breathing logic for lifeform
-	//		datum/air_group to tell lifeform to process using that breath return
-	//DEFAULT: Take air from turf to give to have mob process
-	if(breath_request>0)
-		return remove_air(breath_request)
+/obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_vol)
+	if(breath_vol > 0)
+		var/datum/gas_mixture/G = return_air()
+		return G.remove_volume(breath_vol)
 	else
 		return null
 
@@ -271,7 +275,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 					continue
 
 				// AIs/Robots can do shit from afar.
-				if (isAI(M) || isrobot(M))
+				if (isAI(M) || isrobot(M) || isAdminGhost(M))
 					is_in_use = 1
 					src.attack_ai(M)
 
@@ -333,13 +337,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/link/context)
+/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
-/obj/proc/canLink(var/obj/O, var/link/context)
+/obj/proc/canLink(var/obj/O, var/list/context)
 	return 0
 
 /obj/proc/isLinkedWith(var/obj/O)
@@ -464,7 +468,7 @@ a {
 	if(density==0 || can_affix_to_dense_turf)
 		return TRUE// Non-dense things just don't care. Same with can_affix_to_dense_turf=TRUE objects.
 	for(var/obj/other in loc) //ensure multiple things aren't anchored in one place
-		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flow_flags & ON_BORDER))
+		if(other.anchored == 1 && other.density == 1 && density && !anchored && !(other.flow_flags & ON_BORDER) && !(istype(other,/obj/structure/table)))
 			to_chat(user, "\The [other] is already anchored in this location.")
 			return FALSE // NOPE
 	return TRUE
@@ -474,7 +478,7 @@ a {
  * @param time_to_wrench The time to complete the wrenchening
  * @returns TRUE on success, FALSE on fail
  */
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
 	if(!canAffixHere(user))
 		return FALSE
 	if(!anchored)
@@ -487,7 +491,8 @@ a {
 				return FALSE
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(I)
+		I.playtoolsound(loc, 50)
 	if(do_after(user, src, time_to_wrench))
 		if(!canAffixHere(user))
 			return FALSE
@@ -567,7 +572,10 @@ a {
 
 /obj/proc/clumsy_check(var/mob/living/user)
 	if(istype(user))
-		return (M_CLUMSY in user.mutations)
+		if(isrobot(user))
+			var/mob/living/silicon/robot/R = user
+			return HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN)
+		return (M_CLUMSY in user.mutations) || user.reagents.has_reagent(INCENSE_BANANA)
 	return 0
 
 //Proc that handles NPCs (gremlins) "tampering" with this object.
@@ -634,19 +642,25 @@ a {
 				var/mob/M = loc
 				M.regenerate_icons()
 
-/obj/proc/gen_quality()
-	var/material_mod = material_type ? material_type.quality_mod : 1
-	var/turf/T = get_turf(src)
+/obj/proc/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	var/material_mod = mat ? mat.quality_mod : material_type ? material_type.quality_mod : 1
 	var/surrounding_mod = 1
+	/* - Probably better we find a better way of checking the quality of a room, like an area-level variable for room quality, and cleanliness
+	var/turf/T = get_turf(src)
 	for(var/dir in alldirs)
 		for(var/obj/I in get_step(T, dir))
 			if(I.quality > NORMAL || I.quality < NORMAL)
 				surrounding_mod *= I.quality/rand(1,3)
-	var/initial_quality = round((rand(1,3)*surrounding_mod)*material_mod)
-	quality = Clamp(initial_quality, AWFUL, LEGENDARY)
+	*/
+	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
+	quality = clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(icon, to_icon_state))
+		icon_state = to_icon_state
 
 /obj/proc/gen_description(mob/user)
-	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
+	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
 	var/additional_description
 	if(material_mod)
 		additional_description = "On \the [src] is a carving, it depicts:\n"
@@ -670,5 +684,70 @@ a {
 	if(additional_description)
 		desc = "[initial(desc)] \n [additional_description]"
 
+/obj/proc/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+	if(mat)
+		/*var/icon/original = icon(icon, icon_state) Icon operations keep making mustard gas
+		if(mat.color)
+			original.ColorTone(mat.color)
+			var/obj/item/I = src
+			if(istype(I))
+				var/icon/t_state
+				for(var/hand in list("left_hand", "right_hand"))
+					t_state = icon(I.inhand_states[hand], I.item_state)
+					t_state.ColorTone(mat.color)
+					I.inhand_states[hand] = t_state
+		else if(mat.color_matrix)
+			color = mat.color_matrix
+		icon = original*/
+		alpha = mat.alpha
+		material_type = mat
+		sheet_type = mat.sheettype
+	gen_quality(additional_quality, min_quality)
+	if(quality > B_SUPERIOR)
+		gen_description()
+	if(material_type)
+		if(sharpness_flags && sharpness)
+			force = initial(force)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+		else
+			force = initial(force)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+	if(!findtext(lowertext(name), lowertext(material_type.name)))
+		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+
 /obj/proc/check_uplink_validity()
 	return TRUE
+
+//Return true if thrown object misses
+/obj/PreImpact(atom/movable/A, speed)
+	if(density && !throwpass)
+		return FALSE
+	return TRUE
+
+/obj/proc/FeetStab(mob/living/AM,var/soundplay = 'sound/effects/glass_step.ogg',var/damage = 5,var/knockdown = 3)
+	if(istype(AM))
+		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			return
+		if(AM.flying)
+			return
+		else //Stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			if(ishuman(AM))
+				var/mob/living/carbon/human/H = AM
+				var/danger = FALSE
+
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
+							H.Knockdown(knockdown)
+							H.Stun(knockdown)
+						if(foot.take_damage(damage, 0))
+							H.UpdateDamageIcon()
+						H.updatehealth()
+
+				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")

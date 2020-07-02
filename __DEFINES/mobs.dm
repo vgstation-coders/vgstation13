@@ -22,3 +22,20 @@
 #define MESSENGER_BAG 5
 
 #define SHOW_HELD_ITEM_AND_POINTING_DELAY 0.7 SECONDS
+
+#define VOXGREEN 1
+#define VOXBROWN 2
+#define VOXGRAY 3
+#define VOXLGREEN 4
+#define VOXAZURE 5
+#define VOXEMERALD 6
+
+#define GREYGRAY 1
+#define GREYLIGHT 2
+#define GREYGREEN 3
+#define GREYBLUE 4
+
+#define CATBEASTBROWN 1
+#define CATBEASTBLACK 2
+
+#define CONFUSED_MAGIC 1

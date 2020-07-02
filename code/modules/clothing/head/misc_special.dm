@@ -8,6 +8,7 @@
  *		Butt
  *		Tinfoil Hat
  *		Celtic Crown
+ *		Energy Dome
  */
 
 /*
@@ -16,18 +17,18 @@
 /obj/item/clothing/head/welding
 	name = "welding helmet"
 	desc = "A head-mounted face cover designed to protect the wearer completely from space-arc eye."
-	icon_state = "welding"
+	icon_state = "weldingup"
 	flags = FPRINT
 	item_state = "welding"
 	starting_materials = list(MAT_IRON = 3000, MAT_GLASS = 1000)
 	w_type = RECYK_MISC
-	var/up = 0
-	eyeprot = 3
+	var/up = 1
+	eyeprot = 0
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = FACE
+	body_parts_covered = HEAD
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED,INSECT_SHAPED)
 
 /obj/item/clothing/head/welding/attack_self()
 	toggle()
@@ -41,12 +42,12 @@
 			src.up = !src.up
 			src.body_parts_covered = FACE
 			eyeprot = 3
-			icon_state = initial(icon_state)
+			icon_state = "welding"
 			to_chat(usr, "You flip the [src] down to protect your eyes.")
 		else
 			src.up = !src.up
 			src.body_parts_covered = HEAD
-			icon_state = "[initial(icon_state)]up"
+			icon_state = "weldingup"
 			eyeprot = 0
 			to_chat(usr, "You push the [src] up out of your face.")
 		usr.update_inv_head()	//so our mob-overlays update
@@ -114,8 +115,10 @@
 	desc = "Perfect for winter in Siberia, da?"
 	icon_state = "ushanka"
 	item_state = "ushanka"
+	flags = HIDEHEADHAIR
 	body_parts_covered = EARS|HEAD
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/ushanka/attack_self(mob/user as mob)
 	var/initial_icon_state = initial(icon_state)
@@ -135,6 +138,15 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
+
+/obj/item/clothing/head/ushanka/hos
+	name = "head of security ushanka"
+	desc = "The armored ushanka of the head of security. You cannot bribe an officer of Nanotrasen."
+	icon_state = "ushankablack"
+	item_state = "ushankablack"
+	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
+
 /*
  * Pumpkin head
  */
@@ -145,7 +157,7 @@
 	item_state = "hardhat0_pumpkin"
 	_color = "pumpkin"
 	flags = FPRINT
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	var/brightness_on = 2 //luminosity when on
 	var/on = 0
 
@@ -171,24 +183,38 @@
 	desc = "A pair of kitty ears. Meow!"
 	icon_state = "kitty"
 	flags = FPRINT
-	var/haircolored = 1
+	var/haircolored = TRUE
+	var/cringe = FALSE
+	var/anime = FALSE
 	siemens_coefficient = 1.5
 
-/obj/item/clothing/head/kitty/cursed
-	canremove = 0
-
-/obj/item/clothing/head/kitty/collectable
-	desc = "A pair of black kitty ears. Meow!"
-	haircolored = 0
+/obj/item/clothing/head/kitty/affect_speech(var/datum/speech/speech, var/mob/living/L)
+	if(L.is_wearing_item(src, slot_head))
+		if(cringe || Holiday == APRIL_FOOLS_DAY)
+			speech.message = tumblrspeech(speech.message)
+		if(anime || Holiday == APRIL_FOOLS_DAY)
+			speech.message = nekospeech(speech.message)
 
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
 	if(!istype(user) || !haircolored)
 		return
 	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
-	wear_override.Blend(rgb(user.r_hair, user.g_hair, user.b_hair), ICON_ADD)
+	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
+
+/obj/item/clothing/head/kitty/collectable
+	desc = "A pair of black kitty ears. Meow!"
+	haircolored = FALSE
+
+/obj/item/clothing/head/kitty/anime
+	desc = "A pair of nekomimi. Nya!"
+	anime = TRUE
+
+/obj/item/clothing/head/kitty/anime/cursed
+	canremove = FALSE
+	cringe = TRUE
 
 /obj/item/clothing/head/butt
 	name = "butt"
@@ -217,6 +243,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
+	species_fit = list(GREY_SHAPED,VOX_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
@@ -249,3 +276,9 @@
 	if(wearer.get_item_by_slot(slot_head) == src)
 		if(prob(5))
 			wearer.say(pick("Ah, you're here at last","Twice now you've made me taste bitter defeat", " I hate to disappoint the Cobras but you're mine now.", "Ocelots are proud creatures. They prefer to hunt alone.","This time, I've got twelve shots.","This is the greatest handgun ever made. The Colt Single Action Army.","Six bullets, more than enough to kill anything that moves."))
+
+/obj/item/clothing/head/energy_dome
+	name = "energy dome"
+	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
+	icon_state = "energy_dome"
+	item_state = "energy_dome"

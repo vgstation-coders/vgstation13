@@ -3,6 +3,7 @@
 	desc = "Switch bodies with somebody adjacent to you. Both you and your target regain your mind and knowledge of spells."
 	abbreviation = "MT"
 	user_type = USER_TYPE_WIZARD
+	specialization = SSUTILITY
 
 	school = "transmutation"
 	charge_max = 600
@@ -72,7 +73,7 @@
 			if(caster.mind.special_verbs.len)//If they had any special verbs, we add them here.
 				for(var/V in caster.mind.special_verbs)
 					victim.verbs += V
-			ticker.mode.update_all_wizard_icons()
+			//ticker.mode.update_all_wizard_icons()
 			//MIND TRANSFER END
 
 			//Target is handled in ..(), so we handle the caster here

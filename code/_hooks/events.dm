@@ -24,6 +24,7 @@
 /event/Destroy()
 	holder = null
 	handlers = null
+	..()
 
 /event/proc/Add(var/objectRef,var/procName)
 	var/key="\ref[objectRef]:[procName]"

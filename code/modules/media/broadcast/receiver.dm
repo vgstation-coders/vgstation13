@@ -14,9 +14,10 @@ var/global/media_receivers=list()
 	..()
 	connect_frequency()
 
-/obj/machinery/media/receiver/proc/receive_broadcast(var/url="", var/start_time=0)
+/obj/machinery/media/receiver/proc/receive_broadcast(var/url="", var/start_time=0, var/finish_time=0)
 	media_url = url
 	media_start_time = start_time
+	media_finish_time = finish_time
 	update_music()
 
 /obj/machinery/media/receiver/proc/connect_frequency()

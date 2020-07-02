@@ -154,6 +154,8 @@ Pipelines + Other Objects -> Pipe network
 		update_icon_ready = 1
 	else
 		underlays.Cut()
+	if(!anchored)
+		return //the rest isn't needed for unanchored things
 	var/list/missing_nodes = icon_directions()
 	for (var/obj/machinery/atmospherics/connected_node in node_list)
 		var/con_dir = get_dir(src, connected_node)
@@ -213,7 +215,7 @@ Pipelines + Other Objects -> Pipe network
 //Called when checking connectability in findConnecting()
 //This is checked for both pipes in establishing a connection - the base behaviour will work fine nearly every time
 /obj/machinery/atmospherics/proc/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	return (target.piping_layer == given_layer || target.pipe_flags & ALL_LAYER)
+	return (target.get_layer_of_dir(turn(direction, 180)) == given_layer || target.pipe_flags & ALL_LAYER)
 
 /obj/machinery/atmospherics/proc/getNodeType(var/node_id)
 	return PIPE_TYPE_STANDARD
@@ -237,12 +239,16 @@ Pipelines + Other Objects -> Pipe network
 					return
 			if(!found)
 				continue
-			var/node_var="node[node_id]"
-			if(!(node_var in vars))
-				//testing("[node_var] not in vars.")
-				return
-			if(!vars[node_var])
-				vars[node_var] = found
+			if(!get_node(node_id))
+				set_node(node_id, found)
+
+//These two procs are a shitty compromise to speed up pipe initialization without completely rewriting pipecode.
+//get_node(<n>) should return the var node<n> and set_node(<n>, <v>) should set node<n> to <v>.
+/obj/machinery/atmospherics/proc/get_node(node_id)
+	CRASH("Uh oh! Somebody didn't override get_node()!")
+
+/obj/machinery/atmospherics/proc/set_node(node_id, value)
+	CRASH("Uh oh! Somebody didn't override set_node()!")
 
 // Wait..  What the fuck?
 // I asked /tg/ and bay and they have no idea why this is here, so into the trash it goes. - N3X
@@ -276,7 +282,7 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/proc/reassign_network(datum/pipe_network/old_network, datum/pipe_network/new_network)
 	// Used when two pipe_networks are combining
 
-/obj/machinery/atmospherics/proc/return_network_air(datum/network/reference)
+/obj/machinery/atmospherics/proc/return_network_air(datum/pipe_network/reference)
 	// Return a list of gas_mixture(s) in the object
 	//		associated with reference pipe_network for use in rebuilding the networks gases list
 	// Is permitted to return null
@@ -289,7 +295,9 @@ Pipelines + Other Objects -> Pipe network
 	return FALSE
 
 /obj/machinery/atmospherics/cultify()
-	if(src.invisibility != INVISIBILITY_MAXIMUM)
+	if(density)
+		..()
+	else
 		src.invisibility = INVISIBILITY_MAXIMUM
 
 
@@ -299,7 +307,7 @@ Pipelines + Other Objects -> Pipe network
 		if(user.drop_item(pipe))
 			pipe.setPipingLayer(src.piping_layer) //align it with us
 			return 1
-	if (!iswrench(W))
+	if(!W.is_wrench(user))
 		return ..()
 	if(src.machine_flags & WRENCHMOVE)
 		return ..()
@@ -324,7 +332,7 @@ Pipelines + Other Objects -> Pipe network
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1
-	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \
@@ -396,3 +404,8 @@ Pipelines + Other Objects -> Pipe network
 
 	var/turf/T = loc
 	return !T.intact
+
+// Returns the layer of a pipe connection in the specified direction
+// Only needs to be overridden if a pipe can connect on different layers
+/obj/machinery/atmospherics/proc/get_layer_of_dir(var/direction)
+	return piping_layer

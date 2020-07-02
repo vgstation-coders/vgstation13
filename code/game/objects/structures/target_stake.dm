@@ -9,44 +9,44 @@
 	siemens_coefficient = 1
 	var/obj/item/target/pinned_target // the current pinned target
 
-	Move()
-		..()
-		// Move the pinned target along with the stake
-		if(pinned_target in view(3, src))
-			pinned_target.forceMove(loc)
+/obj/structure/target_stake/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	// Move the pinned target along with the stake
+	if(pinned_target in view(3, src))
+		pinned_target.forceMove(loc)
 
-		else // Sanity check: if the pinned target can't be found in immediate view
-			pinned_target = null
-			setDensity(TRUE)
+	else // Sanity check: if the pinned target can't be found in immediate view
+		pinned_target = null
+		setDensity(TRUE)
 
-	attackby(obj/item/W as obj, mob/user as mob)
-		// Putting objects on the stake. Most importantly, targets
-		if(pinned_target)
-			return // get rid of that pinned target first!
+/obj/structure/target_stake/attackby(obj/item/W as obj, mob/user as mob)
+	// Putting objects on the stake. Most importantly, targets
+	if(pinned_target)
+		return // get rid of that pinned target first!
 
-		if(istype(W, /obj/item/target))
-			if(user.drop_item(W, src.loc))
-				setDensity(FALSE)
-				W.setDensity(TRUE)
-				W.layer = ABOVE_OBJ_LAYER
-				pinned_target = W
-				to_chat(user, "You slide the target into the stake.")
-		return
+	if(istype(W, /obj/item/target))
+		if(user.drop_item(W, src.loc))
+			setDensity(FALSE)
+			W.setDensity(TRUE)
+			W.layer = ABOVE_OBJ_LAYER
+			pinned_target = W
+			to_chat(user, "You slide the target into the stake.")
+	return
 
-	attack_hand(mob/user as mob)
-		// taking pinned targets off!
-		if(pinned_target)
-			setDensity(TRUE)
-			pinned_target.setDensity(FALSE)
-			pinned_target.layer = OBJ_LAYER
+/obj/structure/target_stake/attack_hand(mob/user as mob)
+	// taking pinned targets off!
+	if(pinned_target)
+		setDensity(TRUE)
+		pinned_target.setDensity(FALSE)
+		pinned_target.layer = OBJ_LAYER
 
-			pinned_target.forceMove(user.loc)
-			if(ishuman(user))
-				if(!user.get_active_hand())
-					user.put_in_hands(pinned_target)
-					to_chat(user, "You take the target out of the stake.")
-			else
-				pinned_target.forceMove(get_turf(user))
+		pinned_target.forceMove(user.loc)
+		if(ishuman(user))
+			if(!user.get_active_hand())
+				user.put_in_hands(pinned_target)
 				to_chat(user, "You take the target out of the stake.")
+		else
+			pinned_target.forceMove(get_turf(user))
+			to_chat(user, "You take the target out of the stake.")
 
-			pinned_target = null
+		pinned_target = null

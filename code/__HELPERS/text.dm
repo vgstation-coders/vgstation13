@@ -1,16 +1,5 @@
 #define HTMLTAB "&nbsp;&nbsp;&nbsp;&nbsp;"
-
-//Loops through every line in (text). The 'line' variable holds the current line
-//Example use:
-/*
-var/text = {"Line 1
-Line 2
-Line 3
-"}
-forLineInText(text)
-	world.log << line
-*/
-#define forLineInText(text) for({var/__index=1;var/line=copytext(text, __index, findtext(text, "\n", __index))} ; {__index != 0} ; {__index = findtext(text, "\n", __index+1) ; line = copytext(text, __index+1, findtext(text, "\n", __index+1))})
+#define string2charlist(string) (splittext(string, regex("(.)")) - splittext(string, ""))
 
 /*
  * Holds procs designed to help with filtering text
@@ -30,12 +19,10 @@ forLineInText(text)
 // Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
 /proc/sanitizeSQL(var/t as text)
 	//var/sanitized_text = replacetext(t, "'", "\\'")
-	//sanitized_text = replacetext(sanitized_text, "\"", "\\\"")
-
-	var/sqltext = dbcon.Quote(t)
-	//testing("sanitizeSQL(): BEFORE copytext(): [sqltext]")
-	sqltext = copytext(sqltext, 2, length(sqltext))//Quote() adds quotes around input, we already do that
-	//testing("sanitizeSQL(): AFTER copytext(): [sqltext]")
+	var/sqltext = SSdbcore.Quote(t)
+	sqltext = replacetext(sqltext, "'", "\'")
+	//to_chat(world, "sanitizeSQL(): BEFORE Quote(): [t]")
+	//to_chat(world, "sanitizeSQL(): AFTER Quote(): [sqltext]")
 	return sqltext
 
 /*
@@ -82,17 +69,18 @@ forLineInText(text)
 		i = findtext(Haystack, Needle, i + 1, End)
 
 //Removes a few problematic characters
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","�"="�"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#"))
 	for(var/char in repl_chars)
-		var/index = findtext(t, char)
-		while(index)
-			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
-			index = findtext(t, char)
+		t = replacetext(t, char, repl_chars[char])
 	return t
 
 //Runs byond's sanitization proc along-side sanitize_simple
 /proc/sanitize(var/t,var/list/repl_chars = null)
 	return html_encode(sanitize_simple(t,repl_chars))
+
+/proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
+	var/static/regex/speech_regex = regex(@"[^ -~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit)) //Note that this does NOT scrub HTML, because this is done in different places in me and say messages.
 
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
@@ -105,10 +93,10 @@ forLineInText(text)
 	return copytext((html_encode(strip_html_simple(t))),1,limit)
 
 /proc/reverse_text(txt)
-  var/i = length(txt)+1
-  . = ""
-  while(--i)
-    . += copytext(txt,i,i+1)
+	var/i = length(txt)+1
+	. = ""
+	while(--i)
+		. += copytext(txt,i,i+1)
 
 /*
  * returns null if there is any bad text in the string
@@ -313,9 +301,16 @@ proc/checkhtml(var/t)
 /proc/trim(text)
 	return trim_left(trim_right(text))
 
+//Returns the first word in a string.
+/proc/get_first_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, i) == 32)
+			return copytext(text, 1, i)
+	return text
+
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
-	return uppertext(copytext(t, 1, 2)) + copytext(t, 2)
+	return uppertext(copytext_char(t, 1, 2)) + copytext_char(t, 2)
 
 //Centers text by adding spaces to either side of the string.
 /proc/dd_centertext(message, length)
@@ -393,22 +388,36 @@ proc/checkhtml(var/t)
 	if(parts.len==2)
 		. += ".[parts[2]]"
 
-var/list/watt_suffixes = list("W", "KW", "MW", "GW", "TW", "PW", "EW", "ZW", "YW")
-/proc/format_watts(var/number)
-	if (number<0)
-		return "-[format_watts(abs(number))]"
-	if (number==0)
-		return "0 W"
 
-	var/max_watt_suffix = watt_suffixes.len
+/**
+ * Formats unites with their suffixes
+ * Should be good for J, W, and stuff
+ */
+var/list/unit_suffixes = list("", "k", "M", "G", "T", "P", "E", "Z", "Y")
+
+/proc/format_units(var/number)
+	if (number<0)
+		return "-[format_units(abs(number))]"
+	if (number==0)
+		return "0 "
+
+	var/max_unit_suffix = unit_suffixes.len
 	var/i=1
 	while (round(number/1000) >= 1)
 		number/=1000
 		i++
-		if (i == max_watt_suffix)
+		if (i == max_unit_suffix)
 			break
 
-	return "[format_num(number)] [watt_suffixes[i]]"
+	return "[format_num(number)] [unit_suffixes[i]]"
+
+
+/**
+ * Old unit formatter, the TEG used to use this
+ */
+/proc/format_watts(var/number)
+	return "[format_units(number)]W"
+
 
 //Returns 1 if [text] ends with [suffix]
 //Example: text_ends_with("Woody got wood", "dy got wood") returns 1
@@ -489,6 +498,8 @@ var/quote = ascii2text(34)
 		if(hundreds)
 			out += num2words(hundreds, zero, minus, hundred, digits, tens, units, recursion+1) + list(hundred)
 			number %= 100
+			if(number == 0)
+				return out
 
 	if(number < 100)
 		// Teens
@@ -527,3 +538,42 @@ proc/sql_sanitize_text(var/text)
 	text = replacetext(text, ";", "")
 	text = replacetext(text, "&", "")
 	return text
+
+/proc/is_letter(var/thing) // Thing is an ascii number
+    return (thing >= 65 && thing <= 122)
+
+/proc/buttbottify(var/message)
+	var/list/split_phrase = splittext(message," ") // Split it up into words.
+
+	var/list/prepared_words = split_phrase.Copy()
+	var/i = rand(1,3)
+	for(,i > 0,i--) //Pick a few words to change.
+
+		if (!prepared_words.len)
+			break
+		var/word = pick(prepared_words)
+		prepared_words -= word //Remove from unstuttered words so we don't stutter it again.
+		var/index = split_phrase.Find(word) //Find the word in the split phrase so we can replace it.
+
+		split_phrase[index] = "butt"
+	return jointext(split_phrase," ") // No longer need to sanitize, speech is automatically html_encoded at render-time.
+
+/proc/tumblrspeech(var/speech)
+	if(!speech)
+		return
+	var/static/regex/hewwo_lowercase = new("l|r", "g")
+	var/static/regex/hewwo_uppercase = new("L|R", "g")
+	speech = hewwo_lowercase.Replace(speech, "w")
+	speech = hewwo_uppercase.Replace(speech, "W")
+	return speech
+
+/proc/nekospeech(var/speech)
+	if(!speech)
+		return
+	var/static/regex/nya_lowercase = new("n(?=\[aeiou])|N(?=\[aeiou])", "g")
+	var/static/regex/nya_uppercase = new("N(?=\[AEIOU])|n(?=\[AEIOU])", "g")
+	var/static/regex/nya_Ny = new("^ny|^NY(?!\[A-Z])") //Thanks, saycode.
+	speech = nya_lowercase.Replace(speech, "ny")
+	speech = nya_uppercase.Replace(speech, "NY")
+	speech = nya_Ny.Replace(speech, "Ny")
+	return speech

@@ -1,7 +1,8 @@
 
 /datum/artifact_effect/gasplasma
 	effecttype = "gasplasma"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA)
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/max_pressure
 	var/target_percentage
 	copy_for_battery = list("max_pressure")
@@ -15,10 +16,10 @@
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env)
-			env.adjust_gas("plasma", rand(2,15))
+			env.adjust_gas(GAS_PLASMA, rand(2,15))
 
 /datum/artifact_effect/gasplasma/DoEffectAura()
 	if(holder)
 		var/datum/gas_mixture/env = holder.loc.return_air()
 		if(env && env.pressure < max_pressure)
-			env.adjust_gas("plasma", pick(0, 0, 0.1, rand()))
+			env.adjust_gas(GAS_PLASMA, pick(0, 0, 0.1, rand()))

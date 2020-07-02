@@ -47,6 +47,31 @@
 	. = ..()
 	to_chat(user, "<span class='notice'>Cloning is [clone ? "enabled" : "disabled"].</span>")
 
+/obj/item/device/multitool/attack(mob/M as mob, mob/user as mob)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/datum/organ/external/S = H.organs_by_name[user.zone_sel.selecting]
+		if (!S)
+			return
+		if(!(S.is_robotic()) || user.a_intent != I_HELP)
+			return ..()
+		if(S.status & ORGAN_MALFUNCTIONING)
+			if(do_after(user, M, 6 SECONDS))
+				if(user != M)
+					user.visible_message("<span class='attack'>\The [user] uses \the [src] to reboot \the [M]'s [S.display_name].</span>",\
+					"<span class='attack'>You reboot \the [M]'s [S.display_name] with \the [src].</span>",\
+					"You hear beeping.")
+				else
+					user.visible_message("<span class='attack'>\The [user] uses \the [src] to reboot their [S.display_name].</span>",\
+					"<span class='attack'>You reboot your [S.display_name] with \the [src].</span>",\
+					"You hear beeping.")
+				S.status &= ~ORGAN_MALFUNCTIONING
+				return
+		else if(S.is_malfunctioning()) //Not malfunctioning from the flag. Easy mistake to make.
+			to_chat(user, "<span class = 'notice'>\The [S.display_name] is malfunctioning due to damage, not electrical error.</span>")
+			return
+	..()
+
 /////////////////////////
 //Disguised AI detector// - changes color based on proximity to various surveillance devices
 /////////////////////////

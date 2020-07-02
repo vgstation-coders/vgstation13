@@ -3,7 +3,7 @@
  *		Balloons
  *		Fake telebeacon
  *		Fake singularity
- *		Toy gun
+ *		Toy guns
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
@@ -105,6 +105,13 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
+
+/obj/item/toy/syndicateballoon/byondballoon
+    name = "\improper BYOND balloon"
+    desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
+    icon_state = "byondballoon"
+    item_state = "byondballoon"
+    inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
 /*
  * Fake telebeacon
  */
@@ -126,7 +133,7 @@
 
 /obj/item/toy/spinningtoy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'><b>[user] is putting \his head into \the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
-	return (BRUTELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /*
@@ -172,7 +179,7 @@
 		return 1
 	return
 
-/obj/item/toy/gun/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
+/obj/item/toy/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (flag)
 		return
 	if (!user.dexterity_check())
@@ -186,7 +193,7 @@
 	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 	src.bullets--
 	for(var/mob/O in viewers(user, null))
-		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
+		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [A]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
 	name = "box of cap gun caps"
@@ -210,6 +217,32 @@
 	..()
 	to_chat(user, "There [amount_left == 1 ? "is" : "are"] [amount_left] cap\s left.")
 
+/*
+ * Toy pulse rifle
+ */
+
+
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
+	name = "pulse destroyer"
+	desc = "A heavy-duty, pulse-based lasertag weapon."
+	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
+
+/*
+ * Fireworks launcher
+ */
+
+
+/obj/item/weapon/gun/energy/fireworkslauncher
+	name = "fireworks launcher"
+	desc = "Celebrate in style!"
+	icon_state = "fireworkslauncher"
+	item_state = "riotgun"
+	fire_sound = "sound/weapons/railgun_lowpower.ogg"
+	projectile_type = "/obj/item/projectile/meteor/firework"	
+	charge_cost = 0 //infinite ammo!
+	
+/obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
+	return
 
 /*
  * Toy crossbow
@@ -397,6 +430,11 @@
 	attack_verb = list("pricked", "absorbed", "gored", "stung")
 	w_class = W_CLASS_MEDIUM
 
+/obj/item/toy/foamblade/suicide_act(mob/user)
+	user.visible_message("<span class='danger'>[user] is absorbing \himself! It looks like \he's trying to commit suicide.</span>")
+	playsound(src, 'sound/effects/lingabsorbs.ogg', 50, 1)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
+
 /*
  * Clock bomb
  */
@@ -455,7 +493,7 @@
 
 /obj/item/toy/crayon/suicide_act(mob/user)
 	user.visible_message("<span class = 'danger'><b>[user] is jamming \the [src.name] up \his nose and into \his brain. It looks like \he's trying to commit suicide.</b></span>")
-	return (BRUTELOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_OXYLOSS)
 
 /*
  * Snap pops
@@ -490,8 +528,8 @@
 /obj/item/toy/snappop/virus
 	name = "unstable goo"
 	desc = "Your palm is oozing this stuff!"
-	icon = 'icons/mob/slimes.dmi'
-	icon_state = "red slime extract"
+	icon = 'icons/obj/virology.dmi'
+	icon_state = "unstable_goo"
 	throwforce = 30.0
 	throw_speed = 10
 	throw_range = 30
@@ -506,10 +544,10 @@
 
 /*
  * Syndie stealthy smokebombs!
- */
- /obj/item/toy/snappop/smokebomb
- 	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
+*/
+/obj/item/toy/snappop/smokebomb
 	flags = FPRINT | NO_THROW_MSG
+	origin_tech = Tc_COMBAT + "=1;" + Tc_SYNDICATE + "=1"
 
 /obj/item/toy/snappop/smokebomb/pop()
 	spark(src, 2, FALSE)
@@ -528,8 +566,8 @@
 /obj/item/toy/waterflower
 	name = "Water Flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -684,7 +722,7 @@
 
 /obj/item/toy/gooncode/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class = 'danger'>[user] is using [src.name]! It looks like \he's  trying to re-add poo!</span>")
-	return (BRUTELOSS|FIRELOSS|TOXLOSS|OXYLOSS)
+	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
 
 /obj/item/toy/minimeteor
@@ -716,7 +754,7 @@
 	if(!ishigherbeing(user))
 		to_chat(user, "<span class = 'warning'>You don't know how to use this!</span>")
 		return
-	if(issilent(user))
+	if(issilent(user) || user.is_mute())
 		to_chat(user, "<span class = 'warning'>You find yourself unable to speak at all.</span>")
 		return
 	if(spamcheck)
@@ -1039,13 +1077,13 @@
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		playsound(user, 'sound/vox/doop.wav', 20, 1)
+		playsound(user, 'sound/vox/_doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			playsound(user, 'sound/vox/doop.wav', 20, 1)
+			playsound(user, 'sound/vox/_doop.wav', 20, 1)
 			cooldown = world.time
 			return
 	..()
@@ -1101,6 +1139,21 @@
 	name = "fingerbox"
 	desc = "A high quality fingerbox."
 	icon_state = "fingerbox"
+
+/obj/item/toy/gasha/bangerboy
+	name = "toy Bangerboy"
+	icon_state = "bangerboy"
+	desc = "<B>BANG</B>"
+
+/obj/item/toy/gasha/femsec
+	name = "toy femsec"
+	icon_state = "femsec"
+	desc = "bodybag accessory not included"
+
+/obj/item/toy/gasha/hoptard
+	name = "toy HoPtard"
+	icon_state = "hoptard"
+	desc = "uhhhhhhhh"
 
 	//I couldn't think of anywhere else to put this
 /obj/item/toy/canary
@@ -1169,22 +1222,9 @@
 			for(var/i in L.gasses)
 				if(istype(i, /datum/lung_gas/waste))
 					var/datum/lung_gas/waste/W = i
-					switch(W.id)
-						if("oxygen")
-							B.air_contents.adjust(o2 = 0.5)
-						if("carbon_dioxide")
-							B.air_contents.adjust(co2 = 0.5)
-						if("nitrogen")
-							B.air_contents.adjust(n2 = 0.5)
-						if("toxins")
-							B.air_contents.adjust(tx = 0.5)
-						if("/datum/gas/sleeping_agent")
-							var/datum/gas/sleeping_agent/S = new()
-							S.moles = 0.5
-							B.air_contents.adjust(traces = list(S))
+					B.air_contents.adjust_gas(W.id, 0.5)
 		else
-			B.air_contents.adjust(co2 = 0.5)
-		B.air_contents.update_values()
+			B.air_contents.adjust_gas(GAS_CARBON, 0.5)
 	else
 		var/moles = ONE_ATMOSPHERE*volume/(R_IDEAL_GAS_EQUATION*G.temperature)
 		B.air_contents = G.remove(moles)
@@ -1373,7 +1413,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)

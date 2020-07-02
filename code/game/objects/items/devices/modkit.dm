@@ -3,10 +3,12 @@
 	name = "modification kit"
 	desc = "A kit containing all the needed tools and parts to modify an item into another one."
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=2"
 	var/list/parts = list()		//how many times can this kit perform a given modification
 	var/list/original = list()	//the starting parts
 	var/list/finished = list()	//the finished products
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/device/modkit/New()
 	..()
@@ -15,11 +17,8 @@
 	finished = new/list(2)
 
 	parts[1] =	1
-	original[1] = /obj/item/clothing/head/helmet/space/rig
-	finished[1] = /obj/item/clothing/head/cardborg
-	parts[2] =	1
-	original[2] = /obj/item/clothing/suit/space/rig
-	finished[2] = /obj/item/clothing/suit/cardborg
+	original[1] = /obj/item/clothing/suit/space/rig
+	finished[1] = /obj/item/clothing/suit/cardborg
 
 /obj/item/device/modkit/afterattack(obj/O, mob/user as mob)
 	if(get_dist(O,user) > 1)//For all those years you could use it at any range, what the actual fuck?
@@ -47,7 +46,7 @@
 	if(!isturf(O.loc))
 		to_chat(user, "<span class='warning'>\The [O] must be safely placed on the ground for modification.</span>")
 		return
-	playsound(user.loc, 'sound/items/Screwdriver.ogg', 100, 1)
+	playtoolsound(user.loc, 100)
 	var/N = new to_type(O.loc)
 	user.visible_message("<span class='warning'>[user] opens \the [src] and modifies \the [O] into \the [N].</span>","<span class='warning'>You open \the [src] and modify \the [O] into \the [N].</span>")
 	qdel(O)
@@ -72,14 +71,11 @@
 	finished = new/list(3)
 
 	parts[1] =	1
-	original[1] = /obj/item/clothing/head/helmet/space/rig/security
-	finished[1] = /obj/item/clothing/head/helmet/space/rig/security/stormtrooper
-	parts[2] =	1
-	original[2] = /obj/item/clothing/suit/space/rig/security
-	finished[2] = /obj/item/clothing/suit/space/rig/security/stormtrooper
-	parts[3] =	3
-	original[3] = /obj/item/weapon/gun/energy/laser
-	finished[3] = /obj/item/weapon/gun/energy/laser/blaster
+	original[1] = /obj/item/clothing/suit/space/rig/security
+	finished[1] = /obj/item/clothing/suit/space/rig/security/stormtrooper
+	parts[2] =	3
+	original[2] = /obj/item/weapon/gun/energy/laser
+	finished[2] = /obj/item/weapon/gun/energy/laser/blaster
 
 // /vg/: Old atmos hardsuit.
 /obj/item/device/modkit/gold_rig
@@ -92,31 +88,32 @@
 	finished = new/list(2)
 
 	parts[1] =	1
-	original[1] = /obj/item/clothing/head/helmet/space/rig/atmos
-	finished[1] = /obj/item/clothing/head/helmet/space/rig/atmos/gold
-	parts[2] =	1
-	original[2] = /obj/item/clothing/suit/space/rig/atmos
-	finished[2] = /obj/item/clothing/suit/space/rig/atmos/gold
+	original[1] = /obj/item/clothing/suit/space/rig/atmos
+	finished[1] = /obj/item/clothing/suit/space/rig/atmos/gold
 
+/obj/item/device/modkit/fatsec_rig
+	name = "gut expansion hardsuit modification kit"
 
-/* /vg/ - Not needed
-/obj/item/device/modkit/tajaran
-	name = "tajara hardsuit modification kit"
-	desc = "A kit containing all the needed tools and parts to modify a hardsuit for another user. This one looks like it's meant for Tajara."
-
-/obj/item/device/modkit/tajaran/New()
+/obj/item/device/modkit/fatsec_rig/New()
 	..()
-	parts = new/list(2)
-	original = new/list(2)
-	finished = new/list(2)
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
 
 	parts[1] =	1
-	original[1] = /obj/item/clothing/head/helmet/space/rig
-	finished[1] = /obj/item/clothing/head/helmet/space/rig/tajara
-	parts[2] =	1
-	original[2] = /obj/item/clothing/suit/space/rig
-	finished[2] = /obj/item/clothing/suit/space/rig/tajara
-*/
+	original[1] = /obj/item/clothing/suit/space/rig/security
+	finished[1] = /obj/item/clothing/suit/space/rig/security/fat
+
+/obj/item/device/modkit/syndi_commander
+	name = "syndicate commander hardsuit modification kit"
+	desc = "For showing who's the boss. Apply to hardsuit."
+
+/obj/item/device/modkit/syndi_commander/New()
+	..()
+
+	parts =	list(1) //less shitcode when you only got one part
+	original = list(/obj/item/clothing/suit/space/rig/syndi)
+	finished = list(/obj/item/clothing/suit/space/rig/syndi/commander)
 
 /obj/item/device/modkit/spur_parts
 	name = "suspicious set of metallic parts"
@@ -147,3 +144,26 @@
 	parts[1] =	1
 	original[1] = /obj/item/weapon/gun/energy/gun
 	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
+
+/obj/item/device/modkit/plasmacutter
+	name = "plasma cutter conversion kit"
+	desc = "A set of tools that enables conversion of a mining diamond drill into a plasma cutter. Needs to be loaded with the parts of a proto-kinetic accelerator first."
+
+/obj/item/device/modkit/plasmacutter/New()
+	..()
+	parts = new/list(1)
+	original = new/list(1)
+	finished = new/list(1)
+
+	parts[1] =	0
+	original[1] = /obj/item/weapon/pickaxe/drill/diamond
+	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
+
+/obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
+	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+		to_chat(user, "<span class='warning'>\The [src] is already loaded!</span>")
+		return
+
+	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+		parts[1] = 1
+		qdel(target)

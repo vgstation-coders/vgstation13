@@ -15,8 +15,13 @@
 			src.r_store = W
 			update_inv_pockets(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
-			update_inv_handcuffed(redraw_mob)
+			var/obj/item/weapon/handcuffs/cuffs = W
+			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
+				src.mutual_handcuffs = cuffs
+				update_inv_mutual_handcuffed(redraw_mob)
+			else 
+				src.handcuffed = cuffs
+				update_inv_handcuffed(redraw_mob)
 		else
 			to_chat(usr, "<span class='warning'>You are trying to equip this item to an unsupported inventory slot. How the heck did you manage that? Stop it...</span>")
 			return
@@ -35,7 +40,7 @@
 		if(slot_r_store)
 			return r_store
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 	return null
 
 /mob/living/carbon/alien/humanoid/u_equip(obj/item/W, dropped = 1, var/slot = null)

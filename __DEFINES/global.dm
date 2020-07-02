@@ -1,16 +1,40 @@
+var/list/protected_global_vars = list(
+	"sqlfdbklogin",
+	"sqlfdbkpass",
+	"sqlfdbkdb",
+	"sqladdress",
+	"sqlport",
+	"sqllogin",
+	"sqlpass",
+	"sqlfdbkdb",
+
+	"forbidden_varedit_object_types",
+	"unviewable_varedit_object_types",
+	"protected_global_vars", // Hhaha!
+)
+
 /proc/writeglobal(var/which, var/what)
+	if (which in protected_global_vars)
+		return "Cannot write variable."
 	global.vars[which] = what
 
 /proc/readglobal(var/which)
+	if (which in protected_global_vars)
+		return "Cannot read variable."
 	return global.vars[which]
 
 #define DNA_SE_LENGTH 58
 
 #define VOX_SHAPED "Vox","Skeletal Vox"
-
 #define GREY_SHAPED "Grey"
-
+#define UNATHI_SHAPED "Unathi"
+#define SKRELL_SHAPED "Skrell"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
 #define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+#define MUSHROOM_SHAPED "Mushroom"
+#define INSECT_SHAPED "Insectoid"
+
 
 //Content of the Round End Information window
 var/round_end_info = ""
@@ -19,13 +43,10 @@ var/round_end_info = ""
 var/global/list/deadmins = list()
 
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
-var/list/lockedvars = list("vars", "client", "holder")
-
-//List of vars that you can NEVER edit through VV itself
-var/list/nevervars = list("step_x", "step_y", "step_size")
+var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
 // List of types and how many instances of each type there are.
-var/global/list/type_instances[0]
+var/list/type_instances = list()
 
 /var/global/datum/map/active/map = new() //Current loaded map
 //Defined in its .dm, see maps/_map.dm for more info.
@@ -112,6 +133,7 @@ var/airtunnel_stop = 68 // default
 var/airtunnel_bottom = 72 // default
 var/list/monkeystart = list()
 var/list/wizardstart = list()
+var/list/grinchstart = list()
 var/list/newplayer_start = list()
 var/list/latejoin = list()
 var/list/assistant_latejoin = list()
@@ -128,6 +150,8 @@ var/list/prisonsecuritywarp = list()	//prison security goes to these
 var/list/prisonwarped = list()	//list of players already warped
 var/list/blobstart = list()
 var/list/ninjastart = list()
+var/list/voxstart = list() //Vox raider spawn points
+var/list/voxlocker = list() //Vox locker spawn points
 //	list/traitors = list()	//traitor list
 var/list/cardinal = list( NORTH, SOUTH, EAST, WEST )
 var/list/diagonal = list(NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
@@ -204,13 +228,6 @@ var/forum_authenticated_group = "10"
 var/fileaccess_timer = 0
 var/custom_event_msg = null
 
-//Database connections
-//A connection is established on world creation. Ideally, the connection dies when the server restarts (After feedback logging.).
-var/DBConnection/dbcon	//Feedback database (New database)
-var/DBConnection/dbcon_old	//Tgstation database (Old database) - See the files in the SQL folder for information what goes where.
-
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
-
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000
 
@@ -224,13 +241,21 @@ var/list/score=list(
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
 	"powerloss"      = 0, //How many APCs have alarms (under 30 %)?
+	"maxpower"       = 0, //Most watts in grid on any of the world's powergrids.
 	"escapees"       = 0, //How many people got out alive?
 	"deadcrew"       = 0, //Humans who died during the round
 	"deadsilicon"	 = 0, //Silicons who died during the round
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
-	"disease"        = 0, //How many disease vectors in the world (one disease on one person is one)
+	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
+	"disease_vaccine"	= null, //Which many vaccine antibody isolated
+	"disease_vaccine_score"	= 0, //the associated score
+	"disease_extracted"	= 0, //Score based on the unique extracted effects
+	"disease_effects"	= 0, //Score based on the unique extracted effects
+	"disease_bad"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger >= 3
+	"disease_most"        = null, //Most spread disease
+	"disease_most_count"        = 0, //Most spread disease
 
 	//These ones are mainly for the stat panel
 	"powerbonus"    = 0, //If all APCs on the station are running optimally, big bonus
@@ -238,6 +263,15 @@ var/list/score=list(
 	"deadaipenalty" = 0, //AIs who died during the round
 	"foodeaten"     = 0, //How much food was consumed
 	"clownabuse"    = 0, //How many times a clown was punched, struck or otherwise maligned
+	"slips"			= 0, //How many people have slipped during this round
+	"gunsspawned"	= 0, //Guns spawned by the Summon Guns spell. Only guns, not other artifacts.
+	"dimensionalpushes" = 0, //Amount of times a wizard casted Dimensional Push.
+	"assesblasted"  = 0, //Amount of times a wizard casted Buttbot's Revenge.
+	"shoesnatches"  = 0, //Amount of shoes magically snatched.
+	"greasewiz"     = 0, //Amount of times a wizard casted Grease.
+	"lightningwiz"  = 0, //Amount of times a wizard casted Lighting.
+	"random_soc"    = 0, //Staff of Change bolts set to "random" that hit a human.
+	"heartattacks"  = 0, //Amount of times the "Heart Attack" virus reached final stage, unleashing a hostile floating heart.
 	"richestname"   = null, //This is all stuff to show who was the richest alive on the shuttle
 	"richestjob"    = null,  //Kinda pointless if you dont have a money system i guess
 	"richestcash"   = 0,
@@ -247,10 +281,36 @@ var/list/score=list(
 	"dmgestdamage"  = 0,
 	"dmgestkey"     = null,
 	"explosions"	= 0, //How many explosions happened total
+	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
+	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
+	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
+	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
+	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
+	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
+	"tobacco"        = 0, //Amount of cigarettes, pipes, cigars, etc. lit
+	"lawchanges"	 = 0, //Amount of AI modules used.
+
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
 )
+
+var/list/isolated_antibodies = list(
+	ANTIGEN_O	= 0,
+	ANTIGEN_A	= 0,
+	ANTIGEN_B	= 0,
+	ANTIGEN_RH	= 0,
+	ANTIGEN_Q	= 0,
+	ANTIGEN_U	= 0,
+	ANTIGEN_V	= 0,
+	ANTIGEN_M	= 0,
+	ANTIGEN_N	= 0,
+	ANTIGEN_P	= 0,
+	ANTIGEN_X	= 0,
+	ANTIGEN_Y	= 0,
+	ANTIGEN_Z	= 0,
+	)
+var/list/extracted_gna = list()
 
 var/list/trash_items = list()
 var/list/decals = list()
@@ -278,8 +338,6 @@ var/global/list/volunteer_gladiators = list()
 var/global/list/ready_gladiators = list()
 var/global/list/never_gladiators = list()
 
-var/global/list/achievements = list()
-
 //icons that appear on the Round End pop-up browser
 var/global/list/end_icons = list()
 
@@ -305,7 +363,7 @@ var/nanocoins_lastchange = 0
 
 var/minimapinit = 0
 
-var/bees_species = list()
+var/list/bees_species = list()
 
 var/datum/stat_collector/stat_collection = new
 
@@ -327,9 +385,8 @@ var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
 // ECONOMY
 // Account default values
-#define DEPARTMENT_START_FUNDS 5000
-#define DEPARTMENT_START_WAGE 500
-#define PLAYER_START_WAGE 50
+#define DEPARTMENT_START_FUNDS 500
+#define DEPARTMENT_START_WAGE 50
 
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
@@ -368,7 +425,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/humanoid,						// JUST DON'T DO IT, OK?
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,			// I'm just copying this from transmog.
 		/mob/living/simple_animal/hostile/giant_spider/hunter/dead,		// They are dead.
-		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// They aren't supposed to be playable.
+		/mob/living/simple_animal/hostile/asteroid/hivelordbrood,		// Your motherfucking life ends in 5 seconds.
 		/mob/living/simple_animal/hologram,								// Can't live outside the holodeck.
 		/mob/living/simple_animal/hostile/carp/holocarp,				// These can but they're just a retarded hologram carp reskin for the love of god.
 		/mob/living/slime_pile,											// They are dead.
@@ -377,6 +434,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
+		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		)
 
 //Boss monster list
@@ -389,6 +447,8 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/asteroid/rockernaut/boss, 	// Angie
 	/mob/living/simple_animal/hostile/humanoid/surgeon/boss, 		// First stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
+	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
+	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
 	)
 
 // Set by traitor item, affects cargo supplies
@@ -404,3 +464,51 @@ var/station_does_not_tip = FALSE
 #define CARD_CAPTURE_FAILURE_USER_CANCELED 7 // The user canceled the transaction
 #define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
 #define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
+
+#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
+Vendors will try to subtract from your virtual wallet if possible.
+If you're too broke, they'll try to access your bank account directly.
+This setting decides how much info you have to enter to allow for that.
+Zero; Only your account number is required to deduct funds.
+One; Your account number and PIN are required.
+Two; Your ID card, account number and PIN are required.
+You can change this mid-game at an ATM."}
+
+proc/bank_security_num2text(var/num)
+	switch(num)
+		if(0)
+			return "Zero"
+		if(1)
+			return "One"
+		if(2)
+			return "Two"
+		else
+			return "OUT OF RANGE"
+
+var/list/bank_security_text2num_associative = list(
+	"Zero" = 0,
+	"One" = 1,
+	"Two" = 2
+) // Can't use a zero. Throws a fit about out of bounds indices if you do.
+// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
+//Radial menus currently existing in the world.
+var/global/list/radial_menus = list()
+
+// Copying atoms is stupid and this is a stupid solution
+var/list/variables_not_to_be_copied = list(
+	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
+	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
+	"on_item_removed","on_moved","on_destroyed","on_density_change",
+	"on_z_transition","on_use","on_emote","on_life","on_resist","post_z_transition",
+	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_explode","on_projectile","in_chamber","power_supply","contents",
+	"x","y","z"
+)
+
+//Item lists
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
+
+//Observers
+var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally

@@ -9,6 +9,7 @@
 	. = ..()
 	tag = text("landmark*[]", name)
 	invisibility = 101
+	landmarks_list += src
 
 	switch(name)			//some of these are probably obsolete
 		if("shuttle")
@@ -78,7 +79,17 @@
 			endgame_exits += loc
 			qdel(src)
 
-	landmarks_list += src
+		if("grinchstart")
+			grinchstart += loc
+
+		if("voxstart")
+			voxstart += loc
+
+		if("voxlocker")
+			voxlocker += loc
+			
+		if("ninjastart")
+			ninjastart += loc
 	return 1
 
 /obj/effect/landmark/Destroy()
@@ -93,7 +104,6 @@
 
 /obj/effect/landmark/start/New()
 	..()
-	tag = "start*[name]"
 	invisibility = 101
 
 	return 1
@@ -126,3 +136,12 @@
 
 	if(play_sound)
 		L << play_sound
+
+/obj/effect/landmark/grinchstart
+	name = "grinchstart"
+
+/obj/effect/landmark/xtra_cleanergrenades
+	name = "xtra_cleanergrenades"
+
+/obj/effect/landmark/vox_locker
+	name = "vox_locker"

@@ -63,6 +63,7 @@
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_GROIN, src)
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_HEAD, src)
 		M.Knockdown(20)
+		M.Stun(20)
 		to_chat(M, "<span class='danger'>\The [src] generates a gravity well inside itself!.</span>")
 		new/obj/effect/overlay/gravitywell(loc)
 		M.drop_item(src, force_drop = 1)

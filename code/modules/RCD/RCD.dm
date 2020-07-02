@@ -322,7 +322,7 @@
 		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1
 
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You unscrew the access panel and release the cartridge chamber.</span>")
 		while(matter >= 10)
 			new /obj/item/weapon/rcd_ammo(user.loc)

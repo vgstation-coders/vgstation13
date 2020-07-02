@@ -40,11 +40,6 @@
 			return L[index]
 	return
 
-/proc/islist(list/L)
-	if(istype(L))
-		return 1
-	return 0
-
 //Return either pick(list) or null if list is not of type /list or is empty
 /proc/safepick(list/L)
 	if(istype(L) && L.len)
@@ -79,6 +74,18 @@
 	for(var/type in L)
 		for(var/T in typesof(type)) //Gather all possible typepaths into an associative list
 			L[T] = MAX_VALUE //Set them equal to the max value which is unlikely to collide with any other pregenerated value
+
+//Removes returns a new list which only contains elements from the original list of a certain type
+/proc/prune_list_to_type(list/L, datum/A)
+	if(!L || !L.len || !A)
+		return 0
+	if(!ispath(A))
+		A = A.type
+	var/list/nu = L.Copy()
+	for(var/element in nu)
+		if(!istype(element,A))
+			nu -= element
+	return nu
 
 //Empties the list by setting the length to 0. Hopefully the elements get garbage collected
 /proc/clearlist(list/list)
@@ -128,22 +135,24 @@
 		result = first ^ second
 	return result
 
-//Pretends to pick an element based on its weight but really just seems to pick a random element.
+//Picks an element based on its weight
 /proc/pickweight(list/L)
+	if(!L || !L.len)
+		return
 	var/total = 0
 	var/item
 	for (item in L)
-		if (!L[item])
+		if (isnull(L[item]))
 			L[item] = 1
 		total += L[item]
 
-	total = rand(1, total)
+	total = rand()*total
 	for (item in L)
 		total -=L [item]
 		if (total <= 0)
 			return item
 
-	return null
+	return L[L.len]
 
 //Pick a random element from the list and remove it from the list.
 /proc/pick_n_take(list/L)
@@ -157,6 +166,21 @@
 	if(L.len)
 		. = L[L.len]
 		L.len--
+
+//Puts an item on the end of a list
+/proc/push(list/L, thing)
+	L += thing
+
+//Shift/Unshift works on a FIFO system unlike pop/push working on FILO
+//Returns the bottom(first) element from the list and removes it from the list
+/proc/shift(list/L)
+	if(L.len)
+		. = L[1]
+		L.Cut(1,2)
+
+//Puts an item at the beginning of the list
+/proc/unshift(list/L, thing)
+	L.Insert(1,thing)
 
 /proc/sorted_insert(list/L, thing, comparator)
 	var/pos = L.len
@@ -273,6 +297,19 @@
 			return key
 	return null
 
+//In an associative list, get only the elements and not the keys.
+/proc/get_list_of_elements(var/list/L)
+	var/list/elements = list()
+	for(var/key in L)
+		elements += L[key]
+	return elements
+
+//In an associative list, get only the keys and not the elements.
+/proc/get_list_of_keys(var/list/L)
+	var/list/keys = list()
+	for(var/key in L)
+		keys += key
+	return keys
 
 /proc/count_by_type(var/list/L, type)
 	var/i = 0
@@ -286,6 +323,15 @@
 		if(R.fields[field] == value)
 			return R
 
+//get total of nums in a list, ignores non-num values
+//great with get_list_of_elements!
+/proc/total_list(var/list/L)
+	var/total = 0
+	for(var/element in L)
+		if(!isnum(element))
+			continue
+		total += element
+	return total
 
 //Move a single element from position fromIndex within a list, to position toIndex
 //All elements in the range [1,toIndex) before the move will be before the pivot afterwards

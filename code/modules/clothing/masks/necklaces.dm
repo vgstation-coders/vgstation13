@@ -1,5 +1,6 @@
 /obj/item/clothing/mask/necklace
 	body_parts_covered = 0
+	ignore_flip = TRUE
 
 /obj/item/clothing/mask/necklace/xeno_claw
 	name = "xeno necklace"

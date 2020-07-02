@@ -5,6 +5,8 @@
 	var/releaseWhen = 25
 	var/list/area/prisonAreas = list()
 
+/datum/event/prison_break/can_start()
+	return 25
 
 /datum/event/prison_break/setup()
 	announceWhen = rand(50, 60)
@@ -48,4 +50,4 @@
 					temp_glassairlock.prison_open()
 
 				for(var/obj/machinery/door_timer/temp_timer in A)
-					temp_timer.releasetime = 1
+					temp_timer.timeleft = 0

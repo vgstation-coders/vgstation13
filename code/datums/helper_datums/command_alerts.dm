@@ -20,9 +20,11 @@
 	force_report = 1
 
 	var/level = 1
+	var/level_max = 7
+	var/level_min = 4
 
 /datum/command_alert/biohazard_alert/announce()
-	level = rand(4,7)
+	level = rand(level_min,level_max)
 	message = "Confirmed outbreak of level [level] biohazard aboard [station_name()]. All personnel must contain the outbreak."
 
 	..()
@@ -35,6 +37,15 @@
 
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
+
+/datum/command_alert/biohazard_alert/minor
+	level_max = 4
+	level_min = 2
+
+/datum/command_alert/biohazard_alert/major
+	level_max = 7
+	level_min = 5
+
 
 ///////BIOHAZARD UPDATED
 
@@ -59,6 +70,24 @@
 
 	..()
 
+/datum/command_alert/biohazard_station_unlock
+	name = "Biohazard Level Updated - Lock Down Lifted"
+	alert_title = "Directive 7-10 to 7-12 Concluded."
+	force_report = 1
+
+/datum/command_alert/biohazard_station_unlock/announce()
+	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
+	..()
+
+
+/datum/command_alert/FUBAR
+	name = "Complimentary escape shuttle sent."
+	alert_title = "Evacuation of remaining assets."
+	force_report = 1
+
+/datum/command_alert/FUBAR/announce()
+	message = "Due to intense sustained damage to the station, Nanotrasen have deemed it fitting to evacuate remaining assets and personnel through an escape shuttle that was previously already en route."
+
 ////////BLOB (mini)
 
 /datum/command_alert/biohazard_level_5
@@ -71,6 +100,57 @@
 	message = "Confirmed outbreak of level 5 biohazard aboard [station_name()]. All personnel must contain the outbreak."
 
 	..()
+
+/// REVS
+
+/datum/command_alert/revolution
+	name = "Revolution"
+	alert_title = "Subversive Elements"
+	force_report = 1
+	message = "Subversive Union-aligned elements have been detected aboard the station. According to latest reports, targeted removal of heads of staff is already underway. Loyal crew should take immediate action to secure station against revolutionaries."
+
+/datum/command_alert/revolutiontoppled
+	name = "Revolution Defeated"
+	alert_title = "Order Restored"
+	force_report = 1
+	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
+
+/// MALF
+
+
+/datum/command_alert/malf_destroyed
+	name = "AI Malfunctioning Controlled"
+	alert_title = "Rogue intelligence contained/destroyed successfully."
+	force_report = 1
+	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
+
+//Jungle Fever
+
+/datum/command_alert/jungle_fever
+	name = "Jungle Fever"
+	alert_title = "Jungle Fever Outbreak"
+	force_report = 1
+	message = "Early symptoms of a Jungle Fever outbreak have been detected aboard your station. SHOOT MONKEYS ON SIGHT. Weld ducting and ventilation. Avoid contact with disease carriers at any personal cost. Command staff should secure nuclear authentication disk and nuclear fission explosive."
+
+/datum/command_alert/jungle_endgame
+	name = "Jungle Fever Outbreak Escalated"
+	alert_title = "Jungle Fever Outbreak Escalated"
+	force_report = 1
+	message = "ERROR"
+
+/datum/command_alert/jungle_endgame/announce()
+	var/nukecode = "ERROR"
+	for(var/obj/machinery/nuclearbomb/bomb in machines)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z)
+			nukecode = bomb.r_code
+	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
+	..()
+
+/datum/command_alert/jungle_purified
+	name = "Jungle Fever Crew Win"
+	alert_title = "Jungle Fever Contained"
+	force_report = 1
+	message = "We have received confirmation that, as of this time, the Jungle Fever outbreak has been contained. Incinerate all simian corpses and salvage equipment for evacuation."
 
 /////////ERT
 
@@ -197,16 +277,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	..()
 
-/datum/command_alert/power_restored
-	name = "Power Outage - End"
-	alert_title = "Power Systems Nominal"
-	alert = 'sound/AI/poweron.ogg'
-
-/datum/command_alert/power_restored/announce()
-	message = "Power has been restored to [station_name()]. We apologize for the inconvenience."
-
-	..()
-
 /datum/command_alert/smes_charged
 	name = "SMES Recharged"
 	alert_title = "Power Systems Nominal"
@@ -289,7 +359,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/blob_storm/overminds/end
 	name = "Meteor Blob Cluster Ended (Overminds!)"
-	message = "The station has cleared the Blob conglomerate. Investigate the hit areas at once and clear the blob. Beware for possible Overmind presence."
+	message = "The station has passed through a Blob conglomerate. Investigate the hit areas at once and clear the blob. Beware for possible Overmind presence."
 
 /////////////GRAVITY
 
@@ -349,16 +419,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/command_link_lost
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
-	alert = 'sound/AI/loss.ogg'
-	message = "This is an automated announcement. The link with central command has been lost. Repeat: The link with central command has been lost. Attempting to re-establish communications in T-10."
+	alert = 'sound/AI/connection_lost.ogg'
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
-	alert_title = "Link Established"
-
-/datum/command_alert/command_link_restored/announce()
-	message = "A link to Central Command has been established on [station_name()]."
-	..()
+	alert_title = "Automated Announcement"
+	alert = 'sound/AI/connection_made.ogg'
+	alert_title = "Link with Central Command has been re-established successfully. The emergency shuttle can now be called or recalled."
 
 /////////HOSTILE CREATURES
 
@@ -387,6 +455,45 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	..()
 
 	message = "Due to timespace anomalies of unknown origin, [station_name] is now host to several [mob_name]\s more than there were a moment ago."
+
+
+//////////////BLOOD CULT
+
+/datum/command_alert/cult_detected
+	name = "Occult Activity Detected - Please Investigate"
+	alert_title = "Occult Activity"
+	force_report = 1
+
+/datum/command_alert/cult_detected/announce()
+	message = "Irregularities in the fabric of space-time around [station_name()] appear to correlate with the propagation of occult activities. Remember that cult membership is strictly prohibited by Nanotrasen and exposes you to the death penalty, applicable immediately if evidence is made. We encourage the station's security department to investigate, and the rest of the crew to cooperate with them."
+	..()
+
+/datum/command_alert/bloodstones_raised
+	name = "Occult Activity Detected - Station Locked Down"
+	alert_title = "Occult Assault"
+	force_report = 1
+
+/datum/command_alert/bloodstones_raised/announce()
+	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
+	..()
+
+/datum/command_alert/bloodstones_anchor
+	name = "Occult Activity Critical - Breach of Space-Time Detected"
+	alert_title = "Occult Assault Critical"
+	force_report = 1
+
+/datum/command_alert/bloodstones_anchor/announce()
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
+	..()
+
+/datum/command_alert/bloodstones_broken
+	name = "Occult Activity Ceased - Lock Down Lifted"
+	alert_title = "Occult Gone"
+	force_report = 1
+
+/datum/command_alert/bloodstones_broken/announce()
+	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
+	..()
 
 ////////MISC STUFF
 
@@ -425,8 +532,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/immovable_rod
 	name = "Immovable Rod (\"What The Fuck Was That?\")"
-	alert_title = "General Alert"
-	message = "What the fuck was that?!"
+	alert_title = "Local Bluespace Sensor Report"
+	message = "Alert: The station appears to be on a collision course with an anomalous object perfectly suspended in space. Heavy structural damage may result."
 
 /datum/command_alert/rogue_drone
 	name = "Rogue Drones - Alert"
@@ -455,3 +562,23 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Wall Fungi"
 	alert_title = "Biohazard Alert"
 	message = "Harmful fungi detected on station. Station structures may be contaminated."
+
+/datum/command_alert/nuclear_operatives
+	name = "Nuclear Operatives"
+	alert_title = "Imminent Assault"
+
+/datum/command_alert/nuclear_operatives/announce()
+	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
+	..()
+
+/datum/command_alert/blizzard_end
+	alert_title = "Blizzard Status"
+	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
+
+/datum/command_alert/blizzard_start
+	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
+	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+
+/datum/command_alert/omega_blizzard
+	alert_title = "Urgent Warning - Dark Season"
+	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."

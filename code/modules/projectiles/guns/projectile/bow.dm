@@ -57,6 +57,9 @@
 	var/obj/item/weapon/arrow = null      // Nocked arrow.
 	var/obj/item/weapon/cell/cell = null  // Used for firing special projectiles like rods.
 
+/obj/item/weapon/crossbow/get_cell()
+	return cell
+
 /obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
 		if (istype(W,/obj/item/weapon/arrow))
@@ -101,7 +104,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] already has a cell installed.</span>")
 
-	else if(isscrewdriver(W))
+	else if(W.is_screwdriver(user))
 		if(cell)
 			var/obj/item/C = cell
 			C.forceMove(get_turf(user))
@@ -293,7 +296,7 @@
 			else
 				to_chat(user, "<span class='notice'>You need at least three plastic sheets to complete this task.</span>")
 			return*/
-	else if(istype(W,/obj/item/weapon/screwdriver))
+	else if(W.is_screwdriver(user))
 		if(buildstate == 5)
 			to_chat(user, "<span class='notice'>You secure the crossbow's various parts.</span>")
 			new /obj/item/weapon/crossbow(get_turf(src))

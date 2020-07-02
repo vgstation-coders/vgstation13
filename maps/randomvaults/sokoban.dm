@@ -262,7 +262,7 @@ This ladder stuff looks confusing, so here's an illustration!!!
 	name = "paper- 'The Puzzle'"
 	info = {" This is some sort of a cruel joke. They know they can't fire me, so they're trying to make me quit on my own. The quartermaster built some sort of a puzzle for me to solve. I fucking hate puzzles.
  <br><br>
- Apparently I have to put all the crates on the teleporters. Sounds easy enough, right? Well, he took away my forklift for 'maintenance', and coated every crate with lube, making them impossible to pull. The only way to move them is to push them from behind. If one of them gets stuck in a corner? Tough luck.
+ Apparently I have to put a crate on each of the twelve teleporters. Sounds easy enough, right? Well, he took away my forklift for 'maintenance', and coated every crate with lube, making them impossible to pull. The only way to move them is to push them from behind. If one of them gets stuck in a corner? Tough luck.
  <br>
  He also forbade using wrapping paper or any method of crate moving other than pushing. This is embarrassing and I feel utterly humiliated.
  <br><br>

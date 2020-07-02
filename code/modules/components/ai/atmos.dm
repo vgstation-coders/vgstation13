@@ -46,41 +46,41 @@
 				SendSignal(COMSIG_ADJUST_BODYTEMP, list("temp"=((Environment.temperature - controller.getBodyTemperature()) / 5)))
 
 			if(min_oxy)
-				if(Environment.molar_density("oxygen") < min_oxy)
+				if(Environment.molar_density(GAS_OXYGEN) < min_oxy)
 					atmos_suitable = 0
 					oxygen_alert = 1
 				else
 					oxygen_alert = 0
 
 			if(max_oxy)
-				if(Environment.molar_density("oxygen") > max_oxy)
+				if(Environment.molar_density(GAS_OXYGEN) > max_oxy)
 					atmos_suitable = 0
 
 			if(min_tox)
-				if(Environment.molar_density("toxins") < min_tox)
+				if(Environment.molar_density(GAS_PLASMA) < min_tox)
 					atmos_suitable = 0
 
 			if(max_tox)
-				if(Environment.molar_density("toxins") > max_tox)
+				if(Environment.molar_density(GAS_PLASMA) > max_tox)
 					atmos_suitable = 0
 					toxins_alert = 1
 				else
 					toxins_alert = 0
 
 			if(min_n2)
-				if(Environment.molar_density("nitrogen") < min_n2)
+				if(Environment.molar_density(GAS_NITROGEN) < min_n2)
 					atmos_suitable = 0
 
 			if(max_n2)
-				if(Environment.molar_density("nitrogen") > max_n2)
+				if(Environment.molar_density(GAS_NITROGEN) > max_n2)
 					atmos_suitable = 0
 
 			if(min_co2)
-				if(Environment.molar_density("carbon_dioxide") < min_co2)
+				if(Environment.molar_density(GAS_CARBON) < min_co2)
 					atmos_suitable = 0
 
 			if(max_co2)
-				if(Environment.molar_density("carbon_dioxide") > max_co2)
+				if(Environment.molar_density(GAS_CARBON) > max_co2)
 					atmos_suitable = 0
 
 	//Atmos effect

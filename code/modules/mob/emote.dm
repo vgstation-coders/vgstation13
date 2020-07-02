@@ -57,15 +57,30 @@
 	if (user.stat)
 		return
 
-	var/msg = "<b>[user]</b> " + params
+	var/message = params
+
+	if(copytext(message,1,5) == "says")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,9) == "exclaims")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,6) == "yells")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,5) == "asks")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+
+	var/msg = "<b>[user]</b> " + message
 
 	var/turf/T = get_turf(user) // for pAIs
-	
+
 	for(var/mob/M in dead_mob_list)
 		if (!M.client)
 			continue //skip leavers
-		if(M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(src,null)))
-			M.show_message(message)
+		if(isobserver(M) && M.client.prefs && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(user)))
+			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)

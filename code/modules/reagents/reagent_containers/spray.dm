@@ -116,7 +116,6 @@
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
 
-
 /obj/item/weapon/reagent_containers/spray/cleaner/New()
 	..()
 	reagents.add_reagent(CLEANER, 250)
@@ -131,16 +130,24 @@
 	volume = 40
 	amount_per_transfer_from_this = 10
 
-
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+
+// Luminol
+/obj/item/weapon/reagent_containers/spray/luminol
+	name = "spray bottle (luminol)"
+	desc = "A spray bottle with an unscrewable top. A label on the side reads 'Contains: Luminol'."
+
+/obj/item/weapon/reagent_containers/spray/luminol/New()
+	..()
+	reagents.add_reagent(LUMINOL, 250)
 
 // Plant-B-Gone
 /obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
 	volume = 100
@@ -152,7 +159,7 @@
 /obj/item/weapon/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
-	icon = 'icons/obj/hydroponics2.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbgone"
 	item_state = "plantbgone"
 	volume = 100

@@ -26,7 +26,7 @@
 		<div class="itemContent">
 			<div style="float: left; width: 180px;">{{:data.holdingTank.name}}</div> {{:helper.link('Eject', 'eject', {'remove_tank' : 1})}}
 		</div>
-	</div>q
+	</div>
 
 	<div class="item">
 		<div class="itemLabel">
@@ -41,25 +41,18 @@
 	<div class="item">&nbsp;</div>
 {{/if}}
 
-
 <h3>Power Regulator Status</h3>
+
 <div class="item">
 	<div class="itemLabel">
-		Volume Rate:
+		Scrubbing Gases:
 	</div>
 	<div class="itemContent">
-		{{:helper.displayBar(data.rate, data.minrate, data.maxrate)}}
-		<div style="clear: both; padding-top: 4px;">
-			{{:helper.link('-', null, {'volume_adj' : -1000}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -100}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -10}, (data.rate > data.minrate) ? null : 'disabled')}}
-			{{:helper.link('-', null, {'volume_adj' : -1}, (data.rate > data.minrate) ? null : 'disabled')}}
-			<div style="float: left; width: 80px; text-align: center;">&nbsp;{{:data.rate}} kPa&nbsp;</div>
-			{{:helper.link('+', null, {'volume_adj' : 1}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 10}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 100}, (data.rate < data.maxrate) ? null : 'disabled')}}
-			{{:helper.link('+', null, {'volume_adj' : 1000}, (data.rate < data.maxrate) ? null : 'disabled')}}
-		</div>
+		{{:helper.link('CO<sub>2</sub>', null, {'scrub_toggle': 'co2'}, null, data.scrub_co2 ? 'greenBackground' : null)}}
+		{{:helper.link('Plasma', null, {'scrub_toggle': 'plasma'}, null, data.scrub_plasma ? 'greenBackground' : null)}}
+		{{:helper.link('N<sub>2</sub>O', null, {'scrub_toggle': 'n2o'}, null, data.scrub_n2o ? 'greenBackground' : null)}}
+		{{:helper.link('N<sub>2</sub>', null, {'scrub_toggle': 'n2'}, null, data.scrub_n2 ? 'greenBackground' : null)}}
+		{{:helper.link('O<sub>2</sub>', null, {'scrub_toggle': 'o2'}, null, data.scrub_o2 ? 'greenBackground' : null)}}
 	</div>
 </div>
 

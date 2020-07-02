@@ -39,6 +39,9 @@
 		if(ai.camera_light_on)
 			ai.light_cameras()
 
+		if (ai.station_holomap)
+			ai.station_holomap.update_holomap()
+
 /mob/camera/aiEye/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	return 0
 
@@ -138,6 +141,24 @@
 
 	for(var/datum/camerachunk/c in eyeobj.visibleCameraChunks)
 		c.remove(eyeobj)
+
+/mob/living/silicon/ai/proc/jump_to_area(var/area/A)
+	if(!A)
+		return
+	if(!eyeobj)
+		eyeobj = new(loc)
+		eyeobj.ai = src
+		eyeobj.name = "[name] (AI Eye)"
+		eyeobj.forceMove(loc)
+	var/list/turfs = list()
+	for(var/turf/T in A)
+		turfs.Add(T)
+	var/turf/T = pick(turfs)
+	if(!T)
+		to_chat(src, "<span class='danger'>Nowhere to jump to!</span>")
+		return
+	cameraFollow = null
+	eyeobj.forceMove(T)
 
 /mob/living/silicon/ai/verb/toggle_acceleration()
 	set category = "AI Commands"

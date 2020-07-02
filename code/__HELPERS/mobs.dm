@@ -67,6 +67,11 @@ proc/random_skin_tone(species = "Human")
 	else if(species == "Vox")
 		. = rand(1,6)
 		return .
+	else if(species == "Grey")
+		. = rand(1,4)
+		return .
+	else if(species == "Tajaran")
+		return 1
 	else
 		return 0
 
@@ -93,18 +98,34 @@ proc/skintone2racedescription(tone, species = "Human")
 				return "unknown"
 	else if(species == "Vox")
 		switch(tone)
-			if(6)
+			if(VOXEMERALD)
 				return "emerald"
-			if(5)
+			if(VOXAZURE)
 				return "azure"
-			if(4)
+			if(VOXLGREEN)
 				return "light green"
-			if(2)
+			if(VOXBROWN)
 				return "brown"
-			if(3)
+			if(VOXGRAY)
 				return "gray"
 			else
 				return "green"
+	else if(species == "Grey")
+		switch(tone)
+			if(GREYLIGHT)
+				return "light gray"
+			if(GREYGREEN)
+				return "green"
+			if(GREYBLUE)
+				return "blue"
+			else
+				return "gray"
+	else if(species == "Tajaran")
+		switch(tone)
+			if(CATBEASTBLACK)
+				return "black"
+			else
+				return "brown"
 	else
 		return "unknown"
 
@@ -151,7 +172,6 @@ proc/RoundHealth(health)
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 /proc/cyborg_health_to_icon_state(var/health_ratio)
 	switch(health_ratio)
@@ -292,3 +312,10 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 			L.Add(A)
 
 	return L
+
+//not to be confused with is_loyalty_implanted in human/human.dm L290
+/mob/proc/is_implanted(var/type)
+	for(var/obj/item/weapon/implant/I in src)
+		if(I.implanted && istype(I,type))
+			return TRUE
+	return FALSE

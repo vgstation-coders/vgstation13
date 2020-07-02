@@ -75,7 +75,7 @@
 		/obj/item/weapon/pickaxe/diamond				=3,
 		/obj/item/weapon/pickaxe/drill/diamond			=3,
 		/obj/item/weapon/pickaxe/gold					=3,
-		/obj/item/weapon/pickaxe/plasmacutter			=2,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator			=2,
 		/obj/structure/closet/syndicate/resources		=2,
 		/obj/item/weapon/melee/energy/sword/pirate		=1,
 		/obj/mecha/working/ripley/mining				=1

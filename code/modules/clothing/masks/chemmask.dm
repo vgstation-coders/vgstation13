@@ -20,8 +20,8 @@
 //connections using verbs. When disconnected, the mask will not take any additional reagents from the primary tank and/or the
 //auxiliary beaker. Cycling these verbs will not force injections, the tank is still only capable of one injection per 97 seconds,
 //and the beaker has no need to be forced to inject since the user can alter its time interval directly.
-#define THRESHOLD "Threshold-based"
-#define TIME "Time-based"
+#define INJECTION_METHOD_THRESHOLD "Threshold-based"
+#define INJECTION_METHOD_TIME "Time-based"
 
 /obj/item/clothing/mask/chemmask
 	desc = "A rather sinister mask designed for connection to a chemical pack, providing the pack's safeties are disabled."
@@ -34,8 +34,8 @@
 	permeability_coefficient = 0.01
 	var/tank_injection_rate = 10
 	var/tank_has_injected = 0
-	var/beaker_injection_methods = list(TIME,THRESHOLD)
-	var/beaker_injection_method = THRESHOLD
+	var/beaker_injection_methods = list(INJECTION_METHOD_TIME,INJECTION_METHOD_THRESHOLD)
+	var/beaker_injection_method = INJECTION_METHOD_THRESHOLD
 	var/injection_method_chosen = 0
 	var/beaker_time_interval = 970
 	var/beaker_injection_rate = 10
@@ -92,11 +92,11 @@
 		verbs += /obj/item/clothing/mask/chemmask/verb/set_beaker_usage
 		verbs += /obj/item/clothing/mask/chemmask/verb/set_beaker_injection_method
 		if (injection_method_chosen) //Don't want the user to have to select the beaker injection method more than once per item.
-			if (beaker_injection_method == THRESHOLD)
+			if (beaker_injection_method == INJECTION_METHOD_THRESHOLD)
 				verbs += beaker_verbs_threshold
 				verbs += /obj/item/clothing/mask/chemmask/verb/set_beaker_injection_rate
 				verbs -= beaker_verbs_time
-			else if (beaker_injection_method == TIME)
+			else if (beaker_injection_method == INJECTION_METHOD_TIME)
 				verbs += beaker_verbs_time
 				verbs += /obj/item/clothing/mask/chemmask/verb/set_beaker_injection_rate
 				verbs -= beaker_verbs_threshold
@@ -357,11 +357,11 @@
 			beaker_has_injected_time = 0
 		if (has_beaker(H))
 			if (beakeractive)
-				if (beaker_injection_method == TIME && !beaker_has_injected_time)
+				if (beaker_injection_method == INJECTION_METHOD_TIME && !beaker_has_injected_time)
 					beakerinject(H)
 					beaker_has_injected_time = 1
 					time_at_last_beaker_inject = world.time
-				else if (beaker_injection_method == THRESHOLD)
+				else if (beaker_injection_method == INJECTION_METHOD_THRESHOLD)
 					beakerinject(H)
 				beaker_volume_check(H)
 
@@ -378,9 +378,9 @@
 /obj/item/clothing/mask/chemmask/proc/beakerinject(mob/user)
 	var/obj/item/weapon/reagent_containers/chempack/P = user.back
 	var/obj/item/weapon/reagent_containers/glass/B = P.beaker
-	if (beaker_injection_method == TIME)
+	if (beaker_injection_method == INJECTION_METHOD_TIME)
 		B.reagents.trans_to(user, beaker_injection_rate)
-	else if (beaker_injection_method == THRESHOLD)
+	else if (beaker_injection_method == INJECTION_METHOD_THRESHOLD)
 		var/shouldinject = 0
 		var/datum/reagent/R1 = null
 		var/beakerhasreagent = 0
@@ -411,3 +411,6 @@
 			B.reagents.trans_id_to(user, R1.id, beaker_injection_rate)
 		else if (!beakerhasreagent && !shouldnotinject)
 			B.reagents.trans_to(user, beaker_injection_rate)
+
+#undef INJECTION_METHOD_THRESHOLD
+#undef INJECTION_METHOD_TIME

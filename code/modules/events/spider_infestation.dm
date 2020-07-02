@@ -5,6 +5,10 @@
 
 	var/spawncount = 1
 
+/datum/event/spider_infestation/can_start(var/list/active_with_role)
+	if(!sent_spiders_to_station && active_with_role["Security"] > 1)
+		return 40
+	return 0
 
 /datum/event/spider_infestation/setup()
 	announceWhen = rand(300, 600)

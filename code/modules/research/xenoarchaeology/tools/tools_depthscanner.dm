@@ -21,7 +21,6 @@
 	var/depth = 0
 	var/clearance = 0
 	var/record_index = 1
-	var/dissonance_spread = 1
 	var/material = "unknown"
 
 /obj/item/device/depth_scanner/proc/scan_atom(var/mob/user, var/atom/A)
@@ -40,16 +39,10 @@
 			//find the first artifact and store it
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]
-				D.depth = F.excavation_required * 2		//0-100% and 0-200cm
-				D.clearance = F.clearance_range * 2
-				D.material = get_responsive_reagent(F.find_type)
-			/*
-			if(M.excavation_minerals.len)
-				if(M.excavation_minerals[1] < D.depth)
-					D.depth = M.excavation_minerals[1]
-					D.clearance = rand(2,6)
-					D.dissonance_spread = rand(1,1000) / 100
-			*/
+				D.depth = F.excavation_required	//0-100% and 0-100cm
+				D.clearance = F.clearance_range
+				D.material = F.responsive_reagent
+
 
 			positive_locations.Add(D)
 
@@ -68,12 +61,11 @@
 			//these values are arbitrary
 			D.depth = rand(75,100)
 			D.clearance = rand(5,25)
-			D.dissonance_spread = rand(750,2500) / 100
 
 			positive_locations.Add(D)
 
 			for(var/mob/L in range(src, 1))
-				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!.</span>")
+				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)
@@ -86,7 +78,6 @@
 		dat += "Coords: [current.coords]<br>"
 		dat += "Anomaly depth: [current.depth] cm<br>"
 		dat += "Clearance above anomaly depth: [current.clearance] cm<br>"
-		dat += "Dissonance spread: [current.dissonance_spread]<br>"
 		var/index = responsive_carriers.Find(current.material)
 		if(index > 0 && index <= finds_as_strings.len)
 			dat += "Anomaly material: [finds_as_strings[index]]<br>"

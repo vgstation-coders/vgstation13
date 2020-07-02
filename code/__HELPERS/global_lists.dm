@@ -13,15 +13,13 @@ var/global/list/living_mob_list = list()			//List of all alive mobs, including c
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless. Excludes /mob/new_player
 var/list/observers = new/list()
 var/global/list/areas = list()
+var/global/list/active_component_containers = list() 	//List of all component containers that have registered for updating
 
 var/global/list/chemical_reactions_list				//list of all /datum/chemical_reaction datums. Used during chemical reactions
 var/global/list/chemical_reagents_list				//list of all /datum/reagent datums indexed by reagent id. Used by chemistry stuff
 var/global/list/landmarks_list = list()				//list of all landmarks created
 var/global/list/surgery_steps = list()				//list of all surgery steps  |BS12
 var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mobs target tracking.
-
-// Posters
-var/global/list/datum/poster/poster_designs = typesof(/datum/poster) - /datum/poster - /datum/poster/goldstar
 
 //Preferences stuff
 	//Underwear
@@ -57,6 +55,9 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 		var/datum/emote/E = new path()
 		E.emote_list[E.key] = E
 
+	for(var/path in subtypesof(/datum/rogan_sound))
+		var/datum/rogan_sound/S = new path()
+		number2rogansound[S.number] = S
 
 /* // Uncomment to debug chemical reaction list.
 /client/verb/debug_chemical_list()
@@ -72,7 +73,11 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 */
 
 var/global/list/escape_list = list()
+var/list/bots_list = list()
 
+
+var/list/rcd_list = list()
+var/list/red_tool_list = list()
 var/list/brig_lockers = list()
 var/list/communications_circuitboards = list()
 var/list/pinpointer_list = list()
@@ -83,5 +88,8 @@ var/list/mech_tracking_beacons = list()
 var/list/mop_list = list()
 var/list/mopbucket_list = list()
 var/list/cleanbot_list = list()
+var/list/janicart_list = list()
+var/list/janikeys_list = list()
 var/list/vehicle_list = list()
 var/list/paicard_list = list()
+var/list/effects_list = list()

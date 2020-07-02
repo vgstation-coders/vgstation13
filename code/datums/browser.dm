@@ -41,6 +41,9 @@
 /datum/browser/proc/add_stylesheet(name, file)
 	stylesheets[name] = file
 
+/datum/browser/proc/remove_stylesheets()
+	stylesheets = list()
+
 /datum/browser/proc/add_script(name, file)
 	scripts[name] = file
 
@@ -69,7 +72,7 @@
 
 	return {"<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<!--<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">-->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<head>
 		[head_content]
@@ -178,7 +181,7 @@
 
 	return {"<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<head>
 		[head_content]
 	</head>

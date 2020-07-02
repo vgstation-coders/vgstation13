@@ -3,6 +3,7 @@
 	desc = "This spell punches up to three beings in view."
 	abbreviation = "FS"
 	user_type = USER_TYPE_WIZARD
+	specialization = SSOFFENSIVE
 
 	charge_max = 50
 	spell_flags = 0 //So that it doesn't open a dialog box.
@@ -10,6 +11,7 @@
 	invocation = "I CAST FIST"
 	invocation_type = SpI_SHOUT
 	max_targets = 3
+	spell_flags = NEEDSCLOTHES | LOSE_IN_TRANSFER | IS_HARMFUL
 
 	compatible_mobs = list(/mob/living)
 
@@ -17,7 +19,7 @@
 
 /spell/targeted/fist/cast(var/list/targets)
 	var/mob/living/L = holder
-	if(istype(L))
+	if(istype(L) && L.has_hand_check()) //Can't punch if you have no haaands
 		for(var/mob/living/target in targets)
 			if (L.is_pacified(1,target))
 				return

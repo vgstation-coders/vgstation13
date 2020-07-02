@@ -16,7 +16,7 @@
 
 	if(istype(item,/obj/item/weapon/melee/baton) && item:status ||\
 			istype(item,/obj/item/weapon/melee/energy) ||\
-			istype(item,/obj/item/weapon/melee/cultblade) ||\
+			istype(item,/obj/item/weapon/melee/legacy_cultblade) ||\
 			istype(item,/obj/item/weapon/card/emag) ||\
 			istype(item,/obj/item/device/multitool))
 		Triggered(toucher, context, item)

@@ -11,4 +11,4 @@
    ..()
    new /obj/item/weapon/card/id/nt_disguise(src)
    new /obj/item/clothing/mask/gas/voice/detective(src)
-   new /obj/item/weapon/pocket_mirror(src)
+   new /obj/item/weapon/pocket_mirror/comb(src)

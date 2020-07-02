@@ -149,10 +149,10 @@
 			to_chat(user, "You wrap cable around the base of \the [src], creating a grip.")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/sword/I = new (get_turf(user))
+				var/obj/item/weapon/sword/weaponcraft/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/sword(get_turf(src.loc))
+				new /obj/item/weapon/sword/weaponcraft(get_turf(src.loc))
 			C.use(5)
 			qdel(src)
 	if(iswelder(W))
@@ -171,6 +171,26 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "rail_assembly"
 	var/durability = 100 //After a certain number of shots, the rails will degrade and will need to be replaced.
+	var/stage = 0
+
+/obj/item/weapon/rail_assembly/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/newspaper))
+		to_chat(user, "You add \the [W] to \the [src] as padding.")
+		stage = 1
+		desc = "A set of metal rails with some newspaper stuck on it. With some extra cables, this could work as a splint."
+		icon = 'icons/obj/items.dmi'
+		icon_state = "ghettosplint"
+		qdel(W)
+	if(istype(W,/obj/item/weapon/handcuffs/cable) && stage == 1)
+		to_chat(user,"<span class='notice'>You tie up \the [src] with \the [W], creating a ghetto splint!</span>")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/stack/medical/splint/ghetto/I = new (get_turf(user))
+			user.put_in_hands(I)
+		else
+			new /obj/item/stack/medical/splint/ghetto(get_turf(src.loc))
+		qdel(W)
+		qdel(src)
 
 /obj/item/weapon/cylinder
 	name = "beaker"
@@ -397,9 +417,9 @@
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
 	switch(state)
 		if("stock_reservoir_assembly")
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir"
 				update_assembly()
 		if("stock_reservoir")
@@ -417,9 +437,9 @@
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 				C.use(5)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir_assembly"
 				update_assembly()
 
@@ -440,9 +460,9 @@
 				update_assembly()
 				qdel(W)
 		if("blunderbuss_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
@@ -454,14 +474,14 @@
 
 //RAILGUN BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		if("stock_capacitorbank_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
 			if(iswirecutter(W))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(user, 50)
 				state = "stock_reservoir"
 				update_assembly()
 				var/obj/item/stack/cable_coil/C = new (get_turf(user))
@@ -472,9 +492,9 @@
 				state = "stock_capacitorbank_barrel_assembly"
 				update_assembly()
 				qdel(W)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
@@ -492,9 +512,9 @@
 				update_assembly()
 				qdel(W)
 		if("railgun_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
@@ -562,9 +582,9 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_ansible_amplifier"
 				update_assembly()
 		if("stock_ansible_amplifier")
@@ -574,9 +594,9 @@
 				update_assembly()
 				qdel(W)
 		if("stock_ansible_amplifier_transmitter_assembly")
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "subspacetunneler_assembly"
 				update_assembly()
 		if("subspacetunneler_assembly")
@@ -723,6 +743,81 @@
 			update_wheelchair_assembly()
 //CANNON END///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//WIND-UP BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/windup_assembly
+	name = "wind-up assembly"
+	desc = "A spring in a shoe and all the associated possibilities."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	var/windupState = 1
+	icon_state = "windup_assembly_spring"
+	var/list/windup_adhesive = list(
+		/obj/item/gum,
+		/obj/item/taperoll/police,
+		/obj/item/taperoll/engineering,
+		/obj/item/taperoll/atmos,
+		/obj/item/taperoll/syndie,
+		/obj/item/device/label_roll,
+		/obj/item/weapon/glue,
+		/obj/item/weapon/bonegel,
+		/obj/item/stack/package_wrap,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+		)
+
+/obj/item/spring/attackby(var/obj/item/I, mob/user)
+	if((istype(I, /obj/item/clothing/shoes)) && (user.drop_item(I)))
+		playsound(src,'sound/effects/spring.ogg', 50,1)
+		var/obj/item/weapon/windup_assembly/W = new /obj/item/weapon/windup_assembly(get_turf(src))
+		user.before_take_item(src)
+		user.put_in_hands(W)
+		if(prob(10))
+			to_chat(user,"<span  class='notice'>You put some spring in your step.</span>")
+		else
+			to_chat(user,"<span  class='notice'>You stuff the [src] firmly into the [I].</span>")
+		qdel(I)
+		qdel(src)
+
+/obj/item/weapon/windup_assembly/attackby(var/obj/item/K, mob/user as mob)
+	#define WINDUP_CARDBOARD 1
+	#define WINDUP_RODS 2
+	#define WINDUP_ADHESIVE 3
+	#define WINDUP_CRAYON 4
+	switch(windupState)
+		if(WINDUP_CARDBOARD)
+			if(istype(K, /obj/item/stack/sheet/cardboard))
+				var/obj/item/stack/sheet/cardboard/C = K
+				if(C.use(6))
+					windupState = WINDUP_RODS
+					playsound(src,'sound/items/can_crushed.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You build a box around the assembly.</span>")
+					icon_state = "windup_assembly_cardboard"
+		if(WINDUP_RODS)
+			if(istype(K, /obj/item/stack/rods))
+				var/obj/item/stack/rods/C = K
+				if(C.use(3))
+					windupState = WINDUP_ADHESIVE
+					playsound(src,'sound/items/crank.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You add a crank to the box.</span>")
+					icon_state = "windup_assembly_rods"
+		if(WINDUP_ADHESIVE)
+			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, src))
+				windupState = WINDUP_CRAYON
+				playsound(src,'sound/items/poster_ripped.ogg', 50,1)
+				to_chat(user,"<span  class='notice'>You patch up and reinforce the box.</span>")
+				qdel(K)
+				icon_state = "windup_assembly_adhesive"
+		if(WINDUP_CRAYON)
+			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,src))
+				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
+				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
+				var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/B = new (get_turf(user))
+				qdel(src)
+				user.put_in_hands(B)
+
+
+
+//WIND-UP END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /obj/machinery/power/secured_capacitor
 	name = "capacitor"
 	desc = "A basic capacitor used in the construction of a variety of devices."
@@ -730,6 +825,7 @@
 	icon_state = "secured_capacitor"
 	density = 0
 	state = 1
+	ghost_read = FALSE
 	var/charge = 0
 	var/charging = 0
 	var/list/power_states = list()
@@ -750,12 +846,20 @@
 	icon_state = "secured_capacitor_adv_super"
 	maxcharge = 1000000000
 
+/obj/machinery/power/secured_capacitor/adv/super/ultra
+	name = "ultra capacitor"
+	icon_state = "secured_capacitor_adv_super_ultra"
+	maxcharge = 5000000000
+
 /obj/machinery/power/secured_capacitor/attack_hand(mob/user as mob)
+	if(user.lying)
+		return
 	if(!charging)
 		attempt_connect(user)
 	else
 		disconnect_capacitor()
 		to_chat(user, "<span class='notice'>You halt \the [src.name]'s charging process.</span>")
+	add_fingerprint(user)
 
 /obj/machinery/power/secured_capacitor/examine(mob/user)
 	..()
@@ -769,12 +873,12 @@
 		to_chat(user, "<span class='notice'>\The [src.name] is uncharged.</span>")
 
 /obj/machinery/power/secured_capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(charging)
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return
 		to_chat(user, "You unsecure \the [src.name] from the floor.")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")
@@ -787,6 +891,10 @@
 				I.maximum_charge = maxcharge
 			if("super capacitor")
 				var/obj/item/weapon/stock_parts/capacitor/adv/super/I = new (get_turf(src.loc))
+				I.stored_charge = charge
+				I.maximum_charge = maxcharge
+			if("ultra capacitor")
+				var/obj/item/weapon/stock_parts/capacitor/adv/super/ultra/I = new (get_turf(src.loc))
 				I.stored_charge = charge
 				I.maximum_charge = maxcharge
 		qdel(src)

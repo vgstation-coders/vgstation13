@@ -77,14 +77,14 @@
 		item_state = "flamethrower_0"
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/target, mob/user, flag)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/weapon/storage/backpack ))
 		return
 
-	else if (target.loc == user.loc)
+	else if (A.loc == user.loc)
 		return
 
-	else if (target.loc == user)
+	else if (A.loc == user)
 		return
 
 	else if (locate (/obj/structure/table, src.loc))
@@ -111,7 +111,7 @@
 	var/pressure = tank_gas.return_pressure()
 	var/total_moles = tank_gas.total_moles()
 	if(total_moles)
-		var/o2_concentration = tank_gas.oxygen/total_moles
+		var/o2_concentration = tank_gas[GAS_OXYGEN]/total_moles
 		if(o2_concentration > 0.01)
 			B.has_O2_in_mix = 1
 	else
@@ -129,7 +129,7 @@
 	B.jet_pressure = pressure * (throw_percent/100)
 	B.gas_jet = tank_gas.remove_ratio(throw_percent/100)
 
-	if(Fire(target,user))
+	if(Fire(A,user))
 		user.visible_message("<span class='danger'>[user] shoots a jet of gas from \his [src.name]!</span>","<span class='danger'>You shoot a jet of gas from your [src.name]!</span>")
 		playsound(user, 'sound/weapons/flamethrower.ogg', 50, 1)
 		src.updateUsrDialog()
@@ -138,7 +138,7 @@
 /obj/item/weapon/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.stat || user.restrained() || user.lying)
 		return
-	if(iswrench(W) && !status)//Taking this apart
+	if(W.is_wrench(user) && !status)//Taking this apart
 		var/turf/T = get_turf(src)
 		if(weldtool)
 			weldtool.forceMove(T)
@@ -153,7 +153,7 @@
 		qdel(src)
 		return
 
-	if(isscrewdriver(W) && igniter && !lit)
+	if(W.is_screwdriver(user) && igniter && !lit)
 		status = !status
 		to_chat(user, "<span class='notice'>[igniter] is now [status ? "secured" : "unsecured"]!</span>")
 		update_icon()
@@ -253,7 +253,6 @@
 	..()
 	ptank = new /obj/item/weapon/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
-	gas_tank.toxins = 29.1
-	gas_tank.update_values()
+	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()
 	return

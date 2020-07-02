@@ -28,7 +28,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/allow_drop()
 	return 0
 
-/obj/item/mecha_parts/mecha_equipment/tool/sleeper/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/Destroy()
 	for(var/atom/movable/AM in src)
 		AM.forceMove(get_turf(src))
 	return ..()
@@ -73,9 +73,10 @@
 		*/
 		set_ready_state(0)
 		pr_mech_sleeper.start()
-		occupant_message("<font color='blue'>[target] successfully loaded into [src]. Life support functions engaged.</font>")
+		occupant_message("<span class='notice'>[target] successfully loaded into [src]. Life support functions engaged.</span>")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded. Life support functions engaged.")
+		msg_admin_attack("[chassis.occupant] has loaded [target] into a mecha-sleeper. ([formatJumpTo(chassis)])")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/go_out()
@@ -210,6 +211,12 @@
 		update_equip_info()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/relaymove(mob/user)
+	if(user.isStunned())
+		return
+	occupant_message("[occupant] is self ejecting at [(occupant.health/occupant.maxHealth)*100]% health.")
+	go_out()
+
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/update_equip_info()
 	if(..())
 		send_byjax(chassis.occupant,"msleeper.browser","lossinfo",get_occupant_dam())
@@ -226,6 +233,7 @@
 		S.set_ready_state(1)
 		S.log_message("Deactivated.")
 		S.occupant_message("[src] deactivated - no power.")
+		S.go_out()
 		return stop()
 	var/mob/living/carbon/M = S.occupant
 	if(!M)
@@ -235,10 +243,6 @@
 		M.updatehealth()
 	M.AdjustStunned(-4)
 	M.AdjustKnockdown(-4)
-	M.AdjustStunned(-4)
-	M.Paralyse(2)
-	M.Knockdown(2)
-	M.Stun(2)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
 	S.chassis.use_power(S.energy_drain)
@@ -274,7 +278,7 @@
 	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/destroy()
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
 	chassis.on_moved.Remove(chassis_on_moved_key)
 	return ..()
 
@@ -284,7 +288,7 @@
 	var/result = load_cable(target)
 	var/message
 	if(isnull(result))
-		message = "<font color='red'>Unable to load [target] - no cable found.</font>"
+		message = "<span class='red'>Unable to load [target] - no cable found.</span>"
 	else if(!result)
 		message = "Reel is full."
 	else

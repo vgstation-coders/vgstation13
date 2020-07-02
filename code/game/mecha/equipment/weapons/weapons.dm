@@ -570,7 +570,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
-	projectile = /obj/item/weapon/legcuffs/bolas
+	projectile = /obj/item/weapon/legcuffs/bolas/mech
 	fire_sound = 'sound/weapons/whip.ogg'
 	max_projectiles = 10
 	missile_speed = 1
@@ -583,13 +583,13 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/legcuffs/bolas/M = new projectile(chassis.loc)
+	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
 		target = get_inaccuracy(originaltarget, 1, chassis)
-	M.thrown_from = src
 	M.throw_at(target, missile_range, missile_speed)
+	playsound(src,'sound/weapons/whip.ogg', 20, 1) //because mechs play the sound anyways
 	projectiles--
 	log_message("Fired from [src.name], targeting [originaltarget].")
 	message_admins("[key_name_and_info(chassis.occupant)] fired \a [src] towards [originaltarget] ([formatJumpTo(chassis)])",0,1)

@@ -15,7 +15,7 @@
 "ar" = (/obj/structure/bed/chair/comfy/couch/right/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "as" = (/obj/structure/bed/chair/comfy/couch/mid/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "at" = (/obj/structure/bed/chair/comfy/couch/left/red,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
-"au" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/item/weapon/cigbutt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
+"au" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/item/trash/cigbutt,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "av" = (/obj/structure/window/barricade{tag = "icon-barricade (NORTH)"; icon_state = "barricade"; dir = 1},/obj/structure/window/barricade{tag = "icon-barricade (EAST)"; icon_state = "barricade"; dir = 4},/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "aw" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/soot,/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)
 "ax" = (/obj/effect/landmark/corpse/engineer/rig{dir = 1; name = "Walter"},/turf/simulated/floor/grass{color = "#886688"},/area/vault/zathura/surroundings)

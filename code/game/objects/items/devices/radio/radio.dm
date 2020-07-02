@@ -6,7 +6,7 @@
 	item_state = "walkietalkie"
 	var/on = 1 // 0 for off
 	var/last_transmission
-	var/frequency = 1459 //common chat
+	var/frequency = 1459
 	var/traitor_frequency = 0 //tune to frequency to unlock traitor supplies
 	var/canhear_range = 3 // the range which mobs can hear this radio from
 	var/obj/item/device/radio/patch_link = null
@@ -50,8 +50,8 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(radio_controller)
+	..()
+	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -59,9 +59,9 @@
 	remove_radio_all(src) //Just to be sure
 	..()
 
-
 /obj/item/device/radio/initialize()
-
+	. = ..()
+	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
 			frequency = sanitize_frequency(frequency, maxf)
@@ -81,10 +81,6 @@
 	else
 		return ..()
 
-/obj/item/device/radio/attack_self(mob/user as mob)
-	user.set_machine(src)
-	interact(user)
-
 /obj/item/device/radio/interact(mob/user as mob)
 	if(!on)
 		return
@@ -94,8 +90,7 @@
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
-	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
-		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+	dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
 
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
@@ -445,7 +440,7 @@
 
 	spawn(rand(10,25)) // wait a little...
 
-		if(signal.data["done"] && position.z in signal.data["level"])
+		if(signal.data["done"] && (position.z in signal.data["level"]))
 			// we're done here.
 			returnToPool(speech)
 			return
@@ -526,16 +521,14 @@
 	else
 		user.show_message("<span class = 'info'>\The [src] can not be modified or attached!</span>")
 
+
+/obj/item/device/radio/attack_self(mob/user)
+	user.set_machine(src)
+	interact(user)
+
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
-	if (!( isscrewdriver(W) ))
-		return
-	b_stat = !( b_stat )
-	if (b_stat)
-		user.show_message("<span class = 'notice'>\The [src] can now be attached and modified!</span>")
-	else
-		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
 	updateDialog()
 	update_icon()
 	add_fingerprint(user)

@@ -14,6 +14,7 @@
 	var/obj/item/device/assembly/a_left = null
 	var/obj/item/device/assembly/a_right = null
 	var/obj/special_assembly = null
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/device/assembly_holder/proc/attach(var/obj/item/device/D, var/obj/item/device/D2, var/mob/user)
 	return
@@ -87,11 +88,19 @@
 	if(a_left)
 		overlays += image(icon = icon, icon_state = "[a_left.icon_state]_left")
 		for(var/O in a_left.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_l")
+			var/image/I = a_left.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(a_right)
 		src.overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
 		for(var/O in a_right.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_r")
+			var/image/I = a_right.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(master)
 		master.update_icon()
 
@@ -129,15 +138,15 @@
 		special_assembly.Crossed(AM)
 
 
-/obj/item/device/assembly_holder/on_found(mob/finder as mob)
+/obj/item/device/assembly_holder/on_found(mob/wearer, mob/finder as mob)
 	if(a_left)
-		a_left.on_found(finder)
+		a_left.on_found(wearer, finder)
 	if(a_right)
-		a_right.on_found(finder)
+		a_right.on_found(wearer, finder)
 	if(special_assembly)
 		if(istype(special_assembly, /obj/item))
 			var/obj/item/S = special_assembly
-			S.on_found(finder)
+			S.on_found(wearer, finder)
 
 /obj/item/device/assembly_holder/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
@@ -159,7 +168,7 @@
 
 
 /obj/item/device/assembly_holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
 			return
@@ -236,7 +245,6 @@
 		if(istype(src.loc, /obj/machinery/igniter))
 			src.loc:toggle_state()
 		else
-			:
 			if(a_right != D)
 				a_right.pulsed(0)
 			if(a_left != D)

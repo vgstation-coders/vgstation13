@@ -26,6 +26,7 @@
 	ammo_type ="/obj/item/ammo_casing/a50"
 	mag_type = "/obj/item/ammo_storage/magazine/a50"
 	load_method = 2
+	recoil = 3
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -55,6 +56,7 @@
 	ammo_type = "/obj/item/ammo_casing/a75"
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
+	recoil = 4
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -103,7 +105,7 @@
 /obj/item/weapon/gun/projectile/handgun/RemoveMag(var/mob/user)
 	to_chat(user, "<span class = 'warning'>Try as you might, you can't seem to find a magazine on \the [src]!</span>")
 
-/obj/item/weapon/gun/projectile/handgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/handgun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		if(silenced)
 			user.emote("me",1,"pretends to fire a gun at [target]!")
@@ -122,6 +124,7 @@
 	origin_tech = Tc_COMBAT + "=3"
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/NTUSP/update_icon()
@@ -139,13 +142,16 @@
 
 
 
-/obj/item/weapon/gun/projectile/sec
+/obj/item/weapon/gun/projectile/glock
 	name = "\improper NT Glock"
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. "
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
 	icon = 'icons/obj/biggun.dmi'
+	w_class = W_CLASS_SMALL
+	clowned = CLOWNABLE
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
+	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
 	max_shells = 8
 	caliber = list(POINT380  = 1)
 	origin_tech = Tc_COMBAT + "=3"
@@ -153,18 +159,26 @@
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 
-/obj/item/weapon/gun/projectile/sec/update_icon()
+/obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
 
-/obj/item/weapon/gun/projectile/sec/fancy
-	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds.<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maint crawling!</span>"
+/obj/item/weapon/gun/projectile/glock/fancy
 	name = "\improper NT Glock Custom"
 	icon_state = "secgunfancy"
+	clowned = UNCLOWN
 
-/obj/item/weapon/gun/projectile/sec/fancy/update_icon()
+/obj/item/weapon/gun/projectile/glock/fancy/New()
+	. = ..()
+	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
+
+/obj/item/weapon/gun/projectile/glock/fancy/update_icon()
 	..()
 	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
+
+/obj/item/weapon/gun/projectile/glock/lockbox
+	max_shells = 0
+	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/luger
 	name = "\improper Luger P08"
@@ -185,6 +199,10 @@
 	..()
 	icon_state = "[initial(icon_state)][stored_magazine ? "" : "empty"]"
 
+/obj/item/weapon/gun/projectile/luger/small
+	desc = "The wrath of the SS. Now in extra-concealed size for civilian uses!"
+	w_class = W_CLASS_SMALL
+
 /obj/item/weapon/gun/projectile/beretta
 	name = "\improper Beretta 92FS"
 	desc = "The classic wonder nine and favorite of the undercover cop. Kong whiskey not included."
@@ -202,3 +220,30 @@
 /obj/item/weapon/gun/projectile/beretta/update_icon()
 	..()
 	icon_state = "beretta[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag
+	name = "\improper Automag VI"
+	desc = "It also doubles as a fingerprint removal tool."
+	icon_state = "automag"
+	max_shells = 7
+	caliber = list(POINT357 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_SYNDICATE + "=3"
+	ammo_type = "/obj/item/ammo_casing/a357"
+	mag_type = "/obj/item/ammo_storage/magazine/a357"
+	load_method = 2
+	recoil = 3
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+
+/obj/item/weapon/gun/projectile/automag/update_icon()
+	..()
+	icon_state = "automag[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/automag/prestige
+	name = "\improper Prestige Automag VI"
+	desc = "It also doubles as a fingerprint removal tool. This one is made to look more like the original AutomagIV from the 20th century."
+	icon_state = "automag-prestige"
+
+/obj/item/weapon/gun/projectile/automag/prestige/update_icon()
+	..()
+	icon_state = "automag-prestige[chambered ? "" : "-e"]"

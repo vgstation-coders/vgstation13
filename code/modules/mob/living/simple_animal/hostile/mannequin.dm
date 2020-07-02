@@ -130,8 +130,10 @@
 	..()
 
 /mob/living/simple_animal/hostile/mannequin/cult/CanAttack(var/atom/the_target)
-	if(iscultist(the_target))
-		return 0
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/mannequin/cult/New()

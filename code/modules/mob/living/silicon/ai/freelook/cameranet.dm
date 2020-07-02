@@ -144,12 +144,10 @@ var/datum/cameranet/cameranet = new()
 			return 1
 	return 0
 
-
 // Debug verb for VVing the chunk that the turf is in.
 /*
 /turf/verb/view_chunk()
 	set src in world
-
 	if(cameranet.chunkGenerated(x, y, z))
 		var/datum/camerachunk/chunk = cameranet.getCameraChunk(x, y, z)
 		usr.client.debug_variables(chunk)

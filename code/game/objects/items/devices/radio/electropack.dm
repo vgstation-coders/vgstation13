@@ -40,6 +40,9 @@
 		return
 	..()
 
+/obj/item/device/radio/electropack/prepickup(mob/user)
+	return src == user.back //Prevents picking the item up if it's the user's back slot item. e.g.: if they are quickswapping
+
 /obj/item/device/radio/electropack/Destroy()
 	if(istype(src.loc, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/S = src.loc
@@ -54,6 +57,11 @@
 
 /obj/item/device/radio/electropack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
+	if (W.is_screwdriver())
+		b_stat = !b_stat
+		if (b_stat)
+			to_chat(user, "<span class='notice'>[src] is now ready to be attached!</span>")
+		return
 	if(istype(W, /obj/item/clothing/head/helmet))
 		if(!b_stat)
 			to_chat(user, "<span class='notice'>[src] is not ready to be attached!</span>")
@@ -138,6 +146,7 @@
 		spark(M)
 
 		M.Knockdown(10)
+		M.Stun(10)
 
 	if(master && isWireCut(1))
 		master.receive_signal()

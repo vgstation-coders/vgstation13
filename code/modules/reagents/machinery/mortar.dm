@@ -3,10 +3,13 @@
 	desc = "This is a reinforced bowl, used for crushing stuff into reagents."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "mortar"
+	item_state = "mortar"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT  | OPENCONTAINER
 	volume = 50
 	amount_per_transfer_from_this = 5
 	//We want the all-in-one grinder audience
+	var/crush_flick = "mortar_crush"
 
 	var/list/blend_items = list (
 		/obj/item/stack/sheet/metal           = list(IRON,20),
@@ -25,6 +28,7 @@
 		/obj/item/weapon/reagent_containers/food/snacks/grown/ricestalk  = list(RICE,5),
 		/obj/item/weapon/reagent_containers/food/snacks/grown/cherries   = list(CHERRYJELLY,1),
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans        = list(ALUMINUM,10),
+		/obj/item/trash/soda_cans										 = list(ALUMINUM,10),
 		/obj/item/seeds	                      = list(BLACKPEPPER,5),
 		/obj/item/device/flashlight/flare     = list(SULFUR,10),
 		/obj/item/stack/cable_coil            = list(COPPER, 10),
@@ -34,7 +38,8 @@
 		/obj/item/weapon/match                = list(PHOSPHORUS, 2),
 
 		//Recipes must include both variables!
-		/obj/item/weapon/reagent_containers/food = list("generic",0)
+		/obj/item/weapon/reagent_containers/food = list("generic",0),
+		/obj/item/ice_crystal                = list(ICE, 10),
 	)
 
 
@@ -46,7 +51,7 @@
 	. = ..()
 
 /obj/item/weapon/reagent_containers/glass/mortar/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if (isscrewdriver(O))
+	if (O.is_screwdriver(user))
 		if(crushable)
 			crushable.forceMove(user.loc)
 		new /obj/item/stack/sheet/metal(user.loc)
@@ -93,6 +98,7 @@
 		to_chat(user, "<span class='warning'>There is no more space inside!</span>")
 		return
 	if(is_type_in_list(crushable, juice_items))
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into juice!</span>")
 		var/id = null
 		for(var/i in juice_items)
@@ -105,6 +111,7 @@
 			juiceable.potency = 0
 		reagents.add_reagent(id[1], min(round(5*sqrt(juiceable.potency)), volume - reagents.total_volume))
 	else if(is_type_in_list(crushable, blend_items))
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You grind the contents into dust!</span>")
 		var/id = null
 		var/space = volume - reagents.total_volume
@@ -130,6 +137,7 @@
 			to_chat(user, "<span class ='warning'>An error was encountered. Report this message.</span>")
 			return
 	else
+		flick(crush_flick,src)
 		to_chat(user, "<span class='notice'>You smash the contents into nothingness.</span>")
 	qdel(crushable)
 	crushable = null

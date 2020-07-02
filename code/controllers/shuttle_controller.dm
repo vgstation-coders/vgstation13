@@ -6,6 +6,12 @@
 #define SHUTTLEARRIVETIME  600		// 10 minutes = 600 seconds
 #define SHUTTLELEAVETIME   180		// 3 minutes = 180 seconds
 #define SHUTTLETRANSITTIME 120		// 2 minutes = 120 seconds
+#define SHUTTLEGRACEPERIOD 300      // time after roundstart until the shuttle can be called, 5 minutes = 300 seconds
+
+#define EMERGENCY_SHUTTLE_RECALLED	-1
+#define EMERGENCY_SHUTTLE_STANDBY	0
+#define EMERGENCY_SHUTTLE_GOING_TO_STATION 1
+#define EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM 2
 
 var/global/datum/emergency_shuttle/emergency_shuttle
 
@@ -36,6 +42,8 @@ datum/emergency_shuttle
 	var/voting_cache = 0
 
 	var/warmup_sound = 0
+
+	var/was_early_launched = FALSE //had timer shortened to 10 seconds
 
 	// call the shuttle
 	// if not called before, set the endtime to T+600 seconds
@@ -94,7 +102,7 @@ datum/emergency_shuttle/proc/recall()
 // note if direction = -1, gives a count-up to SHUTTLEARRIVETIME
 datum/emergency_shuttle/proc/timeleft()
 	if(online)
-		var/timeleft = round((endtime - world.timeofday)/10 ,1)
+		var/timeleft = round((endtime - world.time)/10 ,1)
 		if(direction >= 0)
 			return timeleft
 		else
@@ -104,7 +112,7 @@ datum/emergency_shuttle/proc/timeleft()
 
 // sets the time left to a given delay (in seconds)
 datum/emergency_shuttle/proc/settimeleft(var/delay)
-	endtime = world.timeofday + delay * 10
+	endtime = world.time + delay * 10
 	timelimit = delay
 
 // sets the shuttle direction
@@ -115,8 +123,8 @@ datum/emergency_shuttle/proc/setdirection(var/dirn)
 		return
 	direction = dirn
 	// if changing direction, flip the timeleft by SHUTTLEARRIVETIME, unless changing from/to 0
-	var/ticksleft = endtime - world.timeofday
-	endtime = world.timeofday + (SHUTTLEARRIVETIME*10 - ticksleft)
+	var/ticksleft = endtime - world.time
+	endtime = world.time + (SHUTTLEARRIVETIME*10 - ticksleft)
 	return
 
 datum/emergency_shuttle/proc/move_pod(var/pod,var/destination)
@@ -225,6 +233,9 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
 				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
 				world << sound('sound/AI/shuttledock.ogg')
+			if(ticker)
+				ticker.shuttledocked_time = world.time / 10
+				ticker.mode.ShuttleDocked(1)
 				/*
 				if(universe.name == "Hell Rising")
 					to_chat(world, "___________________________________________________________________")
@@ -273,6 +284,9 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 			else
 				vote_preload()
 				location = 2
+
+			if(ticker)
+				ticker.mode.ShuttleDocked(2)
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))
 				var/datum/shuttle/escape/E = shuttle

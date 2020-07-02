@@ -16,6 +16,7 @@
 			handle_blood()
 
 		if(health <= config.health_threshold_dead || !has_brain())
+			emote("deathgasp", message = TRUE)
 			death()
 			blinded = 1
 			silent = 0
@@ -27,6 +28,7 @@
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
 			Paralyse(3)
+			species.OnCrit(src)
 
 			/* Done by handle_breath()
 			if( health <= 20 && prob(1) )
@@ -34,6 +36,8 @@
 					emote("gasp")
 			if(!reagents.has_reagent(INAPROVALINE))
 				adjustOxyLoss(1)*/
+		else
+			species.OutOfCrit(src)
 
 		if(hallucination)
 			if(hallucination >= 20 && !handling_hal)
@@ -71,9 +75,6 @@
 			if(prob(2) && health && !hal_crit)
 				spawn(0)
 					emote("snore")
-		else if(resting)
-			if(halloss > 0)
-				adjustHalLoss(-3)
 		else if(undergoing_hypothermia() >= SEVERE_HYPOTHERMIA)
 			blinded = 1
 			stat = UNCONSCIOUS
@@ -83,6 +84,9 @@
 			if(halloss > 0)
 				adjustHalLoss(-1)
 
+		if(resting && halloss > 0)
+			adjustHalLoss(-3)
+
 		//Eyes
 		if(!species.has_organ["eyes"]) //Presumably if a species has no eyes, they see via something else.
 			eye_blind =  0
@@ -91,16 +95,17 @@
 		else if(!has_eyes())           //Eyes cut out? Permablind.
 			eye_blind =  1
 			blinded =    1
-			eye_blurry = 1
+			eye_blurry = 0
 		else if(sdisabilities & BLIND) //Disabled-blind, doesn't get better on its own
 			blinded =    1
+			eye_blurry = 0
 		else if(eye_blind)		       //Blindness, heals slowly over time
 			eye_blind =  max(eye_blind - 1, 0)
 			blinded =    1
 		else if(istype(glasses, /obj/item/clothing/glasses/sunglasses/blindfold)) //Resting your eyes with a blindfold heals blurry eyes faster
 			eye_blurry = max(eye_blurry - 3, 0)
 			blinded =    1
-		else if(eye_blurry)	           //Blurry eyes heal slowly
+		else if(eye_blurry)
 			eye_blurry = max(eye_blurry - 1, 0)
 
 		//Ears
@@ -131,6 +136,9 @@
 
 		if(knockdown)
 			knockdown = max(knockdown - 1,0) //Before you get mad Rockdtben: I done this so update_canmove isn't called multiple times
+
+		if(say_mute)
+			say_mute = max(say_mute-1, 0)
 
 		if(stuttering)
 			stuttering = max(stuttering - 1, 0)

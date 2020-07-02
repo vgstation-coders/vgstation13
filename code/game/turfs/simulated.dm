@@ -61,8 +61,8 @@
 			bloodDNA = null
 
 			// Floorlength braids?  Enjoy your tripping.
-			if(H.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
-				var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
+			if(H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
+				var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
 				if(hair_style && (hair_style.flags & HAIRSTYLE_CANTRIP))
 					if(H.m_intent == "run" && prob(5))
 						if (H.Slip(4, 5))
@@ -73,17 +73,18 @@
 //returns 1 if made bloody, returns 0 otherwise
 /turf/simulated/add_blood(mob/living/carbon/human/M as mob)
 	if (!..())
-		return 0
+		return FALSE
 
 	for(var/obj/effect/decal/cleanable/blood/B in contents)
 		if(!B.blood_DNA[M.dna.unique_enzymes])
 			B.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 			B.virus2 = virus_copylist(M.virus2)
-		return 1 //we bloodied the floor
+		had_blood = TRUE
+		return TRUE //we bloodied the floor
 
 	blood_splatter(src,M,1)
-	return 1 //we bloodied the floor
-
+	had_blood = TRUE
+	return TRUE //we bloodied the floor
 
 // Only adds blood on the floor -- Skie
 /turf/simulated/proc/add_blood_floor(mob/living/carbon/M as mob)

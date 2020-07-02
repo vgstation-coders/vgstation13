@@ -124,7 +124,7 @@
 								Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
-/obj/structure/morgue/attackby(P as obj, mob/user as mob)
+/obj/structure/morgue/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P)&&!contents.len)
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
 		if(do_after(user, src,50))
@@ -133,14 +133,14 @@
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
-	if(iswrench(P))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(P.is_wrench(user))
+		P.playtoolsound(src, 50)
 		if(dir==4)
 			dir=8
 		else
 			dir=4
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/morgue/relaymove(mob/user as mob)
@@ -162,9 +162,9 @@
 	update()
 
 /obj/structure/morgue/Destroy()
-	. = ..()
 	if(connected)
-		qdel(connected) //references get cleared in the tray's Destroy()
+		qdel(connected)
+	. = ..()
 
 /*
  * Morgue tray
@@ -236,6 +236,7 @@
 
 /obj/structure/crematorium/Destroy()
 	crematorium_list.Remove(src)
+	..()
 
 /obj/structure/crematorium/proc/update()
 	if (cremating)
@@ -293,8 +294,8 @@
 	else if (src.locked == 0)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		src.connected = new /obj/structure/c_tray( src.loc )
-		step(src.connected, SOUTH)
-		var/turf/T = get_step(src, SOUTH)
+		step(src.connected, dir)
+		var/turf/T = get_step(src, dir)
 		if (T.contents.Find(src.connected))
 			src.connected.connected = src
 			src.icon_state = "crema0"
@@ -309,7 +310,7 @@
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
 	if (istype(P, /obj/item/weapon/pen))
-		set_tiny_label(user, " - '", "'")
+		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
 /obj/structure/crematorium/relaymove(mob/user as mob)

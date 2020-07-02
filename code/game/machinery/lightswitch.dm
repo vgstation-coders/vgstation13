@@ -2,12 +2,14 @@
 // can have multiple per area
 // can also operate on non-loc area through "otherarea" var
 /obj/machinery/light_switch
+	name = "light switch"
 	desc = "It turns lights on and off. What are you, simple?"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	anchored = 1.0
 	var/buildstage = 2
 	var/on = 0
+	var/image/overlay
 
 /obj/machinery/light_switch/supports_holomap()
 	return TRUE
@@ -29,10 +31,22 @@
 	updateicon()
 
 /obj/machinery/light_switch/proc/updateicon()
-	if ((stat & NOPOWER) || buildstage != 2)
+	if(!overlay)
+		overlay = image(icon, "light1-overlay")
+		overlay.plane = LIGHTING_PLANE
+		overlay.layer = ABOVE_LIGHTING_LAYER
+
+	overlays.Cut()
+	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
 	else
 		icon_state = on ? "light1" : "light0"
+		overlay.icon_state = "[icon_state]-overlay"
+		overlays += overlay
+		//If the lightswitch itself is in total darkness, even the overlay won't render, so we gotta light up the lightswitch just a tiny bit.
+		//...which, sadly, thanks to goonlights means "oops we have to softlight up the entire 3x3 around the lightswitch because we can't handle one-tile lights anymore"
+		//Maybe vis-contents will bring a more elegant solution when we support them?
+		set_light(1, 0.5, on ? "#82ff4c" : "#f86060")
 
 /obj/machinery/light_switch/examine(mob/user)
 	..()
@@ -41,9 +55,9 @@
 /obj/machinery/light_switch/attackby(obj/item/W as obj, mob/user as mob)
 	switch(buildstage)
 		if(2)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin unscrewing \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 2)
 					to_chat(user, "<span class='notice'>You unscrew the cover blocking the inner wiring of \the [src].</span>")
 					buildstage = 1
@@ -51,9 +65,9 @@
 					on = this_area.lightswitch
 			return
 		if(1)
-			if(isscrewdriver(W))
+			if(W.is_screwdriver(user))
 				to_chat(user, "You begin screwing closed \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You tightly screw closed the cover of \the [src].</span>")
 					buildstage = 2
@@ -61,7 +75,7 @@
 				return
 			if(iswirecutter(W))
 				to_chat(user, "You begin cutting the wiring from \the [src].")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src,10) && buildstage == 1)
 					to_chat(user, "<span class='notice'>You cut the wiring to the lighting power line.</span>")
 					new /obj/item/stack/cable_coil(get_turf(src),3)
@@ -105,6 +119,7 @@
 	if(buildstage != 2)
 		return
 	on = !on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	var/area/this_area = get_area(src)
 	this_area.lightswitch = on
 	this_area.updateicon()

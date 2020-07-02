@@ -17,6 +17,7 @@
 
 	//How many players can be this job
 	var/total_positions = 0
+	var/xtra_positions = 0
 
 	//How many players can spawn in as this job
 	var/spawn_positions = 0
@@ -45,7 +46,7 @@
 	var/pdatype=/obj/item/device/pda
 	var/pdaslot=slot_belt
 
-	var/list/species_blacklist = list() //Job not available to species in this list
+	var/list/species_blacklist = list("Mushroom") //Job not available to species in this list - shrooms can only be traders
 	var/list/species_whitelist = list() //If this list isn't empty, job is only available to species in this list
 
 	var/must_be_map_enabled = 0	//If 1, this job only appears on maps on which it's enabled (its type must be in the map's "enabled_jobs" list)
@@ -53,6 +54,7 @@
 
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money
+	var/wage_payout = 50 //Default wage payout
 	var/no_id = 0 //If 1, don't spawn with an ID
 	var/no_pda= 0 //If 1, don't spawn with a PDA
 	var/no_headset = 0 //If 1, don't spawn with a headset
@@ -60,7 +62,26 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
+
+/datum/job/proc/get_total_positions()
+	return clamp(total_positions + xtra_positions, 0, 99)
+
+/datum/job/proc/set_total_positions(var/nu)
+	total_positions = nu
+
+/datum/job/proc/bump_position_limit()
+	xtra_positions++
+
+/datum/job/proc/reject_new_slots()
+	return FALSE
+
 /datum/job/proc/equip(var/mob/living/carbon/human/H)
+	return 1
+
+/datum/job/proc/priority_reward_equip(var/mob/living/carbon/human/H)
+	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	H.equip_or_collect(new /obj/item/weapon/storage/box/priority_care(H.back), slot_in_backpack)
 	return 1
 
 /datum/job/proc/get_access()

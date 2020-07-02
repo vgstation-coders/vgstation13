@@ -20,7 +20,7 @@
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/update_icon()
 	alpha = invisibility ? 128 : 255
-	if(!node || istype(node,type)) // No connection, or the connection is another burst pipe
+	if(!node1 || istype(node1,type)) // No connection, or the connection is another burst pipe
 		qdel(src) //TODO: silent deleting looks weird
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/ex_act(var/severity)
@@ -34,15 +34,15 @@
 	level = T.intact ? 2 : 1
 	initialize()
 	build_network()
-	if (node)
-		node.initialize()
-		node.build_network()
+	if (node1)
+		node1.initialize()
+		node1.build_network()
 
 /obj/machinery/atmospherics/unary/vent/burstpipe/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (!iswrench(W))
+	if(!W.is_wrench(user))
 		return ..()
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(T, 50)
 	to_chat(user, "<span class='notice'>You begin to remove \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \

@@ -33,9 +33,11 @@
 	spawn(1)
 		update()
 
-/obj/item/organ/internal/Del()
+/obj/item/organ/internal/Destroy()
 	if(!robotic)
 		processing_objects -= src
+	qdel(organ_data)
+	organ_data = null
 	..()
 
 /obj/item/organ/internal/examine(var/mob/user, var/size = "")
@@ -137,6 +139,44 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
 
+/obj/item/organ/internal/heart/insectoid
+	name = "insectoid heart"
+	icon_state = "insectoid-heart-on"
+	prosthetic_name = "circulatory pump"
+	prosthetic_icon = "heart-prosthetic"
+	organ_tag = "heart"
+	fresh = 6
+	dead_icon = "insectoid-heart-off"
+	organ_type = /datum/organ/internal/heart
+
+/obj/item/organ/internal/heart/cell
+	name = "biocharger"
+	icon_state = "heart-cell"
+	prosthetic_name = null
+	prosthetic_icon = null
+	organ_type = /datum/organ/internal/heart/cell
+	robotic=2
+
+/obj/item/organ/internal/heart/cell/get_cell()
+	if(organ_data)
+		var/datum/organ/internal/heart/cell/C = organ_data
+		return C.cell
+
+/obj/item/organ/internal/heart/cell/attack_self(mob/user)
+	if(get_cell())
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You remove \the [C.cell] from \the [src].</span>")
+		user.put_in_hands(C.cell)
+		C.cell = null
+
+/obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+		var/datum/organ/internal/heart/cell/C = organ_data
+		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
+		C.cell = I
+		return
+	..()
+
 /obj/item/organ/internal/lungs
 	name = "human lungs"
 	icon_state = "lungs"
@@ -144,6 +184,14 @@
 	prosthetic_icon = "lungs-prosthetic"
 	organ_tag = "lungs"
 	organ_type = /datum/organ/internal/lungs
+
+/obj/item/organ/internal/lungs/insectoid
+	name = "insectoid lungs"
+	icon_state = "book-lungs"
+	prosthetic_name = "gas exchange system"
+	prosthetic_icon = "lungs-prosthetic"
+	organ_tag = "lungs"
+	organ_type = /datum/organ/internal/lungs/insectoid
 
 /obj/item/organ/internal/lungs/vox
 	name = "vox lungs"
@@ -188,8 +236,8 @@
 	prosthetic_icon = "eyes-prosthetic"
 	organ_tag = "eyes"
 	organ_type = /datum/organ/internal/eyes
-
 	var/eye_colour
+	var/emitter = FALSE
 
 /obj/item/organ/internal/eyes/tajaran
 	name = "tajaran eyeballs"
@@ -209,6 +257,14 @@
 	prosthetic_name = "grey visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grey
 
+/obj/item/organ/internal/eyes/compound
+	name = "compound eyes"
+	icon_state = "eye-compound"
+	prosthetic_name = "visual prosthetis"
+	prosthetic_name = "eyes-prosthetic"
+	organ_tag = "eyes"
+	organ_type = /datum/organ/internal/eyes/compound
+
 /obj/item/organ/internal/eyes/vox
 	name = "vox eyeballs"
 	icon_state = "eyes-vox"
@@ -220,6 +276,12 @@
 //	icon_state = "eyes"
 	prosthetic_name = "grue visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grue
+
+/obj/item/organ/internal/eyes/mushroom
+	name = "mushroom eyeballs"
+	icon_state = "eyes-tajaran"
+	prosthetic_name = "mushroom visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/mushroom
 
 /obj/item/organ/internal/eyes/adv_1
 	name = "advanced prosthesis eyeballs"
@@ -261,25 +323,6 @@
 /obj/item/organ/internal/appendix
 	name = "appendix"
 
-/obj/item/organ/internal/stomach
-	name = "stomach"
-	icon_state = "stomach"
-	organ_tag = "stomach"
-
-/obj/item/organ/internal/stomach/update()
-	.=..()
-	if(istype(organ_data, /datum/organ/internal/stomach))
-		var/datum/organ/internal/stomach/S = organ_data
-		if(!reagents || reagents.maximum_volume != S.reagent_size)
-			create_reagents(S.reagent_size)
-
-/obj/item/organ/internal/stomach/replaced(var/mob/living/target)
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		var/datum/organ/internal/stomach/S = H.get_stomach()
-		if(S)
-			reagents.trans_to(S.get_reagents(), reagents.maximum_volume)
-
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
 	if(!target || !user)
 		return
@@ -315,16 +358,24 @@
 	var/mob/living/carbon/human/H = target
 	if(istype(H))
 		eye_colour = list(
-			H.r_eyes ? H.r_eyes : 0,
-			H.g_eyes ? H.g_eyes : 0,
-			H.b_eyes ? H.b_eyes : 0
+			H.my_appearance.r_eyes ? H.my_appearance.r_eyes : 0,
+			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
+			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
-
+		var/image/I = image(icon,src,"[icon_state]-pupils")
+		I.color = "#[num2hex(eye_colour[1])][num2hex(eye_colour[2])][num2hex(eye_colour[3])]"
+		overlays += I
 		// Leave bloody red pits behind!
-		H.r_eyes = 128
-		H.g_eyes = 0
-		H.b_eyes = 0
+		H.my_appearance.r_eyes = 128
+		H.my_appearance.g_eyes = 0
+		H.my_appearance.b_eyes = 0
 		H.update_body()
+
+		for (var/ID in H.virus2)
+			var/datum/disease2/disease/D = H.virus2[ID]
+			for(var/datum/disease2/effect/emitter/e in D.effects)
+				if (e.announced)
+					emitter = TRUE
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
 	return
@@ -334,9 +385,9 @@
 	// Apply our eye colour to the target.
 	var/mob/living/carbon/human/H = target
 	if(istype(H) && eye_colour)
-		H.r_eyes = eye_colour[1]
-		H.g_eyes = eye_colour[2]
-		H.b_eyes = eye_colour[3]
+		H.my_appearance.r_eyes = eye_colour[1]
+		H.my_appearance.g_eyes = eye_colour[2]
+		H.my_appearance.b_eyes = eye_colour[3]
 		H.update_body()
 
 /obj/item/organ/internal/proc/bitten(mob/user)

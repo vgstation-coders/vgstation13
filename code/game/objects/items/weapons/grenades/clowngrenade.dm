@@ -1,8 +1,9 @@
 /obj/item/weapon/grenade/clown_grenade
 	name = "Banana Grenade"
 	desc = "A grenade used for rapid slipping of larger areas. Contains banana peels that release acid when slipped on."
-	icon_state = "chemg"
-	item_state = "flashbang"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
+	icon_state = "banana"
+	item_state = "banana" //banana inhand sprites when
 	w_class = W_CLASS_SMALL
 	force = 2.0
 	var/stage = 0
@@ -11,7 +12,7 @@
 	var/affected_area = 2
 
 /obj/item/weapon/grenade/clown_grenade/New()
-	icon_state = initial(icon_state) +"_locked"
+	icon_state = initial(icon_state)
 
 /obj/item/weapon/grenade/clown_grenade/prime()
 	..()
@@ -55,8 +56,8 @@
 /obj/item/weapon/bananapeel/traitorpeel
 	name = "banana peel"
 	desc = "A peel from a banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana_peel"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "peel"
 	item_state = "banana_peel"
 	w_class = W_CLASS_TINY
 	throwforce = 0
@@ -75,7 +76,7 @@
 				"<span class='userdanger'>They're eating your back!</span>")
 			return
 		if(ishuman(M))
-			if(M.CheckSlip() < 1)
+			if(M.CheckSlip() != TRUE)
 				return
 			else
 				M.simple_message("<span class='warning'>Your feet feel like they're on fire!</span>",\
@@ -94,6 +95,7 @@
 				"<span class='userdanger'>Please, just end the pain!</span>")
 			playsound(src, 'sound/misc/slip.ogg', 50, 1, -3)
 			M.Knockdown(10)
+			M.Stun(10)
 			M.take_overall_damage(0, burned)
 
 /obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)

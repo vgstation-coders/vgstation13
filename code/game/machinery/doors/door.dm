@@ -44,7 +44,11 @@ var/list/all_doors = list()
 
 	// TODO: refactor to best :(
 	var/animation_delay = 10
-	var/animation_delay_2 = null
+	// These two vars control animation delays for changing density when the door opens/closes.
+	// If they are not 0, the density change of a door will happen only after the delay.
+	// Total animation delay is still animation_delay, these just give a "sub section".
+	var/animation_delay_predensity_opening = 0
+	var/animation_delay_predensity_closing = 0
 
 	// turf animation
 	var/atom/movable/overlay/c_animation = null
@@ -60,7 +64,25 @@ var/list/all_doors = list()
 	else
 		return PROJREACT_WINDOWS
 
+/obj/machinery/door/hitby(atom/movable/AM)
+	. = ..()
+	if(.)
+		return
+	var/obj/item/thing = AM
+	if(!istype(thing))
+		return FALSE
+	if(operating || !density)
+		return FALSE
+	if(!length(thing.GetAccess()))
+		return FALSE
+	if(!check_access(thing))
+		denied()
+		return FALSE
+	open()
+	return TRUE
+
 /obj/machinery/door/Bumped(atom/AM)
+
 	if (ismob(AM))
 		var/mob/M = AM
 
@@ -91,14 +113,30 @@ var/list/all_doors = list()
 
 		if (density)
 			if (vehicle.is_locking(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE) && !operating && allowed(vehicle.get_locked(/datum/locking_category/buckle/chair/vehicle, subtypes=TRUE)[1]))
-				if(istype(vehicle, /obj/structure/bed/chair/vehicle/wizmobile))
+				if(istype(vehicle, /obj/structure/bed/chair/vehicle/firebird))
 					vehicle.forceMove(get_step(vehicle,vehicle.dir))//Firebird doesn't wait for no slowpoke door to fully open before dashing through!
 				open()
 			else if(!operating)
 				denied()
 
+/obj/machinery/door/proc/headbutt_check(mob/user, var/stun_time = 0, var/knockdown_time = 0, var/damage = 0) //This is going to be an airlock proc until someone makes headbutting a more official thing
+	if(prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
+			playsound(src, 'sound/effects/bang.ogg', 25, 1)
+			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
+			if(!istype(H.head, /obj/item/clothing/head/helmet))
+				H.Stun(stun_time)
+				H.Knockdown(knockdown_time)
+				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
+				if(O)
+					O.take_damage(damage) //Brute damage only
+			return
+
 /obj/machinery/door/proc/bump_open(mob/user as mob)
 	// TODO: analyze this
+	headbutt_check(user, 8, 5, 10)
+
 	if(user.last_airflow > world.time - zas_settings.Get(/datum/ZAS_Setting/airflow_delay)) //Fakkit
 		return
 
@@ -108,6 +146,8 @@ var/list/all_doors = list()
 		user = null
 
 	if(allowed(user))
+		if (isshade(user))
+			user.forceMove(loc)//They're basically slightly tangible ghosts, they can fit through doors as soon as they begin openning.
 		open()
 	else if(!operating)
 		denied()
@@ -120,21 +160,9 @@ var/list/all_doors = list()
 	attack_hand(user)
 
 /obj/machinery/door/attack_hand(mob/user as mob)
-	if (prob(HEADBUTT_PROBABILITY) && density && ishuman(user))
-		var/mob/living/carbon/human/H = user
+	headbutt_check(user, 8, 5, 10)
 
-		if (H.getBrainLoss() >= BRAINLOSS_FOR_HEADBUTT)
-			playsound(src, 'sound/effects/bang.ogg', 25, 1)
-			H.visible_message("<span class='warning'>[user] headbutts the airlock.</span>")
-			if (!istype(H.head, /obj/item/clothing/head/helmet))
-				H.Stun(8)
-				H.Knockdown(5)
-				var/datum/organ/external/O = H.get_organ(LIMB_HEAD)
-				O.take_damage(10, 0)
-			return
-
-
-	if(isobserver(user) && !isAdminGhost(user))
+	if(isobserver(user)) //Adminghosts don't want to toggle the door open, they want to see the AI interface
 		return
 
 	add_fingerprint(user)
@@ -207,8 +235,6 @@ var/list/all_doors = list()
 	else
 		icon_state = "[prefix]door_closed"
 
-	sleep(animation_delay_2)
-
 
 /obj/machinery/door/proc/open()
 	if(!density)
@@ -217,6 +243,9 @@ var/list/all_doors = list()
 		return
 	if(!ticker)
 		return 0
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
 	if(!operating)
 		operating = 1
 
@@ -225,13 +254,18 @@ var/list/all_doors = list()
 
 	set_opacity(0)
 	door_animate("opening")
-	sleep(animation_delay)
+	if (animation_delay_predensity_opening)
+		sleep(animation_delay_predensity_opening)
+	else
+		sleep(animation_delay)
 	layer = open_layer
-	density = 0
+	setDensity(FALSE)
+	update_nearby_tiles()
 	explosion_resistance = 0
+	if (animation_delay_predensity_opening)
+		sleep(animation_delay - animation_delay_predensity_opening)
 	update_icon()
 	set_opacity(0)
-	update_nearby_tiles()
 	//update_freelook_sight()
 
 	if(operating == 1)
@@ -248,6 +282,11 @@ var/list/all_doors = list()
 /obj/machinery/door/proc/close()
 	if (density || operating || jammed)
 		return
+
+	for (var/obj/O in src.loc)
+		if (O.blocks_doors())
+			return 0
+
 	operating = 1
 
 	layer = closed_layer
@@ -255,24 +294,33 @@ var/list/all_doors = list()
 	if (makes_noise)
 		playsound(src, soundeffect, soundpitch, 1)
 
-	setDensity(TRUE)
 	door_animate("closing")
-	sleep(animation_delay)
-	update_icon()
+
+	if (animation_delay_predensity_closing)
+		sleep(animation_delay_predensity_closing)
+
+	setDensity(TRUE)
+	update_nearby_tiles()
 
 	if (!glass)
 		src.set_opacity(1)
-		// Copypasta!!!
-		var/obj/effect/beam/B = locate() in loc
-		if(B)
-			qdel(B)
+	// Copypasta!!!
+	var/obj/effect/beam/B = locate() in loc
+	if(B)
+		qdel(B)
+
+	if (animation_delay_predensity_closing)
+		sleep(animation_delay - animation_delay_predensity_closing)
+	else
+		sleep(animation_delay)
+
+	update_icon()
 
 	// TODO: rework how fire works on doors
 	var/obj/effect/fire/F = locate() in loc
 	if(F)
 		qdel(F)
 
-	update_nearby_tiles()
 	operating = 0
 
 /obj/machinery/door/New()
@@ -322,7 +370,7 @@ var/list/all_doors = list()
 	return !density
 
 /obj/machinery/door/Crossed(AM as mob|obj) //Since we can't actually quite open AS the car goes through us, we'll do the next best thing: open as the car goes into our tile.
-	if(istype(AM, /obj/structure/bed/chair/vehicle/wizmobile)) //Which is not 100% correct for things like windoors but it's close enough.
+	if(istype(AM, /obj/structure/bed/chair/vehicle/firebird)) //Which is not 100% correct for things like windoors but it's close enough.
 		open()
 	return ..()
 

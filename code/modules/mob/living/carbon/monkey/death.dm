@@ -6,7 +6,7 @@
 	invisibility = 101
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-m", sleeptime = 15)
-	gibs(loc, viruses, dna)
+	gibs(loc, virus2, dna)
 
 	qdel(src)
 
@@ -31,12 +31,10 @@
 	if(healths)
 		healths.icon_state = "health5"
 	if(!gibbed)
-		emote("deathgasp")
+		emote("deathgasp", message = TRUE)
 	stat = DEAD
 
 	update_canmove()
 	update_icons()
-	if(ticker.mode)
-		ticker.mode.check_win()
 
 	return ..(gibbed)

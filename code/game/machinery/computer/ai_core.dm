@@ -34,8 +34,8 @@
 			icon_state = "4"
 
 /obj/structure/AIcore/attackby(var/obj/item/P, var/mob/user)
-	if(iswrench(P))
-		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+	if(P.is_wrench(user))
+		wrenchAnchor(user, P, time_to_wrench = 2 SECONDS)
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
@@ -53,19 +53,19 @@
 					circuit = P
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(P.is_screwdriver(user) && circuit)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
 			if(iscrowbar(P) && circuit)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = NOCIRCUITBOARD
 				circuit.forceMove(loc)
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
-			if(isscrewdriver(P) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(P.is_screwdriver(user) && circuit)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
 			if(iscablecoil(P))
@@ -82,7 +82,7 @@
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
-					playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+					P.playtoolsound(loc, 50)
 					to_chat(user, "<span class='notice'>You remove the cables.</span>")
 					state = SECURED_CIRCUITBOARD
 					drop_stack(/obj/item/stack/cable_coil, loc, 5, user)
@@ -97,14 +97,15 @@
 						state = GLASS_PANELED
 
 			if(istype(P, /obj/item/device/mmi))
-				if(!P:brainmob)
+				var/obj/item/device/mmi/prison = P
+				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
-				if(P:brainmob.stat == 2)
+				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
 					return
 
-				if(jobban_isbanned(P:brainmob, "AI"))
+				if(jobban_isbanned(prison.brainmob, "AI"))
 					to_chat(user, "<span class='warning'>This [P] does not seem to fit.</span>")
 					return
 
@@ -112,33 +113,29 @@
 					user << "<span class='warning'>You can't let go of \the [P]!</span>"
 					return
 
-				if(P:brainmob.mind)
-					ticker.mode.remove_cultist(P:brainmob.mind, 1)
-					ticker.mode.remove_revolutionary(P:brainmob.mind, 1)
-
 				if (!brain)
 					if (user.drop_item(P, src))
 						brain = P
 						to_chat(user, "Added [P].")
 
 			if(iscrowbar(P) && brain)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
 				brain.forceMove(loc)
 				brain = null
 
 		if(GLASS_PANELED)
 			if(iscrowbar(P))
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
-			else if(isscrewdriver(P))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+			else if(P.is_screwdriver(user))
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
-					A.rename_self("ai", 1)
+					mob_rename_self(A,"ai", null, 1)
 				feedback_inc("cyborg_ais_created",1)
 				qdel(src)
 				return // To avoid running update_icon
@@ -173,13 +170,9 @@ That prevents a few funky behaviors.
 						if(C.contents.len)//If there is an AI on card.
 							to_chat(U, "<span class='danger'>Transfer failed:</span> Existing AI found on this terminal. Remove existing AI to install a new one.")
 						else
-							if (ticker.mode.name == "AI malfunction")
-								var/datum/game_mode/malfunction/malf = ticker.mode
-								for (var/datum/mind/malfai in malf.malf_ai)
-									if (T.mind == malfai && malf.malf_mode_declared)
-										to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
-
-										return
+							if(T.mind.GetRole(MALF))
+								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
+								return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
 							//T.aiRestorePowerRoutine = 0//So the AI initially has power.
 							T.control_disabled = 1//Can't control things remotely if you're stuck in a card!

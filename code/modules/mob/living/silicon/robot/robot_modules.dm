@@ -67,7 +67,6 @@
 	if(emag)
 		modules += emag
 	rebuild()
-	..()
 
 /obj/item/weapon/robot_module/emp_act(severity)
 	if(modules)
@@ -108,13 +107,14 @@
 	if(R.camera)
 		for(var/network in networks)
 			if(!(network in R.camera.network))
-				R.camera.network.Add(network)
-				added_networks.Add(network)
+				R.camera.network += network
+				added_networks += network
 
 /obj/item/weapon/robot_module/proc/RemoveCameraNetworks(var/mob/living/silicon/robot/R)
 	if(R.camera)
-		R.camera.network.Cut(added_networks)
-		added_networks.Cut()
+		for(var/removed_network in added_networks)
+			R.camera.network -= removed_network
+	added_networks = null
 
 /obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)
@@ -254,6 +254,7 @@
 	modules += new /obj/item/weapon/crowbar(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/device/healthanalyzer(src)
+	modules += new /obj/item/device/antibody_scanner(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/weapon/reagent_containers/dropper/robodropper(src)
@@ -271,6 +272,7 @@
 	modules += new /obj/item/weapon/revivalprod(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/robot_rack/bed(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 	var/obj/item/stack/medical/advanced/bruise_pack/B = new /obj/item/stack/medical/advanced/bruise_pack(src)
 	B.max_amount = MEDICAL_MAX_KIT
 	B.amount = MEDICAL_MAX_KIT
@@ -469,6 +471,7 @@
 /obj/item/weapon/robot_module/miner
 	name = "supply robot module"
 	module_holder = "miner"
+	quirk_flags = MODULE_CAN_CLOSE_CLOSETS
 	networks = list(CAMERANET_MINE)
 	radio_key = /obj/item/device/encryptionkey/headset_mining
 	sprites = list(
@@ -499,6 +502,7 @@
 	modules += new /obj/item/weapon/gun/energy/kinetic_accelerator/cyborg(src)
 	modules += new /obj/item/weapon/gripper/no_use/inserter(src)
 	modules += new /obj/item/device/destTagger/cyborg(src)
+	modules += new /obj/item/weapon/storage/bag/clipboard(src)
 	modules += new /obj/item/device/gps/cyborg(src)
 	var/obj/item/stack/package_wrap/W = new /obj/item/stack/package_wrap(src)
 	W.amount = SUPPLY_MAX_WRAP
@@ -513,7 +517,7 @@
 /obj/item/weapon/robot_module/syndicate
 	name = "syndicate-modded combat robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_DEFINITIVE
+	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_HAS_PROJ_RES
 	networks = list(CAMERANET_NUKE)
 	radio_key = /obj/item/device/encryptionkey/syndicate
 	speed_modifier = CYBORG_SYNDICATE_SPEED_MODIFIER
@@ -521,7 +525,6 @@
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/crowbar(src)
 	fix_modules()
 
@@ -555,17 +558,19 @@
 
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/device/chameleon(src)
 	modules += new /obj/item/weapon/gripper/chemistry(src)
 	modules += new /obj/item/device/healthanalyzer(src)
-	modules += new /obj/item/device/mass_spectrometer/adv(src)
+	modules += new /obj/item/device/reagent_scanner/adv(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
-	modules += new /obj/item/weapon/switchtool/surgery(src)
+	modules += new /obj/item/weapon/switchtool/surgery/maxed(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
+	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
 	sensor_augs = list("Thermal", "Medical", "Disable")
 
@@ -574,7 +579,7 @@
 /obj/item/weapon/robot_module/combat
 	name = "combat robot module"
 	module_holder = "malf"
-	quirk_flags = MODULE_IS_THE_LAW
+	quirk_flags = MODULE_IS_THE_LAW | MODULE_HAS_PROJ_RES
 	radio_key = /obj/item/device/encryptionkey/headset_sec
 	sprites = list(
 		"Bladewolf" = "bladewolf",
@@ -585,6 +590,7 @@
 		"Marina" = "marinaCB",
 		"#41" = "servbot-combat",
 		"Kodiak - 'Grizzly'" = "kodiak-combat",
+		"Sleek" = "sleekcombat",
 		"R34 - WAR8a 'Chesty'" = "chesty"
 		)
 	speed_modifier = CYBORG_COMBAT_SPEED_MODIFIER
@@ -598,7 +604,7 @@
 	modules += new /obj/item/weapon/pickaxe/jackhammer/combat(src)
 	modules += new /obj/item/borg/combat/shield(src)
 	modules += new /obj/item/borg/combat/mobility(src)
-	modules += new /obj/item/weapon/wrench(src) //Is a combat android really going to be stopped by a chair?
+	modules += new /obj/item/weapon/wrench(src) //Is a combat machine really going to be stopped by a chair?
 	emag = new /obj/item/weapon/gun/energy/laser/cannon/cyborg(src)
 
 	sensor_augs = list("Security", "Medical", "Mesons", "Thermal", "Light Amplification", "Disable")
@@ -627,5 +633,24 @@
 	emag = new /obj/item/weapon/reagent_containers/borghypo/peace/hacked(src)
 
 	sensor_augs = list("Medical", "Disable")
+
+	fix_modules()
+	
+/obj/item/weapon/robot_module/starman
+	name = "starman robot module"
+	module_holder = "starman"
+	quirk_flags = MODULE_IS_DEFINITIVE | MODULE_IS_FLASHPROOF
+	sprites = list(
+		"Basic" = "starman",
+	)
+	speed_modifier = CYBORG_STARMAN_SPEED_MODIFIER
+	default_modules = FALSE
+
+/obj/item/weapon/robot_module/starman/New()
+
+	modules += new /obj/item/weapon/gun/energy/starman_beam(src)
+	modules += new /obj/item/device/starman_hailer(src)
+
+	sensor_augs = list("Thermal", "Light Amplification", "Disable")
 
 	fix_modules()

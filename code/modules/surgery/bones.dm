@@ -27,7 +27,7 @@
 	if (affected.stage == 0)
 		user.visible_message("[user] starts applying medication to the damaged bones in [target]'s [affected.display_name] with \the [tool]." , \
 		"You start applying medication to the damaged bones in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/glue_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -61,7 +61,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] is beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool]." , \
 		"You are beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool].")
-	target.custom_pain("The pain in your [affected.display_name] is going to make you pass out!",1)
+	target.custom_pain("The pain in your [affected.display_name] is going to make you pass out!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/set_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -179,7 +179,7 @@
 	if (affected.stage <= 5)
 		user.visible_message("[user] starts grasping the damaged bone edges in [target]'s [affected.display_name] with \the [tool]." , \
 		"You start grasping the bone edges and fusing them in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!", 1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!", 1, scream=TRUE)
 	..()
 
 /datum/surgery_step/bone_mender/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

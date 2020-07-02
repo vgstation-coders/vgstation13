@@ -13,79 +13,79 @@ var/global/datum/getrev/revdata = new("config/svndir.txt")
 	var/svndirpath
 	var/revhref
 
-	proc/abort()
-		spawn()
-			qdel (src)
+/datum/getrev/proc/abort()
+	spawn()
+		qdel (src)
 
-	New(filename)
-		..()
-		var/list/Lines = file2list(filename)
-		if(!Lines.len)
-			return abort()
-		for(var/t in Lines)
-			if(!t)
-				continue
-			t = trim(t)
-			if (length(t) == 0)
-				continue
-			else if (copytext(t, 1, 2) == "#")
-				continue
-			var/pos = findtext(t, " ")
-			var/name = null
-			var/value = null
-			if (pos)
-				name = lowertext(copytext(t, 1, pos))
-				value = copytext(t, pos + 1)
-			else
-				name = lowertext(t)
-			if(!name)
-				continue
-			switch(name)
-				if("svndir")
-					svndirpath = value
-				if("revhref")
-					revhref = value
-
-		if(svndirpath && fexists(svndirpath) && fexists("[svndirpath]/entries") && isfile(file("[svndirpath]/entries")))
-			var/list/filelist = file2list("[svndirpath]/entries")
-			var/s_archive = "" //Stores the previous line so the revision owner can be assigned.
-
-			//This thing doesn't count blank lines, so doing filelist[4] isn't working.
-			for(var/s in filelist)
-				if(!commiter)
-					if(s == "has-props")//The line before this is the committer.
-						commiter = s_archive
-				if(!revision)
-					var/n = text2num(s)
-					if(isnum(n))
-						if(n > 5000 && n < 99999) //Do you think we'll still be up and running at r100000? :) ~Errorage
-							revision = s
-				if(revision && commiter)
-					break
-				s_archive = s
-			if(!revision)
-				abort()
-			diary << "Revision info loaded successfully"
-			return
+/datum/getrev/New(filename)
+	..()
+	var/list/Lines = file2list(filename)
+	if(!Lines.len)
 		return abort()
-
-	proc/getRevisionText()
-		var/output
-		if(revhref)
-			output = {"<a href="[revhref][revision]">[revision]</a>"}
+	for(var/t in Lines)
+		if(!t)
+			continue
+		t = trim(t)
+		if (length(t) == 0)
+			continue
+		else if (copytext(t, 1, 2) == "#")
+			continue
+		var/pos = findtext(t, " ")
+		var/name = null
+		var/value = null
+		if (pos)
+			name = lowertext(copytext(t, 1, pos))
+			value = copytext(t, pos + 1)
 		else
-			output = revision
-		return output
+			name = lowertext(t)
+		if(!name)
+			continue
+		switch(name)
+			if("svndir")
+				svndirpath = value
+			if("revhref")
+				revhref = value
 
-	proc/showInfo()
-		return {"<html>
-					<head>
-					</head>
-					<body>
-					<p><b>Server Revision:</b> [getRevisionText()]<br/>
-					<b>Author:</b> [commiter]</p>
-					</body>
-					<html>"}
+	if(svndirpath && fexists(svndirpath) && fexists("[svndirpath]/entries") && isfile(file("[svndirpath]/entries")))
+		var/list/filelist = file2list("[svndirpath]/entries")
+		var/s_archive = "" //Stores the previous line so the revision owner can be assigned.
+
+		//This thing doesn't count blank lines, so doing filelist[4] isn't working.
+		for(var/s in filelist)
+			if(!commiter)
+				if(s == "has-props")//The line before this is the committer.
+					commiter = s_archive
+			if(!revision)
+				var/n = text2num(s)
+				if(isnum(n))
+					if(n > 5000 && n < 99999) //Do you think we'll still be up and running at r100000? :) ~Errorage
+						revision = s
+			if(revision && commiter)
+				break
+			s_archive = s
+		if(!revision)
+			abort()
+		diary << "Revision info loaded successfully"
+		return
+	return abort()
+
+/datum/getrev/proc/getRevisionText()
+	var/output
+	if(revhref)
+		output = {"<a href="[revhref][revision]">[revision]</a>"}
+	else
+		output = revision
+	return output
+
+/datum/getrev/proc/showInfo()
+	return {"<html>
+				<head>
+				</head>
+				<body>
+				<p><b>Server Revision:</b> [getRevisionText()]<br/>
+				<b>Author:</b> [commiter]</p>
+				</body>
+				<html>"}
 
 /proc/return_revision()
 	var/output =  "Sorry, the revision info is unavailable."

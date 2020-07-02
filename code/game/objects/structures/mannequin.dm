@@ -85,7 +85,7 @@
 		Awaken()
 
 /obj/structure/mannequin/HasProximity(var/atom/movable/AM)
-	if(trapped_prox)
+	if(trapped_prox && isliving(AM))
 		Awaken()
 		return 1
 	return 0
@@ -138,15 +138,15 @@
 /obj/structure/mannequin/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/mannequin/wrenchAnchor(var/mob/user)
+/obj/structure/mannequin/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(trapped_strip)
 		Awaken()
 		return FALSE
 	. = ..()
 
 /obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
-	if(iswrench(W))
-		return wrenchAnchor(user, 5 SECONDS)
+	if(W.is_wrench(user))
+		return wrenchAnchor(user, W, 5 SECONDS)
 	else if(user.a_intent == I_HURT)
 		user.delayNextAttack(8)
 		getDamage(W.force)
@@ -242,17 +242,19 @@
 				to_chat(user, "<span class='info'>You pick up \the [I] from \the [src].</span>")
 		else
 			if(get_held_item_by_index(hand_index))
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				var/obj/item/I = held_items[hand_index]
-				user.put_in_hands(I)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					var/obj/item/I = held_items[hand_index]
+					user.put_in_hands(I)
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 			else
-				user.drop_from_inventory(item_in_hand)
-				item_in_hand.forceMove(src)
-				held_items[hand_index] = item_in_hand
-				to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				if(user.drop_item(item_in_hand,src))
+					held_items[hand_index] = item_in_hand
+					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+				else
+					to_chat(user, "<span class='warning'>You can't drop that!</span>")
 
 	else if(href_list["item"])
 		if(trapped_strip)
@@ -271,22 +273,24 @@
 		else
 			if(clothing[item_slot])
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					var/obj/item/I = clothing[item_slot]
-					user.put_in_hands(I)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						var/obj/item/I = clothing[item_slot]
+						user.put_in_hands(I)
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You switch \the [item_in_hand] and \the [I] on the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 			else
 				if(canEquip(user, item_slot,item_in_hand))
-					user.drop_from_inventory(item_in_hand)
-					item_in_hand.forceMove(src)
-					clothing[item_slot] = item_in_hand
-					add_fingerprint(user)
-					to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					if(user.drop_item(item_in_hand,src))
+						clothing[item_slot] = item_in_hand
+						add_fingerprint(user)
+						to_chat(user, "<span class='info'>You place \the [item_in_hand] on \the [src].</span>")
+					else
+						to_chat(user, "<span class='warning'>You can't drop that!</span>")
 				else
 					return
 
@@ -770,8 +774,8 @@
 
 
 /obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
-	if(iswrench(W))
-		return wrenchAnchor(user, 5 SECONDS)
+	if(W.is_wrench(user))
+		return wrenchAnchor(user, W, 5 SECONDS)
 	else if(istype(W, /obj/item/weapon/chisel))
 
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
@@ -935,7 +939,7 @@
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
 		var/turf/T=get_turf(src)
-		playsound(T, 'sound/items/Crowbar.ogg', 50, 1)
+		W.playtoolsound(T, 50)
 
 		if(do_after(user, src, 100))
 			var/obj/item/weapon/circuitboard/airlock/C = new(src)
@@ -966,7 +970,7 @@
 				return
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.remove_fuel(5))
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
 				to_chat(user, "<span class='notice'>You fix some of the dents on \the [src]!</span>")
 			else
@@ -982,7 +986,7 @@
 				return
 			var/obj/item/weapon/weldingtool/WT = W
 			if(WT.remove_fuel(5))
-				playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
 				to_chat(user, "<span class='notice'>You fix some of the dents on \the [src]!</span>")
 			else

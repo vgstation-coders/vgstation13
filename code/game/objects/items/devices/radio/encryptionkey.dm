@@ -20,6 +20,12 @@
 	origin_tech = Tc_SYNDICATE + "=3"
 	syndie = 1//Signifies that it de-crypts Syndicate transmissions
 
+/obj/item/device/encryptionkey/rev
+	icon_state = "cypherkey"
+	channels = list("Revolution" = 1)
+	origin_tech = Tc_SYNDICATE + "=3"
+	syndie = 1
+
 /obj/item/device/encryptionkey/raider
 	icon_state = "cypherkey"
 	channels = list("Raider" = 1)
@@ -170,4 +176,4 @@
 	name = "AI Encryption Key"
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "cap_cypherkey"
-	channels = list("AI Private" = 1, "Command" = 1, "Security" = 1, "Engineering" = 0, "Science" = 0, "Medical" = 0, "Supply" = 0, "Service" = 0)
+	channels = list("AI Private" = 1, "Command" = 1, "Security" = 1, "Engineering" = 1, "Science" = 1, "Medical" = 1, "Supply" = 1, "Service" = 1)

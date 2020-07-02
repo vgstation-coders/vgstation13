@@ -34,12 +34,12 @@
 	if(connected_device)
 		connected_device.disconnect()
 
-	if(node)
-		node.disconnect(src)
+	if(node1)
+		node1.disconnect(src)
 		if(network)
 			returnToPool(network)
 
-	node = null
+	node1 = null
 
 	..()
 
@@ -52,7 +52,7 @@
 /obj/machinery/atmospherics/unary/portables_connector/return_network(obj/machinery/atmospherics/reference)
 	build_network()
 
-	if(reference==node)
+	if(reference==node1)
 		return network
 
 	if(reference==connected_device)
@@ -70,7 +70,7 @@
 
 
 /obj/machinery/atmospherics/unary/portables_connector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (connected_device)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], dettach [connected_device] first.</span>")

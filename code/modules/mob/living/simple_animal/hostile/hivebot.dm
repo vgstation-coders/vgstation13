@@ -80,7 +80,7 @@
 	icon_living = "def_radar-off"
 	health = 200
 	maxHealth = 200
-	status_flags = 0
+	status_flags = UNPACIFIABLE
 	anchored = 1
 	stop_automated_movement = 1
 	var/bot_type = "norm"

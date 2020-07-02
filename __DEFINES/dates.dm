@@ -31,6 +31,7 @@
 #define KINDNESS_DAY "Kindness Day"
 #define FLOWERS_DAY "Flowers Day"
 #define SAYING_HELLO_DAY "Saying-'Hello' Day"
+#define SINTERKLAAS "Sinterklaasfeest"
 #define HUMAN_RIGHTS_DAY "Human-Rights Day"
 #define MONKEY_DAY "Monkey Day"
 #define END_OF_THE_WORLD "End of the World"
@@ -40,3 +41,17 @@
 #define BOXING_DAY "Boxing Day"
 #define NEW_YEARS_EVE "New Year's Eve"
 #define FRIDAY_THE_13TH "Friday the 13th"
+#define VG_BIRTHDAY "/vg/station Anniversary"
+
+//timeslots as strings
+#define SLEEPTIME "the morning shift" //3 to 11
+#define EUROTIME "the European shift" //12 to 15
+#define DAYTIME "the day shift" //16 to 18
+#define PRIMETIME "primetime" //19 to 22
+#define LATETIME "the late shift" //23 to 2
+//timeslots as hour values
+#define SLEEPTIME_HOURS 3 to 11
+#define EUROTIME_HOURS 12 to 15
+#define DAYTIME_HOURS 16 to 18
+#define PRIMETIME_HOURS 19 to 22
+#define LATETIME_HOURS 23, 0 to 2

@@ -26,6 +26,8 @@
 			return "ancientchat"
 		if(MODE_MUSHROOM)
 			return "sporechat"
+		if(MODE_BORER)
+			return "borerchat"
 		else
 			return "Unknown"
 var/list/department_radio_keys = list(
@@ -68,6 +70,21 @@ var/list/department_radio_keys = list(
 	  //z Used by LANGUAGE_CLATTER
 	  //@ Used by LANGUAGE_MARTIAN
 	  ":~" = "sporechat",	"#~" = "sporechat",	    ".~" = "sporechat",
+	  //borers
+	  ":&" = "borerchat", "#&" = "borerchat", ".&" = "borerchat",
+)
+
+var/list/headset_modes = list(
+	"Response Team",
+	"Command",
+	"Service",
+	"Engineering",
+	"Security",
+	"Syndicate",
+	"Supply",
+	"Medical",
+	"Science",
+	"department",
 )
 
 /mob/living/proc/get_default_language()
@@ -80,7 +97,7 @@ var/list/department_radio_keys = list(
 	if (isalien(src))
 		return 1
 	if (!ishuman(src))
-		return
+		return 0
 	var/mob/living/carbon/human/H = src
 	if (H.ears)
 		var/obj/item/device/radio/headset/dongle
@@ -97,7 +114,7 @@ var/list/department_radio_keys = list(
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped)
 		return //under the effects of time magick
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
+	message = sanitize_speech(message)
 	message = capitalize(message)
 
 	say_testing(src, "Say start, message=[message]")
@@ -117,13 +134,13 @@ var/list/department_radio_keys = list(
 		say_testing(src, "ur ded kid")
 		say_dead(message)
 		return
+	if(check_emote(message))
+		say_testing(src, "Emoted")
+		return
 	if (stat) // Unconcious.
 		if(message_mode == MODE_WHISPER) //Lets us say our last words.
 			say_testing(src, "message mode was whisper.")
 			whisper(copytext(message, 3))
-		return
-	if(check_emote(message))
-		say_testing(src, "Emoted")
 		return
 	if(!can_speak_basic(message))
 		say_testing(src, "we aren't able to talk")
@@ -177,6 +194,8 @@ var/list/department_radio_keys = list(
 	treat_speech(speech)
 
 	var/radio_return = get_speech_flags(message_mode)
+	if (speech_was_spoken_into_radio(message_mode))
+		speech.wrapper_classes.Add("spoken_into_radio")
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
 		whisper(speech.message, speech.language)
 		returnToPool(speech)
@@ -199,10 +218,26 @@ var/list/department_radio_keys = list(
 	returnToPool(speech)
 	return 1
 
+/mob/living/proc/resist_memes(var/datum/speech/speech)
+	if(stat || ear_deaf || speech.frequency || speech.speaker == src || !isliving(speech.speaker))
+		return TRUE
+	return FALSE
 
 /mob/living/Hear(var/datum/speech/speech, var/rendered_message = null)
 	if(!rendered_message)
 		rendered_message = speech.message
+
+	//Meme disease code. Needs to come before client so that NPCs/catatonic can be infected.
+	//We don't concern ourselves with: radio chatter, our own speech, or if we're deaf.
+	if(!resist_memes(speech))
+		var/mob/living/L = speech.speaker
+		var/list/diseases = L.virus2
+		if(istype(diseases) && diseases.len)
+			for(var/ID in diseases)
+				var/datum/disease2/disease/V = diseases[ID]
+				if(V.spread & SPREAD_MEMETIC)
+					infect_disease2(V, notes="(Memed, from [L])")
+
 	if(!client)
 		return
 	say_testing(src, "[src] ([src.type]) has heard a message (lang=[speech.language ? speech.language.name : "null"])")
@@ -222,30 +257,77 @@ var/list/department_radio_keys = list(
 	var/atom/movable/AM = speech.speaker.GetSource()
 	if(!say_understands((istype(AM) ? AM : speech.speaker),speech.language)|| force_compose) //force_compose is so AIs don't end up without their hrefs.
 		rendered_message = render_speech(speech)
-	show_message(rendered_message, type, deaf_message, deaf_type)
+
+	//checking for syndie codephrases if person is a tator
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
+		//is tator
+		for(var/T in syndicate_code_phrase)
+			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
+
+		for(var/T in syndicate_code_response)
+			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
+
+	//AI mentions
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/ai = src
+		if(ai.mentions_on)
+			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+				ai << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+
+	// Runechat messages
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	if (ismob(speech.speaker))
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
 	return 0
 
 /mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
+	var/visual_range = message_range //the range of hearers who can see that something was said, but not hear the message
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))
 		message_range = 7
 
-	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
+	message_range = atmospheric_speech(speech,message_range)
+
+	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
+	var/list/actual_listeners = observers.Copy()
+	var/outside_range_message = "<span class='name'>[speech.speaker]</span> appears to say something, but you can't make it out from here."
+	for(var/atom/A in total_listeners)
+		if(!(A in actual_listeners))
+			if(get_dist(src, A) <= message_range)
+				actual_listeners.Add(A)
+			else if(ismob(A))
+				var/mob/M = A
+				if(!M.is_blind())
+					M.show_message(outside_range_message,MESSAGE_SEE,speaker = src)
+			else
+				to_chat(A, outside_range_message)
 
 	var/rendered = render_speech(speech)
 
-	var/list/listening_nonmobs = listeners.Copy()
-	for(var/mob/M in listeners)
+	var/list/listening_nonmobs = actual_listeners.Copy()
+	for(var/mob/M in actual_listeners)
 		listening_nonmobs -= M
 		M.Hear(speech, rendered)
 
-	send_speech_bubble(speech.message, bubble_type, listeners)
+	send_speech_bubble(speech.message, bubble_type, total_listeners)
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
+
+/mob/living/carbon/human/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type)
+	talkcount++
+	. = ..()
 
 /mob/living/proc/say_test(var/text)
 	var/ending = copytext(text, length(text))
@@ -277,7 +359,7 @@ var/list/department_radio_keys = list(
 	if(!message)
 		return
 
-	if(sdisabilities & MUTE)
+	if(is_mute())
 		return
 
 	if(is_muzzled())
@@ -289,7 +371,7 @@ var/list/department_radio_keys = list(
 	return 1
 
 /mob/living/proc/check_emote(message)
-	if(copytext(message, 1, 2) == "*")
+	if(copytext(message, 1, 2) == "*" && is_letter(text2ascii(message, 2)))
 		emote(copytext(message, 2))
 		return 1
 
@@ -305,8 +387,11 @@ var/list/department_radio_keys = list(
 		if(MODE_CHANGELING)
 			if(lingcheck())
 				var/turf/T = get_turf(src)
-				log_say("[mind.changeling.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
-				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",mind.changeling.changelingID,html_encode(speech.message))
+				var/datum/role/changeling/C = mind.GetRole(CHANGELING)
+				if(!C)
+					return 0
+				log_say("[C.changelingID]/[key_name(src)] (@[T.x],[T.y],[T.z]) Changeling Hivemind: [html_encode(speech.message)]")
+				var/themessage = text("<i><font color=#800080><b>[]:</b> []</font></i>",C.changelingID,html_encode(speech.message))
 				for(var/mob/M in player_list)
 					if(M.lingcheck() || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
 						handle_render(M,themessage,src)
@@ -340,7 +425,7 @@ var/list/department_radio_keys = list(
 							handle_render(M,themessage,src)
 					return 1
 		if(MODE_MUSHROOM)
-			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.name, html_encode(speech.message))
+			var/message = text("<span class='mushroom'>Sporemind, <b>[]:</b> []</span>", src.real_name, html_encode(speech.message))
 			var/turf/T = get_turf(src)
 			log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Spore chat: [html_encode(speech.message)]")
 			for(var/mob/M in player_list)
@@ -350,9 +435,30 @@ var/list/department_radio_keys = list(
 						handle_render(M, message,src)
 				if((M in dead_mob_list) && !istype(M, /mob/new_player))
 					handle_render(M, message,src)
+		if(MODE_BORER)
+			//this is sent to and usable by borers and mobs controlled by borers
+			var/mob/living/simple_animal/borer/head = src.has_brain_worms(LIMB_HEAD)
+			if(isborer(src) || head && head.controlling)
+				var/mob/living/simple_animal/borer/B = head && head.controlling ? head : src
+				var/message = text("<span class='cortical'>Cortical link, <b>[]</b>: []</span>",B.truename, html_encode(speech.message))
+				var/turf/T = get_turf(src)
+				log_say("[key_name(src)] (@[T.x],[T.y],[T.z]) Borer chat: [html_encode(speech.message)]")
+
+				for(var/mob/M in mob_list)
+					if(isborer(M) || ((M in dead_mob_list) && !istype(M, /mob/new_player)))
+						if(isborer (M)) //for borers that are IN CONTROL
+							B = M //why it no typecast
+							if(B.controlling)
+								M = B.host
+						handle_render(M, message, src)
+				return 1
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
+	if(!(copytext(speech.message, 1, 2) == "*"))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
+
 	if(getBrainLoss() >= 60)
 		speech.message = derpspeech(speech.message, stuttering)
 
@@ -371,6 +477,14 @@ var/list/department_radio_keys = list(
 		return ITALICS | REDUCE_RANGE //for borgs and polly
 
 	return 0
+
+/mob/living/proc/speech_was_spoken_into_radio(var/message_mode)
+	if (message_mode in headset_modes)
+		return TRUE
+	switch (message_mode)
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+			return TRUE
+	return FALSE
 
 /mob/living/proc/radio(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
@@ -403,27 +517,48 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/lingcheck()
-	if(mind && mind.changeling && !issilicon(src))
+	if(ischangeling(src) && !issilicon(src))
 		return 1
+	return 0
 
 /mob/living/construct_chat_check(var/setting = 0) //setting: 0 is to speak over general into cultchat, 1 is to speak over channel into cultchat, 2 is to hear cultchat
 	if(!mind)
 		return
-
 	if(setting == 0) //overridden for constructs
 		return
-	if(setting == 1)
-		if(mind in ticker.mode.cult && universal_cult_chat == 1)
-			return 1
-	if(setting == 2)
-		if(mind in ticker.mode.cult)
+
+	if (iscultist(src))
+		if(setting == 1)
+			if (checkTattoo(TATTOO_CHAT))
+				return 1
+		if(setting == 2)
 			return 1
 
+	var/datum/faction/cult = find_active_faction_by_member(mind.GetRole(LEGACY_CULT))
+	if(cult)
+		if(setting == 1)
+			if(universal_cult_chat == 1)
+				return 1
+		if(setting == 2)
+			return 1
+
+// Obsolete for any mob which uses a language.
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
 	if (getBrainLoss() >= 60)
 		return "gibbers, [text]"
+	return ..()
+
+// Use this when the mob speaks a given language.
+/mob/proc/get_spoken_verb(var/msg)
+	return ""
+
+/mob/living/get_spoken_verb(var/msg)
+	if (stuttering)
+		return "stammers"
+	if (getBrainLoss() >= 60)
+		return "gibbers"
 	return ..()
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
@@ -454,6 +589,90 @@ var/list/department_radio_keys = list(
 		spawn(30)
 			if(client)
 				client.images -= speech_bubble
+
+/mob/living/whisper(message as text)
+	if(!IsVocal())
+		to_chat(src, "<span class='warning'>You can't speak while silenced.</span>")
+		return
+
+#ifdef SAY_DEBUG
+	var/oldmsg = message
+#endif
+
+	if (isDead() || (stat == UNCONSCIOUS && health > 0))
+		return
+
+	if(say_disabled)	//This is here to try to identify lag problems
+		to_chat(usr, "<span class='danger'>Speech is currently admin-disabled.</span>")
+		return
+
+	var/datum/speech/speech = create_speech(message)
+	speech.language = parse_language(speech.message)
+	speech.mode = SPEECH_MODE_WHISPER
+	speech.message_classes.Add("whisper")
+
+	if(istype(speech.language))
+		speech.message = copytext(speech.message,2+length(speech.language.key))
+	else
+		if(!isnull(speech.language))
+			var/n = speech.language
+			speech.message = copytext(speech.message,1+length(n))
+			say_testing(src, "We tried to speak a language we don't have length = [length(n)], oldmsg = [oldmsg] parsed message = [speech.message]")
+			speech.language = null
+		speech.language = get_default_language()
+
+	speech.message = trim(speech.message)
+
+	if(!can_speak(message))
+		return
+
+	speech.message = "[message]"
+
+	if (client && client.prefs.muted & MUTE_IC)
+		to_chat(src, "<span class='danger'>You cannot whisper (muted).</span>")
+		return
+
+
+	var/whispers = "whispers"
+	var/critical = InCritical()
+
+	log_whisper("[key_name(src)] ([formatLocation(src)]): [message]")
+	treat_speech(speech)
+
+	// If whispering your last words, limit the whisper based on how close you are to death.
+	if(critical && !said_last_words)
+		var/health_diff = round(-config.health_threshold_dead + health)
+		// If we cut our message short, abruptly end it with a-..
+		var/message_len = length(speech.message)
+		speech.message = copytext(speech.message, 1, health_diff) + "[message_len > health_diff ? "-.." : "..."]"
+		speech.message = Ellipsis(speech.message, 10, 1)
+		speech.mode= SPEECH_MODE_FINAL
+		whispers = "whispers with their final breath"
+		said_last_words = src.stat
+	treat_speech(speech)
+
+	var/listeners = get_hearers_in_view(1, src) | observers
+	var/eavesdroppers = get_hearers_in_view(2, src) - listeners
+	var/watchers = hearers(5, src) - listeners - eavesdroppers
+	var/rendered = render_speech(speech)
+	for (var/atom/movable/listener in listeners)
+		listener.Hear(speech, rendered)
+
+	speech.message = stars(speech.message)
+	rendered = render_speech(speech)
+
+	for (var/atom/movable/eavesdropper in eavesdroppers)
+		eavesdropper.Hear(speech, rendered)
+
+	rendered = "<span class='game say'><span class='name'>[src.name]</span> [whispers] something.</span>"
+
+	for (var/mob/watcher in watchers)
+		watcher.show_message(rendered, 2)
+
+	if (said_last_words) // dying words
+		succumb_proc(0)
+
+	returnToPool(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent

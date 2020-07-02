@@ -35,7 +35,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts patching the damaged vein in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start patching the damaged vein in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("The pain in [affected.display_name] is unbearable!",1)
+	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/fix_vein/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -92,7 +92,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("The pain in [affected.display_name] is unbearable!",1)
+	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/fix_dead_tissue/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -147,7 +147,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts applying medication to the affected tissue in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start applying medication to the affected tissue in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/treat_necrosis/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

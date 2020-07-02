@@ -13,22 +13,25 @@
 	if(target)
 		stop_aim()
 		usr.visible_message("<span class='notice'>\The [usr] lowers \the [src]...</span>")
+		return 1
+	return 0
 
 //Clicking gun will still lower aim for guns that don't overwrite this
 /obj/item/weapon/gun/attack_self()
-	lower_aim()
+	if(!lower_aim())
+		return ..()
 
 //Removing the lock and the buttons.
 /obj/item/weapon/gun/dropped(mob/user as mob)
 	stop_aim()
-	if (user.client)
+	if (user && user.client)
 		user.client.remove_gun_icons()
 	return ..()
 
 /obj/item/weapon/gun/equipped(var/mob/user, var/slot, hand_index)
 	if(!hand_index)
 		stop_aim()
-		if (user.client)
+		if (user && user.client)
 			user.client.remove_gun_icons()
 	return ..()
 
@@ -51,7 +54,7 @@
 		Aim(A) 	//Clicked a mob, aim at them
 	else  		//Didn't click someone, check if there is anyone along that guntrace
 		var/mob/living/M = GunTrace(usr.x,usr.y,A.x,A.y,usr.z,usr)  //Find dat mob.
-		if(M && isliving(M) && M in view(user) && !(M in target))
+		if(M && isliving(M) && (M in view(user)) && !(M in target))
 			Aim(M) //Aha!  Aim at them!
 		else if(!ismob(M) || (ismob(M) && !(M in view(user)))) //Nope!  They weren't there!
 			Fire(A,user,params, "struggle" = struggle)  //Fire like normal, then.
@@ -83,7 +86,7 @@
 		stop_aim()
 		return
 	M.last_move_intent = world.time
-	if(can_fire())
+	if(canbe_fired())
 		var/firing_check = can_hit(T,usr) //0 if it cannot hit them, 1 if it is capable of hitting, and 2 if a special check is preventing it from firing.
 		if(firing_check > 0)
 			if(firing_check == 1)
@@ -127,11 +130,10 @@ proc/GunTrace(X1,Y1,X2,Y2,Z=1,exc_obj,PX1=16,PY1=16,PX2=16,PY2=16)
 					return M
 				Y1+=s
 	else
-		var
-			m=(WORLD_ICON_SIZE*(Y2-Y1)+(PY2-PY1))/(WORLD_ICON_SIZE*(X2-X1)+(PX2-PX1))
-			b=(Y1+PY1/WORLD_ICON_SIZE-0.015625)-m*(X1+PX1/WORLD_ICON_SIZE-0.015625) //In tiles
-			signX = SIGN(X2-X1)
-			signY = SIGN(Y2-Y1)
+		var/m=(WORLD_ICON_SIZE*(Y2-Y1)+(PY2-PY1))/(WORLD_ICON_SIZE*(X2-X1)+(PX2-PX1))
+		var/b=(Y1+PY1/WORLD_ICON_SIZE-0.015625)-m*(X1+PX1/WORLD_ICON_SIZE-0.015625) //In tiles
+		var/signX = SIGN(X2-X1)
+		var/signY = SIGN(Y2-Y1)
 		if(X1<X2)
 			b+=m
 		while(1)

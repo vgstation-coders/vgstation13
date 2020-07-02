@@ -75,7 +75,7 @@
 	//When the shuttle moves, if stable is 0 then all unbuckled mobs will be stunned
 	var/stable = 0
 
-	var/password = 28011
+	var/password = null
 	var/can_link_to_computer = LINK_FORBIDDEN
 
 	//Whether the shuttle gibs or displaces stuff. Change this to COLLISION_DISPLACE to make all shuttles displace stuff by default
@@ -101,8 +101,8 @@
 
 	if(istype(linked_area) && linked_area.contents.len) //Only add the shuttle to the list if its area exists and it has something in it
 		shuttles |= src
-
-	password = rand(10000,99999)
+	if(password)
+		password = rand(10000,99999)
 
 //initialize() proc - called automatically in proc/setup_shuttles() below.
 //Returns INIT_SUCCESS, INIT_NO_AREA, INIT_NO_START or INIT_NO_PORT, depending on whether there were any errors
@@ -226,6 +226,9 @@
 	var/atom/A = linked_area.contains_atom_from_list(cant_leave_zlevel) //code/game/atoms.dm, 243
 	if(A)
 		return A
+	for(var/mob/living/M in get_contents_in_object(linked_area, /mob/living))
+		if(M.locked_to_z && M.locked_to_z != destination_port.z)
+			return M
 	return 0
 
 //This is the proc you generally want to use when moving a shuttle. Runs all sorts of checks (cooldown, if already moving, etc)
@@ -303,8 +306,8 @@
 			for(var/obj/structure/shuttle/engine/propulsion/P in linked_area)
 				spawn()
 					P.shoot_exhaust()
-
-	current_port.start_warning_lights()
+	if(current_port)
+		current_port.start_warning_lights()
 	destination_port.start_warning_lights()
 
 	spawn(get_pre_flight_delay())
@@ -329,7 +332,7 @@
 				moving = 0
 				destination_port = null
 				return 0
-			for(var/atom/AA in linked_area)
+			for(var/atom/movable/AA in linked_area)
 				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
 		if(transit_port && get_transit_delay())
@@ -506,7 +509,7 @@
 		shuttle_list += name
 		shuttle_list[name]=S
 
-	var/my_shuttle = input(usr, message, title) in shuttle_list as text|null
+	var/my_shuttle = input(usr, message, title) as null|anything in shuttle_list
 
 	if( my_shuttle && shuttle_list[my_shuttle] && istype(shuttle_list[my_shuttle], /datum/shuttle) )
 		return shuttle_list[my_shuttle]
@@ -538,6 +541,12 @@
 				occupants.Add(L)
 	return occupants
 
+/proc/get_refill_area(var/obj/docking_port/destination/D)
+	if(ispath(D.refill_area))
+		return locate(D.refill_area)
+	else
+		return get_space_area()
+
 //The proc that does most of the work
 //RETURNS: 1 if everything is good, 0 if everything is bad
 /datum/shuttle/proc/move_area_to(var/turf/our_center, var/turf/new_center, var/rotate = 0)
@@ -556,11 +565,12 @@
 	//For displacing
 	var/throwy = world.maxy
 
-	var/area/space
+	var/obj/docking_port/destination/D = linked_port.docked_with
+	var/area/refill_area //the area that will be stamped over where the shuttle left
 
-	space = get_space_area()
-	if(!space)
-		warning("Unable to find space area for shuttle [src.type]")
+	refill_area = get_refill_area(D)
+	if(!refill_area)
+		warning("Unable to find refill area for shuttle [src.type]")
 
 	//Make a list of coordinates of turfs to move, and associate the coordinates with the turfs they represent
 	var/list/turfs_to_move = list()
@@ -647,9 +657,14 @@
 			else
 				AM.forceMove(displace_to)
 
-		var/area/old_area = get_area(new_turf)
+		var/area/old_area = get_area(new_turf) //this is the area that is being replaced by shuttle area in the destination
 		if(!old_area)
-			old_area = space
+			old_area = get_space_area()
+
+		for(var/O in old_turf.overlays)
+			var/image/I = O
+			if(I.icon == 'icons/obj/projectiles.dmi')
+				old_turf.overlays.Remove(I)		//remove beam overlays so they don't stay on the new turfs forever
 
 		//Get the turf's image before it's gone!
 		var/image/undlay
@@ -666,13 +681,13 @@
 
 		//***Remove old turf from shuttle's area****
 
-		space.contents.Add(old_turf)
-		old_turf.change_area(linked_area,space)
+		refill_area.contents.Add(old_turf)
+		old_turf.change_area(linked_area,refill_area)
 
-		//All objects which can't be moved by the shuttle have their area changed to space!
+		//All objects which can't be moved by the shuttle have their area changed to refill_area!
 		for(var/atom/movable/AM in old_turf.contents)
 			if(!AM.can_shuttle_move(src))
-				AM.change_area(linked_area,space)
+				AM.change_area(linked_area,refill_area)
 
 		//****Move all variables from the old turf over to the new turf****
 
@@ -723,22 +738,15 @@
 			S_OLD.zone.remove(S_OLD)
 
 		//*****Move objects and mobs*****
+		for(var/mob/M in old_turf)	//mobs first
+			if(!M.can_shuttle_move(src))
+				continue
+			move_atom(M, new_turf, rotate)
 		for(var/atom/movable/AM in old_turf)
 			if(!AM.can_shuttle_move(src))
 				continue
+			move_atom(AM, new_turf, rotate)
 
-			if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
-				AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
-
-				spawn()
-					AM.forceMove(new_turf)
-
-				//TODO: Make this compactible with bound_x and bound_y.
-			else
-				AM.forceMove(new_turf)
-
-			if(rotate)
-				AM.shuttle_rotate(rotate)
 
 		//Move landmarks - for moving the arrivals shuttle
 		for(var/list/L in moved_landmarks) //moved_landmarks: code/game/area/areas.dm, 527 (above the move_contents_to proc)
@@ -751,7 +759,6 @@
 
 		//Delete the old turf
 		var/replacing_turf_type = old_turf.get_underlying_turf()
-		var/obj/docking_port/destination/D = linked_port.docked_with
 
 		if(D && istype(D))
 			replacing_turf_type = D.base_turf_type
@@ -774,6 +781,20 @@
 				D2.update_nearby_tiles()
 
 	return 1
+
+/datum/shuttle/proc/move_atom(var/atom/movable/AM, var/new_turf, var/rotate)
+	if(AM.bound_width > WORLD_ICON_SIZE || AM.bound_height > WORLD_ICON_SIZE) //If the moved object's bounding box is more than the default, move it after everything else (using spawn())
+		AM.forceMove(null) //Without this, ALL neighbouring turfs attempt to move this object too, resulting in the object getting shifted to north/east
+
+		spawn()
+			AM.forceMove(new_turf)
+
+		//TODO: Make this compactible with bound_x and bound_y.
+	else
+		AM.forceMove(new_turf)
+
+	if(rotate)
+		AM.shuttle_rotate(rotate)
 
 /proc/setup_shuttles()
 	world.log << "Setting up all shuttles..."
@@ -816,6 +837,7 @@
 //Custom shuttles
 /datum/shuttle/custom
 	name = "custom shuttle"
+	can_link_to_computer = LINK_FREE
 
 /datum/shuttle/proc/show_outline(var/mob/user, var/turf/centered_at)
 	if(!user)

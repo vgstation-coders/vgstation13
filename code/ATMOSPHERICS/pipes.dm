@@ -3,7 +3,7 @@
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in update_planes_and_layers() (called on New())
 	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
@@ -13,7 +13,7 @@
 	return FLOAT_PLANE
 
 /obj/machinery/atmospherics/pipe/update_planes_and_layers()
-	if (level == LEVEL_BELOW_FLOOR)
+	if(level == LEVEL_BELOW_FLOOR)
 		plane = ABOVE_PLATING_PLANE
 		layer = PIPE_LAYER
 	else
@@ -27,10 +27,8 @@
 		var/datum/pipeline/pipeline = parent
 		var/list/update_later = list()
 		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
-			pipe.color = mass_colour
-			if(!pipe.can_be_coloured)
-				pipe.default_colour = mass_colour
-				update_later += pipe
+			if(pipe.can_be_coloured)
+				pipe.color = mass_colour
 		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
 			pipe.update_icon()
 		update_later -= pipeline.edges
@@ -166,6 +164,25 @@
 		node2.initialize()
 		node2.build_network()
 	return 1
+
+
+/obj/machinery/atmospherics/pipe/simple/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/simple/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
 
 
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
@@ -503,6 +520,29 @@
 	..()
 
 
+/obj/machinery/atmospherics/pipe/manifold/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
 	update_icon()
 
@@ -717,6 +757,34 @@
 	centre_overlay = manifold4w_centre
 	centre_overlay.color = color
 	overlays += centre_overlay
+
+
+/obj/machinery/atmospherics/pipe/manifold4w/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		if(4)
+			return node4
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold4w/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		if(4)
+			node4 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
 	update_icon()
@@ -937,7 +1005,7 @@
 
 	var/list/layer_nodes = list()
 	var/obj/machinery/atmospherics/other_node = null
-	var/static/image/centre_image = image('icons/obj/atmospherics/pipe_manifold.dmi', "layer_center")
+	var/static/image/centre_image = image(icon = 'icons/obj/atmospherics/pipe_manifold.dmi', icon_state = "layer_center")
 
 /obj/machinery/atmospherics/pipe/layer_manifold/New()
 	for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
@@ -1124,7 +1192,7 @@
 			else
 				layer_mod = -1
 
-		user.ventcrawl_layer = Clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		user.ventcrawl_layer = clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		to_chat(user, "You align yourself with the [user.ventcrawl_layer]\th output.")
 		return 1
 	else
@@ -1148,8 +1216,6 @@
 	initialize_directions = NORTH|SOUTH
 
 	volume = 260 //6 averaged pipe segments
-
-	pipe_flags = ALL_LAYER
 
 	var/obj/machinery/atmospherics/layer_node = null
 	var/obj/machinery/atmospherics/mid_node = null
@@ -1279,11 +1345,6 @@
 					continue
 				layer_node = found
 
-/obj/machinery/atmospherics/pipe/layer_adapter/isConnectable(var/obj/machinery/atmospherics/target, var/direction, var/given_layer)
-	if(direction == dir)
-		return (given_layer == PIPING_LAYER_DEFAULT)
-	return ..()
-
 /obj/machinery/atmospherics/pipe/layer_adapter/getNodeType()
 	return PIPE_TYPE_STANDARD
 
@@ -1297,3 +1358,9 @@
 		user.ventcrawl_layer = (direction == dir) ? PIPING_LAYER_DEFAULT : piping_layer
 		to_chat(user, "You are redirected into the [user.ventcrawl_layer]\th piping layer.")
 		return ..()
+
+/obj/machinery/atmospherics/pipe/layer_adapter/get_layer_of_dir(var/direction)
+	if (direction == dir)
+		return PIPING_LAYER_DEFAULT // requested direction is our mid_node
+	else if (turn(direction, 180) == dir)
+		return piping_layer // requested direction is our layer_node

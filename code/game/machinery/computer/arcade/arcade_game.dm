@@ -10,6 +10,12 @@
 	holder = null
 	..()
 
+/datum/arcade_game/Topic(href, href_list)
+	if(..())
+		return TRUE
+	if(isobserver(usr) && !isAdminGhost(usr) && !holder.haunted)
+		return TRUE
+
 /datum/arcade_game/proc/import_data(var/list/args)
 	if(!args || !args["arcade_type"])
 		return 0
@@ -36,6 +42,19 @@
 /datum/arcade_game/proc/kick_act()
 
 /datum/arcade_game/proc/npc_tamper_act(mob/living/L)
+
+/datum/arcade_game/proc/dispense_prize(var/num_of_prizes)
+	for(var/i=1 to num_of_prizes)
+		if(holder.contents.len) //So admins can add a one-time win item.
+			var/atom/movable/prize = pick(holder.contents)
+			prize.forceMove(holder.loc)
+		else
+			var/prizeselect = pickweight(prizes)
+			if(islist(prizeselect))
+				for(var/I in prizeselect)
+					new I(holder.loc)
+			else
+				new prizeselect(holder.loc)
 
 /datum/arcade_game/New(var/holder)
 	..()
@@ -173,7 +192,7 @@
 		turtle = 0
 
 		if(emagged)
-			New()
+			src.New()
 			emagged = 0
 
 	holder.add_fingerprint(usr)
@@ -196,19 +215,9 @@
 				holder.New()
 				emagged = 0
 
-			else if(!holder.contents.len)
+			else
 				feedback_inc("arcade_win_normal")
-				var/prizeselect = pickweight(prizes)
-				if(islist(prizeselect))
-					for(var/i in prizeselect)
-						new i(holder.loc)
-				else
-					new prizeselect(holder.loc)
-
-			else //admins can varedit arcades to have special prizes via contents, but it removes the prize rather than spawn a new one
-				feedback_inc("arcade_win_normal")
-				var/atom/movable/prize = pick(holder.contents)
-				prize.forceMove(holder.loc)
+				dispense_prize(1)
 
 	else if (emagged && (turtle >= 4))
 		var/boomamt = rand(5,10)
@@ -328,16 +337,13 @@
 	holder.updateUsrDialog()
 
 /datum/arcade_game/space_villain/emp_act(var/severity)
-	var/empprize = null
 	var/num_of_prizes = 0
 	switch(severity)
 		if(1)
 			num_of_prizes = rand(1,4)
 		if(2)
 			num_of_prizes = rand(0,2)
-	for(num_of_prizes; num_of_prizes > 0; num_of_prizes--)
-		empprize = pickweight(prizes)
-		new empprize(holder.loc)
+	dispense_prize(num_of_prizes)
 
 /datum/arcade_game/space_villain/kick_act()
 	if(is_cheater(usr))

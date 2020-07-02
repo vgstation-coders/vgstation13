@@ -47,6 +47,7 @@
 	stop_automated_movement_when_pulled = 0
 
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach
+	var/egg_type = /obj/item/weapon/reagent_containers/food/snacks/roach_eggs
 
 	var/last_laid_eggs = 0
 
@@ -105,8 +106,16 @@
 /mob/living/simple_animal/cockroach/wander_move(turf/dest)
 	..()
 
-	//First, check for any food in our new surroundings
+	//First, try to lay eggs on food
+	//(A food item must not be roach eggs, and must have some nutriment)
+	//When food is used for egg-laying, some of its nutriment is swapped for toxins
+	//This means that after a while, the food's nutriment is replaced with toxins, and the food item can no longer be used for egg-laying
 	for(var/obj/item/weapon/reagent_containers/food/F in loc)
+		if(istype(F, egg_type))
+			continue
+		if(!F.reagents || !F.reagents.has_reagent(NUTRIMENT))
+			continue
+
 		//If there is food, climb on it (using pixel_x and pixel_y manipulation)
 		animate(src, pixel_x = F.pixel_x + rand(-4,4) * PIXEL_MULTIPLIER, pixel_y = F.pixel_y + rand(-4,4) * PIXEL_MULTIPLIER, rand(10,20), 1)
 
@@ -124,30 +133,36 @@
 				//And yeah, roaches can lay eggs on their own eggs. This is kinda intended
 
 				if(F && F.reagents)
-					F.reagents.add_reagent(TOXIN, rand(2,6)/10) //Add some toxin to the food
+					var/tox_amount = rand(2,6)*0.1 //0.2 to 0.6 toxin
+
+					F.reagents.reaction(src, INGEST)
+
+					F.reagents.remove_reagent(NUTRIMENT, tox_amount)
+					F.reagents.add_reagent(TOXIN, tox_amount)
 					lay_eggs()
 
 		return //Don't do anything after that
 
-	//Then, check for any trash
-	for(var/obj/item/trash/T in loc)
-		//If there is trash, climb under it (using pixel_x, pixel_y and layer manipulation)
-		animate(src, pixel_x = T.pixel_x, pixel_y = T.pixel_y, rand(10,30), 1)
+	//Then, try to lay eggs on trash. Only 1 egg may be laid per tile this way
+	if(!(locate(egg_type) in loc))
+		for(var/obj/item/trash/T in loc)
+			//If there is trash, climb under it (using pixel_x, pixel_y and layer manipulation)
+			animate(src, pixel_x = T.pixel_x, pixel_y = T.pixel_y, rand(10,30), 1)
 
-		layer = T.layer - 0.01
+			layer = T.layer - 0.01
 
-		if(flying)
-			stop_flying(anim = 0)
+			if(flying)
+				stop_flying(anim = 0)
 
-		spawn()
-			turns_since_move -= rand(5,20) //Stay here for a while
+			spawn()
+				turns_since_move -= rand(5,20) //Stay here for a while
 
-			if((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance * 0.25)) //Chance of laying eggs under trash is 1/4 of normal
-				sleep(rand(1,5) SECONDS)
+				if((last_laid_eggs + egg_laying_cooldown < world.time) && prob(egg_laying_chance * 0.25)) //Chance of laying eggs under trash is 1/4 of normal
+					sleep(rand(1,5) SECONDS)
 
-				lay_eggs()
+					lay_eggs()
 
-		return
+			return
 
 	//If there's no food, check for any walls to climb on
 	var/turf/simulated/wall/T = dest //If we attempted to move into a wall
@@ -235,7 +250,7 @@
 		last_laid_eggs = world.time
 		return
 
-	var/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/E = new(get_turf(src))
+	var/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/E = new egg_type(get_turf(src))
 
 	E.layer = layer //If we're hiding, the eggs are hidden too
 	E.plane = plane
@@ -282,7 +297,8 @@
 
 	switch(id)
 		if(TOXIN)
-			death(gore = 0)
+			if(method != INGEST)
+				death(gore = 0)
 		if(MUTAGEN)
 			if(prob(10)) //10% chance to become a big roach
 

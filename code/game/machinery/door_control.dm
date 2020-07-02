@@ -5,7 +5,6 @@
 	icon_state = "doorctrl0"
 	desc = "A remote control-switch for a door."
 	power_channel = ENVIRON
-	var/id_tag = null
 	var/range = 10
 	var/normaldoorcontrol = 0
 	var/specialfunctions = 1
@@ -52,9 +51,8 @@
 
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
 	..()
-	..()
 	/* For later implementation
-	if (isscrewdriver(W))
+	if (W.is_screwdriver(user))
 	{
 		if(wiresexposed)
 			icon_state = "doorctrl0"
@@ -86,25 +84,24 @@
 	add_fingerprint(user)
 
 	if(normaldoorcontrol)
-		for(var/obj/machinery/door/airlock/D in range(range))
+		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
-				if(D)
-					if(D.density)
-						D.open()
-					else
-						D.close()
-					return
-				if(specialfunctions & IDSCAN)
-					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
-				if(specialfunctions & BOLTS)
-					if(!D.isWireCut(4) && D.arePowerSystemsOn())
-						D.locked = !D.locked
-						D.update_icon()
-				if(specialfunctions & SHOCK)
-					D.secondsElectrified = D.secondsElectrified ? 0 : -1
-				if(specialfunctions & SAFE)
-					D.safe = !D.safe
+					if(specialfunctions & IDSCAN)
+						D.aiDisabledIdScanner = !D.aiDisabledIdScanner
+					if(specialfunctions & BOLTS)
+						if(!D.isWireCut(4) && D.arePowerSystemsOn())
+							D.toggle_bolts()
+							D.update_icon()
+					if(specialfunctions & SHOCK)
+						D.secondsElectrified = D.secondsElectrified ? 0 : -1
+					if(specialfunctions & SAFE)
+						D.safe = !D.safe
+					if(specialfunctions & OPEN)
+						if(D.density)
+							D.open()
+						else
+							D.close()
 
 	else
 		for(var/obj/machinery/door/poddoor/M in poddoors)
@@ -146,8 +143,8 @@
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			to_chat(user, "<span class='notice'>You detach \the [src] from the wall.</span>")
 			new/obj/item/mounted/frame/driver_button(get_turf(src))
@@ -204,6 +201,7 @@
 	icon_state = "launcherbtt"
 	active = 0
 
+// TODO: Remove this snowflake stuff.
 /obj/machinery/door_control/mapped/interogation_room
 	name = "smartglass control"
 	desc = "Toogle smartglass"
@@ -218,3 +216,17 @@
 	for (var/obj/machinery/door/window/plasma/secure/interogation_room/W in range(range))
 		if (W.smartwindow && src.id_tag == W.smartwindow.id_tag)
 			W.smartwindow.toggle_smart_transparency()
+
+/obj/machinery/door_control/mapped/box_armoury
+    name = "windoor control"
+    desc = "Open or close the windoors in the armoury."
+    id_tag = "IDTagBoxArmoury"
+    req_access = list(access_security)
+    range = 6
+
+/obj/machinery/door_control/mapped/box_armoury/attack_hand(var/mob/user)
+    ..() // Sanity
+    for (var/obj/machinery/door/window/brigdoor/W in range(range))
+        if (src.id_tag == W.id_tag)
+            spawn()
+                W.attack_hand(user)

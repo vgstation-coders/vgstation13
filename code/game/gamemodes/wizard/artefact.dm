@@ -1,6 +1,3 @@
-
-//Apprenticeship contract - moved to antag_spawner.dm
-
 ///////////////////////////Veil Render//////////////////////
 
 /obj/item/weapon/veilrender
@@ -14,6 +11,7 @@
 	w_class = W_CLASS_MEDIUM
 	var/charged = 1
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	var/rendtype = /obj/effect/rend
 
 /obj/effect/rend
 	name = "tear in the fabric of reality"
@@ -22,60 +20,55 @@
 	icon_state = "rift"
 	density = 1
 	anchored = 1.0
+	var/mobsleft = 20
+	var/mobtype = /mob/living/simple_animal/hostile/creature
 
 /obj/effect/rend/New()
-	spawn(50)
-		new /obj/machinery/singularity/narsie/wizard(get_turf(src))
+	processing_objects.Add(src)
+
+/obj/effect/rend/Destroy()
+	processing_objects.Remove(src)
+	..()
+
+/obj/effect/rend/process()
+	for(var/mob/M in loc)
+		if(M.stat != DEAD)
+			return
+	new mobtype(loc)
+	mobsleft--
+	if(mobsleft <= 0)
+		qdel(src)
+
+/obj/effect/rend/attackby(obj/item/I, mob/user)
+	if(isholyweapon(I))
+		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
 		qdel(src)
 		return
-	return
+	..()
 
-/obj/item/weapon/veilrender/attack_self(mob/user as mob)
-	if(charged == 1)
-		new /obj/effect/rend(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to reality itself!</span>")
+/obj/item/weapon/veilrender/attack_self(mob/user)
+	if(charged > 0)
+		create_rend(user)
+		charged--
 	else
 		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
 
-
+/obj/item/weapon/veilrender/proc/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to reality itself!</span>")
 
 /obj/item/weapon/veilrender/vealrender
 	name = "veal render"
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast farm."
+	rendtype = /obj/effect/rend/cow
 
-/obj/item/weapon/veilrender/vealrender/attack_self(mob/user as mob)
-	if(charged)
-		new /obj/effect/rend/cow(get_turf(usr))
-		charged = 0
-		visible_message("<span class='danger'>[src] hums with power as [usr] deals a blow to hunger itself!</span>")
-	else
-		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
+/obj/item/weapon/veilrender/vealrender/create_rend(mob/user)
+	new rendtype(get_turf(user))
+	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to hunger itself!</span>")
 
 /obj/effect/rend/cow
 	desc = "Reverberates with the sound of ten thousand moos."
-	var/cowsleft = 20
-
-/obj/effect/rend/cow/New()
-	processing_objects.Add(src)
-	return
-
-/obj/effect/rend/cow/process()
-	if(locate(/mob) in loc)
-		return
-	new /mob/living/simple_animal/cow(loc)
-	cowsleft--
-	if(cowsleft <= 0)
-		qdel (src)
-
-/obj/effect/rend/cow/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/nullrod))
-		visible_message("<span class='danger'>[I] strikes a blow against \the [src], banishing it!</span>")
-		spawn(1)
-			qdel (src)
-		return
-	..()
-
+	mobtype = /mob/living/simple_animal/cow
 
 /////////////////////////////////////////Scrying///////////////////
 
@@ -161,20 +154,19 @@
 		to_chat(user, "<span class = 'notice'>You prime the glow-stone, it will transform in [prime_time/10] seconds.</span>")
 		activate()
 		return
+	if (clumsy_check(user) && prob(50))
+		to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
+		failure()
+		return
+	if(prob(65))
+		to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
+		activate()
 	else
-		if (clumsy_check(user) && prob(50))
-			to_chat(user, "<span class = 'notice'>Ooh, shiny!</span>")
-			failure()
-			return
-		else if(prob(65))
-			to_chat(user, "<span class = 'notice'>You find what appears to be an on button, and press it.</span>")
-			activate()
-		else
-			if(prob(5))
-				visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
-				if(prob(50))
-					failure()
-			to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
+		if(prob(5))
+			visible_message("<span class = 'warning'>\The [src] ticks [pick("ominously","forebodingly", "harshly")].</span>")
+			if(prob(50))
+				failure()
+		to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
 
 /obj/item/weapon/glow_orb/proc/activate()
 	activating = 1
@@ -207,8 +199,10 @@
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
 	var/soulbound
+	var/mindbound
 	var/z_bound
 	var/mob/bound_soul
+	var/datum/mind/bound_mind
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/soulstone))
@@ -234,6 +228,7 @@
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
 			bound_soul = null
+			unbind_mind()
 	..()
 
 
@@ -252,6 +247,8 @@
 		var/datum/organ/external/E = H.get_active_hand_organ()
 		if(locate(/datum/wound) in E.wounds)
 			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
+			if(user.mind)
+				bind_mind(user.mind)
 			bind(user)
 			charges++
 			update_icon()
@@ -260,6 +257,7 @@
 
 /obj/item/phylactery/proc/revive_soul(list/arguments)
 	if(charges <= 0)
+		unbind_mind()
 		unbind()
 		return
 	var/mob/living/original = arguments["user"]
@@ -271,9 +269,7 @@
 			original.remove_spell(S)
 			H.add_spell(S)
 		H.Paralyse(30)
-		original.mind.transfer_to(H)
-		unbind()
-		bind(H)
+		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
 		if(!arguments["body_destroyed"])
 			original.dust()
 		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
@@ -299,6 +295,21 @@
 	z_bound = to_bind.on_z_transition.Add(src, "z_block")
 	bound_soul = to_bind
 
+/obj/item/phylactery/proc/unbind_mind()
+	if(bound_mind.on_transfer_end)
+		bound_mind.on_transfer_end.Remove(mindbound)
+	mindbound = null
+	bound_mind = null
+
+/obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
+	mindbound = to_bind.on_transfer_end.Add(src, "follow_mind")
+	bound_mind = to_bind
+
+/obj/item/phylactery/proc/follow_mind(list/arguments)
+	unbind()
+	bind(bound_mind.current)
+	update_icon()
+
 /obj/item/phylactery/proc/z_block(list/arguments)
 	var/mob/user = arguments["user"]
 	if(user != bound_soul)
@@ -315,3 +326,146 @@
 			T = get_turf(src)
 			if(user.z != T.z || is_holder_of(user, src))
 				user.dust()
+
+/obj/item/clothing/shoes/blindingspeed
+	name = "boots of blinding speed"
+	desc = "Blinds you while moving."
+	icon_state = "blindingspeed"
+	item_state = "blindingspeed"
+	wizard_garb = 1
+	var/speed_modifier = 4
+
+/obj/item/clothing/shoes/blindingspeed/equipped(mob/living/carbon/human/H, equipped_slot)
+	..()
+	if(istype(H) && H.get_item_by_slot(slot_shoes) == src && equipped_slot != null && equipped_slot == slot_shoes)
+		H.movement_speed_modifier *= speed_modifier
+
+
+/obj/item/clothing/shoes/blindingspeed/step_action()
+	var/mob/living/carbon/human/H = loc
+	H.change_sight(adding = BLIND)
+
+/obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
+	..()
+	if(from_slot == slot_shoes && istype(H))
+		H.movement_speed_modifier /= speed_modifier
+
+/obj/item/clothing/shoes/fuckup
+	name = "Fuckup Boots"
+	desc = "Breaches as you walk."
+	icon_state = "fuckup"
+	item_state = "fuckup"
+	wizard_garb = 1
+	w_class = W_CLASS_LARGE
+
+	var/active = 0
+	var/max_steps = 4
+	var/current_step = 0
+	var/spellcast_key = null
+	var/equip_cooldown = 50
+
+	var/step_cooldown = 1 SECONDS // The step delay.
+
+	var/warmup_steps = 4
+	var/current_warmup_steps = 0
+
+
+/obj/item/clothing/shoes/fuckup/step_action()
+	if (equip_cooldown)
+		equip_cooldown--
+		return ..()
+	if (!active)
+		return ..()
+	if (current_warmup_steps < warmup_steps)
+		current_warmup_steps++
+		return ..()
+	if (current_step >= max_steps)
+		deactivate()
+		return ..()
+	
+	var/mob/living/carbon/human/H = loc
+	H.delayNextMove(step_cooldown)
+	playsound(H, step_sound, 50, 1)
+	if(istype(H.loc,/turf/simulated))
+		var/turf/simulated/T = H.loc
+		T.ex_act(1)
+	for (var/turf/simulated/T in orange(1,get_turf(H)))
+		T.ex_act(3)
+	current_step++
+
+/obj/item/clothing/shoes/fuckup/proc/activate()
+	active = 1
+	current_step = 0
+	current_warmup_steps = 0
+	step_sound = "fuckupstep"
+
+/obj/item/clothing/shoes/fuckup/proc/deactivate()
+	active = 0
+	step_sound = initial(step_sound)
+
+/obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	var/spell/fuckup/F = new
+	H.add_spell(/spell/fuckup)
+	spellcast_key = H.on_spellcast.Add(F, "on_spellcast")
+	return ..()
+
+/obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	for (var/spell/fuckup/F in H.spell_list)
+		H.remove_spell(F)
+		H.on_spellcast.Remove(spellcast_key)
+	return ..()
+
+// -- Fuckup boot spell
+
+/spell/fuckup
+	name = "Activate fuckup boots (toggle)"
+	desc = "Unleash the power of fuckup boots."
+	abbreviation = "FU"
+
+	user_type = USER_TYPE_ARTIFACT
+
+	charge_type = Sp_RECHARGE
+	charge_max = 30 SECONDS
+	invocation_type = SpI_SHOUT
+	invocation = "FA'R N' AL'ENC'ED"
+	range = 0
+	spell_flags = NEEDSCLOTHES | NEEDSHUMAN
+	cooldown_min = 30 SECONDS
+	var/cooldown_on_blink = 4 SECONDS // The cooldown given upon blinking. Reduce to 0 for "fun".
+
+	hud_state = "wiz_fuckup"
+
+/spell/fuckup/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	var/mob/living/carbon/human/H = user // not false because NEEDSHUMAN
+	if (!istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+		return FALSE
+	return TRUE
+
+/spell/fuckup/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
+/spell/fuckup/cast(var/list/targets, var/mob/user)
+	var/mob/living/carbon/human/H = user
+	var/obj/item/clothing/shoes/fuckup/F = H.shoes
+	F.activate()
+	spawn (7 SECONDS)
+		if (F)
+			F.deactivate()
+
+/spell/fuckup/proc/on_spellcast(var/list/arguments)
+	var/spell/spell_casted = arguments["spell"]
+	var/mob/caster = arguments["user"]
+	if (!ishuman(caster))
+		return
+	var/mob/living/carbon/human/H = caster
+	if (istype(spell_casted, /spell/aoe_turf/blink) || istype(spell_casted, /spell/targeted/ethereal_jaunt))
+		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
+		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+			var/obj/item/clothing/shoes/fuckup/F = H.shoes
+			F.deactivate()
+

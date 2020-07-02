@@ -16,13 +16,16 @@
 
 /obj/item/projectile/change/proc/wabbajack(var/mob/living/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
-		if(istype(M, /mob/living/carbon/human/manifested)) // DEEEEEEEEEEEEEEITY
+		if(ismanifested(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
 		var/mob/living/new_mob
 		// Random chance of fucking up
 		if(type!=null && prob(10))
 			type = null
+
+		if(ishuman(M) && type == null)
+			score["random_soc"]++ //Just for scorekeeping. Humans that were hit by a random-type bolt.
 
 		var/randomize = type == null? pick(available_staff_transforms):type
 
@@ -38,7 +41,7 @@
 			if(SOC_SLIME)
 				new_mob = M.slimeize()
 			if(SOC_XENO)
-				new_mob = M.Alienize()
+				new_mob = M.Alienize(pick("Hunter", "Sentinel"))
 			if(SOC_HUMAN)
 				new_mob = M.Humanize()
 			if(SOC_CATBEAST)
@@ -48,10 +51,26 @@
 			else
 				return
 		if(new_mob)
-			if(new_mob.mind && new_mob.mind.wizard_spells && new_mob.mind.wizard_spells.len)
-				for (var/spell/S in new_mob.mind.wizard_spells)
-					new_mob.add_spell(S)
 			var/mob/living/carbon/human/H = new_mob
 			to_chat(new_mob, "<B>Your form morphs into that of a [(istype(H) && H.species && H.species.name) ? H.species.name : randomize].</B>")
 			return new_mob
 
+/obj/item/projectile/zwartepiet
+	name = "bolt of zwarte piet"
+	icon_state = "ice_1"
+	damage = 0
+	damage_type = BURN
+	nodamage = TRUE
+	flag = "energy"
+	var/changetype=null
+	fire_sound = 'sound/weapons/radgun.ogg'
+	
+/obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
+	var/type = changetype
+	spawn(1)
+		zwartepietenate(pietje,type)
+
+/obj/item/projectile/zwartepiet/proc/zwartepietenate(var/mob/living/carbon/human/M,var/type) //WHY: as mob in living_mob_list
+	if(istype(M, /mob/living) && M.stat != DEAD)
+		M.zwartepietify()
+		to_chat(M, "<B>You feel jovial!</B>")

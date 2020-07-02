@@ -1,0 +1,79 @@
+<!-- 
+Title: Crew Monitor Textview
+Used In File(s): \code\modules\cmc\crew.dm
+ -->
+
+<html>
+    <head>
+        <title>Crew Monitor</title>
+    </head>
+    <body>
+            <div id="cmc_controls">
+            {{:helper.link('', 'refresh', { 'toggle' : 1 }, null, 'cmc_btn', 'update_btn')}}
+            {{:helper.link('', 'image', { 'holo' : 1 }, null, 'cmc_btn', 'holo_btn')}}
+            {{for data.levels}}
+                {{:helper.link(value, '', { 'setZ' : value }, null, 'cmc_btn', value)}}
+            {{/for}}
+            </div>
+            <div id="cmc_main"><table align='center' id='contents'>Loading...</table></div>
+        <script>
+        var prevlevel = 1;
+
+        function populateTable(entries_string){
+            var entries = $.parseJSON(entries_string);
+            var string = "<tr><th><u>Name</u></th><th><u>Vitals</u></th><th><u>Position</u></th></tr>";
+            for(var i in entries){
+                entry = entries[i];
+                string += "<tr><td><span class='name "+entry.role+"'>"+entry.name+"</span> ("+entry.job+")</td>";
+                string += "<td><img src='cmc_"+entry.icon+".png' height='11' width='11'/>";
+                if(entry.damage){
+                    string +=  "(<span class='oxygen'>"+entry.damage.oxygen+"</span>/<span class='toxin'>"+entry.damage.toxin+"</span>/<span class='fire'>"+entry.damage.fire+"</span>/<span class='brute'>"+entry.damage.brute+"</span>)";
+                } else {
+                    string += "Not Available";
+                }
+                string += "</td><td>";
+                if(entry.see){
+                    string += entry.area+" ("+entry.see.x+","+entry.see.y+")";
+                } else {
+                    string += "Not Available";
+                }
+                string += "</td></tr>";
+            }
+
+            $("#contents").html(string);
+        }
+
+        function noData(){
+            $("#contents").html("<tr><td>No data currently available</td></tr>");
+        }
+
+        function toggleUpdatebtn(num){
+            if(num == 1){
+                $("#update_btn").css('background-color', 'green');
+            }else{
+                $("#update_btn").css('background-color', 'red');
+            }
+        }
+
+        function messageReceived(){
+            $('.linkActive').stopTime('linkPending');
+            $('.linkActive').removeClass('linkPending');
+            $('.buttonActive').stopTime('linkPending');
+            $('.buttonActive').removeClass('linkPending');
+        }
+
+        function levelSet(level){
+            if(prevlevel != level){
+                var prevbtn = $("#"+prevlevel);
+                prevbtn.removeClass("linkOff");
+            }
+            var btn = $("#"+level);
+            btn.addClass("linkOff");
+            prevlevel = level;
+        }
+
+        levelSet(prevlevel);
+        toggleUpdatebtn({{:data.update}});
+        </script>
+    </body>
+</html>

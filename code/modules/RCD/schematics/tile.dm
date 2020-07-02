@@ -81,7 +81,7 @@
 /datum/rcd_schematic/tile/Topic(var/href, var/href_list)
 	if(href_list["select_paint"])
 		var/list/our_list = get_our_list()
-		var/idx = Clamp(round(text2num(href_list["select_paint"])), 1, our_list.len)
+		var/idx = clamp(round(text2num(href_list["select_paint"])), 1, our_list.len)
 
 		selection = our_list[idx]
 		if(!(selected_dir in get_dir_list_by_dir_type(selection.adirs)))
@@ -350,6 +350,7 @@ var/global/list/paint_variants = list(
 		new /datum/paint_info/decal(DIR_ORTHO,	"carbon_dioxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"nitrous_oxide"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"air"),
+		new /datum/paint_info/decal(DIR_ORTHO,	"mix"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"plasma"),
 		new /datum/paint_info/decal(DIR_ORTHO,	"zoo"),
 
@@ -586,7 +587,8 @@ var/global/list/paint_variants = list(
 	),
 
 	"Chapel" = list(
-		new /datum/paint_info(DIR_ALL,		"chapel")
+		new /datum/paint_info(DIR_ALL,		"chapel"),
+		new /datum/paint_info(DIR_ONE,		"chapeldark")
 	),
 
 	"SS13 logo" = list(

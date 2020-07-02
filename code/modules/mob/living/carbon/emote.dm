@@ -168,17 +168,18 @@
 	message_mime = "laughs silently!"
 	emote_type = EMOTE_AUDIBLE
 
-
 /datum/emote/living/carbon/gag
 	key = "gag"
 	key_third_person = "gags"
 	message = "gags."
+	message_mime = "gags silently."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/gasp
 	key = "gasp"
 	key_third_person = "gasps"
 	message = "gasps!"
+	message_mime = "gasps silently!"
 	emote_type = EMOTE_AUDIBLE
 	stat_allowed = UNCONSCIOUS
 
@@ -209,6 +210,7 @@
 	key = "burp"
 	key_third_person = "burps"
 	message = "burps."
+	message_mime = "appears to burp."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/choke
@@ -221,6 +223,7 @@
 	key = "chuckle"
 	key_third_person = "chuckles"
 	message = "chuckles."
+	message_mime = "imitates a smug chuckle."
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/blush
@@ -228,10 +231,21 @@
 	key_third_person = "blushes"
 	message = "blushes."
 
+/datum/emote/living/carbon/fear
+	key = "fear"
+	key_third_person = "fears"
+	message = "screams in fear!"
+	message_mime = "acts out a fearful scream!"
+	emote_type = EMOTE_AUDIBLE
+
 /datum/emote/living/carbon/sound
+	var/list/science_sounds = null
 	var/list/male_sounds = null
 	var/list/female_sounds = null
+	var/list/birb_sounds = null
+	var/list/insect_sounds = null
 	var/sound_message = null
+
 
 /datum/emote/living/carbon/sound/scream
 	key = "scream"
@@ -239,10 +253,35 @@
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
-	stat_allowed = UNCONSCIOUS
+	science_sounds = list('sound/misc/science_scream1.ogg', 'sound/misc/science_scream2.ogg', 'sound/misc/science_scream3.ogg', 'sound/misc/science_scream4.ogg', 'sound/misc/science_scream5.ogg', 'sound/misc/science_scream6.ogg')
 	male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
 	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
+	voxemote = FALSE
+	insectoidemote = FALSE
+
+/datum/emote/living/carbon/sound/shriek
+	key = "shriek"
+	key_third_person = "shrieks"
+	message = "shrieks!"
+	message_mime = "acts out a shriek!"
+	emote_type = EMOTE_AUDIBLE
+	birb_sounds = list('sound/misc/shriek1.ogg')
+	sound_message = "shrieks in agony!"
+	voxemote = TRUE
+	voxrestrictedemote = TRUE
+
+/datum/emote/living/carbon/sound/chitter
+	key = "chitter"
+	key_third_person = "chitters"
+	message = "chitters!"
+	message_mime = "chitters silently!"
+	emote_type = EMOTE_AUDIBLE
+	insect_sounds = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
+	sound_message = "chitters in agony!"
+	insectoidemote = TRUE
+	insectoidrestrictedemote = TRUE
+
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -255,24 +294,70 @@
 
 /datum/emote/living/carbon/sound/run_emote(mob/user, params)
 	var/mob/living/carbon/human/H = user
-	if (!istype(H))
+	if(!istype(H))
 		return ..()
-	if (H.stat == DEAD)
+	if(H.stat == DEAD)
 		return
 	if (!H.is_muzzled() && !issilent(H)) // Silent = mime, mute species.
-		if (params == TRUE) // Forced scream
+		if((params == TRUE) || (Holiday == APRIL_FOOLS_DAY) || H.manual_emote_sound_override) // Forced scream or april fools or admin override
 			if(world.time-H.last_emote_sound >= 30)//prevent scream spam with things like poly spray
 				if(sound_message)
 					message = sound_message
+				var/obj/item/clothing/C = search_sound_clothing(H, key)
 				var/sound
-				switch(H.gender)
-					if (MALE)
-						sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-					if (FEMALE)
-						sound = pick(female_sounds)
+				if(!C)
+					if(isvox(H) || isskelevox(H))
+						sound = pick(birb_sounds)
+					if(isinsectoid(H))
+						sound = pick(insect_sounds)
+
+					else
+						switch(H.gender)
+							if(MALE)
+								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
+							if(FEMALE)
+								sound = pick(female_sounds)
+				else
+					sound = pick(C.sound_file)
 				playsound(user, sound, 50, 0)
 				H.last_emote_sound = world.time
+
 	else
 		message = "makes a very loud noise."
 
 	return ..()
+
+//A lengthy checks that returns the clothes to be used by other procs
+/datum/emote/living/carbon/sound/proc/search_sound_clothing(mob/living/carbon/human/user, var/sound_key)
+	var/selected_clothing //Check the clothing we've selected to be played
+	var/list/priority_high = list()
+	var/list/priority_med = list()
+	var/list/priority_low = list()
+	var/list/no_priority = list()
+	for(var/obj/item/clothing/C in user.get_equipped_items())
+		if(!C.sound_file)
+			continue
+		if(user.species && (user.species.name in C.sound_respect_species))
+			continue
+		if(!(sound_key in C.sound_change))
+			continue
+		switch(C.sound_priority)
+			if(CLOTHING_SOUND_HIGH_PRIORITY)
+				priority_high += C
+			if(CLOTHING_SOUND_MED_PRIORITY)
+				priority_med += C
+			if(CLOTHING_SOUND_LOW_PRIORITY)
+				priority_low += C
+			else
+				no_priority += C
+	if(!priority_high.len && !priority_med.len && !priority_low.len && !no_priority.len) //We didn't grab any clothing, stop the proc
+		return 0
+	if(priority_high.len)
+		selected_clothing = pick(priority_high)
+	else if(priority_med.len)
+		selected_clothing = pick(priority_med)
+	else if(priority_low.len)
+		selected_clothing = pick(priority_low)
+	else if(no_priority.len)
+		selected_clothing = pick(no_priority)
+	return selected_clothing

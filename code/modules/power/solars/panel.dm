@@ -1,6 +1,6 @@
 /obj/machinery/power/solar/panel
 	icon_state = "sp_base"
-	var/id_tag = 0
+	id_tag = 0
 	var/health = 15 //Fragile shit, even with state-of-the-art reinforced glass
 	var/maxhealth = 15 //If ANYONE ever makes it so that solars can be directly repaired without glass, also used for fancy calculations
 	var/obscured = 0
@@ -116,7 +116,7 @@
 		return
 
 	if(adir != ndir)
-		adir = (360 + adir + Clamp(ndir - adir, -10, 10)) % 360
+		adir = (360 + adir + clamp(ndir - adir, -10, 10)) % 360
 		update_icon()
 		update_solar_exposure()
 

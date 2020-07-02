@@ -12,7 +12,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 	pre_flight_delay = 30
 
 	can_link_to_computer = LINK_PASSWORD_ONLY
-
+	password = TRUE
 	stable = 1 //Don't stun everyone and don't throw anything when moving
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 

@@ -12,20 +12,6 @@
 	var/brute_dam = 0
 	var/burn_dam = 0
 
-/*
-/obj/item/robot_parts/recycle(var/datum/materials/rec)
-	for(var/material in materials)
-		var/rec_mat=material
-		var/CCPS=CC_PER_SHEET_MISC
-		if(rec_mat=="metal")
-			rec_mat="iron"
-			CCPS=CC_PER_SHEET_METAL
-		if(rec_mat=="glass")
-			CCPS=CC_PER_SHEET_GLASS
-		rec.addAmount(material,materials[material]/CCPS)
-	return 1
-*/
-
 /obj/item/robot_parts/l_arm
 	name = "robot left arm"
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
@@ -57,6 +43,9 @@
 	var/wires = 0.0
 	var/obj/item/weapon/cell/cell = null
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
+
+/obj/item/robot_parts/chest/get_cell()
+	return cell
 
 /obj/item/robot_parts/chest/reinforced
 	name = "reinforced robot torso"
@@ -204,18 +193,23 @@
 				to_chat(user, "<span class='warning'>Sticking a dead [W] into the frame would sort of defeat the purpose.</span>")
 				return
 
-			if(M.brainmob.mind in ticker.mode.head_revolutionaries)
+			/*if(M.brainmob.mind in ticker.mode.head_revolutionaries)
 				to_chat(user, "<span class='warning'>The frame's firmware lets out a shrill sound, and flashes 'Abnormal Memory Engram'. It refuses to accept the [W].</span>")
 				return
-
+			*/
 			if(jobban_isbanned(M.brainmob, "Cyborg"))
 				to_chat(user, "<span class='warning'>This [W] does not seem to fit.</span>")
+				return
+
+			var/datum/job/job_datum = job_master.GetJob("Cyborg")
+			if(!job_datum.player_old_enough(M.brainmob.client))
+				to_chat(user, "<span class='warning'>This [W] is too inexperienced to handle being a cyborg</span>")
 				return
 
 			if(!user.drop_item(W))
 				return
 
-			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc), unfinished = 1)
+			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
 
 			for(var/P in M.mommi_assembly_parts) //Let's give back all those mommi creation components
 				for(var/obj/item/L in M.contents)

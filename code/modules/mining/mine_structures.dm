@@ -25,9 +25,10 @@
 	var/start_with_lantern = /obj/item/device/flashlight/lantern/on
 	var/busy = 0
 
-/obj/structure/hanging_lantern/New()
+/obj/structure/hanging_lantern/New(turf/T, var/build_dir)
 
 	..()
+	dir = build_dir
 
 	if(start_with_lantern)
 		lantern = new start_with_lantern(src)
@@ -58,12 +59,12 @@
 
 	add_fingerprint(user)
 
-	if(iswrench(W) && !busy)
+	if(W.is_wrench(user) && !busy)
 		if(lantern)
 			user << "<span class='warning'>Remove \the [lantern] from \the [src] first.</span>"
 			return
 		busy = 1
-		playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+		W.playtoolsound(src, 75)
 		user.visible_message("<span class='warning'>[user] begins deconstructing \the [src].</span>", \
 		"<span class='notice'>You begin deconstructing \the [src].</span>")
 		if(do_after(user, src, 30))

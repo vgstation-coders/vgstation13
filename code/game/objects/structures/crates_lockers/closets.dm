@@ -21,18 +21,51 @@
 							  //then open it in a populated area to crash clients.
 	var/breakout_time = 2 //2 minutes by default
 	var/sound_file = 'sound/machines/click.ogg'
+	var/required_quirk = MODULE_CAN_CLOSE_CLOSETS
+	var/has_electronics = 0
+	var/has_lock_type = null //The type this closet should be converted to if made ID secured
+	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
+	var/obj/item/weapon/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
+
+/obj/structure/closet/New()
+	..()
+	if (has_lock_type)
+		desc += " It has a slot for locking circuitry."
+	else if (has_lockless_type)
+		desc += " The locking circuitry could be unmounted if unlocked."
+	if(ticker && ticker.current_state >= GAME_STATE_PLAYING)
+		initialize()
+
+// Returns null or a list of items to spawn
+/obj/structure/closet/proc/atoms_to_spawn()
+	return null
+
+// Creates the items this closet is supposed to contain and places them inside
+// Override this if you need custom logic
+/obj/structure/closet/proc/spawn_contents()
+	var/list/to_spawn = atoms_to_spawn()
+	for(var/path in to_spawn)
+		var/amount = to_spawn[path] || 1
+		for(var/i in 1 to amount)
+			var/atom/A = new path(src)
+			A.initialize()  // recursive
+
+/obj/structure/closet/basic
+	has_lock_type = /obj/structure/closet/secure_closet/basic
 
 /obj/structure/closet/proc/canweld()
 	return 1
 
 /obj/structure/closet/initialize()
 	..()
+	spawn_contents()
 	if(!opened)		// if closed, any item at the crate's loc is put in the contents
-		take_contents()
+		if(!ticker || ticker.current_state < GAME_STATE_PLAYING)
+			take_contents()
 	else
 		setDensity(FALSE)
 
@@ -49,11 +82,6 @@
 /obj/structure/closet/alter_health()
 	return get_turf(src)
 
-/obj/structure/closet/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(air_group || (height==0 || wall_mounted))
-		return 1
-	return (!density)
-
 /obj/structure/closet/proc/can_open()
 	if(src.welded)
 		return 0
@@ -63,6 +91,11 @@
 	for(var/obj/structure/closet/closet in get_turf(src))
 		if(closet != src && !closet.wall_mounted)
 			return 0
+
+	for(var/mob/living/carbon/carbon in src.loc)
+		if (carbon.mutual_handcuffs)
+			if (carbon.mutual_handcuffed_to.loc == src.loc || carbon.loc == src.loc)
+				return 0
 	return 1
 
 /obj/structure/closet/proc/dump_contents()
@@ -79,7 +112,8 @@
 		AD.forceMove(src.loc)
 
 	for(var/obj/O in src)
-		O.forceMove(src.loc)
+		if(O != src.electronics) //Don't dump your electronics
+			O.forceMove(src.loc)
 
 	for(var/mob/M in src)
 		M.forceMove(src.loc)
@@ -93,7 +127,7 @@
 			break
 		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
-/obj/structure/closet/proc/open()
+/obj/structure/closet/proc/open(mob/user)
 	if(src.opened)
 		return 0
 
@@ -132,7 +166,7 @@
 	AM.forceMove(src)
 	return 1
 
-/obj/structure/closet/proc/close()
+/obj/structure/closet/proc/close(mob/user)
 	if(!src.opened)
 		return 0
 	if(!src.can_close())
@@ -178,27 +212,140 @@
 	playsound(src, sound_file, 15, 1, -3)
 	return 1
 
-/obj/structure/closet/proc/toggle()
+/obj/structure/closet/proc/toggle(mob/user)
 	if(src.opened)
-		return src.close()
-	return src.open()
+		return src.close(user)
+	return src.open(user)
+
+/obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
+	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
+		E.playtoolsound(src, 100)
+		user.visible_message("[user] is installing electronics on \the [src].", "You start to install electronics into \the [src].")
+		if(do_after(user, src, 40))
+			var/obj/structure/closet/new_closet
+			new_closet = change_type(has_lock_type)
+
+			if(new_closet)
+				if(!(user.drop_item(E, new_closet)))
+					return //Abort if we can't drop the electronics for some reason (eg. Superglue)
+
+				to_chat(user, "<span class='notice'>You installed the electronics!</span>")
+				new_closet.electronics = E
+				E.installed = 1
+
+				if(E.one_access)
+					new_closet.req_access = null
+					new_closet.req_one_access = E.conf_access
+				else
+					new_closet.req_access = E.conf_access
+
+				new_closet.locked = 0
+				new_closet.update_icon()
+			else
+				//Should not happen
+				to_chat(user, "<span class='notice'>Wierd, the electronics won't fit.</span>")
+	else if(!has_lock_type)
+		to_chat(user, "<span class='notice'>There's no slot for the electronics</span>")
+
+
+/obj/structure/closet/proc/remove_lock(var/mob/user)
+	if(has_lockless_type)
+		electronics.playtoolsound(src, 100)
+		user.visible_message("[user] is removing \the [src]'s electronics.", "You start removing \the [src]'s electronics.")
+		if(do_after(user, src, 40))
+			var/obj/structure/closet/new_closet
+			new_closet = change_type(has_lockless_type)
+
+			if(new_closet)
+				new_closet.dump_electronics()
+				new_closet.broken = 0
+				new_closet.locked = 0
+				new_closet.update_icon()
+			else
+				//Should not happen
+				to_chat(user, "<span class='notice'>Weird, you can't get the electronics out.</span>")
+	else
+		to_chat(user, "<span class='notice'>You can't get the electronics out</span>")
+
+/obj/structure/closet/proc/dump_electronics()
+	var/obj/item/weapon/circuitboard/airlock/E
+	if (!electronics)
+		E = new/obj/item/weapon/circuitboard/airlock(loc)
+		if(req_access && req_access.len)
+			E.conf_access = req_access
+		else if(req_one_access && req_one_access.len)
+			E.conf_access = req_one_access
+			E.one_access = 1
+	else
+		E = electronics
+		electronics = null
+		E.forceMove(loc)
+		E.installed = 0
+
+	if (broken == 1)
+		E.icon_state = "door_electronics_smoked"
+
+	req_access = null
+	req_one_access = null
+
+	return E
+
+
+
+// Might come handy for painting crates and lockers some day.
+// Using it to change from secure to non secure lockers for now
+/obj/structure/closet/proc/change_type(var/new_type)
+	ASSERT(new_type)//Ensure it's not null
+
+	var/obj/structure/closet/new_closet = new new_type(loc)
+
+	new_closet.contents = src.contents
+
+	new_closet.broken = src.broken
+	new_closet.welded = src.welded
+	new_closet.locked = src.locked
+
+	new_closet.fingerprints = src.fingerprints
+	new_closet.fingerprintshidden = src.fingerprintshidden
+
+	new_closet.electronics = src.electronics
+	new_closet.req_access = src.req_access
+	new_closet.req_one_access = src.req_one_access
+
+	new_closet.update_icon()
+
+	qdel(src)
+	return new_closet
 
 // this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
+	var/obj/item/weapon/circuitboard/airlock/E
 	switch(severity)
 		if(1)
-			for(var/atom/movable/A as mob|obj in src)//pulls everything out of the locker and hits it with an explosion
+			broken = 1
+			if(has_electronics)//If it's got electronics, generate them/pull them out
+				E = dump_electronics()
+				E.forceMove(src)
+			for(var/atom/movable/A in src)//pulls everything else out of the locker and hits it with an explosion
 				A.forceMove(src.loc)
 				A.ex_act(severity++)
 			qdel(src)
 		if(2)
 			if(prob(50))
+				broken = 1
+				if(has_electronics)
+					E = dump_electronics()
+					E.forceMove(src)
 				for (var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
 				qdel(src)
 		if(3)
 			if(prob(5))
+				broken = 1
+				if(has_electronics)
+					E = dump_electronics()
+					E.forceMove(src)
 				for(var/atom/movable/A as mob|obj in src)
 					A.forceMove(src.loc)
 					A.ex_act(severity++)
@@ -215,6 +362,9 @@
 	health -= Proj.damage
 	..()
 	if(health <= 0)
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -239,12 +389,15 @@
 		health -= B.get_damage()
 
 	if(health <= 0)
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		dump_contents()
 		qdel(src)
 
 // This is broken, see attack_ai.
 /obj/structure/closet/attack_robot(mob/living/silicon/robot/user as mob)
-	if(isMoMMI(user))
+	if(isMoMMI(user) || HAS_MODULE_QUIRK(user, required_quirk))
 		src.add_hiddenprint(user)
 		add_fingerprint(user)
 		return src.attack_hand(user)
@@ -261,6 +414,9 @@
 	if(user.environment_smash_flags & SMASH_CONTAINERS)
 //		user.do_attack_animation(src, user) //This will look stupid
 		visible_message("<span class='warning'>[user] destroys the [src]. </span>")
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -269,6 +425,9 @@
 /obj/structure/closet/blob_act()
 	anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = 12)
 	if(prob(75))
+		broken = 1
+		if(has_electronics)
+			dump_electronics()
 		for(var/atom/movable/A as mob|obj in src)
 			A.forceMove(src.loc)
 		qdel(src)
@@ -286,12 +445,13 @@
 
 		if(iswelder(W) && canweld())
 			var/obj/item/weapon/weldingtool/WT = W
-			if(!WT.remove_fuel(0,user))
-				to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("<span class='notice'>\The [src] has been cut apart by [user] with \the [WT].</span>", 1, "You hear welding.", 2)
+			if(has_electronics)
+				dump_electronics()
 			qdel(src)
 			return
 
@@ -301,13 +461,15 @@
 		return
 	else if(iswelder(W) && canweld())
 		var/obj/item/weapon/weldingtool/WT = W
-		if(!WT.remove_fuel(0,user))
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later
+		add_lock(W, user)
+		return
 	else if(!place(user, W))
 		src.attack_hand(user)
 	return
@@ -339,7 +501,7 @@
 	if(user.stat || !isturf(src.loc))
 		return
 
-	if(!src.open())
+	if(!src.open(user))
 		if(!lastbang)
 			to_chat(user, "<span class='notice'>It won't budge!</span>")
 			lastbang = 1
@@ -389,6 +551,7 @@
 			L << sound('sound/machines/click.ogg')
 			L << sound('sound/hallucinations/scary.ogg')
 			L.Knockdown(5)
+			L.Stun(5)
 
 			sleep(50)
 
@@ -396,14 +559,14 @@
 				C.images -= temp_overlay
 			return
 
-	if(!src.toggle())
+	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")
 
 // tk grab then use on self
 /obj/structure/closet/attack_self_tk(mob/user as mob)
 	src.add_fingerprint(user)
 
-	if(!src.toggle())
+	if(!src.toggle(user))
 		to_chat(usr, "<span class='notice'>It won't budge!</span>")
 
 /obj/structure/closet/verb/verb_toggleopen()
@@ -414,13 +577,17 @@
 	if(usr.incapacitated())
 		return
 
-	if(ishuman(usr) || isMoMMI(usr))
-		if(isMoMMI(usr))
-			src.add_hiddenprint(usr)
-			add_fingerprint(usr)
+	if (isrobot(usr))
+		var/mob/living/silicon/robot/R = usr
+		if(isMoMMI(R) || HAS_MODULE_QUIRK(R, required_quirk))
+			src.attack_robot(R)
+			return
+
+	if(ishuman(usr))
 		src.attack_hand(usr)
-	else
-		to_chat(usr, "<span class='warning'>This mob type can't use this verb.</span>")
+		return
+
+	to_chat(usr, "<span class='warning'>You can't toggle the open state of [src].</span>")
 
 /obj/structure/closet/update_icon()//Putting the welded stuff in updateicon() so it's easy to overwrite for special cases (Fridges, cabinets, and whatnot)
 	overlays.len = 0
@@ -435,13 +602,12 @@
 // and due to an oversight in turf/Enter() were going through walls.  That
 // should be independently resolved, but this is also an interesting twist.
 /obj/structure/closet/Exit(atom/movable/AM)
-	open()
+	open(AM)
 	if(AM.loc == src)
 		return 0
 	return 1
 
-/obj/structure/closet/container_resist()
-	var/mob/user = usr
+/obj/structure/closet/container_resist(mob/user)
 	var/breakout_time = 2 //2 minutes by default
 
 	if(opened || (!welded && !locked))
@@ -464,7 +630,7 @@
 		broken = 1 //applies to secure lockers only
 		visible_message("<span class='danger'>[user] successfully broke out of [src]!</span>")
 		to_chat(user, "<span class='notice'>You successfully break out of [src]!</span>")
-		open()
+		open(user)
 
 /obj/structure/closet/send_to_past(var/duration)
 	..()
@@ -486,3 +652,14 @@
 				return
 		to_chat(ghost, "It contains: <span class='info'>[english_list(contents)]</span>.")
 		investigation_log(I_GHOST, "|| had its contents checked by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+
+// -- Vox raiders.
+
+/obj/structure/closet/loot
+	name = "Loot closet"
+	desc = "Store the valuables here for a direct transfer to the shoal. We make much bluespace."
+
+/obj/structure/closet/loot/Destroy()
+	for (var/datum/faction/vox_shoal/VS in ticker.mode.factions)
+		VS.our_bounty_lockers -= src
+	return ..()

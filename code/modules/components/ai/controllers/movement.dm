@@ -4,12 +4,13 @@
 /datum/component/controller/movement/basic/RecieveSignal(var/message_type, var/list/args)
 	if(isliving(container.holder))
 		var/mob/living/M=container.holder
-		if(COMSIG_MOVE)
-			if("loc" in args)
-				M.start_walk_to(args["loc"], 1, walk_delay)
-			if("dir" in args)
-				M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
-				walk(M, args["dir"], walk_delay)
+		switch(message_type)
+			if(COMSIG_MOVE)
+				if("loc" in args)
+					M.start_walk_to(args["loc"], 1, walk_delay)
+				if("dir" in args)
+					M.set_glide_size(DELAY2GLIDESIZE(walk_delay))
+					walk(M, args["dir"], walk_delay)
 
 /datum/component/controller/movement/astar
 	var/list/movement_nodes = list()
@@ -23,12 +24,12 @@
 				if(args["loc"] == target)
 					return //We're already on our way there
 				target = args["loc"]
-				movement_nodes = AStar(M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
+				AStar(src, .proc/receive_path, M, target, /turf/proc/AdjacentTurfsSpace, /turf/proc/Distance, 0, 30, id=M.get_visible_id())
 			if("dir" in args)
-				movement_nodes.Cut()
+				movement_nodes = list()
 				walk(M, args["dir"], walk_delay)
 		if(message_type == COMSIG_LIFE)
-			if(movement_nodes.len && target && (target != null))
+			if(movement_nodes && movement_nodes.len && target && (target != null))
 				if(movement_nodes.len > 0)
 					step_to(M, movement_nodes[1])
 					movement_nodes -= movement_nodes[1]
@@ -36,3 +37,7 @@
 					step_to(src, target)
 					movement_nodes.Cut()
 					return 1
+
+/datum/component/controller/movement/astar/proc/receive_path(var/list/L)
+	if(islist(L))
+		movement_nodes = L

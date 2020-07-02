@@ -38,6 +38,7 @@
 		/datum/rcd_schematic/pipe/filter,
 		/datum/rcd_schematic/pipe/mixer,
 		/datum/rcd_schematic/pipe/thermal_plate,
+		/datum/rcd_schematic/pipe/heat_pump,
 		/datum/rcd_schematic/pipe/injector,
 		/datum/rcd_schematic/pipe/dp_vent,
 
@@ -48,12 +49,6 @@
 		/datum/rcd_schematic/pipe/heat_exchanger,
 		/datum/rcd_schematic/pipe/he_manifold,
 		/datum/rcd_schematic/pipe/he_manifold4w,
-
-		/* Insulated Pipes */
-		/datum/rcd_schematic/pipe/insulated,
-		/datum/rcd_schematic/pipe/insulated_bent,
-		/datum/rcd_schematic/pipe/insulated_manifold,
-		/datum/rcd_schematic/pipe/insulated_4w_manifold,
 
 		/* Disposal Pipes */
 		/datum/rcd_schematic/pipe/disposal,
@@ -91,6 +86,8 @@
 /obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
 	if (L.get_active_hand() != src)
 		return
+	if(istype(event_args["target"], /mob/living/carbon))
+		return //If we're alt clicking a carbon, let's assume we want to interact with them.
 
 	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")

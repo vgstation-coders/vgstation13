@@ -13,8 +13,8 @@
  * Banhammer
  */
 /obj/item/weapon/banhammer/attack(mob/M as mob, mob/user as mob)
-	to_chat(M, "<font color='red'><b>You have been banned FOR NO REISIN by [user]<b></font>")
-	to_chat(user, "<font color='red'>You have <b>BANNED</b> [M]</font>")
+	to_chat(M, "<span class='red'><b>You have been banned FOR NO REISIN by [user]<b></span>")
+	to_chat(user, "<span class='red'>You have <b>BANNED</b> [M]</span>")
 
 /*
  * Classic Baton
@@ -35,7 +35,8 @@
 /obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
-		user.Knockdown(3 * force)
+		user.Knockdown(8)
+		user.Stun(8)
 		if(ishuman(user))
 			var/mob/living/carbon/human/H = user
 			H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -145,7 +146,8 @@
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
 				"<span class='danger'>The fishing rod goes mad!</span>")
 
-			user.Knockdown(3 * force)
+			user.Knockdown(4)
+			user.Stun(4)
 			if(ishuman(user))
 				var/mob/living/carbon/human/H = user
 				H.apply_damage(2*force, BRUTE, LIMB_HEAD)
@@ -162,6 +164,7 @@
 		else
 			playsound(src, 'sound/weapons/Genhit.ogg', 50, 1, -1)
 			target.Knockdown(2)
+			target.Stun(2)
 			target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [target.name] ([target.ckey])</font>")
 			log_attack("<font color='red'>[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with [src.name] (INTENT: [uppertext(user.a_intent)])</font>")
@@ -207,6 +210,7 @@
 		src.w_class = W_CLASS_HUGE
 		src.sharpness = 1.5
 		src.sharpness_flags = SHARP_BLADE | HOT_EDGE
+		src.armor_penetration = 100
 	else
 		to_chat(user, "<span class='notice'>\The [src] can now be concealed.</span>")
 		src.force = initial(src.force)
@@ -214,6 +218,7 @@
 		src.w_class = initial(src.w_class)
 		src.sharpness = initial(src.sharpness)
 		src.sharpness_flags = initial(src.sharpness_flags)
+		src.armor_penetration = initial(armor_penetration)
 	src.add_fingerprint(user)
 	return
 
@@ -238,7 +243,7 @@
 
 /obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
-	return(BRUTELOSS)
+	return(SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
@@ -280,3 +285,45 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+
+/obj/item/weapon/rsscimmy
+	name = "rune scimitar"
+	desc = "A vicious, curved sword."
+	icon_state = "rsscimmy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = 'sound/weapons/runescapeslash.ogg'
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25.0
+	w_class = W_CLASS_MEDIUM
+	throwforce = 15.0
+	throw_speed = 3
+	throw_range = 9
+	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/damocles
+	name = "Damocles"
+	desc = "An extremely powerful experimental sword. Generates an explosion at the site of impact."
+	icon_state = "damocles"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	siemens_coefficient = 1
+	sharpness = 1
+	flags = FPRINT
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25 //A solid weapon by itself
+	w_class = W_CLASS_LARGE
+	attack_verb = list("slashes", "rips", "dices", "cuts", "attacks", "slices", "tears")
+
+/obj/item/weapon/damocles/attack(atom/target, mob/living/user)
+	..()
+	if(prob(1))
+		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
+		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
+	explosion(target, 0, 0, 1)
+
+/obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
+	..()
+	explosion(get_turf(src), 0, 2, 3)
+	qdel(src)

@@ -26,7 +26,7 @@ var/global/datum/store/centcomm_store=new
 
 /datum/store/New()
 	for(var/itempath in typesof(/datum/storeitem) - /datum/storeitem/)
-		items += new itempath()
+		items["[itempath]"] = new itempath()
 
 /datum/store/proc/charge(var/mob/user,var/amount,var/datum/storeitem/item,var/obj/machinery/computer/merch/merchcomp)
 	if(!user)
@@ -39,7 +39,7 @@ var/global/datum/store/centcomm_store=new
 	reconnect_database()
 	if(merchcomp.charge_flow(linked_db, card, user, amount, vendor_account, "Purchase of [item.name]", merchcomp.machine_id) != CARD_CAPTURE_SUCCESS)
 		return 0
-	
+
 	return 1
 
 /datum/store/proc/reconnect_database()
@@ -52,13 +52,15 @@ var/global/datum/store/centcomm_store=new
 
 /datum/store/proc/PlaceOrder(var/mob/living/usr, var/itemID, var/obj/machinery/computer/merch/merchcomp)
 	// Get our item, first.
-
-	var/datum/storeitem/item = new itemID()
-	if(!item)
-		return 0
+	var/datum/storeitem/item = items["[itemID]"]
+	if(item.stock == 0)
+		to_chat(usr, "<span class='warning'>That item is sold out.</span>")
+		return
 	// Try to deduct funds.
 	if(!charge(usr,item.cost,item,merchcomp))
 		return 0
 	// Give them the item.
 	item.deliver(usr,merchcomp)
+	if(item.stock != -1)
+		item.stock--
 	return 1

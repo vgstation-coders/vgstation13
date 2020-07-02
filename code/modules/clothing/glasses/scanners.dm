@@ -1,5 +1,6 @@
 /obj/item/clothing/glasses/scanner
 	item_state = "glasses"
+	species_fit = list(GREY_SHAPED)
 	var/on = TRUE
 	var/list/color_matrix = null
 
@@ -128,7 +129,9 @@
 	eyeprot = -1
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	actions_types = list(/datum/action/item_action/toggle_goggles)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
+	glasses_fit = TRUE
 
 /obj/item/clothing/glasses/scanner/meson/enable(var/mob/C)
 	var/area/A = get_area(src)
@@ -157,9 +160,12 @@
 	name = "optical material scanner"
 	desc = "Allows one to see the original layout of the pipe and cable network."
 	icon_state = "material"
+	species_fit = list(GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	actions_types = list(/datum/action/item_action/toggle_goggles)
 	// vision_flags = SEE_OBJS
+
+	glasses_fit = TRUE
 
 	var/list/image/showing = list()
 	var/mob/viewing

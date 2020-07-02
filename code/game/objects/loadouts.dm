@@ -132,7 +132,7 @@
 						/obj/item/clothing/glasses/thermal/monocle,
 						/obj/item/clothing/head/det_hat,
 						/obj/item/weapon/cloaking_device,
-						/obj/item/weapon/gun/projectile,
+						/obj/item/weapon/gun/projectile/revolver,
 						/obj/item/ammo_storage/box/a357)
 
 /obj/abstract/loadout/tournament_chef
@@ -168,6 +168,12 @@
 						/obj/item/clothing/glasses/eyepatch,
 						/obj/item/weapon/melee/energy/sword/pirate)
 
+/obj/abstract/loadout/rune_knight
+	items_to_spawn = list(/obj/item/clothing/head/helmet/rune,
+						/obj/item/clothing/suit/armor/rune,
+						/obj/item/weapon/rsscimmy,
+						/obj/item/weapon/shield/riot/rune)
+
 /obj/abstract/loadout/space_pirate
 	items_to_spawn = list(/obj/item/clothing/under/pirate,
 						/obj/item/clothing/shoes/brown,
@@ -180,6 +186,13 @@
 	items_to_spawn = list(/obj/item/clothing/under/soviet,
 						/obj/item/clothing/shoes/black,
 						/obj/item/clothing/head/ushanka)
+
+/obj/abstract/loadout/clown_ops
+	items_to_spawn = list(/obj/item/clothing/under/clownpsyche,
+						/obj/item/clothing/shoes/clownshoespsyche,
+						/obj/item/clothing/mask/gas/clownmaskpsyche,
+						/obj/item/weapon/storage/backpack/clownpackpsyche,
+						/obj/item/weapon/gun/energy/laser/rainbow)
 
 /obj/abstract/loadout/tunnel_clown
 	items_to_spawn = list(/obj/item/clothing/under/rank/clown,
@@ -256,7 +269,7 @@
 						/obj/item/weapon/storage/firstaid/regular,
 						/obj/item/weapon/pinpointer,
 						/obj/item/weapon/shield/energy,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/weapon/gun/energy/pulse_rifle,
 						/obj/item/weapon/card/id/death_commando)
 
@@ -292,9 +305,9 @@
 						/obj/item/weapon/storage/box,
 						/obj/item/ammo_storage/box/c45,
 						/obj/item/weapon/storage/firstaid/regular,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/osipr_core,
-						/obj/item/weapon/plastique,
+						/obj/item/weapon/c4,
 						/obj/item/energy_magazine/osipr,
 						/obj/item/weapon/gun/osipr,
 						/obj/item/weapon/card/id/syndicate/commando)
@@ -376,7 +389,7 @@
 						/obj/item/clothing/gloves/centcom,
 						/obj/item/device/radio/headset/heads/captain,
 						/obj/item/clothing/head/centhat,
-						/obj/item/clothing/suit/armor/centcomm,
+						/obj/item/clothing/suit/space/rig/centcomm,
 						/obj/item/clothing/glasses/sunglasses,
 						/obj/item/weapon/gun/energy/laser/captain,
 						/obj/item/device/pda/heads/nt_supreme,

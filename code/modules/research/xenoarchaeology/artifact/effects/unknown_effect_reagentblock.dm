@@ -1,6 +1,7 @@
 /datum/artifact_effect/reagentblock
 	effecttype = "reagentblock"
-	effect = list(EFFECT_TOUCH, EFFECT_AURA, EFFECT_PULSE)
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY)
+	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/duration = 0
 	copy_for_battery = list("duration")
 
@@ -8,7 +9,7 @@
 	..()
 	effect_type = pick(5,7)
 	duration = rand(600,6000)
-	if(effect == EFFECT_AURA)
+	if(effect == ARTIFACT_EFFECT_AURA)
 		effectrange = rand(1,5)
 
 /datum/artifact_effect/reagentblock/DoEffectTouch(var/mob/living/user)

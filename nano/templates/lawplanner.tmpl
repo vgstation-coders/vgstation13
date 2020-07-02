@@ -1,0 +1,194 @@
+<div class="item">
+	{{if data.perp}}
+		<div class="itemLabel">
+			Record:
+		</div>
+		<div class="itemContent">
+			<span class='average'>{{:data.perp}}</span> {{:helper.link('X', null, {'clear' : 'record'})}}
+		</div>
+	{{/if}}
+	{{if data.timearrest}}
+		<div class="itemLabel">
+			Time of Arrest:
+		</div>
+		<div class="itemContent">
+			<span class='average'>{{:data.arresttime}}</span> {{:helper.link('X', null, {'clear' : 'arresttime'})}}
+		</div>
+	{{/if}}
+	<div class="itemLabel">
+		Rapsheet:
+	</div>
+	<div class="itemContent">
+		{{:data.crimes}} ({{:data.timer}}) {{:helper.link('X', null, {'clear' : 'rapsheet'})}}
+	</div>
+</div>
+<div class="item">
+	{{:helper.link('Announce Charges', 'volume-on', {'toggle' : 'announce'},null, data.announce ? 'greenBackground' : null)}}
+	{{:helper.link('Autostart Celltimer', 'play', {'toggle' : 'starttimer'},null, data.starttimer ? 'greenBackground' : null)}}
+	{{:helper.link('Time Arrest', 'clock', {'toggle' : 'timearrest'},null, data.timearrest ? 'greenBackground' : null)}}
+</div>
+<div class="item">
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Assault
+		</div>
+		<div class="line">
+			{{:helper.link('MINOR ASSAULT',	null,{'assault':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('ASSAULT',	null,{'assault':2},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('ABDUCTION',	null,{'assault':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('MANSLAUGHTER',	null,{'assault':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('MURDER',	null,{'assault':6},null, 'redButton')}}
+		</div>
+	</div>
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Damage
+		</div>
+		<div class="line">
+			{{:helper.link('VANDALISM',	null,{'damage':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('NEGLIGANCE',	null,{'damage':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('SABOTAGE',	null,{'damage':4},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('UNAUTH UPLOAD',	null,{'damage':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('GRAND SABOTAGE',	null,{'damage':6},null, 'redButton')}}
+		</div>
+	</div>
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Theft
+		</div>
+		<div class="line">
+			{{:helper.link('PETTY THEFT',	null,{'theft':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('THEFT',	null,{'theft':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('GRAND THEFT',	null,{'theft':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'redButton')}}
+		</div>
+	</div>
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Contraband
+		</div>
+		<div class="line">
+			{{:helper.link('MAKESHIFT WEP',	null,{'contraband':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('WEAPON/EXPLOS',	null,{'contraband':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('DISTRIB/MECHS',	null,{'contraband':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('ENEMY CONTRAB',	null,{'contraband':6},null, 'redButton')}}
+		</div>
+	</div>
+</div>
+<div class="item">
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Trespass
+		</div>
+		<div class="line">
+			{{:helper.link('MINOR TRESPASS',	null,{'trespass':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',	null,null,null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('TRESPASS',	null,{'trespass':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('MAJOR TRESPASS',	null,{'trespass':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',	null,null,null, 'redButton')}}
+		</div>
+	</div>
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Escape
+		</div>
+		<div class="line">
+			{{:helper.link('RESIST ARREST',	null,{'escape':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('ESCAPE',	null,{'escape':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('INTERFERENCE',	null,{'escape':4},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('GRAND ESCAPE',	null,{'escape':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('DEIMPLANTING',	null,{'escape':6},null, 'redButton')}}
+		</div>
+	</div>
+	<div style="float: left; width: 25%;">
+		<div class="itemLabel">
+			Insubordination
+		</div>
+		<div class="line">
+			{{:helper.link('MISUSE COMMS',	null,{'insubordination':1},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('INSUBORD',null,{'insubordination':2},null, 'greenButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('FRAMING',	null,{'insubordination':3},null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('             ',null,null,null, 'yellowButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('POWER ABUSE',	null,{'insubordination':5},null, 'redButton')}}
+		</div>
+		<div class="line">
+			{{:helper.link('ENEMY OF CORP',null,{'insubordination':6},null, 'redButton')}}
+		</div>
+	</div>
+</div>

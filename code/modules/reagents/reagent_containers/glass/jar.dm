@@ -1,6 +1,6 @@
 /obj/item/weapon/reagent_containers/glass/jar
 	name = "jar"
-	desc = "A large jar."
+	desc = "A large jar. Holds 250 units."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "jar"
 	amount_per_transfer_from_this = 10
@@ -13,6 +13,8 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 	var/obj/held_item = null
+	var/list/forbidden_items = list(/obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/syringe, \
+		/obj/item/weapon/reagent_containers/glass/jar, /obj/item/weapon/reagent_containers/pill)
 
 /obj/item/weapon/reagent_containers/glass/jar/New()
 	..()
@@ -56,9 +58,9 @@
 
 /obj/item/weapon/reagent_containers/glass/jar/attackby(obj/item/I, mob/user, params)
 	..()
-	if(I.w_class <= w_class && !held_item)
+	if(!held_item && I.w_class <= w_class && !I.is_open_container() && !is_type_in_list(I, forbidden_items))
 		if(user.drop_item(I, src))
-			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src]</span>")
+			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			held_item = I
 			update_icon()
 
@@ -123,3 +125,8 @@
 			held_item = null
 		getFromPool(/obj/item/weapon/shard, loc)
 		qdel(src)
+
+/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer
+	name = "comically large erlenmeyer flask"
+	desc = "Careful, they don't even make these anymore. Can hold 250 units."
+	icon_state = "erlenmeyerhuge"

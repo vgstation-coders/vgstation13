@@ -140,9 +140,9 @@
 			icon_state = initial(icon_state)
 
 //copied from computer.dm
-/obj/machinery/power/monitor/attackby(I as obj, mob/user as mob)
-	if(isscrewdriver(I) && circuit)
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+/obj/machinery/power/monitor/attackby(obj/item/I as obj, mob/user as mob)
+	if(I.is_screwdriver(user) && circuit)
+		I.playtoolsound(loc, 50)
 		if(do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
 			var/obj/item/weapon/circuitboard/M = new circuit( A )

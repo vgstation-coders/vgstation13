@@ -1,5 +1,3 @@
-#define MALFUNCTION_TEMPORARY 1
-#define MALFUNCTION_PERMANENT 2
 /obj/item/weapon/implant
 	name = "implant"
 	icon = 'icons/obj/device.dmi'
@@ -17,6 +15,9 @@
 /obj/item/weapon/implant/proc/activate()
 	return
 
+// What does the implant do when it's removed?
+/obj/item/weapon/implant/proc/handle_removal(var/mob/remover)
+	return
 
 // What does the implant do upon injection?
 // return 0 if the implant fails (ex. Revhead and loyalty implant.)
@@ -43,7 +44,7 @@
 	name = "melted implant"
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
-	malfunction = MALFUNCTION_PERMANENT
+	malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/Destroy()
 	if(part)
@@ -52,53 +53,6 @@
 	if(reagents)
 		qdel(reagents)
 	..()
-
-/obj/item/weapon/implant/tracking
-	name = "tracking"
-	desc = "Track with this."
-	var/id = 1.0
-
-/obj/item/weapon/implant/tracking/New()
-	..()
-	tracking_implants += src
-
-/obj/item/weapon/implant/tracking/Destroy()
-	..()
-	tracking_implants -= src
-
-/obj/item/weapon/implant/tracking/get_data()
-	var/dat = {"<b>Implant Specifications:</b><BR>
-<b>Name:</b> Tracking Beacon<BR>
-<b>Life:</b> 10 minutes after death of host<BR>
-<b>Important Notes:</b> None<BR>
-<HR>
-<b>Implant Details:</b> <BR>
-<b>Function:</b> Continuously transmits low power signal. Useful for tracking.<BR>
-<b>Special Features:</b><BR>
-<i>Neuro-Safe</i>- Specialized shell absorbs excess voltages self-destructing the chip if
-a malfunction occurs thereby securing safety of subject. The implant will melt and
-disintegrate into bio-safe elements.<BR>
-<b>Integrity:</b> Gradient creates slight risk of being overcharged and frying the
-circuitry. As a result neurotoxins can cause massive damage.<HR>
-Implant Specifics:<BR>"}
-	return dat
-
-/obj/item/weapon/implant/tracking/emp_act(severity)
-	if (malfunction)	//no, dawg, you can't malfunction while you are malfunctioning
-		return
-	malfunction = MALFUNCTION_TEMPORARY
-
-	var/delay = 20
-	switch(severity)
-		if(1)
-			if(prob(60))
-				meltdown()
-		if(2)
-			delay = rand(5 MINUTES, 15 MINUTES)
-
-	spawn(delay)
-		malfunction--
-
 
 
 /obj/item/weapon/implant/explosive
@@ -135,7 +89,7 @@ Implant Specifics:<BR>"}
 		activate()
 
 /obj/item/weapon/implant/explosive/activate()
-	if(malfunction == MALFUNCTION_PERMANENT)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return
 	if(iscarbon(imp_in))
 		var/mob/M = imp_in
@@ -163,7 +117,7 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/emp_act(severity)
 	if(malfunction)
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 	switch (severity)
 		if(2.0)	//Weak EMP will make implant tear limbs off.
 			if(prob(50))
@@ -177,6 +131,7 @@ Implant Specifics:<BR>"}
 						activate()		//50% chance of bye bye
 					else
 						meltdown()		//50% chance of implant disarming
+						return
 	spawn(20)
 		malfunction--
 
@@ -204,7 +159,7 @@ Implant Specifics:<BR>"}
 
 
 /obj/item/weapon/implant/chem
-	name = "chem"
+	name = "chem implant"
 	desc = "Injects things."
 	allow_reagents = 1
 
@@ -228,6 +183,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/chem/New()
 	..()
+	create_reagents(50)
 	chemical_implants.Add(src)
 
 /obj/item/weapon/implant/chem/Destroy()
@@ -255,7 +211,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/chem/emp_act(severity)
 	if (malfunction)
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 
 	switch(severity)
 		if(1)
@@ -268,12 +224,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	spawn(20)
 		malfunction--
 
-/obj/item/weapon/implant/chem/New()
-	. = ..()
-	create_reagents(50)
-
 /obj/item/weapon/implant/loyalty
-	name = "loyalty"
+	name = "loyalty implant"
 	desc = "Makes you loyal or such."
 
 	get_data()
@@ -294,18 +246,25 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
-	if(H.mind in ticker.mode.head_revolutionaries)
+	for(var/obj/item/weapon/implant/I in H)
+		if(istype(I, /obj/item/weapon/implant/traitor))
+			if(I.imp_in == H)
+				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
+				return 0
+	if(isrevhead(H) || (iscultist(H) && veil_thickness >= CULT_ACT_II))
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel the corporate tendrils of Nanotrasen try to invade your mind!</span>")
 		return 0
-	else if(H.mind in ticker.mode:revolutionaries)
-		ticker.mode:remove_revolutionary(H.mind)
+	if(isrevnothead(H))
+		var/datum/role/R = H.mind.GetRole(REV)
+		R.Drop()
+
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
 
 
 
 /obj/item/weapon/implant/traitor
-	name = "Greytide Implant"
+	name = "greytide implant"
 	desc = "Greytide Station wide"
 	icon_state = "implant_evil"
 
@@ -323,8 +282,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return dat
 
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
-	var/list/implanters
-	var/ref = "\ref[user.mind]"
 	if(!iscarbon(M))
 		to_chat(user, "<span class='danger'>The implant doesn't seem to be compatible with [M]!</span>")
 		return 0
@@ -342,35 +299,41 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(I.imp_in == H)
 				H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a strange sensation in your head that quickly dissipates.</span>")
 				return 0
-	if(H.mind in ticker.mode.traitors)
+	if(istraitor(H))
 		H.visible_message("<span class='big danger'>[H] seems to resist the implant!</span>", "<span class='danger'>You feel a familiar sensation in your head that quickly dissipates.</span>")
 		return 0
 	H.implanting = 1
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards [user.name].</span>")
-	if(!(user.mind in ticker.mode:implanter))
-		ticker.mode:implanter[ref] = list()
-	implanters = ticker.mode:implanter[ref]
-	implanters.Add(H.mind)
-	ticker.mode.implanted.Add(H.mind)
-	ticker.mode.implanted[H.mind] = user.mind
-	//ticker.mode:implanter[user.mind] += H.mind
-	ticker.mode:implanter[ref] = implanters
-	ticker.mode.traitors += H.mind
-	H.mind.special_role = "traitor"
+
+	var/datum/faction/F = find_active_faction_by_typeandmember(/datum/faction/syndicate/greytide, null, user.mind)
+	if(!F)
+		F = ticker.mode.CreateFaction(/datum/faction/syndicate/greytide, 0, 1)
+		F.HandleNewMind(user.mind)
+
+	var/success = F.HandleRecruitedMind(H.mind)
+	if(!success)
+		visible_message("<span class = 'warning'>The head of \the [H] begins to glow a deep red. It is going to explode!</span>")
+		spawn(3 SECONDS)
+			var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		return 0
 	to_chat(H, "<B><span class = 'big warning'>You've been shown the Greytide by [user.name]!</B> You now must lay down your life to protect them and assist in their goals at any cost.</span>")
-	var/datum/objective/protect/p = new
-	p.owner = H.mind
-	p.target = user:mind
-	p.explanation_text = "Protect [user:real_name], the [user:mind:assigned_role=="MODE" ? (user:mind:special_role) : (user:mind:assigned_role)]."
-	H.mind.objectives += p
-	for(var/datum/objective/objective in H.mind.objectives)
-		to_chat(H, "<B>Objective #1</B>: [objective.explanation_text]")
-	ticker.mode.update_traitor_icons_added(H.mind)
-	ticker.mode.update_traitor_icons_added(user.mind)
+	F.forgeObjectives()
+	update_faction_icons()
 	log_admin("[ckey(user.key)] has mind-slaved [ckey(H.key)].")
 	return 1
+
+/obj/item/weapon/implant/traitor/handle_removal(var/mob/remover)
+	if (!imp_in.mind)
+		return
+	var/datum/role/R = imp_in.mind.GetRole(IMPLANTSLAVE)
+	if (!R)
+		return
+	log_admin("[key_name(remover)] has removed a greytide implant from [key_name(imp_in)].")
+	R.Drop(FALSE)
+
 /obj/item/weapon/implant/adrenalin
-	name = "adrenalin"
+	name = "adrenalin implant"
 	desc = "Removes all stuns and knockdowns."
 	var/uses
 
@@ -443,7 +406,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/death_alarm/activate(var/cause)
 	var/mob/M = imp_in
 	var/area/t = get_area(M)
-	src.name = "\improper [mobname]'s Death Alarm"
+	src.name = "\improper [mobname]'s death alarm"
 	var/datum/speech/speech = create_speech("[mobname] has died in",1459,src)
 	speech.name="[mobname]'s Death Alarm"
 	speech.job="Death Alarm"
@@ -453,7 +416,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			if(!announcement_intercom || !istype(announcement_intercom))
 				announcement_intercom = new(null)
 
-			if(istype(t, /area/syndicate_station) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
+			if(istype(t, /area/shuttle/nuclearops) || istype(t, /area/syndicate_mothership) || istype(t, /area/shuttle/syndicate_elite) )
 				//give the syndies a bit of stealth
 				speech.message="[mobname] has died in Space!"
 			else
@@ -471,15 +434,16 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/death_alarm/emp_act(severity)			//for some reason alarms stop going off in case they are emp'd, even without this
 	if (malfunction)		//so I'm just going to add a meltdown chance here
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 
 	activate("emp")	//let's shout that this dude is dead
 	if(severity == 1)
 		if(prob(40))	//small chance of obvious meltdown
 			meltdown()
-		else if (prob(60))	//but more likely it will just quietly die
-			malfunction = MALFUNCTION_PERMANENT
+		else	//but more likely it will just quietly die
+			malfunction = IMPLANT_MALFUNCTION_PERMANENT
 		processing_objects.Remove(src)
+		return
 
 	spawn(20)
 		malfunction--
@@ -564,15 +528,15 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	name = "denatured implant"
 	desc = "A dead, hollow implant. Wonder what it used to be..."
 	icon_state = "implant_melted"
-	malfunction = MALFUNCTION_PERMANENT
+	malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/peace/process()
 	var/mob/living/carbon/host = imp_in
 
 	if (isnull(host) && imp_alive)
-		malfunction = MALFUNCTION_PERMANENT
+		malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
-	if (malfunction == MALFUNCTION_PERMANENT)
+	if (malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		meltdown()
 		processing_objects.Remove(src)
 		return
@@ -581,11 +545,11 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		imp_alive = 1
 
 	if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
-		malfunction = MALFUNCTION_TEMPORARY
+		malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 	else
 		malfunction = 0
 
-	if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
+	if (!imp_msg_debounce && malfunction == IMPLANT_MALFUNCTION_TEMPORARY)
 		imp_msg_debounce = 1
 		to_chat(host, "<span class = 'warning'>Your rage bubbles, \the [src] inside you is being suppressed!</span>")
 

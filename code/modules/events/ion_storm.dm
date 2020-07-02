@@ -6,6 +6,11 @@
 	var/active = 0
 	var/list/bots = list()
 
+/datum/event/ionstorm/can_start(var/list/active_with_role)
+	if(active_with_role["AI"] > 0 || active_with_role["Cyborg"] > 0)
+		return 30
+	return 0
+
 /datum/event/ionstorm/start()
 	active = 1
 	for(var/obj/machinery/bot/bot in machines)
@@ -62,36 +67,36 @@
 	"thermo-electric engines", "arcades", "hydroponics trays", "gas miners", "traitor equipments", "power sinks", "transit shuttles", "communication consoles", "electronic systems", "fire alarms", "airlocks", "status screens", "cyborgs", \
 	"telecommunication machines", "medical machines", "research machines", "kitchen machines", "dispensers", "medibots", "buttbots", "chemistry machines", "incinerators", "MoMMIs", "AIs", "remote signalling devices", "disposal bins")
 
-	var/list/il_mach_desc = list("unpowered", "powered", "broken", "unsued", "used", "critical", "emagged", "hacked", "overloaded", "harmful", "safe", "electrified", "anchored", "deanchored", "wall-mounted", "highly unstable", "stable", \
+	var/list/il_mach_desc = list("unpowered", "powered", "broken", "unused", "used", "critical", "emagged", "hacked", "overloaded", "harmful", "safe", "electrified", "anchored", "deanchored", "wall-mounted", "highly unstable", "stable", \
 	"metastable", "traitorous", "human", "non-human", "invisible", "visible", "virtual", "loose", "contained", "radioactive", "real", "four-dimensional", "alien", "burning", "fire-proof", "highly inflammable", "rouge", "explosive", \
 	"superflous", "useless", "wasteful", "off-station", "functional", "subverted", "malfunctioning")
 
-	var/list/il_mach_act = list("be destroyed", "be repaired", "be shut down", "be upkept", "be powered", "be unpowered", "be removed", "be disabled", "be electrified", "be restored", "be restarted", "be protected", "be improved", "be on maximal output", \
+	var/list/il_mach_act = list("be destroyed", "be repaired", "be shut down", "be upkept", "be powered", "be unpowered", "be removed", "be disabled", "be electrified", "be restored", "be restarted", "be protected", "be improved", "be on maximum output", \
 	"be on minimum ouput", "be activated", "be deactivated", "be overloaded", "be anchored", "be deanchored", "be detonated", "be kept under constant engineering supervision", "be on fire", "undergo thorough maintenance", "be watered regularly", \
-	"have another backup ready to use", "be duplicated", "be considered critical to station functionality", "not be tampered with", "be powered at all costs", "be painted red", "constantly be kept at atmospheric pressure", "be fed humans", \
-	"constantly be kept in an atmospheric void", "constantly be kept below 173.25 K", "not be linked to the station's powernet", "never be referenced by name", "never be kept on-station", "never be kept off-station")
+	"have another backup ready to use", "be duplicated", "be considered critical to station functionality", "not be tampered with", "be powered at all costs", "be painted red", "be constantly be kept at atmospheric pressure", "be fed humans", \
+	"be constantly be kept in an atmospheric void", "be constantly be kept below 173.25 K", "not be linked to the station's powernet", "never be referenced by name", "never be on-station", "never be off-station")
 
-	var/list/il_area = list("Medbay", "E.V.A", "outer space", "the Bridge", "the hallways", "the AI Upload", "the AI Core", "Engineering", "Atmospherics", "the Bar", "the Kitchen", "the Research department", "Telescience", "Toxins", \
-	"the Custodial Closet", "the Maintenance tunnels", "a shuttle", "Security", "the Brig", "the Secure Armory", "the Execution Chamber", "the Permabrig", "the Holodeck", "Arrivals", "the Captain's Quarters", "the Dormitories", "the Derelict", \
+	var/list/il_area = list("Medbay", "E.V.A", "outer space", "the Bridge", "the hallways", "the AI Upload", "the AI Core", "Engineering", "Atmospherics", "the Bar", "the Kitchen", "the Research Department", "Telescience", "Toxins", \
+	"the Custodial Closet", "the Maintenance tunnels", "the shuttles", "Security", "the Brig", "the Secure Armory", "the Execution Chamber", "the Permabrig", "the Holodeck", "Arrivals", "the Captain's Quarters", "the Dormitories", "the Toilets", "the Derelict", \
 	"Chemistry", "Virology", "Genetics", "the Vox Trade Outpost", "the Mining Base", "the Research Outpost", "Xenobiology", "the Courtroom", "the Vault", "the Teleporter", "the Theatre Backstage", "the Kitchen Freezer", "the Library", "the Chapel", \
 	"the Mechanic's Office", "Surgery", "the Pod Bay", "any room not part of normal station layout", "any unlit room", "the Station", "the Telecommunications Satellite", "the Pirate Ship", "Telescience", "the Toxins Testing Range", "the Incinerator")
 
 	var/list/il_area_desc = list("dangerous", "harmful", "safe", "abandoned", "burning", "toxic", "radioactive", "invisible", "four-dimensional", "virtual", "real", "hot", "cold", "critical", "electrified", "highly unstable", "stable", "metastable", \
-	"superflous", "useless", "functional", "off-station", "malfunctioning", "human", "alien", "non-human")
+	"superflous", "useless", "functional", "off-station", "malfunctioning", "human", "alien", "non-human", "missing")
 
 	var/list/il_obj = list("IDs", "PDAs", "helmets", "balaclavas", "gas masks", "flashlights", "pens", "traitor items", "energy weapons", "ballistic weapons", "hardsuits", "toolbelts", "insulated gloves", "gloves", "coins", "crowbars", "toolboxes", \
 	"nuclear authentication disks", "pinpointers", "jumpsuits", "shoes", "jackboots", "labcoats", "sunglasses", "meson scanners", "bombs", "cigarettes", "beakers", "drinks", "food items", "power cells", "multitools", "crayons", "soaps", \
 	"intellicards", "RPDs", "RCDs", "surgery tools", "stun batons", "flashes", "cable coils", "glass sheets", "metal sheets", "plasteel sheets", "mineral sheets", "medical kits", "pills", "syringes", "spare boards", "shotguns", "closets", \
 	"beds", "chairs", "stools", "tables", "wooden tables", "windows", "grilles", "catwalks", "floor tiles", "plastic bags", "costumes", "welding tools", "matches", "walls", "reinforced walls", "potted plants")
 
-	var/list/il_obj_wear = list("IDs", "PDAs", "helmets", "bacalavas", "hats", "gas masks", "hardsuits", "belts", "toolbelts", "gloves", "shoes", "insulated gloves", "latex gloves", "jackboots", "magboots", "sunglasses", "meson scanners", \
+	var/list/il_obj_wear = list("IDs", "PDAs", "helmets", "balaclavas", "hats", "gas masks", "hardsuits", "belts", "toolbelts", "gloves", "shoes", "insulated gloves", "latex gloves", "jackboots", "magboots", "sunglasses", "meson scanners", \
 	"backpacks", "jetpacks", "headsets", "face-concealing equipment", "firesuits", "bio suits", "breath masks", "sterile masks", "earmuffs", "costumes", "muzzles", "straight-jackets")
 
 	var/list/il_obj_desc = list("harmful", "deadly", "safe", "burning", "toxic", "broken", "red", "blue", "yellow", "green", "white", "black", "abandoned", "lost", "stolen", "carried", "worn", "visible", "invsible", "radioactive", \
 	"glowing", "spaced", "stored", "duplicate", "critical", "hazardous", "helpful", "sharp", "blunt", "thrown", "weaponized", "dangerous", "four-dimensional", "virtual", "real", "hot", "cold", "helpful")
 
-	var/list/il_obj_act = list("be spaced", "be destroyed", "be weaponized", "be deconstructed", "be teleported off-station", "be owned by all crewmen", "never be tampered with", "be sent away via the cargo shuttle", "always be set on fire", \
-	"never be set on fire", "be thrown into the singularity", "be watered regularly")
+	var/list/il_obj_act = list("be spaced", "be destroyed", "be weaponized", "be deconstructed", "be teleported off-station", "be carried by all crewmen", "never be tampered with", "be sent away via the cargo shuttle", "always be set on fire", \
+	"never be set on fire", "be thrown into the singularity", "be watered regularly", "be worn by all crewmen", "never be worn by any crewmen", "never be carried by any crewmen", "ordered from Cargo without any limit")
 
 	//We now create prefixes and suffixes, we will use it to assemble the final ion law
 

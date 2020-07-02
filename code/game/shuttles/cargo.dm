@@ -6,7 +6,7 @@ var/global/datum/shuttle/supply/cargo_shuttle = new(starting_area = /area/shuttl
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/dock_station
 
-	pre_flight_delay = 10
+	pre_flight_delay = 0
 	destroy_everything = 1 //The cargo shuttle should never be cancelled because of something in the way
 	cooldown = 0
 

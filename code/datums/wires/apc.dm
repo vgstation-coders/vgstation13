@@ -31,12 +31,14 @@ var/const/APC_WIRE_AI_CONTROL = 8
 	return 0
 
 /datum/wires/apc/UpdatePulsed(var/index)
-
+	..()
 	var/obj/machinery/power/apc/A = holder
 
 	switch(index)
 
 		if(APC_WIRE_IDSCAN)
+			if(A.emagged)
+				return
 			A.locked = 0
 
 			spawn(300)
@@ -66,6 +68,7 @@ var/const/APC_WIRE_AI_CONTROL = 8
 
 /datum/wires/apc/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/power/apc/A = holder
+	..()
 	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(APC_WIRE_MAIN_POWER1, APC_WIRE_MAIN_POWER2)

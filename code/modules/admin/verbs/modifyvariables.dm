@@ -2,8 +2,13 @@ var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
 										/datum/blackbox,	//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
-										/datum/configuration,	//prevents people from fucking with logging.
+										/datum/subsystem/dbcore/,			// No messing with the database.
 									)
+
+var/list/unviewable_varedit_object_types = list(
+	/datum/BSQL_Connection/,
+	/datum/BSQL_Operation/,
+)
 
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
 //If called with just [user] argument, it allows you to create a value such as a string, a number, an empty list, a nearby object, etc...
@@ -21,7 +26,10 @@ var/list/forbidden_varedit_object_types = list(
 	if(!C || !C.holder)
 		return
 
-	if(!C.can_edit_var(edited_variable))
+	if(!C.can_edit_var(edited_variable, edited_datum?.type))
+		return
+
+	if (is_type_in_list(edited_datum, unviewable_varedit_object_types) || BSQL_DEBUG_CONNECTION)
 		return
 
 	//Special case for "appearance", because appearance values can't be stored anywhere.
@@ -288,7 +296,7 @@ var/list/forbidden_varedit_object_types = list(
 		mod_list_add(L)
 		return L
 	else
-		L.Remove(variable)
+		L[variable] = variable_set(src, L)
 
 	return L
 
@@ -339,10 +347,11 @@ var/list/forbidden_varedit_object_types = list(
 
 	return M
 
-/client/proc/can_edit_var(var/tocheck)
-	if(tocheck in nevervars)
+/client/proc/can_edit_var(var/tocheck, var/type_to_check)
+	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
 		to_chat(usr, "Editing this variable is forbidden.")
 		return FALSE
+
 	if(tocheck == "bounds")
 		to_chat(usr, "Editing this variable is forbidden. Edit bound_width or bound_height instead.")
 		return FALSE

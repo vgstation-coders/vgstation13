@@ -8,6 +8,8 @@
 
 /turf/simulated/wall/cult/cultify()
 	return
+/turf/simulated/wall/cult/clockworkify()
+	return
 
 /turf/simulated/wall/cult/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
@@ -31,3 +33,7 @@
 		dismantle_wall(1)
 		return 1
 	return 0
+
+/turf/simulated/wall/syndicate
+	icon = 'icons/turf/shuttle.dmi'
+	walltype = "satwall"

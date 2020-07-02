@@ -26,6 +26,8 @@
 	var/list/stamped
 	var/rigged = 0
 	var/spam_flag = 0
+	var/display_x = 400
+	var/display_y = 400
 
 	var/log=""
 	var/obj/item/weapon/photo/img
@@ -54,7 +56,7 @@
 	if(img)
 		user << browse_rsc(img.img, "tmp_photo.png")
 		info_image = "<img src='tmp_photo.png' width='192' style='-ms-interpolation-mode:nearest-neighbor' /><br><a href='?src=\ref[src];picture=1'>Remove</a><br>"
-	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name]")
+	user << browse("<HTML><HEAD><TITLE>[name]</TITLE></HEAD><BODY[color ? " bgcolor=[src.color]":""]>[info_image][info_text][stamps]</BODY></HTML>", "window=[name];size=[display_x]x[display_y]")
 	onclose(user, "[name]")
 
 /obj/item/weapon/paper/update_icon()
@@ -205,7 +207,7 @@
 /obj/item/weapon/paper/proc/openhelp(mob/user as mob)
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
-		<b><center>Crayon&Pen commands</center></b><br>
+		<b><center>Crayon & Pen commands</center></b><br>
 		<br>
 		\[br\] : Creates a linebreak.<br>
 		\[center\] - \[/center\] : Centers the text.<br>
@@ -213,8 +215,13 @@
 		\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
+		\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+		\[row\] - Creates a new table row.<br>
+		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
+		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
+		\[time\] : Inserts the current station time.<br>
 		<br>
 		<b><center>Pen exclusive commands</center></b><br>
 		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
@@ -224,7 +231,7 @@
 		\[hr\] : Adds a horizontal rule.<br>
 		\[img\]http://url\[/img\] : Add an image.<br>
 		<br>
-		<center>Fonts</center><br>
+		<b><center>Fonts</center><br></b>
 		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>
 		\[algerian\] - \[/algerian\] : <span style=\"font-family:Algerian\">Algerian</span><br>
 		\[arial\] - \[/arial\] : <span style=\"font-family:Arial\">Arial</span><br>
@@ -251,8 +258,8 @@
 
 	if(href_list["write"])
 		var/id = href_list["write"]
-		//var/t = strip_html_simple(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
-		//var/t =  strip_html_simple(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
+		//var/t = utf8_sanitize(input(usr, "What text do you wish to add to " + (id=="end" ? "the end of the paper" : "field "+id) + "?", "[name]", null),8192) as message
+		//var/t =  utf8_sanitize(input("Enter what you want to write:", "Write", null, null)  as message, MAX_MESSAGE_LEN)
 		var/new_text
 
 		//Wrap this part in a loop to prevent text from getting lost
@@ -322,37 +329,8 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			var/clown = FALSE
-			if(user.mind && (user.mind.assigned_role == "Clown"))
-				clown = TRUE
-			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
-					clown = TRUE
-			if(!clown)
-				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-				return
-
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
-
-		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-		stampoverlay.icon_state = "paper_[P.icon_state]"
-
-		if(!stamped)
-			stamped = new
-		stamped += P.type
-		overlays += stampoverlay
-
-		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
-
-		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
-			var/obj/C = loc
-			C.update_icon()
-
+		var/obj/item/weapon/stamp/S = P
+		S.try_stamp(user,src)
 	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(img)
 			to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
@@ -478,11 +456,45 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/djstation
 	name = "paper - 'DJ Listening Outpost'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/djstation/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br>\
+	<ol>\
+		<li>Equip yourself with a multi-tool</li>\
+		<li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li>\
+		<li>Turn all the machines on, it has already been configured for you to listen on.</li>\
+	</ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. \
+	\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/intercoms/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br>\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/flag
 	icon_state = "flag_neutral"
@@ -537,9 +549,50 @@ var/global/list/paper_folding_results = list ( \
 	name = "paper- 'Suit Dispenser Manual - How to use them?'"
 	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
 
+/obj/item/weapon/paper/diy_soda
+	name = "paper- 'Instructions'"
+	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<BR>\nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<BR>\nNow as you may have guessed, you will have to mix this delicious beverage yourself.<BR>\nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<BR>\nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<BR>\nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<BR>\nAnd finally, get ready for our secret trademarked ingredient: <BR>\n<b>The element of surprise!</b>"
+
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"
 
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
+
+/obj/item/weapon/paper/merchantreport
+	var/identity
+	var/list/mugshots = list()
+
+/obj/item/weapon/paper/merchantreport/New(loc,mob/living/carbon/human/merchant)
+	if(merchant)
+		identity = merchant.client.prefs.real_name
+		name = "Licensed Merchant Report - [identity]"
+		merchant.client.prefs.update_preview_icon(0) //This is necessary because if they don't check their character sheet it never generates!
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_front)
+		mugshots += fcopy_rsc(merchant.client.prefs.preview_icon_side)
+		info = {"<html><style>
+						body {color: #000000; background: #ccffff;}
+						h1 {color: #000000; font-size:30px;}
+						fieldset {width:140px;}
+						</style>
+						<body>
+						<center><img src="http://ss13.moe/wiki/images/1/17/NanoTrasen_Logo.png"> <h1>ATTN: Internal Affairs</h1></center>
+						Nanotrasen\'s commercial arm has noted the presence of a registered merchant who holds a license for corporate commerce, a process which includes a background check and Nanotrasen loyalty implant. The associate\'s image is enclosed. Please continue to monitor trade on an ongoing basis such that Nanotrasen can maintain highest standard small business enterprise (SBE) partners.<BR>
+						<fieldset>
+	  					<legend>Picture</legend>
+						<center><img src="previewicon-[identity]1.png" width="64" height="64"><img src="previewicon-[identity]2.png" width="64" height="64"></center>
+						</fieldset><BR>
+						Name: [identity]<BR>
+						Blood Type: [merchant.dna.b_type]<BR>
+						Fingerprint: [md5(merchant.dna.uni_identity)]</body></html>"}
+		display_y = 700
+		CentcommStamp(src)
+	..()
+
+/obj/item/weapon/paper/merchantreport/show_text(var/mob/user, var/links = FALSE, var/starred = FALSE)
+	var/index = 1
+	for(var/image in mugshots)
+		user << browse_rsc(image, "previewicon-[identity][index].png")
+		index++
+	..()

@@ -1,3 +1,16 @@
+
+#define REAGENT_STATE_SOLID 1
+#define REAGENT_STATE_LIQUID 2
+#define REAGENT_STATE_GAS 3
+#define FOOD_METABOLISM 0.4
+#define REAGENTS_OVERDOSE 30
+#define REM REAGENTS_EFFECT_MULTIPLIER
+
+// Use in chem.flags.
+#define CHEMFLAG_DISHONORABLE 1
+#define CHEMFLAG_OBSCURING 2
+
+
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -13,6 +26,7 @@
 #define TOXIN 			"toxin"
 #define PLASTICIDE 			"plasticide"
 #define CYANIDE "cyanide"
+#define POTASSIUM_HYDROXIDE 			"potassium_hydroxide"
 #define CHEFSPECIAL 			"chefspecial"
 #define MINTTOXIN 			"minttoxin"
 #define MUTATIONTOXIN 			"mutationtoxin"
@@ -76,6 +90,7 @@
 #define DEXALIN 			"dexalin"
 #define DEXALINP 			"dexalinp"
 #define TRICORDRAZINE 			"tricordrazine"
+#define SIMPOLINOL			"simpolinol"
 #define ADMINORDRAZINE 			"adminordrazine"
 #define SYNAPTIZINE 			"synaptizine"
 #define IMPEDREZENE 			"impedrezene"
@@ -83,22 +98,27 @@
 #define ARITHRAZINE 			"arithrazine"
 #define ALKYSINE 			"alkysine"
 #define ALKYCOSINE 			"alkycosine"
+#define PHYTOSINE			"phytosine"
 #define IMIDAZOLINE 			"imidazoline"
 #define INACUSIATE 			"inacusiate"
 #define PERIDAXON 			"peridaxon"
 #define BICARIDINE 			"bicaridine"
 #define SYNTHOCARISOL 			"synthocarisol"
+#define PHYTOCARISOL			"phytocarisol"
 #define HYPERZINE 			"hyperzine"
 #define HYPOZINE 			"hypozine"
 #define CRYOXADONE 			"cryoxadone"
 #define CLONEXADONE 			"clonexadone"
 #define REZADONE 			"rezadone"
+#define PLACEBO 			"placebo"
 #define SPACEACILLIN 			"spaceacillin"
+#define NANOFLOXACIN 			"nanofloxacin"
 #define CARPOTOXIN 			"carpotoxin"
 #define ZOMBIEPOWDER 			"zombiepowder"
 #define MINDBREAKER 			"mindbreaker"
 #define HEARTBREAKER 			"heartbreaker"
 #define SPIRITBREAKER 			"spiritbreaker"
+#define DEFALEXORIN			"defalexorin"
 #define METHYLIN 			"methylin"
 #define BICARODYNE 			"bicarodyne"
 #define STABILIZINE 			"stabilizine"
@@ -110,6 +130,7 @@
 #define MEDNANOBOTS 			"mednanobots"
 #define COMNANOBOTS 			"comnanobots"
 #define FLUOROSURFACTANT 			"fluorosurfactant"
+#define PICCOLYN			"piccolyn"
 #define NICOTINE 			"nicotine"
 #define AMMONIA 			"ammonia"
 #define SALINE				"saline"
@@ -139,6 +160,7 @@
 #define CORNOIL 			"cornoil"
 #define ENZYME 			"enzyme"
 #define FLOUR 			"flour"
+#define NOVAFLOUR		"novaflour"
 #define RICE 			"rice"
 #define CHERRYJELLY 			"cherryjelly"
 #define HONEY			"honey"
@@ -202,11 +224,17 @@
 #define RUM 			"rum"
 #define VODKA 			"vodka"
 #define SAKE 			"sake"
+#define GLASGOW 			"glasgow"
 #define TEQUILA 			"tequila"
 #define VERMOUTH 			"vermouth"
 #define WINE 			"wine"
 #define COGNAC 			"cognac"
 #define HOOCH 			"hooch"
+#define CHAMPAGNE		"champagne"
+#define BLUECURACAO "bluecuracao"
+#define TRIPLESEC		"triplesec"
+#define BITTERS 		"bitters"
+#define SCHNAPPS		"schnapps"
 #define ALE 			"ale"
 #define THIRTEENLOKO 			"thirteenloko"
 #define BILK 			"bilk"
@@ -219,6 +247,7 @@
 #define WHISKEYCOLA 			"whiskeycola"
 #define MARTINI 			"martini"
 #define VODKAMARTINI 			"vodkamartini"
+#define SAKEMARTINI         "sakemartini"
 #define WHITERUSSIAN 			"whiterussian"
 #define SCREWDRIVERCOCKTAIL 			"screwdrivercocktail"
 #define BOOGER 			"booger"
@@ -234,6 +263,31 @@
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
 #define MOONSHINE 			"moonshine"
+#define MIDNIGHTKISS	"midnightkiss"
+#define COSMOPOLITAN	"cosmopolitan"
+#define CORPSEREVIVER	"corpsereviver"
+#define BLUELAGOON		"bluelagoon"
+#define SEXONTHEBEACH	"sexonthebeach"
+#define AMERICANO		"americano"
+#define BETWEENTHESHEETS	"betweenthesheets"
+#define SIDECAR		"sidecar"
+#define CHAMPAGNECOCKTAIL	"champagnecocktail"
+#define ESPRESSOMARTINI		"espressomartini"
+#define KAMIKAZE		"kamikaze"
+#define MOJITO			"mojito"
+#define WHISKEYTONIC	"whiskeytonic"
+#define MOSCOWMULE		"moscowmule"
+#define CINNAMONWHISKY	"cinnamonwhisky"
+#define C4COCKTAIL		"c4cocktail"
+#define DRAGONSBLOOD	"dragonsblood"
+#define DRAGONSSPIT		"dragonsspit"
+#define FIREBALLCIDER	"fireballcider"
+#define CINNAMONTOASTCOCKTAIL	"cinnamontoastcocktail"
+#define MANHATTANFIREBALL		"manhattanfireball"
+#define FIREBALLCOLA	"fireballcola"
+#define FIRERITA 		"firerita"
+#define MAGICA			"magica"
+#define MAGICADELUXE			"magicadeluxe"
 #define IRISHCOFFEE 			"irishcoffee"
 #define MARGARITA 			"margarita"
 #define BLACKRUSSIAN 			"blackrussian"
@@ -302,6 +356,7 @@
 #define FOAMING_AGENT	"foaming_agent"
 #define BEER2			"beer2"
 #define HOT_COCO		"hot_coco"
+#define HOT_COCO_SUBHUMAN		"hot_coco_subhuman"
 #define DRY_RAMEN		"dry_ramen"
 #define HOT_RAMEN		"hot_ramen"
 #define HELL_RAMEN		"hell_ramen"
@@ -313,6 +368,7 @@
 #define DR_GIBB			"dr_gibb"
 #define SPACE_UP		"space_up"
 #define LEMON_LIME		"lemon_lime"
+#define DIY_SODA		"diy_soda"
 #define B52				"b52"
 #define MANHATTAN_PROJ	"manhattan_proj"
 #define BAHAMA_MAMA		"bahama_mama"
@@ -353,13 +409,30 @@
 #define BAD_TOUCH		"bad_touch"
 #define SUICIDE			"suicide"
 #define KARMOTRINE		"karmotrine"
+#define DEGENERATECALCIUM "degeneratecalcium"
+#define GRAPEJUICE		"grapejuice"
+#define GGRAPEJUICE		"ggrapejuice"
+#define BWINE			"bwine"
+#define WWINE			"wwine"
+#define PLUMPHJUICE		"plumphjuice"
+#define PLUMPHWINE		"phwine"
+#define IRONROT			"ironrot"
+#define GEOMETER		"geometer"
+#define EGG_YOLK		"egg_yolk"
+#define MUSTARD_POWDER	"mustard_powder"
+#define MAYO			"mayo"
+#define DIABEETUSOL		"diabeetusol"
+#define MANNITOL		"mannitol"
+#define DIETINE			"dietine"
+#define GATORMIX		"gatormix"
+#define BLISTEROL		"blisterol"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
 #define GROUND_ROCK 			"ground_rock"
-#define DENSITY_SEPARATED_SAMPLE 			"density_separated_sample"
 #define ANALYSIS_SAMPLE 			"analysis_sample"
 #define CHEMICAL_WASTE 			"chemical_waste"
+#define TRINITRINE		"trinitrine"
 
 //Plant-specific reagents
 #define TANNIC_ACID		"tannic_acid"
@@ -386,6 +459,11 @@
 #define APETRINE		"apetrine"
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
+#define AMINOMICIN		"aminomicin"
+#define AMINOCYPRINIDOL	"aminocyprinidol"
+#define TOMATO_SOUP		"tomato_soup"
+#define LUMINOL			"luminol"
+#define CAFFEINE		"caffeine"
 
 // How many units of reagent are consumed per tick, by default.
 #define REAGENTS_METABOLISM 0.2
@@ -396,6 +474,7 @@
 #define TEMPERATURE_FLAME 700
 #define TEMPERATURE_WELDER 3480
 #define TEMPERATURE_PLASMA 4500
+#define TEMPERATURE_ETHANOL (T0C+1560)
 #define HEAT_TRANSFER_MULTIPLIER 7 //Multiplies the numbers above when heating a reagent container. A truly magical number.
 
 // By defining the effect multiplier this way, it'll exactly adjust
@@ -403,7 +482,42 @@
 #define REAGENTS_EFFECT_MULTIPLIER REAGENTS_METABOLISM / 0.4
 
 //Pulse related bullshit
-var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE)	//increase heart rate
+var/list/tachycardics = list(COFFEE, INAPROVALINE, HYPERZINE, HYPOZINE, NITROGLYCERIN, THIRTEENLOKO, NICOTINE, COCAINE, CAFFEINE)	//increase heart rate
 var/list/bradycardics = list(NEUROTOXIN, CRYOXADONE, CLONEXADONE, SPACE_DRUGS, STOXIN, GREYVODKA, CURARE, MESCALINE, VALERENIC_ACID)	//decrease heart rate
 var/list/heartstopper = list(/*"potassium_phorochloride",*/ ZOMBIEPOWDER) //this stops the heart
 var/list/cheartstopper = list(/*"potassium_chloride",*/ CHEESYGLOOP) //this stops the heart when overdose is met -- c = conditional
+
+//Lists of defines
+//Preferably have the synthetic (chemist-made) versions first, and alternatives after that. This helps with electrolyzing.
+
+#define ANTI_TOXINS list(ANTI_TOXIN, ALLICIN)
+#define KELOTANES list(KELOTANE, TANNIC_ACID)
+#define DERMALINES list(DERMALINE, KATHALAI)
+#define BICARIDINES list(BICARIDINE, OPIUM)
+#define SPACE_DRUGGS list(SPACE_DRUGS, MESCALINE)
+#define SYNAPTIZINES list(SYNAPTIZINE, CYTISINE)
+#define HYPERZINES list(HYPERZINE, COCAINE)
+#define IMIDAZOLINES list(IMIDAZOLINE, ZEAXANTHIN)
+#define STOXINS list(STOXIN, STOXIN2, VALERENIC_ACID)
+#define SACIDS list(SACID, FORMIC_ACID)
+#define PACIDS list(PACID, PHENOL)
+#define NEUROTOXINS list(NEUROTOXIN, CURARE)
+#define TOXINS list(TOXIN, SOLANINE)
+#define CRYPTOBIOLINS list(CRYPTOBIOLIN, PHYSOSTIGMINE)
+#define IMPEDREZENES list(IMPEDREZENE, HYOSCYAMINE)
+#define LEXORINS list(LEXORIN, CORIAMYRTIN)
+#define DEXALINS list(DEXALIN, THYMOL)
+
+#define INCENSE_HAREBELLS	"harebells"
+#define INCENSE_POPPIES		"poppies"
+#define INCENSE_SUNFLOWERS	"sunflowers"
+#define INCENSE_MOONFLOWERS	"moonflowers"
+#define INCENSE_NOVAFLOWERS	"novaflowers"
+#define INCENSE_BANANA		"bananas"
+#define INCENSE_BOOZE		"helmets"
+#define INCENSE_LEAFY		"cabbage"
+#define INCENSE_VAPOR		"vaporsacs"
+#define INCENSE_DENSE		"grasses"
+#define INCENSE_CRAVE		"vales"
+#define INCENSE_CORNOIL 	"cornoils"
+#define INCENSE_MUSTARDPLANT "mustardplant"

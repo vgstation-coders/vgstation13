@@ -80,6 +80,7 @@
 	to_chat(dancer, "<span class='userdanger'>You lose! Your muscles hurt from all the dancing.</span>")
 	visible_message("<span class='notice'>A red screen briefly flashes on \the [src].</span>")
 	dancer.Knockdown(5)
+	dancer.Stun(5)
 
 	for(var/i=0 to rand(1,5))
 		dancer.adjustBruteLoss(rand(1,5))

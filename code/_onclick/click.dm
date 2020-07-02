@@ -3,6 +3,13 @@
 	~Sayu
 */
 
+//A workaround for a BYOND bug (or at least weird behavior). It's classified.
+/client/Click(object, location, control, params)
+	var/list/p = params2list(params)
+	if(p["drag"])
+		return
+	..()
+
 /*
 	Before anything else, defer these calls to a per-mobtype handler.  This allows us to
 	remove istype() spaghetti code, but requires the addition of other handler procs to simplify it.
@@ -24,6 +31,18 @@
 
 /atom/DblClick(location,control,params)
 	usr.DblClickOn(src,params)
+
+//MouseDrop
+/mob/living/carbon/MouseDrop(var/mob/living/carbon/first, var/second_turf, over_location, src_control, over_control, params)
+	var/mob/living/carbon/second = locate() in second_turf
+	if (!istype(first) || !second || (first == usr && second == usr) || (first == second)) //if user is dragging only on himself or user drags and drops on the same target
+		return ..()
+	var/obj/item/to_be_handcuffs = usr.get_active_hand()
+	if (first.Adjacent(usr) && second.Adjacent(usr) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
+		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
+		handcuffs.apply_mutual_cuffs(first, second, usr)
+		return
+	..()
 
 /*
 	Standard mob ClickOn()
@@ -76,6 +95,9 @@
 		CtrlClickOn(A)
 		return
 
+	if(attempt_crawling(A))
+		return
+
 	if(isStunned())
 		return
 
@@ -121,14 +143,8 @@
 			item_attack_delay = held_item.attack_delay
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
-				if(ismob(A) && modifiers["def_zone"])
-					var/mob/M = A
-					var/def_zone
-					def_zone = modifiers["def_zone"]
-					resolved = M.attackby(held_item,src,def_zone = def_zone, params)
-				else
-					resolved = A.attackby(held_item, src, params)
-				if(ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab))
+				resolved = A.attackby(held_item, src, params)
+				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
@@ -177,9 +193,7 @@
 
 // Default behavior: ignore double clicks, consider them normal clicks instead
 /mob/proc/DblClickOn(var/atom/A, var/params)
-	//ClickOn(A,params)
 	return
-
 
 /*
 	Translates into attack_hand, etc.
@@ -230,7 +244,8 @@
 	Not currently used by anything but could easily be.
 */
 /mob/proc/RestrainedClickOn(var/atom/A)
-	return
+	if(INVOKE_EVENT(on_ruattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		return
 
 /*
 	Middle click
@@ -281,8 +296,15 @@
 
 /*
 	Alt click
-	Unused except for AI
 */
+
+/mob/proc/MiddleAltClickOn(var/atom/A)
+	A.MiddleAltClick(src)
+	return
+
+/atom/proc/MiddleAltClick(var/mob/user)
+	return
+
 /mob/proc/AltClickOn(var/atom/A)
 	A.AltClick(src)
 	return
@@ -362,7 +384,9 @@
 		else if(A.pixel_x < -16)
 			change_dir(WEST)
 
+		StartMoving()
 		Facing()
+		EndMoving()
 		return
 
 	if(abs(dx) < abs(dy))
@@ -376,7 +400,9 @@
 		else
 			change_dir(WEST)
 
+	StartMoving()
 	Facing()
+	EndMoving()
 
 
 // File renamed to mouse.dm?

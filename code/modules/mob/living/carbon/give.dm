@@ -1,16 +1,12 @@
-/mob/living/carbon/verb/give()
-	set category = "IC"
-	set name = "Give"
-	set src in oview(1) //Cannot handle giving shit to mobs on your own tile, but it's a small, small loss
-
-	give_item(usr)
-
 /mob/living/carbon/proc/give_item(mob/living/carbon/user)
 
 
 	if(!istype(user))
 		return
 	if(src.stat == 2 || user.stat == 2 || src.client == null)
+		return
+	if(give_check)
+		to_chat(user, "<span class='warning'>\The [src] is currently being passed something by somebody else.</span>")
 		return
 	if(src.handcuffed)
 		to_chat(user, "<span class='warning'>Those hands are cuffed right now.</span>")
@@ -26,8 +22,10 @@
 		to_chat(user, "<span class='warning'>You tried to give yourself \the [I], but you didn't want it.</span>")
 		return
 	if(find_empty_hand_index())
+		give_check = TRUE
 		switch(alert(src, "[user] wants to give you \a [I]?", , "Yes", "No"))
 			if("Yes")
+				give_check = FALSE
 				if(!I)
 					return
 				if(!Adjacent(user))
@@ -51,6 +49,8 @@
 				src.put_in_hands(I)
 				src.visible_message("<span class='notice'>[user] handed \the [I] to [src].</span>")
 			if("No")
+				give_check = FALSE
 				src.visible_message("<span class='warning'>[user] tried to hand \the [I] to [src] but \he didn't want it.</span>")
+
 	else
 		to_chat(user, "<span class='warning'>[src]'s hands are full.</span>")

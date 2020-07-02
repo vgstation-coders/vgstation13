@@ -10,7 +10,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/New()
 	..()
-	reagents.add_reagent(NUTRIMENT, 4)
+	reagents.add_reagent(EGG_YOLK, 4)
 	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/egg/process()
@@ -122,3 +122,42 @@
 
 	reagents.add_reagent(TOXIN, rand(5,15))
 	reagents.add_reagent(RADIUM, rand(1,5))
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/parrot
+	name = "parrot egg"
+	desc = "This doesn't seem realistic. Its texture feels like that of a cracker, and is faceted in microscopic shards of plasma."
+	icon_state = "egg-rainbow"
+	can_color = FALSE
+	hatch_type = /mob/living/simple_animal/parrot
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos
+	name = "chaos egg"
+	desc = "Contents: Unknown. Origin: Unknown. Intent: Unknown. Potential: Unknown. Status: Scrambled."
+	icon_state = "egg-chaos"
+	can_color = FALSE
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/chaos/hatch()
+	playsound(src, 'sound/effects/phasein.ogg', 100, 1)
+	visible_message("\The [src] cracks open, revealing a realm of the unknown within. From that realm, something emerges.")
+	var/choice = pick(existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs))
+	new choice(get_turf(src))
+	processing_objects.Remove(src)
+	qdel(src)
+
+var/snail_egg_count = 0
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail
+	name = "snail egg"
+	desc = "Proud and arrogant, even before birth."
+	icon_state = "egg-snail"
+	can_color = FALSE
+	hatch_type = /mob/living/simple_animal/snail
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail/New()
+	processing_objects.Add(src)
+	snail_egg_count++
+	return ..()
+
+/obj/item/weapon/reagent_containers/food/snacks/egg/snail/Destroy()
+	snail_egg_count--
+	return ..()

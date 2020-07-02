@@ -1,6 +1,7 @@
 /datum/artifact_effect/plantkiller
 	effecttype = "plantkiller"
-	effect = list(EFFECT_AURA, EFFECT_PULSE)
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_UNKNOWN)
+	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 5
 
 /datum/artifact_effect/plantkiller/DoEffectAura()

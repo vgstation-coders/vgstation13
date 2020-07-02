@@ -25,6 +25,7 @@
 	icon_dead = null //this isn't even his final form
 	maxHealth = 150
 	health = 150
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 	min_oxy = 0
 	max_oxy = 0
@@ -55,7 +56,7 @@
 
 /mob/living/simple_animal/hostile/humanoid/surgeon/skeleton
 	name = "\improper Skeletal Surgeon"
-	desc = "He wont be pushed around any longer"
+	desc = "He won't be pushed around any longer"
 	icon = 'icons/mob/surgeon.dmi'
 	icon_state = "skelesurgeon"
 	icon_living = "skelesurgeon"
@@ -63,6 +64,7 @@
 	icon_dying_time = 33
 	maxHealth = 400
 	health = 400
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 	min_oxy = 0
 	max_oxy = 0

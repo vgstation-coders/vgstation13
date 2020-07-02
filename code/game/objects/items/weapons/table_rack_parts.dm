@@ -22,7 +22,7 @@
 	attack_verb = list("slams", "bashes", "batters", "bludgeons", "thrashes", "whacks")
 	var/table_type = /obj/structure/table
 	sheet_type = /obj/item/stack/sheet/metal
-	var/sheet_amount = 1
+	var/sheet_amount = 2
 
 /obj/item/weapon/table_parts/cultify()
 	new /obj/item/weapon/table_parts/wood(loc)
@@ -30,7 +30,7 @@
 
 /obj/item/weapon/table_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
@@ -51,14 +51,36 @@
 			to_chat(user, "<span class='notice'>You add glass panes to \the [name].</span>")
 			glass.use(1)
 			qdel(src)
+	if (istype(W, /obj/item/stack/sheet/glass/plasmaglass))
+		var/obj/item/stack/sheet/glass/plasma = W
+		if (plasma.amount >= 1)
+			new /obj/item/weapon/table_parts/glass/plasma(user.loc)
+			to_chat(user, "<span class='notice'>You add plasma glass panes to \the [name].</span>")
+			plasma.use(1)
+			qdel(src)
+
 /obj/item/weapon/table_parts/attack_self(mob/user)
-	if(locate(/obj/structure/table) in get_turf(user))
+	preattack(get_turf(user), user, 1)
+
+/obj/item/weapon/table_parts/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	. = 1
+	if(!proximity_flag)
+		return
+	if(!isturf(target))
+		return ..()
+	var/turf/T = target
+	if(locate(/obj/structure/table) in T)
 		to_chat(user, "<span class='warning'>There is already a table here!</span>")
 		return
-
-	new table_type(user.loc)
+	if(T.density)
+		to_chat(user, "<span class='warning'>You can't build there!</span>")
+		return
+	new table_type(T)
 	user.drop_item(src, force_drop = 1)
 	qdel(src)
+
+/obj/item/weapon/table_parts/clockworkify()
+	GENERIC_CLOCKWORK_CONVERSION(src, /obj/item/weapon/table_parts/clockwork, CLOCKWORK_GENERIC_GLOW)
 
 /obj/item/weapon/table_parts/reinforced
 	name = "reinforced table parts"
@@ -73,7 +95,7 @@
 	table_type = /obj/structure/table/reinforced
 
 /obj/item/weapon/table_parts/reinforced/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/rods, user.loc, 1, user)
 		qdel(src)
@@ -90,7 +112,7 @@
 	return
 
 /obj/item/weapon/table_parts/wood/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		qdel(src)
 		return
@@ -111,7 +133,7 @@
 	sheet_type = /obj/item/stack/sheet/wood
 
 /obj/item/weapon/table_parts/wood/poker/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, 1, user)
 		drop_stack(/obj/item/stack/tile/grass, user.loc, 1, user)
 		qdel(src)
@@ -129,8 +151,26 @@
 	table_type = /obj/structure/table/glass
 
 /obj/item/weapon/table_parts/glass/attackby(obj/item/weapon/W, mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(/obj/item/stack/sheet/glass/glass, loc, 1, user)
+		drop_stack(sheet_type, loc, 1, user)
+		qdel(src)
+
+/obj/item/weapon/table_parts/glass/plasma
+	name = "glass table parts"
+	desc = "Glass table parts in solid plasma. As stylish as they are sturdy."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "plasma_tableparts"
+	starting_materials = list(MAT_PLASMA = 3750)
+	w_type = RECYK_GLASS
+	melt_temperature=MELTPOINT_PLASMA
+	flags = FPRINT
+	siemens_coefficient = 0 //copying from glass sheets and shards even if its bad balance
+	table_type = /obj/structure/table/glass/plasma
+
+/obj/item/weapon/table_parts/glass/plasma/attackby(obj/item/weapon/W, mob/user)
+	if (W.is_wrench(user))
+		drop_stack(/obj/item/stack/sheet/glass/plasmaglass, loc, 1, user)
 		drop_stack(sheet_type, loc, 1, user)
 		qdel(src)
 
@@ -144,6 +184,9 @@
 	sheet_amount = 4
 
 /obj/item/weapon/table_parts/clockwork/cultify()
+	return
+
+/obj/item/weapon/table_parts/clockwork/clockworkify()
 	return
 
 /obj/item/weapon/rack_parts
@@ -160,15 +203,15 @@
 
 /obj/item/weapon/rack_parts/attackby(obj/item/weapon/W, mob/user)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		drop_stack(sheet_type, user.loc, sheet_amount, user)
 		qdel(src)
 		return
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
-		if(WT.remove_fuel(0, user))
+		if(WT.remove_fuel(1, user))
 			to_chat(user, "You begin slicing through \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(do_after(user, src, 60))
 				to_chat(user, "You cut \the [src] into a gun stock.")
 				if(src.loc == user)
@@ -179,8 +222,7 @@
 				else
 					new /obj/item/weapon/metal_gun_stock(loc)
 					qdel(src)
-		else
-			to_chat(user, "<span class='notice'>You need more welding fuel to complete this task.</span>")
+			return
 
 /obj/item/weapon/rack_parts/attack_self(mob/user)
 	var/obj/structure/rack/R = new /obj/structure/rack(user.loc)

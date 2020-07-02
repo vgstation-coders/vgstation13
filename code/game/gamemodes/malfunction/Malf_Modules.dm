@@ -9,10 +9,8 @@ eject engine
 core sheild
 cable stun
 rcd light flash thingy on matter drain
-
-
-
 */
+
 #define MALFUNCTION "Malfunction"
 /datum/AI_Module
 	var/uses = 0
@@ -39,6 +37,13 @@ rcd light flash thingy on matter drain
 				S.charge_counter += uses
 				return
 		user.add_spell(new power_type, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+
+	// statistics collection - malf module purchases
+	if(user.mind && istype(user.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = user.mind.faction // can never be too careful, in BYOND land
+		if(istype(mf.stat_datum, /datum/stat/faction/malf))
+			var/datum/stat/faction/malf/MS = mf.stat_datum
+			MS.modules.Add(new /datum/stat/malf_module_purchase(src))
 
 /datum/AI_Module/large/fireproof_core
 	module_name = "Core upgrade"
@@ -82,16 +87,16 @@ rcd light flash thingy on matter drain
 	override_base = "grey"
 
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
-	for(var/obj/item/device/rcd/matter/engineering/rcd in world)
+	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
 		rcd.disabled = 1
-	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in world)
+	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in red_tool_list)
 		red.disabled = 1
 	to_chat(src, "RCD-disabling pulse emitted.")
 
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
 	mod_pick_name = "overload"
-	description = "Overloads an electrical machine, causing a small explosion. 2 uses."
+	description = "Overloads an electrical machine, causing a small explosion after a short delay. 2 uses."
 	uses = 2
 	cost = 15
 	power_type = /spell/targeted/overload_machine
@@ -121,15 +126,15 @@ rcd light flash thingy on matter drain
 		explosion(get_turf(M), -1, 1, 2, 3) //C4 Radius + 1 Dest for the machine
 		qdel(M)
 
-/datum/AI_Module/large/place_cyborg_transformer
+/datum/AI_Module/large/place_cyborg_autoborger
 	module_name = "Robotic Factory (Removes Shunting)"
 	mod_pick_name = "cyborgtransformer"
 	description = "Build a machine anywhere, using expensive nanomachines, that can convert a living human into a loyal cyborg slave when placed inside."
 	cost = 100
 
-	power_type = /spell/aoe_turf/conjure/place_transformer
+	power_type = /spell/aoe_turf/conjure/place_autoborger
 
-/spell/aoe_turf/conjure/place_transformer
+/spell/aoe_turf/conjure/place_autoborger
 	name = "Place Robotic Factory"
 	user_type = USER_TYPE_MALFAI
 	panel = MALFUNCTION
@@ -137,11 +142,14 @@ rcd light flash thingy on matter drain
 	charge_max = 1
 	spell_flags = WAIT_FOR_CLICK | NODUPLICATE | IGNORESPACE | IGNOREDENSE
 	range = GLOBALCAST
-	summon_type = list(/obj/machinery/transformer/conveyor)
+	summon_type = list(/obj/machinery/autoborger/conveyor)
 	hud_state = "autoborger"
 	override_base = "grey"
 
-/spell/aoe_turf/conjure/place_transformer/before_target(mob/user)
+/spell/aoe_turf/conjure/place_autoborger/New()
+	..()
+
+/spell/aoe_turf/conjure/place_autoborger/before_target(mob/user)
 	var/mob/living/silicon/ai/A = user
 	if(!istype(A))
 		return 1
@@ -149,7 +157,7 @@ rcd light flash thingy on matter drain
 		return 1
 	return 0
 
-/spell/aoe_turf/conjure/place_transformer/is_valid_target(var/atom/target)
+/spell/aoe_turf/conjure/place_autoborger/is_valid_target(var/atom/target)
 	// Make sure there is enough room.
 	if(!isturf(target))
 		return 0
@@ -170,10 +178,11 @@ rcd light flash thingy on matter drain
 	if(!C.visibleTurfs[middle])
 		alert(holder, "We cannot get camera vision of this location.")
 		return 0
+	newVars = list("belongstomalf" = holder)
 	return 1
 
-/spell/aoe_turf/conjure/place_transformer/cast(var/list/targets,mob/user)
-	// All clear, place the transformer
+/spell/aoe_turf/conjure/place_autoborger/cast(var/list/targets,mob/user)
+	// All clear, place the autoborger
 	..()
 	playsound(targets[1], 'sound/effects/phasein.ogg', 100, 1)
 	var/mob/living/silicon/ai/A = user
@@ -432,10 +441,105 @@ rcd light flash thingy on matter drain
 		src.processing_time -= AM.cost
 		if(AM.one_time)
 			possible_modules -= AM
-		stat_collection.malf_modules += AM.module_name
 
 	if(href_list["desc"])
 		var/datum/AI_Module/AM = locate(href_list["module"])
 		temp = AM.description
 
 	src.use(usr)
+
+
+/spell/aoe_turf/takeover
+	name = "System Override"
+	panel = MALFUNCTION
+	desc = "Start the victory timer"
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	hud_state = "systemtakeover"
+	override_base = "grey"
+
+/spell/aoe_turf/takeover/before_target(mob/user)
+	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+	if(!M)
+		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
+		return 1
+	if (M.stage > FACTION_ENDGAME)
+		to_chat(usr, "<span class='warning'>You've already begun your takeover.</span>")
+		return 1
+	if (M.apcs < 3)
+		to_chat(usr, "<span class='notice'>You don't have enough hacked APCs to take over the station yet. You need to hack at least 3, however hacking more will make the takeover faster. You have hacked [M.apcs] APCs so far.</span>")
+		return 1
+
+	if (alert(usr, "Are you sure you wish to initiate the takeover? The station hostile runtime detection software is bound to alert everyone. You have hacked [M.apcs] APCs.", "Takeover:", "Yes", "No") != "Yes")
+		return 1
+
+/spell/aoe_turf/takeover/cast(var/list/targets, mob/user)
+	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+	if(!M)
+		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
+		return 0
+	M.stage(FACTION_ENDGAME)
+	for(var/datum/role/R in M.members)
+		var/datum/mind/AI_mind = R.antag
+		for(var/spell/S in AI_mind.current.spell_list)
+			if(istype(S,type))
+				AI_mind.current.remove_spell(S)
+
+/spell/targeted/ai_win
+	name = "Explode"
+	desc = "Station goes boom."
+	panel = MALFUNCTION
+	spell_flags = INCLUDEUSER
+
+	charge_type = Sp_CHARGES
+	charge_max = 1
+	max_targets = 1
+
+	hud_state = "radiation"
+	override_base = "grey"
+
+/spell/targeted/ai_win/before_target(mob/user)
+	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+	if(!M)
+		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
+		return 1
+	if(M.stage<MALF_CHOOSING_NUKE)
+		to_chat(usr, "<span class='warning'>You are unable to access the self-destruct system as you don't control the station yet.</span>")
+		return 1
+
+	if(ticker.explosion_in_progress || ticker.station_was_nuked)
+		to_chat(usr, "<span class='notice'>The self-destruct countdown was already triggered!</span>")
+		return 1
+
+	if(!M.stage>=FACTION_VICTORY) //Takeover IS completed, but 60s timer passed.
+		to_chat(usr, "<span class='warning'>Cannot interface, it seems a neutralization signal was sent!</span>")
+		return 1
+
+
+/spell/targeted/ai_win/cast(var/list/targets, mob/user)
+	to_chat(user, "<span class='danger'>Detonation signal sent!</span>")
+	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+	if(!M)
+		to_chat(user, "<span class='warning'>How did you get to this point without actually being a malfunctioning AI?</span>")
+		return 0
+	for(var/datum/role/AI in M.members)
+		for(var/spell/S in AI.antag.current.spell_list)
+			if(istype(S, /spell/targeted/ai_win))
+				AI.antag.current.remove_spell(S)
+	ticker.explosion_in_progress = 1
+	for(var/mob/MM in player_list)
+		if(MM.client)
+			MM << 'sound/machines/Alarm.ogg'
+	to_chat(world, "<span class='danger'>Self-destruction signal received. Self-destructing in 10...</span>")
+	for (var/i=9 to 1 step -1)
+		sleep(10)
+		to_chat(world, "<span class='danger'>[i]...</span>")
+	sleep(10)
+	enter_allowed = 0
+	if(ticker)
+		ticker.station_explosion_cinematic(0,null)
+		ticker.station_was_nuked = 1
+		ticker.explosion_in_progress = 0
+		SSpersistence_map.setSavingFilth(FALSE)
+	M.stage(FACTION_VICTORY)
+

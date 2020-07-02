@@ -46,15 +46,57 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/carbon/human/patient in range(T))
-		if(patient.head && istype(patient.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+	for(var/mob/living/simple_animal/mouse/patient in range(T))
+		if(!check_HUD_visibility(patient, M))
 			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if(holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else if(patient.status_flags & XENO_HOST)
+				holder.icon_state = "hudxeno"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
+			else
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			C.images += holder
+
+	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in range(T))
+		if(!check_HUD_visibility(patient, M))
+			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if (holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else
+				holder.icon_state = "hudundead"
+			C.images += holder
+
+	for(var/mob/living/carbon/patient in range(T))
+		if (ishuman(patient))
+			var/mob/living/carbon/human/H = patient
+			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
+				continue
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
 			continue
 
 		holder = patient.hud_list[HEALTH_HUD]
+
 		if(holder)
 			if(patient.isDead())
 				holder.icon_state = "hudhealth-100"
@@ -68,10 +110,40 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "huddead"
 			else if(patient.status_flags & XENO_HOST)
 				holder.icon_state = "hudxeno"
-			else if(has_any_recorded_disease(patient))
-				holder.icon_state = "hudill"
+			else if(has_recorded_disease(patient))
+				holder.icon_state = "hudill_old"
 			else
-				holder.icon_state = "hudhealthy"
+				var/dangerosity = has_recorded_virus2(patient)
+				switch (dangerosity)
+					if (1)
+						holder.icon_state = "hudill"
+					if (2)
+						holder.icon_state = "hudill_safe"
+					if (3)
+						holder.icon_state = "hudill_danger"
+					else
+						holder.icon_state = "hudhealthy"
+			C.images += holder
+
+		holder = patient.hud_list[RECORD_HUD]
+		if(holder && ishuman(patient))
+			var/mob/living/carbon/human/H = patient
+			var/targetname = H.get_identification_name(H.get_face_name())
+			var/medical = null
+			var/datum/data/record/gen_record = data_core.find_general_record_by_name(targetname)
+			if(gen_record)
+				medical = gen_record.fields["p_stat"]
+			switch(medical)
+				if("*SSD*")
+					holder.icon_state = "hudssd"
+				if("*Deceased*")
+					holder.icon_state = "huddeceased"
+				if("Physically Unfit")
+					holder.icon_state = "hudunfit"
+				if("Active")
+					holder.icon_state = "hudactive"
+				if("Disabled")
+					holder.icon_state = "huddisabled"
 			C.images += holder
 
 
@@ -129,6 +201,8 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 			if(R)
 				holder = perp.hud_list[WANTED_HUD]
 				switch(R.fields["criminal"])
+					if("*High Threat*")
+						holder.icon_state = "hudterminate"
 					if("*Arrest*")
 						holder.icon_state = "hudwanted"
 					if("Incarcerated")
@@ -165,7 +239,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = borg.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/borg_cell = borg.cell
+			var/obj/item/weapon/cell/borg_cell = borg.get_cell()
 			if(!borg_cell)
 				holder.icon_state = "hudnobatt"
 			else
@@ -185,7 +259,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = exosuit.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/exosuit_cell = exosuit.cell
+			var/obj/item/weapon/cell/exosuit_cell = exosuit.get_cell()
 			if(!exosuit_cell)
 				holder.icon_state = "hudnobatt"
 			else
@@ -221,3 +295,28 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		O.process_hud(src)
 		if(!druggy)
 			see_invisible = SEE_INVISIBLE_LIVING
+
+//Artificer HUD
+proc/process_construct_hud(var/mob/M, var/mob/eye)
+	if(!M)
+		return
+	if(!M.client)
+		return
+	var/client/C = M.client
+	var/image/holder
+	var/turf/T
+	if(eye)
+		T = get_turf(eye)
+	else
+		T = get_turf(M)
+	for(var/mob/living/simple_animal/construct/construct in range(T))
+		if(!check_HUD_visibility(construct, M))
+			continue
+
+		holder = construct.hud_list[CONSTRUCT_HUD]
+		if(holder)
+			if(construct.isDead())
+				holder.icon_state = "consthealth0"
+			else
+				holder.icon_state = "consthealth[10*round((construct.health/construct.maxHealth)*10)]"
+			C.images += holder

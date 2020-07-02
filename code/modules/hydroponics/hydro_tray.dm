@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
@@ -179,7 +179,7 @@
 	//Remove the seed if something is already planted.
 	if(seed)
 		remove_plant()
-	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = SSplant.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds","glowshroom","grass"))]
 	if(!seed)
 		return //Weed does not exist, someone fucked up.
 
@@ -195,6 +195,8 @@
 
 	if(O.is_open_container())
 		return 0
+
+	add_fingerprint(user)
 
 	if (istype(O, /obj/item/seeds))
 
@@ -249,12 +251,16 @@
 		to_chat(user, "<span class='warning'>You must place the pot on the ground and use a spade on \the [src] to make a transplant.</span>")
 		return
 
-	else if(seed && istype(O, /obj/item/weapon/pickaxe/shovel))
+	else if(seed && isshovel(O))
 		var/obj/item/claypot/C = locate() in range(user,1)
 		if(!C)
 			to_chat(user, "<span class='warning'>You need an empty clay pot next to you.</span>")
 			return
+		if(C.being_potted)
+			to_chat(user, "<span class='warning'>You must finish transplanting your current plant before starting another.</span>")
+			return
 		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		C.being_potted = TRUE
 		if(do_after(user, src, 50))
 			user.visible_message(	"<span class='notice'>[user] transplants \the [seed.display_name] into \the [C].</span>",
 									"<span class='notice'>[bicon(src)] You transplant \the [seed.display_name] into \the [C].</span>",
@@ -268,14 +274,14 @@
 				S.icon_state += "-large"
 
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+				S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			else
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
@@ -289,7 +295,8 @@
 
 			check_level_sanity()
 			update_icon()
-
+		else
+			C.being_potted = FALSE
 		return
 
 	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
@@ -316,12 +323,13 @@
 
 		// Bookkeeping.
 		check_level_sanity()
+		skip_aging++ //We're about to force a cycle, so one age hasn't passed. Add a single skip counter.
 		force_update = 1
 		process()
 
 		return
 
-	else if (istype(O, /obj/item/weapon/minihoe))
+	else if (ishoe(O))
 
 		if(weedlevel > 0)
 			user.visible_message("<span class='alert'>[user] starts uprooting the weeds.</span>", "<span class='alert'>You remove the weeds from the [src].</span>")
@@ -357,7 +365,7 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
@@ -380,6 +388,11 @@
 
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
+
+	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+		to_chat(user, "You use \the [O] as compost for \the [src].")
+		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
+		qdel(O)
 
 	else
 		return ..()
@@ -489,6 +502,7 @@
 		flags |= OPENCONTAINER
 
 	update_icon()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -498,6 +512,7 @@
 		return
 	light_on = !light_on
 	calculate_light()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
 	set name = "Set Tray Label"
@@ -557,14 +572,16 @@
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
-			yield_mod = Clamp(yield_mod + (rand(3,5)/10), 1, 2)
+			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
 			if(yield_mod >= 2)
 				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
 
 /datum/locking_category/hydro_tray

@@ -24,7 +24,7 @@
 	icon_living = "russianranged"
 
 	corpse = /obj/effect/landmark/corpse/russian/ranged
-	items_to_drop = list(/obj/item/weapon/gun/projectile/mateba)
+	items_to_drop = list(/obj/item/weapon/gun/projectile/nagant)
 
 	melee_damage_lower = 5
 	melee_damage_upper = 5
@@ -32,6 +32,6 @@
 	ranged = 1
 	retreat_distance = 5
 	minimum_distance = 5
-	projectiletype = /obj/item/projectile/bullet
-	projectilesound = 'sound/weapons/Gunshot.ogg'
-	casingtype = /obj/item/ammo_casing/a357
+	projectiletype = /obj/item/projectile/bullet/midbullet2
+	projectilesound = 'sound/weapons/nagant.ogg'
+	casingtype = /obj/item/ammo_casing/c762x38r

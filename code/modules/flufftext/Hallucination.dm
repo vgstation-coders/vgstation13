@@ -26,6 +26,10 @@ mob/living/carbon/proc/handle_hallucinations()
 	handling_hal = 1
 	while(hallucination > 20)
 		sleep(max(MIN_HAL_SLEEP,(rand(200,500)/(hallucination/25))))
+
+		if(gcDestroyed)
+			return
+
 		if((src.reagents.has_reagent(CITALOPRAM) && prob(30)) || src.reagents.has_reagent(PAROXETINE))
 			continue
 		if(prob(3) && hallucinations.len < 3)
@@ -236,7 +240,7 @@ mob/living/carbon/proc/handle_hallucinations()
 			if(77) //Sillycone
 				if(prob(5))
 					to_chat(src, "<font size=4 color='red'>Attention! Delta security level reached!</font>")
-					to_chat(src, "<font color='red'>[config.alert_desc_delta]</font>")
+					to_chat(src, "<span class='red'>[config.alert_desc_delta]</span>")
 					src << sound('sound/AI/aimalf.ogg')
 
 					if(src.client)
@@ -272,6 +276,7 @@ mob/living/carbon/proc/handle_hallucinations()
 
 				if(prob(20))
 					src.Knockdown(10)
+					src.Stun(10)
 			if(82 to 85) //Clown
 				src << get_sfx("clownstep")
 				spawn(rand(16,28))
@@ -521,7 +526,7 @@ var/list/non_fakeattack_weapons = list(/obj/item/weapon/gun/projectile, /obj/ite
 	/obj/item/clothing/mask/gas/voice, /obj/item/clothing/glasses/thermal,\
 	/obj/item/device/chameleon, /obj/item/weapon/card/emag,\
 	/obj/item/weapon/storage/toolbox/syndicate, /obj/item/weapon/aiModule,\
-	/obj/item/device/radio/headset/syndicate,	/obj/item/weapon/plastique,\
+	/obj/item/device/radio/headset/syndicate,	/obj/item/weapon/c4,\
 	/obj/item/device/powersink, /obj/item/weapon/storage/box/syndie_kit,\
 	/obj/item/toy/syndicateballoon, /obj/item/weapon/gun/energy/laser/captain,\
 	/obj/item/weapon/hand_tele, /obj/item/device/rcd, /obj/item/weapon/tank/jetpack,\

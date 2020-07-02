@@ -35,13 +35,11 @@
 /obj/structure/bed/chair/vehicle/wheelchair/unlock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 1
-	animate_movement = initial(animate_movement)
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/lock_atom(var/atom/movable/AM)
 	. = ..()
 	density = 0
-	animate_movement = SYNC_STEPS
 	update_icon()
 
 /obj/structure/bed/chair/vehicle/wheelchair/update_icon()
@@ -53,6 +51,10 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/can_buckle(mob/M, mob/user)
 	if(!Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to || occupant) //Same as vehicle/can_buckle, minus check for user.lying as well as allowing monkey and ayliens
+		return 0
+	if(M_HULK in M.mutations)
+		if(M == user)
+			to_chat(M, "<span class='warning'>You are too muscular to fit in the wheelchair!</span>")
 		return 0
 	return 1
 
@@ -85,11 +87,10 @@
 		else if(M.held_items[i])
 			available_hands -= 1
 
-	available_hands = Clamp(available_hands, 0, 4)
+	available_hands = clamp(available_hands, 0, 4)
 
 	return available_hands
 
-	return 1
 	/*var/left_hand_exists = 1
 	var/right_hand_exists = 1
 
@@ -137,6 +138,9 @@
 		if(can_warn())
 			to_chat(user, "<span class='warning'>You need at least one hand to use [src]!</span>")
 		return 0
+	if(M_HULK in user.mutations)
+		to_chat(user, "<span class='warning'>\The [src] won't budge under your hulking weight!</span>")
+		return 0
 	return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/handle_layer()
@@ -155,10 +159,13 @@
 /obj/structure/bed/chair/vehicle/wheelchair/emp_act(severity)
 	return
 
-/obj/structure/bed/chair/vehicle/wheelchair/update_mob()
-	if(occupant)
-		occupant.pixel_x = 0
-		occupant.pixel_y = 3 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/wheelchair/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = 0, "y" = 3 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
 	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
@@ -202,6 +209,8 @@
 	var/const/default_cell_path = /obj/item/weapon/cell/high
 	var/obj/item/weapon/cell/internal_battery = null
 
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/get_cell()
+	return internal_battery
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/New()
 	..()
@@ -217,7 +226,7 @@
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(internal_battery)
-		internal_battery.use(2) //Example use: 100 charge to get from the cargo desk to medbay side entrance
+		internal_battery.use(min(2, internal_battery.charge)) //Example use: 100 charge to get from the cargo desk to medbay side entrance
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/getMovementDelay()
 	if(internal_battery && internal_battery.charge)
@@ -232,7 +241,7 @@
 		return ..()
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(isscrewdriver(W))
+	if(W.is_screwdriver(user))
 		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
 		maintenance = !maintenance
 	else if(iscrowbar(W)&&maintenance)
@@ -253,9 +262,6 @@
 	icon_state = "wheelchair-syndie"
 	desc = "A high-riding wheelchair fitted with a powerful cell and blades under the carriage. Better get a table between you and it."
 	var/attack_cooldown = 0
-
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/getMovementDelay()
-	return (..() + 1) //Somewhat slower
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/syndicate/to_bump(var/atom/A)
 	if(isliving(A) && !attack_cooldown)

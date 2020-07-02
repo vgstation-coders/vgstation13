@@ -3,6 +3,7 @@
 	desc = "Slick grease covers the ground in a radius, turning the terrain into difficult terrain. Has spell congruency with fire-based spells."
 	abbreviation = "GR"
 	user_type = USER_TYPE_WIZARD
+	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 300
@@ -49,3 +50,4 @@
 		if(user.has_spell_with_flag(SPELL_FIRE))
 			s.carried_reagents.Add(FUEL)
 		s.start()
+	score["greasewiz"]++

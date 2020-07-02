@@ -25,7 +25,8 @@
 
 /datum/artifact_effect/projectiles
 	effecttype = "projectiles"
-	effect = EFFECT_PULSE
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_PRECURSOR)
+	effect = ARTIFACT_EFFECT_PULSE
 	effectrange = 7
 	var/projectiletype
 	var/num_of_shots

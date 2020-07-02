@@ -6,6 +6,7 @@
 
 	var/flashed = 0
 	var/syndicate = 0
+	var/cult_permitted = 0 //For use in some special items to allow silicons to be converted
 	var/datum/ai_laws/laws = null//Now... THEY ALL CAN ALL HAVE LAWS
 	var/list/alarms_to_show = list()
 	var/list/alarms_to_clear = list()
@@ -21,6 +22,10 @@
 	var/global/list/vision_types_list = list("Security Hud","Medical Hud", "Meson Vision", "Night Vision", "Thermal Vision")
 	var/list/alarm_types_show = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
 	var/list/alarm_types_clear = list("Motion" = 0, "Fire" = 0, "Atmosphere" = 0, "Power" = 0, "Camera" = 0)
+
+	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
+
+	var/stored_freqs = 0
 
 /mob/living/silicon/hasFullAccess()
 	return 1
@@ -122,7 +127,13 @@
 	return 1
 
 /mob/living/silicon/generate_static_overlay()
-	return
+	if(!istype(static_overlays,/list))
+		static_overlays = list()
+	static_overlays.Add(list("cult"))
+
+	var/image/static_overlay = image(icon = 'icons/mob/animal.dmi', loc = src, icon_state = pick("faithless","forgotten","otherthing",))
+	static_overlay.override = 1
+	static_overlays["cult"] = static_overlay
 
 /mob/living/silicon/emp_act(severity)
 	for(var/obj/item/stickybomb/B in src)
@@ -223,7 +234,10 @@
 		show_station_time()
 		show_emergency_shuttle_eta()
 		show_system_integrity()
-		show_malf_ai()
+		for(var/datum/faction/F in ticker.mode.factions)
+			var/F_stat = F.get_statpanel_addition()
+			if(F_stat)
+				stat(null, "[F_stat]")
 
 // this function displays the stations manifest in a separate window
 /mob/living/silicon/proc/show_station_manifest()
@@ -270,7 +284,7 @@
 	return universal_speak || (speaking in src.speech_synthesizer_langs)	//need speech synthesizer support to vocalize a language
 
 /mob/living/silicon/add_language(var/language_name, var/can_speak=1)
-	var/var/datum/language/added_language = all_languages[language_name]
+	var/datum/language/added_language = all_languages[language_name]
 	if(!added_language) //Are you trying to pull my leg? This language does not exist.
 		return
 
@@ -280,7 +294,7 @@
 		return 1
 
 /mob/living/silicon/remove_language(var/rem_language, var/can_understand=0)
-	var/var/datum/language/removed_language = all_languages[rem_language]
+	var/datum/language/removed_language = all_languages[rem_language]
 	if(!removed_language) //Oh, look. Now you're trying to remove what does not exist.
 		return
 
@@ -346,3 +360,16 @@
 
 /mob/living/silicon/get_survive_objective()
 	return new /datum/objective/siliconsurvive
+
+/mob/living/silicon/Topic(href, href_list)
+	. = ..()
+	if(usr && (src != usr))
+		return
+	if(href_list["ui_key"] == "state_laws")
+		return state_laws_Topic(href, href_list) //state_laws.dm
+
+/mob/living/silicon/ui_interact(mob/user, ui_key, datum/nanoui/ui = null, force_open = 1)
+	if(..())
+		return
+	if(ui_key == "state_laws")
+		return state_laws_ui_interact(user, ui_key, ui, force_open) //state_laws.dm

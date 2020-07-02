@@ -15,6 +15,7 @@
 	var/activity_log = ""
 	layer = BINARY_PIPE_LAYER
 	var/on = FALSE
+	 
 
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
@@ -35,6 +36,26 @@
 	update_icon()
 	air1.volume = 200
 	air2.volume = 200
+
+
+/obj/machinery/atmospherics/binary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/binary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/binary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
@@ -86,6 +107,19 @@
 		node2.build_network()
 	return 1
 
+//this is used when a machine_flags = WRENCHMOVE machine gets anchored down
+//we want to check that it doesn't form any connections where there is already a connection
+/obj/machinery/atmospherics/binary/wrenchAnchor(var/mob/user, var/obj/item/I)
+	//this has to be first because ..() already starts the anchoring
+	if(!anchored)
+		for(var/obj/machinery/atmospherics/M in src.loc)
+			if(M == src || M.piping_layer != src.piping_layer && !(M.pipe_flags & ALL_LAYER))
+				continue
+			if(M.has_initialize_direction(dir | turn(dir, 180), PIPE_TYPE_STANDARD))
+				to_chat(user, "<span class='warning'>There is already a pipe connection in that direction.</span>")
+				return FALSE
+	. = ..()
+
 // Housekeeping and pipe network stuff below
 /obj/machinery/atmospherics/binary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(reference == node1)
@@ -120,6 +154,9 @@
 	if(node1 && node2)
 		return
 
+	// While other pipes/atmos machinery can use whatever node for any other pipe,
+	// most binary pumps must specifically have the succ end on node1, and the blow
+	// end on node2.
 	node1 = findConnecting(turn(dir, 180))
 	node2 = findConnecting(dir)
 

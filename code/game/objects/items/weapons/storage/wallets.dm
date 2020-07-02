@@ -33,7 +33,7 @@
 	var/obj/item/weapon/card/id/front_id = null
 
 
-/obj/item/weapon/storage/wallet/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/wallet/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
 	. = ..(W, new_location)
 	if(.)
 		if(W == front_id)
@@ -90,3 +90,7 @@
 			new item2_type(src)
 		if(item3_type)
 			new item3_type(src)
+
+/obj/item/weapon/storage/wallet/trader/New()
+	..()
+	dispense_cash(rand(150,250),src)

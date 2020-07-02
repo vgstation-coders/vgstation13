@@ -18,6 +18,7 @@
 	/datum/rcd_schematic/rsf/candle,
 	/datum/rcd_schematic/rsf/dice,
 	/datum/rcd_schematic/rsf/cards,
+	/datum/rcd_schematic/rsf/unecards,
 	/datum/rcd_schematic/rsf/cardboard,
 	/datum/rcd_schematic/rsf/zippo,
 	/datum/rcd_schematic/rsf/camera,
@@ -49,6 +50,7 @@
 	/datum/rcd_schematic/rsf/candle,
 	/datum/rcd_schematic/rsf/dice,
 	/datum/rcd_schematic/rsf/cards,
+	/datum/rcd_schematic/rsf/unecards,
 	/datum/rcd_schematic/rsf/cardboard,
 	/datum/rcd_schematic/rsf/zippo,
 	/datum/rcd_schematic/rsf/camera,
@@ -79,4 +81,4 @@
 	/datum/rcd_schematic/rsf/ushanka,
 	/datum/rcd_schematic/rsf/vodka,
 	/datum/rcd_schematic/rsf/greyshit_vodka
-	)	
+	)

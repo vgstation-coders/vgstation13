@@ -43,7 +43,7 @@
 
 /obj/item/weapon/storage/toolbox/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is [pick("staving","robusting")] \his head in with the [src.name]! It looks like \he's  trying to commit suicide!</span>")
-	return (BRUTELOSS)
+	return (SUICIDE_ACT_BRUTELOSS)
 
 
 /obj/item/weapon/storage/toolbox/emergency

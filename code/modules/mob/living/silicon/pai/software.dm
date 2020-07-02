@@ -108,7 +108,7 @@
 				</div>
 			</body>
 			</html>"}
-	usr << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
+	src << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
 	onclose(usr, "pai")
 	temp = null
 	return
@@ -116,7 +116,7 @@
 
 
 /mob/living/silicon/pai/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(href_list["priv_msg"])	// Admin-PMs were triggering the interface popup. Hopefully this will stop it.
 		return
@@ -146,49 +146,7 @@
 			radio.attack_self(src)
 
 		if("image")
-			var/newImage = input("Select your new display image.", "Display Image", "Happy") in list("Happy", "Cat", "Extremely Happy",
-								 "Face", "Laugh", "Off", "Sad", "Angry", "What", "longface", "sick", "high", "love", "electric", "pissed",
-								 "nose", "kawaii", "cry")
-			var/pID = 1
-
-			switch(newImage)
-				if("Happy")
-					pID = 1
-				if("Cat")
-					pID = 2
-				if("Extremely Happy")
-					pID = 3
-				if("Face")
-					pID = 4
-				if("Laugh")
-					pID = 5
-				if("Off")
-					pID = 6
-				if("Sad")
-					pID = 7
-				if("Angry")
-					pID = 8
-				if("What")
-					pID = 9
-				if("longface")
-					pID = 10
-				if("sick")
-					pID = 11
-				if("high")
-					pID = 12
-				if("love")
-					pID = 13
-				if("electric")
-					pID = 14
-				if("pissed")
-					pID = 15
-				if("nose")
-					pID = 16
-				if("kawaii")
-					pID = 17
-				if("cry")
-					pID = 18
-			card.setEmotion(pID)
+			card.setEmotion()
 
 		if("signaller")
 
@@ -294,18 +252,19 @@
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if("foodsynth")
 			if(href_list["food"] && chargeloop("foodsynth"))
-				var/obj/item/weapon/reagent_containers/food/F
-				switch (href_list["food"])
-					if("donut")
-						F = new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(get_turf(src))
-					if("banana")
-						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
-					else
-						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
-				var/mob/M = get_holder_of_type(loc, /mob)
-				if(M)
-					M.put_in_hands(F)
-				playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
+				var/foodType = href_list["food"]
+				var/found = FALSE
+				for (var/name in synthable_default_food)
+					if ("[synthable_default_food[name]]" == foodType)
+						found = TRUE
+						break
+
+				if (found)
+					var/obj/item/weapon/reagent_containers/food/F = new foodType(get_turf(src))
+					var/mob/M = get_holder_of_type(loc, /mob)
+					if(M)
+						M.put_in_hands(F)
+					playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
 			if(href_list["toggle"])
 				lighted = !lighted
@@ -415,7 +374,7 @@
 /mob/living/silicon/pai/proc/directives()
 	var/dat = ""
 
-	dat += {"[(master) ? "Your master: [master] ([master_dna])" : "You are bound to no one."]
+	dat += {"[(master) ? "Your master: [master] ([dna.unique_enzymes])" : "You are bound to no one."]
 		<br><br>
 		<a href='byond://?src=\ref[src];software=directive;getdna=1'>Request carrier DNA sample</a><br>
 		<h2>Directives</h2><br>
@@ -438,9 +397,9 @@
 		var/turf/T = get_turf(P.loc)
 		for (var/mob/v in viewers(T))
 			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 1, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
-		var/datum/dna/dna = M.dna
+		var/datum/dna/test_dna = M.dna
 		to_chat(P, "<font color = red><h3>[M]'s UE string : [dna.unique_enzymes]</h3></font>")
-		if(dna.unique_enzymes == P.master_dna)
+		if(test_dna.unique_enzymes == P.dna.unique_enzymes)
 			to_chat(P, "<b>DNA is a match to stored Master DNA.</b>")
 		else
 			to_chat(P, "<b>DNA does not match stored Master DNA.</b>")
@@ -512,25 +471,11 @@
 				M = M.loc
 				if(istype(M, /turf))
 					temp = "Error: No biological host found. <br>"
+					dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 					subscreen = 0
 					return dat
-		dat += {"Bioscan Results for [M]: <br>
-		Overall Status: [M.stat > 1 ? "dead" : "[M.health]% healthy"] <br>
-		Scan Breakdown: <br>
-		Respiratory: [M.getOxyLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getOxyLoss()]</font><br>
-		Toxicology: [M.getToxLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getToxLoss()]</font><br>
-		Burns: [M.getFireLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getFireLoss()]</font><br>
-		Structural Integrity: [M.getBruteLoss() > 50 ? "<font color=#FF5555>" : "<font color=#55FF55>"][M.getBruteLoss()]</font><br>
-		Body Temperature: [M.bodytemperature-T0C]&deg;C ([M.bodytemperature*1.8-459.67]&deg;F)<br>
-		"}
-		for(var/datum/disease/D in M.viruses)
-			dat += {"<h4>Infection Detected.</h4><br>
-					 Name: [D.name]<br>
-					 Type: [D.spread]<br>
-					 Stage: [D.stage]/[D.max_stages]<br>
-					 Possible Cure: [D.cure]<br>
-					"}
-		dat += "<a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
+				dat += healthanalyze(M, src, TRUE)
+		dat += "<br/><a href='byond://?src=\ref[src];software=medicalsupplement;sub=0'>Return to Records</a><br>"
 	return dat
 
 // Security Records
@@ -596,10 +541,10 @@
 			dat += "Air Pressure: [round(pressure,0.1)] kPa<br>"
 
 			if (total_moles)
-				var/o2_level = environment.oxygen/total_moles
-				var/n2_level = environment.nitrogen/total_moles
-				var/co2_level = environment.carbon_dioxide/total_moles
-				var/plasma_level = environment.toxins/total_moles
+				var/o2_level = environment[GAS_OXYGEN]/total_moles
+				var/n2_level = environment[GAS_NITROGEN]/total_moles
+				var/co2_level = environment[GAS_CARBON]/total_moles
+				var/plasma_level = environment[GAS_PLASMA]/total_moles
 				var/unknown_level =  1-(o2_level+n2_level+co2_level+plasma_level)
 
 				dat += {"Nitrogen: [round(n2_level*100)]%<br>
@@ -630,13 +575,6 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/hackloop(var/obj/machinery/M)
 	if(M)
 		hacktarget = M
-	var/turf/T = get_turf(loc)
-	if(prob(10))
-		for(var/mob/living/silicon/ai/AI in player_list)
-			if(T.loc)
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress in [T.loc].</b></font>")
-			else
-				to_chat(AI, "<font color = red><b>Network Alert: Brute-force encryption crack in progress. Unable to pinpoint location.</b></font>")
 	while(hackprogress < 100)
 		if(hacktarget && get_dist(src, hacktarget) <= 1)
 			hackprogress += rand(10, 20)
@@ -662,11 +600,13 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareChem()
 	var/dat = "<h3>Chemical Synthesizer</h3>"
 	if(!charge)
-		dat += {"Available Chemicals:<br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=tricordrazine'>Tricordrazine</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=coffee'>Coffee</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=sodiumchloride'>Salt</a> <br>
-		<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=paismoke'>Smoke</a> <br>"}
+		dat += "Default Chemicals:<br>"
+		for(var/chem in synthable_default_chems)
+			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_default_chems[chem]]'>[chem]</a> <br>"
+		if(SOFT_MS in software)
+			dat += "<br>Medical Supplement Chemicals:<br>"
+			for(var/chem in synthable_medical_chems)
+				dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_medical_chems[chem]]'>[chem]</a> <br>"
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
 	return dat
@@ -674,10 +614,9 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareFood()
 	var/dat = "<h3>Nutrition Synthesizer</h3>"
 	if(!charge)
-		dat += {"Available Culinary Deployments:<br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=mess'>Burn it!</a> <br>"}
+		dat += "Available Culinary Deployments:<br>"
+		for(var/grub in synthable_default_food)
+			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=[synthable_default_food[grub]]'>[grub]</a> <br>"
 	else
 		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying at 100%."
 	return dat

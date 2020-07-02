@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+		body {
+			overflow: hidden;
+			background-color: black;
+			color: white;
+			font-family: Georgia, serif
+		}
+		#container {
+			position: relative;
+			width: 100vw;
+			text-align: center;
+		}
+		#splash {
+			display: table-cell;
+			height: 100vh;
+		}
+		.crewtable{
+			width: 100%;
+			table-layout: fixed;
+			white-space: nowrap;
+		}
+		.crewtable td{
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-size: 1.17em;
+		}
+		.actorname {
+			text-align: right;
+			float: right;
+		}
+		.actorsegue {
+			text-align: center;
+			width: 40px;
+		}
+		.actorrole {
+			float: left;
+			text-align: left;
+		}
+		.letterboxer {
+			width: 10%;
+		}
+		.disclaimers {
+			font-family: Arial, Helvetica, sans-serif
+		}
+		h1, h2, h3 {
+			display: inline;
+			font-weight:normal;
+		}
+
+
+	</style>
+</head>
+<body>
+	<div id="sounddiv">
+		<!-- the soundplayer gets added here via javascript! !-->
+	</div>
+	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
+		<tr>
+			<td class="letterboxer"></td>
+			<td id="splash">
+				IF YOU CAN SEE THIS, TELL A CODER WHAT HAPPENED!
+				HELPFUL DETAILS INCLUDE:
+				WAS THE ROUNDEND DELAYED?
+				WAS THE SERVER MANUALLY REBOOTED?
+				DID YOU PLAY MORE THAN ONE ROUND IN A ROW WITHOUT CLOSING THE GAME?
+				DID CREDITS FAIL TO DISPLAY FOR YOU LAST ROUND?
+				DID THE CREDITS AUDIO FAIL TO PLAY FOR YOU?
+				IS YOUR CONNECTION SLOW/WERE YOU TORRENTING DOLPHIN PORN JUST NOW?
+				DID THIS TEXT DISPLAY FOR ANYONE ELSE?
+				WHAT ARE YOUR CREDITS AND JINGLE PREFERENCES SET TO?
+			</td>
+			<td class="letterboxer"></td>
+		</tr>
+		<tr>
+			<td class="letterboxer"></td>
+			<td id="marquee">
+				IF YOU CAN SEE THIS, THE TEXT HAS STARTED SCROLLING,
+				SO REALLY TELL A CODER WHAT HAPPENED!
+			</td>
+			<td class="letterboxer"></td>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+
+	//Runs a route within byond, client or server side. Consider this "ehjax" for byond.
+	function runByond(uri) {
+		window.location = uri;
+	}
+
+	var splashyText = [];
+	var lastinterval; //just for the auto-suicide failsafe
+	var scrollSpeed = 25; //miliseconds between each pixel we go up
+	var splashTime = 2000; //in miliseconds
+	var started = 0;
+	var initialized = 0;
+
+	function setScrollingText(text){
+		document.getElementById("marquee").innerHTML = text;
+	}
+	function setSplashyText(text){
+		splashyText = text.split("%<splashbreak>");
+		splashyText = splashyText.slice(0, -1); //get rid of the last %<splashbreak>
+	}
+	function setAudio(link, autoplay){
+		var sound = document.getElementById("sounddiv");
+		if(autoplay == 1){
+			sound.innerHTML = "<audio id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
+		}
+		else{
+			sound.innerHTML = "<audio id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
+		}
+	}
+
+	function setupCredits(scrollyString, splashyString, theme, newScrollSpeed, newSplashTime){
+		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
+		if(newScrollSpeed !== undefined) {scrollSpeed = parseInt(newScrollSpeed)}
+
+		setScrollingText(scrollyString);
+		setSplashyText(splashyString);
+		applyTheme(theme);
+		initialized = 1;
+	}
+
+	function startAudio(){
+		var sound = document.getElementById("soundplayer");
+		sound.play();
+	}
+
+	function setVolume(newVolume){
+		var volume = 75;
+		if(newVolume !== undefined) {volume = parseInt(newVolume)}
+
+		var sound = document.getElementById("soundplayer");
+		sound.volume = volume/100; //HTML takes a value from 0 to 1.
+	}
+
+	function startCredits(){
+		if(started == 1 || initialized == 0)
+			return;
+		started = 1;
+		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
+		splashLoop(splashyText, 0, splashTime);
+		setTimeout(rollMarquee, splashyText.length*splashTime, scrollSpeed);
+	}
+
+	function splashLoop(arr, index, time){
+		if(index === arr.length){
+			return;
+		}
+		document.getElementById("splash").innerHTML = arr[index];
+		setTimeout(splashLoop, time, arr, index+1, time)
+	}
+
+	function rollMarquee(speed){
+		var div = document.getElementById("container");
+		var bottom = 0;
+		lastinterval = setInterval(function () {
+			bottom = bottom + 1;
+			div.style.bottom = bottom + "px";
+			if(bottom > 6000){ //RUNAWAY CREDIT ALART - no seriously this might keep going if the server doesn't start back up
+				//debugMe()
+				clearInterval(lastinterval);
+				commitSuicide();
+				return;
+			}
+		}, speed);
+	}
+
+	function applyTheme(theme){
+		if(!theme)
+			return
+		switch(theme){
+			case "clown":
+				var crayons = ['red', 'orange', 'yellow', 'green', 'cyan', 'purple'];
+				var divs = document.getElementsByTagName('*');
+				for(var i=0; i<divs.length; i++) {
+					divs[i].style.color = crayons[Math.floor(Math.random() * crayons.length)]
+					divs[i].style.fontFamily = "Comic Sans MS, cursive, sans-serif";
+				}
+				break;
+			case "cooks":
+				document.getElementsByTagName("style")[0].innerHTML += ".actorname, .actorrole, #splash, #episodename {color: rgb(230, 209, 64); font-family: Georgia, serif; font-variant: small-caps; font-style: italic; font-weight: 400; text-shadow: rgb(123, 96, 38) 1px 1px 0px, rgb(123, 96, 38) 1px 1px 0.1px; overflow: visible !important;} #episodename {font-size: 175%;}"
+				break;
+		}
+	}
+
+	function debugMe(){
+		document.documentElement.innerHTML = "<textarea rows='4' cols='50'>" + document.documentElement.innerHTML + "</" + "textarea>";
+		runByond('byond://winset?id=mapwindow.credits;is-visible=true');
+	};
+
+	function commitSuicide(){
+		document.documentElement.innerHTML = '';
+		runByond('byond://winset?id=mapwindow.credits;is-visible=false');
+	};
+	</script>
+</body>
+</html>

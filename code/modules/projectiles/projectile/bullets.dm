@@ -8,6 +8,7 @@
 	penetration = 5 //bullets can now by default move through up to 5 windows, or 2 reinforced windows, or 1 plasma window. (reinforced plasma windows still have enough dampening to completely block them)
 	flag = "bullet"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
+	projectile_speed = 0.5
 	var/embed = 1
 	var/embed_message = TRUE
 
@@ -32,6 +33,42 @@
 	kill_count = 1 //Limits the range to one tile
 	embed = 0
 
+/obj/item/projectile/bullet/weakbullet
+	name = "weak bullet"
+	icon_state = "bbshell"
+	damage = 10
+	stun = 3
+	weaken = 5
+	embed = 0
+	projectile_speed = 0.5
+
+/obj/item/projectile/bullet/weakbullet/booze
+	name = "booze bullet"
+	projectile_speed = 0.5
+
+/obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
+	if(..(target, blocked))
+		var/mob/living/M = target
+		M.dizziness += 20
+		M:slurring += 20
+		M.confused += 20
+		M.eye_blurry += 20
+		M.drowsyness += 20
+		if(M.dizziness <= 150)
+			M.Dizzy(150)
+			M.dizziness = 150
+		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
+			M.paralysis += 2
+			M.dizziness += 10
+			M:slurring += 10
+			M.confused += 10
+			M.eye_blurry += 10
+			M.drowsyness += 10
+			A.volume += 5 //Because we can
+			M.dizziness += 10
+		return 1
+	return 0
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
@@ -43,13 +80,16 @@
 /obj/item/projectile/bullet/shrapnel/New()
 	..()
 	kill_count = rand(6,10)
-
-
+	damage = rand(15,75)
 
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
 	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/New()
+	..()
+	damage = rand(5,45)
 
 /obj/item/projectile/bullet/shrapnel/small/plasma
 
@@ -58,50 +98,22 @@
 	color = "#BF5FFF"
 	damage = 35
 
-
-/obj/item/projectile/bullet/weakbullet
-	name = "weak bullet"
-	icon_state = "bbshell"
-	damage = 10
-	stun = 5
-	weaken = 5
-	embed = 0
-/obj/item/projectile/bullet/weakbullet/booze
-	name = "booze bullet"
-	on_hit(var/atom/target, var/blocked = 0)
-		if(..(target, blocked))
-			var/mob/living/M = target
-			M.dizziness += 20
-			M:slurring += 20
-			M.confused += 20
-			M.eye_blurry += 20
-			M.drowsyness += 20
-			if(M.dizziness <= 150)
-				M.Dizzy(150)
-				M.dizziness = 150
-			for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-				M.paralysis += 2
-				M.dizziness += 10
-				M:slurring += 10
-				M.confused += 10
-				M.eye_blurry += 10
-				M.drowsyness += 10
-				A.volume += 5 //Because we can
-				M.dizziness += 10
-			return 1
-		return 0
+/obj/item/projectile/bullet/shrapnel/small/plasma/New()
+	..()
+	damage = rand(10,60)
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
 	stun = 5
 	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
 	stun = 0
 	weaken = 0
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -140,6 +152,7 @@
 	stun = 5
 	weaken = 5
 	penetration = 1
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
@@ -160,23 +173,7 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
-
-/obj/item/projectile/bullet/suffocationbullet//How does this even work?
-	name = "CO2 bullet"
-	damage = 20
-	damage_type = OXY
-
-
-/obj/item/projectile/bullet/cyanideround
-	name = "poison bullet"
-	damage = 40
-	damage_type = TOX
-
-
-/obj/item/projectile/bullet/burstbullet//I think this one needs something for the on hit
-	name = "exploding bullet"
-	damage = 20
-
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
@@ -188,6 +185,39 @@
 
 /obj/item/projectile/bullet/a762
 	damage = 25
+
+
+obj/item/projectile/bullet/suffocationbullet
+	name = "CO2 bullet"
+	damage = 20
+	damage_type = OXY
+
+
+/obj/item/projectile/bullet/cyanideround
+	name = "poison bullet"
+	damage = 40
+	damage_type = TOX
+
+/obj/item/projectile/bullet/burstbullet
+	name = "exploding bullet"
+	embed = 0
+	damage = 0
+
+/obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
+	..()
+	explosion(target, 0,1,1,5)
+	qdel(src)
+
+/obj/item/projectile/bullet/boombullet
+	name = "small exploding bullet"
+	embed = 0
+	damage = 0
+	penetration = -1
+
+/obj/item/projectile/bullet/boombullet/to_bump(var/atom/target)
+	..()
+	explosion(target, 0,0,1,5)
+	qdel(src)
 
 #define SPUR_FULL_POWER 4
 #define SPUR_HIGH_POWER 3
@@ -288,7 +318,8 @@
 
 	if(istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
 		returnToPool(A)
 
@@ -343,7 +374,7 @@
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
 	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -368,6 +399,7 @@
 	weaken = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS
 	penetration = 10
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/beegun
 	name = "bee"
@@ -425,9 +457,16 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if(istype(atarget, /mob/living) && damage >= 200)
 		var/mob/living/M = atarget
 		M.gib()
+	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
+		var/obj/machinery/singularity/narsie/N = atarget
+		if(!N.wounded)
+			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
+		N.wounded++
+		bullet_die()
+		return
 	else
 		..()
 
@@ -441,13 +480,12 @@
 				if(M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 
-/obj/item/projectile/bullet/APS/OnDeath()
-	var/turf/T = get_turf(src)
-	new /obj/item/stack/rods(T)
+/obj/item/projectile/bullet/APS/cultify()
+	return
 
 /obj/item/projectile/bullet/stinger
 	name = "alien stinger"
-	damage = 5
+	damage = 15
 	damage_type = TOX
 	flag = "bio"
 	fire_sound = 'sound/weapons/hivehand.ogg'
@@ -610,20 +648,15 @@
 
 /obj/item/projectile/bullet/fire_plume/proc/create_puff()
 	if(gas_jet)
-		if(gas_jet.total_moles())
-			var/total_moles = gas_jet.total_moles()
-			var/o2_concentration = gas_jet.oxygen/total_moles
-			var/n2_concentration = gas_jet.nitrogen/total_moles
-			var/co2_concentration = gas_jet.carbon_dioxide/total_moles
-			var/plasma_concentration = gas_jet.toxins/total_moles
-			var/n2o_concentration = null
+		var/total_moles = gas_jet.total_moles
+		if(total_moles)
+			var/o2_concentration = gas_jet[GAS_OXYGEN] / total_moles
+			var/n2_concentration = gas_jet[GAS_NITROGEN] / total_moles
+			var/co2_concentration = gas_jet[GAS_CARBON] / total_moles
+			var/plasma_concentration = gas_jet[GAS_PLASMA] / total_moles
+			var/n2o_concentration = gas_jet[GAS_SLEEPING] / total_moles
 
 			var/datum/gas_mixture/gas_dispersal = gas_jet.remove(original_total_moles/10)
-
-			if(gas_jet.trace_gases.len)
-				for(var/datum/gas/G in gas_jet.trace_gases)
-					if(istype(G, /datum/gas/sleeping_agent))
-						n2o_concentration = G.moles/total_moles
 
 			var/gas_type = null
 
@@ -644,9 +677,9 @@
 	if(!gas_jet)
 		return
 
-	if(gas_jet.total_moles())
-		var/jet_total_moles = gas_jet.total_moles()
-		var/toxin_concentration = gas_jet.toxins/jet_total_moles
+	var/jet_total_moles = gas_jet.total_moles
+	if(jet_total_moles)
+		var/toxin_concentration = gas_jet[GAS_PLASMA] / jet_total_moles
 		if(!(toxin_concentration > 0.01))
 			create_puff()
 			return
@@ -656,9 +689,9 @@
 	if(!has_O2_in_mix && T)
 		var/turf/location = get_turf(src)
 		var/datum/gas_mixture/turf_gases = location.return_air()
-		var/turf_total_moles = turf_gases.total_moles()
+		var/turf_total_moles = turf_gases.total_moles
 		if(turf_total_moles)
-			var/o2_concentration = turf_gases.oxygen/turf_total_moles
+			var/o2_concentration = turf_gases[GAS_OXYGEN] / turf_total_moles
 			if(!(o2_concentration > 0.01))
 				create_puff()
 				return
@@ -709,6 +742,24 @@
 
 /obj/item/projectile/bullet/fire_plume/ex_act()
 	return
+
+/obj/item/projectile/bullet/fire_plume/dragonsbreath //for the shotgun shells
+	has_O2_in_mix = 0
+	max_range = 5
+	burn_strength = 0
+	burn_damage = 10
+	jet_pressure = 0
+	gas_jet = null
+
+/obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
+	..()
+	var/datum/gas_mixture/firemix = new /datum/gas_mixture
+	firemix.adjust_gas(GAS_PLASMA, 666)
+	gas_jet = firemix
+	jet_pressure = firemix.return_pressure()
+	gas_jet.temperature = 383.15
+	burn_strength = gas_jet.temperature
+
 
 /obj/item/projectile/bullet/mahoganut
 	name = "mahogany nut"
@@ -806,6 +857,26 @@
 			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
+/obj/item/projectile/bullet/buckshot/admin
+	name = "admin buckshot pellet"
+	icon_state = "buckshot"
+	damage = 101
+	penetration = 20
+	rotate = 0
+	type_to_fire = /obj/item/projectile/bullet/hecate
+
+/obj/item/projectile/bullet/buckshot/admin/New(atom/T, var/C = 0)
+	..(T)
+	is_child = C
+
+/obj/item/projectile/bullet/buckshot/admin/OnFired()
+	if(!is_child)
+		for(var/I = 1; I <=total_amount_to_fire-1; I++)
+			var/obj/item/projectile/bullet/hecate/B = new type_to_fire(src.loc, 1)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+	..()
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
@@ -855,3 +926,79 @@
 	icon = 'icons/obj/food.dmi'
 	icon_state = "faggot"
 	damage = 10
+
+/obj/item/projectile/bullet/syringe
+	name = "syringe"
+	icon_state = "syringe"
+	damage = 0
+	nodamage = 1
+	phase_type = null
+	penetration = 0
+	fire_sound = 'sound/items/syringeproj.ogg'
+	travel_range = 6
+	custom_impact = TRUE
+	decay_type = /obj/item/weapon/reagent_containers/syringe/broken
+	var/capacity = 15
+	var/stealthy = FALSE
+
+/obj/item/projectile/bullet/syringe/New(atom/A, var/obj/item/weapon/reagent_containers/syringe/source_syringe)
+	..()
+	if(source_syringe)
+		create_reagents(source_syringe.reagents.total_volume)
+		source_syringe.reagents.trans_to(src, source_syringe.reagents.total_volume)
+		name = source_syringe.name
+	else
+		create_reagents(capacity)
+
+/obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
+	if(!A)
+		return
+	if(!..())
+		return FALSE
+	if(ismob(A))
+		var/mob/M = A
+		var/blocked
+		if(ishuman(M))
+			var/mob/living/carbon/human/H = M
+			if(H.species && (H.species.chem_flags & NO_INJECT))
+				H.visible_message("<span class='warning'>\The [src] bounces harmlessly off of \the [H].</span>", "<span class='notice'>\The [src] bounces off you harmlessly and breaks as it hits the ground.</span>")
+				return
+
+			blocked = istype(H.wear_suit, /obj/item/clothing/suit/space)
+		//Syringe gun attack logging by Yvarov
+		var/R
+		if(reagents.total_volume)
+			for(var/datum/reagent/E in reagents.reagent_list)
+				R += E.id + " ("
+				R += num2text(E.volume) + "),"
+			M.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			firer.attack_log += "\[[time_stamp()]\] <b>[firer]/[firer.ckey]</b> shot <b>[M]/[M.ckey]</b> with \a <b>[src]</b> ([R]) [blocked ? "\[BLOCKED\]" : ""]"
+			msg_admin_attack("[firer] ([firer.ckey]) shot [M] ([M.ckey]) with \a [src] ([R]) [blocked ? "\[BLOCKED\]" : ""] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer.x];Y=[firer.y];Z=[firer.z]'>JMP</a>)")
+
+		if(!blocked || stealthy)
+			reagents.trans_to(M, reagents.total_volume)
+			if(!stealthy)
+				M.visible_message("<span class='danger'>\The [M] is hit by \the [src]!</span>")
+			else
+				to_chat(M, "<span class='danger'>You feel a slight prick.</span>")
+
+		else
+			var/mob/living/carbon/human/H = M
+			H.visible_message("<span class='danger'>\The [H] is hit by \the [src], but \his [H.wear_suit] blocked it!</span>") // Fuck you validhunters.
+
+/obj/item/projectile/bullet/syringe/dart
+	stealthy = TRUE
+
+/obj/item/projectile/bullet/syringe/candycane
+	name = "Candycane"
+	icon_state = "candycane"
+	nodamage = 0
+	damage = 25
+	capacity = 15
+	decay_type = null
+	custom_impact = null
+
+/obj/item/projectile/bullet/syringe/candycane/New()
+	..()
+	reagents.add_reagent(DIABEETUSOL, 10)
+	reagents.add_reagent(CARAMEL, 5)

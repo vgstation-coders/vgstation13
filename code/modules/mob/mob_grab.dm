@@ -110,7 +110,8 @@
 			L.adjustOxyLoss(1)
 
 	if(state >= GRAB_KILL)
-		affecting.Knockdown(5)	//Should keep you down unless you get help.
+		affecting.Stun(5) //Should keep you down unless you get help.
+		affecting.Knockdown(5)
 		affecting.losebreath = min(affecting.losebreath + 1, 3) //builds up to 3 over a few seconds
 		affecting.stuttering = max(affecting.stuttering, 6)
 		if(isliving(affecting) && affecting.losebreath >= 3) //if you've been choked for a few seconds
@@ -241,10 +242,6 @@
 			can_eat = TRUE
 		else if(isalien(user) && iscarbon(affecting))
 			can_eat = TRUE
-		else if(ishuman(user))
-			var/mob/living/carbon/human/H = user
-			if(ishorrorform(H) && iscarbon(affecting))
-				can_eat = TRUE
 		if(can_eat)
 			var/mob/living/carbon/attacker = user
 			if(locate(/mob) in attacker.stomach_contents)

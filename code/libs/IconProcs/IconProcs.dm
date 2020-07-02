@@ -10,76 +10,75 @@
 
 #define TO_HEX_DIGIT(n) ascii2text((n&15) + ((n&15)<10 ? 48 : 87))
 
-icon
-	// Multiply all alpha values by this float
-	proc/ChangeOpacity(opacity = 1.0)
-		MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,opacity, 0,0,0,0)
+// Multiply all alpha values by this float
+icon/proc/ChangeOpacity(opacity = 1.0)
+	MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,opacity, 0,0,0,0)
 
-	// Convert to grayscale
-	proc/GrayScale()
-		MapColors(0.3,0.3,0.3, 0.59,0.59,0.59, 0.11,0.11,0.11, 0,0,0)
+// Convert to grayscale
+icon/proc/GrayScale()
+	MapColors(0.3,0.3,0.3, 0.59,0.59,0.59, 0.11,0.11,0.11, 0,0,0)
 
-	proc/ColorTone(tone)
-		GrayScale()
+icon/proc/ColorTone(tone)
+	GrayScale()
 
-		var/list/TONE = ReadRGB(tone)
-		var/gray = round(TONE[1]*0.3 + TONE[2]*0.59 + TONE[3]*0.11, 1)
+	var/list/TONE = ReadRGB(tone)
+	var/gray = round(TONE[1]*0.3 + TONE[2]*0.59 + TONE[3]*0.11, 1)
 
-		var/icon/upper = (255-gray) ? new(src) : null
+	var/icon/upper = (255-gray) ? new(src) : null
 
-		if(gray)
-			MapColors(255/gray,0,0, 0,255/gray,0, 0,0,255/gray, 0,0,0)
-			Blend(tone, ICON_MULTIPLY)
-		else
-			SetIntensity(0)
-		if(255-gray)
-			upper.Blend(rgb(gray,gray,gray), ICON_SUBTRACT)
-			upper.MapColors((255-TONE[1])/(255-gray),0,0,0, 0,(255-TONE[2])/(255-gray),0,0, 0,0,(255-TONE[3])/(255-gray),0, 0,0,0,0, 0,0,0,1)
-			Blend(upper, ICON_ADD)
+	if(gray)
+		MapColors(255/gray,0,0, 0,255/gray,0, 0,0,255/gray, 0,0,0)
+		Blend(tone, ICON_MULTIPLY)
+	else
+		SetIntensity(0)
+	if(255-gray)
+		upper.Blend(rgb(gray,gray,gray), ICON_SUBTRACT)
+		upper.MapColors((255-TONE[1])/(255-gray),0,0,0, 0,(255-TONE[2])/(255-gray),0,0, 0,0,(255-TONE[3])/(255-gray),0, 0,0,0,0, 0,0,0,1)
+		Blend(upper, ICON_ADD)
 
-	// Take the minimum color of two icons; combine transparency as if blending with ICON_ADD
-	proc/MinColors(icon)
-		var/icon/I = new(src)
-		I.Opaque()
-		I.Blend(icon, ICON_SUBTRACT)
-		Blend(I, ICON_SUBTRACT)
+// Take the minimum color of two icons; combine transparency as if blending with ICON_ADD
+icon/proc/MinColors(icon)
+	var/icon/I = new(src)
+	I.Opaque()
+	I.Blend(icon, ICON_SUBTRACT)
+	Blend(I, ICON_SUBTRACT)
 
-	// Take the maximum color of two icons; combine opacity as if blending with ICON_OR
-	proc/MaxColors(icon)
-		var/icon/I
-		if(isicon(icon))
-			I = new(icon)
-		else
-			// solid color
-			I = new(src)
-			I.Blend("#000000", ICON_OVERLAY)
-			I.SwapColor("#000000", null)
-			I.Blend(icon, ICON_OVERLAY)
-		var/icon/J = new(src)
-		J.Opaque()
-		I.Blend(J, ICON_SUBTRACT)
-		Blend(I, ICON_OR)
+// Take the maximum color of two icons; combine opacity as if blending with ICON_OR
+icon/proc/MaxColors(icon)
+	var/icon/I
+	if(isicon(icon))
+		I = new(icon)
+	else
+		// solid color
+		I = new(src)
+		I.Blend("#000000", ICON_OVERLAY)
+		I.SwapColor("#000000", null)
+		I.Blend(icon, ICON_OVERLAY)
+	var/icon/J = new(src)
+	J.Opaque()
+	I.Blend(J, ICON_SUBTRACT)
+	Blend(I, ICON_OR)
 
-	// make this icon fully opaque--transparent pixels become black
-	proc/Opaque(background = "#000000")
-		SwapColor(null, background)
-		MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0, 0,0,0,1)
+// make this icon fully opaque--transparent pixels become black
+icon/proc/Opaque(background = "#000000")
+	SwapColor(null, background)
+	MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0, 0,0,0,1)
 
-	// Change a grayscale icon into a white icon where the original color becomes the alpha
-	// I.e., black -> transparent, gray -> translucent white, white -> solid white
-	proc/BecomeAlphaMask()
-		SwapColor(null, "#000000ff")	// don't let transparent become gray
-		MapColors(0,0,0,0.3, 0,0,0,0.59, 0,0,0,0.11, 0,0,0,0, 1,1,1,0)
+// Change a grayscale icon into a white icon where the original color becomes the alpha
+// I.e., black -> transparent, gray -> translucent white, white -> solid white
+icon/proc/BecomeAlphaMask()
+	SwapColor(null, "#000000ff")	// don't let transparent become gray
+	MapColors(0,0,0,0.3, 0,0,0,0.59, 0,0,0,0.11, 0,0,0,0, 1,1,1,0)
 
-	proc/UseAlphaMask(mask)
-		Opaque()
-		AddAlphaMask(mask)
+icon/proc/UseAlphaMask(mask)
+	Opaque()
+	AddAlphaMask(mask)
 
-	proc/AddAlphaMask(mask)
-		var/icon/M = new(mask)
-		M.Blend("#ffffff", ICON_SUBTRACT)
-		// apply mask
-		Blend(M, ICON_ADD)
+icon/proc/AddAlphaMask(mask)
+	var/icon/M = new(mask)
+	M.Blend("#ffffff", ICON_SUBTRACT)
+	// apply mask
+	Blend(M, ICON_ADD)
 
 /*
 	HSV format is represented as "#hhhssvv" or "#hhhssvvaa"

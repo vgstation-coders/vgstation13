@@ -15,22 +15,6 @@
 // each contiguous network of cables & nodes
 ////////////////////////////////////////////
 
-/*
-Powernet procs :
-/datum/powernet/New()
-/datum/powernet/Del()
-/datum/powernet/Destroy()
-/datum/powernet/resetVariables()
-/datum/powernet/proc/remove_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/add_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/remove_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/add_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/reset()
-/datum/powernet/proc/get_electrocute_damage()
-/datum/powernet/proc/set_to_build()
-/obj/structure/cable/proc/rebuild_from()
-*/
-
 /datum/powernet/New()
 	powernets |= src
 
@@ -219,7 +203,7 @@ var/global/powernets_broke = 0
 		else if(istype(AM,/obj/structure/cable))
 			var/obj/structure/cable/C = AM
 			if(!unmarked || !C.powernet)
-				if(C.d1 == d || C.d2 == d)
+				if(C.hasDir(d))
 					. += C
 
 // rebuild all power networks from scratch - only called at world creation or by the admin verb
@@ -308,6 +292,9 @@ var/global/powernets_broke = 0
 	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
 		return 0
 
+	if(M_NO_SHOCK in M.mutations)
+		return 0
+
 	if(istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 
@@ -336,7 +323,7 @@ var/global/powernets_broke = 0
 		cell = power_source
 	else if(istype(power_source, /obj/machinery/power/apc))
 		var/obj/machinery/power/apc/apc = power_source
-		cell = apc.cell
+		cell = apc.get_cell()
 
 		if(apc.terminal)
 			PN = apc.terminal.powernet

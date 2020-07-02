@@ -1,7 +1,3 @@
-#define HEAT_DAMAGE_LEVEL_1 2 //Amount of damage applied when your body temperature just passes the 360.15k safety point
-#define HEAT_DAMAGE_LEVEL_2 4 //Amount of damage applied when your body temperature passes the 400K point
-#define HEAT_DAMAGE_LEVEL_3 8 //Amount of damage applied when your body temperature passes the 460K point and you are on fire
-
 #define LARVA_GROW_TIME 100
 
 /mob/living/carbon/alien
@@ -27,7 +23,7 @@
 
 	var/move_delay_add = 0 // movement delay to add
 
-	status_flags = CANPARALYSE|CANPUSH
+	status_flags = CANPARALYSE|CANPUSH|UNPACIFIABLE
 	var/heal_rate = 2.5
 	var/plasma_rate = 5
 
@@ -121,7 +117,8 @@ In all, this is a lot like the monkey code. /N
 		var/turf/heat_turf = get_turf(src)
 		loc_temp = heat_turf.temperature
 	else if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell))
-		loc_temp = loc:air_contents.temperature
+		var/obj/machinery/atmospherics/unary/cryo_cell/tube = loc
+		loc_temp = tube.air_contents.temperature
 	else
 		loc_temp = environment.temperature
 
@@ -300,7 +297,3 @@ Des: Removes all infected images from the alien.
 
 /mob/living/carbon/alien/has_eyes()
 	return 0
-
-#undef HEAT_DAMAGE_LEVEL_1
-#undef HEAT_DAMAGE_LEVEL_2
-#undef HEAT_DAMAGE_LEVEL_3

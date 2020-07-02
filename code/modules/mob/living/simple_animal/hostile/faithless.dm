@@ -50,6 +50,7 @@
 	if(istype(L))
 		if(prob(12))
 			L.Knockdown(3)
+			L.Stun(3)
 			L.visible_message("<span class='danger'>\the [src] knocks down \the [L]!</span>")
 
 /mob/living/simple_animal/hostile/faithless/cult
@@ -59,8 +60,10 @@
 
 /mob/living/simple_animal/hostile/faithless/cult/CanAttack(var/atom/the_target)
 	//IF WE ARE CULT MONSTERS (those who spawn after Nar-Sie has risen) THEN WE DON'T ATTACK CULTISTS
-	if(iscultist(the_target))
-		return 0
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
 	return ..(the_target)
 
 /mob/living/simple_animal/hostile/faithless/cult/cultify()
@@ -95,7 +98,7 @@
 			var/obj/machinery/door/D = A
 			if(D.density)
 				D.open()
-		else if(istype(A,/obj/structure/cult/pylon))
+		else if(istype(A,/obj/structure/cult_legacy/pylon))
 			A.attack_animal(src)
 		else if(istype(A, /obj/structure/window) || istype(A, /obj/structure/closet) || istype(A, /obj/structure/table) || istype(A, /obj/structure/grille) || istype(A, /obj/structure/rack))
 			A.attack_animal(src)

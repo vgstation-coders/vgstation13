@@ -5,7 +5,7 @@
 	return
 
 /mob/dead/cultify()
-	if(icon_state != "ghost-narsie")
+	if(invisibility != 0 || icon_state != "ghost-narsie")
 		icon = 'icons/mob/mob.dmi'
 		icon_state = "ghost-narsie"
 		overlays = 0
@@ -31,7 +31,8 @@
 				overlays += H.obj_overlays[HEAD_LAYER]
 				overlays += H.obj_overlays[HANDCUFF_LAYER]
 		invisibility = 0
-		to_chat(src, "<span class='sinister'>Even as a non-corporal being, you can feel Nar-Sie's presence altering you. You are now visible to everyone.</span>")
+		//to_chat(src, "<span class='sinister'>Even as a non-corporal being, you can feel Nar-Sie's presence altering you. You are now visible to everyone.</span>")
+		flick("rune_seer",src)
 
 /mob/dead/update_canmove()
 	return

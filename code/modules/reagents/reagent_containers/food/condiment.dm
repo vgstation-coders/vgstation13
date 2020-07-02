@@ -75,10 +75,6 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/I as obj, mob/user as mob) //We already have an attackby for weapons, but sure, whatever
-
-	return
-
 /obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
 	if(!flag || ismob(target))
 		return 0
@@ -173,6 +169,10 @@
 				name = SUGAR
 				desc = "Tasty space sugar!"
 				icon_state = SUGAR
+			if(CARAMEL)
+				name = CARAMEL
+				desc = "Tasty caramel cubes!"
+				icon_state = CARAMEL
 			if(CHEFSPECIAL)
 				name = "\improper Chef Excellence's Special Sauce"
 				desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
@@ -198,6 +198,14 @@
 				icon_state = CINNAMON
 			if(GRAVY)
 				icon_state = GRAVY
+			if(COCO)
+				name = "cocoa powder"
+				desc = "A vital component for making chocolate."
+				icon_state = COCO
+			if(MAYO)
+				name = "Mayonaise Jar"
+				desc = "Here be mayo" //placeholder desc
+				icon_state = MAYO
 			else
 				name = "misc condiment bottle"
 				desc = "Just your average condiment container."
@@ -240,7 +248,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/mustard
 	name = "mustard"
 	desc = "A spicy yellow paste."
@@ -248,7 +256,7 @@
 /obj/item/weapon/reagent_containers/food/condiment/mustard/New()
 	..()
 	reagents.add_reagent(MUSTARD, 50)
-	
+
 /obj/item/weapon/reagent_containers/food/condiment/relish
 	name = "relish"
 	desc = "A pickled cucumber jam. Tasty!"
@@ -328,6 +336,14 @@
 /obj/item/weapon/reagent_containers/food/condiment/sugar/New()
 	..()
 	reagents.add_reagent(SUGAR, 50)
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel
+	name = "caramel"
+	desc = "Tasty caramel cubes!"
+
+/obj/item/weapon/reagent_containers/food/condiment/caramel/New()
+	..()
+	reagents.add_reagent(CARAMEL, 50)
 
 /obj/item/weapon/reagent_containers/food/condiment/honey
 	name = "honey pot"
@@ -419,3 +435,12 @@
 /obj/item/weapon/reagent_containers/food/condiment/exotic/New()
 	..()
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
+
+
+/obj/item/weapon/reagent_containers/food/condiment/mayo
+	name = "mayonnaise jar"
+	desc = "we have such sights to show you."
+
+/obj/item/weapon/reagent_containers/food/condiment/mayo/New()
+	..()
+	reagents.add_reagent(MAYO, 50)

@@ -3,7 +3,7 @@
 /mob/living/carbon/human/proc/breathe()
 	if(flags & INVULNERABLE)
 		return
-	if(reagents.has_reagent(LEXORIN))
+	if(reagents.has_any_reagents(LEXORINS))
 		return
 	if(undergoing_hypothermia() == PROFOUND_HYPOTHERMIA) // we're not breathing. see handle_hypothermia.dm for details.
 		return
@@ -47,7 +47,7 @@
 				//
 			else if(isobj(loc))
 				var/obj/location_as_object = loc
-				breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+				breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 			else if(isturf(loc))
 				/*if(environment.return_pressure() > ONE_ATMOSPHERE)
 					//Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
@@ -66,19 +66,18 @@
 							rupture_lung()
 
 				//Handle filtering
+
 				var/block = 0
-				if(wear_mask)
-					if(wear_mask.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
+				var/list/blockers = list(wear_mask,glasses,head)
+				for (var/item in blockers)
+					var/obj/item/I = item
+					if (!istype(I))
+						continue
+					if (I.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
 						block = 1
-				if(glasses)
-					if(glasses.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-						block = 1
-				if(head)
-					if(head.clothing_flags & BLOCK_GAS_SMOKE_EFFECT)
-						block = 1
+						break
 
 				if(!block)
-
 					for(var/obj/effect/effect/smoke/chem/smoke in view(1, src)) //If there is smoke within one tile
 						if(smoke.reagents.total_volume)
 							smoke.reagents.reaction(src, INGEST)
@@ -87,6 +86,9 @@
 									smoke.reagents.copy_to(src, 10) //I dunno, maybe the reagents enter the blood stream through the lungs?
 							break //If they breathe in the nasty stuff once, no need to continue checking
 
+					//airborne viral spread/breathing
+					breath_airborne_diseases()
+
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
@@ -94,44 +96,30 @@
 
 	handle_breath(breath)
 
-	if(species.name == "Plasmaman") //For plasmamen only, fuck species modularity
+	if(species)
+		species.handle_environment(environment, src)
 
-		//Check if we're wearing our biosuit and mask.
-		if(!(istype(wear_suit, /obj/item/clothing/suit/space/plasmaman) || istype(wear_suit,/obj/item/clothing/suit/space/bomberman)) || !(istype(head,/obj/item/clothing/head/helmet/space/plasmaman) || istype(head,/obj/item/clothing/head/helmet/space/bomberman)))
-			//testing("Plasmaman [src] leakin'.  coverflags=[cover_flags]")
-			//OH FUCK HE LEAKIN'.
-			//This was OP.
-			//environment.adjust(tx = environment.total_moles()*BREATH_PERCENTAGE) //About one breath's worth. (I know we aren't breathing it out, but this should be about the right amount)
-			if(environment)
-				if(environment.oxygen && environment.total_moles() && (environment.oxygen / environment.total_moles()) >= OXYCONCEN_PLASMEN_IGNITION) //How's the concentration doing?
-					if(!on_fire)
-						to_chat(src, "<span class='warning'>Your body reacts with the atmosphere and bursts into flame!</span>")
-					adjust_fire_stacks(0.5)
-					IgniteMob()
-		else
-			var/obj/item/clothing/suit/space/plasmaman/PS=wear_suit
-			if(istype(PS))
-				if(fire_stacks > 0)
-					PS.Extinguish(src)
-				else
-					PS.regulate_temp_of_wearer(src)
 
 
 	if(breath)
 		loc.assume_air(breath)
-
+/*
 		//Spread some viruses while we are at it
 		if(virus2 && virus2.len > 0)
-			if(prob(10) && get_infection_chance(src))
-//					log_debug("[src] : Exhaling some viruses")
-				for(var/mob/living/M in range(1,src))
-					if(can_be_infected(M))
-						spread_disease_to(src,M)
-
+			//if(get_infection_chance(src))//checking our own infection protections, so we don't spread an airborne virus if we're wearing internals
+			//	for(var/mob/living/M in range(1,src))
+			//		if(can_be_infected(M))
+			//			spread_disease_to(src,M)
+*/
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))
-			internal = null
+			if(wear_suit && isrig(wear_suit)) //But what if he's wearing a rigsuit?
+				var/obj/item/clothing/suit/space/rig/rig = wear_suit
+				if(!rig.T) //But if the rig has no internal tank...
+					internal = null
+			else
+				internal = null
 		if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS))
 			internal = null
 		if(internal)

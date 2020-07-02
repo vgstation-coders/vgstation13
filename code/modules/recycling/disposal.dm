@@ -62,6 +62,7 @@
 	update_icon()
 
 /obj/machinery/disposal/Destroy()
+	eject()
 	if(trunk)
 		if(trunk.disposal)
 			trunk.disposal = null
@@ -100,18 +101,18 @@
 
 	src.add_fingerprint(user)
 	if(mode<=0) // It's off
-		if(isscrewdriver(I))
+		if(I.is_screwdriver(user))
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
 		else if(iswelder(I) && mode==-1)
@@ -450,7 +451,8 @@
 		var/obj/item/I = mover
 		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
 			return
-		if(prob(75))
+		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
+		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
 			I.forceMove(src)
 			for(var/mob/M in viewers(src))
 				M.show_message("\the [I] lands in \the [src].", 1)
@@ -470,7 +472,7 @@
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
-	if(user.restrained() || !user.canmove)
+	if(user.restrained() || !user.canmove || user.incapacitated())
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
@@ -484,7 +486,7 @@
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
 			if(do_after(user,src,20))
-				if(dropping.locked_to || user.restrained() || !user.canmove)
+				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
 				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
 				add_fingerprint(user)
@@ -535,10 +537,6 @@
 	target.forceMove(src)
 	update_icon()
 
-/obj/machinery/disposal/Destroy()
-	eject()
-	..()
-
 // virtual disposal object
 // travels through pipes in lieu of actual items
 // contents will be items flushed by the disposal
@@ -558,7 +556,7 @@
 	for(var/mob/living/carbon/human/H in src)
 		if(H.is_fat() || H.is_bulky())
 			return TRUE
-	
+
 // Dislodge players whenever they're no longer fat or the holder is active for some reason.
 /obj/structure/disposalholder/proc/until_skinny()
 	spawn while(1) // Checking this is not a priority. Check whenever the server has a moment.
@@ -729,7 +727,7 @@
 	dir = 0				// dir will contain dominant direction for junction pipes
 	var/health = 10 	// health points 0-10
 	layer = DISPOSALS_PIPE_LAYER
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in New()
 	var/base_icon_state	// initial icon state on map
 	var/deconstructable = TRUE
 
@@ -743,6 +741,7 @@
 // new pipe, set the icon_state as on map
 /obj/structure/disposalpipe/New()
 	..()
+	plane = ABOVE_PLATING_PLANE //Set cables to the proper plane. They should NOT be on another plane outside of mapping preview
 	base_icon_state = icon_state
 
 
@@ -1594,15 +1593,15 @@
 	if(!I || !user || !deconstructable)
 		return
 	src.add_fingerprint(user)
-	if(isscrewdriver(I))
+	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)

@@ -37,6 +37,7 @@
 	var/powernet = null
 	var/list/records = null
 	var/contain_parts = 1
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
@@ -47,6 +48,12 @@
 	name = "Circuit board (Security Cameras)"
 	desc = "A circuit board for running a computer used for viewing security cameras."
 	build_path = /obj/machinery/computer/security
+/obj/item/weapon/circuitboard/security/wooden_tv
+	name = "Circuit board (Security Cameras TV)"
+	build_path = /obj/machinery/computer/security/wooden_tv
+/obj/item/weapon/circuitboard/security/spesstv
+	name = "Circuit board (high-definition Spess.TV telescreen)"
+	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
@@ -75,11 +82,11 @@
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."
 	build_path = /obj/machinery/computer/med_data
-/obj/item/weapon/circuitboard/pandemic
-	name = "Circuit board (PanD.E.M.I.C. 2200)"
-	desc = "A circuit board for running a computer used in Virology."
-	build_path = /obj/machinery/computer/pandemic
-	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
+///obj/item/weapon/circuitboard/pandemic
+//	name = "Circuit board (PanD.E.M.I.C. 2200)"
+//	desc = "A circuit board for running a computer used in Virology."
+//	build_path = /obj/machinery/computer/pandemic
+//	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	desc = "A circuit board for running a computer used in Genetics."
@@ -110,6 +117,10 @@
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
+/obj/item/weapon/circuitboard/security_alerts
+	name = "Circuit board (Security Records)"
+	desc = "A circuit board for running a computer used for viewing security alerts."
+	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
@@ -190,6 +201,10 @@
 	name = "Circuit board (Prisoner Management)"
 	desc = "A circuit board for running a computer used for monitoring and manipulating prisoner implants."
 	build_path = /obj/machinery/computer/prisoner
+/obj/item/weapon/circuitboard/labor
+	name = "Circuit board (Labor Administration)"
+	desc = "A circuit board for running a computer used for administrating station jobs."
+	build_path = /obj/machinery/computer/labor
 
 /obj/item/weapon/circuitboard/rdconsole
 	name = "Circuit Board (R&D Console)"
@@ -211,6 +226,10 @@
 	name = "Circuit Board (Pod Bay R&D Console)"
 	desc = "A circuit board for running a R&D console for the Pod Bay."
 	build_path = /obj/machinery/computer/rdconsole/pod
+/obj/item/weapon/circuitboard/rdconsole/derelict
+	name = "Circuit Board (Derelict R&D Console)"
+	desc = "A circuit board for running a R&D console for the Derelict."
+	build_path = /obj/machinery/computer/rdconsole/derelict
 
 /obj/item/weapon/circuitboard/mecha_control
 	name = "Circuit Board (Exosuit Control Console)"
@@ -266,11 +285,10 @@
 	desc = "A circuit board for running a computer used to manipulate telecommunications traffic."
 	build_path = /obj/machinery/computer/telecomms/traffic
 	origin_tech = Tc_PROGRAMMING + "=3"
-
-/obj/item/weapon/circuitboard/curefab
+/*/obj/item/weapon/circuitboard/curefab
 	name = "Circuit board (Cure fab)"
 	desc = "A circuit board for running a computer used to fabricate cures for virusses."
-	build_path = /obj/machinery/computer/curer
+	build_path = /obj/machinery/computer/curer*/
 /obj/item/weapon/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	desc = "A circuit board for running a computer used to splice DNA strands in virusses."
@@ -346,7 +364,7 @@
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			playsound(B.loc, 'sound/items/Welder.ogg', 30, 1)
+			I.playtoolsound(B.loc, 30)
 			if(user.get_inactive_hand() == src)
 				user.before_take_item(src)
 				user.put_in_hands(B)
@@ -378,7 +396,7 @@
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 1
 				return 1
 			if(iswelder(P))
@@ -387,14 +405,14 @@
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
 						return
-					playsound(src, 'sound/items/Welder.ogg', 50, 1)
+					WT.playtoolsound(src, 50)
 					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
 					drop_stack(sheet_type, loc, 5, user)
 					state = -1
 					qdel(src)
 				return 1
 		if(1)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
@@ -410,14 +428,14 @@
 				else
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
-			if(isscrewdriver(P) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(P.is_screwdriver(user) && circuit)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
@@ -425,8 +443,8 @@
 				src.circuit = null
 				return 1
 		if(2)
-			if(isscrewdriver(P) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(P.is_screwdriver(user) && circuit)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "1"
@@ -447,7 +465,7 @@
 				return 1
 		if(3)
 			if(iswirecutter(P))
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
@@ -470,14 +488,14 @@
 				return 1
 		if(4)
 			if(iscrowbar(P))
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
-			if(isscrewdriver(P))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			if(P.is_screwdriver(user))
+				P.playtoolsound(src, 50)
 				if(!circuit.build_path) // the board has been soldered away!
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
 					return

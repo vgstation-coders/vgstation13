@@ -5,7 +5,7 @@
 
 	anchored = 1
 
-	var/id_tag
+
 	var/frequency = 1439
 
 	var/on = 1
@@ -77,20 +77,18 @@
 			signal.data["temperature"] = round(air_sample.temperature,0.1)
 
 		if(output>=4)
-			var/total_moles = air_sample.total_moles()
+			var/total_moles = air_sample.total_moles
 			if(total_moles > 0)
-				if(output&4)
-					signal.data["oxygen"] = round(100*air_sample.oxygen/total_moles,0.1)
-				if(output&8)
-					signal.data["toxins"] = round(100*air_sample.toxins/total_moles,0.1)
-				if(output&16)
-					signal.data["nitrogen"] = round(100*air_sample.nitrogen/total_moles,0.1)
-				if(output&32)
-					signal.data["carbon_dioxide"] = round(100*air_sample.carbon_dioxide/total_moles,0.1)
-				if(output&64)
-					var/datum/gas/sleeping_agent/G = locate(/datum/gas/sleeping_agent) in air_sample.trace_gases
-					var/n2o_moles = G ? G.moles : 0
-					signal.data["nitrous_oxide"] = round(100 *n2o_moles/total_moles,0.1)
+				if(output & 4)
+					signal.data["oxygen"] = round(100 * air_sample[GAS_OXYGEN] / total_moles, 0.1)
+				if(output & 8)
+					signal.data["toxins"] = round(100 * air_sample[GAS_PLASMA] / total_moles, 0.1)
+				if(output & 16)
+					signal.data["nitrogen"] = round(100 * air_sample[GAS_NITROGEN] / total_moles, 0.1)
+				if(output & 32)
+					signal.data["carbon_dioxide"] = round(100 * air_sample[GAS_CARBON] / total_moles, 0.1)
+				if(output & 64)
+					signal.data["nitrous_oxide"] = round(100 * air_sample[GAS_SLEEPING] / total_moles, 0.1)
 			else
 				signal.data["oxygen"] = 0
 				signal.data["toxins"] = 0
@@ -106,13 +104,15 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 
 /obj/machinery/air_sensor/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'
@@ -283,7 +283,7 @@ font-weight:bold;
 		var/sensor = input(user, "Select a sensor:", "Sensor Data") as null|anything in sensor_list
 		if(!sensor)
 			return MT_ERROR
-		var/label = strip_html(input(user, "Choose a sensor label:", "Sensor Label") as text|null)
+		var/label = stripped_input(user, "Choose a sensor label:", "Sensor Label")
 		if(!label)
 			return MT_ERROR
 
@@ -331,7 +331,7 @@ font-weight:bold;
 	if(istype(O,/obj/machinery/air_sensor) || istype(O, /obj/machinery/meter))
 		return O:id_tag in sensors
 
-/obj/machinery/computer/general_air_control/linkWith(var/mob/user, var/obj/O, var/link/context)
+/obj/machinery/computer/general_air_control/linkWith(var/mob/user, var/obj/O, var/list/context)
 	sensors[O:id_tag] = reject_bad_name(input(user, "Choose a sensor label:", "Sensor Label") as text|null, allow_numbers=1)
 	return 1
 
@@ -519,7 +519,7 @@ font-weight:bold;
 		var/response=input(usr,"Set new pressure, in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		var/oldpressure = pressure_setting
 		pressure_setting = text2num(response)
-		pressure_setting = Clamp(pressure_setting, 0, 50*ONE_ATMOSPHERE)
+		pressure_setting = clamp(pressure_setting, 0, 50*ONE_ATMOSPHERE)
 		investigation_log(I_ATMOS,"'s output pressure set to [pressure_setting] from [oldpressure] by [key_name(usr)]")
 
 	if(!radio_connection)
@@ -539,7 +539,7 @@ font-weight:bold;
 		input_info = null
 		var/new_rate=input("Enter the new volume rate of the injector:","Injector Rate") as num
 		new_rate = text2num(new_rate)
-		new_rate = Clamp(new_rate, 0, new_rate)
+		new_rate = clamp(new_rate, 0, new_rate)
 		signal.data = list ("tag" = input_tag, "set_volume_rate"=new_rate)
 
 	else if(href_list["out_refresh_status"])
@@ -708,5 +708,3 @@ font-weight:bold;
 		)
 
 		radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
-
-

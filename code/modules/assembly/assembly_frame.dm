@@ -180,7 +180,7 @@
 		if(..())
 			return
 
-		new_index = Clamp(new_index, 1, assemblies.len)
+		new_index = clamp(new_index, 1, assemblies.len)
 
 		assemblies.Remove(AS)
 		assemblies.Insert(new_index, AS)
@@ -325,8 +325,7 @@
 		AS.toggle_secure() //Make it secured
 
 /obj/item/device/assembly_frame/proc/start_new_connection(obj/item/device/assembly/new_parent, obj/item/device/assembly/orphan)
-	var/list/active_connections = connections[new_parent
-	]
+	var/list/active_connections = connections[new_parent]
 	if(!active_connections) //If there ISN'T a list with connections
 		connections[new_parent] = list(orphan) //Make a new one
 	else

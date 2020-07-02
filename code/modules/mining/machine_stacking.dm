@@ -141,7 +141,6 @@
 	var/stack_amt = 50 //amount to stack before releassing.
 	var/max_moved = 100
 
-	var/id_tag//The ID of the stacker this console should control
 	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
@@ -210,7 +209,7 @@
 
 			stacks["[stackA.type]"] = stack
 			returnToPool(stackA)
-		//else if (istype(O, /obj/item/weapon/ore/slag))
+		//else if (istype(O, /obj/item/stack/ore/slag))
 		//	returnToPool(O)
 		else
 			A.forceMove(out_T)
@@ -312,7 +311,7 @@
 /obj/machinery/mineral/stacking_machine/multitool_topic(mob/user, list/href_list, obj/item/device/multitool/P)
 	if("changedir" in href_list)
 		var/changingdir = text2num(href_list["changedir"])
-		changingdir = Clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
+		changingdir = clamp(changingdir, 1, 2)//No runtimes from HREF exploits.
 
 		var/newdir = input("Select the new direction", name, "North") as null|anything in list("North", "South", "East", "West")
 		if(!newdir)
@@ -338,9 +337,6 @@
 	return ..()
 
 /obj/machinery/mineral/stacking_machine/Destroy()
-	id_tag = null
-
 	qdel(mover)
 	mover = null
-
 	. = ..()

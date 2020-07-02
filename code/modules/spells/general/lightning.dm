@@ -3,6 +3,7 @@
 	abbreviation = "LS"
 	desc = "Strike an enemy with a bolt of lightning."
 	user_type = USER_TYPE_WIZARD
+	specialization = SSOFFENSIVE
 	charge_max = 100
 	cooldown_min = 40
 	cooldown_reduc = 30
@@ -10,7 +11,7 @@
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0)
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3) //each level of power grants 1 additional target.
 
-	spell_flags = NEEDSCLOTHES|WAIT_FOR_CLICK
+	spell_flags = NEEDSCLOTHES | WAIT_FOR_CLICK | IS_HARMFUL
 	charge_type = Sp_RECHARGE
 	invocation = "ZAP MUTHA FUH KA"
 	invocation_type = SpI_SHOUT
@@ -112,6 +113,7 @@
 
 		spawn()
 			zapmuthafucka(user, L, bounces)
+		score["lightningwiz"]++
 
 /spell/lightning/proc/zapmuthafucka(var/mob/user, var/mob/living/target, var/chained = bounces, var/list/zapped = list(), var/oursound = null)
 	var/otarget = target
@@ -205,3 +207,8 @@
 					return "Allow the spell to arc up to 5 targets."
 		else
 			return ..()
+
+/spell/lightning/sith
+	basedamage = 25
+	invocation = "UNLIMITED POWER!"
+	user_type = USER_TYPE_OTHER

@@ -10,23 +10,13 @@
 	keytype = /obj/item/key/tractor
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/tractor
 
-/obj/structure/bed/chair/vehicle/tractor/update_mob()
-	if(!occupant)
-		return
-
-	switch(dir)
-		if(SOUTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 7 * PIXEL_MULTIPLIER
-		if(WEST)
-			occupant.pixel_x = 5 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(NORTH)
-			occupant.pixel_x = 0
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
-		if(EAST)
-			occupant.pixel_x = -5 * PIXEL_MULTIPLIER
-			occupant.pixel_y = 4 * PIXEL_MULTIPLIER
+/obj/structure/bed/chair/vehicle/tractor/make_offsets()
+	offsets = list(
+		"[SOUTH]" = list("x" = 0, "y" = 7 * PIXEL_MULTIPLIER),
+		"[WEST]" = list("x" = 5 * PIXEL_MULTIPLIER, "y" = 4 * PIXEL_MULTIPLIER),
+		"[NORTH]" = list("x" = 0, "y" = 4 * PIXEL_MULTIPLIER),
+		"[EAST]" = list("x" = -5 * PIXEL_MULTIPLIER, "y" = 4 * PIXEL_MULTIPLIER)
+		)
 
 /obj/structure/bed/chair/vehicle/tractor/handle_layer()
 	if(dir == NORTH)

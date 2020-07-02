@@ -3,7 +3,7 @@
 	voice_name = "rock"
 	speak_emote = list("grinds")
 	icon_state = "rock1"
-	meat_type = /obj/item/weapon/ore/diamond
+	meat_type = /obj/item/stack/ore/diamond
 	species_type = /mob/living/carbon/monkey/rock
 	flag = NO_BREATHE
 

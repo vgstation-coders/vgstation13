@@ -138,16 +138,16 @@
 	name = "\improper S'rendarr's Hand leaf"
 	singular_name = "S'rendarr's Hand leaf"
 	desc = "A poultice made of soft leaves that is rubbed on bruises."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "cabbage"
+	icon = 'icons/obj/hydroponics/shand.dmi'
+	icon_state = "pack"
 	heal_brute = 5
 
 /obj/item/stack/medical/ointment/tajaran
 	name = "\improper Messa's Tear petals"
 	singular_name = "Messa's Tear petals"
 	desc = "A poultice made of cold, blue petals that is rubbed on burns."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "ambrosiavulgaris"
+	icon = 'icons/obj/hydroponics/mtear.dmi'
+	icon_state = "pack"
 	heal_burn = 5
 
 
@@ -272,3 +272,11 @@
 			affecting.status |= ORGAN_SPLINTED
 			use(1)
 		return
+
+/obj/item/stack/medical/splint/ghetto
+	name = "ghetto splints"
+	icon_state = "ghettosplintcomplete"
+	desc = "A makeshift splint made out of rods, cable and a newspaper."
+	singular_name = "ghetto splint"
+	amount = 1
+	max_amount = 5

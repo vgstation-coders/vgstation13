@@ -3,6 +3,9 @@
 	endWhen = 450
 	var/list/drones_list = list()
 
+/datum/event/rogue_drone/can_start()
+	return 25
+
 /datum/event/rogue_drone/start()
 	//spawn them at the same place as carp
 	var/list/possible_spawns = list()
