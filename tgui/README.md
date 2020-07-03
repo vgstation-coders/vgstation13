@@ -176,7 +176,7 @@ See: [Component Reference](docs/component-reference.md).
 
 ## License
 
-Source code is covered by /tg/station's parent license - **AGPL-3.0**
+Source code is covered by /vg/station's parent license - **GPL-3.0**
 (see the main [README](../README.md)), unless otherwise indicated.
 
 Some files are annotated with a copyright header, which explicitly states
