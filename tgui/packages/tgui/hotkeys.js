@@ -251,7 +251,7 @@ export const hotKeyReducer = (state, action) => {
   if (type === 'hotKey') {
     const { ctrlKey, altKey, keyCode } = payload;
     // Toggle kitchen sink mode
-    if (ctrlKey && altKey && keyCode === KEY_EQUAL) {
+    if (ctrlKey && altKey && keyCode === KEY_0) {
       return {
         ...state,
         showKitchenSink: !state.showKitchenSink,
