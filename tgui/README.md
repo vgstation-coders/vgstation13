@@ -29,10 +29,6 @@ API to React. Take your time to read these guides:
 - [Inferno documentation](https://infernojs.org/docs/guides/components) -
 highlights differences with React.
 
-If you were already familiar with an older, Ractive-based tgui, and want
-to translate concepts between old and new tgui, read this
-[interface conversion guide](docs/converting-old-tgui-interfaces.md).
-
 ## Pre-requisites
 
 You will need these programs to start developing in tgui:
