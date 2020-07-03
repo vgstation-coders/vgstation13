@@ -126,17 +126,23 @@
 				bluespaceConduit += 1
 				playsound(src, 'sound/weapons/blaster.ogg', 10, 1)
 				to_chat(user, "<span class='notice'>The crystal is assimilated into the conduit!</span>")
+				qdel(A)
+				nanomanager.update_uis(src)
+				return
 			if(istype(A, /obj/item/bluespace_crystal/flawless))
 				bluespaceConduit += 300
 				playsound(src, 'sound/weapons/blaster-storm.ogg', 75, 1)
 				to_chat(user, "<span class='notice'>The bluespace conduit flashes violently before calming to a glow.</span>")
+				qdel(A)
+				nanomanager.update_uis(src)
+				return
 			else
 				bluespaceConduit += 3
 				playsound(src, 'sound/weapons/blaster.ogg', 25, 1)
 				to_chat(user, "<span class='notice'>The crystal is assimilated into the conduit!</span>")
-			qdel(A)
-			nanomanager.update_uis(src)
-			return
+				qdel(A)
+				nanomanager.update_uis(src)
+				return
 	if(istype(A, /obj/item/device/soulstone))
 		if(soulShardSafety != FALSE)
 			to_chat(user, "<span class='notice'>That slot is already full!</span>")
