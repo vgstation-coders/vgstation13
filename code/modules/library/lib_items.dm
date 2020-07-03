@@ -42,7 +42,7 @@
 
 	if(health <= 0)
 		visible_message("<span class='warning'>\The [src] breaks apart!</span>")
-		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 3)
+		new /obj/item/stack/sheet/wood(get_turf(src), 3)
 		qdel(src)
 
 /obj/structure/bookcase/attackby(obj/item/O as obj, mob/user as mob)
@@ -65,7 +65,7 @@
 			user.visible_message("<span class='warning'>[user] disassembles \the [src].</span>", \
 			"<span class='notice'>You disassemble \the [src].</span>")
 			busy = 0
-			getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 5)
+			new /obj/item/stack/sheet/wood(get_turf(src), 5)
 			qdel(src)
 			return
 		else

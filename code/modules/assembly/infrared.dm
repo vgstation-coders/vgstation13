@@ -28,7 +28,7 @@
 /obj/item/device/assembly/infra/Destroy(var/turf/loc)
 	processing_objects.Remove(src)
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	..()
 
@@ -51,7 +51,7 @@
 		process()
 	else
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		processing_objects.Remove(src)
 		playsound(T,'sound/weapons/egun_toggle_taser.ogg',70,0,-5)
@@ -63,7 +63,7 @@
 	if(!secured)
 		on = FALSE
 		if(beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		processing_objects.Remove(src)
 	update_icon()
@@ -88,7 +88,7 @@
 /obj/item/device/assembly/infra/process()
 	if(!on)
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		return
 	if(beam || !secured)
@@ -105,7 +105,7 @@
 		T = loc.loc
 	if(T)
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/infrared,T)
+			beam = new /obj/effect/beam/infrared(T)
 		beam.visible=visible
 		beam.dir = dir
 		beam.assembly = src
@@ -114,7 +114,7 @@
 
 /obj/item/device/assembly/infra/attack_hand()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	..()
 
@@ -124,7 +124,7 @@
 	..()
 	dir = t
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 
@@ -134,7 +134,7 @@
 	dir = holder.dir
 	holder.update_icon()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	return 1
 
@@ -190,7 +190,7 @@
 			dir = text2dir(choice)
 			update_icon()
 			if (beam)
-				returnToPool(beam)
+				qdel(beam)
 				beam = null
 			process()
 
@@ -225,11 +225,6 @@
 /obj/effect/beam/infrared/Destroy()
 	assembly = null
 	..()
-
-/obj/effect/beam/infrared/resetVariables()
-	..("sources", "children", "limit","visible", "left", "assembly", "invisibility", "puffed", "alpha", args)
-	children = list()
-	sources = list()
 
 /obj/effect/beam/infrared/get_damage()
 	return 0

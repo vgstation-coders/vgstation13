@@ -414,14 +414,14 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 		// If we have too many drips, remove them and spawn a proper blood splatter.
 		if(drips.len >= 5)
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
-				returnToPool(drop)
+				qdel(drop)
 		else
 			decal_type = /obj/effect/decal/cleanable/blood/drip
 
 	// Find a blood decal or create a new one.
 	B = locate(decal_type) in T
 	if(!B || (decal_type == /obj/effect/decal/cleanable/blood/drip))
-		B = getFromPool(decal_type,T)
+		B = new decal_type(T)
 		B.New(T)
 		if(decal_type == /obj/effect/decal/cleanable/blood/drip)
 			B.icon_state = pick(drip_icons)

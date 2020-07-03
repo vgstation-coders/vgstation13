@@ -43,16 +43,16 @@
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
 	if(mineral == "metal")
-		getFromPool(/obj/item/stack/sheet/metal, src, 2)
+		new /obj/item/stack/sheet/metal(src, 2)
 	else if(mineral == "wood")
-		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	else
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
-			getFromPool(M, src, 2)
+			new M(src, 2)
 
 	if(devastated)
-		getFromPool(/obj/item/stack/sheet/metal, src)
+		new /obj/item/stack/sheet/metal(src)
 	else
 		if(girder_type)
 			new girder_type(src)

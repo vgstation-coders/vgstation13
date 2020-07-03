@@ -71,7 +71,7 @@ var/list/infected_cleanables = list()
 					if (transfers_dna && C.blood_DNA)
 						blood_DNA |= C.blood_DNA.Copy()
 					amount += C.amount
-					returnToPool(C)
+					qdel(C)
 	spawn(1)//cleanables can get infected in many different ways when they spawn so it's much easier to handle the pathogen overlay here after a delay
 		if (virus2 && virus2.len > 0)
 			infected_cleanables += src
@@ -164,12 +164,6 @@ var/list/infected_cleanables = list()
 //		user.update_inv_gloves(1)
 //		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 //
-/obj/effect/decal/cleanable/resetVariables()
-	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
-	viruses = list()
-	virus2 = list()
-	blood_DNA = list()
-
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 

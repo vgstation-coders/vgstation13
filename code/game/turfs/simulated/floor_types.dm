@@ -43,9 +43,9 @@
 
 /turf/simulated/floor/vox/wood/New()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
-	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	..()
 
 /turf/simulated/floor/light
@@ -56,9 +56,9 @@
 
 /turf/simulated/floor/light/New()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
-	floor_tile = getFromPool(/obj/item/stack/tile/light, null)
+	floor_tile = new /obj/item/stack/tile/light(null)
 	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 	var/n = name //just in case commands rename it in the ..() call
 	..()
@@ -78,7 +78,7 @@
 	melt_temperature = 0 // Doesn't melt.
 
 /turf/simulated/floor/wood/New()
-	floor_tile = getFromPool(/obj/item/stack/tile/wood,null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	..()
 
 /turf/simulated/floor/vault
@@ -221,7 +221,7 @@
 /turf/simulated/floor/plating/New()
 	..()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
 
 
@@ -287,9 +287,9 @@
 
 /turf/simulated/floor/grass/New()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
-	floor_tile = getFromPool(/obj/item/stack/tile/grass, null)
+	floor_tile = new /obj/item/stack/tile/grass(null)
 	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
@@ -309,9 +309,9 @@
 
 /turf/simulated/floor/carpet/New()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
-	floor_tile = getFromPool(/obj/item/stack/tile/carpet, null)
+	floor_tile = new /obj/item/stack/tile/carpet(null)
 	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	if(!icon_state)
 		icon_state = initial(icon_state)
@@ -335,9 +335,9 @@
 
 /turf/simulated/floor/arcade/New()
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 		floor_tile = null
-	floor_tile = getFromPool(/obj/item/stack/tile/arcade, null)
+	floor_tile = new /obj/item/stack/tile/arcade(null)
 	..()
 
 /turf/simulated/floor/damaged

@@ -107,7 +107,7 @@
 /obj/structure/window/barricade/Destroy(var/brokenup)
 
 	setDensity(FALSE) //Sanity while we do the rest
-	getFromPool(materialtype, loc, sheetamount)
+	new materialtype(loc, sheetamount)
 
 	..()
 

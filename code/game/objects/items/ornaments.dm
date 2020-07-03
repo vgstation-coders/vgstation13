@@ -62,7 +62,7 @@
 	if(get_turf(src))
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src)) // Create a glass shard at the hit location!
+		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
 	qdel(src)
 
 /obj/item/ornament/red

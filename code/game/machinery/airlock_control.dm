@@ -100,7 +100,7 @@
 
 obj/machinery/door/airlock/proc/send_status()
 	if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -128,7 +128,7 @@ obj/machinery/door/airlock/Bumped(atom/AM)
 	if(istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
 		if(density && radio_connection && mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access)))
-			var/datum/signal/signal = getFromPool(/datum/signal)
+			var/datum/signal/signal = new /datum/signal
 			signal.transmission_method = 1 //radio signal
 			signal.data["tag"] = id_tag
 			signal.data["timestamp"] = world.time
@@ -199,7 +199,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 /obj/machinery/airlock_sensor/attack_hand(mob/user)
 	if(..())
 		return
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.data["tag"] = master_tag
 	signal.data["command"] = command
@@ -209,7 +209,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 
 /obj/machinery/airlock_sensor/process()
 	if(on)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -366,7 +366,7 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 		playsound(src, 'sound/machines/buzz-two.ogg', 20, 0, -1)
 
 	else if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = master_tag
 		signal.data["command"] = command

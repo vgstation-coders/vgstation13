@@ -44,7 +44,7 @@ var/list/wood_icons = list("wood","wood-broken")
 /turf/simulated/floor/New()
 	..()
 	if(!floor_tile)
-		floor_tile = getFromPool(/obj/item/stack/tile/plasteel, null)
+		floor_tile = new /obj/item/stack/tile/plasteel(null)
 		floor_tile.amount = 1
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
@@ -73,7 +73,7 @@ var/list/wood_icons = list("wood","wood-broken")
 				if (1)
 					src.ReplaceWithLattice()
 					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 				if(2)
 					src.ChangeTurf(get_underlying_turf())
@@ -84,7 +84,7 @@ var/list/wood_icons = list("wood","wood-broken")
 						src.break_tile()
 					src.hotspot_expose(1000,CELL_VOLUME,surfaces=1)
 					if(prob(33))
-						var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 		if(3.0)
 			if (prob(50))
@@ -97,7 +97,7 @@ var/list/wood_icons = list("wood","wood-broken")
 
 /turf/simulated/floor/add_dust()
 	if(!(locate(/obj/effect/decal/cleanable/dirt) in contents))
-		getFromPool(/obj/effect/decal/cleanable/dirt,src)
+		new /obj/effect/decal/cleanable/dirt(src)
 
 turf/simulated/floor/update_icon()
 
@@ -363,7 +363,7 @@ turf/simulated/floor/update_icon()
 
 	if(floor_tile)
 		//qdel(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
@@ -381,9 +381,9 @@ turf/simulated/floor/update_icon()
 //this proc.
 /turf/simulated/floor/proc/make_plasteel_floor(var/obj/item/stack/tile/plasteel/T = null)
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
-	floor_tile = getFromPool(T.type, null)
+	floor_tile = new T.type(null)
 	material = floor_tile.material
 	intact = 1
 	plane = TURF_PLANE
@@ -416,7 +416,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/light))
@@ -425,7 +425,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/light, null)
+	floor_tile = new /obj/item/stack/tile/light(null)
 
 	update_icon()
 	levelupdate()
@@ -438,7 +438,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/grass))
@@ -447,7 +447,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	update_icon()
 	levelupdate()
 
@@ -459,7 +459,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/wood))
@@ -468,7 +468,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/wood, null)
+	floor_tile = new /obj/item/stack/tile/wood(null)
 	update_icon()
 	levelupdate()
 
@@ -480,7 +480,7 @@ turf/simulated/floor/update_icon()
 	intact = 1
 	plane = TURF_PLANE
 	if(floor_tile)
-		returnToPool(floor_tile)
+		qdel(floor_tile)
 	floor_tile = null
 	if(T)
 		if(istype(T,/obj/item/stack/tile/carpet))
@@ -489,7 +489,7 @@ turf/simulated/floor/update_icon()
 			levelupdate()
 			return
 	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = getFromPool(/obj/item/stack/tile/carpet, null)
+	floor_tile = new /obj/item/stack/tile/carpet(null)
 
 	update_icon()
 	levelupdate()

@@ -67,7 +67,7 @@
 							icon_state="box_glass_circuit"
 				if (iswelder(P))
 					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+					new /obj/item/stack/sheet/metal(get_turf(src), 5)
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
@@ -184,7 +184,7 @@
 							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
-								returnToPool(O)
+								qdel(O)
 							new_machine.component_parts = list()
 							for(var/obj/O in src)
 								if(circuit.contain_parts) // things like disposal don't want their parts in them
@@ -235,7 +235,7 @@
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
 												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = getFromPool(I, src)
+												var/obj/item/stack/CC = new I(src)
 												CC.amount = camt
 												CC.update_icon()
 												CP.use(camt)
@@ -342,7 +342,7 @@ to destroy them and players will be able to make replacements.
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			returnToPool(src)
+			qdel(src)
 			return
 	else
 		return ..()

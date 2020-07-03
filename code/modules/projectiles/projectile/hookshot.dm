@@ -84,7 +84,7 @@
 		hookshot.hook = null
 	spawn()
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 
 /obj/item/projectile/hookshot/Destroy()
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from

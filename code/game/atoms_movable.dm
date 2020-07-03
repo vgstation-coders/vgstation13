@@ -66,10 +66,10 @@
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
-		getFromPool(/mob/virtualhearer, src)
+		new /mob/virtualhearer(src)
 
 	if(starting_materials)
-		materials = getFromPool(/datum/materials, src)
+		materials = new /datum/materials(src)
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
@@ -84,7 +84,7 @@
 		T.reconsider_lights()
 
 	if(materials)
-		returnToPool(materials)
+		qdel(materials)
 		materials = null
 
 	if(on_z_transition)
@@ -128,7 +128,7 @@
 	if((flags & HEAR) && !ismob(src))
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				returnToPool(VH)
+				qdel(VH)
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -298,7 +298,7 @@
 		var/mob/living/M = AM
 		for(var/obj/item/weapon/grab/G in M.grabbed_by)
 			if (istype(G, /obj/item/weapon/grab))
-				returnToPool(G)
+				qdel(G)
 
 	AM.locked_to = src
 	if (ismob(AM))
@@ -338,7 +338,7 @@
 	if(locking_categories_name.Find(id))
 		return locking_categories_name[id]
 
-	var/datum/locking_category/C = getFromPool(type, src)
+	var/datum/locking_category/C = new type(src)
 	C.name = id
 	locking_categories_name[id] = C
 	locking_categories += C
@@ -352,7 +352,7 @@
 		if (istext(category))
 			return
 
-		. = getFromPool(category, src)
+		. = new category(src)
 		locking_categories_name[category] = .
 		locking_categories += .
 
@@ -755,13 +755,13 @@
 ////////////
 /atom/movable/proc/addHear()
 	flags |= HEAR
-	getFromPool(/mob/virtualhearer, src)
+	new /mob/virtualhearer(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
 	for(var/mob/virtualhearer/VH in virtualhearers)
 		if(VH.attached == src)
-			returnToPool(VH)
+			qdel(VH)
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

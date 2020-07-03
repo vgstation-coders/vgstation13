@@ -154,7 +154,7 @@
 	if (istype(W, /obj/item/weapon/grab))
 		if(iscarbon(W:affecting))
 			take_victim(W:affecting,usr)
-			returnToPool(W)
+			qdel(W)
 			return
 	if(isrobot(user))
 		return

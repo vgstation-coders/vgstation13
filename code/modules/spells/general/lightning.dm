@@ -121,7 +121,7 @@
 	zapped.Add(target)
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
-	var/obj/item/projectile/beam/lightning/spell/L = getFromPool(/obj/item/projectile/beam/lightning/spell, T)
+	var/obj/item/projectile/beam/lightning/spell/L = new /obj/item/projectile/beam/lightning/spell(T)
 
 	if(!oursound)
 		oursound = pick(lightning_sound)
@@ -163,11 +163,11 @@
 			target.emp_act(2)
 			target.apply_damage((issilicon(target) ? basedamage*0.66 : basedamage), BURN, LIMB_CHEST, "blocked" = 0)
 	else if(target)
-		var/obj/item/projectile/beam/lightning/spell/B = getFromPool(/obj/item/projectile/beam/lightning/spell)
+		var/obj/item/projectile/beam/lightning/spell/B = new /obj/item/projectile/beam/lightning/spell
 		B.our_spell = src
 		B.damage = basedamage
 		target.bullet_act(B)
-		returnToPool(B)
+		qdel(B)
 	if(chained)
 		//DO IT AGAIN
 		var/mob/next_target

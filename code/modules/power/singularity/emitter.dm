@@ -94,13 +94,13 @@
 /obj/machinery/power/emitter/proc/update_beam()
 	if(active && powered)
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/emitter, loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir = dir
 			beam.emit(spawn_by=src)
 	else
 		if(beam)
 			beam._re_emit = 0
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 
 /obj/machinery/power/emitter/receive_signal(datum/signal/signal)
@@ -133,7 +133,7 @@
 			update_beam()
 
 /obj/machinery/power/emitter/Destroy()
-	returnToPool(beam)
+	qdel(beam)
 	message_admins("Emitter deleted at ([x],[y],[z] - <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>)",0,1)
 	log_game("Emitter deleted at ([x],[y],[z])")
 	investigation_log(I_SINGULO,"<font color='red'>deleted</font> at ([x],[y],[z])")
@@ -246,7 +246,7 @@
 			fire_delay = rand(20, 100)
 			shot_number = 0
 
-		//beam = getFromPool(/obj/item/projectile/beam/emitter, loc)
+		//beam = new /obj/item/projectile/beam/emitter(loc)
 		//beam.dir = dir
 		//playsound(src, 'sound/weapons/emitter.ogg', 25, 1)
 
@@ -329,11 +329,6 @@
 
 	//Notify prisms of power change.
 	var/event/power_change = new
-
-
-/obj/effect/beam/emitter/resetVariables()
-	..("base_state","power","power_change", args)
-	power_change = new
 
 /obj/effect/beam/emitter/proc/set_power(var/newpower = 1)
 	power = newpower

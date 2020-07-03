@@ -13,7 +13,7 @@
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
-		returnToPool(network)
+		qdel(network)
 	if(air && air.volume) //For the pipeline rebuild next tick
 		temporarily_store_air()
 		qdel(air)
@@ -21,11 +21,6 @@
 	//Null the fuck out of all these references
 	for(var/obj/machinery/atmospherics/pipe/M in members) //Edges are a subset of members
 		M.parent = null
-
-/datum/pipeline/resetVariables()
-	..("members", "edges")
-	members = list()
-	edges = list()
 
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
@@ -114,7 +109,7 @@
 
 /datum/pipeline/proc/return_network(obj/machinery/atmospherics/reference)
 	if(!network)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.build_network(src, null)
 			//technically passing these parameters should not be allowed
 			//however pipe_network.build_network(..) and pipeline.network_extend(...)

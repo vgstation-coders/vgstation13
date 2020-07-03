@@ -924,19 +924,19 @@ Thanks.
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
-				returnToPool(G)
+				qdel(G)
 			else
 				if (G.state == GRAB_AGGRESSIVE)
 					if (prob(25))
 						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>", \
 							drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s hug!</span>")
-						returnToPool(G)
+						qdel(G)
 				else
 					if (G.state == GRAB_NECK)
 						if (prob(5))
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>", \
 								drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s passionate hug!</span>")
-							returnToPool(G)
+							qdel(G)
 		if(resisting)
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
@@ -1591,7 +1591,7 @@ Thanks.
 	if(!holder_type)
 		return 0
 
-	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
+	var/obj/item/weapon/holder/D = new holder_type(loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
@@ -1599,7 +1599,7 @@ Thanks.
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 		return 1
 	else
-		returnToPool(D)
+		qdel(D)
 
 	return 0
 
@@ -1748,7 +1748,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
-				returnToPool(G)
+				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
 	if(isitem(item))
@@ -2018,7 +2018,7 @@ Thanks.
 					strength += V.infectionchance
 				strength = round(strength/airborne_viruses.len)
 				while (strength > 0)//stronger viruses create more clouds at once
-					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 					strength -= 40
 
 /mob/living/proc/handle_virus_updates()

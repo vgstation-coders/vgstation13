@@ -265,7 +265,7 @@
 			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			new /obj/structure/conveyor_assembly(loc,dir)
-			getFromPool(/obj/item/stack/sheet/metal, loc, 3)
+			new /obj/item/stack/sheet/metal(loc, 3)
 			qdel(src)
 			return 1
 	. = ..()
@@ -517,7 +517,7 @@
 
 /obj/machinery/conveyor_switch/proc/send_command(var/command)
 	if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source=src
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag

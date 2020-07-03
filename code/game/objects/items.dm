@@ -890,7 +890,7 @@
 		return
 
 	if(!wielded)
-		wielded = getFromPool(/obj/item/offhand)
+		wielded = new /obj/item/offhand
 
 		//Long line ahead, let's break that up!
 		//
@@ -922,7 +922,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			returnToPool(wielded)
+			qdel(wielded)
 			wielded = null
 	update_wield(user)
 

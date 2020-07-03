@@ -13,14 +13,14 @@
 /datum/rcd_schematic/New(var/obj/item/device/rcd/n_master)
 	master = n_master
 	. = ..()
-	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
+	ourobj = new /obj/abstract/screen/schematics(null, src)
 
 /datum/rcd_schematic/Destroy()
 	master = null
 	if(ourobj)
 		for(var/client/C in clients)
 			C.screen.Remove(ourobj)
-		returnToPool(ourobj)
+		qdel(ourobj)
 		ourobj = null
 
 /datum/rcd_schematic/proc/show()

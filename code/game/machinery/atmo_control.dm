@@ -62,7 +62,7 @@
 
 /obj/machinery/air_sensor/process()
 	if(on)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -502,7 +502,7 @@ font-weight:bold;
 	send_signal(list("tag"=device, "status"))
 
 /obj/machinery/computer/general_air_control/large_tank_control/proc/send_signal(var/list/data)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data=data
@@ -524,7 +524,7 @@ font-weight:bold;
 
 	if(!radio_connection)
 		return 0
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	if(href_list["in_refresh_status"])
@@ -590,7 +590,7 @@ font-weight:bold;
 				if(data["temperature"] <= on_temperature)
 					injecting = 1
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 
@@ -664,7 +664,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(
@@ -683,7 +683,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(
@@ -698,7 +698,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(

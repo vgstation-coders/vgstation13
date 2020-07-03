@@ -77,9 +77,9 @@
 	update_icon()
 
 	if(network1)
-		returnToPool(network1)
+		qdel(network1)
 	if(network3)
-		returnToPool(network3)
+		qdel(network3)
 	build_network()
 
 	if(network1&&network2)
@@ -103,9 +103,9 @@
 	update_icon()
 
 	if(network1)
-		returnToPool(network1)
+		qdel(network1)
 	if(network2)
-		returnToPool(network2)
+		qdel(network2)
 	build_network()
 
 	if(network1&&network3)

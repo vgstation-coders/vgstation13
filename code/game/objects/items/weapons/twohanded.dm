@@ -19,14 +19,14 @@
 
 /obj/item/offhand/dropped(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 
 
 /obj/item/offhand/unwield(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 

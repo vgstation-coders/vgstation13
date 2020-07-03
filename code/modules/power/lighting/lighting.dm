@@ -38,7 +38,7 @@
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
 				return
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")

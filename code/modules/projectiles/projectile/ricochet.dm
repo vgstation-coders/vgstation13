@@ -140,7 +140,7 @@
 	else
 		OnDeath()
 		loc = null
-		returnToPool(src)
+		qdel(src)
 		return
 
 	var/turf/newspawn = locate(T1.x + X_spawn, T1.y + Y_spawn, z)
@@ -204,7 +204,7 @@
 			pos_from = WEST
 
 /obj/item/projectile/ricochet/proc/bulletdies(var/atom/A = null)
-	var/obj/effect/overlay/beam/impact = getFromPool(/obj/effect/overlay/beam,get_turf(src),10,0,'icons/obj/projectiles_impacts.dmi')
+	var/obj/effect/overlay/beam/impact = new /obj/effect/overlay/beam(get_turf(src), 10, 0, 'icons/obj/projectiles_impacts.dmi')
 	if(A)
 		switch(get_dir(src,A))
 			if(NORTH)
@@ -221,7 +221,7 @@
 	spawn()
 		setDensity(FALSE)
 		invisibility = 101
-		returnToPool(src)
+		qdel(src)
 		OnDeath()
 
 /obj/item/projectile/ricochet/to_bump(atom/A as mob|obj|turf|area)

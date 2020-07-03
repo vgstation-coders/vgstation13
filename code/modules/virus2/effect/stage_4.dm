@@ -329,7 +329,7 @@
 					meatslab.throw_at(Tx, i, 3)
 
 					if(!Tx.density)
-						var/obj/effect/decal/cleanable/blood/gibs/D = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+						var/obj/effect/decal/cleanable/blood/gibs/D = new /obj/effect/decal/cleanable/blood/gibs(Tx)
 						D.New(Tx,i)
 
 			if(2) // Losing a limb
@@ -1010,7 +1010,7 @@
 			H.my_appearance.b_eyes = old_b_eyes
 			H.update_body()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	if (emitter)
 		emitter.callOnStartMove -= "\ref[src]"
@@ -1024,7 +1024,7 @@
 
 /datum/disease2/effect/emitter/on_death(var/mob/living/carbon/mob)
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /datum/disease2/effect/emitter/proc/ready()
@@ -1059,15 +1059,15 @@
 /datum/disease2/effect/emitter/proc/update_emitter()
 	if (!ready())
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		return
 	if (!beam)
 		if (!ismouse(emitter))
-			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 			beam.full_damage = 10 * multiplier
 		else
-			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes/mouse(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)
@@ -1082,7 +1082,7 @@
 
 /datum/disease2/effect/emitter/proc/update_emitter_start()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /datum/disease2/effect/emitter/proc/update_emitter_end()
@@ -1090,10 +1090,10 @@
 		return
 	if (!beam)
 		if (!ismouse(emitter))
-			beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 			beam.full_damage = 10 * multiplier
 		else
-			beam = getFromPool(/obj/effect/beam/emitter/eyes/mouse, emitter.loc)
+			beam = new /obj/effect/beam/emitter/eyes/mouse(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)

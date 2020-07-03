@@ -155,7 +155,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
-	var/obj/item/projectile/test/in_chamber = getFromPool(/obj/item/projectile/test, get_step_to(user, target)) //Making the test....
+	var/obj/item/projectile/test/in_chamber = new /obj/item/projectile/test(get_step_to(user, target)) //Making the test...)
 	in_chamber.target = target
 	in_chamber.ttarget = target //what the fuck
 	in_chamber.flags = flags //Set the flags...
@@ -163,12 +163,8 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	returnToPool(in_chamber)
+	qdel(in_chamber)
 	return output //Send it back to the gun!
-
-/obj/item/projectile/resetVariables()
-	..("permutated")
-	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))
@@ -540,12 +536,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/bullet_die()
 	OnDeath()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
         spawn()
                 OnDeath()
-                returnToPool(src)
+                qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
@@ -575,11 +571,11 @@ var/list/impact_master = list()
 	if(!dir)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	if(kill_count < 1)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0

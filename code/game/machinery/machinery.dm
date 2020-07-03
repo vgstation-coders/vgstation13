@@ -497,7 +497,7 @@ Class Procs:
 
 //just something silly to delete the machine while still leaving something behind
 /obj/machinery/proc/smashDestroy(var/destroy_chance = 50)
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 2)
 	spillContents(destroy_chance)
 	qdel(src)
 

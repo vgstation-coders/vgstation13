@@ -397,7 +397,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 			return
 
 	if (W.is_wrench(user) && can_disassemble())
@@ -651,7 +651,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 
 	else if (user.a_intent == I_HURT)
 		user.do_attack_animation(src, W)

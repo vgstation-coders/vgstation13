@@ -168,8 +168,8 @@
 		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
-	getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 4)
+	new /obj/item/stack/rods(get_turf(src), 2)
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people

@@ -346,7 +346,7 @@
 
 	var/new_type = pick(possible_spawns)
 	if(new_type == /obj/item/stack/sheet/metal)
-		new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		new_item = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		new_item = new new_type(get_turf(src))
 	new_item.amount = rand(5,45)
@@ -489,9 +489,9 @@
 
 /datum/find/shard/spawn_item()
 	if(prob(50))
-		return getFromPool(/obj/item/weapon/shard)
+		return new /obj/item/weapon/shard
 	else
-		return getFromPool(/obj/item/weapon/shard/plasma)
+		return new /obj/item/weapon/shard/plasma
 
 /datum/find/rods
 	find_ID = ARCHAEO_RODS

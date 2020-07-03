@@ -267,7 +267,7 @@
 			speech.frequency = secure_radio_connections[channel]
 			if(!channels[channel])
 				say_testing(loc, "\[Radio\] - Unable to find channel \"[channel]\".")
-				returnToPool(speech)
+				qdel(speech)
 				return
 		else
 			speech.frequency = frequency
@@ -335,7 +335,7 @@
 
 	if(subspace_transmission)
 		// First, we want to generate a new radio signal
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 2 // 2 would be a subspace transmission.
 									   // transmission_method could probably be enumerated through #define. Would be neater.
 
@@ -385,7 +385,7 @@
 			R.receive_signal(signal)
 
 		// Receiving code can be located in Telecommunications.dm
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 
@@ -398,7 +398,7 @@
 		filter_type = 1
 
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 2
 
 
@@ -442,13 +442,13 @@
 
 		if(signal.data["done"] && (position.z in signal.data["level"]))
 			// we're done here.
-			returnToPool(speech)
+			qdel(speech)
 			return
 
 		// Oh my god; the comms are down or something because the signal hasn't been broadcasted yet in our level.
 		// Send a mundane broadcast with limited targets:
 		Broadcast_Message(speech, voicemask, filter_type, signal.data["compression"], list(position.z))
-		returnToPool(speech)
+		qdel(speech)
 
 /obj/item/device/radio/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!speech.speaker || speech.frequency)

@@ -286,7 +286,7 @@
 		code = round(code)
 		code = clamp(code, 0, 100)
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = S
 		signal.encryption = code
 		signal.data["message"] = "ACTIVATE"
@@ -297,7 +297,7 @@
 
 
 /datum/signal/proc/tcombroadcast(var/message, var/freq, var/source, var/job)
-	var/datum/signal/newsign = getFromPool(/datum/signal)
+	var/datum/signal/newsign = new /datum/signal
 	var/obj/machinery/telecomms/server/S = data["server"]
 	var/obj/item/device/radio/hradio = S.server_radio
 
@@ -320,7 +320,7 @@
 
 	//SAY REWRITE RELATED CODE.
 	//This code is a little hacky, but it *should* work. Even though it'll result in a virtual speaker referencing another virtual speaker. vOv
-	var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+	var/atom/movable/virtualspeaker/virt = new /atom/movable/virtualspeaker(null)
 	virt.name = source
 	virt.job = job
 	virt.faketrack = 1
@@ -356,4 +356,4 @@
 		S.relay_information(newsign, "/obj/machinery/telecomms/broadcaster") // send this simple message to broadcasters
 
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)

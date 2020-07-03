@@ -21,7 +21,7 @@
 		if(other != src)
 			other.amount += src.amount
 			spawn other.Spread()
-			returnToPool(src)
+			qdel(src)
 			return
 
 	Spread()
@@ -33,7 +33,7 @@
 /obj/effect/decal/cleanable/liquid_fuel/burnFireFuel(var/used_fuel_ratio, var/used_reactants_ratio)
 	amount -= (amount * used_fuel_ratio * used_reactants_ratio) * 5 // liquid fuel burns 5 times as quick
 	if(amount < 0.1)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/decal/cleanable/liquid_fuel/proc/Spread()
 	//Allows liquid fuels to sometimes flow into other tiles.
@@ -52,7 +52,7 @@
 
 			if(origin.Cross(null, target, 0, 0) && target.Cross(null, origin, 0, 0))
 				if(!locate(/obj/effect/decal/cleanable/liquid_fuel) in target)
-					getFromPool(/obj/effect/decal/cleanable/liquid_fuel, target, amount*0.25)
+					new /obj/effect/decal/cleanable/liquid_fuel(target, amount*0.25)
 					amount *= 0.75
 
 /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel
@@ -81,7 +81,7 @@
 		if(locate(/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel) in O)
 			continue
 		if(O.Cross(null, S, 0, 0) && S.Cross(null, O, 0, 0))
-			var/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/FF = getFromPool(/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel, O, amount*0.25, d)
+			var/obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel/FF = new /obj/effect/decal/cleanable/liquid_fuel/flamethrower_fuel(O, amount*0.25, d)
 
 			if(amount + FF.amount > 0.4) //if we make a patch with not enough fuel, we balance it out properly to ensure even burn
 				if(amount < 0.2 || FF.amount < 0.2) //one of these is too small, so let's average
@@ -89,7 +89,7 @@
 					amount = balanced
 					FF.amount = balanced
 			else
-				returnToPool(FF) //otherwise, we can't actually make a new patch and we bin the idea completely
+				qdel(FF) //otherwise, we can't actually make a new patch and we bin the idea completely
 				return
 
 			spawn(1)
@@ -100,4 +100,4 @@
 				transferred_amount += FF.amount
 	amount = max(amount - transferred_amount, 0)
 	if(amount == 0)
-		returnToPool(src)
+		qdel(src)

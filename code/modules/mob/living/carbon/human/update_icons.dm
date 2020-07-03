@@ -1238,7 +1238,7 @@ var/global/list/damage_icon_parts = list()
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O) //theoretically, should only be done once per hand
-		O = getFromPool(/obj/abstract/Overlays/hand_layer)
+		O = new /obj/abstract/Overlays/hand_layer
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)

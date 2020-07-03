@@ -133,31 +133,6 @@
 	else
 		icon_state = "emitter_double_mouse_end"
 
-/obj/effect/beam/emitter/resetVariables()
-	..("sources", "children", "stepped", "master", "pass_flags", "next", "bumped", "steps", "am_connector", "targetMoveKey", "targetDestroyKey", "targetDensityKey", "targetContactLoc", "locDensity", args)
-	children = list()
-	sources = list()
-	next = null
-	target = null
-	master = null
-	bumped=0
-	stepped=0
-	steps=0
-	am_connector=0
-	targetMoveKey=null
-	targetDestroyKey=null
-	targetDensityKey=null
-	targetContactLoc=null
-	locDensity=null
-	icon_state = base_state
-	charged_up = FALSE
-
-	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
-
-/obj/effect/beam/emitter/eyes/resetVariables()
-	..("base_damage","full_damage", args)
-
-
 // Listener for /atom/movable/on_moved
 /obj/effect/beam/proc/target_moved(var/list/args)
 	if(master)
@@ -244,7 +219,7 @@
 	src._re_emit = 0
 	OB.connect_to(AM)
 	OB.update_icon()
-	returnToPool(src)
+	qdel(src)
 	//BEAM_DEL(src)
 
 
@@ -325,7 +300,7 @@
 			//BEAM_DEL(child)
 			children -= child
 			child._re_emit = 0
-			returnToPool(child)
+			qdel(child)
 	children.len = 0
 
 /obj/effect/beam/proc/disconnect(var/re_emit=1)
@@ -370,7 +345,7 @@
 	if(!OB)
 		OB = src
 	src._re_emit = 0
-	returnToPool(src)
+	qdel(src)
 	OB.connect_to(AM)
 
 /obj/effect/beam/proc/HasSource(var/atom/source)
@@ -401,14 +376,14 @@
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] no loc")
 		src._re_emit = 0
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
 		//BEAM_DEL(src)
 		beam_testing("\ref[src] end of world")
 		src._re_emit = 0
-		returnToPool(src)
+		qdel(src)
 		return
 
 	// If we're master, we're actually invisible, and we're on the same tile as the machine.
@@ -437,7 +412,7 @@
 			beam_testing("\ref[src] Bumped")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			returnToPool(src)
+			qdel(src)
 			return
 
 		stepped=1
@@ -446,7 +421,7 @@
 			beam_testing("\ref[src] ran out")
 			//BEAM_DEL(src)
 			src._re_emit = 0
-			returnToPool(src)
+			qdel(src)
 			return
 
 	var/turf/T = get_turf(src)
@@ -462,7 +437,7 @@
 /obj/effect/beam/proc/spawn_child()
 	if(steps >= BEAM_MAX_STEPS)
 		return null // NOPE
-	var/obj/effect/beam/B = getFromPool(type,src.loc)
+	var/obj/effect/beam/B = new type(src.loc)
 	B.steps = src.steps+1
 	B.dir=dir
 	B.master = get_master()
@@ -550,7 +525,7 @@
 	if(next)
 		//BEAM_DEL(next)
 		next._re_emit = 0
-		returnToPool(next)
+		qdel(next)
 		next=null
 	stepped = 0
 	..()

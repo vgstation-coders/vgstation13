@@ -456,7 +456,7 @@
 		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
-		returnToPool(speech)
+		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
 	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever

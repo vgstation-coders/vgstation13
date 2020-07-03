@@ -68,35 +68,35 @@
 
 /obj/machinery/atmospherics/pipe/return_air()
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.air
 
 
 /obj/machinery/atmospherics/pipe/build_network()
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.return_network()
 
 
 /obj/machinery/atmospherics/pipe/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.network_expand(new_network, reference)
 
 
 /obj/machinery/atmospherics/pipe/return_network(obj/machinery/atmospherics/reference)
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.return_network(reference)
 
 
 /obj/machinery/atmospherics/pipe/Destroy()
 	if(parent)
-		returnToPool(parent)
+		qdel(parent)
 	for(var/obj/machinery/meter/M in src.loc)
 		if(M.target == src)
 			new /obj/item/pipe_meter(src.loc)
@@ -371,12 +371,12 @@
 /obj/machinery/atmospherics/pipe/simple/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	update_icon()
@@ -594,17 +594,17 @@
 /obj/machinery/atmospherics/pipe/manifold/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node3 = null
 
 	update_icon()
@@ -840,22 +840,22 @@
 /obj/machinery/atmospherics/pipe/manifold4w/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node3 = null
 
 	if(reference == node4)
 		if(istype(node4, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node4 = null
 
 	update_icon()
@@ -1068,14 +1068,14 @@
 /obj/machinery/atmospherics/pipe/layer_manifold/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == other_node)
 		if(istype(other_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		other_node = null
 
 	else
 		for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 			if(reference == layer_nodes[pipelayer])
 				if(istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe) && !isnull(parent))
-					returnToPool(parent)
+					qdel(parent)
 				layer_nodes[pipelayer] = null
 
 	update_icon()
@@ -1274,11 +1274,11 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/disconnect(var/obj/machinery/atmospherics/reference)
 	if(reference == mid_node)
 		if(istype(mid_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		mid_node = null
 	if(reference == layer_node)
 		if(istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		layer_node = null
 
 	..()

@@ -346,7 +346,7 @@
 		if (length(message) > max_length)
 			message += "-"
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
-		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing,T)
+		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 		W.New(T)
 		W.basecolor = doodle_color
 		W.update_icon()

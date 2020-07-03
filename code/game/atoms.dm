@@ -353,7 +353,7 @@ its easier to just keep the beam vertical.
 	//Maxdistance is the longest range the beam will persist before it gives up.
 	var/EndTime=world.time+time
 	var/broken = 0
-	var/obj/item/projectile/beam/lightning/light = getFromPool(/obj/item/projectile/beam/lightning)
+	var/obj/item/projectile/beam/lightning/light = new /obj/item/projectile/beam/lightning
 	while(BeamTarget&&world.time<EndTime&&get_dist(src,BeamTarget)<maxdistance&&z==BeamTarget.z)
 
 	//If the BeamTarget gets deleted, the time expires, or the BeamTarget gets out
@@ -364,7 +364,7 @@ its easier to just keep the beam vertical.
 
 		for(var/obj/effect/overlay/beam/O in orange(10,src))	//This section erases the previously drawn beam because I found it was easier to
 			if(O.BeamSource==src)				//just draw another instance of the beam instead of trying to manipulate all the
-				returnToPool(O)					//pieces to a new orientation.
+				qdel(O)					//pieces to a new orientation.
 		var/Angle=round(Get_Angle(src,BeamTarget))
 		var/icon/I=new(icon,icon_state)
 		I.Turn(Angle)
@@ -373,7 +373,7 @@ its easier to just keep the beam vertical.
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
 		for(N,N<length,N+=WORLD_ICON_SIZE)
-			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
+			var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(loc)
 			X.BeamSource=src
 			if(N+WORLD_ICON_SIZE>length)
 				var/icon/II=new(icon,icon_state)
@@ -422,7 +422,7 @@ its easier to just keep the beam vertical.
 				break
 		sleep(3)	//Changing this to a lower value will cause the beam to follow more smoothly with movement, but it will also be more laggy.
 					//I've found that 3 ticks provided a nice balance for my use.
-	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) returnToPool(O)
+	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) qdel(O)
 
 //Woo hoo. Overtime
 //All atoms

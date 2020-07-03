@@ -123,15 +123,15 @@ obj/machinery/atmospherics/trinary/Destroy()
 	if(node1)
 		node1.disconnect(src)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(node2)
 		node2.disconnect(src)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 	if(node3)
 		node3.disconnect(src)
 		if(network3)
-			returnToPool(network3)
+			qdel(network3)
 
 	node1 = null
 	node2 = null
@@ -163,17 +163,17 @@ obj/machinery/atmospherics/trinary/initialize()
 
 obj/machinery/atmospherics/trinary/build_network()
 	if(!network1 && node1)
-		network1 = getFromPool(/datum/pipe_network)
+		network1 = new /datum/pipe_network
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = getFromPool(/datum/pipe_network)
+		network2 = new /datum/pipe_network
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
 	if(!network3 && node3)
-		network3 = getFromPool(/datum/pipe_network)
+		network3 = new /datum/pipe_network
 		network3.normal_members += src
 		network3.build_network(node3, src)
 
@@ -217,17 +217,17 @@ obj/machinery/atmospherics/trinary/return_network_air(datum/pipe_network/referen
 obj/machinery/atmospherics/trinary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 		node1 = null
 
 	else if(reference==node2)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 		node2 = null
 
 	else if(reference==node3)
 		if(network3)
-			returnToPool(network3)
+			qdel(network3)
 		node3 = null
 
 	return ..()

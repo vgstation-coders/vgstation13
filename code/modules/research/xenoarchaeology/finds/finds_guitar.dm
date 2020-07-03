@@ -13,7 +13,7 @@
 /obj/item/device/instrument/guitar/magical/proc/eletric_music(var/atom/target, var/mob/user) //Kinda copypasty but eh, i don't want to make a new projectile for this.
 	var/turf/T = get_turf(user)
 	var/turf/U = get_turf(target)
-	var/obj/item/projectile/beam/lightning/L = getFromPool(/obj/item/projectile/beam/lightning, T)
+	var/obj/item/projectile/beam/lightning/L = new /obj/item/projectile/beam/lightning(T)
 	L.damage = round((force * 33) / 100)
 	L.tang = adjustAngle(get_angle(U,T))
 	L.icon = midicon

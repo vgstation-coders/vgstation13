@@ -59,7 +59,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/remove_screen_objs()
 	..()
 	if(inv_tool)
-		returnToPool(inv_tool)
+		qdel(inv_tool)
 		if(client)
 			client.screen -= inv_tool
 		inv_tool = null

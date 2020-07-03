@@ -32,7 +32,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	if(istype(AM, /obj/item/pipe))
-		returnToPool(A)
+		qdel(A)
 	else
 		qdel(AM)
 
@@ -385,7 +385,7 @@
 
 	playsound(user, 'sound/items/Deconstruct.ogg', 50, 1)
 
-	var/obj/item/pipe/P = getFromPool(/obj/item/pipe, A, pipe_id, thisdir)
+	var/obj/item/pipe/P = new /obj/item/pipe(A, pipe_id, thisdir)
 	P.setPipingLayer(thislayer)
 	P.update()
 	P.add_fingerprint(user)

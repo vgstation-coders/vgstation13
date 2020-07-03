@@ -76,9 +76,9 @@
 	..()
 	name = "[name] ([rand(1, 1000)])"
 	real_name = name
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
+	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
+	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
+	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
 
 /mob/living/simple_animal/hologram/advanced/Login()
 	..()
