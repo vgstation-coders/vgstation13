@@ -622,7 +622,7 @@
 	for(var/obj/item/weapon/holder/D in theFly)
 		for(var/mob/M in D.contents)
 			theFly += M //Gets the mob stored in the holder, adds it to the list
-		returnToPool(D)
+		qdel(D)
 	theFly += MO
 	theFly += MT
 	for(var/mob/living/q in theFly)
