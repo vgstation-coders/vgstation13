@@ -222,7 +222,6 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/no_goonchat_for_obj = FALSE
 
 	var/tgui_fancy = TRUE
-	var/tgui_lock = TRUE
 
 	var/client/client
 	var/saveloaded = 0
@@ -426,6 +425,9 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<b>Fancy tgui:</b>
+	<a href='?_src_=prefs;preference=tgui_fancy'>[tgui_fancy ? "Enabled" : "Disabled"]</a><br>
+	<b>
 	<center>Runechat prefererences</center>
 	<b>Chat on map for mobs:</b>
 	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
@@ -1534,6 +1536,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+
+				if("tgui_fancy")
+					tgui_fancy = !tgui_fancy
 
 				if ("mob_chat_on_map")
 					mob_chat_on_map = !mob_chat_on_map

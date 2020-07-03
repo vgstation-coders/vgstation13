@@ -200,7 +200,6 @@
 		"status" = status,
 		"interface" = interface,
 		"fancy" = user.client.prefs.tgui_fancy,
-		"locked" = user.client.prefs.tgui_lock,
 		"observer" = isobserver(user),
 		"window" = window_id,
 		// NOTE: Intentional \ref usage; tgui datums can't/shouldn't
