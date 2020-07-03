@@ -9,7 +9,7 @@ var/datum/subsystem/tgui/SStgui
 	name     = "tgui"
 	flags    = SS_FIRE_IN_LOBBY
 	wait     = 2 SECONDS
-	priority = SS_PRIORITY_NANOUI
+	priority = SS_PRIORITY_TGUI
 
 	var/list/currentrun
 	var/list/open_uis = list() // A list of open UIs, grouped by src_object and ui_key.
