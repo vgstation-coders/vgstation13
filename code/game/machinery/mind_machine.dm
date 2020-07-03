@@ -94,13 +94,8 @@
 		connectTwo.podNumber = 2
 	if ((connectOne) && (connectTwo))
 		podsConnected = TRUE
-<<<<<<< HEAD
 		connectOne.RefreshParts()
 		connectTwo.RefreshParts()
-=======
-	connectOne.RefreshParts()
-	connectTwo.RefreshParts()
->>>>>>> f26397ca35a12dc1f3707bfc260c96ce9c806dc3
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/findConnectOne()
 	for(var/obj/machinery/mind_machine/mind_machine_pod/CO in orange(1,src))
@@ -144,11 +139,8 @@
 			return
 	if(istype(A, /obj/item/device/soulstone))
 		if(soulShardSafety != FALSE)
-<<<<<<< HEAD
 			to_chat(user, "<span class='notice'>That slot is already full!</span>")
-=======
 			to_chat(user, "<span class='notice'>That slot is full!</span>")
->>>>>>> f26397ca35a12dc1f3707bfc260c96ce9c806dc3
 			return
 		if(A.contents.len)
 			to_chat(user, "<span class='notice'>The stone must be empty to function properly.</span>") //prevents deleting players in stones
@@ -179,12 +171,8 @@
 		findConnections()
 
 
-
-<<<<<<< HEAD
 //////UI stuff/////////////
-=======
-//////UI stuff///////////////
->>>>>>> f26397ca35a12dc1f3707bfc260c96ce9c806dc3
+
 
 /obj/machinery/mind_machine/mind_machine_hub/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = NANOUI_FOCUS)
 	if(errorMessage != MINDMACHINE_NOERROR)
@@ -221,11 +209,8 @@
 	ui.set_auto_update(1)
 
 /obj/machinery/mind_machine/mind_machine_hub/Topic(href, href_list)
-<<<<<<< HEAD
 	if(..())
 		return
-=======
->>>>>>> f26397ca35a12dc1f3707bfc260c96ce9c806dc3
 	if(!connectOne.Adjacent(src) || !connectTwo.Adjacent(src) || !connectOne.anchored || !connectTwo.anchored)
 		return
 	if(podsConnected)
