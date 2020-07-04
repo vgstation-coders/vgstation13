@@ -25,6 +25,8 @@
 	var/scheduled_destruction
 	/// Contains the approximate amount of lines for height decay
 	var/approx_lines
+	/// Reference to on_destroyed event from master
+	var/destroyed_ev_key
 
 /**
   * Constructs a chat message overlay
@@ -50,6 +52,7 @@
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
+	owned_by.on_destroyed.Remove(destroyed_ev_key)
 	owned_by = null
 	message_loc = null
 	del message // Images must be del'd by byond internally. It does not lag as much as a datum hard-del.
@@ -68,7 +71,7 @@
 /datum/chatmessage/proc/generate_image(text, atom/target, mob/owner, list/extra_classes, lifespan)
 	// Register client who owns this message
 	owned_by = owner.client
-	owner.on_destroyed.Add(src, .proc/qdel_self)
+	destroyed_ev_key = owner.on_destroyed.Add(src, .proc/qdel_self)
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length
