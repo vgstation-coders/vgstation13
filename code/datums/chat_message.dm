@@ -52,7 +52,7 @@
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-	owned_by.on_destroyed.Remove(destroyed_ev_key)
+		owned_by.mob.on_destroyed.Remove(destroyed_ev_key)
 	owned_by = null
 	message_loc = null
 	del message // Images must be del'd by byond internally. It does not lag as much as a datum hard-del.
