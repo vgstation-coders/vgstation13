@@ -1618,17 +1618,18 @@ var/list/blind_victims = list()
 		last_threshold = world.time
 		var/list/seers = list()
 		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
-			if (iscultist(seer) && seer.client && seer.client.screen)
+			if (iscultist(seer) && seer.client)
 				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
 				var/delta_x = (L.x - seer.x)
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				seers += seer
-				seer << image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				seer.client.images += image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -delta_x, offY = -delta_y, plane = LIGHTING_PLANE)
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 		var/count = 10 SECONDS
 		do
 			for (var/mob/living/seer in seers)
@@ -1640,9 +1641,10 @@ var/list/blind_victims = list()
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seer << image_intruder
+				seer.client.images += image_intruder // see the mover for a set period of time
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 			count--
 		while (count && seers.len)
 
