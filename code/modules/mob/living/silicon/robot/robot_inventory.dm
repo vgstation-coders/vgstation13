@@ -17,6 +17,7 @@
 	return get_all_slots()
 
 //May need work
+
 /mob/living/silicon/robot/is_in_modules(var/obj/item/W)
 	return (W in module.modules)
 
