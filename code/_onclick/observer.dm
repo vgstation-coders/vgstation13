@@ -87,14 +87,6 @@
 	else
 		user.examination(src)
 
-/* Bay edition
-// Oh by the way this didn't work with old click code which is why clicking shit didn't spam you
-/atom/proc/attack_ghost(mob/dead/observer/user as mob)
-	if(user.client && user.client.inquisitive_ghost)
-		examine()
-	return
-*/
-
 // ---------------------------------------
 // And here are some good things for free:
 // Now you can click through portals, wormholes, gateways, and teleporters while observing. -Sayu

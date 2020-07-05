@@ -20,7 +20,7 @@
 	pass_flags = PASSTABLE
 	pressure_resistance = 5
 //	causeerrorheresoifixthis
-	var/obj/item/master = null
+	var/obj/item/master = null//apparently used by device assemblies to track the object they are attached to.
 
 	var/max_heat_protection_temperature //Set this variable to determine up to which temperature (IN KELVIN) the item protects against heat damage. Keep at null to disable protection. Only protects areas set by heat_protection flags
 	var/heat_conductivity = 0.5 // how conductive an item is to heat a player (ie how quickly someone will lose heat) on a scale of 0 - 1. - 1 is fully conductive, 0 is fully insulative, this is a range, not binary.
@@ -29,6 +29,7 @@
 	//Since any item can now be a piece of clothing, this has to be put here so all items share it.
 	var/_color = null
 	var/body_parts_covered = 0 //see setup.dm for appropriate bit flags
+	var/body_parts_visible_override = 0 //for when you want specific parts to be visible while covered (and not all of them), same flags as above.
 	//var/heat_transfer_coefficient = 1 //0 prevents all transfers, 1 is invisible
 	var/gas_transfer_coefficient = 1 // for leaking gas from turf to mask and vice-versa (for masks right now, but at some point, i'd like to include space helmets)
 	var/permeability_coefficient = 1 // for chemicals/diseases
@@ -36,6 +37,7 @@
 	var/slowdown = NO_SLOWDOWN // How much each piece of clothing is slowing you down. Works as a MULTIPLIER, i.e. 0.8 slowdown makes you go 20% faster, 1.5 slowdown makes you go 50% slower.
 
 	var/canremove = TRUE //Mostly for Ninja code at this point but basically will not allow the item to be removed if set to 0. /N
+	var/cant_remove_msg = " cannot be taken off!"
 	var/cant_drop = FALSE //If 1, can't drop it from hands!
 	var/cant_drop_msg = " sticks to your hand!"
 
@@ -46,7 +48,6 @@
 	var/obj/item/device/uplink/hidden/hidden_uplink = null // All items can have an uplink hidden inside, just remember to add the triggers.
 	var/icon_override = null  //Used to override hardcoded clothing dmis in human clothing proc.
 	var/list/species_fit = null //This object has a different appearance when worn by these species
-	var/surgery_speed = 1 //When this item is used as a surgery tool, multiply the delay of the surgery step by this much.
 	var/nonplant_seed_type
 
 	var/list/attack_verb // used in attack() to say how something was attacked "[x] [z.attack_verb] [y] with [z]". Present tense.
@@ -61,7 +62,6 @@
 	var/list/dynamic_overlay[0] //For items which need to slightly alter their on-mob appearance while being worn.
 	var/restraint_resist_time = 0	//When set, allows the item to be applied as restraints, which take this amount of time to resist out of
 	var/restraint_apply_time = 3 SECONDS
-	var/restraint_apply_sound = null
 	var/icon/wear_override = null //Worn state override used when wearing this object on your head/uniform/glasses/etc slot, for making a more procedurally generated icon
 	var/hides_identity = HIDES_IDENTITY_DEFAULT
 	var/datum/daemon/daemon
@@ -69,6 +69,9 @@
 	var/list/datum/disease2/disease/virus2 = list()
 	var/sterility = 0// 0 to 100. increase chances of preventing disease spread.
 	var/image/pathogen
+
+	var/list/toolsounds = null //The sound(s) it makes when used as a tool.
+	var/toolspeed = 1 //When this item is used as a tool, multiply the delay of its do_after by this much.
 
 /obj/item/proc/return_thermal_protection()
 	return return_cover_protection(body_parts_covered) * (1 - heat_conductivity)
@@ -89,13 +92,8 @@
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
-	if(hasvar(src, "holder"))
-		src:holder = null
 	for(var/x in actions)
 		qdel(x)
-	/*  BROKEN, FUCK BYOND
-	if(hasvar(src, "my_atom"))
-		src:my_atom = null*/
 	..()
 
 
@@ -167,20 +165,6 @@
 /obj/item/proc/suicide_act(mob/user)
 	return
 
-/obj/item/verb/move_to_top()
-	set name = "Move To Top"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
-		return
-
-	var/turf/T = loc
-
-	forceMove(null)
-
-	forceMove(T)
-
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
 		switch(w_class)
@@ -244,6 +228,7 @@
 				return
 		//canremove==0 means that object may not be removed. You can still wear it. This only applies to clothing. /N
 		if(!canremove)
+			to_chat(user, "<span class='notice'>\The [src][cant_remove_msg]</span>")
 			return
 
 		user.u_equip(src,FALSE)
@@ -517,7 +502,7 @@
 						return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_belt)
-				if(!H.w_uniform)
+				if(!H.w_uniform && !isbelt(src))
 					if(!disable_warning)
 						to_chat(H, "<span class='warning'>You need a jumpsuit before you can attach this [name].</span>")
 					return CANNOT_EQUIP
@@ -527,7 +512,7 @@
 					if(automatic)
 						if(H.check_for_open_slot(src))
 							return CANNOT_EQUIP
-					if(H.belt.canremove && !istype(H.belt, /obj/item/weapon/storage/belt))
+					if(H.belt.canremove)
 						return CAN_EQUIP_BUT_SLOT_TAKEN
 					else
 						return CANNOT_EQUIP
@@ -905,7 +890,7 @@
 		return
 
 	if(!wielded)
-		wielded = getFromPool(/obj/item/offhand)
+		wielded = new /obj/item/offhand
 
 		//Long line ahead, let's break that up!
 		//
@@ -931,13 +916,13 @@
 		return
 
 /obj/item/proc/unwield(mob/user)
-	if(flags & MUSTTWOHAND && src in user)
+	if(flags & MUSTTWOHAND && (src in user))
 		user.drop_from_inventory(src)
 	if(istype(wielded))
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			returnToPool(wielded)
+			qdel(wielded)
 			wielded = null
 	update_wield(user)
 
@@ -953,7 +938,7 @@
 			return FALSE
 		if (prob(50 - round(damage / 3)))
 			visible_message("<span class='borange'>[loc] blocks \the [blocked] with \the [src]!</span>")
-			if(isatommovable(blocked))
+			if(ismovable(blocked))
 				var/atom/movable/M = blocked
 				M.throwing = FALSE
 			return TRUE
@@ -1296,8 +1281,8 @@ var/global/list/image/blood_overlays = list()
 			to_chat(user, "<span class='danger'>\The [C] needs at least two wrists before you can cuff them together!</span>")
 			return FALSE
 
-	if(restraint_apply_sound)
-		playsound(src, restraint_apply_sound, 30, 1, -2)
+	playtoolsound(src, 30, TRUE, -2)
+
 	user.visible_message("<span class='danger'>[user] is trying to restrain \the [C] with \the [src]!</span>",
 						 "<span class='danger'>You try to restrain \the [C] with \the [src]!</span>")
 
@@ -1323,6 +1308,9 @@ var/global/list/image/blood_overlays = list()
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
 		cuffs.on_restraint_apply(C)
+		var/list/findcuffs = get_contents_in_object(user,/obj/item/device/law_planner)
+		for(var/obj/item/device/law_planner/LP in findcuffs)
+			LP.handcuff_signal()
 		return TRUE
 
 /obj/item/proc/on_restraint_removal(var/mob/living/carbon/C) //Needed for syndicuffs
@@ -1340,6 +1328,9 @@ var/global/list/image/blood_overlays = list()
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()
 	return
+
+/obj/item/proc/stealthy(var/mob/living/carbon/human/H)
+	return H.isGoodPickpocket()
 
 /obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
 	return TRUE
@@ -1363,7 +1354,7 @@ var/global/list/image/blood_overlays = list()
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
 			var/obj/abstract/screen/storage/screenobj = over_object
 			var/obj/item/weapon/storage/storageobj = screenobj.master
-			if(storageobj == loc && usr in storageobj.is_seeing)
+			if(storageobj == loc && (usr in storageobj.is_seeing))
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src
 				storageobj.contents += src
@@ -1410,9 +1401,26 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/is_screwdriver(var/mob/user)
 	return FALSE
 
+/obj/item/proc/is_wrench(var/mob/user)
+	return FALSE
+
 //This proc will be called when the person holding or equipping it talks.
 /obj/item/proc/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	return
+
+/obj/item/gen_quality(var/modifier = 0, var/min_quality = 0, var/datum/material/mat)
+	..()
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(inhand_states[inhand_states[1]], to_icon_state))
+		item_state = to_icon_state
+
+/obj/item/dorfify(var/datum/material/mat, var/additional_quality, var/min_quality)
+	.=..()
+	if(. && material_type)
+		armor["melee"] = min(90, armor["melee"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["bullet"] = min(90, armor["bullet"]*(material_type.armor_mod*(quality/B_AVERAGE)))
+		armor["laser"] = min(90, armor["laser"]*(material_type.armor_mod*(quality/B_AVERAGE)))
 
 /////// DISEASE STUFF //////////////////////////////////////////////////////////////////////////
 
@@ -1457,3 +1465,8 @@ var/global/list/image/blood_overlays = list()
 				perp.infect_disease2(D, notes="(Contact, from picking up \a [src])")
 			else if (bleeding && (D.spread & SPREAD_BLOOD))//if we're covered with a blood-spreading disease, we may infect people with bleeding hands.
 				perp.infect_disease2(D, notes="(Blood, from picking up \a [src])")
+
+/obj/item/proc/playtoolsound(atom/A, var/volume = 75, vary = TRUE, extrarange = null)
+	if(A && toolsounds)
+		var/tool_sound = pick(toolsounds)
+		playsound(A, tool_sound, volume, TRUE, vary)

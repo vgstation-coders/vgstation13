@@ -112,7 +112,7 @@
 	switch(d_state)
 		if(WALLCOMPLETED)
 			if(iswirecutter(W))
-				playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				src.d_state = WALLCOVEREXPOSED
 				update_icon()
 				user.visible_message("<span class='warning'>[user] cuts out \the [src]'s outer grille.</span>", \
@@ -123,7 +123,7 @@
 			if(W.is_screwdriver(user))
 				user.visible_message("<span class='warning'>[user] begins unsecuring \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin unsecuring \the [src]'s external cover.</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVEREXPOSED)
 					src.d_state = WALLCOVERUNSECURED
@@ -164,7 +164,7 @@
 			else if(W.is_screwdriver(user))
 				user.visible_message("<span class='notice'>[user] begins securing \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin securing \the [src]'s external cover.</span>")
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERUNSECURED)
 					src.d_state = WALLCOVEREXPOSED
@@ -179,13 +179,13 @@
 				user.visible_message("<span class='warning'>[user] starts prying off \the [src]'s external cover.</span>", \
 				"<span class='notice'>You struggle to pry off \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear a crowbar.</span>")
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 100) && d_state == WALLCOVERWEAKENED)
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
 					src.d_state = WALLCOVERREMOVED
 					update_icon()
-					getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
+					new /obj/item/stack/sheet/plasteel(get_turf(src))
 					user.visible_message("<span class='warning'>[user] pries off \the [src]'s external cover.</span>", \
 					"<span class='notice'>You pry off \the [src]'s external cover.</span>")
 				return
@@ -208,11 +208,11 @@
 				return
 
 		if(WALLCOVERREMOVED)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 
 				user.visible_message("<span class='warning'>[user] starts loosening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start loosening the bolts anchoring \the [src]'s external support rods.</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLCOVERREMOVED)
 					src.d_state = WALLRODSUNSECURED
@@ -266,11 +266,11 @@
 				return
 
 			//Repair step, tighten the anchoring bolts
-			else if(iswrench(W))
+			else if(W.is_wrench(user))
 
 				user.visible_message("<span class='notice'>[user] starts tightening the bolts anchoring \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You start tightening the bolts anchoring \the [src]'s external support rods.</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 40) && d_state == WALLRODSUNSECURED)
 					src.d_state = WALLCOVERREMOVED
@@ -284,7 +284,7 @@
 
 				user.visible_message("<span class='warning'>[user] starts prying off [src]'s internal cover.</span>", \
 				"<span class='notice'>You struggle to pry off [src]'s internal cover.</span>")
-				playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 
 				if(do_after(user, src, 100) && d_state == WALLRODSCUT)
 					user.visible_message("<span class='warning'>[user] pries off [src]'s internal cover.</span>", \
@@ -330,8 +330,8 @@
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
-		playsound(src, PK.drill_sound, 100, 1)
-		if(do_after(user, src, PK.digspeed * 50))
+		PK.playtoolsound(src, 100)
+		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 50))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			var/pdiff = performWallPressureCheck(src.loc)
@@ -361,11 +361,11 @@
 
 /turf/simulated/wall/r_wall/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
+		new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
 		new girder_type(src)
 	else
-		getFromPool(/obj/item/stack/rods, src, 2)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)
+		new /obj/item/stack/rods(src, 2)
+		new /obj/item/stack/sheet/plasteel(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -388,7 +388,7 @@
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
 				src.d_state = WALLCOVERREMOVED
 				update_icon()
-				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
+				new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
 			else
 				dismantle_wall(0,1)
 		if(3.0)

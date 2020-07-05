@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffdddd"
 	idtype = /obj/item/weapon/card/id/hos
 	req_admin_notify = 1
@@ -66,6 +67,11 @@
 	else
 		return "Red Alert"
 
+/datum/job/hos/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy, /obj/item/clothing/under, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
+	
 
 /datum/job/warden
 	title = "Warden"
@@ -75,6 +81,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 65
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -120,7 +127,12 @@
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
-
+/datum/job/warden/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock, /obj/item/clothing/under, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/storage/fancy/donut_box(H.back), slot_in_backpack)
+	
 
 /datum/job/detective
 	title = "Detective"
@@ -130,12 +142,13 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 
 	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
-	alt_titles = list("Forensic Technician","Gumshoe")
+	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 
 	minimal_player_age = 7
 
@@ -167,7 +180,7 @@
 				H.equip_or_collect(new /obj/item/clothing/under/det(H), slot_w_uniform)
 				H.equip_or_collect(new /obj/item/clothing/suit/storage/forensics/blue(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-			if("Gumshoe")
+			if("Gumshoe","Private Eye")
 				H.mutations += M_NOIR
 				H.dna.SetSEState(NOIRBLOCK,1)
 				H.equip_or_collect(new /obj/item/clothing/under/det/noir(H), slot_w_uniform)
@@ -179,8 +192,7 @@
 				H.equip_or_collect(new /obj/item/clothing/suit/storage/det_suit(H), slot_wear_suit)
 				H.equip_or_collect(new /obj/item/clothing/head/det_hat(H), slot_head)
 				H.equip_or_collect(new /obj/item/clothing/shoes/brown(H), slot_shoes)
-	H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
-
+		H.equip_or_collect(new /obj/item/weapon/lighter/zippo(H), slot_l_store)
 	if(H.backbag == 1)//Why cant some of these things spawn in his office?
 		H.put_in_r_hand(new H.species.survival_gear(H))
 		H.put_in_l_hand(new /obj/item/weapon/storage/box/evidence(H))
@@ -201,6 +213,12 @@
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
+/datum/job/detective/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	var/obj/item/weapon/reagent_containers/food/drinks/flask/detflask/bonusflask = new /obj/item/weapon/reagent_containers/food/drinks/flask/detflask(H.back)
+	bonusflask.reagents.add_reagent(DETCOFFEE, 60)
+	H.equip_or_collect(bonusflask, slot_in_backpack)
+	
 
 
 /datum/job/officer
@@ -211,6 +229,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the head of security"
+	wage_payout = 55
 	selection_color = "#ffeeee"
 	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)
@@ -260,4 +279,10 @@
 
 	var/datum/job/assistant = job_master.GetJob("Assistant")
 	if(assistant.current_positions > 5)
-		. = Clamp(. + assistant.current_positions - 5, 0, 99)
+		. = clamp(. + assistant.current_positions - 5, 0, 99)
+
+/datum/job/officer/priority_reward_equip(var/mob/living/carbon/human/H) 
+	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
+	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
+	

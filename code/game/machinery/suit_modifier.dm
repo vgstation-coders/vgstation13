@@ -20,6 +20,7 @@
 	var/list/modules_to_install = list()
 	var/obj/item/weapon/cell/cell = null
 	var/image/suit_overlay
+	var/activated = FALSE
 	idle_power_usage = 50
 	active_power_usage = 300
 
@@ -49,6 +50,8 @@
 	.=..()
 
 /obj/machinery/suit_modifier/attack_hand(mob/user)
+	if(!isliving(user))
+		return
 	if(is_locking(/mob/living/carbon/human))
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		say("Unit Occupied.", class = "binaryradio")
@@ -66,6 +69,9 @@
 			process_module_installation(H)
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
+	if(activated)
+		return
+	activated = TRUE
 	suit_overlay.icon_state = "suitmodifier_activate"
 	overlays.Add(suit_overlay)
 	use_power = 2
@@ -74,18 +80,16 @@
 	suit_overlay.icon_state = "suitmodifier_working"
 	overlays.Add(suit_overlay)
 	var/obj/item/clothing/suit/space/rig/R = H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit)
-	if(H.head && istype(H.head, R.head_type))
-		R.toggle_helmet(H)
-	var/list/modules_to_activate = list()
+	R.deactivate_suit()
 	for(var/obj/item/rig_module/RM in modules_to_install)
 		if(locate(RM.type) in R.modules) //One already installed
 			continue
 		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
 			say("Module installed to \the [R].", class = "binaryradio")
 			R.modules.Add(RM)
-			modules_to_install.Remove(RM)
-			modules_to_activate.Add(RM)
+			RM.rig = R
 			RM.forceMove(R)
+			modules_to_install.Remove(RM)
 	overlays.Remove(suit_overlay)
 	suit_overlay.icon_state = "suitmodifier_close"
 	overlays.Add(suit_overlay)
@@ -104,8 +108,9 @@
 	unlock_atom(H)
 	overlays.Remove(suit_overlay)
 	suit_overlay.icon_state = null
-	R.toggle_helmet(H)
+	R.initialize_suit()
 	use_power = 1
+	activated = FALSE
 
 /obj/machinery/suit_modifier/get_cell()
 	return cell

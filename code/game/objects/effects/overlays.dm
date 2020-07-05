@@ -29,7 +29,7 @@
 	spawn if(fade)
 		animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/overlay/beam/persist/New()
 	return
@@ -75,6 +75,10 @@
 	wet = new_wet
 	lifespan = world.time + new_lifespan
 	processing_objects.Add(src)
+
+/obj/effect/overlay/puddle/Destroy()
+	processing_objects.Remove(src)
+	..()
 
 /obj/effect/overlay/puddle/process()
 	if(world.time >= lifespan)

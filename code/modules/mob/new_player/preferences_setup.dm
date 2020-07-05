@@ -184,6 +184,16 @@
 					icobase = 'icons/mob/human_races/vox/r_voxbrn.dmi'
 				else
 					icobase = 'icons/mob/human_races/vox/r_vox.dmi'
+		else if(current_species.name == "Grey")
+			switch(s_tone)
+				if(4)
+					icobase = 'icons/mob/human_races/grey/r_greyblue.dmi'
+				if(3)
+					icobase = 'icons/mob/human_races/grey/r_greygreen.dmi'
+				if(2)
+					icobase = 'icons/mob/human_races/grey/r_greylight.dmi'
+				else
+					icobase = 'icons/mob/human_races/grey/r_grey.dmi'
 		else
 			icobase = current_species.icobase
 	else
@@ -192,6 +202,7 @@
 	var/fat=""
 	if(disabilities&DISABILITY_FLAG_FAT && current_species.anatomy_flags & CAN_BE_FAT)
 		fat="_fat"
+	
 	preview_icon = new /icon(icobase, "torso_[g][fat]")
 	preview_icon.Blend(new /icon(icobase, "groin_[g]"), ICON_OVERLAY)
 	preview_icon.Blend(new /icon(icobase, "head_[g]"), ICON_OVERLAY)
@@ -228,7 +239,10 @@
 	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 	if(hair_style)
 		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-		hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
+		if(hair_style.do_colouration)
+			hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
+		if(hair_style.additional_accessories)
+			hair_s.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 		eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 	var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
@@ -423,7 +437,7 @@
 					clothes_s.Blend(new /icon(suit_dmi, "detective"), ICON_OVERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
 				if(OFFICER)
-					clothes_s = new /icon(uniform_dmi, "secred_s")
+					clothes_s = new /icon(uniform_dmi, "security_s")
 					clothes_s.Blend(new /icon(feet_dmi, "jackboots"), ICON_UNDERLAY)
 					clothes_s.Blend(new /icon('icons/mob/head.dmi', "beret"), ICON_OVERLAY)
 					clothes_s.Blend(new /icon('icons/mob/hands.dmi', "black"), ICON_UNDERLAY)
@@ -470,6 +484,8 @@
 					clothes_s = new /icon(uniform_dmi, "grey_s")
 					clothes_s.Blend(new /icon(feet_dmi, "black"), ICON_UNDERLAY)
 					clothes_s=blend_backpack(clothes_s,backbag,"satchel-norm",null,"courierbag")
+	
+		preview_icon.Blend(new /icon('icons/mob/previewbg.dmi',preview_background), ICON_UNDERLAY)
 
 	// Observers get tourist outfit.
 	else

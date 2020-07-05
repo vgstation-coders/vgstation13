@@ -4,6 +4,7 @@ export MAPFILE_MS=metaclub.dmm
 export MAPFILE_PCK=packedstation.dmm
 export MAPFILE_ROID=RoidStation.dmm
 export MAPFILE_SNAXI=snaxi.dmm
+export MAPFILE_WHEEL=wheelstation.dmm
 
 cd ../maps
 
@@ -13,3 +14,4 @@ cp $MAPFILE_MS $MAPFILE_MS.backup
 cp $MAPFILE_PCK $MAPFILE_PCK.backup
 cp $MAPFILE_ROID $MAPFILE_ROID.backup
 cp $MAPFILE_SNAXI $MAPFILE_SNAXI.backup
+cp $MAPFILE_WHEEL $MAPFILE_WHEEL.backup

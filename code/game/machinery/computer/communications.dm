@@ -212,9 +212,7 @@ var/list/shuttle_log = list()
 					return
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "Cancel")
 				if(response == "Yes")
-					if(call_shuttle_proc(usr, justification))
-						if(!isobserver(usr))
-							shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
+					call_shuttle_proc(usr, justification)
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -333,13 +331,18 @@ var/list/shuttle_log = list()
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()
 			if (I || isAdminGhost(usr))
-				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
+				if(isAdminGhost(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
-						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
-						if(!reason || !(usr in view(1,src)))
+						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be announced to the crew, as well as transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
+						if(!reason)
+							to_chat(usr, "You must provide some reason for closing the docking port.")
 							return
-						log_game("[key_name(usr)] closed the port to traders for [reason].")
-						message_admins("[key_name_admin(usr)] closed the port to traders for [reason].")
+						if(!(usr in view(1,src)))
+							return
+						command_alert("The trading port is now on lockdown. Third party traders are no longer free to dock their shuttles with the station. Reason given:\n\n[reason]", "Trading Port - Now on Lockdown", 1)
+						world << sound('sound/AI/trading_port_closed.ogg')
+						log_game("[key_name(usr)] closed the port to traders for reason: [reason].")
+						message_admins("[key_name_admin(usr)] closed the port to traders for reason: [reason].")
 						if(trade_shuttle.current_port.areaname == "NanoTrasen Station")
 							var/obj/machinery/computer/shuttle_control/C = trade_shuttle.control_consoles[1] //There should be exactly one
 							if(C)
@@ -349,9 +352,11 @@ var/list/shuttle_log = list()
 						ports_open = FALSE
 						return
 					if(!ports_open)
-						var/response = alert(usr,"Are you sure you wish to open the station to traders?", "Port Opening", "Yes", "No")
+						var/response = alert(usr,"Are you sure you wish to re-open the station to traders?", "Port Opening", "Yes", "No")
 						if(response != "Yes")
 							return
+						command_alert("The trading port lockdown has been lifted. Third party traders are now free to dock their shuttles with the station.", "Trading Port - Open for Business", 1)
+						world << sound('sound/AI/trading_port_open.ogg')
 						log_game("[key_name(usr)] opened the port to traders.")
 						message_admins("[key_name_admin(usr)] opened the port to traders.")
 						trade_shuttle.add_dock(/obj/docking_port/destination/trade/station)
@@ -551,6 +556,8 @@ var/list/shuttle_log = list()
 	emergency_shuttle.incall()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
+	if(!isobserver(user))
+		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
@@ -624,7 +631,7 @@ var/list/shuttle_log = list()
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command

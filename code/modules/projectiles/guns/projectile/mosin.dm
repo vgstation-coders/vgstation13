@@ -17,7 +17,7 @@
 	var/recentpump = 0 // to prevent spammage
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
-
+	recoil = 4
 
 	gun_flags = 0
 
@@ -90,7 +90,7 @@
 /obj/item/weapon/gun/projectile/mosin/obrez/isHandgun()
 	return TRUE //WHY NOT
 
-/obj/item/weapon/gun/projectile/mosin/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/mosin/obrez/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		spark(user, 3, FALSE)
@@ -118,7 +118,7 @@
 		return
 	if(!T.density && !istype(T, /turf/space))
 		new /obj/effect/fire(T) //add some fire as an effect because low intensity liquid fuel looks weak
-		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the turf
+		new /obj/effect/decal/cleanable/liquid_fuel(T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the tur)
 		T.hotspot_expose(500,500) //light it on fire
 		previousturf = null
 

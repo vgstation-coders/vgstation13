@@ -245,7 +245,7 @@
 	update_icon()
 	updateUsrDialog()
 
-/obj/machinery/power/generator/wrenchAnchor()
+/obj/machinery/power/generator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -308,7 +308,7 @@
 		circ2.network2.update = TRUE
 
 	//Update icon overlays and power usage only if displayed level has changed.
-	var/genlev = Clamp(round(11 * last_gen / max_power), 0, 11)
+	var/genlev = clamp(round(11 * last_gen / max_power), 0, 11)
 
 	if(last_gen > 100 && genlev == 0)
 		genlev = 1

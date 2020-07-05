@@ -4,7 +4,7 @@
 	item_state = "bl_suit"
 	_color = "black"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/blackf
 	name = "feminine black jumpsuit"
@@ -13,7 +13,7 @@
 	item_state = "bl_suit"
 	_color = "blackf"
 	flags = FPRINT
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/blue
 	name = "blue jumpsuit"
@@ -21,7 +21,7 @@
 	item_state = "b_suit"
 	_color = "blue"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/green
 	name = "green jumpsuit"
@@ -29,7 +29,7 @@
 	item_state = "g_suit"
 	_color = "green"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/grey
 	name = "grey jumpsuit"
@@ -37,7 +37,7 @@
 	item_state = "gy_suit"
 	_color = "grey"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/orange
 	name = "orange jumpsuit"
@@ -45,7 +45,7 @@
 	item_state = "o_suit"
 	_color = "orange"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/prisoner
 	name = "prison jumpsuit"
@@ -56,7 +56,7 @@
 	has_sensor = 2
 	sensor_mode = 3
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/pink
 	name = "pink jumpsuit"
@@ -64,7 +64,7 @@
 	item_state = "p_suit"
 	_color = "pink"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/red
 	name = "red jumpsuit"
@@ -72,7 +72,7 @@
 	item_state = "r_suit"
 	_color = "red"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/white
 	name = "white jumpsuit"
@@ -80,7 +80,7 @@
 	item_state = "w_suit"
 	_color = "white"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/color/yellow
 	name = "yellow jumpsuit"
@@ -88,7 +88,7 @@
 	item_state = "y_suit"
 	_color = "yellow"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/psyche
 	name = "psychedelic jumpsuit"
@@ -125,21 +125,21 @@
 	icon_state = "lightpurple"
 	_color = "lightpurple"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lightgreen
 	name = "lightgreen jumpsuit"
 	icon_state = "lightgreen"
 	_color = "lightgreen"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lightbrown
 	name = "lightbrown jumpsuit"
 	icon_state = "lightbrown"
 	_color = "lightbrown"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/brown
 	name = "brown jumpsuit"
@@ -167,7 +167,7 @@
 	icon_state = "lightred"
 	_color = "lightred"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/darkred
 	name = "darkred jumpsuit"
@@ -183,6 +183,7 @@
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
 	body_parts_covered = LOWER_TORSO|LEGS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/redpants
 	name = "red pants"
@@ -191,6 +192,7 @@
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
 	body_parts_covered = LOWER_TORSO|LEGS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/bluepants
 	name = "blue pants"
@@ -199,6 +201,7 @@
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
 	body_parts_covered = LOWER_TORSO|LEGS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/greypants
 	name = "grey pants"
@@ -207,3 +210,4 @@
 	clothing_flags = ONESIZEFITSALL
 	gender = PLURAL
 	body_parts_covered = LOWER_TORSO|LEGS
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)

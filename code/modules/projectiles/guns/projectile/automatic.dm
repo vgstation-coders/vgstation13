@@ -37,7 +37,7 @@
 	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][silenced ? "-silencer":""][chambered ? "" : "-e"]"
 	return
 
-/obj/item/weapon/gun/projectile/automatic/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/automatic/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(burstfire == TRUE)
 		if(!ready_to_fire())
 			return 1
@@ -71,6 +71,7 @@
 	return ..()
 
 /obj/item/weapon/gun/projectile/automatic/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 /obj/item/weapon/gun/projectile/automatic/uzi
@@ -86,6 +87,7 @@
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
+	recoil = 2
 
 /obj/item/weapon/gun/projectile/automatic/uzi/isHandgun()
 	return TRUE
@@ -102,6 +104,8 @@
 	else
 		icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/weapon/gun/projectile/automatic/uzi/bigmag
+	mag_type = "/obj/item/ammo_storage/magazine/uzi45/extended"
 
 /obj/item/weapon/gun/projectile/automatic/microuzi
 	//micro uzi is 9mm :)
@@ -141,6 +145,7 @@
 	mag_drop_sound = 'sound/weapons/smg_empty_alarm.ogg'
 	automagdrop_delay_time = 0
 	load_method = 2
+	recoil = 2
 
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
@@ -170,12 +175,14 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a12mm"
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	load_method = 2
+	recoil = 2
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automatic/xcom/isHandgun()
 	return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 
@@ -195,6 +202,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a762"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	load_method = 2
+	recoil = 2
 	var/cover_open = 0
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/isHandgun()
@@ -217,7 +225,7 @@
 		return 0
 
 
-/obj/item/weapon/gun/projectile/automatic/l6_saw/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params, struggle = 0) //what I tried to do here is just add a check to see if the cover is open or not and add an icon_state change because I can't figure out how c-20rs do it with overlays
+/obj/item/weapon/gun/projectile/automatic/l6_saw/afterattack(atom/A, mob/living/user, flag, params, struggle = 0) //what I tried to do here is just add a check to see if the cover is open or not and add an icon_state change because I can't figure out how c-20rs do it with overlays
 	if(can_discharge())
 		..()
 		update_icon()
@@ -345,6 +353,7 @@
 	update_icon()
 
 /obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	max_shells = 0
 	spawn_mag = FALSE
 
 //Vector receivers.
@@ -358,7 +367,7 @@
 	var/caliber = ".380AUTO" //Its not a list but IT WORKS ON MY MACHINE.
 	var/ammo_type = "/obj/item/ammo_casing/c380auto"
 	var/mag_type = "/obj/item/ammo_storage/magazine/m380auto"
-	var/list/mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/ammo_storage/magazine/a12ga, /obj/item/ammo_storage/magazine/a357)
+	var/list/mag_blacklist = list(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/ammo_storage/magazine/a12ga, /obj/item/ammo_storage/magazine/a357, /obj/item/ammo_storage/magazine/a75, /obj/item/ammo_storage/magazine/uzi45, /obj/item/ammo_storage/magazine/c45, /obj/item/ammo_storage/magazine/a50, /obj/item/ammo_storage/magazine/a762)
 	//Insert unacceptable mags here ^^. The lawgiver makes error gas so always exclude it.
 
 /obj/item/weapon/vectorreceiver/New()

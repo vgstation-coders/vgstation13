@@ -86,8 +86,10 @@ obj/structure/windoor_assembly/Destroy()
 			windoor.req_one_access = electronics.conf_access
 		else
 			windoor.req_access = electronics.conf_access
+		electronics.forceMove(windoor)
+		windoor.electronics = electronics
+		electronics.installed = TRUE
 		windoor.set_electronics()
-		qdel(electronics)
 		electronics = null
 
 
@@ -100,9 +102,9 @@ obj/structure/windoor_assembly/Destroy()
 				return
 			to_chat(user, "<span class='notice'>You dissasembled [src]!</span>")
 			if(glass_type)
-				getFromPool(glass_type,loc,5)
+				new glass_type(loc, 5)
 			if(secure)
-				getFromPool(reinforce_material,loc,2)
+				new reinforce_material(loc, 2)
 			qdel(src)
 		else
 			to_chat(user, "<span class='rose'>You need more welding fuel to dissassemble [src].</span>")
@@ -125,8 +127,8 @@ obj/structure/windoor_assembly/Destroy()
 				update_name()
 
 	//Wrenching an un/secure assembly un/anchors it in place. Step 4 complete/undone
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is [anchored ? "un":""]securing [src] [anchored ? "from" : "to"] the floor.", "You start to [anchored ? "un":""]secure [src] to the floor.")
 
 		if(do_after(user, src, 40))
@@ -154,7 +156,7 @@ obj/structure/windoor_assembly/Destroy()
 
 	//Removing wire from the assembly. Step 5 undone.
 	if(iswirecutter(W) && (anchored && wired))
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is cutting the wires from [src].", "You start to cut the wires from [src].")
 
 		if(do_after(user, src, 40))
@@ -173,7 +175,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
 
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs [AE] into [src].", "You start to install [AE] into [src].")
 
 		if(do_after(user, src, 40))
@@ -187,7 +189,7 @@ obj/structure/windoor_assembly/Destroy()
 
 	//Screwdriver to remove airlock electronics. Step 6 undone.
 	if(W.is_screwdriver(user) && (anchored && electronics))
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] removes the [electronics] from [src].", "You start to uninstall [electronics] from [src].")
 
 		if(do_after(user, src, 40))
@@ -211,7 +213,7 @@ obj/structure/windoor_assembly/Destroy()
 			to_chat(usr, "<span class='rose'>\The [name] is missing electronics.</span>")
 			return
 		usr << browse(null, "window=windoor_access")
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("[user] is prying [src] into the frame.", "You start prying [src] into the frame.")
 
 		if(do_after(user, src, 40))

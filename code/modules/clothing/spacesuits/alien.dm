@@ -8,7 +8,7 @@
 	item_state = "rig_helm"
 	_color = "unathi_breacher"
 	clothing_flags = PLASMAGUARD
-	
+
 /obj/item/clothing/suit/space/unathi/breacher
 	name = "unathi breacher armor"
 	desc = "Some sort of ancient Unathi power suit with ridiculous armor plating."
@@ -65,6 +65,16 @@
 		/obj/item/weapon/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
+
+/obj/item/clothing/head/helmet/space/unathi/soghun
+	name = "unathi soghun helmet"
+	desc = "A Unathi helmet designed after ancient soghun outfits."
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	species_restricted = list(UNATHI_SHAPED)
+	species_fit = list(UNATHI_SHAPED)
+	icon_state = "unathi_soghun"
+	item_state = "engspace_helmet"
+	_color = "unathi_soghun"
 
 /obj/item/clothing/suit/space/unathi/soghun
 	name = "unathi soghun armor"
@@ -145,6 +155,19 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/stealth/step_action()
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/medic
 	name = "alien goggled helmet"
@@ -264,6 +287,19 @@
 	icon_state = "vox-stealth"
 	item_state = "vox-stealth"
 	desc = "A sleek black suit. It seems to have a tail, and is very heavy."
+	var/step_sound = ""
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/New()
+  ..()
+  if(Holiday == APRIL_FOOLS_DAY)
+    name = "vox suit"
+    desc = "Squeak."
+    step_sound = "clownstep"
+
+/obj/item/clothing/suit/space/vox/civ/trader/stealth/step_action()
+    if(ishuman(loc)&&Holiday == APRIL_FOOLS_DAY)
+        var/mob/living/carbon/human/H = loc
+        playsound(H, step_sound, 20, 1)
 
 /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth //blackhelmet
 	name = "alien stealth helmet"
@@ -323,7 +359,7 @@
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
 	desc = "A very alien-looking helmet for vox crewmembers."
-	flags = FPRINT|HIDEHAIRCOMPLETELY //Flags need updating from inheritance above
+	flags = FPRINT //Flags need updating from inheritance above
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	eyeprot = 0
@@ -715,8 +751,8 @@
 	..()
 	if(tank)
 		to_chat(user, "<span class = 'notice'>It has a [bicon(tank)][tank] attached to the back.</span>")
-		
-		
+
+
 /obj/item/clothing/head/helmet/space/skrell/black
 	name = "skrell combat helmet"
 	desc = "a military Skrell space helmet."
@@ -749,7 +785,7 @@
 		/obj/item/weapon/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	
+
 /obj/item/clothing/head/helmet/space/skrell/white
 	name = "skrell space helmet"
 	desc = "a civilian Skrell space helmet."

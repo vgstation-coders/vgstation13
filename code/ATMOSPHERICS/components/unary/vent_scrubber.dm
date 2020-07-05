@@ -9,7 +9,6 @@
 
 	level				= 1
 
-	var/id_tag			= null
 	var/frequency		= 1439
 	var/datum/radio_frequency/radio_connection
 
@@ -115,7 +114,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data = list(
@@ -177,7 +176,7 @@
 	//scrubbing mode
 	if(scrubbing)
 		//if internal pressure limit is enabled and met, we don't do anything
-		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) < 0.05)
+		if((pressure_checks & 2) && (internal_pressure_bound - air_contents.return_pressure()) <= 0.05)
 			if(reducing_pressure)
 				reducing_pressure = 0
 				update_icon()
@@ -251,6 +250,11 @@
 
 			if(network)
 				network.update = 1
+
+		//turn off pressure reduction flag if we were within the margin on the "I'm sorry you had to see this" check.
+		else if(reducing_pressure)
+			reducing_pressure = 0
+			update_icon()
 
 	else //Just siphoning all air
 		if(reducing_pressure)
@@ -342,16 +346,16 @@
 		pressure_checks = (pressure_checks?0:3)
 
 	if("set_internal_pressure" in signal.data)
-		internal_pressure_bound = Clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		internal_pressure_bound = clamp(text2num(signal.data["set_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("set_external_pressure" in signal.data)
-		external_pressure_bound = Clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		external_pressure_bound = clamp(text2num(signal.data["set_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("adjust_internal_pressure" in signal.data)
-		internal_pressure_bound = Clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		internal_pressure_bound = clamp(internal_pressure_bound + text2num(signal.data["adjust_internal_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if("adjust_external_pressure" in signal.data)
-		external_pressure_bound = Clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
+		external_pressure_bound = clamp(external_pressure_bound + text2num(signal.data["adjust_external_pressure"]), 0, ONE_ATMOSPHERE * 50)
 
 	if(signal.data["init"] != null)
 		name = signal.data["init"]
@@ -395,7 +399,7 @@
 				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 				welded = 0
 				update_icon()
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

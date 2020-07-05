@@ -7,6 +7,8 @@ var/list/infected_cleanables = list()
 	w_type = NOT_RECYCLABLE
 	anchored = 1
 
+	var/reagent = null //what reagent did we come from? for wet/dry vac
+
 	// For tracking shit across the floor.
 	var/amount = 0 // 0 = don't track
 	var/counts_as_blood = 0 // Cult
@@ -69,7 +71,7 @@ var/list/infected_cleanables = list()
 					if (transfers_dna && C.blood_DNA)
 						blood_DNA |= C.blood_DNA.Copy()
 					amount += C.amount
-					returnToPool(C)
+					qdel(C)
 	spawn(1)//cleanables can get infected in many different ways when they spawn so it's much easier to handle the pathogen overlay here after a delay
 		if (virus2 && virus2.len > 0)
 			infected_cleanables += src
@@ -86,11 +88,6 @@ var/list/infected_cleanables = list()
 	..()
 	if(persistence_type)
 		SSpersistence_map.track(src, persistence_type)
-
-/obj/effect/decal/cleanable/Destroy()
-	if(persistence_type)
-		SSpersistence_map.forget(src, persistence_type)
-	..()
 
 /obj/effect/decal/cleanable/getPersistenceAge()
 	return age
@@ -126,6 +123,8 @@ var/list/infected_cleanables = list()
 	if(counts_as_blood)
 		bloodspill_remove()
 
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
 	..()
 
 /obj/effect/decal/cleanable/proc/dry(var/drying_age)
@@ -165,12 +164,6 @@ var/list/infected_cleanables = list()
 //		user.update_inv_gloves(1)
 //		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 //
-/obj/effect/decal/cleanable/resetVariables()
-	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
-	viruses = list()
-	virus2 = list()
-	blood_DNA = list()
-
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 

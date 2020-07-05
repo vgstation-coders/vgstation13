@@ -8,6 +8,7 @@
 	return null
 
 /proc/get_area(const/atom/O)
+	RETURN_TYPE(/area)
 	if(isarea(O))
 		return O
 	var/turf/T = get_turf(O)
@@ -579,4 +580,4 @@ var/list/DummyCache = list()
 	//if(mixedcolor<0x00 || mixedcolor>0xFF)
 	//	return 0
 	// that's not the kind of operation we are running here, nerd
-	return Clamp(round(mixedcolor), 0, 255)
+	return clamp(round(mixedcolor), 0, 255)

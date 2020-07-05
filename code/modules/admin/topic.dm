@@ -62,6 +62,8 @@
 		message_admins("[usr.key] has notified [key_name(S)] of a change to their laws.")
 
 		S << sound('sound/machines/lawsync.ogg')
+		if(isrobot(S))
+			S.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 		to_chat(S, "____________________________________")
 		to_chat(S, "<span class='danger'>LAW CHANGE NOTICE</span>")
 		if(S.laws)
@@ -89,7 +91,7 @@
 		//testing("Lawtype: [lawtype]")
 		if(lawtype==1)
 			lawtype=text2num(input("Enter desired law priority. (15-50)","Priority", 15) as num)
-			lawtype=Clamp(lawtype,15,50)
+			lawtype=clamp(lawtype,15,50)
 		var/newlaw = copytext(sanitize(input(usr, "Please enter a new law for the AI.", "Freeform Law Entry", "")),1,MAX_MESSAGE_LEN)
 		if(newlaw=="")
 			return
@@ -356,9 +358,28 @@
 		if(!check_rights(R_SERVER))
 			return
 
-		emergency_shuttle.settimeleft( input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", emergency_shuttle.timeleft() ) as num )
+		var/new_timeleft = input("Enter new shuttle duration (seconds):","Edit Shuttle Timeleft", emergency_shuttle.timeleft() ) as num | null
+		if(!new_timeleft)
+			return
+
+		var/reason
+		var/should_announce = alert("Do you want this to be announced?",,"Yes","No","Cancel" )
+		switch(should_announce)
+			if("Yes")
+				if(new_timeleft < emergency_shuttle.timeleft())
+					reason = pick("is arriving ahead of schedule", \
+								"hit the turbo", \
+								"has engaged nitro afterburners")
+					captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
+				else
+					reason = pick("has been delayed", \
+								"decided to stop for pizza")
+					captain_announce("The emergency shuttle [reason]. It will arrive in [round(new_timeleft/60)] minutes.")
+			if("Cancel")
+				return
+
+		emergency_shuttle.settimeleft( new_timeleft )
 		log_admin("[key_name(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]")
-		captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] edited the Emergency Shuttle's timeleft to [emergency_shuttle.timeleft()]</span>", 1)
 
 		href_list["secretsadmin"] = "emergency_shuttle_panel"
@@ -587,6 +608,37 @@
 		if(O.locked_to)
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
+
+	else if(href_list["climate_timeleft"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/weather/W = map.climate.current_weather
+		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
+		if(!nu)
+			return
+		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
+		log_admin("[key_name(usr)] adjusted weather time.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		climate_panel()
+
+	else if(href_list["climate_weather"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/climate/C = map.climate
+		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
+		if(!nu || nu == C.current_weather.type)
+			return
+		if(!ispath(nu))
+			return
+		C.change_weather(nu)
+		C.forecast()
+		log_admin("[key_name(usr)] adjusted weather type.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		climate_panel()
 
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
@@ -910,9 +962,9 @@
 		var/jobs = ""
 
 	/***********************************WARNING!************************************
-				      The jobban stuff looks mangled and disgusting
-						      But it looks beautiful in-game
-						                -Nodrak
+					  The jobban stuff looks mangled and disgusting
+							  But it looks beautiful in-game
+										-Nodrak
 	************************************WARNING!***********************************/
 		var/counter = 0
 //Regular jobs
@@ -2397,7 +2449,7 @@
 		if(new_amount == null)
 			return
 
-		new_amount = Clamp(new_amount, 0, max_hands)
+		new_amount = clamp(new_amount, 0, max_hands)
 
 		M.set_hand_amount(new_amount)
 		to_chat(usr, "<span class='info'>Changed [M]'s amount of hands to [new_amount].</span>")
@@ -2475,6 +2527,7 @@
 			O.manual_stop_follow(O.locked_to)
 		if(C)
 			C.jumptomob(M)
+			O.manual_follow(M)
 
 	else if(href_list["emergency_shuttle_panel"])
 		emergency_shuttle_panel()
@@ -2916,18 +2969,10 @@
 		usr.client.cmd_admin_subtle_message(M)
 
 	else if(href_list["rapsheet"])
-		checkSessionKey()
-		// build the link
-		//var/dat = "[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]"
-		//if(href_list["rsckey"])
-		//.	dat += "&ckey=[href_list["rsckey"]]"
-//		to_chat(usr, link(dat))
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("ckey" = href_list["rsckey"])))
 		return
 
 	else if(href_list["bansheet"])
-		//checkSessionKey()
-//		to_chat(usr, link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]"))
 		usr << link(getVGPanel("rapsheet", admin = 1))
 		return
 
@@ -3048,7 +3093,7 @@
 			alert("Removed:\n" + jointext(removed_paths, "\n"))
 
 		var/list/offset = splittext(href_list["offset"],",")
-		var/number = Clamp(text2num(href_list["object_count"]), 1, 100)
+		var/number = clamp(text2num(href_list["object_count"]), 1, 100)
 		var/X = offset.len > 0 ? text2num(offset[1]) : 0
 		var/Y = offset.len > 1 ? text2num(offset[2]) : 0
 		var/Z = offset.len > 2 ? text2num(offset[3]) : 0
@@ -3795,26 +3840,25 @@
 				feedback_add_details("admin_secrets_fun_used","TD")
 				message_admins("[key_name_admin(usr)] spawned himself as a Test Dummy.")
 				log_admin("[key_name_admin(usr)] spawned himself as a Test Dummy.")
+				var/newname = ""
+				newname = copytext(sanitize(input("Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
+				if (!newname)
+					newname = "Admin"
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				usr.client.cmd_assume_direct_control(D)
+				var/obj/item/weapon/card/id/admin/admin_id = new(D)
+				admin_id.registered_name = newname
 				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
 				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
+				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
-				D.name = "Admin"
-				D.real_name = "Admin"
-				var/newname = ""
-				newname = copytext(sanitize(input(D, "Before you step out as an embodied god, what name do you wish for?", "Choose your name.", "Admin") as null|text),1,MAX_NAME_LEN)
-				if (!newname)
-					newname = "Admin"
 				D.name = newname
 				D.real_name = newname
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
-				admin_id.registered_name = newname
-				D.equip_to_slot_or_del(admin_id, slot_wear_id)
+				usr.client.cmd_assume_direct_control(D)
+
 			//False flags and bait below. May cause mild hilarity or extreme pain. Now in one button
 			if("fakealerts")
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3823,11 +3867,14 @@
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				switch (choice)
 					if("Biohazard") //GUISE WE HAVE A BLOB
-						var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
-						if(!levelchoice || levelchoice > 7 || levelchoice < 0)
-							to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+						var/levelchoice = input("Set the level of the biohazard alert (1 to 7 supported only)", "Space FEMA Readiness Program", 1) as num
+						if(isnull(levelchoice) || levelchoice > 7 || levelchoice < 1)
+							to_chat(usr, "<span class='warning'>Invalid input range (1 to 7 only)</span>")
 							return
-						biohazard_alert(level = levelchoice)
+						var/datum/command_alert/biohazard_alert/admin_alert = new
+						admin_alert.level_min = levelchoice
+						admin_alert.level_max = levelchoice
+						command_alert(admin_alert)
 						message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						return
@@ -4038,6 +4085,10 @@
 					"syphoners" = VERM_SYPHONER,
 					"greytide gremlins" = VERM_GREMTIDE,
 					"crabs" = VERM_CRABS,
+					"diona nymphs" = VERM_DIONA,
+					"mushman pinheads" = VERM_MUSHMEN,
+					"frogs" = VERM_FROGS,
+					"snails" = VERM_SNAILS
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -4136,7 +4187,7 @@
 				for(var/obj/item/device/transfer_valve/TV in world)
 					if(TV.tank_one||TV.tank_two)
 						qdel(TV)
-						TV++
+						num++
 				message_admins("[key_name_admin(usr)] has removed [num] bombs", 1)
 			if("detonate_bombs")
 				var/num=0
@@ -4224,7 +4275,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = stripped_input(usr, "Provide a Feed Channel Name", "Network Channel Handler", "")
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -5321,6 +5372,30 @@
 
 		PersistencePanel() //refresh!
 
+	// --- Rod tracking
+
+	else if (href_list["rod_to_untrack"])
+		if(!check_rights(R_FUN))
+			return
+		var/obj/item/projectile/P = locate(href_list["rod_to_untrack"])
+
+		if (!P)
+			return
+
+		P.tracking = FALSE
+		P.tracker_datum = null
+		qdel(P.tracker_datum)
+
+		var/log_data = "[P.original]"
+		if (ismob(P.original))
+			var/mob/M = P.original
+			if (M.client)
+				log_data += " (M.client.ckey)"
+
+		log_admin("[key_name(usr)] stopped a rod thrown at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)]  stopped a rod thrown at [log_data].</span>")
+
+		ViewAllRods()
 
 	// ----- Religion and stuff
 	else if(href_list["ashpaper"])
@@ -5510,6 +5585,70 @@
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
 				message_admins(msg)
 				updateRelWindow()
+
+	if (href_list["change_zone_del"])
+		switch (href_list["change_zone_del"])
+			if ("x_min_del", "x_max_del", "y_min_del", "y_max_del")
+				var/new_limit = input(usr, "Input the new boundary.", "Setting [href_list["change_zone_del"]]") as null|num
+				if (new_limit < 0 || new_limit > world.maxx)
+					to_chat(usr, "<span class='warning'>Please enter a number between 0 and [world.maxx].</span>")
+					return FALSE
+				vars[href_list["change_zone_del"]] = new_limit
+			if ("z_del")
+				var/new_limit = input(usr, "Input the new z-level..", "Setting [href_list["change_zone_del"]]") as null|num
+				if (new_limit < 1 || new_limit > 6)
+					to_chat(usr, "<span class='warning'>Please enter a number between 1 and 6.</span>")
+					return FALSE
+				z_del = new_limit
+			if ("type") // Lifted from "spawn" code.
+				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
+
+				var/list/matches = get_matching_types(object, /atom)
+
+				if(matches.len==0)
+					to_chat(usr, "<span class='warning'>No typepaths found.</span>")
+					return
+
+				var/chosen
+				if(matches.len==1)
+					chosen = matches[1]
+				else
+					chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
+				if(!chosen)
+					to_chat(usr, "<span class='warning'>No type chosen.</span>")
+					return
+
+				type_del = chosen
+
+			if ("exec")
+				var/list/things = list()
+				var/turf/T
+				for (var/x_sel = x_min_del; x_sel <= x_max_del; x_sel++)
+					for (var/y_sel = y_min_del; y_sel <= y_max_del; y_sel++)
+						T = locate(x_sel, y_sel, z_del)
+						things += T.contents
+						CHECK_TICK
+				var/time =  start_watch()
+				var/list/to_del = list()
+				for (var/thing in things)
+					if (istype(thing, type_del))
+						to_del += thing
+				var/number = to_del.len
+				for (var/thing in to_del)
+					qdel(thing)
+					CHECK_TICK
+				var/total_time = stop_watch(time)
+				log_admin("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
+				message_admins("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
+				x_min_del = 0
+				x_max_del = 0
+				y_min_del = 0
+				y_max_del = 0
+				z_del = 0
+				type_del = null
+				to_chat(usr, "<span class='notice'>Deleted [number] atoms in [total_time] seconds.</span>")
+
+		mass_delete_in_zone() // Refreshes the window
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()

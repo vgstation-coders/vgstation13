@@ -123,7 +123,7 @@ obj/machinery/gibber/New()
 			M.client.eye = src
 		M.forceMove(src)
 		src.occupant = M
-		returnToPool(G)
+		qdel(G)
 		update_icon()
 
 /obj/machinery/gibber/MouseDropTo(mob/target, mob/user)
@@ -250,11 +250,11 @@ obj/machinery/gibber/New()
 			meatslab.throw_at(Tx,i,3)
 			if (!Tx.density)
 				if(!no_more_gibs)
-					getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx, i)
+					new /obj/effect/decal/cleanable/blood/gibs(Tx, i)
 			else
 				no_more_gibs = TRUE
 				if(i == 1)
-					getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src), i)
+					new /obj/effect/decal/cleanable/blood/gibs(get_turf(src), i)
 		src.operating = 0
 		update_icon()
 
@@ -330,10 +330,10 @@ obj/machinery/gibber/New()
 		B.forceMove(src.loc)
 		B.throw_at(Tx,2,3)
 		if(isalien(victim))
-			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs/xeno, Tx)
+			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = new /obj/effect/decal/cleanable/blood/gibs/xeno(Tx)
 			O.New(Tx,2)
 		else
-			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+			var/obj/effect/decal/cleanable/blood/gibs/O = new /obj/effect/decal/cleanable/blood/gibs(Tx)
 			O.New(Tx,2)
 	else
 		victim.ghostize(0)
@@ -345,7 +345,7 @@ obj/machinery/gibber/New()
 		meatslab.forceMove(src.loc)
 		meatslab.throw_at(Tx,i,3)
 		if (!Tx.density)
-			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
+			var/obj/effect/decal/cleanable/blood/gibs/O = new /obj/effect/decal/cleanable/blood/gibs(Tx)
 			O.New(Tx,i)
 
 /obj/machinery/gibber/npc_tamper_act(mob/living/L)

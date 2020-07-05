@@ -67,6 +67,9 @@ var/global/Holiday = null
 					current_holidays += LABOUR_DAY
 				if(4)
 					current_holidays += FIREFIGHTERS_DAY
+				if(9)
+					Holiday = VG_BIRTHDAY
+					return //go no further, this is the one
 				if(12)
 					current_holidays += OWL_AND_PUSSYCAT_DAY // what a dumb day of observence...but we -do- have costumes already :3
 
@@ -124,6 +127,8 @@ var/global/Holiday = null
 
 		if(12) // Dec
 			switch(DD)
+				if(5)
+					current_holidays += SINTERKLAAS //we've had two dutch headmins -- it's fine
 				if(10)
 					current_holidays += HUMAN_RIGHTS_DAY
 				if(14)

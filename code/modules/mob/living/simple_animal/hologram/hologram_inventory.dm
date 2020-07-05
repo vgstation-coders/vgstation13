@@ -88,7 +88,7 @@
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O)
-		O = getFromPool(/obj/abstract/Overlays/hand_layer)
+		O = new /obj/abstract/Overlays/hand_layer
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)

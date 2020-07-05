@@ -139,6 +139,16 @@
 	dead_icon = "heart-off"
 	organ_type = /datum/organ/internal/heart
 
+/obj/item/organ/internal/heart/insectoid
+	name = "insectoid heart"
+	icon_state = "insectoid-heart-on"
+	prosthetic_name = "circulatory pump"
+	prosthetic_icon = "heart-prosthetic"
+	organ_tag = "heart"
+	fresh = 6
+	dead_icon = "insectoid-heart-off"
+	organ_type = /datum/organ/internal/heart
+
 /obj/item/organ/internal/heart/cell
 	name = "biocharger"
 	icon_state = "heart-cell"
@@ -174,6 +184,14 @@
 	prosthetic_icon = "lungs-prosthetic"
 	organ_tag = "lungs"
 	organ_type = /datum/organ/internal/lungs
+
+/obj/item/organ/internal/lungs/insectoid
+	name = "insectoid lungs"
+	icon_state = "book-lungs"
+	prosthetic_name = "gas exchange system"
+	prosthetic_icon = "lungs-prosthetic"
+	organ_tag = "lungs"
+	organ_type = /datum/organ/internal/lungs/insectoid
 
 /obj/item/organ/internal/lungs/vox
 	name = "vox lungs"
@@ -218,8 +236,8 @@
 	prosthetic_icon = "eyes-prosthetic"
 	organ_tag = "eyes"
 	organ_type = /datum/organ/internal/eyes
-
 	var/eye_colour
+	var/emitter = FALSE
 
 /obj/item/organ/internal/eyes/tajaran
 	name = "tajaran eyeballs"
@@ -239,6 +257,14 @@
 	prosthetic_name = "grey visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grey
 
+/obj/item/organ/internal/eyes/compound
+	name = "compound eyes"
+	icon_state = "eye-compound"
+	prosthetic_name = "visual prosthetis"
+	prosthetic_name = "eyes-prosthetic"
+	organ_tag = "eyes"
+	organ_type = /datum/organ/internal/eyes/compound
+
 /obj/item/organ/internal/eyes/vox
 	name = "vox eyeballs"
 	icon_state = "eyes-vox"
@@ -250,6 +276,12 @@
 //	icon_state = "eyes"
 	prosthetic_name = "grue visual prosthesis"
 	organ_type = /datum/organ/internal/eyes/grue
+
+/obj/item/organ/internal/eyes/mushroom
+	name = "mushroom eyeballs"
+	icon_state = "eyes-tajaran"
+	prosthetic_name = "mushroom visual prosthesis"
+	organ_type = /datum/organ/internal/eyes/mushroom
 
 /obj/item/organ/internal/eyes/adv_1
 	name = "advanced prosthesis eyeballs"
@@ -330,12 +362,20 @@
 			H.my_appearance.g_eyes ? H.my_appearance.g_eyes : 0,
 			H.my_appearance.b_eyes ? H.my_appearance.b_eyes : 0
 			)
-
+		var/image/I = image(icon,src,"[icon_state]-pupils")
+		I.color = "#[num2hex(eye_colour[1])][num2hex(eye_colour[2])][num2hex(eye_colour[3])]"
+		overlays += I
 		// Leave bloody red pits behind!
 		H.my_appearance.r_eyes = 128
 		H.my_appearance.g_eyes = 0
 		H.my_appearance.b_eyes = 0
 		H.update_body()
+
+		for (var/ID in H.virus2)
+			var/datum/disease2/disease/D = H.virus2[ID]
+			for(var/datum/disease2/effect/emitter/e in D.effects)
+				if (e.announced)
+					emitter = TRUE
 
 /obj/item/organ/internal/proc/replaced(var/mob/living/target)
 	return

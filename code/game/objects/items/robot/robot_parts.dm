@@ -12,20 +12,6 @@
 	var/brute_dam = 0
 	var/burn_dam = 0
 
-/*
-/obj/item/robot_parts/recycle(var/datum/materials/rec)
-	for(var/material in materials)
-		var/rec_mat=material
-		var/CCPS=CC_PER_SHEET_MISC
-		if(rec_mat=="metal")
-			rec_mat="iron"
-			CCPS=CC_PER_SHEET_METAL
-		if(rec_mat=="glass")
-			CCPS=CC_PER_SHEET_GLASS
-		rec.addAmount(material,materials[material]/CCPS)
-	return 1
-*/
-
 /obj/item/robot_parts/l_arm
 	name = "robot left arm"
 	desc = "A skeletal limb wrapped in pseudomuscles, with a low-conductivity case."
@@ -213,6 +199,11 @@
 			*/
 			if(jobban_isbanned(M.brainmob, "Cyborg"))
 				to_chat(user, "<span class='warning'>This [W] does not seem to fit.</span>")
+				return
+
+			var/datum/job/job_datum = job_master.GetJob("Cyborg")
+			if(!job_datum.player_old_enough(M.brainmob.client))
+				to_chat(user, "<span class='warning'>This [W] is too inexperienced to handle being a cyborg</span>")
 				return
 
 			if(!user.drop_item(W))

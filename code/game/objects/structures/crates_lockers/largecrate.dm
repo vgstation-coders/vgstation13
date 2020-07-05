@@ -72,6 +72,7 @@
 		var/num = rand(2, 4)
 		for(var/i = 1 to num)
 			new /mob/living/simple_animal/hostile/lizard(loc)
+		new /mob/living/simple_animal/hostile/lizard/frog(loc)
 	..()
 
 /obj/structure/largecrate/porcelain/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -114,4 +115,15 @@
 /obj/structure/largecrate/cat/attackby(obj/item/weapon/W, mob/user)
 	if(iscrowbar(W))
 		new /mob/living/simple_animal/cat/Proc(loc)
+	..()
+
+/obj/structure/largecrate/snails
+	icon_state = "lisacrate"
+
+/obj/structure/largecrate/snails/attackby(obj/item/weapon/W, mob/user)
+	if(iscrowbar(W))
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
+		new /mob/living/simple_animal/snail(loc)
 	..()

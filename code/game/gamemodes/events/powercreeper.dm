@@ -48,7 +48,7 @@
 		grown = 1
 
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
-	var/datum/powernet/PN = getFromPool(/datum/powernet)
+	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(src)
 	for(var/dir in cardinal)
 		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
@@ -59,6 +59,9 @@
 	//we are processing
 	processing_objects.Add(src)
 	set_light(1, 15, LIGHT_COLOR_RED)
+
+/obj/structure/cable/powercreeper/reset_plane()
+	return
 
 /obj/structure/cable/powercreeper/Destroy()
 	processing_objects.Remove(src)
@@ -80,11 +83,14 @@
 		if(isturf(loc))
 			var/turf/T = loc
 			environment = T.return_air()
+			if(environment.temperature < T0C)
+				die()
+				return
 		//add power to powernet through converting atmospheric heat to power
 		add_avail(-(environment.add_thermal_energy(max(environment.get_thermal_energy_change(T0C),-POWER_PER_FRUIT*10)/10)))
 		if(growdirs)
-			var/grow_chance = Clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
-			if(prob(grow_chance))
+			var/grow_chance = clamp(MIN_SPREAD_CHANCE + (powernet.avail/1000), MIN_SPREAD_CHANCE, MAX_SPREAD_CHANCE)
+			if(prob(grow_chance) && (environment.temperature > T0C + 5))
 				var/chosen_dir = pick(cardinal)
 				if(growdirs & chosen_dir)
 					var/turf/target_turf = get_step(src, chosen_dir)
@@ -209,7 +215,7 @@ obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
 		if(src == C)
 			continue
 		if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-			var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+			var/datum/powernet/newPN = new /datum/powernet/
 			newPN.add_cable(C)
 		if(powernet) // if we already have a powernet, then merge the two powernets
 			merge_powernets(powernet,C.powernet)

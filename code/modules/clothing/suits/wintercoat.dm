@@ -7,7 +7,7 @@
 	item_state = "labcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
+	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/device/flashlight,
 		/obj/item/weapon/tank/emergency_oxygen,
@@ -20,6 +20,8 @@
 /obj/item/clothing/suit/storage/wintercoat/New()
 	if(!nohood)
 		hood = new(src)
+		if(wizard_garb)
+			hood.wizard_garb = 1
 	else
 		actions_types = null
 
@@ -30,7 +32,6 @@
 	desc = "A hood attached to a heavy winter jacket."
 	icon_state = "whood"
 	body_parts_covered = HIDEHEADHAIR
-	flags = HIDEHAIRCOMPLETELY
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 	var/obj/item/clothing/suit/storage/wintercoat/coat
 
@@ -43,13 +44,14 @@
 
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"
+	desc = "You guys gonna listen to Garry? You gonna let him give the orders? I mean, he could BE one of those things!"
 	icon_state = "coatcaptain"
-	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 0, rad = 0)
+	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 5, rad = 2)
 
 /obj/item/clothing/suit/storage/wintercoat/security
 	name = "security winter coat"
 	icon_state = "coatsecurity"
-	armor = list(melee = 25, bullet = 20, laser = 20, energy = 15, bomb = 20, bio = 0, rad = 0)
+	armor = list(melee = 40, bullet = 20, laser = 30, energy = 10, bomb = 20, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/weapon/gun/energy,
 		/obj/item/weapon/reagent_containers/spray/pepper,
@@ -148,7 +150,8 @@
 /obj/item/clothing/suit/storage/wintercoat/hop
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
-	armor = list(melee = 50, bullet = 10, laser = 25, energy = 10, bomb = 0, bio = 0, rad = 0)
+	desc = "A slightly armoured fur-lined greatcoat. It looks like it's mostly ceremonial."
+	armor = list(melee = 30, bullet = 10, laser = 10, energy = 10, bomb = 15, bio = 0, rad = 0)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 	allowed = list(
 		/obj/item/weapon/tank/emergency_oxygen,
@@ -184,6 +187,10 @@
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
+		
+/obj/item/clothing/suit/storage/wintercoat/mime
+	name = "mime winter coat"
+	icon_state = "coatmime"
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce
 	name = "Chief Engineer's winter coat"
@@ -206,10 +213,17 @@
 /obj/item/clothing/suit/storage/wintercoat/bartender
 	name = "bartender winter coat"
 	icon_state = "coatbar"
+	desc = "A heavy jacket made from 'synthetic' animal furs. Reinforced to avoid tearing when breaking up bar fights."
+	armor = list(melee = 20, bullet = 10, laser = 10, energy = 0, bomb = 10, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker,
 		/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
+
+/obj/item/clothing/suit/storage/wintercoat/druid
+	name = "druid winter robes"
+	icon_state = "druid_snow"
+	wizard_garb = 1
 
 
 #define HAS_HOOD 1

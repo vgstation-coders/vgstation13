@@ -1,6 +1,6 @@
 /obj/machinery/power/solar/panel
 	icon_state = "sp_base"
-	var/id_tag = 0
+	id_tag = 0
 	var/health = 15 //Fragile shit, even with state-of-the-art reinforced glass
 	var/maxhealth = 15 //If ANYONE ever makes it so that solars can be directly repaired without glass, also used for fancy calculations
 	var/obscured = 0
@@ -76,8 +76,8 @@
 			var/shard = initial(G.shard_type)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			solar_assembly.forceMove(get_turf(src))
-			getFromPool(shard, loc)
-			getFromPool(shard, loc)
+			new shard(loc)
+			new shard(loc)
 			qdel(src)
 
 /obj/machinery/power/solar/panel/update_icon()
@@ -116,7 +116,7 @@
 		return
 
 	if(adir != ndir)
-		adir = (360 + adir + Clamp(ndir - adir, -10, 10)) % 360
+		adir = (360 + adir + clamp(ndir - adir, -10, 10)) % 360
 		update_icon()
 		update_solar_exposure()
 
@@ -143,12 +143,12 @@
 		if(1.0)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			if(prob(15))
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 			kill()
 		if(2.0)
 			if(prob(25))
 				solar_assembly.glass_type = null //The glass you're looking for is below pal
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				kill()
 			else
 				broken()

@@ -147,7 +147,7 @@
 
 	if (href_list["make"])
 		if (src.amount < 1)
-			returnToPool(src) //Never should happen
+			qdel(src) //Never should happen
 		var/list/recipes_list = recipes
 		if (href_list["sublist"])
 			var/datum/stack_recipe_list/srl = recipes_list[text2num(href_list["sublist"])]
@@ -195,7 +195,8 @@
 					R.module_state_3 = null
 					R.inv3.icon_state = "inv3"
 			usr.before_take_item(src)
-		spawn returnToPool(src)
+		spawn()
+			qdel(src)
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount
@@ -329,6 +330,7 @@
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
 		add_amount -= S.amount
+		S.update_materials()
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

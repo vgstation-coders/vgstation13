@@ -103,7 +103,7 @@
 					strength = round(strength/mob.virus2.len)
 					var/i = 1
 					while (strength > 0 && i < 10) //stronger viruses create more clouds at once, max limit of 10 clouds
-						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), mob, virus_copylist(mob.virus2))
+						new /obj/effect/effect/pathogen_cloud/core(get_turf(src), mob, virus_copylist(mob.virus2))
 						strength -= 30
 						i++
 
@@ -231,7 +231,7 @@
 		else
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 			if(D==null)
-				D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
+				D = new /obj/effect/decal/cleanable/blood(get_turf(mob))
 				D.New(D.loc)
 			D.virus2 |= virus_copylist(mob.virus2)
 
@@ -247,7 +247,7 @@
 		mob.emote("cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
-			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
+			D = new /obj/effect/decal/cleanable/blood/viralsputum(get_turf(mob))
 			D.New(D.loc)
 		D.virus2 |= virus_copylist(mob.virus2)
 

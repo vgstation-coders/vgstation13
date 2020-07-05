@@ -53,7 +53,7 @@
 		return
 
 	if(copy)
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -82,7 +82,7 @@
 			copying = 0
 		updateUsrDialog()
 	else if(photocopy)
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -121,7 +121,7 @@
 					break
 			copying = 0
 	else if(ass) //ASS COPY. By Miauw
-		copies = Clamp(copies, 0, 10)
+		copies = clamp(copies, 0, 10)
 		spawn()
 			copying = 1
 			for(var/i = 0, i < copies, i++)
@@ -281,11 +281,11 @@
 		var/xdim = input(usr, "Default paper width", "Formatting", 400) as num|null
 		if(!xdim)
 			return
-		xdim = Clamp(xdim,100,800)
+		xdim = clamp(xdim,100,800)
 		var/ydim = input(usr, "Default paper height", "Formatting", 400) as num|null
 		if(!ydim)
 			return
-		ydim = Clamp(ydim,100,900)
+		ydim = clamp(ydim,100,900)
 		copy.display_x = xdim
 		copy.display_y = ydim
 		to_chat(usr, "<span class='notice'>The machine hums a moment as it configures your document.</span>")
@@ -324,8 +324,8 @@
 				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>This cartridge is not yet ready for replacement! Use up the rest of the toner.</span>")
-	else if(iswrench(O))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	else if(O.is_wrench(user))
+		O.playtoolsound(loc, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] [src].</span>")
 	else if(istype(O, /obj/item/weapon/grab)) //For ass-copying.
@@ -360,7 +360,7 @@
 	if(opened)
 		if(iscrowbar(O))
 			to_chat(user, "You begin to remove the circuits from the [src].")
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+			O.playtoolsound(src, 50)
 			if(do_after(user, src, 50))
 				var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(src.loc)
 				M.state = 1
@@ -382,13 +382,13 @@
 				qdel(src)
 			else
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
+					var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 					O.New(O.loc)
 					toner = 0
 		else
 			if(prob(50))
 				if(toner > 0)
-					var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
+					var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 					O.New(O.loc)
 					toner = 0
 	return
@@ -398,7 +398,7 @@
 		qdel(src)
 	else
 		if(toner > 0)
-			var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, get_turf(src))
+			var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(get_turf(src))
 			O.New(O.loc)
 			toner = 0
 	return

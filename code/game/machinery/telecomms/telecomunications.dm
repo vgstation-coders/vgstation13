@@ -70,7 +70,7 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 			if(long_range_link == 0 && machine.long_range_link == 0)
 				continue
 		// If we're sending a copy, be sure to create the copy for EACH machine and paste the data
-		var/datum/signal/copy = getFromPool(/datum/signal)
+		var/datum/signal/copy = new /datum/signal
 		if(copysig)
 
 			copy.transmission_method = 2
@@ -169,11 +169,6 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 		unlinkFrom(null, link)
 	telecomms_list -= src
 	..()
-
-/obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/buffer)
-	..()
-	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
-		M.notify_unlinked()
 
 // Used in auto linking
 /obj/machinery/telecomms/proc/add_link(var/obj/machinery/telecomms/T)

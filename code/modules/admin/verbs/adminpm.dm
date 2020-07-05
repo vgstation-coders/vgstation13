@@ -106,8 +106,12 @@
 				recieve_color = "maroon"
 			else
 				recieve_color = "red"
-			send_pm_type = holder.rank + " "
-			recieve_pm_type = holder.rank
+			if(holder.fakekey)
+				send_pm_type = "Admin "
+				recieve_pm_type = "Admin"
+			else
+				send_pm_type = holder.rank + " "
+				recieve_pm_type = holder.rank
 
 	else if(!C.holder)
 		to_chat(src, "<span class='red'>Error: Admin-PM: Non-admin to non-admin PM communication is forbidden.</span>")
@@ -131,7 +135,7 @@
 						adminhelp(reply)													//sender has left, adminhelp instead
 				return
 
-	recieve_message = "\[[time_stamp()]] <font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [strict_ascii(msg)]</font>"
+	recieve_message = "<font color='[recieve_color]'>[recieve_pm_type] PM from-<b>[key_name(src, C, C.holder ? 1 : 0)]</b>: [msg]</font>"
 	C.output_to_special_tab(recieve_message, force_focus = TRUE)
 
 	output_to_special_tab("<span class='notice'>[send_pm_type]PM to-<b>[key_name(C, src, holder ? 1 : 0)]</b>: [msg]</span>")

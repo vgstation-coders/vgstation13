@@ -144,7 +144,7 @@
 		if (prob(mut_prob))
 			var/list/datum/organ/external/candidates = list()
 			for (var/datum/organ/external/O in organs)
-				if(!(O.status & ORGAN_MUTATED))
+				if(O.is_organic() && O.is_usable())
 					candidates |= O
 			if (candidates.len)
 				var/datum/organ/external/O = pick(candidates)
@@ -154,14 +154,14 @@
 	else
 		if (prob(heal_prob))
 			for (var/datum/organ/external/O in organs)
-				if (O.status & ORGAN_MUTATED)
+				if (O.is_existing() && O.status & ORGAN_MUTATED)
 					O.unmutate()
 					to_chat(src, "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>")
 					return
 
 	if (getCloneLoss() < 1)
 		for (var/datum/organ/external/O in organs)
-			if (O.status & ORGAN_MUTATED)
+			if (O.is_existing() && O.status & ORGAN_MUTATED)
 				O.unmutate()
 				to_chat(src, "<span class = 'notice'>Your [O.display_name] is shaped normally again.</span>")
 	hud_updateflag |= 1 << HEALTH_HUD
@@ -377,14 +377,18 @@ This function restores all organs.
 
 	switch(damagetype)
 		if(BRUTE)
-			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
-			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
@@ -484,6 +488,9 @@ This function restores all organs.
 	update_canmove()
 
 /mob/living/carbon/human/apply_radiation(var/rads, var/application = RAD_EXTERNAL)
+	if(species.flags & RAD_IMMUNE)
+		return
+
 	if(application == RAD_EXTERNAL)
 		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
 

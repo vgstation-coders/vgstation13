@@ -267,7 +267,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
 					qdel(linked_destroy.loaded_item)
 					linked_destroy.loaded_item = null
-			linked_destroy.icon_state = "d_analyzer"
+			if(linked_destroy.loaded_item) //It deconstructed something with stacks, make it show up full
+				linked_destroy.icon_state = "d_analyzer_l"
+			else
+				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
 			screen = 1.0
 			updateUsrDialog()
@@ -444,12 +447,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
 				for(var/i=1;i<=n;i++)
 					use_power(power)
 					linked_lathe.queue += being_built
 				if(href_list["now"]=="1")
-					linked_lathe.stopped=0
+					linked_lathe.start_processing_queue()
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
 		if (!autorefresh)
@@ -477,19 +480,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the imprinter gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
 				for(var/i=1;i<=n;i++)
 					linked_imprinter.queue += being_built
 					use_power(power)
 				if(href_list["now"]=="1")
-					linked_imprinter.stopped=0
+					linked_imprinter.start_processing_queue()
 
 	else if(href_list["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
 		var/obj/item/weapon/reagent_containers/RC = locate(href_list["beakerI"])
-		if(RC && RC in linked_imprinter.component_parts)
+		if(RC && (RC in linked_imprinter.component_parts))
 			RC.reagents.del_reagent(href_list["disposeI"])
 		linked_imprinter.update_buffer_size()
 
@@ -502,7 +505,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				RC.reagents.clear_reagents()
 			linked_imprinter.update_buffer_size()
 
-	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["removeQItem"]) //Removes an item from the queue
 		var/i=text2num(href_list["removeQItem"])
 		switch(href_list["device"])
 			if("protolathe")
@@ -512,7 +515,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.Cut(i,i+1)
 
-	else if(href_list["clearQ"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["clearQ"]) //Clears queue
 		switch(href_list["device"])
 			if("protolathe")
 				if(linked_lathe)
@@ -521,11 +524,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.len = 0
 
-	else if(href_list["setProtolatheStopped"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		linked_lathe.stopped=(href_list["setProtolatheStopped"]=="1")
+	else if(href_list["setProtolatheStopped"] && linked_lathe) //Makes the protolathe start or stop processing the queue
+		if(href_list["setProtolatheStopped"]=="0")
+			linked_lathe.start_processing_queue()
+		else
+			linked_lathe.stop_processing_queue()
 
-	else if(href_list["setImprinterStopped"] && linked_imprinter) //Causes the protolathe to dispose of all it's reagents.
-		linked_imprinter.stopped=(href_list["setImprinterStopped"]=="1")
+	else if(href_list["setImprinterStopped"] && linked_imprinter) //Ditto for imprinter
+		if(href_list["setImprinterStopped"]=="0")
+			linked_imprinter.start_processing_queue()
+		else
+			linked_imprinter.stop_processing_queue()
 
 	else if(href_list["lathe_ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
@@ -716,13 +725,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
 
 		if(1.1) //Research viewer
+			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
 			dat += "Current Research Levels:<BR><BR>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]<BR>
 					* Level: [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"
 
 		if(1.2) //Technology Disk Menu
 
@@ -763,7 +772,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 
 				dat += {"Name: [d_disk.blueprint.name]<BR>
-					Level: [Clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
+					Level: [clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
 				switch(d_disk.blueprint.build_type)
 					if(IMPRINTER)
 						dat += "Lathe Type: Circuit Imprinter<BR>"
@@ -1115,3 +1124,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	id = 5
 	req_access=list()
 	circuit = "/obj/item/weapon/circuitboard/rdconsole/pod"
+
+/obj/machinery/computer/rdconsole/derelict
+	name = "Derelict R&D Console"
+	id = 6
+	req_access=list()
+	circuit = "/obj/item/weapon/circuitboard/rdconsole/derelict"

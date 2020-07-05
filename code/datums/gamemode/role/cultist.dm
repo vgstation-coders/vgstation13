@@ -2,7 +2,9 @@
 	id = CULTIST
 	name = "Cultist"
 	required_pref = CULTIST
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Merchant")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chief Engineer",
+						"Chief Medical Officer", "Research Director", "Chaplain", "Head of Personnel",
+						"Internal Affairs Agent", "Merchant")
 	logo_state = "cult-logo"
 	greets = list(GREET_DEFAULT,GREET_CUSTOM,GREET_ROUNDSTART,GREET_ADMINTOGGLE)
 	var/list/tattoos = list()
@@ -99,7 +101,9 @@
 				H.adjustOxyLoss(20)
 				H.adjustToxLoss(10)
 		else
-			antag.current.adjustBruteLoss(rand(20,50))
+			if(isliving(antag.current))
+				var/mob/living/L = antag.current
+				L.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -211,7 +215,7 @@
 				M.gui_icons.soulblade_bgLEFT,
 				M.gui_icons.soulblade_coverLEFT,
 				M.gui_icons.soulblade_bloodbar,
-				M.fire,
+				M.healths2,
 				)
 
 /mob/living/carbon/proc/muted()
@@ -229,7 +233,7 @@
 	if (!istype(H))
 		return
 	var/unholy = H.checkTattoo(TATTOO_HOLY)
-	var/current_act = Clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
+	var/current_act = clamp(veil_thickness,CULT_MENDED,CULT_EPILOGUE)
 	if (reagent_id == INCENSE_HAREBELLS)
 		if (unholy)
 			H.eye_blurry = max(H.eye_blurry, 3)

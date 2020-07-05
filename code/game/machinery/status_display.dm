@@ -58,9 +58,14 @@ var/global/list/status_displays = list() //This list contains both normal status
 /obj/machinery/status_display/New()
 	..()
 	status_displays |= src
-	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, frequency)
+
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
+
+/obj/machinery/status_display/initialize()
+	..()
+	if(radio_controller)
+		radio_controller.add_object(src, frequency)
 
 /obj/machinery/status_display/Destroy()
 	.=..()
@@ -341,6 +346,7 @@ var/global/list/status_display_images = list(
 	name = "AI display"
 	anchored = 1
 	density = 0
+	layer = ABOVE_WINDOW_LAYER
 
 	var/spookymode=0 // Ghosts
 

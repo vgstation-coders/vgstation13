@@ -8,6 +8,76 @@
 /*
  * Security
  */
+ 
+ /*
+ * Formalwear first
+ */
+/obj/item/clothing/under/rank/secformal
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)	
+	
+/obj/item/clothing/under/rank/secformal/headofsecurity_blue
+	name = "\improper HoS' blue dress uniform"
+	desc = "Head of Security's blue uniform. For formal occasions."
+	icon_state = "hosblueclothes"
+	item_state = "ba_suit"
+	_color = "hosblueclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy
+	name = "\improper HoS' navy dress uniform"
+	desc = "Head of Security's navy uniform. For formal occasions."
+	icon_state = "hosdnavyclothes"
+	item_state = "jensensuit"
+	_color = "hosdnavyclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_tan
+	name = "\improper HoS' tan dress uniform"
+	desc = "Head of Security's uniform. For formal occasions."
+	icon_state = "hostanclothes"
+	item_state = "ba_suit"
+	_color = "hostanclothes"
+/obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
+	_color = "hosdnavyclothestrimmed"
+	
+/obj/item/clothing/under/rank/secformal/warden_blue
+	name = "warden's blue dress uniform"
+	desc = "Warden's blue dress uniform. For formal occasions."
+	icon_state = "wardenblueclothes"
+	item_state = "ba_suit"
+	_color = "wardenblueclothes"
+/obj/item/clothing/under/rank/secformal/warden_navy
+	name = "warden's navy dress uniform"
+	desc = "Warden's navy dress uniform. For formal occasions."
+	icon_state = "wardendnavyclothes"
+	item_state = "jensensuit"
+	_color = "wardendnavyclothes"
+/obj/item/clothing/under/rank/secformal/warden_tan
+	name = "warden's tan dress uniform"
+	desc = "Warden's tan dress uniform. For formal occasions."
+	icon_state = "wardentanclothes"
+	item_state = "ba_suit"
+	_color = "wardentanclothes"
+	
+/obj/item/clothing/under/rank/secformal/officer_blue
+	name = "officer's blue dress uniform"
+	desc = "Security officer's blue dress uniform. For formal occasions."	
+	icon_state = "officerblueclothes"
+	item_state = "ba_suit"
+	_color = "officerblueclothes"
+/obj/item/clothing/under/rank/secformal/officer_navy
+	name = "officer's navy dress uniform"
+	desc = "Security officer's navy dress uniform. For formal occasions."
+	icon_state = "officerdnavyclothes"
+	item_state = "jensensuit"
+	_color = "officerdnavyclothes"
+/obj/item/clothing/under/rank/secformal/officer_tan
+	name = "officer's tan dress uniform"
+	desc = "Security officer's tan dress uniform. For formal occasions."
+	icon_state = "officertanclothes"
+	item_state = "ba_suit"
+	_color = "officertanclothes"
+ 
+ /*
+ * Normalwear
+ */
+ 
 /obj/item/clothing/under/rank/warden
 	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"
@@ -17,18 +87,18 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/security
 	name = "security officer's jumpsuit"
 	desc = "A jumpsuit made of strong material, providing robust protection."
 	icon_state = "security"
 	item_state = "r_suit"
-	_color = "secred"
+	_color = "security"
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/security/sneaksuit
 	name = "sneaking suit"
@@ -72,14 +142,14 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/det/noir
 	desc = "This suit's stayed with you for years, like an old friend. Sure, it's seen better days, but it ain't shabby; after all, you can afford a blemish on your character, but not on your clothes."
 	icon_state = "sl_suit"
 	item_state = "detective_noir"
 	_color = "detective_noir"
-
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/det_hat
 	name = "hat"
@@ -88,7 +158,7 @@
 	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/candy_corn, /obj/item/weapon/pen)
 	armor = list(melee = 50, bullet = 5, laser = 25,energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/det_hat/noir
 	desc = "This hat's been with you for some time now. It was a gift from your ex, and you wore it during the war. Thinking back on it, the war was prettier."
@@ -106,7 +176,7 @@
 	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.8
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos
 	name = "armored coat"
@@ -116,6 +186,7 @@
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	siemens_coefficient = 0.6
+	species_fit = list(INSECT_SHAPED)
 
 //Jensen cosplay gear
 /obj/item/clothing/under/rank/head_of_security/jensen
@@ -125,14 +196,16 @@
 	item_state = "jensensuit"
 	_color = "jensen"
 	siemens_coefficient = 0.6
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/jensen
 	name = "armored trenchcoat"
 	desc = "A trenchcoat augmented with a special alloy for protection and style."
 	icon_state = "jensencoat"
 	item_state = "jensencoat"
+	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.6
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/hos/sundowner
 	name = "armoured greatcoat"
@@ -140,3 +213,29 @@
 	icon_state = "sundowner_coat_allblack"
 	item_state = "sundowner_coat_allblack"
 	siemens_coefficient = 0.6
+
+// -- Centcomm, OG by SkyMarshall
+	
+/obj/item/clothing/under/rank/centcom/representative
+	desc = "Gold trim on space-black cloth, this uniform displays the rank of \"Ensign\" and bears \"N.C.V. Fearless CV-286\" on the left shounder."
+	name = "\improper Nanotrasen Navy Uniform"
+	icon_state = "officer"
+	item_state = "g_suit"
+	_color = "officer"
+	displays_id = 0
+
+/obj/item/clothing/under/rank/centcom/officer
+	desc = "Gold trim on space-black cloth, this uniform displays the rank of \"Lieutenant Commander\" and bears \"N.C.V. Fearless CV-286\" on the left shounder."
+	name = "\improper Nanotrasen Officers Uniform"
+	icon_state = "officer"
+	item_state = "g_suit"
+	_color = "officer"
+	displays_id = 0
+
+/obj/item/clothing/under/rank/centcom/captain
+	desc = "Gold trim on space-black cloth, this uniform displays the rank of \"Captain\" and bears \"N.C.V. Fearless CV-286\" on the left shounder."
+	name = "\improper Nanotrasen Captains Uniform"
+	icon_state = "centcom"
+	item_state = "dg_suit"
+	_color = "centcom"
+	displays_id = 0

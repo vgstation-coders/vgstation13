@@ -157,7 +157,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
 /proc/sanitize_frequency(var/f)
-	f = Clamp(round(f), 1201, 1599) // 120.1, 159.9
+	f = clamp(round(f), 1201, 1599) // 120.1, 159.9
 
 	if ((f % 2) == 0) //Ensure the last digit is an odd number
 		f += 1
@@ -248,15 +248,15 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
-//Last modified by Carn
-/mob/proc/rename_self(var/role, var/allow_numbers=0)
+//Also used for the screen alarm rename option
+/mob/proc/rename_self(var/role, var/allow_numbers=0, var/namepick_message = "You are a [role]. Would you like to change your name to something else?")
 	spawn(0)
 		var/oldname = real_name
 
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
-			newname = input(src,"You are a [role]. Would you like to change your name to something else?", "Name change",oldname) as text
+			newname = input(src,namepick_message, "Name change",oldname) as text
 			newname = reject_bad_name(newname,allow_numbers)	//returns null if the name doesn't meet some basic requirements. Tidies up a few other things like bad-characters.
 
 			for(var/mob/living/M in player_list)
@@ -267,7 +267,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					break
 			if(newname)
 				break	//That's a suitable name!
-			to_chat(src, "Sorry, that [role]-name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
+			to_chat(src, "Sorry, that name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
 
 		if(!newname)	//we'll stick with the oldname then
 			return
@@ -275,6 +275,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(cmptext("ai",role))
 			if(isAI(src))
 				var/mob/living/silicon/ai/A = src
+				if(A.connected_robots.len) //let the borgs know what their master's new name is
+					for(var/mob/living/silicon/robot/robitt in A.connected_robots)
+						to_chat(robitt, "<span class='notice' style=\"font-family:Courier\">Notice: Linked AI [oldname] renamed to [newname].</span>")
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
 //				world << sound('sound/AI/newAI.ogg')
@@ -286,8 +289,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				if(A.aiPDA)
 					A.aiPDA.owner = newname
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
+				
 
-
+		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
 
 
@@ -598,8 +602,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns turf relative to A offset in dx and dy tiles
 // bound to map limits
 /proc/get_offset_target_turf(atom/A, dx, dy)
-	var/x = Clamp(A.x + dx, 1, world.maxx)
-	var/y = Clamp(A.y + dy, 1, world.maxy)
+	var/x = clamp(A.x + dx, 1, world.maxx)
+	var/y = clamp(A.y + dy, 1, world.maxy)
 
 	return locate(x, y, A.z)
 
@@ -865,14 +869,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	flick(icon_state, A)
 	sleep(time)
 	return 1
-
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -1372,6 +1368,31 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 /mob/dview/send_to_future(var/duration)
 	return
 
+/mob/dview/Destroy()
+	CRASH("Somebody called qdel on dview. That's extremely rude.")
+
+//Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
+//No, view(client) does not work for this, despite what the Ref says.
+//This could be made into a define if you don't mind leaving tview_mob lying around. This could cause bugs though.
+/proc/tview(mob/target)
+	. = view(target.client?.view || world.view, setup_tview(target))
+	tview_mob.loc = null
+
+/proc/setup_tview(mob/target)
+	tview_mob.loc = get_turf(target)
+	tview_mob.sight = target.sight
+	tview_mob.see_in_dark = target.see_in_dark
+	tview_mob.see_invisible = target.see_invisible
+	tview_mob.see_infrared = target.see_infrared //I'm pretty sure we don't actually use this but might as well include it
+	return tview_mob
+
+//Aside from usage, this proc is the only difference between tview and dview.
+/mob/dview/tview/Destroy()
+	CRASH("Somebody called qdel on tview. That's extremely rude.")
+
+//They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it
+var/mob/dview/tview/tview_mob = new()
+
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
 	var/z
@@ -1652,11 +1673,11 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		C.output_to_special_tab(sane_msg)
+		C.output_to_special_tab(msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1674,8 +1695,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y

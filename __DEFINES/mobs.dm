@@ -30,5 +30,12 @@
 #define VOXAZURE 5
 #define VOXEMERALD 6
 
+#define GREYGRAY 1
+#define GREYLIGHT 2
+#define GREYGREEN 3
+#define GREYBLUE 4
+
 #define CATBEASTBROWN 1
 #define CATBEASTBLACK 2
+
+#define CONFUSED_MAGIC 1

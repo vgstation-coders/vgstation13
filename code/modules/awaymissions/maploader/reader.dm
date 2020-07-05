@@ -92,7 +92,10 @@ var/list/map_dimension_cache = list()
 		var/model_key = copytext(tline,2,2+key_len)
 		var/model_contents = copytext(tline,findtext(tfile,"=")+3,length(tline))
 		grid_models[model_key] = model_contents
-		sleep(-1)
+		if (remove_lag)
+			CHECK_TICK
+		else
+			sleep(-1)
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	//now let's fill the map with turf and objects using the constructed model map
@@ -118,11 +121,19 @@ var/list/map_dimension_cache = list()
 		var/map_width = x_depth / key_len //To get the map's width, divide the length of the line by the length of the key
 
 		if(world.maxx < map_width + x_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxx = map_width + x_offset
+			WARNING("Loading [map_element] enlarged the map. New max x = [world.maxx]")
 
 		var/y_depth = z_depth / (x_depth+1) //x_depth + 1 because we're counting the '\n' characters in z_depth
 		if(world.maxy < y_depth + y_offset)
+			if(!map.can_enlarge)
+				WARNING("Cancelled load of [map_element] due to map bounds.")
+				return list()
 			world.maxy = y_depth + y_offset
+			WARNING("Loading [map_element] enlarged the map. New max y = [world.maxy]")
 
 		//then proceed it line by line, starting from top
 		ycrd = y_offset + y_depth
@@ -136,6 +147,8 @@ var/list/map_dimension_cache = list()
 				xcrd++
 				var/model_key = copytext(grid_line,mpos,mpos+key_len)
 				spawned_atoms |= parse_grid(grid_models[model_key],xcrd,ycrd,zcrd+z_offset)
+				if (remove_lag)
+					CHECK_TICK
 			if(map_element)
 				map_element.width = xcrd - x_offset
 

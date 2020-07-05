@@ -4,6 +4,9 @@
 /mob
 	plane = MOB_PLANE
 	var/said_last_words = 0 // All mobs can now whisper as they die
+	var/list/alerts = list()
+
+	var/event/on_blink
 
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
@@ -38,6 +41,12 @@
 		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
+	if(on_bumping)
+		on_bumping.holder = null
+	if(on_bumped)
+		on_bumped.holder = null
+	if(on_touched)
+		on_touched.holder = null
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
@@ -49,14 +58,14 @@
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			returnToPool(spell_master)
+			qdel(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
-					returnToPool(AM)
+					qdel(AM)
 			else
 				qdel(AM)
 		client.screen = list()
@@ -85,6 +94,9 @@
 	qdel(on_clickon)
 	qdel(on_irradiate)
 	qdel(on_death)
+	qdel(on_bumping)
+	qdel(on_bumped)
+	qdel(on_touched)
 
 	on_spellcast = null
 	on_uattack = null
@@ -93,6 +105,9 @@
 	on_clickon = null
 	on_irradiate = null
 	on_death = null
+	on_bumping = null
+	on_bumped = null
+	on_touched = null
 
 	if(transmogged_from)
 		qdel(transmogged_from)
@@ -118,170 +133,140 @@
 
 /mob/proc/remove_screen_objs()
 	if(hands)
-		returnToPool(hands)
+		qdel(hands)
 		if(client)
 			client.screen -= hands
 		hands = null
 	if(pullin)
-		returnToPool(pullin)
+		qdel(pullin)
 		if(client)
 			client.screen -= pullin
 		pullin = null
 	if(visible)
-		returnToPool(visible)
+		qdel(visible)
 		if(client)
 			client.screen -= visible
 		visible = null
-	if(purged)
-		returnToPool(purged)
-		if(client)
-			client.screen -= purged
-		purged = null
 	if(internals)
-		returnToPool(internals)
+		qdel(internals)
 		if(client)
 			client.screen -= internals
 		internals = null
-	if(oxygen)
-		returnToPool(oxygen)
-		if(client)
-			client.screen -= oxygen
-		oxygen = null
 	if(i_select)
-		returnToPool(i_select)
+		qdel(i_select)
 		if(client)
 			client.screen -= i_select
 		i_select = null
 	if(m_select)
-		returnToPool(m_select)
+		qdel(m_select)
 		if(client)
 			client.screen -= m_select
 		m_select = null
-	if(toxin)
-		returnToPool(toxin)
-		if(client)
-			client.screen -= toxin
-		toxin = null
-	if(fire)
-		returnToPool(fire)
-		if(client)
-			client.screen -= fire
-		fire = null
-	if(bodytemp)
-		returnToPool(bodytemp)
-		if(client)
-			client.screen -= bodytemp
-		bodytemp = null
 	if(healths)
-		returnToPool(healths)
+		qdel(healths)
 		if(client)
 			client.screen -= healths
 		healths = null
+	if(healths2)
+		qdel(healths2)
+		if(client)
+			client.screen -= healths2
+		healths2 = null
 	if(throw_icon)
-		returnToPool(throw_icon)
+		qdel(throw_icon)
 		if(client)
 			client.screen -= throw_icon
 		throw_icon = null
-	if(nutrition_icon)
-		returnToPool(nutrition_icon)
-		if(client)
-			client.screen -= nutrition_icon
-		nutrition_icon = null
-	if(pressure)
-		returnToPool(pressure)
-		if(client)
-			client.screen -= pressure
-		pressure = null
 	if(damageoverlay)
-		returnToPool(damageoverlay)
+		qdel(damageoverlay)
 		if(client)
 			client.screen -= damageoverlay
 		damageoverlay = null
 	if(pain)
-		returnToPool(pain)
+		qdel(pain)
 		if(client)
 			client.screen -= pain
 		pain = null
 	if(item_use_icon)
-		returnToPool(item_use_icon)
+		qdel(item_use_icon)
 		if(client)
 			client.screen -= item_use_icon
 		item_use_icon = null
 	if(gun_move_icon)
-		returnToPool(gun_move_icon)
+		qdel(gun_move_icon)
 		if(client)
 			client.screen -= gun_move_icon
 		gun_move_icon = null
 	if(gun_run_icon)
-		returnToPool(gun_run_icon)
+		qdel(gun_run_icon)
 		if(client)
 			client.screen -= gun_run_icon
 		gun_run_icon = null
 	if(gun_setting_icon)
-		returnToPool(gun_setting_icon)
+		qdel(gun_setting_icon)
 		if(client)
 			client.screen -= gun_setting_icon
 		gun_setting_icon = null
 	if(m_suitclothes)
-		returnToPool(m_suitclothes)
+		qdel(m_suitclothes)
 		if(client)
 			client.screen -= m_suitclothes
 		m_suitclothes = null
 	if(m_suitclothesbg)
-		returnToPool(m_suitclothesbg)
+		qdel(m_suitclothesbg)
 		if(client)
 			client.screen -= m_suitclothesbg
 		m_suitclothesbg = null
 	if(m_hat)
-		returnToPool(m_hat)
+		qdel(m_hat)
 		if(client)
 			client.screen -= m_hat
 		m_hat = null
 	if(m_hatbg)
-		returnToPool(m_hatbg)
+		qdel(m_hatbg)
 		if(client)
 			client.screen -= m_hatbg
 		m_hatbg = null
 	if(m_glasses)
-		returnToPool(m_glasses)
+		qdel(m_glasses)
 		if(client)
 			client.screen -= m_glasses
 		m_glasses = null
 	if(m_glassesbg)
-		returnToPool(m_glassesbg)
+		qdel(m_glassesbg)
 		if(client)
 			client.screen -= m_glassesbg
 		m_glasses = null
 	if(zone_sel)
-		returnToPool(zone_sel)
+		qdel(zone_sel)
 		if(client)
 			client.screen -= zone_sel
 		zone_sel = null
 
 	if(iscultist(src) && hud_used)
 		if(hud_used.cult_Act_display)
-			returnToPool(hud_used.cult_Act_display)
+			qdel(hud_used.cult_Act_display)
 			if(client)
 				client.screen -= hud_used.cult_Act_display
 			hud_used.cult_Act_display = null
 		if(hud_used.cult_tattoo_display)
-			returnToPool(hud_used.cult_tattoo_display)
+			qdel(hud_used.cult_tattoo_display)
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 		if (isshade(src) && gui_icons)
 			if(gui_icons.soulblade_bgLEFT)
-				returnToPool(gui_icons.soulblade_bgLEFT)
+				qdel(gui_icons.soulblade_bgLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_bgLEFT
 				gui_icons.soulblade_bgLEFT = null
 			if(gui_icons.soulblade_bloodbar)
-				returnToPool(gui_icons.soulblade_bloodbar)
+				qdel(gui_icons.soulblade_bloodbar)
 				if(client)
 					client.screen -= gui_icons.soulblade_bloodbar
 				gui_icons.soulblade_bloodbar = null
 			if(gui_icons.soulblade_coverLEFT)
-				returnToPool(gui_icons.soulblade_coverLEFT)
+				qdel(gui_icons.soulblade_coverLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_coverLEFT
 				gui_icons.soulblade_coverLEFT = null
@@ -312,11 +297,14 @@
 	on_clickon = new(owner = src)
 	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
+	on_bumping = new(owner = src)
+	on_bumped = new(owner = src)
+	on_touched = new(owner = src)
 
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
-		getFromPool(/mob/virtualhearer, src)
+		new /mob/virtualhearer(src)
 
 	update_colour(0)
 
@@ -324,7 +312,7 @@
 	if(flags & HEAR_ALWAYS)
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				returnToPool(VH)
+				qdel(VH)
 	..()
 
 /mob/proc/is_muzzled()
@@ -393,7 +381,7 @@
 			else
 				msg = alt
 				type = alt_type
-				if((type & MESSAGE_SEE) && (sdisabilities & BLIND || blinded || paralysis)) //Since the alternative is sight-related, make sure we can see
+				if((type & MESSAGE_SEE) && is_blind()) //Since the alternative is sight-related, make sure we can see
 					return
 	//Added voice muffling for Issue 41.
 	//This has been changed to only work with audible messages, because you can't hear a frown
@@ -599,8 +587,8 @@
 
 /mob/proc/restrained()
 	if(timestopped)
-		return 1 //under effects of time magick
-	return
+		return TRUE //under effects of time magick
+	return FALSE
 
 //This proc is called whenever someone clicks an inventory ui slot.
 /mob/proc/attack_ui(slot, hand_index)
@@ -1056,7 +1044,7 @@ Use this proc preferably at the end of an equipment loadout
 //note: ghosts can point, this is intended
 //visible_message will handle invisibility properly
 //overriden here and in /mob/dead/observer for different point span classes and sanity checks
-/mob/verb/pointed(atom/A as turf | obj | mob in view(get_turf(src)))
+/mob/verb/pointed(atom/A as turf | obj | mob in tview(src))
 	set name = "Point To"
 	set category = "Object"
 
@@ -1070,7 +1058,7 @@ Use this proc preferably at the end of an equipment loadout
 		I.showoff(src)
 		return 0
 
-	if(!(A in (view(get_turf(src)) + get_all_slots())) || (usr.see_invisible < A.invisibility))
+	if(!(A in (tview(src) + get_all_slots())))
 		message_admins("<span class='warning'><B>WARNING: </B><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?</span>", 1)
 		log_admin("[key_name_admin(src)] just pointed at something ([A]) they can't currently see. Are they using a macro to cheat?")
 		return 0
@@ -1276,7 +1264,7 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	if(!can_show_flavor_text())
 		return
-	var/msg = utf8_sanitize(flavor_text)
+	var/msg = strip_html(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)
@@ -1510,7 +1498,9 @@ Use this proc preferably at the end of an equipment loadout
 
 
 /mob/proc/can_use_hands()
-	return
+	if(restrained())
+		return FALSE
+	return TRUE
 
 /mob/proc/is_active()
 	return (0 >= usr.stat)
@@ -1528,11 +1518,13 @@ Use this proc preferably at the end of an equipment loadout
 /mob/Stat()
 	..()
 
+	statpanel("Status") //Default tab
 	if(client && client.holder && client.inactivity < 1200)
 		if(statpanel("MC"))
 			stat("Location:", "([x], [y], [z])")
 			stat("CPU:", "[world.cpu]")
 			stat("Instances:", "[world.contents.len]")
+			stat("Internal tick usage:", "[internal_tick_usage]")
 
 			stat(null)
 			if(Master)
@@ -1639,71 +1631,79 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/reset_layer()
 	return
 
-/mob/verb/eastface()
-	set hidden = 1
-	if(loc && loc.relayface(src, EAST))
+/mob/proc/directionface(var/direction)
+	if(loc && loc.relayface(src, direction))
 		return 1
-	if(locked_to && locked_to.relayface(src, EAST))
+	if(locked_to && locked_to.relayface(src, direction))
 		return 1
 	if(!canface())
 		return 0
-	dir = EAST
+	if (dir!=direction)
+		StartMoving()
+	dir = direction
 	Facing()
+	EndMoving()
 	delayNextMove(movement_delay(),additive=1)
 	return 1
 
+/mob/verb/eastface()
+	set hidden = 1
+	return directionface(EAST)
 
 /mob/verb/westface()
 	set hidden = 1
-	if(loc && loc.relayface(src, WEST))
-		return 1
-	if(locked_to && locked_to.relayface(src, WEST))
-		return 1
-	if(!canface())
-		return 0
-	dir = WEST
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(WEST)
 
 /mob/verb/northface()
 	set hidden = 1
-	if(loc && loc.relayface(src, NORTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, NORTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = NORTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(NORTH)
 
 /mob/verb/southface()
 	set hidden = 1
-	if(loc && loc.relayface(src, SOUTH))
-		return 1
-	if(locked_to && locked_to.relayface(src, SOUTH))
-		return 1
-	if(!canface())
-		return 0
-	dir = SOUTH
-	Facing()
-	delayNextMove(movement_delay(),additive=1)
-	return 1
-
+	return directionface(SOUTH)
 
 /mob/proc/Facing()
 	var/datum/listener
-	for(. in src.callOnFace)
-		listener = locate(.)
+	for(var/atomToCall in src.callOnFace)
+		listener = locate(atomToCall)
 		if(listener)
-			call(listener,src.callOnFace[.])(src)
+			call(listener,src.callOnFace[atomToCall])(src)
 		else
-			src.callOnFace -= .
+			src.callOnFace -= atomToCall
 
+
+//this proc allows to set up behaviours that occur the instant BEFORE the mob starts moving from a tile to the next
+/mob/proc/StartMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnStartMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnStartMove[atomToCall])(src)
+		else
+			src.callOnStartMove -= atomToCall
+
+
+//this proc allows to set up behaviours that occur the instant AFTER the mob finishes moving from a tile to the next
+/mob/proc/EndMoving()
+	var/datum/listener
+	for(var/atomToCall in src.callOnEndMove)
+		listener = locate(atomToCall)
+		if(listener)
+			call(listener,src.callOnEndMove[atomToCall])(src)
+		else
+			src.callOnEndMove -= atomToCall
+
+
+/mob/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
+	StartMoving()
+	. = ..()
+	EndMoving()
+
+//Like forceMove(), but for dirs! used in atoms_movable.dm, mainly with chairs and vehicles
+/mob/change_dir(new_dir, var/changer)
+	StartMoving()
+	..()
+	EndMoving()
 
 /mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
 	return 0
@@ -1912,7 +1912,7 @@ mob/proc/on_foot()
 	return 1
 
 /mob/proc/is_blind()
-	if(sdisabilities & BLIND || blinded || paralysis)
+	if((sdisabilities & BLIND) || (sight & BLIND) || blinded || paralysis)
 		return 1
 	return 0
 
@@ -2181,6 +2181,7 @@ mob/proc/on_foot()
 
 /obj/transmog_body_container/proc/set_contained_mob(var/mob/M)
 	ASSERT(M)
+	M.unlock_from()
 	M.forceMove(src)
 	contained_mob = M
 
@@ -2233,7 +2234,7 @@ mob/proc/on_foot()
 			return TRUE
 
 	for(var/mob/living/simple_animal/hostile/asteroid/pillow/P in view(src))
-		if(P.isDead())
+		if(P.isDead() || !P.pacify_aura)
 			continue
 		to_chat(src, "<span class = 'notice'>You feel some strange force in the vicinity preventing you from being violent.</span>")
 		return TRUE
@@ -2241,7 +2242,8 @@ mob/proc/on_foot()
 	return FALSE
 
 /mob/proc/handle_regular_hud_updates()
-	return
+	if(client)
+		return TRUE
 
 /mob/proc/update_antag_huds()
 	if (mind)
@@ -2287,6 +2289,9 @@ mob/proc/on_foot()
 			to_chat(src, "Interference is disrupting the connection with the target mind.")
 			return 0
 	return 1
+
+/mob/proc/get_personal_ambience()
+	return list()
 
 #undef MOB_SPACEDRUGS_HALLUCINATING
 #undef MOB_MINDBREAKER_HALLUCINATING

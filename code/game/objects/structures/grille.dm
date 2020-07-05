@@ -24,7 +24,7 @@
 
 /obj/structure/grille/cultify()
 	new /obj/structure/grille/cult(get_turf(src))
-	returnToPool(src)
+	qdel(src)
 
 /obj/structure/grille/proc/healthcheck(var/hitsound = 0) //Note : Doubles as the destruction proc()
 	if(hitsound)
@@ -172,14 +172,14 @@
 		return
 	if(iswirecutter(W))
 		if(!shock(user, 100, W.siemens_coefficient)) //Prevent user from doing it if he gets shocked
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			drop_stack(grille_material, get_turf(src), broken ? 1 : 2, user) //Drop the rods, taking account on whenever the grille is broken or not !
 			qdel(src)
 			return
 		return //Return in case the user starts cutting and gets shocked, so that it doesn't continue downwards !
 	else if((W.is_screwdriver(user)) && (istype(loc, /turf/simulated) || anchored))
 		if(!shock(user, 90, W.siemens_coefficient))
-			playsound(loc, 'sound/items/Screwdriver.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			anchored = !anchored
 			user.visible_message("<span class='notice'>[user] [anchored ? "fastens" : "unfastens"] the grille [anchored ? "to" : "from"] the floor.</span>", \
 			"<span class='notice'>You [anchored ? "fasten" : "unfasten"] the grille [anchored ? "to" : "from"] the floor.</span>")

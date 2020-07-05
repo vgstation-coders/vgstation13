@@ -72,7 +72,7 @@
 	if(headwear)
 		protection = headwear.eyeprot
 
-	return Clamp(protection, -2, 2)
+	return clamp(protection, -2, 2)
 
 /mob/living/carbon/complex/martian/can_be_infected()
 	return 1

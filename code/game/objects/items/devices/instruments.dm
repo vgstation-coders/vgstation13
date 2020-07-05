@@ -7,6 +7,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/musician.dmi', "right_hand" = 'icons/mob/in-hand/right/musician.dmi')
 	icon = 'icons/obj/musician.dmi'
 	force = 10
+	var/requires_mouth = FALSE
 
 /obj/item/device/instrument/New()
 	..()
@@ -22,10 +23,15 @@
 	song.tempo = song.sanitize_tempo(song.tempo) // tick_lag isn't set when the map is loaded
 	..()
 
-/obj/item/device/instrument/attack_self(mob/user as mob)
+/obj/item/device/instrument/attack_self(mob/user)
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
+	if(requires_mouth)
+		var/mob/living/carbon/C = user
+		if(istype(C) && !C.hasmouth())
+			to_chat(user, "<span class='warning'>You need a mouth to play this instrument!</span>")
+			return 1
 	interact(user)
 
 /obj/item/device/instrument/drum/drum_makeshift/bongos/attack_self(mob/user as mob)
@@ -102,6 +108,7 @@
 	icon_state = "saxophone"
 	item_state = "saxophone"
 	instrumentId = "saxophone"
+	requires_mouth = TRUE
 
 /obj/item/device/instrument/trombone
 	name = "trombone"
@@ -109,6 +116,7 @@
 	icon_state = "trombone"
 	item_state = "trombone"
 	instrumentId = "trombone"
+	requires_mouth = TRUE
 
 /obj/item/device/instrument/recorder
 	name = "recorder"
@@ -116,6 +124,7 @@
 	icon_state = "recorder"
 	item_state = "recorder"
 	instrumentId = "recorder"
+	requires_mouth = TRUE
 
 /obj/item/device/instrument/harmonica
 	name = "harmonica"
@@ -127,6 +136,7 @@
 	force = 5
 	w_class = W_CLASS_SMALL
 	actions_types = list(/datum/action/item_action/instrument)
+	requires_mouth = TRUE
 
 /obj/item/device/instrument/bikehorn
 	name = "gilded bike horn"
@@ -179,7 +189,7 @@
 
 /obj/item/device/instrument/drum/drum_makeshift/attackby(obj/item/I,mob/user,params)
 	if(iswirecutter(I)) //wirecutters disassembles drums and bongos and gives you proper drops based on [decondrop] defined above
-		playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+		I.playtoolsound(loc, 50)
 		visible_message("<span class='notice'>[user] cuts the leather face off \the [src] with \the [I]. </span>")
 		for (var/i = 1 to decondrop)
 			new /obj/item/trash/bowl(get_turf(src))

@@ -33,7 +33,7 @@ var/global/lastDecTalkUse = 0
 	if(class)
 		speech.message_classes.Add(class)
 	send_speech(speech, world.view)
-	returnToPool(speech)
+	qdel(speech)
 
 /atom/movable/proc/Hear(var/datum/speech/speech, var/rendered_speech="")
 	return
@@ -45,6 +45,7 @@ var/global/lastDecTalkUse = 0
 	say_testing(src, "/atom/movable/proc/send_speech() start, msg = [speech.message]; message_range = [range]; language = [speech.language ? speech.language.name : "None"];")
 	if(isnull(range))
 		range = 7
+	range = atmospheric_speech(speech,range)
 	var/rendered = render_speech(speech)
 	var/list/listeners = get_hearers_in_view(range, src)
 	if(speech.speaker.GhostsAlwaysHear())
@@ -52,13 +53,37 @@ var/global/lastDecTalkUse = 0
 	for(var/atom/movable/AM in listeners)
 		AM.Hear(speech, rendered)
 
+/atom/movable/proc/atmospheric_speech(var/datum/speech/speech, var/range=7)
+	var/turf/T = get_turf(speech.speaker)
+	if(T && !T.c_airblock(T)) //we are on an airflowing tile
+		var/atmos = 0
+		var/datum/gas_mixture/current_air = T.return_air()
+		if(current_air)
+			atmos = round(current_air.return_pressure()/ONE_ATMOSPHERE, 0.1)
+		else
+			atmos = 0 //no air
+
+		range = min(round(range * sqrt(atmos)), range) //Range technically falls off with the root of pressure (see Newtonian sound)
+		range = max(range, 1) //If you get right next to someone you can read their lips, or something.
+		/*Rough range breakpoints for default 7-range speech
+		10kpa: 0 (round 0.09 down to 0 for atmos value)
+		11kpa: 2
+		21kpa: 3
+		51kpa: 4
+		61kpa: 5
+		81kpa: 6
+		101kpa: 7 (normal)
+		*/
+
+	return range
+
 /atom/movable/proc/GhostsAlwaysHear()
 	return FALSE
 
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
 		transmitter=GetDefaultRadio()
-	var/datum/speech/speech = getFromPool(/datum/speech)
+	var/datum/speech/speech = new /datum/speech
 	speech.message = message
 	speech.frequency = frequency
 	speech.job = get_job(speech)
@@ -115,7 +140,7 @@ var/global/lastDecTalkUse = 0
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
-		returnToPool(filtered_speech)
+		qdel(filtered_speech)
 
 
 /atom/movable/proc/render_speaker_track_start(var/datum/speech/speech)
@@ -132,6 +157,9 @@ var/global/lastDecTalkUse = 0
 		return " ([speech.job])"
 	return ""
 
+// This is obsolete for any atom movable which actually uses a language whilst speaking.
+// The verb for those atoms will be given in /datum/language/get_spoken_verb()
+// An override depending on the status of the mob is possible with the proc /mob/proc/get_spoken_verb()
 /atom/movable/proc/say_quote(var/text)
 	if(!text)
 		return "says, \"...\""	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -282,15 +310,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 /atom/movable/virtualspeaker/GetDefaultRadio()
 	return radio
 
-/atom/movable/virtualspeaker/resetVariables()
-	job = null
-	faketrack = null
-	source = null
-	radio = null
-
-	..("job", "faketrack", "source", "radio")
-
-proc/handle_render(var/mob,var/message,var/speaker)
+/proc/handle_render(var/mob,var/message,var/speaker)
 	if(istype(mob, /mob/new_player))
 		return //One extra layer of sanity
 	if(istype(mob,/mob/dead/observer))

@@ -21,8 +21,8 @@
 		/obj/item/weapon/gift,
 		/obj/item/weapon/winter_gift,
 		/obj/item/weapon/storage/evidencebag,
-		/obj/item/weapon/legcuffs/bolas,
-		/obj/item/weapon/storage
+		/obj/item/weapon/storage/backpack/holding,
+		/obj/item/weapon/legcuffs/bolas
 		)
 
 	var/list/wrappable_big_stuff = list(
@@ -31,17 +31,35 @@
 		/obj/structure/stackopacks
 		)
 
+/obj/item/stack/package_wrap/preattack(var/obj/target, var/mob/user, var/proximity_flag)
+	if(!istype(target, /atom/movable) || !proximity_flag)
+		return
+	if(!is_type_in_list(target, cannot_wrap))
+		if(istype(target, /obj/item/weapon/storage))
+			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
+			if(do_after(user, target, 10))
+				afterattack(target, user, proximity_flag)//this item is now wrapped!
+				return 1 //don't put wrap in box after you wrap it
+		return 0//proceed as normally (put wrap in box)
+	else
+		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
+	
+
 /obj/item/stack/package_wrap/afterattack(var/attacked, mob/user as mob, var/proximity_flag)
 	var/atom/movable/target = attacked
 	if(!istype(target))
 		return
 	if(is_type_in_list(target, cannot_wrap))
+		to_chat(user, "<span class='notice'>You can't wrap that.</span>")
 		return
 	if(target.anchored)
+		to_chat(user, "<span class='notice'>You can't get the wrapping around \the [target].</span>")
 		return
 	if(target in user)
+		to_chat(user, "<span class='notice'>That's not gonna work.</span>")
 		return
 	if(!proximity_flag)
+		to_chat(user, "<span class='notice'>You're not close enough.</span>")
 		return
 	if(ishuman(attacked))
 		return try_wrap_human(attacked,user)
@@ -62,6 +80,7 @@
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(1)
+			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
 	else if(is_type_in_list(target,wrappable_big_stuff) && bigpath)
@@ -74,6 +93,7 @@
 			target.forceMove(P)
 			P.add_fingerprint(user)
 			use(3)
+			to_chat(user, "<span class='notice'>You wrap \the [target] with \the [src].</span>")
 		else
 			to_chat(user, "<span class='warning'>You need more paper!</span>")
 	else
@@ -190,6 +210,11 @@
 		icon_state = "deliverystack"
 	else if(istype(target,/obj/structure/closet))
 		icon_state = "deliverycloset" //Only IF it isn't a crate-type
+
+/obj/item/delivery/large/Destroy()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	..()
 
 /obj/item/delivery/large/attack_paw(mob/user as mob)
 	return attack_hand(user)

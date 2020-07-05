@@ -29,7 +29,7 @@
 
 			if(species.flags & RAD_GLOW)
 				// Lighting based on radiation.
-				var/rad_glow = Clamp(radiation/20,0.25,5)
+				var/rad_glow = clamp(radiation/20,0.25,5)
 				set_light(rad_glow, rad_glow/2, "#5dca31")
 
 

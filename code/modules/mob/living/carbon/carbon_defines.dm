@@ -10,6 +10,8 @@
 
 	var/mob/living/carbon/mutual_handcuffed_to = null
 	var/mutual_handcuffed_to_event_key = null
+	var/z_transition_bringalong_key = null
+	var/post_z_transition_bringalong_key = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
 	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
 	var/mutual_handcuff_forcemove_time = 0 //last teleport time when user moves ontop of another
@@ -33,3 +35,6 @@
 	if (mutual_handcuffs && mutual_handcuffed_to)
 		mutual_handcuffs.remove_mutual_cuff_events(mutual_handcuffed_to)
 	. = ..()
+
+/mob/living/carbon/proc/hasmouth()
+	return hasmouth

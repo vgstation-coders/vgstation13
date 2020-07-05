@@ -6,6 +6,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the captain"
+	wage_payout = 80
 	selection_color = "#ffeeaa"
 	idtype = /obj/item/weapon/card/id/ce
 	req_admin_notify = 1
@@ -46,6 +47,12 @@
 		H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/survival/engineer(H))
 	else
 		H.equip_or_collect(new /obj/item/weapon/storage/box/survival/engineer(H.back), slot_in_backpack)
+	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
+	L.imp_in = H
+	L.implanted = 1
+	var/datum/organ/external/affected = H.get_organ(LIMB_HEAD)
+	affected.implants += L
+	L.part = affected
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/>")
 	return 1
 
@@ -64,6 +71,7 @@
 	total_positions = 5
 	spawn_positions = 5
 	supervisors = "the chief engineer"
+	wage_payout = 65
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -121,6 +129,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the chief engineer"
+	wage_payout = 65
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
@@ -167,6 +176,7 @@
 	total_positions = 3
 	spawn_positions = 2
 	supervisors = "the research director and the chief engineer"
+	wage_payout = 45
 	selection_color = "#fff5cc"
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)

@@ -49,7 +49,7 @@
 	var/turf/T = get_turf(A)
 	playsound(src.loc, sound_type, 10, 1)
 	var/obj/item/weapon/reagent_containers/food/S = new food_type(T)
-	to_chat(user,"Fabricating [utf8_lowercase(S.name)]..")
+	to_chat(user,"Fabricating [lowertext(S.name)]..")
 	if(toxin)
 		S.reagents.add_reagent(toxin_type, toxin_amount)
 	if(isrobot(user))
@@ -81,3 +81,7 @@
 	..()
 	reagents.add_reagent(DETCOFFEE, 20)
 
+/obj/item/weapon/cookiesynth/lollipop
+	name = "medipop synthesizer"
+	desc = "A self-recharging device used to rapidly deploy medicinal lollipops. Tell your patient they were very brave today."
+	food_type = /obj/item/weapon/reagent_containers/food/snacks/medipop

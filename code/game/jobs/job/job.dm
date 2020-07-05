@@ -46,7 +46,7 @@
 	var/pdatype=/obj/item/device/pda
 	var/pdaslot=slot_belt
 
-	var/list/species_blacklist = list() //Job not available to species in this list
+	var/list/species_blacklist = list("Mushroom") //Job not available to species in this list - shrooms can only be traders
 	var/list/species_whitelist = list() //If this list isn't empty, job is only available to species in this list
 
 	var/must_be_map_enabled = 0	//If 1, this job only appears on maps on which it's enabled (its type must be in the map's "enabled_jobs" list)
@@ -54,6 +54,7 @@
 
 	var/no_crew_manifest = 0 //If 1, don't inject players with this job into the crew manifest
 	var/no_starting_money = 0 //If 1, don't start with a bank account or money
+	var/wage_payout = 50 //Default wage payout
 	var/no_id = 0 //If 1, don't spawn with an ID
 	var/no_pda= 0 //If 1, don't spawn with a PDA
 	var/no_headset = 0 //If 1, don't spawn with a headset
@@ -64,7 +65,7 @@
 	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
 
 /datum/job/proc/get_total_positions()
-	return Clamp(total_positions + xtra_positions, 0, 99)
+	return clamp(total_positions + xtra_positions, 0, 99)
 
 /datum/job/proc/set_total_positions(var/nu)
 	total_positions = nu

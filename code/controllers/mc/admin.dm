@@ -10,6 +10,9 @@
 	name = text
 	return src
 
+/obj/effect/statclick/time/Click()
+	to_chat(usr,"<span class='notice'>The server time is [time2text(world.timeofday, "hh:mm:ss")]. The time slot is [getTimeslot()].</span>")
+
 /obj/effect/statclick/debug
 	var/class
 
@@ -93,9 +96,6 @@
 		if("Cameras")
 			debug_variables(cameranet)
 			feedback_add_details("admin_verb","DCameras")
-		if("Garbage")
-			debug_variables(garbageCollector)
-			feedback_add_details("admin_verb","DGarbage")
 		if("Vote")
 			debug_variables(vote)
 			feedback_add_details("admin_verb","DprocessVote")
@@ -127,3 +127,4 @@
 			to_chat(usr,"<span class='info'>Set path as [path]. Hope that's right...</span>")
 		vote.choices[winner] = ARBITRARILY_LARGE_NUMBER
 	message_admins("Admin [key_name_admin(usr)] rigged the vote for [winner].")
+	log_admin("Admin [key_name(usr)] rigged the vote for [winner]. Choices were [vote.choices.Join(", ")]")

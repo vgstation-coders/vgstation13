@@ -61,7 +61,7 @@ var/datum/subsystem/plant/SSplant
 		var/obj/effect/plantsegment/plant = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!plant || plant.gcDestroyed || plant.disposed)
+		if (!plant || plant.gcDestroyed)
 			remove_plant(plant)
 			continue
 		if(plant.timestopped)
@@ -72,7 +72,7 @@ var/datum/subsystem/plant/SSplant
 			return
 
 /datum/subsystem/plant/proc/add_plant(var/obj/effect/plantsegment/plant)
-	if(!istype(plant) || plant.gcDestroyed || plant.disposed)
+	if(!istype(plant) || plant.gcDestroyed)
 		return
 	processing_plants |= plant
 

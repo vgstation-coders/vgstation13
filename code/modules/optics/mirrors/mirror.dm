@@ -89,7 +89,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	update_beams()
 	return 1
 
-/obj/machinery/mirror/wrenchAnchor(var/mob/user)
+/obj/machinery/mirror/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -263,7 +263,7 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 	for(var/i=1 to nsplits)
 		var/splitdir = deflections[i]
 		var/turf/target = get_edge_target_turf(src, splitdir)
-		var/obj/item/projectile/beam/B = new P.type
+		var/obj/item/projectile/beam/B = new P.type(T)
 		B.original = target
 		B.starting = T
 		B.current = T

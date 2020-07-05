@@ -55,7 +55,7 @@ var/list/arcane_tomes = list()
 			<a href='byond://?src=\ref[src];page=[PAGE_FOREWORD]'><label> * </label> <li> Foreword</a> </li>"}
 
 	var i = 1
-	for(var/subtype in subtypesof(/datum/rune_spell))
+	for(var/subtype in subtypesof(/datum/rune_spell/blood_cult))
 		var/datum/rune_spell/blood_cult/instance = subtype
 		if (initial(instance.Act_restriction) <= veil_thickness)
 			dat += "<a href='byond://?src=\ref[src];page=[i]'><label> \Roman[i] </label> <li>  [initial(instance.name)] </li></a>"
@@ -442,11 +442,13 @@ var/list/arcane_tomes = list()
 			if (istype(active_spell,/datum/rune_spell/blood_cult/portalentrance))
 				var/datum/rune_spell/blood_cult/portalentrance/entrance = active_spell
 				if (entrance.network)
-					word_pulse(global_runesets["blood_cult"].words[entrance.network])
+					var/datum/runeset/rune_set = global_runesets["blood_cult"]
+					word_pulse(rune_set.words[entrance.network])
 			else if (istype(active_spell,/datum/rune_spell/blood_cult/portalexit))
 				var/datum/rune_spell/blood_cult/portalentrance/exit = active_spell
 				if (exit.network)
-					word_pulse(global_runesets["blood_cult"].words[exit.network])
+					var/datum/runeset/rune_set = global_runesets["blood_cult"]
+					word_pulse(rune_set.words[exit.network])
 
 		switch(talisman_interaction)
 			if (RUNE_CAN_ATTUNE)
@@ -582,7 +584,7 @@ var/list/arcane_tomes = list()
 
 /obj/item/weapon/melee/soulblade
 	name = "soul blade"
-	desc = "An obsidian blade fitted with a soul gem, giving it soul catching propertiess."
+	desc = "An obsidian blade fitted with a soul gem, giving it soul catching properties."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	icon = 'icons/obj/cult_64x64.dmi'
 	pixel_x = -16 * PIXEL_MULTIPLIER
@@ -984,9 +986,9 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
 	armor = list(melee = 30, bullet = 10, laser = 10,energy = 5, bomb = 10, bio = 25, rad = 0)
-	body_parts_covered = EARS|HEAD
+	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED)
@@ -1157,7 +1159,7 @@ var/list/arcane_tomes = list()
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
-	
+
 ///////////////////////////////////////DEBUG ITEMS////////////////////////////////////////////////
 //Pamphlet: turns you into a cultist
 /obj/item/weapon/bloodcult_pamphlet
@@ -1221,6 +1223,16 @@ var/list/arcane_tomes = list()
 	starting_materials = list(MAT_IRON = 3750)
 	w_type=RECYK_METAL
 
+/obj/item/weapon/storage/cult/sponsored
+	name = "sponsored coffer"
+	desc = "A sponsor-sticker-plastered storage chest."
+
+/obj/item/weapon/storage/cult/sponsored/New()
+	..()
+	var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(src)
+	cup.reagents.add_reagent(BLOOD, 50)
+	for(var/i in 1 to 2)
+		new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/geometer(src)
 ///////////////////////////////////////CULT GLASS////////////////////////////////////////////////
 
 /obj/item/weapon/reagent_containers/food/drinks/cult
@@ -1233,7 +1245,7 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
 	if (iscultist(user))
@@ -1262,6 +1274,10 @@ var/list/arcane_tomes = list()
 				reagents.reaction(H, INGEST)
 				reagents.trans_to(H, gulp_size)
 	transfer(get_turf(hit_atom), null, splashable_units = -1)
+
+/obj/item/weapon/reagent_containers/food/drinks/cult/gamer
+	name = "gamer goblet"
+	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
 
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 

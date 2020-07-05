@@ -8,7 +8,7 @@
 	slot_flags = SLOT_BELT
 	attack_verb = list("whips", "lashes", "disciplines")
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 /obj/item/weapon/storage/belt/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
@@ -148,6 +148,7 @@
 	allow_quick_empty = TRUE
 	use_to_pickup = TRUE
 	can_only_hold = list(
+		"/obj/item/weapon/reagent_containers/hypospray",
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
@@ -163,7 +164,6 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",
@@ -205,6 +205,9 @@
 		"/obj/item/ammo_casing/shotgun",
 		"/obj/item/ammo_storage",
 		"/obj/item/weapon/reagent_containers/food/snacks/donut",
+		"/obj/item/weapon/reagent_containers/food/snacks/donutiron",
+		"/obj/item/pedometer",
+		"/obj/item/ammo_storage/speedloader/energy",
 		"/obj/item/weapon/storage/fancy/cigarettes",
 		"/obj/item/weapon/lighter",
 		"/obj/item/weapon/cigpacket",
@@ -221,6 +224,7 @@
 		"/obj/item/device/hailer",
 		"/obj/item/weapon/melee/telebaton",
 		"/obj/item/device/gps/secure",
+		"/obj/item/device/law_planner",
 		"/obj/item/clothing/accessory/holobadge",
 		"/obj/item/weapon/autocuffer",
 		"/obj/item/weapon/depocket_wand",
@@ -320,7 +324,7 @@
 /obj/item/weapon/storage/belt/silicon
 	name = "cyber trophy belt"
 	desc = "Contains intellicards, posibrains, and MMIs. Those contained within can only speak to the wearer."
-	icon_state = "securitybelt"
+	icon_state = "cyberbelt"
 	item_state = "security"
 	fits_max_w_class = 4
 	max_combined_w_class = 28
@@ -345,7 +349,7 @@
 	return mobs
 
 /proc/RenderBeltChat(var/obj/item/weapon/storage/belt/silicon/B,var/mob/living/C,var/message)
-	var/list/listeners = observers
+	var/list/listeners = observers.Copy()
 	if(istype(B.loc,/mob))
 		var/mob/M = B.loc
 		listeners += M

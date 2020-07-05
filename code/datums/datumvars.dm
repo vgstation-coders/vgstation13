@@ -132,18 +132,21 @@
 		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
 
 	if(istype(D,/atom/movable))
+		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
 		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
 
 	if(istype(D,/atom))
 		body += "<option value='?_src_=vars;teleport_to=\ref[D]'>Teleport To</option>"
 
-	if(hasvar(D, "transform"))
+	if(istransformable(D))
 		body += "<option value='?_src_=vars;edit_transform=\ref[D]'>Edit Transform Matrix</option>"
-	if(hasvar(D, "appearance_flags"))
+	if(isapperanceeditable(D))
 		body += "<option value='?_src_=vars;toggle_aliasing=\ref[D]'>Toggle Transform Aliasing</option>"
 
 	body += "<option value='?_src_=vars;proc_call=\ref[D]'>Proc call</option>"
-
+	#if EXTOOLS_REFERENCE_TRACKING
+	body += "<option value='?_src_=vars;view_references=\ref[D]'>View references</option>"
+	#endif
 	body += "<option value>---</option>"
 
 	if(ismob(D))
@@ -203,7 +206,7 @@
 	body += "</ul>"
 	body = jointext(body,"")
 
-	var/html = "<html><head>"
+	var/html = "<html><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><head>"
 	if (title)
 		html += "<title>[title]</title>"
 	html += {"<style>
@@ -834,6 +837,48 @@ function loadPage(list) {
 				A.alpha = 0
 				animate(A, alpha = 255, time = stealthy_level)
 
+	else if(href_list["throw_a_fucking_rod_at_it"])
+		if(!check_rights(R_FUN))
+			to_chat(usr, "<span class='warning'>You do not have sufficient permissions to do this.</span>")
+			return
+
+		var/atom/movable/A = locate(href_list["throw_a_fucking_rod_at_it"])
+		if(!istype(A))
+			to_chat(usr, "<span class='warning'>This can only be done to instances of movable atoms.</span>")
+			return
+
+		var/rod_size = input("What type of rod do you want to throw?","Throwing an Immovable Rod",null) as null|anything in list("Normal", "Pillar", "Monolith")
+		var/rod_type
+
+		if (!rod_size)
+			return
+
+		switch (rod_size)
+			if ("Normal")
+				rod_type = /obj/item/projectile/immovablerod
+			if ("Pillar")
+				rod_type = /obj/item/projectile/immovablerod/big
+			if ("Monolith")
+				rod_type = /obj/item/projectile/immovablerod/hyper
+
+		if(alert("Are you sure you want to do this?","Confirm","Yes","No") != "Yes")
+			return
+
+		var/obj/item/projectile/immovablerod/rod = new rod_type(random_start_turf(A.z))
+		rod.tracking = TRUE
+		rod.throw_at(A)
+
+		var/log_data = "[A]"
+		if (ismob(A))
+			var/mob/M = A
+			if (M.client)
+				log_data += " ([M.client.ckey])"
+
+		log_admin("[key_name(usr)] threw a rod at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)] threw a rod at [log_data].</span>")
+		to_chat(usr, "<span class='danger'>If you changed your mind, you can always stop the tracking by using the verb 'VIEW-ALL-RODS' and click the 'Untrack' link.</span>")
+		return
+
 	else if(href_list["teleport_to"])
 		if(!check_rights(0))
 			return
@@ -1114,13 +1159,23 @@ function loadPage(list) {
 			return
 
 		callatomproc(DAT)	//Yes it could be a datum, technically but eh
+	#if EXTOOLS_REFERENCE_TRACKING
+	else if(href_list["view_references"])
+		if(!check_rights(R_DEBUG))
+			return
 
+		var/datum/target = locate(href_list["view_references"])
+		if(!target)
+			return
+
+		usr.client.view_refs(target)
+	#endif
 	else if (href_list["edit_transform"])
 		if (!check_rights(R_DEBUG))
 			return
 
 		var/datum/DAT = locate(href_list["edit_transform"])
-		if (!hasvar(DAT, "transform"))
+		if (!istransformable(DAT))
 			to_chat(src, "This object does not have a transform variable to edit!")
 			return
 
@@ -1137,7 +1192,7 @@ function loadPage(list) {
 			return
 
 		var/datum/DAT = locate(href_list["toggle_aliasing"])
-		if(!hasvar(DAT, "appearance_flags"))
+		if(!isapperanceeditable(DAT))
 			to_chat(src, "This object does not support appearance flags!")
 			return
 
@@ -1168,7 +1223,7 @@ function loadPage(list) {
 			else
 				return FALSE
 
-		if (!(index in L))
+		if (index < 1 || index > L.len)
 			return FALSE
 
 		log_admin("[key_name(usr)] has deleted the value [L[index]] in the list [L][D ? ", belonging to the datum [D] of type [D.type]." : "."]")

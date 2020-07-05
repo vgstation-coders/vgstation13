@@ -380,7 +380,7 @@ var/list/holomap_cache = list()
 		if(U && ishuman(U.loc))
 			var/mob/living/carbon/human/H = U.loc
 			var/obj/item/helmet = H.get_item_by_slot(slot_head)
-			if(helmet && "[helmet.type]" in prefix_update)
+			if(helmet && ("[helmet.type]" in prefix_update))
 				marker_prefix = prefix_update["[helmet.type]"]
 
 /obj/item/clothing/accessory/holomap_chip/raider/update_marker()

@@ -113,7 +113,7 @@
 "ci" = (/obj/machinery/door/mineral/wood,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/spider_cave)
 "cj" = (/obj/structure/table/woodentable,/obj/item/clothing/head/wizard/amp,/turf/simulated/floor/mineral/plasma,/area/awaymission/tomb/spider_cave)
 "ck" = (/obj/structure/table/woodentable,/obj/item/toy/gasha/wizard,/obj/item/weapon/reagent_containers/glass/bottle/wizarditis,/obj/structure/hanging_lantern{dir = 1},/turf/simulated/floor/mineral/plasma,/area/awaymission/tomb/spider_cave)
-"cl" = (/obj/structure/table/woodentable,/obj/item/clothing/head/helmet/space/rig/wizard,/obj/item/clothing/suit/space/rig/wizard,/turf/simulated/floor/mineral/plasma,/area/awaymission/tomb/spider_cave)
+"cl" = (/obj/structure/table/woodentable,/obj/item/clothing/suit/space/rig/wizard,/turf/simulated/floor/mineral/plasma,/area/awaymission/tomb/spider_cave)
 "cm" = (/mob/living/simple_animal/hostile/frog/centurion,/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)
 "cn" = (/obj/effect/decal/cleanable/dirt,/turf/unsimulated/wall/rock,/area/awaymission/tomb/tomb_of_rafid)
 "co" = (/obj/effect/decal/cleanable/dirt,/obj/structure/window/barricade{dir = 8},/turf/unsimulated/floor{icon_state = "asteroid"; name = "sand"},/area/awaymission/tomb/tomb_of_rafid)

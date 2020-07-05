@@ -8,6 +8,8 @@
 	w_class = W_CLASS_TINY
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=3"
 	var/blink_range = 8 // The teleport range when crushed/thrown at someone.
+	var/blueChargeValue = 3	//For things like mind machine
+	toolsounds = list('sound/weapons/blaster.ogg')
 
 /obj/item/bluespace_crystal/New()
 	..()
@@ -50,9 +52,12 @@
 	desc = "An artificially made bluespace crystal, it looks delicate."
 	origin_tech = Tc_BLUESPACE + "=2"
 	blink_range = 4 // Not as good as the organic stuff!
+	blueChargeValue = 1
 
 /obj/item/bluespace_crystal/flawless //Specifically for use with the subspace tunneler
 	name = "flawless bluespace crystal"
 	desc = "A glowing bluespace crystal, not much is known about how they work. This one appears to be of particularly high quality."
 	var/infinite = 1 //Infinite uses by default.
 	var/uses = 50 //Can be varedited to any finite number of uses.
+	blueChargeValue = 300
+	toolsounds = list('sound/weapons/blaster-storm.ogg')

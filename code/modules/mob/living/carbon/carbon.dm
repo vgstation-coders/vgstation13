@@ -23,11 +23,13 @@
 	if(istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/C = AM
 		C.handle_symptom_on_touch(src, AM, BUMP)
+	INVOKE_EVENT(on_bumping, list("user" = src, "bumped" = AM))
 
 /mob/living/carbon/Bumped(var/atom/movable/AM)
 	..()
 	if(!istype(AM, /mob/living/carbon))
 		handle_symptom_on_touch(AM, src, BUMP)
+	INVOKE_EVENT(on_bumped, list("user" = src, "bumping" = AM))
 
 /mob/living/carbon/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	. = ..()
@@ -101,6 +103,7 @@
 			to_chat(M, "<span class='warning'>You can't use your [temp.display_name]</span>")
 			return
 	handle_symptom_on_touch(M, src, HAND)
+	INVOKE_EVENT(on_touched, list("user" = src, "has been touched by" = M))
 
 /mob/living/carbon/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration = 20 SECONDS)
 	if(incapacitation_duration <= 0)
@@ -149,23 +152,23 @@
 /mob/living/carbon/swap_hand()
 	if(++active_hand > held_items.len)
 		active_hand = 1
-
-	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
-			hand_hud_object.icon_state = "hand_active"
-		else
-			hand_hud_object.icon_state = "hand_inactive"
-
-	return
+	update_hands_icons()
 
 /mob/living/carbon/activate_hand(var/selhand)
 	active_hand = selhand
+	update_hands_icons()
 
+/mob/living/carbon/proc/update_hands_icons()
+	if(!hud_used)
+		return
 	for(var/obj/abstract/screen/inventory/hand_hud_object in hud_used.hand_hud_objects)
-		if(active_hand == hand_hud_object.hand_index)
-			hand_hud_object.icon_state = "hand_active"
-		else
-			hand_hud_object.icon_state = "hand_inactive"
+		update_hand_icon(hand_hud_object)
+
+/mob/living/carbon/proc/update_hand_icon(var/obj/abstract/screen/inventory/hand_hud_object)
+	if(active_hand == hand_hud_object.hand_index)
+		hand_hud_object.icon_state = "hand_active"
+	else
+		hand_hud_object.icon_state = "hand_inactive"
 
 /mob/living/carbon/proc/help_shake_act(mob/living/carbon/M)
 	if (src.health >= config.health_threshold_crit)
@@ -229,7 +232,7 @@
 			if (istype(src,/mob/living/carbon/human) && src:w_uniform)
 				var/mob/living/carbon/human/H = src
 				H.w_uniform.add_fingerprint(M)
-			src.sleeping = max(0,src.sleeping-5)
+			src.sleeping = max(0,src.sleeping-10)
 			if(src.sleeping == 0)
 				src.resting = 0
 			AdjustParalysis(-3)
@@ -339,18 +342,18 @@
 	bodytemperature = max(bodytemperature, BODYTEMP_HEAT_DAMAGE_LIMIT+10)*/
 
 /mob/living/carbon/can_use_hands()
-	if(handcuffed)
-		return 0
+	if(!..())
+		return FALSE
 	if(locked_to && ! istype(locked_to, /obj/structure/bed/chair)) // buckling does not restrict hands
-		return 0
-	return 1
+		return FALSE
+	return TRUE
 
 /mob/living/carbon/restrained()
-	if(timestopped)
-		return 1 //under effects of time magick
+	if(..())
+		return TRUE
 	if (check_handcuffs())
-		return 1
-	return
+		return TRUE
+	return FALSE
 
 /mob/living/carbon/show_inv(mob/living/carbon/user as mob)
 	user.set_machine(src)
@@ -462,8 +465,7 @@
 		B.host_brain.real_name = "host brain"
 
 	//reset name if the borer changed it
-	if(name != real_name)
-		name = real_name
+	fully_replace_character_name(null, B.host_name)
 
 	verbs -= /mob/living/carbon/proc/release_control
 	verbs -= /mob/living/carbon/proc/punish_host
@@ -595,7 +597,7 @@
 			src.stomach_contents.Remove(O)
 			O.forceMove(target)
 
-/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0)
+/mob/living/carbon/flash_eyes(intensity = 1, override_blindness_check = 0, affect_silicon = 0, visual = 0, type = /obj/abstract/screen/fullscreen/flash)
 	if(eyecheck() < intensity)
 		..()
 
@@ -622,7 +624,7 @@
 					E.on_touch(src, toucher, touched, touch_type)
 
 /mob/living/carbon/proc/check_handcuffs()
-	return handcuffed
+	return handcuffed || istype(locked_to, /obj/structure/bed/nest)
 
 /mob/living/carbon/proc/get_lowest_body_alpha()
 	if(!body_alphas.len)
@@ -712,7 +714,7 @@
 
 		if(TURF_WET_LUBE)
 			step(src, dir)
-			if (!Slip(stun_amount = 10, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
+			if (!Slip(stun_amount = 5, weaken_amount = 3, slip_on_walking = TRUE, overlay_type = TURF_WET_LUBE, slip_on_magbooties = TRUE))
 				return FALSE
 			for (var/i = 1 to 4)
 				spawn(i)

@@ -6,7 +6,6 @@
 	desc = "This state of the art unit allows NT security personnel to contain a situation or secure an area better and faster."
 	icon = 'icons/obj/detector.dmi'
 	icon_state = "detector1"
-	var/id_tag = null
 	var/range = 3
 	var/disable = 0
 	var/last_read = 0
@@ -257,7 +256,7 @@
 		if ((src.anchored))
 			src.flash()
 
-/obj/machinery/detector/wrenchAnchor(var/mob/user)
+/obj/machinery/detector/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

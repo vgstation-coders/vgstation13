@@ -191,14 +191,17 @@ For vending packs, see vending_packs.dm*/
 	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
+		can_order_contraband = 1
+		var/obj/item/weapon/circuitboard/supplycomp/C = circuit
+		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				for (var/obj/C in src)
 					C.forceMove(loc)
@@ -333,7 +336,7 @@ For vending packs, see vending_packs.dm*/
 				V.show_message("<b>[src]</b>'s monitor flashes, \"[world.time - reqtime] seconds remaining until another requisition form may be printed.\"")
 			return
 
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
@@ -349,7 +352,7 @@ For vending packs, see vending_packs.dm*/
 		var/crates = 1
 		if(multi)
 			var/tempcount = input(usr, "Amount:", "How many crates?", "") as num
-			crates = Clamp(round(text2num(tempcount)), 1, 20)
+			crates = clamp(round(text2num(tempcount)), 1, 20)
 
 		// Calculate money tied up in requests
 		var/total_money_req = 0
@@ -448,7 +451,7 @@ For vending packs, see vending_packs.dm*/
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command
@@ -559,7 +562,7 @@ For vending packs, see vending_packs.dm*/
 
 		var/timeout = world.time + 600
 		// Get ordered pack name and multi crate order boolean
-		var/pack_name = copytext(href_list["doorder"], 1, lentext(href_list["doorder"]))
+		var/pack_name = copytext(href_list["doorder"], 1, -1)
 		var/multi = text2num(copytext(href_list["doorder"], -1))
 		if(!isnum(multi))
 			return
@@ -575,7 +578,7 @@ For vending packs, see vending_packs.dm*/
 		if(multi)
 			var/num_input = input(usr, "Amount:", "How many crates?", "") as num
 			// Maximum 20 crates ordered at a time
-			crates = Clamp(round(text2num(num_input)), 1, 20)
+			crates = clamp(round(text2num(num_input)), 1, 20)
 
 		// Calculate money tied up in usr's requests
 		var/total_money_req = 0

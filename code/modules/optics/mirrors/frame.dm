@@ -11,12 +11,12 @@
 	opacity = 0 // Think table-height.
 
 /obj/structure/mirror_frame/attackby(var/obj/item/W,var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		to_chat(user, "<span class='info'>You begin to unfasten \the [src]'s bolts.</span>")
 		if(do_after(user, src,20))
 			anchored=!anchored
 			user.visible_message("<span class='info'>You unfasten \the [src]'s bolts.</span>", "[user] unfastens the [src]'s bolts.","You hear a ratchet.")
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
@@ -25,7 +25,7 @@
 			if(gcDestroyed)
 				return
 			user.visible_message("<span class='warning'>[user] cuts the [src] apart.</span>", "<span class='warning'>You cut the [src] apart.</span>", "You hear welding.")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 			M.amount = 5
 			qdel(src)
 			return

@@ -9,7 +9,7 @@
 	idle_power_usage = 200
 	active_power_usage = 5000
 	machine_flags = MULTITOOL_MENU
-	var/id_tag = "telepad"
+	id_tag = "telepad"
 
 	var/obj/machinery/computer/telescience/linked
 
@@ -58,11 +58,11 @@
 	..()
 	if(W.is_screwdriver(user))
 		if(opened)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "<span class = 'caution'>You secure the access port on \the [src].</span>")
 			opened = 0
 		else
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "<span class = 'caution'>You open \the [src]'s access port.</span>")
 			opened = 1
 	if(istype(W, /obj/item/bluespace_crystal) && opened)

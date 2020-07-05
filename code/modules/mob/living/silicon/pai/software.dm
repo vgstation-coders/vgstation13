@@ -108,7 +108,7 @@
 				</div>
 			</body>
 			</html>"}
-	usr << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
+	src << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
 	onclose(usr, "pai")
 	temp = null
 	return
@@ -252,18 +252,19 @@
 					to_chat(src, "<span class='warning'>Charge interrupted.</span>")
 		if("foodsynth")
 			if(href_list["food"] && chargeloop("foodsynth"))
-				var/obj/item/weapon/reagent_containers/food/F
-				switch (href_list["food"])
-					if("donut")
-						F = new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(get_turf(src))
-					if("banana")
-						F = new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(get_turf(src))
-					else
-						F = new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
-				var/mob/M = get_holder_of_type(loc, /mob)
-				if(M)
-					M.put_in_hands(F)
-				playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
+				var/foodType = href_list["food"]
+				var/found = FALSE
+				for (var/name in synthable_default_food)
+					if ("[synthable_default_food[name]]" == foodType)
+						found = TRUE
+						break
+
+				if (found)
+					var/obj/item/weapon/reagent_containers/food/F = new foodType(get_turf(src))
+					var/mob/M = get_holder_of_type(loc, /mob)
+					if(M)
+						M.put_in_hands(F)
+					playsound(loc, 'sound/machines/foodsynth.ogg', 50, 1)
 		if("flashlight")
 			if(href_list["toggle"])
 				lighted = !lighted
@@ -373,7 +374,7 @@
 /mob/living/silicon/pai/proc/directives()
 	var/dat = ""
 
-	dat += {"[(master) ? "Your master: [master] ([master_dna])" : "You are bound to no one."]
+	dat += {"[(master) ? "Your master: [master] ([dna.unique_enzymes])" : "You are bound to no one."]
 		<br><br>
 		<a href='byond://?src=\ref[src];software=directive;getdna=1'>Request carrier DNA sample</a><br>
 		<h2>Directives</h2><br>
@@ -396,9 +397,9 @@
 		var/turf/T = get_turf(P.loc)
 		for (var/mob/v in viewers(T))
 			v.show_message("<span class='notice'>[M] presses \his thumb against [P].</span>", 1, "<span class='notice'>[P] makes a sharp clicking sound as it extracts DNA material from [M].</span>", 2)
-		var/datum/dna/dna = M.dna
+		var/datum/dna/test_dna = M.dna
 		to_chat(P, "<font color = red><h3>[M]'s UE string : [dna.unique_enzymes]</h3></font>")
-		if(dna.unique_enzymes == P.master_dna)
+		if(test_dna.unique_enzymes == P.dna.unique_enzymes)
 			to_chat(P, "<b>DNA is a match to stored Master DNA.</b>")
 		else
 			to_chat(P, "<b>DNA does not match stored Master DNA.</b>")
@@ -600,11 +601,12 @@ Target Machine: "}
 	var/dat = "<h3>Chemical Synthesizer</h3>"
 	if(!charge)
 		dat += "Default Chemicals:<br>"
-		for(var/chem in synthable_chems)
-			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_chems[chem]]'>[chem]</a> <br>"
+		for(var/chem in synthable_default_chems)
+			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_default_chems[chem]]'>[chem]</a> <br>"
 		if(SOFT_MS in software)
 			dat += "<br>Medical Supplement Chemicals:<br>"
-			dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[SPACEACILLIN]'>Spaceacilin</a> <br>"
+			for(var/chem in synthable_medical_chems)
+				dat += "<a href='byond://?src=\ref[src];software=chemsynth;sub=0;chem=[synthable_medical_chems[chem]]'>[chem]</a> <br>"
 	else
 		dat += "Charging... [charge]u ready.<br><br>Deploying at 15u."
 	return dat
@@ -612,10 +614,9 @@ Target Machine: "}
 /mob/living/silicon/pai/proc/softwareFood()
 	var/dat = "<h3>Nutrition Synthesizer</h3>"
 	if(!charge)
-		dat += {"Available Culinary Deployments:<br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=donut'>Donut</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=banana'>Banana</a> <br>
-		<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=mess'>Burn it!</a> <br>"}
+		dat += "Available Culinary Deployments:<br>"
+		for(var/grub in synthable_default_food)
+			dat += "<a href='byond://?src=\ref[src];software=foodsynth;sub=0;food=[synthable_default_food[grub]]'>[grub]</a> <br>"
 	else
 		dat += "Charging... [round(charge*100/15)]% ready.<br><br>Deploying at 100%."
 	return dat

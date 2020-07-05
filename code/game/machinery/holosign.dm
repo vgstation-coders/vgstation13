@@ -12,7 +12,6 @@ var/list/obj/machinery/holosign/holosigns = list()
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 	var/lit = 0
-	var/id_tag = null
 	var/on_icon = "sign_on"
 
 /obj/machinery/holosign/New()
@@ -51,7 +50,6 @@ var/list/obj/machinery/holosign/holosigns = list()
 	icon = 'icons/obj/power.dmi'
 	icon_state = "light1"
 	desc = "A remote control switch for holosign."
-	var/id_tag = null
 	var/active = 0
 	anchored = 1.0
 	use_power = 1

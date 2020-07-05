@@ -20,9 +20,9 @@ var/list/response_team_members = list()
 
 /datum/striketeam/ert/greet_commando(var/mob/living/carbon/human/H)
 	if(H.key == leader_key)
-		to_chat(H, "<span class='notice'>You are [H.real_name], the Commander of the Emergency Response Team, in the service of Nanotrasen.</span>")
+		to_chat(H, "<span class='danger'>You are [H.real_name], the Commander of the Emergency Response Team. You answer only to Central Command and are expected to follow Space Law. Assist your assigned station to the best of your abilities.</span>")
 	else
-		to_chat(H, "<span class='notice'>You are [H.real_name], an Emergency Responder, in the service of Nanotrasen.</span>")
+		to_chat(H, "<span class='danger'>You are [H.real_name], an Emergency Responder. You answer only to Central Command and are expected to follow Space Law. Assist your assigned station to the best of your abilities.</span>")
 	for (var/role in H.mind.antag_roles)
 		var/datum/role/R = H.mind.antag_roles[role]
 		R.AnnounceObjectives()

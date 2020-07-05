@@ -41,6 +41,7 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
+	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -514,7 +515,7 @@
 			var/turf/T = loc
 			light_amount = T.get_lumcount() * 10
 
-		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
+		growth = clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 
 		if(growth >= 100)
 			growth = 0
@@ -526,6 +527,10 @@
 			var/matrix/M = adult.transform
 			M.Scale(0)
 			adult.set_species("Mushroom")
+			adult.my_appearance.h_style = "Plump Helmet"
+			adult.my_appearance.r_hair = 60
+			adult.my_appearance.g_hair = 40
+			adult.my_appearance.b_hair = 80
 			for(var/datum/language/L in languages)
 				adult.add_language(L.name)
 

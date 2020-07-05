@@ -20,7 +20,7 @@
 /obj/item/stack/rods/Destroy()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/rods/can_drag_use(mob/user, turf/T)
@@ -29,7 +29,7 @@
 		if(use(1)) //place and use rod
 			return 1
 		else
-			returnToPool(active) //otherwise remove the draggable screen
+			qdel(active) //otherwise remove the draggable screen
 			active = null
 
 /obj/item/stack/rods/drag_use(mob/user, turf/T)
@@ -42,7 +42,7 @@
 /obj/item/stack/rods/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/rods/afterattack(atom/Target, mob/user, adjacent, params)
@@ -90,7 +90,7 @@
 			return
 
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
@@ -110,11 +110,11 @@
 	src.add_fingerprint(user)
 
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/abstract/screen/draggable, src, user)
+		active = new /obj/abstract/screen/draggable(src, user)
 		to_chat(user, "Beginning lattice construction mode, click and hold to use. Use rods again to create grille.")
 		return
 	else //End click drag construction, create grille
-		returnToPool(active)
+		qdel(active)
 
 	if(!istype(user.loc, /turf))
 		return 0
@@ -137,7 +137,7 @@
 		if(!do_after(user, get_turf(src), 10))
 			return
 
-		var/obj/structure/grille/Grille = getFromPool(/obj/structure/grille, user.loc)
+		var/obj/structure/grille/Grille = new /obj/structure/grille(user.loc)
 		if(!Grille)
 			Grille = new(user.loc)
 		to_chat(user, "<span class='notice'>You assembled a grille!</span>")
@@ -166,3 +166,12 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	new/datum/stack_recipe/blacksmithing("Suit of Chainmail",		/obj/item/clothing/suit/armor/vest/chainmail,					10,	time = 100,required_strikes = 15),
 	new/datum/stack_recipe/blacksmithing("Chainmail Coif",		/obj/item/clothing/head/helmet/chainmail,					5,	time = 100,required_strikes = 15),
 	)
+
+
+/obj/item/stack/telecrystal
+	name = "refined telecrystals"
+	singular_name = "telecrystal"
+	desc = "A method of creating an untraceable bluespace teleportation link between two points."
+	icon = 'icons/obj/stock_parts.dmi'
+	icon_state = "ansible_crystal"
+	mech_flags = MECH_SCAN_FAIL

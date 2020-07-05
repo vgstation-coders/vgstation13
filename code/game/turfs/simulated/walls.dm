@@ -43,16 +43,16 @@
 
 /turf/simulated/wall/dismantle_wall(devastated = 0, explode = 0)
 	if(mineral == "metal")
-		getFromPool(/obj/item/stack/sheet/metal, src, 2)
+		new /obj/item/stack/sheet/metal(src, 2)
 	else if(mineral == "wood")
-		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	else
 		var/M = text2path("/obj/item/stack/sheet/mineral/[mineral]")
 		if(M)
-			getFromPool(M, src, 2)
+			new M(src, 2)
 
 	if(devastated)
-		getFromPool(/obj/item/stack/sheet/metal, src)
+		new /obj/item/stack/sheet/metal(src)
 	else
 		if(girder_type)
 			new girder_type(src)
@@ -275,8 +275,8 @@
 
 		user.visible_message("<span class='warning'>[user] begins [PK.drill_verb] straight into \the [src].</span>", \
 		"<span class='notice'>You begin [PK.drill_verb] straight into \the [src].</span>")
-		playsound(src, PK.drill_sound, 100, 1)
-		if(do_after(user, src, PK.digspeed * 10))
+		PK.playtoolsound(src, 100)
+		if(do_after(user, src, (MINE_DURATION * PK.toolspeed) * 10))
 			user.visible_message("<span class='notice'>[user]'s [PK] tears though the last of \the [src], leaving nothing but a girder.</span>", \
 			"<span class='notice'>Your [PK] tears though the last of \the [src], leaving nothing but a girder.</span>")
 			dismantle_wall()
@@ -366,10 +366,6 @@
 	F.icon_state = "wall_thermite"
 	visible_message("<span class='danger'>\The [src] spontaenously combusts!.</span>") //!!OH SHIT!!
 	return
-
-/turf/simulated/wall/Destroy()
-	remove_rot()
-	..()
 
 /turf/simulated/wall/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
 	remove_rot()

@@ -238,19 +238,19 @@ var/list/dispenser_presets = list()
 
 /datum/suit/dorf/security
 	name = "Security"
-	to_spawn = list(/obj/item/clothing/head/helmet/space/rig/security,/obj/item/clothing/suit/space/rig/security)
+	to_spawn = list(/obj/item/clothing/suit/space/rig/security)
 
 /datum/suit/dorf/engineering
 	name = "Engineering"
-	to_spawn = list(/obj/item/clothing/head/helmet/space/rig,/obj/item/clothing/suit/space/rig)
+	to_spawn = list(/obj/item/clothing/suit/space/rig)
 
 /datum/suit/dorf/medical
 	name = "Medical"
-	to_spawn = list(/obj/item/clothing/head/helmet/space/rig/medical,/obj/item/clothing/suit/space/rig/medical)
+	to_spawn = list(/obj/item/clothing/suit/space/rig/medical)
 
 /datum/suit/dorf/atmos
 	name = "Atmospherics Technician"
-	to_spawn = list(/obj/item/clothing/head/helmet/space/rig/atmos,/obj/item/clothing/suit/space/rig/atmos)
+	to_spawn = list(/obj/item/clothing/suit/space/rig/atmos)
 
 /datum/suit/dorf/paramedic
 	name = "Paramedic"
@@ -258,18 +258,18 @@ var/list/dispenser_presets = list()
 
 /datum/suit/dorf/mining
 	name = "Mining"
-	to_spawn = list(/obj/item/clothing/suit/space/rig/mining, /obj/item/clothing/head/helmet/space/rig/mining)
+	to_spawn = list(/obj/item/clothing/suit/space/rig/mining)
 
 /*/datum/suit/dorf/head
 	amount = 1
 
 /datum/suit/dorf/head/captain
 	name = "Captain"
-	to_spawn = (/obj/item/clothing/suit/armor/captain,/obj/item/clothing/head/helmet/space/capspace)
+	to_spawn = (/obj/item/clothing/suit/space/rig/captain)
 
 /datum/suit/dorf/head/chiefengie
 	name = "Chief Engineer"
-	to_spawn = (/obj/item/clothing/suit/space/rig/elite,/obj/item/clothing/head/helmet/space/rig/elite,/obj/item/clothing/shoes/magboots/elite)*/
+	to_spawn = (/obj/item/clothing/suit/space/rig/elite,/obj/item/clothing/shoes/magboots/elite)*/
 
 
 /obj/machinery/suit_dispenser/dorf

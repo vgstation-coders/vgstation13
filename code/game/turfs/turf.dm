@@ -23,8 +23,7 @@
 
 	var/blocks_air = 0
 
-	//associated PathNode in the A* algorithm
-	var/PathNode/PNode = null
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -52,7 +51,7 @@
  */
 
 	var/turf_speed_multiplier = 1
- 
+
 	var/explosion_block = 0
 
 	//For shuttles - if 1, the turf's underlay will never be changed when moved
@@ -69,6 +68,8 @@
 	var/image/viewblock
 
 	var/junction = 0
+
+	var/volume_mult = 1 //how loud are things on this turf?
 
 /turf/examine(mob/user)
 	..()
@@ -87,20 +88,17 @@
 	for(var/atom/movable/AM as mob|obj in src)
 		spawn( 0 )
 			src.Entered(AM)
+	if(opacity)
+		has_opaque_atom = TRUE
 
 /turf/ex_act(severity)
-	return 0
-
-
-/turf/bullet_act(var/obj/item/projectile/Proj)
-	if(Proj.destroy)
-		src.ex_act(2)
-	..()
 	return 0
 
 /turf/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/bullet/gyro))
 		explosion(src, -1, 0, 2)
+	if(Proj.destroy)
+		src.ex_act(2)
 	..()
 	return 0
 
@@ -188,7 +186,7 @@
 		// if(ticker.mode.name == "nuclear emergency")	return
 		if(A.z > 6)
 			return
-		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE - 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE - 1))
+		if (A.x <= TRANSITIONEDGE || A.x >= (world.maxx - TRANSITIONEDGE + 1) || A.y <= TRANSITIONEDGE || A.y >= (world.maxy - TRANSITIONEDGE + 1))
 
 			var/list/contents_brought = list()
 			contents_brought += recursive_type_check(A)
@@ -200,9 +198,13 @@
 
 			var/locked_to_current_z = 0//To prevent the moveable atom from leaving this Z, examples are DAT DISK and derelict MoMMIs.
 
-			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
-				locked_to_current_z = map.zMainStation
-				break
+			var/datum/zLevel/ZL = map.zLevels[z]
+			if(ZL.transitionLoops)
+				locked_to_current_z = z
+
+			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
+			if(nuclear)
+				qdel(nuclear)
 
 			//Check if it's a mob pulling an object
 			var/obj/was_pulling = null
@@ -238,7 +240,7 @@
 				return
 
 			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
+			for(var/atom/movable/AA in contents_brought)
 				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
@@ -268,6 +270,14 @@
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
+
+			INVOKE_EVENT(A.post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/movable/AA in contents_brought)
+				INVOKE_EVENT(AA.post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+
+	if(A && A.opacity)
+		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
+		reconsider_lights()
 
 /turf/proc/is_plating()
 	return 0
@@ -360,11 +370,11 @@
 		var/turf/simulated/S = src
 		if(S.zone)
 			S.zone.rebuild()
-			
+
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
-			returnToPool(F.floor_tile)
+			qdel(F.floor_tile)
 			F.floor_tile = null
 		F = null
 
@@ -730,3 +740,14 @@
 
 /turf/proc/remove_rot()
 	return
+
+//Pathnode stuff
+
+/turf/proc/FindPathNode(var/id)
+	return PathNodes ? PathNodes["[id]"] : null
+
+/turf/proc/AddPathNode(var/PathNode/PN, var/id)
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
+	PathNodes["[id]"] = PN

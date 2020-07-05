@@ -156,6 +156,10 @@ var/list/virusdishes = list()
 	if (open)
 		contained_virus = null
 		growth = 0
+		if (analysed)
+			info = ""
+			analysed = FALSE
+			visible_message("<span class='danger'>The info sticker falls of \the [src].</span>")
 		update_icon()
 
 /obj/item/weapon/virusdish/update_icon()
@@ -268,7 +272,7 @@ var/list/virusdishes = list()
 		last_cloud_time = world.time
 		var/list/L = list()
 		L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
-		getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), last_openner, virus_copylist(L), FALSE)
+		new /obj/effect/effect/pathogen_cloud/core(get_turf(src), last_openner, virus_copylist(L), FALSE)
 
 
 /obj/item/weapon/virusdish/random
@@ -277,8 +281,7 @@ var/list/virusdishes = list()
 /obj/item/weapon/virusdish/random/New(loc)
 	..(loc)
 	if (loc)//because fuck you /datum/subsystem/supply_shuttle/Initialize()
-		var/virus_choice = pick(subtypesof(/datum/disease2/disease))
-		contained_virus = new virus_choice
+		contained_virus = get_random_weighted_disease(WDISH)
 		var/list/anti = list(
 			ANTIGEN_BLOOD	= 1,
 			ANTIGEN_COMMON	= 1,
@@ -367,12 +370,14 @@ var/list/virusdishes = list()
 			var/list/L = list()
 			L["[contained_virus.uniqueID]-[contained_virus.subID]"] = contained_virus
 			while (strength > 0)
-				getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), user, virus_copylist(L), FALSE)
+				new /obj/effect/effect/pathogen_cloud/core(get_turf(src), user, virus_copylist(L), FALSE)
 				strength -= 40
 	qdel(src)
 
 /obj/item/weapon/virusdish/examine(var/mob/user)
 	..()
+	if(!contained_virus)
+		to_chat(user, "<span class='notice'>This one appears to have been disinfected.</span>")
 	if(open)
 		to_chat(user, "<span class='notice'>Its lid is open!</span>")
 	else

@@ -105,7 +105,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/toy/syndicateballoon/ntballoon = 80,
 /obj/item/weapon/am_containment = 10,
 /obj/item/weapon/cane = 5,
-/obj/item/weapon/legcuffs/beartrap = 50,
+/obj/item/weapon/beartrap = 50,
 /obj/item/weapon/rcd_ammo = 10,
 /obj/item/weapon/storage/pneumatic = 40,
 /obj/item/weapon/resonator = 100,
@@ -144,7 +144,7 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/weapon/shield/riot/buckler = 50,
 /obj/item/weapon/shield/riot/roman = 150,
 /obj/item/weapon/shield/energy = 350,
-/obj/item/weapon/bullwhip = 200,
+/obj/item/weapon/gun/hookshot/whip = 200,
 /obj/item/weapon/melee/morningstar = 250,
 /obj/item/weapon/subspacetunneler = 300,
 /obj/item/weapon/melee/energy/sword = 350,
@@ -203,7 +203,7 @@ var/list/shop_prices = list( //Cost in space credits
 
 var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
-var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
+var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - typesof(/obj/item/clothing/head/helmet/space/rig) - list(/obj/item/clothing/suit/space/rig/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket

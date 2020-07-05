@@ -51,7 +51,7 @@
 		else
 			warning("A lighting overlay realised it was in nullspace in update_overlay() and got pooled!")
 
-		returnToPool(src)
+		qdel(src)
 		return
 
 	// To the future coder who sees this and thinks
@@ -104,11 +104,6 @@
 /atom/movable/lighting_overlay/forceMove(atom/destination, var/no_tp=FALSE, var/harderforce = FALSE)
 	if(harderforce)
 		. = ..()
-
-/atom/movable/lighting_overlay/resetVariables(...)
-	color = LIGHTING_BASE_MATRIX
-
-	return ..("color")
 
 /atom/movable/lighting_overlay/send_to_future(var/duration)
 	return

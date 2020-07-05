@@ -18,6 +18,14 @@ var/list/datum/map_element/map_elements = list()
 /datum/map_element/proc/pre_load() //Called before loading the element
 	return
 
+/datum/map_element/proc/can_load(x, y)
+	if(map.can_enlarge)
+		return TRUE
+	if(x + width > world.maxx || y + height > world.maxy)
+		WARNING("Cancelled loading [src]. Map enlargement is forbidden.")
+		return FALSE
+	return TRUE
+
 /datum/map_element/proc/initialize(list/objects) //Called after loading the element. The "objects" list contains all spawned atoms
 	map_elements.Add(src)
 
@@ -32,6 +40,9 @@ var/list/datum/map_element/map_elements = list()
 	//In some cases, location is set to null (when creating a new z-level, for example)
 	//To account for that, location is set again in maploader's load_map() proc
 	location = locate(x+1, y+1, z)
+
+	if(!can_load(x,y))
+		return 0
 
 	pre_load()
 
@@ -72,7 +83,7 @@ var/list/datum/map_element/map_elements = list()
 //Example use:
 //  boss_enemy = track_atom(new /mob/living/simple_animal/corgi)
 
-/datum/map_element/proc/track_atom(atom/A)
+/datum/map_element/proc/track_atom(atom/movable/A)
 	if(!istype(A))
 		return
 
@@ -82,7 +93,7 @@ var/list/datum/map_element/map_elements = list()
 
 
 /datum/map_element/proc/clear_references(list/params)
-	var/atom/A = params["atom"]
+	var/atom/movable/A = params["atom"]
 	if(!A)
 		return
 

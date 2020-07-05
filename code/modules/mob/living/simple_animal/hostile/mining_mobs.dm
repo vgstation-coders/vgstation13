@@ -81,6 +81,24 @@
 	aggro_vision_range = 9
 	idle_vision_range = 2
 
+/mob/living/simple_animal/hostile/asteroid/basilisk/gorgon
+	name = "gorgon"
+	desc = "Looking at this one doesn't seen to turn the beholder into stone."
+	icon_state = "gorgon"
+	icon_living = "gorgon"
+	icon_aggro = "gorgon_alert"
+	icon_dead = "gorgon_dead"
+	move_to_delay = 10
+	ranged = FALSE
+	speed = 2
+	maxHealth = 80
+	health = 80
+	harm_intent_damage = 2
+	melee_damage_lower = 7
+	melee_damage_upper = 7
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+	size = SIZE_SMALL
+
 /obj/item/projectile/temp/basilisk
 	name = "freezing blast"
 	icon_state = "ice_2"
@@ -263,7 +281,7 @@ obj/item/asteroid/basilisk_hide/New()
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -363,7 +381,7 @@ obj/item/asteroid/basilisk_hide/New()
 		to_chat(user, "<span class='notice'>\The [target] refuses \the [src].</span>")
 		return
 
-	if (!target.hasmouth)
+	if (!target.hasmouth())
 		if (target != user)
 			to_chat(user, "<span class='warning'>You attempt to feed \the [src] to \the [target], but you realize they don't have a mouth. How dumb!</span>")
 		else
@@ -413,11 +431,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		returnToPool(src)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
@@ -446,6 +464,14 @@ obj/item/asteroid/basilisk_hide/New()
 	idle_vision_range = 5
 
 	size = SIZE_BIG
+
+/mob/living/simple_animal/hostile/asteroid/goliath/snow
+	name = "white goliath"
+	desc = "Tentacled, space-faring beasts that prey upon fauna in mineral-rich areas. The white subspecies has adapted to camouflage on a snowy world."
+	icon_state = "Goliathwhite"
+	icon_living = "Goliathwhite"
+	icon_aggro = "Goliathwhite_alert"
+	icon_dead = "Goliathwhite_dead"
 
 /mob/living/simple_animal/hostile/asteroid/goliath/OpenFire(atom/ttarget)
 	var/tturf = get_turf(ttarget)
@@ -512,9 +538,6 @@ obj/item/asteroid/basilisk_hide/New()
 	if(proximity_flag && istype(target, /obj/item/clothing))
 		var/obj/item/clothing/C = target
 		var/current_armor = C.armor
-		if(!isturf(C.loc))
-			to_chat(user, "<span class='warning'>\The [C] must be safely placed on the ground for modification.</span>")
-			return
 		if(C.clothing_flags & GOLIATHREINFORCE)
 			C.hidecount ++
 			if(current_armor["melee"] < 90)
@@ -528,6 +551,8 @@ obj/item/asteroid/basilisk_hide/New()
 			C.item_state = "[initial(C.item_state)]_goliath[C.hidecount]"
 			C.icon_state = "[initial(C.icon_state)]_goliath[C.hidecount]"
 			C._color = "mining_goliath[C.hidecount]"
+		if(user.is_wearing_item(C))
+			user.regenerate_icons()
 
 /mob/living/simple_animal/hostile/asteroid/goliath/david
 	name = "david"
@@ -653,7 +678,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 	switch(fire_extremity)
 		if(1) // Fire spout
-			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg')
+			generic_projectile_fire(get_ranged_target_turf(src, dir, 10), src, /obj/item/projectile/fire_breath, 'sound/weapons/flamethrower.ogg', src)
 			if(environment)
 				environment.add_thermal_energy(350000)
 		if(2) //Fire blast
@@ -856,11 +881,15 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_dead = "pillow_dead"
 	holder_type = /obj/item/weapon/holder/animal/pillow
 	size = SIZE_SMALL
+	var/pacify_aura = TRUE
 	var/image/eyes
+
+/mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
+	pacify_aura = FALSE
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()
-	if(!isDead())
+	if(!isDead() && pacify_aura)
 		to_chat(user, "<span class = 'notice'>It looks so comforting, you feel like the world, at least in the general vicinity, is at peace.</span>")
 
 /mob/living/simple_animal/hostile/asteroid/pillow/New()
@@ -872,3 +901,27 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/pillow/death()
 	overlays.Cut()
 	..()
+
+/mob/living/simple_animal/hostile/retaliate/goat/wooly
+	name = "wooly goat"
+	desc = "An absolutely fierce-tempered beast that prefers cold climates. It has a very tough hide."
+	icon_state = "woolygoat"
+	icon_living = "woolygoat"
+	icon_dead = "woolygoat_dead"
+	gives_milk = FALSE
+	health = 120
+	maxHealth = 120
+	anger_chance = 4 //4% per tick to get angry
+	faction = "mining"
+
+/mob/living/simple_animal/hostile/retaliate/goat/wooly/New()
+	..()
+	gender = pick(MALE,FEMALE)
+	gives_milk = (FEMALE ? TRUE : FALSE)
+
+/mob/living/simple_animal/hostile/scarybat/cave
+	name = "cave bats"
+	desc = "A nasty horde of bloodsuckers. They're extra tough."
+	faction = "mining"
+	health = 60
+	maxHealth = 60

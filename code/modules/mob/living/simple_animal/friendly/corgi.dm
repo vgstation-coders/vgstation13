@@ -109,10 +109,10 @@
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
+							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags his tail.")
+							emote("me", 1, "barks at [movement_target] and wags \his tail.")
 							corgi_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")
@@ -123,24 +123,21 @@
 				corgi_status = IDLE
 
 /mob/living/simple_animal/corgi/regular_hud_updates()
-	if(fire)
-		if(fire_alert)
-			fire.icon_state = "fire[fire_alert]" //fire_alert is either 0 if no alert, 1 for heat and 2 for cold.
-		else
-			fire.icon_state = "fire0"
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, fire_alert == 1 ? /obj/abstract/screen/alert/carbon/burn/ice/corgi : /obj/abstract/screen/alert/carbon/burn/fire/corgi)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
 	update_pull_icon()
-	if(oxygen)
-		if(oxygen_alert)
-			oxygen.icon_state = "oxy1"
-		else
-			oxygen.icon_state = "oxy0"
-	if(toxin)
-		if(toxins_alert)
-			toxin.icon_state = "tox1"
-		else
-			toxin.icon_state = "tox0"
+	if(oxygen_alert)
+		throw_alert(SCREEN_ALARM_BREATH, /obj/abstract/screen/alert/carbon/breath/corgi)
+	else
+		clear_alert(SCREEN_ALARM_BREATH)
+	if(toxins_alert)
+		throw_alert(SCREEN_ALARM_TOXINS, /obj/abstract/screen/alert/tox/corgi)
+	else
+		clear_alert(SCREEN_ALARM_TOXINS)
 
-	if (healths)
+	if(healths)
 		switch(health)
 			if(30 to INFINITY)
 				healths.icon_state = "health0"
@@ -158,8 +155,6 @@
 				healths.icon_state = "health6"
 			else
 				healths.icon_state = "health7"
-	//regenerate_icons()
-
 
 /mob/living/simple_animal/corgi/show_inv(mob/user as mob)
 	user.set_machine(src)
@@ -246,7 +241,7 @@
 					if(!item_to_add)
 						usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s back for a moment.</span>")
 						return
-					if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+					if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 						item_to_add.afterattack(src,usr,1)
 						return
 
@@ -277,6 +272,9 @@
 
 					usr.drop_item(item_to_add, src, force_drop = 1)
 					src.inventory_back = item_to_add
+					if(isrig(item_to_add)) //TIME TO HACKINTOSH
+						var/obj/item/clothing/head/helmet/space/rig/rig_helmet = new (src)
+						place_on_head(rig_helmet)
 					regenerate_icons()
 
 		show_inv(usr)
@@ -289,7 +287,7 @@
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 
 
-	if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
 		return
 
@@ -500,21 +498,27 @@
                         dir = i
                         sleep(1)
 
+/mob/living/simple_animal/corgi/proc/reset_appearance()
+	name = real_name
+	desc = initial(desc)
+	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
+	speak_emote = list("barks.", "woofs.")
+	emote_hear = list("barks.", "woofs.", "yaps.")
+	emote_see = list("shakes its head.", "shivers.", "pants.")
+	emote_sound = list("sound/voice/corgibark.ogg")
+	min_oxy = initial(min_oxy)
+	minbodytemp = initial(minbodytemp)
+	maxbodytemp = initial(maxbodytemp)
+	set_light(0)
+
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
 		if("head")
 			if(inventory_head)
-				name = real_name
-				desc = initial(desc)
-				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-				speak_emote = list("barks.", "woofs.")
-				emote_hear = list("barks.", "woofs.", "yaps.")
-				emote_see = list("shakes its head.", "shivers.", "pants.")
-				emote_sound = list("sound/voice/corgibark.ogg")
-				min_oxy = initial(min_oxy)
-				minbodytemp = initial(minbodytemp)
-				maxbodytemp = initial(maxbodytemp)
-				set_light(0)
+				if(isrighelmet(inventory_head) && inventory_back && isrig(inventory_back)) //You've activated my trap card!
+					remove_inventory("back", user)
+					return
+				reset_appearance()
 				inventory_head.forceMove(src.loc)
 				inventory_head = null
 				regenerate_icons()
@@ -524,6 +528,10 @@
 				return
 		if("back")
 			if(inventory_back)
+				if(isrig(inventory_back) && inventory_head && isrighelmet(inventory_head)) //Now we undo the hack
+					qdel(inventory_head)
+					reset_appearance()
+					inventory_head = null
 				inventory_back.forceMove(src.loc)
 				inventory_back = null
 				regenerate_icons()
@@ -573,7 +581,7 @@
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
-	
+
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
 	var/creatine =  reagents.has_reagent(CREATINE)
@@ -586,7 +594,7 @@
 	else if(!creatine && creatine_had)
 		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
 		gib()
-		
+
 	if(creatine && hyperzine)
 		treadmill_speed = 30
 		time_between_directed_steps = 1
@@ -596,7 +604,7 @@
 	else if(hyperzine)
 		treadmill_speed = 3
 		src.Jitter(2 SECONDS)
-		time_between_directed_steps = 3	
+		time_between_directed_steps = 3
 	else
 		treadmill_speed = 0.5
 		time_between_directed_steps = initial(time_between_directed_steps)
@@ -700,7 +708,7 @@
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 				if(prob(5))
 					master = M
-					to_chat(M, "[src] seems closer to you now. At least until somebody else gives him attention, anyway.")
+					to_chat(M, "[src] seems closer to you now. At least until somebody else gives \him attention, anyway.")
 			if(I_HURT)
 				playsound(loc, 'sound/voice/corgigrowl.ogg', 80, 1)
 				emote("me", EMOTE_AUDIBLE, "growls.")

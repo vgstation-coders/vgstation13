@@ -33,7 +33,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 
 	var/show_status = 1 //in order to prevent the signaler button in signaler.dm from saying "... is ready!" when examined
 	var/secured = 1
-	var/list/attached_overlays = null
+	var/list/attached_overlays = list()
 	var/obj/item/device/assembly_holder/holder = null
 	var/cooldown = 0//To prevent spam
 	var/wires = WIRE_RECEIVE | WIRE_PULSE
@@ -137,7 +137,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 			return
 
 		if(L.len >= VALUE_VARIABLE_MAX)
-			new_value = Clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
+			new_value = clamp(new_value, text2num(L[VALUE_VARIABLE_MIN]), text2num(L[VALUE_VARIABLE_MAX]))
 
 	else if(L[VALUE_VARIABLE_TYPE] == VT_POINTER)
 		//When importing assembly frames, assemblies can't connect to stuff with a higher index (because it's not loaded yet)
@@ -179,7 +179,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 		if(!istext(new_value))  //Attempted to write a non-string to a string var - convert the non-string into a string and continue
 			new_value = "[new_value]"
 
-		new_value = utf8_sanitize(new_value, length = MAX_TEXT_VALUE_LEN)
+		new_value = strip_html(new_value, MAX_TEXT_VALUE_LEN)
 
 	//text values can accept either numbers or text, so don't check for that
 
@@ -304,48 +304,3 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	user.set_machine(src)
 	interact(user)
 	return 1
-
-
-/obj/item/device/assembly/interact(mob/user as mob)
-	return //HTML MENU FOR WIRES GOES HERE
-
-/*
-	var/small_icon_state = null//If this obj will go inside the assembly use this for icons
-	var/list/small_icon_state_overlays = null//Same here
-	var/obj/holder = null
-	var/cooldown = 0//To prevent spam
-
-	proc
-		Activate()//Called when this assembly is pulsed by another one
-		Process_cooldown()//Call this via spawn(10) to have it count down the cooldown var
-		Attach_Holder(var/obj/H, var/mob/user)//Called when an assembly holder attempts to attach, sets src's loc in here
-
-
-	Activate()
-		if(cooldown > 0)
-			return 0
-		cooldown = 2
-		spawn(10)
-			Process_cooldown()
-		//Rest of code here
-		return 0
-
-
-	Process_cooldown()
-		cooldown--
-		if(cooldown <= 0)
-			return 0
-		spawn(10)
-			Process_cooldown()
-		return 1
-
-
-	Attach_Holder(var/obj/H, var/mob/user)
-		if(!H)
-			return 0
-		if(!H.IsAssemblyHolder())
-			return 0
-		//Remember to have it set its loc somewhere in here
-
-
-*/

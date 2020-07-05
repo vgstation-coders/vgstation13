@@ -48,22 +48,8 @@
 				adjustOxyLoss(-(light_amount))
 				//TODO: heal wounds, heal broken limbs.
 
-	if(species.flags & REQUIRE_DARK && !(head && head.islightshielded()))
-		var/light_amount = 0
-		if(isturf(loc))
-			var/turf/T = loc
-			light_amount = T.get_lumcount() * 10
-
-		nutrition -= -3+light_amount
-		pain_shock_stage += -3+light_amount
-
-		if(species.flags & IS_PLANT)
-			if(nutrition > 500)
-				nutrition = 500
-			if(!reagents.has_reagent(HYPERZINE))
-				adjustBruteLoss(-10+light_amount)
-				adjustToxLoss(-10+light_amount)
-				adjustOxyLoss(-10+light_amount)
+	if(isslimeperson(src) && reagents.total_volume > 10)
+		blend_multicolor_skin(get_weighted_reagent_color(reagents), min(0.5, (reagents.total_volume / 1000)), 1)
 
 	if(dna && dna.mutantrace == "shadow")
 		var/light_amount = 0
@@ -129,7 +115,7 @@
 			sleeping += 1
 			Paralyse(5)
 
-	confused = max(0, confused - 1)
+	remove_confused(1)
 	//Decrement dizziness counter, clamped to 0
 	if(resting)
 		dizziness = max(0, dizziness - 15)
@@ -143,3 +129,16 @@
 	handle_trace_chems()
 
 	updatehealth()
+
+//Color as text in hex, weight for the color we're adding should be < 1
+/mob/living/carbon/human/proc/blend_multicolor_skin(var/color, var/weight = 0.5, var/updatehair = 0)
+	var/list/colors = GetHexColors(color)
+	multicolor_skin_r = round((1 - weight) * multicolor_skin_r + weight * colors[1])
+	multicolor_skin_g = round((1 - weight) * multicolor_skin_g + weight * colors[2])
+	multicolor_skin_b = round((1 - weight) * multicolor_skin_b + weight * colors[3])
+	update_body()
+	if(updatehair)
+		my_appearance.r_hair = round(multicolor_skin_r * 0.8)
+		my_appearance.g_hair = round(multicolor_skin_g * 0.8)
+		my_appearance.b_hair = round(multicolor_skin_b * 0.8)
+		update_hair()

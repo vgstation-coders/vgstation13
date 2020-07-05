@@ -5,6 +5,7 @@ var/list/spark_sound = list('sound/effects/sparks1.ogg','sound/effects/sparks2.o
 var/list/rustle_sound = list('sound/effects/rustle1.ogg','sound/effects/rustle2.ogg','sound/effects/rustle3.ogg','sound/effects/rustle4.ogg','sound/effects/rustle5.ogg')
 var/list/punch_sound = list('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
 var/list/clown_sound = list('sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
+var/list/slap_sound = list('sound/effects/slap1.ogg','sound/effects/slap2.ogg')
 var/list/swing_hit_sound = list('sound/weapons/genhit1.ogg', 'sound/weapons/genhit2.ogg', 'sound/weapons/genhit3.ogg')
 var/list/hiss_sound = list('sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg')
 var/list/page_sound = list('sound/effects/pageturn1.ogg', 'sound/effects/pageturn2.ogg','sound/effects/pageturn3.ogg')
@@ -15,6 +16,7 @@ var/list/polaroid_sound = list('sound/items/polaroid1.ogg', 'sound/items/polaroi
 var/list/male_scream_sound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg')
 var/list/female_scream_sound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 var/list/vox_shriek_sound = list('sound/misc/shriek1.ogg')
+var/list/insectoid_chitter_sound = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
 var/list/male_cough_sound = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
 var/list/female_cough_sound = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
 var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', 'sound/effects/lightning/chainlightning2.ogg', 'sound/effects/lightning/chainlightning3.ogg', 'sound/effects/lightning/chainlightning4.ogg', 'sound/effects/lightning/chainlightning5.ogg', 'sound/effects/lightning/chainlightning6.ogg', 'sound/effects/lightning/chainlightning7.ogg')
@@ -27,6 +29,7 @@ var/list/card_swipe_sound = list('sound/effects/cardswipe1.ogg', 'sound/effects/
 var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 'sound/effects/mop3.ogg', 'sound/effects/mop4.ogg', 'sound/effects/mop5.ogg')
 var/list/voice_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
 var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
+var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -51,6 +54,9 @@ var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W9
 		extrarange = 0
 	if(!vol) //don't do that
 		return
+
+	if(turf_source)
+		vol *= turf_source.volume_mult
 
 	if(gas_modified && turf_source && !turf_source.c_airblock(turf_source)) //if the sound is modified by air, and we are on an airflowing tile
 		var/atmosphere = 0
@@ -127,10 +133,10 @@ var/const/SURROUND_CAP = 7
 		var/turf/T = get_turf(src)
 
 		var/dx = turf_source.x - T.x // Hearing from the right/left
-		S.x = round(Clamp(dx, -SURROUND_CAP, SURROUND_CAP), 1)
+		S.x = round(clamp(dx, -SURROUND_CAP, SURROUND_CAP), 1)
 
 		var/dz = turf_source.y - T.y // Hearing from infront/behind
-		S.z = round(Clamp(dz, -SURROUND_CAP, SURROUND_CAP), 1)
+		S.z = round(clamp(dz, -SURROUND_CAP, SURROUND_CAP), 1)
 
 		// The y value is for above your head, but there is no ceiling in 2d spessmens.
 		S.y = 1
@@ -167,6 +173,8 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(punch_sound)
 			if ("clownstep")
 				soundin = pick(clown_sound)
+			if ("slap")
+				soundin = pick(slap_sound)
 			if ("swing_hit")
 				soundin = pick(swing_hit_sound)
 			if ("hiss")
@@ -207,5 +215,7 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(voice_sound)
 			if ("windows error")
 				soundin = pick(windows_error)
+			if ("fuckupstep")
+				soundin = fuckup_step
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

@@ -70,6 +70,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(!procname)
 			return
 
+		// Do not make this a global reference. Global references can be cleared out.
+		if (istype(target, /datum/subsystem/dbcore/))
+			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
+			message_admins("[key_name(usr)] used atom proc call on the db controller.")
+			log_admin("[key_name(usr)] used atom proc call on the db controller.")
+			return FALSE
+
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
 			return
@@ -861,10 +868,10 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		return M:Cluwneize()
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cluwne.</span>", 1)
 		feedback_add_details("admin_verb","MKCLU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
+		return M.Cluwneize()
 	else
 		alert("Invalid mob, needs to be a human.")
 
@@ -1356,12 +1363,21 @@ client/proc/check_convertables()
 	feedback_add_details("admin_verb","DIS")
 	return
 
+/client/proc/climate_panel()
+	set name = "Climate Panel"
+	set category = "Admin"
+	if(holder)
+		holder.climate_panel()
+		log_admin("[key_name(usr)] checked the Climate Panel.")
+	feedback_add_details("admin_verb","CLI")
+
+
 /client/proc/start_line_profiling()
 	set category = "Profile"
 	set name = "Start line profiling"
 	set desc = "Starts tracking line by line profiling for code lines that support it"
 
-	PROFILE_START
+	LINE_PROFILE_START
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
 	feedback_add_details("admin_verb","Start line profiling")
@@ -1372,7 +1388,7 @@ client/proc/check_convertables()
 	set name = "Stop line profiling"
 	set desc = "Stops tracking line by line profiling for code lines that support it"
 
-	PROFILE_STOP
+	LINE_PROFILE_STOP
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
 	feedback_add_details("admin_verb","Stop line profiling")

@@ -8,10 +8,9 @@
 	nodamage = 0
 	flag = "bullet"
 	var/embed = 1
-	var/explosive = 1
 	var/picked_up_speed = 0.66 //This is basically projectile speed, so
 	fire_sound = 'sound/weapons/rocket.ogg'
-	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room, 
+	var/exdev 	= 1 //RPGs pack a serious punch and will cause massive structural damage in your average room,
 	var/exheavy = 3 //but won't punch through reinforced walls
 	var/exlight = 5
 	var/exflash = 8
@@ -33,14 +32,10 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
-	if(explosive == 1)
-		explosion(A, exdev, exheavy, exlight, exflash) 
-		if(!gcDestroyed)
-			qdel(src)
-	else
-		..()
-		if(!gcDestroyed)
-			qdel(src)
+	..()
+	explosion(A, exdev, exheavy, exlight, exflash)
+	if(!gcDestroyed)
+		qdel(src)
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
@@ -70,10 +65,12 @@
 	emheavy = 3
 	emlight = 5
 
-/obj/item/projectile/rocket/emp/to_bump(var/atom/A)
+
+/obj/item/projectile/rocket/blank/emp/to_bump(var/atom/A)
 	empulse(A, 3, 5)
 	..()
-	
+
+
 /obj/item/projectile/rocket/blank/stun
 	name = "stun rocket"
 	damage = 15
@@ -81,10 +78,13 @@
 	weaken = 20
 	agony = 30
 
-/obj/item/projectile/rocket/stun/to_bump(var/atom/A)
+
+/obj/item/projectile/rocket/blank/stun/to_bump(var/atom/A)
 	flashbangprime(TRUE, FALSE, FALSE)
 	..()
-		
+
+
+
 /obj/item/projectile/rocket/lowyield/extreme
 	name = "extreme yield rocket"
 	damage = 200
@@ -223,6 +223,8 @@
 		qdel(src)
 
 /obj/item/projectile/rocket/nikita/proc/reset_view()
+	if(!mob)
+		return
 	var/datum/control/C = mob.orient_object[src]
 	if(C)
 		C.break_control()

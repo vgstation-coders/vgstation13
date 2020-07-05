@@ -110,7 +110,7 @@
 
 	return 1
 
-/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(var/mob/user)
+/obj/machinery/atmospherics/binary/circulator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -136,11 +136,11 @@
 		if(node1)
 			node1.disconnect(src)
 			if(network1)
-				returnToPool(network1)
+				qdel(network1)
 		if(node2)
 			node2.disconnect(src)
 			if(network2)
-				returnToPool(network2)
+				qdel(network2)
 
 		node1 = null
 		node2 = null

@@ -73,7 +73,7 @@
 	if (istype(W, /obj/item/device/measuring_tape))
 		var/obj/item/device/measuring_tape/P = W
 		user.visible_message("<span class='notice>[user] extends [P] towards [src].","<span class='notice'>You extend [P] towards [src].</span></span>")
-		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [2*src.excavation_level]cm.</span>")
+		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [src.excavation_level]cm.</span>")
 		return
 
 	if (istype(W, /obj/item/weapon/pickaxe))
@@ -86,7 +86,7 @@
 
 		busy = 1
 
-		if(do_after(user,src, P.digspeed))
+		if(do_after(user,src, (MINE_DURATION * P.toolspeed)))
 
 			busy = 0
 
@@ -97,7 +97,7 @@
 				//failure
 				src.visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
 				to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught, any secrets it was holding are long gone.</span>")
-				returnToPool(src)
+				qdel(src)
 				return
 
 			if(prob(excavation_level))
@@ -111,7 +111,7 @@
 						new spawn_type(get_turf(src))
 				else
 					to_chat(user, "<span class='notice'>[src] has been whittled away under your careful excavation, but there was nothing of interest inside.</span>")
-				returnToPool(src)
+				qdel(src)
 		else
 			busy = 0
 		return
@@ -122,7 +122,7 @@
 	if(istype(user,/mob/living/simple_animal/construct/armoured))
 		playsound(loc, 'sound/weapons/heavysmash.ogg', 75, 1)
 		if(do_after(user, src, 20))
-			returnToPool(src)
+			qdel(src)
 		return 1
 	return 0
 

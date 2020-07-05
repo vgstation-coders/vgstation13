@@ -74,6 +74,19 @@ var/list/department_radio_keys = list(
 	  ":&" = "borerchat", "#&" = "borerchat", ".&" = "borerchat",
 )
 
+var/list/headset_modes = list(
+	"Response Team",
+	"Command",
+	"Service",
+	"Engineering",
+	"Security",
+	"Syndicate",
+	"Supply",
+	"Medical",
+	"Science",
+	"department",
+)
+
 /mob/living/proc/get_default_language()
 	if(!default_language)
 		if(languages && languages.len)
@@ -101,7 +114,7 @@ var/list/department_radio_keys = list(
 	say_testing(src, "/mob/living/say(\"[message]\", [bubble_type]")
 	if(timestopped)
 		return //under the effects of time magick
-	message = trim(copytext(message, 1, MAX_MESSAGE_LEN))
+	message = sanitize_speech(message)
 	message = capitalize(message)
 
 	say_testing(src, "Say start, message=[message]")
@@ -168,10 +181,10 @@ var/list/department_radio_keys = list(
 	speech.message = trim_left(speech.message)
 	if(handle_inherent_channels(speech, message_mode))
 		say_testing(src, "Handled by inherent channel")
-		returnToPool(speech)
+		qdel(speech)
 		return
 	if(!can_speak_vocal(speech.message))
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	//parse the language code and consume it
@@ -181,9 +194,11 @@ var/list/department_radio_keys = list(
 	treat_speech(speech)
 
 	var/radio_return = get_speech_flags(message_mode)
+	if (speech_was_spoken_into_radio(message_mode))
+		speech.wrapper_classes.Add("spoken_into_radio")
 	if(radio_return & NOPASS) //There's a whisper() message_mode, no need to continue the proc if that is called
 		whisper(speech.message, speech.language)
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 	if(radio_return & REDUCE_RANGE)
@@ -200,7 +215,7 @@ var/list/department_radio_keys = list(
 	radio(speech, message_mode) //Sends the radio signal
 	var/turf/T = get_turf(src)
 	log_say("[name]/[key] [T?"(@[T.x],[T.y],[T.z])":"(@[x],[y],[z])"] [speech.language ? "As [speech.language.name] ":""]: [message]")
-	returnToPool(speech)
+	qdel(speech)
 	return 1
 
 /mob/living/proc/resist_memes(var/datum/speech/speech)
@@ -252,27 +267,60 @@ var/list/department_radio_keys = list(
 		for(var/T in syndicate_code_response)
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
-	show_message(rendered_message, type, deaf_message, deaf_type, src)
+	//AI mentions
+	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+		var/mob/living/silicon/ai/ai = src
+		if(ai.mentions_on)
+			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+				ai << 'sound/machines/twobeep.ogg'
+				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
+				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+
+	// Runechat messages
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
+		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
+	if (ismob(speech.speaker))
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+	else if (!client.prefs.no_goonchat_for_obj || length_char(speech.message) > client?.prefs.max_chat_length) // Objects : only display if no goonchat on map or if the runemessage is too small.
+		show_message(rendered_message, type, deaf_message, deaf_type, src)
+
 	return rendered_message
 
 /mob/living/proc/hear_radio_only()
 	return 0
 
 /mob/living/send_speech(var/datum/speech/speech, var/message_range=7, var/bubble_type) // what is bubble type?
+	var/visual_range = message_range //the range of hearers who can see that something was said, but not hear the message
 	say_testing(src, "/mob/living/send_speech() start, msg = [speech.message]; message_range = [message_range]; language = [speech.language ? speech.language.name : "None"]; speaker = [speech.speaker];")
 	if(isnull(message_range))
 		message_range = 7
 
-	var/list/listeners = get_hearers_in_view(message_range, speech.speaker) | observers
+	message_range = atmospheric_speech(speech,message_range)
+
+	var/list/total_listeners = get_hearers_in_view(visual_range, speech.speaker)
+	var/list/actual_listeners = observers.Copy()
+	var/outside_range_message = "<span class='name'>[speech.speaker]</span> appears to say something, but you can't make it out from here."
+	for(var/atom/A in total_listeners)
+		if(!(A in actual_listeners))
+			if(get_dist(src, A) <= message_range)
+				actual_listeners.Add(A)
+			else if(ismob(A))
+				var/mob/M = A
+				if(!M.is_blind())
+					M.show_message(outside_range_message,MESSAGE_SEE,speaker = src)
+			else
+				to_chat(A, outside_range_message)
 
 	var/rendered = render_speech(speech)
 
-	var/list/listening_nonmobs = listeners.Copy()
-	for(var/mob/M in listeners)
+	var/list/listening_nonmobs = actual_listeners.Copy()
+	for(var/mob/M in actual_listeners)
 		listening_nonmobs -= M
 		M.Hear(speech, rendered)
 
-	send_speech_bubble(speech.message, bubble_type, listeners)
+	send_speech_bubble(speech.message, bubble_type, total_listeners)
 
 	for (var/atom/movable/listener in listening_nonmobs)
 		listener.Hear(speech, rendered)
@@ -407,6 +455,10 @@ var/list/department_radio_keys = list(
 	return 0
 
 /mob/living/proc/treat_speech(var/datum/speech/speech, genesay = 0)
+	if(!(copytext(speech.message, 1, 2) == "*"))
+		for(var/obj/item/I in get_all_slots() + held_items)
+			I.affect_speech(speech, src)
+
 	if(getBrainLoss() >= 60)
 		speech.message = derpspeech(speech.message, stuttering)
 
@@ -425,6 +477,14 @@ var/list/department_radio_keys = list(
 		return ITALICS | REDUCE_RANGE //for borgs and polly
 
 	return 0
+
+/mob/living/proc/speech_was_spoken_into_radio(var/message_mode)
+	if (message_mode in headset_modes)
+		return TRUE
+	switch (message_mode)
+		if(MODE_HEADSET, MODE_SECURE_HEADSET, MODE_R_HAND, MODE_L_HAND, MODE_INTERCOM, MODE_BINARY)
+			return TRUE
+	return FALSE
 
 /mob/living/proc/radio(var/datum/speech/speech, var/message_mode)
 	switch(message_mode)
@@ -482,11 +542,23 @@ var/list/department_radio_keys = list(
 		if(setting == 2)
 			return 1
 
+// Obsolete for any mob which uses a language.
 /mob/living/say_quote()
 	if (stuttering)
 		return "stammers, [text]"
 	if (getBrainLoss() >= 60)
 		return "gibbers, [text]"
+	return ..()
+
+// Use this when the mob speaks a given language.
+/mob/proc/get_spoken_verb(var/msg)
+	return ""
+
+/mob/living/get_spoken_verb(var/msg)
+	if (stuttering)
+		return "stammers"
+	if (getBrainLoss() >= 60)
+		return "gibbers"
 	return ..()
 
 /mob/living/proc/send_speech_bubble(var/message,var/bubble_type, var/list/hearers)
@@ -600,7 +672,7 @@ var/list/department_radio_keys = list(
 	if (said_last_words) // dying words
 		succumb_proc(0)
 
-	returnToPool(speech)
+	qdel(speech)
 
 /obj/effect/speech_bubble
 	var/mob/parent

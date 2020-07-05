@@ -41,7 +41,7 @@
 					to_chat(usr, "You begin removing screws from \the [src] backplate...")
 					if(do_after(user, src, 50))
 						to_chat(usr, "<span class='notice'>You unscrew \the [src] from the wall.</span>")
-						playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+						W.playtoolsound(src, 50)
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						qdel(src)
 					return 1
@@ -101,7 +101,7 @@
 					return 1
 				if(W.is_screwdriver(user))
 					to_chat(user, "You begin to complete \the [src]...")
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if(do_after(user, src, 20))
 						if(!_circuitboard)
 							_circuitboard=new boardtype(src)
@@ -163,7 +163,7 @@
 	density = 0
 
 	// Setup parameters only
-	var/id_tag
+
 	var/tag_exterior_door
 	var/tag_interior_door
 	var/tag_airpump
@@ -273,10 +273,11 @@
 
 		if("buffer" in href_list)
 			if(istype(src, /obj/machinery/telecomms))
-				if(!hasvar(src, "id"))
+				var/obj/machinery/telecomms/T = src
+				if(!T.id) // Telecomms are identified by ID
 					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 					return
-			else if(!hasvar(src, "id_tag"))
+			else if(!id_tag)
 				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 				return
 			P.buffer = src

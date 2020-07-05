@@ -25,6 +25,8 @@
 
 	var/datum/state_laws_ui/state_laws_ui = new() //holds the UI state for the State Laws verb. See: state_laws.dm
 
+	var/stored_freqs = 0
+
 /mob/living/silicon/hasFullAccess()
 	return 1
 

@@ -3,7 +3,7 @@
  *		Balloons
  *		Fake telebeacon
  *		Fake singularity
- *		Toy gun
+ *		Toy guns
  *		Toy crossbow
  *		Toy swords
  *		Foam armblade
@@ -105,7 +105,7 @@
     icon_state = "ntballoon"
     item_state = "ntballoon"
     inhand_states = list("left_hand" = 'icons/mob/in-hand/left/memeballoon.dmi', "right_hand" = 'icons/mob/in-hand/right/memeballoon.dmi')
-	
+
 /obj/item/toy/syndicateballoon/byondballoon
     name = "\improper BYOND balloon"
     desc = "There is a tag on the back that reads \"LUMMOX <3!\"."
@@ -179,7 +179,7 @@
 		return 1
 	return
 
-/obj/item/toy/gun/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
+/obj/item/toy/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if (flag)
 		return
 	if (!user.dexterity_check())
@@ -193,7 +193,7 @@
 	playsound(user, 'sound/weapons/Gunshot.ogg', 100, 1)
 	src.bullets--
 	for(var/mob/O in viewers(user, null))
-		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [target]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
+		O.show_message("<span class = 'danger'><B>[user] fires \the [src] at \the [A]!</B></span>", 1, "<span class = 'danger'>You hear a gunshot</span>", 2)
 
 /obj/item/toy/ammo/gun
 	name = "box of cap gun caps"
@@ -217,6 +217,32 @@
 	..()
 	to_chat(user, "There [amount_left == 1 ? "is" : "are"] [amount_left] cap\s left.")
 
+/*
+ * Toy pulse rifle
+ */
+
+
+/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
+	name = "pulse destroyer"
+	desc = "A heavy-duty, pulse-based lasertag weapon."
+	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
+
+/*
+ * Fireworks launcher
+ */
+
+
+/obj/item/weapon/gun/energy/fireworkslauncher
+	name = "fireworks launcher"
+	desc = "Celebrate in style!"
+	icon_state = "fireworkslauncher"
+	item_state = "riotgun"
+	fire_sound = "sound/weapons/railgun_lowpower.ogg"
+	projectile_type = "/obj/item/projectile/meteor/firework"	
+	charge_cost = 0 //infinite ammo!
+	
+/obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
+	return
 
 /*
  * Toy crossbow
@@ -540,8 +566,8 @@
 /obj/item/toy/waterflower
 	name = "Water Flower"
 	desc = "A seemingly innocent sunflower...with a twist."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "sunflower"
+	icon = 'icons/obj/hydroponics/sunflower.dmi'
+	icon_state = "produce"
 	item_state = "sunflower"
 	var/empty = 0
 	flags = OPENCONTAINER
@@ -1051,13 +1077,13 @@
 
 /obj/item/toy/gasha/AI/attack_self(mob/user as mob)
 	if(cooldown < world.time - 8)
-		playsound(user, 'sound/vox/doop.wav', 20, 1)
+		playsound(user, 'sound/vox/_doop.wav', 20, 1)
 		cooldown = world.time
 
 /obj/item/toy/gasha/AI/attack_hand(mob/user as mob)
 	if(loc == user)
 		if(cooldown < world.time - 8)
-			playsound(user, 'sound/vox/doop.wav', 20, 1)
+			playsound(user, 'sound/vox/_doop.wav', 20, 1)
 			cooldown = world.time
 			return
 	..()
@@ -1387,7 +1413,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)

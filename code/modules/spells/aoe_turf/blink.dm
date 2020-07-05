@@ -2,7 +2,7 @@
 	name = "Blink"
 	desc = "This spell randomly teleports you a short distance."
 	user_type = USER_TYPE_WIZARD
-	specialization = DEFENSIVE
+	specialization = SSDEFENSIVE
 	abbreviation = "BL"
 
 	school = "abjuration"
@@ -25,7 +25,7 @@
 	if(T)
 		user.unlock_from()
 		user.teleport_to(T)
-
+		INVOKE_EVENT(user.on_blink, list("starting" = starting, "destination" = T))
 		makeAnimation(T, starting)
 	return
 

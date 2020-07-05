@@ -25,7 +25,8 @@
 	var/biomass = 0
 	var/time_coeff = 1 //Upgraded via part upgrading
 	var/resource_efficiency = 1
-	var/id_tag = "clone_pod"
+	id_tag = "clone_pod"
+	var/upgraded = 0 //if fully upgraded with T4 components, it will drastically improve and allow for some stuff
 	var/obj/machinery/computer/cloning/cloning_computer = null
 
 
@@ -60,15 +61,22 @@
 	RefreshParts()
 
 /obj/machinery/cloning/clonepod/RefreshParts()
+	var/total = 0
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
 		T += SM.rating //First rank is two times more efficient, second rank is two and a half times, third is three times. For reference, there's TWO scanning modules
+		total += SM.rating
 	time_coeff = T/2
 	T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating //Ditto above
+		total += MA.rating
 	resource_efficiency = T/2
 	T = 0
+	if(total >= 16)
+		upgraded = 1
+	else
+		upgraded = 0
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
@@ -83,11 +91,11 @@
 
 /obj/item/weapon/disk/data/New()
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = getFromPool(/datum/block_label)
+		labels[i] = new /datum/block_label
 
 /obj/item/weapon/disk/data/Destroy()
 	for(var/datum/block_label/label in labels)
-		returnToPool(label)
+		qdel(label)
 	labels.Cut()
 	..()
 
@@ -210,7 +218,7 @@
 					if((G.mind && (G.mind.current.stat != DEAD) ||  G.mind != clonemind))
 						return FALSE
 
-	heal_level = rand(10,40) //Randomizes what health the clone is when ejected
+	heal_level = upgraded ? 100 : rand(10,40) //Randomizes what health the clone is when ejected
 	working = TRUE //One at a time!!
 	locked = TRUE
 
@@ -241,7 +249,7 @@
 		H.set_species(H.dna.species, TRUE)
 
 	H.adjustCloneLoss(150) //new damage var so you can't eject a clone early then stab them to abuse the current damage system --NeoFite
-	H.adjustBrainLoss(heal_level + 50 + rand(10, 30)) // The rand(10, 30) will come out as extra brain damage
+	H.adjustBrainLoss(upgraded ? 0 : (heal_level + 50 + rand(10, 30))) // The rand(10, 30) will come out as extra brain damage
 	H.Paralyse(4)
 	H.stat = UNCONSCIOUS //There was a bug which allowed you to talk for a few seconds after being cloned, because your stat wasn't updated until next Life() tick. This is a fix for this!
 
@@ -261,7 +269,8 @@
 
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
-	randmutb(H) // sometimes the clones come out wrong.
+	if(!upgraded)
+		randmutb(H) // sometimes the clones come out wrong.
 	H.dna.mutantrace = R.dna.mutantrace
 	H.update_mutantrace()
 	for(var/datum/language/L in R.languages)
@@ -339,10 +348,10 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
-		return
+		return FALSE
 	for(biomass; biomass > 0;biomass -= BIOMASS_CHUNK)
 		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(loc)
 	return..()

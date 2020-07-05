@@ -14,7 +14,7 @@
 		//testing("Cannot monkey-ify [M], type is [M.type].")
 		return
 	var/mob/living/carbon/human/H = M
-	var/mob/living/carbon/monkey/O = H.monkeyize()
+	var/mob/living/carbon/monkey/O = H.monkeyize(choose_name = TRUE)
 	H = null
 	if (connected) // properly put new monkey inside machine
 		var/obj/machinery/dna_scannernew/C = connected
@@ -40,8 +40,9 @@
 		var/atom/movable/overlay/animation = new( M.loc )
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
-		animation.master = src
-		flick("monkey2h", animation)
+		animation.master = M
+		var/anim_name = M.get_unmonkey_anim()
+		flick(anim_name, animation)
 		sleep(48)
 		animation.master = null
 		qdel(animation)
@@ -115,3 +116,9 @@
 	qdel(M)
 	M = null
 	return
+
+/mob/proc/get_unmonkey_anim()
+	return "monkey2h"
+
+/mob/living/carbon/monkey/get_unmonkey_anim()
+	return unmonkey_anim

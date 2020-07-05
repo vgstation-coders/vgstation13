@@ -10,6 +10,13 @@
 #define SCANMODE_ROBOTICS	7
 #define SCANMODE_HAILER		8
 
+// Don't ask.
+#define PDA_MODE_BEEPSKY 46
+#define PDA_MODE_DELIVERY_BOT 48
+#define PDA_MODE_JANIBOTS 1000 // Initially I wanted to make it a "FUCK" "OLD" "CODERS" defines, but it would actually take some memory as string prototypes, so let's not.
+#define PDA_MODE_FLOORBOTS 1001
+#define PDA_MODE_MEDBOTS 1002
+
 #define PDA_MINIMAP_WIDTH	256
 #define PDA_MINIMAP_OFFSET_X	8
 #define PDA_MINIMAP_OFFSET_Y	233
@@ -194,7 +201,21 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	..()
 	var/datum/pda_app/balance_check/app = new /datum/pda_app/balance_check()
 	app.onInstall(src)
+	var/datum/pda_app/balance_check/app2 = new /datum/pda_app/alarm()
+	app2.onInstall(src)
 	reply = src
+
+	PDAs += src
+	if(default_cartridge)
+		cartridge = new default_cartridge(src)
+	new /obj/item/weapon/pen(src)
+	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
+	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
+	currentevent1 = pick(currentevents1)
+	currentevent2 = pick(currentevents2)
+	currentevent3 = pick(currentevents3)
+	onthisday = pick(history)
+	didyouknow = pick(facts)
 
 /obj/item/device/pda/medical
 	name = "Medical PDA"
@@ -612,20 +633,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
  *	The Actual PDA
  */
 
-/obj/item/device/pda/New()
-	..()
-	PDAs += src
-	if(default_cartridge)
-		cartridge = new default_cartridge(src)
-	new /obj/item/weapon/pen(src)
-	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
-	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
-	currentevent1 = pick(currentevents1)
-	currentevent2 = pick(currentevents2)
-	currentevent3 = pick(currentevents3)
-	onthisday = pick(history)
-	didyouknow = pick(facts)
-
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
 		if(user.incapacitated())
@@ -695,7 +702,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += text("<br><A href='?src=\ref[src];choice=UpdateInfo'>[id ? "Update PDA Info" : ""]</A><br><br>")
 
 
-				dat += {"Station Time: [worldtime2text()]
+				dat += {"Station Time: [worldtime2text()] <a href='byond://?src=\ref[src];choice=alarm'><span class='pda_icon pda_clock'></span> Set Alarm</a>
 					<br><br>
 					<h4>General Functions</h4>
 					<ul>
@@ -703,7 +710,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<li><a href='byond://?src=\ref[src];choice=2'><span class='pda_icon pda_mail'></span> Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=Multimessage'><span class='pda_icon pda_mail'></span> Department Messenger</a></li>
 					<li><a href='byond://?src=\ref[src];choice=50'><span class='pda_icon pda_clock'></span> Current Events</a></li>"}
-				//dat += "<li><a href='byond://?src=[src];choice=chatroom'><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</a></li>"
 
 				dat += "<li><a href='byond://?src=\ref[src];choice=41'><span class='pda_icon pda_notes'></span> View Crew Manifest</a></li>"
 
@@ -723,8 +729,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					for(var/datum/pda_app/app in applications)
 						if(app.menu)
 							dat += {"<li><a href='byond://?src=\ref[src];choice=[app.menu]'>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</a></li>"}
-						else
-							dat += {"<li>[app.icon ? "<span class='pda_icon [app.icon]'></span> " : ""][app.name]</li>"}
 					dat += {"</ul>"}
 
 				if (cartridge)
@@ -732,8 +736,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<h4>Engineering Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=43'><span class='pda_icon pda_power'></span> Power Monitor</a></li>
-							<li><a href='byond://?src=\ref[src];choice=53'><span class='pda_icon pda_alert'></span> Alert Monitor</a></li>
-							</ul>"}
+							<li><a href='byond://?src=\ref[src];choice=53'><span class='pda_icon pda_alert'></span> Alert Monitor</a></li>"}
+
+						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/floorbot))
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_FLOORBOTS]'><span class='pda_icon pda_atmos'></span> Floor Bot Access</a></li>
+									</ul>"}
+						else
+							dat += {"</ul>"}
 
 					if (cartridge.access_mechanic)
 						dat += {"<h4>Mechanic Functions</h4>
@@ -746,8 +755,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += {"<h4>Medical Functions</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=44'><span class='pda_icon pda_medical'></span> Medical Records</a></li>
-							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>
-							</ul>"}
+							<li><a href='byond://?src=\ref[src];choice=Medical Scan'><span class='pda_icon pda_scanner'></span> [scanmode == SCANMODE_MEDICAL ? "Disable" : "Enable"] Medical Scanner</a></li>"}
+
+						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_MEDBOTS]'><span class='pda_icon pda_medical'></span> Medical Bot Access</a></li>
+								</ul>"}
+						else
+							dat += {"</ul>"}
+
 					if (cartridge.access_security)
 
 						dat += {"<h4>Security Functions</h4>
@@ -755,18 +770,19 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							<li><a href='byond://?src=\ref[src];choice=45'><span class='pda_icon pda_cuffs'></span> Security Records</A></li>
 							<li><a href='byond://?src=\ref[src];choice=Integrated Hailer'><span class='pda_icon pda_signaler'></span> [scanmode == SCANMODE_HAILER ? "Disable" : "Enable"] Integrated Hailer</a></li>
 							"}
-					if(istype(cartridge.radio, /obj/item/radio/integrated/beepsky))
 
-						dat += {"<li><a href='byond://?src=\ref[src];choice=46'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
-							</ul>"}
-					else
-						dat += "</ul>"
+						if(istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))
+
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_BEEPSKY]'><span class='pda_icon pda_cuffs'></span> Security Bot Access</a></li>
+								</ul>"}
+						else
+							dat += "</ul>"
 					if(cartridge.access_quartermaster)
 
 						dat += {"<h4>Quartermaster Functions:</h4>
 							<ul>
 							<li><a href='byond://?src=\ref[src];choice=47'><span class='pda_icon pda_crate'></span> Supply Records</A></li>
-							<li><a href='byond://?src=\ref[src];choice=48'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
+							<li><a href='byond://?src=\ref[src];choice=delivery_bot'><span class='pda_icon pda_mule'></span> Delivery Bot Control</A></li>
 							</ul>"}
 
 				dat += {"</ul>
@@ -775,6 +791,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				if (cartridge)
 					if (cartridge.access_janitor)
 						dat += "<li><a href='byond://?src=\ref[src];choice=49'><span class='pda_icon pda_bucket'></span> Custodial Locator</a></li>"
+						if (istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/janitor))
+							dat += {"<li><a href='byond://?src=\ref[src];choice=[PDA_MODE_JANIBOTS]'><span class='pda_icon pda_bucket'></span> Cleaner Bot Access</a></li>"}
 					if (istype(cartridge.radio, /obj/item/radio/integrated/signal))
 						dat += "<li><a href='byond://?src=\ref[src];choice=40'><span class='pda_icon pda_signaler'></span> Signaler System</a></li>"
 					if (cartridge.access_reagent_scanner)
@@ -888,16 +906,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						dat += "Temperature: [round(environment.temperature-T0C)]&deg;C<br>"
 				dat += "<br>"
 
-			if (5)
-
-				dat += {"<h4><span class='pda_icon pda_chatroom'></span> Nanotrasen Relay Chat</h4>
-					<h4><span class='pda_icon pda_menu'></span> Detected Channels</h4>: <li>"}
-				for(var/datum/chatroom/C in chatrooms)
-					dat += "<a href='byond://?src=\ref[src];pdachannel=[C.name]'>#[html_encode(lowertext(C.name))]"
-					if(C.password != "")
-						dat += " <span class='pda_icon pda_locked'></span>"
-					dat += "</li>"
-
 			if (41) //Allows everyone to access crew
 
 				dat += {"<h4><span class='pda_icon pda_notes'></span> Crew Manifest</h4>
@@ -918,6 +926,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					<li>[onthisday]</li><br><br>
 					<b>Did you know...</b><br>
 					<li>[didyouknow]</li><br>"}
+
+			if (PDA_APP_ALARM)
+				var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
+				dat += {"<h4>Alarm Application</h4>"}
+				if(app)
+					dat += {"
+					The alarm is currently <a href='byond://?src=\ref[src];choice=toggleAlarm'>[app.status ? "ON" : "OFF"]</a><br>
+					Current Time:[worldtime2text()]<BR>
+					Alarm Time: [app.target ? "[worldtime2text(app.target)]" : "Unset"] <a href='byond://?src=\ref[src];choice=setAlarm'>SET</a><BR>
+					"}
 
 			if (PDA_APP_RINGER)
 				var/datum/pda_app/ringer/app = locate(/datum/pda_app/ringer) in applications
@@ -1012,73 +1030,97 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								<h5>Bank Account</h5>
 								<i>Unable to connect to accounts database. The database is either nonexistent, inoperative, or too far away.</i>
 								"}
-			/* Old Station Map Stuff
-			if (PDA_APP_STATIONMAP)
-				if(user.client)
-					var/datum/asset/simple/C = new/datum/asset/simple/pda_stationmap()
-					send_asset_list(user.client, C.assets)
 
-				var/datum/pda_app/station_map/app = locate(/datum/pda_app/station_map) in applications
-				dat += {"<h4>Station Map Application</h4>"}
-				if(app)
-					var/turf/T = get_turf(src.loc)
+			if (PDA_MODE_DELIVERY_BOT)
+				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/mule))
+					dat += {"<span class='pda_icon pda_mule'></span>Commlink bot error <br/>"}
+					return
+				// Building the data in the list
+				dat += {"<span class='pda_icon pda_mule'></span><b>M.U.L.E. bot Interlink V1.0</h4> </b><br/>"}
+				dat += "<ul>"
+				for (var/obj/machinery/bot/mulebot/mule in bots_list)
+					if (mule.z != usr.z)
+						continue
+					dat += {"<li>
+							<i>[mule]</i>: [mule.return_status()] in [get_area_name(mule)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=summon;user=\ref[usr]'>[mule.summoned ? "Halt" : "Summon"] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=switch_power;user=\ref[usr]'>Turn [mule.on ? "off" : "on"] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=return_home;user=\ref[usr]'>Send home</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[mule];command=[cartridge.saved_destination];user=\ref[usr]'>Send to:</a> <a href='?src=\ref[cartridge];change_destination=1'>[cartridge.saved_destination] - EDIT</a> <br/>
+							</li>"}
+				dat += "</ul>"
+			if (PDA_MODE_BEEPSKY)
+				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/beepsky))
+					dat += {"<span class='pda_icon pda_cuffs'></span> Commlink bot error <br/>"}
+					return
+				dat += {"<span class='pda_icon pda_cuffs'></span><b>Securitron Interlink</b><br/>"}
+				dat += {"<ul>"}
+				for (var/obj/machinery/bot/secbot/seccie in bots_list)
+					if (seccie.z != usr.z)
+						continue
+					dat += {"<li>
+							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[usr]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=switch_power;user=\ref[usr]'>Turn [seccie.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[usr]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
+							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[usr]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
+							</li>"}
+				for (var/obj/machinery/bot/ed209/seccie in bots_list)
+					dat += {"<li>
+							<i>[seccie]</i>: [seccie.return_status()] in [get_area_name(seccie)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=summon;user=\ref[usr]'>[seccie.summoned ? "Halt" : "Summon"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=auto_patrol;user=\ref[usr]'>[seccie.auto_patrol ? "Enabled" : "Disabled"]</a> <br/>
+							Arrest for no ID: <a href='?src=\ref[cartridge.radio];bot=\ref[seccie];command=arrest_for_ids;user=\ref[usr]'>[seccie.idcheck ? "Yes" : "No"]</a> <br/>
+							</li>"}
+				dat += {"</ul>"}
 
-					if(!fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
-						dat += {"<span class='warning'>It appears that our services have yet to produce a minimap of this station. We apologize for the inconvenience.</span>"}
-
-					if(T.z == map.zMainStation)
-						dat += {"Current Location: <b>[T.loc.name] ([T.x-WORLD_X_OFFSET[map.zMainStation]],[T.y-WORLD_Y_OFFSET[map.zMainStation]],1)</b><br>"}	//it's a "Station Map" app, so it only gives information reguarding
-					else																									//the station's z-level
-						dat += {"Current Location: <b>Unknown</b><br>"}
-
-					if(fexists("icons/pda_icons/pda_minimap_[map.nameShort].png"))
-						dat += {"
-						<div style="position: relative; left: 0; top: 0;">
-						<img src="pda_minimap_[map.nameShort].png" style="position: relative; top: 0; left: 0;"/>
-						"}
-						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						dat += {"</div>"}
-
-					else
-						dat += {"
-						<div style="position: relative; left: 0; top: 0;">
-						<img src="pda_minimap_bg_notfound.png" style="position: relative; top: 0; left: 0;"/>
-						"}
-						if(T.z == map.zMainStation)
-							dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [T.x + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET[map.zMainStation]) * -1) + PDA_MINIMAP_OFFSET_Y + PDA_MINIMAP_WIDTH/2]px; left: [mkr.x+WORLD_X_OFFSET[map.zMainStation] + PDA_MINIMAP_OFFSET_X - PDA_MINIMAP_WIDTH/2]px;"/>"}
-						dat += {"</div>"}
-
-/*
-					dat += {"
-					<div style="position: relative; left: 0; top: 0;">
-					<img src="pda_minimap_bg.png" style="position: relative; top: 0; left: 0;"/>
-					"}
-					if(T.z == map.zMainStation)
-						dat += {"<img src="pda_minimap_loc.gif" style="position: absolute; top: [(T.y * -1) + 247]px; left: [T.x-8]px;"/>"}
-					for(var/datum/minimap_marker/mkr in app.markers)
-						dat += {"<img src="pda_minimap_mkr.gif" style="position: absolute; top: [((mkr.y+WORLD_Y_OFFSET) * -1) + 247]px; left: [mkr.x+WORLD_X_OFFSET-8]px;"/>"}
-
-					dat += {"</div>"}
-*/
-					dat += {"<h5>Markers</h5>
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=x'>X=[app.markx]</a>;
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=y'>Y=[app.marky]</a>;
-					<a href='byond://?src=\ref[src];choice=minimapMarker;mMark=add'>Add New Marker</a>
-					"}
-
-					if(!(app.markers.len))
-						dat += {"<br><span class='warning'>no markers</span>"}
-					else
-						dat +={"<ul>"}
-						for(var/datum/minimap_marker/mkr in app.markers)
-							dat += {"<li>[mkr.name] ([mkr.x]/[mkr.y]) <a href='byond://?src=\ref[src];choice=removeMarker;rMark=[mkr.num]'>remove</a></li>"}
-						dat += {"</ul>"}
-			*/
+			if (PDA_MODE_JANIBOTS)
+				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/janitor))
+					dat += {"<span class='pda_icon pda_bucket'></span>Commlink bot error <br/>"}
+					return
+				dat += {"<span class='pda_icon pda_bucket'></span><b>C.L.E.A.N bot Interlink V1.0</b> <br/>"}
+				dat += "<ul>"
+				for (var/obj/machinery/bot/cleanbot/clean in bots_list)
+					if (clean.z != usr.z)
+						continue
+					dat += {"<li>
+							<i>[clean]</i>: [clean.return_status()] in [get_area_name(clean)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=summon;user=\ref[usr]'>[clean.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=switch_power;user=\ref[usr]'>Turn [clean.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[clean];command=auto_patrol;user=\ref[usr]'>[clean.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+							</li>"}
+				dat += "</ul>"
+			if (PDA_MODE_FLOORBOTS)
+				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/floorbot))
+					dat += {"<span class='pda_icon pda_atmos'></span> Commlink bot error <br/>"}
+					return
+				dat += {"<span class='pda_icon pda_atmos'></span><b>F.L.O.O.R bot Interlink V1.0</b> <br/>"}
+				dat += "<ul>"
+				for (var/obj/machinery/bot/floorbot/floor in bots_list)
+					if (floor.z != usr.z)
+						continue
+					dat += {"<li>
+							<i>[floor]</i>: [floor.return_status()] in [get_area_name(floor)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=summon;user=\ref[usr]'>[floor.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=switch_power;user=\ref[usr]'>Turn [floor.on ? "off" : "on"]</a> <br/>
+							Auto-patrol: <a href='?src=\ref[cartridge.radio];bot=\ref[floor];command=auto_patrol;user=\ref[usr]'>[floor.auto_patrol ? "Enabled" : "Disabled"]</a><br/>
+							</li>"}
+				dat += "</ul>"
+			if (PDA_MODE_MEDBOTS)
+				if (!istype(cartridge.radio, /obj/item/radio/integrated/signal/bot/medbot))
+					dat += {"<span class='pda_icon pda_medical'></span> Commlink bot error <br/>"}
+					return
+				dat += {"<span class='pda_icon pda_medical'></span><b>M.E.D bot Interlink V1.0</b> <br/>"}
+				dat += "<ul>"
+				for (var/obj/machinery/bot/medbot/med in bots_list)
+					if (med.z != usr.z)
+						continue
+					dat += {"<li>
+							<i>[med]</i>: [med.return_status()] in [get_area_name(med)] <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=summon;user=\ref[usr]'>[med.summoned ? "Halt" : "Summon"]</a> <br/>
+							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[usr]'>Turn [med.on ? "off" : "on"]</a> <br/>
+							</li>"}
+				dat += "</ul>"
 			if (PDA_APP_SNAKEII)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_snake()
@@ -1387,8 +1429,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	onclose(user, "pda", src)
 
 /obj/item/device/pda/Topic(href, href_list)
-	..()
-
+	if(..())
+		return
 	var/mob/living/U = usr
 
 	if (href_list["close"])
@@ -1422,7 +1464,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				mode = 0
 			else
 				mode = round(mode/10)//TODO: fix this shit up
-				if((mode==4) || (mode==5))//Fix for cartridges. Redirects to hub.
+				if(mode==4)//Fix for cartridges. Redirects to hub.
 					mode = 0
 				else if(mode >= 40 && mode <= 53)//Fix for cartridges. Redirects to refresh the menu.
 					cartridge.mode = mode
@@ -1459,11 +1501,25 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			mode = 0
 		if("41")
 			mode = 41
-		if("chatroom") // chatroom hub
-			mode = 5
+
+//Fuck this shit this file makes no sense FUNCTIONS===
+
+		if ("delivery_bot")
+			mode = PDA_MODE_DELIVERY_BOT
 
 //APPLICATIONS FUNCTIONS===========================
-
+		if("alarm")
+			mode = PDA_APP_ALARM
+		if("toggleAlarm")
+			var/datum/pda_app/ringer/app = locate(/datum/pda_app/alarm) in applications
+			if(app)
+				app.status = !(app.status)
+		if("setAlarm")
+			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
+			if(app)
+				var/nutime = round(input("How long before the alarm triggers, in minutes?", "Alarm", 1) as num)
+				if(app.set_alarm(nutime))
+					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] minute timer.</span>")
 		if("101")//PDA_APP_RINGER
 			mode = PDA_APP_RINGER
 		if("toggleDeskRinger")
@@ -1741,8 +1797,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			var/datum/pda_app/spesspets/app = locate(/datum/pda_app/spesspets) in applications
 			app.button_cash()
 
-
-
 //MAIN FUNCTIONS===================================
 
 		if("Light")
@@ -1808,7 +1862,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 					var/log = replacetext(n, "\n", "(new line)")//no intentionally spamming admins with 100 lines, nice try
 					log_say("[src] notes - [U] changed the text to: [log]")
-					message_admins("[src] notes - [U] changed the text to: [log]", 1)
 					for(var/mob/dead/observer/M in player_list)
 						if(M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA))
 							M.show_message("<span class='game say'>[src] notes - <span class = 'name'>[U]</span> changed the text to:</span> [log]")
@@ -2145,7 +2198,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	var/t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
-		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
+		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
 		if (!t || toff || (!in_range(src, U) && loc != U)) //If no message, messaging is off, and we're either out of range or not in usr
 			return
 
@@ -2296,6 +2349,8 @@ obj/item/device/pda/AltClick()
 // access to status display signals
 /obj/item/device/pda/attackby(obj/item/C as obj, mob/user as mob)
 	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, C))
+		return
 	if(istype(C, /obj/item/weapon/cartridge) && !cartridge)
 		if(user.drop_item(C, src))
 			cartridge = C

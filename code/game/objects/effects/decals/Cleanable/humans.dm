@@ -9,6 +9,7 @@ var/global/list/blood_list = list()
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = BLOOD
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
@@ -208,8 +209,7 @@ var/global/list/blood_list = list()
 		for (var/i = 0 to spread_radius)
 			sleep(3)
 			if (i > 0)
-				var/obj/effect/decal/cleanable/blood/b = getFromPool(/obj/effect/decal/cleanable/blood/splatter, src.loc)
-				b.New(src.loc)
+				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(src.loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
 				for(var/datum/disease/D in src.viruses)

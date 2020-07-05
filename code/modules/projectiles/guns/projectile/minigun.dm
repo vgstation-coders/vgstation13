@@ -20,7 +20,7 @@
 	..()
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
 
-/obj/item/weapon/gun/gatling/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/gatling/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -32,7 +32,7 @@
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
-/obj/item/weapon/gun/gatling/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/gatling/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	..()
 	var/list/turf/possible_turfs = list()
 	for(var/turf/T in orange(target,1))

@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/gasco2
 	effecttype = "gasco2"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/max_pressure
 	var/target_percentage

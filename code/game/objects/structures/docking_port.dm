@@ -158,11 +158,18 @@ var/global/list/all_docking_ports = list()
 	var/base_turf_icon_state	= null
 	var/base_turf_override		= FALSE
 
+	var/refill_area				= null
+
 /obj/docking_port/destination/New()
 	.=..()
 
 	origin_turf = get_turf(src)
 	//The following few lines exist to make shuttle corners and the syndicate base Less Shit :*
+	if(!refill_area)
+		var/turf/T = get_step(src,dir)
+		var/area/A = get_area(T)
+		if(!istype(A,/area/shuttle))
+			refill_area = A.type //look at the area we're pointing at, if it's not a shuttle, make it our refill area
 	if(base_turf_override)
 		return //Allows mappers to manually set base_turf info
 	if(src.z in 1 to map.zLevels.len)
@@ -259,7 +266,7 @@ var/global/list/dockinglights = list()
 	light_color = LIGHT_COLOR_ORANGE
 	machine_flags = MULTITOOL_MENU
 	var/triggered = 0
-	var/id_tag = "" //Mappers: This should match the areaname of the target destination port.
+	id_tag = "" //Mappers: This should match the areaname of the target destination port.
 	//Examples: "main research department", "research outpost", "deep space", "station auxillary docking", "north of the station", etc.
 
 /obj/machinery/docklight/New()

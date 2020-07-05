@@ -138,7 +138,7 @@
 
 	if(curturf.z != destturf.z)
 		INVOKE_EVENT(teleatom.on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
-		for(var/atom/AA in recursive_type_check(teleatom))
+		for(var/atom/movable/AA in recursive_type_check(teleatom))
 			INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)

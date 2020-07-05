@@ -204,14 +204,14 @@ var/global/list/gas_labels=list(
 	if(href_list["set_intpressure"])
 		var/response = input("Set new pressure in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		intpressure = text2num(response)
-		intpressure = Clamp(intpressure, 0, 50*ONE_ATMOSPHERE)
+		intpressure = clamp(intpressure, 0, 50*ONE_ATMOSPHERE)
 		parent.updateUsrDialog()
 		return 1
 
 	if(href_list["set_extpressure"])
 		var/response = input(usr,"Set new pressure in kPa. \[0-[50*ONE_ATMOSPHERE]\]") as num
 		extpressure = text2num(response)
-		extpressure = Clamp(extpressure, 0, 50*ONE_ATMOSPHERE)
+		extpressure = clamp(extpressure, 0, 50*ONE_ATMOSPHERE)
 		parent.updateUsrDialog()
 		return 1
 

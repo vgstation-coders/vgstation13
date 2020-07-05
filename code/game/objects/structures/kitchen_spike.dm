@@ -22,11 +22,11 @@
 
 /obj/structure/kitchenspike/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		if(occupant)
 			to_chat(user, "<span class='warning'>You can't disassemble [src] with meat and gore all over it.</span>")
 			return
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 2
 		qdel(src)
 		return
@@ -75,7 +75,7 @@
 
 				occupant.meat_amount++
 
-				returnToPool(G)
+				qdel(G)
 				return
 
 /obj/structure/kitchenspike/attack_hand(mob/user)

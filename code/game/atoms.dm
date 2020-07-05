@@ -33,12 +33,8 @@ var/global/list/ghdel_profiling = list()
 
 	// EVENTS
 	/////////////////////////////
-	// On Destroy()
-	var/event/on_destroyed
 	// When density is changed
 	var/event/on_density_change
-	var/event/on_z_transition
-
 
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
@@ -52,6 +48,14 @@ var/global/list/ghdel_profiling = list()
 	appearance_flags = TILE_BOUND|LONG_GLIDE
 
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
+	/// Last name used to calculate a color for the chatmessage overlays
+	var/chat_color_name
+	/// Last color calculated for the the chatmessage overlays
+	var/chat_color
+	/// A luminescence-shifted value of the last color calculated for chatmessage overlays
+	var/chat_color_darkened
+	/// The chat color var, without alpha.
+	var/chat_color_hover
 
 /atom/proc/beam_connect(var/obj/effect/beam/B)
 	if(!last_beamchecks)
@@ -63,7 +67,8 @@ var/global/list/ghdel_profiling = list()
 	return 1
 
 /atom/proc/beam_disconnect(var/obj/effect/beam/B)
-	beams.Remove(B)
+	if (beams)
+		beams.Remove(B)
 
 /atom/proc/apply_beam_damage(var/obj/effect/beam/B)
 	return 1
@@ -138,10 +143,7 @@ var/global/list/ghdel_profiling = list()
 
 /atom/proc/AddToProfiler()
 	// Memory usage profiling - N3X.
-	if (type in type_instances)
-		type_instances[type] = type_instances[type] + 1
-	else
-		type_instances[type] = 1
+	++type_instances[type]
 
 /atom/proc/DeleteFromProfiler()
 	// Memory usage profiling - N3X.
@@ -164,17 +166,9 @@ var/global/list/ghdel_profiling = list()
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
-	if(on_destroyed)
-		on_destroyed.holder = null
-		on_destroyed = null
 	if (on_density_change)
 		on_density_change.holder = null
 		on_density_change = null
-	if(on_z_transition)
-		on_z_transition.holder = null
-		qdel(on_z_transition)
-		on_z_transition = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -188,9 +182,7 @@ var/global/list/ghdel_profiling = list()
 	..()
 
 /atom/New()
-	on_destroyed = new("owner"=src)
 	on_density_change = new("owner"=src)
-	on_z_transition = new("owner"=src)
 	. = ..()
 	AddToProfiler()
 
@@ -361,7 +353,7 @@ its easier to just keep the beam vertical.
 	//Maxdistance is the longest range the beam will persist before it gives up.
 	var/EndTime=world.time+time
 	var/broken = 0
-	var/obj/item/projectile/beam/lightning/light = getFromPool(/obj/item/projectile/beam/lightning)
+	var/obj/item/projectile/beam/lightning/light = new /obj/item/projectile/beam/lightning
 	while(BeamTarget&&world.time<EndTime&&get_dist(src,BeamTarget)<maxdistance&&z==BeamTarget.z)
 
 	//If the BeamTarget gets deleted, the time expires, or the BeamTarget gets out
@@ -372,7 +364,7 @@ its easier to just keep the beam vertical.
 
 		for(var/obj/effect/overlay/beam/O in orange(10,src))	//This section erases the previously drawn beam because I found it was easier to
 			if(O.BeamSource==src)				//just draw another instance of the beam instead of trying to manipulate all the
-				returnToPool(O)					//pieces to a new orientation.
+				qdel(O)					//pieces to a new orientation.
 		var/Angle=round(Get_Angle(src,BeamTarget))
 		var/icon/I=new(icon,icon_state)
 		I.Turn(Angle)
@@ -381,7 +373,7 @@ its easier to just keep the beam vertical.
 		var/N=0
 		var/length=round(sqrt((DX)**2+(DY)**2))
 		for(N,N<length,N+=WORLD_ICON_SIZE)
-			var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,loc)
+			var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(loc)
 			X.BeamSource=src
 			if(N+WORLD_ICON_SIZE>length)
 				var/icon/II=new(icon,icon_state)
@@ -430,7 +422,7 @@ its easier to just keep the beam vertical.
 				break
 		sleep(3)	//Changing this to a lower value will cause the beam to follow more smoothly with movement, but it will also be more laggy.
 					//I've found that 3 ticks provided a nice balance for my use.
-	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) returnToPool(O)
+	for(var/obj/effect/overlay/beam/O in orange(10,src)) if(O.BeamSource==src) qdel(O)
 
 //Woo hoo. Overtime
 //All atoms
@@ -519,72 +511,6 @@ its easier to just keep the beam vertical.
 		anim(target = loc, a_icon = 'icons/mob/blob/blob.dmi', flick_anim = "blob_act", sleeptime = 15, lay = BLOB_SPORE_LAYER, plane = BLOB_PLANE)
 	return
 
-/*
-/atom/proc/attack_hand(mob/user as mob)
-	return
-
-/atom/proc/attack_paw(mob/user as mob)
-	return
-
-/atom/proc/attack_ai(mob/user as mob)
-	return
-
-/atom/proc/attack_robot(mob/user as mob)
-	attack_ai(user)
-	return
-
-/atom/proc/attack_animal(mob/user as mob)
-	return
-
-/atom/proc/attack_ghost(mob/user as mob)
-	var/ghost_flags = 0
-	if(ghost_read)
-		ghost_flags |= PERMIT_ALL
-	if(canGhostRead(user,src,ghost_flags))
-		src.attack_ai(user)
-	else
-		src.examine()
-	return
-
-/atom/proc/attack_admin(mob/user as mob)
-	if(!user || !user.client || !user.client.holder)
-		return
-	attack_hand(user)
-
-//for aliens, it works the same as monkeys except for alien-> mob interactions which will be defined in the
-//appropiate mob files
-/atom/proc/attack_alien(mob/user as mob)
-	src.attack_paw(user)
-	return
-
-/atom/proc/attack_larva(mob/user as mob)
-	return
-
-// for slimes
-/atom/proc/attack_slime(mob/user as mob)
-	return
-
-/atom/proc/hand_h(mob/user as mob)			//human (hand) - restrained
-	return
-
-/atom/proc/hand_p(mob/user as mob)			//monkey (paw) - restrained
-	return
-
-/atom/proc/hand_a(mob/user as mob)			//AI - restrained
-	return
-
-/atom/proc/hand_r(mob/user as mob)			//Cyborg (robot) - restrained
-	src.hand_a(user)
-	return
-
-/atom/proc/hand_al(mob/user as mob)			//alien - restrained
-	src.hand_p(user)
-	return
-
-/atom/proc/hand_m(mob/user as mob)			//slime - restrained
-	return
-*/
-
 /atom/proc/singularity_act()
 	return
 
@@ -624,14 +550,6 @@ its easier to just keep the beam vertical.
 /atom/proc/hitby(var/atom/movable/AM)
 	. = isobserver(AM)
 
-/*
-/atom/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (!(istype(W, /obj/item/weapon/grab) ) && !(istype(W, /obj/item/weapon/plastique)) && !(istype(W, /obj/item/weapon/reagent_containers/spray)) && !(istype(W, /obj/item/weapon/packageWrap)) && !istype(W, /obj/item/device/detective_scanner))
-		for(var/mob/O in viewers(src, null))
-			if ((O.client && !( O.blinded )))
-				to_chat(O, "<span class='danger'>[src] has been hit by [user] with [W]</span>")
-	return
-*/
 /atom/proc/add_hiddenprint(mob/M as mob)
 	if(isnull(M))
 		return
@@ -948,7 +866,7 @@ its easier to just keep the beam vertical.
 			return C.mob
 
 /atom/proc/initialize()
-	return
+	flags |= ATOM_INITIALIZED
 
 /atom/proc/get_cell()
 	return

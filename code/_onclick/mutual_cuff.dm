@@ -9,8 +9,8 @@
 	if(!istype(first) || !istype(second) || !istype(third))
 		return FALSE
 
-	if(restraint_apply_sound)
-		playsound(src, restraint_apply_sound, 30, 1, -2)
+	playtoolsound(src, 30, TRUE, -2)
+
 	third.visible_message("<span class='danger'>\The [third] is trying to restrain \the [first] and \the [second] together with the \the [src]!</span>",
 						 "<span class='danger'>You try to tether \the [first] and \the [second] using \the [src]!</span>")
 
@@ -50,6 +50,11 @@
 	second.equip_to_slot(cuffs, slot_handcuffed)
 	first.equip_to_slot(cuffs, slot_handcuffed)
 
+	first.z_transition_bringalong_key = first.on_z_transition.Add(first, "z_transition_bringalong")
+	second.z_transition_bringalong_key = second.on_z_transition.Add(second, "z_transition_bringalong")
+	first.post_z_transition_bringalong_key = first.post_z_transition.Add(first, "post_z_transition_bringalong")
+	second.post_z_transition_bringalong_key = second.post_z_transition.Add(second, "post_z_transition_bringalong")
+
 	second.mutual_handcuffed_to_event_key = second.on_moved.Add(first, "on_mutual_cuffed_move")
 	first.mutual_handcuffed_to_event_key = first.on_moved.Add(second, "on_mutual_cuffed_move")
 
@@ -72,6 +77,12 @@
 		C.on_moved.Remove(C.mutual_handcuffed_to_event_key)
 		handcuffed_to.on_moved.Remove(handcuffed_to.mutual_handcuffed_to_event_key)
 
+		C.on_z_transition.Remove(C.z_transition_bringalong_key)
+		handcuffed_to.on_z_transition.Remove(handcuffed_to.z_transition_bringalong_key)
+
+		C.post_z_transition.Remove(C.post_z_transition_bringalong_key)
+		handcuffed_to.post_z_transition.Remove(handcuffed_to.post_z_transition_bringalong_key)
+
 		//reset the mob's vars
 		handcuffed_to.mutual_handcuffed_to = null
 		C.mutual_handcuffed_to = null
@@ -81,10 +92,17 @@
 		handcuffed_to.u_equip(src)
 
 /mob/living/carbon/proc/on_mutual_cuffed_move()
-	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_handcuff_forcemove_time + 2)) 
+	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3)) // We moved to a mech, a sleeper, or a locker, or got teleported
+		var/obj/item/weapon/handcuffs/H = mutual_handcuffs
+		if (!istype(H))
+			return
+		H.visible_message("<span class='warning'>\The [H] breaks!</span>")
+		qdel(H)
+		return
+	if (mutual_handcuffed_to && !mutual_handcuffed_to.Adjacent(src) && (world.time > mutual_handcuff_forcemove_time + 2))
 		mutual_handcuffed_to.Slip(2, 3)
 		src.Slip(2, 3)
-		src.forceMove(mutual_handcuffed_to.loc)
+		src.forceMove(get_turf(mutual_handcuffed_to))
 		//if pulling somebody who is buckled force them out of the buckled structure
 		var/obj/structure/bed/locked_to = src.locked_to
 		if (locked_to && istype(locked_to))
@@ -92,4 +110,20 @@
 		//last_call as not to get too many nested calls
 		mutual_handcuff_forcemove_time = world.time
 
-	
+/mob/living/carbon/proc/z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Remove the ability to bring his buddy, since his buddy already brought him here
+		mutual_handcuffed_to.on_z_transition.Remove(mutual_handcuffed_to.z_transition_bringalong_key)
+		mutual_handcuffed_to.z_transition_bringalong_key = null
+		mutual_handcuffed_to.post_z_transition.Remove(mutual_handcuffed_to.post_z_transition_bringalong_key)
+		mutual_handcuffed_to.post_z_transition_bringalong_key = null
+		mutual_handcuffed_to.on_moved.Remove(mutual_handcuffed_to.mutual_handcuffed_to_event_key)
+		mutual_handcuffed_to_event_key = null
+
+/mob/living/carbon/proc/post_z_transition_bringalong(var/mob/user, var/from_z, var/to_z)
+	if (mutual_handcuffed_to)
+		// Re-adds the events on the fly once the transition is done.
+		mutual_handcuffed_to.forceMove(get_turf(src))
+		mutual_handcuffed_to.z_transition_bringalong_key = mutual_handcuffed_to.on_z_transition.Add(mutual_handcuffed_to, "z_transition_bringalong")
+		mutual_handcuffed_to.post_z_transition_bringalong_key = mutual_handcuffed_to.post_z_transition.Add(mutual_handcuffed_to, "post_z_transition_bringalong")
+		mutual_handcuffed_to_event_key = mutual_handcuffed_to.on_moved.Add(src, "on_mutual_cuffed_move")

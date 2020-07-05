@@ -52,7 +52,7 @@
 	//If there's no power cell, the gun looks as if it had an empty power cell
 
 	ratio *= 100
-	ratio = Clamp(ratio, 0, 100) //Value between 0 and 100
+	ratio = clamp(ratio, 0, 100) //Value between 0 and 100
 
 	if(ratio >= 50)
 		ratio = Floor(ratio, icon_charge_multiple)
@@ -63,6 +63,8 @@
 		icon_state = "[modifystate][ratio]"
 	else if(charge_states)
 		icon_state = "[initial(icon_state)][ratio]"
+	if(clowned == CLOWNED)
+		icon_state += "c"
 
 /obj/item/weapon/gun/energy/New()
 	. = ..()
@@ -89,3 +91,12 @@
 		to_chat(M, "<span class='warning'>\The [src] buzzes.</span>")
 		return 1
 	return ..()
+
+/obj/item/weapon/gun/energy/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I,/obj/item/ammo_storage/speedloader/energy) && power_supply.charge < power_supply.maxcharge)
+		power_supply.give(charge_cost*2) //worth 2 more shots
+		qdel(I)
+		update_icon()
+		to_chat(user,"<span class='notice'>\The [I] transfers some power to \the [src].</span>")
+		playsound(src, 'sound/machines/charge_finish.ogg', 50)

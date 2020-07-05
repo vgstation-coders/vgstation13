@@ -22,13 +22,16 @@
 	var/loaded_dna //Blood sample for DNA hashing.
 	var/list/products = list(
 		"heart"            = list(/obj/item/organ/internal/heart,  50),
+		"insectoid heart"  = list(/obj/item/organ/internal/heart/insectoid, 50),
 		"human lungs"      = list(/obj/item/organ/internal/lungs,  30),
 		"vox lungs"        = list(/obj/item/organ/internal/lungs/vox,  30),
 		"plasmaman lungs"  = list(/obj/item/organ/internal/lungs/plasmaman,  30),
+		"book lungs"       = list(/obj/item/organ/internal/lungs/insectoid, 30),
 		"kidneys"          = list(/obj/item/organ/internal/kidneys,20),
 		"human eyes"       = list(/obj/item/organ/internal/eyes,   30),
 		"grey eyes"        = list(/obj/item/organ/internal/eyes/grey,   30),
 		"vox eyes"         = list(/obj/item/organ/internal/eyes/vox,   30),
+		"compound eyes"    = list(/obj/item/organ/internal/eyes/compound, 30),
 		"liver"            = list(/obj/item/organ/internal/liver,  50),
 		"tooth"	           = list(/obj/item/stack/teeth, 10)
 	)
@@ -106,11 +109,11 @@
 		if(user.drop_item(M))
 			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 			stored_matter += M.amount * 10
-			returnToPool(M)
+			qdel(M)
 			return
-	else if(iswrench(W))
+	else if(W.is_wrench(user))
 		user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You begin to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='notice'>[user] begins to [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You [anchored? "unfasten" : "fasten"] \the [src].</span>", "<span class='notice'>You hear a ratchet.</span>")
 			if(anchored)

@@ -182,6 +182,7 @@
 	if(wizard_mob.backbag == 4)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
 	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
@@ -206,15 +207,9 @@
 		wizard_mob.set_species("Human", 1)
 	var/wizard_name_first = pick(wizard_first)
 	var/wizard_name_second = pick(wizard_second)
-	var/randomname = "[wizard_name_first] [wizard_name_second]"
-	spawn(0)
-		var/newname = stripped_input(wizard_mob, "You are a [role_name]. Would you like to change your name to something else?", "Name change", randomname, MAX_NAME_LEN)
+	wizard_mob.fully_replace_character_name(wizard_mob.real_name, "[wizard_name_first] [wizard_name_second]")
+	mob_rename_self(wizard_mob, role_name)
 
-		if (!newname)
-			newname = randomname
-
-		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
-	return
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
 	var/static/list/plasmaman_items = list(
@@ -372,84 +367,6 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
-/proc/equip_ninja(var/mob/living/carbon/human/spaceninja)
-	if(!istype(spaceninja))
-		return 0
-	sleep(1) //so non-humans don't runtime
-	if(!isjusthuman(spaceninja))
-		spaceninja = spaceninja.Humanize("Human")
-	spaceninja.delete_all_equipped_items()
-	if(spaceninja.gender == FEMALE)
-		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/blackf, slot_w_uniform)
-	else
-		spaceninja.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(spaceninja)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/ninja/apprentice, slot_head)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/mask/gas/voice/ninja, slot_wear_mask)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
-	spaceninja.get_item_by_slot(slot_shoes).activateMagnets()
-	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
-	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen(spaceninja), slot_r_store)
-	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
-	if (spaceninja.internals)
-		spaceninja.internals.icon_state = "internal1"
-
-	spaceninja.see_in_dark_override = 8
-
-#define GREET_WEEB "weebgreet"
-/proc/equip_weeaboo(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
-
-	var/datum/role/R = H.mind.GetRole(NINJA)
-	if(R)
-		R.Greet(GREET_WEEB)
-
-/proc/name_ninja(var/mob/living/carbon/human/H)
-	if(!isjusthuman(H))
-		H.set_species("Human", 1)
-	var/ninja_title = pick(ninja_titles)
-	var/ninja_name = pick(ninja_names)
-	var/randomname = "[ninja_title] [ninja_name]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		H.fully_replace_character_name(H.real_name, newname)
-
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
 		return 0
@@ -476,4 +393,64 @@
 		words += "Trust nobody.<br>"
 
 	to_chat(agent,words)
+	return 1
+
+
+
+/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	vox.regenerate_icons()
+
+
+/proc/equip_vox_raider(var/mob/living/carbon/human/H)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider
+	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
+	H.equip_to_slot_or_del(R, slot_ears)
+
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider)
+	H.equip_to_slot_or_del(uni, slot_w_uniform)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox, slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox, slot_gloves) // AS ABOVE.
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight, slot_r_store)
+
+	var/obj/item/weapon/card/id/syndicate/C = new
+	C.registered_name = H.real_name
+	C.assignment = "Trader"
+	C.UpdateName()
+	C.SetOwnerInfo(H)
+	C.icon_state = "trader"
+	C.access = list(access_syndicate, access_trade)
+	var/obj/item/weapon/storage/wallet/W = new
+	W.handle_item_insertion(C)
+	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
+	H.equip_to_slot_or_del(W, slot_wear_id)
 	return 1

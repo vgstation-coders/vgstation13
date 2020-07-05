@@ -13,7 +13,6 @@
 	var/max_rate=50
 
 	var/frequency = 0
-	var/id_tag = null
 	var/datum/radio_frequency/radio_connection
 
 	level = 1
@@ -93,7 +92,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -131,7 +130,7 @@
 
 	if("set_volume_rate" in signal.data)
 		var/number = text2num(signal.data["set_volume_rate"])
-		volume_rate = Clamp(number, 0, air_contents.volume)
+		volume_rate = clamp(number, 0, air_contents.volume)
 
 	if("status" in signal.data)
 		spawn(2)
@@ -167,7 +166,7 @@
 "}
 
 /obj/machinery/atmospherics/unary/outlet_injector/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")
