@@ -313,7 +313,7 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
-	respawnables = list(/obj/item/stack/cable_coil)
+	respawnables = list(/obj/item/stack/cable_coil/yellow)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
@@ -338,7 +338,7 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/borg/fire_shield
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
 	W.amount = ENGINEERING_MAX_COIL
 	W.max_amount = ENGINEERING_MAX_COIL
 	modules += W
