@@ -67,7 +67,7 @@
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 
-	if (veil_thickness == CULT_MENDED && antag && antag.current)
+	if (veil_thickness == CULT_MENDED && antag?.current)
 		if (ishuman(antag.current))
 			var/mob/living/carbon/human/H = antag.current
 			if(H.get_heart() && prob(10))
