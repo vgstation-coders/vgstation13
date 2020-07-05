@@ -159,9 +159,7 @@
 	update_cult_hud()
 
 /datum/role/cultist/proc/update_cult_hud()
-	if (!antag)
-		return
-	var/mob/M = antag.current
+	var/mob/M = antag?.current
 	if(M && M.client && M.hud_used)
 		if(!M.hud_used.cult_Act_display)
 			M.hud_used.cult_hud()
