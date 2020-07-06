@@ -31,7 +31,7 @@ var/global/datum/credits/end_credits = new
 	var/finalized = FALSE
 	var/js_args = list()
 
-	var/do_not_change_credits_song = 0 //If toggled on, will not change the selection of credits songs.
+	var/change_credits_song = 1 //If positive, will change the credits song based on criteria
 	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
 		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
@@ -127,7 +127,7 @@ var/global/datum/credits/end_credits = new
  */
 /datum/credits/proc/on_round_end()
 	draft()
-	if(!do_not_change_credits_song)
+	if(change_credits_song)
 		determine_round_end_song()
 	for(var/client/C in clients)
 		C.credits_audio(preload_only = TRUE) //Credits preference set to "No Reruns" should still preload, since we still don't know if the episode is a rerun. If audio time comes and the episode is a rerun, then we can start preloading the jingle instead.
@@ -268,9 +268,7 @@ var/global/datum/credits/end_credits = new
 //This proc will run at round-end and run various conditions to change audio_link
 //Currently only hosts one additional song
 /datum/credits/proc/determine_round_end_song()
-	if(do_not_change_credits_song) //How did this happen?
-		return
-	var/list/candidates
+	var/list/candidates = list()
 	if(ticker.station_was_nuked)
 		candidates += pick("http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3",
 						"http://ss13.moe/media/m2/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
