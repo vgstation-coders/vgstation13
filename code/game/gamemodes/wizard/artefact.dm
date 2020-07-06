@@ -274,8 +274,8 @@
 			original.remove_spell(S)
 			H.add_spell(S)
 		//Let's give the lich some spooky clothes. Including non-wizards.
-		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/necro(H), slot_head)
-		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/necro(H), slot_wear_suit)
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/skelelich(H), slot_head)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/skelelich(H), slot_wear_suit)
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
 		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
