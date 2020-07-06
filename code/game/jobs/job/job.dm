@@ -64,6 +64,9 @@
 
 	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
 
+/datum/job/proc/is_disabled()
+	return FALSE
+
 /datum/job/proc/get_total_positions()
 	return clamp(total_positions + xtra_positions, 0, 99)
 
