@@ -63,13 +63,17 @@
 		message = "has left the building..."
 	if(!issilent(user) && (M_HARDCORE in user.mutations))
 		message = "whispers with their final breath, <i>'i told u i was hardcore..'</i>"
-	. = ..()
-	if(. && isalienadult(user))
+	..()
+	if(params && isalienadult(user))
 		playsound(user.loc, 'sound/voice/hiss6.ogg', 80, 1, 1)
-	if (. && user.stat == UNCONSCIOUS && !params)
+	if (user.stat == UNCONSCIOUS && !params)
 		user.succumb_proc(0, 1)
+		params = TRUE //Let's make it do the deathgasp sound
 	message = initial(message)
-
+	if(ishuman(user) && params) //If the user is a human and if the user deathgasped because of death
+		var/mob/living/carbon/human/H = user
+		if((Holiday == APRIL_FOOLS_DAY) || (H.is_wearing_item(/obj/item/clothing/suit/unathi/robe, slot_wear_suit)))
+			playsound(H, 'sound/misc/memedeathgasp.ogg', 100)
 
 /datum/emote/living/carbon/drool
 	key = "drool"
