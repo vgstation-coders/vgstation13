@@ -50,8 +50,8 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(radio_controller)
+	..()
+	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -59,8 +59,8 @@
 	remove_radio_all(src) //Just to be sure
 	..()
 
-
 /obj/item/device/radio/initialize()
+	. = ..()
 	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
@@ -90,8 +90,7 @@
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
-	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
-		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+	dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
 
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
@@ -268,7 +267,7 @@
 			speech.frequency = secure_radio_connections[channel]
 			if(!channels[channel])
 				say_testing(loc, "\[Radio\] - Unable to find channel \"[channel]\".")
-				returnToPool(speech)
+				qdel(speech)
 				return
 		else
 			speech.frequency = frequency
@@ -336,7 +335,7 @@
 
 	if(subspace_transmission)
 		// First, we want to generate a new radio signal
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 2 // 2 would be a subspace transmission.
 									   // transmission_method could probably be enumerated through #define. Would be neater.
 
@@ -386,7 +385,7 @@
 			R.receive_signal(signal)
 
 		// Receiving code can be located in Telecommunications.dm
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 
@@ -399,7 +398,7 @@
 		filter_type = 1
 
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 2
 
 
@@ -443,13 +442,13 @@
 
 		if(signal.data["done"] && (position.z in signal.data["level"]))
 			// we're done here.
-			returnToPool(speech)
+			qdel(speech)
 			return
 
 		// Oh my god; the comms are down or something because the signal hasn't been broadcasted yet in our level.
 		// Send a mundane broadcast with limited targets:
 		Broadcast_Message(speech, voicemask, filter_type, signal.data["compression"], list(position.z))
-		returnToPool(speech)
+		qdel(speech)
 
 /obj/item/device/radio/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!speech.speaker || speech.frequency)

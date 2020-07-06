@@ -44,11 +44,7 @@
 		#define MAP_OVERRIDE 7
 	#elif MAP_OVERRIDE == 8
 		#undef MAP_OVERRIDE
-		#include "wheelstation.dm"
-		#define MAP_OVERRIDE 8
-	#elif MAP_OVERRIDE == 9
-		#undef MAP_OVERRIDE
 		#include "snaxi.dm"
-		#define MAP_OVERRIDE 9
+		#define MAP_OVERRIDE 8
 	#endif
 #endif

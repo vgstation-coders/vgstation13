@@ -21,10 +21,6 @@
 	master = null
 	..()
 
-/obj/abstract/screen/resetVariables()
-	..("icon","icon_state","name","master", "screen_loc", args)
-	animate(src)
-
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
@@ -799,7 +795,7 @@
 /client/proc/reset_screen()
 	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
-			returnToPool(objects)
+			qdel(objects)
 	src.screen = null
 
 /obj/abstract/screen/acidable()

@@ -5,7 +5,7 @@
 
 	anchored = 1
 
-	var/id_tag
+
 	var/frequency = 1439
 
 	var/on = 1
@@ -62,7 +62,7 @@
 
 /obj/machinery/air_sensor/process()
 	if(on)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -104,13 +104,15 @@
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
 /obj/machinery/air_sensor/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 
 /obj/machinery/air_sensor/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
 /obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'
@@ -500,7 +502,7 @@ font-weight:bold;
 	send_signal(list("tag"=device, "status"))
 
 /obj/machinery/computer/general_air_control/large_tank_control/proc/send_signal(var/list/data)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data=data
@@ -522,7 +524,7 @@ font-weight:bold;
 
 	if(!radio_connection)
 		return 0
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	if(href_list["in_refresh_status"])
@@ -588,7 +590,7 @@ font-weight:bold;
 				if(data["temperature"] <= on_temperature)
 					injecting = 1
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 
@@ -662,7 +664,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(
@@ -681,7 +683,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(
@@ -696,7 +698,7 @@ font-weight:bold;
 		if(!radio_connection)
 			return 0
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.source = src
 		signal.data = list(

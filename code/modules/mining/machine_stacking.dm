@@ -76,7 +76,7 @@
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1 //radio signal
 	signal.data["tag"] = stacker_tag
@@ -141,7 +141,6 @@
 	var/stack_amt = 50 //amount to stack before releassing.
 	var/max_moved = 100
 
-	var/id_tag//The ID of the stacker this console should control
 	var/frequency = FREQ_DISPOSAL
 	var/datum/radio_frequency/radio_connection
 
@@ -202,16 +201,16 @@
 			var/obj/item/stack/stackA = A
 
 			if(!("[stackA.type]" in stacks))
-				stack = getFromPool(stackA.type, src)
+				stack = new stackA.type(src)
 				stack.amount = stackA.amount
 			else
 				stack = stacks["[stackA.type]"]
 				stack.amount += stackA.amount
 
 			stacks["[stackA.type]"] = stack
-			returnToPool(stackA)
+			qdel(stackA)
 		//else if (istype(O, /obj/item/stack/ore/slag))
-		//	returnToPool(O)
+		//	qdel(O)
 		else
 			A.forceMove(out_T)
 
@@ -236,7 +235,7 @@
 		return
 
 	var/obj/item/stack/stack = stacks[typepath]
-	var/obj/item/stack/stacked = getFromPool(stack.type)
+	var/obj/item/stack/stacked = new stack.type
 
 	var/release_amount = min(stack.amount, stack_amt)
 
@@ -246,13 +245,13 @@
 
 	if(stack.amount == 0)
 		stacks.Remove(typepath)
-		returnToPool(stack)
+		qdel(stack)
 
 /obj/machinery/mineral/stacking_machine/proc/send_signal(list/data)
 	if(!radio_connection)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1 //radio signal
 	signal.data["tag"] = id_tag
@@ -338,9 +337,6 @@
 	return ..()
 
 /obj/machinery/mineral/stacking_machine/Destroy()
-	id_tag = null
-
 	qdel(mover)
 	mover = null
-
 	. = ..()

@@ -346,14 +346,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	..()
 
 //Gets human's own blood.
-proc/get_blood(datum/reagents/container)
-	var/datum/reagent/blood/res = locate() in container.reagent_list //Grab some blood
-	if(res) // Make sure there's some blood at all
-		if(res.data["donor"] != src) //If it's not theirs, then we look for theirs
-			for(var/datum/reagent/blood/D in container.reagent_list)
-				if(D.data["donor"] == src)
-					return D
-	return res
+/proc/get_blood(datum/reagents/container)
+	return locate(/datum/reagent/blood) in container.reagent_list
 
 proc/blood_incompatible(donor,receiver)
 	if(!donor || !receiver)
@@ -414,14 +408,14 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 		// If we have too many drips, remove them and spawn a proper blood splatter.
 		if(drips.len >= 5)
 			for(var/obj/effect/decal/cleanable/blood/drip/drop in drips)
-				returnToPool(drop)
+				qdel(drop)
 		else
 			decal_type = /obj/effect/decal/cleanable/blood/drip
 
 	// Find a blood decal or create a new one.
 	B = locate(decal_type) in T
 	if(!B || (decal_type == /obj/effect/decal/cleanable/blood/drip))
-		B = getFromPool(decal_type,T)
+		B = new decal_type(T)
 		B.New(T)
 		if(decal_type == /obj/effect/decal/cleanable/blood/drip)
 			B.icon_state = pick(drip_icons)

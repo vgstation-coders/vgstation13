@@ -33,7 +33,7 @@
 	var/crayon = 0
 	var/list/blacklisted_targets = list()
 	req_access = list(access_janitor)
-	bot_flags = BOT_PATROL|BOT_BEACON
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
 	auto_patrol = TRUE
 
 	//for attack code
@@ -41,6 +41,7 @@
 	var/attackcooldown = 10 SECONDS // for admin cancer
 	locked = FALSE
 	can_take_pai = TRUE
+	commanding_radio = /obj/item/radio/integrated/signal/bot/janitor
 
 /obj/machinery/bot/cleanbot/New()
 	..()
@@ -169,7 +170,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	return !cleaning
 
 /obj/machinery/bot/cleanbot/process_bot()
-	if(!target)
+	if(can_abandon_target())
 		find_target()
 
 	decay_oldtargets()
@@ -184,9 +185,9 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 	if(oddbutton && prob(5))
 		visible_message("<span class='warning'>Something flies out of \the [src]! He seems to be acting oddly.</span>")
-		add_oldtarget(get_turf(getFromPool(/obj/effect/decal/cleanable/blood/gibs, loc)), -1) //So we don't target our own gibs
+		add_oldtarget(get_turf(new /obj/effect/decal/cleanable/blood/gibs(loc)), -1) //So we don't target our own gib)
 
-/obj/machinery/bot/cleanbot/find_target()
+/obj/machinery/bot/cleanbot/target_selection()
 	for(var/turf/T in view(7, src))
 		if(istype(T, /turf/space))
 			continue
@@ -201,7 +202,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	clean(target)
 	remove_oldtarget(target)
 	target = null
-	return TRUE
+	return ..()
 
 /obj/machinery/bot/cleanbot/proc/get_targets() //This seems slightly wasteful, but it will only be called approximately once every six rounds so whatever
 	blacklisted_targets = list()
@@ -240,6 +241,15 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	spark(src)
 	eject_integratedpai_if_present()
 	qdel(src)
+
+/obj/machinery/bot/cleanbot/return_status()
+	if (cleaning)
+		return "Cleaning"
+	if (target)
+		return "Moving"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
 
 
 /obj/machinery/bot/cleanbot/roomba
@@ -343,7 +353,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	if(istype(target,/obj/effect/decal/cleanable))
 		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(target)
+		qdel(target)
 
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
@@ -370,7 +380,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 				break
 		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(C)
+		qdel(C)
 	else
 		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
 			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")

@@ -112,11 +112,11 @@
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			if(shattered)
-				getFromPool(/obj/item/weapon/shard, loc)
-				getFromPool(/obj/item/stack/sheet/metal, loc, 1)
+				new /obj/item/weapon/shard(loc)
+				new /obj/item/stack/sheet/metal(loc, 1)
 			else
-				getFromPool(/obj/item/stack/sheet/metal, loc, 1)
-				getFromPool(/obj/item/stack/sheet/glass/glass, loc, 2)
+				new /obj/item/stack/sheet/metal(loc, 1)
+				new /obj/item/stack/sheet/glass/glass(loc, 2)
 			qdel(src)
 		return
 

@@ -37,7 +37,7 @@
 				return 1
 			//Determine the direction. It will first check in the direction the person making the window is facing, if it finds an already made window it will try looking at the next cardinal direction, etc.
 			for(var/obj/structure/window/barricade/BC in user.loc)
-				if(!BC.is_fulltile() && BC.dir == user.dir)
+				if(!BC.is_fulltile && BC.dir == user.dir)
 					to_chat(user, "<span class='warning'>There already is a barricade facing that way</span>")
 					return
 			user.visible_message("<span class='warning'>[user] starts building a barricade.</span>", \

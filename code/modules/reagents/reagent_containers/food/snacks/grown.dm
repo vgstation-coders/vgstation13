@@ -199,7 +199,7 @@ var/list/special_fruits = list()
 		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
-	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
+	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
 	S.New(S.loc)
 	if(seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
 		if(filling_color != "#FFFFFF")

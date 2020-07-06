@@ -149,7 +149,7 @@
 		if(ptank)
 			ptank.forceMove(T)
 			ptank = null
-		getFromPool(/obj/item/stack/rods, T)
+		new /obj/item/stack/rods(T)
 		qdel(src)
 		return
 

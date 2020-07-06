@@ -553,7 +553,12 @@ var/list/arcane_tomes = list()
 		for(var/mob/living/simple_animal/shade/A in I)
 			A.forceMove(SB)
 			SB.shade = A
-			A.give_blade_powers()
+			if (A.mind)
+				A.give_blade_powers()
+			else
+				to_chat(user,"<span class='warning'>Although the game appears to hold a shade, it somehow doesn't appear to have a mind capable of manipulating the blade.</span>")
+				to_chat(user,"<span class='danger'>(that's a bug, call Deity, and tell him exactly how you obtained that shade).</span>")
+				message_admins("[key_name(usr)] somehow placed a soul gem containing a shade with no mind inside a soul blade.")
 			break
 		SB.update_icon()
 		qdel(I)

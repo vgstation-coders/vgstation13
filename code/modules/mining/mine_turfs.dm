@@ -222,7 +222,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
 
-/turf/unsimulated/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/mineral/attackby(obj/item/weapon/W, mob/user)
 
 	if(busy)
 		return
@@ -335,7 +335,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				if(artifact_find)
 					if(excavation_level > 0)
 
-						B = getFromPool(/obj/structure/boulder, src)
+						B = new /obj/structure/boulder(src)
 						B.geological_data = geologic_data
 
 						B.artifact_find = artifact_find
@@ -346,7 +346,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 						artifact_debris(1)
 
 				else if(excavation_level > 0 && prob(15))
-					B = getFromPool(/obj/structure/boulder, src)
+					B = new /obj/structure/boulder(src)
 					B.geological_data = geologic_data
 
 				GetDrilled(artifact_destroyed)
@@ -509,7 +509,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(severity)
 		switch(rand(1,3))
 			if(1)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal((src))
 				M.amount = rand(5,25)
 			if(2)
 				var/obj/item/stack/sheet/plasteel/R = new(src)
@@ -526,16 +526,16 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				var/obj/item/stack/tile/plasteel/R = new(src)
 				R.amount = rand(1,5)
 			if(3)
-				var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, (src))
+				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal((src))
 				M.amount = rand(1,5)
 			if(4)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					getFromPool(/obj/item/weapon/shard, loc)
+					new /obj/item/weapon/shard(loc)
 			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					getFromPool(/obj/item/weapon/shard/plasma, loc)
+					new /obj/item/weapon/shard/plasma(loc)
 
 /turf/unsimulated/mineral/dense
 	name = "dense rock"
@@ -584,11 +584,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	icon_state = pick("cavefl_1","cavefl_2","cavefl_3","cavefl_4")
 
 /turf/unsimulated/floor/asteroid/New()
-	var/proper_name = name
 	..()
-
-	name = proper_name
-
 	if(prob(20) && icon_state == "asteroid")
 		icon_state = "asteroid[rand(0,12)]"
 
@@ -604,7 +600,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			gets_dug()
 	return
 
-/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 
 	if(!W || !user)
 		return 0
@@ -622,12 +618,10 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			to_chat(user, "<span class='rose'>This area has already been dug.</span>")
 			return
 
-		to_chat(user, "<span class='rose'>You start digging.<span>")
 		playsound(src, 'sound/effects/rustle1.ogg', 50, 1) //russle sounds sounded better
 
 		if(do_after(user, src, (MINE_DURATION * used_digging.toolspeed)) && user) //the better the drill, the faster the digging
 			playsound(src, 'sound/items/shovel.ogg', 50, 1)
-			to_chat(user, "<span class='notice'>You dug a hole.</span>")
 			gets_dug()
 
 	else
@@ -669,7 +663,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	..()
 	qdel(floor_tile)
 	floor_tile = null
-	name = initial(name)
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"
 	icon_regular_floor = initial(icon_state)
@@ -710,7 +703,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			gets_dug()
 
-/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
 	if(!W || !user)
 		return 0
 	if (istype(W, /obj/item/weapon/pickaxe))

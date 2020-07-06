@@ -37,7 +37,7 @@
 	if(iswelder(W) && stage == 1)
 		W.playtoolsound(src, 50)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 1
 		new /obj/item/stack/sheet/glass/glass(get_turf(src))
 		qdel(src)

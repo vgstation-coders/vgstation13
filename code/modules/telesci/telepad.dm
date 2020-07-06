@@ -8,9 +8,10 @@
 	use_power = 1
 	idle_power_usage = 200
 	active_power_usage = 5000
+
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | CROWDESTROY
 	mech_flags = MECH_SCAN_FAIL
-	var/id_tag = "telepad"
+	id_tag = "telepad"
 
 	var/obj/machinery/computer/telescience/linked
 

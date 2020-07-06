@@ -154,7 +154,7 @@
 	mob_property_flags = MOB_NO_LAZ
 
 /mob/living/simple_animal/hostile/ginger/gingerbroodmother/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/ginger/gingerbomination/A = getFromPool(/mob/living/simple_animal/hostile/ginger/gingerbomination,src.loc)
+	var/mob/living/simple_animal/hostile/ginger/gingerbomination/A = new /mob/living/simple_animal/hostile/ginger/gingerbomination(src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction

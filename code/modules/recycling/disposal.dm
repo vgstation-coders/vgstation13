@@ -486,7 +486,7 @@
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
 			if(do_after(user,src,20))
-				if(dropping.locked_to || user.restrained() || !user.canmove)
+				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
 				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
 				add_fingerprint(user)

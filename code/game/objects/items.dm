@@ -92,13 +92,8 @@
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
-	if(hasvar(src, "holder"))
-		src:holder = null
 	for(var/x in actions)
 		qdel(x)
-	/*  BROKEN, FUCK BYOND
-	if(hasvar(src, "my_atom"))
-		src:my_atom = null*/
 	..()
 
 
@@ -169,20 +164,6 @@
 //Output a creative message and then return the damagetype done
 /obj/item/proc/suicide_act(mob/user)
 	return
-
-/obj/item/verb/move_to_top()
-	set name = "Move To Top"
-	set category = "Object"
-	set src in oview(1)
-
-	if(!istype(loc, /turf) || usr.isUnconscious() || usr.restrained())
-		return
-
-	var/turf/T = loc
-
-	forceMove(null)
-
-	forceMove(T)
 
 /obj/item/examine(mob/user, var/size = "", var/show_name = TRUE)
 	if(!size)
@@ -909,7 +890,7 @@
 		return
 
 	if(!wielded)
-		wielded = getFromPool(/obj/item/offhand)
+		wielded = new /obj/item/offhand
 
 		//Long line ahead, let's break that up!
 		//
@@ -941,7 +922,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			returnToPool(wielded)
+			qdel(wielded)
 			wielded = null
 	update_wield(user)
 

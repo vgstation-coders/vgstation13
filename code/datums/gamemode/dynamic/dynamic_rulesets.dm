@@ -283,7 +283,18 @@
 			continue
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
+	message_admins("[name]: [length(candidates)] candidates")
 	if (!forced)
 		if(!check_enemy_jobs(FALSE))
 			return 0
 	return ..()
+
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user, var/ruleset)
+	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
+		return 1
+	return 0
+
+/datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)
+	var/mob/living/carbon/human/new_character = makeBody(applicant)
+	new_character.dna.ResetSE()
+	return new_character

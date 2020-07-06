@@ -148,6 +148,7 @@
 	allow_quick_empty = TRUE
 	use_to_pickup = TRUE
 	can_only_hold = list(
+		"/obj/item/weapon/reagent_containers/hypospray",
 		"/obj/item/device/healthanalyzer",
 		"/obj/item/weapon/dnainjector",
 		"/obj/item/weapon/reagent_containers/dropper",
@@ -163,7 +164,6 @@
 		"/obj/item/device/flashlight/pen",
 		"/obj/item/clothing/mask/surgical",
 		"/obj/item/clothing/gloves/latex",
-		"/obj/item/weapon/reagent_containers/hypospray/autoinjector",
 		"/obj/item/device/mass_spectrometer",
 		"/obj/item/device/reagent_scanner",
 		"/obj/item/device/gps/paramedic",

@@ -24,12 +24,6 @@
 	pipe_networks -= src
 	..()
 
-/datum/pipe_network/resetVariables()
-	..("gases", "normal_members", "line_members")
-	gases = list()
-	normal_members = list()
-	line_members = list()
-
 /datum/pipe_network/proc/process()
 	set waitfor = FALSE
 	//Equalize gases amongst pipe if called for
@@ -49,7 +43,7 @@
 	//Notes: Assuming that members will add themselves to appropriate roster in network_expandz()
 
 	if(!start_normal)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	start_normal.network_expand(src, reference)
@@ -59,7 +53,7 @@
 	if((normal_members.len>0)||(line_members.len>0))
 		pipe_networks |= src
 	else
-		returnToPool(src)
+		qdel(src)
 		return
 	return 1
 

@@ -260,6 +260,8 @@
 	else if(href_list["tempo"])
 		tempo = sanitize_tempo(tempo + text2num(href_list["tempo"]))
 	else if(href_list["play"])
+		if(playing)
+			return
 		playing = 1
 		spawn()
 			playsong(usr)

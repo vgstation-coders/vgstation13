@@ -93,9 +93,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
                     "Voice of Nar-Sie",
                     "")
 		for (var/datum/role/R in members)
-			var/mob/M = R.antag.current
-			if (M && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
-				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
+			if (R.antag?.current && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+				to_chat(R.antag.current, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
 
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")

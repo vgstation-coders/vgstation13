@@ -20,18 +20,18 @@
 				holder.buildmode.copycat = null
 			if(M.client.buildmode_objs && M.client.buildmode_objs.len)
 				for(var/BM in M.client.buildmode_objs)
-					returnToPool(BM)
+					qdel(BM)
 				M.client.buildmode_objs.Cut()
 		else
 			log_admin("[key_name(usr)] has entered build mode.")
 			M.client.buildmode = 1
 			M.client.show_popup_menus = 0
 
-			var/obj/effect/bmode/buildholder/hold = getFromPool(/obj/effect/bmode/buildholder)
-			hold.builddir = getFromPool(/obj/effect/bmode/builddir,hold)
-			hold.buildhelp = getFromPool(/obj/effect/bmode/buildhelp,hold)
-			hold.buildmode = getFromPool(/obj/effect/bmode/buildmode,hold)
-			hold.buildquit = getFromPool(/obj/effect/bmode/buildquit,hold)
+			var/obj/effect/bmode/buildholder/hold = new /obj/effect/bmode/buildholder
+			hold.builddir = new /obj/effect/bmode/builddir(hold)
+			hold.buildhelp = new /obj/effect/bmode/buildhelp(hold)
+			hold.buildmode = new /obj/effect/bmode/buildmode(hold)
+			hold.buildquit = new /obj/effect/bmode/buildquit(hold)
 			M.client.screen += list(hold.builddir,hold.buildhelp,hold.buildmode,hold.buildquit)
 			hold.cl = M.client
 			M.client.buildmode_objs |= list(hold,hold.builddir,hold.buildhelp,hold.buildmode,hold.buildquit)

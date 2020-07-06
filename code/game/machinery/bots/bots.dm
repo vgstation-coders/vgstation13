@@ -1,4 +1,5 @@
 #define MAX_PATHING_ATTEMPTS 15
+#define BEACON_TIMEOUT 15 // Process calls
 
 #define SEC_BOT 1 // Secutritrons (Beepsky) and ED-209s
 #define MULE_BOT 2 // MULEbots
@@ -11,9 +12,11 @@
 #if ASTAR_DEBUG == 1
 #define log_astar_bot(text) visible_message("[src] : [text]")
 #define log_astar_beacon(text) to_chat(world, "[src] : [text]")
+#define log_astar_command(text) to_chat(world, "[src] : [text]")
 #else
 #define log_astar_bot(text)
 #define log_astar_beacon(text)
+#define log_astar_command(text)
 #endif
 
 /obj/machinery/bot
@@ -50,21 +53,26 @@
 
 	var/beacon_freq = 1445		// navigation beacon frequency
 	var/control_freq = 1447		// bot control frequency
-	var/control_filter = RADIO_SECBOT
+	var/control_filter = null
 
 	var/awaiting_beacon //If we've sent out a signal to get a beacon
+	var/total_awaiting_beacon // How long have we been waiting for?
 	var/nearest_beacon //What our nearest beacon is
 	var/turf/nearest_beacon_loc //The turf of our nearest beacon
 
-	var/type_for_sig = "secbot"
 	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
 	var/auto_patrol = 0		// set to make bot automatically patrol
 	var/waiting_for_patrol = FALSE // Are we waiting for a beacon to give us a clear path? (in order to avoid calling for a path more than once)
+	var/waiting_for_path = FALSE
 	var/list/patrol_path = list() //Our patroling path
 
 	var/current_pathing = 0 // Safety check for recursive movement
 	var/look_for_target = FALSE // Are we currently calculating a path to a target?
 	var/target_chasing_distance = 7 // Default view
+
+	var/summoned = FALSE // Were they summoned?
+
+	var/commanding_radio = /obj/item/radio/integrated/signal/bot
 
 // Adding the bots to global lists; initialize if not.
 /obj/machinery/bot/New()
@@ -91,7 +99,7 @@
 	if(botcard)
 		qdel(botcard)
 		botcard = null
-	if (waiting_for_patrol)
+	if (waiting_for_patrol || waiting_for_path)
 		for (var/datum/path_maker/PM in pathmakers)
 			if (PM.owner == src)
 				qdel(PM)
@@ -109,11 +117,17 @@
 		return
 	if (src.integratedpai)
 		return
+	else
+		total_awaiting_beacon = 0
 	process_pathing()
 	process_bot()
 
 // Makes the bot busy while it looks for a target.
 /obj/machinery/bot/proc/find_target()
+	// Let us hurry home to our master.
+	if (summoned)
+		return FALSE
+
 	look_for_target = TRUE
 	target_selection()
 	look_for_target = FALSE
@@ -123,7 +137,7 @@
 
 // Will we continue chasing our target or not?
 /obj/machinery/bot/proc/can_abandon_target()
-	return (!target || target.gcDestroyed || get_dist(src, target) > target_chasing_distance) && !look_for_target
+	return (!target || target.gcDestroyed || get_dist(src, target) > target_chasing_distance) && !look_for_target &&!summoned
 
 //Set time_to_forget to -1 to never forget it
 /obj/machinery/bot/proc/add_oldtarget(var/old_target, var/time_to_forget = BOT_OLDTARGET_FORGET_DEFAULT)
@@ -172,6 +186,8 @@
 	set_glide_size(DELAY2GLIDESIZE(SS_WAIT_BOTS/steps_per))
 	if(!length(path)) //It is assumed we gain a path through process_bot()
 		if(target)
+			if (waiting_for_path)
+				return 1
 			calc_path(target, .proc/get_path)
 			if (path && length(path))
 				process_path()
@@ -210,6 +226,7 @@
 			frustration = 0
 			return TRUE
 	if(frustration > 5)
+		summoned = FALSE // Let's not try again.
 		if (target && !target.gcDestroyed)
 			calc_path(target, .proc/get_path, next)
 		else
@@ -227,6 +244,8 @@
 
 // Proc called when heave reached our target. We can then fix the hole, heal the guy, etc.
 /obj/machinery/bot/proc/at_path_target()
+	summoned = FALSE
+	target = null
 	return TRUE
 
 /obj/machinery/bot/proc/can_patrol()
@@ -274,6 +293,8 @@
 // After that, we signal the beacon where we are and they transmit a location.
 // The closet location is picked, and a path is calculated.
 /obj/machinery/bot/proc/find_patrol_path()
+	if (summoned)
+		return
 	if(waiting_for_patrol)
 		return
 	if(awaiting_beacon++)
@@ -289,26 +310,32 @@
 	if(patrol_target)
 		waiting_for_patrol = TRUE
 		calc_patrol_path(patrol_target, .proc/get_patrol_path)
-
 // This proc send out a singal to every beacon listening to the "beacon_freq" variable.
 // The signal says, "i'm a bot looking for a beacon to patrol to."
 // Every beacon with the flag "patrol" responds by trasmitting its location.
 // The bot calculates the nearest one and then calculates a path.
-/obj/machinery/bot/proc/find_nearest_beacon()
+/obj/machinery/bot/proc/find_nearest_beacon(var/post_signal = TRUE)
 	log_astar_beacon("find_nearest_beacon called")
 	if(awaiting_beacon)
 		return
-	nearest_beacon = null
-	new_destination = "__nearest__"
-	post_signal(beacon_freq, "findbeacon", "patrol")
+	if (post_signal)
+		nearest_beacon = null
+		new_destination = "__nearest__"
+		post_signal(beacon_freq, "findbeacon", "patrol")
 	awaiting_beacon = 1
 	spawn(10)
 		awaiting_beacon = 0
 		if(nearest_beacon)
+			total_awaiting_beacon = 0
 			log_astar_beacon("nearest_beacon was found and is [nearest_beacon]")
 			set_destination(nearest_beacon)
 		else
-			auto_patrol = 0
+			total_awaiting_beacon++
+			if (total_awaiting_beacon >= MAX_PATHING_ATTEMPTS)
+				total_awaiting_beacon = 0
+				auto_patrol = 0
+			else
+				find_nearest_beacon(FALSE) // Let's try again...
 
 // This proc is different from the other one.
 // It still transmits for every beacon listening to the frequency.
@@ -349,6 +376,8 @@
 			target = null
 			patrol_path = list()
 
+// --- SIGNAL CODE ---
+
 // send a radio signal with a single data key/value pair
 /obj/machinery/bot/proc/post_signal(var/freq, var/key, var/value)
 	log_astar_beacon("posted signal [key] = [value] on freq [freq].")
@@ -361,7 +390,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data = keyval
@@ -373,42 +402,88 @@
 
 // Checks if the bot can recieve the signal or not.
 /obj/machinery/bot/proc/is_valid_signal(var/datum/signal/signal)
-	return signal.data["patrol"] // Most bots wait for a patrol signal
+	return signal.data["command"] || signal.data["patrol"] // Most bots wait for a patrol signal
 
 // This proc is called when we get a singal from beacons.
 // Either we are looking for the nearest beacon, and in this case we compare each signal we get to get the closest one.
 // Or we are looking for one beacon in particular, and will only set our target if what we recieve is the new destination we are supposed to go to.
 // After recieving a valid signal, we'll set it as our CURRENT destination.
-/obj/machinery/bot/receive_signal(datum/signal/signal)
-	// receive response from beacon
-	var/recv = signal.data["beacon"]
+/obj/machinery/bot/receive_signal(var/datum/signal/signal)
 	var/valid = is_valid_signal(signal)
-	log_astar_beacon("[src] recieved signal : [recv]")
-	if(!recv || !valid)
+	if(!valid)
 		return 0
-	if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
-		log_astar_beacon("[src] : new destination chosen, [recv]")
-		destination = new_destination
-		patrol_target = signal.source.loc
-		next_destination = signal.data["next_patrol"]
-		awaiting_beacon = 0
-		return 1
-	// if looking for nearest beacon
-	if(new_destination == "__nearest__")
-		log_astar_beacon("[src] : calculating nearest beacon")
-		var/dist = get_dist(src,signal.source.loc)
-		if(nearest_beacon)
-			// note we ignore the beacon we are located at
-			if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
-				log_astar_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
+
+	// -- Patrol signal --
+	var/recv = signal.data["beacon"]
+	if (recv)
+		log_astar_beacon("recieved patrol signal : [recv]")
+		if(recv == new_destination)	// if the recvd beacon location matches the set destination, then we will navigate there
+			handle_recieved_destination(signal, recv)
+			return 1
+		// if looking for nearest beacon
+		if(new_destination == "__nearest__")
+			log_astar_beacon("calculating nearest beacon")
+			var/dist = get_dist(src,signal.source.loc)
+			if(nearest_beacon)
+				// note we ignore the beacon we are located at
+				if(dist>1 && dist<get_dist(src, nearest_beacon_loc))
+					log_astar_beacon("replacing nearest_beacon [nearest_beacon] with [recv] as it is closer. [get_dist(src, nearest_beacon_loc)] [dist]")
+					nearest_beacon = recv
+					nearest_beacon_loc = signal.source.loc
+				return
+			else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
+				log_astar_beacon("new nearest_beacon is [recv]")
 				nearest_beacon = recv
 				nearest_beacon_loc = signal.source.loc
-			return
-		else if(dist > 1) //We don't have a nearest beacon to compare to, so we're going to accept the first one we find that isn't on the same turf as us
-			log_astar_beacon("new nearest_beacon is [recv]")
-			nearest_beacon = recv
-			nearest_beacon_loc = signal.source.loc
-		return 1
+			return 1
+	// -- Command signals --
+	var/target_bot = signal.data["target"]
+	var/command = signal.data["command"]
+	log_astar_command("recieved signal [command] for [target_bot]")
+	if (target_bot != "\ref[src]")
+		return
+	execute_signal_command(signal, command)
+
+// -- We got a new destination, how do we go there?
+// Most bots will patrol to the target.
+/obj/machinery/bot/proc/handle_recieved_destination(var/datum/signal/signal, var/recv)
+	log_astar_beacon("[src] : new destination chosen, [recv]")
+	destination = new_destination
+	patrol_target = signal.source.loc
+	next_destination = signal.data["next_patrol"]
+	awaiting_beacon = 0
+
+// -- Recieved an order via signal. This proc assumes the bot is the correct one to get the command.
+/obj/machinery/bot/proc/execute_signal_command(var/datum/signal/signal, var/command)
+	log_astar_command("recieved command [command]")
+	if (!istype(signal.source, commanding_radio))
+		log_astar_command("refused command [command], wrong radio type")
+		return TRUE
+	switch (command)
+		if ("auto_patrol")
+			auto_patrol = !auto_patrol
+			return 1
+		if ("summon")
+			if (summoned)
+				summoned  = FALSE
+				destination = ""
+				target = null
+			else
+				summoned = TRUE
+				destination = get_turf(signal.source)
+				target = get_turf(signal.source)
+			path = list()
+			patrol_path = list()
+			return 1
+		if ("switch_power")
+			if (on)
+				turn_off()
+			else
+				turn_on()
+			return 1
+
+/obj/machinery/bot/proc/return_status()
+	return "Idle"
 
 // Caluculate a path between the bot and the target.
 // Target is the target to go to.
@@ -424,7 +499,10 @@
 		path = quick_AStar(src.loc, get_turf(target), cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid, reference="\ref[src]")
 		log_astar_bot("path is [path.len]")
 		return TRUE
-	return AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	waiting_for_path = 1
+	. = AStar(src, proc_to_call, src.loc, target, cardinal_proc, /turf/proc/Distance_cardinal, 0, max(10,get_dist(src,target)*3), id=botcard, exclude=avoid)
+	if (!.)
+		waiting_for_path = 0
 
 /obj/machinery/bot/proc/calc_patrol_path(var/target, var/proc_to_call, var/turf/avoid = null)
 	ASSERT(target && proc_to_call)
@@ -440,6 +518,7 @@
 
 // This proc is called by the path maker once it has calculated a path.
 /obj/machinery/bot/proc/get_path(var/list/L, var/target)
+	waiting_for_path = 0
 	if(islist(L))
 		path = L
 		if (bot_flags & BOT_NOT_CHASING) // Chasing bots are obstinate and will not forget their target so easily.
@@ -513,7 +592,7 @@
 	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		O.New(O.loc)
 	healthcheck()
 
@@ -529,7 +608,7 @@
 	add_logs(M, src, "attacked", admin=0)
 	if(prob(10))
 		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
 		O.New(O.loc)
 	healthcheck()
 
@@ -575,7 +654,7 @@
 	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
 		Emag(user)
 	else
-		if(hasvar(W,"force") && hasvar(W,"damtype"))
+		if(isobj(W))
 			W.on_attack(src, user)
 			visible_message("<span class='danger'>[src] has been hit by [user] with [W].</span>")
 			switch(W.damtype)

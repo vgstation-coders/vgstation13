@@ -142,6 +142,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
+	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
 /datum/species/New()
 	..()
@@ -1290,7 +1291,7 @@ var/list/has_died_as_golem = list()
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD
 
 	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1

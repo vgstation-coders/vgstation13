@@ -54,7 +54,7 @@
 	if(!verb_holder)
 		return
 	if(!path)
-		returnToPool(verb_holder)
+		qdel(verb_holder)
 		verb_holder = null
 		return
 
@@ -208,7 +208,7 @@
 		if(P.isVerb)
 			verb_holder.verbs -= P.verbpath
 
-	returnToPool(verb_holder)
+	qdel(verb_holder)
 	verb_holder = null
 
 
@@ -527,7 +527,8 @@
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
-	flick("monkey2h", animation)
+	var/anim_name = C.get_unmonkey_anim()
+	flick(anim_name, animation)
 	sleep(48)
 	qdel(animation)
 	animation = null

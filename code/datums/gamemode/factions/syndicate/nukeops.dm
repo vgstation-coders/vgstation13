@@ -214,7 +214,7 @@
 			synd_mob.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/roller/surgery(synd_mob))
 		if("Engineering") //Mister deconstruction, C4 and efficient. Engineers have shotguns because stereotype, and eswords for utility
 			synd_mob.equip_to_slot_or_drop(new /obj/item/clothing/glasses/scanner/meson/prescription(synd_mob), slot_glasses)
-			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/gun/projectile/shotgun/pump/combat(synd_mob), slot_s_store) //Only place we can store it, it will drop on the ground for plasmamen
+			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty(synd_mob), slot_in_backpack) 
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/storage/belt/utility/complete(synd_mob), slot_belt)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/storage/box/lethalshells(synd_mob), slot_in_backpack)
 			synd_mob.equip_to_slot_or_drop(new /obj/item/weapon/melee/energy/sword(synd_mob), slot_in_backpack)

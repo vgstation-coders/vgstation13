@@ -47,13 +47,14 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts/update_icon(var/showalert = FALSE)
 	..()
 	if(stat & (NOPOWER|BROKEN))
+		overlays.Cut()
 		return
 	else
 		icon_state = "secalert"
 	if(showalert)
 		overlays += image(icon = icon, icon_state = "secalert-newalerts")
 	else
-		overlays = 0
+		overlays.Cut()
 
 
 /obj/machinery/computer/security_alerts/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)

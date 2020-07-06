@@ -33,10 +33,12 @@ var/list/navbeacons = list()
 	hide(T.intact)
 
 	navbeacons.Add(src)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	spawn(5)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
+/obj/machinery/navbeacon/initialize()
+	if(radio_controller)
+		radio_controller.add_object(src, freq, RADIO_NAVBEACONS)
 
 /obj/machinery/navbeacon/Destroy()
 	navbeacons.Remove(src)
@@ -97,7 +99,7 @@ var/list/navbeacons = list()
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data["beacon"] = location

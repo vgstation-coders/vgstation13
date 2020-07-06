@@ -589,7 +589,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			for(var/datum/feed_channel/F in news_network.network_channels)
 				if( (!F.locked || F.author == scanned_user) && !F.censored)
 					available_channels += F.channel_name
-			channel_name = utf8_sanitize(input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels )
+			channel_name = input(usr, "Choose receiving Feed Channel", "Network Channel Handler") in available_channels
 			updateUsrDialog()
 
 		else if(href_list["set_new_message"])

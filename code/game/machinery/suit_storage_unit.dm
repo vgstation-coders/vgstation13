@@ -466,6 +466,17 @@
 				if(suit)
 					suit.clean_blood()
 					suit.decontaminate()
+					if(isrig(suit))
+						var/obj/item/clothing/suit/space/rig/rigsuit = suit
+						if(rigsuit.H) //Internal helmet
+							rigsuit.H.clean_blood()
+							rigsuit.H.decontaminate()
+						if(rigsuit.G) //Internal Gloves
+							rigsuit.G.clean_blood()
+							rigsuit.G.decontaminate()
+						if(rigsuit.MB) //Internal Boots
+							rigsuit.MB.clean_blood()
+							rigsuit.MB.decontaminate()
 				if(mask)
 					mask.clean_blood()
 					mask.decontaminate()

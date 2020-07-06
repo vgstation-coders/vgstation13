@@ -47,14 +47,11 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	mob_hearers -= attached
 	attached = null
 
-/mob/virtualhearer/resetVariables()
-	gcDestroyed = null //I'm guessing this doesn't supercall for performance reasons, but resetting this particular variable is pretty important
-
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
 		attached.Hear(arglist(args))
 	else
-		returnToPool(src)
+		qdel(src)
 
 /mob/virtualhearer/ex_act()
 	return

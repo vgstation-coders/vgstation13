@@ -5,8 +5,9 @@
 /client/proc/admin_memo(task in list("write","show","delete"))
 	set name = "Memo"
 	set category = "Server"
-	if(!ENABLE_MEMOS)
-		return
+#if !ENABLE_MEMOS
+	return
+#endif
 	if(!check_rights(0))
 		return
 	switch(task)

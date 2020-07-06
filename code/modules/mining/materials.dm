@@ -37,20 +37,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/Destroy()
 	holder = null
-
-/datum/materials/resetVariables(args)
-	var/newargs
-	if(args)
-		newargs = args + "storage"
-	else
-		newargs = "storage"
-
-	..(arglist(newargs))
-
-	if(!initial_materials)
-		initialize_materials()
-
-	storage = initial_materials.Copy()
+	return ..()
 
 /datum/materials/proc/getVolume()
 	var/volume=0

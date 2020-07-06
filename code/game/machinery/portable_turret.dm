@@ -231,7 +231,7 @@ Status: []<BR>"},
 					lasercolor = null
 					salvaged++
 			if(prob(75))
-				getFromPool(/obj/item/stack/sheet/metal, loc, rand(2,6))
+				new /obj/item/stack/sheet/metal(loc, rand(2, 6))
 				salvaged++
 			if(prob(50))
 				new /obj/item/device/assembly/prox_sensor(get_turf(src))
@@ -662,7 +662,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W) && !anchored)
 				W.playtoolsound(src, 75)
 				to_chat(user, "You dismantle the turret construction.")
-				getFromPool(/obj/item/stack/sheet/metal, loc, 5)
+				new /obj/item/stack/sheet/metal(loc, 5)
 				qdel(src)
 				return
 
@@ -698,7 +698,7 @@ Status: []<BR>"},
 						return
 					build_step = 1
 					to_chat(user, "You remove the turret's interior metal armor.")
-					getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+					new /obj/item/stack/sheet/metal(loc, 2)
 					icon_state = "turret_frame"
 					return
 
@@ -777,7 +777,7 @@ Status: []<BR>"},
 			else if(iscrowbar(W))
 				W.playtoolsound(src, 75)
 				to_chat(user, "You pry off the turret's exterior armor.")
-				getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+				new /obj/item/stack/sheet/metal(loc, 2)
 				build_step = 6
 				return
 

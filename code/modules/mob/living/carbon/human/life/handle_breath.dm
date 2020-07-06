@@ -114,7 +114,12 @@
 /mob/living/carbon/human/proc/get_breath_from_internal(volume_needed)
 	if(internal)
 		if(!contents.Find(internal))
-			internal = null
+			if(wear_suit && isrig(wear_suit)) //But what if he's wearing a rigsuit?
+				var/obj/item/clothing/suit/space/rig/rig = wear_suit
+				if(!rig.T) //But if the rig has no internal tank...
+					internal = null
+			else
+				internal = null
 		if(!wear_mask || !(wear_mask.clothing_flags & MASKINTERNALS))
 			internal = null
 		if(internal)

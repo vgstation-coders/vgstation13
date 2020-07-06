@@ -16,7 +16,6 @@
 	req_access = list(access_brig)
 	anchored = TRUE
 	density = FALSE
-	var/id_tag = null     	// id of door it controls
 	var/timeleft = 0		// in seconds
 	var/timing = FALSE
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers

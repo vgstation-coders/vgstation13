@@ -48,7 +48,7 @@ var/event/on_pipenet_tick = new
 		var/obj/machinery/atmospherics/atmosmachinery = currentrun_atmos_machines[currentrun_atmos_machines.len]
 		currentrun_atmos_machines.len--
 
-		if (!atmosmachinery || atmosmachinery.gcDestroyed || atmosmachinery.disposed || atmosmachinery.timestopped)
+		if (!atmosmachinery || atmosmachinery.gcDestroyed || atmosmachinery.timestopped)
 			continue
 
 		if (atmosmachinery.process() && MC_TICK_CHECK)
@@ -61,7 +61,7 @@ var/event/on_pipenet_tick = new
 		var/datum/pipe_network/pipeNetwork = currentrun_pipenets[currentrun_pipenets.len]
 		currentrun_pipenets.len--
 
-		if (!pipeNetwork || pipeNetwork.gcDestroyed || pipeNetwork.disposed)
+		if (!pipeNetwork || pipeNetwork.gcDestroyed)
 			continue
 
 		pipeNetwork.process()

@@ -144,6 +144,12 @@
 	typepath = /obj/item/weapon/storage/photo_album
 	cost = 30
 
+/datum/storeitem/poster
+	name = "Poster"
+	desc = "A random poster from Centcom's prints division. For those with bad taste in art."
+	typepath = /obj/item/mounted/poster
+	cost = 20 
+
 /datum/storeitem/painting
 	name = "Painting"
 	desc = "A random painting from Centcom's museum. For those with good taste in art."

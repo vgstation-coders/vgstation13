@@ -158,7 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
-	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -463,7 +463,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "lucky"
 
 /obj/item/clothing/mask/cigarette/redsuit
-	name = "Lucky Strike cigarette"
+	name = "Redsuit cigarette"
 	desc = "Slim and refined. A mild smoke for a serious smoker."
 	icon_state = "redsuit"
 	overlay_on = "redsuitlit"
@@ -496,13 +496,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 ////////////
 
 /obj/item/clothing/mask/cigarette/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
-	if(!..())
-		return CANNOT_EQUIP
 	var/mob/living/carbon/C = M
 	if(!istype(C) || !C.hasmouth())
 		to_chat(C, "<span class='warning'>You have no mouth.</span>")
 		return CANNOT_EQUIP
-	return CAN_EQUIP
+	. = ..()
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"

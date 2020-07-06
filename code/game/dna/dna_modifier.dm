@@ -435,7 +435,7 @@
 			connected.connected = null
 		connected = null
 	for(var/datum/block_label/label in labels)
-		returnToPool(label)
+		qdel(label)
 	labels.Cut()
 	buffers.Cut()
 	if(disk)
@@ -463,9 +463,9 @@
 /obj/machinery/computer/scan_consolenew/New()
 	..()
 	for(var/i=1;i<=3;i++)
-		buffers[i] = getFromPool(/datum/dna2/record)
+		buffers[i] = new /datum/dna2/record
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = getFromPool(/datum/block_label)
+		labels[i] = new /datum/block_label
 	spawn(5)
 		connected = findScanner()
 		connected.connected = src

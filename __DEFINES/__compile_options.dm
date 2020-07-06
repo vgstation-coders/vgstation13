@@ -28,10 +28,8 @@
 //#define MAP_OVERRIDE 6
 // tgstation.dm:
 //#define MAP_OVERRIDE 7
-// wheelstation.dm
-//#define MAP_OVERRIDE 8
 // snaxi.dm
-//#define MAP_OVERRIDE 9
+//#define MAP_OVERRIDE 8
 
 
 // Toggles several features, explained in their respective comments.
@@ -54,3 +52,5 @@
 
 // I wonder what this does
 #define SHOW_CHANGELOG_ON_NEW_PLAYER_LOGIN !DEVELOPER_MODE
+
+#define EXTOOLS_REFERENCE_TRACKING DEVELOPER_MODE

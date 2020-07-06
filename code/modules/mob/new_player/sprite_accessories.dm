@@ -128,7 +128,7 @@
 /datum/sprite_accessory/hair/longpony
 	name = "Long Ponytail"
 	icon_state = "hair_longpony"
-	
+
 /datum/sprite_accessory/hair/mediumpony
 	name = "Medium Ponytail"
 	icon_state = "hair_mediumpony"
@@ -493,7 +493,7 @@
 	name = "Nia"
 	icon_state = "hair_nia"
 	gender = FEMALE
-	
+
 /datum/sprite_accessory/hair/nia_short
 	name = "Nia (Short)"
 	icon_state = "hair_nia_short"
@@ -744,6 +744,20 @@
 /datum/sprite_accessory/hair/insect_soldier
 	name = "Soldier Head"
 	icon_state = "insect_soldier"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/insect_shiny
+	name = "Shiny Head"
+	icon_state = "insect_shiny"
+	species_allowed = list("Insectoid")
+	gender = NEUTER
+	do_colouration = 0
+
+/datum/sprite_accessory/hair/insect_hornet
+	name = "Hornet Head"
+	icon_state = "insect_hornet"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
 	do_colouration = 0

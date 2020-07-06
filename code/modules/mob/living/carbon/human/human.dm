@@ -179,29 +179,29 @@
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
 
-	obj_overlays[FIRE_LAYER]		= getFromPool(/obj/abstract/Overlays/fire_layer)
-	obj_overlays[MUTANTRACE_LAYER]	= getFromPool(/obj/abstract/Overlays/mutantrace_layer)
-	obj_overlays[MUTATIONS_LAYER]	= getFromPool(/obj/abstract/Overlays/mutations_layer)
-	obj_overlays[DAMAGE_LAYER]	= getFromPool(/obj/abstract/Overlays/damage_layer)
-	obj_overlays[UNIFORM_LAYER]		= getFromPool(/obj/abstract/Overlays/uniform_layer)
-	obj_overlays[ID_LAYER]			= getFromPool(/obj/abstract/Overlays/id_layer)
-	obj_overlays[SHOES_LAYER]		= getFromPool(/obj/abstract/Overlays/shoes_layer)
-	obj_overlays[GLOVES_LAYER]		= getFromPool(/obj/abstract/Overlays/gloves_layer)
-	obj_overlays[EARS_LAYER]		= getFromPool(/obj/abstract/Overlays/ears_layer)
-	obj_overlays[SUIT_LAYER]		= getFromPool(/obj/abstract/Overlays/suit_layer)
-	obj_overlays[GLASSES_LAYER]		= getFromPool(/obj/abstract/Overlays/glasses_layer)
-	obj_overlays[BELT_LAYER]		= getFromPool(/obj/abstract/Overlays/belt_layer)
-	obj_overlays[SUIT_STORE_LAYER]	= getFromPool(/obj/abstract/Overlays/suit_store_layer)
-	obj_overlays[BACK_LAYER]		= getFromPool(/obj/abstract/Overlays/back_layer)
-	obj_overlays[HAIR_LAYER]		= getFromPool(/obj/abstract/Overlays/hair_layer)
-	obj_overlays[GLASSES_OVER_HAIR_LAYER] = getFromPool(/obj/abstract/Overlays/glasses_over_hair_layer)
-	obj_overlays[FACEMASK_LAYER]	= getFromPool(/obj/abstract/Overlays/facemask_layer)
-	obj_overlays[HEAD_LAYER]		= getFromPool(/obj/abstract/Overlays/head_layer)
-	obj_overlays[HANDCUFF_LAYER]	= getFromPool(/obj/abstract/Overlays/handcuff_layer)
-	obj_overlays[LEGCUFF_LAYER]		= getFromPool(/obj/abstract/Overlays/legcuff_layer)
-	//obj_overlays[HAND_LAYER]		= getFromPool(/obj/abstract/Overlays/hand_layer) //moved to human/update_inv_hand()
-	obj_overlays[TAIL_LAYER]		= getFromPool(/obj/abstract/Overlays/tail_layer)
-	obj_overlays[TARGETED_LAYER]	= getFromPool(/obj/abstract/Overlays/targeted_layer)
+	obj_overlays[FIRE_LAYER]		= new /obj/abstract/Overlays/fire_layer
+	obj_overlays[MUTANTRACE_LAYER]	= new /obj/abstract/Overlays/mutantrace_layer
+	obj_overlays[MUTATIONS_LAYER]	= new /obj/abstract/Overlays/mutations_layer
+	obj_overlays[DAMAGE_LAYER]	= new /obj/abstract/Overlays/damage_layer
+	obj_overlays[UNIFORM_LAYER]		= new /obj/abstract/Overlays/uniform_layer
+	obj_overlays[ID_LAYER]			= new /obj/abstract/Overlays/id_layer
+	obj_overlays[SHOES_LAYER]		= new /obj/abstract/Overlays/shoes_layer
+	obj_overlays[GLOVES_LAYER]		= new /obj/abstract/Overlays/gloves_layer
+	obj_overlays[EARS_LAYER]		= new /obj/abstract/Overlays/ears_layer
+	obj_overlays[SUIT_LAYER]		= new /obj/abstract/Overlays/suit_layer
+	obj_overlays[GLASSES_LAYER]		= new /obj/abstract/Overlays/glasses_layer
+	obj_overlays[BELT_LAYER]		= new /obj/abstract/Overlays/belt_layer
+	obj_overlays[SUIT_STORE_LAYER]	= new /obj/abstract/Overlays/suit_store_layer
+	obj_overlays[BACK_LAYER]		= new /obj/abstract/Overlays/back_layer
+	obj_overlays[HAIR_LAYER]		= new /obj/abstract/Overlays/hair_layer
+	obj_overlays[GLASSES_OVER_HAIR_LAYER] = new /obj/abstract/Overlays/glasses_over_hair_layer
+	obj_overlays[FACEMASK_LAYER]	= new /obj/abstract/Overlays/facemask_layer
+	obj_overlays[HEAD_LAYER]		= new /obj/abstract/Overlays/head_layer
+	obj_overlays[HANDCUFF_LAYER]	= new /obj/abstract/Overlays/handcuff_layer
+	obj_overlays[LEGCUFF_LAYER]		= new /obj/abstract/Overlays/legcuff_layer
+	//obj_overlays[HAND_LAYER]		= new /obj/abstract/Overlays/hand_layer
+	obj_overlays[TAIL_LAYER]		= new /obj/abstract/Overlays/tail_layer
+	obj_overlays[TARGETED_LAYER]	= new /obj/abstract/Overlays/targeted_layer
 
 	..()
 
@@ -284,6 +284,13 @@
 			var/obj/spacepod/S = loc
 			stat("Spacepod Charge", "[istype(S.battery) ? "[S.battery.charge] / [S.battery.maxcharge]" : "No cell detected"]")
 			stat("Spacepod Integrity", "[!S.health ? "0" : "[(S.health / initial(S.health)) * 100]"]%")
+
+		if(is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
+			var/obj/item/clothing/suit/space/rig/R = wear_suit
+			if(R.cell)
+				stat("\The [R.name]", "Charge: [R.cell.charge]")
+			if(R.activated)
+				stat("\The [R.name]", "Modules: [english_list(R.modules)]")
 
 		if (mind)
 			for (var/role in mind.antag_roles)
@@ -404,7 +411,7 @@
 //Removed the horrible safety parameter. It was only being used by ninja code anyways.
 //Now checks siemens_coefficient of the affected area by default
 /mob/living/carbon/human/electrocute_act(var/shock_damage, var/obj/source, var/base_siemens_coeff = 1.0, var/def_zone = null, var/incapacitation_duration)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+	if(status_flags & GODMODE || (M_NO_SHOCK in src.mutations))
 		return 0	//godmode
 
 	if (!def_zone)
@@ -620,7 +627,7 @@
 	else if (href_list["show_flavor_text"])
 		if(can_show_flavor_text())
 			var/datum/browser/popup = new(usr, "\ref[src]", name, 500, 200)
-			popup.set_content(utf8_sanitize(flavor_text))
+			popup.set_content(strip_html(flavor_text))
 			popup.open()
 	/*else if (href_list["lookmob"])
 		var/mob/M = locate(href_list["lookmob"])
@@ -1265,7 +1272,7 @@
 			message += "-"
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
 
-		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing, T)
+		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 		W.New(T)
 		W.basecolor = (hand_blood_color) ? hand_blood_color : DEFAULT_BLOOD
 		W.update_icon()

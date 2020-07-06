@@ -185,6 +185,16 @@
 	new /obj/item/weapon/implantcase/loyalty(src)
 	new /obj/item/weapon/implanter/loyalty(src)
 
+/obj/item/weapon/storage/lockbox/exile
+	name = "lockbox (exile implants)"
+	req_one_access = list(access_armory)
+
+/obj/item/weapon/storage/lockbox/exile/New()
+	..()
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implanter/exile(src)
+
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
 	req_one_access = list(access_security)

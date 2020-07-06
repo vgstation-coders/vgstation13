@@ -148,6 +148,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/icon/preview_icon = null
 	var/icon/preview_icon_front = null
 	var/icon/preview_icon_side = null
+	var/preview_background = null
+	var/list/background_options = list("Black", "White", "Tile")
 
 		//Jobs, uses bitflags
 	var/job_civilian_high = 0
@@ -213,6 +215,12 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/credits = CREDITS_ALWAYS
 	var/jingle = JINGLE_CLASSIC
 
+	// Runscape-like chat
+	var/mob_chat_on_map = FALSE
+	var/max_chat_length = CHAT_MESSAGE_MAX_LENGTH
+	var/obj_chat_on_map = FALSE
+	var/no_goonchat_for_obj = FALSE
+
 	var/client/client
 	var/saveloaded = 0
 
@@ -274,7 +282,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<b>Gender:</b> <a href='?_src_=prefs;preference=gender'>[gender == MALE ? "Male" : "Female"]</a><BR>
 	<b>Age:</b> <a href='?_src_=prefs;preference=age;task=input'>[age]</a>
 	</td><td valign='center'>
-	<div class='statusDisplay'><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<div class='statusDisplay'style="height: 64px; width: 128px; padding:0px"><center><img src=previewicon.png class="charPreview"><img src=previewicon2.png class="charPreview"></center></div>
+	<b>Background </b><a href='?_src_=prefs;preference=previous_preview_background;task=input'>&lt;</a> <a href='?_src_=prefs;preference=next_preview_background;task=input'>&gt;</a><BR>
 	</td></tr></table>
 	<h2>Body</h2>
 	<a href='?_src_=prefs;preference=all;task=random'>Random Body</A>
@@ -414,6 +423,15 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=credits_volume'><b>[credits_volume]</b></a><br>
 	<b>Window Flashing</b>
 	<a href='?_src_=prefs;preference=window_flashing'><b>[(window_flashing) ? "Yes":"No"]</b></a><br>
+	<center>Runechat prefererences</center>
+	<b>Chat on map for mobs:</b>
+	<a href='?_src_=prefs;preference=mob_chat_on_map'>[mob_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>Chat on map for objects:</b>
+	<a href='?_src_=prefs;preference=obj_chat_on_map'>[obj_chat_on_map ? "Enabled" : "Disabled"]</a><br>
+	<b>No goonchat messages for objects:</b>
+	<a href='?_src_=prefs;preference=no_goonchat_for_obj'>[no_goonchat_for_obj ? "Enabled" : "Disabled"]</a><br>
+	<b>Runechat message char limit:</b>
+	<a href='?_src_=prefs;preference=max_chat_length;task=input'>[max_chat_length]</a><br>
   </div>
 </div>"}
 
@@ -1122,6 +1140,10 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 					f_style = next_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
 				if("previous_facehair_style")
 					f_style = previous_list_item(f_style, valid_sprite_accessories(facial_hair_styles_list, gender, species))
+				if("next_preview_background")
+					preview_background = next_list_item(preview_background, background_options)
+				if("previous_preview_background")
+					preview_background = previous_list_item(preview_background, background_options)
 				if("age")
 					var/new_age = input(user, "Choose your character's age:\n([AGE_MIN]-[AGE_MAX])", "Character Preference") as num|null
 					if(new_age)
@@ -1509,6 +1531,19 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 				if("typing_indicator")
 					typing_indicator = !typing_indicator
+
+				if ("mob_chat_on_map")
+					mob_chat_on_map = !mob_chat_on_map
+
+				if ("obj_chat_on_map")
+					obj_chat_on_map = !obj_chat_on_map
+
+				if ("max_chat_length")
+					max_chat_length = input(user, "Choose the max character length of shown Runechat messages. Valid range is 1 to [CHAT_MESSAGE_MAX_LENGTH] (default: [initial(max_chat_length)]))", "Character Preference", max_chat_length)  as null|num
+
+				if ("no_goonchat_for_obj")
+					no_goonchat_for_obj = !no_goonchat_for_obj
+
 
 			if(user.client.holder)
 				switch(href_list["preference"])

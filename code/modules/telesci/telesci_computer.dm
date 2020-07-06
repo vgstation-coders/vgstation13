@@ -32,9 +32,8 @@
 	var/obj/item/weapon/cell/cell
 	var/teleport_cell_usage=1000 // 100% of a standard cell
 	processing=1
-	var/id_tag = "teleconsole"
 	mech_flags = MECH_SCAN_FAIL
-
+	id_tag = "teleconsole"
 
 	light_color = LIGHT_COLOR_BLUE
 

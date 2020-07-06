@@ -542,16 +542,9 @@ log transactions
 			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
-	var/turf/our_turf = get_turf(src)
-	var/turf/destination_turf = get_step(our_turf, turn(dir, 180))
-	var/just_throw_it = FALSE
-	if(!destination_turf.Adjacent(src)) //Can we get to this turf being where the ATM is facing?
-		destination_turf = our_turf //We'll handle it another way
-		just_throw_it = TRUE
-	var/list/cash = dispense_cash(arbitrary_sum,destination_turf)
-	if(just_throw_it) //Just throw it at them
-		for(var/obj/I in cash)
-			I.throw_at(pick(trange(3, src)), rand(2,5), rand(1,4))
+		var/list/cash = dispense_cash(arbitrary_sum, H.loc)
+		for(var/obj/item/weapon/spacecash/dosh in cash)
+			H.put_in_hands(dosh)
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)

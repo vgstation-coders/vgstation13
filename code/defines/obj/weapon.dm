@@ -82,9 +82,11 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	flags = FPRINT | NO_ATTACK_MSG
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -796,7 +798,7 @@
 
 	species_fit = list(VOX_SHAPED)
 
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 

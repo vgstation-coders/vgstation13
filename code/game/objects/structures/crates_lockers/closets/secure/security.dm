@@ -208,6 +208,11 @@
 	)
 
 
+/obj/structure/closet/secure_closet/security/empty
+
+/obj/structure/closet/secure_closet/security/empty/atoms_to_spawn()
+	return list()
+
 //The detectivegear box can be found at at the same location as the securitygear box and it contains:
 //sec headset, sec hud, black gloves, sps, 2x .38 ammoboxes, speedloader, evidence bag box, scanner, binoculars, and a hand TV set.
 /obj/structure/closet/secure_closet/detective
@@ -264,7 +269,6 @@
 	name = "Brig Locker"
 	req_access = list(access_brig)
 	anchored = 1
-	var/id_tag = null
 
 /obj/structure/closet/secure_closet/brig/atoms_to_spawn()
 	return list(
