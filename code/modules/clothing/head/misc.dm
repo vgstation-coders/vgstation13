@@ -502,7 +502,7 @@
 	if(!istype(dunce))
 		return
 	if((dunce.get_item_by_slot(slot_head) == src))
-		if(dunce.getBrainLoss < 20)
+		if(dunce.getBrainLoss() < 20)
 			dunce.adjustBrainLoss(1)
 
 /obj/item/clothing/head/party_hat
