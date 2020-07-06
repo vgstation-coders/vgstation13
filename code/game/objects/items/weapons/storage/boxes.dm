@@ -648,7 +648,7 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
-		
+
 /obj/item/weapon/storage/box/dragonsbreathshells
 	name = "12-gauge dragon's breath shells"
 	icon_state = "dragonsbreath_shells"
@@ -658,12 +658,12 @@
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
-		
+
 /obj/item/weapon/storage/box/fragshells
 	name = "12-gauge high-explosive fragmentation shells"
 	icon_state = "frag_shells"
-	storage_slots = 16		
-		
+	storage_slots = 16
+
 /obj/item/weapon/storage/box/fragshells/New()
 	..()
 	for(var/i in 1 to 16)
@@ -1395,3 +1395,14 @@
 	new /obj/item/clothing/under/clownpsyche(src)
 	new /obj/item/clothing/shoes/clownshoespsyche(src)
 	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit
+	name = "Gemsuit outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit/New()
+	new /obj/item/clothing/suit/space/rig/wizard(src)
+	new /obj/item/clothing/head/helmet/space/rig/wizard(src)
+	new /obj/item/clothing/gloves/purple(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+

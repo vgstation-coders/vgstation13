@@ -11,6 +11,7 @@
 	- items_to_collect: items to put in the backbag
 		The associative key is for when to put it if we have no backbag.
 		Use GRASP_LEFT_HAND and GRASP_RIGHT_HAND if it goes to the hands, but slot_x_str if it goes to a slot on the person.
+	- alt_title_items_to_collect: for when you want special items based on job title.
 	- implant_types: the implants we give to the mob.
 	- special_snowflakes: for the edge cases where you need a manual proc.
 	- pda_slot/pda_type/id_type: for the ID and PDA of the mob.
@@ -20,6 +21,7 @@
 	-- "Static" procs
 		- equip(var/mob/living/carbon/human/H): tries to equip everything on the list to the relevant slots. This is the "master proc".
 		- equip_backbag(var/mob/living/carbon/human/H): equip the backbag with the correct pref, and tries to put items in it if possible.
+		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip) : changes items based on disbabilities registered
 		- give_disabilities_equipment(var/mob/living/carbon/human/H): give the correct equipement for the disabilities the mob has, in the correct slots.
 
 	-- Procs you can override
@@ -82,7 +84,7 @@
 	return
 
 /datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
-	if (H.client.IsByondMember())
+	if (H.client?.IsByondMember())
 		to_chat(H, "Thank you for supporting BYOND!")
 		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
 
@@ -93,8 +95,9 @@
 	if (!items_to_equip[slot_glasses_str])
 		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
 
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H)
-	if (!H || !H.mind)
+// -- Equip mindless: if we're going to give the outfit to a mob without a mind
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE)
+	if (!H || (!H.mind && !equip_mindless) )
 		return
 
 	pre_equip(H)
@@ -109,14 +112,17 @@
 
 		var/list/snowflake_items = special_snowflakes[species]
 
-		if (snowflake_items && (slot in snowflake_items[H.mind.role_alt_title])) // ex: special_snowflakes["Vox"]["Emergency responder"].
+		if (snowflake_items && (slot in snowflake_items[H?.mind.role_alt_title])) // ex: special_snowflakes["Vox"]["Emergency responder"].
 			special_equip(H.mind.role_alt_title, slot, 	H)
 			continue
 
 		var/obj_type = L[slot]
 		if (islist(obj_type)) // Special objects for alt-titles.
 			var/list/L2 = obj_type
-			obj_type = L2[H.mind.role_alt_title]
+			if (H.mind && H.mind.role_alt_title in L2)
+				obj_type = L2[H.mind.role_alt_title]
+			else // Mindless
+				obj_type = L2[1] // First item
 		if (!obj_type)
 			continue
 		slot = text2num(slot)
@@ -148,7 +154,9 @@
 		chosen_backpack = backpack_types[BACKPACK_STRING]
 
 	// -- The (wo)man has a backpack, let's put stuff in them
-	var/special_items = alt_title_items_to_collect[H.mind.role_alt_title]
+	var/special_items
+	if (H.mind)
+		special_items = alt_title_items_to_collect[H.mind.role_alt_title]
 
 	if (chosen_backpack)
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
@@ -156,8 +164,9 @@
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 		if (equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
-				H.equip_or_collect(new equip_survival_gear(H.back), slot_in_backpack)
-		else
+				var/path = equip_survival_gear[species]
+				H.equip_or_collect(new path(H.back), slot_in_backpack)
+		else if (equip_survival_gear) //
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
 		// Special alt-title items
@@ -191,7 +200,7 @@
 					if (hand_slot) // ie, if it's an actual number
 						H.put_in_hand(hand_slot, new item)
 
-		// Special alt-title items ;
+		// Special alt-title items, given out the same way.
 		if (special_items)
 			for (var/item_type in special_items)
 				var/chosen_slot = special_items[item_type]
@@ -211,9 +220,9 @@
 	C.access = concrete_job.get_access()
 	C.registered_name = H.real_name
 	C.rank = rank
-	C.assignment = H.mind.role_alt_title
+	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-	C.associated_account_number = H.mind.initial_account.account_number
+	C.associated_account_number = H?.mind?.initial_account.account_number
 	H.equip_or_collect(C, slot_wear_id)
 
 	if (pda_type)
