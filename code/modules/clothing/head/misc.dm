@@ -497,6 +497,14 @@
 	icon_state = "duncecap"
 	item_state = "duncecap"
 
+/obj/item/clothing/head/dunce_cap/OnMobLife(var/mob/living/carbon/human/dunce)
+	..()
+	if(!istype(dunce))
+		return
+	if((dunce.get_item_by_slot(slot_head) == src))
+		if(dunce.getBrainLoss < 20)
+			dunce.adjustBrainLoss(1)
+
 /obj/item/clothing/head/party_hat
 	name = "party hat"
 	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
