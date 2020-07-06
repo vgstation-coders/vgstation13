@@ -270,13 +270,6 @@
 	bleeding = user.check_bodypart_bleeding(HANDS)
 	user.assume_contact_diseases(virus2,src,block,bleeding)
 
-/obj/effect/rune/attack_hand(var/mob/living/user)
-	var/block = 0
-	var/bleeding = 0
-	block = user.check_contact_sterility(HANDS)
-	bleeding = user.check_bodypart_bleeding(HANDS)
-	user.assume_contact_diseases(virus2,src,block,bleeding)
-
 /obj/effect/rune/proc/trigger(var/mob/living/user)
 	user.delayNextAttack(5)
 
