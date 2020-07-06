@@ -1,5 +1,5 @@
 var/runesets_initialized = 0
-var/list/global_runesets = list()
+var/list/datum/runeset/global_runesets = list()
 
 /datum/runeset //Abstract base class
 	var/identifier  //Key mapped to this runeset in runesets. Also used to sync runewords and runesets
@@ -8,7 +8,7 @@ var/list/global_runesets = list()
 	var/list/words_english = list()
 	var/list/words_rune = list()
 	var/list/words_icons = list()
-	
+
 /proc/initialize_runesets()
 	if(runesets_initialized)
 		return
@@ -21,7 +21,7 @@ var/list/global_runesets = list()
 				for(var/word_info in subtypesof(word_set))
 					var/datum/runeword/new_word = new word_info()
 					if(new_word.english)
-						rune_set.words[new_word.english] = new_word	
+						rune_set.words[new_word.english] = new_word
 				global_runesets[rune_set.identifier] = rune_set
 	runesets_initialized = 1
 
@@ -31,10 +31,10 @@ var/list/global_runesets = list()
 	words_english = list("travel", "blood", "join", "hell", "destroy", "technology", "self", "see", "other", "hide")
 	words_rune = list("ire","ego","nahlizet","certum","veri","jatkaa","mgar","balaq", "karazet", "geeri")
 	words_icons = list("rune-1","rune-2","rune-4","rune-8","rune-16","rune-32","rune-64","rune-128", "rune-256", "rune-512")
-	
-	
-	
-	
+
+
+
+
 /datum/runeword
 	var/identifier
 	var/english
@@ -47,13 +47,13 @@ var/list/global_runesets = list()
 	icon = 'icons/effects/uristrunes.dmi'
 	icon_state = ""
 	var/color    //Used by path rune markers
-	
+
 /datum/runeword/blood_cult/travel
 	english		= "travel"
 	rune		= "ire"
 	icon_state	= "rune-1"
 	color = "yellow"
- 
+
 /datum/runeword/blood_cult/blood
 	english		= "blood"
 	rune		= "ego"
