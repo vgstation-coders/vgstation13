@@ -35,11 +35,11 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	Holomap stuff
 	*/
 	//DONT touch, integral to the inner workings
-	var/list/holomap_images = list() //list of lists of images for the people using the console
+	var/list/list/holomap_images = list() //list of lists of images for the people using the console
 	var/list/holomap_z = list() //list of _using selected z_levels
-	var/list/holomap_tooltips = list() //list of lists of markers for the people using the console
+	var/list/list/holomap_tooltips = list() //list of lists of markers for the people using the console
 	var/list/freeze = list() //list of _using set freeze
-	var/list/entries = list() //list of all crew, which has sensors >= 1
+	var/list/list/entries = list() //list of all crew, which has sensors >= 1
 	var/list/textview_updatequeued = list() //list of _using set textviewupdate setting
 	var/list/holomap = list() //list of _using set holomap-enable setting
 	var/list/jobs = list( //needed for formatting, stolen from the old cmc
@@ -149,9 +149,11 @@ GENERAL PROCS
 		deactivate(user)
 		return
 
-	if(!(holomap_z[uid] in (holomap_z_levels_mapped | holomap_z_levels_unmapped))) //catching some more unwanted behaviours
-		if((holomap_z_levels_mapped | holomap_z_levels_unmapped).len > 0)
-			holomap_z[uid] = (holomap_z_levels_mapped | holomap_z_levels_unmapped)[1]
+	var/list/mapped_and_unmapped = holomap_z_levels_mapped | holomap_z_levels_unmapped
+
+	if(!(holomap_z[uid] in mapped_and_unmapped)) //catching some more unwanted behaviours
+		if(mapped_and_unmapped.len > 0)
+			holomap_z[uid] = mapped_and_unmapped[1]
 		else
 			deactivate(user)
 
