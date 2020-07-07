@@ -70,7 +70,7 @@ var/global/list/falltempoverlays = list()
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
+/spell/aoe_turf/fall/actual_perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
 	if(!holder)
 		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
