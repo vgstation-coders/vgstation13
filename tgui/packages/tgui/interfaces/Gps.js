@@ -1,3 +1,4 @@
+// Copyright (c) 2020 /vg/station coders
 // SPDX-License-Identifier: MIT
 
 import { useBackend } from '../backend';
