@@ -131,7 +131,7 @@
 		return 1
 
 	var/t = null
-	if (get_dist(usr, src) <= user.client.view || istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
+	if (istype(usr, /mob/living/silicon/ai) || istype(usr, /mob/dead))
 		t += status()
 	else
 		to_chat(usr, "<span class='notice'><B>You are too far away.</B></span>")
