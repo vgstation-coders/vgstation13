@@ -508,7 +508,7 @@
 	if(prob(1))
 		switch(pick(1,2,3))
 			if(1)
-				say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+				dunce.say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
 				"without oxigen blob don't evoluate?", \
 				"CAPTAINS A COMDOM", "[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
 				"can u give me [pick("telikesis","halk","eppilapse")]?", \
@@ -517,7 +517,7 @@
 				"SOTP IT#", "based and redpilled",\
 				"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
 			if(2)
-				say(pick("FUS RO DAH", \
+				dunce.say(pick("FUS RO DAH", \
 					"fucking 4rries!", \
 					"stat me", \
 					">my face", \
@@ -553,7 +553,7 @@
 					"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
 					"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
 			if(3)
-				emote("drool")
+				dunce.emote("drool")
 
 
 /obj/item/clothing/head/party_hat
