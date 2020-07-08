@@ -16,6 +16,9 @@
 			return 0
 		return 1
 
+/datum/job/ai/is_disabled()
+	return !config.allow_ai
+
 /datum/job/cyborg
 	title = "Cyborg"
 	flag = CYBORG
