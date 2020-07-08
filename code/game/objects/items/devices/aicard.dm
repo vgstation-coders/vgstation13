@@ -28,15 +28,13 @@
 	return
 
 /obj/item/device/aicard/attack_self(mob/user)
-	tgui_interact(user)
-
-/obj/item/device/aicard/ui_data()
-	var/list/data = list()
-	var/mob/living/silicon/ai/mistake = locate() in src
-	if(mistake)
-		data["name"] = mistake.name
-		var/list/laws = list()
-		var/number = 1
+	if (!in_range(src, user))
+		return
+	user.set_machine(src)
+	var/dat = "<TT><B>Intelicard</B><BR>"
+	var/laws
+	for(var/mob/living/silicon/ai/A in src)
+		dat += "Stored AI: [A.name]<br>System integrity: [A.system_integrity()]%<br>"
 
 		//AI DIDN'T KILL SOMEONE FOR ME, CARD HER TO CHECK HER LAWS
 
@@ -49,67 +47,83 @@
 		//if (A.laws.zeroth)
 			//laws += "0: [A.laws.zeroth]<BR>"
 
-		for (var/index = 1, index <= mistake.laws.inherent.len, index++)
-			var/law = mistake.laws.inherent[index]
+		var/number = 1
+		for (var/index = 1, index <= A.laws.inherent.len, index++)
+			var/law = A.laws.inherent[index]
 			if (length(law) > 0)
-				laws += "[number]: [law]"
+				laws += "[number]: [law]<BR>"
 				number++
 
-		for (var/index = 1, index <= mistake.laws.supplied.len, index++)
-			var/law = mistake.laws.supplied[index]
+		for (var/index = 1, index <= A.laws.supplied.len, index++)
+			var/law = A.laws.supplied[index]
 			if (length(law) > 0)
-				laws += "[number]: [law]"
+				laws += "[number]: [law]<BR>"
 				number++
 
-		data["laws"] = laws
-		data["health"] = mistake.system_integrity()
-		data["wireless"] = !mistake.control_disabled
-		data["isDead"] = mistake.stat == DEAD
-		data["isBraindead"] = !!mistake.client
-	data["wiping"] = flush
-	return data
+		dat += "Laws:<br>[laws]<br>"
 
-/obj/item/device/aicard/tgui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = global.hands_state)
-	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
-	if(!ui)
-		ui = new(user, src, ui_key, "Intellicard", name, 500, 500, master_ui, state)
-		ui.open()
+		if (A.stat == 2)
+			dat += "<b>AI nonfunctional</b>"
+		else
+			if (!src.flush)
+				dat += {"<A href='byond://?src=\ref[src];choice=Wipe'>Wipe AI</A>"}
+			else
+				dat += "<b>Wipe in progress</b>"
+			dat += "<br>"
+			dat += {"<a href='byond://?src=\ref[src];choice=Wireless'>[A.control_disabled ? "Enable" : "Disable"] Wireless Activity</a>"}
+			dat += "<br>"
+			dat += {"<a href='byond://?src=\ref[src];choice=Close'> Close</a>"}
+	user << browse(dat, "window=aicard")
+	onclose(user, "aicard")
+	return
 
-/obj/item/device/aicard/ui_act(action, params, datum/tgui/ui)
-	if(..())
-		return FALSE
-	switch(action)
-		if("wipe")
-			if(flush)
-				flush = FALSE
-				return TRUE
+/obj/item/device/aicard/Topic(href, href_list)
+	var/mob/living/U = usr
+	if (!in_range(src, U)||U.machine!=src)//If they are not in range of 1 or less or their machine is not the card (ie, clicked on something else).
+		U << browse(null, "window=aicard")
+		U.unset_machine()
+		return
+
+	add_fingerprint(U)
+	U.set_machine(src)
+
+	switch(href_list["choice"])//Now we switch based on choice.
+		if ("Close")
+			U << browse(null, "window=aicard")
+			U.unset_machine()
+			return
+
+		if ("Wipe")
 			var/confirm = alert("Are you sure you want to wipe this card's memory? This cannot be undone once started.", "Confirm Wipe", "Yes", "No")
-			if(confirm != "Yes" || ..())
-				return TRUE
-			flush = TRUE
-			for(var/mob/living/silicon/ai/A in src)
-				A.suiciding = 1
-				to_chat(A, "Your core files are being wiped!")
-				A.attack_log += "\[[time_stamp()]\] <font color='orange'>Has been wiped with an [src.name] by [ui.user.name] ([ui.user.ckey])</font>"
-				ui.user.attack_log += "\[[time_stamp()]\] <font color='red'>Used an [src.name] to wipe [A.name] ([A.ckey])</font>"
-				log_attack("[key_name(ui.user)] Used an [src.name] to wipe [key_name(A)]")
+			if(confirm == "Yes")
+				if(isnull(src)||!in_range(src, U)||U.machine!=src)
+					U << browse(null, "window=aicard")
+					U.unset_machine()
+					return
+				else
+					flush = 1
+					for(var/mob/living/silicon/ai/A in src)
+						A.suiciding = 1
+						to_chat(A, "Your core files are being wiped!")
+						A.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wiped with an [src.name] by [U.name] ([U.ckey])</font>")
+						U.attack_log += text("\[[time_stamp()]\] <font color='red'>Used an [src.name] to wipe [A.name] ([A.ckey])</font>")
+						log_attack("[key_name(U)] Used an [src.name] to wipe [key_name(A)]")
 
-				spawn()
-					while (A.stat != DEAD && flush)
-						A.adjustOxyLoss(2)
-						A.updatehealth()
-						sleep(1 SECONDS)
-					flush = FALSE
-			return TRUE
-		if("wireless")
+						while (A.stat != 2)
+							A.adjustOxyLoss(2)
+							A.updatehealth()
+							sleep(10)
+						flush = 0
+
+		if ("Wireless")
 			for(var/mob/living/silicon/ai/A in src)
 				A.control_disabled = !A.control_disabled
-				to_chat(A, "The intellicard's wireless port has been [A.control_disabled ? "disabled" : "enabled"]!")
+				to_chat(A, "The intelicard's wireless port has been [A.control_disabled ? "disabled" : "enabled"]!")
 				if (A.control_disabled)
 					overlays -= image('icons/obj/pda.dmi', "aicard-on")
 				else
 					overlays += image('icons/obj/pda.dmi', "aicard-on")
-			return TRUE
+	attack_self(U)
 
 /obj/item/device/aicard/ex_act(severity)
 	switch(severity)
