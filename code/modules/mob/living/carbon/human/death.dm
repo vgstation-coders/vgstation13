@@ -1,4 +1,4 @@
-/mob/living/carbon/human/gib()
+/mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
 	if(species)
 		species.gib(src)
 		return

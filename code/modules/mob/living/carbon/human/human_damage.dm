@@ -303,6 +303,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/get_organ(var/zone)
+	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))

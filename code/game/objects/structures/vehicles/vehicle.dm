@@ -22,7 +22,7 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-
+	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
@@ -82,8 +82,6 @@
 	make_offsets()
 	if(headlights)
 		new /datum/action/vehicle/toggle_headlights(src)
-	verbs -= /obj/structure/bed/verb/buckle_in //idk how to do this properly
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_out
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
@@ -231,13 +229,6 @@
 			return 0
 	return 1
 
-/obj/structure/bed/chair/vehicle/buckle_in()
-	set src in range(1)
-	buckle_mob(usr, usr)
-
-/obj/structure/bed/chair/vehicle/buckle_out()
-	manual_unbuckle(usr)
-
 /obj/structure/bed/chair/vehicle/buckle_mob(mob/M, mob/user)
 	if(!can_buckle(M,user))
 		return
@@ -255,16 +246,11 @@
 		if (action.owner && action.owner != user)
 			action.Remove(action.owner)
 		action.Grant(user)
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_in
-	verbs += /obj/structure/bed/chair/vehicle/buckle_out
 
 /obj/structure/bed/chair/vehicle/manual_unbuckle(user)
 	..()
 	for (var/datum/action/action in vehicle_actions)
 		action.Remove(user)
-	verbs += /obj/structure/bed/chair/vehicle/buckle_in
-	verbs -= /obj/structure/bed/verb/buckle_in //here too
-	verbs -= /obj/structure/bed/chair/vehicle/buckle_out
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)

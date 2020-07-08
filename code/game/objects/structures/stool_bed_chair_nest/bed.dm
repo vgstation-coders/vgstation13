@@ -10,12 +10,12 @@
 	sheet_type = /obj/item/stack/sheet/metal
 	sheet_amt = 1
 	var/mob_lock_type = /datum/locking_category/buckle/bed
-
+	var/buckle_range = 0 // The distance a spessman needs to be within in order
+						 // to be able to use the buckle_in_out verb
 /obj/structure/bed/New()
 	..()
 	if(material_type)
 		sheet_type = material_type.sheettype
-	verbs -= /obj/structure/bed/verb/buckle_out
 
 /obj/structure/bed/cultify()
 	var/obj/structure/bed/chair/wood/wings/I = new /obj/structure/bed/chair/wood/wings(loc)
@@ -51,17 +51,19 @@
 /obj/structure/bed/AltClick(mob/user as mob)
 	buckle_mob(user, user)
 
-/obj/structure/bed/verb/buckle_in()
-	set name = "Buckle In"
+/obj/structure/bed/verb/buckle_in_out()
+	set name = "Buckle In/Out"
 	set category = "Object"
-	set src in range(0)
-	buckle_mob(usr, usr)
+	set src in range(1)
 
-/obj/structure/bed/verb/buckle_out()
-	set name = "Buckle Out"
-	set category = "Object"
-	set src in range(0)
-	manual_unbuckle(usr)
+	var/list/locked_mobs = get_locked(mob_lock_type)
+	if(usr in locked_mobs)
+		manual_unbuckle(usr)
+	else
+		if(get_dist(usr, src) > buckle_range)
+			to_chat(usr, "<span class='warning'>You're too far away.</span>")
+			return
+		buckle_mob(usr, usr)
 
 /obj/structure/bed/proc/manual_unbuckle(var/mob/user)
 	if(user.isStunned())
@@ -97,8 +99,6 @@
 				"You hear metal clanking.")
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
 		M.clear_alert(SCREEN_ALARM_BUCKLE)
-		verbs += /obj/structure/bed/verb/buckle_in
-		verbs -= /obj/structure/bed/verb/buckle_out
 		return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
@@ -144,8 +144,6 @@
 
 	lock_atom(M, mob_lock_type)
 	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
-	verbs -= /obj/structure/bed/verb/buckle_in
-	verbs += /obj/structure/bed/verb/buckle_out
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
