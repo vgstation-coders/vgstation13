@@ -253,7 +253,7 @@
 	var/mob/user = arguments["user"]
 	var/rads = arguments["rads"]
 
-	if(!rig?.wearer == user) //Well lad.
+	if(rig?.wearer != user) //Well lad.
 		user.on_irradiate.Remove(event_key)
 		event_key = null
 		return
