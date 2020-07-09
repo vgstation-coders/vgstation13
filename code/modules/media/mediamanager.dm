@@ -235,6 +235,7 @@ function SetMusic(url, time, volume) {
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
+	set waitfor = FALSE
 	var/targetURL = ""
 	var/targetStartTime = 0
 	var/targetVolume = 0
