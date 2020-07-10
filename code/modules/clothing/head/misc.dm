@@ -501,9 +501,8 @@
 	..()
 	if(!istype(dunce))
 		return
-	if((dunce.get_item_by_slot(slot_head) == src))
-		if(dunce.getBrainLoss() < 20)
-			dunce.adjustBrainLoss(1)
+	if(prob(1))
+		dunce.brain_damage_line()
 //Brain-damaged copypaste but this is thematic
 	if(prob(1))
 		switch(pick(1,2,3))

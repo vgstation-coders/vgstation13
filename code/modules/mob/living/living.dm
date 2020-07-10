@@ -2065,3 +2065,6 @@ Thanks.
 			if(D.effects.len)
 				for(var/datum/disease2/effect/E in D.effects)
 					E.on_death(src)
+
+/mob/living/proc/brain_damage_line()
+	return

@@ -1996,3 +1996,53 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+/mob/living/carbon/human/brain_damage_line()
+	switch(pick(1,2,3))
+		if(1)
+			say(pick("IM A PONY NEEEEEEIIIIIIIIIGH", \
+			"without oxigen blob don't evoluate?", \
+			"CAPTAINS A COMDOM", "[pick("", "that faggot traitor")] [pick("joerge", "george", "gorge", "gdoruge")] [pick("mellens", "melons", "mwrlins")] is grifing me HAL;P!!!", \
+			"can u give me [pick("telikesis","halk","eppilapse")]?", \
+			"THe saiyans screwed", "Bi is THE BEST OF BOTH WORLDS>", \
+			"I WANNA PET TEH monkeyS", "stop grifing me!!!!", \
+			"SOTP IT#", "based and redpilled",\
+			"ho now talking like a milenian piece of shit is too unralistic in the fucking"))
+		if(2)
+			say(pick("FUS RO DAH", \
+			"fucking 4rries!", \
+			"stat me",
+			">my face", \
+			"roll it easy!", \
+			"waaaaaagh!!!", \
+			"red wonz go fasta", \
+			"FOR TEH EMPRAH", \
+			"lol2cat", \
+			"dem dwarfs man, dem dwarfs", \
+			"SPESS MAHREENS", \
+			"hwee did eet fhor khayosss", \
+			"lifelike texture ;_;", \
+			"luv can bloooom", \
+			"PACKETS!!!", \
+			"SARAH HALE DID IT!!!", \
+			"Don't tell Chase", \
+			"WOAH MAMA", \
+			"not so tough now huh", \
+			"WERE NOT BAY!!", \
+			"IF YOU DONT LIKE THE CYBORGS OR SLIMES WHY DONT YU O JUST MAKE YORE OWN!", \
+			"DONT TALK TO ME ABOUT BALANCE!!!!", \
+			"YOU AR JUS LAZY AND DUMB JAMITORS AND SERVICE ROLLS", \
+			"BLAME HOSHI!!!", \
+			"ARRPEE IZ DED!!!", \
+			"THERE ALL JUS MEATAFRIENDS!", \
+			"SOTP MESING WITH THE ROUNS SHITMAN!!!", \
+			"SKELINGTON IS 4 SHITERS!", \
+			"MOMMSI R THE WURST SCUM!!", \
+			"How do we engiener=", \
+			"try to live freely and automatically good bye", \
+			"why woud i take a pin pointner??", \
+			"FUCK IT; KISSYOUR ASSES GOOD BYE DEAD MEN! I AM SELFDESTRUCKTING THE STATION!!!!", \
+			"How do I set up the. SHow do I set u p the Singu. how I the scrungularity????", \
+			"OMG I SED LAW 2 U FAG MOMIM LAW 2!!!"))
+		if(3)
+			emote("drool")
