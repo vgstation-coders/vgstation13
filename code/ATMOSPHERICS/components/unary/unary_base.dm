@@ -2,7 +2,7 @@
 	dir = SOUTH
 	initialize_directions = SOUTH
 	layer = UNARY_PIPE_LAYER
-
+	can_be_coloured = 0
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
@@ -11,7 +11,6 @@
 	..()
 	initialize_directions = dir
 	air_contents = new
-
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
 
