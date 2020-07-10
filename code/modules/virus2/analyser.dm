@@ -87,7 +87,7 @@
 	flick("analyser_turnon",src)
 	set_light(2,2)
 	playsound(loc, "sound/machines/heps.ogg", 50, 1)
-	spawn(1)
+	spawn(1 SECONDS)
 		update_icon()
 		flick("analyser_turnoff",src)
 
