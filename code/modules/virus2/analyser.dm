@@ -83,7 +83,7 @@
 		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
 		return
 	if(!user.can_poltergeist())
-		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
+		to_chat(user, "Your poltergeist abilities are still cooling down.")
 		return FALSE
 	add_hiddenprint(user)
 	icon_state = "analyser_processing"
