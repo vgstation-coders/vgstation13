@@ -73,7 +73,7 @@
 			else
 				to_chat(user, "<span class='warning'>You must open the dish's lid before it can be analysed. Be sure to wear proper protection first (at least a sterile mask and latex gloves).</span>")
 
-/obj/machinery/disease2/diseaseanalyser/attack_ghost(var/mob/user)
+/obj/machinery/disease2/diseaseanalyser/attack_ghost(var/mob/dead/observer/user)
 	if(!can_spook())
 		return FALSE
 	if(stat & (BROKEN))
@@ -82,7 +82,7 @@
 	if (scanner)
 		to_chat(user, "<span class='warning'>\The [scanner] is currently busy using this analyser.</span>")
 		return
-	if(!ghost.can_poltergeist())
+	if(!user.can_poltergeist())
 		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
 		return FALSE
 	add_hiddenprint(user)
