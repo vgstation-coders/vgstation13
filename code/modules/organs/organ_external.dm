@@ -778,6 +778,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 		if(spawn_limb)
 			organ = get_organ_item()
+			if (!organ)
+				return null
 
 			//If any organs are attached to this, attach them to the dropped organ item
 			for(var/datum/organ/external/O in children)
@@ -1464,6 +1466,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 /datum/organ/external/head/generate_dropped_organ(current_organ)
 	if(!current_organ)
 		current_organ = new /obj/item/organ/external/head(owner.loc, owner, src)
+		if (!current_organ)
+			return null
 		owner.decapitated = current_organ
 	var/datum/organ/internal/brain/B = eject_brain()
 	var/obj/item/organ/external/head/H = current_organ
@@ -1785,6 +1789,18 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 	origin_body = H
 
 	if(istype(H))
+		if(iscultist(H) && veil_thickness > CULT_PROLOGUE)
+			//spawning a skull where the head would have been
+			var/randomdir = pick(cardinal)
+			step(src, randomdir)
+			new /obj/item/weapon/skull(get_turf(src))
+			//turning the body into skull-less remains, the dusting will take care of the shade's creation.
+			var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)
+			head_organ.status |= ORGAN_DESTROYED
+			H.dust(TRUE)
+			qdel(src)
+			return
+
 		src.icon_state = H.gender == MALE? "head_m" : "head_f"
 	..()
 	if(isgolem(H)) //Golems don't inhabit their severed heads, they turn to dust when they die.
