@@ -241,6 +241,7 @@ var/stacking_limit = 90
 	dynamic_stats.round_start_pop = candidates.len
 	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
+	candidates.Cut()
 	return 1
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
