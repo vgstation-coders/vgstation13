@@ -244,6 +244,6 @@ var/global/list/falltempoverlays = list()
 	caster.forceMove(get_turf(A))
 	spawn()
 		if(ignore_path)
-			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
+			fall.actual_perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
 		else
-			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
+			fall.actual_perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
