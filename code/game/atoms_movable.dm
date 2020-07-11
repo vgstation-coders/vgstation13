@@ -125,7 +125,7 @@
 	if (un_opaque)
 		un_opaque.recalc_atom_opacity()
 
-	if((flags & HEAR) && !ismob(src))
+	if(flags & HEAR|HEAR_ALWAYS)
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
 				qdel(VH)
