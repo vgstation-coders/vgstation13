@@ -1324,6 +1324,12 @@ var/list/blind_victims = list()
 	mouse_opacity = 0
 	var/duration = 5
 	var/hallucination_radius=25
+	var/mob/virtualhearer/virtualviewer = null
+
+/obj/effect/cult_ritual/confusion/Destroy()//just in case
+	qdel(virtualviewer)
+	virtualviewer = null
+	..()
 
 /obj/effect/cult_ritual/confusion/New(turf/loc,var/duration=300,var/radius=25,var/mob/specific_victim=null)
 	..()
@@ -1381,8 +1387,11 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
-		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		virtualviewer = new(src)//first we need to spawn a fake mob that can see in the dark
+		for(var/obj/machinery/camera/C in view(virtualviewer))
 			shadow(C,T)
 			var/col = C.color
 			animate(C, color = col, time = 4)
@@ -1390,6 +1399,8 @@ var/list/blind_victims = list()
 			animate(color = col, time = 5)
 			C.vision_flags = BLIND//Anyone using a security cameras computer will only see darkness
 			C.setViewRange(-1)//The camera won't reveal the area for the AI anymore
+		qdel(virtualviewer)
+		virtualviewer = null
 
 	spawn(10)
 		for(var/mob/living/carbon/C in victims)
