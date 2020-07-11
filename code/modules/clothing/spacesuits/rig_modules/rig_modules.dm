@@ -4,7 +4,6 @@
 	icon = 'icons/obj/module.dmi'
 	icon_state = "std_mod"
 	var/obj/item/clothing/suit/space/rig/rig
-	var/requires_component = TRUE //This module needs a removable component(helmet,gloves,boot,tank) and should be activated before they're deployed from the suit.
 	var/activated = FALSE
 	var/active_power_usage = 0 //Energy consumption per tick
 
@@ -15,7 +14,24 @@
 /obj/item/rig_module/proc/examine_addition(mob/user)
 	return
 
-/obj/item/rig_module/proc/activate(var/mob/user)//We do not set activated to TRUE in the default activate() proc.
+/obj/item/rig_module/emp_act(severity)
+	return FALSE
+
+/obj/item/rig_module/proc/check_activate(var/requires_human=FALSE)
+	if(!rig || activated)
+		return FALSE
+	if(requires_human && !ishuman(rig.wearer))
+		return FALSE
+	return TRUE
+
+/obj/item/rig_module/proc/check_deactivate(var/requires_human=FALSE)
+	if(!rig || !activated)
+		return FALSE
+	if(requires_human && !ishuman(rig.wearer))
+		return FALSE
+	return TRUE
+
+/obj/item/rig_module/proc/activate()
 	activated = TRUE
 
 /obj/item/rig_module/proc/deactivate()
@@ -25,24 +41,32 @@
 	return
 
 /obj/item/rig_module/proc/say_to_wearer(var/string)
-	if(!ishuman(rig.wearer))
+	if(!rig?.wearer)
 		return
 	to_chat(rig.wearer, "\The [src] reports: <span class = 'binaryradio'>[string]</span>")
 
+
+//Speed boost module
 /obj/item/rig_module/speed_boost
 	name = "rig speed module"
 	desc = "Self-lubricating joints allow for ease of movement when walking in a rigsuit."
 	active_power_usage = 10
 
 /obj/item/rig_module/speed_boost/activate()
+	if(!check_activate())
+		return
 	say_to_wearer("Speed module engaged.")
 	rig.slowdown = max(1, slowdown/1.25)
 	..()
 
 /obj/item/rig_module/speed_boost/deactivate()
+	if(!check_deactivate())
+		return
 	rig.slowdown = initial(rig.slowdown)
 	..()
 
+
+//Health readout module
 /obj/item/rig_module/health_readout
 	name = "articulated spine"
 	desc = "Lets passers by read your health from a distance"
@@ -53,6 +77,8 @@
 	var/mob/living/carbon/human/H = rig.wearer
 	to_chat(user, "<span class = 'notice'>The embedded health readout reads: [H.isDead()?"0%":"[(H.health/H.maxHealth)*100]%"]</span>")
 
+
+//Tank-refiller module
 /obj/item/rig_module/tank_refiller
 	name = "tank pressurizer"
 	desc = "When in atmosphere, syphons from the air to refill the tank connected to your internals."
@@ -61,7 +87,7 @@
 	active_power_usage = 50
 
 /obj/item/rig_module/tank_refiller/activate()
-	if(!ishuman(rig.wearer))
+	if(!check_activate(TRUE))
 		return
 	var/mob/living/carbon/human/H = rig.wearer
 	if(H.internal)
@@ -109,12 +135,15 @@
 		//pressure_delta = target_moles * 8.314 * sample_temperature / internals.volume
 
 
+//Plasmaproof module
 /obj/item/rig_module/plasma_proof
 	name = "plasma-proof sealing authority"
 	desc = "Brings the suit it is installed into up to plasma environment standards."
 	active_power_usage = 5
 
 /obj/item/rig_module/plasma_proof/activate()
+	if(!check_activate())
+		return
 	say_to_wearer("Plasma seal initialized.")
 	rig.clothing_flags |= PLASMAGUARD
 	if(rig.H)
@@ -122,19 +151,23 @@
 	..()
 
 /obj/item/rig_module/plasma_proof/deactivate()
+	if(!check_deactivate())
+		return
 	say_to_wearer("Plasma seal disengaged.")
 	rig.clothing_flags &= ~PLASMAGUARD
 	if(rig.H)
 		rig.H.clothing_flags &= ~PLASMAGUARD
 	..()
 
+
+//Muscle tissue/Hulk module
 /obj/item/rig_module/muscle_tissue
 	name = "artificial muscle tissue"
 	desc = "A flexible tissue with a number of sensors stretched between its surface and interior of the suit. When these sensors detected an impact, the artificial muscle reacts instantaneously, contracting and diffusing the damage."
 	active_power_usage = 100
 
 /obj/item/rig_module/muscle_tissue/activate()
-	if(!ishuman(rig.wearer))
+	if(!check_activate(TRUE))
 		return
 	var/mob/living/carbon/human/H = rig.wearer
 	H.mutations.Add(M_HULK) //I'M FUCKING INVINCIBLE!
@@ -143,10 +176,9 @@
 	rig.canremove = FALSE
 	say_to_wearer("Safety lock enabled.")
 	..()
-	
 
 /obj/item/rig_module/muscle_tissue/deactivate()
-	if(!ishuman(rig.wearer))
+	if(!check_deactivate(TRUE))
 		return
 	var/mob/living/carbon/human/H = rig.wearer
 	H.mutations.Remove(M_HULK)
@@ -155,3 +187,80 @@
 	rig.canremove = TRUE
 	say_to_wearer("Safety lock disabled.")
 	..()
+
+
+//EMP shield module
+/obj/item/rig_module/emp_shield
+	name = "\improper EMP dissipation module"
+	desc = "A bewilderingly complex bundle of optic fibers and silicon photonic circuitry."
+	active_power_usage = 1
+
+/obj/item/rig_module/emp_shield/emp_act(severity)
+	if(activated && rig?.cell?.use(round(300/severity, 50))) // 300/150/100 cell drain to shield the suit. It might sound bad but at least the suit is keeping itself activated.
+		return TRUE
+	return FALSE
+
+
+//Rad shield module
+/obj/item/rig_module/rad_shield
+	name = "\improper R.A.D."
+	desc = "An radiation absorption device. Its acronym and true name both convey the application of this module."
+	active_power_usage = 1
+	var/event_key
+	var/initial_suit = 0
+	var/initial_helmet = 0
+	var/max_capacity = 250
+	var/current_capacity = 0
+
+/obj/item/rig_module/rad_shield/examine_addition(mob/user)
+	var/current_status = round((current_capacity/max_capacity) * 100)
+	to_chat(user, "<span class = 'notice'>The embedded [name] capacity readout reads: <font color='[current_status <= 50 ? "green" : (current_status >= 85 ? "red" : "yellow")]'>[current_status]%</font></span>")
+
+/obj/item/rig_module/rad_shield/check_activate(requires_human=FALSE)
+	if(current_capacity >= max_capacity)
+		return FALSE
+	. = ..(requires_human)
+
+/obj/item/rig_module/rad_shield/activate()
+	if(!check_activate(TRUE))
+		return
+
+	if(rig.H)
+		initial_helmet = rig.H.armor["rad"]
+		rig.H.armor["rad"] = 100
+	initial_suit = rig.armor["rad"]
+	rig.armor["rad"] = 100
+
+	say_to_wearer("[src] enabled.")
+	event_key = rig.wearer.on_irradiate.Add(src, "absorb_rads")
+	..()
+
+/obj/item/rig_module/rad_shield/deactivate()
+	if(!check_deactivate())
+		return
+
+	if(rig?.H)
+		rig.H.armor["rad"] = initial_helmet
+	rig?.armor["rad"] = initial_suit
+
+	say_to_wearer("[src] disabled.")
+	if(event_key)
+		rig.wearer?.on_irradiate.Remove(event_key)
+		event_key = null
+	..()
+
+/obj/item/rig_module/rad_shield/proc/absorb_rads(list/arguments)
+	var/mob/user = arguments["user"]
+	var/rads = arguments["rads"]
+
+	if(rig?.wearer != user) //Well lad.
+		user.on_irradiate.Remove(event_key)
+		event_key = null
+		return
+
+	if(rig.H)
+		current_capacity += min(max_capacity, (rads * ((100 - initial_helmet) / 100)))
+	current_capacity += min(max_capacity, (rads * ((100 - initial_suit) / 100)))
+
+	if(current_capacity >= max_capacity)
+		deactivate()
