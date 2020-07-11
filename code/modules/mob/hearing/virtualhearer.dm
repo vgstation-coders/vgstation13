@@ -38,8 +38,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(!is_type_in_list(attachedto,stationary_hearers))
 		movable_hearers += src
 
-	virtualhearers += src
-
 /mob/virtualhearer/Destroy()
 	..()
 	virtualhearers -= src
