@@ -123,6 +123,7 @@
 	chassis.log_message("[src] removed from equipment.")
 	chassis.refresh_spells()
 	chassis = null
+	qdel(linked_spell)
 	linked_spell = null
 	set_ready_state(1)
 	return

@@ -61,6 +61,7 @@
 		qdel(snowprint_parent)
 	if(blizzard_parent)
 		qdel(blizzard_parent)
+	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)

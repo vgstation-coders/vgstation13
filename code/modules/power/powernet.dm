@@ -16,13 +16,10 @@
 ////////////////////////////////////////////
 
 /datum/powernet/New()
-	powernets |= src
-
-/datum/powernet/Del()
-	powernets -= src
-	..()
+	powernets += src
 
 /datum/powernet/Destroy()
+	powernets -= src
 	for(var/obj/structure/cable/C in cables)
 		C.powernet = null
 	for(var/obj/machinery/power/P in nodes)
@@ -33,6 +30,7 @@
 	cables = null
 	nodes = null
 	components = null
+	..()
 
 /datum/powernet/proc/is_empty()
 	return !cables.len && !nodes.len && !components.len
