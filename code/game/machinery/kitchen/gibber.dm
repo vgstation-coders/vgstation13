@@ -333,10 +333,11 @@ obj/machinery/gibber/New()
 		if(newmeat==null)
 			return
 
-		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		if (newmeat.reagents)//don't want to try and transfer reagents to bones, diamonds, and other non-meat meats
+			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
-		if(victim.reagents)
-			victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
+			if(victim.reagents)
+				victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
 
 		allmeat[i] = newmeat
 
