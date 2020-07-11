@@ -70,7 +70,7 @@
 			return
 	if((modules_to_install.len || cell) && !activated)
 		var/obj/removed = input(user, "Choose an upgrade to remove from [src].", src) as null|anything in modules_to_install + cell
-		if(!removed || activated)
+		if(!removed || activated || !user.Adjacent(src) || user.incapacitated())
 			return
 		user.put_in_hands(removed)
 		if(removed.loc == src)
@@ -111,9 +111,9 @@
 	suit_overlay.icon_state = "suitmodifier_closed"
 	overlays.Add(suit_overlay)
 	sleep(20)
-	if(cell)
-		var/choice = input(H, "Do you wish to install [cell]?", src) in list("Yes", "No")
-		if(choice == "Yes")
+	if(cell) //Can't answer the prompt if you're incapacitated.
+		var/choice = alert(H, "Do you wish to install [cell]?", src, "Yes", "No")
+		if((choice == "Yes") && H.Adjacent(src) && !H.incapacitated())
 			say("Installing [cell] into to \the [R].", class = "binaryradio")
 			if(R.cell)
 				R.cell.forceMove(get_turf(src))
