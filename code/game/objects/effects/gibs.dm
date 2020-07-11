@@ -56,28 +56,42 @@
 		if(gibamounts[i])
 			for(var/j = 1, j<= gibamounts[i], j++)
 				var/gibType = gibtypes[i]
-				gib = new gibType(location)//new gibType(location)
 
-				// Apply human species colouration to masks.
-				if(fleshcolor)
-					gib.fleshcolor = fleshcolor
-				if(bloodcolor)
-					gib.basecolor = bloodcolor
-
-				gib.update_icon()
-
-				if(virus2)
-					gib.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
-
-				gib.blood_DNA = list()
 				if(MobDNA)
-					gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
+					gib = spawngib(gibType,location,fleshcolor,bloodcolor,virus2,MobDNA)
 				else if(istype(src, /obj/effect/gibspawner/xeno))
-					gib.blood_DNA["UNKNOWN DNA"] = "X*"
-				else if(istype(src, /obj/effect/gibspawner/human)) // Probably a monkey
-					gib.blood_DNA["Non-human DNA"] = "A+"
+					gib = spawngib(gibType,location,fleshcolor,bloodcolor,virus2,null,XENO_DNA)
+				else if(istype(src, /obj/effect/gibspawner/human))
+					gib = spawngib(gibType,location,fleshcolor,bloodcolor,virus2,null,HUMAN_DNA)
+
 				var/list/directions = gibdirections[i]
 				if(directions.len)
 					gib.streak(directions, spread_radius)
 
 	qdel(src)
+
+//spawning a single gib
+/proc/spawngib(var/gibType,var/location,var/fleshcolor=DEFAULT_FLESH,var/bloodcolor=DEFAULT_BLOOD,var/list/virus2 = list(), var/datum/dna/MobDNA = null,var/specialDNA = 0)
+	var/obj/effect/decal/cleanable/blood/gibs/gib = new gibType(location)
+
+	if(fleshcolor)
+		gib.fleshcolor = fleshcolor
+	if(bloodcolor)
+		gib.basecolor = bloodcolor
+
+	gib.update_icon()
+
+	if(virus2?.len)
+		gib.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+
+	gib.blood_DNA = list()
+	if(MobDNA)
+		gib.blood_DNA[MobDNA.unique_enzymes] = MobDNA.b_type
+	else
+		switch(specialDNA)
+			if (HUMAN_DNA) // Probably a monkey
+				gib.blood_DNA["Non-human DNA"] = "A+"
+			if (XENO_DNA)
+				gib.blood_DNA["UNKNOWN DNA"] = "X*"
+
+	return gib

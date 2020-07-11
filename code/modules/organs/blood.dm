@@ -264,6 +264,67 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		container.update_icon()
 	return B
 
+/mob/living/proc/get_blood_data()//sometimes we just want a copy of the blood data whether there is blood or not in the mob
+	var/blood_data = list(
+		"donor"=null,
+		"viruses"=null,
+		"blood_DNA"=null,
+		"blood_colour"= null,
+		"blood_type"=null,
+		"resistances"=null,
+		"trace_chem"=null,
+		"virus2" = null,
+		"immunity" = null,
+		)
+
+	blood_data["donor"] = src
+
+	if (dna)
+		blood_data["blood_DNA"] = copytext(dna.unique_enzymes,1,0)
+		blood_data["blood_type"] = copytext(dna.b_type,1,0)
+
+	var/mob/living/carbon/human/H
+	if(istype(src,/mob/living/carbon/human))
+		H = src
+	if (H?.species)
+		blood_data["blood_colour"] = H.species.blood_color
+	else
+		blood_data["blood_colour"] = DEFAULT_BLOOD
+
+	if(resistances && resistances.len)
+		blood_data["resistances"] = resistances.Copy()
+
+	var/list/temp_chem = list()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		temp_chem += R.id
+		temp_chem[R.id] = R.volume
+	blood_data["trace_chem"] = list2params(temp_chem)
+
+	blood_data["virus2"] = list()
+	blood_data["virus2"] |= filter_disease_by_spread(virus_copylist(src.virus2),required = SPREAD_BLOOD)
+
+	if (immune_system)
+		blood_data["immunity"] = immune_system.GetImmunity()
+	return blood_data
+
+/proc/copy_blood_data(var/list/data)
+	var/blood_data = list(
+		"donor"			=data["donor"],
+		"viruses"		=null,
+		"blood_DNA"		=data["blood_DNA"],
+		"blood_colour"	=data["blood_colour"],
+		"blood_type"	=data["blood_type"],
+		"resistances"	=null,
+		"trace_chem"	=data["trace_chem"],
+		"virus2" 		=virus_copylist(data["virus2"]),
+		"immunity" 		=null,
+		)
+	if (data["resistances"])
+		blood_data["resistances"] = data["resistances"].Copy()
+	if (data["immunity"])
+		blood_data["immunity"] = data["immunity"].Copy()
+	return blood_data
+
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
 

@@ -18,6 +18,18 @@
 	var/had_mind = FALSE                      // Owner had a mind at some point. (heist)
 	var/stabilized = FALSE
 
+	var/blood_data = list(
+		"donor"= null,
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O+",
+		"blood_colour" = DEFAULT_BLOOD,
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = null,
+		"immunity" = null,
+		)
+
 /obj/item/organ/internal/attack_self(mob/user as mob)
 
 	// Convert it to an edible form, yum yum.
@@ -75,8 +87,9 @@
 
 	if(fresh && prob(40))
 		fresh--
-		var/datum/reagent/blood = reagents.reagent_list[BLOOD]
-		blood_splatter(src,blood,1)
+		var/datum/reagent/blood/blud = new
+		blud.data = copy_blood_data(blood_data)
+		blood_splatter(src,blud,1)
 
 	health -= rand(1,3)
 	if(health <= 0)
@@ -324,10 +337,12 @@
 	name = "appendix"
 
 /obj/item/organ/internal/proc/removed(var/mob/living/target,var/mob/living/user)
-	if(!target || !user)
+	if(!target)
 		return
 
-	if(organ_data.vital)
+	blood_data = target.get_blood_data()
+
+	if(user && organ_data.vital)
 		user.attack_log += "\[[time_stamp()]\]<font color='red'> removed a vital organ ([src]) from [target.name] ([target.ckey]) (INTENT: [uppertext(user.a_intent)])</font>"
 		target.attack_log += "\[[time_stamp()]\]<font color='orange'> had a vital organ ([src]) removed by [user.name] ([user.ckey]) (INTENT: [uppertext(user.a_intent)])</font>"
 		msg_admin_attack("[user.name] ([user.ckey]) removed a vital organ ([src]) from [target.name] ([target.ckey]) (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -397,8 +412,9 @@
 		return
 
 	to_chat(user, "<span class='notice'>You take an experimental bite out of \the [src].</span>")
-	var/datum/reagent/blood = reagents.reagent_list[BLOOD]
-	blood_splatter(src,blood,1)
+	var/datum/reagent/blood/blud = new
+	blud.data = copy_blood_data(blood_data)
+	blood_splatter(src,blud,1)
 
 
 	user.drop_from_inventory(src)

@@ -87,11 +87,16 @@ var/datum/subsystem/more_init/SSmore_init
 			for(var/brute = 1 to 3)
 				for(var/burn = 1 to 3)
 					var/damage_state = "[brute][burn]"
-					DI = icon('icons/mob/dam_human.dmi', "[damage_state]")			// the damage icon for whole human
-					DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
 					if(species_blood)
+						DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")
 						DI.Blend(S.blood_color, ICON_MULTIPLY)
-					//testing("Completed [damage_state]/[O.icon_name]/[species_blood]")
+						var/icon/DI_burn = icon('icons/mob/dam_human.dmi', "0[burn]")//we don't want burns to blend with the species' blood color
+						DI.Blend(DI_burn, ICON_OVERLAY)
+						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
+					else
+						DI = icon('icons/mob/dam_human.dmi', "[damage_state]")
+						DI.Blend(icon('icons/mob/dam_mask.dmi', O.icon_name), ICON_MULTIPLY)
+
 					damage_icon_parts["[damage_state]/[O.icon_name]/[species_blood]"] = DI
 	spawn(1)
 		qdel(H)

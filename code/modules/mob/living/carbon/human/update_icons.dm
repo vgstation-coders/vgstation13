@@ -133,11 +133,17 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_part,species_blood = "")
 	var/icon/I = damage_icon_parts["[damage_state]/[body_part]/[species_blood]"]
-	if(!I)
+	if(!I)//This should never happen anyway since all species damage icons are getting cached at roundstart (see cachedamageicons())
 		var/icon/DI = icon('icons/mob/dam_human.dmi', damage_state)			// the damage icon for whole human
 		DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)	// mask with this organ's pixels
 		if(species_blood)
-			DI.Blend(species_blood, ICON_MULTIPLY)							// mask with this species's blood color
+			var/brute = copytext(damage_state,1,2)
+			var/burn = copytext(damage_state,2)
+			DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")
+			DI.Blend(species_blood, ICON_MULTIPLY)
+			var/icon/DI_burn = icon('icons/mob/dam_human.dmi', "0[burn]")//we don't want burns to blend with the species' blood color
+			DI.Blend(DI_burn, ICON_OVERLAY)
+			DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)
 		damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] = DI
 		return DI
 	else
