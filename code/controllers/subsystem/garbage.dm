@@ -36,7 +36,6 @@ var/soft_dels = 0
 
 	..(msg)
 
-
 /datum/subsystem/garbage/fire(resumed = FALSE)
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
 	if(narsie_cometh)
@@ -58,7 +57,7 @@ var/soft_dels = 0
 			to_chat(world, "picnic! searching [D]")
 			if(istype(D, /atom/movable))
 				var/atom/movable/A = D
-				testing("GC: Searching references for [A] | [A.type]")
+				testing("GC: Searching references for [refID] [A] | [A.type]")
 				if(A.loc != null)
 					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
 				if(A.contents.len)
@@ -223,6 +222,7 @@ var/soft_dels = 0
 		SSgarbage.addTrash(D)
 
 /datum/proc/Destroy()
+	SHOULD_CALL_PARENT(TRUE)
 	gcDestroyed = "Bye, world!"
 	tag = null
 

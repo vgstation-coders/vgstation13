@@ -287,6 +287,7 @@ var/list/pointers = list()
 
 /datum/signal/Destroy()
 	pointers -= "\ref[src]"
+	..()
 
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source

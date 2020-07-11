@@ -107,9 +107,6 @@
 /turf/unsimulated/mineral/hive
 	mined_type = /turf/unsimulated/floor/evil
 
-/turf/unsimulated/mineral/Destroy()
-	return
-
 /turf/unsimulated/mineral/New()
 	mineral_turfs += src
 	. = ..()
@@ -826,10 +823,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	base_icon_state = "snow_rock"
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
-
-
-/turf/unsimulated/mineral/random/Destroy()
-	return
 
 /turf/unsimulated/mineral/uranium
 	name = "Uranium deposit"

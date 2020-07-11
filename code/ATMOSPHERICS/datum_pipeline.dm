@@ -14,6 +14,7 @@
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
 		qdel(network)
+		network = null
 	if(air && air.volume) //For the pipeline rebuild next tick
 		temporarily_store_air()
 		qdel(air)
@@ -21,6 +22,9 @@
 	//Null the fuck out of all these references
 	for(var/obj/machinery/atmospherics/pipe/M in members) //Edges are a subset of members
 		M.parent = null
+	members = null
+	edges = null
+	..()
 
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
