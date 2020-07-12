@@ -123,3 +123,4 @@
 /datum/locking_category/Destroy()
 	owner  = null
 	locked = null
+	..()

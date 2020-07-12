@@ -36,7 +36,6 @@ var/soft_dels = 0
 
 	..(msg)
 
-
 /datum/subsystem/garbage/fire(resumed = FALSE)
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
 	if(narsie_cometh)
@@ -223,6 +222,7 @@ var/soft_dels = 0
 		SSgarbage.addTrash(D)
 
 /datum/proc/Destroy()
+	SHOULD_CALL_PARENT(TRUE)
 	gcDestroyed = "Bye, world!"
 	tag = null
 
