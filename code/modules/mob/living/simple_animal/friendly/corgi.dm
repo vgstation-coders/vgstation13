@@ -464,6 +464,12 @@
 			else
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
 
+		if(/obj/item/clothing/head/cowboy)
+			name = "Yeehaw Ian"
+			desc = "Are you really just gonna stroll past without saying howdy?"
+			valid = 1
+
+
 	if(valid)
 		if(usr)
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
