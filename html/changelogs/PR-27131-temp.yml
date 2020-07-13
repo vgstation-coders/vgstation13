@@ -1,0 +1,5 @@
+---
+author: hbycyl
+changes:
+  - bugfix: Dedicated greytiders with no other jobprefs now properly join at roundstart
+delete-after: true

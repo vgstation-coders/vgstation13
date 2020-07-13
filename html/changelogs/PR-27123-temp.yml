@@ -1,0 +1,5 @@
+---
+author: twirling-jesters
+changes:
+  - tweak: "Vampires will no longer teleport into holy tiles (e.g.: chapel)."
+delete-after: true

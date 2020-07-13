@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - tweak: Dynamic rulesets will have their weight (chance to fire relative to others) halved if they already fired during the current or last round.
+delete-after: true

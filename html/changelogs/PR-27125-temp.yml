@@ -1,0 +1,5 @@
+---
+author: twirling-jesters
+changes:
+  - bugfix: Farmbot no longer just sits around and does nothing.
+delete-after: true

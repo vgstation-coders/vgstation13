@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - bugfix: "Deaf spacemen (through ear damage, genetics, earmuffs or other) will no longer hear instruments or be affected by Shakashuri."
+delete-after: true

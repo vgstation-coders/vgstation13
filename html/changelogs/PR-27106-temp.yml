@@ -1,0 +1,6 @@
+---
+author: bathosbathtime
+changes:
+  - rscadd: Adds 30 mugs to the regular area of the boozevender
+  - rscadd: Adds the breathalyzer to the contraband section of the boozevender
+delete-after: true

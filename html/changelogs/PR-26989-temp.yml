@@ -1,0 +1,5 @@
+---
+author: Allspice
+changes:
+  - rscadd: "Add a Common channel mode to headsets, .o, function identical to ;. Makes it more convenient to e.g. use custom telecomms channels."
+delete-after: true

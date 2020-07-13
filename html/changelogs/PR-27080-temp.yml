@@ -1,0 +1,7 @@
+---
+author: Buchse
+changes:
+  - rscadd: added insectoid cult gear
+  - bugfix: Fixed gloves on vox and insectoids using human hand sprites
+  - tweak: got rid of giant gap in bug sec armor
+delete-after: true

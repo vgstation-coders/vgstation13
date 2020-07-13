@@ -1,0 +1,5 @@
+---
+author: twirling-jesters
+changes:
+  - bugfix: Fixed sheet amount in aux storage on packed.
+delete-after: true

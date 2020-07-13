@@ -1,0 +1,6 @@
+---
+author: DamianX
+changes:
+  - rscadd: "You can now choose whether to use tgui or NanoUI for GPSs, by changing the \"Fancy tgui\" option under \"General Settings\"."
+  - rscadd: Implemented a potential workaround for a BYOND bug that prevents nanoui and tgui windows from opening.
+delete-after: true
