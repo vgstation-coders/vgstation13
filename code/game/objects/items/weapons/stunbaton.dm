@@ -259,6 +259,20 @@
 	force = initial(force)
 	throwforce = initial(throwforce)
 
+//Advanced stun baton. Currently in testing.
+/obj/item/weapon/melee/baton/advbaton
+	name = "Advanced Stun Baton"
+	desc = "A more powerful version of the standard-issue stun baton."
+	icon_state = "adv_baton"
+	hitcost = 50
+	stunforce = 15
+
+/obj/item/weapon/melee/baton/advbaton/New() //Pre-installing cell.
+	..()
+	bcell = new(src)
+	bcell.charge=bcell.maxcharge // Charge this shit
+	update_icon()
+
 //Makeshift stun baton. Replacement for stun gloves.
 /obj/item/weapon/melee/baton/cattleprod
 	name = "stunprod"
