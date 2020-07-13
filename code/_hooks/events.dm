@@ -59,6 +59,9 @@
 	set waitfor = FALSE
 	return call(source, proctype)(arglist(arguments))
 
+// Declare children of this type path to use as identifiers for the events.
+/lazy_event
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
@@ -74,7 +77,7 @@
   * * lazy_event/event_type Required. The typepath of the event to invoke.
   * * list/arguments Optional. List of parameters to be passed to the event handlers.
   */
-/datum/proc/lazy_invoke_event(/lazy_event/event_type, list/arguments)
+/datum/proc/lazy_invoke_event(lazy_event/event_type, list/arguments)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if(!length(registered_events))
 		// No event at all is registered for this datum.
@@ -98,7 +101,7 @@
   * * datum/target Required. The object that the proc will be called on.
   * * procname Required. The proc to be called.
   */
-/datum/proc/lazy_register_event(event_type, datum/target, procname)
+/datum/proc/lazy_register_event(lazy_event/event_type, datum/target, procname)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if(!registered_events)
 		registered_events = list()
@@ -118,7 +121,7 @@
   * * datum/target Required. The object that's been previously registered.
   * * procname Required. The proc of the object.
   */
-/datum/proc/lazy_unregister_event(event_type, datum/target, procname)
+/datum/proc/lazy_unregister_event(lazy_event/event_type, datum/target, procname)
 	SHOULD_NOT_OVERRIDE(TRUE)
 	if(!registered_events)
 		return
