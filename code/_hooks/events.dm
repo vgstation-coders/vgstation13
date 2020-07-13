@@ -62,6 +62,7 @@
 // Declare children of this type path to use as identifiers for the events.
 /lazy_event
 
+// TODO: Document here the arguments that need to be passed to the procs invoked by each event
 /lazy_event/on_z_transition
 /lazy_event/on_post_z_transition
 
