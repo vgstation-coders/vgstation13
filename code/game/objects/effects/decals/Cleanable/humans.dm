@@ -16,6 +16,7 @@ var/global/list/blood_list = list()
 	plane = ABOVE_TURF_PLANE
 	layer = BLOOD_LAYER
 	appearance_flags = TILE_BOUND|LONG_GLIDE
+	throwforce = 0
 	var/base_icon = 'icons/effects/blood.dmi'
 
 	basecolor=DEFAULT_BLOOD // Color when wet.
@@ -37,6 +38,34 @@ var/global/list/blood_list = list()
 	..()
 	blood_DNA = null
 	virus2 = null
+
+/obj/effect/decal/cleanable/blood/throw_impact(atom/hit_atom)
+	if(ishuman(hit_atom))
+		var/mob/living/carbon/human/H = hit_atom
+		var/blood_data = list(
+			"viruses"		=null,
+			"blood_DNA"		=null,
+			"blood_colour"	=null,
+			"blood_type"	=null,
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+		if (blood_DNA?.len > 0)
+			blood_data["blood_DNA"] = blood_DNA[1]
+			blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
+		blood_data["virus2"] = virus_copylist(virus2)
+		blood_data["blood_colour"] = basecolor
+		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
+		H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
+	if (isliving(hit_atom))
+		var/mob/living/L = hit_atom
+		for(var/i = 1 to held_items.len)
+			var/obj/item/I = held_items[i]
+			if(istype(I))
+				I.add_blood_from_data(blood_data)
+	anchored = TRUE
 
 /obj/effect/decal/cleanable/blood/cultify()
 	return
@@ -129,27 +158,6 @@ var/global/list/blood_list = list()
 		src.fleshcolor = fleshcolor
 	..()
 
-/obj/effect/decal/cleanable/blood/gibs/throw_impact(atom/hit_atom)
-	if(ishuman(hit_atom))
-		var/mob/living/carbon/human/H = hit_atom
-		var/blood_data = list(
-			"viruses"		=null,
-			"blood_DNA"		=null,
-			"blood_colour"	=null,
-			"blood_type"	=null,
-			"resistances"	=null,
-			"trace_chem"	=null,
-			"virus2" 		=list(),
-			"immunity" 		=null,
-			)
-		if (blood_DNA?.len > 0)
-			blood_data["blood_DNA"] = blood_DNA[1]
-			blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
-		blood_data["virus2"] = virus_copylist(virus2)
-		blood_data["blood_colour"] = basecolor
-		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
-		H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
-
 /obj/effect/decal/cleanable/blood/gibs/atom2mapsave()
 	. = ..()
 	.["fleshcolor"] = adjust_RGB(fleshcolor, red = -10, green = 10)
@@ -234,15 +242,20 @@ var/global/list/blood_list = list()
 		for (var/i = 0 to spread_radius)
 			sleep(3)
 			if (i > 0)
-				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(src.loc)
+				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
+
+				if(virus2?.len)
+					b.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+
 				for(var/datum/disease/D in src.viruses)
 					var/datum/disease/ND = D.Copy(1)
 					b.viruses += ND
 					ND.holder = b
 
-			step_to(src, get_step(src, direction), 0)
+			anchored = FALSE
+			throw_at(get_step(src, direction),1,1)//will cover hit humans in blood
 
 
 /obj/effect/decal/cleanable/mucus
