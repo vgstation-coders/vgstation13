@@ -40,8 +40,8 @@ var/global/list/blood_list = list()
 	virus2 = null
 
 /obj/effect/decal/cleanable/blood/throw_impact(atom/hit_atom)
-	if(ishuman(hit_atom))
-		var/mob/living/carbon/human/H = hit_atom
+	if (isliving(hit_atom))
+		var/mob/living/L = hit_atom
 		var/blood_data = list(
 			"viruses"		=null,
 			"blood_DNA"		=null,
@@ -52,17 +52,17 @@ var/global/list/blood_list = list()
 			"virus2" 		=list(),
 			"immunity" 		=null,
 			)
-		if (blood_DNA?.len > 0)
-			blood_data["blood_DNA"] = blood_DNA[1]
-			blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
-		blood_data["virus2"] = virus_copylist(virus2)
-		blood_data["blood_colour"] = basecolor
-		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
-		H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
-	if (isliving(hit_atom))
-		var/mob/living/L = hit_atom
-		for(var/i = 1 to held_items.len)
-			var/obj/item/I = held_items[i]
+		if(ishuman(hit_atom))
+			var/mob/living/carbon/human/H = L
+			if (blood_DNA?.len > 0)
+				blood_data["blood_DNA"] = blood_DNA[1]
+				blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
+			blood_data["virus2"] = virus_copylist(virus2)
+			blood_data["blood_colour"] = basecolor
+			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
+			H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
+		for(var/i = 1 to L.held_items.len)
+			var/obj/item/I = L.held_items[i]
 			if(istype(I))
 				I.add_blood_from_data(blood_data)
 	anchored = TRUE
