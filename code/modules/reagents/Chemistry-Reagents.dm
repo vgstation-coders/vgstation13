@@ -405,7 +405,7 @@
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
 			H.bloody_body_from_data(data,0,src)
-			H.bloody_hands_from_data(data,0,src)
+			H.bloody_hands_from_data(data,2,src)
 			spawn() //Bloody feet, result of the blood that fell on the floor
 				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 

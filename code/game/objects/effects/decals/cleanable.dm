@@ -113,7 +113,8 @@ var/list/infected_cleanables = list()
 			blood_data["virus2"] = virus_copylist(virus2)
 			blood_data["blood_colour"] = basecolor
 			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
-			H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
+			H.bloody_hands_from_data(copy_blood_data(blood_data),2,src)
+			add_blood_to(H, amount)//this one adds blood to the shoes and feet
 		for(var/i = 1 to L.held_items.len)
 			var/obj/item/I = L.held_items[i]
 			if(istype(I))

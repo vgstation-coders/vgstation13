@@ -705,18 +705,12 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_x = species.inventory_offsets["[slot_gloves]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
-		//overlays_standing[GLOVES_LAYER]	= standing
 	else
-		if(blood_DNA && blood_DNA.len)
+		if(blood_DNA?.len && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
-			O.color = hand_blood_color
-			//var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			//bloodsies.color = hand_blood_color
-			//overlays_standing[GLOVES_LAYER]	= bloodsies
+			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
-		//else
-			//overlays_standing[GLOVES_LAYER]	= null
 	if(update_icons)
 		update_icons()
 

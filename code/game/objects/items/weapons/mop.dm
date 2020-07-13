@@ -47,6 +47,7 @@
 	if(!user.Adjacent(A))
 		return
 	if(A.mop_act(src, user))
+		update_icon()
 		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap

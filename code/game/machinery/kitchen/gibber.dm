@@ -268,7 +268,7 @@ obj/machinery/gibber/New()
 			var/obj/effect/decal/cleanable/blood/gibs/gib = allgibs[i]
 			var/turf/Tx = locate(src.x - i, src.y, src.z)
 			meatslab.forceMove(src.loc)
-			meatslab.throw_at(Tx,i,3)
+			meatslab.throw_at(Tx,i,1)
 			gib.anchored = FALSE
 			gib.forceMove(src.loc)
 			gib.throw_at(Tx,i,1)//will cover hit humans in blood
@@ -358,12 +358,12 @@ obj/machinery/gibber/New()
 		var/obj/effect/decal/cleanable/blood/gibs/newgib
 		if (!Tx.density)
 			if (isalien(victim))//alien get their own custom gibs
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,Tx,ALIEN_FLESH,ALIEN_BLOOD,victim.virus2,null,XENO_DNA)
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,get_turf(src),ALIEN_FLESH,ALIEN_BLOOD,victim.virus2,null,XENO_DNA)
 			else if (ishuman(victim))
 				var/mob/living/carbon/human/H = victim
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,Tx,H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
 			else
-				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,Tx,DEFAULT_FLESH,DEFAULT_BLOOD,victim.virus2,victim.dna,HUMAN_DNA)
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),DEFAULT_FLESH,DEFAULT_BLOOD,victim.virus2,victim.dna,HUMAN_DNA)
 			newgib.anchored = FALSE
 			newgib.throw_at(Tx,2,1)//will cover hit humans in blood
 	qdel(victim)
