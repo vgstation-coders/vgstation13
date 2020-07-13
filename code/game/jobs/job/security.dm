@@ -52,6 +52,7 @@
 	else
 		H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 		H.equip_or_collect(new /obj/item/weapon/handcuffs(H), slot_in_backpack)
+		H.equip_or_collect(new /obj/item/weapon/melee/baton/advbaton(H), slot_in_backpack)
 	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(H)
 	L.imp_in = H
 	L.implanted = 1
@@ -67,11 +68,11 @@
 	else
 		return "Red Alert"
 
-/datum/job/hos/priority_reward_equip(var/mob/living/carbon/human/H) 
+/datum/job/hos/priority_reward_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy, /obj/item/clothing/under, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
-	
+
 
 /datum/job/warden
 	title = "Warden"
@@ -127,12 +128,12 @@
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
-/datum/job/warden/priority_reward_equip(var/mob/living/carbon/human/H) 
+/datum/job/warden/priority_reward_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock, /obj/item/clothing/under, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/storage/fancy/donut_box(H.back), slot_in_backpack)
-	
+
 
 /datum/job/detective
 	title = "Detective"
@@ -213,12 +214,12 @@
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	return 1
 
-/datum/job/detective/priority_reward_equip(var/mob/living/carbon/human/H) 
+/datum/job/detective/priority_reward_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	var/obj/item/weapon/reagent_containers/food/drinks/flask/detflask/bonusflask = new /obj/item/weapon/reagent_containers/food/drinks/flask/detflask(H.back)
 	bonusflask.reagents.add_reagent(DETCOFFEE, 60)
 	H.equip_or_collect(bonusflask, slot_in_backpack)
-	
+
 
 
 /datum/job/officer
@@ -281,8 +282,7 @@
 	if(assistant.current_positions > 5)
 		. = clamp(. + assistant.current_positions - 5, 0, 99)
 
-/datum/job/officer/priority_reward_equip(var/mob/living/carbon/human/H) 
+/datum/job/officer/priority_reward_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
-	
