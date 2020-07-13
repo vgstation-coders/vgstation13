@@ -328,11 +328,11 @@ emp_act
 		G.add_blood(source)
 		if (istype(G))
 			G.transfer_blood = amount
-			G.bloody_hands_mob = source
+			G.bloody_hands_data = source.get_blood_data()
 	else
 		add_blood(source)
 		bloody_hands = amount
-		bloody_hands_mob = source
+		bloody_hands_data = source.get_blood_data()
 	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
 
 /mob/living/carbon/human/proc/bloody_body(var/mob/living/source,var/update = 0)
@@ -347,6 +347,43 @@ emp_act
 	if(w_uniform)
 		w_uniform.add_blood(source)
 		update_inv_w_uniform(update)
+
+//=======================================================================================================================
+//The two procs bellow are for when getting bloodied with blood that doesn't come straight from a mob, but from a beaker or something else
+//Since the original donor might not exist anymore
+
+/mob/living/carbon/human/proc/bloody_hands_from_data(var/list/blood_data,var/amount = 2,var/source)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(HANDS)
+	var/bleeding = check_bodypart_bleeding(HANDS)
+	assume_contact_diseases(blood_data["virus2"],source,block,bleeding)
+
+	if (gloves)
+		var/obj/item/clothing/gloves/G = gloves
+		G.add_blood_from_data(blood_data)
+		if (istype(G))
+			G.transfer_blood = amount
+			G.bloody_hands_data = copy_blood_data(blood_data)
+	else
+		add_blood_from_data(blood_data)
+		bloody_hands = amount
+		bloody_hands_data = copy_blood_data(blood_data)
+	update_inv_gloves()		//updates on-mob overlays for bloody hands and/or bloody gloves
+
+/mob/living/carbon/human/proc/bloody_body_from_data(var/list/blood_data,var/update = 0,var/source)
+	//we're getting splashed with blood, so let's check for viruses
+	var/block = check_contact_sterility(FULL_TORSO)
+	var/bleeding = check_bodypart_bleeding(FULL_TORSO)
+	assume_contact_diseases(blood_data["virus2"],source,block,bleeding)
+
+	if(wear_suit)
+		wear_suit.add_blood_from_data(blood_data)
+		update_inv_wear_suit(update)
+	if(w_uniform)
+		w_uniform.add_blood_from_data(blood_data)
+		update_inv_w_uniform(update)
+
+//=======================================================================================================================
 
 /mob/living/carbon/human/apply_luminol(var/update = FALSE) //Despite what you might think with FALSE this will update things as normal.
 	if(wear_suit)

@@ -127,6 +127,27 @@ var/global/list/blood_list = list()
 		src.fleshcolor = fleshcolor
 	..()
 
+/obj/effect/decal/cleanable/blood/gibs/throw_impact(atom/hit_atom)
+	if(ishuman(hit_atom))
+		var/mob/living/carbon/human/H = hit_atom
+		var/blood_data = list(
+			"viruses"		=null,
+			"blood_DNA"		=null,
+			"blood_colour"	=null,
+			"blood_type"	=null,
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+		if (blood_DNA?.len > 0)
+			blood_data["blood_DNA"] = blood_DNA[1]
+			blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
+		blood_data["virus2"] = virus_copylist(virus2)
+		blood_data["blood_colour"] = basecolor
+		H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
+		H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
+
 /obj/effect/decal/cleanable/blood/gibs/atom2mapsave()
 	. = ..()
 	.["fleshcolor"] = adjust_RGB(fleshcolor, red = -10, green = 10)

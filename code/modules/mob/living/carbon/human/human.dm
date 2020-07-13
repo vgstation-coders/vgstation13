@@ -980,7 +980,7 @@
 */
 //returns 1 if made bloody, returns 0 otherwise
 
-/mob/living/carbon/human/add_blood(mob/living/carbon/human/M as mob)
+/mob/living/carbon/human/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return 0
 	if(!M)
@@ -990,7 +990,21 @@
 		return 0 //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	hand_blood_color = blood_color
-	src.update_inv_gloves()	//handles bloody hands overlays and updating
+	update_inv_gloves()	//handles bloody hands overlays and updating
+	verbs += /mob/living/carbon/human/proc/bloody_doodle
+	return 1 //we applied blood to the item
+
+/mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
+	if (!..())
+		return 0
+	if(!blood_data)
+		return
+	//if this blood isn't already in the list, add it
+	if(blood_DNA[blood_data["blood_DNA"]])
+		return 0 //already bloodied with this blood. Cannot add more.
+	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
+	hand_blood_color = blood_color
+	update_inv_gloves()	//handles bloody hands overlays and updating
 	verbs += /mob/living/carbon/human/proc/bloody_doodle
 	return 1 //we applied blood to the item
 

@@ -19,7 +19,6 @@
 	var/stabilized = FALSE
 
 	var/blood_data = list(
-		"donor"= null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O+",
