@@ -123,6 +123,8 @@
 
 	persistent_type_replacement = /obj/effect/decal/cleanable/vomit/pre_dry
 
+	fake_DNA = "vomit splatters"
+
 /obj/effect/decal/cleanable/vomit/pre_dry
 	name = "dry vomit"
 	mouse_opacity = 0

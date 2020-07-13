@@ -41,6 +41,8 @@
 	desc = "It's black and greasy. Looks like Beepsky made another mess."
 	basecolor="#030303"
 
+	fake_DNA = "oil splatters"
+
 /obj/effect/decal/cleanable/blood/oil/dry()
 	return
 

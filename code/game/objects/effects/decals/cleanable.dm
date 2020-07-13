@@ -25,6 +25,7 @@ var/list/infected_cleanables = list()
 	var/persistence_type = SS_CLEANABLE
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
+	var/fake_DNA = "random splatters"//for DNA-less splatters
 
 /obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	if(age)
@@ -44,6 +45,8 @@ var/list/infected_cleanables = list()
 
 	if(ticker)
 		initialize()
+
+	fixDNA()
 
 	..(loc)
 
@@ -83,6 +86,11 @@ var/list/infected_cleanables = list()
 			for (var/mob/L in science_goggles_wearers)
 				if (L.client)
 					L.client.images |= pathogen
+
+
+/obj/effect/decal/cleanable/proc/fixDNA()
+	if (!(blood_DNA?.len))
+		blood_DNA[fake_DNA] = "N/A"
 
 /obj/effect/decal/cleanable/initialize()
 	..()

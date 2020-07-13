@@ -26,6 +26,8 @@ var/global/list/blood_list = list()
 
 	persistence_type = SS_BLOOD
 
+	fake_DNA = "old blood splatters"
+
 /obj/effect/decal/cleanable/blood/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor)
 	if(basecolor)
 		src.basecolor = basecolor
@@ -215,6 +217,8 @@ var/global/list/blood_list = list()
 	icon_state = "floor1"
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 
+	fake_DNA = "viral sputum splatters"
+
 /obj/effect/decal/cleanable/blood/viralsputum/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -250,5 +254,7 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mucus"
 	random_icon_states = list("mucus")
+
+	fake_DNA = "mucus splatters"
 
 	var/dry=0
