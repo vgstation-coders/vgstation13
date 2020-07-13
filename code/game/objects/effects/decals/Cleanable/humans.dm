@@ -39,34 +39,6 @@ var/global/list/blood_list = list()
 	blood_DNA = null
 	virus2 = null
 
-/obj/effect/decal/cleanable/blood/throw_impact(atom/hit_atom)
-	if (isliving(hit_atom))
-		var/mob/living/L = hit_atom
-		var/blood_data = list(
-			"viruses"		=null,
-			"blood_DNA"		=null,
-			"blood_colour"	=null,
-			"blood_type"	=null,
-			"resistances"	=null,
-			"trace_chem"	=null,
-			"virus2" 		=list(),
-			"immunity" 		=null,
-			)
-		if(ishuman(hit_atom))
-			var/mob/living/carbon/human/H = L
-			if (blood_DNA?.len > 0)
-				blood_data["blood_DNA"] = blood_DNA[1]
-				blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
-			blood_data["virus2"] = virus_copylist(virus2)
-			blood_data["blood_colour"] = basecolor
-			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
-			H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
-		for(var/i = 1 to L.held_items.len)
-			var/obj/item/I = L.held_items[i]
-			if(istype(I))
-				I.add_blood_from_data(blood_data)
-	anchored = TRUE
-
 /obj/effect/decal/cleanable/blood/cultify()
 	return
 
@@ -152,6 +124,8 @@ var/global/list/blood_list = list()
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
 	persistence_type = SS_GIBS
 	var/fleshcolor = DEFAULT_FLESH
+
+	fake_DNA = "old gibs splatters"
 
 /obj/effect/decal/cleanable/blood/gibs/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/fleshcolor)
 	if(fleshcolor)

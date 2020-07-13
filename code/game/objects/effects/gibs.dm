@@ -65,7 +65,7 @@
 					gib = spawngib(gibType,location,fleshcolor,bloodcolor,virus2,null,HUMAN_DNA)
 
 				var/list/directions = gibdirections[i]
-				if(directions.len)
+				if(gib && directions.len)
 					gib.streak(directions, spread_radius)
 
 	qdel(src)

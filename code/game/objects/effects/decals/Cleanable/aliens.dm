@@ -6,12 +6,16 @@
 	icon = 'icons/effects/blood.dmi'
 	basecolor = ALIEN_BLOOD
 
+	fake_DNA = "xeno blood splatters"
+
 /obj/effect/decal/cleanable/blood/gibs/xeno
 	name = "xeno gibs"
 	desc = "Gnarly..."
 	icon_state = "xgib1"
 	random_icon_states = list("xgib1", "xgib2", "xgib3", "xgib4", "xgib5", "xgib6")
 	basecolor = ALIEN_BLOOD
+
+	fake_DNA = "xeno gibs splatters"
 
 /obj/effect/decal/cleanable/blood/gibs/xeno/update_icon()
 	color = "#FFFFFF"

@@ -92,6 +92,34 @@ var/list/infected_cleanables = list()
 	if (!(blood_DNA?.len))
 		blood_DNA[fake_DNA] = "N/A"
 
+/obj/effect/decal/cleanable/throw_impact(atom/hit_atom)
+	if (isliving(hit_atom) && blood_DNA?.len)
+		var/mob/living/L = hit_atom
+		var/blood_data = list(
+			"viruses"		=null,
+			"blood_DNA"		=null,
+			"blood_colour"	=null,
+			"blood_type"	=null,
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+		if(ishuman(hit_atom))
+			var/mob/living/carbon/human/H = L
+			if (blood_DNA?.len > 0)
+				blood_data["blood_DNA"] = blood_DNA[1]
+				blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
+			blood_data["virus2"] = virus_copylist(virus2)
+			blood_data["blood_colour"] = basecolor
+			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
+			H.bloody_hands_from_data(copy_blood_data(blood_data),0,src)
+		for(var/i = 1 to L.held_items.len)
+			var/obj/item/I = L.held_items[i]
+			if(istype(I))
+				I.add_blood_from_data(blood_data)
+	anchored = TRUE
+
 /obj/effect/decal/cleanable/initialize()
 	..()
 	if(persistence_type)

@@ -24,7 +24,7 @@
 /obj/item/weapon/mop/update_icon()
 	..()
 	overlays.len = 0
-	if (reagents.total_volume)
+	if (reagents.total_volume >= 1)
 		var/image/covering = image(icon, "mop-reagent")
 		covering.icon += mix_color_from_reagents(reagents.reagent_list)
 		covering.alpha = mix_alpha_from_reagents(reagents.reagent_list)
@@ -35,7 +35,7 @@
 		if(iscleanaway(O))
 			qdel(O)
 	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
-	//A.clean_blood() - You'll have to actually mix space_cleaner/bleach/sterilizine/etc in your water now. Also lets you actually dirty the floors with your mop now.
+	A.clean_blood()
 	playsound(src, get_sfx("mop"), 25, 1)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -62,3 +62,4 @@
 		user.delayNextAttack(10)
 		clean(get_turf(A))
 		reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it
+	update_icon()
