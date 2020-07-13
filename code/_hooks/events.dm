@@ -62,6 +62,9 @@
 // Declare children of this type path to use as identifiers for the events.
 /lazy_event
 
+/lazy_event/on_z_transition
+/lazy_event/on_post_z_transition
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
