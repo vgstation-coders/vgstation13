@@ -65,6 +65,11 @@
 			qdel(dummy)
 			qdel(dummy2)
 
+			for(var/spell/S in caster_spells)
+				victim.add_spell(S)
+			for(var/spell/S in victim_spells)
+				caster.add_spell(S)
+
 			if(victim.mind.special_verbs.len)//To add all the special verbs for the original caster.
 				for(var/V in caster.mind.special_verbs)//Not too important but could come into play.
 					caster.verbs += V
