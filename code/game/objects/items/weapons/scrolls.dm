@@ -89,7 +89,7 @@
 		success = user.Move(attempt)
 		if(!success)
 			tempL.Remove(attempt)
-
+		else
 			user.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = user, "to_z" = user.z, "from_z" = prev_z))
 			break
 
