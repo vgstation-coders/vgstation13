@@ -9,6 +9,8 @@
 
 	stat_datum_type = /datum/stat/role/wizard
 
+	var/spell_list_backup
+
 /datum/role/wizard/ForgeObjectives()
 	if(!antag.current.client.prefs.antag_objectives)
 		AppendObjective(/datum/objective/freeform/wizard)
@@ -85,4 +87,4 @@
 			for(var/entry in artifacts_bought)
 				. += "[entry]<BR>"
 		if(bought_nothing)
-			. += "The wizard used only the magic of charisma this round."
+			. += "The wizard used only the magic of charisma this round.

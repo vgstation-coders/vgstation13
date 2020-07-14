@@ -57,15 +57,13 @@
 				victim.remove_spell(S)
 
 			var/mob/living/dummy = new(caster.loc)
+			var/mob/living/dummy2 = new(victim.loc)
 			caster.mind.transfer_to(dummy)
-			victim.mind.transfer_to(caster)
+			victim.mind.transfer_to(dummy2)
 			dummy.mind.transfer_to(victim)
+			dummy2.mind.transfer_to(caster)
 			qdel(dummy)
-
-			for(var/spell/S in caster_spells)
-				victim.add_spell(S)
-			for(var/spell/S in victim_spells)
-				caster.add_spell(S)
+			qdel(dummy2)
 
 			if(victim.mind.special_verbs.len)//To add all the special verbs for the original caster.
 				for(var/V in caster.mind.special_verbs)//Not too important but could come into play.
