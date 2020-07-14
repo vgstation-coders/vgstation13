@@ -87,4 +87,4 @@
 			for(var/entry in artifacts_bought)
 				. += "[entry]<BR>"
 		if(bought_nothing)
-			. += "The wizard used only the magic of charisma this round.
+			. += "The wizard used only the magic of charisma this round."
