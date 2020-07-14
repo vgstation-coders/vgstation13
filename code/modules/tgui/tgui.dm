@@ -281,10 +281,15 @@
  * optional force bool If the UI should be forced to update.
  */
 /datum/tgui/proc/process(force = FALSE)
+	set waitfor = FALSE
 	var/datum/host = src_object.ui_host(user)
 	if(!src_object || !host || !user) // If the object or user died (or something else), abort.
 		close()
 		return
+
+	if(!winexists(user, window_id))
+		log_tgui("BUG: window with ID [window_id] and interface [interface] for [key_name(user)] does not exist.")
+		close()
 
 	if(status && (force || autoupdate))
 		update() // Update the UI if the status and update settings allow it.

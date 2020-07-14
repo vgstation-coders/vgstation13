@@ -563,6 +563,12 @@ nanoui is used to open and update nano browser uis
 		close()
 		return
 
+	if(!winexists(user, window_id))
+		var/template = templates.len ? templates[1] : "None"
+		world.log << "BUG: window with ID [window_id] and interface [template] for [key_name(user)] does not exist."
+		close()
+		return
+
 	if (status && (update || is_auto_updating))
 		update() // Update the UI (update_status() is called whenever a UI is updated)
 	else
