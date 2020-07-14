@@ -60,14 +60,14 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		if(!M.client.prefs.hear_instruments)
-			continue
 		if(M.is_deaf())
 			continue
-		M.playsound_local(source, soundfile, 100, falloff = 5)
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
+		if(!M.client.prefs.hear_instruments)
+			continue
+		M.playsound_local(source, soundfile, 100, falloff = 5)
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
