@@ -200,7 +200,7 @@ var/list/uristrune_cache = list()
 	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
 	if(write_rune_word(get_turf(user), data["blood"], word = rune_set.words[word], caster = user) > 1)
 		continue_drawing = 1
-		actual_perform(user) //Recursion for drawing runes in a row with tome.
+		perform(user) //Recursion for drawing runes in a row with tome.
 	else
 		var/obj/item/weapon/tome/tome = locate() in user.held_items
 		if(tome && tome.state == TOME_OPEN)

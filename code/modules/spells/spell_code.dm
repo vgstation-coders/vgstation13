@@ -148,7 +148,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/actual_perform(mob/user = usr, skipcharge = 0, list/target_override)
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
 		set_holder(user) //just in case
 
@@ -200,14 +200,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!.)
 			take_charge(user, skipcharge)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
-
-/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
-	if(user.is_casting_a_spell)
-		to_chat(user, "<span class='warning'>You're already casting a spell.</span>")
-		return
-	user.is_casting_a_spell = TRUE
-	actual_perform(arglist(args))
-	user.is_casting_a_spell = FALSE
 
 //This is used with the wait_for_click spell flag to prepare spells to be cast on your next click
 /spell/proc/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
