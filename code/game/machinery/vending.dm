@@ -1969,6 +1969,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/evidence = 6,
 		/obj/item/weapon/legcuffs/bolas = 8,
 		/obj/item/taperoll/police = 5,
+		/obj/item/weapon/book/manual/security_space_law = 2,
 		)
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
