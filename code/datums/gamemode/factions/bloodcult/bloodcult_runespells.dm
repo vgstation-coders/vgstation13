@@ -1355,7 +1355,7 @@ var/list/blind_victims = list()
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
 	else
-		for(var/mob/living/M in viewers(T))
+		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
 	for(var/mob/living/M in potential_victims)
@@ -1381,8 +1381,10 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
-		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		for(var/obj/machinery/camera/C in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			shadow(C,T)
 			var/col = C.color
 			animate(C, color = col, time = 4)
