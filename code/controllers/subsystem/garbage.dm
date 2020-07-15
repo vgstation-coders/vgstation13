@@ -55,9 +55,9 @@ var/soft_dels = 0
 
 			#ifdef GC_FINDREF
 			to_chat(world, "picnic! searching [D]")
+			testing("GC: Searching references for [ref(D)] [D] | [D.type]")
 			if(istype(D, /atom/movable))
 				var/atom/movable/A = D
-				testing("GC: Searching references for [refID] [A] | [A.type]")
 				if(A.loc != null)
 					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
 				if(A.contents.len)
@@ -134,7 +134,7 @@ var/soft_dels = 0
 		if(istype(D.vars[V], /datum))
 			var/datum/A = D.vars[V]
 			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D] | [D.type], var [V]")
+				testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
 				. += 1
 		else if(islist(D.vars[V]))
 			. += LookForListRefs(D.vars[V], targ, D, V)
@@ -158,12 +158,12 @@ var/soft_dels = 0
 		if(istype(F, /datum))
 			var/datum/A = F
 			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V]")
 				. += 1
 		if(istype(G, /datum))
 			var/datum/A = G
 			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V] at key [F]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V] at key [F]")
 				. += 1
 		if(islist(F))
 			. += LookForListRefs(F, targ, D, "[F] in list [V]", foundcache)
