@@ -200,7 +200,6 @@
 	var/charges = 0
 	var/soulbound
 	var/mindbound
-	var/z_bound
 	var/mob/bound_soul
 	var/datum/mind/bound_mind
 
@@ -225,8 +224,7 @@
 /obj/item/phylactery/Destroy()
 	if(bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
+	bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	soulbound = null
 	if(bound_soul)
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
@@ -291,18 +289,17 @@
 	update_icon()
 
 /obj/item/phylactery/proc/unbind()
+	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	if(bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
-	if(bound_soul.on_z_transition)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
 	soulbound = null
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
 	soulbound = to_bind.on_death.Add(src, "revive_soul")
-	z_bound = to_bind.on_z_transition.Add(src, "z_block")
+	to_bind.lazy_register_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()

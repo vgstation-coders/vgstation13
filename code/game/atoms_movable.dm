@@ -45,10 +45,6 @@
 	var/throwpass = 0
 	var/level = 2
 
-	// Change of z-level.
-	var/event/on_z_transition
-	var/event/post_z_transition
-
 	// When this object moves. (args: loc)
 	var/event/on_moved
 	// When the object is qdel'd
@@ -75,8 +71,6 @@
 
 	on_destroyed = new("owner"=src)
 	on_moved = new("owner"=src)
-	on_z_transition = new("owner"=src)
-	post_z_transition = new("owner"=src)
 
 /atom/movable/Destroy()
 	var/turf/T = loc
@@ -87,14 +81,6 @@
 		qdel(materials)
 		materials = null
 
-	if(on_z_transition)
-		on_z_transition.holder = null
-		qdel(on_z_transition)
-		on_z_transition = null
-	if(post_z_transition)
-		post_z_transition.holder = null
-		qdel(post_z_transition)
-		post_z_transition = null
 	if(on_moved)
 		on_moved.holder = null
 		on_moved = null
@@ -456,7 +442,7 @@
 	INVOKE_EVENT(on_moved,list("loc"=loc))
 	var/turf/T = get_turf(destination)
 	if(old_loc && T && old_loc.z != T.z)
-		INVOKE_EVENT(on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
+		lazy_invoke_event(/lazy_event/on_z_transition, list("user" = src, "from_z" = old_loc.z, "to_z" = T.z))
 	return 1
 
 /atom/movable/proc/update_client_hook(atom/destination)
