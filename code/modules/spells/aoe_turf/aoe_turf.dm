@@ -34,6 +34,6 @@ Aoe turf spells have two useful flags: IGNOREDENSE and IGNORESPACE. These are ex
 		spell_center = center
 	return ((target in view_or_range(range, spell_center, selection_type)))
 
-/spell/aoe_turf/actual_perform(mob/user = usr, skipcharge = 0, list/target_override)
+/spell/aoe_turf/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	. = ..()
 	center = null
