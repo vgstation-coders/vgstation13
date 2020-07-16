@@ -37,7 +37,6 @@
 /datum/faction/wizard/HandleNewMind(var/datum/mind/M)
 	..()
 	M.special_role = "Wizard"
-	M.original = M.current
 
 /datum/faction/wizard/OnPostSetup()
 	if(wizardstart.len == 0)
