@@ -79,7 +79,7 @@ var/global/mulebot_count = 0
 
 
 /obj/machinery/bot/mulebot/New()
-	..()
+	. = ..()
 	wires = new(src)
 	botcard = new(src)
 	var/datum/job/cargo_tech/J = new/datum/job/cargo_tech
@@ -87,10 +87,9 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
 
 /obj/machinery/bot/mulebot/initialize()
+	. = ..()
 	mulebot_count += 1
 	if(!suffix)
 		suffix = "#[mulebot_count]"

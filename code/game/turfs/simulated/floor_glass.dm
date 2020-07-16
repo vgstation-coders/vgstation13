@@ -26,12 +26,12 @@
 /turf/simulated/floor/glass/New(loc)
 	..(loc)
 	icon_state = "[((x + y) ^ ~(x * y) + z) % 25]"
-	if(!floor_overlays[icon_state])
+	if(!floor_overlays[glass_state])
 		var/image/floor_overlay = image('icons/turf/overlays.dmi', glass_state)
 		floor_overlay.plane = TURF_PLANE
 		floor_overlay.layer = TURF_LAYER
-		floor_overlays[icon_state] = floor_overlay
-	overlays += floor_overlays[icon_state]
+		floor_overlays[glass_state] = floor_overlay
+	overlays += floor_overlays[glass_state]
 	update_icon()
 
 /turf/simulated/floor/glass/update_icon()

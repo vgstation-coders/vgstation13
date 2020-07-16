@@ -2,7 +2,8 @@
 	name = "mosin nagant"
 	desc = "JOY OF HAVING MOSIN NAGANT RIFLE IS JOY THAT MONEY CANNOT AFFORD. "
 	fire_sound = 'sound/weapons/mosin.ogg'
-	icon_state = "mosin"
+	icon = 'icons/obj/biggun.dmi'
+	icon_state = "mosinlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 5
@@ -81,7 +82,8 @@
 	name = "obrez"
 	desc = "WHEN YOU SHOW OBREZ TO ENEMY, HE THINKS YOU ARE CRAZED LUNATIC, LIKE KRUSCHEV POUNDING SHOE ON DESK AND SHOUTING ANGRY PLAN TO BURY NATO IN DEEP GRAVE. YOU FIRE WITH FLAME BURSTING LIKE FIRE OF DRAGON, TWISTING BOLT LIKE MANIAC BETWEEN FIRINGS AND EJECTING EMPTY CASE AS BIG AS BEER CAN FROM ACTION."
 	fire_sound = 'sound/weapons/obrez.ogg'
-	icon_state = "obrez"
+	icon = 'icons/obj/biggun.dmi'
+	icon_state = "obrezlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM

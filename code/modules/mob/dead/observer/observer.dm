@@ -405,7 +405,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
-				dust()
+				dust(TRUE)
 				return
 			if ("Stay in body")
 				return

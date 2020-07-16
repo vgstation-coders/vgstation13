@@ -73,6 +73,7 @@ var/runechat_icon = null
   * * lifespan - The lifespan of the message in deciseconds
   */
 /datum/chatmessage/proc/generate_image(text, atom/target, mob/owner, list/extra_classes, lifespan)
+	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
 	destroyed_ev_key = owner.on_destroyed.Add(src, .proc/qdel_self)
