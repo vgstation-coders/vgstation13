@@ -116,13 +116,22 @@
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
+	var/weight = src.weight
 	weight *= weight_time_day()
-	if(repeatable && weight > 1)
+	if(repeatable)
+		var/halve_weight = FALSE
 		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-			if(istype(DR,src.type))
-				weight = max(weight-2,1)
 			if(DR.role_category == src.role_category) // Same kind of antag.
-				weight = max(weight-1,1)
+				halve_weight = TRUE
+				break
+		if(!halve_weight)
+			for(var/entry in mode.last_round_executed_rules)
+				var/datum/dynamic_ruleset/DR = entry
+				if(initial(DR.role_category) == src.role_category)
+					halve_weight = TRUE
+					break
+		if(halve_weight)
+			weight /= 2
 	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
 	return weight
 
