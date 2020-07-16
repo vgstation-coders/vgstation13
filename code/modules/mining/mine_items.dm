@@ -971,6 +971,12 @@ proc/move_mining_shuttle()
 	var/cooldown = 0
 
 /obj/item/device/mining_scanner/attack_self(mob/user)
+	scan(user)
+
+/obj/item/device/mining_scanner/AltClick(mob/user)
+	scan(user)
+
+/obj/item/device/mining_scanner/proc/scan(mob/user)
 	if(!user.client)
 		return
 	if(!cooldown)
