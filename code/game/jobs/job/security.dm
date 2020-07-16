@@ -71,7 +71,7 @@
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy, /obj/item/clothing/under, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
- 
+  
 
 /datum/job/warden
 	title = "Warden"
@@ -132,7 +132,7 @@
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/glock, /obj/item/clothing/under, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/storage/fancy/donut_box(H.back), slot_in_backpack)
- 
+  
 
 /datum/job/detective
 	title = "Detective"
@@ -218,7 +218,7 @@
 	var/obj/item/weapon/reagent_containers/food/drinks/flask/detflask/bonusflask = new /obj/item/weapon/reagent_containers/food/drinks/flask/detflask(H.back)
 	bonusflask.reagents.add_reagent(DETCOFFEE, 60)
 	H.equip_or_collect(bonusflask, slot_in_backpack)
- 
+  
 
 
 /datum/job/officer
@@ -285,4 +285,4 @@
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee(H.back), slot_in_backpack)
 	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/donut/normal(H.back), slot_in_backpack)
- 
+  
