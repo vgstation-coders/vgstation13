@@ -68,7 +68,7 @@
 //        RAGIN' MAGES (LATEJOIN)           ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////1.01 - Lowered weight from 3 to 2
-
+/* //Currently disabled
 /datum/dynamic_ruleset/latejoin/raginmages
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
@@ -101,7 +101,7 @@
 	federation.HandleRecruitedRole(newWizard)
 	newWizard.Greet(GREET_LATEJOIN)
 	return 1
-
+*/
 
 //////////////////////////////////////////////
 //                                          //

@@ -272,8 +272,8 @@
 //                                          //
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
-//////////////////////////////////////////////1.01 - Disabled because it caused a bit too many wizards in rounds
-
+//////////////////////////////////////////////
+/* //Currently disabled
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
@@ -307,7 +307,7 @@
 	if (!created_a_faction)
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
-
+*/
 
 //////////////////////////////////////////////
 //                                          //
