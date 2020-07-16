@@ -88,7 +88,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
 	//If harm intent, splash it on em, else try to feed em it
-	if(!M.reagents || istype(src, /obj/item/weapon/reagent_containers/dropper))
+	if(!M.reagents)
 		return
 
 	if(!is_open_container())
