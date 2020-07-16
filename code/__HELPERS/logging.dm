@@ -55,6 +55,7 @@
 			to_chat(C, "DEBUG: [text]")
 
 /proc/log_sql(text)
+	world.log << text
 	if (!config || (config && config.log_sql))
 		diary << html_decode("\[[time_stamp()]]SQL: [text]")
 

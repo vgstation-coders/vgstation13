@@ -44,7 +44,7 @@
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \":ckey\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = :ckey)", list("ckey" = "\"[ckey]\""))
 			if(!query.Execute())
 				log_sql("Error fetching poll question: [query.ErrorMsg()]")
 				qdel(query)
