@@ -179,11 +179,11 @@ var/global/list/whitelisted_species = list("Human")
 /datum/species/proc/clear_organs(var/mob/living/carbon/human/H)
 	if(H.organs)
 		for(var/datum/organ/I in H.organs)
-			I.owner = null
+			qdel(I)
 		H.organs.len=0
 	if(H.internal_organs)
 		for(var/datum/organ/I in H.internal_organs)
-			I.owner = null
+			qdel(I)
 		H.internal_organs.len=0
 	//The rest SHOULD only refer to organs that were already deleted by the above loops, so we can just clear the lists.
 	if(H.organs_by_name)

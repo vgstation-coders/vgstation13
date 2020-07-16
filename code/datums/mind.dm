@@ -30,7 +30,6 @@
 	var/key
 	var/name				//replaces mob/var/original_name
 	var/mob/current
-	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
