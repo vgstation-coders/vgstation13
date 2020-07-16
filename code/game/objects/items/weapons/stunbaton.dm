@@ -259,16 +259,6 @@
 	force = initial(force)
 	throwforce = initial(throwforce)
 
-//Advanced stun baton. Currently in testing.
-/obj/item/weapon/melee/baton/loaded/advbaton
-	name = "Advanced Stun Baton"
-	desc = "A more powerful version of the standard-issue stun baton."
-	icon_state = "adv_baton"
-	hitcost = 50
-	stunforce = 12
-
-
-
 //Makeshift stun baton. Replacement for stun gloves.
 /obj/item/weapon/melee/baton/cattleprod
 	name = "stunprod"
