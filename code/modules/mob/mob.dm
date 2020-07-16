@@ -142,6 +142,16 @@
 		if(client)
 			client.screen -= pullin
 		pullin = null
+	if(kick_icon)
+		qdel(kick_icon)
+		if(client)
+			client.screen -= kick_icon
+		kick_icon = null
+	if(bite_icon)
+		qdel(bite_icon)
+		if(client)
+			client.screen -= bite_icon
+		bite_icon = null
 	if(visible)
 		qdel(visible)
 		if(client)
