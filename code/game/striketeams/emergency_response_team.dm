@@ -122,7 +122,6 @@ var/list/response_team_members = list()
 	//Creates mind stuff.
 	M.mind = new
 	M.mind.current = M
-	M.mind.original = M
 	M.mind.assigned_role = "MODE"
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
@@ -192,9 +191,9 @@ var/list/response_team_members = list()
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
-	
+
 	if(leader_selected)
-		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)	
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)
 	else
 		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
 
