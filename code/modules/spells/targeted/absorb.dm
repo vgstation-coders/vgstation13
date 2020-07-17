@@ -38,7 +38,7 @@
 					for(var/spell/targetspell in C.spell_list)
 						if(!is_type_in_list(targetspell, L.spell_list))
 							to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have learned [targetspell.name]!</span>")
-							L.attack_log += text("\[[time_stamp()]\] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>")
+							L.attack_log += "\[[time_stamp()]\] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>"
 							C.remove_spell(targetspell)
 							L.add_spell(targetspell)
 							to_chat(world, "[targetspell.type]")
@@ -54,7 +54,6 @@
 					target.dust()
 				if(P)		//Remove portal effect if the absorbtion is cancelled early.
 					qdel(P)
-
 
 
 
