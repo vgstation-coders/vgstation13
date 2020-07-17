@@ -273,7 +273,7 @@
 //              RAGIN' MAGES                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-/* //Currently disabled
+
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
@@ -283,11 +283,11 @@
 	required_candidates = 1
 	weight = 1
 	cost = 20
-	requirements = list(90,90,70,40,30,20,10,10,10,10)
+	requirements = list(101,101,101,101,101,101,101,101,101,101) //Disabled from rotation, formerly (90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	logo = "raginmages-logo"
 	repeatable = TRUE
-
+/* //Civil War of Casters code, currently disabled
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/acceptable(var/population=0,var/threat=0)
 	if(locate(/datum/dynamic_ruleset/roundstart/cwc) in mode.executed_rules)
 		message_admins("Rejected Ragin' Mages as there was a Civil War.")
@@ -295,7 +295,7 @@
 		//This means that all ragin mages in CWC will be called only by that ruleset.
 	else
 		return ..()
-
+*/
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/raginmages/ready(var/forced = 0)
 	if(wizardstart.len == 0)
 		log_admin("Cannot accept Wizard ruleset. Couldn't find any wizard spawn points.")
@@ -307,7 +307,7 @@
 	if (!created_a_faction)
 		new_role.OnPostSetup() //Each individual role to show up gets a postsetup
 	..()
-*/
+
 
 //////////////////////////////////////////////
 //                                          //
