@@ -45,13 +45,10 @@
 							L.attack_log += text("\[[time_stamp()] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>")
 							C.remove_spell(targetspell)
 							L.add_spell(targetspell)
-							to_chat(world, "[targetspell.type]")
 							if(!hasAbsorbed)
 								hasAbsorbed = TRUE
 					if(!hasAbsorbed)
 						to_chat(holder, "<span class='notice'>You find magical energy within your foe, but there is nothing new to learn.</span>")
-					to_chat(holder, "<span class='sinister'>You drain [C.real_name] of their magical energy, reducing them to ash!</span>")
-					to_chat(target, "<span class='sinister'>You feel the magic leave your body, reducing you to a pile of bones and ash!!</span>")
 					L.visible_message("<span class='sinister'>[L.real_name] absorbs the magical energy from [C.real_name], causing their body to dissolve in a burst of light!</span>")
 					target.dust()
 				if(P)		//Remove portal effect if the absorbtion is cancelled early.
