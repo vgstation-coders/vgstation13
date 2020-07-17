@@ -381,7 +381,7 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions + 1) > (config.assistantratio * count)
+	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
 	if(enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
