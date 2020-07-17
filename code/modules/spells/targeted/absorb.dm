@@ -32,7 +32,7 @@
 				to_chat(holder, "<span class='warning'>You can only absorb spells from other Wizards.</span>")
 			else
 				var/obj/effect/cult_ritual/feet_portal/P = new (holder.loc, holder, src)
-				if(do_after(holder, target, 5 SECONDS))
+				if(do_after(holder, target, 5 SECONDS, use_user_turf = TRUE))
 					qdel(P)
 					var/hasAbsorbed = FALSE
 					var/canAbsorb = TRUE
@@ -41,14 +41,14 @@
 						for(var/spell/holderspell in L.spell_list)
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
-								if(holderspell.can_improve(Sp_POWER))
+						/*		if(holderspell.can_improve(Sp_POWER))
 									to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have empowered [targetspell.name]!</span>")
 									holderspell.apply_upgrade(Sp_POWER)
 									hasAbsorbed = TRUE
 								if(holderspell.can_improve(Sp_SPEED))
 									to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have quickened [targetspell.name]!</span>")
 									holderspell.apply_upgrade(Sp_SPEED)
-									hasAbsorbed = TRUE
+						*/			hasAbsorbed = TRUE
 						if(canAbsorb)
 							to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have learned [targetspell.name]!</span>")
 							L.attack_log += text("\[[time_stamp()] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>")
