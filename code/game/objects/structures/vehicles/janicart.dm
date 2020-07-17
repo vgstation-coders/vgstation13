@@ -29,6 +29,8 @@
 	var/obj/item/weapon/storage/bag/trash/mybag	= null
 
 	var/upgraded = 0
+	var/emagged = 0
+	var/changing_reagents = 0
 
 /obj/structure/bed/chair/vehicle/janicart/New()
 	. = ..()
@@ -71,6 +73,7 @@
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You hook \the [W] onto \the [nick].</span>")
 			mybag = W
+
 
 /obj/structure/bed/chair/vehicle/janicart/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(istype(M))
@@ -115,6 +118,23 @@
 		remove_trashbag()
 		return
 	..()
+
+/obj/structure/bed/chair/vehicle/janicart/emag_act(mob/user)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>The janicart's water tank churns and bubbles slightly.</span>")
+		var/vol = reagents.total_volume
+		reagents.clear_reagents()
+		reagents.add_reagent(LUBE, vol)
+		emagged = 1
+
+/obj/structure/bed/chair/vehicle/janicart/on_reagent_change()
+	if(emagged && !changing_reagents)
+		changing_reagents = 1 // This is a dirty way to do this, but it's the only way I know of that makes it work.
+		var/vol = reagents.total_volume
+		reagents.clear_reagents()
+		reagents.add_reagent(LUBE, vol)
+		changing_reagents = 0
+
 
 /obj/structure/bed/chair/vehicle/janicart/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
