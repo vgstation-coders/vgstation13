@@ -116,24 +116,23 @@
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
-	var/weight = src.weight
-	weight *= weight_time_day()
-	if(repeatable)
-		var/halve_weight = FALSE
-		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-			if(DR.role_category == src.role_category) // Same kind of antag.
-				halve_weight = TRUE
+	var/result = weight
+	result *= weight_time_day()
+	var/halve_result = FALSE
+	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
+		if(DR.role_category == src.role_category) // Same kind of antag.
+			halve_result = TRUE
+			break
+	if(!halve_result)
+		for(var/entry in mode.last_round_executed_rules)
+			var/datum/dynamic_ruleset/DR = entry
+			if(initial(DR.role_category) == src.role_category)
+				halve_result = TRUE
 				break
-		if(!halve_weight)
-			for(var/entry in mode.last_round_executed_rules)
-				var/datum/dynamic_ruleset/DR = entry
-				if(initial(DR.role_category) == src.role_category)
-					halve_weight = TRUE
-					break
-		if(halve_weight)
-			weight /= 2
-	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
-	return weight
+	if(halve_result)
+		result /= 2
+	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
+	return result
 
 //Return a multiplicative weight. 1 for nothing special.
 /datum/dynamic_ruleset/proc/weight_time_day()
