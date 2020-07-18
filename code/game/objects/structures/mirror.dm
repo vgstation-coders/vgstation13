@@ -28,25 +28,24 @@
 /obj/structure/mirror/proc/choose(mob/living/user, mob/living/carbon/human/target)
 	if(!can_use(user, target))
 		return
-	var/mob/living/carbon/human/H = user
-	var/datum/role/vampire/V = isvampire(H)
+	var/datum/role/vampire/V = isvampire(target)
 	if(V && !(VAMP_MATURE in V.powers))
-		to_chat(H, "<span class='notice'>You don't see anything.</span>")
+		to_chat(user, "<span class='notice'>You don't see anything.</span>")
 		return
 	if(user.hallucinating())
 		switch(rand(1,100))
 			if(1 to 20)
-				to_chat(H, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
-				H.Knockdown(4)
-				H.Stun(4)
+				to_chat(user, "<span class='sinister'>You look like [pick("a monster","a goliath","a catbeast","a ghost","a chicken","the mailman","a demon")]! Your heart skips a beat.</span>")
+				user.Knockdown(4)
+				user.Stun(4)
 				return
 			if(21 to 40)
-				to_chat(H, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
-				H.audible_scream()
-				H.dir = turn(H.dir, 180)
+				to_chat(user, "<span class='sinister'>There's [pick("somebody","a monster","a little girl","a zombie","a ghost","a catbeast","a demon")] standing behind you!</span>")
+				user.audible_scream()
+				user.dir = turn(user.dir, 180)
 				return
 			if(41 to 50)
-				to_chat(H, "<span class='notice'>You don't see anything.</span>")
+				to_chat(user, "<span class='notice'>You don't see anything.</span>")
 				return
 
 	var/which = alert(user, "What would you like to change?", "Appearance", "Hair", "Beard", "Undies")
