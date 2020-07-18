@@ -1,4 +1,4 @@
-	/obj/item
+/obj/item
 	name = "item"
 	icon = 'icons/obj/items.dmi'
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
