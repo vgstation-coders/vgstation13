@@ -9,7 +9,7 @@
 	idle_power_usage = 200
 	active_power_usage = 5000
 
-	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | CROWDESTROY
+	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | CROWDESTROY | FIXED2WORK
 	mech_flags = MECH_SCAN_FAIL
 	id_tag = "telepad"
 
@@ -92,7 +92,7 @@
 	if(panel_open && amplifier)
 		to_chat(user, "<span class='notice'>You carefully take \the [amplifier] from \the [src].</span>")
 		var/obj/item/bluespace_crystal/C=amplifier
-		C.forceMove(get_turf(src))
+		user.put_in_hands(C)
 		amplifier=null
 		return
 
