@@ -128,7 +128,7 @@
 			descmin = input("Optional: Set description for minimum rating","Minimum rating description") as message
 			descmid = input("Optional: Set description for median rating","Median rating description") as message
 			descmax = input("Optional: Set description for maximum rating","Maximum rating description") as message
-		var/datum/DBQuery/query_polladd_option = SSdbcore.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES (:pollid, :option, :percentagecacl, :minval, :maxval, :descmin, :descmid, :descmax)",
+		var/datum/DBQuery/query_polladd_option = SSdbcore.NewQuery("INSERT INTO erro_poll_option (pollid, text, percentagecalc, minval, maxval, descmin, descmid, descmax) VALUES (:pollid, :option, :percentagecalc, :minval, :maxval, :descmin, :descmid, :descmax)",
 			list(
 				"pollid" = pollid,
 				"option" = option,
