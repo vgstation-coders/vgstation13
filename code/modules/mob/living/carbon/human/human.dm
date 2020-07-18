@@ -982,12 +982,15 @@
 
 /mob/living/carbon/human/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
-		return 0
+		return FALSE
 	if(!M)
 		return
+
+	had_blood = TRUE
+
 	//if this blood isn't already in the list, add it
 	if(blood_DNA[M.dna.unique_enzymes])
-		return 0 //already bloodied with this blood. Cannot add more.
+		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	verbs += /mob/living/carbon/human/proc/bloody_doodle
@@ -995,16 +998,19 @@
 
 /mob/living/carbon/human/add_blood_from_data(var/list/blood_data)
 	if (!..())
-		return 0
+		return FALSE
 	if(!blood_data)
 		return
+
+	had_blood = TRUE
+
 	//if this blood isn't already in the list, add it
 	if(blood_DNA[blood_data["blood_DNA"]])
-		return 0 //already bloodied with this blood. Cannot add more.
+		return FALSE //already bloodied with this blood. Cannot add more.
 	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
 	update_inv_gloves()	//handles bloody hands overlays and updating
 	verbs += /mob/living/carbon/human/proc/bloody_doodle
-	return 1 //we applied blood to the item
+	return TRUE //we applied blood to the item
 
 /mob/living/carbon/human/clean_blood(var/clean_feet)
 	.=..()

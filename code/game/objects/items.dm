@@ -1,4 +1,4 @@
-/obj/item
+	/obj/item
 	name = "item"
 	icon = 'icons/obj/items.dmi'
 	var/image/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
@@ -1041,8 +1041,6 @@
 /obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
-	if(istype(src, /obj/item/weapon/melee/energy))
-		return
 
 	//if we haven't made our blood_overlay already
 	if(!blood_overlays[type])
@@ -1080,8 +1078,6 @@
 /obj/item/add_blood_from_data(var/list/blood_data)
 	if (!..())
 		return FALSE
-	if(istype(src, /obj/item/weapon/melee/energy))
-		return
 
 	//if we haven't made our blood_overlay already
 	if(!blood_overlays[type])

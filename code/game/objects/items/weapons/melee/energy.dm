@@ -22,6 +22,13 @@
 		return sharpness
 	return 0
 
+//Energy weapons cannot be bloodied. Not even their handle. Don't ask.
+/obj/item/add_blood(var/mob/living/carbon/human/M)
+	return FALSE
+
+/obj/item/add_blood_from_data(var/list/blood_data)
+	return FALSE
+
 /obj/item/weapon/melee/energy/axe
 	name = "energy axe"
 	desc = "An energised battle axe."

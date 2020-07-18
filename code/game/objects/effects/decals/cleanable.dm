@@ -89,8 +89,9 @@ var/list/infected_cleanables = list()
 
 
 /obj/effect/decal/cleanable/proc/fixDNA()
-	if (!(blood_DNA?.len))
-		blood_DNA[fake_DNA] = "N/A"
+	if (!istype(blood_DNA, /list))
+		blood_DNA = list()
+	blood_DNA[fake_DNA] = "N/A"
 
 /obj/effect/decal/cleanable/throw_impact(atom/hit_atom)
 	if (isliving(hit_atom) && blood_DNA?.len)
