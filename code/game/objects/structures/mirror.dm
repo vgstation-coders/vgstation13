@@ -105,7 +105,7 @@
 		return TRUE
 	which = lowertext(which)
 	visible_message("<span class='danger'>[user] tries to change [target]'s [which].</span>")
-	if(do_after(user, target, 3 SECONDS))
+	if(do_after_many(user, list(target, src), 3 SECONDS))
 		visible_message("<span class='notice'>[user] changes [target]'s [which].</span>")
 		return TRUE
 	return FALSE
