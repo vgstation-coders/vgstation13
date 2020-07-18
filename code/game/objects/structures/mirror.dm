@@ -28,10 +28,6 @@
 /obj/structure/mirror/proc/choose(mob/living/user, mob/living/carbon/human/target)
 	if(!can_use(user, target))
 		return
-	var/datum/role/vampire/V = isvampire(target)
-	if(V && !(VAMP_MATURE in V.powers))
-		to_chat(user, "<span class='notice'>You don't see anything.</span>")
-		return
 	if(user.hallucinating())
 		switch(rand(1,100))
 			if(1 to 20)
