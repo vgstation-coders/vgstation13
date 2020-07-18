@@ -639,11 +639,11 @@ var/global/list/alert_overlays_global = list()
 
 /obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)
 	if(C.is_wrench(user))
-		user.visible_message("<span class='attack'>\The [user] deconstructs \the [src] with \a [C].</span>",\
+		user.visible_message("<span class='notice'>\The [user] deconstructs \the [src] with \a [C].</span>",\
 		"You deconstruct \the [src] with \the [C]!")
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
-		return
+
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*
