@@ -184,7 +184,7 @@
 			desc += "<br>This one seems to be modified."
 			return 1
 		
-	if(A.is_screwdriver(user))
+	if(conversionkit && A.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
 		conversionkit = null
