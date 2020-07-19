@@ -49,7 +49,7 @@
 		to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
 		return 0
 
-	if(current.stat == 2 || current.control_disabled == 1)
+	if(current.stat == 2 && src.occupant != current)
 		to_chat(usr, "Upload failed. No signal is being detected from the AI.")
 	else if(current.aiRestorePowerRoutine)
 		to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
