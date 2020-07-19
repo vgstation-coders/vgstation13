@@ -21,3 +21,11 @@
 	icon_state = "scope"
 	w_class = W_CLASS_SMALL
 	starting_materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
+	
+/obj/item/gun_part/glockfullautoconverter
+	name = "glock full-auto conversion kit"
+	desc = "Invented by an enterprising martian gunsmith; easily installed onto any standard glock to convert it to full auto. Probably not the safest idea."
+	icon = 'icons/obj/gun.dmi' 
+	icon_state = "fullautokit" 
+	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 400)
