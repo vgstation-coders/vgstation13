@@ -65,13 +65,11 @@
 		if(computer_id)
 			failedcid = 0
 
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? " OR computerid = :computer_id" : ""]) AND (bantype = :perma_ban_string OR (bantype = :temp_ban_string  AND expiration_time > Now())) AND isnull(unbanned)",
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)",
 			list(
 				"ckey" = "[ckeytext]",
 				"address" = "[address]",
-				"computer_id" = "[computer_id]",
-				"temp_ban_string" = "TEMPBAN",
-				"perma_ban_string" = "PERMABAN"
+				"computer_id" = "[computer_id]"
 		))
 
 		if(!query.Execute())
