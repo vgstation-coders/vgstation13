@@ -245,6 +245,7 @@
 	if(A.is_screwdriver(user))
 		if(magwellmod.len)
 			mag_type_restricted = magwellmod
+			magwellmod = list()
 			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
