@@ -98,6 +98,15 @@ var/list/obj/machinery/holosign/holosigns = list()
 		if (M.id_tag == src.id_tag)
 			M.toggle(active)
 
+/obj/machinery/holosign_switch/attack_ghost(var/mob/dead/observer/ghost)
+	if(!can_spook())
+		return FALSE
+	if(!ghost.can_poltergeist())
+		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
+		return FALSE
+	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+	return ..()
+
 /obj/machinery/holosign_switch/power_change()
 	..()
 	update_icon()
