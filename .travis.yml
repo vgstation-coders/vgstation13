@@ -1,6 +1,6 @@
 language: generic
 os: linux
-dist: xenial
+dist: bionic
 sudo: false
 
 env:
@@ -66,8 +66,8 @@ matrix:
             - rustc
             - cargo
             - moreutils
-            - libmariadb-client-lgpl-dev:i386
-            - libmariadbd-dev
+            - libssl1.1:i386
+            - zlib1g:i386
       cache:
         directories:
           - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
@@ -76,14 +76,13 @@ matrix:
           - $HOME/libmariadb
       install:
         - tools/travis/install-byond.sh
-        - tools/travis/install_libmariadb.sh
         - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+        - tools/travis/install_rust_g.sh
         - cd libvg
         # --jobs 1 to prevent threading problems with the BYOND crate.
         - cargo test --jobs 1 --verbose
         - cd -
         - tools/travis/build.py
-        - tools/travis/build_bsql.sh
         - cp tools/travis/config/config.txt config/
         - tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 
