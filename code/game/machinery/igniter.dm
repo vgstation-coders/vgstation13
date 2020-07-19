@@ -168,7 +168,7 @@ var/global/list/igniters = list()
 	return src.attack_hand(user)
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(active)
