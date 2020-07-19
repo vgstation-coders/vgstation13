@@ -196,7 +196,7 @@ var/datum/nanomanager/nanomanager = new()
 	// MySQL configuration
 
 var/sqladdress = "localhost"
-var/sqlport = 3306
+var/sqlport = "3306"
 var/sqldb = "tgstation"
 var/sqllogin = "root"
 var/sqlpass = ""

@@ -4,12 +4,32 @@
 /*
  * Holds procs designed to help with filtering text
  * Contains groups:
+ *			SQL sanitization
  *			Text sanitization
  *			Text searches
  *			Text modification
  *			Misc
  */
 
+
+/*
+ * SQL sanitization
+ */
+
+// Run all strings to be used in an SQL query through this proc first to properly escape out injection attempts.
+/proc/sanitizeSQL(var/t as text)
+	//var/sanitized_text = replacetext(t, "'", "\\'")
+	var/sqltext = SSdbcore.Quote(t)
+	sqltext = replacetext(sqltext, "'", "\'")
+	//to_chat(world, "sanitizeSQL(): BEFORE Quote(): [t]")
+	//to_chat(world, "sanitizeSQL(): AFTER Quote(): [sqltext]")
+	return sqltext
+
+/*
+/mob/verb/SanitizeTest(var/t as text)
+	to_chat(src, "IN: [t]")
+	to_chat(src, "OUT: [sanitizeSQL(t)]")
+*/
 /*
  * Text sanitization
  */

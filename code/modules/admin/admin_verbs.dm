@@ -933,7 +933,8 @@ var/list/admin_verbs_mod = list(
 			to_chat(src, "You are already an admin.")
 			verbs -= /client/proc/readmin
 			return
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = :ckey", list("ckey" = ckey))
+		var/sql_ckey = sanitizeSQL(ckey(ckey))
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
 		if(!query.Execute())
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)

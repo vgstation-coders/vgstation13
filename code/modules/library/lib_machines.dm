@@ -54,11 +54,11 @@
 	var/list/where = list()
 	if(author || title || category)
 		if(author)
-			where.Add("author LIKE '%[author]%'")
+			where.Add("author LIKE '%[sanitizeSQL(author)]%'")
 		if(category)
-			where.Add("category = '[category]'")
+			where.Add("category = '[sanitizeSQL(category)]'")
 		if(title)
-			where.Add("title LIKE '%[title]%'")
+			where.Add("title LIKE '%[sanitizeSQL(title)]%'")
 		return " WHERE "+jointext(where," AND ")
 	return ""
 
@@ -91,7 +91,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=[sqlid]")
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -104,7 +104,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE :id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")

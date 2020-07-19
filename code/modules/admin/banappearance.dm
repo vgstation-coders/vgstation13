@@ -62,10 +62,7 @@ DEBUG
 			return
 
 		//appearance bans
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned)",
-			list(
-				"bantype" = "APPEARANCE_PERMABAN",
-			))
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'APPEARANCE_PERMABAN' AND isnull(unbanned)")
 		if(!query.Execute())
 			log_sql("Error: [query.ErrorMsg()]")
 			qdel(query)
