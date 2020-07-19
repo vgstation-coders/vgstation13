@@ -255,7 +255,7 @@ That prevents a few funky behaviors.
 							else if (!T.occupant)
 								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
 			if("AIUPLOAD")//AI Upload terminal.
-				/obj/machinery/computer/aiupload/T = target
+				var/obj/machinery/computer/aiupload/T = target
 				switch(interaction)
 					if("AICARD")
 						var/obj/item/device/aicard/C = src
