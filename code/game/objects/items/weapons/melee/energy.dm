@@ -26,7 +26,7 @@
 /obj/item/weapon/melee/energy/add_blood(var/mob/living/carbon/human/M)
 	return FALSE
 
-/obj/item/add_blood_from_data(var/list/blood_data)
+/obj/item/weapon/melee/energy/add_blood_from_data(var/list/blood_data)
 	return FALSE
 
 /obj/item/weapon/melee/energy/axe
