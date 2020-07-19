@@ -104,7 +104,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	if(!ghost.can_poltergeist())
 		to_chat(ghost, "Your poltergeist abilities are still cooling down.")
 		return FALSE
-	investigation_log(I_GHOST, "|| was switched [on ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
+	investigation_log(I_GHOST, "|| was switched [active ? "off" : "on"] by [key_name(ghost)][ghost.locked_to ? ", who was haunting [ghost.locked_to]" : ""]")
 	return ..()
 
 /obj/machinery/holosign_switch/power_change()
