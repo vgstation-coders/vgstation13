@@ -193,7 +193,7 @@
 	desc = "Can hold security gear like handcuffs and flashes."
 	icon_state = "securitybelt"
 	item_state = "security"//Could likely use a better one.
-	storage_slots = 7
+	storage_slots = 14
 	fits_max_w_class = 3
 	max_combined_w_class = 21
 	can_only_hold = list(
