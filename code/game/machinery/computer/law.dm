@@ -150,7 +150,10 @@
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
 	else
-		to_chat(usr, "[current.name] selected for law changes.")
+		if(src.occupant)
+			to_chat(usr, "AI detected on this terminal. [current.name] selected for law changes.")
+		else
+			to_chat(usr, "[current.name] selected for law changes.")
 
 /obj/machinery/computer/borgupload
 	name = "Cyborg Upload"
