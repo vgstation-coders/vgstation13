@@ -707,7 +707,7 @@
 			if ("address")
 				sqladdress = value
 			if ("port")
-				sqlport = text2num(value)
+				sqlport = value
 			if ("database")
 				sqldb = value
 			if ("login")
