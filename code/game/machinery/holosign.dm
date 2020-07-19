@@ -6,19 +6,27 @@ var/list/obj/machinery/holosign/holosigns = list()
 	name = "holosign"
 	desc = "Small wall-mounted holographic projector"
 	icon = 'icons/obj/holosign.dmi'
-	icon_state = "sign_off"
+	icon_state = "base"
 	layer = ABOVE_DOOR_LAYER
 
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 	var/lit = 0
-	var/on_icon = "sign_on"
+	var/on_icon = ""
+	var/image/overlay
 
 	light_color = "#6496FA"
 
 /obj/machinery/holosign/New()
 	..()
 	holosigns += src
+	update_icon()
+
+/obj/machinery/holosign/Destroy()
+	if (overlay)
+		qdel(overlay)
+		overlay = null
+	..()
 
 /obj/machinery/holosign/proc/toggle(var/active)
 	if (stat & (BROKEN|NOPOWER))
@@ -27,16 +35,19 @@ var/list/obj/machinery/holosign/holosigns = list()
 	update_icon()
 
 /obj/machinery/holosign/update_icon()
-	if (!lit)
-		icon_state = "sign_off"
+	overlays.len = 0
+	if(!lit || (stat & (NOPOWER|BROKEN)))
 		set_light(0)
-	else
-		icon_state = on_icon
-		set_light(2,2)
+		return
+	if(!overlay)
+		overlay = image(icon, on_icon)
+		overlay.plane = LIGHTING_PLANE
+		overlay.layer = ABOVE_LIGHTING_LAYER
+	overlay.icon_state = on_icon
+	overlays += overlay
+	set_light(2,2)
 
 /obj/machinery/holosign/power_change()
-	if (stat & NOPOWER)
-		lit = 0
 	update_icon()
 
 /obj/machinery/holosign/Destroy()
@@ -64,10 +75,21 @@ var/list/obj/machinery/holosign/holosigns = list()
 	icon_state = "light0"
 	desc = "A remote control switch for holosign."
 	var/active = 0
+	var/image/overlay
 	anchored = 1.0
 	use_power = 1
 	idle_power_usage = 2
 	active_power_usage = 4
+
+/obj/machinery/holosign_switch/New(var/turf/loc)
+	..()
+	update_icon()
+
+/obj/machinery/holosign_switch/Destroy()
+	if (overlay)
+		qdel(overlay)
+		overlay = null
+	..()
 
 /obj/machinery/holosign_switch/attack_ai(mob/user as mob)
 	src.add_hiddenprint(user)
@@ -112,7 +134,14 @@ var/list/obj/machinery/holosign/holosigns = list()
 	update_icon()
 
 /obj/machinery/holosign_switch/update_icon()
+	overlays.len = 0
 	if(stat & (NOPOWER|BROKEN))
 		icon_state = "light-p"
 	else
 		icon_state = active ? "light1" : "light0"
+		if(!overlay)
+			overlay = image(icon, "[icon_state]-overlay")
+			overlay.plane = LIGHTING_PLANE
+			overlay.layer = ABOVE_LIGHTING_LAYER
+		overlay.icon_state = "[icon_state]-overlay"
+		overlays += overlay
