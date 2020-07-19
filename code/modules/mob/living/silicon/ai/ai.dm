@@ -39,6 +39,7 @@ var/list/ai_list = list()
 	var/chosen_core_icon_state = "ai"
 	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
 	var/mentions_on = FALSE
+	var/list/holopadoverlays = list()
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -172,6 +173,15 @@ var/list/ai_list = list()
 		anchored = !anchored
 		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
 	busy = FALSE
+
+/mob/living/silicon/ai/verb/toggle_holopadoverlays()
+	set category = "AI Commands"
+	set name = "Toggle Holopad Overlays"
+	
+	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
+		return
+	toggleholopadoverlays()
+	to_chat(src, "<span class='notice' style=\"font-family:Courier\">Holopad overlays <b>[holopadoverlays.len ? "en" : "dis"]abled</b>.</span>")
 
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
