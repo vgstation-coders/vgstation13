@@ -275,7 +275,7 @@ That prevents a few funky behaviors.
 									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
 									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
 						else
-							if(!C.contents.len && T.occupant && !T.active)
+							if(!C.contents.len && T.occupant)
 								C.name = "inteliCard - [T.occupant.name]"
 								if (T.occupant.stat == 2)
 									C.icon_state = "aicard-404"
@@ -288,8 +288,6 @@ That prevents a few funky behaviors.
 								T.occupant = null
 							else if (C.contents.len)
 								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
-							else if (T.active)
-								to_chat(U, "<span class='danger'>ERROR:</span> Reconstruction in progress.")
 							else if (!T.occupant)
 								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")		
 	else

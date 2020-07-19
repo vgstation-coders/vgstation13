@@ -6,6 +6,7 @@
 	icon_state = "command"
 	circuit = "/obj/item/weapon/circuitboard/aiupload"
 	var/mob/living/silicon/ai/current = null
+	var/mob/living/silicon/ai/occupant = null
 	var/opened = 0
 
 	light_color = "#555555"
