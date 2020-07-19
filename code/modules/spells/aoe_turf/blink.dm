@@ -61,7 +61,7 @@
 /spell/aoe_turf/blink/vamp/choose_targets()
 	var/turfs = ..()
 	for (var/turf/T in turfs)
-		if (T.get_lumcount() * 10 > 2 || istype(get_area(T), /area/chapel))
+		if (T.get_lumcount() * 10 > 2 || T.holy)
 			turfs -= T
 	return turfs
 
