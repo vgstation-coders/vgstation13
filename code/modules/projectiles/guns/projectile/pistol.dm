@@ -160,12 +160,19 @@
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
+	remove_overlays()
 	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
-	var/auto_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "auto_attach")
+	var/image/auto_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "auto_attach")
+	auto_overlay.pixel_x = chambered ? 0 : -3
 	if(conversionkit)
 		overlays += auto_overlay
-	else
-		overlays -= auto_overlay
+	
+/obj/item/weapon/gun/projectile/glock/proc/remove_overlays() //god this is HORRIBLE
+	var/image/auto_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "auto_attach")
+	auto_overlay.pixel_x = -3
+	overlays -= auto_overlay
+	auto_overlay.pixel_x = 0
+	overlays -= auto_overlay
 		
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/glockfullautoconverter))
@@ -180,8 +187,9 @@
 	if(A.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
+		conversionkit = null
 		update_icon()
-		fire_delay = 2
+		fire_delay = initial(fire_delay)
 		return 1
 	..()
 	
@@ -198,6 +206,11 @@
 			..()
 			shots_fired++
 			if(!user.contents.Find(src) || jammed)
+				break
+			if(prob(2*shots_fired))
+				jammed = 1
+				user.visible_message("*click click*", "<span class='danger'>*click*</span>")
+				playsound(user, empty_sound, 100, 1)
 				break
 			if(defective && shots_fired > burst_count)
 				recoil = 1 + min(shots_fired - burst_count, 6)
