@@ -146,7 +146,8 @@
 	name = "\improper NT Glock"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
 	icon = 'icons/obj/biggun.dmi'
-	w_class = W_CLASS_SMALL
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT | SLOT_POCKET
 	clowned = CLOWNABLE
 	icon_state = "secglockfancy"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
