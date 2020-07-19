@@ -10,6 +10,15 @@
 
 	light_color = "#555555"
 
+/obj/machinery/computer/aiupload/attackby(I as obj, user as mob)
+	if(istype(I, /obj/item/device/aicard))
+		if(stat & (NOPOWER|BROKEN))
+			to_chat(user, "This terminal isn't functioning right now, get it working!")
+			return
+		I:transfer_ai("AIUPLOAD","AICARD",src,user)
+		return
+	return ..()
+
 
 /obj/machinery/computer/aiupload/verb/AccessInternals()
 	set category = "Object"
@@ -132,7 +141,10 @@
 		to_chat(usr, "The upload computer is broken!")
 		return
 
-	current = select_active_ai(user)
+	if (src.occupant)
+		current = src.occupant
+	else
+		current = select_active_ai(user)
 
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
