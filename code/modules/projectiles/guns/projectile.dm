@@ -20,6 +20,7 @@
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
 	var/list/mag_type_restricted = list() //better magazine manipulation
+	var/list/magwellmod = list() //this holds the magtype restriction when a mod is applied
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -187,6 +188,7 @@
 	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
 		if(user.drop_item(A, src))
 			to_chat(user, "<span class='notice'>You apply [A] to [src]. It won't be coming off in one piece.</span>")
+			magwellmod = mag_type_restricted
 			mag_type_restricted = list()
 			w_class = W_CLASS_MEDIUM
 			update_icon()
@@ -241,8 +243,8 @@
 			return
 	
 	if(A.is_screwdriver(user))
-		if(mag_type_restricted.len != initial(mag_type_restricted.len))
-			mag_type_restricted = initial(mag_type_restricted)
+		if(magwellmod.len)
+			mag_type_restricted = magwellmod
 			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
