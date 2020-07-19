@@ -197,8 +197,10 @@
 	if(conversionkit)
 		if(!ready_to_fire())
 			return 1
-		var/burst_count = 31 //magdump
-		var/shots_fired = 0 //haha, I'm so clever
+		var/burst_count = 21 //magdump
+		if(stored_magazine && stored_magazine.max_ammo > burst_count)
+			burst_count = stored_magazine.max_ammo
+		var/shots_fired = 0
 		var/to_shoot = min(burst_count, getAmmo())
 		var/atom/originaltarget = target
 		for(var/i = 1 to to_shoot)
