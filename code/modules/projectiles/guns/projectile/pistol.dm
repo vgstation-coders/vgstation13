@@ -199,7 +199,7 @@
 			return 1
 		var/burst_count = 21 //magdump
 		if(stored_magazine && stored_magazine.max_ammo > burst_count)
-			burst_count = stored_magazine.max_ammo
+			burst_count = stored_magazine.max_ammo + 1
 		var/shots_fired = 0
 		var/to_shoot = min(burst_count, getAmmo())
 		var/atom/originaltarget = target
