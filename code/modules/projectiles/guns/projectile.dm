@@ -52,10 +52,10 @@
 				return 0
 		if(user)
 			if(user.drop_item(AM, src))
-				to_chat(usr, "<span class='notice'>You load the magazine into \the [src].</span>")
+				to_chat(usr, "<span class='notice'>You load [AM] into \the [src].</span>")
 			else
 				return
-
+		
 		stored_magazine = AM
 		chamber_round()
 		AM.update_icon()
@@ -81,7 +81,8 @@
 					AC.forceMove(user.loc)
 					dropped_bullets++
 					stored_magazine.update_icon()
-				to_chat(usr, "<span class='notice'>You unjam the [name], and spill [dropped_bullets] bullet\s in the process.</span>")
+				var/droppedwords = dropped_bullets ? "" : ", and spill [dropped_bullets] bullet\s in the process"
+				to_chat(usr, "<span class='notice'>You unjam the [name][droppedwords].</span>")
 				chamber_round()
 				update_icon()
 				return 0
@@ -183,6 +184,14 @@
 			update_icon()
 			return 1
 
+	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You apply [A] to [src]. It won't be coming off in one piece.</span>")
+			mag_type_restricted = list()
+			w_class = W_CLASS_MEDIUM
+			update_icon()
+			return 1
+
 	var/num_loaded = 0
 	if(istype(A, /obj/item/ammo_storage/magazine))
 		var/obj/item/ammo_storage/magazine/AM = A
@@ -229,6 +238,12 @@
 			new /datum/action/item_action/toggle_scope(src)
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
+			return
+	
+	if(A.is_screwdriver(user))
+		if(mag_type_restricted.len != initial(mag_type_restricted.len))
+			mag_type_restricted = initial(mag_type_restricted)
+			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)

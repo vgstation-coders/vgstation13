@@ -156,7 +156,7 @@
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
-	var/obj/item/gun_part/glockfullautoconverter/conversionkit = null
+	var/obj/item/gun_part/glock_auto_conversion_kit/conversionkit = null
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
@@ -175,13 +175,13 @@
 	overlays -= auto_overlay
 		
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/glockfullautoconverter))
+	if(istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
 			to_chat(user, "<span class='notice'>You click [A] into [src].</span>")
 			conversionkit = A
 			update_icon()
 			fire_delay = 0
-			desc += "<br>This one seems to be modified."
+			desc += "<br>This one seems to have something screwed into it."
 			return 1
 		
 	if(conversionkit && A.is_screwdriver(user))
@@ -197,28 +197,25 @@
 	if(conversionkit)
 		if(!ready_to_fire())
 			return 1
-		var/burst_count = 31
+		var/burst_count = 31 //magdump
 		var/shots_fired = 0 //haha, I'm so clever
 		var/to_shoot = min(burst_count, getAmmo())
-		if(defective && prob(20))
-			to_shoot = getAmmo()
+		var/atom/originaltarget = target
 		for(var/i = 1 to to_shoot)
 			..()
 			shots_fired++
 			if(!user.contents.Find(src) || jammed)
 				break
-			if(prob(2*shots_fired))
-				jammed = 1
+			if(prob(2 * shots_fired / 5)) //increasing chance to jam
+				jammed = 1 //Someone should write a nicer Jam() proc
 				user.visible_message("*click click*", "<span class='danger'>*click*</span>")
 				playsound(user, empty_sound, 100, 1)
+				chambered = null //there's no indication of the jam otherwise
+				update_icon()
 				break
-			if(defective && shots_fired > burst_count)
-				recoil = 1 + min(shots_fired - burst_count, 6)
-			if(defective && prob(max(0, shots_fired - burst_count * 4)))
-				to_chat(user, "<span class='danger'>\The [src] explodes!.</span>")
-				explosion(get_turf(loc), -1, 0, 2)
-				user.drop_item(src, force_drop = 1)
-				qdel(src)
+			if(shots_fired > 3) //burst flies all over the place
+				target = get_inaccuracy(originaltarget, clamp(recoil, 0, 1))
+			recoil += min(shots_fired / 4, 1)
 		recoil = initial(recoil)
 		return 1
 	else
