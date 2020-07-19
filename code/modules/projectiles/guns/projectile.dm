@@ -92,10 +92,10 @@
 		if(user)
 			if(user.put_in_any_hand_if_possible(stored_magazine)) //if you have empty hands, you'll get the mag
 				user.put_in_hands(stored_magazine)
-				to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You pull [src] out of \the [src]!</span>")
 			else
 				stored_magazine.forceMove(user.loc) //otherwise, it drops to the place you are existing
-				to_chat(usr, "<span class='notice'>You drop the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You drop [src] out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
 		update_icon()
