@@ -93,7 +93,7 @@
 		/obj/item/pizzabox/vegetable,
 		/obj/item/pizzabox/mushroom,
 		/obj/item/weapon/beartrap,
-		/obj/item/stack/package_wrap/syndie,	//The only syndie item on this list
+		/obj/item/stack/package_wrap/syndie,	
 		/obj/item/device/handtv,
 		/obj/item/device/wormhole_jaunter,
 		/obj/item/mounted/poster,
