@@ -59,7 +59,7 @@
 		/obj/item/weapon/hatchet,
 		/obj/item/device/hailer,
 		/obj/item/weapon/storage/fancy/donut_box,	
-		/obj/item/clothing/accessory/holomap_chip/operative, //Too far?
+		/obj/item/clothing/accessory/holomap_chip, //Too far?
 
 		//Toys
 		/obj/item/toy/sword,
