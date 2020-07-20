@@ -100,25 +100,6 @@
 		/obj/item/inflatable/wall,
 		/obj/item/inflatable/door,
 		/obj/item/toy/balloon/long,
-		
-		
-		
-		
-
-		
-
-
-		
-		
-
-		
-		
-		
-		
-		
-		
-
-
 
 		)
 
