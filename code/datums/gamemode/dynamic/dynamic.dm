@@ -220,7 +220,9 @@ var/stacking_limit = 90
 		return
 	var/list/last_round_rulesets = list()
 	for(var/entry in last_round_rulesets_text)
-		last_round_rulesets += text2path(entry)
+		var/entry_path = text2path(entry)
+		if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
+			last_round_rulesets += entry_path
 	last_round_executed_rules = last_round_rulesets
 
 /datum/gamemode/dynamic/Setup()
