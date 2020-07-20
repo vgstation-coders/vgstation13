@@ -242,10 +242,10 @@
 				if(R.scrambledcodes)
 					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && R.emagged != 1)
+				if(istype(R, /mob/living/silicon/robot) && istype(usr, /mob/living/silicon/ai) && ismalf(usr) && R.emagged != 1)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
-						if(R && istype(R))
+						if(R)
 //							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
 							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
 							R.SetEmagged(2)
