@@ -30,6 +30,7 @@
 		/obj/item/weapon/reagent_containers/glass/bottle/capsaicin,
 		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
 		/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer,
+		/obj/item/device/reagent_scanner/adv,
 
 		//Robots (and the mimic)
 		/mob/living/simple_animal/hostile/mimic,
@@ -49,7 +50,6 @@
 		/obj/item/weapon/pickaxe/shovel,
 		/obj/item/stack/cable_coil/random,
 		/obj/item/weapon/soap/,
-		/obj/item/device/mass_spectrometer,
 
 		//Weapons and Security Gear
 		/obj/item/weapon/kitchen/utensil/knife/large/butch,
