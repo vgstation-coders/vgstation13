@@ -1393,6 +1393,9 @@ var/list/has_died_as_golem = list()
 					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
 
+/datum/species/mushroom/makeName()
+	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
+
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()
 	H.default_gib()
