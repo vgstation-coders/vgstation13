@@ -168,10 +168,11 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/butt_replace
-	/datum/surgery_step/butt_replace/priority = 2 //this is more important than anything else!
-	/datum/surgery_step/butt_replace/can_infect = 0
-	/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == LIMB_GROIN && hasorgans(target)
+	priority = 2 //this is more important than anything else!
+	can_infect = 0
+
+/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	return target_zone == LIMB_GROIN && hasorgans(target)
 
 
 /////PULL FLESH////////

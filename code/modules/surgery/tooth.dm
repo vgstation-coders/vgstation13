@@ -4,15 +4,16 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/tooth_replace
-	/datum/surgery_step/tooth_replace/priority = 10
-	/datum/surgery_step/tooth_replace/can_infect = 0
-	/datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		return target_zone == TARGET_MOUTH
+	priority = 10
+	can_infect = 0
+
+/datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	return target_zone == TARGET_MOUTH
 
 
 ///////MEND ROOTS///////
@@ -99,15 +100,16 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/tooth_extract
-	/datum/surgery_step/tooth_extract/priority = 5
-	/datum/surgery_step/tooth_extract/can_infect = 0
-	/datum/surgery_step/tooth_extract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		return target_zone == TARGET_MOUTH
+	priority = 5
+	can_infect = 0
+
+/datum/surgery_step/tooth_extract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	return target_zone == TARGET_MOUTH
 
 
 ///////SET JAWS///////
