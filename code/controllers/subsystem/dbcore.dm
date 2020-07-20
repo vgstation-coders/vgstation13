@@ -133,7 +133,7 @@ var/datum/subsystem/dbcore/SSdbcore
 		if(Connect())
 			log_world("Database connection established.")
 			/*
-			var/datum/DBQuery/query_db_version = NewQuery(/**xx**/"SELECT major, minor FROM schema_revision ORDER BY date DESC LIMIT 1")
+			var/datum/DBQuery/query_db_version = NewQuery("SELECT major, minor FROM schema_revision ORDER BY date DESC LIMIT 1")
 			query_db_version.Execute()
 			if(query_db_version.NextRow())
 				db_major = text2num(query_db_version.item[1])
@@ -167,10 +167,10 @@ var/datum/subsystem/dbcore/SSdbcore
 /datum/subsystem/dbcore/proc/SetRoundID()
 	if(!Connect())
 		return
-	var/datum/DBQuery/query_round_initialize = SSdbcore.NewQuery(/**xx**/"")
+	var/datum/DBQuery/query_round_initialize = SSdbcore.NewQuery("")
 	query_round_initialize.Execute(async = FALSE)
 	qdel(query_round_initialize)
-	var/datum/DBQuery/query_round_last_id = SSdbcore.NewQuery(/**xx**/"SELECT LAST_INSERT_ID()")
+	var/datum/DBQuery/query_round_last_id = SSdbcore.NewQuery("SELECT LAST_INSERT_ID()")
 	query_round_last_id.Execute(async = FALSE)
 	if(query_round_last_id.NextRow(async = FALSE))
 		GLOB.round_id = query_round_last_id.item[1]

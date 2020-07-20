@@ -79,7 +79,7 @@ var/datum/blackbox/blackbox = new
 
 	var/nqueries = 0
 
-	var/datum/DBQuery/query = SSdbcore.NewQuery(/**xx**/"SELECT MAX(round_id) AS round_id FROM erro_feedback")
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT MAX(round_id) AS round_id FROM erro_feedback")
 	if(!query.Execute())
 		log_sql("Error: [query.ErrorMsg()]")
 		qdel(query)
