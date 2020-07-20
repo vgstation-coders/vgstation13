@@ -8,10 +8,6 @@
 	anchored = 1
 	var/shattered = 0
 
-
-/obj/structure/mirror/attack_hand(mob/user)
-	choose(user, user)
-
 /obj/structure/mirror/proc/can_use(mob/living/user, mob/living/carbon/human/target)
 	if(shattered)
 		return FALSE
@@ -22,6 +18,34 @@
 	if(!Adjacent(user) || !Adjacent(target))
 		return FALSE
 	if(user.incapacitated())
+		return FALSE
+	return TRUE
+
+/obj/structure/mirror/proc/delay(mob/living/user, mob/living/carbon/human/target, which)
+	if(user == target)
+		return TRUE
+	which = lowertext(which)
+	visible_message("<span class='danger'>[user] tries to change [target]'s [which].</span>")
+	if(do_after_many(user, list(target, src), 3 SECONDS))
+		visible_message("<span class='notice'>[user] changes [target]'s [which].</span>")
+		return TRUE
+	return FALSE
+
+/obj/structure/mirror/proc/vampire_check(mob/living/user, mob/living/carbon/human/target)
+	var/datum/role/vampire/V = isvampire(target)
+	if(V && !(VAMP_MATURE in V.powers))
+		to_chat(user, "<span class='notice'>You don't see anything in \the [src].</span>")
+		return FALSE
+	return TRUE
+
+/obj/structure/mirror/proc/attempt(mob/living/user, mob/living/carbon/human/target, which)
+	if(!can_use(user, target))
+		return FALSE
+	if(!delay(user, target, which))
+		return FALSE
+	if(!can_use(user, target))
+		return FALSE
+	if(!vampire_check(user, target))
 		return FALSE
 	return TRUE
 
@@ -56,11 +80,7 @@
 			var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, target.gender, target.species.name)
 			if(species_facial_hair.len)
 				var/new_style = input(user, "Select a facial hair style", "Grooming") as null|anything in species_facial_hair
-				if(!new_style || !can_use(user, target))
-					return
-				if(!delay(user, target, which))
-					return
-				if(!can_use(user, target))
+				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.f_style = new_style
 				target.update_hair()
@@ -69,11 +89,7 @@
 			var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, target.species.name) //gender intentionally left null so speshul snowflakes can cross-hairdress
 			if(species_hair.len)
 				var/new_style = input(user, "Select a hair style", "Grooming") as null|anything in species_hair
-				if(!new_style || !can_use(user, target))
-					return
-				if(!delay(user, target, which))
-					return
-				if(!can_use(user, target))
+				if(!new_style || !attempt(user, target, which))
 					return
 				target.my_appearance.h_style = new_style
 				target.update_hair()
@@ -86,25 +102,14 @@
 				underwear_options = underwear_f
 
 			var/new_underwear = input(user, "Select your underwear:", "Undies") as null|anything in underwear_options
-			if(!new_underwear || !can_use(user, target))
-				return
-			if(!delay(user, target, which))
-				return
-			if(!can_use(user, target))
+			if(!new_underwear || !attempt(user, target, which))
 				return
 			target.underwear = underwear_options.Find(new_underwear)
 			target.regenerate_icons()
 	add_fingerprint(user)
 
-/obj/structure/mirror/proc/delay(mob/living/user, mob/living/carbon/human/target, which)
-	if(user == target)
-		return TRUE
-	which = lowertext(which)
-	visible_message("<span class='danger'>[user] tries to change [target]'s [which].</span>")
-	if(do_after_many(user, list(target, src), 3 SECONDS))
-		visible_message("<span class='notice'>[user] changes [target]'s [which].</span>")
-		return TRUE
-	return FALSE
+/obj/structure/mirror/attack_hand(mob/user)
+	choose(user, user)
 
 /obj/structure/mirror/MouseDropTo(mob/living/carbon/human/victim, mob/user)
 	choose(user, victim)
