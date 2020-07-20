@@ -35,8 +35,8 @@
 		/mob/living/simple_animal/hostile/mimic,
 		/mob/living/simple_animal/hostile/viscerator,
 		/mob/living/simple_animal/hostile/hivebot,
-		/obj/machinery/bot/cleanbot/roomba, //UNLEASH THE HORDE
-		/obj/machinery/bot/secbot, //Probably a bad idea.
+	//	/obj/machinery/bot/cleanbot/roomba, //UNLEASH THE HORDE
+	//	/obj/machinery/bot/secbot, //Probably a bad idea.
 
 		//Tools
 		/obj/item/device/analyzer,
