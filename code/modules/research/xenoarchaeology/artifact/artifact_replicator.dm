@@ -22,7 +22,7 @@
 
 	var/list/viables = list(
 		//Medical
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/roller,
 		/obj/item/device/healthanalyzer,
 		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
@@ -98,7 +98,7 @@
 		/obj/item/device/wormhole_jaunter,
 		/obj/item/mounted/poster,
 		/obj/item/inflatable/wall,
-		/obj/item/inflatable/wall,
+		/obj/item/inflatable/door,
 		/obj/item/toy/balloon/long,
 		
 		
