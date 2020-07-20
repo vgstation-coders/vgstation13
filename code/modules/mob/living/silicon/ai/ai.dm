@@ -489,27 +489,15 @@ var/list/ai_list = list()
 	#endif
 
 	if(href_list["track"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-			A.ai_actual_track(target)
-		return
-
-	else if(href_list["faketrack"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-
-			A.cameraFollow = target
-			to_chat(A, text("Now tracking [] on camera.", target.name))
-			if(usr.machine == null)
-				usr.machine = usr
-
-			while (src.cameraFollow == target)
-				to_chat(usr, "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb).")
-				sleep(40)
+		var/name_to_track = href_list["track"]
+		for(var/mob/some_mob in mob_list)
+			if(some_mob.name != name_to_track)
 				continue
-
+			if(!can_track_atom(some_mob))
+				continue
+			ai_actual_track(some_mob)
+			return
+		to_chat(src, "<span class='warning'>Unable to track [name_to_track].</span>")
 		return
 
 	if(href_list["open"])
@@ -840,12 +828,12 @@ var/list/ai_list = list()
 		return
 
 	mentions_on = !mentions_on
-	
-	if(!mentions_on)		
+
+	if(!mentions_on)
 		to_chat(src, "AI mentions deactivated.")
 	else
 		to_chat(src, "AI mentions activated.")
-	
+
 
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"

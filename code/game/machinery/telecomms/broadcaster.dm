@@ -267,7 +267,6 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	virt.job = speech.job
 	//virt.languages = AM.languages
 	virt.source = speech.speaker
-	virt.faketrack = (data == 4) ? 1 : 0
 	virt.radio = speech.radio
 
 	if (compression > 0)
