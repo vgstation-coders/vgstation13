@@ -11,7 +11,7 @@
 	tDomeY = 58
 	tDomeZ = 2
 	zLevels = list(
-		/datum/zLevel/station,
+		/datum/zLevel/hyperspace,
 		/datum/zLevel/centcomm,
 		/datum/zLevel/space{
 			name = "spaceOldSat" ;
@@ -38,6 +38,7 @@
 
 ////////////////////////////////////////////////////////////////
 #include "NRVHorizon.dmm"
+
 #include "NRVH\areas.dm"
 
 #if !defined(MAP_OVERRIDE_FILES)
