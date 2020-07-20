@@ -926,7 +926,7 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process.")
+			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
 			sleep(600)

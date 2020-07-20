@@ -249,7 +249,7 @@
 						if(R)
 							if (!hacking)
 								hacking = 1
-								to_chat(usr, "Beginning override of cyborg safeties. This will take about a minute.")
+								to_chat(usr, "Beginning override of cyborg safeties. This will take some time, and you cannot hack other borgs during the process.")
 								sleep(600)
 //								message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
 								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
