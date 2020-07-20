@@ -55,7 +55,7 @@
 	else if(banckey)
 		ckey = ckey(banckey)
 
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_player WHERE ckey = '[ckey]'")
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_player WHERE ckey = :ckey", list("ckey" = "[ckey]"))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -202,7 +202,7 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 		to_chat(usr, "Cancelled")
 		return
 
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, duration, reason FROM erro_ban WHERE id = [banid]")
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, duration, reason FROM erro_ban WHERE id = :banid", list("banid" = banid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -235,7 +235,12 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 					to_chat(usr, "Cancelled")
 					return
 
-			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET reason = '[value]', edits = CONCAT(edits,'- [eckey] changed ban reason from <cite><b>\\\"[reason]\\\"</b></cite> to <cite><b>\\\"[value]\\\"</b></cite><BR>') WHERE id = [banid]")
+			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET reason = , edits = CONCAT(edits,:edits) WHERE id = :banid",
+				list(
+					"value" = "[value]",
+					"edits" = "- [eckey] changed ban reason from <cite><b>\\\"[reason]\\\"</b></cite> to <cite><b>\\\"[value]\\\"</b></cite><BR>",
+					"banid" = banid
+				))
 			if(!update_query.Execute())
 				message_admins("Error: [update_query.ErrorMsg()]")
 				log_sql("Error: [update_query.ErrorMsg()]")
@@ -250,7 +255,12 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 					to_chat(usr, "Cancelled")
 					return
 
-			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET duration = [value], edits = CONCAT(edits,'- [eckey] changed ban duration from [duration] to [value]<br>'), expiration_time = DATE_ADD(bantime, INTERVAL [value] MINUTE) WHERE id = [banid]")
+			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET duration = :value, edits = CONCAT(edits,:edits), expiration_time = DATE_ADD(bantime, INTERVAL :value MINUTE) WHERE id = :banid",
+				list(
+					"value" = "[value]",
+					"edits" = "- [eckey] changed ban duration from [duration] to [value]<br>",
+					"banid" = banid,
+			))
 			message_admins("[key_name_admin(usr)] has edited a ban for [pckey]'s duration from [duration] to [value]",1)
 			if(!update_query.Execute())
 				message_admins("Error: [update_query.ErrorMsg()]")
@@ -413,11 +423,15 @@ datum/admins/proc/DB_ban_unban_by_id(var/id)
 		var/adminsearch = ""
 		var/playersearch = ""
 		if(adminckey)
-			adminsearch = "AND a_ckey = '[adminckey]' "
+			adminsearch = "AND a_ckey = :adminckey "
 		if(playerckey)
-			playersearch = "AND ckey = '[playerckey]' "
+			playersearch = "AND ckey = :playerckey "
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT id, bantime, bantype, reason, job, duration, expiration_time, ckey, a_ckey, unbanned, unbanned_ckey, unbanned_datetime, edits FROM erro_ban WHERE 1 [playersearch] [adminsearch] ORDER BY bantime DESC")
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT id, bantime, bantype, reason, job, duration, expiration_time, ckey, a_ckey, unbanned, unbanned_ckey, unbanned_datetime, edits FROM erro_ban WHERE 1 [playersearch] [adminsearch] ORDER BY bantime DESC",
+			list(
+				"adminckey" = adminckey,
+				"playerckey" = playerckey,
+			))
 		if(!select_query.Execute())
 			qdel(select_query)
 			message_admins("Error: [select_query.ErrorMsg()]")

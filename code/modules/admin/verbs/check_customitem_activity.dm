@@ -73,7 +73,7 @@ var/inactive_keys = "None<br>"
 	//if there are ckeys left over, check whether they have a database entry at all
 	if(ckeys_with_customitems.len)
 		for(var/cur_ckey in ckeys_with_customitems)
-			var/datum/DBQuery/query_inactive = SSdbcore.NewQuery("SELECT ckey FROM erro_player WHERE ckey = '[cur_ckey]'")
+			var/datum/DBQuery/query_inactive = SSdbcore.NewQuery("SELECT ckey FROM erro_player WHERE ckey = :ckey", list("ckey" = "[cur_ckey]"))
 			query_inactive.Execute()
 			if(!query_inactive.Execute())
 				log_sql("Error: [query_inactive.ErrorMsg()]")
