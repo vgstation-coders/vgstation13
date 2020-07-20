@@ -129,7 +129,7 @@
 				vomit()
 			if(prob(5*minor_rad_multiplier))
 				//Nosebleed
-				if(prob(15) && drip(1))
+				if(prob(15) && drip(1) && species.anatomy_flags & NO_BLOOD)
 					to_chat(src, "<span class = 'danger'>Your nose starts bleeding!</span>")
 			if(prob(5*major_rad_multiplier))
 				//Hallucination
