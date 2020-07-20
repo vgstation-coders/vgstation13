@@ -244,7 +244,7 @@ That prevents a few funky behaviors.
 									C.icon_state = "aicard-full"
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
 								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
-								if(A.control_disabled = 1)
+								if(A.control_disabled == 1)
 									to_chat(T.occupant, "Remote access disabled.")
 								else
 									to_chat(T.occupant, "Remote access enabled.")
@@ -286,7 +286,7 @@ That prevents a few funky behaviors.
 								else
 									C.icon_state = "aicard-full"
 								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
-								if(A.control_disabled = 1)
+								if(A.control_disabled == 1)
 									to_chat(T.occupant, "Remote access disabled.")
 								else
 									to_chat(T.occupant, "Remote access enabled.")
