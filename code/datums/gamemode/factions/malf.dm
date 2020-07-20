@@ -41,7 +41,7 @@
 				continue
 			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
-		if(!living_ais && !ticker.station_was_nuked)
+		if(!living_ais)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
 			return
