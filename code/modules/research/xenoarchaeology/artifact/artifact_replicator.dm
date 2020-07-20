@@ -25,7 +25,7 @@
 		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/roller,
 		/obj/item/device/healthanalyzer,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/toxin,
 		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
 		/obj/item/weapon/reagent_containers/glass/bottle/capsaicin,
 		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
