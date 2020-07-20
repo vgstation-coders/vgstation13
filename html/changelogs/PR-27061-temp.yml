@@ -1,6 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: Cultists turning into shades now properly drop all their items
-  - tweak: Beheading cultists or otherwise destroying their heads now also turns them into shades
-delete-after: true

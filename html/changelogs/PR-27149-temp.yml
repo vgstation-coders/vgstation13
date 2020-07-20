@@ -1,5 +1,0 @@
----
-author: DamianX
-changes:
-  - rscadd: Examining a spaceman with open body parts now shows a list of things that are inside those body parts.
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: DamianX
-changes:
-  - bugfix: AIs will no longer be able to track people after they changed identity. AI tracking now looks for the name that was used in radio messages instead.
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: Hatterhat
-changes:
-  - rscadd: "Plasma cutters (the ones that shoot, from experimental tech) now have a safety; for when you want to hit rocks, not shoot them. Toggle it by using it in your hand."
-delete-after: true

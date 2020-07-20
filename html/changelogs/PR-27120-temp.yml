@@ -1,5 +1,0 @@
----
-author: ShiftyRail
-changes:
-  - rscadd: "Changed yet again the system we use to communicate with the game's database for more stability and less crashes."
-delete-after: true
