@@ -58,7 +58,7 @@
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/hatchet,
 		/obj/item/device/hailer,
-		/obj/item/weapon/storage/fancy/donut_box,
+		/obj/item/weapon/storage/fancy/donut_box,	
 		/obj/item/clothing/accessory/holomap_chip/operative, //Too far?
 
 		//Toys
@@ -70,14 +70,14 @@
 		//Grenades
 		/obj/item/weapon/grenade/chem_grenade/cleaner,
 		/obj/item/weapon/grenade/chem_grenade/metalfoam,
-		/obj/item/weapon/grenade/flashbang,
+		/obj/item/weapon/grenade/flashbang,		//Pretty powerful
 		/obj/item/weapon/grenade/smokebomb,
 		/obj/item/weapon/grenade/chem_grenade/wind,
 
 		//Clothing
 		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/item/clothing/accessory/storage/webbing/paramed,
+		/obj/item/clothing/accessory/storage/webbing/paramed,	//Pretty powerful
 
 		//Other
 		/obj/structure/closet/acloset,
@@ -88,12 +88,12 @@
 		/obj/item/weapon/caution/cone,
 		/obj/item/weapon/cell/high,
 		/obj/item/device/assembly/mousetrap,
-		/obj/item/pizzabox/meat,		
+		/obj/item/pizzabox/meat,		//Pizza boxes: infinite food. Might be an issue
 		/obj/item/pizzabox/margherita,
 		/obj/item/pizzabox/vegetable,
 		/obj/item/pizzabox/mushroom,
 		/obj/item/weapon/beartrap,
-		/obj/item/stack/package_wrap/syndie,
+		/obj/item/stack/package_wrap/syndie,	//The only syndie item on this list
 		/obj/item/device/handtv,
 		/obj/item/device/wormhole_jaunter,
 		/obj/item/mounted/poster,
