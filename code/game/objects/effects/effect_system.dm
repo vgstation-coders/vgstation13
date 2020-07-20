@@ -763,7 +763,6 @@ steam.start() -- spawns the effect
 		flick("[icon_state]-disolve", src)
 		sleep(5)
 		qdel(src)
-	AddToProfiler()
 
 /obj/effect/effect/foam/fire/process()
 	if(--amount < 0)

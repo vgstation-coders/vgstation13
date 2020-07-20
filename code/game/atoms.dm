@@ -141,22 +141,6 @@ var/global/list/ghdel_profiling = list()
 				var/mob/living/M = src
 				M.take_organ_damage(10)
 
-/atom/proc/AddToProfiler()
-	// Memory usage profiling - N3X.
-	++type_instances[type]
-
-/atom/proc/DeleteFromProfiler()
-	// Memory usage profiling - N3X.
-	if (type in type_instances)
-		type_instances[type] = type_instances[type] - 1
-	else
-		type_instances[type] = 0
-		WARNING("Type [type] does not inherit /atom/New().  Please ensure ..() is called, or that the type calls AddToProfiler().")
-
-/atom/Del()
-	DeleteFromProfiler()
-	..()
-
 /atom/Destroy()
 	if(reagents)
 		qdel(reagents)
@@ -184,7 +168,6 @@ var/global/list/ghdel_profiling = list()
 /atom/New()
 	on_density_change = new("owner"=src)
 	. = ..()
-	AddToProfiler()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
