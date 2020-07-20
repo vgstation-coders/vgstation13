@@ -1,7 +1,6 @@
 language: generic
 os: linux
 dist: bionic
-sudo: false
 
 env:
   global:
