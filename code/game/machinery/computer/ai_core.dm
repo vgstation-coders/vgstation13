@@ -243,7 +243,11 @@ That prevents a few funky behaviors.
 								else
 									C.icon_state = "aicard-full"
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
-								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								if(A.control_disabled = 1)
+									to_chat(T.occupant, "Remote access disabled.")
+								else
+									to_chat(T.occupant, "Remote access enabled.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
 								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
@@ -281,7 +285,11 @@ That prevents a few funky behaviors.
 									C.icon_state = "aicard-404"
 								else
 									C.icon_state = "aicard-full"
-								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								if(A.control_disabled = 1)
+									to_chat(T.occupant, "Remote access disabled.")
+								else
+									to_chat(T.occupant, "Remote access enabled.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
 								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
