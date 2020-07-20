@@ -376,6 +376,21 @@
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
 	return
 
+
+/obj/item/weapon/circuitboard/fishtank/proc/solder_improve(mob/user as mob)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a larger tank.</span>")
+	var/obj/item/weapon/circuitboard/fishwall/A = new /obj/item/weapon/circuitboard/fishwall(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+	return	
+
+/obj/item/weapon/circuitboard/fishwall/proc/solder_improve(mob/user as mob)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a smaller tank.</span>")
+	var/obj/item/weapon/circuitboard/fishtank/A = new /obj/item/weapon/circuitboard/fishtank(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+	return
+
 /obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user as mob)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
