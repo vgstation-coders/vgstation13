@@ -213,6 +213,13 @@ var/global/list/accessable_z_levels = list()
 	movementJammed = TRUE
 	transitionLoops = TRUE
 
+//for Horizon
+/datum/zLevel/hyperspace
+	name = "hyperspace"
+	base_turf = /turf/space/transit/south //NRV Horizon flies ever onway
+	movementJammed = TRUE
+
+
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert
 
