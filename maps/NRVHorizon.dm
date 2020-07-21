@@ -26,6 +26,10 @@
 		)
 	enabled_jobs = list(/datum/job/trader)
 
+	event_blacklist = list(/datum/event/carp_migration,/datum/event/rogue_drone,/datum/event/immovable_rod,
+						/datum/event/meteor_wave,/datum/event/meteor_shower,/datum/event/thing_storm/meaty_gore,/datum/event/thing_storm/blob_shower,
+						/datum/event/thing_storm/blob_storm,/datum/event/thing_storm/fireworks)
+
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck
 	)
