@@ -45,9 +45,6 @@ var/global/list/deadmins = list()
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
 var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
-// List of types and how many instances of each type there are.
-var/list/type_instances = list()
-
 /var/global/datum/map/active/map = new() //Current loaded map
 //Defined in its .dm, see maps/_map.dm for more info.
 
@@ -500,7 +497,7 @@ var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
 	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
 	"on_item_removed","on_moved","on_destroyed","on_density_change",
-	"on_z_transition","on_use","on_emote","on_life","on_resist","post_z_transition",
+	"on_use","on_emote","on_life","on_resist",
 	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
 	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",

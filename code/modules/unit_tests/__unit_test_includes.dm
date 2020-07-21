@@ -7,4 +7,5 @@
 #include "slipping.dm"
 #include "names.dm"
 #include "turretid.dm"
+#include "lazy_events.dm"
 #endif

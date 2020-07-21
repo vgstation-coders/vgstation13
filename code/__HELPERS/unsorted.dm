@@ -289,7 +289,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 				if(A.aiPDA)
 					A.aiPDA.owner = newname
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
-				
+
 
 		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
@@ -1369,6 +1369,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	return
 
 /mob/dview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
 	CRASH("Somebody called qdel on dview. That's extremely rude.")
 
 //Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
@@ -1388,6 +1389,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 
 //Aside from usage, this proc is the only difference between tview and dview.
 /mob/dview/tview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
 	CRASH("Somebody called qdel on tview. That's extremely rude.")
 
 //They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it

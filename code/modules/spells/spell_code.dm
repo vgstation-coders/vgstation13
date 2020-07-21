@@ -148,7 +148,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
 		set_holder(user) //just in case
 
@@ -229,13 +229,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/channeled_spell(var/list/args)
 	var/event/E = args["event"]
-	
+
 	if(!currently_channeled)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 
 	var/atom/A = args["atom"]
-	
+
 	if(E.holder != holder)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0

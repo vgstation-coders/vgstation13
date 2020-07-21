@@ -24,7 +24,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	ignoreinvert = 1
 
 /mob/virtualhearer/New(atom/attachedto)
-	AddToProfiler()
 	virtualhearers += src
 	loc = get_turf(attachedto)
 	attached = attachedto
@@ -37,8 +36,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 
 	if(!is_type_in_list(attachedto,stationary_hearers))
 		movable_hearers += src
-
-	virtualhearers += src
 
 /mob/virtualhearer/Destroy()
 	..()

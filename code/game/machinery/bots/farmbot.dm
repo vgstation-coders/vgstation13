@@ -227,6 +227,7 @@
 		flick("[src.icon_initial]_broke", src)
 
 	if ( mode == FARMBOT_MODE_WAITING )
+		find_target()
 		return
 
 	if ( !mode || !target || !(target in view(7,src)) ) //Don't bother chasing down targets out of view

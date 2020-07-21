@@ -1,4 +1,4 @@
-/mob/living/silicon/robot/gib()
+/mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
 	//robots don't die when gibbed. instead they drop their MMI'd brain
 	disconnect_AI()
 	monkeyizing = TRUE

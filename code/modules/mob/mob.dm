@@ -50,8 +50,6 @@
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
-	if(mind && mind.original == src)
-		mind.original = null
 	spellremove(src)
 	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
 		var/mob/living/carbon/Ca = src
@@ -142,6 +140,16 @@
 		if(client)
 			client.screen -= pullin
 		pullin = null
+	if(kick_icon)
+		qdel(kick_icon)
+		if(client)
+			client.screen -= kick_icon
+		kick_icon = null
+	if(bite_icon)
+		qdel(bite_icon)
+		if(client)
+			client.screen -= bite_icon
+		bite_icon = null
 	if(visible)
 		qdel(visible)
 		if(client)

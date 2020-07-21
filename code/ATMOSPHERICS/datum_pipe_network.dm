@@ -19,8 +19,10 @@
 /datum/pipe_network/Destroy()
 	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
 		pipeline.network = null
+	line_members = null
 	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
 		objects.unassign_network(src)
+	normal_members = null
 	pipe_networks -= src
 	..()
 

@@ -570,7 +570,6 @@
 	return 0
 
 /obj/item/weapon/holo/esword/New()
-	AddToProfiler()
 	_color = pick("red","blue","green","purple")
 
 /obj/item/weapon/holo/esword/attack_self(mob/living/user as mob)

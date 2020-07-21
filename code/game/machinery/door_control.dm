@@ -161,7 +161,7 @@
 	</ul>"}
 
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	src.add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return

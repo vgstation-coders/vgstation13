@@ -84,6 +84,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //returns a copy of the elements list
 /PriorityQueue/proc/List()
+	RETURN_TYPE(/list)
 	var/list/ret = L.Copy()
 	return ret
 

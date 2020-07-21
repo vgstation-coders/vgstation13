@@ -206,7 +206,7 @@
 	w_class = W_CLASS_SMALL
 	var/list/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
-	var/max_hand_size = 5
+	var/max_hand_size = 7
 
 	var/datum/context_click/cardhand/hand_click
 

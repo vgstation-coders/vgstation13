@@ -275,13 +275,6 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	return
 
 /**
- * Probably used for getting tracking coordinates?
- * TODO: verify
- */
-/atom/movable/proc/GetTrack()
-	return
-
-/**
  * What is speaking for us?  Usually src.
  */
 /atom/movable/proc/GetSource()
@@ -294,15 +287,12 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 
 /atom/movable/virtualspeaker
 	var/job
-	var/faketrack
 	var/atom/movable/source
 	var/obj/item/device/radio/radio
 
 /atom/movable/virtualspeaker/GetJob()
 	return job
 
-/atom/movable/virtualspeaker/GetTrack()
-	return faketrack
 
 /atom/movable/virtualspeaker/GetSource()
 	return source

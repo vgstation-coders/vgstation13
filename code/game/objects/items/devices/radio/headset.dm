@@ -277,6 +277,9 @@
 
 	return
 
+/obj/item/device/radio/headset/set_frequency(new_frequency)
+	..()
+	recalculateChannels()
 
 /obj/item/device/radio/headset/proc/recalculateChannels()
 	src.channels = list()

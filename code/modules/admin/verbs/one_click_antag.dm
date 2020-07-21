@@ -232,7 +232,6 @@ client/proc/one_click_antag()
 	// Create a brand new mind for the dude
 	new_character.mind = new
 	new_character.mind.current = new_character
-	new_character.mind.original = new_character
 
 	return new_character
 

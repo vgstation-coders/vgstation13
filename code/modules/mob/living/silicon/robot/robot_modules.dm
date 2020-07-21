@@ -79,7 +79,6 @@
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
 	add_languages(R)
-	AddToProfiler()
 	if(default_modules)
 		AddDefaultModules()
 	UpdateModuleHolder(R)
@@ -635,7 +634,7 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
-	
+
 /obj/item/weapon/robot_module/starman
 	name = "starman robot module"
 	module_holder = "starman"

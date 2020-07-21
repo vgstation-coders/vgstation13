@@ -7,6 +7,7 @@
 	var/spellname = "sandbox"
 	var/used = 0
 	name = "spellbook of "
+	item_state = "oneuse"
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."

@@ -200,9 +200,13 @@
 	var/charges = 0
 	var/soulbound
 	var/mindbound
-	var/z_bound
 	var/mob/bound_soul
 	var/datum/mind/bound_mind
+
+/obj/item/phylactery/examine(mob/user, size, show_name)
+	..()
+	if(iswizard(user))
+		to_chat(user, "<span class='sinister'>You can use charged soulstones to refill it. The more charges you have, the faster you will revive.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/soulstone))
@@ -220,8 +224,7 @@
 /obj/item/phylactery/Destroy()
 	if(bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
+	bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	soulbound = null
 	if(bound_soul)
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
@@ -268,11 +271,16 @@
 		for(var/spell/S in original.spell_list)
 			original.remove_spell(S)
 			H.add_spell(S)
-		H.Paralyse(30)
+		//Let's give the lich some spooky clothes. Including non-wizards.
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/skelelich(H), slot_head)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/skelelich(H), slot_wear_suit)
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
 		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
 		if(!arguments["body_destroyed"])
 			original.dust()
-		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
+		var/release_time = round(rand(60 SECONDS, 120 SECONDS)/charges, 10) //In deciseconds
+		H.Paralyse(release_time/20) //Divide by 20 because Paralyse goes down by 1 every Life() tick (roughly every 2 secs)
 		to_chat(H, "<span class = 'notice'>\The [src] will permit you exit in [release_time/10] seconds.</span>")
 		spawn(release_time)
 			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
@@ -281,18 +289,17 @@
 	update_icon()
 
 /obj/item/phylactery/proc/unbind()
+	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	if(bound_soul.on_death)
 		bound_soul.on_death.Remove(soulbound)
-	if(bound_soul.on_z_transition)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
 	soulbound = null
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
 	soulbound = to_bind.on_death.Add(src, "revive_soul")
-	z_bound = to_bind.on_z_transition.Add(src, "z_block")
+	to_bind.lazy_register_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
@@ -382,7 +389,7 @@
 	if (current_step >= max_steps)
 		deactivate()
 		return ..()
-	
+
 	var/mob/living/carbon/human/H = loc
 	H.delayNextMove(step_cooldown)
 	playsound(H, step_sound, 50, 1)

@@ -220,41 +220,6 @@ var/global/datum/controller/occupations/job_master
 		AssignRole(candidate, command_position)
 	return
 
-
-/datum/controller/occupations/proc/FillAIPosition()
-	var/ai_selected = 0
-	var/datum/job/job = GetJob("AI")
-	if(!job)
-		return 0
-	if((job.title == "AI") && (config) && (!config.allow_ai))
-		return 0
-
-	for(var/i = job.get_total_positions(), i > 0, i--)
-		for(var/level = 1 to 3)
-			var/list/candidates = list()
-			if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-				candidates = FindOccupationCandidates(job, level, MALF)
-			else
-				candidates = FindOccupationCandidates(job, level)
-			if(candidates.len)
-				var/mob/new_player/candidate = pick(candidates)
-				if(AssignRole(candidate, "AI"))
-					ai_selected++
-					break
-		//Malf NEEDS an AI so force one if we didn't get a player who wanted it
-		if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
-			unassigned = shuffle(unassigned)
-			for(var/mob/new_player/player in unassigned)
-				if(jobban_isbanned(player, "AI"))
-					continue
-				if(AssignRole(player, "AI"))
-					ai_selected++
-					break
-		if(ai_selected)
-			return 1
-		return 0
-
-
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
@@ -287,11 +252,6 @@ var/global/datum/controller/occupations/job_master
 	unassigned = shuffle(unassigned)
 
 	HandleFeedbackGathering()
-
-	//Check for an AI
-	Debug("DO, Running AI Check")
-	FillAIPosition()
-	Debug("DO, AI Check end")
 
 	//Other jobs are now checked
 	Debug("DO, Running Standard Check")
@@ -393,7 +353,7 @@ var/global/datum/controller/occupations/job_master
 	return 1
 
 /datum/controller/occupations/proc/TryAssignJob(var/mob/new_player/player, var/level, var/datum/job/job)
-	if(!job)
+	if(!job || job.is_disabled())
 		return FALSE
 	if(jobban_isbanned(player, job.title))
 		Debug("DO isbanned failed, Player: [player], Job:[job.title]")
@@ -421,7 +381,7 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions + 1) > (config.assistantratio * count)
+	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
 	if(enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?

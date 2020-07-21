@@ -71,7 +71,7 @@
 
 /obj/item/clothing/accessory/storage/webbing/paramed
 	name = "paramedic webbing"
-	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel"
+	desc = "Sturdy mess of synthcotton belts and buckles. Made to be worn by medical personnel."
 	icon_state = "vest_white"
 	_color = "vest_white"
 	storage_slots = 4
