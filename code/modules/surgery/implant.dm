@@ -177,8 +177,8 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	min_duration = 20
+	max_duration = 30
 
 /datum/surgery_step/cavity/implant_removal/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/internal/brain/sponge = target.internal_organs_by_name["brain"]
@@ -196,7 +196,7 @@
 	var/datum/organ/external/chest/affected = target.get_organ(target_zone)
 
 	if (affected.implants.len)
-		var/obj/item/obj = affected.implants[1]
+		var/obj/item/obj = affected.implants[affected.implants.len]
 		user.visible_message("<span class='notice'>[user] takes something out of incision on [target]'s [affected.display_name] with \the [tool].</span>", \
 		"<span class='notice'>You take [obj] out of incision on [target]'s [affected.display_name]s with \the [tool].</span>" )
 		affected.implants -= obj
