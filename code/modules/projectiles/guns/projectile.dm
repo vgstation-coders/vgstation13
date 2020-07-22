@@ -20,6 +20,7 @@
 	var/obj/item/ammo_casing/chambered = null
 	var/mag_type = ""
 	var/list/mag_type_restricted = list() //better magazine manipulation
+	var/list/magwellmod = list() //this holds the magtype restriction when a mod is applied
 	var/mag_drop_sound ='sound/weapons/magdrop_1.ogg'
 	var/automagdrop_delay_time = 5 // delays the automagdrop
 	var/spawn_mag = TRUE
@@ -52,10 +53,10 @@
 				return 0
 		if(user)
 			if(user.drop_item(AM, src))
-				to_chat(usr, "<span class='notice'>You load the magazine into \the [src].</span>")
+				to_chat(usr, "<span class='notice'>You load [AM] into \the [src].</span>")
 			else
 				return
-
+		
 		stored_magazine = AM
 		chamber_round()
 		AM.update_icon()
@@ -81,7 +82,8 @@
 					AC.forceMove(user.loc)
 					dropped_bullets++
 					stored_magazine.update_icon()
-				to_chat(usr, "<span class='notice'>You unjam the [name], and spill [dropped_bullets] bullet\s in the process.</span>")
+				var/droppedwords = dropped_bullets ? "" : ", and spill [dropped_bullets] bullet\s in the process"
+				to_chat(usr, "<span class='notice'>You unjam the [name][droppedwords].</span>")
 				chamber_round()
 				update_icon()
 				return 0
@@ -90,10 +92,10 @@
 		if(user)
 			if(user.put_in_any_hand_if_possible(stored_magazine)) //if you have empty hands, you'll get the mag
 				user.put_in_hands(stored_magazine)
-				to_chat(usr, "<span class='notice'>You pull the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You pull [stored_magazine] out of \the [src]!</span>")
 			else
 				stored_magazine.forceMove(user.loc) //otherwise, it drops to the place you are existing
-				to_chat(usr, "<span class='notice'>You drop the magazine out of \the [src]!</span>")
+				to_chat(usr, "<span class='notice'>You drop [stored_magazine] out of \the [src]!</span>")
 		stored_magazine.update_icon()
 		stored_magazine = null
 		update_icon()
@@ -183,6 +185,15 @@
 			update_icon()
 			return 1
 
+	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
+		if(user.drop_item(A, src))
+			to_chat(user, "<span class='notice'>You apply [A] to [src]. It won't be coming off in one piece.</span>")
+			magwellmod = mag_type_restricted
+			mag_type_restricted = list()
+			w_class = W_CLASS_MEDIUM
+			update_icon()
+			return 1
+
 	var/num_loaded = 0
 	if(istype(A, /obj/item/ammo_storage/magazine))
 		var/obj/item/ammo_storage/magazine/AM = A
@@ -229,6 +240,13 @@
 			new /datum/action/item_action/toggle_scope(src)
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
+			return
+	
+	if(A.is_screwdriver(user))
+		if(magwellmod.len)
+			mag_type_restricted = magwellmod
+			magwellmod = list()
+			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
 /obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
