@@ -16,7 +16,8 @@
 		if(stat & (NOPOWER|BROKEN))
 			to_chat(user, "This terminal isn't functioning right now, get it working!")
 			return
-		I:transfer_ai("AIUPLOAD","AICARD",src,user)
+		var/obj/item/card = I
+		card.transfer_ai("AIUPLOAD","AICARD",src,user)
 		return
 	return ..()
 
@@ -49,7 +50,7 @@
 		to_chat(usr, "Law uploads have been disabled by Nanotrasen!")
 		return 0
 
-	if(current.stat == 2 && src.occupant != current)
+	if(current.stat == 2 && occupant != current)
 		to_chat(usr, "Upload failed. No signal is being detected from the AI.")
 	else if(current.aiRestorePowerRoutine)
 		to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
@@ -142,8 +143,8 @@
 		to_chat(usr, "The upload computer is broken!")
 		return
 
-	if (src.occupant)
-		current = src.occupant
+	if (occupant)
+		current = occupant
 	else
 		current = select_active_ai(user)
 
