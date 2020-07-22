@@ -2131,7 +2131,7 @@
 		return 1
 	if(icontype)
 		to_chat(user, "<span class='info'>You begin repainting the mech.</span>")
-		if (do_after(user,src,30))
+		if (do_after(user, M , 30))
 			M.initial_icon = icontype
 			M.icon_state = icontype +"-open"
 			for(var/spell/mech/MS in M.intrinsic_spells)
