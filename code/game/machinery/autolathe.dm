@@ -189,7 +189,7 @@
 		else if(allowed_materials && !((I.materials.storage & allowed_materials) ~= I.materials.storage))
 			var/output = "\The [src] can only accept objects made out of these: "
 			for(var/mat_id in allowed_materials)
-				output += (material_list[mat_id].processed_name + " ")
+				output += (material_list[mat_id].get_processed_name() + " ")
 			to_chat(user, output)
 			return 1
 

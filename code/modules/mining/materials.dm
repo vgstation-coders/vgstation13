@@ -181,6 +181,9 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		return FALSE
 	return TRUE
 
+/datum/material/proc/get_processed_name()
+	return processed_name
+
 /datum/material/iron
 	name="Iron"
 	id=MAT_IRON
