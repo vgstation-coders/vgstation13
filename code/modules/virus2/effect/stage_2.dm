@@ -260,9 +260,11 @@
 	badness = EFFECT_DANGER_HELPFUL
 	multiplier = 4
 	max_multiplier = 10
+	max_count = 1
 
 /datum/disease2/effect/lantern/activate(var/mob/living/mob)
-	mob.set_light(multiplier)
+	var/color = rgb(rand(0,255), rand(0,255), rand(0,255))
+	mob.set_light(multiplier, l_color = color)
 	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
 
 
