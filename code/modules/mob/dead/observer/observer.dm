@@ -116,8 +116,6 @@ var/creating_arena = FALSE
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
 
-	station_holomap = new(src)
-
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
@@ -127,6 +125,8 @@ var/creating_arena = FALSE
 
 /mob/dead/observer/Destroy()
 	..()
+	qdel(station_holomap)
+	station_holomap = null
 	ghostMulti = null
 	observers.Remove(src)
 

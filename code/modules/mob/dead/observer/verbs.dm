@@ -376,7 +376,9 @@
 	set desc = "Toggle station holomap on your screen"
 	set category = "Ghost"
 
-	src.station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
+	if(!station_holomap)
+		station_holomap = new(src)
+	station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
 
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
