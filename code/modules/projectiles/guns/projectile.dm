@@ -174,14 +174,17 @@
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP)
-		if(!user.is_holding_item(src))	//if we're not in his hands
-			to_chat(user, "<span class='notice'>You'll need [src] in your hands to do that.</span>")
-			return
 
 		if(user.drop_item(A, src)) //put the silencer into the gun
 			to_chat(user, "<span class='notice'>You screw [A] onto [src].</span>")
 			silenced = A	//dodgy?
 			w_class = W_CLASS_MEDIUM
+			if(silencer_offset.len)
+				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "silencer_mounted")
+				silence_overlay.pixel_x += listgetindex(silencer_offset,1)
+				silence_overlay.pixel_y += listgetindex(silencer_offset,2)
+				overlays += silence_overlay
+				gun_part_overlays += silence_overlay
 			update_icon()
 			return 1
 
@@ -344,6 +347,10 @@
 		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
 		user.put_in_hands(silenced)
 		silenced = 0
+		for(var/image/ol in gun_part_overlays)
+			if(ol.icon_state == "silencer_mounted")
+				overlays -= ol
+				gun_part_overlays -= ol
 		w_class = W_CLASS_SMALL
 	if(scoped)
 		to_chat(user, "<span class='notice'>You release \the [scoped] from \the [src].</span>")

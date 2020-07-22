@@ -32,6 +32,8 @@
 	var/obj/item/projectile/in_chamber = null
 	var/list/caliber //the ammo the gun will accept. Now multiple types (make sure to set them to =1)
 	var/silenced = 0
+	var/list/silencer_offset = list() //x,y coords to bump silencer overlay to FROM (4,13) (use barrel end pixel position)
+	var/list/gun_part_overlays = list() //holds copy of overlays to allow for sane manipulation
 	var/recoil = 0
 	var/ejectshell = 1
 
