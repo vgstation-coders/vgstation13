@@ -493,6 +493,13 @@
 	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
 
+/obj/item/weapon/spellbook/oneuse/absorb
+	spell = /spell/targeted/absorb
+	spellname = "absorb"
+	icon_state ="book"
+	desc = "This book glows with sinister energy."
+	disabled_from_bundle = 1
+
 
 ///// ANCIENT SPELLBOOK /////
 

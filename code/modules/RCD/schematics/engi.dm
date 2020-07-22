@@ -131,6 +131,12 @@
 	schematics += new /datum/selection_schematic/access_schematic(src)
 	selected = schematics[1]
 
+/datum/rcd_schematic/con_airlock/Destroy()
+	for(var/datum/selection_schematic/thing in schematics)
+		qdel(thing)
+	schematics = null
+	..()
+
 /datum/rcd_schematic/con_airlock/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
 	..()
 	show(user)

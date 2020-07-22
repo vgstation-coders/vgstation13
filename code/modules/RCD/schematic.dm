@@ -22,6 +22,7 @@
 			C.screen.Remove(ourobj)
 		qdel(ourobj)
 		ourobj = null
+	selected = null
 	..()
 
 /datum/rcd_schematic/proc/show()
