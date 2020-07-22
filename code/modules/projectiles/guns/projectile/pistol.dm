@@ -158,6 +158,7 @@
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_PLASTIC = 2000)
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
