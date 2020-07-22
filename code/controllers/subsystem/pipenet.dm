@@ -2,8 +2,10 @@ var/datum/subsystem/pipenet/SSpipenet
 
 var/list/obj/machinery/atmospherics/atmos_machines = list()
 var/list/datum/pipe_network/pipe_networks = list()
-var/event/on_pipenet_tick = new
+var/list/pipenet_processing_objects = list()
 
+/datum/proc/pipenet_process()
+	set waitfor = FALSE
 
 /datum/subsystem/pipenet
 	name          = "Pipenet"
@@ -42,7 +44,8 @@ var/event/on_pipenet_tick = new
 	if (!resumed)
 		currentrun_pipenets       = global.pipe_networks.Copy()
 		currentrun_atmos_machines = global.atmos_machines.Copy()
-		INVOKE_EVENT(global.on_pipenet_tick, list())
+		for(var/datum/thing in pipenet_processing_objects)
+			thing.pipenet_process()
 
 	while (currentrun_atmos_machines.len)
 		var/obj/machinery/atmospherics/atmosmachinery = currentrun_atmos_machines[currentrun_atmos_machines.len]
