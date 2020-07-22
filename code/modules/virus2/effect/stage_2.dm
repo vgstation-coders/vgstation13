@@ -264,7 +264,7 @@
 
 /datum/disease2/effect/lantern/activate(var/mob/living/mob)
 	var/color = rgb(rand(0,255), rand(0,255), rand(0,255))
-	mob.set_light(multiplier, multiplier/3,l_color = color)
+	mob.set_light(multiplier, multiplier/3, l_color = color)
 	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
 
 
