@@ -24,6 +24,8 @@
 
 	explosion_block = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,

@@ -9,6 +9,7 @@
 	opacity = 1
 	density = 1
 	blocks_air = 1
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 	//temperature = TCMB
 	var/mineral/mineral
 	var/last_act = 0

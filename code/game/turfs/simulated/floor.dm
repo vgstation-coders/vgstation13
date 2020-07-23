@@ -41,6 +41,9 @@ var/list/wood_icons = list("wood","wood-broken")
 
 	plane = FLOOR_PLANE
 
+	holomap_draw_override = HOLOMAP_DRAW_PATH
+
+
 /turf/simulated/floor/New()
 	..()
 	if(!floor_tile)
