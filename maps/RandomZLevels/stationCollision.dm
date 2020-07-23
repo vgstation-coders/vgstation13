@@ -38,6 +38,7 @@
 
 //Syndicate shuttle
 /area/awaymission/syndishuttle
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 
 /*

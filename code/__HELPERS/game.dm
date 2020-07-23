@@ -28,7 +28,7 @@
 	return format_text ? format_text(A.name) : A.name
 
 /proc/in_range(atom/source, mob/user)
-	if(user.Adjacent(source))
+	if(source.Adjacent(user))
 		return 1
 	else if(istype(user) && user.mutations && user.mutations.len)
 		if((M_TK in user.mutations) && (get_dist(user,source) < tk_maxrange))

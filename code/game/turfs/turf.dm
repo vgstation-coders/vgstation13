@@ -71,6 +71,8 @@
 
 	var/volume_mult = 1 //how loud are things on this turf?
 
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -352,6 +354,7 @@
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
 	var/old_density = density
+	var/old_holomap_draw_override = holomap_draw_override
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -435,6 +438,8 @@
 			else
 				lighting_clear_overlay()
 
+	if (!ticker)
+		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
 	if(density != old_density)

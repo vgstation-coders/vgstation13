@@ -240,6 +240,7 @@
 	var/release_amount = min(stack.amount, stack_amt)
 
 	stacked.amount = release_amount
+	stacked.update_materials()
 	stacked.forceMove(out_T)
 	stack.amount -= release_amount
 
