@@ -750,6 +750,16 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/under/casualsec
+	name = "plainclothes uniform"
+	desc = "You know what they say gentlemen: stupid criminals make stupid cops."
+	icon_state = "casualsec"
+	item_state = "casualsec"
+	_color = "casualsec"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/inquisitor
 	name = "inquisitor's suit"
 	desc = "Historically, inquisitors were cathar detectives who investigated crimes both mundane and supernatural. They were known for traveling to remote parishes plagued by unexplained murders, and for exposing the wicked living among normal humans."

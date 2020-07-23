@@ -77,3 +77,4 @@ Thumbs.db
 # Linux users can compile this themselves
 libvg.so
 
+config-example/admins.txt
