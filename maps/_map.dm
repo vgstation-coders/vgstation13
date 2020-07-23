@@ -216,7 +216,7 @@ var/global/list/accessable_z_levels = list()
 //for Horizon
 /datum/zLevel/hyperspace
 	name = "hyperspace"
-	base_turf = /turf/space/transit/north //NRV Horizon flies ever onward
+	base_turf = /turf/space/transit/horizon //NRV Horizon flies ever onward.
 	movementJammed = TRUE
 
 
