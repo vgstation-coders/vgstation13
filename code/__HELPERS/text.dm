@@ -305,6 +305,13 @@ proc/checkhtml(var/t)
 			return copytext(text, 1, i)
 	return text
 
+//Returns the last word in a string.
+/proc/get_last_word(text)
+	for(var/i = 1 to length(text))
+		if(text2ascii(text, length(text)-i) == 32)
+			return copytext(text, length(text)-i, length(text))
+	return text
+
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
 	return uppertext(copytext_char(t, 1, 2)) + copytext_char(t, 2)

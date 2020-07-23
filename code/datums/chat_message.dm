@@ -103,6 +103,10 @@ var/runechat_icon = null
 	if (!ismob(target))
 		extra_classes |= "small"
 
+	// If we heard our name, it's important
+	if (findtext(text, get_first_word(owner.name) || findtext(text, get_last_word(owner.name))))
+		extra_classes |= "boldtext"
+
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
 		if (!runechat_icon)
