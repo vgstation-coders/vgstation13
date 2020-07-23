@@ -18,6 +18,7 @@
 	override_icon = 'icons/mob/animal.dmi'
 	hud_state = "pitbull"
 	cast_sound = 'sound/voice/pitbullbark.ogg'
+	quicken_price = Sp_BASE_PRICE
 
 var/list/pitbulls_exclude_kinlist = list() //all pitbulls go in here so pitbulls won't attack other pitbulls when feeling treacherous (and instead attack the wizard)
 

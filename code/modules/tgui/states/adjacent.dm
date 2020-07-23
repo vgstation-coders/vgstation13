@@ -9,7 +9,7 @@
 
 var/datum/ui_state/adjacent_state/adjacent_state = new
 
-/datum/ui_state/adjacent_state/can_use_topic(src_object, mob/user)
-	if(!user.Adjacent(src_object))
+/datum/ui_state/adjacent_state/can_use_topic(atom/src_object, mob/user)
+	if(!src_object.Adjacent(user))
 		return UI_CLOSE
 	return user.shared_ui_interaction(src_object)

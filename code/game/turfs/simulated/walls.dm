@@ -24,6 +24,8 @@
 
 	explosion_block = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 /turf/simulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(
 		/turf/simulated/wall,
@@ -120,6 +122,7 @@
 	user.delayNextAttack(8)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
+		playsound(src, 'sound/weapons/heavysmash.ogg', 75, 1)
 		if(prob(100 - hardness) || rotting)
 			dismantle_wall(1)
 			user.visible_message("<span class='danger'>[user] smashes through \the [src].</span>", \
