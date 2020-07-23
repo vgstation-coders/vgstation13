@@ -389,7 +389,6 @@ var/datum/disease2/disease/magnitis = null
 		magnitis.update_global_log()
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",
@@ -449,7 +448,6 @@ var/datum/disease2/disease/wizarditis = null
 		wizarditis.update_global_log()
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",

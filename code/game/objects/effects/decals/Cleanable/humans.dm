@@ -16,6 +16,7 @@ var/global/list/blood_list = list()
 	plane = ABOVE_TURF_PLANE
 	layer = BLOOD_LAYER
 	appearance_flags = TILE_BOUND|LONG_GLIDE
+	throwforce = 0
 	var/base_icon = 'icons/effects/blood.dmi'
 
 	basecolor=DEFAULT_BLOOD // Color when wet.
@@ -25,6 +26,8 @@ var/global/list/blood_list = list()
 	absorbs_types=list(/obj/effect/decal/cleanable/blood,/obj/effect/decal/cleanable/blood/drip,/obj/effect/decal/cleanable/blood/writing)
 
 	persistence_type = SS_BLOOD
+
+	fake_DNA = "old blood splatters"
 
 /obj/effect/decal/cleanable/blood/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor)
 	if(basecolor)
@@ -122,6 +125,8 @@ var/global/list/blood_list = list()
 	persistence_type = SS_GIBS
 	var/fleshcolor = DEFAULT_FLESH
 
+	fake_DNA = "old gibs splatters"
+
 /obj/effect/decal/cleanable/blood/gibs/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/fleshcolor)
 	if(fleshcolor)
 		src.fleshcolor = fleshcolor
@@ -194,6 +199,8 @@ var/global/list/blood_list = list()
 	icon_state = "floor1"
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
 
+	fake_DNA = "viral sputum splatters"
+
 /obj/effect/decal/cleanable/blood/viralsputum/Destroy()
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -204,20 +211,25 @@ var/global/list/blood_list = list()
 
 //We should really get directional blood streak sprites again --snx
 /obj/effect/decal/cleanable/blood/proc/streak(var/list/directions, spread_radius = 0)
-	spawn (0)
+	spawn ()
 		var/direction = pick(directions)
 		for (var/i = 0 to spread_radius)
 			sleep(3)
 			if (i > 0)
-				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(src.loc)
+				var/obj/effect/decal/cleanable/blood/b = new /obj/effect/decal/cleanable/blood/splatter(loc)
 				b.basecolor = src.basecolor
 				b.update_icon()
+
+				if(virus2?.len)
+					b.virus2 = filter_disease_by_spread(virus_copylist(virus2),required = SPREAD_BLOOD)
+
 				for(var/datum/disease/D in src.viruses)
 					var/datum/disease/ND = D.Copy(1)
 					b.viruses += ND
 					ND.holder = b
 
-			step_to(src, get_step(src, direction), 0)
+			anchored = FALSE
+			throw_at(get_step(src, direction),1,1)//will cover hit humans in blood
 
 
 /obj/effect/decal/cleanable/mucus
@@ -229,5 +241,7 @@ var/global/list/blood_list = list()
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mucus"
 	random_icon_states = list("mucus")
+
+	fake_DNA = "mucus splatters"
 
 	var/dry=0

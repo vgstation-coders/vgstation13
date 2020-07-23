@@ -364,6 +364,16 @@
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
 
+/obj/item/weapon/reagent_containers/glass/bucket/equipped(var/mob/M, var/slot)
+	..()
+	if(slot == slot_head)
+		if(reagents.total_volume)
+			for(var/atom/movable/O in M.loc)
+				reagents.reaction(O, TOUCH)
+			reagents.reaction(M.loc, TOUCH)
+			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
+			reagents.clear_reagents()
+
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)

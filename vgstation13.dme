@@ -1787,7 +1787,6 @@
 #include "code\modules\mob\living\carbon\human\life\handle_chemicals_in_body.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_disabilities.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_environment.dm"
-#include "code\modules\mob\living\carbon\human\life\handle_equipment.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_fire.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_hud_list.dm"
 #include "code\modules\mob\living\carbon\human\life\handle_mutations_and_radiation.dm"

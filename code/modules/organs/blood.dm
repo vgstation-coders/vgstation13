@@ -45,7 +45,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	for(var/datum/reagent/blood/B in vessel.reagent_list)
 		if(B.id == BLOOD)
 			B.data = list(
-				"donor"=src,
 				"viruses"=null,
 				"blood_DNA"=dna.unique_enzymes,
 				"blood_colour"= species.blood_color,
@@ -72,12 +71,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		if(blood_volume < BLOOD_VOLUME_MAX && blood_volume)
 			var/datum/reagent/blood/B = locate() in vessel.reagent_list //Grab some blood
 			if(B) // Make sure there's some blood at all
-				if(B.data["donor"] != src) //If it's not theirs, then we look for theirs
-					for(var/datum/reagent/blood/D in vessel.reagent_list)
-						if(D.data["donor"] == src)
-							B = D
-							break
-
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
@@ -227,8 +220,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	B.volume += amount
 
 	//set reagent data
-	B.data["donor"] = src
-
 	if (!B.data["virus2"])
 		B.data["virus2"] = list()
 
@@ -236,8 +227,8 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (immune_system)
 		B.data["immunity"] = src.immune_system.GetImmunity()
 	if (dna)
-		B.data["blood_DNA"] = copytext(src.dna.unique_enzymes,1,0)
-		B.data["blood_type"] = copytext(src.dna.b_type,1,0)
+		B.data["blood_DNA"] = src.dna.unique_enzymes
+		B.data["blood_type"] = src.dna.b_type
 	if(src.resistances && src.resistances.len)
 		if(B.data["resistances"])
 			B.data["resistances"] |= src.resistances.Copy()
@@ -252,7 +243,6 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 
 	var/list/temp_chem = list()
 	for(var/datum/reagent/R in src.reagents.reagent_list)
-		temp_chem += R.id
 		temp_chem[R.id] = R.volume
 	B.data["trace_chem"] = list2params(temp_chem)
 
@@ -263,6 +253,62 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		container.reagents.handle_reactions()
 		container.update_icon()
 	return B
+
+/mob/living/proc/get_blood_data()//sometimes we just want a copy of the blood data whether there is blood or not in the mob
+	var/blood_data = list(
+		"viruses"=null,
+		"blood_DNA"=null,
+		"blood_colour"= null,
+		"blood_type"=null,
+		"resistances"=null,
+		"trace_chem"=null,
+		"virus2" = null,
+		"immunity" = null,
+		)
+
+	if (dna)
+		blood_data["blood_DNA"] = dna.unique_enzymes
+		blood_data["blood_type"] = dna.b_type
+
+	var/mob/living/carbon/human/H
+	if(istype(src,/mob/living/carbon/human))
+		H = src
+	if (H?.species)
+		blood_data["blood_colour"] = H.species.blood_color
+	else
+		blood_data["blood_colour"] = DEFAULT_BLOOD
+
+	if(resistances && resistances.len)
+		blood_data["resistances"] = resistances.Copy()
+
+	var/list/temp_chem = list()
+	for(var/datum/reagent/R in reagents.reagent_list)
+		temp_chem[R.id] = R.volume
+	blood_data["trace_chem"] = list2params(temp_chem)
+
+	blood_data["virus2"] = list()
+	blood_data["virus2"] |= filter_disease_by_spread(virus_copylist(src.virus2),required = SPREAD_BLOOD)
+
+	if (immune_system)
+		blood_data["immunity"] = immune_system.GetImmunity()
+	return blood_data
+
+/proc/copy_blood_data(var/list/data)
+	var/blood_data = list(
+		"viruses"		=null,
+		"blood_DNA"		=data["blood_DNA"],
+		"blood_colour"	=data["blood_colour"],
+		"blood_type"	=data["blood_type"],
+		"resistances"	=null,
+		"trace_chem"	=data["trace_chem"],
+		"virus2" 		=virus_copylist(data["virus2"]),
+		"immunity" 		=null,
+		)
+	if (data["resistances"])
+		blood_data["resistances"] = data["resistances"].Copy()
+	if (data["immunity"])
+		blood_data["immunity"] = data["immunity"].Copy()
+	return blood_data
 
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)

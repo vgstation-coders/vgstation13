@@ -3,8 +3,10 @@
 	desc = "It's a useless heap of junk... <i>or is it?</i>"
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "gib1"
-	basecolor="#030303"
+	basecolor=ROBOT_OIL
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6", "gib7")
+
+	fake_DNA = "robot oil splatters"
 
 /obj/effect/decal/cleanable/blood/gibs/robot/update_icon()
 	color = "#FFFFFF"
@@ -13,7 +15,7 @@
 	return
 
 /obj/effect/decal/cleanable/blood/gibs/robot/streak(var/list/directions)
-	spawn (0)
+	spawn ()
 		var/direction = pick(directions)
 		for (var/i = 0, i < pick(1, 200; 2, 150; 3, 50; 4), i++)
 			sleep(3)
@@ -24,8 +26,9 @@
 					streak.update_icon()
 				else if (prob(10))
 					spark(src)
-			if (step_to(src, get_step(src, direction), 0))
-				break
+
+			anchored = FALSE
+			throw_at(get_step(src, direction),1,1)//will cover hit humans in oil
 
 /obj/effect/decal/cleanable/blood/gibs/robot/limb
 	random_icon_states = list("gibarm", "gibleg")
@@ -39,7 +42,9 @@
 /obj/effect/decal/cleanable/blood/oil
 	name = "motor oil"
 	desc = "It's black and greasy. Looks like Beepsky made another mess."
-	basecolor="#030303"
+	basecolor=ROBOT_OIL
+
+	fake_DNA = "oil splatters"
 
 /obj/effect/decal/cleanable/blood/oil/dry()
 	return

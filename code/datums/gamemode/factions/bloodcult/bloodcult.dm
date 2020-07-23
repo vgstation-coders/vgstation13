@@ -358,7 +358,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
-	if (istype (H_user) && H_user.bloody_hands)
+	if (istype (H_user) && H_user.blood_DNA?.len)
 		data[BLOODCOST_TARGET_HANDS] = H_user
 		var/blood_gathered = min(amount_needed,H_user.bloody_hands)
 		data[BLOODCOST_AMOUNT_HANDS] = blood_gathered
@@ -593,7 +593,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				switch(communion_data[BLOODCOST_RESULT])
 					if (BLOODCOST_TARGET_HANDS)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
-						blood.data["blood_colour"] = HU.hand_blood_color
+						blood.data["blood_colour"] = HU.bloody_hands_data["blood_colour"]
 						if (HU.blood_DNA && HU.blood_DNA.len)
 							var/blood_DNA = pick(HU.blood_DNA)
 							blood.data["blood_DNA"] = blood_DNA
@@ -642,8 +642,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()
-			blood.data["blood_colour"] = H.hand_blood_color
-			if (H.blood_DNA && H.blood_DNA.len)
+			blood.data["blood_colour"] = H.bloody_hands_data["blood_colour"]
+			if (H.blood_DNA?.len && H.bloody_hands > 0)
 				var/blood_DNA = pick(H.blood_DNA)
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = H.blood_DNA[blood_DNA]
