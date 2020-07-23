@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - bugfix: Light switches now only emit light when powered (when either their green or red LED is visible)
+delete-after: true

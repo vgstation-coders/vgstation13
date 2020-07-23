@@ -1,0 +1,7 @@
+---
+author: GeneralVeers25
+changes:
+  - rscadd: "Roidstation: Extra Space Law books in Security."
+  - rscadd: "Roidstation: Atmospherics now has a heater and spare freezer."
+  - bugfix: "Roidstation: A broken couch by the Chapel has been repaired and a tinted window on the Bridge replaced."
+delete-after: true

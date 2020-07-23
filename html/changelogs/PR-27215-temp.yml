@@ -1,0 +1,5 @@
+---
+author: DamianX
+changes:
+  - bugfix: pAIs can use their GPS again.
+delete-after: true

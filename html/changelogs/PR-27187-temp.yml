@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - bugfix: Fixed admins being unable to specify the species and location of a bussed vermin infestation.
+delete-after: true

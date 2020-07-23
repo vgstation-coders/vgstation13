@@ -1,0 +1,5 @@
+---
+author: hbycyl
+changes:
+  - bugfix: Disposals recycling should actually work now
+delete-after: true
