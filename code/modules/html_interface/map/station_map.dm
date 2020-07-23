@@ -114,7 +114,6 @@
 		full_obstacles += /obj/structure/flora/tree
 
 	if(!map.disable_holominimap_generation)
-		//if (zLevel > map.zDeepSpace)
 		if (zLevel > map.zDeepSpace)
 			return // No need to generate an holomap for something that didn't spawn.
 		if(zLevel != map.zCentcomm)
@@ -137,10 +136,13 @@
 								if (locate(obstacle) in tile)
 									override = TRUE
 									break
-							if (map.snow_theme)
+							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
 								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
 									override = TRUE
-							if(override || (!istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored)) || (tile.holomap_draw_override == HOLOMAP_DRAW_FULL) || (aera.holomap_draw_override == HOLOMAP_DRAW_FULL))
+							var/exception = FALSE
+							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
+								exception = TRUE
+							if(override || (!exception && ((tile.holomap_draw_override == HOLOMAP_DRAW_FULL) || (aera.holomap_draw_override == HOLOMAP_DRAW_FULL))))
 								if(map.holomap_offset_x.len >= zLevel)
 									canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
 								else
