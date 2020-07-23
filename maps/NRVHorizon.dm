@@ -4,7 +4,7 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "NRVH"
+	nameShort = "nrvh"
 	nameLong = "NRV Horizon"
 	map_dir = "nrvhorizon"
 	tDomeX = 128
