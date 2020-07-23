@@ -41,9 +41,8 @@
 	research_shuttle.req_access = list() //It's shared by miners and researchers, so remove access requirements
 
 ////////////////////////////////////////////////////////////////
+#include "NRVH/areas.dm"
 #include "NRVHorizon.dmm"
-
-#include "NRVH\areas.dm"
 
 #if !defined(MAP_OVERRIDE_FILES)
 	#define MAP_OVERRIDE_FILES
