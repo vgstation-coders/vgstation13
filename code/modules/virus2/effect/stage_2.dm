@@ -260,12 +260,21 @@
 	badness = EFFECT_DANGER_HELPFUL
 	multiplier = 4
 	max_multiplier = 10
-	max_count = 1
+	var/uncolored = FALSE
+	var/flavortext = FALSE
+	var/color = rgb(255, 255, 255)
 
 /datum/disease2/effect/lantern/activate(var/mob/living/mob)
-	var/color = rgb(rand(0,255), rand(0,255), rand(0,255))
+	if(mob.reagents.has_reagent(CLEANER))
+		uncolored = TRUE	//Having spacecleaner in your system when the effect activates will permanently make the color white.
+	if(mob.reagents.reagent_list.len == 0 || uncolored == TRUE)
+		color = rgb(255, 255, 255)
+	else
+		color = mix_color_from_reagents(mob.reagents.reagent_list)
+	if(!flavortext)
+		to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
+		flavortext = TRUE
 	mob.set_light(multiplier, multiplier/3, l_color = color)
-	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
 
 /datum/disease2/effect/lantern/deactivate(var/mob/living/mob)
 	mob.set_light(0, 0, rgb(0,0,0))
