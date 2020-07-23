@@ -21,48 +21,86 @@
 	..()
 
 	var/list/viables = list(
+		//Medical
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/roller,
-		/obj/structure/closet/crate,
-		/obj/structure/closet/acloset,
+		/obj/item/device/healthanalyzer,
+		/obj/item/weapon/reagent_containers/glass/bottle/toxin,
+		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
+		/obj/item/weapon/reagent_containers/glass/bottle/capsaicin,
+		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
+		/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer,
+		/obj/item/device/reagent_scanner/adv,
+
+		//Robots (and the mimic)
 		/mob/living/simple_animal/hostile/mimic,
 		/mob/living/simple_animal/hostile/viscerator,
 		/mob/living/simple_animal/hostile/hivebot,
+	//	/obj/machinery/bot/cleanbot/roomba, //UNLEASH THE HORDE
+	//	/obj/machinery/bot/secbot, //Probably a bad idea.
+
+		//Tools
 		/obj/item/device/analyzer,
-		/obj/item/device/camera,
 		/obj/item/device/flash,
-		/obj/item/device/flashlight,
-		/obj/item/device/healthanalyzer,
 		/obj/item/device/multitool,
-		/obj/item/device/paicard,
-		/obj/item/device/radio,
-		/obj/item/device/radio/headset,
-		/obj/item/beacon,
-		/obj/item/weapon/autopsy_scanner,
-		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/bonesetter,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch,
-		/obj/item/weapon/caution,
-		/obj/item/weapon/caution/cone,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/storage/bag/clipboard,
-		/obj/item/weapon/cell,
-		/obj/item/weapon/circular_saw,
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/hemostat,
-		/obj/item/weapon/kitchen/utensil/knife/large,
-		/obj/item/weapon/lighter/random,
-		/obj/item/weapon/light/bulb,
-		/obj/item/weapon/light/tube,
+		/obj/item/device/camera,
+		/obj/item/weapon/crowbar/red,
+		/obj/item/weapon/lighter/zippo,
 		/obj/item/weapon/pickaxe,
 		/obj/item/weapon/pickaxe/shovel,
-		/obj/item/weapon/table_parts,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/wrench,
-		/obj/item/weapon/screwdriver,
+		/obj/item/stack/cable_coil/random,
+		/obj/item/weapon/soap/,
+
+		//Weapons and Security Gear
+		/obj/item/weapon/kitchen/utensil/knife/large/butch,
+		/obj/item/weapon/kitchen/utensil/knife/large,
+		/obj/item/clothing/gloves/knuckles,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/hatchet,
+		/obj/item/device/hailer,
+		/obj/item/weapon/storage/fancy/donut_box,	
+		/obj/item/clothing/accessory/holomap_chip, //Too far?
+
+		//Toys
+		/obj/item/toy/sword,
+		/obj/item/toy/snappop,
+		/obj/item/toy/gun,
+		/obj/item/weapon/beach_ball,
+
+		//Grenades
 		/obj/item/weapon/grenade/chem_grenade/cleaner,
 		/obj/item/weapon/grenade/chem_grenade/metalfoam,
+		/obj/item/weapon/grenade/flashbang,		//Pretty powerful
+		/obj/item/weapon/grenade/smokebomb,
+		/obj/item/weapon/grenade/chem_grenade/wind,
+
+		//Clothing
+		/obj/item/clothing/glasses/sunglasses,
+		/obj/item/clothing/gloves/anchor_arms,
+		/obj/item/clothing/accessory/storage/webbing/paramed,	//Pretty powerful
+
+		//Other
+		/obj/structure/closet/acloset,
+		/obj/item/beacon,
+		/obj/item/device/paicard,
+		/obj/item/weapon/bikehorn,
+		/obj/item/weapon/caution,
+		/obj/item/weapon/caution/cone,
+		/obj/item/weapon/cell/high,
+		/obj/item/device/assembly/mousetrap,
+		/obj/item/pizzabox/meat,		//Pizza boxes: infinite food. Might be an issue
+		/obj/item/pizzabox/margherita,
+		/obj/item/pizzabox/vegetable,
+		/obj/item/pizzabox/mushroom,
+		/obj/item/weapon/beartrap,
+		/obj/item/stack/package_wrap/syndie,	
+		/obj/item/device/handtv,
+		/obj/item/device/wormhole_jaunter,
+		/obj/item/mounted/poster,
+		/obj/item/inflatable/wall,
+		/obj/item/inflatable/door,
+		/obj/item/toy/balloon/long,
+
 		)
 
 	var/quantity = rand(5,15)
