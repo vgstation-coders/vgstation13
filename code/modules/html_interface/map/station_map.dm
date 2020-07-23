@@ -115,7 +115,7 @@
 
 	if(!map.disable_holominimap_generation)
 		//if (zLevel > map.zDeepSpace)
-		if (zLevel > map.zMainStation)
+		if (zLevel > map.zDeepSpace)
 			return // No need to generate an holomap for something that didn't spawn.
 		if(zLevel != map.zCentcomm)
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
