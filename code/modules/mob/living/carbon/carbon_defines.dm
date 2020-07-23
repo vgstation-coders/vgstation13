@@ -9,7 +9,6 @@
 	var/number_wounds = 0
 
 	var/mob/living/carbon/mutual_handcuffed_to = null
-	var/mutual_handcuffed_to_event_key = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
 	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
 	var/mutual_handcuff_forcemove_time = 0 //last teleport time when user moves ontop of another
