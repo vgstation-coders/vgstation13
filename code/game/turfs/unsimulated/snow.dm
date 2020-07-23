@@ -301,6 +301,7 @@
 	real_snow_tile = FALSE
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
+	holomap_draw_override = HOLOMAP_DRAW_HALLWAY
 
 /turf/unsimulated/floor/snow/asphalt/mine
 	name = "mine road"
@@ -343,6 +344,7 @@
 	snowprints = FALSE
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
 	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
