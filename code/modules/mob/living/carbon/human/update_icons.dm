@@ -286,7 +286,12 @@ var/global/list/damage_icon_parts = list()
 
 
 	//Underwear
-	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
+	var/list/undielist
+	if(gender == MALE)
+		undielist = underwear_m
+	else
+		undielist = underwear_f
+	if(underwear >0 && underwear <= undielist.len && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 

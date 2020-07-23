@@ -23,8 +23,8 @@ var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mob
 
 //Preferences stuff
 	//Underwear
-var/global/list/underwear_m = list("White", "Grey", "Green", "Blue", "Black", "Mankini", "Love-Hearts", "Black2", "Grey2", "Stripey", "Kinky", "Freedom", "Tea", "Communist", "None") //Curse whoever made male/female underwear diffrent colours
-var/global/list/underwear_f = list("Red", "White", "Yellow", "Blue", "Black", "Thong", "Babydoll", "Baby-Blue", "Green", "Pink", "Kinky", "Freedom", "Communist", "Tea", "None")
+var/global/list/underwear_m = list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers") //Curse whoever made male/female underwear different colours
+var/global/list/underwear_f = list("None", "White", "Green", "Blue", "Black", "Yellow", "Thong", "Baby-Blue", "Babydoll", "Red", "Pink", "Kinky", "Freedom", "Tea", "Communist", "Cowprint")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt", "Messenger Bag")
 
