@@ -309,7 +309,7 @@ proc/checkhtml(var/t)
 /proc/get_last_word(text)
 	for(var/i = 1 to length(text))
 		if(text2ascii(text, length(text)-i) == 32)
-			return copytext(text, length(text)-i, length(text))
+			return copytext(text, length(text)-i, length(text)+1)
 	return text
 
 //Returns a string with the first element of the string capitalized.
