@@ -15,6 +15,7 @@
 	cooldown_min = 5 //4 deciseconds reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
+	quicken_price = Sp_BASE_PRICE
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
 	if(!targets.len)
