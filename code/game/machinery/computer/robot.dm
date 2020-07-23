@@ -243,7 +243,7 @@
 				if(R.scrambledcodes)
 					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R, /mob/living/silicon/robot) && istype(usr, /mob/living/silicon/ai) && ismalf(usr) && R.emagged != 1)
+				if(isrobot(R) && issilicon(usr) && (ismalf(usr) || (usr == R && istraitor(usr)) && !R.emagged)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
 						if(R)
