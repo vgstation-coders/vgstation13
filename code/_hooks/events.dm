@@ -63,6 +63,13 @@
 /lazy_event
 
 // TODO: Document here the arguments that need to be passed to the procs invoked by each event
+
+// Called by human/proc/apply_radiation()
+// Arguments:
+// mob/carbon/living/human/user: The human.
+// rads: The amount of radiation.
+/lazy_event/on_irradiate
+
 /lazy_event/on_z_transition
 /lazy_event/on_post_z_transition
 
