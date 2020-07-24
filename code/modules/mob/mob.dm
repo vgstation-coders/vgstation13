@@ -37,8 +37,6 @@
 		on_ruattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
-	if(on_irradiate)
-		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
 	if(on_bumping)
@@ -90,7 +88,6 @@
 	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
-	qdel(on_irradiate)
 	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
@@ -101,7 +98,6 @@
 	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
-	on_irradiate = null
 	on_death = null
 	on_bumping = null
 	on_bumped = null
@@ -303,7 +299,6 @@
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
-	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)

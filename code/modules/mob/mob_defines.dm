@@ -277,7 +277,6 @@
 	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout
 	var/event/on_damaged
-	var/event/on_irradiate
 	var/event/on_death
 	var/event/on_bumping //We bumped someone
 	var/event/on_bumped //We got bumped
