@@ -293,7 +293,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		blood_data["immunity"] = immune_system.GetImmunity()
 	return blood_data
 
-/proc/copy_blood_data(var/list/data)
+/proc/copy_blood_data(var/list/list/data)
 	var/blood_data = list(
 		"viruses"		=null,
 		"blood_DNA"		=data["blood_DNA"],
