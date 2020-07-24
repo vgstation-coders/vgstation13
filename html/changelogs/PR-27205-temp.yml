@@ -1,6 +1,0 @@
----
-author: DeityLink
-changes:
-  - bugfix: "Fixed Horizon's station holomaps displaying the station too low"
-  - bugfix: "Adjusted Horizon's station center in regard to the spawning of cult bloodstones."
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: twirling-jesters
-changes:
-  - tweak: Punching walls when hulked out will now produce a loud smashing noise.
-delete-after: true

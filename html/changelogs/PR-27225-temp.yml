@@ -1,8 +1,0 @@
----
-author: GeneralVeers25
-changes:
-  - bugfix: "Horizon: Can now be repaired and expanded midflight."
-  - bugfix: "Horizon: Mechanics will no longer be CUBED (tm) at roundstart."
-  - bugfix: "Horizon: Now has more teleporter beacons."
-  - bugfix: "Horizon: Disposals won't breach itself if someone flushes a couple bricks down the toilet."
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: gurfan
-changes:
-  - tweak: Tinfoil hats will now prevent the AI from tracking you.
-delete-after: true
