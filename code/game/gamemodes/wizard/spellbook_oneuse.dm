@@ -322,6 +322,7 @@
 	spell = /spell/lightning
 	spellname = "lightning"
 	icon_state = "booklightning"
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -333,7 +334,7 @@
 /obj/item/weapon/spellbook/oneuse/lightning/sith
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
-	desc = "You can hear it crackle with malevolent electricity."
+	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
 	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/timestop
