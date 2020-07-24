@@ -304,6 +304,7 @@
 	spell = /spell/targeted/buttbots_revenge
 	spellname = "ass magic"
 	icon_state = "bookbutt"
+	desc = "You feel as if your ass could explode any moment just by looking at this."
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
