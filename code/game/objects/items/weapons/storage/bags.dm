@@ -112,7 +112,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
-	var/event_key = null
 
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
@@ -133,10 +132,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		T.event_key = user.on_moved.Add(T, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.on_moved.Remove(T, "mob_moved")
-		T.event_key = null
+		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -153,21 +151,20 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 				remove_from_storage(ore)
 				qdel(ore)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(isrobot(holder))
-		var/mob/living/silicon/robot/S = holder
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+	if(isrobot(mover))
+		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())
 			auto_collect(get_turf(src))
-			auto_fill(holder)
-	else
-		if(holder.is_holding_item(src))
+			auto_fill(mover)
+	else if(isliving(mover))
+		var/mob/living/living_mover = mover
+		if(living_mover.is_holding_item(src))
 			auto_collect(get_turf(src))
-			auto_fill(holder)
+			auto_fill(living_mover)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	if(event_key)
-		user.on_moved.Remove(src, "mob_moved")
-		event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag

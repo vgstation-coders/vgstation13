@@ -61,7 +61,6 @@
 	var/stepped=0
 	var/steps=0 // How many steps we've made from the emitter.  Used in infinite loop avoidance.
 	var/am_connector=0
-	var/targetMoveKey=null // Key for the on_moved listener.
 	var/targetDestroyKey=null // Key for the on_destroyed listener.
 	var/targetDensityKey=null // Key for the on_density_change listener
 	var/targetContactLoc=null // Where we hit the target (used for target_moved)
@@ -133,25 +132,15 @@
 	else
 		icon_state = "emitter_double_mouse_end"
 
-// Listener for /atom/movable/on_moved
-/obj/effect/beam/proc/target_moved(var/list/args)
+// Listener for /lazy_event/on_moved
+/obj/effect/beam/proc/target_moved(atom/movable/mover)
 	if(master)
 		beam_testing("Child got target_moved!  Feeding to master.")
-		master.target_moved(args)
+		master.target_moved(arglist(args))
 		return
 
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		beam_testing("Uh oh, got a target_moved when we weren't listening for one.")
-		E.handlers.Remove("\ref[src]:target_moved")
-		return
+	var/turf/T = mover.loc
 
-	var/turf/T = args["loc"]
-
-	if(E.holder != target)
-		beam_testing("Received erroneous event, killing")
-		E.handlers.Remove("\ref[src]:target_moved")
-		return
 	beam_testing("Target now at [T.x],[T.y],[T.z]")
 	if(T != targetContactLoc && T != loc)
 		beam_testing("Disconnecting: Target moved.")
@@ -260,9 +249,7 @@
 	BM.target=AM
 	BM.update_end_icon()
 	if(istype(AM))
-		if (!AM.on_moved)
-			AM.on_moved = new("owner"=AM)
-		BM.targetMoveKey    = AM.on_moved.Add(BM,    "target_moved")
+		AM.lazy_register_event(/lazy_event/on_moved, BM, .proc/target_moved)
 		if (!AM.on_destroyed)
 			AM.on_destroyed = new("owner"=AM)
 		BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
@@ -307,15 +294,12 @@
 	var/obj/effect/beam/_master=get_master()
 	if(_master.target)
 		if(ismovable(_master.target))
-			if (!_master.target.on_moved)
-				_master.target.on_moved = new("owner"=_master.target)
-			_master.target.on_moved.Remove(_master.targetMoveKey)
+			_master.target.lazy_unregister_event(/lazy_event/on_moved, _master, .proc/target_moved)
 			if (!_master.target.on_destroyed)
 				_master.target.on_destroyed = new("owner"=_master.target)
 			_master.target.on_destroyed.Remove(_master.targetDestroyKey)
 		_master.target.beam_disconnect(_master)
 		_master.target=null
-		_master.targetMoveKey=null
 		_master.targetDestroyKey=null
 		//if(_master.next)
 		//	BEAM_DEL(_master.next)

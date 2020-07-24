@@ -236,12 +236,10 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		// Update on_moved listeners.
-		INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+		lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 		return 0
 
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 
 /mob/camera/blob/proc/update_specialblobs()
 	if(client && gui_icons)

@@ -81,8 +81,6 @@
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
-	qdel(on_moved)
-	on_moved = null
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_ruattack)

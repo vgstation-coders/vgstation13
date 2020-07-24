@@ -73,6 +73,11 @@
 /lazy_event/on_z_transition
 /lazy_event/on_post_z_transition
 
+// Called whenever an /atom/movable moves.
+// Arguments:
+// atom/movable/mover: the movable itself.
+/lazy_event/on_moved
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

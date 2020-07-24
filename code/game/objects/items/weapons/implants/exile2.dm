@@ -18,7 +18,6 @@
 	var/beenSpaced = FALSE
 	var/disablePhrase = ""
 	var/list/zlevels = list(STATION_Z, TELECOMM_Z, DERELICT_Z, ASTEROID_Z, SPACEPIRATE_Z)
-	var/zBanishment_key
 
 /obj/item/weapon/implant/exile/get_data()
 	var/dat = {"
@@ -38,10 +37,10 @@
 	siteOfImplant = get_turf(theExile)
 	zlevels -= illegalZ
 	to_chat(theExile, "<span class='notice'>You shiver as you feel a weak, unsettling film surround you.</span>")
-	zBanishment_key = theExile.on_moved.Add(src, "zBan")
+	theExile.lazy_register_event(/lazy_event/on_moved, src, .proc/zBan)
 	return 1
 
-/obj/item/weapon/implant/exile/proc/zBan()
+/obj/item/weapon/implant/exile/proc/zBan(atom/movable/mover)
 	var/turf/T = get_turf(src)
 	if(!beenSpaced)
 		if(T.z != illegalZ)
@@ -117,7 +116,7 @@
 	playsound(theExile, "sound/machines/notify.ogg", 100, 1)
 	to_chat(theExile, "<span class='notice'>You feel a sudden shooting pain. The film-like sensation fades. Your implant has jaunted out of your body.</span>" )
 	imp_in = null
-	theExile.on_moved.Remove(zBanishment_key)
+	theExile.lazy_unregister_event(/lazy_event/on_moved, src, .proc/zBan)
 	src.forceMove(siteOfImplant)
 	theExile = null
 
