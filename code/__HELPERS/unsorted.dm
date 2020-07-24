@@ -691,7 +691,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/image/progbar
 	if(user && user.client && user.client.prefs.progress_bars)
 		if(!progbar)
-			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target?.loc, "icon_state" = "prog_bar_0")
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.pixel_z = WORLD_ICON_SIZE
@@ -731,7 +731,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 // Creates a progress bar locked on `target` and returns it
 /proc/create_progress_bar_on(var/atom/target)
-	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+	var/image/progress_bar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target?.loc, "icon_state" = "prog_bar_0")
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
@@ -813,7 +813,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	//var/image/barbar
 	if(user && user.client && user.client.prefs.progress_bars && target)
 		if(!progbar)
-			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+			progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target?.loc, "icon_state" = "prog_bar_0")
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
@@ -825,7 +825,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	for (var/i = 1 to numticks)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
-				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "prog_bar_0")
+				progbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target?.loc, "icon_state" = "prog_bar_0")
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
