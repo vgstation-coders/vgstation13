@@ -70,7 +70,10 @@ DEBUG
 			return
 
 		//Job permabans
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_PERMABAN' AND isnull(unbanned)")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned)",
+			list(
+				"bantype" = "JOB_PERMABAN"
+			))
 		if(!query.Execute())
 			message_admins("Error: [query.ErrorMsg()]")
 			log_sql("Error: [query.ErrorMsg()]")
@@ -84,7 +87,10 @@ DEBUG
 			jobban_keylist.Add("[ckey] - [job]")
 		qdel(query)
 		//Job tempbans
-		var/datum/DBQuery/query1 = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = 'JOB_TEMPBAN' AND isnull(unbanned) AND expiration_time > Now()")
+		var/datum/DBQuery/query1 = SSdbcore.NewQuery("SELECT ckey, job FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned) AND expiration_time > Now()",
+			list(
+				"bantype" = "JOB_TEMPBAN",
+			))
 		if(!query1.Execute())
 			log_sql("Error: [query1.ErrorMsg()]")
 			qdel(query1)
