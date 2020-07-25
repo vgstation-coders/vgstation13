@@ -29,8 +29,6 @@ var/runechat_icon = null
 	var/scheduled_destruction
 	/// Contains the approximate amount of lines for height decay
 	var/approx_lines
-	/// Reference to on_destroyed event from master
-	var/destroyed_ev_key
 
 /**
   * Constructs a chat message overlay
@@ -56,7 +54,7 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
-		owned_by.mob.on_destroyed.Remove(destroyed_ev_key)
+		owned_by.mob.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	owned_by = null
 	message_loc = null
 	message = null
@@ -76,7 +74,7 @@ var/runechat_icon = null
 	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
-	destroyed_ev_key = owner.on_destroyed.Add(src, .proc/qdel_self)
+	owner.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length
@@ -161,7 +159,7 @@ var/runechat_icon = null
 	spawn(lifespan - CHAT_MESSAGE_EOL_FADE)
 		end_of_life()
 
-/datum/chatmessage/proc/qdel_self()
+/datum/chatmessage/proc/qdel_self(datum/thing)
 	qdel(src)
 
 /**

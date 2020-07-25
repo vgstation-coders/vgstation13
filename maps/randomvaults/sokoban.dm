@@ -114,13 +114,11 @@
 
 	for(var/obj/structure/closet/crate/sokoban/crate in objects)
 		//check_cheat performs some additional checks first, and only then marks the user as a cheater
-		crate.on_destroyed.Add(crate, "check_cheat")
 		crate.lazy_register_event(/lazy_event/on_moved, crate, /obj/structure/closet/crate/sokoban/proc/check_cheat)
 		crate.parent = src.parent
 
 	for(var/obj/structure/sokoban_teleporter/teleporter in objects)
 		//Teleporters are supposed to be unmovable, so if they're moved or deleted - it's guaranteed cheating
-		teleporter.on_destroyed.Add(parent, "on_cheat")
 		teleporter.lazy_register_event(/lazy_event/on_moved, parent, /datum/map_element/vault/sokoban/proc/on_cheat)
 
 		if(parent)
@@ -187,6 +185,10 @@ This ladder stuff looks confusing, so here's an illustration!!!
 	var/shipped = FALSE //Crate put on a teleporter
 
 	var/datum/map_element/vault/sokoban/parent
+
+/obj/structure/closet/crate/sokoban/Destroy()
+	check_cheat()
+	..()
 
 /obj/structure/closet/crate/sokoban/proc/check_cheat(atom/movable/mover)
 	if(shipped)
