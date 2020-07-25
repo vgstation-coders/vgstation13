@@ -163,6 +163,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 			auto_collect(get_turf(src))
 			auto_fill(living_mover)
 
+/obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
+	if(handling)
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
 	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
