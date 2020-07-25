@@ -109,6 +109,11 @@
 	nearest_beacon = null
 	patrol_path.Cut()
 	path.Cut()
+	if(radio_controller)
+		if(bot_flags & BOT_CONTROL)
+			radio_controller.remove_object(src, control_freq)
+		if(bot_flags & BOT_BEACON)
+			radio_controller.remove_object(src, beacon_freq)
 
 // Reset the safety counter, look or move along a path, and then do bot things.
 /obj/machinery/bot/process()
