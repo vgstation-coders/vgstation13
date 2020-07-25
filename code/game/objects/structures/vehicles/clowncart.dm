@@ -266,8 +266,7 @@
 
 /obj/structure/bed/chair/vehicle/clowncart/relaymove(mob/user, direction)
 	if(user.incapacitated())
-		if(unlock_atom(user))
-			user.clear_alert(SCREEN_ALARM_BUCKLE)
+		unlock_atom(user)
 		return
 	var/turf/T = get_turf(loc)
 	if(!T)
@@ -285,7 +284,6 @@
 			activated = 0
 			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
 			if(unlock_atom(user))
-				user.clear_alert(SCREEN_ALARM_BUCKLE)
 				user.Knockdown(5) //Only Weaken after unbuckling
 				user.Stun(5)
 		return
