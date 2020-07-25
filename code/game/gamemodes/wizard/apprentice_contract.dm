@@ -153,7 +153,6 @@ var/list/wizard_apprentice_setups_by_name = list()
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = name
-		recruiter.role = WIZARD
 		recruiter.jobban_roles = list("Syndicate")
 		recruiter.recruitment_timeout = 30 SECONDS
 	// Role set to Yes or Always
