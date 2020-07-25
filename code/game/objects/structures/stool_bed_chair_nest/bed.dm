@@ -98,7 +98,6 @@
 				"You unbuckle yourself from \the [src].",
 				"You hear metal clanking.")
 		playsound(src, 'sound/misc/buckle_unclick.ogg', 50, 1)
-		M.clear_alert(SCREEN_ALARM_BUCKLE)
 		return TRUE
 
 /obj/structure/bed/proc/buckle_mob(mob/M as mob, mob/user as mob)
@@ -143,15 +142,26 @@
 	add_fingerprint(user)
 
 	lock_atom(M, mob_lock_type)
-	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	if(M.pulledby)
 		M.pulledby.start_pulling(src)
 
+/obj/structure/bed/lock_atom(atom/movable/AM)
+	. = ..()
+	if(!.)
+		return
+	if(ismob(AM))
+		var/mob/dude = AM
+		dude.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
+
 /obj/structure/bed/unlock_atom(var/atom/movable/AM)
 	if(current_glue_state != GLUE_STATE_NONE && ismob(AM))
 		return FALSE
-	return ..()
+	. = ..()
+	if(.)
+		if(ismob(AM))
+			var/mob/dude = AM
+			dude.clear_alert(SCREEN_ALARM_BUCKLE)
 
 /obj/structure/bed/Destroy()
 	if(current_glue_state == GLUE_STATE_PERMA && is_locking(mob_lock_type))//Don't de-ass someone if it was temporary glue.
