@@ -21,9 +21,7 @@
 			sleep(3)
 			if (i > 0)
 				if (prob(40))
-					var/obj/effect/decal/cleanable/blood/oil/streak = new /obj/effect/decal/cleanable/blood/oil/streak(get_turf(src))
-					streak.New(streak.loc)
-					streak.update_icon()
+					new /obj/effect/decal/cleanable/blood/oil/streak(get_turf(src))
 				else if (prob(10))
 					spark(src)
 
