@@ -181,8 +181,8 @@
 			w_class = W_CLASS_MEDIUM
 			if(silencer_offset.len)
 				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "silencer_mounted")
-				silence_overlay.pixel_x += silencer_offset[SUPPRESSOR_OFFSET_X]
-				silence_overlay.pixel_y += silencer_offset[SUPPRESSOR_OFFSET_Y]
+				silence_overlay.pixel_x += silencer_offset[SILENCER_OFFSET_X]
+				silence_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
 				overlays += silence_overlay
 				gun_part_overlays += silence_overlay
 			update_icon()

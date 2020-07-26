@@ -1,8 +1,8 @@
 #define UNCLOWN 1
 #define CLOWNABLE 2
 #define CLOWNED 3
-#define SUPPRESSOR_OFFSET_X 1
-#define SUPPRESSOR_OFFSET_Y 2
+#define SILENCER_OFFSET_X 1
+#define SILENCER_OFFSET_Y 2
 
 /obj/item/weapon/gun
 	name = "gun"
