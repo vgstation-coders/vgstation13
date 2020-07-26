@@ -1471,3 +1471,16 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/subspace/crystal = 1,
 		/obj/item/weapon/stock_parts/subspace/transmitter = 1
 		)
+
+/obj/item/weapon/circuitboard/sci_telepad
+	name = "Circuit board (Telescience Pad)"
+	desc = "A rather unique circuit board designed for teleportation science, currently unable to be reproduced."
+	build_path = /obj/machinery/telepad
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
+	mech_flags = MECH_SCAN_FAIL
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 2,
+	)
