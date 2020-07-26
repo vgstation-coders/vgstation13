@@ -62,7 +62,7 @@
 				if(toner > 0)
 					var/obj/item/weapon/paper/paper_type = copy.type
 					var/obj/item/weapon/paper/c = new paper_type(loc)
-					if(toner > 5)	//lots of toner, make it dark
+					if(toner > 3)	//lots of toner, make it dark
 						c.info = "<font color = #101010>"
 					else			//no toner? shitty copies for you!
 						c.info = "<font color = #808080>"
@@ -93,7 +93,7 @@
 					var/icon/I = icon(photocopy.icon, photocopy.icon_state)
 					var/icon/img = icon(photocopy.img)
 					if(greytoggle == "Greyscale")
-						if(toner > 5) //plenty of toner, go straight greyscale
+						if(toner > 3) //plenty of toner, go straight greyscale
 							I.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0)) //I'm not sure how expensive this is, but given the many limitations of photocopying, it shouldn't be an issue.
 							img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
 						else //not much toner left, lighten the photo
