@@ -179,7 +179,6 @@
 		if (src.holding)
 			src.holding.forceMove(src.loc)
 			src.holding = null
-		INVOKE_EVENT(on_destroyed, list())
 		nanomanager.update_uis(src)
 		return 1
 	else

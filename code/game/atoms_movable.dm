@@ -45,9 +45,6 @@
 	var/throwpass = 0
 	var/level = 2
 
-	// When the object is qdel'd
-	var/event/on_destroyed
-
 	var/atom/movable/tether_master
 	var/list/tether_slaves
 	var/list/current_tethers
@@ -67,8 +64,6 @@
 		for(var/matID in starting_materials)
 			materials.addAmount(matID, starting_materials[matID])
 
-	on_destroyed = new("owner"=src)
-
 /atom/movable/Destroy()
 	var/turf/T = loc
 	if (opacity && istype(T))
@@ -78,10 +73,7 @@
 		qdel(materials)
 		materials = null
 
-	INVOKE_EVENT(on_destroyed, list("atom" = src)) // 1 argument - the object itself
-	if(on_destroyed)
-		on_destroyed.holder = null
-		on_destroyed = null
+	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
 
 	var/turf/un_opaque
 	if (opacity && isturf(loc))
@@ -646,7 +638,6 @@
 /atom/movable/overlay
 	var/atom/master = null
 	var/follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
-	var/master_destroyed_key
 	anchored = 1
 
 /atom/movable/overlay/New()
@@ -665,17 +656,17 @@
 		SetInitLoc()
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		master_destroyed_key = AM.on_destroyed.Add(src, .proc/qdel_self)
+		AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	verbs.len = 0
 
-/atom/movable/overlay/proc/qdel_self()
+/atom/movable/overlay/proc/qdel_self(datum/thing)
 	qdel(src) // Rest in peace
 
 /atom/movable/overlay/Destroy()
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.lazy_unregister_event(/lazy_event/on_moved, src, follow_proc)
-		AM.on_destroyed.Remove(master_destroyed_key)
+		AM.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	master = null
 	return ..()
 

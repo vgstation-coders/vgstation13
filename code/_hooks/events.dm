@@ -78,6 +78,13 @@
 // atom/movable/mover: the movable itself.
 /lazy_event/on_moved
 
+// Called whenever a datum is destroyed.
+// Currently, as an optimization, only /atom/movable invokes this but
+// it can be changed to /datum if the need arises.
+/lazy_event/on_destroyed
+// Arguments:
+// datum/thing: the datum being destroyed.
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

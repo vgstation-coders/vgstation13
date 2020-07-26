@@ -61,7 +61,6 @@
 	var/stepped=0
 	var/steps=0 // How many steps we've made from the emitter.  Used in infinite loop avoidance.
 	var/am_connector=0
-	var/targetDestroyKey=null // Key for the on_destroyed listener.
 	var/targetDensityKey=null // Key for the on_density_change listener
 	var/targetContactLoc=null // Where we hit the target (used for target_moved)
 	var/locDensity=null
@@ -174,23 +173,13 @@
 	// Disconnect and re-emit.
 	disconnect()
 
-// Listener for /atom/on_destroyed
-/obj/effect/beam/proc/target_destroyed(var/list/args)
+// Listener for /lazy_event/on_destroyed
+/obj/effect/beam/proc/target_destroyed(datum/thing)
 	if(master)
 		beam_testing("Child got target_destroyed!  Feeding to master.")
-		master.target_destroyed(args)
+		master.target_destroyed(thing)
 		return
 
-	var/event/E = args["event"]
-
-	if(!targetDestroyKey)
-		E.handlers.Remove("\ref[src]:target_destroyed")
-		beam_testing("Uh oh, got a target_destroyed when we weren't listening for one.")
-		return
-
-	if(E.holder != target)
-		E.handlers.Remove("\ref[src]:target_destroyed")
-		return
 	beam_testing("\ref[src] Disconnecting: \ref[target] Target destroyed.")
 	// Disconnect and re-emit.
 	disconnect()
@@ -250,9 +239,7 @@
 	BM.update_end_icon()
 	if(istype(AM))
 		AM.lazy_register_event(/lazy_event/on_moved, BM, .proc/target_moved)
-		if (!AM.on_destroyed)
-			AM.on_destroyed = new("owner"=AM)
-		BM.targetDestroyKey = AM.on_destroyed.Add(BM,"target_destroyed")
+		AM.lazy_register_event(/lazy_event/on_destroyed, BM, .proc/target_destroyed)
 	BM.targetDensityKey = AM.on_density_change.Add(BM,"target_density_change")
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
@@ -295,12 +282,9 @@
 	if(_master.target)
 		if(ismovable(_master.target))
 			_master.target.lazy_unregister_event(/lazy_event/on_moved, _master, .proc/target_moved)
-			if (!_master.target.on_destroyed)
-				_master.target.on_destroyed = new("owner"=_master.target)
-			_master.target.on_destroyed.Remove(_master.targetDestroyKey)
+			_master.target.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/target_destroyed)
 		_master.target.beam_disconnect(_master)
 		_master.target=null
-		_master.targetDestroyKey=null
 		//if(_master.next)
 		//	BEAM_DEL(_master.next)
 		if(re_emit)
