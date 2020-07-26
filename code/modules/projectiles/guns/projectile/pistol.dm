@@ -162,10 +162,6 @@
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	if(!gun_part_overlays.len)
-		for(var/image/ol in gun_part_overlays)
-			overlays -= ol
-			gun_part_overlays -= ol
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
