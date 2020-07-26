@@ -115,8 +115,6 @@
 					p.photo_size = photocopy.photo_size
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
-					var/copied = html_decode(photocopy.info)
-					p.info += copied
 
 					sleep(15)
 				else
