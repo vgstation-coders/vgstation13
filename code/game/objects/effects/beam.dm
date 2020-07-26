@@ -61,9 +61,7 @@
 	var/stepped=0
 	var/steps=0 // How many steps we've made from the emitter.  Used in infinite loop avoidance.
 	var/am_connector=0
-	var/targetDensityKey=null // Key for the on_density_change listener
 	var/targetContactLoc=null // Where we hit the target (used for target_moved)
-	var/locDensity=null
 	var/list/sources = list() // Whoever served in emitting this beam. Used in prisms to prevent infinite loops.
 	var/_re_emit = 1 // Re-Emit from master when deleted? Set to 0 to not re-emit.
 
@@ -146,30 +144,20 @@
 		// Disconnect and re-emit.
 		disconnect()
 
-/obj/effect/beam/proc/turf_density_change(var/list/args)
-	var/turf/T = args["atom"]
+/obj/effect/beam/proc/turf_density_change(atom/atom)
+	var/turf/T = atom
 	var/atom/A = T.has_dense_content()
 	if(A && !(A in sources) && Cross(A)) //If there is a dense atom, we're not being emitted by it, and it can cross us
 		Crossed(A)
 
-// Listener for /atom/on_density_change
-/obj/effect/beam/proc/target_density_change(var/list/args)
+// Listener for /lazy_event/on_density_change
+/obj/effect/beam/proc/target_density_change(atom/atom)
 	if(master)
 		beam_testing("Child got target_density_change!  Feeding to master.")
-		master.target_density_change(args)
+		master.target_density_change(atom)
 		return
 
-	var/event/E = args["event"]
-
-	if(!targetDensityKey)
-		E.handlers.Remove("\ref[src]:target_density_change")
-		beam_testing("Uh oh, got a target_density_change when we weren't listening for one.")
-		return
-
-	if(E.holder != target)
-		E.handlers.Remove("\ref[src]:target_density_change")
-		return
-	beam_testing("\ref[src] Disconnecting: \ref[target] Target denisty has changed.")
+	beam_testing("\ref[src] Disconnecting: \ref[target] Target density has changed.")
 	// Disconnect and re-emit.
 	disconnect()
 
@@ -240,7 +228,7 @@
 	if(istype(AM))
 		AM.lazy_register_event(/lazy_event/on_moved, BM, .proc/target_moved)
 		AM.lazy_register_event(/lazy_event/on_destroyed, BM, .proc/target_destroyed)
-	BM.targetDensityKey = AM.on_density_change.Add(BM,"target_density_change")
+	AM.lazy_register_event(/lazy_event/on_density_change, BM, .proc/target_density_change)
 	BM.targetContactLoc = AM.loc
 	beam_testing("\ref[BM] - Connected to [AM]")
 	AM.beam_connect(BM)
@@ -393,8 +381,8 @@
 			return
 
 	var/turf/T = get_turf(src)
-	if(T && T.on_density_change)
-		locDensity = T.on_density_change.Add(src, "turf_density_change")
+	if(T)
+		T.lazy_register_event(/lazy_event/on_density_change, src, .proc/turf_density_change)
 
 	next = spawn_child()
 	if(next)
@@ -439,11 +427,12 @@
 
 /obj/effect/beam/Destroy()
 	var/turf/T = get_turf(src)
-	if(T && T.on_density_change)
-		T.on_density_change.Remove(locDensity)
+	if(T)
+		T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/turf_density_change)
 	var/obj/effect/beam/ourselves = src
 	var/obj/effect/beam/ourmaster = get_master()
 	if(target)
+		target.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/target_density_change)
 		if(target.beams)
 			target.beams -= ourselves
 	for(var/obj/machinery/mirror/M in mirror_list)
