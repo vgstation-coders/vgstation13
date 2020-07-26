@@ -769,7 +769,6 @@ var/global/mulebot_count = 0
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
-	O.New(O.loc)
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	unload(0)
 	qdel(src)

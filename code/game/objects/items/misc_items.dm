@@ -4,7 +4,6 @@
 	icon_state = "seeing_stone"
 	w_class = W_CLASS_TINY
 	var/using = FALSE
-	var/event_key
 
 /obj/item/seeing_stone/attack_self(mob/user)
 	..()
@@ -13,12 +12,12 @@
 	else
 		start_using(user)
 
-/obj/item/seeing_stone/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/seeing_stone/proc/mob_moved(atom/movable/mover)
 	if(using)
-		stop_using(holder)
+		stop_using(mover)
 
 /obj/item/seeing_stone/proc/start_using(mob/user)
-	event_key = user.on_moved.Add(src, "mob_moved")
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	user.visible_message("\The [user] holds \the [src] up to \his eye.","You hold \the [src] up to your eye.")
 	user.see_invisible = INVISIBILITY_MAXIMUM
 	user.see_invisible_override = INVISIBILITY_MAXIMUM
@@ -31,7 +30,7 @@
 	using = TRUE
 
 /obj/item/seeing_stone/proc/stop_using(mob/user)
-	user.on_moved.Remove(event_key)
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 	user.see_invisible = initial(user.see_invisible)
 	user.see_invisible_override = 0

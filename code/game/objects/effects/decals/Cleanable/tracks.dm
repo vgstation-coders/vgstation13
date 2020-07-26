@@ -57,6 +57,9 @@
 		"128"=0
 	)
 
+/obj/effect/decal/cleanable/blood/tracks/fixDNA()
+	blood_DNA = list()
+
 	/** DO NOT FUCKING REMOVE THIS. **/
 /obj/effect/decal/cleanable/blood/tracks/process()
 	return PROCESS_KILL

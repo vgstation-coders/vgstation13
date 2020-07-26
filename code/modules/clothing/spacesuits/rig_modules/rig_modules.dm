@@ -232,7 +232,7 @@
 	rig.armor["rad"] = 100
 
 	say_to_wearer("[src] enabled.")
-	event_key = rig.wearer.on_irradiate.Add(src, "absorb_rads")
+	rig.wearer.lazy_register_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
 	..()
 
 /obj/item/rig_module/rad_shield/deactivate()
@@ -244,18 +244,12 @@
 	rig?.armor["rad"] = initial_suit
 
 	say_to_wearer("[src] disabled.")
-	if(event_key)
-		rig.wearer?.on_irradiate.Remove(event_key)
-		event_key = null
+	rig.wearer?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
 	..()
 
-/obj/item/rig_module/rad_shield/proc/absorb_rads(list/arguments)
-	var/mob/user = arguments["user"]
-	var/rads = arguments["rads"]
-
+/obj/item/rig_module/rad_shield/proc/absorb_rads(mob/living/carbon/human/user, rads)
 	if(rig?.wearer != user) //Well lad.
-		user.on_irradiate.Remove(event_key)
-		event_key = null
+		user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/absorb_rads)
 		return
 
 	if(rig.H)

@@ -3269,7 +3269,6 @@
 	new_virus.makerandom(list(40,60),list(20,90),anti,bad,src)
 
 	var/list/blood_data = list(
-		"donor" = null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = "O-",

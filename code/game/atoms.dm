@@ -668,8 +668,8 @@ its easier to just keep the beam vertical.
 
 
 //returns 1 if made bloody, returns 0 otherwise
-/atom/proc/add_blood(mob/living/carbon/human/M as mob)
-	.=1
+/atom/proc/add_blood(var/mob/living/carbon/human/M)
+	.=TRUE
 	if(!M)//if the blood is of non-human source
 		if(!blood_DNA || !istype(blood_DNA, /list))
 			blood_DNA = list()
@@ -682,24 +682,29 @@ its easier to just keep the beam vertical.
 		M.dna = new /datum/dna(null)
 		M.dna.real_name = M.real_name
 	M.check_dna()
-	if (!( src.flags ) & FPRINT)
+	if (!( src.flags & FPRINT))
 		return FALSE
 	if(!blood_DNA || !istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
 		blood_DNA = list()
 	blood_color = DEFAULT_BLOOD
 	if (M.species)
 		blood_color = M.species.blood_color
-	//adding blood to humans
-	else if (istype(src, /mob/living/carbon/human))
-		var/mob/living/carbon/human/H = src
-		//if this blood isn't already in the list, add it
-		if(blood_DNA[H.dna.unique_enzymes])
-			return FALSE //already bloodied with this blood. Cannot add more.
-		blood_DNA[H.dna.unique_enzymes] = H.dna.b_type
-		H.update_inv_gloves()	//handles bloody hands overlays and updating
-		had_blood = TRUE
-		return TRUE //we applied blood to the item
-	return
+	return TRUE
+
+//this proc exists specifically for cases where the mob that originated the blood (aka the "donor") might not exist anymore, leading to bugs galore
+/atom/proc/add_blood_from_data(var/list/blood_data)
+	if (!( istype(blood_data) ))
+		return FALSE
+
+	if (!( src.flags & FPRINT))
+		return FALSE
+
+	if(!istype(blood_DNA, /list))	//if our list of DNA doesn't exist yet (or isn't a list) initialise it.
+		blood_DNA = list()
+
+	blood_color = blood_data["blood_colour"]
+
+	return TRUE
 
 /atom/proc/add_vomit_floor(mob/living/carbon/M, toxvomit = 0, active = 0, steal_reagents_from_mob = 1)
 	if( istype(src, /turf/simulated) )

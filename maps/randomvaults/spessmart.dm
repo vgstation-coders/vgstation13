@@ -238,19 +238,6 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 
 /area/vault/supermarket/shop/proc/setup()
 	spawn()
-		/*
-		looping:
-			for(var/obj/item/I in contents)
-				for(var/type in shop_prices + circuitboard_prices + clothing_prices)
-					if(istype(I, type))
-						I.name = "[I.name] ($[shop_prices[type]])"
-						I.on_destroyed.Add(src, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
-
-						items[I] = shop_prices[type]
-
-						continue looping
-		*/ //This is handled by spawners now
-
 		var/area/vault/supermarket/entrance/E = locate(/area/vault/supermarket/entrance)
 		var/list/protected_objects = list(
 			/obj/structure/window, //Destroying these objects triggers an alarm
@@ -263,9 +250,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		for(var/atom/movable/AM in (src.contents + E.contents))
 
 			if(!is_type_in_list(AM, protected_objects)) continue
-
-			if(AM.on_destroyed)
-				AM.on_destroyed.Add(src, "item_destroyed")
+			AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/item_destroyed)
 
 /area/vault/supermarket/shop/Exited(atom/movable/AM, atom/newloc)
 	..()
@@ -290,8 +275,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 		map_element.goods_purchased++
 		map_element.credits_spent += price
 
-/area/vault/supermarket/shop/proc/item_destroyed(list/params)
-	var/atom/destroyed = params["atom"]
+/area/vault/supermarket/shop/proc/item_destroyed(datum/thing)
+	var/atom/destroyed = thing
 
 	if(istype(destroyed, /obj/item))
 		if(items.Find(destroyed))
@@ -738,7 +723,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 			var/price = to_spawn[new_item_type]
 
 			I.name = "[I.name] ($[price])"
-			I.on_destroyed.Add(S, "item_destroyed") //Only trigger alarm when an item for sale is destroyed
+			I.lazy_register_event(/lazy_event/on_destroyed, S, /area/vault/supermarket/shop/proc/item_destroyed) //Only trigger alarm when an item for sale is destroyed
 
 			S.items[I] = price
 

@@ -355,7 +355,6 @@
 	specheatcap = 3.49
 
 	data = list(
-		"donor"= null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = null,
@@ -405,9 +404,8 @@
 
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
+			H.bloody_body_from_data(data,0,src)
+			H.bloody_hands_from_data(data,2,src)
 			spawn() //Bloody feet, result of the blood that fell on the floor
 				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
@@ -458,31 +456,8 @@
 
 	if(volume < 3) //Hardcoded
 		return
-//	WHY WAS THIS MAKING 2 SPLATTERS? Awfully hardcoded, no need to exist, and this is completely broken colorwise
-//
-	//var/datum/disease/D = self.data["virus"]
-//	if(!self.data["donor"] || ishuman(self.data["donor"]))
-//		var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //Find some blood here
-//		if(!blood_prop) //First blood
-//			blood_prop = new /obj/effect/decal/cleanable/blood(T)
-//			blood_prop.New(T)
-//			blood_prop.blood_DNA[self.data["blood_DNA"]] = self.data["blood_type"]
-//
-//		for(var/datum/disease/D in self.data["viruses"])
-//			var/datum/disease/newVirus = D.Copy(1)
-//			blood_prop.viruses += newVirus
-//
 
-	if(!self.data["donor"] || ishuman(self.data["donor"]))
-		blood_splatter(T, self, 1)
-	else if(ismonkey(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["Non-Human DNA"] = "A+"
-	else if(isalien(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
+	blood_splatter(T, self, 1)
 	T.had_blood = TRUE
 	if(volume >= 5 && !istype(T.loc, /area/chapel)) //Blood desanctifies non-chapel tiles
 		T.holy = 0
@@ -497,9 +472,10 @@
 	return 1
 
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
+
+	O.add_blood_from_data(data)
 
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O

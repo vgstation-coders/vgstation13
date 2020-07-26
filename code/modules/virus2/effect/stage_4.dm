@@ -329,8 +329,7 @@
 					meatslab.throw_at(Tx, i, 3)
 
 					if(!Tx.density)
-						var/obj/effect/decal/cleanable/blood/gibs/D = new /obj/effect/decal/cleanable/blood/gibs(Tx)
-						D.New(Tx,i)
+						new /obj/effect/decal/cleanable/blood/gibs(Tx, i)
 
 			if(2) // Losing a limb
 				for(var/datum/organ/external/E in H.organs)

@@ -27,7 +27,12 @@
 		new_spell_master.icon_state = spell_base
 	spell_masters.Add(new_spell_master)
 	spell_list.Add(spell_to_add)
-	return spell_to_add
+	spell_to_add.on_added(src)
+	if(mind && iswizard)
+		if(!mind.wizard_spells)
+			mind.wizard_spells = list()
+		mind.wizard_spells += spell_to_add
+	return 1
 
 /mob/proc/cast_spell(spell/spell_to_cast, list/targets)
 	if(ispath(spell_to_cast, /spell))
