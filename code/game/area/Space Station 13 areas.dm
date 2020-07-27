@@ -2802,3 +2802,6 @@ var/list/the_station_areas = list (
 		/datum/ambience/dorf,
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
+
+/area/maintenance/engine
+	name = "Engine"

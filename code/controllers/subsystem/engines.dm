@@ -19,6 +19,8 @@ var/datum/subsystem/engines/SSengines
 		if (!ship_has_power)
 			return FALSE
 		for (var/obj/structure/shuttle/engine/propulsion/horizon/engine in large_engines)
+			if (!istype(get_area(engine), /area/maintenance/engine))
+				continue
 			spawn() // So that they fire all at once.
 				engine.shoot_exhaust(3, 0)
 

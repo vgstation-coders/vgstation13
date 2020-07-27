@@ -206,7 +206,7 @@ var/list/large_engines = list()
 /obj/structure/shuttle/engine/propulsion/horizon/shoot_exhaust(forward=9, backward=9, var/turf/source_turf)
 	for (var/dx = 0 to largeness)
 		spawn()
-			var/turf/T = locate(src.x + dx, src.y + largeness, src.z)
+			var/turf/T = locate(src.x + dx, src.y, src.z)
 			..(forward, backward, T)
 
 /obj/structure/shuttle/engine/propulsion/horizon/large_engine
