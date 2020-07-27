@@ -21,7 +21,7 @@
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "scope"
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 1000)
 	
 /obj/item/gun_part/glock_auto_conversion_kit
 	name = "glock full-auto conversion kit"
@@ -29,7 +29,7 @@
 	icon = 'icons/obj/gun.dmi' 
 	icon_state = "fullautokit" 
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 400)
+	starting_materials = list(MAT_IRON = 200)
 	
 /obj/item/gun_part/universal_magwell_expansion_kit
 	name = "universal magwell expansion kit"
@@ -37,4 +37,5 @@
 	icon = 'icons/obj/gun.dmi' 
 	icon_state = "magwellkit" 
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 400)
+	starting_materials = list(MAT_IRON = 200)
+

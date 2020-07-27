@@ -134,7 +134,7 @@
 
 	spell.connected_button = null
 
-	if(spell_objects.len)
+	if(spell_objects?.len)
 		toggle_open(showing + 1)
 	else
 		qdel(src)

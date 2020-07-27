@@ -184,9 +184,15 @@
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
 			return 1
-		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
-			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
+
+
+		else if(allowed_materials && !((I.materials.storage & allowed_materials) ~= I.materials.storage))
+			var/output = "\The [src] can only accept objects made out of these: "
+			for(var/mat_id in allowed_materials)
+				output += (material_list[mat_id].processed_name + " ")
+			to_chat(user, output)
 			return 1
+
 		else if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user

@@ -94,8 +94,6 @@
 		blood_splatter(src,M,1)
 	else if( istype(M, /mob/living/carbon/alien ))
 		var/obj/effect/decal/cleanable/blood/xeno/this = new /obj/effect/decal/cleanable/blood/xeno(src)
-		this.New(src)
 		this.blood_DNA["UNKNOWN BLOOD"] = "X*"
 	else if( istype(M, /mob/living/silicon/robot ))
-		var/obj/effect/decal/cleanable/blood/oil/B = new /obj/effect/decal/cleanable/blood/oil(src)
-		B.New(src)
+		new /obj/effect/decal/cleanable/blood/oil(src)

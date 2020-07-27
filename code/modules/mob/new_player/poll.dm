@@ -43,7 +43,7 @@
 		return
 	if(SSdbcore.Connect())
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype, multiplechoiceoptions FROM erro_poll_question WHERE id = [pollid]")
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype, multiplechoiceoptions FROM erro_poll_question WHERE id = :id", list("id" = pollid))
 		if(!select_query.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -73,7 +73,7 @@
 		switch(polltype)
 			//Polls that have enumerated options
 			if("OPTION")
-				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
+				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
 					log_sql("Error: [voted_query.ErrorMsg()]")
@@ -89,7 +89,7 @@
 				qdel(voted_query)
 				var/list/datum/polloption/options = list()
 
-				var/datum/DBQuery/options_query = SSdbcore.NewQuery("SELECT id, text FROM erro_poll_option WHERE pollid = [pollid]")
+				var/datum/DBQuery/options_query = SSdbcore.NewQuery("SELECT id, text FROM erro_poll_option WHERE pollid = :id", list("id" = pollid))
 				if(!options_query.Execute())
 					message_admins("Error: [options_query.ErrorMsg()]")
 					log_sql("Error: [options_query.ErrorMsg()]")
@@ -137,7 +137,7 @@
 
 			//Polls with a text input
 			if("TEXT")
-				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT replytext FROM erro_poll_textreply WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
+				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT replytext FROM erro_poll_textreply WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
 					log_sql("Error: [voted_query.ErrorMsg()]")
@@ -183,7 +183,7 @@
 
 			//Polls with a text input
 			if("NUMVAL")
-				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT o.text, v.rating FROM erro_poll_option o, erro_poll_vote v WHERE o.pollid = [pollid] AND v.ckey = '[usr.ckey]' AND o.id = v.optionid")
+				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT o.text, v.rating FROM erro_poll_option o, erro_poll_vote v WHERE o.pollid = :id AND v.ckey = :ckey AND o.id = v.optionid", , list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
 					log_sql("Error: [voted_query.ErrorMsg()]")
@@ -216,7 +216,7 @@
 					var/minid = 999999
 					var/maxid = 0
 
-					var/datum/DBQuery/option_query = SSdbcore.NewQuery("SELECT id, text, minval, maxval, descmin, descmid, descmax FROM erro_poll_option WHERE pollid = [pollid]")
+					var/datum/DBQuery/option_query = SSdbcore.NewQuery("SELECT id, text, minval, maxval, descmin, descmid, descmax FROM erro_poll_option WHERE pollid = :id", list("id" = pollid))
 					if(!option_query.Execute())
 						message_admins("Error: [option_query.ErrorMsg()]")
 						log_sql("Error: [option_query.ErrorMsg()]")
@@ -265,7 +265,7 @@
 					qdel(option_query)
 				src << browse(output,"window=playerpoll;size=500x500")
 			if("MULTICHOICE")
-				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
+				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
 					log_sql("Error: [voted_query.ErrorMsg()]")
@@ -283,7 +283,7 @@
 				var/maxoptionid = 0
 				var/minoptionid = 0
 
-				var/datum/DBQuery/options_query = SSdbcore.NewQuery("SELECT id, text FROM erro_poll_option WHERE pollid = [pollid]")
+				var/datum/DBQuery/options_query = SSdbcore.NewQuery("SELECT id, text FROM erro_poll_option WHERE pollid = :id", list("id" = pollid))
 				if(!options_query.Execute())
 					message_admins("Error: [options_query.ErrorMsg()]")
 					log_sql("Error: [options_query.ErrorMsg()]")
@@ -348,7 +348,7 @@
 		return
 	if(SSdbcore.Connect())
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype, multiplechoiceoptions FROM erro_poll_question WHERE id = [pollid] AND Now() BETWEEN starttime AND endtime")
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype, multiplechoiceoptions FROM erro_poll_question WHERE id = :id AND Now() BETWEEN starttime AND endtime", list("id" = pollid))
 		if(!select_query.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -371,7 +371,7 @@
 			to_chat(usr, "<span class='warning'>Poll is not valid.</span>")
 			return
 
-		var/datum/DBQuery/select_query2 = SSdbcore.NewQuery("SELECT id FROM erro_poll_option WHERE id = [optionid] AND pollid = [pollid]")
+		var/datum/DBQuery/select_query2 = SSdbcore.NewQuery("SELECT id FROM erro_poll_option WHERE id = :optionid AND pollid = :pollid", list("optionid" = optionid, "pollid" = pollid))
 		if(!select_query2.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -391,7 +391,7 @@
 
 		var/alreadyvoted = 0
 
-		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_vote WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
+		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_vote WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 		if(!voted_query.Execute())
 			message_admins("Error: [voted_query.ErrorMsg()]")
 			log_sql("Error: [voted_query.ErrorMsg()]")
@@ -415,7 +415,14 @@
 			adminrank = usr.client.holder.rank
 
 
-		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank) VALUES (null, Now(), [pollid], [optionid], '[usr.ckey]', '[usr.client.address]', '[adminrank]')")
+		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank) VALUES (null, Now(), :pollid, :optionid, :ckey, :address, :rank)",
+			list(
+				"pollid" = pollid,
+				"optionid" = optionid,
+				"ckey" = "[usr.ckey]",
+				"address" = "[usr.client.address]",
+				"rank" = adminrank,
+			))
 		if(!insert_query.Execute())
 			message_admins("Error: [insert_query.ErrorMsg()]")
 			log_sql("Error: [insert_query.ErrorMsg()]")
@@ -435,7 +442,7 @@
 		return
 	if(SSdbcore.Connect())
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype FROM erro_poll_question WHERE id = [pollid] AND Now() BETWEEN starttime AND endtime")
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype FROM erro_poll_question WHERE id = :id AND Now() BETWEEN starttime AND endtime", list("id" =  pollid))
 		if(!select_query.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -458,7 +465,7 @@
 
 		var/alreadyvoted = 0
 
-		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_textreply WHERE pollid = [pollid] AND ckey = '[usr.ckey]'")
+		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_textreply WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 		if(!voted_query.Execute())
 			message_admins("Error: [voted_query.ErrorMsg()]")
 			log_sql("Error: [voted_query.ErrorMsg()]")
@@ -483,13 +490,19 @@
 		replytext = replacetext(replytext, "\n", "%BR%")
 		var/text_pass = reject_bad_text(replytext,8000)
 		replytext = replacetext(replytext, "%BR%", "<BR>")
-		replytext = sanitizeSQL(replytext)
 
 		if(!text_pass)
 			to_chat(usr, "The text you entered was blank, contained illegal characters or was too long. Please correct the text and submit again.")
 			return
 
-		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_textreply (id ,datetime ,pollid ,ckey ,ip ,replytext ,adminrank) VALUES (null, Now(), [pollid], '[usr.ckey]', '[usr.client.address]', '[replytext]', '[adminrank]')")
+		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_textreply (id ,datetime ,pollid ,ckey ,ip ,replytext ,adminrank) VALUES (null, Now(), :pollid, :ckey, :address, :replytext, :rank)",
+			list(
+				"pollid" = pollid,
+				"ckey" = "[usr.ckey]",
+				"address" = "[usr.client.address]",
+				"replytext" = replytext,
+				"rank" = adminrank,
+		))
 		if(!insert_query.Execute())
 			message_admins("Error: [insert_query.ErrorMsg()]")
 			log_sql("Error: [insert_query.ErrorMsg()]")
@@ -510,7 +523,7 @@
 	SSdbcore.Connect()
 	if(SSdbcore.IsConnected())
 
-		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype FROM erro_poll_question WHERE id = [pollid] AND Now() BETWEEN starttime AND endtime")
+		var/datum/DBQuery/select_query = SSdbcore.NewQuery("SELECT starttime, endtime, question, polltype FROM erro_poll_question WHERE id = :id AND Now() BETWEEN starttime AND endtime", list("id" =  pollid))
 		if(!select_query.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -531,7 +544,7 @@
 			to_chat(usr, "<span class='warning'>Poll is not valid.</span>")
 			return
 
-		var/datum/DBQuery/select_query2 = SSdbcore.NewQuery("SELECT id FROM erro_poll_option WHERE id = [optionid] AND pollid = [pollid]")
+		var/datum/DBQuery/select_query2 = SSdbcore.NewQuery("SELECT id FROM erro_poll_option WHERE id = :optionid AND pollid = :pollid", list("optionid" = optionid, "pollid" = pollid))
 		if(!select_query2.Execute())
 			message_admins("Error: [select_query.ErrorMsg()]")
 			log_sql("Error: [select_query.ErrorMsg()]")
@@ -551,7 +564,7 @@
 
 		var/alreadyvoted = 0
 
-		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_vote WHERE optionid = [optionid] AND ckey = '[usr.ckey]'")
+		var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT id FROM erro_poll_vote WHERE optionid = :optionid AND ckey = :ckey", list("optionid" = optionid, "ckey" = "[usr.ckey]"))
 		if(!voted_query.Execute())
 			message_admins("Error: [voted_query.ErrorMsg()]")
 			log_sql("Error: [voted_query.ErrorMsg()]")
@@ -573,7 +586,15 @@
 			adminrank = usr.client.holder.rank
 
 
-		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank, rating) VALUES (null, Now(), [pollid], [optionid], '[usr.ckey]', '[usr.client.address]', '[adminrank]', [(isnull(rating)) ? "null" : rating])")
+		var/datum/DBQuery/insert_query = SSdbcore.NewQuery("INSERT INTO erro_poll_vote (id ,datetime ,pollid ,optionid ,ckey ,ip ,adminrank, rating) VALUES (null, Now(), :pollid, :optionid, :ckey, :address, :rank, :rating)",
+			list(
+				"pollid" = pollid,
+				"optionid" = optionid,
+				"ckey" = "[usr.ckey]",
+				"address" = "[usr.client.address]",
+				"rank" = adminrank,
+				"rating" = " [(isnull(rating)) ? "null" : rating]"
+		))
 		if(!insert_query.Execute())
 			message_admins("Error: [insert_query.ErrorMsg()]")
 			log_sql("Error: [insert_query.ErrorMsg()]")

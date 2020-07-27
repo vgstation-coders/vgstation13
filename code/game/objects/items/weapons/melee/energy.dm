@@ -350,7 +350,6 @@
 	origin_tech = Tc_COMBAT + "=3" + Tc_SYNDICATE + "=3"
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
 	armor_penetration = 50
-	var/event_key
 
 /obj/item/weapon/melee/energy/hfmachete/update_icon()
 	icon_state = "[base_state][active]"
@@ -377,7 +376,7 @@
 		armor_penetration = 100
 		to_chat(user, "<span class='warning'> [src] starts vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete1.ogg', 40, 0)
-		event_key = user.on_moved.Add(src, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	else
 		force = initial(force)
 		sterility = initial(sterility)
@@ -388,8 +387,7 @@
 		armor_penetration = initial(armor_penetration)
 		to_chat(user, "<span class='notice'> [src] stops vibrating.</span>")
 		playsound(user, 'sound/weapons/hfmachete0.ogg', 40, 0)
-		user.on_moved.Remove(event_key)
-		event_key = null
+		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	update_icon()
 
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
@@ -424,9 +422,9 @@
 		return
 	..()
 
-/obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(iscarbon(holder) && active)
-		for(var/obj/effect/plantsegment/P in range(holder,0))
+/obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(atom/movable/mover)
+	if(iscarbon(mover) && active)
+		for(var/obj/effect/plantsegment/P in range(mover,0))
 			qdel(P)
 
 /obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)

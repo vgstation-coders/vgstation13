@@ -1294,7 +1294,6 @@
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
 
 		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
-		W.New(T)
 		W.basecolor = (bloody_hands_data["blood_colour"]) ? bloody_hands_data["blood_colour"] : DEFAULT_BLOOD
 		W.update_icon()
 		W.message = message
@@ -1483,7 +1482,7 @@
 	Jitter(jitter_duration)
 
 /mob/living/carbon/human/proc/asthma_attack()
-	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(has_reagent_in_blood(ALBUTEROL)))
+	if(disabilities & ASTHMA && !(M_NO_BREATH in mutations) && !(species && species.flags & NO_BREATHE) && !(has_reagent_in_blood(ALBUTEROL)))
 		forcesay("-")
 		visible_message("<span class='danger'>\The [src] begins wheezing and grabbing at their throat!</span>", \
 									"<span class='warning'>You begin wheezing and grabbing at your throat!</span>")

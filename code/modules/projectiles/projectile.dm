@@ -584,7 +584,8 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		var/turf/T = get_step(src, dir)
-		step_towards(src, T)
+		if(!step_towards(src, T))
+			break
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))

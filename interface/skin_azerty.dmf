@@ -764,7 +764,7 @@ window "mapwindow"
 		text-color = none
 		is-default = true
 		saved-params = "icon-size"
-		style=".center { text-align: center; } .runechatdiv {background-color: #20202070} .black_outline { -dm-text-outline: 1px black } .maptext { font-family: 'Small Fonts'; font-size: 7px; color: white; line-height: 1.1; } .command_headset { font-weight: bold;	font-size: 8px; } .small { font-size: 6px; } .very_small { font-size: 5px;} .big { font-size: 8px; } .reallybig { font-size: 8px; } .extremelybig { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .clown { color: #FF69Bf; font-size: 7px;  font-weight: bold; } .his_grace { color: #15D512; } .hypnophrase { color: #0d0d0d; font-weight: bold; } .yell { font-weight: bold; } .italics { font-size: 6px; }"
+		style=".center { text-align: center; } .runechatdiv {background-color: #20202070} .black_outline { -dm-text-outline: 1px black } .boldtext { font-weight: bold; } .maptext { font-family: 'Small Fonts'; font-size: 7px; color: white; line-height: 1.1; } .command_headset { font-weight: bold;	font-size: 8px; } .small { font-size: 6px; } .very_small { font-size: 5px;} .big { font-size: 8px; } .reallybig { font-size: 8px; } .extremelybig { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .clown { color: #FF69Bf; font-size: 7px;  font-weight: bold; } .his_grace { color: #15D512; } .hypnophrase { color: #0d0d0d; font-weight: bold; } .yell { font-weight: bold; } .italics { font-size: 7px; font-style: italic; }"
 	elem "credits"
 		type = BROWSER
 		pos = 0,0

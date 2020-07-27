@@ -293,7 +293,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		blood_data["immunity"] = immune_system.GetImmunity()
 	return blood_data
 
-/proc/copy_blood_data(var/list/data)
+/proc/copy_blood_data(var/list/list/data)
 	var/blood_data = list(
 		"viruses"		=null,
 		"blood_DNA"		=data["blood_DNA"],
@@ -462,7 +462,6 @@ proc/blood_splatter(var/target,var/datum/reagent/blood/source,var/large)
 	B = locate(decal_type) in T
 	if(!B || (decal_type == /obj/effect/decal/cleanable/blood/drip))
 		B = new decal_type(T)
-		B.New(T)
 		if(decal_type == /obj/effect/decal/cleanable/blood/drip)
 			B.icon_state = pick(drip_icons)
 

@@ -1095,7 +1095,7 @@
 	if(!blood_data)
 		return
 
-	if (blood_data["virus2"]?.len)
+	if (length(blood_data["virus2"]))
 		var/list/blood_diseases = filter_disease_by_spread(blood_data["virus2"],required = SPREAD_BLOOD)
 		if (blood_diseases?.len)
 			for (var/ID in blood_diseases)

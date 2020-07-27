@@ -109,6 +109,11 @@
 	nearest_beacon = null
 	patrol_path.Cut()
 	path.Cut()
+	if(radio_controller)
+		if(bot_flags & BOT_CONTROL)
+			radio_controller.remove_object(src, control_freq)
+		if(bot_flags & BOT_BEACON)
+			radio_controller.remove_object(src, beacon_freq)
 
 // Reset the safety counter, look or move along a path, and then do bot things.
 /obj/machinery/bot/process()
@@ -591,9 +596,8 @@
 	src.visible_message("<span class='danger'>[user] has slashed [src]!</span>")
 	playsound(src, 'sound/weapons/slice.ogg', 25, 1, -1)
 	if(prob(10))
-		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		O.New(O.loc)
+		new /obj/effect/decal/cleanable/blood/oil(src.loc)
+
 	healthcheck()
 
 
@@ -607,9 +611,7 @@
 	src.visible_message("<span class='danger'>[M] [M.attacktext] [src]!</span>")
 	add_logs(M, src, "attacked", admin=0)
 	if(prob(10))
-		//new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(src.loc)
-		O.New(O.loc)
+		new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	healthcheck()
 
 /obj/machinery/bot/proc/declare() //Signals a medical or security HUD user to a relevant bot's activity.

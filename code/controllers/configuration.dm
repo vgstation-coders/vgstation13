@@ -561,15 +561,15 @@
 				if("copy_logs")
 					copy_logs = value
 
-				// BSQL
+				// BRSQL
 				if("bsql_debug")
 					bsql_debug = value
 				if("async_query_timeout")
-					async_query_timeout = value
+					async_query_timeout = text2num(value)
 				if("blocking_query_timeout")
-					blocking_query_timeout = value
+					blocking_query_timeout = text2num(value)
 				if("bsql_thread_limit")
-					bsql_thread_limit = value
+					bsql_thread_limit = text2num(value)
 
 				if("media_base_url")
 					media_base_url = value
@@ -707,7 +707,7 @@
 			if ("address")
 				sqladdress = value
 			if ("port")
-				sqlport = value
+				sqlport = text2num(value)
 			if ("database")
 				sqldb = value
 			if ("login")

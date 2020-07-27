@@ -341,7 +341,6 @@ Pipelines + Other Objects -> Pipe network
 			"You hear a ratchet.")
 		new /obj/item/pipe(loc, null, null, src)
 		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)
 	return 1
 

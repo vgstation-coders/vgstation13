@@ -22,6 +22,32 @@
 /obj/item/weapon/reagent_containers/dropper/update_icon()
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
+/obj/item/weapon/reagent_containers/dropper/attack(mob/M as mob, mob/user as mob)
+	if(!reagents.total_volume && M.is_open_container())
+		to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
+		return
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
+	if(ishuman(M))
+		var/mob/living/carbon/human/victim = M
+		var/obj/item/safe_thing = victim.get_body_part_coverage(EYES)
+		if(safe_thing)
+			user.visible_message("<span class='danger'>[user] tries to squirt something into [M]'s eyes, but fails!</span>")
+			src.reagents.reaction(safe_thing, TOUCH)
+			src.reagents.remove_any(amount_per_transfer_from_this)
+			update_icon()
+			return
+	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>")
+	src.reagents.reaction(M, TOUCH)
+	src.reagents.remove_any(amount_per_transfer_from_this)
+	update_icon()
+	return
+
 /obj/item/weapon/reagent_containers/dropper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
@@ -44,42 +70,15 @@
 			return
 
 		var/trans = 0
-
-		if(ismob(target))
-			var/mob/living/M = target
-			M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
-			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
-			msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-			if(!iscarbon(user))
-				M.LAssailant = null
-			else
-				M.LAssailant = user
-			if(ishuman(target))
-				var/mob/living/carbon/human/victim = target
-				var/obj/item/safe_thing = victim.get_body_part_coverage(EYES)
-				if(safe_thing)
-					user.visible_message("<span class='danger'>[user] tries to squirt something into [target]'s eyes, but fails!</span>")
-					src.reagents.reaction(safe_thing, TOUCH)
-					src.reagents.remove_any(amount_per_transfer_from_this)
-					update_icon()
-					return
-			user.visible_message("<span class='danger'>[user] squirts something into [target]'s eyes!</span>")
-			src.reagents.reaction(target, TOUCH)
-			src.reagents.remove_any(amount_per_transfer_from_this)
-			update_icon()
-			return
-
 		trans = src.reagents.trans_to(target, amount_per_transfer_from_this, log_transfer = TRUE, whodunnit = user)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the solution.</span>")
 		update_icon()
 
 	else
-
+		if(ismob(target))
+			return
 		if(!target.is_open_container() && !istype(target,/obj/structure/reagent_dispensers))
 			to_chat(user, "<span class='warning'>You cannot directly remove reagents from [target].</span>")
-			return
-		if(target.is_open_container() && ismob(target))
-			to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
 			return
 		if(!target.reagents.total_volume)
 			to_chat(user, "<span class='warning'>[target] is empty.</span>")
