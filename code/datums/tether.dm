@@ -3,10 +3,6 @@
 	var/atom/movable/effective_master	//Used to reference either the actual master or its holder at turf level
 	var/atom/movable/slave		//Used only to reference the actual, original slave
 	var/atom/movable/effective_slave	//Used to reference either the actual slave or its holder at turf level
-	var/event_key_master
-	var/event_key_effective_master	//Used only on holders of the master, never the master itself
-	var/event_key_slave
-	var/event_key_effective_slave	//Used only on holders of the slave, never the slave itself
 	var/tether_distance			//On a master-slave tether, how far apart the two can be before the slave is either prohibited from moving or pulled by the master.
 								//On an equal tether, how far apart the two can be before whichever one that moves pulls the other.
 /datum/tether/proc/break_tether()
@@ -20,8 +16,8 @@
 	effective_master = master
 	slave = S
 	effective_slave = slave
-	event_key_master = master.on_moved.Add(src, "master_moved")
-	event_key_slave = slave.on_moved.Add(src, "slave_moved")
+	master.lazy_register_event(/lazy_event/on_moved, src, .proc/master_moved)
+	master.lazy_register_event(/lazy_event/on_moved, src, .proc/slave_moved)
 	if(!master.current_tethers)
 		master.current_tethers = list()
 	master.current_tethers.Add(src)
@@ -31,23 +27,19 @@
 
 /datum/tether/Destroy()
 	if(effective_master != master)
-		effective_master.on_moved.Remove(event_key_effective_master)
+		effective_master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
 		effective_master.current_tethers.Remove(src)
 		effective_master = null
-		event_key_effective_master = null
-	master.on_moved.Remove(event_key_master)
+	master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
 	master.current_tethers.Remove(src)
 	master = null
-	event_key_master = null
 	if(effective_slave != slave)
-		effective_slave.on_moved.Remove(event_key_effective_slave)
+		effective_slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
 		effective_slave.current_tethers.Remove(src)
 		effective_slave = null
-		event_key_effective_slave = null
-	slave.on_moved.Remove(event_key_slave)
+	slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
 	slave.current_tethers.Remove(src)
 	slave = null
-	event_key_slave = null
 	..()
 
 /datum/tether/proc/check_distance()
@@ -63,12 +55,12 @@
 /datum/tether/proc/master_moved()
 	if(effective_master != master)
 		if(!isturf(effective_master.loc) || isturf(master.loc))
-			effective_master.on_moved.Remove(event_key_effective_master)
+			effective_master.lazy_unregister_event(/lazy_event/on_moved, src, .proc/master_moved)
 			effective_master.current_tethers.Remove(src)
 			effective_master = master
 	if(!isturf(master.loc) && effective_master == master)
 		effective_master = get_holder_at_turf_level(master)
-		event_key_effective_master = effective_master.on_moved.Add(src, "master_moved")
+		effective_master.lazy_register_event(/lazy_event/on_moved, src, .proc/master_moved)
 		if(!effective_master.current_tethers)
 			effective_master.current_tethers = list()
 		effective_master.current_tethers.Add(src)
@@ -80,12 +72,12 @@
 /datum/tether/proc/slave_moved()
 	if(effective_slave != slave)
 		if(!isturf(effective_slave.loc) || isturf(slave.loc))
-			effective_slave.on_moved.Remove(event_key_effective_slave)
+			effective_slave.lazy_unregister_event(/lazy_event/on_moved, src, .proc/slave_moved)
 			effective_slave.current_tethers.Remove(src)
 			effective_slave = slave
 	if(!isturf(slave.loc) && effective_slave == slave)
 		effective_slave = get_holder_at_turf_level(slave)
-		event_key_effective_slave = effective_slave.on_moved.Add(src, "slave_moved")
+		effective_slave.lazy_register_event(/lazy_event/on_moved, src, .proc/slave_moved)
 		if(!effective_slave.current_tethers)
 			effective_slave.current_tethers = list()
 		effective_slave.current_tethers.Add(src)

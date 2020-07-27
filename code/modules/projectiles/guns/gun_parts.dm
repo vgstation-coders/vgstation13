@@ -20,16 +20,17 @@
 	name = "telescopic sight"
 	desc = "In the close quarters of a space station, a telescopic sight may be more cumbersome than useful. Ideal for exploring alien worlds."
 	icon_state = "scope"
-	starting_materials = list(MAT_IRON = 400, MAT_GLASS = 2000)
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 1000)
 	
 /obj/item/gun_part/glock_auto_conversion_kit
 	name = "glock full-auto conversion kit"
 	desc = "Invented by an enterprising martian gunsmith; easily installed onto any standard glock to convert it to full auto. Probably not the safest idea."
 	icon_state = "fullautokit" 
-	starting_materials = list(MAT_IRON = 400)
+
 	
 /obj/item/gun_part/universal_magwell_expansion_kit
 	name = "universal magwell expansion kit"
 	desc = "A strange kit that seems to fit into most weapons that have special magwell limitations. Expended upon use."
 	icon_state = "magwellkit" 
-	starting_materials = list(MAT_IRON = 400)
+	w_class = W_CLASS_SMALL
+

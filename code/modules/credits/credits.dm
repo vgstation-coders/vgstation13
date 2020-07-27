@@ -31,6 +31,7 @@ var/global/datum/credits/end_credits = new
 	var/finalized = FALSE
 	var/js_args = list()
 
+	var/change_credits_song = 1 //If positive, will change the credits song based on criteria
 	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
 		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
@@ -126,6 +127,8 @@ var/global/datum/credits/end_credits = new
  */
 /datum/credits/proc/on_round_end()
 	draft()
+	if(change_credits_song)
+		determine_round_end_song()
 	for(var/client/C in clients)
 		C.credits_audio(preload_only = TRUE) //Credits preference set to "No Reruns" should still preload, since we still don't know if the episode is a rerun. If audio time comes and the episode is a rerun, then we can start preloading the jingle instead.
 
@@ -261,6 +264,20 @@ var/global/datum/credits/end_credits = new
 		var/true_story_bro = "<br>[pick("BASED ON","INSPIRED BY","A RE-ENACTMENT OF")] [pick("A TRUE STORY","REAL EVENTS","THE EVENTS ABOARD [uppertext(station_name())]")]"
 		cast_string += "<h3>[true_story_bro]</h3><br>In memory of those that did not make it.<br>[english_list(corpses)].<br>"
 	cast_string += "</div><br>"
+
+//This proc will run at round-end and run various conditions to change audio_link
+//Currently only hosts one additional song
+/datum/credits/proc/determine_round_end_song()
+	var/list/candidates = list()
+	if(ticker.station_was_nuked)
+		candidates += pick("http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
+						"http://ss13.moe/media/m2/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
+
+	if(candidates)
+		audio_link = pick(candidates)
 
 /proc/gender_credits(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)

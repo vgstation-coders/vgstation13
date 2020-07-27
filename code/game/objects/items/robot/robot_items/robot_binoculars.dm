@@ -3,16 +3,15 @@
 	name = "long-range zoom camera lens"
 	icon_state = "binoculars"
 	var/zoom = FALSE
-	var/event_key = null
 
 /obj/item/cyborglens/attack_self(mob/user)
 	zoom = !zoom
 	update_zoom(user)
 
-/obj/item/cyborglens/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/cyborglens/proc/mob_moved(atom/movable/mover)
 	if(zoom)
 		zoom = FALSE
-		update_zoom(holder)
+		update_zoom(mover)
 
 /obj/item/cyborglens/proc/update_zoom(var/mob/user)
 	if(isrobot(user))
@@ -20,11 +19,11 @@
 		if(R.client)
 			var/client/C = R.client
 			if(zoom && R.is_component_functioning("camera"))
-				event_key = R.on_moved.Add(src, "mob_moved")
+				R.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 				R.visible_message("[R]'s camera lens focuses loudly.","Your camera lens focuses loudly.")
 				R.regenerate_icons()
 				C.changeView(C.view + 4)
 			else
-				R.on_moved.Remove(event_key)
+				R.lazy_unregister_event(/lazy_event/on_moved, src, .proc/moved)
 				R.regenerate_icons()
 				C.changeView(C.view - 4)

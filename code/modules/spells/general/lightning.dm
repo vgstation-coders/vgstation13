@@ -100,7 +100,6 @@
 		zapzap = 0
 	return 1
 
-// Listener for /atom/movable/on_moved
 /spell/lightning/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
 	if(istype(L))

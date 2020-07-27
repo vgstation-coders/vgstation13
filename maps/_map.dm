@@ -216,9 +216,8 @@ var/global/list/accessable_z_levels = list()
 //for Horizon
 /datum/zLevel/hyperspace
 	name = "hyperspace"
-	base_turf = /turf/space/transit/south //NRV Horizon flies ever onway
+	base_turf = /turf/space/transit/horizon //NRV Horizon flies ever onward.  Replace this with faketransit if the change to the horizon turf goes through or crew will get chucked around like little dolls.
 	movementJammed = TRUE
-
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert

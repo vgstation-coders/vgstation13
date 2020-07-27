@@ -71,7 +71,7 @@
 	..()
 
 //returns 1 if made bloody, returns 0 otherwise
-/turf/simulated/add_blood(mob/living/carbon/human/M as mob)
+/turf/simulated/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
 
@@ -87,13 +87,13 @@
 	return TRUE //we bloodied the floor
 
 // Only adds blood on the floor -- Skie
-/turf/simulated/proc/add_blood_floor(mob/living/carbon/M as mob)
-	if(istype(M, /mob/living/carbon/monkey))
+/turf/simulated/proc/add_blood_floor(var/mob/living/carbon/M)
+	if (ishuman(M))
+		add_blood(M)
+	else if(istype(M, /mob/living/carbon/monkey))
 		blood_splatter(src,M,1)
 	else if( istype(M, /mob/living/carbon/alien ))
 		var/obj/effect/decal/cleanable/blood/xeno/this = new /obj/effect/decal/cleanable/blood/xeno(src)
-		this.New(src)
 		this.blood_DNA["UNKNOWN BLOOD"] = "X*"
 	else if( istype(M, /mob/living/silicon/robot ))
-		var/obj/effect/decal/cleanable/blood/oil/B = new /obj/effect/decal/cleanable/blood/oil(src)
-		B.New(src)
+		new /obj/effect/decal/cleanable/blood/oil(src)

@@ -257,10 +257,8 @@
 		Joined = copytext(String, JoinPos, JoinPos+10)  //  Get the date in the YYYY-MM-DD format
 
 	account_joined = Joined
-
-	var/sql_ckey = sanitizeSQL(ckey)
 	var/age
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, datediff(Now(),firstseen) as age, datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = :ckey", list("ckey" = ckey))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
@@ -274,9 +272,7 @@
 		break
 	qdel(query)
 
-	var/sql_address = sanitizeSQL(address)
-
-	var/datum/DBQuery/query_ip = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE ip = '[sql_address]'")
+	var/datum/DBQuery/query_ip = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE ip = :address", list("address" = address))
 	if(!query_ip.Execute())
 		log_sql("Error: [query_ip.ErrorMsg()]")
 		qdel(query_ip)
@@ -286,9 +282,7 @@
 		related_accounts_ip += "[query_ip.item[1]], "
 	qdel(query_ip)
 
-	var/sql_computerid = sanitizeSQL(computer_id)
-
-	var/datum/DBQuery/query_cid = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE computerid = '[sql_computerid]'")
+	var/datum/DBQuery/query_cid = SSdbcore.NewQuery("SELECT distinct ckey FROM erro_connection_log WHERE computerid = :computer_id", list("computer_id" = computer_id))
 	if(!query_cid.Execute())
 		log_sql("Error: [query_cid.ErrorMsg()]")
 		qdel(query_cid)
@@ -310,28 +304,46 @@
 	if(istype(holder))
 		admin_rank = holder.rank
 
-	var/sql_admin_rank = sanitizeSQL(admin_rank)
-
 	if(sql_id)
 		//Player already identified previously, we need to just update the 'lastseen', 'ip' and 'computer_id' variables
 		var/datum/DBQuery/query_update
 		if(isnum(age))
-			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]' WHERE id = [sql_id]")
+			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = :address, computerid = :computer_id, lastadminrank = :admin_rank WHERE id = :id",
+				list(
+					"address" = address,
+					"computer_id" = computer_id,
+					"admin_rank" = admin_rank,
+					"id" = sql_id,
+			))
 		else
-			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(), ip = '[sql_address]', computerid = '[sql_computerid]', lastadminrank = '[sql_admin_rank]', accountjoined = '[Joined]' WHERE id = [sql_id]")
+			query_update = SSdbcore.NewQuery("UPDATE erro_player SET lastseen = Now(),ip = :address, computerid = :computer_id, lastadminrank = :admin_rank, accountjoined = :joined WHERE id = :id",
+				list(
+					"address" = address,
+					"computer_id" = computer_id,
+					"admin_rank" = admin_rank,
+					"joined" = Joined,
+					"id" = sql_id,
+			))
 		query_update.Execute()
 		if(query_update.ErrorMsg())
 			WARNING("FINGERPRINT: [query_update.ErrorMsg()]")
 		qdel(query_update)
 	else
 		//New player!! Need to insert all the stuff
-		var/datum/DBQuery/query_insert = SSdbcore.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, '[sql_ckey]', Now(), Now(), '[sql_address]', '[sql_computerid]', '[sql_admin_rank]', '[Joined]')")
+		var/datum/DBQuery/query_insert = SSdbcore.NewQuery("INSERT INTO erro_player (id, ckey, firstseen, lastseen, ip, computerid, lastadminrank, accountjoined) VALUES (null, :ckey, Now(), Now(), :address, :computer_id, :admin_rank, :joined)",
+			list(
+				"ckey" = ckey,
+				"address" = address,
+				"computer_id" = computer_id,
+				"admin_rank" = admin_rank,
+				"joined" = Joined,
+		))
 		query_insert.Execute()
 		if(query_insert.ErrorMsg())
 			WARNING("FINGERPRINT: [query_insert.ErrorMsg()]")
 		qdel(query_insert)
 	if(!isnum(age))
-		var/datum/DBQuery/query_age = SSdbcore.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = '[sql_ckey]'")
+		var/datum/DBQuery/query_age = SSdbcore.NewQuery("SELECT datediff(Now(),accountjoined) as age2 FROM erro_player WHERE ckey = :ckey", list("ckey" = ckey))
 		if(!query_age.Execute())
 			WARNING("FINGERPRINT: [query_age.ErrorMsg()]")
 		while(query_age.NextRow())
@@ -347,8 +359,13 @@
 
 	// logging player access
 	var/server_address_port = "[world.internet_address]:[world.port]"
-	var/sql_server_address_port = sanitizeSQL(server_address_port)
-	var/datum/DBQuery/query_connection_log = SSdbcore.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),'[sql_server_address_port]','[sql_ckey]','[sql_address]','[sql_computerid]');")
+	var/datum/DBQuery/query_connection_log = SSdbcore.NewQuery("INSERT INTO `erro_connection_log`(`id`,`datetime`,`serverip`,`ckey`,`ip`,`computerid`) VALUES(null,Now(),:server_address_port,:ckey,:address,:computer_id);",
+		list(
+			"ckey" = ckey,
+			"address" = address,
+			"computer_id" = computer_id,
+			"server_address_port" = server_address_port,
+	))
 
 	query_connection_log.Execute()
 	if(query_connection_log.ErrorMsg())

@@ -735,7 +735,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	return progress_bar
 
 /proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
@@ -817,7 +817,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
+			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -829,7 +829,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
+				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar

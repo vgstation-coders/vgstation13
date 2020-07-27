@@ -37,8 +37,6 @@
 		on_ruattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
-	if(on_irradiate)
-		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
 	if(on_bumping)
@@ -83,14 +81,11 @@
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
-	qdel(on_moved)
-	on_moved = null
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
-	qdel(on_irradiate)
 	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
@@ -101,7 +96,6 @@
 	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
-	on_irradiate = null
 	on_death = null
 	on_bumping = null
 	on_bumped = null
@@ -303,7 +297,6 @@
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
-	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
@@ -1722,16 +1715,19 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		update_canmove()
 	return
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
 	if(status_flags & CANSTUN)
 		stunned = max(amount,0)
+		update_canmove()
 	return
 
 /mob/proc/AdjustStunned(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
+		update_canmove()
 	return
 
 /mob/proc/Deafen(amount)
@@ -1773,16 +1769,19 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(max(paralysis,amount),0)
+		update_canmove()
 	return
 
 /mob/proc/SetParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(amount,0)
+		update_canmove()
 	return
 
 /mob/proc/AdjustParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(paralysis + amount,0)
+		update_canmove()
 	return
 
 /mob/proc/Sleeping(amount)

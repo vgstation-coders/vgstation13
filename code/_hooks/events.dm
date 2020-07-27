@@ -63,8 +63,32 @@
 /lazy_event
 
 // TODO: Document here the arguments that need to be passed to the procs invoked by each event
+
+// Called by human/proc/apply_radiation()
+// Arguments:
+// mob/carbon/living/human/user: The human.
+// rads: The amount of radiation.
+/lazy_event/on_irradiate
+
 /lazy_event/on_z_transition
 /lazy_event/on_post_z_transition
+
+// Called whenever an /atom/movable moves.
+// Arguments:
+// atom/movable/mover: the movable itself.
+/lazy_event/on_moved
+
+// Called whenever a datum is destroyed.
+// Currently, as an optimization, only /atom/movable invokes this but
+// it can be changed to /datum if the need arises.
+/lazy_event/on_destroyed
+// Arguments:
+// datum/thing: the datum being destroyed.
+
+// Called whenever an atom's density changes.
+// Arguments:
+// atom/atom: the atom whose density changed.
+/lazy_event/on_density_change
 
 /datum
 	/// Associative list of type path -> list(),

@@ -533,6 +533,7 @@
 
 		if(!(A.w_type in list(NOT_RECYCLABLE, RECYK_BIOLOGICAL)))
 			if(A.recycle(ore))
+				ore.addFrom(A.materials, FALSE)
 				qdel(A)
 				continue
 

@@ -493,7 +493,7 @@ This function restores all organs.
 		return
 
 	if(application == RAD_EXTERNAL)
-		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
 
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))
