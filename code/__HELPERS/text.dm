@@ -56,7 +56,11 @@
 	return html_encode(sanitize_simple(t,repl_chars))
 
 /proc/sanitize_speech(var/t, var/limit = MAX_MESSAGE_LEN)
-	var/static/regex/speech_regex = regex(@"[^ -~¡-ÿ]", "g") //Matches all characters not in the printable ASCII range or (most of) the Latin-1 supplement. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
+	//Currently allowed:
+	//( -~): Printable ASCII
+	//(¡-ÿ): Most of the Latin-1 supplement
+	//(Ѐ-ӿ): The entire Cyrillic block
+	var/static/regex/speech_regex = regex(@"[^ -~¡-ÿЀ-ӿ]", "g") //Matches all characters not in the above allowed ranges. In BYOND, \w doesn't work outside the ASCII range, so it's no help here.
 	return trim(copytext(speech_regex.Replace(t, "*"), 1, limit)) //Note that this does NOT scrub HTML, because this is done in different places in me and say messages.
 
 //Runs sanitize and strip_html_simple
