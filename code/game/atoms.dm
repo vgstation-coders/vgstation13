@@ -31,11 +31,6 @@ var/global/list/ghdel_profiling = list()
 
 	var/list/beams
 
-	// EVENTS
-	/////////////////////////////
-	// When density is changed
-	var/event/on_density_change
-
 	var/labeled //Stupid and ugly way to do it, but the alternative would probably require rewriting everywhere a name is read.
 	var/min_harm_label = 0 //Minimum langth of harm-label to be effective. 0 means it cannot be harm-labeled. If any label should work, set this to 1 or 2.
 	var/harm_labeled = 0 //Length of current harm-label. 0 if it doesn't have one.
@@ -150,9 +145,6 @@ var/global/list/ghdel_profiling = list()
 		densityChanged()
 	// Idea by ChuckTheSheep to make the object even more unreferencable.
 	invisibility = 101
-	if (on_density_change)
-		on_density_change.holder = null
-		on_density_change = null
 	if(istype(beams, /list) && beams.len)
 		beams.len = 0
 	/*if(istype(beams) && beams.len)
@@ -164,10 +156,6 @@ var/global/list/ghdel_profiling = list()
 		beams.len = 0
 	*/
 	..()
-
-/atom/New()
-	on_density_change = new("owner"=src)
-	. = ..()
 
 /atom/proc/assume_air(datum/gas_mixture/giver)
 	return null
@@ -199,12 +187,12 @@ var/global/list/ghdel_profiling = list()
 	densityChanged()
 
 /atom/proc/densityChanged()
-	INVOKE_EVENT(on_density_change, list("atom" = src)) // Invoke event for density change
+	lazy_invoke_event(/lazy_event/on_density_change, list("atom" = src))
 	if(beams && beams.len) // If beams is not a list something bad happened and we want to have a runtime to lynch whomever is responsible.
 		beams.len = 0
 	if(!isturf(src))
 		var/turf/T = get_turf(src)
-		if(T && T.on_density_change)
+		if(T)
 			T.densityChanged()
 
 /atom/proc/bumped_by_firebird(var/obj/structure/bed/chair/vehicle/firebird/F)
