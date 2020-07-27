@@ -284,10 +284,13 @@ proc/checkhtml(var/t)
 
 //Returns the first word in a string.
 /proc/get_first_word(text)
-	for(var/i = 1 to length(text))
-		if(text2ascii(text, i) == 32)
-			return copytext(text, 1, i)
-	return text
+	var/list/L = splittext(text, " ")
+	return L[1]
+
+//Returns the last word in a string.
+/proc/get_last_word(text)
+	var/list/L = splittext(text, " ")
+	return L[L.len]
 
 //Returns a string with the first element of the string capitalized.
 /proc/capitalize(var/t as text)
