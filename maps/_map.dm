@@ -101,6 +101,7 @@
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
+	var/has_engines = FALSE // Is the map a space ship with big engines?
 
 /datum/map/New()
 	. = ..()

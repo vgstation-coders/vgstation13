@@ -404,6 +404,9 @@ obj/item/projectile/kinetic/New()
 	fire_damage = 20
 	fire_duration = 6 //shorter but hotter
 
+/obj/item/projectile/fire_breath/shuttle_exhaust/horizon
+	fire_blast_type = /obj/effect/fire_blast/blue/horizon
+
 /obj/item/projectile/cold
 	name = "bolt of cold"
 	icon_state = "ice_1"

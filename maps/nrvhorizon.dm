@@ -33,6 +33,7 @@
 	load_map_elements = list(
 	/datum/map_element/dungeon/holodeck
 	)
+	has_engines = TRUE
 
 /datum/map/active/New()
 	.=..()
