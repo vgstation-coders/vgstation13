@@ -175,7 +175,7 @@
 						
 		
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
+	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
 			to_chat(user, "<span class='notice'>You click [A] into [src].</span>")
 			conversionkit = A

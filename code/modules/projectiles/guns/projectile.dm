@@ -173,7 +173,7 @@
 
 
 /obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP)
+	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP && !silenced)
 
 		if(user.drop_item(A, src)) //put the silencer into the gun
 			to_chat(user, "<span class='notice'>You screw [A] onto [src].</span>")
