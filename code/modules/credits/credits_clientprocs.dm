@@ -46,15 +46,28 @@
 /client/proc/jingle_audio(var/preload_only = FALSE)
 	if(prefs.credits == CREDITS_ALWAYS)
 		return
-
+	var/datum/credits/C = end_credits
 	var/link = ""
+	var/selected_jingle
+	var/selected_folder
+	var/classic_folder = C.roundend_file_path + C.classic_roundend_jingles_folder
+	var/list/classic_jingles = flist(classic_folder)
+	var/new_folder = C.roundend_file_path + C.new_roundend_jingles_folder
+	var/list/new_jingles = flist(new_folder)
 	switch(prefs.jingle)
 		if(JINGLE_NEVER)
 			return
 		if(JINGLE_CLASSIC)
-			link = pick(end_credits.classic_roundend_jingles)
+			selected_jingle = pick(classic_jingles)
 		if(JINGLE_ALL)
-			link = pick(end_credits.classic_roundend_jingles + end_credits.new_roundend_jingles)
+			selected_jingle = pick(classic_jingles, new_jingles)
+
+	if(selected_jingle in classic_jingles)
+		selected_folder = C.classic_roundend_jingles_folder
+	if(selected_jingle in new_jingles)
+		selected_folder = C.new_roundend_jingles_folder
+
+	link = C.roundend_file_path + selected_folder + selected_jingle
 	if(!link)
 		log_debug("[src] somehow had a null jingle link! Jingle preference: [prefs.jingle]")
 

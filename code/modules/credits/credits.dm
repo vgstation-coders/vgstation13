@@ -32,6 +32,11 @@ var/global/datum/credits/end_credits = new
 	var/js_args = list()
 
 	var/change_credits_song = 1 //If positive, will change the credits song based on criteria
+	var/roundend_file_path = "http://ss13.moe/media/m2/source/roundend/"
+	var/credits_folder = "credits/"
+	var/classic_roundend_jingles_folder = "jingleclassic/"
+	var/new_roundend_jingles_folder = "jinglenew/"
+	//The default link and the one that will actually play to everyone
 	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
 	var/list/classic_roundend_jingles = list(
 		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
@@ -266,18 +271,26 @@ var/global/datum/credits/end_credits = new
 	cast_string += "</div><br>"
 
 //This proc will run at round-end and run various conditions to change audio_link
-//Currently only hosts one additional song
+//It works by first selecting our credits folder in which the credits are stored, then we select a folder, then we randomly pick a song from that folder
+//For example, "http://ss13.moe/media/m2/source/roundend/(folder)/(selected_song)"
 /datum/credits/proc/determine_round_end_song()
+	var/folder = "default/"
+	var/list/folder_candidates = run_credits_conditions()
+	if(folder_candidates.len)
+		folder = pick(folder_candidates)
+	var/temp_link = roundend_file_path + credits_folder + folder
+	var/list/songs = flist(temp_link)
+	audio_link = temp_link + pick(songs)
+
+//Runs a bunch of arbitrary checks to determine what unique folder it will select from
+/datum/credits/proc/run_credits_conditions()
 	var/list/candidates = list()
 	if(ticker.station_was_nuked)
-		candidates += pick("http://ss13.moe/media/m2/source/roundend/credits/RA2_Blow_It_Up.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Castanets_You_Are_The_Blood.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_Falling_Instrumental.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
-						"http://ss13.moe/media/m2/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
+		candidates += "nuke/"
+	if(!candidates.len)
+		return
+	return candidates
 
-	if(candidates)
-		audio_link = pick(candidates)
 
 /proc/gender_credits(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
