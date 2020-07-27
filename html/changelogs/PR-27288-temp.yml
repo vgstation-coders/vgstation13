@@ -1,0 +1,5 @@
+---
+author: bthomas2
+changes:
+  - bugfix: Fixed nonfunctional pod armor on taxi_engineering.dmm
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: boy2mantwicethefam
+changes:
+  - bugfix: "People who are unstunned through certain means will now get up immediately instead of at the next Life() tick, which is every 2 seconds."
+delete-after: true

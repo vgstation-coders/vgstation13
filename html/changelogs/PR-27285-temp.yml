@@ -1,0 +1,5 @@
+---
+author: toomykins
+changes:
+  - tweak: disabled AI use of camera computers
+delete-after: true

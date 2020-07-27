@@ -1,0 +1,5 @@
+---
+author: gurfan
+changes:
+  - tweak: Vampires will no longer teleport onto asteroid tiles.
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: gurfan
+changes:
+  - rscadd: Malfunctioning AIs can now hack cyborgs using the robotics console again.
+delete-after: true

@@ -1,0 +1,6 @@
+---
+author: boy2mantwicethefam
+changes:
+  - bugfix: Fixed a bug where the telescience telepad was un-upgradeable because it was considered a computer board with no required components.
+  - bugfix: Fixed a bug where the telescience telepad required a computer frame when rebuilt. Now it properly requires a machine frame and can actually be constructed.
+delete-after: true
