@@ -276,7 +276,7 @@ var/global/datum/credits/end_credits = new
 						"http://ss13.moe/media/m2/source/roundend/credits/Julee_Cruise_The_World_Spins.mp3",
 						"http://ss13.moe/media/m2/source/roundend/credits/Mike_Oldfield_Nuclear.mp3")
 
-	if(candidates)
+	if(candidates.len)
 		audio_link = pick(candidates)
 
 /proc/gender_credits(var/mob/living/carbon/human/H)
