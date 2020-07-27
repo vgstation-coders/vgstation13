@@ -62,7 +62,7 @@
 		var/T = get_turf(user)
 		if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
 			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
-			if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < 7)
+			if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
 				M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	if (emote_type == EMOTE_VISIBLE)
