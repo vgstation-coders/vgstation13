@@ -208,7 +208,7 @@ var/runechat_icon = null
 		if (5 to 16)
 			extra_classes += "very_small"
 
-	if (!say_understands(speaker, message_language))
+	if (message_language && !say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
