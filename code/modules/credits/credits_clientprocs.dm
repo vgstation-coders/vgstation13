@@ -50,21 +50,17 @@
 	var/link = ""
 	var/selected_jingle
 	var/selected_folder
-	var/classic_folder = C.roundend_file_path + C.classic_roundend_jingles_folder
-	var/list/classic_jingles = flist(classic_folder)
-	var/new_folder = C.roundend_file_path + C.new_roundend_jingles_folder
-	var/list/new_jingles = flist(new_folder)
 	switch(prefs.jingle)
 		if(JINGLE_NEVER)
 			return
 		if(JINGLE_CLASSIC)
-			selected_jingle = pick(classic_jingles)
+			selected_jingle = pick(C.classic_roundend_jingles)
 		if(JINGLE_ALL)
-			selected_jingle = pick(classic_jingles, new_jingles)
+			selected_jingle = pick(C.classic_roundend_jingles, C.new_roundend_jingles)
 
-	if(selected_jingle in classic_jingles)
+	if(selected_jingle in C.classic_roundend_jingles)
 		selected_folder = C.classic_roundend_jingles_folder
-	if(selected_jingle in new_jingles)
+	if(selected_jingle in C.new_roundend_jingles)
 		selected_folder = C.new_roundend_jingles_folder
 
 	link = C.roundend_file_path + selected_folder + selected_jingle

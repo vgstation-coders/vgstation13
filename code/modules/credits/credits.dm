@@ -38,24 +38,20 @@ var/global/datum/credits/end_credits = new
 	var/new_roundend_jingles_folder = "jinglenew/"
 	//The default link and the one that will actually play to everyone
 	var/audio_link = "http://ss13.moe/media/m2/source/roundend/credits/Frolic_Luciano_Michelini.mp3"
-	var/list/classic_roundend_jingles = list(
-		"http://ss13.moe/media/m2/source/roundend/jingleclassic/bangindonk.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jingleclassic/apcdestroyed.mp3"
-		)
-	var/list/new_roundend_jingles = list(
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/FTLvictory.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/bayojingle.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/calamitytrigger.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/castlevania.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/duckgame.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/gameoveryeah.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/marioworld.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/megamanX.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/rayman.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/slugmissioncomplete.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/soniclevelcomplete.mp3",
-		"http://ss13.moe/media/m2/source/roundend/jinglenew/tfvictory.mp3"
-		)
+	//Instead of re-searching the entire list of jingles for every client with jingles on
+	//Let's just make them easily accessible to this singular credits datum
+	var/classic_roundend_jingles_filepath
+	var/list/classic_roundend_jingles
+	var/new_roundend_jingles_filepath
+	var/list/new_roundend_jingles
+
+//It hates being initial variables so now let's move this to New()
+/datum/credits/New()
+	..()
+	classic_roundend_jingles_filepath = roundend_file_path + classic_roundend_jingles_folder
+	classic_roundend_jingles = flist(classic_roundend_jingles_filepath)
+	new_roundend_jingles_filepath = roundend_file_path + new_roundend_jingles_folder
+	new_roundend_jingles = flist(new_roundend_jingles_filepath)
 
 /datum/credits/proc/is_rerun()
 	if(customized_name != "" || customized_star != "" || rare_episode_name == TRUE || theme != initial(theme))
@@ -272,7 +268,7 @@ var/global/datum/credits/end_credits = new
 
 //This proc will run at round-end and run various conditions to change audio_link
 //It works by first selecting our credits folder in which the credits are stored, then we select a folder, then we randomly pick a song from that folder
-//For example, "http://ss13.moe/media/m2/source/roundend/(folder)/(selected_song)"
+//For example, "http://ss13.moe/media/m2/source/roundend/credits/(folder)/(selected_song)"
 /datum/credits/proc/determine_round_end_song()
 	var/folder = "default/"
 	var/list/folder_candidates = run_credits_conditions()
