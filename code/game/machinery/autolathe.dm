@@ -186,12 +186,18 @@
 			return 1
 
 
-		else if(allowed_materials && !((I.materials.storage & allowed_materials) ~= I.materials.storage))
-			var/output = "\The [src] can only accept objects made out of these: "
+		else if(allowed_materials)
+
+			var/allowed_materials_volume = 0
 			for(var/mat_id in allowed_materials)
-				output += (material_list[mat_id].processed_name + " ")
-			to_chat(user, output)
-			return 1
+				allowed_materials_volume += I.materials.storage[mat_id]
+
+			if (allowed_materials_volume != I.materials.getVolume())
+				var/output = "\The [src] can only accept objects made out of these: "
+				for(var/mat_id in allowed_materials)
+					output += (material_list[mat_id].processed_name + " ")
+				to_chat(user, output)
+				return 1
 
 		else if(isrobot(user))
 			if(isMoMMI(user))
