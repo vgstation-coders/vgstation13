@@ -210,7 +210,7 @@ var/list/beam_master = list()
 		var/tS = 0
 		while(loc) // Move until we hit something.
 			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
-				returnToPool(src)
+				qdel(src)
 				break
 			if(first && timestopped)
 				tS = 1
@@ -223,7 +223,7 @@ var/list/beam_master = list()
 				break
 
 			if(kill_count-- < 1)
-				returnToPool(src)
+				qdel(src)
 				break
 
 			// Add the overlay as we pass over tiles.
@@ -357,7 +357,7 @@ var/list/beam_master = list()
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/persist/X=getFromPool(/obj/effect/overlay/beam/persist,T)
+		var/obj/effect/overlay/beam/persist/X=new /obj/effect/overlay/beam/persist(T)
 		X.BeamSource=src
 		ouroverlays += X
 		if((N+WORLD_ICON_SIZE*2>length) && (N+WORLD_ICON_SIZE<=length))
@@ -447,7 +447,7 @@ var/list/beam_master = list()
 		for(var/atom/thing in ouroverlays)
 			if(!thing.timestopped && thing.loc && !thing.loc.timestopped)
 				ouroverlays -= thing
-				returnToPool(thing)
+				qdel(thing)
 	spawn
 		var/tS = 0
 		while(loc) //Move until we hit something
@@ -512,10 +512,10 @@ var/list/beam_master = list()
 			sleep(10)
 			for(var/atom/thing in ouroverlays)
 				ouroverlays -= thing
-				returnToPool(thing)
+				qdel(thing)
 
 		//del(src)
-		returnToPool(src)
+		qdel(src)
 
 /*cleanup(reference) //Waits .3 seconds then removes the overlay.
 //	to_chat(world, "setting invisibility")
@@ -664,7 +664,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 					var/obj/item/weapon/gun/energy/tag/their_gun = M.held_items[taggun_index]
 					their_gun.cooldown(target_tag.my_laser_tag_game.disable_time/2)
 				M.Knockdown(target_tag.my_laser_tag_game.stun_time/2)
-				M.Stun(target_tag.my_laser_tag_game.stun_time/2)	
+				M.Stun(target_tag.my_laser_tag_game.stun_time/2)
 				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
@@ -761,7 +761,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			if(kill_count < 1)
 				//del(src)
 				draw_ray(lastposition)
-				returnToPool(src)
+				qdel(src)
 				return
 			kill_count--
 
@@ -798,7 +798,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 			if(kill_count < 1)
 				//del(src)
 				draw_ray(lastposition)
-				returnToPool(src)
+				qdel(src)
 				return
 			kill_count--
 
@@ -813,6 +813,8 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	..()
 
 /obj/item/projectile/beam/bison/proc/draw_ray(var/turf/lastloc)
+	if (gcDestroyed)
+		return
 	if(drawn)
 		return
 	drawn = 1
@@ -840,7 +842,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		if(count >= kill_count)
 			break
 		count++
-		var/obj/effect/overlay/beam/X=getFromPool(/obj/effect/overlay/beam,T,current_timer,1)
+		var/obj/effect/overlay/beam/X=new /obj/effect/overlay/beam(T, current_timer, 1)
 		X.BeamSource=src
 		current_timer += increment
 		if((N+64>(length+16)) && (N+WORLD_ICON_SIZE<=(length+16)))
@@ -946,6 +948,17 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
+/obj/item/projectile/beam/white/to_bump(atom/A)
+	if(!A)
+		return
+	..()
+	if(istype(A, /mob))
+		A.reagents.add_reagent(SPACE_DRUGS, 1)
+		A.reagents.add_reagent(HONKSERUM, 10)
+		var/hit_verb = pick("covers","completely soaks","fills","splashes")
+		A.visible_message("<span class='warning'>\The [src] [hit_verb] [A] with love!</span>",
+			"<span class='warning'>\The [src] [hit_verb] you with love!</span>")
+
 /obj/item/projectile/beam/liquid_stream
 	name = "stream of liquid"
 	icon_state = "liquid_stream"
@@ -958,7 +971,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 
 /obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
 	..(A)
-	create_reagents(10)
+	create_reagents(20)
 	if(t_range)
 		travel_range = t_range
 	else
@@ -969,26 +982,23 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	alpha = mix_alpha_from_reagents(reagents.reagent_list)
 	..()
 
-/obj/item/projectile/beam/liquid_stream/to_bump(atom/A)
-	if(!A)
-		return
-	..()
+/obj/item/projectile/beam/liquid_stream/on_hit(var/atom/A, var/blocked = 0)
 	if(reagents.total_volume)
 		for(var/datum/reagent/R in reagents.reagent_list)
-			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))
+			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
 		if(istype(A, /mob))
 			var/splash_verb = pick("douses","completely soaks","drenches","splashes")
 			A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
 								"<span class='warning'>\The [src] [splash_verb] you!</span>")
-			splash_sub(reagents, get_turf(A), reagents.total_volume/2)
+			splash_sub(reagents, get_turf(A), reagents.total_volume/2)//then we splash 10 of those on the turf in front (or under in case of mobs) of the hit atom
 		else
 			splash_sub(reagents, get_turf(src), reagents.total_volume/2)
-		splash_sub(reagents, A, reagents.total_volume)
+		splash_sub(reagents, A, reagents.total_volume)//and 10 more on the atom itself
 		has_splashed = TRUE
 		return 1
 
 /obj/item/projectile/beam/liquid_stream/OnDeath()
-	if(!has_splashed && get_turf(src))
+	if(!has_splashed && loc)
 		splash_sub(reagents, get_turf(src), reagents.total_volume)
 
 /obj/item/projectile/beam/liquid_stream/proc/adjust_strength(var/t_range)

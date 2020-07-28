@@ -228,16 +228,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+					StartMoving()
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
+					EndMoving()
 
 	handle_automated_speech()
 
 	var/datum/gas_mixture/environment
 	if(loc)
 		environment = loc.return_air()
-		
+
 	handle_environment(environment)
 	handle_regular_hud_updates()
 
@@ -405,8 +407,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src, 0)
+	adjustBruteLoss(Proj.damage)
 	return 0
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
@@ -800,9 +802,3 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
-
-
-/mob/living/simple_animal/resetVariables()
-	..("emote_hear", "emote_see", args)
-	emote_hear = list()
-	emote_see = list()

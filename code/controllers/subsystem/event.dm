@@ -28,7 +28,7 @@ var/list/events = list()
 		var/datum/event/E = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!E || E.gcDestroyed || E.disposed)
+		if (!E || E.gcDestroyed)
 			continue
 
 		E.process()

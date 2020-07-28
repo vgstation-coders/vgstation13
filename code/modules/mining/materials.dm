@@ -18,7 +18,7 @@ proc/initialize_materials()
 			continue
 		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
-var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
+var/global/list/datum/material/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials
@@ -37,20 +37,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/Destroy()
 	holder = null
-
-/datum/materials/resetVariables(args)
-	var/newargs
-	if(args)
-		newargs = args + "storage"
-	else
-		newargs = "storage"
-
-	..(arglist(newargs))
-
-	if(!initial_materials)
-		initialize_materials()
-
-	storage = initial_materials.Copy()
+	return ..()
 
 /datum/materials/proc/getVolume()
 	var/volume=0
@@ -108,7 +95,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 //Sanely removes an amount from us, of a given material ID, and transfers it to somebody else. Returns the given amount
 /datum/materials/proc/Transfer(var/mat_id, var/amount, var/datum/materials/receiver)
 	ASSERT(receiver)
-	if(!mat_id in storage)
+	if(!(mat_id in storage))
 		warning("Transfer(): Unknown material [mat_id]!")
 		return 0
 	amount = min(getAmount(mat_id), amount)
@@ -586,3 +573,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	cointype=null
 	default_show_in_menus = FALSE
 	cc_per_sheet = CC_PER_SHEET_MOLITZ
+
+/datum/material/gingerbread
+	name="Gingerbread"
+	id=MAT_GINGERBREAD
+	value=null
+	oretype=null
+	sheettype=/obj/item/stack/sheet/mineral/gingerbread
+	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_GINGERBREAD

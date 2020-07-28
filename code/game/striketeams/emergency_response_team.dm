@@ -20,9 +20,9 @@ var/list/response_team_members = list()
 
 /datum/striketeam/ert/greet_commando(var/mob/living/carbon/human/H)
 	if(H.key == leader_key)
-		to_chat(H, "<span class='notice'>You are [H.real_name], the Commander of the Emergency Response Team, in the service of Nanotrasen.</span>")
+		to_chat(H, "<span class='danger'>You are [H.real_name], the Commander of the Emergency Response Team. You answer only to Central Command and are expected to follow Space Law. Assist your assigned station to the best of your abilities.</span>")
 	else
-		to_chat(H, "<span class='notice'>You are [H.real_name], an Emergency Responder, in the service of Nanotrasen.</span>")
+		to_chat(H, "<span class='danger'>You are [H.real_name], an Emergency Responder. You answer only to Central Command and are expected to follow Space Law. Assist your assigned station to the best of your abilities.</span>")
 	for (var/role in H.mind.antag_roles)
 		var/datum/role/R = H.mind.antag_roles[role]
 		R.AnnounceObjectives()
@@ -122,7 +122,6 @@ var/list/response_team_members = list()
 	//Creates mind stuff.
 	M.mind = new
 	M.mind.current = M
-	M.mind.original = M
 	M.mind.assigned_role = "MODE"
 	M.mind.special_role = "Response Team"
 	if(!(M.mind in ticker.minds))
@@ -192,9 +191,9 @@ var/list/response_team_members = list()
 	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
 	affected.implants += L
 	L.part = affected
-	
+
 	if(leader_selected)
-		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)	
+		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)
 	else
 		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
 

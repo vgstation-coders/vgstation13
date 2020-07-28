@@ -106,13 +106,19 @@
 	jingle	 		=	preference_list_client["jingle"]
 	window_flashing  =	text2num(preference_list_client["window_flashing"])
 	antag_objectives =  text2num(preference_list_client["antag_objectives"])
+	typing_indicator 	 =  text2num(preference_list_client["typing_indicator"])
+	mob_chat_on_map 	 =  text2num(preference_list_client["mob_chat_on_map"])
+	max_chat_length 	 =  text2num(preference_list_client["max_chat_length"])
+	obj_chat_on_map 	 =  text2num(preference_list_client["obj_chat_on_map"])
+	no_goonchat_for_obj  =  text2num(preference_list_client["no_goonchat_for_obj"])
+	tgui_fancy           =  text2num(preference_list_client["tgui_fancy"])
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
 	UI_style		= 	sanitize_inlist(UI_style, list("White", "Midnight","Orange","old"), initial(UI_style))
 	//be_special		= 	sanitize_integer(be_special, 0, 65535, initial(be_special))
 	default_slot	= 	sanitize_integer(default_slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	toggles			= 	sanitize_integer(toggles, 0, 65535, initial(toggles))
+	toggles			= 	sanitize_integer(toggles, 0, 131071, initial(toggles))
 	UI_style_color	= 	sanitize_hexcolor(UI_style_color, initial(UI_style_color))
 	UI_style_alpha	= 	sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
 	randomslot		= 	sanitize_integer(randomslot, 0, 1, initial(randomslot))
@@ -135,6 +141,12 @@
 	credits_volume  = sanitize_integer(credits_volume, 0, 100, initial(credits_volume))
 	window_flashing = sanitize_integer(window_flashing, 0, 1, initial(window_flashing))
 	antag_objectives =  sanitize_integer(antag_objectives, 0, 1, initial(antag_objectives))
+	typing_indicator 	 =  sanitize_integer(typing_indicator, 0, 1, initial(typing_indicator))
+	mob_chat_on_map 	 =  sanitize_integer(mob_chat_on_map, 0, 1, initial(mob_chat_on_map))
+	max_chat_length 	 =  sanitize_integer(max_chat_length, 0, CHAT_MESSAGE_MAX_LENGTH, initial(max_chat_length))
+	obj_chat_on_map 	 =  sanitize_integer(obj_chat_on_map, 0, 1, initial(obj_chat_on_map))
+	no_goonchat_for_obj  =  sanitize_integer(no_goonchat_for_obj, 0, 1, initial(no_goonchat_for_obj))
+	tgui_fancy           =  sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
 	initialize_preferences()
 	return 1
 
@@ -191,7 +203,7 @@
 	UI_style		= sanitize_inlist(UI_style, list("White", "Midnight","Orange","old"), initial(UI_style))
 	//be_special		= sanitize_integer(be_special, 0, 65535, initial(be_special))
 	default_slot	= sanitize_integer(default_slot, 1, MAX_SAVE_SLOTS, initial(default_slot))
-	toggles			= sanitize_integer(toggles, 0, 65535, initial(toggles))
+	toggles			= sanitize_integer(toggles, 0, 131071, initial(toggles))
 	UI_style_color	= sanitize_hexcolor(UI_style_color, initial(UI_style_color))
 	UI_style_alpha	= sanitize_integer(UI_style_alpha, 0, 255, initial(UI_style_alpha))
 	randomslot		= sanitize_integer(randomslot, 0, 1, initial(randomslot))
@@ -216,15 +228,15 @@
 	check.Add("SELECT ckey FROM client WHERE ckey = ?", ckey)
 	if(check.Execute(db))
 		if(!check.NextRow())
-			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
-			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives)
+			q.Add("INSERT into client (ckey, ooc_color, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj, tgui_fancy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",\
+			ckey, ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map, no_goonchat_for_obj)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
 				return 0
 		else
-			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? WHERE ckey = ?",\
-			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, ckey)
+			q.Add("UPDATE client SET ooc_color=?,lastchangelog=?,UI_style=?,default_slot=?,toggles=?,UI_style_color=?,UI_style_alpha=?,warns=?,warnbans=?,randomslot=?,volume=?,usewmp=?,special=?,usenanoui=?,tooltips=?,progress_bars=?,space_parallax=?,space_dust=?,parallax_speed=?, stumble=?, attack_animation=?, pulltoggle=?, credits=?, jingle=?, hear_voicesound=?, hear_instruments=?, ambience_volume=?, credits_volume=?, window_flashing=?, antag_objectives=? , typing_indicator=? , mob_chat_on_map=? , max_chat_length=?, obj_chat_on_map=?, no_goonchat_for_obj=?, tgui_fancy=? WHERE ckey = ?",\
+			ooccolor, lastchangelog, UI_style, default_slot, toggles, UI_style_color, UI_style_alpha, warns, warnbans, randomslot, volume, usewmp, special_popup, usenanoui, tooltips, progress_bars, space_parallax, space_dust, parallax_speed, stumble, attack_animation, pulltoggle, credits, jingle, hear_voicesound, hear_instruments, ambience_volume, credits_volume, window_flashing, antag_objectives, typing_indicator, mob_chat_on_map, max_chat_length, obj_chat_on_map,no_goonchat_for_obj, tgui_fancy, ckey)
 			if(!q.Execute(db))
 				message_admins("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #: [q.Error()] - [q.ErrorMsg()]")
 				WARNING("Error in save_preferences_sqlite [__FILE__] ln:[__LINE__] #:[q.Error()] - [q.ErrorMsg()]")
@@ -273,6 +285,11 @@
 	S["credits_volume"]<< credits_volume
 	S["window_flashing"]<< window_flashing
 	S["antag_objectives"]<< antag_objectives
+	S["typing_indicator"]<< typing_indicator
+	S["mob_chat_on_map"]		<< mob_chat_on_map
+	S["max_chat_length"]	<< max_chat_length
+	S["obj_chat_on_map"] 	<< obj_chat_on_map
+	S["no_goonchat_for_obj"] 	<< no_goonchat_for_obj
 	return 1
 
 //saving volume changes

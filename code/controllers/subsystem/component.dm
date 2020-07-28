@@ -31,7 +31,7 @@ var/datum/subsystem/component/SScomp
 
 		if(isliving(C.holder))
 			var/mob/living/M = C.holder
-			if (!M || M.disposed || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
+			if (!M || M.gcDestroyed || M.timestopped || M.monkeyizing || M.stat == DEAD)
 				continue
 
 

@@ -33,7 +33,7 @@ var/global/lastDecTalkUse = 0
 	if(class)
 		speech.message_classes.Add(class)
 	send_speech(speech, world.view)
-	returnToPool(speech)
+	qdel(speech)
 
 /atom/movable/proc/Hear(var/datum/speech/speech, var/rendered_speech="")
 	return
@@ -83,7 +83,7 @@ var/global/lastDecTalkUse = 0
 /atom/movable/proc/create_speech(var/message, var/frequency=0, var/atom/movable/transmitter=null)
 	if(!transmitter)
 		transmitter=GetDefaultRadio()
-	var/datum/speech/speech = getFromPool(/datum/speech)
+	var/datum/speech/speech = new /datum/speech
 	speech.message = message
 	speech.frequency = frequency
 	speech.job = get_job(speech)
@@ -140,7 +140,7 @@ var/global/lastDecTalkUse = 0
 	. = "<span class='[filtered_speech.render_wrapper_classes()]'><span class='name'>[render_speaker_track_start(filtered_speech)][render_speech_name(filtered_speech)][render_speaker_track_end(filtered_speech)][freqpart][render_job(filtered_speech)]</span> [filtered_speech.render_message()]</span>"
 	say_testing(src, html_encode(.))
 	if(pooled)
-		returnToPool(filtered_speech)
+		qdel(filtered_speech)
 
 
 /atom/movable/proc/render_speaker_track_start(var/datum/speech/speech)
@@ -157,6 +157,9 @@ var/global/lastDecTalkUse = 0
 		return " ([speech.job])"
 	return ""
 
+// This is obsolete for any atom movable which actually uses a language whilst speaking.
+// The verb for those atoms will be given in /datum/language/get_spoken_verb()
+// An override depending on the status of the mob is possible with the proc /mob/proc/get_spoken_verb()
 /atom/movable/proc/say_quote(var/text)
 	if(!text)
 		return "says, \"...\""	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -272,13 +275,6 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 	return
 
 /**
- * Probably used for getting tracking coordinates?
- * TODO: verify
- */
-/atom/movable/proc/GetTrack()
-	return
-
-/**
  * What is speaking for us?  Usually src.
  */
 /atom/movable/proc/GetSource()
@@ -291,15 +287,12 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 
 /atom/movable/virtualspeaker
 	var/job
-	var/faketrack
 	var/atom/movable/source
 	var/obj/item/device/radio/radio
 
 /atom/movable/virtualspeaker/GetJob()
 	return job
 
-/atom/movable/virtualspeaker/GetTrack()
-	return faketrack
 
 /atom/movable/virtualspeaker/GetSource()
 	return source
@@ -307,15 +300,7 @@ var/global/image/ghostimg = image("icon"='icons/mob/mob.dmi',"icon_state"="ghost
 /atom/movable/virtualspeaker/GetDefaultRadio()
 	return radio
 
-/atom/movable/virtualspeaker/resetVariables()
-	job = null
-	faketrack = null
-	source = null
-	radio = null
-
-	..("job", "faketrack", "source", "radio")
-
-proc/handle_render(var/mob,var/message,var/speaker)
+/proc/handle_render(var/mob,var/message,var/speaker)
 	if(istype(mob, /mob/new_player))
 		return //One extra layer of sanity
 	if(istype(mob,/mob/dead/observer))

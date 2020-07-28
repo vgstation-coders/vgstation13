@@ -153,6 +153,7 @@ Class Procs:
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
+	var/id_tag = null // Identify the machine
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -332,10 +333,11 @@ Class Procs:
 
 		if("buffer" in href_list)
 			if(istype(src, /obj/machinery/telecomms))
-				if(!hasvar(src, "id"))
+				var/obj/machinery/telecomms/T = src
+				if(!T.id)
 					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 					return
-			else if(!hasvar(src, "id_tag"))
+			else if(!id_tag)
 				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 				return
 			P.buffer = src
@@ -495,7 +497,7 @@ Class Procs:
 
 //just something silly to delete the machine while still leaving something behind
 /obj/machinery/proc/smashDestroy(var/destroy_chance = 50)
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 2)
 	spillContents(destroy_chance)
 	qdel(src)
 

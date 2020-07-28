@@ -57,23 +57,12 @@
 		"128"=0
 	)
 
+/obj/effect/decal/cleanable/blood/tracks/fixDNA()
+	blood_DNA = list()
+
 	/** DO NOT FUCKING REMOVE THIS. **/
 /obj/effect/decal/cleanable/blood/tracks/process()
 	return PROCESS_KILL
-
-/obj/effect/decal/cleanable/blood/tracks/resetVariables()
-	..("setdirs", "steps_to_remake")
-	setdirs=list(
-		"1"=0,
-		"2"=0,
-		"4"=0,
-		"8"=0,
-		"16"=0,
-		"32"=0,
-		"64"=0,
-		"128"=0
-	)
-	steps_to_remake = list()
 
 /obj/effect/decal/cleanable/blood/tracks/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y, var/basecolor, var/list/steps_to_remake)
 	if(steps_to_remake && steps_to_remake.len)

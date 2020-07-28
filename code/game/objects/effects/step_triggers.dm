@@ -16,6 +16,8 @@
 		return
 	if(istype(H, /mob/dead/observer) && !affect_ghosts)
 		return
+	if(istype(H, /obj/effect/beam))//those things aren't meant to get moved
+		return
 	Trigger(H)
 
 

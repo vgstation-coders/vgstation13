@@ -32,8 +32,8 @@
 		/obj/item/clothing/head/that,
 		/obj/item/clothing/head/flatcap,
 		/obj/item/clothing/head/hgpiratecap,
-		/obj/item/clothing/head/helmet/tactical/warden,
-		/obj/item/clothing/head/helmet/tactical/HoS,
+		/obj/item/clothing/head/warden,
+		/obj/item/clothing/head/HoS,
 		)
 
 /obj/structure/coatrack/attack_hand(mob/user)
@@ -72,7 +72,7 @@
 			update_icon()
 	else if(C.is_wrench(user))
 		C.playtoolsound(src, 50)
-		getFromPool(/obj/item/stack/sheet/wood, get_turf(src), 2)
+		new /obj/item/stack/sheet/wood(get_turf(src), 2)
 		qdel(src)//the hat and suit on the coat rack are automatically dropped by Destroy()
 	else
 		return ..()

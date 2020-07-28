@@ -16,6 +16,7 @@
 	layer = BINARY_PIPE_LAYER
 	var/on = FALSE
 
+
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
 
@@ -35,6 +36,26 @@
 	update_icon()
 	air1.volume = 200
 	air2.volume = 200
+
+
+/obj/machinery/atmospherics/binary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/binary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/binary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
@@ -118,11 +139,11 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(node2)
 		node2.disconnect(src)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 
 	node1 = null
 	node2 = null
@@ -144,12 +165,12 @@
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)
-		network1 = getFromPool(/datum/pipe_network)
+		network1 = new /datum/pipe_network
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = getFromPool(/datum/pipe_network)
+		network2 = new /datum/pipe_network
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
@@ -186,12 +207,12 @@
 /obj/machinery/atmospherics/binary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 		node1 = null
 
 	else if(reference==node2)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 		node2 = null
 
 	return ..()

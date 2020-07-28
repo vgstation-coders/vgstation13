@@ -48,7 +48,7 @@
 		grown = 1
 
 	//basic cable stuff, this gets done in the cable stack logic, so i needed to copy paste it over, oh well
-	var/datum/powernet/PN = getFromPool(/datum/powernet)
+	var/datum/powernet/PN = new /datum/powernet
 	PN.add_cable(src)
 	for(var/dir in cardinal)
 		mergeConnectedNetworks(dir)   //Merge the powernet with adjacents powernets
@@ -179,12 +179,12 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.on_density_change.Remove(src)
+			T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
 		else
-			T.on_density_change.Add(src, "proxDensityChange")
+			T.lazy_register_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
 
-/obj/structure/cable/powercreeper/proc/proxDensityChange(var/list/args)
-	var/turf/T = args["atom"]
+/obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
 	if(get_dist(T, src) <= 1)
 		var/Adir = get_dir(src, T)
 		if(Adir in cardinal)
@@ -215,7 +215,7 @@ obj/structure/cable/powercreeper/mergeConnectedNetworks(var/direction)
 		if(src == C)
 			continue
 		if(!C.powernet) // if the matching cable somehow got no powernet, make him one (should not happen for cables)
-			var/datum/powernet/newPN = getFromPool(/datum/powernet/)
+			var/datum/powernet/newPN = new /datum/powernet/
 			newPN.add_cable(C)
 		if(powernet) // if we already have a powernet, then merge the two powernets
 			merge_powernets(powernet,C.powernet)

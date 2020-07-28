@@ -2,7 +2,7 @@
 	dir = SOUTH
 	initialize_directions = SOUTH
 	layer = UNARY_PIPE_LAYER
-
+	can_be_coloured = 0
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
@@ -11,9 +11,24 @@
 	..()
 	initialize_directions = dir
 	air_contents = new
-
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
+
+
+/obj/machinery/atmospherics/unary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/unary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/unary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
@@ -69,7 +84,7 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 	node1 = null
 	..()
 
@@ -82,7 +97,7 @@
 
 /obj/machinery/atmospherics/unary/build_network()
 	if(!network && node1)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.normal_members += src
 		network.build_network(node1, src)
 
@@ -107,7 +122,7 @@
 /obj/machinery/atmospherics/unary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 		node1 = null
 	return ..()
 

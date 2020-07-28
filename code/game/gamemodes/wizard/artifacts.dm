@@ -35,14 +35,14 @@
 	abbreviation = "SW"
 	price = 20
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
-	
+
 /datum/spellbook_artifact/staff_of_sinterklaas
 	name = "Staff of Sinterklaas"
 	desc = "An artefact that fires a glowing bolt of energy which turns the target into a jovial helper."
 	abbreviation = "SS"
 	price = 5
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
-	
+
 /datum/spellbook_artifact/staff_of_sinterklaas/can_buy(var/mob/user)
 	return (Holiday == SINTERKLAAS)
 
@@ -73,7 +73,6 @@
 	/obj/item/clothing/shoes/sandal,\
 	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard,\
 	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
@@ -99,7 +98,7 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"
@@ -283,7 +282,7 @@
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	spawned_items = list(/obj/item/phylactery)
+	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich)
 
 
 /datum/spellbook_artifact/darkness
@@ -322,9 +321,3 @@
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
-
-/datum/spellbook_artifact/fuckup
-	name = "Fuckup Boots"
-	abbreviation = "FU"
-	desc = "Makes you much slower, but breaches as you walk."
-	spawned_items = list(/obj/item/clothing/shoes/fuckup)

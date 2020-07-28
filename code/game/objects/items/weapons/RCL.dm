@@ -20,7 +20,6 @@
 	var/active = 0
 	var/obj/structure/cable/last = null
 	var/obj/item/stack/cable_coil/loaded = null
-	var/targetMoveKey = null
 
 /obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
@@ -40,10 +39,10 @@
 			var/diff = loaded.amount % 30
 			if(diff)
 				loaded.use(diff)
-				getFromPool(/obj/item/stack/cable_coil,user.loc,diff)
+				new /obj/item/stack/cable_coil(user.loc, diff)
 			else
 				loaded.use(30)
-				getFromPool(/obj/item/stack/cable_coil,user.loc,30)
+				new /obj/item/stack/cable_coil(user.loc, 30)
 		loaded.max_amount = initial(loaded.max_amount)
 		loaded.forceMove(user.loc)
 		user.put_in_hands(loaded)
@@ -88,7 +87,7 @@
 	update_icon()
 	if(loaded && !loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
-		returnToPool(loaded)
+		qdel(loaded)
 		loaded = null
 		active = 0
 		return 1
@@ -103,23 +102,18 @@
 	if(user)
 		if(active)
 			trigger(user)
-			targetMoveKey = user.on_moved.Add(src, "holder_moved")
+			user.lazy_register_event(/lazy_event/on_moved, src, .proc/holder_moved)
 			return
-		user.on_moved.Remove(targetMoveKey)
-	targetMoveKey = null
+		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/holder_moved)
 
 /obj/item/weapon/rcl/attack_self(mob/user as mob)
 	active = !active
 	to_chat(user, "<span class='notice'>You turn \the [src] [active ? "on" : "off"].<span>")
 	set_move_event(user)
 
-/obj/item/weapon/rcl/proc/holder_moved(var/list/args)
-	var/event/E = args["event"]
-	if(!targetMoveKey)
-		E.handlers.Remove("\ref[src]:holder_moved")
-		return
+/obj/item/weapon/rcl/proc/holder_moved(atom/movable/mover)
 	if(active)
-		trigger(E.holder)
+		trigger(mover)
 
 /obj/item/weapon/rcl/proc/trigger(mob/user as mob)
 	if(!loaded)

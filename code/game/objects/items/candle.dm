@@ -75,9 +75,8 @@
 
 /obj/item/candle/Crossed(var/obj/Proj)
 	if(isbeam(Proj))
-		//Can also be an obj/effect, but they both have the damage var
-		var/obj/item/projectile/beam/P = Proj
-		if(P.damage != 0)
+		var/obj/item/projectile/beam/P = Proj//could be a laser beam or an emitter beam, both feature the get_damage() proc, for now...
+		if(P.get_damage() != 0)
 			light("", 1)
 
 
@@ -117,7 +116,7 @@
 		update_icon()
 	..()
 
-/obj/item/candle/holo/light(flavor_text = "<span class='notice'>\the [src] flickers on.</span>")
+/obj/item/candle/holo/light(var/flavor_text = "<span class='notice'>[usr] lights [src].</span>", var/quiet = 0)
 	if(lit)
 		set_light(CANDLE_LUM,2,light_color)
 	else

@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/goodfeeling
 	effecttype = "goodfeeling"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 	var/list/messages = list("You feel good.",\

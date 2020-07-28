@@ -857,6 +857,7 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+	qdel(src)
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/monkeys
@@ -1159,7 +1160,7 @@
 		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
-		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
 		/obj/abstract/loadout/soviet_rigsuit,
@@ -1235,7 +1236,7 @@
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,
-	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
 	/obj/abstract/loadout/soviet_rigsuit,
@@ -1409,3 +1410,4 @@
 		if (22)
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
+	qdel(src)

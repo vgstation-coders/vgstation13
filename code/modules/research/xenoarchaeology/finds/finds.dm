@@ -346,7 +346,7 @@
 
 	var/new_type = pick(possible_spawns)
 	if(new_type == /obj/item/stack/sheet/metal)
-		new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		new_item = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		new_item = new new_type(get_turf(src))
 	new_item.amount = rand(5,45)
@@ -489,9 +489,9 @@
 
 /datum/find/shard/spawn_item()
 	if(prob(50))
-		return getFromPool(/obj/item/weapon/shard)
+		return new /obj/item/weapon/shard
 	else
-		return getFromPool(/obj/item/weapon/shard/plasma)
+		return new /obj/item/weapon/shard/plasma
 
 /datum/find/rods
 	find_ID = ARCHAEO_RODS
@@ -920,6 +920,16 @@
 		var/result = pick(existing_typesof(/obj/item/toy))
 		return new result
 
+/datum/find/toybox
+	find_ID = ARCHAEO_TOYBOX
+	apply_material_decorations = FALSE
+	apply_image_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/toybox/spawn_item()
+	return new /obj/item/weapon/butterflyknife/viscerator/bunny
+
 /datum/find/largecrystal
 	find_ID = ARCHAEO_LARGE_CRYSTAL
 	apply_material_decorations = FALSE
@@ -1026,7 +1036,6 @@
 
 /obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
 	..()
-	AddToProfiler()
 	if(new_item_type)
 		find_type = new_item_type
 	else

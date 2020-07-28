@@ -21,6 +21,18 @@ NanoStateManager = function ()
 
 	var _currentState = null;
 
+	var parseBYOND = function (jsonString) //Parses BYOND's JSON format for NaNs and infinities into those values instead of just objects
+	{
+		return JSON.parse(jsonString, function(key, value)
+		{
+			if (typeof value === 'object' && value !== null && value.__number__)
+			{
+				return parseFloat(value.__number__);
+			}
+			return value;
+		});
+	};
+
 	// the init function is called when the ui has loaded
 	// this function sets up the templates and base functionality
 	var init = function ()
@@ -28,10 +40,7 @@ NanoStateManager = function ()
 		// We store initialData and templateData in the body tag, it's as good a place as any
 		_data = $('body').data('initialData');
 
-		if (typeof _data === 'string') //If the initial data isn't QUITE valid JSON, jQuery won't parse it automatically
-		{
-			_data = JSON_parseMore(_data); //If it's still invalid, something is very wrong and it SHOULD error
-		}
+		_data = parseBYOND(JSON.stringify(_data)) //Can't pass a reviver to data(), so this is the easiest way to parse the special BYOND values. Hilarious in a morbid sense.
 
 		if (_data == null || !_data.hasOwnProperty('config') || !_data.hasOwnProperty('data'))
 		{
@@ -60,7 +69,7 @@ NanoStateManager = function ()
 		try
 		{
 			// parse the JSON string from the server into a JSON object
-			updateData = JSON_parseMore(jsonString); //To support infinities and NaN so that the whole UI doesn't just crash
+			updateData = parseBYOND(jsonString);
 		}
 		catch (error)
 		{

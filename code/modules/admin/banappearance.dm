@@ -54,7 +54,7 @@ DEBUG
 			appearance_keylist=list()
 			log_admin("appearance_keylist was empty")
 	else
-		if(!establish_db_connection())
+		if(!SSdbcore.Connect())
 			world.log << "Database connection failed. Reverting to the legacy ban system."
 			diary << "Database connection failed. Reverting to the legacy ban system."
 			config.ban_legacy_system = 1
@@ -62,13 +62,19 @@ DEBUG
 			return
 
 		//appearance bans
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = 'APPEARANCE_PERMABAN' AND isnull(unbanned)")
-		query.Execute()
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey FROM erro_ban WHERE bantype = :bantype AND isnull(unbanned)",
+			list(
+				"bantype" = "APPEARANCE_PERMABAN",
+			))
+		if(!query.Execute())
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 
 		while(query.NextRow())
 			var/ckey = query.item[1]
-
 			appearance_keylist.Add("[ckey]")
+		qdel(query)
 
 /proc/appearance_savebanfile()
 	var/savefile/S=new("data/appearance_full.ban")
@@ -96,18 +102,3 @@ DEBUG
 			appearance_savebanfile()
 			return 1
 	return 0
-
-/*
-proc/DB_ban_isappearancebanned(var/playerckey)
-	establish_db_connection()
-	if(!dbcon.IsConnected())
-		return
-
-	var/sqlplayerckey = sql_sanitize_text(ckey(playerckey))
-
-	var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_ban WHERE CKEY = '[sqlplayerckey]' AND ((bantype = 'APPEARANCE_PERMABAN') OR (bantype = 'APPEARANCE_TEMPBAN' AND expiration_time > Now())) AND unbanned != 1")
-	query.Execute()
-	while(query.NextRow())
-		return 1
-	return 0
-*/

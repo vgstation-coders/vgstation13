@@ -153,7 +153,7 @@
 		if(!target.mind)
 			to_chat(user,"<span class='warning'>[target] has no mind!</span>")
 			continue
-		var/vow = copytext(sanitize(input(user, "Enter your vow. You have [R.remaining_vows] left.", "VOW LOCK IN") as null|text),1,MAX_MESSAGE_LEN)
+		var/vow = stripped_input(user, "Enter your vow. You have [R.remaining_vows] left.", "VOW LOCK IN")
 		if(vow)
 			user.say("[target], I vow [vow].")
 			user.say("VOW LOCKED IN!")

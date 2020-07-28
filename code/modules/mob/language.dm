@@ -16,7 +16,10 @@
 	var/list/syllables
 	var/list/space_chance = 55       // Likelihood of getting a space in the random scramble string.
 
-/datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode)
+/datum/language/proc/get_spoken_verb(var/msg, var/silicon, var/mode, var/mob/speaker)
+	var/speaker_verb_override = speaker.get_spoken_verb(msg)
+	if (speaker_verb_override)
+		return speaker_verb_override
 	switch(mode)
 		if(SPEECH_MODE_WHISPER)
 			return "[whisper_verb]"
@@ -44,7 +47,7 @@
 
 /datum/language/proc/render_speech(var/datum/speech/speech, var/html_message)
 	// html_message is the message itself + <span> tags. Do NOT filter it.
-	return "[get_spoken_verb(speech.message,issilicon(speech.speaker),speech.mode)], [html_message]"
+	return "[get_spoken_verb(speech.message,issilicon(speech.speaker),speech.mode, speech.speaker)], [html_message]"
 
 /* Obsolete, here for reference
 /datum/language/proc/format_message(mob/M, message)
@@ -64,7 +67,7 @@
 	ask_verb = "hisses"
 	exclaim_verb = "roars"
 	colour = "soghun"
-	key = "o"
+	key = "*"
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
 /datum/language/tajaran
@@ -74,7 +77,7 @@
 	ask_verb = "mrowls"
 	exclaim_verb = "yowls"
 	colour = "tajaran"
-	key = "j"
+	key = "%"
 	syllables = list("rr","rr","tajr","kir","raj","kii","mir","kra","ahk","nal","vah","khaz","jri","ran","darr", \
 	"mi","jri","dynh","manq","rhe","zar","rrhaz","kal","chur","eech","thaa","dra","jurl","mah","sanu","dra","ii'r", \
 	"ka","aasi","far","wa","baq","ara","qara","zir","sam","mak","hrar","nja","rir","khan","jun","dar","rik","kah", \
@@ -307,31 +310,29 @@
 
 	var/datum/language/new_language = all_languages[language]
 
-	if(!istype(new_language) || new_language in languages)
+	if(!istype(new_language) || (new_language in languages))
 		return 0
 
 	languages.Add(new_language)
 	return 1
 
-/mob/proc/remove_language(var/rem_language)
+/mob/proc/remove_language(rem_language)
 	var/datum/language/L = all_languages[rem_language]
-	. = (L in languages)
-	languages.Remove(L)
+	return languages.Remove(L)
 
 /mob/living/remove_language(rem_language)
-	var/datum/language/L = all_languages[rem_language]
-	if(default_language == L)
-		if(all_languages.len)
-			default_language = all_languages[1]
-		else
-			default_language = null
-	return ..()
+	. = ..()
+	if(.)
+		var/datum/language/L = all_languages[rem_language]
+		if(default_language == L)
+			if(languages.len)
+				default_language = languages[1]
+			else
+				default_language = null
 
 // Can we speak this language, as opposed to just understanding it?
 /mob/proc/can_speak_lang(datum/language/speaking)
-
-
-	return (universal_speak || speaking in src.languages)
+	return (universal_speak || (speaking in src.languages))
 
 //TBD
 /mob/verb/check_languages()

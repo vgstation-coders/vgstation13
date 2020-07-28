@@ -7,6 +7,6 @@
 		return TRUE
 	if(!owner.current || owner.current.isDead() || isbrain(owner.current) || isborer(owner.current))
 		return TRUE //Brains no longer win survive objectives. --NEO
-	if(issilicon(owner.current) && owner.current != owner.original)
+	if(issilicon(owner.current))
 		return TRUE
 	return FALSE

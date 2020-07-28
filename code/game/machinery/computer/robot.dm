@@ -9,6 +9,7 @@
 	req_access = list(access_robotics)
 	circuit = "/obj/item/weapon/circuitboard/robotics"
 
+	var/hacking = 0
 	var/id = 0.0
 	var/temp = null
 	var/status = 0
@@ -24,9 +25,7 @@
 	return src.attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-
 	return src.attack_hand(user)
-	return
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())
@@ -244,15 +243,23 @@
 				if(R.scrambledcodes)
 					return
 				// whatever weirdness this is supposed to be, but that is how the href gets added, so here it is again
-				if(istype(R) && istype(usr, /mob/living/silicon) && usr.mind.special_role && (usr.mind.original == usr) && R.emagged != 1)
+				if((ismalf(usr) || (usr == R && istraitor(usr))) && !R.emagged)
 					var/choice = input("Are you certain you wish to hack [R.name]?") in list("Confirm", "Abort")
 					if(choice == "Confirm")
-						if(R && istype(R))
-//							message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
-							log_game("[key_name(usr)] emagged [R.name] using robotic console!")
-							R.SetEmagged(2)
-							if(R.mind.special_role)
-								R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+						if(R)
+							if (!hacking)
+								hacking = 1
+								to_chat(usr, "Beginning override of cyborg safeties. This will take some time, and you cannot hack other borgs during the process.")
+								sleep(600)
+//								message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
+								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
+								R.SetEmagged(TRUE)
+								to_chat(usr, "Hack successful. [R.name] now has access to illegal technology.")
+								if(R.mind.special_role)
+									R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
+								hacking = 0
+							else
+								to_chat(usr, "You are already hacking a cyborg.")
 
 		src.add_fingerprint(usr)
 	src.updateUsrDialog()

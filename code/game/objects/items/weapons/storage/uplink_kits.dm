@@ -1,6 +1,10 @@
-/obj/item/weapon/storage/box/syndicate/New()
+/obj/item/weapon/storage/box/syndicate/New(var/loc, var/list/conditions, var/forced_bundle)
 	..()
-	var/tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "palpatine" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	var/tagname
+	if(!forced_bundle)
+		tagname = pickweight(list("bloodyspai" = 100, "stealth" = 100, "screwed" = 100, "guns" = 100, "murder" = 100, "freedom" = 100, "hacker" = 100, "lordsingulo" = 100, "smoothoperator" = 100, "psycho" = 100, "hotline" = 100, "ocelot" = 100, "sith" = 100, "anarchist" = 50, "emagsandglue" = 10, "balloon" = 10, "bangerboy" = 100, "highlander" = 100))
+	else
+		tagname = forced_bundle
 
 	switch (tagname)
 		if("bloodyspai")//2+5+2+2+4+4+4=23
@@ -26,7 +30,7 @@
 			new /obj/item/clothing/head/helmet/space/syndicate(src)
 
 		if("guns")//13+4+6+4=27
-			new /obj/item/weapon/gun/projectile(src)
+			new /obj/item/weapon/gun/projectile/revolver(src)
 			new /obj/item/ammo_storage/box/a357(src)
 			new /obj/item/weapon/card/emag(src)
 			new /obj/item/weapon/c4(src)
@@ -118,16 +122,22 @@
 			new /obj/item/clothing/gloves/red(src)
 			new /obj/item/clothing/accessory/storage/bandolier(src)
 
-		if ("palpatine")// It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
-			new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
-			new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
-			new /obj/item/weapon/dnainjector/nofail/telemut(src)
-			new /obj/item/weapon/dnainjector/nofail/jumpy(src)
-			new /obj/item/weapon/spellbook/oneuse/bound_object(src)
-			new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
-			new /obj/item/clothing/head/sith(src)
-			new /obj/item/clothing/suit/sith(src)
-			new /obj/item/clothing/shoes/sandal(src)
+		if ("sith")
+			if("plasmaman" in conditions) //General Veers, you're too close to me
+				new /obj/item/weapon/melee/energy/sword/red(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/clothing/head/helmet/space/plasmaman/sith(src)
+				new /obj/item/clothing/suit/space/plasmaman/sith(src)
+			else // It's treason then (8 + 8 + ? + ? + ? + ? + ? + ?)
+				new /obj/item/weapon/melee/energy/sword/red(src) //He had like one saber when he went ballistic but you get it
+				new /obj/item/weapon/melee/energy/sword/red(src) //Combine these into a double e-sword
+				new /obj/item/weapon/dnainjector/nofail/telemut(src)
+				new /obj/item/weapon/dnainjector/nofail/jumpy(src)
+				new /obj/item/weapon/spellbook/oneuse/bound_object(src)
+				new /obj/item/weapon/spellbook/oneuse/lightning/sith(src) //UNLIMITED POWER, requires wizard garb
+				new /obj/item/clothing/head/sith(src)
+				new /obj/item/clothing/suit/sith(src)
+				new /obj/item/clothing/shoes/sandal(src)
 
 		if("anarchist")//14+14+6=34, plus molotovs
 			new /obj/item/weapon/implanter/traitor(src)
@@ -336,3 +346,17 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/card/emag(src)
 	new /obj/item/weapon/glue(src)
 	return
+
+
+//Syndicate Experimental Gear
+//Contains unique gear not found anywhere else
+/obj/item/weapon/storage/box/syndicate_experimental/New()
+	..()
+	var/selection = pick("damocles", "bomber vest", "bike horn")
+	switch(selection)
+		if("damocles")
+			new /obj/item/weapon/damocles(src)
+		if("bomber vest")
+			new /obj/item/clothing/suit/bomber_vest(src)
+		if("bike horn")
+			new /obj/item/weapon/bikehorn/syndicate(src)

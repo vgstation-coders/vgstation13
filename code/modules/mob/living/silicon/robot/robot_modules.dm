@@ -79,7 +79,6 @@
 /obj/item/weapon/robot_module/New(var/mob/living/silicon/robot/R)
 	..()
 	add_languages(R)
-	AddToProfiler()
 	if(default_modules)
 		AddDefaultModules()
 	UpdateModuleHolder(R)
@@ -313,7 +312,7 @@
 		"R34 - ENG7a 'Conagher'" = "conagher"
 		)
 	speed_modifier = CYBORG_ENGINEERING_SPEED_MODIFIER
-	respawnables = list(/obj/item/stack/cable_coil)
+	respawnables = list(/obj/item/stack/cable_coil/yellow)
 	respawnables_max_amount = ENGINEERING_MAX_COIL
 
 /obj/item/weapon/robot_module/engineering/New()
@@ -338,7 +337,7 @@
 	modules += new /obj/item/device/holomap(src)
 	modules += new /obj/item/weapon/inflatable_dispenser/robot(src)
 	modules += new /obj/item/borg/fire_shield
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
 	W.amount = ENGINEERING_MAX_COIL
 	W.max_amount = ENGINEERING_MAX_COIL
 	modules += W
@@ -525,7 +524,6 @@
 /obj/item/weapon/robot_module/syndicate/New()
 	..()
 
-	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/crowbar(src)
 	fix_modules()
 
@@ -559,6 +557,7 @@
 
 	quirk_flags |= MODULE_CAN_HANDLE_MEDICAL | MODULE_CAN_HANDLE_CHEMS
 
+	modules += new /obj/item/weapon/card/emag(src)
 	modules += new /obj/item/weapon/extinguisher/mini(src)
 	modules += new /obj/item/weapon/inflatable_dispenser(src)
 	modules += new /obj/item/device/chameleon(src)
@@ -568,7 +567,7 @@
 	modules += new /obj/item/weapon/reagent_containers/borghypo/crisis(src)
 	modules += new /obj/item/weapon/reagent_containers/borghypo/biofoam(src)
 	modules += new /obj/item/weapon/revivalprod(src)
-	modules += new /obj/item/weapon/switchtool/surgery(src)
+	modules += new /obj/item/weapon/switchtool/surgery/maxed(src)
 	modules += new /obj/item/robot_rack/bed/syndie(src)
 	modules += new /obj/item/weapon/cookiesynth/lollipop(src)
 
@@ -635,7 +634,7 @@
 	sensor_augs = list("Medical", "Disable")
 
 	fix_modules()
-	
+
 /obj/item/weapon/robot_module/starman
 	name = "starman robot module"
 	module_holder = "starman"

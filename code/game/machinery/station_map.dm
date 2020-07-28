@@ -71,7 +71,7 @@ var/list/station_holomaps = list()
 	bogus = 0
 	var/turf/T = get_turf(src)
 	original_zLevel = T.z
-	if(!(HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]" in extraMiniMaps))
+	if(!((HOLOMAP_EXTRA_STATIONMAP+"_[original_zLevel]") in extraMiniMaps))
 		bogus = 1
 		holomap_datum.initialize_holomap_bogus()
 		update_icon()
@@ -271,7 +271,7 @@ var/list/station_holomaps = list()
 		watching_mob = user
 		var/turf/T = get_turf(user)
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			bogus = 1
 			holomap_datum.initialize_holomap_bogus()
 		else
@@ -300,7 +300,7 @@ var/list/station_holomaps = list()
 	if (lastZ != T.z)
 		lastZ = T.z
 		bogus = 0
-		if(!(HOLOMAP_EXTRA_STATIONMAP+"_[T.z]" in extraMiniMaps))
+		if(!((HOLOMAP_EXTRA_STATIONMAP+"_[T.z]") in extraMiniMaps))
 			holomap_datum.initialize_holomap_bogus()
 			bogus = 1
 		else

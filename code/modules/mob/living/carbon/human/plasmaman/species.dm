@@ -7,6 +7,8 @@
 
 	flags = IS_WHITELISTED | PLASMA_IMMUNE
 	anatomy_flags = NO_BLOOD
+	blood_color = "#743474"
+	flesh_color = "#898476"
 
 	//default_mutations=list(M_SKELETON) // This screws things up
 	primitive = /mob/living/carbon/monkey/skellington/plasma
@@ -31,6 +33,7 @@
 		"appendix" = /datum/organ/internal/appendix,
 		"eyes" =     /datum/organ/internal/eyes
 	)
+	monkey_anim = "p2monkey"
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.
@@ -159,3 +162,15 @@
 				PS.Extinguish(host)
 			else
 				PS.regulate_temp_of_wearer(host)
+
+/datum/species/plasmaman/gib(mob/living/carbon/human/H)
+	..()
+	var/datum/organ/external/head_organ = H.get_organ(LIMB_HEAD)
+	if(head_organ.status & ORGAN_DESTROYED)
+		new /obj/effect/decal/remains/human/noskull(H.loc)
+	else
+		new /obj/effect/decal/remains/human(H.loc)
+		head_organ.droplimb(1,1)
+
+	H.drop_all()
+	qdel(src)

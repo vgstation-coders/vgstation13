@@ -1,5 +1,6 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
 	effect = ARTIFACT_EFFECT_PULSE
 	effect_type = 5
 	var/static/list/possible_types = list()

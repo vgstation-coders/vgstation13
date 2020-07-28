@@ -39,6 +39,7 @@
 	overlays.Cut()
 	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
+		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 		overlay.icon_state = "[icon_state]-overlay"
@@ -119,6 +120,7 @@
 	if(buildstage != 2)
 		return
 	on = !on
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	var/area/this_area = get_area(src)
 	this_area.lightswitch = on
 	this_area.updateicon()

@@ -88,11 +88,19 @@
 	if(a_left)
 		overlays += image(icon = icon, icon_state = "[a_left.icon_state]_left")
 		for(var/O in a_left.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_l")
+			var/image/I = a_left.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(a_right)
 		src.overlays += image(icon = icon, icon_state = "[a_right.icon_state]_right")
 		for(var/O in a_right.attached_overlays)
-			overlays += image(icon = icon, icon_state = "[O]_r")
+			var/image/I = a_right.attached_overlays[O]
+			var/image/J = image(icon = I.icon, icon_state = "[I.icon_state]_r", dir = I.dir)
+			J.layer = I.layer
+			J.plane = I.plane
+			overlays += J
 	if(master)
 		master.update_icon()
 

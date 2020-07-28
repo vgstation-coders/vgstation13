@@ -37,7 +37,7 @@
 	if(iswelder(W) && stage == 1)
 		W.playtoolsound(src, 50)
 		to_chat(user, "<span class = 'caution'>You disassemble the telepad.</span>")
-		var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 		M.amount = 1
 		new /obj/item/stack/sheet/glass/glass(get_turf(src))
 		qdel(src)
@@ -68,6 +68,7 @@
 	desc = "Use this to send crates to cargo telepads."
 	icon = 'icons/obj/telescience.dmi'
 	icon_state = "rcs"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
 	force = 10
@@ -131,7 +132,7 @@
 	var/turf/teleport_target
 	if (mode == MODE_NORMAL)
 		var/list/obj/machinery/telepad_cargo/input_list = list()
-		var/list/area/area_index = list()
+		var/list/area_index = list()
 		for (var/obj/machinery/telepad_cargo/telepad in cargo_telepads)
 			var/turf/T = get_turf(telepad)
 			if (!T)

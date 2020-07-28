@@ -75,7 +75,7 @@ var/list/tag_suits_list = list()
 	dat += "<a href='?src=\ref[src]&create_game=1'>Create a new game</a><br/>"
 	dat += "<hr/>"
 	dat += "<a href='?src=\ref[src]&clear_gamertag=1'>Clear tag</a>"
-	
+
 	return jointext(dat,"")
 
 /obj/item/clothing/suit/tag/proc/refresh_edit_window(var/mob/user, var/datum/laser_tag_game/my_laser_tag_game)
@@ -102,7 +102,7 @@ var/list/tag_suits_list = list()
 		my_laser_tag_game = game
 		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
-	
+
 	if (href_list["create_game"])
 		var/datum/laser_tag_game/game = new
 		game.owner = player
@@ -120,7 +120,7 @@ var/list/tag_suits_list = list()
 			return
 		refresh_edit_window(usr, game)
 		return
-	
+
 	if (href_list["game_mode"])
 		var/datum/laser_tag_game/game = locate(href_list["game_mode"])
 		if (game.owner != player)
@@ -148,7 +148,7 @@ var/list/tag_suits_list = list()
 			game.fire_mode = choice
 		refresh_edit_window(usr, game)
 		return
-	
+
 	if (href_list["stun_time"])
 		var/datum/laser_tag_game/game = locate(href_list["stun_time"])
 		if (game.owner != player)
@@ -190,7 +190,7 @@ var/list/tag_suits_list = list()
 		game.kick_player(usr)
 		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
 		return
-	
+
 	if (href_list["clear_gamertag"])
 		my_laser_tag_game = null
 		player = null
@@ -263,7 +263,7 @@ var/list/tag_suits_list = list()
 	desc = "Yarr."
 	icon_state = "hgpirate"
 	flags = FPRINT
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 
@@ -314,6 +314,7 @@ var/list/tag_suits_list = list()
 	item_state = "wcoat"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/apron/overalls
@@ -333,6 +334,7 @@ var/list/tag_suits_list = list()
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/spaceninjafake
 	name = "space ninja suit replica"
@@ -433,6 +435,7 @@ obj/item/clothing/suit/cassock
 	item_state = "straight_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
@@ -548,6 +551,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -555,6 +559,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -562,6 +567,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -569,6 +575,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -576,6 +583,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
@@ -609,6 +617,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"
@@ -648,7 +657,7 @@ obj/item/clothing/suit/cassock
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
@@ -733,6 +742,7 @@ obj/item/clothing/suit/cassock
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
 	extinguishingProb = 70
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
@@ -751,6 +761,7 @@ obj/item/clothing/suit/cassock
 	heat_conductivity = 0
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	bearpelt = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/trader
 	name = "trader's coat"
@@ -761,7 +772,7 @@ obj/item/clothing/suit/cassock
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)
@@ -844,3 +855,80 @@ obj/item/clothing/suit/poncho
 	icon_state = "poncho"
 	item_state = "poncho"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
+
+
+//BOMBER VEST
+//The whole "bump into people to detonate it, it's the only way" part is intentional, just run into them already
+/obj/item/clothing/suit/bomber_vest
+	name = "Bomber Vest"
+	desc = "A normal vest rigged with impact-sensitive explosives. While active, bumping into anything or being touched will detonate it. For some reason, this will only work if worn."
+	icon_state = "bombvest"
+	item_state = "bombvest"
+	body_parts_covered = FULL_TORSO|IGNORE_INV
+	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
+	var/active = 0
+	//That's right, we're using events for this vest to avoid hardcoding it everywhere
+	var/event_key_touched
+	var/event_key_bumping
+	var/event_key_bumped
+
+/obj/item/clothing/suit/bomber_vest/Destroy()
+	..()
+	event_key_touched = null
+	event_key_bumping = null
+	event_key_bumped = null
+
+/obj/item/clothing/suit/bomber_vest/proc/activate_vest()
+	var/mob/living/carbon/human/H = loc
+	if(!H)
+		return
+	if(!ishuman(H))
+		return
+	if(!(H.wear_suit == src))
+		return
+	active = 1
+	event_key_touched = H.on_touched.Add(src, "detonate")
+	event_key_bumping = H.on_bumping.Add(src, "detonate")
+	event_key_bumped = H.on_bumped.Add(src, "detonate")
+	canremove = 0
+
+/obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
+	active = 0
+	var/mob/living/carbon/human/H = loc
+	if(H)
+		H.on_touched.Remove(event_key_touched)
+		H.on_bumping.Remove(event_key_bumping)
+		H.on_bumped.Remove(event_key_bumped)
+
+/obj/item/clothing/suit/bomber_vest/examine(mob/user)
+	..()
+	if(active)
+		to_chat(user, "<span class='danger'>It appears to be active. RUN!</span>")
+
+/obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
+	var/mob/living/carbon/human/H = loc
+	var/whitelist = arguments["has been touched by"]
+	if(!ishuman(H) || !active)
+		return
+	if(whitelist == H) //No bombing ourselves by checking ourselves
+		return
+	explosion(H, 1, 3, 6)
+	message_admins("[H] has detonated \the [src]!")
+	qdel(src) //Just in case
+
+/datum/action/item_action/toggle_bomber_vest
+	name = "Toggle Bomber Vest Active"
+	desc = "Activate the bomber vest, causing the slightest touch to detonate it and blow both you and everyone nearby into bits if active. Usable only when worn, and can't be taken off once active.</span>"
+
+/datum/action/item_action/toggle_bomber_vest/Trigger()
+	if(IsAvailable() && owner && target)
+		var/obj/item/clothing/suit/bomber_vest/B = target
+		var/mob/living/carbon/human/H = owner
+		if(!(H.wear_suit == B))
+			to_chat(owner, "<span class='warning'>You must wear the vest in order to activate it.</span>")
+			return
+		if(!B.active)
+			B.activate_vest()
+			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being punched.</span>")
+		else
+			to_chat(owner, "<span class='warning'>The vest is already active!</span>")

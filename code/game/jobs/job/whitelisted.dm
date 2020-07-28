@@ -11,7 +11,8 @@
 	minimal_access = list(access_trade)
 	alt_titles = list("Merchant","Salvage Broker")
 
-	species_whitelist = list("Vox")
+	species_whitelist = list("Vox", "Mushroom")
+	species_blacklist = list() //for shrooms
 	must_be_map_enabled = 1
 
 	no_random_roll = 1 //Don't become a vox trader randomly
@@ -33,8 +34,14 @@
 /datum/job/trader/equip(var/mob/living/carbon/human/H)
 	if(!H)
 		return 0
-	H.equip_or_collect(new /obj/item/clothing/under/vox/vox_robes(H), slot_w_uniform)
-	H.equip_or_collect(new /obj/item/clothing/shoes/magboots/vox(H), slot_shoes)
+	if(ismushroom(H))
+		H.equip_or_collect(new /obj/item/clothing/under/stilsuit(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/suit/space/vox/civ/mushmen(H), slot_wear_suit)
+		H.equip_or_collect(new /obj/item/clothing/head/helmet/space/vox/civ/mushmen(H), slot_head)
+		H.equip_or_collect(new /obj/item/clothing/shoes/magboots(H), slot_shoes)
+	if(isvox(H))
+		H.equip_or_collect(new /obj/item/clothing/under/vox/vox_robes(H), slot_w_uniform)
+		H.equip_or_collect(new /obj/item/clothing/shoes/magboots/vox(H), slot_shoes)
 
 	switch(H.backbag) //BS12 EDIT
 		if(2)

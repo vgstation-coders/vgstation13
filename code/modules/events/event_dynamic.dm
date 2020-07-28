@@ -23,8 +23,8 @@ var/list/event_last_fired = list()
 	var/list/possibleEvents = list()
 
 	//see:
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events.dm
-	// Code/WorkInProgress/Cael_Aislinn/Economy/Economy_Events_Mundane.dm
+	// code\modules\Economy\Economy_Events.dm
+	// code\modules\Economy\Economy_Events_Mundane.dm
 	//Commented out for now. Let's be honest, a string of text on PDA is not worth a meteor shower or ion storm
 	//possibleEvents[/datum/event/economic_event] = 100
 	//possibleEvents[/datum/event/trivial_news] = 150

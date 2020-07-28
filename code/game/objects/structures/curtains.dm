@@ -55,7 +55,7 @@
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You cut \the [src] down.</span>")
 			if(!holo)
-				getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src), 4)
+				new /obj/item/stack/sheet/mineral/plastic(get_turf(src), 4)
 			qdel(src)
 		return 1
 	if(W.is_screwdriver(user))

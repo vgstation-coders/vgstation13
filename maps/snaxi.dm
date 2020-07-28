@@ -82,7 +82,7 @@
 	//do not call parent, we have our own AI core button
 	var/obj/abstract/screen/using
 	//Jump to Core/Northwest
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Jump Northwest / View Core"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "northwest"
@@ -90,7 +90,7 @@
 	L += using
 
 	//Jump to Northeast
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Jump Northeast"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "northeast"
@@ -98,7 +98,7 @@
 	L += using
 
 	//Jump to South
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Jump South"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "south"
@@ -159,7 +159,7 @@
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
 	if(ispath(DR.role_category,/datum/role/changeling))
-		return TRUE
+		return FALSE
 
 	return TRUE
 

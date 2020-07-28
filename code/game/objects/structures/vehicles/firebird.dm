@@ -10,7 +10,7 @@
 	dir=pick(cardinal)
 	spawn(rand(10,20))
 		if(src)
-			returnToPool(src)
+			qdel(src)
 
 /datum/effect/effect/system/trail/firebird
 	trail_type = /obj/effect/effect/trails/firebird

@@ -73,8 +73,10 @@
 	)
 
 	var/list/synthable_default_chems = list(
-		"Tricordrazine" = TRICORDRAZINE,
+		"Anti-Toxin" = ANTI_TOXIN,
+		"Inaprovaline" = INAPROVALINE,
 		"Coffee" = COFFEE,
+		"Tea" = TEA,
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)
@@ -216,7 +218,7 @@
 /mob/living/silicon/pai/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
-	flash_eyes(visual = TRUE, affects_silicon = TRUE)
+	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 	switch(severity)
 		if(1)
 			if(!isDead())

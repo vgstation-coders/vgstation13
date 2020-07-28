@@ -65,7 +65,7 @@ var/const/HOLOPAD_MODE = 0
 			for(var/mob/living/silicon/ai/AI in living_mob_list)
 				if(!AI.client)
 					continue
-				to_chat(AI, "<span class='info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
+				to_chat(AI, "<span class='big info'>Your presence is requested at <a href='?src=\ref[AI];jumptoholopad=\ref[src]'>\the [area]</a>.</span>")
 		else
 			to_chat(user, "<span class='notice'>A request for AI presence was already sent recently.</span>")
 
@@ -123,9 +123,20 @@ For the other part of the code, check silicon say.dm. Particularly robot talk.*/
 	master = A//AI is the master.
 	use_power = 2//Active power usage.
 	move_hologram()
+	if(A && A.holopadoverlays.len)
+		for(var/image/ol in A.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad1"
+				break
+		
 	return 1
 
 /obj/machinery/hologram/holopad/proc/clear_holo()
+	if(master && master.holopadoverlays.len)
+		for(var/image/ol in master.holopadoverlays)
+			if(ol.loc == src)
+				ol.icon_state = "holopad0"
+				break
 	qdel(holo)//Get rid of hologram.
 	qdel(ray)
 	holo = null

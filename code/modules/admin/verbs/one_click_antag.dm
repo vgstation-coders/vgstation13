@@ -96,7 +96,7 @@ client/proc/one_click_antag()
 				var/datum/role/RR = FF.get_member_by_mind(M)
 				RR.OnPostSetup()
 				RR.Greet(GREET_LATEJOIN)
-				message_admins("[key_name(H)] has been recruited as recruit of [F.name] via create antagonist verb.")
+				message_admins("[key_name(H)] has been recruited as recruit of [FF.name] via create antagonist verb.")
 				recruit_count++
 
 		FF.OnPostSetup()
@@ -228,6 +228,10 @@ client/proc/one_click_antag()
 
 	new_character.dna.ready_dna(new_character)
 	new_character.key = G_found.key
+
+	// Create a brand new mind for the dude
+	new_character.mind = new
+	new_character.mind.current = new_character
 
 	return new_character
 

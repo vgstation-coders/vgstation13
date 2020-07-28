@@ -16,16 +16,16 @@
 /obj/item/stack/conveyor_assembly/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/abstract/screen/draggable, src, user)
+		active = new /obj/abstract/screen/draggable(src, user)
 		to_chat(user, "Beginning conveyor construction mode, click and drag screen in direction you wish conveyor to go.")
 		return
 	else
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/drag_mousedown(mob/user, turf/origin)
@@ -35,7 +35,7 @@
 		user.client.images += placeimage
 		placeloc = origin
 	else
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/conveyor_assembly/can_drag_use(mob/user, turf/T)
@@ -62,9 +62,9 @@
 
 	if(user.Adjacent(placeloc) && direction && use(1))
 		new /obj/structure/conveyor_assembly(placelocation, direction)
-	if(amount && !disposed)
+	if(amount && !gcDestroyed)
 		spawn()
-			active = getFromPool(/obj/abstract/screen/draggable, src, user)
+			active = new /obj/abstract/screen/draggable(src, user)
 
 /obj/item/stack/conveyor_assembly/end_drag_use(mob/user)
 	if(placeimage && user && user.client)
@@ -77,7 +77,7 @@
 	if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
 			"<span class='warning'>You shape the [src] into metal with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
@@ -109,7 +109,7 @@
 		P.playtoolsound(src, 75)
 		if(do_after(user, src, 10))
 			to_chat(user, "<span class='notice'>You unhinge the frame.</span>")
-			getFromPool(/obj/item/stack/conveyor_assembly, src.loc)
+			new /obj/item/stack/conveyor_assembly(src.loc)
 			qdel(src)
 			return
 	else if(istype(P, /obj/item/stack/sheet/metal))

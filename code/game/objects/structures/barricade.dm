@@ -107,7 +107,7 @@
 /obj/structure/window/barricade/Destroy(var/brokenup)
 
 	setDensity(FALSE) //Sanity while we do the rest
-	getFromPool(materialtype, loc, sheetamount)
+	new materialtype(loc, sheetamount)
 
 	..()
 
@@ -131,12 +131,16 @@
 	health = 150
 	sheetamount = 3
 	layer = ABOVE_DOOR_LAYER
+	is_fulltile = TRUE
 
 //Basically the barricade version of full windows, and inherits the former rather than the later
 /obj/structure/window/barricade/full/New(loc)
 
 	..(loc)
 	flow_flags &= ~ON_BORDER
+
+/obj/structure/window/barricade/full/blocks_doors()
+	return TRUE
 
 /obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
 
@@ -153,10 +157,6 @@
 /obj/structure/window/barricade/full/can_be_reached(mob/user)
 
 	return 1 //That about it Captain
-
-/obj/structure/window/barricade/full/is_fulltile()
-
-	return 1
 
 /obj/structure/window/barricade/full/block //Used by the barricade kit when it is placed on airlocks or windows
 

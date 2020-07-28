@@ -26,7 +26,7 @@
 	..()
 	if(href_list["drop_from_cargo"])
 		var/obj/O = locate(href_list["drop_from_cargo"])
-		if(O && O in src.cargo)
+		if(O && (O in src.cargo))
 			src.occupant_message("<span class='notice'>You unload [O].</span>")
 			O.forceMove(get_turf(src))
 			src.cargo -= O
@@ -49,12 +49,7 @@
 	return output
 
 /obj/mecha/working/empty_bad_contents()
-	for(var/obj/O in src)
-		if(O in cargo) //mom's spaghetti
-			continue
-		if(!is_type_in_list(O,mech_parts))
-			O.forceMove(src.loc)
-	return
+	..(cargo) //mom's spaghetti 2.0
 
 /obj/mecha/working/Destroy()
 	for(var/mob/M in src)

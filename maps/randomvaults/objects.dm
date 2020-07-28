@@ -10,6 +10,8 @@
 	icon_state = "firingrange"
 	dynamic_lighting = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
+
 	//Used for bizarre/odd/reference vaults, entering them causes the wild wasteland sound to play
 	var/mysterious = FALSE
 
@@ -19,9 +21,6 @@
 	if(mysterious)
 		//Create a narrator object to play a sound to everybody who enters the area
 		narrator = new /obj/effect/narration/mystery_sound(null)
-
-/area/vault/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
 
 //Special area that can be used in map elements. When loaded, it creates a new area object and transfers all of its contents into it.
 //This means that this area can be put into multiple map elements without any issues
@@ -40,7 +39,10 @@
 	new_area.tag = "[new_area.type]/\ref[ME]"
 	new_area.addSorted()
 
+/area/vault/gingerbread_house
 
+/area/vault/mechclubhouse
+	requires_power = 1
 
 /area/vault/icetruck
 

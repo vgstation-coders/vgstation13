@@ -63,10 +63,10 @@
 
 	if(network1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(network2)
 		if(network1)
-			returnToPool(network2)
+			qdel(network2)
 
 	build_network()
 
@@ -112,7 +112,7 @@
 	desc = "A digitally controlled valve."
 	icon = 'icons/obj/atmospherics/digital_valve.dmi'
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
