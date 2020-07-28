@@ -43,6 +43,7 @@
 	holder_type = /obj/item/weapon/holder/animal/mouse
 	held_items = list()
 	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
+	var/obj/machinery/power/supermatter/supermatter_target //What shard we're walking towards
 	var/is_fat = 0
 	var/can_chew_wires = 0
 	var/splat = 0
@@ -143,12 +144,20 @@
 			else if (prob(25))
 				dir = pick(cardinal - dir)
 
-		if(!food_target && !client) //Regular mice will be moved towards food, mice with a client won't be
-			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
-				food_target = C
+		if(!food_target && !client && !supermatter_target) //Regular mice will be moved towards food, mice with a client won't be
+			for(var/obj/machinery/power/supermatter/S in can_see)
+				supermatter_target = S
+				food_target = null  //Supermatter takes priority
 				break
+			if(!supermatter_target)
+				for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
+					food_target = C
+					break
 		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough
 			food_target = null
+		if(!(supermatter_target in can_see) || client) //Don't follow it if you cant see it anymore, or if theres a client
+			supermatter_target = null
+
 		if(food_target)
 			if (!locked_to)
 				step_towards(src, food_target)
@@ -158,6 +167,20 @@
 				if (caged && food_target.loc == loc)
 					dir = SOUTH
 				food_target.attack_animal(src)
+
+
+		if(supermatter_target)   //ITS CHEEEEESE
+			if (!locked_to)
+				step_towards(src, supermatter_target)
+			else
+				dir = get_dir(src, supermatter_target)
+			if(Adjacent(supermatter_target))
+				flick(icon_eat, src)
+				sleep(10)
+				visible_message("<span class=\"warning\">The [src] bites into the supermatter!</span>")
+				playsound(src, 'sound/effects/supermatter.ogg', 50, 1)
+				death(0)
+
 
 		if(prob(10))
 
