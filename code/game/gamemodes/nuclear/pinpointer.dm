@@ -343,7 +343,7 @@ var/list/pinpointerpinpointer_list = list()
 	var/turf/this_pos = get_turf(src)
 	target = null
 	for(var/mob/living/dude in living_mob_list)
-		if(dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
+		if(dude.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
 			continue
 		var/turf/dude_pos = get_turf(dude)
 		var/distance = abs(cheap_pythag(this_pos.x - dude_pos.x, this_pos.y - dude_pos.y))
