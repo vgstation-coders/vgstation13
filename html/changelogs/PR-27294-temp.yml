@@ -1,5 +1,0 @@
----
-author: hbycyl
-changes:
-  - bugfix: The autolathe can recycle items properly again
-delete-after: true

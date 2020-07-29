@@ -1,7 +1,0 @@
----
-author: SonixApache
-changes:
-  - imagedel: Reverted glock sprites to old glock sprites
-  - bugfix: Fixed some issues with glock stuff
-  - imageadd: Glocks now use fancy overlays for their attachments
-delete-after: true
