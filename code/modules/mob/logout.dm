@@ -1,4 +1,7 @@
 /mob/Logout()
+	SStgui.on_logout(src)
+	nanomanager.close_user_uis(src)
+
 	if (isobj(loc))
 		var/obj/location = loc
 		location.on_logout(src)
