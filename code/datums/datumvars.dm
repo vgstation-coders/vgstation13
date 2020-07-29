@@ -130,7 +130,6 @@
 		body += "<option value='?_src_=vars;mob_player_panel=\ref[D]'>Show player panel</option>"
 
 	if(istype(D,/atom/movable))
-		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
 		body += "<option value='?_src_=vars;teleport_here=\ref[D]'>Teleport Here</option>"
 
 	if(istype(D,/atom))
@@ -150,29 +149,15 @@
 	if(ismob(D))
 
 		body += {"<option value='?_src_=vars;give_spell=\ref[D]'>Give Spell</option>
-			<option value='?_src_=vars;give_disease=\ref[D]'>Give Old Disease</option>
 			<option value='?_src_=vars;give_disease2=\ref[D]'>Give New Disease</option>
-			<option value='?_src_=vars;addcancer=\ref[D]'>Inflict Cancer</option>
 			<option value='?_src_=vars;godmode=\ref[D]'>Toggle Godmode</option>
 			<option value='?_src_=vars;build_mode=\ref[D]'>Toggle Build Mode</option>
-			<option value='?_src_=vars;make_skeleton=\ref[D]'>Make 2spooky</option>
-			<option value='?_src_=vars;direct_control=\ref[D]'>Assume Direct Control</option>
 			<option value='?_src_=vars;drop_everything=\ref[D]'>Drop Everything</option>
 			<option value='?_src_=vars;regenerateicons=\ref[D]'>Regenerate Icons</option>
-			<option value='?_src_=vars;addlanguage=\ref[D]'>Add Language</option>
-			<option value='?_src_=vars;remlanguage=\ref[D]'>Remove Language</option>
-			<option value='?_src_=vars;make_invisible=\ref[D]'>Make invisible</option>"}
 		if(ishuman(D))
 
 			body += {"<option value>---</option>
-				<option value='?_src_=vars;setmutantrace=\ref[D]'>Set Mutantrace</option>
-				<option value='?_src_=vars;setspecies=\ref[D]'>Set Species</option>
-				<option value='?_src_=vars;makeai=\ref[D]'>Make AI</option>
-				<option value='?_src_=vars;makerobot=\ref[D]'>Make cyborg</option>
-				<option value='?_src_=vars;makemonkey=\ref[D]'>Make monkey</option>
-				<option value='?_src_=vars;makealien=\ref[D]'>Make alien</option>
-				<option value='?_src_=vars;makeslime=\ref[D]'>Make slime</option>
-				<option value='?_src_=vars;makecluwne=\ref[D]'>Make cluwne</option>"}
+				<option value='?_src_=vars;setspecies=\ref[D]'>Set Species</option>}
 
 		body += {"<option value>---</option>
 			<option value='?_src_=vars;gib=\ref[D]'>Gib</option>"}
@@ -180,8 +165,9 @@
 		body += "<option value='?_src_=vars;delete=\ref[D]'>Delete</option>"
 	if(isobj(D))
 		body += "<option value='?_src_=vars;delall=\ref[D]'>Delete all of type</option>"
+	if(ismovable(D))
+		body += "<option value='?_src_=vars;throw_a_fucking_rod_at_it=\ref[D]'>Throw a rod at it</option>"
 	if(isobj(D) || ismob(D) || isturf(D))
-
 		body += {"<option value='?_src_=vars;explode=\ref[D]'>Trigger explosion</option>
 			<option value='?_src_=vars;emp=\ref[D]'>Trigger EM pulse</option>"}
 
