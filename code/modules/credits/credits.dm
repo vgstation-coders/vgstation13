@@ -286,8 +286,6 @@ var/global/datum/credits/end_credits = new
 	if(!candidates.len)
 		return
 	return candidates
-
-
 /proc/gender_credits(var/mob/living/carbon/human/H)
 	if(H.mind && H.mind.key)
 		var/assignment = H.get_assignment(if_no_id = "", if_no_job = "")
