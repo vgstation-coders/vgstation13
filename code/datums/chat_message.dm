@@ -1,8 +1,8 @@
 #define CHAT_MESSAGE_SPAWN_TIME		0.2 SECONDS
 #define CHAT_MESSAGE_LIFESPAN		5 SECONDS
 #define CHAT_MESSAGE_EOL_FADE		0.7 SECONDS
-#define CHAT_MESSAGE_EXP_DECAY		0.7 // Messages decay at pow(factor, idx in stack)
-#define CHAT_MESSAGE_HEIGHT_DECAY	0.6 // Increase message decay based on the height of the message
+#define CHAT_MESSAGE_EXP_DECAY		0.8 // Messages decay at pow(factor, idx in stack)
+#define CHAT_MESSAGE_HEIGHT_DECAY	0.7 // Increase message decay based on the height of the message
 #define CHAT_MESSAGE_APPROX_LHEIGHT	11 // Approximate height in pixels of an 'average' line, used for height decay
 #define CHAT_MESSAGE_WIDTH			96 // pixels
 #define CHAT_MESSAGE_MAX_LENGTH		68 // characters
@@ -100,6 +100,11 @@ var/runechat_icon = null
 	// Non mobs speakers can be small
 	if (!ismob(target))
 		extra_classes |= "small"
+
+	// If we heard our name, it's important
+	var/list/names = splittext(owner.name, " ")
+	for (var/word in names)
+		text = replacetext(text, word, "<b>[word]</b>")
 
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
@@ -203,7 +208,7 @@ var/runechat_icon = null
 		if (5 to 16)
 			extra_classes += "very_small"
 
-	if (!say_understands(speaker, message_language))
+	if (message_language && !say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source

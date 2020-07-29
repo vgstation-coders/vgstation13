@@ -179,12 +179,12 @@
 			else
 				P.growdirs &= ~get_dir(P, src)
 		if(dying)
-			T.on_density_change.Remove(src)
+			T.lazy_unregister_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
 		else
-			T.on_density_change.Add(src, "proxDensityChange")
+			T.lazy_register_event(/lazy_event/on_density_change, src, .proc/proxDensityChange)
 
-/obj/structure/cable/powercreeper/proc/proxDensityChange(var/list/args)
-	var/turf/T = args["atom"]
+/obj/structure/cable/powercreeper/proc/proxDensityChange(atom/atom)
+	var/turf/T = get_turf(atom)
 	if(get_dist(T, src) <= 1)
 		var/Adir = get_dir(src, T)
 		if(Adir in cardinal)

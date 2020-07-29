@@ -51,8 +51,15 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	..()
 
 /obj/machinery/computer/security/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
+	if(istype(user, /mob/living/silicon/robot) || isMoMMI(user))
+		if(Adjacent(user))
+			src.add_hiddenprint(user)
+			return attack_hand(user)
+		else
+			to_chat(user, "You need to get closer to the computer first.")
+	else
+		to_chat(user, "You have your built-in camera systems for this!") //currently too buggy to allow AI to use camera computers
+	return //attack_hand(user)
 
 
 /obj/machinery/computer/security/attack_paw(var/mob/user)
