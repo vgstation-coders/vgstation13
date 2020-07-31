@@ -41,8 +41,8 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 
-	min_duration = 90
-	max_duration = 110
+	min_duration = 40
+	max_duration = 50
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -148,8 +148,8 @@
 
 	priority = 0
 
-	min_duration = 90
-	max_duration = 110
+	min_duration = 40
+	max_duration = 50
 
 /datum/surgery_step/generic/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	. = ..()
@@ -193,8 +193,8 @@
 		/obj/item/device/assembly/mousetrap = 20,
 		)
 
-	min_duration = 40
-	max_duration = 60
+	min_duration = 30
+	max_duration = 40
 
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -305,8 +305,8 @@
 	/obj/item/weapon/weldingtool = 25,
 	)
 
-	min_duration = 70
-	max_duration = 100
+	min_duration = 30
+	max_duration = 40
 
 /datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
