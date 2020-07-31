@@ -301,19 +301,21 @@
 				add_fingerprint(user)
 	else
 		if(I.is_wrench(user))
-			user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
-								 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
-			if(do_after(user, src, 50))
-				if(anchored)
-					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
-								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
-					anchored = 0
-				else
-					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
-								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
-					anchored = 1
-
+			if(!on)
+				user.visible_message("<span class='warning'>[user] starts adjusting the bolts on \the [src].</span>", \
+									 "<span class='notice'>You start adjusting the bolts on \the [src].</span>")
+				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				if(do_after(user, src, 50))
+					if(anchored)
+						src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
+									 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+						anchored = 0
+					else
+						src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
+									 "<span class='notice'>You bolt \the [src] to the floor.</span>")
+						anchored = 1
+			else
+				to_chat(user,"Turn it off first.")
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
