@@ -195,8 +195,13 @@
 		if(anime || Holiday == APRIL_FOOLS_DAY)
 			speech.message = nekospeech(speech.message)
 
+/obj/item/clothing/head/kitty/equipped(var/mob/user, var/slot, hand_index = 0)
+	..()
+	if(haircolored)
+		update_icon(user)
+
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
-	if(!istype(user) || !haircolored)
+	if(!istype(user))
 		return
 	wear_override = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kitty")
 	wear_override.Blend(rgb(user.my_appearance.r_hair, user.my_appearance.g_hair, user.my_appearance.b_hair), ICON_ADD)
