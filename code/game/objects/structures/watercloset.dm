@@ -308,12 +308,13 @@
 				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					on = 0
 					anchored = 0
+					update_icon()
 				else
 					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
 								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
 					anchored = 1
-
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
