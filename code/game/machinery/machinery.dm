@@ -119,6 +119,7 @@ Class Procs:
 
 	penetration_dampening = 5
 
+	lockflags = UNANCHOR_AFTER_UNLOCK
 	var/stat = 0
 	var/emagged = 0
 	var/use_power = 1

@@ -8,7 +8,7 @@
 
 // Flags for atom.lockflags
 #define DENSE_WHEN_LOCKED            1
-
+#define UNANCHOR_AFTER_UNLOCK		2
 
 /* Atom Control */
 

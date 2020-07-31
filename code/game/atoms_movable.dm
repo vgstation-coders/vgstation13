@@ -295,6 +295,9 @@
 	category.unlock(AM)
 	//AM.reset_glide_size() // FIXME: Currently broken.
 
+	if (AM.lockflags & UNANCHOR_AFTER_UNLOCK)
+		AM.anchored = 0
+
 	return TRUE
 
 /atom/movable/proc/unlock_from()
