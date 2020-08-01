@@ -104,7 +104,7 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE :id", list("id" = sqlid))
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=:id", list("id" = sqlid))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")
