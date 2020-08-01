@@ -10,7 +10,7 @@
 	supervisors = "your laws"
 	req_admin_notify = 2
 	minimal_player_age = 30
-	alt_title = list("Computer")
+	alt_titles = list("Computer")
 
 	equip(var/mob/living/carbon/human/H)
 		if(!H)
