@@ -11,7 +11,7 @@
 	selection_color = "#dddddd"
 	access = list(access_hydroponics, access_bar, access_kitchen, access_morgue, access_weapons)
 	minimal_access = list(access_bar,access_weapons)
-
+	alt_titles = list("Barista", "Barman", "Barkeep")
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/bar
 
@@ -230,7 +230,7 @@
 	idtype = /obj/item/weapon/card/id/supply
 	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
-
+	alt_titles = list("Mailman", "Mailwoman")
 	pdaslot=slot_belt
 	pdatype=/obj/item/device/pda/cargo
 
