@@ -208,6 +208,7 @@
 
 	var/icon/earbit = new/icon("icon" = 'icons/mob/head.dmi', "icon_state" = "kittyinner")
 	wear_override.Blend(earbit, ICON_OVERLAY)
+	user.update_inv_head()
 
 /obj/item/clothing/head/kitty/collectable
 	desc = "A pair of black kitty ears. Meow!"
