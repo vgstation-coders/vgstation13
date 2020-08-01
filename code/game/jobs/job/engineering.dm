@@ -134,7 +134,7 @@
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks)
-
+	alt_titles = list("Life Support Specialist", "Firefighter")
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/atmos
 
@@ -181,7 +181,7 @@
 	idtype = /obj/item/weapon/card/id/engineering
 	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
 	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
-	alt_titles = list("Telecommunications Technician", "Spacepod Mechanic", "Greasemonkey")
+	alt_titles = list("Telecommunications Technician", "System Administrator", "Spacepod Mechanic", "Greasemonkey", "IT Professional")
 
 	pdaslot=slot_l_store
 	pdatype=/obj/item/device/pda/mechanic
