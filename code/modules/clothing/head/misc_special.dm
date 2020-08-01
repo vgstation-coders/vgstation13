@@ -197,7 +197,7 @@
 
 /obj/item/clothing/head/kitty/equipped(var/mob/user, var/slot, hand_index = 0)
 	..()
-	if(haircolored)
+	if((haircolored) && (slot == slot_head))
 		update_icon(user)
 
 /obj/item/clothing/head/kitty/update_icon(var/mob/living/carbon/human/user)
