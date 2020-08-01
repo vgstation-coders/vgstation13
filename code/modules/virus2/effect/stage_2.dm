@@ -232,7 +232,6 @@
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 			if(D==null)
 				D = new /obj/effect/decal/cleanable/blood(get_turf(mob))
-				D.New(D.loc)
 			D.virus2 |= virus_copylist(mob.virus2)
 
 /datum/disease2/effect/viralsputum
@@ -248,7 +247,6 @@
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
 			D = new /obj/effect/decal/cleanable/blood/viralsputum(get_turf(mob))
-			D.New(D.loc)
 		D.virus2 |= virus_copylist(mob.virus2)
 
 

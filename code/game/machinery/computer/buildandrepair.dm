@@ -355,13 +355,6 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-/obj/item/weapon/circuitboard/sci_telepad
-	name = "Circuit board (Telescience Pad)"
-	desc = "A rather unique circuit board designed for teleportation science, currently unable to be reproduced."
-	build_path = /obj/machinery/telepad
-	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
-	mech_flags = MECH_SCAN_FAIL
-
 
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))

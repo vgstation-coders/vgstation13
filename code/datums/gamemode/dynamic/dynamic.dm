@@ -323,7 +323,7 @@ var/stacking_limit = 90
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
 			if (rule.ready())
-				drafted_rules[rule] = rule.weight
+				drafted_rules[rule] = rule.get_weight()
 
 	if (classic_secret)
 		message_admins("Classic secret was forced.")

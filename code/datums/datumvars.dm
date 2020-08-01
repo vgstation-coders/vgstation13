@@ -1,5 +1,5 @@
 // reference: /client/proc/modify_variables(var/atom/O, var/param_var_name = null, var/autodetect_class = 0)
-/client/proc/debug_reagents(datum/D in world)
+/client/proc/debug_reagents(atom/D)
 	set category = "Debug"
 	set name = "Add Reagent"
 
@@ -21,11 +21,9 @@
 			log_admin("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 			message_admins("[key_name(usr)] added [reagentDatum] with [reagentAmount] units to [A] at [reagentTemp]K temperature.")
 
-/client/proc/debug_variables(datum/D in world)
+/client/proc/debug_variables(atom/D)
 	set category = "Debug"
 	set name = "View Variables"
-	//set src in world
-
 
 	if(!usr.client || !usr.client.holder)
 		to_chat(usr, "<span class='warning'>You need to be an administrator to access this.</span>")
