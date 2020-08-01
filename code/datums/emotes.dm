@@ -53,7 +53,7 @@
 	if(!msg)
 		return
 
-	var/msg_runechat = "[user] " + msg
+	var/msg_runechat = msg
 	msg = "<b>[user]</b> " + msg
 
 	for(var/mob/M in dead_mob_list)
