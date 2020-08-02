@@ -294,7 +294,7 @@
 	else if(!src.delete && src.temphtml) //Window in buffer - its a menu, dont add clear message
 		dat = text("[]<BR><BR><A href='?src=\ref[];clear=1'>Main Menu</A>", src.temphtml, src)
 	else
-		dat = format_occupant_data(get_occupant_data())
+		dat = format_occupant_data(get_occupant_data(occupant))
 		dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
@@ -318,7 +318,7 @@
 			return
 		var/obj/item/weapon/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
-		R.info = format_occupant_data(get_occupant_data(),1)
+		R.info = format_occupant_data(get_occupant_data(occupant),1)
 
 	else if(href_list["immunity"])
 		if(!immune)
@@ -327,11 +327,11 @@
 			immune.attack(occupant,usr)
 
 
-/obj/machinery/bodyscanner/proc/get_occupant_data()
-	if (!occupant || !istype(occupant, /mob/living/carbon/human))
-		return
-	var/mob/living/carbon/human/H = occupant
-	var/list/occupant_data = list(
+/proc/get_occupant_data(mob/living/M)
+/*	if (!occupant || !istype(occupant, /mob/living/carbon/human))
+		return*/
+	var/mob/living/carbon/human/H = M
+	var/list/health_data = list(
 		"stationtime" = worldtime2text(),
 		"stat" = H.stat,
 		"health" = H.health,
@@ -367,7 +367,7 @@
 		"external_organs" = H.organs.Copy(),
 		"internal_organs" = H.internal_organs.Copy()
 		)
-	return occupant_data
+	return health_data
 
 
 /obj/machinery/bodyscanner/proc/format_occupant_data(var/list/occ,var/print_exceptions=0)
@@ -589,7 +589,7 @@
 			say("Now outputting diagnostic.")
 			var/obj/item/weapon/paper/R = new(src.loc)
 			R.name = "paper - 'body scan report'"
-			R.info = format_occupant_data(get_occupant_data(),1)
+			R.info = format_occupant_data(get_occupant_data(occupant),1)
 
 
 /obj/machinery/bodyscanner/upgraded

@@ -1,6 +1,7 @@
 /obj/item/device/healthanalyzerpro/
 	name = "ProHealth Analyzer"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	icon = 'icons/obj/device.dmi'
 	icon_state = "adv_health"
 	item_state = "healthanalyzer"
 	desc = "A hand-held body scanner able to precisely distinguish vital signs of the subject. This particular device is an experimental model outfitted with several modules that fulfill the roles of common scanning tools, memory function to record last made scan and a printer."
@@ -15,17 +16,13 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 	attack_delay = 0
-	var/tmp/last_scantime = 0
+	var/last_scantime = 0
 	var/last_reading = null
 	var/mode = "Health Scan"
 	var/list/modes = list("Health Scan", "Simplified Health Scan", "Advanced Health Scan", "Reagents Scan", "Immunity Scan", "Autopsy Scan")
-	var/list/datum/autopsy_data_scanner/wdata = list()
-	var/list/datum/autopsy_data_scanner/chemtraces = list()
-	var/target_name = null
-	var/timeofdeath = null
-	var/advanced_butchery = null
 	var/obj/item/device/antibody_scanner/immune
 	var/last_print
+	parent_type = /obj/item/weapon/autopsy_scanner
 
 /obj/item/device/healthanalyzerpro/examine(mob/user)
 	..()
@@ -73,21 +70,23 @@
 	if(user.hallucinating())
 		hallucinate_scan(L,user)
 		return
-	if(mode == "Health Scan" || mode == "Simplified Health Scan")
-		health_scan(L,user)
-	if(mode == "Advanced Health Scan")
-		if(istype(L,/mob/living/carbon/human/))
-			body_scan(L,user)
-	if(mode == "Autopsy Scan")
-		if(istype(L,/mob/living/carbon/human/))
-			autopsy_scan(L,user)
+	switch(mode)
+		if("Health Scan", "Simplified Health Scan")
+			health_scan(L,user)
+		if("Advanced Health Scan")
+			if(istype(L,/mob/living/carbon/human/))
+				body_scan(L,user)
+		if("Autopsy Scan")
+			if(istype(L,/mob/living/carbon/human/))
+				autopsy_scan(L,user)
 	src.add_fingerprint(user)
 
 /obj/item/device/healthanalyzerpro/preattack(atom/O, mob/user) //snowlakes
-	if(mode == "Reagents Scan")
-		reagent_scan(O,user)
-	if(mode == "Immunity Scan")
-		immune_scan(O,user)
+	switch(mode)
+		if("Reagents Scan")
+			reagent_scan(O,user)
+		if("Immunity Scan")
+			immune_scan(O,user)
 	src.add_fingerprint(user)
 
 /obj/item/device/healthanalyzerpro/attack_self(mob/living/user)
@@ -161,102 +160,11 @@
 			last_reading = dat
 			last_scantime = world.time
 
-/obj/item/device/healthanalyzerpro/proc/add_data(var/datum/organ/external/O)
-	if(istype(O,/datum/organ/external/chest))
-		var/mob/living/carbon/human/H = O.owner
-		if(H)
-			if(H.advanced_butchery && H.advanced_butchery.len)
-				advanced_butchery = "\The [target_name] seems to have been butchered with"
-				for(var/i = 1, i <= H.advanced_butchery.len, i++)
-					var/tool_name = H.advanced_butchery[i]
-					if(tool_name == "grue")
-						advanced_butchery = "<span class='warning'>\The [target_name] is likely to have been eaten by a grue.</span>"
-						break
-					if(H.advanced_butchery.len == 1)
-						advanced_butchery += " \a [tool_name]."
-					else if(i != H.advanced_butchery.len)
-						advanced_butchery += " \a [tool_name][H.advanced_butchery.len > 2 ? "," : ""]"
-					else
-						advanced_butchery += " and \a [tool_name]."
+/obj/item/device/healthanalyzerpro/add_data(var/datum/organ/external/O)
 	if(!O.autopsy_data.len && !O.trace_chemicals.len)
 		return 0
-	for(var/V in O.autopsy_data)
-		var/datum/autopsy_data/W = O.autopsy_data[V]
-		if(!W.pretend_weapon)
-			W.pretend_weapon = W.weapon
-		var/datum/autopsy_data_scanner/D = wdata[V]
-		if(!D)
-			D = new()
-			D.weapon = W.weapon
-			wdata[V] = D
-		if(!D.organs_scanned[O.name])
-			if(D.organ_names == "")
-				D.organ_names = O.display_name
-			else
-				D.organ_names += ", [O.display_name]"
-		qdel (D.organs_scanned[O.name])
-		D.organs_scanned[O.name] = W.copy()
-	for(var/V in O.trace_chemicals)
-		if(O.trace_chemicals[V] > 0 && !chemtraces.Find(V))
-			chemtraces += V
+	..()
 	return 1
-
-/obj/item/device/healthanalyzerpro/proc/format_autopsy_data() //slightly modified code from autopsy scanner
-	var/scan_data = ""
-	if(timeofdeath)
-		scan_data += "<b>Time of death:</b> [worldtime2text(timeofdeath)]<br><br>"
-	var/n = 1
-	for(var/wdata_idx in wdata)
-		var/datum/autopsy_data_scanner/D = wdata[wdata_idx]
-		var/total_hits = 0
-		var/total_score = 0
-		var/list/weapon_chances = list() // maps weapon names to a score
-		var/age = 0
-		for(var/wound_idx in D.organs_scanned)
-			var/datum/autopsy_data/W = D.organs_scanned[wound_idx]
-			total_hits += W.hits
-			var/wname = W.pretend_weapon
-			if(wname in weapon_chances)
-				weapon_chances[wname] += W.damage
-			else
-				weapon_chances[wname] = max(W.damage, 1)
-			total_score+=W.damage
-			var/wound_age = W.time_inflicted
-			age = max(age, wound_age)
-		var/damage_desc
-		var/damaging_weapon = (total_score != 0)
-		// total score happens to be the total damage
-		switch(total_score)
-			if(0)
-				damage_desc = "Unknown"
-			if(1 to 5)
-				damage_desc = "<font color='green'>negligible</font>"
-			if(5 to 15)
-				damage_desc = "<font color='green'>light</font>"
-			if(15 to 30)
-				damage_desc = "<font color='orange'>moderate</font>"
-			if(30 to 1000)
-				damage_desc = "<font color='red'>severe</font>"
-		if(!total_score)
-			total_score = D.organs_scanned.len
-		scan_data += "<b>Weapon #[n]</b><br>"
-		if(damaging_weapon)
-			scan_data += "Severity: [damage_desc]<br>"
-			scan_data += "Hits by weapon: [total_hits]<br>"
-		scan_data += "Approximate time of wound infliction: [worldtime2text(age)]<br>"
-		scan_data += "Affected limbs: [D.organ_names]<br>"
-		scan_data += "Possible weapons:<br>"
-		for(var/weapon_name in weapon_chances)
-			scan_data += "\t[100*weapon_chances[weapon_name]/total_score]% [weapon_name]<br>"
-		scan_data += "<br>"
-		n++
-	if(chemtraces.len)
-		scan_data += "<b>Trace Chemicals: </b><br>"
-		for(var/chemID in chemtraces)
-			scan_data += chemID
-			scan_data += "<br>"
-	scan_data += "<br>[advanced_butchery]<br>"
-	return scan_data
 
 //Advanced Health Scanner functions, basicly advanced body scanner
 
@@ -271,52 +179,11 @@
 		playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 		to_chat(user, "<span class='info'>Showing medical statistics of [M]...</span>")
 		var/dat
-		dat = format_health_data(get_health_data(M))
+		dat = format_health_data(get_occupant_data(M))
 		user << browse(dat, "window=borerscan;size=430x600")
 		last_reading = dat
 		last_scantime = world.time
 	return
-
-/obj/item/device/healthanalyzerpro/proc/get_health_data(mob/living/M as mob, mob/living/user as mob)
-	var/mob/living/carbon/human/H = M
-	var/list/health_data = list(
-		"stationtime" = worldtime2text(),
-		"stat" = H.stat,
-		"health" = H.health,
-		"virus_present" = H.virus2.len,
-		"bruteloss" = H.getBruteLoss(),
-		"fireloss" = H.getFireLoss(),
-		"oxyloss" = H.getOxyLoss(),
-		"toxloss" = H.getToxLoss(),
-		"rads" = H.radiation,
-		"radtick" = H.rad_tick,
-		"radstage" = H.get_rad_stage(),
-		"cloneloss" = H.getCloneLoss(),
-		"brainloss" = H.getBrainLoss(),
-		"paralysis" = H.paralysis,
-		"bodytemp" = H.bodytemperature,
-		"borer_present_head" = H.has_brain_worms(),
-		"borer_present_chest" = H.has_brain_worms(LIMB_CHEST),
-		"borer_present_r_arm" = H.has_brain_worms(LIMB_RIGHT_ARM),
-		"borer_present_l_arm" = H.has_brain_worms(LIMB_LEFT_ARM),
-		"borer_present_r_leg" = H.has_brain_worms(LIMB_RIGHT_LEG),
-		"borer_present_l_leg" = H.has_brain_worms(LIMB_LEFT_LEG),
-		"inaprovaline_amount" = H.reagents.get_reagent_amount(INAPROVALINE),
-		"dexalin_amount" = H.reagents.get_reagent_amount(DEXALIN),
-		"stoxin_amount" = H.reagents.get_reagent_amount(STOXIN),
-		"bicaridine_amount" = H.reagents.get_reagent_amount(BICARIDINE),
-		"dermaline_amount" = H.reagents.get_reagent_amount(DERMALINE),
-		"blood_amount" = H.vessel.get_reagent_amount(BLOOD),
-		"all_chems" = H.reagents.reagent_list,
-		"btype" = H.dna.b_type,
-		"disabilities" = H.sdisabilities,
-		"tg_diseases_list" = H.viruses,
-		"lung_ruptured" = H.is_lung_ruptured(),
-		"external_organs" = H.organs.Copy(),
-		"internal_organs" = H.internal_organs.Copy()
-		)
-	return health_data
-
 
 /obj/item/device/healthanalyzerpro/proc/format_health_data(var/list/occ)
 	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
@@ -523,6 +390,8 @@
 //Reagent Scan function
 
 /obj/item/device/healthanalyzerpro/proc/reagent_scan(atom/O, mob/user)
+	if(!O.Adjacent(user))
+		return
 	if(O.reagents)
 		to_chat(user, "<span class='info'>You start the reagents scan...</span>")
 		if(do_mob(user, O, 20))
@@ -545,6 +414,8 @@
 //the fucking virology scanner part
 
 /obj/item/device/healthanalyzerpro/proc/immune_scan(atom/O, mob/user)
+	if(!O.Adjacent(user))
+		return
 	if(!immune)
 		immune = new
 	if(do_mob(user, O, 10))
