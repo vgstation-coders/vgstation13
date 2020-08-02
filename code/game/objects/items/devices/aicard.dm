@@ -17,8 +17,6 @@
 	if(M.mind && M.mind.current != M)
 		return ..()
 	if(do_after(user, M, 40))
-		if(!istype(src) && !istype(M))
-			return
 		M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been carded with [src.name] by [user.name] ([user.ckey])</font>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to card [M.name] ([M.ckey])</font>")
 
