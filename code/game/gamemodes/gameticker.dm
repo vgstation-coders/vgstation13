@@ -208,9 +208,6 @@ var/datum/controller/gameticker/ticker
 		player.new_player_panel_proc()
 
 
-	//here to initialize the random events nicely at round start
-	setup_economy()
-
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
 #endif
