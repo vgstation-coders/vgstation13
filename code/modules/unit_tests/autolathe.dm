@@ -1,4 +1,7 @@
 /datum/unit_test/autolathe/start()
+    return
+
+/datum/unit_test/autolathe/test_recycling/start()
     var/turf/centre = locate(100, 100, 1) // Nice place with a good atmosphere and shit
     var/mob/living/carbon/human/test_subject = new(centre)
     var/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/autolathe = new(centre)
