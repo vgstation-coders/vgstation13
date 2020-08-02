@@ -418,6 +418,13 @@
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
 
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Hacked syndie card"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
+
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
@@ -818,6 +825,15 @@
 	..()
 	access = get_centcom_access("Emergency Responder")
 
+/obj/item/weapon/card/id/emergency_responder_leader
+	name = "Emergency Responder Leader ID card"
+	assignment = "Emergency Responder Leader"
+	icon_state = "ERT_leader"
+
+/obj/item/weapon/card/id/emergency_responder_leader/New()
+	..()
+	access = get_centcom_access("Emergency Responders Leader")
+
 /obj/item/weapon/card/id/special_operations
 	name = "Special Operations Officer ID card"
 	assignment = "Special Operations Officer"
@@ -837,5 +853,3 @@
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()
-
-/obj/item/weapon/card/id/death_commando_

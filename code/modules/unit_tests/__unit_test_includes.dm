@@ -9,4 +9,5 @@
 #include "names.dm"
 #include "turretid.dm"
 #include "lazy_events.dm"
+#include "outfit_datums.dm"
 #endif

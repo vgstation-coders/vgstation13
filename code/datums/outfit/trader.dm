@@ -33,7 +33,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/storage/wallet/trader = "Survival Box",
+		/obj/item/weapon/storage/wallet/trader = SURVIVAL_BOX,
 	)
 
 	pda_type = null
@@ -43,14 +43,14 @@
 /datum/outfit/trader/pre_equip(var/mob/living/carbon/human/H)
 	switch(H.mind.role_alt_title) // Add to the survival box in case we don't have a backbag.
 		if("Trader") //Traders get snacks and a coin
-			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = "Survival Box"
-			items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/thermos/full] = "Survival Box"
-			items_to_collect[/obj/item/weapon/coin/trader] = "Survival Box"
+			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = SURVIVAL_BOX
+			items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/thermos/full] = SURVIVAL_BOX
+			items_to_collect[/obj/item/weapon/coin/trader] = SURVIVAL_BOX
 
 		if("Merchant") //Merchants get an implant
 			implant_types += /obj/item/weapon/implant/loyalty
 
 		if("Salvage Broker")
-			items_to_collect[/obj/item/device/telepad_beacon] = "Survival Box"
-			items_to_collect[/obj/item/weapon/rcs/salvage] = "Survival Box"
+			items_to_collect[/obj/item/device/telepad_beacon] = SURVIVAL_BOX
+			items_to_collect[/obj/item/weapon/rcs/salvage] = SURVIVAL_BOX
 	return ..()

@@ -29,8 +29,8 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/engineer/ce,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slo_suit_str = /obj/item/clothing/head/helmet/space/plasmaman/engineer,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,         
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/engineer/ce,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = /obj/item/device/radio/headset/heads/ce,
@@ -39,8 +39,8 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/engineer/ce,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/ce,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,         
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/ce,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 	)
 
@@ -98,7 +98,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/engineer/,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/full,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_suit_str = /obj/item/clothing/suit/space/plasmaman/engineer,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/engineer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
@@ -113,7 +113,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/engineer,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/full,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 	)
@@ -158,7 +158,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/atmostech,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/atmostech,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_suit_str = /obj/item/clothing/suit/space/plasmaman/atmostech,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/atmostech,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
@@ -168,7 +168,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/atmostech,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
-			slot_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/atmos,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/atmos,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 	)
@@ -218,7 +218,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/workboots,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mechanic,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
-			slot_suit_str = /obj/item/clothing/suit/space/vox/civ/mechanic,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mechanic,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 	)

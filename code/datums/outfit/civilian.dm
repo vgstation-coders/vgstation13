@@ -101,10 +101,10 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
-		/obj/item/ammo_casing/shotgun/beanbag = "Survival Box",
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
@@ -516,7 +516,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),
@@ -526,6 +526,7 @@
 				"Internal Affairs Agent" = /obj/item/clothing/shoes/centcom,
 			),
 			slot_wear_suit_str = list(
+				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
 				"Bridge Officer" = /obj/item/clothing/suit/storage/lawyer/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/suit/storage/internalaffairs,
 			),
@@ -544,7 +545,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),
@@ -568,7 +569,7 @@
 				"Internal Affairs Agent" = /obj/item/device/radio/headset,
 			),
 			slot_w_uniform_str = list(
-				"Lawyer" = /obj/item/clothing/suit/storage/lawyer/bluejacket,
+				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
 				"Bridge Officer" = /obj/item/clothing/under/bridgeofficer,
 				"Internal Affairs Agent" = /obj/item/clothing/under/rank/internalaffairs,
 			),

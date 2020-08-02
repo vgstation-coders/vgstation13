@@ -118,7 +118,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/science,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = list(
+			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
 			)
 		),
@@ -146,7 +146,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
-			slot_s_store_str = list(
+			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
 			)
 		),
