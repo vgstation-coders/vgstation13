@@ -63,9 +63,9 @@
 //Destroyers are medium sized vessels, often used for escorting larger ships but able to go toe-to-toe with them if need be.
 //Frigates are medium sized vessels, often used for escorting larger ships. They will rapidly find themselves outclassed if forced to face heavy warships head on.
 
-var/setup_economy = 0
-/proc/setup_economy()
-	if(setup_economy)
+var/setup_news = 0
+/proc/setup_news()
+	if(setup_news)
 		return
 	var/datum/feed_channel/newChannel = new /datum/feed_channel
 	newChannel.channel_name = "Tau Ceti Daily"
@@ -86,4 +86,4 @@ var/setup_economy = 0
 		weighted_randomevent_locations[D] = D.viable_random_events.len
 		weighted_mundaneevent_locations[D] = D.viable_mundane_events.len
 
-	setup_economy = 1
+	setup_news = 1
