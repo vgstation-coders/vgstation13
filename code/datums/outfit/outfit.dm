@@ -119,7 +119,7 @@
 		var/obj_type = L[slot]
 		if (islist(obj_type)) // Special objects for alt-titles.
 			var/list/L2 = obj_type
-			if (H.mind && H.mind.role_alt_title in L2)
+			if (H?.mind.role_alt_title in L2)
 				obj_type = L2[H.mind.role_alt_title]
 			else // Mindless
 				obj_type = L2[1] // First item
