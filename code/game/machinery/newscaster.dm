@@ -70,6 +70,16 @@
 		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
 		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
 
+/datum/feed_message/proc/NewspaperCopy()//We only copy the vars we'll need
+	var/datum/feed_message/copy = new()
+	copy.author = author
+	copy.body = body
+	copy.author_log = author_log
+	copy.img = icon(img)
+	copy.img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))//grayscale
+	copy.img_info = img_info
+	return copy
+
 /datum/feed_channel/proc/clear()
 	channel_name = ""
 	messages = list()
@@ -78,6 +88,15 @@
 	backup_author = ""
 	censored = 0
 	is_admin_channel = 0
+
+/datum/feed_channel/proc/NewspaperCopy()//We only copy the vars we'll need
+	var/datum/feed_channel/copy = new()
+	copy.channel_name = channel_name
+	copy.author = author
+	copy.messages = list()
+	for(var/datum/feed_message/message in messages)
+		messages += message.NewspaperCopy()
+	return copy
 
 /datum/feed_network
 	var/list/datum/feed_channel/network_channels = list()
@@ -1146,7 +1165,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
-							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><BR>"
+							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><BR>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[scribble]\"</I>"
@@ -1157,7 +1176,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				if(important_message!=null)
 
 					dat += {"<DIV STYLE='float:center;'><FONT SIZE=4><B>Wanted Issue:</B></FONT SIZE></DIV><BR><BR>
-						<B>Criminal name</B>: <FONT COLOR='maroon'>[important_message.author]</FONT><BR>
+						<B>Criminal name</B>: <b>[important_message.author]</b><BR>
 						<B>Description</B>: [important_message.body]<BR>
 						<B>Photo:</B>: "}
 					if(important_message.img)
@@ -1174,7 +1193,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 		dat+="<BR><HR><div align='center'>[curr_page+1]</div>"
-		usr << browse(dat, "window=newspaper_main;size=300x400")
+		usr << browse("<body style='background-color:#969696;'>[dat]</body>", "window=newspaper_main;size=300x400")
 		onclose(usr, "newspaper_main")
 	else
 		to_chat(user, "The paper is full of intelligible symbols!")
@@ -1275,9 +1294,9 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	feedback_inc("newscaster_newspapers_printed",1)
 	var/obj/item/weapon/newspaper/printed_issue = new /obj/item/weapon/newspaper(src)
 	for(var/datum/feed_channel/FC in news_network.network_channels)
-		printed_issue.news_content += FC
+		printed_issue.news_content += FC.NewspaperCopy()
 	if(news_network.wanted_issue)
-		printed_issue.important_message = news_network.wanted_issue
+		printed_issue.important_message = news_network.wanted_issue.NewspaperCopy()
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
 	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
