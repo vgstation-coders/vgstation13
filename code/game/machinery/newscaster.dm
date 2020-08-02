@@ -95,7 +95,7 @@
 	copy.author = author
 	copy.messages = list()
 	for(var/datum/feed_message/message in messages)
-		messages += message.NewspaperCopy()
+		copy.messages += message.NewspaperCopy()
 	return copy
 
 /datum/feed_network
@@ -1150,7 +1150,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				for(var/datum/feed_channel/NP in news_content)
 					pages++ //Let's get it right again.
 				var/datum/feed_channel/C = news_content[curr_page]
-				dat+="<FONT SIZE=4><B>[C.channel_name]</B></FONT><FONT SIZE=1> \[created by: <FONT COLOR='maroon'>[C.author]</FONT>\]</FONT><BR><BR>"
+				dat+="<FONT SIZE=4><B>[C.channel_name]</B></FONT><FONT SIZE=1> \[created by: <b>[C.author]</b>\]</FONT><BR><BR>"
 				if(C.censored)
 					dat+="This channel was deemed dangerous to the general welfare of the station and therefore marked with a <B><FONT COLOR='red'>D-Notice</B></FONT>. Its contents were not transferred to the newspaper at the time of printing."
 				else
@@ -1193,7 +1193,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 		dat+="<BR><HR><div align='center'>[curr_page+1]</div>"
-		usr << browse("<body style='background-color:#969696;'>[dat]</body>", "window=newspaper_main;size=300x400")
+		usr << browse("<body style='background-color:#969696;color:black;'>[dat]</body>", "window=newspaper_main;size=400x400")
 		onclose(usr, "newspaper_main")
 	else
 		to_chat(user, "The paper is full of intelligible symbols!")
