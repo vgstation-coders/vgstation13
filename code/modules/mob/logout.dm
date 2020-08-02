@@ -1,4 +1,7 @@
 /mob/Logout()
+	SStgui.on_logout(src)
+	nanomanager.close_user_uis(src)
+
 	if (isobj(loc))
 		var/obj/location = loc
 		location.on_logout(src)
@@ -6,7 +9,7 @@
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
-				returnToPool(VH)
+				qdel(VH)
 	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out
@@ -30,6 +33,9 @@
 				client.images -= C.pathogen
 			for (var/obj/effect/decal/cleanable/C in infected_cleanables)
 				client.images -= C.pathogen
+
+	if(client && client.media)
+		client.media.stop_music()
 
 	if(admin_datums[src.ckey])
 		if (ticker && ticker.current_state == GAME_STATE_PLAYING) //Only report this stuff if we are currently playing.

@@ -85,7 +85,7 @@ var/list/blob_overminds = list()
 
 	if(icon_size == 64)
 		for(var/atom/movable/overlay/O in loc)
-			returnToPool(O)
+			qdel(O)
 
 		for(var/obj/effect/blob/B in orange(loc,1))
 			B.update_icon()
@@ -127,7 +127,7 @@ var/list/blob_overminds = list()
 	update_health()
 	update_icon()
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)

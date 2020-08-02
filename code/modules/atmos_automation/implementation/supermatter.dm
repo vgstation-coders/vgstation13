@@ -21,7 +21,7 @@
 	field = json["field"]
 
 /datum/automation/get_sm_sensor_data/Evaluate()
-	if(sensor && field && sensor in parent.sensor_information)
+	if(sensor && field && (sensor in parent.sensor_information))
 		return parent.sensor_information[sensor][field]
 	return 0
 

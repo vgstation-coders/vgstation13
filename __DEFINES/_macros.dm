@@ -16,6 +16,8 @@
 
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
+#define isinsectoid(A) (ishuman(A) && istype(A:species, /datum/species/insectoid))
+
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
 
 #define isgrey(A) (ishuman(A) && istype(A:species, /datum/species/grey))
@@ -184,9 +186,7 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
-
-#define iscryotube(T) (istype(T, /obj/machinery/atmospherics/unary/cryo_cell))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -199,10 +199,6 @@
 #define isclient(A) (istype(A, /client))
 
 #define isatom(A) isloc(A)
-
-#if DM_VERSION < 513
-#define ismovable(A) (istype(A, /atom/movable))
-#endif
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
@@ -220,7 +216,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
@@ -229,6 +225,10 @@
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
 #define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
@@ -334,12 +334,6 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#if DM_VERSION < 513
-#define clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
-#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
@@ -396,3 +390,6 @@ proc/get_space_area()
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

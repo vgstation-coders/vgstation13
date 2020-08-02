@@ -1,9 +1,13 @@
 //Syndicate subtype because putting this on new() is fucking retarded.
+//Be sure to update the vars if you ever add even more weird AI link stuff.
 /mob/living/silicon/robot/syndie
 	modtype = "Syndicate"
 	icon_state = "robot_old"
 	req_access = list(access_syndicate)
 	cell_type = /obj/item/weapon/cell/hyper
+	lawupdate = FALSE
+	AIlink = FALSE
+	scrambledcodes = TRUE
 	startup_sound = 'sound/mecha/nominalsyndi.ogg'
 	startup_vary = FALSE
 	syndicate = TRUE
@@ -17,7 +21,6 @@
 
 /mob/living/silicon/robot/syndie/New()
 	..()
-	UnlinkSelf()
 	laws = new /datum/ai_laws/syndicate_override()
 
 	if(!holochip)

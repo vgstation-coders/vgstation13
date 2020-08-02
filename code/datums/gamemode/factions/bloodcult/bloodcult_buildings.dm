@@ -92,7 +92,7 @@
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
-			returnToPool(W)
+			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -161,7 +161,7 @@
 	apply_beam_damage(B)
 	last_beamchecks.Remove("\ref[B]") // RIP
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/structure/cult/apply_beam_damage(var/obj/effect/beam/B)
@@ -209,7 +209,7 @@
 
 	var/list/watching_mobs = list()
 	var/list/watcher_maps = list()
-	var/datum/station_holomap/holomap_datum
+	var/datum/station_holomap/cult/holomap_datum
 
 
 /obj/structure/cult/altar/New()
@@ -229,7 +229,7 @@
 	holomarker.z = src.z
 	holomap_markers[HOLOMAP_MARKER_CULT_ALTAR+"_\ref[src]"] = holomarker
 
-	holomap_datum = new /datum/station_holomap/cult()
+	holomap_datum = new
 	holomap_datum.initialize_holomap(get_turf(src), cursor_icon = "altar-here")
 
 
@@ -297,7 +297,7 @@
 				C.resting = 1
 				C.update_canmove()
 			C.forceMove(loc)
-			returnToPool(G)
+			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
 	..()
@@ -453,7 +453,7 @@
 		return
 	if(is_locking(lock_type))
 		var/choices = list(
-			list("Remove Blade", "radial_altar_remove", "Transfer some of your blood to the blade to repair it and refuel its blood level, or you could just slash someone."),
+			list("Remove Blade", "radial_altar_remove", "Pull the blade off, freeing the victim."),
 			list("Sacrifice", "radial_altar_sacrifice", "Initiate the sacrifice ritual. The ritual can only proceed if the proper victim has been nailed to the altar."),
 			)
 		var/task = show_radial_menu(user,loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
@@ -1423,7 +1423,7 @@ var/list/bloodstone_list = list()
 		if (cult)
 			cult.fail()
 		if(anchor)
-			global_anchor_bloodstone -= src
+			global_anchor_bloodstone = null
 	..()
 
 /obj/structure/cult/bloodstone/attack_construct(var/mob/user)

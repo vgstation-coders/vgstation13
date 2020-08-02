@@ -338,15 +338,9 @@
 
 /turf/unsimulated/wall/splashscreen/lamprey
 	name = "Lamprey Station"
-	icon = null
-	icon_state = null
-	plane = EFFECTS_PLANE
-/turf/unsimulated/wall/splashscreen/lamprey/canSmoothWith()
-	return null
 
 /turf/unsimulated/wall/splashscreen/lamprey/New()
-	icon = 'icons/splashworks/lampreysplash.dmi'
-	icon_state = "lamprey"
+	icon = 'icons/lampreysplash.dmi'
 
 // Items
 

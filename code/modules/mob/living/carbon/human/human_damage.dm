@@ -303,6 +303,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/get_organ(var/zone)
+	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -377,14 +378,18 @@ This function restores all organs.
 
 	switch(damagetype)
 		if(BRUTE)
-			damageoverlaytemp = 20
 			damage = damage * brute_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(damage, 0, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
 		if(BURN)
-			damageoverlaytemp = 20
 			damage = damage * burn_damage_modifier
+
+			if (damage > 0)
+				damageoverlaytemp = 20
 
 			if(organ.take_damage(0, damage, sharp, edge, used_weapon))
 				UpdateDamageIcon(1)
@@ -488,7 +493,7 @@ This function restores all organs.
 		return
 
 	if(application == RAD_EXTERNAL)
-		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
 
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))

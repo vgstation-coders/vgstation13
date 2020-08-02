@@ -2,7 +2,7 @@
 // This machine tells the distance to a nearby artifact, if there is one
 
 /obj/machinery/anomaly/fourier_transform
-	name = "Fourier Transform spectroscope"
+	name = "\improper Fourier transform spectroscope"
 
 /obj/machinery/anomaly/fourier_transform/New()
 	. = ..()
@@ -17,7 +17,7 @@
 	RefreshParts()
 
 /obj/machinery/anomaly/fourier_transform/ScanResults()
-	var/results = "The scan was inconclusive. Check sample integrity and carrier consistency."
+	var/results = "The scan was inconclusive. Check sample integrity."
 
 	var/datum/geosample/scanned_sample
 
@@ -31,7 +31,7 @@
 		var/distance = scanned_sample.artifact_distance
 		if(distance > 0)
 			distance += (2 * rand() - 1) * distance * 0.05
-			results = "Fourier transform analysis on anomalous energy absorption indicates source located inside emission radius (95% accuracy): [distance]."
+			results = "Fourier transform analysis on anomalous energy absorption indicates source located inside emission radius (95% accuracy): <b>[distance]</b>."
 		else
 			results = "Energy dispersion detected throughout sample consistent with background readings.<br>"
 

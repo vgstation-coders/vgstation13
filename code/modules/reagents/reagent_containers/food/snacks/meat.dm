@@ -319,3 +319,58 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 10)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail
+	icon_state = "snail_meat"
+	name = "snail meat"
+	desc = "How uncivilised ! You cannot be expected to eat that without cooking it, mon Dieu !"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother
+	name = "Royal Gingjelly"
+	icon_state = "royal_gingjelly"
+	desc = "The sickly sweet smell wafting from this sticky glob triggers some primal fear. You absolutely should not eat this."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent (CARAMEL, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/consume(mob/living/carbon/eater, messages = 0)
+
+	if(ishuman(eater))
+
+		var/mob/living/carbon/C = eater
+
+		if(C.monkeyizing)
+			return
+		to_chat(eater, "<span class='warning'>Your flesh hardens and your blood turns to frosting. This is agony!</span>")
+		sleep (30)
+		C.monkeyizing = 1
+		C.canmove = 0
+		C.icon = null
+		C.overlays.len = 0
+		C.invisibility = 101
+		for(var/obj/item/W in C)
+			if(istype(W, /obj/item/weapon/implant))
+				var/obj/item/weapon/implant/I = W
+				if(I.imp_in == C)
+					qdel(W)
+					continue
+			W.reset_plane_and_layer()
+			W.forceMove(C.loc)
+			W.dropped(C)
+		var/mob/living/simple_animal/hostile/ginger/gingerbomination/new_mob = new /mob/living/simple_animal/hostile/ginger/gingerbomination(C.loc)
+		new_mob.a_intent = I_HURT
+		if(C.mind)
+			C.mind.transfer_to(new_mob)
+		else
+			new_mob.key = C.key
+		C.transferBorers(new_mob)
+		qdel(C)
+		playsound(src, 'sound/effects/evolve.ogg', 100, 1)

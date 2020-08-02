@@ -5,7 +5,6 @@
 	icon_state = "doorctrl0"
 	desc = "A remote control-switch for a door."
 	power_channel = ENVIRON
-	var/id_tag = null
 	var/range = 10
 	var/normaldoorcontrol = 0
 	var/specialfunctions = 1
@@ -52,7 +51,6 @@
 
 /obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
 	..()
-	..()
 	/* For later implementation
 	if (W.is_screwdriver(user))
 	{
@@ -89,21 +87,21 @@
 		for(var/obj/machinery/door/airlock/D in range(range, src))
 			if(D.id_tag == src.id_tag)
 				spawn(0)
-				if(specialfunctions & IDSCAN)
-					D.aiDisabledIdScanner = !D.aiDisabledIdScanner
-				if(specialfunctions & BOLTS)
-					if(!D.isWireCut(4) && D.arePowerSystemsOn())
-						D.toggle_bolts()
-						D.update_icon()
-				if(specialfunctions & SHOCK)
-					D.secondsElectrified = D.secondsElectrified ? 0 : -1
-				if(specialfunctions & SAFE)
-					D.safe = !D.safe
-				if(specialfunctions & OPEN)
-					if(D.density)
-						D.open()
-					else
-						D.close()
+					if(specialfunctions & IDSCAN)
+						D.aiDisabledIdScanner = !D.aiDisabledIdScanner
+					if(specialfunctions & BOLTS)
+						if(!D.isWireCut(4) && D.arePowerSystemsOn())
+							D.toggle_bolts()
+							D.update_icon()
+					if(specialfunctions & SHOCK)
+						D.secondsElectrified = D.secondsElectrified ? 0 : -1
+					if(specialfunctions & SAFE)
+						D.safe = !D.safe
+					if(specialfunctions & OPEN)
+						if(D.density)
+							D.open()
+						else
+							D.close()
 
 	else
 		for(var/obj/machinery/door/poddoor/M in poddoors)
@@ -163,7 +161,7 @@
 	</ul>"}
 
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	src.add_fingerprint(usr)
 	if(stat & (NOPOWER|BROKEN))
 		return

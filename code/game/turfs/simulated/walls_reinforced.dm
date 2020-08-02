@@ -185,7 +185,7 @@
 					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1) //SLAM
 					src.d_state = WALLCOVERREMOVED
 					update_icon()
-					getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src))
+					new /obj/item/stack/sheet/plasteel(get_turf(src))
 					user.visible_message("<span class='warning'>[user] pries off \the [src]'s external cover.</span>", \
 					"<span class='notice'>You pry off \the [src]'s external cover.</span>")
 				return
@@ -361,11 +361,11 @@
 
 /turf/simulated/wall/r_wall/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
+		new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
 		new girder_type(src)
 	else
-		getFromPool(/obj/item/stack/rods, src, 2)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)
+		new /obj/item/stack/rods(src, 2)
+		new /obj/item/stack/sheet/plasteel(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))
@@ -388,7 +388,7 @@
 			if(prob(75) && (d_state == WALLCOMPLETED))//No more infinite plasteel generation!
 				src.d_state = WALLCOVERREMOVED
 				update_icon()
-				getFromPool(/obj/item/stack/sheet/plasteel, get_turf(src)) //Lose the plasteel needed to get there
+				new /obj/item/stack/sheet/plasteel(get_turf(src)) //Lose the plasteel needed to get ther)
 			else
 				dismantle_wall(0,1)
 		if(3.0)

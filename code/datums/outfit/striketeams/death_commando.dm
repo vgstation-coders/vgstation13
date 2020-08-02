@@ -45,7 +45,7 @@
 	if (is_leader)
 		items_to_collect += /obj/item/weapon/disk/nuclear
 	else
-		items_to_collect += /obj/item/weapon/plastique
+		items_to_collect += /obj/item/weapon/c4
 	return ..()
 
 /datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)

@@ -766,6 +766,16 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
 
+	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
+		//spawning a skull where the head would have been
+		var/obj/item/weapon/skull/sk = new (get_turf(owner))
+		var/randomdir = pick(cardinal)
+		step(sk, randomdir)
+		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
+		status |= ORGAN_DESTROYED
+		owner.dust(TRUE)
+		return
+
 	var/datum/species/species = src.species || owner.species
 	var/obj/item/organ/external/organ //Dropped limb object
 
@@ -909,7 +919,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/proc/release_restraints(var/uncuff = UNCUFF_BOTH)
 	if(uncuff >= UNCUFF_BOTH)
-		if(owner.handcuffed && body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT))
+		if(owner.handcuffed && (body_part in list(ARM_LEFT, ARM_RIGHT, HAND_LEFT, HAND_RIGHT)))
 			owner.visible_message(\
 				"\The [owner.handcuffed.name] falls off of [owner.name].",\
 				"\The [owner.handcuffed.name] falls off you.")
@@ -917,7 +927,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.drop_from_inventory(owner.handcuffed)
 
 	if(uncuff <= UNCUFF_BOTH)
-		if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT))
+		if(owner.legcuffed && (body_part in list(FOOT_LEFT, FOOT_RIGHT, LEG_LEFT, LEG_RIGHT)))
 			owner.visible_message("\The [owner.legcuffed.name] falls off of [owner].", \
 			"\The [owner.legcuffed.name] falls off you.")
 
@@ -979,10 +989,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 	perma_injury = brute_dam
 
 	//Fractures have a chance of getting you out of restraints. All spacemen are all trained to be Houdini.
-	if(owner.handcuffed && body_part in list(HAND_LEFT, HAND_RIGHT))
+	if(owner.handcuffed && (body_part in list(HAND_LEFT, HAND_RIGHT)))
 		if(prob(25))
 			release_restraints(UNCUFF_HANDS)//Handcuffs only.
-	if(owner.legcuffed && body_part in list(FOOT_LEFT, FOOT_RIGHT))
+	if(owner.legcuffed && (body_part in list(FOOT_LEFT, FOOT_RIGHT)))
 		if(prob(25))
 			release_restraints(UNCUFF_LEGS)//Legcuffs only.
 
@@ -1796,7 +1806,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 	//Add (facial) hair.
 	if(H && H.my_appearance.f_style &&  !H.check_hidden_head_flags(HIDEBEARDHAIR))
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.my_appearance.f_style]
-		if(facial_hair_style && species.name in facial_hair_style.species_allowed)
+		if(facial_hair_style && (species.name in facial_hair_style.species_allowed))
 			var/icon/facial = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
 			if(facial_hair_style.do_colouration)
 				facial.Blend(rgb(H.my_appearance.r_facial, H.my_appearance.g_facial, H.my_appearance.b_facial), ICON_ADD)
@@ -1805,7 +1815,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 
 	if(H && H.my_appearance.h_style && !H.check_hidden_head_flags(HIDEHEADHAIR))
 		var/datum/sprite_accessory/hair_style = hair_styles_list[H.my_appearance.h_style]
-		if(hair_style && species.name in hair_style.species_allowed)
+		if(hair_style && (species.name in hair_style.species_allowed))
 			var/icon/hair = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
 			if(hair_style.do_colouration)
 				hair.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)

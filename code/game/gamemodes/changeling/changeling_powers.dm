@@ -54,7 +54,7 @@
 	if(!verb_holder)
 		return
 	if(!path)
-		returnToPool(verb_holder)
+		qdel(verb_holder)
 		verb_holder = null
 		return
 
@@ -208,7 +208,7 @@
 		if(P.isVerb)
 			verb_holder.verbs -= P.verbpath
 
-	returnToPool(verb_holder)
+	qdel(verb_holder)
 	verb_holder = null
 
 
@@ -527,7 +527,8 @@
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
-	flick("monkey2h", animation)
+	var/anim_name = C.get_unmonkey_anim()
+	flick(anim_name, animation)
 	sleep(48)
 	qdel(animation)
 	animation = null
@@ -960,7 +961,7 @@ var/list/datum/dna/hivemind_bank = list()
 		return 0 //One is inside, the other is outside something.
 	if(sting_range < 2)
 		return Adjacent(M)
-	if(AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range)) //If a path exists, good!
+	if(quick_AStar(src.loc, M.loc, /turf/proc/AdjacentTurfs, /turf/proc/Distance, sting_range, reference="\ref[src]")) //If a path exists, good!
 		return 1
 	return 0
 
@@ -1063,7 +1064,7 @@ var/list/datum/dna/hivemind_bank = list()
 		var/obj/item/projectile/puke/P = new /obj/item/projectile/puke/clear
 		P.reagents.add_reagent(S, amount)
 		M.visible_message("<span class = 'warning'>\The [M] spits a globule of chemicals!</span>")
-		generic_projectile_fire(get_ranged_target_turf(M, M.dir, 10), M, P, 'sound/weapons/pierce.ogg')
+		generic_projectile_fire(get_ranged_target_turf(M, M.dir, 10), M, P, 'sound/weapons/pierce.ogg', M)
 
 /obj/item/verbs/changeling/proc/changeling_transformation_sting()
 	set category = "Changeling"

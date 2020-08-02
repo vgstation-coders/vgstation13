@@ -11,6 +11,7 @@
 	name = "ashes"
 	desc = "Ashes to ashes, dust to dust, and into space."
 	gender = PLURAL
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/objects.dmi'
 	icon_state = "ash"
 	anchored = 1
@@ -34,6 +35,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = FLOUR
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "flour"
 
@@ -43,6 +45,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = TRUE
+	reagent = RADIUM
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "greenglow"
 
@@ -56,6 +59,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = TRUE
+	reagent = LUMINOL
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "mfloor1"
 	//icon = 'icons/effects/tomatodecal.dmi'
@@ -74,6 +78,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
+	reagent = SPIDERS //no way this can go wrong, right?
 	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb1"
@@ -83,6 +88,7 @@
 	desc = "It looks like a melted... something."
 	density = 0
 	anchored = 1
+	reagent = CHEMICAL_WASTE
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
 	icon = 'icons/obj/chemical.dmi'
@@ -94,6 +100,7 @@
 	desc = "Somebody should remove that."
 	density = 0
 	anchored = 1
+	reagent = SPIDERS
 	plane = ABOVE_HUMAN_PLANE
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "cobweb2"
@@ -105,6 +112,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = VOMIT
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "vomit_1"
 
@@ -114,6 +122,8 @@
 	transfers_dna = 1
 
 	persistent_type_replacement = /obj/effect/decal/cleanable/vomit/pre_dry
+
+	fake_DNA = "vomit splatters"
 
 /obj/effect/decal/cleanable/vomit/pre_dry
 	name = "dry vomit"
@@ -161,6 +171,7 @@
 	desc = "It's red."
 	density = 0
 	anchored = 1
+	reagent = TOMATOJUICE
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("tomato_floor1", "tomato_floor2", "tomato_floor3")
 
@@ -178,6 +189,7 @@
 	desc = "Seems like this one won't hatch."
 	density = 0
 	anchored = 1
+	//reagent = EGGYOLK (not in yet)
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
 
@@ -204,6 +216,7 @@
 	desc = "This burnt-out campfire reminds you of someone."
 	anchored = 1
 	density = 0
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/obj/atmos.dmi'
 	icon_state = "campfire_burnt"
 
@@ -241,6 +254,7 @@
 	gender = PLURAL
 	density = 0
 	anchored = 1
+	reagent = TOXIN //ash is bad for you!
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "lspaceclutter"
 
@@ -249,6 +263,7 @@
 	desc = "A disgusting mess."
 	icon = 'icons/mob/animal.dmi'
 	icon_state = "cockroach_remains1"
+	reagent = ROACHSHELL
 
 /obj/effect/decal/cleanable/cockroach_remains/New()
 	..()
@@ -265,16 +280,20 @@
 	desc = "Looks like some one has butter fingers."
 	icon = 'icons/effects/tomatodecal.dmi'
 	icon_state = "smashed_butter"
+	reagent = LIQUIDBUTTER
 
 /obj/effect/decal/cleanable/virusdish
-	name = "broken virus containment dish"
+	name = "broken growth dish"
+	desc = "Probably not safe to step on it with your feet naked. Someone should clean it up."
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "brokendish-outline"
 	density = 0
 	anchored = 1
+	reagent = VIRUSFOOD
 	mouse_opacity = 1
 	layer = OBJ_LAYER
 	plane = OBJ_PLANE
+	persistent_type_replacement = /obj/effect/decal/cleanable/virusdish/persistent
 	var/last_openner
 	var/datum/disease2/disease/contained_virus
 
@@ -304,3 +323,11 @@
 			perp.infect_disease2(contained_virus, notes="(Contact, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
 		else if (bleeding && (contained_virus.spread & SPREAD_BLOOD))
 			perp.infect_disease2(contained_virus, notes="(Blood, from [perp.lying?"lying":"standing"] over a broken virus dish[last_openner ? " broken by [last_openner]" : ""])")
+
+/obj/effect/decal/cleanable/virusdish/persistent
+	desc = "Whatever kind of pathogenic culture was in there has long since decayed. Someone should still clean it up eventually."
+	icon_state = "brokendish-persistent"
+	persistent_type_replacement = null
+
+/obj/effect/decal/cleanable/virusdish/persistent/post_mapsave2atom(var/list/L)
+	icon_state = "brokendish-persistent"

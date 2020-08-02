@@ -27,7 +27,7 @@
 		verbs -= rotate_verbs
 
 /obj/machinery/atmospherics/unary/tank/Destroy()
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+	new /obj/item/stack/sheet/metal(get_turf(src), 5)
 	..()
 
 /obj/machinery/atmospherics/unary/tank/ex_act()
@@ -189,7 +189,7 @@
 		if(do_after(user, src, 40))
 			user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 			"<span class='notice'>You dissasemble \the [src].</span>")
-			//getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+			//new /obj/item/stack/sheet/metal(get_turf(src), 5)
 			punctured(user)
 		return
 

@@ -128,7 +128,8 @@ var/list/admin_verbs_fun = list(
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
 	/client/proc/set_teleport_pref,
-	/client/proc/deadchat_singularity
+	/client/proc/deadchat_singularity,
+	/client/proc/view_all_rods,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -158,11 +159,11 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/client/proc/save_coordinates,
+	/datum/admins/proc/mass_delete_in_zone,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -176,7 +177,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
 	/client/proc/handle_paperwork, //this is completely experimental
@@ -285,7 +285,6 @@ var/list/admin_verbs_hideable = list(
 	/proc/possess,
 	/proc/release,
 	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
 	/client/proc/create_map_element
 	)
 var/list/admin_verbs_mod = list(
@@ -898,10 +897,34 @@ var/list/admin_verbs_mod = list(
 	set desc = "Regain your admin powers."
 	var/datum/admins/D = admin_datums[ckey]
 	if(config.admin_legacy_system)
-		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
-		return
+		var/list/lines = file2list("config/admins.txt")
+		for(var/line in lines)
+			// if the line doesn't begin with our ckey we don't care
+			if(findtext(ckey(line), ckey) != 1)
+				continue
+			//Split the line at every "-"
+			var/list/List = splittext(line, "-")
+			if(!List.len)
+				continue
+
+			//rank follows the first "-"
+			var/rank = ""
+			if(List.len >= 2)
+				rank = ckeyEx(List[2])
+
+			//load permissions associated with this rank
+			var/rights = admin_ranks[rank]
+
+			//create the admin datum and store it for later use
+			D = new /datum/admins(rank, rights, ckey)
+
+			//associate them with the new admin datum
+			D.associate(src)
+
+			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
+				world.SetConfig("APP/admin", ckey, "role=admin")
 	else
-		if(!dbcon.IsConnected())
+		if(!SSdbcore.IsConnected())
 			message_admins("Warning, mysql database is not connected.")
 			to_chat(src, "Warning, mysql database is not connected.")
 			return
@@ -909,9 +932,11 @@ var/list/admin_verbs_mod = list(
 			to_chat(src, "You are already an admin.")
 			verbs -= /client/proc/readmin
 			return
-		var/sql_ckey = sanitizeSQL(ckey(ckey))
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
-		query.Execute()
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = :ckey", list("ckey" = ckey))
+		if(!query.Execute())
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 		while(query.NextRow())
 			var/dckey = query.item[1]
 			var/rank = query.item[2]
@@ -929,6 +954,7 @@ var/list/admin_verbs_mod = list(
 			log_admin("[src] re-adminned themselves.")
 			feedback_add_details("admin_verb","RAS")
 			verbs -= /client/proc/readmin
+			qdel(query)
 			return
 
 /client/proc/achievement()
@@ -1263,4 +1289,12 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.PersistencePanel()
 	feedback_add_details("admin_verb","PEP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/view_all_rods()
+	set name = "VIEW-ALL-RODS"
+	set category = "Fun"
+	if(holder)
+		holder.ViewAllRods()
+	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

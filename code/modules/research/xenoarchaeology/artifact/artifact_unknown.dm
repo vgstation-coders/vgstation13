@@ -3,7 +3,9 @@
 	desc = "A large alien device."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano00"
-	var/icon_num = 0
+	var/prefix = "ano"
+	var/numsuffix = 0
+	var/image/fx_image
 	density = 1
 	var/datum/artifact_effect/primary_effect
 	var/datum/artifact_effect/secondary_effect
@@ -49,23 +51,41 @@
 						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
 						secondary_effect.ToggleActivate(2)
 
-	icon_num = rand(0,11)
-	icon_state = "ano[icon_num]0"
-	if(icon_num == 7 || icon_num == 8)
-		name = "large crystal"
-		desc = pick("It shines faintly as it catches the light.",\
-		"It appears to have a faint inner glow.",\
-		"It seems to draw you inward as you look it at.",\
-		"Something twinkles faintly as you look at it.",\
-		"It's mesmerizing to behold.")
-	else if(icon_num == 9)
-		name = "alien computer"
-		desc = "It is covered in strange markings."
-	else if(icon_num == 10)
-		desc = "A large alien device, there appear to be some kind of vents in the side."
-	else if(icon_num == 11)
-		name = "sealed alien pod"
-		desc = "A strange alien device."
+	generate_icon()
+
+/obj/machinery/artifact/proc/generate_icon()
+	prefix = pick(primary_effect.valid_style_types)
+	numsuffix = pick(rand(1,all_artifact_style_effect_types[prefix]))
+
+	if(prefix in goon_style_effect_types)
+		icon = 'goon/icons/obj/artifacts.dmi'
+		if(prefix != ARTIFACT_STYLE_RELIQUARY)
+			fx_image = image(icon, "[prefix][numsuffix]fx")
+			fx_image.color = rgb(rand(0,255),rand(0,255),rand(0,255))
+	else
+		if(numsuffix == 7 || numsuffix == 8)
+			name = "large crystal"
+			desc = pick("It shines faintly as it catches the light.",\
+			"It appears to have a faint inner glow.",\
+			"It seems to draw you inward as you look it at.",\
+			"Something twinkles faintly as you look at it.",\
+			"It's mesmerizing to behold.")
+		else if(numsuffix == 9)
+			name = "alien computer"
+			desc = "It is covered in strange markings."
+		else if(numsuffix == 10)
+			desc = "A large alien device, there appear to be some kind of vents in the side."
+		else if(numsuffix == 11)
+			name = "sealed alien pod"
+			desc = "A strange alien device."
+
+	update_icon()
+
+/obj/machinery/artifact/update_icon()
+	overlays.len = 0
+	icon_state = "[prefix][numsuffix][icon == 'icons/obj/xenoarchaeology.dmi' ? primary_effect.activated : ((primary_effect.activated && fx_image) ? "" : "fx")]" //If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
+	if(fx_image && primary_effect.activated)
+		overlays += fx_image
 
 /obj/machinery/artifact/process()
 

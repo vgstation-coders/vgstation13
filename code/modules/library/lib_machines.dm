@@ -54,11 +54,11 @@
 	var/list/where = list()
 	if(author || title || category)
 		if(author)
-			where.Add("author LIKE '%[sanitizeSQL(author)]%'")
+			where.Add("author LIKE '%[author]%'")
 		if(category)
-			where.Add("category = '[sanitizeSQL(category)]'")
+			where.Add("category = '[category]'")
 		if(title)
-			where.Add("title LIKE '%[sanitizeSQL(title)]%'")
+			where.Add("title LIKE '%[title]%'")
 		return " WHERE "+jointext(where," AND ")
 	return ""
 
@@ -91,8 +91,11 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[sqlid]")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = sqlid))
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+	qdel(query)
 
 /datum/library_catalog/proc/getBookByID(var/id as text)
 	if("[id]" in cached_books)
@@ -101,8 +104,12 @@
 	var/sqlid = text2num(id)
 	if(!sqlid)
 		return
-	var/DBQuery/query = dbcon_old.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=[sqlid]")
-	query.Execute()
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT  id, author, title, category, ckey  FROM library WHERE id=:id", list("id" = sqlid))
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+		return
 
 	var/list/results=list()
 	while(query.NextRow())
@@ -116,7 +123,9 @@
 		))
 		results += CB
 		cached_books["[id]"]=CB
+		qdel(query)
 		return CB
+	qdel(query)
 	return results
 
 var/global/datum/library_catalog/library_catalog = new()

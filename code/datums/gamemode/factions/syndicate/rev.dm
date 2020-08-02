@@ -12,6 +12,7 @@
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
 	playlist = "nukesquad"
+	var/discovered = 0
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -130,9 +131,13 @@
 		var/threshold = 50 //the percentage of living revs at which point the announcement is triggered
 		if(living_revs > 0 && total_valid_living > 0)
 			var/revs_percentage = round((living_revs * 100)/total_valid_living)
-			if(revs_percentage >= threshold)
-				stage(FACTION_ENDGAME)
-				command_alert(/datum/command_alert/revolution)
+			if(revs_percentage >= threshold && !discovered)
+				for (var/datum/role/revolutionary/leader/comrade in members)
+					to_chat(comrade.antag.current, "<span class='warning'>The time to act is upon us. Nanotrasen must have noticed us by now. Let's waste no time!</span>")
+				discovered = 1
+				spawn(60 SECONDS)
+					stage(FACTION_ENDGAME)
+					command_alert(/datum/command_alert/revolution)
 
 	switch(remaining_targets)
 		if(0)
@@ -149,7 +154,7 @@
 	if(stage >= FACTION_ENDGAME)
 		var/anyone = FALSE
 		for(var/datum/role/R in members)
-			if(!R.antag.current.stat)
+			if(R.antag.current && !R.antag.current.stat)
 				anyone = TRUE //If one rev is still not incapacitated
 		if(!anyone)
 			stage(FACTION_DEFEATED)

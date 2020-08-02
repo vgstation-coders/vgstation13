@@ -1,5 +1,6 @@
 /datum/artifact_effect/reagentblock
 	effecttype = "reagentblock"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_RELIQUARY)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/duration = 0
 	copy_for_battery = list("duration")

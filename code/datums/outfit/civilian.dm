@@ -168,7 +168,7 @@
 // -- Botanist
 
 /datum/outfit/hydro // (!)
-	
+
 	outfit_name = "Botanist"
 	associated_job = /datum/job/hydro
 
@@ -242,7 +242,7 @@
 // -- Clown
 
 /datum/outfit/clown // Honk
-	
+
 	outfit_name = "Clown"
 	associated_job = /datum/job/clown
 
@@ -299,7 +299,7 @@
 	)
 
 	items_to_collect = list( // No backup slots ; backbag pref ignored
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = null, 
+		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = null,
 		/obj/item/weapon/bikehorn = null,
 		/obj/item/weapon/stamp/clown = null,
 		/obj/item/toy/crayon/rainbow = null,
@@ -321,7 +321,7 @@
 // -- Mime
 
 /datum/outfit/mime // ...
-	
+
 	outfit_name = "Mime"
 	associated_job = /datum/job/mime
 
@@ -384,7 +384,7 @@
 // -- Janitor
 
 /datum/outfit/janitor
-		
+
 	outfit_name = "Janitor"
 	associated_job = /datum/job/janitor
 
@@ -429,9 +429,9 @@
 	return 1
 
 // -- Librarian
-	
+
 /datum/outfit/librarian
-		
+
 	outfit_name = "Librarian"
 	associated_job = /datum/job/librarian
 
@@ -452,8 +452,8 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/suit_jacket/red,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman,
-			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/librarian,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/librarian,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 		),
 		/datum/species/vox/ = list(
@@ -468,6 +468,12 @@
 
 	items_to_collect = list(
 		/obj/item/weapon/barcodescanner = GRASP_RIGHT_HAND,
+	)
+
+	alt_title_items_to_collect = list(
+		"Game Master" = list(
+			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+		)
 	)
 
 	pda_type = /obj/item/device/pda/librarian
@@ -491,7 +497,7 @@
 // -- Lawyer, IAA, Bridge Officer
 
 /datum/outfit/iaa
-		
+
 	outfit_name = "Internal Affairs Agent"
 	associated_job = /datum/job/iaa
 
@@ -611,7 +617,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
-			slot_l_store_str = /obj/item/weapon/nullrod, 
+			slot_l_store_str = /obj/item/weapon/nullrod,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,

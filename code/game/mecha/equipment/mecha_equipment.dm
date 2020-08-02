@@ -15,7 +15,7 @@
 	var/range = MELEE //bitflags
 	reliability = 1000
 	var/salvageable = 1
-	var/is_activateable = 1
+	var/is_activateable = FALSE
 	var/spell/mech/linked_spell //Default action is to make the make it the active equipment
 
 
@@ -29,6 +29,8 @@
 
 /obj/item/mecha_parts/mecha_equipment/New()
 	..()
+	if(istype(loc,/obj/mecha))
+		attach(loc)
 	return
 
 /obj/item/mecha_parts/mecha_equipment/proc/update_chassis_page()
@@ -121,6 +123,7 @@
 	chassis.log_message("[src] removed from equipment.")
 	chassis.refresh_spells()
 	chassis = null
+	qdel(linked_spell)
 	linked_spell = null
 	set_ready_state(1)
 	return

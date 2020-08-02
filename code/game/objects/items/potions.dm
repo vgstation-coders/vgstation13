@@ -72,7 +72,7 @@
 	if(T)
 		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src))
+		new /obj/item/weapon/shard(get_turf(src))
 	if(full)
 		if(ismob(hit_atom))
 			impact_mob(hit_atom)

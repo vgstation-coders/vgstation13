@@ -25,56 +25,56 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
 	..()
+	if(custom_plantname)
+		plantname = custom_plantname
 	if(ticker)
 		initialize()
-
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
 	//Handle some post-spawn var stuff.
-	spawn()
-		//Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
-			seed = SSplant.seeds[plantname]
-			if(!seed)
-				return
-			icon = seed.plant_dmi
-			potency = round(seed.potency)
-			force = seed.thorny ? 5+seed.carnivorous*3 : 0
-			throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
+	//Fill the object up with the appropriate reagents.
+	if(!isnull(plantname))
+		seed = SSplant.seeds[plantname]
+		if(!seed)
+			return
+		icon = seed.plant_dmi
+		potency = round(seed.potency)
+		force = seed.thorny ? 5+seed.carnivorous*3 : 0
+		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
 
-			if(seed.teleporting)
-				name = "blue-space [name]"
-			if(seed.stinging)
-				name = "stinging [name]"
-			if(seed.juicy == 2)
-				name = "slippery [name]"
+		if(seed.teleporting)
+			name = "blue-space [name]"
+		if(seed.stinging)
+			name = "stinging [name]"
+		if(seed.juicy == 2)
+			name = "slippery [name]"
 
-			if(!seed.chems)
-				return
+		if(!seed.chems)
+			return
 
-			var/totalreagents = 0
+		var/totalreagents = 0
+		for(var/rid in seed.chems)
+			var/list/reagent_data = seed.chems[rid]
+			var/rtotal = reagent_data[1]
+			if(reagent_data.len > 1 && potency > 0)
+				rtotal += round(potency/reagent_data[2])
+			totalreagents += rtotal
+
+		if(totalreagents)
+			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
 			for(var/rid in seed.chems)
 				var/list/reagent_data = seed.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				totalreagents += rtotal
+				reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
-			if(totalreagents)
-				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
-				for(var/rid in seed.chems)
-					var/list/reagent_data = seed.chems[rid]
-					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
-						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
-
-		if(reagents.total_volume > 0)
-			bitesize = 1 + round(reagents.total_volume/2, 1)
+	if(reagents.total_volume > 0)
+		bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
@@ -199,8 +199,7 @@ var/list/special_fruits = list()
 		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
-	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
-	S.New(S.loc)
+	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
 	if(seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
@@ -363,7 +362,7 @@ var/list/special_fruits = list()
 	plantname = "rocknut"
 	force = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
 	..()
 	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
 	eatverb = pick("crunch","gnaw","bite")
@@ -901,7 +900,7 @@ var/list/special_fruits = list()
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
@@ -1037,3 +1036,11 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
+	name = "mustard flowers"
+	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	potency = 10
+	filling_color = "#DFE88B"
+	plantname = "mustardplant"
+	fragrance = INCENSE_MUSTARDPLANT

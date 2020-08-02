@@ -142,6 +142,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/list/inventory_offsets
 
 	var/species_intro //What intro you're given when you become this species.
+	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
 
 /datum/species/New()
 	..()
@@ -1190,15 +1191,27 @@ var/list/has_died_as_golem = list()
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD
 
 	default_mutations=list(RAD_IMMUNE)
-	brute_mod = 1.3
-	burn_mod = 1.3
+	burn_mod = 1.1
 	tox_mod = 0.5
 
 	blood_color = "#ebece6"
 	flesh_color = "#9c7f25"
+
+	uniform_icons = 'icons/mob/species/insectoid/uniform.dmi'
+//	fat_uniform_icons = 'icons/mob/uniform_fat.dmi'
+	gloves_icons    = 'icons/mob/species/vox/gloves.dmi'
+	glasses_icons   = 'icons/mob/species/insectoid/eyes.dmi'
+	ears_icons      = 'icons/mob/species/insectoid/ears.dmi'
+	shoes_icons 	= 'icons/mob/species/insectoid/feet.dmi'
+	head_icons      = 'icons/mob/species/insectoid/head.dmi'
+//	belt_icons      = 'icons/mob/belt.dmi'
+	wear_suit_icons = 'icons/mob/species/insectoid/suit.dmi'
+	wear_mask_icons = 'icons/mob/species/insectoid/mask.dmi'
+//	back_icons      = 'icons/mob/back.dmi'
+
 
 	has_mutant_race = 0
 
@@ -1210,10 +1223,13 @@ var/list/has_died_as_golem = list()
 		"brain" =    /datum/organ/internal/brain,
 		"eyes" =     /datum/organ/internal/eyes/compound/
 		)
+/datum/species/insectoid/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
+	speech.message = replacetext(speech.message, "s", "z") //stolen from plasman code if it borks.
+	..()
 
 	species_intro = "You are an Insectoid.<br>\
-					Your body is utterly immune to the perils of radiation, and you are able to better defend against toxic chemicals <br>\
-					However, your rigid body is somewhat more fragile than that of more soft-bodied species. Resilient though you may be, a good smack may put you out of commission."
+					Your body is highly resistant to the initial effects of radiation exposure, and you'll be better able to defend against toxic chemicals. <br>\
+					However, your body is more susceptible to heat than that of other species. Resilient though you may be, heat and flame are your biggest concern."
 
 
 /datum/species/insectoid/makeName(var/gender,var/mob/living/carbon/human/H=null)
@@ -1232,10 +1248,12 @@ var/list/has_died_as_golem = list()
 	name = "Mushroom"
 	icobase = 'icons/mob/human_races/r_mushman.dmi'
 	deform = 'icons/mob/human_races/r_mushman.dmi'
+	eyes = "mushroom_eyes"
 	known_languages = list(LANGUAGE_VOX)
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
-	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | REQUIRE_DARK | IS_SPECIES_MUTE
+	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
+	anatomy_flags = NO_BALD
 
 	gender = NEUTER
 
@@ -1266,13 +1284,17 @@ var/list/has_died_as_golem = list()
 
 	has_organ = list(
 		"brain" =    /datum/organ/internal/brain/mushroom_brain,
+		"eyes" =     /datum/organ/internal/eyes/mushroom,
 		)
 
 	species_intro = "You are a Mushroom Person.<br>\
-					You are an odd creature, light harms you and makes you hunger, but the darkness heals you and feeds you.<br>\
+					You are an odd creature. Your lack of a mouth prevents you from eating, but you can stand or lay on food to absorb it.<br>\
 					You have a resistance to burn and toxin, but a weakness to brute damage. You are adept at seeing in the dark, moreso with your light inversion ability.<br>\
-					However, you lack a mouth with which to talk. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
+					Additionally, you cannot speak. Instead you can remotely talk into somebodies mind should you examine them, or they talk to you.<br>\
 					You also have access to the Sporemind, which allows you to communicate with others on the Sporemind through :~"
+
+/datum/species/mushroom/makeName()
+	return capitalize(pick(mush_first)) + " " + capitalize(pick(mush_last))
 
 /datum/species/mushroom/gib(mob/living/carbon/human/H)
 	..()

@@ -74,10 +74,13 @@
 	var/obj/item/held_item = get_active_hand()
 
 	if(!attempt_item_suicide(held_item)) //Failed to perform a special item suicide, go for normal stuff
-		visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
-							 "<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
+		if(Holiday == APRIL_FOOLS_DAY)
+			visible_message("<span class='danger'>[src] stares above and sees your ugly face! It looks like \he's trying to commit suicide.</span>")
+		else
+			visible_message(pick("<span class='danger'>[src] is attempting to bite \his tongue off! It looks like \he's trying to commit suicide.</span>", \
+								 "<span class='danger'>[src] is jamming \his thumbs into \his eye sockets! It looks like \he's trying to commit suicide.</span>", \
+								 "<span class='danger'>[src] is twisting \his own neck! It looks like \he's trying to commit suicide.</span>", \
+								 "<span class='danger'>[src] is holding \his breath! It looks like \he's trying to commit suicide.</span>"))
 		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
 

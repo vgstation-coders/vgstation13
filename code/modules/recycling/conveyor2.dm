@@ -21,7 +21,7 @@
 	var/movedir			// the actual direction to move stuff in
 
 	var/list/affecting	// the list of all items that will be moved this ptick
-	var/id_tag = ""			// the control ID	- must match controller ID
+	id_tag = ""			// the control ID	- must match controller ID
 
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
@@ -265,7 +265,7 @@
 			"<span class='warning'>You cut the metal plates off \the [src] with the welding tool.</span>", \
 			"<span class='warning'>You hear welding.</span>")
 			new /obj/structure/conveyor_assembly(loc,dir)
-			getFromPool(/obj/item/stack/sheet/metal, loc, 3)
+			new /obj/item/stack/sheet/metal(loc, 3)
 			qdel(src)
 			return 1
 	. = ..()
@@ -403,7 +403,7 @@
 	var/convdir = 0 			// lock to one direction. -1 = reverse, 0 = not locked, 1 = forward
 	var/operated = 1			// true if just operated
 
-	var/id_tag = "" 			// must match conveyor IDs to control them
+	id_tag = "" 			// must match conveyor IDs to control them
 
 	var/frequency = 1367
 	var/datum/radio_frequency/radio_connection
@@ -517,7 +517,7 @@
 
 /obj/machinery/conveyor_switch/proc/send_command(var/command)
 	if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source=src
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag

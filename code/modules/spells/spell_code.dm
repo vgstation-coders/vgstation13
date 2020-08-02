@@ -13,7 +13,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/specialization //Used for what list they belong to in the spellbook. SSOFFENSIVE, SSDEFENSIVE, SSUTILITY
 
 	var/charge_type = Sp_RECHARGE //can be recharge or charges, see charge_max and charge_counter descriptions; can also be based on the holder's vars now, use "holder_var" for that; can ALSO be made to gradually drain the charge with Sp_GRADUAL
-	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGE (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
+	//The following are allowed: Sp_RECHARGE (Recharges), Sp_CHARGES (Limited uses), Sp_GRADUAL (Gradually lose charges), Sp_PASSIVE (Does not cast)
 
 	var/initial_charge_max = 100 //Used to calculate cooldown reduction
 	var/charge_max = 100 //recharge time in deciseconds if charge_type = Sp_RECHARGE or starting charges if charge_type = Sp_CHARGES
@@ -24,6 +24,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
 
 	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+	var/quicken_price = Sp_BASE_PRICE * 0.5 //How much lowering the spell cooldown costs in the spellbook
 	var/refund_price = 0 //If 0, non-refundable
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
@@ -148,7 +149,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
 		set_holder(user) //just in case
 
@@ -191,7 +192,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets, "user" = user))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -229,13 +230,13 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 /spell/proc/channeled_spell(var/list/args)
 	var/event/E = args["event"]
-	
+
 	if(!currently_channeled)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
 
 	var/atom/A = args["atom"]
-	
+
 	if(E.holder != holder)
 		E.handlers.Remove("\ref[src]:channeled_spell")
 		return 0
@@ -250,7 +251,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target))
+		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target, "user" = user))
 
 		if(prob(critfailchance))
 			critfail(target, holder)
@@ -600,6 +601,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return empower_spell()
 
 /spell/proc/get_upgrade_price(upgrade_type)
+	if(upgrade_type == Sp_SPEED)
+		return quicken_price
 	return src.price
 
 ///INFO

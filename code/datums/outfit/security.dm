@@ -234,6 +234,7 @@
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
+	H.check_mutations = 1
 
 // -- Offficer
 

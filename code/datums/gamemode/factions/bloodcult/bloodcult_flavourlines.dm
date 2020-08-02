@@ -344,7 +344,7 @@ var/list/all_depts_list = list(
 
 	// Converter and victim are of the same dept
 	for (var/list/dept in all_depts_list)
-		if (victim_job in dept && converter_job in dept)
+		if ((victim_job in dept) && (converter_job in dept))
 			valid_lines += acceptance_lines_same_dept
 
 	// Act

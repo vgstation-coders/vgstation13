@@ -159,7 +159,7 @@ datum/hSB/Topic(href, href_list)
 
 				P.regenerate_icons()
 			if("hsbmetal")
-				var/obj/item/stack/sheet/hsb = getFromPool(/obj/item/stack/sheet/metal,get_turf(usr))
+				var/obj/item/stack/sheet/hsb = new /obj/item/stack/sheet/metal(get_turf(usr))
 				hsb.amount = 50
 				hsb.forceMove(usr.loc)
 			if("hsbglass")

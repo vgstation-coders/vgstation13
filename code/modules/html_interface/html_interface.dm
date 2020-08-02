@@ -119,7 +119,7 @@ mob/verb/test()
 	src.height         = height
 	src.head           = head
 
-/datum/html_interface/Del()
+/datum/html_interface/Destroy()
 	src.closeAll()
 
 	html_interfaces.Remove(src)
@@ -154,7 +154,7 @@ mob/verb/test()
 	winset(hclient.client, "browser_\ref[src].browser", list2params(list("parent" = "browser_\ref[src]", "type" = "browser", "pos" = "0,0", "size" = "[width]x[height]", "anchor1" = "0,0", "anchor2" = "100,100", "use-title" = "true", "auto-format" = "false")))
 
 	sendAssets(hclient.client)
-	
+
 /datum/html_interface/proc/sendAssets(var/client/client)
 	send_asset(client, "jquery.min.js")
 	send_asset(client, "bootstrap.min.js")

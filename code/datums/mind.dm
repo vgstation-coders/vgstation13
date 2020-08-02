@@ -30,7 +30,6 @@
 	var/key
 	var/name				//replaces mob/var/original_name
 	var/mob/current
-	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
@@ -42,6 +41,8 @@
 	var/role_alt_title
 
 	var/datum/job/assigned_job
+	var/job_priority // How much did we want the job we ended up having? Used for assistant rerolls.
+
 	var/datum/religion/faith
 
 	var/list/kills=list()
@@ -63,6 +64,7 @@
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 	var/list/heard_before = list()
+	var/event/on_transfer_end
 
 	var/nospells = 0 //Can't cast spells.
 	var/hasbeensacrificed = FALSE
@@ -71,6 +73,7 @@
 
 /datum/mind/New(var/key)
 	src.key = key
+	on_transfer_end = new(owner = src)
 
 /datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
@@ -85,6 +88,7 @@
 		R.PreMindTransfer(current)
 
 	if(current)					//remove ourself from our old body's mind variable
+		current.old_assigned_role = assigned_role
 		current.mind = null
 	if(new_character.mind)		//remove any mind currently in our new body's mind variable
 		new_character.mind.current = null
@@ -104,6 +108,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
+	INVOKE_EVENT(on_transfer_end, list("mind" = src))
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
@@ -122,13 +127,14 @@
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
 
-/datum/mind/proc/store_memory(new_text)
-	if(length(memory) > MAX_PAPER_MESSAGE_LEN)
-		to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
-		return
-	if(length(new_text) > MAX_MESSAGE_LEN)
-		to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
-		return
+/datum/mind/proc/store_memory(new_text, var/forced)
+	if(!forced)
+		if(length(memory) > MAX_PAPER_MESSAGE_LEN)
+			to_chat(current, "<span class = 'warning'>Your memory, however hazy, is full.</span>")
+			return
+		if(length(new_text) > MAX_MESSAGE_LEN)
+			to_chat(current, "<span class = 'warning'>That's a lot to memorize at once.</span>")
+			return
 	if(new_text)
 		memory += "[new_text]<BR>"
 
@@ -513,7 +519,6 @@
 		mind.key = key
 	else
 		mind = new /datum/mind(key)
-		mind.original = src
 		if(ticker)
 			ticker.minds += mind
 		else

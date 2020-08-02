@@ -241,7 +241,7 @@
 					if(!item_to_add)
 						usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s back for a moment.</span>")
 						return
-					if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+					if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 						item_to_add.afterattack(src,usr,1)
 						return
 
@@ -272,6 +272,9 @@
 
 					usr.drop_item(item_to_add, src, force_drop = 1)
 					src.inventory_back = item_to_add
+					if(isrig(item_to_add)) //TIME TO HACKINTOSH
+						var/obj/item/clothing/head/helmet/space/rig/rig_helmet = new (src)
+						place_on_head(rig_helmet)
 					regenerate_icons()
 
 		show_inv(usr)
@@ -284,7 +287,7 @@
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 
 
-	if(istype(item_to_add,/obj/item/weapon/plastique)) // last thing he ever wears, I guess
+	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
 		return
 
@@ -461,6 +464,12 @@
 			else
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
 
+		if(/obj/item/clothing/head/cowboy)
+			name = "Yeehaw Ian"
+			desc = "Are you really just gonna stroll past without saying howdy?"
+			valid = 1
+
+
 	if(valid)
 		if(usr)
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
@@ -495,21 +504,27 @@
                         dir = i
                         sleep(1)
 
+/mob/living/simple_animal/corgi/proc/reset_appearance()
+	name = real_name
+	desc = initial(desc)
+	speak = list("YAP!", "Woof!", "Bark!", "Arf!")
+	speak_emote = list("barks.", "woofs.")
+	emote_hear = list("barks.", "woofs.", "yaps.")
+	emote_see = list("shakes its head.", "shivers.", "pants.")
+	emote_sound = list("sound/voice/corgibark.ogg")
+	min_oxy = initial(min_oxy)
+	minbodytemp = initial(minbodytemp)
+	maxbodytemp = initial(maxbodytemp)
+	set_light(0)
+
 /mob/living/simple_animal/corgi/proc/remove_inventory(var/remove_from = "head", mob/user)
 	switch(remove_from)
 		if("head")
 			if(inventory_head)
-				name = real_name
-				desc = initial(desc)
-				speak = list("YAP!", "Woof!", "Bark!", "Arf!")
-				speak_emote = list("barks.", "woofs.")
-				emote_hear = list("barks.", "woofs.", "yaps.")
-				emote_see = list("shakes its head.", "shivers.", "pants.")
-				emote_sound = list("sound/voice/corgibark.ogg")
-				min_oxy = initial(min_oxy)
-				minbodytemp = initial(minbodytemp)
-				maxbodytemp = initial(maxbodytemp)
-				set_light(0)
+				if(isrighelmet(inventory_head) && inventory_back && isrig(inventory_back)) //You've activated my trap card!
+					remove_inventory("back", user)
+					return
+				reset_appearance()
 				inventory_head.forceMove(src.loc)
 				inventory_head = null
 				regenerate_icons()
@@ -519,6 +534,10 @@
 				return
 		if("back")
 			if(inventory_back)
+				if(isrig(inventory_back) && inventory_head && isrighelmet(inventory_head)) //Now we undo the hack
+					qdel(inventory_head)
+					reset_appearance()
+					inventory_head = null
 				inventory_back.forceMove(src.loc)
 				inventory_back = null
 				regenerate_icons()
@@ -568,7 +587,7 @@
 	spin_emotes = list("dances around.","chases his tail.")
 	is_pet = TRUE
 	var/creatine_had = 0
-	
+
 /mob/living/simple_animal/corgi/Ian/Life()
 	..()
 	var/creatine =  reagents.has_reagent(CREATINE)
@@ -581,7 +600,7 @@
 	else if(!creatine && creatine_had)
 		visible_message("<span class='danger'>[src]'s muscles tear themselves apart!</span>")
 		gib()
-		
+
 	if(creatine && hyperzine)
 		treadmill_speed = 30
 		time_between_directed_steps = 1
@@ -591,7 +610,7 @@
 	else if(hyperzine)
 		treadmill_speed = 3
 		src.Jitter(2 SECONDS)
-		time_between_directed_steps = 3	
+		time_between_directed_steps = 3
 	else
 		treadmill_speed = 0.5
 		time_between_directed_steps = initial(time_between_directed_steps)
@@ -691,7 +710,7 @@
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
-				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to you."))
+				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to [M]."))
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 				if(prob(5))
 					master = M

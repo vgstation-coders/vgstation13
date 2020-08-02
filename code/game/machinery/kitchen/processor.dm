@@ -76,23 +76,29 @@
 /datum/food_processor_process/poison/carpmeat
 	input = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
 
-/datum/food_processor_process/meat
+/datum/food_processor_process/food/meat
 	input = /obj/item/weapon/reagent_containers/food/snacks/meat
-	output = /obj/item/weapon/reagent_containers/food/snacks/faggot
+	output = /obj/item/weapon/reagent_containers/food/snacks/faggot/processed
 
-/datum/food_processor_process/potato
+/datum/food_processor_process/food/potato
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/potato
-	output = /obj/item/weapon/reagent_containers/food/snacks/fries
+	output = /obj/item/weapon/reagent_containers/food/snacks/fries/processed
 
-/datum/food_processor_process/carrot
+/datum/food_processor_process/food/carrot
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
-	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries
+	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed
 
-/datum/food_processor_process/soybeans
+/datum/food_processor_process/food/soybeans
 	input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
-	output = /obj/item/weapon/reagent_containers/food/snacks/soydope
+	output = /obj/item/weapon/reagent_containers/food/snacks/soydope/processed
 
-	/* mobs */
+
+/datum/food_processor_process/food/process(loc, var/obj/what)
+	var/processed = new src.output(loc)
+	what.reagents.trans_to(processed, what.reagents.total_volume)
+	qdel(what)
+
+/* mobs */
 /datum/food_processor_process/mob/slime
 	input = /mob/living/carbon/slime
 	output
@@ -191,14 +197,18 @@
 /obj/machinery/processor/attackby(var/obj/item/O, var/mob/user)
 	if(..())
 		return 1
+
+	if(istype(O, /obj/item/weapon/storage/bag/plants))
+		return fill(O, user)
+
 	return add_to(O, user)
 
 /obj/machinery/processor/proc/add_to(var/atom/movable/A, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return 1
-	if(src.contents.len >= content_limit) //TODO: several items at once? several different items?
-		to_chat(user, "<span class='warning'>\The [src] is full, it cannot fit anymore.</span>")
+	if(is_full()) //TODO: several items at once? several different items?
+		warn_full(user)
 		return 1
 	if (istype(A, /obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = A
@@ -206,7 +216,7 @@
 
 	var/datum/food_processor_process/P = select_recipe(A)
 	if (!P)
-		to_chat(user, "<span class='warning'>This probably won't blend.</span>")
+		to_chat(user, "<span class='warning'>You can't process that.</span>")
 		return 1
 	user.visible_message("<span class='notice'>[user] puts [A] into [src].</span>", \
 		"You put [A] into the [src].")
@@ -263,4 +273,33 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
+	if(istype(O, /obj/item/weapon/storage/bag/plants))
+		fill(O, user)
+		return
 	add_to(O,user)
+
+/obj/machinery/processor/proc/warn_full(var/mob/who)
+	to_chat(who, "<span class='warning'>\The [src] is full, it cannot fit anymore.</span>")
+
+/obj/machinery/processor/proc/is_full()
+	return src.contents.len >= content_limit
+
+/obj/machinery/processor/proc/fill(var/obj/item/weapon/storage/bag/plants/bag, var/mob/user)
+	if(src.processing)
+		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
+		return
+	var/items_transferred = 0
+	for(var/obj/item/item in bag.contents)
+		if(is_full())
+			if(items_transferred > 0)
+				to_chat(user, "You fill \the [src] to the brim.")
+			else
+				warn_full(user)
+			break
+		var/datum/food_processor_process/recipe = select_recipe(item)
+		if (!recipe)
+			continue
+		bag.remove_from_storage(item,src)
+		items_transferred++
+	if(items_transferred == 0 && !is_full())
+		to_chat(user, "<span class='warning'>You can't process anything in \the [bag].</span>")

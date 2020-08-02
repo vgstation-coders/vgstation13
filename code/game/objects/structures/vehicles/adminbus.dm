@@ -237,7 +237,7 @@
 					L.locked_to = 0
 				L.Stun(5)
 				L.Knockdown(5)
-				L.apply_effect(STUTTER, 5)
+				L.apply_effect(5, STUTTER)
 				playsound(src, pick(hit_sound), 50, 0, 0)
 		if(3)
 			for(var/mob/living/L in S)

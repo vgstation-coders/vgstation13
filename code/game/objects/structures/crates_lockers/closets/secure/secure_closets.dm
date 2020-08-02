@@ -1,6 +1,6 @@
 /obj/structure/closet/secure_closet
 	name = "secure locker"
-	desc = "It's an immobile card-locked storage unit."
+	desc = "It's a high-security card-locked storage unit."
 	icon = 'icons/obj/closet.dmi'
 	icon_state = "secure1"
 	density = 1
@@ -15,6 +15,7 @@
 	var/icon_off = "secureoff"
 	wall_mounted = 0 //never solid (You can always pass over it)
 	health = 200
+	var/id_tag = null
 
 /obj/structure/closet/secure_closet/basic
 	has_lockless_type = /obj/structure/closet/basic
@@ -22,7 +23,7 @@
 /obj/structure/closet/secure_closet/can_open()
 	if(!..())
 		return 0
-	if(src.locked)	
+	if(src.locked)
 		return 0
 	return 1
 
@@ -47,7 +48,7 @@
 				src.req_access += pick(get_all_accesses())
 	..()
 
-/obj/structure/closet/secure_closet/proc/togglelock(mob/user as mob)
+/obj/structure/closet/secure_closet/proc/togglelock(mob/user)
 	if(allowed(user))
 		locked = !locked
 		visible_message("<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>")
@@ -88,13 +89,13 @@
 				return
 			welded =! welded
 			update_icon()
-			M.visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
+			visible_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
 		if(W.is_screwdriver(user) && !locked && has_lockless_type)
 			remove_lock(user)
 			return
 		togglelock(user)
 
-/obj/structure/closet/secure_closet/relaymove(mob/user as mob)
+/obj/structure/closet/secure_closet/relaymove(mob/user)
 	if(user.stat || !isturf(src.loc))
 		return
 

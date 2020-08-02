@@ -8,4 +8,8 @@ If this sort of language offends you in any way then please go away or grow thic
 
 Beyond that, we welcome absolutely anyone to learn to code with our mess of an engine to contribute to our mess of a game, and are happy to help you learn to hate BYOND as much as we do.
 
+##### Notes on content
+
+The game we are maintaining is a roleplaying simulation of a dystopian future. The content hosted on this repository is a work of fiction and does not reflect the opinions of the people contributing to it.
+
 **Welcome to the team.**

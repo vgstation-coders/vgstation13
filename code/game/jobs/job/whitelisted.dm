@@ -11,7 +11,8 @@
 	minimal_access = list(access_trade)
 	alt_titles = list("Merchant","Salvage Broker")
 
-	species_whitelist = list("Vox")
+	species_whitelist = list("Vox", "Mushroom")
+	species_blacklist = list() //for shrooms
 	must_be_map_enabled = 1
 
 	no_random_roll = 1 //Don't become a vox trader randomly

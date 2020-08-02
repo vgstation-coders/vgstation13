@@ -158,6 +158,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	desc = "A roll of tobacco and nicotine. Not the best thing to have on your face in the event of a plasma flood."
 	icon_state = "cig"
 	item_state = "cig"
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED, VOX_SHAPED)
 	w_class = W_CLASS_TINY
 	body_parts_covered = 0
 	var/list/unlit_attack_verb = list("prods", "pokes")
@@ -355,7 +356,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		M.IgniteMob()
 	smoketime--
 	var/datum/gas_mixture/env = location.return_air()
-	if(smoketime <= 0 | env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+	if(smoketime <= 0 || env.molar_density(GAS_OXYGEN) < (5 / CELL_VOLUME))
+		if(smoketime > 0 && ishuman(loc))
+			var/mob/living/carbon/human/mysmoker = loc
+			if(mysmoker.internal?.air_contents.partial_pressure(GAS_OXYGEN) > 0)
+				return //if there's oxygen in the tank, let my cig live freely
 		if(!inside_item)
 			var/atom/new_butt = new type_butt(location) //Spawn the cigarette butt
 			transfer_fingerprints_to(new_butt)
@@ -374,7 +379,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	//Oddly specific and snowflakey reagent transfer system below
 	if(reagents && reagents.total_volume)	//Check if it has any reagents at all
 		if(iscarbon(M) && ((src == M.wear_mask) || (loc == M.wear_mask))) //If it's in the human/monkey mouth, transfer reagents to the mob
-			if(M.reagents.has_any_reagents(LEXORINS) || M_NO_BREATH in M.mutations || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
+			if(M.reagents.has_any_reagents(LEXORINS) || (M_NO_BREATH in M.mutations) || istype(M.loc, /obj/machinery/atmospherics/unary/cryo_cell))
 				reagents.remove_any(REAGENTS_METABOLISM)
 			else
 				if(prob(25)) //So it's not an instarape in case of acid
@@ -417,9 +422,85 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
+//////////////
+//FANCY CIGS//
+//////////////
+
+/obj/item/clothing/mask/cigarette/bidi
+	name = "Bidi"
+	desc = "An acrid, loosely-rolled tobacco leaf, stuffed with herbs and spices and bound with twine."
+	icon_state = "bidi"
+	overlay_on = "bidilit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/bidibutt
+	item_state = "bidi"
+
+/obj/item/clothing/mask/cigarette/goldencarp
+	name = "Golden Carp cigarette"
+	desc = "A cigarette made from light, fine paper, with a thin gold band above the filter."
+	icon_state = "goldencarp"
+	overlay_on = "goldencarplit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/goldencarpbutt
+	item_state = "goldencarp"
+
+/obj/item/clothing/mask/cigarette/starlight
+	name = "Starlight cigarette"
+	desc = "A nicely-rolled smoke. Above the filter are a red and yellow band."
+	icon_state = "starlight"
+	overlay_on = "starlightlit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/starlightbutt
+	item_state = "starlight"
+
+/obj/item/clothing/mask/cigarette/lucky
+	name = "Lucky Strike cigarette"
+	desc = "Plain and unfiltered, just how great-great-grandad used to like them."
+	icon_state = "lucky"
+	overlay_on = "luckylit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/luckybutt
+	item_state = "lucky"
+
+/obj/item/clothing/mask/cigarette/redsuit
+	name = "Redsuit cigarette"
+	desc = "Slim and refined. A mild smoke for a serious smoker."
+	icon_state = "redsuit"
+	overlay_on = "redsuitlit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/redsuitbutt
+	item_state = "redsuit"
+
+/obj/item/clothing/mask/cigarette/ntstandard
+	name = "NT Standard cigarette"
+	desc = "Matte grey with a blue band. Corporate loyalty with every puff."
+	icon_state = "ntstandard"
+	overlay_on = "ntstandardlit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/ntstandardbutt
+	item_state = "ntstandard"
+
+/obj/item/clothing/mask/cigarette/spaceport
+	name = "Spaceport cigarette"
+	desc = "The dull gold band wrapped around this cig does nothing to hide its cheap origins."
+	icon_state = "spaceport"
+	overlay_on = "spaceportlit"
+	slot_flags = SLOT_MASK
+	type_butt = /obj/item/trash/cigbutt/spaceportbutt
+	item_state = "spaceport"
+
+
+
 ////////////
 // CIGARS //
 ////////////
+
+/obj/item/clothing/mask/cigarette/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	var/mob/living/carbon/C = M
+	if(!istype(C) || !C.hasmouth())
+		to_chat(C, "<span class='warning'>You have no mouth.</span>")
+		return CANNOT_EQUIP
+	. = ..()
 
 /obj/item/clothing/mask/cigarette/cigar
 	name = "Premium Cigar"
@@ -432,13 +513,14 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	item_state = "cigar"
 	smoketime = 1500
 	chem_volume = 25
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/cohiba
 	name = "Cohiba Robusto Cigar"
 	desc = "There's little more you could want from a cigar."
 	icon_state = "cigar2"
 	overlay_on = "cigar2lit"
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/mask/cigarette/cigar/havana
 	name = "Premium Havanian Cigar"
@@ -447,6 +529,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	overlay_on = "cigar2lit"
 	smoketime = 7200
 	chem_volume = 30
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/trash/cigbutt
 	name = "cigarette butt"
@@ -456,6 +539,49 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	w_class = W_CLASS_TINY
 	throwforce = 1
 	autoignition_temperature = 0 //The filter doesn't burn
+
+/obj/item/trash/cigbutt/bidibutt
+	name = "bidi butt"
+	desc = "An acrid bidi stub."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "bidibutt"
+	w_class = W_CLASS_TINY
+
+/obj/item/trash/cigbutt/goldencarpbutt
+	name = "cigarette butt"
+	desc = "Leftovers of a fancy smoke."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "goldencarpbutt"
+
+/obj/item/trash/cigbutt/starlightbutt
+	name = "cigarette butt"
+	desc = "A slick-looking cig butt."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "starlightbutt"
+
+/obj/item/trash/cigbutt/luckybutt
+	name = "cigarette butt"
+	desc = "An unfiltered cigarette butt."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "luckybutt"
+
+/obj/item/trash/cigbutt/redsuitbutt
+	name = "cigarette butt"
+	desc = "A discarded butt, with an ominous red band."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "redsuitbutt"
+
+/obj/item/trash/cigbutt/spaceportbutt
+	name = "cigarette butt"
+	desc = "A discarded butt, with a tacky gold band in the middle."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "spaceportbutt"
+
+/obj/item/trash/cigbutt/ntstandardbutt
+	name = "cigarette butt"
+	desc = "A butt bearing the logo of the corp wrapped above the filter."
+	icon = 'icons/obj/clothing/masks.dmi'
+	icon_state = "ntstandardbutt"
 
 /obj/item/trash/cigbutt/cigarbutt
 	name = "cigar butt"
@@ -484,7 +610,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	type_butt = /obj/item/trash/cigbutt/bluntbutt
 	item_state = "blunt"
 	slot_flags = SLOT_MASK
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 	lit_attack_verb = list("burns", "singes", "blunts")
 	smoketime = 420

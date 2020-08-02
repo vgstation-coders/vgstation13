@@ -16,7 +16,7 @@
 
 /turf/proc/lighting_clear_overlay()
 	if (lighting_overlay)
-		returnToPool(lighting_overlay)
+		qdel(lighting_overlay)
 
 	for (var/datum/lighting_corner/C in corners)
 		C.update_active()
@@ -31,7 +31,7 @@
 		if (!lighting_corners_initialised)
 			generate_missing_corners()
 
-		getFromPool(/atom/movable/lighting_overlay, src)
+		new /atom/movable/lighting_overlay(src)
 
 		for (var/datum/lighting_corner/C in corners)
 			if (!C.active) // We would activate the corner, calculate the lighting for it.

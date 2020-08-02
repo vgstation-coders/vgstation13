@@ -1,3 +1,5 @@
+#define MALF_INITIAL_TIMER 1800
+
 /datum/faction/malf
 	name = "Malfunctioning AI"
 	desc = "ERROR"
@@ -74,11 +76,11 @@
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		malfAI.antag.current.add_spell(new /spell/aoe_turf/ai_win, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 
 	return
 
 /datum/faction/malf/get_statpanel_addition()
 	if(stage >= FACTION_ENDGAME)
-		return "Time left: [max(AI_win_timeleft/(apcs/3), 0)]"
+		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null

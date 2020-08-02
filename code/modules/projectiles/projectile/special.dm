@@ -256,11 +256,11 @@ obj/item/projectile/kinetic/New()
 			if(!isturf(A))
 				..(A)
 			//qdel(src) // Comment this out if you want to shoot through the asteroid, ERASER-style.
-			returnToPool(src)
+			qdel(src)
 			return 1
 	else
 		//qdel(src)
-		returnToPool(src)
+		qdel(src)
 		return 0
 
 /obj/item/effect/kinetic_blast
@@ -272,7 +272,7 @@ obj/item/projectile/kinetic/New()
 /obj/item/effect/kinetic_blast/New()
 	..()
 	spawn(4)
-		returnToPool(src)
+		qdel(src)
 
 /obj/item/projectile/kinetic/cutter
 

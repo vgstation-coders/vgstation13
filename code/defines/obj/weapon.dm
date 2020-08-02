@@ -82,9 +82,11 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	flags = FPRINT | NO_ATTACK_MSG
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -199,7 +201,7 @@
 	throw_range = 10
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
-	var/trip_prob = 90
+	var/trip_prob = 100
 	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
@@ -285,6 +287,8 @@
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
 	icon_state = ""
+	item_state = "cbolas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
 	throw_range = 6
 	trip_prob = 20 //gets updated below in update_icon()
@@ -417,6 +421,8 @@
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 	var/image/ied_overlay
 
+	var/trapped_user_key
+
 /obj/item/weapon/beartrap/New()
 	..()
 	ied_overlay = image('icons/obj/items.dmi')
@@ -472,7 +478,7 @@
 			if(affecting.take_damage(15, 0, 15, SERRATED_BLADE & SHARP_BLADE))
 				H.UpdateDamageIcon()
 				H.updatehealth()
-			
+
 			armed = 0
 			anchored = FALSE
 			update_icon()
@@ -485,21 +491,25 @@
 				to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
 				trapped = 0
 				unlock_atom(L)
+				L.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 				trappeduser = null
 				anchored = FALSE
+				return
 			else
 				user.visible_message("<span class='notice'>[H] tries to pry \the [src] off of [L]!</span>", \
 				"<span class='notice'>You try to pry open \the [src] with your bear hands.</span>")
 
 				if(do_after(user, src, 40) && prob(60)) //60% chance I think
-				
+
 					user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of [L]!</span>", \
 					"<span class='notice'>You manage to pry \the [src] off!</span>")
 					playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
 					trapped = 0
 					trappeduser = null
 					unlock_atom(L)
+					L.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 					anchored = FALSE
+					return
 				else
 					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of [L], and crushes their leg even more!</span>", \
 					"<span class='warning'>You fail to pry \the [src] off of [L], and you crush their leg even more!</span>")
@@ -508,6 +518,7 @@
 					if(trappedorgan.take_damage(5,0,0)) //holy fuck it's easy to knock out legs
 						L.UpdateDamageIcon()
 					L.updatehealth()
+					return
 	..()
 
 /obj/item/weapon/beartrap/attackby(var/obj/item/I, mob/user) //Let's get explosive.
@@ -550,6 +561,7 @@
 			trapped = 0
 			anchored = FALSE
 			unlock_atom(trappeduser)
+			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 			trappeduser = null
 		else
 			to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
@@ -558,6 +570,7 @@
 				trapped = 0
 				anchored = FALSE
 				unlock_atom(trappeduser)
+				trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 				trappeduser = null
 	else
 		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
@@ -588,6 +601,7 @@
 				playsound(src, 'sound/effects/snap.ogg', 60, 1)
 				H.audible_scream()
 				lock_atom(H, /datum/locking_category/beartrap)
+				H.lazy_register_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 
 				to_chat(H, "<span class='danger'>The bear trap latches to your legs as you hear a hissing sound!</span>")
 
@@ -605,7 +619,15 @@
 					IED.prime()
 					src.desc = initial(src.desc)
 					overlays.Remove(ied_overlay)
-				return
+					var/mob/living/carbon/human/H2 = trappeduser
+					if(H2 && !H2.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
+						to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
+						trapped = 0
+						unlock_atom(H2)
+						trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+						trappeduser = null
+						anchored = FALSE
+					return
 
 			if(H.m_intent == "run") //This is where the real fun begins
 				trap(H)
@@ -635,14 +657,36 @@
 			H.updatehealth()
 
 	if(!H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
-		to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap</span>")
+		to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
 		trapped = 0
+		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
 		trappeduser = null
 		unlock_atom(H)
 		anchored = FALSE
 
 	H.update_canmove()
 
+// Called when the dude is moved from the trap on way or the other.
+/obj/item/weapon/beartrap/proc/forcefully_remove(atom/movable/mover)
+	if (get_turf(mover) != src.loc)
+		if (ishuman(mover))
+			var/mob/living/carbon/human/H = mover
+			playsound(mover, 'sound/effects/snap.ogg', 60, 1)
+			H.audible_scream()
+
+			var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+			if(affecting)
+				if(affecting.take_damage(30, 0, 50, SERRATED_BLADE & SHARP_BLADE)) // This is going to hurt.
+					H.UpdateDamageIcon()
+					H.updatehealth()
+		visible_message("<span class='warning'>The wound on [mover]'s leg worsens terribly as the trap let go of them.</span>")
+		trapped = 0
+		unlock_atom(trappeduser)
+		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		anchored = FALSE
+		trappeduser.update_canmove()
+		trappeduser = null
+		return
 
 /obj/item/weapon/batteringram
 	name = "battering ram"
@@ -754,7 +798,7 @@
 
 	species_fit = list(VOX_SHAPED)
 
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 

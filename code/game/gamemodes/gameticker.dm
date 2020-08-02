@@ -81,7 +81,7 @@ var/datum/controller/gameticker/ticker
 	else
 		login_music = fcopy_rsc(oursong)
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
@@ -401,7 +401,6 @@ var/datum/controller/gameticker/ticker
 					else
 						data_core.manifest_inject(new_character)
 				player.FuckUpGenes(new_character)
-				player.DiseaseCarrierCheck(new_character)
 				qdel(player)
 
 
@@ -454,8 +453,6 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 
-			end_credits.on_round_end()
-
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
@@ -483,6 +480,8 @@ var/datum/controller/gameticker/ticker
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Restarting in [restart_timeout/10] seconds</B></span>")
+
+			end_credits.on_round_end()
 
 			if(blackbox)
 				if(config.map_voting)

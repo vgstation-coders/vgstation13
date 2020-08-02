@@ -530,18 +530,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		my_atom.on_reagent_change()
 	return 0
 
-/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0, var/remove_reagents = FALSE, var/mob_reagent_threshold = 0)
+/datum/reagents/proc/reaction(var/atom/A, var/method=TOUCH, var/volume_modifier=0)
 
 	switch(method)
 		if(TOUCH)
 			for(var/datum/reagent/R in reagent_list)
-				if(isliving(A))
-					var/datum/reagent/MR = A.reagents.get_reagent_by_type(R.type)
-					if(!mob_reagent_threshold || !MR || (mob_reagent_threshold > MR.volume))
-						if(isanimal(A))
-							R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
-						else
-							R.reaction_mob(A, TOUCH, R.volume+volume_modifier, remove_reagents)
+				if(ismob(A))
+					if(isanimal(A))
+						R.reaction_animal(A, TOUCH, R.volume+volume_modifier)
+					else
+						R.reaction_mob(A, TOUCH, R.volume+volume_modifier)
 				if(isturf(A))
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj))
@@ -557,6 +555,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_turf(A, R.volume+volume_modifier)
 				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
+	return
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
@@ -953,3 +952,17 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		if(my_atom)
 			var/atom/A = my_atom
 			A.reagents = src
+
+
+//written for ethylredoxrazine, but might be fun for turning water into wine or something
+/datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)
+	var/total_amount_converted = 0
+
+	for(var/datum/reagent/itsareagent in reagent_list)
+		if(istype(itsareagent, convert_from_type))
+			var/amount_to_convert
+			amount_to_convert = min(itsareagent.volume, convert_amount)
+			total_amount_converted += amount_to_convert
+			remove_that_reagent(itsareagent, amount_to_convert)
+	return add_reagent(initial(convert_to_type.id), total_amount_converted)
+

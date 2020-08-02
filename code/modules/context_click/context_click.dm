@@ -12,6 +12,10 @@ IDs can then be used to cause certain behaviour using the action() proc
 	..()
 	holder = to_hold
 
+/datum/context_click/Destroy()
+	holder = null
+	return ..()
+
 //Gives the id clicked in this particular handler
 /datum/context_click/proc/return_clicked_id(var/x_pos, var/y_pos)
 	return

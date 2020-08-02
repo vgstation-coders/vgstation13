@@ -1,5 +1,3 @@
-#define MALFUNCTION_TEMPORARY 1
-#define MALFUNCTION_PERMANENT 2
 /obj/item/weapon/implant
 	name = "implant"
 	icon = 'icons/obj/device.dmi'
@@ -46,7 +44,7 @@
 	name = "melted implant"
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
-	malfunction = MALFUNCTION_PERMANENT
+	malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/Destroy()
 	if(part)
@@ -55,53 +53,6 @@
 	if(reagents)
 		qdel(reagents)
 	..()
-
-/obj/item/weapon/implant/tracking
-	name = "tracking implant"
-	desc = "Track with this."
-	var/id = 1.0
-
-/obj/item/weapon/implant/tracking/New()
-	..()
-	tracking_implants += src
-
-/obj/item/weapon/implant/tracking/Destroy()
-	..()
-	tracking_implants -= src
-
-/obj/item/weapon/implant/tracking/get_data()
-	var/dat = {"<b>Implant Specifications:</b><BR>
-<b>Name:</b> Tracking Beacon<BR>
-<b>Life:</b> 10 minutes after death of host<BR>
-<b>Important Notes:</b> None<BR>
-<HR>
-<b>Implant Details:</b> <BR>
-<b>Function:</b> Continuously transmits low power signal. Useful for tracking.<BR>
-<b>Special Features:</b><BR>
-<i>Neuro-Safe</i>- Specialized shell absorbs excess voltages self-destructing the chip if
-a malfunction occurs thereby securing safety of subject. The implant will melt and
-disintegrate into bio-safe elements.<BR>
-<b>Integrity:</b> Gradient creates slight risk of being overcharged and frying the
-circuitry. As a result neurotoxins can cause massive damage.<HR>
-Implant Specifics:<BR>"}
-	return dat
-
-/obj/item/weapon/implant/tracking/emp_act(severity)
-	if (malfunction)	//no, dawg, you can't malfunction while you are malfunctioning
-		return
-	malfunction = MALFUNCTION_TEMPORARY
-
-	var/delay = 20
-	switch(severity)
-		if(1)
-			if(prob(60))
-				meltdown()
-		if(2)
-			delay = rand(5 MINUTES, 15 MINUTES)
-
-	spawn(delay)
-		malfunction--
-
 
 
 /obj/item/weapon/implant/explosive
@@ -138,7 +89,7 @@ Implant Specifics:<BR>"}
 		activate()
 
 /obj/item/weapon/implant/explosive/activate()
-	if(malfunction == MALFUNCTION_PERMANENT)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return
 	if(iscarbon(imp_in))
 		var/mob/M = imp_in
@@ -166,7 +117,7 @@ Implant Specifics:<BR>"}
 /obj/item/weapon/implant/explosive/emp_act(severity)
 	if(malfunction)
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 	switch (severity)
 		if(2.0)	//Weak EMP will make implant tear limbs off.
 			if(prob(50))
@@ -180,6 +131,7 @@ Implant Specifics:<BR>"}
 						activate()		//50% chance of bye bye
 					else
 						meltdown()		//50% chance of implant disarming
+						return
 	spawn(20)
 		malfunction--
 
@@ -259,7 +211,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/chem/emp_act(severity)
 	if (malfunction)
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 
 	switch(severity)
 		if(1)
@@ -477,20 +429,21 @@ the implant may become unstable and either pre-maturely inject the subject or si
 			speech.message="[mobname] has died-zzzzt in-in-in..."
 			processing_objects.Remove(src)
 	Broadcast_Message(speech, vmask=0, data=0, compression=0, level=list(0,1))
-	returnToPool(speech)
+	qdel(speech)
 
 /obj/item/weapon/implant/death_alarm/emp_act(severity)			//for some reason alarms stop going off in case they are emp'd, even without this
 	if (malfunction)		//so I'm just going to add a meltdown chance here
 		return
-	malfunction = MALFUNCTION_TEMPORARY
+	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 
 	activate("emp")	//let's shout that this dude is dead
 	if(severity == 1)
 		if(prob(40))	//small chance of obvious meltdown
 			meltdown()
-		else if (prob(60))	//but more likely it will just quietly die
-			malfunction = MALFUNCTION_PERMANENT
+		else	//but more likely it will just quietly die
+			malfunction = IMPLANT_MALFUNCTION_PERMANENT
 		processing_objects.Remove(src)
+		return
 
 	spawn(20)
 		malfunction--
@@ -575,15 +528,15 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	name = "denatured implant"
 	desc = "A dead, hollow implant. Wonder what it used to be..."
 	icon_state = "implant_melted"
-	malfunction = MALFUNCTION_PERMANENT
+	malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
 /obj/item/weapon/implant/peace/process()
 	var/mob/living/carbon/host = imp_in
 
 	if (isnull(host) && imp_alive)
-		malfunction = MALFUNCTION_PERMANENT
+		malfunction = IMPLANT_MALFUNCTION_PERMANENT
 
-	if (malfunction == MALFUNCTION_PERMANENT)
+	if (malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		meltdown()
 		processing_objects.Remove(src)
 		return
@@ -592,11 +545,11 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		imp_alive = 1
 
 	if (host.nutrition <= 0 || host.reagents.has_reagent(METHYLIN, 15))
-		malfunction = MALFUNCTION_TEMPORARY
+		malfunction = IMPLANT_MALFUNCTION_TEMPORARY
 	else
 		malfunction = 0
 
-	if (!imp_msg_debounce && malfunction == MALFUNCTION_TEMPORARY)
+	if (!imp_msg_debounce && malfunction == IMPLANT_MALFUNCTION_TEMPORARY)
 		imp_msg_debounce = 1
 		to_chat(host, "<span class = 'warning'>Your rage bubbles, \the [src] inside you is being suppressed!</span>")
 

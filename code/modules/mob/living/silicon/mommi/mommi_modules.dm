@@ -4,7 +4,7 @@
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	languages = list()
 	sprites = list("Basic" = "mommi")
-	respawnables = list (/obj/item/stack/cable_coil)
+	respawnables = list (/obj/item/stack/cable_coil/yellow)
 	respawnables_max_amount = MOMMI_MAX_COIL
 	default_modules = FALSE
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
@@ -31,7 +31,7 @@
 	modules += new /obj/item/device/silicate_sprayer(src)
 	modules += new /obj/item/borg/fire_shield
 
-	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil(src)
+	var/obj/item/stack/cable_coil/W = new /obj/item/stack/cable_coil/yellow(src)
 	W.amount = MOMMI_MAX_COIL
 	W.max_amount = MOMMI_MAX_COIL
 	modules += W

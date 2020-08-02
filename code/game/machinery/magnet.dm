@@ -33,10 +33,12 @@
 	var/turf/T = loc
 	hide(T.intact)
 	center = T
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	spawn(10)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_controller.add_object(src, freq, RADIO_MAGNETS)
+/obj/machinery/magnetic_module/initialize()
+	if(radio_controller)
+		radio_controller.add_object(src, freq, RADIO_MAGNETS)
 
 	spawn()
 		magnetic_process()
@@ -233,10 +235,12 @@
 			if(M.freq == frequency && M.code == code)
 				magnets.Add(M)
 
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-	spawn(45)	// must wait for map loading to finish
-		if(radio_controller)
-			radio_connection = radio_controller.add_object(src, frequency, RADIO_MAGNETS)
+/obj/machinery/magnetic_controller/initialize()
+	if(radio_controller)
+		radio_connection = radio_controller.add_object(src, frequency, RADIO_MAGNETS)
 
 
 	if(path) // check for default path
@@ -290,7 +294,7 @@
 	if(href_list["radio-op"])
 
 		// Prepare signal beforehand, because this is a radio operation
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 // radio transmission
 		signal.source = src
 		signal.frequency = frequency
@@ -357,7 +361,7 @@
 		looping = 1
 
 		// Prepare the radio signal
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 // radio transmission
 		signal.source = src
 		signal.frequency = frequency

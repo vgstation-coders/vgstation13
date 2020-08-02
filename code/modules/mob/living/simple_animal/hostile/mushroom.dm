@@ -85,7 +85,7 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/mushroom/revive()
+/mob/living/simple_animal/hostile/mushroom/revive(refreshbutcher = 1)
 	..()
 	icon_state = "mushroom_color"
 	UpdateMushroomCap()

@@ -87,7 +87,7 @@
 	return
 
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
-	if( T && T in protected_area.turretTargets )
+	if(T && (T in protected_area.turretTargets))
 		var/area/area_T = get_area(T)
 		if( !area_T || (area_T.type != protected_area.type) )
 			protected_area.Exited(T)
@@ -205,20 +205,20 @@
 	if (src.lasers)
 		switch(lasertype)
 			if(1)
-				A = getFromPool(/obj/item/projectile/beam, loc)
+				A = new /obj/item/projectile/beam(loc)
 			if(2)
-				A = getFromPool(/obj/item/projectile/beam/heavylaser, loc)
+				A = new /obj/item/projectile/beam/heavylaser(loc)
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 			if(3)
-				A = getFromPool(/obj/item/projectile/beam/pulse, loc)
+				A = new /obj/item/projectile/beam/pulse(loc)
 				fire_sound = 'sound/weapons/pulse.ogg'
 			if(4)
-				A = getFromPool(/obj/item/projectile/change, loc)
+				A = new /obj/item/projectile/change(loc)
 				fire_sound = 'sound/weapons/radgun.ogg'
 			if(5)
-				A = getFromPool(/obj/item/projectile/beam/lasertag/blue, loc)
+				A = new /obj/item/projectile/beam/lasertag/blue(loc)
 			if(6)
-				A = getFromPool(/obj/item/projectile/beam/lasertag/red, loc)
+				A = new /obj/item/projectile/beam/lasertag/red(loc)
 		use_power(500)
 	else
 		A = new /obj/item/projectile/energy/electrode( loc )
@@ -360,14 +360,19 @@
 	..()
 	if(!control_area)
 		control_area = get_area(src)
-	else if(istext(control_area))
-		for(var/area/A in areas)
-			if(A.name && A.name == control_area)
-				control_area = A
-				break
 	else if(ispath(control_area))
 		control_area = locate(control_area)
+	else if(istext(control_area))
+		var/path = text2path(control_area)
+		if(path)
+			control_area = locate(path)
+		else
+			for(var/area/A in areas)
+				if(cmptext(A.name, control_area))
+					control_area = A
+					break
 
+	ASSERT(isarea(control_area))
 	updateTurrets() //Updates the turrets and the icon if an instance is made that is not set to stun by default
 
 /obj/machinery/turretid/emag(mob/user)
@@ -631,12 +636,12 @@
 	var/target = null
 	if(scan_for["human"])
 		for(var/mob/living/carbon/human/M in oview(scan_range,src))
-			if(M.stat || M.isStunned() || M in exclude)
+			if(M.stat || M.isStunned() || (M in exclude))
 				continue
 			pos_targets += M
 	if(scan_for["cyborg"])
 		for(var/mob/living/silicon/M in oview(scan_range,src))
-			if(M.stat || M.lying || M in exclude)
+			if(M.stat || M.lying || (M in exclude))
 				continue
 			pos_targets += M
 	if(scan_for["mecha"])
@@ -646,7 +651,7 @@
 			pos_targets += M
 	if(scan_for["alien"])
 		for(var/mob/living/carbon/alien/M in oview(scan_range,src))
-			if(M.stat || M.lying || M in exclude)
+			if(M.stat || M.lying || (M in exclude))
 				continue
 			pos_targets += M
 	if(pos_targets.len)

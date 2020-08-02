@@ -1,6 +1,6 @@
 /mob
 	var/bloody_hands = 0
-	var/mob/living/carbon/human/bloody_hands_mob
+	var/list/bloody_hands_data = list()
 	var/track_blood = 0
 	var/list/feet_blood_DNA
 	var/feet_blood_color
@@ -8,9 +8,9 @@
 
 /obj/item/clothing/gloves
 	var/transfer_blood = 0
-	var/mob/living/carbon/human/bloody_hands_mob
+	var/list/bloody_hands_data = list()
 
-/obj/item/clothing/shoes/
+/obj/item/clothing/shoes
 	var/track_blood = 0
 
 /obj/item/weapon/reagent_containers/glass/rag
@@ -39,7 +39,7 @@
 			src.reagents.reaction(M, TOUCH)
 			spawn(5) src.reagents.clear_reagents()
 			return 1
-	else		
+	else
 		var/datum/organ/external/targetorgan = M.get_organ(user.zone_sel.selecting)
 		var/list/bleeding_organs = M.get_bleeding_organs()
 		if(targetorgan in bleeding_organs) //rags work as bandages

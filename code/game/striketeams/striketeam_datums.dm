@@ -338,7 +338,6 @@ var/list/sent_strike_teams = list()
 	//Creates mind stuff.
 	new_commando.mind = new
 	new_commando.mind.current = new_commando
-	new_commando.mind.original = new_commando
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Custom Team"
 	if(!(new_commando.mind in ticker.minds))

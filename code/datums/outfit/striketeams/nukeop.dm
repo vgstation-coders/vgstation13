@@ -71,12 +71,12 @@
         //Mister deconstruction, C4 and efficient. Engineers have shotguns because stereotype, and eswords for utility
         "Engineering" = list(
             slot_glasses_str = /obj/item/clothing/glasses/scanner/meson/prescription,
-            slot_s_store_str = /obj/item/weapon/gun/projectile/shotgun/pump/combat,
+            slot_s_store_str = /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty,
             slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
             slot_in_backpack_str = list(
                 /obj/item/weapon/storage/box/lethalshells = 1,
                 /obj/item/weapon/melee/energy/sword = 1,
-                /obj/item/weapon/plastique = 3,
+                /obj/item/weapon/c4 = 3,
                 /obj/item/clothing/glasses/welding/superior = 1,
             ),
             ACCESSORY_ITEM = /obj/item/clothing/shoes/magboots/syndie/elite,

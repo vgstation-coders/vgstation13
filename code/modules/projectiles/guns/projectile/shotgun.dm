@@ -28,6 +28,7 @@
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 	gun_flags = 0
+	starting_materials = list(MAT_IRON = 7500, MAT_WOOD = 3750)
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)
@@ -78,6 +79,14 @@
 	max_shells = 8
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
+
+/obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
+	name = "combat shorty"
+	desc = "Handy for close encounters."
+	icon_state = "scshotgun"
+	w_class = W_CLASS_MEDIUM
+	slot_flags = SLOT_BELT
+	max_shells = 3
 
 //this is largely hacky and bad :(	-Pete
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel
@@ -166,7 +175,7 @@
 	item_state = "sawnshotgun"
 	fire_delay = 0
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		..()
 		attack_self(user)

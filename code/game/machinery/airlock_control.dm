@@ -7,7 +7,7 @@
 
 // This code allows for airlocks to be controlled externally by setting an id_tag and comm frequency (disables ID access)
 /obj/machinery/door/airlock
-	var/id_tag
+
 	var/frequency
 	var/shockedby = list()
 	var/datum/radio_frequency/radio_connection
@@ -27,7 +27,7 @@
 				open(1)
 			else
 				close(1)
-		
+
 		if("open")
 			open(1)
 
@@ -48,7 +48,7 @@
 			toggle_bolts()
 			sleep(2)
 			update_icon()
-			
+
 		if("secure_cycle")
 			if(density)
 				if(locked)
@@ -100,7 +100,7 @@
 
 obj/machinery/door/airlock/proc/send_status()
 	if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -128,7 +128,7 @@ obj/machinery/door/airlock/Bumped(atom/AM)
 	if(istype(AM, /obj/mecha))
 		var/obj/mecha/mecha = AM
 		if(density && radio_connection && mecha.occupant && (src.allowed(mecha.occupant) || src.check_access_list(mecha.operation_req_access)))
-			var/datum/signal/signal = getFromPool(/datum/signal)
+			var/datum/signal/signal = new /datum/signal
 			signal.transmission_method = 1 //radio signal
 			signal.data["tag"] = id_tag
 			signal.data["timestamp"] = world.time
@@ -148,20 +148,22 @@ obj/machinery/door/airlock/proc/set_frequency(new_frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 
 
-obj/machinery/door/airlock/initialize()
+/obj/machinery/door/airlock/initialize()
+	if (!radio_controller)
+		return
 	if(frequency)
 		set_frequency(frequency)
 
 	update_icon()
 
 
-obj/machinery/door/airlock/New()
+/obj/machinery/door/airlock/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-obj/machinery/airlock_sensor
+/obj/machinery/airlock_sensor
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "airlock_sensor_off"
 	name = "airlock sensor"
@@ -169,7 +171,7 @@ obj/machinery/airlock_sensor
 	anchored = 1
 	power_channel = ENVIRON
 
-	var/id_tag
+
 	var/master_tag
 	var/frequency = 1449
 	var/command = "cycle"
@@ -185,7 +187,7 @@ obj/machinery/airlock_sensor
 	machine_flags = MULTITOOL_MENU
 
 
-obj/machinery/airlock_sensor/update_icon()
+/obj/machinery/airlock_sensor/update_icon()
 	if(on)
 		if(alert)
 			icon_state = "airlock_sensor_alert"
@@ -194,20 +196,20 @@ obj/machinery/airlock_sensor/update_icon()
 	else
 		icon_state = "airlock_sensor_off"
 
-obj/machinery/airlock_sensor/attack_hand(mob/user)
+/obj/machinery/airlock_sensor/attack_hand(mob/user)
 	if(..())
 		return
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.data["tag"] = master_tag
 	signal.data["command"] = command
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	radio_connection.post_signal(src, signal, range = AIRLOCK_CONTROL_RANGE, filter = RADIO_AIRLOCK)
 	flick("airlock_sensor_cycle", src)
 
-obj/machinery/airlock_sensor/process()
+/obj/machinery/airlock_sensor/process()
 	if(on)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = id_tag
 		signal.data["timestamp"] = world.time
@@ -223,24 +225,26 @@ obj/machinery/airlock_sensor/process()
 
 	update_icon()
 
-obj/machinery/airlock_sensor/proc/set_frequency(new_frequency)
+/obj/machinery/airlock_sensor/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, frequency, RADIO_AIRLOCK)
 
-obj/machinery/airlock_sensor/initialize()
+/obj/machinery/airlock_sensor/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 
-obj/machinery/airlock_sensor/New()
+/obj/machinery/airlock_sensor/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-obj/machinery/airlock_sensor/airlock_interior
+/obj/machinery/airlock_sensor/airlock_interior
 	command = "cycle_interior"
 
-obj/machinery/airlock_sensor/airlock_exterior
+/obj/machinery/airlock_sensor/airlock_exterior
 	command = "cycle_exterior"
 
 /obj/machinery/airlock_sensor/New(turf/loc, var/ndir, var/building=0)
@@ -261,7 +265,7 @@ obj/machinery/airlock_sensor/airlock_exterior
 		//stat |= MAINT
 		//src.update_icon()
 
-obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+/obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return {"
 		<ul>
 			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
@@ -269,7 +273,7 @@ obj/machinery/airlock_sensor/multitool_menu(var/mob/user,var/obj/item/device/mul
 			[format_tag("Master ID Tag","master_tag")]
 		</ul>"}
 
-obj/machinery/airlock_sensor/Topic(href,href_list)
+/obj/machinery/airlock_sensor/Topic(href,href_list)
 	if(..())
 		return 0
 
@@ -292,7 +296,7 @@ obj/machinery/airlock_sensor/Topic(href,href_list)
 	update_multitool_menu(usr)
 
 
-obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
+/obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
 		return .
@@ -303,7 +307,7 @@ obj/machinery/airlock_sensor/attackby(var/obj/item/W, var/mob/user)
 			new /obj/item/mounted/frame/airlock_sensor(get_turf(src))
 			qdel(src)
 
-obj/machinery/access_button
+/obj/machinery/access_button
 	icon = 'icons/obj/airlock_machines.dmi'
 	icon_state = "access_button_standby"
 	name = "access button"
@@ -347,20 +351,22 @@ obj/machinery/access_button
 		//src.update_icon()
 
 
-obj/machinery/access_button/update_icon()
+/obj/machinery/access_button/update_icon()
 	if(on)
 		icon_state = "access_button_standby"
 	else
 		icon_state = "access_button_off"
 
 
-obj/machinery/access_button/attack_hand(mob/user)
+/obj/machinery/access_button/attack_hand(mob/user)
 	add_fingerprint(usr)
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access Denied.</span>")
+		playsound(src, 'sound/machines/buzz-two.ogg', 20, 0, -1)
 
 	else if(radio_connection)
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 1 //radio signal
 		signal.data["tag"] = master_tag
 		signal.data["command"] = command
@@ -369,7 +375,7 @@ obj/machinery/access_button/attack_hand(mob/user)
 	flick("access_button_cycle", src)
 
 
-obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
+/obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 	. = ..()
 	if(.)
 		return .
@@ -380,33 +386,35 @@ obj/machinery/access_button/attackby(var/obj/item/W, var/mob/user)
 			new /obj/item/mounted/frame/access_button(get_turf(src))
 			qdel(src)
 
-obj/machinery/access_button/proc/set_frequency(new_frequency)
+/obj/machinery/access_button/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	radio_connection = radio_controller.add_object(src, frequency, customfilter)
 
 
-obj/machinery/access_button/initialize()
+/obj/machinery/access_button/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 
 
-obj/machinery/access_button/New()
+/obj/machinery/access_button/New()
 	..()
 
-	if(radio_controller)
-		set_frequency(frequency)
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+		initialize()
 
-obj/machinery/access_button/airlock_interior
+/obj/machinery/access_button/airlock_interior
 	frequency = 1449
 	command = "cycle_interior"
 
-obj/machinery/access_button/airlock_exterior
+/obj/machinery/access_button/airlock_exterior
 	frequency = 1449
 	command = "cycle_exterior"
 
 
 
-obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
+/obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return {"
 		<ul>
 			<li><b>Frequency:</b> <a href="?src=\ref[src];set_freq=-1">[format_frequency(frequency)] GHz</a> (<a href="?src=\ref[src];set_freq=[0]">Reset</a>)</li>
@@ -415,7 +423,7 @@ obj/machinery/access_button/multitool_menu(var/mob/user,var/obj/item/device/mult
 			<li><b>Filter:</b> <a href="?src=\ref[src];set_filter=-1">[customfilter]</a></li>
 		</ul>"}
 
-obj/machinery/access_button/Topic(href,href_list)
+/obj/machinery/access_button/Topic(href,href_list)
 	if(..())
 		return 1
 

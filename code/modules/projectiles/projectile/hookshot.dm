@@ -12,6 +12,7 @@
 	var/icon_name = "hookshot"
 	var/chain_datum_path = /datum/chain
 	var/chain_overlay_path = /obj/effect/overlay/chain
+	var/can_tether = TRUE
 
 /obj/item/projectile/hookshot/process_step()
 	var/sleeptime = 1
@@ -83,7 +84,7 @@
 		hookshot.hook = null
 	spawn()
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 
 /obj/item/projectile/hookshot/Destroy()
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
@@ -100,6 +101,11 @@
 
 	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
 	spawn()
+		if(!can_tether)
+			..(A)
+			hookshot.rewind_chain()
+			bullet_die()
+			return
 		if(held_item_check(A))
 			return
 		if(isturf(A))					//if we hit a wall or an anchored atom, we pull ourselves to it
@@ -174,3 +180,151 @@
 
 /obj/item/projectile/hookshot/ex_act()
 	return
+
+//Whips
+
+/obj/item/projectile/hookshot/whip
+	name = "whip"
+	icon_state = "whip"
+	icon_name = "whip"
+	nodamage = 0
+	damage = 10
+	kill_count = 5
+	sharpness = 1.2
+	failure_message = "Your hand slips and the whip falls loose..."
+	can_tether = FALSE
+	var/whipitgood_bonus = 5
+
+/obj/item/projectile/hookshot/whip/on_hit(var/atom/atarget, var/blocked = 0)
+	var/obj/item/weapon/gun/hookshot/whip/W = shot_from
+	if(W.firer?.is_wearing_item(/obj/item/clothing/head/energy_dome) && whipitgood_bonus)
+		force += whipitgood_bonus
+		visible_message("<span class='warning'>[W.firer] whips it good!</span>")
+	..(atarget, blocked)
+
+/obj/item/projectile/hookshot/whip/liquorice
+	name = "liquoricium whip"
+	icon_state = "liquorice"
+	icon_name = "liquorice"
+	damage = 15
+	sharpness = 1.2
+	failure_message = "The coil sticks to itself and won't unwind!"
+	whipitgood_bonus = null
+
+/obj/item/projectile/hookshot/whip/liquorice/to_bump(atom/A as mob)
+	create_reagents(5)
+	reagents.add_reagent(DIABEETUSOL, 2)
+	reagents.add_reagent(CARAMEL, 3)
+	var/mob/M = A
+	if(ishuman(M))
+		reagents.trans_to(M, reagents.total_volume)
+	..(A)
+
+/obj/item/projectile/hookshot/whip/vampkiller
+	name = "flail"
+	icon_state = "vampkiller"
+	icon_name = "vampkiller"
+	damage = 0
+	sharpness = 0
+	failure_message = "The lash's tip falls to the ground with a clunk..."
+	whipitgood_bonus = null
+
+/obj/item/projectile/hookshot/whip/vampkiller/true
+	icon_state = "vampkiller_true"
+	icon_name = "vampkiller_true"
+	damage = 20
+	sharpness = 1.5
+	failure_message = "The lash's tip falls to the ground with a heavy clunk..."
+	whipitgood_bonus = null
+
+/obj/item/projectile/hookshot/whip/vampkiller/true/to_bump(atom/A as mob|obj|turf|area)
+	var/mob/M = A
+	if(istype(M) && isvampire(M))
+		damage = 30
+		sharpness = 2
+	..(A)
+
+//Wind-up Boxes///////////////////////////////////////////////////////////////////
+/obj/item/projectile/hookshot/whip/windup_box
+	name = ""
+	icon_state = ""
+	icon_name = ""
+	nodamage = 0
+	damage = 0
+	sharpness = 0
+	kill_count = 20 //range is defined by maxlength so this prevents animation issues
+	failure_message = ""
+	can_tether = FALSE
+	var/windUp = 0
+	var/springForce = 0
+	var/damMod = 0
+
+/obj/item/projectile/hookshot/whip/windup_box/OnFired()
+	..()
+	var/obj/item/weapon/gun/hookshot/whip/windup_box/T = shot_from
+	if(istype(T))
+		windUp = T.windUp
+		springForce = T.springForce //inherits all the oomph from the box itself
+		damage = (windUp + springForce*damMod)
+		T.maxlength += springForce
+		T.windUp = 0
+		T.overWind = 0
+		T.springForce = 0 //resets the box's values but keeps its own for the hit
+
+/obj/item/projectile/hookshot/whip/windup_box/bootbox
+	name = "boot-in-a-box"
+	icon_state = "spring"
+	icon_name = "spring"
+	damMod = 5
+
+
+/obj/item/projectile/hookshot/whip/windup_box/bootbox/on_hit(atom/target as mob|obj|turf|area)
+	var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/T = shot_from
+	if(istype(target,/mob/living))
+		var/mob/living/K = target
+		switch(windUp)
+			if(9 to 12)
+				K.Knockdown(1)
+			if(13 to 16)
+				K.Knockdown(2)
+			if(17 to INFINITY) //launches the target away with force/distance proportional to how much we cranked
+				var/turf/Q = get_turf(K)
+				var/turf/endLocation
+				var/throwdir = (dir)
+				endLocation = get_ranged_target_turf(Q, throwdir, springForce)
+				K.throw_at(endLocation,springForce,windUp)
+				K.Knockdown(2+springForce)
+				if (prob(10*springForce))
+					explosion(K.loc,-1,0,0)
+					explosion(T.loc,-1,0,1)
+					qdel(T)
+
+
+/obj/item/projectile/hookshot/whip/windup_box/clownbox
+	name = "Punchline"
+	icon_state = "clown"
+	icon_name = "clown"
+	damMod = 3
+
+/obj/item/projectile/hookshot/whip/windup_box/clownbox/on_hit(atom/target as mob|obj|turf|area)
+	if(istype(target,/mob/living))
+		var/mob/living/K = target
+		switch(windUp)
+			if(12 to 15)
+				K.Knockdown(3)
+				K.Stun(1)
+			if(16 to INFINITY) //Like the boot-in-a-box knockback except it phases them through walls.
+				var/turf/Q = get_turf(K)
+				var/turf/endLocation
+				var/throwdir = (dir)
+				endLocation = get_ranged_target_turf(Q, throwdir, 2+springForce)
+				K.Knockdown(3+springForce)
+				K.Stun(3)
+				animate(K,alpha = 0, time =3) //Best solution I could find to no smooth animation with forceMove
+				spawn(5) //Knocks/stuns them then quickly fades them out, moves them, icon fuckery to make flick work, and fades them back in as a little re-appearing animation
+					K.forceMove(endLocation, no_tp=1, harderforce=0, glide_size_override=0)
+					var/oldIcon = K.icon
+					K.icon = 'icons/obj/wind_up.dmi'//flick is dumb, it works dumb
+					K.alpha = OPAQUE
+					flick("bananaphaz_flick", K)
+					K.icon = oldIcon
