@@ -284,10 +284,7 @@
 //Grow clones to maturity then kick them out.  FREELOADERS
 /obj/machinery/cloning/clonepod/process()
 
-	if(stat & NOPOWER) //Autoeject if power is lost
-		if (occupant)
-			locked = FALSE
-			go_out()
+	if(stat & NOPOWER) //do nothing if power is lost
 		return
 
 	if((occupant) && (occupant.loc == src))
@@ -365,20 +362,11 @@
 
 	. = ..()
 
-//Let's unlock this early I guess.  Might be too early, needs tweaking.
+
 /obj/machinery/cloning/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	. = ..()
 	if(.)
 		return .
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
-		if (!check_access(W))
-			to_chat(user, "<span class='warning'>Access Denied.</span>")
-			return
-		else if ((!locked) || (isnull(occupant)))
-			return
-		else
-			locked = FALSE
-			to_chat(user, "System unlocked.")
 	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		if(user.drop_item(W))
 			playsound(src, 'sound/machines/juicerfast.ogg', 30, 1)
@@ -398,16 +386,6 @@
 	connected.updateUsrDialog()
 	return TRUE
 
-/obj/machinery/cloning/clonepod/verb/eject()
-	set name = "Eject Cloner"
-	set category = "Object"
-	set src in oview(1)
-
-	if (usr.isUnconscious())
-		return
-	go_out()
-	add_fingerprint(usr)
-	return
 
 /obj/machinery/cloning/clonepod/proc/go_out(var/exit = loc)
 	if (locked)
@@ -546,10 +524,8 @@
 	..()
 
 	if(occupant && prob(5))
-		visible_message("<span class='notice'>[src] buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
+		visible_message("<span class='notice'>[src] buzzes.</span>","<span class='warning'>You hear a buzz, but nothing else happens.</span>")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
-		locked = FALSE
-		go_out()
 
 /*
  *	Diskette Box
