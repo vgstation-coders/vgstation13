@@ -145,6 +145,14 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/newsreader/Destroy()
 	..()
 
+/datum/pda_app/newsreader/proc/newsAlert(var/channel_name)
+	if(pda_device.silent)
+		return
+	var/turf/T = get_turf(pda_device)
+	playsound(T, 'sound/machines/twobeep.ogg', 50, 1)
+	for (var/mob/O in hearers(3, T))
+		O.show_message(text("[bicon(pda_device)] [channel_name ? "Breaking news from [channel_name]" : "Attention! Wanted issue distributed!"]!"))
+
 ///////////SNAKEII//////////////////////////////////////////////////////////////
 
 /datum/pda_app/snake

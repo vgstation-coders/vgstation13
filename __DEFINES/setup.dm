@@ -1239,6 +1239,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define NEWSREADER_CHANNEL_LIST	0
 #define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1

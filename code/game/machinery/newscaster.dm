@@ -37,6 +37,8 @@
 
 	var/icon/img = null
 	var/icon/backup_img
+	var/icon/img_pda = null
+	var/icon/backup_img_pda
 	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
 
 /datum/feed_channel
@@ -56,6 +58,17 @@
 	backup_author = ""
 	img = null
 	backup_img = null
+	img_pda = null
+	backup_img_pda = null
+
+/datum/feed_message/proc/make_PDA_img()
+	if (img)
+		img_pda = icon(img)
+		//turns the image grayscale then applies adds an olive coat of paint
+		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
+		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
+		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
+		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
 
 /datum/feed_channel/proc/clear()
 	channel_name = ""
@@ -674,6 +687,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
+					newMsg.make_PDA_img()
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -681,6 +695,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(channel_name)
+				for(var/obj/item/device/pda/PDA in PDAs)
+					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+					if(reader)
+						reader.newsAlert(channel_name)
 
 			updateUsrDialog()
 
@@ -783,10 +801,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
+							WANTED.make_PDA_img()
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
 							NEWSCASTER.update_icon()
+						for(var/obj/item/device/pda/PDA in PDAs)
+							var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+							if(reader)
+								reader.newsAlert()
 						screen = NEWSCASTER_WANTED_SUCCESS
 					else
 						if(news_network.wanted_issue.is_admin_message)
@@ -862,8 +885,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(MSG.img != null)
 				MSG.backup_img = MSG.img
 				MSG.img = null
+				MSG.backup_img_pda = MSG.img_pda
+				MSG.img_pda = null
 			else
 				MSG.img = MSG.backup_img
+				MSG.img_pda = MSG.backup_img_pda
 			if(MSG.body != "<B>\[REDACTED\]</B>")
 				MSG.backup_body = MSG.body
 				MSG.body = "<B>\[REDACTED\]</B>"
@@ -1264,7 +1290,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		say("Breaking news from [channel]!")
 		alert = TRUE
 		update_icon()
-		spawn(300)
+		spawn(30 SECONDS)
 			alert = FALSE
 			update_icon()
 		playsound(src, 'sound/machines/twobeep.ogg', 75, 1)
@@ -1272,7 +1298,6 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		for(var/mob/O in hearers(world.view-1, T))
 		say("Attention! Wanted issue distributed!")
 		playsound(src, 'sound/machines/warning-buzzer.ogg', 75, 1)
-	return
 
 /obj/machinery/newscaster/say_quote(text)
 	return "beeps, [text]"

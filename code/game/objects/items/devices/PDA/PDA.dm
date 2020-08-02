@@ -1148,20 +1148,22 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					if (NEWSREADER_CHANNEL_LIST)
 						dat += {"<h4>Station Feed Channels</h4>"}
 						if(app)
+							if(news_network.wanted_issue)
+								dat+= "<HR><b><A href='?src=\ref[src];choice=viewWanted'>Read Wanted Issue</A></b><HR>"
 							if( isemptylist(news_network.network_channels) )
 								dat+="<br><i>No active channels found...</i>"
 							else
 								for(var/datum/feed_channel/channel in news_network.network_channels)
 									if(channel.is_admin_channel)
-										dat+="<b><font style='BACKGROUND-COLOR: LightGreen '><a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a></font></b><br>"
+										dat+="<b><a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a></b><br>"
 									else
-										dat+="<b><a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a> [(channel.censored) ? ("<font color='red'>***</font>") : ""]<br></b>"
+										dat+="<a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a> [(channel.censored) ? ("***") : ""]<br>"
 					if (NEWSREADER_VIEW_CHANNEL)
 						if(app)
-							dat+="<b>[app.viewing_channel.channel_name]: </b><font size=1>\[created by: <font color='maroon'>[app.viewing_channel.author]</font>\]</font><HR>"
+							dat+="<b>[app.viewing_channel.channel_name]: </b><font size=1>\[created by: <b>[app.viewing_channel.author]</b>\]</font><HR>"
 							if(app.viewing_channel.censored)
-								dat += {"<font color='red'><B>ATTENTION: </B></font>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<br>
-									No further feed story additions are allowed while the D-Notice is in effect.</font><br><br>"}
+								dat += {"<B>ATTENTION: </B></font>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<br>
+									No further feed story additions are allowed while the D-Notice is in effect.<br><br>"}
 							else
 								if( isemptylist(app.viewing_channel.messages) )
 									dat+="<i>No feed messages found in channel...</i><br>"
@@ -1171,10 +1173,23 @@ var/global/list/obj/item/device/pda/PDAs = list()
 										i++
 										dat+="-[message.body] <br>"
 										if(message.img)
-											usr << browse_rsc(message.img, "tmp_photo[i].png")
+											usr << browse_rsc(message.img_pda, "tmp_photo_pda[i].png")
 
-											dat+="<a href='?src=\ref[src];show_photo_info=\ref[message]'><img src='tmp_photo[i].png' width = '192'></a><br><br>"
-										dat+="<font size=1>\[Story by <font color='maroon'>[message.author]</font>\]</font><br>"
+											dat+="<a href='?src=\ref[src];choice=showPhotoInfo;showPhotoInfo=\ref[message]'><img src='tmp_photo_pda[i].png' width = '192'></a><br>"
+										dat+="<font size=1>\[Story by <b>[message.author]</b>\]</font><HR>"
+
+							dat += {"<br><a href='?src=\ref[src];choice=viewChannels'>Back</a>"}
+					if (NEWSREADER_WANTED_SHOW)
+						if(app)
+							dat += {"<B>-- STATIONWIDE WANTED ISSUE --</B><BR><FONT SIZE=2>\[Submitted by: <b>[news_network.wanted_issue.backup_author]</b>\]</FONT><HR>
+								<B>Criminal</B>: [news_network.wanted_issue.author]<BR>
+								<B>Description</B>: [news_network.wanted_issue.body]<BR>
+								<B>Photo:</B>: "}
+							if(news_network.wanted_issue.img_pda)
+								usr << browse_rsc(news_network.wanted_issue.img_pda, "tmp_photow_pda.png")
+								dat+="<BR><img src='tmp_photow_pda.png' width = '180'>"
+							else
+								dat+="None"
 
 							dat += {"<br><a href='?src=\ref[src];choice=viewChannels'>Back</a>"}
 
@@ -1691,6 +1706,15 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if("viewChannels")
 			var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
 			app.screen = NEWSREADER_CHANNEL_LIST
+
+		if("viewWanted")
+			var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
+			app.screen = NEWSREADER_WANTED_SHOW
+
+		if("showPhotoInfo")
+			var/datum/feed_message/FM = locate(href_list["showPhotoInfo"])
+			if(istype(FM) && FM.img_info)
+				usr.show_message("<span class='info'>[FM.img_info]</span>", MESSAGE_SEE)
 
 //GAME FUNCTIONS====================================
 
