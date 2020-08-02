@@ -1175,7 +1175,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					pages++
 				if(important_message!=null)
 
-					dat += {"<DIV STYLE='float:center;'><FONT SIZE=4><B>Wanted Issue:</B></FONT SIZE></DIV><BR><BR>
+					dat += {"<DIV STYLE='align:center;'><FONT SIZE=4><B>!!Wanted!!</B></FONT SIZE></DIV>
 						<B>Criminal name</B>: <b>[important_message.author]</b><BR>
 						<B>Description</B>: [important_message.body]<BR>
 						<B>Photo:</B>: "}
@@ -1294,7 +1294,8 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	feedback_inc("newscaster_newspapers_printed",1)
 	var/obj/item/weapon/newspaper/printed_issue = new /obj/item/weapon/newspaper(src)
 	for(var/datum/feed_channel/FC in news_network.network_channels)
-		printed_issue.news_content += FC.NewspaperCopy()
+		if (!FC.censored)//censored channels aren't printed at all, why waste all this good paper
+			printed_issue.news_content += FC.NewspaperCopy()
 	if(news_network.wanted_issue)
 		printed_issue.important_message = news_network.wanted_issue.NewspaperCopy()
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
