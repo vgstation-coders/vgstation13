@@ -150,7 +150,10 @@
 
 /obj/structure/AIcore/deactivated/attackby(var/obj/item/device/aicard/A as obj, var/mob/user as mob)
 	if(istype(A, /obj/item/device/aicard))//Is it?
-		A.transfer_ai("INACTIVE","AICARD",src,user)
+		if(do_after(user, src, 40))
+			if(!istype(src) && !istype(A))
+				return
+			A.transfer_ai("INACTIVE","AICARD",src,user)
 	return ..()
 
 /*
@@ -299,7 +302,7 @@ That prevents a few funky behaviors.
 							else if (C.contents.len)
 								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
 							else if (!T.occupant)
-								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")		
+								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
 	else
 		to_chat(U, "<span class='danger'>ERROR:</span> AI flush is in progress, cannot execute transfer protocol.")
 	return
