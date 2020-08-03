@@ -63,21 +63,25 @@ var/list/beam_master = list()
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
-	var/list/ray/paths = list() //full of rays
+	var/list/ray/past_rays = list() //full of rays
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
-	var/ray/beam_ray/our_ray = new /ray/beam_ray(origin, direction, src)
-	for(var/ray/beam_ray/other_ray in paths)
-		if(other_ray.overlaps(our_ray))
+	//fuck byond
+	if(past_rays == null)
+		past_rays = list()
+
+	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin, direction, src)
+	for(var/ray/beam_ray/other_ray in past_rays)
+		if(other_ray.overlaps(shot_ray))
 			return //we already went here
 
 	var/list/rayCastHit/hits
 	if(travel_range)
-		hits = our_ray.cast(travel_range)
+		hits = shot_ray.cast(travel_range)
 	else
-		hits = our_ray.cast(MAX_BEAM_DISTANCE)
+		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
-	paths += our_ray
+	past_rays += shot_ray
 
 	//visuals
 	shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
@@ -94,7 +98,7 @@ var/list/beam_master = list()
 		return
 
 	//we assume that our latest ray is what caused this rebound
-	var/ray/beam_ray/latest_ray = paths[paths.len]
+	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
 
 	//TODO make new ray
 	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
@@ -103,7 +107,7 @@ var/list/beam_master = list()
 
 	//check if raypath was already traveled
 	var/ray/temp_ray = new /ray(origin, direction)
-	for(var/ray/beam_ray/other_ray in paths)
+	for(var/ray/beam_ray/other_ray in past_rays)
 		if(temp_ray.overlaps(other_ray))
 			return
 
