@@ -184,6 +184,7 @@
 	var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
 		setGender(new_gender == "Male" ? MALE : FEMALE)
+	update_body()
 
 /mob/living/carbon/human/proc/pick_appearance(var/mob/user)
 	var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
@@ -234,3 +235,4 @@
 	//M.rebuild_appearance()
 	update_hair()
 	update_body()
+	check_dna()

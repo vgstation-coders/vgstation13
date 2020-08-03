@@ -805,8 +805,8 @@ var/list/admin_verbs_mod = list(
 	switch(alert("Are you sure you wish to edit this mob's appearance? Skrell, Unathi, Vox and Tajaran can result in unintended consequences.",,"Yes","No"))
 		if("No")
 			return
-	M.pick_gender()
-	M.pick_appearance()
+	M.pick_gender(usr)
+	M.pick_appearance(usr)
 
 /client/proc/playernotes()
 	set name = "Show Player Notes"

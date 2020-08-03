@@ -226,9 +226,9 @@
 					targ.name = stagename
 
 				if("Gender")
-					targ.pick_gender()
+					targ.pick_gender(M)
 
 				if("Appearance")
-					targ.pick_appearance()
-
+					targ.pick_appearance(M)
+					
 			to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")
