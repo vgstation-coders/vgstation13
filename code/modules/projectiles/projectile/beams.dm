@@ -9,7 +9,42 @@
  *         icon_states/dirs for each placed beam image
  *             turfs that have that icon_state/dir
  */
+
 var/list/beam_master = list()
+
+#define MAX_BEAM_DISTANCE 100
+
+//overriding the filter function of an inherited beam
+/ray/beam_ray
+	var/obj/item/projectile/beam/fired_beam
+	var/list/rayCastHit/hit_cache //cause beam code is retarded
+
+/ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
+	..(p_origin, p_direction, fired_beam.starting.z)
+	src.fired_beam = fired_beam
+
+/ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
+	. = ..()
+	hit_cache = .
+
+/ray/beam_ray/raycast_hit_check(var/atom/movable/A)
+
+	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
+	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
+		return RAY_CAST_HIT_EXIT
+
+	/*if(!A.Cross(fired_beam))
+		return 1
+
+	if(istype(A, /turf))
+		for(var/atom/movable/mA in A)
+			if(!mA.Cross(fired_beam))
+				return 1
+
+	if(A == fired_beam.original && !fired_beam.bumped && !isturf(fired_beam.original))
+		return 1*/
+
+	return 0
 
 /obj/item/projectile/beam
 	name = "laser"
@@ -28,68 +63,58 @@ var/list/beam_master = list()
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
+	var/list/ray/past_rays = list() //full of rays
 
+/obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
+	//fuck byond
+	if(past_rays == null)
+		past_rays = list()
 
-/obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
-	target = get_turf(original)
-	dist_x = abs(target.x - starting.x)
-	dist_y = abs(target.y - starting.y)
+	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin, direction, src)
+	for(var/ray/beam_ray/other_ray in past_rays)
+		if(other_ray.overlaps(shot_ray))
+			return //we already went here
 
-	override_starting_X = starting.x
-	override_starting_Y = starting.y
-	override_target_X = target.x
-	override_target_Y = target.y
-
-	if (target.x > starting.x)
-		dx = EAST
+	var/list/rayCastHit/hits
+	if(travel_range)
+		hits = shot_ray.cast(travel_range)
 	else
-		dx = WEST
+		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
-	if (target.y > starting.y)
-		dy = NORTH
-	else
-		dy = SOUTH
+	past_rays += shot_ray
 
-	if(dist_x > dist_y)
-		error = dist_x/2 - dist_y
-	else
-		error = dist_y/2 - dist_x
-
-	target_angle = round(Get_Angle(starting,target))
-
-	return 1
+	//visuals
+	shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
 
 /obj/item/projectile/beam/process()
-	var/lastposition = loc
-	var/reference = "\ref[src]" //So we do not have to recalculate it a ton
+	var/vector/origin = atom2vector(starting)
+	var/vector/direction = atoms2vector(starting, original)
 
-	target = get_turf(original)
-	dist_x = abs(target.x - src.x)
-	dist_y = abs(target.y - src.y)
+	fireto(origin, direction)
 
-	if (target.x > src.x)
-		dx = EAST
-	else
-		dx = WEST
+/obj/item/projectile/beam/rebound(atom/A)
+	//we only allow this laser to be rebound once
+	if(reflected)
+		return
 
-	if (target.y > src.y)
-		dy = NORTH
-	else
-		dy = SOUTH
-	var/target_dir = SOUTH
+	//we assume that our latest ray is what caused this rebound
+	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
 
-	if(dist_x > dist_y)
-		error = dist_x/2 - dist_y
+	//TODO make new ray
+	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
+	var/vector/origin = hit_cache[hit_cache.len].point
+	var/vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
 
-		spawn
-			reference = bresenham_step(dist_x,dist_y,dx,dy,lastposition,target_dir,reference)
+	//check if raypath was already traveled
+	var/ray/temp_ray = new /ray(origin, direction)
+	for(var/ray/beam_ray/other_ray in past_rays)
+		if(temp_ray.overlaps(other_ray))
+			return
 
-	else
-		error = dist_y/2 - dist_x
-		spawn
-			reference = bresenham_step(dist_y,dist_x,dy,dx,lastposition,target_dir,reference)
+	reflected = 1
+	fireto(origin, direction)
+	shot_from = A //temporary
 
-	cleanup(reference)
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
 	var/first = 1
@@ -196,7 +221,6 @@ var/list/beam_master = list()
 		while((loc.timestopped || timestopped) && !first)
 			sleep(3)
 		first = 0
-
 
 	return reference
 
