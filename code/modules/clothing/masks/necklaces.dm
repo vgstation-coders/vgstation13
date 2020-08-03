@@ -98,9 +98,11 @@
 	var/total_apcs = 0
 	var/good_apcs = 0
 	for(var/obj/machinery/power/apc/some_apc in power_machines)
+		if(!some_apc.z != map.zMainStation)
+			continue
 		total_apcs++
 		var/obj/item/weapon/cell/battery = some_apc.get_cell()
-		var/const/minimum_power_cell_charge_percent = 31 // Equipment turns off at 30%
+		var/const/minimum_power_cell_charge_percent = 80
 		if(battery?.percent() > minimum_power_cell_charge_percent || some_apc.charging)
 			good_apcs++
 	return (100*good_apcs/total_apcs) >= good_apcs_percentage_required
