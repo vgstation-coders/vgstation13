@@ -28,8 +28,8 @@
 				to_chat(holder, "<span class='warning'>This being is devoid of any magic.</span>")
 			else if(!C.isDead() && !C.isInCrit())
 				to_chat(holder, "<span class='warning'>Your enemy is still full of life! Kill or maim them!</span>")
-			else if(!iswizard(target))	//Just in case the wizard manages to summon spells for the crew. No fun allowed.
-				to_chat(holder, "<span class='warning'>You can only absorb spells from other Wizards.</span>")
+			else if(isapprentice(target))	//So wizards with absorb don't abuse their own apprentices for double spells
+				to_chat(holder, "<span class='warning'>Only a fool would steal magic from an apprentice.</span>")
 			else
 				var/obj/effect/cult_ritual/feet_portal/P = new (holder.loc, holder, src)
 				if(do_after(holder, target, 5 SECONDS, use_user_turf = TRUE))
@@ -59,7 +59,8 @@
 					if(!hasAbsorbed)
 						to_chat(holder, "<span class='notice'>You find magical energy within your foe, but there is nothing new to learn.</span>")
 					L.visible_message("<span class='sinister'>[L.real_name] absorbs the magical energy from [C.real_name], causing their body to dissolve in a burst of light!</span>")
-					target.dust()
+					if(iswizard(target))	//Wizards aren't wizards without magic! Dust their asses if they're a wizard
+						target.dust()
 				if(P)		//Remove portal effect if the absorbtion is cancelled early.
 					qdel(P)
 
