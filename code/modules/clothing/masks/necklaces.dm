@@ -10,6 +10,7 @@
 	desc = "It doesn't let go."
 	ignore_flip = TRUE
 	canremove = FALSE
+	clothing_flags = MASKINTERNALS
 	var/primed = FALSE
 	var/scheduled_explosion_time
 	var/condition_for_release_text = ""
