@@ -50,6 +50,8 @@
 									holderspell.apply_upgrade(Sp_SPEED)
 						*/			hasAbsorbed = TRUE
 						if(canAbsorb)
+							to_chat(target, "<span class='warning'>You feel the magical energy being drained from you!</span>")
+							to_chat(target, "<span class='warning'>You forget how to cast [targetspell.name]!</span>")
 							to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have learned [targetspell.name]!</span>")
 							L.attack_log += text("\[[time_stamp()] <font color='orange'>[L.real_name] ([L.ckey]) absorbed the spell [targetspell.name] from [C.real_name] ([C.ckey]).</font>")
 							C.remove_spell(targetspell)
