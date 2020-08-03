@@ -172,16 +172,23 @@
 	disable_suit_sensors(wizard_mob)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
 	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
-	if(WPF)
-		if(WPF.get_member_by_mind(wizard_mob.mind))
+	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
+	if(WPF && PFW)  //Are there wizwar factions?
+		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
-		else
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-	else
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+	else //No wizwar, give them normal robes
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+
 	if(wizard_mob.backbag == 2)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 3)
