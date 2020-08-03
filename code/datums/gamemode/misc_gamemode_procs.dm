@@ -178,17 +178,25 @@
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
+			S.uses = Sp_BASE_PRICE * 3.5
+			S.maxuses = Sp_BASE_PRICE * 3.5
 		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
+			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+			S.uses = Sp_BASE_PRICE * 3.5
+			S.maxuses = Sp_BASE_PRICE * 3.5
 		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+			if(!apprentice)
+				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 	else //No wizwar, give them normal robes
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
-
+		if(!apprentice)
+			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 	if(wizard_mob.backbag == 2)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 3)
@@ -200,8 +208,6 @@
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
 	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
 	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
-	if(!apprentice)
-		wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 
 	wizard_mob.make_all_robot_parts_organic()
 
