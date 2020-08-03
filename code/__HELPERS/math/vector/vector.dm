@@ -1,3 +1,26 @@
+var/list/vector/cardinal_vectors = list(
+	new /vector(0,1), //NORTH
+	new /vector(0,-1), //SOUTH
+	new /vector(1,0), //EAST
+	new /vector(-1,0) //WEST
+)
+var/list/vector/diagonal_vectors = list(
+	new /vector(1,1), //NORTHEAST
+	new /vector(-1,1), //NORTHWEST
+	new /vector(1,-1), //SOUTHEAST
+	new /vector(-1,-1) //SOUTHWEST
+)
+var/list/vector/all_vectors = list(
+	new /vector(0,1), //NORTH
+	new /vector(0,-1), //SOUTH
+	new /vector(1,0), //EAST
+	new /vector(-1,0), //WEST
+	new /vector(1,1), //NORTHEAST
+	new /vector(-1,1), //NORTHWEST
+	new /vector(1,-1), //SOUTHEAST
+	new /vector(-1,-1) //SOUTHWEST
+)
+
 // Basic geometry things.
 /vector
 	var/x = 0
@@ -23,9 +46,11 @@
 /vector/proc/floored()
 	return new /vector(Floor(x), Floor(y))
 
+//use this one
 /vector/proc/chebyshev_norm()
 	return max(abs(x), abs(y))
 
+//use this one
 /vector/proc/chebyshev_normalized()
 	var/norm = chebyshev_norm()
 	return new /vector(x/norm, y/norm)
@@ -53,6 +78,16 @@
 			return 270
 
 	return arctan(y/x)
+
+/vector/proc/dot(var/vector/B)
+	return src.x * B.x + src.y * B.y
+
+/vector/proc/angleBetween(var/vector/B)
+	return arccos((src.dot(B))/(src.chebyshev_norm()*B.chebyshev_norm()))
+
+/vector/proc/mirrorWith(var/vector/B)
+	var/vector/b_norm = B.chebyshev_normalized()
+	return src - 2 * src.dot(b_norm) * b_norm
 
 //operator overloading
 /vector/proc/operator+(var/vector/B)

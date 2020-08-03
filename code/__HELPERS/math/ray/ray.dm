@@ -43,15 +43,15 @@
 	return (c_x == c_y && (!max_distance || c_x <= max_distance ))
 
 /ray/proc/hitsArea(var/vector/position, var/vector/dimensions)
-	var/angle = direction.getAngle()
+	var/angle = direction.toAngle()
 	if(angle < 90)
-		return (hitsLine(position, position + new vector(0, dimensions.y)) || hitsLine(position, position + new vector(dimensions.x, 0)))
+		return (hitsLine(position, position + new /vector(0, dimensions.y)) || hitsLine(position, position + new /vector(dimensions.x, 0)))
 	else if(angle < 180)
-		return (hitsLine(position, position + new vector(0, dimensions.y)) || hitsLine(position + new vector(0, dimensions.y), position + dimensions))
+		return (hitsLine(position, position + new /vector(0, dimensions.y)) || hitsLine(position + new /vector(0, dimensions.y), position + dimensions))
 	else if(angle < 270)
-		return (hitsLine(position + new vector(0, dimensions.y), position + dimensions) || hitsLine(position + new vector(dimensions.x, 0), position + dimensions))
+		return (hitsLine(position + new /vector(0, dimensions.y), position + dimensions) || hitsLine(position + new /vector(dimensions.x, 0), position + dimensions))
 	else if(angle < 360)
-		return (hitsLine(position, position + new vector(dimensions.x, 0)) || hitsLine(position + new vector(dimensions.x, 0), position + dimension))
+		return (hitsLine(position, position + new /vector(dimensions.x, 0)) || hitsLine(position + new /vector(dimensions.x, 0), position + dimensions))
 	else
 		return FALSE
 
@@ -66,19 +66,26 @@
 
 	//TODO CROSS CALC
 
-//returns angle we hit atom with
-//assumes atom is 1x1 square box
-/ray/proc/getHitAngleOnAtom(var/atom/hit_atom)
-	var/entry_angle = direction.toAngle()
-	if(entry_angle < 90)
-	else if(entry_angle < 180)
-	else if(entry_angle < 270)
-	else if(entry_angle < 360)
-	else
-		return -1
+//returns rebound angle of hit atom
+//assumes atom is 1x1 hexagonal box
+/ray/proc/getReboundOnAtom(var/rayCastHit/hit)
+	//calc where we hit the atom
+	var/vector/hit_point = hit.point
+	var/vector/hit_atom_loc = atom2vector(hit.hit_atom)
 
-	var/vector/atom_pos = atom2vector(hit_atom)
+	var/vector/hit_vector = hit_point - hit_atom_loc
 
+	//we assume every atom is a hex, hence we use all_vectors
+	var/smallest_angle = 360
+	var/vector/entry_dir = null
+
+	for(var/vector/dir in all_vectors)
+		var/angle = dir.angleBetween(hit_vector)
+		if(angle < smallest_angle)
+			smallest_angle = angle
+			entry_dir = dir
+
+	return src.direction.mirrorWith(entry_dir)
 
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)
@@ -91,7 +98,6 @@
 	return RAY_CAST_HIT_CONTINUE
 
 //returns list of raycasthits
-//TODO (copy and modify getAllHits)
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
 	//calculating a step and its distance to use in the loop
 	var/vector/a_step = direction * RAY_CAST_STEP
@@ -136,11 +142,11 @@
 			if(RAY_CAST_NO_HIT_EXIT)
 				break; //exit loop
 			if(RAY_CAST_HIT_CONTINUE)
-				hits += new /rayCastHit(src, T, distance)
+				hits += new /rayCastHit(src, T, new_position, distance)
 				if(max_hits && max_hits >= hits.len)
 					break
 			if(RAY_CAST_HIT_EXIT)
-				. += new /rayCastHit(src, T, distance)
+				. += new /rayCastHit(src, T, new_position, distance)
 				if(max_hits && max_hits >= hits.len)
 					break
 				break //exit loop
@@ -152,11 +158,11 @@
 				if(RAY_CAST_NO_HIT_EXIT)
 					break; //exit loop
 				if(RAY_CAST_HIT_CONTINUE)
-					. += new /rayCastHit(src, A, distance)
+					. += new /rayCastHit(src, A, new_position, distance)
 					if(max_hits && max_hits >= hits.len)
 						break
 				if(RAY_CAST_HIT_EXIT)
-					. += new /rayCastHit(src, A, distance)
+					. += new /rayCastHit(src, A, new_position, distance)
 					if(max_hits && max_hits >= hits.len)
 						break
 					break //exit loop

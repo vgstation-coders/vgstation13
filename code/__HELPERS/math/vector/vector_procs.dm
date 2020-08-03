@@ -22,3 +22,8 @@
 //Vector from A -> B
 /proc/atoms2vector(var/atom/A, var/atom/B)
 	return new /vector((B.x - A.x), (B.y - A.y))
+
+/proc/mirror_with_test()
+	var/vector/d = new /vector(-1,-1)
+	var/vector/n = new /vector(0,1)
+	message_admins(d.mirrorWith(n).toString())

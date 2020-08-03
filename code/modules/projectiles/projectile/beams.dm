@@ -17,10 +17,15 @@ var/list/beam_master = list()
 //overriding the filter function of an inherited beam
 /ray/beam_ray
 	var/obj/item/projectile/beam/fired_beam
+	var/list/rayCastHit/hit_cache //cause beam code is retarded
 
 /ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
+
+/ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
+	. = ..()
+	hit_cache = .
 
 /ray/beam_ray/raycast_hit_check(var/atom/movable/A)
 
@@ -58,7 +63,7 @@ var/list/beam_master = list()
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
-	var/list/ray/beam_ray/paths = list() //full of rays
+	var/list/ray/paths = list() //full of rays
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
 	var/ray/beam_ray/our_ray = new /ray/beam_ray(origin, direction, src)
@@ -75,7 +80,7 @@ var/list/beam_master = list()
 	paths += our_ray
 
 	//visuals
-	shot_from.Beam(hits[hits.len].hit_atom) //, icon_state, icon, 50, MAX_BEAM_DISTANCE)
+	shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
@@ -91,17 +96,20 @@ var/list/beam_master = list()
 	//we assume that our latest ray is what caused this rebound
 	var/ray/beam_ray/latest_ray = paths[paths.len]
 
-	//TODO calc angle
-
 	//TODO make new ray
-	var/vector/origin =
-	var/vector/direction =
+	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
+	var/vector/origin = hit_cache[hit_cache.len].point
+	var/vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
 
-	//TODO check if raypath was already traveled
+	//check if raypath was already traveled
+	var/ray/temp_ray = new /ray(origin, direction)
 	for(var/ray/beam_ray/other_ray in paths)
+		if(temp_ray.overlaps(other_ray))
+			return
 
 	reflected = 1
 	fireto(origin, direction)
+	shot_from = A //temporary
 
 
 /obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
