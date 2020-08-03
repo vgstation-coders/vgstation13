@@ -19,7 +19,6 @@
 	var/holopeople_enabled = TRUE //Set this to true to allow observers become holodudes
 	var/list/connected_holopeople = list()
 	var/maximum_holopeople = 4
-	var/static/list/available_rooms
 	light_color = LIGHT_COLOR_CYAN
 
 /obj/machinery/computer/HolodeckControl/attack_ai(var/mob/user as mob)
