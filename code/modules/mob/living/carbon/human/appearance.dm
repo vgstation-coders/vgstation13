@@ -179,3 +179,58 @@
 	blue = max(min(blue + rand (-25, 25), 255), 0)
 
 	return list(red, green, blue)
+
+/mob/living/carbon/human/proc/pick_gender()
+	var/new_gender = alert(src, "Please select gender.", "Character Generation", "Male", "Female")
+	if (new_gender)
+		src.setGender(new_gender == "Male" ? MALE : FEMALE)
+
+/mob/living/carbon/human/proc/pick_appearance()
+	var/new_tone = input(src, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
+	if (!new_tone)
+		new_tone = 35
+	src.my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
+	src.my_appearance.s_tone =  -src.my_appearance.s_tone + 35
+
+	var/new_facial = input(src, "Please select facial hair color.", "Character Generation") as color
+	if(new_facial)
+		src.my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
+		src.my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
+		src.my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
+
+	var/new_hair = input(src, "Please select hair color.", "Character Generation") as color
+	if(new_facial)
+		src.my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
+		src.my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
+		src.my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
+
+	var/new_eyes = input(src, "Please select eye color.", "Character Generation") as color
+	if(new_eyes)
+		src.my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
+		src.my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
+		src.my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
+
+	// hair
+	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
+	var/list/hairs = list()
+
+	// loop through potential hairs
+	for(var/x in all_hairs)
+		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
+		hairs.Add(H.name) // add hair name to hairs
+		qdel(H) // delete the hair after it's all done
+		H = null
+
+	//hair
+	var/new_hstyle = input(src, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
+	if(new_hstyle)
+		src.my_appearance.h_style = new_hstyle
+
+	// facial hair
+	var/new_fstyle = input(src, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
+	if(new_fstyle)
+		src.my_appearance.f_style = new_fstyle
+
+	//M.rebuild_appearance()
+	src.update_hair()
+	src.update_body()
