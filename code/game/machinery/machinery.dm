@@ -135,6 +135,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	var/obj/item/weapon/cell/connected_cell = null
 
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
@@ -242,7 +243,7 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel))
+	if(!powered(power_channel) && !connected_cell)
 		return 0
 
 	switch (use_power)
