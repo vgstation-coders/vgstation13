@@ -56,8 +56,8 @@ var/list/response_team_members = list()
 	M.real_name = commando_name
 	M.name = commando_name
 	M.age = !leader_selected ? rand(23,35) : rand(35,45)
-	M.pick_gender()
-	M.pick_appearance()
+	M.pick_gender(user)
+	M.pick_appearance(user)
 	M.check_dna(M)
 	M.dna.ready_dna(M)//Creates DNA.
 
