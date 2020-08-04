@@ -34,6 +34,7 @@
 		"eyes" =     /datum/organ/internal/eyes
 	)
 	monkey_anim = "p2monkey"
+	monkey_anim_duration = 18
 
 /datum/species/plasmaman/handle_speech(var/datum/speech/speech, mob/living/carbon/human/H)
 	speech.message = replacetext(speech.message, "s", "s-s") //not using stutter("s") because it likes adding more s's.

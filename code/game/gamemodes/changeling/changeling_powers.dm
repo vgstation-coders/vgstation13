@@ -528,8 +528,9 @@
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = src
 	var/anim_name = C.get_unmonkey_anim()
+	var/anim_duration = C.get_unmonkey_anim_duration()
 	flick(anim_name, animation)
-	sleep(48)
+	sleep(anim_duration)
 	qdel(animation)
 	animation = null
 

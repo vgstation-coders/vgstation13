@@ -42,8 +42,9 @@
 		animation.icon = 'icons/mob/mob.dmi'
 		animation.master = M
 		var/anim_name = M.get_unmonkey_anim()
+		var/anim_duration = M.get_unmonkey_anim_duration()
 		flick(anim_name, animation)
-		sleep(48)
+		sleep(anim_duration)
 		animation.master = null
 		qdel(animation)
 
@@ -122,3 +123,9 @@
 
 /mob/living/carbon/monkey/get_unmonkey_anim()
 	return unmonkey_anim
+
+/mob/proc/get_unmonkey_anim_duration()
+	return 22
+
+/mob/living/carbon/monkey/get_unmonkey_anim_duration()
+	return unmonkey_anim_duration

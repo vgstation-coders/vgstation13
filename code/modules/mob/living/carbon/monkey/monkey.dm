@@ -42,6 +42,7 @@
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
 	var/unmonkey_anim = "monkey2h"
+	var/unmonkey_anim_duration = 22 //This should be equal to the frames of the animation!!!
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)

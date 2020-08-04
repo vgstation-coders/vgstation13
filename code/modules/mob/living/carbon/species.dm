@@ -143,6 +143,7 @@ var/global/list/whitelisted_species = list("Human")
 
 	var/species_intro //What intro you're given when you become this species.
 	var/monkey_anim = "h2monkey" // Animation from monkeyisation.
+	var/monkey_anim_duration = 22 //Animation duration for monkeyization, THIS SHOULD BE EQUAL TO THE FRAMES IN THE ANIMATION
 
 /datum/species/New()
 	..()

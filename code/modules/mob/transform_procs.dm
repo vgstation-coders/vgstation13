@@ -1,5 +1,3 @@
-#define MONKEY_ANIM_TIME 22
-
 // A standardized proc for turning a mob into a monkey
 // ignore_primitive will force the mob to specifically become a monkey and not its primitive type
 // returns the monkey mob
@@ -50,9 +48,10 @@
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
 		animation.master = src
-		var/moneky_anim = get_monkey_anim()
-		flick(moneky_anim, animation)
-		sleep(MONKEY_ANIM_TIME)
+		var/monkey_anim = get_monkey_anim()
+		var/monkey_anim_duration = get_monkey_anim_duration()
+		flick(monkey_anim, animation)
+		sleep(monkey_anim_duration)
 		animation.master = null
 		qdel(animation)
 	var/mob/living/carbon/monkey/Mo
@@ -89,9 +88,17 @@
 /mob/proc/get_monkey_anim()
 	return "h2monkey"
 
+/mob/proc/get_monkey_anim_duration()
+	return 22 //Let's just go with the default of h2monkey
+
 /mob/living/carbon/human/get_monkey_anim()
 	if (species)
 		return species.monkey_anim
+	return ..()
+
+/mob/living/carbon/human/get_monkey_anim_duration()
+	if(species)
+		return species.monkey_anim_duration
 	return ..()
 
 /mob/proc/Cluwneize()

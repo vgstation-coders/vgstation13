@@ -43,3 +43,4 @@
 	light_color = "#FAA019"
 	species_type = /mob/living/carbon/monkey/skellington/plasma
 	unmonkey_anim = "monkey2p"
+	unmonkey_anim_duration = 17
