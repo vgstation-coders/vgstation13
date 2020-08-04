@@ -34,7 +34,6 @@ var/list/beam_master = list()
 		return RAY_CAST_NO_HIT_CONTINUE
 
 	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
-	message_admins(A.type)
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
 		message_admins("a1")
 		message_admins(A.type)
@@ -116,8 +115,8 @@ var/list/beam_master = list()
 /obj/item/projectile/beam/rebound(atom/A)
 	//we only allow this laser to be rebound once
 	message_admins("rebounded")
-	if(reflected)
-		return
+	reflected = 1
+
 
 	//we assume that our latest ray is what caused this rebound
 	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
@@ -133,7 +132,6 @@ var/list/beam_master = list()
 		if(temp_ray.overlaps(other_ray))
 			return
 
-	reflected = 1
 	fireto(origin, direction)
 	shot_from = A //temporary
 

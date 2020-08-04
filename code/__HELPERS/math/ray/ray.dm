@@ -90,6 +90,8 @@
 
 	for(var/vector/dir in all_vectors)
 		var/angle = dir.angleBetween(hit_vector)
+		message_admins(dir.toString())
+		message_admins(angle)
 		if(angle < smallest_angle)
 			smallest_angle = angle
 			entry_dir = dir
