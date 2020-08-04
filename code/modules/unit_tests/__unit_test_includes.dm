@@ -4,9 +4,10 @@
 #include "circuitboards.dm"
 #include "dna_and_disabilities.dm"
 #include "hexadecimal.dm"
+#include "icons.dm"
+#include "lazy_events.dm"
+#include "names.dm"
 #include "reagent_recipe_collisions.dm"
 #include "slipping.dm"
-#include "names.dm"
 #include "turretid.dm"
-#include "lazy_events.dm"
 #endif
