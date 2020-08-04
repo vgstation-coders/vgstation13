@@ -8,8 +8,7 @@
 		)
 
 	priority = 1
-	min_duration = 40
-	max_duration = 60
+	duration = 4 SECONDS
 
 /datum/surgery_step/prepare_genitals/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -49,8 +48,7 @@
 		)
 
 	priority = 10 //Fuck sakes
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 	blood_level = 2 //Icky
 
 /datum/surgery_step/reshape_genitals/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
