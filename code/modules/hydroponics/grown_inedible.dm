@@ -285,3 +285,5 @@
 		M.put_in_hands(src)
 		to_chat(M, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
 
+/obj/item/weapon/carnivorous_pumpkin/acidable()
+	return FALSE
