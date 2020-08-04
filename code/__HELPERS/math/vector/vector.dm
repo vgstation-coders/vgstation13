@@ -86,8 +86,15 @@ var/list/vector/all_vectors = list(
 	return src.x * B.x + src.y * B.y
 
 /vector/proc/angleBetween(var/vector/B)
-	if(src.is_null() || B.is_null()) return FALSE
-	return arccos((src.dot(B))/(src.chebyshev_norm()*B.chebyshev_norm()))
+	if(src.is_null() || B.is_null()) return 0
+	var/vector/src_norm = src.chebyshev_normalized()
+	var/vector/b_norm = B.chebyshev_normalized()
+	if(src_norm.equals(b_norm)) return 0
+	return arccos(src_norm * b_norm)
+
+/vector/proc/mirrorWithNormal(var/vector/N)
+	var/vector/n_norm = N.chebyshev_normalized()
+	return src - n_norm * ( 2 * ( src * n_norm ))
 
 //operator overloading
 /vector/proc/operator+(var/vector/B)
@@ -115,6 +122,8 @@ var/list/vector/all_vectors = list(
 	y -= B.y*/
 
 /vector/proc/operator*(var/mult)
+	if(istype(mult, /vector))
+		return dot(mult)
 	return new /vector(x * mult, y * mult)
 
 /*/vector/proc/operator*=(var/mult)
