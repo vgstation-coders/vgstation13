@@ -64,7 +64,7 @@
 /datum/feed_message/proc/make_PDA_img()
 	if (img)
 		img_pda = icon(img)
-		//turns the image grayscale then applies adds an olive coat of paint
+		//turns the image grayscale then applies an olive coat of paint
 		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
 		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
 		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
