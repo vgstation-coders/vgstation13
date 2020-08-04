@@ -59,7 +59,7 @@ var/list/vector/all_vectors = list(
 	return IS_INT(x) && IS_INT(y)
 
 /vector/proc/is_null()
-	return chebyshev_norm() != 0
+	return chebyshev_norm() == 0
 
 /vector/proc/toString()
 	return "\[Vector\]([x],[y])"
