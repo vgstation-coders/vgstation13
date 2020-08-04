@@ -135,7 +135,9 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
-	var/obj/item/weapon/cell/connected_cell = null
+	
+	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
+	var/battery_dependent = 0	//Requires a battery to run
 
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
@@ -378,7 +380,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(href_list["close"])
 		return
