@@ -58,6 +58,9 @@ var/list/vector/all_vectors = list(
 /vector/proc/is_integer()
 	return IS_INT(x) && IS_INT(y)
 
+/vector/proc/is_null()
+	return chebyshev_norm() != 0
+
 /vector/proc/toString()
 	return "\[Vector\]([x],[y])"
 
@@ -83,11 +86,8 @@ var/list/vector/all_vectors = list(
 	return src.x * B.x + src.y * B.y
 
 /vector/proc/angleBetween(var/vector/B)
+	if(src.is_null() || B.is_null()) return FALSE
 	return arccos((src.dot(B))/(src.chebyshev_norm()*B.chebyshev_norm()))
-
-/vector/proc/mirrorWith(var/vector/B)
-	var/vector/b_norm = B.chebyshev_normalized()
-	return src - 2 * src.dot(b_norm) * b_norm
 
 //operator overloading
 /vector/proc/operator+(var/vector/B)
