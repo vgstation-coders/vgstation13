@@ -142,7 +142,7 @@
 /obj/machinery/proc/use_power(amount, chan = power_channel)
 	var/area/this_area = get_area(src)
 	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
-		if(connected_cell.charge < amount*0.75))	//Let them squeeze the last bit of power out.
+		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
 			connected_cell.charge = 0
 		else
 			connected_cell.use(amount*0.75)				
