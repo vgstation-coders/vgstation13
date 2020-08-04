@@ -7,10 +7,6 @@
 	plane = ABOVE_HUD_PLANE
 	var/datum/radial_menu/parent
 
-/obj/screen/radial/Destroy()
-	..()
-	parent = null
-
 /obj/screen/radial/slice
 	icon_state = "radial_slice"
 	var/choice
@@ -222,11 +218,6 @@
 	choices_icons.Cut()
 	choices_values.Cut()
 	choices_tooltips.Cut()
-	for(var/element in elements)
-		qdel(element)
-	elements.Cut()
-	qdel(close_button)
-	close_button = null
 	current_page = 1
 
 /datum/radial_menu/proc/element_chosen(choice_id,mob/user)
@@ -294,7 +285,6 @@
 /datum/radial_menu/proc/hide()
 	if(current_user)
 		current_user.images -= menu_holder
-	menu_holder = null
 
 /datum/radial_menu/proc/wait()
 	while (!gcDestroyed && current_user && !finished && !selected_choice)
