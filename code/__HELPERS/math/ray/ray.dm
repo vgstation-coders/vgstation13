@@ -9,8 +9,11 @@
 
 //Return values for raycast_hit_check
 #define RAY_CAST_NO_HIT_EXIT 		-1
+// use x < 0 for costum no_hit_exit defines
 #define RAY_CAST_NO_HIT_CONTINUE 	0
+//use 0 <= x < 1 for costum hit_continue defines
 #define RAY_CAST_HIT_CONTINUE 		1
+//use 1 < x for costum hit_exit defines
 #define RAY_CAST_HIT_EXIT 			2
 
 /ray
@@ -37,6 +40,12 @@
 /ray/proc/hitsPoint(var/vector/point, var/max_distance = 0)
 	if(origin.equals(point)) //the easy way out
 		return TRUE
+
+	if(direction.x == 0 && point.x != origin.x)
+		return FALSE
+
+	if(direction.y == 0 && point.y != origin.y)
+		return FALSE
 
 	var/c_x = (point.x - origin.x) / direction.x
 	var/c_y = (point.y - origin.y) / direction.y
@@ -70,7 +79,7 @@
 //assumes atom is 1x1 hexagonal box
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
-	var/vector/hit_point = hit.point
+	var/vector/hit_point = hit.point_raw
 	var/vector/hit_atom_loc = atom2vector(hit.hit_atom)
 
 	var/vector/hit_vector = hit_point - hit_atom_loc
@@ -78,14 +87,17 @@
 	//we assume every atom is a hex, hence we use all_vectors
 	var/smallest_angle = 360
 	var/vector/entry_dir = null
+	var/is_cardinal
 
 	for(var/vector/dir in all_vectors)
 		var/angle = dir.angleBetween(hit_vector)
 		if(angle < smallest_angle)
 			smallest_angle = angle
 			entry_dir = dir
+			is_cardinal = TRUE
 
-	return src.direction.mirrorWith(entry_dir)
+	return src.direction * new /vector(-1*abs(entry_dir.x), -1*abs(entry_dir.y)) //TODO
+
 
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)
@@ -141,17 +153,18 @@
 		var/turf/T = locate(new_position.x, new_position.y, z)
 
 		//trying hit at turf
-		switch(raycast_hit_check(T))
-			if(RAY_CAST_NO_HIT_EXIT)
-				message_admins("e1")
-				return hits //exit loop
-			if(RAY_CAST_HIT_CONTINUE)
-				hits += new /rayCastHit(src, T, new_position, distance)
-			if(RAY_CAST_HIT_EXIT)
-				message_admins("e2")
-				hits += new /rayCastHit(src, T, new_position, distance)
-				return hits //exit loop
-			//if(RAY_CAST_NO_HIT_CONTINUE) <-- not included cause we dont do anything here
+		var/hit_check = raycast_hit_check(T)
+		if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
+			message_admins("e1")
+			return hits
+		else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
+			//empty, nothing happens here
+		else if(hit_check <= RAY_CAST_HIT_CONTINUE)
+			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
+		else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
+			message_admins("e2")
+			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
+			return hits //exit loop
 
 		if(max_hits && max_hits >= hits.len)
 			message_admins("e3")
@@ -159,17 +172,17 @@
 
 		//trying hit on every atom inside the turf
 		for(var/atom/movable/A in T)
-			switch(raycast_hit_check(A))
-				if(RAY_CAST_NO_HIT_EXIT)
-					message_admins("e4")
-					return hits //exit loop
-				if(RAY_CAST_HIT_CONTINUE)
-					hits += new /rayCastHit(src, A, new_position, distance)
-				if(RAY_CAST_HIT_EXIT)
-					message_admins("e5")
-					hits += new /rayCastHit(src, A, new_position, distance)
-					return hits //exit loop
-				//if(RAY_CAST_NO_HIT_CONTINUE) <-- not included cause we dont do anything here
+			hit_check = raycast_hit_check(A)
+			if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
+				message_admins("e4")
+				return hits
+			else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
+			else if(hit_check <= RAY_CAST_HIT_CONTINUE)
+				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
+			else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
+				message_admins("e5")
+				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
+				return hits //exit loop
 			if(max_hits && max_hits >= hits.len)
 				message_admins("e6")
 				return hits

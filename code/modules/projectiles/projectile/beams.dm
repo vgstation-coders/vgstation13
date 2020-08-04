@@ -14,10 +14,12 @@ var/list/beam_master = list()
 
 #define MAX_BEAM_DISTANCE 100
 
+#define RAY_CAST_REBOUND 1.5
+
 //overriding the filter function of an inherited beam
 /ray/beam_ray
 	var/obj/item/projectile/beam/fired_beam
-	var/list/rayCastHit/hit_cache //cause beam code is retarded
+	var/list/rayCastHit/hit_cache
 
 /ray/beam_ray/New(var/vector/p_origin, var/vector/p_direction, var/obj/item/projectile/beam/fired_beam)
 	..(p_origin, p_direction, fired_beam.starting.z)
@@ -38,7 +40,12 @@ var/list/beam_master = list()
 		message_admins(A.type)
 		return RAY_CAST_HIT_EXIT
 
-	if(istype(A, /mob/living) && A.bullet_act(fired_beam) > 0)
+	if(istype(A, /mob/living))
+		var/ret = A.bullet_act(fired_beam)
+
+		if(ret < 0) //we rebounded
+			return RAY_CAST_REBOUND
+
 		return RAY_CAST_HIT_EXIT
 
 	if(A.opacity)
@@ -89,12 +96,16 @@ var/list/beam_master = list()
 
 	past_rays += shot_ray
 
-	//visuals
 	if(isnull(hits) || hits.len == 0)
 		message_admins("no hits")
 		//TODO infinite shot
 	else
+		var/rayCastHit/last_hit = hits[hits.len]
+
 		shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
+
+		if(last_hit.hit_type == RAY_CAST_REBOUND)
+			rebound(last_hit.hit_atom)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
@@ -111,7 +122,7 @@ var/list/beam_master = list()
 	//we assume that our latest ray is what caused this rebound
 	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
 
-	//TODO make new ray
+	//make new ray
 	var/list/rayCastHit/hit_cache = latest_ray.hit_cache
 	var/vector/origin = hit_cache[hit_cache.len].point
 	var/vector/direction = latest_ray.getReboundOnAtom(hit_cache[hit_cache.len])
