@@ -16,7 +16,6 @@
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
 
-	var/parentMoveKey = null
 	var/turf/turf = null // Updated in addToTurf()/removeFromTurf()
 
 /datum/power_connection/New(var/obj/parent)
@@ -39,7 +38,7 @@
 // CALLBACK from /lazy_event/on_moved.
 // This should never happen, except when Singuloth is doing its shenanigans, as rebuilding
 //  powernets is extremely slow.
-/datum/power_connection/proc/parent_moved()
+/datum/power_connection/proc/parent_moved(atom/movable/mover)
 	removeFromTurf() // Removes old ref
 	addToTurf() // Adds new one
 
