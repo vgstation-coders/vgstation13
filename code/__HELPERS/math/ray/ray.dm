@@ -99,6 +99,7 @@
 
 //returns list of raycasthits
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
+	set background = 1 // infinite loop protection gets triggered
 	//calculating a step and its distance to use in the loop
 	var/vector/a_step = direction * RAY_CAST_STEP
 	var/step_distance = a_step.chebyshev_norm()
@@ -111,9 +112,11 @@
 	var/list/vector/positions = list()
 
 	//our result
-	var/list/atom/movable/hits = list()
+	var/list/rayCastHit/hits = list()
 
+	var/i = 0
 	while(distance < max_distance)
+		i++
 		//moving one step further
 		pointer += a_step
 		distance += step_distance
@@ -131,7 +134,7 @@
 			continue
 
 		//check if this is origin and if we should ignore it
-		if(!ignore_origin || new_position.equals(origin_floored))
+		if(ignore_origin && new_position.equals(origin_floored))
 			continue
 
 		//getting the turf at our current (floored) vector
@@ -140,36 +143,43 @@
 		//trying hit at turf
 		switch(raycast_hit_check(T))
 			if(RAY_CAST_NO_HIT_EXIT)
-				break; //exit loop
+				message_admins("e1")
+				return hits //exit loop
 			if(RAY_CAST_HIT_CONTINUE)
 				hits += new /rayCastHit(src, T, new_position, distance)
-				if(max_hits && max_hits >= hits.len)
-					break
 			if(RAY_CAST_HIT_EXIT)
-				. += new /rayCastHit(src, T, new_position, distance)
-				if(max_hits && max_hits >= hits.len)
-					break
-				break //exit loop
+				message_admins("e2")
+				hits += new /rayCastHit(src, T, new_position, distance)
+				return hits //exit loop
 			//if(RAY_CAST_NO_HIT_CONTINUE) <-- not included cause we dont do anything here
+
+		if(max_hits && max_hits >= hits.len)
+			message_admins("e3")
+			return hits
 
 		//trying hit on every atom inside the turf
 		for(var/atom/movable/A in T)
 			switch(raycast_hit_check(A))
 				if(RAY_CAST_NO_HIT_EXIT)
-					break; //exit loop
+					message_admins("e4")
+					return hits //exit loop
 				if(RAY_CAST_HIT_CONTINUE)
-					. += new /rayCastHit(src, A, new_position, distance)
-					if(max_hits && max_hits >= hits.len)
-						break
+					hits += new /rayCastHit(src, A, new_position, distance)
 				if(RAY_CAST_HIT_EXIT)
-					. += new /rayCastHit(src, A, new_position, distance)
-					if(max_hits && max_hits >= hits.len)
-						break
-					break //exit loop
+					message_admins("e5")
+					hits += new /rayCastHit(src, A, new_position, distance)
+					return hits //exit loop
 				//if(RAY_CAST_NO_HIT_CONTINUE) <-- not included cause we dont do anything here
+			if(max_hits && max_hits >= hits.len)
+				message_admins("e6")
+				return hits
 
 		//adding our position so we know we already checked this one
 		positions += new_position
+
+	message_admins("e7")
+	message_admins(i)
+	return hits
 
 //helper proc to get first hit
 /ray/proc/getFirstHit(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/ignore_origin = TRUE)

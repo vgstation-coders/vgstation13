@@ -28,22 +28,23 @@ var/list/beam_master = list()
 	hit_cache = .
 
 /ray/beam_ray/raycast_hit_check(var/atom/movable/A)
+	if(isnull(A))
+		return RAY_CAST_NO_HIT_CONTINUE
 
 	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
+	message_admins(A.type)
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
+		message_admins("a1")
+		message_admins(A.type)
 		return RAY_CAST_HIT_EXIT
 
-	/*if(!A.Cross(fired_beam))
-		return 1
+	if(istype(A, /mob/living) && A.bullet_act(fired_beam) > 0)
+		return RAY_CAST_HIT_EXIT
 
-	if(istype(A, /turf))
-		for(var/atom/movable/mA in A)
-			if(!mA.Cross(fired_beam))
-				return 1
-
-	if(A == fired_beam.original && !fired_beam.bumped && !isturf(fired_beam.original))
-		return 1*/
-
+	if(A.opacity)
+		message_admins("a2")
+		message_admins(A.type)
+		return RAY_CAST_HIT_EXIT
 	return 0
 
 /obj/item/projectile/beam
@@ -66,11 +67,8 @@ var/list/beam_master = list()
 	var/list/ray/past_rays = list() //full of rays
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
-	//fuck byond
-	if(past_rays == null)
-		past_rays = list()
-
-	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin, direction, src)
+	// + 0.5 because we want to start in the middle of the tile
+	var/ray/beam_ray/shot_ray = new /ray/beam_ray(origin + new /vector(0.5, 0.5), direction, src)
 	for(var/ray/beam_ray/other_ray in past_rays)
 		if(other_ray.overlaps(shot_ray))
 			return //we already went here
@@ -81,10 +79,22 @@ var/list/beam_master = list()
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
+	for(var/rayCastHit/rCH in hits)
+		var/image/I = image('icons/Testing/Zone.dmi',"fullblock",10)
+		rCH.hit_atom.overlays += I
+		var/ref = "\ref[rCH.hit_atom]"
+		spawn(30)
+			var/atom/movable/R = locate(ref)
+			R.overlays -= I
+
 	past_rays += shot_ray
 
 	//visuals
-	shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
+	if(isnull(hits) || hits.len == 0)
+		message_admins("no hits")
+		//TODO infinite shot
+	else
+		shot_from.Beam(hits[hits.len].hit_atom)//, icon_state, icon, 50, MAX_BEAM_DISTANCE)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
@@ -94,6 +104,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/rebound(atom/A)
 	//we only allow this laser to be rebound once
+	message_admins("rebounded")
 	if(reflected)
 		return
 
