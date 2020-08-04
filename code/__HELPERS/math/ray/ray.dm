@@ -80,23 +80,26 @@
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
 	var/vector/hit_point = hit.point_raw
-	var/vector/hit_atom_loc = atom2vector(hit.hit_atom)
+	var/vector/hit_atom_loc = atom2vector(hit.hit_atom) + new /vector(0.5, 0.5)
 
 	var/vector/hit_vector = hit_point - hit_atom_loc
 
 	//we assume every atom is a hex, hence we use all_vectors
 	var/smallest_angle = 360
 	var/vector/entry_dir = null
-	var/is_cardinal
 
 	for(var/vector/dir in all_vectors)
 		var/angle = dir.angleBetween(hit_vector)
 		if(angle < smallest_angle)
 			smallest_angle = angle
 			entry_dir = dir
-			is_cardinal = TRUE
 
-	return src.direction * new /vector(-1*abs(entry_dir.x), -1*abs(entry_dir.y)) //TODO
+	message_admins(hit_point.toString())
+	message_admins(hit_vector.toString())
+	message_admins("entry_dir:")
+	message_admins(entry_dir.toString())
+
+	return src.direction.mirrorWithNormal(entry_dir)
 
 
 //gets a point along the ray
