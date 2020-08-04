@@ -23,9 +23,6 @@ I IS TYPIN'!'
 	M.typing_indicator = null
 	. = ..()
 
-/atom/movable/overlay/typing_indicator/SetInitLoc()
-	forceMove(get_turf(master))
-
 /mob/proc/create_typing_indicator()
 	if(client && !stat && client.prefs.typing_indicator && src.is_visible() && isturf(src.loc))
 		if(!typing_indicator)
