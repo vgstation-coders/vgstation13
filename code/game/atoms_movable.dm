@@ -635,10 +635,13 @@
 		src.throw_impact(get_turf(src), speed, user)
 
 //Overlays
+
+/datum/locking_category/overlay
+
 /atom/movable/overlay
 	var/atom/master = null
-	var/follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
 	anchored = 1
+	lockflags = 0 //Neither dense when locking or dense when locked to something
 
 /atom/movable/overlay/New()
 	. = ..()
@@ -652,8 +655,7 @@
 
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.lazy_register_event(/lazy_event/on_moved, src, follow_proc)
-		SetInitLoc()
+		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
@@ -665,13 +667,10 @@
 /atom/movable/overlay/Destroy()
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.lazy_unregister_event(/lazy_event/on_moved, src, follow_proc)
+		AM.unlock_atom(src)
 		AM.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	master = null
 	return ..()
-
-/atom/movable/overlay/proc/SetInitLoc()
-	forceMove(master.loc)
 
 /atom/movable/overlay/blob_act()
 	return
