@@ -203,7 +203,7 @@
 		if (M)
 			assigned += M
 			candidates -= M
-			var/datum/role/wizard/newWizard = new		//TODO: ENSURE WIZARDS DONT GET SENT TO THE CUCK CUBE
+			var/datum/role/wizard/newWizard = new		
 			newWizard.AssignToRole(M.mind,1)
 			if(wizards_number % 2)
 				WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
