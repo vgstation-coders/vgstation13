@@ -3909,11 +3909,6 @@
 						message_admins("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE Carp Migration Alert.")
 						return
-					if("Revs")
-						command_alert(/datum/command_alert/revolution)
-						message_admins("[key_name_admin(usr)] triggered a FAKE revolution alert.")
-						log_admin("[key_name_admin(usr)] triggered a FAKE revolution alert.")
-						return
 					if("Bloodstones raised")
 						command_alert(/datum/command_alert/bloodstones_raised)
 						message_admins("[key_name_admin(usr)] triggered a FAKE Bloodstones Alert (raised).")

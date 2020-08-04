@@ -103,12 +103,6 @@
 
 /// REVS
 
-/datum/command_alert/revolution
-	name = "Revolution"
-	alert_title = "Subversive Elements"
-	force_report = 1
-	message = "Subversive Union-aligned elements have been detected aboard the station. According to latest reports, targeted removal of heads of staff is already underway. Loyal crew should take immediate action to secure station against revolutionaries."
-
 /datum/command_alert/revolutiontoppled
 	name = "Revolution Defeated"
 	alert_title = "Order Restored"
