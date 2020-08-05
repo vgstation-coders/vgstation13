@@ -441,7 +441,7 @@
 	var/mob/living/carbon/human/H = occupant
 	while(hits>0)
 		if (hits>=4)
-			qdel(pick(H.internal_organs - H.internal_organs["brain"]))
+			qdel(pick(H.internal_organs - H.internal_organs_by_name["brain"]))
 			hits -= 4
 		else
 			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 1, display_message = FALSE)
