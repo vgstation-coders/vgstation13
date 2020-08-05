@@ -495,8 +495,8 @@
 	update_hidden_item_icons(W)
 
 	W.hud_layerise()
-	W.equipped(src, slot)
 	W.forceMove(src)
+	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
 
