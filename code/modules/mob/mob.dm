@@ -305,15 +305,15 @@
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
-		new /mob/virtualhearer(src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	update_colour(0)
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				qdel(VH)
+		if(virtualhearer)
+			qdel(virtualhearer)
+			virtualhearer = null
 	..()
 
 /mob/proc/is_muzzled()
