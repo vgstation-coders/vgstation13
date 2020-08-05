@@ -13,12 +13,14 @@ var/world_startup_time
 
 #define RECOMMENDED_VERSION 513
 
-
 var/savefile/panicfile
 /world/New()
 	world_startup_time = world.timeofday
 	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
+		#if EXTOOLS_DEBUGGER
+		call(extools_path, "debug_initialize")()
+		#endif
 		call(extools_path, "maptick_initialize")()
 		#if EXTOOLS_REFERENCE_TRACKING
 		call(extools_path, "ref_tracking_initialize")()
