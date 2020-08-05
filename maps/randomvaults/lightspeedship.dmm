@@ -151,7 +151,7 @@
 "eE" = (/obj/machinery/power/monitor,/obj/structure/cable{d2 = 4; icon_state = "0-4"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "eF" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor{dir = 8; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "eG" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor{dir = 4; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
-"eH" = (/obj/machinery/power/am_control_unit{anchored = 1},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor/engine,/area/shuttle/lightship/start)
+"eH" = (/obj/structure/cable{d2 = 8; icon_state = "0-8"},/obj/machinery/power/am_control_unit,/turf/simulated/floor/engine,/area/shuttle/lightship/start)
 "eI" = (/obj/structure/table/reinforced,/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 10},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 0},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 5},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 15},/obj/machinery/light{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "whitered"},/area/shuttle/lightship/start)
 "eK" = (/obj/machinery/power/apc/no_alerts{dir = 4; pixel_x = 25},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d2 = 2; icon_state = "0-2"; pixel_y = 1},/turf/simulated/floor{dir = 4; icon_state = "whitered"},/area/shuttle/lightship/start)
 "eM" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/machinery/door/airlock/glass_medical,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
