@@ -22,6 +22,9 @@
 	var/vector/origin_floored //the floored origin vector
 	var/vector/direction //direction of the ray
 
+/ray/proc/toString()
+	return "\[Ray\](\n- origin = " + origin.toString() + "\n- origin_floored = "+ origin_floored.toString() + "\n- direction = " + direction.toString() + "\n- z-level = " + num2text(z) + "\n)"
+
 //use atom2vector for the origin, atoms2vector for the direction
 /ray/New(var/vector/p_origin, var/vector/p_direction, var/z)
 	origin = p_origin
@@ -29,9 +32,12 @@
 	direction = p_direction.chebyshev_normalized()
 	src.z = z
 
+/ray/proc/equals(var/ray/other_ray)
+	return src.direction.equals(other_ray.direction) && src.hitsPoint(other_ray.origin)
+
 //checks if another ray overlaps this one
 /ray/proc/overlaps(var/ray/other_ray)
-	if(!(direction.equals(other_ray.direction) || direction.equals(-1*other_ray.direction))) //direction is normalized, so we can check like this
+	if(!(direction.equals(other_ray.direction) || direction.equals(other_ray.direction*-1))) //direction is normalized, so we can check like this
 		return FALSE
 
 	return hitsPoint(other_ray.origin)
@@ -76,7 +82,7 @@
 	//TODO CROSS CALC
 
 //returns rebound angle of hit atom
-//assumes atom is 1x1 hexagonal box
+//assumes atom is 1x1 octogonal box
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
 	var/vector/hit_point = hit.point_raw
@@ -84,16 +90,15 @@
 
 	var/vector/hit_vector = hit_point - hit_atom_loc
 
-	//we assume every atom is a hex, hence we use all_vectors
-	var/smallest_angle = 360
+	//we assume every atom is a octogonal, hence we use all_vectors
+	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
 	var/vector/entry_dir = null
 
 	for(var/vector/dir in all_vectors)
-		var/angle = dir.angleBetween(hit_vector)
-		message_admins(dir.toString())
-		message_admins(angle)
-		if(angle < smallest_angle)
-			smallest_angle = angle
+		var/vector/delta = dir.chebyshev_normalized() - hit_point.chebyshev_normalized()
+		var/dist = delta.chebyshev_norm()
+		if(dist < smallest_dist)
+			smallest_dist = dist
 			entry_dir = dir
 
 	message_admins(hit_point.toString())
@@ -206,4 +211,3 @@
 		return result[1]
 	else
 		return null
-
