@@ -112,7 +112,7 @@
 //gets a point along the ray
 /ray/proc/getPoint(var/distance)
 	var/vector/path = direction * distance
-	return (origin + path).floored()
+	return origin + path
 
 //inherit and override this for costum logic
 //=> for possible return values check defines at top of file
@@ -203,6 +203,54 @@
 	message_admins("e7")
 	message_admins(i)
 	return hits
+
+var/list/ray_draw_icon_cache = list()
+
+/ray/proc/draw(var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
+	var/distance_pointer = 0.5
+	while(distance_pointer < draw_distance - 1)
+		var/vector/point = getPoint(distance_pointer)
+		var/vector/point_floored = point.floored()
+
+		var/vector/pixels = (point - point_floored) * 32 //32 -> there must be a constant anywhere for that
+
+		var/image/I = image(icon, icon_state)
+		I.pixel_x = pixels.x
+		I.pixel_y = pixels.y
+		I.plane = EFFECTS_PLANE
+		I.layer = PROJECTILE_LAYER
+
+		var/turf/T = locate(point_floored.x, point_floored.y, z)
+		T.overlays += I
+		var/turf_ref = "\ref[T]"
+		var/img_ref = "\ref[I]"
+		//spawn(3)
+		//	locate(turf_ref).overlays -= locate(img_ref)
+
+		distance_pointer++
+
+	//TODO do the last mile
+
+	/*the old way
+	var/icon_ref = "[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"
+	update_pixel()
+
+	//If the icon has not been added yet
+	if( !(icon_ref in beam_icon_cache))
+		var/image/I = image(icon,"[icon_state]_pixel",dir = target_dir) //Generate it.
+		if(beam_color)
+			I.color = beam_color
+		I.transform = turn(I.transform, target_angle+45)
+		I.pixel_x = PixelX
+		I.pixel_y = PixelY
+		I.plane = EFFECTS_PLANE
+		I.layer = PROJECTILE_LAYER
+		beam_master[icon_ref] = I //And cache it!
+
+	at_pos.overlays += beam_master[icon_ref]
+	var/ref = "\ref[at_pos]"
+	spawn(3)
+		locate(ref).overlays -= beam_master[icon_ref]*/
 
 //helper proc to get first hit
 /ray/proc/getFirstHit(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/ignore_origin = TRUE)

@@ -98,40 +98,16 @@ var/list/beam_master = list()
 	if(isnull(hits) || hits.len == 0)
 		message_admins("no hits")
 		if(travel_range)
-			drawBeam(shot_ray, travel_range)
+			shot_ray.draw(travel_range)
 		else
-			drawBeam(shot_ray, MAX_BEAM_DISTANCE)
+			shot_ray.draw(MAX_BEAM_DISTANCE)
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
-		drawBeam(shot_ray, last_hit.distance)
+		shot_ray.draw(last_hit.distance)
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
 			rebound(last_hit.hit_atom)
-
-var/list/beam_icon_cache = list()
-
-/obj/item/projectile/beam/proc/drawBeam(var/ray/beam_ray/ray_to_draw, var/distance_to_draw)
-	//TODO
-	var/icon_ref = "[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"
-	update_pixel()
-
-	//If the icon has not been added yet
-	if( !(icon_ref in beam_icon_cache))
-		var/image/I = image(icon,"[icon_state]_pixel",dir = target_dir) //Generate it.
-		if(beam_color)
-			I.color = beam_color
-		I.transform = turn(I.transform, target_angle+45)
-		I.pixel_x = PixelX
-		I.pixel_y = PixelY
-		I.plane = EFFECTS_PLANE
-		I.layer = PROJECTILE_LAYER
-		beam_master[icon_ref] = I //And cache it!
-
-	at_pos.overlays += beam_master[icon_ref]
-	var/ref = "\ref[at_pos]"
-	spawn(3)
-		locate(ref).overlays -= beam_master[icon_ref]
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
