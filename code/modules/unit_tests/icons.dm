@@ -13,7 +13,15 @@
     types -= /obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy // idk what the fuck is this, but it's not broken
     types -= /obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
     types -= /obj/item/weapon/reagent_containers/food/snacks/sushi
-    for(var/F in types)
-        var/obj/item/weapon/reagent_containers/food/snacks/food = new F()
+    for(var/type in types)
+        var/obj/item/weapon/reagent_containers/food/snacks/food = new type()
         if(!has_icon(food.icon, food.icon_state))
-            fail("FAILED FOR [F] :: [food.name] with icon state: [food.icon_state]")
+            fail("FAILED FOR [type] :: \"[food.name]\" with icon state: \"[food.icon_state]\"")
+
+/datum/unit_test/icons/seeds/start()
+    // basically every seed packet
+    var/types = subtypesof(/obj/item/seeds)
+    for(var/type in types)
+        var/obj/item/seeds/seed = new type()
+        if(!has_icon(seed.icon, seed.icon_state))
+            fail("FAILED FOR [type] :: \"[seed.name]\" with icon: \"[seed.icon]\" and icon_state: \"[seed.icon_state]\"")
