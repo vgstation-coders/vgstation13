@@ -441,11 +441,12 @@
 	var/mob/living/carbon/human/H = occupant
 	while(hits>0)
 		if (hits>=4)
-			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 0, display_message = FALSE)
+			qdel(pick(H.internal_organs - H.internal_organs["heart"]))
 			hits -= 4
 		else
-			pick(H.internal_organs).Destroy()
+			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 1, display_message = FALSE)
 			hits--
+
 	occupant.updatehealth()
 
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
