@@ -206,28 +206,33 @@
 
 var/list/ray_draw_icon_cache = list()
 
-/ray/proc/draw(var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE)
+/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/distance_pointer = 0.5
-	while(distance_pointer < draw_distance - 1)
+	var/step_size = 1
+	var/angle = direction.toAngle()
+	message_admins(angle)
+	while(distance_pointer < draw_distance - step_size)
 		var/vector/point = getPoint(distance_pointer)
 		var/vector/point_floored = point.floored()
 
-		var/vector/pixels = (point - point_floored) * 32 //32 -> there must be a constant anywhere for that
+		var/vector/pixels = (point - point_floored) * WORLD_ICON_SIZE
 
-		var/image/I = image(icon, icon_state)
+		var/turf/T = locate(point_floored.x, point_floored.y, z)
+
+		var/image/I = image(icon, icon_state, dir=NORTH)
+		I.transform = turn(NORTH, angle)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
 		I.plane = EFFECTS_PLANE
 		I.layer = PROJECTILE_LAYER
 
-		var/turf/T = locate(point_floored.x, point_floored.y, z)
-		T.overlays += I
-		var/turf_ref = "\ref[T]"
-		var/img_ref = "\ref[I]"
+		var/atom/movable/image_holder = new (T)
+		image_holder.overlays += I
+		var/ref = "\ref[image_holder]"
 		//spawn(3)
 		//	locate(turf_ref).overlays -= locate(img_ref)
 
-		distance_pointer++
+		distance_pointer += step_size
 
 	//TODO do the last mile
 
