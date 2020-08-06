@@ -216,6 +216,7 @@
 		overlays += image(icon, "bearburger")
 		visible_message("<span class='danger'>\The [src] catches \the [AM] mid-flight, a jovial look on its face.</span>")
 		burger = AM
+		burger.forceMove(src)
 		LostTarget()
 	else if (prob(50))
 		dropBurger()
