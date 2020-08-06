@@ -47,39 +47,15 @@
 	if(origin.equals(point)) //the easy way out
 		return TRUE
 
-	if(direction.x == 0 && point.x != origin.x)
-		return FALSE
+	if(direction.x == 0)
+		return point.x == origin.x
 
-	if(direction.y == 0 && point.y != origin.y)
-		return FALSE
+	if(direction.y == 0)
+		return point.y != origin.y
 
 	var/c_x = (point.x - origin.x) / direction.x
 	var/c_y = (point.y - origin.y) / direction.y
 	return (c_x == c_y && (!max_distance || c_x <= max_distance ))
-
-/ray/proc/hitsArea(var/vector/position, var/vector/dimensions)
-	var/angle = direction.toAngle()
-	if(angle < 90)
-		return (hitsLine(position, position + new /vector(0, dimensions.y)) || hitsLine(position, position + new /vector(dimensions.x, 0)))
-	else if(angle < 180)
-		return (hitsLine(position, position + new /vector(0, dimensions.y)) || hitsLine(position + new /vector(0, dimensions.y), position + dimensions))
-	else if(angle < 270)
-		return (hitsLine(position + new /vector(0, dimensions.y), position + dimensions) || hitsLine(position + new /vector(dimensions.x, 0), position + dimensions))
-	else if(angle < 360)
-		return (hitsLine(position, position + new /vector(dimensions.x, 0)) || hitsLine(position + new /vector(dimensions.x, 0), position + dimensions))
-	else
-		return FALSE
-
-/ray/proc/hitsLine(var/vector/start, var/vector/end)
-	var/vector/line_direction = end - start
-	line_direction = line_direction.chebyshev_normalized()
-	if(direction.equals(line_direction) || direction.equals(-1*line_direction))
-		if(hitsPoint(start))
-			return TRUE
-		else
-			return FALSE
-
-	//TODO CROSS CALC
 
 //returns rebound angle of hit atom
 //assumes atom is 1x1 octogonal box
@@ -95,7 +71,7 @@
 	var/vector/entry_dir = null
 
 	for(var/vector/dir in all_vectors)
-		var/vector/delta = dir.chebyshev_normalized() - hit_point.chebyshev_normalized()
+		var/vector/delta = dir.chebyshev_normalized() - hit_vector.chebyshev_normalized()
 		var/dist = delta.chebyshev_norm()
 		if(dist < smallest_dist)
 			smallest_dist = dist
@@ -210,7 +186,10 @@ var/list/ray_draw_icon_cache = list()
 
 		var/vector/pixels = (point - point_floored - new /vector(0.5, 0.5)) * WORLD_ICON_SIZE
 
-		var/image/I = image(icon, icon_state, dir=NORTH)
+		var/turf/T = locate(point_floored.x, point_floored.y, z)
+
+		var/obj/effect/overlay/beam/I = new (T, lifetime=3, fade=TRUE, src_icon = icon, icon_state = icon_state)
+		//var/image/I = image(icon, icon_state, dir=NORTH)
 		//I.transform = turn(NORTH, angle) //redo. turn only supports 45 degree steps
 		I.transform = matrix().Turn(angle)
 		//TODO: generate 32x32 image w/ chosen color and make it transparent. add inverse alpha mask filter over points we want to render
@@ -220,13 +199,12 @@ var/list/ray_draw_icon_cache = list()
 		I.plane = EFFECTS_PLANE
 		I.layer = PROJECTILE_LAYER
 
-		var/turf/T = locate(point_floored.x, point_floored.y, z)
 
-		T.overlays += I
-		var/turf_ref = "\ref[T]"
-		var/img_ref = "\ref[I]"
-		spawn(2)
-			locate(turf_ref).overlays -= locate(img_ref)
+		//T.overlays += I
+		//var/turf_ref = "\ref[T]"
+		//var/img_ref = "\ref[I]"
+		//spawn(2)
+			//locate(turf_ref).overlays -= locate(img_ref)
 
 		distance_pointer += step_size
 

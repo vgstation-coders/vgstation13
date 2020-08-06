@@ -85,6 +85,7 @@ var/list/beam_master = list()
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
+	//testing
 	for(var/rayCastHit/rCH in hits)
 		var/image/I = image('icons/Testing/Zone.dmi',"fullblock",10)
 		rCH.hit_atom.overlays += I
@@ -92,6 +93,7 @@ var/list/beam_master = list()
 		spawn(30)
 			var/atom/movable/R = locate(ref)
 			R.overlays -= I
+	//testing
 
 	past_rays += shot_ray
 
@@ -131,7 +133,7 @@ var/list/beam_master = list()
 	//check if raypath was already traveled
 	var/ray/temp_ray = new /ray(origin, direction)
 	for(var/ray/beam_ray/other_ray in past_rays)
-		if(temp_ray.overlaps(other_ray))
+		if(temp_ray.equals(other_ray))
 			return
 
 	fireto(origin, direction)
