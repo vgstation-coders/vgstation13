@@ -116,6 +116,50 @@
 	name = "Ponytail 1"
 	icon_state = "hair_ponytail"
 
+/datum/sprite_accessory/hair/sideswept
+	name = "Sideswept"
+	icon_state = "hair_sideswept"
+
+/datum/sprite_accessory/hair/rightside
+	name = "Right Side"
+	icon_state = "hair_rightside"
+
+/datum/sprite_accessory/hair/amazon
+	name = "Amazon"
+	icon_state = "hair_amazon"
+
+/datum/sprite_accessory/hair/gipsy
+	name = "Gipsy"
+	icon_state = "hair_gipsy"
+
+/datum/sprite_accessory/hair/bluntbangs
+	name = "Blunt Bangs"
+	icon_state = "hair_bluntbangs"
+
+/datum/sprite_accessory/hair/longhalfshave
+	name = "Long Half-Shave"
+	icon_state = "hair_halfshaved"
+
+/datum/sprite_accessory/hair/longsidepart
+	name = "Long Sidepart"
+	icon_state = "hair_longsidepartstraight"
+
+/datum/sprite_accessory/hair/slightlymessy
+	name = "Slightly Messy"
+	icon_state = "hair_slightlymessy"
+
+/datum/sprite_accessory/hair/baum
+	name = "Baum"
+	icon_state = "hair_baum"
+
+/datum/sprite_accessory/hair/slick
+	name = "Slick"
+	icon_state = "hair_slick"
+
+/datum/sprite_accessory/hair/wolfmane
+	name = "Wolfmane"
+	icon_state = "hair_wolfmane"
+
 /datum/sprite_accessory/hair/ponytail2
 	name = "Ponytail 2"
 	icon_state = "hair_pa"

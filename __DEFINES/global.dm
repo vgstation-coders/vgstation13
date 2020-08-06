@@ -502,3 +502,6 @@ var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clot
 
 //Observers
 var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally
+
+var/list/all_machines = list()
+var/list/machinery_rating_cache = list() // list of type path -> number

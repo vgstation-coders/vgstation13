@@ -166,6 +166,7 @@ Class Procs:
 	..()
 
 /obj/machinery/New()
+	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
 	//if(ticker) initialize()
 	return ..()
@@ -181,7 +182,7 @@ Class Procs:
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
 /obj/machinery/Destroy()
-
+	all_machines -= src
 	machines.Remove(src)
 
 	power_machines.Remove(src)

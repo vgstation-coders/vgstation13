@@ -85,6 +85,11 @@
 // Arguments:
 // datum/thing: the datum being destroyed.
 
+// Called whenever an atom's density changes.
+// Arguments:
+// atom/atom: the atom whose density changed.
+/lazy_event/on_density_change
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

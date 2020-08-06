@@ -143,11 +143,11 @@
 /obj/item/weapon/gun/projectile/glock
 	name = "\improper NT Glock"
 	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket."
-	icon = 'icons/obj/biggun.dmi'
+	icon = 'icons/obj/gun.dmi'
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT | SLOT_POCKET
 	clowned = CLOWNABLE
-	icon_state = "secglockfancy"
+	icon_state = "secglock"
 	ammo_type = "/obj/item/ammo_casing/c380auto"
 	mag_type = "/obj/item/ammo_storage/magazine/m380auto"
 	mag_type_restricted = list(/obj/item/ammo_storage/magazine/m380auto/extended)
@@ -157,29 +157,31 @@
 	fire_sound = 'sound/weapons/semiauto.ogg'
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
+	silencer_offset = list(24,5)
+	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_PLASTIC = 2000)
 	var/obj/item/gun_part/glock_auto_conversion_kit/conversionkit = null
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
 	..()
-	remove_overlays()
-	icon_state = "secglock[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
-	var/image/auto_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "auto_attach")
-	auto_overlay.pixel_x = chambered ? 0 : -3
-	if(conversionkit)
-		overlays += auto_overlay
-	
-/obj/item/weapon/gun/projectile/glock/proc/remove_overlays() //god this is HORRIBLE
-	var/image/auto_overlay = image("icon" = 'icons/obj/biggun.dmi', "icon_state" = "auto_attach")
-	auto_overlay.pixel_x = -3
-	overlays -= auto_overlay
-	auto_overlay.pixel_x = 0
-	overlays -= auto_overlay
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"][stored_magazine ? "" : "-m"][clowned == CLOWNED ? "-c" : ""]"
+	for(var/image/ol in gun_part_overlays)
+		if(ol.icon_state == "auto_attach")
+			var/oldpixelx = ol.pixel_x
+			var/newpixelx = chambered ? 0 : -4	
+			if(oldpixelx != newpixelx)
+				overlays -= ol	
+				ol.pixel_x = chambered ? 0 : -4	
+				overlays += ol
+						
 		
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
+	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
 			to_chat(user, "<span class='notice'>You click [A] into [src].</span>")
 			conversionkit = A
+			var/image/auto_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "auto_attach")
+			overlays += auto_overlay
+			gun_part_overlays += auto_overlay
 			update_icon()
 			fire_delay = 0
 			desc += "<br>This one seems to have something screwed into it."
@@ -189,6 +191,10 @@
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
 		conversionkit = null
+		for(var/image/ol in gun_part_overlays)
+			if(ol.icon_state == "auto_attach")
+				overlays -= ol
+				gun_part_overlays -= ol
 		update_icon()
 		fire_delay = initial(fire_delay)
 		return 1
@@ -227,16 +233,9 @@
 
 /obj/item/weapon/gun/projectile/glock/fancy
 	name = "\improper NT Glock Custom"
-	icon_state = "secgunfancy"
+	desc = "The NT Glock is a cheap, ubiquitous sidearm, produced by a NanoTrasen subsidiary. Uses .380AUTO rounds. Its subcompact frame can fit in your pocket. <br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
+	icon_state = "secglockfancy"
 	clowned = UNCLOWN
-
-/obj/item/weapon/gun/projectile/glock/fancy/New()
-	. = ..()
-	desc += "<br><span class='notice'>This one has a sweet platinum-plated slide, and tritium night sights for maintenance crawling!</span>"
-
-/obj/item/weapon/gun/projectile/glock/fancy/update_icon()
-	..()
-	icon_state = "secglockfancy[chambered ? "" : "-e"][silenced ? "-s" : ""][stored_magazine ? "" : "-m"]"
 
 /obj/item/weapon/gun/projectile/glock/lockbox
 	max_shells = 0

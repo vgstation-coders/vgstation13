@@ -390,6 +390,9 @@
 		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	update_icon()
 
+/obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
 /obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
 		return ..()
