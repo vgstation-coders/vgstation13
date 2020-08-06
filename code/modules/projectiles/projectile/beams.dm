@@ -35,8 +35,6 @@ var/list/beam_master = list()
 
 	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
-		message_admins("a1")
-		message_admins(A.type)
 		return RAY_CAST_HIT_EXIT
 
 	if(istype(A, /mob/living))
@@ -48,8 +46,6 @@ var/list/beam_master = list()
 		return RAY_CAST_HIT_EXIT
 
 	if(A.opacity)
-		message_admins("a2")
-		message_admins(A.type)
 		return RAY_CAST_HIT_EXIT
 	return 0
 
@@ -98,7 +94,6 @@ var/list/beam_master = list()
 	past_rays += shot_ray
 
 	if(isnull(hits) || hits.len == 0)
-		message_admins("no hits")
 		if(travel_range)
 			shot_ray.draw(travel_range)
 		else
@@ -120,7 +115,6 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/rebound(atom/A)
 	//we only allow this laser to be rebound once
-	message_admins("rebounded")
 	reflected = 1
 
 	//we assume that our latest ray is what caused this rebound

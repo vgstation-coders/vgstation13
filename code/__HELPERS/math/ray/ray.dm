@@ -77,11 +77,6 @@
 			smallest_dist = dist
 			entry_dir = dir
 
-	message_admins(hit_point.toString())
-	message_admins(hit_vector.toString())
-	message_admins("entry_dir:")
-	message_admins(entry_dir.toString())
-
 	return src.direction.mirrorWithNormal(entry_dir)
 
 
