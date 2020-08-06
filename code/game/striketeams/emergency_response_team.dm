@@ -11,6 +11,7 @@ var/list/response_team_members = list()
 	spawns_name = "ERT"
 	can_customize = TRUE
 	logo = "ert-logo"
+	outfit_datum = /datum/outfit/striketeam/ert
 
 /datum/striketeam/ert/failure()
 	command_alert(/datum/command_alert/ert_fail)
@@ -135,7 +136,11 @@ var/list/response_team_members = list()
 		ert.forgeObjectives(mission)
 		if(ert)
 			ert.HandleNewMind(M.mind) //First come, first served
-	M.equip_response_team(leader_selected)
+
+	var/datum/outfit/striketeam/concrete_outfit = new outfit_datum
+	if (leader_selected)
+		concrete_outfit.is_leader = TRUE
+	concrete_outfit.equip(M)
 
 	if(spawner)
 		spawner.occupant = null
@@ -144,60 +149,6 @@ var/list/response_team_members = list()
 	M.forceMove(spawn_location.loc)
 
 	return M
-
-/mob/living/carbon/human/proc/equip_response_team(leader_selected = 0)
-	//Special radio setup
-	equip_to_slot_or_del(new /obj/item/device/radio/headset/ert(src), slot_ears)
-
-	//Adding Camera Network
-	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = list(CAMERANET_ERT)
-	camera.c_tag = real_name
-
-	//Basic Uniform
-	equip_to_slot_or_del(new /obj/item/clothing/under/ert(src), slot_w_uniform)
-	equip_to_slot_or_del(new /obj/item/device/flashlight(src), slot_l_store)
-	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/gun/nuclear(src), slot_belt)
-
-	//Glasses
-	equip_to_slot_or_del(new /obj/item/clothing/glasses/sunglasses/sechud(src), slot_glasses)
-
-	//Shoes & gloves
-	equip_to_slot_or_del(new /obj/item/clothing/shoes/swat(src), slot_shoes)
-	equip_to_slot_or_del(new /obj/item/clothing/gloves/swat(src), slot_gloves)
-
-	//Backpack
-	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
-	equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/ert(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
-
-	if(leader_selected)
-		equip_to_slot_or_del(new /obj/item/weapon/card/shuttle_pass/ert(src), slot_in_backpack)
-
-	var/obj/item/weapon/card/id/W = new(src)
-	W.assignment = "Emergency Responder[leader_selected ? " Leader" : ""]"
-	W.registered_name = real_name
-	W.name = "[real_name]'s ID Card ([W.assignment])"
-	if(!leader_selected)
-		W.access = get_centcom_access("Emergency Responder")
-		W.icon_state = "ERT_empty"	//placeholder until revamp
-	else
-		W.access = get_centcom_access("Emergency Responders Leader")
-		W.icon_state = "ERT_leader"
-	equip_to_slot_or_del(W, slot_wear_id)
-	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)
-	L.imp_in = src
-	L.implanted = 1
-	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
-	affected.implants += L
-	L.part = affected
-
-	if(leader_selected)
-		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)
-	else
-		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
-
-	return 1
 
 //stealing that sweet bobbing animation from cryo.dm
 /obj/machinery/ert_cryo_cell
