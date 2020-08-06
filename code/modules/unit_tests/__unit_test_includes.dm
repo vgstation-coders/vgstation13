@@ -10,6 +10,4 @@
 #include "reagent_recipe_collisions.dm"
 #include "slipping.dm"
 #include "turretid.dm"
-#include "lazy_events.dm"
-#include "outfit_datums.dm"
 #endif
