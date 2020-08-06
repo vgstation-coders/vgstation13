@@ -330,11 +330,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/heads/nt_captain/New()
 	..()
-	for(var/A in applications)
-		qdel(A)
-	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))
-		var/datum/pda_app/app = new app_type()
-		app.onInstall(src)
+	get_all_apps()
 
 /obj/item/device/pda/heads/nt_supreme
 	name = "Nanotrasen Supreme Commander PDA"
@@ -342,11 +338,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/heads/nt_supreme/New()
 	..()
-	for(var/A in applications)
-		qdel(A)
-	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))
-		var/datum/pda_app/app = new app_type()
-		app.onInstall(src)
+	get_all_apps()
 
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
@@ -406,11 +398,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/captain/New()
 	..()
-	for(var/A in applications)
-		qdel(A)
-	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))	//yes, the captain is such a baller that his PDA has all the apps by default.
-		var/datum/pda_app/app = new app_type()						//will have to edit that when emagged/hidden apps get added.
-		app.onInstall(src)
+	get_all_apps()
 
 /obj/item/device/pda/cargo
 	name = "Cargo PDA"
@@ -653,6 +641,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /*
  *	The Actual PDA
  */
+
+/obj/item/device/pda/proc/get_all_apps()
+	for(var/A in applications)
+		applications -= A
+		qdel(A)
+	for(var/app_type in subtypesof(/datum/pda_app))
+		var/datum/pda_app/app = new app_type()
+		app.onInstall(src)
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
@@ -1144,10 +1140,10 @@ var/global/list/obj/item/device/pda/PDAs = list()
 				dat += "</ul>"
 			if (PDA_APP_NEWSREADER)
 				var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
-				switch(app.screen)
-					if (NEWSREADER_CHANNEL_LIST)
-						dat += {"<h4>Station Feed Channels</h4>"}
-						if(app)
+				if(app)
+					switch(app.screen)
+						if (NEWSREADER_CHANNEL_LIST)
+							dat += {"<h4>Station Feed Channels</h4>"}
 							if(news_network.wanted_issue)
 								dat+= "<HR><b><A href='?src=\ref[src];choice=viewWanted'>Read Wanted Issue</A></b><HR>"
 							if(isemptylist(news_network.network_channels))
@@ -1158,8 +1154,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 										dat+="<b><a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a></b><br>"
 									else
 										dat+="<a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a> [(channel.censored) ? ("***") : ""]<br>"
-					if (NEWSREADER_VIEW_CHANNEL)
-						if(app)
+						if (NEWSREADER_VIEW_CHANNEL)
 							dat+="<b>[app.viewing_channel.channel_name]: </b><font size=1>\[created by: <b>[app.viewing_channel.author]</b>\]</font><HR>"
 							if(app.viewing_channel.censored)
 								dat += {"<B>ATTENTION: </B></font>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<br>
@@ -1179,8 +1174,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 										dat+="<font size=1>\[Story by <b>[message.author]</b>\]</font><HR>"
 
 							dat += {"<br><a href='?src=\ref[src];choice=viewChannels'>Back</a>"}
-					if (NEWSREADER_WANTED_SHOW)
-						if(app)
+						if (NEWSREADER_WANTED_SHOW)
 							dat += {"<B>-- STATIONWIDE WANTED ISSUE --</B><BR><FONT SIZE=2>\[Submitted by: <b>[news_network.wanted_issue.backup_author]</b>\]</FONT><HR>
 								<B>Criminal</B>: [news_network.wanted_issue.author]<BR>
 								<B>Description</B>: [news_network.wanted_issue.body]<BR>

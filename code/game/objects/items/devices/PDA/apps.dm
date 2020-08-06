@@ -139,12 +139,6 @@ var/global/list/pda_app_menus = list(
 	var/datum/feed_channel/viewing_channel
 	var/screen = NEWSREADER_CHANNEL_LIST
 
-/datum/pda_app/newsreader/onInstall(var/obj/item/device/pda/device)
-	..()
-
-/datum/pda_app/newsreader/Destroy()
-	..()
-
 /datum/pda_app/newsreader/proc/newsAlert(var/channel_name)
 	if(pda_device.silent)
 		return

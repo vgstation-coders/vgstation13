@@ -61,7 +61,7 @@
 	img_pda = null
 	backup_img_pda = null
 
-/datum/feed_message/proc/make_PDA_img()
+/datum/feed_message/proc/ImagePDA()
 	if (img)
 		img_pda = icon(img)
 		//turns the image grayscale then applies an olive coat of paint
@@ -706,7 +706,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
-					newMsg.make_PDA_img()
+					newMsg.ImagePDA()
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -820,7 +820,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
-							WANTED.make_PDA_img()
+							WANTED.ImagePDA()
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
