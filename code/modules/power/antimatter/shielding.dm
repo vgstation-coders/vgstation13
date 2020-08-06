@@ -85,12 +85,17 @@ proc/cardinalrange(var/center)
 		for(var/obj/machinery/power/am_control_unit/AMC in cardinalrange(src))
 			if(AMC.add_shielding(src))
 				break
-		if(!mapped) // Prevent rescanning and suicide if it's part of the map
+		if(!mapped) // Prevent suicide if it's part of the map
 			if(!priorscan)
 				sleep(20)
 				controllerscan(1)//Last chance
 				return
 			qdel(src)
+		else
+			if(!priorscan)
+				sleep(20)
+				controllerscan(1)
+				return 
 
 // Find surrounding unconnected shielding and add them to our controller
 /obj/machinery/am_shielding/proc/assimilate()

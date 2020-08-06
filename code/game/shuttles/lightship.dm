@@ -25,13 +25,18 @@
 /datum/shuttle/lightship/initialize()
 	.=..()
 	add_dock(/obj/docking_port/destination/lightship/start)
-	add_dock(/obj/docking_port/destination/salvage/arrivals)
-	add_dock(/obj/docking_port/destination/salvage/north)
-	add_dock(/obj/docking_port/destination/salvage/east)
-	add_dock(/obj/docking_port/destination/salvage/south)
+	add_dock(/obj/docking_port/destination/syndicate/north)
+	add_dock(/obj/docking_port/destination/syndicate/northeast)
+	add_dock(/obj/docking_port/destination/syndicate/east)
+	add_dock(/obj/docking_port/destination/syndicate/southeast)
+	add_dock(/obj/docking_port/destination/syndicate/south)
+	add_dock(/obj/docking_port/destination/syndicate/southwest)
+	add_dock(/obj/docking_port/destination/syndicate/west)
+	add_dock(/obj/docking_port/destination/syndicate/northwest)
+	add_dock(/obj/docking_port/destination/syndicate/commssat)
 	add_dock(/obj/docking_port/destination/salvage/derelict)
 	add_dock(/obj/docking_port/destination/salvage/dj)
-	add_dock(/obj/docking_port/destination/salvage/abandoned_ship)
+	
 
 /obj/machinery/computer/shuttle_control/lightship
 	icon_state = "syndishuttle"
