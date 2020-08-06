@@ -109,7 +109,8 @@ var/list/beam_master = list()
 		shot_ray.draw(last_hit.distance)
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
-			rebound(last_hit.hit_atom)
+			spawn()
+				rebound(last_hit.hit_atom)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
