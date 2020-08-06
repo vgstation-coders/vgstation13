@@ -79,7 +79,7 @@
 "dh" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/shuttle/lightship/start)
 "dj" = (/obj/structure/closet/emcloset,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "dk" = (/obj/machinery/light{dir = 1},/obj/machinery/floodlight,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
-"dl" = (/obj/structure/closet/secure_closet/engineering_electrical{locked = 0},/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
+"dl" = (/obj/structure/closet/secure_closet/engineering_electrical{req_access = list()},/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dm" = (/obj/structure/table,/obj/item/stack/sheet/plasteel{amount = 50},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dn" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "do" = (/obj/machinery/power/battery/smes,/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
@@ -97,7 +97,7 @@
 "dH" = (/obj/structure/table,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/airlock,/turf/simulated/floor{dir = 5; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "dJ" = (/obj/machinery/recharge_station,/turf/simulated/floor{dir = 9; icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "dK" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/obj/item/robot_parts/robot_suit,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/shuttle/lightship/start)
-"dL" = (/obj/machinery/light{dir = 1},/obj/machinery/r_n_d/fabricator/mech{req_one_access = list()},/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/shuttle/lightship/start)
+"dL" = (/obj/machinery/light{dir = 1},/obj/machinery/r_n_d/fabricator/mech{req_access = list(); req_one_access = null},/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "dM" = (/obj/item/robot_parts/robot_suit,/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "dN" = (/obj/machinery/recharge_station,/turf/simulated/floor{dir = 5; icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "dP" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/obj/structure/table/reinforced,/obj/item/weapon/storage/box/syndie_kit/smokebombs{pixel_y = 15},/obj/item/toy/cards,/turf/simulated/floor{dir = 1; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
@@ -134,7 +134,7 @@
 "eT" = (/obj/machinery/computer/communications,/turf/simulated/floor{dir = 4; icon_state = "whiteredcorner"},/area/shuttle/lightship/start)
 "eU" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "eV" = (/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
-"eW" = (/obj/structure/closet/secure_closet/engineering_general,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/turf/simulated/floor{dir = 4; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
+"eW" = (/obj/structure/closet/secure_closet/engineering_general{req_access = list()},/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/obj/item/weapon/am_containment,/turf/simulated/floor{dir = 4; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "eX" = (/obj/structure/table/reinforced,/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 10},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 0},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 5},/obj/item/ammo_casing/rocket_rpg/nikita{pixel_y = 15},/turf/simulated/floor{dir = 8; icon_state = "whitered"},/area/shuttle/lightship/start)
 "eY" = (/turf/simulated/floor{dir = 5; icon_state = "whitered"},/area/shuttle/lightship/start)
 "fa" = (/turf/simulated/floor{dir = 4; icon_state = "whitered"},/area/shuttle/lightship/start)
@@ -231,6 +231,7 @@
 "hT" = (/obj/structure/closet/emcloset,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "hU" = (/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "hV" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
+"hW" = (/obj/machinery/r_n_d/fabricator/circuit_imprinter,/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "hX" = (/turf/simulated/shuttle/wall{icon_state = "swall7"},/area/shuttle/lightship/start)
 "hZ" = (/obj/structure/closet/coffin,/obj/effect/landmark/corpse/engineer,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "ia" = (/obj/structure/closet/coffin,/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
@@ -262,18 +263,17 @@
 "iE" = (/obj/structure/closet/crate/critter,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "iF" = (/turf/simulated/shuttle/wall{icon_state = "swall13"},/area/shuttle/lightship/start)
 "iG" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/shuttle/lightship/start)
-"jl" = (/obj/machinery/r_n_d/fabricator/circuit_imprinter,/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "jv" = (/turf/space,/area/shuttle/lightship/start)
 "jz" = (/turf/simulated/shuttle/wall{dir = 3; icon_state = "swall2"; tag = "icon-swall2"},/area/shuttle/lightship/start)
-"ni" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "uW" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/docking_port/shuttle,/turf/simulated/shuttle/plating,/area/shuttle/lightship/start)
+"xR" = (/obj/machinery/computer/rdconsole/pod{name = "Lightspeed Ship R&D Console"},/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "Ca" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/lightship/start)
-"Cc" = (/obj/machinery/computer/secure_data,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/lightship/start)
-"Jh" = (/obj/machinery/computer/rdconsole/pod{name = "Lightspeed Ship R&D Console"},/turf/simulated/floor{icon_state = "whitepurple"},/area/shuttle/lightship/start)
-"Po" = (/obj/abstract/map/spawner/assistant,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"Ek" = (/obj/structure/bed/chair/comfy/black{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
+"Sq" = (/obj/abstract/map/spawner/assistant,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "SS" = (/obj/machinery/door/airlock/external,/turf/simulated/shuttle/plating,/area/shuttle/lightship/start)
 "UG" = (/obj/docking_port/destination/lightship/start{dir = 2},/turf/space,/area)
 "UZ" = (/turf/simulated/floor{dir = 4; icon_state = "warnwhite"},/area/shuttle/lightship/start)
+"Zq" = (/obj/machinery/computer/secure_data,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/lightship/start)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaUGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -290,16 +290,16 @@ aLiFhNiAckclfBfBcohzhEhEhEhEhEhGcwgUcyhAczhycBcBcDeMcFcIhycIcJhXhNhNiFhNhNivhNhN
 hXhNhNhQhNhNgkhNhNivhNhNhNivgkiFhNhNhNiAcPcQcRcRcThGcVhycXhycYhAdadbdcdbdahXhNhNiFhPhNivhNhNhNdhaa
 gSdjdkgSdldmdndodpeBdrdrdrhAfndudvdwdxhPdzcQcRdAcDhAdDcIhycIdFgSdHdadbdadbhPdJdKdLdMdNhAdPdQdRgSaa
 dTdUdUdTdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehehejekhAeleoeoeoepeMeueseteseugMevgagagaexhAeRhyeAeBaa
-hPdUdUhPdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNeMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeRnieTeUaa
+hPdUdUhPdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNeMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeREkeTeUaa
 dTdUdUdTdVbreVeVeWeBdrdrdrhAeXeYhyfnfahyhpfdhphpffhAfhhUfRhUhVfmfnfqfpfqfnfmfrfsfsfsftfueRhyfvfEaa
-hGdjfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNhphAfOfRhUfRfShGfqfnfWfnfXhPfZJhgbjlgchGgegfgghGaa
-hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgygzCcgAhXhNhNivhPhNiFhNhNhNiGaa
+hGdjfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNhphAfOfRhUfRfShGfqfnfWfnfXhPfZxRgbhWgchGgegfgghGaa
+hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgygzZqgAhXhNhNivhPhNiFhNhNhNiGaa
 iuivhNiAgHgIgIgKhygMgRgRbybAgRgSgTgUgVhAhpgpgWhphpbShUfRhUfRhahXhNhNivhPhNiFhNhNiGaaaaaaaaaaaaaaaa
 aahXhNiAhghhhihjhkhPhmhmhmhmhmhohphphqhAhrhphphphthGhvhvhwhahahXivhNiGjvaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaiuiviAhyhmhmhmhzhAhBhChEhEhFhGhHhIhJhAhNhNhNhLhNhQhNhNhNivhPiFiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaiuhQhNhNhNhNiviFhNhNhRhNhNiFhNivhNiAhThUhVhUhUhXhNhNiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaiuhNivhZiahAibdUdUdUdUdUieaHhXiviAifhUhUhUighXivhNiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaaaaaiuhNihhAiidUPodUdUijdUdUhAiuiAikhUhUhUilhXiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaiuhNihhAiidUSqdUdUijdUdUhAiuiAikhUhUhUilhXiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaimaciviziohAipiqiririsitisishAaaiuiviwixiwiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaimaciAdUdUizhNhNhNhNhNhNhNhNiAaaaahAaYhyUZhAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaimaciAdUiBioiCdUioiDdUdUioiEhAaaaahAhkhyUZhAaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
