@@ -33,9 +33,7 @@
 	add_dock(/obj/docking_port/destination/syndicate/southwest)
 	add_dock(/obj/docking_port/destination/syndicate/west)
 	add_dock(/obj/docking_port/destination/syndicate/northwest)
-	add_dock(/obj/docking_port/destination/syndicate/commssat)
-	add_dock(/obj/docking_port/destination/salvage/derelict)
-	add_dock(/obj/docking_port/destination/salvage/dj)
+
 	
 
 /obj/machinery/computer/shuttle_control/lightship
