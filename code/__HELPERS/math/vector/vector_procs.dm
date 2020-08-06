@@ -22,3 +22,11 @@
 //Vector from A -> B
 /proc/atoms2vector(var/atom/A, var/atom/B)
 	return new /vector((B.x - A.x), (B.y - A.y))
+
+/proc/drawLaser(var/vector/A, var/vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
+	var/vector/delta = (B - A)
+	var/ray/laser_ray = new /ray(A, delta)
+	var/distance = delta.chebyshev_norm()
+
+	laser_ray.draw(distance, icon, icon_state)
+

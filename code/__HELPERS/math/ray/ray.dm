@@ -136,9 +136,7 @@
 	//our result
 	var/list/rayCastHit/hits = list()
 
-	var/i = 0
 	while(distance < max_distance)
-		i++
 		//moving one step further
 		pointer += a_step
 		distance += step_distance
@@ -165,61 +163,56 @@
 		//trying hit at turf
 		var/hit_check = raycast_hit_check(T)
 		if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
-			message_admins("e1")
 			return hits
 		else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
 			//empty, nothing happens here
 		else if(hit_check <= RAY_CAST_HIT_CONTINUE)
 			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
 		else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
-			message_admins("e2")
 			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
 			return hits //exit loop
 
 		if(max_hits && max_hits >= hits.len)
-			message_admins("e3")
 			return hits
 
 		//trying hit on every atom inside the turf
 		for(var/atom/movable/A in T)
 			hit_check = raycast_hit_check(A)
 			if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
-				message_admins("e4")
 				return hits
 			else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
 			else if(hit_check <= RAY_CAST_HIT_CONTINUE)
 				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
 			else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
-				message_admins("e5")
 				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
 				return hits //exit loop
 			if(max_hits && max_hits >= hits.len)
-				message_admins("e6")
 				return hits
 
 		//adding our position so we know we already checked this one
 		positions += new_position
 
-	message_admins("e7")
-	message_admins(i)
 	return hits
 
 var/list/ray_draw_icon_cache = list()
 
 /ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/distance_pointer = 0.5
-	var/step_size = 1
+	var/step_size = 0.5 // adjust in which laser-parts are drawn
 	var/angle = direction.toAngle()
-	message_admins(angle)
-	while(distance_pointer < draw_distance - step_size)
-		var/vector/point = getPoint(distance_pointer)
+	while(distance_pointer < draw_distance)
+		var/vector/point
+		if(distance_pointer > draw_distance - step_size) //last loop
+			point = getPoint(draw_distance - step_size)
+		else
+			point = getPoint(distance_pointer)
 		var/vector/point_floored = point.floored()
 
 		var/vector/pixels = (point - point_floored - new /vector(0.5, 0.5)) * WORLD_ICON_SIZE
 
 		var/image/I = image(icon, icon_state, dir=NORTH)
-		message_admins(angle)
-		I.transform = turn(NORTH, angle) //redo. turn only supports 45 degree steps
+		//I.transform = turn(NORTH, angle) //redo. turn only supports 45 degree steps
+		I.transform = matrix().Turn(angle)
 		//TODO: generate 32x32 image w/ chosen color and make it transparent. add inverse alpha mask filter over points we want to render
 		//TODO: make this a generic proc (draw line from x to y (vectors) with color c)
 		I.pixel_x = pixels.x
@@ -232,33 +225,10 @@ var/list/ray_draw_icon_cache = list()
 		T.overlays += I
 		var/turf_ref = "\ref[T]"
 		var/img_ref = "\ref[I]"
-		spawn(3)
+		spawn(2)
 			locate(turf_ref).overlays -= locate(img_ref)
 
 		distance_pointer += step_size
-
-	//TODO do the last mile
-
-	/*the old way
-	var/icon_ref = "[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"
-	update_pixel()
-
-	//If the icon has not been added yet
-	if( !(icon_ref in beam_icon_cache))
-		var/image/I = image(icon,"[icon_state]_pixel",dir = target_dir) //Generate it.
-		if(beam_color)
-			I.color = beam_color
-		I.transform = turn(I.transform, target_angle+45)
-		I.pixel_x = PixelX
-		I.pixel_y = PixelY
-		I.plane = EFFECTS_PLANE
-		I.layer = PROJECTILE_LAYER
-		beam_master[icon_ref] = I //And cache it!
-
-	at_pos.overlays += beam_master[icon_ref]
-	var/ref = "\ref[at_pos]"
-	spawn(3)
-		locate(ref).overlays -= beam_master[icon_ref]*/
 
 //helper proc to get first hit
 /ray/proc/getFirstHit(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/ignore_origin = TRUE)
