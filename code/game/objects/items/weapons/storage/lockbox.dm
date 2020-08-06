@@ -517,7 +517,8 @@
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s ablative plating!</span>")
 		P.reflected = 1
-		P.rebound(src)
+		if(!istype(P, /obj/item/projectile/beam))
+			P.rebound(src)
 		return -1
 	react()
 	return ..()

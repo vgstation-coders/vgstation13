@@ -210,7 +210,9 @@
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
 
 			P.reflected = 1
-			P.rebound(src)
+
+			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+				P.rebound(src)
 
 			return -1 // complete projectile permutation
 
