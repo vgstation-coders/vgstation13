@@ -65,8 +65,9 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T = loc
-	if (opacity && istype(T))
+	var/turf/T
+	if (opacity && isturf(loc))
+		T = loc // recalc_atom_opacity() is called later on this
 		T.reconsider_lights()
 
 	if(materials)
@@ -74,10 +75,6 @@
 		materials = null
 
 	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
-
-	var/turf/un_opaque
-	if (opacity && isturf(loc))
-		un_opaque = loc
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -94,10 +91,10 @@
 
 	forceMove(null, harderforce = TRUE)
 
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
+	if (T)
+		T.recalc_atom_opacity()
 
-	if(flags & HEAR|HEAR_ALWAYS)
+	if(flags & (HEAR|HEAR_ALWAYS))
 		for(var/mob/virtualhearer/VH in virtualhearers)
 			if(VH.attached == src)
 				qdel(VH)
