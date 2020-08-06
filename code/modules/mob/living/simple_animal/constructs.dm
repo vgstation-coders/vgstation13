@@ -209,9 +209,9 @@
 			visible_message("<span class='danger'>\The [P.name] gets reflected by \the [src]'s shell!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
 
-			P.reflected = 1
 
 			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+				P.reflected = 1
 				P.rebound(src)
 
 			return -1 // complete projectile permutation

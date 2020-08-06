@@ -19,6 +19,7 @@ emp_act
 				visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s [wear_suit.name]!</span>")
 
 				if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+					P.reflected = 1
 					P.rebound(src)
 
 				return -1 // complete projectile permutation

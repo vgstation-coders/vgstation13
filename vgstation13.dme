@@ -2576,7 +2576,6 @@
 #include "code\modules\tgui\subsystem.dm"
 #include "code\modules\tgui\tgui.dm"
 #include "code\modules\tgui\states\adjacent.dm"
-#include "code\modules\unit_tests\outfit_datums.dm"
 #include "code\modules\tgui\states\default.dm"
 #include "code\modules\tooltip\tooltip.dm"
 #include "code\modules\unit_tests\__unit_test_includes.dm"
