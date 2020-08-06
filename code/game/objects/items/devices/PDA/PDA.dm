@@ -2418,7 +2418,7 @@ obj/item/device/pda/AltClick()
 		switch(scanmode)
 
 			if(SCANMODE_MEDICAL)
-				healthanalyze(C,user,0)
+				healthanalyze(C,user,1)
 
 			if(SCANMODE_FORENSIC)
 				if (!istype(C:dna, /datum/dna))
