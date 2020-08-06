@@ -1142,6 +1142,18 @@
 	reagents.add_reagent(CARAMEL, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/bearburger
+	name = "bear burger"
+	desc = "There's gotta be a pun in there somewhere, but no Pun Pun."//TODO: replace with a better pun, bear-related if possible
+	icon_state = "bearburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(HYPERZINE, 8)
+	src.bitesize = 4
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"
