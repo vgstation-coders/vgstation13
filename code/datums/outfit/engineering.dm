@@ -57,6 +57,8 @@
 	id_type = /obj/item/weapon/card/id/ce
 
 /datum/outfit/chief_engineer/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 
 // -- Station engineer
@@ -127,6 +129,8 @@
 	id_type = /obj/item/weapon/card/id/engineering
 
 /datum/outfit/engineer/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/>")
 
 // -- Atmos tech

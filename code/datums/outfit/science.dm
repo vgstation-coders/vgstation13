@@ -50,6 +50,8 @@
 /datum/outfit/rd/post_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 
 
@@ -158,6 +160,8 @@
 
 /datum/outfit/scientist/post_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 
 // -- Roboticist
@@ -218,4 +222,6 @@
 /datum/outfit/roboticist/post_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")

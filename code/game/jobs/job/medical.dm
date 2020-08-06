@@ -94,6 +94,7 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
+	outfit_datum = /datum/outfit/virologist
 
 /datum/job/virologist/priority_reward_equip(var/mob/living/carbon/human/H)
 	. = ..()

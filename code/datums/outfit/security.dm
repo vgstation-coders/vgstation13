@@ -60,6 +60,8 @@
 	id_type = /obj/item/weapon/card/id/hos
 
 /datum/outfit/hos/post_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Warden
@@ -124,6 +126,8 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/warden/post_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Detective
@@ -228,13 +232,15 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
+	if (H.mind)
+		return
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Offficer
 
@@ -300,4 +306,6 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/officer/post_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")

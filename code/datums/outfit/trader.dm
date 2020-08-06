@@ -41,6 +41,8 @@
 	id_type = /obj/item/weapon/card/id/vox
 
 /datum/outfit/trader/pre_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	switch(H.mind.role_alt_title) // Add to the survival box in case we don't have a backbag.
 		if("Trader") //Traders get snacks and a coin
 			items_to_collect[/obj/item/weapon/storage/box/donkpockets/random_amount] = SURVIVAL_BOX

@@ -119,11 +119,13 @@
 		var/obj_type = L[slot]
 		if (islist(obj_type)) // Special objects for alt-titles.
 			var/list/L2 = obj_type
-			if (H?.mind.role_alt_title in L2)
+			obj_type = null
+			if (H.mind && H.mind.role_alt_title)
 				obj_type = L2[H.mind.role_alt_title]
-			else // Mindless
-				obj_type = L2[1] // First item
-		if (!obj_type)
+			else // Mindless or spawned-in people get the first item.
+				var/default_title = L2[1]
+				obj_type = L2[default_title]
+		if (isnull(obj_type))
 			continue
 		slot = text2num(slot)
 		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
@@ -222,7 +224,7 @@
 	C.rank = rank
 	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-	C.associated_account_number = H?.mind?.initial_account.account_number
+	C.associated_account_number = H?.mind?.initial_account?.account_number
 	H.equip_or_collect(C, slot_wear_id)
 
 	if (pda_type)
@@ -244,7 +246,6 @@
 	if (!give_disabilities_equipment)
 		return
 
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
 	if(!H.check_stand_ability())
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)

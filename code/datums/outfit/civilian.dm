@@ -60,6 +60,8 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Bartender
@@ -117,6 +119,8 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Chef
@@ -163,6 +167,8 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/chef/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Botanist

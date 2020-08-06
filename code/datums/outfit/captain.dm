@@ -39,7 +39,7 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 	)
-	
+
 	items_to_collect = list(
 		/obj/item/weapon/storage/box/ids = GRASP_RIGHT_HAND,
 		/obj/item/weapon/gun/energy/gun = GRASP_LEFT_HAND,
@@ -55,6 +55,8 @@
 
 
 /datum/outfit/captain/post_equip(var/mob/living/carbon/human/H)
+	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 	to_chat(world, "<b>[H.real_name] is the captain!</b>")
-	equip_accessory(H, /obj/item/clothing/accessory/medal/gold/captain, /obj/item/clothing/under)
