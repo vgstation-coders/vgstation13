@@ -1150,7 +1150,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						if(app)
 							if(news_network.wanted_issue)
 								dat+= "<HR><b><A href='?src=\ref[src];choice=viewWanted'>Read Wanted Issue</A></b><HR>"
-							if( isemptylist(news_network.network_channels) )
+							if(isemptylist(news_network.network_channels))
 								dat+="<br><i>No active channels found...</i>"
 							else
 								for(var/datum/feed_channel/channel in news_network.network_channels)
