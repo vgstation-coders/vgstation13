@@ -66,6 +66,7 @@ var/list/vector/all_vectors = list(
 
 //returns angle from 0 to 360
 //-1 if vector is (0,0)
+//TODO THIS IS BROKEN
 /vector/proc/toAngle()
 	if(x == 0)
 		if(y == 0)

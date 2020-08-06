@@ -215,22 +215,25 @@ var/list/ray_draw_icon_cache = list()
 		var/vector/point = getPoint(distance_pointer)
 		var/vector/point_floored = point.floored()
 
-		var/vector/pixels = (point - point_floored) * WORLD_ICON_SIZE
-
-		var/turf/T = locate(point_floored.x, point_floored.y, z)
+		var/vector/pixels = (point - point_floored - new /vector(0.5, 0.5)) * WORLD_ICON_SIZE
 
 		var/image/I = image(icon, icon_state, dir=NORTH)
-		I.transform = turn(NORTH, angle)
+		message_admins(angle)
+		I.transform = turn(NORTH, angle) //redo. turn only supports 45 degree steps
+		//TODO: generate 32x32 image w/ chosen color and make it transparent. add inverse alpha mask filter over points we want to render
+		//TODO: make this a generic proc (draw line from x to y (vectors) with color c)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
 		I.plane = EFFECTS_PLANE
 		I.layer = PROJECTILE_LAYER
 
-		var/atom/movable/image_holder = new (T)
-		image_holder.overlays += I
-		var/ref = "\ref[image_holder]"
-		//spawn(3)
-		//	locate(turf_ref).overlays -= locate(img_ref)
+		var/turf/T = locate(point_floored.x, point_floored.y, z)
+
+		T.overlays += I
+		var/turf_ref = "\ref[T]"
+		var/img_ref = "\ref[I]"
+		spawn(3)
+			locate(turf_ref).overlays -= locate(img_ref)
 
 		distance_pointer += step_size
 
