@@ -1084,31 +1084,25 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	var/list/dropped_items
 	var/delete_items
-	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Loadout","") as null|anything in list("Yes","No")
+	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Outfit","") as null|anything in list("Yes","No")
 	if(!strip_items)
 		return
 	if(strip_items == "Yes")
-		delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
+		delete_items = input(usr,"Delete stripped items?","Equip Outfit","") as null|anything in list("Yes","No")
 		if(!delete_items)
 			return
-	var/list/loadouts = list() + "USE ITEMS ON MY TURF" + (typesof(/obj/abstract/loadout) - /obj/abstract/loadout)
-	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
-	if(!loadout_type)
+	var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
+	var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	if(!outfit_type || !ispath(outfit_type))
 		return
 	if(strip_items == "Yes")
 		dropped_items = M.unequip_everything()
 		if(delete_items == "Yes")
 			for(var/atom/A in dropped_items)
 				qdel(A)
-	if(loadout_type == "USE ITEMS ON MY TURF")
-		M.equip_loadout(null, FALSE)
-	else
-		if(!ispath(loadout_type))
-			alert("ERROR: No such loadout type found.")
-			return
-		M.equip_loadout(loadout_type, FALSE)
-
-	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)
+	var/datum/outfit/concrete_outfit = new outfit_type
+	concrete_outfit.equip(M, TRUE)
+	log_admin("[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].")
+	message_admins("<span class='notice'>[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].</span>", 1)
 
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

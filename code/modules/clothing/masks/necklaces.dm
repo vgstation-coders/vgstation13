@@ -98,7 +98,7 @@
 	var/total_apcs = 0
 	var/good_apcs = 0
 	for(var/obj/machinery/power/apc/some_apc in power_machines)
-		if(!some_apc.z != map.zMainStation)
+		if(some_apc.z != map.zMainStation)
 			continue
 		total_apcs++
 		var/obj/item/weapon/cell/battery = some_apc.get_cell()

@@ -71,7 +71,7 @@
 	if(isliving(src))
 		var/mob/living/L = src
 		Mo.suiciding = L.suiciding
-		Mo.take_overall_damage(L.getBruteLoss(), L.getFireLoss())
+		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
 		Mo.stat = L.stat
