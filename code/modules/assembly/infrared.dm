@@ -213,7 +213,7 @@
 	var/obj/item/device/assembly/infra/assembly
 	var/puffed = 0
 
-	var/list/smokes_n_mists = list(
+	var/static/list/smokes_n_mists = list(
 		/obj/effect/decal/chemical_puff,
 		/obj/effect/effect/smoke,
 		/obj/effect/effect/water,
