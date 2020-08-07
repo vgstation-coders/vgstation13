@@ -16,7 +16,7 @@
 	desc = "Sheets made out of metal. It has been dubbed Metal Sheets."
 	singular_name = "metal sheet"
 	icon_state = "sheet-metal"
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	throwforce = 14.0
 	flags = FPRINT
@@ -24,7 +24,6 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_STEEL
 	mat_type = MAT_IRON
-	perunit = CC_PER_SHEET_METAL
 
 /obj/item/stack/sheet/metal/ex_act(severity)
 	switch(severity)
@@ -66,8 +65,7 @@
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-plasteel"
-	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL, MAT_PLASMA = CC_PER_SHEET_PLASMA) // Was 7500, which doesn't make any fucking sense
-	perunit = 2875 //average of plasma and metal
+	starting_materials = list(MAT_IRON = 1, MAT_PLASMA = 1) // Was 7500, which doesn't make any fucking sense
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1

@@ -25,7 +25,7 @@
 
 	//Internal resources
 	var/glass = 0
-	var/glass_max = 5 * CC_PER_SHEET_GLASS
+	var/glass_max = 5
 	var/cardboard = 0
 	var/cardboard_max = 5
 
@@ -41,7 +41,7 @@
 
 	//Quality = switchcount for created bulbs. Higher switchcount = higher chance to burn out on switch.
 	//Efficiency = multiplied by autolathe base glass for lights
-	var/prod_quality = 30 
+	var/prod_quality = 30
 	var/prod_eff = 1.5
 
 	//Options for advanced replacer, put in the base type for sanity purposes
@@ -67,17 +67,17 @@
 
 /obj/item/device/lightreplacer/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/stack/sheet/glass/glass))
-		if(!add_glass(CC_PER_SHEET_GLASS, force_fill = 1))
+		var/obj/item/stack/sheet/glass/glass/G = W
+		if(!add_glass(G.amount, force_fill = 1))
 			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
 			return
-		var/obj/item/stack/sheet/glass/glass/G = W
 		G.use(1)
 		to_chat(user, "<span class='notice'>You insert \the [G] into \the [src].</span>")
 		return
 
 	if(istype(W, /obj/item/stack/sheet/cardboard))
 		if(!add_cardboard(1, force_fill = 1))
-			to_chat(user, "<span class='warning'>\The [src] can't hold any more glass!</span>")
+			to_chat(user, "<span class='warning'>\The [src] can't hold any more cardboard!</span>")
 			return
 		var/obj/item/stack/sheet/cardboard/G = W
 		G.use(1)
@@ -137,9 +137,9 @@
 		data["waste"]["amount"]++
 
 	data["resources"] = list(
-		"glass" = glass, 
-		"glass_max" = glass_max, 
-		"cardboard" = cardboard, 
+		"glass" = glass,
+		"glass_max" = glass_max,
+		"cardboard" = cardboard,
 		"cardboard_max" = cardboard_max)
 
 	data["settings"] = list(
@@ -214,11 +214,11 @@
 						to_chat(usr, "<span class='notice'>\The [src] constructs a new waste container.</span>")
 						attack_self(usr)
 					return 1
-		
+
 	if(href_list["recycle"])
 		recycle_waste()
 		return 1
-		
+
 	if(href_list["settings"])
 		switch(href_list["settings"])
 			if("shape")
@@ -244,7 +244,7 @@
 			return 1
 		recharge(usr)
 		return 1
-	
+
 	if(href_list["dump"])
 		if(!istype(src, /obj/item/device/lightreplacer/borg))
 			return 1
@@ -461,7 +461,7 @@
 /obj/item/device/lightreplacer/advanced
 	name = "advanced light replacer"
 	device_mode = LIGHTREPLACER_ADVANCED
-	glass_max = 15 * CC_PER_SHEET_GLASS
+	glass_max = 15
 	cardboard_max = 10
 
 /obj/item/device/lightreplacer/borg
@@ -472,7 +472,7 @@
 	..()
 	supply = new /obj/item/weapon/storage/box/lights
 	waste = new /obj/item/weapon/storage/box/lights
-	add_glass(5 * CC_PER_SHEET_GLASS, 2)
+	add_glass(5, 2)
 
 /obj/item/device/lightreplacer/loaded/New()
 	..()

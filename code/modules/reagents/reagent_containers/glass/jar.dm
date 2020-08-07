@@ -7,7 +7,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30)
 	flags = FPRINT  | OPENCONTAINER
 	volume = 250
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS+250)
+	starting_materials = list(MAT_GLASS = 1.1)
 	w_type = RECYK_GLASS
 	w_class = W_CLASS_MEDIUM
 	melt_temperature = MELTPOINT_GLASS

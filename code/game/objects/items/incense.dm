@@ -261,7 +261,7 @@
 	storage_slots = 14
 	can_only_hold = list("/obj/item/incense_stick")
 	foldable = /obj/item/stack/sheet/wood
-	starting_materials = list(MAT_WOOD = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_WOOD = 1)
 	w_type=RECYK_WOOD
 	siemens_coefficient = 0
 	vending_cat = "incense material"

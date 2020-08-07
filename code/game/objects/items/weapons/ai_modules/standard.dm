@@ -31,7 +31,7 @@
 	priority = 5
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)
 
 /******************** PrototypeEngineOffline ********************/
 
@@ -43,7 +43,7 @@
 	priority = LAW_IONIC // Was 6, but doesn't jive with law priority numbering.
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)
 
 /******************** TeleporterOffline ********************/
 
@@ -54,7 +54,7 @@
 	priority = 7
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)
 
 /******************** Quarantine ********************/
 
@@ -65,7 +65,7 @@
 	priority = 8
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)
 
 /******************** OxygenIsToxicToHumans ********************/
 
@@ -76,4 +76,4 @@
 	priority = 9
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)

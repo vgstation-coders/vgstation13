@@ -16,7 +16,6 @@
 	var/singular_name
 	var/irregular_plural //"Teeth", for example. Without this, you'd see "There are 30 tooths in the stack."
 	var/amount = 1
-	var/perunit = 3750
 	var/max_amount //also see stack recipes initialisation, param "max_res_amount" must be equal to this max_amount
 	var/redeemed = 0 // For selling minerals to central command via supply shuttle.
 	var/restock_amount = 0 //For borg chargers restocking.

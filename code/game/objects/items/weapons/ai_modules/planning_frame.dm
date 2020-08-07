@@ -25,7 +25,7 @@
 	item_state = "electronic"
 
 	//Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS)
+	starting_materials = list(MAT_GLASS = 1)
 	w_type=RECYK_ELECTRONIC
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 

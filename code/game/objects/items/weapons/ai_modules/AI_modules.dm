@@ -99,7 +99,7 @@ Refactored AI modules by N3X15
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_GOLD = 0.1)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 /obj/item/weapon/aiModule/reset/updateLaw()
@@ -124,7 +124,7 @@ Refactored AI modules by N3X15
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
 
 	// Recycling
-	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_DIAMOND = 100/CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = 1, MAT_DIAMOND = 0.1)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
 /obj/item/weapon/aiModule/purge/updateLaw()
