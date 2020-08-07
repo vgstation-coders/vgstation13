@@ -19,7 +19,7 @@
 	if(istype(O, /obj/machinery))
 		var/obj/machinery/M = O
 		build_type = FLATPACKER
-		materials += list(MAT_IRON = 5 * CC_PER_SHEET_METAL) //cost of the frame
+		materials += list(MAT_IRON = 5) //cost of the frame
 		if(M.component_parts && M.component_parts.len)
 			category = "Machines"
 			for(var/obj/item/I in M.component_parts) //fetching the circuit by looking in the parts

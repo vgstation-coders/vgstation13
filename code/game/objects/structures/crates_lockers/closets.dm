@@ -27,7 +27,7 @@
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
 	var/obj/item/weapon/circuitboard/airlock/electronics
 
-	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
+	starting_materials = list(MAT_IRON = 2)
 	w_type = RECYK_METAL
 	ignoreinvert = 1
 

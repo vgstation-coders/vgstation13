@@ -28,7 +28,7 @@
 	use_power = 0
 	var/release_log = ""
 	var/busy = 0
-	starting_materials = list(MAT_IRON = 10*CC_PER_SHEET_METAL)
+	starting_materials = list(MAT_IRON = 10)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 

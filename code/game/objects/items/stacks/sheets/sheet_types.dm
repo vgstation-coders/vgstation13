@@ -92,7 +92,6 @@
 	w_type = RECYK_WOOD
 	siemens_coefficient = 0 //no conduct
 	mat_type = MAT_WOOD
-	perunit = CC_PER_SHEET_WOOD
 
 
 /obj/item/stack/sheet/wood/afterattack(atom/Target, mob/user, adjacent, params)
@@ -133,7 +132,7 @@
 	icon_state = "sheet-card"
 	flags = FPRINT
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_CARDBOARD = CC_PER_SHEET_CARDBOARD)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 /obj/item/stack/sheet/cardboard/New(var/loc, var/amount=null)
@@ -179,7 +178,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	sheettype = "clockwork"
 	flags = FPRINT
 	origin_tech = Tc_ANOMALY + "=1"
-	starting_materials = list(MAT_BRASS = CC_PER_SHEET_BRASS)
+	starting_materials = list(MAT_BRASS = 1)
 	mat_type = MAT_BRASS
 
 /obj/item/stack/sheet/brass/New(var/loc, var/amount=null)
@@ -193,7 +192,7 @@ var/list/datum/stack_recipe/charcoal_recipes = list ()
 	icon_state = "sheet-alloy"
 	flags = FPRINT
 	origin_tech = Tc_ANOMALY + "=1"
-	starting_materials = list(MAT_RALLOY = CC_PER_SHEET_RALLOY)
+	starting_materials = list(MAT_RALLOY = 1)
 	mat_type = MAT_RALLOY
 
 /obj/item/stack/sheet/ralloy/New(var/loc, var/amount=null)
