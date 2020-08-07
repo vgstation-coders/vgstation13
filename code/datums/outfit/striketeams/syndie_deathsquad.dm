@@ -15,7 +15,6 @@
 			slot_shoes_str = /obj/item/clothing/shoes/swat,
 			slot_gloves_str = /obj/item/clothing/gloves/swat,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal,
-			slot_head_str =  /obj/item/clothing/head/helmet/space/rig/syndicate_elite,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndicate_elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/syndicate,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen,
@@ -55,3 +54,5 @@
 
 /datum/outfit/striketeam/syndie_deathsquad/post_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/elite,  /obj/item/clothing/under, 5)
+	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
+	R.toggle_suit()

@@ -11,7 +11,13 @@
 
 // ----- RIGSUITS
 
-/datum/outfit/special/gemsuit
+/datum/outfit/special/rig
+
+/datum/outfit/special/rig/post_equip(var/mob/living/carbon/human/H)
+	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
+	R.toggle_suit()
+
+/datum/outfit/special/rig/gemsuit
 	outfit_name = "Wizard Gemsuit"
 	items_to_spawn = list(
 		"Default" = list(
@@ -21,7 +27,7 @@
 		),
 	)
 
-/datum/outfit/special/nazi_rig
+/datum/outfit/special/rig/nazi_rig
 	outfit_name = "Nazi rigsuit"
 	items_to_spawn = list(
 		"Default" = list(
@@ -29,13 +35,75 @@
 		),
 	)
 
-/datum/outfit/special/soviet_rig
+/datum/outfit/special/rig/soviet_rig
 	outfit_name = "Soviet rigsuit"
 	items_to_spawn = list(
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/soviet,
 		),
 	)
+
+/datum/outfit/special/rig/engineer_rig
+	outfit_name = "Engineer rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+/datum/outfit/special/rig/ce_rig
+	outfit_name = "Chief engineer rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/elite,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+/datum/outfit/special/rig/mining_rig
+	outfit_name = "Chief engineer rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/mining,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+/datum/outfit/special/rig/mining_rig
+	outfit_name = "Syndie rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndi,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+/datum/outfit/special/rig/medical_rig
+	outfit_name = "Medical rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/medical,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+/datum/outfit/special/rig/atmos_rig
+	outfit_name = "Atmos rig suit"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/atmos,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+		),
+	)
+
+// ----- Other suits
 
 /datum/outfit/special/dreed_gear
 	outfit_name = "Judge Dreed"
@@ -61,66 +129,6 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space,
 			slot_head_str = /obj/item/clothing/head/helmet/space,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/engineer_rig
-	outfit_name = "Engineer rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/ce_rig
-	outfit_name = "Chief engineer rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/elite,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/mining_rig
-	outfit_name = "Chief engineer rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/mining,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/mining_rig
-	outfit_name = "Syndie rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndi,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/medical_rig
-	outfit_name = "Medical rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/medical,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
-		),
-	)
-
-/datum/outfit/special/atmos_rig
-	outfit_name = "Atmos rig suit"
-	items_to_spawn = list(
-		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/atmos,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
