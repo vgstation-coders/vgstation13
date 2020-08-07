@@ -133,10 +133,10 @@ var/global/list/rnd_machines = list()
 				var/datum/material/M = materials.getMaterial(matID)
 				var/obj/item/stack/sheet/sheet = new M.sheettype(src.loc)
 				if(sheet)
-					var/available_num_sheets = round(materials.storage[matID]/sheet.perunit)
+					var/available_num_sheets = round(materials.storage[matID])
 					if(available_num_sheets>0)
 						sheet.amount = available_num_sheets
-						materials.removeAmount(matID, sheet.amount * sheet.perunit)
+						materials.removeAmount(matID, sheet.amount)
 					else
 						qdel(sheet)
 		return TRUE
@@ -195,8 +195,7 @@ var/global/list/rnd_machines = list()
 				to_chat(user, "<span class='warning'>\The [src] rejects \the [O.name].</span>")
 				return 1
 
-		var/obj/item/stack/sheet/S = O
-		if (TotalMaterials() + S.perunit > max_material_storage)
+		if (TotalMaterials() > max_material_storage)
 			to_chat(user, "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>")
 			return 1
 
@@ -209,8 +208,8 @@ var/global/list/rnd_machines = list()
 	//1 So the autolathe doesn't recycle the stack.
 		if(amount > stack.amount)
 			amount = stack.amount
-		if(max_material_storage - TotalMaterials() < (amount*stack.perunit))//Can't overfill
-			amount = min(stack.amount, round((max_material_storage-TotalMaterials())/stack.perunit))
+		if(max_material_storage - TotalMaterials() < (amount))//Can't overfill
+			amount = min(stack.amount, round(max_material_storage-TotalMaterials()))
 
 		if (!(amount > 0))
 			to_chat(user, "<span class='warning'>\The [src]'s material bin is full. Please remove material before adding more.</span>")
@@ -239,7 +238,7 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)
-		materials.addAmount(found, amount * material.cc_per_sheet)
+		materials.addAmount(found, amount)
 		spawn(ANIM_LENGTH)
 			busy = FALSE
 		return 1

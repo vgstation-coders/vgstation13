@@ -360,7 +360,7 @@
 		var/amount = ore.getAmount(metal)
 		if (M.default_show_in_menus || amount != 0)
 			// display 1 = 1 sheet in the interface.
-			data["ore"][metal] = list("name" = M.name, "amount" = amount / M.cc_per_sheet)
+			data["ore"][metal] = list("name" = M.name, "amount" = amount)
 
 	data["credits"] = credits
 

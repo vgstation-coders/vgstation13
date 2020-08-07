@@ -24,7 +24,7 @@ Mineral Sheets
 	if(!recyck_mat)
 		return 0
 
-	rec.addAmount(recyck_mat, amount * get_material_cc_per_sheet(recyck_mat))
+	rec.addAmount(recyck_mat, amount)
 	. = 1
 
 /*

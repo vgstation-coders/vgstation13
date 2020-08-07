@@ -140,7 +140,7 @@
 		return ..()
 
 /obj/item/stack/sheet/cardboard/recycle(var/datum/materials/rec)
-	rec.addAmount(MAT_CARDBOARD, amount * get_material_cc_per_sheet(MAT_CARDBOARD))
+	rec.addAmount(MAT_CARDBOARD, amount)
 	return 1
 
 /*

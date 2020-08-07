@@ -661,7 +661,7 @@
 	var/datum/material/material = materials.getMaterial(matID)
 	if(material)
 		//var/obj/item/stack/sheet/res = new material.sheettype(src)
-		var/total_amount = min(round(materials.storage[matID]/material.cc_per_sheet), amount)
+		var/total_amount = min(round(materials.storage[matID]), amount)
 		var/to_spawn = total_amount
 
 		while(to_spawn > 0)
@@ -677,7 +677,7 @@
 				mats.amount = to_spawn
 				to_spawn = 0
 
-			materials.removeAmount(matID, mats.amount * mats.perunit)
+			materials.removeAmount(matID, mats.amount)
 			mats.forceMove(src.loc)
 		return total_amount
 	return 0

@@ -384,7 +384,7 @@
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
 		return NOT_RECYCLABLE
-	rec.addAmount(material, 0.2 * get_material_cc_per_sheet(material)) // 5 coins per sheet.
+	rec.addAmount(material, 0.2) // 5 coins per sheet.
 	return w_type
 
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)

@@ -99,7 +99,7 @@
 	for(var/O in materials.storage)
 		if(materials.storage[O] > 0)
 			var/datum/material/mat = materials.getMaterial(O)
-			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]/mat.cc_per_sheet] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
+			dat += text("[capitalize(mat.processed_name)]: [materials.storage[O]] <A href='?src=\ref[src];release=[mat.id]'>Release</A><br>")
 
 	dat += text("<br>This unit can hold stacks of [stack_amt] sheets of each mineral type.<br><br>")
 
@@ -148,13 +148,13 @@
 			if(!mat)
 				to_chat(usr, "<span class='warning'>Unable to find material [release]!</span>")
 				return 1
-			var/desired = input("How much?","How much [mat.processed_name] to eject?", materials.storage[release]/mat.cc_per_sheet) as num
+			var/desired = input("How much?","How much [mat.processed_name] to eject?", materials.storage[release]) as num
 			if(desired==0)
 				return 1
 			var/obj/item/stack/sheet/out = new mat.sheettype(output.loc)
 			out.redeemed = 1 //Central command will not pay for this mineral stack.
-			out.set_amount(clamp(round(desired), 0, min(materials.storage[release]/mat.cc_per_sheet, out.max_amount)))
-			materials.removeAmount(release, out.amount * mat.cc_per_sheet)
+			out.set_amount(clamp(round(desired), 0, min(materials.storage[release], out.max_amount)))
+			materials.removeAmount(release, out.amount)
 	updateUsrDialog()
 	return
 

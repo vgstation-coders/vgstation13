@@ -1118,9 +1118,9 @@
 	var/datum/global_iterator/pr_mech_generator
 	var/coeff = 100
 	var/obj/item/stack/sheet/fuel
-	var/max_fuel = 150000
-	var/fuel_per_cycle_idle = 100
-	var/fuel_per_cycle_active = 500
+	var/max_fuel = 50
+	var/fuel_per_cycle_idle = 0.1
+	var/fuel_per_cycle_active = 0.5
 	var/power_per_cycle = 20
 	reliability = 1000
 
@@ -1169,7 +1169,7 @@
 /obj/item/mecha_parts/mecha_equipment/generator/get_equip_info()
 	var/output = ..()
 	if(output)
-		return "[output] \[[fuel]: [round(fuel.amount*fuel.perunit,0.1)] cm<sup>3</sup>\] - <a href='?src=\ref[src];toggle=1'>[pr_mech_generator.active()?"Dea":"A"]ctivate</a>"
+		return "[output] \[[fuel]: [round(fuel.amount,0.01)] cm<sup>3</sup>\] - <a href='?src=\ref[src];toggle=1'>[pr_mech_generator.active()?"Dea":"A"]ctivate</a>"
 	return
 
 /obj/item/mecha_parts/mecha_equipment/generator/action(target)
@@ -1188,9 +1188,9 @@
 
 /obj/item/mecha_parts/mecha_equipment/generator/proc/load_fuel(var/obj/item/stack/sheet/P)
 	if(P.type == fuel.type && P.amount)
-		var/to_load = max(max_fuel - fuel.amount*fuel.perunit,0)
+		var/to_load = max(max_fuel - fuel.amount,0)
 		if(to_load)
-			var/units = min(max(round(to_load / P.perunit),1),P.amount)
+			var/units = min(max(round(to_load),1),P.amount)
 			if(units)
 				fuel.amount += units
 				P.use(units)
@@ -1252,7 +1252,7 @@
 	if(cur_charge<EG.chassis.cell.maxcharge)
 		use_fuel = EG.fuel_per_cycle_active
 		EG.chassis.give_power(EG.power_per_cycle)
-	EG.fuel.amount -= min(use_fuel/EG.fuel.perunit,EG.fuel.amount)
+	EG.fuel.amount -= min(use_fuel,EG.fuel.amount)
 	EG.update_equip_info()
 	return 1
 
@@ -1261,9 +1261,9 @@
 	desc = "Generates power using uranium. Pollutes the environment."
 	icon_state = "tesla"
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_ENGINEERING + "=3"
-	max_fuel = 50000
-	fuel_per_cycle_idle = 10
-	fuel_per_cycle_active = 30
+	max_fuel = 50
+	fuel_per_cycle_idle = 0.01
+	fuel_per_cycle_active = 0.03
 	power_per_cycle = 50
 	var/rad_per_cycle = 0.3
 	reliability = 1000

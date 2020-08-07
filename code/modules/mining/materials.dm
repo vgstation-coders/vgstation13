@@ -50,7 +50,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/value=0
 	for(var/mat_id in storage)
 		var/datum/material/mat = getMaterial(mat_id)
-		value += mat.value * (storage[mat_id]/mat.cc_per_sheet)
+		value += mat.value * (storage[mat_id])
 	return value
 
 //Returns however much we have of that material
@@ -126,7 +126,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 		var/amount = getAmount(id)
 		if(amount)
 			var/datum/material/mat = getMaterial(id)
-			drop_stack(mat.sheettype, loc, Floor(amount / mat.cc_per_sheet))
+			drop_stack(mat.sheettype, loc, Floor(amount))
 
 /datum/materials/proc/makeOre(var/atom/loc)
 	for(var/id in storage)
@@ -139,10 +139,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	makeOre(loc)
 	for(var/id in storage)
 		removeAmount(id, storage[id])
-
-/proc/get_material_cc_per_sheet(var/matID)
-	var/datum/material/mat = material_list[matID]
-	return mat.cc_per_sheet
 
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
@@ -168,6 +164,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/melt_temperature = MELTPOINT_STEEL
 	var/armor_mod = 1
 	var/default_show_in_menus = TRUE // If false, stuff like the smelter won't show these *unless it has some*.
+	var/rarity = MAT_RARITY_COMMON //used by material synthesizer
 
 
 /datum/material/New()
@@ -228,6 +225,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 1.6
 	quality_mod = 2
 	melt_temperature = MELTPOINT_CARBON
+	rarity = MAT_RARITY_RARE
 
 /datum/material/plasma
 	name="Plasma"
@@ -240,6 +238,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.2
 	sharpness_mod = 1.4
 	quality_mod = 1.3
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/plasma/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -260,6 +259,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.5
 	quality_mod = 1.7
 	melt_temperature = MELTPOINT_GOLD
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/silver
 	name="Silver"
@@ -273,6 +273,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.7
 	quality_mod = 1.5
 	melt_temperature = MELTPOINT_SILVER
+	rarity = MAT_RARITY_UNCOMMON
 
 
 /datum/material/uranium
@@ -287,6 +288,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.2
 	quality_mod = 1.4
 	melt_temperature = MELTPOINT_URANIUM
+	rarity = MAT_RARITY_UNCOMMON
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -304,6 +306,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 	melt_temperature = MELTPOINT_POTASSIUM
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/clown/New()
 	if(!..())
@@ -328,7 +331,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Phazon"
 	id=MAT_PHAZON
 	value=VALUE_PHAZON
-	cc_per_sheet = 1500
 	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
 	cointype=/obj/item/weapon/coin/phazon
@@ -337,6 +339,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 1.8
 	quality_mod = 2.2
 	melt_temperature = MELTPOINT_PLASMA
+	rarity = MAT_RARITY_RARE
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -361,6 +364,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
 	color = "#F8F8FF" //rgb: 248, 248, 255
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/cardboard
 	name="Cardboard"
@@ -377,7 +381,6 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
 	cointype=null
-	cc_per_sheet = CC_PER_SHEET_WOOD
 	color = "#663300" //rgb: 102, 51, 0
 
 /datum/material/brass
@@ -404,6 +407,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id = MAT_ICE
 	value = 0
 	oretype = /obj/item/ice_crystal
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/mythril
 	name="mythril"
@@ -417,6 +421,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.6
 	quality_mod = 1.5
 	armor_mod = 1.75
+	rarity = MAT_RARITY_UNCOMMON
 
 /datum/material/telecrystal
 	name="telecrystal"
@@ -425,6 +430,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
+	rarity = MAT_RARITY_UNCOMMON
 
 
 /datum/material/pharosium

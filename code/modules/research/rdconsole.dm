@@ -549,10 +549,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			warning("PROTOLATHE: Unknown material [matID]! ([href])")
 		else
 			var/obj/item/stack/sheet/sheet = new M.sheettype(linked_lathe.get_output())
-			var/available_num_sheets = round(linked_lathe.materials.storage[matID]/sheet.perunit)
+			var/available_num_sheets = round(linked_lathe.materials.storage[matID])
 			if(available_num_sheets>0)
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
-				linked_lathe.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+				linked_lathe.materials.removeAmount(matID, sheet.amount)
 			else
 				qdel (sheet)
 				sheet = null
@@ -569,10 +569,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			warning("IMPRINTER: Unknown material [matID]! ([href])")
 		else
 			var/obj/item/stack/sheet/sheet = new M.sheettype(linked_imprinter.get_output())
-			var/available_num_sheets = round(linked_imprinter.materials.storage[matID]/sheet.perunit)
+			var/available_num_sheets = round(linked_imprinter.materials.storage[matID])
 			if(available_num_sheets>0)
 				sheet.amount = min(available_num_sheets, desired_num_sheets)
-				linked_imprinter.materials.removeAmount(matID, sheet.amount * sheet.perunit)
+				linked_imprinter.materials.removeAmount(matID, sheet.amount)
 			else
 				qdel (sheet)
 				sheet = null
@@ -923,9 +923,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			for(var/matID in linked_lathe.materials.storage)
 				var/datum/material/M=linked_lathe.materials.getMaterial(matID)
 				dat += "<li>[linked_lathe.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
-				if(linked_lathe.materials.storage[matID] >= M.cc_per_sheet)
+				if(linked_lathe.materials.storage[matID] >= 1) //Only take out solid sheets
 					dat += " - <A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=1'>(1 Sheet)</A> "
-					if(linked_lathe.materials.storage[matID] >= (M.cc_per_sheet*5))
+					if(linked_lathe.materials.storage[matID] >= 5)
 						dat += "<A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=5'>(5 Sheets)</A> "
 					dat += "<A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=50'>(Max Sheets)</A>"
 				else
@@ -1037,9 +1037,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(!(matID in linked_imprinter.allowed_materials))
 					continue
 				dat += "<li>[linked_imprinter.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
-				if(linked_imprinter.materials.storage[matID] >= M.cc_per_sheet)
+				if(linked_imprinter.materials.storage[matID] >= 1)
 					dat += " - <A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=1'>(1 Sheet)</A> "
-					if(linked_imprinter.materials.storage[matID] >= (M.cc_per_sheet*5))
+					if(linked_imprinter.materials.storage[matID] >= 5)
 						dat += "<A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=5'>(5 Sheets)</A> "
 					dat += "<A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=50'>(Max Sheets)</A>"
 				else

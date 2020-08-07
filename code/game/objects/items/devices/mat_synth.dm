@@ -70,15 +70,16 @@
 
 /obj/item/device/material_synth/proc/create_material(mob/user, var/material)
 	var/obj/item/stack/sheet/material_type = material
-
+	var/datum/materials/materials_list = new
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R && R.cell && R.cell.charge && material_type)
 			var/modifier = MAT_COST_COMMON
-			if(initial(active_material.perunit) < 3750)
-				modifier = MAT_COST_MEDIUM
-			if(initial(active_material.perunit) < 2000)
-				modifier = MAT_COST_RARE
+			switch(materials_list.getMaterial(active_material.mat_type)) //Go to global list, find material with the sheet's mat_type ID
+				if(MAT_RARITY_UNCOMMON)
+					modifier = MAT_COST_MEDIUM
+				if(MAT_RARITY_RARE)
+					modifier = MAT_COST_RARE
 			var/amount = input(user, "How many sheets of [initial(material_type.name)] do you want to synthesize", "Material Synthesizer") as num
 			amount = clamp(round(amount, 1), 0, 50)
 			if(amount)
@@ -129,14 +130,13 @@
 			var/modifier
 			var/unit_can_produce
 			var/tospawn
-			var/per_unit = initial(active_material.perunit)
 
-			if (per_unit < 2000)
-				modifier = MAT_COST_RARE
-			else if (per_unit < 3750)
-				modifier = MAT_COST_MEDIUM
-			else
-				modifier = MAT_COST_COMMON
+			modifier = MAT_COST_COMMON
+			switch(materials_list.getMaterial(active_material.mat_type)) //Go to global list, find material with the sheet's mat_type ID
+				if(MAT_RARITY_UNCOMMON)
+					modifier = MAT_COST_MEDIUM
+				if(MAT_RARITY_RARE)
+					modifier = MAT_COST_RARE
 
 			unit_can_produce = round(matter / modifier)
 
