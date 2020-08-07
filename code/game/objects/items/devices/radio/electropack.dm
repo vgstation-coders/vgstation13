@@ -9,7 +9,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BACK
 	w_class = W_CLASS_HUGE
-	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 2500)
+	starting_materials = list(MAT_IRON = 3, MAT_GLASS = 1)
 	w_type = RECYK_ELECTRONIC
 	var/code = 2
 	var/datum/radio_frequency/radio_connection

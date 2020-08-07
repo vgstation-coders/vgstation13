@@ -392,7 +392,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "razor"
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 340)
+	starting_materials = list(MAT_IRON = 0.2)
 
 /obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
 	if(location == "mouth")

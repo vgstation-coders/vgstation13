@@ -13,7 +13,7 @@
 	sharpness_flags = SHARP_TIP
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
-	starting_materials = list(MAT_GLASS = 1000)
+	starting_materials = list(MAT_GLASS = 0.2)
 	w_type = RECYK_GLASS
 
 	var/mode = SYRINGE_DRAW

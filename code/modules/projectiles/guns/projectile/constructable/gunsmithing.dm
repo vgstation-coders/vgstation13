@@ -197,7 +197,7 @@
 	desc = "A beaker. There appear to be six holes drilled through the bottom."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beaker"
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	origin_tech = Tc_MATERIALS + "=1"
 	w_class = W_CLASS_TINY
 	var/has_divider = 0
@@ -634,7 +634,7 @@
 	force = 5.0
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 150)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"

@@ -14,7 +14,7 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 2
 	throw_range = 5
-	starting_materials = list(MAT_IRON = 500)
+	starting_materials = list(MAT_IRON = 0.5)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
@@ -26,7 +26,7 @@
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
 		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
-	
+
 /obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 

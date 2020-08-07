@@ -22,7 +22,7 @@ var/global/list/math_circuit_operations_list = list("ADD", "SUBTRACT", "MULTIPLY
 
 	desc = "A tiny circuit intended for use in assembly frames. It performs simple math operations like addition, multiplication, and powers."
 	icon_state = "circuit_math"
-	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 75)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 
 	origin_tech = Tc_PROGRAMMING + "=2"

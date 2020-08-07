@@ -60,7 +60,7 @@ datum/reagent/chemical_waste
 	desc = "A small, open-topped glass container for delicate research samples. It sports a re-useable strip for labelling with a pen."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "solution_tray"
-	starting_materials = list(MAT_GLASS = 20)
+	starting_materials = list(MAT_GLASS = 0.02)
 	w_type = RECYK_GLASS
 	w_class = W_CLASS_TINY
 	amount_per_transfer_from_this = 1

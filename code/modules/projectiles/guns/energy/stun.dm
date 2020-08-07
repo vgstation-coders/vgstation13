@@ -105,7 +105,7 @@
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | NO_STORAGE_MSG
 	item_state = "crossbow"
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=5"
 	silenced = 1
@@ -147,7 +147,7 @@
 	desc = "A weapon favored by syndicate infiltration teams."
 	w_class = W_CLASS_LARGE
 	force = 10
-	starting_materials = list(MAT_IRON = 200000)
+	starting_materials = list(MAT_IRON = 2)
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 

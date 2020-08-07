@@ -7,7 +7,7 @@
 	desc = "A jar. You're not sure what it's supposed to hold."
 	icon_state = "jar"
 	item_state = "beaker"
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 

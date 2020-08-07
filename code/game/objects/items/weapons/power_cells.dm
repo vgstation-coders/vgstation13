@@ -13,7 +13,7 @@
 	w_class = W_CLASS_SMALL
 	var/charge = 0	// note %age conveted to actual charge in New
 	var/maxcharge = 1000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Rugged
 	var/rigged = 0		// true if rigged to explode
@@ -35,7 +35,7 @@
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 500
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/crap/empty/New()
 	..()
@@ -49,7 +49,7 @@
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 
 /obj/item/weapon/cell/secborg/empty/New()
@@ -60,7 +60,7 @@
 	name = "\improper Mining borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 
 /obj/item/weapon/cell/miningborg/empty/New()
@@ -73,7 +73,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	icon_state = "hcell"
 	maxcharge = 10000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/high/cyborg
 	name = "cyborg rechargeable power cell"
@@ -92,7 +92,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=5"
 	icon_state = "scell"
 	maxcharge = 20000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/super/empty/New()
 	..()
@@ -103,7 +103,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=6"
 	icon_state = "hpcell"
 	maxcharge = 30000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/hyper/empty/New()
 	..()
@@ -193,7 +193,7 @@
 	icon_state = "icell"
 	origin_tech = null
 	maxcharge = 35000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/infinite/New()
 	..()
@@ -209,7 +209,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=8"
 	icon_state = "ucell"
 	maxcharge = 50000
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 
 /obj/item/weapon/cell/ultra/empty/New()
 	..()
@@ -220,7 +220,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=7"
 	icon_state = "rcell"
 	maxcharge = 1000
-	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1, MAT_URANIUM = 0.1)
 	var/charge_rate = 100
 
 /obj/item/weapon/cell/rad/empty/New()
@@ -252,7 +252,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=9"
 	icon_state = "pcell"
 	maxcharge = 2500
-	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1, MAT_PHAZON = 0.1)
 	charge_rate = 250
 
 /obj/item/weapon/cell/rad/large/empty/New()

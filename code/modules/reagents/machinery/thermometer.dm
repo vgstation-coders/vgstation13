@@ -6,7 +6,7 @@
 	flags = FPRINT
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_BIOTECH + "=2"
@@ -97,7 +97,7 @@
 	icon_state = "therm_digi_1"
 	origin_tech = Tc_ENGINEERING + "=3;" + Tc_BIOTECH + "=3"
 
-	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 400)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_GLASS
 
@@ -132,11 +132,11 @@
 	sharpness_flags = SHARP_TIP
 	w_class = W_CLASS_TINY
 	attack_verb = list("stabs", "slashes", "attacks")
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 	hitsound = 'sound/weapons/bladeslice.ogg'
-	
+
 /obj/item/weapon/thermometer/byond
 	desc = "A device that measures temperature using the expansion of blood when exposed to heat. There's an imprint on the glass that says \"Made in BYOND\"."
 	icon_state = "therm_byond"

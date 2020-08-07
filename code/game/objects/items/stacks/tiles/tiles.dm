@@ -5,7 +5,7 @@
 	icon_state = "tile"
 	w_class = W_CLASS_MEDIUM
 	force = 6.0
-	starting_materials = list(MAT_IRON = 937.5)
+	starting_materials = list(MAT_IRON = 0.25)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	throwforce = 10

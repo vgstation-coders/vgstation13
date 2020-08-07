@@ -5,7 +5,7 @@
 	item_state = "gun"
 	origin_tech = Tc_COMBAT + "=4;" + Tc_MATERIALS + "=4"
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 1000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	flags = FPRINT
 	siemens_coefficient = 1

@@ -12,7 +12,7 @@
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
-	starting_materials = list(MAT_IRON = 15000)
+	starting_materials = list(MAT_IRON = 5)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=9;" + Tc_BLUESPACE + "=5"
@@ -264,7 +264,7 @@
 	. = ..()
 	if(. && deployed)
 		sharpness_flags = deployed.sharpness_flags
-	
+
 /obj/item/weapon/switchtool/swiss_army_knife/undeploy()
 	. = ..()
 	sharpness_flags = 0

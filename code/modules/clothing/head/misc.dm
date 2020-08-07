@@ -148,7 +148,7 @@
 	item_state = "cardborg_h"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 /obj/item/clothing/head/cardborg/affect_speech(var/datum/speech/speech, var/mob/living/L)

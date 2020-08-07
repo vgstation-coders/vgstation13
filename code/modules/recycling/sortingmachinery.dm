@@ -4,7 +4,7 @@
 	name = "destination tagger"
 	desc = "Used to set the destination of properly wrapped packages."
 	icon_state = "dest_tagger"
-	starting_materials = list(MAT_IRON = 300)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_METAL
 
 	var/panel = 0 //If the panel is open.

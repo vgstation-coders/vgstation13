@@ -14,7 +14,7 @@
 	gender = PLURAL
 	icon = 'icons/obj/items.dmi'
 	icon_state = "table_parts"
-	starting_materials = list(MAT_IRON = 3750)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
@@ -87,7 +87,7 @@
 	desc = "Hard table parts. Well...harder..."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "reinf_tableparts"
-	starting_materials = list(MAT_IRON = 7500)
+	starting_materials = list(MAT_IRON = 2)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	flags = FPRINT
@@ -143,7 +143,7 @@
 	desc = "Glass table parts for the spaceman with style."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "glass_tableparts"
-	starting_materials = list(MAT_GLASS = 3750)
+	starting_materials = list(MAT_GLASS = 1)
 	w_type = RECYK_GLASS
 	melt_temperature=MELTPOINT_GLASS
 	flags = FPRINT
@@ -161,7 +161,7 @@
 	desc = "Glass table parts in solid plasma. As stylish as they are sturdy."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "plasma_tableparts"
-	starting_materials = list(MAT_PLASMA = 3750)
+	starting_materials = list(MAT_PLASMA = 1)
 	w_type = RECYK_GLASS
 	melt_temperature=MELTPOINT_PLASMA
 	flags = FPRINT
@@ -178,7 +178,7 @@
 	name = "brass table parts"
 	desc = "Parts of a slightly beveled brass table."
 	icon_state = "brass_tableparts"
-	starting_materials = list(MAT_BRASS = 15000)
+	starting_materials = list(MAT_BRASS = 5)
 	table_type = /obj/structure/table/reinforced/clockwork
 	sheet_type = /obj/item/stack/sheet/brass
 	sheet_amount = 4
@@ -196,7 +196,7 @@
 	icon_state = "rack_parts"
 	flags = FPRINT
 	siemens_coefficient = 1
-	starting_materials = list(MAT_IRON = 3750)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	var/sheet_amount = 1

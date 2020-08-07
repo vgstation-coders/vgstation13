@@ -149,7 +149,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_MEDIUM
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.5, MAT_GLASS = 0.5)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
 	attack_verb = list("strikes", "pistol whips", "hits", "bashes")
@@ -203,7 +203,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.2)
 	melt_temperature = MELTPOINT_PLASTIC
 	w_type = RECYK_MISC
 	var/amount_left = 7.0
@@ -238,9 +238,9 @@
 	icon_state = "fireworkslauncher"
 	item_state = "riotgun"
 	fire_sound = "sound/weapons/railgun_lowpower.ogg"
-	projectile_type = "/obj/item/projectile/meteor/firework"	
+	projectile_type = "/obj/item/projectile/meteor/firework"
 	charge_cost = 0 //infinite ammo!
-	
+
 /obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
 	return
 

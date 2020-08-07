@@ -21,7 +21,7 @@ BREATHALYZER
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
 	item_state = "electronic"
-	starting_materials = list(MAT_IRON = 500, MAT_GLASS = 100)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.2)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
@@ -93,7 +93,7 @@ BREATHALYZER
 	throwforce = 3
 	w_class = W_CLASS_TINY
 	throw_speed = 5
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1"
@@ -330,7 +330,7 @@ Subject's pulse: ??? BPM"})
 	throwforce = 5
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"
@@ -437,7 +437,7 @@ Subject's pulse: ??? BPM"})
 	throwforce = 5
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
@@ -522,7 +522,7 @@ Subject's pulse: ??? BPM"})
 	throwforce = 5
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_BIOTECH + "=2"
 	var/details = 0
@@ -567,7 +567,7 @@ Subject's pulse: ??? BPM"})
 	throwforce = 3
 	w_class = W_CLASS_TINY
 	throw_speed = 5
-	starting_materials = list(MAT_IRON = 50)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_ENGINEERING + "=1;" + Tc_BIOTECH + "=1"

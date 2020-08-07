@@ -120,7 +120,7 @@ var/list/lawgiver_modes = list(
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=5;" + Tc_ENGINEERING + "=5"
 	w_class = W_CLASS_MEDIUM
-	starting_materials = list(MAT_IRON = 1000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	recoil = 0
 	flags = HEAR | FPRINT

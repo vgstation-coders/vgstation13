@@ -8,7 +8,7 @@
 	desc = "Used to remotely activate devices."
 	icon_state = "signaller"
 	item_state = "signaler"
-	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 200)
+	starting_materials = list(MAT_IRON = 0.4, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 	wires = WIRE_RECEIVE | WIRE_PULSE | WIRE_RADIO_PULSE | WIRE_RADIO_RECEIVE

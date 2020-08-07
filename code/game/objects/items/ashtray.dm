@@ -78,7 +78,7 @@
 	icon_broken  = "ashtray_bork_bl"
 	max_butts = 14
 	health = 24
-	starting_materials = list(MAT_PLASTIC = 50)
+	starting_materials = list(MAT_PLASTIC = 0.01)
 	w_type = RECYK_MISC
 	empty_desc = "Cheap plastic ashtray."
 	throwforce = 3
@@ -98,7 +98,7 @@
 	icon_broken  = "ashtray_bork_br"
 	max_butts = 10
 	health = 72
-	starting_materials = list(MAT_IRON = 80)
+	starting_materials = list(MAT_IRON = 0.01)
 	w_type = RECYK_METAL
 	empty_desc = "A large ashtray made of bronze."
 	throwforce = 10
@@ -119,7 +119,7 @@
 	icon_broken  = "ashtray_bork_gl"
 	max_butts = 12
 	health = 12
-	starting_materials = list(MAT_GLASS = 60)
+	starting_materials = list(MAT_GLASS = 0.01)
 	empty_desc = "Glass ashtray. Looks fragile."
 	throwforce = 6
 

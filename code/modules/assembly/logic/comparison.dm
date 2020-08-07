@@ -18,7 +18,7 @@ var/global/list/comparison_circuit_operations = list("EQUAL TO", "LESS THAN", "M
 
 	desc = "A tiny circuit intended for use in assembly frames. When it receives a signal, it checks whether the condition is true or false, and sends a pulse to the the corresponding assembly."
 	icon_state = "circuit_="
-	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 25)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 
 	origin_tech = Tc_PROGRAMMING + "=1"

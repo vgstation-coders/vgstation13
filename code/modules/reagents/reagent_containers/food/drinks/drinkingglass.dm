@@ -6,7 +6,7 @@
 	isGlass = 1
 	amount_per_transfer_from_this = 10
 	volume = 50
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	force = 5
 	smashtext = ""  //due to inconsistencies in the names of the drinks just don't say anything
 	smashname = "broken glass"
@@ -806,7 +806,7 @@
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
 
@@ -826,7 +826,7 @@
 	isGlass = 0
 	amount_per_transfer_from_this = 10
 	volume = 30
-	starting_materials = list(MAT_IRON = 500)
+	starting_materials = list(MAT_IRON = 0.2)
 
 /obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
 

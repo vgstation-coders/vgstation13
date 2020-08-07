@@ -30,7 +30,7 @@
 	throwforce = 2
 	force = 1
 
-	starting_materials = list(MAT_PLASTIC = 1200)
+	starting_materials = list(MAT_PLASTIC = 0.5)
 	melt_temperature = MELTPOINT_PLASTIC
 
 /obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = 1)

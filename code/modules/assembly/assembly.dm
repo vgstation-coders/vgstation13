@@ -24,7 +24,7 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	flags = FPRINT
 	siemens_coefficient = 1
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 100)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_ELECTRONIC
 	throwforce = 2
 	throw_speed = 3

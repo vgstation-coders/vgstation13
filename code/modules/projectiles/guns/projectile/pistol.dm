@@ -158,7 +158,7 @@
 	load_method = 2
 	gun_flags = SILENCECOMP | EMPTYCASINGS
 	silencer_offset = list(24,5)
-	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_PLASTIC = 2000)
+	starting_materials = list(MAT_IRON = 2, MAT_GLASS = 1, MAT_PLASTIC = 2)
 	var/obj/item/gun_part/glock_auto_conversion_kit/conversionkit = null
 
 /obj/item/weapon/gun/projectile/glock/update_icon()
@@ -167,13 +167,13 @@
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
 			var/oldpixelx = ol.pixel_x
-			var/newpixelx = chambered ? 0 : -4	
+			var/newpixelx = chambered ? 0 : -4
 			if(oldpixelx != newpixelx)
-				overlays -= ol	
-				ol.pixel_x = chambered ? 0 : -4	
+				overlays -= ol
+				ol.pixel_x = chambered ? 0 : -4
 				overlays += ol
-						
-		
+
+
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
@@ -186,7 +186,7 @@
 			fire_delay = 0
 			desc += "<br>This one seems to have something screwed into it."
 			return 1
-		
+
 	if(conversionkit && A.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
@@ -199,7 +199,7 @@
 		fire_delay = initial(fire_delay)
 		return 1
 	..()
-	
+
 /obj/item/weapon/gun/projectile/glock/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(conversionkit)
 		var/shots_fired = 0

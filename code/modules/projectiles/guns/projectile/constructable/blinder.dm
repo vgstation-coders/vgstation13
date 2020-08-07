@@ -9,7 +9,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_ELECTRONIC
 	var/obj/item/weapon/cell/cell = null
 	var/obj/item/weapon/light/bulb/flashbulb = null

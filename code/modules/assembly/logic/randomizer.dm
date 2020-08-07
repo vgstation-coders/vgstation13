@@ -9,7 +9,7 @@
 
 	desc = "A tiny circuit intended for use in assembly frames. When it receives a pulse, it randomly selects a set amount of devices connected to it, and emits a pulse to them."
 	icon_state = "circuit_rng"
-	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 25)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 
 	origin_tech = Tc_PROGRAMMING + "=1"

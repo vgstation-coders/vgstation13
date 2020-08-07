@@ -2,7 +2,7 @@
 	name = "price tagger"
 	desc = "Used to set the price of items."
 	icon_state = "dest_tagger" //placeholder, feel free to add a sprite
-	starting_materials = list(MAT_IRON = 300)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_METAL
 
 	var/current_price = 0

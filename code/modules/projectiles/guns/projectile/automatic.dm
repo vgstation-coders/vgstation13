@@ -272,7 +272,7 @@
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
 	burst_count = 2
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 6250, MAT_GLASS = 1500, MAT_PLASTIC = 2500)
+	starting_materials = list(MAT_IRON = 2, MAT_GLASS = 1, MAT_PLASTIC = 1)
 	var/receiver
 
 /obj/item/weapon/gun/projectile/automatic/vector/isHandgun()

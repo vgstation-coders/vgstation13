@@ -3,7 +3,7 @@
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
 
-	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
+	starting_materials = list(MAT_IRON = 20, MAT_GLASS = 10)
 
 	var/hook_key
 

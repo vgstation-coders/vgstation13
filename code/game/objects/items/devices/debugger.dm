@@ -17,7 +17,7 @@
 	throw_range = 15
 	throw_speed = 3
 	desc = "You can use this on airlocks or APCs to try to hack them without cutting wires."
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.01)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_ENGINEERING + "=1"

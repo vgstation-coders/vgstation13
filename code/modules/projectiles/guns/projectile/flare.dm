@@ -10,7 +10,7 @@
 	item_state = "flaregun"
 	max_shells = 1
 	w_class = W_CLASS_MEDIUM
-	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 7500)
+	starting_materials = list(MAT_IRON = 4, MAT_GLASS = 2)
 	w_type = RECYK_METAL
 	force = 4
 	recoil = 1

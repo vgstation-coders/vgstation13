@@ -65,7 +65,7 @@
 					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut")
 
 	foldable = /obj/item/stack/sheet/cardboard
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type = RECYK_MISC
 
 /obj/item/weapon/storage/fancy/donut_box/empty
@@ -95,7 +95,7 @@
 	var/egg_type = "chicken"
 
 	foldable = /obj/item/stack/sheet/cardboard
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type = RECYK_MISC
 
 /obj/item/weapon/storage/fancy/egg_box/empty
@@ -129,7 +129,7 @@
 	icon_type = "candle"
 	item_state = "candlebox5"
 	foldable = /obj/item/stack/sheet/cardboard
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type = RECYK_MISC
 	storage_slots = 5
 	throwforce = 2
@@ -167,7 +167,7 @@
 	icon = 'icons/obj/crayons.dmi'
 	icon_state = "crayonbox"
 	foldable = /obj/item/stack/sheet/cardboard
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 	w_class = W_CLASS_SMALL
 	storage_slots = 7
@@ -303,7 +303,7 @@
 	storage_slots = 6
 	can_only_hold = list("=/obj/item/clothing/mask/cigarette","/obj/item/clothing/mask/cigarette/goldencarp","/obj/item/clothing/mask/cigarette/starlight","/obj/item/clothing/mask/cigarette/bidi","/obj/item/clothing/mask/cigarette/lucky","/obj/item/clothing/mask/cigarette/redsuit","/obj/item/clothing/mask/cigarette/ntstandard","/obj/item/clothing/mask/cigarette/spaceport", "/obj/item/weapon/lighter", "/obj/item/weapon/p_folded/note_small")
 	icon_type = "cigarette"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 	var/equip_from_box = TRUE
 	var/cigtype = /obj/item/clothing/mask/cigarette
@@ -542,7 +542,7 @@
 	can_only_hold = list("/obj/item/device/flashlight/flare")
 
 	foldable = /obj/item/stack/sheet/cardboard
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 /obj/item/weapon/storage/fancy/flares/empty
@@ -580,7 +580,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
 	icon_type = "drumstick"
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/chicken_drumstick")
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 /obj/item/weapon/storage/fancy/food_box/chicken_bucket/New()
@@ -621,7 +621,7 @@
 	storage_slots = 4
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/slider")
 	var/slider_type = /obj/item/weapon/reagent_containers/food/snacks/slider//set this as the spawn path of your slider
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 /obj/item/weapon/storage/fancy/food_box/slider_box/New()

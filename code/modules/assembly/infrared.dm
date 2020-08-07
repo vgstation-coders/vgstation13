@@ -4,7 +4,7 @@
 
 	desc = "Emits a visible or invisible beam and is triggered when the beam is interrupted."
 	icon_state = "infrared"
-	starting_materials = list(MAT_IRON = 1000, MAT_GLASS = 500)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=2"
 

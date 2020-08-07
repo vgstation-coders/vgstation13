@@ -22,7 +22,7 @@ Refactored AI modules by N3X15
 	origin_tech = Tc_PROGRAMMING + "=3"
 
 	//Recycling
-	starting_materials = list(MAT_GLASS = 2000)
+	starting_materials = list(MAT_GLASS = 0.6)
 	w_type=RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.

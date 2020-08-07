@@ -64,7 +64,7 @@
 	anchored = 0.0
 	origin_tech = Tc_MATERIALS + "=2"
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
+	starting_materials = list(MAT_IRON = 15, MAT_GLASS = 15) //Let's make them arbitrarily big
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/rcd_ammo/attackby(var/obj/O, mob/user)

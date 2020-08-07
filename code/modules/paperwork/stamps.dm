@@ -9,7 +9,7 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 7
 	throw_range = 15
-	starting_materials = list(MAT_IRON = 60)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_MISC
 	_color = "cargo"
 	pressure_resistance = 2
@@ -19,7 +19,7 @@
 	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
 
 	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-	stampoverlay.icon_state = "paper_[icon_state]"	
+	stampoverlay.icon_state = "paper_[icon_state]"
 	// We have to reapply overlays on envelopes so we can't have random offsets
 	if(istype(P, /obj/item/weapon/paper/envelope))
 		stampoverlay.pixel_x = 5 * PIXEL_MULTIPLIER

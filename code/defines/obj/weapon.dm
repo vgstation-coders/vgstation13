@@ -126,7 +126,7 @@
 	force = 5.0
 	throwforce = 7.0
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 50)
+	starting_materials = list(MAT_IRON = 0.5)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_STEEL
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
@@ -139,7 +139,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/datadisks.dmi', "right_hand" = 'icons/mob/in-hand/right/datadisks.dmi')
 	w_class = W_CLASS_TINY
 	w_type = RECYK_ELECTRONIC
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.01)
 
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
@@ -409,7 +409,7 @@
 	desc = "A trap used to catch bears and other legged creatures."
 	flags = FPRINT
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 50000)
+	starting_materials = list(MAT_IRON = 15)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	anchored = FALSE
@@ -828,7 +828,7 @@
 	w_class = W_CLASS_SMALL
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 100)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature=MELTPOINT_SILICON
 	origin_tech = Tc_MAGNETS + "=1"
@@ -920,7 +920,7 @@
 	var/amount = 1.0
 	var/laying = 0.0
 	var/old_lay = null
-	starting_materials = list(MAT_IRON = 70)
+	starting_materials = list(MAT_IRON = 0.01)
 	w_type = RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	attack_verb = list("whips", "lashes", "disciplines", "tickles")

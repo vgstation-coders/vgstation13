@@ -8,7 +8,7 @@
 	hitsound = 'sound/effects/woodhit.ogg'
 	force = 1
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 120)
+	starting_materials = list(MAT_IRON = 0.2)
 
 	flags = FPRINT
 	siemens_coefficient = 1

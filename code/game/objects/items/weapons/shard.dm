@@ -15,7 +15,7 @@
 	throwforce = 15.0
 
 	item_state = "shard-glassnew"
-	starting_materials = list(MAT_GLASS = 3750)
+	starting_materials = list(MAT_GLASS = 1)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	siemens_coefficient = 0 //no conduct
@@ -62,7 +62,7 @@
 	icon = 'icons/obj/shards.dmi'
 	icon_state = "shrapnellarge"
 	desc = "A bunch of tiny bits of shattered metal."
-	starting_materials = list(MAT_IRON = 5)
+	starting_materials = list(MAT_IRON = 0.01)
 	w_type=RECYK_METAL
 	melt_temperature=MELTPOINT_STEEL
 	glass = /obj/item/stack/sheet/metal

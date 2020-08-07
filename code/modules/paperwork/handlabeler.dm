@@ -4,7 +4,7 @@
 	icon_state = "labeler0"
 	item_state = "labeler0"
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 175)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_MISC
 	var/label = null
 	var/chars_left = 250 //Like in an actual label maker, uses an amount per character rather than per label.

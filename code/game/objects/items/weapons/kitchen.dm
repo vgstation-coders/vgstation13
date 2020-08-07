@@ -227,7 +227,7 @@
 	throw_speed = 3
 	throw_range = 7
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 12000)
+	starting_materials = list(MAT_IRON = 3)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
@@ -249,7 +249,7 @@
 	throwforce = 6.0
 	throw_speed = 3
 	throw_range = 6
-	starting_materials = list(MAT_IRON = 12000)
+	starting_materials = list(MAT_IRON = 3)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
@@ -304,7 +304,7 @@
 	throwforce = 8.0
 	throw_speed = 3
 	throw_range = 6
-	starting_materials = list(MAT_IRON = 12000)
+	starting_materials = list(MAT_IRON = 3)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
@@ -421,7 +421,7 @@
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
 	siemens_coefficient = 1
-	starting_materials = list(MAT_IRON = 3000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	var/list/carrying = list() // List of things on the tray. - Doohl

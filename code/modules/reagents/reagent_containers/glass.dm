@@ -103,7 +103,7 @@
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "beaker"
 	item_state = "beaker"
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
@@ -216,7 +216,7 @@
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."
 	icon_state = "beakerlarge"
-	starting_materials = list(MAT_GLASS = 1500)
+	starting_materials = list(MAT_GLASS = 0.4)
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 
@@ -252,7 +252,7 @@
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
 	icon_state = "beakernoreact"
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	volume = 50
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
@@ -262,7 +262,7 @@
 	name = "large stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreactlarge"
-	starting_materials = list(MAT_GLASS = 1500)
+	starting_materials = list(MAT_GLASS = 0.4)
 	volume = 100
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
@@ -270,7 +270,7 @@
 	name = "bluespace beaker"
 	desc = "A newly-developed high-capacity beaker that uses advances in bluespace research. Can hold up to 200 units."
 	icon_state = "beakerbluespace"
-	starting_materials = list(MAT_GLASS = 2000)
+	starting_materials = list(MAT_GLASS = 0.6)
 	volume = 200
 	w_type = RECYK_GLASS
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,200)
@@ -282,7 +282,7 @@
 	name = "large bluespace beaker"
 	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
 	icon_state = "beakerbluespacelarge"
-	starting_materials = list(MAT_GLASS = 5000)
+	starting_materials = list(MAT_GLASS = 1)
 	volume = 300
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
@@ -291,7 +291,7 @@
 	name = "vial"
 	desc = "A small glass vial. Can hold up to 25 units."
 	icon_state = "vial"
-	starting_materials = list(MAT_GLASS = 250)
+	starting_materials = list(MAT_GLASS = 0.1)
 	volume = 25
 	possible_transfer_amounts = list(5,10,15,25)
 
@@ -354,7 +354,7 @@
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "bucket"
 	item_state = "bucket"
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.4)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
@@ -491,7 +491,7 @@
 	name = "Kettle"
 	desc = "A pot made for holding hot drinks. Can hold up to 75 units."
 	icon_state = "kettle"
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.3)
 	volume = 75
 	w_type = RECYK_GLASS
 	amount_per_transfer_from_this = 10

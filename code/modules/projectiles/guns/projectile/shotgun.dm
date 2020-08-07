@@ -28,7 +28,7 @@
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 	gun_flags = 0
-	starting_materials = list(MAT_IRON = 7500, MAT_WOOD = 3750)
+	starting_materials = list(MAT_IRON = 2, MAT_WOOD = 1)
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)

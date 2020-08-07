@@ -5,7 +5,7 @@
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
 	w_class = W_CLASS_SMALL //It should be tiny! -Agouri
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.01)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 

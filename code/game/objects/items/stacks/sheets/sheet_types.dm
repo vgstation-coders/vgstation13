@@ -65,7 +65,7 @@
 	desc = "This sheet is an alloy of iron and plasma."
 	icon_state = "sheet-plasteel"
 	item_state = "sheet-plasteel"
-	starting_materials = list(MAT_IRON = 1, MAT_PLASMA = 1) // Was 7500, which doesn't make any fucking sense
+	starting_materials = list(MAT_IRON = 1, MAT_PLASMA = 1)
 	throwforce = 15.0
 	flags = FPRINT
 	siemens_coefficient = 1

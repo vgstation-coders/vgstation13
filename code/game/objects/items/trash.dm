@@ -62,19 +62,19 @@
 /obj/item/trash/bustanuts
 	name = "\improper Busta-Nuts"
 	icon_state = "busta_nut"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/oldempirebar
 	name = "Old Empire Bar"
 	icon_state = "old_empire_bar"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/raisins
 	name = "4no raisins"
 	icon_state= "4no_raisins"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/candy
@@ -93,19 +93,19 @@
 /obj/item/trash/popcorn
 	name = "popcorn"
 	icon_state = "popcorn"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/sosjerky
 	name = "\improper Scaredy's Private Reserve Beef Jerky"
 	icon_state = "sosjerky"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/syndi_cakes
 	name = "\improper Syndi cakes"
 	icon_state = "syndi_cakes"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	w_type=RECYK_MISC
 
 /obj/item/trash/discountchocolate
@@ -202,7 +202,7 @@
 /obj/item/trash/chicken_bucket
 	name = "chicken bucket"
 	icon_state = "kfc_bucket"
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
@@ -228,7 +228,7 @@
 /obj/item/trash/byond_box
 	name = "discarded BYOND support package"
 	icon_state = "byond"
-	starting_materials = list(MAT_CARDBOARD = 370)
+	starting_materials = list(MAT_CARDBOARD = 0.2)
 	autoignition_temperature = 522
 	w_type=RECYK_MISC
 
@@ -239,7 +239,7 @@ var/list/crushed_cans_cache = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = "crushed_can"
-	starting_materials = list(MAT_IRON = 50)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type=RECYK_METAL
 	force = 0
 	throwforce = 2

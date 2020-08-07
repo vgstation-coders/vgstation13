@@ -62,7 +62,7 @@ var/list/locator_holomap_cache = list()
 	item_state = "electronic"
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 400)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 

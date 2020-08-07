@@ -421,7 +421,7 @@ obj/item/clothing/suit/cassock
 	desc = "An ordinary cardboard box with holes cut in the sides."
 	icon_state = "cardborg"
 	item_state = "cardborg"
-	starting_materials = list(MAT_CARDBOARD = 11250)
+	starting_materials = list(MAT_CARDBOARD = 3)
 	w_type=RECYK_MISC
 
 /*

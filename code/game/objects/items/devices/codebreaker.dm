@@ -10,7 +10,7 @@
 	throwforce = 5.0
 	throw_range = 15
 	throw_speed = 3
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.01)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_PROGRAMMING + "=6;" + Tc_SYNDICATE + "=7"

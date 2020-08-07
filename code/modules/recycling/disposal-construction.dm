@@ -10,7 +10,7 @@
 	anchored = 0
 	density = 0
 	pressure_resistance = 5*ONE_ATMOSPHERE
-	starting_materials = list(MAT_IRON = 1850)
+	starting_materials = list(MAT_IRON = 0.5)
 	w_type = RECYK_METAL
 	level = 2
 	var/ptype = 0

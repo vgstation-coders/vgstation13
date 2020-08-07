@@ -14,7 +14,7 @@
 	throwforce = 3
 	w_class = W_CLASS_TINY
 	throw_speed = 5
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BIOTECH + "=1" // TODO: figure out appropriate values

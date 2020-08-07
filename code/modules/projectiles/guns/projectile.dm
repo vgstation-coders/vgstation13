@@ -9,7 +9,7 @@
 	caliber = list(POINT357 = 1)
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2"
 	w_class = W_CLASS_MEDIUM
-	starting_materials = list(MAT_IRON = 1000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	recoil = 1
 	var/ammo_type = "/obj/item/ammo_casing/a357"
@@ -56,7 +56,7 @@
 				to_chat(usr, "<span class='notice'>You load [AM] into \the [src].</span>")
 			else
 				return
-		
+
 		stored_magazine = AM
 		chamber_round()
 		AM.update_icon()
@@ -244,7 +244,7 @@
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
 			return
-	
+
 	if(A.is_screwdriver(user))
 		if(magwellmod.len)
 			mag_type_restricted = magwellmod

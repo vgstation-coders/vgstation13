@@ -24,7 +24,7 @@
 
 	icon_state = "circuit_write"
 
-	starting_materials = list(MAT_IRON = 130, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 
 	origin_tech = Tc_PROGRAMMING + "=1"

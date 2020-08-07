@@ -9,7 +9,7 @@
 	item_state = "electronic"
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 500)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 	var/obj/target = null // this can be used to override disk tracking on normal pinpointers (ie. for shunted malf ais)

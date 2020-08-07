@@ -22,7 +22,7 @@
 	item_state = "electronic"
 	throw_speed = 4
 	throw_range = 20
-	starting_materials = list(MAT_IRON = 400)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 
@@ -157,7 +157,7 @@ Frequency:
 	w_class = W_CLASS_SMALL
 	throw_speed = 3
 	throw_range = 5
-	starting_materials = list(MAT_IRON = 10000, MAT_GOLD = 500, MAT_PHAZON = 50)
+	starting_materials = list(MAT_IRON = 3, MAT_GOLD = 0.2, MAT_PHAZON = 0.01)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_BLUESPACE + "=3"
 	var/list/portals = list()

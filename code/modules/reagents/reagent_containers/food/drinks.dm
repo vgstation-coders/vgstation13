@@ -1003,7 +1003,7 @@
 	icon_state = "plasticbottle"
 	origin_tech = Tc_MATERIALS + "=1"
 	melt_temperature = MELTPOINT_PLASTIC
-	starting_materials = list(MAT_PLASTIC = 500)
+	starting_materials = list(MAT_PLASTIC = 0.2)
 	volume = 100
 	amount_per_transfer_from_this = 10
 
@@ -1089,7 +1089,7 @@
 /obj/item/weapon/reagent_containers/food/drinks/bottle
 	amount_per_transfer_from_this = 10
 	volume = 100
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	bottleheight = 31
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
@@ -1111,7 +1111,7 @@
 	item_state = "beer"
 	attack_verb = list("stabs", "slashes", "attacks")
 	var/icon/broken_outline = icon('icons/obj/drinks.dmi', "broken")
-	starting_materials = list(MAT_GLASS = 500)
+	starting_materials = list(MAT_GLASS = 0.2)
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 

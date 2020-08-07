@@ -605,7 +605,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	icon_state = "tube"
 	base_state = "tube"
 	item_state = "c_tube"
-	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 60)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 	w_type = RECYK_GLASS
 	brightness_range = 6
 	brightness_power = 1.5
@@ -616,7 +616,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hetube"
-	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
+	starting_materials = list(MAT_GLASS = 0.2, MAT_IRON = 0.2)
 	brightness_range = 8
 	brightness_power = 4
 	brightness_color = LIGHT_COLOR_HALOGEN
@@ -626,7 +626,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "smart light tube"
 	desc = "An LED light tube with built-in electronics to control various properties."
 	base_state = "hetube"
-	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 60)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 	brightness_range = 8
 	brightness_power = 4
 	brightness_color = "#FFFFFF"
@@ -649,7 +649,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	name = "large light tube"
 	brightness_range = 15
 	brightness_power = 4
-	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 	cost = 15
 
 /obj/item/weapon/light/bulb
@@ -662,7 +662,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_range = 3.5
 	brightness_power = 2
 	brightness_color = LIGHT_COLOR_TUNGSTEN
-	starting_materials = list(MAT_GLASS = 50, MAT_IRON = 30)
+	starting_materials = list(MAT_GLASS = 0.05, MAT_IRON = 0.05)
 	cost = 5
 	w_type = RECYK_GLASS
 
@@ -677,7 +677,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 3
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 1
-	starting_materials = list(MAT_GLASS = 150, MAT_IRON = 30)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 
 /obj/item/weapon/light/bulb/smart
 	name = "smart light bulb"
@@ -687,7 +687,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_power = 3
 	brightness_color = "#FFFFFF"
 	cost = 1
-	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 30)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 
 /obj/item/weapon/light/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/device/lightreplacer))
@@ -708,7 +708,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	item_state = "egg4"
 	brightness_range = 5
 	brightness_power = 2
-	starting_materials = list(MAT_GLASS = 300, MAT_IRON = 60)
+	starting_materials = list(MAT_GLASS = 0.1, MAT_IRON = 0.1)
 
 // update the icon state and description of the light
 

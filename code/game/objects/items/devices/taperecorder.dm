@@ -5,7 +5,7 @@
 	item_state = "analyzer"
 	origin_tech = Tc_MAGNETS + "=1;" + Tc_PROGRAMMING + "=1"
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_IRON = 60, MAT_GLASS = 30)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.2)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	var/emagged = 0.0

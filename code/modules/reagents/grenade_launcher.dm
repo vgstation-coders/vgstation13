@@ -11,7 +11,7 @@
 	var/max_grenades = 3
 	var/timer_override = FALSE
 	var/timer_override_value = 5 SECONDS
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 
 /obj/item/weapon/gun/grenadelauncher/examine(mob/user)

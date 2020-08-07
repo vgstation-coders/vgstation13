@@ -11,7 +11,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30)
 	flags = FPRINT  | OPENCONTAINER
 	volume = 30
-	starting_materials = list(MAT_GLASS = 1000)
+	starting_materials = list(MAT_GLASS = 0.2)
 	w_type = RECYK_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
@@ -571,7 +571,7 @@ var/datum/disease2/disease/wizarditis = null
 	desc = "A bottle of BLAM! Ultraclean brand bleach. Has many warning labels."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bleachbottle"
-	starting_materials = list(MAT_PLASTIC = 1000)
+	starting_materials = list(MAT_PLASTIC = 0.2)
 	w_type = RECYK_MISC
 	melt_temperature = MELTPOINT_PLASTIC
 

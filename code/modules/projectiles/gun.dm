@@ -14,7 +14,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	throwforce = 5

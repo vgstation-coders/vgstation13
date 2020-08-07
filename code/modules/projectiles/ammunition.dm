@@ -50,7 +50,7 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 	item_state = "syringe_kit"
-	starting_materials = list(MAT_IRON = 50000)
+	starting_materials = list(MAT_IRON = 15)
 	w_type = RECYK_METAL
 	throwforce = 2
 	w_class = W_CLASS_TINY

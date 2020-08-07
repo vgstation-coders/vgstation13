@@ -6,7 +6,7 @@
 	desc = "Used to play pre-recorded messages."
 	icon_state = "speaker"
 	item_state = "speaker"
-	starting_materials = list(MAT_IRON = 800, MAT_GLASS = 100)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 

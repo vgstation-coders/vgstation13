@@ -28,7 +28,7 @@
 	icon_state = "box"
 	item_state = "box"
 	foldable = /obj/item/stack/sheet/cardboard	//BubbleWrap
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
@@ -41,7 +41,7 @@
 	w_class = W_CLASS_LARGE // Big, bulky.
 	foldable = /obj/item/stack/sheet/cardboard
 	foldable_amount = 4 // Takes 4 to make. - N3X
-	starting_materials = list(MAT_CARDBOARD = 15000)
+	starting_materials = list(MAT_CARDBOARD = 4)
 	storage_slots = 21
 	max_combined_w_class = 42 // 21*2
 
@@ -825,7 +825,7 @@
 	desc = "A box of seven glass Christmas ornaments. Color not included."
 	icon_state = "ornament_box"
 	foldable = null
-	starting_materials = list(MAT_GLASS = 2500)		//needed for autolathe production
+	starting_materials = list(MAT_GLASS = 1)		//needed for autolathe production
 
 /obj/item/weapon/storage/box/ornaments/New()
 	..()

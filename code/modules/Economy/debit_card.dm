@@ -8,7 +8,7 @@
 	icon_state = "debit"
 	melt_temperature = MELTPOINT_PLASTIC
 	w_class = W_CLASS_TINY
-	starting_materials = list(MAT_PLASTIC = 10)
+	starting_materials = list(MAT_PLASTIC = 0.01)
 	w_type = RECYK_MISC
 	var/to_cut = 0.8
 	var/authorized_name = "" // The name of the card. Edited at any ATM.
@@ -69,7 +69,7 @@
 	desc = "A sturdy looking metal card containing near field circuitry."
 	icon_state = "debit-preferred"
 	melt_temperature = MELTPOINT_STEEL
-	starting_materials = list(MAT_IRON = 10)
+	starting_materials = list(MAT_IRON = 0.01)
 	w_type = RECYK_METAL
 	to_cut = 1
 	var/examine_held = "<span class='notice'>You feel more important just by holding it</span>"
@@ -83,7 +83,7 @@
 	name = "\improper elite debit card"
 	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important"
 	icon_state = "debit-elite"
-	starting_materials = list(MAT_IRON = 20)
+	starting_materials = list(MAT_IRON = 0.01)
 	to_cut = 1.5
 	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
 
@@ -125,7 +125,7 @@
 /obj/item/weapon/card/debit/preferred/department/elite
 	desc = "A very sturdy looking metal card containing near field circuitry. Whoever owns it must be really important"
 	icon_state = "debit-elite"
-	starting_materials = list(MAT_IRON = 20)
+	starting_materials = list(MAT_IRON = 0.01)
 	to_cut = 1.5
 	examine_held = "<span class='notice'>You feel <b>incredibly</b> important just by holding it</span>"
 

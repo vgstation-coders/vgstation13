@@ -29,7 +29,7 @@
 	throw_speed = 2
 	throw_range = 9
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 75, MAT_GLASS = 25)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 

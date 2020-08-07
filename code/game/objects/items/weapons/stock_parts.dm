@@ -21,7 +21,7 @@
 	desc = "Used in the construction of computers and other devices with a interactive console."
 	icon_state = "screen"
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_GLASS = 200)
+	starting_materials = list(MAT_GLASS = 0.1)
 	w_type = RECYK_GLASS
 
 /obj/item/weapon/stock_parts/console_screen/rped_rating()
@@ -33,7 +33,7 @@
 	desc = "A basic capacitor used in the construction of a variety of devices."
 	icon_state = "capacitor2_basic"
 	origin_tech = Tc_POWERSTORAGE + "=1"
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.02)
 	w_type = RECYK_ELECTRONIC
 	var/stored_charge = 0
 	var/maximum_charge = 30000000
@@ -71,7 +71,7 @@
 	desc = "A compact, high resolution scanning module used in the construction of certain devices."
 	icon_state = "scan_module"
 	origin_tech = Tc_MAGNETS + "=1"
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/stock_parts/manipulator
@@ -79,7 +79,7 @@
 	desc = "A tiny little manipulator used in the construction of certain devices."
 	icon_state = "micro_mani"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_PROGRAMMING + "=1"
-	starting_materials = list(MAT_IRON = 30)
+	starting_materials = list(MAT_IRON = 0.02)
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/stock_parts/micro_laser
@@ -87,7 +87,7 @@
 	desc = "A tiny laser used in certain devices."
 	icon_state = "micro_laser"
 	origin_tech = Tc_MAGNETS + "=1"
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.02)
 	w_type = RECYK_ELECTRONIC
 
 /obj/item/weapon/stock_parts/matter_bin
@@ -95,7 +95,7 @@
 	desc = "A container for hold compressed matter awaiting re-construction."
 	icon_state = "matter_bin"
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 80)
+	starting_materials = list(MAT_IRON = 0.02)
 	w_type = RECYK_ELECTRONIC
 
 //Rank 2
@@ -106,7 +106,7 @@
 	icon_state = "capacitor2_adv"
 	origin_tech = Tc_POWERSTORAGE + "=3"
 	rating = 2
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.02)
 	maximum_charge = 200000000
 
 /obj/item/weapon/stock_parts/scanning_module/adv
@@ -115,7 +115,7 @@
 	icon_state = "adv_scan_module"
 	origin_tech = Tc_MAGNETS + "=3"
 	rating = 2
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.02)
 
 /obj/item/weapon/stock_parts/manipulator/nano
 	name = "nano-manipulator"
@@ -123,7 +123,7 @@
 	icon_state = "nano_mani"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_PROGRAMMING + "=2"
 	rating = 2
-	starting_materials = list(MAT_IRON = 30)
+	starting_materials = list(MAT_IRON = 0.02)
 
 /obj/item/weapon/stock_parts/micro_laser/high
 	name = "high-power micro-laser"
@@ -131,7 +131,7 @@
 	icon_state = "high_micro_laser"
 	origin_tech = Tc_MAGNETS + "=3"
 	rating = 2
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.03)
 
 /obj/item/weapon/stock_parts/matter_bin/adv
 	name = "advanced matter bin"
@@ -139,7 +139,7 @@
 	icon_state = "advanced_matter_bin"
 	origin_tech = Tc_MATERIALS + "=3"
 	rating = 2
-	starting_materials = list(MAT_IRON = 80)
+	starting_materials = list(MAT_IRON = 0.03)
 
 //Rating 3
 
@@ -149,7 +149,7 @@
 	icon_state = "capacitor2_super"
 	origin_tech = Tc_POWERSTORAGE + "=5;" + Tc_MATERIALS + "=4"
 	rating = 3
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.02)
 	maximum_charge = 1000000000
 
 /obj/item/weapon/stock_parts/scanning_module/adv/phasic
@@ -158,7 +158,7 @@
 	icon_state = "super_scan_module"
 	origin_tech = Tc_MAGNETS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01, MAT_SILVER = 0.01)
 
 /obj/item/weapon/stock_parts/manipulator/nano/pico
 	name = "pico-manipulator"
@@ -166,7 +166,7 @@
 	icon_state = "pico_mani"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_PROGRAMMING + "=2"
 	rating = 3
-	starting_materials = list(MAT_IRON = 40, MAT_PLASMA = 40)
+	starting_materials = list(MAT_IRON = 0.02, MAT_PLASMA = 0.02)
 
 /obj/item/weapon/stock_parts/micro_laser/high/ultra
 	name = "ultra-high-power micro-laser"
@@ -174,7 +174,7 @@
 	desc = "A tiny laser used in certain devices."
 	origin_tech = Tc_MAGNETS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 20, MAT_URANIUM = 10)
+	starting_materials = list(MAT_IRON = 0.01, MAT_GLASS = 0.02, MAT_URANIUM = 0.01)
 
 /obj/item/weapon/stock_parts/matter_bin/adv/super
 	name = "super matter bin"
@@ -182,7 +182,7 @@
 	icon_state = "super_matter_bin"
 	origin_tech = Tc_MATERIALS + "=5"
 	rating = 3
-	starting_materials = list(MAT_IRON = 80)
+	starting_materials = list(MAT_IRON = 0.04)
 
 //Rating 4
 //Please don't make these too easily accessible to the station.
@@ -193,7 +193,7 @@
 	icon_state = "bluespace_matter_bin"
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=4"
 	rating = 4
-	starting_materials = list(MAT_IRON = 80, MAT_SILVER = 20, MAT_GOLD = 20)
+	starting_materials = list(MAT_IRON = 0.04, MAT_SILVER = 0.02, MAT_GOLD = 0.02)
 
 /obj/item/weapon/stock_parts/micro_laser/high/ultra/giga
 	name = "giga micro-laser"
@@ -201,7 +201,7 @@
 	desc = "A tiny laser, capable of fine manipulation, and worryingly high damage capabilities. Used in the construction of certain devices."
 	origin_tech = Tc_MAGNETS + "=8"
 	rating = 4
-	starting_materials = list(MAT_IRON = 250, MAT_URANIUM = 50, MAT_DIAMOND = 20, MAT_PHAZON = 5)
+	starting_materials = list(MAT_IRON = 0.1, MAT_URANIUM = 0.05, MAT_DIAMOND = 0.02, MAT_PHAZON = 0.01)
 
 /obj/item/weapon/stock_parts/capacitor/adv/super/ultra
 	name = "ultra capacitor"
@@ -209,7 +209,7 @@
 	desc = "An ultra-high capacity capacitor, used in the construction of certain devices."
 	origin_tech = Tc_POWERSTORAGE + "=8;" + Tc_MATERIALS + "=6"
 	rating = 4
-	starting_materials = list(MAT_IRON = 250, MAT_URANIUM = 100, MAT_GOLD = 20, MAT_PHAZON = 5)
+	starting_materials = list(MAT_IRON = 0.1, MAT_URANIUM = 0.05, MAT_GOLD = 0.02, MAT_PHAZON = 0.1)
 	maximum_charge = 5000000000
 
 
@@ -219,7 +219,7 @@
 	desc = "A manipulator capable of manipulating protons, used in the construction of certain devices."
 	origin_tech = Tc_MATERIALS + "=7;" + Tc_PROGRAMMING + "=4"
 	rating = 4
-	starting_materials = list(MAT_IRON = 125, MAT_URANIUM = 30, MAT_SILVER = 10, MAT_PHAZON = 5)
+	starting_materials = list(MAT_IRON = 0.05, MAT_URANIUM = 0.02, MAT_SILVER = 0.01, MAT_PHAZON = 0.01)
 
 
 /obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace
@@ -228,7 +228,7 @@
 	icon_state = "ultra_scan_module"
 	origin_tech = Tc_MAGNETS + "=7"
 	rating = 4
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20, MAT_SILVER = 10, MAT_PHAZON = 5)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.2, MAT_SILVER = 0.01, MAT_PHAZON = 0.01)
 
 
 // Subspace stock parts
@@ -238,46 +238,46 @@
 	icon_state = "subspace_ansible"
 	desc = "A compact module capable of sensing extradimensional activity."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2"
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 
 /obj/item/weapon/stock_parts/subspace/filter
 	name = "hyperwave filter"
 	icon_state = "hyperwave_filter"
 	desc = "A tiny device capable of filtering and converting super-intense radiowaves."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MAGNETS + "=2"
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 
 /obj/item/weapon/stock_parts/subspace/amplifier
 	name = "subspace amplifier"
 	icon_state = "subspace_amplifier"
 	desc = "A compact micro-machine capable of amplifying weak subspace transmissions."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MAGNETS + "=4;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2"
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 
 /obj/item/weapon/stock_parts/subspace/treatment
 	name = "subspace treatment disk"
 	icon_state = "treatment_disk"
 	desc = "A compact micro-machine capable of stretching out hyper-compressed radio waves."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MAGNETS + "=2;" + Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=2"
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 
 /obj/item/weapon/stock_parts/subspace/analyzer
 	name = "subspace wavelength analyzer"
 	icon_state = "wavelength_analyzer"
 	desc = "A sophisticated analyzer capable of analyzing cryptic subspace wavelengths."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MAGNETS + "=4;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2"
-	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
+	starting_materials = list(MAT_IRON = 0.02, MAT_GLASS = 0.01)
 
 /obj/item/weapon/stock_parts/subspace/crystal
 	name = "ansible crystal"
 	icon_state = "ansible_crystal"
 	desc = "A crystal made from pure glass used to transmit laser databursts to subspace."
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=2"
-	starting_materials = list(MAT_GLASS = 50)
+	starting_materials = list(MAT_GLASS = 0.02)
 
 /obj/item/weapon/stock_parts/subspace/transmitter
 	name = "subspace transmitter"
 	icon_state = "subspace_transmitter"
 	desc = "A large piece of equipment used to open a window into the subspace dimension."
 	origin_tech = Tc_MAGNETS + "=5;" + Tc_MATERIALS + "=5;" + Tc_BLUESPACE + "=3"
-	starting_materials = list(MAT_IRON = 50)
+	starting_materials = list(MAT_IRON = 0.02)

@@ -9,7 +9,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	icon = 'icons/obj/items.dmi'
 	icon_state = "paint_neutral"
 	item_state = "paintcan"
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.5)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM
 	melt_temperature = MELTPOINT_STEEL

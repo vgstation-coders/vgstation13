@@ -9,7 +9,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 20)
+	starting_materials = list(MAT_IRON = 0.5, MAT_GLASS = 0.5)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL // Assuming big beefy fucking maglite.
 	actions_types = list(/datum/action/item_action/toggle_light)
@@ -110,7 +110,7 @@
 	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
 	icon_state = "taclight"
 	item_state = ""
-	
+
 /obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return 0
@@ -129,7 +129,7 @@
 		return 1
 	else
 		to_chat(user, "<span class='notice'>\The [src] cannot be attached to that.</span>")
-	return ..()	
+	return ..()
 
 
 // the desk lamps are a bit special

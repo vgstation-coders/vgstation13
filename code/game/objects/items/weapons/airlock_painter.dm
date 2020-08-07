@@ -7,7 +7,7 @@
 
 	w_class = W_CLASS_SMALL
 
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.2, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_ENGINEERING + "=1"
 

@@ -9,7 +9,7 @@
 
 	desc = "A tiny circuit intended for use in assembly frames. When it receives a signal, its counter is increased by 1. When its counter reaches a set value, this circuit emits a pulse."
 	icon_state = "circuit_+"
-	starting_materials = list(MAT_IRON = 100, MAT_GLASS = 25)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 
 	origin_tech = Tc_PROGRAMMING + "=1"

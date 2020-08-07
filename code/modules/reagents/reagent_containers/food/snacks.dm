@@ -3369,7 +3369,7 @@
 	icon = 'icons/obj/food_container.dmi'
 	icon_state = "pizzabox1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
-	starting_materials = list(MAT_CARDBOARD = 3750)
+	starting_materials = list(MAT_CARDBOARD = 1)
 	w_type=RECYK_MISC
 
 	var/open = 0 // Is the box open?
@@ -4807,7 +4807,7 @@
 	throwforce = 1
 	autoignition_temperature = 0
 	w_type = RECYK_MISC
-	starting_materials = list(MAT_PLASTIC = 100)
+	starting_materials = list(MAT_PLASTIC = 0.05)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped
 	desc = "Still covered in golden foil wrapper."

@@ -13,7 +13,7 @@
 	fire_sound = 'sound/items/syringeproj.ogg'
 	var/list/syringes = new/list()
 	var/max_syringes = 1
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_METAL
 
 /obj/item/weapon/gun/syringe/examine(mob/user)

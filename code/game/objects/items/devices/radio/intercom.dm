@@ -165,7 +165,7 @@
 	icon_state = "door_electronics"
 	desc = "Looks like a circuit. Probably is."
 	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 50, MAT_GLASS = 50)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 
@@ -189,12 +189,12 @@
 	src.frequency = copy.frequency
 	src.broadcasting = copy.broadcasting
 	src.listening = copy.listening
-	
+
 /obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
 	if(clicker.intercom_clipboard)
 		src.frequency = clicker.intercom_clipboard.frequency
 		src.broadcasting = clicker.intercom_clipboard.broadcasting
-		src.listening = clicker.intercom_clipboard.listening		
+		src.listening = clicker.intercom_clipboard.listening
 
 		src.updateDialog()
 

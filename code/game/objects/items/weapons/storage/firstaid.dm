@@ -151,7 +151,7 @@
 	allow_quick_gather = 1
 	use_to_pickup = 1
 	storage_slots = 14
-	starting_materials = list(MAT_IRON = 10, MAT_GLASS = 60)
+	starting_materials = list(MAT_IRON = 0.1, MAT_GLASS = 0.1)
 	var/melted = 0
 	var/image/colour_overlay
 

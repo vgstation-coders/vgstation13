@@ -4,7 +4,7 @@
 
 /obj/item/ammo_storage/box
 	exact = 1
-	starting_materials = list(MAT_IRON = 2000)
+	starting_materials = list(MAT_IRON = 1)
 
 /obj/item/ammo_storage/box/a357
 	name = "ammo box (.357)"
@@ -126,7 +126,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	max_ammo = 7
 	multiple_sprites = 1
-	starting_materials = list(MAT_IRON = 8000)
+	starting_materials = list(MAT_IRON = 2)
 
 /obj/item/ammo_storage/box/a50
 	name = "ammo box (.50AE)"

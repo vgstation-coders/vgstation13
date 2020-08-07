@@ -6,7 +6,7 @@
 	w_class = W_CLASS_SMALL
 	anchored = 0
 	flags = FPRINT
-	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 300)
+	starting_materials = list(MAT_IRON = 0.5, MAT_GLASS = 0.2)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 

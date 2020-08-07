@@ -241,7 +241,7 @@
 	w_class = W_CLASS_TINY
 	throw_speed = 5
 	throw_range = 10
-	starting_materials = list(MAT_IRON = 200)
+	starting_materials = list(MAT_IRON = 0.2)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_ENGINEERING + "=3"
 	var/mode = 1;

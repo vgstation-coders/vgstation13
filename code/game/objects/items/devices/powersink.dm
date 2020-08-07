@@ -11,7 +11,7 @@
 	throwforce = 5
 	throw_speed = 1
 	throw_range = 2
-	starting_materials = list(MAT_IRON = 750)
+	starting_materials = list(MAT_IRON = 1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_POWERSTORAGE + "=3;" + Tc_SYNDICATE + "=5"

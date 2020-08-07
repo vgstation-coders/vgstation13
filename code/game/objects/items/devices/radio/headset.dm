@@ -4,7 +4,7 @@
 	icon_state = "headset"
 	item_state = "headset"
 	species_fit = list(INSECT_SHAPED)
-	starting_materials = list(MAT_IRON = 75)
+	starting_materials = list(MAT_IRON = 0.1)
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_PLASTIC
 	subspace_transmission = 1

@@ -12,7 +12,7 @@
 
 	desc = "A device used to configure light floors from a distance."
 	icon_state = "light_tiler"
-	starting_materials = list(MAT_IRON = 1500, MAT_GLASS = 200)
+	starting_materials = list(MAT_IRON = 0.5, MAT_GLASS = 0.1)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=2;" + Tc_PROGRAMMING + "=2"
 

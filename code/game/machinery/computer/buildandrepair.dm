@@ -26,7 +26,7 @@
 	icon_state = "id_mod"
 	item_state = "circuitboard"
 	origin_tech = Tc_PROGRAMMING + "=2"
-	starting_materials = list(MAT_GLASS = 2000) // Recycle glass only
+	starting_materials = list(MAT_GLASS = 0.6) // Recycle glass only
 	w_type = RECYK_ELECTRONIC
 
 	var/id_tag = null

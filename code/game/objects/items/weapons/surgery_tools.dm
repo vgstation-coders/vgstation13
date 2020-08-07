@@ -5,7 +5,7 @@
 	icon_state = "retractor"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "retractor"
-	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	starting_materials = list(MAT_IRON = 3, MAT_GLASS = 2)
 	melt_temperature = MELTPOINT_STEEL
 	w_type = RECYK_METAL
 	flags = FPRINT
@@ -38,7 +38,7 @@
 	icon_state = "hemostat"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "hemostat"
-	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
+	starting_materials = list(MAT_IRON = 2, MAT_GLASS = 1)
 	w_type = RECYK_METAL
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -67,7 +67,7 @@
 	icon_state = "cautery"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "cautery"
-	starting_materials = list(MAT_IRON = 5000, MAT_GLASS = 2500)
+	starting_materials = list(MAT_IRON = 2, MAT_GLASS = 1)
 	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -123,7 +123,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/surgery_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/surgery_tools.dmi')
 	item_state = "surgicaldrill"
 	hitsound = 'sound/weapons/circsawhit.ogg'
-	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 10000)
+	starting_materials = list(MAT_IRON = 5, MAT_GLASS = 3)
 	w_type = RECYK_ELECTRONIC
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -163,7 +163,7 @@
 	throwforce = 5.0
 	throw_speed = 3
 	throw_range = 5
-	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	starting_materials = list(MAT_IRON = 3, MAT_GLASS = 2)
 	w_type = RECYK_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
@@ -285,7 +285,7 @@
 	throwforce = 9.0
 	throw_speed = 3
 	throw_range = 5
-	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
+	starting_materials = list(MAT_IRON = 6, MAT_GLASS = 3)
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
@@ -398,7 +398,7 @@
 	throw_speed = 3
 	throw_range = 5
 	attack_verb = list("attacks", "hits", "bludgeons")
-	starting_materials = list(MAT_IRON = 10000, MAT_GLASS = 5000)
+	starting_materials = list(MAT_IRON = 3, MAT_GLASS = 2)
 	w_type = RECYK_METAL
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 

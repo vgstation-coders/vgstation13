@@ -196,7 +196,7 @@ proc/move_mining_shuttle()
 	w_class = W_CLASS_LARGE
 	sharpness = 0.6
 	sharpness_flags = SHARP_TIP
-	starting_materials = list(MAT_IRON = 3750) //one sheet, but where can you make them?
+	starting_materials = list(MAT_IRON = 1) //one sheet, but where can you make them?
 	w_type = RECYK_METAL
 	toolspeed = 0.4 //moving the delay to an item var so R&D can make improved picks. --NEO
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"

@@ -20,7 +20,7 @@
 	icon_state = "weldingup"
 	flags = FPRINT
 	item_state = "welding"
-	starting_materials = list(MAT_IRON = 3000, MAT_GLASS = 1000)
+	starting_materials = list(MAT_IRON = 1, MAT_GLASS = 0.5)
 	w_type = RECYK_MISC
 	var/up = 1
 	eyeprot = 0

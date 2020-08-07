@@ -1225,7 +1225,7 @@ var/list/arcane_tomes = list()
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "cult"
 	item_state = "syringe_kit"
-	starting_materials = list(MAT_IRON = 3750)
+	starting_materials = list(MAT_IRON = 1)
 	w_type=RECYK_METAL
 
 /obj/item/weapon/storage/cult/sponsored
