@@ -8,27 +8,29 @@
 	proj_type = /obj/item/projectile/spell_projectile/fireball
 
 	school = "evocation"
-	charge_max = 100
+	charge_max = 200
 	spell_flags = IS_HARMFUL
 	invocation = "ONI SOMA"
 	invocation_type = SpI_SHOUT
 	range = 20
-	cooldown_min = 20 //10 deciseconds reduction per rank
+	cooldown_min = 50
+	price = 0.75 * Sp_BASE_PRICE
 
-	spell_flags = 0
+	spell_flags = NEEDSCLOTHES
 	spell_aspect_flags = SPELL_FIRE
 	duration = 20
 	projectile_speed = 1
 
-	amt_dam_brute = 20
-	amt_dam_fire = 25
+	amt_dam_brute = 10
+	amt_dam_fire = 15
 
-	var/ex_severe = -1
-	var/ex_heavy = 1
-	var/ex_light = 2
-	var/ex_flash = 5
+	var/ex_severe = 0
+	var/ex_heavy = 0
+	var/ex_light = 1
+	var/ex_flash = 3
 
-	level_max = list(Sp_TOTAL = 5, Sp_SPEED = 4, Sp_POWER = 1)
+	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0, Sp_POWER = 0, Sp_SPECIAL = 0)
+	level_max = list(Sp_TOTAL = 9, Sp_SPEED = 4, Sp_MOVE = 1, Sp_POWER = 3, Sp_SPECIAL = 1)
 
 	hud_state = "wiz_fireball"
 
@@ -45,23 +47,42 @@
 			targets -= M
 	return targets
 
-/spell/targeted/projectile/dumbfire/fireball/empower_spell()
-	spell_levels[Sp_POWER]++
-
-	var/explosion_description = ""
-	switch(spell_levels[Sp_POWER])
-		if(0)
-			name = "Fireball"
-			explosion_description = "It will now create a small explosion."
-		if(1)
+/spell/targeted/projectile/dumbfire/fireball/apply_upgrade(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return quicken_spell()
+		if(Sp_MOVE)
+			spell_levels[Sp_MOVE]++
 			name = "Controlled Fireball"
-			explosion_description = "The fireball will no longer only fly in the direction you're facing. Now you're able to shoot it wherever you want."
 			spell_flags |= WAIT_FOR_CLICK
 			dumbfire = 0
-		else
-			return
+			return "The spell is now targetable."
+		if(Sp_SPECIAL)
+			spell_levels[Sp_SPECIAL]++
+			spell_flags -= NEEDSCLOTHES
+			return "The spell no longer requires robes to cast."
+		if(Sp_POWER)
+			spell_levels[Sp_POWER]++	//These are = not += to avoid potential fuckery with adding damage over and over
+			if(spell_levels[Sp_POWER] == 1)
+				ex_light = 2
+			if(spell_levels[Sp_POWER] == 2)
+				amt_dam_fire = 25
+				amt_dam_brute = 20
+				ex_flash = 5
+			if(spell_levels[Sp_POWER] == 3)
+				ex_heavy = 1
 
-	return "You have improved Fireball into [name]. [explosion_description]"
+
+/spell/targeted/projectile/dumbfire/fireball/get_upgrade_price(upgrade_type)
+	switch(upgrade_type)
+		if(Sp_SPEED)
+			return 10
+		if(Sp_POWER)
+			return 5
+		if(Sp_MOVE)
+			return 10
+		if(Sp_SPECIAL)
+			return 10
 
 /spell/targeted/projectile/dumbfire/fireball/is_valid_target(var/atom/target)
 	if(!istype(target))
@@ -72,8 +93,12 @@
 	return (isturf(target) || isturf(target.loc))
 
 /spell/targeted/projectile/dumbfire/fireball/get_upgrade_info(upgrade_type, level)
-	if(upgrade_type == Sp_POWER)
+	if(upgrade_type == Sp_MOVE)
 		return "Make the spell targetable."
+	if(upgrade_type == Sp_POWER)
+		return "Increase explosive power! Each level is worth more than the last."
+	if(upgrade_type == Sp_SPECIAL)
+		return "Allows the spell to be cast without wizard robes."
 	return ..()
 
 //PROJECTILE
