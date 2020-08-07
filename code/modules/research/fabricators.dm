@@ -14,7 +14,7 @@
 
 	var/time_coeff = 1 //can be upgraded with research
 	var/resource_coeff = 1 //can be upgraded with research
-	max_material_storage = 562500 //All this could probably be done better with a list but meh.
+	max_material_storage = 150 //All this could probably be done better with a list but meh.
 
 	var/datum/research/files
 	var/id
@@ -62,7 +62,7 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating - 1
-	max_material_storage = (initial(max_material_storage)+(T * 187500))
+	max_material_storage = (initial(max_material_storage)+(T * 50))
 
 	T = 0
 	var/datum/tech/Tech = files.known_tech["materials"]
@@ -485,8 +485,8 @@
 /obj/machinery/r_n_d/fabricator/proc/stop_processing_queue()
 	stopped=1
 
-/obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=1)
-	return min(0.01,round(part.materials[resource]*resource_coeff, roundto))
+/obj/machinery/r_n_d/fabricator/proc/get_resource_cost_w_coeff(var/datum/design/part as obj,var/resource as text, var/roundto=0.01)
+	return max(0.01,round(part.materials[resource]*resource_coeff, roundto))
 
 //produces the adjusted time taken to build a component
 //different fabricators have different modifiers
@@ -494,8 +494,8 @@
 //MatTotal is a time modifier based on the total material cost of the design, divided by FAB_MAT_BASEMOD
 //build_time is a var unique to each fabricator. It's mostly one, but bigger machines get higher build_time
 //time_coeff is set by the machine components
-/obj/machinery/r_n_d/fabricator/proc/get_construction_time_w_coeff(var/datum/design/part as obj, var/roundto=1)
-	return round(/*TechTotal(part)*/(part.MatTotal()/FAB_MAT_BASEMOD)*build_time*time_coeff, roundto)
+/obj/machinery/r_n_d/fabricator/proc/get_construction_time_w_coeff(var/datum/design/part as obj, var/roundto=0.1)
+	return round(part.MatTotal()*build_time*time_coeff, roundto)
 
 /obj/machinery/r_n_d/fabricator/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	if(stat & (BROKEN|NOPOWER))

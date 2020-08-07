@@ -237,7 +237,6 @@ var/global/list/rnd_machines = list()
 		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src].</span>")
 		icon_state = "[base_state]"
 
-		var/datum/material/material = materials.getMaterial(found)
 		materials.addAmount(found, amount)
 		spawn(ANIM_LENGTH)
 			busy = FALSE
@@ -247,7 +246,7 @@ var/global/list/rnd_machines = list()
 
 /obj/machinery/r_n_d/proc/TotalMaterials() //returns the total of all the stored materials. Makes code neater.
 	if(materials)
-		return materials.getVolume()
+		return round(materials.getVolume(), 0.01)
 	return 0
 
 // Returns the atom to output to.

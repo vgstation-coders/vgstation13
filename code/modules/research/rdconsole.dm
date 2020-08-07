@@ -922,7 +922,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			for(var/matID in linked_lathe.materials.storage)
 				var/datum/material/M=linked_lathe.materials.getMaterial(matID)
-				dat += "<li>[linked_lathe.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
+				dat += "<li>[linked_lathe.materials.storage[matID]] sheets of [M.processed_name]"
 				if(linked_lathe.materials.storage[matID] >= 1) //Only take out solid sheets
 					dat += " - <A href='?src=\ref[src];lathe_ejectsheet=[matID];lathe_ejectsheet_amt=1'>(1 Sheet)</A> "
 					if(linked_lathe.materials.storage[matID] >= 5)
@@ -971,7 +971,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 			dat += {"[CircuitImprinterHeader()]
 				Circuit Imprinter Menu \[<A href='?src=\ref[src];toggleAutoRefresh=1'>Auto-Refresh: [autorefresh ? "ON" : "OFF"]</A>\]<BR>
-				<b>Material Amount:</b> [linked_imprinter.TotalMaterials()] cm<sup>3</sup><BR>
+				<b>Material Amount:</b> [linked_imprinter.TotalMaterials()] sheets<BR>
 				<b>Chemical Volume:</b> [linked_imprinter.get_total_volume()] units<HR>"}
 			dat += "Filter: "
 			for(var/name_set in linked_imprinter.part_sets)
@@ -1036,7 +1036,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				var/datum/material/M=linked_imprinter.materials.getMaterial(matID)
 				if(!(matID in linked_imprinter.allowed_materials))
 					continue
-				dat += "<li>[linked_imprinter.materials.storage[matID]] cm<sup>3</sup> of [M.processed_name]"
+				dat += "<li>[linked_imprinter.materials.storage[matID]] sheets of [M.processed_name]"
 				if(linked_imprinter.materials.storage[matID] >= 1)
 					dat += " - <A href='?src=\ref[src];imprinter_ejectsheet=[matID];imprinter_ejectsheet_amt=1'>(1 Sheet)</A> "
 					if(linked_imprinter.materials.storage[matID] >= 5)

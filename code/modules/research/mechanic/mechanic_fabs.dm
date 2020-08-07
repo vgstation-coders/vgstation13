@@ -3,7 +3,7 @@
 
 #define GEN_FAB_BASETIME 	5
 
-#define GEN_FAB_BASESTORAGE 225000
+#define GEN_FAB_BASESTORAGE 60
 
 #define PLASTIC_FRACTION 0.1
 /obj/machinery/r_n_d/fabricator/mechanic_fab

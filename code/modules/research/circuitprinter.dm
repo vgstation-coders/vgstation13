@@ -13,7 +13,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	desc = "A fabricator capable of etching circuit designs onto glass and minerals."
 	flags = OPENCONTAINER
 
-	max_material_storage = 75000
+	max_material_storage = 20
 	build_time = IMPRINTER_BUILD_TIME
 	build_number = 1
 
@@ -72,7 +72,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	T = 0
 	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
-	max_material_storage = T * 75000
+	max_material_storage = T * 20
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	..()
