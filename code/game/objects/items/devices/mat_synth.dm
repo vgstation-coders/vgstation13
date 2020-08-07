@@ -191,7 +191,10 @@
 		else
 			matter += 10
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
-			qdel(RA)
+			if(S.amount == 1)
+				qdel(S)
+			else 
+				S.amount--
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
 	if(istype(O, /obj/item/weapon/card/emag))
 		if(!emagged)

@@ -315,9 +315,11 @@
 		if((matter + 10) > max_matter)
 			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
 			return 1
-
-		S.amount--
 		matter += 10
+		if(S.amount == 1)
+			qdel(S)
+		else 
+			S.amount--
 		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		to_chat(user, "<span class='notice'>\the [src] now holds [matter]/[max_matter] matter-units.</span>")
 		return 1

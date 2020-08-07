@@ -179,6 +179,8 @@ var/list/datum/stack_recipe/chain_recipes = list (
 
 /obj/item/stack/rcd_ammo
 	name = "compressed matter cartridge"
+	singular_name = "compressed matter cartridge"
+	irregular_plural = "compressed matter cartridges"
 	desc = "Highly compressed matter in a cartridge form, used in various fabricators."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
