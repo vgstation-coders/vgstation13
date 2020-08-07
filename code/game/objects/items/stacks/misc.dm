@@ -2,7 +2,6 @@
 	name = "metal rod"
 	desc = "Some rods. Can be used for building, or something."
 	singular_name = "metal rod"
-	irregular_plural = "metal rods"
 	icon_state = "rods"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -181,11 +180,11 @@ var/list/datum/stack_recipe/chain_recipes = list (
 /obj/item/stack/rcd_ammo
 	name = "compressed matter cartridge"
 	singular_name = "compressed matter cartridge"
-	irregular_plural = "compressed matter cartridges"
 	desc = "Highly compressed matter in a cartridge form, used in various fabricators."
 	icon = 'icons/obj/ammo.dmi'
 	icon_state = "rcd"
 	item_state = "rcdammo"
+	max_amount = 5
 	
 	origin_tech = Tc_MATERIALS + "=2"
 	w_class = W_CLASS_SMALL
