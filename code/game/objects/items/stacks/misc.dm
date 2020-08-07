@@ -2,6 +2,7 @@
 	name = "metal rod"
 	desc = "Some rods. Can be used for building, or something."
 	singular_name = "metal rod"
+	irregular_plural = "metal rods"
 	icon_state = "rods"
 	flags = FPRINT
 	siemens_coefficient = 1
