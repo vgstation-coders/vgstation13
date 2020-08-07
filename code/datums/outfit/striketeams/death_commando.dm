@@ -29,7 +29,6 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal,
 			slot_ears_str = /obj/item/device/radio/headset/deathsquad,
 			slot_belt_str = /obj/item/weapon/gun/energy/pulse_rifle,
-			slot_head_str = /obj/item/clothing/head/helmet/space/rig/deathsquad,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/deathsquad,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,
@@ -52,3 +51,5 @@
 	// Accesories.
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
+	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
+	R.toggle_suit()

@@ -13,7 +13,6 @@
 			slot_shoes_str = /obj/item/clothing/shoes/magboots/deathsquad,
 			slot_gloves_str = /obj/item/clothing/gloves/combat,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal,
-			slot_head_str =  /obj/item/clothing/head/helmet/space/rig/deathsquad,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/deathsquad,
 			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,
@@ -59,3 +58,5 @@
 		equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/deathsquad,  /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
+	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
+	R.toggle_suit()
