@@ -712,7 +712,7 @@
 	else
 		if (pay_blood())
 			R.one_pulse()
-			spell_holder.visible_message("<span class='rose'>The blood drops merge into each others, and a talisman takes form in their place</span>")
+			spell_holder.visible_message("<span class='rose'>The blood drops merge into each other, and a talisman takes form in their place.</span>")
 			var/turf/T = get_turf(spell_holder)
 			AT = new (T)
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
