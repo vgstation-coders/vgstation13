@@ -24,10 +24,7 @@ var/const/max_assembly_amount = 300
 /obj/machinery/rust_fuel_compressor/attackby(obj/item/stack/S as obj, mob/user as mob)
 	if (istype(S, /obj/item/stack/rcd_ammo))
 		compressed_matter += 10
-		if(S.amount == 1)
-			qdel(S)
-		else 
-			S.amount--
+		S.use(1)
 		return
 	..()
 
