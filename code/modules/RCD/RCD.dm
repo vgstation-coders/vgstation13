@@ -311,7 +311,7 @@
 
 /obj/item/device/rcd/matter/attackby(var/obj/item/weapon/W, var/mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/rcd_ammo))
+	if(istype(W, /obj/item/stack/rcd_ammo))
 		if((matter + 10) > max_matter)
 			to_chat(user, "<span class='notice'>\the [src] can't hold any more matter-units.</span>")
 			return 1
@@ -325,7 +325,7 @@
 	if(W.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You unscrew the access panel and release the cartridge chamber.</span>")
 		while(matter >= 10)
-			new /obj/item/weapon/rcd_ammo(user.loc)
+			new /obj/item/stack/rcd_ammo(user.loc)
 			matter -= 10
 
 		return 1

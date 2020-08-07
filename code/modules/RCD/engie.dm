@@ -52,21 +52,3 @@
 
 /obj/item/device/rcd/matter/engineering/pre_loaded/admin/delay(var/mob/user, var/atom/target, var/amount)
 	return TRUE
-
-/obj/item/weapon/rcd_ammo
-	name = "compressed matter cartridge"
-	desc = "Highly compressed matter in a cartridge form, used in various fabricators."
-	icon = 'icons/obj/ammo.dmi'
-	icon_state = "rcd"
-	item_state = "rcdammo"
-	opacity = 0
-	density = 0
-	anchored = 0.0
-	origin_tech = Tc_MATERIALS + "=2"
-	w_class = W_CLASS_SMALL
-	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
-	w_type = RECYK_ELECTRONIC
-
-/obj/item/weapon/rcd_ammo/attackby(var/obj/O, mob/user)
-	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
-		return O.attackby(src, user)

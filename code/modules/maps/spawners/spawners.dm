@@ -729,7 +729,7 @@
 		/obj/item/weapon/pickaxe/jackhammer,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd,
-		/obj/item/weapon/rcd_ammo,
+		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
 		/obj/item/weapon/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
