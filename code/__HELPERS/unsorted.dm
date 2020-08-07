@@ -1038,11 +1038,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					var/old_icon_state1 = T.icon_state
 					var/old_icon1 = T.icon
 
-					var/datum/gas_mixture/new_air
-					if(T.air)
-						new_air = new
-						new_air.copy_from(T.air)
-
 					if(platingRequired)
 						if(istype(B, /turf/space))
 							continue moving
@@ -1053,8 +1048,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					X.icon_state = old_icon_state1
 					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
 
-					if(new_air)
-						X.air = new_air
+					X.return_air().copy_from(T.return_air())
 
 					var/list/objs = new/list()
 					var/list/newobjs = new/list()
