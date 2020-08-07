@@ -761,28 +761,6 @@ Use this proc preferably at the end of an equipment loadout
 				B.handle_item_insertion(I,1)
 	regenerate_icons()
 
-/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
-	if(type)
-		if(ispath(type, /obj/abstract/loadout))
-			new type(get_turf(src), src, unequip_current)
-	else
-		var/turf/T = get_turf(usr)
-		if(T)
-			if(unequip_current)
-				unequip_everything()	//unequip everything before equipping loadout
-			var/list/to_equip = list()
-			for(var/obj/item/I in T.contents)
-				to_equip.Add(new I.type(get_turf(src)))
-			recursive_list_equip(to_equip)
-			var/loadout_list = ""
-			for(var/obj/item/O in to_equip)
-				if(O == to_equip[to_equip.len])
-					loadout_list += "[O.type]"
-				else
-					loadout_list += "[O.type], "
-			log_admin("[key_name(src)] has been equipped with a custom loadout consisting of [loadout_list].")
-
-
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
 		return 0
