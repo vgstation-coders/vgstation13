@@ -81,16 +81,6 @@ var/list/beam_master = list()
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
-	//testing
-	for(var/rayCastHit/rCH in hits)
-		var/image/I = image('icons/Testing/Zone.dmi',"fullblock",10)
-		rCH.hit_atom.overlays += I
-		var/ref = "\ref[rCH.hit_atom]"
-		spawn(30)
-			var/atom/movable/R = locate(ref)
-			R.overlays -= I
-	//testing
-
 	past_rays += shot_ray
 
 	if(isnull(hits) || hits.len == 0)

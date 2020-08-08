@@ -32,6 +32,7 @@
 	direction = p_direction.chebyshev_normalized()
 	src.z = z
 
+//check if ray equals other ray
 /ray/proc/equals(var/ray/other_ray)
 	return src.direction.equals(other_ray.direction) && src.hitsPoint(other_ray.origin)
 
@@ -59,6 +60,8 @@
 
 //returns rebound angle of hit atom
 //assumes atom is 1x1 octogonal box
+//TODO: entry vector (0.4,1) on the surface normal (1,-1). result is (1.6, -0.2)
+// wrong?
 /ray/proc/getReboundOnAtom(var/rayCastHit/hit)
 	//calc where we hit the atom
 	var/vector/hit_point = hit.point_raw
@@ -67,9 +70,9 @@
 	var/vector/hit_vector = hit_point - hit_atom_loc
 
 	//we assume every atom is a octogonal, hence we use all_vectors
+	//here we calculate the "face" of the octagonal atom we want to rebound on
 	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
 	var/vector/entry_dir = null
-
 	for(var/vector/dir in all_vectors)
 		var/vector/delta = dir.chebyshev_normalized() - hit_vector.chebyshev_normalized()
 		var/dist = delta.chebyshev_norm()
@@ -87,6 +90,7 @@
 
 //inherit and override this for costum logic
 //=> for possible return values check defines at top of file
+//=> can also use costum return values
 /ray/proc/raycast_hit_check(var/atom/movable/A)
 	return RAY_CAST_HIT_CONTINUE
 
@@ -167,14 +171,14 @@
 
 var/list/ray_draw_icon_cache = list()
 
-/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
-	var/distance_pointer = 0.5
-	var/step_size = 0.5 // adjust in which laser-parts are drawn
+/ray/proc/draw(var/draw_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser", var/starting_distance=0.7, var/distance_from_endpoint=-0.5, var/step_size=0.5, var/lifetime=3, var/fade=TRUE)
+	var/distance_pointer = starting_distance
 	var/angle = direction.toAngle()
-	while(distance_pointer < draw_distance)
+	var/max_distance = draw_distance - distance_from_endpoint
+	while(distance_pointer < max_distance)
 		var/vector/point
-		if(distance_pointer > draw_distance - step_size) //last loop
-			point = getPoint(draw_distance - step_size)
+		if(distance_pointer > max_distance - step_size) //last loop
+			point = getPoint(max_distance - step_size)
 		else
 			point = getPoint(distance_pointer)
 		var/vector/point_floored = point.floored()
@@ -183,23 +187,12 @@ var/list/ray_draw_icon_cache = list()
 
 		var/turf/T = locate(point_floored.x, point_floored.y, z)
 
-		var/obj/effect/overlay/beam/I = new (T, lifetime=3, fade=TRUE, src_icon = icon, icon_state = icon_state)
-		//var/image/I = image(icon, icon_state, dir=NORTH)
-		//I.transform = turn(NORTH, angle) //redo. turn only supports 45 degree steps
+		var/obj/effect/overlay/beam/I = new (T, lifetime=lifetime, fade=fade, src_icon = icon, icon_state = icon_state)
 		I.transform = matrix().Turn(angle)
-		//TODO: generate 32x32 image w/ chosen color and make it transparent. add inverse alpha mask filter over points we want to render
-		//TODO: make this a generic proc (draw line from x to y (vectors) with color c)
 		I.pixel_x = pixels.x
 		I.pixel_y = pixels.y
 		I.plane = EFFECTS_PLANE
 		I.layer = PROJECTILE_LAYER
-
-
-		//T.overlays += I
-		//var/turf_ref = "\ref[T]"
-		//var/img_ref = "\ref[I]"
-		//spawn(2)
-			//locate(turf_ref).overlays -= locate(img_ref)
 
 		distance_pointer += step_size
 
