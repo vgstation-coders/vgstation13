@@ -136,10 +136,9 @@ var/soft_dels = 0
 		if(V == "contents" || V == "vars")
 			continue
 		var/datum/A = Dvars[V]
-		if(istype(A, /datum))
-			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
-				.++
+		if(A == targ)
+			testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
+			.++
 		else if(islist(A))
 			. += LookForListRefs(A, targ, D, V)
 
