@@ -46,6 +46,8 @@
 
 	equip_survival_gear = list(
 		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	implant_types = list(
@@ -122,6 +124,8 @@
 
 	equip_survival_gear = list(
 		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -179,6 +183,8 @@
 
 	equip_survival_gear = list(
 		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -229,6 +235,8 @@
 
 	equip_survival_gear = list(
 		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/mechanic
