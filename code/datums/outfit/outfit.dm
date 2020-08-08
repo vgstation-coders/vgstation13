@@ -21,7 +21,7 @@
 	-- "Static" procs
 		- equip(var/mob/living/carbon/human/H): tries to equip everything on the list to the relevant slots. This is the "master proc".
 		- equip_backbag(var/mob/living/carbon/human/H): equip the backbag with the correct pref, and tries to put items in it if possible.
-		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip) : changes items based on disbabilities registered
+		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip) : changes items based on disabilities registered
 		- give_disabilities_equipment(var/mob/living/carbon/human/H): give the correct equipement for the disabilities the mob has, in the correct slots.
 
 	-- Procs you can override
@@ -92,7 +92,7 @@
 		return
 	if (H.disabilities & ASTHMA)
 		items_to_collect[/obj/item/device/inhaler] = SURVIVAL_BOX
-	if (!items_to_equip[slot_glasses_str])
+	if (!items_to_equip[slot_glasses_str] && (H.disabilities & NEARSIGHTED))
 		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
