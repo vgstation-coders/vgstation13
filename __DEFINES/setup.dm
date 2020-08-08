@@ -1256,9 +1256,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII			105
 #define PDA_APP_MINESWEEPER		106
 #define PDA_APP_SPESSPETS		107
+#define PDA_APP_NEWSREADER		108
 
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
