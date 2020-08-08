@@ -3,6 +3,8 @@
 
 var/world_startup_time
 
+var/list/extra_ressources = list('html/Calibri.ttf')
+
 /world
 	mob = /mob/new_player
 	turf = /turf/space
