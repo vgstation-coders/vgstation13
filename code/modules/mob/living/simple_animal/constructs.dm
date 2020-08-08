@@ -349,7 +349,7 @@
 		overlay_plane = FLOAT_PLANE
 	
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	glowicon.Blend(glowicon, ICON_ADD, glowcolor)
+	glowicon.Blend(glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
