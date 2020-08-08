@@ -94,6 +94,7 @@
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
+	overlays = 0
 	for(var/i=0;i<3;i++)
 		new /obj/item/weapon/ectoplasm (src.loc)
 	for(var/mob/M in viewers(src, null))
