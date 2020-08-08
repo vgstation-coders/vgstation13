@@ -432,6 +432,8 @@
 			var/obj/item/device/soulstone/C = src
 			var/mob/living/simple_animal/shade/A = locate() in C
 			var/mob/living/simple_animal/construct/Z
+			var/construct_color = rgb(0,0,0)
+			var/construct_iscult = 1
 			if(A)
 				var/list/choices = list(
 					list("Artificer", "radial_artificer", "Though fragile, this construct can reshape its surroundings, conjuring walls, floors, and most importantly, repair other constructs. Additionally, they may operate some cult structures."),
@@ -443,7 +445,13 @@
 					return
 				switch(construct_class)
 					if("Juggernaut")
-						Z = new /mob/living/simple_animal/construct/armoured (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/armoured(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
@@ -452,7 +460,13 @@
 						deleteafter = 1
 
 					if("Wraith")
-						Z = new /mob/living/simple_animal/construct/wraith (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/wraith(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
@@ -461,7 +475,13 @@
 						deleteafter = 1
 
 					if("Artificer")
-						Z = new /mob/living/simple_animal/construct/builder (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/builder(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")
@@ -482,6 +502,8 @@
 			var/obj/item/device/soulstone/C = src
 			var/mob/living/simple_animal/shade/A = locate() in C
 			var/mob/living/simple_animal/construct/Z
+			var/construct_color = rgb(0,0,0)
+			var/construct_iscult = 1
 			if(A)
 				var/list/choices = list(
 					list("Artificer", "radial_artificer2", "Though fragile, this construct can reshape its surroundings, conjuring walls, floors, and most importantly, repair other constructs. Additionally, they may operate some cult structures. <b>Can open gateways to summon eldritch monsters from the realm of Nar-Sie.</b>"),
@@ -493,7 +515,13 @@
 					return
 				switch(construct_class)
 					if("Juggernaut")
-						Z = new /mob/living/simple_animal/construct/armoured/perfect (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/armoured/perfect(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
@@ -503,7 +531,13 @@
 						deleteafter = 1
 
 					if("Wraith")
-						Z = new /mob/living/simple_animal/construct/wraith/perfect (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/wraith/perfect(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
@@ -513,7 +547,13 @@
 						deleteafter = 1
 
 					if("Artificer")
-						Z = new /mob/living/simple_animal/construct/builder/perfect (get_turf(T.loc))
+						if(!iscultist(U))
+							construct_iscult = 0
+							if(iswizard(U))
+								construct_color = rgb(157, 1, 196)
+							else
+								construct_color = rgb(0,0,255)
+						Z = new /mob/living/simple_animal/construct/builder/perfect(get_turf(T.loc), color = construct_color, iscult = construct_iscult)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")

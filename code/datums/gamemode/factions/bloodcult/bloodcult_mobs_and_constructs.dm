@@ -12,8 +12,8 @@
 	var/dash_dir = null
 	var/turf/crashing = null
 
-/mob/living/simple_animal/construct/armoured/perfect/New()
-	..()
+/mob/living/simple_animal/construct/armoured/perfect/New(var/color = rgb(0,0,0), var/iscult = 1)
+	..(color, iscult)
 	setupfloat()
 
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
@@ -112,8 +112,8 @@
 	var/ammo = 3
 	var/ammo_recharge = 0
 
-/mob/living/simple_animal/construct/wraith/perfect/New()
-	..()
+/mob/living/simple_animal/construct/wraith/perfect/New(var/color = rgb(0,0,0), var/iscult = 1)
+	..(color, iscult)
 	setupfloat()
 
 /mob/living/simple_animal/construct/wraith/perfect/Life()
@@ -248,8 +248,8 @@
 	var/heal_range = 2
 	var/list/minions = list()
 
-/mob/living/simple_animal/construct/builder/perfect/New()
-	..()
+/mob/living/simple_animal/construct/builder/perfect/New(var/color = rgb(0,0,0), var/iscult = 1)
+	..(color, iscult)
 	setupfloat()
 
 /mob/living/simple_animal/construct/builder/perfect/Life()
@@ -390,6 +390,7 @@
 	flying = 1
 	environment_smash_flags = 0
 	var/mob/living/simple_animal/construct/builder/perfect/master = null
+	var/glowcolor = rgb(0,0,0)
 
 
 /mob/living/simple_animal/hostile/hex/New()
@@ -397,7 +398,9 @@
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	var/icon/glowicon = icon(icon,"glow-[icon_state]", )
+	glowicon.Blend(glowicon, ICON_ADD, glowcolor)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
 	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)

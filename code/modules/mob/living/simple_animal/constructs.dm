@@ -41,6 +41,7 @@
 
 	var/list/healers = list()
 
+
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (healers.len > 0)
@@ -83,14 +84,20 @@
 /mob/living/simple_animal/construct/cultify()
 	return
 
-/mob/living/simple_animal/construct/New()
+/mob/living/simple_animal/construct/New(var/color = rgb(0,0,0), var/iscult = 1 )
 	..()
+	
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
-	add_language(LANGUAGE_CULT)
-	default_language = all_languages[LANGUAGE_CULT]
+	if(iscult)
+		add_language(LANGUAGE_CULT)
+		default_language = all_languages[LANGUAGE_CULT]
+	else	
+		universal_understand = 1
+		add_language(LANGUAGE_GALACTIC_COMMON)
+		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	setupglow()
+	setupglow(color)
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -333,15 +340,17 @@
 	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/setupglow()
+/mob/living/simple_animal/construct/proc/setupglow(glowcolor)
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
-
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	
+	var/icon/glowicon = icon(icon,"glow-[icon_state]")
+	glowicon.Blend(glowicon, ICON_ADD, glowcolor)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
 
