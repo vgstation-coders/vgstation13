@@ -9,7 +9,6 @@
 
 	level				= 1
 
-	var/id_tag			= null
 	var/frequency		= 1439
 	var/datum/radio_frequency/radio_connection
 
@@ -115,7 +114,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data = list(

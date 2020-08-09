@@ -38,6 +38,6 @@
 		L["[pathogen.uniqueID]-[pathogen.subID]"] = pathogen
 
 		for (var/i = 1 to max(1,round(chargelevelmax/20)))
-			getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(holder),null,virus_copylist(L),FALSE)
+			new /obj/effect/effect/pathogen_cloud/core(get_turf(holder), null, virus_copylist(L), FALSE)
 
 		return 1

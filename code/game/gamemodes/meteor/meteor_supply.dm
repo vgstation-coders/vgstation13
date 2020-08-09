@@ -37,12 +37,12 @@
 /obj/structure/closet/crate/engi/meteor_materials/New()
 
 	..()
-	getFromPool(/obj/item/stack/sheet/metal, src, 50)
-	getFromPool(/obj/item/stack/sheet/metal, src, 50)
-	getFromPool(/obj/item/stack/sheet/wood, src, 50)
-	getFromPool(/obj/item/stack/sheet/wood, src, 50)
-	getFromPool(/obj/item/stack/sheet/glass/rglass, src, 50)
-	getFromPool(/obj/item/stack/sheet/glass/plasmarglass, src, 50)
+	new /obj/item/stack/sheet/metal(src, 50)
+	new /obj/item/stack/sheet/metal(src, 50)
+	new /obj/item/stack/sheet/wood(src, 50)
+	new /obj/item/stack/sheet/wood(src, 50)
+	new /obj/item/stack/sheet/glass/rglass(src, 50)
+	new /obj/item/stack/sheet/glass/plasmarglass(src, 50)
 
 //Assorted protection items. Gloves, sunglasses
 /obj/structure/closet/crate/meteor_assorted_protection
@@ -141,7 +141,7 @@
 
 	..()
 	new /obj/machinery/power/port_gen/pacman/super(src)
-	getFromPool(/obj/item/stack/sheet/mineral/uranium, src, 50)
+	new /obj/item/stack/sheet/mineral/uranium(src, 50)
 
 /obj/structure/closet/crate/engi/meteor_breach
 	name = "\improper Space Weather Inc. anti-breach kit"

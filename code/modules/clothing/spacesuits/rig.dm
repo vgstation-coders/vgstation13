@@ -169,12 +169,15 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	processing_objects |= src
 
 /obj/item/clothing/suit/space/rig/emp_act(severity)
-	if(activated)
-		deactivate_suit(FALSE)
-	if(cell)
-		cell.emp_act(severity)
+	for(var/obj/item/rig_module/M in modules)
+		if(M.emp_act(severity)) //EMP shielding module returns TRUE if it has charges.
+			return
 	for(var/obj/item/I in all_hardsuit_parts)
 		I.emp_act(severity)
+	if(cell)
+		cell.emp_act(severity)
+	if(activated)
+		deactivate_suit(FALSE)
 	..(severity)
 
 /obj/item/clothing/suit/space/rig/Destroy()

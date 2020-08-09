@@ -13,13 +13,18 @@ var/world_startup_time
 
 #define RECOMMENDED_VERSION 513
 
-
 var/savefile/panicfile
 /world/New()
 	world_startup_time = world.timeofday
 	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
+		#if EXTOOLS_DEBUGGER
+		call(extools_path, "debug_initialize")()
+		#endif
 		call(extools_path, "maptick_initialize")()
+		#if EXTOOLS_REFERENCE_TRACKING
+		call(extools_path, "ref_tracking_initialize")()
+		#endif
 	else
 		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet
@@ -28,12 +33,6 @@ var/savefile/panicfile
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
 		WORLD_Y_OFFSET += rand(-50,50)
-
-	// Initialize world events as early as possible.
-	on_login = new ()
-	on_ban   = new ()
-	on_unban = new ()
-
 
 	/*Runtimes, not sure if i need it still so commenting out for now
 	starticon = rotate_icon('icons/obj/lightning.dmi', "lightningstart")
@@ -215,8 +214,6 @@ var/savefile/panicfile
 			n++
 		s["players"] = n
 
-		if(revdata)
-			s["revision"] = revdata.revision
 		s["admins"] = admins
 
 		return list2params(s)

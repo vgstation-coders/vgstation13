@@ -131,6 +131,14 @@
 
 	arbitrary_measurement_of_how_lush_I_am_right_now = max(1, arbitrary_measurement_of_how_lush_I_am_right_now)
 
+	color = null
+	if (seed.hematophage && seed.ligneous)
+		color = "#804040"
+	else if (seed.hematophage)
+		color = "#800000"
+	else if (seed.ligneous)
+		color = "#808080"
+
 	switch(arbitrary_measurement_of_how_lush_I_am_right_now)
 		if(1)
 			icon_state = "Light[rand(1,3)]"

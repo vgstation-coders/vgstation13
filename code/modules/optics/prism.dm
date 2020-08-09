@@ -25,7 +25,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	prism_list += src
 
 /obj/machinery/prism/Destroy()
-	returnToPool(beam)
+	qdel(beam)
 	beam=null
 	prism_list -= src
 	..()
@@ -44,7 +44,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
 	src.dir = turn(src.dir, -90)
-	returnToPool(beam)
+	qdel(beam)
 	beam=null
 	update_beams()
 	return 1
@@ -58,7 +58,7 @@ var/list/obj/machinery/prism/prism_list = list()
 		to_chat(usr, "It is fastened to the floor!")
 		return 0
 	src.dir = turn(src.dir, 90)
-	returnToPool(beam)
+	qdel(beam)
 	beam=null
 	update_beams()
 	return 1
@@ -105,7 +105,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	if(beams.len>0 && anchored)
 		var/newbeam=0
 		if(!beam)
-			beam = getFromPool(/obj/effect/beam/emitter,loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
 			newbeam=1
 		beam.power=0
@@ -135,5 +135,5 @@ var/list/obj/machinery/prism/prism_list = list()
 	else
 		icon_state = "prism_off"
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam=null

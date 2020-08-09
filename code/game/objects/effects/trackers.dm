@@ -37,7 +37,7 @@
 		target = pick(player_list)
 		return
 	if(target.z != z)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	var/target_absolute_X = target.x * WORLD_ICON_SIZE
@@ -48,10 +48,10 @@
 
 	var/dist = sqrt(abs(dx)**2 + abs(dy)**2)
 	if(dist > maxdist)
-		returnToPool(src)
+		qdel(src)
 		return
 	else if(dist < 16)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	if(abs(dx) > abs(dy))
@@ -101,7 +101,7 @@
 				else
 					possible_icons.Add("[custom_icon_state][i]")
 		for(var/i = 0;i < tr_number;i++)
-			var/obj/effect/tracker/Tr = getFromPool(tr_type, tr_source)
+			var/obj/effect/tracker/Tr = new tr_type(tr_source)
 			Tr.target = tr_destination
 			if(custom_icon_state)
 				Tr.icon_state = pick(possible_icons)

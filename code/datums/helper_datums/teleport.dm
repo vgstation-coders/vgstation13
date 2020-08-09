@@ -137,9 +137,9 @@
 		P.reflected = TRUE//you can now get hit by the projectile you just fired. Careful with portals!
 
 	if(curturf.z != destturf.z)
-		INVOKE_EVENT(teleatom.on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
+		teleatom.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = teleatom, "from_z" = curturf.z, "to_z" = destturf.z))
 		for(var/atom/movable/AA in recursive_type_check(teleatom))
-			INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
+			AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = curturf.z, "to_z" = destturf.z))
 
 	if(force_teleport)
 		teleatom.forceMove(destturf,TRUE)

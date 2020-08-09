@@ -87,14 +87,12 @@ var/list/datum/map_element/map_elements = list()
 	if(!istype(A))
 		return
 
-	A.on_destroyed.Add(src, "clear_references")
-
+	A.lazy_register_event(/lazy_event/on_destroyed, src, .proc/clear_references)
 	return A
 
 
-/datum/map_element/proc/clear_references(list/params)
-	var/atom/movable/A = params["atom"]
-	if(!A)
+/datum/map_element/proc/clear_references(datum/thing)
+	if(!thing)
 		return
 
 	//Remove instances by brute force (there aren't that many vars in map element datums)
@@ -102,11 +100,11 @@ var/list/datum/map_element/map_elements = list()
 		if(key == "vars")
 			continue
 
-		if(vars[key] == A)
+		if(vars[key] == thing)
 			vars[key] = null
 		else if(istype(vars[key], /list))
 			var/list/L = vars[key]
 
 			//Remove all instances from the list
-			while(L.Remove(A))
+			while(L.Remove(thing))
 				continue

@@ -116,8 +116,6 @@ var/creating_arena = FALSE
 		T = pick(latejoin)			//Safety in case we cannot find the body's position
 	loc = T
 
-	station_holomap = new(src)
-
 	if(!name)							//To prevent nameless ghosts
 		name = capitalize(pick(first_names_male)) + " " + capitalize(pick(last_names))
 	real_name = name
@@ -127,6 +125,8 @@ var/creating_arena = FALSE
 
 /mob/dead/observer/Destroy()
 	..()
+	qdel(station_holomap)
+	station_holomap = null
 	ghostMulti = null
 	observers.Remove(src)
 
@@ -272,7 +272,6 @@ Works together with spawning an observer, noted above.
 			return "health0"
 		else
 			return "health-100"
-	return "0"
 
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)
@@ -406,7 +405,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
-				dust()
+				dust(TRUE)
 				return
 			if ("Stay in body")
 				return
@@ -571,7 +570,6 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		var/mob/target = locate(href_list["jump"])
 		var/mob/A = usr;
 		to_chat(A, "Teleporting to [target]...")
-		//var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
 		if(target && target != usr)
 			var/turf/pos = get_turf(A)
 			var/turf/T=get_turf(target)

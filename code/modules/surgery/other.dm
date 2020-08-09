@@ -15,8 +15,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 70
-	max_duration = 90
+	duration = 7 SECONDS
 
 /datum/surgery_step/fix_vein/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!hasorgans(target))
@@ -74,8 +73,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 110
-	max_duration = 160
+	duration = 11 SECONDS
 
 /datum/surgery_step/fix_dead_tissue/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!hasorgans(target))
@@ -123,8 +121,7 @@
 	can_infect = 0
 	blood_level = 0
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/treat_necrosis/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!istype(tool, /obj/item/weapon/reagent_containers))

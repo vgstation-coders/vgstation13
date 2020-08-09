@@ -5,9 +5,9 @@
 	var/obj/abstract/screen/fullscreen/screen = screens[category]
 	if(!screen || screen.type != type)
 		clear_fullscreen(category, FALSE)
-		screen = getFromPool(type)
+		screen = new type
 	else if(screen.clear_after_length)
-		screen = getFromPool(type)
+		screen = new type
 	else if(!severity || severity == screen.severity)
 		return null
 

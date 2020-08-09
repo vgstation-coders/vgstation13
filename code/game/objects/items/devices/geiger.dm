@@ -10,23 +10,19 @@
 	var/on = 0
 	var/last_call = 0
 	var/last_sound = 0
-	var/event_key
 
 /obj/item/device/geiger_counter/New()
 	..()
 	update_icon()
 
 /obj/item/device/geiger_counter/pickup(mob/user)
-	event_key = user.on_irradiate.Add(src, "measure_rad")
+	user.lazy_register_event(/lazy_event/on_irradiate, src, .proc/measure_rad)
 
 /obj/item/device/geiger_counter/dropped(mob/user)
-	user.on_irradiate.Remove(event_key)
-	event_key = null
+	user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/measure_rad)
 
 
-/obj/item/device/geiger_counter/proc/measure_rad(list/arguments)
-	var/mob/user = arguments["user"]
-	var/rads = arguments["rads"]
+/obj/item/device/geiger_counter/proc/measure_rad(mob/living/carbon/human/user, rads)
 	if(on && world.time > last_call + COOLDOWN)
 		to_chat(user, "<span class = 'notice'>Radiation detected.</span>")
 		last_call = world.time

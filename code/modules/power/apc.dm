@@ -538,7 +538,7 @@
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
 				return
-			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
+			new /obj/item/stack/cable_coil(get_turf(user), 10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 				"You cut the cables and dismantle the power terminal.")
@@ -560,7 +560,7 @@
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
+				new /obj/item/stack/sheet/metal(get_turf(src), 1)
 				user.visible_message(\
 					"<span class='warning'>[src] has been cut apart by [user.name] with the weldingtool.</span>",\
 					"You disassembled the broken APC frame.",\
@@ -926,7 +926,7 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process.")
+			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
 			sleep(600)

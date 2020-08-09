@@ -569,8 +569,7 @@ var/global/list/loopModeNames=list(
 			var/success = 0
 			var/error = 0
 
-			//Loop through each line
-			forLineInText(choice)
+			for(var/line in splittext(choice, "\n"))
 				var/list/L = params2list(line)
 				if(L.len >= 3)
 					var/list/params = list()
@@ -1058,7 +1057,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - rock"
 	unformatted = "rock"
 	formatted = "Rock"
-	/obj/item/weapon/vinyl/security
+/obj/item/weapon/vinyl/security
 	name = "nanovinyl - security"
 	unformatted = "security"
 	formatted = "Security"
@@ -1066,7 +1065,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - shuttle"
 	unformatted = "shuttle"
 	formatted = "Shuttle"
-	/obj/item/weapon/vinyl/thunderdome
+/obj/item/weapon/vinyl/thunderdome
 	name = "nanovinyl - thunderdome"
 	unformatted = "thunderdome"
 	formatted =	"Thunderdome"

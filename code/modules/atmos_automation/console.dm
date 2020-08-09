@@ -64,7 +64,7 @@
 	send_signal(list("tag"=device, "status"))
 
 /obj/machinery/computer/general_air_control/atmos_automation/proc/send_signal(var/list/data, filter = RADIO_ATMOSIA)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data=data

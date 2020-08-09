@@ -5,7 +5,7 @@
 
 	var/obj/abstract/screen/using
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "act_intent"
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1_alien.dmi'
@@ -14,7 +14,7 @@
 	src.adding += using
 	action_intent = using
 
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "mov_intent"
 	using.dir = SOUTHWEST
 	using.icon = 'icons/mob/screen1_alien.dmi'
@@ -23,19 +23,19 @@
 	src.adding += using
 	move_intent = using
 
-	mymob.healths = getFromPool(/obj/abstract/screen)
+	mymob.healths = new /obj/abstract/screen
 	mymob.healths.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.healths.icon_state = "health0"
 	mymob.healths.name = "health"
 	mymob.healths.screen_loc = ui_alien_health
 
-	mymob.pullin = getFromPool(/obj/abstract/screen)
+	mymob.pullin = new /obj/abstract/screen
 	mymob.pullin.icon = 'icons/mob/screen1_alien.dmi'
 	mymob.pullin.icon_state = "pull0"
 	mymob.pullin.name = "pull"
 	mymob.pullin.screen_loc = ui_pull_resist
 
-	mymob.zone_sel = getFromPool(/obj/abstract/screen/zone_sel)
+	mymob.zone_sel = new /obj/abstract/screen/zone_sel
 	mymob.zone_sel.overlays.len = 0
 	mymob.zone_sel.overlays += image("icon" = 'icons/mob/zone_sel.dmi', "icon_state" = text("[]", mymob.zone_sel.selecting))
 

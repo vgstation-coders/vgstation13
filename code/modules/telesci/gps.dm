@@ -49,12 +49,17 @@ var/list/SPS_list = list()
 	emped = TRUE
 	transmitting = FALSE
 	update_icon()
+	SStgui.update_uis(src)
 	spawn(30 SECONDS)
 		emped = FALSE
 		update_icon()
+		SStgui.update_uis(src)
 
 /obj/item/device/gps/attack_self(mob/user)
-	ui_interact(user)
+	if(user.client.prefs.tgui_fancy)
+		tgui_interact(user)
+	else
+		ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
@@ -74,7 +79,65 @@ var/list/SPS_list = list()
 	else
 		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
 
+// Begin tgui
+/obj/item/device/gps/tgui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = global.adjacent_state)
+	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "Gps", name, 500, 500, master_ui, state)
+		ui.open()
+	ui.set_autoupdate(autorefreshing)
 
+/obj/item/device/gps/ui_data()
+	var/list/data = list()
+	data["emped"] = emped
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	var/list/devices = list()
+	if(!emped && transmitting)
+		for(var/obj/item/device/gps/other in gps_list)
+			if(!other.transmitting || other == src)
+				continue
+			var/list/device_data = list()
+			device_data["tag"] = other.gpstag
+			device_data["location_text"] = other.get_location_name()
+			devices += list(device_data)
+	data["devices"] = devices
+	return data
+
+/obj/item/device/gps/ui_act(action, list/params)
+	if(..())
+		return
+	switch(action)
+		if("turn_on")
+			if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+				return FALSE
+			transmitting = TRUE
+			update_icon()
+			return TRUE
+		if("set_tag")
+			if(isobserver(usr))
+				to_chat(usr, "No way.")
+				return FALSE
+			if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //no silicons allowed
+				to_chat(usr, "<span class='caution'>You need to have the GPS in your hand to do that!</span>")
+				return TRUE
+			var/new_tag = params["new_tag"]
+			if(!new_tag)
+				return TRUE
+			if(length(new_tag) > 5)
+				to_chat(usr, "<span class='caution'>The tag must have a maximum of five characters!</span>")
+			else
+				gpstag = new_tag
+				update_name()
+			return TRUE
+		if("toggle_refresh")
+			autorefreshing = !autorefreshing
+			return TRUE
+// end tgui
+
+// Begin NanoUI
 /obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	if(emped)
@@ -101,6 +164,8 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
+	if(..())
+		return FALSE
 	if(href_list["turn_on"])
 		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
 			return FALSE
@@ -120,7 +185,6 @@ var/list/SPS_list = list()
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return TRUE
-		a = strict_ascii(a)
 		if(!a) //what a check
 			return TRUE
 		if(length(a) > 5)
@@ -132,9 +196,7 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
-	if(..())
-		return FALSE
-
+// End NanoUI
 /obj/item/device/gps/science
 	icon_state = "gps-s"
 	base_tag = "SCI"
@@ -203,6 +265,3 @@ var/list/SPS_list = list()
 			boop = TRUE
 	if (boop)
 		playsound(src,'sound/machines/radioboop.ogg',40,1)
-			
-		
-		

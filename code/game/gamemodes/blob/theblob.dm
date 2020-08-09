@@ -85,7 +85,7 @@ var/list/blob_overminds = list()
 
 	if(icon_size == 64)
 		for(var/atom/movable/overlay/O in loc)
-			returnToPool(O)
+			qdel(O)
 
 		for(var/obj/effect/blob/B in orange(loc,1))
 			B.update_icon()

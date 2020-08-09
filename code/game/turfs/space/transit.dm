@@ -86,4 +86,77 @@
 	pushdirection = EAST
 	icon_state="debug-west"
 
+/turf/space/transit/horizon //special transit turf for Horizon
 
+	pushdirection = SOUTH //the ship is moving forward
+	plane = ABOVE_PARALLAX_PLANE
+	icon_state="debug-north"
+
+/turf/space/transit/horizon/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+    return ..(N, tell_universe, 1, allow)
+
+/turf/space/transit/horizon/canBuildCatwalk()
+	if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
+	return locate(/obj/structure/lattice) in contents
+
+/turf/space/transit/horizon/canBuildLattice(var/material)
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/space/transit/horizon/canBuildPlating(var/material)
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
+		return 1
+	return BUILD_FAILURE
+
+//code that throws you around like a little bitch. Commented out until I can figure out how to make it work.
+///turf/space/transit/horizon/Crossed(atom/movable/O)
+//    if(!istype(O) || isobserver(O) || istype(O, /obj/effect/beam))
+//        return
+
+//    step(O, pushdirection)
+
+/turf/space/transit/faketransit //special transit turf for Horizon that doesn't throw you around like a little bitch
+
+	pushdirection = SOUTH //the ship is moving forward
+	plane = ABOVE_PARALLAX_PLANE
+	icon_state="debug-north"
+
+/turf/space/transit/faketransit/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_lighting_update = 0, var/allow = 1)
+    return ..(N, tell_universe, 1, allow)
+
+/turf/space/transit/faketransit/canBuildCatwalk()
+	if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
+	return locate(/obj/structure/lattice) in contents
+
+/turf/space/transit/faketransit/canBuildLattice(var/material)
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if(locate(/obj/structure/catwalk) in contents)
+		return BUILD_FAILURE
+	else if(!(locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/sheet/wood)))
+		return BUILD_SUCCESS
+	return BUILD_FAILURE
+
+/turf/space/transit/faketransit/canBuildPlating(var/material)
+	if(src.x >= (world.maxx - TRANSITIONEDGE) || src.x <= TRANSITIONEDGE)
+		return BUILD_FAILURE
+	else if (src.y >= (world.maxy - TRANSITIONEDGE || src.y <= TRANSITIONEDGE ))
+		return BUILD_FAILURE
+	else if((locate(/obj/structure/lattice) in contents) && !(istype(material,/obj/item/stack/tile/wood)))
+		return 1
+	return BUILD_FAILURE

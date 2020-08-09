@@ -17,6 +17,7 @@
 	return get_all_slots()
 
 //May need work
+
 /mob/living/silicon/robot/is_in_modules(var/obj/item/W)
 	return (W in module.modules)
 
@@ -277,35 +278,24 @@
 	return FALSE
 
 /mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
-	if(isgripper(module_active))
-		var/obj/item/weapon/gripper/G = module_active
+	if(!target)
+		target = loc
+	for(var/obj/item/weapon/gripper/G in get_all_slots())
 		return G.drop_item(to_drop, target, force_drop, dontsay)
-	else
-		return FALSE
+	return FALSE
 
 /mob/living/silicon/robot/drop_from_inventory(var/obj/item/W) //needed for pills, thanks oldcoders.
 	if(isgripper(W.loc))
 		drop_item(force_drop = TRUE, dontsay = TRUE)
-	else
-		..()
+	..()
 
 /mob/living/silicon/robot/put_in_hands(var/obj/item/W)
-	var/obj/item/weapon/gripper/G = null
 	if(!W)
 		return FALSE
 	if(cell && cell.charge <= ROBOT_LOW_POWER)
 		drop_from_inventory(W)
 		return FALSE
-	if(isgripper(module_state_1))
-		G = module_state_1
-		if(!G.wrapped && G.grip_item(W, src, 1))
-			return TRUE
-	if(isgripper(module_state_2))
-		G = module_state_2
-		if(!G.wrapped && G.grip_item(W, src, 1))
-			return TRUE
-	if(isgripper(module_state_3))
-		G = module_state_3
+	for(var/obj/item/weapon/gripper/G in get_all_slots())
 		if(!G.wrapped && G.grip_item(W, src, 1))
 			return TRUE
 	W.forceMove(get_turf(src))

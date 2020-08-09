@@ -19,14 +19,14 @@
 
 /obj/item/offhand/dropped(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 
 
 /obj/item/offhand/unwield(user)
 	if(!wielding)
-		returnToPool(src)
+		qdel(src)
 		return null
 	return wielding.unwield(user)
 
@@ -194,15 +194,14 @@
 	flags = FPRINT | TWOHANDABLE
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
-	var/event_key
 
-/obj/item/binoculars/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/binoculars/proc/mob_moved(atom/movable/mover)
 	if(wielded)
-		unwield(holder)
+		unwield(mover)
 
 /obj/item/binoculars/update_wield(mob/user)
 	if(wielded)
-		event_key = user.on_moved.Add(src, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] holds \the [src] up to \his eyes.","You hold \the [src] up to your eyes.")
 		item_state = "binoculars_wielded"
 		user.regenerate_icons()
@@ -211,7 +210,7 @@
 			var/client/C = user.client
 			C.changeView(C.view + 7)
 	else
-		user.on_moved.Remove(event_key)
+		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 		user.visible_message("\The [user] lowers \the [src].","You lower \the [src].")
 		item_state = "binoculars"
 		user.regenerate_icons()
@@ -236,7 +235,6 @@
 	sharpness_flags = SHARP_BLADE | SERRATED_BLADE
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	var/event_key
 
 /obj/item/weapon/bloodlust/update_wield(mob/user)
 	..()
@@ -251,10 +249,9 @@
 	if(user)
 		user.update_inv_hands()
 	if(wielded)
-		event_key = user.on_moved.Add(src, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	else
-		user.on_moved.Remove(event_key)
-		event_key = null
+		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
 	if(isliving(target))
@@ -266,9 +263,9 @@
 		return
 	..()
 
-/obj/item/weapon/bloodlust/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(iscarbon(holder) && wielded)
-		for(var/obj/effect/plantsegment/P in range(holder,0))
+/obj/item/weapon/bloodlust/proc/mob_moved(atom/movable/mover)
+	if(iscarbon(mover) && wielded)
+		for(var/obj/effect/plantsegment/P in range(mover,0))
 			qdel(P)
 
 /obj/item/weapon/bloodlust/IsShield()

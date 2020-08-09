@@ -57,7 +57,6 @@
 	var/lastpuke = 0
 
 	var/mob/remoteview_target = null
-	var/hand_blood_color
 
 	var/meatleft = 3 //For chef item
 

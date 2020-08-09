@@ -6,7 +6,7 @@
 	item_state = "rpg"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
-	starting_materials = list(MAT_IRON = 5000)
+	starting_materials = list(MAT_IRON = 25000, MAT_GLASS = 7500, MAT_PLASTIC = 12500, MAT_GOLD = 3000)
 	w_type = RECYK_METAL
 	force = 10
 	recoil = 1 //The backblast isn't just decorative you know

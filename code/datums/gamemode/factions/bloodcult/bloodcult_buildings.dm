@@ -92,7 +92,7 @@
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
-			returnToPool(W)
+			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -297,7 +297,7 @@
 				C.resting = 1
 				C.update_canmove()
 			C.forceMove(loc)
-			returnToPool(G)
+			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
 	..()

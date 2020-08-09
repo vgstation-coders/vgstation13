@@ -228,7 +228,7 @@
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
-			health = (istype(S, /obj/item/seeds/cutting) ? round(seed.endurance/rand(2,5)) : seed.endurance)
+			health = seed.endurance
 
 			lastcycle = world.time
 
@@ -274,14 +274,14 @@
 				S.icon_state += "-large"
 
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+				S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			else
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"

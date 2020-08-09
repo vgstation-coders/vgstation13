@@ -355,7 +355,6 @@
 	specheatcap = 3.49
 
 	data = list(
-		"donor"= null,
 		"viruses" = null,
 		"blood_DNA" = null,
 		"blood_type" = null,
@@ -405,9 +404,8 @@
 
 		if(ishuman(L) && (method == TOUCH))
 			var/mob/living/carbon/human/H = L
-			H.bloody_body(self.data["donor"])
-			if(self.data["donor"])
-				H.bloody_hands(self.data["donor"])
+			H.bloody_body_from_data(data,0,src)
+			H.bloody_hands_from_data(data,2,src)
 			spawn() //Bloody feet, result of the blood that fell on the floor
 				var/obj/effect/decal/cleanable/blood/B = locate() in get_turf(H)
 
@@ -458,31 +456,8 @@
 
 	if(volume < 3) //Hardcoded
 		return
-//	WHY WAS THIS MAKING 2 SPLATTERS? Awfully hardcoded, no need to exist, and this is completely broken colorwise
-//
-	//var/datum/disease/D = self.data["virus"]
-//	if(!self.data["donor"] || ishuman(self.data["donor"]))
-//		var/obj/effect/decal/cleanable/blood/blood_prop = locate() in T //Find some blood here
-//		if(!blood_prop) //First blood
-//			blood_prop = getFromPool(/obj/effect/decal/cleanable/blood, T)
-//			blood_prop.New(T)
-//			blood_prop.blood_DNA[self.data["blood_DNA"]] = self.data["blood_type"]
-//
-//		for(var/datum/disease/D in self.data["viruses"])
-//			var/datum/disease/newVirus = D.Copy(1)
-//			blood_prop.viruses += newVirus
-//
 
-	if(!self.data["donor"] || ishuman(self.data["donor"]))
-		blood_splatter(T, self, 1)
-	else if(ismonkey(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["Non-Human DNA"] = "A+"
-	else if(isalien(self.data["donor"]))
-		var/obj/effect/decal/cleanable/blood/B = blood_splatter(T, self, 1)
-		if(B)
-			B.blood_DNA["UNKNOWN DNA STRUCTURE"] = "X*"
+	blood_splatter(T, self, 1)
 	T.had_blood = TRUE
 	if(volume >= 5 && !istype(T.loc, /area/chapel)) //Blood desanctifies non-chapel tiles
 		T.holy = 0
@@ -497,9 +472,10 @@
 	return 1
 
 /datum/reagent/blood/reaction_obj(var/obj/O, var/volume)
-
 	if(..())
 		return 1
+
+	O.add_blood_from_data(data)
 
 	if(istype(O, /obj/item/clothing/mask/stone))
 		var/obj/item/clothing/mask/stone/S = O
@@ -2059,7 +2035,7 @@
 		return 1
 
 	if(!(locate(/obj/effect/decal/cleanable/liquid_fuel) in T))
-		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, volume)
+		new /obj/effect/decal/cleanable/liquid_fuel(T, volume)
 
 /datum/reagent/fuel/on_mob_life(var/mob/living/M)
 
@@ -2089,7 +2065,7 @@
 
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/vomit) in T))
-			getFromPool(/obj/effect/decal/cleanable/vomit, T)
+			new /obj/effect/decal/cleanable/vomit(T)
 
 /datum/reagent/space_cleaner
 	name = "Space Cleaner"
@@ -2443,7 +2419,7 @@
 		return 1
 
 	M.heal_organ_damage(0, 2 * REM)
-	
+
 /datum/reagent/dermaline
 	name = "Dermaline"
 	id = DERMALINE
@@ -2910,8 +2886,8 @@
 
 	if(..())
 		return 1
-	
-	 M.heal_organ_damage(4 * REM, -1 * REM) //heal 2 brute, cause 0.5 burn
+
+	M.heal_organ_damage(4 * REM, -1 * REM) //heal 2 brute, cause 0.5 burn
 
 /datum/reagent/hyperzine
 	name = "Hyperzine"
@@ -3429,7 +3405,7 @@
 /datum/reagent/methylin/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	M.adjustBrainLoss(1)
-	
+
 /datum/reagent/bicarodyne
 	name = "Bicarodyne"
 	id = BICARODYNE
@@ -3895,7 +3871,7 @@
 	density = 1.44
 	specheatcap = 60
 	overdose_am = 5
-	
+
 	var/on_a_diet
 	var/oldmetabolism
 
@@ -3903,10 +3879,10 @@
 
 	if(..())
 		return 1
-	
+
 	if(prob(5))
 		M.adjustToxLoss(1)
-	
+
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(!on_a_diet)
@@ -3915,7 +3891,7 @@
 			H.calorie_burn_rate += H.calorie_burn_rate * 3
 		if(prob(8))
 			H.vomit(0,1)
-			
+
 /datum/reagent/dietine/reagent_deleted()
 	if(ishuman(holder.my_atom))
 		var/mob/living/carbon/human/H = holder.my_atom
@@ -3925,7 +3901,7 @@
 /datum/reagent/dietine/on_overdose(var/mob/living/M)
 	M.adjustToxLoss(1)
 	if(ishuman(M))
-		var/mob/living/carbon/human/H = M	
+		var/mob/living/carbon/human/H = M
 		H.vomit(0,1)
 
 /datum/reagent/soysauce
@@ -3986,7 +3962,7 @@
 	nutriment_factor = 15 * REAGENTS_METABOLISM
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFACD" //LEMONCHIFFON
-	
+
 /datum/reagent/drink/gatormix
 	name = "Gator Mix"
 	id = GATORMIX
@@ -3999,15 +3975,15 @@
 	adj_sleepy = -5
 	adj_temp = 10
 	overdose_am = 50
-	
+
 /datum/reagent/gatormix/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	
+
 	if(ishuman(M) && prob(20))
 		var/mob/living/carbon/human/H = M
 		H.Jitter(5)
-		
+
 /datum/reagent/gatormix/on_overdose(var/mob/living/M)
 
 	if(ishuman(M) && prob(5))
@@ -5937,7 +5913,7 @@
 	name = "Waifu"
 	id = WAIFU
 	description = "Don't drink more than one waifu if you value your laifu."
-	color = "#664300"
+	color = "#D0206F"
 
 /datum/reagent/ethanol/waifu/on_mob_life(var/mob/living/M)
 	if(..())
@@ -5955,6 +5931,30 @@
 				H.u_equip(H.w_uniform, 1)
 			H.equip_to_slot(S, slot_w_uniform)
 			holder.remove_reagent(WAIFU,4) //Generating clothes costs extra reagent
+	M.regenerate_icons()
+
+/datum/reagent/ethanol/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	description = "You talkin' shit about my husbando?"
+	color = "#2043D0"
+
+/datum/reagent/ethanol/husbando/on_mob_life(var/mob/living/M) //it's copypasted from waifu
+	if(..())
+		return 1
+	if(M.gender == FEMALE)
+		M.setGender(MALE)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(!M.is_wearing_item(/obj/item/clothing/under/callum))
+			var/turf/T = get_turf(H)
+			T.turf_animation('icons/effects/96x96.dmi',"manexplode",-32,0,MOB_LAYER+1,'sound/items/poster_ripped.ogg',anim_plane = MOB_PLANE)
+			H.visible_message("<span class='warning'>[H] reveals his true outfit in a vortex of ripped clothes!</span>")
+			var/obj/item/clothing/under/callum/C = new /obj/item/clothing/under/callum(get_turf(H))
+			if(H.w_uniform)
+				H.u_equip(H.w_uniform, 1)
+			H.equip_to_slot(C, slot_w_uniform)
+			holder.remove_reagent(HUSBANDO,4)
 	M.regenerate_icons()
 
 /datum/reagent/ethanol/scientists_serendipity
@@ -6020,7 +6020,7 @@
 	id = MAGICADELUXE
 	description = "Makes you feel enchanted until the aftertaste hits you."
 	color = "#009933" //rgb(0, 153, 51)
-	
+
 /datum/reagent/ethanol/magicadeluxe/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
@@ -6050,14 +6050,14 @@
 		playsound(M,'sound/effects/summon_guns.ogg', 50, 1)
 		for (var/spell/majik in fake_spells)
 			M.add_spell(majik)
-		
+
 		if(ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/spell/thisisdumb = new /spell/targeted/equip_item/robesummon
 			H.add_spell(thisisdumb)
 			thisisdumb.charge_type = Sp_CHARGES
 			thisisdumb.charge_counter = 1
-			thisisdumb.charge_max = 1		
+			thisisdumb.charge_max = 1
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
 
@@ -6578,7 +6578,7 @@
 	description = "Triple sec, Cinnamon Whisky, and Tequila, eugh. Less a cocktail more than throwing whatever's on the shelf in a glass."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#f0133c" //rgb: 240, 19, 60
-	
+
 /datum/reagent/ethanol/deadrum/magica
 	name = "Magica"
 	id = MAGICA
@@ -6982,7 +6982,7 @@
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 
-	if (H.mind.miming)
+	if (H?.mind.miming)
 		H.mind.miming = 0
 		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
 			H.remove_spell(spell)

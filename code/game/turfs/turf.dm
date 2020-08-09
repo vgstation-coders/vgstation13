@@ -71,6 +71,8 @@
 
 	var/volume_mult = 1 //how loud are things on this turf?
 
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -239,9 +241,9 @@
 			if(!move_to_z)
 				return
 
-			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			A.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -271,9 +273,9 @@
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
 
-			INVOKE_EVENT(A.post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
 			for(var/atom/movable/AA in contents_brought)
-				INVOKE_EVENT(AA.post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -352,6 +354,7 @@
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
 	var/old_density = density
+	var/old_holomap_draw_override = holomap_draw_override
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -374,7 +377,7 @@
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
-			returnToPool(F.floor_tile)
+			qdel(F.floor_tile)
 			F.floor_tile = null
 		F = null
 
@@ -435,6 +438,8 @@
 			else
 				lighting_clear_overlay()
 
+	if (!ticker)
+		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
 	if(density != old_density)

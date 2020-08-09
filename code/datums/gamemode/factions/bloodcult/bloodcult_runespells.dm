@@ -501,7 +501,7 @@
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
 	if (!reminder)
 		return
-	reminder = utf8_sanitize(reminder) // No weird HTML
+	reminder = strip_html_simple(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
 	cult.cult_reminders += text
@@ -712,7 +712,7 @@
 	else
 		if (pay_blood())
 			R.one_pulse()
-			spell_holder.visible_message("<span class='rose'>The blood drops merge into each others, and a talisman takes form in their place</span>")
+			spell_holder.visible_message("<span class='rose'>The blood drops merge into each other, and a talisman takes form in their place.</span>")
 			var/turf/T = get_turf(spell_holder)
 			AT = new (T)
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
@@ -1355,7 +1355,7 @@ var/list/blind_victims = list()
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
 	else
-		for(var/mob/living/M in viewers(T))
+		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
 	for(var/mob/living/M in potential_victims)
@@ -1381,8 +1381,10 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
-		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		for(var/obj/machinery/camera/C in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			shadow(C,T)
 			var/col = C.color
 			animate(C, color = col, time = 4)
@@ -1618,17 +1620,18 @@ var/list/blind_victims = list()
 		last_threshold = world.time
 		var/list/seers = list()
 		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
-			if (iscultist(seer) && seer.client && seer.client.screen)
+			if (iscultist(seer) && seer.client)
 				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
 				var/delta_x = (L.x - seer.x)
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				seers += seer
-				seer << image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				seer.client.images += image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -delta_x, offY = -delta_y, plane = LIGHTING_PLANE)
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 		var/count = 10 SECONDS
 		do
 			for (var/mob/living/seer in seers)
@@ -1640,9 +1643,10 @@ var/list/blind_victims = list()
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seer << image_intruder
+				seer.client.images += image_intruder // see the mover for a set period of time
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 			count--
 		while (count && seers.len)
 

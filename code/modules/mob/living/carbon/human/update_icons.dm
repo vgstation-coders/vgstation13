@@ -133,11 +133,17 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_part,species_blood = "")
 	var/icon/I = damage_icon_parts["[damage_state]/[body_part]/[species_blood]"]
-	if(!I)
+	if(!I)//This should never happen anyway since all species damage icons are getting cached at roundstart (see cachedamageicons())
 		var/icon/DI = icon('icons/mob/dam_human.dmi', damage_state)			// the damage icon for whole human
 		DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)	// mask with this organ's pixels
 		if(species_blood)
-			DI.Blend(species_blood, ICON_MULTIPLY)							// mask with this species's blood color
+			var/brute = copytext(damage_state,1,2)
+			var/burn = copytext(damage_state,2)
+			DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")
+			DI.Blend(species_blood, ICON_MULTIPLY)
+			var/icon/DI_burn = icon('icons/mob/dam_human.dmi', "0[burn]")//we don't want burns to blend with the species' blood color
+			DI.Blend(DI_burn, ICON_OVERLAY)
+			DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)
 		damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] = DI
 		return DI
 	else
@@ -286,7 +292,12 @@ var/global/list/damage_icon_parts = list()
 
 
 	//Underwear
-	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
+	var/list/undielist
+	if(gender == MALE)
+		undielist = underwear_m
+	else
+		undielist = underwear_f
+	if(underwear >0 && underwear <= undielist.len && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
@@ -699,18 +710,12 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_x = species.inventory_offsets["[slot_gloves]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
-		//overlays_standing[GLOVES_LAYER]	= standing
 	else
-		if(blood_DNA && blood_DNA.len)
+		if(blood_DNA?.len && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
-			O.color = hand_blood_color
-			//var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			//bloodsies.color = hand_blood_color
-			//overlays_standing[GLOVES_LAYER]	= bloodsies
+			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
-		//else
-			//overlays_standing[GLOVES_LAYER]	= null
 	if(update_icons)
 		update_icons()
 
@@ -1238,7 +1243,7 @@ var/global/list/damage_icon_parts = list()
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O) //theoretically, should only be done once per hand
-		O = getFromPool(/obj/abstract/Overlays/hand_layer)
+		O = new /obj/abstract/Overlays/hand_layer
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)

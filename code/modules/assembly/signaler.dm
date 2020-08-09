@@ -135,7 +135,7 @@
 	if(!(code in 1 to 100))
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.encryption = code
 	signal.data["message"] = "ACTIVATE"

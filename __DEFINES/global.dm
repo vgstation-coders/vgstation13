@@ -45,9 +45,6 @@ var/global/list/deadmins = list()
 //List of vars that require DEBUG on top of VAREDIT to be able to edit
 var/list/lockedvars = list("vars", "client", "holder", "step_x", "step_y", "step_size")
 
-// List of types and how many instances of each type there are.
-var/global/list/type_instances[0]
-
 /var/global/datum/map/active/map = new() //Current loaded map
 //Defined in its .dm, see maps/_map.dm for more info.
 
@@ -196,7 +193,7 @@ var/datum/nanomanager/nanomanager = new()
 	// MySQL configuration
 
 var/sqladdress = "localhost"
-var/sqlport = "3306"
+var/sqlport = 3306
 var/sqldb = "tgstation"
 var/sqllogin = "root"
 var/sqlpass = ""
@@ -227,8 +224,6 @@ var/forum_authenticated_group = "10"
 	// However it'd be ok to use for accessing attack logs and such too, which are even laggier.
 var/fileaccess_timer = 0
 var/custom_event_msg = null
-
-#define MIDNIGHT_ROLLOVER		864000	//number of deciseconds in a day
 
 //Recall time limit:  2 hours
 var/recall_time_limit = 72000
@@ -316,12 +311,6 @@ var/list/extracted_gna = list()
 
 var/list/trash_items = list()
 var/list/decals = list()
-
-// Mostly used for ban systems.
-// Initialized on world/New()
-var/global/event/on_login
-var/global/event/on_ban
-var/global/event/on_unban
 
 // Space get this to return for things i guess?
 var/global/datum/gas_mixture/space_gas = new
@@ -436,6 +425,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/hostile/mining_drone,					// This thing is super broken in the hands of a player and it was never meant to be summoned out of actual mining drone cubes.
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
+		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
 		)
 
 //Boss monster list
@@ -499,11 +489,10 @@ var/global/list/radial_menus = list()
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
-	"group","on_login","on_ban","on_unban","on_pipenet_tick","on_item_added",
-	"on_item_removed","on_moved","on_destroyed","on_density_change",
-	"on_z_transition","on_use","on_emote","on_life","on_resist","post_z_transition",
+	"group","on_density_change","registered_events",
+	"on_resist",
 	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
-	"on_irradiate","on_death","on_clickon","on_attackhand","on_attackby",
+	"on_death","on_clickon","on_attackhand","on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
@@ -513,3 +502,6 @@ var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clot
 
 //Observers
 var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally
+
+var/list/all_machines = list()
+var/list/machinery_rating_cache = list() // list of type path -> number

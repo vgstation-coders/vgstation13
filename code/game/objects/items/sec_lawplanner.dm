@@ -203,22 +203,22 @@
 
 /datum/law/assault/minor
 	name = "1A-1 MINOR ASSAULT"
-	penalty = 3
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/assault/full
 	name = "1A-2 ASSAULT"
-	penalty = 6
+	penalty = 3
 	code = LAW_A2
 
 /datum/law/assault/abduction
 	name = "1B-1 ABDUCTION"
-	penalty = 10
+	penalty = 4
 	code = LAW_B1
 
 /datum/law/assault/manslaughter
 	name = "1C-1 MANSLAUGHTER"
-	penalty = 10
+	penalty = 8
 	code = LAW_C1
 
 /datum/law/assault/murder
@@ -232,28 +232,28 @@
 
 /datum/law/damage/vandalism
 	name = "2A-1 VANDALISM"
-	penalty = 3
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/damage/negligence
 	name = "2B-1 NEGLIGENCE"
-	penalty = 5
+	penalty = 3
 	code = LAW_B1
 	demotion = TRUE
 
 /datum/law/damage/sabotage
 	name = "2B-2 SABOTAGE"
-	penalty = 8
+	penalty = 4
 	code = LAW_B2
 
 /datum/law/damage/illegalupload
 	name = "2C-1 ILLEGAL UPLOAD"
-	penalty = 10
+	penalty = 5
 	code = LAW_C1
 
 /datum/law/damage/grandsabotage
 	name = "2C-2 GRAND SABOTAGE"
-	penalty = 15
+	penalty = 8
 	code = LAW_C2
 	death = TRUE
 
@@ -262,17 +262,17 @@
 
 /datum/law/theft/petty
 	name = "3A-1 PETTY THEFT"
-	penalty = 3
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/theft/full
 	name = "3B-1 THEFT"
-	penalty = 5
+	penalty = 3
 	code = LAW_B1
 
 /datum/law/theft/grand
 	name = "3C-1 GRAND THEFT"
-	penalty = 15
+	penalty = 5
 	code = LAW_C1
 
 /datum/law/contraband
@@ -280,24 +280,24 @@
 
 /datum/law/contraband/makeshiftcons
 	name = "4A-1 MAKESHIFT/CONSOLES"
-	penalty = 5
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/contraband/weaponexpl
 	name = "4B-1 WEAPONS/EXPLOSIVES"
-	penalty = 8
+	penalty = 4
 	code = LAW_B1
 	demotion = TRUE
 
 /datum/law/contraband/mechs
 	name = "4C-1 COMBAT GEAR/MECHS"
-	penalty = 10
+	penalty = 5
 	code = LAW_C1
 	demotion = TRUE
 
 /datum/law/contraband/enemycontraband
 	name = "4C-2 ENEMY CONTRABAND"
-	penalty = 10
+	penalty = 5
 	code = LAW_C2
 	demotion = TRUE
 
@@ -306,7 +306,7 @@
 
 /datum/law/trespass/minor
 	name = "5A-1 MINOR TRESPASS"
-	penalty = 3
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/trespass/bande
@@ -316,12 +316,12 @@
 
 /datum/law/trespass/full
 	name = "5B-1 TRESPASS"
-	penalty = 6
+	penalty = 3
 	code = LAW_B1
 
 /datum/law/trespass/major
 	name = "5C-1 MAJOR TRESPASS"
-	penalty = 10
+	penalty = 5
 	code = LAW_C1
 
 /datum/law/escape
@@ -329,17 +329,17 @@
 
 /datum/law/escape/resist
 	name = "6A-1 RESISTING"
-	penalty = 5
+	penalty = 1
 	code = LAW_A1
 
 /datum/law/escape/full
 	name = "6B-1 ESCAPE"
-	penalty = 5
+	penalty = 1
 	code = LAW_B1
 
 /datum/law/escape/interfere
 	name = "6B-2 INTERFERENCE"
-	penalty = 10
+	penalty = 2
 	code = LAW_B2
 
 /datum/law/escape/grand
@@ -363,7 +363,7 @@
 
 /datum/law/insub/insub
 	name = "7A-2 INSUBORD"
-	penalty = 5
+	penalty = 1
 	demotion = TRUE
 	code = LAW_A2
 

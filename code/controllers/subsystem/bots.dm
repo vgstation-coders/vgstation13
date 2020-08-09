@@ -19,7 +19,7 @@ var/datum/subsystem/bots/SSBots
 		return ..()
 
 	..("B:[global.bots_list.len]")
-	
+
 // This is to allow the near identical fast machinery process to use it.
 /datum/subsystem/bots/proc/get_currenrun()
 	return bots_list.Copy()
@@ -33,7 +33,7 @@ var/datum/subsystem/bots/SSBots
 		var/obj/machinery/bot/M = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!M || M.gcDestroyed || M.disposed || M.timestopped)
+		if (!M || M.gcDestroyed || M.timestopped)
 			continue
 
 		if (M.process() == PROCESS_KILL)

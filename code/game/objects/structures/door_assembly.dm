@@ -211,7 +211,7 @@
 
 					to_chat(user, "<span class='notice'>You dissasembled the airlock assembly!</span>")
 
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 					M.amount = 4
 
 					qdel (src)

@@ -62,7 +62,7 @@
 	load_dungeon(END)
 	loaded_levels.Add(END)
 
-/datum/map_element/vault/sokoban/proc/on_cheat()
+/datum/map_element/vault/sokoban/proc/on_cheat(atom/movable/mover)
 	for(var/datum/map_element/dungeon/sokoban_level/L in loaded_levels)
 		if(L.reward)
 			var/turf/current_loc = get_turf(L.reward)
@@ -84,7 +84,7 @@
 		cheated = TRUE
 		winner_name = "[usr] ([usr.key])"
 
-/datum/map_element/vault/sokoban/proc/mark_winner()
+/datum/map_element/vault/sokoban/proc/mark_winner(atom/movable/mover)
 	//Check if the 'winner' bypassed any teleporters. If they did, they're a cheater
 	for(var/obj/structure/sokoban_teleporter/T in teleporters)
 		if(T.active || !isturf(T.loc))
@@ -114,14 +114,12 @@
 
 	for(var/obj/structure/closet/crate/sokoban/crate in objects)
 		//check_cheat performs some additional checks first, and only then marks the user as a cheater
-		crate.on_destroyed.Add(crate, "check_cheat")
-		crate.on_moved.Add(crate, "check_cheat")
+		crate.lazy_register_event(/lazy_event/on_moved, crate, /obj/structure/closet/crate/sokoban/proc/check_cheat)
 		crate.parent = src.parent
 
 	for(var/obj/structure/sokoban_teleporter/teleporter in objects)
 		//Teleporters are supposed to be unmovable, so if they're moved or deleted - it's guaranteed cheating
-		teleporter.on_destroyed.Add(parent, "on_cheat")
-		teleporter.on_moved.Add(parent, "on_cheat")
+		teleporter.lazy_register_event(/lazy_event/on_moved, parent, /datum/map_element/vault/sokoban/proc/on_cheat)
 
 		if(parent)
 			parent.teleporters.Add(teleporter)
@@ -139,7 +137,7 @@
 	reward = track_atom(locate(/obj/item/clothing/suit/armor/laserproof/advanced) in objects)
 	if(reward)
 		reward_turf = get_turf(reward)
-		reward.on_moved.Add(parent, "mark_winner")
+		reward.lazy_register_event(/lazy_event/on_moved, parent, /datum/map_element/vault/sokoban/proc/mark_winner)
 
 /*
 This ladder stuff looks confusing, so here's an illustration!!!
@@ -188,7 +186,11 @@ This ladder stuff looks confusing, so here's an illustration!!!
 
 	var/datum/map_element/vault/sokoban/parent
 
-/obj/structure/closet/crate/sokoban/proc/check_cheat()
+/obj/structure/closet/crate/sokoban/Destroy()
+	check_cheat()
+	..()
+
+/obj/structure/closet/crate/sokoban/proc/check_cheat(atom/movable/mover)
 	if(shipped)
 		return //Teleported crates can be destroyed safely
 

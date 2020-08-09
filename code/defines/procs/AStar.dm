@@ -84,6 +84,7 @@ length to avoid portals or something i guess?? Not that they're counted right no
 
 //returns a copy of the elements list
 /PriorityQueue/proc/List()
+	RETURN_TYPE(/list)
 	var/list/ret = L.Copy()
 	return ret
 
@@ -137,8 +138,8 @@ length to avoid portals or something i guess?? Not that they're counted right no
 	total_node_cost = distance_from_start + distance_from_end
 
 /PathNode/Destroy()
-	source.PathNodes[id] = null
-	source.PathNodes.Remove(id)
+	if(source.PathNodes)
+		source.PathNodes -= id
 	source = null
 	prevNode = null
 	..()

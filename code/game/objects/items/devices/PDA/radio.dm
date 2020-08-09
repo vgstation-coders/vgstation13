@@ -46,7 +46,7 @@
 
 	investigation_log(I_WIRES, "used as signaler by [key_name(usr)] - [format_frequency(frequency)]/[code]")
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.encryption = code
 	signal.data["message"] = message
@@ -72,7 +72,7 @@
 		log_astar_command("Sending [href_list["command"]] to [href_list["bot"]]")
 
 		// Actual signal sent
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = src
 		signal.transmission_method = 1
 		signal.data["target"] = href_list["bot"]

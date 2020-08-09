@@ -38,6 +38,7 @@
 		"Luxury" = list(
 			/datum/storeitem/wallet,
 			/datum/storeitem/photo_album,
+			/datum/storeitem/poster,
 			/datum/storeitem/painting,
 			),
 		)

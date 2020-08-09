@@ -255,6 +255,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	new /obj/item/weapon/dice/d12(src)
 	new /obj/item/weapon/dice/d20(src)
 
+/obj/item/weapon/storage/pill_bottle/dice/with_die/New()
+	. = ..()
+	new /obj/item/weapon/dice/borg(src)
+
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "pill bottle (hyperzine)"
@@ -281,10 +285,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	name = "Experimental Medication"
 	desc = "Hazardous.  Warranty voided if consumed."
 
-	/obj/item/weapon/storage/pill_bottle/nanobot/New()
-		..()
-		for (var/i = 1 to 5)
-			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+/obj/item/weapon/storage/pill_bottle/nanobot/New()
+	..()
+	for (var/i = 1 to 5)
+		new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
 /obj/item/weapon/storage/pill_bottle/radiation
 	name = "pill bottle (radiation treatment)"
@@ -303,16 +307,16 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	icon_state = "candybag"
 	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
 
-	/obj/item/weapon/storage/pill_bottle/sweets/New()
-		..()
-		overlays -= colour_overlay
-		colour_overlay = null
-		for (var/i = 1 to 10)
-			new spawn_type(src)
+/obj/item/weapon/storage/pill_bottle/sweets/New()
+	..()
+	overlays -= colour_overlay
+	colour_overlay = null
+	for (var/i = 1 to 10)
+		new spawn_type(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
-	
+
 /obj/item/weapon/storage/pill_bottle/lollipops
 	name = "bag of lollipops"
 	desc = "Ha, sucker!"
@@ -321,7 +325,7 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	max_combined_w_class = 4
 	storage_slots = 4
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/lollipop","/obj/item/trash/lollipopstick")
-	
+
 /obj/item/weapon/storage/pill_bottle/lollipops/New()
 	..()
 	for (var/i = 1 to 4)

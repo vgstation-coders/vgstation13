@@ -184,6 +184,7 @@
 	return 0
 
 /turf/return_air()
+	RETURN_TYPE(/datum/gas_mixture)
 	//Create gas mixture to hold data for passing
 	var/datum/gas_mixture/unsimulated/GM = new
 

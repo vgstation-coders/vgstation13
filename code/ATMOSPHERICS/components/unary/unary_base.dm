@@ -2,7 +2,7 @@
 	dir = SOUTH
 	initialize_directions = SOUTH
 	layer = UNARY_PIPE_LAYER
-
+	can_be_coloured = 0
 	var/datum/gas_mixture/air_contents
 	var/obj/machinery/atmospherics/node1
 	var/datum/pipe_network/network
@@ -11,7 +11,6 @@
 	..()
 	initialize_directions = dir
 	air_contents = new
-
 	air_contents.temperature = T0C
 	air_contents.volume = starting_volume
 
@@ -85,7 +84,7 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 	node1 = null
 	..()
 
@@ -98,7 +97,7 @@
 
 /obj/machinery/atmospherics/unary/build_network()
 	if(!network && node1)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.normal_members += src
 		network.build_network(node1, src)
 
@@ -123,7 +122,7 @@
 /obj/machinery/atmospherics/unary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network)
-			returnToPool(network)
+			qdel(network)
 		node1 = null
 	return ..()
 

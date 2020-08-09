@@ -13,7 +13,8 @@
 
 /datum/pipeline/Destroy()
 	if(network) //For the pipenet rebuild
-		returnToPool(network)
+		qdel(network)
+		network = null
 	if(air && air.volume) //For the pipeline rebuild next tick
 		temporarily_store_air()
 		qdel(air)
@@ -21,11 +22,9 @@
 	//Null the fuck out of all these references
 	for(var/obj/machinery/atmospherics/pipe/M in members) //Edges are a subset of members
 		M.parent = null
-
-/datum/pipeline/resetVariables()
-	..("members", "edges")
-	members = list()
-	edges = list()
+	members = null
+	edges = null
+	..()
 
 /datum/pipeline/proc/process()//This use to be called called from the pipe networks
 	if((world.timeofday - last_pressure_check) / 10 >= PRESSURE_CHECK_DELAY)
@@ -73,7 +72,11 @@
 
 			if(result.len>0)
 				for(var/obj/machinery/atmospherics/pipe/item in result)
-					if(!members.Find(item))
+					if(item.parent != src)
+						if(item.parent)
+							//Destroy the old pipeline so that the air is stored in the pipes
+							//This could be optimized significantly by making it merge item.parent into this pipeline instead (or vice versa) but I'm just fixing a bug here
+							qdel(item.parent)
 						members += item
 						possible_expansions += item
 
@@ -114,7 +117,7 @@
 
 /datum/pipeline/proc/return_network(obj/machinery/atmospherics/reference)
 	if(!network)
-		network = getFromPool(/datum/pipe_network)
+		network = new /datum/pipe_network
 		network.build_network(src, null)
 			//technically passing these parameters should not be allowed
 			//however pipe_network.build_network(..) and pipeline.network_extend(...)

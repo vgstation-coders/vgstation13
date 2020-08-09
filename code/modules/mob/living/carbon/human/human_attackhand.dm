@@ -147,7 +147,7 @@
 		var/obj/item/weapon/grab/G = M.get_inactive_hand()
 		if(istype(G) && G.affecting == src)
 			spawn()
-				returnToPool(G)
+				qdel(G)
 
 				var/throw_dir = M.dir
 				if(M.loc != src.loc)
