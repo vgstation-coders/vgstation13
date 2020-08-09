@@ -244,7 +244,8 @@
 /datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	if (!H.mind)
-		H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+		return
+	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Clown
 
