@@ -88,7 +88,7 @@
 /mob/living/simple_animal/construct/New(var/mob/living/carbon/user)
 	..()
 
-	if(istype(user, mob/living/carbon))
+	if(istype(user, /mob/living/carbon))
 		//Determine construct color	and set languages
 		if(!iscultist(user))
 			universal_understand = 1
