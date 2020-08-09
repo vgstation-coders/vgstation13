@@ -102,10 +102,11 @@ function SetMusic(url, time, volume) {
 
 
 /hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
-	for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-		SJ.playing=1
-		SJ.update_music()
-		SJ.update_icon()
+	spawn(0)
+		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+			SJ.playing=1
+			SJ.update_music()
+			SJ.update_icon()
 
 /mob/proc/update_music()
 	if (client && client.media && !client.media.forced)
@@ -234,6 +235,7 @@ function SetMusic(url, time, volume) {
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
+	set waitfor = FALSE
 	var/targetURL = ""
 	var/targetStartTime = 0
 	var/targetVolume = 0

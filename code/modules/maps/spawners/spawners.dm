@@ -857,6 +857,7 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+	qdel(src)
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/monkeys
@@ -1162,8 +1163,8 @@
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/abstract/loadout/soviet_rigsuit,
-		/obj/abstract/loadout/nazi_rigsuit,
+		/obj/item/clothing/suit/space/rig/soviet,
+		/obj/item/clothing/suit/space/rig/nazi,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1238,9 +1239,9 @@
 	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/abstract/loadout/soviet_rigsuit,
-	/obj/abstract/loadout/nazi_rigsuit,
-	/obj/abstract/loadout/dredd_gear
+	/obj/item/clothing/suit/space/rig/soviet,
+	/obj/item/clothing/suit/space/rig/nazi,
+	/obj/abstract/spawn_all/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1409,3 +1410,27 @@
 		if (22)
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
+	qdel(src)
+
+// Spawn all in the turf
+/obj/abstract/spawn_all
+	var/list/to_spawn = list()
+
+/obj/abstract/spawn_all/New()
+	. = ..()
+	for (var/thing in to_spawn)
+		new thing(get_turf(src))
+	qdel(src)
+
+/obj/abstract/spawn_all/dredd_gear
+	to_spawn = list(
+		/obj/item/clothing/under/darkred,
+		/obj/item/clothing/glasses/hud/security,
+		/obj/item/clothing/gloves/combat,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/head/helmet/dredd,
+		/obj/item/clothing/mask/gas/swat,
+		/obj/item/weapon/storage/belt/security,
+		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/weapon/gun/lawgiver,
+	)

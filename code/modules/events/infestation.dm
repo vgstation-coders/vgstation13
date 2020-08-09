@@ -1,4 +1,5 @@
 /datum/event/infestation
+	startWhen = 5// so overrides have time to be processed
 	announceWhen = 15
 	endWhen = 20
 	var/locstring

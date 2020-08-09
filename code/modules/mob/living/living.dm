@@ -19,7 +19,6 @@
 	immune_system = new (src)
 
 	on_resist = new(owner = src)
-	on_life = new(owner = src)
 
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
@@ -48,10 +47,6 @@
 	if(on_resist)
 		qdel(on_resist)
 		on_resist = null
-
-	if(on_life)
-		qdel(on_life)
-		on_life = null
 
 	. = ..()
 
@@ -109,28 +104,6 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
-
-	INVOKE_EVENT(on_life, list())
-
-	/*if(mind)
-		if(mind in ticker.mode.implanted)
-			if(implanting)
-				return 0
-//			to_chat(world, "[src.name]")
-			var/datum/mind/head = ticker.mode.implanted[mind]
-			//var/list/removal
-			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
-//				to_chat(world, "doesn't have an implant")
-				ticker.mode.remove_traitor_mind(mind, head)
-
-				if((head in ticker.mode.implanters))
-					ticker.mode.implanter[head] -= src.mind
-				ticker.mode.implanted -= src.mind
-				if(src.mind in ticker.mode.traitors)
-					ticker.mode.traitors -= src.mind
-					special_role = null
-					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
-				*/
 	return 1
 
 // Apply connect damage
@@ -445,7 +418,7 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+	if(status_flags & GODMODE || (M_NO_SHOCK in src.mutations))
 		return 0
 
 	var/damage = shock_damage * siemens_coeff
@@ -473,6 +446,7 @@
 	..()
 
 /mob/living/proc/get_organ(zone)
+	RETURN_TYPE(/datum/organ/external)
 	return
 
 //A proc that turns organ strings into a list of organ datums
@@ -923,19 +897,19 @@ Thanks.
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
-				returnToPool(G)
+				qdel(G)
 			else
 				if (G.state == GRAB_AGGRESSIVE)
 					if (prob(25))
 						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>", \
 							drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s hug!</span>")
-						returnToPool(G)
+						qdel(G)
 				else
 					if (G.state == GRAB_NECK)
 						if (prob(5))
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>", \
 								drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s passionate hug!</span>")
-							returnToPool(G)
+							qdel(G)
 		if(resisting)
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
@@ -1590,7 +1564,7 @@ Thanks.
 	if(!holder_type)
 		return 0
 
-	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
+	var/obj/item/weapon/holder/D = new holder_type(loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
@@ -1598,7 +1572,7 @@ Thanks.
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 		return 1
 	else
-		returnToPool(D)
+		qdel(D)
 
 	return 0
 
@@ -1747,7 +1721,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
-				returnToPool(G)
+				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
 	if(isitem(item))
@@ -1914,6 +1888,9 @@ Thanks.
 	if (istype(disease_list) && disease_list.len > 0)
 		for(var/ID in disease_list)
 			var/datum/disease2/disease/V = disease_list[ID]
+			if (!V)
+				message_admins("[key_name(src)] is trying to assume contact diseases from touching \a [source], but the disease_list contains an ID ([ID]) that isn't associated to an actual disease datum! Ping Deity about it please.")
+				return
 			if(!blocked && V.spread & SPREAD_CONTACT)
 				infect_disease2(V, notes="(Contact, from [source])")
 			else if(suitable_colony() && V.spread & SPREAD_COLONY)
@@ -2017,7 +1994,7 @@ Thanks.
 					strength += V.infectionchance
 				strength = round(strength/airborne_viruses.len)
 				while (strength > 0)//stronger viruses create more clouds at once
-					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 					strength -= 40
 
 /mob/living/proc/handle_virus_updates()

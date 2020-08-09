@@ -277,6 +277,30 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_legcuffed 17
 #define slot_legs 18
 
+//slots, but in string format.
+#define slot_back_str "1"
+#define slot_wear_mask_str "2"
+#define slot_handcuffed_str "3"
+#define slot_belt_str "4"
+#define slot_wear_id_str "5"
+#define slot_ears_str "6"
+#define slot_glasses_str "7"
+#define slot_gloves_str "8"
+#define slot_head_str "9"
+#define slot_shoes_str "10"
+#define slot_wear_suit_str "11"
+#define slot_w_uniform_str "12"
+#define slot_l_store_str "13"
+#define slot_r_store_str "14"
+#define slot_s_store_str "15"
+#define slot_in_backpack_str "16"
+#define slot_legcuffed_str "17"
+#define slot_legs_str "18"
+
+#define ACCESSORY_ITEM "accessory item"
+#define SURVIVAL_BOX "Survival Box"
+
+
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
@@ -1232,9 +1256,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII			105
 #define PDA_APP_MINESWEEPER		106
 #define PDA_APP_SPESSPETS		107
+#define PDA_APP_NEWSREADER		108
 
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1406,6 +1435,7 @@ var/proccalls = 1
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
+#define log_tgui(text) diary << html_decode("\[[time_stamp()]]TGUI: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
@@ -1516,6 +1546,9 @@ var/proccalls = 1
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
 
+#define GRASP_RIGHT_HAND_STR "1"
+#define GRASP_LEFT_HAND_STR "2"
+
 #define BLOB_CORE_PROPORTION 20
 
 //Holomap filters
@@ -1564,9 +1597,17 @@ var/proccalls = 1
 #define HOLOMAP_DRAW_NORMAL	0
 #define HOLOMAP_DRAW_FULL	1
 #define HOLOMAP_DRAW_EMPTY	2
+#define HOLOMAP_DRAW_PATH	3
+#define HOLOMAP_DRAW_HALLWAY	4
+
+#define HUMAN_DNA	1
+#define XENO_DNA	2
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
+#define ALIEN_BLOOD "#05EE05"
+#define ALIEN_FLESH "#34334B"
+#define ROBOT_OIL "#030303"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again

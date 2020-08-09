@@ -61,6 +61,13 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/storage/bag/ore,
+		/obj/item/device/mining_scanner,
+		/obj/item/weapon/pickaxe,
+		/obj/item/weapon/gun/energy/kinetic_accelerator)
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
@@ -519,8 +526,11 @@
 /obj/item/clothing/head/helmet/space/ghetto
 	name = "jury-rigged space-proof fire helmet"
 	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
+	icon_state = "ghettorig0"
+	item_state = "ghettorig0"
+	light_power = 1.5
+	var/brightness_on = 4 //luminosity when on
+	var/on = 0
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
@@ -529,8 +539,20 @@
 	heat_conductivity = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
+	actions_types = list(/datum/action/item_action/toggle_light)
 	eyeprot = 0
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/ghetto/attack_self(mob/user)
+	on = !on
+	icon_state = "ghettorig[on]"
+	item_state = "ghettorig[on]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"
@@ -545,7 +567,8 @@
 	heat_conductivity = 0 //thanks, blanket
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

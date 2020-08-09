@@ -303,6 +303,7 @@ This function restores all organs.
 
 
 /mob/living/carbon/human/get_organ(var/zone)
+	RETURN_TYPE(/datum/organ/external)
 	if(!zone)
 		zone = LIMB_CHEST
 	if (zone in list( "eyes", "mouth" ))
@@ -492,7 +493,7 @@ This function restores all organs.
 		return
 
 	if(application == RAD_EXTERNAL)
-		INVOKE_EVENT(on_irradiate, list("user" = src,"rads" = rads))
+		lazy_invoke_event(/lazy_event/on_irradiate, list("user" = src, "rads" = rads))
 
 	if(reagents)
 		if(reagents.has_reagent(LITHOTORCRAZINE))

@@ -1,12 +1,15 @@
 /mob/Logout()
+	SStgui.on_logout(src)
+	nanomanager.close_user_uis(src)
+
 	if (isobj(loc))
 		var/obj/location = loc
 		location.on_logout(src)
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
+		if(virtualhearer)
+			qdel(virtualhearer)
+			virtualhearer = null
 	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out

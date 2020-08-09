@@ -7,6 +7,7 @@ var/global/list/pda_app_menus = list(
 	PDA_APP_SPAMFILTER,
 	PDA_APP_BALANCECHECK,
 	PDA_APP_STATIONMAP,
+	PDA_APP_NEWSREADER,
 	PDA_APP_SNAKEII,
 	PDA_APP_MINESWEEPER,
 	PDA_APP_SPESSPETS,
@@ -129,12 +130,29 @@ var/global/list/pda_app_menus = list(
 		holomap = null
 	..()
 
+/datum/pda_app/newsreader
+	name = "Newsreader"
+	desc = "Access to the latest news from the comfort of your pocket."
+	price = 40
+	menu = PDA_APP_NEWSREADER
+	icon = "pda_news"
+	var/datum/feed_channel/viewing_channel
+	var/screen = NEWSREADER_CHANNEL_LIST
+
+/datum/pda_app/newsreader/proc/newsAlert(var/channel_name)
+	if(pda_device.silent)
+		return
+	var/turf/T = get_turf(pda_device)
+	playsound(T, 'sound/machines/twobeep.ogg', 50, 1)
+	for (var/mob/O in hearers(3, T))
+		O.show_message(text("[bicon(pda_device)] [channel_name ? "Breaking news from [channel_name]" : "Attention! Wanted issue distributed!"]!"))
+
 ///////////SNAKEII//////////////////////////////////////////////////////////////
 
 /datum/pda_app/snake
 	name = "Snake II"
 	desc = "A video game. This old classic from Earth made it all the way to the far reaches of space! Includes station leaderboard."
-	price = 40
+	price = 3
 	menu = PDA_APP_SNAKEII
 	icon = "pda_game"
 	var/volume = 6
@@ -245,7 +263,7 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/minesweeper
 	name = "Minesweeper"
 	desc = "A video game. This old classic from Earth made it all the way to the far reaches of space! Includes station leaderboard."
-	price = 35
+	price = 5
 	menu = PDA_APP_MINESWEEPER
 	icon = "pda_game"
 	var/ingame = 0
@@ -292,7 +310,7 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/spesspets
 	name = "Spess Pets"
 	desc = "A virtual pet simulator. For when you don't have the balls to own a real pet. Includes multi-PDA interactions and Nanocoin mining."
-	price = 70
+	price = 10
 	menu = PDA_APP_SPESSPETS
 	icon = "pda_egg"
 	var/obj/machinery/account_database/linked_db

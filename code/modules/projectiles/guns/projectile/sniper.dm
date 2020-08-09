@@ -67,10 +67,10 @@
 	recoil = 2
 	fire_sound = 'sound/weapons/hunting_fire.ogg'
 	fire_delay = 2
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	var/scope_toggled = 0
 	gun_flags = SCOPED
-	var recentpump = 0
+	var/recentpump = 0
 	var/obj/item/ammo_casing/current_shell = null
 	var/list/gun_overlay = list()
 	actions_types = list(/datum/action/item_action/toggle_wielding)
@@ -136,18 +136,14 @@
 	return 1
 
 /obj/item/weapon/gun/projectile/hecate/hunting/proc/scoping()
-	if(is_holder_of(usr, src))
-		if(wielded && scoped)
-			if(scope_toggled)
-				scope_toggled = 0
-			else
-				scope_toggled = 1
-			update_wield(usr)
-		else
-			if(scoped)
-				to_chat(usr, "<span class='warning'>You must dual-wield \the [src] before you can use scope on it!</span>")
+	if(!is_holder_of(usr, src))
+		return
+	if(wielded && scoped)
+		scope_toggled = !scope_toggled
+		update_wield(usr)
 	else
-		return ..()
+		if(scoped)
+			to_chat(usr, "<span class='warning'>You must dual-wield \the [src] before you can use scope on it!</span>")
 
 /obj/item/weapon/gun/projectile/hecate/hunting/AltClick()
 	scoping()

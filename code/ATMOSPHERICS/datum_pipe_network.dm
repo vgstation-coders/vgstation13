@@ -19,16 +19,12 @@
 /datum/pipe_network/Destroy()
 	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
 		pipeline.network = null
+	line_members = null
 	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
 		objects.unassign_network(src)
+	normal_members = null
 	pipe_networks -= src
 	..()
-
-/datum/pipe_network/resetVariables()
-	..("gases", "normal_members", "line_members")
-	gases = list()
-	normal_members = list()
-	line_members = list()
 
 /datum/pipe_network/proc/process()
 	set waitfor = FALSE
@@ -49,7 +45,7 @@
 	//Notes: Assuming that members will add themselves to appropriate roster in network_expandz()
 
 	if(!start_normal)
-		returnToPool(src)
+		qdel(src)
 		return
 
 	start_normal.network_expand(src, reference)
@@ -59,7 +55,7 @@
 	if((normal_members.len>0)||(line_members.len>0))
 		pipe_networks |= src
 	else
-		returnToPool(src)
+		qdel(src)
 		return
 	return 1
 

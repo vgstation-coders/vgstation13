@@ -243,7 +243,7 @@
 		if(!targloc || targloc == curloc)
 			break
 		playsound(chassis, fire_sound, 80, 1)
-		var/obj/item/projectile/A = getFromPool(projectile,curloc)//new projectile(curloc)
+		var/obj/item/projectile/A = new projectile(curloc)//new projectile(curloc)
 		src.projectiles--
 		A.firer = chassis.occupant
 		A.original = target

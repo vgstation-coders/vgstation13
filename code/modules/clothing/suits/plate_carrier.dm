@@ -92,7 +92,7 @@
 		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
 		var/turf/T = get_turf(src)
 		playsound(T, "shatter", 70, 1)
-		getFromPool(/obj/effect/decal/cleanable/dirt,T)
+		new /obj/effect/decal/cleanable/dirt(T)
 		if(prob(75))
 			var/obj/item/weapon/shard/shrapnel/S = new(T)
 			S.name = "[src] shrapnel"

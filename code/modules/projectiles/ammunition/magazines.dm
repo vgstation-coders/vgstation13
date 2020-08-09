@@ -4,6 +4,8 @@
 /obj/item/ammo_storage/magazine
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
+	materials = list(MAT_IRON = 200)
+
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"

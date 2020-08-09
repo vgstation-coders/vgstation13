@@ -155,7 +155,7 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/give_AI_jumps(var/list/L)
 	var/obj/abstract/screen/using
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "AI Core"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "ai_core"
@@ -212,6 +212,12 @@ var/global/list/accessable_z_levels = list()
 	base_area = /area/surface/snow
 	movementJammed = TRUE
 	transitionLoops = TRUE
+
+//for Horizon
+/datum/zLevel/hyperspace
+	name = "hyperspace"
+	base_turf = /turf/space/transit/horizon //NRV Horizon flies ever onward.  Replace this with faketransit if the change to the horizon turf goes through or crew will get chucked around like little dolls.
+	movementJammed = TRUE
 
 //Currently experimental, contains nothing worthy of interest
 /datum/zLevel/desert

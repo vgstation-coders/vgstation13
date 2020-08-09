@@ -4,15 +4,16 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/tooth_replace
-	/datum/surgery_step/tooth_replace/priority = 10
-	/datum/surgery_step/tooth_replace/can_infect = 0
-	/datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		return target_zone == TARGET_MOUTH
+	priority = 10
+	can_infect = 0
+
+/datum/surgery_step/tooth_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	return target_zone == TARGET_MOUTH
 
 
 ///////MEND ROOTS///////
@@ -22,8 +23,7 @@
 		/obj/item/stack/cable_coil = 50,
 		)
 
-	min_duration = 100
-	max_duration = 120
+	duration = 10 SECONDS
 
 /datum/surgery_step/tooth_replace/mend_roots/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face == 1
@@ -53,8 +53,7 @@
 		/obj/item/stack/teeth = 100,
 		)
 
-	min_duration = 60
-	max_duration = 80
+	duration = 6 SECONDS
 
 /datum/surgery_step/tooth_replace/new_teeth/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -99,15 +98,16 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/tooth_extract
-	/datum/surgery_step/tooth_extract/priority = 5
-	/datum/surgery_step/tooth_extract/can_infect = 0
-	/datum/surgery_step/tooth_extract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (!affected)
-			return 0
-		return target_zone == TARGET_MOUTH
+	priority = 5
+	can_infect = 0
+
+/datum/surgery_step/tooth_extract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (!affected)
+		return 0
+	return target_zone == TARGET_MOUTH
 
 
 ///////SET JAWS///////
@@ -117,8 +117,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/tooth_extract/set_jaws/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..()
@@ -150,8 +149,7 @@
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
-	min_duration = 100
-	max_duration = 120
+	duration = 10 SECONDS
 
 /datum/surgery_step/tooth_extract/pull_tooth/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -197,8 +195,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/tooth_extract/reset/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.tooth_extract == 1

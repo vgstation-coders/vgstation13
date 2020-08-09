@@ -14,6 +14,7 @@
 /area/mine/unexplored
 	name = "Mine"
 	icon_state = "unexplored"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 //TODO: Make all these types inherit from /area/mining_outpost/ instead.
 /area/mine/lobby

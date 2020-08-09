@@ -11,10 +11,13 @@
 	req_admin_notify = 2
 	minimal_player_age = 30
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		return 1
+/datum/job/ai/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	return 1
+
+/datum/job/ai/is_disabled()
+	return !config.allow_ai
 
 /datum/job/cyborg
 	title = "Cyborg"
@@ -26,13 +29,12 @@
 	spawn_positions = 2
 	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
-	no_id = 1
 	minimal_player_age = 10
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		return 1
+/datum/job/cyborg/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	return 1
 
 /datum/job/mommi
 	title = "Mobile MMI"
@@ -44,9 +46,8 @@
 	spawn_positions = 2
 	supervisors = "your laws and the AI"
 	selection_color = "#ddffdd"
-	no_id = 1
 
-	equip(var/mob/living/carbon/human/H)
-		if(!H)
-			return 0
-		return 1
+/datum/job/mommi/equip(var/mob/living/carbon/human/H)
+	if(!H)
+		return 0
+	return 1

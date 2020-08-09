@@ -11,7 +11,7 @@
 	handle_symptom_on_death()
 	..()
 
-/mob/living/gib()
+/mob/living/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

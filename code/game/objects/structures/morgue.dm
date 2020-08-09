@@ -433,8 +433,10 @@
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
 	if (allowed(user))
+		playsound(src,'sound/misc/click.ogg',30,0,-1)
 		for (var/obj/structure/crematorium/C in crematorium_list)
 			if (C.id == id)
 				C.cremate(user)
 	else
+		playsound(src,'sound/machines/denied.ogg',30,0,-1)
 		to_chat(user, "<SPAN CLASS='alert'>Access denied.</SPAN>")

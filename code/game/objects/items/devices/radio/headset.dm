@@ -9,7 +9,8 @@
 	melt_temperature = MELTPOINT_PLASTIC
 	subspace_transmission = 1
 	canhear_range = 0 // can't hear headsets from very far away
-
+	flags = FPRINT // No HEAR. Headsets should only work when being used explicitly.
+	broadcasting = TRUE
 	slot_flags = SLOT_EARS
 	var/translate_binary = 0
 	var/translate_hive = 0
@@ -28,6 +29,11 @@
 
 /obj/item/device/radio/headset/initialize()
 	recalculateChannels()
+	return ..()
+
+/obj/item/device/radio/headset/talk_into(datum/speech/speech_orig, channel=null)
+	if(!broadcasting)
+		return
 	return ..()
 
 /obj/item/device/radio/headset/receive_range(freq, level)
@@ -271,6 +277,9 @@
 
 	return
 
+/obj/item/device/radio/headset/set_frequency(new_frequency)
+	..()
+	recalculateChannels()
 
 /obj/item/device/radio/headset/proc/recalculateChannels()
 	src.channels = list()

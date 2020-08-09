@@ -16,6 +16,7 @@
 	layer = BINARY_PIPE_LAYER
 	var/on = FALSE
 
+
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
 
@@ -138,11 +139,11 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(node2)
 		node2.disconnect(src)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 
 	node1 = null
 	node2 = null
@@ -164,12 +165,12 @@
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)
-		network1 = getFromPool(/datum/pipe_network)
+		network1 = new /datum/pipe_network
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = getFromPool(/datum/pipe_network)
+		network2 = new /datum/pipe_network
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
@@ -206,12 +207,12 @@
 /obj/machinery/atmospherics/binary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 		node1 = null
 
 	else if(reference==node2)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 		node2 = null
 
 	return ..()

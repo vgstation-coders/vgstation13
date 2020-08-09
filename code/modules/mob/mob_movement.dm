@@ -453,14 +453,14 @@
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s grip!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s hug!</span>")
-				returnToPool(G)
+				qdel(G)
 			if(G.state == GRAB_NECK)
 				mob.delayNextMove(10)
 				if(!prob(5))
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s headlock!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s passionate hug!</span>")
-				returnToPool(G)
+				qdel(G)
 	return 0
 
 
@@ -510,7 +510,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
-			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
+			mob.lazy_invoke_event(/lazy_event/on_moved, list("mover" = mob))
 			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy

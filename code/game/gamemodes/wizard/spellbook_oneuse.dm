@@ -7,6 +7,7 @@
 	var/spellname = "sandbox"
 	var/used = 0
 	name = "spellbook of "
+	item_state = "oneuse"
 	uses = 1
 	max_uses = 1
 	desc = "This template spellbook was never meant for the eyes of man..."
@@ -303,6 +304,7 @@
 	spell = /spell/targeted/buttbots_revenge
 	spellname = "ass magic"
 	icon_state = "bookbutt"
+	desc = "You feel as if your ass could explode at any moment, just by looking at this."
 
 /obj/item/weapon/spellbook/oneuse/buttbot/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -321,6 +323,7 @@
 	spell = /spell/lightning
 	spellname = "lightning"
 	icon_state = "booklightning"
+	desc = "You can hear it crackle with malevolent electricity."
 
 /obj/item/weapon/spellbook/oneuse/lightning/recoil(mob/living/carbon/user as mob)
 	if(istype(user, /mob/living/carbon/human))
@@ -332,7 +335,7 @@
 /obj/item/weapon/spellbook/oneuse/lightning/sith
 	spell = /spell/lightning/sith
 	spellname = "sith lightning"
-	desc = "You can hear it crackle with malevolent electricity."
+	desc = "You can faintly hear it yell 'UNLIMITED POWER'."
 	disabled_from_bundle = 1
 
 /obj/item/weapon/spellbook/oneuse/timestop
@@ -491,6 +494,13 @@
 	..()
 	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
+
+/obj/item/weapon/spellbook/oneuse/absorb
+	spell = /spell/targeted/absorb
+	spellname = "absorb"
+	icon_state ="book"
+	desc = "This book glows with sinister energy."
+	disabled_from_bundle = 1
 
 
 ///// ANCIENT SPELLBOOK /////

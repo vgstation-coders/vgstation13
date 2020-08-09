@@ -12,7 +12,7 @@
 	var/exclusive_hook=null // Disables output to the room
 
 	// Media system autolink.
-	var/id_tag = "???"
+	id_tag = "???"
 
 /obj/machinery/media/proc/hookMediaOutput(var/obj/machinery/media/transmitter/T, exclusive=0)
 	if(exclusive)

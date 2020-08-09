@@ -44,7 +44,7 @@
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \":ckey\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = :ckey)", list("ckey" = "\"[ckey]\""))
 			if(!query.Execute())
 				log_sql("Error fetching poll question: [query.ErrorMsg()]")
 				qdel(query)
@@ -456,7 +456,7 @@
 		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
-		returnToPool(speech)
+		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
 	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
@@ -537,7 +537,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if (mind)
 		mind.active = 0 // we wish to transfer the key manually
-		mind.original = new_character
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
 	new_character.name = real_name
@@ -616,7 +615,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	//Handles transferring the mind and key manually.
 	if (mind)
 		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.original = new_character
 		mind.transfer_to(new_character)
 	new_character.key = key //Do this after. For reasons known only to oldcoders.
 	spawn()

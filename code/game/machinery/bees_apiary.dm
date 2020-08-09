@@ -337,7 +337,7 @@ var/list/apiaries_list = list()
 /obj/machinery/apiary/proc/empty_beehive()
 	if (!queen_bees_inside && !worker_bees_inside)
 		return
-	var/mob/living/simple_animal/bee/lastBees = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+	var/mob/living/simple_animal/bee/lastBees = new /mob/living/simple_animal/bee(get_turf(src))
 	for(var/i = 1 to worker_bees_inside)
 		worker_bees_inside--
 		lastBees.addBee(new species.bee_type())
@@ -354,7 +354,7 @@ var/list/apiaries_list = list()
 		return 0
 	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
 		return 0
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), src)
 	var/datum/bee/queen_bee/new_queen = new species.queen_type(src)
 	queen_bees_inside--
 	B_mob.addBee(new_queen)
@@ -381,7 +381,7 @@ var/list/apiaries_list = list()
 	for(var/datum/bee/B in bees_outside_hive)
 		B.angerAt(M)
 
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), get_turf(src), src)
 	for (var/i=1 to worker_bees_inside)
 		var/datum/bee/B = new species.bee_type(src)
 		B_mob.addBee(B)
@@ -466,7 +466,7 @@ var/list/apiaries_list = list()
 		//SENDING OUT BEES
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 11)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = null
 			if (species.queen_wanders && queen_bees_inside > 0 && nutrilevel > 0 && worker_bees_inside > 15 && prob(nutrilevel/3))
 				B = new species.queen_type(src)
@@ -653,7 +653,7 @@ var/list/apiaries_list = list()
 		//sending out bees to KILL
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 15)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = new species.bee_type(src)
 			worker_bees_inside--
 			bees_outside_hive.Add(B)

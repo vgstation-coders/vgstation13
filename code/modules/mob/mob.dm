@@ -37,8 +37,6 @@
 		on_ruattack.holder = null
 	if(on_damaged)
 		on_damaged.holder = null
-	if(on_irradiate)
-		on_irradiate.holder = null
 	if(on_death)
 		on_death.holder = null
 	if(on_bumping)
@@ -50,22 +48,20 @@
 	unset_machine()
 	if(mind && mind.current == src)
 		mind.current = null
-	if(mind && mind.original == src)
-		mind.original = null
 	spellremove(src)
 	if(istype(src,/mob/living/carbon))//iscarbon is defined at the mob/living level
 		var/mob/living/carbon/Ca = src
 		Ca.dropBorers(1)//sanity checking for borers that haven't been qdel'd yet
 	if(client)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
-			returnToPool(spell_master)
+			qdel(spell_master)
 		spell_masters = null
 		remove_screen_objs()
 		for(var/atom/movable/AM in client.screen)
 			var/obj/abstract/screen/screenobj = AM
 			if(istype(screenobj))
 				if(!screenobj.globalscreen) //Screens taken care of in other places or used by multiple people
-					returnToPool(AM)
+					qdel(AM)
 			else
 				qdel(AM)
 		client.screen = list()
@@ -85,14 +81,11 @@
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
-	qdel(on_moved)
-	on_moved = null
 	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
-	qdel(on_irradiate)
 	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
@@ -103,7 +96,6 @@
 	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
-	on_irradiate = null
 	on_death = null
 	on_bumping = null
 	on_bumped = null
@@ -133,140 +125,150 @@
 
 /mob/proc/remove_screen_objs()
 	if(hands)
-		returnToPool(hands)
+		qdel(hands)
 		if(client)
 			client.screen -= hands
 		hands = null
 	if(pullin)
-		returnToPool(pullin)
+		qdel(pullin)
 		if(client)
 			client.screen -= pullin
 		pullin = null
+	if(kick_icon)
+		qdel(kick_icon)
+		if(client)
+			client.screen -= kick_icon
+		kick_icon = null
+	if(bite_icon)
+		qdel(bite_icon)
+		if(client)
+			client.screen -= bite_icon
+		bite_icon = null
 	if(visible)
-		returnToPool(visible)
+		qdel(visible)
 		if(client)
 			client.screen -= visible
 		visible = null
 	if(internals)
-		returnToPool(internals)
+		qdel(internals)
 		if(client)
 			client.screen -= internals
 		internals = null
 	if(i_select)
-		returnToPool(i_select)
+		qdel(i_select)
 		if(client)
 			client.screen -= i_select
 		i_select = null
 	if(m_select)
-		returnToPool(m_select)
+		qdel(m_select)
 		if(client)
 			client.screen -= m_select
 		m_select = null
 	if(healths)
-		returnToPool(healths)
+		qdel(healths)
 		if(client)
 			client.screen -= healths
 		healths = null
 	if(healths2)
-		returnToPool(healths2)
+		qdel(healths2)
 		if(client)
 			client.screen -= healths2
 		healths2 = null
 	if(throw_icon)
-		returnToPool(throw_icon)
+		qdel(throw_icon)
 		if(client)
 			client.screen -= throw_icon
 		throw_icon = null
 	if(damageoverlay)
-		returnToPool(damageoverlay)
+		qdel(damageoverlay)
 		if(client)
 			client.screen -= damageoverlay
 		damageoverlay = null
 	if(pain)
-		returnToPool(pain)
+		qdel(pain)
 		if(client)
 			client.screen -= pain
 		pain = null
 	if(item_use_icon)
-		returnToPool(item_use_icon)
+		qdel(item_use_icon)
 		if(client)
 			client.screen -= item_use_icon
 		item_use_icon = null
 	if(gun_move_icon)
-		returnToPool(gun_move_icon)
+		qdel(gun_move_icon)
 		if(client)
 			client.screen -= gun_move_icon
 		gun_move_icon = null
 	if(gun_run_icon)
-		returnToPool(gun_run_icon)
+		qdel(gun_run_icon)
 		if(client)
 			client.screen -= gun_run_icon
 		gun_run_icon = null
 	if(gun_setting_icon)
-		returnToPool(gun_setting_icon)
+		qdel(gun_setting_icon)
 		if(client)
 			client.screen -= gun_setting_icon
 		gun_setting_icon = null
 	if(m_suitclothes)
-		returnToPool(m_suitclothes)
+		qdel(m_suitclothes)
 		if(client)
 			client.screen -= m_suitclothes
 		m_suitclothes = null
 	if(m_suitclothesbg)
-		returnToPool(m_suitclothesbg)
+		qdel(m_suitclothesbg)
 		if(client)
 			client.screen -= m_suitclothesbg
 		m_suitclothesbg = null
 	if(m_hat)
-		returnToPool(m_hat)
+		qdel(m_hat)
 		if(client)
 			client.screen -= m_hat
 		m_hat = null
 	if(m_hatbg)
-		returnToPool(m_hatbg)
+		qdel(m_hatbg)
 		if(client)
 			client.screen -= m_hatbg
 		m_hatbg = null
 	if(m_glasses)
-		returnToPool(m_glasses)
+		qdel(m_glasses)
 		if(client)
 			client.screen -= m_glasses
 		m_glasses = null
 	if(m_glassesbg)
-		returnToPool(m_glassesbg)
+		qdel(m_glassesbg)
 		if(client)
 			client.screen -= m_glassesbg
 		m_glasses = null
 	if(zone_sel)
-		returnToPool(zone_sel)
+		qdel(zone_sel)
 		if(client)
 			client.screen -= zone_sel
 		zone_sel = null
 
 	if(iscultist(src) && hud_used)
 		if(hud_used.cult_Act_display)
-			returnToPool(hud_used.cult_Act_display)
+			qdel(hud_used.cult_Act_display)
 			if(client)
 				client.screen -= hud_used.cult_Act_display
 			hud_used.cult_Act_display = null
 		if(hud_used.cult_tattoo_display)
-			returnToPool(hud_used.cult_tattoo_display)
+			qdel(hud_used.cult_tattoo_display)
 			if(client)
 				client.screen -= hud_used.cult_tattoo_display
 			hud_used.cult_tattoo_display = null
 		if (isshade(src) && gui_icons)
 			if(gui_icons.soulblade_bgLEFT)
-				returnToPool(gui_icons.soulblade_bgLEFT)
+				qdel(gui_icons.soulblade_bgLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_bgLEFT
 				gui_icons.soulblade_bgLEFT = null
 			if(gui_icons.soulblade_bloodbar)
-				returnToPool(gui_icons.soulblade_bloodbar)
+				qdel(gui_icons.soulblade_bloodbar)
 				if(client)
 					client.screen -= gui_icons.soulblade_bloodbar
 				gui_icons.soulblade_bloodbar = null
 			if(gui_icons.soulblade_coverLEFT)
-				returnToPool(gui_icons.soulblade_coverLEFT)
+				qdel(gui_icons.soulblade_coverLEFT)
 				if(client)
 					client.screen -= gui_icons.soulblade_coverLEFT
 				gui_icons.soulblade_coverLEFT = null
@@ -295,7 +297,6 @@
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
-	on_irradiate = new(owner = src)
 	on_death = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
@@ -304,15 +305,15 @@
 	forceMove(loc) //Without this, area.Entered() isn't called when a mob is spawned inside area
 
 	if(flags & HEAR_ALWAYS)
-		getFromPool(/mob/virtualhearer, src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	update_colour(0)
 
 /mob/Del()
 	if(flags & HEAR_ALWAYS)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				returnToPool(VH)
+		if(virtualhearer)
+			qdel(virtualhearer)
+			virtualhearer = null
 	..()
 
 /mob/proc/is_muzzled()
@@ -759,28 +760,6 @@ Use this proc preferably at the end of an equipment loadout
 			if(istype(B))
 				B.handle_item_insertion(I,1)
 	regenerate_icons()
-
-/mob/proc/equip_loadout(var/type, var/unequip_current = TRUE)	//Equips a loadout of the given type or, if no type is given, attempts to make a loadout from all the items on the proc caller's turf and equip that
-	if(type)
-		if(ispath(type, /obj/abstract/loadout))
-			new type(get_turf(src), src, unequip_current)
-	else
-		var/turf/T = get_turf(usr)
-		if(T)
-			if(unequip_current)
-				unequip_everything()	//unequip everything before equipping loadout
-			var/list/to_equip = list()
-			for(var/obj/item/I in T.contents)
-				to_equip.Add(new I.type(get_turf(src)))
-			recursive_list_equip(to_equip)
-			var/loadout_list = ""
-			for(var/obj/item/O in to_equip)
-				if(O == to_equip[to_equip.len])
-					loadout_list += "[O.type]"
-				else
-					loadout_list += "[O.type], "
-			log_admin("[key_name(src)] has been equipped with a custom loadout consisting of [loadout_list].")
-
 
 /obj/item/proc/mob_check_equip(M as mob, slot, disable_warning = 0)
 	if(!M)
@@ -1264,7 +1243,7 @@ Use this proc preferably at the end of an equipment loadout
 		return
 	if(!can_show_flavor_text())
 		return
-	var/msg = utf8_sanitize(flavor_text)
+	var/msg = strip_html(flavor_text)
 	if(findtext(msg, "http:") || findtext(msg, "https:") || findtext(msg, "www."))
 		return "<font color='#ffa000'><b><a href='?src=\ref[src];show_flavor_text=1'>Show flavor text</a></b></font>"
 	if(length(msg) <= 32)
@@ -1714,16 +1693,19 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Stun(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(max(stunned,amount),0) //can't go below 0, getting a low amount of stun doesn't lower your current stun
+		update_canmove()
 	return
 
 /mob/proc/SetStunned(amount) //if you REALLY need to set stun to a set amount without the whole "can't go below current stunned"
 	if(status_flags & CANSTUN)
 		stunned = max(amount,0)
+		update_canmove()
 	return
 
 /mob/proc/AdjustStunned(amount)
 	if(status_flags & CANSTUN)
 		stunned = max(stunned + amount,0)
+		update_canmove()
 	return
 
 /mob/proc/Deafen(amount)
@@ -1765,16 +1747,19 @@ Use this proc preferably at the end of an equipment loadout
 /mob/proc/Paralyse(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(max(paralysis,amount),0)
+		update_canmove()
 	return
 
 /mob/proc/SetParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(amount,0)
+		update_canmove()
 	return
 
 /mob/proc/AdjustParalysis(amount)
 	if(status_flags & CANPARALYSE)
 		paralysis = max(paralysis + amount,0)
+		update_canmove()
 	return
 
 /mob/proc/Sleeping(amount)

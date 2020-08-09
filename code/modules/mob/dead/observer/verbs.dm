@@ -346,8 +346,7 @@
 		if (length(message) > max_length)
 			message += "-"
 			to_chat(src, "<span class='warning'>You ran out of blood to write with!</span>")
-		var/obj/effect/decal/cleanable/blood/writing/W = getFromPool(/obj/effect/decal/cleanable/blood/writing,T)
-		W.New(T)
+		var/obj/effect/decal/cleanable/blood/writing/W = new /obj/effect/decal/cleanable/blood/writing(T)
 		W.basecolor = doodle_color
 		W.update_icon()
 		W.message = message
@@ -376,7 +375,9 @@
 	set desc = "Toggle station holomap on your screen"
 	set category = "Ghost"
 
-	src.station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
+	if(!station_holomap)
+		station_holomap = new(src)
+	station_holomap.toggleHolomap(src, FALSE) // We don't need client.eye.
 
 /mob/dead/observer/verb/find_arena()
 	set category = "Ghost"
