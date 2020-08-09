@@ -90,7 +90,7 @@
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	setupglow(determine_color(user))
+	setupglow(setup_type(user))
 
 /mob/living/simple_animal/construct/proc/setup_type(var/mob/living/carbon/creator)
 	if(istype(creator, /mob/living/carbon))
