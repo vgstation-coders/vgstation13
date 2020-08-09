@@ -111,7 +111,7 @@
 
 			var/datum/role/streamer/streamer_role = creator.mind.GetRole(STREAMER)
 			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
-				if(streamer_role.followers == 0 && streamer_role.subscribers == 0) //No followers and subscribers, use normal cult colors.
+				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
 					construct_color = rgb(235,0,0)
 				else
 					construct_color = rgb(30,255,30)
