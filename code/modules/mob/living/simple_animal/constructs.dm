@@ -85,13 +85,11 @@
 /mob/living/simple_animal/construct/cultify()
 	return
 
-/mob/living/simple_animal/construct/New(var/mob/living/carbon/user)
+/mob/living/simple_animal/construct/New()
 	..()
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	setup_type(user)
-	setupglow()
 
 /mob/living/simple_animal/construct/proc/setup_type(var/mob/living/carbon/creator)
 	if(istype(creator, /mob/living/carbon))
@@ -117,6 +115,7 @@
 					construct_color = rgb(30,255,30)
 			else	
 				construct_color = rgb(235,0,0)
+	setupglow()
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
