@@ -62,7 +62,7 @@
 						to_chat(holder, "<span class='notice'>You find magical energy within your foe, but there is nothing new to learn.</span>")
 					if(iswizard(target))	//Wizards aren't wizards without magic! Dust their asses if they're a wizard
 						target.dust()
-						L.visible_message("<span class='sinister'>[C.rea_name] dissolves in a burst of light!</span>")
+						L.visible_message("<span class='sinister'>[C.real_name] dissolves in a burst of light!</span>")
 				if(P)		//Remove portal effect if the absorbtion is cancelled early.
 					qdel(P)
 
