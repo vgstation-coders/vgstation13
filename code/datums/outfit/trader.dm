@@ -18,8 +18,8 @@
 			slot_w_uniform_str =/obj/item/clothing/under/vox/vox_robes,
 			slot_shoes_str = /obj/item/clothing/shoes/magboots/vox,
 			slot_belt_str = /obj/item/device/radio,
-			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
-			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader,
+			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 		/datum/species/mushroom = list(
@@ -41,7 +41,7 @@
 	id_type = /obj/item/weapon/card/id/vox
 
 /datum/outfit/trader/pre_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
+	if (!H.mind)
 		return
 	switch(H.mind.role_alt_title) // Add to the survival box in case we don't have a backbag.
 		if("Trader") //Traders get snacks and a coin
