@@ -389,8 +389,6 @@
 	. = ..()
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
-	var/mob/living/simple_animal/construct/builder = user
-	newVars = list("construct_color" = builder.construct_color)
 	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
 	if (artificer.minions.len >= 3)
 		to_chat(user,"<span class='warning'>You cannot sustain more than 3 lesser constructs alive.</span>")
@@ -400,7 +398,8 @@
 /spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
 	AM.master = user
 	AM.master.minions.Add(AM)
-	AM.setupglow()
+	var/mob/living/simple_animal/construct/builder = user
+	AM.setupglow(builder.construct_color)
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
