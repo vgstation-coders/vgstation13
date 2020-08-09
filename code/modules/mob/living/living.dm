@@ -19,7 +19,6 @@
 	immune_system = new (src)
 
 	on_resist = new(owner = src)
-	on_life = new(owner = src)
 
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
@@ -48,10 +47,6 @@
 	if(on_resist)
 		qdel(on_resist)
 		on_resist = null
-
-	if(on_life)
-		qdel(on_life)
-		on_life = null
 
 	. = ..()
 
@@ -109,28 +104,6 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
-
-	INVOKE_EVENT(on_life, list())
-
-	/*if(mind)
-		if(mind in ticker.mode.implanted)
-			if(implanting)
-				return 0
-//			to_chat(world, "[src.name]")
-			var/datum/mind/head = ticker.mode.implanted[mind]
-			//var/list/removal
-			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
-//				to_chat(world, "doesn't have an implant")
-				ticker.mode.remove_traitor_mind(mind, head)
-
-				if((head in ticker.mode.implanters))
-					ticker.mode.implanter[head] -= src.mind
-				ticker.mode.implanted -= src.mind
-				if(src.mind in ticker.mode.traitors)
-					ticker.mode.traitors -= src.mind
-					special_role = null
-					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
-				*/
 	return 1
 
 // Apply connect damage
