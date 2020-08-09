@@ -12,8 +12,8 @@
 	var/dash_dir = null
 	var/turf/crashing = null
 
-/mob/living/simple_animal/construct/armoured/perfect/New(var/mob/living/carbon/user)
-	..(user)
+/mob/living/simple_animal/construct/armoured/perfect/New()
+	..()
 	setupfloat()
 
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
@@ -112,8 +112,8 @@
 	var/ammo = 3
 	var/ammo_recharge = 0
 
-/mob/living/simple_animal/construct/wraith/perfect/New(var/mob/living/carbon/user)
-	..(user)
+/mob/living/simple_animal/construct/wraith/perfect/New()
+	..()
 	setupfloat()
 
 /mob/living/simple_animal/construct/wraith/perfect/Life()
@@ -248,8 +248,8 @@
 	var/heal_range = 2
 	var/list/minions = list()
 
-/mob/living/simple_animal/construct/builder/perfect/New(var/mob/living/carbon/user)
-	..(user)
+/mob/living/simple_animal/construct/builder/perfect/New()
+	..()
 	setupfloat()
 
 /mob/living/simple_animal/construct/builder/perfect/Life()
