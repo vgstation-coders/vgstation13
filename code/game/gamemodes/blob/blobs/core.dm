@@ -129,7 +129,9 @@
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
 	if (!overmind)
-		create_overmind(user.client)
+		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
+		if(confirm)
+			create_overmind(user.client)
 
 /obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
 	if(!new_overmind)
