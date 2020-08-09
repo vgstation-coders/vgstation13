@@ -126,7 +126,9 @@ var/list/beam_master = list()
 	shot_from = A //temporary
 
 /obj/item/projectile/beam/dumbfire(var/dir)
-	fireto()
+	var/vector/origin = atom2vector(starting)
+	var/vector/direction = dir2vector(dir)
+	fireto(origin, direction)
 
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
