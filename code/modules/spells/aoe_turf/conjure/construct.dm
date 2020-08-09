@@ -390,7 +390,7 @@
 
 /spell/aoe_turf/conjure/hex/before_channel(var/mob/user)
 	var/mob/living/simple_animal/construct/builder = user
-	newVars = list("glowcolor" = builder.construct_color)
+	newVars = list("construct_color" = builder.construct_color)
 	var/mob/living/simple_animal/construct/builder/perfect/artificer = user
 	if (artificer.minions.len >= 3)
 		to_chat(user,"<span class='warning'>You cannot sustain more than 3 lesser constructs alive.</span>")
