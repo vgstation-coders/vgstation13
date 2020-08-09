@@ -54,7 +54,7 @@ var/list/beam_master = list()
 	icon_state = "laser"
 	invisibility = 101
 	animate_movement = 2
-	linear_movement = 1
+	linear_movement = 0 //this will set out icon_state to ..._pixel if 1
 	layer = PROJECTILE_LAYER
 	plane = LIGHTING_PLANE
 	pass_flags = PASSTABLE | PASSGLASS | PASSGRILLE
@@ -67,6 +67,7 @@ var/list/beam_master = list()
 	var/wait = 0
 	var/beam_color= null
 	var/list/ray/past_rays = list() //full of rays
+
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
 	// + 0.5 because we want to start in the middle of the tile
@@ -85,13 +86,13 @@ var/list/beam_master = list()
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range)
+			shot_ray.draw(travel_range, icon, icon_state)
 		else
-			shot_ray.draw(MAX_BEAM_DISTANCE)
+			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state)
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
-		shot_ray.draw(last_hit.distance)
+		shot_ray.draw(last_hit.distance, icon, icon_state)
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
 			spawn()
@@ -124,203 +125,8 @@ var/list/beam_master = list()
 	fireto(origin, direction)
 	shot_from = A //temporary
 
-/obj/item/projectile/beam/bresenham_step(var/distA, var/distB, var/dA, var/dB, var/lastposition, var/target_dir, var/reference)
-	var/first = 1
-	var/tS = 0
-	while(src && src.loc)// only stop when we've hit something, or hit the end of the map
-		bumped = 0
-		if(first && timestopped)
-			tS = 1
-			timestopped = 0
-		if(error < 0)
-			var/atom/step = get_step(src, dB)
-			if(!step)
-				bullet_die()
-			src.Move(step)
-			error += distA
-			target_dir = null
-		else
-			var/atom/step = get_step(src, dA)
-			if(!step)
-				bullet_die()
-			src.Move(step)
-			error -= distB
-			target_dir = dA
-			if(error < 0)
-				target_dir = dA + dB
-
-		if(isnull(loc))
-			return reference
-		if(lastposition == loc && (!tS && !timestopped && !loc.timestopped))
-			kill_count = 0
-		lastposition = loc
-		if(kill_count < 1)
-			bullet_die()
-			return reference
-		if(travel_range)
-			if(get_exact_dist(starting, get_turf(src)) > travel_range)
-				bullet_die()
-				return reference
-		kill_count--
-		if(bump_original_check())
-			return reference
-
-		if(linear_movement)
-			update_pixel()
-
-			//If the icon has not been added yet
-			if( !("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in beam_master))
-				var/image/I = image(icon,"[icon_state]_pixel",13,target_dir) //Generate it.
-				if(beam_color)
-					I.color = beam_color
-				I.transform = turn(I.transform, target_angle+45)
-				I.pixel_x = PixelX
-				I.pixel_y = PixelY
-				I.plane = EFFECTS_PLANE
-				I.layer = PROJECTILE_LAYER
-				beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = I //And cache it!
-
-			//Finally add the overlay
-			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
-
-				//Add the turf to a list in the beam master so they can be cleaned up easily.
-				if(reference in beam_master)
-					var/list/turf_master = beam_master[reference]
-					if("[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]" in turf_master)
-						var/list/turfs = turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"]
-						turfs += loc
-					else
-						turf_master["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
-				else
-					var/list/turfs = list()
-					turfs["[icon_state]_angle[target_angle]_pX[PixelX]_pY[PixelY]_color[beam_color]"] = list(loc)
-					beam_master[reference] = turfs
-		else
-			//If the icon has not been added yet
-			if( !("[icon_state][target_dir]" in beam_master))
-				var/image/I = image(icon,icon_state,10,target_dir) //Generate it.
-				I.plane = EFFECTS_PLANE
-				I.layer = PROJECTILE_LAYER
-				beam_master["[icon_state][target_dir]"] = I //And cache it!
-
-			//Finally add the overlay
-			if(src.loc && target_dir)
-				src.loc.overlays += beam_master["[icon_state][target_dir]"]
-
-				//Add the turf to a list in the beam master so they can be cleaned up easily.
-				if(reference in beam_master)
-					var/list/turf_master = beam_master[reference]
-					if("[icon_state][target_dir]" in turf_master)
-						var/list/turfs = turf_master["[icon_state][target_dir]"]
-						turfs += loc
-					else
-						turf_master["[icon_state][target_dir]"] = list(loc)
-				else
-					var/list/turfs = list()
-					turfs["[icon_state][target_dir]"] = list(loc)
-					beam_master[reference] = turfs
-		if(tS)
-			timestopped = loc.timestopped
-			tS = 0
-		if(wait)
-			sleep(wait)
-			wait = 0
-		while((loc.timestopped || timestopped) && !first)
-			sleep(3)
-		first = 0
-
-	return reference
-
 /obj/item/projectile/beam/dumbfire(var/dir)
-	var/reference = "\ref[src]" // So we do not have to recalculate it a ton.
-
-	spawn(0)
-		var/target_dir = dir ? dir : src.dir// TODO: remove dir arg. Or don't because the way this was set up without it broke spacepods.
-		var/first = 1
-		var/tS = 0
-		while(loc) // Move until we hit something.
-			if((x == 1 || x == world.maxx || y == 1 || y == world.maxy))
-				qdel(src)
-				break
-			if(first && timestopped)
-				tS = 1
-				timestopped = 0
-			step(src, target_dir) // Move.
-			if(tS)
-				tS = 0
-				timestopped = loc.timestopped
-			if(bumped)
-				break
-
-			if(kill_count-- < 1)
-				qdel(src)
-				break
-
-			// Add the overlay as we pass over tiles.
-
-			// If the icon has not been added yet.
-			if(!beam_master.Find("[icon_state][target_dir]"))
-				beam_master["[icon_state][target_dir]"] = image(icon, icon_state, 10, target_dir) // Generate, and cache it!
-
-			// Finally add the overlay
-			loc.overlays.Add(beam_master["[icon_state][target_dir]"])
-
-			// Add the turf to a list in the beam master so they can be cleaned up easily.
-			if(beam_master.Find(reference))
-				var/list/turf_master = beam_master[reference]
-
-				if(turf_master.Find("[icon_state][target_dir]"))
-					turf_master["[icon_state][target_dir]"] += loc
-				else
-					turf_master["[icon_state][target_dir]"] = list(loc)
-			else
-				var/list/turfs = new
-				turfs["[icon_state][target_dir]"] = list(loc)
-				beam_master[reference] = turfs
-			while((loc.timestopped || timestopped) && !first)
-				sleep(3)
-			first = 0
-
-
-	cleanup(reference)
-
-/obj/item/projectile/beam/proc/cleanup(const/reference)
-	var/TS
-	var/atom/lastloc
-	var/starttime = world.time
-	var/cleanedup = 0
-	while(world.time - starttime < 3 || TS)
-		if(loc)
-			lastloc = loc
-		TS = lastloc.timestopped
-		if(TS)
-			if(world.time - starttime > 3)
-				if(!cleanedup)
-					var/list/turf_master = beam_master[reference]
-
-					for(var/laser_state in turf_master)
-						var/list/turfs = turf_master[laser_state]
-						for(var/turf/T in turfs)
-							if(!T.timestopped)
-								T.overlays.Remove(beam_master[laser_state])
-					cleanedup = 1
-			sleep(2)
-
-		else
-			sleep(1)
-
-	if(cleanedup)
-		sleep(2)
-	var/list/turf_master = beam_master[reference]
-
-	for(var/laser_state in turf_master)
-		var/list/turfs = turf_master[laser_state]
-
-		for(var/turf/T in turfs)
-			T.overlays.Remove(beam_master[laser_state])
-
-		turfs.len = 0
+	fireto()
 
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
@@ -339,6 +145,7 @@ var/list/beam_master = list()
 	damage = 0
 	icon = 'icons/obj/lightning.dmi'
 	icon_state = "lightning"
+	linear_movement = 1
 	stun = 10
 	weaken = 10
 	stutter = 50
