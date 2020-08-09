@@ -164,11 +164,16 @@
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
 		// -- Special surival gear for that species
 		if (equip_survival_gear.len)
+
 			var/my_species = H.species.type // This temporary var is necessary.
+
 			if (ispath(equip_survival_gear[my_species]))
 				var/path = equip_survival_gear[my_species]
 				H.equip_or_collect(new path(H.back), slot_in_backpack)
-		else if (equip_survival_gear) // -- No special path, but the outfit still needs to give out a surival box => we give out the default one
+			// -- No special path, but the outfit still needs to give out a surival box => we give out the default one
+			else
+				H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		else if (equip_survival_gear)
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
 		// Special alt-title items
