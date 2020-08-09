@@ -88,29 +88,29 @@
 /mob/living/simple_animal/construct/New(var/mob/living/carbon/user)
 	..()
 
+	if(istype(user, mob/living/carbon))
+		//Determine construct color	and set languages
+		if(!iscultist(user))
+			universal_understand = 1
+			add_language(LANGUAGE_GALACTIC_COMMON)
+			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
-	//Determine construct color	and set languages
-	if(!iscultist(user))
-		universal_understand = 1
-		add_language(LANGUAGE_GALACTIC_COMMON)
-		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-
-		if(iswizard(user))
-			construct_color = rgb(157, 1, 196)
-		else
-			construct_color = rgb(0, 153, 255)
-	else
-		add_language(LANGUAGE_CULT)
-		default_language = all_languages[LANGUAGE_CULT]
-
-		var/datum/role/streamer/streamer_role = user.mind.GetRole(STREAMER)
-		if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
-			if(streamer_role.followers == 0 && streamer_role.subscribers == 0) //No followers and subscribers, use normal cult colors.
-				construct_color = rgb(235,0,0)
+			if(iswizard(user))
+				construct_color = rgb(157, 1, 196)
 			else
-				construct_color = rgb(30,255,30)
-		else	
-			construct_color = rgb(235,0,0)
+				construct_color = rgb(0, 153, 255)
+		else
+			add_language(LANGUAGE_CULT)
+			default_language = all_languages[LANGUAGE_CULT]
+
+			var/datum/role/streamer/streamer_role = user.mind.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				if(streamer_role.followers == 0 && streamer_role.subscribers == 0) //No followers and subscribers, use normal cult colors.
+					construct_color = rgb(235,0,0)
+				else
+					construct_color = rgb(30,255,30)
+			else	
+				construct_color = rgb(235,0,0)
 	
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
