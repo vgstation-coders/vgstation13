@@ -41,6 +41,7 @@
 
 	var/list/healers = list()
 
+	var/construct_color = rgb(0,0,0)
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
@@ -84,20 +85,37 @@
 /mob/living/simple_animal/construct/cultify()
 	return
 
-/mob/living/simple_animal/construct/New(var/color = rgb(0,0,0), var/iscult = 1 )
+/mob/living/simple_animal/construct/New(var/mob/living/carbon/user)
 	..()
-	
-	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
-	if(iscult)
-		add_language(LANGUAGE_CULT)
-		default_language = all_languages[LANGUAGE_CULT]
-	else	
+
+
+	//Determine construct color	and set languages
+	if(!iscultist(user))
 		universal_understand = 1
 		add_language(LANGUAGE_GALACTIC_COMMON)
 		default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
+		if(iswizard(user))
+			construct_color = rgb(157, 1, 196)
+		else
+			construct_color = rgb(0, 153, 255)
+	else
+		add_language(LANGUAGE_CULT)
+		default_language = all_languages[LANGUAGE_CULT]
+
+		var/datum/role/streamer/streamer_role = user.mind.GetRole(STREAMER)
+		if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+			if(streamer_role.followers == 0 && streamer_role.subscribers == 0) //No followers and subscribers, use normal cult colors.
+				construct_color = rgb(235,0,0)
+			else
+				construct_color = rgb(30,255,30)
+		else	
+			construct_color = rgb(235,0,0)
+	
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	setupglow(color)
+	setupglow(construct_color)
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
