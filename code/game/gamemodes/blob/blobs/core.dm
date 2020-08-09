@@ -131,7 +131,10 @@
 	if (!overmind)
 		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
 		if(confirm)
-			create_overmind(user.client)
+			if(!overmind)
+				create_overmind(user.client)
+			else	
+				to_chat(user, "<span class='warning'>Someone has already taken control of this core.</span>")
 
 /obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
 	if(!new_overmind)
