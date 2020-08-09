@@ -87,6 +87,8 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
+	add_language(LANGUAGE_CULT)
+	default_language = all_languages[LANGUAGE_CULT]
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
@@ -97,6 +99,7 @@
 		if(!iscultist(creator))
 			universal_understand = 1
 			add_language(LANGUAGE_GALACTIC_COMMON)
+			remove_language(LANGUAGE_CULT)
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 			if(iswizard(creator))
@@ -104,8 +107,6 @@
 			else
 				construct_color = rgb(0, 153, 255)
 		else
-			add_language(LANGUAGE_CULT)
-			default_language = all_languages[LANGUAGE_CULT]
 
 			var/datum/role/streamer/streamer_role = creator.mind.GetRole(STREAMER)
 			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
