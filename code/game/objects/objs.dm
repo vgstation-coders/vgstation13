@@ -739,7 +739,7 @@ a {
 				var/danger = FALSE
 
 				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
-				if(!H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+				if(foot && !H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
 					if(foot.is_organic())
 						danger = TRUE
 
