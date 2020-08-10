@@ -1,4 +1,4 @@
-#define ION_COOLDOWN	1 MINUTES
+#define ION_COOLDOWN	15 MINUTES
 
 /obj/item/device/loic_remote
 	name = "\improper strange remote"
