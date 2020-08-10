@@ -379,6 +379,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert = 'sound/AI/ionstorm.ogg'
 	message = "Ion storm detected near the station. Please check all AI-controlled equipment for errors."
 
+/datum/command_alert/ion_storm_malicious
+	name = "Ion Storm - AI affected"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/ionstorm.ogg'
+	message = "Abnormal ion activity detected. Please check all AI-controlled equipment for errors. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/ion_storm_large
 	name = "Ion Storm - All Affected"
 	alert_title = "Anomaly Alert"
