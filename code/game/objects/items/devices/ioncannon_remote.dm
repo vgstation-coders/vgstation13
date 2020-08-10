@@ -19,6 +19,9 @@
 	if(world.time - last_used < ION_COOLDOWN)
 		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon is still on cooldown.</span>")
 		return
+	if(!get_area(src))
+		to_chat(user, "The remote can't establish a connection. You need to be on the station.")
+		return
 	if(alert(user, "A cryptic message appears on the screen: \"Activate the Low Orbit Ion-Cannon?\".", name, "Yes", "No") != "Yes")
 		return
 	if(user.incapacitated() || !Adjacent(user))
