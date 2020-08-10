@@ -1,4 +1,4 @@
-#define ION_COOLDOWN	15 MINUTES
+
 
 /obj/item/device/loic_remote
 	name = "\improper strange remote"
@@ -7,16 +7,16 @@
 	icon_state = "batterer"
 	w_class = W_CLASS_TINY
 	flags = FPRINT
-	var/last_used = 0
+	var/cooldown = 0
 
 /obj/item/device/loic_remote/process()
-	if(world.time - last_used > ION_COOLDOWN)		//Set the icon back to the default if the cooldown expires
+	if(cooldown - world.time < 0)		//Set the icon back to the default if the cooldown expires
 		icon_state = "batterer"
 		processing_objects.Remove(src)
 
 
 /obj/item/device/loic_remote/attack_self(var/mob/user)
-	if(world.time - last_used < ION_COOLDOWN)
+	if(cooldown - world.time > 0)
 		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon is still on cooldown.</span>")
 		return
 	if(!get_area(src))
@@ -28,7 +28,7 @@
 		return
 	generate_ion_law()
 	command_alert(/datum/command_alert/ion_storm_malicious)
-	last_used = world.time
+	cooldown = world.time = 15 MINUTES
 	icon_state = "battererburnt"
 	processing_objects.Add(src)
 
@@ -49,7 +49,4 @@
 	
 
 
-		
 
-#undef ION_COOLDOWN
-    
