@@ -688,3 +688,18 @@
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))
+
+//Plastic chairs
+/obj/structure/bed/chair/plastic
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amt = 3
+
+/obj/structure/bed/chair/plastic/plastic_chair
+	icon_state = "plastic_chair"
+	name = "plastic chair"
+	desc = "All ready for the barbecue."
+
+/obj/structure/bed/chair/plastic/plastic_chair/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE
