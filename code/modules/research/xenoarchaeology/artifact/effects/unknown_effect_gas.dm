@@ -1,5 +1,5 @@
 
-/datum/artifact_effect/gas
+/datum/artifact_effect/gas //s
 	effecttype = "gas"
 	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_MARTIAN)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
