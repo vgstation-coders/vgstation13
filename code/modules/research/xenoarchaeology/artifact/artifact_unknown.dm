@@ -93,14 +93,14 @@
 	else if(primary_effect.activated)
 		if(fx_image)
 			fx_suffix = ""
+			overlays += fx_image
 		else	
 			fx_suffix = "fx"					//If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
 	else
 		fx_suffix = ""						//If its an non-active goon artifact, fx suffix is always empty.
 	
 	icon_state = "[prefix][numsuffix][fx_suffix]" 
-	if(fx_image && primary_effect.activated)
-		overlays += fx_image
+
 
 /obj/machinery/artifact/process()
 
