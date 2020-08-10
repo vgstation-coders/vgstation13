@@ -720,9 +720,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(name != initial(name)) //Not chicken
 		new_animal.name = name
+	if(mind)
+		mind.transfer_to(new_animal)
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
 
 	if(colour)
 		new_animal.colour = colour
