@@ -5,6 +5,7 @@
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA)
 	var/max_pressure
 	copy_for_battery = list("max_pressure")
+	var/effect_gas = null
 
 /datum/artifact_effect/gasoxy/New()
 	..()

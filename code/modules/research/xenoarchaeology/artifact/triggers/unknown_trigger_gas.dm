@@ -3,7 +3,7 @@
 /datum/artifact_trigger/gas
 	triggertype = TRIGGER_GAS
 	scanned_trigger = SCAN_ATMOS
-	var/trigger_gas = 0
+	var/trigger_gas = null
 
 /datum/artifact_trigger/gas/New()
 	..()
@@ -19,5 +19,5 @@
 				Triggered(0, trigger_gas, 0)
 
 		else
-			if(env.molar_density(trigger_Gas) < MOLE_TRIGGER)
+			if(env.molar_density(trigger_gas) < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
