@@ -1006,7 +1006,10 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
-	
+
+/datum/uplink_item/jobspecific/clown_botanist
+	category = "Clown Botany Specials"
+
 /datum/uplink_item/jobspecific/clown_botanist/clownpodseeds
 	name = "Clown pod seeds"
 	desc = "Packet of clown pod seeds"
