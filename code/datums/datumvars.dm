@@ -849,6 +849,27 @@ function loadPage(list) {
 				A.dir = turn(A.dir, 45)
 		href_list["datumrefresh"] = href_list["rotatedatum"]
 
+	else if(href_list["setspecies"])
+		if(!check_rights(R_SPAWN))
+			return
+
+		var/mob/living/carbon/human/H = locate(href_list["setspecies"])
+		if(!istype(H))
+			to_chat(usr, "This can only be done to instances of type /mob/living/carbon/human")
+			return
+
+		var/new_species = input("Please choose a new species.","Species",null) as null|anything in all_species
+
+		if(!H)
+			to_chat(usr, "Mob doesn't exist anymore")
+			return
+
+		if(H.set_species(new_species, force_organs=1))
+			to_chat(usr, "Set species of [H] to [H.species].")
+			H.regenerate_icons()
+		else
+			to_chat(usr, "Failed! Something went wrong.")
+
 	else if(href_list["regenerateicons"])
 		if(!check_rights(0))
 			return
