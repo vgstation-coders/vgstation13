@@ -159,6 +159,7 @@
 			/obj/item/weapon/storage/backpack/satchel_eng,
 			/obj/item/weapon/storage/backpack/messenger/engi,
 			),
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED,
 		/obj/item/clothing/under/rank/mechanic,
 		/obj/item/clothing/shoes/workboots,
 		/obj/item/weapon/storage/toolbox/mechanical,
