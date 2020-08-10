@@ -83,7 +83,7 @@
 
 /obj/machinery/artifact/update_icon()
 	overlays.len = 0
-	icon_state = "[prefix][numsuffix][icon == 'icons/obj/xenoarchaeology.dmi' ? primary_effect.activated : ((primary_effect.activated && fx_image) ? "" : "fx")]" //If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
+	icon_state = "[prefix][numsuffix][icon == 'icons/obj/xenoarchaeology.dmi' ? primary_effect.activated : ((!primary_effect.activated) ? "" : ((primary_effect.activated && fx_image) ? "" : "fx"))]" //If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
 	if(fx_image && primary_effect.activated)
 		overlays += fx_image
 
