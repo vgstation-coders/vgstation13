@@ -74,6 +74,17 @@
 	melee_damage_lower=10
 	melee_damage_upper=35
 
+/mob/living/simple_animal/hostile/bear/brownbear
+	name = "brown bear"
+	desc = "Does it shit in the woods?"
+	icon_state = "brownbear"
+	icon_living = "brownbear"
+	icon_dead = "brownbear_dead"
+	default_icon_floor = "brownbear"
+	default_icon_space = "brownbear"
+
+	faction = "forest"
+
 /mob/living/simple_animal/hostile/bear/polarbear
 	name = "space polar bear"
 	desc = "You would think that space would be considered cold enough for regular space bears, well these are adapted for colder climates"
