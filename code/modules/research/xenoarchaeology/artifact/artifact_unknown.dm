@@ -83,7 +83,7 @@
 
 /obj/machinery/artifact/update_icon()
 	overlays.len = 0
-	var/fx_suffix = "0"
+	var/fx_suffix = ""
 
 	if(icon == 'icons/obj/xenoarchaeology.dmi')		//If its not a goon artifact:
 		if(primary_effect.activated)				// If its active, suffix is 1, otherwise its 0
