@@ -138,10 +138,6 @@
 	desc = "A tool for replacing components in machines. Requires the user to manually guide and articulate it."
 	icon_state = "PED"
 	item_state = "PED"
-	w_class = W_CLASS_LARGE
-	use_to_pickup = 1
-	fits_max_w_class = W_CLASS_MEDIUM
-	max_combined_w_class = 100
 	storage_slots = 35
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 
