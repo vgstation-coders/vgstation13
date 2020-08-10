@@ -146,7 +146,7 @@
 		var/obj/machinery/M = A
 		if(!M.panel_open)
 			..()
-		else if(do_after(user, M, 50))
+		else if(do_after(user, M, 5 SECONDS))
 			..()
 		else
 			return 1
