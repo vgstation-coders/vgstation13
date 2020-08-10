@@ -28,6 +28,7 @@
 	var/ex_heavy = 0
 	var/ex_light = 1
 	var/ex_flash = 3
+	var/pressure = ONE_ATMOSPHERE
 
 	spell_levels = list(Sp_SPEED = 0, Sp_MOVE = 0, Sp_POWER = 0, Sp_SPECIAL = 0)
 	level_max = list(Sp_TOTAL = 9, Sp_SPEED = 4, Sp_MOVE = 1, Sp_POWER = 3, Sp_SPECIAL = 1)
@@ -38,6 +39,9 @@
 	for(var/mob/living/M in targets)
 		apply_spell_damage(M)
 	explosion(get_turf(spell_holder), ex_severe, ex_heavy, ex_light, ex_flash)
+	var/fDam = 1 + spell_levels[Sp_SPEED] + spell_levels[Sp_MOVE] + spell_levels[Sp_POWER] + spell_levels[Sp_SPECIAL]
+	for(var/atom/A in orange(ex_light, spell_holder))
+		new /obj/effect/fire_blast(A, fDam, 0, 1, pressure, 0, 3)
 	return targets
 
 /spell/targeted/projectile/dumbfire/fireball/choose_prox_targets(mob/user = usr, var/atom/movable/spell_holder)
@@ -63,14 +67,16 @@
 			return "The spell no longer requires robes to cast."
 		if(Sp_POWER)
 			spell_levels[Sp_POWER]++	//These are = not += to avoid potential fuckery with adding damage over and over
+			pressure += 50
 			if(spell_levels[Sp_POWER] == 1)
 				ex_light = 2
 			if(spell_levels[Sp_POWER] == 2)
+				amt_dam_brute = 15
 				amt_dam_fire = 25
-				amt_dam_brute = 20
-				ex_flash = 5
+				ex_flash = 4
 			if(spell_levels[Sp_POWER] == 3)
 				ex_heavy = 1
+				ex_flash = 5
 
 
 /spell/targeted/projectile/dumbfire/fireball/get_upgrade_price(upgrade_type)
