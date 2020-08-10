@@ -175,3 +175,22 @@ var/list/datum/stack_recipe/chain_recipes = list (
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "ansible_crystal"
 	mech_flags = MECH_SCAN_FAIL
+
+
+/obj/item/stack/rcd_ammo
+	name = "compressed matter cartridge"
+	singular_name = "compressed matter cartridge"
+	desc = "Highly compressed matter in a cartridge form, used in various fabricators."
+	icon = 'icons/obj/ammo.dmi'
+	icon_state = "rcd"
+	item_state = "rcdammo"
+	max_amount = 5
+	
+	origin_tech = Tc_MATERIALS + "=2"
+	w_class = W_CLASS_SMALL
+	starting_materials = list(MAT_IRON = 20000, MAT_GLASS = 10000)
+	w_type = RECYK_ELECTRONIC
+
+/obj/item/stack/rcd_ammo/attackby(var/obj/O, mob/user)
+	if(is_type_in_list(O, list(/obj/item/device/rcd/matter/engineering,  /obj/item/device/rcd/matter/rsf)) || (istype(O, /obj/item/device/material_synth) && !istype(O, /obj/item/device/material_synth/robot)))
+		return O.attackby(src, user)

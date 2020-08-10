@@ -96,7 +96,7 @@
 	icon_state = "bandolier"
 	_color = "bandolier"
 	storage_slots = 8
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"
