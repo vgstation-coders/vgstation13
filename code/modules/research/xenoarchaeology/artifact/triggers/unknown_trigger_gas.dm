@@ -7,7 +7,7 @@
 
 /datum/artifact_trigger/gas/New()
 	..()
-	trigger_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA) //TODO: See if these can be replaced with the defines without fucking up
+	trigger_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA) //TODO: fuck myself
 
 
 /datum/artifact_trigger/gas/CheckTrigger()
