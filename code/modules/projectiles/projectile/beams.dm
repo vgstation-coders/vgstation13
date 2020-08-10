@@ -10,6 +10,13 @@
  *             turfs that have that icon_state/dir
  */
 
+/client/verb/bench(var/atom/target)
+	var/obj/item/weapon/gun/energy/laser/admin/L = new (get_turf(mob))
+	var/mob/M = mob
+	M.put_in_hands(L)
+	for(var/i in 1 to 100)
+		L.Fire(target, M)
+
 var/list/beam_master = list()
 
 #define MAX_BEAM_DISTANCE 100
