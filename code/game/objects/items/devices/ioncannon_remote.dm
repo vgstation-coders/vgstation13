@@ -8,6 +8,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	var/cooldown = 0
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/device/loic_remote/process()
 	if(cooldown - world.time < 0)		//Set the icon back to the default if the cooldown expires
