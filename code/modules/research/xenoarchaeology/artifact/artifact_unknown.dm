@@ -92,9 +92,9 @@
 			fx_suffix = 0
 	else if(primary_effect.activated)
 		if(fx_image)
-			fx_suffix = "fx"
+			fx_suffix = ""
 		else	
-			fx_suffix = ""					//If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
+			fx_suffix = "fx"					//If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
 	else
 		fx_suffix = ""						//If its an non-active goon artifact, fx suffix is always empty.
 	
