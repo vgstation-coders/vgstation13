@@ -53,7 +53,7 @@
 	if(!msg)
 		return
 
-	var/msg_runechat = "[user] " + msg
+	var/msg_runechat = msg
 	msg = "<b>[user]</b> " + msg
 
 	for(var/mob/M in dead_mob_list)
@@ -67,7 +67,7 @@
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
-		for (var/mob/O in (viewers(world.view, user) + user))
+		for (var/mob/O in viewers(world.view, user))
 			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS)
 				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else

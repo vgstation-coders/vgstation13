@@ -15,8 +15,7 @@
 
 	priority = 0
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/glue_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -50,8 +49,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/set_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -90,8 +88,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/mend_skull/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -128,8 +125,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/finish_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -167,8 +163,7 @@
 
 	priority = 0.1 //so it tries to do this before /glue_bone
 
-	min_duration = 80
-	max_duration = 90
+	duration = 8 SECONDS
 
 /datum/surgery_step/bone_mender/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

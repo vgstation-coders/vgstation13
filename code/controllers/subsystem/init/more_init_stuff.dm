@@ -9,7 +9,7 @@ var/datum/subsystem/more_init/SSmore_init
 	NEW_SS_GLOBAL(SSmore_init)
 
 /datum/subsystem/more_init/Initialize(timeofday)
-	setup_economy()
+	setup_news()
 	var/watch=start_watch()
 	log_startup_progress("Caching damage icons...")
 	cachedamageicons()
@@ -44,6 +44,17 @@ var/datum/subsystem/more_init/SSmore_init
 		S.init_cams()
 
 	init_wizard_apprentice_setups()
+	machinery_rating_cache = cache_machinery_components_rating()
+
+/proc/cache_machinery_components_rating()
+	var/list/cache = list()
+	for(var/obj/machinery/machine in all_machines)
+		if(!cache[machine.type])
+			var/rating = 0
+			for(var/obj/item/weapon/stock_parts/SP in machine.component_parts)
+				rating += SP.rating
+			cache[machine.type] = rating
+	return cache
 
 /proc/init_wizard_apprentice_setups()
 	for (var/setup_type in subtypesof(/datum/wizard_apprentice_setup))

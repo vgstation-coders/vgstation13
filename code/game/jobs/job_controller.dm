@@ -400,13 +400,6 @@ var/global/datum/controller/occupations/job_master
 	if(!H)
 		return 0
 	var/datum/job/job = GetJob(rank)
-	if(job)
-		job.equip(H)
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
-
-	H.job = rank
-
 	if(!joined_late)
 		var/obj/S = null
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -421,12 +414,11 @@ var/global/datum/controller/occupations/job_master
 		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 			H.forceMove(S.loc)
 
-	var/balance_wallet = 0
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
-		balance_wallet = rand(100,250)
+		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
@@ -445,6 +437,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 				H.mind.initial_account = M
+				H.mind.initial_wallet_funds = balance_wallet
 
 			// If they're head, give them the account info for their department
 			if(H.mind && job.head_position)
@@ -464,6 +457,14 @@ var/global/datum/controller/occupations/job_master
 				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
+
+	if(job)
+		job.equip(H) // Outfit datum.
+	else
+		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
+
+	H.job = rank
+
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
@@ -472,31 +473,6 @@ var/global/datum/controller/occupations/job_master
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
-				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
-					H.species.equip(H)
-			else
-				switch(H.backbag) //BS12 EDIT
-					if(1)
-						if(H.species.survival_gear)
-							H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-					if(2)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(3)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel_norm(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(4)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-				H.species.equip(H)
-
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else
@@ -505,94 +481,10 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	spawnId(H, rank, alt_title, balance_wallet)
-
 	if(job && job.priority)
 		job.priority_reward_equip(H)
 
-	if(!job || !job.no_headset)
-		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
-
-	//Gives glasses to the vision impaired
-	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
-		var/equipped = H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
-		if(equipped != 1)
-			var/obj/item/clothing/glasses/G = H.glasses
-			G.prescription = 1
-//		H.update_icons()
-
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
-	if(!H.check_stand_ability())
-		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
-		W.buckle_mob(H,H)
-
-	if(H.disabilities & ASTHMA)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
-		else
-			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-
-	if (H.client.IsByondMember())
-		to_chat(H, "Thank you for supporting BYOND!")
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
-
-	if(Holiday == VG_BIRTHDAY)
-		H.equip_or_collect(new /obj/item/clothing/head/party_hat(H), slot_head)
-
 	return 1
-
-
-/datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, rank, title, wallet_funds=0)
-	if(!H)
-		return 0
-	var/obj/item/weapon/card/id/C = null
-
-	var/datum/job/job = null
-	for(var/datum/job/J in occupations)
-		if(J.title == rank)
-			job = J
-			break
-
-	if(!job || !job.no_pda)
-		H.equip_or_collect(new job.pdatype(H), job.pdaslot)
-
-	if(job)
-		if(job.no_id)
-			return
-		else
-			C = new job.idtype(H)
-			C.access = job.get_access()
-	else
-		C = new /obj/item/weapon/card/id(H)
-
-	if(C)
-		C.registered_name = H.real_name
-		C.rank = rank
-		C.assignment = title ? title : rank
-		C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-
-		//put the player's account number onto the ID
-		if(H.mind && H.mind.initial_account)
-			C.associated_account_number = H.mind.initial_account.account_number
-
-		H.equip_or_collect(C, slot_wear_id)
-
-		if(C.virtual_wallet)
-			C.update_virtual_wallet(wallet_funds)
-
-	if(locate(/obj/item/device/pda,H))
-		var/obj/item/device/pda/pda = locate(/obj/item/device/pda,H)
-		pda.owner = H.real_name
-		pda.ownjob = C.assignment
-		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
-	H.update_inv_belt()
-	H.update_inv_wear_id()
-	return 1
-
-
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
 	if(!config.load_jobs_from_txt)

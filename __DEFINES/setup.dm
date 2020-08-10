@@ -277,6 +277,30 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_legcuffed 17
 #define slot_legs 18
 
+//slots, but in string format.
+#define slot_back_str "1"
+#define slot_wear_mask_str "2"
+#define slot_handcuffed_str "3"
+#define slot_belt_str "4"
+#define slot_wear_id_str "5"
+#define slot_ears_str "6"
+#define slot_glasses_str "7"
+#define slot_gloves_str "8"
+#define slot_head_str "9"
+#define slot_shoes_str "10"
+#define slot_wear_suit_str "11"
+#define slot_w_uniform_str "12"
+#define slot_l_store_str "13"
+#define slot_r_store_str "14"
+#define slot_s_store_str "15"
+#define slot_in_backpack_str "16"
+#define slot_legcuffed_str "17"
+#define slot_legs_str "18"
+
+#define ACCESSORY_ITEM "accessory item"
+#define SURVIVAL_BOX "Survival Box"
+
+
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
@@ -1232,9 +1256,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII			105
 #define PDA_APP_MINESWEEPER		106
 #define PDA_APP_SPESSPETS		107
+#define PDA_APP_NEWSREADER		108
 
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1516,6 +1545,9 @@ var/proccalls = 1
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
+
+#define GRASP_RIGHT_HAND_STR "1"
+#define GRASP_LEFT_HAND_STR "2"
 
 #define BLOB_CORE_PROPORTION 20
 

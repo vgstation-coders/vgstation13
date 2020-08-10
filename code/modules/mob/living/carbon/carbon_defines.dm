@@ -20,7 +20,6 @@
 
 	var/hasmouth = 1 // Used for food, etc.
 	var/give_check = FALSE
-	var/event/on_emote = new ()
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
