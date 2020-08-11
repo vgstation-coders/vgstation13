@@ -619,5 +619,8 @@
 		gib()
 	qdel(src)
 
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)
+	return ..(reverse_text(message))
+
 
 

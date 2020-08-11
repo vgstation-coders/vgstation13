@@ -469,8 +469,9 @@
 			findtarget()
 			return
 		else
+			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 1)
 			throw_at(target, 3, 1)
-			if(dist <= 1)
+			if(dist == 0)	
 				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 					Attach(target)
 					return
