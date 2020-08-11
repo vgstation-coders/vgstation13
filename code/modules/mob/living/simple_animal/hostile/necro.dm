@@ -57,7 +57,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 10
 	attacktext = "bites"
-	attack_sound = 'sound/weapons/bite.ogg'
+	attack_sound = 'sounbite.oggd/weapons/'
 
 	min_oxy = 0
 	max_oxy = 0
@@ -591,6 +591,9 @@
 	health = 75
 	can_evolve = FALSE
 	canRegenerate = 1
+	harm_intent_damage = 20
+	melee_damage_lower = 15
+	melee_damage_upper = 25
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/New()
@@ -613,7 +616,7 @@
 			var/datum/organ/external/head/head_organ = host.get_organ(LIMB_HEAD)
 			head_organ.explode()
 		else
-			visible_message("<span class='danger'>\The headcrab releases it's grasp from [src]!</span>")
+			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
 		host = null
 	else
 		gib()

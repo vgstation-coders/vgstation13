@@ -416,8 +416,11 @@
 
 	var/mob/living/carbon/C = M
 	var/obj/item/clothing/mask/facehugger/F = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+	var/obj/item/clothing/mask/facehugger/F2 = C.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_head)
 
 	if(F && (!F.sterile || hugger.sterile) && F != hugger) // Lamarr won't fight over faces and neither will normal huggers.
+		return FALSE
+	if(F2 && (!F2.sterile || hugger.sterile) && F2 != hugger) 
 		return FALSE
 
 	return TRUE
@@ -469,7 +472,7 @@
 			findtarget()
 			return
 		else
-			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 1)
+			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 0)
 			throw_at(target, 3, 1)
 			if(dist == 0)	
 				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
@@ -560,6 +563,7 @@
 		return
 
 	while(target && target.head == src && !target.isDead() && !target.isInCrit())	//If they're still alive chew at their fuggin skull
+		playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 		target.apply_damage(10, BRUTE, LIMB_HEAD)
 		sleep(30)
 
