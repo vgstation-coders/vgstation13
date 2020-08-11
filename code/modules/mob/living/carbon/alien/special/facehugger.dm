@@ -541,7 +541,8 @@
 		target.movement_speed_modifier -= 0.75			//Slow them down like a taser
 		spawn(30)
 			target.movement_speed_modifier += 0.75
-		Assimilate(target)
+		if(!sterile)
+			Assimilate(target)
 
 	
 	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
@@ -562,6 +563,7 @@
 
 	if(target && target.head == src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
 		visible_message("<span class='danger'>[target.real_name] begins to shake and convulse violently!</span>")
+		to_chat(target, "<span class='sinister'>You feel your consciousness slipping away...</span>")
 		target.Jitter(1000)
 		spawn(100)
 		if(target && target.head == src)

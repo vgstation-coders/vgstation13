@@ -1058,7 +1058,10 @@ Thanks.
 			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
 			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
 			if(do_after(L, crab, 3 SECONDS))
-				if(prob(50))
+				var/rng = 50
+				if(crab.stat == DEAD)
+					rng = 100
+				if(prob(rng))
 					if(L.get_item_by_slot(slot_head) == crab)
 						L.drop_from_inventory(crab)
 						crab.GoIdle(10 SECONDS) 

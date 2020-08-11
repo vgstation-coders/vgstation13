@@ -575,6 +575,8 @@
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")
 
+#undef RAD_COST
+
 
 /////////////////////////////////////////////////////// 
 ///////////////// HEADCRAB ZOMBIES //////////////////// 
@@ -585,10 +587,14 @@
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
 	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
-	maxHealth = 50
-	health = 50
-	can_evolve = TRUE
+	maxHealth = 75
+	health = 75
+	can_evolve = FALSE
+	canRegenerate = 1
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/New()
+	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
 	if(host)
@@ -597,7 +603,9 @@
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
+	to_chat(world, "awdhawiudhaiuwd")
 	if(host && mind)
+		to_chat(world, "FUUUUUNNKKK")
 		host.loc = get_turf(src)
 		mind.transfer_to(host)
 		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
@@ -608,6 +616,4 @@
 		qdel(src)
 
 
-	replacetext(speech.message,"s","th")
 
-#undef RAD_COST
