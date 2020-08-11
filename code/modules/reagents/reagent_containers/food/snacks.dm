@@ -1144,7 +1144,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/bearburger
 	name = "bear burger"
-	desc = "There's gotta be a pun in there somewhere, but no Pun Pun."//TODO: replace with a better pun, bear-related if possible
+	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
 	icon_state = "bearburger"
 	food_flags = FOOD_MEAT
 
