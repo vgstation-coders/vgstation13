@@ -368,12 +368,12 @@
 		return
 
 	if (!type) //No type, we want the message to appear no matter our awareness as long as we aren't uncounscious or sleeping
-		if(stat != UNCONSCIOUS && sleeping <= 0)
+		if(stat != UNCONSCIOUS)
 			to_chat(src, msg)
 		return
 
 	var/awareness = 0
-	if(stat != UNCONSCIOUS && sleeping <= 0)
+	if(stat != UNCONSCIOUS)
 		if (!is_blind())
 			awareness |= MESSAGE_SEE
 		if (!is_deaf())
