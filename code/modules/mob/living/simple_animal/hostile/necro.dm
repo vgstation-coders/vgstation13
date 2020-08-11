@@ -575,4 +575,39 @@
 			spawn(3 SECONDS)
 				set_light(1, 2, "#5dca31")
 
+
+/////////////////////////////////////////////////////// 
+///////////////// HEADCRAB ZOMBIES //////////////////// 
+///////////////////////////////////////////////////////
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab //Not very useful
+	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
+	icon_living = "zombie_turned"
+	icon_dead = "zombie_turned"
+	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
+	maxHealth = 50
+	health = 50
+	can_evolve = TRUE
+	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
+	if(host)
+		qdel(host)
+		host = null
+	..()
+
+/mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
+	if(host && mind)
+		host.loc = get_turf(src)
+		mind.transfer_to(host)
+		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+		if(ghost && ghost.can_reenter_corpse)
+			key = mind.key
+		visible_message("<span class='notice'>\The headcrab releases it's grasp from [src]!</span>")
+		host = null
+		qdel(src)
+
+
+	replacetext(speech.message,"s","th")
+
 #undef RAD_COST

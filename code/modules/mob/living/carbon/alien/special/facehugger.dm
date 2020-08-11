@@ -460,22 +460,22 @@
 	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
 		var/dist = get_dist(loc, target.loc)
-		if(dist > 4)
+		if(dist > 5)
 			target = null
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 
-		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+		var/obj/item/clothing/mask/facehugger/headcrab/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
 		if(F && !F.sterile) // Toys won't prevent real huggers
 			findtarget()
 			return
 		else
-			step_towards(src, target, 0)
+			throw_at(target, 3, 1)
 			if(dist <= 1)
 				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 					Attach(target)
 					return
 				else
-					walk(src,0)
+					walk(src,0)		
 					findtarget()
 					return
 
