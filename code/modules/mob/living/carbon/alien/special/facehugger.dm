@@ -246,10 +246,7 @@
 	if(!sterile)
 		L.take_organ_damage(strength, 0) //done here so that even borgs and humans in helmets take damage
 
-
 	L.visible_message("<span class='danger'>\The [src] leaps at [L]'s face!</span>")
-
-
 
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
@@ -275,7 +272,6 @@
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 					return
 
-	if(iscarbon(L))
 		var/mob/living/carbon/target = L
 		var/obj/item/clothing/W = target.get_item_by_slot(slot_wear_mask)
 		var/obj/item/weapon/tank/had_internal = target.internal
