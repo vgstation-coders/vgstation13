@@ -1059,9 +1059,10 @@ Thanks.
 			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
 			if(do_after(L, crab, 3 SECONDS))
 				if(prob(50))
-					L.drop_from_inventory(crab)
-					crab.GoIdle(10 SECONDS) 
-					L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+					if(L.get_item_by_slot(slot_head) == crab)
+						L.drop_from_inventory(crab)
+						crab.GoIdle(10 SECONDS) 
+						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
 				else
 					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
 					return

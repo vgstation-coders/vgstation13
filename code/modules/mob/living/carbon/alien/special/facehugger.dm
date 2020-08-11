@@ -168,7 +168,10 @@
 		if(CONSCIOUS)
 			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
 	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
+		if(istype(src, /obj/item/clothing/mask/facehugger/headcrab))
+			to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
+		else
+			to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
@@ -398,10 +401,10 @@
 	if(isalien(M))
 		return FALSE
 
-	if(M.status_flags & XENO_HOST)
+	if((M.status_flags & XENO_HOST) && !istype(hugger, /obj/item/clothing/mask/facehugger/headcrab))
 		return FALSE
 
-	if(iscorgi(M))
+	if(iscorgi(M) && !istype(hugger, /obj/item/clothing/mask/facehugger/headcrab))
 		var/mob/living/simple_animal/corgi/corgi = M
 		if(corgi.facehugger && !corgi.facehugger.sterile)
 			return FALSE
@@ -439,20 +442,42 @@
 	slot_flags = SLOT_HEAD
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
-	
+	cant_remove_msg = "The headcrab is latched on tight!"
 
-/obj/item/clothing/mask/facehugger/headcrab/examine(mob/user)
-	..()
-	if(!real) 
+/obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
+	var/mob/living/carbon/human/target = user
+	if(target && target.head == src)
+		target.resist()
+	else
+		..()
+
+/obj/item/clothing/mask/facehugger/headcrab/followtarget()
+	if(!real)
+		return // Why are you trying to path stupid toy
+	if(!target)
+		findtarget()
 		return
-	switch(stat)
-		if(DEAD,UNCONSCIOUS)
-			to_chat(user, "<span class='deadsay'>\The [src] is not moving.</span>")
-		if(CONSCIOUS)
-			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
-	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
-	return
+	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
+		nextwalk = world.time + walk_speed
+		var/dist = get_dist(loc, target.loc)
+		if(dist > 4)
+			target = null
+			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
+
+		var/obj/item/clothing/mask/facehugger/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger, slot_wear_mask)
+		if(F && !F.sterile) // Toys won't prevent real huggers
+			findtarget()
+			return
+		else
+			step_towards(src, target, 0)
+			if(dist <= 1)
+				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
+					Attach(target)
+					return
+				else
+					walk(src,0)
+					findtarget()
+					return
 
 
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
@@ -532,8 +557,8 @@
 		return
 
 	while(target && target.head == src && !target.isDead() && !target.isInCrit())	//If they're still alive chew at their fuggin skull
-		target.apply_damage(5, BRUTE, LIMB_HEAD)
-		sleep(20)
+		target.apply_damage(10, BRUTE, LIMB_HEAD)
+		sleep(30)
 
 	if(target && target.head == src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
 		visible_message("<span class='danger'>[target.real_name] begins to shake and convulse violently!</span>")
