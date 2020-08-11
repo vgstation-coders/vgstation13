@@ -37,7 +37,7 @@
 	qdel(construct)
 	construct = null
 
-/obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
+/obj/structure/spacepod_frame/unarmored/attackby(obj/item/W, mob/user)
 	if(!construct || !construct.action(W, user))
 		if(istype(W,/obj/item/pod_parts/armor/civ))
 			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
