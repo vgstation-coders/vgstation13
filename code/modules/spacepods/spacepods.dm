@@ -771,10 +771,6 @@
 	if(iscrowbar(W))
 		hatch_open = !hatch_open
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch. [hatch_open ? "There's nothing inside." : ""]</span>")
-		if(hatch_open && contents.len)
-			var/anyitem = 0
-			if(anyitem)
-				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items land" : "an item lands"] at the feet of [user].</span>")
 		return
 
 	if(istype(W, /obj/item/weapon/cell))
