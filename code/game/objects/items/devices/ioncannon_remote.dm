@@ -21,7 +21,7 @@
 	if(cooldown - world.time > 0)
 		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon is still on cooldown.</span>")
 		return
-	if(get_area(src).name == "Space" || T.z != STATION_Z)
+	if(!is_type_in_list(get_area(src), the_station_areas))
 		to_chat(user, "The remote can't establish a connection. You need to be on the station.")
 		return
 	if(alert(user, "A cryptic message appears on the screen: \"Activate the Low Orbit Ion-Cannon?\".", name, "Yes", "No") != "Yes")
