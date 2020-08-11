@@ -569,7 +569,7 @@
 		if(target && target.head == src)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
-			target.make_zombie(retain_mind = 1)
+			target.make_zombie(retain_mind = 1, crabzombie = 1)
 		
 	
 
