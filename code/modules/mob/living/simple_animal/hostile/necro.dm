@@ -603,17 +603,21 @@
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
-	to_chat(world, "awdhawiudhaiuwd")
 	if(host && mind)
-		to_chat(world, "FUUUUUNNKKK")
 		host.loc = get_turf(src)
 		mind.transfer_to(host)
 		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key
-		visible_message("<span class='notice'>\The headcrab releases it's grasp from [src]!</span>")
+		if(prob(33))	//33% chance to blow up their fucking head
+			var/datum/organ/external/head/head_organ = host.get_organ(LIMB_HEAD)
+			head_organ.explode()
+		else
+			visible_message("<span class='danger'>\The headcrab releases it's grasp from [src]!</span>")
 		host = null
-		qdel(src)
+	else
+		gib()
+	qdel(src)
 
 
 

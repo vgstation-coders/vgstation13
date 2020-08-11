@@ -541,6 +541,7 @@
 		target.movement_speed_modifier -= 0.75			//Slow them down like a taser
 		spawn(30)
 			target.movement_speed_modifier += 0.75
+		target.update_inv_head()			//Sometimes it doesnt work the first time
 		if(!sterile)
 			Assimilate(target)
 
@@ -567,6 +568,8 @@
 		target.Jitter(1000)
 		spawn(100)
 		if(target && target.head == src)
+			target.death(0)
+			target.remove_jitter()
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
 			target.make_zombie(retain_mind = 1, crabzombie = 1)
