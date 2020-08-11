@@ -591,9 +591,6 @@
 	health = 75
 	can_evolve = FALSE
 	canRegenerate = 0
-	harm_intent_damage = 20
-	melee_damage_lower = 15
-	melee_damage_upper = 2
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
