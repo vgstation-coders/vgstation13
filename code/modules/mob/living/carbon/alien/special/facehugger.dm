@@ -431,10 +431,10 @@
 
 /obj/item/clothing/mask/facehugger/headcrab
 	name = "headcrab" //womp womp
-	desc = "Get this thing away from me!"  //TODO: think of a better quote
+	desc = "Get that thing away from me!"  //TODO: think of a better quote
 	icon = 'icons/mob/alien.dmi'
-	icon_state = "facehugger"
-	item_state = "facehugger"
+	icon_state = "headcrab"
+	item_state = "headcrab"
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	clothing_flags = null
@@ -524,23 +524,25 @@
 
 	return FALSE
 
-/obj/item/clothing/mask/facehugger/headcrab/Assimilate(mob/living/L)
+/obj/item/clothing/mask/facehugger/headcrab/proc/Assimilate(mob/living/L)
 	if(!ishuman(L))
 		return
 	var/mob/living/carbon/human/target = L
 	if(!target || target.head != src) //was taken off or something
 		return
 
-	while(target && target.head = src && (!target.isDead() || !target.isInCrit()))	//If they're still alive chew at their fuggin skull
-		M.adjustBruteLoss(15)
-		sleep(15)
+	while(target && target.head == src && !target.isDead() && !target.isInCrit())	//If they're still alive chew at their fuggin skull
+		target.apply_damage(5, BRUTE, LIMB_HEAD)
+		sleep(20)
 
-	if(target && target.head = src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
-		visible_message("<span class='danger'>[target.real_name]Begins to shake and convulse violently!</span>")
-		target.Jitter(5)
-		sleep(50)
-		if(target && target.head = src)
-		target.Jitter(1)
+	if(target && target.head == src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
+		visible_message("<span class='danger'>[target.real_name] begins to shake and convulse violently!</span>")
+		target.Jitter(1000)
+		spawn(100)
+		if(target && target.head == src)
+			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
+			hgibs(target.loc, target.virus2, target.dna)
+			target.make_zombie(retain_mind = 1)
 		
 	
 
