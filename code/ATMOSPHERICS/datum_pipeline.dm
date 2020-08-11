@@ -15,8 +15,9 @@
 	if(network) //For the pipenet rebuild
 		qdel(network)
 		network = null
-	if(air && air.volume) //For the pipeline rebuild next tick
-		temporarily_store_air()
+	if(air) //For the pipeline rebuild next tick
+		if(air.total_moles)
+			temporarily_store_air()
 		qdel(air)
 		air = null
 	//Null the fuck out of all these references
@@ -101,7 +102,10 @@
 /datum/pipeline/proc/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 
 
-	if(new_network.line_members.Find(src))
+	if(src in new_network.line_members)
+		if(network && (network != new_network))
+			qdel(network)
+			network = null
 		return 0
 
 	new_network.line_members += src
