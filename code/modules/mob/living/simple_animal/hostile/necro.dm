@@ -614,7 +614,6 @@
 			head_organ.explode()
 		else
 			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
-		host = null
 	else
 		gib()
 	qdel(src)
