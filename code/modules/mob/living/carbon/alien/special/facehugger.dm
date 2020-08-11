@@ -241,13 +241,15 @@
 		return FALSE
 	if(stat != CONSCIOUS)
 		return FALSE
+	if(!CanHug(L, src))
+		return FALSE
 	if(!sterile)
 		L.take_organ_damage(strength, 0) //done here so that even borgs and humans in helmets take damage
 
+
 	L.visible_message("<span class='danger'>\The [src] leaps at [L]'s face!</span>")
 
-	if(!CanHug(L, src))
-		return FALSE
+
 
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
