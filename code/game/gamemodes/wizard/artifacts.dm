@@ -320,4 +320,5 @@
 	name = "Boots of Blinding Speed"
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
+	price = 0.75 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)

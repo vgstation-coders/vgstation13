@@ -334,10 +334,12 @@
 
 /obj/item/clothing/shoes/blindingspeed
 	name = "boots of blinding speed"
-	desc = "Blinds you while moving."
+	desc = "Blinds you while moving. Temporarily pass on their curse with a kick."
 	icon_state = "blindingspeed"
 	item_state = "blindingspeed"
 	wizard_garb = 1
+	bonus_kick_damage = 5
+	var/blinding = TRUE
 	var/speed_modifier = 4
 
 /obj/item/clothing/shoes/blindingspeed/equipped(mob/living/carbon/human/H, equipped_slot)
@@ -348,7 +350,19 @@
 
 /obj/item/clothing/shoes/blindingspeed/step_action()
 	var/mob/living/carbon/human/H = loc
-	H.change_sight(adding = BLIND)
+	if(blinding)
+		H.change_sight(adding = BLIND)
+
+/obj/item/clothing/shoes/blindingspeed/on_kick(mob/living/user, mob/living/victim)	//Everybody was kung-fu fighting
+	if(blinding)
+		if(iscarbon(victim))
+			var/mob/living/carbon/C = victim
+			C.eye_blind += 3
+			C.eye_blurry += 5
+			C.Knockdown(1)	//Those kicks were fast as lightning
+		blinding = FALSE	//In fact it was a little bit frightening
+		spawn(5 SECONDS)	//But they fought with expert timing
+			blinding = TRUE
 
 /obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()
