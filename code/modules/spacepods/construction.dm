@@ -243,7 +243,6 @@
 		)
 
 /datum/construction/reversible/pod/unarmored/civ/empty
-	..()
 	result = /obj/spacepod/empty
 
 /datum/construction/reversible/pod/unarmored/taxi
