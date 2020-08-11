@@ -421,3 +421,128 @@
 
 /obj/item/clothing/mask/facehugger/acidable()
 	return sterile
+
+
+
+
+//////////////////////////////////////////////////// 
+////////////////  HEADCRABS  /////////////////////// 
+////////////////////////////////////////////////////
+
+/obj/item/clothing/mask/facehugger/headcrab
+	name = "headcrab" //womp womp
+	desc = "Get this thing away from me!"  //TODO: think of a better quote
+	icon = 'icons/mob/alien.dmi'
+	icon_state = "facehugger"
+	item_state = "facehugger"
+	body_parts_covered = HEAD
+	slot_flags = SLOT_HEAD
+	clothing_flags = null
+	canremove = 0  //You need to resist out of it.
+	
+
+/obj/item/clothing/mask/facehugger/headcrab/examine(mob/user)
+	..()
+	if(!real) 
+		return
+	switch(stat)
+		if(DEAD,UNCONSCIOUS)
+			to_chat(user, "<span class='deadsay'>\The [src] is not moving.</span>")
+		if(CONSCIOUS)
+			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
+	if (sterile)
+		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
+	return
+
+
+/obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
+	if(isalien(L))
+		return FALSE
+	if(attached)
+		return FALSE
+	if(!Adjacent(L))
+		return FALSE
+	if(loc == L)
+		return FALSE
+	if(stat != CONSCIOUS)
+		return FALSE
+	if(!sterile)
+		L.take_organ_damage(strength, 0) //done here so that even borgs and humans in helmets take damage
+
+	L.visible_message("<span class='danger'>\The [src] leaps at [L]'s face!</span>")
+
+	if(!CanHug(L, src))
+		return FALSE
+
+	if(ishuman(L))
+		var/mob/living/carbon/human/H = L
+		var/obj/item/head_protection = H.get_body_part_coverage(HEAD)
+		if(!real && head_protection)
+			return //Toys really shouldn't be forcefully removing gear
+
+		if(head_protection)
+			var/rng = 80	//80% chance to remove the hat if it isn't a rig
+			if(istype(head_protection, /obj/item/clothing/head/helmet/space/rig))
+				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
+			if(prob(rng)) // Temporary balance change, all mouth-covering hats will be more effective
+				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [head_protection], and rips it off in the process!</span>")
+				H.drop_from_inventory(head_protection)
+				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
+				return
+			else
+				H.visible_message("<span class='danger'>\The [src] bounces off of \the [head_protection]!</span>")
+				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
+					death()
+					return
+				else
+					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
+					return
+
+	if(iscarbon(L))
+		var/mob/living/carbon/target = L
+		var/obj/item/clothing/W = target.get_item_by_slot(slot_head)
+
+		if(W && W != src)
+			if(!W.canremove)
+				return FALSE
+			target.drop_from_inventory(W)
+
+			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s head!</span>")
+
+		forceMove(target)
+		target.audible_scream()
+		target.equip_to_slot(src, slot_head)
+		target.update_inv_head()
+		target.movement_speed_modifier -= 0.75			//Slow them down like a taser
+		spawn(30)
+			target.movement_speed_modifier += 0.75
+		Assimilate(target)
+
+	
+	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
+
+
+	return FALSE
+
+/obj/item/clothing/mask/facehugger/headcrab/Assimilate(mob/living/L)
+	if(!ishuman(L))
+		return
+	var/mob/living/carbon/human/target = L
+	if(!target || target.head != src) //was taken off or something
+		return
+
+	while(target && target.head = src && (!target.isDead() || !target.isInCrit()))	//If they're still alive chew at their fuggin skull
+		M.adjustBruteLoss(15)
+		sleep(15)
+
+	if(target && target.head = src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
+		visible_message("<span class='danger'>[target.real_name]Begins to shake and convulse violently!</span>")
+		target.Jitter(5)
+		sleep(50)
+		if(target && target.head = src)
+		target.Jitter(1)
+		
+	
+
+	
+

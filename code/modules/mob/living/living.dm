@@ -1051,6 +1051,21 @@ Thanks.
 						BD.attack_hand(usr)
 					C.open()
 
+	//Removing a headcrab
+	if(ishuman(L))
+		var/on_head = L.get_item_by_slot(slot_head)
+		if(istype(on_head, /obj/item/clothing/mask/facehugger/headcrab))
+			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
+			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
+			if(do_after(L, crab, 3 SECONDS))
+				if(prob(50))
+					L.drop_from_inventory(crab)
+					crab.GoIdle(10 SECONDS) 
+					L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+				else
+					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
+					return
+
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
 		locked_to.attack_hand(src)
