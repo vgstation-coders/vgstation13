@@ -24,7 +24,7 @@
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
 			loaded_machine.power_change()
-			
+
 /obj/machinery/cart/cargo/examine(mob/user)
 	..()
 	if(internal_battery)
@@ -119,8 +119,7 @@
 		loaded_machine = C
 		loaded_machine.anchored = 1
 		loaded_machine.battery_dependent = 1
-		if(loaded_machine.machine_flags & WRENCHMOVE)
-			loaded_machine.machine_flags &= ~WRENCHMOVE
+		loaded_machine.machine_flags &= ~WRENCHMOVE
 		if(!is_blacklisted(C))
 			if(internal_battery)
 				loaded_machine.connected_cell = internal_battery
@@ -146,8 +145,7 @@
 		loaded_machine.battery_dependent = 0
 		loaded_machine.connected_cell = null
 		loaded_machine.power_change()
-		if(!(loaded_machine.machine_flags & WRENCHMOVE))
-			loaded_machine.machine_flags |= WRENCHMOVE
+		loaded_machine.machine_flags |= WRENCHMOVE
 		visible_message("The [load] is unloaded from the cart.")
 		if(!is_blacklisted(load))		
 			visible_message("The [load]'s cables disconnect from the cart.'")			
