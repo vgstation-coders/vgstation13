@@ -24,10 +24,7 @@
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
 			loaded_machine.power_change()
-
-/obj/machinery/loaded_machine/wrenchAnchor(mob/user, obj/item/I)
-	return FALSE
-	
+			
 /obj/machinery/cart/cargo/examine(mob/user)
 	..()
 	if(internal_battery)
