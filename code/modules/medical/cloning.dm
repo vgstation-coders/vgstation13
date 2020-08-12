@@ -429,6 +429,26 @@
 	occupant.forceMove(exit)
 	icon_state = "pod_0"
 	eject_wait = FALSE //If it's still set somehow.
+	//do early ejection damage
+	var/completion = 10*((occupant.health + 100) / (heal_level + 100)) //same way completion is calculated for examine text, but out of 10 instead of 100
+	var/damage_rolls = 10 - round(completion) - (round(resource_efficiency) - 1) // 1 roll for each 10% missing, each improved pair of manipulators reduces one roll
+	var/hits = 0
+	while(damage_rolls > 0)
+		if(prob(25))//each roll has a 25% chance to give the occupant a bad time
+			hits++
+		damage_rolls--
+	//apply the damage
+	var/mob/living/carbon/human/H = occupant
+	while(hits>0)
+		if (hits>=4)
+			qdel(pick(H.internal_organs - H.internal_organs_by_name["brain"]))
+			hits -= 4
+		else //if this pick lands on either torso part, those can't be droplimb'd. Get out of jail free, I guess
+			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 1, display_message = FALSE)
+			hits--
+
+	occupant.updatehealth()
+
 	domutcheck(occupant) //Waiting until they're out before possible monkeyizing.
 	occupant.add_side_effect("Bad Stomach") // Give them an extra side-effect for free.
 	occupant = null

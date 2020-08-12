@@ -116,6 +116,15 @@
 /obj/machinery/proc/powered(chan = power_channel)
 	if(!src.loc)
 		return 0
+		
+	if(battery_dependent && !connected_cell)
+		return 0
+
+	if(connected_cell)
+		if(connected_cell.charge > 0)
+			return 1
+		else
+			return 0
 
 	if(!use_power)
 		return 1
@@ -132,13 +141,18 @@
 // defaults to power_channel
 /obj/machinery/proc/use_power(amount, chan = power_channel)
 	var/area/this_area = get_area(src)
-	if(!this_area)
-		return 0						// if not, then not powered.
+	if(connected_cell && connected_cell.charge > 0)   //If theres a cell directly providing power use it, only for cargo carts at the moment
+		if(connected_cell.charge < amount*0.75)	//Let them squeeze the last bit of power out.
+			connected_cell.charge = 0
+		else
+			connected_cell.use(amount*0.75)				
+	else
+		if(!this_area)
+			return 0						// if not, then not powered.
+		if(!powered(chan)) //no point in trying if we don't have power
+			return 0
 
-	if(!powered(chan)) //no point in trying if we don't have power
-		return 0
-
-	this_area.use_power(amount, chan)
+		this_area.use_power(amount, chan)
 
 // called whenever the power settings of the containing area change
 // by default, check equipment channel & set flag

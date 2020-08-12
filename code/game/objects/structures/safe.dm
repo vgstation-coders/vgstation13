@@ -203,7 +203,7 @@ obj/structure/safe/ex_act(severity)
 		/obj/item/weapon/gun/energy/staff/change,
 		/obj/item/weapon/gun/energy/staff/animate,
 		/obj/item/weapon/gun/energy/staff/focus,
-		/obj/abstract/loadout/gemsuit
+		/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit,
 		)
 
 /obj/structure/safe/floor/wizard/New()

@@ -4,11 +4,58 @@
 /obj/machinery/cart/cargo
 	name = "cargo cart"
 	desc = "A cart for transporting crates. Designed to attach to a tractor."
+	var/obj/item/weapon/cell/internal_battery = null
+	var/maintenance = 0
+	var/obj/machinery/loaded_machine = null
+	var/list/prohibited = list(
+		/obj/machinery/atmospherics/miner,
+		/obj/machinery/cell_charger
+	)
 
 /obj/machinery/cart/cargo/toboggan
 	name = "toboggan"
 	desc = "A toboggan designed to transport crates and injured crewmen through the snow. Designed to attach to a snowmobile."
 	icon_state = "toboggan"
+
+/obj/machinery/cart/cargo/get_cell()
+	return internal_battery
+
+/obj/machinery/cart/cargo/process()			
+	if(internal_battery)
+		if(internal_battery.charge == 0 && loaded_machine)
+			loaded_machine.power_change()
+
+/obj/machinery/cart/cargo/examine(mob/user)
+	..()
+	if(internal_battery)
+		to_chat(user, "<span class='info'>The battery meter reads: [round(internal_battery.percent(),1)]%</span>")
+	else
+		to_chat(user, "<span class='warning'>There is no battery inserted.</span>")
+
+/obj/machinery/cart/cargo/attackby(obj/item/weapon/W as obj, mob/user)
+	if(W.is_screwdriver(user))
+		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
+		playsound(src, 'sound/items/Screwdriver2.ogg', 50, 1)
+		maintenance = !maintenance
+	else if(iscrowbar(W)&&maintenance)
+		if(internal_battery)
+			user.put_in_hands(internal_battery)
+			internal_battery = null
+			if(loaded_machine)
+				loaded_machine.connected_cell = null
+				loaded_machine.power_change()
+		user.visible_message("<span class='notice'>[user] pries out \the [src]'s battery.</span>", "<span class='notice'>You pry out \the [src]'s battery.</span>", "You hear a clunk.")
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+	else if(istype(W,/obj/item/weapon/cell)&&maintenance&&!internal_battery)
+		if(user.drop_item(W,src))
+			internal_battery = W
+			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+			if(loaded_machine)
+				loaded_machine.connected_cell = internal_battery
+				loaded_machine.power_change()
+	else
+		..()
 
 /obj/machinery/cart/cargo/relaymove(mob/user)
 	unload()
@@ -28,7 +75,7 @@
 		return
 	if(is_locking(/datum/locking_category/cargocart) || istype(C, /obj/machinery/cart/))
 		return
-
+	
 	load(C)
 
 /obj/machinery/cart/cargo/MouseDropFrom(obj/over_object as obj, src_location, over_location)
@@ -40,6 +87,11 @@
 		return
 	unload(over_object)
 
+/obj/machinery/cart/cargo/proc/is_blacklisted(var/obj/machinery/M)
+	for(var/B in prohibited)
+		if(istype(M, B))
+			return 1
+	return 0
 
 /obj/machinery/cart/cargo/proc/load(var/atom/movable/C)
 
@@ -58,8 +110,24 @@
 	if(istype(C,/obj/structure/closet/crate))
 		var/obj/structure/closet/crate/crate = C
 		crate.close()
-
+	
+	visible_message("The [C] is loaded onto the cart.")
 	lock_atom(C, /datum/locking_category/cargocart)
+	
+	if(istype(C, /obj/machinery))
+		loaded_machine = C
+		if(!is_blacklisted(C))
+			if(internal_battery)
+				loaded_machine.connected_cell = internal_battery
+			loaded_machine.state = 1
+			loaded_machine.anchored = 1
+			loaded_machine.battery_dependent = 1
+			loaded_machine.power_change()
+			visible_message("The [C]'s cables hook onto the carts power lines.")
+		else
+			loaded_machine.anchored = 0		//Blacklisted machines kept becoming anchored.
+
+	
 	return TRUE
 
 /obj/machinery/cart/cargo/proc/unload(var/dirn = 0)
@@ -68,6 +136,18 @@
 
 	var/atom/movable/load = get_locked(/datum/locking_category/cargocart)[1]
 	unlock_atom(load)
+
+	if(istype(load, /obj/machinery))
+		if(!is_blacklisted(load))
+			if(internal_battery && loaded_machine)
+				loaded_machine.connected_cell = null
+			loaded_machine.state = 0
+			loaded_machine.anchored = 0
+			loaded_machine.battery_dependent = 1
+			loaded_machine.power_change()
+			visible_message("The [load]'s cables disconnect from the cart.'")
+		loaded_machine = null
+		visible_message("The [load] is unloaded from the cart.")
 
 	if(dirn)
 		var/turf/T = src.loc
@@ -78,7 +158,8 @@
 			load.forceMove(src.loc)
 
 	for(var/atom/movable/AM in src)
-		AM.forceMove(src.loc)
+		if(AM != internal_battery)
+			AM.forceMove(src.loc)
 
 /obj/machinery/cart/cargo/lock_atom(var/atom/movable/AM, var/datum/locking_category/category)
 	. = ..()

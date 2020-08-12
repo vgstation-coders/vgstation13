@@ -28,8 +28,7 @@
 		/obj/item/weapon/shard = 50,
 		)
 
-	min_duration = 90
-	max_duration = 110
+	duration = 9 SECONDS
 
 /datum/surgery_step/generic/cut_face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == "mouth" && target.op_stage.face == 0 && check_anesthesia(target)
@@ -61,8 +60,7 @@
 		/obj/item/device/assembly/mousetrap = 10	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
-	min_duration = 70
-	max_duration = 90
+	duration = 7 SECONDS
 
 /datum/surgery_step/face/mend_vocal/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face == 1
@@ -92,8 +90,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 75,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/face/fix_face/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face == 2
@@ -132,8 +129,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 70
-	max_duration = 100
+	duration = 7 SECONDS
 
 /datum/surgery_step/face/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.face > 0

@@ -118,7 +118,7 @@
 		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
-		new /obj/item/weapon/rcd_ammo(), \
+		new /obj/item/stack/rcd_ammo(), \
 		new /obj/item/weapon/light/tube(), \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
