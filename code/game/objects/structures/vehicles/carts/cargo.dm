@@ -19,9 +19,13 @@
 /obj/machinery/cart/cargo/get_cell()
 	return internal_battery
 
-/obj/machinery/cart/cargo/process()			//This might cause lag....?
-	if(internal_battery.charge == 0 && loaded_machine)
-		loaded_machine.power_change()
+/obj/machinery/cart/cargo/process()	
+	if(loaded_machine)
+		if(loaded_machine.loc != src.loc)	//Quick check to see if its on the cart, there could probably be a better check for this
+			unload()		
+	if(internal_battery)
+		if(internal_battery.charge == 0 && loaded_machine)
+			loaded_machine.power_change()
 
 /obj/machinery/cart/cargo/examine(mob/user)
 	..()
@@ -137,13 +141,13 @@
 
 	if(istype(load, /obj/machinery))
 		if(!is_blacklisted(load))
-			if(internal_battery && loaded_machine)
-				loaded_machine.connected_cell = null
-			loaded_machine.state = 0
-			loaded_machine.anchored = 0
-			loaded_machine.battery_dependent = 1
+			loaded_machine.battery_dependent = 0
 			loaded_machine.power_change()
 			visible_message("The [load]'s cables disconnect from the cart.'")
+			if(internal_battery && loaded_machine)
+				loaded_machine.connected_cell = null
+		loaded_machine.state = 0
+		loaded_machine.anchored = 0
 		loaded_machine = null
 		visible_message("The [load] is unloaded from the cart.")
 
