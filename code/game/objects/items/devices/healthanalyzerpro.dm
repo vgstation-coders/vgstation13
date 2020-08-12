@@ -32,7 +32,7 @@
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/examine(mob/user)
 	..()
-	to_chat(user, "<span class='notice'>Current active mode: [mode].</span>")
+	to_chat(user, "<span class='info'>Current active mode: [mode].</span>")
 
 /obj/item/weapon/autopsy_scanner/healthanalyzerpro/verb/toggle_mode()
 	set name = "Switch mode"
