@@ -313,6 +313,14 @@
 	</ul>"}
 
 
+/obj/machinery/conveyor/DuplicateObject(var/location)
+	var/obj/machinery/conveyor/duplicate = ..()
+	duplicate.in_reverse = in_reverse
+	duplicate.backwards = backwards
+	duplicate.forwards = forwards
+	duplicate.movedir = movedir
+	return duplicate
+
 /obj/machinery/conveyor/multitool_topic(var/mob/user,var/list/href_list,var/obj/O)
 	. = ..()
 	if(.)

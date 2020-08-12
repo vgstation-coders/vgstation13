@@ -243,6 +243,8 @@
 
 /datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Clown
@@ -383,8 +385,9 @@
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
-	H.mind.miming = MIMING_OUT_OF_CHOICE
 	mob_rename_self(H,"mime")
+	if (H.mind)
+		H.mind.miming = MIMING_OUT_OF_CHOICE
 	return 1
 
 // -- Janitor
@@ -604,6 +607,8 @@
 
 /datum/outfit/lawyer/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/>")
 
 // -- Chaplain

@@ -1142,6 +1142,18 @@
 	reagents.add_reagent(CARAMEL, 4)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/bearburger
+	name = "bear burger"
+	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
+	icon_state = "bearburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(HYPERZINE, 8)
+	src.bitesize = 4
+
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
 	desc = "That's all you can say!"

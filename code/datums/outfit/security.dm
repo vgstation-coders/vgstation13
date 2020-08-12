@@ -262,7 +262,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_l_store_str = /obj/item/device/flash,
 		),
@@ -305,6 +305,6 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/officer/post_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
+	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")

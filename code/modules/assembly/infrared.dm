@@ -295,14 +295,14 @@
 	..()
 
 ////////////////////////////////////Leaving the beam triggers the emitter//////////////////////
-/obj/effect/beam/infrared/target_moved(var/list/args)
+/obj/effect/beam/infrared/target_moved(atom/movable/mover)
 	hit()
 	..()
 
-/obj/effect/beam/infrared/target_density_change(var/list/args)
+/obj/effect/beam/infrared/target_density_change(atom/atom)
 	hit()
 	..()
 
-/obj/effect/beam/infrared/target_destroyed(var/list/args)
+/obj/effect/beam/infrared/target_destroyed(datum/thing)
 	hit()
 	..()

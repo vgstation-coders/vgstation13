@@ -475,6 +475,14 @@ var/list/uplink_items = list()
 	num_in_stock = 1
 	cost = 10
 
+/datum/uplink_item/sabotage_tools/loic_remote
+	name = "Low Orbit Ion Cannon Remote"
+	desc = "This device can activate a remote syndicate satellite every 15 minutes, generating a randomized law in the station's AI. Results may vary."
+	item = /obj/item/device/loic_remote
+	cost = 8
+	discounted_cost = 6
+	jobs_with_discount = SCIENCE_POSITIONS
+
 /datum/uplink_item/sabotage_tools/reportintercom
 	name = "NT Central Command Report Falsifier"
 	desc = "A command report intercom stolen from Nanotrasen Command that allows for a single fake Command Update to be sent. Ensure tastefulness so that the crew actually falls for the message. Item is particular obvious and will have to be manually discarded after use."
