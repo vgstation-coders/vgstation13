@@ -24,7 +24,7 @@
 	if(cooldown-world.time < 0)
 		to_chat(user, "<span class='notice'>It is ready to fire.</span>") 
 	else
-		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon can fire again in [cooldown-world.time].</span>") 
+		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon can fire again in [time2text(cooldown-world.time)].</span>") 
 /obj/item/device/loic_remote/attack_self(var/mob/user)
 	var/turf/T = get_turf(src)
 	if(cooldown - world.time > 0)
