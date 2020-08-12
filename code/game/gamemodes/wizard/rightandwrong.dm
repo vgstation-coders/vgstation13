@@ -424,7 +424,7 @@
 
 
 /mob/living/carbon/human/proc/equip_artifact(var/datum/role/R)
-	var/randomizeartifact = pick("staffchange", "staffswap", "staffmental", "soulstone", "rigsuit", "staffanimate", "staffnecro", "apprentice", "scyingorb", "cloak", "gloworb", "phylactery", "speedboots")
+	var/randomizeartifact = pick("staffswap", "staffmental", "soulstone", "rigsuit", "staffanimate", "staffnecro", "apprentice", "scyingorb", "cloak", "gloworb", "phylactery", "speedboots")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
