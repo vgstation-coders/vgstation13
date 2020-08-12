@@ -98,7 +98,7 @@ var/list/vector/all_vectors = list(
 	return arccos((src_norm * b_norm)/(src_norm.chebyshev_norm()*b_norm.chebyshev_norm()))
 
 /vector/proc/mirrorWithNormal(var/vector/N)
-	var/vector/n_norm = N.chebyshev_normalized()
+	var/vector/n_norm = N.normalized()
 	return src - n_norm * ( 2 * ( src * n_norm ))
 
 //operator overloading
