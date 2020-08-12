@@ -135,7 +135,7 @@
 		/obj/item/weapon/reagent_containers/hypospray,
 		/obj/item/weapon/card/debit/preferred/department/medical,
 		/obj/item/weapon/switchtool/surgery,
-		/obj/item/device/healthanalyzerpro
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro
 	)
 
 

@@ -171,7 +171,7 @@
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
 		"/obj/item/weapon/electrolyzer",
-		"/obj/item/device/healthanalyzerpro"
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim

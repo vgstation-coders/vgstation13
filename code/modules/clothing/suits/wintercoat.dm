@@ -98,7 +98,7 @@
 		/obj/item/device/flashlight/pen,
 		/obj/item/weapon/minihoe,
 		/obj/item/weapon/switchtool,
-		/obj/item/device/healthanalyzerpro)
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"

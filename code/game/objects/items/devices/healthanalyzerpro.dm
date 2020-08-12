@@ -5,7 +5,7 @@
 #define PRO_IMMUNE_SCAN	"Immunity Scan"
 #define PRO_AUTOPSY_SCAN	"Autopsy Scan"
 
-/obj/item/device/healthanalyzerpro
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro
 	name = "Health Analyzer Pro"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon = 'icons/obj/device.dmi'
@@ -29,13 +29,12 @@
 	var/list/modes = list(PRO_HEALTH_SCAN, PRO_HEALTH_SCAN_SIMPLE, PRO_BODY_SCAN, PRO_REAGENT_SCAN, PRO_IMMUNE_SCAN, PRO_AUTOPSY_SCAN)
 	var/obj/item/device/antibody_scanner/immune
 	var/last_print
-	parent_type = /obj/item/weapon/autopsy_scanner
 
-/obj/item/device/healthanalyzerpro/examine(mob/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Current active mode: [mode].</span>")
 
-/obj/item/device/healthanalyzerpro/verb/toggle_mode()
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/verb/toggle_mode()
 	set name = "Switch mode"
 	set src in usr
 	set category = "Object"
@@ -44,11 +43,11 @@
 	last_reading = null
 	last_scantime = 0
 
-/obj/item/device/healthanalyzerpro/AltClick()
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/AltClick()
 	if(usr.is_holding_item(src))
 		toggle_mode()
 
-/obj/item/device/healthanalyzerpro/print_data() //verb from autopsy scanner changed to work differently here
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/print_data() //verb from autopsy scanner changed to work differently here
 	var/mob/user = usr
 	if(mode == "Immunity Scan")
 		to_chat(user, "<span class='warning'>Due to memory constraints, immunity scan doesn't provide printing function!</span>")
@@ -71,7 +70,7 @@
 	R.info = last_reading
 	user.put_in_hands(R)
 
-/obj/item/device/healthanalyzerpro/attack(mob/living/L, mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/attack(mob/living/L, mob/living/user)
 	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -89,7 +88,7 @@
 				autopsy_scan(L,user)
 	add_fingerprint(user)
 
-/obj/item/device/healthanalyzerpro/preattack(atom/O, mob/user) //snowlakes
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/preattack(atom/O, mob/user) //snowlakes
 	switch(mode)
 		if(PRO_REAGENT_SCAN)
 			reagent_scan(O,user)
@@ -97,7 +96,7 @@
 			immune_scan(O,user)
 	add_fingerprint(user)
 
-/obj/item/device/healthanalyzerpro/attack_self(mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/attack_self(mob/living/user)
 	if(..())
 		return
 	if(!user.dexterity_check())
@@ -114,7 +113,7 @@
 			hallucinate_scan(user)
 	add_fingerprint(user)
 
-/obj/item/device/healthanalyzerpro/proc/hallucinate_scan(mob/living/M, mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/hallucinate_scan(mob/living/M, mob/living/user)
 	if(M && M.isDead())
 		user.show_message("<span class='game say'><b>\The [src] beeps</b>, \"It's dead, Jim.\"</span>", MESSAGE_HEAR ,"<span class='notice'>\The [src] glows black.</span>")
 	else
@@ -123,9 +122,9 @@
 
 //Health Scan and Simplified Health Scan
 
-/obj/item/device/healthanalyzerpro/proc/health_scan(mob/living/M, mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/health_scan(mob/living/M, mob/living/user)
 	var/scan_detail
-	if(PRO_HEALTH_SCAN)
+	if(mode == PRO_HEALTH_SCAN)
 		scan_detail = 1
 	else
 		scan_detail = 0
@@ -137,7 +136,7 @@
 
 //Autopsy Function
 
-/obj/item/device/healthanalyzerpro/proc/autopsy_scan(mob/living/carbon/human/M, mob/living/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/autopsy_scan(mob/living/carbon/human/M, mob/living/user)
 	if(!istype(M))
 		return
 	if(!can_operate(M, user))
@@ -169,7 +168,7 @@
 			last_reading = dat
 			last_scantime = world.time
 
-/obj/item/device/healthanalyzerpro/add_data(var/datum/organ/external/O)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/add_data(var/datum/organ/external/O)
 	if(!O.autopsy_data.len && !O.trace_chemicals.len)
 		return 0
 	..()
@@ -177,7 +176,7 @@
 
 //Advanced Health Scanner functions, basicly advanced body scanner
 
-/obj/item/device/healthanalyzerpro/proc/body_scan(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/body_scan(mob/living/M as mob, mob/living/user as mob)
 	if (!M)
 		return
 	if(!istype(M, /mob/living/carbon/human))
@@ -196,7 +195,7 @@
 
 //Reagent Scan function
 
-/obj/item/device/healthanalyzerpro/proc/reagent_scan(atom/O, mob/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/reagent_scan(atom/O, mob/user)
 	if(!O.Adjacent(user))
 		return
 	if(O.reagents)
@@ -220,7 +219,7 @@
 
 //the fucking virology scanner part
 
-/obj/item/device/healthanalyzerpro/proc/immune_scan(atom/O, mob/user)
+/obj/item/weapon/autopsy_scanner/healthanalyzerpro/proc/immune_scan(atom/O, mob/user)
 	if(!O.Adjacent(user))
 		return
 	if(!iscarbon(O))
