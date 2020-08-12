@@ -422,7 +422,7 @@
 		S.summons_received = randomizemagic
 
 /mob/living/carbon/human/proc/equip_potions(var/datum/role/R)
-	for(i=0, i<3, i++)
+	for(var/i=0, i<3, i++)
 		var/randomizepotions = pick("healing", "transform", "toxin", "mana", "invisibility", "stoneskin", "speed", "zombie", "truesight", "strength", "random", "sword", "levitation", "fireball", "light", "fullness", "transparency", "paralysis", "teleport")
 		switch (randomizepotions)
 			if("healing")
