@@ -305,7 +305,7 @@
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "alchemy")
+	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "street_alch")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
@@ -413,9 +413,9 @@
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
 		if("ice_barrage")
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
-		if("alchemy")
+		if("street_alch")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-			new /obj/item/potion/random(get_turf(src))
+	new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
