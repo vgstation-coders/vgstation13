@@ -420,6 +420,8 @@
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
 		S.summons_received = randomizemagic
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+
 
 /mob/living/carbon/human/proc/equip_artifact(var/datum/role/R)
 	var/randomizeartifact = pick("staffchange", "staffswap", "staffmental", "soulstone", "rigsuit", "staffanimate", "staffnecro", "apprentice", "scyingorb", "cloak", "gloworb", "phylactery", "speedboots")
@@ -519,3 +521,4 @@
 	var/datum/role/wizard/summon_magic/artifact/S = R
 	if(istype(S))
 		S.summons_received = randomizeartifact
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
