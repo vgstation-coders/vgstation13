@@ -97,6 +97,16 @@
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
+	if(ishuman(user)) //apparently other races don't apply lipstick.
+		var/mob/living/carbon/human/H = user
+		if((H.attack_type == ATTACK_BITE) && (H.a_intent == I_HELP)) //if biting and helping
+			add_fingerprint(H)
+			if(H.lip_style)
+				to_chat(user, "<span class='notice'>You kiss the piece of paper, leaving a pair of lipstick lips.</span>")
+				src.stamps += (src.stamps=="" ? "<HR>" : "<BR>") + "<i>The [src.name] has a big [H.lip_style] kiss on it.</i>"
+			else
+				to_chat(user, "<span class='notice'>You kiss the piece of paper.</span>")
+
 	user.examination(src)
 	if(rigged && (Holiday == APRIL_FOOLS_DAY))
 		if(spam_flag == 0)
