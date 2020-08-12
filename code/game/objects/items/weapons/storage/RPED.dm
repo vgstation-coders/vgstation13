@@ -131,3 +131,24 @@
 /obj/item/weapon/storage/bag/gadgets/part_replacer/injector/play_rped_sound()
 	..()
 	qdel(src) //We've had a successful upgrade, time to die.
+
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED
+	name = "part exchange device"
+	desc = "A tool for replacing components in machines. Requires the user to manually guide and articulate it."
+	icon_state = "PED"
+	item_state = "PED"
+	storage_slots = 35
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+
+/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED/preattack(var/atom/A, mob/user)
+	if(istype(A, /obj/machinery))
+		var/obj/machinery/M = A
+		if(!M.panel_open)
+			..()
+		else if(do_after(user, M, 5 SECONDS))
+			..()
+		else
+			return 1
+	else
+		..()

@@ -146,6 +146,16 @@
 	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
 	category = "Engineering"
 
+/datum/design/PED
+	name = "Part Exchange Device"
+	desc = "A tool for replacing components in machines. Requires the user to manually guide and articulate it."
+	id = "ped"
+	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
+	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED
+	category = "Engineering"
+
 /datum/design/mat_synth
 	name = "Material Synthesizer"
 	desc = "A device capable of producing very little rare material with a whole lot of investment."
