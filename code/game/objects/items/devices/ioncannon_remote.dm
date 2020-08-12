@@ -11,10 +11,10 @@
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/device/loic_remote/process()
-	if(cooldown - world.time < 0)		//Set the icon back to the default if the cooldown expires
-		icon_state = "batterer"
-		processing_objects.Remove(src)
+	update_icon()
 
+/obj/item/device/loic_remote/update_icon()
+	icon_state = "batterer[cooldown-world.time<0 ? "" : "burnt"]"
 
 /obj/item/device/loic_remote/attack_self(var/mob/user)
 	var/turf/T = get_turf(src)
