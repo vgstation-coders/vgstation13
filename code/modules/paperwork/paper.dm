@@ -104,6 +104,14 @@
 			if(H.lip_style)
 				to_chat(user, "<span class='notice'>You kiss the piece of paper, leaving a pair of lipstick lips.</span>")
 				src.stamps += (src.stamps=="" ? "<HR>" : "<BR>") + "<i>The [src.name] has a big [H.lip_style] kiss on it.</i>"
+				var/image/kissoverlay = image('icons/obj/paper.dmi')
+				kissoverlay.icon_state = "lipstick_kiss"
+				kissoverlay.pixel_x = rand(-1, 1) * PIXEL_MULTIPLIER //the kiss overlay is quite big
+				kissoverlay.pixel_y = rand(-1, 1) * PIXEL_MULTIPLIER
+				if(!src.stamped)
+					src.stamped = new
+				src.stamped += type
+				src.overlays += kissoverlay
 			else
 				to_chat(user, "<span class='notice'>You kiss the piece of paper.</span>")
 
