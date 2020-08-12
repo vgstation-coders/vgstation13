@@ -210,7 +210,7 @@
 /datum/spellbook_artifact/summon_swords
 	name = "Summon Swords"
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
-	abbreviation = "SA"
+	abbreviation = "SS"
 
 /datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
@@ -226,14 +226,14 @@
 /datum/spellbook_artifact/summon_artifacts
 	name = "Summon Artifacts"
 	desc = "Share the secrets of the ancient world and bring peace to the station. Or chaos."
-	abbreviation = "SS"
+	abbreviation = "SA"
 	vprice = Sp_BASE_PRICE*2
 
-/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
+/datum/spellbook_artifact/summon_artifacts/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
 	return is_roundstart_wizard(user)
 
-/datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/summon_artifacts/purchased(mob/living/carbon/human/H)
 	..()
 
 	H.rightandwrong("artifact")
