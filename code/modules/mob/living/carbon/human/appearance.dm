@@ -181,13 +181,13 @@
 	return list(red, green, blue)
 
 /mob/living/carbon/human/proc/pick_gender(var/mob/user)
-	var/new_gender = alert(src, "Please select gender.", "Character Generation", "Male", "Female")
+	var/new_gender = alert(user, "Please select gender.", "Character Generation", "Male", "Female")
 	if (new_gender)
 		setGender(new_gender == "Male" ? MALE : FEMALE)
 	update_body()
 
 /mob/living/carbon/human/proc/pick_appearance(var/mob/user)
-	var/new_tone = input(src, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
+	var/new_tone = input(user, "Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
 	if (!new_tone)
 		new_tone = 35
 	my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
