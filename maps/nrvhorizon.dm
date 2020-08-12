@@ -49,8 +49,6 @@
 ////////////////////////////////////////////////////////////////
 #include "nrvhorizon.dmm"
 
-#include "NRVH\areas.dm"
-
 #if !defined(MAP_OVERRIDE_FILES)
 	#define MAP_OVERRIDE_FILES
 	#include "packedstation\misc.dm"
