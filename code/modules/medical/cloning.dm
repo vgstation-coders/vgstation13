@@ -443,7 +443,7 @@
 		if (hits>=4)
 			qdel(pick(H.internal_organs - H.internal_organs_by_name["brain"]))
 			hits -= 4
-		else
+		else //if this pick lands on either torso part, those can't be droplimb'd. Get out of jail free, I guess
 			H.organs_by_name[pick(H.organs_by_name)].droplimb(override = 1, no_explode = 1, spawn_limb = 1, display_message = FALSE)
 			hits--
 
