@@ -30,25 +30,28 @@ var/list/beam_master = list()
 	. = ..()
 	hit_cache = .
 
-/ray/beam_ray/raycast_hit_check(var/atom/movable/A)
+/ray/beam_ray/raycast_hit_check(var/rayCastHitInfo/info)
+	var/atom/movable/A = info.hit_atom
+
 	if(isnull(A))
-		return RAY_CAST_NO_HIT_CONTINUE
+		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
-		return RAY_CAST_HIT_EXIT
+		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
+
 
 	if(istype(A, /mob/living))
 		var/ret = A.bullet_act(fired_beam)
 
 		if(ret < 0) //we rebounded
-			return RAY_CAST_REBOUND
+			return new /rayCastHit(info, RAY_CAST_REBOUND)
 
-		return RAY_CAST_HIT_EXIT
+		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
 	if(A.opacity)
-		return RAY_CAST_HIT_EXIT
-	return 0
+		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
+	return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 /obj/item/projectile/beam
 	name = "laser"

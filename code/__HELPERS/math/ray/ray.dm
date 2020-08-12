@@ -91,8 +91,8 @@
 //inherit and override this for costum logic
 //=> for possible return values check defines at top of file
 //=> can also use costum return values
-/ray/proc/raycast_hit_check(var/atom/movable/A)
-	return RAY_CAST_HIT_CONTINUE
+/ray/proc/raycast_hit_check(var/rayCastHitInfo/info)
+	return new /rayCastHit(info, RAY_CAST_HIT_CONTINUE)
 
 //returns list of raycasthits
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
@@ -136,33 +136,36 @@
 		var/turf/T = locate(new_position.x, new_position.y, z)
 
 		//trying hit at turf
-		var/hit_check = raycast_hit_check(T)
-		if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
-			return hits
-		else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
-			//empty, nothing happens here
-		else if(hit_check <= RAY_CAST_HIT_CONTINUE)
-			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
-		else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
-			hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
-			return hits //exit loop
+		var/rayCastHitInfo/info = new /rayCastHitInfo(src, T, new_position, new_position_unfloored, distance)
+		var/rayCastHit/hit = raycast_hit_check(info)
+		switch(hit.hit_code())
+			if(RAY_CAST_NO_HIT_EXIT)
+				return hits
+			if(RAY_CAST_NO_HIT_CONTINUE)
+				//nothing happens
+			if(RAY_CAST_HIT_CONTINUE)
+				hits += hit
+			if(RAY_CAST_HIT_EXIT)
+				hits += hit
+				return hits
 
 		if(max_hits && max_hits >= hits.len)
 			return hits
 
 		//trying hit on every atom inside the turf
 		for(var/atom/movable/A in T)
-			hit_check = raycast_hit_check(A)
-			if(hit_check < RAY_CAST_NO_HIT_CONTINUE) //no_hit_exit
-				return hits
-			else if(hit_check == RAY_CAST_NO_HIT_CONTINUE)
-			else if(hit_check <= RAY_CAST_HIT_CONTINUE)
-				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
-			else if(hit_check > RAY_CAST_HIT_CONTINUE) //hit_exit
-				hits += new /rayCastHit(src, T, new_position, new_position_unfloored, distance, hit_check)
-				return hits //exit loop
-			if(max_hits && max_hits >= hits.len)
-				return hits
+			info = new /rayCastHitInfo(src, A, new_position, new_position_unfloored, distance)
+			hit = raycast_hit_check(info)
+			switch(hit.hit_code())
+				if(RAY_CAST_NO_HIT_EXIT)
+					return hits
+				if(RAY_CAST_NO_HIT_CONTINUE)
+					//nothing happens
+				if(RAY_CAST_HIT_CONTINUE)
+					hits += hit
+				if(RAY_CAST_HIT_EXIT)
+					hits += hit
+					return hits
 
 		//adding our position so we know we already checked this one
 		positions += new_position
