@@ -12,6 +12,8 @@
 			survivor_type = /datum/role/survivor/crusader/
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
+		if ("potions")
+			survivor_type = /datum/role/wizard/summon_potions/
 		else
 			survivor_type = /datum/role/survivor/
 
@@ -50,6 +52,8 @@
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
+		if (/datum/role/wizard/summon_potions)
+			return equip_potions(R)
 		else
 			return equip_guns(R)
 
@@ -416,3 +420,54 @@
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
 		S.summons_received = randomizemagic
+
+/mob/living/carbon/human/proc/equip_potions(var/datum/role/R)
+	var/randomizepotions = pick("healing", "transform", "toxin", "mana", "invisibility", "stoneskin", "speed", "zombie", "truesight", "strength", "random", "sword", "levitation", "fireball", "light", "fullness", "transparency", "paralysis", "teleport")
+	switch (randomizepotions)
+		if("healing")
+			new /obj/item/potion/healing(get_turf(src))
+		if("transform")
+			new /obj/item/potion/transform(get_turf(src))
+		if("toxin")
+			new /obj/item/potion/toxin(get_turf(src))
+		if("mana")
+			new /obj/item/potion/mana(get_turf(src))
+		if("invisibility")
+			new /obj/item/potion/invisibility/major(get_turf(src))
+		if("stoneskin")
+			new /obj/item/potion/stoneskin(get_turf(src))
+		if("speed")
+			new /obj/item/potion/speed/major(get_turf(src))
+		if("zombie")
+			new /obj/item/potion/zombie(get_turf(src))
+		if("truesight")
+			new /obj/item/potion/mutation/truesight/major(get_turf(src))
+		if("strength")
+			new /obj/item/potion/mutation/strength/major(get_turf(src))
+		if("random")
+			new /obj/item/potion/random(get_turf(src))
+			new /obj/item/potion/random(get_turf(src))
+			new /obj/item/potion/random(get_turf(src))
+		if("sword")
+			new /obj/item/potion/sword(get_turf(src))
+		if("levitation")
+			new /obj/item/potion/levitation(get_turf(src))
+		if("fireball")
+			new /obj/item/potion/fireball(get_turf(src))
+		if("invisibility")
+			new /obj/item/potion/invisibility(get_turf(src))
+		if("light")
+			new /obj/item/potion/light(get_turf(src))
+		if("fullness")
+			new /obj/item/potion/fullness(get_turf(src))
+		if("transparency")
+			new /obj/item/potion/transparency(get_turf(src))
+		if("paralysis")
+			new /obj/item/potion/paralysis(get_turf(src))
+		if("teleport")
+			new /obj/item/potion/teleport(get_turf(src))
+		
+	var/datum/role/survivor/S = R
+	if(istype(S))
+		S.summons_received = randomizepotions
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
