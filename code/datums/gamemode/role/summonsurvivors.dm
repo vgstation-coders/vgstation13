@@ -48,3 +48,12 @@
 /datum/role/wizard/summon_magic/GetScoreboard()
 	. = ..()
 	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+
+/datum/role/wizard/summon_magic/artifact
+	name = MAGICIAN_ARTIFACT
+	id = MAGICIAN_ARTIFACT
+
+/datum/role/wizard/summon_magic/artifact/Greet()
+	to_chat(antag.current, "<B>You are a Magical Archeologist!</B><BR>Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...")
+
+

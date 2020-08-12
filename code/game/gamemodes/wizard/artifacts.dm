@@ -180,7 +180,7 @@
 	abbreviation = "SG"
 
 /datum/spellbook_artifact/summon_guns/can_buy(var/mob/user)
-	//Only roundstart wizards may summon guns, magic, or blades
+	//Only roundstart wizards may summon guns, magic, blades, or artifacts
 	return is_roundstart_wizard(user)
 
 
@@ -197,7 +197,7 @@
 	abbreviation = "SM"
 
 /datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
-	//Only roundstart wizards may summon guns, magic, or blades
+	//Only roundstart wizards may summon guns, magic, blades, or artifacts
 	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
@@ -210,10 +210,10 @@
 /datum/spellbook_artifact/summon_swords
 	name = "Summon Swords"
 	desc = "Launch a crusade or just spark a blood bath. Either way there will be limbs flying and blood spraying."
-	abbreviation = "SS"
+	abbreviation = "SA"
 
 /datum/spellbook_artifact/summon_swords/can_buy(var/mob/user)
-	//Only roundstart wizards may summon guns, magic, or blades
+	//Only roundstart wizards may summon guns, magic, blades, or artifacts
 	return is_roundstart_wizard(user)
 
 /datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
@@ -221,6 +221,22 @@
 
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
+
+/datum/spellbook_artifact/summon_artifacts
+	name = "Summon Artifacts"
+	desc = "Share the secrets of the ancient world and bring peace to the station. Or chaos."
+	abbreviation = "SS"
+
+/datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, blades, or artifacts
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_magic/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("artifact")
+	to_chat(H, "<span class='userdanger'>You have shared legendary treasures with the crew.</span>")
+
 
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"

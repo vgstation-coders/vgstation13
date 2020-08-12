@@ -58,6 +58,7 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define MAGICIAN_ARTIFACT "Magical Archeologist"
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
