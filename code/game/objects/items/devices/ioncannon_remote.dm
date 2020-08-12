@@ -10,12 +10,21 @@
 	var/cooldown = 0
 	mech_flags = MECH_SCAN_FAIL
 
+/obj/item/device/loic_remote/New()
+	processing_objects.Add(src)
+
 /obj/item/device/loic_remote/process()
 	update_icon()
 
 /obj/item/device/loic_remote/update_icon()
-	icon_state = "batterer[cooldown-world.time<0 ? "" : "burnt"]"
+	icon_state = "batterer[cooldown-world.time < 0 ? "" : "burnt"]"
 
+/obj/item/device/loic_remote/examine(mob/user)
+	..()
+	if(cooldown-world.time < 0)
+		to_chat(user, "<span class='notice'>It is ready to fire.</span>") 
+	else
+		to_chat(user, "<span class='notice'>The Low Orbit Ion Cannon can fire again in [cooldown-world.time].</span>") 
 /obj/item/device/loic_remote/attack_self(var/mob/user)
 	var/turf/T = get_turf(src)
 	if(cooldown - world.time > 0)
@@ -31,7 +40,6 @@
 	generate_ion_law()
 	command_alert(/datum/command_alert/ion_storm_malicious)
 	cooldown = world.time + 15 MINUTES
-	processing_objects.Add(src)
 
 	to_chat(user, "<span class='notice'>\The [src]'s screen flashes green for a moment.</span>")
 
