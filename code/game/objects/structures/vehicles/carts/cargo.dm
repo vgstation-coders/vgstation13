@@ -21,9 +21,6 @@
 	return internal_battery
 
 /obj/machinery/cart/cargo/process()	
-	if(loaded_machine)
-		if(loaded_machine.anchored == 0)	 //Check if somebody uses a wrench on it to unanchor the machine
-			unload()		
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
 			loaded_machine.power_change()
