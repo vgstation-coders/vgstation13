@@ -12,4 +12,6 @@
 #include "turretid.dm"
 #include "lazy_events.dm"
 #include "outfit_datums.dm"
+#include "ray.dm"
+#include "vector.dm"
 #endif
