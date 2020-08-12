@@ -40,15 +40,15 @@ var/list/beam_master = list()
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
-	if(!isturf(fired_beam.original) && A == fired_beam.original)
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-
 	if(istype(A, /mob/living))
 		var/ret = A.bullet_act(fired_beam)
 
 		if(ret < 0) //we rebounded
 			return new /rayCastHit(info, RAY_CAST_REBOUND)
 
+		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
+
+	if(!isturf(fired_beam.original) && A == fired_beam.original)
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
 	if(A.opacity)
