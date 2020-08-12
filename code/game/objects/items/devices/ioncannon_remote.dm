@@ -31,7 +31,6 @@
 	generate_ion_law()
 	command_alert(/datum/command_alert/ion_storm_malicious)
 	cooldown = world.time + 15 MINUTES
-	icon_state = "battererburnt"
 	processing_objects.Add(src)
 
 	to_chat(user, "<span class='notice'>\The [src]'s screen flashes green for a moment.</span>")
