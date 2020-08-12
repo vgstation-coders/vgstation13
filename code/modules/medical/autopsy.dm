@@ -148,25 +148,24 @@
 
 /obj/item/weapon/autopsy_scanner/verb/print_data()
 	set category = "Object"
-	set src in view(usr, 1)
+	set src in usr
 	set name = "Print Data"
-	if(usr.isUnconscious() || !(istype(usr,/mob/living/carbon/human)))
-		to_chat(usr, "No.")
+
+	var/mob/user = usr
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	for(var/mob/O in viewers(usr))
-		O.show_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
 
-	sleep(10)
+	sleep(1 SECONDS)
 
-	var/obj/item/weapon/paper/P = new(usr.loc)
+	var/obj/item/weapon/paper/P = new(user.loc)
 	P.name = "Autopsy Data ([target_name])"
 	P.info = "<tt>[format_autopsy_data()]</tt>"
 	P.overlays += image(icon = P.icon, icon_state = "paper_words")
 
-	if(istype(usr,/mob/living/carbon))
-		// place the item in the usr's hand if possible
-		usr.put_in_hands(P)
+	user.put_in_hands(P)
 
 /obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
