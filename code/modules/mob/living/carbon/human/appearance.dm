@@ -211,17 +211,6 @@
 		my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
 		my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	// hair
-	var/list/all_hairs = typesof(/datum/sprite_accessory/hair) - /datum/sprite_accessory/hair
-	var/list/hairs = list()
-
-	// loop through potential hairs
-	for(var/x in all_hairs)
-		var/datum/sprite_accessory/hair/H = new x // create new hair datum based on type x
-		hairs.Add(H.name) // add hair name to hairs
-		qdel(H) // delete the hair after it's all done
-		H = null
-
 	//hair
 	var/new_hstyle = input(user, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
 	if(new_hstyle)
