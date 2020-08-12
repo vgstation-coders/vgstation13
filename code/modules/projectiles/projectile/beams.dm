@@ -40,7 +40,7 @@ var/list/beam_master = list()
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
-	if(!isturf(original) && A == fired_beam.original)
+	if(!isturf(fired_beam.original) && A == fired_beam.original)
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
 	if(istype(A, /mob/living))
