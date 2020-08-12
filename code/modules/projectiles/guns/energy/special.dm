@@ -81,6 +81,7 @@
 	projectile_type = "/obj/item/projectile/change"
 	origin_tech = null
 	clumsy_check = 0
+	honor_check = 0
 	var/charge_tick = 0
 
 

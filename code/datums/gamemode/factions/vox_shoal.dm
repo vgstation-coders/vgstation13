@@ -128,6 +128,71 @@ var/list/potential_bonus_items = list(
 	. = ..()
 	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
 
+/datum/faction/vox_shoal/OnPostSetup()
+	..()
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+		if (A.name == "vox_locker")
+			var/obj/structure/closet/loot/L = new(get_turf(A))
+			our_bounty_lockers += L
+			qdel(A)
+			A = null
+			continue
+
+	var/spawn_count = 1
+
+	for(var/datum/role/vox_raider/V in members)
+		if(spawn_count > vox_spawn.len)
+			spawn_count = 1
+		var/datum/mind/synd_mind = V.antag
+		synd_mind.current.forceMove(vox_spawn[spawn_count])
+		spawn_count++
+		equip_raider(synd_mind.current, spawn_count)
+
+/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	var/datum/outfit/striketeam/voxraider/concrete_outfit = new
+	concrete_outfit.equip(vox)
+	vox.regenerate_icons()
+	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
+
+	/*
+	spawn()
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		concrete_outfit.chosen_spec = chosen_loadout
+		concrete_outfit.equip_special_items(vox)
+	*/
+
 /datum/faction/vox_shoal/process()
 	if (completed)
 		return

@@ -31,7 +31,7 @@
 	icon = 'icons/lamprey.dmi'
 	icon_state = "catchall"
 	requires_power = 0
-	anti_ethereal = 0
+	anti_ethereal = 1
 
 /area/lamprey/mining
 	name = "Mining"

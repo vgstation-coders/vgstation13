@@ -413,6 +413,8 @@
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
 		if("ice_barrage")
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
+	new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
+
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
 		S.summons_received = randomizemagic

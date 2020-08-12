@@ -6982,7 +6982,7 @@
 
 /datum/reagent/honkserum/on_overdose(var/mob/living/H)
 
-	if (H.mind.miming)
+	if (H?.mind.miming)
 		H.mind.miming = 0
 		for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
 			H.remove_spell(spell)

@@ -418,6 +418,13 @@
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
 
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Hacked syndie card"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
+
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
 		var/obj/item/weapon/card/id/I = O
@@ -568,6 +575,10 @@
 						to_chat(user, "<span class='notice'>All information has been deleted from \the [src].</span>")
 	else
 		..()
+
+/obj/item/weapon/card/id/syndicate/raider
+	access = list(access_syndicate, access_trade)
+	assignment = "Trader"
 
 #undef AGENT_CARD_DEFAULT_ACCESS
 
@@ -745,8 +756,17 @@
 	icon_state = "deathsquad"
 
 /obj/item/weapon/card/id/death_commando/New()
-	..()
+	. = ..()
 	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/death_commando_leader
+	name = "Sgt.Reaper ID card"
+	assignment = "Death Commander"
+	icon_state = "creed"
+
+/obj/item/weapon/card/id/death_commando_leader/New()
+	. = ..()
+	access = get_centcom_access("Creed Commander")
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Syndicate Commando ID card"
@@ -804,6 +824,15 @@
 /obj/item/weapon/card/id/emergency_responder/New()
 	..()
 	access = get_centcom_access("Emergency Responder")
+
+/obj/item/weapon/card/id/emergency_responder_leader
+	name = "Emergency Responder Leader ID card"
+	assignment = "Emergency Responder Leader"
+	icon_state = "ERT_leader"
+
+/obj/item/weapon/card/id/emergency_responder_leader/New()
+	..()
+	access = get_centcom_access("Emergency Responders Leader")
 
 /obj/item/weapon/card/id/special_operations
 	name = "Special Operations Officer ID card"

@@ -679,8 +679,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					U.relock()
 				U.on_detached()
 
-		host.on_emote.Remove(eh_emote)
-
 	if(host_brain && host_brain.ckey)
 		src.ckey = host.ckey
 		host.ckey = host_brain.ckey
@@ -931,8 +929,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	host_brain.name = M.name
 	host_brain.real_name = M.real_name
-
-	eh_emote = host.on_emote.Add(src,"host_emote")
 
 	// Tell our upgrades that we've attached.
 	for(var/uid in research.unlocked.Copy())

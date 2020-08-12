@@ -54,26 +54,7 @@ var/soft_dels = 0
 				continue
 
 			#ifdef GC_FINDREF
-			to_chat(world, "picnic! searching [D]")
-			testing("GC: Searching references for [ref(D)] [D] | [D.type]")
-			if(istype(D, /atom/movable))
-				var/atom/movable/A = D
-				if(A.loc != null)
-					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
-				if(A.contents.len)
-					testing("GC: [A] | [A.type] has contents:")
-					for(var/atom/B in A.contents)
-						testing("[B] | [B.type]")
-			var/found = 0
-			for(var/atom/R in world)
-				found += LookForRefs(R, D)
-			for(var/datum/R)
-				found += LookForRefs(R, D)
-			for(var/client/R)
-				found += LookForRefs(R, D)
-			found += LookForRefs(world, D)
-			found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
-			to_chat(world, "we found [found]")
+			FindRef(D)
 			#endif
 
 
@@ -126,18 +107,40 @@ var/soft_dels = 0
 #ifdef GC_FINDREF
 /world/loop_checks = 0
 
+/datum/subsystem/garbage/proc/FindRef(datum/D)
+	to_chat(world, "picnic! searching [D]")
+	testing("GC: Searching references for [ref(D)] [D] | [D.type]")
+	if(istype(D, /atom/movable))
+		var/atom/movable/A = D
+		if(A.loc != null)
+			testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
+		if(A.contents.len)
+			testing("GC: [A] | [A.type] has contents:")
+			for(var/atom/B in A.contents)
+				testing("[B] | [B.type]")
+	var/found = 0
+	for(var/atom/R in world)
+		found += LookForRefs(R, D)
+	for(var/datum/R)
+		found += LookForRefs(R, D)
+	for(var/client/R)
+		found += LookForRefs(R, D)
+	found += LookForRefs(world, D)
+	found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
+	to_chat(world, "we found [found]")
+
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
-	for(var/V in D.vars)
+	var/list/Dvars = D.vars
+	for(var/V in Dvars)
 		if(V == "contents" || V == "vars")
 			continue
-		if(istype(D.vars[V], /datum))
-			var/datum/A = D.vars[V]
-			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
-				. += 1
-		else if(islist(D.vars[V]))
-			. += LookForListRefs(D.vars[V], targ, D, V)
+		var/datum/A = Dvars[V]
+		if(A == targ)
+			testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
+			.++
+		else if(islist(A))
+			. += LookForListRefs(A, targ, D, V)
 
 /datum/subsystem/garbage/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V, var/list/foundcache = list())
 	. = 0

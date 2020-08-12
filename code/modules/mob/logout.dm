@@ -7,9 +7,9 @@
 		location.on_logout(src)
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS))
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				qdel(VH)
+		if(virtualhearer)
+			qdel(virtualhearer)
+			virtualhearer = null
 	world.log << "[src] logout"
 
 	remove_spell_channeling() //remove spell channeling before we log out

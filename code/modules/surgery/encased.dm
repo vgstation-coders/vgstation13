@@ -24,8 +24,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/open_encased/saw/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
@@ -80,8 +79,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/open_encased/retract/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!hasorgans(target))
@@ -140,8 +138,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 20
-	max_duration = 40
+	duration = 2 SECONDS
 
 /datum/surgery_step/open_encased/close/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 
@@ -201,8 +198,7 @@
 		/obj/item/weapon/screwdriver = 75,
 		)
 
-	min_duration = 20
-	max_duration = 40
+	duration = 2 SECONDS
 
 /datum/surgery_step/open_encased/mend/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 

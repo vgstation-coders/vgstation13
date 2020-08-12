@@ -590,7 +590,7 @@
 				S.GiveTarget(target)
 
 /mob/living/simple_animal/hostile/humanoid/skellington/lich/Shoot(atom/a, params)
-	var/spell = rand(1,5)
+	var/spell = rand(1,4)
 	var/diceroll = rand(1,20)
 	var/list/victims = list()
 	for(var/mob/living/carbon/human/H in view(src, magic_range))
@@ -622,21 +622,7 @@
 				victims.Remove(H)
 				if(!victims.len)
 					break
-		if(3) //Soul Swarm
-			visible_message("<span class = 'warning'>\The [src] starts to float above the ground!</span>")
-			animate(src, pixel_y = 8, time = 1 SECONDS, easing = ELASTIC_EASING)
-			animate(pixel_y = rand(8,19), pixel_x = rand(-8,8), time = 3 SECONDS, easing = SINE_EASING, loop = 5)
-			for(var/i = 0 to round(diceroll,4))
-				var/mob/living/carbon/human/mtarget = pick(victims)
-				if(mtarget.isDead())
-					continue
-				to_chat(mtarget, "<span class = 'warning'>\The [src] sets its gaze upon you, and fires a soul swarm at you!</span>")
-				var/obj/item/projectile/P = new /obj/item/projectile/soul_swarm(get_turf(src), targetmob = mtarget)
-				spawn()
-					P.OnFired()
-					P.process()
-			animate(src, pixel_y = 0, pixel_x = 0, time = 3 SECONDS, easing = SINE_EASING)
-		if(4) //Raise undead
+		if(3) //Raise undead
 			var/number_of_raised = round(diceroll/3)
 			for(var/mob/living/carbon/human/H in victims)
 				if(!H.isDead())
@@ -653,40 +639,9 @@
 				H.visible_message("<span class = 'warning'>\The [H] raises from the dead!</span>")
 				new /mob/living/simple_animal/hostile/humanoid/skellington(H.loc)
 				qdel(H)
-		if(5) //Fall
+		if(4) //Fall
 			flags |= TIMELESS
 			var/duration = 8*diceroll
 			timestop(src, duration, magic_range, TRUE)
 			spawn(duration)
 				flags &= ~TIMELESS
-
-
-/obj/item/projectile/soul_swarm
-	name = "soul swarm"
-	desc = "It flickers with some rudimentary form of intelligence, but conversation doesn't seem to be the strong point of a magical projectile."
-	icon_state = "soul"
-	damage = 15
-	travel_range = 30
-
-	var/mob/mobtarget = null
-
-/obj/item/projectile/soul_swarm/Destroy()
-	mobtarget = null
-	..()
-
-/obj/item/projectile/soul_swarm/New(var/mob/targetmob)
-	..()
-	stun = rand(0,25)
-	weaken = rand(0,25)
-	paralyze = rand(0,25)
-	irradiate = rand(0,25)
-	stutter = rand(0,25)
-	eyeblur = rand(0,25)
-	drowsy = rand(0,25)
-	agony = rand(0,25)
-	jittery = rand(0,25)
-	mobtarget = targetmob
-
-/obj/item/projectile/soul_swarm/process_step()
-	..()
-	original = mobtarget.loc //update the target

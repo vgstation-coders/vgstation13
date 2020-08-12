@@ -12,8 +12,7 @@
 		)
 
 	priority = 3
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/brain/bone_chips/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -47,8 +46,7 @@
 		)
 
 	priority = 3
-	min_duration = 90
-	max_duration = 110
+	duration = 9 SECONDS
 
 /datum/surgery_step/brain/hematoma/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
