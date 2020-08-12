@@ -21,7 +21,7 @@
 
 /obj/machinery/cart/cargo/process()	
 	if(loaded_machine)
-		if(loaded_machine.loc != src.loc)	//Quick check to see if its on the cart, there could probably be a better check for this
+		if(loaded_machine.anchored == 0)	 //Check if somebody uses a wrench on it to unanchor the machine
 			unload()		
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
@@ -118,16 +118,16 @@
 	
 	if(istype(C, /obj/machinery))
 		loaded_machine = C
+		loaded_machine.anchored = 1
+		loaded_machine.battery_dependent = 1
 		if(!is_blacklisted(C))
 			if(internal_battery)
 				loaded_machine.connected_cell = internal_battery
-			loaded_machine.state = 1
-			loaded_machine.anchored = 1
-			loaded_machine.battery_dependent = 1
+			loaded_machine.state = 1		
 			loaded_machine.power_change()
 			visible_message("The [C]'s cables hook onto the carts power lines.")
-		else
-			loaded_machine.anchored = 0		//Blacklisted machines kept becoming anchored.
+		
+
 
 	
 	return TRUE
@@ -140,16 +140,17 @@
 	unlock_atom(load)
 
 	if(istype(load, /obj/machinery))
+		loaded_machine.state = 0
+		loaded_machine.anchored = 0
+		loaded_machine = null
+		loaded_machine.battery_dependent = 0
+		visible_message("The [load] is unloaded from the cart.")
 		if(!is_blacklisted(load))
-			loaded_machine.battery_dependent = 0
 			loaded_machine.power_change()
 			visible_message("The [load]'s cables disconnect from the cart.'")
 			if(internal_battery && loaded_machine)
 				loaded_machine.connected_cell = null
-		loaded_machine.state = 0
-		loaded_machine.anchored = 0
-		loaded_machine = null
-		visible_message("The [load] is unloaded from the cart.")
+
 
 	if(dirn)
 		var/turf/T = src.loc
