@@ -433,6 +433,13 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 
+/area/shuttle/lightship
+	name = "\improper Lightspeed Ship"
+	requires_power = 1
+
+/area/shuttle/lightship/start
+	icon_state = "yellow"
+
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
 	icon_state = "yellow"

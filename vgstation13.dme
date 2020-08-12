@@ -1195,6 +1195,7 @@
 #include "code\game\shuttles\emergency.dm"
 #include "code\game\shuttles\mining.dm"
 #include "code\game\shuttles\misc.dm"
+#include "code\game\shuttles\lightship.dm"
 #include "code\game\shuttles\research.dm"
 #include "code\game\shuttles\salvage.dm"
 #include "code\game\shuttles\security.dm"
