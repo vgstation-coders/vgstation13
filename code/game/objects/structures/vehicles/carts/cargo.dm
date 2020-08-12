@@ -8,7 +8,8 @@
 	var/maintenance = 0
 	var/obj/machinery/loaded_machine = null
 	var/list/prohibited = list(
-		/obj/machinery/atmospherics/miner
+		/obj/machinery/atmospherics/miner,
+		/obj/machinery/cell_charger
 	)
 
 /obj/machinery/cart/cargo/toboggan
@@ -19,9 +20,10 @@
 /obj/machinery/cart/cargo/get_cell()
 	return internal_battery
 
-/obj/machinery/cart/cargo/process()			//This might cause lag....?
-	if(internal_battery.charge == 0 && loaded_machine)
-		loaded_machine.power_change()
+/obj/machinery/cart/cargo/process()			
+	if(internal_battery)
+		if(internal_battery.charge == 0 && loaded_machine)
+			loaded_machine.power_change()
 
 /obj/machinery/cart/cargo/examine(mob/user)
 	..()
