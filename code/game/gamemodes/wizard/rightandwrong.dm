@@ -415,7 +415,7 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
+			new /obj/item/potion/random(get_turf(src))
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
