@@ -20,7 +20,7 @@
 /obj/machinery/cart/cargo/get_cell()
 	return internal_battery
 
-/obj/machinery/cart/cargo/process()	
+/obj/machinery/cart/cargo/process()			
 	if(internal_battery)
 		if(internal_battery.charge == 0 && loaded_machine)
 			loaded_machine.power_change()
