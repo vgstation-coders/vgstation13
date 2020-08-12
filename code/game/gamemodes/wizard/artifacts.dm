@@ -222,10 +222,12 @@
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
+//SUMMON ARTIFACTS
 /datum/spellbook_artifact/summon_artifacts
 	name = "Summon Artifacts"
 	desc = "Share the secrets of the ancient world and bring peace to the station. Or chaos."
 	abbreviation = "SS"
+	vprice = Sp_BASE_PRICE*2
 
 /datum/spellbook_artifact/summon_magic/can_buy(var/mob/user)
 	//Only roundstart wizards may summon guns, magic, blades, or artifacts
