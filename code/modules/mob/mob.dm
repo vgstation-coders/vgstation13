@@ -361,50 +361,35 @@
 	else
 		to_chat(src, msg)
 
-/mob/proc/show_message(msg, type, alt, alt_type, var/mob/speaker)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
+/mob/proc/show_message(var/msg, var/type, var/alt, var/alt_type, var/mob/speaker)//Message, type of message (1=visible or 2=hearable), alternative message, alt message type (1=if blind or 2=if deaf), and optionally the speaker
 	//Because the person who made this is a fucking idiot, let's clarify. 1 is sight-related messages (aka emotes in general), 2 is hearing-related (aka HEY DUMBFUCK I'M TALKING TO YOU)
 
 	if(!client) //We dun goof
 		return
 
-	if(type)
-		if((type & MESSAGE_SEE) && is_blind()) //Vision related //We can't see all those emotes no-one ever does !
-			if(!(alt))
-				return
-			else
-				msg = alt
-				type = alt_type
-		if((type & MESSAGE_HEAR) && is_deaf()) //Hearing related //We can't hear what the person is saying. Too bad
-			if(!(alt))
-				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//Well, not THAT deaf
+	if (!type) //No type, we want the message to appear no matter our awareness as long as we aren't uncounscious or sleeping
+		if(stat != UNCONSCIOUS)
+			to_chat(src, msg)
+		return
 
-				return //And that does it
-			else
-				msg = alt
-				type = alt_type
-				if((type & MESSAGE_SEE) && is_blind()) //Since the alternative is sight-related, make sure we can see
-					return
-	//Added voice muffling for Issue 41.
-	//This has been changed to only work with audible messages, because you can't hear a frown
-	//This blocks "audible" emotes like gasping and screaming, but that's such a small loss. Who wants to hear themselves gasping to death ? I don't
-	if(stat == UNCONSCIOUS || sleeping > 0) //No-one's home
-		if((type & MESSAGE_SEE)) //This is an emote
-			if(!(alt)) //No alternative message
-				return //We can't see it, we're a bit too dying over here
-			else //Hey look someone passed an alternative message
-				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//Now we can totally not hear it!
+	var/awareness = 0
+	if(stat != UNCONSCIOUS)
+		if (!is_blind())
+			awareness |= MESSAGE_SEE
+		if (!is_deaf())
+			awareness |= MESSAGE_HEAR
 
-				return //And we're good
-		else //This is not an emote
-			if (speaker && (src.ckey == speaker.ckey) && speaker.isincrit() && speaker.said_last_words) //if user is in crit, if user has said_last_words, and whisperer of the final words IS the user himself)
-				to_chat(src, msg)//Send it
-			else
-				to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")//The sweet silence of death
-			return //All we ever needed to hear
-	else //We're fine
-		to_chat(src, msg)//Send it
-
-	return
+	if (awareness & type)
+		to_chat(src, msg)
+	else if (awareness & alt_type)
+		to_chat(src, alt)
+	else if (speaker && (speaker.ckey == ckey) && speaker.isincrit() && speaker.said_last_words) //You can hear your own last words.
+		to_chat(src, msg)
+	else if ((type == MESSAGE_HEAR) || (alt_type == MESSAGE_HEAR)) //we're completely unaware, either deafblind or sleeping.
+		if (speaker)
+			to_chat(src, "<span class='notice'>You can almost hear someone talking.</span>")
+		else
+			to_chat(src, "<span class='notice'>You can almost hear something.</span>")
 
 // Show a message to all mobs in sight of this one
 // This would be for visible actions by the src mob
@@ -430,7 +415,7 @@
 			msg2 = blind_drugged_message
 
 	if(!ignore_self)
-		show_message( msg, 1, msg2, 2)
+		show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR)
 
 	..(message, blind_message, drugged_message, blind_drugged_message, range)
 
@@ -445,7 +430,7 @@
 			msg = drugged_message
 		if(blind_drugged_message)
 			msg2 = blind_drugged_message
-	show_message( msg, 1, msg2, 2)
+	show_message( msg, MESSAGE_SEE, msg2, MESSAGE_HEAR)
 
 // Show a message to all mobs in sight of this atom
 // Use for objects performing visible actions
