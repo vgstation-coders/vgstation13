@@ -9,6 +9,7 @@
 	var/obj/machinery/loaded_machine = null
 	var/list/prohibited = list(
 		/obj/machinery/atmospherics/miner
+		/obj/machinery/cell_charger
 	)
 
 /obj/machinery/cart/cargo/toboggan
@@ -143,12 +144,11 @@
 		loaded_machine.state = 0
 		loaded_machine.anchored = 0
 		loaded_machine.battery_dependent = 0
+		loaded_machine.connected_cell = null
+		loaded_machine.power_change()
 		visible_message("The [load] is unloaded from the cart.")
-		if(!is_blacklisted(load))
-			loaded_machine.power_change()
-			visible_message("The [load]'s cables disconnect from the cart.'")
-			if(internal_battery && loaded_machine)
-				loaded_machine.connected_cell = null
+		if(!is_blacklisted(load))		
+			visible_message("The [load]'s cables disconnect from the cart.'")			
 		loaded_machine = null
 
 
