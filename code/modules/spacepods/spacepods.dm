@@ -800,7 +800,6 @@
 
 /obj/spacepod/empty/adjust_health(var/damage)
 	health = clamp(health-damage, 0, maxHealth)
-	var/percentage = (health / initial(health)) * 100
 	if(health <= 0)
 		qdel(src)
 
