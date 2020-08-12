@@ -215,7 +215,7 @@
 
 /obj/structure/mirror/magic/attack_hand(mob/M)
 	if(!shattered)
-		var/which = alert(M, "What would you like to change?", "Magic Mirror", "Name", "Gender", "Appearance")
+		var/which = input("Change what?", "Magic Mirror") as null|anything in list("Name","Gender","Appearance")
 		var/mob/living/carbon/human/targ = M
 
 		switch(which)
