@@ -142,7 +142,6 @@
 	if(istype(load, /obj/machinery))
 		loaded_machine.state = 0
 		loaded_machine.anchored = 0
-		loaded_machine = null
 		loaded_machine.battery_dependent = 0
 		visible_message("The [load] is unloaded from the cart.")
 		if(!is_blacklisted(load))
@@ -150,6 +149,7 @@
 			visible_message("The [load]'s cables disconnect from the cart.'")
 			if(internal_battery && loaded_machine)
 				loaded_machine.connected_cell = null
+		loaded_machine = null
 
 
 	if(dirn)
