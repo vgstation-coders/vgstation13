@@ -8,7 +8,7 @@
 	var/maintenance = 0
 	var/obj/machinery/loaded_machine = null
 	var/list/prohibited = list(
-		/obj/machinery/atmospherics/miner
+		/obj/machinery/atmospherics/miner,
 		/obj/machinery/cell_charger
 	)
 
