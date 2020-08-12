@@ -882,6 +882,7 @@
 #include "code\game\objects\items\devices\holomap.dm"
 #include "code\game\objects\items\devices\inhaler.dm"
 #include "code\game\objects\items\devices\instruments.dm"
+#include "code\game\objects\items\devices\ioncannon_remote.dm"
 #include "code\game\objects\items\devices\lightreplacer.dm"
 #include "code\game\objects\items\devices\maracas.dm"
 #include "code\game\objects\items\devices\mat_synth.dm"
