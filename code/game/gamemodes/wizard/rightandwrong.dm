@@ -478,8 +478,8 @@
 			new /obj/item/clothing/shoes/sandal(get_turf(src))
 
 	switch (randomizeartifact)
-		if("staffchange")
-			new /obj/item/weapon/gun/energy/staff/change(get_turf(src))
+//		if("staffchange")
+//			new /obj/item/weapon/gun/energy/staff/change(get_turf(src))
 		if("staffswap")
 			new /obj/item/weapon/gun/energy/staff/swapper(get_turf(src))
 		if("staffmental")
