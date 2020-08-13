@@ -2,6 +2,8 @@
 #define SUMMON_SNACKS_DISCOUNT 2
 #define SUMMON_SNACKS_HORRIBLE 3
 #define SUMMON_SNACKS_PUB 4
+#define SUMMON_SNACKS_PATROL 5
+#define SUMMON_SNACKS_SPICY 6
 
 /spell/targeted/summon_snacks //can mean aoe for mobs (limited/unlimited number) or one target mob
 	name = "Summon Snacks"
@@ -22,7 +24,7 @@
 	range = 7
 	compatible_mobs = list(/mob/living/carbon)
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_AMOUNT = 0, Sp_MOVE = 0)
-	level_max = list(Sp_TOTAL = 13, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 4)
+	level_max = list(Sp_TOTAL = 15, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 6)
 	var/menuType = SUMMON_SNACKS_FILLING
 
 /spell/targeted/summon_snacks/cast(var/list/targets, mob/user)
@@ -70,6 +72,16 @@
 				menuType = SUMMON_SNACKS_PUB
 				return "Your snacks are now pub fare."
 			if(spell_levels[Sp_MOVE] == 4)
+				name = "Summon Patrol Snacks"
+				invocation = "LEH'GO I'LAND"
+				menuType = SUMMON_SNACKS_PATROL
+				return "Your snacks are now loved by security."
+			if(spell_levels[Sp_MOVE] == 5)
+				name = "Summon Spicy Snacks"
+				invocation = "HAW'T TO'MALLEE"
+				menuType = SUMMON_SNACKS_SPICY
+				return "Your snacks are now Mexican."
+			if(spell_levels[Sp_MOVE] == 6)
 				name = "Summon Filling Snacks"
 				invocation = "OR'DER UHP"
 				menuType = SUMMON_SNACKS_FILLING
@@ -96,7 +108,7 @@
 		if(Sp_AMOUNT)
 			return "Increases how many bites it takes to finish eating."
 		if(Sp_MOVE)
-			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub."
+			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub, Level 4: Patrol, Level 5: Spicy."
 
 /obj/item/weapon/reagent_containers/food/snacks/summoned
 	name = "wizard snack"
@@ -107,19 +119,28 @@
 /obj/item/weapon/reagent_containers/food/snacks/summoned/proc/spellInherit(var/menu, var/biteS, var/diabeetus)
 	switch(menu)
 		if(SUMMON_SNACKS_FILLING)
-			reagents.add_reagent(NUTRIMENT, 8)
+			reagents.add_reagent(NUTRIMENT, 5)
+			reagents.add_reagent(TOMATO_SOUP, 3)
 		if(SUMMON_SNACKS_DISCOUNT)
 			reagents.add_reagent(NUTRIMENT, 1)
 			reagents.add_reagent(DISCOUNT, 3)
-			reagents.add_reagent(BEFF, 1)
+			reagents.add_reagent(URANIUM, 0.4)
 			reagents.add_reagent(CHEMICAL_WASTE, 1)
 		if(SUMMON_SNACKS_HORRIBLE)
 			reagents.add_reagent(NUTRIMENT, 1)
 			reagents.add_reagent(TOXIN, 1)
-			reagents.add_reagent(SUGAR, 2)
+			reagents.add_reagent(SUGAR, 1)
 		if(SUMMON_SNACKS_PUB)
 			reagents.add_reagent(NUTRIMENT, 2)
-			reagents.add_reagent(BEER, 4)
+			reagents.add_reagent(BEER, 2)
+			reagents.add_reagent(WHISKEY, 2)
+		if(SUMMON_SNACKS_PATROL)
+			reagents.add_reagent(SUGAR, 2)
+			reagents.add_reagent(SPRINKLES, 3)
+			reagents.add_reagent(COFFEE, 2)
+		if(SUMMON_SNACKS_SPICY)
+			reagents.add_reagent(NUTRIMENT, 3)
+			reagents.add_reagent(CAPSAICIN, 2)
 	bitesize = 6 - biteS
 	if(diabeetus)
 		reagents.add_reagent(DIABEETUSOL, 1)
@@ -131,16 +152,22 @@
 	switch(onMenu)
 		if(SUMMON_SNACKS_FILLING)
 			icon_state = "sandwich"
-			name = "Summoned sandwich"
+			name = "summoned sandwich"
 		if(SUMMON_SNACKS_DISCOUNT)
 			icon_state = "goburger"
-			name = "Summoned Dan Burger"
+			name = "summoned Dan burger"
 		if(SUMMON_SNACKS_HORRIBLE)
 			icon_state = "COOKIE!!!"	//I hate you, mysterious icon namer
-			name = "Summoned Chocolate Chip Cookie"
+			name = "summoned chocolate chip cookie"
 		if(SUMMON_SNACKS_PUB)
 			icon_state = "fries"
-			name = "Summoned Fries"
+			name = "summoned fries"
+		if(SUMMON_SNACKS_PATROL)
+			icon_state = "donut2"
+			name = "summoned donut"
+		if(SUMMON_SNACKS_SPICY)
+			icon_state = "chilaquiles"
+			name = "summoned nachos"
 
 /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink
 	icon = 'icons/obj/drinks.dmi'
@@ -150,13 +177,19 @@
 	switch(onMenu)
 		if(SUMMON_SNACKS_FILLING)
 			icon_state = "tomatosoup"
-			name = "Summoned Tomato Soup"
+			name = "summoned tomato soup"
 		if(SUMMON_SNACKS_DISCOUNT)
 			icon_state = "filk"
-			name = "Summoned Filk"
+			name = "summoned filk"
 		if(SUMMON_SNACKS_HORRIBLE)
 			icon_state = "orangejuice"
-			name = "Summoned Orange Juice"
+			name = "summoned orange juice"
 		if(SUMMON_SNACKS_PUB)
 			icon_state = "beer"
-			name = "Summoned Beer"
+			name = "summoned beer"
+		if(SUMMON_SNACKS_PATROL)
+			icon_state = "coffee"
+			name = "summoned coffee"
+		if(SUMMON_SNACKS_SPICY)
+			icon_state = "tequilaglass"
+			name = "summoned tequila"

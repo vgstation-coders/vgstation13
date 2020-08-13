@@ -8005,7 +8005,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	nutriment_factor = 40 * REAGENTS_METABOLISM //This is maybe a little much
+	nutriment_factor = 45 * REAGENTS_METABOLISM //This is maybe a little much
 	sport = 0 //This will never come up but adding it made me smile
 	density = 3 //He DENSE
 	specheatcap = 0.55536
@@ -8030,8 +8030,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 				H.sleeping++
 		else
 			playsound(H, pick(chubbysound), 100, 1)
-			H.overeatduration += 20
-			H.nutrition += 20
+			H.overeatduration += 10 * volume
+			H.nutrition += 10 * volume
 		if(H.nutrition > 750)
 			if(prob(volume) && heart && !heart.robotic)
 				to_chat(H, "<span class='danger'>Your heart just can't take it anymore!</span>")
