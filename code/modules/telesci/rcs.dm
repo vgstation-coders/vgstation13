@@ -205,6 +205,7 @@
 /obj/item/weapon/rcs/salvage/syndicate
 	desc = "An old RCS model that has been modified for longterm use. Upon closer inspection, it appears that the safety features on this device are disabled."
 	no_station = FALSE
+	emagged = 1
 
 #undef MODE_NORMAL
 #undef MODE_RANDOM
