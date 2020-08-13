@@ -403,7 +403,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = IS_WHITELISTED | NO_BREATHE
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
+	anatomy_flags = NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
