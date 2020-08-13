@@ -56,7 +56,7 @@
 		if(dist < smallest_dist)
 			smallest_dist = dist
 			closestDir = d
-	return d
+	return closestDir
 
 /proc/drawLaser(var/vector/A, var/vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/vector/delta = (B - A)
