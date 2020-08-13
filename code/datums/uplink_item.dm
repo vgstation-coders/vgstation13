@@ -1014,7 +1014,6 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
-	/obj/item/weapon/gun/dartgun/vox/raider
 
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
