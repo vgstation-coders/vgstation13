@@ -1014,3 +1014,23 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
+	/obj/item/weapon/gun/dartgun/vox/raider
+
+/datum/uplink_item/jobspecific/trader
+	category = "Trader Specials"
+
+/datum/uplink_item/jobspecific/trader/dartgun
+	name = "Chemical Dart Gun"
+	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
+	item = /obj/item/weapon/gun/dartgun/vox/raider
+	cost = 10
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/dart_cartridge
+	name = "Dart Cartridge"
+	desc = "A spare cartridge to refill your dart gun."
+	item = /obj/item/weapon/dart_cartridge/
+	cost = 2
+	jobs_exclusive = list("Trader")
+	
+
