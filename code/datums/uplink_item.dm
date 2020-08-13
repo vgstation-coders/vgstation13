@@ -1028,7 +1028,7 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/trader/dart_cartridge
 	name = "Dart Cartridge"
 	desc = "A spare cartridge to refill your dart gun."
-	item = /obj/item/weapon/dart_cartridge/
+	item = /obj/item/weapon/dart_cartridge
 	cost = 2
 	jobs_exclusive = list("Trader")
 	
