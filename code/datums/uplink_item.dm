@@ -1022,7 +1022,7 @@ var/list/uplink_items = list()
 	name = "Chemical Dart Gun"
 	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
 	item = /obj/item/weapon/gun/dartgun/vox/raider
-	cost = 10
+	cost = 12
 	jobs_exclusive = list("Trader")
 
 /datum/uplink_item/jobspecific/trader/dart_cartridge
