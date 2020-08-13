@@ -360,3 +360,12 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 			new /obj/item/clothing/suit/bomber_vest(src)
 		if("bike horn")
 			new /obj/item/weapon/bikehorn/syndicate(src)
+
+/obj/item/weapon/storage/box/syndie_kit/cratesender
+	name = "box (CS)"
+
+/obj/item/weapon/storage/box/syndie_kit/cratesender/New()
+	..()
+	new /obj/item/device/telepad_beacon(src)
+	new /obj/item/weapon/rcs/salvage/syndicate(src)
+	return
