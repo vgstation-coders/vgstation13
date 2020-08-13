@@ -385,3 +385,27 @@
 	spawn(30)
 		qdel(src)
 
+
+
+/obj/item/projectile/ricochet/taser
+	name = "electrode"
+	nodamage = 1
+	stun = 10
+	weaken = 10
+	stutter = 10
+	jittery = 20
+	agony = 10
+	hitsound = 'sound/weapons/taserhit.ogg'
+
+/obj/item/projectile/ricochet/taser/hit_apply(var/mob/living/secoff, var/blocked = 0)
+	spawn(13)
+		secoff.apply_effects(stun, weaken, blocked = blocked)
+	secoff.apply_effects (stutter = stutter, blocked = blocked, agony = agony)
+	secoff.audible_scream()
+	if(secoff.tazed == 0)
+		secoff.movement_speed_modifier -= 0.75
+		spawn(30)
+			secoff.movement_speed_modifier += 0.75
+	secoff.tazed = 1
+	spawn(30)
+		secoff.tazed = 0
