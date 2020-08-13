@@ -43,10 +43,29 @@
 		if(NORTHWEST)
 			return new /vector(-1,1)
 
+//defaults to north
+/proc/vector2ClosestDir(var/vector/V)
+	var/vector/V_norm = V.chebyshev_normalized()
+
+	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
+	var/closestDir = NORTH
+	for(var/d in all_vectors)
+		var/vector/dir = all_vectors[d]
+		var/vector/delta = dir.chebyshev_normalized() - V_norm
+		var/dist = delta.chebyshev_norm()
+		if(dist < smallest_dist)
+			smallest_dist = dist
+			closestDir = d
+	return d
+
 /proc/drawLaser(var/vector/A, var/vector/B, var/icon='icons/obj/projectiles.dmi', var/icon_state = "laser")
 	var/vector/delta = (B - A)
 	var/ray/laser_ray = new /ray(A, delta)
 	var/distance = delta.chebyshev_norm()
 
 	laser_ray.draw(distance, icon, icon_state)
+
+/proc/vector2turf(var/vector/V, var/z)
+	var/turf/T = locate(V.x, V.y, z)
+	return T
 

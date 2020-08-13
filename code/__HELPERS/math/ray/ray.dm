@@ -71,14 +71,8 @@
 
 	//we assume every atom is a octogonal, hence we use all_vectors
 	//here we calculate the "face" of the octagonal atom we want to rebound on
-	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
-	var/vector/entry_dir = null
-	for(var/vector/dir in all_vectors)
-		var/vector/delta = dir.chebyshev_normalized() - hit_vector.chebyshev_normalized()
-		var/dist = delta.chebyshev_norm()
-		if(dist < smallest_dist)
-			smallest_dist = dist
-			entry_dir = dir
+	var/entry_byond_dir = vector2ClosestDir(hit_vector)
+	var/vector/entry_dir = dir2vector(entry_byond_dir)
 
 	return src.direction.mirrorWithNormal(entry_dir)
 
@@ -133,7 +127,7 @@
 			continue
 
 		//getting the turf at our current (floored) vector
-		var/turf/T = locate(new_position.x, new_position.y, z)
+		var/turf/T = vector2turf(new_position, z)
 
 		//trying hit at turf
 		var/rayCastHitInfo/info = new /rayCastHitInfo(src, T, new_position, new_position_unfloored, distance)

@@ -32,6 +32,16 @@ var/list/beam_master = list()
 
 /ray/beam_ray/raycast_hit_check(var/rayCastHitInfo/info)
 	var/atom/movable/A = info.hit_atom
+	var/turf/T = vector2turf(info.point, z)
+
+	//setting loc for to_bumo
+	fired_beam.loc = T
+
+	//setting dir for to_bumo
+	var/vector/nextTile = getPoint(info.distance + 1)
+	var/vector/dirToNextTile = atoms2vector(T, vector2turf(nextTile))
+	fired_beam.dir = vector2ClosestDir(dirToNextTile)
+
 
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
@@ -40,13 +50,13 @@ var/list/beam_master = list()
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
-	if(istype(A, /mob/living))
+	/*if(istype(A, /mob/living))
 		var/ret = A.bullet_act(fired_beam)
 
 		if(ret < 0) //we rebounded
 			return new /rayCastHit(info, RAY_CAST_REBOUND)
 
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
+		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)*/
 
 	if(!isturf(fired_beam.original) && A == fired_beam.original)
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)

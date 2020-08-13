@@ -1,24 +1,24 @@
 var/list/vector/cardinal_vectors = list(
-	new /vector(0,1), //NORTH
-	new /vector(0,-1), //SOUTH
-	new /vector(1,0), //EAST
-	new /vector(-1,0) //WEST
+	NORTH = new /vector(0,1), //NORTH
+	SOUTH = new /vector(0,-1), //SOUTH
+	EAST = new /vector(1,0), //EAST
+	WEST = new /vector(-1,0) //WEST
 )
 var/list/vector/diagonal_vectors = list(
-	new /vector(1,1), //NORTHEAST
-	new /vector(-1,1), //NORTHWEST
-	new /vector(1,-1), //SOUTHEAST
-	new /vector(-1,-1) //SOUTHWEST
+	NORTHEAST = new /vector(1,1), //NORTHEAST
+	NORTHWEST = new /vector(-1,1), //NORTHWEST
+	SOUTHEAST = new /vector(1,-1), //SOUTHEAST
+	SOUTHWEST = new /vector(-1,-1) //SOUTHWEST
 )
 var/list/vector/all_vectors = list(
-	new /vector(0,1), //NORTH
-	new /vector(0,-1), //SOUTH
-	new /vector(1,0), //EAST
-	new /vector(-1,0), //WEST
-	new /vector(1,1), //NORTHEAST
-	new /vector(-1,1), //NORTHWEST
-	new /vector(1,-1), //SOUTHEAST
-	new /vector(-1,-1) //SOUTHWEST
+	NORTH = new /vector(0,1), //NORTH
+	SOUTH = new /vector(0,-1), //SOUTH
+	EAST = new /vector(1,0), //EAST
+	WEST = new /vector(-1,0), //WEST
+	NORTHEAST = new /vector(1,1), //NORTHEAST
+	NORTHWEST = new /vector(-1,1), //NORTHWEST
+	SOUTHEAST = new /vector(1,-1), //SOUTHEAST
+	SOUTHWEST = new /vector(-1,-1) //SOUTHWEST
 )
 
 // Basic geometry things.
