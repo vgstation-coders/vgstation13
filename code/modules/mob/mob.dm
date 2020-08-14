@@ -29,8 +29,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_uattack)
-		on_uattack.holder = null
 	if(on_ruattack)
 		on_ruattack.holder = null
 	if(on_damaged)
@@ -79,7 +77,6 @@
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
-	qdel(on_uattack)
 	qdel(on_ruattack)
 	qdel(on_damaged)
 	qdel(on_clickon)
@@ -88,7 +85,6 @@
 	qdel(on_bumped)
 	qdel(on_touched)
 
-	on_uattack = null
 	on_ruattack = null
 	on_damaged = null
 	on_clickon = null
@@ -287,7 +283,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_uattack = new(owner = src)
 	on_ruattack = new(owner = src)
 	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
@@ -1952,8 +1947,7 @@ mob/proc/on_foot()
 //High order proc to remove a mobs spell channeling, removes channeling fully
 /mob/proc/remove_spell_channeling()
 	if(spell_channeling)
-		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
-		thespell.channel_spell(force_remove = 1)
+		spell_channeling.channel_spell(force_remove = 1)
 		return 1
 	return 0
 

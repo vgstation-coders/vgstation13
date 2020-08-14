@@ -102,6 +102,11 @@
 // list/targets: the list of targets the spell is being cast against. May not always be a list.
 /lazy_event/on_spellcast
 
+// Called whenever a mob attacks something with an empty hand.
+// Arguments:
+// atom/atom: The atom that's being attacked.
+/lazy_event/on_uattack
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

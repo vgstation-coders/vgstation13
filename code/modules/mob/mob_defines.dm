@@ -272,7 +272,6 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/event/on_uattack
 	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout
 	var/event/on_damaged
@@ -284,7 +283,7 @@
 	var/event/on_clickon
 
 	var/list/alphas = list()
-	var/spell_channeling
+	var/spell/spell_channeling // The spell that's currently being channeled
 
 	var/see_in_dark_override = 0	//for general guaranteed modification of these variables
 	var/see_invisible_override = 0

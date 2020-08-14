@@ -490,7 +490,7 @@ var/global/list/radial_menus = list()
 var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
 	"group","registered_events",
-	"on_uattack","on_ruattack","on_logout","on_damaged",
+	"on_ruattack","on_logout","on_damaged",
 	"on_death","on_clickon","on_attackhand","on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"

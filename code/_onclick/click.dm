@@ -151,7 +151,7 @@
 		else
 			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
 				delayNextAttack(10)
-			if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+			if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return
 			UnarmedAttack(A, 1, params)
 
@@ -182,7 +182,7 @@
 	else
 		if(ismob(A))
 			delayNextAttack(10)
-		if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+		if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 			return
 		RangedAttack(A, params)
 
