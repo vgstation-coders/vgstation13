@@ -455,16 +455,17 @@
 	else
 		..()
 
-/obj/item/clothing/mask/facehugger/findtarget()
+/obj/item/clothing/mask/facehugger/headcrab/findtarget()
 	if(!real)
 		return
 	target = null
 	for(var/mob/living/T in hearers(src,6))
 		if(!CanHug(T, src))
 			continue
-		if(T && (!T.isUnconscious() ) )
-
-			if(get_dist(loc, T.loc) <= 6)
+		if(T && get_dist(loc, T.loc) <= 6)
+			if(T.isUnconscious())	
+				prob(33) ? target = T : continue	//66% chance to ignore dead/unconscious people. This means that when a zombie is killed you wont know if the headcrab will go back to the corpse or towards you
+			else
 				target = T	
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W, mob/user)
@@ -493,7 +494,7 @@
 
 		var/obj/item/clothing/mask/facehugger/headcrab/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
 		if(F == src)
-			Assimilate()
+			Assimilate(target)
 		else if(F && !F.sterile) // Toys won't prevent real huggers
 			findtarget()
 			return
@@ -503,7 +504,7 @@
 				var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
 				throw_at(escape_tile, 4, 1)
 				escaping = 0
-				sleep(50)
+				sleep(0)
 			else
 				throw_at(target, 3, 1)
 				if(dist == 0)	
