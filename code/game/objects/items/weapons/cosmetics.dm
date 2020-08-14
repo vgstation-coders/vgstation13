@@ -60,7 +60,7 @@
 			to_chat(user, "<span class='warning'>You try to apply the lipstick, but alas, you have no mouth.</span>")
 			return
 		if(H.check_body_part_coverage(MOUTH))
-			to_chat(user, "Remove the equipment covering your mouth, first.")
+			to_chat(user, "<span class='warning'>Remove the equipment covering your mouth, first.</span>")
 			return
 		if(H == user)
 			if(H.species.anatomy_flags & HAS_LIPS)
