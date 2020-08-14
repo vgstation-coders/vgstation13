@@ -29,8 +29,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_damaged)
-		on_damaged.holder = null
 	if(on_death)
 		on_death.holder = null
 	if(on_bumping)
@@ -73,14 +71,12 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
 	qdel(on_touched)
 
-	on_damaged = null
 	on_clickon = null
 	on_death = null
 	on_bumping = null
@@ -277,7 +273,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_death = new(owner = src)
 	on_bumping = new(owner = src)

@@ -117,6 +117,13 @@
 // mob/user: The mob that's logging out.
 /lazy_event/on_logout
 
+// Called whenever a mob takes damage.
+// Truthy return values will prevent the damage.
+// Arguments:
+// kind: the kind of damage the mob is being dealt.
+// amount: the amount of damage the mob is being dealt.
+/lazy_event/on_damaged
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
