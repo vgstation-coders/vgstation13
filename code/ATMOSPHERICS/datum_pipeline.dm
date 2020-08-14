@@ -103,10 +103,10 @@
 
 
 	if(src in new_network.line_members)
-		if(network && (network != new_network))
-			qdel(network)
-			network = null
 		return 0
+
+	if(network && (network != new_network))
+		return new_network.merge(network)
 
 	new_network.line_members += src
 
