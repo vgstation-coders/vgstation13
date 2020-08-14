@@ -615,6 +615,7 @@
 		else
 			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
 		crab?.escaping = 1
+		crab.followtarget()
 		host = null
 		qdel(src)	
 	else
