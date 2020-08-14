@@ -1,35 +1,6 @@
 #define HOLOMAP_OBSTACLE	"#FFFFFFDD"
 #define HOLOMAP_PATH		"#66666699"
 
-var/total_mineral_turfs = 0
-var/test_Plasma = 0
-var/test_Iron = 0
-var/test_Gold = 0
-var/test_Silver = 0
-var/test_Uranium = 0
-var/test_Diamond = 0
-var/test_Clown = 0
-var/test_Phazon = 0
-var/test_Electrum = 0
-var/test_Nanotrasite = 0
-var/test_Pharosium = 0
-var/test_Char = 0
-var/test_Claretine = 0
-var/test_Bohrum = 0
-var/test_Syreline = 0
-var/test_Erebite = 0
-var/test_Cytine = 0
-var/test_Uqill = 0
-var/test_Telecrystal = 0
-var/test_Mauxite = 0
-var/test_Cobryl = 0
-var/test_Cerenkite = 0
-var/test_Molitz = 0
-var/test_Gibtonite = 0
-var/test_Ice = 0
-var/test_Mythril = 0
-var/test_other = 0
-
 /datum/holomap_marker
 	var/x
 	var/y
@@ -57,35 +28,6 @@ var/test_other = 0
 		holoMiniMaps |= z
 		generateMarkers(z)
 		generateHoloMinimap(z)
-
-	to_chat(world,"total_mineral_turfs = [total_mineral_turfs]")
-	to_chat(world,"test_Plasma = [test_Plasma]")
-	to_chat(world,"test_Iron = [test_Iron]")
-	to_chat(world,"test_Gold = [test_Gold]")
-	to_chat(world,"test_Silver = [test_Silver]")
-	to_chat(world,"test_Uranium = [test_Uranium]")
-	to_chat(world,"test_Diamond = [test_Diamond]")
-	to_chat(world,"test_Clown = [test_Clown]")
-	to_chat(world,"test_Phazon = [test_Phazon]")
-	to_chat(world,"test_Electrum = [test_Electrum]")
-	to_chat(world,"test_Nanotrasite = [test_Nanotrasite]")
-	to_chat(world,"test_Pharosium = [test_Pharosium]")
-	to_chat(world,"test_Char = [test_Char]")
-	to_chat(world,"test_Claretine = [test_Claretine]")
-	to_chat(world,"test_Bohrum = [test_Bohrum]")
-	to_chat(world,"test_Syreline = [test_Syreline]")
-	to_chat(world,"test_Erebite = [test_Erebite]")
-	to_chat(world,"test_Cytine = [test_Cytine]")
-	to_chat(world,"test_Uqill = [test_Uqill]")
-	to_chat(world,"test_Telecrystal = [test_Telecrystal]")
-	to_chat(world,"test_Mauxite = [test_Mauxite]")
-	to_chat(world,"test_Cobryl = [test_Cobryl]")
-	to_chat(world,"test_Cerenkite = [test_Cerenkite]")
-	to_chat(world,"test_Molitz = [test_Molitz]")
-	to_chat(world,"test_Gibtonite = [test_Gibtonite]")
-	to_chat(world,"test_Ice = [test_Ice]")
-	to_chat(world,"test_Mythril = [test_Mythril]")
-	to_chat(world,"test_other = [test_other]")
 
 	//------------Cult Map start--------
 	var/icon/canvas = icon('icons/480x480.dmi', "cultmap")
@@ -178,69 +120,6 @@ var/test_other = 0
 			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 				for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
 					var/turf/tile = locate(i, r, zLevel)
-
-					if (istype(tile, /turf/unsimulated/mineral/random))
-						var/turf/unsimulated/mineral/random/T = tile
-						total_mineral_turfs++
-						var/mineral/M = T.mineral
-						if (M)
-							switch(M.name)
-								if ("Plasma")
-									test_Plasma++
-								if ("Iron")
-									test_Iron++
-								if ("Gold")
-									test_Gold++
-								if ("Silver")
-									test_Silver++
-								if ("Uranium")
-									test_Uranium++
-								if ("Diamond")
-									test_Diamond++
-								if ("Clown")
-									test_Clown++
-								if ("Phazon")
-									test_Phazon++
-								if ("Electrum")
-									test_Electrum++
-								if ("Nanotrasite")
-									test_Nanotrasite++
-								if ("Pharosium")
-									test_Pharosium++
-								if ("Char")
-									test_Char++
-								if ("Claretine")
-									test_Claretine++
-								if ("Bohrum")
-									test_Bohrum++
-								if ("Syreline")
-									test_Syreline++
-								if ("Erebite")
-									test_Erebite++
-								if ("Cytine")
-									test_Cytine++
-								if ("Uqill")
-									test_Uqill++
-								if ("Telecrystal")
-									test_Telecrystal++
-								if ("Mauxite")
-									test_Mauxite++
-								if ("Cobryl")
-									test_Cobryl++
-								if ("Cerenkite")
-									test_Cerenkite++
-								if ("Molitz")
-									test_Molitz++
-								if ("Gibtonite")
-									test_Gibtonite++
-								if ("Ice")
-									test_Ice++
-								if ("Mythril")
-									test_Mythril++
-								else
-									test_other++
-
-
 					if (tile?.loc)
 						var/area/aera = tile.loc
 						var/override = FALSE

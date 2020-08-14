@@ -443,6 +443,12 @@ var/global/current_centcomm_order_id=124901
 	)
 	worth = 1200
 
+/datum/centcomm_order/department/science/phazon/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
+
 /datum/centcomm_order/department/science/durand/New()
 	..()
 	must_be_in_crate = 0
@@ -450,6 +456,12 @@ var/global/current_centcomm_order_id=124901
 		/obj/mecha/combat/durand = 1
 	)
 	worth = 900
+
+/datum/centcomm_order/department/science/durand/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
 
 /datum/centcomm_order/department/science/gygax/New()
 	..()
@@ -459,6 +471,12 @@ var/global/current_centcomm_order_id=124901
 	)
 	worth = 700
 
+/datum/centcomm_order/department/science/gygax/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
+
 /datum/centcomm_order/department/science/odysseus/New()
 	..()
 	must_be_in_crate = 0
@@ -466,6 +484,12 @@ var/global/current_centcomm_order_id=124901
 		/obj/mecha/medical/odysseus = 1
 	)
 	worth = 600
+
+/datum/centcomm_order/department/science/odysseus/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
 
 /datum/centcomm_order/department/science/ripley/New()
 	..()
@@ -475,6 +499,12 @@ var/global/current_centcomm_order_id=124901
 	)
 	worth = 500
 
+/datum/centcomm_order/department/science/ripley/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
+
 /datum/centcomm_order/department/science/clarke/New()
 	..()
 	must_be_in_crate = 0
@@ -482,6 +512,12 @@ var/global/current_centcomm_order_id=124901
 		/obj/mecha/working/clarke = 1
 	)
 	worth = 500
+
+/datum/centcomm_order/department/science/clarke/ExtraChecks(var/obj/mecha/M)
+	if (!istype(M))
+		return 0
+	M.wreckage = null
+	return 1
 
 /datum/centcomm_order/department/science/robot/New()
 	..()
@@ -1014,6 +1050,10 @@ var/global/current_centcomm_order_id=124901
 /datum/centcomm_order/department/civilian
 	acct_by_string = "Civilian"
 
+/datum/centcomm_order/per_unit/department/civilian
+	name = "Nanotrasen Farmers United"
+	acct_by_string = "Civilian"
+
 /datum/centcomm_order/department/civilian/food
 	var/sauce = 0//I SAID I WANTED KETCHUP
 
@@ -1121,12 +1161,17 @@ var/global/current_centcomm_order_id=124901
 	)
 	worth = 70*requested[requested[1]]
 
-/datum/centcomm_order/department/civilian/potato/New()
+
+/datum/centcomm_order/per_unit/department/civilian/potato/New()
 	..()
 	requested = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = rand(50,200)
 	)
-	worth = 5*requested[requested[1]]
+	unit_prices=list(
+		/obj/item/weapon/reagent_containers/food/snacks/grown/potato = 5
+	)
+	worth = "5$ per potato"
+
 
 /datum/centcomm_order/department/civilian/honeycomb
 	var/flavor
@@ -1156,6 +1201,8 @@ var/global/current_centcomm_order_id=124901
 		return 0
 	if (!flavor)
 		return 1
+	if (!H.verify())
+		return 0
 	if (H.reagents?.has_reagent_type(flavor, amount = -1, strict = 1))
 		return 1
 	return 0
