@@ -241,7 +241,6 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	chems[new_chem] = list(rand(1,severity/3),rand(10-Ceiling(severity/3),15))
 	return 1
 
-//Gives the plant a new, random icon from a list, with matching growth stages number.
 /datum/seed/proc/randomize_icon()
 	var/random = rand(1, SSplant.roundstart_seeds)
 	var/random_key = SSplant.seeds[random]
