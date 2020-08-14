@@ -107,6 +107,11 @@
 // atom/atom: The atom that's being attacked.
 /lazy_event/on_uattack
 
+// Called whenever a mob attacks something while restrained.
+// Arguments:
+// atom/atom: The atom that's being attacked.
+/lazy_event/on_ruattack
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

@@ -213,15 +213,14 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		user.lazy_register_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
 		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
+			user.lazy_register_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
+			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
 		user.lazy_unregister_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
-		var/event/ER = user.on_ruattack
-		if(ER)
-			ER.handlers.Remove(user.spell_channeling)
+		user.lazy_unregister_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
