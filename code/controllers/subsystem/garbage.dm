@@ -66,7 +66,7 @@ var/soft_dels = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
+			if(ismovable(D))
 				var/atom/movable/AM = D
 				AM.hard_deleted = 1
 			else
@@ -75,7 +75,10 @@ var/soft_dels = 0
 
 			#ifdef GC_REFDEBUG
 			fakedels += D
+			if(ismovable(D))
+				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
 			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+			#undef GC_REFDEBUG
 			#else
 			del D
 			#endif
