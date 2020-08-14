@@ -18,8 +18,6 @@
 
 	immune_system = new (src)
 
-	on_resist = new(owner = src)
-
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -43,10 +41,6 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
-
-	if(on_resist)
-		qdel(on_resist)
-		on_resist = null
 
 	. = ..()
 
@@ -777,9 +771,6 @@ Thanks.
 				hook.override_starting_X--
 				hook.override_target_X--
 
-/mob/living
-	var/event/on_resist
-
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
@@ -787,7 +778,7 @@ Thanks.
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
-	INVOKE_EVENT(on_resist, list())
+	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
