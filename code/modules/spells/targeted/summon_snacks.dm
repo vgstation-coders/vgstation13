@@ -4,6 +4,7 @@
 #define SUMMON_SNACKS_PUB 4
 #define SUMMON_SNACKS_PATROL 5
 #define SUMMON_SNACKS_SPICY 6
+#define SUMMON_SNACKS_DWARF 7
 
 /spell/targeted/summon_snacks //can mean aoe for mobs (limited/unlimited number) or one target mob
 	name = "Summon Snacks"
@@ -24,7 +25,7 @@
 	range = 7
 	compatible_mobs = list(/mob/living/carbon)
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_AMOUNT = 0, Sp_MOVE = 0)
-	level_max = list(Sp_TOTAL = 15, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 6)
+	level_max = list(Sp_TOTAL = 16, Sp_SPEED = 3, Sp_POWER = 1, Sp_AMOUNT = 5, Sp_MOVE = 7)
 	var/menuType = SUMMON_SNACKS_FILLING
 
 /spell/targeted/summon_snacks/cast(var/list/targets, mob/user)
@@ -82,6 +83,11 @@
 				menuType = SUMMON_SNACKS_SPICY
 				return "Your snacks are now Mexican."
 			if(spell_levels[Sp_MOVE] == 6)
+				name = "Summon Drunken Snacks"
+				invocation = "FSH'IN LEV'VAL"
+				menuType = SUMMON_SNACKS_DWARF
+				return "Your snacks are now dwarven."
+			if(spell_levels[Sp_MOVE] == 7)
 				name = "Summon Filling Snacks"
 				invocation = "OR'DER UHP"
 				menuType = SUMMON_SNACKS_FILLING
@@ -141,6 +147,9 @@
 		if(SUMMON_SNACKS_SPICY)
 			reagents.add_reagent(NUTRIMENT, 3)
 			reagents.add_reagent(CAPSAICIN, 2)
+		if(SUMMON_SNACKS_DWARF)
+			reagents.add_reagent(BEER, 8)
+			reagents.add_reagent(TRICORDRAZINE, 2)
 	bitesize = 6 - biteS
 	if(diabeetus)
 		reagents.add_reagent(DIABEETUSOL, 1)
@@ -168,6 +177,9 @@
 		if(SUMMON_SNACKS_SPICY)
 			icon_state = "chilaquiles"
 			name = "summoned nachos"
+		if(SUMMON_SNACKS_DWARF)
+			icon_state = "herbsalad"
+			name = "summoned kebab"
 
 /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink
 	icon = 'icons/obj/drinks.dmi'
@@ -193,3 +205,6 @@
 		if(SUMMON_SNACKS_SPICY)
 			icon_state = "tequilaglass"
 			name = "summoned tequila"
+		if(SUMMON_SNACKS_DWARF)
+			icon_state = "beerglass"
+			name = "summoned beer"
