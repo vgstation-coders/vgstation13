@@ -56,7 +56,7 @@
 		if(H.lip_style)	//if they already have lipstick on
 			to_chat(user, "<span class='notice'>You need to wipe off the old lipstick first!</span>")
 			return
-		if(H.flags & SPECIES_NO_MOUTH)
+		if(H.species.flags & SPECIES_NO_MOUTH)
 			to_chat(user, "You try to apply the lipstick, but alas, you have no mouth.")
 			return
 		if(H.check_body_part_coverage(MOUTH))
