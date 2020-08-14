@@ -455,7 +455,7 @@
 	else
 		..()
 
-/obj/item/clothing/mask/facehugger/proc/findtarget()
+/obj/item/clothing/mask/facehugger/findtarget()
 	if(!real)
 		return
 	target = null
