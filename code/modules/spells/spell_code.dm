@@ -192,7 +192,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -251,7 +251,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)

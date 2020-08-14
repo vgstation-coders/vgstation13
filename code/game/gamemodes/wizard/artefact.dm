@@ -366,7 +366,6 @@
 	var/active = 0
 	var/max_steps = 4
 	var/current_step = 0
-	var/spellcast_key = null
 	var/equip_cooldown = 50
 
 	var/step_cooldown = 1 SECONDS // The step delay.
@@ -412,14 +411,14 @@
 	equip_cooldown = initial(equip_cooldown)
 	var/spell/fuckup/F = new
 	H.add_spell(/spell/fuckup)
-	spellcast_key = H.on_spellcast.Add(F, "on_spellcast")
+	H.lazy_register_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
 	return ..()
 
 /obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
 	equip_cooldown = initial(equip_cooldown)
 	for (var/spell/fuckup/F in H.spell_list)
 		H.remove_spell(F)
-		H.on_spellcast.Remove(spellcast_key)
+		H.lazy_unregister_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
 	return ..()
 
 // -- Fuckup boot spell
@@ -462,15 +461,12 @@
 		if (F)
 			F.deactivate()
 
-/spell/fuckup/proc/on_spellcast(var/list/arguments)
-	var/spell/spell_casted = arguments["spell"]
-	var/mob/caster = arguments["user"]
-	if (!ishuman(caster))
+/spell/fuckup/proc/on_spellcast(spell/spell, mob/user, list/targets)
+	if (!ishuman(user))
 		return
-	var/mob/living/carbon/human/H = caster
-	if (istype(spell_casted, /spell/aoe_turf/blink) || istype(spell_casted, /spell/targeted/ethereal_jaunt))
+	var/mob/living/carbon/human/H = user
+	if (istype(spell, /spell/aoe_turf/blink) || istype(spell, /spell/targeted/ethereal_jaunt))
 		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
 		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
 			var/obj/item/clothing/shoes/fuckup/F = H.shoes
 			F.deactivate()
-

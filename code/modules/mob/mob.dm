@@ -29,8 +29,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_spellcast)
-		on_spellcast.holder = null
 	if(on_uattack)
 		on_uattack.holder = null
 	if(on_ruattack)
@@ -81,7 +79,6 @@
 		qdel(leftovers)
 	qdel(on_logout)
 	on_logout = null
-	qdel(on_spellcast)
 	qdel(on_uattack)
 	qdel(on_ruattack)
 	qdel(on_damaged)
@@ -91,7 +88,6 @@
 	qdel(on_bumped)
 	qdel(on_touched)
 
-	on_spellcast = null
 	on_uattack = null
 	on_ruattack = null
 	on_damaged = null
@@ -291,7 +287,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_spellcast = new(owner = src)
 	on_uattack = new(owner = src)
 	on_ruattack = new(owner = src)
 	on_logout = new(owner = src)

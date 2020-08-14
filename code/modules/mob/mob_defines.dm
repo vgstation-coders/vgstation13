@@ -272,7 +272,6 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/event/on_spellcast
 	var/event/on_uattack
 	var/event/on_ruattack	//on restrained unarmed attack
 	var/event/on_logout

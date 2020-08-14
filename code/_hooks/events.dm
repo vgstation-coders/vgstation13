@@ -95,6 +95,13 @@
 // mob/user: the mob that's resisting
 /lazy_event/on_resist
 
+// Called whenever a mob casts a spell.
+// Arguments:
+// spell/spell: the spell that's being cast.
+// mob/user: the mob that's casting the spell.
+// list/targets: the list of targets the spell is being cast against. May not always be a list.
+/lazy_event/on_spellcast
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
