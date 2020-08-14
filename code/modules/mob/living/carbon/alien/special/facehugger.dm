@@ -462,11 +462,9 @@
 	for(var/mob/living/T in hearers(src,6))
 		if(!CanHug(T, src))
 			continue
-		if(T && get_dist(loc, T.loc) <= 6)
-			if(T.isUnconscious())	
-				prob(33) ? target = T : continue	//66% chance to ignore dead/unconscious people. This means that when a zombie is killed you wont know if the headcrab will go back to the corpse or towards you
-			else
-				target = T	
+		if(T && !T.isDead())
+			if(get_dist(loc, T.loc) <= 6)
+				target = T
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W, mob/user)
 	if(ishuman(user))
