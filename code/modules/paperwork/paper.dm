@@ -100,7 +100,7 @@
 	if(ishuman(user)) // best not let the monkeys write loveletters
 		var/mob/living/carbon/human/H = user
 		if((H.attack_type == ATTACK_BITE) && (H.a_intent == I_HELP)) //if biting and helping
-			if(!(H.species.anatomy_flags & HAS_LIPS) || (H.flags & SPECIES_NO_MOUTH)) // skeletons can apply lipstick but cannot kiss
+			if(!(H.species.anatomy_flags & HAS_LIPS) || (H.species.flags & SPECIES_NO_MOUTH)) // skeletons can apply lipstick but cannot kiss
 				to_chat(user, "You have no lips, how are you going to kiss?")
 				return
 			if(H.check_body_part_coverage(MOUTH))
