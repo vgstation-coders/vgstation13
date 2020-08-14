@@ -445,6 +445,8 @@
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
 	cant_remove_msg = "The headcrab is latched on tight!"
+	var/escaping = 0 	//If enabled the headcrab will GTFO
+	var/is_being_resisted = 0
 
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
 	var/mob/living/carbon/human/target = user
@@ -452,6 +454,29 @@
 		target.resist()
 	else
 		..()
+
+/obj/item/clothing/mask/facehugger/proc/findtarget()
+	if(!real)
+		return
+	target = null
+	for(var/mob/living/T in hearers(src,6))
+		if(!CanHug(T, src))
+			continue
+		if(T && (!T.isUnconscious() ) )
+
+			if(get_dist(loc, T.loc) <= 6)
+				target = T	
+
+/obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W, mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/U = user
+		var/obj/item/clothing/mask/facehugger/headcrab/H = U.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
+		if(H == src)
+			U.resist()
+			return
+	if(W.force)
+		health -= W.force
+		healthcheck()
 
 /obj/item/clothing/mask/facehugger/headcrab/followtarget()
 	if(!real)
@@ -462,25 +487,33 @@
 	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
 		var/dist = get_dist(loc, target.loc)
-		if(dist > 5)
+		if(dist > 6)
 			target = null
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 
 		var/obj/item/clothing/mask/facehugger/headcrab/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
-		if(F && !F.sterile) // Toys won't prevent real huggers
+		if(F == src)
+			Assimilate()
+		else if(F && !F.sterile) // Toys won't prevent real huggers
 			findtarget()
 			return
 		else
 			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 0)
-			throw_at(target, 3, 1)
-			if(dist == 0)	
-				if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
-					Attach(target)
-					return
-				else
-					walk(src,0)		
-					findtarget()
-					return
+			if(escaping)		//If escaping, jump away from the nearest guy.
+				var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
+				throw_at(escape_tile, 4, 1)
+				escaping = 0
+				sleep(50)
+			else
+				throw_at(target, 3, 1)
+				if(dist == 0)	
+					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
+						Attach(target)
+						return
+					else
+						walk(src,0)		
+						findtarget()
+						return
 
 
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
@@ -569,13 +602,14 @@
 		visible_message("<span class='danger'>[target.real_name] begins to shake and convulse violently!</span>")
 		to_chat(target, "<span class='sinister'>You feel your consciousness slipping away...</span>")
 		target.Jitter(1000)
-		spawn(100)
+		sleep(150)
 		target.remove_jitter()
 		if(target && target.head == src)
 			target.death(0)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
-			target.make_zombie(retain_mind = 1, crabzombie = 1)
+			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.make_zombie(retain_mind = 1, crabzombie = 1)
+			Z.crab = src
 		
 	
 

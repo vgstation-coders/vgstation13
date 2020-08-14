@@ -1056,6 +1056,9 @@ Thanks.
 		var/on_head = L.get_item_by_slot(slot_head)
 		if(istype(on_head, /obj/item/clothing/mask/facehugger/headcrab))
 			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
+			if(crab.is_being_resisted)
+				return
+			crab.is_being_resisted = 1
 			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
 			if(do_after(L, crab, 3 SECONDS))
 				var/rng = 50
@@ -1066,9 +1069,12 @@ Thanks.
 						L.drop_from_inventory(crab)
 						crab.GoIdle(10 SECONDS) 
 						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+						crab.is_being_resisted = 0
 				else
 					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
+					crab.is_being_resisted = 0
 					return
+			crab.is_being_resisted = 0 //If the do_after is cancelled.
 
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))

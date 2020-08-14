@@ -586,12 +586,14 @@
 	icon_state = "zombie_turned" //Looks almost not unlike just a naked guy to potentially catch others off guard
 	icon_living = "zombie_turned"
 	icon_dead = "zombie_turned"
-	desc = "A reanimated corpse that looks like it has seen better days. This one still appears quite human."
+	desc = "A human that is under control of a headcrab. Better stay away unless you want to become one too."
 	maxHealth = 75
 	health = 75
 	can_evolve = FALSE
 	canRegenerate = 0
 	var/mob/living/carbon/human/host //Whoever the zombie was previously, kept in a reference to potentially bring back
+	var/obj/item/clothing/mask/facehugger/headcrab/crab //The crab controlling it.
+	
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/Destroy()
 	if(host)
@@ -600,20 +602,26 @@
 	..()
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/death(var/gibbed = FALSE)
-	if(host && mind)
+	if(host)
 		host.loc = get_turf(src)
-		mind.transfer_to(host)
-		var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
-		if(ghost && ghost.can_reenter_corpse)
-			key = mind.key
+		if(mind)
+			mind.transfer_to(host)
+			var/mob/dead/observer/ghost = get_ghost_from_mind(mind)
+			if(ghost && ghost.can_reenter_corpse)
+				key = mind.key
 		if(prob(33))	//33% chance to blow up their fucking head
 			var/datum/organ/external/head/head_organ = host.get_organ(LIMB_HEAD)
 			head_organ.explode()
 		else
 			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
+		crab?.escaping = 1
+		host = null
+		qdel(src)	
 	else
-		gib()
-	qdel(src)
+		host = new /mob/living/carbon/human
+		host.get_organ(LIMB_HEAD).explode()
+		visible_message("<span class='danger'>The [src] collapses weakly!</span>")  //There was not a host.
+		qdel(src)
 
 /mob/living/simple_animal/hostile/necro/zombie/headcrab/say(message, bubble_type)
 	return ..(reverse_text(message))
