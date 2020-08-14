@@ -14,9 +14,12 @@ var/world_startup_time
 #define RECOMMENDED_VERSION 513
 
 var/savefile/panicfile
-/world/New()
-	world_startup_time = world.timeofday
-	var/extools_path = system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
+
+var/datum/early_init/early_init_datum = new
+
+/datum/early_init/New()
+	..()
+	var/extools_path = world.system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
 	if(fexists(extools_path))
 		#if EXTOOLS_DEBUGGER
 		call(extools_path, "debug_initialize")()
@@ -29,6 +32,9 @@ var/savefile/panicfile
 		// warn on missing library
 		// extools on linux does not exist and is not in the repository as of yet
 		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
+
+/world/New()
+	world_startup_time = world.timeofday
 	// Honk honk, fuck you science
 	for(var/i=1, i<=map.zLevels.len, i++)
 		WORLD_X_OFFSET += rand(-50,50)
