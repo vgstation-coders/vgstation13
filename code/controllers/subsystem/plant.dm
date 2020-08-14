@@ -11,6 +11,7 @@ var/datum/subsystem/plant/SSplant
 	var/list/processing_plants = list()
 	var/list/currentrun
 	var/list/datum/seed/seeds = list() // All seed data stored here.
+	var/roundstart_seeds
 
 /datum/subsystem/plant/New()
 	NEW_SS_GLOBAL(SSplant)
@@ -26,6 +27,7 @@ var/datum/subsystem/plant/SSplant
 		seeds[S.name] = S
 		S.uid = "[seeds.len]"
 		S.roundstart = TRUE
+	roundstart_seeds = seeds.len
 	..()
 
 /datum/subsystem/plant/proc/create_random_seed(var/survive_on_station)
