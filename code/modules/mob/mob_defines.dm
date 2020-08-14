@@ -272,7 +272,6 @@
 	penetration_dampening = 7
 
 	var/list/languages[0]
-	var/event/on_logout
 	var/event/on_damaged
 	var/event/on_death
 	var/event/on_bumping //We bumped someone

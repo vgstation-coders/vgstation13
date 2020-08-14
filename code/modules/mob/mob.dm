@@ -73,8 +73,6 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_logout)
-	on_logout = null
 	qdel(on_damaged)
 	qdel(on_clickon)
 	qdel(on_death)
@@ -279,7 +277,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_logout = new(owner = src)
 	on_damaged = new(owner = src)
 	on_clickon = new(owner = src)
 	on_death = new(owner = src)

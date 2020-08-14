@@ -112,6 +112,11 @@
 // atom/atom: The atom that's being attacked.
 /lazy_event/on_ruattack
 
+// Called by mob/Logout().
+// Arguments:
+// mob/user: The mob that's logging out.
+/lazy_event/on_logout
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
