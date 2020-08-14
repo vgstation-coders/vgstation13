@@ -124,6 +124,15 @@ var/list/all_generated_artifact_ids = list()
 					var/spawn_type = artifact_find.artifact_find_type
 					if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
+					else if (spawn_type == /obj/machinery/power/supermatter)
+						spawn(rand(10 MINUTES, 30 MINUTES))//The time it takes for Nanotrasen to detect it and make the Science dept an offer they cannot refuse.
+							var/already = 0
+							for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
+								if (istype(O, /datum/centcomm_order/department/science/supermatter))
+									already = 1
+							if (!already)
+								SSsupply_shuttle.add_centcomm_order(new /datum/centcomm_order/department/science/supermatter)
+						new spawn_type(get_turf(src))
 					else
 						var/atom/movable/AM = new spawn_type(get_turf(src))
 						excavated_large_artifacts[artifact_find.artifact_id] = AM
@@ -133,6 +142,8 @@ var/list/all_generated_artifact_ids = list()
 		else
 			busy = 0
 		return
+
+/datum/centcomm_order/department/science/supermatter
 
 /obj/structure/boulder/attack_construct(var/mob/user)
 	if (!Adjacent(user))

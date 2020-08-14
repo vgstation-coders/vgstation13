@@ -47,6 +47,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		var/datum/supply_packs/P = new typepath
 		supply_packs[P.name] = P
 
+	add_centcomm_order(new /datum/centcomm_order/per_unit/plasma)
+
 	..()
 
 /datum/subsystem/supply_shuttle/fire(resumed = FALSE)
@@ -109,17 +111,20 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	return 1
 
 /datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate)
+	if (istype(A,/obj/item/weapon/storage/lockbox))
+		for (var/atom/A2 in A)
+			SellObjToOrders(A2, 1)
+			if(A2)
+				qdel(A2)
 	// Per-unit orders run last so they don't steal shit.
-	var/list/deferred_order_checks=list()
-	var/order_idx=0
+	var/list/deferred_orders = list()
 	for(var/datum/centcomm_order/O in centcomm_orders)
-		order_idx++
 		if(istype(O,/datum/centcomm_order/per_unit))
-			deferred_order_checks += order_idx
+			deferred_orders += O
+			continue
 		if(O.CheckShuttleObject(A,in_crate))
 			return
-	for(var/oid in deferred_order_checks)
-		var/datum/centcomm_order/O = centcomm_orders[oid]
+	for(var/datum/centcomm_order/O in deferred_orders)
 		if(O.CheckShuttleObject(A,in_crate))
 			return
 
@@ -131,51 +136,22 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
+	var/recycled_crates = 0
 	for(var/atom/movable/MA in shuttle)
-		if(MA.anchored)
+		if(MA.anchored && !ismecha(MA))
 			continue
 
-		if(istype(MA, /obj/item/stack/sheet/mineral/plasma))
-			var/obj/item/stack/sheet/mineral/plasma/P = MA
-			if(P.redeemed)
-				continue
-			var/datum/material/mat = materials_list.getMaterial(P.mat_type)
-			var/amount = (mat.value * 10) * P.amount
-			cargo_acct.money += amount
-			var/datum/transaction/T = new()
-			T.target_name = cargo_acct.owner_name
-			T.purpose = "Central Command Plasma sale"
-			T.amount = amount
-			T.date = current_date_string
-			T.time = worldtime2text()
-			cargo_acct.transaction_log.Add(T)
-		// Must be in a crate!
-		else if(istype(MA,/obj/structure/closet/crate))
-			cargo_acct.money += credits_per_crate
-			var/find_slip = 1
+		if(istype(MA,/obj/structure/closet/crate))
+			recycled_crates++
 
+			var/find_slip = 1
 			for(var/obj/A in MA)
-				if(istype(A, /obj/item/stack/sheet/mineral/plasma))
-					var/obj/item/stack/sheet/mineral/plasma/P = A
-					if(P.redeemed)
-						continue
-					var/datum/material/mat = materials_list.getMaterial(P.mat_type)
-					var/amount = (mat.value * 10) * P.amount
-					cargo_acct.money += amount
-					var/datum/transaction/T = new()
-					T.target_name = cargo_acct.owner_name
-					T.purpose = "Central Command Plasma sale"
-					T.amount = amount
-					T.date = current_date_string
-					T.time = worldtime2text()
-					cargo_acct.transaction_log.Add(T)
-					continue
 				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
 						var/datum/transaction/T = new()
-						T.target_name = cargo_acct.owner_name
-						T.purpose = "Central Command purchase confirmation (Stamped Slip) [A]"
+						T.target_name = "Central Command Administration"
+						T.purpose = "Purchase confirmation (Stamped Slip) [A]"
 						T.amount = credits_per_slip
 						T.date = current_date_string
 						T.time = worldtime2text()
@@ -195,10 +171,23 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
-				O.Pay()
+				if (!istype(O, /datum/centcomm_order/per_unit))
+					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
+				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
+					S.say("Central Command request fulfilled!")
+					playsound(S, 'sound/machines/info.ogg', 50, 1)
 		qdel(MA)
 
+	if (recycled_crates)
+		var/datum/transaction/T = new()
+		T.target_name = "Central Command Recycling"
+		T.purpose = "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]"
+		T.amount = credits_per_crate*recycled_crates
+		T.date = current_date_string
+		T.time = worldtime2text()
+		cargo_acct.transaction_log.Add(T)
+		cargo_acct.money += credits_per_crate*recycled_crates
 
 /datum/subsystem/supply_shuttle/proc/buy()
 	if(!shoppinglist.len)
@@ -333,7 +322,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 /datum/subsystem/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
 	var/name = "External order form - [C.name] order number [C.id]"
-	var/info = {"<h3>Central command supply requisition form</h3<><hr>
+	var/info = {"<h3>Central Command supply requisition form</h3<><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
 	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]<br>
@@ -341,9 +330,12 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	 			[C.getRequestsByName(1)]
 	 			WORTH: [C.worth] credits TO [C.acct_by_string]
 	 			"}
+	if (C.silent)
+		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
 		reqform.name = name
 		reqform.info = info
 		reqform.update_icon()
-		S.say("New central command request available")
+		S.say("New Central Command request available!")
+		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)

@@ -269,7 +269,10 @@ For vending packs, see vending_packs.dm*/
 
 	var/centcomm_list[0]
 	for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
-		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
+		var/displayworth = O.worth
+		if (isnum(O.worth))
+			displayworth = "[O.worth]$"
+		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "extra" = O.extra_requirements, "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = displayworth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
 	var/datum/money_account/account = current_acct["account"]
