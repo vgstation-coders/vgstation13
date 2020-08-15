@@ -226,14 +226,6 @@
 			if(!H.isUnconscious())
 				Attach(H)
 
-/obj/item/clothing/mask/facehugger/headcrab/HasProximity(atom/movable/AM as mob|obj)	//STOP LATCHING ONTO HEADLESS PEOPLE
-	if(ishuman(AM))
-		if(CanHug(AM, src))
-			var/mob/living/carbon/human/H = AM
-			if(!H.isUnconscious())
-				Attach(H)
-	return FALSE
-
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/L)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
@@ -520,17 +512,21 @@
 		else
 			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 0)
 			if(escaping)		//If escaping, jump away from the nearest guy.
-				var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
-				if(escape_tile.loc == target.loc)	//If the target is on the same tile just jump a random direction away
-					var/turf/escape_tile_random = locate(src.x + rand(3,6)*(-1**rand(1,2)), src.y + rand(3,6)*(-1**rand(1,2)), src.z)	//This is messy. For x and y coordinates, pick a random number between 3 and 6, then randomly make that number positive or negative.
-					throw_at(escape_tile_random, 4, 1)
+				if(src.loc == target.loc)	//If the target is on the same tile just jump a random direction away
+					var/turf/escape_tile = locate(src.x + rand(3,6)*(-1**rand(1,2)), src.y + rand(3,6)*(-1**rand(1,2)), src.z)	//This is messy. For x and y coordinates, pick a random number between 3 and 6, then randomly make that number positive or negative.
+					throw_at(escape_tile, 4, 1)
 				else
+					var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
 					throw_at(escape_tile, 4, 1)
 				escaping = 0
 				sleep(50)
 				GoActive()
 			else
 				throw_at(target, 3, 1)
+				if(dist == 0)
+					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
+						Attach(target)
+						return
 
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(isalien(L))
@@ -612,6 +608,7 @@
 	while(target && target.head == src && !target.isDead() && !target.isInCrit())	//If they're still alive chew at their fuggin skull
 		playsound(src, 'sound/weapons/bite.ogg', 50, 1)
 		target.apply_damage(10, BRUTE, LIMB_HEAD)
+		target.update_inv_head()
 		sleep(30)
 
 	if(target && target.head == src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.

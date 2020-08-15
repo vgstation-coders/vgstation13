@@ -1071,6 +1071,7 @@ Thanks.
 						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
 						crab.is_being_resisted = 0
 						crab.escaping = 1
+						crab.GoActive()
 				else
 					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
 					crab.is_being_resisted = 0
