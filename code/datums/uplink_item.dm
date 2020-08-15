@@ -835,6 +835,14 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Chef")
 
+/datum/uplink_item/jobspecific/service/specialsauce
+	name = "Wendigo Meat"
+	desc = "Turn yourself or others into a Wendigo with this special meat"
+	item = /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
+	cost = 8
+	discounted_cost = 2
+	jobs_with_discount = list("Chef")
+
 /datum/uplink_item/jobspecific/service/meatcleaver
 	name = "Meat Cleaver"
 	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also has a strong to stun when thrown."
