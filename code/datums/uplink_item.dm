@@ -835,7 +835,7 @@ var/list/uplink_items = list()
 	discounted_cost = 2
 	jobs_with_discount = list("Chef")
 
-/datum/uplink_item/jobspecific/service/specialsauce
+/datum/uplink_item/jobspecific/service/WendigoMeat
 	name = "Wendigo Meat"
 	desc = "Turn yourself or others into a Wendigo with this special meat"
 	item = /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
