@@ -257,9 +257,6 @@ var/list/apiaries_list = list()
 		worker_bees_inside++
 	if (!species)
 		species = B.species
-	if(B.mob)
-		B.mob.bees.Remove(B)
-		B.mob = null
 	B.home = src
 	B.state = null
 	B.health = B.maxHealth

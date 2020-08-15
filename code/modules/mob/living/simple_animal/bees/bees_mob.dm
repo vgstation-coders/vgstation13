@@ -256,12 +256,13 @@ var/bee_mobs_count = 0
 
 	while (amount > 0 && bees.len)
 		var/datum/bee/B = pick(bees)
-		if (B.health > amount)
-			B.health -= amount
-			amount = 0
-		else
-			amount -= B.health
-			B.death()
+		if(B)
+			if (B.health > amount)
+				B.health -= amount
+				amount = 0
+			else
+				amount -= B.health
+				B.death()
 
 	if (bees.len <= 0)
 		qdel(src)
