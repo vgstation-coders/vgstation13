@@ -477,6 +477,15 @@
 		health -= W.force
 		healthcheck()
 
+
+/obj/item/clothing/mask/facehugger/headcrab/throw_impact(atom/hit_atom)
+	..()
+	if(stat == CONSCIOUS)
+		icon_state = "[initial(icon_state)]"
+		if(ishuman(hit_atom))
+			if(hit_atom.isUnconscious()) 	//STOP ATTACHING TO CORPSES YOU FUCK
+				Attach(hit_atom)
+
 /obj/item/clothing/mask/facehugger/headcrab/followtarget()
 	if(!real)
 		return // Why are you trying to path stupid toy
@@ -506,7 +515,7 @@
 			else
 				throw_at(target, 3, 1)
 				if(dist == 0)	
-					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
+					if(CanHug(target, src) && isturf(target.loc)) 
 						Attach(target)
 						return
 					else
