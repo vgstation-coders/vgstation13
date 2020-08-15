@@ -33,6 +33,14 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
+/obj/item/weapon/storage/box/ashify()
+	var/datum/gas_mixture/A = loc.return_air()
+	for(var/obj/item/O in contents)
+		O.fire_act(A,src.is_hot(),A.volume)
+		remove_from_storage(O, get_turf(src), refresh = 0)
+	refresh_all()
+	. = ..()
+
 /obj/item/weapon/storage/box/large
 	name = "large box"
 	desc = "You could build a fort with this."
