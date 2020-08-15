@@ -508,7 +508,7 @@ var/bee_mobs_count = 0
 					updateDamage()
 
 			else if((state == BEE_BUILDING) || (prob(30) && state != BEE_OUT_FOR_ENEMIES && pollinating <= 0  && B_mob.pollinating <= 0 && state == B_mob.state))
-				for (varB_mob.bees = list()/datum/bee/B in B_mob.bees)
+				for (var/datum/bee/B in B_mob.bees)
 					addBee(B)
 				B_mob.bees = list()
 				add_plants(B_mob.visited_plants)
