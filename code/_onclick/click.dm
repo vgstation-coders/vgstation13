@@ -75,7 +75,8 @@
 		return
 
 	var/list/modifiers = params2list(params)
-	on_clickon.Invoke(list(
+	lazy_invoke_event(/lazy_event/on_clickon, list(
+		"user" = src,
 		"modifiers" = modifiers,
 		"target" = A
 	))

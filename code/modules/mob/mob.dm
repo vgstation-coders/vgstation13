@@ -69,12 +69,10 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_clickon)
 	qdel(on_bumping)
 	qdel(on_bumped)
 	qdel(on_touched)
 
-	on_clickon = null
 	on_bumping = null
 	on_bumped = null
 	on_touched = null
@@ -269,7 +267,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_clickon = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
 	on_touched = new(owner = src)

@@ -275,8 +275,6 @@
 	var/event/on_bumping //We bumped someone
 	var/event/on_bumped //We got bumped
 	var/event/on_touched // We got touched by anything
-	// Allows overiding click modifiers and such.
-	var/event/on_clickon
 
 	var/list/alphas = list()
 	var/spell/spell_channeling // The spell that's currently being channeled

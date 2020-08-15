@@ -130,6 +130,14 @@
 // body_destroyed: Whether the mob is about to be gibbed.
 /lazy_event/on_death
 
+// Called by /mob/proc/ClickOn.
+// The list of modifiers can be changed by the event listeners.
+// Arguments:
+// mob/user: the user that's doing the clicking.
+// list/modifiers: list of key modifiers (shift, alt, etcetera).
+// atom/target: the atom that's being clicked on.
+/lazy_event/on_clickon
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
