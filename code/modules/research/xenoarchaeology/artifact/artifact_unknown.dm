@@ -13,7 +13,6 @@
 	var/contained = 0
 	var/artifact_id = ""
 	anchored = 0
-	var/event/on_attackhand
 	var/event/on_attackby
 	var/event/on_explode
 	var/event/on_projectile
@@ -25,7 +24,6 @@
 	else
 		artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
 
-	on_attackhand = new(owner = src)
 	on_attackby = new(owner = src)
 	on_explode = new(owner = src)
 	on_projectile = new(owner = src)
@@ -88,18 +86,18 @@
 	if(icon == 'icons/obj/xenoarchaeology.dmi')		//If its not a goon artifact:
 		if(primary_effect.activated)				// If its active, suffix is 1, otherwise its 0
 			fx_suffix = 1
-		else	
+		else
 			fx_suffix = 0
 	else if(primary_effect.activated)
 		if(fx_image)
 			fx_suffix = ""
 			overlays += fx_image
-		else	
+		else
 			fx_suffix = "fx"					//If we're a goon-style artifact and we don't have an fx image, then we're our own fx!
 	else
 		fx_suffix = ""						//If its an non-active goon artifact, fx suffix is always empty.
-	
-	icon_state = "[prefix][numsuffix][fx_suffix]" 
+
+	icon_state = "[prefix][numsuffix][fx_suffix]"
 
 
 /obj/machinery/artifact/process()
@@ -141,7 +139,7 @@
 		return
 
 	src.add_fingerprint(user)
-	on_attackhand.Invoke(list(user, "TOUCH"))
+	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
 	to_chat(user, "<b>You touch [src].</b>")
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
@@ -157,7 +155,7 @@
 		var/warn = 0
 
 		if (prob(50))
-			on_attackhand.Invoke(list(M, "BUMPED"))
+			lazy_invoke_event(/lazy_event/on_bumped, list("user" = M, "target" = src))
 			warn = 1
 		if(warn)
 			to_chat(M, "<b>You accidentally touch [src].<b>")
@@ -191,7 +189,6 @@
 /obj/machinery/artifact/Destroy()
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
-	qdel(on_attackhand); on_attackhand = null
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null

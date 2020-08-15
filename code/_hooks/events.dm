@@ -138,6 +138,20 @@
 // atom/target: the atom that's being clicked on.
 /lazy_event/on_clickon
 
+// Called when an atom is attacked with an empty hand.
+// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
+// Arguments:
+// mob/user: the guy who is attacking.
+// atom/target: the atom that's being attacked.
+/lazy_event/on_attackhand
+
+// Called whenever an atom bumps into another.
+// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
+// Arguments:
+// mob/user: the guy who is bumping.
+// atom/target: the atom that's being bumped into.
+/lazy_event/on_bumped
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.
