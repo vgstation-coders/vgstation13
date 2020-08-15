@@ -202,9 +202,11 @@
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
-	if(isliving(AM))
+	if(ishuman(AM))
 		if(CanHug(AM, src))
-			return Attach(AM)
+			var/mob/living/carbon/human/H
+			if(!H.isUnconscious())
+				Attach(H)
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
@@ -215,12 +217,23 @@
 			if(icon_state == "[initial(icon_state)]_thrown")
 				icon_state = "[initial(icon_state)]"
 
-/obj/item/clothing/mask/facehugger/throw_impact(atom/hit_atom)
+/obj/item/clothing/mask/facehugger/throw_impact(atom/hit_atom)		//STOP LATCHING ONTO HEADLESS PEOPLE
 	..()
 	if(stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]"
-		if(isliving(hit_atom))
-			Attach(hit_atom)
+		if(ishuman(hit_atom))	
+			var/mob/living/carbon/human/H = hit_atom
+			if(!H.isUnconscious())
+				Attach(H)
+
+/obj/item/clothing/mask/facehugger/headcrab/HasProximity(atom/movable/AM as mob|obj)	//STOP LATCHING ONTO HEADLESS PEOPLE
+	if(ishuman(AM))
+		if(CanHug(AM, src))
+			var/mob/living/carbon/human/H = AM
+			if(!H.isUnconscious())
+				Attach(H)
+	return FALSE
+
 
 /obj/item/clothing/mask/facehugger/proc/Attach(mob/living/L)
 	var/preggers = rand(MIN_IMPREGNATION_TIME,MAX_IMPREGNATION_TIME)
@@ -448,6 +461,13 @@
 	var/escaping = 0 	//If enabled the headcrab will GTFO
 	var/is_being_resisted = 0
 
+/obj/item/clothing/mask/facehugger/headcrab/equipped(mob/living/carbon/human/H)
+	if(stat == CONSCIOUS)
+		Assimilate(H)
+	else if(stat == UNCONSCIOUS)
+		GoActive()
+		Assimilate(H)
+
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
 	var/mob/living/carbon/human/target = user
 	if(target && target.head == src)
@@ -459,14 +479,16 @@
 	if(!real)
 		return
 	target = null
-	for(var/mob/living/T in hearers(src,6))
+	for(var/mob/living/carbon/human/T in hearers(src,6))
 		if(!CanHug(T, src))
 			continue
-		if(T && !T.isDead())
+		if(T && !T.isUnconscious())
 			if(get_dist(loc, T.loc) <= 6)
 				target = T
 
-/obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W, mob/user)
+
+
+/obj/item/clothing/mask/facehugger/headcrab/attackby(obj/item/weapon/W, mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/U = user
 		var/obj/item/clothing/mask/facehugger/headcrab/H = U.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
@@ -477,14 +499,6 @@
 		health -= W.force
 		healthcheck()
 
-
-/obj/item/clothing/mask/facehugger/headcrab/throw_impact(atom/hit_atom)
-	..()
-	if(stat == CONSCIOUS)
-		icon_state = "[initial(icon_state)]"
-		if(ishuman(hit_atom))
-			if(hit_atom.isUnconscious()) 	//STOP ATTACHING TO CORPSES YOU FUCK
-				Attach(hit_atom)
 
 /obj/item/clothing/mask/facehugger/headcrab/followtarget()
 	if(!real)
@@ -500,29 +514,23 @@
 			return //We'll let the facehugger do nothing for a bit, since it's fucking up.
 
 		var/obj/item/clothing/mask/facehugger/headcrab/F = target.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
-		if(F == src)
-			Assimilate(target)
-		else if(F && !F.sterile) // Toys won't prevent real huggers
+		if(F && !F.sterile) // Toys won't prevent real huggers
 			findtarget()
 			return
 		else
 			playsound(src, pick('sound/items/headcrab_attack1.ogg', 'sound/items/headcrab_attack2.ogg', 'sound/items/headcrab_attack3.ogg'), 50, 0)
 			if(escaping)		//If escaping, jump away from the nearest guy.
 				var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
-				throw_at(escape_tile, 4, 1)
+				if(escape_tile.loc == target.loc)	//If the target is on the same tile just jump a random direction away
+					var/turf/escape_tile_random = locate(src.x + rand(3,6)*(-1**rand(1,2)), src.y + rand(3,6)*(-1**rand(1,2)), src.z)	//This is messy. For x and y coordinates, pick a random number between 3 and 6, then randomly make that number positive or negative.
+					throw_at(escape_tile_randm, 4, 1)
+				else
+					throw_at(escape_tile, 4, 1)
 				escaping = 0
-				sleep(0)
+				sleep(50)
+				GoActive()
 			else
 				throw_at(target, 3, 1)
-				if(dist == 0)	
-					if(CanHug(target, src) && isturf(target.loc)) 
-						Attach(target)
-						return
-					else
-						walk(src,0)		
-						findtarget()
-						return
-
 
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(isalien(L))
