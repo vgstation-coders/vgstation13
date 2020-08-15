@@ -498,9 +498,10 @@ var/bee_mobs_count = 0
 			//angry bees will drag other bees along with them
 			if(state == BEE_OUT_FOR_ENEMIES)
 				if((prob(10) && B_mob.state == BEE_OUT_FOR_PLANTS) || (prob(60) && B_mob.state == BEE_OUT_FOR_ENEMIES))
-					for (var/datum/bee/B in B_mob.bees)
-						addBee(B)
-					B_mob.bees = list()
+					if(B_mob.bees.len > 0)
+						for (var/datum/bee/B in B_mob.bees)
+							addBee(B)
+							B_mob.bees.Remove(B)
 					add_plants(B_mob.visited_plants)
 					if(!target)
 						target = B_mob.target
