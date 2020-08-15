@@ -341,6 +341,8 @@
 		usr.update_icons()
 	W.forceMove(src)
 	W.on_enter_storage(src)
+	var/datum/gas_mixture/A = loc.return_air()
+	src.fire_act(A,W.is_hot(),A.return_volume())
 	if(usr)
 		if (usr.client && usr.s_active != src)
 			usr.client.screen -= W

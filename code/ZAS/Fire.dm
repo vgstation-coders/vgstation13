@@ -58,6 +58,9 @@ Attach to transfer valve and open. BOOM.
 	on_fire=0
 	if(fire_overlay)
 		overlays -= fire_overlay
+	if(istype(src,/obj))
+		var/obj/O = src
+		O.source_temperature = initial(O.source_temperature)
 
 /atom/proc/ignite(var/temperature)
 	on_fire=1
@@ -65,6 +68,11 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+	if(istype(src,/obj))
+		var/obj/O = src
+		O.source_temperature = temperature
+		var/datum/gas_mixture/A = O.loc.return_air()
+		O.loc.fire_act(A,temperature,A.return_volume())
 	spawn()
 		burnItselfUp()
 
