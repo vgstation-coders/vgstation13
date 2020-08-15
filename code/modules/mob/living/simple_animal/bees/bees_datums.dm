@@ -55,6 +55,7 @@ var/bees_count = 0
 
 /datum/bee/proc/death(var/gibbed = FALSE)
 	if (mob)
+		mob.bees.Remove(src)
 		new corpse(get_turf(mob))
 	qdel(src)
 

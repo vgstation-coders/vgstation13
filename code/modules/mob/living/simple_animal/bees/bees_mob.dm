@@ -256,7 +256,6 @@ var/bee_mobs_count = 0
 
 	while (amount > 0 && bees.len)
 		var/datum/bee/B = pick(bees)
-		if(B)
 			if (B.health > amount)
 				B.health -= amount
 				amount = 0
