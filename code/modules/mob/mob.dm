@@ -29,8 +29,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_death)
-		on_death.holder = null
 	if(on_bumping)
 		on_bumping.holder = null
 	if(on_bumped)
@@ -72,13 +70,11 @@
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
 	qdel(on_clickon)
-	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
 	qdel(on_touched)
 
 	on_clickon = null
-	on_death = null
 	on_bumping = null
 	on_bumped = null
 	on_touched = null
@@ -274,7 +270,6 @@
 
 	store_position()
 	on_clickon = new(owner = src)
-	on_death = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
 	on_touched = new(owner = src)

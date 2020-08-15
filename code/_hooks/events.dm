@@ -124,6 +124,12 @@
 // amount: the amount of damage the mob is being dealt.
 /lazy_event/on_damaged
 
+// Called whenever a mob dies.
+// Arguments:
+// mob/user: The mob that's dying.
+// body_destroyed: Whether the mob is about to be gibbed.
+/lazy_event/on_death
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

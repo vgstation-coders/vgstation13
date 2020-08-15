@@ -196,7 +196,6 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
-	var/soulbound
 	var/mindbound
 	var/mob/bound_soul
 	var/datum/mind/bound_mind
@@ -220,11 +219,9 @@
 		..()
 
 /obj/item/phylactery/Destroy()
-	if(bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
-	bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
-	soulbound = null
 	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
@@ -234,7 +231,7 @@
 
 
 /obj/item/phylactery/update_icon()
-	if(soulbound)
+	if(bound_soul)
 		if(charges >= 1)
 			icon_state = "phylactery"
 		else
@@ -243,7 +240,7 @@
 		icon_state = "phylactery_empty_noglow"
 
 /obj/item/phylactery/attack_self(mob/user)
-	if(!soulbound && ishuman(user))
+	if(!bound_soul && ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/E = H.get_active_hand_organ()
 		if(locate(/datum/wound) in E.wounds)
@@ -256,12 +253,12 @@
 	else
 		..()
 
-/obj/item/phylactery/proc/revive_soul(list/arguments)
+/obj/item/phylactery/proc/revive_soul(mob/user, body_destroyed)
 	if(charges <= 0)
 		unbind_mind()
 		unbind()
 		return
-	var/mob/living/original = arguments["user"]
+	var/mob/living/original = user
 	if(original.mind)
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		H.real_name = original.real_name
@@ -275,7 +272,7 @@
 		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
 		H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
 		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
-		if(!arguments["body_destroyed"])
+		if(!body_destroyed)
 			original.dust()
 		var/release_time = round(rand(60 SECONDS, 120 SECONDS)/charges, 10) //In deciseconds
 		H.Paralyse(release_time/20) //Divide by 20 because Paralyse goes down by 1 every Life() tick (roughly every 2 secs)
@@ -289,14 +286,12 @@
 /obj/item/phylactery/proc/unbind()
 	if(bound_soul)
 		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
-	if(bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
-	soulbound = null
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
-	soulbound = to_bind.on_death.Add(src, "revive_soul")
+	to_bind.lazy_register_event(/lazy_event/on_death, src, .proc/revive_soul)
 	to_bind.lazy_register_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	bound_soul = to_bind
 
