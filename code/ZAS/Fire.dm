@@ -68,13 +68,14 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
-	if(istype(src,/obj))
-		var/obj/O = src
-		O.source_temperature = temperature
-		var/datum/gas_mixture/A = O.loc.return_air()
-		O.loc.fire_act(A,temperature,A.return_volume())
 	spawn()
 		burnItselfUp()
+
+/obj/ignite(var/temperature)
+	..()
+	source_temperature = temperature
+	var/datum/gas_mixture/A = loc.return_air()
+	loc.fire_act(A,temperature,A.volume)
 
 /atom/proc/melt()
 	return //lolidk

@@ -26,7 +26,7 @@
 /obj/item/weapon/storage/backpack/ashify()
 	var/datum/gas_mixture/A = loc.return_air()
 	for(var/obj/item/O in contents)
-		O.fire_act(A,src.is_hot(),A.return_volume())
+		O.fire_act(A,src.is_hot(),A.volume)
 		remove_from_storage(O, get_turf(src), refresh = 0)
 	refresh_all()
 	. = ..()
