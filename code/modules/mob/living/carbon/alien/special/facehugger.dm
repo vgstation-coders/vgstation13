@@ -523,7 +523,7 @@
 				var/turf/escape_tile = locate(src.x-(target.x-src.x)*2, src.y-(target.y-src.y)*2, target.z)
 				if(escape_tile.loc == target.loc)	//If the target is on the same tile just jump a random direction away
 					var/turf/escape_tile_random = locate(src.x + rand(3,6)*(-1**rand(1,2)), src.y + rand(3,6)*(-1**rand(1,2)), src.z)	//This is messy. For x and y coordinates, pick a random number between 3 and 6, then randomly make that number positive or negative.
-					throw_at(escape_tile_randm, 4, 1)
+					throw_at(escape_tile_random, 4, 1)
 				else
 					throw_at(escape_tile, 4, 1)
 				escaping = 0
