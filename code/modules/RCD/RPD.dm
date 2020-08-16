@@ -3,7 +3,7 @@
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
 	var/has_metal_slime = 0
-	var/has_red_slime = 0
+	var/has_yellow_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 	var/build_all = 0
 	var/autowrench = 0
@@ -153,18 +153,18 @@
 			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
 			qdel(W)
 			return
-					
-	if(istype(W, /obj/item/slime_extract/red))
-		if(has_red_slime)
+
+	if(istype(W, /obj/item/slime_extract/yellow))
+		if(has_yellow_slime)
 			to_chat(user, "It already has \a [W] attached.")
 			return
 		else
-			has_metal_slime=1
+			has_yellow_slime=1
 			verbs += /obj/item/device/rcd/rpd/proc/autowrench
 			to_chat(user, "You jam \the [W] into the RPD's output nozzle.")
 			qdel(W)
 			return
-	
+
 	..()
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
@@ -234,15 +234,15 @@
 /obj/item/device/rcd/rpd/proc/autowrench()
 	set category = "Object"
 	set name = "Autowrench Mode"
-	
+
 	if(usr.incapacitated())
 		return
-	
+
 	src.autowrench = !src.autowrench
-	
+
 	to_chat(usr, "You toggle the automatic wrenching feature on the RPD")
 
-	
+
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
 
