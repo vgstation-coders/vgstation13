@@ -76,7 +76,19 @@
 	w_class = W_CLASS_LARGE //big shit, to balance its power
 	force = 15.0
 	throwforce = 12.0
+	var/has_slime = 0
 
+/obj/item/weapon/wrench/socket/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/slime_extract/bluespace))
+		if(has_slime)
+			to_chat(user, "This wrench  already has \a [W] inside it's head.")
+			return
+		else
+			has_slime=1
+			to_chat(user, "You shove \the [W] inside the wrench's head.")
+			qdel(W)
+			return
+	..()
 /*
  * Screwdriver
  */
