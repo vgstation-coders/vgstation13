@@ -604,6 +604,7 @@
 
 		if (do_after(user,src, 40))
 			O.clean_blood()
+			O.extinguish()
 			if(O.current_glue_state == GLUE_STATE_TEMP)
 				O.unglue()
 			user.visible_message( \
