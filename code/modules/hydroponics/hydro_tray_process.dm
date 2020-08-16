@@ -55,12 +55,13 @@
 			lastproduce--
 
 	// Advance plant age.
-	if(skip_aging)
-		skip_aging--
-	else
-		if(prob(80))
-			age += 1 * HYDRO_SPEED_MULTIPLIER
-		update_icon_after_process = 1
+	if(!has_slime)
+			if(skip_aging)
+				skip_aging--
+			else
+				if(prob(80))
+					age += 1 * HYDRO_SPEED_MULTIPLIER
+					update_icon_after_process = 1
 
 	//Highly mutable plants have a chance of mutating every tick.
 	if(seed.immutable == -1)

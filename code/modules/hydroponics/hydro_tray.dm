@@ -42,7 +42,7 @@
 	var/closed_system          // If set, the tray will attempt to take atmos from a pipe.
 	var/force_update           // Set this to bypass the cycle time check.
 	var/skip_aging = 0		   // Don't advance age for the next N cycles.
-
+	var/has_slime = 0		   // Green slime extract applied; plants don't age.
 	var/pollination = 0
 	var/bees = 0				//Are the trays currently affected by the bees' pollination?
 
@@ -394,6 +394,15 @@
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)
 
+	else if(istype(O, /obj/item/slime_extract/green))
+		
+		if(has_slime)
+			to_chat(user, "This hydroponics tray already has \a [O] inside.")
+		else
+			has_slime=1
+			to_chat(user, "You attach \the [O] to the tray's internal mechanisms.")
+			qdel(O)
+		
 	else
 		return ..()
 
