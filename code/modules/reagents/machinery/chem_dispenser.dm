@@ -294,18 +294,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(isrobot(user))
 		if(!can_use(user))
 			return
-					
+
 	if(istype(D, /obj/item/slime_extract/black))
 		if(has_slime)
 			to_chat(user, "There's already slime in the tank!")
 			return
 		else
 			has_slime=1
-			dispensable_reagents.add(DSYRUP)
+			dispensable_reagents.Add(DSYRUP)
 			to_chat(user, "You throw the slime into the dispenser's tank.")
-			qdel(W)
+			qdel(D)
 			return
-					
+
 	if(can_insert(D))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")

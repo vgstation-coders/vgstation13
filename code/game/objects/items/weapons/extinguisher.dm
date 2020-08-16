@@ -53,7 +53,7 @@
 	item_state = "foam_extinguisher"
 	sprite_name = "foam_extinguisher"
 	var/has_slime = 0
-	
+
 /proc/pack_check(mob/user, var/obj/item/weapon/extinguisher/E) //Checks the user for a nonempty chempack.
 	var/mob/living/M = user
 	if (M && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack))
@@ -93,7 +93,7 @@
 			qdel(W)
 			return
 	..()
-	
+
 /obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
@@ -279,10 +279,11 @@
 				var/datum/reagents/R = new/datum/reagents(5)
 				R.my_atom = src
 				reagents.trans_to_holder(R,1)
+				var/obj/effect/effect/foam/fire/W
 				if(has_slime)
-					var/obj/effect/effect/foam/fire/W=new /obj/effect/effect/foam/fire/enhanced(get_turf(src),R)
+					W=new /obj/effect/effect/foam/fire/enhanced(get_turf(src),R)
 				else
-					var/obj/effect/effect/foam/fire/W = new /obj/effect/effect/foam/fire(get_turf(src),R)
+					W = new /obj/effect/effect/foam/fire(get_turf(src),R)
 				var/turf/my_target = pick(the_targets)
 				if(!W || !src)
 					return

@@ -8225,10 +8225,10 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		M.reagents.add_reagent(NUTRIMENT, 2)
 
 /datum/reagent/dsyrup
-name = "Delightful Syrup"
-id = DSYRUP
-description = "This syrup is everyone's favorite tricord additive."
-reagent_state = REAGENT_STATE_LIQUID
-color = "#571212" //like a dark red
-density = 1.00 //basically water
-specheatcap = 4.184
+	name = "Delightful Syrup"
+	id = DSYRUP
+	description = "This syrup is everyone's favorite tricord additive."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#571212" //like a dark red
+	density = 1.00 //basically water
+	specheatcap = 4.184

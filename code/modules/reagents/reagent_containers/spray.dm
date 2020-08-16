@@ -130,7 +130,7 @@
 	volume = 40
 	amount_per_transfer_from_this = 10
 	var/has_slime = 0
-	
+
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
@@ -148,7 +148,7 @@
 			return
 	..()
 
-/obj/item/weapon/reagent_containers/spray/pepper/proc/make_puff(var/atom/target, var/mob/user))
+/obj/item/weapon/reagent_containers/spray/pepper/make_puff(var/atom/target, var/mob/user)
 	if(has_slime)
 		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
 	..()
