@@ -83,9 +83,10 @@ Attach to transfer valve and open. BOOM.
 /atom/proc/solidify()
 	return //lolidk
 
-/atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/atom/proc/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume, var/testCase = FALSE)
 	if(autoignition_temperature && !on_fire && exposed_temperature > autoignition_temperature)
-		ignite(exposed_temperature)
+		if(!testCase)
+			ignite(exposed_temperature)
 		return 1
 	return 0
 

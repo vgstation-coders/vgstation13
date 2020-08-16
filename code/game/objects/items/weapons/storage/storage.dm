@@ -333,6 +333,7 @@
 //The stop_warning parameter will stop the insertion message from being displayed. It is intended for cases where you are inserting multiple items at once,
 //such as when picking up all the items on a tile with one click.
 /obj/item/weapon/storage/proc/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	var/caughtfire = FALSE
 	if(!istype(W))
 		return 0
 	if(usr)
@@ -342,7 +343,8 @@
 	W.forceMove(src)
 	W.on_enter_storage(src)
 	var/datum/gas_mixture/A = loc.return_air()
-	src.fire_act(A,W.is_hot(),A.volume)
+	if(src.fire_act(A,W.is_hot(),A.volume,1)) //Test case, don't ignite even if inserted item is hot. this is so text is displayed in the right order.
+		caughtfire = TRUE
 	if(usr)
 		if (usr.client && usr.s_active != src)
 			usr.client.screen -= W
@@ -352,12 +354,16 @@
 			for(var/mob/M in viewers(usr, null))
 				if (M == usr)
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
+					if(caughtfire)
+						to_chat(usr, "<span class='warning'>\The [src] catches fire!</span>")
 				else if (M in range(1) && !stealthy(usr)) //If someone is standing close enough, they can tell what it is...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-
-
+				else
+					if(caughtfire)
+						M.show_message("<span class='warning'>[usr]'s [src] catches fire!</span>")
+	src.fire_act(A,W.is_hot(),A.volume) // see if it catches fire
 	W.mouse_opacity = 2 //So you can click on the area around the item to equip it, instead of having to pixel hunt
 	update_icon()
 
@@ -670,6 +676,17 @@
 		remove_from_storage(O, A, refresh = 0)
 
 	refresh_all()
+
+/obj/item/weapon/storage/extinguish()
+	if(autoignition_temperature)
+		for(var/obj/item/O in contents)
+			if(O.is_hot() > autoignition_temperature)
+				remove_from_storage(O, get_turf(src), refresh = 0)
+				for(var/mob/M in viewers(O, null))
+					M.show_message("<span class='notice'>\The [O] falls out of \the [src].</span>")
+
+		refresh_all()
+	..()
 
 /obj/item/weapon/storage/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	//Forbids wearing a storage item in a  no_storage_slot (ie plastic bags over head) with something already inside

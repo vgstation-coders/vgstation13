@@ -268,6 +268,11 @@
 		on_fire = 1
 		set_light(src.light_range + 3)
 		update_fire()
+		for(var/mob/M in viewers(src, null))
+			if (M == src)
+				to_chat(usr, "<span class='warning'>You catch fire!</span>")
+			else
+				M.show_message("<span class='warning'>[src] catches fire!</span>")
 		return 1
 	else
 		return 0
@@ -277,6 +282,8 @@
 		on_fire = 0
 		fire_stacks = 0
 		set_light(src.light_range - 3)
+		for(var/obj/item/I in get_all_slots())
+			I.extinguish()
 		update_fire()
 
 /mob/living/proc/update_fire()
