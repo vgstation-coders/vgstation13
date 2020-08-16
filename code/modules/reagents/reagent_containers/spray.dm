@@ -123,16 +123,35 @@
 //pepperspray
 /obj/item/weapon/reagent_containers/spray/pepper
 	name = "pepperspray"
-	desc = "Manufactured by UhangInc, used to blind and down an opponent quickly."
+	desc = "A pepper spray manufactured by UhangInc, used to blind and down an opponent quickly."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "pepperspray"
 	item_state = "pepperspray"
 	volume = 40
 	amount_per_transfer_from_this = 10
-
+	var/has_slime = 0
+	
 /obj/item/weapon/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
+
+/obj/item/weapon/reagent_containers/spray/pepper/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/slime_extract/orange))
+		if(has_slime)
+			to_chat(user, "The bottle already has \a [W] inside.")
+			return
+		else
+			has_slime=1
+			reagents.add_reagent(CONDENSEDCAPSAICIN, 40)//in a perfect world, we'd calculate how much to add, but the add_reagents() already has sanity checking for max volume
+			to_chat(user, "You drop \the [W] down into the spray canister, and liquid capsaicin swells up to the brim.")
+			qdel(W)
+			return
+	..()
+
+/obj/item/weapon/reagent_containers/spray/pepper/proc/make_puff(var/atom/target, var/mob/user))
+	if(has_slime)
+		reagents.add_reagent(CONDENSEDCAPSAICIN, 10)
+	..()
 
 // Luminol
 /obj/item/weapon/reagent_containers/spray/luminol
