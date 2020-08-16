@@ -336,6 +336,6 @@
 	else
 		return FALSE
 
-/datum/spellbook_artifact/purchased(mob/living/carbon/human/H)
+/datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
 	..()
 	H.add_spell (new/spell/passive/nogunallowed)
