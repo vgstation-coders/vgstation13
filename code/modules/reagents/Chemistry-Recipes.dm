@@ -2540,6 +2540,13 @@
 	required_reagents = list(LIMEJUICE = 1, TOMATOJUICE = 1, ORANGEJUICE = 1, CREAM = 1, TRICORDRAZINE = 1)
 	result_amount = 5
 
+/datum/chemical_reaction/doctor_delight_from_syrup
+	name = "The Dector's Delight from pre-mix"
+	id= "p_doctordelight"
+	result = DOCTORSDELIGHT
+	required_reagents = list(DSYRUP = 1, TRICORDRAZINE = 1)
+	result_amount = 2
+	
 /datum/chemical_reaction/irish_cream
 	name = "Irish Cream"
 	id = IRISHCREAM

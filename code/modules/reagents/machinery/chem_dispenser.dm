@@ -44,7 +44,7 @@
 		SACID,
 		TUNGSTEN
 		)
-
+	var/has_slime = 0
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
 /*
@@ -286,7 +286,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
 	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
+/obj/machinery/chem_dispenser/attackby(var/obj/item/D as obj, var/mob/user as mob) //to be worked on
 
 	if(..())
 		return 1
@@ -294,7 +294,18 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	if(isrobot(user))
 		if(!can_use(user))
 			return
-
+					
+	if(istype(D, /obj/item/slime_extract/black))
+		if(has_slime)
+			to_chat(user, "There's already slime in the tank!")
+			return
+		else
+			has_slime=1
+			dispensable_reagents.add(DSYRUP)
+			to_chat(user, "You throw the slime into the dispenser's tank.")
+			qdel(W)
+			return
+					
 	if(can_insert(D))
 		if(src.container)
 			to_chat(user, "\A [src.container] is already loaded into the machine.")
