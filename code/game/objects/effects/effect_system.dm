@@ -715,6 +715,9 @@ steam.start() -- spawns the effect
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
 	icon_state = "mfoam"
+	
+/obj/effect/effect/foam/fire/enhanced
+	lowest_temperature = 0
 
 /obj/effect/effect/foam/New(loc, var/ismetal=0)
 	. = ..(loc)
