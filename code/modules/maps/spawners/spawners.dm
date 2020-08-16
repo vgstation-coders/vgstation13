@@ -1415,11 +1415,17 @@
 // Spawn all in the turf
 /obj/abstract/spawn_all
 	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
 
 /obj/abstract/spawn_all/New()
 	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
 	for (var/thing in to_spawn)
-		new thing(get_turf(src))
+		new thing(location)
 	qdel(src)
 
 /obj/abstract/spawn_all/dredd_gear

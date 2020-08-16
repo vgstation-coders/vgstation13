@@ -103,10 +103,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
@@ -122,6 +119,15 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/obj/abstract/spawn_all/bartender
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag
+	)
 
 // -- Chef
 
