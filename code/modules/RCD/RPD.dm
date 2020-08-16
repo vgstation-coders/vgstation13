@@ -2,7 +2,7 @@
 	name       = "\improper Rapid-Piping-Device (RPD)"
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
-
+	var/has_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 
 	var/hook_key
@@ -139,6 +139,65 @@
 	if (selected)
 		return selected.Topic(href, href_list)
 
+/obj/item/device/rcd/rpd/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/slime_extract/metal))
+		if(has_slime)
+			to_chat(user, "It already has \a [W] attached.")
+			return
+		else
+			has_slime=1
+			new/obj/item/device/rcd/rpd/verb/multilayer(src)
+			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
+			qdel(W)
+			return
+	..()
+	
+/obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
+	if(!selected)
+		return 1
+	
+	if(~selected.flags & (RCD_SELF_SANE | RCD_RANGE) && !(user.Adjacent(A) && A.Adjacent(user))) // If RCD_SELF_SANE and RCD_RANGE are disabled we use adjacency.
+		return 1
+	
+	if(selected.flags & RCD_RANGE && ~selected.flags & RCD_SELF_SANE && get_dist(A, user) > 1) // RCD_RANGE is used AND we're NOT SELF_SANE, use range(1)
+		return 1
+	
+	if(selected.flags & RCD_GET_TURF) // Get the turf because RCD_GET_TURF is on.
+		A = get_turf(A)
+		if (!A)
+			return // Thing clicked was in nullspace, so we won't pass a null turf.
+	
+	if(~selected.flags & RCD_SELF_SANE && get_energy(user) < selected.energy_cost) // Handle energy amounts, but only if not SELF_SANE.
+		return 1
+	if(build_all && istype(selected, /datum/rcd_schematic/pipe) && selected.layer)
+		for(var/layer in 1 to 5)
+			busy  = TRUE // Busy to prevent switching schematic while it's in use.
+			/datum/rcd_schematic/pipe/our_schematic = selected //typecast
+			our_schematic.set_layer(layer)
+			var/t = our_schematic.attack(A, user)
+			if(!t) // No errors
+				if(~our_schematic.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
+					use_energy(our_schematic.energy_cost, user)
+			else
+				if(istext(t))
+					to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+				else
+					to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+			
+			busy = FALSE
+	return 1				
+
+/obj/item/device/rcd/rpd/verb/multilayer()
+	set category = "Object"
+	set name = "Multilayer Mode"
+	
+	if(usr.incapacitated())
+		return
+
+	src.build_all = !src.build_all
+	
+	to_chat(usr, "You toggle the multilayer building mode on the RPD")		
+	
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
 
