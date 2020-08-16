@@ -163,8 +163,6 @@
 #define RAISE_HUMAN 1
 #define RAISE_ANIMAL 2
 #define RAISE_MEAT 3
-#define RAISE_MONKEY 4
-//#define RAISE_TYPE_FAITHLESS 2
 /obj/item/weapon/gun/energy/staff/necro
 	name = "staff of necromancy"
 	desc = "A wicked looking staff that pulses with evil energy."
