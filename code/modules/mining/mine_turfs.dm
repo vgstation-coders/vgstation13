@@ -383,6 +383,12 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				else if(excavation_level > 0 && prob(15))
 					B = new /obj/structure/boulder(src)
 					B.geological_data = geologic_data
+				
+					
+				if(P.has_slime)
+					for(var/turf/unsimulated/mineral/M in range(src,1))
+							M.GetDrilled(safety_override = TRUE, driller = user)
+					return
 
 				GetDrilled(artifact_destroyed)
 
