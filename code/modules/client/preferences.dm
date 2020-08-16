@@ -1238,7 +1238,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 							r_hair = hex2num(copytext(new_hair, 2, 4))
 							g_hair = hex2num(copytext(new_hair, 4, 6))
 							b_hair = hex2num(copytext(new_hair, 6, 8))
-
+					if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 10 and 50:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 10, 50)
+							g_hair = clamp(g_hair, 10, 50)
+							b_hair = clamp(b_hair, 10, 50)
 				if("h_style")
 					var/new_h_style = input(user, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_sprite_accessories(hair_styles_list, null, species) //gender intentionally left null so speshul snowflakes can cross-hairdress
 					if(new_h_style)
@@ -1292,6 +1300,15 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 						if(skin_c)
 							s_tone = clamp(skin_c,1,4)
 							to_chat(user,"You will now be [skintone2racedescription(s_tone,species)] in color.")
+					else if(species == "Insectoid")
+						var/carapace = input(user, "Choose your character's carapace colour, color values will be adjusted to between 10 and 50:", "Character Preference", rgb(r_hair, g_hair, b_hair)) as color|null
+						if(carapace)
+							r_hair = hex2num(copytext(carapace, 2, 4))
+							g_hair = hex2num(copytext(carapace, 4, 6))
+							b_hair = hex2num(copytext(carapace, 6, 8))
+							r_hair = clamp(r_hair, 10, 50)
+							g_hair = clamp(g_hair, 10, 50)
+							b_hair = clamp(b_hair, 10, 50)
 					else
 						to_chat(user,"Your species doesn't have different skin tones. Yet?")
 						return

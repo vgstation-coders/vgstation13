@@ -965,6 +965,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 16384
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
