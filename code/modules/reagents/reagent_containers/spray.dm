@@ -135,7 +135,7 @@
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
 
-/obj/item/weapon/reagent_containers/spray/pepper/attackby(obj/item/weapon/W, mob/user)
+/obj/item/weapon/reagent_containers/spray/pepper/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/slime_extract/orange))
 		if(has_slime)
 			to_chat(user, "The bottle already has \a [W] inside.")
