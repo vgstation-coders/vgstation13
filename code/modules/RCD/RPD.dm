@@ -2,9 +2,12 @@
 	name       = "\improper Rapid-Piping-Device (RPD)"
 	desc       = "A device used to rapidly pipe things."
 	icon_state = "rpd"
-	var/has_slime = 0
+	var/has_metal_slime = 0
+	var/has_red_slime = 0
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 	var/build_all = 0
+	var/autowrench = 0
+	var/obj/item/weapon/wrench/internal = new()
 	var/hook_key
 
 	schematics = list(
@@ -141,15 +144,27 @@
 
 /obj/item/device/rcd/rpd/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/slime_extract/metal))
-		if(has_slime)
+		if(has_metal_slime)
 			to_chat(user, "It already has \a [W] attached.")
 			return
 		else
-			has_slime=1
-			new/obj/item/device/rcd/rpd/verb/multilayer(src)
+			has_metal_slime=1
+			verbs += /obj/item/device/rcd/rpd/proc/multilayer
 			to_chat(user, "You jam \the [W] into the RPD's fabricator.")
 			qdel(W)
 			return
+					
+	if(istype(W, /obj/item/slime_extract/red))
+		if(has_red_slime)
+			to_chat(user, "It already has \a [W] attached.")
+			return
+		else
+			has_metal_slime=1
+			verbs += /obj/item/device/rcd/rpd/proc/autowrench
+			to_chat(user, "You jam \the [W] into the RPD's output nozzle.")
+			qdel(W)
+			return
+	
 	..()
 
 /obj/item/device/rcd/rpd/afterattack(var/atom/A, var/mob/user)
@@ -171,19 +186,22 @@
 		return 1
 	if(build_all && istype(selected, /datum/rcd_schematic/pipe))
 		var/datum/rcd_schematic/pipe/our_schematic = selected //typecast
-		if(!our_schematic.layer) // this is needed because disposal pipe schematic datums are retarded
+		if(our_schematic.layer) // this is needed because disposal pipe schematic datums are retarded
 			for(var/layer in 1 to 5)
 				busy  = TRUE // Busy to prevent switching schematic while it's in use.
 				our_schematic.set_layer(layer)
-				var/t = our_schematic.attack(A, user)
-				if(!t) // No errors
-					if(~our_schematic.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
-						use_energy(our_schematic.energy_cost, user)
+				if(layer != 5 )
+					spawn(-1) our_schematic.attack(A, user)
 				else
-					if(istext(t))
-						to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+					var/t = our_schematic.attack(A, user)
+					if(!t) // No errors
+						if(~our_schematic.flags & RCD_SELF_COST) // Handle energy costs unless the schematic does it itself.
+							use_energy(our_schematic.energy_cost, user)
 					else
-						to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
+						if(istext(t))
+							to_chat(user, "<span class='warning'>\the [src]'s error light flickers: [t]</span>")
+						else
+							to_chat(user, "<span class='warning'>\the [src]'s error light flickers.</span>")
 
 				busy = FALSE
 			return 1
@@ -202,7 +220,7 @@
 	busy = FALSE
 	return 1
 
-/obj/item/device/rcd/rpd/verb/multilayer()
+/obj/item/device/rcd/rpd/proc/multilayer()
 	set category = "Object"
 	set name = "Multilayer Mode"
 
@@ -213,6 +231,18 @@
 
 	to_chat(usr, "You toggle the multilayer building mode on the RPD")
 
+/obj/item/device/rcd/rpd/proc/autowrench()
+	set category = "Object"
+	set name = "Autowrench Mode"
+	
+	if(usr.incapacitated())
+		return
+	
+	src.autowrench = !src.autowrench
+	
+	to_chat(usr, "You toggle the automatic wrenching feature on the RPD")
+
+	
 /obj/item/device/rcd/rpd/admin
 	name = "experimental Rapid-Piping-Device (RPD)"
 

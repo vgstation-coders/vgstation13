@@ -389,6 +389,9 @@
 	P.setPipingLayer(thislayer)
 	P.update()
 	P.add_fingerprint(user)
+	var/obj/item/device/rcd/rpd/ourmaster = master
+	if(ourmaster.autowrench)
+		P.attackby(ourmaster.internal, user)
 
 /datum/rcd_schematic/pipe/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
 	if(!istype(old_schematic, /datum/rcd_schematic/pipe))
