@@ -398,10 +398,12 @@
 		
 		if(has_slime)
 			to_chat(user, "This hydroponics tray already has \a [O] inside.")
+			return
 		else
 			has_slime=1
 			to_chat(user, "You attach \the [O] to the tray's internal mechanisms.")
 			qdel(O)
+			return
 		
 	else
 		return ..()
