@@ -357,6 +357,10 @@ steam.start() -- spawns the effect
 	R.burn_skin(2)
 	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
 
+
+/obj/effect/effect/smoke/transparent
+	opacity = FALSE
+
 /////////////////////////////////////////////
 // Smoke spread
 /////////////////////////////////////////////
@@ -416,6 +420,9 @@ steam.start() -- spawns the effect
 
 /datum/effect/effect/system/smoke_spread/heat
 	smoke_type = /obj/effect/effect/smoke/heat
+
+/datum/effect/effect/system/smoke_spread/transparent
+	smoke_type = /obj/effect/effect/smoke/transparent
 
 /////////////////////////////////////////////
 // Chem smoke
