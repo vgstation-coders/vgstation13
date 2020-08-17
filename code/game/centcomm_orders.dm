@@ -69,7 +69,7 @@ var/global/current_centcomm_order_id=124901
 	score["stuffshipped"]++
 	return TRUE
 
-/datum/centcomm_order/proc/Pay()
+/datum/centcomm_order/proc/Pay(var/complete = TRUE)
 	acct.charge(-worth,null,"Payment for order #[id]",dest_name = name)
 
 /datum/centcomm_order/proc/getRequestsByName(var/html_format = 0)
@@ -129,6 +129,16 @@ var/global/current_centcomm_order_id=124901
 	var/left_to_check = list()
 	var/toPay = 0
 
+
+/datum/centcomm_order/per_unit/Pay(var/complete = TRUE)
+	if(toPay)
+		if(complete)
+			acct.charge(-toPay,null,"Complete payment for per-unit order #[id]",dest_name = name)
+			score["stuffshipped"]++
+		else
+			acct.charge(-toPay,null,"Partial payment for per-unit order #[id]",dest_name = name)
+		toPay = 0
+
 // Same as normal, but will take every last bit of what you provided.
 /datum/centcomm_order/per_unit/CheckShuttleObject(var/obj/O, var/in_crate)
 	if(must_be_in_crate && !in_crate)
@@ -140,11 +150,11 @@ var/global/current_centcomm_order_id=124901
 		if(istype(O, /obj/item/stack))
 			var/obj/item/stack/S = O
 			amount = S.amount
-		if(!(O.type in fulfilled))
-			fulfilled[O.type]=0
+		if(!(O.type in left_to_check))
+			left_to_check[O.type]=0
 		if (!ExtraChecks(O))
 			return 0
-		fulfilled[O.type] += amount
+		left_to_check[O.type] += amount
 		qdel(O)
 		return 1
 	return 0
@@ -162,13 +172,7 @@ var/global/current_centcomm_order_id=124901
 		fulfilled[typepath] += left_to_check[typepath]
 		left_to_check[typepath] = 0
 	. = ..()
-	if(toPay)
-		switch (.)
-			if (TRUE)
-				acct.charge(-toPay,null,"Complete payment for per-unit order #[id]",dest_name = name)
-				score["stuffshipped"]++
-			if (FALSE)
-				acct.charge(-toPay,null,"Partial payment for per-unit order #[id]",dest_name = name)
+	Pay(.)
 
 //////////////////////////////////////////////
 // ORDERS START HERE
@@ -721,7 +725,7 @@ var/global/current_centcomm_order_id=124901
 	name_override = list(
 		/obj/item/organ/internal/kidneys = "human kidneys"
 	)
-	extra_requirements = "The organs needs to be fresh, use a medical crate."
+	extra_requirements = "The organs needs to be fresh, use a medical crate or a freezer."
 	worth = 200*requested[requested[1]]
 
 /datum/centcomm_order/department/medical/kidneys/ExtraChecks(var/obj/item/organ/internal/kidneys/I)
@@ -739,7 +743,7 @@ var/global/current_centcomm_order_id=124901
 	name_override = list(
 		/obj/item/organ/internal/heart = "human heart"
 	)
-	extra_requirements = "The organ needs to be fresh, use a medical crate."
+	extra_requirements = "The organ needs to be fresh, use a medical crate or a freezer."
 	worth = 400
 
 /datum/centcomm_order/department/medical/heart/ExtraChecks(var/obj/item/organ/internal/heart/I)
@@ -1173,30 +1177,42 @@ var/global/current_centcomm_order_id=124901
 	worth = "5$ per potato"
 
 
-/datum/centcomm_order/department/civilian/honeycomb
+/datum/centcomm_order/per_unit/department/civilian/honeycomb
 	var/flavor
 
-/datum/centcomm_order/department/civilian/honeycomb/New()
+/datum/centcomm_order/per_unit/department/civilian/honeycomb/New()
 	..()
 	requested = list(
 		/obj/item/weapon/reagent_containers/food/snacks/honeycomb = rand(4,20)
 	)
-	worth = 80*requested[requested[1]]
-	flavor = pick(
-		/datum/reagent/drink/applejuice,
-		/datum/reagent/drink/grapejuice,
-		/datum/reagent/drink/banana,
-		/datum/reagent/blood,
-		/datum/reagent/psilocybin,
-		/datum/reagent/hyperzine/cocaine,
-		)//we've got some interesting honey enthusiasts over at Central Command
+	if (prob(50))
+		unit_prices=list(
+			/obj/item/weapon/reagent_containers/food/snacks/honeycomb = 20
+		)
+		worth = "20$ per honeycomb"
+		flavor = pick(
+			/datum/reagent/drink/applejuice,
+			/datum/reagent/drink/grapejuice,
+			/datum/reagent/drink/banana,
+			)
+	else
+		unit_prices=list(
+			/obj/item/weapon/reagent_containers/food/snacks/honeycomb = 60
+		)
+		worth = "60$ per honeycomb"
+		flavor = pick(
+			/datum/reagent/blood,
+			/datum/reagent/psilocybin,
+			/datum/reagent/hyperzine/cocaine,
+			)//we've got some interesting honey enthusiasts over at Central Command
+
 	var/datum/reagent/F = flavor
 	name_override = list(
 		/obj/item/weapon/reagent_containers/food/snacks/honeycomb = "[initial(F.name)]-flavored Honeycombs"
 	)
 	extra_requirements = "The flavor has to be natural, and not injected into the honeycomb."
 
-/datum/centcomm_order/department/civilian/honeycomb/ExtraChecks(var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H)
+/datum/centcomm_order/per_unit/department/civilian/honeycomb/ExtraChecks(var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H)
 	if (!istype(H))
 		return 0
 	if (!flavor)
