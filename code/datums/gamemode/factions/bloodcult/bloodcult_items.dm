@@ -1401,10 +1401,10 @@ var/list/arcane_tomes = list()
 			else
 				if(istype(user_slot, /obj/item/clothing/under/))
 					to_chat(world, "help")
-					var/iditem = user.get_item_by_slot(slot_wear_id)		//Remember what belt/ID/pocket items they had
-					var/beltitem = user.get_item_by_slot(slot_belt)
-					var/pocketitemr = user.get_item_by_slot(slot_r_store)
-					var/pocketiteml = user.get_item_by_slot(slot_l_store)
+					var/obj/item/iditem = user.get_item_by_slot(slot_wear_id)		//Remember what belt/ID/pocket items they had
+					var/obj/item/beltitem = user.get_item_by_slot(slot_belt)
+					var/obj/item/pocketitemr = user.get_item_by_slot(slot_r_store)
+					var/obj/item/pocketiteml = user.get_item_by_slot(slot_l_store)
 					user.u_equip(user_slot)
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 					if(iditem)
