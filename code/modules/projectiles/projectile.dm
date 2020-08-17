@@ -278,7 +278,7 @@ var/list/impact_master = list()
 		if(permutated)
 			permutated.Add(A)
 
-		return 0
+		return -1
 	else if(!custom_impact)
 		var/impact_icon = null
 		var/impact_sound = null

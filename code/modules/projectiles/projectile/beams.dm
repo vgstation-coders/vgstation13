@@ -34,34 +34,16 @@ var/list/beam_master = list()
 	var/atom/movable/A = info.hit_atom
 	var/turf/T = vector2turf(info.point, z)
 
-	//setting loc for to_bumo
-	fired_beam.loc = T
-
-	//setting dir for to_bumo
-	var/vector/nextTile = getPoint(info.distance + 1)
-	var/vector/dirToNextTile = atoms2vector(T, vector2turf(nextTile))
-	fired_beam.dir = vector2ClosestDir(dirToNextTile)
-
-
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
-	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-
-	/*if(istype(A, /mob/living))
-		var/ret = A.bullet_act(fired_beam)
-
-		if(ret < 0) //we rebounded
+	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
+		var/ret = fired_beam.to_bump(A)
+		if(ret)
+			return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
+		else if(ret == -1)
 			return new /rayCastHit(info, RAY_CAST_REBOUND)
 
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)*/
-
-	if(!isturf(fired_beam.original) && A == fired_beam.original)
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-
-	if(A.opacity)
-		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 	return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 /obj/item/projectile/beam
