@@ -143,11 +143,11 @@ datum/vgassembly/Topic(href,href_list)
 		var/target = input(usr, "Select which component you want to output to.", "Select Target Component", 0) as null|anything in refs
 		if(!target)
 			return
-		
+
 		target = refs["[target]"]
 		if(!locate(target))
 			return
-		
+
 		var/input = input("Select which input you want to target.", "Select Target Input", "main") as null|anything in locate(target)._input
 
 		var/datum/vgcomponent/vgc = locate(target)
@@ -157,7 +157,7 @@ datum/vgassembly/Topic(href,href_list)
 		var/datum/vgcomponent/vgc = locate(href_list["touch"])
 		if(!vgc || !vgc.has_touch)
 			return
-		
+
 		vgc.touch_enabled = !vgc.touch_enabled
 	else if(href_list["debug"])
 		var/datum/vgcomponent/vgc = locate(href_list["debug"])
@@ -194,7 +194,7 @@ datum/vgassembly/proc/touched(var/obj/item/O, var/mob/user)
 	var/input = input("What component do you want to interact with?", "Select Component", null) as null|anything in touchables
 	if(!input)
 		return
-	
+
 	touchables[input].onTouch(O, user)
 	return
 
@@ -204,7 +204,7 @@ datum/vgassembly/proc/UI_Update()
 		if(!user)
 			windows[ref] = null
 			continue
-		
+
 		updateCurcuit(user)
 
 datum/vgassembly/proc/hasSpace()
@@ -213,10 +213,10 @@ datum/vgassembly/proc/hasSpace()
 datum/vgassembly/proc/canAdd(var/datum/vgcomponent/vgc)
 	if(!hasSpace())
 		return 0
-	
+
 	if(!vgc)
 		return 0
-	
+
 	if(allowed_components.len > 0)
 		for(var/c_type in allowed_components)
 			if(c_type == vgc.type)
@@ -295,7 +295,7 @@ datum/vgcomponent/Destroy()
 datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	if(_assembly)
 		return 0 //how
-	
+
 	if(!A || !A.canAdd(src))
 		return 0 //more plausible
 
@@ -308,7 +308,7 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	if(!_assembly)
 		return
 
-	
+
 	var/datum/vgassembly/A = _assembly
 	_assembly = null //needs to be null for rebuild to work for other components
 	A.rebuild()
@@ -573,7 +573,7 @@ Keyboard
 		if(!signal) //wasn't a number
 			return 0
 
-	if(!(signal in (1 to 5)))
+	if(!(signal in 1 to 5))
 		return 0
 
 	range = signal
@@ -735,15 +735,15 @@ Index getter
 		signal = text2num(signal)
 		if(!signal)
 			return//wasn't a number
-		
+
 	index = signal
 
 /datum/vgcomponent/index_getter/proc/grab(var/signal)
 	if(!istype(signal, /list))
 		return
-	
+
 	var/list/L = signal
-	
+
 	if(index > L.len)
 		return
 
@@ -849,7 +849,7 @@ datum/vgcomponent/signaler/New()
 		if(!signal) //wasn't a number
 			return 0
 
-	if(!(signal in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
+	if(!(signal in MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY))
 		return 0
 
 	_signaler.set_frequency(signal)
@@ -861,7 +861,7 @@ datum/vgcomponent/signaler/New()
 		if(!signal) //wasn't a number
 			return 0
 
-	if(!(signal in (1 to 100)))
+	if(!(signal in 1 to 100))
 		return 0
 
 	_signaler.code = signal
