@@ -46,7 +46,6 @@ var/list/beam_master = list()
 	if(isnull(A))
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
-	fired_beam.loc = A.loc //we need to do this for to_bump to properly calculate
 	if(fired_beam.to_bump(A)) //this already calls bullet_act on our targets!!!
 		return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
 
