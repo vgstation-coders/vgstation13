@@ -693,6 +693,7 @@
 /obj/structure/bed/chair/plastic
 	sheet_type = /obj/item/stack/sheet/mineral/plastic
 	sheet_amt = 3
+	anchored = 0
 
 /obj/structure/bed/chair/plastic/plastic_chair
 	icon_state = "plastic_chair"
