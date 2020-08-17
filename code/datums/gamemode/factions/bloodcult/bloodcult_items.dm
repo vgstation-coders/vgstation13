@@ -1347,7 +1347,6 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/head/culthood,
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
-		/obj/item/clothing/under/cultclownsuit,
 		/obj/item/clothing/mask/gas/cultclownmask
 		)
 
@@ -1400,20 +1399,27 @@ var/list/arcane_tomes = list()
 			if (!user_slot)
 				user.equip_to_slot_or_drop(stored_slot,nslot)
 			else
-				if(slot == slot_w_uniform)
+				if(istype(user_slot, /obj/item/clothing/under/))
+					to_chat(world, "help")
 					var/iditem = user.get_item_by_slot(slot_wear_id)		//Remember what belt/ID/pocket items they had
 					var/beltitem = user.get_item_by_slot(slot_belt)
 					var/pocketitemr = user.get_item_by_slot(slot_r_store)
 					var/pocketiteml = user.get_item_by_slot(slot_l_store)
+					user.u_equip(user_slot)
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 					if(iditem)
-						user.equip_to_slot_or_drop(iditem,slot_wear_id)		//Re-equip them so they dont drop on the ground
+						to_chat(world, "help1")
+						iditem.forcemove(slot_wear_id)		//Re-equip them so they dont drop on the ground
 					if(beltitem)
-						user.equip_to_slot_or_drop(beltitem, slot_belt)
+						to_chat(world, "help2")
+						beltitem.forcemove(slot_belt)
 					if(pocketitemr)
-						user.equip_to_slot_or_drop(pocketitemr,slot_r_store)
+						to_chat(world, "help3")
+						pocketitemr.forceMove(slot_r_store)
 					if(pocketiteml)
-						user.equip_to_slot_or_drop(pocketiteml,slot_l_store)
+						to_chat(world, "help")
+						pocketiteml.forceMove(slot_l_store)
+					qdel(user_slot)
 				if(istype(user_slot, /obj/item/weapon/storage))
 					var/obj/item/weapon/storage/S = user_slot
 					S.close(user)
