@@ -140,7 +140,7 @@
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_POWERSTORAGE = 3, Tc_MAGNETS = 3)
 	build_type = IMPRINTER
 	category = "Misc"
-	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000) //Needs carbon.
+	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
 	build_path = /obj/item/rig_module/emp_shield
 
 /datum/design/rigsuit_radshield

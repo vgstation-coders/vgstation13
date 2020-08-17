@@ -209,7 +209,7 @@
 	var/event_key
 	var/initial_suit = 0
 	var/initial_helmet = 0
-	var/max_capacity = 250 //Just barely over 1 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. Based on in-game tests on 14/08/2020.
+	var/max_capacity = 250 //Just barely over 1 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
 	var/current_capacity = 0
 
 /obj/item/rig_module/rad_shield/examine_addition(mob/user)
