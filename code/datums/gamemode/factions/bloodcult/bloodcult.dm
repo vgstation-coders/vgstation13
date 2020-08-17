@@ -902,6 +902,9 @@ var/static/list/valid_cultpower_slots = list(
 	slot_wear_suit,
 	slot_head,
 	slot_shoes,
+	slot_back,
+	slot_w_uniform,
+	slot_wear_mask,
 	)//might add more slots later as I add more items that could fit in them
 
 /*	get_cult_power

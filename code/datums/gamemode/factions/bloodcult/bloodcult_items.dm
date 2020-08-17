@@ -1045,6 +1045,51 @@ var/list/arcane_tomes = list()
 /obj/item/clothing/suit/cultrobes/cultify()
 	return
 
+///////////////////////////////////////HONK////////////////////////////////////////////////
+
+/obj/item/clothing/under/cultclownsuit
+	name = "cult clown suit"
+	desc = "<span class='sinister'>'HONK!'</span>"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
+	icon_state = "clowncult"
+	item_state = "cultrobes"
+	_color = "clowncult"
+	flags = FPRINT
+	armor = list(melee = 15, bullet = 15, laser = 15, energy = 15, bomb = 15, bio = 15, rad = 0)
+	siemens_coefficient = 0
+	clothing_flags = ONESIZEFITSALL
+
+/obj/item/clothing/under/cultclownsuit/get_cult_power()
+	return 50
+
+/obj/item/clothing/under/cultclownsuit/cultify()
+	return
+
+/obj/item/clothing/mask/gas/cultclownmask
+	name = "cult clown mask"
+	desc = "No clown cultist is complete without his mask!"
+	icon_state = "clowncult"
+	item_state = "clown_hat"
+	can_flip = 0
+	canstage = 0
+
+/obj/item/clothing/mask/gas/get_cult_power()
+	return 20
+
+/obj/item/clothing/mask/gas/cultclownmask/cultify()
+	return
+
+/obj/item/clothing/shoes/cult/clown
+	name = "cult clown shoes"
+	desc = "A pair of shoes worn by the followers of Nar-Sie. These ones seem to be extra big and squeeky."
+	icon_state = "clowncult"
+	species_fit = list()
+
+/obj/item/weapon/storage/backpack/cultpack/clown
+	name = "Giggles Cult Honkerton"
+	desc = "It's a backpack created by Nar-Sie's own clowns!"
+	icon_state = "clownpackcult"
+
 ///////////////////////////////////////CULT BACKPACK (TROPHY RACK)////////////////////////////////////////////////
 
 /obj/item/weapon/storage/backpack/cultpack
@@ -1302,6 +1347,8 @@ var/list/arcane_tomes = list()
 		/obj/item/clothing/head/culthood,
 		/obj/item/clothing/shoes/cult,
 		/obj/item/clothing/suit/cultrobes,
+		/obj/item/clothing/under/cultclownsuit,
+		/obj/item/clothing/mask/gas/cultclownmask
 		)
 
 	var/list/stored_gear = list()
@@ -1353,10 +1400,37 @@ var/list/arcane_tomes = list()
 			if (!user_slot)
 				user.equip_to_slot_or_drop(stored_slot,nslot)
 			else
+				if(istype(user_slot, /obj/item/clothing/under/rank))
+					var/iditem = user.get_item_by_slot(slot_wear_id)		//Remember what belt/ID/pocket items they had
+					var/beltitem = user.get_item_by_slot(slot_belt)
+					var/pocketitemr = user.get_item_by_slot(slot_r_store)
+					var/pocketiteml = user.get_item_by_slot(slot_l_store)
+					user.equip_to_slot_or_drop(stored_slot,nslot)
+					iditem?user.equip_to_slot_or_drop(iditem,slot_wear_id)		//Re-equip them so they dont drop on the ground
+					beltitem?user.equip_to_slot_or_drop(beltitem, slot_belt)
+					pocketitemr?user.equip_to_slot_or_drop(pocketitemr,slot_r_store)
+					pocketitemluser.equip_to_slot_or_drop(pocketiteml,slot_l_store)
 				if(istype(user_slot, /obj/item/weapon/storage))
 					var/obj/item/weapon/storage/S = user_slot
 					S.close(user)
-				if (istype(user_slot,/obj/item/weapon/storage/backpack/cultpack))
+				if (istype(user_slot,/obj/item/weapon/storage/backpack/cultpack/clown))
+					if (istype(stored_slot,/obj/item/weapon/storage/backpack/))
+						//swapping clown backpacks
+						for(var/obj/item/I in user_slot)
+							I.forceMove(stored_slot)
+						user.u_equip(user_slot)
+						qdel(user_slot)
+						user.equip_to_slot_or_drop(stored_slot,nslot)
+					else
+						//free clown backpack
+						var/obj/item/weapon/storage/backpack/clown/B = new(user)
+						for(var/obj/item/I in user_slot)
+							I.forceMove(B)
+						user.u_equip(user_slot)
+						qdel(user_slot)
+						user.equip_to_slot_or_drop(B,nslot)
+						user.put_in_hands(stored_slot)
+				else if (istype(user_slot,/obj/item/weapon/storage/backpack/cultpack))
 					if (istype(stored_slot,/obj/item/weapon/storage/backpack))
 						//swapping backpacks
 						for(var/obj/item/I in user_slot)

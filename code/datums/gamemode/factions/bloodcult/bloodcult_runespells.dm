@@ -1827,6 +1827,19 @@ var/list/blind_victims = list()
 		return
 
 	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
+	
+	if(activator.mind.assigned_role == "Clown") //Change slots to store if theyre a clown
+		slots_to_store = list(
+			slot_shoes,
+			slot_back,
+			slot_wear_mask,
+			slot_s_store,
+			slot_w_uniform,
+			slot_wear_id,
+			slot_l_store,
+			slot_r_store,
+			slot_belt,
+		)
 
 	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
 	if (istype (spell_holder,/obj/item/weapon/talisman))
@@ -1835,7 +1848,7 @@ var/list/blind_victims = list()
 		if (T.uses > 1)
 			BT.remaining = spell_holder
 			spell_holder.forceMove(BT)
-
+	
 	for(var/slot in slots_to_store)
 		var/obj/item/user_slot = activator.get_item_by_slot(slot)
 		if (user_slot)
@@ -1854,23 +1867,52 @@ var/list/blind_victims = list()
 		activator.equip_to_slot_or_drop(new /obj/item/clothing/head/helmet/space/plasmaman/cultist(activator), slot_head)
 		activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/space/plasmaman/cultist(activator), slot_wear_suit)
 	else
-		activator.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(activator), slot_head)
+		if(activator.mind.assigned_role == "Clown")
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/mask/gas/cultclownmask, slot_wear_mask)
+		else
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/head/culthood(activator), slot_head)
 		if (ismonkey(activator))
 			activator.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes(activator), slot_w_uniform)
+		else if(activator.mind.assigned_role == "Clown")
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/under/cultclownsuit(activator), slot_w_uniform)
+			if(BT.stored_gear[num2text(slot_wear_id)])
+				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_wear_id)], slot_wear_id)	
+				BT.stored_gear.Remove(num2text(slot_wear_id))
+			if(BT.stored_gear[num2text(slot_l_store)])
+				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_l_store)], slot_l_store)
+				BT.stored_gear.Remove(num2text(slot_l_store))
+			if(BT.stored_gear[num2text(slot_r_store)])
+				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_r_store)], slot_r_store)
+				BT.stored_gear.Remove(num2text(slot_r_store))		
+			if(BT.stored_gear[num2text(slot_belt)])
+				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_belt)], slot_r_store)
+				BT.stored_gear.Remove(num2text(slot_belt))
 		else
 			activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(activator), slot_wear_suit)
 
 	if (!ismonkey(activator))
-		activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
+		if(activator.mind.assigned_role == "Clown")
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult/clown(activator), slot_shoes)
+		else
+			activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
 
 	//transferring backpack items
-	var/obj/item/weapon/storage/backpack/cultpack/new_pack = new (activator)
-	if ((num2text(slot_back) in BT.stored_gear))
-		var/obj/item/stored_slot = BT.stored_gear[num2text(slot_back)]
-		if (istype (stored_slot,/obj/item/weapon/storage/backpack))
-			for(var/obj/item/I in stored_slot)
-				I.forceMove(new_pack)
-	activator.equip_to_slot_or_drop(new_pack, slot_back)
+	if(activator.mind.assigned_role == "Clown")
+		var/obj/item/weapon/storage/backpack/cultpack/clown/new_pack = new (activator)
+		if ((num2text(slot_back) in BT.stored_gear))
+			var/obj/item/stored_slot = BT.stored_gear[num2text(slot_back)]
+			if (istype (stored_slot,/obj/item/weapon/storage/backpack))
+				for(var/obj/item/I in stored_slot)
+					I.forceMove(new_pack)
+		activator.equip_to_slot_or_drop(new_pack, slot_back)
+	else
+		var/obj/item/weapon/storage/backpack/cultpack/new_pack = new (activator)
+		if ((num2text(slot_back) in BT.stored_gear))
+			var/obj/item/stored_slot = BT.stored_gear[num2text(slot_back)]
+			if (istype (stored_slot,/obj/item/weapon/storage/backpack))
+				for(var/obj/item/I in stored_slot)
+					I.forceMove(new_pack)
+		activator.equip_to_slot_or_drop(new_pack, slot_back)
 
 	activator.put_in_hands(BT)
 	to_chat(activator, "<span class='notice'>Robes and gear of the followers of Nar-Sie manifests around your body. You feel empowered.</span>")
