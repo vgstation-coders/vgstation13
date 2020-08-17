@@ -4,12 +4,11 @@ Base Assembly
 /datum/vgassembly
 	var/name = "VGAssembly"
 	var/obj/_parent
-	var/list/_vgcs = list() //list of vgcs contained inside
+	var/list/_vgcs = list() //list of vgcs contained inside, index by their unique name used in the ui
 	var/list/windows = list() //list of open uis, indexed with \ref[user]
 	var/size = ARBITRARILY_LARGE_NUMBER
 	//you can only use one or the other
-	var/list/allowed_components = list() // keep list empty to disable
-	var/list/banned_components = list() // keep list empty to disable
+	var/allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MOVEMENT | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE
 	var/list/output_queue = list() //list of outputs to fire, indexed by \ref[vgc]
 	var/timestopped = 0
 
@@ -206,15 +205,8 @@ Base Assembly
 	if(!vgc)
 		return 0
 
-	if(allowed_components.len > 0)
-		for(var/c_type in allowed_components)
-			if(c_type == vgc.type)
-				return 1
+	if(!(vgc.usage_flags & allowed_usage_flags))
 		return 0
-	else if(banned_components.len > 0)
-		for(var/c_type in banned_components)
-			if(c_type == vgc.type)
-				return 0
 	return 1
 
 /datum/vgassembly/proc/setTimestop(var/timestop)
@@ -252,3 +244,11 @@ Base Assembly
 
 		var/proc_string = vgc._output[target][1]._input[vgc._output[target][2]]
 		call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
+
+/datum/vgassembly/robot_small
+/datum/vgassembly/robot_big
+/datum/vgassembly/attachable_small
+/datum/vgassembly/attachable_big
+/datum/vgassembly/handheld
+/datum/vgassembly/tablet
+/datum/vgassembly/anchored
