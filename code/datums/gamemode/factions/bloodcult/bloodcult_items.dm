@@ -1409,10 +1409,10 @@ var/list/arcane_tomes = list()
 					user.equip_to_slot_or_drop(stored_slot,nslot)
 					if(iditem)
 						to_chat(world, "help1")
-						iditem.forcemove(slot_wear_id)		//Re-equip them so they dont drop on the ground
+						iditem.forceMove(slot_wear_id)		//Re-equip them so they dont drop on the ground
 					if(beltitem)
 						to_chat(world, "help2")
-						beltitem.forcemove(slot_belt)
+						beltitem.forceMove(slot_belt)
 					if(pocketitemr)
 						to_chat(world, "help3")
 						pocketitemr.forceMove(slot_r_store)
