@@ -9,6 +9,13 @@
 			if(vga)
 				vga.setTimestop(new_value)
 
+//Usage flags to specify what the component does (used for limiting which components can be attached to which assembly)
+//bitflag, components can only have one tho
+#define VGCOMP_USAGE_NONE 0
+#define VGCOMP_USAGE_MOVEMENT 1
+#define VGCOMP_USAGE_MANIPULATE_SMALL 2 //small manipulaters used on costum tools and such
+#define VGCOMP_USAGE_MANIPULATE_LARGE 3 //large manipulators (doorcontroller, robotarm)
+
 /*
 Base Assembly
 */
@@ -284,6 +291,7 @@ Base Component
 	var/touch_enabled = 0 //if touch will fire
 	var/obj_path = /obj/item/vgc_obj
 	var/timestopped = 0 //needed for processingobjs
+	var/usage_flags = VGCOMP_USAGE_NONE
 
 /datum/vgcomponent/Destroy()
 	..()
@@ -378,6 +386,7 @@ Door control
 		"toggle" = "toggle"
 	)
 	_output = list()
+	usage_flags = VGCOMP_USAGE_MANIPULATE_LARGE
 
 /datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 	saved_access = ID.GetAccess()
