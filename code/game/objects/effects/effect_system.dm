@@ -717,7 +717,7 @@ steam.start() -- spawns the effect
 	icon_state = "mfoam"
 	
 /obj/effect/effect/foam/fire/enhanced
-	lowest_temperature = 0
+	lowest_temperature = 16
 
 /obj/effect/effect/foam/New(loc, var/ismetal=0)
 	. = ..(loc)
