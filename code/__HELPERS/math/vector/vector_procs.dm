@@ -49,8 +49,8 @@
 
 	var/smallest_dist = 2 //since all vectors are normalized, the biggest possible distance is 2
 	var/closestDir = NORTH
-	for(var/d in all_vectors)
-		var/vector/dir = all_vectors[d]
+	for(var/d in alldirs)
+		var/vector/dir = dir2vector(d)
 		var/vector/delta = dir.chebyshev_normalized() - V_norm
 		var/dist = delta.chebyshev_norm()
 		if(dist < smallest_dist)

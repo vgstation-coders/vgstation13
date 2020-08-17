@@ -38,10 +38,11 @@ var/list/beam_master = list()
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
+		var/p_len = fired_beam.permutated.len
 		var/ret = fired_beam.to_bump(A)
 		if(ret)
 			return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-		else if(ret == -1)
+		else if(p_len != fired_beam.permutated.len) //check if we reflected on anything... yes, there is not better (easy) way
 			return new /rayCastHit(info, RAY_CAST_REBOUND)
 
 	return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
