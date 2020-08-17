@@ -1400,7 +1400,7 @@ var/list/arcane_tomes = list()
 			if (!user_slot)
 				user.equip_to_slot_or_drop(stored_slot,nslot)
 			else
-				if(istype(user_slot, /obj/item/clothing/under/rank))
+				if(istype(user_slot, /obj/item/clothing/under))
 					var/iditem = user.get_item_by_slot(slot_wear_id)		//Remember what belt/ID/pocket items they had
 					var/beltitem = user.get_item_by_slot(slot_belt)
 					var/pocketitemr = user.get_item_by_slot(slot_r_store)

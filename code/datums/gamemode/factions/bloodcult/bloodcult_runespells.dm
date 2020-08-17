@@ -1885,7 +1885,7 @@ var/list/blind_victims = list()
 				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_r_store)], slot_r_store)
 				BT.stored_gear.Remove(num2text(slot_r_store))		
 			if(BT.stored_gear[num2text(slot_belt)])
-				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_belt)], slot_r_store)
+				activator.equip_to_slot_or_drop(BT.stored_gear[num2text(slot_belt)], slot_belt)
 				BT.stored_gear.Remove(num2text(slot_belt))
 		else
 			activator.equip_to_slot_or_drop(new /obj/item/clothing/suit/cultrobes(activator), slot_wear_suit)
