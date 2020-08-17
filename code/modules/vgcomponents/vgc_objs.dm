@@ -60,13 +60,13 @@ Components
 /obj/item/vgc_obj/door_controller/attackby(obj/item/weapon/W, mob/user) //setting access
 	if(!vgc)
 		return //how
-	
+
 	if(!istype(vgc, datum_type))
 		return
 
 	if(!istype(W, /obj/item/weapon/card/id))
 		return
-	
+
 	var/datum/vgcomponent/doorController/DC = vgc
 	DC.setAccess(W)
 	to_chat(user, "You set \the [src.name]'s access")
@@ -82,6 +82,9 @@ Components
 
 /obj/item/vgc_obj/button/toggle
 	datum_type = /datum/vgcomponent/button/toggle
+
+/obj/item/vgc_obj/gate_button
+	datum_type = /datum/vgcomponent/gate_button
 
 /obj/item/vgc_obj/splitter
 	datum_type = /datum/vgcomponent/splitter
@@ -125,18 +128,18 @@ Components
 /obj/item/vgc_obj/typecheck/preattack(var/atom/A, mob/user, proximity_flag)
 	if(!vgc || !A || !user)
 		return //how
-	
+
 	if(!istype(vgc, datum_type))
 		return
 
 	if(proximity_flag != 1)
 		return
 
-	var/datum/vgcomponent/typecheck/V = vgc 
+	var/datum/vgcomponent/typecheck/V = vgc
 
 	if(!V.waitingForType)
 		return
-	
+
 	V.costum_type = A.type
 	V.waitingForType = 0
 	to_chat(user, "You copied \the [A]'s type into \the [src.name]'s memory")
