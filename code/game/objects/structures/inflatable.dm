@@ -444,7 +444,7 @@
 			A.ex_act(severity++)
 	..()
 
-/obj/structure/inflatable/shelter/container_resist(mob/user)
+/obj/structure/inflatable/shelter/container_resist(var/mob/user,var/turf/dest)
 	if(exiting.Find(user))
 		exiting -= user
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
@@ -453,7 +453,10 @@
 	exiting += user
 	spawn(6 SECONDS)
 		if(loc && exiting.Find(user)) //If not loc, it was probably deflated
-			user.forceMove(loc)
+			if (dest)
+				user.forceMove(dest)
+			else
+				user.forceMove(loc)
 			exiting -= user
 			update_icon()
 			to_chat(user,"<span class='notice'>You climb free of the shelter.</span>")
@@ -494,6 +497,22 @@
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time
 			enter_shelter(target)
+
+
+/obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!Adjacent(over_location))
+		return
+	if(!istype(over_location) || over_location.density)
+		return
+	if(usr.incapacitated())
+		return
+	for(var/atom/movable/A in over_location.contents)
+		if(A.density)
+			if((A == src) || istype(A, /mob))
+				continue
+			return
+	if(istype(over_location))
+		container_resist(usr,over_location)
 
 /obj/structure/inflatable/shelter/Exited(var/atom/movable/mover)
 	update_icon()
