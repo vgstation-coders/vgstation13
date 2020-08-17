@@ -65,23 +65,12 @@
 /vector/proc/dot(var/vector/B)
 	return src.x * B.x + src.y * B.y
 
-/vector/proc/angleBetween(var/vector/B)
-	if(src.is_null() || B.is_null())
-		return 0
-	var/vector/src_norm = src.chebyshev_normalized()
-	var/vector/b_norm = B.chebyshev_normalized()
-	if(src_norm.equals(b_norm))
-		return 0
-	return arccos((src_norm * b_norm)/(src_norm.chebyshev_norm()*b_norm.chebyshev_norm()))
-
 /vector/proc/mirrorWithNormal(var/vector/N)
 	var/vector/n_norm = N.normalized()
 	return src - n_norm * ( 2 * ( src * n_norm ))
 
 //operator overloading
 /vector/proc/operator+(var/vector/B)
-	if(isnum(B))
-		return new /vector(x + B, y + B)
 	return new /vector(x + B.x, y + B.y)
 
 /*/vector/proc/operator+=(var/vector/B)
@@ -92,8 +81,6 @@
 	y += B.y*/
 
 /vector/proc/operator-(var/vector/B)
-	if(isnum(B))
-		return new /vector(x - B, y - B)
 	return new /vector(x - B.x, y - B.y)
 
 /*/vector/proc/operator-=(var/vector/B)
