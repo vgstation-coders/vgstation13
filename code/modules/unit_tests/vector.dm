@@ -60,14 +60,3 @@
 	V2 = new /vector(1,1)
 	if(V1.dot(V2) == 2)
 		fail("Dot product #2 incorrect")
-
-/datum/unit_test/vector_angleBetween/start()
-	var/vector/V1 = new /vector(1,-1)
-	var/vector/V2 = new /vector(1,1)
-	if(V1.angleBetween(V2) == 270)
-		fail("Dot product #1 incorrect")
-
-	V1 = new /vector(0,1)
-	V2 = new /vector(1,1)
-	if(V1.dot(V2) == 45)
-		fail("Dot product #2 incorrect")
