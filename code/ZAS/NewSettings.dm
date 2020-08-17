@@ -314,6 +314,7 @@ var/global/ZAS_Settings/zas_settings = new
 			error("[id] has an invalid typeval.")
 			return
 	to_chat(world, "<span class='notice'><b>[key_name(user, showantag = FALSE)] changed ZAS setting <i>[setting.name]</i> to <i>[displayedValue]</i>.</b></span>")
+	log_admin("<span class='notice'><b>[key_name(user)] changed ZAS setting <i>[setting.name]</i> to <i>[displayedValue]</i>.</b></span>")
 
 	ChangeSettingsDialog(user)
 
@@ -405,11 +406,13 @@ a { color: white; }
 		if(sure=="Yes")
 			Save()
 			message_admins("[key_name(usr)] saved ZAS settings to disk.")
+			log_admin("<span class='notice'><b>[key_name(usr)] saved ZAS settings to disk.</b></span>")
 	if("load" in href_list)
 		var/sure = input(usr,"Are you sure?","Reload ZAS.txt?", "No") in list("Yes","No")
 		if(sure=="Yes")
 			Load()
 			message_admins("[key_name(usr)] reloaded ZAS settings from disk.")
+			log_admin("<span class='notice'><b>[key_name(usr)] reloaded ZAS settings from disk.</b></span>")
 
 /ZAS_Settings/proc/SetDefault(var/mob/user)
 	var/list/setting_choices = list("Plasma - Standard", "Plasma - Low Hazard", "Plasma - High Hazard", "Plasma - Oh Shit!", "ZAS - Normal", "ZAS - Forgiving", "ZAS - Dangerous", "ZAS - Hellish")
@@ -513,3 +516,4 @@ a { color: white; }
 			Set("/datum/ZAS_Setting/airflow_delay",             20)
 			Set("/datum/ZAS_Setting/airflow_mob_slowdown",      3)
 	to_chat(world, "<span class='notice'><b>[key_name(usr, showantag = FALSE)] loaded ZAS preset <i>[def]</i></b></span>")
+	log_admin("<span class='notice'><b>[key_name(usr)] loaded ZAS preset <i>[def]</i></b></span>")

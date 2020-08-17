@@ -1,51 +1,49 @@
-
 /obj/item/mounted/poster
 	name = "rolled-up poster"
 	desc = "The poster comes with its own automatic adhesive mechanism, for easy pinning to any vertical surface."
 	icon = 'icons/obj/posters.dmi'
 	icon_state = "rolled_poster"
-	var/serial_number = 0
-	var/build_time = 17
-	var/path = /obj/structure/sign/poster
-	var/serial = TRUE
+	var/build_time = 2 SECONDS
+	var/datum/poster/design
 	w_type=RECYK_MISC
 
 
-/obj/item/mounted/poster/New(turf/loc, var/given_serial = 0)
-	if(serial)
-		if(given_serial == 0)
-			serial_number = rand(1, poster_designs.len)
-		else
-			serial_number = given_serial
-		name += " - No. [serial_number]"
-		if(serial_number == -1)
-			name = "Commendation Poster"
-	..(loc)
+/obj/item/mounted/poster/New(turf/loc, var/datum/poster/predesign=null)
+	design = predesign
+	if(!design)
+		pick_design()
+	..()
+
+/obj/item/mounted/poster/examine(mob/user)
+	..()
+	if(design)
+		to_chat(user,"<span class='info'>This one is titled '[design.name]'.</span>")
+
+/obj/item/mounted/poster/proc/pick_design()
+	var/random = subtypesof(/datum/poster) - typesof(/datum/poster/special)
+	var/type = pick(random)
+	design = new type
 
 /obj/item/mounted/poster/do_build(turf/on_wall, mob/user)
-	//declaring D because otherwise if P gets 'deconstructed' we lose our reference to P.resulting_poster
-	var/obj/structure/sign/poster/D = new path(on_wall,src.serial_number)
-
-	var/temp_loc = user.loc
+	var/obj/structure/sign/poster/D = new(on_wall,design)
 	poster_animation(D,user)
-	qdel(src)	//delete it now to cut down on sanity checks afterwards. Agouri's code supports rerolling it anyway
-
-
-
-	if(!D)
-		return
-
 	if(do_after(user, on_wall, build_time))//Let's check if everything is still there
 		to_chat(user, "<span class='notice'>You place \the [src]!</span>")
-		return D
-	else
-		D.roll_and_drop(temp_loc)
-
+		qdel(src)
+		return
+	qdel(D)
 
 /obj/item/mounted/poster/proc/poster_animation(obj/D,mob/user)
 	to_chat(user, "<span class='notice'>You start placing the poster on the wall...</span>")
 	flick("poster_being_set",D)
 	playsound(get_turf(D), 'sound/items/poster_being_created.ogg', 100, 1)
+
+/obj/item/mounted/poster/goldstar/pick_design()
+	design = new /datum/poster/special/goldstar
+
+/obj/item/mounted/poster/cargo/pick_design()
+	var/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
+	design = new type
 
 //############################## THE ACTUAL DECALS ###########################
 
@@ -53,56 +51,55 @@
 	name = "poster"
 	desc = "A large piece of space-resistant printed paper. "
 	icon = 'icons/obj/posters.dmi'
+	icon_state = "default"
 	anchored = 1
-	var/serial_number	//Will hold the value of src.loc if nobody initialises it
+	var/datum/poster/design
 	var/ruined = 0
 
 
-/obj/structure/sign/poster/New(loc,var/serial=0)
-
-	serial_number = serial
-	switch(serial_number)
-		if(-2)
-			return
-		if(-1)
-			name = "Award of Sufficiency"
-			desc = "The mere sight of it makes you very proud."
-			icon_state = "goldstar"
-			return
-		if(0)
-			serial_number = rand(1, poster_designs.len) //mapping specific posters
-	var/designtype = poster_designs[serial_number]
-	var/datum/poster/design=new designtype
-	name += " - [design.name]"
-	desc += " [design.desc]"
-	icon_state = design.icon_state // poster[serial_number]
+/obj/structure/sign/poster/New(loc, var/datum/poster/predesign)
 	..()
+	if(!design)
+		if(predesign)
+			design = predesign
+		else
+			design()
+	name = design.name
+	desc = design.desc
+	icon_state = design.icon_state
+
+/obj/structure/sign/poster/proc/design()
+	var/list/poster_designs = subtypesof(/datum/poster) - typesof(/datum/poster/special)
+	var/type = pick(poster_designs)
+	design = new type
 
 /obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(iswirecutter(W))
-		playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(loc, 100)
 		if(ruined)
 			to_chat(user, "<span class='notice'>You remove the remnants of the poster.</span>")
 			qdel(src)
 		else
 			to_chat(user, "<span class='notice'>You carefully remove the poster from the wall.</span>")
 			roll_and_drop(user.loc)
-		return
 
-/obj/structure/sign/poster/attack_hand(mob/user as mob)
+/obj/structure/sign/poster/attack_hand(mob/user)
 	if(ruined)
+		to_chat(user,"<span class='warning'>It's in tatters. You'll need wirecutters to get all the scraps off.</span>" )
 		return
-	var/temp_loc = user.loc
-	switch(alert("Do I want to rip the poster from the wall?","You think...","Yes","No"))
-		if("Yes")
-			if(user.loc != temp_loc)
-				return
+	switch(user.a_intent)
+		if(I_HURT)
 			visible_message("<span class='warning'>[user] rips [src] in a single, decisive motion!</span>" )
 			playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
 			rip()
 			add_fingerprint(user)
-		if("No")
-			return
+		if(I_HELP)
+			visible_message("<span class='notice'>[user] admires \the [src].</span>" )
+		else
+			visible_message("<span class='notice'>[user] begins taking down \the [src].</span>")
+			if(do_after(user, src, 4 SECONDS))
+				roll_and_drop(user.loc)
+
 
 /obj/structure/sign/poster/proc/rip(mob/user)
 	ruined = 1
@@ -112,9 +109,9 @@
 
 /obj/structure/sign/poster/proc/roll_and_drop(turf/newloc)
 	if(newloc)
-		new /obj/item/mounted/poster(newloc, serial_number)
+		new /obj/item/mounted/poster(newloc, design)
 	else
-		new /obj/item/mounted/poster(get_turf(src), serial_number)
+		new /obj/item/mounted/poster(get_turf(src), design)
 	qdel(src)
 
 /obj/structure/sign/poster/kick_act(mob/living/carbon/human/H)
@@ -125,10 +122,16 @@
 
 		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 
+/obj/structure/sign/poster/goldstar/design()
+	design = new /datum/poster/special/goldstar
+
+/obj/structure/sign/poster/cargo/design()
+	var/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
+	design = new type
 
 /datum/poster
-	// Name suffix. Poster - [name]
 	var/name=""
-	// Description suffix
 	var/desc=""
 	var/icon_state=""
+	var/path = /obj/structure/sign/poster
+//see decals/posters/bs12.dm, tpgposters.dm and vgposters.dm

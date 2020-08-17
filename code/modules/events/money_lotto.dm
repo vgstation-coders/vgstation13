@@ -5,6 +5,9 @@
 	var/winner_sum = 0
 	var/deposit_success = 0
 
+/datum/event/money_lotto/can_start()
+	return 20
+
 /datum/event/money_lotto/start()
 	winner_sum = pick(5000, 10000, 50000, 100000, 500000, 1000000, 1500000)
 	if(all_money_accounts.len)
@@ -38,3 +41,8 @@
 
 	for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 		NEWSCASTER.newsAlert("Tau Ceti Daily")
+
+	for(var/obj/item/device/pda/PDA in PDAs)
+		var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+		if(reader)
+			reader.newsAlert("Tau Ceti Daily")

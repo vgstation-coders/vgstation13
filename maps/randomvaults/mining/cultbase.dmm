@@ -1,0 +1,38 @@
+"a" = (/turf/unsimulated/mineral/random,/area/asteroid)
+"b" = (/turf/unsimulated/mineral/random,/turf/simulated/wall/cult{icon_state = "cult0"},/area/asteroid)
+"c" = (/obj/structure/cultgirder,/turf/simulated/floor/engine/cult,/area/asteroid)
+"d" = (/turf/simulated/floor/engine/cult,/area/asteroid)
+"e" = (/obj/structure/grille/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"f" = (/obj/structure/cult_legacy/forge,/turf/simulated/floor/engine/cult,/area/asteroid)
+"g" = (/turf/simulated/wall/cult{icon_state = "cult0"},/area/asteroid)
+"h" = (/obj/effect/gateway/active/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"i" = (/obj/item/candle{desc = "This strange candle is made of some mystery wax. It never seems to burn out."; icon_state = "candle1_lit"; lit = 1; name = "Blood Candle"; pixel_x = 2; wax = 50000},/turf/simulated/floor/engine/cult,/area/asteroid)
+"j" = (/mob/living/simple_animal/hostile/faithless/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"k" = (/mob/living/simple_animal/hostile/scarybat/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"l" = (/obj/item/clothing/suit/space/plasmaman/cultist,/turf/simulated/floor/engine/cult,/area/asteroid)
+"m" = (/obj/structure/cult_legacy/talisman{icon_state = "altar"; name = "Foresaken Altar"},/obj/item/weapon/coin/iron,/obj/item/weapon/reagent_containers/food/drinks/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"n" = (/obj/item/clothing/head/helmet/space/plasmaman/cultist,/turf/simulated/floor/engine/cult,/area/asteroid)
+"o" = (/obj/structure/cult_legacy/tome,/turf/simulated/floor/engine/cult,/area/asteroid)
+"p" = (/obj/structure/cult_legacy/talisman,/turf/simulated/floor/engine/cult,/area/asteroid)
+"q" = (/obj/effect/decal/cleanable/blood{icon_state = "floor4"},/turf/simulated/floor/engine/cult,/area/asteroid)
+"r" = (/obj/effect/decal/cleanable/blood{icon_state = "gibbl4"},/turf/simulated/floor/engine/cult,/area/asteroid)
+"s" = (/obj/item/weapon/storage/cult,/turf/simulated/floor/engine/cult,/area/asteroid)
+"t" = (/obj/effect/decal/cleanable/blood{icon_state = "floor7"},/turf/simulated/floor/engine/cult,/area/asteroid)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaa
+aaaaabcdcbaaaaa
+aaaaefgdgfeaaaa
+aaaedddddddeaaa
+aaehidqddjideaa
+abdjdggdggdddba
+acgeegikigeegca
+ajdqddlmnddrdja
+acgeegikigeegca
+abdsdggdggjdoba
+aaedidddddideaa
+aaaedjddtddeaaa
+aaaaepgdgheaaaa
+aaaaabcdcbaaaaa
+aaaaaaaaaaaaaaa
+"}

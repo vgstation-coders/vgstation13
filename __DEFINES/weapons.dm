@@ -11,6 +11,7 @@
 #define POINT75 ".75"
 #define POINT762 "a762"
 #define POINT762X55 "7.62x55"
+#define NAGANTREVOLVER "7.62x38R"
 #define BROWNING50 ".50BMG"
 
 #define ROCKETGRENADE "rpg"
@@ -25,3 +26,17 @@
 #define LAWGIVER_MODE_KIND_ENERGY "energy"
 #define LAWGIVER_MODE_KIND_BULLET "bullet"
 #define LAWGIVER_MAX_AMMO 5
+
+//gun shit - prepare to have various things added to this, also, moved here because it's more tidy
+#define SILENCECOMP  1 		//Silencer-compatible
+#define AUTOMAGDROP  2		//Does the mag drop when it's empty?
+#define EMPTYCASINGS 4		//Does the gun eject empty casings?
+#define SCOPED		 8		//Attachable scope?
+#define CHAMBERSPENT 16		//Spent casings stay in the gun untill reloaded
+
+//projectiles bouncing off and phasing through obstacles
+#define PROJREACT_WALLS		1//includes opaque doors
+#define PROJREACT_WINDOWS	2//includes transparent doors
+#define PROJREACT_OBJS		4//structures, machines and items
+#define PROJREACT_MOBS		8//all mobs
+#define PROJREACT_BLOB		16//blob

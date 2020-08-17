@@ -2,7 +2,7 @@
 
 	var/msg = "<span class='info'>*---------*\nThis is [bicon(src)] \a <EM>[src]</EM>!\n"
 
-	if (src.handcuffed &&  handcuffed.is_visible())
+	if ((src.handcuffed &&  handcuffed.is_visible()) || (src.mutual_handcuffs && mutual_handcuffs.is_visible()))
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 	if (src.hat && hat.is_visible())
 		msg += "It is wearing [bicon(src.hat)] \a [src.hat] on its head.\n"

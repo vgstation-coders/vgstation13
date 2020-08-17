@@ -18,7 +18,6 @@
 		var/spell/S = type_S
 		if (initial(S.user_type) == type)
 			spellList += S
-
 	return spellList
 
 /proc/getAllWizSpells()

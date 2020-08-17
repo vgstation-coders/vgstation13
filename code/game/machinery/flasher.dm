@@ -6,7 +6,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	desc = "A wall-mounted flashbulb device."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "mflash1"
-	var/id_tag = null
+	 
 	var/range = 2 //this is roughly the size of brig cell
 	var/disable = 0
 	var/last_flash = 0 //Don't want it getting spammed like regular flashes
@@ -38,11 +38,6 @@ var/list/obj/machinery/flasher/flashers = list()
 	density = 1
 	min_harm_label = 35 //A lot. Has to wrap around the bulb, after all.
 
-/*
-/obj/machinery/flasher/New()
-	sleep(4)					//<--- What the fuck are you doing? D=
-	src.sd_SetLuminosity(2)
-*/
 /obj/machinery/flasher/power_change()
 	if ( powered() )
 		stat &= ~NOPOWER
@@ -130,7 +125,7 @@ var/list/obj/machinery/flasher/flashers = list()
 			src.flash()
 
 /obj/machinery/flasher/portable/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		add_fingerprint(user)
 		src.anchored = !src.anchored
 
@@ -153,7 +148,7 @@ var/list/obj/machinery/flasher/flashers = list()
 	return src.attack_hand(user)
 
 /obj/machinery/flasher_button/attack_hand(mob/user as mob)
-
+	playsound(src,'sound/misc/click.ogg',30,0,-1)
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(active)

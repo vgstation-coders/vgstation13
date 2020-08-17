@@ -32,7 +32,7 @@
 			if(!src.check_for_support())
 				src.pr_inertial_movement.start(list(src,direction))
 				src.log_message("Movement control lost. Inertial movement started.")*/
-		if(do_after(step_in))
+		spawn(step_in)
 			can_move = 1
 		return 1
 	return 0

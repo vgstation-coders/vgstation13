@@ -29,4 +29,5 @@
 		"/obj/item/weapon/wrench",
 		"/obj/item/weapon/storage/box/excavation",
 		"/obj/item/weapon/anobattery",
-		"/obj/item/weapon/weldingtool")
+		"/obj/item/weapon/weldingtool",
+		"/obj/item/device/xenoarch_scanner")

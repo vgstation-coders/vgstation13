@@ -1,4 +1,3 @@
-
 //override procs in children as necessary
 /datum/artifact_effect
 	var/effecttype = "unknown"		//purely used for admin checks ingame, not needed any more
@@ -13,6 +12,7 @@
 	var/list/copy_for_battery  //add any effect-specific variables you need copied for anomaly batteries as a list of strings
 	var/effect_type = 0
 	var/isolated = 0
+	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -64,7 +64,7 @@
 		if(reveal_toggle == 1 && holder)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
-				A.icon_state = "ano[A.icon_num][activated]"
+				A.update_icon()
 			var/display_msg
 			if(activated)
 				display_msg = pick("momentarily glows brightly!","distorts slightly for a moment!","flickers slightly!","vibrates!","shimmers slightly for a moment!")
@@ -107,19 +107,23 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 	//anomaly suits give best protection, but excavation suits are almost as good
 	if(istype(H.wear_suit,/obj/item/clothing/suit/bio_suit/anomaly))
 		protected += 0.6
-	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/anomaly))
-		protected += 0.5
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/storage/labcoat/rd))
 		protected += 0.5
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/anomaly))
+		protected += 0.5
 	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/rig/ror))
+		protected += 0.3
+	else if(istype(H.wear_suit,/obj/item/clothing/suit/space/rig/arch))
 		protected += 0.3
 
 	if(istype(H.head,/obj/item/clothing/head/bio_hood/anomaly))
 		protected += 0.3
-	if(istype(H.head,/obj/item/clothing/head/helmet/space/rig/ror))
-		protected += 0.1
 	else if(istype(H.head,/obj/item/clothing/head/helmet/space/anomaly))
 		protected += 0.2
+	else if(istype(H.head,/obj/item/clothing/head/helmet/space/rig/ror))
+		protected += 0.1
+	else if(istype(H.head,/obj/item/clothing/head/helmet/space/rig/arch))
+		protected += 0.1
 
 	//latex gloves and science goggles also give a bit of bonus protection
 	if(istype(H.gloves,/obj/item/clothing/gloves/latex))
@@ -165,6 +169,8 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 
 /datum/artifact_effect/Destroy()
 	if(trigger)
-		qdel(trigger); trigger = null
+		qdel(trigger)
+		trigger = null
 	copy_for_battery = null
 	holder = null
+	..()

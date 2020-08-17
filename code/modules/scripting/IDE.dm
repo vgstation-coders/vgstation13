@@ -89,12 +89,12 @@
 			if(Machine.SelectedServer)
 				var/obj/machinery/telecomms/server/Server = Machine.SelectedServer
 
-				var/datum/signal/signal = getFromPool(/datum/signal)
+				var/datum/signal/signal = new /datum/signal
 				signal.data["message"] = ""
 				if(Server.freq_listening.len > 0)
 					signal.frequency = Server.freq_listening[1]
 				else
-					signal.frequency = 1459
+					signal.frequency = COMMON_FREQ
 				signal.data["name"] = ""
 				signal.data["job"] = ""
 				signal.data["reject"] = 0

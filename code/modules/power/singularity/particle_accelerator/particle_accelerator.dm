@@ -2,7 +2,7 @@
 
 /*Composed of 7 parts
 3 Particle emitters
-proc
+procs
 emit_particle()
 
 1 power box
@@ -14,7 +14,7 @@ mix_gas()
 
 1 gas holder WIP
 acts like a tank valve on the ground that you wrench gas tanks onto
-proc
+procs
 extract_gas()
 return_gas()
 attach_tank()
@@ -28,7 +28,7 @@ interface for the pa, acts like a computer with an html menu for diff parts and 
 all other parts contain only a ref to this
 a /machine/, tells the others to do work
 contains ref for all parts
-proc
+procs
 process()
 check_build()
 
@@ -82,11 +82,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	desc_holder = "This is where Alpha particles are generated from \[REDACTED\]"
 	icon_state = "end_cap"
 	reference = "end_cap"
-
-/obj/structure/particle_accelerator/update_icon()
-	..()
-	return
-
 
 /obj/structure/particle_accelerator/verb/rotate()
 	set name = "Rotate Clockwise"
@@ -210,15 +205,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 
 	switch(src.construction_state)//TODO:Might be more interesting to have it need several parts rather than a single list of steps
 		if(0)
-			if(iswrench(O))
-				playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			if(O.is_wrench(user))
+				O.playtoolsound(src, 75)
 				src.anchored = 1
 				user.visible_message("[user.name] secures the [src.name] to the floor.", \
 					"You secure the external bolts.")
 				temp_state++
 		if(1)
-			if(iswrench(O))
-				playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			if(O.is_wrench(user))
+				O.playtoolsound(src, 75)
 				src.anchored = 0
 				user.visible_message("[user.name] detaches the [src.name] from the floor.", \
 					"You remove the external bolts.")
@@ -250,7 +245,6 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			update_state()
 		update_icon()
 		return 1
-	return 0
 
 
 
@@ -353,15 +347,15 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 	var/temp_state = src.construction_state
 	switch(src.construction_state)//TODO:Might be more interesting to have it need several parts rather than a single list of steps
 		if(0)
-			if(iswrench(O))
-				playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			if(O.is_wrench(user))
+				O.playtoolsound(src, 75)
 				src.anchored = 1
 				user.visible_message("[user.name] secures the [src.name] to the floor.", \
 					"You secure the external bolts.")
 				temp_state++
 		if(1)
-			if(iswrench(O))
-				playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			if(O.is_wrench(user))
+				O.playtoolsound(src, 75)
 				src.anchored = 0
 				user.visible_message("[user.name] detaches the [src.name] from the floor.", \
 					"You remove the external bolts.")
@@ -379,11 +373,13 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			else if(O.is_screwdriver(user))
 				user.visible_message("[user.name] closes the [src.name]'s access panel.", \
 					"You close the access panel.")
+				O.playtoolsound(src, 25, extrarange = -6)
 				temp_state++
 		if(3)
 			if(O.is_screwdriver(user))
 				user.visible_message("[user.name] opens the [src.name]'s access panel.", \
 					"You open the access panel.")
+				O.playtoolsound(src, 25, extrarange = -6)
 				temp_state--
 				active = 0
 	if(temp_state == src.construction_state)//Nothing changed
@@ -398,4 +394,3 @@ So, hopefully this is helpful if any more icons are to be added/changed/wonderin
 			use_power = 1
 		update_icon()
 		return 1
-	return 0

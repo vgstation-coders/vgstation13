@@ -104,7 +104,7 @@
 /obj/item/device/chameleon/proc/eject_all()
 	for(var/atom/movable/A in active_dummy)
 		A.forceMove(active_dummy.loc)
-		if(ismob(A))
+		if(isliving(A))
 			var/mob/M = A
 			M.reset_view(null)
 			M.layer = MOB_LAYER //Reset the mob's layer
@@ -125,6 +125,7 @@
 	icon_state = new_iconstate
 	overlays = new_overlays
 	dir = O.dir
+	unlock_from()
 	M.forceMove(src)
 	M.layer = OBJ_LAYER //Needed for some things, notably lockers
 	M.plane = OBJ_PLANE
@@ -145,12 +146,12 @@
 
 /obj/effect/dummy/chameleon/ex_act(severity)
 	for(var/mob/M in src)
-		ex_act(severity)
+		M.ex_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/emp_act(severity)
 	for(var/mob/M in src)
-		emp_act(severity)
+		M.emp_act(severity)
 	disrupt()
 
 /obj/effect/dummy/chameleon/blob_act()
@@ -163,6 +164,9 @@
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
 	if(istype(loc, /turf/space))
 		return //No magical space movement!
+
+	if(istype(loc, /obj/structure/disposalholder))
+		return loc.relaymove(user,direction) //clang!
 
 	if(can_move)
 		can_move = 0

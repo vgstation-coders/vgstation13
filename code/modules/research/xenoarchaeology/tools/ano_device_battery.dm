@@ -174,6 +174,8 @@
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
 		activated = 0
+		if(inserted_battery.battery_effect.activated)
+			inserted_battery.battery_effect.ToggleActivate(0)
 	if(href_list["starttimer"])
 		timing = 1
 		archived_time = time

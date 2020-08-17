@@ -1,6 +1,7 @@
 //NEVER USE THIS IT SUX	-PETETHEGOAT
 
 var/global/list/cached_icons = list()
+var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
 /obj/item/weapon/reagent_containers/glass/paint
 	desc = "A bucket containing paint."
@@ -174,7 +175,7 @@ var/global/list/cached_icons = list()
 		return
 */
 
-datum/reagent/paint
+/datum/reagent/paint
 	name = "Paint"
 	id = "paint_"
 	description = "Floor paint is used to color floor tiles."
@@ -232,7 +233,7 @@ datum/reagent/paint
 		color = "#FFFFFF"
 		id = "paint_white"
 
-datum/reagent/paint_remover
+/datum/reagent/paint_remover
 	name = "Paint Remover"
 	id = "paint_remover"
 	description = "Paint remover is used to remove floor paint from floor tiles."
@@ -243,3 +244,8 @@ datum/reagent/paint_remover
 		if(istype(T) && T.icon != initial(T.icon))
 			T.icon = initial(T.icon)
 		return
+
+/datum/reagent/paint_remover/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.reagents.remove_reagents_by_type(paint_types, 2)

@@ -1,0 +1,66 @@
+<!-- used by /obj/machinery/disease2/incubator -->
+
+<div class="item">
+	<div class="itemLabel">
+		Power Status:
+	</div>
+	<div class="itemContent">
+		{{:helper.link('On', 'power', {'power' : 1}, data.on ? 'selected' : null)}}{{:helper.link('Off', 'close', {'power' : 1}, data.on ? null : 'selected')}}
+	</div>
+</div>
+
+<h3>Dishes</h3>
+
+<table class="statusDisplay">
+	<tr>
+		<th colspan="2">Controls</th>
+		<th style="min-width: 175px">Dish name</th>
+		<th style="min-width: 75px">Growth</th>
+		<th style="min-width: 120px">Reagents</th>
+		<th>Major mutations</th>
+		<th>Minor mutations</th>
+	</tr>
+	{{for data.dishes}}
+		<tr>
+			{{if !value.inserted}}
+				<!-- No dish inserted, show blank. -->
+				<td style="min-width: 65px">
+					{{:helper.link('Insert', 'arrowstop-1-s', {'insertdish' : index+1}, null, 'wide')}}
+				</td>
+				<td>
+					{{:helper.link('', 'search', null, 'disabled', 'wide')}}
+				</td>
+				<td>
+					empty
+				</td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			{{else}}
+				<!-- Dish inserted -->
+				<td style="min-width: 65px">
+					{{:helper.link('Eject', 'eject', {'ejectdish' : index+1}, null, 'wide')}}
+				</td>
+				<td>
+					{{:helper.link('', 'search', {'examinedish': index+1}, null, 'wide')}}
+				</td>
+				<td>
+					{{>value.name}}
+				</td>
+				<td>
+					{{:helper.displayBar(value.growth, 0, 100, 'wide', helper.round(value.growth) + '%')}}
+				</td>
+				<td>
+					{{:helper.link('Flush (' + helper.precisionRound(value.reagents_volume, 2) + 'u)', 'close', {'flushdish': index+1}, value.reagents_volume <= 0 ? 'disabled' : null, 'wide')}}
+				</td>
+				<td>
+					{{:value.major_mutations}}
+				</td>
+				<td>
+					str={{:value.minor_mutations_strength}}|rob={{:value.minor_mutations_robustness}}|eff={{:value.minor_mutations_effects}}
+				</td>
+			{{/if}}
+		</tr>
+	{{/for}}
+</table>

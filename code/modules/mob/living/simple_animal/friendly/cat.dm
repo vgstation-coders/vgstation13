@@ -73,42 +73,44 @@
 	if(timestopped)
 		return 0 //under effects of time magick
 
-	//MICE!
-	if((src.loc) && isturf(src.loc))
-		if(!stat && !resting && !locked_to)
-			for(var/mob/living/simple_animal/mouse/M in view(1,src))
-				if(!M.stat && Adjacent(M))
-					M.splat()
-					visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
-					movement_target = null
-					stop_automated_movement = 0
-					break
+	if (!isUnconscious())
+		//MICE!
+		if(isturf(loc))
+			if(!stat && !resting && !locked_to)
+				for(var/mob/living/simple_animal/mouse/M in view(1,src))
+					if(!M.stat && Adjacent(M) && !(M.locked_to && istype(M.locked_to, /obj/item/critter_cage)))
+						M.splat()
+						visible_message("<span class='warning'>\The [name] [pick(kill_verbs)] \the [M]!</span>")
+						movement_target = null
+						stop_automated_movement = 0
+						break
 
 	..()
 
-	for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
-		if(prob(15) && !snack.stat)
-			emote("me",, pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
-		break
+	if (!isUnconscious())
+		for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
+			if(prob(15) && !snack.stat)
+				emote("me",, pick("[pick(growl_verbs)] at [snack]!", "eyes [snack] hungrily."))
+			break
 
-	if(!stat && !resting && !locked_to)
-		turns_since_scan++
-		if(turns_since_scan > 5)
-			start_walk_to(0)
-			turns_since_scan = 0
-			if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
-				movement_target = null
-				stop_automated_movement = 0
-			if( !movement_target || !(movement_target.loc in oview(src, 3)) )
-				movement_target = null
-				stop_automated_movement = 0
-				for(var/mob/living/simple_animal/mouse/snack in oview(src,3))
-					if(isturf(snack.loc) && !snack.stat)
-						movement_target = snack
-						break
-			if(movement_target)
-				stop_automated_movement = 1
-				start_walk_to(movement_target,0,3)
+		if(!stat && !resting && !locked_to)
+			turns_since_scan++
+			if(turns_since_scan > 5)
+				start_walk_to(0)
+				turns_since_scan = 0
+				if((movement_target) && !(isturf(movement_target.loc) || ishuman(movement_target.loc) ))
+					movement_target = null
+					stop_automated_movement = 0
+				if( !movement_target || !(movement_target.loc in oview(src, 3)) )
+					movement_target = null
+					stop_automated_movement = 0
+					for(var/mob/living/simple_animal/mouse/snack in oview(src,3))
+						if(isturf(snack.loc) && !snack.stat)
+							movement_target = snack
+							break
+				if(movement_target)
+					stop_automated_movement = 1
+					start_walk_to(movement_target,0,3)
 
 /mob/living/simple_animal/cat/attack_hand(mob/living/carbon/human/M)
 	. = ..()
@@ -123,9 +125,9 @@
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
 				emote("me", EMOTE_AUDIBLE, "purrs.")
-				playsound(loc, 'sound/voice/catpurr.ogg', 80, 1)
+				playsound(loc, 'sound/voice/catpurr.ogg', 50, 1)
 			if(I_HURT)
-				playsound(loc, 'sound/voice/cathiss.ogg', 80, 1)
+				playsound(loc, 'sound/voice/cathiss.ogg', 50, 1)
 				emote("me", EMOTE_AUDIBLE, "hisses.")
 
 /mob/living/simple_animal/cat/snek/react_to_touch(mob/M)
@@ -149,7 +151,7 @@
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
 	childtype = null
-	holder_type = null
+	holder_type = /obj/item/weapon/holder/animal/snek
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
@@ -167,12 +169,32 @@ var/list/wizard_snakes = list()
 		wizard_snakes[src] = spell_holder
 
 /mob/living/simple_animal/cat/snek/wizard/death(var/gibbed = FALSE)
+	..(TRUE)
 	if(!transmogrify())
 		visible_message("<span class='notice'>\The [src] vanishes!</span>")
 		qdel(src)
-	..(TRUE)
 
 /mob/living/simple_animal/cat/snek/wizard/Destroy()
 	wizard_snakes[src] = null
 	wizard_snakes -= src
 	..()
+
+/mob/living/simple_animal/cat/snek/pudge
+	name = "Pudge"
+	desc = "You've never seen a snake like this before. It is quite chubby!"
+	icon_state = "pudge"
+	icon_living = "pudge"
+	icon_dead = "pudge_dead"
+	gender = NEUTER
+	speak = list("Meep!", "Chirp!","Mweeeb!")
+	speak_emote = list("squeaks")
+	emote_hear = list("squeaks")
+	emote_see = list("slithers")
+	emote_sound = list() // stops snakes purring
+	kill_verbs = list("strikes at", "splats", "bites", "lunges at")
+	growl_verbs = list("squeaks")
+
+	species_type = /mob/living/simple_animal/cat/snek
+	butchering_drops = null
+	childtype = null
+	holder_type = /obj/item/weapon/holder/animal/snek

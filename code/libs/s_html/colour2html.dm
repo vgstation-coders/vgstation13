@@ -65,14 +65,13 @@ proc/HTMLAssociate(colour, html)
 /*************************************/
 //HTML ASSOCIATIONS SAVING/LOADING
 
-world
-	New()
-		..()
-		LoadHTMLAssociations()
+world/New()
+	..()
+	LoadHTMLAssociations()
 
-	Del()
-		SaveHTMLAssociations()
-		..()
+world/Del()
+	SaveHTMLAssociations()
+	..()
 
 var/html_colours[0]
 

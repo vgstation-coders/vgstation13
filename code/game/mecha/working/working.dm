@@ -17,19 +17,6 @@
 /obj/mecha/working/range_action(atom/target as obj|mob|turf)
 	return
 
-/*
-/obj/mecha/working/get_stats_part()
-	var/output = ..()
-	output += "<b>[src.name] Tools:</b><div style=\"margin-left: 15px;\">"
-	if(equipment.len)
-		for(var/obj/item/mecha_parts/mecha_equipment/MT in equipment)
-			output += "[selected==MT?"<b>":"<a href='?src=\ref[src];select_equip=\ref[MT]'>"][MT.get_equip_info()][selected==MT?"</b>":"</a>"]<br>"
-	else
-		output += "None"
-	output += "</div>"
-	return output
-*/
-
 /obj/mecha/working/Exit(atom/movable/O)
 	if(O in cargo)
 		return 0
@@ -39,7 +26,7 @@
 	..()
 	if(href_list["drop_from_cargo"])
 		var/obj/O = locate(href_list["drop_from_cargo"])
-		if(O && O in src.cargo)
+		if(O && (O in src.cargo))
 			src.occupant_message("<span class='notice'>You unload [O].</span>")
 			O.forceMove(get_turf(src))
 			src.cargo -= O
@@ -62,12 +49,7 @@
 	return output
 
 /obj/mecha/working/empty_bad_contents()
-	for(var/obj/O in src)
-		if(O in cargo) //mom's spaghetti
-			continue
-		if(!is_type_in_list(O,mech_parts))
-			O.forceMove(src.loc)
-	return
+	..(cargo) //mom's spaghetti 2.0
 
 /obj/mecha/working/Destroy()
 	for(var/mob/M in src)

@@ -73,6 +73,20 @@ Changelogs can be attached either by following the instructions in html/changelo
 For the keys you can use in an in-body changelog, they are the same as described in example.yml
 NOTE that anything *after* the :cl: will be parsed as a changelog, if it somehow manages to be parseable as such, so always put the changelog at the VERY end!
 
+Valid Prefixes:
+bugfix
+wip (For works in progress)
+tweak
+soundadd
+sounddel
+rscdel (general deleting of nice things)
+rscadd (general adding of nice things)
+imageadd
+imagedel
+spellcheck (typo fixes)
+experiment
+tgs (TG-ported fixes?)
+
 An example changelog is attached to this PR for your convenience:
 -->
 :cl:

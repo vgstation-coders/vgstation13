@@ -156,7 +156,7 @@
 /datum/global_iterator/mech_bay_recharger/process(var/obj/machinery/mech_bay_recharge_port/port, var/obj/mecha/mecha)
 	if(!port)
 		return 0
-	if(mecha && mecha in get_turf(port.recharge_floor))
+	if(mecha && (mecha in get_turf(port.recharge_floor)))
 		if(!mecha.cell)
 			return
 		var/delta = min(max_charge, mecha.cell.maxcharge - mecha.cell.charge)
@@ -168,7 +168,6 @@
 			port.stop_charge()
 	else
 		port.stop_charge()
-	return
 
 
 
@@ -205,7 +204,7 @@
 
 /obj/machinery/computer/mech_bay_power_console/power_change()
 	if(stat & BROKEN)
-		icon_state = initial(icon_state)+"_broken"
+		icon_state = initial(icon_state) +"_broken"
 		if(recharge_port)
 			recharge_port.stop_charge()
 	else if(powered())

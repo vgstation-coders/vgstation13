@@ -299,7 +299,7 @@
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
 	drop_hands()
-	
+
 // deletes all and only equipped items, including items in hand
 /mob/proc/delete_all_equipped_items()
 	for (var/obj/item/I in get_all_slots())
@@ -346,7 +346,7 @@
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
-		
+
 /mob/proc/delete_held_items(var/atom/Target) //deletes both items
 	for(var/obj/item/I in held_items)
 		qdel(I)
@@ -473,6 +473,9 @@
 		if(slot_handcuffed)
 			if(!src.handcuffed)
 				src.handcuffed = W
+				equipped = 1
+			if (!src.mutual_handcuffs)
+				src.mutual_handcuffs = W
 				equipped = 1
 		if(slot_belt)
 			if(!src.belt && src.w_uniform)

@@ -20,9 +20,11 @@
 	force_report = 1
 
 	var/level = 1
+	var/level_max = 7
+	var/level_min = 4
 
 /datum/command_alert/biohazard_alert/announce()
-	level = rand(4,7)
+	level = rand(level_min,level_max)
 	message = "Confirmed outbreak of level [level] biohazard aboard [station_name()]. All personnel must contain the outbreak."
 
 	..()
@@ -35,6 +37,15 @@
 
 	for(var/word in vox_sentence)
 		play_vox_sound(word,STATION_Z,null)
+
+/datum/command_alert/biohazard_alert/minor
+	level_max = 4
+	level_min = 2
+
+/datum/command_alert/biohazard_alert/major
+	level_max = 7
+	level_min = 5
+
 
 ///////BIOHAZARD UPDATED
 
@@ -266,16 +277,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	..()
 
-/datum/command_alert/power_restored
-	name = "Power Outage - End"
-	alert_title = "Power Systems Nominal"
-	alert = 'sound/AI/poweron.ogg'
-
-/datum/command_alert/power_restored/announce()
-	message = "Power has been restored to [station_name()]. We apologize for the inconvenience."
-
-	..()
-
 /datum/command_alert/smes_charged
 	name = "SMES Recharged"
 	alert_title = "Power Systems Nominal"
@@ -378,6 +379,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert = 'sound/AI/ionstorm.ogg'
 	message = "Ion storm detected near the station. Please check all AI-controlled equipment for errors."
 
+/datum/command_alert/ion_storm_malicious
+	name = "Ion Storm - AI affected"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/ionstorm.ogg'
+	message = "Abnormal ion activity detected. Please check all AI-controlled equipment for errors. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/ion_storm_large
 	name = "Ion Storm - All Affected"
 	alert_title = "Anomaly Alert"
@@ -418,16 +425,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/command_link_lost
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
-	alert = 'sound/AI/loss.ogg'
-	message = "This is an automated announcement. The link with central command has been lost. Repeat: The link with central command has been lost. Attempting to re-establish communications in T-10."
+	alert = 'sound/AI/connection_lost.ogg'
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
-	alert_title = "Link Established"
-
-/datum/command_alert/command_link_restored/announce()
-	message = "A link to Central Command has been established on [station_name()]."
-	..()
+	alert_title = "Automated Announcement"
+	alert = 'sound/AI/connection_made.ogg'
+	alert_title = "Link with Central Command has been re-established successfully. The emergency shuttle can now be called or recalled."
 
 /////////HOSTILE CREATURES
 
@@ -484,7 +489,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 
 /datum/command_alert/bloodstones_anchor/announce()
-	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. Destroy it at all costs, do not let any cultist near it."
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
 	..()
 
 /datum/command_alert/bloodstones_broken
@@ -563,3 +568,23 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Wall Fungi"
 	alert_title = "Biohazard Alert"
 	message = "Harmful fungi detected on station. Station structures may be contaminated."
+
+/datum/command_alert/nuclear_operatives
+	name = "Nuclear Operatives"
+	alert_title = "Imminent Assault"
+
+/datum/command_alert/nuclear_operatives/announce()
+	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
+	..()
+
+/datum/command_alert/blizzard_end
+	alert_title = "Blizzard Status"
+	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
+
+/datum/command_alert/blizzard_start
+	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
+	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+
+/datum/command_alert/omega_blizzard
+	alert_title = "Urgent Warning - Dark Season"
+	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."

@@ -54,6 +54,7 @@
 /area/research_outpost/spectro
 	name = "Mass Spectrometry Lab"
 	icon_state = "anospectro"
+	lightswitch = FALSE
 
 /area/research_outpost/anomaly
 	name = "Anomalous Materials Lab"

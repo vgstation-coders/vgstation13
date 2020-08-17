@@ -29,6 +29,23 @@
 	price = 2 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
 
+/datum/spellbook_artifact/staff_of_swapping
+	name = "Staff of Swapping"
+	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
+	abbreviation = "SW"
+	price = 20
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
+
+/datum/spellbook_artifact/staff_of_sinterklaas
+	name = "Staff of Sinterklaas"
+	desc = "An artefact that fires a glowing bolt of energy which turns the target into a jovial helper."
+	abbreviation = "SS"
+	price = 5
+	spawned_items = list(/obj/item/weapon/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
+
+/datum/spellbook_artifact/staff_of_sinterklaas/can_buy(var/mob/user)
+	return (Holiday == SINTERKLAAS)
+
 /datum/spellbook_artifact/mental_focus
 	name = "Mental Focus"
 	desc = "An artefact that channels the will of the user into destructive bolts of force."
@@ -56,7 +73,6 @@
 	/obj/item/clothing/shoes/sandal,\
 	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/clothing/head/helmet/space/rig/wizard,\
 	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
@@ -70,22 +86,19 @@
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
 	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
-/*
-#define APPRENTICE_PRICE Sp_BASE_PRICE
+
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
-	desc = "A magical contract binding an apprentice wizard to your service, using it will summon them to your side."
+	desc = "A magical contract binding an apprentice wizard to your service. Using it will summon them to your side."
 	abbreviation = "CT"
-	spawned_items = list(/obj/item/weapon/antag_spawner/contract)
-	price = APPRENTICE_PRICE
-*/
+	spawned_items = list(/obj/item/wizard_apprentice_contract)
 
 /datum/spellbook_artifact/bundle
 	name = "Spellbook Bundle"
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook/random)
+	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"
@@ -254,7 +267,7 @@
 	H.real_name = pick("Santa Claus","Jolly St. Nick","Sandy Claws","Sinterklaas","Father Christmas","Kris Kringle")
 	H.nutrition += 1000
 
-	H.add_spell(new/spell/noclothes)
+	H.add_spell(new/spell/passive/noclothes)
 	H.add_spell(new/spell/aoe_turf/conjure/snowmobile)
 	H.add_spell(new/spell/targeted/wrapping_paper)
 	H.add_spell(new/spell/aoe_turf/conjure/gingerbreadman)
@@ -269,7 +282,7 @@
 /datum/spellbook_artifact/phylactery
 	name = "phylactery"
 	desc = "Creates a soulbinding artifact that, upon the death of the user, resurrects them as best it can. You must bind yourself to this through making an incision on your palm, holding the phylactery in that hand, and squeezing it."
-	spawned_items = list(/obj/item/phylactery)
+	spawned_items = list(/obj/item/phylactery, /obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich)
 
 
 /datum/spellbook_artifact/darkness
@@ -302,3 +315,27 @@
 	H.add_spell(new/spell/targeted/create_trinket)
 	H.add_spell(new/spell/targeted/cool_object)
 	H.add_spell(new/spell/targeted/warm_object)
+
+/datum/spellbook_artifact/blindingspeed
+	name = "Boots of Blinding Speed"
+	abbreviation = "BS"
+	desc = "Makes you much faster, but blinds you while you move."
+	price = 0.75 * Sp_BASE_PRICE
+	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
+
+/datum/spellbook_artifact/nogunallowed
+	name = "No Gun Allowed"
+	abbreviation = "NGA"
+	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
+	price = -0.5 * Sp_BASE_PRICE
+
+/datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	if(iswizard(user) || isapprentice(user) || ismagician(user))
+		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
+			return TRUE
+	else
+		return FALSE
+
+/datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
+	..()
+	H.add_spell (new/spell/passive/nogunallowed)

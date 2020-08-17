@@ -42,8 +42,8 @@
 	src.add_hiddenprint(user)
 	return src.attack_hand(user)
 
-/obj/machinery/computer/med_data/attack_paw(user as mob)
-	return src.attack_hand(user)
+/obj/machinery/computer/operating/attack_paw(user as mob)
+	return attack_hand(user)
 
 /obj/machinery/computer/operating/attack_hand(mob/user as mob)
 	if(..())

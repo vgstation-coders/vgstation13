@@ -30,7 +30,7 @@ Pipelines + Other Objects -> Pipe network
 	var/initialize_directions = 0
 	var/initialize_directions_he = 0 // Same, but for HE pipes.
 
-	var/can_be_coloured = 0
+	var/can_be_coloured = 1 //set to 0 to blacklist your atmos thing from being colored
 	var/image/centre_overlay = null
 	// Investigation logs
 	var/log
@@ -154,6 +154,8 @@ Pipelines + Other Objects -> Pipe network
 		update_icon_ready = 1
 	else
 		underlays.Cut()
+	if(!anchored)
+		return //the rest isn't needed for unanchored things
 	var/list/missing_nodes = icon_directions()
 	for (var/obj/machinery/atmospherics/connected_node in node_list)
 		var/con_dir = get_dir(src, connected_node)
@@ -237,12 +239,16 @@ Pipelines + Other Objects -> Pipe network
 					return
 			if(!found)
 				continue
-			var/node_var="node[node_id]"
-			if(!(node_var in vars))
-				//testing("[node_var] not in vars.")
-				return
-			if(!vars[node_var])
-				vars[node_var] = found
+			if(!get_node(node_id))
+				set_node(node_id, found)
+
+//These two procs are a shitty compromise to speed up pipe initialization without completely rewriting pipecode.
+//get_node(<n>) should return the var node<n> and set_node(<n>, <v>) should set node<n> to <v>.
+/obj/machinery/atmospherics/proc/get_node(node_id)
+	CRASH("Uh oh! Somebody didn't override get_node()!")
+
+/obj/machinery/atmospherics/proc/set_node(node_id, value)
+	CRASH("Uh oh! Somebody didn't override set_node()!")
 
 // Wait..  What the fuck?
 // I asked /tg/ and bay and they have no idea why this is here, so into the trash it goes. - N3X
@@ -276,7 +282,7 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/proc/reassign_network(datum/pipe_network/old_network, datum/pipe_network/new_network)
 	// Used when two pipe_networks are combining
 
-/obj/machinery/atmospherics/proc/return_network_air(datum/network/reference)
+/obj/machinery/atmospherics/proc/return_network_air(datum/pipe_network/reference)
 	// Return a list of gas_mixture(s) in the object
 	//		associated with reference pipe_network for use in rebuilding the networks gases list
 	// Is permitted to return null
@@ -301,7 +307,7 @@ Pipelines + Other Objects -> Pipe network
 		if(user.drop_item(pipe))
 			pipe.setPipingLayer(src.piping_layer) //align it with us
 			return 1
-	if (!iswrench(W))
+	if(!W.is_wrench(user))
 		return ..()
 	if(src.machine_flags & WRENCHMOVE)
 		return ..()
@@ -326,16 +332,15 @@ Pipelines + Other Objects -> Pipe network
 		else
 			to_chat(user, "<span class='warning'>You cannot unwrench this [src], it's too exerted due to internal pressure.</span>")
 			return 1
-	playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	W.playtoolsound(src, 50)
 	to_chat(user, "<span class='notice'>You begin to unfasten \the [src]...</span>")
 	if (do_after(user, src, 40))
 		user.visible_message( \
 			"[user] unfastens \the [src].", \
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear a ratchet.")
-		getFromPool(/obj/item/pipe, loc, null, null, src)
+		new /obj/item/pipe(loc, null, null, src)
 		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)
 	return 1
 

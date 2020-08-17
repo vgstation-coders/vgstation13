@@ -82,7 +82,7 @@
 /obj/structure/displaycase/ex_act(severity)
 	switch(severity)
 		if (1)
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 			if (occupant)
 				dump()
 			qdel(src)
@@ -105,7 +105,7 @@
 
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
-		getFromPool(/obj/item/weapon/shard, loc)
+		new /obj/item/weapon/shard(loc)
 		if(occupant)
 			dump()
 		qdel(src)
@@ -115,7 +115,7 @@
 		if (!( src.destroyed ))
 			setDensity(FALSE)
 			src.destroyed = 1
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 			playsound(src, "shatter", 70, 1)
 			update_icon()
 	else
@@ -159,7 +159,7 @@
 		user.visible_message("[user.name] pries \the [src] apart.", \
 			"You pry \the [src] apart.", \
 			"You hear something pop.")
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		dump()
 
 		var/obj/item/weapon/circuitboard/airlock/C = circuit

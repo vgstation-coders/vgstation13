@@ -327,7 +327,8 @@ var/global/no_pin_for_debit = TRUE
 		// If we have a vaild secondary amount, charge the secondary payment method.
 		secondary_money_account.charge(transaction_amount_secondary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized)
 
-	primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized)
+	if(!primary_money_account.charge(transaction_amount_primary, dest, transaction_purpose, terminal_name, terminal_id, dest_name, authorized))
+		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 	// Finally charge the primary
 	var/account_type = primary_money_account.virtual ? "virtual wallet" : "bank account"
 	to_chat(user, "[bicon(src)] <span class='notice'>Remaining balance on [account_type], $[num2septext(primary_money_account.money)].</span>")

@@ -1,17 +1,23 @@
 //admin verb groups - They can overlap if you so wish. Only one of each verb will exist in the verbs list regardless
 var/list/admin_verbs_default = list(
-	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
+
+// Everyone has +ADMIN so we don't actually need anything in here.
+// Downside: The observers no longer have msay if we lack defaults.
 	/client/proc/deadmin_self,			/*destroys our own admin datum so we can play as a regular player*/
+
+	)
+var/list/admin_verbs_admin = list(
+
+	/datum/admins/proc/show_player_panel,	/*shows an interface for individual players, with various links (links require additional flags*/
 	/client/proc/hide_verbs,			/*hides all our adminverbs*/
 	/client/proc/hide_most_verbs,		/*hides all our hideable adminverbs*/
 	/client/proc/debug_variables,		/*allows us to -see- the variables of any instance in the game. +VAREDIT needed to modify*/
 	/client/proc/check_antagonists,		/*shows all antags*/
 	/client/proc/advwho,				/*in addition to listing connected ckeys, shows character name and living/dead/antag status for each*/
 	/datum/admins/proc/checkCID,
-	/datum/admins/proc/checkCKEY
-//	/client/proc/deadchat				/*toggles deadchat on/off*/
-	)
-var/list/admin_verbs_admin = list(
+	/datum/admins/proc/checkCKEY,
+	//	/client/proc/deadchat				/*toggles deadchat on/off*/
+
 	/client/proc/set_base_turf,
 	/datum/admins/proc/delay,
 	/client/proc/SendCentcommFax,		/*sends a fax to all fax machines*/
@@ -80,7 +86,9 @@ var/list/admin_verbs_admin = list(
 	/client/proc/manage_religions,
 	/client/proc/set_veil_thickness,
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
-	/client/proc/persistence_panel			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
+	/client/proc/diseases_panel,
+	/client/proc/climate_panel
 )
 var/list/admin_verbs_ban = list(
 	/client/proc/unban_panel,
@@ -119,6 +127,9 @@ var/list/admin_verbs_fun = list(
 	/client/proc/mommi_static,
 	/client/proc/makepAI,
 	/client/proc/set_blob_looks,
+	/client/proc/set_teleport_pref,
+	/client/proc/deadchat_singularity,
+	/client/proc/view_all_rods,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -148,11 +159,11 @@ var/list/admin_verbs_server = list(
 	/client/proc/toggle_random_events,
 	/client/proc/check_customitem_activity,
 	/client/proc/dump_chemreactions,
-	/client/proc/save_coordinates
+	/client/proc/save_coordinates,
+	/datum/admins/proc/mass_delete_in_zone,
 	)
 var/list/admin_verbs_debug = list(
 	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
 	/client/proc/cmd_admin_list_open_jobs,
 	/proc/getbrokeninhands,
 	/client/proc/Debug2,
@@ -166,7 +177,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/restart_controller,
 	/client/proc/enable_debug_verbs,
 	/client/proc/callproc,
-	/client/proc/cmd_admin_dump_instances, // /vg/
 	/client/proc/cmd_admin_dump_machine_type_list, // /vg/
 	/client/proc/disable_bloodvirii,       // /vg
 	/client/proc/handle_paperwork, //this is completely experimental
@@ -183,7 +193,6 @@ var/list/admin_verbs_debug = list(
 	/client/proc/mob_list,
 	/client/proc/cure_disease,
 	/client/proc/check_bomb,
-	/client/proc/set_teleport_pref,
 	/client/proc/check_convertables,
 	/client/proc/check_spiral,
 	/client/proc/check_striketeams,
@@ -193,6 +202,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/view_runtimes,
 	/client/proc/cmd_mass_modify_object_variables,
 	/client/proc/emergency_shuttle_panel,
+	/client/proc/bee_count,
 #if UNIT_TESTS_ENABLED
 	/client/proc/unit_test_panel,
 #endif
@@ -275,7 +285,6 @@ var/list/admin_verbs_hideable = list(
 	/proc/possess,
 	/proc/release,
 	/client/proc/gc_dump_hdl,
-	/client/proc/debug_pooling,
 	/client/proc/create_map_element
 	)
 var/list/admin_verbs_mod = list(
@@ -360,6 +369,7 @@ var/list/admin_verbs_mod = list(
 		/client/proc/ticklag,
 		/client/proc/cmd_admin_grantfullaccess,
 		/client/proc/kaboom,
+		/client/proc/rigvote,
 		/client/proc/splash,
 		/client/proc/cmd_admin_areatest,
 		/client/proc/readmin,
@@ -407,7 +417,7 @@ var/list/admin_verbs_mod = list(
 		ghost.reenter_corpse()
 		feedback_add_details("admin_verb","P") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	else if(istype(mob,/mob/new_player))
-		to_chat(src, "<font color='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</font>")
+		to_chat(src, "<span class='red'>Error: Aghost: Can't admin-ghost whilst in the lobby. Join or Observe first.</span>")
 	else
 		//ghostize
 		var/mob/body = mob
@@ -550,7 +560,7 @@ var/list/admin_verbs_mod = list(
 		D = preferences_datums[warned_ckey]
 
 	if(!D)
-		to_chat(src, "<font color='red'>Error: warn(): No such ckey found.</font>")
+		to_chat(src, "<span class='red'>Error: warn(): No such ckey found.</span>")
 		return
 
 	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
@@ -590,7 +600,7 @@ var/list/admin_verbs_mod = list(
 	if(!warned_ckey || !istext(warned_ckey))
 		return
 	/*if(warned_ckey in admin_datums)
-		to_chat(usr, "<font color='red'>Error: warn(): You can't warn admins.</font>")
+		to_chat(usr, "<span class='red'>Error: warn(): You can't warn admins.</span>")
 		return*/
 
 	var/datum/preferences/D
@@ -601,17 +611,17 @@ var/list/admin_verbs_mod = list(
 		D = preferences_datums[warned_ckey]
 
 	if(!D)
-		to_chat(src, "<font color='red'>Error: unwarn(): No such ckey found.</font>")
+		to_chat(src, "<span class='red'>Error: unwarn(): No such ckey found.</span>")
 		return
 
 	if(D.warns == 0)
-		to_chat(src, "<font color='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</font>")
+		to_chat(src, "<span class='red'>Error: unwarn(): You can't unwarn someone with 0 warnings, you big dummy.</span>")
 		return
 
 	D.warns-=1
 	var/strikesleft = MAX_WARNS-D.warns
 	if(C)
-		to_chat(C, "<font color='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</font>")
+		to_chat(C, "<span class='red'><BIG><B>One of your warnings has been removed.</B></BIG><br>You currently have [strikesleft] strike\s left</span>")
 		message_admins("[key_name_admin(src)] has unwarned [key_name_admin(C)]. They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
 	else
 		message_admins("[key_name_admin(src)] has unwarned [warned_ckey] (DC). They have [strikesleft] strike(s) remaining, and have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
@@ -687,6 +697,26 @@ var/list/admin_verbs_mod = list(
 	feedback_add_details("admin_verb","GS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] gave [key_name(T)] the spell [S].")
 	message_admins("<span class='notice'>[key_name_admin(usr)] gave [key_name(T)] the spell [S].</span>", 1)
+
+
+/client/proc/toggle_invisible(mob/T as mob in mob_list)
+	set category = "Fun"
+	set name = "Toggle invisiblity"
+	set desc = "Make a mob completely invisible."
+
+	if (T.alphas["admin_invis"] == 0)
+		T.forced_density = 0
+		T.alphas -= "admin_invis"
+	else
+		T.alphas["admin_invis"] = 0
+		T.density = 0
+		T.forced_density = 1
+
+	to_chat(T, "<span class='notice'>Admin [key_name_admin(usr)] toggled your invisiblity.</span>")
+
+	feedback_add_details("admin_verb","MI") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	log_admin("[key_name(usr)] toggled [key_name(T)] invisibility.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] toggled [key_name(T)] invisibility.</span>", 1)
 
 /client/proc/give_disease(mob/T as mob in mob_list) // -- Giacom
 	set category = "Fun"
@@ -775,49 +805,8 @@ var/list/admin_verbs_mod = list(
 	switch(alert("Are you sure you wish to edit this mob's appearance? Skrell, Unathi, Vox and Tajaran can result in unintended consequences.",,"Yes","No"))
 		if("No")
 			return
-	var/new_facial = input("Please select facial hair color.", "Character Generation") as color
-	if(new_facial)
-		M.my_appearance.r_facial = hex2num(copytext(new_facial, 2, 4))
-		M.my_appearance.g_facial = hex2num(copytext(new_facial, 4, 6))
-		M.my_appearance.b_facial = hex2num(copytext(new_facial, 6, 8))
-
-	var/new_hair = input("Please select hair color.", "Character Generation") as color
-	if(new_facial)
-		M.my_appearance.r_hair = hex2num(copytext(new_hair, 2, 4))
-		M.my_appearance.g_hair = hex2num(copytext(new_hair, 4, 6))
-		M.my_appearance.b_hair = hex2num(copytext(new_hair, 6, 8))
-
-	var/new_eyes = input("Please select eye color.", "Character Generation") as color
-	if(new_eyes)
-		M.my_appearance.r_eyes = hex2num(copytext(new_eyes, 2, 4))
-		M.my_appearance.g_eyes = hex2num(copytext(new_eyes, 4, 6))
-		M.my_appearance.b_eyes = hex2num(copytext(new_eyes, 6, 8))
-
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation")  as text
-
-	if (new_tone)
-		M.my_appearance.s_tone = max(min(round(text2num(new_tone)), 220), 1)
-		M.my_appearance.s_tone =  -M.my_appearance.s_tone + 35
-
-	// hair
-	var/new_hstyle = input(usr, "Select a hair style", "Grooming")  as null|anything in hair_styles_list
-	if(new_hstyle)
-		M.my_appearance.h_style = new_hstyle
-
-	// facial hair
-	var/new_fstyle = input(usr, "Select a facial hair style", "Grooming")  as null|anything in facial_hair_styles_list
-	if(new_fstyle)
-		M.my_appearance.f_style = new_fstyle
-
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			M.setGender(MALE)
-		else
-			M.setGender(FEMALE)
-	M.update_hair()
-	M.update_body()
-	M.check_dna(M)
+	M.pick_gender(usr)
+	M.pick_appearance(usr)
 
 /client/proc/playernotes()
 	set name = "Show Player Notes"
@@ -867,10 +856,34 @@ var/list/admin_verbs_mod = list(
 	set desc = "Regain your admin powers."
 	var/datum/admins/D = admin_datums[ckey]
 	if(config.admin_legacy_system)
-		to_chat(src, "<span class='notice'>Legacy admins is not supported yet</span>")
-		return
+		var/list/lines = file2list("config/admins.txt")
+		for(var/line in lines)
+			// if the line doesn't begin with our ckey we don't care
+			if(findtext(ckey(line), ckey) != 1)
+				continue
+			//Split the line at every "-"
+			var/list/List = splittext(line, "-")
+			if(!List.len)
+				continue
+
+			//rank follows the first "-"
+			var/rank = ""
+			if(List.len >= 2)
+				rank = ckeyEx(List[2])
+
+			//load permissions associated with this rank
+			var/rights = admin_ranks[rank]
+
+			//create the admin datum and store it for later use
+			D = new /datum/admins(rank, rights, ckey)
+
+			//associate them with the new admin datum
+			D.associate(src)
+
+			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
+				world.SetConfig("APP/admin", ckey, "role=admin")
 	else
-		if(!dbcon.IsConnected())
+		if(!SSdbcore.IsConnected())
 			message_admins("Warning, mysql database is not connected.")
 			to_chat(src, "Warning, mysql database is not connected.")
 			return
@@ -878,9 +891,11 @@ var/list/admin_verbs_mod = list(
 			to_chat(src, "You are already an admin.")
 			verbs -= /client/proc/readmin
 			return
-		var/sql_ckey = sanitizeSQL(ckey(ckey))
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = '[sql_ckey]'")
-		query.Execute()
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, rank, level, flags FROM erro_admin WHERE ckey = :ckey", list("ckey" = ckey))
+		if(!query.Execute())
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 		while(query.NextRow())
 			var/dckey = query.item[1]
 			var/rank = query.item[2]
@@ -898,6 +913,7 @@ var/list/admin_verbs_mod = list(
 			log_admin("[src] re-adminned themselves.")
 			feedback_add_details("admin_verb","RAS")
 			verbs -= /client/proc/readmin
+			qdel(query)
 			return
 
 /client/proc/achievement()
@@ -926,34 +942,37 @@ var/list/admin_verbs_mod = list(
 		return
 
 	if(istype(winner, /mob/living))
-		achoice = alert("Give our winner his own trophy?","Achievement Trophy", "Confirm", "Cancel")
+		achoice = alert("Are you sure you want to give them an award?","Achievement award", "Confirm", "Cancel")
 		if(achoice == "Cancel")
 			return
 
-	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Last Question", "No!","Yes!")
+	var/glob = alert("Announce the achievement globally? (Beware! Ruins immersion!)", "Announce To All Players", "No!","Yes!")
 
-	if(achoice == "Confirm")
-		var/obj/item/weapon/reagent_containers/food/drinks/golden_cup/C = new(get_turf(winner))
-		C.name = name
-		C.desc = desc
-		if(iscarbon(winner) && (winner.stat == CONSCIOUS))
-			winner.put_in_hands(C)
-	else
-		to_chat(winner, "<span class='danger'>You win [name]! [desc]</span>")
-
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
+	var/obj/item/award
+	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
+	if(achoice == "Gold cup")
+		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
+	if(achoice == "Gold medal")
+		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
+	if(achoice == "Dunce cap")
+		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
+	award.name = name
+	award.desc = desc
+	if(iscarbon(winner) && (winner.stat == CONSCIOUS))
+		winner.put_in_hands(award)
 
 	if(glob == "No!")
-		winner.client << sound('sound/misc/achievement.ogg')
+		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
-			to_chat(O, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+			to_chat(O, "<span class='danger'>[bicon(award)] Attention all ghosts, <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 	else
-		world << sound('sound/misc/achievement.ogg')
-		to_chat(world, "<span class='danger'>[bicon(cup)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
+		world << sound('sound/misc/achievement.ogg', volume=35)
+		to_chat(world, "<span class='danger'>[bicon(award)] <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
 
-	to_chat(winner, "<span class='danger'>Congratulations!</span>")
+	to_chat(winner, "<span class='danger'>[bicon(award)] Congratulations to you, <b>[winner.name]</b>! You have won \"<b>[name]</b>\"!</span>")
 
-	achievements += "<b>[winner.key]</b> as <b>[winner.name]</b> won \"<b>[name]</b>\"! \"[desc]\""
+	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
+	ticker.achievements.Add(achievement)
 
 	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 
@@ -1019,8 +1038,8 @@ var/list/admin_verbs_mod = list(
 	message_admins("<span class='notice'>[key_name_admin(src)] set all blobs to use the \"[chosen]\" look.</span>")
 
 /datum/admins/proc/media_stop_all()
-	set name = "Stop All Media"
-	set desc = "Stops all music and video."
+	set name = "Stop all Media"
+	set desc = "Stops all music, video and admin sounds."
 	set category = "Fun"
 
 	if(!check_rights(R_FUN))
@@ -1114,8 +1133,8 @@ var/list/admin_verbs_mod = list(
 			if(z_coord == null)
 				return
 
-			x_coord = Clamp(x_coord, 1, world.maxx)
-			y_coord = Clamp(y_coord, 1, world.maxy)
+			x_coord = clamp(x_coord, 1, world.maxx)
+			y_coord = clamp(y_coord, 1, world.maxy)
 
 		if(ML_LOAD_TO_Z2)
 			if(!dungeon_area)
@@ -1229,4 +1248,12 @@ var/list/admin_verbs_mod = list(
 	if(holder)
 		holder.PersistencePanel()
 	feedback_add_details("admin_verb","PEP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	return
+
+/client/proc/view_all_rods()
+	set name = "VIEW-ALL-RODS"
+	set category = "Fun"
+	if(holder)
+		holder.ViewAllRods()
+	feedback_add_details("admin_verb","V-ROD") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

@@ -37,10 +37,16 @@
 			holder2.icon_state = "hudbrainworm"
 		else
 			holder.icon_state = "hudhealthy"
-			if(virus2.len)
-				holder2.icon_state = "hudill"
-			else
-				holder2.icon_state = "hudhealthy"
+			var/dangerosity = has_recorded_virus2(src)
+			switch (dangerosity)
+				if (1)
+					holder.icon_state = "hudill"
+				if (2)
+					holder.icon_state = "hudill_safe"
+				if (3)
+					holder.icon_state = "hudill_danger"
+				else
+					holder.icon_state = "hudhealthy"
 
 		hud_list[STATUS_HUD] = holder
 		hud_list[STATUS_HUD_OOC] = holder2

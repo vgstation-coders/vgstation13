@@ -66,3 +66,9 @@
 		M.playsound_local(get_turf(src), selected_sound, volume, shiftpitch)
 		spam_flag = world.timeofday
 		//to_chat(M, selected_sound) //this doesn't actually go to their chat very much at all.
+
+/obj/item/device/soundsynth/AltClick()
+	if(!usr.incapacitated() && Adjacent(usr))
+		pick_sound()
+		return
+	return ..()

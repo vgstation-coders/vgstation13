@@ -148,7 +148,7 @@ var/LACTOSEBLOCK = 0
 	CHAVBLOCK      = getAssignedBlock("CHAV",       numsToAssign)
 	SWEDEBLOCK     = getAssignedBlock("SWEDE",      numsToAssign)
 	SCRAMBLEBLOCK  = getAssignedBlock("SCRAMBLE",   numsToAssign)
-	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign, DNA_HARD_BOUNDS, good=1) //Why the hell does this have "good" if it's a disability?
+	TOXICFARTBLOCK = getAssignedBlock("TOXICFART",  numsToAssign)
 	HORNSBLOCK     = getAssignedBlock("HORNS",      numsToAssign)
 	SMILEBLOCK     = getAssignedBlock("SMILE",      numsToAssign)
 	ELVISBLOCK     = getAssignedBlock("ELVIS",      numsToAssign)

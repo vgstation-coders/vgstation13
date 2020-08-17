@@ -21,12 +21,21 @@
 	mop_list.Remove(src)
 	..()
 
+/obj/item/weapon/mop/update_icon()
+	..()
+	overlays.len = 0
+	if (reagents.total_volume >= 1)
+		var/image/covering = image(icon, "mop-reagent")
+		covering.icon += mix_color_from_reagents(reagents.reagent_list)
+		covering.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+		overlays += covering
+
 /obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
-	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
-	A.clean_blood()
 	for(var/obj/effect/O in A)
 		if(iscleanaway(O))
 			qdel(O)
+	reagents.reaction(A,1,10) //Mops magically make chems ten times more efficient than usual, aka equivalent of 50 units of whatever you're using
+	A.clean_blood()
 	playsound(src, get_sfx("mop"), 25, 1)
 
 /obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
@@ -38,6 +47,7 @@
 	if(!user.Adjacent(A))
 		return
 	if(A.mop_act(src, user))
+		update_icon()
 		return
 	if(istype(A, /mob/living))
 		if(!(reagents.total_volume < 1)) //Slap slap slap
@@ -53,3 +63,4 @@
 		user.delayNextAttack(10)
 		clean(get_turf(A))
 		reagents.remove_any(1) //Might be a tad wonky with "special mop mixes", but fuck it
+	update_icon()

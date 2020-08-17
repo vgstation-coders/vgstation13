@@ -9,76 +9,76 @@
 	var/icon/virtualIcon
 	var/list/bulletholes = list()
 
-	Destroy()
-		// if a target is deleted and associated with a stake, force stake to forget
-		for(var/obj/structure/target_stake/T in view(3,src))
-			if(T.pinned_target == src)
-				T.pinned_target = null
-				T.setDensity(TRUE)
-				break
-		..() // delete target
+/obj/item/target/Destroy()
+	// if a target is deleted and associated with a stake, force stake to forget
+	for(var/obj/structure/target_stake/T in view(3,src))
+		if(T.pinned_target == src)
+			T.pinned_target = null
+			T.setDensity(TRUE)
+			break
+	..() // delete target
 
-	Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
-		..()
-		// After target moves, check for nearby stakes. If associated, move to target
-		for(var/obj/structure/target_stake/M in view(3,src))
-			if(M.density == 0 && M.pinned_target == src)
-				M.forceMove(loc)
+/obj/item/target/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
+	..()
+	// After target moves, check for nearby stakes. If associated, move to target
+	for(var/obj/structure/target_stake/M in view(3,src))
+		if(M.density == 0 && M.pinned_target == src)
+			M.forceMove(loc)
 
-		// This may seem a little counter-intuitive but I assure you that's for a purpose.
-		// Stakes are the ones that carry targets, yes, but in the stake code we set
-		// a stake's density to 0 meaning it can't be pushed anymore. Instead of pushing
-		// the stake now, we have to push the target.
-
-
-
-	attackby(obj/item/W as obj, mob/user as mob)
-		if (iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
-			if(WT.remove_fuel(0, user))
-				overlays.len = 0
-				to_chat(usr, "You slice off [src]'s uneven chunks of aluminum and scorch marks.")
-				return
+	// This may seem a little counter-intuitive but I assure you that's for a purpose.
+	// Stakes are the ones that carry targets, yes, but in the stake code we set
+	// a stake's density to 0 meaning it can't be pushed anymore. Instead of pushing
+	// the stake now, we have to push the target.
 
 
-	attack_hand(mob/user as mob)
-		// taking pinned targets off!
-		var/obj/structure/target_stake/stake
-		for(var/obj/structure/target_stake/T in view(3,src))
-			if(T.pinned_target == src)
-				stake = T
-				break
 
-		if(stake)
-			if(stake.pinned_target)
-				stake.setDensity(TRUE)
-				setDensity(FALSE)
-				layer = OBJ_LAYER
-				plane = OBJ_PLANE
+/obj/item/target/attackby(obj/item/W as obj, mob/user as mob)
+	if (iswelder(W))
+		var/obj/item/weapon/weldingtool/WT = W
+		if(WT.remove_fuel(0, user))
+			overlays.len = 0
+			to_chat(usr, "You slice off [src]'s uneven chunks of aluminum and scorch marks.")
+			return
 
-				loc = user.loc
-				if(ishuman(user))
-					if(!user.get_active_hand())
-						user.put_in_hands(src)
-						to_chat(user, "You take the target out of the stake.")
-				else
-					src.forceMove(get_turf(user))
+
+/obj/item/target/attack_hand(mob/user as mob)
+	// taking pinned targets off!
+	var/obj/structure/target_stake/stake
+	for(var/obj/structure/target_stake/T in view(3,src))
+		if(T.pinned_target == src)
+			stake = T
+			break
+
+	if(stake)
+		if(stake.pinned_target)
+			stake.setDensity(TRUE)
+			setDensity(FALSE)
+			layer = OBJ_LAYER
+			plane = OBJ_PLANE
+
+			loc = user.loc
+			if(ishuman(user))
+				if(!user.get_active_hand())
+					user.put_in_hands(src)
 					to_chat(user, "You take the target out of the stake.")
+			else
+				src.forceMove(get_turf(user))
+				to_chat(user, "You take the target out of the stake.")
 
-				stake.pinned_target = null
-				return
+			stake.pinned_target = null
+			return
 
-		else
-			..()
+	else
+		..()
 
-	syndicate
-		icon_state = "target_s"
-		desc = "A shooting target that looks like a syndicate scum."
-		hp = 2600 // i guess syndie targets are sturdier?
-	alien
-		icon_state = "target_q"
-		desc = "A shooting target that looks like a xenomorphic alien."
-		hp = 2350 // alium onest too kinda
+/obj/item/target/syndicate
+	icon_state = "target_s"
+	desc = "A shooting target that looks like a syndicate scum."
+	hp = 2600 // i guess syndie targets are sturdier?
+/obj/item/target/alien
+	icon_state = "target_q"
+	desc = "A shooting target that looks like a xenomorphic alien."
+	hp = 2350 // alium onest too kinda
 
 /obj/item/target/bullet_act(var/obj/item/projectile/Proj)
 	if(overlays.len >= 10) //Too many overlays
@@ -165,22 +165,22 @@
 	var/b2y1 = 0
 	var/b2y2 = 0
 
-	New(var/obj/item/target/Target, var/pixel_x = 0, var/pixel_y = 0)
-		if(!Target)
-			return
+/datum/bullethole/New(var/obj/item/target/Target, var/pixel_x = 0, var/pixel_y = 0)
+	if(!Target)
+		return
 
-		// Randomize the first box
-		b1x1 = pixel_x - pick(1,1,1,1,2,2,3,3,4)
-		b1x2 = pixel_x + pick(1,1,1,1,2,2,3,3,4)
-		b1y = pixel_y
-		if(prob(35))
-			b1y += rand(-4,4)
+	// Randomize the first box
+	b1x1 = pixel_x - pick(1,1,1,1,2,2,3,3,4)
+	b1x2 = pixel_x + pick(1,1,1,1,2,2,3,3,4)
+	b1y = pixel_y
+	if(prob(35))
+		b1y += rand(-4,4)
 
-		// Randomize the second box
-		b2x = pixel_x
-		if(prob(35))
-			b2x += rand(-4,4)
-		b2y1 = pixel_y + pick(1,1,1,1,2,2,3,3,4)
-		b2y2 = pixel_y - pick(1,1,1,1,2,2,3,3,4)
+	// Randomize the second box
+	b2x = pixel_x
+	if(prob(35))
+		b2x += rand(-4,4)
+	b2y1 = pixel_y + pick(1,1,1,1,2,2,3,3,4)
+	b2y2 = pixel_y - pick(1,1,1,1,2,2,3,3,4)
 
-		Target.bulletholes.Add(src)
+	Target.bulletholes.Add(src)

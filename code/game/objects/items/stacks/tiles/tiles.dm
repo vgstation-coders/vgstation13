@@ -26,16 +26,16 @@
 /obj/item/stack/tile/plasteel/Destroy()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/tile/plasteel/attack_self(mob/user)
 	if(!active) //Start click drag construction
-		active = getFromPool(/obj/abstract/screen/draggable, src, user)
+		active = new /obj/abstract/screen/draggable(src, user)
 		to_chat(user, "Beginning plating construction mode, click and hold to use.")
 		return
 	else //End click drag construction, create grille
-		returnToPool(active)
+		qdel(active)
 
 /obj/item/stack/tile/plasteel/can_drag_use(mob/user, turf/T)
 	if(user.Adjacent(T)) //can we place here
@@ -44,7 +44,7 @@
 			if(use(1)) //place and use rod
 				return 1
 			else
-				returnToPool(active) //otherwise remove the draggable screen
+				qdel(active) //otherwise remove the draggable screen
 				active = null
 
 /obj/item/stack/tile/plasteel/drag_use(mob/user, turf/T)
@@ -62,15 +62,16 @@
 /obj/item/stack/tile/plasteel/dropped()
 	..()
 	if(active)
-		returnToPool(active)
+		qdel(active)
 		active = null
 
 /obj/item/stack/tile/plasteel/proc/build(turf/S as turf)
-	if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-		S.ChangeTurf(/turf/simulated/floor/plating/airless)
-	else
-		S.ChangeTurf(/turf/simulated/floor/plating)
-	return
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(/turf/simulated/floor/plating)
+			return
+	S.ChangeTurf(/turf/simulated/floor/plating/airless)
 
 /obj/item/stack/tile/plasteel/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
@@ -80,7 +81,7 @@
 			return
 
 		if(WT.remove_fuel(0,user))
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal
 			M.amount = 1
 			M.forceMove(get_turf(usr)) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
 			user.visible_message("<span class='warning'>[src] is shaped into metal by [user.name] with the welding tool.</span>", \
@@ -139,11 +140,15 @@
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-			S.ChangeTurf(/turf/simulated/floor/glass/airless)
-		else
-			S.ChangeTurf(/turf/simulated/floor/glass)
 		qdel(L)
+		if(S.air)
+			var/datum/gas_mixture/GM = S.air
+			if(GM.pressure > HALF_ATM)
+				S.ChangeTurf(/turf/simulated/floor/glass)
+				return
+		S.ChangeTurf(/turf/simulated/floor/glass/airless)
+
+
 
 /obj/item/stack/glass_tile/rglass/plasma
 	name = "plasma glass tile"
@@ -154,8 +159,12 @@
 	var/obj/structure/lattice/L = S.canBuildCatwalk(src)
 	if(istype(L))
 		playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
-		if(istype(S,/turf/space) || istype(S,/turf/unsimulated))
-			S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
-		else
-			S.ChangeTurf(/turf/simulated/floor/glass/plasma)
 		qdel(L)
+		if(S.air)
+			var/datum/gas_mixture/GM = S.air
+			if(GM.pressure > HALF_ATM)
+				S.ChangeTurf(/turf/simulated/floor/glass/plasma)
+				return
+		S.ChangeTurf(/turf/simulated/floor/glass/plasma/airless)
+
+

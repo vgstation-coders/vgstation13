@@ -54,6 +54,7 @@
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
+	var/cell_type_path = /obj/item/weapon/cell
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
 	var/lighting = 3
@@ -119,9 +120,9 @@
 /obj/machinery/power/apc/New(loc, var/ndir, var/building=0)
 	..(loc)
 	var/area/this_area = get_area(src)
-	if(this_area.areaapc)
+	if(this_area.areaapc || this_area.forbid_apc)
 		var/turf/T = get_turf(src)
-		world.log << "Second APC detected in area: [this_area.name] [T.x], [T.y], [T.z]. Deleting the second APC."
+		world.log << "[this_area.forbid_apc ? "Forbidden" : "Second"] APC detected in area: [this_area.name] [T.x], [T.y], [T.z]. Deleting the second APC."
 		qdel(src)
 		return
 
@@ -157,7 +158,7 @@
 	has_electronics = 2 //installed and secured
 	// is starting with a power cell installed, create it and set its charge level
 	if(cell_type)
-		src.cell = new/obj/item/weapon/cell(src)
+		src.cell = new cell_type_path(src)
 		cell.maxcharge = cell_type	// cell_type is maximum charge (old default was 1000 or 2500 (values one and two respectively)
 		cell.charge = start_charge * cell.maxcharge / 100.0 		// (convert percentage to actual value)
 
@@ -399,7 +400,7 @@
 			if (terminal)
 				to_chat(user, "<span class='warning'>Disconnect wires first.</span>")
 				return
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
 
 			if (do_after(user, src, 50) && opened && !terminal && has_electronics == 1)
@@ -460,12 +461,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "You screw the circuit electronics into place.")
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "You unfasten the electronics.")
 				else /* has_electronics==0 */
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
@@ -475,6 +476,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
+				W.playtoolsound(src, 25, extrarange = -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
@@ -494,6 +496,7 @@
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
 				update_icon()
+				nanomanager.update_uis(src)
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
@@ -511,6 +514,7 @@
 					locked = 0
 					to_chat(user, "You emag the APC interface.")
 					update_icon()
+					nanomanager.update_uis(src)
 				else
 					to_chat(user, "You fail to [ locked ? "unlock" : "lock"] the APC interface.")
 	else if (istype(W, /obj/item/stack/cable_coil) && !terminal && opened && has_electronics != 2)
@@ -534,7 +538,7 @@
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
 				return
-			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
+			new /obj/item/stack/cable_coil(get_turf(user), 10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 				"You cut the cables and dismantle the power terminal.")
@@ -556,7 +560,7 @@
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
+				new /obj/item/stack/sheet/metal(get_turf(src), 1)
 				user.visible_message(\
 					"<span class='warning'>[src] has been cut apart by [user.name] with the weldingtool.</span>",\
 					"You disassembled the broken APC frame.",\
@@ -912,7 +916,7 @@
 		update()
 
 	else if (href_list["overload"])
-		if(istype(usr, /mob/living/silicon))
+		if(istype(usr, /mob/living/silicon) || isAdminGhost(usr))
 			src.overload_lighting()
 
 	else if (href_list["malfhack"])
@@ -922,7 +926,7 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process.")
+			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
 			sleep(600)
@@ -1002,7 +1006,12 @@
 		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
-	stat_collection.malf_shunted = TRUE
+	// record that the malf shunted, for statistics
+	if(istype(malf.mind) && istype(malf.mind.faction, /datum/faction/malf))
+		var/datum/faction/malf/mf = malf.mind.faction
+		if(istype(mf.stat_datum, /datum/stat/faction/malf))
+			var/datum/stat/faction/malf/MS = mf.stat_datum
+			MS.shunted = TRUE
 
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

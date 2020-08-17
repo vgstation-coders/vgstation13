@@ -379,7 +379,7 @@
 "ho" = (/obj/machinery/conveyor/auto{dir = 9},/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_wildride)
 "hp" = (/obj/item/weapon/stool/hologram,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "hq" = (/obj/structure/grille,/obj/structure/window/reinforced/holo{dir = 4},/obj/structure/window/reinforced/holo{dir = 8},/obj/structure/cable/white,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
-"hr" = (/obj/item/weapon/legcuffs/beartrap,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
+"hr" = (/obj/item/weapon/beartrap,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "hs" = (/obj/structure/table/holotable,/obj/item/clothing/shoes/roman,/obj/item/clothing/under/gladiator,/obj/item/clothing/head/helmet/gladiator,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "ht" = (/obj/structure/table/holotable,/obj/item/clothing/shoes/roman,/obj/item/clothing/under/roman,/obj/item/clothing/head/helmet/roman,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)
 "hu" = (/obj/structure/table/holotable,/obj/item/clothing/suit/armor/knight/templar,/obj/item/clothing/head/helmet/knight/templar,/turf/simulated/floor/holofloor{icon_state = "engine"; name = "Holodeck Projector Floor"},/area/holodeck/source_ragecage)

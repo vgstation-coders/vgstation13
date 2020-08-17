@@ -4,18 +4,12 @@
 	adding = list()
 	other = list()
 
+	adding = map.give_AI_jumps(adding) //gives AI core button, or more based on map
+
 	var/obj/abstract/screen/using
 
-//AI core
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "AI Core"
-	using.icon = 'icons/mob/screen_ai.dmi'
-	using.icon_state = "ai_core"
-	using.screen_loc = ui_ai_core
-	adding += using
-
 //Camera list
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Show Camera List"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "camera"
@@ -23,7 +17,7 @@
 	adding += using
 
 //Track
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Track With Camera"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "track"
@@ -31,7 +25,7 @@
 	adding += using
 
 //Camera light
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Toggle Camera Light"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "camera_light"
@@ -39,7 +33,7 @@
 	adding += using
 
 //Crew Manifest
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Show Crew Manifest"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "manifest"
@@ -47,7 +41,7 @@
 	adding += using
 
 //Alerts
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Show Alerts"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "alerts"
@@ -55,7 +49,7 @@
 	adding += using
 
 //Announcement
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Announcement"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "announcement"
@@ -63,15 +57,15 @@
 	adding += using
 
 //Shuttle
-	using = getFromPool(/obj/abstract/screen)
-	using.name = "Call Emergency Shuttle"
+	using = new /obj/abstract/screen
+	using.name = "(Re)Call Emergency Shuttle"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "call_shuttle"
 	using.screen_loc = ui_ai_shuttle
 	adding += using
 
 //Laws
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "State Laws"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "state_laws"
@@ -79,7 +73,7 @@
 	adding += using
 
 //PDA message
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "PDA - Send Message"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "pda_send"
@@ -87,7 +81,7 @@
 	adding += using
 
 //PDA log
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "PDA - Show Message Log"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "pda_receive"
@@ -95,7 +89,7 @@
 	adding += using
 
 //Take image
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Take Image"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "take_picture"
@@ -103,7 +97,7 @@
 	adding += using
 
 //View images
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "View Images"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "view_images"
@@ -111,7 +105,7 @@
 	adding += using
 
 //Radio Configuration
-	using = getFromPool(/obj/abstract/screen)
+	using = new /obj/abstract/screen
 	using.name = "Configure Radio"
 	using.icon = 'icons/mob/screen_ai.dmi'
 	using.icon_state = "change_radio"

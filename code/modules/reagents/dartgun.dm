@@ -67,11 +67,8 @@
 /obj/item/weapon/gun/dartgun/examine(mob/user)
 	..()
 	if (beakers.len)
-		to_chat(user, "<span class='info'>[src] contains:</span>")
 		for(var/obj/item/weapon/reagent_containers/glass/beaker/B in beakers)
-			if(B.reagents && B.reagents.reagent_list.len)
-				for(var/datum/reagent/R in B.reagents.reagent_list)
-					to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
+			B.reagents.get_examine(user)
 
 /obj/item/weapon/gun/dartgun/attackby(obj/item/I as obj, mob/user as mob)
 	if(istype(I, /obj/item/weapon/dart_cartridge))
@@ -163,7 +160,7 @@
 			update_icon()
 		return 1
 
-/obj/item/weapon/gun/dartgun/afterattack(atom/target as mob|obj|turf|area, mob/user , flag)
+/obj/item/weapon/gun/dartgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(target == user)
 		return
 	..()
@@ -257,7 +254,7 @@
 	src.updateUsrDialog()
 	return
 
-/obj/item/weapon/gun/dartgun/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/dartgun/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(cartridge)
 		..()
 	else

@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -19,14 +18,9 @@ var/list/cyborg_list = list()
 	var/startup_sound = 'sound/voice/liveagain.ogg'
 	var/startup_vary = TRUE //Does the startup sounds vary?
 
-	// Alerts
-	var/pressure_alert = FALSE
-	var/temp_alert = FALSE
-
 	var/obj/item/device/station_map/station_holomap = null
 
 	//Hud stuff
-	var/obj/abstract/screen/cells = null
 	var/obj/abstract/screen/inv1 = null
 	var/obj/abstract/screen/inv2 = null
 	var/obj/abstract/screen/inv3 = null
@@ -148,6 +142,11 @@ var/list/cyborg_list = list()
 
 	..()
 
+	if (mind && !stored_freqs)
+		spawn(1)
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+		stored_freqs = 1
+
 	if(cell)
 		var/datum/robot_component/cell_component = components["power cell"]
 		cell_component.wrapped = cell
@@ -173,13 +172,18 @@ var/list/cyborg_list = list()
 	if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
+		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: Link to [src] established.</span>")
 		lawsync()
 		lawupdate = TRUE
 	else
 		lawupdate = FALSE
 
-/mob/living/silicon/robot/proc/disconnect_AI()
+/mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
 	if(connected_ai)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
+		if(announce)
+			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
 		connected_ai.connected_robots -= src
 		connected_ai = null
 
@@ -207,33 +211,28 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
-	if(cells)
-		returnToPool(cells)
-		if(client)
-			client.screen -= cells
-		cells = null //TODO: Move to mob level helper
 	if(inv1)
-		returnToPool(inv1)
+		qdel(inv1)
 		if(client)
 			client.screen -= inv1
 		inv1 = null
 	if(inv2)
-		returnToPool(inv2)
+		qdel(inv2)
 		if(client)
 			client.screen -= inv2
 		inv2 = null
 	if(inv3)
-		returnToPool(inv3)
+		qdel(inv3)
 		if(client)
 			client.screen -= inv3
 		inv3 = null
 	if(robot_modules_background)
-		returnToPool(robot_modules_background)
+		qdel(robot_modules_background)
 		if(client)
 			client.screen -= robot_modules_background
 		robot_modules_background = null
 	if(sensor)
-		returnToPool(sensor)
+		qdel(sensor)
 		if(client)
 			client.screen -= sensor
 		sensor = null
@@ -299,6 +298,8 @@ var/list/cyborg_list = list()
 		changed_name = custom_name
 	else
 		changed_name = "[modtype] [braintype]-[num2text(ident)]"
+	if(connected_ai)
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: unit [name] renamed to [changed_name].</span>")
 	real_name = changed_name
 	name = real_name
 
@@ -376,7 +377,6 @@ var/list/cyborg_list = list()
 	else
 		gib()
 		return TRUE
-	return FALSE
 
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
@@ -996,7 +996,7 @@ var/list/cyborg_list = list()
 	if(!istype(I, /obj/item/weapon/card/id) && istype(I, /obj/item))
 		I = I.GetID()
 	if(!I || !I.access) //not ID or no access
-		return TRUE
+		return FALSE
 	for(var/req in req_access)
 		if(!(req in I.access)) //doesn't have this access
 			return FALSE
@@ -1068,7 +1068,7 @@ var/list/cyborg_list = list()
 
 
 /mob/living/silicon/robot/Topic(href, href_list)
-	..()
+	. = ..()
 
 	if(usr && (src != usr))
 		return
@@ -1113,27 +1113,6 @@ var/list/cyborg_list = list()
 			to_chat(src, "Module isn't activated")
 		installed_modules()
 
-	if(href_list["lawc"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawc"])
-		switch(lawcheck[L+1])
-			if("Yes")
-				lawcheck[L+1] = "No"
-			if("No")
-				lawcheck[L+1] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-
-	if(href_list["lawi"]) // Toggling whether or not a law gets stated by the State Laws verb --NeoFite
-		var/L = text2num(href_list["lawi"])
-		switch(ioncheck[L])
-			if("Yes")
-				ioncheck[L] = "No"
-			if("No")
-				ioncheck[L] = "Yes"
-//		to_chat(src, text ("Switching Law [L]'s report status to []", lawcheck[L+1]))
-		checklaws()
-	if(href_list["laws"]) // With how my law selection code works, I changed statelaws from a verb to a proc, and call it through my law selection panel. --NeoFite
-		statelaws()
 	if(href_list["vision"])
 		sensor_mode()
 		installed_modules()
@@ -1195,7 +1174,7 @@ var/list/cyborg_list = list()
 		station_holomap.update_holomap()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(mind && mind.special_role && emagged)
+	if(istraitor(src) && emagged)
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
@@ -1359,3 +1338,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
 	return modulelock
+
+//Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
+/mob/living/silicon/robot/proc/get_percentage_power_for_movement()
+	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)

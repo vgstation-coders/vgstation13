@@ -14,6 +14,7 @@
 	var/mob/affecting = null
 	var/datum/religion/my_rel = new /datum/religion
 	actions_types = list(/datum/action/item_action/convert)
+	rustle_sound = "pageturn"
 
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
@@ -164,7 +165,8 @@
 			A.reagents.add_reagent(HOLYWATER, water2holy)
 
 /obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	playsound(src, "rustle", 50, 1, -5)
+	if(!stealthy(user))
+		playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
 /obj/item/weapon/storage/bible/pickup(mob/living/user as mob)

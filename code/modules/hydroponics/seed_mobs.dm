@@ -60,13 +60,9 @@
 		O = pick(currently_querying)
 		while(currently_querying.len && !check_observer(O)) //While we the list has something and
 			currently_querying -= O				//Remove them from the list if they don't get checked properly
-			if(currently_querying.len) // Are we out of people?
-				O = null // Don't want to transfer a non-observer into a diona.
-				break
+			if(!currently_querying.len) // Are we out of people?
+				return
 			O = pick(currently_querying)
-
-		if(!check_observer(O))
-			return
 
 		transfer_personality(O.client, host)
 
@@ -106,7 +102,7 @@
 /datum/seed/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
 		var/mob/dead/observer/O = locate(href_list["signup"])
-		if(!O)
+		if(!istype(O) || O != usr)
 			return
 
 		volunteer(O)

@@ -16,6 +16,8 @@
 
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
+#define isinsectoid(A) (ishuman(A) && istype(A:species, /datum/species/insectoid))
+
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
 
 #define isgrey(A) (ishuman(A) && istype(A:species, /datum/species/grey))
@@ -136,8 +138,6 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
@@ -153,6 +153,10 @@
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
 #define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
+
+#define isbanana(A) istype(A, /obj/item/weapon/reagent_containers/food/snacks/grown/banana)
+
+#define isgun(A) istype(A, /obj/item/weapon/gun)
 
 #define ispowercell(A) istype(A, /obj/item/weapon/cell)
 
@@ -182,7 +186,7 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -194,9 +198,7 @@
 
 #define isclient(A) (istype(A, /client))
 
-#define isatom(A) (istype(A, /atom))
-
-#define isatommovable(A) (istype(A, /atom/movable))
+#define isatom(A) isloc(A)
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
@@ -212,15 +214,21 @@
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
-#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor))
+#define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
 #define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
+
+#define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
@@ -238,6 +246,10 @@
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
+
+#define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
 
@@ -265,7 +277,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
@@ -280,6 +292,8 @@
 #define isninja(H) (H.mind && H.mind.GetRole(NINJA))
 
 #define isrambler(H) (H.mind && H.mind.GetRole(RAMBLER))
+
+#define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 
@@ -322,15 +336,11 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#define Clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
 
-#define CLAMP01(x) 		(Clamp(x, 0, 1))
+#define CLAMP01(x) 		(clamp(x, 0, 1))
 
 //CPU lag shit
 #define calculateticks(x)	x * world.tick_lag // Converts your ticks to proper tenths.
@@ -379,3 +389,9 @@ proc/get_space_area()
 
 #define create_trader_account create_account("Trader Shoal", 0, null, 0, 1, TRUE)
 //Starts 0 credits, not sourced from any database, earns 0 credits, hidden
+
+// strips all newlines from a string, replacing them with null
+#define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

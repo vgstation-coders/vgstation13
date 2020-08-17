@@ -16,7 +16,6 @@
 	var/machine_flags = 0 // Emulate machinery flags.
 	var/inMachineList = 0
 
-	var/parentMoveKey = null
 	var/turf/turf = null // Updated in addToTurf()/removeFromTurf()
 
 /datum/power_connection/New(var/obj/parent)
@@ -24,7 +23,7 @@
 	power_machines |= src
 
 	// Used for updating turf power_connection lists when moved.
-	parentMoveKey = parent.on_moved.Add(src, "parent_moved")
+	parent.lazy_register_event(/lazy_event/on_moved, src, .proc/parent_moved)
 	addToTurf()
 
 /datum/power_connection/Destroy()
@@ -33,14 +32,13 @@
 
 	// Remember to tell our turf that we're gone.
 	removeFromTurf()
-	parent.on_moved.Remove(parentMoveKey)
-
+	parent.lazy_unregister_event(/lazy_event/on_moved, src, .proc/parent_moved)
 	..()
 
-// CALLBACK from parent.on_moved.
+// CALLBACK from /lazy_event/on_moved.
 // This should never happen, except when Singuloth is doing its shenanigans, as rebuilding
 //  powernets is extremely slow.
-/datum/power_connection/proc/parent_moved(var/list/args)
+/datum/power_connection/proc/parent_moved(atom/movable/mover)
 	removeFromTurf() // Removes old ref
 	addToTurf() // Adds new one
 

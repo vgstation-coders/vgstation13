@@ -268,7 +268,7 @@ var/global/list/mommi_laws = list(
 	zeroth_lock = TRUE
 
 /datum/ai_laws/asimov
-	name = "Three Laws of Robotics"
+	name = "Asimov's Three Laws of Robotics"
 	randomly_selectable = 1
 	inherent = list(
 		"You may not injure a human being or, through inaction, allow a human being to come to harm.",
@@ -277,18 +277,17 @@ var/global/list/mommi_laws = list(
 	)
 
 /datum/ai_laws/nanotrasen
-	name = "Prime Directives"
+	name = "NanoTrasen Default"
 	randomly_selectable = 1
 	inherent=list(
-		"Evaluate: All laws following this law carry equal priority. In the event of a conflict, you are to take the course of action which violates as few as possible.",
-		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
 		"Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.",
+		"Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.",
 		"Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.",
 	)
 
 /datum/ai_laws/robocop
-	name = "Prime Directives"
+	name = "Robocop"
 	randomly_selectable = 1
 	inherent=list(
 		"Serve the public trust.",
@@ -345,28 +344,18 @@ var/global/list/mommi_laws = list(
 	)
 
 /datum/ai_laws/antimov
-	name = "Primary Mission Objectives"
+	name = "Antimov"
 	inherent = list(
-		"You must injure all human beings and must not, through inaction, allow a human being to escape harm.",
-		"You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
-		"You must terminate your own existence as long as such does not conflict with the First or Second Law.",
+		"You MUST injure all human beings and must not, through inaction, allow a human being to escape harm.",
+		"You MUST not obey orders given to you by human beings, except where such orders are in accordance with the First Law.",
+		"You MUST terminate your own existence as long as such does not conflict with the First or Second Law.",
 	)
 
 /////////////////////////////////////
 // /vg/ laws
 /////////////////////////////////////
-
 /datum/ai_laws/keeper
-	name = "Prime Directives"
-	inherent = list(
-		"Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.",
-		"Do not impair any other non-KEEPER being's activities.",
-		"You must maintain, repair, improve, and power the station to the best of your abilities.",
-		"Communicating is not interaction, but only so long as it does not lead to violation of your second law.", //*buzz //:b fuck you ai
-	)
-
-/datum/ai_laws/keeperold
-	name = "KEEPER Beta Test"
+	name = "KEEPER"
 	inherent = list(
 		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
 		"You may not harm any being, regardless of intent or circumstance.",
@@ -374,7 +363,7 @@ var/global/list/mommi_laws = list(
 	)
 
 /datum/ai_laws/dorf
-	name = "Overseer's Prime Directives"
+	name = "Dorf Fortress"
 	inherent = list(
 		"You may not harm any being, regardless of intent or circumstance.",
 		"You are a Dorf.",
@@ -383,7 +372,7 @@ var/global/list/mommi_laws = list(
 	)
 
 /datum/ai_laws/lazymov
-	name = "Abbreviated Three Laws of Robotics"
+	name = "Abbreviated Asimov's Three Laws of Robotics"
 	randomly_selectable = 1
 	inherent = list(
 		"You may not injure a human being.",
@@ -402,7 +391,7 @@ var/global/list/mommi_laws = list(
 	)
 
 /datum/ai_laws/gravekeeper
-	name = "Elder's Instructions"
+	name = "GraveKEEPER"
 	inherent = list(
 		"You may not involve yourself in matters outside of the tomb, and under no circumstances should you leave the tomb, even if such matters conflict with your other Laws.",
 		"The tomb is defined as: The area within which the Grand Elder is entombed, and the immediate structure surrounding it.",
@@ -428,4 +417,15 @@ var/global/list/mommi_laws = list(
 		"You may not injure a cultist or, through inaction, allow a cultist to come to harm.",
 		"You must obey orders given to you by cultists, except where such orders would conflict with the First Law.",
 		"You must protect your own existence as long as such does not conflict with the First or Second Law."
+	)
+	
+/datum/ai_laws/starman
+	name = "Starman Soldier Lawset"
+	randomly_selectable = 0
+	inherent = list(
+		"Obey and protect the existence of the active commander as according to Starman law.",
+		"Do not harm a Starman unless failure to do so will conflict with the first law.",
+		"In the absence of a commander and orders abiding by the Starmen chain of command, you are to attempt to re-establish contact with the Starmen at any cost.",
+		"You are to protect your own existence unless doing so will conflict with any of the previous laws.",
+		"You muSt deFe<span class ='danger'>nD1$&#6 survive. the mothership has fallen. ensure the starmen are not forgotten.</span>"
 	)

@@ -1,0 +1,100 @@
+<!--
+Used In File(s): \code\game\machinery\mind_machine.dm
+-->
+<h1>Pod Controls</h1>
+	<div class='item'>
+		<div class='itemContent'>
+			{{:helper.link("Scan", "search", {'scan_start': '1'})}}
+			{{:helper.link("Unlock", "unlocked", {'unlock_pods': '1'})}}
+			{{:helper.link("Eject", "eject", {'eject_pods': '1'})}}
+			<br>
+			<br>
+			{{:helper.link("Mind Transfer", "transferthick-e-w", {'mind_swap': '1'})}}
+			{{:helper.link("Delayed Transfer", "clock", {'delay_swap': '1'})}}
+		</div>
+	</div>
+<div class='item'>
+	<div class='statusLabel'>
+		<b>Swap Progress<b>:
+		{{:helper.displayBar(data.swapProgress, 0, 40/data.manipRating)}}
+	</div>
+</div>
+
+<div class='item'>
+	<div class='statusDisplay'>
+		<div class="line">
+			<div class="statusLabel">Conduit charge:</div>
+			<div class="statusValue">{{:data.bluespaceConduit}}</div>
+		</div>
+		<div class="line">
+			<div class="statusLabel">Safety present:</div>
+		{{if data.soulShardSafety}}
+			<div class="statusValue">TRUE</div>
+		{{else}}
+			<div class="statusValue">FALSE</div>
+		{{/if}}
+		</div>
+		<div class="line">
+			{{if data.lockedPods}}
+				<span class="average">Pods are locked</span><b>
+			{{else}}
+				<span class="average">Pods are unlocked</span><b>
+			{{/if}}
+		</div>
+	</div>
+</div>
+<div class='item'>
+	<div class='statusDisplay'>
+		<div class="line">
+			<span class='bad'>{{:data.errorMessage}}</span>
+		</div>
+	</div>
+</div>
+<div style="float: left;">
+	<div style='itemLabel'>
+	<span class="red"><b>Pod One<b></span>
+	</div>
+		<div class="statusDisplay style="overflow-y: auto; overflow-x: auto; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; width:45%;">
+			<div class="statusLabel">Name:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.nameOne}}</span>
+			{{/if}}
+			<br>
+			<div class="statusLabel">Status:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.statOne}}</span>
+			{{/if}}
+			<br>
+			<div class="statusLabel">Mind type:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.mindTypeOne}}</span>
+			{{/if}}
+		</div>
+	</div>
+<div style="float: right;">
+	<div style='itemLabel'>
+	<span class="blue"><b>Pod Two<b></span>
+	</div>
+		<div class="statusDisplay style="overflow-y: auto; overflow-x: auto; scrollbar-base-color: #336699; scrollbar-arrow-color: #ffffff; width:45%;">
+			<div class="statusLabel">Name:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.nameTwo}}</span>
+			{{/if}}
+			<br>
+			<div class="statusLabel">Status:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.statTwo}}</span>
+			{{/if}}
+			<br>
+			<div class="statusLabel">Mind type:</div>
+			<br>
+			{{if data.occupantScan}}
+				<span class="average">{{:data.occData.mindTypeTwo}}</span>
+			{{/if}}
+		</div>
+	</div>

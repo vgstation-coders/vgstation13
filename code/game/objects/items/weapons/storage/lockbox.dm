@@ -53,7 +53,7 @@
 			return I.registered_name
 		else
 			return "UNKNOWN" // Shouldn't happen but eh
-	
+
 	else if (issilicon(user)) // Currently, borgos cannot open lockboxes, but if you want to make a module who can, this will work.
 		return "[user]"
 
@@ -73,7 +73,7 @@
 			return
 		return toggle(user, I.registered_name)
 	if (isPDA(W))
-		var/obj/item/device/pda/P = W 
+		var/obj/item/device/pda/P = W
 		var/obj/item/weapon/card/id/I = P.id
 		if (!I)
 			return
@@ -184,6 +184,16 @@
 	new /obj/item/weapon/implantcase/loyalty(src)
 	new /obj/item/weapon/implantcase/loyalty(src)
 	new /obj/item/weapon/implanter/loyalty(src)
+
+/obj/item/weapon/storage/lockbox/exile
+	name = "lockbox (exile implants)"
+	req_one_access = list(access_armory)
+
+/obj/item/weapon/storage/lockbox/exile/New()
+	..()
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implantcase/exile(src)
+	new /obj/item/weapon/implanter/exile(src)
 
 /obj/item/weapon/storage/lockbox/tracking
 	name = "lockbox (tracking implants)"
@@ -319,3 +329,205 @@
 			return 1
 	else
 		to_chat(usr, "<span class='warning'>You lack the dexterity to do this.</span>")
+
+
+//-------------------------Disk Box, Large Disk Box-------------------------
+
+
+/obj/item/weapon/storage/lockbox/diskettebox
+	name = "diskette box"
+	desc = "A lockable box for storing data disks."
+	icon = 'icons/obj/storage/datadisks.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	icon_state = "map_diskbox"
+	item_state = "diskbox"
+	can_only_hold = list("/obj/item/weapon/disk")
+	fits_max_w_class = 3
+	w_class = W_CLASS_MEDIUM
+	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
+	storage_slots = 7
+	req_one_access = list()
+	var/icon_alt = ""
+
+/obj/item/weapon/storage/lockbox/diskettebox/New()
+	..()
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open
+	icon_state = "map_diskbox_open"
+	locked = FALSE
+
+/obj/item/weapon/storage/lockbox/diskettebox/large
+	name = "large diskette box"
+	desc = "A bigger lockable box for storing data disks."
+	icon_state = "map_diskbox_large"
+	icon_alt = "_large"
+	storage_slots = 14
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open
+	icon_state = "map_diskbox_large_open"
+	locked = FALSE
+
+//---------------------------------PRESETS---------------------------------
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk
+	name = "flora diskette box"
+	desc = "A lockable box of flora data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/botanydisk/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk/botany(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk
+	name = "large flora diskette box"
+	desc = "A large lockable box of flora data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/botanydisk/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk/botany(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/cloning
+	name = "cloning diskette box"
+	desc = "A lockable box of cloning data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/cloning/New()
+	..()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/weapon/disk/data(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/research
+	name = "research diskette box"
+	desc = "A lockable box of tech data disks."
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/research/New()
+	..()
+	new /obj/item/weapon/disk/tech_disk(src)
+	new /obj/item/weapon/disk/tech_disk(src)
+	new /obj/item/weapon/disk/design_disk(src)
+	new /obj/item/weapon/disk/design_disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/open/blanks/New()
+	..()
+	var/j = rand(1,round(storage_slots/2))//up to half the slots filled with useless disks
+	for(var/i = 1 to j)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks/New()
+	..()
+	var/j = rand(1,round(storage_slots/2))//up to half the slots filled with useless disks
+	for(var/i = 1 to j)
+		new /obj/item/weapon/disk(src)
+	update_icon()
+
+//---------------------------------PRESETS END-----------------------------
+
+/obj/item/weapon/storage/lockbox/diskettebox/update_icon()
+	overlays.len = 0
+	icon_state = "diskbox[icon_alt]"
+	item_state = "diskbox"
+	if (!broken && !locked)
+		overlays += image('icons/obj/storage/datadisks.dmi',src,"cover[icon_alt]_open")
+
+	var/i = 0
+	for (var/obj/item/weapon/disk/disk in contents)
+		var/image/disk_image = image('icons/obj/storage/datadisks.dmi',src,disk.icon_state)
+		if (icon_alt)
+			disk_image.pixel_x -= 3
+			if ((i % 2) != 0)
+				disk_image.pixel_x += 7
+			disk_image.pixel_x -= round(i/2)
+			disk_image.pixel_y -= round(i/2)
+			if (i >= 12)
+				disk_image.pixel_y -= 1
+		else
+			disk_image.pixel_x -= i
+			disk_image.pixel_y -= i
+			if (i >= 6)
+				disk_image.pixel_y -= 1
+		overlays += disk_image
+		i++
+
+	overlays += image('icons/obj/storage/datadisks.dmi',src,"overlay[icon_alt]")
+
+	if (!broken)
+		overlays += image(icon, src, "led[locked]")
+		if(locked)
+			overlays += image(icon, src, "cover[icon_alt]")
+	else
+		overlays += image(icon, src, "ledb")
+
+/obj/item/weapon/storage/lockbox/diskettebox/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	. = ..()
+	if (istype(W,/obj/item/weapon/card))
+		playsound(src, get_sfx("card_swipe"), 60, 1, -5)
+	update_icon()
+
+/obj/item/weapon/storage/lockbox/diskettebox/handle_item_insertion(obj/item/W as obj, prevent_warning = 0)
+	.=..()
+	if (.)
+		playsound(loc, 'sound/machines/click.ogg', 30, -5)
+
+/obj/item/weapon/storage/lockbox/security_sponsored
+	name = "sponsored Team Security lockbox"
+	desc = "A sponsor-sticker-plastered lockbox."
+	req_one_access = list(access_brig)
+	storage_slots = 6
+
+/obj/item/weapon/storage/lockbox/security_sponsored/New()
+	..()
+	for(var/i in 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/donitos/coolranch(src)
+	new /obj/item/weapon/implanter/spesstv(src)
+
+/obj/item/weapon/storage/lockbox/team_security_cameras
+	name = "sponsored Team Security cameras lockbox"
+	desc = "A sponsor-sticker-plastered lockbox."
+	req_one_access = list(access_brig)
+	storage_slots = 6
+
+/obj/item/weapon/storage/lockbox/team_security_cameras/New()
+	..()
+	for(var/i in 1 to 6)
+		new /obj/item/clothing/accessory/spesstv_tactical_camera(src)
+
+/obj/item/weapon/storage/lockbox/advanced
+	name = "advanced lockbox"
+	desc = "A highly advanced lockbox from Alcatraz IV, from series RE-4. It has ablative plating to repel lasers and its flat surfaces avoid the vulnerabilities of an ablative vest. Its shock-dispersing core makes it impossible to bomb or drill, it's reinforced against ballistics, and it can reactively teleport. The solid state controller on its scanner cannot be disrupted by electromagnetic pulse and uses elliptic-curve cryptography to frustrate common sequencer hacking. This lockbox is probably more valuable than whatever is inside it."
+	health = 200
+	storage_slots = 1
+	fits_max_w_class = W_CLASS_LARGE
+
+/obj/item/weapon/storage/lockbox/advanced/ex_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emp_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/emag_act()
+	react()
+
+/obj/item/weapon/storage/lockbox/advanced/bullet_act(var/obj/item/projectile/P)
+	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
+		visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s ablative plating!</span>")
+		P.reflected = 1
+		P.rebound(src)
+		return -1
+	react()
+	return ..()
+
+/obj/item/weapon/storage/lockbox/advanced/proc/react()
+	teleport_radius(6)
+	visible_message("<span class='danger'>\The [src] displaces itself with its reactive teleport system!</span>")
+	playsound(src, 'sound/effects/teleport.ogg', 50, 1)
+
+/obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
+	..()
+	req_one_access = list(access_security)
+	new /obj/item/weapon/gun/energy/shotgun(src)

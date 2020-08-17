@@ -28,14 +28,15 @@
 
 //List of spawnable vaults is in code/modules/randomMaps/vault_definitions.dm
 
+//This a random vault spawns somewhere in this area. Then this area is replaced with space!
 /area/random_vault
 	name = "random vault area"
 	desc = "Spawn a vault in there somewhere"
 	icon_state = "random_vault"
-	flags = NO_PERSISTENCE
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
-//This a random vault spawns somewhere in this area. Then this area is replaced with space!
-/area/random_vault
+/area/vault
+	flags = NO_PERSISTENCE|NO_PACIFICATION
 
 /proc/get_map_element_objects(base_type = /datum/map_element/vault)
 	var/list/list_of_vaults = typesof(base_type) - base_type
@@ -78,7 +79,7 @@
 	message_admins("<span class='info'>Spawning [vault_number] vaults in space!</span>")
 
 	var/area/A = locate(/area/random_vault)
-	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE)
+	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_on_map)
 
 	for(var/turf/TURF in A) //Replace all of the temporary areas with space
 		TURF.set_area(space)
@@ -98,6 +99,10 @@
 	var/list/dimensions = E.get_dimensions()
 	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
 	return result
+
+/proc/stay_on_map(var/datum/map_element/E, var/turf/start_turf)
+	return start_turf && (start_turf.z <= map.zDeepSpace)
+
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)
@@ -173,15 +178,17 @@
 			continue
 		var/sanity = 0
 		var/turf/new_spawn_point
-		while(1)
+		do
 			sanity++
-			if(sanity > 100)
-				break
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
 			if(filter_function && !call(filter_function)(ME, new_spawn_point))
+				new_spawn_point = null
 				continue
 			break
+		while(sanity < 100)
+		if(!new_spawn_point)
+			continue
 		var/vault_x = new_spawn_point.x
 		var/vault_y = new_spawn_point.y
 		var/vault_z = new_spawn_point.z

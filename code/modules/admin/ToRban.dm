@@ -57,7 +57,7 @@
 			if(config)
 				if(config.ToRban)
 					config.ToRban = 0
-					message_admins("<font color='red'>ToR banning disabled.</font>")
+					message_admins("<span class='red'>ToR banning disabled.</span>")
 				else
 					config.ToRban = 1
 					message_admins("<font colot='green'>ToR banning enabled.</font>")
@@ -85,7 +85,7 @@
 				if(ToRban_isbanned(input))
 					to_chat(src, "<font color='green'><b>Address is a known ToR address</b></font>")
 				else
-					to_chat(src, "<font color='red'><b>Address is not a known ToR address</b></font>")
+					to_chat(src, "<span class='red'><b>Address is not a known ToR address</b></span>")
 	return
 
 #undef TORFILE

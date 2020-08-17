@@ -16,6 +16,7 @@
 	layer = BINARY_PIPE_LAYER
 	var/on = FALSE
 
+
 /obj/machinery/atmospherics/binary/investigation_log(var/subject, var/message)
 	activity_log += ..()
 
@@ -35,6 +36,26 @@
 	update_icon()
 	air1.volume = 200
 	air2.volume = 200
+
+
+/obj/machinery/atmospherics/binary/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/binary/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
+
 
 /obj/machinery/atmospherics/binary/update_planes_and_layers()
 	if (level == LEVEL_BELOW_FLOOR)
@@ -86,6 +107,19 @@
 		node2.build_network()
 	return 1
 
+//this is used when a machine_flags = WRENCHMOVE machine gets anchored down
+//we want to check that it doesn't form any connections where there is already a connection
+/obj/machinery/atmospherics/binary/wrenchAnchor(var/mob/user, var/obj/item/I)
+	//this has to be first because ..() already starts the anchoring
+	if(!anchored)
+		for(var/obj/machinery/atmospherics/M in src.loc)
+			if(M == src || M.piping_layer != src.piping_layer && !(M.pipe_flags & ALL_LAYER))
+				continue
+			if(M.has_initialize_direction(dir | turn(dir, 180), PIPE_TYPE_STANDARD))
+				to_chat(user, "<span class='warning'>There is already a pipe connection in that direction.</span>")
+				return FALSE
+	. = ..()
+
 // Housekeeping and pipe network stuff below
 /obj/machinery/atmospherics/binary/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(reference == node1)
@@ -105,11 +139,11 @@
 	if(node1)
 		node1.disconnect(src)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 	if(node2)
 		node2.disconnect(src)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 
 	node1 = null
 	node2 = null
@@ -131,12 +165,12 @@
 
 /obj/machinery/atmospherics/binary/build_network()
 	if(!network1 && node1)
-		network1 = getFromPool(/datum/pipe_network)
+		network1 = new /datum/pipe_network
 		network1.normal_members += src
 		network1.build_network(node1, src)
 
 	if(!network2 && node2)
-		network2 = getFromPool(/datum/pipe_network)
+		network2 = new /datum/pipe_network
 		network2.normal_members += src
 		network2.build_network(node2, src)
 
@@ -173,12 +207,12 @@
 /obj/machinery/atmospherics/binary/disconnect(obj/machinery/atmospherics/reference)
 	if(reference==node1)
 		if(network1)
-			returnToPool(network1)
+			qdel(network1)
 		node1 = null
 
 	else if(reference==node2)
 		if(network2)
-			returnToPool(network2)
+			qdel(network2)
 		node2 = null
 
 	return ..()

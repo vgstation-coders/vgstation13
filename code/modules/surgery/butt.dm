@@ -21,8 +21,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/slice_cheek/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_HAS_A_BUTT && istype(target)
@@ -31,7 +30,7 @@
 /datum/surgery_step/butt/slice_cheek/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] begins to slice [target]'s ass cheek with \the [tool].", \
 	"You begin to slice [target]'s ass cheek with \the [tool].")
-	target.custom_pain("You haven't felt a pain like this since college!",1)
+	target.custom_pain("You haven't felt a pain like this since college!",1, scream=TRUE)
 	..()
 
 
@@ -62,8 +61,7 @@
 		/obj/item/weapon/shard = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt/seperate_anus/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt == SURGERY_BUTT_CUT
@@ -72,7 +70,7 @@
 /datum/surgery_step/butt/seperate_anus/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] starts shortening the end of [target]'s anus with \the [tool].", \
 	"You start shortening the end of [target]'s anus with \the [tool].")
-	target.custom_pain("It feels like that hamster is chewing its way out!",1)
+	target.custom_pain("It feels like that hamster is chewing its way out!",1, scream=TRUE)
 	..()
 
 
@@ -97,8 +95,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/saw_hip/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SEPARATE_ANUS
@@ -106,7 +103,7 @@
 /datum/surgery_step/butt/saw_hip/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] begins to cut off ends of [target]'s hip with \the [tool].", \
 	"You begin to cut off ends of [target]'s hip with \the [tool].")
-	target.custom_pain("THE PAIN!",1)
+	target.custom_pain("THE PAIN!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/butt/saw_hip/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -137,8 +134,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt/cauterize_butt/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP
@@ -146,7 +142,7 @@
 /datum/surgery_step/butt/cauterize_butt/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("[user] begins to cauterize [target]'s ass with \the [tool].", \
 	"You begin to cauterize [target]'s ass with \the [tool].")
-	target.custom_pain("IT BUURNS!",1)
+	target.custom_pain("IT BUURNS!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/butt/cauterize_butt/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -168,10 +164,11 @@
 //////////////////////////////////////////////////////////////////
 
 /datum/surgery_step/butt_replace
-	/datum/surgery_step/butt_replace/priority = 2 //this is more important than anything else!
-	/datum/surgery_step/butt_replace/can_infect = 0
-	/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == LIMB_GROIN && hasorgans(target)
+	priority = 2 //this is more important than anything else!
+	can_infect = 0
+
+/datum/surgery_step/butt_replace/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	return target_zone == LIMB_GROIN && hasorgans(target)
 
 
 /////PULL FLESH////////
@@ -182,8 +179,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/peel/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BEGIN_BUTT_REPLACE && target.op_stage.butt == SURGERY_NO_BUTT && istype(target)
@@ -213,8 +209,7 @@
 		/obj/item/weapon/screwdriver = 75,
 		)
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt_replace/hips/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BUTT_PEEL && istype(target)
@@ -245,8 +240,7 @@
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/shape/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt_replace == SURGERY_REPLACE_HIP && istype(target)
@@ -274,8 +268,7 @@
 		/obj/item/clothing/head/butt = 100,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/butt_replace/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.butt_replace == SURGERY_BUTT_SHAPE && istype(target)
@@ -322,8 +315,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/butt_replace/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target_zone == LIMB_GROIN && target.op_stage.butt == SURGERY_SAW_HIP && target.op_stage.butt_replace
@@ -339,7 +331,7 @@
 	"<span class='notice'>You have cauterized [target]'s ass with \the [tool].</span>")
 	target.op_stage.butt_replace = SURGERY_HAS_A_BUTT
 	affected.open = 0
-	affected.clamp()
+	affected.clamp_wounds()
 
 /datum/surgery_step/butt_replace/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	user.visible_message("<span class='warning'>[user]'s hand slips, burning the flesh around [target]'s butt with /the [tool]!</span>" , \

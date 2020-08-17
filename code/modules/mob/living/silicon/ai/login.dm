@@ -10,7 +10,8 @@
 	if(ismalf(src))
 		to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
 
-	for(var/obj/effect/rune/rune in rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	for(var/obj/effect/rune/rune in rune_set.rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
 		client.images += rune.blood_image
 	regenerate_icons()
 
@@ -19,4 +20,9 @@
 			O.mode = 1
 			O.emotion = "Neutral"
 	view_core()
+	if (mind && !stored_freqs)
+		to_chat(src, "The various frequencies used by the crew to communicate have been stored in your mind. Use the verb <i>Notes</i> to access them.")
+		spawn(1)
+			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
+		stored_freqs = 1
 	client.CAN_MOVE_DIAGONALLY = TRUE

@@ -12,7 +12,7 @@
 		if(ghost && ghost.can_reenter_corpse)
 			key = mind.key // Force the ghost in here
 	if(Owner)
-		faction = "\ref[Owner]"
+		faction = "necro"
 		friends.Add(Owner)
 		creator = Owner
 		if(client)
@@ -134,6 +134,10 @@
 	search_objects = 1
 
 	var/list/clothing = list() //If the previous corpse had clothing, it 'wears' it
+
+/mob/living/simple_animal/hostile/necro/zombie/New() //(mob/living/L)
+	..()
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudundead")
 
 /mob/living/simple_animal/hostile/necro/zombie/CanAttack(var/atom/the_target)
 	if(the_target == creator)
@@ -272,7 +276,7 @@
 
 		animate(src, transform = final_transform, pixel_y = final_pixel_y, dir = final_dir, time = 2, easing = EASE_IN | EASE_OUT)
 
-/mob/living/simple_animal/hostile/necro/zombie/revive()
+/mob/living/simple_animal/hostile/necro/zombie/revive(refreshbutcher = 1)
 	..()
 	times_revived += 1
 	lying = 0
@@ -419,7 +423,10 @@
 	if(target.health < -150  && isjusthuman(target)) //Gotta be a bit chewed on
 		visible_message("<span class='warning'>\The [target] stirs, as if it's trying to get up.</span>")
 		if(prob(zombify_chance))
-			zombify(target)
+			var/master = creator ? creator : src
+			target.make_zombie(master)
+
+/*
 
 /mob/living/simple_animal/hostile/necro/zombie/putrid/proc/zombify(var/mob/living/carbon/human/target)
 	//Make the target drop their stuff, move them into the contents of the zombie so the ghost can at least see how its zombie self is doing
@@ -430,6 +437,8 @@
 	new_zombie.host = target
 	target.ghostize()
 	target.loc = null
+
+*/
 
 /mob/living/simple_animal/hostile/necro/zombie/proc/get_clothes(var/mob/target, var/mob/living/simple_animal/hostile/necro/zombie/new_zombie)
 	/*Check what mob type the target is, if it's carbon, run through their wear_ slots see human_defines.dm L#34

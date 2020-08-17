@@ -19,8 +19,8 @@
 
 	var/bibledelay = 0 // LOL NO SPAM (1 minute delay) -- Doohl
 	var/booklist
-
-	machine_flags = EMAGGABLE
+	pass_flags = PASSTABLE
+	machine_flags = EMAGGABLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/computer/library/checkout/attack_hand(var/mob/user as mob)
 	if(..())
@@ -93,7 +93,7 @@
 				<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"}
 		if(4)
 			dat += "<h3>External Archive</h3>"
-			if(!dbcon_old.IsConnected())
+			if(!SSdbcore.IsConnected())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font>"
 			else
 				num_results = src.get_num_results()
@@ -228,13 +228,13 @@
 		else
 			var/pn = text2num(href_list["pagenum"])
 			if(!isnull(pn))
-				page_num = Clamp(pn, 0, num_pages)
+				page_num = clamp(pn, 0, num_pages)
 
 	if(href_list["page"])
 		if(num_pages == 0)
 			page_num = 0
 		else
-			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
+			page_num = clamp(text2num(href_list["page"]), 0, num_pages)
 	if(href_list["settitle"])
 		var/newtitle = input("Enter a title to search for:") as text|null
 		if(newtitle)
@@ -267,14 +267,16 @@
 		var/datum/cachedbook/target = getBookByID(href_list["del"]) // Sanitized in getBookByID
 		var/ans = alert(usr, "Are you sure you wish to delete \"[target.title]\", by [target.author]? This cannot be undone.", "Library System", "Yes", "No")
 		if(ans=="Yes")
-			var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE id=[target.id]")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE id=:id", list("id" = "[target.id]"))
 			var/response = query.Execute()
 			if(!response)
 				to_chat(usr, query.ErrorMsg())
+				qdel(query)
 				return
 			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
 			message_admins("[key_name_admin(usr)] has deleted \"[target.title]\", by [target.author] ([target.ckey])!")
 			src.updateUsrDialog()
+			qdel(query)
 			return
 
 	if(href_list["delbyckey"])
@@ -284,17 +286,19 @@
 		var/tckey = ckey(href_list["delbyckey"])
 		var/ans = alert(usr,"Are you sure you wish to delete all books by [tckey]? This cannot be undone.", "Library System", "Yes", "No")
 		if(ans=="Yes")
-			var/DBQuery/query = dbcon_old.NewQuery("DELETE FROM library WHERE ckey='[sanitizeSQL(tckey)]'")
-			var/response = query.Execute()
+			var/datum/DBQuery/query = SSdbcore.NewQuery("DELETE FROM library WHERE ckey=:tckey", list("tckey" = tckey))
+			var/datum/DBQuery/response = query.Execute()
 			if(!response)
 				to_chat(usr, query.ErrorMsg())
+				qdel(query)
 				return
-			var/affected=query.RowsAffected()
-			if(affected==0)
+			if(response.item.len==0)
 				to_chat(usr, "<span class='danger'>Unable to find any matching rows.</span>")
+				qdel(query)
 				return
-			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted [affected] books written by [tckey]!")
-			message_admins("[key_name_admin(usr)] has deleted [affected] books written by [tckey]!")
+			log_admin("LIBRARY: [usr.name]/[usr.key] has deleted [response.item.len] books written by [tckey]!")
+			message_admins("[key_name_admin(usr)] has deleted [response.item.len] books written by [tckey]!")
+			qdel(query)
 			src.updateUsrDialog()
 			return
 
@@ -390,15 +394,21 @@
 			if(scanner.cache)
 				var/choice = input("Are you certain you wish to upload this title to the Archive?") in list("Confirm", "Abort")
 				if(choice == "Confirm")
-					establish_old_db_connection()
-					if(!dbcon_old.IsConnected())
+					if(!SSdbcore.Connect())
 						alert("Connection to Archive has been severed. Aborting.")
 					else
-						var/sqltitle = sanitizeSQL(scanner.cache.name)
-						var/sqlauthor = sanitizeSQL(scanner.cache.author)
-						var/sqlcontent = sanitizeSQL(scanner.cache.dat)
-						var/sqlcategory = sanitizeSQL(upload_category)
-						var/DBQuery/query = dbcon_old.NewQuery("INSERT INTO library (author, title, content, category, ckey) VALUES ('[sqlauthor]', '[sqltitle]', '[sqlcontent]', '[sqlcategory]', '[ckey(usr.key)]')")
+						var/sqltitle = scanner.cache.name
+						var/sqlauthor = scanner.cache.author
+						var/sqlcontent = scanner.cache.dat
+						var/sqlcategory = upload_category
+						var/datum/DBQuery/query = SSdbcore.NewQuery("INSERT INTO library (author, title, content, category, ckey) VALUES (:author, :title, :content, :category, :ckey)",
+							list(
+								"author" = sqlauthor,
+								"title" =  sqltitle,
+								"content" = sqlcontent,
+								"category" = sqlcategory,
+								"ckey" = "[ckey(usr.key)]"
+							))
 						var/response = query.Execute()
 						if(!response)
 							to_chat(usr, query.ErrorMsg())
@@ -406,6 +416,7 @@
 							world.log << response
 							log_admin("[usr.name]/[usr.key] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
 							message_admins("[key_name_admin(usr)] has uploaded the book titled [scanner.cache.name], [length(scanner.cache.dat)] characters in length")
+						qdel(query)
 
 	if(href_list["id"])
 		if(href_list["id"]=="-1")
@@ -413,7 +424,7 @@
 			if(!href_list["id"])
 				return
 
-		if(!dbcon_old.IsConnected())
+		if(!SSdbcore.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 			return
 
@@ -438,7 +449,7 @@
 			return
 		var/bookid = href_list["manual"]
 
-		if(!dbcon_old.IsConnected())
+		if(!SSdbcore.IsConnected())
 			alert("Connection to Archive has been severed. Aborting.")
 			return
 

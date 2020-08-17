@@ -9,11 +9,25 @@
  * Lasertag
  */
 
+var/list/tag_suits_list = list()
+
 /obj/item/clothing/suit/tag
 	blood_overlay_type = "armor"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_MAGNETS + "=2"
 	body_parts_covered = FULL_TORSO
 	siemens_coefficient = 3.0
+	var/datum/laser_tag_game/my_laser_tag_game = null
+	var/datum/laser_tag_participant/player = null
+
+/obj/item/clothing/suit/tag/New()
+	tag_suits_list += src
+	return ..()
+
+/obj/item/clothing/suit/tag/Destroy()
+	tag_suits_list -= src
+	my_laser_tag_game = null
+	player = null
+	return ..()
 
 /obj/item/clothing/suit/tag/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
@@ -33,6 +47,156 @@
 			L.update_icon()
 		return 1
 	return ..()
+
+/obj/item/clothing/suit/tag/attack_self(var/mob/living/carbon/human/H)
+	if (H.incapacitated())
+		return
+	else
+		H << browse(get_window_text(H),"window=laser_tag_window;size=700x500")
+
+/obj/item/clothing/suit/tag/proc/get_window_text(var/mob/living/carbon/human/H)
+	var/dat = list()
+	dat += "<h3>Laser tag games</h3> <br/>"
+	dat += "<b>Tag:</b> [get_gamer_tag(H)]<br/>"
+	dat += "<hr/>"
+	if (!my_laser_tag_game)
+		dat += "Available laser tag games: <br/>"
+		for (var/datum/laser_tag_game/game in laser_tag_games)
+			dat += "<b>[game.name]</b> - <a href='?src=\ref[src]&join_game=\ref[game]'>Join!</a> <br/>'"
+	else
+		dat += "My game: <b>[my_laser_tag_game.name]</b>"
+		if (my_laser_tag_game.owner == player)
+			dat += " -- <a href='?src=\ref[src]&edit_game=\ref[my_laser_tag_game]'>Edit/delete</a>"
+		dat += "<br/>"
+		dat += "<b>Mode:</b> [my_laser_tag_game.mode] <br/>"
+		dat += "<a href='?src=\ref[src]&get_score=\ref[my_laser_tag_game]'>Get scoreboard</a><br/>"
+		dat += "<a href='?src=\ref[src]&leave_game=\ref[my_laser_tag_game]'>Leave game</a><br/>"
+	dat += "<hr/>"
+	dat += "<a href='?src=\ref[src]&create_game=1'>Create a new game</a><br/>"
+	dat += "<hr/>"
+	dat += "<a href='?src=\ref[src]&clear_gamertag=1'>Clear tag</a>"
+
+	return jointext(dat,"")
+
+/obj/item/clothing/suit/tag/proc/refresh_edit_window(var/mob/user, var/datum/laser_tag_game/my_laser_tag_game)
+	var/dat = {"
+		<h3>Game parameters</h3>
+		<br/>
+		<b>Mode:</b> <a href='?src=\ref[src]&game_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.mode] </a><br/>
+		<b>Fire mode:</b> <a href='?src=\ref[src]&fire_mode=\ref[my_laser_tag_game]'>[my_laser_tag_game.fire_mode] </a> <br/>
+		<b>Stun time:</b> <a href='?src=\ref[src]&stun_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.stun_time] </a> <br/>
+		<b>Disable time:</b> <a href='?src=\ref[src]&disable_time=\ref[my_laser_tag_game]'>[my_laser_tag_game.disable_time] </a> <br/>
+		<b><a href='?src=\ref[src]&delete_game=\ref[my_laser_tag_game]'>Delete the game</a></b> <br/>
+		<br/>
+		<b><a href='?src=\ref[src]&edition_done=\ref[my_laser_tag_game]'>Done</a></b>
+	""}
+	user << browse(dat,"window=laser_tag_window2;size=250x250")
+
+/obj/item/clothing/suit/tag/Topic(href, href_list)
+	if(..())
+		return 1
+
+	if (href_list["join_game"])
+		var/datum/laser_tag_game/game = locate(href_list["join_game"])
+		game.handle_new_player(player, usr)
+		my_laser_tag_game = game
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		return
+
+	if (href_list["create_game"])
+		var/datum/laser_tag_game/game = new
+		game.owner = player
+		my_laser_tag_game = game
+		game.name = "[get_first_word(usr.name)]'s game"
+		game.handle_new_player(player, usr)
+		refresh_edit_window(usr, game)
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		return
+
+	// Game parametrisation
+	if (href_list["edit_game"])
+		var/datum/laser_tag_game/game = locate(href_list["edit_game"])
+		if (game.owner != player)
+			return
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["game_mode"])
+		var/datum/laser_tag_game/game = locate(href_list["game_mode"])
+		if (game.owner != player)
+			return
+		var/choices = list(
+			LT_MODE_TEAM,
+			LT_MODE_FFA,
+		)
+		var/choice = input(usr, "Choose the game mode.", "Game mode") as null|anything in choices
+		if (choice)
+			game.mode = choice
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["fire_mode"])
+		var/datum/laser_tag_game/game = locate(href_list["fire_mode"])
+		if (game.owner != player)
+			return
+		var/choices = list(
+			LT_FIREMODE_LASER,
+			LT_FIREMODE_TASER,
+		)
+		var/choice = input(usr, "Choose the fire mode.", "Fire mode") as null|anything in choices
+		if (choice)
+			game.fire_mode = choice
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["stun_time"])
+		var/datum/laser_tag_game/game = locate(href_list["stun_time"])
+		if (game.owner != player)
+			return
+		var/choice = input(usr, "Choose the stun duration.", "Stun duration") as null|num
+		game.stun_time = clamp(choice, 0, 12)
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["disable_time"])
+		var/datum/laser_tag_game/game = locate(href_list["disable_time"])
+		if (game.owner != player)
+			return
+		var/choice = input(usr, "Choose the disbale duration.", "Disable duration") as null|num
+		game.disable_time = clamp(choice, 0, 30)
+		refresh_edit_window(usr, game)
+		return
+
+	if (href_list["edition_done"])
+		usr << browse(null,"window=laser_tag_window2;size=250x250")
+		return
+
+	if (href_list["delete_game"])
+		var/datum/laser_tag_game/game = locate(href_list["delete_game"])
+		if (game.owner != player)
+			return
+		qdel(game)
+		usr << browse(null,"window=laser_tag_window2;size=250x250")
+		return
+	// End game parametrisation
+
+	if (href_list["get_score"])
+		var/datum/laser_tag_game/game = locate(href_list["get_score"])
+		game.get_score_board(usr)
+		return
+
+	if (href_list["leave_game"])
+		var/datum/laser_tag_game/game = locate(href_list["leave_game"])
+		game.kick_player(usr)
+		usr << browse(get_window_text(usr),"window=laser_tag_window;size=500x250")
+		return
+
+	if (href_list["clear_gamertag"])
+		my_laser_tag_game = null
+		player = null
+		usr << browse(null,"window=laser_tag_window;size=500x250")
+		to_chat(usr, "<span = 'notice'>You clear your tag out of the vest and leave it to be used by someone else.</span>")
+		return
 
 /proc/get_tag_armor(mob/M)
 	if(ishuman(M))
@@ -56,6 +220,18 @@
 			var/obj/item/clothing/C = AH.w_uniform
 			for(var/obj/item/clothing/accessory/lasertag/L in C.accessories)
 				return L.source_vest
+
+/obj/item/clothing/suit/tag/proc/get_gamer_tag(var/mob/living/carbon/human/H)
+	if (!player)
+		var/datum/laser_tag_participant/gamer = new
+		gamer.nametag = get_first_word(H.name) + "#[rand(1000, 9999)]"
+		switch (src.type)
+			if (/obj/item/clothing/suit/tag/bluetag)
+				gamer.team = "Blue"
+			if (/obj/item/clothing/suit/tag/redtag)
+				gamer.team = "Red"
+		src.player = gamer
+	return player.nametag
 
 /obj/item/clothing/suit/tag/bluetag
 	name = "blue laser tag armour"
@@ -87,7 +263,7 @@
 	desc = "Yarr."
 	icon_state = "hgpirate"
 	flags = FPRINT
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 
@@ -138,6 +314,7 @@
 	item_state = "wcoat"
 	blood_overlay_type = "armor"
 	body_parts_covered = FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/apron/overalls
@@ -157,6 +334,17 @@
 	flags = FPRINT
 	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/suit/spaceninjafake
+	name = "space ninja suit replica"
+	icon_state = "s-ninja-old"
+	item_state = "s-ninja_suit"
+	desc = "A plastic replica of a ninja suit, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
+	w_class = W_CLASS_MEDIUM
+	flags = FPRINT
+	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
 /obj/item/clothing/suit/sith
 	name = "Sith Robe"
@@ -166,7 +354,7 @@
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	wizard_garb = 1 //Allows lightning to be used
-	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/dualsaber) //Fits e-swords
+	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/melee/energy/sword/dualsaber) //Fits e-swords
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -175,12 +363,26 @@
 	item_state = "hastur"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 
+obj/item/clothing/suit/cassock
+	name = "Cassock"
+	desc = "A black garment belonging to a priest."
+	icon_state = "cassock"
+	item_state = "cassock"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO
+
 /obj/item/clothing/suit/imperium_monk
 	name = "Imperium monk"
 	desc = "Have YOU killed a xenos today?"
 	icon_state = "imperium_monk"
 	item_state = "imperium_monk"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+
+/obj/item/clothing/suit/vamphunter
+	name = "vampire hunter armor"
+	desc = "A set of ornate leather armor modelled off of a set worn by an ancient vampire-hunting warrior. While quite fearsome looking, it offers little in protection."
+	icon_state = "vamphunter"
+	item_state = "vamphunter"
+	body_parts_covered = FULL_TORSO|FEET
 
 
 /obj/item/clothing/suit/chickensuit
@@ -206,6 +408,13 @@
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
 
+/obj/item/clothing/suit/highlanderkilt
+	name = "highlander's kilt"
+	desc = "There can be only one."
+	icon_state = "highlanderkilt"
+	item_state = "highlanderkilt"
+	clothing_flags = ONESIZEFITSALL
+	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/suit/cardborg
 	name = "cardborg suit"
@@ -226,6 +435,7 @@
 	item_state = "straight_jacket"
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/ianshirt
 	name = "worn shirt"
@@ -341,6 +551,7 @@
 	icon_state = "swim_black"
 	_color = "swim_black"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/blue
 	name = "blue swimsuit"
@@ -348,6 +559,7 @@
 	icon_state = "swim_blue"
 	_color = "swim_blue"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/purple
 	name = "purple swimsuit"
@@ -355,6 +567,7 @@
 	icon_state = "swim_purp"
 	_color = "swim_purp"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/green
 	name = "green swimsuit"
@@ -362,6 +575,7 @@
 	icon_state = "swim_green"
 	_color = "swim_green"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/under/swimsuit/red
 	name = "red swimsuit"
@@ -369,6 +583,7 @@
 	icon_state = "swim_red"
 	_color = "swim_red"
 	siemens_coefficient = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/simonjacket
 	name = "Simon's Jacket"
@@ -376,6 +591,7 @@
 	icon_state = "simonjacket"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	allowed = list (/obj/item/weapon/pickaxe/drill)
 
 /obj/item/clothing/suit/kaminacape
 	name = "Kamina's Cape"
@@ -401,6 +617,7 @@
 	icon_state = "russofurcoat"
 	allowed = list(/obj/item/weapon/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/doshjacket
 	name = "Plasterer's Jacket"
@@ -420,6 +637,7 @@
 	icon_state = "raincoat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
 	allowed = list (/obj/item/weapon/fireaxe)
+	sterility = 100
 
 /obj/item/clothing/suit/kefkarobe
 	name = "Crazed Jester's Robe"
@@ -439,7 +657,7 @@
 	blood_overlay_type = "coat"
 	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/maidapron
 	name = "Apron"
@@ -524,6 +742,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	var/bearpelt = 0
 	extinguishingProb = 70
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/spaceblanket/attackby(obj/item/W,mob/user)
@@ -542,6 +761,7 @@
 	heat_conductivity = 0
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	bearpelt = 1
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/trader
 	name = "trader's coat"
@@ -552,7 +772,7 @@
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	max_combined_w_class = 28
 	storage_slots = 14
 	actions_types = list(/datum/action/item_action/show_wares)
@@ -621,3 +841,94 @@
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+
+/obj/item/clothing/suit/red_suit
+	name = "red suit"
+	desc = "A sleazy looking red suit"
+	icon_state = "red_suit"
+	item_state = "red_suit"
+	body_parts_covered = 0
+
+obj/item/clothing/suit/poncho
+	name = "poncho"
+	desc = "A wooly poncho. Smells of beans."
+	icon_state = "poncho"
+	item_state = "poncho"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
+
+
+//BOMBER VEST
+//The whole "bump into people to detonate it, it's the only way" part is intentional, just run into them already
+/obj/item/clothing/suit/bomber_vest
+	name = "Bomber Vest"
+	desc = "A normal vest rigged with impact-sensitive explosives. While active, bumping into anything or being touched will detonate it. For some reason, this will only work if worn."
+	icon_state = "bombvest"
+	item_state = "bombvest"
+	body_parts_covered = FULL_TORSO|IGNORE_INV
+	actions_types = list(/datum/action/item_action/toggle_bomber_vest)
+	var/active = 0
+	//That's right, we're using events for this vest to avoid hardcoding it everywhere
+	var/event_key_touched
+	var/event_key_bumping
+	var/event_key_bumped
+
+/obj/item/clothing/suit/bomber_vest/Destroy()
+	..()
+	event_key_touched = null
+	event_key_bumping = null
+	event_key_bumped = null
+
+/obj/item/clothing/suit/bomber_vest/proc/activate_vest()
+	var/mob/living/carbon/human/H = loc
+	if(!H)
+		return
+	if(!ishuman(H))
+		return
+	if(!(H.wear_suit == src))
+		return
+	active = 1
+	event_key_touched = H.on_touched.Add(src, "detonate")
+	event_key_bumping = H.on_bumping.Add(src, "detonate")
+	event_key_bumped = H.on_bumped.Add(src, "detonate")
+	canremove = 0
+
+/obj/item/clothing/suit/bomber_vest/proc/deactivate_vest()
+	active = 0
+	var/mob/living/carbon/human/H = loc
+	if(H)
+		H.on_touched.Remove(event_key_touched)
+		H.on_bumping.Remove(event_key_bumping)
+		H.on_bumped.Remove(event_key_bumped)
+
+/obj/item/clothing/suit/bomber_vest/examine(mob/user)
+	..()
+	if(active)
+		to_chat(user, "<span class='danger'>It appears to be active. RUN!</span>")
+
+/obj/item/clothing/suit/bomber_vest/proc/detonate(list/arguments)
+	var/mob/living/carbon/human/H = loc
+	var/whitelist = arguments["has been touched by"]
+	if(!ishuman(H) || !active)
+		return
+	if(whitelist == H) //No bombing ourselves by checking ourselves
+		return
+	explosion(H, 1, 3, 6)
+	message_admins("[H] has detonated \the [src]!")
+	qdel(src) //Just in case
+
+/datum/action/item_action/toggle_bomber_vest
+	name = "Toggle Bomber Vest Active"
+	desc = "Activate the bomber vest, causing the slightest touch to detonate it and blow both you and everyone nearby into bits if active. Usable only when worn, and can't be taken off once active.</span>"
+
+/datum/action/item_action/toggle_bomber_vest/Trigger()
+	if(IsAvailable() && owner && target)
+		var/obj/item/clothing/suit/bomber_vest/B = target
+		var/mob/living/carbon/human/H = owner
+		if(!(H.wear_suit == B))
+			to_chat(owner, "<span class='warning'>You must wear the vest in order to activate it.</span>")
+			return
+		if(!B.active)
+			B.activate_vest()
+			to_chat(owner, "<span class='warning'>You toggle on the vest. Bumping into anything will detonate it, as will being punched.</span>")
+		else
+			to_chat(owner, "<span class='warning'>The vest is already active!</span>")

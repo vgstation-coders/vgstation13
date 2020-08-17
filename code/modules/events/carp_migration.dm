@@ -3,6 +3,9 @@
 	endWhen = 450
 	var/list/spawned_carp = list()
 
+/datum/event/carp_migration/can_start()
+	return 40
+
 /datum/event/carp_migration/setup()
 	announceWhen = rand(15, 30)
 	endWhen = rand(600,1200)

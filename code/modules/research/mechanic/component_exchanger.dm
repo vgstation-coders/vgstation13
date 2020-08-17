@@ -145,28 +145,28 @@
 			//Yes, an istype list. We don't have helpers for this, and this coder is not that sharp
 			if(istype(P, /obj/item/weapon/stock_parts/capacitor))
 				for(var/obj/item/weapon/stock_parts/capacitor/R in src.contents)
-					if(R.rating > P.rating && P in M.component_parts) //Kind of a hack, but makes sure we don't replace components that already were
+					if(R.rating > P.rating && (P in M.component_parts)) //Kind of a hack, but makes sure we don't replace components that already were
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 						//Do not break in case we find even better
 			if(istype(P, /obj/item/weapon/stock_parts/scanning_module))
 				for(var/obj/item/weapon/stock_parts/scanning_module/R in src.contents)
-					if(R.rating > P.rating && P in M.component_parts)
+					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 			if(istype(P, /obj/item/weapon/stock_parts/manipulator))
 				for(var/obj/item/weapon/stock_parts/manipulator/R in src.contents)
-					if(R.rating > P.rating && P in M.component_parts)
+					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 			if(istype(P, /obj/item/weapon/stock_parts/micro_laser))
 				for(var/obj/item/weapon/stock_parts/micro_laser/R in src.contents)
-					if(R.rating > P.rating && P in M.component_parts)
+					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 			if(istype(P, /obj/item/weapon/stock_parts/matter_bin))
 				for(var/obj/item/weapon/stock_parts/matter_bin/R in src.contents)
-					if(R.rating > P.rating && P in M.component_parts)
+					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 			//Good thing there's only a few stock parts types

@@ -33,6 +33,42 @@
 	kill_count = 1 //Limits the range to one tile
 	embed = 0
 
+/obj/item/projectile/bullet/weakbullet
+	name = "weak bullet"
+	icon_state = "bbshell"
+	damage = 10
+	stun = 3
+	weaken = 5
+	embed = 0
+	projectile_speed = 0.5
+
+/obj/item/projectile/bullet/weakbullet/booze
+	name = "booze bullet"
+	projectile_speed = 0.5
+
+/obj/item/projectile/bullet/weakbullet/booze/on_hit(var/atom/target, var/blocked = 0)
+	if(..(target, blocked))
+		var/mob/living/M = target
+		M.dizziness += 20
+		M:slurring += 20
+		M.confused += 20
+		M.eye_blurry += 20
+		M.drowsyness += 20
+		if(M.dizziness <= 150)
+			M.Dizzy(150)
+			M.dizziness = 150
+		for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
+			M.paralysis += 2
+			M.dizziness += 10
+			M:slurring += 10
+			M.confused += 10
+			M.eye_blurry += 10
+			M.drowsyness += 10
+			A.volume += 5 //Because we can
+			M.dizziness += 10
+		return 1
+	return 0
+
 /obj/item/projectile/bullet/shrapnel
 
 	name = "shrapnel"
@@ -44,13 +80,16 @@
 /obj/item/projectile/bullet/shrapnel/New()
 	..()
 	kill_count = rand(6,10)
-
-
+	damage = rand(15,75)
 
 /obj/item/projectile/bullet/shrapnel/small
 
 	name = "small shrapnel"
 	damage = 25
+
+/obj/item/projectile/bullet/shrapnel/small/New()
+	..()
+	damage = rand(5,45)
 
 /obj/item/projectile/bullet/shrapnel/small/plasma
 
@@ -59,50 +98,22 @@
 	color = "#BF5FFF"
 	damage = 35
 
-
-/obj/item/projectile/bullet/weakbullet
-	name = "weak bullet"
-	icon_state = "bbshell"
-	damage = 10
-	stun = 5
-	weaken = 5
-	embed = 0
-/obj/item/projectile/bullet/weakbullet/booze
-	name = "booze bullet"
-	on_hit(var/atom/target, var/blocked = 0)
-		if(..(target, blocked))
-			var/mob/living/M = target
-			M.dizziness += 20
-			M:slurring += 20
-			M.confused += 20
-			M.eye_blurry += 20
-			M.drowsyness += 20
-			if(M.dizziness <= 150)
-				M.Dizzy(150)
-				M.dizziness = 150
-			for(var/datum/reagent/ethanol/A in M.reagents.reagent_list)
-				M.paralysis += 2
-				M.dizziness += 10
-				M:slurring += 10
-				M.confused += 10
-				M.eye_blurry += 10
-				M.drowsyness += 10
-				A.volume += 5 //Because we can
-				M.dizziness += 10
-			return 1
-		return 0
+/obj/item/projectile/bullet/shrapnel/small/plasma/New()
+	..()
+	damage = rand(10,60)
 
 /obj/item/projectile/bullet/midbullet
 	damage = 20
 	stun = 5
 	weaken = 5
 	fire_sound = 'sound/weapons/Gunshot_c20.ogg'
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/midbullet/lawgiver
 	damage = 10
 	stun = 0
 	weaken = 0
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 
 /obj/item/projectile/bullet/midbullet/assault
 	damage = 20
@@ -141,6 +152,7 @@
 	stun = 5
 	weaken = 5
 	penetration = 1
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/auto380 //new sec pistol ammo, reverse name because lol compiler
 	damage = 15
@@ -161,23 +173,7 @@
 	weaken = 5
 	embed = 0
 	penetration = 0
-
-/obj/item/projectile/bullet/suffocationbullet//How does this even work?
-	name = "CO2 bullet"
-	damage = 20
-	damage_type = OXY
-
-
-/obj/item/projectile/bullet/cyanideround
-	name = "poison bullet"
-	damage = 40
-	damage_type = TOX
-
-
-/obj/item/projectile/bullet/burstbullet//I think this one needs something for the on hit
-	name = "exploding bullet"
-	damage = 20
-
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
@@ -189,6 +185,39 @@
 
 /obj/item/projectile/bullet/a762
 	damage = 25
+
+
+obj/item/projectile/bullet/suffocationbullet
+	name = "CO2 bullet"
+	damage = 20
+	damage_type = OXY
+
+
+/obj/item/projectile/bullet/cyanideround
+	name = "poison bullet"
+	damage = 40
+	damage_type = TOX
+
+/obj/item/projectile/bullet/burstbullet
+	name = "exploding bullet"
+	embed = 0
+	damage = 0
+
+/obj/item/projectile/bullet/burstbullet/on_hit(var/atom/target, var/blocked = 0)
+	..()
+	explosion(target, 0,1,1,5)
+	qdel(src)
+
+/obj/item/projectile/bullet/boombullet
+	name = "small exploding bullet"
+	embed = 0
+	damage = 0
+	penetration = -1
+
+/obj/item/projectile/bullet/boombullet/to_bump(var/atom/target)
+	..()
+	explosion(target, 0,0,1,5)
+	qdel(src)
 
 #define SPUR_FULL_POWER 4
 #define SPUR_HIGH_POWER 3
@@ -289,9 +318,10 @@
 
 	if(istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
-		M.GetDrilled()
+		if(M.mining_difficulty < MINE_DIFFICULTY_TOUGH)
+			M.GetDrilled()
 	if(istype(A, /obj/structure/boulder))
-		returnToPool(A)
+		qdel(A)
 
 	return ..()
 
@@ -344,7 +374,7 @@
 	stutter = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS|PROJREACT_BLOB
 	penetration = 20 //can hit 3 mobs at once, or go through a wall and hit 2 more mobs, or go through an rwall/blast door and hit 1 mob
-	projectile_speed = 0.66
+	projectile_speed = 0.5
 	fire_sound = 'sound/weapons/hecate_fire.ogg'
 
 /obj/item/projectile/bullet/hecate/OnFired()
@@ -369,6 +399,7 @@
 	weaken = 5
 	phase_type = PROJREACT_WALLS|PROJREACT_WINDOWS|PROJREACT_OBJS
 	penetration = 10
+	projectile_speed = 1
 
 /obj/item/projectile/bullet/beegun
 	name = "bee"
@@ -426,10 +457,10 @@
 	penetration = 0 //By default. Higher-power shots will have penetration.
 
 /obj/item/projectile/bullet/APS/on_hit(var/atom/atarget, var/blocked = 0)
-	if(istype(atarget, /mob/living) && damage == 200)
+	if(istype(atarget, /mob/living) && damage >= 200)
 		var/mob/living/M = atarget
 		M.gib()
-	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage == 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
+	else if(istype(atarget, /obj/machinery/singularity/narsie) && blessed && damage >= 200) //MINE IS THE ROD THAT SHALL PIERCE THE HEAVENS
 		var/obj/machinery/singularity/narsie/N = atarget
 		if(!N.wounded)
 			N.visible_message("<span class = 'danger'>\The [src] strikes \the [N], wounding them. This god can bleed!</span>", range = 20)
@@ -449,19 +480,12 @@
 				if(M_turf && (M_turf.z == starting.z))
 					M.playsound_local(starting, 'sound/weapons/hecate_fire_far.ogg', 25, 1)
 
-/obj/item/projectile/bullet/APS/OnDeath()
-	var/turf/T = get_turf(src)
-	if(blessed)
-		new /obj/item/weapon/nullrod(T)
-	else
-		new /obj/item/stack/rods(T)
-
 /obj/item/projectile/bullet/APS/cultify()
 	return
 
 /obj/item/projectile/bullet/stinger
 	name = "alien stinger"
-	damage = 10
+	damage = 15
 	damage_type = TOX
 	flag = "bio"
 	fire_sound = 'sound/weapons/hivehand.ogg'
@@ -719,6 +743,24 @@
 /obj/item/projectile/bullet/fire_plume/ex_act()
 	return
 
+/obj/item/projectile/bullet/fire_plume/dragonsbreath //for the shotgun shells
+	has_O2_in_mix = 0
+	max_range = 5
+	burn_strength = 0
+	burn_damage = 10
+	jet_pressure = 0
+	gas_jet = null
+
+/obj/item/projectile/bullet/fire_plume/dragonsbreath/New()
+	..()
+	var/datum/gas_mixture/firemix = new /datum/gas_mixture
+	firemix.adjust_gas(GAS_PLASMA, 666)
+	gas_jet = firemix
+	jet_pressure = firemix.return_pressure()
+	gas_jet.temperature = 383.15
+	burn_strength = gas_jet.temperature
+
+
 /obj/item/projectile/bullet/mahoganut
 	name = "mahogany nut"
 	icon_state = "nut"
@@ -815,6 +857,26 @@
 			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
 	..()
 
+/obj/item/projectile/bullet/buckshot/admin
+	name = "admin buckshot pellet"
+	icon_state = "buckshot"
+	damage = 101
+	penetration = 20
+	rotate = 0
+	type_to_fire = /obj/item/projectile/bullet/hecate
+
+/obj/item/projectile/bullet/buckshot/admin/New(atom/T, var/C = 0)
+	..(T)
+	is_child = C
+
+/obj/item/projectile/bullet/buckshot/admin/OnFired()
+	if(!is_child)
+		for(var/I = 1; I <=total_amount_to_fire-1; I++)
+			var/obj/item/projectile/bullet/hecate/B = new type_to_fire(src.loc, 1)
+			B.damage = src.damage
+			B.launch_at(original, tar_zone = src.def_zone, from = src.shot_from, variance_angle = src.variance_angle)
+	..()
+
 /obj/item/projectile/bullet/invisible
 	name = "invisible bullet"
 	icon_state = null
@@ -891,7 +953,8 @@
 /obj/item/projectile/bullet/syringe/on_hit(atom/A as mob|obj|turf|area)
 	if(!A)
 		return
-	..()
+	if(!..())
+		return FALSE
 	if(ismob(A))
 		var/mob/M = A
 		var/blocked
@@ -925,3 +988,17 @@
 
 /obj/item/projectile/bullet/syringe/dart
 	stealthy = TRUE
+
+/obj/item/projectile/bullet/syringe/candycane
+	name = "Candycane"
+	icon_state = "candycane"
+	nodamage = 0
+	damage = 25
+	capacity = 15
+	decay_type = null
+	custom_impact = null
+
+/obj/item/projectile/bullet/syringe/candycane/New()
+	..()
+	reagents.add_reagent(DIABEETUSOL, 10)
+	reagents.add_reagent(CARAMEL, 5)

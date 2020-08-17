@@ -42,12 +42,12 @@
 
 /obj/item/weapon/holder/process()
 	if(!loc)
-		return returnToPool(src)
+		return qdel(src)
 	else if(istype(loc,/turf) || !(contents.len))
-		return returnToPool(src)
+		return qdel(src)
 
 /obj/item/weapon/holder/relaymove(mob/M, direction)
-	returnToPool(src) //This calls Destroy(), and frees the mob
+	qdel(src) //This calls Destroy(), and frees the mob
 
 /obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	for(var/mob/M in src.contents)
@@ -95,7 +95,7 @@
 	..()
 	if(M)
 		appearance = M.appearance
-		w_class = Clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
+		w_class = clamp((M.size - SIZE_TINY) * W_CLASS_MEDIUM, W_CLASS_TINY, W_CLASS_HUGE)
 		//	SIZE		|	W_CLASS
 
 		//	SIZE_TINY	|	W_CLASS_TINY
@@ -123,7 +123,7 @@
 		var/mob/living/simple_animal/mouse/mouse = M
 
 		item_state = initial(mouse.icon_state) //Initial icon states are "mouse_gray", "mouse_white", etc
-		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray", "mouse_black")))
+		if(!(item_state in list("mouse_white", "mouse_brown", "mouse_gray", "mouse_black", "mouse_plague", "mouse_balbc", "mouse_operative")))
 			item_state = "mouse_gray"
 
 //CORGI
@@ -159,6 +159,22 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//FROG
+
+/obj/item/weapon/holder/animal/frog
+	name = "frog holder"
+	desc = "Don't hold it too tight."
+	item_state = "frog"
+	slot_flags = SLOT_HEAD
+
+//SNAIL
+
+/obj/item/weapon/holder/animal/snail
+	name = "snail holder"
+	desc = "Eh, it's all gooey and sticky."
+	item_state = "snail"
+	slot_flags = SLOT_HEAD
+
 //SALEM
 
 /obj/item/weapon/holder/animal/salem
@@ -168,6 +184,12 @@
 
 	update_itemstate_on_twohand = TRUE
 
+//SNAKES
+
+/obj/item/weapon/holder/animal/snek
+	name = "snake holder"
+	desc = "Kept you waiting?"
+	item_state = "snek"
 
 //SLIMES
 /obj/item/weapon/holder/animal/slime
@@ -178,7 +200,7 @@
 	var/mob/living/simple_animal/slime/S = stored_mob
 	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
 	..()

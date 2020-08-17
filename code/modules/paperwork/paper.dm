@@ -207,7 +207,7 @@
 /obj/item/weapon/paper/proc/openhelp(mob/user as mob)
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
-		<b><center>Crayon&Pen commands</center></b><br>
+		<b><center>Crayon & Pen commands</center></b><br>
 		<br>
 		\[br\] : Creates a linebreak.<br>
 		\[center\] - \[/center\] : Centers the text.<br>
@@ -215,8 +215,13 @@
 		\[i\] - \[/i\] : Makes the text <i>italic</i>.<br>
 		\[u\] - \[/u\] : Makes the text <u>underlined</u>.<br>
 		\[large\] - \[/large\] : Increases the <span style=\"font-size:25px\">size</span> of the text.<br>
+		\[table\] - \[/table\] : Creates table using \[row\] and \[cell\] tags.<br>
+		\[row\] - Creates a new table row.<br>
+		\[cell\] - Creates a new table cell.<br>
 		\[sign\] : Inserts a signature of your name in a foolproof way.<br>
 		\[field\] : Inserts an invisible field which lets you start type from there. Useful for forms.<br>
+		\[date\] : Inserts the current date in the format DAY MONTH, YEAR.<br>
+		\[time\] : Inserts the current station time.<br>
 		<br>
 		<b><center>Pen exclusive commands</center></b><br>
 		\[small\] - \[/small\] : Decreases the <span style=\"font-size:15px\">size</span> of the text.<br>
@@ -226,7 +231,7 @@
 		\[hr\] : Adds a horizontal rule.<br>
 		\[img\]http://url\[/img\] : Add an image.<br>
 		<br>
-		<center>Fonts</center><br>
+		<b><center>Fonts</center><br></b>
 		\[agency\] - \[/agency\] : <span style=\"font-family:Agency FB\">Agency FB</span><br>
 		\[algerian\] - \[/algerian\] : <span style=\"font-family:Algerian\">Algerian</span><br>
 		\[arial\] - \[/arial\] : <span style=\"font-family:Arial\">Arial</span><br>
@@ -324,37 +329,8 @@
 		return
 
 	else if(istype(P, /obj/item/weapon/stamp))
-
-		if(istype(P, /obj/item/weapon/stamp/clown))
-			var/clown = FALSE
-			if(user.mind && (user.mind.assigned_role == "Clown"))
-				clown = TRUE
-			if(isrobot(user))
-				var/mob/living/silicon/robot/R = user
-				if(HAS_MODULE_QUIRK(R, MODULE_IS_A_CLOWN))
-					clown = TRUE
-			if(!clown)
-				to_chat(user, "<span class='notice'>You are totally unable to use the stamp. HONK!</span>")
-				return
-
-		stamps += (stamps=="" ? "<HR>" : "<BR>") + "<i>This [src.name] has been stamped with the [P.name].</i>"
-
-		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-		stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-		stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-		stampoverlay.icon_state = "paper_[P.icon_state]"
-
-		if(!stamped)
-			stamped = new
-		stamped += P.type
-		overlays += stampoverlay
-
-		to_chat(user, "<span class='notice'>You stamp [src] with your rubber stamp.</span>")
-
-		if(istype(loc, /obj/item/weapon/storage/bag/clipboard))
-			var/obj/C = loc
-			C.update_icon()
-
+		var/obj/item/weapon/stamp/S = P
+		S.try_stamp(user,src)
 	else if(istype(P, /obj/item/weapon/photo) && !istype(src, /obj/item/weapon/paper/envelope))
 		if(img)
 			to_chat(user, "<span class='notice'>This paper already has a photo attached.</span>")
@@ -480,11 +456,45 @@ var/global/list/paper_folding_results = list ( \
 
 /obj/item/weapon/paper/djstation
 	name = "paper - 'DJ Listening Outpost'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br><ol><li>Equip yourself with a multi-tool</li><li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li><li>Turn all the machines on, it has already been configured for you to listen on.</li></ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/djstation/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies. Here is a step by step guide to start listening in on those saucy radio channels:<br>\
+	<ol>\
+		<li>Equip yourself with a multi-tool</li>\
+		<li>Use the multitool on each machine, that is the broadcaster, receiver and the relay.</li>\
+		<li>Turn all the machines on, it has already been configured for you to listen on.</li>\
+	</ol> Simple as that. Now to listen to the private channels, you'll have to configure the intercoms, located on the front desk. \
+	\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/intercoms
 	name = "paper - 'Ace Reporter Intercom manual'"
-	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br> Here is a list of frequencies for you to listen on.<br><ul><li>145.9 - Common Channel</li><li>144.7 - Private AI Channel</li><li>135.9 - Security Channel</li><li>135.7 - Engineering Channel</li><li>135.5 - Medical Channel</li><li>135.3 - Command Channel</li><li>135.1 - Science Channel</li><li>134.9 - Service Channel</li><li>134.7 - Supply Channel</li>"
+
+/obj/item/weapon/paper/intercoms/initialize()
+	..()
+	info = "<B>Welcome new owner!</B><BR><BR>You have purchased the latest in listening equipment. The telecommunication setup we created is the best in listening to common and private radio fequencies.Now to listen to the private channels, you'll have to configure the intercoms.<br>\
+	Here is a list of frequencies for you to listen on.<br>\
+	<ul>\
+		<li>[COMMON_FREQ] - Common Channel</li>\
+		<li>[AIPRIV_FREQ] - Private AI Channel</li>\
+		<li>[SEC_FREQ] - Security Channel</li>\
+		<li>[ENG_FREQ] - Engineering Channel</li>\
+		<li>[MED_FREQ] - Medical Channel</li>\
+		<li>[COMM_FREQ] - Command Channel</li>\
+		<li>[SCI_FREQ] - Science Channel</li>\
+		<li>[SER_FREQ] - Service Channel</li>\
+		<li>[SUP_FREQ] - Supply Channel</li>"
 
 /obj/item/weapon/paper/flag
 	icon_state = "flag_neutral"
@@ -538,6 +548,10 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/suitdispenser
 	name = "paper- 'Suit Dispenser Manual - How to use them?'"
 	info = "Step 1: Place the items that you want the dispenser to dispense on top of one of them, preferably the one bellow this paper.<BR>\nStep 2: Click the dispenser, and choose <b>Define Preset from items on top</b>.<BR>\nStep 3: Click every dispenser you wish to see dispensing, and click <b>Choose a Preset</b>.<BR>\nTo re-use a dispenser, just click <b>Resupply</b>."
+
+/obj/item/weapon/paper/diy_soda
+	name = "paper- 'Instructions'"
+	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<BR>\nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<BR>\nNow as you may have guessed, you will have to mix this delicious beverage yourself.<BR>\nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<BR>\nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<BR>\nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<BR>\nAnd finally, get ready for our secret trademarked ingredient: <BR>\n<b>The element of surprise!</b>"
 
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"

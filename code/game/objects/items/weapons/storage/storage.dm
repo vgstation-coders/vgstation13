@@ -18,7 +18,7 @@
 	var/list/is_seeing = new/list() //List of mobs which are currently seeing the contents of this item's storage
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
 	var/max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
-	var/storage_slots = 7 //The number of storage slots in this container.
+	var/storage_slots = 0 //The number of storage slots in this container.
 	var/obj/abstract/screen/storage/boxes = null
 	var/obj/abstract/screen/close/closer = null
 	var/use_to_pickup	//Set this to make it possible to use this item in an inverse way, so you can have the item in your hand and click items on the floor to pick them up.
@@ -30,15 +30,16 @@
 	var/foldable_amount = 1 // Number of foldables to produce, if any - N3X
 	var/internal_store = 0
 	var/list/no_storage_slot = new/list()//if the item is equipped in a slot that is contained in this list, the item will act purely as a clothing item and not a storage item (ie plastic bags over head)
+	var/rustle_sound = "rustle"
 
 /obj/item/weapon/storage/proc/can_use()
 	return TRUE
 
 /obj/item/weapon/storage/on_mousedrop_to_inventory_slot()
-	playsound(src, "rustle", 50, 1, -5)
+	playsound(src, rustle_sound, 50, 1, -5)
 
 /obj/item/weapon/storage/MouseDropFrom(obj/over_object as obj)
-	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src)))
+	if(over_object == usr && (in_range(src, usr) || is_holder_of(usr, src) || distance_interact(usr)))
 		orient2hud()
 		show_to(usr)
 		return
@@ -53,12 +54,24 @@
 	return ..()
 
 /obj/item/weapon/storage/AltClick(mob/user)
-	if(!(in_range(src, user) || is_holder_of(user, src)))
+	if(!(in_range(src, user) || is_holder_of(user, src) || distance_interact(user)))
 		return ..()
 	orient2hud(user)
 	if(user.s_active)
 		user.s_active.close(user)
 	src.show_to(user)
+
+//override to allow certain circumstances of looking inside this item if not holding or adjacent
+//distance interact can let you use storage even inside a mecha (see screen_objects.dm L160)
+//and also pull items out of that storage; it can be quite powerful, add narrow conditions
+/obj/item/weapon/storage/proc/distance_interact(mob/user)
+	return FALSE
+
+/obj/item/weapon/storage/Adjacent(var/atom/neighbor)
+	if(ismob(neighbor) && distance_interact(neighbor))
+		return TRUE
+	else
+		return ..()
 
 /obj/item/weapon/storage/proc/empty_contents_to(var/atom/place)
 	var/turf = get_turf(place)
@@ -164,12 +177,12 @@
 	var/obj/item/sample_object
 	var/number
 
-	New(obj/item/sample as obj)
-		if(!istype(sample))
-			qdel(src)
-			return
-		sample_object = sample
-		number = 1
+/datum/numbered_display/New(obj/item/sample as obj)
+	if(!istype(sample))
+		qdel(src)
+		return
+	sample_object = sample
+	number = 1
 
 //This proc determines the size of the inventory to be displayed. Please touch it only if you know what you're doing.
 /obj/item/weapon/storage/proc/orient2hud()
@@ -194,6 +207,8 @@
 	//var/mob/living/carbon/human/H = user
 	var/row_num = 0
 	var/col_count = min(7,storage_slots) -1
+	if(col_count < 0)
+		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
 	if (adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
@@ -217,7 +232,7 @@
 
 	if(src.loc == W)
 		return 0 //Means the item is already in the storage item
-	if(contents.len >= storage_slots)
+	if(storage_slots && (contents.len >= storage_slots))
 		if(!stop_messages)
 			to_chat(usr, "<span class='notice'>\The [src] is full, make some space.</span>")
 		return 0 //Storage item is full
@@ -335,9 +350,9 @@
 			for(var/mob/M in viewers(usr, null))
 				if (M == usr)
 					to_chat(usr, "<span class='notice'>You put \the [W] into \the [src].</span>")
-				else if (M in range(1)) //If someone is standing close enough, they can tell what it is...
+				else if (M in range(1) && !stealthy(usr)) //If someone is standing close enough, they can tell what it is...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
-				else if (W.w_class >= W_CLASS_MEDIUM) //Otherwise they can only see large or normal items from a distance...
+				else if (W.w_class >= W_CLASS_MEDIUM && !stealthy(usr)) //Otherwise they can only see large or normal items from a distance...
 					M.show_message("<span class='notice'>[usr] puts \the [W] into \the [src].</span>")
 
 
@@ -349,7 +364,7 @@
 
 //Call this proc to handle the removal of an item from the storage item. The item will be moved to the atom sent as new_target
 //force needs to be 1 if you want to override the can_be_inserted() if the target's a storage item.
-/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W as obj, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/weapon/storage/proc/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	if(!istype(W))
 		return 0
 
@@ -361,7 +376,6 @@
 	if(istype(src, /obj/item/weapon/storage/fancy))
 		var/obj/item/weapon/storage/fancy/F = src
 		F.update_icon(1)
-
 
 	if(new_location)
 		var/mob/M
@@ -399,7 +413,7 @@
 
 //This proc is called when you want to place an item into the storage item.
 /obj/item/weapon/storage/attackby(obj/item/W as obj, mob/user as mob)
-	if(!Adjacent(user,MAX_ITEM_DEPTH))
+	if(!Adjacent(user,MAX_ITEM_DEPTH) && !distance_interact(user))
 		return
 	..()
 
@@ -438,7 +452,13 @@
 	..()
 
 /obj/item/weapon/storage/attack_hand(mob/user as mob)
-	playsound(src, "rustle", 50, 1, -5)
+	if(!stealthy(user))
+		playsound(src, rustle_sound, 50, 1, -5)
+
+	if (user.s_active == src) // Click on the backpack again to close it.
+		close(user)
+		src.add_fingerprint(user)
+		return
 
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
@@ -460,10 +480,12 @@
 	if (maxloc == user)
 		orient2hud()
 		show_to(user)
+		src.add_fingerprint(user)
+		return
 	else
 		..()
 		close_all()
-	src.add_fingerprint(user)
+		src.add_fingerprint(user)
 
 /obj/item/weapon/storage/attack_paw(mob/user as mob)
 	return attack_hand(user)
@@ -513,13 +535,13 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = getFromPool(/obj/abstract/screen/storage)
+	src.boxes = new /obj/abstract/screen/storage
 	src.boxes.name = "storage"
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
 	src.boxes.layer = HUD_BASE_LAYER
-	src.closer = getFromPool(/obj/abstract/screen/close)
+	src.closer = new /obj/abstract/screen/close
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = HUD_ITEM_LAYER
@@ -579,10 +601,10 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		returnToPool(boxes)
+		qdel(boxes)
 		boxes = null
 	if(closer)
-		returnToPool(closer)
+		qdel(closer)
 		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)

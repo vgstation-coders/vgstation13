@@ -20,8 +20,7 @@
 				<A href='?src=\ref[src];setauthor=1'>Filter by Author: [query.author]</A><br />
 				<A href='?src=\ref[src];search=1'>\[Start Search\]</A><br />"}
 		if(1)
-			establish_old_db_connection()
-			if(!dbcon_old.IsConnected())
+			if(!SSdbcore.Connect())
 				dat += "<font color=red><b>ERROR</b>: Unable to contact External Archive. Please contact your system administrator for assistance.</font><br />"
 			else if(num_results == 0)
 				dat += "<em>No results found.</em>"
@@ -67,7 +66,7 @@
 		else
 			var/pn = text2num(href_list["pagenum"])
 			if(!isnull(pn))
-				page_num = Clamp(pn, 0, num_pages)
+				page_num = clamp(pn, 0, num_pages)
 
 	if(href_list["settitle"])
 		var/newtitle = input("Enter a title to search for:") as text|null
@@ -92,7 +91,7 @@
 		if(num_pages == 0)
 			page_num = 0
 		else
-			page_num = Clamp(text2num(href_list["page"]), 0, num_pages)
+			page_num = clamp(text2num(href_list["page"]), 0, num_pages)
 
 	if(href_list["search"])
 		num_results = src.get_num_results()

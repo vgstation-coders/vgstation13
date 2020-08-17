@@ -15,30 +15,11 @@
 // each contiguous network of cables & nodes
 ////////////////////////////////////////////
 
-/*
-Powernet procs :
 /datum/powernet/New()
-/datum/powernet/Del()
+	powernets += src
+
 /datum/powernet/Destroy()
-/datum/powernet/resetVariables()
-/datum/powernet/proc/remove_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/add_cable(var/obj/structure/cable/C)
-/datum/powernet/proc/remove_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/add_machine(var/obj/machinery/power/M)
-/datum/powernet/proc/reset()
-/datum/powernet/proc/get_electrocute_damage()
-/datum/powernet/proc/set_to_build()
-/obj/structure/cable/proc/rebuild_from()
-*/
-
-/datum/powernet/New()
-	powernets |= src
-
-/datum/powernet/Del()
 	powernets -= src
-	..()
-
-/datum/powernet/Destroy()
 	for(var/obj/structure/cable/C in cables)
 		C.powernet = null
 	for(var/obj/machinery/power/P in nodes)
@@ -49,12 +30,7 @@ Powernet procs :
 	cables = null
 	nodes = null
 	components = null
-
-/datum/powernet/resetVariables()
-	..("cables","nodes")
-	cables = list()
-	nodes = list()
-	components = list()
+	..()
 
 /datum/powernet/proc/is_empty()
 	return !cables.len && !nodes.len && !components.len
@@ -65,7 +41,7 @@ Powernet procs :
 	cables -= C
 	C.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // helper proc for removing a power machine from the current powernet
 // warning : this proc doesn't check if the machine exists, but don't worry a runtime should tell you if it doesn't
@@ -73,7 +49,7 @@ Powernet procs :
 	nodes -= M
 	M.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // helper proc for removing a power machine from the current powernet
 // warning : this proc doesn't check if the machine exists, but don't worry a runtime should tell you if it doesn't
@@ -81,7 +57,7 @@ Powernet procs :
 	components -= C
 	C.powernet = null
 	if(is_empty())
-		returnToPool(src)
+		qdel(src)
 
 // add a cable to the current powernet
 /datum/powernet/proc/add_cable(obj/structure/cable/C)
@@ -157,7 +133,7 @@ Powernet procs :
 		P.build_status = 1
 	for(var/datum/power_connection/C in components)
 		C.build_status = 1
-	returnToPool(src)
+	qdel(src)
 
 //Hopefully this will never ever have to be used
 var/global/powernets_broke = 0
@@ -165,7 +141,7 @@ var/global/powernets_broke = 0
 //This will rebuild a powernet properly during the new tick cycle
 /obj/structure/cable/proc/rebuild_from()
 	if(!powernet)
-		var/datum/powernet/NewPN = getFromPool(/datum/powernet)
+		var/datum/powernet/NewPN = new /datum/powernet
 		NewPN.add_cable(src)
 		propagate_network(src, src.powernet)
 		NewPN.load = oldload
@@ -219,7 +195,7 @@ var/global/powernets_broke = 0
 		else if(istype(AM,/obj/structure/cable))
 			var/obj/structure/cable/C = AM
 			if(!unmarked || !C.powernet)
-				if(C.d1 == d || C.d2 == d)
+				if(C.hasDir(d))
 					. += C
 
 // rebuild all power networks from scratch - only called at world creation or by the admin verb
@@ -306,6 +282,9 @@ var/global/powernets_broke = 0
 // no animations will be performed by this proc.
 /proc/electrocute_mob(mob/living/M, power_source, obj/source, siemens_coeff = 1.0)
 	if(istype(M.loc, /obj/mecha))											// feckin mechs are dumb
+		return 0
+
+	if(M_NO_SHOCK in M.mutations)
 		return 0
 
 	if(istype(M, /mob/living/carbon/human))

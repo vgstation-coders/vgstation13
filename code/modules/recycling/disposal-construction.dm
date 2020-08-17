@@ -202,7 +202,7 @@
 			nicetype = "pipe"
 			ispipe = 1
 
-	if(iswrench(I))
+	if(I.is_wrench(user))
 		if(anchored) //This the only part where we're DETACHING the pipe, so it doesn't really need to check anything.
 			anchored = 0
 			if(ispipe)
@@ -211,7 +211,7 @@
 			else
 				setDensity(TRUE)
 			to_chat(user, "You detach the [nicetype] from the underfloor.")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			I.playtoolsound(src, 100)
 			update()
 			return
 		else
@@ -231,7 +231,7 @@
 			else
 				setDensity(TRUE) // We don't want disposal bins or outlets to go density 0
 			to_chat(user, "You attach the [nicetype] to the underfloor.")
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			I.playtoolsound(src, 100)
 			update()
 
 	else if(iswelder(I))

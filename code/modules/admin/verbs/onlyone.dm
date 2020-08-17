@@ -11,7 +11,7 @@
 			pickfrom += name
 			pickfrom[name] = D
 
-	var/event_type_name = input(user, "Select an event.", "THERE CAN BE ONLY ONE", null) in pickfrom as text|null
+	var/event_type_name = input(user, "Select an event.", "THERE CAN BE ONLY ONE", null) as null|anything in pickfrom
 	if(!event_type_name)
 		return
 	var/event_type = pickfrom[event_type_name]

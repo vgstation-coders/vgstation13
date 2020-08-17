@@ -123,7 +123,11 @@
 	usr.stop_pulling()
 
 /client/verb/swap_hand()
-	set hidden = 1
+
+	set name = "Swap-hands"
+	set category = "IC"
+	set desc = "Swap your current active hand."
+
 	if(istype(mob,/mob/living/silicon/robot/mommi))
 		return // MoMMIs only have one tool slot.
 	if(istype(mob,/mob/living/silicon/robot))//Oh nested logic loops, is there anything you can't do? -Sieve
@@ -134,63 +138,63 @@
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else
-				R:inv1.icon_state = "inv1 +a"
-				R:inv2.icon_state = "inv2"
-				R:inv3.icon_state = "inv3"
-				R:module_active = R:module_state_1
+				R.inv1.icon_state = "inv1 +a"
+				R.inv2.icon_state = "inv2"
+				R.inv3.icon_state = "inv3"
+				R.module_active = R.module_state_1
 		else
 			if(R.module_active == R.module_state_1)
 				if(!R.module_state_2)
 					if(!R.module_state_3)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3 +a"
-						R:module_active = R:module_state_3
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3 +a"
+						R.module_active = R.module_state_3
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2 +a"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_2
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2 +a"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_2
 			else if(R.module_active == R.module_state_2)
 				if(!R.module_state_3)
 					if(!R.module_state_1)
 						return
 					else
-						R:inv1.icon_state = "inv1 +a"
-						R:inv2.icon_state = "inv2"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_1
+						R.inv1.icon_state = "inv1 +a"
+						R.inv2.icon_state = "inv2"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_1
 				else
-					R:inv1.icon_state = "inv1"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3 +a"
-					R:module_active = R:module_state_3
+					R.inv1.icon_state = "inv1"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3 +a"
+					R.module_active = R.module_state_3
 			else if(R.module_active == R.module_state_3)
 				if(!R.module_state_1)
 					if(!R.module_state_2)
 						return
 					else
-						R:inv1.icon_state = "inv1"
-						R:inv2.icon_state = "inv2 +a"
-						R:inv3.icon_state = "inv3"
-						R:module_active = R:module_state_2
+						R.inv1.icon_state = "inv1"
+						R.inv2.icon_state = "inv2 +a"
+						R.inv3.icon_state = "inv3"
+						R.module_active = R.module_state_2
 				else
-					R:inv1.icon_state = "inv1 +a"
-					R:inv2.icon_state = "inv2"
-					R:inv3.icon_state = "inv3"
-					R:module_active = R:module_state_1
+					R.inv1.icon_state = "inv1 +a"
+					R.inv2.icon_state = "inv2"
+					R.inv3.icon_state = "inv3"
+					R.module_active = R.module_state_1
 			else
 				return
 	mob.swap_hand()
@@ -218,7 +222,6 @@
 	if(!isrobot(mob))
 		mob.drop_item_v()
 	return
-
 
 /client/Center()
 	/* No 3D movement in 2D spessman game. dir 16 is Z Up
@@ -345,6 +348,7 @@
 		mob.last_move_intent = world.time + 10
 		mob.set_glide_size(DELAY2GLIDESIZE(move_delay)) //Since we're moving OUT OF OUR OWN VOLITION AND BY OURSELVES we can update our glide_size here!
 
+		mob.StartMoving()
 		// Something with pulling things
 		var/obj/item/weapon/grab/Findgrab = locate() in mob
 		if(Findgrab)
@@ -356,6 +360,7 @@
 					if(M)
 						if ((mob.Adjacent(M) || M.loc == mob.loc))
 							var/turf/T = mob.loc
+							M.StartMoving()
 							step(mob, Dir)
 							if (isturf(M.loc))
 								var/diag = get_dir(mob, M)
@@ -363,6 +368,7 @@
 									diag = null
 								if ((get_dist(mob, M) > 1 || diag))
 									step(M, get_dir(M.loc, T))
+							M.EndMoving()
 				else
 					for(var/mob/M in L)
 						M.other_mobs = 1
@@ -370,17 +376,18 @@
 							M.animate_movement = 3
 					for(var/mob/M in L)
 						spawn( 0 )
+							M.StartMoving()
 							step(M, dir)
+							M.EndMoving()
 							return
 						spawn( 1 )
 							M.other_mobs = null
 							M.animate_movement = 2
 							return
 
-		else if(mob.confused)
-			step_rand(mob)
-			mob.last_movement=world.time
 		else
+			if (mob.process_confused(Dir))
+				return
 			if (prefs.stumble && ((world.time - mob.last_movement) > 5 && move_delay < 2))
 				mob.delayNextMove(3)	//if set, delays the second step when a mob starts moving to attempt to make precise high ping movement easier
 			//	to_chat(src, "<span class='notice'>First Step</span>")
@@ -389,6 +396,42 @@
 
 		if(mob.dir != old_dir)
 			mob.Facing()
+		mob.EndMoving()
+
+/mob/proc/process_confused(var/Dir)
+	if (confused <= 0)
+		return FALSE
+	. = TRUE
+	var/old_dir = dir
+	if (confused_intensity == CONFUSED_MAGIC)
+		StartMoving()
+		step_rand(src)
+		EndMoving()
+		return
+
+	StartMoving()
+	switch(Dir)
+		if(NORTH)
+			step(src, pick(NORTHEAST, NORTHWEST))
+		if(SOUTH)
+			step(src, pick(SOUTHEAST, SOUTHWEST))
+		if(EAST)
+			step(src, pick(NORTHEAST, SOUTHEAST))
+		if(WEST)
+			step(src, pick(NORTHWEST, SOUTHWEST))
+		if(NORTHEAST)
+			step(src, pick(NORTH, EAST))
+		if(NORTHWEST)
+			step(src, pick(NORTH, WEST))
+		if(SOUTHEAST)
+			step(src, pick(SOUTH, EAST))
+		if(SOUTHWEST)
+			step(src, pick(SOUTH, WEST))
+	EndMoving()
+
+	last_movement=world.time
+	if(dir != old_dir)
+		Facing()
 
 ///Process_Grab()
 ///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
@@ -410,14 +453,14 @@
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s grip!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s hug!</span>")
-				returnToPool(G)
+				qdel(G)
 			if(G.state == GRAB_NECK)
 				mob.delayNextMove(10)
 				if(!prob(5))
 					return 1
 				mob.visible_message("<span class='warning'>[mob] has broken free of [G.assailant]'s headlock!</span>",
 					drugged_message="<span class='warning'>[mob] has broken free of [G.assailant]'s passionate hug!</span>")
-				returnToPool(G)
+				qdel(G)
 	return 0
 
 
@@ -455,8 +498,11 @@
 					mob.forceEnter(get_step(mob, direct))
 					mob.dir = direct
 			mob.delayNextMove(movedelay)
-		if(INCORPOREAL_ETHEREAL) //Jaunting, without needing to be done through relaymove
+		if(INCORPOREAL_ETHEREAL, INCORPOREAL_ETHEREAL_IMPROVED) //Jaunting, without needing to be done through relaymove
+			var/jaunt_type = mob.incorporeal_move
 			var/movedelay = ETHEREAL_MOVEDELAY
+			if(jaunt_type == INCORPOREAL_ETHEREAL_IMPROVED)
+				movedelay = ETHEREAL_IMPROVED_MOVEDELAY
 			mob.set_glide_size(DELAY2GLIDESIZE(movedelay))
 			var/turf/newLoc = get_step(mob,direct)
 			if(!(newLoc.turf_flags & NOJAUNT) && !newLoc.holy)
@@ -464,7 +510,7 @@
 				mob.dir = direct
 			else
 				to_chat(mob, "<span class='warning'>Some strange aura is blocking the way!</span>")
-			INVOKE_EVENT(mob.on_moved,list("dir"=direct))
+			mob.lazy_invoke_event(/lazy_event/on_moved, list("mover" = mob))
 			mob.delayNextMove(movedelay)
 			return 1
 	// Crossed is always a bit iffy
@@ -525,7 +571,9 @@
 		var/mob/mobpulled = target
 		var/atom/movable/secondarypull = mobpulled.pulling
 		mobpulled.stop_pulling()
+		mobpulled.StartMoving()
 		step(mobpulled, get_dir(mobpulled.loc, dest))
+		mobpulled.EndMoving()
 		if(mobpulled && secondarypull)
 			mobpulled.start_pulling(secondarypull)
 	else

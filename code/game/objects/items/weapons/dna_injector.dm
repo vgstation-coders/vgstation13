@@ -119,7 +119,8 @@
 					M.dna.UpdateSE()
 				else
 					M.dna.SetSEValue(block,src.GetValue())
-				domutcheck(M, null, nofail)
+				spawn() //domutcheck can include monkeyization which is long and stops the proc until it's done, this fixes it
+					domutcheck(M, null, nofail)
 				uses--
 				//if(prob(5))
 					//trigger_side_effect(M)
@@ -523,9 +524,9 @@
 	datatype = DNA2_BUF_SE
 	value = 0xFFF
 	//block = 2
-	New()
-		block = SHADOWBLOCK
-		..()
+/obj/item/weapon/dnainjector/nofail/darkcloak/New()
+	block = SHADOWBLOCK
+	..()
 
 /obj/item/weapon/dnainjector/nofail/antidarkcloak
 	name = "DNA-Injector (Anti-Dark Cloak)"
@@ -533,9 +534,10 @@
 	datatype = DNA2_BUF_SE
 	value = 0x001
 	//block = 2
-	New()
-		block = SHADOWBLOCK
-		..()
+
+/obj/item/weapon/dnainjector/nofail/antidarkcloak/New()
+	block = SHADOWBLOCK
+	..()
 */
 /obj/item/weapon/dnainjector/nofail/chameleon
 	name = "DNA-Injector (Chameleon)"

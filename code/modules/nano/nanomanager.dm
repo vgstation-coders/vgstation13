@@ -187,6 +187,26 @@
 	return close_count
 
  /**
+  * Close all /nanoui uis attached to src_object
+  *
+  * @param src_object /obj|/mob The obj or mob which the uis are attached to
+  *
+  * @return int The number of uis closed
+  */
+/datum/nanomanager/proc/close_uis(src_object)
+	var/src_object_key = "\ref[src_object]"
+	if(!istype(open_uis[src_object_key], /list))
+		return 0
+
+	var/close_count = 0
+	for(var/ui_key in open_uis[src_object_key])
+		for(var/datum/nanoui/ui in open_uis[src_object_key][ui_key])
+			ui.close()
+			close_count++
+
+	return close_count
+
+ /**
   * Add a /nanoui ui to the list of open uis
   * This is called by the /nanoui open() proc
   *
@@ -288,3 +308,30 @@
 		world.log << file
 		client << browse_rsc(file)	// send the file to the client
 
+ /**
+  * Sends a message to the client-side JS of UIs on the object.
+  *
+  * @param src_object /datum The object owning the interface being sent to.
+  * @param ui_key string The string key of the UI being sent to.
+  * @param js_function string The name of the JS function to execute.
+  * @param data list List of arguments to send to the JS function.
+  * @param user /mob If provided, a specific mob to send to. If null, all mobs with the UI open will be sent to.
+  *
+  * @return nothing
+  */
+/datum/nanomanager/proc/send_message(src_object, ui_key, js_function, data, mob/user = null)
+    var/src_object_key = "\ref[src_object]"
+    if (isnull(open_uis[src_object_key]))
+        return 0
+
+    var/paramlist = list2params(data)
+
+    var/update_count = 0
+    for (var/datum/nanoui/ui in open_uis[src_object_key][ui_key])
+        if (!ui.src_object || (user != null && ui.user != user))
+            continue
+
+        ui.send_message(js_function, paramlist)
+        update_count += 1
+
+    return update_count

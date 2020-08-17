@@ -2,6 +2,7 @@
 	name = "Blink"
 	desc = "This spell randomly teleports you a short distance."
 	user_type = USER_TYPE_WIZARD
+	specialization = SSDEFENSIVE
 	abbreviation = "BL"
 
 	school = "abjuration"
@@ -14,6 +15,7 @@
 	cooldown_min = 5 //4 deciseconds reduction per rank
 	hud_state = "wiz_blink"
 	selection_type = "range"
+	quicken_price = Sp_BASE_PRICE
 
 /spell/aoe_turf/blink/cast(var/list/targets, mob/user)
 	if(!targets.len)
@@ -23,13 +25,13 @@
 	var/turf/starting = get_turf(user)
 	if(T)
 		user.unlock_from()
-		user.forceMove(T)
-
+		user.teleport_to(T)
+		INVOKE_EVENT(user.on_blink, list("starting" = starting, "destination" = T))
 		makeAnimation(T, starting)
 	return
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/effect/system/smoke_spread/transparent/smoke = new
 	smoke.set_up(1, 0, T)
 	smoke.start()
 
@@ -51,17 +53,24 @@
 	. = ..()
 	if (!.) // No need to go further.
 		return FALSE
+	if (user.locked_to)
+		to_chat(user, "<span class='warning'>We are restrained!</span>")
+		return FALSE
 	if (!user.vampire_power(blood_cost, CONSCIOUS))
 		return FALSE
 
 /spell/aoe_turf/blink/vamp/choose_targets()
 	var/turfs = ..()
 	for (var/turf/T in turfs)
-		if (T.get_lumcount() * 10 > 2)
+		if (T.get_lumcount() * 10 > 2 || T.holy || istype(T, /turf/unsimulated/floor/asteroid))
 			turfs -= T
 	return turfs
 
 /spell/aoe_turf/blink/vamp/cast(var/list/targets, var/mob/user)
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		for (var/datum/organ/external/O in H.organs)
+			O.release_restraints()
 	. = ..()
 	var/datum/role/vampire/V = isvampire(user)
 	if (V)

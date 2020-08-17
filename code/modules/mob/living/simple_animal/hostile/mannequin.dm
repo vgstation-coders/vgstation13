@@ -48,7 +48,7 @@
 	for(var/obj/cloth in clothing)
 		cloth.forceMove(loc)
 		clothing -= cloth
-	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+	new /obj/effect/decal/cleanable/dirt(loc)
 
 /mob/living/simple_animal/hostile/mannequin/proc/ChangeOwner(var/mob/owner)
 	LoseTarget()
@@ -67,11 +67,11 @@
 /mob/living/simple_animal/hostile/mannequin/wood/breakDown()
 	visible_message("<span class='warning'><b>[src]</b> collapses!</span>")
 	playsound(loc, 'sound/effects/woodcutting.ogg', 100, 1)
-	getFromPool(/obj/item/stack/sheet/wood, loc, 5)
+	new /obj/item/stack/sheet/wood(loc, 5)
 	for(var/obj/cloth in clothing)
 		cloth.forceMove(loc)
 		clothing -= cloth
-	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+	new /obj/effect/decal/cleanable/dirt(loc)
 
 /mob/living/simple_animal/hostile/mannequin/cyber
 	name = "human cyber mannequin"
@@ -87,7 +87,7 @@
 	visible_message("<span class='warning'><b>[src]</b> explodes!</span>")
 	explosion(loc,0,0,2)
 	playsound(loc, 'sound/effects/sparks4.ogg', 100, 1)
-	getFromPool(/obj/item/stack/sheet/metal, loc, 5)
+	new /obj/item/stack/sheet/metal(loc, 5)
 	var/parts_list = list(
 		/obj/item/robot_parts/head,
 		/obj/item/robot_parts/chest,
@@ -103,7 +103,7 @@
 	for(var/obj/cloth in clothing)
 		cloth.forceMove(loc)
 		clothing -= cloth
-	getFromPool(/obj/effect/decal/cleanable/dirt,loc)
+	new /obj/effect/decal/cleanable/dirt(loc)
 
 /mob/living/simple_animal/hostile/mannequin/cultify()
 	var/mob/living/simple_animal/hostile/mannequin/cult/C = new(loc)

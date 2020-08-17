@@ -17,12 +17,14 @@
 	..()
 
 /obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
-	if( user.restrained() || istype(user, /mob/living/silicon/pai) ) //added istype(user, /mob/living/silicon/pai) cause it was in buckle_mob, dunno why tho
+	if(istype(user, /mob/living/silicon/pai)) //added istype(user, /mob/living/silicon/pai) cause it was in buckle_mob, dunno why tho
 		return
 
 	if(is_locking(/datum/locking_category/buckle/bed/nest))
 		var/mob/M = get_locked(/datum/locking_category/buckle/bed/nest)[1]
 		if(M != user)
+			if(user.restrained())
+				return
 			M.visible_message(\
 				"<span class='notice'>[user.name] pulls [M.name] free from the sticky nest!</span>",\
 				"<span class='notice'>[user.name] pulls you free from the gelatinous resin.</span>",\

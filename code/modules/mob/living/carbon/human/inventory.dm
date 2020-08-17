@@ -59,18 +59,18 @@
 	var/list/obscured = list()
 
 	if(wear_suit)
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEGLOVES))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEGLOVES), 0))
 			obscured |= slot_gloves
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDEJUMPSUIT))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDEJUMPSUIT), 0))
 			obscured |= slot_w_uniform
-		if(is_slot_hidden(wear_suit.body_parts_covered,HIDESHOES))
+		if(is_slot_hidden(wear_suit.body_parts_covered, (HIDESHOES), 0))
 			obscured |= slot_shoes
 	if(head)
-		if(is_slot_hidden(head.body_parts_covered,HIDEMASK))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEMASK), 0))
 			obscured |= slot_wear_mask
-		if(is_slot_hidden(head.body_parts_covered,HIDEEYES))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEYES), 0))
 			obscured |= slot_glasses
-		if(is_slot_hidden(head.body_parts_covered,HIDEEARS))
+		if(is_slot_hidden(head.body_parts_covered, (HIDEEARS), 0))
 			obscured |= slot_ears
 	if(obscured.len > 0)
 		return obscured
@@ -91,14 +91,15 @@
 		items = get_clothing_items()
 	items -= list(gloves,shoes,w_uniform,glasses,ears) // now that these can hide stuff they need to be excluded
 	if(!hidden_flags)
-		return
+		return 0
 	var/ignore_slot
 	for(var/obj/item/equipped in items)
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		else if(is_slot_hidden(equipped.body_parts_covered,hidden_flags,ignore_slot))
+		else if(is_slot_hidden(equipped.body_parts_covered,(hidden_flags),ignore_slot,equipped.body_parts_visible_override))
 			return 1
+	return 0
 
 /mob/living/carbon/human/proc/equip_in_one_of_slots(obj/item/W, list/slots, act_on_fail = 1, put_in_hand_if_fail = 0)
 	for (var/slot in slots)
@@ -133,7 +134,7 @@
 		if(slot_wear_mask)
 			return wear_mask
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 		if(slot_legcuffed)
 			return legcuffed
 		if(slot_belt)
@@ -255,7 +256,7 @@
 			u_equip(l_store, 1)
 		if (wear_id)
 			u_equip(wear_id, 1)
-		if (belt)
+		if (belt && !isbelt(belt))
 			u_equip(belt, 1)
 		w_uniform = null
 		success = 1
@@ -332,6 +333,13 @@
 		success = 1
 		slot = slot_handcuffed
 		update_inv_handcuffed()
+	else if (W == mutual_handcuffs)
+		if(mutual_handcuffs.on_restraint_removal(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		mutual_handcuffs = null
+		success = 1
+		slot = slot_handcuffed
+		update_inv_mutual_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -428,8 +436,13 @@
 			src.wear_mask = W
 			update_inv_wear_mask(redraw_mob)
 		if(slot_handcuffed)
-			src.handcuffed = W
-			update_inv_handcuffed(redraw_mob)
+			var/obj/item/weapon/handcuffs/cuffs = W
+			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
+				src.mutual_handcuffs = cuffs
+				update_inv_mutual_handcuffed(redraw_mob)
+			else
+				src.handcuffed = cuffs
+				update_inv_handcuffed(redraw_mob)
 		if(slot_legcuffed)
 			src.legcuffed = W
 			update_inv_legcuffed(redraw_mob)
@@ -450,11 +463,7 @@
 			update_inv_gloves(redraw_mob)
 		if(slot_head)
 			src.head = W
-			//if((head.flags & BLOCKHAIR) || (head.flags & BLOCKHEADHAIR)) //Makes people bald when switching to one with no Blocking flags
-			//	update_hair(redraw_mob)	//rebuild hair
 			update_hair(redraw_mob)
-			if(istype(W,/obj/item/clothing/head/kitty))
-				W.update_icon(src)
 			update_inv_head(redraw_mob)
 		if(slot_shoes)
 			src.shoes = W
@@ -486,8 +495,8 @@
 	update_hidden_item_icons(W)
 
 	W.hud_layerise()
-	W.equipped(src, slot)
 	W.forceMove(src)
+	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
 

@@ -7,6 +7,11 @@
 	var/datum/money_account/affected_account
 	var/obj/machinery/account_database/affected_db
 
+/datum/event/money_hacker/can_start()
+	if(account_hack_attempted)
+		return 30
+	return 0
+
 /datum/event/money_hacker/setup()
 	if(all_money_accounts.len)
 		for(var/obj/machinery/account_database/DB in account_DBs)
@@ -32,7 +37,7 @@
 	without intervention this attack will succeed in [time_duration / 600] minutes. Required intervention: complete shutdown of affected accounts databases until the attack has ceased. \
 	Notifications will be sent as updates occur.<br>"
 	var/my_department = "[station_name()] firewall subroutines"
-	var/sending = message + "<font color='blue'><b>Message dispatched by [my_department].</b></font>"
+	var/sending = message + "<span class='notice'><b>Message dispatched by [my_department].</b></span>"
 
 	var/pass = 0
 	for(var/obj/machinery/message_server/MS in message_servers)
@@ -46,7 +51,7 @@
 		var/keyed_dpt1 = ckey("Engineering")
 		var/keyed_dpt2 = ckey("Security")
 		var/keyed_dpt3 = ckey("Bridge")
-		for (var/obj/machinery/requests_console/Console in allConsoles)
+		for (var/obj/machinery/requests_console/Console in requests_consoles)
 			var/keyed_department = ckey(Console.department)
 			if(keyed_department == keyed_dpt1 || keyed_department == keyed_dpt2 || keyed_department == keyed_dpt3)
 				if(Console.newmessagepriority < 2)
@@ -89,7 +94,7 @@
 			message = "The attack has ceased, the affected databases can now be brought online."
 
 		var/my_department = "[station_name()] firewall subroutines"
-		var/sending = message + "<font color='blue'><b>Message dispatched by [my_department].</b></font>"
+		var/sending = message + "<span class='notice'><b>Message dispatched by [my_department].</b></span>"
 
 		var/pass = 0
 		for(var/obj/machinery/message_server/MS in message_servers)
@@ -103,7 +108,7 @@
 			var/keyed_dpt1 = ckey("Engineering")
 			var/keyed_dpt2 = ckey("Security")
 			var/keyed_dpt3 = ckey("Bridge")
-			for (var/obj/machinery/requests_console/Console in allConsoles)
+			for (var/obj/machinery/requests_console/Console in requests_consoles)
 				var/keyed_department = ckey(Console.department)
 				if(keyed_department == keyed_dpt1 || keyed_department == keyed_dpt2 || keyed_department == keyed_dpt3)
 					if(Console.newmessagepriority < 2)

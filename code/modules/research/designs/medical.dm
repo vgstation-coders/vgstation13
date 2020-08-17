@@ -110,8 +110,8 @@
 	build_path = /obj/item/clothing/mask/chemmask
 
 /datum/design/antibody_scanner
-	name = "Antibody Scanner"
-	desc = "Used to scan living beings for antibodies in their blood."
+	name = "Immunity Scanner"
+	desc = "A hand-held body scanner able to evaluate the immune system of the subject."
 	id = "antibody_scanner"
 	req_tech = list(Tc_MAGNETS = 2, Tc_BIOTECH = 2)
 	build_type = PROTOLATHE

@@ -63,7 +63,7 @@
 	if(victim.get_exposed_body_parts() && prob(chance))
 		if(seed.chems && seed.chems.len)
 			for(var/rid in seed.chems)
-				victim.reagents.add_reagent(rid, Clamp(1, 5, seed.potency/10))
+				victim.reagents.add_reagent(rid, clamp(1, 5, seed.potency/10))
 			to_chat(victim, "<span class='danger'>You are stung by \the [src]!</span>")
 	last_special = world.time
 
@@ -103,13 +103,13 @@
 			victim.vessel.remove_reagent(BLOOD, drawing)
 			last_special = world.time
 
-/obj/effect/plantsegment/proc/manual_unbuckle(mob/user as mob)
+/obj/effect/plantsegment/proc/manual_unbuckle(mob/user)
 	var/list/atom/movable/locked = get_locked(/datum/locking_category/plantsegment)
 	if(locked && locked.len)
 		var/mob/M = locked[1]
 		if(!user || !istype(user))
 			user = M //Since the event sytem can't hot-potato arguments, for now, assume if noone's trying to free you, then you're trying to free yourself.
-		if(prob(Clamp(140 - seed.potency, 20, 100)))
+		if(prob(clamp(140 - seed.potency, 20, 100)))
 			if(M != user)
 				M.visible_message(\
 					"<span class='notice'>[user.name] frees [M.name] from \the [src].</span>",\
@@ -137,7 +137,7 @@
 	if(!istype(M))
 		return
 
-	on_resist_key = M.on_resist.Add(src, "manual_unbuckle")
+	M.lazy_register_event(/lazy_event/on_resist, src, .proc/manual_unbuckle)
 
 	last_special = world.time
 
@@ -149,8 +149,7 @@
 	if(!istype(M))
 		return
 
-	M.on_resist.Remove(on_resist_key)
-	on_resist_key = null
+	M.lazy_unregister_event(/lazy_event/on_resist, src, .proc/manual_unbuckle)
 
 /obj/effect/plantsegment/proc/entangle_mob(var/mob/living/victim)
 	if(!victim || victim.locked_to || !seed || seed.spread != 2 || is_locking(/datum/locking_category/plantsegment)) //How much of this is actually necessary, I wonder

@@ -19,12 +19,13 @@
 	var/shard_type = /obj/item/weapon/shard
 	mat_type = MAT_GLASS
 	siemens_coefficient = 0 //does not conduct
+	perunit = CC_PER_SHEET_GLASS
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
 		new /obj/item/weapon/circuitboard/blank(user.loc)
 		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
-		playsound(src.loc, 'sound/items/Welder.ogg', 35, 1)
+		W.playtoolsound(loc, 35)
 		src.use(1)
 	if(istype(W, /obj/item/stack/rods) && !reinforced)
 		var/obj/item/stack/rods/V  = W
@@ -53,7 +54,7 @@
 	desc = "HOLY SHEET! That is a lot of glass."
 	singular_name = "glass sheet"
 	icon_state = "sheet-glass"
-	starting_materials = list(MAT_GLASS = 3750)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
 	origin_tech = Tc_MATERIALS + "=1"
 	rglass = /obj/item/stack/sheet/glass/rglass
 
@@ -90,7 +91,7 @@
 	singular_name = "reinforced glass sheet"
 	sname = "glass_ref"
 	icon_state = "sheet-rglass"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = 3750)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_GLASS = CC_PER_SHEET_GLASS)
 	origin_tech = Tc_MATERIALS + "=2"
 	reinforced = 1
 	glass_quality = 1
@@ -114,7 +115,7 @@
 	singular_name = "glass sheet"
 	icon_state = "sheet-plasmaglass"
 	sname = "plasma"
-	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_PLASMA)
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_PLASMATECH + "=2"
 	rglass = /obj/item/stack/sheet/glass/plasmarglass
 	perunit = 2875 //average of plasma and glass
@@ -137,7 +138,7 @@
 	singular_name = "reinforced plasma glass sheet"
 	icon_state = "sheet-plasmarglass"
 	sname = "plasma_ref"
-	starting_materials = list(MAT_IRON = 1875, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_MISC)
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_GLASS = CC_PER_SHEET_GLASS, MAT_PLASMA = CC_PER_SHEET_PLASMA)
 	melt_temperature = MELTPOINT_STEEL+500 // I guess...?
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_PLASMATECH + "=2"
 	perunit = 2875
@@ -159,7 +160,7 @@ var/list/datum/stack_recipe/rglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
-	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass, 5, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass, 1, time = 2, on_floor = TRUE),
 	)
 
 var/list/datum/stack_recipe/plasmaglass_recipes = list (
@@ -171,5 +172,5 @@ var/list/datum/stack_recipe/plasmarglass_recipes = list (
 	new/datum/stack_recipe("window", /obj/structure/window/reinforced/plasma/loose, 1, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("full window", /obj/structure/window/full/reinforced/plasma/loose, 2, time = 10, on_floor = TRUE),
 	new/datum/stack_recipe("windoor", /obj/structure/windoor_assembly/plasma, 5, time = 10, start_unanchored = TRUE, on_floor = TRUE),
-	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass/plasma, 5, time = 10, on_floor = TRUE),
+	new/datum/stack_recipe("glass tile", /obj/item/stack/glass_tile/rglass/plasma, 1, time = 2, on_floor = TRUE),
 	)

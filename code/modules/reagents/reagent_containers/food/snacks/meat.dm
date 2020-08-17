@@ -10,13 +10,11 @@
 	var/meatword = "meat"
 
 	var/obj/item/poisonsacs = null //This is what will contain the poison
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/New(atom/A, var/mob/M)
-	..(A)
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	bitesize = 3
 	if(M)
 		if(uppertext(M.name) != "UNKNOWN")
 			name = "[M.name] [meatword]"
@@ -100,13 +98,14 @@
 	name = "carp fillet"
 	desc = "A fillet of spess carp meat"
 	icon_state = "fishfillet"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
-		eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 6
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/carppoisongland
+	eatverb = pick("bite","chew","choke down","gnaw","swallow","chomp")
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat/imitation
 	name = "imitation carp fillet"
@@ -116,49 +115,52 @@
 	name = "venomous spines"
 	desc = "The toxin-filled spines of a space carp."
 	icon_state = "toxicspine"
-	New()
-		..()
-		reagents.add_reagent(CARPOTOXIN, 3)
-		bitesize = 3
+/obj/item/weapon/reagent_containers/food/snacks/carppoisongland/New()
+	..()
+	reagents.add_reagent(CARPOTOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
 	name = "xenomeat"
 	desc = "A slab of xeno meat"
 	icon_state = "xenomeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 3)
-		src.bitesize = 6
+/obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+	src.bitesize = 6
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
 	name = "spider meat"
 	desc = "A slab of spider meat."
 	icon_state = "spidermeat"
-	New()
-		..()
-		poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
-		reagents.add_reagent(NUTRIMENT, 3)
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat/New()
+	..()
+	poisonsacs = new /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
+	reagents.add_reagent(NUTRIMENT, 3)
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland
 	name = "venomous spittle sac"
 	desc = "The toxin-filled poison sac of a giant spider."
 	icon_state = "toxicsac"
-	New()
-		..()
-		reagents.add_reagent(TOXIN, 3)
-		bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/spiderpoisongland/New()
+	..()
+	reagents.add_reagent(TOXIN, 3)
+	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
 	name = "bear meat"
 	desc = "A very manly slab of meat."
 	icon_state = "bearmeat"
-	New()
-		..()
-		reagents.add_reagent(NUTRIMENT, 12)
-		reagents.add_reagent(HYPERZINE, 5)
-		src.bitesize = 3
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 12)
+	reagents.add_reagent(HYPERZINE, 5)
+	src.bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/roach
 	name = "cockroach meat"
@@ -317,3 +319,58 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 10)
+
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail
+	icon_state = "snail_meat"
+	name = "snail meat"
+	desc = "How uncivilised ! You cannot be expected to eat that without cooking it, mon Dieu !"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/food.dmi', "right_hand" = 'icons/mob/in-hand/right/food.dmi')
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/snail/New()
+	. = ..()
+	reagents.add_reagent(NUTRIMENT,5)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother
+	name = "Royal Gingjelly"
+	icon_state = "royal_gingjelly"
+	desc = "The sickly sweet smell wafting from this sticky glob triggers some primal fear. You absolutely should not eat this."
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 10)
+	reagents.add_reagent (CARAMEL, 10)
+
+/obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother/consume(mob/living/carbon/eater, messages = 0)
+
+	if(ishuman(eater))
+
+		var/mob/living/carbon/C = eater
+
+		if(C.monkeyizing)
+			return
+		to_chat(eater, "<span class='warning'>Your flesh hardens and your blood turns to frosting. This is agony!</span>")
+		sleep (30)
+		C.monkeyizing = 1
+		C.canmove = 0
+		C.icon = null
+		C.overlays.len = 0
+		C.invisibility = 101
+		for(var/obj/item/W in C)
+			if(istype(W, /obj/item/weapon/implant))
+				var/obj/item/weapon/implant/I = W
+				if(I.imp_in == C)
+					qdel(W)
+					continue
+			W.reset_plane_and_layer()
+			W.forceMove(C.loc)
+			W.dropped(C)
+		var/mob/living/simple_animal/hostile/ginger/gingerbomination/new_mob = new /mob/living/simple_animal/hostile/ginger/gingerbomination(C.loc)
+		new_mob.a_intent = I_HURT
+		if(C.mind)
+			C.mind.transfer_to(new_mob)
+		else
+			new_mob.key = C.key
+		C.transferBorers(new_mob)
+		qdel(C)
+		playsound(src, 'sound/effects/evolve.ogg', 100, 1)

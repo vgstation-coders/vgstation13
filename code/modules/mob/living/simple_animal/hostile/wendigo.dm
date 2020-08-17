@@ -36,6 +36,7 @@
 	var/consumes = 0 //How many people it has eaten
 	speak_chance = 15
 	speak = list("Help!","Help me!","Somebody help!","Get over here, quickly!")
+	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH|UNPACIFIABLE
 
 
 /mob/living/simple_animal/hostile/wendigo/CanAttack(var/atom/the_target)

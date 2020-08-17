@@ -1,6 +1,6 @@
 /obj/machinery/portable_atmospherics/hydroponics
 	name = "hydroponics tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	anchored = 1
 	flags = OPENCONTAINER | PROXMOVE // PROXMOVE could be added and removed as necessary if it causes lag
@@ -196,6 +196,8 @@
 	if(O.is_open_container())
 		return 0
 
+	add_fingerprint(user)
+
 	if (istype(O, /obj/item/seeds))
 
 		if(!seed)
@@ -226,7 +228,7 @@
 				nutrilevel = 1
 
 			//Snowflakey, maybe move this to the seed datum
-			health = (istype(S, /obj/item/seeds/cutting) ? round(seed.endurance/rand(2,5)) : seed.endurance)
+			health = seed.endurance
 
 			lastcycle = world.time
 
@@ -272,14 +274,14 @@
 				S.icon_state += "-large"
 
 			if(dead)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-dead")
+				S.overlays += image(seed.plant_dmi,"dead")
 			else if(harvest)
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-harvest")
+				S.overlays += image(seed.plant_dmi,"harvest")
 			else if(age < seed.maturation)
 				var/t_growthstate = max(1,round((age * seed.growth_stages) / seed.maturation))
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[t_growthstate]")
+				S.overlays += image(seed.plant_dmi,"stage-[t_growthstate]")
 			else
-				S.overlays += image(seed.plant_dmi,"[seed.plant_icon]-grow[seed.growth_stages]")
+				S.overlays += image(seed.plant_dmi,"stage-[seed.growth_stages]")
 
 			S.plant_name = seed.display_name
 			S.name = "potted [S.plant_name]"
@@ -363,7 +365,7 @@
 	else if(istype(O, /obj/item/weapon/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
-	else if(iswrench(O) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
+	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
 		return //Don't call parent. I mean, soil shouldn't be a child of portable_atmospherics at all, but that's not very feasible.
 
 	else if(istype(O, /obj/item/apiary))
@@ -500,6 +502,7 @@
 		flags |= OPENCONTAINER
 
 	update_icon()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/light_toggle()
 	set name = "Toggle Light"
@@ -509,6 +512,7 @@
 		return
 	light_on = !light_on
 	calculate_light()
+	add_fingerprint(usr)
 
 /obj/machinery/portable_atmospherics/hydroponics/verb/set_label()
 	set name = "Set Tray Label"
@@ -568,14 +572,16 @@
 				return
 	else if(istype(Proj ,/obj/item/projectile/energy/florayield))
 		if(seed && !dead)
-			yield_mod = Clamp(yield_mod + (rand(3,5)/10), 1, 2)
+			yield_mod = clamp(yield_mod + (rand(3,5)/10), 1, 2)
 			if(yield_mod >= 2)
 				visible_message("<span class='notice'>\The [seed.display_name] looks lush and healthy.</span>")
 			return
 
 	..()
 
-/obj/machinery/portable_atmospherics/hydroponics/AltClick()
+/obj/machinery/portable_atmospherics/hydroponics/AltClick(var/mob/usr)
+	if((usr.incapacitated() || !Adjacent(usr)))
+		return
 	close_lid()
 
 /datum/locking_category/hydro_tray

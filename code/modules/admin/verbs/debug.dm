@@ -1,3 +1,6 @@
+//how long we keep proc call results (datums and lists)
+#define PROC_RESULT_KEEP_TIME 5 MINUTES
+
 /client/proc/Debug2()
 	set category = "Debug"
 	set name = "Debug-Game"
@@ -67,8 +70,15 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(!procname)
 			return
 
+		// Do not make this a global reference. Global references can be cleared out.
+		if (istype(target, /datum/subsystem/dbcore/))
+			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
+			message_admins("[key_name(usr)] used atom proc call on the db controller.")
+			log_admin("[key_name(usr)] used atom proc call on the db controller.")
+			return FALSE
+
 		if(target && !hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -86,7 +96,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 
 		if(targetselected)
 			if(!target)
-				to_chat(usr, "<font color='red'>Error: callproc(): owner of proc no longer exists.</font>")
+				to_chat(usr, "<span class='red'>Error: callproc(): owner of proc no longer exists.</span>")
 				return
 
 			log_admin("[key_name(src)] called [target]'s [procname]() with [lst.len ? "the arguments [list2params(lst)]":"no arguments"].")
@@ -100,7 +110,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
+		to_chat(usr, "<span class='notice'>[procname] returned: [returnval]</span>")
 		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/callatomproc(var/datum/target as anything)
@@ -120,7 +130,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			return
 
 		if(!hascall(target, procname))
-			to_chat(usr, "<span style='color: red;'>Error: callatomproc(): target has no such call [procname].</span>")
+			to_chat(usr, "<span class='red'>Error: callatomproc(): target has no such call [procname].</span>")
 			return
 
 		var/argnum = input("Number of arguments","Number:",0) as num|null
@@ -143,9 +153,19 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			returnval = "null"
 		else if(returnval == "")
 			returnval = "\"\" (empty string)"
-		to_chat(usr, "<font color='blue'>[procname] returned: [returnval]</font>")
-		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+		var/returntext = returnval
+		if(istype(returnval, /datum))
+			returntext = "[returnval] <a href='?_src_=vars;Vars=\ref[returnval]'>\[VV\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+		else if(istype(returnval, /list))
+			returntext = "<a href='?_src_=vars;List=\ref[returnval]'>\[List\]</A>"
+			spawn(PROC_RESULT_KEEP_TIME)
+				returnval = null
+
+		to_chat(usr, "<span class='notice'>[procname] returned: [returntext]</span>")
+		feedback_add_details("admin_verb","APC") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/Cell()
 	set category = "Debug"
@@ -486,7 +506,7 @@ Pressure: [env.pressure]"}
 		if(A && !(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
-	for(var/obj/machinery/requests_console/RC in allConsoles)
+	for(var/obj/machinery/requests_console/RC in requests_consoles)
 		var/area/A = get_area(RC)
 		if(A && !(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
@@ -691,20 +711,6 @@ Pressure: [env.pressure]"}
 	else
 		alert("Invalid mob")
 
-
-/client/proc/cmd_admin_dump_instances()
-	set category = "Debug"
-	set name = "Dump Instance Counts"
-	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F=file("data/logs/profiling/[date_string]_instances.csv")
-	fdel(F)
-	F << "Types,Number of Instances"
-	for(var/key in type_instances)
-		F << "[key],[type_instances[key]]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
-
 /client/proc/cmd_admin_find_bad_blood_tracks()
 	set category = "Debug"
 	set name = "Find broken blood tracks"
@@ -848,10 +854,10 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		return M:Cluwneize()
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cluwne.</span>", 1)
 		feedback_add_details("admin_verb","MKCLU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
+		return M.Cluwneize()
 	else
 		alert("Invalid mob, needs to be a human.")
 
@@ -1138,9 +1144,9 @@ client/proc/check_bomb()
 
 /client/proc/set_teleport_pref()
 	set name = "Set Teleport-Here Preferences"
-	set category = "Debug"
+	set category = "Fun"
 
-	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discret way?","Teleport-Here Preferences", "Flashy","Stealthy")
+	teleport_here_pref = alert("Do you want to teleport atoms in a flashy way or a discreet way?","Teleport-Here Preferences", "Flashy","Stealthy")
 
 	switch(teleport_here_pref)
 		if("Flashy")
@@ -1244,7 +1250,17 @@ client/proc/check_convertables()
 		if(!chosen)
 			return
 
-	holder.marked_datum = new chosen
+	var/list/lst = list()
+	var/argnum = input("Number of arguments","Number:",0) as num|null
+	if(!argnum && (argnum!=0))
+		return
+
+	lst.len = argnum // Expand to right length
+
+	for(var/i = 1 to argnum) // Lists indexed from 1 forwards in byond
+		lst[i] = variable_set(src)
+
+	holder.marked_datum = new chosen(arglist(lst))
 
 	to_chat(usr, "<span class='notify'>A reference to the new [chosen] has been stored in your marked datum. <a href='?_src_=vars;Vars=\ref[holder.marked_datum]'>Click here to access it</a></span>")
 	log_admin("[key_name(usr)] spawned the datum [chosen] to his marked datum.")
@@ -1310,14 +1326,44 @@ client/proc/check_convertables()
 		holder.emergency_shuttle_panel()
 		log_admin("[key_name(usr)] checked the Emergency Shuttle Panel.")
 	feedback_add_details("admin_verb","ESP")
+
+/client/proc/bee_count()
+	set category = "Debug"
+	set name = "Check Bee Count"
+	set desc = "Check how many bee datums or mobs currently exist in the world."
+
+	var/contained_bees = 0
+	for (var/obj/machinery/apiary/A in apiaries_list)
+		contained_bees += A.worker_bees_inside
+		contained_bees += A.queen_bees_inside
+	to_chat(usr, "<span class='notice'>There are currently [bees_count] bee datums, spread between [bee_mobs_count] swarms (or possibly held in bug nets).</span>")
+	to_chat(usr, "<span class='notice'>Additionally, there are [contained_bees] bees currently contained within apiaries.</span>")
+
+
+/client/proc/diseases_panel()
+	set name = "Diseases Panel"
+	set category = "Admin"
+	if(holder)
+		holder.diseases_panel()
+		log_admin("[key_name(usr)] checked the Diseases Panel.")
+	feedback_add_details("admin_verb","DIS")
 	return
+
+/client/proc/climate_panel()
+	set name = "Climate Panel"
+	set category = "Admin"
+	if(holder)
+		holder.climate_panel()
+		log_admin("[key_name(usr)] checked the Climate Panel.")
+	feedback_add_details("admin_verb","CLI")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"
 	set name = "Start line profiling"
 	set desc = "Starts tracking line by line profiling for code lines that support it"
 
-	PROFILE_START
+	LINE_PROFILE_START
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
 	feedback_add_details("admin_verb","Start line profiling")
@@ -1328,7 +1374,7 @@ client/proc/check_convertables()
 	set name = "Stop line profiling"
 	set desc = "Stops tracking line by line profiling for code lines that support it"
 
-	PROFILE_STOP
+	LINE_PROFILE_STOP
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
 	feedback_add_details("admin_verb","Stop line profiling")

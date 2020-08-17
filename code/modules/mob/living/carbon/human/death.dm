@@ -1,10 +1,17 @@
-/mob/living/carbon/human/gib()
+/mob/living/carbon/human/gib(animation = FALSE, meat = TRUE)
+	if(species)
+		species.gib(src)
+		return
+
 	death(1)
 	monkeyizing = 1
 	canmove = 0
 	icon = null
 	invisibility = 101
+	default_gib()
 
+//This will get called often at first until custom gibbing events get made up for each species.
+/mob/living/carbon/human/proc/default_gib()
 	for(var/datum/organ/external/E in src.organs)
 		if(istype(E, /datum/organ/external/chest) || istype(E, /datum/organ/external/groin)) //Really bad stuff happens when either get removed
 			continue
@@ -18,8 +25,9 @@
 		gib_radius = 6 //Your insides are all lubed, so gibs travel much further
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-h", sleeptime = 15)
-	hgibs(loc, viruses, dna, species.flesh_color, species.blood_color, gib_radius)
+	hgibs(loc, virus2, dna, species.flesh_color, species.blood_color, gib_radius)
 	qdel(src)
+
 
 /mob/living/carbon/human/dust(var/drop_everything = FALSE)
 	death(1)
@@ -45,6 +53,13 @@
 	qdel(src)
 
 /mob/living/carbon/human/Destroy()
+	infected_contact_mobs -= src
+	if (pathogen)
+		for (var/mob/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
 		var/turf/T = get_turf(src)
 		if (T)
@@ -73,7 +88,7 @@
 	..()
 
 	for(var/obj/abstract/Overlays/O in obj_overlays)
-		returnToPool(O)
+		qdel(O)
 
 	obj_overlays = null
 
@@ -115,11 +130,9 @@
 		if(!suiciding) //Cowards don't count
 			score["deadcrew"]++ //Someone died at this point, and that's terrible
 	if(ticker && ticker.mode)
-//		world.log << "k"
 		sql_report_death(src)
-		//ticker.mode.check_win() //Calls the rounds wincheck, mainly for wizard, malf, and changeling now
 	species.handle_death(src)
-	if(become_zombie_after_death && isjusthuman(src)) //2 if they retain their mind, 1 if they don't
+	if(become_zombie_after_death && isjusthuman(src))
 		spawn(30 SECONDS)
 			if(!gcDestroyed)
 				make_zombie(retain_mind = become_zombie_after_death-1)

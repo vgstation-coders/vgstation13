@@ -4,6 +4,7 @@
 #define COMM_SCREEN_MESSAGES	3
 #define COMM_SCREEN_SECLEVEL	4
 #define COMM_SCREEN_ERT			5
+#define COMM_SCREEN_SHUTTLE_LOG 6
 
 #define UNAUTH 0
 #define AUTH_HEAD 1
@@ -15,6 +16,8 @@ var/global/ports_open = TRUE
 #define SHUTTLE_RECALL  -1
 #define SHUTTLE_CALL     1
 #define SHUTTLE_TRANSFER 2
+
+var/list/shuttle_log = list()
 
 /shuttle_call
 	var/direction=0
@@ -87,17 +90,12 @@ var/global/ports_open = TRUE
 			setMenuState(usr,COMM_SCREEN_MAIN)
 		if("login")
 			var/mob/M = usr
-			var/obj/item/weapon/card/id/I = M.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			if (istype(I,/obj/item/weapon/card/emag))
-				emag(usr)
-			if (I && istype(I))
-				if(src.check_access(I))
-					authenticated = AUTH_HEAD
-				if(access_captain in I.access)
+			if(allowed(M))
+				authenticated = AUTH_HEAD
+				if(access_captain in M.GetAccess())
 					authenticated = AUTH_CAPT
+			if(emagged) //Login regardless if you have an ID
+				authenticated = AUTH_CAPT
 		if("logout")
 			authenticated = UNAUTH
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -110,12 +108,8 @@ var/global/ports_open = TRUE
 				return
 			tmp_alertlevel = text2num(href_list["level"])
 			var/mob/M = usr
-			var/obj/item/weapon/card/id/I = M.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			if (isAdminGhost(usr) || (I && istype(I)))
-				if(isAdminGhost(usr) || (access_heads in I.access)) //Let heads change the alert level.
+			if (allowed(M) || emagged)
+				if(isAdminGhost(usr) || (access_heads in M.GetAccess()) || emagged) //Let heads change the alert level. Works while emagged
 					var/old_level = security_level
 					if(!tmp_alertlevel)
 						tmp_alertlevel = SEC_LEVEL_GREEN
@@ -139,7 +133,7 @@ var/global/ports_open = TRUE
 					tmp_alertlevel = 0
 				setMenuState(usr,COMM_SCREEN_MAIN)
 			else
-				to_chat(usr, "You need to swipe your ID.")
+				to_chat(usr, "You need to have a valid ID.")
 
 		if("announce")
 			if(authenticated==AUTH_CAPT && !issilicon(usr))
@@ -232,6 +226,8 @@ var/global/ports_open = TRUE
 				var/response = alert("Are you sure you wish to recall the shuttle?", "Confirm", "Yes", "No")
 				if(response == "Yes")
 					recall_shuttle(usr)
+					if(!isobserver(usr))
+						shuttle_log += "\[[worldtime2text()]] Recalled from [get_area(usr)]."
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -335,13 +331,18 @@ var/global/ports_open = TRUE
 			var/mob/M = usr
 			var/obj/item/weapon/card/id/I = M.get_id_card()
 			if (I || isAdminGhost(usr))
-				if(isAdminGhost(usr) || (access_hos in I.access) || (access_heads in I.access && security_level >= SEC_LEVEL_RED))
+				if(isAdminGhost(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
-						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems") as null|text
-						if(!reason || !(usr in view(1,src)))
+						var/reason = stripped_input(usr, "Please input a concise justification for port closure. This reason will be announced to the crew, as well as transmitted to the trader shuttle.", "Nanotrasen Anti-Comdom Systems")
+						if(!reason)
+							to_chat(usr, "You must provide some reason for closing the docking port.")
 							return
-						log_game("[key_name(usr)] closed the port to traders for [reason].")
-						message_admins("[key_name_admin(usr)] closed the port to traders for [reason].")
+						if(!(usr in view(1,src)))
+							return
+						command_alert("The trading port is now on lockdown. Third party traders are no longer free to dock their shuttles with the station. Reason given:\n\n[reason]", "Trading Port - Now on Lockdown", 1)
+						world << sound('sound/AI/trading_port_closed.ogg')
+						log_game("[key_name(usr)] closed the port to traders for reason: [reason].")
+						message_admins("[key_name_admin(usr)] closed the port to traders for reason: [reason].")
 						if(trade_shuttle.current_port.areaname == "NanoTrasen Station")
 							var/obj/machinery/computer/shuttle_control/C = trade_shuttle.control_consoles[1] //There should be exactly one
 							if(C)
@@ -351,9 +352,11 @@ var/global/ports_open = TRUE
 						ports_open = FALSE
 						return
 					if(!ports_open)
-						var/response = alert(usr,"Are you sure you wish to open the station to traders?", "Port Opening", "Yes", "No")
+						var/response = alert(usr,"Are you sure you wish to re-open the station to traders?", "Port Opening", "Yes", "No")
 						if(response != "Yes")
 							return
+						command_alert("The trading port lockdown has been lifted. Third party traders are now free to dock their shuttles with the station.", "Trading Port - Open for Business", 1)
+						world << sound('sound/AI/trading_port_open.ogg')
 						log_game("[key_name(usr)] opened the port to traders.")
 						message_admins("[key_name_admin(usr)] opened the port to traders.")
 						trade_shuttle.add_dock(/obj/docking_port/destination/trade/station)
@@ -364,7 +367,8 @@ var/global/ports_open = TRUE
 					to_chat(usr, "<span class='warning'>This action requires either a red alert or head of security authorization.</span>")
 			else
 				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
-
+		if("ViewShuttleLog")
+			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
@@ -397,7 +401,12 @@ var/global/ports_open = TRUE
 	data["menu_state"] = data["is_ai"] ? ai_menu_state : menu_state
 	data["emagged"] = emagged
 	data["authenticated"] = (isAdminGhost(user) ? AUTH_CAPT : authenticated)
-	data["screen"] = getMenuState(usr)
+	var/current_screen = getMenuState(usr)
+	if(current_screen == COMM_SCREEN_SHUTTLE_LOG)
+		data["shuttle_log"] = list()
+		for(var/entry in shuttle_log)
+			data["shuttle_log"] += list(list("text" = entry))
+	data["screen"] = current_screen
 
 	data["stat_display"] = list(
 		"type"=display_type,
@@ -547,12 +556,14 @@ var/global/ports_open = TRUE
 	emergency_shuttle.incall()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
+	if(!isobserver(user))
+		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
 	world << sound('sound/AI/shuttlecalled.ogg')
 
-	return
+	return 1
 
 /proc/init_shift_change(var/mob/user, var/force = 0)
 	if ((!( ticker ) || emergency_shuttle.location))
@@ -620,7 +631,7 @@ var/global/ports_open = TRUE
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command

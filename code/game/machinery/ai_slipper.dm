@@ -68,6 +68,31 @@
 	onclose(user, "computer")
 	return
 
+/obj/machinery/ai_slipper/AICtrlClick(mob/user as mob)
+	src.add_hiddenprint(user)
+	src.disabled = !src.disabled
+	icon_state = src.disabled? "motion0":"motion3"
+	return
+
+/obj/machinery/ai_slipper/AIShiftClick(mob/user as mob)
+	src.add_hiddenprint(user)
+	if(stat & (NOPOWER|BROKEN))
+		return
+	if(src.cooldown_on)
+		to_chat(user, "It's still on cooldown!")
+		return
+	if(src.disabled)
+		to_chat(user, "It's turned off!")
+		return
+
+	new /obj/effect/effect/foam(src.loc)
+	src.uses--
+	cooldown_on = 1
+	cooldown_time = world.timeofday + 100
+	slip_process()
+	to_chat(user, "Uses left: [uses].")
+	return
+
 /obj/machinery/ai_slipper/Topic(href, href_list)
 	if(..())
 		return 1

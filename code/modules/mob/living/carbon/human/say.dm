@@ -1,6 +1,9 @@
 ///mob/living/carbon/human/say(var/message)
 //	..(message)
 
+// This is obsolete if the human is using a language.
+// Verbs in such a situation are given in /datum/language/get_spoken_verb().
+// The proc get_spoken_verb(var/msg) allows you to override the spoken verb depending on the mob.
 /mob/living/carbon/human/say_quote(text)
 	if(!text)
 		return "says, \"...\"";	//not the best solution, but it will stop a large number of runtimes. The cause is somewhere in the Tcomms code
@@ -21,11 +24,23 @@
 
 	return "says, [text]";
 
-/mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
-	if(wear_mask && istype(wear_mask))
-		if(!(copytext(speech.message, 1, 2) == "*"/* || (mind && mind.changeling && department_radio_keys[copytext(speech.message, 1, 3)] != "changeling")*/))
-			wear_mask.treat_mask_speech(speech)
+// Use this for an override of the spoken verb.
+/mob/living/carbon/human/get_spoken_verb(var/msg)
+	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice) || istype(wear_mask, /obj/item/clothing/head/cardborg))
+		if (istype(wear_mask, /obj/item/clothing/mask/gas/voice))
+			var/obj/item/clothing/mask/gas/voice/V = wear_mask
+			if (!(V.vchange) || V.speech_mode == VOICE_CHANGER_SAYS)
+				return ..()
+		var/ending = copytext(msg, length(msg))
+		if (ending == "?")
+			return "queries"
+		if (ending == "!")
+			return "declares"
+		return "states"
 
+	return ..()
+
+/mob/living/carbon/human/treat_speech(var/datum/speech/speech, var/genesay=0)
 	if ((M_HULK in mutations) && health >= 25 && length(speech.message))
 		speech.message = "[uppertext(replacetext(speech.message, ".", "!"))]!!" //because I don't know how to code properly in getting vars from other files -Bro
 	if (src.slurring || (undergoing_hypothermia() == MODERATE_HYPOTHERMIA && prob(25)))
@@ -67,6 +82,11 @@
 
 
 /mob/living/carbon/human/GetVoice()
+	if(find_held_item_by_type(/obj/item/device/megaphone))
+		var/obj/item/device/megaphone/M = locate() in held_items
+		if(istype(M) && M.mask_voice)
+			return "Unknown"
+
 	if(istype(wear_mask, /obj/item/clothing/mask/gas/voice))
 		var/obj/item/clothing/mask/gas/voice/V = wear_mask
 		if(V.vchange && V.is_flipped == 1) //the mask works and we are wearing it on the face instead of on the head
@@ -77,6 +97,7 @@
 				return "Unknown"
 		else
 			return real_name
+
 	if(mind) // monkeyhumans exist, don't descriminate
 		var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
 		if(changeling && changeling.mimicing)
@@ -147,37 +168,6 @@
 		return get_id_name("Unknown")
 	return null
 
-/mob/living/carbon/human/proc/forcesay(list/append)
-	if(stat == CONSCIOUS)
-		if(client)
-			var/virgin = 1	//has the text been modified yet?
-			var/temp = winget(client, "input", "text")
-			if(findtextEx(temp, "Say \"", 1, 7) && length(temp) > 5)	//case sensitive means
-
-				temp = replacetext(temp, ";", "")	//general radio
-
-				if(findtext(trim_left(temp), ":", 6, 7))	//dept radio
-					temp = copytext(trim_left(temp), 8)
-					virgin = 0
-
-				if(virgin)
-					temp = copytext(trim_left(temp), 6)	//normal speech
-					virgin = 0
-
-				while(findtext(trim_left(temp), ":", 1, 2))	//dept radio again (necessary)
-					temp = copytext(trim_left(temp), 3)
-
-				if(findtext(temp, "*", 1, 2))	//emotes
-					return
-
-				var/trimmed = trim_left(temp)
-				if(length(trimmed))
-					if(append)
-						temp += pick(append)
-
-					say(temp)
-				winset(client, "input", "text=[null]")
-
 /mob/living/carbon/human/say_understands(var/mob/other,var/datum/language/speaking = null)
 	if(other)
 		other = other.GetSource()
@@ -196,6 +186,9 @@
 			return 1
 		if (istype(other, /mob/living/carbon/slime))
 			return 1
+		if (istype(other, /mob/living/carbon/complex/gondola))
+			return 1
+
 
 	//This is already covered by mob/say_understands()
 	//if (istype(other, /mob/living/simple_animal))

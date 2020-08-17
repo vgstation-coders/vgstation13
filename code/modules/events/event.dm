@@ -6,6 +6,11 @@
 
 	var/activeFor		= 0	//How long the event has existed. You don't need to change this.
 
+//Called by event dynamic, returns the percent chance to fire if successful, 0 otherwise.
+// Args: list: active_with_role. The number of jobs that have active members. Used as active_with_role["AI"] = number of active.
+/datum/event/proc/can_start(var/list/active_with_role)
+	return 0
+
 //Called first before processing.
 //Allows you to setup your event, such as randomly
 //setting the startWhen and or announceWhen variables.
@@ -76,7 +81,8 @@
 
 //Adds the event to the global events list, and removes it from the list
 //of potential events.
-/datum/event/New()
-	setup()
-	events.Add(src)
+/datum/event/New(var/start_event = TRUE)
+	if(start_event)
+		setup()
+		events.Add(src)
 	..()

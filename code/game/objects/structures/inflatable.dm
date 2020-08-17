@@ -62,7 +62,7 @@
 	if(!WE.remove_fuel(1, user))
 		return
 	to_chat(user, "<span class='notice'>You melt \the [src] into a plastic sheet.</span>")
-	getFromPool(/obj/item/stack/sheet/mineral/plastic, get_turf(src))
+	new /obj/item/stack/sheet/mineral/plastic(get_turf(src))
 	qdel(src)
 
 /obj/item/inflatable/wall

@@ -1,6 +1,7 @@
 
 /datum/artifact_effect/badfeeling
 	effecttype = "badfeeling"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 	var/list/messages = list("You feel worried.",\
@@ -35,7 +36,7 @@
 				if(prob(75))
 					to_chat(H, "<b><font color='red' size='[num2text(rand(1,5))]'><b>[pick(drastic_messages)]</b></font>")
 				else
-					to_chat(H, "<font color='red'>[pick(messages)]</font>")
+					to_chat(H, "<span class='red'>[pick(messages)]</span>")
 
 			if(prob(50))
 				H.dizziness += rand(3,5)
@@ -45,7 +46,7 @@
 		for (var/mob/living/carbon/human/H in range(src.effectrange,holder))
 			if(prob(5))
 				if(prob(75))
-					to_chat(H, "<font color='red'>[pick(messages)]</font>")
+					to_chat(H, "<span class='red'>[pick(messages)]</span>")
 				else
 					to_chat(H, "<font color='red' size='[num2text(rand(1,5))]'><b>[pick(drastic_messages)]</b></font>")
 
@@ -60,7 +61,7 @@
 				if(prob(95))
 					to_chat(H, "<font color='red' size='[num2text(rand(1,5))]'><b>[pick(drastic_messages)]</b></font>")
 				else
-					to_chat(H, "<font color='red'>[pick(messages)]</font>")
+					to_chat(H, "<span class='red'>[pick(messages)]</span>")
 
 			if(prob(50))
 				H.dizziness += rand(3,5)

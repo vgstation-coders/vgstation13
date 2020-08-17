@@ -2,6 +2,7 @@
 /obj/item/weapon/book/manual/excavation
 	name = "Out on the dig"
 	icon_state = "excavation"
+	item_state = "book6"
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig"
 	dat = {"<html>
@@ -114,6 +115,7 @@
 /obj/item/weapon/book/manual/mass_spectrometry
 	name = "High power mass spectrometry, a comprehensive guide"
 	icon_state = "analysis"
+	item_state = "book6"
 	author = "Winton Rice, Chief Mass Spectrometry Technician at the Institute of Applied Sciences on Arcadia"
 	title = "High powered mass spectrometry, a comprehensive guide"
 	dat = {"<html>
@@ -184,6 +186,7 @@
 /obj/item/weapon/book/manual/anomaly_spectroscopy
 	name = "Spectroscopy: Analysing the anomalies of the cosmos"
 	icon_state = "anomaly"
+	item_state = "book6"
 	author = "Doctor Martin Boyle, Director Research at the Lower Hydrolian Sector Listening Array"
 	title = "Spectroscopy: Analysing the anomalies of the cosmos"
 	dat = {"<html>
@@ -207,6 +210,7 @@
 /obj/item/weapon/book/manual/materials_chemistry_analysis
 	name = "Materials analysis and the chemical implications"
 	icon_state = "chemistry"
+	item_state = "book6"
 	author = "Jasper Pascal, Senior Lecturer in Materials Analysis at the University of Jol'Nar"
 	title = "Materials analysis and the chemical implications"
 	dat = {"<html>
@@ -233,6 +237,7 @@
 /obj/item/weapon/book/manual/anomaly_testing
 	name = "Anomalous materials and energies"
 	icon_state = "triangulate"
+	item_state = "book6"
 	author = "Norman York, formerly of the Tyrolion Institute on Titan"
 	title = "Anomalous materials and energies"
 	dat = {"<html>
@@ -310,6 +315,7 @@
 /obj/item/weapon/book/manual/stasis
 	name = "Cellular suspension, the new Cryogenics?"
 	icon_state = "stasis"
+	item_state = "book6"
 	author = "Elvin Schmidt"
 	title = "Cellular suspension, the new Cryogenics?"
 	dat = {"<html>

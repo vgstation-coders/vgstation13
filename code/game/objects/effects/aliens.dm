@@ -207,6 +207,8 @@
 /obj/effect/alien/weeds/node/New()
 	connected_weeds = new()
 	..(src.loc, src)
+	spawn(HEARTBEAT_RATE)
+		heartbeat()
 
 /obj/effect/alien/weeds/node/Destroy()
 	for(var/obj/effect/alien/weeds/W in connected_weeds)
@@ -240,11 +242,6 @@
 	spawn(rand(100, 250))
 		if(src)
 			Life()
-
-/obj/effect/alien/weeds/node/New()
-	..()
-	spawn(HEARTBEAT_RATE)
-		heartbeat()
 
 /obj/effect/alien/weeds/node/proc/heartbeat()
 	flick("weednode-heartbeat",src)
@@ -514,7 +511,7 @@
 			if(!child)
 				src.visible_message("<span class='warning'>The egg bursts apart, revealing nothing!</span>")
 				status = "GROWN"
-				getFromPool(/obj/effect/decal/cleanable/blood/xeno, src)
+				new /obj/effect/decal/cleanable/blood/xeno(src)
 				health = min(health,0)
 				return
 			child.forceMove(loc)

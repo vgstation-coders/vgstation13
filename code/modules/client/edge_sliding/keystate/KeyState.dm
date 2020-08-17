@@ -27,78 +27,79 @@ proc/keycode2char(N)
 		else return 0
 
 KeyState
-	var
-		client/client
-		shift = 0
-		list/key[255]
-		mouse_x=0;mouse_y=0
-	New(client/C)
-		if(C)client=C
-		var/index
-		for(index = 1 to 255)
-			key[index]=0
-	proc
-		Update(event,KeyCode)
-			var/T=KeyCode
-			KeyCode=text2num(KeyCode)
-			switch(event)
-				if("KeyUp")
-					if(key[KeyCode])
-						key[KeyCode]=0
-						switch(KeyCode)
-							if(16)shift&=~1
-							if(17)shift&=~2
-							if(18)shift&=~4
-						if(client)client.KeyUp(KeyCode,shift)
-				if("KeyDown")
-					if(!key[KeyCode])
-						key[KeyCode]=1
-						switch(KeyCode)
-							if(16)shift|=1
-							if(17)shift|=2
-							if(18)shift|=4
-						if(client)client.KeyDown(KeyCode,shift)
-					else if(key_repeat&&client)client.KeyDown(KeyCode)
-				if("MouseCoordinate")
-					mouse_x=copytext(T,1,findtext(T,","))
-					mouse_y=copytext(T,findtext(T,",")+1,0)
+	var/client/client
+	var/shift = 0
+	var/list/key[255]
+	var/mouse_x=0
+	var/mouse_y=0
+
+KeyState/New(client/C)
+	if(C)client=C
+	var/index
+	for(index = 1 to 255)
+		key[index]=0
+
+KeyState/proc/Update(event,KeyCode)
+	var/T=KeyCode
+	KeyCode=text2num(KeyCode)
+	switch(event)
+		if("KeyUp")
+			if(key[KeyCode])
+				key[KeyCode]=0
+				switch(KeyCode)
+					if(16)shift&=~1
+					if(17)shift&=~2
+					if(18)shift&=~4
+				if(client)client.KeyUp(KeyCode,shift)
+		if("KeyDown")
+			if(!key[KeyCode])
+				key[KeyCode]=1
+				switch(KeyCode)
+					if(16)shift|=1
+					if(17)shift|=2
+					if(18)shift|=4
+				if(client)client.KeyDown(KeyCode,shift)
+			else if(key_repeat&&client)client.KeyDown(KeyCode)
+		if("MouseCoordinate")
+			mouse_x=copytext(T,1,findtext(T,","))
+			mouse_y=copytext(T,findtext(T,",")+1,0)
 
 client
-	var
-		KeyState/keystate
-		resolution
-		avail_resolution
-		system_type
-		color_quality
-	Topic(href,href_list[])
-		if("action" in href_list)
-			if(href_list["action"]=="KeyState")
-				var/event = href_list[2]
-				keystate.Update(event,href_list[event])
-			if(href_list["action"]=="infosetup")
-				resolution=href_list["resolution"]
-				avail_resolution=href_list["availresolution"]
-				color_quality=href_list["color"]
-				system_type=href_list["os"]
-		return ..()
-	verb/manual_focus()
-		set hidden = 1
-		if(!keystate)return
-		if(manual_focus&&keystate.open)
-			KeyFocus()
-	proc
-		//info return functions
-		resolution()return resolution
-		avail_resolution()return avail_resolution
-		system_type()return system_type
-		color_quality()return color_quality
+	var/KeyState/keystate
+	var/resolution
+	var/avail_resolution
+	var/system_type
+	var/color_quality
+
+client/Topic(href,href_list[])
+	if("action" in href_list)
+		if(href_list["action"]=="KeyState")
+			var/event = href_list[2]
+			keystate.Update(event,href_list[event])
+		if(href_list["action"]=="infosetup")
+			resolution=href_list["resolution"]
+			avail_resolution=href_list["availresolution"]
+			color_quality=href_list["color"]
+			system_type=href_list["os"]
+	return ..()
+client/verb/manual_focus()
+	set hidden = 1
+	if(!keystate)return
+	if(manual_focus&&keystate.open)
+		KeyFocus()
+
+//info return functions
+client/proc/resolution() return resolution
+client/proc/avail_resolution()return avail_resolution
+client/proc/system_type()return system_type
+client/proc/color_quality()return color_quality
 		//action functions
-		key_repeat(repeat)keystate.key_repeat=repeat
-		KeySetup(focus=1)
-			keystate=new(src)
-			if(focus)KeyFocus()
-		InfoSetup()
-			src<<browse({"
+client/proc/key_repeat(repeat)keystate.key_repeat=repeat
+client/proc/KeySetup(focus=1)
+	keystate=new(src)
+	if(focus)KeyFocus()
+client/proc/InfoSetup()
+	src<<browse({"
 <html>
 <head>
 </head>
@@ -114,8 +115,8 @@ window.location="?action=infosetup&resolution="+resolution+"&availresolution="+a
 </body>
 </html>
 "},"window=infosetup;size=0x0;can_resize=0;titlebar=0")
-		MouseUpdate()
-			src<<browse({"
+client/proc/MouseUpdate()
+	src<<browse({"
 <html>
 <head>
 <script type="text/javascript">
@@ -130,10 +131,10 @@ window.location="?action=KeyState&MouseCoordinate="+event.screenX+","+event.scre
 </html>
 "},"window=coordinate;size=0x0;can_resize=0;titlebar=0")
 
-		KeyFocus()
-			var/key_repeat_code
-			if(keystate.key_repeat)
-				key_repeat_code = {"
+client/proc/KeyFocus()
+	var/key_repeat_code
+	if(keystate.key_repeat)
+		key_repeat_code = {"
 <html>
 <head>
 <script type="text/javascript">
@@ -155,8 +156,8 @@ function KeyDown(event)
 this.focus()
 </script>
 </body></html>"}
-			else
-				key_repeat_code = {"
+	else
+		key_repeat_code = {"
 <html>
 <head>
 <script type="text/javascript">
@@ -188,4 +189,4 @@ for(index=0; index<255; index+=1)
 this.focus()
 </script>
 </body></html>"}
-			src<<browse(key_repeat_code,"window=KeyEvent;size=0x0;can_resize=0;titlebar=0")
+	src<<browse(key_repeat_code,"window=KeyEvent;size=0x0;can_resize=0;titlebar=0")

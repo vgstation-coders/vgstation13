@@ -29,7 +29,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	plane = OBJ_PLANE
 
 	var/defective = 0
-	var/quality = NORMAL //What level of quality this object is.
+	var/quality = B_AVERAGE //What level of quality this object is.
 	var/datum/material/material_type //What material this thing is made out of
 	var/event/on_use
 	var/sheet_type = /obj/item/stack/sheet/metal
@@ -44,6 +44,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 	var/has_been_invisible_sprayed = FALSE
 	var/impactsound
+	var/current_glue_state = GLUE_STATE_NONE
 
 // Whether this object can appear in holomaps
 /obj/proc/supports_holomap()
@@ -77,6 +78,9 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	..()
 
 /obj/item/proc/is_used_on(obj/O, mob/user)
+
+/obj/proc/blocks_doors()
+	return 0
 
 
 /obj/proc/install_pai(obj/item/device/paicard/P)
@@ -116,7 +120,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			install_pai(O)
 			state_controls_pai(O)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
-	if(O)
+	if(W)
 		var/obj/item/weapon/W = O
 		INVOKE_EVENT(W.on_use, list("user" = user, "target" = src))
 		if(W.material_type)
@@ -353,13 +357,13 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 /obj/proc/multitool_menu(var/mob/user,var/obj/item/device/multitool/P)
 	return "<b>NO MULTITOOL_MENU!</b>"
 
-/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/link/context)
+/obj/proc/linkWith(var/mob/user, var/obj/buffer, var/list/context)
 	return 0
 
 /obj/proc/unlinkFrom(var/mob/user, var/obj/buffer)
 	return 0
 
-/obj/proc/canLink(var/obj/O, var/link/context)
+/obj/proc/canLink(var/obj/O, var/list/context)
 	return 0
 
 /obj/proc/isLinkedWith(var/obj/O)
@@ -494,7 +498,7 @@ a {
  * @param time_to_wrench The time to complete the wrenchening
  * @returns TRUE on success, FALSE on fail
  */
-/obj/proc/wrenchAnchor(var/mob/user, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
+/obj/proc/wrenchAnchor(var/mob/user, var/obj/item/I, var/time_to_wrench = 3 SECONDS) //proc to wrench an object that can be secured
 	if(!canAffixHere(user))
 		return FALSE
 	if(!anchored)
@@ -507,7 +511,8 @@ a {
 				return FALSE
 	user.visible_message(	"[user] begins to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.",
 							"You begin to [anchored ? "unbolt" : "bolt"] \the [src] [anchored ? "from" : "to" ] the floor.")
-	playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(I)
+		I.playtoolsound(loc, 50)
 	if(do_after(user, src, time_to_wrench))
 		if(!canAffixHere(user))
 			return FALSE
@@ -668,10 +673,14 @@ a {
 				surrounding_mod *= I.quality/rand(1,3)
 	*/
 	var/initial_quality = round(((rand(1,3)*surrounding_mod)*material_mod)+modifier)
-	quality = Clamp(initial_quality, AWFUL>min_quality?AWFUL:min_quality, LEGENDARY)
+	quality = clamp(initial_quality, B_AWFUL>min_quality?B_AWFUL:min_quality, B_LEGENDARY)
+	var/processed_name = lowertext(mat? mat.processed_name : material_type.processed_name)
+	var/to_icon_state = "[initial(icon_state)]_[processed_name]_[quality]"
+	if(has_icon(icon, to_icon_state))
+		icon_state = to_icon_state
 
 /obj/proc/gen_description(mob/user)
-	var/material_mod = quality-GOOD>1 ? quality-GOOD : 0
+	var/material_mod = quality-B_GOOD>1 ? quality-B_GOOD : 0
 	var/additional_description
 	if(material_mod)
 		additional_description = "On \the [src] is a carving, it depicts:\n"
@@ -714,10 +723,18 @@ a {
 		material_type = mat
 		sheet_type = mat.sheettype
 	gen_quality(additional_quality, min_quality)
-	if(quality > SUPERIOR)
+	if(quality > B_SUPERIOR)
 		gen_description()
-	if(!findtext(lowertext(name), lowertext(mat.name)))
-		name = "[quality == NORMAL ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
+	if(material_type)
+		if(sharpness_flags && sharpness)
+			force = initial(force)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+			sharpness = initial(sharpness)*(material_type.sharpness_mod*(quality/B_AVERAGE))
+		else
+			force = initial(force)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+			throwforce = initial(throwforce)*(material_type.brunt_damage_mod*(quality/B_AVERAGE))
+	if(!findtext(lowertext(name), lowertext(material_type.name)))
+		name = "[quality == B_AVERAGE ? "": "[lowertext(qualityByString[quality])] "][lowertext(mat.name)] [name]"
 
 /obj/proc/check_uplink_validity()
 	return TRUE
@@ -727,3 +744,30 @@ a {
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
+
+/obj/proc/FeetStab(mob/living/AM,var/soundplay = 'sound/effects/glass_step.ogg',var/damage = 5,var/knockdown = 3)
+	if(istype(AM))
+		if(AM.locked_to) //Mob is locked to something, so it's not actually stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			return
+		if(AM.flying)
+			return
+		else //Stepping on the glass
+			playsound(src, soundplay, 50, 1)
+			if(ishuman(AM))
+				var/mob/living/carbon/human/H = AM
+				var/danger = FALSE
+
+				var/datum/organ/external/foot = H.pick_usable_organ(LIMB_LEFT_FOOT, LIMB_RIGHT_FOOT)
+				if(foot && !H.organ_has_mutation(foot, M_STONE_SKIN) && !H.check_body_part_coverage(FEET))
+					if(foot.is_organic())
+						danger = TRUE
+
+						if(!H.lying && H.feels_pain())
+							H.Knockdown(knockdown)
+							H.Stun(knockdown)
+						if(foot.take_damage(damage, 0))
+							H.UpdateDamageIcon()
+						H.updatehealth()
+
+				to_chat(AM, "<span class='[danger ? "danger" : "notice"]'>You step in \the [src]!</span>")

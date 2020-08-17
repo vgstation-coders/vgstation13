@@ -1,7 +1,7 @@
 /obj/machinery/media/receiver/boombox
 	name = "Boombox"
 	desc = "Tune in and tune out."
-
+	pass_flags = PASSTABLE
 	icon='icons/obj/radio.dmi'
 	icon_state="radio"
 
@@ -96,7 +96,7 @@
 	icon='icons/obj/radio.dmi'
 	icon_state="wallradio"
 	anchored=1
-	volume=0.25 // 25% of user's set volume.
+	volume=1 // applies a % of the user's media volume pref
 	var/buildstage = 0
 
 /obj/machinery/media/receiver/boombox/wallmount/supports_holomap()
@@ -153,7 +153,7 @@
 				return ..()
 		if(SYSTEMISKINDADONE)
 			if(W.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
 					on = 1
 					buildstage = SYSTEMISDONE
@@ -162,9 +162,9 @@
 					update_on(TRUE)
 				return 1
 			else if(iswirecutter(W))
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
-					getFromPool(/obj/item/stack/cable_coil,get_turf(src),5)
+					new /obj/item/stack/cable_coil(get_turf(src), 5)
 					buildstage = SYSTEMISNOTDONE
 					update_icon()
 
@@ -179,9 +179,9 @@
 					to_chat(user, "<span class='notice'>You wire \the [src]!</span>")
 					buildstage = SYSTEMISKINDADONE
 				return 1
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "<span class='notice'>You remove the securing bolts...</span>")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISNOTDONE)
 					new /obj/item/mounted/frame/soundsystem(get_turf(src))
 					to_chat(user, "<span class='notice'>The frame pops off.</span>")

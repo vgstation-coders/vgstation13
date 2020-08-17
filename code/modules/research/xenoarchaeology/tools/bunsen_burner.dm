@@ -50,6 +50,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
+	set_light(0)
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -59,12 +60,7 @@
 			to_chat(user, "<span class = 'notice'>\The [src] is on.</span>")
 		if(BUNSEN_OPEN)
 			to_chat(user, "<span class = 'notice'>\The [src]'s fuel port is open.</span>")
-	to_chat(user, "<span class='info'>It contains:</span>")
-	if(reagents && reagents.reagent_list.len)
-		for(var/datum/reagent/R in reagents.reagent_list)
-			to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-	else
-		to_chat(user, "<span class='info'>Nothing.</span>")
+	reagents.get_examine(user)
 	if(held_container)
 		to_chat(user, "<span class='info'>It is holding a:</span>")
 		held_container.examine(user)
@@ -82,22 +78,25 @@
 						return
 		else
 			if(!held_container && user.drop_item(W, src))
-				held_container = W
 				to_chat(user, "<span class='notice'>You put \the [held_container] onto \the [src].</span>")
-				var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
-				var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
-				overlays += I
-				overlays += I2
 				add_fingerprint(user)
+				load_item(W)
 				return 1 // avoid afterattack() being called
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
 		..()
+
+/obj/machinery/bunsen_burner/proc/load_item(obj/item/weapon/W)
+	held_container = W
+	var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_x" = 2 * PIXEL_MULTIPLIER, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(W.icon, W.icon_state)))
+	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
+	overlays += I
+	overlays += I2
 
 /obj/machinery/bunsen_burner/process()
 	if(heating == BUNSEN_ON)
@@ -141,6 +140,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
+		set_light(0)
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
@@ -176,6 +176,7 @@
 		return
 	heating = !heating
 	update_icon()
+	set_light(heating)
 	if(heating == BUNSEN_ON)
 		processing_objects.Add(src)
 	else
@@ -248,14 +249,9 @@ obj/machinery/bunsen_burner/mapped/New()
 	desc = "[initial(desc)] Perfect for keeping your coffee hot."
 	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug
 	coffeemug.reagents.add_reagent(COFFEE, 30)
-	held_container = coffeemug
-	var/image/I = image("icon"=coffeemug, "layer"=FLOAT_LAYER, "pixel_y" = 13 * PIXEL_MULTIPLIER)
-	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
-	overlays += I
-	overlays += I2
+	load_item(coffeemug)
 
 
 #undef BUNSEN_OPEN
 #undef BUNSEN_OFF
 #undef BUNSEN_ON
-

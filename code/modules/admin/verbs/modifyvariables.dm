@@ -1,7 +1,8 @@
 var/list/forbidden_varedit_object_types = list(
 										/datum/admins,						//Admins editing their own admin-power object? Yup, sounds like a good idea.
-										/datum/blackbox,	//Prevents people messing with feedback gathering
+										/datum/blackbox,					//Prevents people messing with feedback gathering
 										/datum/feedback_variable,			//Prevents people messing with feedback gathering
+										/datum/subsystem/dbcore/,			// No messing with the database.
 									)
 
 //Interface for editing a variable. It returns its new value. If edited_datum, it automatically changes the edited datum's value
@@ -339,10 +340,6 @@ var/list/forbidden_varedit_object_types = list(
 	return M
 
 /client/proc/can_edit_var(var/tocheck, var/type_to_check)
-	if(tocheck in nevervars)
-		to_chat(usr, "Editing this variable is forbidden.")
-		return FALSE
-
 	if (is_type_in_list(type_to_check, forbidden_varedit_object_types))
 		to_chat(usr, "Editing this variable is forbidden.")
 		return FALSE

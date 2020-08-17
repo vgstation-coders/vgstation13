@@ -203,7 +203,7 @@
 		if(max_health >= HEALTH_FOR_FLOWER_RECHARGE)
 			if(do_after(user, src, 5))
 				W.reagents.remove_any(10)
-				var/tmp/bananas = reagents.get_reagent_amount(BANANA)
+				var/bananas = reagents.get_reagent_amount(BANANA)
 				reagents.remove_reagent(BANANA, bananas) //removing banan so it doesn't get transferred into the water flower
 				if(reagents.total_volume >= 10)
 					visible_message("<span class='notice'>The HONKTech pump has recharged [W].</span>")
@@ -281,11 +281,11 @@
 		return
 	if(reagents.total_volume <= 0 && max_health < HEALTH_FOR_FREE_MOVEMENT) //No fuel
 		if(user)
-			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
-			unlock_atom(user)
 			activated = 0
-			user.Knockdown(5) //Only Weaken after unbuckling
-			user.Stun(5)
+			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
+			if(unlock_atom(user))
+				user.Knockdown(5) //Only Weaken after unbuckling
+				user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)
@@ -337,7 +337,7 @@
 		new /obj/effect/decal/cleanable/crayon(pos, main = colour1, shade = colour2, type = printing_text)
 	else
 		if(printing_text == "paint")
-			var/tmp/turf/T = pos
+			var/turf/T = pos
 			var/ind = "[initial(T.icon)][colour1]"
 			if(!cached_icons[ind]) //shamelessly copied from paint.dm
 				var/icon/overlay = new/icon(initial(T.icon))

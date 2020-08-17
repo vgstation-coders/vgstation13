@@ -18,7 +18,7 @@ proc/initialize_materials()
 			continue
 		initial_materials += list(mat.id = 0) // This is for machines in r&d who have a material holder. If you can't make sheets of the material, you can't put in an r_n_d machine to begin with.
 
-var/global/list/material_list		//Stores an instance of all the datums as an assoc with their matids
+var/global/list/datum/material/material_list		//Stores an instance of all the datums as an assoc with their matids
 var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials
@@ -37,41 +37,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 /datum/materials/Destroy()
 	holder = null
-
-/datum/materials/resetVariables(args)
-	var/newargs
-	if(args)
-		newargs = args + "storage"
-	else
-		newargs = "storage"
-
-	..(arglist(newargs))
-
-	if(!initial_materials)
-		initialize_materials()
-
-	storage = initial_materials.Copy()
-
-/datum/materials/proc/addAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
-		warning("addAmount(): Unknown material [mat_id]!")
-		return
-	// I HATE BYOND
-	// storage[mat_id].stored++
-	storage[mat_id] = max(0, storage[mat_id] + amount)
-
-
-/datum/materials/proc/removeFrom(var/datum/materials/mats)
-	src.addFrom(mats,zero_after=1)
-
-/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
-	if(mats == null)
-		return
-	for(var/mat_id in storage)
-		if(mats.storage[mat_id]>0)
-			storage[mat_id] += mats.storage[mat_id]
-			if(zero_after)
-				mats.storage[mat_id] = 0
+	return ..()
 
 /datum/materials/proc/getVolume()
 	var/volume=0
@@ -84,15 +50,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/value=0
 	for(var/mat_id in storage)
 		var/datum/material/mat = getMaterial(mat_id)
-		value += mat.value * storage[mat_id]
+		value += mat.value * (storage[mat_id]/mat.cc_per_sheet)
 	return value
 
-/datum/materials/proc/removeAmount(var/mat_id,var/amount)
-	if(!(mat_id in storage))
-		warning("removeAmount(): Unknown material [mat_id]!")
-		return
-	addAmount(mat_id,-amount)
-
+//Returns however much we have of that material
 /datum/materials/proc/getAmount(var/mat_id)
 	if(!(mat_id in storage))
 		warning("getAmount(): Unknown material [mat_id]!")
@@ -100,12 +61,65 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 
 	return storage[mat_id]
 
+//Returns the material datum according to the given ID
 /datum/materials/proc/getMaterial(var/mat_id)
 	if(!(mat_id in material_list))
 		warning("getMaterial(): Unknown material [mat_id]!")
 		return 0
 
 	return material_list[mat_id]
+
+//Adds the given amount of the given mat_ID to our storage
+/datum/materials/proc/addAmount(var/mat_id,var/amount)
+	if(!(mat_id in storage))
+		warning("addAmount(): Unknown material [mat_id]!")
+		return
+	// I HATE BYOND
+	// storage[mat_id].stored++
+	storage[mat_id] = max(0, storage[mat_id] + amount)
+
+//Adds all of the given materials datum's resources to ours. If zero_after, we set their storage amounts to 0
+/datum/materials/proc/addFrom(var/datum/materials/mats, var/zero_after=0)
+	if(mats == null)
+		return
+	for(var/mat_id in storage)
+		if(mats.storage[mat_id]>0)
+			storage[mat_id] += mats.storage[mat_id]
+			if(zero_after)
+				mats.storage[mat_id] = 0
+
+//Used to remove all materials from a given materials datum, and transfer it to ours
+/datum/materials/proc/removeFrom(var/datum/materials/mats)
+	src.addFrom(mats,zero_after=1)
+
+//Sanely removes an amount from us, of a given material ID, and transfers it to somebody else. Returns the given amount
+/datum/materials/proc/Transfer(var/mat_id, var/amount, var/datum/materials/receiver)
+	ASSERT(receiver)
+	if(!(mat_id in storage))
+		warning("Transfer(): Unknown material [mat_id]!")
+		return 0
+	amount = min(getAmount(mat_id), amount)
+	receiver.addAmount(mat_id, amount)
+	removeAmount(mat_id, amount)
+	return amount
+
+//Itterates through every material ID we have, and transfers the percentage of how much we have of that material to the receiver
+/datum/materials/proc/TransferPercent(var/percentage, var/datum/materials/receiver)
+	var/amount_transferred = 0
+	for(var/mat_id in storage)
+		var/amount = Transfer(mat_id, getAmount(mat_id) * (percentage/100), receiver)
+		amount_transferred += amount
+	return amount_transferred
+
+/datum/materials/proc/TransferAll(var/datum/materials/receiver)
+	return TransferPercent(100, receiver)
+
+/datum/materials/proc/removeAmount(var/mat_id,var/amount)
+	if(!(mat_id in storage))
+		warning("removeAmount(): Unknown material [mat_id]!")
+		return
+	addAmount(mat_id,-amount)
+
 
 /datum/materials/proc/makeSheets(var/atom/loc)
 	for (var/id in storage)
@@ -126,6 +140,10 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	for(var/id in storage)
 		removeAmount(id, storage[id])
 
+/proc/get_material_cc_per_sheet(var/matID)
+	var/datum/material/mat = material_list[matID]
+	return mat.cc_per_sheet
+
 //HOOKS//
 /atom/proc/onMaterialChange(matID, amount)
 	return
@@ -136,7 +154,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/name=""
 	var/processed_name=""
 	var/id=""
-	var/cc_per_sheet=CC_PER_SHEET_MISC
+	var/cc_per_sheet=CC_PER_SHEET_DEFAULT
 	var/oretype=null
 	var/sheettype=null
 	var/cointype=null
@@ -150,6 +168,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	var/quality_mod = 1
 	var/melt_temperature = MELTPOINT_STEEL
 	var/armor_mod = 1
+	var/default_show_in_menus = TRUE // If false, stuff like the smelter won't show these *unless it has some*.
 
 
 /datum/material/New()
@@ -165,7 +184,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/iron
 	name="Iron"
 	id=MAT_IRON
-	value=1
+	value=VALUE_IRON
 	cc_per_sheet=CC_PER_SHEET_METAL
 	oretype=/obj/item/stack/ore/iron
 	sheettype=/obj/item/stack/sheet/metal
@@ -180,7 +199,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	name="Sand"
 	processed_name="Glass"
 	id=MAT_GLASS
-	value=1
+	value=VALUE_GLASS
 	cc_per_sheet=CC_PER_SHEET_GLASS
 	oretype=/obj/item/stack/ore/glass
 	sheettype=/obj/item/stack/sheet/glass/glass
@@ -202,8 +221,8 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/diamond
 	name="Diamond"
 	id=MAT_DIAMOND
-	value=40
-	cc_per_sheet = 1750
+	value=VALUE_DIAMOND
+	cc_per_sheet = CC_PER_SHEET_DIAMOND
 	oretype=/obj/item/stack/ore/diamond
 	sheettype=/obj/item/stack/sheet/mineral/diamond
 	cointype=/obj/item/weapon/coin/diamond
@@ -217,7 +236,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plasma
 	name="Plasma"
 	id=MAT_PLASMA
-	value=40
+	value=VALUE_PLASMA
 	oretype=/obj/item/stack/ore/plasma
 	sheettype=/obj/item/stack/sheet/mineral/plasma
 	cointype=/obj/item/weapon/coin/plasma
@@ -225,6 +244,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	brunt_damage_mod = 1.2
 	sharpness_mod = 1.4
 	quality_mod = 1.3
+	cc_per_sheet = CC_PER_SHEET_PLASMA
 
 /datum/material/plasma/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -236,7 +256,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/gold
 	name="Gold"
 	id=MAT_GOLD
-	value=20
+	value=VALUE_GOLD
 	oretype=/obj/item/stack/ore/gold
 	sheettype=/obj/item/stack/sheet/mineral/gold
 	cointype=/obj/item/weapon/coin/gold
@@ -245,11 +265,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.5
 	quality_mod = 1.7
 	melt_temperature = MELTPOINT_GOLD
+	cc_per_sheet = CC_PER_SHEET_GOLD
 
 /datum/material/silver
 	name="Silver"
 	id=MAT_SILVER
-	value=20
+	value=VALUE_SILVER
 	oretype=/obj/item/stack/ore/silver
 	sheettype=/obj/item/stack/sheet/mineral/silver
 	cointype=/obj/item/weapon/coin/silver
@@ -258,12 +279,13 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.7
 	quality_mod = 1.5
 	melt_temperature = MELTPOINT_SILVER
+	cc_per_sheet = CC_PER_SHEET_SILVER
 
 
 /datum/material/uranium
 	name="Uranium"
 	id=MAT_URANIUM
-	value=20
+	value=VALUE_URANIUM
 	oretype=/obj/item/stack/ore/uranium
 	sheettype=/obj/item/stack/sheet/mineral/uranium
 	cointype=/obj/item/weapon/coin/uranium
@@ -272,6 +294,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.2
 	quality_mod = 1.4
 	melt_temperature = MELTPOINT_URANIUM
+	cc_per_sheet = CC_PER_SHEET_URANIUM
 
 
 /datum/material/uranium/on_use(obj/source, atom/target, mob/user)
@@ -284,11 +307,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/clown
 	name="Bananium"
 	id=MAT_CLOWN
-	value=100
+	value=VALUE_CLOWN
 	oretype=/obj/item/stack/ore/clown
 	sheettype=/obj/item/stack/sheet/mineral/clown
 	cointype=/obj/item/weapon/coin/clown
 	melt_temperature = MELTPOINT_POTASSIUM
+	cc_per_sheet = CC_PER_SHEET_CLOWN
 
 /datum/material/clown/New()
 	if(!..())
@@ -312,7 +336,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/phazon
 	name="Phazon"
 	id=MAT_PHAZON
-	value=200
+	value=VALUE_PHAZON
 	cc_per_sheet = 1500
 	oretype=/obj/item/stack/ore/phazon
 	sheettype=/obj/item/stack/sheet/mineral/phazon
@@ -322,6 +346,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 1.8
 	quality_mod = 2.2
 	melt_temperature = MELTPOINT_PLASMA
+	cc_per_sheet = CC_PER_SHEET_PHAZON
 
 /datum/material/phazon/on_use(obj/source, atom/target, mob/user)
 	if(!..())
@@ -341,29 +366,30 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 /datum/material/plastic
 	name="Plastic"
 	id=MAT_PLASTIC
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/mineral/plastic
 	cointype=null
 	color = "#F8F8FF" //rgb: 248, 248, 255
+	cc_per_sheet = CC_PER_SHEET_PLASTIC
 
 /datum/material/cardboard
 	name="Cardboard"
 	id=MAT_CARDBOARD
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/cardboard
 	cointype=null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_CARDBOARD
 
 /datum/material/wood
 	name="Wood"
 	id=MAT_WOOD
-	value=1
+	value=0
 	oretype=null
 	sheettype=/obj/item/stack/sheet/wood
 	cointype=null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_WOOD
 	color = "#663300" //rgb: 102, 51, 0
 
 /datum/material/brass
@@ -373,7 +399,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype = null
 	sheettype = /obj/item/stack/sheet/brass
 	cointype = null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_BRASS
 	color = "#A97F1B"
 	melt_temperature = MELTPOINT_BRASS
 
@@ -384,7 +410,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	oretype = null
 	sheettype = /obj/item/stack/sheet/ralloy
 	cointype = null
-	cc_per_sheet = CC_PER_SHEET_METAL
+	cc_per_sheet = CC_PER_SHEET_RALLOY
 	color = "#363636"
 
 /datum/material/ice
@@ -392,11 +418,12 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	id = MAT_ICE
 	value = 0
 	oretype = /obj/item/ice_crystal
+	cc_per_sheet = CC_PER_SHEET_ICE
 
 /datum/material/mythril
 	name="mythril"
 	id=MAT_MYTHRIL
-	value=50
+	value=VALUE_MYTHRIL
 	oretype=/obj/item/stack/ore/mythril
 	sheettype=/obj/item/stack/sheet/mineral/mythril
 	cointype=/obj/item/weapon/coin/mythril
@@ -405,119 +432,154 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	sharpness_mod = 0.6
 	quality_mod = 1.5
 	armor_mod = 1.75
+	cc_per_sheet = CC_PER_SHEET_MYTHRIL
 
 /datum/material/telecrystal
 	name="telecrystal"
 	id=MAT_TELECRYSTAL
-	value=200
+	value=VALUE_TELECRYSTAL
 	oretype=/obj/item/stack/ore/telecrystal
 	sheettype=/obj/item/bluespace_crystal
 	cointype=null
+	cc_per_sheet = CC_PER_SHEET_TELECRYSTAL
 
 
-/* //Commented out to save save space in menus listing materials until they are used
 /datum/material/pharosium
 	name="Pharosium"
-	id="pharosium"
+	id=MAT_PHAROSIUM
 	value=10
 	oretype=/obj/item/stack/ore/pharosium
 	sheettype=/obj/item/stack/sheet/mineral/pharosium
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_PHAROSIUM
+
 
 /datum/material/char
 	name="Char"
-	id="char"
+	id=MAT_CHAR
 	value=5
 	oretype=/obj/item/stack/ore/char
 	sheettype=/obj/item/stack/sheet/mineral/char
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CHAR
 
 
 /datum/material/claretine
 	name="Claretine"
-	id="claretine"
+	id=MAT_CLARETINE
 	value=50
 	oretype=/obj/item/stack/ore/claretine
 	sheettype=/obj/item/stack/sheet/mineral/claretine
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CLARETINE
 
 
 /datum/material/bohrum
 	name="Bohrum"
-	id="bohrum"
+	id=MAT_BOHRUM
 	value=50
 	oretype=/obj/item/stack/ore/bohrum
 	sheettype=/obj/item/stack/sheet/mineral/bohrum
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_BOHRUM
 
 
 /datum/material/syreline
 	name="Syreline"
-	id="syreline"
+	id=MAT_SYRELINE
 	value=70
 	oretype=/obj/item/stack/ore/syreline
 	sheettype=/obj/item/stack/sheet/mineral/syreline
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_SYRELINE
 
 
 /datum/material/erebite
 	name="Erebite"
-	id="erebite"
+	id=MAT_EREBITE
 	value=50
 	oretype=/obj/item/stack/ore/erebite
 	sheettype=/obj/item/stack/sheet/mineral/erebite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_EREBITE
 
 
 /datum/material/cytine
 	name="Cytine"
-	id="cytine"
+	id=MAT_CYTINE
 	value=30
 	oretype=/obj/item/stack/ore/cytine
 	sheettype=/obj/item/stack/sheet/mineral/cytine
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CYTINE
 
 
 /datum/material/uqill
 	name="Uqill"
-	id="uqill"
+	id=MAT_UQILL
 	value=90
 	oretype=/obj/item/stack/ore/uqill
 	sheettype=/obj/item/stack/sheet/mineral/uqill
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_UQILL
 
 
 /datum/material/mauxite
 	name="Mauxite"
-	id="mauxite"
+	id=MAT_MAUXITE
 	value=5
 	oretype=/obj/item/stack/ore/mauxite
 	sheettype=/obj/item/stack/sheet/mineral/mauxite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_MAUXITE
 
 
 /datum/material/cobryl
 	name="Cobryl"
-	id="cobryl"
+	id=MAT_COBRYL
 	value=30
 	oretype=/obj/item/stack/ore/cobryl
 	sheettype=/obj/item/stack/sheet/mineral/cobryl
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_COBRYL
 
 
 /datum/material/cerenkite
 	name="Cerenkite"
-	id="cerenkite"
+	id=MAT_CERENKITE
 	value=50
 	oretype=/obj/item/stack/ore/cerenkite
 	sheettype=/obj/item/stack/sheet/mineral/cerenkite
 	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_CERENKITE
 
 /datum/material/molitz
 	name="Molitz"
-	id="molitz"
+	id=MAT_MOLITZ
 	value=10
 	oretype=/obj/item/stack/ore/molitz
 	sheettype=/obj/item/stack/sheet/mineral/molitz
 	cointype=null
-*/
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_MOLITZ
+
+/datum/material/gingerbread
+	name="Gingerbread"
+	id=MAT_GINGERBREAD
+	value=null
+	oretype=null
+	sheettype=/obj/item/stack/sheet/mineral/gingerbread
+	cointype=null
+	default_show_in_menus = FALSE
+	cc_per_sheet = CC_PER_SHEET_GINGERBREAD

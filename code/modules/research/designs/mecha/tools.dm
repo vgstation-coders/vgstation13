@@ -268,3 +268,23 @@
 	build_path = /obj/item/mecha_parts/mecha_equipment/tool/collector
 	category = "Exosuit_Modules"
 	materials = list(MAT_IRON=10000,MAT_PLASMA=10000)
+
+/datum/design/mechrack
+	name = "Module Design (Exosuit-Mounted Rack)"
+	desc = "Allows for the construction of the Exosuit-Mounted Rack."
+	id = "mech_rack"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 3, Tc_MAGNETS = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/passive/rack
+	category = "Exosuit_Modules"
+	materials = list(MAT_IRON=10000)
+
+/datum/design/mechrunningboard
+	name = "Module Design (Powered Exosuit Running Board)"
+	desc = "Allows for the construction of the Powered Exosuit Running Board."
+	id = "mech_runningboard"
+	build_type = MECHFAB
+	req_tech = list(Tc_MATERIALS = 6)
+	build_path = /obj/item/mecha_parts/mecha_equipment/passive/runningboard
+	category = "Exosuit_Modules"
+	materials = list(MAT_IRON=10000)

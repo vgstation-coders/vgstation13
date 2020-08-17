@@ -13,8 +13,8 @@
  * Banhammer
  */
 /obj/item/weapon/banhammer/attack(mob/M as mob, mob/user as mob)
-	to_chat(M, "<font color='red'><b>You have been banned FOR NO REISIN by [user]<b></font>")
-	to_chat(user, "<font color='red'>You have <b>BANNED</b> [M]</font>")
+	to_chat(M, "<span class='red'><b>You have been banned FOR NO REISIN by [user]<b></span>")
+	to_chat(user, "<span class='red'>You have <b>BANNED</b> [M]</span>")
 
 /*
  * Classic Baton
@@ -285,3 +285,45 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	item_state = "grey_sword"
 	force = 4
+
+/obj/item/weapon/rsscimmy
+	name = "rune scimitar"
+	desc = "A vicious, curved sword."
+	icon_state = "rsscimmy"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	hitsound = 'sound/weapons/runescapeslash.ogg'
+	flags = FPRINT
+	siemens_coefficient = 1
+	sharpness = 1
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25.0
+	w_class = W_CLASS_MEDIUM
+	throwforce = 15.0
+	throw_speed = 3
+	throw_range = 9
+	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
+
+/obj/item/weapon/damocles
+	name = "Damocles"
+	desc = "An extremely powerful experimental sword. Generates an explosion at the site of impact."
+	icon_state = "damocles"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	siemens_coefficient = 1
+	sharpness = 1
+	flags = FPRINT
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
+	force = 25 //A solid weapon by itself
+	w_class = W_CLASS_LARGE
+	attack_verb = list("slashes", "rips", "dices", "cuts", "attacks", "slices", "tears")
+
+/obj/item/weapon/damocles/attack(atom/target, mob/living/user)
+	..()
+	if(prob(1))
+		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
+		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
+	explosion(target, 0, 0, 1)
+
+/obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
+	..()
+	explosion(get_turf(src), 0, 2, 3)
+	qdel(src)

@@ -28,6 +28,7 @@
 		//UNCONSCIOUS. NO-ONE IS HOME
 		if((getOxyLoss() > 50) || (config.health_threshold_crit > health))
 			Paralyse(3)
+			species.OnCrit(src)
 
 			/* Done by handle_breath()
 			if( health <= 20 && prob(1) )
@@ -35,6 +36,8 @@
 					emote("gasp")
 			if(!reagents.has_reagent(INAPROVALINE))
 				adjustOxyLoss(1)*/
+		else
+			species.OutOfCrit(src)
 
 		if(hallucination)
 			if(hallucination >= 20 && !handling_hal)

@@ -32,7 +32,7 @@
 		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
 		return 0
 	var/atom/movable/AM = A
-	if(isatommovable(AM))
+	if(ismovable(AM))
 		var/turf/atom_turf = get_turf(A)
 		if(AM.level == LEVEL_BELOW_FLOOR && isturf(atom_turf) && atom_turf.intact)
 			to_chat(user, "<span class='notice'>You need to remove the plating first.</span>")

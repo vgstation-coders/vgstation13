@@ -16,6 +16,8 @@ var/datum/controller/gameticker/ticker
 	var/event_time = null
 	var/event = 0
 
+	var/list/achievements = list()
+
 	var/login_music			// music played in pregame lobby
 
 	var/list/datum/mind/minds = list()//The people in the game. Used for objective tracking.
@@ -37,6 +39,7 @@ var/datum/controller/gameticker/ticker
 
 	var/explosion_in_progress
 	var/station_was_nuked
+	var/revolutionary_victory //If on, Castle can be voted if the conditions are right
 
 	var/list/datum/role/antag_types = list() // Associative list of all the antag types in the round (List[id] = roleNumber1) //Seems to be totally unused?
 
@@ -52,8 +55,10 @@ var/datum/controller/gameticker/ticker
 		"sound/music/space_oddity.ogg",
 		"sound/music/title1.ogg",
 		"sound/music/title2.ogg",
+		"sound/music/title3.ogg",
 		"sound/music/clown.ogg",
 		"sound/music/robocop.ogg",
+		"sound/music/street_cleaner_robocop.ogg",
 		"sound/music/gaytony.ogg",
 		"sound/music/rocketman.ogg",
 		"sound/music/2525.ogg",
@@ -61,6 +66,7 @@ var/datum/controller/gameticker/ticker
 		"sound/music/whatisthissong.ogg",
 		"sound/music/space_asshole.ogg",
 		"sound/music/starman.ogg",
+		"sound/music/Lou_Reed_-_Satellite_of_Love.ogg",
 		"sound/music/dawsonschristian.ogg",
 		"sound/music/carmenmirandasghost.ogg",
 		"sound/music/twilight.ogg",
@@ -76,7 +82,7 @@ var/datum/controller/gameticker/ticker
 	else
 		login_music = fcopy_rsc(oursong)
 
-	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`")
+	send2maindiscord("**Server is loaded** and in pre-game lobby at `[config.server? "byond://[config.server]" : "byond://[world.address]:[world.port]"]`", TRUE)
 
 	do
 #ifdef GAMETICKER_LOBBY_DURATION
@@ -85,7 +91,7 @@ var/datum/controller/gameticker/ticker
 		var/delay_timetotal = DEFAULT_LOBBY_TIME
 #endif
 		pregame_timeleft = world.timeofday + delay_timetotal
-		to_chat(world, "<B><FONT color='blue'>Welcome to the pre-game lobby!</FONT></B>")
+		to_chat(world, "<B><span class='notice'>Welcome to the pre-game lobby!</span></B>")
 		to_chat(world, "Please, setup your character and select ready. Game will start in [(pregame_timeleft - world.timeofday) / 10] seconds.")
 		while(current_state <= GAME_STATE_PREGAME)
 			for(var/i=0, i<10, i++)
@@ -110,6 +116,14 @@ var/datum/controller/gameticker/ticker
 	while (!setup())
 #undef LOBBY_TICKING
 #undef LOBBY_TICKING_RESTARTED
+
+/datum/controller/gameticker/proc/IsThematic(var/playlist)
+	if(!theme)
+		return 0
+	if(theme.playlist_id == playlist)
+		return 1
+	return 0
+
 /datum/controller/gameticker/proc/StartThematic(var/playlist)
 	if(!theme)
 		theme = new(locate(1,1,CENTCOMM_Z))
@@ -195,9 +209,6 @@ var/datum/controller/gameticker/ticker
 		player.new_player_panel_proc()
 
 
-	//here to initialize the random events nicely at round start
-	setup_economy()
-
 #if UNIT_TESTS_AUTORUN
 	run_unit_tests()
 #endif
@@ -220,7 +231,7 @@ var/datum/controller/gameticker/ticker
 				if(istype(obj, /obj/effect/landmark/spacepod/random))
 					qdel(obj)
 
-		to_chat(world, "<FONT color='blue'><B>Enjoy the game!</B></FONT>")
+		to_chat(world, "<span class='notice'><B>Enjoy the game!</B></span>")
 
 		send2maindiscord("**The game has started**")
 
@@ -249,7 +260,7 @@ var/datum/controller/gameticker/ticker
 		//Holiday Round-start stuff	~Carn
 		Holiday_Game_Start()
 		//mode.Clean_Antags()
-
+		create_random_orders(3) //Populate the order system so cargo has something to do
 	//start_events() //handles random events and space dust.
 	//new random event system is handled from the MC.
 
@@ -264,8 +275,6 @@ var/datum/controller/gameticker/ticker
 		statistic_cycle() // Polls population totals regularly and stores them in an SQL DB -- TLE
 
 	stat_collection.round_start_time = world.realtime
-	spawn(5 MINUTES) // poll every 5 minutes
-		population_poll_loop()
 
 	wageSetup()
 	post_roundstart()
@@ -442,8 +451,6 @@ var/datum/controller/gameticker/ticker
 		spawn
 			declare_completion()
 
-			end_credits.on_round_end()
-
 			gameend_time = world.time / 10
 			if(config.map_voting)
 				//testing("Vote picked [chosen_map]")
@@ -471,6 +478,8 @@ var/datum/controller/gameticker/ticker
 				feedback_set_details("end_proper","\proper completion")
 				if(!delay_end && !watchdog.waiting)
 					to_chat(world, "<span class='notice'><B>Restarting in [restart_timeout/10] seconds</B></span>")
+
+			end_credits.on_round_end()
 
 			if(blackbox)
 				if(config.map_voting)
@@ -690,13 +699,11 @@ var/datum/controller/gameticker/ticker
 	return text
 
 /datum/controller/gameticker/proc/achievement_declare_completion()
+	if(!ticker.achievements.len)
+		return
 	var/text = "<br><FONT size = 5><b>Additionally, the following players earned achievements:</b></FONT>"
-	var/icon/cup = icon('icons/obj/drinks.dmi', "golden_cup")
-	end_icons += cup
-	var/tempstate = end_icons.len
-	for(var/winner in achievements)
-		text += {"<br><img src="logo_[tempstate].png"> [winner]"}
-
+	for(var/datum/achievement/achievement in ticker.achievements)
+		text += {"<br>[bicon(achievement.item)] <b>[achievement.ckey]</b> as <b>[achievement.mob_name]</b> won <b>[achievement.award_name]</b>, <b>[achievement.award_desc]!</b>"}
 	return text
 
 /datum/controller/gameticker/proc/get_all_heads()

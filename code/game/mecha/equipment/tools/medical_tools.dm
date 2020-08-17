@@ -73,9 +73,10 @@
 		*/
 		set_ready_state(0)
 		pr_mech_sleeper.start()
-		occupant_message("<font color='blue'>[target] successfully loaded into [src]. Life support functions engaged.</font>")
+		occupant_message("<span class='notice'>[target] successfully loaded into [src]. Life support functions engaged.</span>")
 		chassis.visible_message("[chassis] loads [target] into [src].")
 		log_message("[target] loaded. Life support functions engaged.")
+		msg_admin_attack("[chassis.occupant] has loaded [target] into a mecha-sleeper. ([formatJumpTo(chassis)])")
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/proc/go_out()
@@ -210,6 +211,12 @@
 		update_equip_info()
 	return
 
+/obj/item/mecha_parts/mecha_equipment/tool/sleeper/relaymove(mob/user)
+	if(user.isStunned())
+		return
+	occupant_message("[occupant] is self ejecting at [(occupant.health/occupant.maxHealth)*100]% health.")
+	go_out()
+
 /obj/item/mecha_parts/mecha_equipment/tool/sleeper/update_equip_info()
 	if(..())
 		send_byjax(chassis.occupant,"msleeper.browser","lossinfo",get_occupant_dam())
@@ -226,6 +233,7 @@
 		S.set_ready_state(1)
 		S.log_message("Deactivated.")
 		S.occupant_message("[src] deactivated - no power.")
+		S.go_out()
 		return stop()
 	var/mob/living/carbon/M = S.occupant
 	if(!M)
@@ -235,10 +243,6 @@
 		M.updatehealth()
 	M.AdjustStunned(-4)
 	M.AdjustKnockdown(-4)
-	M.AdjustStunned(-4)
-	M.Paralyse(2)
-	M.Knockdown(2)
-	M.Stun(2)
 	if(M.reagents.get_reagent_amount(INAPROVALINE) < 5)
 		M.reagents.add_reagent(INAPROVALINE, 5)
 	S.chassis.use_power(S.energy_drain)
@@ -249,7 +253,6 @@
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer //why the fuck is this under medical_tools?
 	name = "\improper Cable Layer"
 	icon_state = "mecha_wire"
-	var/chassis_on_moved_key
 	var/turf/old_turf
 	var/obj/structure/cable/last_piece
 	var/obj/item/stack/cable_coil/cable
@@ -268,14 +271,14 @@
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/attach()
 	..()
-	chassis_on_moved_key = chassis.on_moved.Add(src, "layCable")
+	chassis.lazy_register_event(/lazy_event/on_moved, src, .proc/layCable)
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/detach()
-	chassis.on_moved.Remove(chassis_on_moved_key)
+	chassis.lazy_unregister_event(/lazy_event/on_moved, src, .proc/layCable)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/Destroy()
-	chassis.on_moved.Remove(chassis_on_moved_key)
+	chassis.lazy_unregister_event(/lazy_event/on_moved, src, .proc/layCable)
 	return ..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/cable_layer/action(var/obj/item/stack/cable_coil/target)
@@ -284,7 +287,7 @@
 	var/result = load_cable(target)
 	var/message
 	if(isnull(result))
-		message = "<font color='red'>Unable to load [target] - no cable found.</font>"
+		message = "<span class='red'>Unable to load [target] - no cable found.</span>"
 	else if(!result)
 		message = "Reel is full."
 	else
@@ -307,7 +310,7 @@
 			m = min(m, cable.amount)
 			if(m)
 				use_cable(m)
-				var/obj/item/stack/cable_coil/CC = getFromPool(/obj/item/stack/cable_coil, get_turf(chassis))
+				var/obj/item/stack/cable_coil/CC = new /obj/item/stack/cable_coil(get_turf(chassis))
 				CC.amount = m
 		else
 			occupant_message("There's no more cable on the reel.")
@@ -326,7 +329,7 @@
 		if(to_load)
 			to_load = min(CC.amount, to_load)
 			if(!cable)
-				cable = getFromPool(/obj/item/stack/cable_coil, src)
+				cable = new /obj/item/stack/cable_coil(src)
 				cable.amount = 0
 			cable.amount += to_load
 			CC.use(to_load)
@@ -360,8 +363,8 @@
 			T.make_plating()
 	return !new_turf.intact
 
-/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(var/list/args)
-	var/turf/new_turf = args["loc"]
+/obj/item/mecha_parts/mecha_equipment/tool/cable_layer/proc/layCable(atom/movable/mover)
+	var/turf/new_turf = mover.loc
 	if(equip_ready || !istype(new_turf) || !dismantleFloor(new_turf))
 		return reset()
 	var/fdirn = turn(chassis.dir,180)
@@ -370,7 +373,7 @@
 			return reset()
 	if(!use_cable(1))
 		return reset()
-	var/obj/structure/cable/NC = getFromPool(/obj/structure/cable, new_turf)
+	var/obj/structure/cable/NC = new /obj/structure/cable(new_turf)
 	NC.cableColor("red")
 	NC.d1 = 0
 	NC.d2 = fdirn

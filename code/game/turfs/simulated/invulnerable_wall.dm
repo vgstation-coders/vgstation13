@@ -25,7 +25,7 @@
 		var/obj/item/weapon/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
+		S.playtoolsound(loc, 100)
 		to_chat(user, "<span class='notice'>You remove the bullet marks with \the [W].</span>")
 		bullet_marks = 0
 		icon = initial(icon)
@@ -41,10 +41,10 @@
 
 /turf/simulated/wall/invulnerable/dismantle_wall(devastated = 0, explode = 0)
 	if(!devastated)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rods
+		new /obj/item/stack/sheet/plasteel(src)//Reinforced girder has deconstruction steps too. If no girder, drop ONE plasteel sheet AND rod)
 	else
-		getFromPool(/obj/item/stack/rods, src, 2)
-		getFromPool(/obj/item/stack/sheet/plasteel, src)
+		new /obj/item/stack/rods(src, 2)
+		new /obj/item/stack/sheet/plasteel(src)
 
 	for(var/obj/O in src.contents) //Eject contents!
 		if(istype(O,/obj/structure/sign/poster))

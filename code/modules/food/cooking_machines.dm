@@ -172,6 +172,10 @@ var/global/ingredientLimit = 10
 	if(isjustobserver(usr) || ismouse(usr))
 		return
 
+	if(active)
+		to_chat(usr, "<span class='warning'>\The [src] is currently busy!</span>")
+		return
+
 	if(cooks_in_reagents)
 		if(do_after(usr, src, src.reagents.total_volume / 10))
 			src.reagents.clear_reagents()
@@ -429,7 +433,7 @@ var/global/ingredientLimit = 10
 	..()
 	empty_icon()
 
-/obj/machinery/cooking/deepfryer/makeFood(var/item/I)
+/obj/machinery/cooking/deepfryer/makeFood(var/obj/item/I)
 	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(src.ingredient)
@@ -543,7 +547,7 @@ var/global/ingredientLimit = 10
 	else
 		return ..()
 
-/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/item/I)
+/obj/machinery/cooking/deepfryer/confectionator/makeFood(var/obj/item/I)
 
 	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 	if(cooks_in_reagents)

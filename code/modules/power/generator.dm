@@ -15,12 +15,11 @@
 
 	var/tmp/last_gen    = 0
 	var/tmp/lastgenlev  = 0 // Used in update_icon()
-	var/const/max_power = 500000 // Amount of W produced at which point the meter caps.
+	var/const/max_power = 3000000 // Amount of W produced at which point the meter caps.
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 	var/tmp/datum/html_interface/nanotrasen/interface
-	var/tmp/on_pipenet_tick_key
 
 /obj/machinery/power/generator/New()
 	..()
@@ -49,7 +48,7 @@
 	interface = new(src, name, 450, 410, head)
 
 	html_machines += src
-	on_pipenet_tick_key = global.on_pipenet_tick.Add(src, "pipenet_process")
+	global.pipenet_processing_objects += src
 
 	init_ui()
 
@@ -67,7 +66,7 @@
 	interface = null
 
 	html_machines -= src
-	global.on_pipenet_tick.Remove(on_pipenet_tick_key)
+	global.pipenet_processing_objects -= src
 
 /obj/machinery/power/generator/proc/init_ui()
 	interface.updateLayout({"
@@ -245,7 +244,7 @@
 	update_icon()
 	updateUsrDialog()
 
-/obj/machinery/power/generator/wrenchAnchor()
+/obj/machinery/power/generator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -266,7 +265,7 @@
 		overlays += image(icon = icon, icon_state = "teg-op[lastgenlev]")
 
 // We actually tick power gen on the pipenet process to make sure we're synced with pipenet updates.
-/obj/machinery/power/generator/proc/pipenet_process(var/list/event_args, var/datum/controller/process/pipenet/owner)
+/obj/machinery/power/generator/pipenet_process()
 	if(!operable())
 		return
 
@@ -281,7 +280,7 @@
 		if(delta_temperature > 0 && air1_heat_capacity > 0 && air2_heat_capacity > 0)
 			var/energy_transfer = delta_temperature * air2_heat_capacity * air1_heat_capacity / (air2_heat_capacity + air1_heat_capacity)
 			var/heat = energy_transfer * (1 - thermal_efficiency)
-			last_gen = energy_transfer * thermal_efficiency * 0.05
+			last_gen = energy_transfer * thermal_efficiency * 0.3
 
 			//If our circulators are lubed get extra power
 			if(circ1.reagents.get_reagent_amount(LUBE)>=1)
@@ -308,7 +307,7 @@
 		circ2.network2.update = TRUE
 
 	//Update icon overlays and power usage only if displayed level has changed.
-	var/genlev = Clamp(round(11 * last_gen / max_power), 0, 11)
+	var/genlev = clamp(round(11 * last_gen / max_power), 0, 11)
 
 	if(last_gen > 100 && genlev == 0)
 		genlev = 1

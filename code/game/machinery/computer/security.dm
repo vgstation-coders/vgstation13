@@ -465,6 +465,7 @@ What a mess.*/
 
 							temp = {"<h5>Criminal Status:</h5>
 								<ul>
+								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=highthreat'>*High Threat*</a></li>
 								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=none'>None</a></li>
 								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=arrest'>*Arrest*</a></li>
 								<li><a href='?src=\ref[src];choice=Change Criminal Status;criminal2=incarcerated'>Incarcerated</a></li>
@@ -506,6 +507,8 @@ What a mess.*/
 							switch(href_list["criminal2"])
 								if("none")
 									active2.fields["criminal"] = "None"
+								if("highthreat")
+									active2.fields["criminal"] = "*High Threat*"
 								if("arrest")
 									active2.fields["criminal"] = "*Arrest*"
 								if("incarcerated")

@@ -10,7 +10,8 @@
 		if(find_target())
 			explanation_text = format_explanation()
 			if(owner)
-				to_chat(owner.current,"<span class='warning'><BIG>We have identified our objective target!</BIG></span>")
+				to_chat(owner.current,"<span class='warning'><BIG>We have identified our objective!</BIG></span>")
+				to_chat(owner.current,"<span class='warning'>The target is [target.current.real_name], the [target.assigned_role=="MODE" ? (target.special_role) : (target.assigned_role)]. Commit that name to memory.</span>")
 		else
 			if(owner)
 				to_chat(owner.current,"<span class='warning'><BIG>We have determined the target is not on this station. Redact assassination order.</BIG></warning>")

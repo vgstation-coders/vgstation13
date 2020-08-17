@@ -22,7 +22,7 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-
+	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
@@ -45,12 +45,16 @@
 	var/can_have_carts = TRUE
 
 	var/mob/occupant
-	lock_type = /datum/locking_category/buckle/chair/vehicle
+	mob_lock_type = /datum/locking_category/buckle/chair/vehicle
 	var/wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle
 	var/last_warn
 
 	var/list/offsets = list()
 	var/last_dir
+
+	var/list/datum/action/vehicle_actions = list()
+
+	var/headlights = FALSE
 
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
@@ -76,6 +80,8 @@
 		nick=name
 	set_keys()
 	make_offsets()
+	if(headlights)
+		new /datum/action/vehicle/toggle_headlights(src)
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
@@ -106,6 +112,9 @@
 	else if(istype(W, /obj/item/key))
 		if(!heldkey)
 			if(keytype)
+				if(!istype(W, keytype))
+					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
+					return
 				if(mykey && mykey != W)
 					to_chat(user, "<span class='warning'>\The [src] is paired to a different key.</span>")
 					return
@@ -120,10 +129,7 @@
 				else //In case the key is unable to leave the user's hand. IE glue.
 					to_chat(user, "<span class='notice'>You fail to put \the [W] into \the [src]'s ignition and turn it.</span>")
 			else
-				if(keytype)
-					to_chat(user, "<span class='warning'>\The [W] doesn't fit into \the [src]'s ignition.</span>")
-				else
-					to_chat(user, "<span class='notice'>You don't need a key.</span>")
+				to_chat(user, "<span class='notice'>You don't need a key.</span>")
 		else
 			to_chat(user, "<span class='notice'>\The [src] already has \the [heldkey] in it.</span>")
 	else if(W.is_screwdriver(user) && !heldkey)
@@ -168,9 +174,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = get_turf(loc)
-	if(!T)
-		return 0
+	var/turf/T = loc
+	if(!istype(T))
+		return 0 //location isn't a turf or doesn't exist
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -235,6 +241,16 @@
 
 	add_fingerprint(user)
 
+	for (var/datum/action/action in vehicle_actions)
+		if (action.owner && action.owner != user)
+			action.Remove(action.owner)
+		action.Grant(user)
+
+/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+	..()
+	for (var/datum/action/action in vehicle_actions)
+		action.Remove(user)
+
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
 		plane = ABOVE_HUMAN_PLANE
@@ -284,6 +300,8 @@
 
 /obj/structure/bed/chair/vehicle/proc/update_mob()
 	if(!occupant)
+		return
+	if(!(dir in cardinal))
 		return
 
 	if(last_dir)
@@ -403,9 +421,45 @@
 	if (loc == oldloc)
 		return
 	if(next_cart)
+		sleep(0)
 		next_cart.Move(oldloc, glide_size_override = src.glide_size)
 
 /obj/structure/bed/chair/vehicle/proc/disconnected() //proc that carts call, we have no use for it
 	return
 
 /datum/locking_category/buckle/chair/vehicle
+
+
+/////////////////////////////////////
+//           VEHICLE ACTIONS
+////////////////////////////////////
+
+/datum/action/vehicle/toggle_headlights
+	name = "toggle headlights"
+	desc = "Turn the headlights on or off."
+	var/on = FALSE
+	var/brightness = 6
+	var/sounds = list('sound/items/flashlight_on.ogg','sound/items/flashlight_off.ogg')
+
+/datum/action/vehicle/toggle_headlights/New(var/obj/structure/bed/chair/vehicle/Target)
+	..()
+	icon_icon = Target.icon
+	button_icon_state = Target.icon_state
+	Target.vehicle_actions += src
+
+/datum/action/vehicle/toggle_headlights/Trigger()
+	if(!..())
+		return FALSE
+	on = !on
+	if(on)
+		target.set_light(brightness)
+		playsound(target, sounds[1], 50, 1)
+	else
+		target.set_light(0)
+		playsound(target, sounds[2], 50, 1)
+	target.update_icon()
+
+/datum/action/vehicle/toggle_headlights/siren
+	name = "toggle siren"
+	desc = "Turn the siren lights on or off."
+	sounds = list('sound/voice/woopwoop.ogg','sound/items/flashlight_off.ogg')

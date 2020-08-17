@@ -14,7 +14,7 @@
 
 /datum/automation/get_register_data/Evaluate()
 	var/datum/automation/field = children[1]
-	var/registerid = Clamp(field.Evaluate(), 1, parent.register_amount)//Just in case.
+	var/registerid = clamp(field.Evaluate(), 1, parent.register_amount)//Just in case.
 
 	if(registerid)
 		return parent.registers[registerid]
@@ -62,7 +62,7 @@
 	var/datum/automation/valuefield = children[2]
 
 	var/registerid = idfield.Evaluate()
-	registerid = Clamp(registerid, 1, parent.register_amount)
+	registerid = clamp(registerid, 1, parent.register_amount)
 
 	parent.registers[registerid] = valuefield.Evaluate()
 

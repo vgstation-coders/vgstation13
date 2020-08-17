@@ -76,13 +76,13 @@
 	interpreter.SetVar("WEST",	 	WEST)			// WEST  (8)
 
 	// Channel macros
-	interpreter.SetVar("$common",		1459)
-	interpreter.SetVar("$science",		1351)
-	interpreter.SetVar("$command",		1353)
-	interpreter.SetVar("$medical",		1355)
-	interpreter.SetVar("$engineering",	1357)
-	interpreter.SetVar("$security",		1359)
-	interpreter.SetVar("$supply",		1347)
+	interpreter.SetVar("$common",		COMMON_FREQ)
+	interpreter.SetVar("$science",		SCI_FREQ)
+	interpreter.SetVar("$command",		COMM_FREQ)
+	interpreter.SetVar("$medical",		MED_FREQ)
+	interpreter.SetVar("$engineering",	ENG_FREQ)
+	interpreter.SetVar("$security",		SEC_FREQ)
+	interpreter.SetVar("$supply",		SUP_FREQ)
 
 	// Signal data
 
@@ -141,7 +141,7 @@
 				@param replacestring: 	the string to replace the substring with
 
 	*/
-	interpreter.SetProc("replace",		/proc/utf8_replace)
+	interpreter.SetProc("replace",		/proc/n_replacetext)
 
 	/*
 		-> Locates an element/substring inside of a list or string
@@ -178,7 +178,7 @@
 
 	interpreter.SetProc("pick",			/proc/n_pick)
 	interpreter.SetProc("prob",			/proc/prob_chance)
-	interpreter.SetProc("substr",		/proc/utf8_copy)
+	interpreter.SetProc("substr",		/proc/docopytext)
 
 	interpreter.SetProc("shuffle",		/proc/shuffle)
 	interpreter.SetProc("uniquevector",	/proc/uniquelist)
@@ -188,13 +188,13 @@
 	interpreter.SetProc("vector2text",	/proc/vg_jointext)
 
 	// Strings
-	interpreter.SetProc("lower",		/proc/utf8_lowercase)
-	interpreter.SetProc("upper",		/proc/utf8_uppercase)
+	interpreter.SetProc("lower",		/proc/n_lower)
+	interpreter.SetProc("upper",		/proc/n_upper)
 	interpreter.SetProc("explode",		/proc/string_explode)
 	interpreter.SetProc("repeat",		/proc/n_repeat)
-	interpreter.SetProc("reverse",		/proc/utf8_reverse)
+	interpreter.SetProc("reverse",		/proc/reverse_text)
 	interpreter.SetProc("tonum",		/proc/n_str2num)
-	interpreter.SetProc("capitalize",	/proc/utf8_capitalize)
+	interpreter.SetProc("capitalize",	/proc/capitalize)
 	//interpreter.SetProc("replacetextEx",/proc/n_replacetextEx)
 
 	// Numbers
@@ -267,7 +267,7 @@
 		else
 			S.memory[address] = value
 
-/datum/signal/proc/signaler(var/freq = 1459, var/code = 30)
+/datum/signal/proc/signaler(var/freq = COMMON_FREQ, var/code = 30)
 	if(isnum(freq) && isnum(code))
 
 		var/obj/machinery/telecomms/server/S = data["server"]
@@ -284,9 +284,9 @@
 		freq = sanitize_frequency(freq)
 
 		code = round(code)
-		code = Clamp(code, 0, 100)
+		code = clamp(code, 0, 100)
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = S
 		signal.encryption = code
 		signal.data["message"] = "ACTIVATE"
@@ -297,7 +297,7 @@
 
 
 /datum/signal/proc/tcombroadcast(var/message, var/freq, var/source, var/job)
-	var/datum/signal/newsign = getFromPool(/datum/signal)
+	var/datum/signal/newsign = new /datum/signal
 	var/obj/machinery/telecomms/server/S = data["server"]
 	var/obj/item/device/radio/hradio = S.server_radio
 
@@ -311,7 +311,7 @@
 		source = "[html_encode(uppertext(S.id))]"
 		hradio = new // sets the hradio as a radio intercom
 	if(!freq || (!isnum(freq) && text2num(freq) == null))
-		freq = 1459
+		freq = COMMON_FREQ
 	if(findtext(num2text(freq), ".")) // if the frequency has been set as a decimal
 		freq *= 10 // shift the decimal one place
 
@@ -320,10 +320,9 @@
 
 	//SAY REWRITE RELATED CODE.
 	//This code is a little hacky, but it *should* work. Even though it'll result in a virtual speaker referencing another virtual speaker. vOv
-	var/atom/movable/virtualspeaker/virt = getFromPool(/atom/movable/virtualspeaker, null)
+	var/atom/movable/virtualspeaker/virt = new /atom/movable/virtualspeaker(null)
 	virt.name = source
 	virt.job = job
-	virt.faketrack = 1
 	//END SAY REWRITE RELATED CODE.
 
 
@@ -356,4 +355,4 @@
 		S.relay_information(newsign, "/obj/machinery/telecomms/broadcaster") // send this simple message to broadcasters
 
 	spawn(50)
-		returnToPool(virt)
+		qdel(virt)

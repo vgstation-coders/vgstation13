@@ -141,11 +141,13 @@
 
 //If you don't need anything complicated.
 /datum/asset/simple
-	var/assets = list()
+	var/list/assets = list()
 
 /datum/asset/simple/register()
 	for(var/asset_name in assets)
 		register_asset(asset_name, assets[asset_name])
+
+
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
@@ -310,31 +312,47 @@
 
 /datum/asset/simple/pda_spesspets
 	assets = list(
-		"spesspets_bg.png"		= 'icons/pda_icons/spesspets_icons/spesspets_bg.png',
-		"spesspets_egg0.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg0.png',
-		"spesspets_egg1.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg1.png',
-		"spesspets_egg2.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg2.png',
-		"spesspets_egg3.png"	= 'icons/pda_icons/spesspets_icons/spesspets_egg3.png',
-		"spesspets_hatch.png"	= 'icons/pda_icons/spesspets_icons/spesspets_hatch.png',
-		"spesspets_talk.png"		= 'icons/pda_icons/spesspets_icons/spesspets_talk.png',
-		"spesspets_walk.png"		= 'icons/pda_icons/spesspets_icons/spesspets_walk.png',
-		"spesspets_feed.png"		= 'icons/pda_icons/spesspets_icons/spesspets_feed.png',
-		"spesspets_clean.png"	= 'icons/pda_icons/spesspets_icons/spesspets_clean.png',
-		"spesspets_heal.png"		= 'icons/pda_icons/spesspets_icons/spesspets_heal.png',
-		"spesspets_fight.png"		= 'icons/pda_icons/spesspets_icons/spesspets_fight.png',
-		"spesspets_visit.png"		= 'icons/pda_icons/spesspets_icons/spesspets_visit.png',
-		"spesspets_work.png"	= 'icons/pda_icons/spesspets_icons/spesspets_work.png',
-		"spesspets_cash.png"		= 'icons/pda_icons/spesspets_icons/spesspets_cash.png',
-		"spesspets_rate.png"		= 'icons/pda_icons/spesspets_icons/spesspets_rate.png',
-		"spesspets_Corgegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Corgegg.png',
-		"spesspets_Chimpegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Chimpegg.png',
-		"spesspets_Borgegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Borgegg.png',
-		"spesspets_Syndegg.png"	= 'icons/pda_icons/spesspets_icons/spesspets_Syndegg.png',
-		"spesspets_hunger.png"		= 'icons/pda_icons/spesspets_icons/spesspets_hunger.png',
-		"spesspets_dirty.png"			= 'icons/pda_icons/spesspets_icons/spesspets_dirty.png',
-		"spesspets_hurt.png"			= 'icons/pda_icons/spesspets_icons/spesspets_hurt.png',
-		"spesspets_mine.png"		= 'icons/pda_icons/spesspets_icons/spesspets_mine.png',
-		"spesspets_sleep.png"		= 'icons/pda_icons/spesspets_icons/spesspets_sleep.png'
+		"spesspets_bg.png"			=	'icons/pda_icons/spesspets_icons/spesspets_bg.png',
+		"spesspets_egg0.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg0.png',
+		"spesspets_egg1.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg1.png',
+		"spesspets_egg2.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg2.png',
+		"spesspets_egg3.png"		=	'icons/pda_icons/spesspets_icons/spesspets_egg3.png',
+		"spesspets_hatch.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hatch.png',
+		"spesspets_talk.png"		=	'icons/pda_icons/spesspets_icons/spesspets_talk.png',
+		"spesspets_walk.png"		=	'icons/pda_icons/spesspets_icons/spesspets_walk.png',
+		"spesspets_feed.png"		=	'icons/pda_icons/spesspets_icons/spesspets_feed.png',
+		"spesspets_clean.png"		=	'icons/pda_icons/spesspets_icons/spesspets_clean.png',
+		"spesspets_heal.png"		=	'icons/pda_icons/spesspets_icons/spesspets_heal.png',
+		"spesspets_fight.png"		=	'icons/pda_icons/spesspets_icons/spesspets_fight.png',
+		"spesspets_visit.png"		=	'icons/pda_icons/spesspets_icons/spesspets_visit.png',
+		"spesspets_work.png"		=	'icons/pda_icons/spesspets_icons/spesspets_work.png',
+		"spesspets_cash.png"		=	'icons/pda_icons/spesspets_icons/spesspets_cash.png',
+		"spesspets_rate.png"		=	'icons/pda_icons/spesspets_icons/spesspets_rate.png',
+		"spesspets_Corgegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Corgegg.png',
+		"spesspets_Chimpegg.png"	=	'icons/pda_icons/spesspets_icons/spesspets_Chimpegg.png',
+		"spesspets_Borgegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Borgegg.png',
+		"spesspets_Syndegg.png"		=	'icons/pda_icons/spesspets_icons/spesspets_Syndegg.png',
+		"spesspets_hunger.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hunger.png',
+		"spesspets_dirty.png"		=	'icons/pda_icons/spesspets_icons/spesspets_dirty.png',
+		"spesspets_hurt.png"		=	'icons/pda_icons/spesspets_icons/spesspets_hurt.png',
+		"spesspets_mine.png"		=	'icons/pda_icons/spesspets_icons/spesspets_mine.png',
+		"spesspets_sleep.png"		=	'icons/pda_icons/spesspets_icons/spesspets_sleep.png',
+		"spesspets_arrow_right.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_right.png',
+		"spesspets_arrow_left.png"	=	'icons/pda_icons/spesspets_icons/spesspets_arrow_left.png'
+	)
+
+/datum/asset/simple/cmc_css_icons
+	assets = list(
+		//"cmc.css" = 'html/browser/cmc.css',
+		"cmc_background.png" = 'icons/cmc/css_icons/background.png',
+		"cmc_0.png" = 'icons/cmc/css_icons/0.png',
+		"cmc_1.png" = 'icons/cmc/css_icons/1.png',
+		"cmc_2.png" = 'icons/cmc/css_icons/2.png',
+		"cmc_3.png" = 'icons/cmc/css_icons/3.png',
+		"cmc_4.png" = 'icons/cmc/css_icons/4.png',
+		"cmc_5.png" = 'icons/cmc/css_icons/5.png',
+		"cmc_6.png" = 'icons/cmc/css_icons/6.png',
+		"cmc_7.png" = 'icons/cmc/css_icons/7.png'
 	)
 
 /datum/asset/simple/nanoui_maps/New()
@@ -354,3 +372,44 @@
 
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
+
+/datum/asset/simple/emoji_list
+	assets = list(
+		"emoji-happy.png"		=	'icons/pda_icons/emoji/happy.png',
+		"emoji-sad.png"		=	'icons/pda_icons/emoji/sad.png',
+		"emoji-angry.png"		=	'icons/pda_icons/emoji/angry.png',
+		"emoji-confused.png"		=	'icons/pda_icons/emoji/confused.png',
+		"emoji-pensive.png"		=	'icons/pda_icons/emoji/pensive.png',
+		"emoji-rolling_eyes.png"		=	'icons/pda_icons/emoji/rolling_eyes.png',
+		"emoji-noface.png"		=	'icons/pda_icons/emoji/noface.png',
+		"emoji-joy.png"		=	'icons/pda_icons/emoji/joy.png',
+		"emoji-gun.png"		=	'icons/pda_icons/emoji/gun.png',
+		"emoji-ok_hand.png"		=	'icons/pda_icons/emoji/ok_hand.png',
+		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png',
+		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png',
+		"emoji-thumbs_up.png"		=	'icons/pda_icons/emoji/thumbs_up.png',
+		"emoji-thumbs_down.png"		=	'icons/pda_icons/emoji/thumbs_down.png',
+		"emoji-rocket_ship.png"		=	'icons/pda_icons/emoji/rocket_ship.png',
+		"emoji-tada.png"		=	'icons/pda_icons/emoji/tada.png',
+		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png',
+		"emoji-carp.png"		=	'icons/pda_icons/emoji/carp.png',
+		"emoji-clown.png"		=	'icons/pda_icons/emoji/clown.png',
+		"emoji-prohibited.png"		=	'icons/pda_icons/emoji/prohibited.png',
+		"emoji-sunglasses.png"		=	'icons/pda_icons/emoji/sunglasses.png'
+	)
+
+/datum/asset/simple/fontawesome
+	assets = list(
+		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
+		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
+		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
+		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
+		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
+		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+	)
+
+/datum/asset/simple/tgui
+	assets = list(
+		"tgui.bundle.js" = 'tgui/packages/tgui/public/tgui.bundle.js',
+		"tgui.bundle.css" = 'tgui/packages/tgui/public/tgui.bundle.css',
+	)

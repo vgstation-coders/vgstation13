@@ -15,6 +15,7 @@
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
 	var/transfer_efficiency_bonus = 0 //What is the efficiency "bonus" (additive to percentage) from the parts used (scanning module) ?
 	var/chargelevel = -1
+	var/has_beeped = FALSE
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EMAGGABLE
 
@@ -85,6 +86,7 @@
 
 			if(user.drop_item(W, src))
 				charging = W
+				has_beeped = FALSE
 				user.visible_message("<span class='notice'>[user] inserts a cell into [src].</span>", "<span class='notice'>You insert a cell into [src].</span>")
 				chargelevel = -1
 		updateicon()
@@ -106,7 +108,7 @@
 			spark(src, 5)
 			spawn(15)
 				explosion(src.loc, -1, 1, 3, adminlog = 0) //Overload
-				Destroy(src) //It exploded, rip
+				qdel(src) //It exploded, rip
 			return
 		usr.put_in_hands(charging)
 		charging.add_fingerprint(user)
@@ -116,7 +118,7 @@
 		chargelevel = -1
 		updateicon()
 
-/obj/machinery/cell_charger/wrenchAnchor(var/mob/user)
+/obj/machinery/cell_charger/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(charging)
 		to_chat(user, "<span class='warning'>Remove the cell first!</span>")
 		return FALSE
@@ -138,12 +140,13 @@
 	if(!charging || (stat & (BROKEN|NOPOWER)) || !anchored)
 		return
 
-	if(emagged) //Did someone fuck with the charger ?
-		use_power(transfer_rate*transfer_rate_coeff*10) //Drain all the power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)*0.25) //Lose most of it
-	else
-		use_power(transfer_rate*transfer_rate_coeff) //Snatch some power
-		charging.give(transfer_rate*transfer_rate_coeff*(transfer_efficiency+transfer_efficiency_bonus)) //Inefficiency (Joule effect + other shenanigans)
+	if(charging.give(transfer_rate*transfer_rate_coeff * (transfer_efficiency+transfer_efficiency_bonus) * (emagged ? 0.25 : 1)))//Inefficiency (Joule effect + other shenanigans)  //Lose most of it if emagged
+		use_power(transfer_rate * transfer_rate_coeff * (emagged ? 10 : 1))  //Drain all the power if emagged
+		if(has_beeped) //It's charging again
+			has_beeped = FALSE
+	if(round(charging.percent() >= 100)&&!has_beeped)
+		playsound(src, 'sound/machines/charge_finish.ogg', 50)
+		has_beeped = TRUE
 
 	updateicon()
 
@@ -210,6 +213,7 @@
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	var/obj/item/weapon/cell/stored = null
 	var/state = 0 //0 if up, 1 if down; only used for icons
+	var/removablecell = TRUE
 
 /obj/item/device/crank_charger/get_cell()
 	return stored
@@ -235,10 +239,11 @@
 		..()
 
 /obj/item/device/crank_charger/attack_self(mob/user)
+	var/mob/living/L = user
 	if(stored)
 		if(stored.charge<stored.maxcharge)
-			user.delayNextAttack(1)
-			stored.charge += 100
+			L.delayNextAttack(1)
+			stored.charge += 100 * L.get_strength()
 			state = !state
 			update_icon()
 			stored.updateicon()
@@ -246,10 +251,10 @@
 			if(stored.charge>stored.maxcharge)
 				stored.charge = stored.maxcharge
 	else
-		to_chat(user,"<span class='warning'>There is no cell loaded!</span>")
+		to_chat(L,"<span class='warning'>There is no cell loaded!</span>")
 
 /obj/item/device/crank_charger/attack_hand(mob/user)
-	if(stored && user.get_inactive_hand() == src)
+	if(stored && removablecell && user.get_inactive_hand() == src)
 		stored.updateicon()
 		user.put_in_hands(stored)
 		stored = null
@@ -262,3 +267,46 @@
 		qdel(stored)
 		stored = null
 	..()
+
+/obj/item/device/crank_charger/generous
+	name = "generous crank"
+	desc = "Uses reverse-engineered ninja power glove technology to transfer energy wirelessly at short range into objects that can be recharged."
+	icon_state = "crankcharger-0"
+	removablecell = FALSE
+	var/list/forbidden_targets = list(/obj/item/weapon/gun)
+	var/last_charged
+
+/obj/item/device/crank_charger/generous/New()
+	..()
+	processing_objects += src
+	stored = new /obj/item/weapon/cell/empty(src)
+
+/obj/item/device/crank_charger/generous/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/device/crank_charger/generous/attack_self(mob/user)
+	..()
+	last_charged = world.time
+
+/obj/item/device/crank_charger/generous/afterattack(var/atom/target, var/mob/user)
+	..()
+	if(is_type_in_list(target,forbidden_targets))
+		to_chat(user,"<span class='warning'>The generous crank isn't compatible with that.</span>")
+		return
+	var/obj/item/weapon/cell/C = target.get_cell()
+	if(istype(C))
+		if(!stored.charge)
+			to_chat(user,"<span class='warning'>The loaded cell has no charge.</span>")
+			return
+		var/transfer = min(C.maxcharge - C.charge,stored.charge)
+		if(!transfer) //since we already ruled out no charge here, if min() = 0 that means the diff is 0
+			to_chat(user,"<span class='good'>That already has full charge!</span>")
+			return
+		playsound(get_turf(src), pick(lightning_sound), 25, 1, "vary" = 0)
+		stored.use(transfer)
+		C.give(transfer)
+
+/obj/item/device/crank_charger/generous/process()
+	if(stored && world.time > last_charged + 4 SECONDS) //After 2 ticks, start draining
+		stored.use(100) //remove a single crank per tick

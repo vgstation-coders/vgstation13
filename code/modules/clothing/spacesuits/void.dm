@@ -7,6 +7,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	icon_state = "void"
 	item_state = "void"
+	body_parts_visible_override = EYES
 
 /obj/item/clothing/suit/space/nasavoid
 	name = "NASA Voidsuit"

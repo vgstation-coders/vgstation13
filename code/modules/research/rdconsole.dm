@@ -253,27 +253,24 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						files.UpdateTech(T, temp_tech[T])
 				if(linked_destroy.loaded_item.reliability < 100 && linked_destroy.loaded_item.crit_fail)
 					files.UpdateDesign(linked_destroy.loaded_item.type)
-				if(linked_lathe && linked_destroy.loaded_item.materials) //Also sends salvaged materials to a linked protolathe, if any.
-					for(var/matID in linked_destroy.loaded_item.materials.storage) //Transfers by ID
-						linked_lathe.materials.addAmount(matID, linked_destroy.loaded_item.materials.storage[matID])
-				linked_destroy.loaded_item = null
-			for(var/obj/I in linked_destroy.contents)
-				for(var/mob/M in I.contents)
-					M.death()
-				if(istype(I,/obj/item/stack/sheet)) //Only deconstructs one sheet at a time instead of the entire stack
-					var/obj/item/stack/sheet/S = I
-					if(S.amount > 1)
-						S.amount--
-						linked_destroy.loaded_item = S
-					else
+
+				if(istype(linked_destroy.loaded_item, /obj/item/stack))
+					var/obj/item/stack/sheet/S = linked_destroy.loaded_item
+					if(linked_lathe && S.materials)
+						S.materials.TransferPercent((1/S.amount)*100, linked_lathe.materials)
+					S.use(1)
+					if(!S.amount)
 						qdel(S)
-						S = null
-						linked_destroy.icon_state = "d_analyzer"
+						linked_destroy.loaded_item = null
 				else
-					if(!(I in linked_destroy.component_parts))
-						qdel(I)
-						I = null
-						linked_destroy.icon_state = "d_analyzer"
+					if(linked_lathe && linked_destroy.loaded_item.materials)
+						linked_destroy.loaded_item.materials.TransferAll(linked_lathe.materials)
+					qdel(linked_destroy.loaded_item)
+					linked_destroy.loaded_item = null
+			if(linked_destroy.loaded_item) //It deconstructed something with stacks, make it show up full
+				linked_destroy.icon_state = "d_analyzer_l"
+			else
+				linked_destroy.icon_state = "d_analyzer"
 			use_power(250)
 			screen = 1.0
 			updateUsrDialog()
@@ -450,12 +447,12 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the 'lathe gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_lathe.queue.len)
 				for(var/i=1;i<=n;i++)
 					use_power(power)
 					linked_lathe.queue += being_built
 				if(href_list["now"]=="1")
-					linked_lathe.stopped=0
+					linked_lathe.start_processing_queue()
 
 	else if(href_list["imprint"]) //Causes the Circuit Imprinter to build something.
 		if (!autorefresh)
@@ -483,19 +480,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 						return //in case the imprinter gets unlinked or destroyed or someshit while the popup is open
 				else
 					n = text2num(href_list["n"])
-				n = Clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
+				n = clamp(n, 0, RESEARCH_MAX_Q_LEN - linked_imprinter.queue.len)
 				for(var/i=1;i<=n;i++)
 					linked_imprinter.queue += being_built
 					use_power(power)
 				if(href_list["now"]=="1")
-					linked_imprinter.stopped=0
+					linked_imprinter.start_processing_queue()
 
 	else if(href_list["disposeI"] && linked_imprinter)  //Causes the circuit imprinter to dispose of a single reagent (all of it)
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
 		var/obj/item/weapon/reagent_containers/RC = locate(href_list["beakerI"])
-		if(RC && RC in linked_imprinter.component_parts)
+		if(RC && (RC in linked_imprinter.component_parts))
 			RC.reagents.del_reagent(href_list["disposeI"])
 		linked_imprinter.update_buffer_size()
 
@@ -508,7 +505,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				RC.reagents.clear_reagents()
 			linked_imprinter.update_buffer_size()
 
-	else if(href_list["removeQItem"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["removeQItem"]) //Removes an item from the queue
 		var/i=text2num(href_list["removeQItem"])
 		switch(href_list["device"])
 			if("protolathe")
@@ -518,7 +515,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.Cut(i,i+1)
 
-	else if(href_list["clearQ"]) //Causes the protolathe to dispose of all it's reagents.
+	else if(href_list["clearQ"]) //Clears queue
 		switch(href_list["device"])
 			if("protolathe")
 				if(linked_lathe)
@@ -527,11 +524,17 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				if(linked_imprinter)
 					linked_imprinter.queue.len = 0
 
-	else if(href_list["setProtolatheStopped"] && linked_lathe) //Causes the protolathe to dispose of all it's reagents.
-		linked_lathe.stopped=(href_list["setProtolatheStopped"]=="1")
+	else if(href_list["setProtolatheStopped"] && linked_lathe) //Makes the protolathe start or stop processing the queue
+		if(href_list["setProtolatheStopped"]=="0")
+			linked_lathe.start_processing_queue()
+		else
+			linked_lathe.stop_processing_queue()
 
-	else if(href_list["setImprinterStopped"] && linked_imprinter) //Causes the protolathe to dispose of all it's reagents.
-		linked_imprinter.stopped=(href_list["setImprinterStopped"]=="1")
+	else if(href_list["setImprinterStopped"] && linked_imprinter) //Ditto for imprinter
+		if(href_list["setImprinterStopped"]=="0")
+			linked_imprinter.start_processing_queue()
+		else
+			linked_imprinter.stop_processing_queue()
 
 	else if(href_list["lathe_ejectsheet"] && linked_lathe) //Causes the protolathe to eject a sheet of material
 		if(!src.allowed(usr))
@@ -722,13 +725,13 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += "<A href='?src=\ref[src];menu=1.6'>Settings</A>"
 
 		if(1.1) //Research viewer
+			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A><BR>"
 			dat += "Current Research Levels:<BR><BR>"
 			for(var/ID in files.known_tech)
 				var/datum/tech/T = files.known_tech[ID]
 				dat += {"[T.name]<BR>
 					* Level: [T.level]<BR>
 					* Summary: [T.desc]<HR>"}
-			dat += "<A href='?src=\ref[src];menu=1.0'>Main Menu</A>"
 
 		if(1.2) //Technology Disk Menu
 
@@ -769,7 +772,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			else
 
 				dat += {"Name: [d_disk.blueprint.name]<BR>
-					Level: [Clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
+					Level: [clamp(d_disk.blueprint.reliability + rand(-15,15), 0, 100)]<BR>"}
 				switch(d_disk.blueprint.build_type)
 					if(IMPRINTER)
 						dat += "Lathe Type: Circuit Imprinter<BR>"
@@ -853,11 +856,19 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			dat += {"<A href='?src=\ref[src];menu=1.0'>Main Menu</A><HR>
 				Deconstruction Menu<HR>
 				Name: [linked_destroy.loaded_item.name]<BR>
-				Origin Tech:<BR>"}
+				Origin Tech:<UL>"}
 			var/list/temp_tech = linked_destroy.ConvertReqString2List(linked_destroy.loaded_item.origin_tech)
 			for(var/T in temp_tech)
-				dat += "* [CallTechName(T)] [temp_tech[T]]<BR>"
-
+				var/datum/tech/TT = files.GetKTechByID(T)
+				dat += "<LI>[CallTechName(T)] [temp_tech[T]] \[Current research level: [TT.level]\]</LI>"
+			dat += "</UL>"
+			if(linked_destroy.loaded_item.materials)
+				dat += "Material Composition:<UL>"
+				for(var/matID in linked_destroy.loaded_item.materials.storage)
+					if(linked_destroy.loaded_item.materials.storage[matID])
+						var/datum/material/M = linked_destroy.loaded_item.materials.getMaterial(matID)
+						dat += "<LI>[M.processed_name]: [linked_destroy.loaded_item.materials.storage[matID]]</LI>"
+				dat += "</UL><BR>"
 			dat += {"<HR><A href='?src=\ref[src];deconstruct=1'>Deconstruct Item</A> ||
 				<A href='?src=\ref[src];eject_item=1'>Eject Item</A> || "}
 		/////////////////////PROTOLATHE SCREENS/////////////////////////
@@ -924,12 +935,28 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(3.4) //Protolathe Queue Management
 			dat += protolathe_header()+"Production Queue<BR><HR><ul>"
+			var/list/required_materials = list()
 			for(var/i=1;i<=linked_lathe.queue.len;i++)
 				var/datum/design/I=linked_lathe.queue[i]
 				dat += "<li>Name: [I.name]"
+				for(var/material in I.materials)
+					required_materials[material] += I.materials[material]*linked_lathe.resource_coeff
 				if(linked_lathe.stopped)
 					dat += "<A href='?src=\ref[src];removeQItem=[i];device=protolathe'>(Remove)</A></li>"
-			dat += "</ul><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
+			dat += "</ul>"
+			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
+				dat += "<BR>Required Materials: "
+				for(var/I in required_materials)
+					var/datum/material/M=linked_lathe.materials.getMaterial(I)
+					var/success = "red"
+					var/success_amount = linked_lathe.check_mats(I)
+					if(linked_lathe.check_mats(I) >= required_materials[I])
+						success = "green"
+					else if(linked_lathe.check_mats_bluespace(I) >= required_materials[I])
+						success_amount = linked_lathe.check_mats_bluespace(I)
+						success = "blue"
+					dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
+			dat += "<br><A href='?src=\ref[src];clearQ=1;device=protolathe'>Remove All Queued Items</A><br />"
 			if(linked_lathe.stopped)
 				dat += "<A href='?src=\ref[src];setProtolatheStopped=0' style='color:green'>Start Production</A>"
 			else
@@ -1022,12 +1049,34 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 
 		if(4.4) //Imprinter Queue Management
 			dat += CircuitImprinterHeader()+"Production Queue<BR><HR><ul>"
+			var/list/required_materials = list()
 			for(var/i=1;i<=linked_imprinter.queue.len;i++)
 				var/datum/design/I=linked_imprinter.queue[i]
 				dat += "<li>Name: [I.name]"
+				for(var/material in I.materials)
+					required_materials[material] += I.materials[material]*linked_imprinter.resource_coeff
 				if(linked_imprinter.stopped)
 					dat += "<A href='?src=\ref[src];removeQItem=[i];device=imprinter'>(Remove)</A></li>"
-			dat += "</ul><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
+			dat += "</ul>"
+			if(required_materials.len) //Do we have the materials required? Green if so, blue if it requires bluespace, red otherwise.
+				dat += "<BR>Required Materials: "
+				for(var/I in required_materials)
+					if(copytext(I,1,2) == "$")
+						var/datum/material/M=linked_imprinter.materials.getMaterial(I)
+						if(M)
+							var/success = "red"
+							var/success_amount = linked_imprinter.check_mats(I)
+							if(linked_imprinter.check_mats(I) >= required_materials[I])
+								success = "green"
+							else if(linked_imprinter.check_mats_bluespace(I) >= required_materials[I])
+								success_amount = linked_imprinter.check_mats_bluespace(I)
+								success = "blue"
+							dat += "<span style='color:[success]'>[required_materials[I]] ([success_amount]) [M.processed_name]. </span>"
+					else
+						var/success = linked_imprinter.check_mats(I)
+						dat += "<span style='color:[success?"green":"red"]'>[required_materials[I]] ([success]) [reagent_name(I)]. </span>"
+
+			dat += "<br><A href='?src=\ref[src];clearQ=1;device=imprinter'>Remove All Queued Items</A><br />"
 			if(linked_imprinter.stopped)
 				dat += "<A href='?src=\ref[src];setImprinterStopped=0' style='color:green'>Start Production</A>"
 			else
@@ -1075,3 +1124,9 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	id = 5
 	req_access=list()
 	circuit = "/obj/item/weapon/circuitboard/rdconsole/pod"
+
+/obj/machinery/computer/rdconsole/derelict
+	name = "Derelict R&D Console"
+	id = 6
+	req_access=list()
+	circuit = "/obj/item/weapon/circuitboard/rdconsole/derelict"

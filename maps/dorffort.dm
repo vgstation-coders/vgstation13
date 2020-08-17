@@ -25,7 +25,8 @@
 			name = "spacePirateShip" ;
 			},
 		)
-	New()
+
+/datum/map/active/New()
 
 /proc/make_dorf_secret()
 	var/turf/T = null
@@ -101,27 +102,28 @@
 	room_size_max = 10
 	flags = CONTIGUOUS_WALLS
 
-	postProcessComplex()
-		..()
-		for(var/surprise_room/room in rooms)
-			var/list/w_cand=room.GetTurfs(TURF_FLOOR)
-			for(var/turf/simulated/floor/airless/F in w_cand)
-				if(!istype(F))
-					continue
-				F.icon_state = "barber"
+/mining_surprise/dorf/medbay/postProcessComplex()
+	..()
+	for(var/surprise_room/room in rooms)
+		var/list/w_cand=room.GetTurfs(TURF_FLOOR)
+		for(var/turf/simulated/floor/airless/F in w_cand)
+			if(!istype(F))
+				continue
+			F.icon_state = "barber"
 
 /obj/structure/closet/crate/secure/engisec/PA
 	name = "Particle Accelerator crate"
 	req_access = list(access_engine)
-	New()
-		new /obj/structure/particle_accelerator/fuel_chamber(src)
-		new /obj/machinery/particle_accelerator/control_box(src)
-		new /obj/structure/particle_accelerator/particle_emitter/center(src)
-		new /obj/structure/particle_accelerator/particle_emitter/left(src)
-		new /obj/structure/particle_accelerator/particle_emitter/right(src)
-		new /obj/structure/particle_accelerator/power_box(src)
-		new /obj/structure/particle_accelerator/end_cap(src)
-		..()
+/obj/structure/closet/crate/secure/engisec/PA/New()
+	new /obj/structure/particle_accelerator/fuel_chamber(src)
+	new /obj/machinery/particle_accelerator/control_box(src)
+	new /obj/structure/particle_accelerator/particle_emitter/center(src)
+	new /obj/structure/particle_accelerator/particle_emitter/left(src)
+	new /obj/structure/particle_accelerator/particle_emitter/right(src)
+	new /obj/structure/particle_accelerator/power_box(src)
+	new /obj/structure/particle_accelerator/end_cap(src)
+	..()
+
 /mining_surprise/dorf/engineering
 	name= "Abandoned Engine Room"
 	max_richness = 9

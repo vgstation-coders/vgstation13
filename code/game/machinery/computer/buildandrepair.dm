@@ -37,6 +37,7 @@
 	var/powernet = null
 	var/list/records = null
 	var/contain_parts = 1
+	toolsounds = list('sound/items/Screwdriver.ogg')
 
 /obj/item/weapon/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
@@ -47,6 +48,12 @@
 	name = "Circuit board (Security Cameras)"
 	desc = "A circuit board for running a computer used for viewing security cameras."
 	build_path = /obj/machinery/computer/security
+/obj/item/weapon/circuitboard/security/wooden_tv
+	name = "Circuit board (Security Cameras TV)"
+	build_path = /obj/machinery/computer/security/wooden_tv
+/obj/item/weapon/circuitboard/security/spesstv
+	name = "Circuit board (high-definition Spess.TV telescreen)"
+	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 /obj/item/weapon/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
@@ -75,11 +82,11 @@
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."
 	build_path = /obj/machinery/computer/med_data
-/obj/item/weapon/circuitboard/pandemic
-	name = "Circuit board (PanD.E.M.I.C. 2200)"
-	desc = "A circuit board for running a computer used in Virology."
-	build_path = /obj/machinery/computer/pandemic
-	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
+///obj/item/weapon/circuitboard/pandemic
+//	name = "Circuit board (PanD.E.M.I.C. 2200)"
+//	desc = "A circuit board for running a computer used in Virology."
+//	build_path = /obj/machinery/computer/pandemic
+//	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
 /obj/item/weapon/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	desc = "A circuit board for running a computer used in Genetics."
@@ -110,6 +117,10 @@
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
+/obj/item/weapon/circuitboard/security_alerts
+	name = "Circuit board (Security Records)"
+	desc = "A circuit board for running a computer used for viewing security alerts."
+	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
@@ -215,6 +226,10 @@
 	name = "Circuit Board (Pod Bay R&D Console)"
 	desc = "A circuit board for running a R&D console for the Pod Bay."
 	build_path = /obj/machinery/computer/rdconsole/pod
+/obj/item/weapon/circuitboard/rdconsole/derelict
+	name = "Circuit Board (Derelict R&D Console)"
+	desc = "A circuit board for running a R&D console for the Derelict."
+	build_path = /obj/machinery/computer/rdconsole/derelict
 
 /obj/item/weapon/circuitboard/mecha_control
 	name = "Circuit Board (Exosuit Control Console)"
@@ -270,11 +285,10 @@
 	desc = "A circuit board for running a computer used to manipulate telecommunications traffic."
 	build_path = /obj/machinery/computer/telecomms/traffic
 	origin_tech = Tc_PROGRAMMING + "=3"
-
-/obj/item/weapon/circuitboard/curefab
+/*/obj/item/weapon/circuitboard/curefab
 	name = "Circuit board (Cure fab)"
 	desc = "A circuit board for running a computer used to fabricate cures for virusses."
-	build_path = /obj/machinery/computer/curer
+	build_path = /obj/machinery/computer/curer*/
 /obj/item/weapon/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	desc = "A circuit board for running a computer used to splice DNA strands in virusses."
@@ -317,6 +331,7 @@
 	desc = "A circuit board for running a computer used to operate the Telescience Telepad."
 	build_path = /obj/machinery/computer/telescience
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=2"
+	mech_flags = MECH_SCAN_FAIL
 /obj/item/weapon/circuitboard/forensic_computer
 	name = "Circuit board (Forensics Console)"
 	desc = "A circuit board for running a computer used to scan objects and view data from portable scanners."
@@ -340,6 +355,7 @@
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
+
 /obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
 		var/obj/item/weapon/solder/S = I
@@ -350,7 +366,7 @@
 		if(WT.remove_fuel(1,user))
 			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
-			playsound(B.loc, 'sound/items/Welder.ogg', 30, 1)
+			I.playtoolsound(B.loc, 30)
 			if(user.get_inactive_hand() == src)
 				user.before_take_item(src)
 				user.put_in_hands(B)
@@ -358,16 +374,31 @@
 			return
 	return
 
-/obj/item/weapon/circuitboard/proc/solder_improve(mob/user as mob)
+/obj/item/weapon/circuitboard/proc/solder_improve(mob/user)
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
-	return
 
-/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user as mob)
+
+
+/obj/item/weapon/circuitboard/fishtank/solder_improve(mob/user)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a larger tank.</span>")
+	var/obj/item/weapon/circuitboard/fishwall/A = new /obj/item/weapon/circuitboard/fishwall(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+
+
+/obj/item/weapon/circuitboard/fishwall/solder_improve(mob/user)
+	to_chat(user, "<span class='notice'>You modify the circuitry to support a smaller tank.</span>")
+	var/obj/item/weapon/circuitboard/fishtank/A = new /obj/item/weapon/circuitboard/fishtank(src.loc)
+	user.put_in_hands(A)
+	qdel(src)
+
+
+/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
-	return
 
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user as mob)
+
+/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
 	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
 		return ..()
 	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
@@ -377,12 +408,11 @@
 		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
 		user.put_in_hands(A)
 		qdel(src)
-		return
 
 /obj/structure/computerframe/attackby(obj/item/P as obj, mob/user as mob)
 	switch(state)
 		if(0)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 1
 				return 1
 			if(iswelder(P))
@@ -391,14 +421,14 @@
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
 						return
-					playsound(src, 'sound/items/Welder.ogg', 50, 1)
+					WT.playtoolsound(src, 50)
 					user.visible_message("[user] welds the frame back into metal.", "You weld the frame back into metal.", "You hear welding.")
 					drop_stack(sheet_type, loc, 5, user)
 					state = -1
 					qdel(src)
 				return 1
 		if(1)
-			if(iswrench(P) && wrenchAnchor(user))
+			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 0
 				return 1
 			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
@@ -415,13 +445,13 @@
 					to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				return 1
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] screws the circuit board into place.", "You screw the circuit board into place.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
 				return 1
 			if(iscrowbar(P) && circuit)
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the circuit board.", "You remove the circuit board", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "0"
@@ -430,7 +460,7 @@
 				return 1
 		if(2)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unfastens the circuit board.", "You unfasten the circuit board.", "You hear metallic sounds.")
 				src.state = 1
 				src.icon_state = "1"
@@ -451,7 +481,7 @@
 				return 1
 		if(3)
 			if(iswirecutter(P))
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] unplugs the wires from the frame.", "You unplug the wires from the frame.", "You hear metallic sounds.")
 				src.state = 2
 				src.icon_state = "2"
@@ -474,14 +504,14 @@
 				return 1
 		if(4)
 			if(iscrowbar(P))
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				user.visible_message("[user] removes the glass panel from the frame.", "You remove the glass panel from the frame.", "You hear metallic sounds.")
 				src.state = 3
 				src.icon_state = "3"
 				new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
 			if(P.is_screwdriver(user))
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(src, 50)
 				if(!circuit.build_path) // the board has been soldered away!
 					to_chat(user, "<span class='warning'>You connect the monitor, but nothing turns on!</span>")
 					return

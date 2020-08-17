@@ -219,6 +219,14 @@
 	if(src.species && src.species.flags & NO_BREATHE)
 		to_chat(src, "<span class='notice'><B>You don't breathe, so you can't help \the [target]!</B></span>")
 		return 0
+	if(!hasmouth())
+		to_chat(src, "<span class='notice'><B>You don't have a mouth!</B></span>")
+		return 0
+	if(iscarbon(target))
+		var/mob/living/carbon/C = target
+		if(!C.hasmouth())
+			to_chat(src, "<span class='notice'><B>They don't have a mouth!</B></span>")
+			return 0
 	if(src.check_body_part_coverage(MOUTH))
 		to_chat(src, "<span class='notice'><B>Remove your [src.get_body_part_coverage(MOUTH)]!</B></span>")
 		return 0

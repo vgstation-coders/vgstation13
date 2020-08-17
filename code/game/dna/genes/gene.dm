@@ -69,8 +69,7 @@
 /**
 * Called when the mob says shit
 */
-/datum/dna/gene/proc/OnSay(var/mob/M, var/message)
-	return message
+/datum/dna/gene/proc/OnSay(var/mob/M, var/datum/speech/message)
 
 /**
 * Called after the mob runs update_icons.

@@ -78,7 +78,7 @@
 		if(istype(E, /datum/stack_recipe))
 			var/datum/stack_recipe/R = E
 			var/max_multiplier = round(src.amount / R.req_amount)
-			var/title as text
+			var/title
 			var/can_build = 1
 			can_build = can_build && (max_multiplier>0)
 
@@ -147,7 +147,7 @@
 
 	if (href_list["make"])
 		if (src.amount < 1)
-			returnToPool(src) //Never should happen
+			qdel(src) //Never should happen
 		var/list/recipes_list = recipes
 		if (href_list["sublist"])
 			var/datum/stack_recipe_list/srl = recipes_list[text2num(href_list["sublist"])]
@@ -163,6 +163,10 @@
 
 /obj/item/stack/proc/use(var/amount)
 	ASSERT(isnum(src.amount))
+
+	if (src.amount <= 0)
+		qdel(src) // We don't have anything left
+		return
 
 	if(src.amount>=amount)
 		src.amount-=amount
@@ -191,7 +195,8 @@
 					R.module_state_3 = null
 					R.inv3.icon_state = "inv3"
 			usr.before_take_item(src)
-		spawn returnToPool(src)
+		spawn()
+			qdel(src)
 
 /obj/item/stack/proc/add(var/amount)
 	src.amount += amount
@@ -254,7 +259,7 @@
 		if (amount >= max_amount)
 			to_chat(user, "\The [src] cannot hold anymore [CORRECT_STACK_NAME(src)].")
 			return 1
-		var/to_transfer as num
+		var/to_transfer
 		if (user.get_inactive_hand()==S)
 			to_transfer = 1
 		else
@@ -320,9 +325,12 @@
 				return S
 	var/obj/item/stack/S = new_stack_type
 	for(var/i = 0 to round(add_amount/initial(S.max_amount)))
+		if (add_amount <= 0)
+			continue
 		S = new new_stack_type(loc)
 		S.amount = min(add_amount, S.max_amount)
 		add_amount -= S.amount
+		S.update_materials()
 	return S
 
 /obj/item/stack/verb_pickup(mob/living/user)

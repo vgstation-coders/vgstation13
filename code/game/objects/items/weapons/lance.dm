@@ -169,7 +169,7 @@
 				var/datum/organ/external/affecting = H.get_organ(ran_zone(owner.zone_sel.selecting))
 
 				if(H.check_shields(base_damage, L))
-					H.visible_message("<span class='danger'>[H] blocks \the [owner]'s [src.L.name] hit.</span>", "<span class='notice'>You block \the [owner]'s couched [src.L.name].</span>")
+					H.visible_message("<span class='borange'>[H] blocks \the [owner]'s [src.L.name] hit.</span>", "<span class='notice'>You block \the [owner]'s couched [src.L.name].</span>")
 					return
 
 				victim.apply_damage(base_damage, BRUTE, affecting)

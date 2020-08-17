@@ -61,7 +61,7 @@
 "bi" = (/obj/item/toy/balloon/glove,/turf/simulated/floor/plating,/area/vault/assistantlair)
 "bj" = (/obj/item/clothing/suit/ianshirt,/turf/simulated/floor/plating,/area/vault/assistantlair)
 "bk" = (/obj/machinery/light/small{dir = 4},/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/assistantlair)
-"bl" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small,/obj/item/device/camera/big_photos,/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/assistantlair)
+"bl" = (/obj/effect/decal/cleanable/dirt,/obj/machinery/light/small,/turf/simulated/floor/plating{icon_state = "panelscorched"},/area/vault/assistantlair)
 "bm" = (/obj/structure/table,/obj/item/clothing/mask/scarf/blue,/turf/simulated/floor/plating{icon_state = "platingdmg1"},/area/vault/assistantlair)
 "bn" = (/obj/structure/reagent_dispensers/fueltank,/turf/simulated/floor/plating,/area/vault/assistantlair)
 "bo" = (/obj/item/weapon/stool,/obj/structure/sign/poster{icon_state = "bsposter10"; pixel_x = -32},/turf/simulated/floor/plating,/area/vault/assistantlair)

@@ -3,6 +3,9 @@
 	var/time_failed = 0
 	var/obj/machinery/message_server/useMS
 
+/datum/event/pda_spam/can_start()
+	return 50
+
 /datum/event/pda_spam/setup()
 	time_failed = world.time
 	for(var/obj/machinery/message_server/MS in message_servers)

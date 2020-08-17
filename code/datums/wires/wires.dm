@@ -33,7 +33,6 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 	src.holder = holder
 	if(!istype(holder, holder_type))
 		CRASH("Our holder is null/the wrong type!")
-		return
 
 	// Generate new wires
 	if(random)
@@ -51,6 +50,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 /datum/wires/Destroy()
 	if(holder)
 		holder = null
+	..()
 
 /datum/wires/proc/GenerateWires()
 	var/list/colours_to_pick = wireColours.Copy() // Get a copy, not a reference.
@@ -177,11 +177,11 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 
 // Called when wires cut/mended.
 /datum/wires/proc/UpdateCut(var/index, var/mended, mob/user)
-	return
+	playsound(holder, 'sound/items/wirecutter.ogg', 25, 1, -6)
 
 // Called when wire pulsed. Add code here.
 /datum/wires/proc/UpdatePulsed(var/index, mob/user)
-	return
+	playsound(holder, 'sound/machines/airlock_beep.ogg', 25, 1, -6)
 
 /datum/wires/proc/CanUse(var/mob/L)
 	if(!L.dexterity_check())

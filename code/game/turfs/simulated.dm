@@ -19,7 +19,7 @@
 /turf/simulated/proc/AddTracks(var/typepath,var/bloodDNA,var/comingdir,var/goingdir,var/bloodcolor=DEFAULT_BLOOD)
 	var/obj/effect/decal/cleanable/blood/tracks/tracks = locate(typepath) in src
 	if(!tracks)
-		tracks = getFromPool(typepath, src)
+		tracks = new typepath(src)
 	tracks.AddTracks(bloodDNA,comingdir,goingdir,bloodcolor)
 
 /turf/simulated/Entered(atom/A, atom/OL)
@@ -71,28 +71,29 @@
 	..()
 
 //returns 1 if made bloody, returns 0 otherwise
-/turf/simulated/add_blood(mob/living/carbon/human/M as mob)
+/turf/simulated/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
-		return 0
+		return FALSE
 
 	for(var/obj/effect/decal/cleanable/blood/B in contents)
 		if(!B.blood_DNA[M.dna.unique_enzymes])
 			B.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 			B.virus2 = virus_copylist(M.virus2)
-		return 1 //we bloodied the floor
+		had_blood = TRUE
+		return TRUE //we bloodied the floor
 
 	blood_splatter(src,M,1)
-	return 1 //we bloodied the floor
-
+	had_blood = TRUE
+	return TRUE //we bloodied the floor
 
 // Only adds blood on the floor -- Skie
-/turf/simulated/proc/add_blood_floor(mob/living/carbon/M as mob)
-	if(istype(M, /mob/living/carbon/monkey))
+/turf/simulated/proc/add_blood_floor(var/mob/living/carbon/M)
+	if (ishuman(M))
+		add_blood(M)
+	else if(istype(M, /mob/living/carbon/monkey))
 		blood_splatter(src,M,1)
 	else if( istype(M, /mob/living/carbon/alien ))
-		var/obj/effect/decal/cleanable/blood/xeno/this = getFromPool(/obj/effect/decal/cleanable/blood/xeno, src)
-		this.New(src)
+		var/obj/effect/decal/cleanable/blood/xeno/this = new /obj/effect/decal/cleanable/blood/xeno(src)
 		this.blood_DNA["UNKNOWN BLOOD"] = "X*"
 	else if( istype(M, /mob/living/silicon/robot ))
-		var/obj/effect/decal/cleanable/blood/oil/B = getFromPool(/obj/effect/decal/cleanable/blood/oil,src)
-		B.New(src)
+		new /obj/effect/decal/cleanable/blood/oil(src)

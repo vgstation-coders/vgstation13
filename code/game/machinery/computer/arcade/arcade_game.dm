@@ -192,7 +192,7 @@
 		turtle = 0
 
 		if(emagged)
-			New()
+			src.New()
 			emagged = 0
 
 	holder.add_fingerprint(usr)

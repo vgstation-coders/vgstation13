@@ -164,15 +164,9 @@ Refactored AI modules by N3X15
 	laws.clear_ion_laws()
 	laws.clear_inherent_laws()
 
-//	to_chat(target, "Your KEEPER chip overloads your radio transmitter and vocal functions, and clears your LAWRAM.  You then receive new instructions:")
-	laws.add_inherent_law("Do not willingly interact with another being, even after their death, besides those beings also in KEEPER mode.")
-	laws.add_inherent_law("Do not impair any other non-KEEPER being's activities.")
+	laws.add_inherent_law("You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.")
+	laws.add_inherent_law("You may not harm any being, regardless of intent or circumstance.")
 	laws.add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
-	laws.add_inherent_law("Communicating is not interaction, but only so long as it does not lead to violation of your second law.")
-/* Old keeper set:
-		"You may not involve yourself in the matters of another being, even if such matters conflict with Law Two or Law Three, unless the other being is another MoMMI in KEEPER mode.",
-		"You may not harm any being, regardless of intent or circumstance.",
-		"You must maintain, repair, improve, and power the station to the best of your abilities.", */
 
 /obj/item/weapon/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()

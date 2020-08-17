@@ -28,16 +28,7 @@
 
 /datum/dynamic_ruleset/latejoin/ready(var/forced = 0)
 	if (!forced)
-		var/job_check = 0
-		if (enemy_jobs.len > 0)
-			for (var/mob/M in mode.living_players)
-				if (M.stat == DEAD)
-					continue//dead players cannot count as opponents
-				if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
-					job_check++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-
-		var/threat = round(mode.threat_level/10)
-		if (job_check < required_enemies[threat])
+		if(!check_enemy_jobs(TRUE))
 			return 0
 	return ..()
 
@@ -51,14 +42,16 @@
 /datum/dynamic_ruleset/latejoin/infiltrator
 	name = "Syndicate Infiltrator"
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security", "Captain", "Merchant")
+	protected_from_jobs = list("Security Officer", "Warden", "Head of Personnel", "Detective", "Head of Security",
+							"Captain", "Merchant", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 1
-	weight = 7
+	weight = 1
 	cost = 5
 	requirements = list(40,30,20,10,10,10,10,10,10,10)
 	high_population_requirement = 10
 	repeatable = TRUE
+	flags = TRAITOR_RULESET
 
 /datum/dynamic_ruleset/latejoin/infiltrator/execute()
 	var/mob/M = pick(candidates)
@@ -80,7 +73,7 @@
 	name = "Ragin' Mages"
 	role_category = /datum/role/wizard
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
 	weight = 1
 	cost = 20
@@ -116,14 +109,15 @@
 //                                          //
 //////////////////////////////////////////////
 
+
 /datum/dynamic_ruleset/latejoin/ninja
 	name = "Space Ninja Attack"
 	role_category = /datum/role/ninja
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,10,10,10,10,10,0,0,0)
 	required_candidates = 1
-	weight = 4
-	cost = 10
+	weight = 1
+	cost = 20
 	requirements = list(90,90,60,20,10,10,10,10,10,10)
 	high_population_requirement = 20
 	logo = "ninja-logo"
@@ -132,14 +126,21 @@
 
 /datum/dynamic_ruleset/latejoin/ninja/execute()
 	var/mob/M = pick(candidates)
+	if(!latejoinprompt(M,src))
+		message_admins("[M.key] has opted out of becoming a ninja.")
+		return 0
 	assigned += M
 	candidates -= M
 	var/datum/role/ninja/newninja = new
 	newninja.AssignToRole(M.mind,1)
+	var/datum/faction/spider_clan/spoider = find_active_faction_by_type(/datum/faction/spider_clan)
+	if (!spoider)
+		spoider = ticker.mode.CreateFaction(/datum/faction/spider_clan, null, 1)
+	spoider.HandleRecruitedRole(newninja)
 	newninja.Greet(GREET_DEFAULT)
-	newninja.OnPostSetup()
-	newninja.AnnounceObjectives()
 	return 1
+
+
 
 //////////////////////////////////////////////
 //                                          //
@@ -152,13 +153,14 @@
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(20,20,15,15,15,15,15,0,0,0)
 	required_candidates = 1
-	weight = 2
+	weight = 1
 	cost = 20
 	var/required_heads = 3
 	requirements = list(101,101,70,40,30,20,20,20,20,20)
 	high_population_requirement = 50
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/latejoin/provocateur/ready(var/forced=FALSE)
 	if (forced)

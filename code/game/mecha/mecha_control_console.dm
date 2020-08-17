@@ -140,7 +140,7 @@
 	var/obj/mecha/M = in_mecha()
 	if(M)
 		M.log_message("Exosuit tracking beacon self-destruct activated.",1)
-		M.occupant_message("<font color='red'><b>Exosuit tracking beacon short-circuits!</b></font>")
+		M.occupant_message("<span class='red'><b>Exosuit tracking beacon short-circuits!</b></span>")
 		M.occupant << sound('sound/machines/warning-buzzer.ogg',wait=0)
 		if (M.get_charge())
 			if (M.cell.charge < 5000 && M)
@@ -158,7 +158,7 @@
 		M.state = !M.state
 		M.log_message("Emergency maintenance protocols [M.state?"activated":"deactivated"].",1)
 		if(M.occupant)
-			M.occupant_message("<font color='red'>Exosuit emergency maintenance protocols [M.state?"activated":"deactivated"].</font>")
+			M.occupant_message("<span class='red'>Exosuit emergency maintenance protocols [M.state?"activated":"deactivated"].</span>")
 			M.occupant << sound('sound/mecha/mechlockdown.ogg',wait=0)
 
 		return M.state

@@ -131,6 +131,12 @@
 	schematics += new /datum/selection_schematic/access_schematic(src)
 	selected = schematics[1]
 
+/datum/rcd_schematic/con_airlock/Destroy()
+	for(var/datum/selection_schematic/thing in schematics)
+		qdel(thing)
+	schematics = null
+	..()
+
 /datum/rcd_schematic/con_airlock/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
 	..()
 	show(user)
@@ -264,7 +270,7 @@
 
 /datum/rcd_schematic/con_airlock/Topic(var/href, var/href_list)
 	if(href_list["set_selected"])
-		var/idx = Clamp(text2num(href_list["set_selected"]), 1, schematics.len)
+		var/idx = clamp(text2num(href_list["set_selected"]), 1, schematics.len)
 		var/datum/selection_schematic/airlock_schematic/C = schematics[idx]
 
 		selected = C
@@ -353,7 +359,7 @@
 	playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 
 	var/obj/machinery/door/airlock/D = new selected.build_type(A)
-	if(capitalize(selected_name) == selected_name)	//The name inputted is capitalized, so we add \improper.
+	if(selected_name && (capitalize(selected_name) == selected_name))	//The name inputted is capitalized, so we add \improper.
 		D.name	= "\improper [selected_name]"
 	else
 		D.name		= selected_name
@@ -379,12 +385,12 @@
 /datum/selection_schematic/New(var/master)
 	..()
 	src.master = master
-	ourobj = getFromPool(/obj/abstract/screen/schematics, null, src)
+	ourobj = new /obj/abstract/screen/schematics(null, src)
 
 /datum/selection_schematic/Destroy()
 	for(var/client/C in clients)
 		C.screen.Remove(ourobj)
-	returnToPool(ourobj)
+	qdel(ourobj)
 	ourobj = null
 	..()
 
@@ -404,8 +410,8 @@
 /datum/selection_schematic/airlock_schematic/clicked(var/mob/user)
 	if(master:selected == src)
 		master:selected_name = copytext(sanitize(input(usr,"What would you like to name this airlock?","Input a name",name) as text|null),1,MAX_NAME_LEN)
-		if(capitalize(master:selected_name) == master:selected_name)
-			master:selected_name = "\improper[master:selected_name]"
+		if(master:selected_name && (capitalize(master:selected_name) == master:selected_name))
+			master:selected_name = "\improper [master:selected_name]"
 	else
 		master.selected = src
 // Schematics for schematics, I know, but it's OOP!

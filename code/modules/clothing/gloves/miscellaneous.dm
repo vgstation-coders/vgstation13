@@ -8,7 +8,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/centcom
 	desc = "Regal green gloves, with a nice gold trim. Lordy."
@@ -27,7 +27,7 @@
 	icon_state = "black"
 	item_state = "black"
 	siemens_coefficient = 1.0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/swat
 	desc = "These tactical gloves are somewhat fire and impact-resistant."
@@ -38,7 +38,52 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/gloves/swat/operator
+	name = "operator gloves"
+	desc = "Once you touch down in the LZ at the FOB, locate the IEDs and don't put up with any FNGs."
+
+/obj/item/clothing/gloves/swat/operator/examine(mob/user)
+	..()
+	if(locate(/obj/item/weapon/implant/loyalty) in user)
+		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
+
+/obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
+	if(A == user && !user.incapacitated())
+		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
+			var/list/choices = list(
+				list("Stick together!", "radial_group"),
+				list("Split up!", "radial_split"),
+				list("Wait here!", "radial_waithere"),
+				list("Busy, cover!", "radial_busy")
+			)
+
+			var/sign = show_radial_menu(user,user,choices)
+			if(!sign)
+				return 0 //if they don't want to sign, let them check their own status
+			signal(sign,user)
+			return 1 //exit the attack_hand
+	return ..()
+
+/obj/item/clothing/gloves/swat/operator/proc/signal(var/sign, mob/user)
+	if(user.incapacitated())
+		return
+	for(var/mob/M in view(7, user))
+		if(!M.client)
+			continue //Don't bother, no one to show it to
+		if(M.isUnconscious() || M.eye_blind || M.blinded)
+			continue //can't perceive this message
+		if(M.is_implanted(/obj/item/weapon/implant/loyalty) || istype(M, /mob/dead/observer))
+			to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
+			continue
+		else if(isrobot(M))
+			var/mob/living/silicon/robot/robit = M
+			if(HAS_MODULE_QUIRK(robit, MODULE_IS_THE_LAW))
+				to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
+				continue
+
+		to_chat(M,"<span class='notice'>[user] makes strange hand symbols.</span>")
 
 /obj/item/clothing/gloves/combat //Combined effect of SWAT gloves and insulated gloves
 	desc = "These tactical gloves are somewhat fire and impact resistant."
@@ -49,7 +94,7 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/latex
 	name = "latex gloves"
@@ -59,7 +104,8 @@
 	siemens_coefficient = 0.30
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	sterility = 100
 
 /obj/item/clothing/gloves/botanic_leather
 	desc = "These leather gloves protect against thorns, barbs, prickles, spikes and other harmful objects of floral origin."
@@ -68,7 +114,7 @@
 	item_state = "leather"
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/batmangloves
 	desc = "Used for handling all things bat related."
@@ -89,28 +135,28 @@
 	name = "DRN-001 Gloves"
 	icon_state = "megagloves"
 	item_state = "megagloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/protogloves
 	desc = "Funcionally identical to the DRN-001 model's, but in red!"
 	name = "Prototype Gloves"
 	icon_state = "protogloves"
 	item_state = "protogloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/megaxgloves
 	desc = "An upgrade to the DRN-001's gauntlets, retains the uncomfortable armor, but comes with white gloves!"
 	name = "Maverick Hunter gloves"
 	icon_state = "megaxgloves"
 	item_state = "megaxgloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/joegloves
 	desc = "Large grey gloves, very similar to the Prototype's."
 	name = "Sniper Gloves"
 	icon_state = "joegloves"
 	item_state = "joegloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/doomguy
 	desc = ""
@@ -147,7 +193,7 @@
 	desc = "When you're a jerk, everybody loves you."
 	icon_state = "anchorarms"
 	item_state = "anchorarms"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/neorussian
 	name = "neo-Russian gloves"
@@ -263,7 +309,7 @@
 		victim.throw_at(get_edge_target_turf(loc, loc.dir), 5, 1)
 		victim.Stun(stunforce)
 		victim.Knockdown(stunforce)
-		victim.apply_effect(STUTTER, stunforce)
+		victim.apply_effect(stunforce, STUTTER)
 
 		last_punch = world.time
 		update_icon()
@@ -348,11 +394,12 @@
 	return FALSE
 
 /obj/item/clothing/gloves/mining/Touch(var/atom/A, mob/user, proximity)
-	if(proximity && istype(A, /turf/unsimulated/mineral) && do_after(user, A, 6))
-		playsound(get_turf(src), hitsound_added, 100, 1, vary = 0)
-		user.do_attack_animation(A, src)
-		var/turf/unsimulated/mineral/T = A
-		T.GetDrilled(0)
+	if(proximity && istype(A, /turf/unsimulated/mineral))
+		var/turf/unsimulated/mineral/M = A
+		if(do_after(user, A, max(M.minimum_mine_time,4 SECONDS*M.mining_difficulty)))
+			playsound(get_turf(src), hitsound_added, 100, 1, vary = 0)
+			user.do_attack_animation(M, src)
+			M.GetDrilled(0)
 
 /obj/item/clothing/gloves/mining/attack_icon()
 	return image(icon = 'icons/mob/attackanims.dmi', icon_state = "rockernaut")

@@ -73,7 +73,7 @@
 		qdel(src)
 
 /obj/effect/biomass/proc/spread()
-	var/location = get_step_rand(src)
+	var/location = get_step(src, pick(alldirs))
 
 	if(istype(location, /turf/simulated/floor))
 		var/turf/simulated/floor/Floor = location

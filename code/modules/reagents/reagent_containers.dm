@@ -77,12 +77,17 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if(!possible_transfer_amounts)
 		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
 
+/obj/item/weapon/reagent_containers/Destroy()
+	if(istype(loc, /obj/machinery/iv_drip))
+		var/obj/machinery/iv_drip/holder = loc
+		holder.remove_container()
+ . = ..()
+
 /obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
 	return
 
 /obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
 	//If harm intent, splash it on em, else try to feed em it
-
 	if(!M.reagents)
 		return
 
@@ -105,7 +110,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		imbibe(user)
 		return 1
 
-	else if(ishuman(M))
+	else if(ishuman(M) || iscorgi(M))
 		user.visible_message("<span class='danger'>[user] attempts to feed [M] \the [src].</span>", "<span class='danger'>You attempt to feed [M] \the [src].</span>")
 
 		if(!do_mob(user, M, 30))
@@ -123,14 +128,6 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 			return 0
 
-
-// this prevented pills, food, and other things from being picked up by bags.
-// possibly intentional, but removing it allows us to not duplicate functionality.
-// -Sayu (storage consolidation)
-/*
-/obj/item/weapon/reagent_containers/attackby(obj/item/I as obj, mob/user as mob)
-	return
-*/
 
 /**
  * This usually handles reagent transfer between containers and splashing the contents.
@@ -294,9 +291,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	return 0
 
 /obj/item/weapon/reagent_containers/proc/is_empty()
+	if(!reagents)
+		return TRUE
 	return reagents.total_volume <= 0
 
 /obj/item/weapon/reagent_containers/proc/is_full()
+	if(!reagents)
+		return FALSE
 	return reagents.total_volume >= reagents.maximum_volume
 
 /obj/item/weapon/reagent_containers/proc/can_transfer_an_APTFT()
@@ -325,19 +326,15 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else
 		return "No reagents"
 
-/obj/item/weapon/reagent_containers/proc/show_list_of_reagents(mob/user) //Displays a list of the reagents to a mob, formatted for reading
-	to_chat(user, "It contains:")
-	if(!reagents.total_volume)
-		to_chat(user, "<span class='info'>Nothing.</span>")
-	else
-		if(reagents.reagent_list.len)
-			for(var/datum/reagent/R in reagents.reagent_list)
-				to_chat(user, "<span class='info'>[R.volume] units of [R.name]</span>")
-
 /obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
-	return 0
+	return FALSE
+
+/obj/item/weapon/reagent_containers/proc/should_qdel_if_empty()
+	return FALSE
 
 /obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+	if(!can_drink(user))
+		return 0
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 
@@ -346,17 +343,19 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		reagents.reaction(user, TOUCH)
 		return 1
 	if(reagents.total_volume)
-		if(can_drink(user))
-			reagents.reaction(user, INGEST)
-			spawn(5)
-				if(reagents)
-					reagents.trans_to(user, amount_per_imbibe)
+		reagents.reaction(user, INGEST)
+		spawn(5)
+			if(reagents)
+				reagents.trans_to(user, amount_per_imbibe)
 
 	return 1
 
 /obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			H.visible_message("<span class='warning'>[H] can't drink without a mouth!</span>","<span class='warning'>You can't drink without a mouth!</span>")
+			return 0
 		if(H.species.chem_flags & NO_DRINK)
 			reagents.reaction(get_turf(H), TOUCH)
 			H.visible_message("<span class='warning'>The contents in [src] fall through and splash onto the ground, what a mess!</span>")

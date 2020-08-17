@@ -56,7 +56,7 @@
 					build_path = 0
 					new /obj/item/stack/sheet/glass/glass(get_turf(src))
 					icon_state = "box_0"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 				if(istype(P, /obj/item/weapon/circuitboard/airlock) && P:icon_state != "door_electronics_smoked")
 					if (!C)
 						if(user.drop_item(P, src))
@@ -67,7 +67,7 @@
 							icon_state="box_glass_circuit"
 				if (iswelder(P))
 					to_chat(user, "<span class='notice'>You use the machine frame as a vice and shape the glass with the welder into a fish bowl.</span>")
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 5)
+					new /obj/item/stack/sheet/metal(get_turf(src), 5)
 					new /obj/machinery/fishtank/bowl(get_turf(src))
 					qdel(src)
 				return
@@ -80,14 +80,14 @@
 						circuit = null
 					build_state--
 					icon_state = "box_glass"
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 				if(P.is_screwdriver(user) && C)
 					var/obj/structure/displaycase/new_display_case = new(get_turf(src))
 					new_display_case.circuit = C
 					C.forceMove(new_display_case)
 					circuit = null
 					C = null
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 					qdel(src)
 				return
 		return
@@ -116,8 +116,8 @@
 				icon_state="box_glass"
 				return
 			else
-				if(iswrench(P))
-					playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+				if(P.is_wrench(user))
+					P.playtoolsound(src, 75)
 					to_chat(user, "<span class='notice'>You dismantle the frame.</span>")
 					drop_stack(sheet_type, get_turf(src), 5, user)
 					qdel(src)
@@ -148,7 +148,7 @@
 						to_chat(user, "<span class='warning'>This frame does not accept circuit boards of this type!</span>")
 				else
 					if(iswirecutter(P))
-						playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+						P.playtoolsound(src, 50)
 						to_chat(user, "<span class='notice'>You remove the cables.</span>")
 						set_build_state(1)
 						var/obj/item/stack/cable_coil/A = new /obj/item/stack/cable_coil( src.loc )
@@ -157,7 +157,7 @@
 		if(3)
 			if(!..())
 				if(iscrowbar(P))
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					P.playtoolsound(src, 50)
 					set_build_state(2)
 					circuit.forceMove(src.loc)
 					circuit = null
@@ -181,10 +181,10 @@
 								component_check = 0
 								break
 						if(component_check)
-							playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+							P.playtoolsound(src, 50)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
-								returnToPool(O)
+								qdel(O)
 							new_machine.component_parts = list()
 							for(var/obj/O in src)
 								if(circuit.contain_parts) // things like disposal don't want their parts in them
@@ -235,7 +235,7 @@
 											var/obj/item/stack/CP = P
 											if(CP.amount >= req_components[I])
 												var/camt = min(CP.amount, req_components[I]) // amount of the stack to take, idealy amount required, but limited by amount provided
-												var/obj/item/stack/CC = getFromPool(I, src)
+												var/obj/item/stack/CC = new I(src)
 												CC.amount = camt
 												CC.update_icon()
 												CP.use(camt)
@@ -328,7 +328,7 @@ to destroy them and players will be able to make replacements.
 		var/obj/item/weapon/solder/S = O
 		if(!S.remove_fuel(4,user))
 			return
-		playsound(loc, 'sound/items/Welder.ogg', 50, 1)
+		S.playtoolsound(loc, 50)
 		soldering = 1
 		if(do_after(user, src,40))
 			var/boardType = allowed_boards[t]
@@ -342,7 +342,7 @@ to destroy them and players will be able to make replacements.
 		if(WT.remove_fuel(1,user))
 			var/obj/item/stack/sheet/glass/glass/new_item = new()
 			new_item.forceMove(src.loc) //This is because new() doesn't call forceMove, so we're forcemoving the new sheet to make it stack with other sheets on the ground.
-			returnToPool(src)
+			qdel(src)
 			return
 	else
 		return ..()
@@ -374,7 +374,7 @@ to destroy them and players will be able to make replacements.
 	desc = "A circuit board used to run a machine that fabricates guns, ammunition, and firearm accessories."
 	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe
 	board_type = MACHINE
-	//origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
+	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=2;" + Tc_COMBAT + "=4"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 3,
 							/obj/item/weapon/stock_parts/manipulator = 1,
@@ -388,7 +388,8 @@ to destroy them and players will be able to make replacements.
 	origin_tech = Tc_ENGINEERING + "=2;" + Tc_PROGRAMMING + "=3"
 	req_components = list(
 							/obj/item/weapon/stock_parts/matter_bin = 2,
-							/obj/item/weapon/stock_parts/manipulator = 2)
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 2)
 
 /obj/item/weapon/circuitboard/circuit_imprinter
 	name = "Circuit board (Circuit Imprinter)"
@@ -955,8 +956,8 @@ obj/item/weapon/circuitboard/rdserver
 
 //Teleporter
 /obj/item/weapon/circuitboard/telehub
-	name = "Circuit Board (Teleporter Hub)"
-	desc = "A circuit board used to run a machine that works as the base for a teleporter."
+	name = "Circuit Board (Teleporter Generator)"
+	desc = "A circuit board used to run a machine that generates a teleporter horizon."
 	build_path = /obj/machinery/teleport/hub
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -970,8 +971,8 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/subspace/transmitter = 4)
 
 /obj/item/weapon/circuitboard/telestation
-	name = "Circuit Board (Teleporter Station)"
-	desc = "A circuit board used to run a machine that generates an active teleportation field."
+	name = "Circuit Board (Teleporter Controller)"
+	desc = "A circuit board used to co-ordinate teleporter generators."
 	build_path = /obj/machinery/teleport/station
 	board_type = MACHINE
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_ENGINEERING + "=3;" + Tc_BLUESPACE + "=3"
@@ -1153,6 +1154,15 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/scanning_module = 2,
 							/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/keyfab
+	name = "Circuit Board (Key Fabricator)"
+	desc = "A circuit board used to run a machine that fabricates keys."
+	build_path = /obj/machinery/keyfab
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_ENGINEERING + "=2"
+	req_components = list(
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/incubator
 	name = "Circuit Board (Pathogenic Incubator)"
 	desc = "A circuit board used to run a machine that incubates viruses."
@@ -1179,7 +1189,7 @@ obj/item/weapon/circuitboard/rdserver
 /obj/item/weapon/circuitboard/centrifuge
 	name = "Circuit Board (Isolation Centrifuge)"
 	desc = "A circuit board used to run a machine that isolates pathogens and antibodies."
-	build_path = /obj/machinery/centrifuge
+	build_path = /obj/machinery/disease2/centrifuge
 	board_type = MACHINE
 	origin_tech = Tc_BIOTECH + "=3"
 	req_components = list(
@@ -1351,30 +1361,10 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list (
 							/obj/item/weapon/stock_parts/scanning_module = 3)
 
-/obj/item/weapon/circuitboard/anom/accelerator
-	name = "Circuit Board (Accelerator Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/accelerator
-
-/obj/item/weapon/circuitboard/anom/gas
-	name = "Circuit Board (Gas Chromatography Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/gas_chromatography
-
 /obj/item/weapon/circuitboard/anom/hyper
 	name = "Circuit Board (Hyperspectral Imager)"
 	desc = "A circuit board used to run a machine used in xenoarcheology."
 	build_path = /obj/machinery/anomaly/hyperspectral
-
-/obj/item/weapon/circuitboard/anom/ion
-	name = "Circuit Board (Ion Mobility Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/ion_mobility
-
-/obj/item/weapon/circuitboard/anom/iso
-	name = "Circuit Board (Isotope Ratio Spectrometer)"
-	desc = "A circuit board used to run a machine used in xenoarcheology."
-	build_path = /obj/machinery/anomaly/isotope_ratio
 
 /obj/item/weapon/circuitboard/confectionator
 
@@ -1398,6 +1388,17 @@ obj/item/weapon/circuitboard/rdserver
 						/obj/item/weapon/stock_parts/micro_laser = 3,
 						/obj/item/weapon/stock_parts/console_screen = 1)
 
+/obj/item/weapon/circuitboard/medal_printer
+	name = "Circuit board (Medal Printer)"
+	desc = "A circuit board for the medal printer."
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_MATERIALS + "=4;" + Tc_ENGINEERING + "=4"
+	build_path = /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer
+	req_components = list(
+						/obj/item/weapon/stock_parts/matter_bin = 1,
+						/obj/item/weapon/stock_parts/manipulator = 2,
+						/obj/item/weapon/stock_parts/micro_laser = 1,
+						/obj/item/weapon/stock_parts/console_screen = 1)
 
 /*
  * Fishtanks
@@ -1440,4 +1441,46 @@ obj/item/weapon/circuitboard/rdserver
 	req_components = list(
 		/obj/item/weapon/stock_parts/console_screen = 1,
 		/obj/item/weapon/stock_parts/micro_laser = 3,
+	)
+
+/obj/item/weapon/circuitboard/mind_machine_hub
+	name = "Circuit Board (Mind Machine Hub)"
+	desc = "A circuit board used to run a mind machine hub"
+	build_path = /obj/machinery/mind_machine/mind_machine_hub
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/manipulator/nano = 2,
+		/obj/item/weapon/stock_parts/subspace/analyzer = 1,
+		/obj/item/weapon/stock_parts/subspace/filter = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/console_screen = 1
+	)
+
+/obj/item/weapon/circuitboard/mind_machine_pod
+	name = "Circuit Board (Mind Machine Pod)"
+	desc = "A circuit board used to run a mind machine pod"
+	build_path = /obj/machinery/mind_machine/mind_machine_pod
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=4;" + Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=5"
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module/adv/phasic = 2,
+		/obj/item/weapon/stock_parts/subspace/treatment = 1,
+		/obj/item/weapon/stock_parts/subspace/ansible = 1,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 1,
+		/obj/item/weapon/stock_parts/subspace/crystal = 1,
+		/obj/item/weapon/stock_parts/subspace/transmitter = 1
+		)
+
+/obj/item/weapon/circuitboard/sci_telepad
+	name = "Circuit board (Telescience Pad)"
+	desc = "A rather unique circuit board designed for teleportation science, currently unable to be reproduced."
+	build_path = /obj/machinery/telepad
+	board_type = MACHINE
+	origin_tech = Tc_BLUESPACE + "=3;" + Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
+	mech_flags = MECH_SCAN_FAIL
+	req_components = list(
+		/obj/item/weapon/stock_parts/scanning_module = 1,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/micro_laser = 2,
 	)

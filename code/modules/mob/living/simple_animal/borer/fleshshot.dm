@@ -16,6 +16,8 @@
 	golem_check = 0
 	fire_delay = 4
 	delay_user = 0
+	chaintype = /obj/effect/overlay/hookchain/flesh
+	hooktype = /obj/item/projectile/hookshot/flesh
 	var/mob/living/simple_animal/borer/parent_borer = null
 	var/image/item_overlay = null
 	var/obj/item/to_be_dropped = null //to allow items to be dropped at range

@@ -13,6 +13,9 @@
 	w_class = W_CLASS_MEDIUM
 	fire_delay = 0
 	fire_sound = 'sound/weapons/hookshot_fire.ogg'
+	clumsy_check = 0
+	var/chaintype = /obj/effect/overlay/hookchain
+	var/hooktype = /obj/item/projectile/hookshot
 	var/maxlength = 14
 	var/obj/item/projectile/hookshot/hook = null
 	var/list/links = list()
@@ -37,14 +40,9 @@
 /obj/item/weapon/gun/hookshot/New()
 	..()
 	for(var/i = 0;i <= maxlength; i++)
-		if(istype(src, /obj/item/weapon/gun/hookshot/flesh))
-			var/obj/effect/overlay/hookchain/flesh/HC = new(src)
-			HC.shot_from = src
-			links["[i]"] = HC
-		else
-			var/obj/effect/overlay/hookchain/HC = new(src)
-			HC.shot_from = src
-			links["[i]"] = HC
+		var/obj/effect/overlay/hookchain/HC = new chaintype(src)
+		HC.shot_from = src
+		links["[i]"] = HC
 
 /obj/item/weapon/gun/hookshot/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(chain_datum)
@@ -80,14 +78,14 @@
 		panic = 0
 
 	if(!hook && !rewinding && !clockwerk && !check_tether())//if there is no projectile already, and we aren't currently rewinding the chain, or reeling in toward a target,
-		hook = new/obj/item/projectile/hookshot(src)		//and that the hookshot isn't currently sustaining a tether, then we can fire.
+		hook = new hooktype(src)		//and that the hookshot isn't currently sustaining a tether, then we can fire.
 		in_chamber = hook
 		firer = loc
 		update_icon()
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
+/obj/item/weapon/gun/hookshot/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(check_tether())
@@ -465,3 +463,191 @@
 		chain_datum.snap = 1
 		chain_datum.Delete_Chain()
 	..()
+
+/obj/item/weapon/gun/hookshot/whip
+	name = "bullwhip"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "bullwhip"
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	fire_action = "flick"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 5
+	maxlength = 5
+	hooktype = /obj/item/projectile/hookshot/whip
+	empty_sound = null
+	slot_flags = SLOT_BELT
+
+/obj/item/weapon/gun/hookshot/whip/update_icon()
+	return
+
+/obj/item/weapon/gun/hookshot/whip/liquorice
+	name = "liquoricium whip"
+	icon_state = "liquorice"
+	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit."
+	fire_sound = 'sound/weapons/whip_crack.ogg'
+	fire_action = "flick"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 8
+	maxlength = 4
+	hooktype = /obj/item/projectile/hookshot/whip/liquorice
+	empty_sound = null
+
+/obj/item/weapon/gun/hookshot/whip/vampkiller
+	name = "vampire killer"
+	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
+	icon_state = "vampkiller"
+	item_state = "vampkiller"
+	force = 15
+	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
+	fire_sound = 'sound/weapons/vampkiller.ogg'
+
+/obj/item/weapon/gun/hookshot/whip/vampkiller/true
+	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."
+	icon_state = "vampkiller_true"
+	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true
+
+//Windup-Boxes/////////////////////////////////////////////////////
+/obj/item/weapon/gun/hookshot/whip/windup_box
+	name = "windup-box"
+	icon = 'icons/obj/wind_up.dmi'
+	icon_state = ""
+	item_state = ""
+	desc = ""
+	fire_action = "activate"
+	inhand_states = list()
+	clumsy_check = 0 //Just makes sense
+	force = 5
+	maxlength = 0
+	hooktype = /obj/item/projectile/hookshot/whip/windup_box
+	var/lengthDecider = 0 //replaces maxlength due to a needed reset
+	var/windUp = 0 //amount of times cranked
+	var/maxWindUp = 16 //threshold for overwind
+	var/overWind = 0 //warning/delay system
+	var/state = 0 //Icon changes with each crank, stolen from the crank cell charger
+	var/springForce = 0 //makes the big kicks
+	var/minWindUp = 4
+	var/list/fireSound = null
+	var/fireVolume = 0
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/New()
+	..()
+	maxlength = lengthDecider
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/attack_self(mob/user)
+	if(user.incapacitated())
+		return 1
+	state = !state
+	update_icon()
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/Fire(atom/target, mob/living/user, params, reflex =0, struggle = 0, use_shooter_turf = FALSE) //4 winds minimum
+	maxlength = lengthDecider
+	if(windUp < minWindUp)
+		playsound(src,'sound/items/metal_impact.ogg', 25,1)
+		to_chat(user, "<span class='notice'>the spring isn't tight enough to fire</span>")
+		return
+	playsound(src, fireSound, fireVolume,1)
+	return ..()
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox
+	name = "boot-in-a-box"
+	icon = 'icons/obj/wind_up.dmi'
+	icon_state = "bootbox-0"
+	item_state = "bootbox"
+	desc = "A box with a spring-loaded boot inside. There is a crank attached to wind it up."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+	hooktype = /obj/item/projectile/hookshot/whip/windup_box/bootbox
+	lengthDecider = 4
+	fireSound = 'sound/effects/fence_smash.ogg'
+	fireVolume = 50
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/update_icon()
+	icon_state = "bootbox-[state]"
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/attack_self(mob/user)
+	if(..())
+		return 1
+	if(prob(windUp*springForce)) //prob 0 before they start forcing it, perfectly safe
+		explosion(loc,-1,0,1)
+		qdel(src)
+		return
+	if(windUp >= maxWindUp) //give them a chance to stop winding in the safety zone. Also largely to delay on-the-run use.
+		if(overWind<3)
+			user.delayNextAttack(20)
+			playsound(src,'sound/weapons/smash.ogg', 25, 1)
+			overWind++
+			to_chat(user, "<span class='notice'>The crank will barely move.</span>")
+		else //we are no longer in the safety zone. You get one free one before boom risk
+			to_chat(user, "<span class='notice'>With great difficulty you get the crank moving.</span>")
+			user.delayNextAttack(30)
+			playsound(src,'sound/items/crank.ogg',100,1)
+			update_icon()
+			windUp++
+			springForce++
+		return
+	user.delayNextAttack(5)
+	playsound(src, 'sound/items/crank.ogg',50,1)
+	update_icon()
+	windUp++
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+	name = "\improper Punchline"
+	icon = 'icons/obj/wind_up.dmi'
+	icon_state = "clownbox-0"
+	item_state = "clownbox"
+	desc = "Given rich deposits of bananium and phazon beyond most spacemen's wildest dreams, they chose to make this."
+	fire_action = "slip open"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
+	hooktype = /obj/item/projectile/hookshot/whip/windup_box/clownbox
+	lengthDecider = 6
+	fireSound = 'sound/effects/party_horn.ogg'
+	fireVolume = 100
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox/update_icon()
+	icon_state = "clownbox-[state]"
+
+/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox/attack_self(mob/user)
+	if(..())
+		return 1
+	if(prob(springForce*10)) //Every crank past the threshold has 10% higher chance of teleporting you a number of times equal to those cranks.
+		var/area/A = get_area(src)
+		to_chat(user, "<span class='notice'>You overload the gears. You begin slipping through reality!</span>")
+		if(A.flags & NO_TELEPORT)
+			return
+		flick("bananaphaz_flick", src)
+		for(var/i in 0 to springForce)
+			sleep(5)
+			do_teleport(user,get_turf(user),windUp/2, asoundin = 'sound/effects/party_horn.ogg') //Teleport accuracy also scales with total windup. This increases risk/reward in intentionally causing malfunction
+		user.Stun(springForce)
+		user.Knockdown(springForce) //Further increases risk. Makes bad luck less lethal and saving high springForce for teleports more dangerous.
+		windUp = 0
+		overWind = 0
+		springForce = 0
+
+	if(windUp >= maxWindUp)
+		if(overWind <3)
+			user.delayNextAttack(10)
+			playsound(src,'sound/effects/splat_pie2.ogg', 50, 1)
+			overWind++
+			to_chat(user, "<span class='notice'>The crank will barely move.</span>")
+			return
+		else
+			to_chat(user, "<span class='notice'>With great difficulty you get the crank moving.</span>")
+			user.delayNextAttack(15)
+			if(clumsy_check(user))
+				if(prob(50)) //Clowns effectively reload faster
+					windUp++
+					to_chat(user, "<span class='notice'>Your clumsy hand slips and cranks twice, woops!.</span>")
+			playsound(src, 'sound/items/bikehorn.ogg',100,1)
+			update_icon()
+			windUp++
+			springForce++
+		return
+	user.delayNextAttack(5)
+	if(clumsy_check(user))
+		if(prob(50))
+			windUp++
+			to_chat(user, "<span class='notice'>Your clumsy hand slips and cranks twice, woops!.</span>")
+	playsound(src, 'sound/items/bikehorn.ogg',50,1)
+	update_icon()
+	windUp++
+

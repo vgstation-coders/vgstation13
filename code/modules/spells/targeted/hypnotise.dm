@@ -39,10 +39,16 @@
 
 	var/mob/M = target
 
-	if (!M.vampire_affected(user.mind))
-		return FALSE
-	return ..()
-
+	var/success = M.vampire_affected(user.mind)
+	switch (success)
+		if (TRUE)
+			return ..()
+		if (FALSE)
+			return FALSE
+		if (VAMP_FAILURE)
+			critfail(target, user)
+			return FALSE
+	
 /spell/targeted/hypnotise/cast(var/list/targets, var/mob/user)
 	if (targets.len > 1)
 		return FALSE
@@ -62,6 +68,12 @@
 			to_chat(user, "<span class='warning'>You broke your gaze.</span>")
 			return FALSE
 	var/datum/role/vampire/V = isvampire(user)
-	if (!V)
-		return FALSE
-	V.remove_blood(blood_cost)
+	if (V)
+		V.remove_blood(blood_cost)
+
+/spell/targeted/hypnotise/critfail(var/list/targets, var/mob/user)
+	to_chat(user, "<span class='danger'>You feel yourself sleepy...</span>")
+	apply_spell_damage(user)
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(3*blood_cost)

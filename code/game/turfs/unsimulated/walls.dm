@@ -7,6 +7,8 @@
 	explosion_block = 2
 	blocks_air = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 	var/walltype = "riveted"
 /turf/unsimulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(/turf/unsimulated/wall)
@@ -31,8 +33,14 @@
 	name = "unnaturally hard rock wall"
 	icon = 'icons/turf/walls.dmi'
 	icon_state = "rock"
+
 /turf/unsimulated/wall/rock/canSmoothWith()
 	return null
+
+/turf/unsimulated/wall/rock/ice
+	name = "unnaturally hard ice wall"
+	icon = 'icons/turf/walls.dmi'
+	icon_state = "snow_rock"
 
 /turf/unsimulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)

@@ -356,20 +356,30 @@ proc/Gibberish(t, p)//t is the inputted message, and any value higher than 70 fo
 	spawn(1)
 		if(!M || !M.client || M.shakecamera)
 			return
-
+		var/client/C = M.client
 		M.shakecamera = 1
 
 		for (var/x = 1 to duration)
-			if(!M || !M.client)
+			if(!C)
 				M.shakecamera = 0
 				return //somebody disconnected while being shaken
-			M.client.pixel_x = WORLD_ICON_SIZE*rand(-strength, strength)
-			M.client.pixel_y = WORLD_ICON_SIZE*rand(-strength, strength)
+			C.pixel_x = WORLD_ICON_SIZE*rand(-strength, strength)
+			C.pixel_y = WORLD_ICON_SIZE*rand(-strength, strength)
 			sleep(1)
 
 		M.shakecamera = 0
-		M.client.pixel_x = 0
-		M.client.pixel_y = 0
+		C.pixel_x = 0
+		C.pixel_y = 0
+
+/proc/directional_recoil(mob/M, strength=1, angle = 0)
+	if(!M || !M.client)
+		return
+	var/client/C = M.client
+	var/recoil_x = -sin(angle)*4*strength + rand(-strength, strength)
+	var/recoil_y = -cos(angle)*4*strength + rand(-strength, strength)
+	animate(C, pixel_x=recoil_x, pixel_y=recoil_y, time=1, easing=SINE_EASING|EASE_OUT, flags=ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+	sleep(2)
+	animate(C, pixel_x=0, pixel_y=0, time=3, easing=SINE_EASING|EASE_IN)
 
 
 /proc/findname(msg)
@@ -525,6 +535,8 @@ proc/is_blind(A)
 				return TRUE
 			if(isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
+			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
+				return TRUE
 	return FALSE
 
 // Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()
@@ -535,3 +547,11 @@ proc/is_blind(A)
 // Returns a string that provides identification data for this mob
 /mob/proc/identification_string()
 	return name
+
+/mob/proc/can_be_infected()
+	return 0
+
+/mob/proc/remove_confused(var/amt)
+	confused = max(0, confused - amt)
+	if (confused <= 0)
+		confused_intensity = 0

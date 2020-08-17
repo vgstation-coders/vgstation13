@@ -5,7 +5,7 @@
 		if(slot_wear_mask)
 			return wear_mask
 		if(slot_handcuffed)
-			return handcuffed
+			return handcuffed || mutual_handcuffs
 		if(slot_legcuffed)
 			return legcuffed
 	return null
@@ -21,6 +21,13 @@
 		success = 1
 		slot = slot_handcuffed
 		update_inv_handcuffed()
+	else if (W == mutual_handcuffs)
+		if(mutual_handcuffs.on_restraint_removal(src)) //If this returns 1, then the unquipping action was interrupted
+			return 0
+		mutual_handcuffs = null
+		success = 1
+		slot = slot_handcuffed
+		update_inv_mutual_handcuffed()
 	else if (W == legcuffed)
 		legcuffed = null
 		success = 1
@@ -54,3 +61,44 @@
 					legcuffed,
 					back)
 	return equipped
+
+/mob/living/carbon/verb/get_backpack()
+	set name = "Get backpack"
+	set category = "IC"
+	set desc = "Get what is currently on your backslot"
+
+	attack_ui(slot_back)
+
+/mob/living/carbon/proc/hotkey_box_slot(var/slot)
+	if (slot <= 0 || slot > 9)
+		return
+	if (incapacitated())
+		return
+	if (!s_active) // No box to pick from
+		return
+
+	// attack if no held item
+	var/obj/item/holding = src.get_active_hand()
+	if (!holding)
+		var/obj/item/I = s_active.contents[slot]
+		if (!I)
+			return
+
+		if (istype(I, /obj/item/weapon/storage)) // Storage within storage
+			var/obj/item/weapon/storage/S = I
+			S.orient2hud(src)
+			s_active.close(src)
+			S.show_to(src)
+			return
+
+		if(s_active.remove_from_storage(I, get_turf(src)))
+			put_in_hands(I)
+
+	else
+		if (!s_active.can_be_inserted(holding))
+			return
+		s_active.handle_item_insertion(holding)
+
+/mob/living/carbon/verb/StorageHotkey(var/index as num)
+	set hidden = 1
+	hotkey_box_slot(index)

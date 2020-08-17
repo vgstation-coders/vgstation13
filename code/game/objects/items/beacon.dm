@@ -84,3 +84,12 @@ var/global/list/obj/item/beacon/beacons = list()
 /obj/item/beacon/bluespace_beacon/singularity_pull()
 	return
 
+var/global/list/emergency_beacons = list()
+
+/obj/item/beacon/bluespace_beacon/emergency/New()
+	..()
+	emergency_beacons += src
+
+/obj/item/beacon/bluespace_beacon/emergency/Destroy()
+	emergency_beacons -= src
+	..()

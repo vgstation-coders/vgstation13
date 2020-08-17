@@ -51,8 +51,8 @@
 /obj/item/weapon/bananapeel
 	name = "banana peel"
 	desc = "A peel from a banana."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "banana_peel"
+	icon = 'icons/obj/hydroponics/banana.dmi'
+	icon_state = "peel"
 	item_state = "banana_peel"
 	w_class = W_CLASS_TINY
 	throwforce = 0
@@ -67,8 +67,8 @@
 /obj/item/weapon/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
-	icon = 'icons/obj/harvest.dmi'
-	icon_state = "corncob"
+	icon = 'icons/obj/hydroponics/corn.dmi'
+	icon_state = "cob"
 	item_state = "corncob"
 	w_class = W_CLASS_TINY
 	throwforce = 0
@@ -82,9 +82,11 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
 	throw_range = 20
+	flags = FPRINT | NO_ATTACK_MSG
 
 /obj/item/weapon/soap/nanotrasen
 	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
@@ -199,7 +201,8 @@
 	throw_range = 10
 	var/dispenser = 0
 	var/throw_sound = 'sound/weapons/whip.ogg'
-	var/trip_prob = 90
+	var/trip_prob = 100
+	ignore_blocking = IGNORE_SOME_SHIELDS
 
 /obj/item/weapon/legcuffs/bolas/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	user.throw_item(target)
@@ -284,6 +287,8 @@
 	name = "cable bolas"
 	desc = "A poorly made bolas, tied together with cable."
 	icon_state = ""
+	item_state = "cbolas"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	throw_speed = 1
 	throw_range = 6
 	trip_prob = 20 //gets updated below in update_icon()
@@ -339,7 +344,7 @@
 		if(iswirecutter(I)) //allows you to convert the wire back to a cable coil
 			if(!weight1 && !weight2) //if there's nothing attached
 				user.show_message("<span class='notice'>You cut the knot in the [src].</span>")
-				playsound(usr, 'sound/items/Wirecutter.ogg', 50, 1)
+				I.playtoolsound(usr, 50)
 				var /obj/item/stack/cable_coil/C = new /obj/item/stack/cable_coil(user.loc) //we get back the wire lengths we put in
 				var /obj/item/stack/cable_coil/S = new /obj/item/weapon/screwdriver(user.loc)
 				C.amount = 10
@@ -360,7 +365,7 @@
 				if(weight2)
 					weight2.forceMove(get_turf(usr))
 					weight2 = null
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				I.playtoolsound(user, 50)
 				update_icon()
 				return
 		if(I.w_class) //if it has a defined weight
@@ -389,89 +394,217 @@
 			else
 				user.show_message("<span class='rose'>There are already two weights on this [src]!</span>")
 
-/obj/item/weapon/legcuffs/beartrap
+/datum/locking_category/beartrap
+		flags = LOCKED_CAN_LIE_AND_STAND
+
+/obj/item/weapon/beartrap
 	name = "bear trap"
 	throw_speed = 2
 	throw_range = 1
-	layer = OPEN_DOOR_LAYER
+	siemens_coefficient = 1
+	plane = OBJ_PLANE
+	layer = BELOW_CLOSED_DOOR_LAYER
+	icon = 'icons/obj/items.dmi'
 	icon_state = "beartrap0"
 	desc = "A trap used to catch bears and other legged creatures."
+	flags = FPRINT
+	origin_tech = Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_IRON = 50000)
 	w_type = RECYK_METAL
+	w_class = W_CLASS_LARGE
+	anchored = FALSE
+	var/breakouttime = 60
 	var/armed = 0
+	var/trapped = 0
+	var/datum/organ/external/trappedorgan //The limb currently trapped, it must be a leg
+	var/mob/living/trappeduser
 	var/obj/item/weapon/grenade/iedcasing/IED = null
 	var/image/ied_overlay
 
-/obj/item/weapon/legcuffs/beartrap/New()
+	var/trapped_user_key
+
+/obj/item/weapon/beartrap/New()
 	..()
 	ied_overlay = image('icons/obj/items.dmi')
 	ied_overlay.icon_state = "beartrap_ied"
 
-/obj/item/weapon/legcuffs/beartrap/armed
+/obj/item/weapon/beartrap/armed
 	armed = 1
+	anchored = TRUE
 	icon_state = "beartrap1"
 
-/obj/item/weapon/legcuffs/beartrap/suicide_act(mob/user)
-	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] on \his head! It looks like \he's trying to commit suicide.</span>")
-	return (SUICIDE_ACT_BRUTELOSS)
+/obj/item/weapon/beartrap/suicide_act(mob/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
+		if(head_organ)
+			to_chat(viewers(user), "<span class='danger'>[user] is arming the [src.name] on \his head! It looks like \he's trying to commit suicide!</span>")
+			playsound(src, 'sound/effects/snap.ogg', 75, 1)
+			head_organ.explode()
+			return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/legcuffs/beartrap/update_icon()
+/obj/item/weapon/beartrap/update_icon()
 	icon_state = "beartrap[armed]"
 
-/obj/item/weapon/legcuffs/beartrap/attack_self(mob/user as mob)
+/obj/item/weapon/beartrap/attack_self(mob/user)
 	..()
 	if(ishuman(user) && !user.stat && !user.restrained())
 		armed = !armed
 
 		update_icon()
 
-		to_chat(user, "<span class='notice'>[src] is now [armed ? "armed" : "disarmed"]</span>")
+		to_chat(user, "<span class='notice'>The [src.name] is now [armed ? "armed" : "disarmed"]</span>")
 		playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+		anchored = TRUE
+		user.drop_item(src, force_drop = 1)
 
 		if(armed && IED)
 			message_admins("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 			log_game("[key_name(usr)] has armed a beartrap rigged with an IED at [formatJumpTo(get_turf(src))]!")
 
-/obj/item/weapon/legcuffs/beartrap/attackby(var/obj/item/I, mob/user as mob) //Let's get explosive.
+/obj/item/weapon/beartrap/attack_hand(mob/living/user)
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(armed)
+			var/datum/organ/external/affecting = user.get_active_hand_organ()
+			if (!affecting)
+				return
+
+			user.visible_message("<span class='warning'>\The [H] sets off \the [src]!</span>", \
+			"<span class='danger'>You set off \the [src] and it crushes your hand!</span>")
+			playsound(src, 'sound/effects/snap.ogg', 60, 1)
+
+			H.audible_scream()
+			if(affecting.take_damage(15, 0, 15, SERRATED_BLADE & SHARP_BLADE))
+				H.UpdateDamageIcon()
+				H.updatehealth()
+
+			armed = 0
+			anchored = FALSE
+			update_icon()
+
+			return
+
+		else if(trapped && trappeduser)
+			var/mob/living/carbon/human/L = trappeduser
+			if(!L.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
+				to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
+				trapped = 0
+				unlock_atom(L)
+				L.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+				trappeduser = null
+				anchored = FALSE
+				return
+			else
+				user.visible_message("<span class='notice'>[H] tries to pry \the [src] off of [L]!</span>", \
+				"<span class='notice'>You try to pry open \the [src] with your bear hands.</span>")
+
+				if(do_after(user, src, 40) && prob(60)) //60% chance I think
+
+					user.visible_message("<span class='notice'>\The [H] managed to pry \the [src] off of [L]!</span>", \
+					"<span class='notice'>You manage to pry \the [src] off!</span>")
+					playsound(user.loc, 'sound/weapons/handcuffs.ogg', 30, 1, -3)
+					trapped = 0
+					trappeduser = null
+					unlock_atom(L)
+					L.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+					anchored = FALSE
+					return
+				else
+					user.visible_message("<span class='warning'>\The [H] fails to pry \the [src] off of [L], and crushes their leg even more!</span>", \
+					"<span class='warning'>You fail to pry \the [src] off of [L], and you crush their leg even more!</span>")
+
+					L.audible_scream()
+					if(trappedorgan.take_damage(5,0,0)) //holy fuck it's easy to knock out legs
+						L.UpdateDamageIcon()
+					L.updatehealth()
+					return
+	..()
+
+/obj/item/weapon/beartrap/attackby(var/obj/item/I, mob/user) //Let's get explosive.
 	if(istype(I, /obj/item/weapon/grenade/iedcasing))
 		if(IED)
 			to_chat(user, "<span class='warning'>This beartrap already has an IED hooked up to it!</span>")
 			return
-		IED = I
-		switch(IED.assembled)
+		var/obj/item/weapon/grenade/iedcasing/candidate_IED = I
+		switch(candidate_IED.assembled)
 			if(0,1) //if it's not fueled/hooked up
 				to_chat(user, "<span class='warning'>You haven't prepared this IED yet!</span>")
-				IED = null
 				return
-			if(2,3)
+			if(2)
 				if(user.drop_item(I, src))
 					var/turf/bombturf = get_turf(src)
 					var/area/A = get_area(bombturf)
 					var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[user]'>?</A> has rigged a beartrap with an IED at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
 					message_admins(log_str)
 					log_game(log_str)
+					IED = I
 					to_chat(user, "<span class='notice'>You sneak the [IED] underneath the pressure plate and connect the trigger wire.</span>")
 					desc = "A trap used to catch bears and other legged creatures. <span class='warning'>There is an IED hooked up to it.</span>"
 					overlays.Add(ied_overlay)
+			if(3) //There is a whole thing about setting the IED's detonation status for IED'd bear traps, this is to avoid insanity
+				to_chat(user, "<span class='warning'It's dangerous to shove a lit IED into a bear trap! Find another way to get rid of it!</span>")
+				return
 			else
 				to_chat(user, "<span class='danger'>You shouldn't be reading this message! Contact a coder or someone, something broke!</span>")
-				IED = null
 				return
-	if(I.is_screwdriver(user))
-		if(IED)
-			IED.forceMove(get_turf(src.loc))
-			IED = null
-			to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
-			overlays.Remove(ied_overlay)
-			return
+	else if(I.is_screwdriver(user) && IED)
+		IED.forceMove(get_turf(src.loc))
+		IED = null
+		to_chat(user, "<span class='notice'>You remove the IED from the [src].</span>")
+		overlays.Remove(ied_overlay)
+		return
+	else if(iscrowbar(I) && trapped)
+		var/mob/living/carbon/human/victim = trappeduser
+		if(!victim.pick_usable_organ(trappedorgan))
+			to_chat(user, "<span class='notice'>Without a leg for the bear trap to pin onto, you safely crowbar it open.</span>")
+			trapped = 0
+			anchored = FALSE
+			unlock_atom(trappeduser)
+			trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+			trappeduser = null
+		else
+			to_chat(user, "<span class='notice'>You begin to pry the bear trap off of [trappeduser.name].</span>")
+			if(do_after(user, src, 30))
+				to_chat(user, "<span class='notice'>You pry open the bear trap with \the [I.name].</span>")
+				trapped = 0
+				anchored = FALSE
+				unlock_atom(trappeduser)
+				trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+				trappeduser = null
+	else
+		to_chat(user, "<span class='notice'>You carefully set the bear trap off with \the [I.name].</span>")
+		playsound(src, 'sound/effects/snap.ogg', 60, 1)
+		armed = 0
+		anchored = FALSE
 	..()
 
-/obj/item/weapon/legcuffs/beartrap/Crossed(AM as mob|obj)
+/obj/item/weapon/beartrap/Crossed(AM)
 	if(armed && isliving(AM) && isturf(src.loc))
+
 		var/mob/living/L = AM
 
-		if(L.on_foot()) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
-			if(IED && isturf(src.loc))
+		if(L.on_foot() && ishuman(L)) //Flying mobs can't get caught in beartraps! Note that this also prevents lying mobs from triggering traps
+			var/mob/living/carbon/human/H = L
+			H.visible_message("<span class='danger'>[H] steps on \the [src].</span>",\
+					"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
+					"<span class='notice'>You hear a sudden snapping sound!",\
+					//Hallucination messages
+					"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
+					"<span class='danger'>A [(IED && IED.active) ? "horrifying fiery dragon" : "crocodile"] attempts to bite your leg off!</span>")
+			if(IED && isturf(src.loc) && H.m_intent == "run")
+				var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+				if(!affecting)
+					return
+				trapped = 1
+				trappedorgan = affecting
+				playsound(src, 'sound/effects/snap.ogg', 60, 1)
+				H.audible_scream()
+				lock_atom(H, /datum/locking_category/beartrap)
+				H.lazy_register_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+
+				to_chat(H, "<span class='danger'>The bear trap latches to your legs as you hear a hissing sound!</span>")
+
 				IED.active = 1
 				IED.overlays -= image('icons/obj/grenade.dmi', icon_state = "improvised_grenade_filled")
 				IED.icon_state = initial(icon_state) + "_active"
@@ -481,35 +614,79 @@
 				var/log_str = "[key_name(usr)]<A HREF='?_src_=holder;adminmoreinfo=\ref[AM]'>?</A> has triggered an IED-rigged [name] at <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[bombturf.x];Y=[bombturf.y];Z=[bombturf.z]'>[A.name] (JMP)</a>."
 				message_admins(log_str)
 				log_game(log_str)
+
 				spawn(IED.det_time)
 					IED.prime()
-
 					src.desc = initial(src.desc)
+					overlays.Remove(ied_overlay)
+					var/mob/living/carbon/human/H2 = trappeduser
+					if(H2 && !H2.pick_usable_organ(trappedorgan)) //check if they lost their leg, and get them out of the trap
+						to_chat(L, "<span class='warning'>With your leg missing, you slip out of the bear trap.</span>")
+						trapped = 0
+						unlock_atom(H2)
+						trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+						trappeduser = null
+						anchored = FALSE
+					return
 
-			if(ishuman(L))
-				var/mob/living/carbon/H = AM
-				if(H.m_intent == "run")
-					armed = 0
-					H.legcuffed = src
-					src.forceMove(H)
-					H.update_inv_legcuffed()
+			if(H.m_intent == "run") //This is where the real fun begins
+				trap(H)
 
-					feedback_add_details("handcuffs","B") //Yes, I know they're legcuffs. Don't change this, no need for an extra variable. The "B" is used to tell them apart.
+		else if(isanimal(AM))
+			armed = 0
+			var/mob/living/simple_animal/SA = AM
+			SA.health -= 20
 
-					H.visible_message("<span class='danger'>[H] steps on \the [src].</span>",\
-						"<span class='danger'>You step on \the [src]![(IED && IED.active) ? " The explosive device attached to it activates." : ""]</span>",\
-						"<span class='notice'>You hear a sudden snapping sound!",\
-						//Hallucination messages
-						"<span class='danger'>A terrifying crocodile snaps at [H]!</span>",\
-						"<span class='danger'>A [(IED && IED.active) ? "crocodile" : "horrifying fiery dragon"] attempts to bite your leg off!</span>")
-			else if(isanimal(AM))
-				armed = 0
-				var/mob/living/simple_animal/SA = AM
-				SA.health -= 20
-
-			overlays.Remove(ied_overlay)
-			update_icon()
+	update_icon()
 	..()
+
+/obj/item/weapon/beartrap/proc/trap(var/mob/living/carbon/human/H)
+	trapped = 1
+	trappeduser = H
+	armed = 0
+
+	playsound(src, 'sound/effects/snap.ogg', 60, 1)
+	H.audible_scream()
+	lock_atom(H, /datum/locking_category/beartrap)
+
+	var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+	if(affecting)
+		trappedorgan = affecting
+		if(affecting.take_damage(15, 0, 25, SERRATED_BLADE & SHARP_BLADE))
+			H.UpdateDamageIcon()
+			H.updatehealth()
+
+	if(!H.pick_usable_organ(affecting)) //check if they lost their leg, and get them out of the trap
+		to_chat(H, "<span class='warning'>With your leg missing, you slip out of the bear trap!</span>")
+		trapped = 0
+		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		trappeduser = null
+		unlock_atom(H)
+		anchored = FALSE
+
+	H.update_canmove()
+
+// Called when the dude is moved from the trap on way or the other.
+/obj/item/weapon/beartrap/proc/forcefully_remove(atom/movable/mover)
+	if (get_turf(mover) != src.loc)
+		if (ishuman(mover))
+			var/mob/living/carbon/human/H = mover
+			playsound(mover, 'sound/effects/snap.ogg', 60, 1)
+			H.audible_scream()
+
+			var/datum/organ/external/affecting = H.pick_usable_organ(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
+			if(affecting)
+				if(affecting.take_damage(30, 0, 50, SERRATED_BLADE & SHARP_BLADE)) // This is going to hurt.
+					H.UpdateDamageIcon()
+					H.updatehealth()
+		visible_message("<span class='warning'>The wound on [mover]'s leg worsens terribly as the trap let go of them.</span>")
+		trapped = 0
+		unlock_atom(trappeduser)
+		trappeduser.lazy_unregister_event(/lazy_event/on_moved, src, .proc/forcefully_remove)
+		anchored = FALSE
+		trappeduser.update_canmove()
+		trappeduser = null
+		return
 
 /obj/item/weapon/batteringram
 	name = "battering ram"
@@ -621,8 +798,7 @@
 
 	species_fit = list(VOX_SHAPED)
 
-	flags = HIDEHAIRCOMPLETELY
-	body_parts_covered = FULL_HEAD
+	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 
@@ -872,35 +1048,34 @@
 //	to_chat(world, "[angle] [(get_dist(user, A) - 1)]")
 	user.Beam(A, "lightning", 'icons/obj/zap.dmi', 50, 15)
 /*Testing
-proc
     //  creates an /icon object with 360 states of rotation
-    rotate_icon(file, state, step = 1, aa = FALSE)
-        var icon/base = icon(file, state)
+proc/rotate_icon(file, state, step = 1, aa = FALSE)
+	var icon/base = icon(file, state)
 
-        var w, h, w2, h2
-        if(aa)
-            aa ++
-            w = base.Width()
-            w2 = w * aa
-            h = base.Height()
-            h2 = h * aa
+	var w, h, w2, h2
+	if(aa)
+		aa ++
+		w = base.Width()
+		w2 = w * aa
+		h = base.Height()
+		h2 = h * aa
 
-        var icon{result = icon(base); temp}
+	var icon{result = icon(base); temp}
 
-        for(var/angle in 0 to 360 step step)
-            if(angle == 0  )
-            	continue
-            if(angle == 360)
-            	continue
+	for(var/angle in 0 to 360 step step)
+		if(angle == 0  )
+			continue
+		if(angle == 360)
+			continue
 
-            temp = icon(base)
+		temp = icon(base)
 
-            if(aa)
-            	temp.Scale(w2, h2)
-            temp.Turn(angle)
-            if(aa)
-            	temp.Scale(w,   h)
+		if(aa)
+			temp.Scale(w2, h2)
+		temp.Turn(angle)
+		if(aa)
+			temp.Scale(w,   h)
 
-            result.Insert(temp, "[angle]")
+		result.Insert(temp, "[angle]")
 
-        return result*/
+	return result*/

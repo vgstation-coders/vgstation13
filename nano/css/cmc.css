@@ -1,0 +1,85 @@
+/* 
+Title: Crew Monitor Textview
+Used In File(s): \code\modules\cmc\crew.dm
+*/
+
+body {
+  font-size: 15px;
+}
+
+td, th {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
+  font-weight: 700;
+  font-size: 15px;
+}
+
+#cmc_controls {
+  float: left;
+  max-width: 10%;
+  background: url(uiMaskBackground.png);
+  padding-top: 5px;
+  padding-bottom: 5px;
+  display: block;
+}
+
+.cmc_btn {
+  margin: 4px 10px;
+}
+
+.fire {
+  color: orange;
+}
+
+.brute {
+  color: red;
+}
+
+.toxin {
+  color: green;
+}
+
+.oxygen {
+  color: blue;
+}
+
+.name {
+  font-weight: 1000;
+}
+
+.name.cap {
+  color: #C06616;
+}
+
+.name.sec {
+  color: #E74C3C;
+}
+
+.name.med {
+  color: #3498DB;
+}
+
+.name.sci {
+  color: #9B59B6;
+}
+
+.name.eng {
+  color: #F1C40F;
+}
+
+.name.car {
+  color: #F39C12;
+}
+
+.name.cent {
+  color: #00C100;
+}
+
+.name.unk {
+  color: #C38312;
+}
+
+.name.silicon {
+  color: #85c1e9;
+}

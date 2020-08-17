@@ -1,12 +1,13 @@
-/mob/living/silicon/robot/gib()
+/mob/living/silicon/robot/gib(animation = FALSE, meat = TRUE)
 	//robots don't die when gibbed. instead they drop their MMI'd brain
+	disconnect_AI()
 	monkeyizing = TRUE
 	canmove = FALSE
 	icon = null
 	invisibility = 101
 
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "gibbed-r", sleeptime = 15)
-	robogibs(loc, viruses)
+	robogibs(loc, virus2)
 
 	if(mind) //To make sure we're gibbing a player, who knows
 		if(!suiciding) //I don't know how that could happen, but you can't be too sure
@@ -17,6 +18,7 @@
 	qdel(src)
 
 /mob/living/silicon/robot/dust()
+	disconnect_AI()
 	death(1)
 	monkeyizing = TRUE
 	canmove = FALSE

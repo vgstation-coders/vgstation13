@@ -41,7 +41,6 @@ var/list/impact_master = list()
 	var/damage_type = BRUTE //BRUTE, BURN, TOX, OXY, CLONE are the only things that should be in here
 	var/nodamage = 0 //Determines if the projectile will skip any damage inflictions
 	var/flag = "bullet" //Defines what armor to use when it hits things.  Must be set to bullet, laser, energy,or bomb	//Cael - bio and rad are also valid
-	var/projectile_type = "/obj/item/projectile"
 	var/kill_count = INFINITY //This will de-increment every process(). When 0, it will delete the projectile.
 	var/total_steps = 0
 		//Effects
@@ -72,6 +71,9 @@ var/list/impact_master = list()
 	var/inaccurate = 0
 
 	var/turf/target = null
+	var/datum/tracker/tracker_datum = null
+	var/tracking = FALSE
+
 	var/dist_x = 0
 	var/dist_y = 0
 	var/dx = 0
@@ -112,14 +114,26 @@ var/list/impact_master = list()
 	initial_pixel_x = pixel_x
 	initial_pixel_y = pixel_y
 
+/obj/item/projectile/proc/get_damage()
+	return damage
+
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
-	if(blocked >= 2)
+
+	qdel(tracker_datum)
+	tracker_datum = null
+
+	if(blocked >= 100)
 		return 0//Full block
 	if(!isliving(atarget))
 		return 0
+
+	if(istype(shot_from,/obj/item/weapon/gun))
+		var/obj/item/weapon/gun/G = shot_from
+		G.bullet_hitting(src,atarget)
+
 	// FUCK mice. - N3X
 	if(ismouse(atarget) && (stun+weaken+paralyze+agony)>5)
 		var/mob/living/simple_animal/mouse/M=atarget
@@ -141,7 +155,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
-	var/obj/item/projectile/test/in_chamber = getFromPool(/obj/item/projectile/test, get_step_to(user, target)) //Making the test....
+	var/obj/item/projectile/test/in_chamber = new /obj/item/projectile/test(get_step_to(user, target)) //Making the test...)
 	in_chamber.target = target
 	in_chamber.ttarget = target //what the fuck
 	in_chamber.flags = flags //Set the flags...
@@ -149,12 +163,8 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	returnToPool(in_chamber)
+	qdel(in_chamber)
 	return output //Send it back to the gun!
-
-/obj/item/projectile/resetVariables()
-	..("permutated")
-	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))
@@ -206,7 +216,7 @@ var/list/impact_master = list()
 		var/miss_modifier = -30
 		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
-			if (daddy.target && original in daddy.target) //As opposed to no-delay pew pew
+			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
 				miss_modifier += -30
 		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate
 			miss_modifier += -200
@@ -235,6 +245,7 @@ var/list/impact_master = list()
 					visible_message("<span class='warning'>[A.name] is hit by the [src.name] in the [parse_zone(def_zone)]!</span>")//X has fired Y is now given by the guns so you cant tell who shot you if you could not see the shooter
 			admin_warn(M)
 			if(istype(firer, /mob))
+				M.do_hitmarker(firer)
 				if(!iscarbon(firer))
 					M.LAssailant = null
 				else
@@ -363,6 +374,16 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	if (tracking)
+		if (istype(proj_target, /atom/movable))
+			var/atom/movable/the_target = proj_target
+			var/datum/tracker/T = new
+			T.name = "[src] tracker on [proj_target]"
+			T.target = target
+			src.tracker_datum = T
+			the_target.add_tracker(T)
+
 	dist_x = abs(target.x - starting.x)
 	dist_y = abs(target.y - starting.y)
 
@@ -419,6 +440,36 @@ var/list/impact_master = list()
 			pixel_y = PixelY
 
 		bumped = 0
+
+		if (tracker_datum && tracker_datum.changed)
+			tracker_datum.changed = FALSE
+			var/dist = get_dist(tracker_datum.target, src)
+			if (tracker_datum.lost_position_distance && (dist > tracker_datum.lost_position_distance))
+				tracker_datum.active = FALSE
+			else
+				target = tracker_datum.target
+				var/turf/current = get_turf(src)
+
+				// recalculate trajectory based on new tracker data
+				if (target.x > current.x)
+					dx = EAST
+				else
+					dx = WEST
+
+				if (target.y > current.y)
+					dy = NORTH
+				else
+					dy = SOUTH
+
+				dist_x = abs(target.x - current.x)
+				dist_y = abs(target.y - current.y)
+
+				if(dist_x > dist_y)
+					error = dist_x/2 - dist_y
+				else
+					error = dist_y/2 - dist_x
+				if(rotate)
+					target_angle = round(Get_Angle(current,target))
 
 		sleep(projectile_speed)
 
@@ -485,12 +536,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/bullet_die()
 	OnDeath()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
         spawn()
                 OnDeath()
-                returnToPool(src)
+                qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
@@ -520,11 +571,11 @@ var/list/impact_master = list()
 	if(!dir)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	if(kill_count < 1)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0
@@ -533,7 +584,8 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		var/turf/T = get_step(src, dir)
-		step_towards(src, T)
+		if(!step_towards(src, T))
+			break
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))

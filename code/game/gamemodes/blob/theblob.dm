@@ -1,41 +1,6 @@
-//I will need to recode parts of this but I am way too tired atm <- whoever said this, I've got your back -Deity Link
 
-/* Contents
-/obj/effect/blob
-/obj/effect/blob/blob_act()
-/obj/effect/blob/New(turf/loc,newlook = "new")
-/obj/effect/blob/Destroy()
-/obj/effect/blob/projectile_check()
-/obj/effect/blob/CanPass(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-/obj/effect/blob/beam_connect(var/obj/effect/beam/B)
-/obj/effect/blob/beam_disconnect(var/obj/effect/beam/B)
-/obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
-/obj/effect/blob/handle_beams()
-/obj/effect/blob/process()
-/obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
-/obj/effect/blob/ex_act(severity)
-/obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-/obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/user)
-/obj/effect/blob/update_icon(var/spawnend = 0)
-
-/obj/effect/blob/proc/update_looks()
-var/list/blob_looks
-/obj/effect/blob/proc/Life()
-/obj/effect/blob/proc/aftermove()
-/obj/effect/blob/proc/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/proc/run_action()
-/obj/effect/blob/proc/expand(var/turf/T = null, var/prob = 1)
-/obj/effect/blob/proc/change_to(var/type, var/mob/camera/blob/M = null)
-/obj/effect/blob/proc/Delete()
-/obj/effect/blob/proc/update_health()
-
-
-/obj/effect/blob/normal
-/obj/effect/blob/normal/Delete()
-/obj/effect/blob/normal/Pulse(var/pulse = 0, var/origin_dir = 0)
-/obj/effect/blob/normal/update_icon(var/spawnend = 0)
-*/
 //Few global vars to track the blob
+var/blob_tiles_grown_total = 0
 var/list/blobs = list()
 var/list/blob_cores = list()
 var/list/blob_nodes = list()
@@ -109,6 +74,8 @@ var/list/blob_overminds = list()
 	..(loc)
 	for(var/atom/A in loc)
 		A.blob_act(0,src)
+
+	blob_tiles_grown_total++
 	return
 
 
@@ -118,7 +85,7 @@ var/list/blob_overminds = list()
 
 	if(icon_size == 64)
 		for(var/atom/movable/overlay/O in loc)
-			returnToPool(O)
+			qdel(O)
 
 		for(var/obj/effect/blob/B in orange(loc,1))
 			B.update_icon()
@@ -160,7 +127,7 @@ var/list/blob_overminds = list()
 	update_health()
 	update_icon()
 	if(beams.len == 0)
-		if(!custom_process && src in processing_objects)
+		if(!custom_process)
 			processing_objects.Remove(src)
 
 /obj/effect/blob/apply_beam_damage(var/obj/effect/beam/B)
@@ -192,7 +159,7 @@ var/list/blob_overminds = list()
 
 /obj/effect/blob/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	..()
-	var/damage = Clamp(0.01 * exposed_temperature / fire_resist, 0, 4 - fire_resist)
+	var/damage = clamp(0.01 * exposed_temperature / fire_resist, 0, 4 - fire_resist)
 	if(damage)
 		health -= damage
 		update_health()
@@ -270,6 +237,12 @@ var/list/blob_overminds = list()
 			layer = OBJ_LAYER
 			overlays.len = 0
 
+	blob_looks(looks)
+
+	if(right_now)
+		update_icon()
+
+/atom/proc/blob_looks(var/looks = "new")
 	switch(looks)
 		if("new")
 			icon = 'icons/mob/blob/blob_64x64.dmi'
@@ -293,8 +266,6 @@ var/list/blob_overminds = list()
 			icon = 'icons/mob/blob_machine.dmi'
 		*/
 
-	if(right_now)
-		update_icon()
 
 var/list/blob_looks_admin = list(//Options available to admins
 	"new" = 64,
@@ -485,3 +456,47 @@ var/list/blob_looks_player = list(//Options available to players
 	else
 		if(health <= 15)
 			icon_state = "blob_damaged"
+
+///////////////////////BLOB SPORE DISEASE//////////////////////////////////
+var/list/blob_diseases = list()
+
+/proc/CreateBlobDisease(var/looks)
+	var/datum/disease2/disease/S = new
+	S.form = "Spores"
+	S.infectionchance = 95
+	S.infectionchance_base = 95
+	S.stageprob = 0//single-stage
+	S.stage_variance = 0
+	S.max_stage = 1
+	S.can_kill = list()
+
+	var/datum/disease2/effect/blob_spores/E = new /datum/disease2/effect/blob_spores
+	E.looks = looks
+	S.effects += E
+
+	S.antigen = list(pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN))))
+	S.antigen |= pick(antigen_family(pick(ANTIGEN_RARE,ANTIGEN_ALIEN)))
+
+	S.spread = SPREAD_BLOOD
+	S.uniqueID = rand(0,9999)
+	S.subID = rand(0,9999)
+
+	S.strength = rand(70,100)
+	S.robustness = 100
+
+	S.color = "#99CB99"
+	S.pattern = 2
+	S.pattern_color = "#FFC977"
+
+	log_debug("Creating Spores #[S.uniqueID]-[S.subID].")
+	S.log += "<br />[timestamp()] Created<br>"
+
+	S.origin = "Blob ([looks])"
+
+	S.mutation_modifier = 0
+
+	S.update_global_log()
+
+	blob_diseases[looks] = S
+
+///////////////////////////////////////////////////////////////////////////

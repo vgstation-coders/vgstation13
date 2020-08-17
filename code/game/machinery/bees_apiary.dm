@@ -11,9 +11,11 @@
 */
 var/list/apiary_reservation = list()
 
+var/list/apiaries_list = list()
+
 /obj/machinery/apiary
 	name = "apiary tray"
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
@@ -46,6 +48,7 @@ var/list/apiary_reservation = list()
 
 /obj/machinery/apiary/New()
 	..()
+	apiaries_list.Add(src)
 	overlays += image('icons/obj/apiary_bees_etc.dmi', icon_state=apiary_icon)
 	create_reagents(100)
 	consume = new()
@@ -53,6 +56,7 @@ var/list/apiary_reservation = list()
 		open_for_exile = 1
 
 /obj/machinery/apiary/Destroy()
+	apiaries_list.Remove(src)
 	for (var/datum/bee/B in bees_outside_hive)
 		B.home = null
 		if (B.mob)
@@ -333,7 +337,7 @@ var/list/apiary_reservation = list()
 /obj/machinery/apiary/proc/empty_beehive()
 	if (!queen_bees_inside && !worker_bees_inside)
 		return
-	var/mob/living/simple_animal/bee/lastBees = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+	var/mob/living/simple_animal/bee/lastBees = new /mob/living/simple_animal/bee(get_turf(src))
 	for(var/i = 1 to worker_bees_inside)
 		worker_bees_inside--
 		lastBees.addBee(new species.bee_type())
@@ -350,7 +354,7 @@ var/list/apiary_reservation = list()
 		return 0
 	if (A.queen_bees_inside > 0 || locate(/datum/bee/queen_bee) in A.bees_outside_hive)//another queen made her way there somehow
 		return 0
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), src)
 	var/datum/bee/queen_bee/new_queen = new species.queen_type(src)
 	queen_bees_inside--
 	B_mob.addBee(new_queen)
@@ -377,7 +381,7 @@ var/list/apiary_reservation = list()
 	for(var/datum/bee/B in bees_outside_hive)
 		B.angerAt(M)
 
-	var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, get_turf(src), get_turf(src), src)
+	var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src), get_turf(src), src)
 	for (var/i=1 to worker_bees_inside)
 		var/datum/bee/B = new species.bee_type(src)
 		B_mob.addBee(B)
@@ -462,7 +466,7 @@ var/list/apiary_reservation = list()
 		//SENDING OUT BEES
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 11)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = null
 			if (species.queen_wanders && queen_bees_inside > 0 && nutrilevel > 0 && worker_bees_inside > 15 && prob(nutrilevel/3))
 				B = new species.queen_type(src)
@@ -523,7 +527,7 @@ var/list/apiary_reservation = list()
 				qdel(B_mob)
 
 			//Nearby homeless bees get a free invite.
-			if (W.species && W.species == B_mob.bee_species && (B_mob.bees + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
+			if (W.species && W.species == B_mob.bee_species && (B_mob.bees.len + W.worker_bees_inside + W.queen_bees_inside) <= MAX_BEES_PER_HIVE)
 				for(var/datum/bee/B in B_mob.bees)
 					W.enterHive(B)
 				qdel(B_mob)
@@ -649,7 +653,7 @@ var/list/apiary_reservation = list()
 		//sending out bees to KILL
 		if(worker_bees_inside >= 10 && bees_outside_hive.len < 15)
 			var/turf/T = get_turf(src)
-			var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee, T, src)
+			var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T, src)
 			var/datum/bee/B = new species.bee_type(src)
 			worker_bees_inside--
 			bees_outside_hive.Add(B)

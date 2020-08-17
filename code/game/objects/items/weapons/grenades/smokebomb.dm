@@ -1,8 +1,8 @@
 /obj/item/weapon/grenade/smokebomb
-	desc = "It is set to detonate in 2 seconds."
+	desc = "Generates a cloud of harmless, vision-obscuring smoke upon detonation."
 	name = "smoke bomb"
 	icon = 'icons/obj/grenade.dmi'
-	icon_state = "flashbang"
+	icon_state = "smokebomb"
 	det_time = 20
 	item_state = "flashbang"
 	flags = FPRINT

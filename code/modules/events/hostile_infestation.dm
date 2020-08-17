@@ -9,6 +9,11 @@
 	var/override_location = null
 	var/override_monster = null
 
+/datum/event/hostile_infestation/can_start(var/list/active_with_role)
+	if(active_with_role["Security"] > 1)
+		return 25
+	return 0
+
 /datum/event/hostile_infestation/start()
 	var/z_level = 1
 	for(var/mob/M in player_list)

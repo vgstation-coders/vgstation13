@@ -76,8 +76,14 @@ LOG_RC
 ## log world.log and runtime errors to a file
 # LOG_RUNTIMES
 
+## log sql status messages.
+# LOG_SQL
+
+## log all sql queries.
+# LOG_SQL_QUERIES
+
 ## sql switching
-# SQL_ENABLED
+# SQL_ENABLED 1
 
 ## disconnect players who did nothing during 10 minutes
 # KICK_INACTIVE
@@ -307,11 +313,15 @@ SKIP_VAULT_GENERATION
 ## SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
 ## Uncomment to disable the lovely robotic voice that tells you the time at the start of every shift.
 ## Recommended for your sanity if you start the server a lot for testing things.
-#SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
+SHUT_UP_AUTOMATIC_DIAGNOSTIC_AND_ANNOUNCEMENT_SYSTEM
 
 ## NO_LOBBY_MUSIC
 ## Uncomment to never play lobby music. Useful if you use guest keys to multiaccount-test stuff, since you can't use client preferences for those.
-#NO_LOBBY_MUSIC
+NO_LOBBY_MUSIC
+
+## NO_AMBIENCE
+## Same as above.
+NO_AMBIENCE
 
 ## ENABLE_ROUNDSTART_AWAY_MISSIONS
 ## Uncomment to genereate an away mission at the beginning of each round
@@ -334,3 +344,18 @@ ENABLE_WAGES
 # HTTP URL to send Discord messages to.
 # DISCORD_URL
 # DISCORD_PASSWORD
+
+## Time in seconds for asynchronous queries to timeout
+## Set to 0 for infinite
+ASYNC_QUERY_TIMEOUT 10
+
+## Time in seconds for blocking queries to execute before slow query timeout
+## Set to 0 for infinite
+## Must be less than or equal to ASYNC_QUERY_TIMEOUT
+BLOCKING_QUERY_TIMEOUT 5
+
+## The maximum number of additional threads BSQL is allowed to run at once
+BSQL_THREAD_LIMIT 50
+
+## Uncomment to enable verbose BSQL communication logs
+#BSQL_DEBUG

@@ -15,8 +15,7 @@
 
 	priority = 0
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/glue_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -27,7 +26,7 @@
 	if (affected.stage == 0)
 		user.visible_message("[user] starts applying medication to the damaged bones in [target]'s [affected.display_name] with \the [tool]." , \
 		"You start applying medication to the damaged bones in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/glue_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -50,8 +49,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/set_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -61,7 +59,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] is beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool]." , \
 		"You are beginning to set the bone in [target]'s [affected.display_name] in place with \the [tool].")
-	target.custom_pain("The pain in your [affected.display_name] is going to make you pass out!",1)
+	target.custom_pain("The pain in your [affected.display_name] is going to make you pass out!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/set_bone/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -90,8 +88,7 @@
 		/obj/item/weapon/wrench = 75,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/mend_skull/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -128,8 +125,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/finish_bone/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -167,8 +163,7 @@
 
 	priority = 0.1 //so it tries to do this before /glue_bone
 
-	min_duration = 80
-	max_duration = 90
+	duration = 8 SECONDS
 
 /datum/surgery_step/bone_mender/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -179,7 +174,7 @@
 	if (affected.stage <= 5)
 		user.visible_message("[user] starts grasping the damaged bone edges in [target]'s [affected.display_name] with \the [tool]." , \
 		"You start grasping the bone edges and fusing them in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!", 1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!", 1, scream=TRUE)
 	..()
 
 /datum/surgery_step/bone_mender/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

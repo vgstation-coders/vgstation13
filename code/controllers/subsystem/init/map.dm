@@ -38,4 +38,10 @@ var/datum/subsystem/map/SSmap
 		z.post_mapload()
 		log_startup_progress("Finished with zLevel [z.z] in [stop_watch(watch)]s.")
 	log_startup_progress("Finished calling post on zLevels in [stop_watch(watch_prim)]s.")
+
+	var/watch = start_watch()
+	log_startup_progress("Starting map-specific inits...")
+	map.map_specific_init()
+	log_startup_progress("Finished map-specific inits in [stop_watch(watch)]s.")
+
 	..()

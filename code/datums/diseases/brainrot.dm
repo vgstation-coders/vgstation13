@@ -27,7 +27,7 @@
 				affected_mob.updatehealth()
 		if(3)
 			if(prob(2))
-				affected_mob.emote("stare")
+				affected_mob.emote("stare", null, null, TRUE)
 			if(prob(2))
 				affected_mob.emote("drool", null, null, TRUE)
 			if(prob(10) && affected_mob.getBrainLoss()<=98)//shouldn't retard you to death now
@@ -42,7 +42,7 @@
 					to_chat(affected_mob, "<span class='warning'>Your head hurts.</span>" ) */
 		if(4)
 			if(prob(2))
-				affected_mob.emote("stare")
+				affected_mob.emote("stare", null, null, TRUE)
 			if(prob(2))
 				affected_mob.emote("drool", null, null, TRUE)
 /*			if(prob(15))

@@ -1,6 +1,6 @@
 /mob/living/simple_animal/hostile/humanoid/skellington
 	name = "skellington"
-	desc = "A skeleton, held together by scraps of skin and muscle. It sppears to be feral."
+	desc = "A skeleton, held together by scraps of skin and muscle. It appears to be feral."
 
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "skellington"

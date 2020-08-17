@@ -1,5 +1,6 @@
 /datum/artifact_effect/deadharvest
 	effecttype = "deadharvest"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ELDRITCH, ARTIFACT_STYLE_WIZARD)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	var/list/mob_spawn = list()
 	var/points = 0

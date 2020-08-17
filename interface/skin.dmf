@@ -139,10 +139,10 @@ macro "macro"
 		command = ".screenshot"
 	elem "F3"
 		name = "F3"
-		command = "say"
+		command = ".Say"
 	elem "F4"
 		name = "F4"
-		command = "me"
+		command = ".Me"
 	elem "F5"
 		name = "F5"
 		command = "Aghost"
@@ -229,39 +229,48 @@ macro "hotkeymode"
 	elem "1"
 		name = "1"
 		command = "a-intent help"
-	elem "CTRL+1"
-		name = "CTRL+1"
-		command = "a-intent help"
 	elem "2"
 		name = "2"
-		command = "a-intent disarm"
-	elem "CTRL+2"
-		name = "CTRL+2"
 		command = "a-intent disarm"
 	elem "3"
 		name = "3"
 		command = "a-intent grab"
-	elem "CTRL+3"
-		name = "CTRL+3"
-		command = "a-intent grab"
 	elem "4"
 		name = "4"
-		command = "a-intent hurt"
-	elem "CTRL+4"
-		name = "CTRL+4"
 		command = "a-intent hurt"
 	elem "5"
 		name = "5"
 		command = "a-kick"
-	elem "CTRL+5"
-		name = "CTRL+5"
-		command = "a-kick"
 	elem "6"
 		name = "6"
 		command = "a-bite"
+	elem "CTRL+1"
+		name = "CTRL+1"
+		command = "StorageHotkey 1"
+	elem "CTRL+2"
+		name = "CTRL+2"
+		command = "StorageHotkey 2"
+	elem "CTRL+3"
+		name = "CTRL+3"
+		command = "StorageHotkey 3"
+	elem "CTRL+4"
+		name = "CTRL+4"
+		command = "StorageHotkey 4"
+	elem "CTRL+5"
+		name = "CTRL+5"
+		command = "StorageHotkey 5"
 	elem "CTRL+6"
 		name = "CTRL+6"
-		command = "a-bite"
+		command = "StorageHotkey 6"
+	elem "CTRL+7"
+		name = "CTRL+7"
+		command = "StorageHotkey 7"
+	elem "CTRL+8"
+		name = "CTRL+8"
+		command = "StorageHotkey 8"
+	elem "CTRL+9"
+		name = "CTRL+9"
+		command = "StorageHotkey 9"
 	elem "A"
 		name = "A"
 		command = "MoveKey 8 1"
@@ -292,9 +301,12 @@ macro "hotkeymode"
 	elem "CTRL+G"
 		name = "CTRL+G"
 		command = "a-intent right"
+	elem "M+UP"
+		name = "M+UP"
+		command = ".Me"
 	elem "M"
 		name = "M"
-		command = "me"
+		command = "Me"
 	elem "Q"
 		name = "Q"
 		command = ".northwest"
@@ -315,7 +327,10 @@ macro "hotkeymode"
 		command = "MoveKey 2 0"
 	elem "T"
 		name = "T"
-		command = "say"
+		command = "Say"
+	elem "T+UP"
+		name = "T+UP"
+		command = ".Say"
 	elem "W"
 		name = "W"
 		command = "MoveKey 1 1"
@@ -354,10 +369,16 @@ macro "hotkeymode"
 		command = ".screenshot"
 	elem "F3"
 		name = "F3"
-		command = "say"
+		command = "Say"
+	elem "F3+UP"
+		name = "F3+UP"
+		command = ".Say"
 	elem "F4"
 		name = "F4"
-		command = "me"
+		command = "Me"
+	elem "F4+UP"
+		name = "F4+UP"
+		command = ".Me"
 	elem "F5"
 		name = "F5"
 		command = "Aghost"
@@ -412,47 +433,104 @@ menu "menu"
 		category = "&Client"
 		saved-params = "is-checked"
 	elem
-		name = "&Icons"
+		name = "&Display"
 		command = ""
+		saved-params = "is-checked"
+	elem "distort"
+		name = "&Distort"
+		command = ".winset \"mapwindow.map.zoom-mode=distort\""
+		category = "&Display"
+		group = "scaling"
+		can-check = true
+		saved-params = "is-checked"
+	elem "Normal"
+		name = "&Normal"
+		command = ".winset \"mapwindow.map.zoom-mode=normal\""
+		category = "&Display"
+		is-checked = true
+		can-check = true
+		group = "scaling"
+		saved-params = "is-checked"
+	elem "blur"
+		name = "&Blur"
+		command = ".winset \"mapwindow.map.zoom-mode=blur\""
+		category = "&Display"
+		group = "scaling"
+		can-check = true
+		saved-params = "is-checked"
+	elem
+		name = ""
+		command = ""
+		category = "&Display"
 		saved-params = "is-checked"
 	elem "stretch"
 		name = "&Stretch to fit"
 		command = ".winset \"mapwindow.map.icon-size=0\""
-		category = "&Icons"
+		category = "&Display"
 		is-checked = true
-		can-check = true
-		group = "size"
-		saved-params = "is-checked"
-	elem "icon64"
-		name = "&64x64 (2x)"
-		command = ".winset \"mapwindow.map.icon-size=64\""
-		category = "&Icons"
-		can-check = true
-		group = "size"
-		saved-params = "is-checked"
-	elem "icon64"
-		name = "&48x48 (1.5x)"
-		command = ".winset \"mapwindow.map.icon-size=48\""
-		category = "&Icons"
-		can-check = true
-		group = "size"
-		saved-params = "is-checked"
-	elem "icon32"
-		name = "&32x32"
-		command = ".winset \"mapwindow.map.icon-size=32\""
-		category = "&Icons"
 		can-check = true
 		group = "size"
 		saved-params = "is-checked"
 	elem
 		name = ""
 		command = ""
-		category = "&Icons"
+		category = "&Display"
+		saved-params = "is-checked"
+	elem "icon128"
+		name = "&128x128 (4x)"
+		command = ".winset \"mapwindow.map.icon-size=128\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem "icon96"
+		name = "&96x96 (3x)"
+		command = ".winset \"mapwindow.map.icon-size=96\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem "icon64"
+		name = "&64x64 (2x)"
+		command = ".winset \"mapwindow.map.icon-size=64\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem "icon64"
+		name = "&48x48 (1.5x)"
+		command = ".winset \"mapwindow.map.icon-size=48\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem "icon32"
+		name = "&32x32"
+		command = ".winset \"mapwindow.map.icon-size=32\""
+		category = "&Display"
+		can-check = true
+		group = "size"
+		saved-params = "is-checked"
+	elem
+		name = ""
+		command = ""
+		category = "&Display"
 		saved-params = "is-checked"
 	elem "textmode"
 		name = "&Text"
 		command = ".winset \"menu.textmode.is-checked=true?mapwindow.map.text-mode=true:mapwindow.map.text-mode=false\""
-		category = "&Icons"
+		category = "&Display"
+		can-check = true
+		saved-params = "is-checked"
+	elem
+		name = ""
+		command = ""
+		category = "&Display"
+		saved-params = "is-checked"
+	elem "swapsides"
+		name = "&Swap Sides"
+		command = "swapsides"
+		category = "&Display"
 		can-check = true
 		saved-params = "is-checked"
 	elem
@@ -482,15 +560,6 @@ menu "menu"
 		name = "Special Roles"
 		command = "modifypreferences 2"
 		category = "Settings"
-		saved-params = "is-checked"
-	elem "skinmenu"
-		name = "Skin"
-		command = ""
-		saved-params = "is-checked"
-	elem
-		name = "Swap Sides"
-		command = "swapsides"
-		category = "Skin"
 		saved-params = "is-checked"
 	elem "server_menu"
 		name = "Server"
@@ -594,109 +663,6 @@ window "Telecomms IDE"
 		command = "cancel"
 		multi-line = true
 		no-command = true
-
-window "chemdispenser"
-	elem "chemdispenser"
-		type = MAIN
-		pos = 281,0
-		size = 625x412
-		anchor1 = none
-		anchor2 = none
-		background-color = #414141
-		is-visible = false
-		saved-params = "pos;size;is-minimized;is-maximized"
-		title = "Chem Dispenser"
-		statusbar = false
-		can-resize = false
-	elem "eject"
-		type = BUTTON
-		pos = 328,373
-		size = 296x39
-		anchor1 = 10,91
-		anchor2 = 100,100
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = "is-checked"
-		text = "[Insert beaker]"
-		command = "skincmd \"chemdispenser;eject\""
-		is-flat = true
-	elem "amountc"
-		type = BUTTON
-		pos = 0,373
-		size = 280x39
-		anchor1 = 0,91
-		anchor2 = 0,100
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = "is-checked"
-		text = "Change Amount"
-		command = "skincmd \"chemdispenser;amountc\""
-		is-flat = true
-	elem "energy"
-		type = LABEL
-		pos = 288,0
-		size = 264x32
-		anchor1 = 100,0
-		anchor2 = none
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = ""
-		text = "Energy: 25"
-	elem "amount"
-		type = LABEL
-		pos = 0,0
-		size = 288x34
-		anchor1 = 0,0
-		anchor2 = 29,7
-		font-size = 13
-		text-color = #808080
-		background-color = #414141
-		saved-params = ""
-		text = "Amount: 30"
-	elem "child1"
-		type = CHILD
-		pos = 0,32
-		size = 624x333
-		anchor1 = 0,8
-		anchor2 = 100,87
-		background-color = #408080
-		saved-params = "splitter"
-		left = "chemdispenser_reagents"
-		is-vert = false
-
-window "chemdispenser_reagents"
-	elem "chemdispenser_reagents"
-		type = MAIN
-		pos = 281,0
-		size = 652x309
-		anchor1 = none
-		anchor2 = none
-		background-color = #414141
-		saved-params = "pos;size;is-minimized;is-maximized"
-		titlebar = false
-		statusbar = false
-		can-close = false
-		can-minimize = false
-		can-resize = false
-		is-pane = true
-		can-scroll = vertical
-	elem "template_name"
-		type = BUTTON
-		pos = 8,8
-		size = 144x32
-		anchor1 = none
-		anchor2 = none
-		font-size = 13
-		background-color = #808080
-		is-visible = false
-		saved-params = "is-checked"
-		text = "Chloral Hydrate"
-		command = ""
-		is-flat = true
-		button-type = pushbox
 
 window "mainwindow"
 	elem "mainwindow"
@@ -816,6 +782,7 @@ window "mapwindow"
 		text-color = none
 		is-default = true
 		saved-params = "icon-size"
+		style=".center { text-align: center; } .runechatdiv {background-color: #20202070} .black_outline { -dm-text-outline: 1px black } .boldtext { font-weight: bold; } .maptext { font-family: 'Small Fonts'; font-size: 7px; color: white; line-height: 1.1; } .command_headset { font-weight: bold;	font-size: 8px; } .small { font-size: 6px; } .very_small { font-size: 5px;} .big { font-size: 8px; } .reallybig { font-size: 8px; } .extremelybig { font-size: 8px; } .greentext { color: #00FF00; font-size: 7px; } .redtext { color: #FF0000; font-size: 7px; } .clown { color: #FF69Bf; font-size: 7px;  font-weight: bold; } .his_grace { color: #15D512; } .hypnophrase { color: #0d0d0d; font-weight: bold; } .yell { font-weight: bold; } .italics { font-size: 7px; font-style: italic; }"
 	elem "credits"
 		type = BROWSER
 		pos = 0,0
@@ -852,6 +819,18 @@ window "outputwindow"
 		is-disabled = true
 		saved-params = ""
 		auto-format = false
+
+window "popupwindow"
+	elem "popupwindow"
+		type = MAIN
+		pos = 281,0
+		size = 120x120
+		anchor1 = none
+		anchor2 = none
+		background-color = none
+		is-visible = false
+		saved-params = "pos;size;is-minimized;is-maximized"
+		statusbar = false
 
 window "rpane"
 	elem "rpane"
@@ -909,7 +888,7 @@ window "rpane"
 		command = ".winset \"rpanewindow.left=window1\""
 		group = "rpanemode"
 		button-type = pushbox
-	elem "map"
+	elem "mapb"
 		type = BUTTON
 		pos = 386,0
 		size = 80x16
@@ -924,6 +903,15 @@ window "rpane"
 		size = 1x1
 		anchor1 = none
 		anchor2 = none
+		is-visible = false
+		saved-params = ""
+	elem "hosttracker2"
+		type = BROWSER
+		pos = 392,25
+		size = 1x1
+		anchor1 = none
+		anchor2 = none
+		is-visible = false
 		saved-params = ""
 	elem "rulesb"
 		type = BUTTON
@@ -1074,3 +1062,4 @@ window "window1"
 		background-color = #fffdd0
 		border = sunken
 		saved-params = "max-lines"
+

@@ -253,7 +253,6 @@
 			return //Toys really shouldn't be forcefully removing gear
 
 		if(mouth_protection && mouth_protection != H.wear_mask) //can't be protected with your own mask, has to be a hat
-			stat_collection.xeno_faces_protected++
 			var/rng = CHANCE_TO_REMOVE_HEADWEAR
 			if(istype(mouth_protection, /obj/item/clothing/head/helmet/space/rig))
 				rng = CHANCE_TO_REMOVE_SPECIAL_HEADWEAR
@@ -270,7 +269,6 @@
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
 					return
-			return
 
 	if(iscarbon(L))
 		var/mob/living/carbon/target = L
@@ -313,15 +311,12 @@
 				C.visible_message("<span class='danger'>\The [src] smashes against [C]'s \the [headwear], and rips it off in the process!</span>")
 				C.drop_from_inventory(headwear)
 				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-				return
 			else
 				C.visible_message("<span class='danger'>\The [src] bounces off of \the [headwear]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					death()
-					return
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-					return
 			return
 
 		forceMove(C)
@@ -342,7 +337,7 @@
 
 	var/mob/living/carbon/CA = target
 
-	if(!sterile && !(istype(CA) && !CA.hasmouth))
+	if(!sterile && !(istype(CA) && !CA.hasmouth()))
 		var/obj/item/alien_embryo/E = new (target)
 		target.status_flags |= XENO_HOST
 		if(istype(target, /mob/living/carbon/human))
@@ -350,7 +345,6 @@
 			var/datum/organ/external/chest/affected = T.get_organ(LIMB_CHEST)
 			affected.implants += E
 		target.visible_message("<span class='danger'>\The [src] falls limp after violating [target]'s face !</span>")
-		stat_collection.xeno_faces_hugged++
 
 		death()
 		//target.drop_from_inventory(src)

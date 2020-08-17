@@ -6,37 +6,37 @@
 	icon_state = "ore2"
 	w_type = RECYK_MISC
 	max_amount = 100
-	var/material=null
 	var/datum/geosample/geologic_data
+	var/can_orebox = TRUE
 
 /obj/item/stack/ore/recycle(var/datum/materials/rec)
-	if(material==null)
+	if(!materials)
 		return NOT_RECYCLABLE
-	rec.addAmount(material, amount)
-	return w_type
+
+	return ..()
 
 /obj/item/stack/ore/uranium
 	name = "Uranium ore"
 	icon_state = "Uranium ore"
 	origin_tech = Tc_MATERIALS + "=5"
-	material=MAT_URANIUM
 	melt_temperature = 1070+T0C
+	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM)
 
 /obj/item/stack/ore/iron
 	name = "Iron ore"
 	icon_state = "Iron ore"
 	origin_tech = Tc_MATERIALS + "=1"
-	material=MAT_IRON
 	melt_temperature = MELTPOINT_STEEL
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL)
 
 /obj/item/stack/ore/glass
 	name = "Sand"
 	icon_state = "Glass ore"
 	origin_tech = Tc_MATERIALS + "=1"
-	material=MAT_GLASS
 	melt_temperature = MELTPOINT_GLASS
 	slot_flags = SLOT_POCKET
 	throw_range = 1 //It just scatters to the ground as soon as you throw it.
+	starting_materials = list(MAT_GLASS = CC_PER_SHEET_GLASS)
 
 /obj/item/stack/ore/glass/cave
 	name = "cave sand"
@@ -44,9 +44,11 @@
 
 /obj/item/stack/ore/glass/throw_impact(atom/hit_atom)
 	//Intentionally not calling ..()
+	var/turf/T //turf to extinguish
 	if(isturf(hit_atom))
 		if(!locate(/obj/effect/decal/cleanable/scattered_sand) in hit_atom)
 			new/obj/effect/decal/cleanable/scattered_sand(hit_atom)
+		T = hit_atom
 		qdel(src)
 	else if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
@@ -59,12 +61,22 @@
 			H.eye_blind = max(H.eye_blind, rand(1,3))
 			H.drop_hands(get_turf(H))
 		log_attack("<font color='red'>[hit_atom] ([H ? H.ckey : "what"]) was pocketsanded by ([src.fingerprintslast])</font>")
+	else
+		T = get_turf(hit_atom)
+
+	if(T)
+		for(var/atom/atm in T) //extinguishing things
+			if(isliving(atm)) // For extinguishing mobs on fire
+				var/mob/living/M = atm
+				M.ExtinguishMob()
+			if(atm.on_fire) // For extinguishing objects on fire
+				atm.extinguish()
 
 /obj/item/stack/ore/glass/attack_self(mob/living/user as mob) //It's magic I ain't gonna explain how instant conversion with no tool works. -- Urist
 	var/location = get_turf(user)
 	for(var/obj/item/stack/ore/glass/sandToConvert in location)
-		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
-		sandToConvert.use(1)
+		drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, sandToConvert.amount, user)
+		sandToConvert.use(sandToConvert.amount)
 
 	drop_stack(/obj/item/stack/sheet/mineral/sandstone, location, 1, user)
 	use(1)
@@ -73,49 +85,64 @@
 	name = "Plasma ore"
 	icon_state = "Plasma ore"
 	origin_tech = Tc_MATERIALS + "=2"
-	material=MAT_PLASMA
 	melt_temperature = MELTPOINT_STEEL+500
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA)
+
+/obj/item/stack/ore/nanotrasite
+	name = "Nanotrasite ore"
+	icon_state = "Nanotrasite ore"
+	origin_tech = Tc_MATERIALS + "=3"
+	melt_temperature = MELTPOINT_STEEL+700
+	starting_materials = list(MAT_IRON = CC_PER_SHEET_METAL/2, MAT_PLASMA = CC_PER_SHEET_PLASMA/2)
 
 /obj/item/stack/ore/silver
 	name = "Silver ore"
 	icon_state = "Silver ore"
 	origin_tech = Tc_MATERIALS + "=3"
-	material=MAT_SILVER
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER)
 	melt_temperature = 961+T0C
 
 /obj/item/stack/ore/gold
 	name = "Gold ore"
 	icon_state = "Gold ore"
 	origin_tech = Tc_MATERIALS + "=4"
-	material=MAT_GOLD
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD)
 	melt_temperature = 1064+T0C
+
+/obj/item/stack/ore/electrum
+	name = "Electrum ore"
+	icon_state = "Electrum ore"
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_MISC*0.6, MAT_SILVER = CC_PER_SHEET_MISC*0.4)
+	origin_tech = Tc_MATERIALS + "=4"
+	melt_temperature = 1023.22+T0C //60% gold, 40% silver
 
 /obj/item/stack/ore/diamond
 	name = "Diamond ore"
 	icon_state = "Diamond ore"
 	origin_tech = Tc_MATERIALS + "=6"
-	material=MAT_DIAMOND
+	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND)
 
 /obj/item/stack/ore/clown
 	name = "Bananium ore"
 	icon_state = "Clown ore"
 	origin_tech = Tc_MATERIALS + "=4"
-	material=MAT_CLOWN
-	melt_temperature = MELTPOINT_GLASS
+	melt_temperature = MELTPOINT_POTASSIUM
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN)
 
 /obj/item/stack/ore/phazon
 	name = "Phazite"
 	desc = "What the fuck?"
 	icon_state = "Phazon ore"
 	origin_tech = Tc_MATERIALS + "=7"
-	material=MAT_PHAZON
 	melt_temperature = MELTPOINT_GLASS
+	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON)
 
 /obj/item/stack/ore/slag
 	name = "Slag"
 	desc = "Completely useless unless recycled."
 	icon_state = "slag"
 	melt_temperature=MELTPOINT_PLASTIC
+	can_orebox = FALSE
 
 	// melt_temperature is automatically adjusted.
 
@@ -132,53 +159,57 @@
 	name = "mauxite ore"
 	desc = "A chunk of Mauxite, a sturdy common metal."
 	icon_state = "mauxite"
-	material="mauxite"
+	starting_materials = list(MAT_MAUXITE = CC_PER_SHEET_MAUXITE)
+
 /obj/item/stack/ore/molitz
 	name = "molitz crystal"
 	desc = "A crystal of Molitz, a common crystalline substance."
 	icon_state = "molitz"
-	material="molitz"
+	starting_materials = list(MAT_MOLITZ = CC_PER_SHEET_MOLITZ)
+
 /obj/item/stack/ore/pharosium
 	name = "pharosium ore"
 	desc = "A chunk of Pharosium, a conductive metal."
 	icon_state = "pharosium"
-	material="pharosium"
+	starting_materials = list(MAT_PHAROSIUM = CC_PER_SHEET_PHAROSIUM)
+
 // Common Cluster Ores
 
 /obj/item/stack/ore/cobryl
 	name = "cobryl ore"
 	desc = "A chunk of Cobryl, a somewhat valuable metal."
 	icon_state = "cobryl"
-	material="cobryl"
+	starting_materials = list(MAT_COBRYL = CC_PER_SHEET_COBRYL)
+
 /obj/item/stack/ore/char
 	name = "char ore"
 	desc = "A heap of Char, a fossil energy source similar to coal."
 	icon_state = "char"
-	material="char"
+	starting_materials = list(MAT_CHAR = CC_PER_SHEET_CHAR)
 // Rare Vein Ores
 
 /obj/item/stack/ore/claretine
 	name = "claretine ore"
 	desc = "A heap of Claretine, a highly conductive salt."
 	icon_state = "claretine"
-	material="claretine"
+	starting_materials = list(MAT_CLARETINE = CC_PER_SHEET_CLARETINE)
 /obj/item/stack/ore/bohrum
 	name = "bohrum ore"
 	desc = "A chunk of Bohrum, a heavy and highly durable metal."
 	icon_state = "bohrum"
-	material="bohrum"
+	starting_materials = list(MAT_BOHRUM = CC_PER_SHEET_BOHRUM)
 /obj/item/stack/ore/syreline
 	name = "syreline ore"
 	desc = "A chunk of Syreline, an extremely valuable and coveted metal."
 	icon_state = "syreline"
-	material="syreline"
+	starting_materials = list(MAT_SYRELINE = CC_PER_SHEET_SYRELINE)
 // Rare Cluster Ores
 
 /obj/item/stack/ore/erebite
 	name = "erebite ore"
 	desc = "A chunk of Erebite, an extremely volatile high-energy mineral."
 	icon_state = "erebite"
-	material="erebite"
+	starting_materials = list(MAT_EREBITE = CC_PER_SHEET_EREBITE)
 /obj/item/stack/ore/erebite/ex_act()
 	explosion(src.loc,-1,0,2)
 	qdel(src)
@@ -191,7 +222,7 @@
 	name = "cerenkite ore"
 	desc = "A chunk of Cerenkite, a highly radioactive mineral."
 	icon_state = "cerenkite"
-	material="cerenkite"
+	starting_materials = list(MAT_CERENKITE = CC_PER_SHEET_CERENKITE)
 
 /obj/item/stack/ore/cerenkite/ex_act()
 	var/L = get_turf(src)
@@ -215,7 +246,7 @@
 	name = "cytine"
 	desc = "A glowing Cytine gemstone, somewhat valuable but not paticularly useful."
 	icon_state = "cytine"
-	material="cytine"
+	starting_materials = list(MAT_CYTINE = CC_PER_SHEET_CYTINE)
 /obj/item/stack/ore/cytine/New()
 	..()
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
@@ -230,19 +261,19 @@
 	name = "uqill nugget"
 	desc = "A nugget of Uqill, a rare and very dense stone."
 	icon_state = "uqill"
-	material="uqill"
+	starting_materials = list(MAT_UQILL = CC_PER_SHEET_UQILL)
 
 /obj/item/stack/ore/telecrystal
 	name = "telecrystal"
 	desc = "A large unprocessed telecrystal, a gemstone with space-warping properties."
 	icon_state = "telecrystal"
-	material=MAT_TELECRYSTAL
+	starting_materials = list(MAT_TELECRYSTAL = CC_PER_SHEET_TELECRYSTAL)
 
 /obj/item/stack/ore/mythril
 	name = "mythril ore"
 	desc = "A naturally-occuring silver steel alloy."
 	icon_state = "cobryl"
-	material=MAT_MYTHRIL
+	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL)
 
 /obj/item/weapon/gibtonite
 	name = "Gibtonite ore"
@@ -332,16 +363,18 @@
 
 /obj/item/weapon/coin
 	icon = 'icons/obj/items.dmi'
-	name = "Coin"
+	name = "coin"
+	desc = "Long phased out in favor of galactic credits."
 	icon_state = "coin"
 	flags = FPRINT
 	siemens_coefficient = 1
-	force = 0.0
-	throwforce = 0.0
+	force = 1
+	throwforce = 1
 	w_class = W_CLASS_TINY
 	var/string_attached
 	var/material=MAT_IRON // Ore ID, used with coinbags.
 	var/credits = 0 // How many credits is this coin worth?
+	var/sideup = "heads." //heads, tails or on its side?
 
 /obj/item/weapon/coin/New()
 	. = ..()
@@ -351,76 +384,155 @@
 /obj/item/weapon/coin/recycle(var/datum/materials/rec)
 	if(material==null)
 		return NOT_RECYCLABLE
-	rec.addAmount(material, 0.2) // 5 coins per sheet.
+	rec.addAmount(material, 0.2 * get_material_cc_per_sheet(material)) // 5 coins per sheet.
 	return w_type
 
 /obj/item/weapon/coin/is_screwdriver(var/mob/user)
+	if(user.a_intent == I_HURT)
+		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
+
+/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+	var/matrix/flipit = matrix()
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(5,1)
+	flipit.Invert()
+	flipit.Turn(rand(1,359))
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	flipit.Scale(0.2,1)
+	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (pick(0,1))
+		sideup = "heads-up."
+		flipit.Scale(5,1)
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	else
+		sideup = "tails-up."
+		flipit.Scale(5,1)
+		flipit.Invert()
+		flipit.Turn(rand(1,359))
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+	if (prob(0.1) || rigged)
+		flipit.Scale(0.2,1)
+		animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
+		sideup = "on the side!"
+	if(!thrown)
+		user.visible_message("<span class='notice'>[user] flips [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You flip [src]. It lands [sideup]</span>", \
+							 "<span class='notice'>You hear [src] landing.</span>")
+	else
+		if(!throwing) //coin was thrown and is coming to rest
+			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
+
+/obj/item/weapon/coin/examine(var/mob/user)
+	..()
+	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
+
+/obj/item/weapon/coin/equipped(var/mob/user)
+	..()
+	sideup = "heads-up."
+	transform = null
+
+/obj/item/weapon/coin/attack_self(var/mob/user)
+	coinflip(user, 0)
+
+/obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
+	..()
+	coinflip(user, 1)
 
 /obj/item/weapon/coin/gold
 	material=MAT_GOLD
-	name = "Gold coin"
+	name = "gold coin"
+	desc = "Worth its weight in gold!"
 	icon_state = "coin_gold"
-	credits = 5
+	credits = 0.4
 	melt_temperature=1064+T0C
+	siemens_coefficient = 1.3
 
 /obj/item/weapon/coin/silver
 	material=MAT_SILVER
-	name = "Silver coin"
+	name = "silver coin"
+	desc = "Not worth a lot, but it sure is shiny."
 	icon_state = "coin_silver"
-	credits = 1
+	credits = 0.3
 	melt_temperature=961+T0C
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/diamond
 	material=MAT_DIAMOND
-	name = "Diamond coin"
+	name = "diamond coin"
+	desc = "A girl's second-best friend!"
 	icon_state = "coin_diamond"
-	credits = 25
+	credits = 1
+	siemens_coefficient = 0.1
 
 /obj/item/weapon/coin/iron
 	material=MAT_IRON
-	name = "Iron coin"
+	name = "iron coin"
+	desc = "Practically worthless, even for a coin."
 	icon_state = "coin_iron"
 	credits = 0.01
 	melt_temperature=MELTPOINT_STEEL
+	siemens_coefficient = 1
 
 /obj/item/weapon/coin/plasma
 	material=MAT_PLASMA
-	name = "Solid plasma coin"
+	name = "solid plasma coin"
+	desc = "Not worth a lot, but safer to handle than raw plasma."
 	icon_state = "coin_plasma"
-	credits = 0.1
+	credits = 0.04
 	melt_temperature=MELTPOINT_STEEL+500
+	siemens_coefficient = 0.6
 
 /obj/item/weapon/coin/uranium
 	material=MAT_URANIUM
-	name = "Uranium coin"
+	name = "uranium coin"
+	desc = "A heavy coin that is always warm to the touch."
 	icon_state = "coin_uranium"
-	credits = 25
+	force = 2
+	throwforce = 2
+	credits = 0.2
 	melt_temperature=1070+T0C
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/clown
 	material=MAT_CLOWN
-	name = "Bananaium coin"
+	name = "bananium coin"
+	desc = "A funny, rare coin minted from pure banana essence. Honk!"
 	icon_state = "coin_clown"
-	credits = 1000
+	credits = 10
 	melt_temperature=MELTPOINT_GLASS
+	siemens_coefficient = 0.5
 
 /obj/item/weapon/coin/phazon
 	material=MAT_PHAZON
-	name = "Phazon coin"
+	name = "phazon coin"
 	icon_state = "coin_phazon"
-	credits = 2000
+	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
+
+/obj/item/weapon/coin/phazon/New()
+	siemens_coefficient = rand(0,200) / 100
+	credits = rand(1,1000)
 
 /obj/item/weapon/coin/adamantine
 	material="adamantine"
-	name = "Adamantine coin"
+	name = "adamantine coin"
 	icon_state = "coin_adamantine"
+	desc = "An expensive coin minted long ago from extremely rare, hard, super-conductive metal."
+	force = 3
+	throwforce = 3
+	siemens_coefficient = 3
+	credits = 1000
 
 /obj/item/weapon/coin/mythril
 	material="mythril"
-	name = "Mythril coin"
+	name = "mythril coin"
+	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
 	icon_state = "coin_mythril"
+	credits = 1000
+	siemens_coefficient = 0
 
 /obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )

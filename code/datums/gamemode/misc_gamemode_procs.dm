@@ -18,7 +18,7 @@
 				continue //AFK client
 			if(L.stat)
 				if(L.suiciding)	//Suicider
-					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 					continue //Disconnected client
 				if(L.stat == UNCONSCIOUS)
 					msg += "<b>[L.name]</b> ([L.ckey]), the [L.job] (Dying)\n"
@@ -29,20 +29,20 @@
 
 			continue //Happy connected client
 		for(var/mob/dead/observer/D in mob_list)
-			if(D.mind && (D.mind.original == L || D.mind.current == L))
+			if(D.mind && D.mind.current == L)
 				if(L.stat == DEAD)
 					if(L.suiciding)	//Suicider
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Suicide</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Suicide</b></span>)\n"
 						continue //Disconnected client
 					else
 						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (Dead)\n"
 						continue //Dead mob, ghost abandoned
 				else
 					if(D.can_reenter_corpse)
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>This shouldn't appear.</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>This shouldn't appear.</b></span>)\n"
 						continue //Lolwhat
 					else
-						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<font color='red'><b>Ghosted</b></font>)\n"
+						msg += "<b>[L.name]</b> ([ckey(D.mind.key)]), the [L.job] (<span class='red'><b>Ghosted</b></span>)\n"
 						continue //Ghosted while alive
 
 
@@ -130,9 +130,13 @@
 		if(66 to 79)
 			intercepttext += "<b>Uncharted Space</b></center><BR>"
 			intercepttext += "Congratulations and thank you for participating in the NT 'Frontier' space program! Your station is actively orbiting a high value system far from the nearest support stations. Little is known about your region of space, and the opportunity to encounter the unknown invites greater glory. You are encouraged to elevate security as necessary to protect Nanotrasen assets."
-		if(80 to 100)
+		if(80 to 99)
 			intercepttext += "<b>Black Orbit</b></center><BR>"
 			intercepttext += "As part of a mandatory security protocol, we are required to inform you that as a result of your orbital pattern directly behind an astrological body (oriented from our nearest observatory), your station will be under decreased monitoring and support. It is anticipated that your extreme location and decreased surveillance could pose security risks. Avoid unnecessary risks and attempt to keep your station in one piece."
+		if(100)
+			intercepttext += "<b>Impending Doom</b></center><BR>"
+			intercepttext += "Your station is somehow in the middle of hostile territory, in clear view of any enemy of the corporation. Your likelihood to survive is low, and station destruction is expected and almost inevitable. Secure any sensitive material and neutralize any enemy you will come across. It is important that you at least try to maintain the station.<BR>"
+			intercepttext += "Good luck."
 
 	intercepttext += "</body></html>"
 
@@ -151,7 +155,7 @@
 	var/obj/item/clothing/under/U = H.get_item_by_slot(slot_w_uniform)
 	U.sensor_mode = 0
 
-/proc/equip_wizard(mob/living/carbon/human/wizard_mob)
+/proc/equip_wizard(mob/living/carbon/human/wizard_mob, apprentice = FALSE)
 	if (!istype(wizard_mob))
 		return
 
@@ -161,16 +165,41 @@
 	qdel(wizard_mob.shoes)
 	qdel(wizard_mob.r_store)
 	qdel(wizard_mob.l_store)
-
 	if(!wizard_mob.find_empty_hand_index())
 		wizard_mob.u_equip(wizard_mob.held_items[GRASP_LEFT_HAND])
-
 	wizard_mob.equip_to_slot_or_del(new /obj/item/device/radio/headset(wizard_mob), slot_ears)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(wizard_mob), slot_w_uniform)
 	disable_suit_sensors(wizard_mob)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(wizard_mob), slot_shoes)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+	var/datum/faction/wizard/civilwar/wpf/WPF = find_active_faction_by_type(/datum/faction/wizard/civilwar/wpf)
+	var/datum/faction/wizard/civilwar/wpf/PFW = find_active_faction_by_type(/datum/faction/wizard/civilwar/pfw)
+	if(WPF && PFW)  //Are there wizwar factions?
+		if(WPF.get_member_by_mind(wizard_mob.mind))  //WPF get red
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+		//	S.uses = Sp_BASE_PRICE * 3.5
+		//	S.max_uses = Sp_BASE_PRICE * 3.5
+			wizard_mob.put_in_hands(S)
+		else if(PFW.get_member_by_mind(wizard_mob.mind))  //PFW get blue
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+			wizard_mob.add_spell(new /spell/targeted/absorb)
+			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+		//	S.uses = Sp_BASE_PRICE * 3.5
+		//	S.max_uses = Sp_BASE_PRICE * 3.5
+			wizard_mob.put_in_hands(S)
+		else //An ordinary wizard spawned after the wizwar ruleset was called, this shouldn't happen unless someone forces ragin' mages. Give them normal robes but no absorb spell.
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+			if(!apprentice)
+				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+	else //No wizwar, give them normal robes
+		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
+		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
+		if(!apprentice)
+			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
 	if(wizard_mob.backbag == 2)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 3)
@@ -178,36 +207,32 @@
 	if(wizard_mob.backbag == 4)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
 	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
 //	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(wizard_mob), slot_r_store)
-	wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
+	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
 
 	wizard_mob.make_all_robot_parts_organic()
 
 	// For Vox and plasmadudes.
 	//wizard_mob.species.handle_post_spawn(wizard_mob)
 
-	to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
-	to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
-	wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
+	if(!apprentice)
+		to_chat(wizard_mob, "You will find a list of available spells in your spell book. Choose your magic arsenal carefully.")
+		to_chat(wizard_mob, "In your pockets you will find a teleport scroll. Use it as needed.")
+		wizard_mob.mind.store_memory("<B>Remember:</B> do not forget to prepare your spells.")
 	wizard_mob.update_icons()
 	return 1
 
-/proc/name_wizard(mob/living/carbon/human/wizard_mob)
+/proc/name_wizard(mob/living/carbon/human/wizard_mob, role_name = "Space Wizard")
 	//Allows the wizard to choose a custom name or go with a random one. Spawn 0 so it does not lag the round starting.
 	if(wizard_mob.species && wizard_mob.species.name != "Human")
 		wizard_mob.set_species("Human", 1)
 	var/wizard_name_first = pick(wizard_first)
 	var/wizard_name_second = pick(wizard_second)
-	var/randomname = "[wizard_name_first] [wizard_name_second]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(wizard_mob, "You are a Space Wizard. Would you like to change your name to something else?", "Name change", randomname) as null|text),1,MAX_NAME_LEN)
+	wizard_mob.fully_replace_character_name(wizard_mob.real_name, "[wizard_name_first] [wizard_name_second]")
+	mob_rename_self(wizard_mob, role_name)
 
-		if (!newname)
-			newname = randomname
-
-		wizard_mob.fully_replace_character_name(wizard_mob.real_name, newname)
-	return
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
 	var/static/list/plasmaman_items = list(
@@ -365,72 +390,6 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
-/proc/equip_ninja(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/ninja)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
-
-#define GREET_WEEB "weebgreet"
-/proc/equip_weeaboo(var/mob/living/carbon/human/H)
-	if(!istype(H))
-		return 0
-	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
-
-	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
-	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
-	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
-	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
-
-	H.see_in_dark_override = 8
-
-	var/datum/role/R = H.mind.GetRole(NINJA)
-	if(R)
-		R.Greet(GREET_WEEB)
-
-/proc/name_ninja(var/mob/living/carbon/human/H)
-	if(!isjusthuman(H))
-		H.set_species("Human", 1)
-	var/ninja_title = pick(ninja_titles)
-	var/ninja_name = pick(ninja_names)
-	var/randomname = "[ninja_title] [ninja_name]"
-	spawn(0)
-		var/newname = copytext(sanitize(input(H, "You are an angry Space ninja. Would you like to change your name to something else?", randomname, randomname) as null|text),1,MAX_NAME_LEN)
-
-		if (!newname)
-			newname = randomname
-
-		H.fully_replace_character_name(H.real_name, newname)
-
 /proc/share_syndicate_codephrase(var/mob/living/agent)
 	if(!agent)
 		return 0
@@ -439,13 +398,15 @@
 		return 0
 	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
-		words += "<span class='warning'>Code Phrase: </span>[syndicate_code_phrase]<br>"
-		agent.mind.store_memory("<b>Code Phrase</b>: [syndicate_code_phrase]")
+		var/phrases = syndicate_code_phrase.Join(", ")
+		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
+		agent.mind.store_memory("<b>Code Phrases</b>: [phrases].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code phrase.<br>"
 	if (syndicate_code_response)
-		words += "<span class='warning'>Code Response: </span>[syndicate_code_response]<br>"
-		agent.mind.store_memory("<b>Code Response</b>: [syndicate_code_response]")
+		var/response = syndicate_code_response.Join(", ")
+		words += "<span class='warning'>Code Response: </span>[response].<br>"
+		agent.mind.store_memory("<b>Code Response</b>: [response].")
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 
@@ -457,3 +418,62 @@
 	to_chat(agent,words)
 	return 1
 
+
+
+/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	vox.regenerate_icons()
+
+
+/proc/equip_vox_raider(var/mob/living/carbon/human/H)
+	var/obj/item/device/radio/R = new /obj/item/device/radio/headset/raider
+	R.set_frequency(RAID_FREQ) // new fancy vox raiders radios now incapable of hearing station freq
+	H.equip_to_slot_or_del(R, slot_ears)
+
+	var/obj/item/clothing/under/vox/vox_robes/uni = new /obj/item/clothing/under/vox/vox_robes
+	uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/raider)
+	H.equip_to_slot_or_del(uni, slot_w_uniform)
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/vox, slot_shoes) // REPLACE THESE WITH CODED VOX ALTERNATIVES.
+	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox, slot_gloves) // AS ABOVE.
+
+	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox, slot_wear_mask)
+	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/device/flashlight, slot_r_store)
+
+	var/obj/item/weapon/card/id/syndicate/C = new
+	C.registered_name = H.real_name
+	C.assignment = "Trader"
+	C.UpdateName()
+	C.SetOwnerInfo(H)
+	C.icon_state = "trader"
+	C.access = list(access_syndicate, access_trade)
+	var/obj/item/weapon/storage/wallet/W = new
+	W.handle_item_insertion(C)
+	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
+	H.equip_to_slot_or_del(W, slot_wear_id)
+	return 1

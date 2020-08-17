@@ -22,7 +22,7 @@
 			genesource = "unknown"
 
 /obj/machinery/botany
-	icon = 'icons/obj/hydroponics.dmi'
+	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "hydrotray3"
 	density = 1
 	anchored = 1
@@ -41,13 +41,11 @@
 	var/failed_task = 0
 	var/disk_needs_genes = 0
 	var/time_coeff = 1
-	var/degradation_coeff = 1
 
 /obj/machinery/botany/RefreshParts()
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
 		T += ML.rating
-	degradation_coeff = round(T/2)
 	T = 0
 	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating
@@ -137,7 +135,6 @@
 	icon_state = "traitcopier"
 
 	var/datum/seed/genetics // Currently scanned seed genetic structure.
-	var/degradation = 0     // Increments with each scan, stops allowing gene mods after a certain point.
 
 /obj/machinery/botany/extractor/New()
 	..()
@@ -174,7 +171,6 @@
 	data["geneTags"] = gene_tag_list
 
 	data["activity"] = active
-	data["degradation"] = degradation
 
 	if(loaded_disk)
 		data["disk"] = 1
@@ -254,7 +250,6 @@
 
 		if(loaded_seed && loaded_seed.seed)
 			genetics = loaded_seed.seed
-			degradation = 0
 
 		qdel(loaded_seed)
 		loaded_seed = null
@@ -280,17 +275,10 @@
 		loaded_disk.desc += " The label reads 'gene [href_list["get_gene"]], sampled from [genetics.display_name]'."
 		eject_disk = 1
 
-		degradation += round(rand(20,60)/degradation_coeff)
-		if(degradation >= 100)
-			failed_task = 1
-			genetics = null
-			degradation = 0
-
 	if(href_list["clear_buffer"])
 		if(!genetics)
 			return
 		genetics = null
-		degradation = 0
 	return 1
 
 // Fires an extracted trait into another packet of seeds with a chance
@@ -325,11 +313,6 @@
 
 	data["activity"] = active
 	data["mode"] = mode
-
-	if(loaded_seed)
-		data["degradation"] = loaded_seed.modified
-	else
-		data["degradation"] = 0
 
 	if(loaded_disk && loaded_disk.genes.len)
 		data["disk"] = 1
@@ -383,7 +366,6 @@
 
 		for(var/datum/plantgene/gene in loaded_disk.genes)
 			loaded_seed.seed.apply_gene(gene, mode)
-			loaded_seed.modified += round(rand(5,10)/degradation_coeff)
 
 	else if(href_list["toggle_mode"])
 		switch(mode)

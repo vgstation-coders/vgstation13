@@ -6,7 +6,7 @@
 
 	school = "evocation"
 	charge_max = 600
-	spell_flags = NEEDSCLOTHES
+	spell_flags = NEEDSCLOTHES | IS_HARMFUL
 	invocation = "EI NATH"
 	invocation_type = SpI_SHOUT
 	range = 1

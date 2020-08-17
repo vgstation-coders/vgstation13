@@ -107,8 +107,7 @@
 
 /mob/camera/blob/proc/add_points(var/points)
 	if(points != 0)
-		blob_points = Clamp(blob_points + points, 0, max_blob_points)
-		stat_collection.blob_res_generated += points
+		blob_points = clamp(blob_points + points, 0, max_blob_points)
 	var/number_of_cores = blob_cores.len
 	//Updating the HUD
 	if(hud_used)
@@ -187,7 +186,7 @@
 			rendered = "<font color=\"#EE4000\"><i><span class='game say'>Blob Telepathy, <span class='name'>[name]</span> <a href='byond://?src=\ref[M];follow2=\ref[M];follow=\ref[src]'>(Follow)</a> <span class='message'>[message_a]</span></span></i></font>"
 			M.show_message(rendered, 2)
 
-/mob/camera/blob/emote(var/act,var/m_type=1,var/message = null,var/auto)
+/mob/camera/blob/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	return
 
 /mob/camera/blob/ex_act()
@@ -237,12 +236,10 @@
 			if(newrange > maxjumprange) //to avoid going in an infinite loop
 				break
 
-		// Update on_moved listeners.
-		INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+		lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 		return 0
 
-	// Update on_moved listeners.
-	INVOKE_EVENT(on_moved,list("loc"=NewLoc))
+	lazy_invoke_event(/lazy_event/on_moved, list("mover" = src))
 
 /mob/camera/blob/proc/update_specialblobs()
 	if(client && gui_icons)

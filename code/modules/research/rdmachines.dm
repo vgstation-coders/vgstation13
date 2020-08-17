@@ -42,7 +42,7 @@ var/global/list/rnd_machines = list()
 	icon_state_open = "[base_state]_t"
 
 	if(research_flags & TAKESMATIN && !materials)
-		materials = getFromPool(/datum/materials, src)
+		materials = new /datum/materials(src)
 
 	if(ticker)
 		initialize()
@@ -109,7 +109,7 @@ var/global/list/rnd_machines = list()
 /obj/machinery/r_n_d/proc/update_hacked()
 	return
 
-/obj/machinery/r_n_d/togglePanelOpen(var/item/toggleitem, mob/user)
+/obj/machinery/r_n_d/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(..())
 		if (panel_open && linked_console)
 			linked_console.linked_machines -= src
@@ -125,7 +125,7 @@ var/global/list/rnd_machines = list()
 		return 1
 
 /obj/machinery/r_n_d/crowbarDestroy(mob/user)
-	if(..() == 1)
+	if(..())
 		if (materials)
 			for(var/matID in materials.storage)
 				if (materials.storage[matID] == 0) // No materials of this type
@@ -139,8 +139,8 @@ var/global/list/rnd_machines = list()
 						materials.removeAmount(matID, sheet.amount * sheet.perunit)
 					else
 						qdel(sheet)
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
 /obj/machinery/r_n_d/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (shocked)
@@ -235,7 +235,7 @@ var/global/list/rnd_machines = list()
 		icon_state = "[base_state]"
 		use_power(max(1000, (3750*amount/10)))
 		stack.use(amount)
-		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src.].</span>")
+		to_chat(user, "<span class='notice'>You add [amount] sheet[amount > 1 ? "s":""] to the [src].</span>")
 		icon_state = "[base_state]"
 
 		var/datum/material/material = materials.getMaterial(found)

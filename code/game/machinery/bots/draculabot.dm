@@ -16,7 +16,6 @@
 	health = 40
 	maxhealth = 20
 	req_access = list(access_medical)
-	var/mob/living/carbon/human/target //Only used if emagged
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
@@ -29,6 +28,7 @@
 								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
 	var/obj/item/weapon/reagent_containers/blood/last_bag
+
 
 /obj/machinery/bot/bloodbot/New()
 	..()
@@ -168,40 +168,42 @@
 		visible_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
 		emagged = 1
 		on = 1
+		steps_per = 4 // Gotta go fast
 		update_icon()
 	else
 		locked = 0
 		visible_message("<span class='danger'>[src]'s panel clicks open.</span>", 1)
 
-/obj/machinery/bot/bloodbot/process()
-	if(!on)
-		return
-	if(!emagged) //In a normal situation, the bloodbot just loiters around instead of seeking out targets
-		if(!quiet && prob(5))
-			speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
-		if(!currently_drawing_blood && prob(5) && isturf(loc)) //Wander
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
-			Move(get_step(src, pick(cardinal)))
-	else //First priority: drink an adjacent target. Otherwise, pick a target and move toward it if we have none.
+/obj/machinery/bot/bloodbot/can_path()
+	return !currently_drawing_blood
+
+/obj/machinery/bot/bloodbot/process_bot()
+	// Emagged behaviour
+	if (emagged)
+		if (!target)
+			find_target()
 		if(prob(5))
 			speak(pick("Blaah!","I vant to suck your blood!","I never drink... wine.","The blood is the life.","I must hunt soon!","I hunger!","Death rages.","The night beckons.","Mwa ha ha!"))
 		for(var/mob/living/carbon/human/H in view(1,src))
 			if(H.vessel.has_reagent(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
 				drink(H)
 				return //Dr. Acula is easily distracted. If he finds anything to drink en route to his target he will stop and drain it first.
-		if(target && !target.vessel.get_reagent_amount(BLOOD))
-			target = null
-		if(!target)
-			var/list/possible_targets = list()
-			for(var/mob/living/carbon/human/H in view(7,src))
-				if(H.vessel.get_reagent_amount(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
-					possible_targets += H
-			if(possible_targets.len)
-				target = pick(possible_targets)
-			else
-				return
-		if(target)
-			start_walk_to(get_turf(target),1,0,1)
+		return
+	if(!quiet && prob(5))
+		speak(pick("Donate blood here!","I'm going to want another blood sample.","Give blood so others may live.","Share life. Donate blood.","C'mon! We know you've got it in you!","Hey -- you're somebody's type!"))
+	if(!currently_drawing_blood && prob(5) && isturf(loc)) //Wander
+		set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY))
+		Move(get_step(src, pick(cardinal)))
+
+/obj/machinery/bot/bloodbot/target_selection()
+	if (emagged)
+		var/list/possible_targets = list()
+		for(var/mob/living/carbon/human/H in view(target_chasing_distance,src))
+			if(H.vessel.has_reagent(BLOOD) && !(H.species.anatomy_flags & NO_BLOOD))
+				possible_targets += H
+		if (possible_targets.len)
+			target = pick(possible_targets)
+			process_path() // Let's waste no time
 
 /obj/machinery/bot/bloodbot/proc/drink(mob/living/carbon/human/H)
 	if(!on || !istype(H))
@@ -242,8 +244,10 @@
 	else //Blah! Splash blood on the floor and drink like crazy!
 		if(!Adjacent(H))
 			return
+		if(!H.vessel.has_reagent(BLOOD))
+			return
 		H.vessel.remove_reagent(BLOOD,DANGER_DRINK_RATE)
-		getFromPool(/obj/effect/decal/cleanable/blood, get_turf(src))
+		new /obj/effect/decal/cleanable/blood(get_turf(src))
 		playsound(src, 'sound/effects/splat.ogg', 50, 1)
 		spawn(1 SECONDS)
 			drink(H)

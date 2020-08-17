@@ -55,7 +55,7 @@
 					archeo_turf.archaeo_overlay = "overlay_archaeo[rand(1,3)]"
 					archeo_turf.overlays += archeo_turf.archaeo_overlay
 
-		if(!M.artifact_find && !D.gen_large_artifacts && prob(ARTIFACT_SPAWN_CHANCE))
+		if(!M.artifact_find && D.gen_large_artifacts && prob(ARTIFACT_SPAWN_CHANCE))
 			M.artifact_find = new()
 			SSxenoarch.artifact_spawning_turfs.Add(M)
 

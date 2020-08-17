@@ -18,9 +18,9 @@
 		to_chat(user, "<span class='info'>Station Time: [worldtime2text()]")
 
 /obj/structure/clock/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(do_after(user, src, 3 SECONDS))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			anchored = !anchored
 			update_icon()
 	else

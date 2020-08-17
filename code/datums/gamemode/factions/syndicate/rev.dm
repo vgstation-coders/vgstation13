@@ -11,6 +11,7 @@
 	hud_icons = list("rev-logo", "rev_head-logo")
 	initroletype = /datum/role/revolutionary/leader
 	roletype = /datum/role/revolutionary
+	playlist = "nukesquad"
 
 /datum/faction/revolution/HandleRecruitedMind(var/datum/mind/M)
 	if(M.assigned_role in command_positions)
@@ -104,8 +105,13 @@
 	if(stage <= FACTION_DEFEATED)
 		return
 
-	// -- 2. Are all the heads dead ?
+	// -- 1. Did we get objectives in the first place.
 	var/remaining_targets = objective_holder.objectives.len
+	if (!remaining_targets)
+		forgeObjectives()
+		return FALSE
+
+	// -- 2. Are all the heads dead ?
 	for(var/datum/objective/objective in objective_holder.GetObjectives())
 		if(objective.IsFulfilled())
 			remaining_targets--
@@ -125,7 +131,7 @@
 	if(stage >= FACTION_ENDGAME)
 		var/anyone = FALSE
 		for(var/datum/role/R in members)
-			if(!R.antag.current.stat)
+			if(R.antag.current && !R.antag.current.stat)
 				anyone = TRUE //If one rev is still not incapacitated
 		if(!anyone)
 			stage(FACTION_DEFEATED)
@@ -152,5 +158,6 @@
 	switch (result)
 		if (ALL_HEADS_DEAD)
 			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
+			ticker.revolutionary_victory = 1
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")

@@ -500,7 +500,7 @@
 		/obj/item/weapon/corncob,
 		/obj/item/weapon/bikehorn,
 		/obj/item/weapon/c_tube,
-		/obj/item/weapon/legcuffs/beartrap,
+		/obj/item/weapon/beartrap,
 		/obj/item/weapon/caution,
 		/obj/item/weapon/rack_parts,
 		/obj/item/weapon/caution/cone,
@@ -515,7 +515,6 @@
 		/obj/item/weapon/storage/bag/clipboard,
 		/obj/item/weapon/coin,
 		/obj/item/weapon/coin/gold,
-		/obj/item/weapon/coin/adamantine,
 		/obj/item/weapon/coin/clown,
 		/obj/item/weapon/coin/diamond,
 		/obj/item/weapon/coin/iron,
@@ -588,17 +587,24 @@
 		/obj/item/weapon/switchtool/swiss_army_knife
 		)
 
+/obj/abstract/map/spawner/maint/lowchance
+	name = "low-chance maint spawner"
+	amount = 1
+	chance = 10
+
 /obj/abstract/map/spawner/highrisk
 	name = "high risk spawner"
 	icon_state = "maint"
 	chance = 20
-	to_spawn = list(
+	/* Removed until they get properly converted to virus2 or something
 		/obj/item/weapon/reagent_containers/glass/bottle/epiglottis_virion,
 		/obj/item/weapon/reagent_containers/glass/bottle/flu_virion,
-		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/weapon/reagent_containers/glass/bottle/pierrot_throat,
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/weapon/reagent_containers/glass/bottle/cold,
+	*/
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/weapon/reagent_containers/glass/bottle/magnitis,
 		/obj/item/device/powersink,
 		/obj/item/device/powersink,
 		/obj/item/weapon/gun/projectile/flamethrower/full,
@@ -606,6 +612,17 @@
 		/obj/item/clothing/shoes/magboots/magnificent,
 		/obj/item/weapon/gun/projectile/russian,
 	)
+
+/obj/abstract/map/spawner/floorpill
+	name = "floor pill spawner"
+	icon_state = "maint_pills"
+	chance = 20
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/pill/random/maintenance
+	)
+
+/obj/abstract/map/spawner/floorpill/guaranteed
+	chance = 100
 
 // Space ///////////////////////////////////////////////////////
 
@@ -632,7 +649,7 @@
 		/obj/item/weapon/gun/projectile/silenced,
 		/obj/item/weapon/harpoon,
 		/obj/item/weapon/melee/classic_baton,
-		/obj/item/weapon/pickaxe/plasmacutter,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator,
 		/obj/item/weapon/shield/energy,
 		)
 
@@ -712,7 +729,7 @@
 		/obj/item/weapon/pickaxe/jackhammer,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd,
-		/obj/item/weapon/rcd_ammo,
+		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
 		/obj/item/weapon/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
@@ -840,7 +857,25 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+	qdel(src)
 // Mobs ////////////////////////////////////////////////////////
+
+/obj/abstract/map/spawner/mobs/monkeys
+	name = "monkey spawner"
+	icon_state = "mob_monkey"
+	chance = 50
+	to_spawn = list(
+		/mob/living/carbon/monkey,
+		/mob/living/carbon/monkey/tajara,
+		/mob/living/carbon/monkey/skrell,
+		/mob/living/carbon/monkey/unathi,
+		/mob/living/carbon/monkey/grey,
+		/mob/living/carbon/monkey/mushroom,
+		/mob/living/carbon/monkey/rock,
+		/mob/living/carbon/monkey/diona,
+		/mob/living/carbon/monkey/skellington,
+		/mob/living/carbon/monkey/skellington/plasma)
+
 
 /obj/abstract/map/spawner/mobs/carp
 	name = "carp spawner"
@@ -860,11 +895,7 @@
 	icon_state = "mob_mouse"
 	amount = 2
 	chance = 50
-	to_spawn = list(
-		/mob/living/simple_animal/mouse/brown,
-		/mob/living/simple_animal/mouse/gray,
-		/mob/living/simple_animal/mouse/white,
-		)
+	to_spawn = list(/mob/living/simple_animal/mouse/common)
 
 /obj/abstract/map/spawner/mobs/bear
 	name = "bear spawner"
@@ -1126,14 +1157,14 @@
 		/obj/item/clothing/accessory/medal/gold/heroism,
 		/obj/item/clothing/accessory/storage/webbing,
 		/obj/item/clothing/suit/armor/laserproof,
-		/obj/item/clothing/accessory/holster,
+		/obj/item/clothing/accessory/holster/handgun,
 		/obj/item/clothing/glasses/scanner/night,
 		/obj/item/clothing/head/collectable/petehat,
-		/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/abstract/loadout/soviet_rigsuit,
-		/obj/abstract/loadout/nazi_rigsuit,
+		/obj/item/clothing/suit/space/rig/soviet,
+		/obj/item/clothing/suit/space/rig/nazi,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1201,16 +1232,16 @@
 	/obj/item/clothing/accessory/storage/webbing,
 	/obj/item/clothing/under/sexyclown,
 	/obj/item/clothing/suit/armor/laserproof,
-	/obj/item/clothing/accessory/holster,
+	/obj/item/clothing/accessory/holster/handgun,
 	/obj/item/clothing/head/helmet/siren,
 	/obj/item/clothing/glasses/scanner/night,
 	/obj/item/clothing/head/collectable/petehat,
-	/obj/item/clothing/head/helmet/tactical/HoS/dermal,
+	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/abstract/loadout/soviet_rigsuit,
-	/obj/abstract/loadout/nazi_rigsuit,
-	/obj/abstract/loadout/dredd_gear
+	/obj/item/clothing/suit/space/rig/soviet,
+	/obj/item/clothing/suit/space/rig/nazi,
+	/obj/abstract/spawn_all/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1379,3 +1410,33 @@
 		if (22)
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
+	qdel(src)
+
+// Spawn all in the turf
+/obj/abstract/spawn_all
+	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
+
+/obj/abstract/spawn_all/New()
+	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
+	for (var/thing in to_spawn)
+		new thing(location)
+	qdel(src)
+
+/obj/abstract/spawn_all/dredd_gear
+	to_spawn = list(
+		/obj/item/clothing/under/darkred,
+		/obj/item/clothing/glasses/hud/security,
+		/obj/item/clothing/gloves/combat,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/head/helmet/dredd,
+		/obj/item/clothing/mask/gas/swat,
+		/obj/item/weapon/storage/belt/security,
+		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/weapon/gun/lawgiver,
+	)

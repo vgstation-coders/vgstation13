@@ -30,21 +30,24 @@
 		desc = "An evidence bag containing [I]. [I.desc]"
 		w_class = I.w_class
 	else
+		desc = initial(desc)
+		w_class = initial(w_class)
 		overlays.Cut()
 
 /obj/item/weapon/storage/box/evidence
 	name = "evidence bag box"
 	desc = "A box containing evidence bags."
 	icon_state = "evidencebox"
-	New()
-		new /obj/item/weapon/storage/evidencebag(src)
-		new /obj/item/weapon/storage/evidencebag(src)
-		new /obj/item/weapon/storage/evidencebag(src)
-		new /obj/item/weapon/storage/evidencebag(src)
-		new /obj/item/weapon/storage/evidencebag(src)
-		new /obj/item/weapon/storage/evidencebag(src)
-		..()
-		return
+
+/obj/item/weapon/storage/box/evidence/New()
+	new /obj/item/weapon/storage/evidencebag(src)
+	new /obj/item/weapon/storage/evidencebag(src)
+	new /obj/item/weapon/storage/evidencebag(src)
+	new /obj/item/weapon/storage/evidencebag(src)
+	new /obj/item/weapon/storage/evidencebag(src)
+	new /obj/item/weapon/storage/evidencebag(src)
+	..()
+	return
 
 /obj/item/weapon/f_card
 	name = "finger print card"

@@ -5,6 +5,7 @@ var/global/list/falltempoverlays = list()
 	name = "Time Stop"
 	desc = "This spell temporarily stops time for everybody around you, except for you. The spell lasts 3 seconds, and upgrading its power can further increase the duration."
 	user_type = USER_TYPE_WIZARD
+	specialization = SSUTILITY
 
 	abbreviation = "MS"
 
@@ -12,11 +13,11 @@ var/global/list/falltempoverlays = list()
 
 	selection_type = "range"
 	school = "transmutation"
-	charge_max = 900 // now 2min
+	charge_max = 500 // now 2min
 	invocation = "OMNIA RUINAM"
 	invocation_type = SpI_SHOUT
-	range = 4
-	cooldown_min = 600
+	range = 6
+	cooldown_min = 200
 	cooldown_reduc = 100
 	level_max = list(Sp_TOTAL = 3, Sp_SPEED = 3, Sp_POWER = 3)
 	hud_state = "wiz_timestop"
@@ -69,14 +70,14 @@ var/global/list/falltempoverlays = list()
 		for(i = -x, i <= x, i++)
 			. += "[x],[y]"
 
-/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, var/ignore_timeless = FALSE) //if recharge is started is important for the trigger spells
+/spell/aoe_turf/fall/perform(mob/user = usr, skipcharge = 0, list/target_override, var/ignore_timeless = FALSE, var/ignore_path = null) //if recharge is started is important for the trigger spells
 	if(!holder)
 		set_holder(user) //just in case
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
 		return
-	var/list/targets = choose_targets(user)
+	var/list/targets = target_override || choose_targets(user)
 	if(targets && targets.len)
 		if(prob(the_world_chance))
 			invocation = "ZA WARUDO"
@@ -90,11 +91,11 @@ var/global/list/falltempoverlays = list()
 		if(prob(critfailchance))
 			critfail(targets, user)
 		else
-			cast(targets, user, ignore_timeless)
+			cast(targets, user, ignore_timeless, ignore_path)
 		after_cast(targets) //generates the sparks, smoke, target messages etc.
 		invocation = initial(invocation)
 
-/spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE)
+/spell/aoe_turf/fall/cast(list/targets, mob/user, var/ignore_timeless = FALSE, var/ignore_path)
 	var/turf/ourturf = get_turf(user)
 
 	var/list/potentials = circlerangeturfs(user, range)
@@ -112,18 +113,21 @@ var/global/list/falltempoverlays = list()
 				if(C.mob)
 					C.mob.see_fall()
 
-	INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets))
+	user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		//animate(aoe_underlay, transform = null, time = 2)
-	var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
-	playsound(user, oursound, 100, 0, 0, 0, 0)
+	//var/oursound = (invocation == "ZA WARUDO" ? 'sound/effects/theworld.ogg' :'sound/effects/fall.ogg')
+	//playsound(user, oursound, 100, 0, 0, 0, 0)
 
 	sleepfor = world.time + sleeptime
 	for(var/turf/T in targets)
-		oureffects += getFromPool(/obj/effect/stop/sleeping, T, sleepfor, user.mind, src, invocation == "ZA WARUDO")
+
+		oureffects += new /obj/effect/stop/sleeping(T, sleepfor, user.mind, src, invocation == "ZA WARUDO", ignore_path)
 		for(var/atom/movable/everything in T)
 			if(isliving(everything))
 				var/mob/living/L = everything
+				if(ignore_path && istype(everything,ignore_path))
+					continue
 				if(L == holder)
 					continue
 				if(!ignore_timeless && L.flags & TIMELESS)
@@ -131,8 +135,10 @@ var/global/list/falltempoverlays = list()
 				affected += L
 				invertcolor(L)
 				spawn() recursive_timestop(L)
-				L.playsound_local(L, invocation == "ZA WARUDO" ? 'sound/effects/theworld2.ogg' : 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
+				L.playsound_local(L, 'sound/effects/theworld2.ogg', 100, 0, 0, 0, 0)
 			else
+				if(ignore_path && istype(everything,ignore_path))
+					continue
 				if(!ignore_timeless && everything.flags & TIMELESS)
 					continue
 				spawn() recursive_timestop(everything)
@@ -146,6 +152,7 @@ var/global/list/falltempoverlays = list()
 
 		affected += T
 	return
+
 /spell/aoe_turf/fall/proc/recursive_timestop(var/atom/O, var/ignore_timeless = FALSE)
 	var/list/processing_list = list(O)
 	var/list/processed_list = new/list()
@@ -172,7 +179,7 @@ var/global/list/falltempoverlays = list()
 		sleep(1)
 	//animate(aoe_underlay, transform = aoe_underlay.transform / 50, time = 2)
 	for(var/obj/effect/stop/sleeping/S in oureffects)
-		returnToPool(S)
+		qdel(S)
 		oureffects -= S
 	for(var/atom/everything in affected)
 		everything.appearance = falltempoverlays[everything]
@@ -219,7 +226,7 @@ var/global/list/falltempoverlays = list()
 						0,0,-1,
 						1,1,1)
 
-/proc/timestop(atom/A, var/duration, var/range, var/ignore_timeless = FALSE)
+/proc/timestop(atom/A, var/duration, var/range, var/ignore_timeless = FALSE, var/ignore_path = null)
 	if(!A || !duration)
 		return
 	var/mob/caster = new
@@ -236,5 +243,7 @@ var/global/list/falltempoverlays = list()
 	fall.sleeptime = duration			//for how long
 	caster.forceMove(get_turf(A))
 	spawn()
-		fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)
-		qdel(caster)
+		if(ignore_path)
+			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless, ignore_path = ignore_path)
+		else
+			fall.perform(caster, skipcharge = 1, ignore_timeless = ignore_timeless)

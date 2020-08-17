@@ -49,6 +49,9 @@ var/const/WIRE_BEACON_RX = 256	// beacon ping recv
 	The regulator light is [getRegulatorColor()].<BR>"}
 
 /datum/wires/mulebot/UpdatePulsed(var/index)
+	var/obj/machinery/bot/mulebot/M = holder
+	M = M
+	..()
 	switch(index)
 		if(WIRE_REMOTE_RX,WIRE_REMOTE_TX,WIRE_BEACON_RX)
 			holder.visible_message("<span class='notice'>[bicon(holder)] You hear a radio crackle.</span>")

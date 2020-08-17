@@ -85,8 +85,8 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user)) //No ghosts or mice putting people into the sleeper
 		return
-	var/mob/living/L = O
-	if(!istype(L)|| L == user)
+	var/mob/living/carbon/human/L = O
+	if(!istype(L))
 		return
 
 	L.unlock_from() //We checked above that they can ONLY be buckled to a rollerbed to allow this to happen!
@@ -136,21 +136,11 @@
 
 	add_fingerprint(user)
 
-/obj/machinery/optable/verb/climb_on()
-	set name = "Climb On Table"
-	set category = "Object"
-	set src in oview(1)
-
-	if(usr.isUnconscious() || !ishuman(usr) || usr.locked_to || usr.restrained())
-		return
-
-	take_victim(usr, usr)
-
 /obj/machinery/optable/attackby(obj/item/weapon/W as obj, mob/living/carbon/user as mob)
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 50)
 		if(do_after(user, src, 40))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			switch(rating)
 				if(1)
 					new /obj/item/weapon/stock_parts/scanning_module(src.loc)
@@ -164,7 +154,7 @@
 	if (istype(W, /obj/item/weapon/grab))
 		if(iscarbon(W:affecting))
 			take_victim(W:affecting,usr)
-			returnToPool(W)
+			qdel(W)
 			return
 	if(isrobot(user))
 		return

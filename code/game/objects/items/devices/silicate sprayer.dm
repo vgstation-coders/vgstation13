@@ -13,6 +13,8 @@
 
 	icon = 'icons/obj/device.dmi'
 	icon_state = "silicate sprayer"
+	item_state = "silicate"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 
 	w_class = W_CLASS_SMALL
 	flags = FPRINT | OPENCONTAINER
@@ -134,6 +136,8 @@
 	desc = "An advanced tool used to repair and reinforce windows."
 
 	icon_state = "silicate sprayer advanced"
+	item_state = "advsilicate"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 
 	max_silicate = 100
 	silicate_per_state = 10

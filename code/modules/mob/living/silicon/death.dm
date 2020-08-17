@@ -1,4 +1,4 @@
-/mob/living/silicon/gib()
+/mob/living/silicon/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -6,7 +6,7 @@
 	invisibility = 101
 
 //	anim(target = src, a_icon = 'icons/mob/mob.dmi', /*flick_anim = "gibbed-r"*/, sleeptime = 15)
-	robogibs(loc, viruses)
+	robogibs(loc, virus2)
 
 	dead_mob_list -= src
 	qdel(src)

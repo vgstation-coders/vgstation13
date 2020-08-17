@@ -1,54 +1,89 @@
-#pretending we're C because otherwise ruby/rvm will initialize, even with "language: dm".
-language: rust
-rust:
-- stable
-sudo: false
+language: generic
+os: linux
+dist: bionic
 
 env:
   global:
-  - BYOND_MAJOR="512"
-  - BYOND_MINOR="1453"
-  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation bagelstation test_box test_tiny"
+  - BYOND_MAJOR="513"
+  - BYOND_MINOR="1523"
+  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
-  matrix:
-  - DM_UNIT_TESTS="1"
-  - DM_UNIT_TESTS="0"
 
-cache:
-  directories:
-  - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
-  - $HOME/.cache/pip
-  - $TRAVIS_BUILD_DIR/libvg/target
-  - $HOME/.cargo
-
-addons:
-  apt:
-    packages:
-    - libc6-i386
-    - libgcc1:i386
-    - libstdc++6:i386
-    - moreutils
-
-install:
-- pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
-
-before_script:
-- tools/travis/install-byond.sh
-
-script:
-# Has to use Python 2 instead of 3 because else it won't find colorama.
-- python tools/travis/check_map_files.py maps/
-- find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
-- python tools/changelog/ss13_genchangelog.py html/changelog.html html/changelogs --dry-run
-- source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-- cd libvg
-# --jobs 1 to prevent threading problems with the BYOND crate.
-- cargo test --jobs 1 --verbose
-- cd -
-- tools/travis/build.py
-- cp tools/travis/config/config.txt config/
-- tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
+jobs:
+  include:
+    - name: "Run linters"
+      env:
+        - SPACEMAN_DMM_GIT_TAG="suite-1.5"
+      addons:
+        apt:
+          packages:
+            - python3
+            - python3-pip
+            - python3-setuptools
+            - python3-pil
+      cache:
+        directories:
+          - $HOME/SpacemanDMM
+          - $HOME/.cache/pip
+      install:
+      - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
+      - tools/travis/install_spaceman_dmm.sh dreamchecker
+      script:
+      - python tools/travis/check_map_files.py maps/
+      - python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
+      - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+      - ~/dreamchecker
+    - name: "Compile all maps"
+      env:
+        DM_UNIT_TESTS="0"
+      addons:
+        apt:
+          packages:
+            - libstdc++6:i386
+      cache:
+        directories:
+          - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
+      install:
+        - tools/travis/install-byond.sh
+        - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+      script:
+        - tools/travis/build.py
+    - name: "Compile and run tests"
+      env:
+        DM_UNIT_TESTS="1"
+      addons:
+        mariadb: '10.2'
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - libstdc++6:i386
+            - gcc-multilib
+            - g++-7
+            - g++-7-multilib
+            - rustc
+            - cargo
+            - moreutils
+            - libssl1.1:i386
+            - zlib1g:i386
+      cache:
+        directories:
+          - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
+          - $TRAVIS_BUILD_DIR/libvg/target
+          - $HOME/.cargo
+          - $HOME/libmariadb
+      install:
+        - tools/travis/install-byond.sh
+        - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+        - tools/travis/install_rust_g.sh
+        - cd libvg
+        # --jobs 1 to prevent threading problems with the BYOND crate.
+        - cargo test --jobs 1 --verbose
+        - cd -
+        - tools/travis/build.py
+        - cp tools/travis/config/config.txt config/
+        - tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 
 notifications:
   irc:

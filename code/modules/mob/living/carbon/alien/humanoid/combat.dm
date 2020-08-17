@@ -3,13 +3,13 @@
 		return
 	var/datum/organ/external/affecting = get_organ(ran_zone(zone_sel.selecting))
 	var/disarm_chance_modifier = target.run_armor_check(affecting, "melee", quiet = 1)
-	if(prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
+	if(prob(100-disarm_chance_modifier))
 		do_attack_animation(target, src)
 		playsound(loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
 		target.apply_effect(4, WEAKEN, target.run_armor_check(affecting, "melee"))
 		visible_message("<span class='danger'>[src] has tackled down [target]!</span>")
 
-	else if (prob(80/(disarm_chance_modifier == 0 ? 1 : disarm_chance_modifier)))
+	else if (prob(100-disarm_chance_modifier))
 		do_attack_animation(target, src)
 		playsound(loc, get_unarmed_hit_sound(), 25, 1, -1)
 		target.drop_item()

@@ -195,7 +195,6 @@ var/global/list/narsie_list = list()
 				return 0
 
 			M.cultify()
-			stat_collection.cult_narsie_corpses_fed++
 
 	//ITEM PROCESSING
 		else if (istype(A, /obj/))

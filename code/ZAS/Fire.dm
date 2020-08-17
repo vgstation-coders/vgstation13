@@ -34,11 +34,24 @@ Attach to transfer valve and open. BOOM.
 		//testing("[src] ashifying (BFF)!")
 		ashify()
 
+/atom/proc/burnItselfUp()
+	while(on_fire)
+		var/in_fire = FALSE
+		for(var/obj/effect/fire/F in loc)
+			in_fire = TRUE
+			break
+		if(!in_fire)
+			fire_fuel -= 0.2
+			if(fire_fuel<=0.1)
+				ashify()
+		sleep(2 SECONDS)
+
 /atom/proc/ashify()
 	if(!on_fire)
 		return
 	var/ashtype = ashtype()
 	new ashtype(src.loc)
+	extinguish()
 	qdel(src)
 
 /atom/proc/extinguish()
@@ -52,6 +65,8 @@ Attach to transfer valve and open. BOOM.
 	if(fire_dmi && fire_sprite)
 		fire_overlay = image(fire_dmi,fire_sprite)
 		overlays += fire_overlay
+	spawn()
+		burnItselfUp()
 
 /atom/proc/melt()
 	return //lolidk
@@ -307,7 +322,7 @@ datum/gas_mixture/proc/zburn(var/turf/T, force_burn)
 		var/total_reactants = total_fuel + total_oxygen
 
 		//determine the amount of reactants actually reacting
-		var/used_reactants_ratio = Clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), Clamp(0.2 / total_reactants, 0, 1), 1)
+		var/used_reactants_ratio = clamp(firelevel / zas_settings.Get(/datum/ZAS_Setting/fire_firelevel_multiplier), clamp(0.2 / total_reactants, 0, 1), 1)
 
 		//remove and add gasses as calculated
 		adjust_multi(
@@ -460,10 +475,10 @@ datum/gas_mixture/proc/calculate_firelevel(var/turf/T)
 
 	//Always check these damage procs first if fire damage isn't working. They're probably what's wrong.
 
-	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, "Fire")
-	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, "Fire")
-	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, "Fire")
-	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, "Fire")
-	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, "Fire")
+	apply_damage(2.5*mx*head_exposure, BURN, LIMB_HEAD, 0, 0, used_weapon = "Fire")
+	apply_damage(2.5*mx*chest_exposure, BURN, LIMB_CHEST, 0, 0, used_weapon ="Fire")
+	apply_damage(2.0*mx*groin_exposure, BURN, LIMB_GROIN, 0, 0, used_weapon ="Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_LEFT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.6*mx*legs_exposure, BURN, LIMB_RIGHT_LEG, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_LEFT_ARM, 0, 0, used_weapon = "Fire")
+	apply_damage(0.4*mx*arms_exposure, BURN, LIMB_RIGHT_ARM, 0, 0, used_weapon = "Fire")

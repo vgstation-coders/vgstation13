@@ -112,6 +112,14 @@
 	name = "\improper Discount Dan's Chocolate Bar"
 	icon_state = "danbar"
 
+/obj/item/trash/donitos
+	name = "Donitos"
+	icon_state = "donitos"
+
+/obj/item/trash/donitos_coolranch
+	name = "Donitos Cool Ranch"
+	icon_state = "donitos_coolranch"
+
 /obj/item/trash/danitos
 	name = "\improper Danitos"
 	icon_state = "danitos"
@@ -123,6 +131,24 @@
 /obj/item/trash/plate
 	name = "plate"
 	icon_state = "plate"
+	var/clean = FALSE
+/obj/item/trash/plate/clean
+	icon_state = "cleanplate"
+	desc = "Clean enough to eat on, probably."
+	clean = TRUE
+/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/soap))
+		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+		clean = TRUE
+		update_icon()
+		return TRUE
+	return ..()
+
+/obj/item/trash/plate/update_icon()
+	if(clean)
+		icon_state = "cleanplate"
+	else
+		icon_state = "plate"
 
 /obj/item/trash/pietin
 	name = "pie tin"
@@ -137,10 +163,20 @@
 		qdel(W)
 		qdel(src)
 		user.put_in_hands(I)
+	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
+		if(user.drop_item(W))
+			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			qdel(W)
+			qdel(src)
 
 /obj/item/trash/snack_bowl
 	name = "snack bowl"
 	icon_state	= "snack_bowl"
+
+/obj/item/trash/monkey_bowl
+	name = "monkey bowl"
+	icon_state	= "monkey_bowl"
+	desc = "It was delicia."
 
 /obj/item/trash/pistachios
 	name = "pistachios pack"
@@ -168,6 +204,7 @@
 	icon_state = "kfc_bucket"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()
@@ -188,3 +225,50 @@
 	name = "cyber mannequin pedestale"
 	icon_state = "mannequin_cyber_empty"
 
+/obj/item/trash/byond_box
+	name = "discarded BYOND support package"
+	icon_state = "byond"
+	starting_materials = list(MAT_CARDBOARD = 370)
+	autoignition_temperature = 522
+	w_type=RECYK_MISC
+
+var/list/crushed_cans_cache = list()
+
+/obj/item/trash/soda_cans
+	name = "crushed soda can"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
+	icon = 'icons/obj/drinks.dmi'
+	icon_state = "crushed_can"
+	starting_materials = list(MAT_IRON = 50)
+	w_type=RECYK_METAL
+	force = 0
+	throwforce = 2
+	throw_range = 8
+	throw_speed = 3
+
+/obj/item/trash/soda_cans/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
+	..()
+	if(icon_state)
+		if (!(icon_state in crushed_cans_cache))
+			var/icon/I = icon('icons/obj/drinks.dmi',"crushed_can")
+			var/icon/J = icon('icons/obj/drinks.dmi',"crushed_can-overlay")
+			var/icon/K = icon('icons/obj/drinks.dmi',icon_state)
+			I.Blend(K,ICON_MULTIPLY)
+			I.Blend(J,ICON_OVERLAY)
+			crushed_cans_cache[icon_state] = I
+		icon = icon(crushed_cans_cache[icon_state])
+		item_state = icon_state
+
+
+/obj/item/trash/soda_cans/atom2mapsave()
+	color = name//a bit hacky but hey
+	. = ..()
+
+/obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
+	name = color
+	color = null
+
+/obj/item/trash/slag
+	name = "slag"
+	desc = "Electronics burnt to a crisp"
+	icon_state = "slag"

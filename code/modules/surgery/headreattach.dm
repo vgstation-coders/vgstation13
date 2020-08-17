@@ -26,8 +26,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 
 /datum/surgery_step/head/peel/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -59,8 +58,7 @@
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/shape/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -96,8 +94,7 @@
 		/obj/item/weapon/FixOVein = 80,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/suture/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -140,8 +137,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 60
-	max_duration = 70
+	duration = 6 SECONDS
 
 /datum/surgery_step/head/prepare/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -179,8 +175,7 @@
 
 	can_infect = 0
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/attach/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)
@@ -194,49 +189,17 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached [target]'s head to the body.</span>",	\
 	"<span class='notice'>You have attached [target]'s head to the body.</span>")
-	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
 
-	var/obj/item/organ/external/O = tool
-	if(istype(O))
-		affected.species = O.species
-
-	target.update_body()
-	target.updatehealth()
-	target.UpdateDamageIcon()
 	var/obj/item/organ/external/head/B = tool
 	if (B.brainmob.mind)
 		B.brainmob.mind.transfer_to(target)
 	target.languages = B.brainmob.languages
 	target.default_language = B.brainmob.default_language
 
-	if (B.butchering_drops.len) //Transferring teeth and other stuff
-		for(var/datum/butchering_product/BP in B.butchering_drops) //First, search for all "stuff" inside the head
-
-			var/datum/butchering_product/match = locate(BP.type) in target.butchering_drops //See if our guy already has the same thing in him (shouldn't happen, but who knows)
-			if(istype(match)) //If he does have a duplicate
-				target.butchering_drops -= match //Remove it!
-				qdel(match)
-
-			target.butchering_drops.Add(BP) //Transfer
-			B.butchering_drops.Remove(BP)
-
-	affected.cancer_stage = B.cancer_stage
-
-	if(B.organ_data)
-		var/datum/organ/internal/brain/copied
-		var/datum/organ/internal/I = B.organ_data
-		copied = I.Copy()
-		copied.owner = target
-		target.internal_organs_by_name["brain"] = copied
-		target.internal_organs += copied
-		affected.internal_organs += copied
-
+	affected.attach(B)
 	target.decapitated = null
-
-	user.u_equip(B,1)
-	qdel(B)
 
 
 /datum/surgery_step/head/attach/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -253,8 +216,7 @@
 
 	can_infect = 0
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/head/attach_robot/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/head = target.get_organ(target_zone)
@@ -268,11 +230,10 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("<span class='notice'>[user] has attached \the [tool] to the body.</span>",	\
 	"<span class='notice'>You have attached \the [tool] to the bodies reshaped neck.</span>")
-	affected.attach(tool)
-	target.decapitated = null
-	affected.status = 0
 	affected.amputated = 0
 	affected.destspawn = 0
+	affected.attach(tool)
+	target.decapitated = null
 
 /datum/surgery_step/head/attach_robot/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

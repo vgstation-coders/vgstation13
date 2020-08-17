@@ -16,7 +16,7 @@
 	var/datum/dna2/record/active_record = null
 	var/obj/item/weapon/disk/data/diskette = null //Mostly so the geneticist can steal everything.
 	var/loading = 0 // Nice loading text
-	var/available_species = list("Human","Tajaran","Skrell","Unathi","Grey","Plasmamen","Vox")
+	var/available_species = list("Human","Tajaran","Skrell","Unathi","Grey","Plasmamen","Vox", "Insectoid")
 
 	light_color = LIGHT_COLOR_BLUE
 
@@ -62,7 +62,7 @@
 ///obj/machinery/computer/cloning/getLink(var/idx) - abandoned orphan code that never worked anyway
 //	return (idx >= 1 && idx <= links.len) ? links[idx] : null
 
-/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/link/context)
+/obj/machinery/computer/cloning/linkWith(var/mob/user, var/obj/O, var/list/context)
 	if(istype(O, /obj/machinery/cloning/clonepod))
 		pod1 = O
 		pod1.connected = src

@@ -12,6 +12,7 @@
 	var/accessory_exclusion = DECORATION
 	var/obj/item/clothing/attached_to = null
 	var/image/inv_overlay
+	var/ignoreinteract = FALSE //for accessories that should not come off when attached to object is touched
 
 /obj/item/clothing/accessory/New()
 	..()
@@ -41,6 +42,7 @@
 /obj/item/clothing/accessory/proc/on_removed(mob/user as mob)
 	if(!attached_to)
 		return
+	to_chat(user, "<span class='notice'>You remove [src] from [attached_to].</span>")
 	attached_to.overlays -= inv_overlay
 	attached_to = null
 	forceMove(get_turf(user || src))
@@ -92,7 +94,7 @@
 
 /obj/item/clothing/accessory/tie
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 /obj/item/clothing/accessory/tie/can_attach_to(obj/item/clothing/C)
 	if(istype(C))
@@ -124,7 +126,7 @@
 	_color = "stethoscope"
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = "rustle"
+	toolsounds = list("rustle")
 
 /obj/item/clothing/accessory/stethoscope/attack(mob/living/carbon/human/M, mob/living/user)
 	if(ishuman(M) && isliving(user))
@@ -217,6 +219,19 @@
 /obj/item/clothing/accessory/medal/gold/heroism
 	name = "medal of exceptional heroism"
 	desc = "An extremely rare golden medal awarded only by CentComm. To recieve such a medal is the highest honor and as such, very few exist. This medal is almost never awarded to anybody but commanders."
+
+/obj/item/clothing/accessory/medal/byond
+	name = "\improper BYOND support pin"
+	icon_state = "byond"
+	_color = "byond"
+	desc = "A cheap, but surprisingly rare, plastic pin. Sent to supporters by the BYOND corporation."
+
+/obj/item/clothing/accessory/medal/byond/on_attached(obj/item/clothing/C)
+	..()
+	if(ismob(C.loc))
+		var/mob/living/carbon/human/supporter = C.loc
+		if((supporter.getBrainLoss()) < 5)
+			supporter.adjustBrainLoss(1)
 
 /*
 	Holobadges are worn on the belt or neck, and can be used to show that the holder is an authorized
@@ -337,31 +352,27 @@
 	w_class = W_CLASS_TINY
 	w_type = RECYK_WOOD
 
-/obj/item/clothing/accessory/rad_patch/proc/check_rads(list/arguments)
+/obj/item/clothing/accessory/rad_patch/proc/check_rads(mob/living/carbon/human/user, rads)
 	if(triggered)
 		return
-	var/mob/user = arguments["user"]
-	var/rads = arguments["rads"]
 	rad_absorbed += rads
 
 	if(rad_absorbed > rad_threshold)
 		triggered = TRUE
 		update_icon()
 		to_chat(user, "<span class = 'warning'>You hear \the [src] tick!</span>")
-		user.on_irradiate.Remove(event_key)
-		event_key = null
+
+		user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_attached(obj/item/clothing/C)
 	..()
 	if(ismob(C.loc) && !triggered)
 		var/mob/user = C.loc
-		event_key = user.on_irradiate.Add(src, "check_rads")
+		user.lazy_register_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	if(event_key)
-		user.on_irradiate.Remove(event_key)
-		event_key = null
+	user?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)

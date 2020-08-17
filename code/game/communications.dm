@@ -87,16 +87,7 @@ Frequency range: 1200 to 1600
 Radiochat range: 1441 to 1489 (most devices refuse to be tune to other frequency, even during mapmaking)
 
 Radio:
-1459 - standard radio chat
-1351 - Science
-1353 - Command
-1355 - Medical
-1357 - Engineering
-1359 - Security
-1441 - death squad
-1443 - Confession Intercom
-1349 - Botany, chef, bartender
-1347 - Cargo techs
+Randomized frequencues between 1200 to 1600
 
 Devices:
 1451 - tracking implant
@@ -118,67 +109,6 @@ On the map:
 1453 for engineering access
 1455 for AI access
 */
-
-var/list/radiochannels = list(
-	"Common" = 1459,
-	"AI Private" = 1447,
-	"Deathsquad" = 1441,
-	"Security" = 1359,
-	"Engineering" = 1357,
-	"Command" = 1353,
-	"Medical" = 1355,
-	"Science" = 1351,
-	"Service" = 1349,
-	"Supply" = 1347,
-	"Response Team" = 1345,
-	"Raider" = 1215,
-	"Syndicate" = 1213,
-	"DJ" = 1201
-)
-
-var/list/radiochannelsreverse = list(
-	"1201" = "DJ",
-	"1213" = "Syndicate",
-	"1215" = "Raider",
-	"1345" = "Response Team",
-	"1347" = "Supply",
-	"1349" = "Service",
-	"1351" = "Science",
-	"1355" = "Medical",
-	"1353" = "Command",
-	"1357" = "Engineering",
-	"1359" = "Security",
-	"1441" = "Deathsquad",
-	"1447" = "AI Private",
-	"1459" = "Common"
-)
-
-
-//depenging helpers
-var/const/SUPP_FREQ = 1347 //supply, coloured light brown in chat window
-var/const/SERV_FREQ = 1349 //service, coloured green in chat window
-var/const/DSQUAD_FREQ = 1441 //death squad frequency, coloured grey in chat window
-var/const/RESTEAM_FREQ = 1345 //response team frequency, uses the deathsquad color at the moment.
-var/const/AIPRIV_FREQ = 1447 //AI private, colored magenta in chat window
-var/const/DJ_FREQ = 1201 //Media
-var/const/COMMON_FREQ = 1459
-
-// central command channels, i.e deathsquid & response teams
-var/list/CENT_FREQS = list(1345, 1441)
-
-var/const/COMM_FREQ = 1353 //command, colored gold in chat window
-var/const/REV_FREQ  = 1211
-var/const/SYND_FREQ = 1213
-var/const/RAID_FREQ = 1215 // for raiders
-
-// department channels
-var/const/SEC_FREQ = 1359
-var/const/ENG_FREQ = 1357
-var/const/SCI_FREQ = 1351
-var/const/MED_FREQ = 1355
-var/const/SUP_FREQ = 1347
-var/const/SER_FREQ = 1349
-
 #define TRANSMISSION_WIRE	0
 #define TRANSMISSION_RADIO	1
 
@@ -237,7 +167,7 @@ var/global/datum/controller/radio/radio_controller
 	if(range)
 		start_point = get_turf(source)
 		if(!start_point)
-			returnToPool(signal)
+			qdel(signal)
 			return 0
 
 	if (filter) //here goes some copypasta. It is for optimisation. -rastaf0
@@ -285,7 +215,7 @@ var/global/datum/controller/radio/radio_controller
 	//log_admin("DEBUG: post_signal(source=[source] ([source.x], [source.y], [source.z]),filter=[filter]) frequency=[frequency], N_f=[N_f], N_nf=[N_nf]")
 
 
-	returnToPool(signal)
+	qdel(signal)
 
 /datum/radio_frequency/proc/add_listener(const/obj/device, var/filter)
 	if(!filter) // FIXME
@@ -357,12 +287,7 @@ var/list/pointers = list()
 
 /datum/signal/Destroy()
 	pointers -= "\ref[src]"
-
-/datum/signal/resetVariables()
-	. = ..("data")
-
-	source = null
-	data = list()
+	..()
 
 /datum/signal/proc/copy_from(datum/signal/model)
 	source = model.source
@@ -387,4 +312,4 @@ var/list/pointers = list()
 	for(var/d in data)
 		var/val = data[d]
 		if(istext(val))
-			data[d] = utf8_sanitize(val)
+			data[d] = strip_html_simple(val)

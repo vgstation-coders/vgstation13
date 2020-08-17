@@ -119,7 +119,14 @@ CREATE TABLE client (
     hear_voicesound INTEGER,
     hear_instruments INTEGER,
     ambience_volume INTEGER,
-    credits_volume INTEGER
+    credits_volume INTEGER,
+    antag_objectives INTEGER,
+	typing_indicator INTEGER,
+	mob_chat_on_map INTEGER,
+	max_chat_length INTEGER,
+	obj_chat_on_map INTEGER,
+	no_goonchat_for_obj INTEGER,
+	tgui_fancy INTEGER,
 );
 
 

@@ -24,16 +24,16 @@
 	set category = null
 
 	if(!src.holder)
-		to_chat(src, "<font color='red'>Only Admins may use this command.</font>")
+		to_chat(src, "<span class='red'>Only Admins may use this command.</span>")
 		return
 
 	var/client/target = input(src,"Choose somebody to grant access to the server's runtime logs (permissions expire at the end of each round):","Grant Permissions",null) as null|anything in clients
 	if(!istype(target,/client))
-		to_chat(src, "<font color='red'>Error: giveruntimelog(): Client not found.</font>")
+		to_chat(src, "<span class='red'>Error: giveruntimelog(): Client not found.</span>")
 		return
 
 	target.verbs |= /client/proc/getruntimelog
-	to_chat(target, "<font color='red'>You have been granted access to runtime logs. Please use them responsibly or risk being banned.</font>")
+	to_chat(target, "<span class='red'>You have been granted access to runtime logs. Please use them responsibly or risk being banned.</span>")
 	return
 
 
@@ -87,7 +87,7 @@
 	if( fexists(path) )
 		obtain_log(path, src)
 	else
-		to_chat(src, "<font color='red'>Error: view_txt_log(): File not found/Invalid path([path]).</font>")
+		to_chat(src, "<span class='red'>Error: view_txt_log(): File not found/Invalid path([path]).</span>")
 		return
 	feedback_add_details("admin_verb","VTL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
@@ -102,7 +102,7 @@
 	if( fexists(path) )
 		obtain_log(path, src)
 	else
-		to_chat(src, "<font color='red'>Error: view_atk_log(): File not found/Invalid path([path]).</font>")
+		to_chat(src, "<span class='red'>Error: view_atk_log(): File not found/Invalid path([path]).</span>")
 		return
 	feedback_add_details("admin_verb","SSAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return

@@ -75,7 +75,7 @@
 
 /obj/item/robot_rack/bed/syndie
 	icon_state = "syndie_borgbed_"
-	initial_type = /obj/structure/bed/roller/borg/syndie
+	initial_type = /obj/structure/bed/roller/surgery/borg/syndie
 
 //Ammo racks, they hold/make mags and borgs can attack it with projectile guns to load them.
 /obj/item/robot_rack/ammo

@@ -1,13 +1,18 @@
 datum/event/organ_failure
 	var/severity = 1
 
+/datum/event/organ_failure/can_start(var/list/active_with_role)
+	if(active_with_role["Medical"] > 1)
+		return 30
+	return 0
+
 datum/event/organ_failure/setup()
 	announceWhen = rand(0, 150)
 	endWhen = announceWhen + 1
 	severity = rand(1, 4)
 
 datum/event/organ_failure/announce()
-	biohazard_alert(rand(3,7))
+	biohazard_alert()
 datum/event/organ_failure/start()
 	var/list/candidates = list()	//list of candidate keys
 	for(var/mob/living/carbon/human/G in player_list)

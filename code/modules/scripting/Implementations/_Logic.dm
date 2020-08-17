@@ -118,7 +118,7 @@
 
 		else
 			if(istext(haystack))
-				return utf8_find(haystack, needle, start, end)
+				return findtext_char(haystack, needle, start, end)
 
 // Clone of copytext()
 /proc/docopytext(var/string, var/start = 1, var/end = 0)
@@ -129,7 +129,7 @@
 // Clone of length()
 /proc/smartlength(var/container)
 	if (istext(container))
-		return utf8_len(container)
+		return length_char(container)
 
 	return length(container)
 
@@ -174,7 +174,7 @@ proc/n_str2num(var/string)
 // Clamps N between min and max
 /proc/n_clamp(var/num, var/min = 0, var/max = 1)
 	if(isnum(num) && isnum(min) && isnum(max))
-		return Clamp(num, min, max)
+		return clamp(num, min, max)
 
 // Number shit
 proc/n_num2str(var/num)

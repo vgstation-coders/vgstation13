@@ -1,0 +1,12 @@
+.chord {
+    display: inline;
+    border: 2px solid black;
+    background-color: radial-gradient(lightgrey 1%, grey 70%, black 1%);;
+    padding: 2px;
+    margin: 1px;
+}
+
+.chord.activeChord {
+    background-color: chartreuse;
+    color: black;
+}

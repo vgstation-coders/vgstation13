@@ -24,6 +24,12 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 	)
 	return allowed_items
 
+/mob/living/DblClickOn(atom/A, params)
+	if(is_type_in_list(A,ventcrawl_machinery))
+		src.handle_ventcrawl(A)
+		return TRUE
+	return ..()
+
 /mob/living/AltClickOn(var/atom/A)
 	if(is_type_in_list(A,ventcrawl_machinery))
 		src.handle_ventcrawl(A)

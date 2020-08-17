@@ -5,7 +5,7 @@ var/datum/subsystem/ambientsound/SSambience
 
 /datum/subsystem/ambientsound
 	name = "Ambient Sound"
-	wait = 5 SECONDS
+	wait = 10 SECONDS
 	flags = SS_NO_INIT | SS_BACKGROUND | SS_NO_TICK_CHECK
 	priority = SS_PRIORITY_AMBIENCE
 
@@ -15,6 +15,8 @@ var/datum/subsystem/ambientsound/SSambience
 
 
 /datum/subsystem/ambientsound/fire(resumed = FALSE)
+	if(config.no_ambience)
+		return
 	for (var/client/C in clients)
 		if(C && (C.prefs.toggles & SOUND_AMBIENCE))
 			C.handle_ambience()
@@ -58,9 +60,12 @@ client/proc/handle_ambience()
 			src << sound(last_ambient_noise, 0, 0, CHANNEL_AMBIENCE, prefs.ambience_volume)
 
 /client/proc/get_ambience()
-	var/area/a = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
-	if(a && a.ambient_sounds)
-		return a.ambient_sounds
+	var/list/personal = mob.get_personal_ambience()
+	if(personal.len)
+		return personal
+	var/area/A = get_area(mob)//other overrides can go in here. eg: overrides for weather. or for cult.
+	if(A)
+		return A.get_ambience_list()
 
 /datum/ambience
 	var/length = 0 MINUTES //doesn't need to be 100% accurate. should be in the ballpark though.

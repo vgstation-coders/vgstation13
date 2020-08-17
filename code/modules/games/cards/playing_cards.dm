@@ -19,17 +19,18 @@
 /datum/context_click/cardhand/action(obj/item/used_item, mob/user, params)
 	var/obj/item/toy/cardhand/hand = holder
 	if(!used_item)
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		var/obj/item/toy/singlecard/card = hand.currenthand[index]
 		hand.currenthand.Remove(card)
 		user.put_in_hands(card)
 		hand.update_icon()
 		if(hand.currenthand.len == 1)
 			var/obj/item/toy/singlecard/C = hand.currenthand[1]
-			qdel(hand)
+			user.u_equip(hand, FALSE)
 			user.put_in_inactive_hand(C)
+			qdel(hand)
 	else if(istype(used_item, /obj/item/toy/singlecard))
-		var/index = Clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
+		var/index = clamp(return_clicked_id_by_params(params), 1, hand.currenthand.len)
 		hand.currenthand.Insert(index, used_item) //We put it where we specified
 		hand.update_icon()
 
@@ -205,7 +206,7 @@
 	w_class = W_CLASS_SMALL
 	var/list/currenthand = list()
 	var/obj/item/toy/cards/parentdeck = null
-	var/max_hand_size = 5
+	var/max_hand_size = 7
 
 	var/datum/context_click/cardhand/hand_click
 
@@ -305,6 +306,10 @@
 		cardname = newcardname
 		name = cardname
 	update_icon()
+
+/obj/item/toy/singlecard/Destroy()
+	parentdeck.cards -= src
+	..()
 
 /obj/item/toy/singlecard/update_icon()
 	if(flipped)

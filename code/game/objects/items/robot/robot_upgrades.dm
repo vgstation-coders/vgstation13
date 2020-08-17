@@ -37,10 +37,10 @@
 		if(!(R.modtype in required_modules))
 			to_chat(user, "<span class='warning'>\The [src] will not fit into \the [R.module.name]!</span>")
 			return FAILED_TO_ADD
-	
+
 	if(required_upgrades.len)
 		for(var/U in required_upgrades)
-			if(!U in R.module.upgrades)
+			if(!R.module.upgrades.Find(U))
 				to_chat(user, "<span class='warning'>\The [R] is missing a required upgrade to install [src].</span>")
 				return FAILED_TO_ADD
 
@@ -78,7 +78,7 @@
 
 	if(!HAS_MODULE_QUIRK(R, MODULE_IS_THE_LAW)) //Make them able to *law and *halt
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
-	
+
 	if(R.modtype == HUG_MODULE)
 		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
 		if(C)
@@ -294,7 +294,7 @@
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass)
+	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/disk/botany)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
@@ -396,10 +396,10 @@
 		new_icons += list("Heavy" = "[R.base_icon]-H")
 	if(new_icons.len > 0)
 		R.set_module_sprites(new_icons)
-	
+
 	if(R.modtype == HUG_MODULE)
 		securify_module(R)
-	
+
 	R.module.quirk_flags |= MODULE_HAS_FLASH_RES
 
 /obj/item/borg/upgrade/hos
@@ -417,15 +417,15 @@
 	var/obj/item/weapon/gripper/service/noir/G = locate_component(/obj/item/weapon/gripper/service/noir, R, user)
 	if(!G)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/weapon/gun/projectile/detective/PG = locate_component(/obj/item/weapon/gun/projectile/detective, R, user)
 	if(!PG)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/ammo_storage/speedloader/c38/cyborg/SL = locate_component(/obj/item/ammo_storage/speedloader/c38/cyborg, R, user)
 	if(!SL)
 		return FAILED_TO_ADD
-	
+
 	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R)
 
 	if(T) //Since having a taser isn't necessary for this upgrade, this is fine.
@@ -447,7 +447,7 @@
 
 	if(R.modtype == HUG_MODULE)
 		R.set_module_sprites(list("Head of Silicons" = "peaceborg-hos"))
-	
+
 	R.module.quirk_flags |= MODULE_IS_FLASHPROOF | MODULE_IS_DEFINITIVE
 
 //Supply Stuff

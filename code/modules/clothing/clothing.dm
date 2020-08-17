@@ -1,5 +1,6 @@
 /obj/item/clothing
 	name = "clothing"
+	sterility = 5
 	var/list/species_restricted = null //Only these species can wear this kit.
 	var/wizard_garb = 0 // Wearing this empowers a wizard.
 	var/eyeprot = 0 //for head and eyewear
@@ -14,11 +15,25 @@
 	var/hidecount = 0
 	var/extinguishingProb = 15
 
+//Sound stuff
+//sound_change flags are CLOTHING_SOUND_SCREAM and CLOTHING_SOUND_COUGH
+//sound_priority are CLOTHING_SOUND_[level]_PRIORITY, replace [level] with LOW/MED/HIGH
+	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
+	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
+	var/list/sound_file //The actual files to be played, it will pick from the list
+	var/list/sound_respect_species //Species will not play sounds from clothing
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
 		qdel(A)
 	..()
+
+/obj/item/clothing/CtrlClick(var/mob/user)
+	if(isturf(loc))
+		return ..()
+	if(isliving(user) && !user.incapacitated() && user.Adjacent(src) && accessories.len)
+		removeaccessory()
 
 /obj/item/clothing/examine(mob/user)
 	..()
@@ -47,6 +62,10 @@
 			var/mob/living/carbon/human/H = loc
 			H.update_inv_by_slot(slot_flags)
 		return 1
+	if(I.is_screwdriver(user))
+		for(var/obj/item/clothing/accessory/accessory in priority_accessories())
+			if(accessory.attackby(I, user))
+				return 1
 	for(var/obj/item/clothing/accessory/accessory in priority_accessories())
 		if(accessory.attackby(I, user))
 			return 1
@@ -64,9 +83,15 @@
 					delayed.Add(A)
 				else
 					continue
+		var/ignorecounter = 0
 		for(var/obj/item/clothing/accessory/A in delayed)
-			if(A.on_accessory_interact(user, 1))
+			//if(A.ignoreinteract)
+				//ignorecounter += 1
+			ignorecounter += A.ignoreinteract
+			if(!(A.ignoreinteract) && A.on_accessory_interact(user, 1))
 				return 1
+		if(ignorecounter == accessories.len)
+			return ..()
 		return
 	return ..()
 
@@ -304,6 +329,7 @@
 	icon = 'icons/obj/clothing/gloves.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gloves.dmi', "right_hand" = 'icons/mob/in-hand/right/gloves.dmi')
 	siemens_coefficient = 0.50
+	sterility = 50
 	var/wired = 0
 	var/obj/item/weapon/cell/cell = 0
 	var/clipped = 0
@@ -424,9 +450,6 @@
 /obj/item/clothing/mask/attack_self()
 	togglemask()
 
-/obj/item/clothing/mask/proc/treat_mask_speech(var/datum/speech/speech)
-	return
-
 //Shoes
 /obj/item/clothing/shoes
 	name = "shoes"
@@ -438,16 +461,19 @@
 	var/chaintype = null // Type of chain.
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
+	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
 
 	siemens_coefficient = 0.9
 	body_parts_covered = FEET
 	slot_flags = SLOT_FEET
 	heat_conductivity = SHOE_HEAT_CONDUCTIVITY
 	permeability_coefficient = 0.50
+	sterility = 50
 
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
+	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
 
 /obj/item/clothing/shoes/proc/step_action()
 	stepstaken++
@@ -455,7 +481,7 @@
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				if(stepstaken % 2 == 1)
+				if(stepstaken % modulo_steps == 0)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
 				playsound(H, step_sound, 20, 1)
@@ -463,9 +489,28 @@
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
+/obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
+	if(user.equip_to_slot_if_possible(src, slot_shoes))
+		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
+	else
+		..()
+
 /obj/item/clothing/shoes/clean_blood()
 	. = ..()
 	track_blood = 0
+
+/obj/item/clothing/shoes/proc/togglemagpulse(var/mob/user = usr, var/override = FALSE)
+	if(!override)
+		if(user.isUnconscious())
+			return
+	if((clothing_flags & MAGPULSE))
+		clothing_flags &= ~(NOSLIP | MAGPULSE)
+		slowdown = NO_SLOWDOWN
+		return 0
+	else
+		clothing_flags |= (NOSLIP | MAGPULSE)
+		slowdown = mag_slow
+		return 1
 
 //Suit
 /obj/item/clothing/suit
@@ -482,26 +527,29 @@
 	species_restricted = list("exclude","Muton")
 	siemens_coefficient = 0.9
 	clothing_flags = CANEXTINGUISH
+	sterility = 30
 
 //Spacesuit
 //Note: Everything in modules/clothing/spacesuits should have the entire suit grouped together.
-//      Meaning the the suit is defined directly after the corrisponding helmet. Just like below!
+//      Meaning the the suit is defined directly after the corresponding helmet. Just like below!
 /obj/item/clothing/head/helmet/space
 	name = "Space helmet"
 	icon_state = "space"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment."
-	flags = FPRINT|HIDEHAIRCOMPLETELY
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	item_state = "space"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/spacesuits.dmi', "right_hand" = 'icons/mob/in-hand/right/spacesuits.dmi')
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
-	body_parts_covered = FULL_HEAD|BEARD
+	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
+	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -522,6 +570,8 @@
 	species_restricted = list("exclude","Diona","Muton")
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
+	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under
@@ -543,12 +593,20 @@
 		*/
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
+	var/icon/jersey_overlays
 
-/obj/item/clothing/under/Destroy()
-	for(var/obj/machinery/computer/crew/C in machines)
-		if(C && src in C.tracked)
-			C.tracked -= src
+// Associative list of exact type -> number
+var/list/jersey_numbers = list()
+
+/obj/item/clothing/under/New()
 	..()
+	if(jersey_overlays)
+		var/number = jersey_numbers[type]++ % 99
+		var/first_digit = num2text(round((number / 10) % 10))
+		var/second_digit = num2text(round(number % 10))
+		var/image/jersey_overlay = image(jersey_overlays, src, "[first_digit]-")
+		jersey_overlay.overlays += image(jersey_overlays, src, second_digit)
+		dynamic_overlay["[UNIFORM_LAYER]"] = jersey_overlay
 
 /obj/item/clothing/under/examine(mob/user)
 	..()
@@ -564,6 +622,9 @@
 			mode = "Its vital tracker and tracking beacon appear to be enabled."
 	to_chat(user, "<span class='info'>" + mode + "</span>")
 
+/obj/item/clothing/under/emp_act(severity)
+	..()
+	sensor_mode = pick(0,1,2,3)
 
 /obj/item/clothing/under/proc/set_sensors(mob/user as mob)
 	if(user.incapacitated())
@@ -611,7 +672,6 @@
 	set category = "Object"
 	set src in usr
 	set_sensors(usr)
-	..()
 
 /obj/item/clothing/under/AltClick()
 	if(is_holder_of(usr, src))

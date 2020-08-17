@@ -7,20 +7,22 @@
 
 /datum/dynamic_ruleset/roundstart/traitor
 	name = "Syndicate Traitors"
-	persistent = 1
+	persistent = 0
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
-	weight = 5
+	weight = 1
 	cost = 10
+	var/traitor_threshold = 3
+	var/additional_cost = 5
 	requirements = list(10,10,10,10,10,10,10,10,10,10)
 	high_population_requirement = 10
-	var/autotraitor_cooldown = 450//15 minutes (ticks once per 2 sec)
 
 /datum/dynamic_ruleset/roundstart/traitor/execute()
 	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
-	var/num_traitors = min(round(mode.candidates.len / traitor_scaling_coeff) + 1, candidates.len)
+	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
 	for (var/i = 1 to num_traitors)
 		var/mob/M = pick(candidates)
 		assigned += M
@@ -28,32 +30,34 @@
 		var/datum/role/traitor/newTraitor = new
 		newTraitor.AssignToRole(M.mind,1)
 		newTraitor.Greet(GREET_ROUNDSTART)
+		// Above 3 traitors, we start to cost a bit more.
+		if (i > traitor_threshold)
+			if ((mode.threat > additional_cost))
+				mode.spend_threat(additional_cost)
+			else
+				break
 	return 1
-
-/datum/dynamic_ruleset/roundstart/traitor/process()
-	if (autotraitor_cooldown)
-		autotraitor_cooldown--
-	else
-		autotraitor_cooldown = 450//15 minutes
-		message_admins("Dynamic Mode: Checking if we can turn someone into a traitor...")
-		mode.picking_specific_rule(/datum/dynamic_ruleset/midround/autotraitor)
 
 //////////////////////////////////////////////
 //                                          //
 //               CHANGELINGS                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                          //
 //////////////////////////////////////////////
-/*
+
+
+//note: this can only fire on snowmap
+
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
-	role_category = CHANGELING
-	protected_from_jobs = list("Security Officer", "Warden", "Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	role_category = /datum/role/changeling
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 3
-	cost = 30
+	weight = 1
+	cost = 18
 	requirements = list(80,60,40,20,20,10,10,10,10,10)
 	high_population_requirement = 30
 
@@ -68,7 +72,7 @@
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
-*/
+
 //////////////////////////////////////////////
 //                                          //
 //               VAMPIRES                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,18 +82,19 @@
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = /datum/role/vampire
-	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective", "Head of Security", "Captain")
+	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
-	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(1,1,0,0,0,0,0,0,0,0)
+	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 2
-	cost = 25
-	requirements = list(80,60,50,30,20,10,10,10,10,10)
+	weight = 1
+	cost = 15
+	requirements = list(80,70,60,60,30,20,10,10,10,10)
 	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/vampire/execute()
-	var/num_vampires = min(round(mode.candidates.len / 10) + 1, candidates.len)
+	var/num_vampires = min(round(mode.roundstart_pop_ready / 10) + 1, candidates.len)
 	for (var/i = 1 to num_vampires)
 		var/mob/M = pick(candidates)
 		assigned += M
@@ -98,6 +103,12 @@
 		var/datum/role/vampire/newVampire = new(M.mind, fac, override = TRUE)
 		newVampire.Greet(GREET_MASTER)
 		newVampire.AnnounceObjectives()
+		// Above 2 vampires, we start to cost a bit more.
+		if (i >= 2)
+			if (mode.threat > cost)
+				mode.spend_threat(cost)
+			else
+				break
 	update_faction_icons()
 	return 1
 
@@ -113,9 +124,9 @@
 	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 30
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -154,16 +165,17 @@
 	role_category = /datum/role/wizard
 	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Warden","Head of Security", "Captain")
-	required_enemies = list(3,3,2,2,2,2,2,1,1,0)
-	required_candidates = 1
-	weight = 2
+	required_pop = list(25,25,20,20,20,20,15,15,15,5)
+	required_candidates = 4
+	weight = 1
 	cost = 45
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	persistent = 1
-	var/wizard_cd = 210 //7 minutes
+//	var/wizard_cd = 210 //7 minutes
 	var/total_wizards = 4
 
+/*
 /datum/dynamic_ruleset/roundstart/cwc/process()
 	..()
 	if (wizard_cd)
@@ -181,18 +193,23 @@
 		message_admins("Dynamic Mode: Civil War rages on. Trying to send mage [sent_wizards+1] for [initial(RM.my_fac.name)].")
 		RM.cost = 0
 		mode.picking_specific_rule(RM,TRUE) //forced
+*/
 
 /datum/dynamic_ruleset/roundstart/cwc/execute()
-	var/mob/M = pick(candidates)
-	if (M)
-		assigned += M
-		candidates -= M
-		var/datum/role/wizard/newWizard = new
-		newWizard.AssignToRole(M.mind,1)
-		var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
-		ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
-		WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
-		newWizard.Greet(GREET_MIDROUND)
+	var/datum/faction/wizard/civilwar/wpf/WPF = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/wpf, null, 1)
+	var/datum/faction/wizard/civilwar/wpf/PFW = ticker.mode.CreateFaction(/datum/faction/wizard/civilwar/pfw, null, 1)
+	for(var/wizards_number = 1 to total_wizards)
+		var/mob/M = pick(candidates)
+		if (M)
+			assigned += M
+			candidates -= M
+			var/datum/role/wizard/newWizard = new		
+			newWizard.AssignToRole(M.mind,1)
+			if(wizards_number % 2)
+				WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
+			else
+				PFW.HandleRecruitedRole(newWizard)
+			newWizard.Greet(GREET_MIDROUND)
 	return 1
 
 //////////////////////////////////////////////
@@ -204,19 +221,24 @@
 /datum/dynamic_ruleset/roundstart/bloodcult
 	name = "Blood Cult"
 	role_category = /datum/role/cultist
-	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent")
+	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective",
+							"Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent",
+							"Chief Engineer", "Chief Medical Officer", "Research Director")
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
-	weight = 3
+	weight = 1
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
 	high_population_requirement = 40
 	var/cultist_cap = list(2,2,3,4,4,4,4,4,4,4)
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/bloodcult/ready(var/forced = 0)
 	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
 	required_candidates = cultist_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/bloodcult/execute()
@@ -254,9 +276,9 @@
 	protected_from_jobs = list("Merchant")
 	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Chaplain", "Head of Personnel", "Internal Affairs Agent", "Chaplain")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Chaplain")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
-	weight = 3
+	weight = 1
 	cost = 25
 	requirements = list(90,90,70,40,30,20,10,10,10,10)
 	high_population_requirement = 40
@@ -289,30 +311,32 @@
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
 	role_category = /datum/role/nuclear_operative
-	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
+	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
-	required_candidates = 5
-	weight = 3
+	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
+	required_candidates = 5 //This value is useless, see operative_cap
+	weight = 1
 	cost = 40
-	requirements = list(90,90,90,80,60,40,30,20,10,10)
+	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
 	high_population_requirement = 60
-	var/operative_cap = list(2,2,3,3,4,5,5,5,5,5)
-
+	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
-	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	required_candidates = operative_cap[indice_pop]
+	if (forced)
+		required_candidates = 1
 	. = ..()
 
 /datum/dynamic_ruleset/roundstart/nuclear/execute()
-	//if ready() did its job, candidates should have 5 or more members in it
+	//If ready() did its job, candidates should have 5 or more members in it
 	var/datum/faction/syndicate/nuke_op/nuclear = find_active_faction_by_type(/datum/faction/syndicate/nuke_op)
-	if (!nuclear)
+	if(!nuclear)
 		nuclear = ticker.mode.CreateFaction(/datum/faction/syndicate/nuke_op, null, 1)
 
-	var/indice_pop = min(10,round(mode.roundstart_pop_ready/5)+1)
+	var/indice_pop = min(10, round(mode.roundstart_pop_ready/5) + 1)
 	var/operatives = operative_cap[indice_pop]
+	message_admins("[name]: indice_pop = [indice_pop], operatives = [operatives]")
 	var/leader = 1
 	for(var/operatives_number = 1 to operatives)
 		if(candidates.len <= 0)
@@ -320,21 +344,20 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		if (leader)
+		if(leader)
 			leader = 0
 			var/datum/role/nuclear_operative/leader/newCop = new
-			newCop.AssignToRole(M.mind,1)
+			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
 		else
 			var/datum/role/nuclear_operative/newCop = new
-			newCop.AssignToRole(M.mind,1)
+			newCop.AssignToRole(M.mind, 1)
 			nuclear.HandleRecruitedRole(newCop)
 			newCop.Greet(GREET_ROUNDSTART)
-	for (var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
+	for(var/obj/effect/spawner/newbomb/timer/syndicate/bomb in syndicate_bomb_spawners)
 		bomb.spawnbomb()
 	return 1
-
 
 //////////////////////////////////////////////
 //                                          //
@@ -348,12 +371,13 @@
 	enemy_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Scientist", "Chemist", "Research Director", "Chief Engineer")
 	restricted_from_jobs = list("Security Officer", "Warden","Detective","Head of Security", "Captain", "Research Director", "Chief Engineer")
 	job_priority = list("AI","Cyborg")
-	required_enemies = list(4,4,4,4,4,4,2,2,2,0)
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
-	weight = 2
+	weight = 1
 	cost = 40
-	requirements = list(90,90,90,90,80,70,50,30,20,10)
-	high_population_requirement = 65
+	requirements = list(90,80,70,60,50,40,40,30,30,20)
+	high_population_requirement = 60
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/malf/execute()
 	var/datum/faction/malf/unction = find_active_faction_by_type(/datum/faction/malf)
@@ -403,14 +427,16 @@
 /datum/dynamic_ruleset/roundstart/blob
 	name = "Blob Conglomerate"
 	role_category = /datum/role/blob_overmind/
-	restricted_from_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
+	restricted_from_jobs = list("AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Head of Personnel")
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_enemies = list(3,3,3,3,3,2,1,1,0,0)
+	required_pop = list(30,25,25,20,20,20,15,15,15,15)
 	required_candidates = 1
-	weight = 3
+	weight = 1
+	weekday_rule_boost = list("Tue")
 	cost = 45
 	requirements = list(90,90,90,80,60,40,30,20,10,10)
 	high_population_requirement = 70
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/blob/execute()
 	var/datum/faction/blob_conglomerate/blob_fac = find_active_faction_by_type(/datum/faction/blob_conglomerate)
@@ -443,9 +469,9 @@
 	role_category = null
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 0
-	weight = 3
+	weight = 1
 	cost = 0
 	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 101
@@ -465,15 +491,16 @@
 	name = "Revolution"
 	role_category = /datum/role/revolutionary
 	restricted_from_jobs = list("Merchant","AI", "Cyborg", "Mobile MMI", "Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Head of Personnel", "Chief Engineer", "Chief Medical Officer", "Research Director", "Internal Affairs Agent")
-	enemy_jobs = list("AI", "Cyborg", "Security Officer","Detective","Head of Security", "Captain", "Warden")
-	required_enemies = list(2,2,1,1,1,1,1,0,0,0)
+	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain", "Warden")
+	required_pop = list(25,25,25,20,20,20,15,15,15,15)
 	required_candidates = 3
-	weight = 2
-	cost = 35
+	weight = 1
+	cost = 40
 	requirements = list(101,101,70,40,30,20,10,10,10,10)
 	high_population_requirement = 50
 	delay = 5 MINUTES
 	var/required_heads = 3
+	flags = HIGHLANDER_RULESET
 
 /datum/dynamic_ruleset/roundstart/delayed/revs/ready(var/forced = 0)
 	if (forced)
@@ -518,12 +545,13 @@
 	role_category = /datum/role/grinch
 	restricted_from_jobs = list()
 	enemy_jobs = list()
-	required_enemies = list(0,0,0,0,0,0,0,0,0,0)
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
 	required_candidates = 1
-	weight = 3
+	weight = 1
 	cost = 10
-	requirements = list(40,20,10,10,10,10,10,10,10,10) // So that's not possible to roll it naturally
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
 	high_population_requirement = 10
+	flags = MINOR_RULESET
 
 /datum/dynamic_ruleset/roundstart/grinch/acceptable(var/population=0, var/threat=0)
 	if(grinchstart.len == 0)

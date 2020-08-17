@@ -120,7 +120,7 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/monster/New(loc, var/mob/living/who_we_were)
 	name = who_we_were.name+" cyber horror"
 	desc = "What was once \a [who_we_were], twisted by machine."
-	var/multiplier = who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1
+	var/multiplier = min(3,who_we_were.reagents.has_reagent(MEDNANOBOTS)?who_we_were.reagents.get_reagent_amount(MEDNANOBOTS)/10:1)
 	var/has_robo_icon = FALSE
 	if(isanimal(who_we_were))
 		var/mob/living/simple_animal/S = who_we_were

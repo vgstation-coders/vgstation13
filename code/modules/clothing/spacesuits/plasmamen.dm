@@ -9,7 +9,8 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_restricted = list("Plasmaman")
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE //we can't change, so some resistance is needed
 
@@ -38,7 +39,8 @@
 	desc = "A special containment helmet designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	pressure_resistance = 40 * ONE_ATMOSPHERE
-	species_restricted = list("Plasmaman")
+	species_restricted = list(PLASMAMAN_SHAPED)
+	species_fit = list(PLASMAMAN_SHAPED)
 	eyeprot = 0
 
 	icon_state = "plasmaman_helmet0"
@@ -131,6 +133,15 @@
 	name = "plasmaman botanist helmet"
 	icon_state = "plasmamanBotanist_helmet0"
 	base_state = "plasmamanBotanist_helmet"
+
+/obj/item/clothing/suit/space/plasmaman/librarian
+	name = "plasmaman librarian suit"
+	icon_state = "plasmamanLibrarian_suit"
+
+/obj/item/clothing/head/helmet/space/plasmaman/librarian
+	name = "plasmaman librarian helmet"
+	icon_state = "plasmamanLibrarian_helmet0"
+	base_state = "plasmamanLibrarian_helmet"
 
 /obj/item/clothing/suit/space/plasmaman/chaplain
 	name = "plasmaman chaplain suit"
@@ -364,7 +375,7 @@
 
 //NUKEOPS
 
-/obj/item/clothing/suit/space/plasmaman/nuclear
+/obj/item/clothing/suit/space/plasmaman/nuclear //should just replace this with a ref to the normal suit
 	name = "blood red plasmaman suit"
 	icon_state = "plasmaman_Nukeops"
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
@@ -411,3 +422,28 @@
 	base_state = "plasmamanCult_helmet"
 	desc = "A containment suit designed by the followers of Nar-Sie. It glows menacingly with unearthly flames."
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
+
+//Sith
+
+/obj/item/clothing/suit/space/plasmaman/sith
+	name = "plasmaman Sith suit"
+	icon_state = "plasmaman_sith_suit"
+	item_state = "plasmaman_sith_suit"
+	desc = "A menacing armored suit that protects the wearer from harm, fit for a plasmaman. It appears to permanently seal itself once worn."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+	canremove = 0
+
+/obj/item/clothing/suit/space/plasmaman/sith/acidable()
+	return 0
+
+//Unlike the suit, the helmet can be taken off
+/obj/item/clothing/head/helmet/space/plasmaman/sith
+	name = "plasmaman Sith helmet"
+	icon_state = "plasmaman_sith_helmet0"
+	item_state = "plasmaman_sith_helmet0"
+	base_state = "plasmaman_sith_helmet"
+	desc = "A menacing helmet that protects the wearer from harm, fit for a plasmaman."
+	armor = list(melee = 60, bullet = 50, laser = 50, energy = 50, bomb = 80, bio = 100, rad = 100)
+
+/obj/item/clothing/head/helmet/space/plasmaman/sith/acidable()
+	return 0

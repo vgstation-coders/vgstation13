@@ -11,6 +11,7 @@
 
 #define R_IDEAL_GAS_EQUATION	8.314 //kPa*L/(K*mol)
 #define ONE_ATMOSPHERE		101.325	//kPa
+#define HALF_ATM				ONE_ATMOSPHERE * 0.5
 
 #define MEGAWATT 1000000
 #define TEN_MEGAWATTS 10000000
@@ -52,3 +53,7 @@
 // The highest number supported is a signed 32-bit floating point number.
 // Integers beyond the 24 bit range are represented as single-precision floating points, and thus will lose accuracy beyond the range of +/- 16777216
 #define SHORT_REAL_LIMIT 16777216
+
+#define manhattan_distance(a, b) (abs(a.x - b.x) + abs(a.y - b.y))
+
+#define IS_INT(x) (x == round(x))

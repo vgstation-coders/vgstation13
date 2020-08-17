@@ -19,6 +19,8 @@
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL|ALIEN
 
+	flags = HEAR_ALWAYS | PROXMOVE
+
 	size = SIZE_SMALL
 
 	var/canWearClothes = 1
@@ -39,6 +41,7 @@
 	var/update_muts = 1                        // Monkey gene must be set at start.
 	var/alien = 0								//Used for reagent metabolism.
 	var/canPossess = FALSE
+	var/unmonkey_anim = "monkey2h"
 
 /mob/living/carbon/monkey/New()
 	var/datum/reagents/R = new/datum/reagents(1000)
@@ -79,6 +82,9 @@
 
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
+
+	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
+	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 
 	..()
 	update_icons()
@@ -202,7 +208,7 @@
 	if(canWearClothes)
 		dat +=	"<br><b>Uniform:</b> <A href='?src=\ref[src];item=[slot_w_uniform]'>[makeStrippingButton(uniform)]</A>"
 
-	if(handcuffed)
+	if(handcuffed || mutual_handcuffs)
 		dat += "<BR><B>Handcuffed:</B> <A href='?src=\ref[src];item=[slot_handcuffed]'>Remove</A>"
 
 	dat += {"
@@ -253,7 +259,12 @@
 		damage = (damage/(armor+1))
 	return damage
 
-/mob/living/carbon/monkey/attack_hand(mob/living/carbon/human/M as mob)
+/mob/living/carbon/monkey/attack_hand(var/mob/living/carbon/human/M)
+	var/touch_zone = get_part_from_limb(M.zone_sel.selecting)
+	var/block = 0
+	if (M.check_contact_sterility(HANDS) || check_contact_sterility(touch_zone))//only one side has to wear protective clothing to prevent contact infection
+		block = 1
+	share_contact_diseases(M,block,0)//monkeys can't bleed right now
 
 	switch(M.a_intent)
 		if(I_HELP)
@@ -303,6 +314,14 @@
 						to_chat(src, "<span class='notice'>Somebody jumped your claim on \the [src] and is already controlling it. Try another </span>")
 			else if(!(O.can_reenter_corpse))
 				to_chat(O,"<span class='notice'>While \the [src] may be mindless, you have recently ghosted and thus are not allowed to take over for now.</span>")
+
+
+
+/mob/living/carbon/monkey/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+	if(!..())
+		return
+
+	I.disease_contact(src,get_part_from_limb(def_zone))
 
 /mob/living/carbon/monkey/Stat()
 	..()
@@ -381,7 +400,7 @@
 		gib()
 		return
 	if (stat == DEAD && !client)
-		gibs(loc, viruses)
+		gibs(loc, virus2)
 		qdel(src)
 		return
 
@@ -496,7 +515,7 @@
 			var/turf/T = loc
 			light_amount = T.get_lumcount() * 10
 
-		growth = Clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
+		growth = clamp(growth + rand(1,3)/(10*light_amount>1 ? light_amount : 1),0,100)
 
 		if(growth >= 100)
 			growth = 0
@@ -508,6 +527,10 @@
 			var/matrix/M = adult.transform
 			M.Scale(0)
 			adult.set_species("Mushroom")
+			adult.my_appearance.h_style = "Plump Helmet"
+			adult.my_appearance.r_hair = 60
+			adult.my_appearance.g_hair = 40
+			adult.my_appearance.b_hair = 80
 			for(var/datum/language/L in languages)
 				adult.add_language(L.name)
 
@@ -534,3 +557,9 @@
 	..()
 	if(statpanel("Status"))
 		stat(null, "Growth completing: [growth]%")
+
+/mob/living/carbon/monkey/mushroom/passive_emote()
+	emote(pick("scratch","jump","roll"))
+
+/mob/living/carbon/monkey/can_be_infected()
+	return 1

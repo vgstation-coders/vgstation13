@@ -4,8 +4,13 @@
 	else
 		return I
 
-/mob/living/carbon/proc/strip_time()
+/mob/living/proc/strip_time()
 	return HUMAN_STRIP_DELAY
+
+/mob/living/carbon/strip_time()
+	if(isGoodPickpocket())
+		return HUMAN_STRIP_DELAY/2
+	return ..()
 
 /mob/living/carbon/proc/reversestrip_time()
 	return HUMAN_REVERSESTRIP_DELAY
@@ -16,7 +21,7 @@
 
 	target_item.add_fingerprint(user) //We don't need to be successful in order to get our prints on the thing
 
-	if(do_mob(user, src, strip_time())) //Fails if the user moves, changes held item, is incapacitated, etc.
+	if(do_mob(user, src, strip_time(), 10, 0)) //Fails if the user moves, changes held item, is incapacitated, etc.
 		if(temp_loc != target_item.loc) //This will also fail if the item to strip went anywhere, necessary because do_mob() doesn't keep track of it.
 			return
 
@@ -25,8 +30,11 @@
 
 		drop_from_inventory(target_item)
 		target_item.stripped(src, user)
-		if(pickpocket)
-			user.put_in_hands(target_item)
+		var/mob/living/carbon/human/H = user
+		if(pickpocket == 2) //Search for the glove's storage suits and see if they are full as only the thief storage gloves use this
+			H.place_in_glove_storage(target_item) //Defined in human.dm
+		else if(pickpocket)
+			H.put_in_hands(target_item)
 
 		return TRUE
 
@@ -257,7 +265,7 @@
 		return
 	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s suit sensors.</span>", "<span class='danger'>\The [user] is trying to set your suit sensors!</span>")
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, user.strip_time()))
 		var/newmode = suit.set_sensors(user)
 		if(newmode)
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [newmode] by [user.name] ([user.ckey])</font>")
@@ -272,7 +280,7 @@
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
 	if(user.incapacitated())
 		return
-	
+
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return
@@ -285,6 +293,6 @@
 	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s internals.</span>", "<span class='danger'>\The [user] is trying to set your internals!</span>")
 
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, user.strip_time()))
 		src.toggle_internals(user, T)
 		show_inv(user)

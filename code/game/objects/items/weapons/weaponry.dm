@@ -293,35 +293,6 @@ obj/item/weapon/banhammer/admin
 		parent_borer.chemicals -= 10
 		sleep(10)
 
-/obj/item/weapon/bullwhip
-	name = "bullwhip"
-	desc = "An archaeologist's best friend."
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	icon_state = "bullwhip"
-	item_state = null
-	hitsound = "sound/weapons/whip_crack.ogg"
-	flags = FPRINT
-	slot_flags = SLOT_BELT
-	force = 15
-	throwforce = 0
-	w_class = W_CLASS_MEDIUM
-	attack_verb = list("whips", "lashes", "thrashes", "flagellates", "flogs")
-
-/obj/item/weapon/bullwhip/afterattack(atom/A, mob/living/user)
-	if(user.Adjacent(A))
-		user.delayNextAttack(10)
-		return
-	var/obj/item/projectile/beam/bullwhip/projectile = new(get_turf(user), get_dir(user, A), src, user)
-	var/targeting = "chest"
-	if(user.zone_sel)
-		targeting = user.zone_sel.selecting
-	projectile.launch_at(A,tar_zone = targeting,from = user)
-
-/obj/item/weapon/bullwhip/attack(mob/M, mob/user)
-	sharpness = 1.2	//a whip can only cut things when it is actually whipping
-	..()
-	sharpness = 0
-
 /obj/item/weapon/macuahuitl
 	name = "wooden paddle"
 	desc = "This doesn't look like it's capable of much damage."
@@ -484,7 +455,19 @@ obj/item/weapon/banhammer/admin
 /obj/item/weapon/hammer
 	name = "smithing hammer"
 	desc = "for those with a predeliction for applying concussive maintenance"
+	icon = 'icons/obj/blacksmithing/hammer.dmi'
 	icon_state = "hammer"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hammer_left.dmi', "right_hand" = 'icons/mob/in-hand/right/hammer_right.dmi')
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
+
+/obj/item/weapon/pitchfork
+	name = "pitchfork"
+	desc = "Down with the current state of things!"
+	icon = 'icons/obj/weapons.dmi'
+	icon_state = "pitchspoon"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	force = 8
+	sharpness = 2
+	sharpness = SHARP_TIP
+	hitsound = 'sound/weapons/bladeslice.ogg'

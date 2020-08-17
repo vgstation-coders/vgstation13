@@ -24,7 +24,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	ignoreinvert = 1
 
 /mob/virtualhearer/New(atom/attachedto)
-	AddToProfiler()
 	virtualhearers += src
 	loc = get_turf(attachedto)
 	attached = attachedto
@@ -38,8 +37,6 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	if(!is_type_in_list(attachedto,stationary_hearers))
 		movable_hearers += src
 
-	virtualhearers += src
-
 /mob/virtualhearer/Destroy()
 	..()
 	virtualhearers -= src
@@ -47,14 +44,11 @@ var/list/stationary_hearers = list(	/obj/item/device/radio/intercom,
 	mob_hearers -= attached
 	attached = null
 
-/mob/virtualhearer/resetVariables()
-	return
-
 /mob/virtualhearer/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(attached)
 		attached.Hear(arglist(args))
 	else
-		returnToPool(src)
+		qdel(src)
 
 /mob/virtualhearer/ex_act()
 	return

@@ -43,6 +43,15 @@ var/list/factions_with_hud_icons = list()
 	var/datum/role/leader
 	var/list/faction_scoreboard_data = list()
 	var/stage = FACTION_DORMANT //role_datums_defines.dm
+	var/playlist
+
+	var/minor_victory = FALSE
+
+	// This datum represents all data that is exported to the statistics file at the end of the round.
+	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
+	// See dynamic_stats.dm
+	var/datum/stat/faction/stat_datum = null
+	var/datum/stat/faction/stat_datum_type = /datum/stat/faction
 
 /datum/faction/New()
 	..()
@@ -53,6 +62,8 @@ var/list/factions_with_hud_icons = list()
 
 	for (var/datum/faction/F in factions_with_hud_icons)
 		update_hud_icons()
+
+	stat_datum = new stat_datum_type()
 
 /datum/faction/proc/OnPostSetup()
 	for(var/datum/role/R in members)
@@ -92,15 +103,15 @@ var/list/factions_with_hud_icons = list()
 	if(!newRole.AssignToRole(M))
 		newRole.Drop()
 		return 0
-	return 1
+	return newRole
 
 /datum/faction/proc/HandleRecruitedMind(var/datum/mind/M, var/override = FALSE)
 	for(var/datum/role/R in members)
 		if(R.antag == M)
-			return 0
+			return R
 	if(M.GetRole(late_role))
 		WARNING("Mind already had a role of [late_role]!")
-		return 0
+		return (M.GetRole(late_role))
 	var/datum/role/R = new roletype(null,src,late_role) // Add him to our roles
 	if(!R.AssignToRole(M, override))
 		R.Drop()
@@ -149,7 +160,7 @@ var/list/factions_with_hud_icons = list()
 		for (var/datum/objective/objective in objective_holder.GetObjectives())
 			var/successful = objective.IsFulfilled()
 			objective.extraInfo()
-			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<font color='red'>Fail.</font>"]"
+			score_results += "<B>Objective #[count]</B>: [objective.explanation_text] [successful ? "<font color='green'><B>Success!</B></font>" : "<span class='red'>Fail.</span>"]"
 			feedback_add_details("[ID]_objective","[objective.type]|[successful ? "SUCCESS" : "FAIL"]")
 			count++
 			if (count <= objective_holder.objectives.len)
@@ -158,8 +169,11 @@ var/list/factions_with_hud_icons = list()
 		if (IsSuccessful())
 			score_results += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 			feedback_add_details("[ID]_success","SUCCESS")
+		else if (minor_victory)
+			score_results += "<br><font color='green'><B>\The [name] has achieved a minor victory.</B> [minorVictoryText()]</font>"
+			feedback_add_details("[ID]_success","MINOR_VICTORY")
 		else
-			score_results += "<br><font color='red'><B>\The [name] has failed.</B></font>"
+			score_results += "<br><span class='red'><B>\The [name] has failed.</B></span>"
 			feedback_add_details("[ID]_success","FAIL")
 
 	if(objective_holder.objectives.len > 0)
@@ -175,6 +189,9 @@ var/list/factions_with_hud_icons = list()
 			if (i < members.len)
 				score_results += "<br>"
 		i++
+
+	stat_collection.add_faction(src)
+
 	return score_results
 
 /datum/faction/Topic(href, href_list)
@@ -231,7 +248,10 @@ var/list/factions_with_hud_icons = list()
 			set_security_level("blue")
 			ticker.StopThematic()
 		if(FACTION_ENDGAME) //Faction is nearing victory. Set red alert and play endgame music.
-			ticker.StartThematic("endgame")
+			if(playlist)
+				ticker.StartThematic(playlist)
+			else
+				ticker.StartThematic("endgame")
 			sleep(2 SECONDS)
 			set_security_level("red")
 
@@ -243,6 +263,9 @@ var/list/factions_with_hud_icons = list()
 
 /datum/faction/proc/check_win()
 	return
+
+/datum/faction/proc/minorVictoryText()
+	return ""
 
 //updating every icons at the same time allows their animate() to be sync'd, so we can alternate the one on top without any additional proc calls.
 /proc/update_faction_icons()
@@ -395,6 +418,11 @@ var/list/factions_with_hud_icons = list()
 	ID = CUSTOMSQUAD
 	logo_state = "nano-logo"
 
+/datum/faction/strike_team/forgeObjectives(var/mission)
+	var/datum/objective/custom/c = new /datum/objective/custom
+	c.explanation_text = mission
+	AppendObjective(c)
+
 //________________________________________________
 
 /datum/faction/strike_team/ert
@@ -423,6 +451,8 @@ var/list/factions_with_hud_icons = list()
 	initroletype = /datum/role/syndicate_elite_commando
 	roletype = /datum/role/syndicate_elite_commando
 	logo_state = "elite-logo"
+
+//________________________________________________
 
 /datum/faction/strike_team/custom
 	name = "Custom Strike Team"

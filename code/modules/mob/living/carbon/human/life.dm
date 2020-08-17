@@ -78,7 +78,7 @@ var/global/list/organ_damage_overlays = list(
 	var/fire_alert = 0
 	var/pressure_alert = 0
 	var/prev_gender = null // Debug for plural genders
-	var/temperature_alert = 0
+	var/temperature_alert = TEMP_ALARM_SAFE
 	var/in_stasis = 0
 	var/do_deferred_species_setup=0
 	var/exposedtimenow = 0
@@ -124,6 +124,8 @@ var/global/list/organ_damage_overlays = list(
 	//TODO: seperate this out
 	//Update the current life tick, can be used to e.g. only do something every 4 ticks
 	life_tick++
+	if (life_tick % 2)
+		crawlcounter = 1
 
 	var/datum/gas_mixture/environment = loc.return_air()
 	in_stasis = istype(loc, /obj/structure/closet/body_bag/cryobag) && loc:opened == 0 //Nice runtime operator
@@ -165,7 +167,6 @@ var/global/list/organ_damage_overlays = list(
 		handle_shock()
 		handle_pain()
 		handle_medical_side_effects()
-		handle_equipment()
 	handle_stasis_bag()
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"

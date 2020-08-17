@@ -6,10 +6,7 @@
 	temperature = T0C
 	oxygen = MOLES_O2STANDARD_ARCTIC
 	nitrogen = MOLES_N2STANDARD_ARCTIC
-	light_color = "#e5ffff"
 	can_border_transition = 1
-	dynamic_lighting = 0
-	luminosity = 1
 	var/snowballs = 0
 	var/global/list/icon_state_to_appearance = list()
 
@@ -52,7 +49,7 @@
 			"<span class='notice'>You dig out some snow with \the [W].</span>")
 			extract_snowballs(5, FALSE, user)
 
-/turf/simulated/floor/plating/snow/attack_hand(mob/user as mob)
+/turf/simulated/floor/plating/snow/CtrlClick(mob/user)
 
 	//Reach down and make a snowball
 	if(!snowballs)
@@ -120,14 +117,15 @@
 /turf/simulated/floor/plating/snow/cold
 	temperature = T_ARCTIC
 
-/turf/simulated/floor/plating/snow/permafrost
-	icon_state = "permafrost_full"
-
 /turf/simulated/floor/plating/snow/ice
 	name = "ice"
 	icon_state = "ice"
 
-/turf/simulated/floor/plating/snow/concrete
-	name = "concrete"
+/turf/simulated/floor/engine/concrete
 	icon = 'icons/turf/floors.dmi'
 	icon_state = "concrete"
+	name = "concrete"
+	desc = "Concrete is a substantially stronger, more resistant vehicle surface than asphalt, though it grips somewhat less making it better suited for short, low-speed drives."
+
+/turf/simulated/floor/engine/cement/attackby(obj/item/weapon/C, mob/user)
+	return //no deconstruct

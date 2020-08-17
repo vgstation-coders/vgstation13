@@ -16,6 +16,13 @@
 	active_power_usage = 500
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
+	var/list/allowed_victims = list(
+		/mob/living/carbon/human,
+		/mob/living/carbon/alien/humanoid,
+		/mob/living/carbon/monkey,
+		/mob/living/simple_animal/hostile/alien,
+		)
+
 /********************************************************************
 **   Adding Stock Parts to VV so preconstructed shit has its candy **
 ********************************************************************/
@@ -104,7 +111,7 @@ obj/machinery/gibber/New()
 	if(src.occupant)
 		to_chat(user, "<span class='warning'>[src] is full! Empty it first.</span>")
 		return
-	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
+	if (!( istype(G, /obj/item/weapon/grab)) || !(is_type_in_list(G.affecting, allowed_victims)))
 		to_chat(user, "<span class='warning'>This item is not suitable for [src]!</span>")
 		return
 	if(G.affecting.abiotic(1))
@@ -123,7 +130,7 @@ obj/machinery/gibber/New()
 			M.client.eye = src
 		M.forceMove(src)
 		src.occupant = M
-		returnToPool(G)
+		qdel(G)
 		update_icon()
 
 /obj/machinery/gibber/MouseDropTo(mob/target, mob/user)
@@ -185,7 +192,7 @@ obj/machinery/gibber/New()
 	return
 
 
-/obj/machinery/gibber/proc/startgibbing(mob/user as mob)
+/obj/machinery/gibber/proc/startgibbing(var/mob/user)
 	if(src.operating)
 		return
 	if(!src.occupant)
@@ -206,10 +213,13 @@ obj/machinery/gibber/New()
 	var/totalslabs = src.occupant.size
 
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
+	var/obj/effect/decal/cleanable/blood/gibs/allgibs[totalslabs]
+	playsound(src, 'sound/machines/blender.ogg', 50, 1)
 	for (var/i=1 to totalslabs)
+		//first we spawn the meat
 		var/obj/item/weapon/newmeat
 		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
-			newmeat = new occupant.meat_type(null, occupant)
+			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else
 			newmeat = new occupant.meat_type()
@@ -217,7 +227,24 @@ obj/machinery/gibber/New()
 		if(src.occupant.reagents)
 			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 
+		if (occupant.virus2?.len)
+			for (var/ID in occupant.virus2)
+				var/datum/disease2/disease/D = occupant.virus2[ID]
+				if (D.spread & SPREAD_BLOOD)
+					newmeat.infect_disease2(D,1,"(Gibber, from [occupant], and activated by [user])",0)
+
 		allmeat[i] = newmeat
+
+		//then we spawn the gib splatter
+		var/obj/effect/decal/cleanable/blood/gibs/newgib
+		if (isalien(occupant)||istype(occupant, /mob/living/simple_animal/hostile/alien))//alien get their own custom gibs
+			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,src,ALIEN_FLESH,ALIEN_BLOOD,occupant.virus2,null)
+		else if (ishuman(occupant))
+			var/mob/living/carbon/human/H = occupant
+			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
+		else
+			newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,src,DEFAULT_FLESH,DEFAULT_BLOOD,occupant.virus2,occupant.dna)
+		allgibs[i] = newgib
 
 	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <B>[key_name(user)]</B>" //One shall not simply gib a mob unnoticed!
 	user.attack_log += "\[[time_stamp()]\] Gibbed <B>[key_name(src.occupant)]</B>"
@@ -234,21 +261,18 @@ obj/machinery/gibber/New()
 	qdel(src.occupant)
 	src.occupant = null
 
-	spawn(src.gibtime)
-		var/no_more_gibs = FALSE
+	spawn(src.gibtime)//finally we throw both the meat and gibs in front of the gibber.
+		playsound(src, 'sound/effects/gib2.ogg', 50, 1)
 		operating = 0
 		for (var/i=1 to totalslabs)
 			var/obj/item/meatslab = allmeat[i]
+			var/obj/effect/decal/cleanable/blood/gibs/gib = allgibs[i]
 			var/turf/Tx = locate(src.x - i, src.y, src.z)
 			meatslab.forceMove(src.loc)
-			meatslab.throw_at(Tx,i,3)
-			if (!Tx.density)
-				if(!no_more_gibs)
-					getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx, i)
-			else
-				no_more_gibs = TRUE
-				if(i == 1)
-					getFromPool(/obj/effect/decal/cleanable/blood/gibs, get_turf(src), i)
+			meatslab.throw_at(Tx,i,1)
+			gib.anchored = FALSE
+			gib.forceMove(src.loc)
+			gib.throw_at(Tx,i,1)//will cover hit humans in blood
 		src.operating = 0
 		update_icon()
 
@@ -307,40 +331,43 @@ obj/machinery/gibber/New()
 		if(newmeat==null)
 			return
 
-		newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
+		if (newmeat.reagents)//don't want to try and transfer reagents to bones, diamonds, and other non-meat meats
+			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 
-		if(victim.reagents)
-			victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
+			if(victim.reagents)
+				victim.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from them
 
 		allmeat[i] = newmeat
 
 	victim.attack_log += "\[[time_stamp()]\] Was auto-gibbed by <B>[src]</B>" //One shall not simply gib a mob unnoticed!
 	log_attack("<B>[src]</B> auto-gibbed <B>[key_name(victim)]</B>")
 	victim.death(1)
-	if(ishuman(victim) || ismonkey(victim) || isalien(victim))
+	if(victim.client && (ishuman(victim) || ismonkey(victim) || isalien(victim)))
 		var/obj/item/organ/internal/brain/B = new(src.loc)
 		B.transfer_identity(victim)
 		var/turf/Tx = locate(src.x - 2, src.y, src.z)
 		B.forceMove(src.loc)
-		B.throw_at(Tx,2,3)
-		if(isalien(victim))
-			var/obj/effect/decal/cleanable/blood/gibs/xeno/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs/xeno, Tx)
-			O.New(Tx,2)
-		else
-			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-			O.New(Tx,2)
+		B.throw_at(Tx,2,1)
 	else
 		victim.ghostize(0)
-	qdel(victim)
 	playsound(src, 'sound/effects/gib2.ogg', 50, 1)
 	for (var/i=1 to totalslabs)
 		var/obj/item/meatslab = allmeat[i]
 		var/turf/Tx = locate(src.x - i, src.y, src.z)
 		meatslab.forceMove(src.loc)
-		meatslab.throw_at(Tx,i,3)
+		meatslab.throw_at(Tx,i,1)
+		var/obj/effect/decal/cleanable/blood/gibs/newgib
 		if (!Tx.density)
-			var/obj/effect/decal/cleanable/blood/gibs/O = getFromPool(/obj/effect/decal/cleanable/blood/gibs, Tx)
-			O.New(Tx,i)
+			if (isalien(victim)||istype(occupant, /mob/living/simple_animal/hostile/alien))//alien get their own custom gibs
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs/xeno,get_turf(src),ALIEN_FLESH,ALIEN_BLOOD,victim.virus2,null)
+			else if (ishuman(victim))
+				var/mob/living/carbon/human/H = victim
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),H.species.flesh_color,H.species.blood_color,H.virus2,H.dna)
+			else
+				newgib = spawngib(/obj/effect/decal/cleanable/blood/gibs,get_turf(src),DEFAULT_FLESH,DEFAULT_BLOOD,victim.virus2,victim.dna)
+			newgib.anchored = FALSE
+			newgib.throw_at(Tx,2,1)//will cover hit humans in blood
+	qdel(victim)
 
 /obj/machinery/gibber/npc_tamper_act(mob/living/L)
 	attack_hand(L)

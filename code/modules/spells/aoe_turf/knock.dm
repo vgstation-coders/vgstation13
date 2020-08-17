@@ -3,6 +3,7 @@
 	desc = "This spell opens nearby doors and does not require wizard garb."
 	abbreviation = "KN"
 	user_type = USER_TYPE_WIZARD
+	specialization = SSUTILITY
 
 	school = "transmutation"
 	charge_max = 100

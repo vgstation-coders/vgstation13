@@ -12,6 +12,10 @@ IDs can then be used to cause certain behaviour using the action() proc
 	..()
 	holder = to_hold
 
+/datum/context_click/Destroy()
+	holder = null
+	return ..()
+
 //Gives the id clicked in this particular handler
 /datum/context_click/proc/return_clicked_id(var/x_pos, var/y_pos)
 	return
@@ -22,8 +26,8 @@ IDs can then be used to cause certain behaviour using the action() proc
 		return
 
 	var/list/params_list = params2list(params)
-	var/x_pos_clicked = Clamp(text2num(params_list["icon-x"]), 1, WORLD_ICON_SIZE)
-	var/y_pos_clicked = Clamp(text2num(params_list["icon-y"]), 1, WORLD_ICON_SIZE)
+	var/x_pos_clicked = clamp(text2num(params_list["icon-x"]), 1, WORLD_ICON_SIZE)
+	var/y_pos_clicked = clamp(text2num(params_list["icon-y"]), 1, WORLD_ICON_SIZE)
 
 	return return_clicked_id(x_pos_clicked, y_pos_clicked)
 

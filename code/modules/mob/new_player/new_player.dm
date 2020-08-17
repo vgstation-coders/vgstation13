@@ -5,6 +5,7 @@
 	var/spawning = 0//Referenced when you want to delete the new_player later on in the code.
 	var/totalPlayers = 0		 //Player counts for the Lobby tab
 	var/totalPlayersReady = 0
+	var/pinghop_cd = 0 //last pinged HOP
 
 	flags = NONE
 
@@ -39,19 +40,20 @@
 
 	output += "<p><a href='byond://?src=\ref[src];observe=1'>Observe</A></p>"
 	if(!IsGuestKey(src.key))
-		establish_db_connection()
-
-		if(dbcon.IsConnected())
+		if(SSdbcore.Connect())
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/DBQuery/query = dbcon.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
-			query.Execute()
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \":ckey\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = :ckey)", list("ckey" = "\"[ckey]\""))
+			if(!query.Execute())
+				log_sql("Error fetching poll question: [query.ErrorMsg()]")
+				qdel(query)
+				return
 			var/newpoll = 0
 			while(query.NextRow())
 				newpoll = 1
 				break
-
+			qdel(query)
 			if(newpoll)
 				output += "<p><b><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A> (NEW!)</b></p>"
 			else
@@ -70,7 +72,7 @@
 
 	if(statpanel("Status") && ticker)
 		if (ticker.current_state != GAME_STATE_PREGAME)
-			stat("Station Time:", "[worldtime2text()]")
+			timeStatEntry()
 		if(ticker.hide_mode)
 			stat("Game Mode:", "Secret")
 		else
@@ -101,6 +103,9 @@
 		return 0
 
 	if(!client)
+		return 0
+
+	if(secret_check_one(src,href_list))
 		return 0
 
 	if(href_list["show_preferences"])
@@ -173,6 +178,30 @@
 			return 0
 
 		AttemptLateSpawn(href_list["SelectedJob"])
+		return
+
+	if(href_list["RequestPrio"])
+		if(world.time <= pinghop_cd + 60 SECONDS)
+			to_chat(src, "<span class='warning'>You have recently requested for heads of staff to open priority roles.</span>")
+			return
+		var/count_pings = 0
+		var/list/priority_jobs = job_master.GetPrioritizedJobs()
+		if (priority_jobs.len)
+			to_chat(src, "<span class='warning'>Slots for priority roles are already opened.</span>")
+			return
+		to_chat(src, "<span class='bnotice'>You have requested for heads of staff to open priority roles. Please stand by.</span>")
+		for(var/obj/item/device/pda/pingme in PDAs)
+			if(pingme.cartridge && pingme.cartridge.fax_pings && pingme.cartridge.access_status_display)
+				//This may seem like a strange check, but it's excluding the IAA for only HOP/Cap
+				playsound(pingme, "sound/effects/kirakrik.ogg", 50, 1)
+				var/mob/living/L = get_holder_of_type(pingme,/mob/living)
+				if(L && L.key && L.client)
+					to_chat(L,"[bicon(pingme)] <span class='info'><B>Central Command is requesting guidance on job applications.</B> Please update high priority jobs at labor console.</span>")
+					count_pings++
+				else
+					pingme.visible_message("[bicon(pingme)] *Labor Request*")
+				pinghop_cd = world.time
+		message_admins("[src] ([src.key]) requested high priority jobs. [count_pings ? "[count_pings]" : "<span class='danger'>No</span>"] players heard the request.")
 		return
 
 	if(!ready && href_list["preference"])
@@ -285,8 +314,7 @@
 	observer.name = observer.real_name
 	if(!client.holder && !config.antag_hud_allowed)           // For new ghosts we remove the verb from even showing up if it's not allowed.
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
-	observer.key = key
-	mob_list -= src
+	mind.transfer_to(observer)
 	qdel(src)
 
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
@@ -311,6 +339,10 @@
 	var/datum/job/job = job_master.GetJob(rank)
 	if(job.species_whitelist.len)
 		if(!job.species_whitelist.Find(client.prefs.species))
+			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
+			return 0
+	if(job.species_blacklist.len)
+		if(job.species_blacklist.Find(client.prefs.species))
 			to_chat(src, alert("[rank] is not available for [client.prefs.species]."))
 			return 0
 
@@ -421,10 +453,10 @@
 		speech.name = "Arrivals Announcement Computer"
 		speech.job = "Automated Announcement"
 		speech.as_name = "Arrivals Announcement Computer"
-		speech.frequency = 1459
+		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
-		returnToPool(speech)
+		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
 	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
@@ -444,6 +476,7 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 			dat += "<font color='red'>The station is currently undergoing crew transfer procedures.</font><br>"
 
 	dat += "Choose from the following open positions:<br>"
+	var/countprio = 0
 	for(var/datum/job/job in (job_master.GetPrioritizedJobs() + job_master.GetUnprioritizedJobs()))
 		if(job && IsJobAvailable(job.title))
 			var/active = 0
@@ -454,12 +487,18 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 				if(!job.species_whitelist.Find(client.prefs.species))
 					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
 					continue
+			if(job.species_blacklist.len)
+				if(job.species_blacklist.Find(client.prefs.species))
+					dat += "<s>[job.title] ([job.current_positions]) (Active: [active])</s><br>"
+					continue
 
 			if(job.priority)
+				countprio++
 				dat += "<a style='color:red' href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active]) (Requested!)</a><br>"
 			else
 				dat += "<a href='byond://?src=\ref[src];SelectedJob=[job.title]'>[job.title] ([job.current_positions]) (Active: [active])</a><br>"
-
+	if(!countprio)
+		dat += "<a style='color:red' href='byond://?src=\ref[src];RequestPrio=1'>Request High Priority Jobs</a><br>"
 	dat += "</center>"
 	src << browse(dat, "window=latechoices;size=350x640;can_close=1")
 
@@ -498,7 +537,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if (mind)
 		mind.active = 0 // we wish to transfer the key manually
-		mind.original = new_character
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
 	new_character.name = real_name
@@ -577,7 +615,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	//Handles transferring the mind and key manually.
 	if (mind)
 		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.original = new_character
 		mind.transfer_to(new_character)
 	new_character.key = key //Do this after. For reasons known only to oldcoders.
 	spawn()

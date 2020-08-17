@@ -17,7 +17,7 @@
 	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
-	C.integrity = Clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
+	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
 /obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
@@ -28,7 +28,7 @@
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
-		playsound(user, 'sound/items/Welder.ogg', 100, 1)
+		S.playtoolsound(user, 100)
 		integrity = TELECOMMS_MAX_INTEGRITY
 		to_chat(user, "<span class='notice'>You repair the damaged internals of \the [src].</span>")
 		updateUsrDialog()
@@ -70,7 +70,7 @@
 	dat = {"
 		<p>[temp]</p>
 		<p><b>Power Status:</b> <a href='?src=\ref[src];input=toggle'>[toggled ? "On" : "Off"]</a></p>
-		<p><b>Integrity:</b> [Clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
+		<p><b>Integrity:</b> [clamp(get_integrity(), 0, TELECOMMS_MAX_INTEGRITY)]%</p>
 	"}
 	if(on && toggled)
 		dat += {"
@@ -113,7 +113,7 @@
 	return istype(O,/obj/machinery/telecomms)
 
 /obj/machinery/telecomms/isLinkedWith(var/obj/O)
-	return O != null && O in links
+	return O != null && (O in links)
 
 /obj/machinery/telecomms/getLink(var/idx)
 	return (idx >= 1 && idx <= links.len) ? links[idx] : null
@@ -290,7 +290,7 @@
 // NOTE: A user won't be provided if unlinked by deletion!
 /obj/machinery/telecomms/unlinkFrom(var/mob/user, var/obj/O)
 	var/obj/machinery/telecomms/T=O
-	if(O && O in links)
+	if(O && (O in links))
 		if(T.links)
 			T.links.Remove(src)
 		links.Remove(O)
@@ -302,6 +302,9 @@
 			temp = "<font color = #666633>-% Removed \ref[T] [T.name] from linked entities. %-</font color>"
 		else
 			temp = "<font color = #666633>-% Unable to locate machine to unlink from, try again. %-</font color>"
+
+	for(var/obj/machinery/computer/telecomms/monitor/M in range(25,src))
+		M.notify_unlinked()
 
 /obj/machinery/telecomms/linkWith(var/mob/user, var/mob/O)
 	if(O && O != src && istype(O, /obj/machinery/telecomms))

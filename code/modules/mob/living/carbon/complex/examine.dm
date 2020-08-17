@@ -5,6 +5,9 @@
 	if (src.handcuffed &&  handcuffed.is_visible())
 		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
 
+	if (src.mutual_handcuffs && mutual_handcuffs.is_visible())
+		msg += "It is [bicon(src.handcuffed)] handcuffed!\n"
+
 	for(var/obj/item/I in held_items)
 		if(I.is_visible())
 			if(I.blood_DNA && I.blood_DNA.len)

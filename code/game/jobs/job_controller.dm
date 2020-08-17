@@ -12,7 +12,7 @@ var/global/datum/controller/occupations/job_master
 
 	var/priority_jobs_remaining = 3 //Limit on how many prioritized jobs can be had at once.
 	var/list/labor_consoles = list()
-
+	var/list/assistant_second_chance = list()
 
 /datum/controller/occupations/proc/SetupOccupations(var/faction = "Station")
 	occupations = list()
@@ -48,8 +48,8 @@ var/global/datum/controller/occupations/job_master
 	job_debug.Add(text)
 	return 1
 
-
 /datum/controller/occupations/proc/GetJob(var/rank)
+	RETURN_TYPE(/datum/job)
 	if(!rank)
 		return null
 	for(var/datum/job/J in occupations)
@@ -62,7 +62,7 @@ var/global/datum/controller/occupations/job_master
 /datum/controller/occupations/proc/GetPlayerAltTitle(mob/new_player/player, rank)
 	return player.client.prefs.GetPlayerAltTitle(GetJob(rank))
 
-/datum/controller/occupations/proc/AssignRole(var/mob/new_player/player, var/rank, var/latejoin = 0)
+/datum/controller/occupations/proc/AssignRole(var/mob/new_player/player, var/rank, var/latejoin = 0, var/pref_level = 5) // We assume we got the job we wanted (latejoin, etc).
 	Debug("Running AR, Player: [player], Rank: [rank], LJ: [latejoin]")
 	if(player && player.mind && rank)
 		var/datum/job/job = GetJob(rank)
@@ -78,6 +78,7 @@ var/global/datum/controller/occupations/job_master
 		if((job.current_positions < position_limit) || position_limit == -1)
 			Debug("Player: [player] is now Rank: [rank], JCP:[job.current_positions], JPL:[position_limit]")
 			player.mind.assigned_role = rank
+			player.mind.job_priority = pref_level
 			player.mind.role_alt_title = GetPlayerAltTitle(player, rank)
 
 			unassigned -= player
@@ -89,6 +90,15 @@ var/global/datum/controller/occupations/job_master
 			return 1
 	Debug("AR has failed, Player: [player], Rank: [rank]")
 	return 0
+
+/datum/controller/occupations/proc/UnassignRole(var/mob/new_player/player)
+	Debug("Unassigning role for [player]")
+	var/datum/job/job = GetJob(player.mind.assigned_role)
+	player.mind.assigned_role = ""
+	player.mind.role_alt_title = ""
+	job.current_positions--
+	for(var/obj/machinery/computer/labor/L in labor_consoles)
+		L.updateUsrDialog()
 
 /datum/controller/occupations/proc/FreeRole(var/rank, mob/user)	//making additional slot on the fly
 	var/datum/job/job = GetJob(rank)
@@ -197,23 +207,6 @@ var/global/datum/controller/occupations/job_master
 	unassigned = list()
 	return
 
-
-	///This proc is called before the level loop of DivideOccupations() and will try to select a head, ignoring ALL non-head preferences for every level until it locates a head or runs out of levels to check
-/datum/controller/occupations/proc/FillHeadPosition()
-	for(var/level = 1 to 3)
-		for(var/command_position in command_positions)
-			var/datum/job/job = GetJob(command_position)
-			if(!job)
-				continue
-			var/list/candidates = FindOccupationCandidates(job, level)
-			if(!candidates.len)
-				continue
-			var/mob/new_player/candidate = pick(candidates)
-			if(AssignRole(candidate, command_position))
-				return 1
-	return 0
-
-
 	///This proc is called at the start of the level loop of DivideOccupations() and will cause head jobs to be checked before any other jobs of the same level
 /datum/controller/occupations/proc/CheckHeadPositions(var/level)
 	for(var/command_position in command_positions)
@@ -226,41 +219,6 @@ var/global/datum/controller/occupations/job_master
 		var/mob/new_player/candidate = pick(candidates)
 		AssignRole(candidate, command_position)
 	return
-
-
-/datum/controller/occupations/proc/FillAIPosition()
-	var/ai_selected = 0
-	var/datum/job/job = GetJob("AI")
-	if(!job)
-		return 0
-	if((job.title == "AI") && (config) && (!config.allow_ai))
-		return 0
-
-	for(var/i = job.get_total_positions(), i > 0, i--)
-		for(var/level = 1 to 3)
-			var/list/candidates = list()
-			if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-				candidates = FindOccupationCandidates(job, level, MALF)
-			else
-				candidates = FindOccupationCandidates(job, level)
-			if(candidates.len)
-				var/mob/new_player/candidate = pick(candidates)
-				if(AssignRole(candidate, "AI"))
-					ai_selected++
-					break
-		//Malf NEEDS an AI so force one if we didn't get a player who wanted it
-		if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
-			unassigned = shuffle(unassigned)
-			for(var/mob/new_player/player in unassigned)
-				if(jobban_isbanned(player, "AI"))
-					continue
-				if(AssignRole(player, "AI"))
-					ai_selected++
-					break
-		if(ai_selected)
-			return 1
-		return 0
-
 
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
@@ -295,16 +253,6 @@ var/global/datum/controller/occupations/job_master
 
 	HandleFeedbackGathering()
 
-	//Select one head
-	Debug("DO, Running Head Check")
-	FillHeadPosition()
-	Debug("DO, Head Check end")
-
-	//Check for an AI
-	Debug("DO, Running AI Check")
-	FillAIPosition()
-	Debug("DO, AI Check end")
-
 	//Other jobs are now checked
 	Debug("DO, Running Standard Check")
 
@@ -331,29 +279,6 @@ var/global/datum/controller/occupations/job_master
 	// Hand out random jobs to the people who didn't get any in the last check
 	// Also makes sure that they got their preference correct
 
-	//People who wants to be assistants, sure, go on.
-	var/count = 0
-	var/datum/job/officer = job_master.GetJob("Security Officer")
-	var/datum/job/warden = job_master.GetJob("Warden")
-	var/datum/job/hos = job_master.GetJob("Head of Security")
-	count = (officer.current_positions + warden.current_positions + hos.current_positions)
-	Debug("DO, Running Assistant Check 1")
-	var/datum/job/assist = new /datum/job/assistant()
-	var/datum/job/master_assistant = GetJob("Assistant")
-	var/list/assistant_candidates = FindOccupationCandidates(assist, 3)
-	assistant_candidates = shuffle(assistant_candidates)
-	Debug("AC1, Candidates: [assistant_candidates.len]")
-	for(var/mob/new_player/player in assistant_candidates)
-		Debug("AC1 pass, Player: [player]")
-		if(config.assistantlimit)
-			if(master_assistant.current_positions > (config.assistantratio * count))
-				if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
-					break
-		AssignRole(player, "Assistant")
-		assistant_candidates -= player
-	unassigned |= assistant_candidates
-	Debug("DO, AC1 end")
-
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
@@ -377,22 +302,47 @@ var/global/datum/controller/occupations/job_master
 
 	Debug("DO, Standard Check end")
 
+	// Rejoice, for you have been given a second chance to be a greytider.
 	Debug("DO, Running AC2")
+
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	var/datum/job/master_assistant = GetJob("Assistant")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				count = (officer.current_positions + warden.current_positions + hos.current_positions)
-				if(master_assistant.current_positions > (config.assistantratio * count))
+				if(master_assistant.current_positions-1 > (config.assistantratio * count))
 					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
 						continue
 
+			if(master_assistant.species_blacklist.len && master_assistant.species_blacklist.Find(player.client.prefs.species))
+				to_chat(player, "You have been returned to lobby because your species is blacklisted from assistant.")
+				player.ready = 0
+				unassigned -= player
+				continue //no, you can't evade the blacklist just by not being picked for your available jobs
 			Debug("AC2 Assistant located, Player: [player]")
 			AssignRole(player, "Assistant")
+
+	// Those that got assigned a role, but had assistant higher.
+	for (var/mob/new_player/player in shuffle(player_list))
+		if (player.ckey in assistant_second_chance)
+			var/assistant_pref = assistant_second_chance[player.ckey]
+			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
+			if(master_assistant.current_positions-1 > (config.assistantratio * count))
+				if(count < 5)
+					Debug("AC3: [player] failed the lottery.")
+			if (assistant_pref < player.mind.job_priority)
+				Debug("AC3: got made an assistant as a second chance.")
+				UnassignRole(player)
+				AssignRole(player, "Assistant")
 
 	//For ones returning to lobby
 	for(var/mob/new_player/player in unassigned)
@@ -403,7 +353,7 @@ var/global/datum/controller/occupations/job_master
 	return 1
 
 /datum/controller/occupations/proc/TryAssignJob(var/mob/new_player/player, var/level, var/datum/job/job)
-	if(!job)
+	if(!job || job.is_disabled())
 		return FALSE
 	if(jobban_isbanned(player, job.title))
 		Debug("DO isbanned failed, Player: [player], Job:[job.title]")
@@ -413,24 +363,43 @@ var/global/datum/controller/occupations/job_master
 		return FALSE
 	// If the player wants that job on this level, then try give it to him.
 	if(player.client.prefs.GetJobDepartment(job, level) & job.flag)
-
+		if (job.title == "Assistant" && !CheckAssistantCount(player, level))
+			return FALSE
 		// If the job isn't filled
 		if((job.current_positions < job.spawn_positions) || job.spawn_positions == -1)
 			Debug("DO pass, Player: [player], Level:[level], Job:[job.title]")
-			AssignRole(player, job.title)
+			AssignRole(player, job.title, pref_level = level)
 			return TRUE
+
+// -- Snowflaked proc which can be adjusted to more jobs than assistants if needed.
+/datum/controller/occupations/proc/CheckAssistantCount(var/mob/new_player/player, var/level)
+	//People who wants to be assistants, sure, go on.
+	var/count = 0
+	var/datum/job/officer = job_master.GetJob("Security Officer")
+	var/datum/job/warden = job_master.GetJob("Warden")
+	var/datum/job/hos = job_master.GetJob("Head of Security")
+	count = (officer.current_positions + warden.current_positions + hos.current_positions)
+	Debug("DO, Running Assistant Check 1 for [player]")
+	var/datum/job/master_assistant = GetJob("Assistant")
+	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
+	if(enough_sec && (count < 5))
+		Debug("AC1 failed, not enough sec.")
+		// Does he want anything else...?
+		for (var/datum/job/J in occupations)
+			if (player.client.prefs.GetJobDepartment(J, level) & J.flag)
+				Debug("AC1 failed, but other job slots for [player]. Adding them to the list of backup assistant slots.")
+				assistant_second_chance[player.ckey] = level
+				return FALSE
+		// If this failed, then we don't want anything else, so we'll for the second assistant check.
+		return FALSE
+
+	Debug("DO, AC1 end")
+	return TRUE
 
 /datum/controller/occupations/proc/EquipRank(var/mob/living/carbon/human/H, var/rank, var/joined_late = 0)
 	if(!H)
 		return 0
 	var/datum/job/job = GetJob(rank)
-	if(job)
-		job.equip(H)
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
-
-	H.job = rank
-
 	if(!joined_late)
 		var/obj/S = null
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
@@ -445,16 +414,16 @@ var/global/datum/controller/occupations/job_master
 		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 			H.forceMove(S.loc)
 
-	var/balance_wallet = 0
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
-		balance_wallet = rand(100,250)
+		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
-			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = PLAYER_START_WAGE, security_pref = bank_pref_number)
+			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
+			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -468,6 +437,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 				H.mind.initial_account = M
+				H.mind.initial_wallet_funds = balance_wallet
 
 			// If they're head, give them the account info for their department
 			if(H.mind && job.head_position)
@@ -482,11 +452,19 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 			spawn()
-				to_chat(H, "<span class='danger'>Your bank account number is: <span style='color: black;'>[M.account_number]</span>, your bank account pin is: <span style='color: black;'>[M.remote_access_pin]</span></span>")
-				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span style='color: black;'>$[balance_wallet]</span>, your bank account funds are: <span style='color: black;'>$[balance_bank]</span></span>")
-				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span style='color: black;'>[bank_pref]</span></span>")
+				to_chat(H, "<span class='danger'>Your bank account number is: <span class='darknotice'>[M.account_number]</span>, your bank account pin is: <span class='darknotice'>[M.remote_access_pin]</span></span>")
+				to_chat(H, "<span class='danger'>Your virtual wallet funds are: <span class='darknotice'>$[balance_wallet]</span>, your bank account funds are: <span class='darknotice'>$[balance_bank]</span></span>")
+				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
+
+	if(job)
+		job.equip(H) // Outfit datum.
+	else
+		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
+
+	H.job = rank
+
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
@@ -495,31 +473,6 @@ var/global/datum/controller/occupations/job_master
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
-				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
-					H.species.equip(H)
-			else
-				switch(H.backbag) //BS12 EDIT
-					if(1)
-						if(H.species.survival_gear)
-							H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-					if(2)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(3)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel_norm(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(4)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-				H.species.equip(H)
-
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else
@@ -528,84 +481,10 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	spawnId(H, rank, alt_title, balance_wallet)
-
 	if(job && job.priority)
 		job.priority_reward_equip(H)
 
-	if(!job || !job.no_headset)
-		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
-
-	//Gives glasses to the vision impaired
-	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
-		var/equipped = H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
-		if(equipped != 1)
-			var/obj/item/clothing/glasses/G = H.glasses
-			G.prescription = 1
-//		H.update_icons()
-
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
-	if(!H.check_stand_ability())
-		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
-		W.buckle_mob(H,H)
-
-	if(H.disabilities & ASTHMA)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
-		else
-			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-
 	return 1
-
-
-/datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, rank, title, wallet_funds=0)
-	if(!H)
-		return 0
-	var/obj/item/weapon/card/id/C = null
-
-	var/datum/job/job = null
-	for(var/datum/job/J in occupations)
-		if(J.title == rank)
-			job = J
-			break
-
-	if(!job || !job.no_pda)
-		H.equip_or_collect(new job.pdatype(H), job.pdaslot)
-
-	if(job)
-		if(job.no_id)
-			return
-		else
-			C = new job.idtype(H)
-			C.access = job.get_access()
-	else
-		C = new /obj/item/weapon/card/id(H)
-
-	if(C)
-		C.registered_name = H.real_name
-		C.rank = rank
-		C.assignment = title ? title : rank
-		C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-
-		//put the player's account number onto the ID
-		if(H.mind && H.mind.initial_account)
-			C.associated_account_number = H.mind.initial_account.account_number
-
-		H.equip_or_collect(C, slot_wear_id)
-
-		if(C.virtual_wallet)
-			C.update_virtual_wallet(wallet_funds)
-
-	if(locate(/obj/item/device/pda,H))
-		var/obj/item/device/pda/pda = locate(/obj/item/device/pda,H)
-		pda.owner = H.real_name
-		pda.ownjob = C.assignment
-		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
-	H.update_inv_belt()
-	H.update_inv_wear_id()
-	return 1
-
-
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
 	if(!config.load_jobs_from_txt)

@@ -111,6 +111,7 @@
 
 /obj/structure/falsewall/closed
 	density = 1
+	opacity = 1
 
 /obj/structure/falsewall/New()
 	..()
@@ -222,14 +223,6 @@
 			T = get_turf(src)
 			T.attackby(W,user)
 		qdel(src)
-
-/obj/structure/falsewall/update_icon()//Calling icon_update will refresh the smoothwalls if it's closed, otherwise it will make sure the icon is correct if it's open
-	..()
-	if(density)
-		icon_state = "[mineral]0"
-		src.relativewall()
-	else
-		icon_state = "[mineral]fwall_open"
 
 /*
  * False R-Walls
@@ -392,6 +385,15 @@
 	desc = "A wall made of colorful plastic blocks attached together."
 	icon_state = ""
 	mineral = "plastic"
+
+/obj/structure/falsewall/gingerbread
+	name = "gingerbread wall"
+	desc = "Extremely stale and generally unappetizing."
+	icon_state = ""
+	mineral = "gingerbread"
+	density = 1
+	opacity = 1
+	anchored = 1
 
 //-----------wtf?-----------start
 /obj/structure/falsewall/clown

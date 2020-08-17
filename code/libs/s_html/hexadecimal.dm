@@ -17,12 +17,11 @@ proc/hex2num(hex)
 
 	if(!istext(hex))
 		CRASH("hex2num not given a hexadecimal string argument (user error)")
-		return
 
 	var/num = 0
 	var/power = 0
 
-	for(var/i = lentext(hex), i > 0, i--)
+	for(var/i = length(hex), i > 0, i--)
 		var/char = copytext(hex, i, i+1) //extract hexadecimal character from string
 		switch(char)
 			if("0")
@@ -47,7 +46,6 @@ proc/hex2num(hex)
 
 			else
 				CRASH("hex2num given non-hexadecimal string (user error)")
-				return
 
 		power++
 

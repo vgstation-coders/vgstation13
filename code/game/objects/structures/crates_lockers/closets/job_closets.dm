@@ -20,9 +20,11 @@
 		/obj/item/clothing/head/hairflower,
 		/obj/item/clothing/under/sl_suit = 2,
 		/obj/item/clothing/under/rank/bartender = 2,
+		/obj/item/clothing/under/rank/btc_bartender = 2,
 		/obj/item/clothing/under/dress/dress_saloon,
 		/obj/item/clothing/suit/wcoat = 2,
 		/obj/item/clothing/shoes/black = 2,
+		/obj/item/clothing/shoes/purplepumps = 2,
 		/obj/item/clothing/monkeyclothes = 2,
 		/obj/item/weapon/reagent_containers/food/drinks/coloring,
 	)

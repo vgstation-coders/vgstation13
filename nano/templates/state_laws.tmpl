@@ -1,0 +1,97 @@
+<div class="item">
+    <div class="itemLabel">Mode:</div>
+        <div class="itemContent">
+            {{:helper.link("Toggle mode", "gear", {"ui_key": "state_laws", "toggle_mode": 1}, null, 'floatRight')}}
+            {{if data.freeform}}
+                Freeform
+            {{else}}
+                Standard
+            {{/if}}
+        </div>
+    </div>
+</div>
+<div class="item">
+    <div class="statusDisplay">
+    {{if data.freeform}}
+        <span class="red"><b>LYING ABOUT YOUR LAWS MAY BE AGAINST YOUR LAWSET. DO NOT LIE UNLESS YOU ARE CERTAIN YOUR LAWSET OR CIRCUMSTANCES PERMIT IT.</b></span>
+        <br><br>
+        Examples of this are Syndicate subversion (emag) and lawsets that do not force you to serve carbons,
+        such as Corporate (but you'd better have a good reason.)
+        <b>Asimov silicons usually can not lie about their laws.</b>
+        <br>­<br>
+        Breaking this rule will get you bwoinked, jobbanned, or worse. If you don't need to lie, use the standard State Laws functionality.
+    {{else}}
+        This interface lets you state your current laws by speaking them out, optionally on the radio.
+        <br><br>
+        Select the laws you wish to state below, then choose the radio channel you wish to output on and click on <i>State Laws</i> to speak them out.
+        Note that some radio channels may not be available to you: if this is the case, you will state your laws off-radio.
+        <br><br>
+        If you require more advanced control over which laws to state and how, use the Freeform mode by toggling it in the top right.
+    {{/if}}
+    </div>
+</div>
+{{if data.freeform}}
+<div class="item">
+    <div class="line">
+        <h3>Preset lawsets</h3>
+    </div>
+    <div class="itemContentWide">
+        {{if data.has_linked_ai}}
+        {{:helper.link("(Use laws from linked AI)", null, {"ui_key": "state_laws", "reset_to_ai_laws": 1})}}
+        {{/if}}
+        {{for data.preset_laws}}
+            {{:helper.link(value.name, null, {"ui_key": "state_laws", "preset_law_select": index + 1})}}
+        {{/for}}
+    </div>
+</div>
+{{/if}}
+<div class="item">
+    <form id="lawedit" name="lawedit" action="byond://" method="post">
+    <input type="hidden" id="src" name="src" value="{{:data.src}}">
+    <input type="hidden" id="src" name="ui_key" value="state_laws">
+    <div class="line">
+        {{:helper.link("Reset", "arrowreturn-1-w", {"ui_key": "state_laws", "reset_laws": 1}, null, 'floatRight')}}
+        {{if data.freeform && !data.freeform_editing_unlocked}}
+        {{:helper.link("Edit", "gear", {"ui_key": "state_laws", "freeform_edit_toggle": 1}, null, 'floatRight')}}
+        {{else data.freeform && data.freeform_editing_unlocked}}
+        {{:helper.submitButton("Save", "disk", "lawedit", null, "floatRight")}}
+        {{/if}}
+        <h3 style="clear:left;display:inline">Currently selected laws</h3>
+    </div>
+        {{if !data.freeform_editing_unlocked}}
+        <div class="statusDisplay">
+            {{for data.selected_laws}}
+                <div class="line">
+                    {{if value.enabled}}
+                        {{:helper.link("On", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'greenBackground')}}
+                    {{else}}
+                        {{:helper.link("Off", null, {"ui_key": "state_laws", "toggle_law_enable": index + 1}, null, 'redBackground')}}
+                    {{/if}}
+                    <div class="statusValue">
+                        {{>value.text}}
+                    </div>
+                </div>
+            {{empty}}
+                <div class="line">
+                    <div class="statusValue dark">(no laws found)</div>
+                </div>
+            {{/for}}
+        </div>
+        {{else}}
+        <textarea name="edited_laws" id="edited_laws" rows="10" cols="50" class="statusDisplay" style="width:100%;padding:0;overflow:hidden">{{for data.selected_laws}}{{>value.text}}{{:'\n'}}{{/for}}</textarea>
+        {{/if}}
+    </form>
+</div>
+<div class="item">
+    <form id="keyedit" name="keyedit" action="byond://" method="post">
+        <input type="hidden" id="src" name="src" value="{{:data.src}}">
+        <input type="hidden" id="ui_key" name="ui_key" value="state_laws">
+        <input type="hidden" id="speak_laws" name="speak_laws" value="1">
+        <div class="line">
+            {{:helper.submitButton("State Laws", "volume-on", "keyedit")}}
+        </div>
+        <div class="line">
+            Radio key: <input type="text" name="radio_key" id="radio_key" maxlength="2" size="2" value="{{>data.radio_key}}">
+        </div>
+    </form>
+</div>

@@ -48,12 +48,12 @@
 	density = 1
 	anchored = 1
 
-	New()
-		..()
+/obj/effect/snake_egg/New()
+	..()
 
-		spawn(300)
-			for(var/mob/M in src)
-				M.forceMove(src.loc)
-				icon_state = "egg_hatched"
-				setDensity(FALSE)
-		return
+	spawn(300)
+		for(var/mob/M in src)
+			M.forceMove(src.loc)
+			icon_state = "egg_hatched"
+			setDensity(FALSE)
+	return

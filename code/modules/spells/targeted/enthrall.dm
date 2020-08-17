@@ -31,13 +31,17 @@
 
 	var/mob/M = target
 
-	if (!M.vampire_affected(user.mind))
-		return FALSE
-
-	if (!user.can_enthrall(target))
-		return FALSE
-
-	return ..()
+	var/success = M.vampire_affected(user.mind)
+	switch (success)
+		if (TRUE)
+			if (!user.can_enthrall(target))
+				return FALSE
+			return ..()
+		if (FALSE)
+			return FALSE
+		if (VAMP_FAILURE)
+			critfail(target, user)
+			return FALSE
 
 
 /spell/targeted/enthrall/cast(var/list/targets, var/mob/user)
@@ -62,3 +66,12 @@
 		return FALSE
 
 	V.remove_blood(blood_cost)
+
+/spell/targeted/enthrall/critfail(var/list/targets, var/mob/user)
+	to_chat(user, "<span class='sinister'>You won't command this one.</span>")
+	if (ishuman(user))
+		var/mob/living/carbon/human/H = user
+		H.confused = max(10, H.confused)
+	var/datum/role/vampire/V = isvampire(user)
+	if (V)
+		V.remove_blood(blood_cost)

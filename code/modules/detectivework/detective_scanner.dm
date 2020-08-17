@@ -7,7 +7,7 @@
 	icon_state = "forensic1"
 	var/amount = 20.0
 	var/list/stored = list()
-	w_class = W_CLASS_MEDIUM
+	w_class = W_CLASS_SMALL
 	item_state = "electronic"
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -183,7 +183,6 @@
 		"The results of the scan pique your interest.",\
 		"You hear a faint hum of electrical equipment, and someone making a thoughtful noise.")
 		return 0
-	return
 
 /obj/item/device/detective_scanner/proc/add_data(var/atom/A, var/list/blood_DNA_found,var/list/fingerprints_found,var/list/fibers_found)
 	//I love associative lists.

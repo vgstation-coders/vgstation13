@@ -122,7 +122,7 @@
 		msg += "<span class='warning'>[t_He] [t_has] blood-stained hands!</span>\n"
 
 	//handcuffed?
-	if(handcuffed && handcuffed.is_visible())
+	if((handcuffed && handcuffed.is_visible()) || (mutual_handcuffs && mutual_handcuffs.is_visible()))
 		if(istype(handcuffed, /obj/item/weapon/handcuffs/cable))
 			msg += "<span class='warning'>[t_He] [t_is] [bicon(handcuffed)] restrained with cable!</span>\n"
 		else
@@ -249,6 +249,7 @@
 				is_destroyed["[temp.display_name]"] = 1
 				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] [t_is] missing [t_his] [temp.display_name].</span>\n"
 				continue
+
 			if(temp.status & ORGAN_PEG)
 				if(!(temp.brute_dam + temp.burn_dam))
 					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a peg [temp.display_name]!</span>\n"
@@ -350,6 +351,15 @@
 					is_bleeding["[temp.display_name]"] = 1
 			else
 				wound_flavor_text["[temp.display_name]"] = ""
+			if(temp.open == 3) // Magic number! Someone #define this.
+				var/organ_text = list("<span class='notice'>[capitalize(t_his)] [temp.display_name] is <span class='danger'>wide open</span>. ")
+				if(length(temp.implants))
+					if(length(temp.implants) == 1)
+						organ_text += "\A [temp.implants[1]] is visible inside it."
+					else
+						organ_text += "[english_list(temp.implants)] are visible inside it."
+				organ_text += "</span><br>"
+				wound_flavor_text["[temp.display_name]"] += jointext(organ_text, null)
 
 	//Handles the text strings being added to the actual description.
 	//If they have something that covers the limb, and it is not missing, put flavortext.  If it is covered but bleeding, add other flavortext.
@@ -416,7 +426,7 @@
 
 		if(distance <= 3)
 			if(!has_brain())
-				msg += "<font color='blue'><b>[t_He] [t_has] had [t_his] brain removed.</b></font>\n"
+				msg += "<span class='notice'><b>[t_He] [t_has] had [t_his] brain removed.</b></span>\n"
 
 	var/butchery = "" //More information about butchering status, check out "code/datums/helper_datums/butchering.dm"
 	if(butchering_drops && butchering_drops.len)
@@ -449,6 +459,10 @@
 
 		msg += {"<span class = 'deptradio'>Physical status:</span> <a href='?src=\ref[src];medical=1'>\[[medical]\]</a>\n
 			<span class = 'deptradio'>Medical records:</span> <a href='?src=\ref[src];medrecord=`'>\[View\]\n</a>"}
+		for (var/ID in virus2)
+			if (ID in virusDB)
+				var/datum/data/record/v = virusDB[ID]
+				msg += "<br><span class='warning'>[v.fields["name"]][v.fields["nickname"] ? " \"[v.fields["nickname"]]\"" : ""] detected in subject.</span>\n"
 		if(!isjustobserver(user))
 			msg += "<a href='?src=\ref[src];medrecordadd=`'>\[Add comment\]</a>\n"
 

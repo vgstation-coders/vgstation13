@@ -1,0 +1,79 @@
+"a" = (/turf/space,/area)
+"b" = (/obj/docking_port/destination/salvage/clown{dir = 2},/turf/space,/area)
+"c" = (/turf/unsimulated/mineral,/area/vault/automap)
+"d" = (/turf/unsimulated/mineral/random/high_chance_clown,/area/vault/automap)
+"e" = (/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"f" = (/obj/effect/glowshroom,/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"g" = (/obj/effect/landmark/corpse/clown,/obj/item/weapon/paper{info = "The call has gone out! Our ancestral home has been rediscovered! Not a small patch of land, but a true clown nation, a true Clown Planet! We're on our way home at last!"},/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"h" = (/turf/simulated/shuttle/wall{icon_state = "swall_s6"},/area/vault/automap)
+"i" = (/turf/simulated/shuttle/wall{icon_state = "swall12"},/area/vault/automap)
+"j" = (/obj/machinery/door/unpowered/shuttle,/turf/simulated/floor/airless,/area/vault/automap)
+"k" = (/turf/simulated/shuttle/wall{icon_state = "swall_s10"},/area/vault/automap)
+"l" = (/turf/unsimulated/floor/asteroid,/turf/simulated/shuttle/wall{icon_state = "swall_f9"},/area/vault/automap)
+"m" = (/obj/effect/landmark/corpse/clown,/obj/effect/decal/cleanable/blood,/turf/simulated/floor/airless,/area/vault/automap)
+"n" = (/turf/simulated/floor/airless,/area/vault/automap)
+"o" = (/obj/structure/closet/crate,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/toy/gasha/clown,/turf/simulated/floor/airless,/area/vault/automap)
+"p" = (/obj/structure/closet/crate,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/turf/simulated/floor/airless,/area/vault/automap)
+"q" = (/obj/structure/closet/crate{icon_state = "crateopen"; opened = 1},/obj/item/stack/ore/clown,/turf/simulated/floor/airless,/area/vault/automap)
+"r" = (/obj/structure/shuttle/engine/heater{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating/airless,/area/vault/automap)
+"s" = (/obj/structure/shuttle/engine/propulsion/right{dir = 4},/turf/space,/area/vault/automap)
+"t" = (/obj/item/weapon/shard{icon_state = "small"},/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"u" = (/obj/effect/decal/cleanable/blood/splatter,/turf/simulated/floor/airless,/area/vault/automap)
+"v" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/airless,/area/vault/automap)
+"w" = (/obj/item/stack/ore/clown,/turf/simulated/floor/airless,/area/vault/automap)
+"x" = (/obj/structure/shuttle/engine/propulsion{dir = 4},/turf/space,/area/vault/automap)
+"y" = (/obj/item/weapon/shard{icon_state = "medium"},/obj/structure/bed/chair/shuttle{dir = 8},/turf/unsimulated/floor/asteroid,/area/vault/automap)
+"z" = (/obj/effect/landmark/corpse/clown{name = "Clown Pilot"},/obj/effect/decal/cleanable/blood,/turf/simulated/floor/airless,/area/vault/automap)
+"A" = (/obj/effect/decal/cleanable/blood/splatter,/obj/effect/decal/cleanable/blood/splatter,/turf/simulated/floor/airless,/area/vault/automap)
+"B" = (/obj/item/stack/ore/clown,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/airless,/area/vault/automap)
+"C" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating/airless,/area/vault/automap)
+"D" = (/obj/item/weapon/shard,/obj/effect/decal/cleanable/blood,/obj/structure/bed/chair/shuttle{dir = 8},/turf/simulated/floor/airless,/area/vault/automap)
+"E" = (/obj/item/weapon/shard{icon_state = "medium"},/turf/simulated/floor/airless,/area/vault/automap)
+"F" = (/turf/space,/turf/simulated/shuttle/wall{icon_state = "swall_f5"},/area/vault/automap)
+"G" = (/turf/simulated/floor/airless,/turf/simulated/shuttle/wall{icon_state = "swall_f10"},/area/vault/automap)
+"H" = (/obj/item/weapon/pickaxe,/turf/simulated/floor/airless,/area/vault/automap)
+"I" = (/obj/structure/closet/crate,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/obj/item/stack/ore/clown,/turf/simulated/floor/airless,/area/vault/automap)
+"J" = (/obj/structure/shuttle/engine/propulsion/left{dir = 4},/turf/space,/area/vault/automap)
+"K" = (/turf/simulated/shuttle/wall{icon_state = "swall_s5"},/area/vault/automap)
+"L" = (/turf/simulated/shuttle/wall{icon_state = "swall_s9"},/area/vault/automap)
+"M" = (/obj/effect/decal/remains/human,/turf/unsimulated/floor/asteroid,/area/vault/automap)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaaaabaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaacccccccaaaaaaaaaaaaaa
+aaaacccdddddddcaaaaaaaaaaaaa
+aaaacdddddeddddcaaaaaaaaaaaa
+acccddddeeeedddcaaaaaaaaaaaa
+acddddddfeeeeddcaaaaaaaaaaaa
+cdddddddeegefdddcaaaaaaaaaaa
+cddddddddefeedddcaaaaaaaaaaa
+acddddddddedddddcaaaaaaaaaaa
+acddddddddddddddchiijjiiiiik
+aaccdddddddddddhilemnnopqnrs
+aaacddddddddddddcctunvnvwnrx
+aaccddddddddddddcyzAnwnBnwrx
+aaccdddddddddddCuDvEvmnnnwrx
+aacddddddddddddFiGvHnnIppnrJ
+aaccdddddddddddddKiijjiiiiiL
+acccdddddddddddddccccccccaaa
+accacddddddddddddddddddcaaaa
+aaaacddddddddddddddddddcaaaa
+aaaaccccccdMddddddddddccaaaa
+aaaacaaaaacccddddddcccaaaaaa
+aaaaaaaaaaaaaccccccaaaaaaaaa
+"}

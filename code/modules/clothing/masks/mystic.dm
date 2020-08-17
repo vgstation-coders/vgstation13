@@ -69,7 +69,7 @@ var/list/has_been_shade = list()
 		flick("happiest_flash", src)
 		has_been_shade.Add(M.mind)
 		var/mob/dead/observer/G = M.ghostize(1)
-		var/mob/living/simple_animal/shade/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/happiest, TRUE)
+		var/mob/living/simple_animal/shade/noncult/happiest/S = G.transmogrify(/mob/living/simple_animal/shade/noncult/happiest, TRUE)
 		S.name = "[M.real_name] the Shade"
 		S.real_name = "[M.real_name]"
 		S.cancel_camera()

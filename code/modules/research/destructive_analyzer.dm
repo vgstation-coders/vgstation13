@@ -37,7 +37,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/S in component_parts)
 		T += S.rating * 0.1
-	T = Clamp(T, 0, 1)
+	T = clamp(T, 0, 1)
 	decon_mod = T
 
 /obj/machinery/r_n_d/destructive_analyzer/proc/ConvertReqString2List(var/list/source_list)
@@ -52,35 +52,32 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return -1
 	return ..()
 
-/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user)
-	if(..() == 1)
+/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+	if(..())
 		if(loaded_item)
 			loaded_item.forceMove(loc)
-		return 1
-	return -1
+		return TRUE
+	return FALSE
 
-/obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O as obj, var/mob/user as mob)
+/obj/machinery/r_n_d/destructive_analyzer/attackby(var/obj/O, var/mob/user)
 	if(..())
 		return 1
-	if (istype(O, /obj/item) && !loaded_item && !panel_open)
-		if(isrobot(user)) //Don't put your module items in there!
-			if(isMoMMI(user))
-				var/mob/living/silicon/robot/mommi/mommi = user
-				if(mommi.is_in_modules(O,permit_sheets=1))
-					to_chat(user, "<span class='warning'>You cannot insert something that is part of you.</span>")
-					return
-			else
-				return
+	if(istype(O, /obj/item) && !loaded_item && !panel_open)
 		if(!O.origin_tech)
 			to_chat(user, "<span class='warning'>This doesn't seem to have a tech origin!</span>")
 			return
 		var/list/temp_tech = ConvertReqString2List(O.origin_tech)
-		if (temp_tech.len == 0)
+
+		if(temp_tech.len == 0)
 			to_chat(user, "<span class='warning'>You cannot deconstruct this item!</span>")
 			return
-		/*if(O.reliability < 90 && O.crit_fail == 0)
-			to_chat(usr, "<span class='warning'>Item is neither reliable enough or broken enough to learn from.</span>")
-			return*/
+
+		if(isrobot(user)) //Don't put your module items in there!
+			var/mob/living/silicon/robot/R = user
+			if(R.is_in_modules(O))
+				to_chat(user, "<span class='warning'>You cannot insert something that is part of you.</span>")
+				return
+
 		if(user.drop_item(O, src))
 			busy = 1
 			loaded_item = O
@@ -89,6 +86,8 @@ Note: Must be placed within 3 tiles of the R&D Console
 			spawn(10)
 				icon_state = "d_analyzer_l"
 				busy = 0
+				if(linked_console)
+					linked_console.updateUsrDialog()
 	return 1
 
 /obj/machinery/r_n_d/destructive_analyzer/attack_hand(mob/user as mob)

@@ -57,6 +57,15 @@
 	icon_state = "d20"
 	sides = 20
 
+/obj/item/weapon/dice/loaded
+	desc = "A die with six even sides. Basic and servicable."
+
+/obj/item/weapon/dice/loaded/d20
+	name = "d20"
+	desc = "A die with twenty even sides. The prefered die to throw at the GM."
+	icon_state = "d20"
+	sides = 20
+
 /obj/item/weapon/dice/d20/e20
 	var/triggered = 0
 
@@ -67,8 +76,7 @@
 	..()
 	diceroll(user, 1)
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
-	result = rand(minsides, sides)
+/obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""
 	if(sides == 20)
 		if(result == 20)
@@ -84,6 +92,15 @@
 							 "<span class='notice'>You hear [src] landing on [result]. [comment]</span>")
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
+
+/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+	result = rand(minsides, sides)
+	show_roll(user, thrown, result)
+
+/obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
+	result = rand(minsides, sides * 1.5)
+	result = min(result, sides)
+	show_roll(user, thrown, result)
 
 /obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
 	if(istype(H) && !H.shoes)
@@ -286,10 +303,10 @@
 							user.update_mutations()
 							to_chat(user, "<span class=danger><B>You have been granted protection! </span></B>")
 						if(4)
-							getFromPool(/obj/item/stack/sheet/mineral/gold,user.loc,25)
+							new /obj/item/stack/sheet/mineral/gold(user.loc, 25)
 							to_chat(user, "<span class=danger)(B>You have been reward in gold! </span></B>")
 						if(5)
-							getFromPool(/obj/item/stack/sheet/mineral/silver,user.loc,25)
+							new /obj/item/stack/sheet/mineral/silver(user.loc, 25)
 							to_chat(user, "<span class=danger><B>You have been rewarded in silver! </span></B>")
 						if(6)
 							to_chat(user, "<span class=danger><B>You have been reward with a fancy new costume! </span></B>")
@@ -310,9 +327,9 @@
 
 				if(20)
 					to_chat(user, "<span class=sinister><B>A perfect roll! enjoy your reward! </span></B>")
-					getFromPool(/obj/item/stack/sheet/mineral/phazon,user.loc,10)
-					getFromPool(/obj/item/stack/sheet/mineral/diamond,user.loc,10)
-					getFromPool(/obj/item/stack/sheet/mineral/clown,user.loc,10)
+					new /obj/item/stack/sheet/mineral/phazon(user.loc, 10)
+					new /obj/item/stack/sheet/mineral/diamond(user.loc, 10)
+					new /obj/item/stack/sheet/mineral/clown(user.loc, 10)
 					user.dna.SetSEState(XRAYBLOCK,1)
 					user.dna.SetSEState(TELEBLOCK,1)
 					user.dna.SetSEState(INCREASERUNBLOCK,1)

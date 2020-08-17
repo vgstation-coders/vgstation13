@@ -8,24 +8,11 @@
 	name = "trader coin"
 	icon_state = "coin_mythril"
 
-/obj/item/weapon/storage/trader_marauder
-	name = "box of Marauder circuits"
-	desc = "All in one box!"
-	icon = 'icons/obj/storage/smallboxes.dmi'
-	icon_state = "box_of_doom"
-	item_state = "box_of_doom"
-
-/obj/item/weapon/storage/trader_marauder/New() //Because we're good jews, they won't be able to finish the marauder. The box is missing a circuit.
-	..()
-	new /obj/item/weapon/circuitboard/mecha/marauder(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/peripherals(src)
-	//new /obj/item/weapon/circuitboard/mecha/marauder/targeting(src)
-	new /obj/item/weapon/circuitboard/mecha/marauder/main(src)
-
 /obj/item/weapon/storage/trader_chemistry
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -34,11 +21,15 @@
 	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
 	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter(src)
+	new /obj/item/weapon/reagent_containers/glass/beaker/bluespace(src)
+	new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer(src)
 
 /obj/item/weapon/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
-	desc = "Hmmm... it smells like tomato"
+	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -68,10 +59,9 @@
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
 	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
-	/obj/item/clothing/under/skelevoxsuit,
+	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
-	list(/obj/item/clothing/head/helmet/space/rig/wizard, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple, /obj/item/clothing/shoes/sandal),
-	list(/obj/item/clothing/head/helmet/space/rig/knight, /obj/item/clothing/head/helmet/space/rig/knight),
+	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
@@ -87,14 +77,6 @@
 				new i(src)
 		else
 			new wonder_clothing(src)
-
-/*/obj/structure/cage/with_random_slime
-	..()
-
-	add_mob
-
-/mob/living/carbon/slime/proc/randomSlime()
-*/
 
 /area/vault/mecha_graveyard
 
@@ -193,18 +175,36 @@
 	name = "Alcatraz IV security crate"
 	desc = "It came from Alcatraz IV!"
 
+	//6+6+6=18
+var/global/list/alcatraz_stuff = list(
+	//3 of a kind
+	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
+	/obj/item/pedometer,/obj/item/pedometer,/obj/item/pedometer,
+	//2 of a kind
+	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
+	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
+	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
+	//1 of a kind
+	/obj/item/clothing/under/securityskirt/elite,
+	/obj/item/clothing/head/helmet/donutgiver,
+	/obj/item/clothing/accessory/bangerboy,
+	/obj/item/key/security/spare,
+	/obj/item/weapon/ram_kit,
+	/obj/item/device/vampirehead,)
+
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	new /obj/item/clothing/head/helmet/donutgiver(src)
-	new /obj/item/clothing/under/securityskirt/elite(src)
-	new /obj/item/clothing/accessory/bangerboy(src)
-	new /obj/item/weapon/autocuffer(src)
+	for(var/i = 1 to 6)
+		if(!alcatraz_stuff.len)
+			return
+		var/path = pick_n_take(alcatraz_stuff)
+		new path(src)
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
-	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to easily configure their onboard timers. Straps nicely onto security armor."
+	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
-	origin_tech = Tc_COMBAT + "=2"
+	mech_flags = MECH_SCAN_FAIL
 	var/obj/item/weapon/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
@@ -218,7 +218,9 @@
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/weapon/grenade))
-		W.attackby(S,user)
+		var/obj/item/weapon/grenade/G = W
+		G.det_time = 1.5 SECONDS
+		G.activate(user)
 	else
 		..()
 
@@ -227,7 +229,7 @@
 
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
-	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections."
+	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
 	icon_state = "helmet_sec"
 	item_state = "helmet"
 	flags = HEAR | FPRINT
@@ -382,6 +384,7 @@
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "modkit"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	flags = FPRINT
 	siemens_coefficient = 0
 	w_class = W_CLASS_SMALL
@@ -429,88 +432,11 @@
 	mob_path = null
 	bonus_path = /mob/living/carbon/human/frankenstein
 
-/*/obj/item/device/law_planner                                                      Scapped, but maybe in the future
-	name = "law planning frame"
-	desc = "A large data pad with buttons for crimes. Used for planning a brig sentence."
-	w_class = W_CLASS_SMALL
-	origin_tech = Tc_PROGRAMMING + "=6"
-	icon = 'icons/obj/pda.dmi'
-	icon_state = "aicard"
-	item_state = "electronic"
-	req_access = list(access_brig)
-	var/announce = 1 //0 = Off, 1 = On select, 2 = On upload
-	var/start_timer = FALSE //If true, automatically start the timer on upload
-	var/datum/data/record/upload_crimes = null //If has DNA, will look for an associated datacore file and upload crimes
-	var/list/rapsheet = list()
-	var/total_time = 0
-
-	var/list/minor_crimes = list(
-							"RESISTING ARREST"=2,
-							"PETTY CRIME"=3,
-							"DRUGGING"=4,
-							"POSSESSION"=5,
-							"MANHUNT"=5,
-							"ESCAPE"=5,
-							"FRAMING"=5,
-							"WORKPLACE HAZARD"=5,
-							"ASSAULT"=6,
-							"POSS. WEAPON"=7,
-							"POSS. EXPLOSIVE"=8)
-	var/list/major_crimes = list(
-							"B&E RESTRICTED"=10,
-							"INTERFERENCE"=10,
-							"UNLAWFUL UPLOAD"=10,
-							"ABUSE OF POWER"=10,
-							"ASSAULT ON SEC"=10,
-							"MAJOR TRESPASS"=10,
-							"MAJOR B&E"=15,
-							"GRAND THEFT"=15)
-
-/obj/item/device/law_planner/proc/announce()
-	say(english_list(rapsheet))
-	say("[total_time] minutes.")
-
-/obj/item/device/law_planner/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
-	if(!proximity_flag)
-		to_chat(user, "<span class='warning'>You can't seem to reach \the [A].</span>")
-		return 0
-	if(!allowed)
-		to_chat(user, "<span class='warning'>You must wear your ID!</span>")
-		return 0
-	if(ishuman(A)&&!(A==user))
-		for(var/datum/data/record/E in data_core.security)
-			if(E.fields["name"] == A.name)
-				say("Verified. Found record match for [A].")
-				upload_crimes = E
-	if(istype(A,/obj/machinery/door_timer))
-		if(announce==2)
-			announce()
-		if(upload_crimes)
-			upload_crimes.fields["criminal"] = "Incarcerated"
-			var/counter = 1
-			while(upload_crimes.fields["com_[counter]"])
-				counter++
-			upload_crimes.fields["com_[counter]"] = text("Made by [user] (Automated) on [time2text(world.realtime, "DDD MMM DD")]<BR>[english_list(rapsheet)]")
-		var/obj/machinery/door_timer/D = A
-		if(D.timeleft())
-			//We're adding time
-			D.releasetime += total_time*60
-		else
-			//Setting time
-			D.timeset(total_time*60)
-		if(start_timer && !D.timing)
-			D.timer_start()
-		upload_crimes = null
-		rapsheet = null
-		total_time = null
-	else
-		..()*/
-
-
 /obj/item/weapon/boxofsnow
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
 	icon = 'icons/obj/storage/smallboxes.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
@@ -551,17 +477,24 @@
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 
-/obj/item/weapon/depocket_wand/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.handcuffed)
-			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
-			to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+			scan(H,user)
 		else
-			to_chat(user,"<span class='warning'>The subject must be handcuffed.</span>")
+			user.visible_message("<span class='danger'>[user] begins waving \the [src] over [M].</span>","<span class='danger'>You begin waving \the [src] over [M].</span>")
+			if(do_after(user,H, 2 SECONDS))
+				scan(H,user)
 	else
 		..()
+
+/obj/item/weapon/depocket_wand/proc/scan(mob/living/carbon/human/H, mob/living/user)
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
+
+
 
 #define VAMP_FLASH_CD 50
 
@@ -747,3 +680,341 @@
 		name = "[t]'s ID card ([assignment])"
 	else
 		return
+
+
+/obj/item/weapon/mech_expansion_kit
+	name = "exosuit expansion kit"
+	desc = "All the equipment you need to replace that useless legroom with a useful bonus equipment slot on your mech."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "modkit"
+	flags = FPRINT
+	siemens_coefficient = 0
+	w_class = W_CLASS_SMALL
+	var/working = FALSE
+
+/obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(!istype(target,/obj/mecha))
+		to_chat(user,"<span class='warning'>That isn't an exosuit!</span>")
+		return
+	if(working)
+		to_chat(user,"<span class='warning'>This is already being used to upgrade something!</span>")
+		return
+	var/obj/mecha/M = target
+	if(M.max_equip > initial(M.max_equip))
+		to_chat(user,"<span class='warning'>That exosuit cannot be modified any further. There's no more legroom to eliminate!</span>")
+		return
+	to_chat(user,"<span class='notice'>You begin modifying the exosuit.</span>")
+	working = TRUE
+	if(do_after(user,target,4 SECONDS))
+		to_chat(user,"<span class='notice'>You finish modifying the exosuit!</span>")
+		M.max_equip++
+		qdel(src)
+	else
+		to_chat(user,"<span class='notice'>You stop modifying the exosuit.</span>")
+		working = FALSE
+	return 1
+
+/obj/structure/wetdryvac
+	name = "wet/dry vacuum"
+	desc = "A powerful vacuum cleaner that can collect both trash and fluids."
+	density = TRUE
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "wetdryvac1"
+	var/max_trash = 50
+	var/list/trash = list()
+	var/obj/item/vachandle/myhandle
+
+/obj/structure/wetdryvac/New()
+	..()
+	create_reagents(50)
+	myhandle = new /obj/item/vachandle(src)
+
+/obj/structure/wetdryvac/Destroy()
+	if(myhandle)
+		if(myhandle.loc == src)
+			qdel(myhandle)
+		else
+			myhandle.myvac = null
+		myhandle = null
+	for(var/obj/item/I in trash)
+		qdel(I)
+	trash.Cut()
+	..()
+
+/obj/structure/wetdryvac/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The wet tank gauge reads: [reagents.total_volume]/[reagents.maximum_volume]</span>")
+	to_chat(user,"<span class='info'>The dry storage gauge reads: [trash.len]/[max_trash]</span>")
+
+/obj/structure/wetdryvac/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/vachandle))
+		if(!myhandle)
+			myhandle = W
+		if(myhandle == W)
+			to_chat(user,"<span class='notice'>You insert \the [W] into \the [src].")
+			user.drop_item(W,src)
+			update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/attack_hand(mob/user)
+	if(myhandle && myhandle.loc == src)
+		user.put_in_hands(myhandle)
+		update_icon()
+	else
+		..()
+
+/obj/structure/wetdryvac/update_icon()
+	if(myhandle)
+		icon_state = "wetdryvac[myhandle.loc == src]"
+	else
+		icon_state = "wetdryvac0"
+
+/obj/structure/wetdryvac/MouseDropFrom(var/obj/O, src_location, var/turf/over_location, src_control, over_control, params)
+	if(!can_use(usr,O))
+		return
+	if(istype(O,/obj/structure/sink))
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		reagents.clear_reagents()
+		to_chat(usr, "<span class='notice'>You flush \the [src] wet contents down \the [O].</span>")
+	else if(istype(O,/obj/item/weapon/reagent_containers) && O.is_open_container())
+		if(!reagents.total_volume)
+			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
+		to_chat(usr, "<span class='notice'>You pour \the [src] wet contents into \the [O].</span>")
+		reagents.trans_to(O.reagents,reagents.total_volume)
+	else if(istype(O,/obj/machinery/disposal))
+		if(!contents.len)
+			to_chat(usr,"<span class='warning'>\The [src] dry storage is already empty!</span>")
+			return
+		playsound(src, 'sound/effects/freeze.ogg', 25, 1) //this sounds like trash moving to me
+		for(var/obj/item/I in trash)
+			I.forceMove(O)
+		trash.Cut()
+		to_chat(usr, "<span class='notice'>You dump \the [src] dry contents into \the [O].</span>")
+
+/obj/structure/wetdryvac/MouseDropTo(atom/O, mob/user)
+	if(!can_use(user,O))
+		return
+	whrr(get_turf(O))
+
+/obj/structure/wetdryvac/proc/whrr(var/turf/T)
+	if(!T)
+		return
+	playsound(src, 'sound/effects/vacuum.ogg', 25, 1)
+	for(var/obj/effect/decal/cleanable/C in T)
+		if(C.reagent)
+			if(reagents.is_full())
+				visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+				break
+			reagents.add_reagent(C.reagent,1)
+		qdel(C)
+	for(var/obj/effect/overlay/puddle/P in T)
+		if(reagents.is_full())
+			visible_message("<span class='warning'>\The [src] sputters, wet tank full!</span>")
+			break
+		if(P.wet == TURF_WET_LUBE)
+			reagents.add_reagent(LUBE,1)
+		else if(P.wet == TURF_WET_WATER)
+			reagents.add_reagent(WATER,1)
+		qdel(P)
+	T.clean_blood()
+	for(var/obj/item/trash/R in T)
+		if(trash.len >= max_trash)
+			visible_message("<span class='warning'>\The [src] sputters, dry storage full!</span>")
+			return
+		R.forceMove(src)
+		trash += R
+
+/obj/structure/wetdryvac/proc/can_use(mob/user, atom/target)
+	if(!ishigherbeing(user) && !isrobot(user) || user.incapacitated() || user.lying)
+		return FALSE
+	if(!Adjacent(user) || !user.Adjacent(target))
+		return FALSE
+	return TRUE
+
+/obj/item/vachandle
+	name = "vacuum handle"
+	desc = "Handy. It doesn't suck per se, it merely conveys suckage."
+	w_class = W_CLASS_MEDIUM
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "vachandle"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
+	item_state = "vachandle"
+	w_class = W_CLASS_HUGE
+	var/obj/structure/wetdryvac/myvac
+	var/event_key = null
+
+/obj/item/vachandle/New()
+	..()
+	myvac = loc
+
+/obj/item/vachandle/Destroy()
+	myvac.myhandle = null
+	myvac = null
+	..()
+
+/obj/item/vachandle/pickup(mob/user)
+	..()
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/vachandle/dropped(mob/user)
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+	if(loc != myvac)
+		retract()
+
+/obj/item/vachandle/throw_at()
+	retract()
+
+/obj/item/vachandle/proc/mob_moved(atom/movable/mover)
+	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
+		retract()
+
+/obj/item/vachandle/proc/retract()
+	if(loc == myvac)
+		return
+	visible_message("<span class='warning'>\The [src] snaps back into \the [myvac]!</span>")
+	if(ismob(loc))
+		var/mob/M = loc
+		M.drop_item(src,myvac)
+	else
+		forceMove(myvac)
+	myvac.update_icon()
+
+/obj/item/vachandle/preattack(atom/target, mob/user , proximity)
+	if(!myvac)
+		to_chat(user, "<span class='warning'>\The [src] isn't attached to a vacuum!</span>")
+		return
+	if(!proximity || !myvac.can_use(user,target))
+		return
+	if(target == myvac)
+		return ..()
+	myvac.whrr(get_turf(target))
+	return 1
+
+/obj/item/weapon/fakeposter_kit
+	name = "cargo cache kit"
+	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
+	icon = 'icons/obj/barricade.dmi'
+	icon_state = "barricade_kit"
+	w_class = W_CLASS_MEDIUM
+
+/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
+	if(!proximity)
+		return
+	if(istype(target,/turf/simulated/wall))
+		playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
+		if(do_after(user,target,4 SECONDS))
+			to_chat(user,"<span class='notice'>Using the kit, you hollow out the wall and hang the poster in front.</span>")
+			var/obj/structure/fakecargoposter/FCP = new(target)
+			FCP.access_loc = get_turf(user)
+			qdel(src)
+			return 1
+	else
+		return ..()
+
+/obj/structure/fakecargoposter
+	icon = 'icons/obj/posters.dmi'
+	var/obj/item/weapon/storage/cargocache/cash
+	var/turf/access_loc
+
+/obj/structure/fakecargoposter/New()
+	..()
+	var/datum/poster/type = pick(/datum/poster/special/cargoflag,/datum/poster/special/cargofull)
+	icon_state = initial(type.icon_state)
+	desc = initial(type.desc)
+	name = initial(type.name)
+	cash = new(src)
+
+/obj/structure/fakecargoposter/examine(mob/user)
+	..()
+	if(user.loc == access_loc)
+		to_chat(user, "<span class='info'>Upon closer inspection, there's a hidden cache behind it accessible with a free hand.</span>")
+
+/obj/structure/fakecargoposter/Destroy()
+	for(var/atom/movable/A in cash.contents)
+		A.forceMove(loc)
+	qdel(cash)
+	cash = null
+	..()
+
+/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
+	if(iswelder(W))
+		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
+		var/obj/item/weapon/weldingtool/WT=W
+		if(WT.do_weld(user, src, 10 SECONDS, 5))
+			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
+			qdel(src)
+	else if(user.loc == access_loc)
+		cash.attackby(W,user)
+	else
+		..()
+
+/obj/structure/fakecargoposter/attack_hand(mob/user)
+	if(user.loc == access_loc)
+		cash.AltClick(user)
+
+/obj/item/weapon/storage/cargocache
+	name = "cargo cache"
+	desc = "A large hidey hole for all your goodies."
+	icon = 'icons/obj/posters.dmi'
+	icon_state = "cargoposter-flag"
+	fits_max_w_class = W_CLASS_LARGE
+	max_combined_w_class = 28
+	slot_flags = 0
+
+/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
+	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
+		return TRUE
+	return FALSE
+
+#define REWARD_FREQUENCY 1000
+/obj/item/pedometer
+	name = "patrolmens' pedometer"
+	desc = "A device which estimates steps taken. This one dispenses prizes for patrolling maintenance or major hallways. It needs to be on your belt, pockets, or in hand to register movement."
+	icon = 'icons/obj/device.dmi'
+	icon_state = "pedometer"
+	w_class = W_CLASS_SMALL
+	slot_flags = SLOT_BELT
+	var/count = 0
+	var/list/approved_areas = list(/area/maintenance,/area/hallway)
+	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
+	var/list/regular_rewards = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee,
+									/obj/item/weapon/reagent_containers/food/snacks/donutiron,
+									/obj/item/ammo_storage/speedloader/energy)
+
+/obj/item/pedometer/examine(mob/user)
+	..()
+	to_chat(user,"<span class='info'>The reward ticker reads [count].</span>")
+
+/obj/item/pedometer/pickup(mob/user)
+	..()
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/pedometer/dropped(mob/user)
+	..()
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
+
+/obj/item/pedometer/proc/mob_moved(atom/movable/mover)
+	var/turf/T = get_turf(src)
+	var/area/A = get_area(T)
+	if(is_type_in_list(A,approved_areas))
+		count++
+		if(!(count % REWARD_FREQUENCY))
+			var/path
+			if(special_rewards.len)
+				path = pick_n_take(special_rewards)
+			else
+				path = pick(regular_rewards)
+			if(path)
+				var/obj/item/I = new path(get_turf(src))
+				if(isliving(mover))
+					var/mob/living/living_mover = mover
+					living_mover.put_in_hands(I)
+				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")

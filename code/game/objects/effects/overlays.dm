@@ -29,7 +29,7 @@
 	spawn if(fade)
 		animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
-		returnToPool(src)
+		qdel(src)
 
 /obj/effect/overlay/beam/persist/New()
 	return
@@ -76,6 +76,10 @@
 	lifespan = world.time + new_lifespan
 	processing_objects.Add(src)
 
+/obj/effect/overlay/puddle/Destroy()
+	processing_objects.Remove(src)
+	..()
+
 /obj/effect/overlay/puddle/process()
 	if(world.time >= lifespan)
 		qdel(src)
@@ -87,6 +91,23 @@
 	var/mob/living/L = AM
 	if (!L.ApplySlip(src))
 		return ..()
+
+/obj/effect/overlay/holywaterpuddle
+	name = "Puddle"
+	icon = 'icons/effects/water.dmi'
+	icon_state = "holy_floor"
+	anchored = 1
+	mouse_opacity = 0
+	var/lifespan
+
+/obj/effect/overlay/holywaterpuddle/New(var/turf/T)
+	. = ..()
+	lifespan = world.time + HOLYWATER_DURATION
+	processing_objects.Add(src)
+
+/obj/effect/overlay/holywaterpuddle/process()
+	if(world.time >= lifespan)
+		qdel(src)
 
 /obj/effect/overlay/wallrot
 	name = "Wallrot"

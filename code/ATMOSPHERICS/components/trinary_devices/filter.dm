@@ -26,18 +26,18 @@ Filter types:
 
 	ex_node_offset = 5
 
-obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
+/obj/machinery/atmospherics/trinary/filter/proc/set_frequency(new_frequency)
 	radio_controller.remove_object(src, frequency)
 	frequency = new_frequency
 	if(frequency)
 		radio_connection = radio_controller.add_object(src, frequency, RADIO_ATMOSIA)
 
-obj/machinery/atmospherics/trinary/filter/New()
-	if(radio_controller)
+/obj/machinery/atmospherics/trinary/filter/New()
+	if(ticker && ticker.current_state == GAME_STATE_PLAYING)
 		initialize()
 	..()
 
-obj/machinery/atmospherics/trinary/filter/update_icon()
+/obj/machinery/atmospherics/trinary/filter/update_icon()
 	if(stat & NOPOWER)
 		icon_state = "hintact_off"
 	else if(node2 && node3 && node1)
@@ -47,35 +47,28 @@ obj/machinery/atmospherics/trinary/filter/update_icon()
 		on = 0
 	..()
 
-obj/machinery/atmospherics/trinary/filter/power_change()
+/obj/machinery/atmospherics/trinary/filter/power_change()
 	var/old_stat = stat
 	..()
 	if(old_stat != stat)
 		on = !on
 		update_icon()
 
-obj/machinery/atmospherics/trinary/filter/process()
+/obj/machinery/atmospherics/trinary/filter/process()
 	. = ..()
 	if(!on)
 		return
 
 	var/output_starting_pressure = air3.return_pressure()
-
-	if(output_starting_pressure >= target_pressure || air2.return_pressure() >= target_pressure )
-		//No need to mix if target is already full!
-		return
-
-	//Calculate necessary moles to transfer using PV=nRT
-
 	var/pressure_delta = target_pressure - output_starting_pressure
-	var/transfer_moles
+	var/filtered_pressure_delta = target_pressure - air2.return_pressure()
 
-	if(air1.temperature > 0)
-		transfer_moles = pressure_delta * air3.volume / (air1.temperature * R_IDEAL_GAS_EQUATION)
-
-	//Actually transfer the gas
-
-	if(transfer_moles > 0)
+	if(pressure_delta > 0.01 && filtered_pressure_delta > 0.01 && (air1.temperature > 0 || air3.temperature > 0))
+		//Figure out how much gas to transfer to meet the target pressure.
+		var/air_temperature = (air1.temperature > 0) ? air1.temperature : air3.temperature
+		var/output_volume = air3.volume + (network3 ? network3.volume : 0)
+		//get the number of moles that would have to be transfered to bring sink to the target pressure
+		var/transfer_moles = (pressure_delta * output_volume) / (air_temperature * R_IDEAL_GAS_EQUATION)
 		var/datum/gas_mixture/removed = air1.remove(transfer_moles)
 
 		if(!removed)
@@ -107,23 +100,23 @@ obj/machinery/atmospherics/trinary/filter/process()
 		air2.merge(filtered_out)
 		air3.merge(removed)
 
-	if(network2)
-		network2.update = 1
-
-	if(network3)
-		network3.update = 1
-
-	if(network1)
-		network1.update = 1
+		if(network2)
+			network2.update = 1
+		if(network3)
+			network3.update = 1
+		if(network1)
+			network1.update = 1
 
 	return 1
 
-obj/machinery/atmospherics/trinary/filter/initialize()
+/obj/machinery/atmospherics/trinary/filter/initialize()
+	if (!radio_controller)
+		return
 	set_frequency(frequency)
 	..()
 
 
-obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
+/obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 	if(..())
 		return
 
@@ -176,7 +169,7 @@ obj/machinery/atmospherics/trinary/filter/attack_hand(user as mob) // -- TLE
 	onclose(user, "atmo_filter")
 	return
 
-obj/machinery/atmospherics/trinary/filter/Topic(href, href_list) // -- TLE
+/obj/machinery/atmospherics/trinary/filter/Topic(href, href_list) // -- TLE
 	if(..())
 		return
 	usr.set_machine(src)

@@ -30,29 +30,48 @@
 	mouse_opacity = 1
 	plane = LYING_MOB_PLANE
 
-/obj/effect/decal/cleanable/bee/New()
+/obj/effect/decal/cleanable/bee/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	..()
-	var/image/I = image(icon,icon_state)
-	I.pixel_x = rand(-10,10)
-	I.pixel_y = rand(-4,4)
-	I.dir = pick(cardinal)
-
-	for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
-		if (corpse != src)
-			corpse.overlays += I
-			qdel(src)
-			return
-		else
-			icon_state = "bees0"
+	if (isnum(color) && color > 0)
+		src.icon_state = "bees0"
+		var/failsafe = min(color,30)
+		for (var/i = 1 to failsafe)
+			var/image/I = image(icon,icon_state)
+			I.pixel_x = rand(-10,10)
+			I.pixel_y = rand(-4,4)
+			I.dir = pick(cardinal)
 			overlays += I
+		color = null
+	else
+		var/image/I = image(src.icon,src.icon_state)
+		I.pixel_x = rand(-10,10)
+		I.pixel_y = rand(-4,4)
+		I.dir = pick(cardinal)
+
+		for (var/obj/effect/decal/cleanable/bee/corpse in get_turf(src))
+			if (corpse != src)
+				corpse.overlays += I
+				qdel(src)
+				return
+			else
+				icon_state = "bees0"
+				overlays += I
 
 /obj/effect/decal/cleanable/bee/queen_bee
 	name = "dead queen bee"
 	icon_state = "queen_bee_dead"
 
+/obj/effect/decal/cleanable/bee/atom2mapsave()
+	icon_state = initial(icon_state)
+	if (overlays.len > 0)
+		color = overlays.len//a bit hacky but hey
+	. = ..()
 
 
 //////////////////////BEE MOB///////////////////////////////////////
+
+
+var/bee_mobs_count = 0
 
 /mob/living/simple_animal/bee
 	name = "swarm of bees"
@@ -103,10 +122,12 @@
 
 /mob/living/simple_animal/bee/New(loc, var/obj/machinery/apiary/new_home)
 	..()
+	bee_mobs_count++
 	home = new_home
 
 
 /mob/living/simple_animal/bee/Destroy()
+	bee_mobs_count--
 	if(home)
 		for (var/datum/bee/B in bees)
 			home.bees_outside_hive -= B
@@ -122,9 +143,9 @@
 
 /mob/living/simple_animal/bee/death(var/gibbed = FALSE)
 	..(gibbed)
-	returnToPool(src)
+	qdel(src)
 
-/mob/living/simple_animal/bee/gib()
+/mob/living/simple_animal/bee/gib(var/animation = 0, var/meat = 1)
 	death(1)
 	monkeyizing = 1
 	canmove = 0
@@ -302,11 +323,6 @@
 		if (!visited_plants.Find(new_plant))
 			visited_plants.Add(new_plant)
 
-/mob/living/simple_animal/bee/resetVariables()
-	..("bees", "visited_plants", args)
-	bees = list()
-	visited_plants = list()
-
 ////////////////////////////////LIFE////////////////////////////////////////
 
 /mob/living/simple_animal/bee/Life()
@@ -357,7 +373,7 @@
 					mood_change(BEE_HEADING_HOME)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in home_goers)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -369,7 +385,7 @@
 					mood_change(BEE_OUT_FOR_PLANTS)
 
 				else
-					var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,T)
+					var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(T)
 					for (var/datum/bee/B in pollinaters)
 						B_mob.addBee(B)
 						bees.Remove(B)
@@ -410,7 +426,7 @@
 				target = null
 			if(bees.len > 5)
 				//calm down and spread out a little
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				for (var/i = 1 to rand(1,5))
 					var/datum/bee/B = pick(bees)
 					B_mob.addBee(B)
@@ -421,7 +437,7 @@
 				step_rand(B_mob)
 
 		//ATTACKING TARGET
-		else if(state == BEE_OUT_FOR_ENEMIES && M in view(src,1))
+		else if(state == BEE_OUT_FOR_ENEMIES && (M in view(src,1)))
 			var/sting_prob = 100
 			if(istype(M))
 				var/obj/item/clothing/worn_suit = M.wear_suit
@@ -506,7 +522,7 @@
 					queen = 1
 					break
 			if (state != BEE_ROAMING || !queen)//homeless bees spread out if there's no queen among them
-				var/mob/living/simple_animal/bee/B_mob = getFromPool(/mob/living/simple_animal/bee,get_turf(src))
+				var/mob/living/simple_animal/bee/B_mob = new /mob/living/simple_animal/bee(get_turf(src))
 				var/datum/bee/B = pick(bees)
 				B_mob.addBee(B)
 				bees.Remove(B)
@@ -579,7 +595,7 @@
 		//REACHING FOR FLOWERS
 		if(state == BEE_OUT_FOR_PLANTS && pollinating <= 0)
 			var/turf/target_turf = null
-			if(target_plant && target_plant in view(src,7))
+			if(target_plant && (target_plant in view(src,7)))
 				target_turf = get_turf(target_plant)
 				wander = 0
 			else

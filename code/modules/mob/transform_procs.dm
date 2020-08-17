@@ -26,18 +26,21 @@
 	dropBorers()
 	return ..()
 
-/mob/proc/Postmorph(var/mob/new_mob = null)
+/mob/proc/Postmorph(var/mob/new_mob = null, var/namepick = FALSE, var/namepick_message = null)
 	if(!new_mob)
 		return
 	if(mind)
 		mind.transfer_to(new_mob)
+		//namepick
+		if(namepick)
+			mob_rename_self(new_mob, null, namepick_message, FALSE)
 	else
 		new_mob.key = key
 	new_mob.a_intent = a_intent
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = TRUE)
+/mob/proc/monkeyize(var/ignore_primitive = FALSE, var/choose_name = FALSE)
 	if(ismonkey(src)) //What's the point
 		return
 	if(!Premorph())
@@ -47,12 +50,13 @@
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
 		animation.master = src
-		flick("h2monkey", animation)
+		var/moneky_anim = get_monkey_anim()
+		flick(moneky_anim, animation)
 		sleep(MONKEY_ANIM_TIME)
 		animation.master = null
 		qdel(animation)
 	var/mob/living/carbon/monkey/Mo
-	if(ignore_primitive)
+	if(ignore_primitive || !ishuman(src))
 		Mo = new /mob/living/carbon/monkey(loc)
 	else
 		var/mob/living/carbon/human/H = src
@@ -67,7 +71,7 @@
 	if(isliving(src))
 		var/mob/living/L = src
 		Mo.suiciding = L.suiciding
-		Mo.take_overall_damage(L.getBruteLoss(), L.getFireLoss())
+		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
 		Mo.stat = L.stat
@@ -75,12 +79,20 @@
 			Mo.viruses += D
 			D.affected_mob = Mo
 			L.viruses -= D //But why?
+		Mo.virus2 = virus_copylist(L.virus2)
+		if (L.immune_system)
+			L.immune_system.transfer_to(Mo)
 	Mo.delayNextAttack(0)
-	Postmorph(Mo)
+	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
-/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE)
-	.=..()
+/mob/proc/get_monkey_anim()
+	return "h2monkey"
+
+/mob/living/carbon/human/get_monkey_anim()
+	if (species)
+		return species.monkey_anim
+	return ..()
 
 /mob/proc/Cluwneize()
 	if(!Premorph())
@@ -134,13 +146,12 @@
 			comm.ai += O
 	if(mind)
 		mind.transfer_to(O)
-		O.mind.original = O
 	else
 		O.key = key
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
 	O.verbs += /mob/living/silicon/ai/proc/ai_statuschange
 	O.job = "AI"
-	O.rename_self("ai",1)
+	mob_rename_self(O,"ai", null, 1)
 	. = O
 	if(del_mob)
 		qdel(src)
@@ -153,7 +164,6 @@
 	if(mind)		//TODO
 		mind.transfer_to(O)
 		if(O.mind.assigned_role == "Cyborg")
-			O.mind.original = O
 		else if(mind && mind.special_role)
 			O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 	else
@@ -161,12 +171,12 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	if(jobban_isbanned(O, "Cyborg")) //You somehow managed to get borged, congrats.
+	if(jobban_isbanned(O, "Cyborg") || !job_master.GetJob("Cyborg").player_old_enough(O.client)) //You somehow managed to get borged, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
 		to_chat(src, "<span class='danger'>Self-destruct mechanism engaged.</span>")
 		O.self_destruct()
-		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
+		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
@@ -181,7 +191,6 @@
 	if(mind)		//TODO
 		mind.transfer_to(O)
 		if(O.mind.assigned_role == "Cyborg")
-			O.mind.original = O
 		else if(mind && mind.special_role)
 			O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 	else
@@ -269,10 +278,9 @@
 		new_human.setGender(gender) //The new human will inherit its gender
 	else //If its gender is NEUTRAL or PLURAL,
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-	var/datum/preferences/A = new()	//Randomize appearance for the human
-	A.randomize_appearance_for(new_human)
+	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
-		var/list/restricted = list("Krampus", "Horror")
+		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
 	new_human.set_species(new_species)
 	if(isliving(src))
@@ -308,6 +316,18 @@
 	return new_mob
 
 /mob/living/carbon/human/proc/GALize()
+	if(ishuman(src))
+		var/mob/living/carbon/human/M = src
+		if(!M.is_wearing_item(/obj/item/clothing/under/galo))
+			var/obj/item/clothing/under/galo/G = new /obj/item/clothing/under/galo(get_turf(M))
+			if(M.w_uniform)
+				M.u_equip(M.w_uniform, 1)
+			M.equip_to_slot(G, slot_w_uniform)
+		if(!M.is_wearing_item(/obj/item/clothing/glasses/sunglasses))
+			var/obj/item/clothing/glasses/sunglasses/S = new /obj/item/clothing/glasses/sunglasses(get_turf(M))
+			if(M.glasses)
+				M.u_equip(M.glasses, 1)
+			M.equip_to_slot(S, slot_glasses)
 	my_appearance.s_tone = -100 //Nichi saro ni itte hada o yaku
 	update_body()
 	if(gender == MALE && my_appearance.h_style != "Toriyama 2")
@@ -317,5 +337,35 @@
 	my_appearance.b_facial = my_appearance.b_hair = 0
 	update_hair()
 	playsound(src, 'sound/misc/gal-o-sengen.ogg', 50, 1)// GO GO GO GO GO GO GAL-O-SENGEN
+
+/mob/living/carbon/human/proc/zwartepietify()
+	if(ishuman(src)) //daar word aan de deur geklopt
+		if(!isjusthuman(src))
+			src.Humanize("Human")
+		var/mob/living/carbon/human/M = src
+		if(!M.is_wearing_item(/obj/item/clothing/under/jester))
+			var/obj/item/clothing/under/jester/JE = new /obj/item/clothing/under/jester(get_turf(M))
+			if(M.w_uniform) //hard geklopt
+				M.u_equip(M.w_uniform, 1)
+			M.equip_to_slot(JE, slot_w_uniform)
+			JE.canremove = 0
+		if(!M.is_wearing_item(/obj/item/clothing/gloves/black))
+			var/obj/item/clothing/gloves/black/BG = new /obj/item/clothing/gloves/black(get_turf(M))
+			if(M.gloves) //zacht geklopt
+				M.u_equip(M.gloves, 1)
+			M.equip_to_slot(BG, slot_gloves)
+			BG.canremove = 0
+		my_appearance.s_tone = -250
+		lip_style = "red"
+		update_body() //daar word aan de deur geklopt
+		if(my_appearance.h_style != "Afro")
+			my_appearance.h_style = "Afro"
+		if(my_appearance.f_style  != "Shaven")
+			my_appearance.f_style  = "Shaven"
+		my_appearance.r_facial = my_appearance.r_hair = 5
+		my_appearance.g_facial = my_appearance.g_hair = 5
+		my_appearance.b_facial = my_appearance.b_hair = 5
+		update_hair() //wie zal dat zijn?
+
 
 #undef MONKEY_ANIM_TIME

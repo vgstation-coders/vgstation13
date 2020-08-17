@@ -1,8 +1,7 @@
-/*****************************************
-*
-* GLOBAL STYLES
-*
-******************************************/
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+/* IF YOU UPDATE ANY OF THESE YOU HAVE TO UPDATE STYLESHEET.DM TOO */
+
 html, body {
 	padding: 0;
 	margin: 0;
@@ -11,9 +10,9 @@ html, body {
 }
 body {
 	background: #fff;
-    font-family: Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 9pt;
-    line-height: 1.2;
+	font-family: Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 9pt;
+	line-height: 1.2;
 	overflow-x: hidden;
 	overflow-y: scroll;
 	word-wrap: break-word;
@@ -28,6 +27,125 @@ img.icon {
 	width: 16px;
 	height: 16px;
 }
+
+a {color: #0000ff;}
+a:visited {color: #ff00ff;}
+a.popt {text-decoration: none;}
+
+/* ADD HERE FOR BOLD */
+.bold, .name, .prefix, .ooc, .looc, .adminooc, .adminlooc, .admin, .gfartooc, .gfartlooc, .gfartadmin, .mentorooc, .mentorlooc, .medal {font-weight: bold;}
+
+/* ADD HERE FOR ITALIC */
+.italic, .ghostdronesay.broadcast {font-style: italic;}
+
+/* OUTPUT COLORS */
+.highlight {background: yellow;}
+h1, h2, h3, h4, h5, h6	{color: #0000ff;font-family: Georgia, Verdana, sans-serif;}
+em						{font-style: normal;	font-weight: bold;}
+.motd					{color: #638500;	font-family: Verdana, sans-serif;}
+.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6
+						{color: #638500;	text-decoration: underline;}
+.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover
+						{color: #638500;}
+.prefix					{font-weight: bold;}
+.ooc					{font-weight: bold;}
+.adminobserverooc		{color: #0099cc;	font-weight: bold;}
+.adminooc				{color: #b82e00;	font-weight: bold;}
+.adminobserver			{color: #996600;	font-weight: bold;}
+.admin					{color: #386aff;	font-weight: bold;}
+.adminsay				{color: #9611D4;	font-weight: bold;}
+.name					{font-weight: bold;}
+.say					{}
+.siliconsay				{font-family: 'Courier New', Courier, monospace;}
+.deadsay				{color: #5c00e6;}
+.radio					{color: #ff9933;}
+.commonradio			{color: #008000;}
+.deptradio				{color: #993399;}
+.comradio				{color: #193A7A;}
+.syndradio				{color: #6d3f40;}
+.raiderradio			{color: #6d3f40;}
+.dsquadradio			{color: #686868;}
+.resteamradio			{color: #18BC46;}
+.aiprivradio			{color: #ff00ff;}
+.centradio				{color: #5C5C8A;}
+.secradio				{color: #A30000;}
+.engradio				{color: #A66300;}
+.medradio				{color: #3399CC;}
+.sciradio				{color: #993399;}
+.supradio				{color: #5F4519;}
+.serradio				{color: #A17A4E;}
+.djradio				{color: #663300;}
+.binaryradio			{color: #0B0050;	font-family: 'Courier New', Courier, monospace;}
+.mommiradio				{color: navy;}
+.alert					{color: #ff0000;}
+h1.alert, h2.alert		{color: #000000;}
+.emote					{font-style: italic;}
+.selecteddna			{color: #FFFFFF;	background-color: #001B1B}
+.attack					{color: #ff0000;}
+.moderate				{color: #CC0000;}
+.disarm					{color: #990000;}
+.passive				{color: #660000;}
+.danger					{color: #ff0000;	font-weight: bold;}
+.userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
+.warning				{color: #ff0000;	font-style: italic;}
+.sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
+.blob					{color: #006221;	font-weight: bold;	font-style: italic;}
+.numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
+.confirm				{color: #00af3b;}
+.rose					{color: #ff5050;}
+.info					{color: #0000CC;}
+.notice					{color: #000099;}
+.bnotice				{color: #000099; 	font-weight: bold;}
+.darknotice				{color: #000000;}
+.sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
+.alien					{color: #543354;}
+.ancient				{color: #008B8B;	font-stye: italic;}
+.newscaster				{color: #800000;}
+.mod					{color: #735638;	font-weight: bold;}
+.modooc					{color: #000000;	font-weight: bold;}
+.adminmod				{color: #402A14;	font-weight: bold;}
+.tajaran				{color: #803B56;}
+.skrell					{color: #00CED1;}
+.solcom					{color: #22228B;}
+.soghun					{color: #228B22;}
+.vox					{color: #AA00AA;}
+.rough					{font-family: 'Trebuchet MS', cursive, sans-serif;}
+.say_quote				{font-family: Georgia, Verdana, sans-serif;}
+.cult					{color: #800080; font-weight: bold; font-style: italic;}
+.interface				{color: #330033;}
+.big, .megaphone		{font-size: 150%;}
+.bold					{font-weight: bold;}
+.center					{text-align: center;}
+.red					{color: #FF0000;}
+.grey					{color: #585858; font-family: Dotum, sans-serif;}
+.skeleton				{color: #585858; font-weight: bold; font-style: italic;}
+.mushroom				{color: #4B0082;}
+.gutter					{color: #61380B; font-style: italic;}
+.golem					{color: #B4DBCB; font-weight: bold;}
+.slime					{color: #34A7Af;}
+.orange					{color: #ffa500;}
+.borange				{color: #ffa500; font-weight: bold;}
+.maroon					{color: #800000;}
+
+.good					{color: green;}
+.average				{color: #FF8000;}
+.bad					{color: #FF0000;}
+
+.italics, .talkinto		{font-style:italic;}
+.whisper				{font-style:italic;color:#333333;}
+
+.recruit 				{color: #5c00e6; font-weight: bold; font-style: italic;}
+
+.text-normal {font-weight: normal; font-style: normal;}
+.hidden {display: none; visibility: hidden;}
+
+/*
+ * GOONCHAT WINDOW STYLES
+ */
+
+.connectionClosed, .fatalError {background: red; color: white; padding: 5px;}
+.connectionClosed.restored {background: green;}
+.internal.boldnshit {color: #000099; font-weight: bold;}
 
 .repeat:before { /* "repeated" badge class for combined messages */
 	content: 'x';
@@ -47,16 +165,6 @@ img.icon {
 	border-radius: 12px;
 }
 
-a {color: #0000ff;}
-a:visited {color: #ff00ff;}
-a.popt {text-decoration: none;}
-
-
-/*****************************************
-*
-* OUTPUT NOT RELATED TO ACTUAL MESSAGES
-*
-******************************************/
 #loading {
 	position: fixed;
 	width: 300px;
@@ -82,9 +190,9 @@ a.popt {text-decoration: none;}
 	padding: 8px;
 	background: #ddd;
 	text-decoration: none;
-    font-variant: small-caps;
-    font-size: 1.1em;
-    font-weight: bold;
+	font-variant: small-caps;
+	font-size: 1.1em;
+	font-weight: bold;
 	color: #333;
 }
 #newMessages:hover {background: #ccc;}
@@ -112,21 +220,21 @@ a.popt {text-decoration: none;}
 }
 #options a {
 	background: #ddd;
-    height: 30px;
+	height: 30px;
 	padding: 5px 0;
 	display: block;
 	color: #333;
 	text-decoration: none;
-    line-height: 28px;
-    border-top: 1px solid #b4b4b4;
+	line-height: 28px;
+	border-top: 1px solid #b4b4b4;
 }
 #options a:hover {background: #ccc;}
 #options .toggle {
 	width: 40px;
-    background: #ccc;
-    border-top: 0;
-    float: right;
-    text-align: center;
+	background: #ccc;
+	border-top: 0;
+	float: right;
+	text-align: center;
 }
 #options .sub {clear: both; display: none; width: 160px;}
 #options .sub.scroll {overflow-y: scroll;}
@@ -147,7 +255,6 @@ a.popt {text-decoration: none;}
 }
 #options .decreaseFont {border-top: 0;}
 
-/* POPUPS */
 .popup {
 	position: fixed;
 	top: 50%;
@@ -193,128 +300,3 @@ a.popt {text-decoration: none;}
 .highlightPopup input.highlightTermSubmit {margin-top: 5px;}
 
 .icon-stack {height: 1em; line-height: 1em; width: 1em; vertical-align: middle; margin-top: -2px;}
-
-
-/*****************************************
-*
-* OUTPUT ACTUALLY RELATED TO MESSAGES
-*
-******************************************/
-
-/* MOTD */
-.motd {color: #638500;}
-.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #638500; text-decoration: underline;}
-.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover {color: #638500;}
-
-/* ADD HERE FOR BOLD */
-.bold, .name, .prefix, .ooc, .looc, .adminooc, .adminlooc, .admin, .gfartooc, .gfartlooc, .gfartadmin, .mentorooc, .mentorlooc, .medal {font-weight: bold;}
-
-/* ADD HERE FOR ITALIC */
-.italic, .ghostdronesay.broadcast {font-style: italic;}
-
-/* OUTPUT COLORS */
-.highlight {background: yellow;}
-h1, h2, h3, h4, h5, h6	{color: #0000ff;font-family: Georgia, Verdana, sans-serif;}
-em						{font-style: normal;	font-weight: bold;}
-.motd					{color: #638500;	font-family: Verdana, sans-serif;}
-.motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6
-						{color: #638500;	text-decoration: underline;}
-.motd a, .motd a:link, .motd a:visited, .motd a:active, .motd a:hover
-						{color: #638500;}
-.prefix					{					font-weight: bold;}
-.ooc					{					font-weight: bold;}
-.adminobserverooc		{color: #0099cc;	font-weight: bold;}
-.adminooc				{color: #b82e00;	font-weight: bold;}
-.adminobserver			{color: #996600;	font-weight: bold;}
-.admin					{color: #386aff;	font-weight: bold;}
-.adminsay				{color: #9611D4;	font-weight: bold;}
-.name					{					font-weight: bold;}
-.say					{}
-.siliconsay				{font-family: 'Courier New', Courier, monospace;}
-.deadsay				{color: #5c00e6;}
-.radio					{color: #ff9933;}
-.commonradio			{color: #008000;}
-.deptradio				{color: #993399;}
-.comradio				{color: #193A7A;}
-.syndradio				{color: #6d3f40;}
-.raiderradio				{color: #6d3f40;}
-.dsquadradio			{color: #686868;}
-.resteamradio			{color: #18BC46;}
-.aiprivradio			{color: #ff00ff;}
-.centradio				{color: #5C5C8A;}
-.secradio				{color: #A30000;}
-.engradio				{color: #A66300;}
-.medradio				{color: #3399CC;}
-.sciradio				{color: #993399;}
-.supradio				{color: #5F4519;}
-.serradio				{color: #A17A4E;}
-.djradio				{color: #663300;}
-.binaryradio			{color: #0B0050;	font-family: 'Courier New', Courier, monospace;}
-.mommiradio				{color: navy;}
-.alert					{color: #ff0000;}
-h1.alert, h2.alert		{color: #000000;}
-.emote					{					font-style: italic;}
-.selecteddna			{color: #FFFFFF; 	background-color: #001B1B}
-.attack					{color: #ff0000;}
-.moderate				{color: #CC0000;}
-.disarm					{color: #990000;}
-.passive				{color: #660000;}
-.danger					{color: #ff0000;	font-weight: bold;}
-.userdanger				{color: #ff0000;	font-weight: bold;	font-size: 120%}
-.warning				{color: #ff0000;	font-style: italic;}
-.sinister				{color: #800080;	font-weight: bold;	font-style: italic;} /* /vg/ */
-.blob					{color: #006221;	font-weight: bold;	font-style: italic;}
-.numb					{color: transparent;font-weight: bold;	text-shadow: 0 0 2px rgba(0,161,161,0.5);} /* blurry text */
-.confirm				{color: #00af3b;}
-.rose					{color: #ff5050;}
-.info					{color: #0000CC;}
-.notice					{color: #000099;}
-.bnotice				{color: #000099; 	font-weight: bold;}
-.sans					{font-family: 'Comic Sans MS', cursive, sans-serif;}
-.alien					{color: #543354;}
-.ancient				{color: #008B8B;	font-stye: italic;}
-.newscaster				{color: #800000;}
-.mod					{color: #735638;	font-weight: bold;}
-.modooc					{color: #000000;	font-weight: bold;}
-.adminmod				{color: #402A14;	font-weight: bold;}
-.tajaran				{color: #803B56;}
-.skrell					{color: #00CED1;}
-.solcom					{color: #22228B;}
-.soghun					{color: #228B22;}
-.vox					{color: #AA00AA;}
-.rough					{font-family: 'Trebuchet MS', cursive, sans-serif;}
-.say_quote				{font-family: Georgia, Verdana, sans-serif;}
-.cult					{color: #800080; font-weight: bold; font-style: italic;}
-.interface				{color: #330033;}
-.big					{font-size: 150%;}
-.bold					{font-weight: bold;}
-.center					{text-align: center;}
-.red					{color: #FF0000;}
-.grey					{color: #585858; font-family: Dotum, sans-serif;}
-.skeleton				{color: #585858; font-weight: bold; font-style: italic;}
-.gutter					{color: #61380B; font-style: italic;}
-.golem					{color: #B4DBCB; font-weight: bold;}
-.slime					{color: #34A7Af;}
-.orange					{color: #ffa500;}
-.maroon					{color: #800000;}
-
-/* /vg/ */
-.good					{color: green;}
-.average				{color: #FF8000;}
-.bad					{color: #FF0000;}
-.mushroom				{color: #4B0082;}
-/* /vg/ Saycode Rewrite */
-.italics, .talkinto		{font-style:italic;}
-.whisper				{font-style:italic;color:#333333;}
-/* Recruiting stuff */
-.recruit 				{color: #5c00e6; font-weight: bold; font-style: italic;}
-"}
-
-
-.connectionClosed, .fatalError {background: red; color: white; padding: 5px;}
-.connectionClosed.restored {background: green;}
-.internal.boldnshit {color: blue; font-weight: bold;}
-
-/* HELPER CLASSES */
-.text-normal {font-weight: normal; font-style: normal;}
-.hidden {display: none; visibility: hidden;}

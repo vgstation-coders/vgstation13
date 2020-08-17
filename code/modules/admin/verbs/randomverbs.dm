@@ -171,12 +171,12 @@ proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 		if(!usr || !usr.client)
 			return
 		if(!usr.client.holder)
-			to_chat(usr, "<font color='red'>Error: cmd_admin_mute: You don't have permission to do this.</font>")
+			to_chat(usr, "<span class='red'>Error: cmd_admin_mute: You don't have permission to do this.</span>")
 			return
 		if(!M.client)
-			to_chat(usr, "<font color='red'>Error: cmd_admin_mute: This mob doesn't have a client tied to it.</font>")
+			to_chat(usr, "<span class='red'>Error: cmd_admin_mute: This mob doesn't have a client tied to it.</span>")
 		if(M.client.holder)
-			to_chat(usr, "<font color='red'>Error: cmd_admin_mute: You cannot mute an admin.</font>")
+			to_chat(usr, "<span class='red'>Error: cmd_admin_mute: You cannot mute an admin.</span>")
 	if(!M.client)
 		return
 	if(M.client.holder)
@@ -257,7 +257,7 @@ proc/cmd_admin_mute(mob/M as mob, mute_type, automute = 0)
 		if(candidates.len)
 			ckey = input("Pick the player you want to respawn as a xeno.", "Suitable Candidates") as null|anything in candidates
 		else
-			to_chat(usr, "<font color='red'>Error: create_xeno(): no suitable candidates.</font>")
+			to_chat(usr, "<span class='red'>Error: create_xeno(): no suitable candidates.</span>")
 	if(!istext(ckey))
 		return 0
 
@@ -294,7 +294,7 @@ Ccomp's first proc.
 	var/list/mobs = list()
 	var/list/ghosts = list()
 	var/list/sortmob = sortNames(mob_list)                           // get the mob list.
-	/var/any=0
+	var/any=0
 	for(var/mob/dead/observer/M in sortmob)
 		mobs.Add(M)                                             //filter it where it's only ghosts
 		any = 1                                                 //if no ghosts show up, any will just be 0
@@ -434,7 +434,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			break
 
 	if(!G_found)//If a ghost was not found.
-		to_chat(usr, "<font color='red'>There is no active key like that in the game or the person is not currently a ghost.</font>")
+		to_chat(usr, "<span class='red'>There is no active key like that in the game or the person is not currently a ghost.</span>")
 		return
 
 	if(G_found.mind && !G_found.mind.active)	//mind isn't currently in use by someone/something
@@ -655,11 +655,24 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		if(confirmation == "No")
 			return
 	var/input = input(usr, "Please enter anything you want. Anything. Serious.", "What?", "") as message|null
-	var/customname = input(usr, "Pick a title for the report.", "Title") as text|null
 	if(!input)
 		return
+
+	var/customname = input(usr, "Pick a title for the report, or just leave it as Nanotrasen Update. \nLeaving this blank will cancel the command report.", "Choose a title", "Nanotrasen Update") as text|null
 	if(!customname)
-		customname = "Nanotrasen Update"
+		return
+
+	var/headsonly = FALSE
+
+	switch(alert("\t[customname] \n\n[input] \n---------- \nIf this message is correct, who is it intended for?", "Please verify your message", "All Crew", "Heads Only", "Cancel"))
+		if("All Crew")
+			command_alert(input, customname,1);
+		if("Heads Only")
+			headsonly = TRUE
+			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+		else
+			return
+
 	for (var/obj/machinery/computer/communications/C in machines)
 		if(! (C.stat & (BROKEN|NOPOWER) ) )
 			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
@@ -669,18 +682,12 @@ Traitors and the like can also be revived with the previous role mostly intact.
 			C.messagetitle.Add("[command_name()] Update")
 			C.messagetext.Add(P.info)
 
-	switch(alert("Should this be announced to the general population?",,"Yes","No"))
-		if("Yes")
-			command_alert(input, customname,1);
-		if("No")
-			to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
-
 	world << sound('sound/AI/commandreport.ogg', volume = 60)
-	log_admin("[key_name(src)] has created a command report: [input]")
+	log_admin("[key_name(src)] has created a [headsonly ? "heads only" : "publicly announced"] command report titled [customname]: [input]")
 	message_admins("[key_name_admin(src)] has created a command report", 1)
 	feedback_add_details("admin_verb","CCR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
-/client/proc/cmd_admin_delete(atom/O as obj|mob|turf in world)
+/client/proc/cmd_admin_delete(atom/O)
 	set category = "Admin"
 	set name = "Delete"
 
@@ -785,26 +792,28 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	log_admin("[key_name(usr)] has gibbed [key_name(M)]")
 	message_admins("[key_name_admin(usr)] has gibbed [key_name_admin(M)]", 1)
 
-	if(istype(M, /mob/dead/observer))
-		gibs(M.loc, M.viruses)
-		return
-
-	M.gib()
+	if(!istype(M, /mob/dead/observer))
+		M.gib()
+	else
+		gibs(M.loc, null)
 	feedback_add_details("admin_verb","GIB") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/cmd_admin_gib_self()
 	set name = "Gibself"
 	set category = "Fun"
 
-	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
-	if(confirm == "Yes")
-		log_admin("[key_name(usr)] used gibself.")
-		message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
-		if(!istype(mob, /mob/dead/observer))
-			mob.gib()
-		else
-			gibs(mob.loc, mob.viruses)
-		feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+	if(!istype(mob, /mob/dead/observer))
+		var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
+		if(confirm != "Yes")
+			return
+
+	log_admin("[key_name(usr)] used gibself.")
+	message_admins("<span class='notice'>[key_name_admin(usr)] used gibself.</span>", 1)
+	if(!istype(mob, /mob/dead/observer))
+		mob.gib()
+	else
+		gibs(mob.loc, null)
+	feedback_add_details("admin_verb","GIBS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 /*
 /client/proc/cmd_manual_ban()
 	set name = "Manual Ban"
@@ -912,7 +921,7 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		else
 			return
 
-	var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification") as text|null
+	var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 	var/confirm = alert(src, "Are you sure you want to call the shuttle?", "Confirm", "Yes", "Cancel")
 	if(confirm != "Yes")
 		return
@@ -1075,31 +1084,25 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 	var/list/dropped_items
 	var/delete_items
-	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Loadout","") as null|anything in list("Yes","No")
+	var/strip_items = input(usr,"Do you want to strip \the [M]'s current equipment?","Equip Outfit","") as null|anything in list("Yes","No")
 	if(!strip_items)
 		return
 	if(strip_items == "Yes")
-		delete_items = input(usr,"Delete stripped items?","Equip Loadout","") as null|anything in list("Yes","No")
+		delete_items = input(usr,"Delete stripped items?","Equip Outfit","") as null|anything in list("Yes","No")
 		if(!delete_items)
 			return
-	var/list/loadouts = list() + "USE ITEMS ON MY TURF" + (typesof(/obj/abstract/loadout) - /obj/abstract/loadout)
-	var/loadout_type = input(usr,"Loadout Type","Equip Loadout","") as null|anything in loadouts
-	if(!loadout_type)
+	var/list/outfits = (typesof(/datum/outfit/) - /datum/outfit/ - /datum/outfit/striketeam/)
+	var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	if(!outfit_type || !ispath(outfit_type))
 		return
 	if(strip_items == "Yes")
 		dropped_items = M.unequip_everything()
 		if(delete_items == "Yes")
 			for(var/atom/A in dropped_items)
 				qdel(A)
-	if(loadout_type == "USE ITEMS ON MY TURF")
-		M.equip_loadout(null, FALSE)
-	else
-		if(!ispath(loadout_type))
-			alert("ERROR: No such loadout type found.")
-			return
-		M.equip_loadout(loadout_type, FALSE)
-
-	log_admin("[key_name(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].")
-	message_admins("<span class='notice'>[key_name_admin(usr)] has equipped a [loadout_type ? "loadout of type [loadout_type]" : "custom loadout"] to [key_name(M)].</span>", 1)
+	var/datum/outfit/concrete_outfit = new outfit_type
+	concrete_outfit.equip(M, TRUE)
+	log_admin("[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].")
+	message_admins("<span class='notice'>[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].</span>", 1)
 
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

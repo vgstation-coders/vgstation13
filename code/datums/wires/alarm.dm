@@ -35,6 +35,7 @@ var/const/AALARM_WIRE_AALARM = 16
 
 /datum/wires/alarm/UpdateCut(var/index, var/mended, var/mob/user)
 	var/obj/machinery/alarm/A = holder
+	..()
 	var/obj/I = user.get_active_hand()
 	switch(index)
 		if(AALARM_WIRE_IDSCAN)
@@ -66,6 +67,7 @@ var/const/AALARM_WIRE_AALARM = 16
 
 /datum/wires/alarm/UpdatePulsed(var/index)
 	var/obj/machinery/alarm/A = holder
+	..()
 	switch(index)
 		if(AALARM_WIRE_IDSCAN)
 			A.locked = !A.locked

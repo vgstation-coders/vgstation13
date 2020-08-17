@@ -45,7 +45,7 @@ mob/living/carbon/proc/pain(var/partname, var/amount, var/force, var/burning = 0
 
 // message is the custom message to be displayed
 // flash_strength is 0 for weak pain flash, 1 for strong pain flash
-mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
+mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength, var/scream = FALSE)
 	if(stat >= 1)
 		return
 
@@ -59,6 +59,8 @@ mob/living/carbon/human/proc/custom_pain(var/message, var/flash_strength)
 	// Anti message spam checks
 	if(msg && ((msg != last_pain_message) || (world.time >= next_pain_time)))
 		last_pain_message = msg
+		if(scream)
+			audible_scream()
 		to_chat(src, msg)
 	next_pain_time = world.time + 100
 

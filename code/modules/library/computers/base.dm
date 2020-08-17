@@ -7,7 +7,7 @@
 	var/num_pages = 0
 	var/num_results = 0
 	var/datum/library_query/query = new()
-
+	pass_flags = PASSTABLE
 	icon = 'icons/obj/library.dmi'
 	icon_state = "computer"
 
@@ -48,10 +48,12 @@
 		//sql += " [query.toSQL()]"
 	// Pagination
 //	to_chat(world, sql)
-	var/DBQuery/_query = dbcon_old.NewQuery(sql)
+	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql)
 	_query.Execute()
 	if(_query.ErrorMsg())
 		world.log << _query.ErrorMsg()
+		qdel(_query)
+		return
 
 	var/list/results = list()
 	while(_query.NextRow())
@@ -64,6 +66,7 @@
 			"ckey"    =_query.item[5]
 		))
 		results += CB
+	qdel(_query)
 	return results
 
 /obj/machinery/computer/library/proc/get_num_results()
@@ -71,10 +74,17 @@
 	//if(query)
 		//sql += query.toSQL()
 
-	var/DBQuery/_query = dbcon_old.NewQuery(sql)
-	_query.Execute()
+	var/datum/DBQuery/_query = SSdbcore.NewQuery(sql)
+	if(!_query.Execute())
+		message_admins("Error: [_query.ErrorMsg()]")
+		log_sql("Error: [_query.ErrorMsg()]")
+		qdel(_query)
+		return
 	while(_query.NextRow())
-		return text2num(_query.item[1])
+		. = text2num(_query.item[1])
+		qdel(_query)
+		return
+	qdel(_query)
 	return 0
 
 /obj/machinery/computer/library/proc/get_pagelist()

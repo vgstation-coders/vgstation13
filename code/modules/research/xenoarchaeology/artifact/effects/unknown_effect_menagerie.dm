@@ -1,17 +1,18 @@
 /datum/artifact_effect/menagerie
 	effecttype = "menagerie"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_WIZARD)
 	effect = ARTIFACT_EFFECT_PULSE
 	effect_type = 5
 	var/static/list/possible_types = list()
 
 /datum/artifact_effect/menagerie/New()
 	..()
-	possible_types = existing_typesof(/mob/living) - (existing_typesof(/mob/living/silicon) + existing_typesof(/mob/living/simple_animal/hostile/humanoid))
+	possible_types = existing_typesof(/mob/living) - (existing_typesof_list(blacklisted_mobs) + (existing_typesof(/mob/living/silicon) + /mob/living/simple_animal/scp_173))
 
 /datum/artifact_effect/menagerie/DoEffectPulse()
 	if(holder)
 		for(var/mob/living/M in range(effectrange,holder))
-			if(istype(M, /mob/living/silicon))
+			if(issilicon(M))
 				continue
 			if(!M.transmogged_from)
 				var/multiplier = GetAnomalySusceptibility(M)

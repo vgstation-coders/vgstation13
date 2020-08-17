@@ -11,7 +11,7 @@
 	var/obj/item/clothing/mask/necklace/crystal/C = pick(rambler.search_contents_for(/obj/item/clothing/mask/necklace/crystal))
 	if(!C || !C.suspect)
 		return FALSE
-	if(C.suspect.mind.antag_roles.len)
+	if(C.suspect.antag_roles.len)
 		return TRUE
 	else
 		return FALSE

@@ -135,6 +135,9 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
+	
+	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
+	var/battery_dependent = 0	//Requires a battery to run
 
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
@@ -153,6 +156,7 @@ Class Procs:
 
 	var/inMachineList = 1 // For debugging.
 	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
+	var/id_tag = null // Identify the machine
 
 /obj/machinery/cultify()
 	var/list/random_structure = list(
@@ -165,6 +169,7 @@ Class Procs:
 	..()
 
 /obj/machinery/New()
+	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
 	//if(ticker) initialize()
 	return ..()
@@ -180,7 +185,7 @@ Class Procs:
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
 /obj/machinery/Destroy()
-
+	all_machines -= src
 	machines.Remove(src)
 
 	power_machines.Remove(src)
@@ -241,7 +246,7 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel))
+	if(!powered(power_channel) && !connected_cell)
 		return 0
 
 	switch (use_power)
@@ -332,10 +337,11 @@ Class Procs:
 
 		if("buffer" in href_list)
 			if(istype(src, /obj/machinery/telecomms))
-				if(!hasvar(src, "id"))
+				var/obj/machinery/telecomms/T = src
+				if(!T.id)
 					to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 					return
-			else if(!hasvar(src, "id_tag"))
+			else if(!id_tag)
 				to_chat(usr, "<span class='danger'>A red light flashes and nothing changes.</span>")
 				return
 			P.buffer = src
@@ -362,9 +368,20 @@ Class Procs:
 			update_multitool_menu(usr)
 			return 1
 
+/obj/machinery/proc/is_on_same_z(var/mob/user)
+	var/turf/T = get_turf(user)
+	if(!isAI(user) && T.z != z && user.z != map.zCentcomm)
+		return FALSE
+	return TRUE
+
+/obj/machinery/proc/is_in_range(var/mob/user)
+	if((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		return FALSE
+	return TRUE
+
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(href_list["close"])
 		return
@@ -377,12 +394,10 @@ Class Procs:
 		if (!usr.dexterity_check())
 			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
 			return 1
-		var/turf/T = get_turf(usr)
-		if(!isAI(usr) && T.z != z)
-			if(usr.z != map.zCentcomm)
-				to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
-				return 1
-		if ((!in_range(src, usr) || !istype(src.loc, /turf)) && !istype(usr, /mob/living/silicon))
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 1
+		if(!is_in_range(usr))
 			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
 			return 1
 	else if(!custom_aghost_alerts)
@@ -461,7 +476,7 @@ Class Procs:
 		if(prob(destroy_chance))
 			qdel(I)
 		else
-			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src:reagents && src:reagents.total_volume)
+			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
@@ -472,21 +487,21 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
-		playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		dropFrame()
 		spillContents()
 		user.visible_message(	"<span class='notice'>[user] successfully pries out the circuitboard from \the [src]!</span>",
 								"<span class='notice'>[bicon(src)] You successfully pry out the circuitboard from \the [src]!</span>")
 		return 1
-	return -1
+	return 0
 
 //just something silly to delete the machine while still leaving something behind
 /obj/machinery/proc/smashDestroy(var/destroy_chance = 50)
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 2)
 	spillContents(destroy_chance)
 	qdel(src)
 
@@ -500,7 +515,7 @@ Class Procs:
 			icon_state = initial(icon_state)
 	to_chat(user, "<span class='notice'>[bicon(src)] You [panel_open ? "open" : "close"] the maintenance hatch of \the [src].</span>")
 	if(toggleitem.is_screwdriver(user))
-		playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		toggleitem.playtoolsound(loc, 50)
 	update_icon()
 	return 1
 
@@ -527,7 +542,7 @@ Class Procs:
 	user.visible_message("[user.name] starts to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You start to [state - 1 ? "unweld": "weld" ] the [src] [state - 1 ? "from" : "to"] the floor.", \
 		"You hear welding.")
-	if (WT.do_weld(user, src,20, 0))
+	if (WT.do_weld(user, src,20, 1))
 		if(gcDestroyed)
 			return -1
 		switch(state)
@@ -543,7 +558,6 @@ Class Procs:
 							)
 		return 1
 	else
-		to_chat(user, "<span class='rose'>You need more welding fuel to complete this task.</span>")
 		return -1
 
 /**
@@ -568,19 +582,22 @@ Class Procs:
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
+
+	add_fingerprint(user)
+
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
 			return
 
-	if(iswrench(O) && wrenchable()) //make sure this is BEFORE the fixed2work check
+	if(O.is_wrench(user) && wrenchable()) //make sure this is BEFORE the fixed2work check
 		if(!panel_open)
 			if(state == 2 && src.machine_flags & WELD_FIXED) //prevent unanchoring welded machinery
 				to_chat(user, "\The [src] has to be unwelded from the floor first.")
 				return -1 //state set to 2, can't do it
 			else
-				if(wrenchAnchor(user) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
+				if(wrenchAnchor(user, O) && machine_flags & FIXED2WORK) //wrenches/unwrenches into place if possible, then updates the power and state if necessary
 					state = anchored
 					power_change() //updates us to turn on or off as necessary
 					return 1
@@ -598,7 +615,7 @@ Class Procs:
 
 	if(iscrowbar(O) && machine_flags & CROWDESTROY)
 		if(panel_open)
-			if(crowbarDestroy(user) == 1)
+			if(crowbarDestroy(user, O))
 				qdel(src)
 				return 1
 			else
@@ -612,8 +629,11 @@ Class Procs:
 		return to_chat(user, "<span class='warning'>\The [src] must be anchored first!</span>")
 
 	if(istype(O, /obj/item/device/paicard) && machine_flags & WIREJACK)
-		for(var/mob/M in O)
-			wirejack(M)
+		var/obj/item/device/paicard/P = O
+		if(!P.pai)
+			return 1
+		if(wirejack(P.pai))
+			to_chat(user, "<span class='notice'>Wirejack engaged on \the [src].</span>")
 		return 1
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
@@ -706,7 +726,7 @@ Class Procs:
 			W.play_rped_sound()
 		else
 			to_chat(user, "<span class='notice'>Following parts detected in the machine:</span>")
-			for(var/var/obj/item/C in component_parts)
+			for(var/obj/item/C in component_parts)
 				to_chat(user, "<span class='notice'>    [C.name]</span>")
 		return 1
 	return 0

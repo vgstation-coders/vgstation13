@@ -68,6 +68,7 @@
 	can_fire = 0
 	flags |= SS_NO_FIRE
 	Master.subsystems -= src
+	..()
 
 // Queue it to run.
 //   (we loop thru a linked list until we get to the end or find the right point)

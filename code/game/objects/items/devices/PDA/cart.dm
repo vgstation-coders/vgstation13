@@ -1,3 +1,6 @@
+// -- This file is the worst file you'll ever have to work with in your entire life coding for ss13.
+// Enjoy.
+
 /obj/item/weapon/cartridge
 	name = "\improper Generic cartridge"
 	desc = "A data cartridge for portable microcomputers."
@@ -7,7 +10,10 @@
 	origin_tech = Tc_PROGRAMMING + "=2"
 	w_class = W_CLASS_TINY
 
+	// -- What we use to communicate with bots
 	var/obj/item/radio/integrated/radio = null
+
+	// -- Various "access" crap
 	var/access_security = 0
 	var/access_engine = 0
 	var/access_atmos = 0
@@ -17,7 +23,6 @@
 	var/access_clown = 0
 	var/access_mime = 0
 	var/access_janitor = 0
-//	var/access_flora = 0
 	var/access_reagent_scanner = 0
 	var/access_remote_door = 0 //Control some blast doors remotely!!
 	var/remote_door_id = ""
@@ -26,11 +31,18 @@
 	var/access_hydroponics = 0
 	var/access_trader = 0
 	var/access_robotics = 0
+	var/fax_pings = FALSE
+
+	// -- Crime against OOP variable (controls what is shown on PDA call to cartridge)
 	var/mode = null
 	var/menu
+
+	// -- Records
 	var/datum/data/record/active1 = null //General
 	var/datum/data/record/active2 = null //Medical
 	var/datum/data/record/active3 = null //Security
+
+	// -- Various crimes against object oriented programming
 	var/obj/machinery/power/monitor/powmonitor = null // Power Monitor
 	var/list/powermonitors = list()
 	var/obj/machinery/computer/station_alert/alertmonitor = null // Alert Monitor
@@ -38,6 +50,9 @@
 	var/message1	// used for status_displays
 	var/message2
 	var/list/stored_data = list()
+
+	// Bot destination
+	var/saved_destination = "No destination"
 
 /obj/item/weapon/cartridge/Destroy()
 	if(radio)
@@ -60,6 +75,11 @@
 	icon_state = "cart-e"
 	access_engine = 1
 
+/obj/item/weapon/cartridge/engineering/New()
+	..()
+	spawn(5)//giving time for the radio_controller to initialize :^)
+		radio = new /obj/item/radio/integrated/signal/bot/floorbot(src)
+
 /obj/item/weapon/cartridge/atmos
 	name = "\improper BreatheDeep Cartridge"
 	icon_state = "cart-a"
@@ -75,6 +95,11 @@
 	name = "\improper Med-U Cartridge"
 	icon_state = "cart-m"
 	access_medical = 1
+
+/obj/item/weapon/cartridge/medical/New()
+	..()
+	spawn(5)//giving time for the radio_controller to initialize :^)
+		radio = new /obj/item/radio/integrated/signal/bot/medbot(src)
 
 /obj/item/weapon/cartridge/chemistry
 	name = "\improper ChemWhiz Cartridge"
@@ -94,7 +119,7 @@
 /obj/item/weapon/cartridge/security/New()
 	..()
 	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/beepsky(src)
+		radio = new /obj/item/radio/integrated/signal/bot/beepsky(src)
 
 /obj/item/weapon/cartridge/detective
 	name = "\improper D.E.T.E.C.T. Cartridge"
@@ -110,10 +135,16 @@
 	icon_state = "cart-j"
 	access_janitor = 1
 
+/obj/item/weapon/cartridge/janitor/New()
+	..()
+	spawn(5)//giving time for the radio_controller to initialize :^) // The lenny face is because this is an absurd solution to a silly problem, but it fits the rest of the file
+		radio = new /obj/item/radio/integrated/signal/bot/janitor(src)
+
 /obj/item/weapon/cartridge/lawyer
 	name = "\improper P.R.O.V.E. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
+	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/clown
 	name = "\improper Honkworks 5.0"
@@ -162,7 +193,7 @@
 /obj/item/weapon/cartridge/quartermaster/New()
 	..()
 	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/mule(src)
+		radio = new /obj/item/radio/integrated/signal/bot/mule(src)
 
 /obj/item/weapon/cartridge/head
 	name = "\improper Easy-Record DELUXE"
@@ -178,11 +209,12 @@
 	access_quartermaster = 1
 	access_janitor = 1
 	access_security = 1
+	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/hop/New()
 	..()
 	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/mule(src)
+		radio = new /obj/item/radio/integrated/signal/bot/mule(src)
 
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
@@ -194,7 +226,7 @@
 /obj/item/weapon/cartridge/hos/New()
 	..()
 	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/beepsky(src)
+		radio = new /obj/item/radio/integrated/signal/bot/beepsky(src)
 
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
@@ -205,6 +237,11 @@
 	access_engine = 1
 	access_atmos = 1
 
+/obj/item/weapon/cartridge/ce/New()
+	..()
+	spawn(5)//giving time for the radio_controller to initialize :^)
+		radio = new /obj/item/radio/integrated/signal/bot/floorbot(src)
+
 /obj/item/weapon/cartridge/cmo
 	name = "\improper Med-U DELUXE"
 	icon_state = "cart-cmo"
@@ -212,6 +249,11 @@
 	access_status_display = 1
 	access_reagent_scanner = 1
 	access_medical = 1
+
+/obj/item/weapon/cartridge/cmo/New()
+	..()
+	spawn(5)//giving time for the radio_controller to initialize :^)
+		radio = new /obj/item/radio/integrated/signal/bot/medbot(src)
 
 /obj/item/weapon/cartridge/rd
 	name = "\improper Signal Ace DELUXE"
@@ -238,6 +280,7 @@
 	access_reagent_scanner = 1
 	access_status_display = 1
 	access_atmos = 1
+	fax_pings = TRUE
 
 /obj/item/weapon/cartridge/syndicate
 	name = "\improper Detomatix Cartridge"
@@ -286,7 +329,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command
@@ -527,56 +570,6 @@ Code:
 				menu += "<b>Record Lost!</b><br>"
 
 			menu += "<br>"
-		if (46) //beepsky control
-			var/obj/item/radio/integrated/beepsky/SC = radio
-			if(!SC)
-				menu = "Interlink Error - Please reinsert cartridge."
-				return
-
-			menu = "<h4><img src=pda_cuffs.png> Securitron Interlink</h4>"
-
-			if(!SC.active)
-				// list of bots
-				if(!SC.botlist || (SC.botlist && SC.botlist.len==0))
-					menu += "No bots found.<BR>"
-
-				else
-					for(var/obj/machinery/bot/B in SC.botlist)
-						if (B)
-							menu += "<A href='byond://?src=\ref[SC];op=control;bot=\ref[B]'>[B] at [B.loc.loc]</A><BR>"
-
-				menu += "<BR><A href='byond://?src=\ref[SC];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
-
-			else	// bot selected, control it
-
-				menu += "<B>[SC.active]</B><BR> Status: (<A href='byond://?src=\ref[SC];op=control;bot=\ref[SC.active]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
-
-				if(!SC.botstatus)
-					menu += "Waiting for response...<BR>"
-				else
-
-
-					menu += {"Location: [SC.botstatus["loca"] ]<BR>
-						Mode: "}
-					switch(SC.botstatus["mode"])
-						if(0)
-							menu += "Ready"
-						if(1)
-							menu += "Apprehending target"
-						if(2,3)
-							menu += "Arresting target"
-						if(4)
-							menu += "Starting patrol"
-						if(5)
-							menu += "On patrol"
-						if(6)
-							menu += "Responding to summons"
-
-
-					menu += {"<BR>\[<A href='byond://?src=\ref[SC];op=stop'>Stop Patrol</A>\]
-						\[<A href='byond://?src=\ref[SC];op=go'>Start Patrol</A>\]
-						\[<A href='byond://?src=\ref[SC];op=summon'>Summon Bot</A>\]<BR>
-						<HR><A href='byond://?src=\ref[SC];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
 		if (47) //quartermaster order records
 
 			menu = {"<h4><img src=pda_crate.png> Supply Record Interlink</h4>
@@ -593,63 +586,6 @@ Code:
 				var/datum/supply_order/SO = S
 				menu += "<li>#[SO.ordernum] - [SO.object.name] requested by [SO.orderedby]</li>"
 			menu += "</ol><font size=\"-3\">Upgrade NOW to Space Parts & Space Vendors PLUS for full remote order control and inventory management."
-
-		if (48) //mulebot control
-			var/obj/item/radio/integrated/mule/QC = radio
-			if(!QC)
-				menu = "Interlink Error - Please reinsert cartridge."
-				return
-
-			menu = "<h4><img src=pda_mule.png> M.U.L.E. bot Interlink V0.8</h4>"
-
-			if(!QC.active)
-				// list of bots
-				if(!QC.botlist || (QC.botlist && QC.botlist.len==0))
-					menu += "No bots found.<BR>"
-
-				else
-					for(var/obj/machinery/bot/mulebot/B in QC.botlist)
-						menu += "<A href='byond://?src=\ref[QC];op=control;bot=\ref[B]'>[B] at [get_area(B)]</A><BR>"
-				menu += "<BR><A href='byond://?src=\ref[QC];op=scanbots'><img src=pda_scanner.png> Scan for active bots</A><BR>"
-
-			else	// bot selected, control it
-
-				menu += "<B>[QC.active]</B><BR> Status: (<A href='byond://?src=\ref[QC];op=control;bot=\ref[QC.active]'><img src=pda_refresh.png><i>refresh</i></A>)<BR>"
-
-				if(!QC.botstatus)
-					menu += "Waiting for response...<BR>"
-				else
-
-
-					menu += {"Location: [QC.botstatus["loca"] ]<BR>
-						Mode: "}
-					switch(QC.botstatus["mode"])
-						if(0)
-							menu += "Ready"
-						if(1)
-							menu += "Loading/Unloading"
-						if(2)
-							menu += "Navigating to Delivery Location"
-						if(3)
-							menu += "Navigating to Home"
-						if(4)
-							menu += "Waiting for clear path"
-						if(5,6)
-							menu += "Calculating navigation path"
-						if(7)
-							menu += "Unable to locate destination"
-					var/obj/structure/closet/crate/C = QC.botstatus["load"]
-
-					menu += {"<BR>Current Load: [ !C ? "<i>none</i>" : "[C.name] (<A href='byond://?src=\ref[QC];op=unload'><i>unload</i></A>)" ]<BR>
-						Destination: [!QC.botstatus["dest"] ? "<i>none</i>" : QC.botstatus["dest"] ] (<A href='byond://?src=\ref[QC];op=setdest'><i>set</i></A>)<BR>
-						Power: [QC.botstatus["powr"]]%<BR>
-						Home: [!QC.botstatus["home"] ? "<i>none</i>" : QC.botstatus["home"] ]<BR>
-						Auto Return Home: [QC.botstatus["retn"] ? "<B>On</B> <A href='byond://?src=\ref[QC];op=retoff'>Off</A>" : "(<A href='byond://?src=\ref[QC];op=reton'><i>On</i></A>) <B>Off</B>"]<BR>
-						Auto Pickup Crate: [QC.botstatus["pick"] ? "<B>On</B> <A href='byond://?src=\ref[QC];op=pickoff'>Off</A>" : "(<A href='byond://?src=\ref[QC];op=pickon'><i>On</i></A>) <B>Off</B>"]<BR><BR>
-						\[<A href='byond://?src=\ref[QC];op=stop'>Stop</A>\]
-						\[<A href='byond://?src=\ref[QC];op=go'>Proceed</A>\]
-						\[<A href='byond://?src=\ref[QC];op=home'>Return Home</A>\]<BR>
-						<HR><A href='byond://?src=\ref[QC];op=botlist'><img src=pda_back.png>Return to bot list</A>"}
 		if (49) //janitorial locator
 			menu = "<h4><img src=pda_bucket.png> Persistent Custodial Object Locator</h4>"
 
@@ -746,11 +682,19 @@ Code:
 
 
 /obj/item/weapon/cartridge/Topic(href, href_list)
-	..()
+	if (..())
+		return
 
 	if (!usr.canmove || usr.stat || usr.restrained() || !in_range(loc, usr))
 		usr.unset_machine()
 		usr << browse(null, "window=pda")
+		return
+
+	if (href_list["change_destination"])
+		var/new_dest = stripped_input(usr, "Set the new destination", "New mulebot destination")
+		if (!new_dest)
+			return
+		saved_destination = new_dest
 		return
 
 	switch(href_list["choice"])

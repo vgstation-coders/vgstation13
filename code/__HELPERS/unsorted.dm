@@ -157,7 +157,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 
 //Ensure the frequency is within bounds of what it should be sending/recieving at
 /proc/sanitize_frequency(var/f)
-	f = Clamp(round(f), 1201, 1599) // 120.1, 159.9
+	f = clamp(round(f), 1201, 1599) // 120.1, 159.9
 
 	if ((f % 2) == 0) //Ensure the last digit is an odd number
 		f += 1
@@ -248,15 +248,15 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
-//Last modified by Carn
-/mob/proc/rename_self(var/role, var/allow_numbers=0)
+//Also used for the screen alarm rename option
+/mob/proc/rename_self(var/role, var/allow_numbers=0, var/namepick_message = "You are a [role]. Would you like to change your name to something else?")
 	spawn(0)
 		var/oldname = real_name
 
 		var/newname
 
 		for(var/i=1,i<=3,i++)	//we get 3 attempts to pick a suitable name.
-			newname = input(src,"You are a [role]. Would you like to change your name to something else?", "Name change",oldname) as text
+			newname = input(src,namepick_message, "Name change",oldname) as text
 			newname = reject_bad_name(newname,allow_numbers)	//returns null if the name doesn't meet some basic requirements. Tidies up a few other things like bad-characters.
 
 			for(var/mob/living/M in player_list)
@@ -267,7 +267,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					break
 			if(newname)
 				break	//That's a suitable name!
-			to_chat(src, "Sorry, that [role]-name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
+			to_chat(src, "Sorry, that name wasn't appropriate, please try another. It's possibly too long/short, has bad characters or is already taken.")
 
 		if(!newname)	//we'll stick with the oldname then
 			return
@@ -275,6 +275,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(cmptext("ai",role))
 			if(isAI(src))
 				var/mob/living/silicon/ai/A = src
+				if(A.connected_robots.len) //let the borgs know what their master's new name is
+					for(var/mob/living/silicon/robot/robitt in A.connected_robots)
+						to_chat(robitt, "<span class='notice' style=\"font-family:Courier\">Notice: Linked AI [oldname] renamed to [newname].</span>")
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
 //				world << sound('sound/AI/newAI.ogg')
@@ -288,6 +291,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
 
 
+		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
 
 
@@ -598,8 +602,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 // returns turf relative to A offset in dx and dy tiles
 // bound to map limits
 /proc/get_offset_target_turf(atom/A, dx, dy)
-	var/x = Clamp(A.x + dx, 1, world.maxx)
-	var/y = Clamp(A.y + dy, 1, world.maxy)
+	var/x = clamp(A.x + dx, 1, world.maxx)
+	var/y = clamp(A.y + dy, 1, world.maxy)
 
 	return locate(x, y, A.z)
 
@@ -676,7 +680,8 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	else
 		return get_step(ref, base_dir)
 
-/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10) //This is quite an ugly solution but i refuse to use the old request system.
+//if needs_item is 0 it won't need any item that existed in "holding" to finish
+/proc/do_mob(var/mob/user , var/mob/target, var/delay = 30, var/numticks = 10, var/needs_item = 1) //This is quite an ugly solution but i refuse to use the old request system.
 	if(!user || !target)
 		return 0
 	var/user_loc = user.loc
@@ -709,7 +714,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if ( user.loc != user_loc || target.loc != target_loc || user.get_active_hand() != holding || user.isStunned())
+		if ( user.loc != user_loc || target.loc != target_loc || (needs_item && (holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())) || user.isStunned())
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -730,7 +735,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	return progress_bar
 
 /proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
@@ -777,7 +782,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					var/image/target_progress_bar = targets[target_]
 					stop_progress_bar(user, target_progress_bar)
 				return FALSE
-		if(needhand && !user.do_after_hand_check(holding))
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))
 			for(var/target_ in targets)
 				var/image/target_progress_bar = targets[target_]
 				stop_progress_bar(user, target_progress_bar)
@@ -812,7 +817,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
+			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -824,7 +829,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
+				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
@@ -845,7 +850,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 					if(progbar)
 						progbar.loc = null
 			return 0
-		if(needhand && !user.do_after_hand_check(holding))	//Sometimes you don't want the user to have to keep their active hand
+		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))	//Sometimes you don't want the user to have to use any hands
 			if(progbar)
 				progbar.icon_state = "prog_bar_stopped"
 				spawn(2)
@@ -864,14 +869,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	flick(icon_state, A)
 	sleep(time)
 	return 1
-
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -964,22 +961,20 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
 	return CR
 
-proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
-	if(!original)
-		return null
-
-	var/obj/O = null
-
-	if(sameloc)
-		O=new original.type(original.loc)
-	else
-		O=new original.type(locate(0,0,0))
-
-	if(perfectcopy)
-		if((O) && (original))
-			for(var/V in original.vars - variables_not_to_be_copied)
-				O.vars[V] = original.vars[V]
-	return O
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 
 /area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
@@ -1038,6 +1033,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 				var/datum/coords/C_trg = refined_trg[B]
 				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
 
+					var/old_name = T.name
 					var/old_dir1 = T.dir
 					var/old_icon_state1 = T.icon_state
 					var/old_icon1 = T.icon
@@ -1047,9 +1043,12 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 							continue moving
 
 					var/turf/X = B.ChangeTurf(T.type)
+					X.name = old_name
 					X.dir = old_dir1
 					X.icon_state = old_icon_state1
 					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+
+					X.return_air().copy_from(T.return_air())
 
 					var/list/objs = new/list()
 					var/list/newobjs = new/list()
@@ -1065,11 +1064,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 					for(var/obj/O in objs)
-						newobjs += DuplicateObject(O , 1)
-
-
-					for(var/obj/O in newobjs)
-						O.forceMove(X)
+						newobjs += O.DuplicateObject(X)
 
 					for(var/mob/M in T)
 
@@ -1078,24 +1073,10 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 						mobs += M
 
 					for(var/mob/M in mobs)
-						newmobs += DuplicateObject(M , 1)
-
-					for(var/mob/M in newmobs)
-						M.forceMove(X)
+						newmobs += M.DuplicateObject(X)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
-
-
-
-					for(var/V in T.vars - variables_not_to_be_copied)
-						X.vars[V] = T.vars[V]
-
-//					var/area/AR = X.loc
-
-//					if(AR.dynamic_lighting)
-//						X.opacity = !X.opacity
-//						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
 
 					toupdate += X
 
@@ -1296,9 +1277,12 @@ var/list/WALLITEMS = list(
 	return 0
 
 proc/rotate_icon(file, state, step = 1, aa = FALSE)
-	var icon/base = icon(file, state)
+	var/icon/base = icon(file, state)
 
-	var w, h, w2, h2
+	var/w
+	var/h
+	var/w2
+	var/h2
 
 	if(aa)
 		aa ++
@@ -1307,7 +1291,8 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 		h = base.Height()
 		h2 = h * aa
 
-	var icon{result = icon(base); temp}
+	var/icon/result = icon(base)
+	var/icon/temp
 
 	for(var/angle in 0 to 360 step step)
 		if(angle == 0  )
@@ -1367,6 +1352,33 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 /mob/dview/send_to_future(var/duration)
 	return
 
+/mob/dview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on dview. That's extremely rude.")
+
+//Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
+//No, view(client) does not work for this, despite what the Ref says.
+//This could be made into a define if you don't mind leaving tview_mob lying around. This could cause bugs though.
+/proc/tview(mob/target)
+	. = view(target.client?.view || world.view, setup_tview(target))
+	tview_mob.loc = null
+
+/proc/setup_tview(mob/target)
+	tview_mob.loc = get_turf(target)
+	tview_mob.sight = target.sight
+	tview_mob.see_in_dark = target.see_in_dark
+	tview_mob.see_invisible = target.see_invisible
+	tview_mob.see_infrared = target.see_infrared //I'm pretty sure we don't actually use this but might as well include it
+	return tview_mob
+
+//Aside from usage, this proc is the only difference between tview and dview.
+/mob/dview/tview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on tview. That's extremely rude.")
+
+//They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it
+var/mob/dview/tview/tview_mob = new()
+
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
 	var/z
@@ -1396,7 +1408,7 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 /turf/proc/has_dense_content()
 	for(var/atom/turf_contents in contents)
 		if(turf_contents.density)
-			return 1
+			return turf_contents
 	return 0
 
 //Checks if there are any atoms in the turf that aren't system-only (currently only lighting overlays count)
@@ -1617,23 +1629,41 @@ Game Mode config tags:
 	var/list/found_factions = find_active_factions_by_member(R, M)
 	return locate(fac_type) in found_factions
 
+/proc/find_unique_objectives(list/new_objectives, list/old_objectives)
+	var/list/uniques = list()
+	for (var/datum/objective/new_objective in new_objectives)
+		var/is_unique = TRUE
+		for (var/datum/objective/old_objective in old_objectives)
+			if (old_objective.name == new_objective.name)
+				is_unique = FALSE
+		if (is_unique)
+			uniques.Add(new_objective)
+	return uniques
+
+
 /proc/clients_in_moblist(var/list/mob/mobs)
 	. = list()
 	for(var/mob/M in mobs)
 		if(M.client)
 			. += M.client
 
+/client/proc/output_to_special_tab(msg, force_focus = FALSE)
+	if(prefs.special_popup)
+		src << output("\[[time_stamp()]] [msg]", "window1.msay_output")
+		if(!holder) //Force normal players to see the admin message when it gets sent to them
+			winset(src, "rpane.special_button", "is-checked=true")
+			winset(src, null, "rpanewindow.left=window1")
+	if(prefs.special_popup == SPECIAL_POPUP_EXCLUSIVE)
+		return
+	to_chat(src, msg)
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		if(C.prefs.special_popup)
-			C << output("\[[time_stamp()]] [sane_msg]", "window1.msay_output")
-		else
-			to_chat(C, msg)
+		C.output_to_special_tab(msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1651,8 +1681,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y
@@ -1786,3 +1816,81 @@ Game Mode config tags:
     if(!istype(C) || (!C.prefs.window_flashing && !ignorepref))
         return
     winset(C, "mainwindow", "flash=5")
+
+
+/proc/generate_radio_frequencies()
+	//1200-1600
+	var/list/taken_freqs = list()
+
+	for(var/i in freq_text)
+		var/freq_found = FALSE
+		while(freq_found != TRUE)
+			var/chosen_freq = rand(1201, 1599)
+			chosen_freq = sanitize_frequency(chosen_freq)
+			if(taken_freqs.Find(chosen_freq))
+				continue
+			taken_freqs.Add(chosen_freq)
+			freqs[i] = chosen_freq
+			world.log << "freq [i] is now [chosen_freq]"
+			freq_found = TRUE
+
+	freqtospan = list(
+		"[COMMON_FREQ]" = "commonradio",
+		"[SCI_FREQ]" = "sciradio",
+		"[MED_FREQ]" = "medradio",
+		"[ENG_FREQ]" = "engradio",
+		"[SUP_FREQ]" = "supradio",
+		"[SER_FREQ]" = "serradio",
+		"[SEC_FREQ]" = "secradio",
+		"[COMM_FREQ]" = "comradio",
+		"[AIPRIV_FREQ]" = "aiprivradio",
+		"[SYND_FREQ]" = "syndradio",
+		"[DSQUAD_FREQ]" = "dsquadradio",
+		"[RESPONSE_FREQ]" = "resteamradio",
+		"[RAID_FREQ]" = "raiderradio",
+	)
+
+	radiochannelsreverse = list(
+		"[DJ_FREQ]" = "DJ",
+		"[SYND_FREQ]" = "Syndicate",
+		"[RAID_FREQ]" = "Raider",
+		"[RESPONSE_FREQ]" = "Response Team",
+		"[SUP_FREQ]" = "Supply",
+		"[SER_FREQ]" = "Service",
+		"[SCI_FREQ]" = "Science",
+		"[MED_FREQ]" = "Medical",
+		"[COMM_FREQ]" = "Command",
+		"[ENG_FREQ]" = "Engineering",
+		"[SEC_FREQ]" = "Security",
+		"[DSQUAD_FREQ]" = "Deathsquad",
+		"[AIPRIV_FREQ]" = "AI Private",
+		"[COMMON_FREQ]" = "Common"
+	)
+
+	radiochannels = list(
+		"Common" = COMMON_FREQ,
+		"AI Private" = AIPRIV_FREQ,
+		"Deathsquad" = DSQUAD_FREQ,
+		"Security" = SEC_FREQ,
+		"Engineering" = ENG_FREQ,
+		"Command" = COMM_FREQ,
+		"Medical" = MED_FREQ,
+		"Science" = SCI_FREQ,
+		"Service" = SER_FREQ,
+		"Supply" = SUP_FREQ,
+		"Response Team" = RESPONSE_FREQ,
+		"Raider" = RAID_FREQ,
+		"Syndicate" = SYND_FREQ,
+		"DJ" = DJ_FREQ
+	)
+
+	stationchannels = list(
+	"Common" = COMMON_FREQ,
+	"Security" = SEC_FREQ,
+	"Engineering" = ENG_FREQ,
+	"Command" = COMM_FREQ,
+	"Medical" = MED_FREQ,
+	"Science" = SCI_FREQ,
+	"Service" = SER_FREQ,
+	"Supply" = SUP_FREQ
+	)

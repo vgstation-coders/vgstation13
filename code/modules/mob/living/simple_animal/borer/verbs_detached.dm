@@ -1,4 +1,3 @@
-
 /obj/item/verbs/borer/detached/verb/infest()
 	set category = "Alien"
 	set name = "Infest"

@@ -9,17 +9,17 @@
 /datum/unit_test/slipping
 
 
-	/*  
+	/*
 		We spawn an item, make an human run on it, and check if he slipped or not
 		The list is of the form :
-		item_to_spawn = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS) 
+		item_to_spawn = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS)
 	*/
 
 	var/list/items_and_result_humans = list(
 		/obj/item/weapon/reagent_containers/food/snacks/butter = list(TRUE, FALSE, FALSE, FALSE),
 		/obj/item/weapon/bananapeel/ = list(TRUE, TRUE, FALSE, FALSE),
 		/obj/item/weapon/soap/ = list(TRUE, TRUE, FALSE, FALSE),
-		/obj/item/device/pda/clown = list(TRUE, FALSE, FALSE, FALSE),
+		/obj/item/device/pda/clown = list(TRUE, TRUE, FALSE, FALSE),
 		)
 
 	/* overlay_to_spawn = list(RESULT_RUN, RESULT_WALK, RESULT_NOSLIP, RESULT_MAGBOOTS) */
@@ -50,7 +50,7 @@
 				if (RESULT_MAGBOOTS)
 					var/obj/item/clothing/shoes/magboots/M = new
 					H.equip_or_collect(M, slot_shoes)
-					M.toggle(H)
+					M.togglemagpulse(H)
 			H.Move(T_test, NORTH)
 			if (H.isStunned() != items_and_result_humans[type][i])
 				fail("Slipping test failed at [type], step [i] ; expected [items_and_result_humans[type][i]], got [H.isStunned()]")
@@ -74,7 +74,7 @@
 				if (RESULT_MAGBOOTS)
 					var/obj/item/clothing/shoes/magboots/M = new
 					H.equip_or_collect(M, slot_shoes)
-					M.toggle(H)
+					M.togglemagpulse(H)
 			H.Move(T_test, NORTH)
 			if (H.isStunned() != overlays_and_results[wetness][j])
 				fail("Slipping test failed at [wetness], step [j] ; expected [overlays_and_results[wetness][j]], got [H.isStunned()]")

@@ -58,6 +58,20 @@
 		return
 
 	var/message = params
+
+	if(copytext(message,1,5) == "says")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,9) == "exclaims")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,6) == "yells")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+	else if(copytext(message,1,5) == "asks")
+		to_chat(user, "<span class='danger'>Invalid emote.</span>")
+		return
+
 	var/msg = "<b>[user]</b> " + message
 
 	var/turf/T = get_turf(user) // for pAIs

@@ -49,7 +49,7 @@
 
 	if(!remove_materials(part))
 		stopped = 1
-		src.visible_message("<font color='blue'>The [src.name] beeps, \"Not enough materials to complete item.\"</font>")
+		src.visible_message("<span class='notice'>The [src.name] beeps, \"Not enough materials to complete item.\"</span>")
 		return
 
 	src.being_built = new part.build_path(src)
@@ -64,10 +64,7 @@
 	src.overlays -= image(icon = icon, icon_state = "[base_state]_ani")
 	if(being_built)
 		var/obj/structure/closet/crate/flatpack/FP = new
-		being_built.forceMove(FP)
-		FP.name += " ([being_built.name])"
-		FP.machine = being_built
-		FP.update_icon()
+		FP.insert_machine(being_built)
 		var/turf/output = get_output()
 		FP.forceMove(get_turf(output))
 		src.visible_message("[bicon(src)] \The [src] beeps: \"Successfully completed \the [being_built.name].\"")

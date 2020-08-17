@@ -11,3 +11,32 @@
 
 /obj/item/ammo_casing/rocket_rpg/update_icon()
 	return
+
+/obj/item/ammo_casing/rocket_rpg/lowyield
+	name = "low yield rocket"
+	desc = "Explosive supplement to Nanotrasen's rocket launchers."
+	projectile_type = "/obj/item/projectile/rocket/lowyield"
+	starting_materials = list(MAT_IRON = 10000)
+
+/obj/item/ammo_casing/rocket_rpg/blank
+	name = "blank rocket"
+	desc = "This rocket left intentionally blank."
+	projectile_type = "/obj/item/projectile/rocket/blank"
+	starting_materials = list(MAT_IRON = 50)
+
+/obj/item/ammo_casing/rocket_rpg/emp
+	name = "EMP rocket"
+	desc = "EMP rocket for the Nanotrasen rocket launcher."
+	projectile_type = "/obj/item/projectile/rocket/blank/emp"
+	starting_materials = list(MAT_IRON = 10000, MAT_URANIUM = 250)
+
+/obj/item/ammo_casing/rocket_rpg/stun
+	name = "stun rocket"
+	desc = "Stun rocket for the Nanotrasen rocket launcher. Not a flashbang."
+	projectile_type = "/obj/item/projectile/rocket/blank/stun"
+	starting_materials = list(MAT_IRON = 25000, MAT_SILVER = 500)
+
+/obj/item/ammo_casing/rocket_rpg/extreme
+	name = "extreme rocket" //don't even map or spawn this in or you'll be very sad
+	desc = "Extreme-yield rocket. Fire from very very far away."
+	projectile_type = "/obj/item/projectile/rocket/lowyield/extreme"

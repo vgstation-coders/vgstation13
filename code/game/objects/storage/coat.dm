@@ -48,3 +48,10 @@
 	else if(istype(over_object, /obj/structure/table)) //empty on table
 		return hold.MouseDropFrom(over_object)
 	return ..()
+
+/obj/item/clothing/suit/storage/AltClick(mob/user as mob)
+	if(user == src.loc)
+		return hold.attack_hand(user)
+	else
+		return ..()
+	

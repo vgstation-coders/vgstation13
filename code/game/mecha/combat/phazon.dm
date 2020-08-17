@@ -19,7 +19,14 @@
 	var/phasing = 0
 	var/phasing_energy_drain = 200
 	max_equip = 4
-
+	mech_sprites = list(
+		"phazon",
+		"phazon_blanco",
+		"plazmus",
+		"imperion",
+		"janus",
+	)
+	paintable = 1
 
 /obj/mecha/combat/phazon/New()
 	..()
@@ -32,17 +39,22 @@
 
 /obj/mecha/combat/phazon/to_bump(var/atom/obstacle)
 	if(phasing && get_charge()>=phasing_energy_drain)
-		spawn()
-			if(can_move)
-				can_move = 0
-				flick("phazon-phase", src)
-				src.forceMove(get_step(src,src.dir))
-				src.use_power(phasing_energy_drain)
-				sleep(step_in*3)
+		var/turf/new_turf = get_step(src, dir)
+		var/datum/zLevel/L = get_z_level(new_turf)
+		if (L.teleJammed)
+			return
+		var/area/A = get_area(new_turf)
+		if (A.flags & NO_TELEPORT || A.jammed)
+			return
+		if(can_move)
+			can_move = 0
+			flick("[initial_icon]-phase", src)
+			src.forceMove(new_turf)
+			src.use_power(phasing_energy_drain)
+			spawn(step_in*3)
 				can_move = 1
 	else
 		. = ..()
-	return
 
 /spell/mech/phazon/phasing
 	name = "Phasing"
@@ -51,6 +63,9 @@
 	charge_counter = 10
 	hud_state = "phazon-phase"
 	override_icon = 'icons/mecha/mecha.dmi'
+
+/spell/mech/phazon/phasing/update_spell_icon()
+	hud_state = "[linked_mech.initial_icon]-phase"
 
 /spell/mech/phazon/phasing/cast(list/targets, mob/user)
 	var/obj/mecha/combat/phazon/Phazon = linked_mech

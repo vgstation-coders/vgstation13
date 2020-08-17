@@ -16,9 +16,12 @@ var/list/sent_strike_teams = list()
 	var/searching = FALSE
 
 	var/leader_key = ""
+	var/leader_name = "" //Currently only called by deathsquad striketeam
 	var/list/team_composition = list()
 
 	var/list/datum/objective/objectives = list()
+
+	var/datum/outfit/outfit_datum
 
 /datum/striketeam/proc/trigger_strike(var/mob/user)
 	//Is the game started
@@ -73,6 +76,7 @@ var/list/sent_strike_teams = list()
 			continue
 
 		to_chat(O, "[bicon(team_logo)]<span class='recruit'>[faction_name] needs YOU to become part of its upcoming [striketeam_name]. (<a href='?src=\ref[src];signup=\ref[O]'>Apply now!</a>)</span>[bicon(team_logo)]")
+		to_chat(O, "[bicon(team_logo)]<span class='recruit'>Their mission: [mission]</span>[bicon(team_logo)]")
 
 	spawn(1 MINUTES)
 		searching = FALSE
@@ -142,7 +146,6 @@ var/list/sent_strike_teams = list()
 				new_commando.key = applicant.key
 
 				new_commando.update_action_buttons_icon()
-				new_commando.mind.store_memory("<B>Mission:</B> <span class='warning'>[mission].</span>")
 
 				greet_commando(new_commando)
 		extras()
@@ -153,7 +156,9 @@ var/list/sent_strike_teams = list()
 
 /datum/striketeam/proc/greet_commando(var/mob/living/carbon/human/H)
 	to_chat(H, "<span class='notice'>You are a [striketeam_name] commando, in the service of [faction_name].</span>")
-	to_chat(H, "<span class='notice'>Your current mission is: <span class='danger'>[mission]</span></span>")
+	for (var/role in H.mind.antag_roles)
+		var/datum/role/R = H.mind.antag_roles[role]
+		R.AnnounceObjectives()
 
 /datum/striketeam/Topic(var/href, var/list/href_list)
 	if(href_list["signup"])
@@ -200,6 +205,8 @@ var/list/sent_strike_teams = list()
 	var/can_customize_name = 0
 	var/can_customize_appearance = 0
 	var/defaultname = "Commando"
+
+	outfit_datum = /datum/outfit/striketeam/death_commando
 
 /datum/striketeam/custom/trigger_strike(var/mob/user)
 	custom = 1
@@ -331,7 +338,6 @@ var/list/sent_strike_teams = list()
 	//Creates mind stuff.
 	new_commando.mind = new
 	new_commando.mind.current = new_commando
-	new_commando.mind.original = new_commando
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Custom Team"
 	if(!(new_commando.mind in ticker.minds))
@@ -342,8 +348,12 @@ var/list/sent_strike_teams = list()
 		customsquad.HandleRecruitedMind(new_commando.mind)
 	else
 		customsquad = ticker.mode.CreateFaction(/datum/faction/strike_team/custom)
+		customsquad.name = striketeam_name
+		customsquad.forgeObjectives(mission)
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
-	new_commando.equip_death_commando(leader_selected)
+
+	var/datum/outfit/concrete_outfit = new outfit_datum
+	concrete_outfit.equip(new_commando)
 
 	return new_commando

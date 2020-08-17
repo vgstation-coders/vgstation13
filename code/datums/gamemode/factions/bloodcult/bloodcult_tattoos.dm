@@ -119,7 +119,6 @@ var/list/blood_communion = list()
 	H.status_flags &= ~CANSTUN
 	H.status_flags &= ~CANKNOCKDOWN
 	H.status_flags &= ~CANPARALYSE
-	H.status_flags &= ~PACIFIABLE
 	H.fixblood()
 	H.regenerate_icons()
 

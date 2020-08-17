@@ -3,7 +3,7 @@
 	var/datum/pipeline/parent
 	var/volume = 0
 	force = 20
-	plane = ABOVE_PLATING_PLANE
+	plane = ABOVE_TURF_PLANE //Set above turf for mapping preview only, supposed to be ABOVE_PLATING_PLANE, handled in update_planes_and_layers() (called on New())
 	layer = PIPE_LAYER
 	use_power = 0
 	var/alert_pressure = 80*ONE_ATMOSPHERE
@@ -13,7 +13,7 @@
 	return FLOAT_PLANE
 
 /obj/machinery/atmospherics/pipe/update_planes_and_layers()
-	if (level == LEVEL_BELOW_FLOOR)
+	if(level == LEVEL_BELOW_FLOOR)
 		plane = ABOVE_PLATING_PLANE
 		layer = PIPE_LAYER
 	else
@@ -27,10 +27,8 @@
 		var/datum/pipeline/pipeline = parent
 		var/list/update_later = list()
 		for(var/obj/machinery/atmospherics/pipe in pipeline.members)
-			pipe.color = mass_colour
-			if(!pipe.can_be_coloured)
-				pipe.default_colour = mass_colour
-				update_later += pipe
+			if(pipe.can_be_coloured)
+				pipe.color = mass_colour
 		for(var/obj/machinery/atmospherics/pipe in pipeline.edges)
 			pipe.update_icon()
 		update_later -= pipeline.edges
@@ -70,35 +68,36 @@
 
 /obj/machinery/atmospherics/pipe/return_air()
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.air
 
 
 /obj/machinery/atmospherics/pipe/build_network()
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.return_network()
 
 
 /obj/machinery/atmospherics/pipe/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.network_expand(new_network, reference)
 
 
 /obj/machinery/atmospherics/pipe/return_network(obj/machinery/atmospherics/reference)
 	if(!parent)
-		parent = getFromPool(/datum/pipeline)
+		parent = new /datum/pipeline
 		parent.build_pipeline(src)
 	return parent.return_network(reference)
 
 
 /obj/machinery/atmospherics/pipe/Destroy()
 	if(parent)
-		returnToPool(parent)
+		qdel(parent)
+		parent = null
 	for(var/obj/machinery/meter/M in src.loc)
 		if(M.target == src)
 			new /obj/item/pipe_meter(src.loc)
@@ -166,6 +165,25 @@
 		node2.initialize()
 		node2.build_network()
 	return 1
+
+
+/obj/machinery/atmospherics/pipe/simple/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/simple/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		else
+			CRASH("Invalid node_id!")
 
 
 /obj/machinery/atmospherics/pipe/simple/hide(var/i)
@@ -354,12 +372,12 @@
 /obj/machinery/atmospherics/pipe/simple/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	update_icon()
@@ -503,6 +521,29 @@
 	..()
 
 
+/obj/machinery/atmospherics/pipe/manifold/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/manifold/hide(var/i)
 	update_icon()
 
@@ -554,17 +595,17 @@
 /obj/machinery/atmospherics/pipe/manifold/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node3 = null
 
 	update_icon()
@@ -718,6 +759,34 @@
 	centre_overlay.color = color
 	overlays += centre_overlay
 
+
+/obj/machinery/atmospherics/pipe/manifold4w/get_node(node_id)
+	switch(node_id)
+		if(1)
+			return node1
+		if(2)
+			return node2
+		if(3)
+			return node3
+		if(4)
+			return node4
+		else
+			CRASH("Invalid node_id!")
+
+/obj/machinery/atmospherics/pipe/manifold4w/set_node(node_id, value)
+	switch(node_id)
+		if(1)
+			node1 = value
+		if(2)
+			node2 = value
+		if(3)
+			node3 = value
+		if(4)
+			node4 = value
+		else
+			CRASH("Invalid node_id!")
+
+
 /obj/machinery/atmospherics/pipe/manifold4w/hide(var/i)
 	update_icon()
 
@@ -772,22 +841,22 @@
 /obj/machinery/atmospherics/pipe/manifold4w/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == node1)
 		if(istype(node1, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node1 = null
 
 	if(reference == node2)
 		if(istype(node2, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node2 = null
 
 	if(reference == node3)
 		if(istype(node3, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node3 = null
 
 	if(reference == node4)
 		if(istype(node4, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		node4 = null
 
 	update_icon()
@@ -1000,14 +1069,14 @@
 /obj/machinery/atmospherics/pipe/layer_manifold/disconnect(obj/machinery/atmospherics/reference)
 	if(reference == other_node)
 		if(istype(other_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		other_node = null
 
 	else
 		for(var/pipelayer = PIPING_LAYER_MIN; pipelayer <= PIPING_LAYER_MAX; pipelayer += PIPING_LAYER_INCREMENT)
 			if(reference == layer_nodes[pipelayer])
 				if(istype(layer_nodes[pipelayer], /obj/machinery/atmospherics/pipe) && !isnull(parent))
-					returnToPool(parent)
+					qdel(parent)
 				layer_nodes[pipelayer] = null
 
 	update_icon()
@@ -1124,7 +1193,7 @@
 			else
 				layer_mod = -1
 
-		user.ventcrawl_layer = Clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
+		user.ventcrawl_layer = clamp(user.ventcrawl_layer + layer_mod, PIPING_LAYER_MIN, PIPING_LAYER_MAX)
 		to_chat(user, "You align yourself with the [user.ventcrawl_layer]\th output.")
 		return 1
 	else
@@ -1206,11 +1275,11 @@
 /obj/machinery/atmospherics/pipe/layer_adapter/disconnect(var/obj/machinery/atmospherics/reference)
 	if(reference == mid_node)
 		if(istype(mid_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		mid_node = null
 	if(reference == layer_node)
 		if(istype(layer_node, /obj/machinery/atmospherics/pipe) && !isnull(parent))
-			returnToPool(parent)
+			qdel(parent)
 		layer_node = null
 
 	..()

@@ -2,7 +2,7 @@
 /obj/machinery/artifact_harvester
 	name = "Exotic Particle Harvester"
 	icon = 'icons/obj/virology.dmi'
-	icon_state = "incubator"	//incubator_on
+	icon_state = "incubator_old"	//incubator_old_on
 	anchored = 1
 	density = 1
 	idle_power_usage = 50
@@ -104,7 +104,7 @@
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
-			icon_state = "incubator"
+			icon_state = "incubator_old"
 
 	else if(harvesting < 0)
 		//dump some charge
@@ -129,7 +129,7 @@
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
-			icon_state = "incubator"
+			icon_state = "incubator_old"
 
 /obj/machinery/artifact_harvester/Topic(href, href_list)
 
@@ -158,7 +158,7 @@
 					chargerate = isolated_primary.chargelevelmax / isolated_primary.effectrange
 					harvesting = 1
 					use_power = 2
-					icon_state = "incubator_on"
+					icon_state = "incubator_old_on"
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
 
@@ -205,7 +205,7 @@
 					chargerate = isolated_secondary.chargelevelmax / isolated_secondary.effectrange
 					harvesting = 1
 					use_power = 2
-					icon_state = "incubator_on"
+					icon_state = "incubator_old_on"
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
 
@@ -236,7 +236,7 @@
 				inserted_battery.battery_effect.ToggleActivate()
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
-			icon_state = "incubator"
+			icon_state = "incubator_old"
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
 
 	if (href_list["alockon"])
@@ -320,7 +320,7 @@
 						inserted_battery.battery_effect.ToggleActivate(0)
 					harvesting = -1
 					use_power = 2
-					icon_state = "incubator_on"
+					icon_state = "incubator_old_on"
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)
 			else

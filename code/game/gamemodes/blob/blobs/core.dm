@@ -74,7 +74,7 @@
 		return 0 //under effects of time magick
 
 	if(overmind)
-		var/points_to_collect = Clamp(point_rate*round((world.time-last_resource_collection)/10), 0, 10)
+		var/points_to_collect = clamp(point_rate*round((world.time-last_resource_collection)/10), 0, 10)
 		overmind.add_points(points_to_collect)
 		last_resource_collection = world.time
 
@@ -129,7 +129,12 @@
 
 /obj/effect/blob/core/attack_ghost(var/mob/user)
 	if (!overmind)
-		create_overmind(user.client)
+		var/confirm = alert("Take control of this blob core?", "Take Control", "Yes", "No")
+		if(confirm)
+			if(!overmind)
+				create_overmind(user.client)
+			else	
+				to_chat(user, "<span class='warning'>Someone has already taken control of this core.</span>")
 
 /obj/effect/blob/core/proc/create_overmind(var/client/new_overmind)
 	if(!new_overmind)
@@ -203,8 +208,6 @@
 		for(var/mob/camera/blob/O in blob_overminds)
 			if(O != B)
 				to_chat(O,"<span class='notice'>A new blob cerebrate has started thinking inside a blob core! [B] joins the blob! <a href='?src=\ref[O];blobjump=\ref[loc]'>(JUMP)</a></span>")
-
-	stat_collection.blob_spawned_blob_players++
 
 	return 1
 

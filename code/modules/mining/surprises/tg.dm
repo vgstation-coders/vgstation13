@@ -77,7 +77,7 @@
 		// /vg/: /obj/item/key=1
 		/obj/item/clothing/glasses/monocle=5,
 		// /vg/:
-		/obj/structure/bed/chair/vehicle/wizmobile=1
+		/obj/structure/bed/chair/vehicle/firebird=1
 	)
 	fluffitems = list(
 		/obj/structure/safe/floor/wizard=1,
@@ -132,7 +132,7 @@
 		/turf/simulated/floor/bluegrid=1
 	)
 	spawntypes = list(
-		/obj/item/weapon/pickaxe/plasmacutter=1,
+		/obj/item/weapon/pickaxe/plasmacutter/accelerator=1,
 		/obj/machinery/shieldgen=1,
 		/obj/item/weapon/cell/hyper=1
 	)

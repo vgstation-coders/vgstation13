@@ -1,9 +1,13 @@
+var/list/infected_cleanables = list()
+
 /obj/effect/decal/cleanable
 	var/list/random_icon_states = list()
 	var/targeted_by = null	//Used so cleanbots can claim a mess.
 	mouse_opacity = 0 //N3X made this 0, which made it impossible to click things, and in the current 510 version right-click things.
 	w_type = NOT_RECYCLABLE
 	anchored = 1
+
+	var/reagent = null //what reagent did we come from? for wet/dry vac
 
 	// For tracking shit across the floor.
 	var/amount = 0 // 0 = don't track
@@ -16,10 +20,12 @@
 	var/list/absorbs_types = list() // Types to aggregate.
 
 	var/on_wall = 0 //Wall on which this decal is placed on
+	var/image/pathogen
 
 	var/persistence_type = SS_CLEANABLE
 	var/age = 1 //For map persistence. +1 per round that this item has survived. After a certain amount, it will not carry on to the next round anymore.
 	var/persistent_type_replacement //If defined, the persistent item generated from this will be of this type rather than our own.
+	var/fake_DNA = "random splatters"//for DNA-less splatters
 
 /obj/effect/decal/cleanable/New(var/loc, var/age, var/icon_state, var/color, var/dir, var/pixel_x, var/pixel_y)
 	if(age)
@@ -39,6 +45,8 @@
 
 	if(ticker)
 		initialize()
+
+	fixDNA()
 
 	..(loc)
 
@@ -66,17 +74,58 @@
 					if (transfers_dna && C.blood_DNA)
 						blood_DNA |= C.blood_DNA.Copy()
 					amount += C.amount
-					returnToPool(C)
+					qdel(C)
+	spawn(1)//cleanables can get infected in many different ways when they spawn so it's much easier to handle the pathogen overlay here after a delay
+		if (virus2 && virus2.len > 0)
+			infected_cleanables += src
+			if (!pathogen)
+				pathogen = image('icons/effects/effects.dmi',src,"pathogen_blood")
+				pathogen.plane = HUD_PLANE
+				pathogen.layer = UNDER_HUD_LAYER
+				pathogen.appearance_flags = RESET_COLOR|RESET_ALPHA
+			for (var/mob/L in science_goggles_wearers)
+				if (L.client)
+					L.client.images |= pathogen
+
+
+/obj/effect/decal/cleanable/proc/fixDNA()
+	if (!istype(blood_DNA, /list))
+		blood_DNA = list()
+	blood_DNA[fake_DNA] = "N/A"
+
+/obj/effect/decal/cleanable/throw_impact(atom/hit_atom)
+	if (isliving(hit_atom) && blood_DNA?.len)
+		var/mob/living/L = hit_atom
+		var/blood_data = list(
+			"viruses"		=null,
+			"blood_DNA"		=null,
+			"blood_colour"	=null,
+			"blood_type"	=null,
+			"resistances"	=null,
+			"trace_chem"	=null,
+			"virus2" 		=list(),
+			"immunity" 		=null,
+			)
+		if(ishuman(hit_atom))
+			var/mob/living/carbon/human/H = L
+			if (blood_DNA?.len > 0)
+				blood_data["blood_DNA"] = blood_DNA[1]
+				blood_data["blood_type"] = blood_DNA[blood_DNA[1]]
+			blood_data["virus2"] = virus_copylist(virus2)
+			blood_data["blood_colour"] = basecolor
+			H.bloody_body_from_data(copy_blood_data(blood_data),0,src)
+			H.bloody_hands_from_data(copy_blood_data(blood_data),2,src)
+			add_blood_to(H, amount)//this one adds blood to the shoes and feet
+		for(var/i = 1 to L.held_items.len)
+			var/obj/item/I = L.held_items[i]
+			if(istype(I))
+				I.add_blood_from_data(blood_data)
+	anchored = TRUE
 
 /obj/effect/decal/cleanable/initialize()
 	..()
 	if(persistence_type)
 		SSpersistence_map.track(src, persistence_type)
-
-/obj/effect/decal/cleanable/Destroy()
-	if(persistence_type)
-		SSpersistence_map.forget(src, persistence_type)
-	..()
 
 /obj/effect/decal/cleanable/getPersistenceAge()
 	return age
@@ -90,12 +139,20 @@
 	if(persistent_type_replacement)
 		.["type"] = persistent_type_replacement
 
+
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O,/obj/item/weapon/mop))
 		return ..()
 	return 0 //No more "X HITS THE BLOOD WITH AN RCD"
 
 /obj/effect/decal/cleanable/Destroy()
+	infected_cleanables -= src
+	if (pathogen)
+		for (var/mob/L in science_goggles_wearers)
+			if (L.client)
+				L.client.images -= pathogen
+		pathogen = null
+
 	blood_list -= src
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
@@ -104,6 +161,8 @@
 	if(counts_as_blood)
 		bloodspill_remove()
 
+	if(persistence_type)
+		SSpersistence_map.forget(src, persistence_type)
 	..()
 
 /obj/effect/decal/cleanable/proc/dry(var/drying_age)
@@ -143,13 +202,6 @@
 //		user.update_inv_gloves(1)
 //		user.verbs += /mob/living/carbon/human/proc/bloody_doodle
 //
-/obj/effect/decal/cleanable/resetVariables()
-	Destroy()
-	..("viruses","virus2", "blood_DNA", "random_icon_states", args)
-	viruses = list()
-	virus2 = list()
-	blood_DNA = list()
-
 /obj/effect/decal/cleanable/proc/messcheck(var/obj/effect/decal/cleanable/M)
 	return 1
 

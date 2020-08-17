@@ -344,7 +344,7 @@
 	override_base = "cult"
 	charge_max = 150
 	spell_flags = 0
-	var/dash_range = 10
+	var/dash_range = 4
 
 /spell/juggerdash/choose_targets(var/mob/user = usr)
 	return list(user)
@@ -398,6 +398,8 @@
 /spell/aoe_turf/conjure/hex/on_creation(var/mob/living/simple_animal/hostile/hex/AM, var/mob/user)
 	AM.master = user
 	AM.master.minions.Add(AM)
+	var/mob/living/simple_animal/construct/builder = user
+	AM.setupglow(builder.construct_color)
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"

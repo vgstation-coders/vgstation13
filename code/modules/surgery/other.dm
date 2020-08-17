@@ -15,8 +15,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 70
-	max_duration = 90
+	duration = 7 SECONDS
 
 /datum/surgery_step/fix_vein/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!hasorgans(target))
@@ -35,7 +34,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts patching the damaged vein in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start patching the damaged vein in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("The pain in [affected.display_name] is unbearable!",1)
+	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/fix_vein/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -74,8 +73,7 @@
 	can_infect = 1
 	blood_level = 1
 
-	min_duration = 110
-	max_duration = 160
+	duration = 11 SECONDS
 
 /datum/surgery_step/fix_dead_tissue/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!hasorgans(target))
@@ -92,7 +90,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start cutting away necrotic tissue in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("The pain in [affected.display_name] is unbearable!",1)
+	target.custom_pain("The pain in [affected.display_name] is unbearable!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/fix_dead_tissue/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -123,8 +121,7 @@
 	can_infect = 0
 	blood_level = 0
 
-	min_duration = 50
-	max_duration = 60
+	duration = 5 SECONDS
 
 /datum/surgery_step/treat_necrosis/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (!istype(tool, /obj/item/weapon/reagent_containers))
@@ -147,7 +144,7 @@
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	user.visible_message("[user] starts applying medication to the affected tissue in [target]'s [affected.display_name] with \the [tool]." , \
 	"You start applying medication to the affected tissue in [target]'s [affected.display_name] with \the [tool].")
-	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1)
+	target.custom_pain("Something in your [affected.display_name] is causing you a lot of pain!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/treat_necrosis/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

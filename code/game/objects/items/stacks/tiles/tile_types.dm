@@ -15,24 +15,24 @@
 /obj/item/stack/tile/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			returnToPool(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				returnToPool(src)
+				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				returnToPool(src)
+				qdel(src)
 				return
 		else
 	return
 
 /obj/item/stack/tile/blob_act()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/stack/tile/singularity_act()
-	returnToPool(src)
+	qdel(src)
 	return 2
 
 /*
@@ -75,10 +75,13 @@
 	material = "wood"
 
 /obj/item/stack/tile/wood/proc/build(turf/S as turf)
-	if(istype(S,/turf/unsimulated/floor/asteroid))
-		S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
-	else
-		S.ChangeTurf(/turf/simulated/floor/plating/deck)
+	if(S.air)
+		var/datum/gas_mixture/GM = S.air
+		if(GM.pressure > HALF_ATM)
+			S.ChangeTurf(/turf/simulated/floor/plating/deck)
+			return
+	S.ChangeTurf(/turf/simulated/floor/plating/deck/airless)
+
 
 /obj/item/stack/tile/wood/afterattack(atom/target, mob/user, adjacent, params)
 	if(adjacent)
@@ -99,9 +102,9 @@
 					qdel(L)
 
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(use(4))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")
@@ -159,5 +162,7 @@ obj/item/stack/tile/slime
 
 /obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
 	if(isslimeperson(L) || isslime(L))
-		return -1
-	return current_slowdown+5
+		current_slowdown *= 5
+	else
+		current_slowdown *= 0.01
+	..()

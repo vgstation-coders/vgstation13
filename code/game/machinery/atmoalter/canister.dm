@@ -67,6 +67,10 @@
 	canister_color = "orange"
 	can_label = 0
 
+/obj/machinery/portable_atmospherics/canister/plasma/broken
+	icon_state = "orange-1"
+	destroyed = 1
+
 /obj/machinery/portable_atmospherics/canister/carbon_dioxide
 	name = "Canister \[CO2\]"
 	icon_state = "black"
@@ -175,7 +179,6 @@
 		if (src.holding)
 			src.holding.forceMove(src.loc)
 			src.holding = null
-		INVOKE_EVENT(on_destroyed, list())
 		nanomanager.update_uis(src)
 		return 1
 	else
@@ -258,14 +261,14 @@
 	if(iswelder(W) && src.destroyed)
 		if(weld(W, user))
 			to_chat(user, "<span class='notice'>You salvage what's left of \the [src].</span>")
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))//new /obj/item/stack/sheet/metal(src.loc)
 			M.amount = 3
 			qdel (src)
 		return
 
-	if(!iswrench(W) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
+	if(!W.is_wrench(user) && !istype(W, /obj/item/weapon/tank) && !istype(W, /obj/item/device/analyzer) && !istype(W, /obj/item/device/pda))
 		visible_message("<span class='warning'>[user] hits the [src] with a [W]!</span>")
-		investigation_log(I_ATMOS, "<span style='danger'>was smacked with \a [W] by [key_name(user)]</span>")
+		investigation_log(I_ATMOS, "<span class='danger'>was smacked with \a [W] by [key_name(user)]</span>")
 		src.health -= W.force
 		src.add_fingerprint(user)
 		healthcheck()

@@ -200,7 +200,7 @@
 		held_item.forceMove(src.loc)
 		held_item = null
 
-	robogibs(src.loc, viruses)
+	robogibs(src.loc, virus2)
 	qdel(src)
 
 /mob/living/simple_animal/spiderbot/emp_act(severity)

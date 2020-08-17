@@ -56,57 +56,108 @@
 
 /proc/generateMarkers(var/ZLevel)
 	//generating specific markers
-	if(ZLevel == map.zMainStation)
-		var/i = 1
-		for(var/obj/machinery/power/battery/smes/S in smes_list)
-			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = HOLOMAP_MARKER_SMES
-			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
-			newMarker.x = S.x
-			newMarker.y = S.y
-			newMarker.z = S.z
-			holomap_markers[HOLOMAP_MARKER_SMES+"_[i]"] = newMarker
-			i++
-		if(nukedisk)//Only gives the disk's original position on the map
-			var/datum/holomap_marker/newMarker = new()
-			newMarker.id = HOLOMAP_MARKER_DISK
-			newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
-			newMarker.x = nukedisk.x
-			newMarker.y = nukedisk.y
-			newMarker.z = nukedisk.z
-			holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
-	//generating area markers
-	for(var/area/A in areas)
-		if(A.holomap_marker)
-			var/turf/T = A.getAreaCenter(ZLevel)
-			if(T)
+	if(!map.disable_holominimap_generation)
+		if(ZLevel == map.zMainStation)
+			var/i = 1
+			for(var/obj/machinery/power/battery/smes/S in smes_list)
 				var/datum/holomap_marker/newMarker = new()
-				newMarker.id = A.holomap_marker
-				newMarker.filter = A.holomap_filter
-				newMarker.x = T.x
-				newMarker.y = T.y
-				newMarker.z = ZLevel
-				holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
+				newMarker.id = HOLOMAP_MARKER_SMES
+				newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+				newMarker.x = S.x
+				newMarker.y = S.y
+				newMarker.z = S.z
+				holomap_markers[HOLOMAP_MARKER_SMES+"_[i]"] = newMarker
+				i++
+			if(nukedisk)//Only gives the disk's original position on the map
+				var/datum/holomap_marker/newMarker = new()
+				newMarker.id = HOLOMAP_MARKER_DISK
+				newMarker.filter = HOLOMAP_FILTER_STATIONMAP_STRATEGIC
+				newMarker.x = nukedisk.x
+				newMarker.y = nukedisk.y
+				newMarker.z = nukedisk.z
+				holomap_markers[HOLOMAP_MARKER_DISK] = newMarker
+	//generating area markers
+		for(var/area/A in areas)
+			if(A.holomap_marker)
+				var/turf/T = A.getAreaCenter(ZLevel)
+				if(T)
+					var/datum/holomap_marker/newMarker = new()
+					newMarker.id = A.holomap_marker
+					newMarker.filter = A.holomap_filter
+					newMarker.x = T.x
+					newMarker.y = T.y
+					newMarker.z = ZLevel
+					holomap_markers[newMarker.id+"_\ref[A]"] = newMarker
 
 
 /proc/generateHoloMinimap(var/zLevel=1)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
-	if(zLevel != map.zCentcomm)
-		for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-				var/turf/tile = locate(i, r, zLevel)
-				if(tile && tile.loc.holomapAlwaysDraw())
-					if((!istype(tile, get_base_turf(zLevel)) && istype(tile.loc, /area/mine/unexplored)) || istype(tile.loc, /area/asteroid/artifactroom) || istype(tile, /turf/simulated/wall) || istype(tile, /turf/unsimulated/mineral) || istype(tile, /turf/unsimulated/wall) || (locate(/obj/structure/grille) in tile) || (locate(/obj/structure/window/full) in tile))
-						if(map.holomap_offset_x.len >= zLevel)
-							canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-						else
-							canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
-					else if (istype(tile, /turf/simulated/floor) || istype(tile, /turf/unsimulated/floor) || (locate(/obj/structure/catwalk) in tile))
-						if(map.holomap_offset_x.len >= zLevel)
-							canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-						else
-							canvas.DrawBox(HOLOMAP_PATH, i, r)
+	//These atoms will keep their tile empty on holomaps
+	var/list/full_emptiness = list()
+
+	//These atoms will appear as obstacles on holomaps
+	var/list/full_obstacles = list(
+		/obj/structure/grille,
+		/obj/structure/fence,
+		/obj/structure/window/full,
+		)
+
+	//These atoms will appear as floors on holomaps
+	var/list/full_paths = list(
+		/obj/structure/catwalk,
+		/obj/structure/fence/door,
+		)
+
+	if (map.snow_theme)//we got a lot of turfs to check, so let's only check for those if we really need it
+		full_emptiness += /obj/glacier
+		full_obstacles += /obj/structure/flora/tree
+
+	if(!map.disable_holominimap_generation)
+		if (zLevel > map.zDeepSpace)
+			return // No need to generate an holomap for something that didn't spawn.
+		if(zLevel != map.zCentcomm)
+			for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+				for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+					var/turf/tile = locate(i, r, zLevel)
+					if (tile?.loc)
+						var/area/aera = tile.loc
+						var/override = FALSE
+						for(var/emptiness in full_emptiness)
+							var/atom/A = locate(emptiness) in tile
+							if (A && !is_type_in_list(A,full_paths))
+								override = TRUE
+								break
+						if (override)
+							continue
+						if((tile.holomap_draw_override != HOLOMAP_DRAW_EMPTY) && (aera.holomap_draw_override != HOLOMAP_DRAW_EMPTY))
+							override = FALSE
+							for(var/obstacle in full_obstacles)
+								if (locate(obstacle) in tile)
+									override = TRUE
+									break
+							if (map.snow_theme)//a few snowflake checks (pun intended) to keep some of snaxi's secrets a bit harder to find.
+								if ((istype(tile, /turf/unsimulated/floor/snow/permafrost) && istype(aera, /area/surface/mine)) ||(istype(tile, /turf/unsimulated/floor/snow/cave) && istype(aera, /area/surface/outer/ne)))
+									override = TRUE
+							var/exception = FALSE
+							if (istype(tile, get_base_turf(zLevel)) && istype(aera, /area/mine/unexplored))//we could avoid such exceptions if this area wasn't ever painted over space.
+								exception = TRUE
+							if(override || (!exception && ((tile.holomap_draw_override == HOLOMAP_DRAW_FULL) || (aera.holomap_draw_override == HOLOMAP_DRAW_FULL))))
+								if(map.holomap_offset_x.len >= zLevel)
+									canvas.DrawBox(HOLOMAP_OBSTACLE, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+								else
+									canvas.DrawBox(HOLOMAP_OBSTACLE, i, r)
+							else
+								override = FALSE
+								for(var/path in full_paths)
+									if (locate(path) in tile)
+										override = TRUE
+										break
+								if (override || (tile.holomap_draw_override == HOLOMAP_DRAW_PATH))
+									if(map.holomap_offset_x.len >= zLevel)
+										canvas.DrawBox(HOLOMAP_PATH, min(i+map.holomap_offset_x[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[zLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+									else
+										canvas.DrawBox(HOLOMAP_PATH, i, r)
 
 	holoMiniMaps[zLevel] = canvas
 
@@ -167,16 +218,22 @@
 /proc/generateStationMinimap(var/StationZLevel)
 	var/icon/canvas = icon('icons/480x480.dmi', "blank")
 
-	for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-		for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
-			var/turf/tile = locate(i, r, StationZLevel)
-			if(tile && tile.loc)
-				var/area/areaToPaint = tile.loc
-				if(areaToPaint.holomap_color)
-					if(map.holomap_offset_x.len >= StationZLevel)
-						canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
-					else
-						canvas.DrawBox(areaToPaint.holomap_color, i, r)
+	if(!map.disable_holominimap_generation)
+		for(var/i = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+			for(var/r = 1 to ((2 * world.view + 1)*WORLD_ICON_SIZE))
+				var/turf/tile = locate(i, r, StationZLevel)
+				if(tile && tile.loc)
+					var/area/areaToPaint = tile.loc
+					if(areaToPaint.holomap_color)
+						if(map.holomap_offset_x.len >= StationZLevel)
+							canvas.DrawBox(areaToPaint.holomap_color, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						else
+							canvas.DrawBox(areaToPaint.holomap_color, i, r)
+					else if (tile.holomap_draw_override == HOLOMAP_DRAW_HALLWAY)
+						if(map.holomap_offset_x.len >= StationZLevel)
+							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, min(i+map.holomap_offset_x[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)), min(r+map.holomap_offset_y[StationZLevel],((2 * world.view + 1)*WORLD_ICON_SIZE)))
+						else
+							canvas.DrawBox(HOLOMAP_AREACOLOR_HALLWAYS, i, r)
 
 	var/icon/big_map = icon('icons/480x480.dmi', "stationmap")
 	var/icon/small_map = icon('icons/480x480.dmi', "blank")

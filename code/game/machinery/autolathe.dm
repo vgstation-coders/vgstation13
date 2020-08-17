@@ -55,13 +55,14 @@
 		new /obj/item/weapon/reagent_containers/glass/bucket(), \
 		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
 		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
+		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
 		new /obj/item/weapon/storage/toolbox(), \
 		new /obj/item/weapon/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
 		new /obj/item/device/assembly/signaler(), \
-		/*new /obj/item/device/assembly/infra(), \*/
+		new /obj/item/device/assembly/infra(), \
 		new /obj/item/device/assembly/timer(), \
 		new /obj/item/device/assembly/voice(), \
 		new /obj/item/device/assembly/prox_sensor(), \
@@ -101,7 +102,7 @@
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
-		new /obj/item/weapon/extinguisher(), \
+		new /obj/item/weapon/extinguisher/empty(), \
 		new /obj/item/device/radio/headset(), \
 		new /obj/item/device/radio/off(), \
 		new /obj/item/weapon/kitchen/utensil/knife/large(), \
@@ -117,7 +118,7 @@
 		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
-		new /obj/item/weapon/rcd_ammo(), \
+		new /obj/item/stack/rcd_ammo(), \
 		new /obj/item/weapon/light/tube(), \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
@@ -141,7 +142,8 @@
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
-		new /obj/item/weapon/legcuffs/beartrap(),\
+		new /obj/item/weapon/beartrap(),\
+		new /obj/item/gun_part/scope(),\
 		)
 	)
 
@@ -176,31 +178,44 @@
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/attackby(obj/item/I, mob/user)
 	if(..())
-		return 1
+		return 0
 
 	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
-			return 1
-		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
-			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
-			return 1
+			return 0
+
+
+		else if(allowed_materials)
+
+			var/allowed_materials_volume = 0
+			for(var/mat_id in allowed_materials)
+				allowed_materials_volume += I.materials.storage[mat_id]
+
+			if (allowed_materials_volume != I.materials.getVolume())
+				var/output = "\The [src] can only accept objects made out of these: "
+				for(var/mat_id in allowed_materials)
+					output += (material_list[mat_id].processed_name + " ")
+				to_chat(user, output)
+				return 0
+
 		else if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(I))
 					to_chat(user, "You cannot recycle your built in tools.")
-					return 1
+					return 0
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
-				return 1
+				return 0
 		else if(!I.recyclable())
 			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
-			return 1
+			return 0
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
 								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
-		return 1
+			return 1
+	return 0

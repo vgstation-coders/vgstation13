@@ -6,7 +6,7 @@
 	flags = FPRINT
 	w_class = W_CLASS_SMALL
 	gas_transfer_coefficient = 0.90
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	origin_tech = Tc_BIOTECH + "=2"
 	body_parts_covered = MOUTH
 
@@ -29,7 +29,9 @@
 	gas_transfer_coefficient = 0.90
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 25, rad = 0)
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+	sterility = 100
+	clothing_flags = BLOCK_GAS_SMOKE_EFFECT
 
 /obj/item/clothing/mask/fakemoustache
 	name = "fake moustache"
@@ -73,10 +75,11 @@
 	desc = "LOADSAMONEY"
 	icon_state = "balaclava"
 	item_state = "balaclava"
-	flags = FPRINT|HIDEHAIRCOMPLETELY
-	body_parts_covered = HEAD|MOUTH|EARS
+	flags = FPRINT
+	body_parts_covered = HIDEHAIR | MOUTH
 	w_class = W_CLASS_SMALL
 	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", INSECT_SHAPED)
 	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
@@ -107,13 +110,14 @@
 	desc = "A mask made of soft vinyl and latex, representing the head of a horse."
 	icon_state = "horsehead"
 	item_state = "horsehead"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
 	var/voicechange = 0
 	siemens_coefficient = 0.9
 
-/obj/item/clothing/mask/horsehead/treat_mask_speech(var/datum/speech/speech)
+/obj/item/clothing/mask/horsehead/affect_speech(var/datum/speech/speech, var/mob/living/L)
 	if(src.voicechange)
 		speech.message = pick("NEEIIGGGHHHH!", "NEEEIIIIGHH!", "NEIIIGGHH!", "HAAWWWWW!", "HAAAWWW!")
 
@@ -166,6 +170,7 @@ obj/item/clothing/mask/joy
 	desc = "For when you want people to think you're a vampire. Glows in the dark!"
 	icon_state = "fangs"
 	item_state = "fangs"
+	body_parts_covered = NONE
 	var/light_absorbed = 0
 	var/glowy_fangs
 	var/image/glow_fangs

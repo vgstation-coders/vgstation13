@@ -21,7 +21,7 @@
 
 	usr.set_machine(src)
 
-	if(beaker && href_list["createbar"])
+	if(container && href_list["createbar"])
 		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
 		reagents.trans_to(SB, 10)
 		src.updateUsrDialog()
@@ -37,10 +37,10 @@
 	user.set_machine(src)
 
 	var/dat = list()
-	if(!beaker)
+	if(!container)
 		dat += "Please insert a beaker.<BR>"
 	else
-		var/datum/reagents/R = beaker.reagents
+		var/datum/reagents/R = container.reagents
 		dat += "<A href='?src=\ref[src];eject=1'>Eject beaker and Clear Buffer</A><BR>"
 		if(!R.total_volume)
 			dat += "Beaker is empty."

@@ -12,9 +12,9 @@
 	icon_gib = "clown_gib"
 	speak_chance = 50
 	turns_per_move = 5
-	response_help = "pokes the"
-	response_disarm = "gently pushes aside the"
-	response_harm = "hits the"
+	response_help = "pokes"
+	response_disarm = "gently pushes aside"
+	response_harm = "hits"
 	speak = list("HONK", "Honk!", "PLEASE KILL ME")
 	speak_emote = list("squeals", "cries","sobs")
 	emote_hear = list("honks sadly")
@@ -22,6 +22,8 @@
 	a_intent = I_HELP
 	var/footstep=0 // For clownshoe noises
 	//deny_client_move=1 // HONK // Doesn't work right yet
+
+	meat_type = null
 
 	stop_automated_movement_when_pulled = 1
 	maxHealth = 30
@@ -79,168 +81,6 @@
 	speech_filter.addReplacement("h\[aei\]lp\\s+(\[^\\s\]+)","end $1's show")
 	speech_filter.addReplacement("^h\[aei\]lp.*","END THE SHOW")
 
-/*
-	var/stance = CLOWN_STANCE_IDLE	//Used to determine behavior
-	var/mob/living/target_mob
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/Life()
-	if(timestopped)
-		return 0 //under effects of time magick
-	if(client || stat || stat==DEAD)
-		return //Lets not force players or dead/incap cluwnes to move
-	..()
-	if(!stat && !resting && !locked_to)
-		if(health > maxHealth)
-			health = maxHealth
-		if(health <= 0)
-			stat=DEAD
-
-
-		if(!ckey && !stop_automated_movement)
-			if(isturf(src.loc) && !resting && !locked_to && canmove)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
-				turns_since_move++
-				if(turns_since_move >= turns_per_move)
-					if(!(stop_automated_movement_when_pulled && pulledby)) //Soma animals don't move when pulled
-						Move(get_step(src,pick(cardinal)))
-						turns_since_move = 0
-
-		if(!stat)
-			switch(stance)
-				if(CLOWN_STANCE_IDLE)
-					if (src.hostile == 0)
-						return
-					for(var/atom/A in view(7,src))
-						if(iscluwne(A))
-							continue
-
-						if(isliving(A))
-							var/mob/living/L = A
-							if(!L.stat)
-								stance = CLOWN_STANCE_ATTACK
-								target_mob = L
-								break
-
-						if(istype(A, /obj/mecha))
-							var/obj/mecha/M = A
-							if (M.occupant)
-								stance = CLOWN_STANCE_ATTACK
-								target_mob = M
-								break
-					if (target_mob)
-						emote("me",,"honks menacingly at [target_mob]")
-
-				if(CLOWN_STANCE_ATTACK)	//This one should only be active for one tick
-					stop_automated_movement = 1
-					if(!target_mob || SA_attackable(target_mob))
-						stance = CLOWN_STANCE_IDLE
-					if(target_mob in view(7,src))
-						start_walk_to(target_mob, 1, 3)
-						stance = CLOWN_STANCE_ATTACKING
-
-				if(CLOWN_STANCE_ATTACKING)
-					stop_automated_movement = 1
-					if(!target_mob || SA_attackable(target_mob))
-						stance = CLOWN_STANCE_IDLE
-						target_mob = null
-						return
-					if(!(target_mob in view(7,src)))
-						stance = CLOWN_STANCE_IDLE
-						target_mob = null
-						return
-					if(get_dist(src, target_mob) <= 1)	//Attacking
-						if(isliving(target_mob))
-							var/mob/living/L = target_mob
-							L.attack_animal(src)
-							if(prob(10))
-								L.Knockdown(5)
-								L.visible_message("<span class='danger'>\the [src] slips \the [L]!</span>")
-							for(var/mob/H in viewers(src, null))
-								if(istype(H, /mob/living/simple_animal/clown))
-									var/mob/living/simple_animal/clown/C = H
-									C.hostile = 1
-						if(istype(target_mob,/obj/mecha))
-							var/obj/mecha/M = target_mob
-							M.attack_animal(src)
-							for(var/mob/H in viewers(src, null))
-								if(istype(H, /mob/living/simple_animal/clown))
-									var/mob/living/simple_animal/clown/C = H
-									C.hostile = 1
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/bullet_act(var/obj/item/projectile/Proj)
-	..()
-	hostile = 1
-	for(var/mob/M in viewers(src, null))
-		if(istype(M, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = M
-			C.hostile = 1
-	return 0
-
-
-/*
-/mob/living/simple_animal/hostile/retaliate/cluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-*/
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_hand(mob/living/carbon/human/M as mob)
-	..()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-	return 0
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/proc/alertMode()
-	hostile = 1
-	for(var/mob/Z in viewers(src, null))
-		if(istype(Z, /mob/living/simple_animal/hostile/retaliate/cluwne))
-			var/mob/living/simple_animal/hostile/retaliate/cluwne/C = Z
-			C.hostile = 1
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_animal(mob/living/simple_animal/M as mob)
-	alertMode()
-	if(M.melee_damage_upper <= 0)
-		M.emote("me",,"[M.friendly] \the <EM>[src]</EM>")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		health -= damage
-/*
-/mob/living/simple_animal/hostile/retaliate/cluwne/attack_alien(mob/living/carbon/alien/humanoid/M as mob)
-	alertMode()
-	if(M.melee_damage_upper <= 0)
-		M.emote("me",,"[M.friendly] \the <EM>[src]</EM>")
-	else
-		if(M.attack_sound)
-			playsound(loc, M.attack_sound, 50, 1, 1)
-		for(var/mob/O in viewers(src, null))
-			O.show_message("<span class='attack'>\The <EM>[M]</EM> [M.attacktext] \the <EM>[src]</EM>!</span>", 1)
-		M.attack_log += text("\[[time_stamp()]\] <font color='red'>attacked [src.name] ([src.ckey])</font>")
-		src.attack_log += text("\[[time_stamp()]\] <font color='orange'>was attacked by [M.name] ([M.ckey])</font>")
-		var/damage = rand(M.melee_damage_lower, M.melee_damage_upper)
-		health -= damage
-*/
-*/
 /mob/living/simple_animal/hostile/retaliate/cluwne/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
@@ -296,7 +136,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act, var/type, var/message, var/auto)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	if(timestopped)
 		return //under effects of time magick
 
@@ -324,7 +164,7 @@
 	icon_dead = null
 	response_help = "honks the"
 	speak = list("Honk!")
-	speak_emote = list("sqeaks")
+	speak_emote = list("squeaks")
 	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
@@ -348,4 +188,48 @@
 	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin
+	name = "psychedelic clown goblin"
+	desc = "A tiny walking mask and clown shoes. You want to honk his nose and cover your eyes!"
+	icon_state = "ClownPsychedelicGoblin"
+	icon_living = "ClownPsychedelicGoblin"
+	icon_dead = null
+	response_help = "honks the"
+	speak = list("Honk!", "Groovy!", "Far Out!")
+	speak_emote = list("squeaks")
+
+	emote_hear = list("honks")
+	maxHealth = 100
+	health = 100
+	size = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+
+	speed = 1
+	turns_per_move = 1
+
+	melee_damage_type = "BRAIN"
+	var/spacedrugs_chance = 30
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen)) //Renaming
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this psychedelic clown goblin?", "Clown Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			name = "[n_name]"
+		return
+	..()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/AttackingTarget()
+	..()
+	var/mob/living/L = target
+	if(L.reagents)
+		if(prob(spacedrugs_chance))
+			visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
+			L.reagents.add_reagent(SPACE_DRUGS, 1)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/death(var/gibbed = FALSE)
+	..(TRUE)
+	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
+	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
 	qdel(src)

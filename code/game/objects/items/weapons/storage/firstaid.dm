@@ -11,6 +11,7 @@
 /obj/item/weapon/storage/firstaid
 	name = "first-aid kit"
 	desc = "It's an emergency medical kit for those serious boo-boos."
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/firstaid-kits.dmi', "right_hand" = 'icons/mob/in-hand/right/firstaid-kits.dmi')
 	icon_state = "firstaid"
 	throw_speed = 2
 	throw_range = 8
@@ -75,7 +76,7 @@
 
 	icon_state = pick("antitoxin","antitoxfirstaid","antitoxfirstaid2","antitoxfirstaid3")
 
-	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
+	new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
 	new /obj/item/weapon/reagent_containers/syringe/antitoxin(src)
 	new /obj/item/weapon/reagent_containers/pill/antitox(src)
@@ -159,7 +160,9 @@
 	colour_overlay = image('icons/obj/chemical.dmi',"bottle_colour")
 	overlays += colour_overlay
 
-/obj/item/weapon/storage/pill_bottle/AltClick()
+/obj/item/weapon/storage/pill_bottle/CtrlClick()
+	if(isturf(loc))
+		return ..()
 	if(!usr.isUnconscious() && Adjacent(usr))
 		change()
 		return
@@ -252,6 +255,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	new /obj/item/weapon/dice/d12(src)
 	new /obj/item/weapon/dice/d20(src)
 
+/obj/item/weapon/storage/pill_bottle/dice/with_die/New()
+	. = ..()
+	new /obj/item/weapon/dice/borg(src)
+
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "pill bottle (hyperzine)"
@@ -278,10 +285,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	name = "Experimental Medication"
 	desc = "Hazardous.  Warranty voided if consumed."
 
-	/obj/item/weapon/storage/pill_bottle/nanobot/New()
-		..()
-		for (var/i = 1 to 5)
-			new /obj/item/weapon/reagent_containers/pill/nanobot(src)
+/obj/item/weapon/storage/pill_bottle/nanobot/New()
+	..()
+	for (var/i = 1 to 5)
+		new /obj/item/weapon/reagent_containers/pill/nanobot(src)
 
 /obj/item/weapon/storage/pill_bottle/radiation
 	name = "pill bottle (radiation treatment)"
@@ -300,12 +307,36 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	icon_state = "candybag"
 	var/spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet
 
-	/obj/item/weapon/storage/pill_bottle/sweets/New()
-		..()
-		overlays -= colour_overlay
-		colour_overlay = null
-		for (var/i = 1 to 10)
-			new spawn_type(src)
+/obj/item/weapon/storage/pill_bottle/sweets/New()
+	..()
+	overlays -= colour_overlay
+	colour_overlay = null
+	for (var/i = 1 to 10)
+		new spawn_type(src)
 
 /obj/item/weapon/storage/pill_bottle/sweets/strange
 	spawn_type = /obj/item/weapon/reagent_containers/food/snacks/sweet/strange
+
+/obj/item/weapon/storage/pill_bottle/lollipops
+	name = "bag of lollipops"
+	desc = "Ha, sucker!"
+	icon = 'icons/obj/candymachine.dmi'
+	icon_state = "lollibag"
+	max_combined_w_class = 4
+	storage_slots = 4
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/lollipop","/obj/item/trash/lollipopstick")
+
+/obj/item/weapon/storage/pill_bottle/lollipops/New()
+	..()
+	for (var/i = 1 to 4)
+		new /obj/item/weapon/reagent_containers/food/snacks/lollipop(src)
+	overlays = null
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin
+	name = "pill bottle (nanofloxacin)"
+	desc = "Contains pills used to exterminate pathogen. May also exterminate yourself if taken in larger doses."
+
+/obj/item/weapon/storage/pill_bottle/nanofloxacin/New()
+	..()
+	for (var/i = 1 to 12)
+		new /obj/item/weapon/reagent_containers/pill/nanofloxacin(src)

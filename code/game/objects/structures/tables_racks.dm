@@ -146,22 +146,22 @@
 							dir_sum += 128
 
 		var/table_type = 0 //stand_alone table
-		if(dir_sum%16 in cardinal)
+		if((dir_sum%16) in cardinal)
 			table_type = 1 //endtable
 			dir_sum %= 16
-		if(dir_sum%16 in list(3,12))
+		if((dir_sum%16) in list(3,12))
 			table_type = 2 //1 tile thick, streight table
 			if(dir_sum%16 == 3) //3 doesn't exist as a dir
 				dir_sum = 2
 			if(dir_sum%16 == 12) //12 doesn't exist as a dir.
 				dir_sum = 4
-		if(dir_sum%16 in list(5,6,9,10))
+		if((dir_sum%16) in list(5,6,9,10))
 			if(locate(/obj/structure/table,get_step(src.loc,dir_sum%16)))
 				table_type = 3 //full table (not the 1 tile thick one, but one of the 'tabledir' tables)
 			else
 				table_type = 2 //1 tile thick, corner table (treated the same as streight tables in code later on)
 			dir_sum %= 16
-		if(dir_sum%16 in list(13,14,7,11)) //Three-way intersection
+		if((dir_sum%16) in list(13,14,7,11)) //Three-way intersection
 			table_type = 5 //full table as three-way intersections are not sprited, would require 64 sprites to handle all combinations.  TOO BAD -- SkyMarshal
 			switch(dir_sum%16)	//Begin computation of the special type tables.  --SkyMarshal
 				if(7)
@@ -315,34 +315,31 @@
 			return 1
 	return 0
 
-/obj/structure/table/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/table/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
 	destroy()
 
 //checks if projectile 'P' from turf 'from' can hit whatever is behind the table. Returns 1 if it can, 0 if bullet stops.
 /obj/structure/table/proc/check_cover(obj/item/projectile/P, turf/from)
-	var/turf/cover = flipped ? get_turf(src) : get_step(loc, get_dir(from, loc))
-	if (get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
-		return 1
-	if (get_turf(P.original) == cover)
-		var/chance = 20
-		if (ismob(P.original))
+	var/shooting_at_the_table_directly = P.original == src
+	var/chance = 60
+	if(!shooting_at_the_table_directly)
+		if(!flipped || get_dir(loc, from) != dir) // It needs to be flipped and the direction needs to be right
+			return 1
+		if(get_dist(P.starting, loc) <= 1) //Tables won't help you if people are THIS close
+			return 1
+		if(ismob(P.original))
 			var/mob/M = P.original
-			if (M.lying)
-				chance += 20				//Lying down lets you catch less bullets
-		if(flipped)
-			if(get_dir(loc, from) == dir)	//Flipped tables catch mroe bullets
-				chance += 20
-			else
-				return 1					//But only from one side
-		if(prob(chance))
-			health -= P.damage/2
-			if (health > 0)
-				visible_message("<span class='warning'>[P] hits \the [src]!</span>")
-				return 0
-			else
-				visible_message("<span class='warning'>[src] breaks down!</span>")
-				destroy()
-				return 1
+			if(M.lying)
+				chance += 20 //Lying down lets you catch less bullets
+	if(shooting_at_the_table_directly || prob(chance))
+		health -= P.damage/2
+		if (health > 0)
+			visible_message("<span class='warning'>[P] hits \the [src]!</span>")
+			return 0
+		else
+			visible_message("<span class='warning'>[src] breaks down!</span>")
+			destroy()
+			return 1
 	return 1
 
 /obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
@@ -363,7 +360,7 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = name)
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		M.Stun(1)
@@ -400,12 +397,12 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 			return
 
-	if (iswrench(W) && can_disassemble())
+	if (W.is_wrench(user) && can_disassemble())
 		to_chat(user, "<span class='notice'>Now disassembling table...</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		if(do_after(user, src,50))
 			destroy()
 		return
@@ -654,7 +651,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 
 	else if (user.a_intent == I_HURT)
 		user.do_attack_animation(src, W)
@@ -668,6 +665,12 @@
 	else
 		..()
 
+/obj/structure/table/glass/plasma
+	name = "plasma glass table"
+	desc = "A standard table with a reinforced plasma glass finish."
+	icon_state = "plasma_table"
+	parts = /obj/item/weapon/table_parts/glass/plasma
+	health = 150
 
 /*
  * Brass
@@ -758,12 +761,12 @@
 		return 1
 	return !density
 
-/obj/structure/rack/bumped_by_firebird(obj/structure/stool/bed/chair/vehicle/wizmobile/W)
+/obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
 	destroy()
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && can_disassemble())
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user) && can_disassemble())
+		W.playtoolsound(src, 50)
 		destroy(TRUE)
 		return
 
@@ -783,7 +786,7 @@
 			offset_step++
 			return 1
 
-/obj/structure/table/attack_hand(mob/living/user)
+/obj/structure/rack/attack_hand(mob/living/user)
 	if(M_HULK in user.mutations)
 		user.do_attack_animation(src, user)
 		visible_message("<span class='danger'>[user] smashes [src] apart!</span>")

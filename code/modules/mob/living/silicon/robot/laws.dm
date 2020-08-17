@@ -3,95 +3,6 @@
 	set name = "Show Laws"
 	show_laws()
 
-//vg edit
-/mob/living/silicon/robot/proc/statelaws() // -- TLE
-	say(";Current Active Laws:")
-	var/number = 1
-	sleep(10)
-
-
-
-	if (laws.zeroth)
-		if (lawcheck[1] == "Yes") //This line and the similar lines below make sure you don't state a law unless you want to. --NeoFite
-			say(";0. [laws.zeroth]")
-			sleep(10)
-
-	for (var/index = 1, index <= laws.ion.len, index++)
-		var/law = laws.ion[index]
-		var/num = ionnum()
-		if (length(law) > 0)
-			if (ioncheck[index] == "Yes")
-				say(";[num]. [law]")
-				sleep(10)
-
-	for (var/index = 1, index <= laws.inherent.len, index++)
-		var/law = laws.inherent[index]
-
-		if (length(law) > 0)
-			if (lawcheck[index+1] == "Yes")
-				say(";[number]. [law]")
-				sleep(10)
-			number++
-
-
-	for (var/index = 1, index <= laws.supplied.len, index++)
-		var/law = laws.supplied[index]
-
-		if (length(law) > 0)
-			if(lawcheck.len >= number+1)
-				if (lawcheck[number+1] == "Yes")
-					say(";[number]. [law]")
-					sleep(10)
-				number++
-
-/mob/living/silicon/robot/verb/checklaws() //Gives you a link-driven interface for deciding what laws the statelaws() proc will share with the crew. --NeoFite
-	set category = "Robot Commands"
-	set name = "State Laws"
-
-	var/list = "<b>Which laws do you want to include when stating them for the crew?</b><br><br>"
-
-
-
-	if (laws.zeroth)
-		if (!lawcheck[1])
-			lawcheck[1] = "No" //Given Law 0's usual nature, it defaults to NOT getting reported. --NeoFite
-		list += {"<A href='byond://?src=\ref[src];lawc=0'>[lawcheck[1]] 0:</A> [laws.zeroth]<BR>"}
-
-	for (var/index = 1, index <= laws.ion.len, index++)
-		var/law = laws.ion[index]
-
-		if (length(law) > 0)
-
-
-			if (!ioncheck[index])
-				ioncheck[index] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawi=[index]'>[ioncheck[index]] [ionnum()]:</A> [law]<BR>"}
-			ioncheck.len += 1
-
-	var/number = 1
-	for (var/index = 1, index <= laws.inherent.len, index++)
-		var/law = laws.inherent[index]
-
-		if (length(law) > 0)
-			lawcheck.len += 1
-
-			if (!lawcheck[number+1])
-				lawcheck[number+1] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[lawcheck[number+1]] [number]:</A> [law]<BR>"}
-			number++
-
-	for (var/index = 1, index <= laws.supplied.len, index++)
-		var/law = laws.supplied[index]
-		if (length(law) > 0)
-			lawcheck.len += 1
-			if (!lawcheck[number+1])
-				lawcheck[number+1] = "Yes"
-			list += {"<A href='byond://?src=\ref[src];lawc=[number]'>[lawcheck[number+1]] [number]:</A> [law]<BR>"}
-			number++
-	list += {"<br><br><A href='byond://?src=\ref[src];laws=1'>State Laws</A>"}
-
-	usr << browse(list, "window=laws")
-
 /mob/living/silicon/robot/show_laws(var/everyone = 0)
 	laws_sanity_check()
 	var/who
@@ -109,7 +20,7 @@
 			else
 				lawsync()
 				to_chat(src, "<b>Laws synced with AI, be sure to note any changes.</b>")
-				if(mind && mind.special_role == "traitor" && mind.original == src)
+				if(istraitor(src))
 					to_chat(src, "<b>Remember, your AI does NOT share or know about your law 0.")
 		else
 			to_chat(src, "<b>No AI selected to sync laws with, disabling lawsync protocol.</b>")
@@ -117,7 +28,7 @@
 
 	to_chat(who, "<b>Obey these laws:</b>")
 	laws.show_laws(who)
-	if (mind && (mind.special_role == "traitor" && mind.original == src) && connected_ai)
+	if (istraitor(src) && connected_ai)
 		to_chat(who, "<b>Remember, [connected_ai.name] is technically your master, but your objective comes first.</b>")
 	else if (connected_ai)
 		to_chat(who, "<b>Remember, [connected_ai.name] is your master, other AIs can be ignored.</b>")

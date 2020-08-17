@@ -67,7 +67,7 @@
 /datum/artifact_trigger/Destroy()
 	my_artifact = null
 	my_effect = null
-
+	..()
 
 /datum/artifact_trigger/Topic(href, href_list)
 	return my_artifact.Topic(href, href_list)

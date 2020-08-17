@@ -9,9 +9,7 @@
 	var/view_range = 20				//how close excavation has to come to show an overlay on the turf
 	var/clearance_range = 3			//how close excavation has to come to extract the item
 									//if excavation hits var/excavation_required exactly, it's contained find is extracted cleanly without the ore
-	var/prob_delicate = 90			//probability it requires an active suspension field to not insta-crumble
-	var/dissonance_spread = 1		//proportion of the tile that is affected by this find
-	var/responsive_reagent
+	var/responsive_reagent = PLASMA
 	var/apply_material_decorations = FALSE
 	var/apply_image_decorations = FALSE
 	var/material_descriptor = ""
@@ -24,12 +22,11 @@
 /datum/find/New(var/exc_req)
 	excavation_required = exc_req
 	clearance_range = rand(2,6)
-	dissonance_spread = rand(1500,2500) / 100
 
-/datum/find/proc/create_find(var/obj/item/weapon/archaeological_find/new_item) //Makes the item. Applies strangeness to it. Returns item
+/datum/find/proc/create_find(var/atom/loc) //Makes the item. Applies strangeness to it. Returns item
 	if(prob(5))
 		talkative = TRUE
-	var/obj/item/weapon/I = spawn_item(new_item)
+	var/obj/item/weapon/I = spawn_item()
 	if(apply_prefix)
 		apply_prefix(I)
 	if(apply_material_decorations)
@@ -48,10 +45,12 @@
 				I.heard_words = list()
 			I.speaking_to_players = TRUE
 			processing_objects.Add(I)
+	I.forceMove(loc)
 	return I
 
 
-/datum/find/proc/spawn_item(var/obj/item/weapon/archaeological_find/new_item) //Makes the item. Returns item.
+/datum/find/proc/spawn_item() //Makes the item. Returns item.
+	return new /obj/item/weapon/archaeological_find
 
 /datum/find/proc/apply_prefix(var/obj/item/I)
 	I.name = "[pick("strange","ancient","alien","")] [item_type?"[item_type]":"[initial(I.name)]"]"
@@ -112,7 +111,7 @@
 	item_type = "bowl"
 
 /datum/find/bowl/spawn_item()
-	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
 	new_item.icon_state = "bowl"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
@@ -132,7 +131,7 @@
 	anomaly_factor = 0
 
 /datum/find/urn/spawn_item()
-	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing)
+	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
 	new_item.icon_state = "urn"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
@@ -168,7 +167,8 @@
 	additional_desc = TRUE
 	responsive_reagent = MERCURY
 
-/datum/find/statuette/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/statuette/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	new_item.icon_state = "statuette"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -185,7 +185,8 @@
 	additional_desc = TRUE
 	responsive_reagent = MERCURY
 
-/datum/find/instrument/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/instrument/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	new_item.icon_state = "instrument"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	if(prob(30))
@@ -248,7 +249,7 @@
 
 /datum/find/beartrap/spawn_item()
 	item_type = "[pick("wicked","evil","byzantine","dangerous")] looking [pick("device","contraption","thing","trap")]"
-	return new /obj/item/weapon/legcuffs/beartrap
+	return new /obj/item/weapon/beartrap
 
 /datum/find/beartrap/additional_description(var/obj/item/I)
 	I.desc += "[pick("It looks like it could take a limb off",\
@@ -276,9 +277,10 @@
 	responsive_reagent = MERCURY
 
 /datum/find/box/spawn_item()
-	var/obj/item/new_item = new /obj/item/weapon/storage/box
+	var/obj/item/weapon/storage/box/new_item = new /obj/item/weapon/storage/box
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_item.icon_state = "box"
+	new_item.foldable = null
 	if(prob(30))
 		apply_image_decorations = TRUE
 	return new_item
@@ -344,7 +346,7 @@
 
 	var/new_type = pick(possible_spawns)
 	if(new_type == /obj/item/stack/sheet/metal)
-		new_item = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		new_item = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		new_item = new new_type(get_turf(src))
 	new_item.amount = rand(5,45)
@@ -373,7 +375,8 @@
 	anomaly_factor = 3
 	responsive_reagent = NITROGEN
 
-/datum/find/crystal/spawn_item(var/obj/item/weapon/archaeological_find/new_find)
+/datum/find/crystal/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_find = ..()
 	if(prob(25))
 		item_type = "smooth green crystal"
 		new_find.icon_state = "Green lump"
@@ -486,9 +489,9 @@
 
 /datum/find/shard/spawn_item()
 	if(prob(50))
-		return getFromPool(/obj/item/weapon/shard)
+		return new /obj/item/weapon/shard
 	else
-		return getFromPool(/obj/item/weapon/shard/plasma)
+		return new /obj/item/weapon/shard/plasma
 
 /datum/find/rods
 	find_ID = ARCHAEO_RODS
@@ -503,6 +506,7 @@
 /datum/find/stock_parts //Tier 4 parts
 	find_ID = ARCHAEO_STOCKPARTS
 	apply_material_decorations = FALSE
+	responsive_reagent = IRON
 	anomaly_factor = 2
 
 /datum/find/stock_parts/spawn_item()
@@ -521,6 +525,7 @@
 	find_ID = ARCHAEO_KATANA
 	apply_prefix = FALSE
 	responsive_reagent = IRON
+	anomaly_factor = 0
 
 /datum/find/katana/spawn_item()
 	var/obj/item/weapon/new_item = new /obj/item/weapon/katana
@@ -590,12 +595,10 @@
 	additional_desc = TRUE
 
 /datum/find/gun/spawn_item()
-	var/obj/item/weapon/gun/projectile/new_gun = new /obj/item/weapon/gun/projectile
-	new_gun.icon_state = "gun[rand(1,4)]"
-	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
-	new_gun.item_state = new_gun.icon_state
-	new_gun.inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
-	new_gun.desc = ""
+	// use subtypes to change icon_state.
+	// because gun code relies on initial(icon_state)
+	var/gun_type = pick(subtypesof(/obj/item/weapon/gun/projectile/xenoarch))
+	var/obj/item/weapon/gun/projectile/new_gun = new gun_type
 
 	//let's get some ammunition in this gun : weighted to pick available ammo
 	new_gun.caliber = pick(50;list(POINT357 = 1),
@@ -628,6 +631,27 @@
 
 	return new_gun
 
+/obj/item/weapon/gun/projectile/xenoarch
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
+	desc = ""
+
+/obj/item/weapon/gun/projectile/xenoarch/gun1
+	icon_state = "gun1"
+	item_state = "gun1"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun2
+	icon_state = "gun2"
+	item_state = "gun2"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun3
+	icon_state = "gun3"
+	item_state = "gun3"
+
+/obj/item/weapon/gun/projectile/xenoarch/gun4
+	icon_state = "gun4"
+	item_state = "gun4"
+
 /datum/find/gun/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique projectile weapon, you're not sure if it will fire or not."
 	if(prob(10)) // 10% chance to be a smart gun
@@ -640,7 +664,8 @@
 	anomaly_factor = 2
 	responsive_reagent = MERCURY
 
-/datum/find/unknown/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/unknown/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
@@ -717,7 +742,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = CARBON
 
-/datum/find/remains_human/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_human/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "humanoid [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remains"
@@ -740,7 +766,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = IRON
 
-/datum/find/remains_robot/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_robot/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
 	new_item.icon = 'icons/mob/robots.dmi'
 	new_item.icon_state = "remainsrobot"
@@ -764,7 +791,8 @@
 	apply_material_decorations = FALSE
 	responsive_reagent = CARBON
 
-/datum/find/remains_xeno/spawn_item(var/obj/item/weapon/archaeological_find/new_item)
+/datum/find/remains_xeno/spawn_item()
+	var/obj/item/weapon/archaeological_find/new_item = ..()
 	item_type = "alien [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remainsxeno"
@@ -810,7 +838,27 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/spacesuit/spawn_item()
-	var/result = pick(/obj/item/clothing/suit/space/ancient,  /obj/item/clothing/head/helmet/space/ancient)
+	var/result = pick(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient)
+	return new result
+
+/datum/find/excasuit
+	find_ID = ARCHAEO_EXCASUIT
+	anomaly_factor = 2
+	apply_material_decorations = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/excasuit/spawn_item()
+	var/result = pick(/obj/item/clothing/suit/space/anomaly, /obj/item/clothing/head/helmet/space/anomaly)
+	return new result
+
+/datum/find/anomsuit
+	find_ID = ARCHAEO_ANOMSUIT
+	anomaly_factor = 2
+	apply_material_decorations = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/anomsuit/spawn_item()
+	var/result = pick(/obj/item/clothing/suit/bio_suit/anomaly/old, /obj/item/clothing/head/bio_hood/anomaly/old)
 	return new result
 
 /datum/find/lance
@@ -872,6 +920,16 @@
 		var/result = pick(existing_typesof(/obj/item/toy))
 		return new result
 
+/datum/find/toybox
+	find_ID = ARCHAEO_TOYBOX
+	apply_material_decorations = FALSE
+	apply_image_decorations = FALSE
+	apply_prefix = FALSE
+	responsive_reagent = POTASSIUM
+
+/datum/find/toybox/spawn_item()
+	return new /obj/item/weapon/butterflyknife/viscerator/bunny
+
 /datum/find/largecrystal
 	find_ID = ARCHAEO_LARGE_CRYSTAL
 	apply_material_decorations = FALSE
@@ -931,13 +989,11 @@
 	var/datum/geosample/geologic_data
 	origin_tech = Tc_MATERIALS + "=5"
 
-/obj/item/weapon/strangerock/New(loc, var/inside_item_type = 0)
+/obj/item/weapon/strangerock/New(loc, var/datum/find/F)
 	..()
 	//method = rand(0,2)
-	if(inside_item_type)
-		new/obj/item/weapon/archaeological_find(src, new_item_type = inside_item_type)
-		if(!inside)
-			inside = locate() in contents
+	if(F)
+		inside = F.spawn_item(src)
 
 /obj/item/weapon/strangerock/Destroy()
 	..()
@@ -980,7 +1036,6 @@
 
 /obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
 	..()
-	AddToProfiler()
 	if(new_item_type)
 		find_type = new_item_type
 	else

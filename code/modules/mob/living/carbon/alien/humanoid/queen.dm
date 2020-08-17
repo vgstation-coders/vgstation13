@@ -4,14 +4,14 @@
 	maxHealth = 300
 	health = 300
 	icon_state = "alienq_s"
-	status_flags = CANPARALYSE
+	status_flags = CANPARALYSE|UNPACIFIABLE
 	heal_rate = 5
 	plasma_rate = 20
 
 /mob/living/carbon/alien/humanoid/queen/movement_tally_multiplier()
 	. = ..()
 	. *= 5 // Queens are slow as fuck
-	
+
 /mob/living/carbon/alien/humanoid/queen/feels_pain()
 	return FALSE // Queens are slow enough as they are
 

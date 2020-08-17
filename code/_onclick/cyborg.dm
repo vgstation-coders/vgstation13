@@ -47,6 +47,9 @@
 		aicamera.captureimage(A, src)
 		return
 
+	if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A)))
+		return
+
 	var/obj/item/W = get_active_hand()
 
 	// Cyborgs have no range-checking unless there is item use
@@ -92,8 +95,6 @@
 	else
 		//next_move = world.time + 10
 		W.afterattack(A, src, 0, params)
-		return
-	return
 
 //Gripper Handling
 //This is used when a gripper is used on anything. It does all the handling for it.
