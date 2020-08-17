@@ -206,7 +206,7 @@
 		if(CanHug(AM, src))
 			var/mob/living/carbon/human/H
 			if(!H.isUnconscious())
-				Attach(H)
+				return Attach(H)
 	return FALSE
 
 /obj/item/clothing/mask/facehugger/throw_at(atom/target, range, speed)
