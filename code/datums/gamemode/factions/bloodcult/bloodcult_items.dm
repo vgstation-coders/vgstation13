@@ -1406,10 +1406,14 @@ var/list/arcane_tomes = list()
 					var/pocketitemr = user.get_item_by_slot(slot_r_store)
 					var/pocketiteml = user.get_item_by_slot(slot_l_store)
 					user.equip_to_slot_or_drop(stored_slot,nslot)
-					iditem?user.equip_to_slot_or_drop(iditem,slot_wear_id)		//Re-equip them so they dont drop on the ground
-					beltitem?user.equip_to_slot_or_drop(beltitem, slot_belt)
-					pocketitemr?user.equip_to_slot_or_drop(pocketitemr,slot_r_store)
-					pocketitemluser.equip_to_slot_or_drop(pocketiteml,slot_l_store)
+					if(iditem)
+						user.equip_to_slot_or_drop(iditem,slot_wear_id)		//Re-equip them so they dont drop on the ground
+					if(beltitem)
+						user.equip_to_slot_or_drop(beltitem, slot_belt)
+					if(pocketitemr)
+						user.equip_to_slot_or_drop(pocketitemr,slot_r_store)
+					if(pocketiteml)
+						user.equip_to_slot_or_drop(pocketiteml,slot_l_store)
 				if(istype(user_slot, /obj/item/weapon/storage))
 					var/obj/item/weapon/storage/S = user_slot
 					S.close(user)
