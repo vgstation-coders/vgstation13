@@ -1,7 +1,7 @@
-obj
+/obj
 	var/datum/vgassembly/vga = null //component assembly
 
-obj/variable_edited(var_name, old_value, new_value)
+/obj/variable_edited(var_name, old_value, new_value)
 	. =..()
 
 	switch(var_name)
@@ -267,7 +267,7 @@ datum/vgassembly/proc/fireOutputs()
 /*
 Base Component
 */
-datum/vgcomponent
+/datum/vgcomponent
 	var/name = "VGComponent" //used in the ui
 	var/desc = "used to make logic happen"
 	var/datum/vgassembly/_assembly //obj component is attached to
@@ -285,14 +285,14 @@ datum/vgcomponent
 	var/obj_path = /obj/item/vgc_obj
 	var/timestopped = 0 //needed for processingobjs
 
-datum/vgcomponent/Destroy()
+/datum/vgcomponent/Destroy()
 	..()
 	_assembly = null
 	_input = null
 	_output = null
 	settings = null
 
-datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
+/datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	if(_assembly)
 		return 0 //how
 	
@@ -304,7 +304,7 @@ datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
 	_assembly.UI_Update()
 	return 1
 
-datum/vgcomponent/proc/Uninstall() //don't override
+/datum/vgcomponent/proc/Uninstall() //don't override
 	if(!_assembly)
 		return
 
@@ -317,7 +317,7 @@ datum/vgcomponent/proc/Uninstall() //don't override
 	return new obj_path(src)
 
 //basically removes all assigned outputs which aren't in the assembly anymore
-datum/vgcomponent/proc/rebuildOutputs()
+/datum/vgcomponent/proc/rebuildOutputs()
 	for(var/O in _output)
 		if(!_output[O])
 			continue
@@ -325,7 +325,7 @@ datum/vgcomponent/proc/rebuildOutputs()
 		if(_output[O][1]._assembly != src._assembly)
 			_output[O] = null
 
-datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
+/datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 	if(!_assembly)
 		return
 
@@ -334,7 +334,7 @@ datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 
 	_assembly.output_queue[++_assembly.output_queue.len] = list("\ref[src]", target, signal)
 
-datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
+/datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
 	if(!(out in _output))
 		return 0
 
@@ -347,15 +347,15 @@ datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, va
 	_output[out] = list(vgc, target)
 
 //opens window to configure settings
-datum/vgcomponent/proc/openSettings(var/mob/user)
+/datum/vgcomponent/proc/openSettings(var/mob/user)
 	return
 
 //default input path
-datum/vgcomponent/proc/main(var/signal)
+/datum/vgcomponent/proc/main(var/signal)
 	message_admins("somehow [src]'s default input got called, altough it was never set.'")
 	return
 
-datum/vgcomponent/proc/onTouch(var/obj/item/O, var/mob/user)
+/datum/vgcomponent/proc/onTouch(var/obj/item/O, var/mob/user)
 	return
 
 /*
@@ -367,7 +367,7 @@ COMPONENTS (the ones i made myself... kinda)
 Door control
 -- maybe let this send out events sometime like ondooropen, ondoorclose
 */
-datum/vgcomponent/doorController
+/datum/vgcomponent/doorController
 	name = "Doorcontroller"
 	desc="controls doors"
 	var/list/saved_access = list() //ID.GetAccess()
@@ -379,10 +379,10 @@ datum/vgcomponent/doorController
 	)
 	_output = list()
 
-datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
+/datum/vgcomponent/doorController/proc/setAccess(var/obj/item/weapon/card/id/ID)
 	saved_access = ID.GetAccess()
 
-datum/vgcomponent/doorController/proc/open(var/signal)
+/datum/vgcomponent/doorController/proc/open(var/signal)
 	if(!signal) //we want a 1
 		return 0
 
@@ -397,7 +397,7 @@ datum/vgcomponent/doorController/proc/open(var/signal)
 		D.denied()
 	return 0
 
-datum/vgcomponent/doorController/proc/close(var/signal)
+/datum/vgcomponent/doorController/proc/close(var/signal)
 	if(!signal) //we want a 1
 		return 0
 
@@ -412,7 +412,7 @@ datum/vgcomponent/doorController/proc/close(var/signal)
 		D.denied()
 	return 0
 
-datum/vgcomponent/doorController/proc/toggle(var/signal)
+/datum/vgcomponent/doorController/proc/toggle(var/signal)
 	if(!signal) //we want a 1
 		return 0
 
@@ -469,11 +469,30 @@ Button
 	if(toggle)
 		state = !state
 
-//togglebutton
+/*
+Togglebutton
+*/
 /datum/vgcomponent/button/toggle
 	name = "Togglebutton"
 	toggle = 1
 	obj_path = /obj/item/vgc_obj/button/toggle
+
+/*
+Gate
+*/
+/datum/vgcomponent/gate_button
+	name = "Gate"
+	desc = "Toggle to enable/disable signal passthrough"
+	var/state = TRUE
+	obj_path = /obj/item/vgc_obj/gate_button
+	touch_enabled = 1
+
+/datum/vgcomponent/gate_button/onTouch(obj/item/O, mob/user)
+	state = !state
+
+/datum/vgcomponent/gate_button/main(signal)
+	if(state)
+		handleOutput(signal = signal)
 
 /*
 Splitter
