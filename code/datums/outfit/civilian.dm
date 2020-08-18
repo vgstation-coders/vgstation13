@@ -611,7 +611,7 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom
 
-/datum/outfit/lawyer/post_equip(var/mob/living/carbon/human/H)
+/datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
 	if (!H.mind)
 		return
