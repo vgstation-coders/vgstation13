@@ -499,7 +499,7 @@
 			enter_shelter(target)
 
 
-/obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, over_location, src_control, over_control, params)
+/obj/structure/inflatable/shelter/MouseDropFrom(over_object, src_location, turf/over_location, src_control, over_control, params)
 	if(!Adjacent(over_location))
 		return
 	if(!istype(over_location) || over_location.density)
