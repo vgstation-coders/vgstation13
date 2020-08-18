@@ -56,7 +56,7 @@
 		if(JINGLE_CLASSIC)
 			selected_jingle = pick(C.classic_roundend_jingles)
 		if(JINGLE_ALL)
-			selected_jingle = pick(C.classic_roundend_jingles, C.new_roundend_jingles)
+			selected_jingle = pick(C.classic_roundend_jingles + C.new_roundend_jingles)
 
 	if(selected_jingle in C.classic_roundend_jingles)
 		selected_folder = C.classic_roundend_jingles_folder
