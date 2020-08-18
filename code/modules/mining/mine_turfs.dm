@@ -386,7 +386,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 
 				if(P.has_slime)
-					for(var/turf/unsimulated/mineral/M in range(src,1))
+					for(var/turf/unsimulated/mineral/M in range(user,1))
 						M.GetDrilled(safety_override = TRUE, driller = user)
 					return
 
