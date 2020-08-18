@@ -170,6 +170,12 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelburger
 
+/datum/recipe/bearburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bearburger
+
+
 // Burger sliders //////////////////////////////////////////////
 
 /datum/recipe/sliders

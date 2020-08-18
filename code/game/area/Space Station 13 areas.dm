@@ -433,6 +433,13 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 
+/area/shuttle/lightship
+	name = "\improper Lightspeed Ship"
+	requires_power = 1
+
+/area/shuttle/lightship/start
+	icon_state = "yellow"
+
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
 	icon_state = "yellow"
@@ -2802,3 +2809,34 @@ var/list/the_station_areas = list (
 		/datum/ambience/dorf,
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
+
+// BEGIN Horizon
+/area/hallway/primary/foreport
+	name = "Fore Port"
+	icon_state = "hallP"
+
+/area/hallway/primary/forestarboard
+	name = "Fore Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperstarboard
+	name = "Upper Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperport
+	name = "Upper Port"
+	icon_state = "hallP"
+
+/area/hallway/secondary/podescape1
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/podescape2
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/exit2
+	name = "Escape Shuttle Hallway Right"
+	icon_state = "escape"
+
+// END Horizon

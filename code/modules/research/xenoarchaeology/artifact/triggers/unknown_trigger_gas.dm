@@ -3,11 +3,11 @@
 /datum/artifact_trigger/gas
 	triggertype = TRIGGER_GAS
 	scanned_trigger = SCAN_ATMOS
-	var/trigger_gas = 0
+	var/trigger_gas = null
 
 /datum/artifact_trigger/gas/New()
 	..()
-	trigger_gas = pick("PLASMA", "CARBON_DIOXIDE", "NITROGEN", "OXYGEN") //TODO: See if these can be replaced with the defines without fucking up
+	trigger_gas = pick(GAS_NITROGEN, GAS_OXYGEN, GAS_CARBON, GAS_PLASMA)
 
 
 /datum/artifact_trigger/gas/CheckTrigger()
@@ -15,9 +15,9 @@
 	var/datum/gas_mixture/env = T.return_air()
 	if(env)
 		if(!my_effect.activated)
-			if(env.molar_density(lowertext(trigger_gas)) >= MOLE_TRIGGER)
+			if(env.molar_density(trigger_gas) >= MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)
 
 		else
-			if(env.molar_density(lowertext(trigger_gas)) < MOLE_TRIGGER)
+			if(env.molar_density(trigger_gas) < MOLE_TRIGGER)
 				Triggered(0, trigger_gas, 0)

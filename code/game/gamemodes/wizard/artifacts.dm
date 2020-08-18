@@ -320,4 +320,22 @@
 	name = "Boots of Blinding Speed"
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
+	price = 0.75 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
+
+/datum/spellbook_artifact/nogunallowed
+	name = "No Gun Allowed"
+	abbreviation = "NGA"
+	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
+	price = -0.5 * Sp_BASE_PRICE
+
+/datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	if(iswizard(user) || isapprentice(user) || ismagician(user))
+		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
+			return TRUE
+	else
+		return FALSE
+
+/datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
+	..()
+	H.add_spell (new/spell/passive/nogunallowed)

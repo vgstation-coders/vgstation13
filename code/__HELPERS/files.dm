@@ -73,6 +73,22 @@
 				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
 				binary = null
 				continue
+//Lamprey currently has a tendency to crash for no real reason, uncomment this when it stops being broken
+/*
+		if(potential == "Lamprey Station/") //Available if the station is wrecked enough
+			var/crew_score = score["crewscore"] //So that we can use this in the chat
+			if(crew_score >= -20000)
+				message_admins("Skipping map [potential], stationrequires lower than -20000 score (is [score]).")
+				warning("Skipping map [potential], station requires lower than -20000 score (is [score]).")
+				binary = null
+				continue
+*/
+		if(potential == "Castle Station/") //Available if revolutionaries won
+			if(!ticker.revolutionary_victory)
+				message_admins("Skipping map [potential], revolutionaries have not won.")
+				warning("Skipping map [potential], revolutionaries have not won.")
+				binary = null
+				continue
 		if(!binary)
 			warning("Map folder [path] does not contain a valid byond binary, skipping.")
 		else

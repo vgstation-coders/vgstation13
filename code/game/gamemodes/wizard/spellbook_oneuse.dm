@@ -498,7 +498,7 @@
 /obj/item/weapon/spellbook/oneuse/absorb
 	spell = /spell/targeted/absorb
 	spellname = "absorb"
-	icon_state ="book"
+	icon_state ="bookabsorb"
 	desc = "This book glows with sinister energy."
 	disabled_from_bundle = 1
 

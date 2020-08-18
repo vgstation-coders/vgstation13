@@ -443,7 +443,8 @@
 					return
 				switch(construct_class)
 					if("Juggernaut")
-						Z = new /mob/living/simple_animal/construct/armoured (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/armoured(get_turf(T.loc))
+						Z.setup_type(U)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
@@ -452,7 +453,8 @@
 						deleteafter = 1
 
 					if("Wraith")
-						Z = new /mob/living/simple_animal/construct/wraith (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/wraith(get_turf(T.loc))
+						Z.setup_type(U)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
@@ -461,7 +463,8 @@
 						deleteafter = 1
 
 					if("Artificer")
-						Z = new /mob/living/simple_animal/construct/builder (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/builder(get_turf(T.loc))
+						Z.setup_type(U)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")
@@ -493,7 +496,9 @@
 					return
 				switch(construct_class)
 					if("Juggernaut")
-						Z = new /mob/living/simple_animal/construct/armoured/perfect (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/armoured/perfect(get_turf(T.loc))
+						Z.setup_type(U)
+						flick("make_juggernaut2", Z)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
@@ -503,7 +508,9 @@
 						deleteafter = 1
 
 					if("Wraith")
-						Z = new /mob/living/simple_animal/construct/wraith/perfect (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/wraith/perfect(get_turf(T.loc))
+						Z.setup_type(U)
+						flick("make_wraith2", Z)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
@@ -513,7 +520,9 @@
 						deleteafter = 1
 
 					if("Artificer")
-						Z = new /mob/living/simple_animal/construct/builder/perfect (get_turf(T.loc))
+						Z = new /mob/living/simple_animal/construct/builder/perfect(get_turf(T.loc))
+						Z.setup_type(U)
+						flick("make_artificer2", Z)
 						A.mind.transfer_to(Z)
 						qdel(T)
 						to_chat(Z, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")

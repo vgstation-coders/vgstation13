@@ -2,6 +2,7 @@
 
 //#define GC_DEBUG
 //#define GC_FINDREF
+//#define GC_REFDEBUG
 
 var/datum/subsystem/garbage/SSgarbage
 
@@ -22,6 +23,9 @@ var/soft_dels = 0
 	// To let them know how hardworking am I :^).
 	var/dels_count = 0
 	var/hard_dels = 0
+	#ifdef GC_REFDEBUG
+	var/list/fakedels = list()
+	#endif
 
 
 /datum/subsystem/garbage/New()
@@ -62,14 +66,22 @@ var/soft_dels = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
+			if(ismovable(D))
 				var/atom/movable/AM = D
 				AM.hard_deleted = 1
 			else
 				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
 				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
 
+			#ifdef GC_REFDEBUG
+			fakedels += D
+			if(ismovable(D))
+				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
+			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+			#undef GC_REFDEBUG
+			#else
 			del D
+			#endif
 			removeTrash(refID)
 
 			hard_dels++

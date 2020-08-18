@@ -71,6 +71,7 @@
 			if (!B.bee_species.angery || prob(max(0,100-B.bees.len*5)))
 				for (var/datum/bee/BEES in B.bees)
 					caught_bees.Add(BEES)
+					B.bees.Remove(BEES)
 					BEES.home = null
 					if (B.home)
 						B.home.bees_outside_hive.Remove(BEES)
