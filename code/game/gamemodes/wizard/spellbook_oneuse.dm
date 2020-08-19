@@ -495,6 +495,18 @@
 	playsound(user, 'sound/effects/ice_barrage.ogg', 50, 100, extrarange = 3, gas_modified = 0)
 	new /obj/structure/ice_block(user.loc, user, 30 SECONDS)
 
+/obj/item/weapon/spellbook/oneuse/alchemy
+	spell = /spell/targeted/alchemy
+	spellname = "Street Alchemy"
+	desc = "The letters are all in different hand writing and the ink varies in colour."
+	icon_state = "bookalch"
+
+/obj/item/weapon/spellbook/oneuse/alchemy/recoil(mob/living/carbon/user)
+	..()
+	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
+	var/datum/reagent/toAdd = pick(PACID, HELL_RAMEN, CHLORALHYDRATE, MINDBREAKER)
+	user.reagents.add_reagent(toAdd, 3)
+
 /obj/item/weapon/spellbook/oneuse/absorb
 	spell = /spell/targeted/absorb
 	spellname = "absorb"
