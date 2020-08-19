@@ -368,8 +368,6 @@
 //set disable_warning to disable the 'you are unable to equip that' warning.
 //unset redraw_mob to prevent the mob from being redrawn at the end.
 /mob/living/carbon/human/equip_to_slot_if_possible(obj/item/W as obj, slot, act_on_fail = 0, disable_warning = 0, redraw_mob = 1, automatic = 0)
-	if (!istype(W))
-		return
 	switch(W.mob_can_equip(src, slot, disable_warning, automatic))
 		if(CANNOT_EQUIP)
 			switch(act_on_fail)
