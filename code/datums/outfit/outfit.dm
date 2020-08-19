@@ -229,7 +229,7 @@
 		H.species.final_equip(H)
 
 // -- Spawn correct ID and PDA
-/datum/outfit/proc/spawn_id(var/mob/living/carbon/human/H, rank)
+/datum/outfit/proc/spawn_id(var/mob/living/carbon/human/H)
 	if (!associated_job)
 		CRASH("Outfit [outfit_name] has no associated job, and the proc to spawn the ID is not overriden.")
 	var/datum/job/concrete_job = new associated_job
@@ -238,7 +238,7 @@
 	C = new id_type(H)
 	C.access = concrete_job.get_access()
 	C.registered_name = H.real_name
-	C.rank = rank
+	C.rank = concrete_job.title
 	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
 	C.associated_account_number = H?.mind?.initial_account?.account_number

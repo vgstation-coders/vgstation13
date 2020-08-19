@@ -340,7 +340,7 @@
 	associated_job = /datum/job/mime
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -404,7 +404,7 @@
 	associated_job = /datum/job/janitor
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -451,7 +451,7 @@
 	associated_job = /datum/job/librarian
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -517,7 +517,7 @@
 	associated_job = /datum/job/iaa
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -624,7 +624,7 @@
 	associated_job = /datum/job/chaplain
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
