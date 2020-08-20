@@ -71,6 +71,9 @@ Components
 	DC.setAccess(W)
 	to_chat(user, "You set \the [src.name]'s access")
 
+/obj/item/vgc_obj/cleaner
+	datum_type = /datum/vgcomponent/processor/cleaner
+
 /obj/item/vgc_obj/debugger
 	datum_type = /datum/vgcomponent/debugger
 
@@ -96,7 +99,7 @@ Components
 	datum_type = /datum/vgcomponent/keyboard
 
 /obj/item/vgc_obj/prox_sensor
-	datum_type = /datum/vgcomponent/prox_sensor
+	datum_type = /datum/vgcomponent/processor/prox_sensor
 
 /obj/item/vgc_obj/add
 	datum_type = /datum/vgcomponent/algorithmic/add
