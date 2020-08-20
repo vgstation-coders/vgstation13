@@ -1566,6 +1566,51 @@ var/mob/dview/tview/tview_mob = new()
 			colour += temp_col
 	return colour
 
+/proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
+	var/randomizepotions = pick("healing", "transform", "toxin", "mana", "invisibility", "stoneskin", "speed", "zombie", "truesight", "strength", "random", "sword", "levitation", "fireball", "light", "fullness", "transparency", "paralysis", "teleport", "deception")
+	switch (randomizepotions)
+			if("healing")
+				return /obj/item/potion/healing
+			if("transform")
+				return /obj/item/potion/transform
+			if("toxin")
+				return /obj/item/potion/toxin
+			if("mana")
+				return /obj/item/potion/mana
+			if("invisibility")
+				return /obj/item/potion/invisibility/major
+			if("stoneskin")
+				return /obj/item/potion/stoneskin
+			if("speed")
+				return /obj/item/potion/speed/major
+			if("zombie")
+				return /obj/item/potion/zombie
+			if("truesight")
+				return /obj/item/potion/mutation/truesight/major
+			if("strength")
+				return /obj/item/potion/mutation/strength/major
+			if("random")
+				return /obj/item/potion/random
+			if("sword")
+				return /obj/item/potion/sword
+			if("levitation")
+				return /obj/item/potion/levitation
+			if("fireball")
+				return /obj/item/potion/fireball
+			if("invisibility")
+				return /obj/item/potion/invisibility
+			if("light")
+				return /obj/item/potion/light
+			if("fullness")
+				return /obj/item/potion/fullness
+			if("transparency")
+				return /obj/item/potion/transparency
+			if("paralysis")
+				return /obj/item/potion/paralysis
+			if("teleport")
+				return /obj/item/potion/teleport
+			if("deception")	//uh oh
+				return /obj/item/potion/deception
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
