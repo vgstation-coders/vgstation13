@@ -9,9 +9,10 @@
 			if(vga)
 				vga.setTimestop(new_value)
 
-/obj/emag_act()
+/obj/attackby(obj/item/O, mob/user)
 	. = ..()
-	vga.onHacked()
+	if(istype(O, /obj/item/weapon/card/emag))
+		vga.onHacked()
 
 /*
 Base Assembly
@@ -308,19 +309,30 @@ Base Component
 	_assembly = A
 	_assembly._vgcs += src
 	_assembly.UI_Update()
+
+	OnInstall()
+
 	return 1
+
+/datum/vgcomponent/proc/OnInstall()
+	return
 
 /datum/vgcomponent/proc/Uninstall() //don't override
 	if(!_assembly)
 		return
 
-	
 	var/datum/vgassembly/A = _assembly
 	_assembly = null //needs to be null for rebuild to work for other components
 	A.rebuild()
 	A._vgcs -= src //now that we rebuilt, we can remove ourselves
 	A.UI_Update()
+
+	OnUninstall()
+
 	return new obj_path(src)
+
+/datum/vgcomponent/proc/OnUninstall()
+	return
 
 //basically removes all assigned outputs which aren't in the assembly anymore
 /datum/vgcomponent/proc/rebuildOutputs()
@@ -439,6 +451,118 @@ Door control
 	else
 		D.denied()
 	return 0
+
+/*
+== PROCESSING COMPONENTS
+*/
+/datum/vgcomponent/processor/OnUninstall()
+	stop_processing()
+
+/datum/vgcomponent/processor/proc/start_processing()
+	if(!(src in processing_objects))
+		processing_objects.Add(src)
+		return 1
+	return 0
+
+/datum/vgcomponent/processor/proc/stop_processing()
+	if(src in processing_objects)
+		processing_objects.Remove(src)
+		return 1
+	return 0
+
+/datum/vgcomponent/processor/proc/process()
+	return
+
+/*
+Cleaner - cleans floortiles below object
+*/
+/datum/vgcomponent/processor/cleaner
+	name = "Cleaner"
+	desc="Cleans Tiles"
+	obj_path = /obj/item/vgc_obj/cleaner
+	_input = list(
+		"activate" = "start_processing",
+		"deactivate" = "stop_processing"
+	)
+	_output = list()
+	usage_flags = VGCOMP_USAGE_MANIPULATE_LARGE
+	var/list/blacklisted_targets = list()
+	var/time_between_cleaning = 3 SECONDS
+	var/blocked_until
+
+/datum/vgcomponent/processor/cleaner/process()
+	if(world.time < blocked_until)
+		return
+
+	var/obj/O = _assembly._parent
+	var/turf/T = get_turf(O)
+
+	if(!hacked && prob(5))
+		O.visible_message("<span class='warning'>\the [src] cleans up the [T].</span>")
+		qdel(get_cleanable_decals(T)[0])
+	else
+		O.visible_message("<span class='warning'>Something flies out of \the [src]! It seems to be acting oddly.</span>")
+		new /obj/effect/decal/cleanable/blood/gibs(T)
+	blocked_until = world.time + time_between_cleaning
+
+/datum/vgcomponent/processor/cleaner/proc/get_cleanable_decals(var/turf/T)
+	. = list()
+	for(var/obj/effect/decal/cleanable/C in T)
+		if(!(is_type_in_list(C,blacklisted_targets)))
+			. += C
+
+/datum/vgcomponent/processor/cleaner/openSettings(mob/user)
+	. = ..()
+	/*todo:
+	if(!src.blood)
+		blacklisted_targets += (/obj/effect/decal/cleanable/blood)
+	if(!src.crayon)
+		blacklisted_targets += (/obj/effect/decal/cleanable/crayon)
+	*/
+
+/*
+Proximity Sensor
+*/
+/datum/vgcomponent/processor/prox_sensor
+	name = "Proximity Sensor"
+	desc = "detects fast movement"
+	obj_path = /obj/item/vgc_obj/prox_sensor
+	_input = list(
+		"activate" = "start_processing",
+		"deactivate" = "stop_processing",
+		"toggle" = "toggle",
+		"setRange" = "setRange"
+	)
+	_output = list(
+		"sense" = null
+	)
+	var/range = 2
+	has_settings = 1
+
+/datum/vgcomponent/processor/prox_sensor/proc/toggle()
+	if(!stop_processing())
+		start_processing()
+	return 1
+
+/datum/vgcomponent/processor/prox_sensor/proc/setRange(var/signal)
+	if(!isnum(signal))
+		signal = text2num(signal)
+		if(!signal) //wasn't a number
+			return 0
+
+	if(!(signal in 1 to 5))
+		return 0
+
+	range = signal
+	return 1
+
+/datum/vgcomponent/processor/prox_sensor/process()
+	//sense for people
+	var/turf/loc = get_turf(_assembly._parent)
+	for(var/mob/living/A in range(range,loc))
+		if(A.move_speed < 12)
+			handleOutput("sense")
+			return //to prevent the spam, only output once per process
 
 /*
 Debugger
