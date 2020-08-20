@@ -615,7 +615,7 @@
 		else
 			visible_message("<span class='danger'>The headcrab releases it's grasp from [src]!</span>")
 		crab?.escaping = 1
-		crab.stat = CONSCIOUS 
+		crab?.stat = CONSCIOUS 
 		host = null
 		qdel(src)	
 	else
