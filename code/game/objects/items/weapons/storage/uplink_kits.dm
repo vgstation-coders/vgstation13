@@ -368,4 +368,3 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/device/telepad_beacon(src)
 	new /obj/item/weapon/rcs/salvage/syndicate(src)
-	return
