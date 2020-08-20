@@ -222,6 +222,22 @@
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
+//SUMMON POTIONS
+/datum/spellbook_artifact/summon_potions
+	name = "Summon Potions"
+	desc = "Launch a market crash or start the next potion depression. Either way there will be glass breaking and potions selling."
+	abbreviation = "SP"
+
+/datum/spellbook_artifact/summon_potions/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("potions")
+	to_chat(H, "<span class='userdanger'>POTIONS FOR SALE!</span>")
+
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
 	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."

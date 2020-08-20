@@ -12,6 +12,8 @@
 			survivor_type = /datum/role/survivor/crusader/
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
+		if ("potions")
+			survivor_type = /datum/role/wizard/summon_potions/
 		else
 			survivor_type = /datum/role/survivor/
 
@@ -50,6 +52,8 @@
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
+		if (/datum/role/wizard/summon_potions)
+			return equip_potions(R)
 		else
 			return equip_guns(R)
 
@@ -420,3 +424,15 @@
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
 		S.summons_received = randomizemagic
+
+/mob/living/carbon/human/proc/equip_potions(var/datum/role/R)
+	var/datum/role/survivor/S = R
+	for(var/i=0, i<3, i++)
+		var/obj/item/potion/randompotion = get_random_potion()
+		var/obj/item/potion/P = new randompotion(get_turf(src))
+		if(istype(S))
+			S.summons_received = P.name
+		if(istype(P, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one.
+			to_chat(src, "You feel like it's a bad idea to drink the [P.name] yourself...")
+		
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)

@@ -1566,6 +1566,9 @@ var/mob/dview/tview/tview_mob = new()
 			colour += temp_col
 	return colour
 
+/proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
+	return pick(subtypesof(/obj/item/potion) - /obj/item/potion/mutation)
+			
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
