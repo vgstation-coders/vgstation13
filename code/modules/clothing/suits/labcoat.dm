@@ -102,3 +102,10 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 20, bio = 50, rad = 50)
 	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 50
+
+/obj/item/clothing/suit/storage/labcoat/forensic
+	name = "forensic labcoat"
+	desc = "A suit that protects from all the gnashing spills and spoils produced by crime."
+	allowed = list(/obj/item/roller, /obj/item/device/analyzer,/obj/item/stack/medical,/obj/item/weapon/dnainjector,/obj/item/weapon/reagent_containers/dropper,/obj/item/weapon/reagent_containers/syringe,/obj/item/weapon/reagent_containers/hypospray,/obj/item/device/healthanalyzer,/obj/item/device/antibody_scanner,/obj/item/device/flashlight/pen,/obj/item/weapon/minihoe,/obj/item/weapon/switchtool,/obj/item/weapon/autopsy_scanner/healthanalyzerpro,
+		/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
+	armor = list(melee = 10, bullet = 10, laser = 15, energy = 10, bomb = 0, bio = 50, rad = 0)
