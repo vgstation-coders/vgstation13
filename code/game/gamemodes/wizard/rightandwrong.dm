@@ -426,6 +426,8 @@
 	for(var/i=0, i<3, i++)
 		var/potion = get_random_potion()
 		new potion(get_turf(src))
+		if(istype(potion, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one. If they managed to get a heal potion AND deception potion they're fucked though.
+			to_chat(src, "You feel like it's a bad idea to drink [potion.name] yourself...")
 		if(istype(S))
 			S.summons_received += potion.name
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
