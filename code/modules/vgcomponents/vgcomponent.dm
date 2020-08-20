@@ -9,6 +9,10 @@
 			if(vga)
 				vga.setTimestop(new_value)
 
+/obj/emag_act()
+	. = ..()
+	vga.onHacked()
+
 /*
 Base Component
 */
@@ -30,6 +34,7 @@ Base Component
 	var/obj_path = /obj/item/vgc_obj
 	var/timestopped = 0 //needed for processingobjs
 	var/usage_flags = VGCOMP_USAGE_NONE
+	var/hacked = FALSE
 
 /datum/vgcomponent/Destroy()
 	..()
@@ -103,6 +108,9 @@ Base Component
 
 /datum/vgcomponent/proc/onTouch(var/obj/item/O, var/mob/user)
 	return
+
+/datum/vgcomponent/proc/onHacked()
+	hacked = TRUE
 
 /*
 =============================================
