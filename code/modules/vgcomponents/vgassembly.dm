@@ -246,8 +246,8 @@ Base Assembly
 		call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
 
 /datum/vgassembly/proc/onHacked()
-	for(var/vgcomponent/comp in _vgcs)
-		comp.onHacked()
+	for(var/datum/vgcomponent/C in _vgcs)
+		C.onHacked()
 
 /datum/vgassembly/robot_small
 /datum/vgassembly/robot_big
