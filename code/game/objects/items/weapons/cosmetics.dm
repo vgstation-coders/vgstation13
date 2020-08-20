@@ -259,6 +259,8 @@
 		H.my_appearance.g_hair = color_g
 		H.my_appearance.b_hair = color_b
 	H.update_hair()
+	if(H.species.anatomy_flags & RGBSKINTONE)
+		H.update_body()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 /obj/item/weapon/hair_dye/skin_dye
@@ -291,6 +293,11 @@
 	H.multicolor_skin_g = color_g
 	H.multicolor_skin_b = color_b
 	H.update_body()
+	if(H.species.anatomy_flags & RGBSKINTONE)
+		H.my_appearance.r_hair = color_r
+		H.my_appearance.g_hair = color_g
+		H.my_appearance.b_hair = color_b
+		H.update_hair()
 	uses--
 	if(!uses)
 		qdel(src)

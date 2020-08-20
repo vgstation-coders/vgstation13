@@ -264,9 +264,9 @@ var/global/list/damage_icon_parts = list()
 		if(species.anatomy_flags & MULTICOLOR)
 			stand_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
 		else if(species.anatomy_flags & RGBSKINTONE)
-			my_appearance.r_hair = clamp(my_appearance.r_hair, 10, 50)	//So we don't get rainbow monkeymen roaches
-			my_appearance.g_hair = clamp(my_appearance.g_hair, 10, 50)
-			my_appearance.b_hair = clamp(my_appearance.b_hair, 10, 50)
+			my_appearance.r_hair = clamp(my_appearance.r_hair, 0, 90)	//So we don't get rainbow monkeymen roaches
+			my_appearance.g_hair = clamp(my_appearance.g_hair, 0, 90)
+			my_appearance.b_hair = clamp(my_appearance.b_hair, 0, 90)
 			stand_icon.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
 			//stand_icon.Blend(my_appearance.s_tone, ICON_ADD)
 		else if(species.anatomy_flags & HAS_SKIN_TONE)
