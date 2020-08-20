@@ -551,7 +551,7 @@
 		var/mob/living/carbon/human/H = L
 		var/obj/item/head_protection = H.get_body_part_coverage(HEAD)
 		if(!real && head_protection)
-			return //Toys really shouldn't be forcefully removing gear
+			return FALSE//Toys really shouldn't be forcefully removing gear
 
 		if(head_protection)
 			var/rng = 80	//80% chance to remove the hat if it isn't a rig
@@ -561,15 +561,15 @@
 				H.visible_message("<span class='danger'>\The [src] smashes against [H]'s \the [head_protection], and rips it off in the process!</span>")
 				H.drop_from_inventory(head_protection)
 				GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-				return
+				return FALSE
 			else
 				H.visible_message("<span class='danger'>\The [src] bounces off of \the [head_protection]!</span>")
 				if(prob(CHANCE_TO_DIE_AFTER_HEAD_DENIED) && !sterile)
 					death()
-					return
+					return FALSE
 				else
 					GoIdle(TIME_IDLE_AFTER_HEAD_DENIED)
-					return
+					return FALSE
 
 		var/mob/living/carbon/target = L
 		var/obj/item/clothing/W = target.get_item_by_slot(slot_head)
@@ -591,6 +591,7 @@
 		target.update_inv_head()			//Sometimes it doesnt work the first time
 		if(!sterile)
 			Assimilate(target)
+			return TRUE
 
 	
 	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
