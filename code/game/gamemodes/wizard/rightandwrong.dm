@@ -425,9 +425,10 @@
 	var/datum/role/survivor/S = R
 	for(var/i=0, i<3, i++)
 		var/obj/item/potion/randompotion = get_random_potion()
-		new randompotion(get_turf(src))
-		if(istype(randompotion, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one. If they managed to get a heal potion AND deception potion they're fucked though.
-			to_chat(src, "You feel like it's a bad idea to drink [randompotion.name] yourself...")
+		var/obj/item/potion/P = new randompotion(get_turf(src))
 		if(istype(S))
-			S.summons_received += randompotion.name
+			S.summons_received = P.name
+		if(istype(P, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one.
+			to_chat(src, "You feel like it's a bad idea to drink the [P.name] yourself...")
+		
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
