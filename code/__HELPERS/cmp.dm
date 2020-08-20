@@ -55,3 +55,9 @@ var/atom/cmp_dist_origin=null
 
 /proc/cmp_profile_count_dsc(var/list/a, var/list/b)
 	return b[PROFILE_ITEM_COUNT] - a[PROFILE_ITEM_COUNT]
+
+/proc/cmp_list_by_element_desc(list/a, list/b)
+	return a[cmp_field] - b[cmp_field]
+
+/proc/cmp_list_by_element_asc(list/a, list/b)
+	return b[cmp_field] - a[cmp_field]

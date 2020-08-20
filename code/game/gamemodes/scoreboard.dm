@@ -102,6 +102,8 @@
 				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
 					score["clownabuse"]++
 
+	score["money_leaderboard"] = SSpersistence_misc.tasks[/datum/persistence_task/highscores]
+	var/list/rich_escapes = list()
 	for(var/mob/living/player in player_list)
 		if(player.stat != DEAD)
 			var/turf/T = get_turf(player)
@@ -110,27 +112,20 @@
 
 			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
 				score["escapees"]++
-//					player.unlock_medal("100M Dash", 1)
-//				player.unlock_medal("Survivor", 1)
-//				for(var/obj/item/weapon/gnomechompski/G in player.get_contents())
-//					player.unlock_medal("Guardin' gnome", 1)
-
 				var/cashscore = 0
 				var/dmgscore = 0
 
-
 				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
 					cashscore += C1.GetBalance() //From bank account
-
 					if(istype(C1.virtual_wallet))
 						cashscore += C1.virtual_wallet.money
 
 				for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 					cashscore += (C2.amount * C2.worth)
 
-//					for(var/datum/data/record/Ba in data_core.bank)
-//						if(Ba.fields["name"] == E.real_name)
-//							cashscore += Ba.fields["current_money"]
+				var/datum/record/money/record = new(player.key, player.job, cashscore)
+				rich_escapes += record
+
 				if(cashscore > score["richestcash"])
 					score["richestcash"] = cashscore
 					score["richestname"] = player.real_name
@@ -143,6 +138,7 @@
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
 
+    score["money_leaderboard"].insert_records(rich_escapes)
 
 	/*
 
@@ -637,7 +633,16 @@
 			score["rating"] = "The Pride of Science Itself"
 		if(50000 to INFINITY)
 			score["rating"] = "Nanotrasen's Finest"
-	dat += "<B><U>RATING:</U></B> [score["rating"]]"
+	dat += "<B><U>RATING:</U></B> [score["rating"]]<br><br>"
+
+	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
+	if(!score["money_leaderboard"].data.len)
+		dat += "Nobody has set up a rich escape yet."
+	else
+		var/i = 1
+		for(var/datum/record/money/entry in score["money_leaderboard"].data)
+			var/cash = num2text(entry.cash, 12)
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
 	for(var/i = 1; i <= end_icons.len; i++)
 		src << browse_rsc(end_icons[i],"logo_[i].png")
