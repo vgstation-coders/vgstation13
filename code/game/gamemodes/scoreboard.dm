@@ -138,7 +138,8 @@
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
 
-    score["money_leaderboard"].insert_records(rich_escapes)
+	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
+	leaderboard.insert_records(rich_escapes)
 
 	/*
 
@@ -635,12 +636,13 @@
 			score["rating"] = "Nanotrasen's Finest"
 	dat += "<B><U>RATING:</U></B> [score["rating"]]<br><br>"
 
+	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
 	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
-	if(!score["money_leaderboard"].data.len)
+	if(!leaderboard.data.len)
 		dat += "Nobody has set up a rich escape yet."
 	else
 		var/i = 1
-		for(var/datum/record/money/entry in score["money_leaderboard"].data)
+		for(var/datum/record/money/entry in leaderboard.data)
 			var/cash = num2text(entry.cash, 12)
 			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 

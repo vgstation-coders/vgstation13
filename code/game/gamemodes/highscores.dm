@@ -1,5 +1,3 @@
-var/datum/highscores/money/money_leaderboard
-
 /datum/record/money
 	var/ckey
 	var/role
