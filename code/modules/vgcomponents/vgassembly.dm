@@ -21,6 +21,10 @@ Base Assembly
 	_vgcs = null
 	..()
 
+/datum/vgassembly/proc/attachTo(var/obj/O)
+	O.vga = src
+	_parent = O
+
 /datum/vgassembly/proc/rebuild()
 	for(var/datum/vgcomponent/vgc in _vgcs)
 		vgc.rebuildOutputs()

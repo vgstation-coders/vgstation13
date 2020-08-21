@@ -12,8 +12,7 @@ Base Assembly
 	..()
 	if(!istype(nvga, datum_type))
 		nvga = new datum_type()
-	vga = nvga
-	vga._parent = src
+	nvga.attachTo(src)
 
 /obj/item/vgc_assembly/Destroy()
 	vga = null
@@ -22,6 +21,24 @@ Base Assembly
 /obj/item/vgc_assembly/examine(mob/user, size, show_name)
 	. = ..()
 	vga.showCircuit(user)
+
+/obj/item/vgc_assembly/proc/attachTo(var/obj/O)
+	vga.attachTo(O)
+	qdel(src)
+
+/obj/item/vgc_assembly/proc/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/vgc_obj))
+		var/obj/item/vgc_obj/CO = W
+		CO.Install(vga)
+		to_chat(user, "You install \the [W.name] into \the [vga.name].")
+		return 1
+	else if(istype(W, /obj/item/vgc_logictool))
+		vga.showCircuit(user)
+		to_chat(user, "You bring up the circuit on \the [W.name].")
+		return 1
+
+	vga.touched(W, user)
+	return 1
 
 /*
 Base Component
@@ -50,6 +67,10 @@ Base Component
 
 	if(vgc.has_settings)
 		vgc.openSettings(user)
+
+/obj/item/vgc_obj/proc/Install(var/vgassembly/vga)
+	vgc.Install(vga)
+	qdel(src)
 
 /*
 Components

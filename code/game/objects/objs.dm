@@ -83,24 +83,10 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 
 /obj/attackby(obj/item/O, mob/user)
 	if(!vga && istype(O, /obj/item/vgc_assembly))
-		vga = O.vga
-		vga._parent = src
+		var/obj/item/vgc_assembly/V = O
+		V.attachTo(src)
 		to_chat(user, "You install \the [O.name] into \the [src].")
-		qdel(O)
 		return 1
-	if(vga && istype(vga, /datum/vgassembly))
-		if(istype(O, /obj/item/vgc_obj))
-			var/obj/item/vgc_obj/CO = O
-			CO.vgc.Install(vga)
-			to_chat(user, "You install \the [O.name] into \the [vga.name].")
-			qdel(O)
-			return 1
-		else if(istype(O, /obj/item/vgc_logictool))
-			vga.showCircuit(user)
-			to_chat(user, "You bring up the circuit on \the [O.name].")
-			return 1
-		else
-			vga.touched(O, user)
 	if(can_take_pai && istype(O, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")
