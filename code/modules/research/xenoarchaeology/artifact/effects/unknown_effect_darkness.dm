@@ -14,7 +14,7 @@
 /datum/artifact_effect/darkness/ToggleActivate()
 	..()
 	if(holder)
-		if(!activated)
+		if(!activated) 
 			holder.set_light(effectrange, -dark_level)
 		else
 			holder.set_light(0)
