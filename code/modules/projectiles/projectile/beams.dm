@@ -30,7 +30,6 @@ var/list/beam_master = list()
 	var/beam_color= null
 
 
-
 /obj/item/projectile/beam/OnFired()	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(original)
 	dist_x = abs(target.x - starting.x)

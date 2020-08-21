@@ -971,10 +971,18 @@ ASSEMBLY WRAPPERS (just components that use the current assembly objs)
 signaler
 raw signaler
 */
+/obj/item/device/assembly/signaler/vgc
+	var/datum/vgcomponent/signaler/vgc = null //we need this to hook into receive_update, only used for the internal signaller of /datum/vgcomponent/signaller
+
+/obj/item/device/assembly/signaler/receive_signal(datum/signal/signal)
+	if(..() && vgc)
+		vgc.was_signaled()
+
+
 /datum/vgcomponent/signaler
 	name = "Signaler"
 	desc="receives and sends signals"
-	var/obj/item/device/assembly/signaler/_signaler
+	var/obj/item/device/assembly/signaler/vgc/_signaler
 	has_touch = 1
 	touch_enabled = 0
 	obj_path = /obj/item/vgc_obj/signaler
