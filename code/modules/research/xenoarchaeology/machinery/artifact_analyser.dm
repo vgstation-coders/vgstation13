@@ -1,4 +1,14 @@
 
+var/global/list/analyzed_anomalies = list()
+var/anomaly_report_num = 0
+
+/obj/item/weapon/disk/hdd/anomaly
+	name = "Encrypted HDD"
+	desc = "Additional Anomaly data has been encrypted into this HDD, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it."
+	origin_tech = Tc_ANOMALY+"=5"
+
+//////////////////////////////////////////////////////////////////////////////////
+
 /obj/machinery/artifact_analyser
 	name = "anomaly analyser"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
@@ -13,7 +23,6 @@
 	var/scan_completion_time = 0
 	var/scan_duration = 120
 	var/obj/scanned_object
-	var/report_num = 0
 
 /obj/machinery/artifact_analyser/New()
 	..()
@@ -86,23 +95,29 @@
 			results = get_scan_info(scanned_object)
 
 		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
-		var/obj/item/weapon/paper/P = new(src.loc)
-		P.name = "[src] report #[++report_num]"
-		P.info = "<b>[src] analysis report #[report_num]</b><br>"
+		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
+		P.name = "Anomaly Report #[++anomaly_report_num]"
+		P.artifact = scanned_object
+		P.info = "<b>[src] analysis report #[anomaly_report_num]</b><br>"
 		P.info += "<br>"
 		P.info += "[bicon(scanned_object)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamp-qm")
 
-		if(!findtext(P.info, "Mundane"))
-			P.origin_tech = Tc_ANOMALY+"=5"
-			P.info += "<br>"
-			P.info += "<br><i>Additional data has been encrypted into this report, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it.</i>"
+		if(!findtext(P.info, "Mundane") && !(scanned_object in analyzed_anomalies))
+			var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
+			analyzed_anomalies += scanned_object
+			HDD.name = "Encrypted HDD #[analyzed_anomalies.len]"
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
 			A.anchored = FALSE
 			A.being_used = FALSE
+			if (!A.analyzed)
+				A.analyzed = TRUE
+				if (istype(A.primary_effect) && A.primary_effect.triggered)
+					score["artifacts"]++
+
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
 	if(..())

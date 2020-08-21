@@ -13,9 +13,12 @@
 	var/contained = 0
 	var/artifact_id = ""
 	anchored = 0
+	layer = ABOVE_OBJ_LAYER
 	var/event/on_attackby
 	var/event/on_explode
 	var/event/on_projectile
+	var/analyzed = 0 //set to 1 after having been analyzed successfully
+	var/safe_delete = FALSE
 
 /obj/machinery/artifact/New(location, find_id, generate_effect = 1)
 	..()
@@ -168,10 +171,12 @@
 	switch(severity)
 		if(1.0)
 			src.investigation_log(I_ARTIFACT, "|| blew up by EXPLOSION DAMAGE([severity]).")
+			ArtifactRepercussion(src, null, "an explosion", "[type]")
 			qdel(src)
 		if(2.0)
 			if (prob(50))
 				src.investigation_log(I_ARTIFACT, "|| blew up by EXPLOSION DAMAGE([severity]).")
+				ArtifactRepercussion(src, null, "an explosion", "[type]")
 				qdel(src)
 			else
 				on_explode.Invoke(list("", "EXPLOSION"))
@@ -192,4 +197,23 @@
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
+
 	..()
+
+/proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
+	if (mob_cause)
+		source.investigation_log(I_ARTIFACT, "|| [artifact_type] destroyed by [key_name(mob_cause)].")
+	else
+		source.investigation_log(I_ARTIFACT, "|| [artifact_type] destroyed[other_cause ? "because of [other_cause]." : ""]")
+	for(var/mob/living/M in range(src, 200))
+		M.playsound_local(src, 'sound/hallucinations/scary.ogg', 100, 0)
+		to_chat(M, "<span class='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></span>")
+		if(prob(50)) //pain
+			flick("pain",M.pain)
+			if(prob(50))
+				M.adjustBruteLoss(5)
+		else
+			M.flash_eyes(visual = 1)
+			if(prob(50))
+				M.Stun(5)
+		M.apply_radiation(25, RAD_EXTERNAL)

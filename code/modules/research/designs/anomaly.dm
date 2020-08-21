@@ -1,3 +1,13 @@
+
+//6: max obtainable, by deconstructing a third encrypted HDD
+//5: obtainable by deconstructing another rare find OR another encrypted HDD
+//4: obtainable by deconstructing some rare finds OR by deconstructing an encrypted HDD
+//3:
+//2: easily obtainabled by deconstructing small artifacts
+//1:
+//0:
+
+//ANOMALY LEVEL 1
 /datum/design/scienceglasses
 	name = "Science Goggles"
 	desc = "You expect those glasses to protect you from science-related hazards. Maybe you shouldn't."
@@ -38,26 +48,7 @@
 	category = "Anomaly"
 	build_path = /obj/item/device/core_sampler
 
-/datum/design/xenoarch_scanner
-	name = "Xenoarchaeology digsite locator"
-	desc = "Shows digsites in vicinity, whether they're hidden or not."
-	id = "xenoarch_scanner"
-	req_tech  =list(Tc_MAGNETS = 2, Tc_ANOMALY = 2)
-	build_type = PROTOLATHE
-	materials = list(MAT_GLASS=1000, MAT_IRON = 1000)
-	category = "Anomaly"
-	build_path = /obj/item/device/xenoarch_scanner
-
-/datum/design/xenoarch_scanner_adv
-	name = "Advanced xenoarchaeology digsite locator"
-	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their reagent via highlighting them a specific colour"
-	id = "xenoarch_scanner_adv"
-	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 3)
-	build_type = PROTOLATHE
-	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
-	category = "Anomaly"
-	build_path = /obj/item/device/xenoarch_scanner/adv
-
+//ANOMALY LEVEL 2
 /datum/design/phazon_glowstick
 	name = "Phazon Glowstick"
 	desc = "A glowstick filled with phazon material that will change colors upon agitation. It has a string on it so you can wear it."
@@ -68,14 +59,38 @@
 	category = "Anomaly"
 	build_path = /obj/item/clothing/accessory/glowstick/phazon
 
-/*
-/datum/design/ano_scanner
-	name = "Alden-Saraspova Counter"
-	desc = "Aids in triangulation of exotic particles."
-	id = "ano_scanner"
-	req_tech = list(Tc_MATERIALS = 1, Tc_ANOMALY = 6)
+
+//ANOMALY LEVEL 3
+/datum/design/xenoarch_scanner
+	name = "Xenoarchaeology digsite locator"
+	desc = "Shows digsites in vicinity, whether they're hidden or not."
+	id = "xenoarch_scanner"
+	req_tech  =list(Tc_MAGNETS = 2, Tc_ANOMALY = 3)
 	build_type = PROTOLATHE
-	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_URANIUM = 200)
+	materials = list(MAT_GLASS=1000, MAT_IRON = 1000)
+	category = "Anomaly"
+	build_path = /obj/item/device/xenoarch_scanner
+
+
+//ANOMALY LEVEL 4
+/datum/design/xenoarch_scanner_adv//lets you find large artifacts buried in view
+	name = "Advanced xenoarchaeology digsite locator"
+	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their material via highlighting them a specific colour"
+	id = "xenoarch_scanner_adv"
+	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
+	category = "Anomaly"
+	build_path = /obj/item/device/xenoarch_scanner/adv
+
+//ANOMALY LEVEL 5
+/datum/design/ano_scanner//easily lets you quickly find every large artifact buried on the Z-Level
+	name = "Alden-Saraspova Counter"
+	desc = "Aids in triangulation of exotic particles. Useful to locate large alien artifacts."
+	id = "ano_scanner"
+	req_tech = list(Tc_MATERIALS = 6, Tc_BLUESPACE = 4, Tc_ANOMALY = 5)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2500, MAT_GLASS = 2500, MAT_GOLD = 200, MAT_URANIUM = 200)
 	category = "Anomaly"
 	build_path = /obj/item/device/ano_scanner
-*/
+
