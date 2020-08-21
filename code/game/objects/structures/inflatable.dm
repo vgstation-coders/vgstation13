@@ -332,7 +332,7 @@
 	if(!(user.loc == src))
 		to_chat(user, "<span class='notice'>Click to enter. Use grab on shelter to force target inside. Click-drag onto firealarm or right click to deflate.</span>")
 	else
-		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Resist to exit/cancel exit.</span>")
+		to_chat(user, "<span class='notice'>Click to package contaminated clothes. Click-drag to an adjacent turf or Resist to exit/cancel exit.</span>")
 	var/list/living_contents = list()
 	for(var/mob/living/L in contents)
 		living_contents += L.name //Shelters can frequently end up with dropped items because people fall asleep.
