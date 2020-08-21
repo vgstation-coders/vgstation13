@@ -141,9 +141,6 @@ var/list/all_generated_artifact_ids = list()
 				qdel(src)
 		else
 			busy = 0
-		return
-
-/datum/centcomm_order/department/science/supermatter
 
 /obj/structure/boulder/attack_construct(var/mob/user)
 	if (!Adjacent(user))
