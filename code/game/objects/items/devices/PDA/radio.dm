@@ -8,6 +8,13 @@
 	var/on = 0 //Are we currently active?
 	var/menu_message = ""
 
+/obj/item/radio/integrated/Destroy()
+	. = ..()
+	hostpda = null
+
+/obj/item/radio/integrated/Adjacent(var/atom/neighbor)
+	return hostpda.Adjacent(neighbor)
+
 /*
  *	Radio Cartridge, essentially a signaler.
  */
@@ -56,6 +63,7 @@
 	return
 
 /obj/item/radio/integrated/signal/bot/Topic(href, href_list)
+	to_chat(world, "Sending [href_list["command"]] to [href_list["bot"]]")
 	if (..())
 		return
 
