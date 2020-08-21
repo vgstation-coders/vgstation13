@@ -64,6 +64,7 @@
 			radio.initialize()
 
 /obj/item/weapon/cartridge/initialize()
+	. = ..()
 	if (radio)
 		radio.initialize()
 
