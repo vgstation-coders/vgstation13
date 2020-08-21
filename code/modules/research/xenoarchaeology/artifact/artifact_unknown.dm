@@ -205,8 +205,8 @@
 		source.investigation_log(I_ARTIFACT, "|| [artifact_type] destroyed by [key_name(mob_cause)].")
 	else
 		source.investigation_log(I_ARTIFACT, "|| [artifact_type] destroyed[other_cause ? "because of [other_cause]." : ""]")
-	for(var/mob/living/M in range(src, 200))
-		M.playsound_local(src, 'sound/hallucinations/scary.ogg', 100, 0)
+	for(var/mob/living/M in range(source, 200))
+		M.playsound_local(M, 'sound/hallucinations/scary.ogg', 100, 0)
 		to_chat(M, "<span class='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></span>")
 		if(prob(50)) //pain
 			flick("pain",M.pain)
