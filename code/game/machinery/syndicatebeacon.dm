@@ -109,7 +109,7 @@
 	name = "singularity beacon"
 	desc = "A suspicious-looking beacon. It looks like one of those snazzy state-of-the-art bluespace devices."
 	icon = 'icons/obj/singularity.dmi'
-	icon_state = "beacon"
+	icon_state = "beacon0"
 	anchored = 0
 	density = 1
 	machine_flags = WRENCHMOVE | FIXED2WORK
