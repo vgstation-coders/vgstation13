@@ -6,6 +6,7 @@
 	var/capacity = 200
 	var/stored_charge = 0
 	var/effect_id = ""
+	var/obj/item/weapon/anodevice/inserted_device
 
 /obj/item/weapon/anobattery/New()
 	. = ..()
@@ -38,6 +39,8 @@
 			if(user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You insert the battery.</span>")
 				inserted_battery = I
+				var/obj/item/weapon/anobattery/B = I
+				B.inserted_device = src
 				UpdateSprite()
 	else
 		return ..()
@@ -183,6 +186,7 @@
 	if(href_list["ejectbattery"])
 		shutdown_emission()
 		inserted_battery.forceMove(get_turf(src))
+		inserted_battery.inserted_device = null
 		inserted_battery = null
 		UpdateSprite()
 	if(href_list["close"])
