@@ -217,7 +217,7 @@ Base Assembly
 		return
 
 	while(output_queue.len)
-		var/vgc_output_queue_item/Q = output_queue[output_queue.len]
+		var/vgc_output_queue_item/Q = output_queue[1]
 
 		if(!Q.target || !Q.source || Q.target.timestopped || Q.target._busy || !_vgcs.Find(Q.target) || !_vgcs.Find(Q.source) )
 			output_queue.len-- //remove item
@@ -227,7 +227,7 @@ Base Assembly
 			continue
 
 		Q.fire()
-		output_queue.len--
+		output_queue -= Q
 
 /datum/vgassembly/proc/onHacked()
 	for(var/datum/vgcomponent/C in _vgcs)

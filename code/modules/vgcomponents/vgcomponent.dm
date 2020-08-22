@@ -256,9 +256,11 @@ Cleaner - cleans floortiles below object
 	var/obj/O = _assembly._parent
 	var/turf/T = get_turf(O)
 
-	if(!hacked && prob(5))
+	if(!hacked && prob(95))
 		O.visible_message("<span class='warning'>\the [src] cleans up the [T].</span>")
-		qdel(get_cleanable_decals(T)[0])
+		var/list/c_d = get_cleanable_decals(T)
+		if(c_d.len)
+			qdel(c_d[1])
 	else
 		O.visible_message("<span class='warning'>Something flies out of \the [src]! It seems to be acting oddly.</span>")
 		new /obj/effect/decal/cleanable/blood/gibs(T)

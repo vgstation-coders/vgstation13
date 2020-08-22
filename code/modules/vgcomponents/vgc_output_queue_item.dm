@@ -11,4 +11,4 @@
 	src.signal = signal
 
 /vgc_output_queue_item/proc/fire()
-	call(target, target_proc)(signal)
+	call(target, target._input[target_proc])(signal)
