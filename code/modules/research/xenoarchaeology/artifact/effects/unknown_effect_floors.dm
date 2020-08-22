@@ -7,7 +7,7 @@
 		/turf/simulated/floor/mineral/gingerbread_dirt_tile,
 		/turf/simulated/floor/mineral/gingerbread_nest,
 		/turf/simulated/floor/plating/ironsand,
-		/turf/simulated/floor/plating/foamedmetal
+		/turf/simulated/floor/foamedmetal
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
