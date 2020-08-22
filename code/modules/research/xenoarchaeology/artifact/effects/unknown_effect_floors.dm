@@ -18,7 +18,8 @@
 		/turf/simulated/floor/mineral/gingerbread_dirt_tile,
 		/turf/simulated/floor/mineral/gingerbread_nest,
 		/turf/simulated/floor/mineral/gingerbread_tile,
-		/turf/simulated/floor/mineral/gingerbread_floor, //Gingerbread tiles are still included.
+		/turf/simulated/floor/mineral/gingerbread_floor, //Gingerbread floors are fucky
+		/turf/simulated/floor/mineral/gingerbread,
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
@@ -28,11 +29,13 @@
 	make_floors(min(5, effectrange))
 
 /datum/artifact_effect/floors/proc/make_floors(var/range)
-	available_floors += typesof(/turf/simulated/floor/mineral) + typesof(/turf/simulated/floor/glass) 
+	available_floors += typesof(/turf/simulated/floor/mineral) + typesof(/turf/simulated/floor/glass)
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/floortype = pick(available_floors - blacklisted_floors)
+				var/floortype = pick(available_floors)
+				if(is_type_in_list(floortype, blacklisted_floors))
+					floortype = /turf/simulated/floor	//default to normal floors if it rolls a blacklisted one
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
-				sleep(1)
+				sleep(5)
