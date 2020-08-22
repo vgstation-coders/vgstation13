@@ -14,7 +14,6 @@
 		/turf/simulated/floor/wood,
 		/turf/simulated/floor/dark,
 	)
-	available_floors += typesof(/turf/simulated/floor/mineral) + typesof(/turf/simulated/floor/glass) 
 	var/blacklisted_floors = list(
 		/turf/simulated/floor/mineral/gingerbread_dirt_tile,
 		/turf/simulated/floor/mineral/gingerbread_nest,
@@ -29,6 +28,7 @@
 	make_floors(min(5, effectrange))
 
 /datum/artifact_effect/floors/proc/make_floors(var/range)
+	available_floors += typesof(/turf/simulated/floor/mineral) + typesof(/turf/simulated/floor/glass) 
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
