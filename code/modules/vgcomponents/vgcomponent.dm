@@ -25,7 +25,7 @@ Base Component
 		"main" = "main"
 	)
 	var/list/_output = list( //can only point to one component: list(0 => ref to component, 1 => target), as can be seen in setOutput
-		"main" = null
+		"main"
 	)
 	var/_busy = 0 //if machine is busy, for components who need time to properly function
 	var/list/settings = list() //list of open uis, indexed with \ref[user]
@@ -37,6 +37,13 @@ Base Component
 	var/usage_flags = VGCOMP_USAGE_NONE
 	var/hacked = FALSE
 
+/datum/vgcomponent/New()
+	..()
+
+	//build outputs
+	for(var/tag in _output)
+		_output[tag] = list()
+
 /datum/vgcomponent/Destroy()
 	..()
 	_assembly = null
@@ -44,7 +51,7 @@ Base Component
 	_output = null
 	settings = null
 
-/datum/vgcomponent/proc/Install(var/datum/vgassembly/A)
+/datum/vgcomponent/proc/Install(var/datum/vgassembly/A) //dont override
 	if(_assembly)
 		return 0 //how
 
@@ -81,33 +88,40 @@ Base Component
 
 //basically removes all assigned outputs which aren't in the assembly anymore
 /datum/vgcomponent/proc/rebuildOutputs()
-	for(var/O in _output)
-		if(!_output[O])
-			continue
-
-		if(_output[O][1]._assembly != src._assembly)
-			_output[O] = null
+	for(var/tag in _output)
+		for(var/vgcomp_output/O in _output[tag])
+			if(O.vgc._assembly != src._assembly)
+				_output[tag] -= O
 
 /datum/vgcomponent/proc/handleOutput(var/target = "main", var/signal = 1)
 	if(!_assembly)
 		return
 
-	if(!_assembly.output_queue["\ref[src]"])
-		_assembly.output_queue["\ref[src]"] = list()
+	for(var/vgcomp_output/O in _output[target])
+		_assembly.output_queue += new /vgc_output_queue_item(src, O.vgc, O.target, signal)
 
-	_assembly.output_queue[++_assembly.output_queue.len] = list("\ref[src]", target, signal)
-
-/datum/vgcomponent/proc/setOutput(var/out = "main", var/datum/vgcomponent/vgc, var/target = "main")
+/datum/vgcomponent/proc/addOutput(var/datum/vgcomponent/vgc, var/out = "main", var/target = "main")
 	if(!(out in _output))
 		return 0
 
 	if(!(target in vgc._input))
 		return 0
 
-	if(!_assembly || !_assembly._vgcs.Find(vgc))
-		return //how
+	if(!_assembly || _assembly != vgc._assembly)
+		return 0
 
-	_output[out] = list(vgc, target)
+	for(var/vgcomp_output/O in _output[out])
+		if(O.vgc == vgc && O.target == target)
+			return 0
+
+	_output[out] += new /vgcomp_output(vgc, target)
+
+/datum/vgcomponent/proc/removeOutput(var/datum/vgcomponent/vgc, var/out = "main", var/target = "main")
+	for(var/vgcomp_output/O in _output[out])
+		if(O.vgc == vgc && O.target == target)
+			_output[out] -= O
+			return 1
+	return 0
 
 //opens window to configure settings
 /datum/vgcomponent/proc/openSettings(var/mob/user)
@@ -279,7 +293,7 @@ Proximity Sensor
 		"setRange" = "setRange"
 	)
 	_output = list(
-		"sense" = null
+		"sense"
 	)
 	var/range = 2
 	has_settings = 1
@@ -374,28 +388,6 @@ Gate
 		handleOutput(signal = signal)
 
 /*
-Splitter
-*/
-/datum/vgcomponent/splitter
-	name = "Splitter"
-	desc = "splits signals"
-	obj_path = /obj/item/vgc_obj/splitter
-	_output = list(
-		"channel1" = null,
-		"channel2" = null
-	)
-	has_settings = 1
-
-/datum/vgcomponent/splitter/main(var/signal)
-	for(var/out in _output)
-		handleOutput(out, signal)
-	return 1
-
-/datum/vgcomponent/splitter/openSettings(var/mob/user)
-	to_chat(user, "here you will be able to add new channels, altough that is TODO")
-	return
-
-/*
 Speaker
 */
 /datum/vgcomponent/speaker
@@ -405,8 +397,8 @@ Speaker
 	_output = list()
 
 /datum/vgcomponent/speaker/main(var/signal)
-	/*if(signal == 1)
-		signal = pick("YEET","WAAAA","REEEEE","meep","hello","help","good evening","m'lady")*/
+	if(!istext(signal))
+		signal = "[signal]"
 	_assembly._parent.say(signal)
 	return 1
 
@@ -552,7 +544,7 @@ Index getter
 		"grab" = "grab"
 	)
 	_output = list(
-		"element" = null
+		"element"
 	)
 	var/index = 1
 	has_settings = 1 //for setting the index
@@ -666,14 +658,15 @@ raw signaler
 		"send" = "send" //sends
 	)
 	_output = list(
-		"signaled" = null
+		"signaled"
 	)
 	has_settings = 1
 
 /datum/vgcomponent/signaler/onTouch(var/obj/item/O, var/mob/user)
 	send()
 
-datum/vgcomponent/signaler/New()
+/datum/vgcomponent/signaler/New()
+	..()
 	_signaler = new ()
 	_signaler.fingerprintslast = "VGAssembly" //for the investigation log TODO
 	_signaler.vgc = src //so we can hook into receive_signal

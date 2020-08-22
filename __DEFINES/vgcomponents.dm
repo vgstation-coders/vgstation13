@@ -3,7 +3,7 @@
 
 //see modules/vgcompontents
 
-#define VGCOMP_USAGE_NONE 0
-#define VGCOMP_USAGE_MOVEMENT 1
-#define VGCOMP_USAGE_MANIPULATE_SMALL 2 //small manipulaters used on costum tools and such
-#define VGCOMP_USAGE_MANIPULATE_LARGE 3 //large manipulators (doorcontroller, robotarm)
+#define VGCOMP_USAGE_NONE 1
+#define VGCOMP_USAGE_MOVEMENT 2
+#define VGCOMP_USAGE_MANIPULATE_SMALL 4 //small manipulaters used on costum tools and such
+#define VGCOMP_USAGE_MANIPULATE_LARGE 8 //large manipulators (doorcontroller, robotarm)

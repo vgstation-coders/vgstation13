@@ -9,7 +9,7 @@ Base Assembly
 	var/size = ARBITRARILY_LARGE_NUMBER
 	//you can only use one or the other
 	var/allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MOVEMENT | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE
-	var/list/output_queue = list() //list of outputs to fire, indexed by \ref[vgc]
+	var/list/vgc_output_queue_item/output_queue = list() //list of vgc_output_queue_item
 	var/timestopped = 0
 
 /datum/vgassembly/New()
@@ -61,16 +61,13 @@ Base Assembly
 			content += "<dt>No Inputs</dt>"
 
 		if(vgc._output.len > 0)
-			content += "<dt>Outputs:</dt>"
+			content += "<dt>Outputs:</dt><dl>"
 			for(var/out in vgc._output)
-				content += "<dd>[out] "
-				if(vgc._output[out])
-					var/tar = vgc._output[out][2]
-					var/tar_obj = vgc._output[out][1]
-					content += "assigned to [tar] of \ref[tar_obj] <a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Reassign\]</a> <a HREF='?src=\ref[src];clear=\ref[vgc];output=[out]'>\[Clear\]</a>"
-				else
-					content += "<a HREF='?src=\ref[src];setO=\ref[vgc];output=[out]'>\[Assign\]</a>"
-				content += "</dd>"
+				content += "<dt>[out]</dt>"
+				if(vgc._output[out].len)
+					for(var/vgcomp_output/O in vgc._output[out])
+						content += "<dd>\"[O.target]\" of \ref[O.vgc] <a HREF='?src=\ref[src];deleteOutput=\ref[vgc];output=[out];vgc=\ref[O.vgc];target=[O.target]'>\[X\]</a></dd>"
+				content += "<dd><a HREF='?src=\ref[src];addOutput=\ref[vgc];output=[out]'>\[Add\]</a></dd></dl>"
 		else
 			content += "No Outputs<br>"
 		content += "</dl></dd>"
@@ -114,17 +111,15 @@ Base Assembly
 		to_chat(usr, "You open \the [vgc.name]'s settings.")
 		vgc.openSettings(usr)
 		return
-	else if(href_list["setO"])
-		var/datum/vgcomponent/out = locate(href_list["setO"])
-		if(!out)
+	else if(href_list["addOutput"])
+		var/datum/vgcomponent/V = locate(href_list["addOutput"])
+		if(!V)
 			return
-
-		if(!(href_list["output"] in out._output))
-			return
+		var/output = href_list["output"]
 
 		var/list/refs = list()
 		for(var/datum/vgcomponent/vgc in _vgcs)
-			if(vgc == out)
+			if(vgc == V)
 				continue //dont wanna assign to ourself, or do we?
 			var/i = 1
 			while(1)
@@ -137,14 +132,14 @@ Base Assembly
 			return
 
 		target = refs["[target]"]
-		if(!locate(target))
+		var/datum/vgcomponent/T = locate(target)
+		if(!T)
 			return
 
-		var/input = input("Select which input you want to target.", "Select Target Input", "main") as null|anything in locate(target)._input
+		var/input = input("Select which input you want to target.", "Select Target Input", "main") as null|anything in T._input
 
-		var/datum/vgcomponent/vgc = locate(target)
-		to_chat(usr, "You connect \the [out.name]'s [href_list["output"]] with \the [vgc.name]'s [input].")
-		out.setOutput(href_list["output"], vgc, input)
+		to_chat(usr, "You connect \the [V.name]'s [output] with \the [T.name]'s [input].")
+		V.addOutput(T, output, input)
 	else if(href_list["touch"])
 		var/datum/vgcomponent/vgc = locate(href_list["touch"])
 		if(!vgc || !vgc.has_touch)
@@ -162,16 +157,15 @@ Base Assembly
 		to_chat(usr, "You pulse [href_list["input"]] of [vgc.name].")
 		call(vgc, vgc._input[href_list["input"]])(1)
 		return
-	else if(href_list["clear"])
-		var/datum/vgcomponent/vgc = locate(href_list["clear"])
-		if(!vgc)
+	else if(href_list["deleteOutput"])
+		var/datum/vgcomponent/S = locate(href_list["deleteOutput"])
+		var/datum/vgcomponent/T = locate(href_list["vgc"])
+		if(!S || !T)
 			return
-
-		if(!(href_list["output"] in vgc._output))
+		var/target = href_list["target"]
+		var/output = href_list["output"]
+		if(!S.removeOutput(T, output, target))
 			return
-
-		to_chat(usr, "You clear [href_list["output"]] of [vgc.name].")
-		vgc._output[href_list["output"]] = null
 	updateCurcuit(usr)
 
 
@@ -223,31 +217,17 @@ Base Assembly
 		return
 
 	while(output_queue.len)
-		var/list/Q = output_queue[output_queue.len]
+		var/vgc_output_queue_item/Q = output_queue[output_queue.len]
+
+		if(!Q.target || !Q.source || Q.target.timestopped || Q.target._busy || !_vgcs.Find(Q.target) || !_vgcs.Find(Q.source) )
+			output_queue.len-- //remove item
+			continue
+
+		if(Q.source.timestopped)
+			continue
+
+		Q.fire()
 		output_queue.len--
-		var/ref = Q[1]
-		var/target = Q[2]
-		var/signal = Q[3]
-
-		var/datum/vgcomponent/vgc = locate(ref)
-		if(!vgc)
-			continue
-
-		if(vgc.timestopped)
-			continue
-
-		if(!vgc._output[target])
-			continue
-
-		if(vgc._output[target][1]._busy)
-			continue
-
-		if(!_vgcs.Find(vgc._output[target][1])) //component no longer in vga apparently
-			vgc._output[target] = null
-			continue
-
-		var/proc_string = vgc._output[target][1]._input[vgc._output[target][2]]
-		call(vgc._output[target][1], proc_string)(signal) //oh boy what a line
 
 /datum/vgassembly/proc/onHacked()
 	for(var/datum/vgcomponent/C in _vgcs)

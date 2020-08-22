@@ -69,8 +69,8 @@ Base Component
 		vgc.openSettings(user)
 
 /obj/item/vgc_obj/proc/Install(var/datum/vgassembly/vga)
-	vgc.Install(vga)
-	qdel(src)
+	if(vgc.Install(vga))
+		qdel(src)
 
 /*
 Components
@@ -109,9 +109,6 @@ Components
 
 /obj/item/vgc_obj/gate_button
 	datum_type = /datum/vgcomponent/gate_button
-
-/obj/item/vgc_obj/splitter
-	datum_type = /datum/vgcomponent/splitter
 
 /obj/item/vgc_obj/speaker
 	datum_type = /datum/vgcomponent/speaker
@@ -188,7 +185,7 @@ Testing stuff
 	D.Install(vga)
 	D.saved_access = get_absolutely_all_accesses()
 	S.Install(vga) //default 1457 30
-	S.setOutput("signaled", D, "toggle")
+	S.addOutput(D,"signaled", "toggle")
 
 /obj/item/vgc_assembly/debugTest/New()
 	var/datum/vgassembly/A = new ()
@@ -197,7 +194,7 @@ Testing stuff
 	var/datum/vgcomponent/signaler/S = new ()
 	D.Install(vga)
 	S.Install(vga) //default 1457 30
-	S.setOutput("signaled", D)
+	S.addOutput(D, "signaled")
 
 /obj/item/vgc_assembly/debugkit/New()
 	var/datum/vgassembly/A = new ()
