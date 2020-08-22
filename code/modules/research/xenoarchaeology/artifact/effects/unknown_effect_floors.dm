@@ -11,7 +11,7 @@
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
-	make_floors(min(2, effectrange))
+	make_floors(min(1, effectrange))
 
 /datum/artifact_effect/floors/DoEffectPulse()
 	make_floors(min(5, effectrange))
