@@ -441,22 +441,27 @@
 	icon_state = "voxpearl"
 	w_class = W_CLASS_TINY
 
-/obj/item/weapon/allfruit //Never spawn this.
+/obj/item/allfruit // This is actually spawnable and does nothing currently. Maybe you could make a balanced version?
 	name = "all-fruit"
+	desc = "Anything you want, at your fingertips. This is an inert plastic model."
+	icon = 'icons/lamprey.dmi'
+	icon_state = "allfruit"
+
+/obj/item/allfruit/admin //Never spawn this.
 	desc = "Anything you want, at your fingertips."
 	icon = 'icons/lamprey.dmi'
 	icon_state = "allfruit"
-	var/list/available_fruits = list()
+	var/list/available_objects = list()
 	var/switching = 0
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/allfruit/New(atom/loc, custom_plantname) //Never spawn this.
+/obj/item/allfruit/admin/New(atom/loc, custom_plantname) //Never spawn this.
 	..()
-	available_fruits = existing_typesof(/obj)
-	available_fruits = shuffle(available_fruits)
+	available_objects = existing_typesof(/obj)
+	available_objects = shuffle(available_objects)
 
-/obj/item/weapon/allfruit/verb/pick_leaf() //Never spawn this.
+/obj/item/allfruit/admin/verb/pick_leaf() //Never spawn this.
 	set name = "Pick allfruit leaf"
 	set category = "Object"
 	set src in range(1)
@@ -473,32 +478,32 @@
 	else
 		getallfruit(user, user.get_active_hand())
 
-/obj/item/weapon/allfruit/AltClick(mob/user) //Never spawn this.
+/obj/item/allfruit/admin/AltClick(mob/user) //Never spawn this.
 	pick_leaf()
 
-/obj/item/weapon/allfruit/attackby(obj/item/weapon/W, mob/user) //Never spawn this.
+/obj/item/allfruit/admin/attackby(obj/item/weapon/W, mob/user) //Never spawn this.
 	pick_leaf()
 
-/obj/item/weapon/allfruit/proc/randomize() //Never spawn this.
+/obj/item/allfruit/admin/proc/randomize() //Never spawn this.
 	switching = 1
 	mouse_opacity = 2
 	spawn()
 		while(switching)
-			current_path = available_fruits[counter]
+			current_path = available_objects[counter]
 			var/obj/S = current_path
 			icon = initial(S.icon)
 			icon_state = initial(S.icon_state)
 			playsound(src, 'sound/misc/click.ogg', 50, 1)
 			sleep(1)
-			if(counter == available_fruits.len)
+			if(counter == available_objects.len)
 				counter = 0
-				available_fruits = shuffle(available_fruits)
+				available_objects = shuffle(available_objects)
 			counter++
 
-/obj/item/weapon/allfruit/proc/getallfruit(mob/user, obj/item/weapon/W) //Never spawn this.
+/obj/item/allfruit/admin/proc/getallfruit(mob/user, obj/item/weapon/W) //Never spawn this.
 	if(!switching || !current_path)
 		return
-	verbs -= /obj/item/weapon/allfruit/verb/pick_leaf
+	verbs -= /obj/item/allfruit/admin/verb/pick_leaf
 	switching = 0
 	var/N = rand(1,3)
 	if(get_turf(user))
@@ -521,7 +526,7 @@
 		new current_path(get_turf(src))
 	qdel(src)
 
-/obj/item/weapon/allfruit/pre_ticking/New() //Never spawn this.
+/obj/item/allfruit/admin/pre_ticking/New() //Never spawn this.
 	..()
 	randomize()
 
@@ -535,4 +540,4 @@
 /obj/item/weapon/storage/box/allfruit/New() //Never spawn this.
 	..()
 	for(var/i = 1 to 14)
-		new /obj/item/weapon/allfruit(src)
+		new /obj/item/allfruit/admin(src)
