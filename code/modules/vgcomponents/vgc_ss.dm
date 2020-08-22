@@ -29,7 +29,7 @@ var/list/vg_assemblies = list()
 		if(!istype(A, /datum/vgassembly))
 			continue //outta here
 
-		if (!A || A.gcDestroyed || A.disposed || A.timestopped)
+		if (!A || A.gcDestroyed || A.timestopped)
 			continue
 
 		A.fireOutputs()

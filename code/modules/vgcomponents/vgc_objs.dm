@@ -26,7 +26,7 @@ Base Assembly
 	vga.attachTo(O)
 	qdel(src)
 
-/obj/item/vgc_assembly/proc/attackby(obj/item/weapon/W, mob/user)
+/obj/item/vgc_assembly/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/vgc_obj))
 		var/obj/item/vgc_obj/CO = W
 		CO.Install(vga)
