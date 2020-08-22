@@ -28,7 +28,7 @@
 	var/health = 80			// the turret's health
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
+	var/obj/item/weapon/gun/energy/installed = null		// the type of weapon installed
 	var/reqpower = 750 //power used per shot
 
 	var/obj/machinery/porta_turret_cover/cover = null	// the cover that is covering this turret
@@ -47,8 +47,6 @@
 	var/on = 1				// determines if the turret is on
 	var/disabled = 0
 
-	var/mob/living/controller 		//If emagged the turret won't target this person.
-
 	machine_flags = EMAGGABLE | SHUTTLEWRENCH
 
 /obj/machinery/porta_turret/New()
@@ -65,9 +63,9 @@
 		installed = new /obj/item/weapon/gun/energy/taser(src)
 
 	else
-		var/obj/item/weapon/gun/G = installed
+		var/obj/item/weapon/gun/energy/E = installed
 
-		switch(G.type)
+		switch(E.type)
 			if(/obj/item/weapon/gun/energy/tag/blue)
 				lasercolor = "b"
 				req_access = list(access_maint_tunnels)
@@ -210,7 +208,6 @@ Status: []<BR>"},
 		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
 			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
-		controller = user
 		req_access = list()
 		on = 0 // turns off the turret temporarily
 		sleep(60) // 6 seconds for the traitor to gtfo of the area before the turret decides to ruin his shit
@@ -394,11 +391,10 @@ Status: []<BR>"},
 		if(L.isDead() || isMoMMI(L))//mommis are always safe
 			continue
 		if(emagged)
-			if(L != controller)
-				if(L.isUnconscious())
-					secondarytargets += L //if the turret is emagged, skip all the fancy target picking stuff
-				else
-					targets += L  //and focus on murdering everything
+			if(L.isUnconscious())
+				secondarytargets += L //if the turret is emagged, skip all the fancy target picking stuff
+			else
+				targets += L  //and focus on murdering everything
 
 		else if(!issilicon(L))
 			if(isanimal(L)) // if its set to check for xenos/carps, check for non-mob "crittersssss"(And simple_animals)
