@@ -15,7 +15,7 @@
 	pressure_resistance = 2
 	attack_verb = list("stamps")
 
-proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,iconstate,Xoffset,Yoffset)
+proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
 	if(istype(P, /obj/item/weapon/paper/envelope))
 		stampoverlay.pixel_x = Yoffset * PIXEL_MULTIPLIER
 		stampoverlay.pixel_y = Xoffset * PIXEL_MULTIPLIER //envelopes are broad instead of long, we just invert the x and y.
@@ -31,7 +31,7 @@ proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,iconstate,Xoff
 	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
 	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 	stampoverlay.icon_state = "paper_[icon_state]"
-	add_paper_overlay(P,stampoverlay,stampoverlay.icon_state,2,2)
+	add_paper_overlay(P,stampoverlay,2,2)
 	if(!P.stamped)
 		P.stamped = new
 	P.stamped += type

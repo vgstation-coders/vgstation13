@@ -97,6 +97,8 @@
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
+	if(user.attack_delayer.blocked())
+		return
 	if(ishuman(user)) // best not let the monkeys write loveletters
 		var/mob/living/carbon/human/H = user
 		if((H.attack_type == ATTACK_BITE) && (H.a_intent == I_HELP)) //if biting and helping
@@ -107,6 +109,7 @@
 				to_chat(user, "Remove the equipment covering your mouth, first.")
 				return
 			add_fingerprint(H)
+			user.delayNextAttack(1 SECONDS)
 			if(H.lip_style)
 				to_chat(user, "<span class='notice'>You kiss the piece of paper, leaving a lipstick impression.</span>")
 				src.stamps += (src.stamps=="" ? "<HR>" : "<BR>") + "<i>The [src.name] has a big [H.lip_style] kiss on it.</i>"
@@ -123,7 +126,7 @@
 						colourcode = "#800080"
 				kissoverlay.icon_state = "lipstick_kiss"
 				kissoverlay.icon += colourcode // make the kiss the color of the lipstick
-				add_paper_overlay(src,kissoverlay,kissoverlay.icon_state,1,1)
+				add_paper_overlay(src,kissoverlay,1,1)
 			else
 				to_chat(user, "<span class='notice'>You kiss the piece of paper.</span>")
 
