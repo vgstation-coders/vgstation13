@@ -8,7 +8,7 @@ Base Assembly
 	var/list/windows = list() //list of open uis, indexed with \ref[user]
 	var/size = ARBITRARILY_LARGE_NUMBER
 	//you can only use one or the other
-	var/allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MOVEMENT | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE
+	var/allowed_usage_flags
 	var/list/vgc_output_queue_item/output_queue = list() //list of vgc_output_queue_item
 	var/timestopped = 0
 
@@ -234,9 +234,22 @@ Base Assembly
 		C.onHacked()
 
 /datum/vgassembly/robot_small
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MOVEMENT | VGCOMP_USAGE_MANIPULATE_SMALL
+
 /datum/vgassembly/robot_big
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MOVEMENT | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE
+
 /datum/vgassembly/attachable_small
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MANIPULATE_SMALL
+
 /datum/vgassembly/attachable_big
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE
+
 /datum/vgassembly/handheld
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MANIPULATE_SMALL
+
 /datum/vgassembly/tablet
+	allowed_usage_flags = VGCOMP_USAGE_NONE
+
 /datum/vgassembly/anchored
+	allowed_usage_flags = VGCOMP_USAGE_NONE | VGCOMP_USAGE_MANIPULATE_SMALL | VGCOMP_USAGE_MANIPULATE_LARGE

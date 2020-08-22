@@ -40,6 +40,76 @@ Base Assembly
 	vga.touched(W, user)
 	return 1
 
+/obj/item/vgc_assembly/robot_small
+	datum_type = /datum/vgassembly/robot_small
+	icon = 'icons/obj/vgassemblies/bots.dmi'
+	icon_state = "bot_small"
+
+/obj/item/vgc_assembly/attachable_small
+	datum_type = /datum/vgassembly/attachable_small
+
+/obj/item/vgc_assembly/attachable_big
+	datum_type = /datum/vgassembly/attachable_big
+
+/obj/item/vgc_assembly/handheld
+	datum_type = /datum/vgassembly/handheld
+
+/obj/item/vgc_assembly/tablet
+	datum_type = /datum/vgassembly/tablet
+
+//TODO this should probably not be an item
+/obj/item/vgc_assembly/robot_big
+	datum_type = /datum/vgassembly/robot_big
+	icon = 'icons/obj/vgassemblies/bots.dmi'
+	icon_state = "bot_big"
+
+//TODO this should probably not be an item
+/obj/item/vgc_assembly/anchored
+	datum_type = /datum/vgassembly/anchored
+	anchored = 1
+
+
+/*
+Testing stuff
+*/
+/obj/item/vgc_assembly/doorTest/New()
+	var/datum/vgc_assembly/robot_big/A = new ()
+	..(A)
+	var/datum/vgcomponent/doorController/D = new ()
+	var/datum/vgcomponent/signaler/S = new ()
+	D.Install(vga)
+	D.saved_access = get_absolutely_all_accesses()
+	S.Install(vga) //default 1457 30
+	S.addOutput(D,"signaled", "toggle")
+
+	new /obj/item/device/assembly/signaler(get_turf(src))
+
+/obj/item/vgc_assembly/debugTest/New()
+	var/datum/vgc_assembly/robot_big/A = new ()
+	..(A)
+	var/datum/vgcomponent/debugger/D = new ()
+	var/datum/vgcomponent/signaler/S = new ()
+	var/datum/vgcomponent/processor/cleaner/C = new ()
+	D.Install(vga)
+	S.Install(vga) //default 1457 30
+	C.Install(vga)
+	S.addOutput(D, "signaled")
+	D.addOutput(C, "toggle")
+
+	new /obj/item/device/assembly/signaler(get_turf(src))
+
+/obj/item/vgc_assembly/debugkit/New()
+	var/datum/vgc_assembly/robot_big/A = new ()
+	..(A)
+	for(var/T in typesof(/datum/vgcomponent))
+		var/datum/vgcomponent/C = new T()
+		if(C.name == "VGComponent") //its the default one! BAIL
+			continue
+		C.Install(vga)
+
+	//spawn utilities
+	new /obj/item/vgc_logictool(get_turf(src))
+
 /*
 Base Component
 */
@@ -173,37 +243,3 @@ Logictool
 	desc="to look at embedded assemblies"
 	icon = 'icons/obj/pipe-item.dmi'
 	icon_state = "meter"
-
-/*
-Testing stuff
-*/
-/obj/item/vgc_assembly/doorTest/New()
-	var/datum/vgassembly/A = new ()
-	..(A)
-	var/datum/vgcomponent/doorController/D = new ()
-	var/datum/vgcomponent/signaler/S = new ()
-	D.Install(vga)
-	D.saved_access = get_absolutely_all_accesses()
-	S.Install(vga) //default 1457 30
-	S.addOutput(D,"signaled", "toggle")
-
-/obj/item/vgc_assembly/debugTest/New()
-	var/datum/vgassembly/A = new ()
-	..(A)
-	var/datum/vgcomponent/debugger/D = new ()
-	var/datum/vgcomponent/signaler/S = new ()
-	D.Install(vga)
-	S.Install(vga) //default 1457 30
-	S.addOutput(D, "signaled")
-
-/obj/item/vgc_assembly/debugkit/New()
-	var/datum/vgassembly/A = new ()
-	..(A)
-	for(var/T in typesof(/datum/vgcomponent))
-		var/datum/vgcomponent/C = new T()
-		if(C.name == "VGComponent") //its the default one! BAIL
-			continue
-		C.Install(vga)
-
-	//spawn utilities
-	new /obj/item/vgc_logictool(get_turf(src))
