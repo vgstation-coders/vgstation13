@@ -68,7 +68,7 @@ Base Component
 	if(vgc.has_settings)
 		vgc.openSettings(user)
 
-/obj/item/vgc_obj/proc/Install(var/vgassembly/vga)
+/obj/item/vgc_obj/proc/Install(var/datum/vgassembly/vga)
 	vgc.Install(vga)
 	qdel(src)
 
