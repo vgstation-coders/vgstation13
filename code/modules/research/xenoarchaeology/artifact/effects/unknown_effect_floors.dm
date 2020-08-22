@@ -7,19 +7,20 @@
 		/turf/simulated/floor/carpet, 
 		/turf/simulated/floor/arcade,
 		/turf/simulated/floor/damaged,
-		/turf/simulated/floor,
 		/turf/simulated/floor/grass,
 		/turf/simulated/floor/engine/cult,
 		/turf/simulated/floor/engine,
 		/turf/simulated/floor/wood,
 		/turf/simulated/floor/dark,
-	)
-	var/blacklisted_floors = list(
-		/turf/simulated/floor/mineral/gingerbread_dirt_tile,
-		/turf/simulated/floor/mineral/gingerbread_nest,
-		/turf/simulated/floor/mineral/gingerbread_tile,
-		/turf/simulated/floor/mineral/gingerbread_floor, //Gingerbread floors are fucky
-		/turf/simulated/floor/mineral/gingerbread,
+		/turf/simulated/floor/mineral/plastic,
+		/turf/simulated/floor/mineral/phazon,
+		/turf/simulated/floor/mineral/clockwork,
+		/turf/simulated/floor/mineral/uranium,
+		/turf/simulated/floor/mineral/diamond,
+		/turf/simulated/floor/mineral/clown,
+		/turf/simulated/floor/mineral/silver,
+		/turf/simulated/floor/mineral/gold,
+		/turf/simulated/floor/mineral/plasma,
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
@@ -29,13 +30,14 @@
 	make_floors(min(5, effectrange))
 
 /datum/artifact_effect/floors/proc/make_floors(var/range)
-	available_floors += typesof(/turf/simulated/floor/mineral) + typesof(/turf/simulated/floor/glass)
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/floortype = pick(available_floors)
-				if(is_type_in_list(floortype, blacklisted_floors))
-					floortype = /turf/simulated/floor	//default to normal floors if it rolls a blacklisted one
+				var/floortype
+				if(prob(66))	//66% of floors are wierdified
+					floortype = pick(available_floors)
+				else
+					floortype = /turf/simulated/floor
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
 				sleep(2)
