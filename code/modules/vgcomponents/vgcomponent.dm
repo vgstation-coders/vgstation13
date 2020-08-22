@@ -229,6 +229,11 @@ Door control
 		return 1
 	return 0
 
+/datum/vgcomponent/processor/proc/toggle_processing()
+	if(!stop_processing())
+		start_processing()
+	return 1
+
 /datum/vgcomponent/processor/proc/process()
 	return
 
@@ -241,12 +246,13 @@ Cleaner - cleans floortiles below object
 	obj_path = /obj/item/vgc_obj/cleaner
 	_input = list(
 		"activate" = "start_processing",
-		"deactivate" = "stop_processing"
+		"deactivate" = "stop_processing",
+		"toggle" = "toggle_processing"
 	)
 	_output = list()
 	usage_flags = VGCOMP_USAGE_MANIPULATE_LARGE
 	var/list/blacklisted_targets = list()
-	var/time_between_cleaning = 3 SECONDS
+	var/time_between_cleaning = 1 SECONDS
 	var/blocked_until
 
 /datum/vgcomponent/processor/cleaner/process()
@@ -291,7 +297,7 @@ Proximity Sensor
 	_input = list(
 		"activate" = "start_processing",
 		"deactivate" = "stop_processing",
-		"toggle" = "toggle",
+		"toggle" = "toggle_processing",
 		"setRange" = "setRange"
 	)
 	_output = list(
@@ -299,11 +305,6 @@ Proximity Sensor
 	)
 	var/range = 2
 	has_settings = 1
-
-/datum/vgcomponent/processor/prox_sensor/proc/toggle()
-	if(!stop_processing())
-		start_processing()
-	return 1
 
 /datum/vgcomponent/processor/prox_sensor/proc/setRange(var/signal)
 	if(!isnum(signal))
