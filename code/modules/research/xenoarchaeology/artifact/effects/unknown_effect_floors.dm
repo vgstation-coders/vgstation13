@@ -38,4 +38,4 @@
 					floortype = /turf/simulated/floor	//default to normal floors if it rolls a blacklisted one
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
-				sleep(3)
+				sleep(2)
