@@ -135,7 +135,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
-	
+
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
 
@@ -583,23 +583,6 @@ Class Procs:
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
 	..()
 	add_fingerprint(user)
-	if(!vga && istype(O, /obj/item/vgc_assembly))
-		vga = O.vga
-		vga._parent = src
-		to_chat(user, "You install \the [O] into \the [src].")
-		qdel(O)
-		return
-	if(vga)
-		if(istype(O, /obj/item/vgc_obj))
-			var/obj/item/vgc_obj/CO = O
-			vga._vgcs += CO.vgc
-			to_chat(user, "You install \the [O] into the [vga].")
-			qdel(O)
-			return
-		if(istype(O, /obj/item/vgc_logictool))
-			vga.showCircuit(user)
-			to_chat(user, "You bring up the circuit on \the [O].")
-			return
 	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
 		var/obj/item/weapon/card/emag/E = O
 		if(E.canUse(user,src))

@@ -108,8 +108,8 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 			state_controls_pai(O)
 			playsound(src, 'sound/misc/cartridge_in.ogg', 25)
 	if(O)
-		var/obj/item/weapon/W = O
 		INVOKE_EVENT(O.on_use, list("user" = user, "target" = src))
+		var/obj/item/weapon/W = O
 		if(W.material_type)
 			W.material_type.on_use(W, src, user)
 
