@@ -90,7 +90,6 @@
 
 //returns list of raycasthits
 /ray/proc/cast(var/max_distance = RAY_CAST_DEFAULT_MAX_DISTANCE, var/max_hits = RAY_CAST_UNLIMITED_HITS, var/ignore_origin = TRUE)
-	set background = 1 // infinite loop protection gets triggered
 	//calculating a step and its distance to use in the loop
 	var/vector/a_step = direction * RAY_CAST_STEP
 	var/step_distance = a_step.chebyshev_norm()
@@ -163,6 +162,8 @@
 
 		//adding our position so we know we already checked this one
 		positions += new_position
+
+		CHECK_TICK
 
 	return hits
 

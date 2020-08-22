@@ -73,31 +73,13 @@
 /vector/proc/operator+(var/vector/B)
 	return new /vector(x + B.x, y + B.y)
 
-/*/vector/proc/operator+=(var/vector/B)
-	if(isnum(B))
-		x += B
-		y += B
-	x += B.x
-	y += B.y*/
-
 /vector/proc/operator-(var/vector/B)
 	return new /vector(x - B.x, y - B.y)
-
-/*/vector/proc/operator-=(var/vector/B)
-	if(isnum(B))
-		x -= B
-		y -= B
-	x -= B.x
-	y -= B.y*/
 
 /vector/proc/operator*(var/mult)
 	if(istype(mult, /vector))
 		return dot(mult)
 	return new /vector(x * mult, y * mult)
-
-/*/vector/proc/operator*=(var/mult)
-	x *= mult
-	y *= mult*/
 
 /vector/proc/equals(var/vector/vectorB)
 	return (x == vectorB.x && y == vectorB.y)
