@@ -178,11 +178,6 @@
 	access_atmos = 1
 	radio_type = /obj/item/radio/integrated/signal
 
-/obj/item/weapon/cartridge/signal/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new (src)
-
 /obj/item/weapon/cartridge/quartermaster
 	name = "\improper Space Parts & Space Vendors Cartridge"
 	desc = "Perfect for the Quartermaster on the go!"
