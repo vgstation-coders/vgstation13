@@ -21,6 +21,8 @@
 		/turf/simulated/floor/mineral/silver,
 		/turf/simulated/floor/mineral/gold,
 		/turf/simulated/floor/mineral/plasma,
+		/turf/simulated/floor/glass,
+		/turf/simulated/floor/glass/plasma,
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
