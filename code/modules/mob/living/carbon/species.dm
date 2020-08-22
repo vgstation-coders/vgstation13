@@ -1191,7 +1191,7 @@ var/list/has_died_as_golem = list()
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1
