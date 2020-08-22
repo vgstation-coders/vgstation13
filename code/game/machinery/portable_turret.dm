@@ -615,8 +615,7 @@ Status: []<BR>"},
 	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
 		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
 		R.choose_projectile()
-		var/P = "[R.in_chamber]"
-		A = new P(loc)
+		A = new R.in_chamber.type(loc)
 	else
 		var/obj/item/weapon/gun/energy/E = installed
 		A = new E.projectile_type(loc)
