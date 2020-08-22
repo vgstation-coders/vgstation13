@@ -97,6 +97,40 @@
 	return
 
 /obj/item/weapon/paper/attack_self(mob/living/user as mob)
+	if(user.attack_delayer.blocked())
+		return
+	if(ishuman(user)) // best not let the monkeys write loveletters
+		var/mob/living/carbon/human/H = user
+		if((H.attack_type == ATTACK_BITE) && (H.a_intent == I_HELP)) //if biting and helping
+			if(!(H.species.anatomy_flags & HAS_LIPS) || (H.species.flags & SPECIES_NO_MOUTH)) // skeletons can apply lipstick but cannot kiss
+				to_chat(user, "You have no lips, how are you going to kiss?")
+				return
+			if(H.check_body_part_coverage(MOUTH))
+				to_chat(user, "Remove the equipment covering your mouth, first.")
+				return
+			add_fingerprint(H)
+			user.delayNextAttack(1 SECONDS)
+			if(H.lip_style)
+				to_chat(user, "<span class='notice'>You kiss the piece of paper, leaving a lipstick impression.</span>")
+				src.stamps += (src.stamps=="" ? "<HR>" : "<BR>") + "<i>The [src.name] has a big [H.lip_style] kiss on it.</i>"
+				var/image/kissoverlay = image('icons/obj/paper.dmi')
+				var/colourcode = "#FF0000" //red default
+				switch(H.lip_style) // TODO - make lip_style use RGB values instead of color name in text
+					if("jade")
+						colourcode = "#00FF00"
+					if("black")
+						colourcode = "#000000"
+					if("blue")
+						colourcode = "#0000FF"
+					if("purple")
+						colourcode = "#800080"
+				kissoverlay.icon_state = "lipstick_kiss"
+				kissoverlay.icon += colourcode // make the kiss the color of the lipstick
+				add_paper_overlay(src,kissoverlay,1,1)
+			else
+				to_chat(user, "<span class='notice'>You kiss the piece of paper.</span>")
+
+
 	user.examination(src)
 	if(rigged && (Holiday == APRIL_FOOLS_DAY))
 		if(spam_flag == 0)

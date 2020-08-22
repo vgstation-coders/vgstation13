@@ -56,21 +56,35 @@
 		if(H.lip_style)	//if they already have lipstick on
 			to_chat(user, "<span class='notice'>You need to wipe off the old lipstick first!</span>")
 			return
+		if(H.species.flags & SPECIES_NO_MOUTH)
+			to_chat(user, "<span class='warning'>You try to apply the lipstick, but alas, you have no mouth.</span>")
+			return
+		if(H.check_body_part_coverage(MOUTH))
+			to_chat(user, "<span class='warning'>Remove the equipment covering your mouth, first.</span>")
+			return
 		if(H == user)
-			user.visible_message("<span class='notice'>[user] does their lips with \the [src].</span>", \
-								 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			if(H.species.anatomy_flags & HAS_LIPS)
+				user.visible_message("<span class='notice'>[user] does their lips with \the [src].</span>", \
+									 "<span class='notice'>You take a moment to apply \the [src]. Perfect!</span>")
+			else
+				user.visible_message("<span class='notice'>[user] applies \the [src] onto the place where their lips should be, looking quite silly.</span>", \
+									 "<span class='notice'>You take a moment to apply \the [src] onto your lipless face. Perfect!</span>")
 			H.lip_style = colour
 			H.update_body()
 		else
-			user.visible_message("<span class='warning'>[user] begins to do [H]'s lips with \the [src].</span>", \
+			user.visible_message("<span class='warning'>[user] begins to apply \the [src] onto [H].</span>", \
 								 "<span class='notice'>You begin to apply \the [src].</span>")
 			if(do_after(user,H, 20))	//user needs to keep their active hand, H does not.
-				user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
-									 "<span class='notice'>You apply \the [src].</span>")
+				if(H.species.anatomy_flags & HAS_LIPS)
+					user.visible_message("<span class='notice'>[user] does [H]'s lips with \the [src].</span>", \
+									 	"<span class='notice'>You apply \the [src].</span>")
+				else
+					user.visible_message("<span class='notice'>[user] applied some of \the [src] onto [H]'s lipless face.</span>", \
+									 	"<span class='notice'>You apply \the [src] onto [H]'s lipless face.</span>")
 				H.lip_style = colour
 				H.update_body()
 	else
-		to_chat(user, "<span class='notice'>Where are the lips on that?</span>")
+		to_chat(user, "<span class='notice'>That would look stupid.</span>")
 
 /obj/item/weapon/eyeshadow
 	name = "black eyeshadow"
