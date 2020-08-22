@@ -63,7 +63,6 @@
 	return
 
 /obj/item/radio/integrated/signal/bot/Topic(href, href_list)
-	to_chat(world, "Sending [href_list["command"]] to [href_list["bot"]]")
 	if (..())
 		return
 
