@@ -684,7 +684,7 @@ datum/vgcomponent/signaler/New()
 		if(!signal) //wasn't a number
 			return 0
 
-	if(!(signal in (MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY)))
+	if(!(signal in MINIMUM_FREQUENCY to MAXIMUM_FREQUENCY))
 		return 0
 
 	_signaler.set_frequency(signal)
@@ -696,7 +696,7 @@ datum/vgcomponent/signaler/New()
 		if(!signal) //wasn't a number
 			return 0
 
-	if(!(signal in (1 to 100)))
+	if(!(signal in 1 to 100))
 		return 0
 
 	_signaler.code = signal
