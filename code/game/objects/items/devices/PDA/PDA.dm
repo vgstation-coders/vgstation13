@@ -207,6 +207,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	PDAs += src
 	if(default_cartridge)
 		cartridge = new default_cartridge(src)
+		// PDA being given out to people during the cuck cube
+		if(ticker && ticker.current_state >= GAME_STATE_SETTING_UP)
+			cartridge.initialize()
 	new /obj/item/weapon/pen(src)
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
@@ -215,6 +218,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	currentevent3 = pick(currentevents3)
 	onthisday = pick(history)
 	didyouknow = pick(facts)
+
+/obj/item/device/pda/initialize()
+	. = ..()
+	if (cartridge)
+		cartridge.initialize()
 
 /obj/item/device/pda/medical
 	name = "Medical PDA"
@@ -2614,6 +2622,8 @@ obj/item/device/pda/AltClick()
 		pai = null
 
 	if(cartridge)
+		if (cartridge.radio)
+			cartridge.radio.hostpda = null
 		qdel(cartridge)
 		cartridge = null
 
