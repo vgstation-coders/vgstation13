@@ -22,7 +22,7 @@
 		/turf/simulated/floor/mineral/gold,
 		/turf/simulated/floor/mineral/plasma,
 		/turf/simulated/floor/glass,
-		/turf/simulated/floor/glass/plasma,
+		/turf/simulated/floor/glass/plasma
 	)
 
 /datum/artifact_effect/floors/DoEffectAura()
@@ -35,11 +35,7 @@
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/floortype
-				if(prob(66))	//66% of floors are wierdified
-					floortype = pick(available_floors)
-				else
-					floortype = /turf/simulated/floor
+				var/floortype = pick(available_floors)
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
 				sleep(2)
