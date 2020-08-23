@@ -474,7 +474,7 @@
 	for(var/mob/living/carbon/human/T in hearers(src,6))
 		if(!CanHug(T, src))
 			continue
-		if(!T?.isUnconscious())
+		if(!T.isUnconscious())
 			if(get_dist(loc, T.loc) <= 6)
 				target = T
 
