@@ -201,7 +201,7 @@
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
 	if(ishuman(AM))
 		if(CanHug(AM, src))
-			var/mob/living/carbon/human/H
+			var/mob/living/carbon/human/H = AM
 			if(!H.isUnconscious())
 				return Attach(H)
 	return FALSE
@@ -472,7 +472,7 @@
 	for(var/mob/living/carbon/human/T in hearers(src,6))
 		if(!CanHug(T, src))
 			continue
-		if(!T?.isUnconscious())
+		if(!T.isUnconscious())
 			if(get_dist(loc, T.loc) <= 6)
 				target = T
 
