@@ -52,7 +52,7 @@
 	environment_smash_flags = 0
 	var/bites = 3
 
-/mob/living/simple_animal/hostile/necro/meat_ghoul/proc/meatOfTheDead(M)
+/mob/living/simple_animal/hostile/necro/meat_ghoul/proc/ghoulifyMeat(M)
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/mType = M
 	bites = mType.bitesize
 	maxHealth += bites + mType.reagents.get_reagent_amount(NUTRIMENT)
