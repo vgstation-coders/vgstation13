@@ -67,11 +67,13 @@
 
 /mob/living/simple_animal/hostile/necro/meat_ghoul/bite_act(mob/living/carbon/human/user)
 	..()
-	if(health < maxHealth/bites)
-		gib()
-	var/perBite = health/bites
-	user.reagents.add_reagent(NUTRIMENT, perBite)
-	health -= perBite
+	bites--
+	user.reagents.add_reagent(NUTRIMENT, bites)
+	playsound(user, 'sound/items/eatfood.ogg', 50, 1)
+	if(bites <= 0)
+		to_chat(user, "<span class='notice'>You devour \the [src]!</span>")
+		qdel(src)
+
 
 /mob/living/simple_animal/hostile/necro/meat_ghoul/death(var/gibbed = FALSE)
 	..(gibbed)
@@ -110,7 +112,7 @@
 		speak = ghoulToBe.speak
 	zombIcon.ColorTone("#85B060")
 	icon = zombIcon
-	name = "[aGhoul.name] " + "ghoul"
+	name = "[aGhoul.name] ghoul"
 	desc = "A ghoulish [aGhoul.name]."
 
 

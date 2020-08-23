@@ -206,15 +206,11 @@
 /obj/item/weapon/gun/energy/staff/necro/afterattack(atom/target, mob/living/user, flag, params, struggle = 0)
 	if(!charges || istype(target, /mob/living/simple_animal/hostile/necro) || get_dist(target, user) > 7)
 		return 0
-	var/toRaise = canRaise(target)
+	var/toRaise = canRaise(target, user)
 	if(!toRaise)
 		return
 	switch(toRaise)
 		if(RAISE_HUMAN)
-			var/mob/living/carbon/human/H = target
-			if(!H.stat || (H.stat < DEAD && H.health > config.health_threshold_crit))
-				to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
-				return 0
 			humanRaise(target, user)
 		if(RAISE_ANIMAL)
 			var/mob/living/L = target
@@ -226,13 +222,18 @@
 			meatRaise(target, user)
 
 
-/obj/item/weapon/gun/energy/staff/necro/proc/canRaise(atom/target)
+/obj/item/weapon/gun/energy/staff/necro/proc/canRaise(atom/target, mob/living/user)
 	if(ishuman(target))
+		var/mob/living/carbon/human/H = target
+		if(H.stat != DEAD && !H.InCritical())
+			to_chat(user, "<span class = 'warning'>[!H.stat?"\The [target] needs to be dead or in a critical state first.":H.health>config.health_threshold_crit?"\The [target] has not received enough damage.":"Something went wrong with the conversion process."]</span>")
+			return 0
 		return RAISE_HUMAN
 	if(isanimal(target) || ismonkey(target))
 		return RAISE_ANIMAL
 	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks/meat))
 		return RAISE_MEAT
+
 	return 0
 
 
@@ -240,7 +241,7 @@
 /obj/item/weapon/gun/energy/staff/necro/proc/meatRaise(var/obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user, M)
 	make_tracker_effects(get_turf(M), user)
-	mG.meatOfTheDead(M)
+	mG.ghoulifyMeat(M)
 	mG.faction = "\ref[user]"
 	qdel(M)
 	charges--
