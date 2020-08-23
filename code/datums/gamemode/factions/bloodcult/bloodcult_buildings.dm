@@ -363,7 +363,7 @@
 			return
 		if(user.incapacitated() || user.lying)
 			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src))
+		if(O.anchored || !Adjacent(user) || !user.Adjacent(O))
 			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
 			return
