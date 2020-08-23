@@ -398,6 +398,9 @@
 	hitsound = 'sound/weapons/taserhit.ogg'
 
 /obj/item/projectile/ricochet/taser/hit_apply(var/mob/living/secoff, var/blocked = 0)
+	if(ismanifested(secoff))
+		secoff.visible_message("<span class='danger'>\The [secoff] seems to completely ignore \the [src] that hit them.</span>","<span class='warning'>You can barely feel at all \the [src]'s electrical discharge.</span>")
+		return
 	spawn(13)
 		secoff.apply_effects(stun, weaken, blocked = blocked)
 	secoff.apply_effects (stutter = stutter, blocked = blocked, agony = agony)
