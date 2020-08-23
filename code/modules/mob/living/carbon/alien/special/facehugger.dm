@@ -168,10 +168,7 @@
 		if(CONSCIOUS)
 			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
 	if (sterile)
-		if(istype(src, /obj/item/clothing/mask/facehugger/headcrab))
 			to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
-		else
-			to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
@@ -461,11 +458,12 @@
 		Assimilate(H)
 
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
-	var/mob/living/carbon/human/target = user
-	if(target && target.head == src)
-		target.resist()
-	else
-		..()
+	if(ishuman(user))
+		var/mob/living/carbon/human/target = user
+		if(target && target.head == src)
+			target.resist()
+		else
+			..()
 
 /obj/item/clothing/mask/facehugger/headcrab/findtarget()
 	if(!real)
@@ -527,6 +525,7 @@
 					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 						Attach(target)
 						return
+/obj/item/clothing/mask/facehugger/headcrab/examine(mob/user)
 
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(isalien(L))
