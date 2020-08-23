@@ -36,7 +36,7 @@
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/floortype = pick(available_floors)
+				var/turf/floortype = pick(available_floors)
 				if(!create_air)
 					if(istype(T, /turf/space))	//if space, make sure you aren't magically generating air.
 						floortype.oxygen = 0.01
