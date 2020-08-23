@@ -1013,7 +1013,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	damage = 0
 	fire_sound = 'sound/weapons/railgun_highpower.ogg'
 
-/obj/item/projectile/beam/combustion/Bump(atom/A)
+/obj/item/projectile/beam/combustion/to_bump(atom/A)
 	if(!A)
 		return
 	..()
