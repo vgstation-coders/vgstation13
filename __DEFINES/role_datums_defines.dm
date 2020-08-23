@@ -76,6 +76,7 @@
 #define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
+#define GREET_SYNDBEACON	"syndbeacon"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
