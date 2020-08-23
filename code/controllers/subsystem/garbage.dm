@@ -49,8 +49,7 @@ List of hard deletions:"}
 		"dels" = dels_count,
 		"soft_dels" = soft_dels,
 		"hard_dels" = hard_dels,
-		"hd_list" = list(ghdel_profiling.Copy())
-	))
+		"hd_list" = ghdel_profiling))
 	..()
 
 /datum/subsystem/garbage/stat_entry()
