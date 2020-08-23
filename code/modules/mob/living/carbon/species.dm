@@ -251,7 +251,7 @@ var/global/list/whitelisted_species = list("Human")
 		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
 	else
 		//testing("  ratio < 1, adding oxyLoss.")
-		H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
 		H.failed_last_breath = 1
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
