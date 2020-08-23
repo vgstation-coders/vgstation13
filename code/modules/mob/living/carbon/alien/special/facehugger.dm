@@ -204,7 +204,7 @@
 /obj/item/clothing/mask/facehugger/HasProximity(atom/movable/AM as mob|obj)
 	if(ishuman(AM))
 		if(CanHug(AM, src))
-			var/mob/living/carbon/human/H
+			var/mob/living/carbon/human/H = AM
 			if(!H.isUnconscious())
 				return Attach(H)
 	return FALSE
