@@ -38,7 +38,7 @@
 			if(istype(T, /turf/space) || isfloor(T))
 				var/floortype = pick(available_floors)
 				if(!create_air)
-					if(istype(T, /turf/space)	//if space, make sure you aren't magically generating air.
+					if(istype(T, /turf/space))	//if space, make sure you aren't magically generating air.
 						floortype.oxygen = 0.01
 						floortype.nitrogen = 0.01
 						floortype.temperature = TCMB
