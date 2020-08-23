@@ -623,7 +623,7 @@
 	if(target && target.head == src && (target.isDead() || target.isInCrit()))	//Once they die, start the zombification.
 		visible_message("<span class='danger'>[target.real_name] begins to shake and convulse violently!</span>")
 		to_chat(target, "<span class='sinister'>You feel your consciousness slipping away...</span>")
-		target.Jitter(1000)
+		target.Jitter(500)
 		sleep(150)
 		target.remove_jitter()
 		if(target && target.head == src)
