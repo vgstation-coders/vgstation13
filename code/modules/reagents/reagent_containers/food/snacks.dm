@@ -604,13 +604,15 @@
 	if(Holiday != VALENTINES_DAY)
 		new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(get_turf(src))
 		qdel(src)
+		return FALSE
+	return TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate
 	desc = "Bought (or made) with love!"
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine/syndicate/New()
-	..()
-	reagents.add_reagent(BICARODYNE, 3)
+	if(..())
+		reagents.add_reagent(BICARODYNE, 3)
 
 /obj/item/weapon/reagent_containers/food/snacks/chocolateegg
 	name = "chocolate egg"
@@ -1139,6 +1141,18 @@
 	reagents.add_reagent(NUTRIMENT, 8)
 	reagents.add_reagent(CARAMEL, 4)
 	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger
+	name = "bear burger"
+	desc = "Fits perfectly in any pic-a-nic basket. Oh bothering to grizzle into this won't be a boo-boo. Honey, it would be beary foolish to hibernate on such a unbearably, ursa majorly good treat!"
+	icon_state = "bearburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/bearburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 20)
+	reagents.add_reagent(HYPERZINE, 8)
+	src.bitesize = 4
 
 /obj/item/weapon/reagent_containers/food/snacks/omelette	//FUCK THIS
 	name = "omelette du fromage"
@@ -4429,7 +4443,7 @@
 	reagents.add_reagent(NUTRIMENT, 10)
 	reagents.add_reagent(SUGAR, 10)
 	reagents.add_reagent(ICE, 10, reagtemp = T0C)
-	reagents.add_reagent("melonjuice", 5)
+	reagents.add_reagent(WATERMELONJUICE, 5)
 	bitesize = 3
 
 /obj/item/weapon/reagent_containers/food/snacks/sundae
@@ -6311,16 +6325,19 @@ obj/item/weapon/reagent_containers/food/snacks/butterfingers_l
 	icon = 'icons/obj/food2.dmi'
 
 /obj/item/weapon/reagent_containers/food/snacks/PAIcookie/New()
+	..()
 	icon_state = "paicookie[pick(1,2,3)]"
 	reagents.add_reagent(NUTRIMENT,5)
 	bitesize = 1
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread
+	icon = 'icons/obj/food2.dmi'
 	icon_state = "paitoast"
 	trash = 0
 	desc = "A slice of bread, browned onto it is the image of a familiar friend."
 
 /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread/New()
+	..()
 	reagents.add_reagent(NUTRIMENT,5)
 	bitesize = 1
 

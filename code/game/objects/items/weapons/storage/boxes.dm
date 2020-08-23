@@ -1396,3 +1396,14 @@
 	new /obj/item/clothing/under/clownpsyche(src)
 	new /obj/item/clothing/shoes/clownshoespsyche(src)
 	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit
+	name = "Gemsuit outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit/New()
+	new /obj/item/clothing/suit/space/rig/wizard(src)
+	new /obj/item/clothing/head/helmet/space/rig/wizard(src)
+	new /obj/item/clothing/gloves/purple(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+

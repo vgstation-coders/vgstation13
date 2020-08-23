@@ -89,20 +89,10 @@
 		if(O.trace_chemicals[V] > 0 && !chemtraces.Find(V))
 			chemtraces += V
 
-
-/obj/item/weapon/autopsy_scanner/verb/print_data()
-	set category = "Object"
-	set src in view(usr, 1)
-	set name = "Print Data"
-	if(usr.isUnconscious() || !(istype(usr,/mob/living/carbon/human)))
-		to_chat(usr, "No.")
-		return
-
+/obj/item/weapon/autopsy_scanner/proc/format_autopsy_data() //modified code to allow OOP
 	var/scan_data = ""
-
 	if(timeofdeath)
 		scan_data += "<b>Time of death:</b> [worldtime2text(timeofdeath)]<br><br>"
-
 	var/n = 1
 	for(var/wdata_idx in wdata)
 		var/datum/autopsy_data_scanner/D = wdata[wdata_idx]
@@ -110,27 +100,19 @@
 		var/total_score = 0
 		var/list/weapon_chances = list() // maps weapon names to a score
 		var/age = 0
-
 		for(var/wound_idx in D.organs_scanned)
 			var/datum/autopsy_data/W = D.organs_scanned[wound_idx]
 			total_hits += W.hits
-
 			var/wname = W.pretend_weapon
-
 			if(wname in weapon_chances)
 				weapon_chances[wname] += W.damage
 			else
 				weapon_chances[wname] = max(W.damage, 1)
 			total_score+=W.damage
-
-
 			var/wound_age = W.time_inflicted
 			age = max(age, wound_age)
-
 		var/damage_desc
-
 		var/damaging_weapon = (total_score != 0)
-
 		// total score happens to be the total damage
 		switch(total_score)
 			if(0)
@@ -143,10 +125,8 @@
 				damage_desc = "<font color='orange'>moderate</font>"
 			if(30 to 1000)
 				damage_desc = "<font color='red'>severe</font>"
-
 		if(!total_score)
 			total_score = D.organs_scanned.len
-
 		scan_data += "<b>Weapon #[n]</b><br>"
 		if(damaging_weapon)
 			scan_data += "Severity: [damage_desc]<br>"
@@ -156,32 +136,36 @@
 		scan_data += "Possible weapons:<br>"
 		for(var/weapon_name in weapon_chances)
 			scan_data += "\t[100*weapon_chances[weapon_name]/total_score]% [weapon_name]<br>"
-
 		scan_data += "<br>"
-
 		n++
-
 	if(chemtraces.len)
 		scan_data += "<b>Trace Chemicals: </b><br>"
 		for(var/chemID in chemtraces)
 			scan_data += chemID
 			scan_data += "<br>"
-
 	scan_data += "<br>[advanced_butchery]<br>"
+	return scan_data
 
-	for(var/mob/O in viewers(usr))
-		O.show_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+/obj/item/weapon/autopsy_scanner/verb/print_data()
+	set category = "Object"
+	set src in usr
+	set name = "Print Data"
 
-	sleep(10)
+	var/mob/user = usr
+	if(!user.dexterity_check())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
+		return
 
-	var/obj/item/weapon/paper/P = new(usr.loc)
+	visible_message("<span class='warning'>\the [src] rattles and prints out a sheet of paper.</span>", 1)
+
+	sleep(1 SECONDS)
+
+	var/obj/item/weapon/paper/P = new(user.loc)
 	P.name = "Autopsy Data ([target_name])"
-	P.info = "<tt>[scan_data]</tt>"
+	P.info = "<tt>[format_autopsy_data()]</tt>"
 	P.overlays += image(icon = P.icon, icon_state = "paper_words")
 
-	if(istype(usr,/mob/living/carbon))
-		// place the item in the usr's hand if possible
-		usr.put_in_hands(P)
+	user.put_in_hands(P)
 
 /obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))

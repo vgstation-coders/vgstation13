@@ -2,6 +2,7 @@
 
 //#define GC_DEBUG
 //#define GC_FINDREF
+//#define GC_REFDEBUG
 
 var/datum/subsystem/garbage/SSgarbage
 
@@ -22,6 +23,9 @@ var/soft_dels = 0
 	// To let them know how hardworking am I :^).
 	var/dels_count = 0
 	var/hard_dels = 0
+	#ifdef GC_REFDEBUG
+	var/list/fakedels = list()
+	#endif
 
 
 /datum/subsystem/garbage/New()
@@ -54,26 +58,7 @@ var/soft_dels = 0
 				continue
 
 			#ifdef GC_FINDREF
-			to_chat(world, "picnic! searching [D]")
-			testing("GC: Searching references for [ref(D)] [D] | [D.type]")
-			if(istype(D, /atom/movable))
-				var/atom/movable/A = D
-				if(A.loc != null)
-					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
-				if(A.contents.len)
-					testing("GC: [A] | [A.type] has contents:")
-					for(var/atom/B in A.contents)
-						testing("[B] | [B.type]")
-			var/found = 0
-			for(var/atom/R in world)
-				found += LookForRefs(R, D)
-			for(var/datum/R)
-				found += LookForRefs(R, D)
-			for(var/client/R)
-				found += LookForRefs(R, D)
-			found += LookForRefs(world, D)
-			found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
-			to_chat(world, "we found [found]")
+			FindRef(D)
 			#endif
 
 
@@ -81,14 +66,22 @@ var/soft_dels = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
+			if(ismovable(D))
 				var/atom/movable/AM = D
 				AM.hard_deleted = 1
 			else
 				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
 				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
 
+			#ifdef GC_REFDEBUG
+			fakedels += D
+			if(ismovable(D))
+				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
+			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+			#undef GC_REFDEBUG
+			#else
 			del D
+			#endif
 			removeTrash(refID)
 
 			hard_dels++
@@ -126,18 +119,40 @@ var/soft_dels = 0
 #ifdef GC_FINDREF
 /world/loop_checks = 0
 
+/datum/subsystem/garbage/proc/FindRef(datum/D)
+	to_chat(world, "picnic! searching [D]")
+	testing("GC: Searching references for [ref(D)] [D] | [D.type]")
+	if(istype(D, /atom/movable))
+		var/atom/movable/A = D
+		if(A.loc != null)
+			testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
+		if(A.contents.len)
+			testing("GC: [A] | [A.type] has contents:")
+			for(var/atom/B in A.contents)
+				testing("[B] | [B.type]")
+	var/found = 0
+	for(var/atom/R in world)
+		found += LookForRefs(R, D)
+	for(var/datum/R)
+		found += LookForRefs(R, D)
+	for(var/client/R)
+		found += LookForRefs(R, D)
+	found += LookForRefs(world, D)
+	found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
+	to_chat(world, "we found [found]")
+
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
-	for(var/V in D.vars)
+	var/list/Dvars = D.vars
+	for(var/V in Dvars)
 		if(V == "contents" || V == "vars")
 			continue
-		if(istype(D.vars[V], /datum))
-			var/datum/A = D.vars[V]
-			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
-				. += 1
-		else if(islist(D.vars[V]))
-			. += LookForListRefs(D.vars[V], targ, D, V)
+		var/datum/A = Dvars[V]
+		if(A == targ)
+			testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
+			.++
+		else if(islist(A))
+			. += LookForListRefs(A, targ, D, V)
 
 /datum/subsystem/garbage/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V, var/list/foundcache = list())
 	. = 0

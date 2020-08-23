@@ -24,8 +24,7 @@
 		/obj/item/weapon/shard = 50,
 		)
 
-	min_duration = 30
-	max_duration = 50
+	duration = 3 SECONDS
 
 /datum/surgery_step/slime/cut_flesh/can_use(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
 	return ..() && istype(target) && target.core_removal_stage == 0
@@ -58,8 +57,7 @@
 		/obj/item/weapon/shard = 50,
 		)
 
-	min_duration = 30
-	max_duration = 50
+	duration = 3 SECONDS
 
 /datum/surgery_step/slime/cut_innards/can_use(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
 	return ..() && istype(target) && target.core_removal_stage == 1
@@ -87,8 +85,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 50
-	max_duration = 70
+	duration = 5 SECONDS
 
 /datum/surgery_step/slime/saw_core/can_use(mob/living/user, mob/living/carbon/slime/target, target_zone, obj/item/tool)
 	return ..() && (istype(target) && target.core_removal_stage == 2 && target.cores > 0) //This is being passed a human as target, unsure why.

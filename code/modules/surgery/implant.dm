@@ -40,8 +40,7 @@
 		/obj/item/stack/rods = 50,
 		)
 
-	min_duration = 60
-	max_duration = 80
+	duration = 6 SECONDS
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
@@ -87,8 +86,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 60
-	max_duration = 80
+	duration = 6 SECONDS
 
 /datum/surgery_step/cavity/close_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -122,8 +120,7 @@
 		/obj/item = 100,
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/cavity/place_item/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
@@ -177,8 +174,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 20,
 		)
 
-	min_duration = 20
-	max_duration = 30
+	duration = 2 SECONDS
 
 /datum/surgery_step/cavity/implant_removal/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/internal/brain/sponge = target.internal_organs_by_name["brain"]

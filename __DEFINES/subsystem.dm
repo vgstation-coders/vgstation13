@@ -5,11 +5,11 @@
 #define SS_INIT_DBCORE			   900
 #define SS_INIT_SSdbcore	       800
 #define SS_INIT_RUST               26
+#define SS_INIT_PLANT              25.5
 #define SS_INIT_SUPPLY_SHUTTLE     25
 #define SS_INIT_SUN                24
 #define SS_INIT_GARBAGE            23
 #define SS_INIT_JOB                22
-#define SS_INIT_PLANT              21.5
 #define SS_INIT_HUMANS             21
 #define SS_INIT_MAP                20
 #define SS_INIT_COMPONENT          19.5

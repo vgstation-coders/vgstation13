@@ -222,6 +222,22 @@
 	H.rightandwrong("swords")
 	to_chat(H, "<span class='userdanger'>DEUS VULT!</span>")
 
+//SUMMON POTIONS
+/datum/spellbook_artifact/summon_potions
+	name = "Summon Potions"
+	desc = "Launch a market crash or start the next potion depression. Either way there will be glass breaking and potions selling."
+	abbreviation = "SP"
+
+/datum/spellbook_artifact/summon_potions/can_buy(var/mob/user)
+	//Only roundstart wizards may summon guns, magic, or blades
+	return is_roundstart_wizard(user)
+
+/datum/spellbook_artifact/summon_swords/purchased(mob/living/carbon/human/H)
+	..()
+
+	H.rightandwrong("potions")
+	to_chat(H, "<span class='userdanger'>POTIONS FOR SALE!</span>")
+
 /datum/spellbook_artifact/glow_orbs
 	name = "Bundle of glow orbs"
 	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."
@@ -320,4 +336,22 @@
 	name = "Boots of Blinding Speed"
 	abbreviation = "BS"
 	desc = "Makes you much faster, but blinds you while you move."
+	price = 0.75 * Sp_BASE_PRICE
 	spawned_items = list(/obj/item/clothing/shoes/blindingspeed)
+
+/datum/spellbook_artifact/nogunallowed
+	name = "No Gun Allowed"
+	abbreviation = "NGA"
+	desc = "Forgo the use of guns in exchange for magical power. Some within the Wizard Federation have lobbied to make this spell a legal obligation."
+	price = -0.5 * Sp_BASE_PRICE
+
+/datum/spellbook_artifact/nogunallowed/can_buy(var/mob/user)
+	if(iswizard(user) || isapprentice(user) || ismagician(user))
+		if(!locate(/spell/passive/nogunallowed) in user.spell_list)
+			return TRUE
+	else
+		return FALSE
+
+/datum/spellbook_artifact/nogunallowed/purchased(mob/living/carbon/human/H)
+	..()
+	H.add_spell (new/spell/passive/nogunallowed)

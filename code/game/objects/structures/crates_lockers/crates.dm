@@ -402,9 +402,9 @@
 
 /obj/structure/closet/crate/rcd/New()
 	..()
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
 	new /obj/item/device/rcd/matter/engineering(src)
 
 /obj/structure/closet/crate/radiation/New()

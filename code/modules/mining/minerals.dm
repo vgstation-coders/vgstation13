@@ -1,6 +1,7 @@
 var/list/name_to_mineral
 
 proc/SetupMinerals()
+	SetupMineralSpawnLists()
 	name_to_mineral = list()
 	for(var/type in typesof(/mineral) - /mineral)
 		var/mineral/new_mineral = new type

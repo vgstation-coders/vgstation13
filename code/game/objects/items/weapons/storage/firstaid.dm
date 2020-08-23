@@ -255,6 +255,10 @@ var/global/list/bottle_colour_choices = list("Blue" = "#0094FF","Dark Blue" = "#
 	new /obj/item/weapon/dice/d12(src)
 	new /obj/item/weapon/dice/d20(src)
 
+/obj/item/weapon/storage/pill_bottle/dice/with_die/New()
+	. = ..()
+	new /obj/item/weapon/dice/borg(src)
+
 
 /obj/item/weapon/storage/pill_bottle/hyperzine
 	name = "pill bottle (hyperzine)"

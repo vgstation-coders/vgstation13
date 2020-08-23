@@ -4010,6 +4010,24 @@
 							B.destroy_environnement = 0
 				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
 				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+			if("mechanics_motivator")
+				if(!world.has_round_started())
+					to_chat(usr, "The round has not started yet,")
+					return
+				var/equipped_count = 0
+				for(var/mob/living/dude in player_list)
+					if(dude.mind?.assigned_role != "Mechanic")
+						continue
+					var/obj/item/current_mask = dude.get_item_by_slot(slot_wear_mask)
+					if(current_mask)
+						if(istype(current_mask, /obj/item/clothing/mask/explosive_collar/mechanic))
+							continue
+						dude.drop_item(current_mask, dude.loc, TRUE)
+					var/obj/item/clothing/mask/explosive_collar/mechanic/cool_necklace = new
+					dude.equip_to_slot(cool_necklace, slot_wear_mask)
+					equipped_count++
+				to_chat(usr, "<span class='notice'>Equipped [equipped_count] mechanics with cool necklaces.</span>")
+				log_admin("[key_name(usr)] equipped [equipped_count] Mechanics with cool necklaces.")
 			if("togglebombmethod")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BM")
@@ -4337,6 +4355,11 @@
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert(src.admincaster_feed_channel.channel_name)
 
+		for(var/obj/item/device/pda/PDA in PDAs)
+			var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+			if(reader)
+				reader.newsAlert(src.admincaster_feed_channel.channel_name)
+
 		log_admin("[key_name_admin(usr)] submitted a feed story to channel: [src.admincaster_feed_channel.channel_name]!")
 		src.access_news_network()
 
@@ -4396,6 +4419,10 @@
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
+					for(var/obj/item/device/pda/PDA in PDAs)
+						var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+						if(reader)
+							reader.newsAlert()
 					src.admincaster_screen = 15
 				else
 					news_network.wanted_issue.author = src.admincaster_feed_message.author

@@ -886,6 +886,8 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
+	environment_smash_flags = 0
+	response_help = "pets"
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()

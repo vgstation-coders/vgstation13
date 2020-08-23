@@ -44,7 +44,7 @@
 		"/obj/item/taperoll/atmos",
 		"/obj/item/taperoll/syndie/atmos",
 		"/obj/item/weapon/extinguisher",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/device/lightreplacer",
 		"/obj/item/device/device_analyser",
@@ -108,7 +108,7 @@
 		"/obj/item/device/rcd/rpd",
 		"/obj/item/device/rcd/tile_painter",
 		"/obj/item/weapon/storage/component_exchanger",
-		"/obj/item/weapon/rcd_ammo",
+		"/obj/item/stack/rcd_ammo",
 		"/obj/item/weapon/reagent_containers/glass/fuelcan",
 		"/obj/item/blueprints",
 		"/obj/item/device/lightreplacer",
@@ -170,7 +170,8 @@
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
-		"/obj/item/weapon/electrolyzer"
+		"/obj/item/weapon/electrolyzer",
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim

@@ -689,18 +689,6 @@
 			if(!AM.can_shuttle_move(src))
 				AM.change_area(linked_area,refill_area)
 
-		//****Move all variables from the old turf over to the new turf****
-
-		for(var/key in old_turf.vars)
-			if(key in ignored_keys)
-				continue
-			//ignored_keys: code/game/area/areas.dm, 526 (above the move_contents_to proc)
-			//as of 06/08/2015: list("loc", "locs", "parent_type", "vars", "verbs", "type", "x", "y", "z","group","contents","air","light","areaMaster","underlays","lighting_overlay")
-			if(istype(old_turf.vars[key],/list))
-				var/list/L = old_turf.vars[key]
-				new_turf.vars[key] = L.Copy()
-			else if(old_turf.vars)
-				new_turf.vars[key] = old_turf.vars[key]
 		if(old_turf.transform)
 			new_turf.transform = old_turf.transform
 

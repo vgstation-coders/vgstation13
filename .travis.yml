@@ -6,7 +6,7 @@ env:
   global:
   - BYOND_MAJOR="513"
   - BYOND_MINOR="1523"
-  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation"
+  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
 

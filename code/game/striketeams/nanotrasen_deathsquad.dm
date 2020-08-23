@@ -10,6 +10,8 @@
 	can_customize = FALSE
 	logo = "death-logo"
 
+	outfit_datum = /datum/outfit/striketeam/nt_deathsquad
+
 /datum/striketeam/deathsquad/create_commando(obj/spawn_location, leader_selected = 0)
 	var/mob/living/carbon/human/new_commando = new(spawn_location.loc)
 	var/commando_leader_rank = pick("Major", "Rescue Leader", "Commander")
@@ -31,6 +33,7 @@
 	new_commando.mind.assigned_role = "MODE"
 	new_commando.mind.special_role = "Death Commando"
 	var/datum/faction/deathsquad = find_active_faction_by_type(/datum/faction/strike_team/deathsquad)
+	var/datum/outfit/striketeam/concrete_outfit = new outfit_datum
 	if(deathsquad)
 		deathsquad.HandleRecruitedMind(new_commando.mind)
 	else
@@ -43,8 +46,8 @@
 		D.logo_state = "creed-logo"
 	else
 		leader_name = new_commando.real_name
-	new_commando.equip_death_commando(leader_selected)
-
+		concrete_outfit.is_leader = TRUE
+	concrete_outfit.equip(new_commando)
 	return new_commando
 
 /datum/striketeam/deathsquad/greet_commando(var/mob/living/carbon/human/H)
@@ -59,84 +62,3 @@
 	for (var/role in H.mind.antag_roles)
 		var/datum/role/R = H.mind.antag_roles[role]
 		R.AnnounceObjectives()
-
-/mob/living/carbon/human/proc/equip_death_commando(leader = 0)
-	//Special radio setup
-	equip_to_slot_or_del(new /obj/item/device/radio/headset/deathsquad(src), slot_ears)
-
-	//Adding Camera Network
-	var/obj/machinery/camera/camera = new /obj/machinery/camera(src) //Gives all the commandos internals cameras.
-	camera.network = list(CAMERANET_CREED)
-	camera.c_tag = real_name
-
-	//Basic Uniform
-	if (leader)
-		var/obj/item/clothing/under/rank/centcom_officer/uni = new /obj/item/clothing/under/rank/centcom_officer(src)
-		uni.attach_accessory(new/obj/item/clothing/accessory/holomap_chip/deathsquad(src))
-		equip_to_slot_or_del(uni, slot_w_uniform)
-	else
-		equip_to_slot_or_del(new /obj/item/clothing/under/deathsquad(src), slot_w_uniform)
-
-	//Shoes & gloves
-	equip_to_slot_or_del(new /obj/item/clothing/shoes/magboots/deathsquad(src), slot_shoes)
-	equip_to_slot_or_del(new /obj/item/clothing/gloves/combat(src), slot_gloves)
-
-	//Glasses
-	equip_to_slot_or_del(new /obj/item/clothing/glasses/thermal(src), slot_glasses)
-
-	//Mask & Armor
-	equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/rig/deathsquad(src), slot_head)
-	equip_to_slot_or_del(new /obj/item/clothing/mask/gas/swat(src), slot_wear_mask)
-	equip_to_slot_or_del(new /obj/item/clothing/suit/space/rig/deathsquad(src), slot_wear_suit)
-	equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(src), slot_s_store)
-
-	//Backpack
-	equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/security(src), slot_back)
-	equip_to_slot_or_del(new /obj/item/weapon/storage/box(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/ammo_storage/speedloader/a357(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/weapon/storage/firstaid/regular(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/weapon/pinpointer(src), slot_in_backpack)
-	equip_to_slot_or_del(new /obj/item/weapon/shield/energy(src), slot_in_backpack)
-	if (leader)
-		equip_to_slot_or_del(new /obj/item/weapon/disk/nuclear(src), slot_in_backpack)
-	else
-		equip_to_slot_or_del(new /obj/item/weapon/c4(src), slot_in_backpack)
-
-	//Other equipment and accessories
-	equip_to_slot_or_del(new /obj/item/weapon/gun/energy/pulse_rifle(src), slot_belt)
-	equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
-	equip_accessory(src, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)
-
-
-	var/obj/item/weapon/implant/loyalty/L = new/obj/item/weapon/implant/loyalty(src)//Here you go Deuryn
-	L.imp_in = src
-	L.implanted = 1
-	var/obj/item/weapon/implant/explosive/E = new/obj/item/weapon/implant/explosive/nuclear(src)
-	E.imp_in = src
-	E.implanted = 1
-	var/datum/organ/external/affected = get_organ(LIMB_HEAD)
-	affected.implants += L
-	L.part = affected
-	affected.implants += E
-	E.part = affected
-	src.update_icons()
-
-
-
-	var/obj/item/weapon/card/id/W = new(src)
-	W.name = "[real_name]'s ID Card"
-	if(leader)
-		W.access = get_centcom_access("Creed Commander")
-		W.icon_state = "creed"
-		W.assignment = "Death Commander"
-	else
-		W.access = get_centcom_access("Death Commando")
-		W.icon_state = "deathsquad"
-		W.assignment = "Death Commando"
-	W.registered_name = real_name
-	equip_to_slot_or_del(W, slot_wear_id)
-
-	add_language(LANGUAGE_DEATHSQUAD)
-	default_language = all_languages[LANGUAGE_DEATHSQUAD]
-
-	return 1

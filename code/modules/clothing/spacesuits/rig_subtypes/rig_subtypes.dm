@@ -61,6 +61,13 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/storage/bag/ore,
+		/obj/item/device/mining_scanner,
+		/obj/item/weapon/pickaxe,
+		/obj/item/weapon/gun/energy/kinetic_accelerator)
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
