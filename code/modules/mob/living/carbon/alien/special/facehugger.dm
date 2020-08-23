@@ -493,7 +493,7 @@
 	if(!target)
 		findtarget()
 		return
-	if(loc && isturf(loc) && !attached && !stat && nextwalk <= world.time)
+	if(isturf(loc) && !attached && !stat && nextwalk <= world.time)
 		nextwalk = world.time + walk_speed
 		var/dist = get_dist(loc, target.loc)
 		if(dist > 6)
