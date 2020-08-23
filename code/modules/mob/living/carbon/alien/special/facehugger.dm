@@ -40,6 +40,7 @@
 	var/nextwalk = FALSE
 	var/mob/living/target = null
 
+
 /obj/item/clothing/mask/facehugger/can_contaminate()
 	return FALSE
 
@@ -445,8 +446,8 @@
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
 	cant_remove_msg = "The headcrab is latched on tight!"
-	var/escaping = 0 	//If enabled the headcrab will GTFO
 	var/is_being_resisted = 0
+	var/escaping = 0 	//If enabled the crab will try to escape.
 
 /obj/item/clothing/mask/facehugger/headcrab/equipped(mob/living/carbon/human/H)
 	if(stat == CONSCIOUS)
@@ -534,6 +535,8 @@
 		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
 	return
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
+	if(escaping)
+		return FALSE
 	if(isalien(L))
 		return FALSE
 	if(attached)
