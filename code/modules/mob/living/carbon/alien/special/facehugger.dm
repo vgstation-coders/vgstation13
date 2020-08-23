@@ -599,7 +599,7 @@
 	if(!ishuman(L))
 		return
 	var/mob/living/carbon/human/target = L
-	if(!target || target.head != src) //was taken off or something
+	if(target.head != src) //was taken off or something
 		return
 
 	while(target && target.head == src && !target.isDead() && !target.isInCrit())	//If they're still alive chew at their fuggin skull
