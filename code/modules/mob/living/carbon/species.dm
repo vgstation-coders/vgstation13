@@ -192,6 +192,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
 		H.grasp_organs.len = 0
+	H.bad_external_organs.Cut()
 
 
 /datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
