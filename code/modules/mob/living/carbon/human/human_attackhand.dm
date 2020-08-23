@@ -239,7 +239,7 @@
 					if(head == crab)
 						drop_from_inventory(crab)
 						crab.GoIdle(15 SECONDS) 
-						visible_message("[M.real_name] pulls the headcrab off of [src.real_name]'s head!")
+						visible_message("[M] pulls the headcrab off of [src]'s head!")
 			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
