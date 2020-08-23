@@ -101,9 +101,8 @@
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
-<<<<<<< HEAD
 	var/has_engines = FALSE // Is the map a space ship with big engines?
-=======
+
 	var/list/holodeck_rooms = list(
 		"Basketball Court",
 		"Beach",
@@ -133,7 +132,6 @@
 		"Combat Arena" = "Safety protocols disabled - weapons are not for recreation.",
 		"Medieval Tournament" = "Safety protocols disabled - weapons are not for recreation.",
 	)
->>>>>>> 66020c8ccbf9b00525b0084e06d3d5b04c3f2837
 
 /datum/map/New()
 	. = ..()

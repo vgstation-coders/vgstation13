@@ -2810,10 +2810,8 @@ var/list/the_station_areas = list (
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
 
-<<<<<<< HEAD
 /area/maintenance/engine
 	name = "Engine"
-=======
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"
@@ -2844,4 +2842,3 @@ var/list/the_station_areas = list (
 	icon_state = "escape"
 
 // END Horizon
->>>>>>> 66020c8ccbf9b00525b0084e06d3d5b04c3f2837
