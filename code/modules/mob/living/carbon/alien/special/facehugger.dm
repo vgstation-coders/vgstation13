@@ -62,9 +62,7 @@
 		if(!CanHug(T, src))
 			continue
 		if(T && (!T.isUnconscious() ) )
-
-			if(get_dist(loc, T.loc) <= 4)
-				target = T
+			target = T
 
 
 /obj/item/clothing/mask/facehugger/proc/followtarget()
@@ -473,8 +471,7 @@
 		if(!CanHug(T, src))
 			continue
 		if(!T.isUnconscious())
-			if(get_dist(loc, T.loc) <= 6)
-				target = T
+			target = T
 
 
 
