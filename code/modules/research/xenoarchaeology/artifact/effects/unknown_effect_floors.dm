@@ -3,6 +3,7 @@
 	valid_style_types = list(ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_PRECURSOR)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
+	var/create_air = 0 	//If set to 1 will create air-filled floors. Always at 0 for the time being.
 	var/available_floors = list(			
 		/turf/simulated/floor/carpet, 
 		/turf/simulated/floor/arcade,
@@ -36,6 +37,17 @@
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
 				var/floortype = pick(available_floors)
+				if(!create_air)
+					if(istype(T, /turf/space)	//if space, make sure you aren't magically generating air.
+						floortype.oxygen = 0.01
+						floortype.nitrogen = 0.01
+						floortype.temperature = TCMB
+					else						//if not space, take the air from the turf
+						floortype.oxygen = T.oxygen
+						floortype.nitrogen = T.nitrogen
+						floortype.carbon_dioxide = T.carbon_dioxide
+						floortype.toxins = T.toxins
+						floortype.temperature = T.temperature
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
 				sleep(2)
