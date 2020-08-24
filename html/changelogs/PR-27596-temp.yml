@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - rscadd: "a single use Cult Pamphlet can now spawn instead of a large artifact, just like Vampire stone masks and Changeling vials. Same rarity too, which is to say, extremely low."
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: PaulRitter
+changes:
+  - tweak: Lasers no longer freak out when hitting blobs
+delete-after: true
