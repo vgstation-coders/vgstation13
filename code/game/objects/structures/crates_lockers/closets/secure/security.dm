@@ -233,6 +233,7 @@
 		/obj/item/clothing/suit/storage/det_suit/noir,
 		/obj/item/clothing/suit/storage/forensics/blue,
 		/obj/item/clothing/suit/storage/forensics/red,
+		/obj/item/clothing/suit/storage/labcoat/forensic,
 		/obj/item/clothing/head/det_hat,
 		/obj/item/clothing/head/det_hat/noir,
 		/obj/item/clothing/shoes/brown,
