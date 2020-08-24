@@ -38,7 +38,10 @@
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
 				var/turf/floortype
-				randomized ? floortype = pick(available_floors) : floortype = /turf/simulated/floor
+				if(randomized)
+					floortype = pick(available_floors)
+				else
+					floortype = /turf/simulated/floor
 				shadow(T,holder.loc,"artificer_convert")
 				if(!create_air && istype(T, /turf/space))	//if space, make sure you aren't magically generating air.	
 					T.ChangeTurf(floortype)
