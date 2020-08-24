@@ -951,17 +951,34 @@ var/list/admin_verbs_mod = list(
 	var/obj/item/award
 	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
 	if(achoice == "Gold cup")
-		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup(get_turf(winner))
+		award = /obj/item/weapon/reagent_containers/food/drinks/golden_cup
 	if(achoice == "Gold medal")
-		award = new /obj/item/clothing/accessory/medal/gold(get_turf(winner))
+		award = /obj/item/clothing/accessory/medal/gold
 	if(achoice == "Dunce cap")
-		award = new /obj/item/clothing/head/dunce_cap(get_turf(winner))
+		award = /obj/item/clothing/head/dunce_cap
+
+	give_award(winner, award, name, desc, glob == "No!" ? FALSE : TRUE)
+	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
+
+// winner can be a mob or a ckey
+/proc/give_award(mob_or_ckey, award_path, name, desc, announce = TRUE)
+	ASSERT(!isnull(mob_or_ckey))
+	var/mob/living/carbon/winner = istext(mob_or_ckey) ? get_mob_by_key(mob_or_ckey) : mob_or_ckey
+	if(!winner)
+		log_debug("Something tried to give an award to a non existing player!")
+		return
+	var/obj/award
+	if(!award_path)
+		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup()
+	else
+		award = new award_path()
 	award.name = name
 	award.desc = desc
+
 	if(iscarbon(winner) && (winner.stat == CONSCIOUS))
 		winner.put_in_hands(award)
 
-	if(glob == "No!")
+	if(!announce)
 		winner.client << sound('sound/misc/achievement.ogg', volume=35)
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='danger'>[bicon(award)] Attention all ghosts, <b>[winner.name]</b> wins \"<b>[name]</b>\"!</span>")
@@ -973,8 +990,6 @@ var/list/admin_verbs_mod = list(
 
 	var/datum/achievement = new /datum/achievement(award, winner.key, winner.name, name, desc)
 	ticker.achievements.Add(achievement)
-
-	message_admins("[key_name_admin(usr)] has awarded <b>[winner.key]</b>([winner.name]) with the achievement \"<b>[name]</b>\"! \"[desc]\".", 1)
 
 /client/proc/mommi_static()
 	set name = "Toggle MoMMI Static"

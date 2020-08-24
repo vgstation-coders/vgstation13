@@ -290,6 +290,8 @@ var/list/score=list(
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
+
+	"money_leaderboard" = list(),
 )
 
 var/list/isolated_antibodies = list(
