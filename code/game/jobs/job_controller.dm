@@ -402,6 +402,7 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/job = GetJob(rank)
 	if(!joined_late)
 		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
 			if(sloc.name != rank)
 				continue
@@ -410,9 +411,23 @@ var/global/datum/controller/occupations/job_master
 			S = sloc
 			break
 		if(!S)
-			S = locate("start*[rank]") // use old stype
-		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
 			H.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			H.forceMove(pick(latejoin))
 
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
