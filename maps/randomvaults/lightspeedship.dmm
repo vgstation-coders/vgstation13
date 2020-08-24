@@ -2,9 +2,13 @@
 "ab" = (/obj/structure/shuttle/engine/propulsion{dir = 8},/turf/space,/area/shuttle/lightship/start)
 "ac" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/shuttle/engine/heater{dir = 8},/turf/simulated/floor/plating/airless,/area/shuttle/lightship/start)
 "ad" = (/obj/machinery/power/battery/smes{charge = 0},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
+"ae" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/shuttle/engine/heater{dir = 8},/obj/structure/window/reinforced{dir = 1},/turf/simulated/floor/plating/airless,/area/shuttle/lightship/start)
+"af" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/shuttle/engine/heater{dir = 8},/obj/structure/window/reinforced{one_way = 1},/turf/simulated/floor/plating/airless,/area/shuttle/lightship/start)
 "ag" = (/obj/structure/shuttle/engine/propulsion/left{dir = 8},/turf/space,/area/shuttle/lightship/start)
 "ah" = (/obj/structure/closet/crate,/obj/abstract/map/spawner/engi/materials,/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"ai" = (/obj/machinery/light,/turf/simulated/floor{dir = 10; icon_state = "whitegreen"},/area/shuttle/lightship/start)
 "aj" = (/obj/structure/closet/emcloset,/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"ak" = (/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "al" = (/obj/structure/closet/radiation,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "am" = (/obj/structure/closet/welded,/obj/abstract/map/spawner/maint,/obj/abstract/map/spawner/space/tools,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "an" = (/obj/structure/closet/wardrobe/pjs,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
@@ -12,6 +16,7 @@
 "ap" = (/obj/structure/closet/firecloset,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "aq" = (/obj/structure/block,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "ar" = (/obj/item/clothing/head/christmas/santahat/red,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
+"as" = (/obj/machinery/computer/security,/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "at" = (/obj/structure/closet/crate,/obj/abstract/map/spawner/engi/materials,/obj/item/weapon/storage/box/lights,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "au" = (/obj/structure/closet/crate/trashcart,/obj/item/weapon/storage/bag/trash,/obj/item/trash/bustanuts,/obj/item/trash/bustanuts,/obj/item/trash/bustanuts,/obj/item/trash/bustanuts,/obj/item/trash/bustanuts,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "av" = (/obj/structure/closet/crate/chest,/obj/abstract/map/spawner/space/tools,/obj/abstract/map/spawner/space/tools,/obj/abstract/map/spawner/space/tools,/turf/simulated/floor/plating,/area/shuttle/lightship/start)
@@ -186,7 +191,6 @@
 "gv" = (/obj/machinery/shieldgen,/obj/machinery/light{dir = 4},/turf/simulated/floor/bluegrid,/area/shuttle/lightship/start)
 "gx" = (/obj/machinery/computer/bhangmeter,/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "gy" = (/obj/machinery/computer/security_alerts,/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/lightship/start)
-"gz" = (/obj/machinery/computer/security,/obj/machinery/light,/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "gA" = (/obj/structure/table,/obj/machinery/recharger,/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
 "gH" = (/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "gI" = (/turf/simulated/floor{icon_state = "warnwhite"},/area/shuttle/lightship/start)
@@ -275,10 +279,10 @@
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaUGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaabachNhRhNhNhNhNhNhNhNhNhNhNdhaaaaaajzuWSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabaehNhRhNhNhNhNhNhNhNhNhNhNdhaaaaaajzuWSSjzaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaagacahdUajdjalamanaoapaqararhAaaaaaabqhkUZbqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaagacatdUdUdUdUdUdUdUauavaraqhAaaaaaaaYhkUZaYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaagachNivhNhNhNhNivhNhNhNhNhNiAaaaLhNiFixixiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaagafhNivhNhNhNhNivhNhNhNhNhNiAaaaLhNiFixixiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaabyaLiAaFaFaFaFhAaHaHbIaJaHhAaLiAikhUhUhUilhXcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaLbXiFaUaVaWbYaXhAdUdUdUdUaHhXiFiAifhUhUhUbZhAcdhNcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaLhQbXhNbibjbkivhNiFhRhNhNivhNiFhNhXhNhNhNczhNiAhNhNiFcLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
@@ -287,20 +291,20 @@ aahXhNiAbNhyhyhyeDhPgIgIgIgIgIhohphphqhAbWhyhyhycagScchycecfcghXiFhNcLaaaaaaaaaa
 aLiFhNiAckclfBfBcohzhEhEhEhEhEhGcwgUcyhAdzhyhyhycDgMcFcIhycIcJhXhNhNiFeteMivhNhNcLaaaaaaaaaaaaaaaa
 hXhNhNhQhNhNgkhNhNivhNhNhNivgkiFhNhNhNiAcPcQcRdAcThGcVhycXhycYhAdadbdcesfdhXhNhNiFdKhNivhNhNhNdhaa
 gSdjdkgSdldmdnaddpeBdrdrdrhAfndudvdwdxhPdzfmfpdAcDhAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
-ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeueseueseugMevgagagaexhAeRhyeAipaa
+ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeuesaieseugMevgagagaexhAeRhyeAipaa
 hPdUdUhPdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNgMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeREkeTeUaa
-ibdUdUibdVbreVeVeWeBdrdrdrhAeXeYhyfnfagMhphphphpffhAfhhUfRhUhUgMfnfqfnfqfngMfrfsfsfsftfueRhyfvfEaa
+ibdUdUibdVbreVeVeWeBdrdrdrhAeXeYhyfnfagMhphphphpffhAfhhUfRhUhUgMfnfqakfqfngMfrfsfsfsftfueRhyfvfEaa
 hGdjfyhGfzfAfBfCfDdZdrdrdrhAfFfGfGfIfJhPhphpfMfNhphAfOfRhUfRfShGfqiCfWfnfXhPfZxRgbhWgchGgegfgghGaa
-hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgygzZqgAhXhNhNivdKhNiFhNhNhNiGaa
+hXhNhNhQhNhNgMhNhNiFhNhNhNiFgkivhNhNhNiAgogpgqfNhqgSgthUfRhUgvhAgxgyasZqgAhXhNhNivdKhNiFhNhNhNiGaa
 iuivhNiAgHgIgIgIhygMgRgRgRbAgRgSgTgUgVhAhpgpgWhphpbShUfRhUfRhahXhNhNiveteMiFhNhNiGaaaaaaaaaaaaaaaa
 aahXhNiAhghhhihjhkhPhmhmhmhmhmhohphphqhAhrhphphphthGhvhvhwhahahXivhNiGjvaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaiuiviAhyhmhmhmhzhAhBhChEhEhFhGhHhIhJhAhNhNhNhLhNhQhNhNhNivdKiFiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaiuhQhNhNhNhNiviFhNhNhRhNhNiFhNivhNiAhThUhVhUhUhXhNhNiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaiuhNivhZiahAaHdUdUdUdUdUieaHhXiviAifhUhUhUighXivhNiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaiuhNihhAdUdUSqdUdUijdUdUhAiuiAikhUhUhUilhXiGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaimaciviziohAdUiqiririsitisishAaaiuhNivSSSSiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaimaeiviziohAdUiqiririsitisishAaaiuhNivSSSSiviGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaimaciAdUdUizhNhNhNhNhNhNhNhNiAaaaaaabqhkUZbqaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaimaciAdUiBiodUdUioiDdUdUioiEhAaaaaaaaYhkUZaYaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-aaaaaaabaciFhRhNhNhNhNhNhNhNhNhNhNiGaaaaaagSSSSSgSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+aaaaaaabafiFhRhNhNhNhNhNhNhNhNhNhNiGaaaaaagSSSSSgSaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 "}
