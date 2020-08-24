@@ -44,8 +44,7 @@
 					floortype = /turf/simulated/floor
 				shadow(T,holder.loc,"artificer_convert")
 				if(!create_air && istype(T, /turf/space))	//if space, make sure you aren't magically generating air.	
-					T.ChangeTurf(floortype)
-					T.air = null
+					T.ChangeTurf(floortype).air = null
 				else
 					T.ChangeTurf(floortype)
 				sleep(2)
