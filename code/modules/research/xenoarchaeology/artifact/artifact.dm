@@ -37,7 +37,7 @@
 
 /obj/structure/boulder
 	name = "rocky debris"
-	desc = "Leftover rock from an excavation, it's been partially dug out already but there's still a lot to go."
+	desc = "Leftover rock from an excavation. May or may not contain an artifact, but if it does you better use a small pickaxe, lest you destroy it along with the debris."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "boulder1"
 	density = 1
