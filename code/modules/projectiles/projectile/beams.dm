@@ -124,6 +124,9 @@ var/list/beam_master = list()
 	shot_from = A //temporary
 
 /obj/item/projectile/beam/dumbfire(var/dir)
+	dir = dir ? dir : src.dir
+	starting = starting ? starting : src.loc
+
 	var/vector/origin = atom2vector(starting)
 	var/vector/direction = dir2vector(dir)
 	fireto(origin, direction)
