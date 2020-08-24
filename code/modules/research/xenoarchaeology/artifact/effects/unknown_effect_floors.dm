@@ -38,7 +38,7 @@
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
 				var/turf/floortype
-				if(randomized)
+				if(randomize)
 					floortype = pick(available_floors)
 				else
 					floortype = /turf/simulated/floor
