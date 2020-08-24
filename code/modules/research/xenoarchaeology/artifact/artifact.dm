@@ -18,6 +18,7 @@
 	5;/obj/machinery/syndicate_beacon,
 	5;/obj/item/clothing/mask/stone,
 	5;/obj/item/changeling_vial,
+	5;/obj/item/weapon/bloodcult_pamphlet/oneuse,
 	25;/obj/machinery/singularity_beacon,
 	25;/obj/machinery/power/supermatter,
 	50;/obj/structure/constructshell,

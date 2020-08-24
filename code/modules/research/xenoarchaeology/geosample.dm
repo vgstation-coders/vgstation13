@@ -16,16 +16,21 @@
 
 /obj/item/weapon/rocksliver
 	name = "rock sliver"
-	desc = "It looks extremely delicate."
+	desc = "A piece of rock precisely extracted. Must be ground into powder for further analysis."
 	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "sliver1"	//0-4
+	icon_state = "sliver"
 	w_class = W_CLASS_TINY
-	//item_state = "electronic"
 	var/datum/geosample/geological_data
+
+/obj/item/weapon/rocksliver/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		set_tiny_label(user)
+	else
+		return ..()
 
 /obj/item/weapon/rocksliver/New()
 	. = ..()
-	icon_state = "sliver[rand(1,3)]"
+	icon_state = "sliver"
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
