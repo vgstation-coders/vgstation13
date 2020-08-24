@@ -560,6 +560,10 @@
 	icon_state = "hair_manbun"
 	gender = MALE
 
+/datum/sprite_accessory/hair/sonicboom
+	name = "SonicBoom"
+	icon_state = "hair_sonicboom"
+
 /*
 ///////////////////////////////////
 /  =---------------------------=  /
