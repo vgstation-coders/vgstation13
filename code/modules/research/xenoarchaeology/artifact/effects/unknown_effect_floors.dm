@@ -4,6 +4,7 @@
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
 	var/create_air = 0 	//If set to 1 will create air-filled floors. Always at 0 for the time being.
+	var/randomize = 1 	//If set to 1 will create random floors. Always at 1 for the time being.
 	var/available_floors = list(			
 		/turf/simulated/floor/carpet, 
 		/turf/simulated/floor/arcade,
@@ -36,12 +37,12 @@
 	if(holder)
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/turf/floortype = pick(available_floors)
-				if(!create_air)
-					if(istype(T, /turf/space))	//if space, make sure you aren't magically generating air.
-						floortype.oxygen = 0.01
-						floortype.nitrogen = 0.01
-						floortype.temperature = TCMB
+				var/turf/floortype
+				randomized ? floortype = pick(available_floors) : floortype = /turf/simulated/floor
 				shadow(T,holder.loc,"artificer_convert")
-				T.ChangeTurf(floortype)
+				if(!create_air && istype(T, /turf/space))	//if space, make sure you aren't magically generating air.	
+					T.ChangeTurf(floortype)
+					T.air = null
+				else
+					T.ChangeTurf(floortype)
 				sleep(2)
