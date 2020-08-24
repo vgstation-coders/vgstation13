@@ -31,8 +31,7 @@
 		/obj/item/weapon/shard = 50,
 		)
 
-	min_duration = 90
-	max_duration = 110
+	duration = 9 SECONDS
 
 /datum/surgery_step/eye/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..()
@@ -65,8 +64,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 50,
 		)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/eye/lift_eyes/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.eyes == 1
@@ -99,8 +97,7 @@
 		/obj/item/device/assembly/mousetrap = 10,	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
 
-	min_duration = 80
-	max_duration = 100
+	duration = 8 SECONDS
 
 /datum/surgery_step/eye/mend_eyes/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..() && target.op_stage.eyes == 2
@@ -139,8 +136,7 @@
 		/obj/item/weapon/weldingtool = 25,
 		)
 
-	min_duration = 70
-	max_duration = 100
+	duration = 7 SECONDS
 
 /datum/surgery_step/eye/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	return ..()

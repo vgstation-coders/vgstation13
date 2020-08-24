@@ -37,6 +37,8 @@
 
 	var/icon/img = null
 	var/icon/backup_img
+	var/icon/img_pda = null
+	var/icon/backup_img_pda
 	var/img_info = "" //Stuff like "You can see Honkers on the photo. Honkins looks hurt..."
 
 /datum/feed_channel
@@ -56,6 +58,27 @@
 	backup_author = ""
 	img = null
 	backup_img = null
+	img_pda = null
+	backup_img_pda = null
+
+/datum/feed_message/proc/ImagePDA()
+	if (img)
+		img_pda = icon(img)
+		//turns the image grayscale then applies an olive coat of paint
+		img_pda.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(128,128,0))
+		//lowers the brightness then ups the contrast so we get something that fits on a PDA screen
+		img_pda.MapColors(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,-0.53,-0.53,-0.53,0)
+		img_pda.MapColors(1.75,0,0,0,0,1.75,0,0,0,0,1.75,0,0,0,0,1.75,-0.375,-0.375,-0.375,0)
+
+/datum/feed_message/proc/NewspaperCopy()//We only copy the vars we'll need
+	var/datum/feed_message/copy = new()
+	copy.author = author
+	copy.body = body
+	copy.author_log = author_log
+	copy.img = icon(img)
+	copy.img.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28))//grayscale
+	copy.img_info = img_info
+	return copy
 
 /datum/feed_channel/proc/clear()
 	channel_name = ""
@@ -65,6 +88,15 @@
 	backup_author = ""
 	censored = 0
 	is_admin_channel = 0
+
+/datum/feed_channel/proc/NewspaperCopy()//We only copy the vars we'll need
+	var/datum/feed_channel/copy = new()
+	copy.channel_name = channel_name
+	copy.author = author
+	copy.messages = list()
+	for(var/datum/feed_message/message in messages)
+		copy.messages += message.NewspaperCopy()
+	return copy
 
 /datum/feed_network
 	var/list/datum/feed_channel/network_channels = list()
@@ -674,6 +706,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
 						newMsg.img_info = P.fields["info"]
+					newMsg.ImagePDA()
 					EjectPhoto()
 				feedback_inc("newscaster_stories",1)
 				our_channel.messages += newMsg                  //Adding message to the network's appropriate feed_channel
@@ -681,6 +714,10 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				log_game("[key_name(usr)] posted the message [newMsg.body] as [newMsg.author].")
 				for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 					NEWSCASTER.newsAlert(channel_name)
+				for(var/obj/item/device/pda/PDA in PDAs)
+					var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+					if(reader)
+						reader.newsAlert(channel_name)
 
 			updateUsrDialog()
 
@@ -783,10 +820,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
 								WANTED.img = P.fields["img"]
+							WANTED.ImagePDA()
 						news_network.wanted_issue = WANTED
 						for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 							NEWSCASTER.newsAlert()
 							NEWSCASTER.update_icon()
+						for(var/obj/item/device/pda/PDA in PDAs)
+							var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+							if(reader)
+								reader.newsAlert()
 						screen = NEWSCASTER_WANTED_SUCCESS
 					else
 						if(news_network.wanted_issue.is_admin_message)
@@ -862,8 +904,11 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			if(MSG.img != null)
 				MSG.backup_img = MSG.img
 				MSG.img = null
+				MSG.backup_img_pda = MSG.img_pda
+				MSG.img_pda = null
 			else
 				MSG.img = MSG.backup_img
+				MSG.img_pda = MSG.backup_img_pda
 			if(MSG.body != "<B>\[REDACTED\]</B>")
 				MSG.backup_body = MSG.body
 				MSG.body = "<B>\[REDACTED\]</B>"
@@ -1105,7 +1150,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				for(var/datum/feed_channel/NP in news_content)
 					pages++ //Let's get it right again.
 				var/datum/feed_channel/C = news_content[curr_page]
-				dat+="<FONT SIZE=4><B>[C.channel_name]</B></FONT><FONT SIZE=1> \[created by: <FONT COLOR='maroon'>[C.author]</FONT>\]</FONT><BR><BR>"
+				dat+="<FONT SIZE=4><B>[C.channel_name]</B></FONT><FONT SIZE=1> \[created by: <b>[C.author]</b>\]</FONT><BR><BR>"
 				if(C.censored)
 					dat+="This channel was deemed dangerous to the general welfare of the station and therefore marked with a <B><FONT COLOR='red'>D-Notice</B></FONT>. Its contents were not transferred to the newspaper at the time of printing."
 				else
@@ -1120,7 +1165,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 							if(MESSAGE.img)
 								user << browse_rsc(MESSAGE.img, "tmp_photo[i].png")
 								dat+="<img src='tmp_photo[i].png' width = '180'><BR>"
-							dat+="<FONT SIZE=1>\[Story by <FONT COLOR='maroon'>[MESSAGE.author]</FONT>\]</FONT><BR><BR>"
+							dat+="<FONT SIZE=1>\[Story by <b>[MESSAGE.author]</b>\]</FONT><BR><BR>"
 						dat+="</ul>"
 				if(scribble_page==curr_page)
 					dat+="<BR><I>There is a small scribble near the end of this page... It reads: \"[scribble]\"</I>"
@@ -1130,8 +1175,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					pages++
 				if(important_message!=null)
 
-					dat += {"<DIV STYLE='float:center;'><FONT SIZE=4><B>Wanted Issue:</B></FONT SIZE></DIV><BR><BR>
-						<B>Criminal name</B>: <FONT COLOR='maroon'>[important_message.author]</FONT><BR>
+					dat += {"<DIV STYLE='align:center;'><FONT SIZE=4><B>!!Wanted!!</B></FONT SIZE></DIV>
+						<B>Criminal name</B>: <b>[important_message.author]</b><BR>
 						<B>Description</B>: [important_message.body]<BR>
 						<B>Photo:</B>: "}
 					if(important_message.img)
@@ -1148,7 +1193,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				dat+="I'm sorry to break your immersion. This shit's bugged. Report this bug to Agouri, polyxenitopalidou@gmail.com"
 
 		dat+="<BR><HR><div align='center'>[curr_page+1]</div>"
-		usr << browse(dat, "window=newspaper_main;size=300x400")
+		usr << browse("<body style='background-color:#969696;color:black;'>[dat]</body>", "window=newspaper_main;size=400x400")
 		onclose(usr, "newspaper_main")
 	else
 		to_chat(user, "The paper is full of intelligible symbols!")
@@ -1249,9 +1294,10 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	feedback_inc("newscaster_newspapers_printed",1)
 	var/obj/item/weapon/newspaper/printed_issue = new /obj/item/weapon/newspaper(src)
 	for(var/datum/feed_channel/FC in news_network.network_channels)
-		printed_issue.news_content += FC
+		if (!FC.censored)//censored channels aren't printed at all, why waste all this good paper
+			printed_issue.news_content += FC.NewspaperCopy()
 	if(news_network.wanted_issue)
-		printed_issue.important_message = news_network.wanted_issue
+		printed_issue.important_message = news_network.wanted_issue.NewspaperCopy()
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
 	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
@@ -1264,7 +1310,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		say("Breaking news from [channel]!")
 		alert = TRUE
 		update_icon()
-		spawn(300)
+		spawn(30 SECONDS)
 			alert = FALSE
 			update_icon()
 		playsound(src, 'sound/machines/twobeep.ogg', 75, 1)
@@ -1272,7 +1318,6 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		for(var/mob/O in hearers(world.view-1, T))
 		say("Attention! Wanted issue distributed!")
 		playsound(src, 'sound/machines/warning-buzzer.ogg', 75, 1)
-	return
 
 /obj/machinery/newscaster/say_quote(text)
 	return "beeps, [text]"

@@ -45,7 +45,10 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	implant_types = list(
@@ -57,6 +60,8 @@
 	id_type = /obj/item/weapon/card/id/ce
 
 /datum/outfit/chief_engineer/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
 
 // -- Station engineer
@@ -119,7 +124,10 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -127,6 +135,8 @@
 	id_type = /obj/item/weapon/card/id/engineering
 
 /datum/outfit/engineer/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/>")
 
 // -- Atmos tech
@@ -174,7 +184,10 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/engineering
@@ -224,7 +237,10 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/mechanic

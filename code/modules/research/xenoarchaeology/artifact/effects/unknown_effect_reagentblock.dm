@@ -23,7 +23,7 @@
 
 /datum/artifact_effect/reagentblock/DoEffectAura()
 	if(holder)
-		for(var/mob/living/carbon/C in range(effectrange,holder))
+		for(var/mob/living/carbon/C in range(effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(C.reagents.has_reagent(BLOCKIZINE))
@@ -34,7 +34,7 @@
 
 /datum/artifact_effect/reagentblock/DoEffectPulse()
 	if(holder)
-		for(var/mob/living/carbon/C in range(effectrange,holder))
+		for(var/mob/living/carbon/C in range(effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(C.reagents.has_reagent(BLOCKIZINE))

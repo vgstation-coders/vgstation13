@@ -67,7 +67,7 @@
 	recoil = 2
 	fire_sound = 'sound/weapons/hunting_fire.ogg'
 	fire_delay = 2
-	slowdown = 0
+	slowdown = NO_SLOWDOWN
 	var/scope_toggled = 0
 	gun_flags = SCOPED
 	var/recentpump = 0

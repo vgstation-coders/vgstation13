@@ -145,6 +145,8 @@
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 // -- Chemist
@@ -203,6 +205,8 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/chemist/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 // -- Paramedic
@@ -254,7 +258,10 @@
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
@@ -266,6 +273,8 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/paramedic/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 // -- Geneticist
@@ -316,6 +325,8 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/geneticist/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/><b>Science:</b> [SCI_FREQ] <br/>")
 
 // -- Virologist
@@ -367,4 +378,6 @@
 
 /datum/outfit/virologist/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")

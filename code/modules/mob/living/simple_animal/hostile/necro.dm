@@ -33,6 +33,94 @@
 	if(name == initial(name) && !unique_name)
 		name += " ([rand(1,1000)])"
 
+/mob/living/simple_animal/hostile/necro/meat_ghoul
+	name = "meat ghoul"
+	desc = "An abomination of muscle and fat. Ironically, it's very hungry."
+	icon = 'icons/obj/wizard.dmi'
+	icon_state = "meatghoul"
+	icon_living = "meatghoul"
+	icon_dead = "meatghoul_dead"
+	speak_chance = 0
+	turns_per_move = 1
+	speed = 5
+	move_to_delay = 3
+	maxHealth = 10
+	health = 10
+	melee_damage_lower = 5
+	melee_damage_upper = 8
+	attacktext = "meats"
+	environment_smash_flags = 0
+	var/bites = 3
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/proc/ghoulifyMeat(M)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/mType = M
+	bites = mType.bitesize
+	maxHealth += bites + mType.reagents.get_reagent_amount(NUTRIMENT)
+	health = maxHealth
+	melee_damage_upper += bites
+	melee_damage_lower += bites
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/Life()
+	..()
+	if(prob(bites))
+		new /obj/effect/decal/cleanable/blood(get_turf(src))
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/bite_act(mob/living/carbon/human/user)
+	..()
+	bites--
+	user.reagents.add_reagent(NUTRIMENT, bites)
+	playsound(user, 'sound/items/eatfood.ogg', 50, 1)
+	if(bites <= 0)
+		to_chat(user, "<span class='notice'>You devour \the [src]!</span>")
+		qdel(src)
+
+
+/mob/living/simple_animal/hostile/necro/meat_ghoul/death(var/gibbed = FALSE)
+	..(gibbed)
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul
+	name = "ghoulish animal"
+	desc = "A ghoulish animal"
+	icon_state = "skelly"
+	icon_living = "skelly"
+	icon_dead = "skelly_dead"
+	turns_per_move = 1
+	speed = 7
+	move_to_delay = 5
+	maxHealth = 30
+	health = 30
+	melee_damage_lower = 5
+	melee_damage_upper = 10
+	attacktext = "bites"
+	speak_emote = list("groans", "moans")
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul/proc/ghoulifyAnimal(S)
+	var/mob/living/aGhoul = S
+	var/icon/zombIcon = icon(aGhoul.icon, aGhoul.icon_state)
+	if(isanimal(aGhoul))
+		var/mob/living/simple_animal/ghoulToBe = aGhoul
+		zombIcon = icon(ghoulToBe.icon, ghoulToBe.icon_living)
+		speed = ghoulToBe.speed*2	//Slower than we were
+		maxHealth = ghoulToBe.maxHealth
+		health = maxHealth
+		melee_damage_upper = ghoulToBe.melee_damage_upper
+		melee_damage_lower = ghoulToBe.melee_damage_lower
+		attacktext = ghoulToBe.attacktext
+		speak = ghoulToBe.speak
+	zombIcon.ColorTone("#85B060")
+	icon = zombIcon
+	name = "[aGhoul.name] ghoul"
+	desc = "A ghoulish [aGhoul.name]."
+
+
+/mob/living/simple_animal/hostile/necro/animal_ghoul/death(var/gibbed = FALSE)
+	..(gibbed)
+	new /obj/effect/decal/cleanable/ash(loc)
+	qdel(src)
+
 /mob/living/simple_animal/hostile/necro/skeleton
 	name = "skeleton"
 	desc = "Truly the ride never ends."

@@ -105,11 +105,11 @@
 			qdel(insert_query)
 			return
 		qdel(insert_query)
-		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :text);",
+		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :log_text)",
 		list(
 			"ckey" = "[usr.ckey]",
 			"address" = "[usr.client.address]",
-			"text" = "Added new admin [adm_ckey] to rank [new_rank]",
+			"log_text" = "Added new admin [adm_ckey] to rank [new_rank]",
 		)) // FIXME: [sqlfdbkdb] is the default name of the feedback DB.
 		if(!log_query.Execute())
 			message_admins("Error: [log_query.ErrorMsg()]")
@@ -131,11 +131,11 @@
 				qdel(insert_query)
 				return
 			qdel(insert_query)
-			var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :text);",
+			var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :log_text)",
 				list(
 					"ckey" = "[usr.ckey]",
 					"address" = "[usr.client.address]",
-					"text" = "Edited the rank of [adm_ckey] to [new_rank]"
+					"log_text" = "Edited the rank of [adm_ckey] to [new_rank]"
 				)) // FIXME: [sqlfdbkdb] is the default name of the feedback DB.
 			if(!log_query.Execute())
 				message_admins("Error: [log_query.ErrorMsg()]")
@@ -202,11 +202,11 @@
 			qdel(insert_query)
 			return
 		qdel(insert_query)
-		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey', :address, :text);",
+		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey', :address, :log_text)",
 		 	list(
 				 "ckey" = "[usr.ckey]",
 				 "address" = "[usr.client.address]",
-				 "text" = "Removed permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]",
+				 "log_text" = "Removed permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]",
 			 ))
 		if(!log_query.Execute())
 			message_admins("Error: [log_query.ErrorMsg()]")
@@ -227,11 +227,11 @@
 			qdel(insert_query)
 			return
 		qdel(insert_query)
-		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :text)",
+		var/datum/DBQuery/log_query = SSdbcore.NewQuery("INSERT INTO [sqlfdbkdb].`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , :ckey, :address, :log_text)",
 		 	list(
 				 "ckey" = "[usr.ckey]",
 				 "address" = "[usr.client.address]",
-				 "text" = "Added permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]",
+				 "log_text" = "Added permission [rights2text(new_permission)] (flag = [new_permission]) to admin [adm_ckey]",
 		))
 		if(!log_query.Execute())
 			message_admins("Error: [log_query.ErrorMsg()]")

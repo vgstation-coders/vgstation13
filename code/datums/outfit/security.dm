@@ -60,6 +60,8 @@
 	id_type = /obj/item/weapon/card/id/hos
 
 /datum/outfit/hos/post_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Warden
@@ -83,7 +85,6 @@
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/hos/jensen,
 			slot_l_store_str = /obj/item/device/flash,
 		),
 		/datum/species/plasmaman = list(
@@ -124,6 +125,8 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/warden/post_equip(var/mob/living/carbon/human/H)
+	if (H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Detective
@@ -228,13 +231,15 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
+	if (H.mind)
+		return
+	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 
 // -- Offficer
 
@@ -257,7 +262,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/jackboots,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
-			slot_wear_suit_str = /obj/item/clothing/suit/armor/hos/jensen,
+			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest/security,
 			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_l_store_str = /obj/item/device/flash,
 		),
@@ -300,4 +305,6 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/officer/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")

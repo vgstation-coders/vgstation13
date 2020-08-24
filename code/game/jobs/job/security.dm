@@ -47,8 +47,8 @@
 	selection_color = "#ffeeee"
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels)
-	minimal_player_age = 7
 	outfit_datum = /datum/outfit/warden
+	minimal_player_age = 7
 
 /datum/job/warden/priority_reward_equip(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
@@ -88,10 +88,10 @@
 	supervisors = "the head of security"
 	wage_payout = 55
 	selection_color = "#ffeeee"
-	idtype = /obj/item/weapon/card/id/security
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels)
 	minimal_player_age = 7
+	outfit_datum = /datum/outfit/officer
 
 /datum/job/officer/get_total_positions()
 	. = ..()

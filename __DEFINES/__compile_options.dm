@@ -30,7 +30,8 @@
 //#define MAP_OVERRIDE 7
 // snaxi.dm
 //#define MAP_OVERRIDE 8
-
+// nrvhorizon.dm
+//#define MAP_OVERRIDE 9
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this

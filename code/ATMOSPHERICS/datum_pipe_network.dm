@@ -17,13 +17,28 @@
 	..()
 
 /datum/pipe_network/Destroy()
-	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
-		pipeline.network = null
-	line_members = null
-	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
-		objects.unassign_network(src)
-	normal_members = null
+	if(line_members)
+		for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
+			pipeline.network = null
+		line_members = null
+
+	if(normal_members)
+		for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
+			objects.unassign_network(src)
+		normal_members = null
+
 	pipe_networks -= src
+
+	if(air_transient)
+		qdel(air_transient)
+		air_transient = null
+
+	if(radiate)
+		qdel(radiate)
+		radiate = null
+
+	gases = null
+
 	..()
 
 /datum/pipe_network/proc/process()
@@ -73,6 +88,9 @@
 	for(var/datum/pipeline/line_member in giver.line_members)
 		line_member.network = src
 
+	giver.line_members = null
+	giver.normal_members = null
+	qdel(giver)
 
 	update_network_gases()
 	return 1

@@ -213,7 +213,7 @@
 	var/obj/item/device/assembly/infra/assembly
 	var/puffed = 0
 
-	var/list/smokes_n_mists = list(
+	var/static/list/smokes_n_mists = list(
 		/obj/effect/decal/chemical_puff,
 		/obj/effect/effect/smoke,
 		/obj/effect/effect/water,
@@ -295,14 +295,14 @@
 	..()
 
 ////////////////////////////////////Leaving the beam triggers the emitter//////////////////////
-/obj/effect/beam/infrared/target_moved(var/list/args)
+/obj/effect/beam/infrared/target_moved(atom/movable/mover)
 	hit()
 	..()
 
-/obj/effect/beam/infrared/target_density_change(var/list/args)
+/obj/effect/beam/infrared/target_density_change(atom/atom)
 	hit()
 	..()
 
-/obj/effect/beam/infrared/target_destroyed(var/list/args)
+/obj/effect/beam/infrared/target_destroyed(datum/thing)
 	hit()
 	..()

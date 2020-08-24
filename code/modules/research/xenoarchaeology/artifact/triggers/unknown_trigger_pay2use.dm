@@ -13,7 +13,7 @@
 
 /datum/artifact_trigger/pay2use/New()
 	..()
-	key_attackhand = my_artifact.on_attackhand.Add(src, "owner_attackhand")
+	my_artifact.lazy_register_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 	mode = rand(0,2)
 	reconnect_database()
@@ -190,7 +190,7 @@
 		payviacard(500, 3600, usr)
 
 /datum/artifact_trigger/pay2use/Destroy()
-	my_artifact.on_attackhand.Remove(key_attackhand)
+	my_artifact.lazy_unregister_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
 	my_artifact.on_attackby.Remove(key_attackby)
 	linked_db = null
 	..()

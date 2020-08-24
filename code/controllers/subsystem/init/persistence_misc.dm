@@ -135,3 +135,50 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 			continue
 		data["latest_rulesets"] |= "[some_ruleset.type]"
 	write_file(data)
+
+// This task has a unit test on code/modules/unit_tests/highscores.dm
+/datum/persistence_task/highscores
+	execute = TRUE
+	name = "Money highscores"
+	file_path = "data/persistence/money_highscores.json"
+
+/datum/persistence_task/highscores/on_init()
+	var/to_read = read_file()
+	if(!to_read)
+		log_debug("[name] task found an empty file on [file_path]")
+		return
+	for(var/list/L in to_read)
+		var/datum/record/money/record = new(L["ckey"], L["role"], L["cash"], L["shift_duration"], L["date"])
+		data += record
+
+/datum/persistence_task/highscores/on_shutdown()
+	var/list/L = list()
+	for(var/datum/record/money/record in data)
+		L += list(record.vars)
+	write_file(L)
+
+/datum/persistence_task/highscores/proc/insert_records(list/records)
+	data += records
+	cmp_field = "cash"
+	sortTim(data, /proc/cmp_list_by_element_asc)
+	data.Cut(6) // we only store the top 5
+	for(var/datum/record/money/record in data)
+		if(record in records)
+			if(data[1] == record)
+				announce_new_highest_record(record)
+			else
+				announce_new_record(record)
+
+/datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/record/money/record)
+	var/name = "Richest escape ever"
+	var/desc = "You broke the record of the richest escape! $[record.cash] chips accumulated."
+	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+
+/datum/persistence_task/highscores/proc/announce_new_record(var/datum/record/money/record)
+	var/name = "Good rich escape"
+	var/desc = "You made it to the top 5! You accumulated $[record.cash]."
+	give_award(record.ckey, /obj/item/clothing/accessory/medal/gold, name, desc, FALSE)
+
+/datum/persistence_task/highscores/proc/clear_records()
+	data = list()
+	fdel(file(file_path))

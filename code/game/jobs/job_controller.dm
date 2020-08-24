@@ -414,12 +414,11 @@ var/global/datum/controller/occupations/job_master
 		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
 			H.forceMove(S.loc)
 
-	var/balance_wallet = 0
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
-		balance_wallet = rand(100,250)
+		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
@@ -438,6 +437,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 				H.mind.initial_account = M
+				H.mind.initial_wallet_funds = balance_wallet
 
 			// If they're head, give them the account info for their department
 			if(H.mind && job.head_position)

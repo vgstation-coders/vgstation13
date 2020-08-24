@@ -729,7 +729,7 @@
 		/obj/item/weapon/pickaxe/jackhammer,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd,
-		/obj/item/weapon/rcd_ammo,
+		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
 		/obj/item/weapon/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
@@ -1163,8 +1163,8 @@
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/abstract/spawn_all/soviet_rigsuit,
-		/obj/abstract/spawn_all/nazi_rigsuit,
+		/obj/item/clothing/suit/space/rig/soviet,
+		/obj/item/clothing/suit/space/rig/nazi,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1239,8 +1239,8 @@
 	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/abstract/spawn_all/soviet_rigsuit,
-	/obj/abstract/spawn_all/nazi_rigsuit,
+	/obj/item/clothing/suit/space/rig/soviet,
+	/obj/item/clothing/suit/space/rig/nazi,
 	/obj/abstract/spawn_all/dredd_gear
 )
 
@@ -1415,21 +1415,18 @@
 // Spawn all in the turf
 /obj/abstract/spawn_all
 	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
 
 /obj/abstract/spawn_all/New()
 	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
 	for (var/thing in to_spawn)
-		new thing(get_turf(src))
-
-/obj/abstract/spawn_all/soviet_rigsuit
-	to_spawn = list(
-		/obj/item/clothing/suit/space/rig/soviet,
-	)
-
-/obj/abstract/spawn_all/nazi_rigsuit
-	to_spawn = list(
-		/obj/item/clothing/suit/space/rig/nazi,
-	)
+		new thing(location)
+	qdel(src)
 
 /obj/abstract/spawn_all/dredd_gear
 	to_spawn = list(

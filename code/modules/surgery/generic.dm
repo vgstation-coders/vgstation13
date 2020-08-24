@@ -41,8 +41,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 
-	min_duration = 40
-	max_duration = 50
+	duration = 4 SECONDS
 
 /datum/surgery_step/generic/cut_with_laser/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -90,8 +89,7 @@
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
 
-	min_duration = 80
-	max_duration = 120
+	duration = 8 SECONDS
 
 /datum/surgery_step/generic/incision_manager/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -108,7 +106,7 @@
 	"You start to construct a prepared incision on and within [target]'s [affected.display_name] with \the [tool].")
 	target.custom_pain("You feel a horrible, searing pain in your [affected.display_name] as it is pushed apart!",1, scream=TRUE)
 	tool.icon_state = "[initial(tool.icon_state)]_on"
-	spawn(max_duration)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
+	spawn(duration)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 		tool.icon_state = "[initial(tool.icon_state)]_off"
 	..()
 
@@ -148,8 +146,7 @@
 
 	priority = 0
 
-	min_duration = 40
-	max_duration = 50
+	duration = 4 SECONDS
 
 /datum/surgery_step/generic/cut_open/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	. = ..()
@@ -193,8 +190,7 @@
 		/obj/item/device/assembly/mousetrap = 20,
 		)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/generic/clamp_bleeders/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -235,8 +231,7 @@
 		/obj/item/weapon/kitchen/utensil/fork = 50
 		)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/generic/retract_skin/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -305,8 +300,7 @@
 	/obj/item/weapon/weldingtool = 25,
 	)
 
-	min_duration = 30
-	max_duration = 40
+	duration = 3 SECONDS
 
 /datum/surgery_step/generic/cauterize/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())
@@ -346,8 +340,7 @@
 		/obj/item/weapon/hatchet = 75,
 		)
 
-	min_duration = 110
-	max_duration = 160
+	duration = 11 SECONDS
 
 /datum/surgery_step/generic/cut_limb/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if (target_zone == "eyes")	//there are specific steps for eye surgery
@@ -398,8 +391,7 @@
 
 	priority = 0.1 //Tries to inject biofoam before other steps
 
-	min_duration = 10
-	max_duration = 20
+	duration = 1 SECONDS
 
 /datum/surgery_step/generic/injectfoam/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(..())

@@ -36,7 +36,7 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 	)
-	
+
 	items_to_collect = list(
 		/obj/item/weapon/storage/box/ids = GRASP_RIGHT_HAND,
 	)
@@ -50,6 +50,8 @@
 	id_type = /obj/item/weapon/card/id/silver
 
 /datum/outfit/hop/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 
 // -- QM
@@ -99,8 +101,10 @@
 
 
 /datum/outfit/qm/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
+	if (!H.mind)
+		return
+	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 
 // -- Cargo techie
 
@@ -146,6 +150,8 @@
 
 /datum/outfit/cargo_tech/post_equip(var/mob/living/carbon/human/H)
 	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
+	if (!H.mind)
+		return
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Shaft Miner
@@ -185,14 +191,17 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
 		),
 	)
-		
+
 	items_to_collect = list(
 		/obj/item/weapon/crowbar = GRASP_LEFT_HAND,
 		/obj/item/weapon/storage/bag/ore = slot_l_store_str,
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/shaftminer
@@ -200,4 +209,6 @@
 	id_type = /obj/item/weapon/card/id/supply
 
 /datum/outfit/mining/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")

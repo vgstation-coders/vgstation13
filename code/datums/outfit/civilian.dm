@@ -60,6 +60,8 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Bartender
@@ -101,10 +103,7 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
-		/obj/item/ammo_casing/shotgun/beanbag = SURVIVAL_BOX,
+		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
 		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
@@ -117,7 +116,18 @@
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/obj/abstract/spawn_all/bartender
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag,
+		/obj/item/ammo_casing/shotgun/beanbag
+	)
 
 // -- Chef
 
@@ -163,6 +173,8 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/chef/post_equip(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Botanist
@@ -237,6 +249,8 @@
 
 /datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
 
 // -- Clown
@@ -326,7 +340,7 @@
 	associated_job = /datum/job/mime
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -377,8 +391,9 @@
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
-	H.mind.miming = MIMING_OUT_OF_CHOICE
 	mob_rename_self(H,"mime")
+	if (H.mind)
+		H.mind.miming = MIMING_OUT_OF_CHOICE
 	return 1
 
 // -- Janitor
@@ -389,7 +404,7 @@
 	associated_job = /datum/job/janitor
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -436,7 +451,7 @@
 	associated_job = /datum/job/librarian
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -502,7 +517,7 @@
 	associated_job = /datum/job/iaa
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
@@ -596,8 +611,10 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/centcom
 
-/datum/outfit/lawyer/post_equip(var/mob/living/carbon/human/H)
+/datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	if (!H.mind)
+		return
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/>")
 
 // -- Chaplain
@@ -607,7 +624,7 @@
 	associated_job = /datum/job/chaplain
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage,
+		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
 		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
 		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
 		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,

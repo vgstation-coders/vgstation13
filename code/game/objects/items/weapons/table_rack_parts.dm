@@ -189,6 +189,15 @@
 /obj/item/weapon/table_parts/clockwork/clockworkify()
 	return
 
+/obj/item/weapon/table_parts/plastic
+	name = "plastic table parts"
+	desc = "Parts for a plastic table for your space patio."
+	icon_state = "plastic_tableparts"
+	starting_materials = list(MAT_PLASTIC = 3750)
+	table_type = /obj/structure/table/plastic
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amount = 5
+
 /obj/item/weapon/rack_parts
 	name = "rack parts"
 	desc = "Parts of a rack."

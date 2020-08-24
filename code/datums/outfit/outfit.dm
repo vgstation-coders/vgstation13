@@ -20,8 +20,10 @@
 	PROCS :
 	-- "Static" procs
 		- equip(var/mob/living/carbon/human/H): tries to equip everything on the list to the relevant slots. This is the "master proc".
+		- equip_items(var/list/L, var/mob/living/carbon/human/H, var/species): equips the items in the list L to the human H of the given species.
 		- equip_backbag(var/mob/living/carbon/human/H): equip the backbag with the correct pref, and tries to put items in it if possible.
-		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip) : changes items based on disbabilities registered
+		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip): changes items based on disabilities registered
+		- give_implants(var/mob/living/carbon/human/H): automatically implants the guy with the implants in the list.
 		- give_disabilities_equipment(var/mob/living/carbon/human/H): give the correct equipement for the disabilities the mob has, in the correct slots.
 
 	-- Procs you can override
@@ -29,7 +31,6 @@
 		- post_equip(var/mob/living/carbon/human/H): after the mob is fully dressed.
 		- spawn_id(var/mob/living/carbon/human/H, rank): give an ID to the mob. Overriden by striketeams.
 		- species_final_equip(var/mob/living/carbon/human/H): give internals/a tank to species as needed.
-
 		- special_equip(var/title, var/slot, var/mob/living/carbon/human/H): for the more exotic item slots.
 */
 
@@ -62,7 +63,7 @@
 	var/pda_type = null
 	var/id_type = null
 
-	// For job-slot combinations that require a bit more work than just equipping a string
+	// For job-slot combinations that require a bit more work than just equipping an item at a given slot
 	// Formatting  :
 	/*
 		special_snowflakes = list(
@@ -79,22 +80,6 @@
 /datum/outfit/New()
 	return
 
-
-/datum/outfit/proc/pre_equip(var/mob/living/carbon/human/H)
-	return
-
-/datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
-	if (H.client?.IsByondMember())
-		to_chat(H, "Thank you for supporting BYOND!")
-		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
-
-	if (!give_disabilities_equipment)
-		return
-	if (H.disabilities & ASTHMA)
-		items_to_collect[/obj/item/device/inhaler] = SURVIVAL_BOX
-	if (!items_to_equip[slot_glasses_str])
-		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
-
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
 /datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
@@ -106,8 +91,36 @@
 	if (!L) // Couldn't find the particular species
 		species = "Default"
 		L = items_to_spawn["Default"]
-	pre_equip_disabilities(H, L)
 
+	pre_equip_disabilities(H, L)
+	equip_items(L, H, species)
+	equip_backbag(H, species)
+	give_implants(H)
+	species_final_equip(H)
+	spawn_id(H)
+	post_equip(H) // Accessories, IDs, etc.
+	give_disabilities_equipment(H)
+	H.update_icons()
+
+// -- Modify mob or loadout before giving items
+/datum/outfit/proc/pre_equip(var/mob/living/carbon/human/H)
+	return
+
+// -- Handle disabilities
+/datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
+	if (H.client?.IsByondMember())
+		to_chat(H, "Thank you for supporting BYOND!")
+		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
+
+	if (!give_disabilities_equipment)
+		return
+	if (H.disabilities & ASTHMA)
+		items_to_collect[/obj/item/device/inhaler] = SURVIVAL_BOX
+	if (!items_to_equip[slot_glasses_str] && (H.disabilities & NEARSIGHTED))
+		items_to_equip[slot_glasses_str] = /obj/item/clothing/glasses/regular
+
+// Spawning the actual items contained in L
+/datum/outfit/proc/equip_items(var/list/L, var/mob/living/carbon/human/H, var/species)
 	for (var/slot in L)
 
 		var/list/snowflake_items = special_snowflakes[species]
@@ -119,31 +132,18 @@
 		var/obj_type = L[slot]
 		if (islist(obj_type)) // Special objects for alt-titles.
 			var/list/L2 = obj_type
-			if (H?.mind.role_alt_title in L2)
+			obj_type = null
+			if (H.mind && H.mind.role_alt_title)
 				obj_type = L2[H.mind.role_alt_title]
-			else // Mindless
-				obj_type = L2[1] // First item
-		if (!obj_type)
+			else // Mindless or spawned-in people get the first item.
+				var/default_title = L2[1]
+				obj_type = L2[default_title]
+		if (isnull(obj_type))
 			continue
 		slot = text2num(slot)
 		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
 
-	equip_backbag(H, species)
-
-	for (var/imp_type in implant_types)
-		var/obj/item/weapon/implant/I = new imp_type(H)
-		I.imp_in = H
-		I.implanted = 1
-		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
-		affected.implants += I
-		I.part = affected
-
-	species_final_equip(H)
-	spawn_id(H)
-	post_equip(H) // Accessories, IDs, etc.
-	give_disabilities_equipment(H)
-	H.update_icons()
-
+// -- Give out backbag and items to be collected in the backpack
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H, var/species)
 	// -- Backbag
 	var/obj/item/chosen_backpack = null
@@ -162,11 +162,18 @@
 		H.equip_to_slot_or_del(new chosen_backpack(H), slot_back, 1)
 		for (var/item_type in items_to_collect)
 			H.equip_or_collect(new item_type(H.back), slot_in_backpack)
+		// -- Special surival gear for that species
 		if (equip_survival_gear.len)
-			if (ispath(equip_survival_gear[species]))
-				var/path = equip_survival_gear[species]
+
+			var/my_species = H.species.type // This temporary var is necessary.
+
+			if (ispath(equip_survival_gear[my_species]))
+				var/path = equip_survival_gear[my_species]
 				H.equip_or_collect(new path(H.back), slot_in_backpack)
-		else if (equip_survival_gear) //
+			// -- No special path, but the outfit still needs to give out a surival box => we give out the default one
+			else
+				H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
+		else if (equip_survival_gear)
 			H.equip_or_collect(new H.species.survival_gear(H.back), slot_in_backpack)
 
 		// Special alt-title items
@@ -206,11 +213,23 @@
 				var/chosen_slot = special_items[item_type]
 				H.equip_to_slot_if_possible(new item_type(get_turf(H)), chosen_slot)
 
+// -- Implant the dude
+/datum/outfit/proc/give_implants(var/mob/living/carbon/human/H)
+	for (var/imp_type in implant_types)
+		var/obj/item/weapon/implant/I = new imp_type(H)
+		I.imp_in = H
+		I.implanted = 1
+		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
+		affected.implants += I
+		I.part = affected
+
+// -- Species-related equip (turning on internals, etc)
 /datum/outfit/proc/species_final_equip(var/mob/living/carbon/human/H)
 	if (H.species)
 		H.species.final_equip(H)
 
-/datum/outfit/proc/spawn_id(var/mob/living/carbon/human/H, rank)
+// -- Spawn correct ID and PDA
+/datum/outfit/proc/spawn_id(var/mob/living/carbon/human/H)
 	if (!associated_job)
 		CRASH("Outfit [outfit_name] has no associated job, and the proc to spawn the ID is not overriden.")
 	var/datum/job/concrete_job = new associated_job
@@ -219,11 +238,13 @@
 	C = new id_type(H)
 	C.access = concrete_job.get_access()
 	C.registered_name = H.real_name
-	C.rank = rank
+	C.rank = concrete_job.title
 	C.assignment = H.mind ? H.mind.role_alt_title : concrete_job.title
 	C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-	C.associated_account_number = H?.mind?.initial_account.account_number
+	C.associated_account_number = H?.mind?.initial_account?.account_number
 	H.equip_or_collect(C, slot_wear_id)
+	if(C.virtual_wallet && H.mind)
+		C.update_virtual_wallet(H.mind.initial_wallet_funds)
 
 	if (pda_type)
 		var/obj/item/device/pda/pda = new pda_type(H)
@@ -232,19 +253,16 @@
 		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
 		H.equip_or_collect(pda, pda_slot)
 
-
+// -- Things to do AFTER all the equipment is given (ex: accessories)
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
 
-// Special snowflakes.
-/datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
-	return
-
+// -- Final disabilities things, after all is given
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
 	if (!give_disabilities_equipment)
 		return
 
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
+	// -- Automatically giving out a wheelchair if the guy can't stand
 	if(!H.check_stand_ability())
 		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
 		W.buckle_mob(H,H)
@@ -254,6 +272,10 @@
 		G.prescription = 1
 
 	return 1
+
+// Special snowflakes : handle special cases for a given title and a given slot
+/datum/outfit/proc/special_equip(var/title, var/slot, var/mob/living/carbon/human/H)
+	return
 
 // Strike teams have 2 particularities : a leader, and several specialised roles.
 // Give the concrete (instancied) outfit datum the right "specialisation" after the player made his choice.

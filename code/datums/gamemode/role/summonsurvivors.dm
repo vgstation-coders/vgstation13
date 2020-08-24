@@ -48,3 +48,23 @@
 /datum/role/wizard/summon_magic/GetScoreboard()
 	. = ..()
 	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
+
+/datum/role/wizard/summon_potions
+	disallow_job = FALSE
+	name = POTION
+	id = POTION
+	logo_state = "magik-logo"
+	var/summons_received
+
+/datum/role/wizard/summon_potions/ForgeObjectives()
+	var/datum/objective/survive/potions/S = new
+	AppendObjective(S)
+
+/datum/role/wizard/summon_potions/Greet()
+	to_chat(antag.current, "<B>You are a Potion Seller!</B><BR>Your own safety matters abov- Fuck that, GO SELL SOME POTIONS!")
+
+/datum/role/wizard/summon_potions/OnPostSetup()
+	return TRUE
+/datum/role/wizard/summon_potions/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"

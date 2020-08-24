@@ -1587,25 +1587,6 @@
 	potency = 30
 	ideal_light = 0
 
-
-/datum/seed/test
-	name = "test"
-	seed_name = "testing"
-	seed_noun = "data"
-	display_name = "runtimes"
-	products = list(/mob/living/simple_animal/cat/Runtime)
-
-	nutrient_consumption = 0
-	water_consumption = 0
-	pest_tolerance = 11
-	weed_tolerance = 11
-	lifespan = 1000
-	endurance = 100
-	maturation = 1
-	production = 1
-	yield = 1
-	potency = 1
-
 /datum/seed/nofruit
 	name = "nofruit"
 	seed_name = "no-fruit"

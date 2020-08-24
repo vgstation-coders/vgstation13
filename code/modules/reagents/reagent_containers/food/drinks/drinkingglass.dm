@@ -495,7 +495,7 @@
 			if(SYNDICATEBOMB)
 				icon_state = "syndicatebomb"
 				name = "\improper Syndicate Bomb"
-				desc = "Somebody set us up the bomb!"
+				desc = "Somebody set up us the bomb!"
 				isGlass = 0//blablabla hidden features, blablabla joke material
 			if(ERIKASURPRISE)
 				icon_state = "erikasurprise"
@@ -806,7 +806,7 @@
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
-	
+
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
 

@@ -263,6 +263,11 @@ var/global/list/damage_icon_parts = list()
 	if(!skeleton && !husk && !hulk)
 		if(species.anatomy_flags & MULTICOLOR)
 			stand_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
+		else if(species.anatomy_flags & RGBSKINTONE)
+			my_appearance.r_hair = clamp(my_appearance.r_hair, 0, 80)	//So we don't get rainbow monkeymen roaches
+			my_appearance.g_hair = clamp(my_appearance.g_hair, 0, 50)
+			my_appearance.b_hair = clamp(my_appearance.b_hair, 0, 35)
+			stand_icon.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
 		else if(species.anatomy_flags & HAS_SKIN_TONE)
 			if(my_appearance.s_tone >= 0)
 				stand_icon.Blend(rgb(my_appearance.s_tone, my_appearance.s_tone, my_appearance.s_tone), ICON_ADD)
@@ -284,7 +289,7 @@ var/global/list/damage_icon_parts = list()
 			stand_icon.Blend(eyes, ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
-		if(lip_style && (species && species.anatomy_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
+		if(lip_style)
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 		if(eye_style)
