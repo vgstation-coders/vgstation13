@@ -19,7 +19,7 @@
 
 /datum/artifact_effect/robohurt/DoEffectAura()
 	if(holder)
-		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
+		for (var/mob/living/silicon/robot/M in range(src.effectrange,get_turf(holder)))
 			if(prob(10))
 				to_chat(M, "<span class='warning'>SYSTEM ALERT: Harmful energy field detected!</span>")
 			M.adjustBruteLoss(1)
@@ -29,7 +29,7 @@
 
 /datum/artifact_effect/robohurt/DoEffectPulse()
 	if(holder)
-		for (var/mob/living/silicon/robot/M in range(src.effectrange,holder))
+		for (var/mob/living/silicon/robot/M in range(src.effectrange,get_turf(holder)))
 			to_chat(M, "<span class='warning'>SYSTEM ALERT: Structural damage inflicted by energy pulse!</span>")
 			M.adjustBruteLoss(10)
 			M.adjustFireLoss(10)

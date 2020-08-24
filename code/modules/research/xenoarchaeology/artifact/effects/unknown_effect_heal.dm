@@ -39,7 +39,7 @@
 /datum/artifact_effect/heal/DoEffectAura()
 	//todo: check over this properly
 	if(holder)
-		for (var/mob/living/carbon/C in range(src.effectrange,holder))
+		for (var/mob/living/carbon/C in range(src.effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				if(prob(10))
@@ -54,7 +54,7 @@
 /datum/artifact_effect/heal/DoEffectPulse()
 	//todo: check over this properly
 	if(holder)
-		for (var/mob/living/carbon/C in range(src.effectrange,holder))
+		for (var/mob/living/carbon/C in range(src.effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(C)
 			if(prob(weakness * 100))
 				to_chat(C, "<span class='notice'>A wave of energy invigorates you.</span>")
