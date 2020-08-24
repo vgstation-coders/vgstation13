@@ -125,7 +125,7 @@ var/list/beam_master = list()
 
 /obj/item/projectile/beam/dumbfire(var/dir)
 	dir = dir ? dir : src.dir
-	starting = starting ? starting : src.loc
+	starting = starting || loc
 
 	var/vector/origin = atom2vector(starting)
 	var/vector/direction = dir2vector(dir)
