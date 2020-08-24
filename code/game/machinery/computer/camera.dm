@@ -29,7 +29,6 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 /obj/machinery/computer/security/New()
 	..()
-	init_action_buttons()
 
 	if (ticker && ticker.current_state  == GAME_STATE_PLAYING)
 		init_cams()
@@ -171,7 +170,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/datum/action/camera/next/N = new(src)
 	var/datum/action/camera/follow/F = new(src)
 	var/datum/action/camera/subscribe/S = new(src)
-	our_actions = list(P, C, L, N, F, S)
+	return list(P, C, L, N, F, S)
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
 	name = "high-definition Spess.TV telescreen"
