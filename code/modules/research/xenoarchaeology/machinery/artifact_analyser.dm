@@ -192,6 +192,14 @@ var/anomaly_report_num = 0
 			phasing suggested?"
 		if(/obj/structure/crystal)
 			return "Crystal formation - Pseudo organic crystalline matrix, unlikely to have formed naturally. No known technology exists to synthesize this exact composition."
+		if(/obj/machinery/communication)
+			return "Ancient Communivation Device - Requires to be wrenched in a powered area. Permits bluespace communication between the bearers of the crystals."
+		if(/obj/structure/essence_printer)
+			return "Essence Printer - Interaction of a human with the item seem to bind their essence to the stone. Under unknown circumstances, a sentient clone of the human will come out of the stone, whether the original human is alive or dead."
+		if(/obj/item/clothing/gloves/warping_claws)
+			return "Warping Claws - Permits quick travel by ripping straight through the fabric of space. Those claws are quite cumbersome however, do not expect being able to use any machine while wearing them."
+		if(/obj/machinery/singularity_beacon)
+			return "Ominous Beacon - Graviton attraction device. Will converge nearby gravitational singularities toward itself so long as it remains powered."
 		if(/obj/machinery/artifact)
 			//the fun one
 			var/obj/machinery/artifact/A = scanned_obj
