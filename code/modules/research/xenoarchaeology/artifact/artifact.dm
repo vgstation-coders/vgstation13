@@ -18,6 +18,7 @@
 	//5;/obj/machinery/syndicate_beacon,
 	5;/obj/item/clothing/mask/stone,
 	5;/obj/item/changeling_vial,
+	5;/obj/item/weapon/bloodcult_pamphlet/oneuse,
 	10;/obj/structure/constructshell,
 	25;/obj/machinery/power/supermatter,
 	100;/obj/item/clothing/gloves/warping_claws,
