@@ -227,7 +227,7 @@
 	enemy_jobs = list("Security Officer","Warden", "Detective","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 4
-	required_enemies = 2
+	required_enemies = (2,2,2,2,2,2,2,2,2,2)
 	weight = 1
 	cost = 30
 	requirements = list(90,80,60,30,20,10,10,10,10,10)
@@ -316,7 +316,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
 	required_candidates = 5 //This value is useless, see operative_cap
-	required_enemies = 3
+	required_enemies = (3,3,3,3,3,3,3,3,3,3)
 	weight = 1
 	cost = 40
 	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
