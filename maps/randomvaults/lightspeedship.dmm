@@ -1,6 +1,7 @@
 "aa" = (/turf/space,/area)
 "ab" = (/obj/structure/shuttle/engine/propulsion{dir = 8},/turf/space,/area/shuttle/lightship/start)
 "ac" = (/obj/structure/window/reinforced{dir = 4},/obj/structure/shuttle/engine/heater{dir = 8},/turf/simulated/floor/plating/airless,/area/shuttle/lightship/start)
+"ad" = (/obj/machinery/power/battery/smes{charge = 0},/obj/structure/cable{d2 = 8; icon_state = "0-8"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "ag" = (/obj/structure/shuttle/engine/propulsion/left{dir = 8},/turf/space,/area/shuttle/lightship/start)
 "ah" = (/obj/structure/closet/crate,/obj/abstract/map/spawner/engi/materials,/obj/machinery/light_switch{dir = 1; pixel_y = 25},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
 "aj" = (/obj/structure/closet/emcloset,/obj/machinery/light{dir = 1},/turf/simulated/floor/plating,/area/shuttle/lightship/start)
@@ -82,7 +83,6 @@
 "dl" = (/obj/machinery/vending/engineering,/turf/simulated/floor{dir = 9; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dm" = (/obj/structure/table,/obj/item/stack/sheet/plasteel{amount = 50},/obj/structure/cable{d1 = 2; d2 = 4; icon_state = "2-4"},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dn" = (/obj/structure/cable{d1 = 4; d2 = 8; icon_state = "4-8"; pixel_y = 0},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
-"do" = (/obj/machinery/power/battery/smes{charge = 0},/turf/simulated/floor{dir = 1; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dp" = (/obj/structure/table,/obj/item/device/radio{pixel_y = 6},/obj/item/device/radio{pixel_x = 6; pixel_y = 4},/obj/item/device/radio{pixel_x = -6; pixel_y = 4},/obj/item/device/radio,/obj/machinery/light{dir = 1},/turf/simulated/floor{dir = 5; icon_state = "whiteyellow"},/area/shuttle/lightship/start)
 "dr" = (/obj/machinery/am_shielding/map,/turf/simulated/floor/engine,/area/shuttle/lightship/start)
 "du" = (/turf/simulated/floor{dir = 1; icon_state = "whitered"},/area/shuttle/lightship/start)
@@ -286,7 +286,7 @@ aaaLiFiAbsbtbubvbwhAbxgRgRbAbBgSbDhIbFhAcBdBdBdTdHhAezfHfUcddKivcLaaaaaaaaaaaaaa
 aahXhNiAbNhyhyhyeDhPgIgIgIgIgIhohphphqhAbWhyhyhycagScchycecfcghXiFhNcLaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 aLiFhNiAckclfBfBcohzhEhEhEhEhEhGcwgUcyhAdzhyhyhycDgMcFcIhycIcJhXhNhNiFeteMivhNhNcLaaaaaaaaaaaaaaaa
 hXhNhNhQhNhNgkhNhNivhNhNhNivgkiFhNhNhNiAcPcQcRdAcThGcVhycXhycYhAdadbdcesfdhXhNhNiFdKhNivhNhNhNdhaa
-gSdjdkgSdldmdndodpeBdrdrdrhAfndudvdwdxhPdzfmfpdAcDhAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
+gSdjdkgSdldmdnaddpeBdrdrdrhAfndudvdwdxhPdzfmfpdAcDhAdDcIhycIdFgSdbeugKeueshPdJdMdLdMdNhAdPdQdRgSaa
 ibdUdUibdVdWfBaZdYdZdrdrdrhAeXfqhyfFfagMeuehiiejekhAeleoeoeoepgMeueseueseugMevgagagaexhAeRhyeAipaa
 hPdUdUhPdVbmeEeFeGeHdrdrdrhAeIhyhyhyfahXhNhNhPhNhNhQhNgMhPhNhNhNhNhNhNhNhNiAhyfVfVfVhyhPeREkeTeUaa
 ibdUdUibdVbreVeVeWeBdrdrdrhAeXeYhyfnfagMhphphphpffhAfhhUfRhUhUgMfnfqfnfqfngMfrfsfsfsftfueRhyfvfEaa
