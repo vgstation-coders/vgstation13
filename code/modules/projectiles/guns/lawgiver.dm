@@ -153,9 +153,6 @@ var/list/lawgiver_modes = list(
 	if(magazine)
 		qdel(magazine)
 		magazine = null
-	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
 	..()
 
 /obj/item/weapon/gun/lawgiver/GetVoice()
