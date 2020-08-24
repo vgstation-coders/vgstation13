@@ -3,7 +3,6 @@
 	valid_style_types = list(ARTIFACT_STYLE_WIZARD, ARTIFACT_STYLE_RELIQUARY, ARTIFACT_STYLE_PRECURSOR)
 	effect = list(ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 	effect_type = 2
-	var/create_air = 0 	//If set to 1 will create air-filled floors. Always at 0 for the time being.
 	var/randomize = 1 	//If set to 1 will create random floors. Always at 1 for the time being.
 	var/available_floors = list(			
 		/turf/simulated/floor/carpet, 
@@ -42,9 +41,5 @@
 					floortype = pick(available_floors)
 				else
 					floortype = /turf/simulated/floor
-				shadow(T,holder.loc,"artificer_convert")
-				if(!create_air && istype(T, /turf/space))	//if space, make sure you aren't magically generating air.	
-					T.ChangeTurf(floortype).air = null
-				else
-					T.ChangeTurf(floortype)
+				T.ChangeTurf(floortype)
 				sleep(2)
