@@ -42,12 +42,6 @@
 						floortype.oxygen = 0.01
 						floortype.nitrogen = 0.01
 						floortype.temperature = TCMB
-					else						//if not space, take the air from the turf
-						floortype.oxygen = T.oxygen
-						floortype.nitrogen = T.nitrogen
-						floortype.carbon_dioxide = T.carbon_dioxide
-						floortype.toxins = T.toxins
-						floortype.temperature = T.temperature
 				shadow(T,holder.loc,"artificer_convert")
 				T.ChangeTurf(floortype)
 				sleep(2)
