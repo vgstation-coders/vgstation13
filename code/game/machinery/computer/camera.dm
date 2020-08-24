@@ -16,8 +16,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/network = list(CAMERANET_SS13)
 	var/mapping = 0//For the overview file, interesting bit of code.
 
-	var/list/datum/action/camera/our_actions = list()
-
+	var/list/list/our_actions = list() // assoc list of mob -> list/datum/action
 	light_color = LIGHT_COLOR_RED
 
 /obj/machinery/computer/security/proc/init_action_buttons()
@@ -26,7 +25,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/datum/action/camera/cyborg/C1 = new(src)
 	var/datum/action/camera/listing/L = new(src)
 	var/datum/action/camera/next/N = new(src)
-	our_actions = list(P, C, C1, L, N)
+	return list(P, C, C1, L, N)
 
 /obj/machinery/computer/security/New()
 	..()
@@ -90,13 +89,33 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	if (!current || !(current.can_use())) // No suitable active camera
 		init_cams()
-	if (current) // Did we find a camera
-		for (var/datum/action/camera/action in our_actions)
-			if (action.owner && action.owner != user)
-				action.Remove(action.owner)
-			action.Grant(user)
-	else
+	start_watching(user)
+
+/obj/machinery/computer/security/proc/start_watching(mob/user)
+	if (!current) // Did we find a camera
 		to_chat(user, "<span class='warning'>No active cameras found.</span>")
+		return
+
+	var/list/user_actions = init_action_buttons()
+	our_actions[user] = user_actions
+	for(var/datum/action/action_datum in user_actions)
+		action_datum.Grant(user)
+
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/user_moved)
+
+/obj/machinery/computer/security/proc/stop_watching(mob/user)
+	user.cancel_camera()
+	for(var/datum/action/action_datum in our_actions[user])
+		action_datum.Remove(user)
+		qdel(action_datum)
+	our_actions -= user
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/user_moved)
+
+/obj/machinery/computer/security/proc/user_moved(mob/mover)
+	if(is_in_range(mover))
+		return
+	stop_watching(mover)
+
 
 /obj/machinery/computer/security/telescreen
 	name = "Telescreen"
@@ -325,8 +344,8 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	button_icon_state = "cancel"
 
 /datum/action/camera/cancel/Trigger()
-	var/mob/living/user = owner
-	user.cancel_camera()
+	var/obj/machinery/computer/security/console = target
+	console.stop_watching(owner)
 
 /datum/action/camera/follow
 	name = "Follow!"
