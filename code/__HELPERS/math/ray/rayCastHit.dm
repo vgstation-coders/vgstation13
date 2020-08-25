@@ -14,6 +14,13 @@
 	src.distance = info.distance
 	src.hit_type = hit_type
 
+/rayCastHit/Destroy()
+	used_ray = null
+	hit_atom = null
+	point = null
+	point_raw = null
+	..()
+
 //see ray.dm for defines
 /rayCastHit/proc/hit_code()
 	if(hit_type < RAY_CAST_NO_HIT_CONTINUE)

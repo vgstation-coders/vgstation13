@@ -32,6 +32,12 @@
 	direction = p_direction.chebyshev_normalized()
 	src.z = z
 
+/ray/Destroy()
+	origin = null
+	origin_floored = null
+	direction = null
+	..()
+
 //check if ray equals other ray
 /ray/proc/equals(var/ray/other_ray)
 	return src.direction.equals(other_ray.direction) && src.hitsPoint(other_ray.origin)

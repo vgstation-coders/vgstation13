@@ -11,3 +11,10 @@
 	src.point = point
 	src.point_raw = point_raw
 	src.distance = distance
+
+/rayCastHitInfo/Destroy()
+	used_ray = null
+	hit_atom = null
+	point = null
+	point_raw = null
+	..()
