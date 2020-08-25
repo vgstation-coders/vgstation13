@@ -33,11 +33,8 @@
 	src.z = z
 
 /ray/Destroy()
-	qdel(origin)
 	origin = null
-	qdel(origin_floored)
 	origin_floored = null
-	qdel(direction)
 	direction = null
 	..()
 
