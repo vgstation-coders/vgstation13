@@ -617,9 +617,7 @@
 
 	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))	//If its a gravity gun set the charge to 200 so the game doesnt break.
 		new_gun.charge_cost = 200			
-	if(istype(new_gun.projectile_type, /obj/item/projectile/beam/white))	//If its a rainbow laser give it a random color, the color wont change after this, though.
-		new_gun.projectile_type.projectile_color= pick(list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3"))
-
+		
 	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
 		'sound/weapons/alien_laser1.ogg',
 		'sound/weapons/alien_laser2.ogg',
