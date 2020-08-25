@@ -555,7 +555,7 @@
 		/obj/item/weapon/gun/energy/laser/captain	=	15,		//15% chance to be self-recharging
 		/obj/item/weapon/gun/energy/bison			= 	5,		//5% chance to be pump-charge
 	))
-	var/obj/item/weapon/gun/energy/new_gun = new /obj/item/weapon/gun/energy
+	var/obj/item/weapon/gun/energy/new_gun = new gun_base
 	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'
 	new_gun.icon_state = "egun[rand(1,6)]"
 	new_gun.item_state = new_gun.icon_state
@@ -564,14 +564,15 @@
 	new_gun.desc = ""
 
 	//Randomize it!
-	new_gun.fire_delay = rand(1, 5)			//Randomize the fire delay
-	new_gun.charge_cost = rand(25, 200)		//Randomize the cost-per-fire (how many shots it has)
+	var/delay = rand(1, 20)
+	new_gun.fire_delay = delay		//Randomize the fire delay
+	new_gun.attack_delay = delay
+	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
 	new_gun.projectile_type = pickweight(list(		//Randomize the beam it fires. Standard laser deals 30 burn.
 
 		/obj/item/projectile/beam 							= 250,	
 		/obj/item/projectile/beam/captain					= 80,	//40 damage
 		/obj/item/projectile/beam/retro						= 120,
-		/obj/item/projectile/beam/lightning 				= 70,	//Will this break anything?
 		/obj/item/projectile/beam/practice					= 130,	//Deals no damage.
 		/obj/item/projectile/beam/lightlaser				= 120,	//25 damage
 		/obj/item/projectile/beam/weaklaser					= 130,	//15 damage
@@ -602,35 +603,38 @@
 		/obj/item/projectile/energy/electrode/fast			= 80,	//fast tasers
 		/obj/item/projectile/energy/electrode/scatter		= 80,	//3-way tasers
 		//DUMB SHIT
-		/obj/item/projectile/energy/osipr					= 20,	//oh no
+		/obj/item/projectile/energy/osipr					= 10,	//oh no
 		/obj/item/projectile/energy/rad						= 50,	//30 damage, irradiates
-		/obj/item/projectile/gravitywell					= 5,	//uh oh
+		/obj/item/projectile/gravitywell					= 10,	//uh oh
 		/obj/item/projectile/beam/pulse						= 40,	//50 damage, destroys walls
 		/obj/item/projectile/energy/electrode/scatter/sun 	= 10,	//holy christ
 		/obj/item/projectile/swap							= 50,	//swap staff bolts
 		/obj/item/projectile/forcebolt						= 50,	//mental focus bolts
-		/obj/item/projectile/beam/mindflayer				= 60,	//deals brain damage
+		/obj/item/projectile/beam/mindflayer				= 50,	//deals brain damage
 	))	
 
-	new_gun.fire_sound = pick(				//Randomize the sound it makes
-		'sound/weapons/alien_laser1.ogg'
-		'sound/weapons/alien_laser2.ogg'
-		'sound/weapons/blaster.ogg'
-		'sound/weapons/electriczap.ogg'
-		'sound/weapons/hivehand.ogg'
-		'sound/weapons/kinetic_accelerator.ogg'
-		'sound/weapons/Laser.ogg'
-		'sound/weapons/Laser2.ogg'
-		'sound/weapons/laser3.ogg'
-		'sound/weapons/lasercannonfire.ogg'
-		'sound/weapons/ion.ogg'
-		'sound/weapons/megabuster.ogg'
-		'sound/weapons/pulse.ogg'
-		'sound/weapons/pulse2.ogg'
-		'sound/weapons/pulse3.ogg'
-		'sound/weapons/Taser.ogg'
+	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))
+		new_gun.charge_cost = 200			//If its a gravity gun set the charge to the max so the game doesnt break.
+
+	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
+		'sound/weapons/alien_laser1.ogg',
+		'sound/weapons/alien_laser2.ogg',
+		'sound/weapons/blaster.ogg',
+		'sound/weapons/electriczap.ogg',
+		'sound/weapons/hivehand.ogg',
+		'sound/weapons/kinetic_accelerator.ogg',
+		'sound/weapons/Laser.ogg',
+		'sound/weapons/Laser2.ogg',
+		'sound/weapons/laser3.ogg',
+		'sound/weapons/lasercannonfire.ogg',
+		'sound/weapons/ion.ogg',
+		'sound/weapons/megabuster.ogg',
+		'sound/weapons/pulse.ogg',
+		'sound/weapons/pulse2.ogg',
+		'sound/weapons/pulse3.ogg',
+		'sound/weapons/Taser.ogg',
 		'sound/weapons/Taser2.ogg'
-	)
+	))
 	
 
 	//5% chance to explode when first fired
@@ -649,7 +653,6 @@
 
 /datum/find/laser/additional_description(var/obj/item/I)
 	I.desc += "Looks like an antique energy weapon, you're not sure if it will fire or not."
-	var/obj/item/
 	if(istype(I, /obj/item/weapon/gun/energy/bison))
 		I.desc += "There seems to be some sort of pump on the back of the stock."
 	if(prob(10)) // 10% chance to be a smart gun
