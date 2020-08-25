@@ -15,7 +15,6 @@
 	src.hit_type = hit_type
 
 /rayCastHit/Destroy()
-	..()
 	qdel(used_ray)
 	used_ray = null
 	qdel(hit_atom)
@@ -24,6 +23,7 @@
 	point = null
 	qdel(point_raw)
 	point_raw = null
+	..()
 
 //see ray.dm for defines
 /rayCastHit/proc/hit_code()

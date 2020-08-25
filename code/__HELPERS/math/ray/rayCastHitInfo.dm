@@ -13,7 +13,6 @@
 	src.distance = distance
 
 /rayCastHitInfo/Destroy()
-	..()
 	qdel(used_ray)
 	used_ray = null
 	qdel(hit_atom)
@@ -22,3 +21,4 @@
 	point = null
 	qdel(point_raw)
 	point_raw = null
+	..()
