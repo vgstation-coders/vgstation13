@@ -26,6 +26,13 @@ var/list/beam_master = list()
 	..(p_origin, p_direction, fired_beam.starting.z)
 	src.fired_beam = fired_beam
 
+/ray/beam_ray/Destroy()
+	..()
+	fired_beam = null
+	for(var/rayCastHit/H in hit_cache)
+		qdel(H)
+	hit_cache = null
+
 /ray/beam_ray/cast(max_distance, max_hits, ignore_origin)
 	. = ..()
 	hit_cache = .
@@ -65,6 +72,12 @@ var/list/beam_master = list()
 	var/wait = 0
 	var/beam_color= null
 	var/list/ray/past_rays = list() //full of rays
+
+/obj/item/projectile/beam/Destroy()
+	..()
+	for(var/ray/R in past_rays)
+		qdel(R)
+	past_rays = null
 
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
