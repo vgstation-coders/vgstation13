@@ -564,10 +564,7 @@
 	new_gun.desc = ""
 
 	//Randomize it!
-	var/delay = rand(1, 20)
-	new_gun.fire_delay = delay		//Randomize the fire delay
-	new_gun.attack_delay = delay
-	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
+	
 	new_gun.projectile_type = pickweight(list(		//Randomize the beam it fires. Standard laser deals 30 burn.
 
 		/obj/item/projectile/beam 							= 250,	
@@ -607,14 +604,21 @@
 		/obj/item/projectile/energy/rad						= 50,	//30 damage, irradiates
 		/obj/item/projectile/gravitywell					= 10,	//uh oh
 		/obj/item/projectile/beam/pulse						= 40,	//50 damage, destroys walls
-		/obj/item/projectile/energy/electrode/scatter/sun 	= 10,	//holy christ
+//		/obj/item/projectile/energy/electrode/scatter/sun 	= 10,	//holy christ
 		/obj/item/projectile/swap							= 50,	//swap staff bolts
 		/obj/item/projectile/forcebolt						= 50,	//mental focus bolts
 		/obj/item/projectile/beam/mindflayer				= 50,	//deals brain damage
 	))	
+	
+	var/delay = rand(1, 20)	
+	new_gun.fire_delay = delay		//Randomize the fire delay
+	new_gun.attack_delay = delay
+	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
 
-	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))
-		new_gun.charge_cost = 200			//If its a gravity gun set the charge to the max so the game doesnt break.
+	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))	//If its a gravity gun set the charge to 200 so the game doesnt break.
+		new_gun.charge_cost = 200			
+	if(istype(new_gun.projectile_type, /obj/item/projectile/beam/white))	//If its a rainbow laser give it a random color, the color wont change after this, though.
+		new_gun.projectile_type.projectile_color= pick(list("#FF0000","#FF8C00","#FFFF00","#00FF00","#00BFFF","#0000FF","#9400D3"))
 
 	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
 		'sound/weapons/alien_laser1.ogg',
