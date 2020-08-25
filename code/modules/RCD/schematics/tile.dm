@@ -157,7 +157,7 @@
 /datum/paint_info/proc/validate(var/turf/simulated/floor/test)
 	switch (ftype)
 		if (PAINT_FLOOR) //why is it named plasteel anyway?
-			if (!(istype(test.floor_tile,/obj/item/stack/tile/plasteel)))
+			if (!(ispath(test.floor_tile,/obj/item/stack/tile/plasteel)))
 				return 0 //if it's carpet, wood or some other stuff, we aren't going to paint that
 			if (istype(test, /turf/simulated/floor/engine))
 				return 0 	//reinforced floor has plasteel in floor_tile too

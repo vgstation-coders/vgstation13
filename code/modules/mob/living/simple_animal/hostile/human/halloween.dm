@@ -465,8 +465,7 @@
 				return
 			if(prob(15))
 				visible_message("<span class = 'warning'>\The [src] pries up \the [F]!</span>")
-			F.floor_tile.forceMove(src)
-			F.floor_tile = null
+			new F.floor_tile(src)
 			F.make_plating()
 
 /mob/living/simple_animal/hostile/syphoner/CanAttack(var/atom/the_target)

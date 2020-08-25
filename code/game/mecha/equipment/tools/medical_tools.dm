@@ -359,7 +359,7 @@
 		var/turf/simulated/floor/T = new_turf
 		if(!T.is_plating())
 			if(!T.broken && !T.burnt)
-				new T.floor_tile.type(T)
+				new T.floor_tile(T)
 			T.make_plating()
 	return !new_turf.intact
 

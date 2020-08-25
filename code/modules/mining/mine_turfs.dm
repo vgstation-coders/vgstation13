@@ -696,7 +696,6 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/simulated/floor/asteroid/New()
 	..()
-	qdel(floor_tile)
 	floor_tile = null
 	if(prob(20))
 		icon_state = "asteroid[rand(0,12)]"

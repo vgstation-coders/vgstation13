@@ -9,9 +9,6 @@
 	var/material
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sheets_n_ores.dmi', "right_hand" = 'icons/mob/in-hand/right/sheets_n_ores.dmi')
 
-/obj/item/stack/tile/proc/adjust_slowdown(mob/living/L, current_slowdown)
-	return current_slowdown
-
 /obj/item/stack/tile/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -147,7 +144,7 @@
 
 	material = "fabric"
 
-obj/item/stack/tile/slime
+/obj/item/stack/tile/slime
 	name = "tile of slime"
 	desc = "A flat piece of slime made through xenobiology"
 	icon_state = "tile-slime"
@@ -159,10 +156,3 @@ obj/item/stack/tile/slime
 	flags = FPRINT
 	siemens_coefficient = 1
 	max_amount = 60
-
-/obj/item/stack/tile/slime/adjust_slowdown(mob/living/L, current_slowdown)
-	if(isslimeperson(L) || isslime(L))
-		current_slowdown *= 5
-	else
-		current_slowdown *= 0.01
-	..()

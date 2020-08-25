@@ -34,7 +34,7 @@ var/list/wood_icons = list("wood","wood-broken")
 	var/burnt = 0
 	var/material = "metal"
 	var/spam_flag = 0 //For certain interactions, like bananium floors honking when stepped on
-	var/obj/item/stack/tile/floor_tile
+	var/floor_tile = /obj/item/stack/tile/plasteel
 	var/image/floor_overlay
 
 	melt_temperature = 1643.15 // Melting point of steel
@@ -46,9 +46,6 @@ var/list/wood_icons = list("wood","wood-broken")
 
 /turf/simulated/floor/New()
 	..()
-	if(!floor_tile)
-		floor_tile = new /obj/item/stack/tile/plasteel(null)
-		floor_tile.amount = 1
 	if(icon_state in icons_to_ignore_at_floor_init) //so damaged/burned tiles or plating icons aren't saved as the default
 		icon_regular_floor = "floor"
 	else
@@ -115,7 +112,9 @@ turf/simulated/floor/update_icon()
 	else if(is_slime_floor())
 		icon_state = "tile-slime"
 	else if(is_light_floor())
-		var/obj/item/stack/tile/light/T = floor_tile
+		world.log << "TODO"
+		// TODO
+		/*var/obj/item/stack/tile/light/T = floor_tile
 		overlays -= floor_overlay //Removes overlay without removing other overlays. Replaces it a few lines down if on.
 		if(T.on)
 			set_light(5)
@@ -125,7 +124,7 @@ turf/simulated/floor/update_icon()
 			light_color = floor_overlay.color
 		else
 			set_light(0)
-			icon_state = "light_off"
+			icon_state = "light_off"*/
 	else if(is_grass_floor())
 		if(!broken && !burnt)
 			if(!(icon_state in list("grass1","grass2","grass3","grass4")))
@@ -182,11 +181,7 @@ turf/simulated/floor/update_icon()
 //				to_chat(world, "[icon_state]y's got [icon_state]")
 	else if(is_mineral_floor())
 		if(!broken && !burnt)
-			icon_state = floor_tile.material
-	/*spawn(1)
-		if(istype(src,/turf/simulated/floor)) //Was throwing runtime errors due to a chance of it changing to space halfway through.
-			if(air)
-				update_visuals(air)*/
+			icon_state = material
 
 /turf/simulated/floor/return_siding_icon_state()
 	..()
@@ -206,10 +201,11 @@ turf/simulated/floor/update_icon()
 	return src.attack_hand(user)
 
 /turf/simulated/floor/attack_hand(mob/user as mob)
-	if (is_light_floor())
+	world.log << "TODO"
+	/*if (is_light_floor())
 		var/obj/item/stack/tile/light/T = floor_tile
 		T.on = !T.on
-		update_icon()
+		update_icon()*/
 
 	switch(material)
 		if("bananium")
@@ -229,42 +225,42 @@ turf/simulated/floor/update_icon()
 	break_tile()
 
 /turf/simulated/floor/is_plasteel_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/plasteel))
+	if(ispath(floor_tile, /obj/item/stack/tile/plasteel))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_light_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/light))
+	if(ispath(floor_tile, /obj/item/stack/tile/light))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_grass_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/grass))
+	if(ispath(floor_tile, /obj/item/stack/tile/grass))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_wood_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/wood))
+	if(ispath(floor_tile, /obj/item/stack/tile/wood))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_carpet_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/carpet))
+	if(ispath(floor_tile, /obj/item/stack/tile/carpet))
 		return 1
 	else
 		return 0
 
 /turf/simulated/floor/is_arcade_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/arcade))
+	if(ispath(floor_tile, /obj/item/stack/tile/arcade))
 		return 1
 	return 0
 
 /turf/simulated/floor/is_slime_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/slime))
+	if(ispath(floor_tile, /obj/item/stack/tile/slime))
 		return 1
 	else
 		return 0
@@ -275,7 +271,7 @@ turf/simulated/floor/update_icon()
 	return 0
 
 /turf/simulated/floor/is_mineral_floor()
-	if(istype(floor_tile,/obj/item/stack/tile/mineral))
+	if(ispath(floor_tile, /obj/item/stack/tile/mineral))
 		return 1
 	return 0
 
@@ -364,9 +360,6 @@ turf/simulated/floor/update_icon()
 						var/turf/simulated/floor/FF = get_step(src,direction)
 						FF.update_icon() //so siding get updated properly
 
-	if(floor_tile)
-		//qdel(floor_tile)
-		qdel(floor_tile)
 	icon_plating = "plating"
 	set_light(0)
 	floor_tile = null
@@ -382,27 +375,24 @@ turf/simulated/floor/update_icon()
 //This proc will make the turf a plasteel floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
-/turf/simulated/floor/proc/make_plasteel_floor(var/obj/item/stack/tile/plasteel/T = null)
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	floor_tile = new T.type(null)
-	material = floor_tile.material
+/turf/simulated/floor/proc/make_plasteel_floor(floortype = /obj/item/stack/tile/plasteel, material = "metal")
+	floor_tile = floortype
+	src.material = material
 	intact = 1
 	plane = TURF_PLANE
-	if(istype(T,/obj/item/stack/tile/light))
+	/*if(istype(T,/obj/item/stack/tile/light))
 		var/obj/item/stack/tile/light/L = T
 		var/obj/item/stack/tile/light/F = floor_tile
 		F.color_r = L.color_r
 		F.color_g = L.color_g
 		F.color_b = L.color_b
-		F.on = L.on
-	if(istype(T,/obj/item/stack/tile/grass))
+		F.on = L.on*/
+	if(ispath(floortype, /obj/item/stack/tile/grass))
 		for(var/direction in cardinal)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
 				FF.update_icon() //so siding gets updated properly
-	else if(istype(T,/obj/item/stack/tile/carpet))
+	else if(ispath(floortype, /obj/item/stack/tile/carpet))
 		for(var/direction in alldirs)
 			if(istype(get_step(src,direction),/turf/simulated/floor))
 				var/turf/simulated/floor/FF = get_step(src,direction)
@@ -410,89 +400,43 @@ turf/simulated/floor/update_icon()
 	update_icon()
 	levelupdate()
 	playsound(src, 'sound/weapons/Genhit.ogg', 50, 1)
+
 //This proc will make the turf a light floor tile. The expected argument is the tile to make the turf with
 //If none is given it will make a new object. dropping or unequipping must be handled before or after calling
 //this proc.
-/turf/simulated/floor/proc/make_light_floor(var/obj/item/stack/tile/light/T = null)
+/turf/simulated/floor/proc/make_light_floor()
 	broken = 0
 	burnt = 0
 	intact = 1
 	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/light))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/light(null)
-
+	floor_tile = /obj/item/stack/tile/light
 	update_icon()
 	levelupdate()
 
-//This proc will make a turf into a grass patch. Fun eh? Insert the grass tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_grass_floor(var/obj/item/stack/tile/grass/T = null)
+/turf/simulated/floor/proc/make_grass_floor()
 	broken = 0
 	burnt = 0
 	intact = 1
 	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/grass))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/wood(null)
+	floor_tile = /obj/item/stack/tile/wood
 	update_icon()
 	levelupdate()
 
-//This proc will make a turf into a wood floor. Fun eh? Insert the wood tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_wood_floor(var/obj/item/stack/tile/wood/T = null)
+/turf/simulated/floor/proc/make_wood_floor()
 	broken = 0
 	burnt = 0
 	intact = 1
 	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/wood))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/wood(null)
+	floor_tile = /obj/item/stack/tile/wood
 	update_icon()
 	levelupdate()
 
-//This proc will make a turf into a carpet floor. Fun eh? Insert the carpet tile to be used as the argument
-//If no argument is given a new one will be made.
-/turf/simulated/floor/proc/make_carpet_floor(var/obj/item/stack/tile/carpet/T = null)
+/turf/simulated/floor/proc/make_carpet_floor()
 	broken = 0
 	burnt = 0
 	intact = 1
 	plane = TURF_PLANE
-	if(floor_tile)
-		qdel(floor_tile)
-	floor_tile = null
-	if(T)
-		if(istype(T,/obj/item/stack/tile/carpet))
-			floor_tile = T
-			update_icon()
-			levelupdate()
-			return
-	//if you gave a valid parameter, it won't get thisf ar.
-	floor_tile = new /obj/item/stack/tile/carpet(null)
+	floor_tile = /obj/item/stack/tile/carpet
 
 	update_icon()
 	levelupdate()
@@ -501,16 +445,10 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/singularity_pull(S, current_size)
 	if(current_size >= STAGE_FIVE)
 		if(prob(75))
-			if(floor_tile && !broken && !burnt)
-				floor_tile.forceMove(src)
-				floor_tile = null
 			make_plating()
 		return
 	if(current_size == STAGE_FOUR)
 		if(prob(30))
-			if(floor_tile && !broken && !burnt)
-				floor_tile.forceMove(src)
-				floor_tile = null
 			make_plating()
 
 /turf/simulated/floor/attackby(obj/item/C as obj, mob/user as mob)
@@ -531,11 +469,11 @@ turf/simulated/floor/update_icon()
 				var/obj/item/stack/tile/light/T = floor_tile
 				floor_overlay = T.get_turf_image()
 				overlays -= floor_overlay // This removes the light floor overlay, but not other floor overlays.
-				floor_tile.forceMove(src)
+				new floor_tile(src)
 				floor_tile = null
 			else
-				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
-				floor_tile.forceMove(src)
+				to_chat(user, "<span class='notice'>You remove the [name].</span>")
+				new floor_tile(src)
 				floor_tile = null
 
 		make_plating()
@@ -550,7 +488,7 @@ turf/simulated/floor/update_icon()
 			else
 				if(is_wood_floor())
 					to_chat(user, "<span class='notice'>You unscrew the planks.</span>")
-					new floor_tile.type(src)
+					new floor_tile(src)
 
 			make_plating()
 			C.playtoolsound(src, 80)
@@ -575,7 +513,7 @@ turf/simulated/floor/update_icon()
 			if(!broken && !burnt)
 				var/obj/item/stack/tile/T = C
 				if(T.use(1))
-					make_plasteel_floor(T)
+					make_plasteel_floor(T.type, T.material)
 			else
 				to_chat(user, "<span class='warning'>This section is too damaged to support a tile. Use a welder to fix the damage.</span>")
 	else if(isshovel(C))
@@ -675,10 +613,3 @@ turf/simulated/floor/update_icon()
 /turf/simulated/floor/clockworkify()
 	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
 	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
-
-/turf/simulated/floor/adjust_slowdown(mob/living/L, current_slowdown)
-	//Phazon floors make movement faster
-	if(floor_tile)
-		current_slowdown = floor_tile.adjust_slowdown(L, current_slowdown)
-
-	return ..()

@@ -50,8 +50,12 @@
 			light = new/datum/light_source(src, .)
 
 // Incase any lighting vars are on in the typepath we turn the light on in New().
+//var/global/list/mytypes = list()
 /atom/New()
 	. = ..()
+/*	if (!("[type]" in mytypes))
+		mytypes["[type]"] = 0
+	mytypes["[type]"] += 1*/
 
 	if (light_power && light_range)
 		update_light()

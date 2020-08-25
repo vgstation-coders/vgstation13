@@ -34,32 +34,20 @@
 
 /turf/simulated/floor/vox/wood
 	icon_state = "wood"
-	floor_tile
+	floor_tile = /obj/item/stack/tile/wood
 
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 10
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
 
-/turf/simulated/floor/vox/wood/New()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-	floor_tile = new /obj/item/stack/tile/wood(null)
-	..()
-
 /turf/simulated/floor/light
 	name = "Light floor"
 	luminosity = 5
 	icon_state = "light_on"
-	floor_tile
+	floor_tile = /obj/item/stack/tile/light
 
 /turf/simulated/floor/light/New()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-	floor_tile = new /obj/item/stack/tile/light(null)
-	floor_tile.New() //I guess New() isn't run on objects spawned without the definition of a turf to house them, ah well.
 	var/n = name //just in case commands rename it in the ..() call
 	..()
 	spawn(4)
@@ -70,16 +58,12 @@
 /turf/simulated/floor/wood
 	name = "floor"
 	icon_state = "wood"
-	floor_tile
+	floor_tile = /obj/item/stack/tile/wood
 
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 10
 	soot_type = null
 	melt_temperature = 0 // Doesn't melt.
-
-/turf/simulated/floor/wood/New()
-	floor_tile = new /obj/item/stack/tile/wood(null)
-	..()
 
 /turf/simulated/floor/vault
 	icon_state = "rockvault"
@@ -218,13 +202,6 @@
 	..()
 	name = "deck"
 
-/turf/simulated/floor/plating/New()
-	..()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-
-
 /turf/simulated/floor/plating/airless
 	icon_state = "plating"
 	name = "airless plating"
@@ -283,14 +260,9 @@
 /turf/simulated/floor/grass
 	name = "Grass patch"
 	icon_state = "grass1"
-	floor_tile
+	floor_tile = /obj/item/stack/tile/grass
 
 /turf/simulated/floor/grass/New()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-	floor_tile = new /obj/item/stack/tile/grass(null)
-	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	icon_state = "grass[pick("1","2","3","4")]"
 	..()
 	spawn(4)
@@ -304,15 +276,10 @@
 /turf/simulated/floor/carpet
 	name = "Carpet"
 	icon_state = "carpet"
-	floor_tile
+	floor_tile = /obj/item/stack/tile/carpet
 	var/has_siding=1
 
 /turf/simulated/floor/carpet/New()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-	floor_tile = new /obj/item/stack/tile/carpet(null)
-	floor_tile.New() //I guess New() isn't ran on objects spawned without the definition of a turf to house them, ah well.
 	if(!icon_state)
 		icon_state = initial(icon_state)
 	..()
@@ -331,14 +298,7 @@
 /turf/simulated/floor/arcade
 	name = "Arcade Carpet"
 	icon_state = "arcade"
-	floor_tile
-
-/turf/simulated/floor/arcade/New()
-	if(floor_tile)
-		qdel(floor_tile)
-		floor_tile = null
-	floor_tile = new /obj/item/stack/tile/arcade(null)
-	..()
+	floor_tile = /obj/item/stack/tile/arcade
 
 /turf/simulated/floor/damaged
 	icon_state = "damaged1"
