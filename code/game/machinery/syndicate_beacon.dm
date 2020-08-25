@@ -26,18 +26,20 @@
 
 	user.set_machine(src)
 
-	var/dat = "<font color=#005500><i>Scanning [pick("retina pattern", "voice print", "fingerprints", "dna sequence")]...<br>Identity confirmed,<br></i></font>"
+	var/dat = "<body link='yellow' alink='white' bgcolor='#601414'><font color='white'>"
+	dat += "<i>Scanning [pick("retina pattern", "voice print", "fingerprints", "dna sequence")]...<br>Identity confirmed,<br></i>"
 	if (istype(user, /mob/living/carbon/human) || istype(user, /mob/living/silicon/ai))
 		if(issyndicate(user))
-			dat += "<font color=#07700><i>Operative record found. Greetings, Agent [user.real_name].</i></font><br>"
+			dat += "<i>Operative record found. Greetings, Agent [user.real_name].</i><br>"
 		else
 			var/honorific = "Mr."
 			if(user.gender == FEMALE)
 				honorific = "Ms."
-			dat += "<font color=red><i>Identity not found in operative database. What can the Syndicate do for you today, [honorific] [user.real_name]?</i></font><br>"
+			dat += "<i>Identity not found in operative database. What can the Syndicate do for you today, [honorific] [user.real_name]?</i><br>"
 			if(!selfdestructing)
 				dat += "<br><br><A href='?src=\ref[src];betraitor=1'>\"[pick("I want to switch teams.", "I want to work for you.", "Let me join you.", "I can be of use to you.", "You want me working for you, and here's why...", "Give me an objective.", "How's the 401k over at the Syndicate?")]\"</A><BR>"
 	dat += temptext
+	dat += "</body>"
 	user << browse(dat, "window=syndbeacon")
 	onclose(user, "syndbeacon")
 
@@ -55,7 +57,7 @@
 	if(href_list["betraitor"])
 		//antag-banned players just cause the beacon to explode
 		if (jobban_isbanned(M, TRAITOR) || isantagbanned(M))
-			temptext = "<font color=red><i><b>Double-crosser. You planned to betray us from the start. Allow us to repay the favor in kind.</b></i></font>"
+			temptext = "<i><b>Double-crosser. You planned to betray us from the start. Allow us to repay the favor in kind.</b></i>"
 			updateUsrDialog()
 			selfdestruct()
 			return
@@ -63,7 +65,7 @@
 		//so do antags that already belong to a faction (antags that don't belong to a specific factions are tolerated)
 		for(var/datum/role/R in M.mind.antag_roles)
 			if(R.faction)
-				temptext = "<font color=red><i><b>Double-crosser. You planned to betray us from the start. Allow us to repay the favor in kind.</b></i></font>"
+				temptext = "<i><b>Double-crosser. You planned to betray us from the start. Allow us to repay the favor in kind.</b></i>"
 				updateUsrDialog()
 				selfdestruct()
 				return
