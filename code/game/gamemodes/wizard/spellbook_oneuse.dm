@@ -514,6 +514,10 @@
 	desc = "This book glows with sinister energy."
 	disabled_from_bundle = 1
 
+/obj/item/weapon/spellbook/oneuse/absorb/attack_self(mob/user as mob)
+	..()
+	qdel(src)
+
 
 ///// ANCIENT SPELLBOOK /////
 
