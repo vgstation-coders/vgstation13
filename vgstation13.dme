@@ -2534,6 +2534,7 @@
 #include "code\modules\spells\targeted\retard.dm"
 #include "code\modules\spells\targeted\shoesnatch.dm"
 #include "code\modules\spells\targeted\street_alchemy.dm"
+#include "code\modules\spells\targeted\summon_snacks.dm"
 #include "code\modules\spells\targeted\targeted.dm"
 #include "code\modules\spells\targeted\watertowine.dm"
 #include "code\modules\spells\targeted\wrap.dm"
