@@ -275,7 +275,7 @@
 
 // -- Same as above, for priority arrivals
 /datum/outfit/proc/post_equip_priority(var/mob/living/carbon/human/H)
-	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
+	return
 
 // -- Final disabilities things, after all is given
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)
