@@ -19,7 +19,7 @@
 
 	PROCS :
 	-- "Static" procs
-		- equip(var/mob/living/carbon/human/H): tries to equip everything on the list to the relevant slots. This is the "master proc".
+		- equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE): tries to equip everything on the list to the relevant slots. This is the "master proc".
 		- equip_items(var/list/L, var/mob/living/carbon/human/H, var/species): equips the items in the list L to the human H of the given species.
 		- equip_backbag(var/mob/living/carbon/human/H): equip the backbag with the correct pref, and tries to put items in it if possible.
 		- pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip): changes items based on disabilities registered
@@ -32,6 +32,12 @@
 		- spawn_id(var/mob/living/carbon/human/H, rank): give an ID to the mob. Overriden by striketeams.
 		- species_final_equip(var/mob/living/carbon/human/H): give internals/a tank to species as needed.
 		- special_equip(var/title, var/slot, var/mob/living/carbon/human/H): for the more exotic item slots.
+
+		- priority_pre_equip(var/mob/living/carbon/human/H, var/species): things to do BEFORE equipping the guy if he's a priority arrival.
+		- priority_post_equip(var/mob/living/carbon/human/H): things to do AFTER equipping the guy if he's a priority arrival.
+
+	NOTES:
+		- if the mob is mindless, in case of alt-title items, the FIRST item is given.
 */
 
 /datum/outfit/
@@ -81,16 +87,20 @@
 	return
 
 // -- Equip mindless: if we're going to give the outfit to a mob without a mind
-/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE)
+/datum/outfit/proc/equip(var/mob/living/carbon/human/H, var/equip_mindless = FALSE, var/priority = FALSE)
 	if (!H || (!H.mind && !equip_mindless) )
 		return
 
 	pre_equip(H)
+
 	var/species = H.species.type
 	var/list/L = items_to_spawn[species]
 	if (!L) // Couldn't find the particular species
 		species = "Default"
 		L = items_to_spawn["Default"]
+
+	if (priority)
+		pre_equip_priority(H, species)
 
 	pre_equip_disabilities(H, L)
 	equip_items(L, H, species)
@@ -99,12 +109,18 @@
 	species_final_equip(H)
 	spawn_id(H)
 	post_equip(H) // Accessories, IDs, etc.
+	if (priority)
+		post_equip_priority(H)
 	give_disabilities_equipment(H)
 	H.update_icons()
 
 // -- Modify mob or loadout before giving items
 /datum/outfit/proc/pre_equip(var/mob/living/carbon/human/H)
 	return
+
+// -- Same as above, for priority arrivals
+/datum/outfit/proc/pre_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/storage/box/priority_care] = GRASP_RIGHT_HAND
 
 // -- Handle disabilities
 /datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
@@ -256,6 +272,10 @@
 // -- Things to do AFTER all the equipment is given (ex: accessories)
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
 	return // Empty
+
+// -- Same as above, for priority arrivals
+/datum/outfit/proc/post_equip_priority(var/mob/living/carbon/human/H)
+	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 
 // -- Final disabilities things, after all is given
 /datum/outfit/proc/give_disabilities_equipment(var/mob/living/carbon/human/H)

@@ -474,7 +474,7 @@ var/global/datum/controller/occupations/job_master
 	var/alt_title = null
 
 	if(job)
-		job.equip(H) // Outfit datum.
+		job.equip(H, job.priority) // Outfit datum.
 	else
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
@@ -495,9 +495,6 @@ var/global/datum/controller/occupations/job_master
 		to_chat(H, "<b>As the [alt_title ? alt_title : rank] you answer directly to [job.supervisors]. Special circumstances may change this.</b>")
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
-
-	if(job && job.priority)
-		job.priority_reward_equip(H)
 
 	return 1
 

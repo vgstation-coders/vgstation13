@@ -64,6 +64,10 @@
 		return
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
+/datum/outfit/assistant/post_equip_priority(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	return ..()
+
 // -- Bartender
 
 /datum/outfit/bartender
@@ -119,6 +123,11 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser] = SURVIVAL_BOX
+	return ..()
 
 /obj/abstract/spawn_all/bartender
 	where_to_spawn = SPAWN_ON_LOC
@@ -176,6 +185,17 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/datum/outfit/chef/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/abstract/spawn_all/chef] = SURVIVAL_BOX
+	return ..()
+
+/obj/abstract/spawn_all/chef
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/flour,
+		/obj/item/weapon/reagent_containers/food/drinks/flour
+	)
 
 // -- Botanist
 
@@ -252,6 +272,17 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/datum/outfit/hydro/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/abstract/spawn_all/hydro] = SURVIVAL_BOX
+	return ..()
+
+/obj/abstract/spawn_all/hydro
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
+		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine
+	)
 
 // -- Clown
 
@@ -332,6 +363,11 @@
 	mob_rename_self(H,"clown")
 	return 1
 
+/datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	return ..()
+
+
 // -- Mime
 
 /datum/outfit/mime // ...
@@ -396,6 +432,10 @@
 		H.mind.miming = MIMING_OUT_OF_CHOICE
 	return 1
 
+/datum/outfit/mime/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	return ..()
+
 // -- Janitor
 
 /datum/outfit/janitor
@@ -442,6 +482,11 @@
 	H.add_language(LANGUAGE_MOUSE)
 	to_chat(H, "<span class = 'notice'>Decades of roaming maintenance tunnels and interacting with its denizens have granted you the ability to understand the speech of mice and rats.</span>")
 	return 1
+
+/datum/outfit/janitor/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/grenade/chem_grenade/cleaner] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/spray/cleaner] = SURVIVAL_BOX
+	return ..()
 
 // -- Librarian
 
@@ -667,3 +712,7 @@
 	spawn(0)
 		ChooseReligion(H) // Contains an input() proc and hence must be spawn()ed.
 	return 1
+
+/datum/outfit/chaplain/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater] = SURVIVAL_BOX
+	return ..()
