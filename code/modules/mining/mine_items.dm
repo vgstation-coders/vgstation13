@@ -214,7 +214,7 @@ proc/move_mining_shuttle()
 			return
 		else
 			has_slime=1
-			to_chat(user, "You mold \the [W] around the tip of the tool.")
+			to_chat(user, "You mold \the [W] around the tip of \the [src].")
 			qdel(W)
 			return
 	..()
