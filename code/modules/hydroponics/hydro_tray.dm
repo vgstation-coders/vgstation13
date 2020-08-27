@@ -397,7 +397,7 @@
 	else if(istype(O, /obj/item/slime_extract/green))
 		
 		if(has_slime)
-			to_chat(user, "This hydroponics tray already has \a [O] inside.")
+			to_chat(user, "\the [src] already has \a [O] inside.")
 			return
 		else
 			has_slime=1
