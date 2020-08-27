@@ -81,7 +81,7 @@
 /obj/item/weapon/wrench/socket/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/slime_extract/bluespace))
 		if(has_slime)
-			to_chat(user, "This wrench  already has \a [W] inside it's head.")
+			to_chat(user, "\the [src] already has \a [W] inside it's head.")
 			return
 		else
 			has_slime=1
