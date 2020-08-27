@@ -93,11 +93,16 @@
 	A.AICtrlClick(src)
 /mob/living/silicon/ai/AltClickOn(var/atom/A)
 	A.AIAltClick(src)
+/mob/living/silicon/ai/MiddleShiftClickOn(var/atom/A)
+	A.AIMiddleShiftClick(src)
 
 /*
 	The following criminally helpful code is just the previous code cleaned up;
 	I have no idea why it was in atoms.dm instead of respective files.
 */
+
+/atom/proc/AIMiddleShiftClick()
+	return
 
 /atom/proc/AIShiftClick()
 	return
