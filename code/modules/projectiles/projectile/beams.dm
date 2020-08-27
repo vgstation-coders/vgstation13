@@ -93,19 +93,24 @@ var/list/beam_master = list()
 	else
 		hits = shot_ray.cast(MAX_BEAM_DISTANCE)
 
-	past_rays += shot_ray
+	if(!gcDestroyed)
+		past_rays += shot_ray
+	else
+		shot_ray.fired_beam = null // hard-delete prevention
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
 			shot_ray.draw(travel_range, icon, icon_state)
 		else
 			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state)
+
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 
 		shot_ray.draw(last_hit.distance, icon, icon_state)
 
 		if(last_hit.hit_type == RAY_CAST_REBOUND)
+			ASSERT(!gcDestroyed)
 			spawn()
 				rebound(last_hit.hit_atom)
 
