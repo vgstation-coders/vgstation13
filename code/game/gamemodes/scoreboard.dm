@@ -116,7 +116,7 @@
 				var/dmgscore = 0
 
 				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
-					cashscore += C1.GetBalance() //From bank account
+					cashscore += C1.GetBalance() * 0.95 // punishes you for not taking risks
 					if(istype(C1.virtual_wallet))
 						cashscore += C1.virtual_wallet.money
 
