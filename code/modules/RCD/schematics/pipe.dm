@@ -391,7 +391,7 @@
 	P.add_fingerprint(user)
 	var/obj/item/device/rcd/rpd/ourmaster = master
 	if(ourmaster.autowrench)
-		P.attackby(ourmaster.internal, user)
+		P.attackby(ourmaster.internal_wrench, user)
 
 /datum/rcd_schematic/pipe/select(var/mob/user, var/datum/rcd_schematic/old_schematic)
 	if(!istype(old_schematic, /datum/rcd_schematic/pipe))
