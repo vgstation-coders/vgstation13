@@ -7,7 +7,7 @@
 	starting_materials = list(MAT_IRON = 75000, MAT_GLASS = 37500)
 	var/build_all = 0
 	var/autowrench = 0
-	var/obj/item/weapon/wrench/internal = new()
+	var/obj/item/weapon/wrench/internal_wrench = new()
 	var/hook_key
 
 	schematics = list(
