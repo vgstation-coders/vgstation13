@@ -308,7 +308,7 @@
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
-/mob/living/carbon/human
+/datum/mind 
 	var/has_equipped_magic = 0
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
@@ -422,9 +422,9 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	if(!has_equipped_magic)
+	if(!mind.has_equipped_magic)
 		new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
-		has_equipped_magic = 1
+		mind.has_equipped_magic = 1
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
