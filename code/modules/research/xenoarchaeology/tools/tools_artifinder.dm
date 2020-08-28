@@ -10,8 +10,8 @@
 	var/last_scan_time = 0
 	var/scan_cooldown = 10
 
-/obj/item/device/ano_scanner/attack_self(var/mob/user)
-	if(world.time - last_scan_time < scan_delay)
+/obj/item/device/artifact_finder/attack_self(var/mob/user)
+	if(last_scan_time && (world.time - last_scan_time < scan_cooldown))
 		return
 	last_scan_time = world.time
 
