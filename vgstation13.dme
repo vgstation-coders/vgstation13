@@ -2376,6 +2376,7 @@
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_deadharvest.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_dnaswitch.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_emp.dm"
+#include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_floors.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_forcefield.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_gas.dm"
 #include "code\modules\research\xenoarchaeology\artifact\effects\unknown_effect_goodfeeling.dm"
