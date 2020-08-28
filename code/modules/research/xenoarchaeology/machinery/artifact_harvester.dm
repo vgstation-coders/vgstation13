@@ -179,6 +179,8 @@
 						//copy the new datum into the battery
 						inserted_battery.battery_effect = E
 						inserted_battery.stored_charge = 0
+
+					inserted_battery.effect_id = cur_artifact?.artifact_id
 				else
 					var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
 					src.visible_message(message)
@@ -226,6 +228,8 @@
 						//copy the new datum into the battery
 						inserted_battery.battery_effect = E
 						inserted_battery.stored_charge = 0
+
+					inserted_battery.effect_id = cur_artifact?.artifact_id
 				else
 					var/message = "<b>[src]</b> states, \"Cannot harvest. Incompatible energy signatures detected.\""
 					src.visible_message(message)

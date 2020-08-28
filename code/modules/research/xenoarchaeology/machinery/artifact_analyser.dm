@@ -96,18 +96,31 @@ var/anomaly_report_num = 0
 
 		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
 		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
-		P.name = "Anomaly Report #[++anomaly_report_num]"
 		P.artifact = scanned_object
-		P.info = "<b>[src] analysis report #[anomaly_report_num]</b><br>"
+		P.info = "<b>[src] analysis report for [scanned_object]</b><br>"
 		P.info += "<br>"
 		P.info += "[bicon(scanned_object)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamp-qm")
 
-		if(!findtext(P.info, "Mundane") && !(scanned_object in analyzed_anomalies))
-			var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
-			analyzed_anomalies += scanned_object
-			HDD.name = "Encrypted HDD #[analyzed_anomalies.len]"
+		if(!findtext(P.info, "Mundane"))
+			var/art_id
+			var/found = FALSE
+			for(var/artifact_id in excavated_large_artifacts)
+				if (excavated_large_artifacts[artifact_id] == scanned_object)
+					art_id = artifact_id
+					found = TRUE
+			if (!found)
+				art_id = generate_artifact_id()
+				excavated_large_artifacts[art_id] = scanned_object
+			if (!(scanned_object in analyzed_anomalies))
+				var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
+				analyzed_anomalies += scanned_object
+				HDD.name = "Encrypted HDD ([art_id])"
+			P.name = "Exotic Anomaly Report ([art_id])"
+		else
+			anomaly_report_num++
+			P.name = "Mundane Anomaly Report #[anomaly_report_num]"
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object

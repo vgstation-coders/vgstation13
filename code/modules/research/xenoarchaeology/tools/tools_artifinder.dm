@@ -21,7 +21,10 @@
 	var/closest_dist = ARBITRARILY_LARGE_NUMBER
 
 	var/turf/T = get_turf(src)
-	for (var/obj/machinery/artifact/A in excavated_large_artifacts)
+	for (var/artifact_id in excavated_large_artifacts)
+		var/obj/machinery/artifact/A = excavated_large_artifacts[artifact_id]
+		if (!istype(A))
+			continue
 		var/turf/U = get_turf(A)
 		if (T.z != U.z)
 			continue
@@ -37,6 +40,7 @@
 
 		var/arti_dist = sqrt(get_dist_squared(U, T))
 		if (arti_dist < closest_dist)
+			closest_dist = arti_dist
 			closest_id = A.artifact_id
 			dir = get_dir(T,U)
 
@@ -49,6 +53,7 @@
 		if (A.inserted_battery.battery_effect.activated || A.inserted_battery.battery_effect.isolated)
 			var/device_dist = sqrt(get_dist_squared(U, T))
 			if (device_dist < closest_dist)
+				closest_dist = device_dist
 				closest_id = A.inserted_battery.effect_id
 				dir = get_dir(T,U)
 

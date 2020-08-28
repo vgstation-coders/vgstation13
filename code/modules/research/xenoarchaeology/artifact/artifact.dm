@@ -125,7 +125,8 @@ var/list/all_generated_artifact_ids = list()
 					if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
 					else
-						new spawn_type(get_turf(src))
+						var/atom/movable/AM = new spawn_type(get_turf(src))
+						excavated_large_artifacts[artifact_find.artifact_id] = AM
 				else
 					to_chat(user, "<span class='notice'>[src] has been whittled away under your careful excavation, but there was nothing of interest inside.</span>")
 				qdel(src)
