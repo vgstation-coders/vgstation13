@@ -50,8 +50,8 @@
 				icon_state = "sampler-full"
 
 				//put in a rock sliver
-				var/obj/item/weapon/rocksliver/R = new(src)
-				R.geological_data = geo_data
+				extracted = new(src)
+				extracted.geological_data = geo_data
 
 				to_chat(user, "<span class='notice'>You extract a sample from \the [item_to_sample]'s core.</span>")
 		else
