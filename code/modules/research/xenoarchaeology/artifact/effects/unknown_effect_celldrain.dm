@@ -11,7 +11,7 @@
 		if(isrobot(user) && (world.time >= next_message))
 			to_chat(user, "<span class='notice'>SYSTEM ALERT: Large energy drain detected!</span>")
 			next_message = world.time + 50
-		target_cell.use(500)
+		target_cell.use(min(500, target_cell.charge))
 		return TRUE
 
 /datum/artifact_effect/celldrain/DoEffectAura()
@@ -22,7 +22,7 @@
 				if(isrobot(C) && (world.time >= next_message))
 					to_chat(C, "<span class='notice'>SYSTEM ALERT: Energy drain detected!</span>")
 					next_message = world.time + 300
-				target_cell.use(200)
+				target_cell.use(min(200, target_cell.charge))
 		for(var/obj/machinery/power/battery/S in range(effectrange, holder))
 			S.charge = max(0, S.charge - 2000)
 		return TRUE
@@ -35,7 +35,7 @@
 				if(isrobot(C) && (world.time >= next_message))
 					to_chat(C, "<span class='notice'>SYSTEM ALERT: Large energy drain detected!</span>")
 					next_message = world.time + 300
-				target_cell.use(300 * chargelevelmax)
+				target_cell.use(min(300 * chargelevelmax, target_cell.charge))
 		for(var/obj/machinery/power/battery/S in range(effectrange, holder))
 			S.charge = max(0, S.charge - 3000 * chargelevelmax)
 		return TRUE

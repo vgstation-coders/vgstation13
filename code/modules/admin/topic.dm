@@ -3710,6 +3710,8 @@
 							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
 						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
 
+					numsuffix = 12
+					icon_state = "ano120"
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
 
