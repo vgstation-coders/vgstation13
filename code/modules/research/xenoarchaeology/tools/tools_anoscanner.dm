@@ -1,6 +1,6 @@
 /obj/item/device/ano_scanner
 	name = "\improper Alden-Saraspova counter"
-	desc = "Aids in triangulation of exotic particles."
+	desc = "Aids in triangulation of exotic particles. Too sensible however to locate already excavated anomalies."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano_scanner"
 	item_state = "lampgreen"

@@ -1,3 +1,5 @@
+var/list/excavated_large_artifacts = list()
+
 /obj/machinery/artifact
 	name = "alien artifact"
 	desc = "A large alien device."
@@ -25,7 +27,9 @@
 	if(find_id)
 		artifact_id = find_id
 	else
-		artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+		artifact_id = generate_artifact_id()
+
+	excavated_large_artifacts[artifact_id] = src
 
 	on_attackby = new(owner = src)
 	on_explode = new(owner = src)
@@ -198,6 +202,7 @@
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
 
+	excavated_large_artifacts -= artifact_id
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")

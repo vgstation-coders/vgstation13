@@ -12,7 +12,7 @@
 
 	stat_collection.artifacts_discovered++
 
-	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+	artifact_id = generate_artifact_id()
 
 	artifact_find_type = pick(
 	5;/obj/machinery/syndicate_beacon,
@@ -31,6 +31,21 @@
 	100;/obj/machinery/communication,
 	100;/mob/living/simple_animal/hostile/roboduck,
 	1000;/obj/machinery/artifact)
+
+var/list/all_generated_artifact_ids = list()
+
+/proc/generate_artifact_id()
+	var/artifact_id
+	var/custom = TRUE
+	for (var/i = 1 to 3)//three tries. cosmically low chance to get an already existing ID each time, but if we do, we'll settle with a custom one
+		artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+		if (!(artifact_id in all_generated_artifact_ids))
+			custom = FALSE
+			break
+	if (custom)
+		artifact_id = "sirius-[add_zero("[all_generated_artifact_ids.len]",3)]"
+	all_generated_artifact_ids += artifact_id
+	return artifact_id
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Boulders - sometimes turn up after excavating turf - excavate further to try and find large xenoarch finds

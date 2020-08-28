@@ -31,4 +31,5 @@
 		"/obj/item/weapon/anobattery",
 		"/obj/item/weapon/weldingtool",
 		"/obj/item/device/xenoarch_scanner",
-		"/obj/item/device/ano_scanner")
+		"/obj/item/device/ano_scanner",
+		"/obj/item/device/artifact_finder")
