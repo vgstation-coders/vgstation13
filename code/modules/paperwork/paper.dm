@@ -594,6 +594,14 @@ var/global/list/paper_folding_results = list ( \
 /obj/item/weapon/paper/manifest
 	name = "Supply Manifest"
 
+/obj/item/weapon/paper/anomaly
+	name = "Anomaly Report"
+	var/obj/machinery/artifact/artifact
+
+/obj/item/weapon/paper/anomaly/Destroy()
+	artifact = null
+	..()
+
 /obj/item/weapon/paper/merchantreport
 	var/identity
 	var/list/mugshots = list()

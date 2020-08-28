@@ -523,6 +523,8 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
+		/obj/item/weapon/disk,
+		/obj/item/weapon/disk/hdd,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,

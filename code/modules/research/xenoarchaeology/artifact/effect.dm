@@ -13,6 +13,7 @@
 	var/effect_type = 0
 	var/isolated = 0
 	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
+	var/triggered = 0 //set to 1 if it has been activated at least once
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -58,6 +59,13 @@
 		else
 			activated = 1
 			isolated = 1
+			if (!triggered)
+				triggered = 1
+				if(istype(holder, /obj/machinery/artifact))
+					var/obj/machinery/artifact/A = holder
+					if (A.analyzed)
+						score["artifacts"]++
+
 			spawn(20 SECONDS)
 				isolated = 0
 

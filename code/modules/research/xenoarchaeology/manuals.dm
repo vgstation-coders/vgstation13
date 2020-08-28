@@ -1,5 +1,101 @@
 
 /obj/item/weapon/book/manual/excavation
+	name = "Out on the dig: NEW EDITION!"
+	icon_state = "excavation"
+	item_state = "book6"
+	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
+	title = "Out on the dig"
+	dat = {"<html>
+				<head>
+				<style>
+				h1 {font-size: 18px; margin: 15px 0px 5px;}
+				h1 {font-size: 15px; margin: 15px 0px 5px;}
+				li {margin: 2px 0px 2px 15px;}
+				ul {list-style: none; margin: 5px; padding: 0px;}
+				ol {margin: 5px; padding: 0px 15px;}
+				</style>
+				</head>
+				<body>
+
+				<h1><a name="Contents">Contents</a></h1>
+				<ol>
+					<li><a href="#Prep">Prepping the expedition</a></li>
+					<li><a href="#Tools">Knowing your tools</a></li>
+					<li><a href="#Find">Finding the dig</a></li>
+					<li><a href="#Analyse">Analysing deposits</a></li>
+					<li><a href="#Excavate">Extracting your first find</a></li>
+				</ol>
+				<br>
+
+				<h1><a name="Prep">Prepping the expedition</a></h1>
+				Every digsite I've been to, someone has forgotten something and I've never yet been to a dig that hasn't had me hiking to get to it - so gather your gear
+				and get it to the site the first time. You learn quick that time is money, when you've got a shipful of raiders searching for you the next asteroid over,
+				but don't be afraid to clear some space if there are any inconvenient boulders in the way.<br>
+				<list>
+				<li>an excavation gear-belt to hold all your tools</li>
+				<li>a crate for holding small finds</li>
+				<li>a lantern to light up where the stars don't shine</li>
+				<li>a newsreader-equiped PDA to keep up with the news on the Station.</li>
+				</list><br>
+				<a href="#Contents">Contents</a>
+
+				<h1><a name="Tools">Knowing your tools</a></h1>
+				Every xenoarchaeologist has a plethora of tools at their disposal, but here's the important ones:<br>
+				<list>
+				<li><b>Optical meson scanner</b> - you will find digsites in record time by being able to see through walls. But keep in mind that even regular looking walls may contain finds.</li>
+				<li><b>Pickaxes and drills</b> - useful to quickly reach a digsite, but be careful when coming near one as they will destroy any find that falls under them.</li>
+				<li><b>Small picks and excavation drills</b> - lets you dig inside a rock to extract its secrets. Small picks have a set dig depth while excavation drills can be set..</li>
+				<li><b>Brush/b> - lets you cleanly extract your finds from strange rocks.</li>
+				<li><b>Measuring tape</b> - use it to measure the depth a rock face has been excavated to.</li>
+				<li><b>GPS</b> - knowing where you are precisely is necessary when triangulating anomalous xenotic energy signatures.</li>
+				<li><b>Core sampler</b> - use this to take rock slivers directly from rock walls that you can then run to the lab for analysis to triangulate the location of large artifacts.</li>
+				<li><b>Depth scanner</b> - uses x-ray diffraction to locate anomalous densities in rock, indicating archaeological deposits.
+					Comes with a handy reference log containing co-ordinates and time of each scan.</li>
+				<li><b>Digsite locator</b> - because not all digsites can be seen at a glance, this scanner will highlight for you ever wall that contains finds, as well as their mineral composition, hinting at their nature.</li>
+				<li><b>Alden-Saraspova counter</b> - uses a patented application of Fourier Transform analysis to determine the difference between background and
+					exotic radiation. Use it to determine how far you are from the closest anomalous energy source.</li>
+				</list><br>
+				<a href="#Contents">Contents</a>
+
+				<h1><a name="Find">Finding the dig</a></h1>
+				Wouldn't be a xenoarchaeologist without their dig, but everyone has to start somewhere. Here's a basic procedure to get yours as quickly as possible:<br>
+				<list>
+				<li><b>Put on your meson goggles</b> (if that wasn't already done) - Being able to see through walls will let you find a digsite over ten times as fast.</li>
+				<li><b>Check first areas further away from the Mining Outpost</b> - reduces the chances of a miner digging straight through your site.</li>
+				<li><b>Walk along the walls of the asteroid</b> - there is usually no need to start digging until you've spotted a digsite with your goggles, just by walking along the path you'll find a digsite soon enough. You will recognize them from the white and brown streaks on the rock.</li>
+				<li><b>Pull out your depth scanner</b> - Finds can often be found even in rocks that look normal, specifically in those adjacent to rocks with visible finds, so when getting close to the site, use your scanner on each rock before digging it.</li>
+				</list><br>
+				<a href="#Contents">Contents</a>
+
+				<h1><a name="Analyse">Figuring out the nature of a digsite</a></h1>
+				You've found some unusual strata, so grab your picks, it's time to go digging. As a rule of thumb, you can usually identify the nature of a digsite from the material of most finds in it:<br>
+				<list>
+				<li><b>Gardens</b> - Usually full of carbon anomalies, such as fossilized plants and bones. Your station's botanist will want the plants, while your Research Director might want the bones.</li>
+				<li><b>Animal Nest</b> - Similar to gardens, but may also feature some fossilized eggs that may be revitalized.</li>
+				<li><b>Houses</b> - Often full of mercury anomalies, features lots of small furniture, cutlery, toys and bowls...</li>
+				<li><b>Industrial Sites</b> - Generally an even mix of iron, mercury and potassium anomalies, you may find old spacesuits or materials.</li>
+				<li><b>Temples</b> - Similar to industrial sites with a bit more nitrogen anomalies as well. Often full of cursed and dangerous relics. Touch them at your own risks.</li>
+				<li><b>War Sites</b> - A vast majority of iron sites, featuring various weapons such as guns, both kinetic and energetic, swords and spears...</li>
+				</list><br>
+				<a href="#Contents">Contents</a>
+
+				<h1><a name="Excavate">Extracting your first find</a></h1>
+				Remember to scan the rock again after extracting a find. A single rock surface often holds several anomalies.<br>
+				<list>
+				<li><b>Scan the rock</b> - Use a depth scanner to determine the find's depth and clearance, memorize it.</li>
+				<li><b>FUNCTIONAL AND SAFE digging</b> - Dig into the rock until you've cleared away a depth somewhere between the anomaly depth and the clearance above it. The find
+					should come loose on it's own, but it will be in the midst of a chunk of rock. Use your brush on it to clear away the excess.</li>
+				<li><b>FANCY AND SPEEDY digging</b> - Dig into the rock until you've cleared away a depth equal to the anomaly depth, but without any of your strokes
+					entering the clearance range.</li>
+				<li><b>The Big Find</b> - Sometimes, anomalies appear made of an unknown material, should that happen, finishing digging the rock with your hand pickaxe, as well as the boulder left behind. You've found yourself an exceedingly rare artifact. Perform analysis on it back at the outpost to find out its true nature.</li>
+				</list><br>
+				<a href="#Contents">Contents</a>
+
+				</body>
+				</html>
+			"}
+
+/obj/item/weapon/book/manual/excavation/old
 	name = "Out on the dig"
 	icon_state = "excavation"
 	item_state = "book6"

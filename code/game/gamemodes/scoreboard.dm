@@ -255,30 +255,37 @@
 			score["deadpets"]++
 
 	//Bonus Modifiers
+	//--General--
 	//var/traitorwins = score["traitorswon"]
 	var/deathpoints = score["deadcrew"] * 250 //Human beans aren't free
 	var/siliconpoints = score["deadsilicon"] * 500 //Silicons certainly aren't either
 	//var/researchpoints = score["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
 	var/eventpoints = score["eventsendured"] * 200 //Events fine every 10 to 15 and are uncommon
 	var/escapoints = score["escapees"] * 100 //Two rescued human beans are worth a dead one
+
+	//--Service--
 	var/harvests = score["stuffharvested"] * 1 //One harvest is one product. So 5 wheat is 5 points
-	//var/shipping = score["stuffshipped"] * 5 //Does not work currently
-	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 	var/meals = score["meals"] * 5 //Every item cooked (needs to fire make_food()) awards five points
 	//var/drinks = score["drinks"] * 5 //All drinks that ever existed award five points. No better way to do it yet
-	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	var/litter = score["litter"] //Every item listed under /obj/item/trash will cost one point if it exists
-	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	var/messpoints
-	//var/atmos
 	if(score["mess"] != 0)
 		messpoints = score["mess"] //If there are any messes, let's count them
+
+	//--Supply--
+	//var/shipping = score["stuffshipped"] * 5 //Does not work currently
+	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
+
+	//--Engineering--
+	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
+	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
+	//var/atmos
 	//if(score["airloss"] != 0)
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
+
+	//--Medical--
 	//var/beneficialpoints = score["disease_good"] * 20
-
 	score["disease_vaccine"] = ""
-
 	for (var/antigen in all_antigens)
 		if (isolated_antibodies[antigen] == 1)
 			score["disease_vaccine"] += "[antigen]"
@@ -297,6 +304,10 @@
 		score["disease_vaccine_score"] = 1000
 
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
+
+	//--Science--
+	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
+
 
 	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
@@ -327,6 +338,7 @@
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
+	score["crewscore"] += artifacts
 	//score["crewscore"] += beneficialpoints
 	score["crewscore"] += score["disease_vaccine_score"]
 	score["crewscore"] += score["disease_effects"]
@@ -501,15 +513,16 @@
 
 	<U>THE GOOD:</U><BR>
 	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score["time"] * 0.2)] Points)<BR>
-	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
-	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
-	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
 	<B>Shuttle Escapees:</B> [score["escapees"]] ([score["escapees"] * 100] Points)<BR>
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
-	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
+	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
+	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
+	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
+	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>
 	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR><BR>
+	<B>Analyzed & Activated Large Artifacts:</B> [score["artifacts"]] ([score["artifacts"] * 400] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
 	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 250] Points)<BR>

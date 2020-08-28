@@ -7,7 +7,7 @@
 #define XENOARCH_MAX_ENERGY_TRANSFER 4000
 
 //How many joules of electrical energy produce how many joules of heat energy?
-#define XENOARCH_HEAT_COEFFICIENT 3
+#define XENOARCH_HEAT_COEFFICIENT 30
 
 #define XENOARCH_SAFETY_TEMP 350
 #define XENOARCH_MAX_TEMP 400
@@ -81,7 +81,7 @@
 	else
 		use_power = 1
 
-	//Add 3000 joules when active.  This is about 0.6 degrees per tick.
+	//Add 3000 joules when active.  This is about 6 degrees per tick.
 	//May need adjustment
 	if(use_power == 1)
 		var/heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
@@ -158,7 +158,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 		return
 
 	if (href_list["eject"] && held_container && !scan_process)
-		eject()
+		eject(usr)
 		. = 1
 
 	if (href_list["begin"] && !scan_process && held_container)
@@ -169,8 +169,10 @@ obj/machinery/anomaly/Topic(href, href_list)
 		stop()
 		. = 1
 
-/obj/machinery/anomaly/proc/eject()
+/obj/machinery/anomaly/proc/eject(var/mob/user)
 	held_container.forceMove(loc)
+	if (user && Adjacent(user))
+		user.put_in_hands(held_container)
 	held_container = null
 	nanomanager.update_uis(src)
 
@@ -201,7 +203,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 	if (user.incapacitated() || !user.Adjacent(src) || scan_process || !held_container || stat & NOPOWER)
 		return
 
-	eject()
+	eject(user)
 
 /obj/machinery/anomaly/CtrlClick(var/mob/user)
 	if (!anchored)
