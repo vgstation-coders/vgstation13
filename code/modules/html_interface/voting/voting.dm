@@ -39,6 +39,7 @@ var/global/datum/controller/vote/vote = new()
 	var/list/current_votes = list()
 	var/list/discarded_choices = list()
 	var/list/ismapvote
+	var/list/allmaps
 	var/chosen_map
 	name               = "datum"
 	var/datum/html_interface/nanotrasen/vote/interface
