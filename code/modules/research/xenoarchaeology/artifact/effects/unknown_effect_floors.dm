@@ -34,12 +34,12 @@
 
 /datum/artifact_effect/floors/proc/make_floors(var/range)
 	if(holder)
+		var/turf/floortype
+		if(randomize)
+			floortype = pick(available_floors)
+		else
+			floortype = /turf/simulated/floor
 		for(var/turf/T in spiral_block(get_turf(holder), range))
 			if(istype(T, /turf/space) || isfloor(T))
-				var/turf/floortype
-				if(randomize)
-					floortype = pick(available_floors)
-				else
-					floortype = /turf/simulated/floor
 				T.ChangeTurf(floortype)
 				sleep(2)
