@@ -28,7 +28,8 @@
 	var/health = 80			// the turret's health
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/obj/item/weapon/gun/energy/installed = null		// the type of weapon installed
+	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
+
 	var/reqpower = 750 //power used per shot
 
 	var/obj/machinery/porta_turret_cover/cover = null	// the cover that is covering this turret
@@ -206,7 +207,8 @@ Status: []<BR>"},
 		else //But when unsecured the cover is gone, so it shows the message itself
 			visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
-			installed.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
+			var/obj/item/weapon/gun/energy/E = installed
+			E.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
 		req_access = list()
 		on = 0 // turns off the turret temporarily
@@ -610,7 +612,13 @@ Status: []<BR>"},
 //		 //Shooting Code:
 	playsound(src, installed.fire_sound, 75, 1)
 	var/obj/item/projectile/A
-	A = new installed.projectile_type(loc)
+	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
+		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
+		R.choose_projectile()
+		A = new R.in_chamber.type(loc)
+	else
+		var/obj/item/weapon/gun/energy/E = installed
+		A = new E.projectile_type(loc)
 	A.original = target
 	A.starting = T
 	A.shot_from = installed
@@ -704,7 +712,7 @@ Status: []<BR>"},
 
 
 		if(3)
-			if(istype(W, /obj/item/weapon/gun/energy)) // the gun installation part
+			if(istype(W, /obj/item/weapon/gun/energy) || istype(W, /obj/item/weapon/gun/projectile/roulette_revolver)) // the gun installation part
 				if(!user.drop_item(W, src))
 					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
