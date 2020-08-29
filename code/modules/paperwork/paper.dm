@@ -587,6 +587,10 @@ var/global/list/paper_folding_results = list ( \
 	name = "paper- 'Instructions'"
 	info = "Thank you for purchasing Dr. Pecker's DIY Soda Kit!<BR>\nIt has been scientifically proven to bring your tastebuds into the delicious state and turn your teeth into a molar solution!<BR>\nNow as you may have guessed, you will have to mix this delicious beverage yourself.<BR>\nDon't worry, it's pretty basic stuff. Just remember to never lick the spoon!<BR>\nFirst, mix the contents of all three <b>small vials</b> into the <b>large flask</b>.<BR>\nThen, mix the contents of the <b>small flasks</b> into the <b>large flask</b>.<BR>\nAnd finally, get ready for our secret trademarked ingredient: <BR>\n<b>The element of surprise!</b>"
 
+/obj/item/weapon/paper/spectrometry_decommission
+	name = "paper- 'Re:Spectrometry Decommission'"
+	info = "The mulebots have finished carrying out the last packs of floor tiles and furnitures from the lab. It was always a matter of time given how little results we got from mass spectrometry, despite how interesting the technology seemed at first.<br>I cannot blame Nanotrasen given the advances in the anomalous energies field, this is definitely a much better investment.<br>I'm not sure where I'll be working now that my contract is over, I think I'll stay at Central Command for the foreseeable future, their testing facilities have a pretty high turnover rate I hear. Please do come say hello the next time you're there!<br><br><i>W.R.</i>"
+
 /obj/item/weapon/paper/outoforder
 	name = "paper- 'OUT OF ORDER'"
 	info = "<B>OUT OF ORDER</B>"

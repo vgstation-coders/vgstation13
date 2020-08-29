@@ -68,6 +68,21 @@ datum/reagent/chemical_waste
 	volume = 2
 	flags = FPRINT | OPENCONTAINER
 
+/obj/item/weapon/reagent_containers/glass/solution_tray/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/pickup(mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/dropped(mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/attack_hand()
+	..()
+	update_icon()
+
 /obj/item/weapon/reagent_containers/glass/solution_tray/update_icon()
 	overlays.len = 0
 
