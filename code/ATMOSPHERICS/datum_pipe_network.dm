@@ -31,9 +31,7 @@
 		qdel(air_transient)
 		air_transient = null
 
-	if(radiate)
-		qdel(radiate)
-		radiate = null
+	radiate = null //This is a ref to an external gas_mixture, so it should not be deleted
 
 	gases = null
 
