@@ -39,6 +39,7 @@
 					for(var/spell/targetspell in C.spell_list)
 						canAbsorb = TRUE
 						for(var/spell/holderspell in L.spell_list)
+							if(targetspell.user_type == USER_TYPE_VAMPIRE || targetspell.user_type == USER_TYPE_CULT  || targetspell.user_type == USER_TYPE_MALFAI || targetspell.user_type == USER_TYPE_GENETIC)
 							if(targetspell.type == holderspell.type)
 								canAbsorb = FALSE
 						/*		if(holderspell.can_improve(Sp_POWER))
