@@ -24,6 +24,12 @@
 	//slot_flags = SLOT_BELT
 	var/obj/item/weapon/rocksliver/extracted
 
+/obj/item/device/core_sampler/Destroy()
+	if (extracted)
+		qdel(extracted)
+		extracted = null
+	..()
+
 /obj/item/device/core_sampler/examine(mob/user)
 	..()
 	if(get_dist(src, user) < 2)

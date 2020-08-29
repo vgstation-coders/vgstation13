@@ -58,7 +58,7 @@
 		if (stat & (NOPOWER|BROKEN))
 			stop()
 		else
-			use_power = 2
+			use_power = MACHINE_POWER_USE_ACTIVE
 			if(scan_process++ > target_scan_ticks)
 				FinishScan()
 			else if(temperature > XENOARCH_MAX_TEMP)
@@ -71,19 +71,22 @@
 			if(scan_process && prob(5))
 				visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>")
 	else
-		use_power = 1
+		use_power = MACHINE_POWER_USE_IDLE
 
 	//Next, temperature management. First we automatically heat up as long as we're powered, depending on how much power we're using.
-	var/heat_added
-	switch (use_power)
-		if (1)
-			heat_added = idle_power_usage * XENOARCH_HEAT_COEFFICIENT
-		if (2)
-			heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
+	//Only if we're powered of course.
+	if (!(stat & (NOPOWER|BROKEN)))
+		var/heat_added
+		switch (use_power)
+			if (MACHINE_POWER_USE_IDLE)
+				heat_added = idle_power_usage * XENOARCH_HEAT_COEFFICIENT
+			if (MACHINE_POWER_USE_ACTIVE)
+				heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
 
-	if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
-		temperature += heat_added / XENOARCH_HEAT_CAPACITY
+		if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
+			temperature += heat_added / XENOARCH_HEAT_CAPACITY
 
+	//But whether we are powered or not, our temperature and that of the air around us will still average out, which will eventually lead to the heat death of our universe.
 	var/datum/gas_mixture/env = loc.return_air()
 	var/environmental_temp = env.temperature
 	var/temperature_difference = abs(environmental_temp - temperature)
@@ -180,13 +183,13 @@ obj/machinery/anomaly/Topic(href, href_list)
 			return FALSE
 
 	scan_process = 1
-	use_power = 2
+	use_power = MACHINE_POWER_USE_ACTIVE
 	update_icon()
 	nanomanager.update_uis(src)
 
 /obj/machinery/anomaly/proc/stop()
 	scan_process = 0
-	use_power = 1
+	use_power = MACHINE_POWER_USE_IDLE
 	update_icon()
 	nanomanager.update_uis(src)
 
