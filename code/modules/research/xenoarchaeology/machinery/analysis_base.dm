@@ -89,29 +89,30 @@
 	//But whether we are powered or not, our temperature and that of the air around us will still average out, which will eventually lead to the heat death of our universe.
 	var/datum/gas_mixture/env = loc.return_air()
 	var/environmental_temp = env.temperature
-	var/temperature_difference = abs(environmental_temp - temperature)
-	var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
-	var/heat_capacity = removed.heat_capacity()
+	if (temperature != environmental_temp)
+		var/temperature_difference = abs(environmental_temp - temperature)
+		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
+		var/heat_capacity = removed.heat_capacity()
 
-	var/entropy = temperature_difference * heat_capacity
+		var/entropy = temperature_difference * heat_capacity
 
-	if(temperature > environmental_temp)
-		//cool down to match the air
-		temperature = max(environmental_temp, temperature - entropy / XENOARCH_HEAT_CAPACITY)
-		removed.temperature = max(TCMB, removed.temperature + entropy / heat_capacity)
+		if(temperature > environmental_temp)
+			//cool down to match the air
+			temperature = max(environmental_temp, temperature - entropy / XENOARCH_HEAT_CAPACITY)
+			removed.temperature = max(TCMB, removed.temperature + entropy / heat_capacity)
 
-		if(temperature_difference > 10 && prob(5))
-			visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
+			if(temperature_difference > 10 && prob(5))
+				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
 
-	else if(temperature < environmental_temp)
-		//heat up to match the air
-		temperature = min(environmental_temp, temperature + entropy / XENOARCH_HEAT_CAPACITY)
-		removed.temperature = max(TCMB, removed.temperature - entropy / heat_capacity)
+		else if(temperature < environmental_temp)
+			//heat up to match the air
+			temperature = min(environmental_temp, temperature + entropy / XENOARCH_HEAT_CAPACITY)
+			removed.temperature = max(TCMB, removed.temperature - entropy / heat_capacity)
 
-		if(temperature_difference > 10 && prob(5))
-			visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a quiet plink.")
+			if(temperature_difference > 10 && prob(5))
+				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a quiet plink.")
 
-	env.merge(removed)
+		env.merge(removed)
 
 	nanomanager.update_uis(src)
 
