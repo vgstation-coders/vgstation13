@@ -17,15 +17,13 @@
 	..()
 
 /datum/pipe_network/Destroy()
-	if(line_members)
-		for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
-			pipeline.network = null
-		line_members = null
+	for(var/datum/pipeline/pipeline in line_members) //This will remove the pipeline references for us
+		pipeline.network = null
+	line_members = null
 
-	if(normal_members)
-		for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
-			objects.unassign_network(src)
-		normal_members = null
+	for(var/obj/machinery/atmospherics/objects in normal_members) //Procs for the different bases will remove the references
+		objects.unassign_network(src)
+	normal_members = null
 
 	pipe_networks -= src
 
@@ -33,9 +31,7 @@
 		qdel(air_transient)
 		air_transient = null
 
-	if(radiate)
-		qdel(radiate)
-		radiate = null
+	radiate = null //This is a ref to an external gas_mixture, so it should not be deleted
 
 	gases = null
 
