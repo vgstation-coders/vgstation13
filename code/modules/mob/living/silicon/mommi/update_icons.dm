@@ -75,6 +75,8 @@
 				I.pixel_y = -12 * PIXEL_MULTIPLIER
 			if("scout")
 				I.pixel_y = -15 * PIXEL_MULTIPLIER
+			if("cutie")
+				I.pixel_y = -6 * PIXEL_MULIPLIER
 		// Add the adjusted hat to our overlays
 		overlays += I
 
