@@ -149,7 +149,7 @@
 "fh" = (/obj/structure/table/glass,/obj/item/weapon/circuitboard/shield_cap,/turf/simulated/floor{icon_state = "dark"},/area/shuttle/lightship/start)
 "fm" = (/obj/structure/bed/chair/wood/normal{dir = 4},/obj/structure/bed/chair/wood/normal{dir = 4},/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "fn" = (/turf/simulated/floor{dir = 9; icon_state = "whitered"},/area/shuttle/lightship/start)
-"fp" = (/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/fork,/obj/abstract/map/spawner/food,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
+"fp" = (/obj/structure/table/woodentable,/obj/item/weapon/kitchen/utensil/spoon,/obj/item/weapon/kitchen/utensil/fork,/obj/abstract/map/spawner/food/voxfood,/turf/simulated/floor{icon_state = "white"},/area/shuttle/lightship/start)
 "fq" = (/turf/simulated/floor{dir = 6; icon_state = "whitered"},/area/shuttle/lightship/start)
 "fr" = (/turf/simulated/floor{dir = 9; icon_state = "whitepurple"},/area/shuttle/lightship/start)
 "fs" = (/turf/simulated/floor{dir = 1; icon_state = "whitepurple"},/area/shuttle/lightship/start)
