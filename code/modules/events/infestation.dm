@@ -151,7 +151,7 @@
 			S.amount_grown = 0
 		else
 			var/spawn_type = pick(spawn_types)
-			var/atom/M = new spawn_type(picked)
+			var/atom/movable/M = new spawn_type(picked)
 			if(M.density)
 				valid -= picked
 		if(!valid.len)
