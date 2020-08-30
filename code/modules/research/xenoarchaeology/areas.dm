@@ -21,20 +21,15 @@
 	name = "Research Outpost Power"
 	icon_state = "engine"
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-	ambient_sounds = list(/datum/ambience/engi1,/datum/ambience/engi2,/datum/ambience/engi3,/datum/ambience/engi4)
 
 /area/research_outpost/atmos
 	name = "Research Outpost Atmospherics"
 	icon_state = "atmos"
 	holomap_color = HOLOMAP_AREACOLOR_ENGINEERING
-	ambient_sounds = list(/datum/ambience/engi1,/datum/ambience/engi2,/datum/ambience/engi3,/datum/ambience/engi4)
 
 /area/research_outpost/maint
 	name = "Research Outpost Maintenance"
 	icon_state = "maintcentral"
-	ambient_sounds = list(
-		/datum/ambience/maint1,
-		/datum/ambience/maint2)
 
 /area/research_outpost/iso1
 	name = "Isolation Cell"
@@ -60,8 +55,6 @@
 	name = "Mass Spectrometry Lab"
 	icon_state = "anospectro"
 	lightswitch = FALSE
-	ambient_sounds = list(
-		/datum/ambience/ded2)
 
 /area/research_outpost/anomaly
 	name = "Anomalous Materials Lab"
@@ -83,23 +76,14 @@
 /area/research_outpost/tempstorage
 	name = "Temporary Storage"
 	icon_state = "storage"
-	ambient_sounds = list(
-		/datum/ambience/maint1,
-		/datum/ambience/maint2)
 
 /area/research_outpost/maintstore1
 	name = "Auxiliary Storage"
 	icon_state = "auxstorage"
-	ambient_sounds = list(
-		/datum/ambience/maint1,
-		/datum/ambience/maint2)
 
 /area/research_outpost/maintstore2
 	name = "Maintenance Storage"
 	icon_state = "auxstorage"
-	ambient_sounds = list(
-		/datum/ambience/maint1,
-		/datum/ambience/maint2)
 
 /area/research_outpost/breakroom
 	name = "Break Room"
