@@ -261,5 +261,5 @@
 
 /obj/item/rig_module/rad_shield/adv
 	name = "high capacity radiation absorption device"
-	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. It can be reset by using a suit storage unit's cleaning operation."
+	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. This model features a higher capacity than the basic version. It can be reset by using a suit storage unit's cleaning operation."
 	max_capacity = 800 //About 3-4 "item touches" worth based on the same conditions as the above testing.
