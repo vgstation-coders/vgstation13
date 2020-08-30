@@ -2,7 +2,7 @@
 /obj/item/weapon/book/manual/excavation
 	name = "Out on the dig: NEW EDITION!"
 	icon_state = "excavation"
-	item_state = "book6"
+	item_state = "excavation"
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig"
 	dat = {"<html>
@@ -45,7 +45,7 @@
 				<li><b>Optical meson scanner</b> - you will find digsites in record time by being able to see through walls. But keep in mind that even regular looking walls may contain finds.</li>
 				<li><b>Pickaxes and drills</b> - useful to quickly reach a digsite, but be careful when coming near one as they will destroy any find that falls under them.</li>
 				<li><b>Small picks and excavation drills</b> - lets you dig inside a rock to extract its secrets. Small picks have a set dig depth while excavation drills can be set..</li>
-				<li><b>Brush/b> - lets you cleanly extract your finds from strange rocks.</li>
+				<li><b>Brush</b> - lets you cleanly extract your finds from strange rocks.</li>
 				<li><b>Measuring tape</b> - use it to measure the depth a rock face has been excavated to.</li>
 				<li><b>GPS</b> - knowing where you are precisely is necessary when triangulating anomalous xenotic energy signatures.</li>
 				<li><b>Core sampler</b> - use this to take rock slivers directly from rock walls that you can then run to the lab for analysis to triangulate the location of large artifacts.</li>
@@ -97,7 +97,7 @@
 
 /obj/item/weapon/book/manual/excavation/old
 	name = "Out on the dig"
-	icon_state = "excavation"
+	icon_state = "excavation_old"
 	item_state = "book6"
 	author = "Professor Patrick Mason, Curator of the Antiquities Museum on Ichar VII"
 	title = "Out on the dig"
