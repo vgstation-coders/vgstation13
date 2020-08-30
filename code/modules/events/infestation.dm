@@ -51,7 +51,7 @@
 	var/max_number = 4
 
 	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS,
-	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN, VERM_FROGS, VERM_SNAILS)
+	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN, VERM_FROGS, VERM_SNAILS, VERM_HEADCRABS)
 
 	if (override_vermin)
 		vermin = override_vermin
@@ -124,6 +124,10 @@
 			spawn_types = /mob/living/simple_animal/snail
 			vermstring = "snails"
 			max_number = 7
+		if(VERM_HEADCRABS)
+			spawn_types = /obj/item/clothing/mask/facehugger/headcrab
+			vermstring = "headcrabs"
+			max_number = 12
 
 
 	var/number = rand(2, max_number)
@@ -147,7 +151,7 @@
 			S.amount_grown = 0
 		else
 			var/spawn_type = pick(spawn_types)
-			var/mob/M = new spawn_type(picked)
+			var/atom/M = new spawn_type(picked)
 			if(M.density)
 				valid -= picked
 		if(!valid.len)
