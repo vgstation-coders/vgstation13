@@ -214,7 +214,7 @@
 /obj/item/projectile/hookshot/whip/liquorice/to_bump(atom/A as mob)
 	create_reagents(5)
 	reagents.add_reagent(DIABEETUSOL, 2)
-	reagents.add_reagent(CARAMEL, 3)
+	reagents.add_reagent(SUGAR, 3)
 	var/mob/M = A
 	if(ishuman(M))
 		reagents.trans_to(M, reagents.total_volume)

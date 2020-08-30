@@ -993,12 +993,12 @@ obj/item/projectile/bullet/suffocationbullet
 	name = "Candycane"
 	icon_state = "candycane"
 	nodamage = 0
-	damage = 25
+	damage = 20
 	capacity = 15
 	decay_type = null
 	custom_impact = null
 
 /obj/item/projectile/bullet/syringe/candycane/New()
 	..()
-	reagents.add_reagent(DIABEETUSOL, 10)
-	reagents.add_reagent(CARAMEL, 5)
+	reagents.add_reagent(DIABEETUSOL, 4)
+	reagents.add_reagent(SUGAR, 5)
