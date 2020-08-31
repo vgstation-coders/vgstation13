@@ -145,6 +145,7 @@
 			),
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
+		/obj/item/clothing/suit/armor/vest/wardenshort,
 		/obj/item/clothing/head/warden,
 		/obj/item/weapon/storage/box/flashbangs,
 		/obj/item/weapon/storage/box/bolas,

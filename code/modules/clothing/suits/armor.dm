@@ -79,6 +79,14 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/suit/armor/vest/wardenshort
+	name = "Warden's short jacket"
+	desc = "A short, armored jacket, perfect for desk duty."
+	icon_state = "wardenjacket"
+	item_state = "wardenjacket"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
 	desc = "The narkotiki camo pattern will come useful for botany raids."
