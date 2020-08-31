@@ -1,5 +1,5 @@
 /obj/item/weapon/anobattery
-	name = "Anomaly power battery"
+	name = "anomaly power battery"
 	desc = "A radioactive procedure allows for anomalous exotic particles to be stored inside, until they may exploited by a power utilizer."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "anobattery0"
@@ -36,7 +36,7 @@
 var/list/anomaly_power_utilizers = list()
 
 /obj/item/weapon/anodevice
-	name = "Anomaly power utilizer"
+	name = "anomaly power utilizer"
 	desc = "Features a large socket where a battery might fit."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "anodev"
