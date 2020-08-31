@@ -14,6 +14,7 @@
 	var/isolated = 0
 	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
 	var/triggered = 0 //set to 1 if it has been activated at least once
+	var/activation_sound = null
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -32,6 +33,17 @@
 
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+
+	activation_sound = pick(
+		'sound/machines/alien_artifacts/artifact_activation_1.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_2.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_3.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_4.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_5.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_6.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_7.ogg',
+		'sound/machines/alien_artifacts/artifact_activation_8.ogg',
+		)
 
 	//random charge time and distance
 	switch(pick(100;1, 50;2, 25;3))
@@ -70,6 +82,7 @@
 				isolated = 0
 
 		if(reveal_toggle == 1 && holder)
+			playsound(holder, activation_sound, 20, 0, -3, FALLOFF_SOUNDS, 0)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
 				A.update_icon()
