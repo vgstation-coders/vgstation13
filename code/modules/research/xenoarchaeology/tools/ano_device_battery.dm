@@ -161,6 +161,19 @@ var/list/anomaly_power_utilizers = list()
 		var/mob/living/L = hit_atom
 		to_chat(L, "<span class='warning'>\The [src] vibrates as it slams into you.</span>")
 		inserted_battery.battery_effect.DoEffectTouch(L)
+		var/client/foundclient = directory[ckey(fingerprintslast)]
+		var/mob/foundmob = foundclient.mob
+		if (istype(foundmob))
+			foundmob.lastattacked = L
+			L.lastattacker = foundmob
+		if (istype(foundmob))
+			foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
+		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
+		log_attack("<font color='red'>[istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>" )
+		if(!istype(foundmob))
+			L.LAssailant = foundmob
+		else
+			L.LAssailant = null
 
 /obj/item/weapon/anodevice/attack(var/mob/M, var/mob/user)
 	var/clumsy = FALSE
@@ -176,6 +189,15 @@ var/list/anomaly_power_utilizers = list()
 			inserted_battery.battery_effect.DoEffectTouch(user)
 		else
 			inserted_battery.battery_effect.DoEffectTouch(M)
+			user.lastattacked = M
+			M.lastattacker = user
+			user.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
+			M.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [user.name] ([user.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>" )
+			if(!iscarbon(user))
+				M.LAssailant = null
+			else
+				M.LAssailant = user
 
 /obj/item/weapon/anodevice/proc/shutdown_emission()
 	if(activated)
@@ -224,6 +246,8 @@ var/list/anomaly_power_utilizers = list()
 		timing = 0
 		if(!inserted_battery.battery_effect.activated)
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id]([inserted_battery.battery_effect]) emission started by [key_name(usr)]")
+			if (inserted_battery.battery_effect.effecttype != "unknown")
+				log_game("[src] ([inserted_battery.battery_effect.effecttype]) activated by [key_name(usr)](<A HREF='?_src_=holder;adminmoreinfo=\ref[usr]'>?</A>) in [formatJumpTo(get_turf(src))]")
 			inserted_battery.battery_effect.ToggleActivate(1)
 	if(href_list["shutdown"])
 		activated = 0
