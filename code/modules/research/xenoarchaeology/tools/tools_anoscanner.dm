@@ -44,4 +44,5 @@
 			else
 				SSxenoarch.artifact_spawning_turfs.Remove(T)
 
+	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	cur_turf.visible_message("<span class='info'>[src] clicks.</span>")

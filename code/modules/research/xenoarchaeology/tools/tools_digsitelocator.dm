@@ -29,6 +29,7 @@
 		if(!C)
 			return
 		cooldown = world.time
+		playsound(user, 'sound/items/detscan.ogg', 50, 1)
 		for(var/turf/unsimulated/mineral/M in range(7, user))
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]
