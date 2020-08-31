@@ -37,7 +37,7 @@
 
 /mob/living/silicon/robot/death(gibbed)
 	if(shell)	//Shells will always gib on death
-		gibbed = TRUE
+		gib()
 	if(stat == DEAD)
 		return
 	if(!gibbed)
