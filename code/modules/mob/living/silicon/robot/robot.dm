@@ -101,8 +101,8 @@ var/list/cyborg_list = list()
 	var/shell = FALSE		//This is an cyborg directly controlled by the AI
 	var/deployed = TRUE		//The shell was deployed to
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
-	var/action/undeployment/undeployment_action
-	var/action/detonate/detonate_action
+	var/datum/action/undeployment/undeployment_action = new 
+	var/datum/action/detonate/destroy_action = new
 
 /mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
@@ -1369,7 +1369,6 @@ var/list/cyborg_list = list()
 	mainframe.connected_robots |= src
 	lawupdate = TRUE
 	lawsync()
-	var/mob/M = src
 	if(radio && AI.radio)
 		radio.channels = AI.radio.channels
 		radio.subspace_transmission = TRUE
@@ -1411,7 +1410,7 @@ var/list/cyborg_list = list()
 		return
 	mind.transfer_to(mainframe)
 	deployed = FALSE
-	mainframe.deployed_shell = null
+	mainframe.shell = null
 	undeployment_action.Remove(src)
 	destroy_action.Remove(src)
 	if(radio) //Recalculate the radio channel
@@ -1419,5 +1418,5 @@ var/list/cyborg_list = list()
 	if(mainframe.laws)
 		mainframe.laws.show_laws(mainframe) //Always remind the AI when switching
 	if(mainframe.eyeobj)
-		mainframe.eyeobj.setLoc(loc)
+		mainframe.eyeobj.forceMove(loc)
 

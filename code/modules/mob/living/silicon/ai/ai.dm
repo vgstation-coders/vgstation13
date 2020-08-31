@@ -43,7 +43,7 @@ var/list/ai_list = list()
 
 	//Shell stuff
 	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
-	var/datum/action/innate/deploy_shell/deploy_action = new
+	var/datum/action/deploy_shell/deploy_action = new
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -862,7 +862,7 @@ var/list/ai_list = list()
 		return
 
 	if(shell)	//If the silicon already has a linked shell, go to that one!
-		if (target.shell == DEAD || shell.deployed || shell.mainframe != src)
+		if (shell.stat == DEAD || shell.deployed || shell.mainframe != src)
 			return
 		if(mind)
 			to_chat(src, "Taking control of cyborg shell...")
@@ -872,9 +872,8 @@ var/list/ai_list = list()
 	else		//Otherwise, lets see if we can create a new shell
 		var/list/potential_shells = list()
 		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)
-			var/atom/A = emptyborg
-			if(can_track_atom(emptyborg))	//Must be visible
-				continue
+			if(!cameranet.checkCameraVis(emptyborg))	//Must be visible
+				continue	
 			if(!emptyborg.check_completion())	//Must be ready to have a posi/MMI inserted
 				continue
 			potential_shells.Add(emptyborg)
@@ -884,7 +883,8 @@ var/list/ai_list = list()
 		var/list/options = list()	
 		for(var/obj/item/robot_parts/robot_suit/S in potential_shells)	
 			options["Exoskeleton in [get_area(S)]"] = S
-		var/obj/item/robot_parts/robot_suit/chosen_shell = input(src, "Which exoskeleton to control?") as null|anything in options
+		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
+		var/obj/item/robot_parts/robot_suit/chosen_shell = options[choice]
 		if(mind)
 			to_chat(src, "Taking control of cyborg shell...")
 			var/mob/living/silicon/robot/R = chosen_shell.create_robot()
