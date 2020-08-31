@@ -1351,7 +1351,7 @@ var/list/cyborg_list = list()
 
 //AI Shell Control
 
-/mob/living/silicon/robot/proc/deploy(mob/living/silicon/ai/AI)		//Places the AI into the shell.
+/mob/living/silicon/robot/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
 	if(!shell)	//AI is trying to deploy into a borg thats not designated a shell. This shouldn't happen, but prevent it anyway.
 		return
 	deployed = TRUE
@@ -1361,6 +1361,37 @@ var/list/cyborg_list = list()
 	mainframe.connected_robots |= src
 	lawupdate = TRUE
 	lawsync()
+	var/mob/M = src
 	if(radio && AI.radio)
 		radio.channels = AI.radio.channels
 		radio.subspace_transmission = TRUE
+
+/datum/action/undeployment
+	name = "Disconnect from shell"
+	desc = "Stop controlling your shell and resume normal core operations."
+	icon_icon = 'icons/mob/AI.dmi'
+	button_icon_state = "ai"
+
+/datum/action/undeployment/Trigger()
+	if(!..())
+		return FALSE
+	var/mob/living/silicon/robot/R = owner
+
+	R.undeploy()
+	return TRUE
+
+/mob/living/silicon/robot/proc/undeploy()
+
+	if(!deployed || !mind || !mainframe)
+		return
+	mind.transfer_to(mainframe)
+	deployed = FALSE
+	mainframe.deployed_shell = null
+	undeployment_action.Remove(src)
+	if(radio) //Recalculate the radio channel
+		radio.recalculateChannels()
+	if(mainframe.laws)
+		mainframe.laws.show_laws(mainframe) //Always remind the AI when switching
+	if(mainframe.eyeobj)
+		mainframe.eyeobj.setLoc(loc)
+

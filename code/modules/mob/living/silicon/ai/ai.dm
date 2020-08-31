@@ -41,6 +41,9 @@ var/list/ai_list = list()
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
 
+	//Shell stuff
+	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
+
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
 
@@ -843,6 +846,59 @@ var/list/ai_list = list()
 		return
 
 	station_holomap.toggleHolomap(src,1)
+
+/mob/living/silicon/ai/verb/deploy_to_shell()	//Pop into a shell if you own one
+	set category = "AI Commands"
+	set name = "Deploy to Shell"
+
+	if(incapacitated())
+		return
+	if(control_disabled)
+		to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
+		return
+
+	if(shell)	//If the silicon already has a linked shell, go to that one!
+		if (target.shell == DEAD || shell.deployed || shell.mainframe != src)
+			return
+		if(mind)
+			to_chat(src, "Taking control of cyborg shell...")
+			shell.deploy_init(src)
+			mind.transfer_to(shell)
+
+	else		//Otherwise, lets see if we can create a new shell
+		var/list/potential_shells = list()
+		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)
+			var/atom/A = emptyborg
+			if(can_track_atom(emptyborg))	//Must be visible
+				continue
+			if(!emptyborg.check_completion())	//Must be ready to have a posi/MMI inserted
+				continue
+			potential_shells.Add(emptyborg)
+		if(potential_shells.len == 0)
+			to_chat(src, "<span class='warning'>No potential cyborg shells available.</span>")
+			return
+		var/list/options = list()	
+		for(var/obj/item/robot_parts/robot_suit/S in potential_shells)	
+			options["Exoskeleton in [get_area(S)]"] = S
+		var/obj/item/robot_parts/robot_suit/chosen_shell = input(src, "Which exoskeleton to control?") as null|anything in options
+		if(mind)
+			to_chat(src, "Taking control of cyborg shell...")
+			var/mob/living/silicon/robot/R = chosen_shell.create_robot()
+			R.deploy_init(src)
+			mind.transfer_to(R)
+
+/datum/action/deploy_shell
+	name = "Deploy to AI Shell"
+	desc = "Wirelessly control your personal cyborg shell or create a new one from an empty exoskeleton."
+	icon_icon = 'icons/mob/robots.dmi'
+	button_icon_state = "robot"
+
+/datum/action/deploy_shell/Trigger()
+	var/mob/living/silicon/ai/AI = owner
+	if(!AI)
+		return
+	AI.deploy_to_shell()
+
 
 //AI_CAMERA_LUMINOSITY
 

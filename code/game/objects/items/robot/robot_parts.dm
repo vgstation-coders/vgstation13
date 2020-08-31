@@ -209,47 +209,15 @@
 			if(!user.drop_item(W))
 				return
 
-			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
-
 			for(var/P in M.mommi_assembly_parts) //Let's give back all those mommi creation components
 				for(var/obj/item/L in M.contents)
 					if(L == P)
 						L.forceMove(T)
 						M.contents -= L
+					
+			create_robot(M)
 
-			if(!O)
-				return
-
-			O.mmi = W
-			O.invisibility = 0
-			O.custom_name = created_name
-			O.updatename("Default")
-
-			M.brainmob.mind.transfer_to(O)
-
-			if(O.mind && O.mind.special_role)
-				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
-
-			O.job = "Cyborg"
-			if(chest.extension)
-				O.component_extension = chest.extension
-				O.upgrade_components()
-			O.cell = chest.cell
-			O.cell.forceMove(O)
-			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-
-			// Since we "magically" installed a cell, we also have to update the correct component.
-			if(O.cell)
-				var/datum/robot_component/cell_component = O.components["power cell"]
-				cell_component.wrapped = O.cell
-				cell_component.installed = 1
-
-			feedback_inc("cyborg_birth",1)
-
-			spawn()
-				O.Namepick()
-
-			qdel(src)
+			
 		else
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
@@ -263,6 +231,48 @@
 		src.created_name = t
 
 	return
+
+/obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M)
+	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
+	if(!O)
+		return
+	if(M)
+		O.mmi = M
+	O.invisibility = 0
+	O.custom_name = created_name
+	O.updatename("Default")
+
+	if(M)
+		M.brainmob.mind.transfer_to(O)
+
+	if(O.mind && O.mind.special_role)
+		O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
+
+	O.job = "Cyborg"
+	if(chest.extension)
+		O.component_extension = chest.extension
+		O.upgrade_components()
+	O.cell = chest.cell
+	O.cell.forceMove(O)
+	if(M)
+		M.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+
+	// Since we "magically" installed a cell, we also have to update the correct component.
+	if(O.cell)
+		var/datum/robot_component/cell_component = O.components["power cell"]
+		cell_component.wrapped = O.cell
+		cell_component.installed = 1
+
+	feedback_inc("cyborg_birth",1)
+
+	spawn()
+		if(M)
+			O.Namepick()
+
+	qdel(src)
+
+	return O
+
 
 /obj/item/robot_parts/chest/attackby(obj/item/W as obj, mob/user as mob)
 	..()
