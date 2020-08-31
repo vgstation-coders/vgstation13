@@ -308,8 +308,6 @@
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
-/datum/mind 
-	var/has_equipped_magic = 0
 
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
 	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "alchemy")
@@ -422,9 +420,15 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	if(!mind.has_equipped_magic)
-		new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
-		mind.has_equipped_magic = 1
+	 
+	var/mob/U = src
+	var/recieve_absorb = 1
+	for(var/spell/S in U.spell_list)			//I was told that is_type_in_list can cause unforseen consequences so I'm doing this
+		if(S.type == /spell/targeted/absorb)
+			recieve_absorb = 0
+			break
+	if(recieve_absorb)
+		U.add_spell(/spell/targeted/absorb)
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
