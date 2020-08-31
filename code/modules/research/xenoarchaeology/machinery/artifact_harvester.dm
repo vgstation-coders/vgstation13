@@ -313,8 +313,9 @@
 
 	if (href_list["ejectbattery"])
 		if(inserted_battery)
-			src.inserted_battery.forceMove(src.loc)
-			src.inserted_battery = null
+			inserted_battery.forceMove(loc)
+			inserted_battery.update_icon()
+			inserted_battery = null
 
 	if (href_list["drainbattery"])
 		if(inserted_battery)
