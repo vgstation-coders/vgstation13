@@ -43,6 +43,7 @@ var/list/ai_list = list()
 
 	//Shell stuff
 	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
+	var/datum/action/innate/deploy_shell/deploy_action = new
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -110,6 +111,9 @@ var/list/ai_list = list()
 	holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
 
 	proc_holder_list = new()
+
+	//Action Buttons
+	deploy_action.Grant(src)
 
 	//Determine the AI's lawset
 	if(L && istype(L,/datum/ai_laws))
