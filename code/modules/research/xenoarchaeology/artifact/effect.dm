@@ -34,16 +34,17 @@
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
 
-	activation_sound = pick(
-		'sound/machines/alien_artifacts/artifact_activation_1.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_2.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_3.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_4.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_5.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_6.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_7.ogg',
-		'sound/machines/alien_artifacts/artifact_activation_8.ogg',
-		)
+	if (effecttype != "unknown")
+		activation_sound = pick(
+			'sound/machines/alien_artifacts/artifact_activation_1.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_2.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_3.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_4.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_5.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_6.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_7.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_8.ogg',
+			)
 
 	//random charge time and distance
 	switch(pick(100;1, 50;2, 25;3))
