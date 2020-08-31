@@ -45,6 +45,7 @@ var/list/ai_list = list()
 	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
 	var/datum/action/deploy_shell/deploy_action = new
 	var/deployed = 0		//Is the AI currently controlling a borg
+	var/greeted = 0		//Shitty fix for being repeatedly told the AI greeting
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -160,7 +161,7 @@ var/list/ai_list = list()
 				spawn(1)
 					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 				stored_freqs = 1
-
+			greeted = 1
 			job = "AI"
 	ai_list += src
 	..()

@@ -99,7 +99,7 @@ var/list/cyborg_list = list()
 
 //AI Control
 	var/shell = FALSE		//This is an cyborg directly controlled by the AI
-	var/deployed = TRUE		//The shell was deployed to
+	var/deployed = FALSE		//The shell was deployed to
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
 	var/datum/action/undeployment/undeployment_action = new 
 	var/datum/action/detonate/destroy_action = new
@@ -1415,8 +1415,6 @@ var/list/cyborg_list = list()
 	destroy_action.Remove(src)
 	if(radio) //Recalculate the radio channel
 		radio.recalculateChannels()
-	if(mainframe.laws)
-		mainframe.laws.show_laws(mainframe) //Always remind the AI when switching
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
 
