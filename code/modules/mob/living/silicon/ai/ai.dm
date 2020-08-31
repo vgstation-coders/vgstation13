@@ -44,6 +44,7 @@ var/list/ai_list = list()
 	//Shell stuff
 	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
 	var/datum/action/deploy_shell/deploy_action = new
+	var/datum/action/detonate/destroy_action = new
 	var/deployed = 0		//Is the AI currently controlling a borg
 	var/greeted = 0		//Shitty fix for being repeatedly told the AI greeting
 
@@ -116,6 +117,7 @@ var/list/ai_list = list()
 
 	//Action Buttons
 	deploy_action.Grant(src)
+	destroy_action.Grant(src)
 
 	//Determine the AI's lawset
 	if(L && istype(L,/datum/ai_laws))
@@ -911,6 +913,35 @@ var/list/ai_list = list()
 	if(!AI)
 		return
 	AI.deploy_to_shell()
+
+/datum/action/detonate/
+	name = "Destroy shell"
+	desc = "Destroy your current shell and make room for a new one."
+	icon_icon = 'icons/mob/robots.dmi'
+	button_icon_state = "gibup"
+
+/datum/action/detonate/Trigger()
+	if(!..())
+		return FALSE
+	if(istype(owner, /mob/living/silicon/robot))		//Pressing the button as a borg
+		if(shell)		//non-shells shouldn't be able to blow themself up
+			var/mob/living/silicon/robot/R = owner
+			R.mainframe.shell = null
+			R.gib()
+			return TRUE
+	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
+		if(shell)
+			var/mob/living/silicon/robot/R = owner.shell
+			R.mainframe.shell = null
+			R.gib()
+			return TRUE
+		else
+			to_chat("<span class='warning'>You have no shell.</span>")
+			return FALSE
+	else
+		to_chat("<span class='warning'>You can't do that.</span>")
+		return FALSE
+
 
 
 //AI_CAMERA_LUMINOSITY
