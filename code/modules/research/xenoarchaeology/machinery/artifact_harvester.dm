@@ -17,6 +17,7 @@
 	var/chargerate = 0
 	var/harvester = "" // Logs who started a harvest.
 	var/obj/effect/artifact_field/artifact_field
+	light_color = "#6496FA"
 
 /obj/machinery/artifact_harvester/New()
 	..()
@@ -29,6 +30,7 @@
 	if(istype(I,/obj/item/weapon/anobattery))
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
+				playsound(loc, 'sound/machines/click.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You insert [I] into [src].</span>")
 				src.inserted_battery = I
 				updateDialog()
@@ -97,6 +99,11 @@
 		//creates variable charging rates, with the minimum being 0.5
 		inserted_battery.stored_charge += chargerate
 
+		// Radiation
+		for(var/mob/living/carbon/M in view(src,3))
+			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) ) //Distance/rads: 1 = 27, 2 = 21, 3 = 19
+			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)
+
 		//check if we've finished
 		if(inserted_battery.stored_charge >= inserted_battery.capacity)
 			inserted_battery.stored_charge = inserted_battery.capacity //Prevents overcharging
@@ -105,6 +112,7 @@
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
 			icon_state = "incubator_old"
+			set_light(0)
 
 	else if(harvesting < 0)
 		//dump some charge
@@ -130,6 +138,7 @@
 				inserted_battery.battery_effect.ToggleActivate()
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
 			icon_state = "incubator_old"
+			set_light(0)
 
 /obj/machinery/artifact_harvester/Topic(href, href_list)
 
@@ -159,6 +168,7 @@
 					harvesting = 1
 					use_power = 2
 					icon_state = "incubator_old_on"
+					set_light(2,2)
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
 
@@ -208,6 +218,7 @@
 					harvesting = 1
 					use_power = 2
 					icon_state = "incubator_old_on"
+					set_light(2,2)
 					var/message = "<b>[src]</b> states, \"Beginning artifact energy harvesting.\""
 					src.visible_message(message)
 
@@ -241,6 +252,7 @@
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			icon_state = "incubator_old"
+			set_light(0)
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
 
 	if (href_list["alockon"])
@@ -313,6 +325,7 @@
 
 	if (href_list["ejectbattery"])
 		if(inserted_battery)
+			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0)
 			inserted_battery.forceMove(loc)
 			inserted_battery.update_icon()
 			inserted_battery = null
@@ -326,6 +339,7 @@
 					harvesting = -1
 					use_power = 2
 					icon_state = "incubator_old_on"
+					set_light(2,2)
 					var/message = "<b>[src]</b> states, \"Warning, battery charge dump commencing.\""
 					src.visible_message(message)
 			else

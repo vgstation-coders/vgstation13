@@ -171,7 +171,7 @@ var/list/anomaly_power_utilizers = list()
 		else
 			visible_message("<span class='warning'>\The [user] taps \the [M] with \the [src].</span>", "[bicon(src)]<span class='warning'>You tap \the [M] with \the [src].</span>")
 
-	if(cooldown <= 0 && activated && inserted_battery?.battery_effect && (inserted_battery.battery_effect.effect != ARTIFACT_EFFECT_TOUCH))
+	if(cooldown <= 0 && activated && inserted_battery?.battery_effect && (inserted_battery.battery_effect.effect == ARTIFACT_EFFECT_TOUCH))
 		if (clumsy)
 			inserted_battery.battery_effect.DoEffectTouch(user)
 		else
