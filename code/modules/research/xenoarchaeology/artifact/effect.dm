@@ -82,7 +82,7 @@
 				isolated = 0
 
 		if(reveal_toggle == 1 && holder)
-			if (IsPrimary())
+			if(!istype(holder, /obj/machinery/artifact) || holder.primary_effect == src)
 				playsound(holder, activation_sound, 20, 0, -3, FALLOFF_SOUNDS, 0)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
