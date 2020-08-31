@@ -924,14 +924,14 @@ var/list/ai_list = list()
 	if(!..())
 		return FALSE
 	if(istype(owner, /mob/living/silicon/robot))		//Pressing the button as a borg
-		if(shell)		//non-shells shouldn't be able to blow themself up
-			var/mob/living/silicon/robot/R = owner
+		var/mob/living/silicon/robot/R = owner
+		if(R.shell)										//Non-shells shouldn't be able to detonate themselves
 			R.mainframe.shell = null
 			R.gib()
 			return TRUE
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
-		if(shell)
-			var/mob/living/silicon/robot/R = owner.shell
+		var/mob/living/silicon/ai/R = owner
+		if(R.shell)			
 			R.mainframe.shell = null
 			R.gib()
 			return TRUE

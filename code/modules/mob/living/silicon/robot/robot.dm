@@ -1393,21 +1393,6 @@ var/list/cyborg_list = list()
 	R.undeploy()
 	return TRUE
 
-/datum/action/detonate/
-	name = "Destroy shell"
-	desc = "Destroy your current shell to make room for a new one."
-	icon_icon = 'icons/mob/robots.dmi'
-	button_icon_state = "gibup"
-
-/datum/action/detonate/Trigger()
-	if(!..())
-		return FALSE
-	var/mob/living/silicon/robot/R = owner
-
-	R.mainframe.shell = null
-	R.gib()
-	return TRUE
-
 /mob/living/silicon/robot/proc/undeploy()
 
 	if(!deployed || !mind || !mainframe)
