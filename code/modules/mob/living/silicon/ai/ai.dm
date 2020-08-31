@@ -44,6 +44,7 @@ var/list/ai_list = list()
 	//Shell stuff
 	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
 	var/datum/action/deploy_shell/deploy_action = new
+	var/deployed = 0		//Is the AI currently controlling a borg
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
@@ -866,8 +867,10 @@ var/list/ai_list = list()
 			return
 		if(mind)
 			to_chat(src, "Taking control of cyborg shell...")
-			shell.deploy_init(src)
+			deployed = 1
 			mind.transfer_to(shell)
+			shell.deploy_init(src)
+			
 
 	else		//Otherwise, lets see if we can create a new shell
 		var/list/potential_shells = list()
@@ -886,10 +889,16 @@ var/list/ai_list = list()
 		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
 		var/obj/item/robot_parts/robot_suit/chosen_shell = options[choice]
 		if(mind)
+			deployed = 1
 			to_chat(src, "Taking control of cyborg shell...")
 			var/mob/living/silicon/robot/R = chosen_shell.create_robot()
-			R.deploy_init(src)
+			shell = R
 			mind.transfer_to(R)
+			R.shell = TRUE
+			R.deploy_init(src)
+			
+			
+
 
 /datum/action/deploy_shell
 	name = "Deploy to AI Shell"

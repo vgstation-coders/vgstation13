@@ -1392,8 +1392,8 @@ var/list/cyborg_list = list()
 /datum/action/detonate/
 	name = "Destroy shell"
 	desc = "Destroy your current shell to make room for a new one."
-	icon_icon = 'icons/mob/AI.dmi'
-	button_icon_state = "ai"
+	icon_icon = 'icons/mob/robots.dmi'
+	button_icon_state = "gibup"
 
 /datum/action/detonate/Trigger()
 	if(!..())
@@ -1409,8 +1409,8 @@ var/list/cyborg_list = list()
 	if(!deployed || !mind || !mainframe)
 		return
 	mind.transfer_to(mainframe)
+	mainframe.deployed = 0
 	deployed = FALSE
-	mainframe.shell = null
 	undeployment_action.Remove(src)
 	destroy_action.Remove(src)
 	if(radio) //Recalculate the radio channel

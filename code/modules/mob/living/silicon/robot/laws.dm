@@ -69,7 +69,11 @@
 				laws.supplied[index] = temp
 
 		if(mind)
-			var/datum/role/mastermalf = connected_ai.mind.GetRole(MALF)
+			var/datum/role/mastermalf		//Workaround for shelled AIs causing runtimes
+			if(connected_ai.deployed)
+				mastermalf =  connected_ai.shell.mind.GetRole(MALF)
+			else
+				mastermalf = connected_ai.mind.GetRole(MALF)
 			if(mastermalf)
 				var/datum/faction/my_new_faction = mastermalf.faction
 				my_new_faction.HandleRecruitedMind(mind)

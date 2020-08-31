@@ -38,7 +38,6 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(shell)	//Shells will always gib on death
 		gibbed = TRUE
-		mainframe.shell = null
 	if(stat == DEAD)
 		return
 	if(!gibbed)
@@ -88,6 +87,9 @@
 					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
+		else if(shell && deployed)	//an AI is controlling it
+			undeploy()
+			mainframe.shell = null
 		else
 			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
 		mmi = null

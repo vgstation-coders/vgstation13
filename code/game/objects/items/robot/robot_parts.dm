@@ -44,6 +44,10 @@
 	var/obj/item/weapon/cell/cell = null
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
 
+/obj/item/robot_parts/chest/complete
+	cell = new /obj/item/weapon/cell/high
+	wires = 1.0
+
 /obj/item/robot_parts/chest/get_cell()
 	return cell
 
@@ -59,6 +63,10 @@
 	var/obj/item/device/flash/flash1 = null
 	var/obj/item/device/flash/flash2 = null
 
+/obj/item/robot_parts/head/complete
+	flash1 = new /obj/item/device/flash
+	flash2 = new /obj/item/device/flash
+
 /obj/item/robot_parts/robot_suit
 	name = "robot endoskeleton"
 	desc = "A complex metal backbone with standard limb sockets and pseudomuscle anchors."
@@ -70,6 +78,14 @@
 	var/obj/item/robot_parts/chest/chest = null
 	var/obj/item/robot_parts/head/head = null
 	var/created_name = ""
+
+/obj/item/robot_parts/robot_suit/mapped
+	l_arm = new /obj/item/robot_parts/l_arm
+	r_arm = new /obj/item/robot_parts/r_arm
+	l_leg = new /obj/item/robot_parts/l_leg
+	r_leg = new /obj/item/robot_parts/r_leg
+	chest = new /obj/item/robot_parts/chest/complete
+	head = new /obj/item/robot_parts/head/complete
 
 /obj/item/robot_parts/robot_suit/New()
 	..()
