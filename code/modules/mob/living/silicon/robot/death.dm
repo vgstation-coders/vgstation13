@@ -76,9 +76,11 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
 	cyborg_list -= src
-	if(shell && deployed)	//an AI is controlling it
-		undeploy()
-		mainframe.shell = null
+	if(shell)	//an AI owns this borg
+		if(deployed)
+			undeploy()
+		if(mainframe)
+			mainframe.shell = null
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)

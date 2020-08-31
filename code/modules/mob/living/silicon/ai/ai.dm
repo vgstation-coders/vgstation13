@@ -872,7 +872,6 @@ var/list/ai_list = list()
 			mind.transfer_to(shell)
 			shell.deploy_init(src)
 			
-
 	else		//Otherwise, lets see if we can create a new shell
 		var/list/potential_shells = list()
 		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)
