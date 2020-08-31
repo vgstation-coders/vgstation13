@@ -101,6 +101,8 @@ var/list/cyborg_list = list()
 	var/shell = FALSE		//This is an cyborg directly controlled by the AI
 	var/deployed = TRUE		//The shell was deployed to
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
+	var/action/undeployment/undeployment_action
+	var/action/detonate/detonate_action
 
 /mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
@@ -174,7 +176,10 @@ var/list/cyborg_list = list()
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 /mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
-	if(istype(new_AI))
+	if(shell && mainframe)	//Un-lockdown the shell if it was locked down previously
+		to_chat(mainframe, "<span class='notice' style=\"font-family:Courier\">Notice: Connection to cyborg shell re-established.</span>" )
+		SetLockdown(FALSE)
+	else if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
 		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
@@ -185,7 +190,10 @@ var/list/cyborg_list = list()
 		lawupdate = FALSE
 
 /mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
-	if(connected_ai)
+	if(shell && mainframe)	//It's a shell. Cutting the AI link effectively locks it down
+		to_chat(mainframe, "<span class='alert' style=\"font-family:Courier\">ERROR: AI Link to cyborg shell was cut.</span>" )
+		SetLockdown(TRUE)
+	else if(connected_ai)
 		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
 		if(announce)
 			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
@@ -1365,6 +1373,8 @@ var/list/cyborg_list = list()
 	if(radio && AI.radio)
 		radio.channels = AI.radio.channels
 		radio.subspace_transmission = TRUE
+	undeployment_action.Grant(src)
+	destroy_action.Grant(src)
 
 /datum/action/undeployment
 	name = "Disconnect from shell"
@@ -1380,6 +1390,21 @@ var/list/cyborg_list = list()
 	R.undeploy()
 	return TRUE
 
+/datum/action/detonate/
+	name = "Destroy shell"
+	desc = "Destroy your current shell to make room for a new one."
+	icon_icon = 'icons/mob/AI.dmi'
+	button_icon_state = "ai"
+
+/datum/action/detonate/Trigger()
+	if(!..())
+		return FALSE
+	var/mob/living/silicon/robot/R = owner
+
+	R.mainframe.shell = null
+	R.gib()
+	return TRUE
+
 /mob/living/silicon/robot/proc/undeploy()
 
 	if(!deployed || !mind || !mainframe)
@@ -1388,6 +1413,7 @@ var/list/cyborg_list = list()
 	deployed = FALSE
 	mainframe.deployed_shell = null
 	undeployment_action.Remove(src)
+	destroy_action.Remove(src)
 	if(radio) //Recalculate the radio channel
 		radio.recalculateChannels()
 	if(mainframe.laws)
