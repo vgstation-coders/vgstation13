@@ -76,6 +76,9 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
 	cyborg_list -= src
+	if(shell && deployed)	//an AI is controlling it
+		undeploy()
+		mainframe.shell = null
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
@@ -87,9 +90,6 @@
 					MB.Drop()
 				mind.transfer_to(mmi.brainmob)
 			mmi.brainmob.locked_to_z = locked_to_z
-		else if(shell && deployed)	//an AI is controlling it
-			undeploy()
-			mainframe.shell = null
 		else
 			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
 		mmi = null
