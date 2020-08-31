@@ -167,9 +167,9 @@ var/list/anomaly_power_utilizers = list()
 			foundmob.lastattacked = L
 			L.lastattacker = foundmob
 		if (istype(foundmob))
-			foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
-		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
-		log_attack("<font color='red'>[istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effect.effecttype])</font>" )
+			foundmob.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>"
+		L.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>"
+		log_attack("<font color='red'>[istype(foundmob) ? foundmob.name : ""] ([istype(foundmob) ? foundmob.ckey : ""]) touched [L.name] ([L.ckey]) with thrown [name] ([inserted_battery.battery_effect.effecttype])</font>" )
 		if(!istype(foundmob))
 			L.LAssailant = foundmob
 		else
@@ -191,9 +191,9 @@ var/list/anomaly_power_utilizers = list()
 			inserted_battery.battery_effect.DoEffectTouch(M)
 			user.lastattacked = M
 			M.lastattacker = user
-			user.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
-			M.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [user.name] ([user.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>"
-			log_attack("<font color='red'>[user.name] ([user.ckey]) touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effect.effecttype])</font>" )
+			user.attack_log += "\[[time_stamp()]\]<font color='red'> Touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effecttype])</font>"
+			M.attack_log += "\[[time_stamp()]\]<font color='orange'> Touched by [user.name] ([user.ckey]) with [name] ([inserted_battery.battery_effect.effecttype])</font>"
+			log_attack("<font color='red'>[user.name] ([user.ckey]) touched [M.name] ([M.ckey]) with [name] ([inserted_battery.battery_effect.effecttype])</font>" )
 			if(!iscarbon(user))
 				M.LAssailant = null
 			else
