@@ -18,6 +18,7 @@
 	var/harvester = "" // Logs who started a harvest.
 	var/obj/effect/artifact_field/artifact_field
 	light_color = "#6496FA"
+	var/radiation_range = 4
 
 /obj/machinery/artifact_harvester/New()
 	..()
@@ -100,9 +101,11 @@
 		inserted_battery.stored_charge += chargerate
 
 		// Radiation
-		for(var/mob/living/carbon/M in view(src,3))
-			var/rads = RADS_PER_TICK * sqrt( 1 / (get_dist(M, src) + 1) ) //Distance/rads: 1 = 27, 2 = 21, 3 = 19
-			M.apply_radiation(round(rads*count_rad_wires()/2),RAD_EXTERNAL)
+		var/turf/T = get_turf(src)
+		for(var/mob/living/M in dview(radiation_range, T, INVISIBILITY_MAXIMUM))
+			var/dist2mob = sqrt(get_dist_squared(T, get_turf(M)))
+			var/rads = 40 / max(1,dist2mob) //Distance/rads: 1 = 40, 2 = 20, 3 = 13, 4 = 10
+			M.apply_radiation(round(rads),RAD_EXTERNAL)
 
 		//check if we've finished
 		if(inserted_battery.stored_charge >= inserted_battery.capacity)
