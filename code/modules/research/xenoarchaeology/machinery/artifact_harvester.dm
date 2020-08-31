@@ -18,7 +18,7 @@
 	var/chargerate = 0
 	var/harvester = "" // Logs who started a harvest.
 	var/obj/effect/artifact_field/artifact_field
-	light_color = "#6496FA"
+	light_color = "#E1C400"
 	var/radiation_range = 4
 
 /obj/machinery/artifact_harvester/New()
