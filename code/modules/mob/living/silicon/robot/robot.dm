@@ -97,6 +97,11 @@ var/list/cyborg_list = list()
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
+//AI Control
+	var/shell = FALSE		//This is an cyborg directly controlled by the AI
+	var/deployed = TRUE		//The shell was deployed to
+	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
+
 /mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
@@ -1342,3 +1347,20 @@ var/list/cyborg_list = list()
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
 	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
+
+
+//AI Shell Control
+
+/mob/living/silicon/robot/proc/deploy(mob/living/silicon/ai/AI)		//Places the AI into the shell.
+	if(!shell)	//AI is trying to deploy into a borg thats not designated a shell. This shouldn't happen, but prevent it anyway.
+		return
+	deployed = TRUE
+	real_name = "[AI.name] Shell"
+	name = real_name
+	mainframe = AI
+	mainframe.connected_robots |= src
+	lawupdate = TRUE
+	lawsync()
+	if(radio && AI.radio)
+		radio.channels = AI.radio.channels
+		radio.subspace_transmission = TRUE
