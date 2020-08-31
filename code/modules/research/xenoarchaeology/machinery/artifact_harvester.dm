@@ -354,6 +354,9 @@
 		if(inserted_battery)
 			playsound(src, 'sound/machines/click.ogg', 50, 0)
 			inserted_battery.forceMove(loc)
+			if (isliving(usr))
+				var/mob/living/user = usr
+				user.put_in_hands(inserted_battery)
 			inserted_battery.update_icon()
 			inserted_battery = null
 			update_icon()
