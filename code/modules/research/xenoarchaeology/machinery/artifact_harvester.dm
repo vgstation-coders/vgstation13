@@ -1,8 +1,9 @@
 
 /obj/machinery/artifact_harvester
-	name = "Exotic Particle Harvester"
-	icon = 'icons/obj/virology.dmi'
-	icon_state = "incubator_old"	//incubator_old_on
+	name = "exotic particle harvester"
+	desc = "There is a big slot in which a battery might fit on top. A sticker on the side warns about radioactivity."
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	icon_state = "harvester"
 	anchored = 1
 	density = 1
 	idle_power_usage = 50
@@ -49,14 +50,16 @@
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 	if(owned_scanner)
 		owned_scanner.harvester_console = src
+		owned_scanner.desc = "Can harvest the exotic particles of a large alien artifact that has been isolated in it."
 
 /obj/machinery/artifact_harvester/attackby(var/obj/I as obj, var/mob/user as mob)
 	if(istype(I,/obj/item/weapon/anobattery))
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
-				playsound(loc, 'sound/machines/click.ogg', 50, 1)
+				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				to_chat(user, "<span class='notice'>You insert [I] into [src].</span>")
-				src.inserted_battery = I
+				inserted_battery = I
+				update_icon()
 				updateDialog()
 		else
 			to_chat(user, "<span class='warning'>There is already a battery in [src].</span>")
@@ -140,7 +143,7 @@
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Battery is full.\"")
 			src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id] harvested by [key_name(harvester)]")
-			update_icon()
+		update_icon()
 
 	else if(harvesting < 0)
 		//dump some charge
@@ -165,7 +168,7 @@
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
 				inserted_battery.battery_effect.ToggleActivate()
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
-			update_icon()
+		update_icon()
 
 /obj/machinery/artifact_harvester/Topic(href, href_list)
 
@@ -349,10 +352,11 @@
 
 	if (href_list["ejectbattery"])
 		if(inserted_battery)
-			playsound(src, 'sound/items/Deconstruct.ogg', 50, 0)
+			playsound(src, 'sound/machines/click.ogg', 50, 0)
 			inserted_battery.forceMove(loc)
 			inserted_battery.update_icon()
 			inserted_battery = null
+			update_icon()
 
 	if (href_list["drainbattery"])
 		if(inserted_battery)
@@ -378,18 +382,39 @@
 
 	updateDialog()
 
+/obj/machinery/artifact_harvester/power_change()
+	..()
+	update_icon()
+
 /obj/machinery/artifact_harvester/update_icon()
+	overlays.len = 0
+	icon_state = "harvester"
+	set_light(0)
+
+	if(stat & (NOPOWER|BROKEN))
+		return
+
 	if (harvesting != 0)
-		icon_state = "incubator_old_on"
 		set_light(2,2)
-	else
-		icon_state = "incubator_old"
-		set_light(2)
+		if (harvesting > 0)
+			icon_state = "harvester_charge"
+		else
+			icon_state = "harvester_drain"
+
 	if (owned_scanner)
 		owned_scanner.update_icon()
 
+	if (inserted_battery)
+		inserted_battery.update_icon()
+		var/image/battery_overlay = new
+		battery_overlay.appearance = inserted_battery.appearance
+		battery_overlay.pixel_x = -1
+		battery_overlay.pixel_y = 5
+		overlays += battery_overlay
+
 /obj/effect/artifact_field
 	name = "energy field"
+	desc = "An artifact is contained behind."
 	icon = 'icons/effects/effects.dmi'
 	anchored = 1
 	density = 1
