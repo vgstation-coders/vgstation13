@@ -931,9 +931,10 @@ var/list/ai_list = list()
 			return TRUE
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
 		var/mob/living/silicon/ai/R = owner
-		if(R.shell)			
-			R.mainframe.shell = null
-			R.gib()
+		if(R.shell)	
+			R.shell.mainframe = null
+			R.shell.gib()		
+			R.shell = null	
 			return TRUE
 		else
 			to_chat("<span class='warning'>You have no shell.</span>")
