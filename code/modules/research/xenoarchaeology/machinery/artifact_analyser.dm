@@ -30,6 +30,12 @@ var/anomaly_report_num = 0
 	reconnect_scanner()
 	update_icon()
 
+/obj/machinery/artifact_harvester/Destroy()
+	if (owned_scanner)
+		owned_scanner.analyser_console = null
+		owned_scanner = null
+	..()
+
 /obj/machinery/artifact_analyser/update_icon()
 	icon_state = "[initial(icon_state)][scan_in_progress]"
 	if(owned_scanner)
@@ -41,7 +47,7 @@ var/anomaly_report_num = 0
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 	if(owned_scanner)
-		owned_scanner.owner_console = src
+		owned_scanner.analyser_console = src
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..())
