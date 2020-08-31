@@ -82,7 +82,8 @@
 				isolated = 0
 
 		if(reveal_toggle == 1 && holder)
-			playsound(holder, activation_sound, 20, 0, -3, FALLOFF_SOUNDS, 0)
+			if (IsPrimary())
+				playsound(holder, activation_sound, 20, 0, -3, FALLOFF_SOUNDS, 0)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
 				A.update_icon()
