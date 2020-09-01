@@ -41,7 +41,7 @@
 /obj/item/weapon/rocksliver/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
 	if (T && !istype(T, /turf/space))
-		visible_message("<span class='danger'>The virus dish shatters on impact!</span>")
+		visible_message("<span class='danger'>The rock sample shatters on impact!</span>")
 		playsound(src, 'sound/effects/pop.ogg', 100, 1, -2)
 		new /obj/effect/decal/cleanable/dirt(T)
 	qdel(src)
