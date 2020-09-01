@@ -42,7 +42,7 @@ var/list/ai_list = list()
 	var/list/holopadoverlays = list()
 
 	//Shell stuff
-	var/mob/living/silicon/robot/shell = null  //The shell the AI currently owns
+	var/mob/living/silicon/robot/shell/shell = null  //The shell the AI currently owns
 	var/datum/action/deploy_shell/deploy_action = new
 	var/datum/action/detonate/destroy_action = new
 	var/deployed = 0		//Is the AI currently controlling a borg
@@ -876,7 +876,7 @@ var/list/ai_list = list()
 			
 	else		//Otherwise, lets see if we can create a new shell
 		var/list/potential_shells = list()
-		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)
+		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)	//Looping through the world might not be good
 			if(!cameranet.checkCameraVis(emptyborg))	//Must be visible
 				continue	
 			if(!emptyborg.check_completion())	//Must be ready to have a posi/MMI inserted
@@ -894,10 +894,9 @@ var/list/ai_list = list()
 			if(mind)
 				deployed = 1
 				to_chat(src, "Taking control of cyborg shell...")
-				var/mob/living/silicon/robot/R = chosen_shell.create_robot()
+				var/mob/living/silicon/robot/shell/R = chosen_shell.create_robot(is_shell = 1)
 				shell = R
 				mind.transfer_to(R)
-				R.shell = TRUE
 				R.deploy_init(src)
 			
 			
@@ -924,12 +923,11 @@ var/list/ai_list = list()
 /datum/action/detonate/Trigger()
 	if(!..())
 		return FALSE
-	if(istype(owner, /mob/living/silicon/robot))		//Pressing the button as a borg
-		var/mob/living/silicon/robot/R = owner
-		if(R.shell)										//Non-shells shouldn't be able to detonate themselves
-			R.mainframe.shell = null
-			R.gib()
-			return TRUE
+	if(istype(owner, /mob/living/silicon/robot/shell))		//Pressing the button as a shell
+		var/mob/living/silicon/robot/shell/R = owner
+		R.mainframe.shell = null
+		R.gib()
+		return TRUE
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
 		var/mob/living/silicon/ai/R = owner
 		if(R.shell)	

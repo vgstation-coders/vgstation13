@@ -258,10 +258,9 @@
 	if(!A.shell)
 		A.deployed = 1
 		to_chat(A, "Taking control of cyborg shell...")
-		var/mob/living/silicon/robot/R = create_robot()
+		var/mob/living/silicon/robot/shell/R = create_robot(is_shell = 1)
 		A.shell = R
 		A.mind.transfer_to(R)
-		R.shell = TRUE
 		R.deploy_init(A)
 
 /obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
@@ -287,8 +286,13 @@
 		head.forceMove(T)
 	qdel(src)
 
-/obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M)
-	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
+/obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M, is_shell = FALSE)
+	var/robottype
+	if(is_shell)
+		robottype = /mob/living/silicon/robot/shell
+	else
+		robottype = /mob/living/silicon/robot
+	var/mob/living/silicon/robot/O = new robottype(get_turf(loc))
 	if(!O)
 		return
 	if(M)

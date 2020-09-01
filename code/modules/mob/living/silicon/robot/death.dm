@@ -35,9 +35,10 @@
 	qdel(src)
 
 
+/mob/living/silicon/robot/shell/death(gibbed)
+	..(TRUE)	//Always gib.
+
 /mob/living/silicon/robot/death(gibbed)
-	if(shell)	//Shells will always gib on death
-		gib()
 	if(stat == DEAD)
 		return
 	if(!gibbed)
@@ -76,11 +77,6 @@
 //If there's an MMI in the robot, have it ejected when the mob goes away. --NEO
 /mob/living/silicon/robot/Destroy()
 	cyborg_list -= src
-	if(shell)	//an AI owns this borg
-		if(deployed)
-			undeploy()
-		if(mainframe)
-			mainframe.shell = null
 	if(mmi)//Safety for when a cyborg gets dust()ed. Or there is no MMI inside.
 		var/turf/T = get_turf(loc)//To hopefully prevent run time errors.
 		if(T)
@@ -95,4 +91,11 @@
 		else
 			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
 		mmi = null
+	..()
+
+/mob/living/silicon/robot/shell/Destroy()
+	if(deployed)
+		undeploy()
+	if(mainframe)
+		mainframe.shell = null
 	..()

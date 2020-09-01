@@ -97,13 +97,6 @@ var/list/cyborg_list = list()
 	var/last_tase_timeofday
 	var/last_high_damage_taken_timeofday
 
-//AI Control
-	var/shell = FALSE		//This is an cyborg directly controlled by the AI
-	var/deployed = FALSE		//The shell was deployed to
-	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
-	var/datum/action/undeployment/undeployment_action = new 
-	var/datum/action/detonate/destroy_action = new
-
 /mob/living/silicon/robot/New(loc, var/malfAI = null)
 	ident = rand(1, 999)
 	updatename(modtype)
@@ -176,10 +169,7 @@ var/list/cyborg_list = list()
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 /mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
-	if(shell && mainframe)	//Un-lockdown the shell if it was locked down previously
-		to_chat(mainframe, "<span class='notice' style=\"font-family:Courier\">Notice: Connection to cyborg shell re-established.</span>" )
-		SetLockdown(FALSE)
-	else if(istype(new_AI))
+	if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
 		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
@@ -190,10 +180,7 @@ var/list/cyborg_list = list()
 		lawupdate = FALSE
 
 /mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
-	if(shell && mainframe)	//It's a shell. Cutting the AI link effectively locks it down
-		to_chat(mainframe, "<span class='alert' style=\"font-family:Courier\">ERROR: AI Link to cyborg shell was cut.</span>" )
-		SetLockdown(TRUE)
-	else if(connected_ai)
+	if(connected_ai)
 		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
 		if(announce)
 			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
@@ -572,7 +559,7 @@ var/list/cyborg_list = list()
 				if(prob(50))
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].")
-					if(shell)	//Shells will gib when emagged
+					if(isshell(src))	//Putting this here would be cleaner than shoving it in a child proc
 						gib()
 						log_game("[key_name(user)] emagged cyborg shell [key_name(src)].  Shell destroyed.")
 						return FALSE
@@ -1363,9 +1350,14 @@ var/list/cyborg_list = list()
 
 //AI Shell Control
 
-/mob/living/silicon/robot/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
-	if(!shell)	//AI is trying to deploy into a borg thats not designated a shell. This shouldn't happen, but prevent it anyway.
-		return
+/mob/living/silicon/robot/shell
+	var/deployed = FALSE		//Is the shell being controlled right now
+	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
+	var/datum/action/undeployment/undeployment_action = new 
+	var/datum/action/detonate/destroy_action = new
+
+
+/mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
 	deployed = TRUE
 	real_name = "[AI.name] Shell"
 	name = real_name
@@ -1388,12 +1380,12 @@ var/list/cyborg_list = list()
 /datum/action/undeployment/Trigger()
 	if(!..())
 		return FALSE
-	var/mob/living/silicon/robot/R = owner
+	var/mob/living/silicon/robot/shell/R = owner
 
 	R.undeploy()
 	return TRUE
 
-/mob/living/silicon/robot/proc/undeploy()
+/mob/living/silicon/robot/shell/proc/undeploy()
 	if(!deployed || !mind || !mainframe)
 		return
 	to_chat(src,"Releasing control of cyborg shell...")
@@ -1406,4 +1398,12 @@ var/list/cyborg_list = list()
 		radio.recalculateChannels()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
+
+/mob/living/silicon/robot/shell/connect_AI()
+	to_chat(mainframe, "<span class='notice' style=\"font-family:Courier\">Notice: Connection to cyborg shell re-established.</span>" )
+	SetLockdown(FALSE)
+
+/mob/living/silicon/robot/shell/disconnect_AI()
+	to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Connection to cyborg shell has been cut.</span>")
+	SetLockdown(TRUE)
 
