@@ -128,7 +128,7 @@
 				feedback_inc("cyborg_frames_built",1)
 				return 1
 	return 0
-
+	
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
@@ -246,7 +246,26 @@
 
 		src.created_name = t
 
+	if(W.force >= 15)	//Smash those skeletons
+		smash()
+
 	return
+
+/obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
+	if(P.damage > 10)
+		smash()
+
+
+/obj/item/robot_parts/robot_suit/proc/smash()
+		robogibs(loc)
+		visible_message("<span class='danger'>[src] blows apart!</span>")
+		var/turf/T = get_turf(src)
+		l_arm?.l_arm.forceMove(T)
+		r_arm?.r_arm.forceMove(T)
+		l_leg?.l_leg.forceMove(T)
+		r_leg?.r_leg.forceMove(T)
+		chest?.chest.forceMove(T)
+		head?.head.forceMove(T)
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M)
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
