@@ -127,7 +127,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put \the [W] into the [src].</span>")
-
+			playsound(loc, 'sound/machines/click.ogg', 50, 1)
 			held_container = W
 			nanomanager.update_uis(src)
 
@@ -172,6 +172,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 /obj/machinery/anomaly/proc/eject(var/mob/user)
 	held_container.forceMove(loc)
+	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 	if (user && Adjacent(user))
 		user.put_in_hands(held_container)
 	held_container = null
