@@ -646,6 +646,7 @@ About the new airlock wires panel:
 /turf/AIAltClick()
 	for(var/obj/machinery/door/airlock/A in contents)
 		A.AIAltClick()
+		break
 
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
@@ -664,6 +665,7 @@ About the new airlock wires panel:
 /turf/AIShiftClick()
 	for(var/obj/machinery/door/airlock/A in contents)
 		A.AIShiftClick()
+		break
 
 /obj/machinery/door/airlock/CtrlClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
@@ -674,6 +676,7 @@ About the new airlock wires panel:
 /turf/AICtrlClick()
 	for(var/obj/machinery/door/airlock/A in contents)
 		A.AICtrlClick()
+		break
 
 /obj/machinery/door/airlock/ShiftClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
