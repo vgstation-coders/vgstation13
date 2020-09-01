@@ -860,6 +860,7 @@ var/list/ai_list = list()
 	set name = "Deploy to Shell"
 
 	if(incapacitated())
+		to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
 		return
 	if(control_disabled)
 		to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")

@@ -13,6 +13,7 @@
 	*/
 
 /mob/living/silicon/robot/shell/Login()
+	..()
 	regenerate_icons()
 	if(module)
 		module.UpdateModuleHolder(src)	

@@ -274,16 +274,22 @@
 	var/turf/T = get_turf(src)
 	if(l_arm)
 		l_arm.forceMove(T)
+		l_arm = null
 	if(r_arm)
 		r_arm.forceMove(T)
+		r_arm = null
 	if(l_leg)
 		l_leg.forceMove(T)
+		l_leg = null
 	if(r_leg)
 		r_leg.forceMove(T)
+		r_leg = null
 	if(chest)
 		chest.forceMove(T)
+		chest = null
 	if(head)
 		head.forceMove(T)
+		head = null
 	qdel(src)
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M, is_shell = FALSE)

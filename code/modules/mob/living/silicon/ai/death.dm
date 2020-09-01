@@ -1,4 +1,6 @@
 /mob/living/silicon/ai/death(gibbed)
+	if(deployed)
+		undeploy()
 	if(stat == DEAD)
 		return
 	if(!gibbed)
