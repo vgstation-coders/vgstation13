@@ -643,6 +643,10 @@ About the new airlock wires panel:
 			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
+/turf/AIAltClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AIAltClick()
+
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
 		if(locked)
@@ -657,11 +661,19 @@ About the new airlock wires panel:
 		else
 			Topic("aiDisable=7", list("aiDisable"="7"), 1)
 
+/turf/AIShiftClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AIShiftClick()
+
 /obj/machinery/door/airlock/CtrlClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
 		AICtrlClick()
 	else
 		..()
+
+/turf/AICtrlClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AICtrlClick()
 
 /obj/machinery/door/airlock/ShiftClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))

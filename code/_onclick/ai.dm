@@ -19,6 +19,9 @@
 
 	if(ismob(A) || ismecha(A))
 		ai_actual_track(A)
+	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] || modifiers["alt"] || modifiers["ctrl"])
+		return
 	else
 		A.move_camera_by_click()
 
