@@ -252,7 +252,7 @@
 	return
 
 /obj/item/robot_parts/robot_suit/attack_ai(mob/user as mob)
-	if(!check_completion)
+	if(!check_completion())
 		return
 	var/mob/living/silicon/ai/A = user
 	if(!A.shell)
