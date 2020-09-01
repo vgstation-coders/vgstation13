@@ -887,17 +887,18 @@ var/list/ai_list = list()
 			return
 		var/list/options = list()	
 		for(var/obj/item/robot_parts/robot_suit/S in potential_shells)	
-			options["Exoskeleton in [get_area(S)]"] = S
+			options["Exoskeleton #[potential_shells.Find(S)] in [get_area(S)]"] = S
 		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
-		var/obj/item/robot_parts/robot_suit/chosen_shell = options[choice]
-		if(mind)
-			deployed = 1
-			to_chat(src, "Taking control of cyborg shell...")
-			var/mob/living/silicon/robot/R = chosen_shell.create_robot()
-			shell = R
-			mind.transfer_to(R)
-			R.shell = TRUE
-			R.deploy_init(src)
+		if(choice)
+			var/obj/item/robot_parts/robot_suit/chosen_shell = options[choice]
+			if(mind)
+				deployed = 1
+				to_chat(src, "Taking control of cyborg shell...")
+				var/mob/living/silicon/robot/R = chosen_shell.create_robot()
+				shell = R
+				mind.transfer_to(R)
+				R.shell = TRUE
+				R.deploy_init(src)
 			
 			
 

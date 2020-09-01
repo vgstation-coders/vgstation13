@@ -272,6 +272,7 @@
 		chest.forceMove(T)
 	if(head)
 		head.forceMove(T)
+	qdel(src)
 
 /obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M)
 	var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))

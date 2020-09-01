@@ -1394,9 +1394,9 @@ var/list/cyborg_list = list()
 	return TRUE
 
 /mob/living/silicon/robot/proc/undeploy()
-
 	if(!deployed || !mind || !mainframe)
 		return
+	to_chat(src,"Releasing control of cyborg shell...")
 	mind.transfer_to(mainframe)
 	mainframe.deployed = 0
 	deployed = FALSE
