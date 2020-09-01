@@ -251,6 +251,19 @@
 
 	return
 
+/obj/item/robot_parts/robot_suit/attack_ai(mob/user as mob)
+	if(!check_completion)
+		return
+	var/mob/living/silicon/ai/A = user
+	if(!A.shell)
+		A.deployed = 1
+		to_chat(A, "Taking control of cyborg shell...")
+		var/mob/living/silicon/robot/R = create_robot()
+		A.shell = R
+		A.mind.transfer_to(R)
+		R.shell = TRUE
+		R.deploy_init(A)
+
 /obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
 	if(P.damage > 10)
 		smash()
