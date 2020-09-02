@@ -36,7 +36,7 @@
 	..()
 	effectrange = 7
 	effect_type = pick(1,3,4,6)
-	chargelevelmax = rand(2, 10)
+	chargelevelmax = rand(2, 5)
 	projectiletype = pick(validartifactprojectiles)
 	num_of_shots = pick(100;1, 100;2, 50;3, 25;4, 10;6)
 
