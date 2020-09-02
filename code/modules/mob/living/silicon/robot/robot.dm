@@ -1355,6 +1355,7 @@ var/list/cyborg_list = list()
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
 	var/datum/action/undeployment/undeployment_action = new 
 	var/datum/action/detonate/destroy_action = new
+	braintype = "AI Shell"
 
 
 /mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.

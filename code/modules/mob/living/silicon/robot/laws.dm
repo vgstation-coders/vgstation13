@@ -22,7 +22,7 @@
 				to_chat(src, "<b>Laws synced with AI, be sure to note any changes.</b>")
 				if(istraitor(src))
 					to_chat(src, "<b>Remember, your AI does NOT share or know about your law 0.")
-		else
+		else if(!isshell(src))
 			to_chat(src, "<b>No AI selected to sync laws with, disabling lawsync protocol.</b>")
 			lawupdate = 0
 
@@ -35,7 +35,7 @@
 	else if (emagged)
 		to_chat(who, "<b>Remember, you are not required to listen to the AI.</b>")
 	else
-		if(ticker.current_state == GAME_STATE_PLAYING) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
+		if(ticker.current_state == GAME_STATE_PLAYING && !isshell(src)) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
 			to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
 
 /mob/living/silicon/robot/proc/lawsync()

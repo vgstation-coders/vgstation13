@@ -280,6 +280,9 @@
 	else if (isAI(speech.speaker))
 		speech.job = "AI"
 
+	else if (isshell(speech.speaker))
+		speech.job = "AI Shell"
+
 	// --- Cyborg ---
 	else if (isrobot(speech.speaker))
 		speech.job = "Cyborg"
