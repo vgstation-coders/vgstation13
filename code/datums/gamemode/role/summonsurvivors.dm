@@ -54,6 +54,26 @@
 	id = MAGICIAN_ARTIFACT
 
 /datum/role/wizard/summon_magic/artifact/Greet()
-	to_chat(antag.current, "<B>You are a Magical Archeologist!</B><BR>Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...")
+	to_chat(antag.current, "<B>You are a Magical Artificer!</B><BR>Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...")
 
+/datum/role/wizard/summon_potions
+	disallow_job = FALSE
+	name = POTION
+	id = POTION
+	logo_state = "magik-logo"
+	var/summons_received
+
+/datum/role/wizard/summon_potions/ForgeObjectives()
+	var/datum/objective/survive/potions/S = new
+	AppendObjective(S)
+
+/datum/role/wizard/summon_potions/Greet()
+	to_chat(antag.current, "<B>You are a Potion Seller!</B><BR>Your own safety matters abov- Fuck that, GO SELL SOME POTIONS!")
+
+/datum/role/wizard/summon_potions/OnPostSetup()
+	return TRUE
+  
+/datum/role/wizard/summon_potions/GetScoreboard()
+	. = ..()
+	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
 

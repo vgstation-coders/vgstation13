@@ -1,3 +1,40 @@
+var/global/list/mineralSpawnChance[]
+/proc/SetupMineralSpawnLists()
+	if(!mineralSpawnChance) mineralSpawnChance = list()
+	mineralSpawnChance["random"] = list(
+		"Iron"      = 50,
+		"Plasma"    = 25,
+		"Ice"		= 10,
+		"Uranium"   = 5,
+		"Gold"      = 5,
+		"Silver"    = 5,
+		"Gibtonite" = 5,
+		"Diamond"   = 1,
+		"Cave"      = 1,
+	)
+	mineralSpawnChance["snow"] = list(
+		"Nanotrasite" = 24,
+		"Electrum"  = 8,
+		"Diamond"   = 1,
+		"Ice Cave"  = 1,
+	)
+	mineralSpawnChance["random_high"] = list(
+		"Uranium" = 10,
+		"Iron"    = 30,
+		"Diamond" = 2,
+		"Gold"    = 10,
+		"Silver"  = 10,
+		"Plasma"  = 25,
+	)
+	mineralSpawnChance["clown"] = list(
+		"Uranium" = 10,
+		"Diamond" = 2,
+		"Gold"    = 5,
+		"Silver"  = 5,
+		"Plasma"  = 25,
+		"Clown"   = 15,
+		"Phazon"  = 10
+	)
 /**********************Mineral deposits**************************/
 /turf/unsimulated/mineral //wall piece
 	name = "Rock"
@@ -445,18 +482,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
-		investigation_log(I_ARTIFACT, "|| [artifact_find.artifact_find_type] destroyed by [key_name(usr)].")
-		for(var/mob/living/M in range(src, 200))
-			to_chat(M, "<span class='red'><b>[pick("A high pitched [pick("keening","wailing","whistle")]","A rumbling noise like [pick("thunder","heavy machinery")]")] somehow penetrates your mind before fading away!</b></span>")
-			if(prob(50)) //pain
-				flick("pain",M.pain)
-				if(prob(50))
-					M.adjustBruteLoss(5)
-			else
-				M.flash_eyes(visual = 1)
-				if(prob(50))
-					M.Stun(5)
-			M.apply_radiation(25, RAD_EXTERNAL)
+		ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
 
 	if(artifact_fail && !mineral)
 		if(prob(1))
@@ -740,25 +766,15 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 
 /turf/unsimulated/mineral/random
 	name = "Mineral deposit"
-	var/mineralSpawnChanceList = list(
-		"Iron"      = 50,
-		"Plasma"    = 25,
-		"Ice"		= 10,
-		"Uranium"   = 5,
-		"Gold"      = 5,
-		"Silver"    = 5,
-		"Gibtonite" = 5,
-		"Diamond"   = 1,
-		"Cave"      = 1,
-	)
+	var/mineralPool = "random"
 	var/mineralChance = 10  //means 10% chance of this plot changing to a mineral deposit
 
 /turf/unsimulated/mineral/random/New()
-	if (prob(mineralChance) && !mineral)
-		var/mineral_name = pickweight(mineralSpawnChanceList) //temp mineral name
-
+	if (prob(mineralChance) && !mineral && mineralPool)
 		if(!name_to_mineral)
 			SetupMinerals()
+
+		var/mineral_name = pickweight(mineralSpawnChance[mineralPool]) //temp mineral name
 
 		if (mineral_name)
 			if(mineral_name in name_to_mineral)
@@ -775,12 +791,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	mined_type = /turf/unsimulated/floor/snow/permafrost
 	overlay_state = "snow_rock_overlay"
 
-	mineralSpawnChanceList = list(
-		"Nanotrasite" = 24,
-		"Electrum"  = 8,
-		"Diamond"   = 1,
-		"Ice Cave"  = 1,
-	)
+	mineralPool = "snow"
 
 
 /turf/unsimulated/mineral/random/snow/New()
@@ -790,14 +801,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/random/high_chance
 	icon_state = "rock(high)"
 	mineralChance = 25
-	mineralSpawnChanceList = list(
-		"Uranium" = 10,
-		"Iron"    = 30,
-		"Diamond" = 2,
-		"Gold"    = 10,
-		"Silver"  = 10,
-		"Plasma"  = 25,
-	)
+	mineralPool = "random_high"
 
 /turf/unsimulated/mineral/random/high_chance/snow
 	icon_state = "snow_rock"
@@ -809,15 +813,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/random/high_chance_clown
 	icon_state = "rock(clown)"
 	mineralChance = 40
-	mineralSpawnChanceList = list(
-		"Uranium" = 10,
-		"Diamond" = 2,
-		"Gold"    = 5,
-		"Silver"  = 5,
-		"Plasma"  = 25,
-		"Clown"   = 15,
-		"Phazon"  = 10
-	)
+	mineralPool = "clown"
 
 /turf/unsimulated/mineral/random/high_chance_clown/snow
 	icon_state = "snow_rock"

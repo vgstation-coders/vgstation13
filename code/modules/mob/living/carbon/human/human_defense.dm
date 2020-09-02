@@ -18,8 +18,9 @@ emp_act
 			if(prob(reflectchance))
 				visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s [wear_suit.name]!</span>")
 
-				P.reflected = 1
-				P.rebound(src)
+				if(!istype(P, /obj/item/projectile/beam)) //beam has its own rebound-call-logic
+					P.reflected = 1
+					P.rebound(src)
 
 				return -1 // complete projectile permutation
 
@@ -469,8 +470,8 @@ emp_act
 	var/damage_blocked = 0
 
 	//INVOKE_EVENT may return null sometimes - this doesn't work nice with bitflags (which is what's being done here). Hence the !! operator - it turns a null into a 0.
-	var/brute_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = b_loss))
-	var/burn_resolved = !!INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = f_loss))
+	var/brute_resolved = !!lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = b_loss))
+	var/burn_resolved = !!lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = f_loss))
 	damage_blocked |= (brute_resolved | burn_resolved)
 
 	if(damage_blocked)

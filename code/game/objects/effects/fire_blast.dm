@@ -113,11 +113,15 @@
 
 /obj/effect/fire_blast/blue
 	icon = 'icons/effects/fireblue.dmi'
+	spread_start = 0
+	spread_chance = 30
+
+/obj/effect/fire_blast/blue/horizon
+	duration = 3 SECONDS
+	spread_chance = 5
 
 /obj/effect/fire_blast/blue/New(T, var/damage = 0, var/current_step = 0, var/age = 1, var/pressure = 0, var/blast_temperature = 0, var/fire_duration)
 	..(T, damage, current_step, age, pressure, blast_temperature, fire_duration)
-	spread_start = 0
-	spread_chance = 30
 
 /obj/effect/fire_blast/no_spread
 	spread = 0
@@ -151,5 +155,4 @@
 	spawn()
 		for(var/i = 1; i <= 5; i++)
 			sleep(2)
-
 		qdel(src)

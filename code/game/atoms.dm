@@ -177,7 +177,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/on_reagent_change()
 	return
 
-/atom/proc/Bumped(AM as mob|obj)
+// This proc is intended to be called by `to_bump` whenever a movable
+// object bumps into this atom.
+/atom/proc/Bumped(atom/movable/AM)
 	return
 
 /atom/proc/setDensity(var/density)
@@ -830,8 +832,6 @@ its easier to just keep the beam vertical.
 	else
 		return TRUE
 
-/atom/proc/to_bump()
-	return
 
 /atom/proc/get_last_player_touched()	//returns a reference to the mob of the ckey that last touched the atom
 	for(var/client/C in clients)

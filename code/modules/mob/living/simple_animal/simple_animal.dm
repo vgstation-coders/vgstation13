@@ -582,7 +582,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -598,7 +598,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2

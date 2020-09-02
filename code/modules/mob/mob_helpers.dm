@@ -535,6 +535,8 @@ proc/is_blind(A)
 				return TRUE
 			if(isninja(user) && (honorable & HONORABLE_NINJA))
 				return TRUE
+			if((iswizard(user) || isapprentice(user) || ismagician(user)) && (user.flags & HONORABLE_NOGUNALLOWED))
+				return TRUE
 	return FALSE
 
 // Called by /mob/living/carbon/human/examine() and /mob/living/carbon/human/Topic()

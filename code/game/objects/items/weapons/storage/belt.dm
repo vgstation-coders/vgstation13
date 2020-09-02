@@ -170,7 +170,8 @@
 		"/obj/item/device/antibody_scanner",
 		"/obj/item/weapon/switchtool/surgery",
 		"/obj/item/weapon/grenade/chem_grenade",
-		"/obj/item/weapon/electrolyzer"
+		"/obj/item/weapon/electrolyzer",
+		"/obj/item/weapon/autopsy_scanner/healthanalyzerpro"
 	)
 
 /obj/item/weapon/storage/belt/slim
@@ -233,6 +234,8 @@
 /obj/item/weapon/storage/belt/detective
 	name = "hard-worn belt"
 	desc = "There's a lot you can tell about a man from his clothes - sometimes it's all he can afford, or maybe he chooses to wear something as a message... this belt, then, is a statement. Classy, but not too drab. Fashionable, but still useful. People look at this belt and think, 'My god. That belt is frighteningly well placed. The shades of beige that seem to flood over themselves, splayed across every notch... I fear many things, but I fear most the man who possesses such an incredible belt.'"
+	icon_state = "detective"
+	item_state = "detective"
 	max_combined_w_class = 200 //Some of their stuff is pretty large and they have a lot of crap so lets just be safe.
 	can_only_hold = list(
 		"/obj/item/clothing/glasses",

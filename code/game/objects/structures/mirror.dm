@@ -118,7 +118,7 @@
 	if(shattered)
 		return
 	shattered = 1
-	icon_state = "mirror_broke"
+	icon_state = "[icon_state]_broke"
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
@@ -207,3 +207,28 @@
 /obj/structure/mirror/kick_act()
 	..()
 	shatter()
+
+/obj/structure/mirror/magic
+	name = "magic mirror"
+	desc = "Mirror mirror on the wall, who's the most powerful of them all? It hums with arcane power."
+	icon_state = "mirrormagic"
+
+/obj/structure/mirror/magic/attack_hand(mob/M)
+	if(!shattered)
+		var/which = input("Change what?", "Magic Mirror") as null|anything in list("Name","Gender","Appearance")
+		var/mob/living/carbon/human/targ = M
+
+		switch(which)
+
+			if("Name")
+				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name") as null|text), 1, MAX_NAME_LEN)
+				targ.real_name = stagename
+				targ.name = stagename
+
+			if("Gender")
+				targ.pick_gender(M)
+
+			if("Appearance")
+				targ.pick_appearance(M)
+				
+		to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")

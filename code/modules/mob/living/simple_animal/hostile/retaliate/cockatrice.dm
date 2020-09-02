@@ -193,7 +193,7 @@
 	for(var/mob/living/L in loc)
 		movement_touch_check(L)
 
-/mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
+/mob/living/simple_animal/hostile/retaliate/cockatrice/to_bump(mob/living/L)
 	spawn()
 		movement_touch_check(L)
 
