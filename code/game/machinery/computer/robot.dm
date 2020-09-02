@@ -256,7 +256,7 @@
 								R.SetEmagged(TRUE)
 								var/mob/living/silicon/ai/A = usr
 								if(A.deployed)
-									to_chat(A,shell, "Hack successful. [R.name] now has access to illegal technology.")
+									to_chat(A.shell, "Hack successful. [R.name] now has access to illegal technology.")
 								else
 									to_chat(A, "Hack successful. [R.name] now has access to illegal technology.")
 								if(R.mind.special_role)
