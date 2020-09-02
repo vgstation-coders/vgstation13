@@ -922,7 +922,6 @@ var/list/ai_list = list()
 	button_icon_state = "gibup"
 
 /datum/action/detonate/Trigger()
-	if(!..())
 	if(istype(owner, /mob/living/silicon/robot/shell))		//Pressing the button as a shell
 		var/mob/living/silicon/robot/shell/R = owner
 		R.mainframe.shell = null
@@ -930,14 +929,13 @@ var/list/ai_list = list()
 		return TRUE
 		
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
+		var/mob/living/silicon/ai/R = owner
 		if(owner.incapacitated())
 			to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
 			return FALSE
 		if(owner.control_disabled)
 			to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
 			return FALSE 
-
-		var/mob/living/silicon/ai/R = owner
 		if(R.shell)	
 			R.shell.gib()					
 			return TRUE
