@@ -1359,7 +1359,7 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
 	deployed = TRUE
-	real_name = "[AI.name] Shell"
+	real_name = "Shell of [AI.name]"
 	name = real_name
 	mainframe = AI
 	mainframe.connected_robots |= src
