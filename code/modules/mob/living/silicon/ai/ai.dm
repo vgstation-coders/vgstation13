@@ -930,21 +930,20 @@ var/list/ai_list = list()
 		return TRUE
 		
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
-		if(incapacitated())
+		if(owner.incapacitated())
 			to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
 			return FALSE
-		if(control_disabled)
+		if(owner.control_disabled)
 			to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
 			return FALSE 
 
 		var/mob/living/silicon/ai/R = owner
-			if(R.shell)	
-				R.shell.mainframe = null
-				R.shell.gib()					
-				return TRUE
-			else
-				to_chat("<span class='warning'>You have no shell.</span>")
-				return FALSE
+		if(R.shell)	
+			R.shell.gib()					
+			return TRUE
+		else
+			to_chat("<span class='warning'>You have no shell.</span>")
+			return FALSE
 	else
 		to_chat("<span class='warning'>You can't do that.</span>")
 		return FALSE

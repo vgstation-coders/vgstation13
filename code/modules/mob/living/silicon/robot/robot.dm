@@ -1378,6 +1378,13 @@ var/list/cyborg_list = list()
 	icon_icon = 'icons/mob/AI.dmi'
 	button_icon_state = "ai"
 
+/datum/action/UpdateButtonIcon()
+	if(owner.mainframe)
+		button_icon_state = "[owner.mainframe.icon_state]"
+	else
+		button_icon_state = "ai"
+	..()
+
 /datum/action/undeployment/Trigger()
 	if(!..())
 		return FALSE
