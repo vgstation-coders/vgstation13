@@ -865,6 +865,9 @@ var/list/ai_list = list()
 	if(control_disabled)
 		to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
 		return
+	if(istype(loc, /obj/machinery/power/apc))
+		to_chat(src, "<span class='warning'>You can't control a shell while shunted.</span>")
+		return
 
 	if(shell)	//If the silicon already has a linked shell, go to that one!
 		if (shell.stat == DEAD || shell.deployed || shell.mainframe != src)
