@@ -233,7 +233,14 @@
 
 	switch(M.a_intent)
 		if(I_HELP)
-			if(health >= config.health_threshold_crit)
+			if(istype(head, /obj/item/clothing/mask/facehugger/headcrab))
+				var/obj/item/clothing/mask/facehugger/headcrab/crab = get_item_by_slot(slot_head)
+				if(do_after(M, src, 2 SECONDS))
+					if(head == crab)
+						drop_from_inventory(crab)
+						crab.GoIdle(15 SECONDS) 
+						visible_message("[M] pulls the headcrab off of [src]'s head!")
+			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)
 				return 1
 			else if(ishuman(M))

@@ -18,10 +18,6 @@
 	minimal_player_age = 20
 	outfit_datum = /datum/outfit/cmo
 
-/datum/job/cmo/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /datum/job/doctor
@@ -39,10 +35,6 @@
 	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 	outfit_datum = /datum/outfit/doctor
 
-/datum/job/doctor/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
-
 //Chemist is a medical job damnit	//YEAH FUCK YOU SCIENCE	-Pete	//Guys, behave -Erro //No, fuck science
 /datum/job/chemist
 	title = "Chemist"
@@ -59,10 +51,6 @@
 	alt_titles = list("Pharmacist")
 	outfit_datum = /datum/outfit/chemist
 
-/datum/job/chemist/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/storage/bag/chem(H.back), slot_in_backpack)
-
 /datum/job/geneticist
 	title = "Geneticist"
 	flag = GENETICIST
@@ -76,10 +64,6 @@
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
 	outfit_datum = /datum/outfit/geneticist
-
-/datum/job/geneticist/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/storage/belt/medical(H.back), slot_in_backpack)
 
 /datum/job/virologist
 	title = "Virologist"
@@ -95,10 +79,6 @@
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
 	outfit_datum = /datum/outfit/virologist
-
-/datum/job/virologist/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/virusdish/random(H.back), slot_in_backpack)
 
 /*
 /datum/job/psychiatrist

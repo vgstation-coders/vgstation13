@@ -31,7 +31,7 @@
 	return
 
 /spell/aoe_turf/blink/proc/makeAnimation(var/turf/T, var/turf/starting)
-	var/datum/effect/effect/system/smoke_spread/smoke = new /datum/effect/effect/system/smoke_spread()
+	var/datum/effect/effect/system/smoke_spread/transparent/smoke = new
 	smoke.set_up(1, 0, T)
 	smoke.start()
 

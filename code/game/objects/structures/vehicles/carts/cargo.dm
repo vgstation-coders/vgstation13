@@ -52,7 +52,8 @@
 			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 			if(loaded_machine)
-				loaded_machine.connected_cell = internal_battery
+				if(!is_blacklisted(loaded_machine))
+					loaded_machine.connected_cell = internal_battery
 				loaded_machine.power_change()
 	else
 		..()
@@ -116,16 +117,17 @@
 	
 	if(istype(C, /obj/machinery))
 		loaded_machine = C
+		loaded_machine.anchored = 1
+		loaded_machine.battery_dependent = 1
+		loaded_machine.machine_flags &= ~WRENCHMOVE
 		if(!is_blacklisted(C))
 			if(internal_battery)
 				loaded_machine.connected_cell = internal_battery
-			loaded_machine.state = 1
-			loaded_machine.anchored = 1
-			loaded_machine.battery_dependent = 1
+			loaded_machine.state = 1		
 			loaded_machine.power_change()
 			visible_message("The [C]'s cables hook onto the carts power lines.")
-		else
-			loaded_machine.anchored = 0		//Blacklisted machines kept becoming anchored.
+		
+
 
 	
 	return TRUE
@@ -138,16 +140,17 @@
 	unlock_atom(load)
 
 	if(istype(load, /obj/machinery))
-		if(!is_blacklisted(load))
-			if(internal_battery && loaded_machine)
-				loaded_machine.connected_cell = null
-			loaded_machine.state = 0
-			loaded_machine.anchored = 0
-			loaded_machine.battery_dependent = 1
-			loaded_machine.power_change()
-			visible_message("The [load]'s cables disconnect from the cart.'")
-		loaded_machine = null
+		loaded_machine.state = 0
+		loaded_machine.anchored = 0
+		loaded_machine.battery_dependent = 0
+		loaded_machine.connected_cell = null
+		loaded_machine.power_change()
+		loaded_machine.machine_flags |= WRENCHMOVE
 		visible_message("The [load] is unloaded from the cart.")
+		if(!is_blacklisted(load))		
+			visible_message("The [load]'s cables disconnect from the cart.'")			
+		loaded_machine = null
+
 
 	if(dirn)
 		var/turf/T = src.loc

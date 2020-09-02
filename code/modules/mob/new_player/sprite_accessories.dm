@@ -560,6 +560,10 @@
 	icon_state = "hair_manbun"
 	gender = MALE
 
+/datum/sprite_accessory/hair/sonicboom
+	name = "SonicBoom"
+	icon_state = "hair_sonicboom"
+
 /*
 ///////////////////////////////////
 /  =---------------------------=  /
@@ -685,126 +689,108 @@
 	icon_state = "insect_antennae"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_long
 	name = "Long Insectoid Antennae"
 	icon_state = "insect_antennae_long"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_curly
 	name = "Curly Insectoid Antennae"
 	icon_state = "insect_curly"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_crest
 	name =  "Short Crest"
 	icon_state = "insect_crest_short"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_thick
 	name = "Thick Carapace"
 	icon_state = "insect_thick"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_sharp
 	name = "Sharp Insectoid Crest"
 	icon_state = "crest_sharp"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_quad
 	name = "Quad Insectoid Antennae"
 	icon_state = "insect_quad"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_swept
 	name = "Swept-back Antennae"
 	icon_state = "insect_swept"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_ridge
 	name = "Ridged Carapace"
 	icon_state = "insect_ridges"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_wide
 	name = "Wide Carapace"
 	icon_state = "insect_wide"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_nasute
 	name = "Nasute Head"
 	icon_state = "insect_nasute"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_triple
 	name = "Triple Insectoid Horns"
 	icon_state = "insect_triple"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_mandible
 	name = "Large Mandibles"
 	icon_state = "insect_mandibles"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_wedge
 	name = "Wedge Head"
 	icon_state = "insect_wedge"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_hiver
 	name = "Hiver Head"
 	icon_state = "insect_hiver"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_soldier
 	name = "Soldier Head"
 	icon_state = "insect_soldier"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_shiny
 	name = "Shiny Head"
 	icon_state = "insect_shiny"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 /datum/sprite_accessory/hair/insect_hornet
 	name = "Hornet Head"
 	icon_state = "insect_hornet"
 	species_allowed = list("Insectoid")
 	gender = NEUTER
-	do_colouration = 0
 
 
 /datum/sprite_accessory/hair/una_spines_long

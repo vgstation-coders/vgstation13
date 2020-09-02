@@ -46,6 +46,10 @@
 /area/mine/maintenance
 	name = "Mining Station Communications"
 	holomap_color = HOLOMAP_AREACOLOR_COMMAND
+	ambient_sounds = list(
+		/datum/ambience/tcomms1,
+		/datum/ambience/tcomms2,
+		/datum/ambience/tcomms3)
 
 /area/mine/cafeteria
 	name = "Mining station Cafeteria"

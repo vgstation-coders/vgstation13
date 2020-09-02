@@ -381,13 +381,23 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(src.throwing)
-		src.throw_impact(Obstacle)
-		src.throwing = 0
-
-	if (Obstacle)
-		Obstacle.Bumped(src)
+// Always override this proc instead of BYOND-provided Bump().
+// This is a workaround for some dumb BYOND behavior:
+// The `Obstacle` argument passed to Bump() is the first dense object
+// in the turf's `contents`. The argument we provide to this proc
+// is instead the actual object that's blocking movement.
+/atom/movable/proc/to_bump(atom/Obstacle)
+	if(airflow_speed > 0 && airflow_dest)
+		airflow_hit(Obstacle)
+	else
+		airflow_speed = 0
+		airflow_time = 0
+		if(src.throwing)
+			src.throw_impact(Obstacle)
+			src.throwing = 0
+		if(Obstacle)
+			Obstacle.Bumped(src)
+	sound_override = 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)

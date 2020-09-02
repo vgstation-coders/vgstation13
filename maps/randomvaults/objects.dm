@@ -451,7 +451,6 @@
 
 /obj/item/projectile/beam/retro/weak
 	damage = 15
-	linear_movement = 0
 
 /turf/simulated/floor/engine/old
 	icon_state = "engineold"

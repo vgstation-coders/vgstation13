@@ -14,11 +14,12 @@
 
 /proc/get_maps(root="maps/voting/")
 	var/list/maps = list() //an associative list to be returned, associates title with path+binary
+	var/list/all_maps = list() //list of all maps, skipped or otherwise
 	var/recursion_limit = 20 //lots of maps waiting to be played, feels like TF2
 	//Get our potential maps
 	testing("starting in [root]")
 	for(var/potential in flist(root))
-		if(copytext(potential,-1,0 != "/"))
+		if(copytext(potential,-1,0) != "/")
 			continue // Not a directory, ignore it.
 		testing("Inside [root + potential]")
 		if(!recursion_limit)
@@ -33,7 +34,7 @@
 		var/skipping = 0
 		for(var/binaries in flist(path))
 			testing("Checking file [binaries]")
-			if(copytext(binaries,-15,0) == "playercount.txt")
+			if(copytext(binaries,-4,0) == ".txt")
 				var/list/lines = file2list(path+binaries)
 				for(var/line in lines)
 					if(findtext(line,"max"))
@@ -44,18 +45,22 @@
 						testing("[path] minimum players is [line] found [min]")
 					else
 						warning("Our file had excessive lines, skipping.")
+						skipping = 3 //useless file
+						min = null
+						max = null
 				if(!isnull(min) && !isnull(max))
 					if((min != -1) && clients.len < min)
-						skipping = 1
+						skipping = 1 //too little players
 					else if((max != -1) && clients.len > max)
-						skipping = 2
+						skipping = 2 //too many players
 			if(copytext(binaries,-4,0) == ".dmb")
 				if(binary)
 					warning("Extra DMB [binary] in map folder, skipping.")
 					continue
 				binary = binaries
 				continue
-
+		if(skipping < 3)
+			all_maps[potential] = path + binary
 		if(skipping)
 			message_admins("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
 			warning("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
@@ -98,6 +103,7 @@
 	var/list/maplist = get_list_of_keys(maps)
 	send2maindiscord("A map vote was initiated with these options: [english_list(maplist)].")
 	send2mainirc("A map vote was initiated with these options: [english_list(maplist)].")
+	vote.allmaps = all_maps
 	return maps
 
 //Sends resource files to client cache

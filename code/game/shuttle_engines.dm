@@ -40,6 +40,7 @@
 	name = "propulsion"
 	icon_state = "propulsion"
 	opacity = 1
+	var/exhaust_type = /obj/item/projectile/fire_breath/shuttle_exhaust
 
 /obj/structure/shuttle/engine/heater/DIY
 	name = "shuttle engine pre-igniter"
@@ -129,12 +130,14 @@
 		return rotate_ccw()
 	return ..()
 
-/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust(forward=9, backward=9)
+/obj/structure/shuttle/engine/propulsion/proc/shoot_exhaust(forward=9, backward=9, var/turf/source_turf)
 	if(!anchored)
 		return
 	var/turf/target = get_edge_target_turf(src,dir)
-	var/turf/T = get_turf(src)
-	var/obj/item/projectile/fire_breath/A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+	var/turf/T = source_turf
+	if (!T)
+		T = get_turf(src)
+	var/obj/item/projectile/fire_breath/A = new exhaust_type(T)
 	A.max_range = forward
 
 	for(var/i=0, i<2, i++)
@@ -150,7 +153,7 @@
 
 		target = get_edge_target_turf(src,reverse_direction(dir))
 		sleep(6)
-		A = new /obj/item/projectile/fire_breath/shuttle_exhaust(T)
+		A = new exhaust_type(T)
 		A.max_range = backward
 
 /obj/structure/shuttle/engine/propulsion/left
@@ -178,3 +181,44 @@
 /obj/structure/shuttle/engine/router
 	name = "router"
 	icon_state = "router"
+
+// -- NRV HORIZON --
+
+var/ship_has_power = TRUE
+var/list/large_engines = list()
+
+/obj/structure/shuttle/engine/propulsion/horizon
+	var/largeness = 0 // How much extra turfs we are on.
+
+	plane = EFFECTS_PLANE
+	layer = HORIZON_EXHAUST_LAYER
+	exhaust_type = /obj/item/projectile/fire_breath/shuttle_exhaust/horizon
+
+/obj/structure/shuttle/engine/propulsion/horizon/New()
+	. = ..()
+	large_engines += src
+
+/obj/structure/shuttle/engine/propulsion/horizon/Destroy()
+	large_engines -= src
+	. = ..()
+
+// Calls the parents on all the turfs we occupy.
+/obj/structure/shuttle/engine/propulsion/horizon/shoot_exhaust(forward=9, backward=9, var/turf/source_turf)
+	for (var/dx = 0 to largeness)
+		spawn()
+			var/turf/T = locate(src.x + dx, src.y, src.z)
+			..(forward, backward, T)
+
+/obj/structure/shuttle/engine/propulsion/horizon/large_engine
+	bound_height = 64
+	bound_width = 64
+	icon = 'icons/2x2.dmi'
+	icon_state = "large_engine"
+	largeness = 1
+
+/obj/structure/shuttle/engine/propulsion/horizon/huge_engine
+	bound_height = 96
+	bound_width = 96
+	icon = 'icons/3x3.dmi'
+	icon_state = "huge_engine"
+	largeness = 2

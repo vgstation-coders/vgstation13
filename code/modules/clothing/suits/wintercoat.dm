@@ -97,7 +97,8 @@
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/flashlight/pen,
 		/obj/item/weapon/minihoe,
-		/obj/item/weapon/switchtool)
+		/obj/item/weapon/switchtool,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"
@@ -187,7 +188,7 @@
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
-		
+
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
 	icon_state = "coatmime"

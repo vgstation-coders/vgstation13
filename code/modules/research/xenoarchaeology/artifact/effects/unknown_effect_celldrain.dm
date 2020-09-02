@@ -19,7 +19,7 @@
 
 /datum/artifact_effect/celldrain/DoEffectAura()
 	if(holder)
-		for(var/atom/movable/C in range(effectrange, holder))
+		for(var/atom/movable/C in range(effectrange, get_turf(holder)))
 			var/obj/item/weapon/cell/target_cell = C.get_cell()
 			if(target_cell)	
 				if(isrobot(C) && (world.time >= next_message))
@@ -33,7 +33,7 @@
 
 /datum/artifact_effect/celldrain/DoEffectPulse()
 	if(holder)
-		for(var/atom/movable/C in range(effectrange, holder))
+		for(var/atom/movable/C in range(effectrange, get_turf(holder)))
 			var/obj/item/weapon/cell/target_cell = C.get_cell()
 			if(target_cell)	
 				if(isrobot(C) && (world.time >= next_message))

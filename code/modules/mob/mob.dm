@@ -29,16 +29,6 @@
 		for(var/M in mind.heard_before)
 			if(mind.heard_before[M] == src)
 				mind.heard_before[M] = null
-	if(on_spellcast)
-		on_spellcast.holder = null
-	if(on_uattack)
-		on_uattack.holder = null
-	if(on_ruattack)
-		on_ruattack.holder = null
-	if(on_damaged)
-		on_damaged.holder = null
-	if(on_death)
-		on_death.holder = null
 	if(on_bumping)
 		on_bumping.holder = null
 	if(on_bumped)
@@ -79,24 +69,10 @@
 	hud_used = null
 	for(var/atom/movable/leftovers in src)
 		qdel(leftovers)
-	qdel(on_logout)
-	on_logout = null
-	qdel(on_spellcast)
-	qdel(on_uattack)
-	qdel(on_ruattack)
-	qdel(on_damaged)
-	qdel(on_clickon)
-	qdel(on_death)
 	qdel(on_bumping)
 	qdel(on_bumped)
 	qdel(on_touched)
 
-	on_spellcast = null
-	on_uattack = null
-	on_ruattack = null
-	on_damaged = null
-	on_clickon = null
-	on_death = null
 	on_bumping = null
 	on_bumped = null
 	on_touched = null
@@ -291,13 +267,6 @@
 		living_mob_list += src
 
 	store_position()
-	on_spellcast = new(owner = src)
-	on_uattack = new(owner = src)
-	on_ruattack = new(owner = src)
-	on_logout = new(owner = src)
-	on_damaged = new(owner = src)
-	on_clickon = new(owner = src)
-	on_death = new(owner = src)
 	on_bumping = new(owner = src)
 	on_bumped = new(owner = src)
 	on_touched = new(owner = src)
@@ -1957,8 +1926,7 @@ mob/proc/on_foot()
 //High order proc to remove a mobs spell channeling, removes channeling fully
 /mob/proc/remove_spell_channeling()
 	if(spell_channeling)
-		var/spell/thespell = on_uattack.handlers[spell_channeling][EVENT_OBJECT_INDEX]
-		thespell.channel_spell(force_remove = 1)
+		spell_channeling.channel_spell(force_remove = 1)
 		return 1
 	return 0
 

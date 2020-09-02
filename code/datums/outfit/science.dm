@@ -225,3 +225,7 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
+
+/datum/outfit/roboticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/device/flash/synthetic] = SURVIVAL_BOX
+	return ..()

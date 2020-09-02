@@ -2810,6 +2810,8 @@ var/list/the_station_areas = list (
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
 
+/area/maintenance/engine
+	name = "Engine"
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"

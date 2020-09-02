@@ -1,4 +1,15 @@
 
+var/global/list/analyzed_anomalies = list()
+var/anomaly_report_num = 0
+
+/obj/item/weapon/disk/hdd/anomaly
+	name = "Encrypted HDD"
+	desc = "Additional Anomaly data has been encrypted into this HDD, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it."
+	origin_tech = Tc_ANOMALY+"=5"
+	mech_flags = MECH_SCAN_FAIL
+
+//////////////////////////////////////////////////////////////////////////////////
+
 /obj/machinery/artifact_analyser
 	name = "anomaly analyser"
 	desc = "Studies the emissions of anomalous materials to discover their uses."
@@ -13,11 +24,20 @@
 	var/scan_completion_time = 0
 	var/scan_duration = 120
 	var/obj/scanned_object
-	var/report_num = 0
 
 /obj/machinery/artifact_analyser/New()
 	..()
 	reconnect_scanner()
+	update_icon()
+
+/obj/machinery/artifact_harvester/Destroy()
+	if (owned_scanner)
+		owned_scanner.analyser_console = null
+		owned_scanner = null
+	..()
+
+/obj/machinery/artifact_analyser/power_change()
+	..()
 	update_icon()
 
 /obj/machinery/artifact_analyser/update_icon()
@@ -31,7 +51,8 @@
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 	if(owned_scanner)
-		owned_scanner.owner_console = src
+		owned_scanner.analyser_console = src
+		owned_scanner.desc = "Place anomalies here for scanning. Exotic anomalies may provide data that will be encrypted for use by R&D."
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..())
@@ -86,23 +107,42 @@
 			results = get_scan_info(scanned_object)
 
 		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
-		var/obj/item/weapon/paper/P = new(src.loc)
-		P.name = "[src] report #[++report_num]"
-		P.info = "<b>[src] analysis report #[report_num]</b><br>"
+		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
+		P.artifact = scanned_object
+		P.info = "<b>[src] analysis report for [scanned_object]</b><br>"
 		P.info += "<br>"
 		P.info += "[bicon(scanned_object)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamp-qm")
 
 		if(!findtext(P.info, "Mundane"))
-			P.origin_tech = Tc_ANOMALY+"=5"
-			P.info += "<br>"
-			P.info += "<br><i>Additional data has been encrypted into this report, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it.</i>"
+			var/art_id
+			var/found = FALSE
+			for(var/artifact_id in excavated_large_artifacts)
+				if (excavated_large_artifacts[artifact_id] == scanned_object)
+					art_id = artifact_id
+					found = TRUE
+			if (!found)
+				art_id = generate_artifact_id()
+				excavated_large_artifacts[art_id] = scanned_object
+			if (!(scanned_object in analyzed_anomalies))
+				var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
+				analyzed_anomalies += scanned_object
+				HDD.name = "Encrypted HDD ([art_id])"
+			P.name = "Exotic Anomaly Report ([art_id])"
+		else
+			anomaly_report_num++
+			P.name = "Mundane Anomaly Report #[anomaly_report_num]"
 
 		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
 			var/obj/machinery/artifact/A = scanned_object
 			A.anchored = FALSE
 			A.being_used = FALSE
+			if (!A.analyzed)
+				A.analyzed = TRUE
+				if (istype(A.primary_effect) && A.primary_effect.triggered)
+					score["artifacts"]++
+
 
 /obj/machinery/artifact_analyser/Topic(href, href_list)
 	if(..())
@@ -177,6 +217,14 @@
 			phasing suggested?"
 		if(/obj/structure/crystal)
 			return "Crystal formation - Pseudo organic crystalline matrix, unlikely to have formed naturally. No known technology exists to synthesize this exact composition."
+		if(/obj/machinery/communication)
+			return "Ancient Communivation Device - Requires to be wrenched in a powered area. Permits bluespace communication between the bearers of the crystals."
+		if(/obj/structure/essence_printer)
+			return "Essence Printer - Interaction of a human with the item seem to bind their essence to the stone. Under unknown circumstances, a sentient clone of the human will come out of the stone, whether the original human is alive or dead."
+		if(/obj/item/clothing/gloves/warping_claws)
+			return "Warping Claws - Permits quick travel by ripping straight through the fabric of space. Those claws are quite cumbersome however, do not expect being able to use any machine while wearing them."
+		if(/obj/machinery/singularity_beacon)
+			return "Ominous Beacon - Graviton attraction device. Will converge nearby gravitational singularities toward itself so long as it remains powered."
 		if(/obj/machinery/artifact)
 			//the fun one
 			var/obj/machinery/artifact/A = scanned_obj

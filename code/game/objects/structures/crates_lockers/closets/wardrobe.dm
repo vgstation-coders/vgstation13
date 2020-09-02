@@ -19,10 +19,13 @@
 	return list(
 		/obj/item/clothing/under/rank/security = 3,
 		/obj/item/clothing/under/rank/security2 = 3,
+		/obj/item/clothing/under/rank/collar = 2,
 		/obj/item/clothing/shoes/jackboots = 3,
 		/obj/item/clothing/head/soft/sec = 3,
 		/obj/item/clothing/head/beret/sec = 3,
 		/obj/item/clothing/mask/bandana/red = 3,
+		/obj/item/clothing/head/peaked = 3,
+		/obj/item/clothing/head/garrison = 2,
 	)
 
 /obj/structure/closet/wardrobe/pink

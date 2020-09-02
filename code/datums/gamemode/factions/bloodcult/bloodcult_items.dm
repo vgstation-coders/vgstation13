@@ -1194,6 +1194,10 @@ var/list/arcane_tomes = list()
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_PAMPHLET)
 
+/obj/item/weapon/bloodcult_pamphlet/oneuse/attack_self(var/mob/user)
+	..()
+	qdel(src)
+
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use
 /obj/item/weapon/bloodcult_jaunter
 	name = "test jaunter"

@@ -926,10 +926,11 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot hack other APC's during the process.")
+			var/time_required = round(min(100, 600 * (M.apcs ? (1/M.apcs + 0.5/M.apcs) : 1)), 10) //60 seconds at no APC and 1 APC, 45 seconds at 2 APCs, 30 seconds at 3 APCs, 23 seconds at 4, 18 seconds at 5
+			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
-			sleep(600)
+			sleep(time_required)
 			if(src && malfai)
 				if (!src.aidisabled)
 					malfai.malfhack = null

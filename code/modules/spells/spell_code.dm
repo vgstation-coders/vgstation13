@@ -192,7 +192,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -210,48 +210,36 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.spell_channeling = user.on_uattack.Add(src, "channeled_spell")
+		user.lazy_register_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
+		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
+			user.lazy_register_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
+			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		var/event/E = user.on_uattack
-		E.handlers.Remove(user.spell_channeling)
-		var/event/ER = user.on_ruattack
-		if(ER)
-			ER.handlers.Remove(user.spell_channeling)
+		user.lazy_unregister_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
+		user.lazy_unregister_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
 		connected_button.name = name
 	return 1
 
-/spell/proc/channeled_spell(var/list/args)
-	var/event/E = args["event"]
-
-	if(!currently_channeled)
-		E.handlers.Remove("\ref[src]:channeled_spell")
-		return 0
-
-	var/atom/A = args["atom"]
-
-	if(E.holder != holder)
-		E.handlers.Remove("\ref[src]:channeled_spell")
-		return 0
-	var/list/target = list(A)
+/spell/proc/channeled_spell(atom/atom)
+	var/list/target = list(atom)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
 
-	if(cast_check(1, holder) && is_valid_target(A, user))
+	if(cast_check(1, holder) && is_valid_target(atom, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)

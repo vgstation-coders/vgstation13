@@ -1,6 +1,6 @@
 /obj/item/device/ano_scanner
 	name = "\improper Alden-Saraspova counter"
-	desc = "Aids in triangulation of exotic particles."
+	desc = "Aids in triangulation of exotic particles. Too sensible however to locate already excavated anomalies."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "ano_scanner"
 	item_state = "lampgreen"
@@ -37,8 +37,7 @@
 		for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
 			if(T.artifact_find)
 				if(T.z == cur_turf.z)
-					var/cur_dist = get_dist(cur_turf, T)
-
+					var/cur_dist = sqrt(get_dist_squared(cur_turf, T))
 					if((nearest_artifact_distance < 0 || cur_dist < nearest_artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range)
 						nearest_artifact_distance = cur_dist + rand() * 2 - 1
 						nearest_artifact_id = T.artifact_find.artifact_id

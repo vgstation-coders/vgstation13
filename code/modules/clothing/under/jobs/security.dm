@@ -8,13 +8,13 @@
 /*
  * Security
  */
- 
+
  /*
  * Formalwear first
  */
 /obj/item/clothing/under/rank/secformal
-	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)	
-	
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/rank/secformal/headofsecurity_blue
 	name = "\improper HoS' blue dress uniform"
 	desc = "Head of Security's blue uniform. For formal occasions."
@@ -35,7 +35,7 @@
 	_color = "hostanclothes"
 /obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
 	_color = "hosdnavyclothestrimmed"
-	
+
 /obj/item/clothing/under/rank/secformal/warden_blue
 	name = "warden's blue dress uniform"
 	desc = "Warden's blue dress uniform. For formal occasions."
@@ -54,10 +54,10 @@
 	icon_state = "wardentanclothes"
 	item_state = "ba_suit"
 	_color = "wardentanclothes"
-	
+
 /obj/item/clothing/under/rank/secformal/officer_blue
 	name = "officer's blue dress uniform"
-	desc = "Security officer's blue dress uniform. For formal occasions."	
+	desc = "Security officer's blue dress uniform. For formal occasions."
 	icon_state = "officerblueclothes"
 	item_state = "ba_suit"
 	_color = "officerblueclothes"
@@ -73,11 +73,11 @@
 	icon_state = "officertanclothes"
 	item_state = "ba_suit"
 	_color = "officertanclothes"
- 
+
  /*
  * Normalwear
  */
- 
+
 /obj/item/clothing/under/rank/warden
 	desc = "A jumpsuit made of strong material, providing robust protection. It has the word \"WARDEN\" written on the shoulders."
 	name = "warden's jumpsuit"
@@ -129,6 +129,16 @@
 	clothing_flags = ONESIZEFITSALL
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED)
+
+/obj/item/clothing/under/rank/collar
+	name = "security officer's uniform"
+	desc = "A jumpsuit made of strong material, with a dash of military flare."
+	icon_state = "collar"
+	item_state = "collar"
+	_color = "collar"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	clothing_flags = ONESIZEFITSALL
+	siemens_coefficient = 0.9
 
 /*
  * Detective
@@ -215,7 +225,7 @@
 	siemens_coefficient = 0.6
 
 // -- Centcomm, OG by SkyMarshall
-	
+
 /obj/item/clothing/under/rank/centcom/representative
 	desc = "Gold trim on space-black cloth, this uniform displays the rank of \"Ensign\" and bears \"N.C.V. Fearless CV-286\" on the left shounder."
 	name = "\improper Nanotrasen Navy Uniform"

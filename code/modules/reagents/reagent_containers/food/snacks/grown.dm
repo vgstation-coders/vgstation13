@@ -41,6 +41,7 @@ var/list/special_fruits = list()
 		if(!seed)
 			return
 		icon = seed.plant_dmi
+		icon_state = seed.plant_icon_state
 		potency = round(seed.potency)
 		force = seed.thorny ? 5+seed.carnivorous*3 : 0
 		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0

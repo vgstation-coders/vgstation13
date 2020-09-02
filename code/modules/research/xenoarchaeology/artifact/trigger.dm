@@ -48,6 +48,18 @@
 				log += " || attacked by [key_name(toucher)]."
 			my_artifact.investigation_log(I_ARTIFACT, log)
 			my_effect.ToggleActivate()
+		else
+			var/log = "|| effect [my_effect.artifact_id]([my_effect]) triggered from touch by [context]([my_effect.trigger])"
+			if(item)
+				log += " || [item]"
+			if(toucher)
+				log += " || attacked by [key_name(toucher)]."
+			my_artifact.investigation_log(I_ARTIFACT, log)
+			my_effect.ToggleActivate()
+			var/datum/artifact_effect/E = my_effect
+			spawn (2 SECONDS)//artifacts with a Touch effect remain visibly activated for 2 seconds
+				if (E?.activated)
+					E.ToggleActivate()
 
 	else if(!my_effect.IsPrimary() && prob(25))	//secondary effects only have a 1/4 chance to trigger
 		if(my_effect.effect != ARTIFACT_EFFECT_TOUCH)
@@ -63,6 +75,18 @@
 				log += " || attacked by [key_name(toucher)]."
 			my_artifact.investigation_log(I_ARTIFACT, log)
 			my_effect.ToggleActivate(2)
+		else
+			var/log = "|| effect [my_effect.artifact_id]([my_effect]) triggered from touch by [context]([my_effect.trigger])"
+			if(item)
+				log += " || [item]"
+			if(toucher)
+				log += " || attacked by [key_name(toucher)]."
+			my_artifact.investigation_log(I_ARTIFACT, log)
+			my_effect.ToggleActivate(2)
+			var/datum/artifact_effect/E = my_effect
+			spawn (2 SECONDS)//artifacts with a Touch effect remain visibly activated for 2 seconds
+				if (E?.activated)
+					E.ToggleActivate(2)
 
 /datum/artifact_trigger/Destroy()
 	my_artifact = null

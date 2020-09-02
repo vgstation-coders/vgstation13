@@ -523,6 +523,8 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
+		/obj/item/weapon/disk,
+		/obj/item/weapon/disk/hdd,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,
@@ -1415,11 +1417,17 @@
 // Spawn all in the turf
 /obj/abstract/spawn_all
 	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
 
 /obj/abstract/spawn_all/New()
 	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
 	for (var/thing in to_spawn)
-		new thing(get_turf(src))
+		new thing(location)
 	qdel(src)
 
 /obj/abstract/spawn_all/dredd_gear
