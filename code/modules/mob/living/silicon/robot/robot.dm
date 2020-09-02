@@ -1379,9 +1379,12 @@ var/list/cyborg_list = list()
 	button_icon_state = "ai"
 
 /datum/action/UpdateButtonIcon()
-	var/mob/living/silicon/robot/shell/R = owner
-	if(R.mainframe)
-		button_icon_state = "[R.mainframe.icon_state]"
+	if(isshell(owner))
+		var/mob/living/silicon/robot/shell/R = owner
+		if(R.mainframe)
+			button_icon_state = "[R.mainframe.icon_state]"
+		else
+			button_icon_state = "ai"
 	else
 		button_icon_state = "ai"
 	..()
