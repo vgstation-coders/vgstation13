@@ -78,7 +78,7 @@
 		share_syndicate_codephrase(N.antag.current)
 		N.antag.current << sound('sound/voice/syndicate_intro.ogg')
 
-		if(!leader_selected)
+		if(istype(N, /datum/role/nuclear_operative/leader) && !leader_selected)
 			prepare_syndicate_leader(synd_mind, nuke_code)
 			leader_selected = 1
 		else
