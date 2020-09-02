@@ -39,7 +39,7 @@
 		for (var/datum/role/R in members)
 			if(!R.antag.current)
 				continue
-			if(isAI(R.antag.current) && !R.antag.current.isDead())
+			if((isAI(R.antag.current) || isshell(R.antag.current)) && !R.antag.current.isDead())
 				living_ais++
 		if(!living_ais)
 			command_alert(/datum/command_alert/malf_destroyed)
