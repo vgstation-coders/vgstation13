@@ -20,12 +20,6 @@
 	minimal_player_age = 20
 	outfit_datum = /datum/outfit/chief_engineer
 
-/datum/job/chief_engineer/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
-	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/cracker(H.back), slot_in_backpack) //poly gets part of the divvy, savvy?
-
 /datum/job/engineer
 	title = "Station Engineer"
 	flag = ENGINEER
@@ -41,11 +35,6 @@
 	alt_titles = list("Maintenance Technician","Engine Technician","Electrician")
 	outfit_datum = /datum/outfit/engineer
 
-/datum/job/engineer/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
-	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
-
 /datum/job/atmos
 	title = "Atmospheric Technician"
 	flag = ATMOSTECH
@@ -59,11 +48,6 @@
 	access = list(access_eva, access_engine, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_atmospherics)
 	minimal_access = list(access_atmospherics, access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks)
 	outfit_datum = /datum/outfit/atmos
-
-/datum/job/atmos/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/clothing/glasses/scanner/meson(H), slot_glasses)
-	H.equip_or_collect(new /obj/item/clothing/gloves/yellow(H), slot_gloves)
 
 /datum/job/mechanic
 	title = "Mechanic"

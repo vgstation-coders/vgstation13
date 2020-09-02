@@ -99,7 +99,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
 
-
 /datum/outfit/qm/post_equip(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 	if (!H.mind)
@@ -212,3 +211,7 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")
+
+/datum/outfit/mining/post_equip_priority(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/pickaxe/drill(get_turf(H)))
+	return ..()
