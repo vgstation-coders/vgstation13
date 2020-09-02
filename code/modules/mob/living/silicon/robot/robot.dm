@@ -1360,6 +1360,7 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
 	deployed = TRUE
+	connected_ai = AI
 	real_name = "Shell of [AI.name]"
 	name = real_name
 	mainframe = AI
@@ -1378,13 +1379,10 @@ var/list/cyborg_list = list()
 	icon_icon = 'icons/mob/AI.dmi'
 	button_icon_state = "ai"
 
-/datum/action/UpdateButtonIcon()
-	if(isshell(owner))
-		var/mob/living/silicon/robot/shell/R = owner
-		if(R.mainframe)
-			button_icon_state = "[R.mainframe.icon_state]"
-		else
-			button_icon_state = "ai"
+/datum/action/undeployment/UpdateButtonIcon()
+	var/mob/living/silicon/robot/shell/R = owner
+	if(R.mainframe)
+		button_icon_state = "[R.mainframe.icon_state]"
 	else
 		button_icon_state = "ai"
 	..()

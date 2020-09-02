@@ -13,7 +13,7 @@
 		who = src
 
 	if(lawupdate)
-		if (connected_ai)
+		if (connected_ai && isshell(src))
 			if(connected_ai.stat || connected_ai.control_disabled)
 				to_chat(src, "<b>AI signal lost, unable to sync laws.</b>")
 
@@ -22,7 +22,7 @@
 				to_chat(src, "<b>Laws synced with AI, be sure to note any changes.</b>")
 				if(istraitor(src))
 					to_chat(src, "<b>Remember, your AI does NOT share or know about your law 0.")
-		else if(!isshell(src))
+		else
 			to_chat(src, "<b>No AI selected to sync laws with, disabling lawsync protocol.</b>")
 			lawupdate = 0
 
