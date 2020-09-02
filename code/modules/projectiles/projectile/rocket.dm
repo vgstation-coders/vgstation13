@@ -229,3 +229,93 @@
 	if(C)
 		C.break_control()
 		qdel(C)
+
+
+//Clown missiles
+
+/obj/item/projectile/rocket/clown
+	name = "clown rocket" //abstract
+	damage = 0
+	weaken = 0
+	agony = 0
+	exdev 	= -1
+	exheavy = 0
+	exlight = 0
+	exflash = 0
+	stun = 5
+	var/payload_type
+	var/payload_power = 5
+	var/payload_radius = 2
+
+
+/obj/item/projectile/rocket/clown/to_bump(var/atom/A)
+	//playsound() //big honk sound
+
+		//if()//istype check for mob, if it's a direct hit then up the stun time
+	launch_payload()
+
+	..()
+
+
+
+/obj/item/projectile/rocket/clown/proc/launch_payload()
+	if(payload_type)
+		var/atom/curloc = get_turf(src)
+		//radius = 5
+		var/list/possible_targets= block_borders(locate(curloc.x-payload_radius, curloc.y-payload_radius, curloc.z), locate(curloc.x+payload_radius, curloc.y+payload_radius, curloc.z))  //I want to throw at the outer reaches of the radius
+
+
+		//create the payload and throw at each location
+		for(var/atom/loc in possible_targets)
+			var/atom/movable/payload = new payload_type(curloc)
+			payload.throw_at(loc,9,payload_power) // the last one is throwspeed, maybe have the payload determine lethality
+
+
+
+/*
+
+		for(var/obj/item/shrapnel in shrapnel_list)
+			var/amount = shrapnel.shrapnel_amount
+			if(amount)
+				while(amount > 0)
+					amount--
+					var/obj/item/projectile/shrapnel_projectile = shrapnel.get_shrapnel_projectile()
+					target=pick(possible_targets)
+					shrapnel_projectile.forceMove(curloc)
+					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
+				qdel(shrapnel)
+			else
+				target =pick(possible_targets)
+				shrapnel.forceMove(curloc)
+				shrapnel.throw_at(target,9,10)
+
+*/
+
+//low risk
+
+/obj/item/projectile/rocket/clown/mouse
+	payload_type = /mob/living/simple_animal/mouse
+
+/obj/item/projectile/rocket/clown/pizza
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
+
+/obj/item/projectile/rocket/clown/pie
+	payload_type = /obj/item/weapon/reagent_containers/food/snacks/pie
+
+//high risk: not necessarily lethal but can create a nuisance
+
+/obj/item/projectile/rocket/clown/cow
+	payload_type =/mob/living/simple_animal/cow
+
+/obj/item/projectile/rocket/clown/goblin
+	payload_type = /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
+
+
+//lethals: some variants of normally non-lethal payloads that fire so fast they'll actually hurt people, or downright lethal payloads
+
+
+//obj/item/projectile/rocket/clown/cat
+//obj/item/projectile/rocket/clown/dimensional_slip //slip, teleport, slip again, teleport again, very rapidly for about 10 seconds then end
+//obj/item/projectile/rocket/clown/shoesnatch
+//obj/item/projectile/rocket/clown/trash
+//obj/item/projectile/rocket/clown/honk

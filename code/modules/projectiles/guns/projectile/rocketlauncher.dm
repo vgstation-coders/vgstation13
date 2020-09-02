@@ -4,6 +4,7 @@
 	fire_sound = 'sound/weapons/rocket.ogg'
 	icon_state = "rpg"
 	item_state = "rpg"
+	var/initial_icon = "rpg"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 5000)
@@ -22,9 +23,13 @@
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
 
+/obj/item/weapon/gun/projectile/rocketlauncher/New()
+	..()
+	update_icon()
+
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
 	return FALSE
-
+/*
 /obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
 	if(!getAmmo())
 		icon_state = "rpg_e"
@@ -32,6 +37,31 @@
 	else
 		icon_state = "rpg"
 		item_state = "rpg"
+*/
+/obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
+	visible_message ("<span class='warning'>update icon proc has been called on \the [src] with [src.loaded[1]] : [initial_icon]_[loaded[1].icon_suffix]</span>")
+	if(loaded.len == 0)
+		overlays.len = 0
+	else
+		overlays += image(icon, src, icon_state = "rpg_[loaded[1].icon_suffix]") //for(var/obj/item/ammo_casing/AC in loaded)
+	return
+
+
+/obj/item/weapon/gun/projectile/rocketlauncher/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	..()
+	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
+		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
+		spawn(automagdrop_delay_time)
+			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
+				RemoveMag(user)
+				if(mag_drop_sound)
+					playsound(user, mag_drop_sound, 40, 1)
+					update_icon()
+	return
+
+/obj/item/weapon/gun/projectile/rocketlauncher/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	..()
+	update_icon()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if(M == user && user.zone_sel.selecting == "mouth") //Are we trying to suicide by shooting our head off ?
@@ -60,6 +90,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "rpg_nt"
 	item_state = "rpg_nt"
+	initial_icon = "rpg_nt"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
@@ -77,14 +108,6 @@
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/blank"
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
-
-/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/update_icon()
-	if(!getAmmo())
-		icon_state = "rpg_nt_e"
-		item_state = "rpg_nt_e"
-	else
-		icon_state = "rpg_nt"
-		item_state = "rpg_nt"
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	spawn_mag = TRUE
@@ -154,3 +177,16 @@
 	..()
 	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+
+/obj/item/weapon/gun/projectile/rocketlauncher/clown
+	name = "shoulder mounted gag launcher"
+	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222"
+	fire_sound = 'sound/weapons/rocket.ogg'
+	icon_state = "rpg_clown"
+	item_state = "rpg"//TODO
+	initial_icon = "rpg_clown"
+	max_shells = 1
+	clumsy_check = 0
+
+	//desc = "You've just henked your last honk."
