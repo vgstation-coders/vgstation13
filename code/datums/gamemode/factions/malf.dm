@@ -76,7 +76,10 @@
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+		if(isshell(malfAI.antag.current))
+			malfAI.antag.current.mainframe.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+		else
+			malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 
 	return
 
