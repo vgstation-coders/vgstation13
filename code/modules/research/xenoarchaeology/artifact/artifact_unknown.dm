@@ -56,7 +56,7 @@ var/list/excavated_large_artifacts = list()
 						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
 						secondary_effect.ToggleActivate(2)
 
-	generate_icon()
+		generate_icon()
 
 /obj/machinery/artifact/proc/generate_icon()
 	prefix = pick(primary_effect.valid_style_types)
