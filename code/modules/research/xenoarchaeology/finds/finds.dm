@@ -113,6 +113,7 @@
 /datum/find/bowl/spawn_item()
 	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
+	new_item.name = "bowl"
 	new_item.icon_state = "bowl"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -133,6 +134,7 @@
 /datum/find/urn/spawn_item()
 	var/glass_type = pick(200;/obj/item/weapon/reagent_containers/glass, 25;/obj/item/weapon/reagent_containers/glass/replenishing, 25;/obj/item/weapon/reagent_containers/glass/xenoviral)
 	var/obj/item/weapon/new_item = new glass_type
+	new_item.name = "urn"
 	new_item.icon_state = "urn"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
