@@ -11,6 +11,7 @@
 	var/nearest_artifact_distance = -1
 	var/last_scan_time = 0
 	var/scan_delay = 25
+	toolsounds = list('sound/items/healthanalyzer.ogg')
 
 /obj/item/device/ano_scanner/attack_self(var/mob/user)
 	return src.interact(user)
@@ -44,5 +45,5 @@
 			else
 				SSxenoarch.artifact_spawning_turfs.Remove(T)
 
-	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
+	playtoolsound(src, 50)
 	cur_turf.visible_message("<span class='info'>[src] clicks.</span>")
