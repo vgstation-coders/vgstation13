@@ -341,7 +341,11 @@ var/anomaly_report_num = 0
 			return out
 		else
 			//it was an ordinary item
-			var/result = ""
-			if (isobj(AM))
-				result = "[AM.name] - Mundane application, composed of carbo-ferritic alloy composite."//TODO: be more descriptive depending on the type of object
+			var/result = "[AM.name] - Mundane application, composed of carbo-ferritic alloy composite."//TODO: be more descriptive depending on the type of object
+			if (ismob(AM))
+				result = "[AM.name] - Mundane creature."
+				if (iscarbon(AM))
+					result += " carbon-based."
+				if (issilicon(AM))
+					result += " silicon-based."
 			return result
