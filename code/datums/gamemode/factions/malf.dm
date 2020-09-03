@@ -77,7 +77,8 @@
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
 		if(isshell(malfAI.antag.current))
-			malfAI.antag.current.mainframe.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+			var/mob/living/silicon/robot/shell/S = malfAI.antag.current
+			S.mainframe.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 		else
 			malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 
