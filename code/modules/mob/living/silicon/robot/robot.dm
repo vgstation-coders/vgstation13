@@ -1409,7 +1409,7 @@ var/list/cyborg_list = list()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
 	
-/mob/living/silicon/robot/shell/close_connection()
+/mob/living/silicon/robot/shell/proc/close_connection()
 	if(deployed)
 		undeploy()
 	if(mainframe)

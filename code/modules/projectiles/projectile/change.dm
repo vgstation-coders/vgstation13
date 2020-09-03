@@ -22,6 +22,7 @@
 		if(isshell(M))	//Kick out the AI if its a shell
 			var/mob/living/silicon/robot/shell/R = M
 			R.close_connection()
+			
 		var/mob/living/new_mob
 		// Random chance of fucking up
 		if(type!=null && prob(10))
