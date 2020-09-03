@@ -7995,8 +7995,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 	if(method == TOUCH)
 		if(issilicon(M))//borgs are hurt on touch by this chem
-			M.adjustFireLoss(5*REM)
-			M.adjustBruteLoss(5*REM)
+			M.adjustFireLoss(10)
+			M.adjustBruteLoss(10)
+//todo : mech and pod damage
 
 
 /datum/reagent/diabeetusol
