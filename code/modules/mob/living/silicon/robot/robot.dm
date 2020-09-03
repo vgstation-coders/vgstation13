@@ -1408,6 +1408,13 @@ var/list/cyborg_list = list()
 		radio.recalculateChannels()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
+	
+/mob/living/silicon/robot/shell/close_connection()
+	if(deployed)
+		undeploy()
+	if(mainframe)
+		mainframe.shell = null
+		mainframe = null
 
 /mob/living/silicon/robot/shell/connect_AI()
 	to_chat(mainframe, "<span class='notice' style=\"font-family:Courier\">Notice: Connection to cyborg shell re-established.</span>" )

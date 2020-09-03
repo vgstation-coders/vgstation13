@@ -95,8 +95,5 @@
 	..()
 
 /mob/living/silicon/robot/shell/Destroy()
-	if(deployed)
-		undeploy()
-	if(mainframe)
-		mainframe.shell = null
+	close_connection()
 	..()
