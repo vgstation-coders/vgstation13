@@ -34,14 +34,17 @@
 
 /datum/artifact_effect/projectiles/New()
 	..()
+	effectrange = 7
 	effect_type = pick(1,3,4,6)
-	chargelevelmax = rand(5, 20)
+	chargelevelmax = rand(2, 5)
 	projectiletype = pick(validartifactprojectiles)
 	num_of_shots = pick(100;1, 100;2, 50;3, 25;4, 10;6)
 
 /datum/artifact_effect/projectiles/DoEffectPulse()
 	if(holder)
-		var/possible_turfs = trange(effectrange, get_turf(holder)) - trange(effectrange - 1, get_turf(holder))
-		for(var/i=0, i<num_of_shots, i++)
-			var/turf/target = pick(possible_turfs)
-			generic_projectile_fire(target, holder, projectiletype)
+		spawn()
+			var/possible_turfs = trange(effectrange, get_turf(holder)) - trange(effectrange - 1, get_turf(holder))
+			for(var/i=0, i<num_of_shots, i++)
+				var/turf/target = pick(possible_turfs)
+				generic_projectile_fire(target, holder, projectiletype)
+				sleep (5)
