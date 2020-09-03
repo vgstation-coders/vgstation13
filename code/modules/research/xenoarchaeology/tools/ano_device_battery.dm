@@ -212,8 +212,8 @@ var/list/anomaly_power_utilizers = list()
 			inserted_battery.battery_effect.ToggleActivate(1)
 
 /obj/item/weapon/anodevice/Topic(href, href_list)
-
-	if ((get_dist(src, usr) > 1))
+	. = ..()
+	if(.)
 		return
 	usr.set_machine(src)
 	if(href_list["neg_changetime_max"])
