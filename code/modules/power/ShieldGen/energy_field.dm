@@ -12,6 +12,8 @@
 	invisibility = 101
 	var/strength = 0
 
+	var/explosion_block = 20
+
 /obj/effect/energy_field/ex_act(var/severity)
 	Stress(0.5 + severity)
 
