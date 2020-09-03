@@ -1,4 +1,5 @@
 var/list/excavated_large_artifacts = list()
+var/list/destroyed_large_artifacts = list()
 
 /obj/machinery/artifact
 	name = "alien artifact"
@@ -202,13 +203,27 @@ var/list/excavated_large_artifacts = list()
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
+	excavated_large_artifacts -= artifact_id
+	var/list/artifact_data = list(
+		artifact_id,
+		get_turf(src),
+		type,
+		)
+	if (primary_effect)
+		artifact_data += primary_effect.effecttype
+	else
+		artifact_data += ""
+	if (secondary_effect)
+		artifact_data += secondary_effect.effecttype
+	else
+		artifact_data += ""
+	destroyed_large_artifacts[artifact_id] = artifact_data
+
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
-
-	excavated_large_artifacts -= artifact_id
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
