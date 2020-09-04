@@ -1010,8 +1010,12 @@ var/list/cyborg_list = list()
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)
-		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
+		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)
+		if(isshell(src))	//Make them green.
+			eyesicon.Blend(rgb(0,255,0), ICON_OVERLAY)
+		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
+
 		overlays += eyes
 
 	if(opened)
