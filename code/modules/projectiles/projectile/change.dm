@@ -23,9 +23,9 @@
 			var/mob/living/silicon/robot/shell/R = M
 			R.close_connection()
 
-		if(isai(M))	//Force the AI back if its in a shell
+		if(isAI(M))	//Force the AI back if its in a shell
 			var/mob/living/silicon/ai/R = M
-			if(deployed)
+			if(R.deployed)
 				R.shell.undeploy()
 				R.shell.gib()		//Destroy the shell, they wont be needing it anymore
 	
