@@ -382,16 +382,16 @@
 /datum/find/crystal/spawn_item()
 	var/obj/item/weapon/archaeological_find/new_find = new()
 	if(prob(25))
-		new_find.name = = "smooth green crystal"
+		new_find.name = "smooth green crystal"
 		new_find.icon_state = "Green lump"
 	else if(prob(33))
-		new_find.name = = "irregular purple crystal"
+		new_find.name = "irregular purple crystal"
 		new_find.icon_state = "Phazon"
 	else if(prob(50))
-		new_find.name = = "rough red crystal"
+		new_find.name = "rough red crystal"
 		new_find.icon_state = "changerock"
 	else
-		new_find.name = = "smooth red crystal"
+		new_find.name = "smooth red crystal"
 		new_find.icon_state = "smoothrock"
 
 	if(prob(10))
