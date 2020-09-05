@@ -15,7 +15,7 @@ var/datum/subsystem/xenoarch/SSxenoarch
 
 /datum/subsystem/xenoarch/Initialize(timeofday)
 	SetupXenoarch()
-	initialized = TRUE
+	..()
 
 
 
