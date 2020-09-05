@@ -421,14 +421,10 @@
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
 	 
-	var/mob/U = src
-	var/recieve_absorb = !(locate(/spell/targeted/absorb) in U.spell_list)
-	for(var/spell/S in U.spell_list)			//I was told that is_type_in_list can cause unforseen consequences so I'm doing this
-		if(S.type == /spell/targeted/absorb)
-			recieve_absorb = 0
-			break
+	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
+
 	if(recieve_absorb)
-		U.add_spell(/spell/targeted/absorb)
+		add_spell(/spell/targeted/absorb)
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
