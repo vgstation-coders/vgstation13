@@ -78,6 +78,7 @@
 	var/obj/item/robot_parts/chest/chest = null
 	var/obj/item/robot_parts/head/head = null
 	var/created_name = ""
+	var/ai_control = 1 
 
 /obj/item/robot_parts/robot_suit/mapped
 	l_arm = new /obj/item/robot_parts/l_arm
@@ -251,17 +252,23 @@
 
 	return
 
-/obj/item/robot_parts/robot_suit/attack_ai(mob/user as mob)
+/obj/item/robot_parts/robot_suit/attack_hand(mob/user)
+	if(ai_control)
+		to_chat(user, "You disable AI control on the cyborg exoskeleton.")
+		ai_control = 0
+	else
+		to_chat(user, "You enable AI control on the cyborg exoskeleton.")
+		ai_control = 1
+
+/obj/item/robot_parts/robot_suit/attack_ai(mob/user)
 	if(!check_completion())
+		return
+	if(!ai_control)
 		return
 	var/mob/living/silicon/ai/A = user
 	if(!A.shell)
-		A.deployed = 1
-		to_chat(A, "Taking control of cyborg shell...")
-		var/mob/living/silicon/robot/shell/R = create_robot(is_shell = 1)
-		A.shell = R
-		A.mind.transfer_to(R)
-		R.deploy_init(A)
+		A.create_shell(src)
+
 
 /obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
 	if(P.damage > 10)

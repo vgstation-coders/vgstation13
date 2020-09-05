@@ -887,6 +887,8 @@ var/list/ai_list = list()
 				continue	
 			if(!emptyborg.check_completion())	//Must be ready to have a posi/MMI inserted
 				continue
+			if(!emptyborg.ai_control)		//AI control was disabled
+				continue
 			potential_shells.Add(emptyborg)
 		if(potential_shells.len == 0)
 			to_chat(src, "<span class='warning'>No potential cyborg shells available.</span>")
@@ -896,17 +898,17 @@ var/list/ai_list = list()
 			options["Exoskeleton #[potential_shells.Find(S)] in [get_area(S)]"] = S
 		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
 		if(choice)
-			var/obj/item/robot_parts/robot_suit/chosen_shell = options[choice]
-			if(mind)
-				deployed = 1
-				to_chat(src, "Taking control of cyborg shell...")
-				var/mob/living/silicon/robot/shell/R = chosen_shell.create_robot(is_shell = 1)
-				shell = R
-				mind.transfer_to(R)
-				R.deploy_init(src)
-			
-			
+			create_shell(options[choice])
 
+			
+/mob/living/silicon/ai/proc/create_shell(var/obj/item/robot_parts/robot_suit/suit)		
+	if(mind && !shell)
+		deployed = 1
+		to_chat(src, "Taking control of cyborg shell...")
+		var/mob/living/silicon/robot/shell/R = chosen_shell.create_robot(is_shell = 1)
+		shell = R
+		mind.transfer_to(R)
+		R.deploy_init(src)
 
 /datum/action/deploy_shell
 	name = "Deploy to AI Shell"

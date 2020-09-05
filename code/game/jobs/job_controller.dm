@@ -312,7 +312,7 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/master_assistant = GetJob("Assistant")
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
-	var/datum/job/borg = job_master.GetJob("Cyborg")
+	var/datum/job/borg = job_master.GetJob("Cyborg")	//spawn a completed cyborg shell if no borgs readied up
 	var/borg_count = borg.current_positions
 	if(!borg_count)
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
