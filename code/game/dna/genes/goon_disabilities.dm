@@ -72,15 +72,9 @@
 
 	return 1
 
-/datum/dna/gene/disability/fat/OnMobLife(var/mob/M)
-	if(M.overeatduration < 100)
-		M.overeatduration = 600 // this ensures it always stays fat
-
-
-/datum/dna/gene/disability/fat/deactivate(var/mob/M)
-	if(M.overeatduration > 100)
-		M.overeatduration = 0
-		M.nutrition = max(M.nutrition - 200, 0)
+/datum/dna/gene/disability/fat/activate(var/mob/M)
+	if(M.overeatduration < 500)
+		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
 
 /datum/dna/gene/disability/fat/New()
