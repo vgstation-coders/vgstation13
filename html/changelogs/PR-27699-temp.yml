@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - rscadd: "Re-added a Beacon to the Research Outpost on all maps ('cept Roid of course) to make up for those no longer in the Excavation lockers"
+delete-after: true

@@ -1,0 +1,6 @@
+---
+author: DeityLink
+changes:
+  - bugfix: "Fixed RoidStation's Anomalous Materials freezer facing South instead of North."
+  - bugfix: "Fixed Synergy's Anomalous Materials cold pen featuring a vent and a scrubber impeding the freezer's efforts at cooling the zone."
+delete-after: true

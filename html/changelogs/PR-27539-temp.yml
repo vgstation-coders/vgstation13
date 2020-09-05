@@ -1,0 +1,5 @@
+---
+author: gurfan
+changes:
+  - rscadd: Traders can now purchase dart guns and dart cartridges from their syndicate uplinks.
+delete-after: true

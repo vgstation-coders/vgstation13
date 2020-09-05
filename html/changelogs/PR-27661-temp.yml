@@ -1,0 +1,6 @@
+---
+author: DeityLink
+changes:
+  - rscdel: Removed the Zombie Virus Syndrome virologist traitor item.
+  - rscadd: "Added the Deadly Syndrome Collection virologist traitor item, a diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+delete-after: true

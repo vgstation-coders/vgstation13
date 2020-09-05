@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - soundadd: Alien artifacts now emit a sound when their primary effect activates. Each artifact has their sound picked randomly amount 8 brand new sounds.
+delete-after: true

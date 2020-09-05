@@ -1,0 +1,5 @@
+---
+author: GreatBigFailure
+changes:
+  - bugfix: Pass the Pumpkin/Summon Snacks now work on laying targets
+delete-after: true

@@ -1,0 +1,5 @@
+---
+author: DeityLink
+changes:
+  - bugfix: "Synergy: Moved the light fixture on top of the anomaly scanner pad in Anomalous Materials two tiles to the left."
+delete-after: true
