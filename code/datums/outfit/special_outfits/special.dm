@@ -47,7 +47,7 @@
 	outfit_name = "Engineer rig suit"
 	items_to_spawn = list(
 		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -57,7 +57,7 @@
 	outfit_name = "Chief engineer rig suit"
 	items_to_spawn = list(
 		"Default" = list(
-			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/elite,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer/elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
@@ -132,6 +132,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
 		),
+	//Maybe replace with civilian rig whenever that becomes a truely unique rig.
 	)
 
 // ----- THUNDERDOME TOURNAMENT
