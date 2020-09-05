@@ -11,11 +11,12 @@
 	var/nearest_artifact_distance = -1
 	var/last_scan_time = 0
 	var/scan_delay = 25
+	toolsounds = list('sound/items/healthanalyzer.ogg')
 
-/obj/item/device/ano_scanner/attack_self(var/mob/user as mob)
+/obj/item/device/ano_scanner/attack_self(var/mob/user)
 	return src.interact(user)
 
-/obj/item/device/ano_scanner/interact(var/mob/user as mob)
+/obj/item/device/ano_scanner/interact(var/mob/user)
 	var/message = "Background radiation levels detected."
 
 	if(nearest_artifact_distance >= 0)
@@ -25,9 +26,9 @@
 
 	if(world.time - last_scan_time >= scan_delay)
 		spawn(0)
-			scan()
+			scan(user)
 
-/obj/item/device/ano_scanner/proc/scan()
+/obj/item/device/ano_scanner/proc/scan(var/mob/user)
 	last_scan_time = world.time
 	nearest_artifact_distance = -1
 
@@ -44,4 +45,5 @@
 			else
 				SSxenoarch.artifact_spawning_turfs.Remove(T)
 
+	playtoolsound(src, 50)
 	cur_turf.visible_message("<span class='info'>[src] clicks.</span>")

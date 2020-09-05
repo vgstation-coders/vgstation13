@@ -60,6 +60,7 @@ var/list/anomaly_power_utilizers = list()
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You insert the battery.</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 40, 0, -2)
 				inserted_battery = I
 				var/obj/item/weapon/anobattery/B = I
 				B.inserted_device = src
@@ -260,6 +261,7 @@ var/list/anomaly_power_utilizers = list()
 		src.investigation_log(I_ARTIFACT, "|| anomaly battery [inserted_battery.battery_effect.artifact_id]([inserted_battery.battery_effect]) emission timed by [key_name(usr)]")
 	if(href_list["ejectbattery"])
 		shutdown_emission()
+		playsound(src, 'sound/machines/click.ogg', 40, 0, -2)
 		inserted_battery.forceMove(get_turf(src))
 		if (isliving(usr))
 			var/mob/living/L = usr

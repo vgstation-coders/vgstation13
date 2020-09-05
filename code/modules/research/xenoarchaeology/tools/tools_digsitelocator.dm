@@ -10,6 +10,7 @@
 	origin_tech = Tc_ANOMALY+"=1"
 	var/cooldown = 0
 	var/adv = FALSE
+	toolsounds = list('sound/items/detscan.ogg')
 
 /obj/item/device/xenoarch_scanner/adv
 	name = "advanced xenoarchaeological digsite locator"
@@ -29,6 +30,7 @@
 		if(!C)
 			return
 		cooldown = world.time
+		playtoolsound(src, 50)
 		for(var/turf/unsimulated/mineral/M in range(7, user))
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]

@@ -152,6 +152,14 @@ var/list/excavated_large_artifacts = list()
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	..()
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, W)
+	if (W.hitsound)
+		playsound(src, W.hitsound, 50, 1, -1)
+	if (W.attack_verb)
+		visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
+	else
+		visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
 	on_attackby.Invoke(list(user, "MELEE", W))
 
 /obj/machinery/artifact/Bumped(var/atom/A)
