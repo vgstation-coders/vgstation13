@@ -34,7 +34,7 @@ var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuck
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary = 1, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
+/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
