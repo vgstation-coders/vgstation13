@@ -7,7 +7,11 @@
 	var/primary_effect = ""
 	var/secondary_effect = ""
 
-/datum/artifact_postmortem_data/New(var/atom/artifact,var/ignore = FALSE)
+/datum/artifact_postmortem_data/New(var/atom/artifact,var/ignore = FALSE,var/error = FALSE)
+	if (!artifact)
+		if (!error)//if we know we're generating an corrupted archive, just return so we can fill in the data manually afterwards.
+			qdel(src)
+		return
 	var/found = FALSE
 	for(var/artifact_id in excavated_large_artifacts)
 		if (excavated_large_artifacts[artifact_id] == artifact)
@@ -78,14 +82,13 @@
 		var/atom/A = excavated_large_artifacts[ID]
 		if (!(A?.loc))
 			if (!(ID in destroyed_large_artifacts))
-				var/list/artifact_data = list(
-					ID,
-					"not_a_turf",
-					"error: no postmortem artifact data generated",
-					"",
-					"",
-					)//a non-anomaly artifact was destroyed, no real way to know what type it was.
-				destroyed_large_artifacts[ID] += artifact_data
+				var/datum/artifact_postmortem_data/corrupted = new(null, FALSE, TRUE)
+				corrupted.artifact_id = ID
+				corrupted.last_loc = "not_a_turf"
+				corrupted.artifact_type = "error: no postmortem artifact data generated"
+				corrupted.primary_effect = ""
+				corrupted.secondary_effect = ""
+				destroyed_large_artifacts[ID] += corrupted
 			continue
 		var/turf/T = get_turf(A)
 		var/prim = ""
