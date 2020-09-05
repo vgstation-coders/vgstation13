@@ -41,7 +41,7 @@
 				continue
 			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
-		if(!living_ais)
+		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
 			return
