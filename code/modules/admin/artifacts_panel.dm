@@ -1,9 +1,9 @@
 /datum/admins/proc/artifacts_panel()
 	if (!(SSxenoarch?.initialized))
-		alert("The Xenoarch subsystem hasn't initialized yet!")
+		to_chat(usr,"<span class='danger'>The Xenoarch subsystem hasn't initialized yet!</span>")
 
-	if (!SSxenoarch.artifact_spawning_turfs.len)
-		alert("The Xenoarch subsystem seems to not have spawned any large artifact in the map. Lack of valid asteroid turfs?")
+	else if (!SSxenoarch?.artifact_spawning_turfs.len)
+		to_chat(usr,"<span class='danger'>The Xenoarch subsystem seems to not have spawned any large artifact in the map. Lack of valid asteroid turfs?</span>")
 
 	var/dat = {"<html>
 		<head>
@@ -85,20 +85,22 @@
 			"}
 
 	//Finally we list every large artifact still buried on the asteroid
-	for (var/turf/unsimulated/mineral/M in SSxenoarch.artifact_spawning_turfs)
-		if (!istype(M))
-			continue
-		if (!M.artifact_find)
-			continue
-		var/datum/artifact_find/A = M.artifact_find
-		dat += {"<tr>
-			<td>[A.artifact_id]</td>
-			<td><b>Buried</b> <a href='?src=\ref[src];artifactpanel_jumpto=\ref[M]'>([M.x],[M.y],[M.z])</a></td>
-			<td>[A.artifact_find_type]</td>
-			<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
-			<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
-			</tr>
-			"}
+	if (SSxenoarch)
+		for (var/turf/unsimulated/mineral/M in SSxenoarch.artifact_spawning_turfs)
+			if (!istype(M))
+				continue
+			if (!M.artifact_find)
+				continue
+			var/datum/artifact_find/A = M.artifact_find
+			dat += {"<tr>
+				<td>[A.artifact_id]</td>
+				<td><b>Buried</b> <a href='?src=\ref[src];artifactpanel_jumpto=\ref[M]'>([M.x],[M.y],[M.z])</a></td>
+				<td>[A.artifact_find_type]</td>
+				<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
+				<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
+				</tr>
+				"}
+
 	dat += {"</table>
 		</body>
 		</html>
