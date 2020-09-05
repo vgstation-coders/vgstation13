@@ -1402,7 +1402,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/proc/undeploy()
 	if(!deployed || !mind || !mainframe)
 		return
-	sleep(5)	//spamming this breaks things
+	sleep(1)	//spamming this breaks things
 	to_chat(src,"Releasing control of cyborg shell...")
 	mind.transfer_to(mainframe)
 	mainframe.deployed = 0
