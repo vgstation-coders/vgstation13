@@ -72,18 +72,16 @@
 
 	return 1
 
-/datum/dna/gene/disability/fat/activate(var/mob/M)
+/datum/dna/gene/disability/fat/OnMobLife(var/mob/M)
 	if(M.overeatduration < 100)
-		M.overeatduration += 600 // 500 is minimum fat threshold.
-	else
-		return
+		M.overeatduration = 600 // this ensures it always stays fat
+
 
 /datum/dna/gene/disability/fat/deactivate(var/mob/M)
 	if(M.overeatduration > 100)
 		M.overeatduration = 0
 		M.nutrition = max(M.nutrition - 200, 0)
-	else
-		return
+
 
 /datum/dna/gene/disability/fat/New()
 	..()
