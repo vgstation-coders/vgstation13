@@ -312,6 +312,16 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/master_assistant = GetJob("Assistant")
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
+	var/datum/job/borg = job_master.GetJob("Cyborg")
+	var/borg_count = borg.current_positions
+	if(!borg_count)
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != "Cyborg")
+				continue
+			else
+				new /obj/item/robot_parts/robot_suit/mapped(sloc.loc)
+				break
+
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
