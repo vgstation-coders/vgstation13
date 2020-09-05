@@ -871,7 +871,7 @@ var/list/ai_list = list()
 
 	if(shell)	//If the silicon already has a linked shell, go to that one!
 		sleep(1)	//spamming the verb breaks things
-		if (shell.stat == DEAD || shell.deployed || shell.mainframe != src)
+		if (shell.deployed || shell.mainframe != src)
 			return
 		if(mind)
 			to_chat(src, "Taking control of cyborg shell...")
