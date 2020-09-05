@@ -1011,8 +1011,8 @@ var/list/cyborg_list = list()
 	update_fire()
 	if(!stat && cell != null)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)
-		if(isshell(src))	//Make them green.
-			eyesicon.Blend(rgb(0,255,0), ICON_OVERLAY)
+		if(isshell(src))	//Make them white.
+			eyesicon.Blend(rgb(255,255,255), ICON_ADD)
 		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
 
@@ -1402,6 +1402,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/proc/undeploy()
 	if(!deployed || !mind || !mainframe)
 		return
+	sleep(5)	//spamming this breaks things
 	to_chat(src,"Releasing control of cyborg shell...")
 	mind.transfer_to(mainframe)
 	mainframe.deployed = 0
