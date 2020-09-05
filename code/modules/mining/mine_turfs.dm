@@ -56,7 +56,6 @@ var/global/list/mineralSpawnChance[]
 //	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
-	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay

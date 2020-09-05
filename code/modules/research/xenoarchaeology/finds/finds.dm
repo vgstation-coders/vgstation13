@@ -50,7 +50,9 @@
 
 
 /datum/find/proc/spawn_item() //Makes the item. Returns item.
-	return new /obj/item/weapon/archaeological_find
+	log_admin("/datum/find/spawn_item() parent proc was called, that should never happen. Find type is [type]")
+	message_admins("/datum/find/spawn_item() parent proc was called, that should never happen. Find type is [type]")
+	return
 
 /datum/find/proc/apply_prefix(var/obj/item/I)
 	I.name = "[pick("strange","ancient","alien","")] [item_type?"[item_type]":"[initial(I.name)]"]"
@@ -170,7 +172,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/statuette/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	new_item.icon_state = "statuette"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	return new_item
@@ -188,7 +190,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/instrument/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	new_item.icon_state = "instrument"
 	new_item.icon = 'icons/obj/xenoarchaeology.dmi'
 	if(prob(30))
@@ -378,18 +380,18 @@
 	responsive_reagent = NITROGEN
 
 /datum/find/crystal/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_find = ..()
+	var/obj/item/weapon/archaeological_find/new_find = new()
 	if(prob(25))
-		item_type = "smooth green crystal"
+		new_find.name = = "smooth green crystal"
 		new_find.icon_state = "Green lump"
 	else if(prob(33))
-		item_type = "irregular purple crystal"
+		new_find.name = = "irregular purple crystal"
 		new_find.icon_state = "Phazon"
 	else if(prob(50))
-		item_type = "rough red crystal"
+		new_find.name = = "rough red crystal"
 		new_find.icon_state = "changerock"
 	else
-		item_type = "smooth red crystal"
+		new_find.name = = "smooth red crystal"
 		new_find.icon_state = "smoothrock"
 
 	if(prob(10))
@@ -667,7 +669,7 @@
 	responsive_reagent = MERCURY
 
 /datum/find/unknown/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	if(prob(50))
 		qdel(new_item)
 		new_item = new /obj/item/weapon/glow_orb
@@ -745,7 +747,7 @@
 	responsive_reagent = CARBON
 
 /datum/find/remains_human/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "humanoid [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remains"
@@ -769,7 +771,7 @@
 	responsive_reagent = IRON
 
 /datum/find/remains_robot/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "[pick("mechanical","robotic","cyborg")] [pick("remains","chassis","debris")]"
 	new_item.icon = 'icons/mob/robots.dmi'
 	new_item.icon_state = "remainsrobot"
@@ -794,7 +796,7 @@
 	responsive_reagent = CARBON
 
 /datum/find/remains_xeno/spawn_item()
-	var/obj/item/weapon/archaeological_find/new_item = ..()
+	var/obj/item/weapon/archaeological_find/new_item = new()
 	item_type = "alien [pick("remains","skeleton")]"
 	new_item.icon = 'icons/effects/blood.dmi'
 	new_item.icon_state = "remainsxeno"
@@ -1027,29 +1029,14 @@
 		qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Archaeological finds
+// Basic archaeological find
 
 /obj/item/weapon/archaeological_find
 	name = "object"
 	desc = "This object is completely alien."
 	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "ano01"
-	var/datum/find/find_type
+	icon_state = "unknown1"
 
-/obj/item/weapon/archaeological_find/New(loc, var/new_item_type)
+/obj/item/weapon/archaeological_find/New(loc)
 	..()
-	if(new_item_type)
-		find_type = new_item_type
-	else
-		find_type = get_random_find()
-
 	icon_state = "unknown[rand(1,4)]"
-	var/obj/item/weapon/new_item = find_type.create_find(src)
-
-	var/turf/T = get_turf(src)
-	if(new_item != src)
-		new_item.forceMove(src.loc)
-		qdel(src)
-
-	if(istype(T, /turf/unsimulated/mineral))
-		T:last_find = new_item
