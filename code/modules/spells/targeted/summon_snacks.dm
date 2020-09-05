@@ -121,6 +121,7 @@
 	desc = "Magically delicious."
 	icon_state = "spellburger"
 	cant_drop = 1
+	laying_pickup = TRUE
 
 /obj/item/weapon/reagent_containers/food/snacks/summoned/proc/spellInherit(var/menu, var/biteS, var/diabeetus)
 	switch(menu)

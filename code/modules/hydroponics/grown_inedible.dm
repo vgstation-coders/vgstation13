@@ -264,6 +264,7 @@
 	icon = 'icons/obj/clothing/hats.dmi'
 	icon_state = "hardhat1_pumpkin"
 	cant_drop = 1
+	laying_pickup = TRUE
 
 /obj/item/weapon/carnivorous_pumpkin/New()
 	..()
