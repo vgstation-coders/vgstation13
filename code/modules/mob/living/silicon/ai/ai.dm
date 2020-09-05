@@ -905,7 +905,7 @@ var/list/ai_list = list()
 	if(mind && !shell)
 		deployed = 1
 		to_chat(src, "Taking control of cyborg shell...")
-		var/mob/living/silicon/robot/shell/R = chosen_shell.create_robot(is_shell = 1)
+		var/mob/living/silicon/robot/shell/R = suit.create_robot(is_shell = 1)
 		shell = R
 		mind.transfer_to(R)
 		R.deploy_init(src)
