@@ -107,16 +107,16 @@
 
 	//Next we list every large artifact that got destroyed
 	for(var/ID in destroyed_large_artifacts)
-		var/list/data = destroyed_large_artifacts[ID]
+		var/datum/artifact_postmortem_data/data = destroyed_large_artifacts[ID]
 		if (!istype(data))
 			continue
-		var/turf/T = data[2]
+		var/turf/T = data.last_loc
 		dat += {"<tr>
-			<td>[data[1]]</td>
+			<td>[data.artifact_id]</td>
 			<td><font color='red'><b>Destroyed</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
-			<td>[data[3]]</td>
-			<td>[data[4]]</td>
-			<td>[data[5]]</td>
+			<td>[data.artifact_type]</td>
+			<td>[data.primary_effect]</td>
+			<td>[data.secondary_effect]</td>
 			</tr>
 			"}
 
