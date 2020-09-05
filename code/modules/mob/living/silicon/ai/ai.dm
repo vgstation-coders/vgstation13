@@ -897,6 +897,8 @@ var/list/ai_list = list()
 		for(var/obj/item/robot_parts/robot_suit/S in potential_shells)	
 			options["Exoskeleton #[potential_shells.Find(S)] in [get_area(S)]"] = S
 		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
+		if(shell)	//no exploits allowed
+			to_chat(src, "<span class='warning'>You already have a shell.</span>")
 		if(choice)
 			create_shell(options[choice])
 
