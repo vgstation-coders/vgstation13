@@ -63,7 +63,7 @@
 		dat += {"<tr>
 			<td>[ID]</td>
 			<td><font color='green'><b>Excavated</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
-			<td>[A.type]</td>
+			<td>[A.type]<a href='?_src_=vars;Vars=\ref[A]'>\[VV\]</a><a href='?_src_=vars;mark_object=\ref[A]'>\[mark datum\]</a></td>
 			<td>[prim]</td>
 			<td>[sec]</td>
 			</tr>
