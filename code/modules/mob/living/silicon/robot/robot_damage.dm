@@ -39,7 +39,7 @@
 	return amount
 
 /mob/living/silicon/robot/adjustBruteLoss(var/amount)
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return FALSE
 	if(amount > 0)
 		take_overall_damage(amount, 0)
@@ -47,7 +47,7 @@
 		heal_overall_damage(-amount, 0)
 
 /mob/living/silicon/robot/adjustFireLoss(var/amount)
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return FALSE
 	if(amount > 0)
 		take_overall_damage(0, amount)

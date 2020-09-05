@@ -64,7 +64,15 @@
 //////Parts and connection/////////
 
 /obj/machinery/mind_machine/mind_machine_hub/New()
-	illegalSwap = boss_mobs + blacklisted_mobs - list(/mob/living/simple_animal/hostile/mechahitler, /mob/living/simple_animal/hostile/alien/queen/large, /mob/living/simple_animal/hostile/retaliate/cockatrice)
+	..()
+	illegalSwap = boss_mobs + blacklisted_mobs - list(/mob/living/simple_animal/hostile/mechahitler,
+		/mob/living/simple_animal/hostile/alien/queen/large,
+		/mob/living/simple_animal/hostile/retaliate/cockatrice,
+		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,
+		/mob/living/simple_animal/hostile/bear/spare,
+		/mob/living/simple_animal/hostile/asteroid/rockernaut/boss,
+		/mob/living/simple_animal/hostile/mining_drone
+		)
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/mind_machine_hub,
 		/obj/item/weapon/stock_parts/console_screen,
@@ -343,6 +351,8 @@
 			MT = MINDMACHINE_HIGHER //Player controlled
 	if(isvampire(S) || isanycultist(S) || ischangeling(S) || ismalf(S))
 		MT = MINDMACHINE_SHIELDED //Mostly to fix spell bugs but also tinfoil
+	if(is_type_in_list(S, illegalSwap) || is_type_in_list(S, illegalSwap))
+		MT = MINDMACHINE_SHIELDED
 	if((ishigherbeing(S)) || (ismonkey(S)))
 		var/mob/living/carbon/T = S
 		if(T.is_wearing_item(/obj/item/clothing/head/tinfoil))
@@ -385,8 +395,6 @@
 	icon_state = "mind_hub_active"
 	connectOne.icon_state = "mind_pod_active"
 	connectTwo.icon_state = "mind_pod_active"
-	if(is_type_in_list(occupantOne, illegalSwap) || is_type_in_list(occupantTwo, illegalSwap))
-		malfSwap = TRUE //fun sanity check. Can't send their mind into the illegal body.
 	flyTally(occupantOne)
 	flyTally(occupantTwo)
 	for(var/prog in 1 to 40/manipRating) //Counts up 5 to 10 seconds, checks if we lost power each time and ruins your day if so. Otherwise just for UI progress bar
@@ -685,6 +693,7 @@
 	var/obj/machinery/mind_machine/mind_machine_hub/connectedHub
 
 /obj/machinery/mind_machine/mind_machine_pod/New()
+	..()
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/mind_machine_pod,
 		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,

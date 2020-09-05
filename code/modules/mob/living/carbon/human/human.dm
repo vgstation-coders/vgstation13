@@ -256,9 +256,9 @@
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")
 		stat(null, "Move Mode: [m_intent]")
-		for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/faction/F in ticker.mode?.factions)
 			var/F_stat = F.get_statpanel_addition()
-			if(F_stat && F_stat != null)
+			if(F_stat)
 				stat(null, "[F_stat]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
@@ -1881,13 +1881,23 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
-	T.virus2 = virus_copylist(virus2)
-	T.get_clothes(src, T)
-	T.name = real_name
-	T.host = src
-	forceMove(null)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	if(crabzombie)
+		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src	
+		forceMove(null)
+		return T
+	else
+		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()

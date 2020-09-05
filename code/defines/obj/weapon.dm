@@ -141,6 +141,14 @@
 	w_type = RECYK_ELECTRONIC
 	starting_materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 
+/obj/item/weapon/disk/hdd
+	name = "Hard Disk Drive"
+	icon_state = "harddisk"
+	item_state = "harddisk"
+	w_class = W_CLASS_SMALL
+	w_type = RECYK_ELECTRONIC
+	starting_materials = list(MAT_IRON = 200, MAT_GLASS = 20)
+
 //TODO: Figure out wtf this is and possibly remove it -Nodrak
 /obj/item/weapon/dummy
 	name = "dummy"
@@ -779,6 +787,8 @@
 			var/mob/living/carbon/C = AM
 			if(C.m_intent != "walk")
 				src.visible_message("The [src.name] beeps, \"Running on wet floors is hazardous to your health.\"")
+				message_admins("[C] triggered the explosive wet floor sign at [loc] ([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
+				log_game("[C] triggered the explosive wet floor sign at [loc]([x], [y], [z]): <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[x];Y=[y];Z=[z]'>JMP</a>, last touched by [fingerprintslast].")
 				explosion(src.loc,-1,2,0)
 				if(ishuman(C))
 					dead_legs(C)

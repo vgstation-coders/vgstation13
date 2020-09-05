@@ -108,7 +108,7 @@
 
 
 
-datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
+/datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 
 
 	if(!check_rights(R_BAN))
@@ -181,7 +181,7 @@ datum/admins/proc/DB_ban_unban(var/ckey, var/bantype, var/job = "")
 
 	DB_ban_unban_by_id(ban_id)
 
-datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
+/datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 
 
 	if(!check_rights(R_BAN))
@@ -224,7 +224,7 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 					to_chat(usr, "Cancelled")
 					return
 
-			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET reason = , edits = CONCAT(edits,:edits) WHERE id = :banid",
+			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET reason = :value, edits = CONCAT(edits,:edits) WHERE id = :banid",
 				list(
 					"value" = "[value]",
 					"edits" = "- [eckey] changed ban reason from <cite><b>\\\"[reason]\\\"</b></cite> to <cite><b>\\\"[value]\\\"</b></cite><BR>",
@@ -268,7 +268,7 @@ datum/admins/proc/DB_ban_edit(var/banid = null, var/param = null)
 			to_chat(usr, "Cancelled")
 			return
 
-datum/admins/proc/DB_ban_unban_by_id(var/id)
+/datum/admins/proc/DB_ban_unban_by_id(var/id)
 
 
 	if(!check_rights(R_BAN))

@@ -965,6 +965,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 16384
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1535,10 +1536,10 @@ var/proccalls = 1
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  1
-#define HONORABLE_HIGHLANDER 2
-#define HONORABLE_NINJA      4
-#define HONORABLE_NOGUNALLOWED	8
+#define HONORABLE_BOMBERMAN  262144
+#define HONORABLE_HIGHLANDER 524288
+#define HONORABLE_NINJA      1048576
+#define HONORABLE_NOGUNALLOWED	2097152
 #define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED
 
 #define SPELL_ANIMATION_TTL 2 MINUTES

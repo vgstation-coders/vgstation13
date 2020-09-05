@@ -1,7 +1,8 @@
 /obj/item/device/xenoarch_scanner
 	name = "xenoarchaeological digsite locator"
 	desc = "A scanner that checks the surrounding area for potential xenoarch digsites. If it finds any, It will briefly make them visible. Requires mesons for optimal use."
-	icon_state = "forensic0-old" //placeholder
+	icon = 'icons/obj/xenoarchaeology.dmi'
+	icon_state = "digsitelocator"
 	item_state  = "analyzer"
 	w_class = W_CLASS_SMALL
 	flags = 0
@@ -12,7 +13,7 @@
 
 /obj/item/device/xenoarch_scanner/adv
 	name = "advanced xenoarchaeological digsite locator"
-	icon_state = "unknown"
+	icon_state = "digsitelocator_adv"
 	desc = "A scanner that scans the surrounding area for potential xenoarch digsites, highlighting them temporarily in a colour associated with their responsive reagent. Requires mesons for optimal use."
 	adv = TRUE
 
@@ -31,20 +32,21 @@
 		for(var/turf/unsimulated/mineral/M in range(7, user))
 			if(M.finds.len)
 				var/datum/find/F = M.finds[1]
-				var/new_icon_state
-				var/new_color
-				if(adv)
-					new_icon_state = "find_overlay"
-					new_color = color_from_find_reagent[F.responsive_reagent]
-				else
-					new_icon_state = pick("archaeo1","archaeo2","archaeo3")
-				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = new_icon_state, layer = UNDER_HUD_LAYER)
-				if(new_color)
-					I.color = new_color
+				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "find_overlay[pick("1","2","3")]", layer = UNDER_HUD_LAYER)
+				I.color = color_from_find_reagent[F.responsive_reagent]
 				I.plane = HUD_PLANE
 				C.images += I
 				spawn(1 SECONDS)
-					animate(I, alpha = 0, time = 2 SECONDS)
-				spawn(3 SECONDS)
+					animate(I, alpha = 0, time = 4 SECONDS)
+				spawn(5 SECONDS)
+					if(C)
+						C.images -= I
+			if (adv && M.artifact_find)
+				var/image/I = image('icons/turf/mine_overlays.dmi', loc = M, icon_state = "artifact_overlay", layer = UNDER_HUD_LAYER)
+				I.plane = HUD_PLANE
+				C.images += I
+				spawn(1 SECONDS)
+					animate(I, alpha = 0, time = 4 SECONDS)
+				spawn(5 SECONDS)
 					if(C)
 						C.images -= I

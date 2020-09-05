@@ -245,6 +245,7 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
+	"artifacts"      = 0, //How many large artifacts were analyzed and activated
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
 	"disease_vaccine"	= null, //Which many vaccine antibody isolated
 	"disease_vaccine_score"	= 0, //the associated score
@@ -290,6 +291,8 @@ var/list/score=list(
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
+
+	"money_leaderboard" = list(),
 )
 
 var/list/isolated_antibodies = list(
@@ -489,10 +492,8 @@ var/global/list/radial_menus = list()
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
-	"group","on_density_change","registered_events",
-	"on_resist",
-	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
-	"on_death","on_clickon","on_attackhand","on_attackby",
+	"group","registered_events",
+	"on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )

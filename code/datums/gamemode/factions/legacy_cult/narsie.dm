@@ -105,23 +105,6 @@ var/global/list/narsie_list = list()
 				to_chat(M, "<span class='danger'>You feel your sanity crumble away in an instant as you gaze upon [src.name]...</span>")
 				M.apply_effect(3, STUN)
 
-
-/obj/machinery/singularity/narsie/large/to_bump(atom/A)
-	if(!narnar)
-		return
-	if(isturf(A))
-		narsiewall(A)
-	else if(istype(A, /obj/structure/cult))
-		qdel(A)
-
-/obj/machinery/singularity/narsie/large/Bumped(atom/A)
-	if(!narnar)
-		return
-	if(isturf(A))
-		narsiewall(A)
-	else if(istype(A, /obj/structure/cult))
-		qdel(A)
-
 /obj/machinery/singularity/narsie/move(var/force_move = 0)
 	if(!move_self)
 		return 0
@@ -175,14 +158,6 @@ var/global/list/narsie_list = list()
 			T.desc = "something that goes beyond your understanding went this way"
 			T.icon_state = "cult-narsie"
 			T.luminosity = 1
-
-/obj/machinery/singularity/narsie/proc/narsiewall(var/turf/T)
-	T.desc = "An opening has been made on that wall, but who can say if what you seek truly lies on the other side?"
-	T.icon = 'icons/turf/walls.dmi'
-	T.icon_state = "cult-narsie"
-	T.opacity = 0
-	T.setDensity(FALSE)
-	luminosity = 1
 
 /obj/machinery/singularity/narsie/large/consume(const/atom/A) //Has its own consume proc because it doesn't need energy and I don't want BoHs to explode it. --NEO
 //NEW BEHAVIOUR

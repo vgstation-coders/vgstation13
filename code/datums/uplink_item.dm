@@ -1032,4 +1032,10 @@ var/list/uplink_items = list()
 	cost = 2
 	jobs_exclusive = list("Trader")
 	
+/datum/uplink_item/jobspecific/trader/cratesender
+	name = "Modified Crate Sender"
+	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
+	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
+	cost = 6
+	jobs_exclusive = list("Trader")
 

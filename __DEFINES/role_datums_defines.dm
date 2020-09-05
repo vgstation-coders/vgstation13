@@ -58,6 +58,7 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define POTION "Potion Seller"
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
@@ -75,6 +76,7 @@
 #define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
+#define GREET_SYNDBEACON	"syndbeacon"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"

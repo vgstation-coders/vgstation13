@@ -90,6 +90,68 @@
 // atom/atom: the atom whose density changed.
 /lazy_event/on_density_change
 
+// Called whenever a mob uses the "resist" verb.
+// Arguments:
+// mob/user: the mob that's resisting
+/lazy_event/on_resist
+
+// Called whenever a mob casts a spell.
+// Arguments:
+// spell/spell: the spell that's being cast.
+// mob/user: the mob that's casting the spell.
+// list/targets: the list of targets the spell is being cast against. May not always be a list.
+/lazy_event/on_spellcast
+
+// Called whenever a mob attacks something with an empty hand.
+// Arguments:
+// atom/atom: The atom that's being attacked.
+/lazy_event/on_uattack
+
+// Called whenever a mob attacks something while restrained.
+// Arguments:
+// atom/atom: The atom that's being attacked.
+/lazy_event/on_ruattack
+
+// Called by mob/Logout().
+// Arguments:
+// mob/user: The mob that's logging out.
+/lazy_event/on_logout
+
+// Called whenever a mob takes damage.
+// Truthy return values will prevent the damage.
+// Arguments:
+// kind: the kind of damage the mob is being dealt.
+// amount: the amount of damage the mob is being dealt.
+/lazy_event/on_damaged
+
+// Called whenever a mob dies.
+// Arguments:
+// mob/user: The mob that's dying.
+// body_destroyed: Whether the mob is about to be gibbed.
+/lazy_event/on_death
+
+// Called by /mob/proc/ClickOn.
+// The list of modifiers can be changed by the event listeners.
+// Arguments:
+// mob/user: the user that's doing the clicking.
+// list/modifiers: list of key modifiers (shift, alt, etcetera).
+// atom/target: the atom that's being clicked on.
+/lazy_event/on_clickon
+
+// Called when an atom is attacked with an empty hand.
+// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
+// Arguments:
+// mob/user: the guy who is attacking.
+// atom/target: the atom that's being attacked.
+/lazy_event/on_attackhand
+
+// Called whenever an atom bumps into another.
+// Currently only used by xenoarch artifacts, should probably be moved to the base proc.
+// Arguments:
+// mob/user: the guy who is bumping.
+// atom/target: the atom that's being bumped into.
+/lazy_event/on_bumped
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

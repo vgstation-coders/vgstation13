@@ -8005,40 +8005,39 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#FFFFFF" //rgb: 255, 255, 255
-	nutriment_factor = 25 * REAGENTS_METABOLISM //This is maybe a little much
+	nutriment_factor = 45 * REAGENTS_METABOLISM //This is maybe a little much
 	sport = 0 //This will never come up but adding it made me smile
 	density = 3 //He DENSE
 	specheatcap = 0.55536
 	overdose_am = 30
+	custom_metabolism = 0.05
 
 /datum/reagent/diabeetusol/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
-
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
-		var/list/chubbysound = list('sound/instruments/trombone/Eb3.mid', 'sound/instruments/trombone/Gb2.mid', 'sound/instruments/trombone/Bb3.mid')
-		switch(volume)
-			if(5 to 10)
-				if(prob(40))
-					H.dizziness += 2
-					H.confused += 2
-				if(prob(10))
-					H.sleeping += 1
-			if(10 to 25)
-				H.overeatduration += 250
-				H.nutrition += 250
-				if(prob(20))
-					playsound(src, pick(chubbysound), 50, 1)
-
-			if(25 to INFINITY)
-				if(heart && !heart.robotic)
-					to_chat(H, "<span class='danger'>Your heart caramelizes!</span>")
-					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
-					H.adjustOxyLoss(60)
-					H.adjustBruteLoss(30)
+		var/static/list/chubbysound = list('sound/instruments/trombone/Eb3.mid', 'sound/instruments/trombone/Gb2.mid', 'sound/instruments/trombone/Bb3.mid')
+		var/sugarUnits = H.reagents.get_reagent_amount(SUGAR)
+		if(sugarUnits < volume)
+			if(prob(volume*30))
+				playsound(H, pick(chubbysound), 50, 1)
+				H.confused += 2
+				H.eye_blurry += 2
+				H.dizziness += 2
+			if(prob(volume*5))
+				H.sleeping++
+		else
+			playsound(H, pick(chubbysound), 100, 1)
+			H.overeatduration += 10 * volume
+			H.nutrition += 10 * volume
+		if(H.nutrition > 750)
+			if(prob(volume) && heart && !heart.robotic)
+				to_chat(H, "<span class='danger'>Your heart just can't take it anymore!</span>")
+				qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
+				H.adjustOxyLoss(60)
+				H.adjustBruteLoss(30)
 
 //////////////////////
 //					//

@@ -74,9 +74,6 @@
 /atom/proc/requires_dexterity(mob/user)
 	return 0
 
-/mob/living/carbon/human/RestrainedClickOn(var/atom/A)
-	..()
-
 /mob/living/carbon/human/RangedAttack(var/atom/A)
 	if(!gloves && !mutations.len)
 		return
@@ -112,9 +109,6 @@
 
 /atom/proc/attack_animal(mob/user as mob)
 	return
-/mob/living/RestrainedClickOn(var/atom/A)
-	..()
-
 /*
 	Monkeys
 */

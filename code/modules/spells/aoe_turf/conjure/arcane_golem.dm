@@ -33,7 +33,7 @@
 /spell/aoe_turf/conjure/arcane_golem/cast(list/targets, mob/user)
 	//Link the golem to its master
 	newVars = list("master_spell" = src)
-	user.on_spellcast.Add(src, "copy_spellcast")
+	user.lazy_register_event(/lazy_event/on_spellcast, src, .proc/copy_spellcast)
 
 	check_golems()
 
@@ -60,9 +60,8 @@
 	to_chat(user, "<span class='sinister'>You infuse \the [AG] with your mana and knowledge. If it dies, your arcane abilities will be affected.</span>")
 	src.golems.Add(AG)
 
-/spell/aoe_turf/conjure/arcane_golem/proc/copy_spellcast(list/arguments)
-	var/spell/spell_to_copy = arguments["spell"]
-	var/target = arguments["target"]
+/spell/aoe_turf/conjure/arcane_golem/proc/copy_spellcast(spell/spell, mob/user, list/targets)
+	var/spell/spell_to_copy = spell
 
 	if(!istype(spell_to_copy) || !istype(spell_to_copy.holder))
 		return
@@ -76,12 +75,10 @@
 	var/cast_dir = spell_to_copy.holder.dir
 
 	//Convert the target argument to a list of targets
-	var/list/targets
-	if(istype(target, /list))
-		var/list/L = target
-		targets = L.Copy()
-	else if(!isnull(target))
-		targets = list(target)
+	if(islist(targets))
+		targets = targets.Copy()
+	else if(!isnull(targets))
+		targets = list(targets)
 
 	for(var/mob/living/simple_animal/hostile/arcane_golem/AG in golems)
 		var/spell/cast_spell = spell_to_copy

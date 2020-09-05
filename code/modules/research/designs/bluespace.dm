@@ -8,6 +8,16 @@
 	category = "Bluespace"
 	build_path = /obj/item/beacon
 
+/datum/design/beacon_locator
+	name = "Locator Device"
+	desc = "Used to scan and locate beacons on a particular frequency."
+	id = "beacon_locator"
+	req_tech = list(Tc_BLUESPACE = 2)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 200, MAT_GLASS = 100)
+	category = "Bluespace"
+	build_path = /obj/item/device/beacon_locator
+
 /datum/design/bag_holding
 	name = "Bag of Holding"
 	desc = "A backpack that opens into a localized pocket of Blue Space."

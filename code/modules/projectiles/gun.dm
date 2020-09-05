@@ -71,6 +71,12 @@
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 
+/obj/item/weapon/gun/Destroy()
+	if(in_chamber)
+		qdel(in_chamber)
+		in_chamber = null
+	..()
+
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time

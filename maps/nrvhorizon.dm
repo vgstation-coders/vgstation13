@@ -55,6 +55,7 @@
 		"Begin Atmospheric Burn Simulation",
 		"Begin Wildlife Simulation"
 	)
+	has_engines = TRUE
 
 	holomap_offset_x = list(0,0,0,86,0,0,0,)
 	holomap_offset_y = list(85,0,0,94,0,0,0,)

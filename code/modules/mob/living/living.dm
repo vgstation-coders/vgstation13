@@ -18,8 +18,6 @@
 
 	immune_system = new (src)
 
-	on_resist = new(owner = src)
-
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -43,10 +41,6 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
-
-	if(on_resist)
-		qdel(on_resist)
-		on_resist = null
 
 	. = ..()
 
@@ -250,7 +244,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -262,7 +256,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = OXY, "amount" = amount)))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -279,7 +273,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = TOX, "amount" = amount)))
 		return 0
 
 	var/mult = 1
@@ -303,7 +297,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -315,7 +309,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = CLONE, "amount" = amount)))
 		return 0
 
 	if(ishuman(src))
@@ -337,7 +331,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRAIN, "amount" = amount)))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -777,9 +771,6 @@ Thanks.
 				hook.override_starting_X--
 				hook.override_target_X--
 
-/mob/living
-	var/event/on_resist
-
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
@@ -787,7 +778,7 @@ Thanks.
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
-	INVOKE_EVENT(on_resist, list())
+	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -1050,6 +1041,33 @@ Thanks.
 						var/obj/item/delivery/large/BD = C.loc
 						BD.attack_hand(usr)
 					C.open()
+
+	//Removing a headcrab
+	if(ishuman(L))
+		var/on_head = L.get_item_by_slot(slot_head)
+		if(istype(on_head, /obj/item/clothing/mask/facehugger/headcrab))
+			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
+			if(crab.is_being_resisted)
+				return
+			crab.is_being_resisted = 1
+			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
+			if(do_after(L, crab, 3 SECONDS))
+				var/rng = 50
+				if(crab.stat == DEAD)	
+					rng = 100
+				if(prob(rng))
+					if(L.get_item_by_slot(slot_head) == crab)
+						L.drop_from_inventory(crab)
+						crab.GoIdle(10 SECONDS) 
+						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+						crab.is_being_resisted = 0
+						crab.escaping = 1
+						crab.GoActive()
+				else
+					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
+					crab.is_being_resisted = 0
+					return
+			crab.is_being_resisted = 0 //If the do_after is cancelled.
 
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
