@@ -264,6 +264,7 @@
 	if(!check_completion())
 		return
 	if(!ai_control)
+		to_chat(user, "<span class='warning'>AI control is disabled on that exoskeleton.</span>")
 		return
 	var/mob/living/silicon/ai/A = user
 	if(!A.shell)
