@@ -1,3 +1,39 @@
+
+//Something to remember destroyed artifacts without keeping the atom floating in nullspace
+/datum/artifact_postmortem_data
+	var/artifact_id = "<error>-000"
+	var/turf/last_loc = null
+	var/artifact_type = null
+	var/primary_effect = ""
+	var/secondary_effect = ""
+
+/datum/artifact_postmortem_data/New(var/atom/artifact,var/ignore = FALSE)
+	var/found = FALSE
+	for(var/artifact_id in excavated_large_artifacts)
+		if (excavated_large_artifacts[artifact_id] == artifact)
+			artifact_id = artifact_id
+			found = TRUE
+	if (!found)
+		if (ignore)
+			qdel(src)
+			return
+		else
+			artifact_id = generate_artifact_id()
+
+	last_loc = get_turf(artifact)
+	artifact_type = artifact.type
+
+	if (istype(artifact, /obj/machinery/artifact))
+		var/obj/machinery/artifact/A = artifact
+		if (A.primary_effect)
+			primary_effect = A.primary_effect.effecttype
+		if (A.secondary_effect)
+			secondary_effect = A.secondary_effect.effecttype
+
+	destroyed_large_artifacts[artifact_id] = src
+
+////////////////////////The Actual Panel//////////////////////////////////////
+
 /datum/admins/proc/artifacts_panel()
 	if (!(SSxenoarch?.initialized))
 		to_chat(usr,"<span class='danger'>The Xenoarch subsystem hasn't initialized yet!</span>")
@@ -45,7 +81,7 @@
 				var/list/artifact_data = list(
 					ID,
 					"not_a_turf",
-					"not /obj/machinery/artifact",
+					"error: no postmortem artifact data generated",
 					"",
 					"",
 					)//a non-anomaly artifact was destroyed, no real way to know what type it was.

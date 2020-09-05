@@ -11,6 +11,10 @@
 	var/infinite = 0 //by default the mask is destroyed after one use
 	var/blood_to_give = 300 //seeing as the new vampire won't have had a whole round to prepare, they get some blood free
 
+/obj/item/clothing/mask/stone/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/item/clothing/mask/stone/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
 	if(spikes_out)
 		to_chat(M, "<span class='warning'>You can't get the mask over your face with its stone spikes in the way!</span>")

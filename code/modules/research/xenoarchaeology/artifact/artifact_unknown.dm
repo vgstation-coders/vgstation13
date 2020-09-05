@@ -204,20 +204,8 @@ var/list/destroyed_large_artifacts = list()
 
 /obj/machinery/artifact/Destroy()
 	excavated_large_artifacts -= artifact_id
-	var/list/artifact_data = list(
-		artifact_id,
-		get_turf(src),
-		type,
-		)
-	if (primary_effect)
-		artifact_data += primary_effect.effecttype
-	else
-		artifact_data += ""
-	if (secondary_effect)
-		artifact_data += secondary_effect.effecttype
-	else
-		artifact_data += ""
-	destroyed_large_artifacts[artifact_id] = artifact_data
+
+	new /datum/artifact_postmortem_data(src)
 
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null

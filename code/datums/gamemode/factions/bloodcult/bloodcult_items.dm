@@ -1198,6 +1198,10 @@ var/list/arcane_tomes = list()
 	..()
 	qdel(src)
 
+/obj/item/weapon/bloodcult_pamphlet/oneuse/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use
 /obj/item/weapon/bloodcult_jaunter
 	name = "test jaunter"
