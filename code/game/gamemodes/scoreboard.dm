@@ -606,9 +606,15 @@
 		if(score["dmgestdamage"])
 			dat += "<B>Most Battered Escapee:</B> [score["dmgestname"]], [score["dmgestjob"]]: [score["dmgestdamage"]] damage ([score["dmgestkey"]])<BR>"
 		if(score["richestcash"])
-			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: [score["richestcash"]] space credits ([score["richestkey"]])<BR>"
+			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: $[score["richestcash"]] ([score["richestkey"]])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
+
+	dat += "<B>Department Leaderboard:</B><BR>"
+	var/list/dept_leaderboard = get_dept_leaderboard()
+	for (var/i = 1 to dept_leaderboard.len)
+		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+
 	dat += {"<HR><BR>
 
 	<B><U>FINAL SCORE: [score["crewscore"]]</U></B><BR>"}

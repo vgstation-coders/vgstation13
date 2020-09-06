@@ -7,6 +7,9 @@
 
 #define REASON_LEN 140 // max length for reason message, nanoui appears to not like long strings.
 
+#define CENTCOMM_ORDER_DELAY_MIN (20 MINUTES)
+#define CENTCOMM_ORDER_DELAY_MAX (40 MINUTES)
+
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 /datum/subsystem/supply_shuttle
@@ -34,6 +37,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/datum/materials/materials_list
 	var/restriction = 1 //Who can approve orders? 0 = autoapprove; 1 = has access; 2 = has an ID (omits silicons); 3 = actions require PIN
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
+	var/centcomm_order_cooldown = 9999
+	var/centcomm_last_order = 0
 
 /datum/subsystem/supply_shuttle/New()
 	NEW_SS_GLOBAL(SSsupply_shuttle)
@@ -49,6 +54,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	add_centcomm_order(new /datum/centcomm_order/per_unit/plasma)
 
+	centcomm_last_order = world.time
+	//centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
+	centcomm_order_cooldown = rand(200,400)
 	..()
 
 /datum/subsystem/supply_shuttle/fire(resumed = FALSE)
@@ -60,6 +68,18 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		else
 			eta = 0
 			send()
+
+	if (world.time > (centcomm_last_order + centcomm_order_cooldown))
+		centcomm_last_order = world.time
+		//centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
+		centcomm_order_cooldown = rand(200,400)
+
+		//1 more simultaneous order for every 10 players.
+		//Centcomm uses the crew manifest to determine how many people actually are on the station.
+		var/new_orders = 1 + round(data_core.general.len / 10)
+
+		for (var/i = 1 to new_orders)
+			create_weighted_order()
 
 /datum/supply_order
 	var/ordernum
@@ -339,3 +359,17 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		reqform.update_icon()
 		S.say("New Central Command request available!")
 		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
+
+	for (var/obj/machinery/message_server/MS in message_servers)
+		if(MS.is_functioning())
+			for (var/obj/machinery/requests_console/Console in requests_consoles)
+				if (Console.department in C.request_consoles_to_notify)
+					Console.screen = 8
+					if(Console.newmessagepriority < 1)
+						Console.newmessagepriority = 1
+						Console.icon_state = "req_comp2"
+					if(!Console.silent)
+						playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
+						Console.visible_message("The [src] beeps; New Order from [C.name]")
+					Console.messages += "<B>[name]</B><BR>[info]"
+					Console.set_light(2)
