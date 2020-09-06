@@ -1236,7 +1236,7 @@ client/proc/check_convertables()
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
