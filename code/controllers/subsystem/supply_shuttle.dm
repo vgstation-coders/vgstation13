@@ -55,8 +55,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	add_centcomm_order(new /datum/centcomm_order/per_unit/plasma)
 
 	centcomm_last_order = world.time
-	//centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
-	centcomm_order_cooldown = rand(200,400)
+	centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
 	..()
 
 /datum/subsystem/supply_shuttle/fire(resumed = FALSE)
@@ -71,8 +70,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	if (world.time > (centcomm_last_order + centcomm_order_cooldown))
 		centcomm_last_order = world.time
-		//centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
-		centcomm_order_cooldown = rand(200,400)
+		centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
 
 		//1 more simultaneous order for every 10 players.
 		//Centcomm uses the crew manifest to determine how many people actually are on the station.

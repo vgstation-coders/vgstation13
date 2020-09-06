@@ -242,35 +242,35 @@
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine = rand(1,6)
 			)
 			name_override = list(
-				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine = "[G] wine"
+				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/wine = "[initial(G.name)] wine"
 			)
 		if (2)
 			requested = list(
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey = rand(1,6)
 			)
 			name_override = list(
-				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey = "[G] whiskey"
+				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/whiskey = "[initial(G.name)] whiskey"
 			)
 		if (3)
 			requested = list(
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vermouth = rand(1,6)
 			)
 			name_override = list(
-				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vermouth = "[G] vermouth"
+				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vermouth = "[initial(G.name)] vermouth"
 			)
 		if (4)
 			requested = list(
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka = rand(1,6)
 			)
 			name_override = list(
-				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka = "[G] vodka"
+				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/vodka = "[initial(G.name)] vodka"
 			)
 		if (5)
 			requested = list(
 				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/ale = rand(1,6)
 			)
 			name_override = list(
-				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/ale = "[G] ale"
+				/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/ale = "[initial(G.name)] ale"
 			)
 	worth = 100*requested[requested[1]]
 
