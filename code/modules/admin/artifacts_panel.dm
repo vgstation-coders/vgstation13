@@ -13,9 +13,10 @@
 			qdel(src)
 		return
 	var/found = FALSE
-	for(var/artifact_id in excavated_large_artifacts)
-		if (excavated_large_artifacts[artifact_id] == artifact)
-			artifact_id = artifact_id
+	for(var/ID in excavated_large_artifacts)
+		if (excavated_large_artifacts[ID] == artifact)
+			excavated_large_artifacts -= ID
+			artifact_id = ID
 			found = TRUE
 	if (!found)
 		if (ignore)
@@ -122,8 +123,34 @@
 			<td>[data.secondary_effect]</td>
 			</tr>
 			"}
+	for(var/ID in razed_large_artifacts)
+		var/datum/artifact_postmortem_data/data = razed_large_artifacts[ID]
+		if (!istype(data))
+			continue
+		var/turf/T = data.last_loc
+		dat += {"<tr>
+			<td>[data.artifact_id]</td>
+			<td><font color='red'><b>Razed</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
+			<td>[data.artifact_type]</td>
+			<td>[data.primary_effect]</td>
+			<td>[data.secondary_effect]</td>
+			</tr>
+			"}
 
 	//Finally we list every large artifact still buried on the asteroid
+	for(var/obj/structure/boulder/boulder in boulders)
+		if (!boulder.artifact_find)
+			continue
+		var/turf/T = get_turf(boulder)
+		var/datum/artifact_find/A = boulder.artifact_find
+		dat += {"<tr>
+			<td>[A.artifact_id]</td>
+			<td><b>Boulder</b> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
+			<td>[A.artifact_find_type]</td>
+			<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
+			<td>[(A.artifact_find_type == /obj/machinery/artifact) ? "???":""]</td>
+			</tr>
+			"}
 	if (SSxenoarch)
 		for (var/turf/unsimulated/mineral/M in SSxenoarch.artifact_spawning_turfs)
 			if (!istype(M))
@@ -145,4 +172,4 @@
 		</html>
 		"}
 
-	usr << browse(dat, "window=artifactspanel;size=705x450")
+	usr << browse(dat, "window=artifactspanel;size=840x450")

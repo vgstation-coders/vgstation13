@@ -1,5 +1,6 @@
 var/list/excavated_large_artifacts = list()
 var/list/destroyed_large_artifacts = list()
+var/list/razed_large_artifacts = list()//destroyed while still inside a rock wall/boulder
 
 /obj/machinery/artifact
 	name = "alien artifact"
@@ -203,8 +204,6 @@ var/list/destroyed_large_artifacts = list()
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
-	excavated_large_artifacts -= artifact_id
-
 	new /datum/artifact_postmortem_data(src)
 
 	qdel(primary_effect); primary_effect = null
