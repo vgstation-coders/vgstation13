@@ -14,6 +14,7 @@
 /datum/outfit/special/rig
 
 /datum/outfit/special/rig/post_equip(var/mob/living/carbon/human/H)
+	..()
 	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
 	R.toggle_suit()
 
@@ -151,6 +152,7 @@
 	)
 
 /datum/outfit/special/tournament_standard_red/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/grenade/smokebomb(H))
 
 /datum/outfit/special/tournament_standard_green
@@ -167,6 +169,7 @@
 	)
 
 /datum/outfit/special/tournament_standard_green/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/grenade/smokebomb(H))
 
 /datum/outfit/special/tournament_gangster
@@ -203,6 +206,7 @@
 	)
 
 /datum/outfit/special/tournament_chef/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(H))
 
 /datum/outfit/special/tournament_janitor
@@ -229,6 +233,7 @@
 	)
 
 /datum/outfit/special/tournament_janitor/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/mop(H))
 
 // ----- MISC FLAVOR THINGS
@@ -245,6 +250,7 @@
 	)
 
 /datum/outfit/special/pirate/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(H))
 
 /datum/outfit/special/space_pirate
@@ -260,6 +266,7 @@
 	)
 
 /datum/outfit/special/space_pirate/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(H))
 
 /datum/outfit/special/rune_knight
@@ -272,6 +279,7 @@
 	)
 
 /datum/outfit/special/rune_knight/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/rsscimmy(src))
 	H.put_in_hands(new /obj/item/weapon/shield/riot/rune(src))
 
@@ -302,6 +310,7 @@
 	)
 
 /datum/outfit/special/masked_killer/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
 	H.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(H))
 	for (var/obj/item/I in H) // Everything is bloody
@@ -341,6 +350,7 @@
 	id_type = /obj/item/weapon/card/id/tunnel_clown
 
 /datum/outfit/special/with_id/tunnel_clown/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
 	H.put_in_hands(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H))
 
@@ -378,6 +388,7 @@
 	id_type = /obj/item/weapon/card/id/nt_rep
 
 /datum/outfit/special/with_id/nt_rep/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
 
 /datum/outfit/special/with_id/nt_officer
@@ -513,6 +524,7 @@
 	outfit_name = "Arena bomberman"
 
 /datum/outfit/special/bomberman/arena/post_equip(var/mob/living/carbon/human/H)
+	..()
 	for(var/obj/item/clothing/C in H)
 		C.canremove = 0
 		if(istype(C, /obj/item/clothing/suit/space/bomberman))
@@ -544,6 +556,7 @@
 	)
 
 /datum/outfit/special/blue_wizard/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))
 
 /datum/outfit/special/red_wizard
@@ -565,6 +578,7 @@
 	)
 
 /datum/outfit/special/red_wizard/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))
 
 /datum/outfit/special/marisa_wizard
@@ -586,4 +600,5 @@
 	)
 
 /datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))

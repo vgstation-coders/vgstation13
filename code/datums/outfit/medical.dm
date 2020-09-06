@@ -51,8 +51,8 @@
 	id_type = /obj/item/weapon/card/id/cmo
 
 /datum/outfit/cmo/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -149,10 +149,8 @@
 						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -212,11 +210,6 @@
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-/datum/outfit/chemist/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
@@ -285,11 +278,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
 
-/datum/outfit/paramedic/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
-
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
@@ -340,11 +328,6 @@
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-/datum/outfit/geneticist/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/><b>Science:</b> [SCI_FREQ] <br/>")
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -398,10 +381,8 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/virologist/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND

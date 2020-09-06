@@ -59,11 +59,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/hos
 
-/datum/outfit/hos/post_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
-
 /datum/outfit/hos/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX
 	items_to_collect[/obj/item/weapon/reagent_containers/food/snacks/donut/normal] = SURVIVAL_BOX
@@ -132,11 +127,6 @@
 	pda_type = /obj/item/device/pda/warden
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
-
-/datum/outfit/warden/post_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/warden/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX
@@ -250,15 +240,13 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/detective/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
@@ -329,11 +317,6 @@
 	pda_type = /obj/item/device/pda/security
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
-
-/datum/outfit/officer/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/officer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX

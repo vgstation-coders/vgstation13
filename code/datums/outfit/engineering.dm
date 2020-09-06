@@ -59,11 +59,6 @@
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/ce
 
-/datum/outfit/chief_engineer/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Engineering:</b> [ENG_FREQ]<br/>")
-
 /datum/outfit/chief_engineer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/snacks/cracker] = SURVIVAL_BOX //poly gets part of the divvy, savvy?
 
@@ -141,11 +136,6 @@
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
-/datum/outfit/engineer/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/>")
-
 /datum/outfit/engineer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_spawn[species][slot_glasses_str] = /obj/item/clothing/glasses/scanner/meson
 	items_to_spawn[species][slot_gloves_str] = /obj/item/clothing/gloves/yellow
@@ -206,9 +196,6 @@
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/engineering
 
-/datum/outfit/atmos/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/>")
-
 /datum/outfit/atmos/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_spawn[species][slot_glasses_str] = /obj/item/clothing/glasses/scanner/meson
 	items_to_spawn[species][slot_gloves_str] = /obj/item/clothing/gloves/yellow
@@ -265,7 +252,7 @@
 	id_type = /obj/item/weapon/card/id/engineering
 
 /datum/outfit/mechanic/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <br/><b>Engineering:</b> [ENG_FREQ]<br/> <b>Science:</b> [SCI_FREQ] ")
+	..()
 	if(!(H.flags&DISABILITY_FLAG_NEARSIGHTED))
 		var/obj/item/clothing/glasses/welding/W = new (H)
 		H.equip_or_collect(W, slot_glasses)
