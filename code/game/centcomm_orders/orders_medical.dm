@@ -190,7 +190,7 @@
 		return 0
 	if ((Disk.stage == req_stage) && Disk.effect && !(Disk.effect.type in already_goten))
 		already_goten += Disk.effect.type
-			return 1
+		return 1
 	return 0
 
 //----------------------------------------------Genetics----------------------------------------------------
