@@ -250,15 +250,44 @@
 	reagents.add_reagent(BLOOD, 20, data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/random
-	name = "Random culture bottle"
-	desc = "A small bottle. Contains a random disease."
+	name = "unknown culture bottle"
+	desc = "A small bottle. Contains an unknown disease."
 	icon = 'icons/obj/chemical.dmi'
-	//icon_state = "bottle3"
+
 /obj/item/weapon/reagent_containers/glass/bottle/random/New()
 	..()
-	var/datum/disease/advance/F = new(0)
-	var/list/data = list("viruses"= list(F))
-	reagents.add_reagent(BLOOD, 20, data)
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/datum/disease2/disease/new_virus = new virus_choice
+
+	var/list/anti = list(
+		ANTIGEN_BLOOD	= 1,
+		ANTIGEN_COMMON	= 1,
+		ANTIGEN_RARE	= 1,
+		ANTIGEN_ALIEN	= 1,
+		)
+	var/list/bad = list(
+		EFFECT_DANGER_HELPFUL	= 1,
+		EFFECT_DANGER_FLAVOR	= 1,
+		EFFECT_DANGER_ANNOYING	= 1,
+		EFFECT_DANGER_HINDRANCE	= 1,
+		EFFECT_DANGER_HARMFUL	= 1,
+		EFFECT_DANGER_DEADLY	= 1,
+		)
+
+	new_virus.origin = "Random culture bottle"
+
+	new_virus.makerandom(list(40,60),list(20,90),anti,bad)
+
+	var/list/blood_data = list(
+		"viruses" = null,
+		"blood_DNA" = null,
+		"blood_type" = "O-",
+		"resistances" = null,
+		"trace_chem" = null,
+		"virus2" = list()
+	)
+	blood_data["virus2"]["[new_virus.uniqueID]-[new_virus.subID]"] = new_virus
+	reagents.add_reagent(BLOOD, volume, blood_data)
 
 /obj/item/weapon/reagent_containers/glass/bottle/retrovirus
 	name = "Retrovirus culture bottle"
