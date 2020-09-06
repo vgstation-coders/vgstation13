@@ -609,6 +609,23 @@
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
 
+	else if(href_list["artifactpanel_jumpto"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/turf/T = locate(href_list["artifactpanel_jumpto"])
+
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(T)
+
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
 			return

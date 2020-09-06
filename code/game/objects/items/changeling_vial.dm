@@ -7,6 +7,10 @@
 	w_class = 1
 	var/genomes_to_give = 10 //seeing as the new changeling won't have had a whole round to prepare, they get some genomes free
 
+/obj/item/changeling_vial/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/item/changeling_vial/attack_self(mob/user as mob)
 	if(ishuman(user) && !(isantagbanned(user) || jobban_isbanned(user, CHANGELING)))
 		var/mob/living/carbon/human/H = user

@@ -1347,7 +1347,14 @@ client/proc/check_convertables()
 		holder.diseases_panel()
 		log_admin("[key_name(usr)] checked the Diseases Panel.")
 	feedback_add_details("admin_verb","DIS")
-	return
+
+/client/proc/artifacts_panel()
+	set name = "Artifacts Panel"
+	set category = "Admin"
+	if(holder)
+		holder.artifacts_panel()
+		log_admin("[key_name(usr)] checked the Artifacts Panel.")
+	feedback_add_details("admin_verb","ART")
 
 /client/proc/climate_panel()
 	set name = "Climate Panel"

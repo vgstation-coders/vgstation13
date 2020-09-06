@@ -1,4 +1,6 @@
 var/list/excavated_large_artifacts = list()
+var/list/destroyed_large_artifacts = list()
+var/list/razed_large_artifacts = list()//destroyed while still inside a rock wall/boulder
 
 /obj/machinery/artifact
 	name = "alien artifact"
@@ -210,13 +212,13 @@ var/list/excavated_large_artifacts = list()
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
+	new /datum/artifact_postmortem_data(src)
+
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
-
-	excavated_large_artifacts -= artifact_id
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
