@@ -240,7 +240,7 @@
 
 
 /obj/item/weapon/gun/energy/staff/necro/proc/meatRaise(var/obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
-	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user, M)
+	var/mob/living/simple_animal/hostile/necro/meat_ghoul/mG = new /mob/living/simple_animal/hostile/necro/meat_ghoul(get_turf(M), user)
 	make_tracker_effects(get_turf(M), user)
 	mG.ghoulifyMeat(M)
 	mG.faction = "\ref[user]"
