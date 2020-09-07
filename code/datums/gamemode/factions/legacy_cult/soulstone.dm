@@ -247,7 +247,7 @@
 		return
 
 	var/mob/dead/observer/O = targetClient.mob
-	if(!targetClient.desires_role(CULTIST) || !O.can_reenter_corpse)
+	if((iscultist(user) && !targetClient.desires_role(CULTIST)) || !O.can_reenter_corpse)
 		user.simple_message("<span class='danger'>A supernatural force prevents you from capturing that being's soul...</span>")
 		return
 
