@@ -126,11 +126,7 @@ var/list/all_generated_artifact_ids = list()
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
 					else if (spawn_type == /obj/machinery/power/supermatter)
 						spawn(rand(10 MINUTES, 30 MINUTES))//The time it takes for Nanotrasen to detect it and make the Science dept an offer they cannot refuse.
-							var/already = 0
-							for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
-								if (istype(O, /datum/centcomm_order/department/science/supermatter))
-									already = 1
-							if (!already)
+							if (!(locate(/datum/centcomm_order/department/science/supermatter) in SSsupply_shuttle.centcomm_orders))
 								SSsupply_shuttle.add_centcomm_order(new /datum/centcomm_order/department/science/supermatter)
 						new spawn_type(get_turf(src))
 					else
