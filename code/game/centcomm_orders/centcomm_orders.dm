@@ -91,7 +91,7 @@ var/global/current_centcomm_order_id=124901
 /datum/centcomm_order/proc/ExtraChecks(var/atom/movable/AM)
 	return 1
 
-/datum/centcomm_order/proc/CheckShuttleObject(var/obj/O, var/in_crate)
+/datum/centcomm_order/proc/CheckShuttleObject(var/obj/O, var/in_crate, var/preserve = FALSE)
 	if(must_be_in_crate && !in_crate)
 		return 0
 	if(!O)
@@ -109,7 +109,8 @@ var/global/current_centcomm_order_id=124901
 		if (!ExtraChecks(O))
 			return 0
 		fulfilled[O.type] += amount
-		qdel(O)
+		if (!preserve)
+			qdel(O)
 		return 1
 	return 0
 
@@ -200,7 +201,7 @@ var/global/current_centcomm_order_id=124901
 		toPay = 0
 
 // Same as normal, but will take every last bit of what you provided.
-/datum/centcomm_order/per_unit/CheckShuttleObject(var/obj/O, var/in_crate)
+/datum/centcomm_order/per_unit/CheckShuttleObject(var/obj/O, var/in_crate, var/preserve = FALSE)
 	if(must_be_in_crate && !in_crate)
 		return 0
 	if(!O)
@@ -215,12 +216,13 @@ var/global/current_centcomm_order_id=124901
 		if (!ExtraChecks(O))
 			return 0
 		left_to_check[O.type] += amount
-		qdel(O)
+		if (!preserve)
+			qdel(O)
 		return 1
 	return 0
 
 /datum/centcomm_order/per_unit/CheckFulfilled()
-	var/toPay = 0
+	toPay = 0
 	for(var/typepath in left_to_check)
 		var/worth_per_unit = unit_prices[typepath]
 		var/amount         = left_to_check[typepath]

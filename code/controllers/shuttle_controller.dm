@@ -292,9 +292,9 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 				if(istype(MA,/obj/structure/closet/crate))
 					for(var/obj/A in MA)
-						SSsupply_shuttle.SellObjToOrders(A,1)
+						SSsupply_shuttle.SellObjToOrders(A,1,TRUE)
 				else
-					SSsupply_shuttle.SellObjToOrders(MA,0)
+					SSsupply_shuttle.SellObjToOrders(MA,0,TRUE)
 
 				for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
 					O.cargo_contribution = 0//Cargo doesn't get their 10% bonus when items are shipped this way.

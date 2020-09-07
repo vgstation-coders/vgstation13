@@ -128,11 +128,11 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	return 1
 
-/datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate)
+/datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate,var/preserve = FALSE)
 	if (istype(A,/obj/item/weapon/storage/lockbox))
 		for (var/atom/A2 in A)
 			SellObjToOrders(A2, 1)
-			if(A2)
+			if(A2 && !preserve)
 				qdel(A2)
 	// Per-unit orders run last so they don't steal shit.
 	var/list/deferred_orders = list()
@@ -140,10 +140,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(istype(O,/datum/centcomm_order/per_unit))
 			deferred_orders += O
 			continue
-		if(O.CheckShuttleObject(A,in_crate))
+		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
 	for(var/datum/centcomm_order/O in deferred_orders)
-		if(O.CheckShuttleObject(A,in_crate))
+		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
 
 /datum/subsystem/supply_shuttle/proc/sell()
@@ -195,7 +195,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
 					S.say("Central Command request fulfilled!")
 					playsound(S, 'sound/machines/info.ogg', 50, 1)
-		qdel(MA)
+		if(MA)
+			qdel(MA)
 
 	if (recycled_crates)
 		var/datum/transaction/T = new()
