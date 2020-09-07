@@ -1328,7 +1328,8 @@ client/proc/check_convertables()
 		return
 
 	var/ordertype = input("Select a Request.","Central Command Request",1) as null|anything in (subtypesof(/datum/centcomm_order) - /datum/centcomm_order/per_unit)
-	SSsupply_shuttle.add_centcomm_order(new ordertype)
+	if (ordertype)
+		SSsupply_shuttle.add_centcomm_order(new ordertype)
 
 /client/proc/emergency_shuttle_panel()
 	set name = "Emergency Shuttle Panel"
