@@ -243,7 +243,12 @@
 	//target is the source of the guy's soul (his body, or his head if decapitated)
 	//add_target is his body if he has been decapitated, for cosmetic purposes (and so it dusts)
 
-	if(!targetClient)
+	if(!targetClient?.mob)
+		return
+
+	var/mob/dead/observer/O = targetClient.mob
+	if(!targetClient.desires_role(CULTIST) || !O.can_reenter_corpse)
+		user.simple_message("<span class='danger'>A supernatural force prevents you from capturing that being's soul...</span>")
 		return
 
 	var/mob/living/carbon/human/body = null
