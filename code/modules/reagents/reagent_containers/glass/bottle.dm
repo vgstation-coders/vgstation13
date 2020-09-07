@@ -253,7 +253,8 @@
 	name = "unknown culture bottle"
 	desc = "A small bottle. Contains an unknown disease."
 	icon = 'icons/obj/chemical.dmi'
-icon_state = "bottle_alt"
+	icon_state = "bottle_alt"
+
 /obj/item/weapon/reagent_containers/glass/bottle/random/New()
 	..()
 	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
