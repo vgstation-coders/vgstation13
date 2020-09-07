@@ -263,7 +263,7 @@
 		ANTIGEN_BLOOD	= 1,
 		ANTIGEN_COMMON	= 1,
 		ANTIGEN_RARE	= 1,
-		ANTIGEN_ALIEN	= 1,
+		ANTIGEN_ALIEN	= 0,
 		)
 	var/list/bad = list(
 		EFFECT_DANGER_HELPFUL	= 1,
