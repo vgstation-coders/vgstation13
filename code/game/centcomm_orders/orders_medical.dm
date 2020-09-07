@@ -88,12 +88,10 @@
 /datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
 	if (!istype(V))
 		return 0
-	for(var/datum/reagent/R in V.reagents?.reagent_list)
-		if (istype(R,/datum/reagent/vaccine))
-			var/datum/reagent/vaccine/vaccine = R
-			for (var/A in vaccine.data["antigen"])
-				if (A == required_vac)
-					return 1
+	for(var/datum/reagent/vaccine/vaccine in V.reagents?.reagent_list)
+		for (var/A in vaccine.data["antigen"])
+			if (A == required_vac)
+				return 1
 	return 0
 
 //Dangerous Disease Vial

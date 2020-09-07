@@ -296,8 +296,7 @@ var/global/current_centcomm_order_id=124901
 			order_exists["Service"] += 1
 
 	for(var/dept in order_exists)
-		if(order_exists[dept])
-			department_weights[dept] = max(1, department_weights[dept] -= order_exists[dept])//the more active orders a department has, the less likely it'll get another one
+		department_weights[dept] = max(1, department_weights[dept] -= order_exists[dept])//the more active orders a department has, the less likely it'll get another one
 
 	var/chosen_dept = pick(
 		department_weights["Cargo"];"Cargo",

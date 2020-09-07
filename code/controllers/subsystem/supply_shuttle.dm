@@ -69,15 +69,27 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 			send()
 
 	if (world.time > (centcomm_last_order + centcomm_order_cooldown))
-		centcomm_last_order = world.time
-		centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
+
 
 		//1 more simultaneous order for every 10 players.
 		//Centcomm uses the crew manifest to determine how many people actually are on the station.
 		var/new_orders = 1 + round(data_core.general.len / 10)
-
 		for (var/i = 1 to new_orders)
 			create_weighted_order()
+
+		//If the are less than 1 order per 5 crew members, the next order will come sooner, otherwise later.
+		var/new_cooldown = 1 + round(data_core.general.len / 5)
+		var/modified_min = CENTCOMM_ORDER_DELAY_MIN
+		var/modified_max = CENTCOMM_ORDER_DELAY_MAX
+		while(new_cooldown > centcomm_orders.len)
+			new_cooldown--
+			modified_max = max(modified_min, modified_max - 5 MINUTES)
+		while(new_cooldown < centcomm_orders.len)
+			new_cooldown++
+			modified_min = min(modified_max, modified_min + 5 MINUTES)
+
+		centcomm_last_order = world.time
+		centcomm_order_cooldown = rand(modified_min,modified_max)
 
 /datum/supply_order
 	var/ordernum
@@ -372,3 +384,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 						Console.visible_message("The [src] beeps; New Order from [C.name]")
 					Console.messages += "<B>[name]</B><BR>[info]"
 					Console.set_light(2)
+
+
+#undef CENTCOMM_ORDER_DELAY_MIN
+#undef CENTCOMM_ORDER_DELAY_MAX
