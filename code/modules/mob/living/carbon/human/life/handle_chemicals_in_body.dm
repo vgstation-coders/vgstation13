@@ -98,8 +98,8 @@
 			nutrition = OVEREAT_THRESHOLD
 	else
 		if(overeatduration > 1)
-			if(M_OBESITY in mutations)
-				overeatduration -= 1 //Those with obesity gene take twice as long to unfat
+			if(M_FAT in mutations)
+				overeatduration -= 1 //Those already fat take twice as long to unfat
 			else
 				overeatduration -= 2
 

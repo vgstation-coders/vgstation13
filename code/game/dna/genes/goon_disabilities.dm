@@ -60,8 +60,6 @@
 	activation_message = "You feel blubbery and lethargic!"
 	deactivation_message = "You feel fit!"
 
-	mutation = M_OBESITY
-
 /datum/dna/gene/disability/fat/can_activate(var/mob/M, var/flags)
 	if(!ishuman(M))
 		return 0
@@ -71,6 +69,10 @@
 		return 0
 
 	return 1
+
+/datum/dna/gene/disability/fat/activate(var/mob/M)
+	if(M.overeatduration < 500)
+		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
 /datum/dna/gene/disability/fat/New()
 	..()
