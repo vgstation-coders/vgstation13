@@ -300,7 +300,6 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
-			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 			slot_l_store_str = /obj/item/device/flash,
 		),
@@ -312,7 +311,6 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
-			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 			slot_l_store_str = /obj/item/device/flash,
 		),
@@ -342,3 +340,9 @@
 /datum/outfit/officer/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	return ..()
+
+/datum/outfit/officer/species_final_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	switch (H.species.type)
+		if (/datum/species/vox, /datum/species/plasmaman)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/taser(H.back), slot_in_backpack)
