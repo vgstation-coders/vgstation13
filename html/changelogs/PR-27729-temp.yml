@@ -1,5 +1,0 @@
----
-author: DeityLink
-changes:
-  - rscadd: "Adds a new debug admin panel that tracks every large artifact in the world, whether they are excavated, buried, or destroyed."
-delete-after: true

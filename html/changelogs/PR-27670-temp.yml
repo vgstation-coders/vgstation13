@@ -1,6 +1,0 @@
----
-author: Stressedphysicist
-changes:
-  - tweak: "Obesity and Fatness are now the same thing, being fat makes it harder to unfat"
-  - bugfix: "The fat gene now makes you fat, removing it doesn't make you unfat"
-delete-after: true
