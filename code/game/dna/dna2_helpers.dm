@@ -157,12 +157,14 @@
 		setGender(MALE)
 
 	//Hair
-	var/hair = clamp(dna.GetUIValueRange(DNA_UI_HAIR_STYLE, hair_styles_list.len), 1, hair_styles_list.len)
-	my_appearance.h_style = hair_styles_list[hair]
+	var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+	var/hair = clamp(dna.GetUIValueRange(DNA_UI_HAIR_STYLE, species_hair.len), 1, species_hair.len)
+	my_appearance.h_style = species_hair[hair]
 
 	//Facial Hair
-	var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, facial_hair_styles_list.len), 1, facial_hair_styles_list.len)
-	my_appearance.f_style = facial_hair_styles_list[beard]
+	var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+	var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, species_facial_hair.len), 1, species_facial_hair.len)
+	my_appearance.f_style = species_facial_hair[beard]
 
 	update_body(0)
 	update_hair()
