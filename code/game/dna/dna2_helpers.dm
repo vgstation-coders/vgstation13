@@ -159,14 +159,12 @@
 			H.setGender(MALE)
 
 		//Hair
-		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE,hair_styles_list.len)
-		if((0 < hair) && (hair <= hair_styles_list.len))
-			H.my_appearance.h_style = hair_styles_list[hair]
+		var/hair = clamp(dna.GetUIValueRange(DNA_UI_HAIR_STYLE, hair_styles_list.len), 1, hair_styles_list.len)
+		H.my_appearance.h_style = hair_styles_list[hair]
 
 		//Facial Hair
-		var/beard = dna.GetUIValueRange(DNA_UI_BEARD_STYLE,facial_hair_styles_list.len)
-		if((0 < beard) && (beard <= facial_hair_styles_list.len))
-			H.my_appearance.f_style = facial_hair_styles_list[beard]
+		var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, facial_hair_styles_list.len), 1, facial_hair_styles_list.len)
+		H.my_appearance.f_style = facial_hair_styles_list[beard]
 
 		H.update_body(0)
 		H.update_hair()
