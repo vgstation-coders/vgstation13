@@ -109,7 +109,6 @@
 
 var/announcing_vox = 0 // Stores the time of the last announcement
 var/const/VOX_CHANNEL = 200
-var/const/VOX_AMBIENCE_CHANNEL = 201
 var/const/VOX_DELAY = 600
 var/VOX_AVAILABLE_VOICES = list(
 	"fem" = "Feminine",
@@ -240,18 +239,20 @@ var/VOX_AVAILABLE_VOICES = list(
 		if(M?.stage == FACTION_ENDGAME)
 			corruptvox = TRUE
 	if(!isemptylist(laws.ion))
-		corruptvox= TRUE
+		for(var/ionlaw in laws.ion)
+			if(!(findtext(ionlaw,"Do not state nor hint towards this law.") <> 0))
+				corruptvox= TRUE
 
 	for(var/word in words)
 		if(!corruptvox)
 			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
 		else //Corrupted VOX, apply weird frequencies and repeats.
-			freq= rand(11000,21000) // mas/fem VOX standard bit rate is 16000.
+			freq = rand(11000,21000) // mas/fem VOX standard bit rate is 16000.
 			if(freq>20450)
 				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
 					freq = freq + (freq/5)
 					play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
-				freq = rand(10000,12000)
+				freq = rand(11000,14000)
 			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
 
 #endif // DISABLE_VOX
