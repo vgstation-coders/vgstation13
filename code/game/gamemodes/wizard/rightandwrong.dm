@@ -312,6 +312,7 @@
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
+
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
 	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "alchemy")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
@@ -423,7 +424,11 @@
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
 		if("alchemy")
 			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
-	new /obj/item/weapon/spellbook/oneuse/absorb(get_turf(src))
+	 
+	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
+
+	if(receive_absorb)
+		add_spell(/spell/targeted/absorb)
 
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
