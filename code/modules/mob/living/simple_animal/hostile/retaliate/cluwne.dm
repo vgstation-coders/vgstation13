@@ -156,6 +156,13 @@
 		else
 			playsound(src, "clownstep", 20, 1)
 
+/mob/living/simple_animal/hostile/retaliate/cluwne/death(var/gibbed = FALSE)
+	..(gibbed)
+	if(client && iscluwnebanned(src))
+		to_chat(src, "<big><span class='danger'>You have died, and will not be able to rejoin the game until the next round.</span><big>")
+		sleep(1)
+		del(client)
+
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 	name = "clown goblin"
 	desc = "A tiny walking mask and clown shoes. You want to honk his nose!"
