@@ -109,6 +109,7 @@
 
 var/announcing_vox = 0 // Stores the time of the last announcement
 var/const/VOX_CHANNEL = 200
+var/const/VOX_AMBIENCE_CHANNEL = 201
 var/const/VOX_DELAY = 600
 var/VOX_AVAILABLE_VOICES = list(
 	"fem" = "Feminine",
@@ -190,7 +191,6 @@ var/VOX_AVAILABLE_VOICES = list(
 /mob/living/silicon/ai/proc/play_announcement(var/message)
 	set waitfor = FALSE
 	last_announcement = message
-
 	if(!message || announcing_vox > world.time)
 		return
 
@@ -233,9 +233,27 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(T.z == src.z)
 				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
 	*/
+	var/freq = 1
+	var/corruptvox = FALSE //Corrupted VOX, if AI is latestage malf or ion law'd vox will be corrupted
+	if(ismalf(src))
+		var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
+		if(M?.stage == FACTION_ENDGAME)
+			corruptvox = TRUE
+	if(!isemptylist(laws.ion))
+		corruptvox= TRUE
 
 	for(var/word in words)
-		play_vox_word(word, vox_voice, src.z, null, TRUE)
+		if(!corruptvox)
+			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+		else //Corrupted VOX, apply weird frequencies and repeats.
+			freq= rand(11000,21000) // mas/fem VOX standard bit rate is 16000.
+			if(freq>20450)
+				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
+					freq = freq + (freq/5)
+					play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+				freq = rand(10000,12000)
+			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+
 #endif // DISABLE_VOX
 
 var/list/vox_digits=list(
@@ -283,21 +301,21 @@ var/list/vox_units=list(
 /proc/vox_num2list(var/number)
 	return num2words(number, zero='sound/AI/zero.ogg', minus='sound/AI/minus.ogg', hundred='sound/AI/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
-/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE)
+/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE, var/frequency=1)
 	. = TRUE
 
 	word = lowertext(word)
 	var/soundFile = vox_sounds[voice][word]
 	if(soundFile)
-		. = play_vox_sound(soundFile,z_level,only_listener)
+		. = play_vox_sound(soundFile,z_level,only_listener, frequency)
 		if (do_sleep)
 			//sleep(vox_sound_lengths[soundFile] SECONDS)
 			sleep(vox_sound_lengths[soundFile])
 
-/proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener)
+/proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener, var/frequency=1)
 	var/sound/voice = sound(sound_file, wait = 1, channel = VOX_CHANNEL)
 	voice.status = SOUND_STREAM
-
+	voice.frequency = frequency
 	// If there is no single listener, broadcast to everyone in the same z level
 	if(!only_listener)
 		// Play voice for all mobs in the z level
