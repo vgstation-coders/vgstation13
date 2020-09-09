@@ -423,7 +423,7 @@
 	 
 	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
 
-	if(recieve_absorb)
+	if(receive_absorb)
 		add_spell(/spell/targeted/absorb)
 
 	var/datum/role/wizard/summon_magic/S = R
