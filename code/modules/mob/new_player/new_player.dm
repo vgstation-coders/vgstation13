@@ -162,6 +162,9 @@
 
 		LateChoices()
 	if(href_list["cluwnebanned"])
+		if(!iscluwnebanned(usr))
+			to_chat(usr, "<span class='warning'>honk</span>")
+			return
 		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
 			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
 			return
