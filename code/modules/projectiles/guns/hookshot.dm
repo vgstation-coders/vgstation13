@@ -518,6 +518,7 @@
 	clumsy_check = 0 //Just makes sense
 	force = 5
 	maxlength = 0
+	mech_flags = MECH_SCAN_ILLEGAL
 	hooktype = /obj/item/projectile/hookshot/whip/windup_box
 	var/lengthDecider = 0 //replaces maxlength due to a needed reset
 	var/windUp = 0 //amount of times cranked
