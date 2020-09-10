@@ -82,6 +82,7 @@
 	icon = 'icons/obj/items.dmi'
 	icon_state = "soap"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=1"
 	siemens_coefficient = 0 //no conduct
 	throwforce = 0
 	throw_speed = 4
@@ -417,7 +418,7 @@
 	desc = "A trap used to catch bears and other legged creatures."
 	flags = FPRINT
 	origin_tech = Tc_MATERIALS + "=1"
-	starting_materials = list(MAT_IRON = 50000)
+	starting_materials = list(MAT_IRON = 5000)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_LARGE
 	anchored = FALSE
@@ -749,6 +750,7 @@
 	throwforce = 3.0
 	throw_speed = 1
 	throw_range = 5
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=1"
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	attack_verb = list("warns", "cautions", "smashes")

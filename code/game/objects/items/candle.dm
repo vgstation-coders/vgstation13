@@ -5,6 +5,7 @@
 	icon_state = "candle1"
 	item_state = "candle1"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=1"
 	heat_production = 1000
 	source_temperature = TEMPERATURE_FLAME
 	light_color = LIGHT_COLOR_FIRE

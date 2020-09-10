@@ -8,6 +8,7 @@
 	throw_speed = 4
 	throw_range = 20
 	flags = FPRINT | NO_ATTACK_MSG
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_BLUESPACE + "=2;" + Tc_PROGRAMMING  + "=5;" + Tc_MAGNETS + "=3" //Expensive to replicate, good research boost if you chat with the detective though
 	var/c_tag = ""
 	var/active = FALSE
 	var/network = ""

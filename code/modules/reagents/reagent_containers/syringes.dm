@@ -14,6 +14,7 @@
 	possible_transfer_amounts = null //list(5,10,15)
 	volume = 15
 	starting_materials = list(MAT_GLASS = 1000)
+	origin_tech = Tc_BIOTECH  + "=2;" + Tc_COMBAT  + "=1"
 	w_type = RECYK_GLASS
 
 	var/mode = SYRINGE_DRAW
@@ -390,6 +391,8 @@
 /obj/item/weapon/reagent_containers/syringe/syndi
 	name = "syringe (syndicate mix)"
 	desc = "Contains cyanide, chloral hydrate and lexorin. Something tells you it might be lethal on arrival."
+	mech_flags = MECH_SCAN_ILLEGAL
+
 /obj/item/weapon/reagent_containers/syringe/syndi/New()
 	..()
 	reagents.add_reagent(CYANIDE, 5)

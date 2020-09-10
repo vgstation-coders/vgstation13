@@ -238,9 +238,9 @@
 	icon_state = "fireworkslauncher"
 	item_state = "riotgun"
 	fire_sound = "sound/weapons/railgun_lowpower.ogg"
-	projectile_type = "/obj/item/projectile/meteor/firework"	
+	projectile_type = "/obj/item/projectile/meteor/firework"
 	charge_cost = 0 //infinite ammo!
-	
+
 /obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
 	return
 
@@ -381,6 +381,7 @@
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "sword0"
 	item_state = "sword0"
+	origin_tech = Tc_COMBAT  + "=1"
 	var/active = 0.0
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
@@ -474,6 +475,7 @@
 	icon = 'icons/obj/crayons.dmi'
 	icon_state = "crayonred"
 	w_class = W_CLASS_TINY
+	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("attacks", "colours", "colors")//teehee
 	var/colour = DEFAULT_BLOOD //RGB
 	var/shadeColour = "#220000" //RGB
@@ -503,6 +505,7 @@
 	desc = "Wow!"
 	icon = 'icons/obj/toy.dmi'
 	icon_state = "snappop"
+	origin_tech = Tc_COMBAT  + "=1"
 	w_class = W_CLASS_TINY
 
 /obj/item/toy/snappop/throw_impact(atom/hit_atom)

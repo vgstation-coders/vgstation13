@@ -34,6 +34,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	item_state = "electronic"
 	w_class = W_CLASS_TINY
 	flags = FPRINT
+	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BLUESPACE + "=1;" + Tc_PROGRAMMING  + "=4"
 	slot_flags = SLOT_ID | SLOT_BELT
 
 	//Main variables

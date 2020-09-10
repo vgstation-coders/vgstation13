@@ -10,6 +10,7 @@
 	var/turf/end
 	var/tape_type = /obj/item/tape
 	var/icon_base
+	origin_tech = Tc_MATERIALS + "=2;" + Tc_ENGINEERING + "=1"
 
 /obj/item/tape
 	name = "tape"
@@ -260,6 +261,7 @@
 // -- /taperoll/syndie = contains all the things dealing with charges
 /obj/item/taperoll/syndie
 	var/charges_left = 12
+	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/taperoll/syndie/police
 	name = "police tape"
