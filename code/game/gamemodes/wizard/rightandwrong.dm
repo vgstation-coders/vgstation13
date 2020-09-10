@@ -62,7 +62,7 @@
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -164,8 +164,11 @@
 			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
 		if("nt12")
 			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
-		if ("automag")
+		if("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
+		if("lolly_lobber")
+			new /obj/item/weapon/gun/lolly_lobber(get_turf(src))
+
 	var/datum/role/survivor/S = R
 	if(istype(S))
 		S.summons_received = randomizeguns
@@ -173,7 +176,7 @@
 	score["gunsspawned"]++
 
 /mob/living/carbon/human/proc/equip_swords(var/datum/role/R)
-	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity")
+	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity", "whip")
 	var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar", "roman")
 	switch (randomizeknightcolor) //everyone gets some armor as well
 		if("green")
@@ -216,10 +219,7 @@
 			new miscpick(get_turf(src))
 		if("throw")
 			if(prob(20))
-				if(prob(50))
-					new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
-				else
-					new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
+				new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
 			else
 				new /obj/item/weapon/hatchet(get_turf(src))
 		if("armblade") // good luck getting it off. Maybe cut your own arm off :^)
@@ -307,6 +307,12 @@
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
 			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
+		if("whip")
+			if(prob(50))
+				new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
+			else
+				new /obj/item/projectile/hookshot/whip/liquorice(get_turf(src))
+
 	var/datum/role/survivor/crusader/S = R
 	if(istype(S))
 		S.summons_received = randomizeswords
@@ -544,5 +550,5 @@
 			S.summons_received = P.name
 		if(istype(P, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one.
 			to_chat(src, "You feel like it's a bad idea to drink the [P.name] yourself...")
-		
+
 	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
