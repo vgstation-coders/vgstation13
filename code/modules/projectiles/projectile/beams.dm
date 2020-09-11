@@ -68,7 +68,6 @@ var/list/beam_master = list()
 	flag = "laser"
 	eyeblur = 4
 	fire_sound = 'sound/weapons/Laser.ogg'
-	anchored = TRUE
 	var/frequency = 1
 	var/wait = 0
 	var/beam_color= null
@@ -79,7 +78,6 @@ var/list/beam_master = list()
 		qdel(R)
 	past_rays = null
 	..()
-
 
 /obj/item/projectile/beam/proc/fireto(var/vector/origin, var/vector/direction)
 	// + 0.5 because we want to start in the middle of the tile
@@ -96,24 +94,24 @@ var/list/beam_master = list()
 
 	if(!gcDestroyed)
 		past_rays += shot_ray
-	else
-		shot_ray.fired_beam = null // hard-delete prevention
 
-	if(isnull(hits) || hits.len == 0)
+	var/distance = MAX_BEAM_DISTANCE;
+	if((isnull(hits) || hits.len == 0))
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state)
-		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state)
-
+			distance = travel_range
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
+		distance = last_hit.distance
 
-		shot_ray.draw(last_hit.distance, icon, icon_state)
+	shot_ray.draw(last_hit.distance, icon, icon_state)
 
-		if(last_hit.hit_type == RAY_CAST_REBOUND)
-			ASSERT(!gcDestroyed)
-			spawn()
-				rebound(last_hit.hit_atom)
+	if(last_hit.hit_type == RAY_CAST_REBOUND)
+		ASSERT(!gcDestroyed)
+		spawn()
+			rebound(last_hit.hit_atom)
+
+	if(gcDestroyed)
+		qdel(shot_ray)
 
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
