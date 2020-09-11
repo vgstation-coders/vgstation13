@@ -59,7 +59,7 @@
 	icon_state = "dermal"
 	item_state = "dermal"
 	siemens_coefficient = 0.6
-	
+
 /obj/item/clothing/head/beret/headofsecurity
 	name = "formal Head of Security beret"
 	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
@@ -75,7 +75,7 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(GREY_SHAPED,VOX_SHAPED,INSECT_SHAPED)
-	
+
 /obj/item/clothing/head/beret/warden
 	name = "formal warden beret"
 	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
@@ -128,11 +128,23 @@
 	name = "security beret"
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
-	
+
 /obj/item/clothing/head/beret/officer
 	name = "formal security officer beret"
 	desc = "A navy beret with a Security Officer rank insignia on it. For formal occasions."
 	icon_state = "officerberet"
+
+/obj/item/clothing/head/peaked
+	name = "peaked cap"
+	desc = "A red peaked cap, with a corporate logo on it."
+	icon_state = "peaked"
+	item_state = "peaked"
+
+/obj/item/clothing/head/garrison
+	name = "garrison cap"
+	desc = "A squat garrison cap, for officers made of sterner stuff."
+	icon_state = "garrison"
+	item_state = "garrison"
 
 //Medical
 /obj/item/clothing/head/surgery

@@ -12,15 +12,16 @@
 
 	stat_collection.artifacts_discovered++
 
-	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+	artifact_id = generate_artifact_id()
 
 	artifact_find_type = pick(
-	//5;/obj/machinery/syndicate_beacon,
+	5;/obj/machinery/syndicate_beacon,
 	5;/obj/item/clothing/mask/stone,
 	5;/obj/item/changeling_vial,
 	5;/obj/item/weapon/bloodcult_pamphlet/oneuse,
-	10;/obj/structure/constructshell,
+	25;/obj/machinery/singularity_beacon,
 	25;/obj/machinery/power/supermatter,
+	50;/obj/structure/constructshell,
 	100;/obj/item/clothing/gloves/warping_claws,
 	100;/obj/machinery/auto_cloner,
 	100;/obj/structure/bed/chair/vehicle/gigadrill,
@@ -31,12 +32,29 @@
 	100;/mob/living/simple_animal/hostile/roboduck,
 	1000;/obj/machinery/artifact)
 
+var/list/all_generated_artifact_ids = list()
+
+/proc/generate_artifact_id()
+	var/artifact_id
+	var/custom = TRUE
+	for (var/i = 1 to 3)//three tries. cosmically low chance to get an already existing ID each time, but if we do, we'll settle with a custom one
+		artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+		if (!(artifact_id in all_generated_artifact_ids))
+			custom = FALSE
+			break
+	if (custom)
+		artifact_id = "sirius-[add_zero("[all_generated_artifact_ids.len]",3)]"
+	all_generated_artifact_ids += artifact_id
+	return artifact_id
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Boulders - sometimes turn up after excavating turf - excavate further to try and find large xenoarch finds
 
+var/list/boulders = list()
+
 /obj/structure/boulder
 	name = "rocky debris"
-	desc = "Leftover rock from an excavation, it's been partially dug out already but there's still a lot to go."
+	desc = "Leftover rock from an excavation. May or may not contain an artifact, but if it does you better use a small pickaxe, lest you destroy it along with the debris."
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "boulder1"
 	density = 1
@@ -48,12 +66,14 @@
 	var/datum/artifact_find/artifact_find
 
 /obj/structure/boulder/Destroy()
-	..()
+	boulders -= src
 	geological_data = null
 	artifact_find = null
+	..()
 
 /obj/structure/boulder/New()
 	..()
+	boulders += src
 	icon_state = "boulder[rand(1,4)]"
 	excavation_level = rand(5,50)
 
@@ -96,26 +116,38 @@
 
 			if(excavation_level > 100)
 				//failure
-				src.visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
-				to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught, any secrets it was holding are long gone.</span>")
+				visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
+				if(artifact_find)//destroyed artifacts have weird, unpleasant effects
+					var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
+					destroyed.artifact_id = artifact_find.artifact_id
+					destroyed.last_loc = get_turf(src)
+					destroyed.artifact_type = artifact_find.artifact_find_type
+					if (artifact_find.artifact_find_type == /obj/machinery/artifact)
+						destroyed.primary_effect = "???"
+						destroyed.secondary_effect = "???"
+					razed_large_artifacts[artifact_find.artifact_id] += destroyed
+					to_chat(user, "<span class='red'>As \the [src] disintegrates under your onslaught...</span>")//continued by the message from ArtifactRepercussion()
+					ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
+				else
+					to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught.</span>")
 				qdel(src)
 				return
 
 			if(prob(excavation_level))
 				//success
-				src.visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
+				visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
 				if(artifact_find)
 					var/spawn_type = artifact_find.artifact_find_type
 					if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
 					else
-						new spawn_type(get_turf(src))
+						var/atom/movable/AM = new spawn_type(get_turf(src))
+						excavated_large_artifacts[artifact_find.artifact_id] = AM
 				else
 					to_chat(user, "<span class='notice'>[src] has been whittled away under your careful excavation, but there was nothing of interest inside.</span>")
 				qdel(src)
 		else
 			busy = 0
-		return
 
 /obj/structure/boulder/attack_construct(var/mob/user)
 	if (!Adjacent(user))

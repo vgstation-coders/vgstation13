@@ -2,7 +2,7 @@
 	<div class="itemLabel">
 		Temperature:
 	</div>
-	{{:helper.displayBar(data.temperature, 273.15, data.max_temperature, data.temperature > data.safety_temperature ? "bad" : "good")}}
+	{{:helper.displayBar(data.temperature, 0, data.max_temperature, data.temperature > data.safety_temperature ? "bad" : "good")}}
 	<div class="itemContent" style="width: 60px">
 		{{:helper.round(data.temperature)}} K
 	</div>

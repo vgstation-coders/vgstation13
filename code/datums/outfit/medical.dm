@@ -54,6 +54,11 @@
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
 	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
 
+/datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	return ..()
+
+// -- Doctor
 
 /datum/outfit/doctor
 
@@ -149,6 +154,10 @@
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
+/datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	return ..()
+
 // -- Chemist
 
 /datum/outfit/chemist
@@ -208,6 +217,10 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
+
+/datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
+	return ..()
 
 // -- Paramedic
 
@@ -277,6 +290,10 @@
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
+/datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	return ..()
+
 // -- Geneticist
 
 /datum/outfit/geneticist
@@ -328,6 +345,10 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/><b>Science:</b> [SCI_FREQ] <br/>")
+
+/datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	return ..()
 
 // -- Virologist
 
@@ -381,3 +402,7 @@
 	if (!H.mind)
 		return
 	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
+
+/datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND
+	return ..()

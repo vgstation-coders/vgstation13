@@ -461,7 +461,6 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
-#define M_OBESITY       200		// Decreased metabolism
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
@@ -758,6 +757,7 @@ SEE_PIXELS	256
 #define VERM_MUSHMEN 15
 #define VERM_FROGS 14
 #define VERM_SNAILS 15
+#define VERM_HEADCRABS 16
 
 
 #define MONSTER_BEAR    0
@@ -1536,10 +1536,10 @@ var/proccalls = 1
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  1
-#define HONORABLE_HIGHLANDER 2
-#define HONORABLE_NINJA      4
-#define HONORABLE_NOGUNALLOWED	8
+#define HONORABLE_BOMBERMAN  262144
+#define HONORABLE_HIGHLANDER 524288
+#define HONORABLE_NINJA      1048576
+#define HONORABLE_NOGUNALLOWED	2097152
 #define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED
 
 #define SPELL_ANIMATION_TTL 2 MINUTES

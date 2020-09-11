@@ -99,6 +99,7 @@ var/list/beam_master = list()
 	if((isnull(hits) || hits.len == 0))
 		if(travel_range)
 			distance = travel_range
+
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
 		distance = last_hit.distance

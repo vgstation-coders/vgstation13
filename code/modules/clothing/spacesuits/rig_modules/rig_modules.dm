@@ -203,13 +203,13 @@
 
 //Rad shield module
 /obj/item/rig_module/rad_shield
-	name = "\improper R.A.D."
-	desc = "An radiation absorption device. Its acronym and true name both convey the application of this module."
+	name = "radiation absorption device"
+	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors it protects the suit wearer from incoming radiation until its collectors are full. It can be reset by using a suit storage unit's cleaning operation."
 	active_power_usage = 1
 	var/event_key
 	var/initial_suit = 0
 	var/initial_helmet = 0
-	var/max_capacity = 250
+	var/max_capacity = 250 //Just barely over 1 "item touch" worth of rads when standing right next to the shard with a suit with only 10 rad resist. About 5-6 items at 50. Based on in-game tests on Aug. 2020.
 	var/current_capacity = 0
 
 /obj/item/rig_module/rad_shield/examine_addition(mob/user)
@@ -258,3 +258,8 @@
 
 	if(current_capacity >= max_capacity)
 		deactivate()
+
+/obj/item/rig_module/rad_shield/adv
+	name = "high capacity radiation absorption device"
+	desc = "Its acronym, R.A.D., and full name both convey the application of this module. By using similar technology as radiation collectors, it protects the suit wearer from incoming radiation until its collectors are full. This model features a higher capacity than the basic version. It can be reset by using a suit storage unit's cleaning operation."
+	max_capacity = 800 //About 3-4 "item touches" worth based on the same conditions as the above testing.

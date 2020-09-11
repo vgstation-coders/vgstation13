@@ -245,6 +245,7 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
+	"artifacts"      = 0, //How many large artifacts were analyzed and activated
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
 	"disease_vaccine"	= null, //Which many vaccine antibody isolated
 	"disease_vaccine_score"	= 0, //the associated score
@@ -428,6 +429,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
+		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
 		)
 
 //Boss monster list

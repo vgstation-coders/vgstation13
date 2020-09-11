@@ -474,7 +474,7 @@ var/global/datum/controller/occupations/job_master
 	var/alt_title = null
 
 	if(job)
-		job.equip(H) // Outfit datum.
+		job.equip(H, job.priority) // Outfit datum.
 	else
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
@@ -496,9 +496,8 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	if(job && job.priority)
-		job.priority_reward_equip(H)
-
+	if(job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
