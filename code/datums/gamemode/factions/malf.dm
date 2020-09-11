@@ -84,3 +84,8 @@ You should now be able to use your Explode spell to interface with the nuclear f
 	if(stage >= FACTION_ENDGAME)
 		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null
+
+/proc/calculate_malf_hack_APC_cooldown(var/apcs)
+	// if you can come up with a better proc name be my guest
+	// 60 seconds at no APC and 1 APC, 45 seconds at 2 APCs, 30 seconds at 3 APCs, 23 seconds at 4, 18 seconds at 5
+	return round(max(100, 600 * (apcs > 1 ? (1/apcs + 0.5/apcs) : 1)), 10)
