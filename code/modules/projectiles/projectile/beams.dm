@@ -103,12 +103,12 @@ var/list/beam_master = list()
 		var/rayCastHit/last_hit = hits[hits.len]
 		distance = last_hit.distance
 
-	shot_ray.draw(last_hit.distance, icon, icon_state)
+		if(last_hit.hit_type == RAY_CAST_REBOUND)
+			ASSERT(!gcDestroyed)
+			spawn()
+				rebound(last_hit.hit_atom)
 
-	if(last_hit.hit_type == RAY_CAST_REBOUND)
-		ASSERT(!gcDestroyed)
-		spawn()
-			rebound(last_hit.hit_atom)
+	shot_ray.draw(distance, icon, icon_state)
 
 	if(gcDestroyed)
 		qdel(shot_ray)
