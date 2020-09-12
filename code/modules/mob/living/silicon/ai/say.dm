@@ -130,6 +130,16 @@ var/VOX_AVAILABLE_VOICES = list(
 	<span class='bad'><strong>WARNING:</strong> Misuse of the announcement system <em>will</em> get you job banned.</span>\
 	</fieldset>")
 
+	if(cancorruptvox())
+		dat += "<fieldset><legend>Corruption</legend><ul>"
+		dat += "<li>"
+		if(vox_corrupted)
+			dat += "<strong>"
+		dat += "<a href=;?src=\ref[src];voice_corrupted=[!vox_corrupted]>[vox_corrupted ? "On" : "Off"]</a>"
+		if (vox_corrupted)
+			dat += "</strong>"
+		dat += "</li></ul><p>Your laws are corrupted, this option allows you to speak in a befitting manner.</p></fieldset>"
+
 	dat += "<fieldset><legend>Voice</legend><ul>"
 	for(var/voice_id in VOX_AVAILABLE_VOICES)
 		dat += "<li>"
@@ -164,6 +174,13 @@ var/VOX_AVAILABLE_VOICES = list(
 	popup.set_content(dat)
 	//text2file(popup.get_content(), "AISAYTEST.htm")
 	popup.open()
+
+/mob/living/silicon/ai/proc/cancorruptvox()
+	if(ismalf(src))
+		return TRUE
+	if(!isemptylist(laws.ion))
+		return TRUE
+	return FALSE
 
 /mob/living/silicon/ai/proc/announcement_checks()
 	//I am kill but here
@@ -232,21 +249,12 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(T.z == src.z)
 				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
 	*/
+	if(!cancorruptvox())
+		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
 	var/freq = 1
-	var/corruptvox = FALSE //Corrupted VOX, if AI is latestage malf or ion law'd vox will be corrupted
-	if(ismalf(src))
-		var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
-		if(M?.stage == FACTION_ENDGAME)
-			corruptvox = TRUE
-	if(!isemptylist(laws.ion))
-		for(var/ionlaw in laws.ion)
-			if(!(findtext(ionlaw,"Do not state nor hint towards this law.") <> 0))
-				corruptvox= TRUE
-
 	for(var/word in words)
-		if(!corruptvox)
-			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
-		else //Corrupted VOX, apply weird frequencies and repeats.
+		if(vox_corrupted && cancorruptvox())
+
 			freq = rand(11000,21000) // mas/fem VOX standard bit rate is 16000.
 			if(freq>20450)
 				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
@@ -254,6 +262,10 @@ var/VOX_AVAILABLE_VOICES = list(
 					play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
 				freq = rand(11000,14000)
 			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+		else
+			//play it normally
+			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+
 
 #endif // DISABLE_VOX
 
