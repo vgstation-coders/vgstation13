@@ -149,6 +149,7 @@
 		user.mind.transfer_to(src)
 		src.name = "Spider-bot ([user.name])"
 		src.mouse = user
+		add_language(LANGUAGE_MOUSE)
 		user.forceMove(src)
 		src.update_icon()
 	else
@@ -193,6 +194,7 @@
 			mouse.forceMove(T)
 			mind.transfer_to(mouse)
 			mouse = null
+			remove_language(LANGUAGE_MOUSE)
 
 	src.name = "Spider-bot"
 	update_icon()
@@ -348,8 +350,6 @@
 	return SLIP_HAS_MAGBOOTS
 
 /mob/living/simple_animal/spiderbot/say(var/message)
-	if(mouse)
-		add_language(LANGUAGE_MOUSE)
 	return ..(message, "R")
 
 /mob/living/simple_animal/spiderbot/treat_speech(var/datum/speech/speech, genesay = 0)
