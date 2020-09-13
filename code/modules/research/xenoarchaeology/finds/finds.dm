@@ -471,14 +471,14 @@
 
 	var/choice = pick(
 	75;/obj/item/clothing/head/culthood,
-	25;/obj/item/clothing/suit/cultrobes
+	25;/obj/item/clothing/suit/cultrobes,
 	60;/obj/item/clothing/head/culthood/old,
 	20;/obj/item/clothing/suit/cultrobes/old
 	45;/obj/item/clothing/head/magus,
 	15;/obj/item/clothing/suit/magusred,
 	30;/obj/item/clothing/head/helmet/space/cult,
 	10;/obj/item/clothing/suit/space/cult,
-	15;/obj/item/clothing/head/helmet/space/legacy_cult
+	15;/obj/item/clothing/head/helmet/space/legacy_cult,
 	5;/obj/item/clothing/suit/space/legacy_cult)
 	return new choice
 
