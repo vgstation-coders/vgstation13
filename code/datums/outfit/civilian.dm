@@ -50,7 +50,7 @@
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
 		),
 	)

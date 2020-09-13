@@ -157,7 +157,7 @@
 		if (isnull(obj_type))
 			continue
 		slot = text2num(slot)
-		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
+		H.equip_to_slot_if_possible(new obj_type(get_turf(H)), slot, TRUE)
 
 // -- Give out backbag and items to be collected in the backpack
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H, var/species)

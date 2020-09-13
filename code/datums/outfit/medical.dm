@@ -38,7 +38,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/cmo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -116,7 +116,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -203,7 +203,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -259,7 +259,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -321,7 +321,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/geneticist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -372,7 +372,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/virologist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 

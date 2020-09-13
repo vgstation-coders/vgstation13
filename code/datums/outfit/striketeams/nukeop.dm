@@ -138,7 +138,7 @@
             slot_w_uniform_str = /obj/item/clothing/under/syndicate/holomap,
             slot_shoes_str = /obj/item/clothing/shoes/combat,
             slot_wear_suit_str = /obj/item/clothing/suit/armor/bulletproof,
-            slot_wear_mask_str = /obj/item/clothing/mask/breath, // Different
+            slot_wear_mask_str = /obj/item/clothing/mask/breath/vox, // Different
             slot_gloves_str = /obj/item/clothing/gloves/combat,
             slot_head_str = /obj/item/clothing/head/helmet/tactical/swat,
             slot_wear_id_str = /obj/item/weapon/card/id/syndicate,
