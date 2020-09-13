@@ -213,7 +213,7 @@
 		return 0
 	if (!I.block && I.buf)//Not a block injector
 		var/datum/dna2/record/R = I.buf
-		if (R.types & 4)//SE Injector
+		if (R.types & DNA2_BUF_SE)//SE Injector
 			for (var/block in R.dna.SE)
 				if (I.buf.dna.SE >= 2050)
 					return 0
@@ -240,7 +240,7 @@
 		return 0
 	if (I.block == XRAYBLOCK && I.buf)//Block Injector
 		var/datum/dna2/record/R = I.buf
-		if (R.types & 4)//SE Injector
+		if (R.types & DNA2_BUF_SE)//SE Injector
 			var/bstate = R.dna.GetSEState(XRAYBLOCK)
 			return bstate
 	return 0
@@ -264,7 +264,7 @@
 		return 0
 	if (I.block == HULKBLOCK && I.buf)//Block Injector
 		var/datum/dna2/record/R = I.buf
-		if (R.types & 4)//SE Injector
+		if (R.types & DNA2_BUF_SE)//SE Injector
 			var/bstate = R.dna.GetSEState(HULKBLOCK)
 			return bstate
 	return 0
@@ -312,7 +312,7 @@
 		return 0
 	if (I.block == REMOTEVIEWBLOCK && I.buf)//Block Injector
 		var/datum/dna2/record/R = I.buf
-		if (R.types & 4)//SE Injector
+		if (R.types & DNA2_BUF_SE)//SE Injector
 			var/bstate = R.dna.GetSEState(REMOTEVIEWBLOCK)
 			return bstate
 	return 0
