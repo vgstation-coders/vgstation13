@@ -34,10 +34,6 @@
 	dead_mob_list -= src
 	qdel(src)
 
-/*
-/mob/living/silicon/robot/shell/death(gibbed)
-	..(TRUE)	//Always gib.
-*/
 
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
