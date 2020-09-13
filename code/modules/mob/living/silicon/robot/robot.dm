@@ -1428,15 +1428,15 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/SetEmagged(var/new_state)
 	if(new_state)
 		gib()
-		log_game("[key_name(user)] emagged cyborg shell [key_name(src)].  Shell destroyed.")
+		log_game("AI-Cyborg shell [key_name(src)] was emagged and destroyed.")
 	return FALSE
 
-/mob/living/silicon/robot/shell/updateicon()
-	..()
+/mob/living/silicon/robot/shell/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
+	..(overlay_layer, overlay_plane)
 	overlays.Cut()
 	if(!stat && cell != null)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
-		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
+		eyesicon.Blend(rgb(210,210,210), ICON_ADD)
 		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
 
