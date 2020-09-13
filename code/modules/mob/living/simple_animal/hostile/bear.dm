@@ -255,6 +255,7 @@
 
 /mob/living/simple_animal/hostile/bear/death()
 	dropBurger(FALSE)
+	update_icon()
 	..()
 
 /mob/living/simple_animal/hostile/bear/is_pacified()
