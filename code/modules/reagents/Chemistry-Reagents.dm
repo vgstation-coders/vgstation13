@@ -7973,7 +7973,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(volume >= 5 && istype(T, /turf/simulated/wall/) && T.can_thermite)
+	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall))
 		var/turf/simulated/wall/W = T
 		W.rot()
 
