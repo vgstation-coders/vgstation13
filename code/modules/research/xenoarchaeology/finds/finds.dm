@@ -211,10 +211,33 @@
 
 /datum/find/knife/spawn_item()
 	var/obj/item/new_item = new /obj/item/weapon/kitchen/utensil/knife/large
-	item_type = "[pick("bladed knife","serrated blade","sharp cutting implement")]"
+	item_type = "[pick("double-bladed knife","serrated blade","sharp cutting implement")]"
+	new_item.icon = 'icons/obj/weapons.dmi'
+	switch(item_type)
+		if ("double-bladed knife")
+			new_item.icon_state = "double_bladed"
+		if ("serrated blade")
+			new_item.icon_state = "serrated_blade"
+		if ("sharp cutting implement")
+			new_item.icon_state = "cutting_implement"
 	return new_item
 
 /datum/find/knife/additional_description(var/obj/item/I)
+	I.desc += "[pick("It doesn't look safe.",\
+			"It looks wickedly jagged",\
+			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
+
+/datum/find/ritualknife
+	find_ID = ARCHAEO_RITUALKNIFE
+	additional_desc = TRUE
+	apply_material_decorations = TRUE
+	responsive_reagent = IRON
+
+/datum/find/ritualknife/spawn_item()
+	var/obj/item/new_item = new /obj/item/weapon/kitchen/utensil/knife/large/ritual
+	return new_item
+
+/datum/find/ritualknife/additional_description(var/obj/item/I)
 	I.desc += "[pick("It doesn't look safe.",\
 			"It looks wickedly jagged",\
 			"There appear to be [pick("dark red","dark purple","dark green","dark blue")] stains along the edges")]."
@@ -568,10 +591,10 @@
 	new_gun.desc = ""
 
 	//Randomize it!
-	
+
 	new_gun.projectile_type = pickweight(list(		//Randomize the beam it fires. Standard laser deals 30 burn.
 
-		/obj/item/projectile/beam 							= 250,	
+		/obj/item/projectile/beam 							= 250,
 		/obj/item/projectile/beam/captain					= 80,	//40 damage
 		/obj/item/projectile/beam/retro						= 120,
 		/obj/item/projectile/beam/practice					= 130,	//Deals no damage.
@@ -612,16 +635,16 @@
 		/obj/item/projectile/swap							= 50,	//swap staff bolts
 		/obj/item/projectile/forcebolt						= 50,	//mental focus bolts
 		/obj/item/projectile/beam/mindflayer				= 50,	//deals brain damage
-	))	
-	
-	var/delay = rand(1, 20)	
+	))
+
+	var/delay = rand(1, 20)
 	new_gun.fire_delay = delay		//Randomize the fire delay
 	new_gun.attack_delay = delay
 	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
 
 	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))	//If its a gravity gun set the charge to 200 so the game doesnt break.
-		new_gun.charge_cost = 200			
-		
+		new_gun.charge_cost = 200
+
 	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
 		'sound/weapons/alien_laser1.ogg',
 		'sound/weapons/alien_laser2.ogg',
@@ -641,7 +664,7 @@
 		'sound/weapons/Taser.ogg',
 		'sound/weapons/Taser2.ogg'
 	))
-	
+
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
