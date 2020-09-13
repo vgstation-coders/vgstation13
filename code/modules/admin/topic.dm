@@ -609,6 +609,54 @@
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
 
+	else if(href_list["artifactpanel_jumpto"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/turf/T = locate(href_list["artifactpanel_jumpto"])
+
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(T)
+
+	else if(href_list["climate_timeleft"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/weather/W = map.climate.current_weather
+		var/nu = input(usr, "Enter remaining time (nearest 2 seconds)", "Adjust Timeleft", W.timeleft / (1 SECONDS)) as null|num
+		if(!nu)
+			return
+		W.timeleft = round(nu SECONDS,SS_WAIT_WEATHER)
+		log_admin("[key_name(usr)] adjusted weather time.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather time.</span>", 1)
+		climate_panel()
+
+	else if(href_list["climate_weather"])
+		if(!check_rights(R_ADMIN))
+			return
+		if(!map.climate)
+			return
+		var/datum/climate/C = map.climate
+		var/nu = input(usr, "Select New Weather", "Adjust Weather", C.current_weather.type) as null|anything in typesof(/datum/weather)
+		if(!nu || nu == C.current_weather.type)
+			return
+		if(!ispath(nu))
+			return
+		C.change_weather(nu)
+		C.forecast()
+		log_admin("[key_name(usr)] adjusted weather type.")
+		message_admins("<span class='notice'>[key_name(usr)] adjusted weather type.</span>", 1)
+		climate_panel()
+
 	else if(href_list["delay_round_end"])
 		if(!check_rights(R_SERVER))
 			return
@@ -931,9 +979,9 @@
 		var/jobs = ""
 
 	/***********************************WARNING!************************************
-				      The jobban stuff looks mangled and disgusting
-						      But it looks beautiful in-game
-						                -Nodrak
+					  The jobban stuff looks mangled and disgusting
+							  But it looks beautiful in-game
+										-Nodrak
 	************************************WARNING!***********************************/
 		var/counter = 0
 //Regular jobs
@@ -1615,7 +1663,7 @@
 			return alert(usr, "The game has already started.", null, null, null, null)
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		var/roundstart_rules = list()
+		var/list/datum/dynamic_ruleset/roundstart/roundstart_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
 			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
 			roundstart_rules[newrule.name] = newrule
@@ -1656,7 +1704,7 @@
 			return alert(usr, "The game must start first.", null, null, null, null)
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		var/latejoin_rules = list()
+		var/list/datum/dynamic_ruleset/latejoin/latejoin_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 			var/datum/dynamic_ruleset/latejoin/newrule = new rule()
 			latejoin_rules[newrule.name] = newrule
@@ -2626,6 +2674,35 @@
 			log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 			message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 
+
+	else if(href_list["syndbeaconpermission"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/obj/machinery/syndicate_beacon/syndbeacon = locate(href_list["syndbeacon"])
+		var/mob/user = locate(href_list["user"])
+		var/answer = text2num(href_list["answer"])
+
+		if (!syndbeacon || !user)
+			return
+
+		switch (answer)
+			if (1)
+				syndbeacon.ready_up()
+				log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (2)
+				syndbeacon.temptext = "<i>We have no need for you at this time. Have a pleasant day.</i><br>"
+				syndbeacon.updateUsrDialog()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (3)
+				syndbeacon.temptext = "<i>The Syndicate has grown tired of you.</i><br>"
+				syndbeacon.updateUsrDialog()
+				syndbeacon.selfdestruct()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+
 	else if(href_list["adminchecklaws"])
 		output_ai_laws()
 
@@ -2938,18 +3015,10 @@
 		usr.client.cmd_admin_subtle_message(M)
 
 	else if(href_list["rapsheet"])
-		checkSessionKey()
-		// build the link
-		//var/dat = "[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]"
-		//if(href_list["rsckey"])
-		//.	dat += "&ckey=[href_list["rsckey"]]"
-//		to_chat(usr, link(dat))
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("ckey" = href_list["rsckey"])))
 		return
 
 	else if(href_list["bansheet"])
-		//checkSessionKey()
-//		to_chat(usr, link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]"))
 		usr << link(getVGPanel("rapsheet", admin = 1))
 		return
 
@@ -3565,7 +3634,7 @@
 						lavaturfs += F
 
 				spawn(0)
-					for(var/i = i, i < length, i++) // 180 = 3 minutes
+					for(var/i = 0, i < length, i++) // 180 = 3 minutes
 						if(damage)
 							for(var/mob/living/carbon/L in living_mob_list)
 								if(istype(L.loc, /turf/simulated/floor)) // Are they on LAVA?!
@@ -3687,6 +3756,7 @@
 							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
 						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
 
+					custom.generate_icon()
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
 
@@ -3844,11 +3914,14 @@
 				//Big fat lists of effects, not very modular but at least there's less buttons
 				switch (choice)
 					if("Biohazard") //GUISE WE HAVE A BLOB
-						var/levelchoice = input("Set the level of the biohazard alert, or leave at 0 to have a random level (1 to 7 supported only)", "Space FEMA Readiness Program", 0) as num
-						if(!levelchoice || levelchoice > 7 || levelchoice < 0)
-							to_chat(usr, "<span class='warning'>Invalid input range (0 to 7 only)</span>")
+						var/levelchoice = input("Set the level of the biohazard alert (1 to 7 supported only)", "Space FEMA Readiness Program", 1) as num
+						if(isnull(levelchoice) || levelchoice > 7 || levelchoice < 1)
+							to_chat(usr, "<span class='warning'>Invalid input range (1 to 7 only)</span>")
 							return
-						biohazard_alert(level = levelchoice)
+						var/datum/command_alert/biohazard_alert/admin_alert = new
+						admin_alert.level_min = levelchoice
+						admin_alert.level_max = levelchoice
+						command_alert(admin_alert)
 						message_admins("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						log_admin("[key_name_admin(usr)] triggered a FAKE Biohzard Alert.")
 						return
@@ -3984,6 +4057,24 @@
 							B.destroy_environnement = 0
 				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
 				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+			if("mechanics_motivator")
+				if(!world.has_round_started())
+					to_chat(usr, "The round has not started yet,")
+					return
+				var/equipped_count = 0
+				for(var/mob/living/dude in player_list)
+					if(dude.mind?.assigned_role != "Mechanic")
+						continue
+					var/obj/item/current_mask = dude.get_item_by_slot(slot_wear_mask)
+					if(current_mask)
+						if(istype(current_mask, /obj/item/clothing/mask/explosive_collar/mechanic))
+							continue
+						dude.drop_item(current_mask, dude.loc, TRUE)
+					var/obj/item/clothing/mask/explosive_collar/mechanic/cool_necklace = new
+					dude.equip_to_slot(cool_necklace, slot_wear_mask)
+					equipped_count++
+				to_chat(usr, "<span class='notice'>Equipped [equipped_count] mechanics with cool necklaces.</span>")
+				log_admin("[key_name(usr)] equipped [equipped_count] Mechanics with cool necklaces.")
 			if("togglebombmethod")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BM")
@@ -4059,6 +4150,10 @@
 					"syphoners" = VERM_SYPHONER,
 					"greytide gremlins" = VERM_GREMTIDE,
 					"crabs" = VERM_CRABS,
+					"diona nymphs" = VERM_DIONA,
+					"mushman pinheads" = VERM_MUSHMEN,
+					"frogs" = VERM_FROGS,
+					"snails" = VERM_SNAILS
 					)
 				var/ov = vermins[input("What vermin should infest the station?", "Vermin Infestation") in vermins]
 				var/ol = locations[input("Where should they spawn?", "Vermin Infestation") in locations]
@@ -4157,7 +4252,7 @@
 				for(var/obj/item/device/transfer_valve/TV in world)
 					if(TV.tank_one||TV.tank_two)
 						qdel(TV)
-						TV++
+						num++
 				message_admins("[key_name_admin(usr)] has removed [num] bombs", 1)
 			if("detonate_bombs")
 				var/num=0
@@ -4245,7 +4340,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = stripped_input(usr, "Provide a Feed Channel Name", "Network Channel Handler", "")
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -4307,6 +4402,11 @@
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert(src.admincaster_feed_channel.channel_name)
 
+		for(var/obj/item/device/pda/PDA in PDAs)
+			var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+			if(reader)
+				reader.newsAlert(src.admincaster_feed_channel.channel_name)
+
 		log_admin("[key_name_admin(usr)] submitted a feed story to channel: [src.admincaster_feed_channel.channel_name]!")
 		src.access_news_network()
 
@@ -4366,6 +4466,10 @@
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
+					for(var/obj/item/device/pda/PDA in PDAs)
+						var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+						if(reader)
+							reader.newsAlert()
 					src.admincaster_screen = 15
 				else
 					news_network.wanted_issue.author = src.admincaster_feed_message.author
@@ -5342,6 +5446,30 @@
 
 		PersistencePanel() //refresh!
 
+	// --- Rod tracking
+
+	else if (href_list["rod_to_untrack"])
+		if(!check_rights(R_FUN))
+			return
+		var/obj/item/projectile/P = locate(href_list["rod_to_untrack"])
+
+		if (!P)
+			return
+
+		P.tracking = FALSE
+		P.tracker_datum = null
+		qdel(P.tracker_datum)
+
+		var/log_data = "[P.original]"
+		if (ismob(P.original))
+			var/mob/M = P.original
+			if (M.client)
+				log_data += " (M.client.ckey)"
+
+		log_admin("[key_name(usr)] stopped a rod thrown at [log_data].")
+		message_admins("<span class='notice'>[key_name(usr)]  stopped a rod thrown at [log_data].</span>")
+
+		ViewAllRods()
 
 	// ----- Religion and stuff
 	else if(href_list["ashpaper"])
@@ -5531,6 +5659,70 @@
 				var/msg = "[key_name(usr)] removed [key_name(M)] from his religion."
 				message_admins(msg)
 				updateRelWindow()
+
+	if (href_list["change_zone_del"])
+		switch (href_list["change_zone_del"])
+			if ("x_min_del", "x_max_del", "y_min_del", "y_max_del")
+				var/new_limit = input(usr, "Input the new boundary.", "Setting [href_list["change_zone_del"]]") as null|num
+				if (new_limit < 0 || new_limit > world.maxx)
+					to_chat(usr, "<span class='warning'>Please enter a number between 0 and [world.maxx].</span>")
+					return FALSE
+				vars[href_list["change_zone_del"]] = new_limit
+			if ("z_del")
+				var/new_limit = input(usr, "Input the new z-level..", "Setting [href_list["change_zone_del"]]") as null|num
+				if (new_limit < 1 || new_limit > 6)
+					to_chat(usr, "<span class='warning'>Please enter a number between 1 and 6.</span>")
+					return FALSE
+				z_del = new_limit
+			if ("type") // Lifted from "spawn" code.
+				var/object = input(usr, "Enter a typepath. It will be autocompleted.", "Setting the type to delete.") as null|text
+
+				var/list/matches = get_matching_types(object, /atom)
+
+				if(matches.len==0)
+					to_chat(usr, "<span class='warning'>No typepaths found.</span>")
+					return
+
+				var/chosen
+				if(matches.len==1)
+					chosen = matches[1]
+				else
+					chosen = input("Select an atom type", "Spawn Atom", matches[1]) as null|anything in matches
+				if(!chosen)
+					to_chat(usr, "<span class='warning'>No type chosen.</span>")
+					return
+
+				type_del = chosen
+
+			if ("exec")
+				var/list/things = list()
+				var/turf/T
+				for (var/x_sel = x_min_del; x_sel <= x_max_del; x_sel++)
+					for (var/y_sel = y_min_del; y_sel <= y_max_del; y_sel++)
+						T = locate(x_sel, y_sel, z_del)
+						things += T.contents
+						CHECK_TICK
+				var/time =  start_watch()
+				var/list/to_del = list()
+				for (var/thing in things)
+					if (istype(thing, type_del))
+						to_del += thing
+				var/number = to_del.len
+				for (var/thing in to_del)
+					qdel(thing)
+					CHECK_TICK
+				var/total_time = stop_watch(time)
+				log_admin("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
+				message_admins("[key_name(usr)] deleted [number] [type_del] in a [x_max_del - x_min_del]x[y_max_del - y_min_del] square starting at ([x_min_del],[x_max_del],[z_del])")
+				x_min_del = 0
+				x_max_del = 0
+				y_min_del = 0
+				y_max_del = 0
+				z_del = 0
+				type_del = null
+				to_chat(usr, "<span class='notice'>Deleted [number] atoms in [total_time] seconds.</span>")
+
+		mass_delete_in_zone() // Refreshes the window
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()

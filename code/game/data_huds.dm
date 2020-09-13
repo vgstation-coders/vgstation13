@@ -72,6 +72,19 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
+	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in range(T))
+		if(!check_HUD_visibility(patient, M))
+			continue
+		if(!C)
+			continue
+		holder = patient.hud_list[STATUS_HUD]
+		if (holder)
+			if(patient.isDead())
+				holder.icon_state = "huddead"
+			else
+				holder.icon_state = "hudundead"
+			C.images += holder
+
 	for(var/mob/living/carbon/patient in range(T))
 		if (ishuman(patient))
 			var/mob/living/carbon/human/H = patient

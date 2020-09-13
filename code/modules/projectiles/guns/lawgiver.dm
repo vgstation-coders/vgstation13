@@ -153,9 +153,6 @@ var/list/lawgiver_modes = list(
 	if(magazine)
 		qdel(magazine)
 		magazine = null
-	if(in_chamber)
-		qdel(in_chamber)
-		in_chamber = null
 	..()
 
 /obj/item/weapon/gun/lawgiver/GetVoice()
@@ -325,7 +322,7 @@ var/list/lawgiver_modes = list(
 		in_chamber = new projectile_type(src)
 	Fire(projectile2_target, user, params, struggle)
 
-/obj/item/weapon/gun/lawgiver/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
+/obj/item/weapon/gun/lawgiver/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
 	..()
 	if(!firing_mode_datum.ammo_casing_type)
 		return
@@ -416,7 +413,7 @@ var/list/lawgiver_modes = list(
 		return 0
 	return 1
 
-/obj/item/weapon/gun/lawgiver/afterattack(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/weapon/gun/lawgiver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)

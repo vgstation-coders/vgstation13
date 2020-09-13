@@ -14,6 +14,8 @@
 	var/log_admin = 0					// log admin actions
 	var/log_admin_only = FALSE
 	var/log_debug = 1					// log debug output
+	var/log_sql = 0						// log SQL events
+	var/log_sql_queries = 0				// debug info SQL queries
 	var/log_game = 0					// log game events
 	var/log_vote = 0					// log voting
 	var/log_whisper = 0					// log client whisper
@@ -26,7 +28,7 @@
 	var/log_rc = 0						// log requests consoles
 	var/log_hrefs = 0					// logs all links clicked in-game. Could be used for debugging and tracking down exploits
 	var/log_runtimes = 0                // Logs all runtimes.
-	var/sql_enabled = 1					// for sql switching
+	var/sql_enabled = 0					// for sql switching
 	var/allow_admin_ooccolor = 0		// Allows admins with relevant permissions to have their own ooc colour
 	var/allow_vote_restart = 0 			// allow votes to restart
 	var/allow_vote_mode = 0				// allow votes to change mode
@@ -70,6 +72,12 @@
 	var/automute_on = 0					//enables automuting/spam prevention
 	var/jobs_have_minimal_access = 0	//determines whether jobs use minimal access or expanded access.
 	var/copy_logs = null
+
+	// BSQL things
+	var/bsql_debug = 0
+	var/async_query_timeout = 10
+	var/blocking_query_timeout = 5
+	var/bsql_thread_limit = 50
 
 	var/cult_ghostwriter = 1               //Allows ghosts to write in blood in cult rounds...
 	var/cult_ghostwriter_req_cultists = 10 //...so long as this many cultists are active.
@@ -285,6 +293,12 @@
 
 				if ("log_debug")
 					config.log_debug = text2num(value)
+
+				if ("log_sql")
+					config.log_sql = 1
+
+				if ("log_sql_queries")
+					config.log_sql_queries = 1
 
 				if ("log_game")
 					config.log_game = 1
@@ -546,6 +560,17 @@
 					config.assistantratio = text2num(value)
 				if("copy_logs")
 					copy_logs = value
+
+				// BRSQL
+				if("bsql_debug")
+					bsql_debug = value
+				if("async_query_timeout")
+					async_query_timeout = text2num(value)
+				if("blocking_query_timeout")
+					blocking_query_timeout = text2num(value)
+				if("bsql_thread_limit")
+					bsql_thread_limit = text2num(value)
+
 				if("media_base_url")
 					media_base_url = value
 				if("media_secret_key")
@@ -682,7 +707,7 @@
 			if ("address")
 				sqladdress = value
 			if ("port")
-				sqlport = value
+				sqlport = text2num(value)
 			if ("database")
 				sqldb = value
 			if ("login")

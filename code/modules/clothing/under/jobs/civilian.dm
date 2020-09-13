@@ -14,8 +14,8 @@
 	item_state = "ba_suit"
 	_color = "ba_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/rank/btc_bartender
 	desc = "Sanctioned by the BTC. Including the tights."
 	name = "BTC bartender's uniform"
@@ -23,7 +23,7 @@
 	item_state = "btc_bartender"
 	_color = "btc_bartender"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 
 
@@ -34,7 +34,7 @@
 	item_state = "caparmor"
 	_color = "captain"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/cargo
@@ -44,7 +44,7 @@
 	item_state = "lb_suit"
 	_color = "qm"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/cargotech
@@ -54,7 +54,7 @@
 	item_state = "lb_suit"
 	_color = "cargo"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/chaplain
@@ -64,7 +64,7 @@
 	item_state = "bl_suit"
 	_color = "chapblack"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/chef
@@ -73,7 +73,7 @@
 	icon_state = "chef"
 	_color = "chef"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/clown
@@ -83,7 +83,7 @@
 	item_state = "clown"
 	_color = "clown"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/head_of_personnel
@@ -93,7 +93,7 @@
 	item_state = "b_suit"
 	_color = "hop"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/hydroponics
@@ -104,7 +104,7 @@
 	_color = "hydroponics"
 	permeability_coefficient = 0.50
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/botany
 	desc = "It's a jumpsuit designed to protect against minor plant-related hazards. For the more garden-minded botanist."
@@ -146,7 +146,7 @@
 	item_state = "internalaffairs"
 	_color = "internalaffairs"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/janitor
@@ -156,7 +156,7 @@
 	_color = "janitor"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/lawyer
@@ -180,13 +180,13 @@
 	icon_state = "lawyer_red"
 	item_state = "lawyer_red"
 	_color = "lawyer_red"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/blue
 	icon_state = "lawyer_blue"
 	item_state = "lawyer_blue"
 	_color = "lawyer_blue"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/bluesuit
 	name = "Blue Suit"
@@ -219,7 +219,7 @@
 	item_state = "red_suit"
 	_color = "red_suit"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/mime
@@ -229,7 +229,7 @@
 	item_state = "mime"
 	_color = "mime"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/miner
@@ -239,7 +239,7 @@
 	item_state = "miner"
 	_color = "miner"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/bridgeofficer
 	name = "bridge officer uniform"

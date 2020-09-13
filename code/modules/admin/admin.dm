@@ -40,8 +40,6 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-
-	checkSessionKey()
 	var/body = {"<html><head><title>Options for [M.key]</title></head>
 <body>Options panel for <b>[M]</b>"}
 	var/species_description
@@ -272,11 +270,9 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-	checkSessionKey()
 	var/cid = input("Type computer ID", "CID", 0) as num | null
 	if(cid)
 		usr << link(getVGPanel("rapsheet", admin = 1, query = list("cid" = cid)))
-//	to_chat(usr, link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]&cid=[cid]"))
 	return
 
 /datum/admins/proc/checkCKEY()
@@ -290,10 +286,8 @@ var/global/floorIsLava = 0
 	if (!istype(src,/datum/admins))
 		to_chat(usr, "Error: you are not an admin!")
 		return
-	checkSessionKey()
 	var/ckey = lowertext(input("Type player ckey", "ckey", null) as text | null)
 	usr << link(getVGPanel("rapsheet", admin = 1, query = list("ckey" = ckey)))
-//	usr << link("[config.vgws_base_url]/index.php/rapsheet/?s=[sessKey]&ckey=[ckey]")
 	return
 
 /datum/admins/proc/PlayerNotesPage(page)
@@ -903,6 +897,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=bomberdestroy'>Make Bomberman Bombs actually destroy structures</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernohurt'>Make Bomberman Bombs harmless to players (default)</A><BR>
 			<A href='?src=\ref[src];secretsfun=bombernodestroy'>Make Bomberman Bombs harmless to the environment (default)</A><BR>
+			<A href='?src=\ref[src];secretsfun=mechanics_motivator'>Incentivize Mechanics to do their job</A><BR>
 			<B>Final Solutions</B><BR>
 			<I>(Warning, these will end the round!)</I><BR>
 			<BR>
@@ -1618,3 +1613,17 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		dat += "Max [T.max_per_turf] per turf. Lasts up to [T.max_age] rounds.<hr>"
 
 	usr << browse(dat, "window=persistencepanel;size=350x600")
+
+/datum/admins/proc/ViewAllRods()
+	if(!check_rights(0))
+		return
+
+	var/dat = "<center><B>View all active rods</B></center><hr>"
+
+	for (var/obj/item/projectile/immovablerod/rod in all_rods)
+		dat += "<b>[rod]</b> in z = [rod.z] (<a href='?_src_=vars;Vars=\ref[rod]'>\[VV\]</A>)"
+		if (rod.tracking)
+			dat += "- <A href='?src=\ref[src];rod_to_untrack=\ref[rod]'>(UNTRACK)</A>"
+		dat += "<br/>"
+
+	usr << browse(dat, "window=rodswindow;size=350x300")

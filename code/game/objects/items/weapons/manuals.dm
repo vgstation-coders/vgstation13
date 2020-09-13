@@ -9,6 +9,7 @@
 /obj/item/weapon/book/manual/engineering_construction
 	name = "Station Repairs and Construction"
 	icon_state ="bookEngineering"
+	item_state = "book3"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
@@ -114,6 +115,7 @@
 /obj/item/weapon/book/manual/hydroponics_pod_people
 	name = "Growing Dionae and YOU! A book on growing your new best friends!"
 	icon_state ="bookHydroponicsPodPeople"
+	item_state = "book5"
 	author = "Farmer John"
 	title = "The Human Harvest - From seed to market"
 	dat = {"<html>
@@ -154,6 +156,7 @@
 /obj/item/weapon/book/manual/chemistry_manual
 	name = "Chemistry 101"
 	icon_state ="bookChemistry"
+	item_state = "book6"
 	author = "SpaceChem Inc."
 	title = "Chemistry 101"
 	wiki_page = "Guide_to_Chemistry"
@@ -523,6 +526,7 @@
 /obj/item/weapon/book/manual/detective
 	name = "The Film Noir: proper Procedures for Investigations"
 	icon_state ="bookDetective"
+	item_state = "book2"
 	author = "Nanotrasen"
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
@@ -530,6 +534,7 @@
 /obj/item/weapon/book/manual/nuclear
 	name = "Fission Mailed: Nuclear Sabotage 101"
 	icon_state ="bookNuclear"
+	item_state ="bookNuclear"
 	author = "Syndicate"
 	title = "Fission Mailed: Nuclear Sabotage 101"
 	wiki_page = "Nuclear_Agent"
@@ -606,6 +611,7 @@
 /obj/item/weapon/book/manual/virology_guide
 	name = "A Crash Course in Virology"
 	icon_state ="bookVirologyGuide"
+	item_state ="bookVirologyGuide"
 	author = "Frederick Chapman Montagnier"
 	title = "A Crash Course in Virology"
 	book_width = 819
@@ -804,6 +810,7 @@ var/virology_encyclopedia = ""
 /obj/item/weapon/book/manual/virology_encyclopedia
 	name = "Symptom Encyclopedia"
 	icon_state ="bookVirologyEncyclopedia"
+	item_state ="bookVirologyEncyclopedia"
 	author = "Frederick Chapman Montagnier"
 	title = "Symptom Encyclopedia"
 	dat = ""

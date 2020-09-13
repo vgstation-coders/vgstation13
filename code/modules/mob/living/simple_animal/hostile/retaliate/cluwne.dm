@@ -136,7 +136,7 @@
 		to_chat(src, "<span class='warning'>You have a seizure!</span>")
 		Paralyse(10)
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/emote(var/act, var/type, var/message, var/auto)
+/mob/living/simple_animal/hostile/retaliate/cluwne/emote(act, m_type = null, message = null, ignore_status = FALSE)
 	if(timestopped)
 		return //under effects of time magick
 
@@ -156,6 +156,13 @@
 		else
 			playsound(src, "clownstep", 20, 1)
 
+/mob/living/simple_animal/hostile/retaliate/cluwne/death(var/gibbed = FALSE)
+	..(gibbed)
+	if(client && iscluwnebanned(src))
+		to_chat(src, "<big><span class='danger'>You have died, and will not be able to rejoin the game until the next round.</span><big>")
+		sleep(1)
+		del(client)
+
 /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 	name = "clown goblin"
 	desc = "A tiny walking mask and clown shoes. You want to honk his nose!"
@@ -164,7 +171,7 @@
 	icon_dead = null
 	response_help = "honks the"
 	speak = list("Honk!")
-	speak_emote = list("sqeaks")
+	speak_emote = list("squeaks")
 	emote_hear = list("honks")
 	maxHealth = 100
 	health = 100
@@ -188,4 +195,48 @@
 	..(TRUE)
 	new /obj/item/clothing/mask/gas/clown_hat(src.loc)
 	new /obj/item/clothing/shoes/clown_shoes(src.loc)
+	qdel(src)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin
+	name = "psychedelic clown goblin"
+	desc = "A tiny walking mask and clown shoes. You want to honk his nose and cover your eyes!"
+	icon_state = "ClownPsychedelicGoblin"
+	icon_living = "ClownPsychedelicGoblin"
+	icon_dead = null
+	response_help = "honks the"
+	speak = list("Honk!", "Groovy!", "Far Out!")
+	speak_emote = list("squeaks")
+
+	emote_hear = list("honks")
+	maxHealth = 100
+	health = 100
+	size = 1
+	environment_smash_flags = SMASH_LIGHT_STRUCTURES
+
+	speed = 1
+	turns_per_move = 1
+
+	melee_damage_type = "BRAIN"
+	var/spacedrugs_chance = 30
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W,/obj/item/weapon/pen)) //Renaming
+		var/n_name = copytext(sanitize(input(user, "What would you like to name this psychedelic clown goblin?", "Clown Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
+		if(n_name && Adjacent(user) && !user.stat)
+			name = "[n_name]"
+		return
+	..()
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/AttackingTarget()
+	..()
+	var/mob/living/L = target
+	if(L.reagents)
+		if(prob(spacedrugs_chance))
+			visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
+			L.reagents.add_reagent(SPACE_DRUGS, 1)
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/death(var/gibbed = FALSE)
+	..(TRUE)
+	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
+	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
 	qdel(src)

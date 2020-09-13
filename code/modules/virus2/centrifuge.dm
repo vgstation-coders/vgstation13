@@ -161,9 +161,12 @@
 
 
 /obj/machinery/disease2/centrifuge/proc/add_vial_sprite(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/slot)
-	overlays += "centrifuge_vial[slot][on ? "_moving" : ""]"
+	var/spin = on
+	if(stat & (BROKEN|NOPOWER))
+		spin = FALSE
+	overlays += "centrifuge_vial[slot][spin ? "_moving" : ""]"
 	if (vial.reagents.total_volume)
-		var/image/filling = image(icon, "centrifuge_vial[slot]_filling[on ? "_moving" : ""]")
+		var/image/filling = image(icon, "centrifuge_vial[slot]_filling[spin ? "_moving" : ""]")
 		filling.icon += mix_color_from_reagents(vial.reagents.reagent_list)
 		filling.alpha = mix_alpha_from_reagents(vial.reagents.reagent_list)
 		overlays += filling
@@ -323,7 +326,7 @@
 
 				var/data = list("antigen" = list(task.target_name))
 				vial_datum.vial.reagents.add_reagent(VACCINE, amount, data)
-
+				isolated_antibodies[task.target_name] = 1
 				vial_datum.current_task = null
 
 				alert_noise("ping")

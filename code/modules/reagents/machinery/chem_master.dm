@@ -37,6 +37,8 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	var/max_pill_size = 50
 	var/pill_display_number = MAX_PILL_SPRITE/2
 
+	var/electrolytic = FALSE
+
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 3
 	light_power_on = 2
@@ -198,6 +200,37 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 			var/datum/browser/popup = new(usr, "[windowtype]", "[name]", 585, 400, src)
 			popup.set_content(dat)
 			popup.open()
+			return 1
+
+		else if(href_list["electrolyze"])
+			if(!electrolytic)
+				return
+			var/datum/reagent/target = locate(href_list["electrolyze"])
+			var/datum/chemical_reaction/unreaction
+			for(var/poss in typesof(/datum/chemical_reaction/))
+				var/datum/chemical_reaction/check = poss
+				if(initial(check.id) == target.id)
+					unreaction = new check
+					break
+			if(!unreaction)
+				to_chat(usr, "<span class='notice'>The chemical couldn't be broken down.</span>")
+				return
+			if(unreaction.result_amount > target.volume)
+				to_chat(usr, "<span class='notice'>There wasn't enough [target] to break down!</span>")
+				return
+			var/total_reactions = round(target.volume / unreaction.result_amount)
+			use_power(30*total_reactions)
+			var/amount_to_electrolyze = total_reactions*unreaction.result_amount
+			//The reason we have this new var is because the rounding may mean there are less reactions than total volume!
+			container.reagents.remove_reagent(unreaction.result,amount_to_electrolyze) //This moves over the reactive bulk, and leaves behind the amount too small to react
+			for(var/E in unreaction.required_reagents)
+				var/reagent_ID = E
+				if(islist(E))
+					var/list/L = E
+					reagent_ID = L[1] //the first element should be the synthetic version of the chemical
+				reagents.add_reagent(reagent_ID, unreaction.required_reagents[E]*total_reactions)
+			updateUsrDialog()
+			playsound(src, 'sound/effects/bubbles.ogg', 80, 1)
 			return 1
 
 		else if(href_list["add"])
@@ -516,7 +549,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[reg_name] , [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A>
+						[reg_name], [round(G.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[G]'>(?)</A> [electrolytic ? "<A href='?src=\ref[src];electrolyze=\ref[G]'>(Electrolyze)</A>" : ""]
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];add=[G.id];amount=1'>1u</A>
@@ -591,7 +624,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					reg_name = "[reg_name] ([vaccines])"
 				dat += {"
 					<td class="column1">
-						[reg_name] , [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
+						[reg_name], [round(N.volume, 0.01)] Units - <A href='?src=\ref[src];analyze=\ref[N]'>(?)</A>
 					</td>
 					<td class="column2">
 						<A href='?src=\ref[src];remove=[N.id];amount=1'>1u</A>
@@ -678,5 +711,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "condimaster"
 	chem_board = /obj/item/weapon/circuitboard/condimaster
 	windowtype = "condi_master"
+
+/obj/machinery/chem_master/electrolytic
+	name = "\improper Electrolytic ChemMaster"
+	desc = "The ultimate industrial chemical cooker, its chemical reservoir is made from non-reactive stasis technology and it can electrolyze individual chemicals within. These were banned after the Junkie Wars of 2420, but you can still find them in shady places."
+	electrolytic = TRUE
+	flags = FPRINT  | NOREACT
 
 #undef MAX_PILL_SPRITE

@@ -314,10 +314,10 @@
 		return -1
 	return ..()
 
-/obj/machinery/recharge_station/crowbarDestroy(mob/user)
+/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='notice'>You can't do that while this charger is occupied.</span>")
-		return -1
+		return 0
 	return ..()
 
 /obj/machinery/recharge_station/Bumped(atom/AM as mob|obj)

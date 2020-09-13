@@ -63,7 +63,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	update_beams()
 	return 1
 
-/obj/machinery/prism/wrenchAnchor(var/mob/user)
+/obj/machinery/prism/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return
@@ -105,7 +105,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	if(beams.len>0 && anchored)
 		var/newbeam=0
 		if(!beam)
-			beam = new (loc)
+			beam = new /obj/effect/beam/emitter(loc)
 			beam.dir=dir
 			newbeam=1
 		beam.power=0
@@ -134,5 +134,6 @@ var/list/obj/machinery/prism/prism_list = list()
 		icon_state = "prism_on"
 	else
 		icon_state = "prism_off"
-		qdel(beam)
-		beam=null
+		if (beam)
+			qdel(beam)
+			beam=null

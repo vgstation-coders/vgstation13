@@ -53,14 +53,30 @@
 	var/holo_target = "show_map" // Our holomap target.
 
 	var/list/synthable_default_food = list(
-		"Donut" = /obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		"Apple" = /obj/item/weapon/reagent_containers/food/snacks/grown/apple,
 		"Banana" = /obj/item/weapon/reagent_containers/food/snacks/grown/banana,
+		"Orange" = /obj/item/weapon/reagent_containers/food/snacks/grown/orange,
+		"Peanut" = /obj/item/weapon/reagent_containers/food/snacks/grown/peanut,
+		"Donut" = /obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		"Muffin" = /obj/item/weapon/reagent_containers/food/snacks/muffin,
+		"Pie" = /obj/item/weapon/reagent_containers/food/snacks/pie,
+		"Chocolate Bar" = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar,
+		"Space Twinkie" = /obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,
+		"Sweets" = /obj/item/weapon/reagent_containers/food/snacks/sweet,
+		"Gum" = /obj/item/gum,
+		"Popcorn" = /obj/item/weapon/reagent_containers/food/snacks/popcorn,
+		"Faggot" = /obj/item/weapon/reagent_containers/food/snacks/faggot,
+		"Sausage" = /obj/item/weapon/reagent_containers/food/snacks/sausage,
+		"Toast" = /obj/item/weapon/reagent_containers/food/snacks/breadslice/paibread,
+		"Cookie" = /obj/item/weapon/reagent_containers/food/snacks/PAIcookie,
 		"Burn it!" = /obj/item/weapon/reagent_containers/food/snacks/badrecipe,
 	)
 
 	var/list/synthable_default_chems = list(
-		"Tricordrazine" = TRICORDRAZINE,
+		"Anti-Toxin" = ANTI_TOXIN,
+		"Inaprovaline" = INAPROVALINE,
 		"Coffee" = COFFEE,
+		"Tea" = TEA,
 		"Salt" = SODIUMCHLORIDE,
 		"Smoke" = PAISMOKE,
 	)
@@ -202,7 +218,7 @@
 /mob/living/silicon/pai/ex_act(severity)
 	if(flags & INVULNERABLE)
 		return
-	flash_eyes(visual = TRUE, affects_silicon = TRUE)
+	flash_eyes(visual = TRUE, affect_silicon = TRUE)
 	switch(severity)
 		if(1)
 			if(!isDead())

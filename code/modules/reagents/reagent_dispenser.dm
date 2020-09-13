@@ -23,8 +23,8 @@
 	return ..()
 
 /obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W) && wrenchable())
-		return wrenchAnchor(user)
+	if(W.is_wrench(user) && wrenchable())
+		return wrenchAnchor(user, W)
 
 /obj/structure/reagent_dispensers/examine(mob/user)
 	..()
@@ -118,11 +118,12 @@
 			usr.visible_message("<span class='notice'>[usr] detaches [rig] from \the [src].", "<span class='notice'>You detach [rig] from \the [src]</span>")
 			if(rig)
 				rig.forceMove(get_turf(usr))
+				rig.master = null
 				rig = null
 			overlays = new/list()
 
 /obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W,/obj/item/weapon/wrench))
+	if (W.is_wrench(user))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
 			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
 		modded = modded ? 0 : 1
@@ -147,6 +148,7 @@
 				log_game("[key_name(user)] rigged fueltank at ([loc.x],[loc.y],[loc.z]) for explosion.")
 
 			rig = W
+			rig.master = src
 
 			var/image/test = image(W.appearance, src, "pixel_x" = 6, "pixel_y" = -1)
 			overlays += test
@@ -168,7 +170,7 @@
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
-		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
+		if(Proj.get_damage())
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
 				Proj.firer.attack_log += "\[[time_stamp()]\] <b>[key_name(Proj.firer)]</b> shot <b>[src]([x],[y],[z])</b> with a <b>[Proj.type]</b>"
@@ -424,7 +426,7 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		return
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
@@ -476,7 +478,7 @@
 			enter_barrel(target)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/container_resist(mob/user)
-	if (exiting.Remove(user)) 
+	if (exiting.Remove(user))
 		to_chat(user,"<span class='warning'>You stop climbing free of \the [src].</span>")
 		return
 	visible_message("<span class='warning'>[user] begins to climb free of the \the [src]!</span>")

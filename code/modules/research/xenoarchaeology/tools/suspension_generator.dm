@@ -1,3 +1,6 @@
+// No longer necessary for doing xenoarch, but kept in because you can use it on people.
+// Still available from cargo.
+
 /obj/machinery/suspension_gen
 	name = "suspension field generator"
 	desc = "It has stubby legs bolted up against it's body for stabilising."
@@ -196,7 +199,7 @@
 				to_chat(user, "<span class='warning'>Unscrew \the [src]'s battery panel first.</span>")
 		else
 			to_chat(user, "<span class='warning'>\the [src]'s security locks are engaged.</span>")
-	else if (iswrench(W))
+	else if (W.is_wrench(user))
 		if(!suspension_field)
 			if(anchored)
 				anchored = 0

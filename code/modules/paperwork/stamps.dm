@@ -15,24 +15,27 @@
 	pressure_resistance = 2
 	attack_verb = list("stamps")
 
-/obj/item/weapon/stamp/proc/try_stamp(mob/user,obj/item/weapon/paper/P)
-	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
-
-	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
-	stampoverlay.pixel_x = rand(-2, 2) * PIXEL_MULTIPLIER
-	stampoverlay.pixel_y = rand(-3, 2) * PIXEL_MULTIPLIER
-	stampoverlay.icon_state = "paper_[icon_state]"
-
-	if(!P.stamped)
-		P.stamped = new
-	P.stamped += type
+proc/add_paper_overlay(obj/item/weapon/paper/P,image/stampoverlay,Xoffset,Yoffset)
+	if(istype(P, /obj/item/weapon/paper/envelope))
+		stampoverlay.pixel_x = Yoffset * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = Xoffset * PIXEL_MULTIPLIER //envelopes are broad instead of long, we just invert the x and y.
+	else
+		stampoverlay.pixel_x = rand(Xoffset * -1, Xoffset) * PIXEL_MULTIPLIER
+		stampoverlay.pixel_y = rand(Yoffset * -1, Yoffset) * PIXEL_MULTIPLIER
 	P.overlays += stampoverlay
-
-	to_chat(user, "<span class='notice'>You stamp [P] with \the [src].</span>")
-
 	if(istype(P.loc, /obj/item/weapon/storage/bag/clipboard))
 		var/obj/C = P.loc
 		C.update_icon()
+
+/obj/item/weapon/stamp/proc/try_stamp(mob/user,obj/item/weapon/paper/P)
+	P.stamps += (P.stamps=="" ? "<HR>" : "<BR>") + "<i>This [P.name] has been stamped with \the [name].</i>"
+	var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
+	stampoverlay.icon_state = "paper_[icon_state]"
+	add_paper_overlay(P,stampoverlay,2,2)
+	if(!P.stamped)
+		P.stamped = new
+	P.stamped += type
+	to_chat(user, "<span class='notice'>You stamp [P] with \the [src].</span>")
 
 /obj/item/weapon/stamp/captain
 	name = "captain's rubber stamp"

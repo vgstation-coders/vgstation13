@@ -15,7 +15,7 @@
 		qdel(src)
 	if(iswirecutter(I))
 		to_chat(user, "You cut out the top and bottom of \the [src] with \the [I].")
-		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+		I.playtoolsound(user, 50)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
 			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
@@ -139,8 +139,8 @@
 	process_shrapnel()
 	explosion(get_turf(src.loc),-1,0,2)
 
-	if(istype(loc, /obj/item/weapon/legcuffs/beartrap))
-		var/obj/item/weapon/legcuffs/beartrap/boomtrap = loc
+	if(istype(loc, /obj/item/weapon/beartrap))
+		var/obj/item/weapon/beartrap/boomtrap = loc
 		if(istype(boomtrap.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = loc.loc
 			if(H.legcuffed == boomtrap)
@@ -150,6 +150,7 @@
 
 				qdel(H.legcuffed)
 				H.legcuffed = null
+				unlock_atom(H)
 				boomtrap.IED = null
 	qdel(src)
 

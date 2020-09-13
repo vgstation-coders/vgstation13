@@ -16,18 +16,19 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	var/list/network = list(CAMERANET_SS13)
 	var/mapping = 0//For the overview file, interesting bit of code.
 
-	var/list/datum/action/camera/our_actions = list()
-
+	var/list/list/our_actions = list() // assoc list of mob -> list/datum/action
 	light_color = LIGHT_COLOR_RED
 
-/obj/machinery/computer/security/New()
-	..()
+/obj/machinery/computer/security/proc/init_action_buttons()
 	var/datum/action/camera/previous/P = new(src)
 	var/datum/action/camera/cancel/C = new(src)
 	var/datum/action/camera/cyborg/C1 = new(src)
 	var/datum/action/camera/listing/L = new(src)
 	var/datum/action/camera/next/N = new(src)
-	our_actions = list(P, C, C1, L, N)
+	return list(P, C, C1, L, N)
+
+/obj/machinery/computer/security/New()
+	..()
 
 	if (ticker && ticker.current_state  == GAME_STATE_PLAYING)
 		init_cams()
@@ -48,8 +49,15 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	..()
 
 /obj/machinery/computer/security/attack_ai(var/mob/user)
-	src.add_hiddenprint(user)
-	return attack_hand(user)
+	if(istype(user, /mob/living/silicon/robot) || isMoMMI(user))
+		if(Adjacent(user))
+			src.add_hiddenprint(user)
+			return attack_hand(user)
+		else
+			to_chat(user, "You need to get closer to the computer first.")
+	else
+		to_chat(user, "You have your built-in camera systems for this!") //currently too buggy to allow AI to use camera computers
+	return //attack_hand(user)
 
 
 /obj/machinery/computer/security/attack_paw(var/mob/user)
@@ -72,7 +80,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	if (src.z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
-	if(stat & (NOPOWER|BROKEN))
+	if(!is_operational())
 		return
 
 	if(!isAI(user))
@@ -80,13 +88,33 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 
 	if (!current || !(current.can_use())) // No suitable active camera
 		init_cams()
-	if (current) // Did we find a camera
-		for (var/datum/action/camera/action in our_actions)
-			if (action.owner && action.owner != user)
-				action.Remove(action.owner)
-			action.Grant(user)
-	else
+	start_watching(user)
+
+/obj/machinery/computer/security/proc/start_watching(mob/user)
+	if (!current) // Did we find a camera
 		to_chat(user, "<span class='warning'>No active cameras found.</span>")
+		return
+
+	var/list/user_actions = init_action_buttons()
+	our_actions[user] = user_actions
+	for(var/datum/action/action_datum in user_actions)
+		action_datum.Grant(user)
+
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/user_moved)
+
+/obj/machinery/computer/security/proc/stop_watching(mob/user)
+	user.cancel_camera()
+	for(var/datum/action/action_datum in our_actions[user])
+		action_datum.Remove(user)
+		qdel(action_datum)
+	our_actions -= user
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/user_moved)
+
+/obj/machinery/computer/security/proc/user_moved(mob/mover)
+	if(is_in_range(mover))
+		return
+	stop_watching(mover)
+
 
 /obj/machinery/computer/security/telescreen
 	name = "Telescreen"
@@ -97,12 +125,13 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	density = 0
 	circuit = null
 	layer = ABOVE_WINDOW_LAYER
-
+	pass_flags = PASSTABLE
 	light_color = null
 
 /obj/machinery/computer/security/telescreen/examine(mob/user)
 	..()
-	to_chat(user, "Looks like the current channel is \"<span class='info'>[current.c_tag]</span>\"")
+	if(current?.c_tag)
+		to_chat(user, "Looks like the current channel is \"<span class='info'>[current.c_tag]</span>\"")
 
 /obj/machinery/computer/security/telescreen/update_icon()
 	icon_state = initial(icon_state)
@@ -115,11 +144,43 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	desc = "Damn, they better have chicken-channel on these things."
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "entertainment"
-	network = list(CAMERANET_THUNDER, CAMERANET_COURTROOM)
+	network = list(CAMERANET_THUNDER, CAMERANET_COURTROOM, CAMERANET_SPESSTV)
 	density = 0
 	circuit = null
 
 	light_color = null
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv
+	name = "low-latency Spess.TV CRT monitor"
+	desc = "An ancient computer monitor. They don't make them like they used to. A sticker reads: \"Come be their hero\"."
+	icon = 'icons/obj/spesstv.dmi'
+	icon_state = "crt"
+	network = list(CAMERANET_SPESSTV)
+	density = TRUE
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/is_operational()
+	return TRUE
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/update_icon()
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/init_action_buttons()
+	var/datum/action/camera/previous/P = new(src)
+	var/datum/action/camera/cancel/C = new(src)
+	var/datum/action/camera/listing/L = new(src)
+	var/datum/action/camera/next/N = new(src)
+	var/datum/action/camera/follow/F = new(src)
+	var/datum/action/camera/subscribe/S = new(src)
+	return list(P, C, L, N, F, S)
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
+	name = "high-definition Spess.TV telescreen"
+	icon = 'icons/obj/status_display.dmi'
+	icon_state = "entertainment"
+	circuit = /obj/item/weapon/circuitboard/security/spesstv
+
+/obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen/New()
+	..()
+	overlays += "spesstv_overlay"
 
 /obj/machinery/computer/security/telescreen/entertainment/wooden_tv
 	icon_state = "security_det"
@@ -282,9 +343,46 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	button_icon_state = "cancel"
 
 /datum/action/camera/cancel/Trigger()
-	var/mob/living/user = owner
-	user.cancel_camera()
+	var/obj/machinery/computer/security/console = target
+	console.stop_watching(owner)
 
+/datum/action/camera/follow
+	name = "Follow!"
+	desc = "Follow this streamer to be notified when they go online."
+	icon_icon = 'icons/obj/camera_buttons.dmi'
+	button_icon_state = "follow"
+
+/datum/action/camera/follow/Trigger()
+	if(usr.incapacitated())
+		return
+	var/obj/machinery/computer/security/telescreen/entertainment/spesstv/tv = target
+	if (!istype(tv))
+		return
+	if(!in_range(tv, usr))
+		return
+	var/obj/machinery/camera/arena/spesstv/camera = tv.current
+	var/datum/role/streamer/streamer_role = camera.streamer
+
+	streamer_role.try_add_follower(usr.mind)
+
+/datum/action/camera/subscribe
+	name = "Subscribe! ($250)"
+	desc = "Support this streamer and get a subscriber badge and a loot box!"
+	icon_icon = 'icons/obj/camera_buttons.dmi'
+	button_icon_state = "subscribe"
+
+/datum/action/camera/subscribe/Trigger()
+	if(usr.incapacitated())
+		return
+	var/obj/machinery/computer/security/telescreen/entertainment/spesstv/tv = target
+	if (!istype(tv))
+		return
+	if(!in_range(tv, usr))
+		return
+	var/obj/machinery/camera/arena/spesstv/camera = tv.current
+	var/datum/role/streamer/streamer_role = camera.streamer
+
+	streamer_role.try_add_subscription(usr.mind, tv)
 /datum/action/camera/cyborg
 	name = "Cyborg camera listing"
 	desc = "List all the cyborg cameras conected to this network."

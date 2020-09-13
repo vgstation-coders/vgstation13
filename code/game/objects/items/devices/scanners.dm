@@ -8,6 +8,11 @@ REAGENT SCANNER
 BREATHALYZER
 */
 
+#define CAN_REVIVE_NO 0 // Human cannot be revived.
+#define CAN_REVIVE_GHOSTING 1 // Human is observing but can otherwise be revived.
+#define CAN_REVIVE_IN_BODY 2 // Human can be revived AND is in body.
+
+
 /obj/item/device/t_scanner
 	name = "\improper T-ray scanner"
 	desc = "A terahertz-ray emitter and scanner that can pick up the faintest traces of energy, used to detect the invisible."
@@ -173,6 +178,9 @@ Subject's pulse: ??? BPM"})
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: Dead</span><br>"
 	else
 		message += "<span class='notice'>Analyzing Results for [M]:<br>Overall Status: [M.stat > 1 ? "Dead" : "[M.health - M.halloss]% Healthy"]</span>"
+	if(isanimal(M))
+		to_chat(user, message)//Simple animal, we don't care about anything else.
+		return message
 	message += "<br>Key: <span class='notice'>Suffocation</span>/<font color='green'>Toxin</font>/<font color='#FFA500'>Burns</font>/<span class='red'>Brute</span>"
 	message += "<br>Damage Specifics: <span class='notice'>[OX]</span> - <font color='green'>[TX]</font> - <font color='#FFA500'>[BU]</font> - <span class='red'>[BR]</span>"
 	message += "<br>[(M.undergoing_hypothermia()) ?  "<span class='warning'>" : "<span class='notice'>"]Body Temperature: [round(M.bodytemperature-T0C,0.1)]&deg;C ([round(M.bodytemperature*1.8-459.67,0.1)]&deg;F)</span>"
@@ -267,9 +275,41 @@ Subject's pulse: ??? BPM"})
 				if(-1000000000 to BLOOD_VOLUME_SURVIVE)
 					message += "<br><span class='danger'>Danger: Blood Level Fatal: [blood_percent]% [blood_volume]cl</span>"
 		message += "<br><span class='notice'>Subject's pulse: <font color='[H.pulse == PULSE_THREADY || H.pulse == PULSE_NONE ? "red" : "blue"]'>[H.get_pulse(GETPULSE_TOOL)] BPM</font></span>"
+		if (H.isDead())
+			var/revive_status = check_can_revive(H)
+
+			if (revive_status == CAN_REVIVE_NO)
+				message += "<br><span class='danger'>No brainwaves detected. Subject cannot be revived.</span>"
+
+			else if (revive_status == CAN_REVIVE_GHOSTING)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject may be revivable.</span>"
+
+			else if (revive_status == CAN_REVIVE_IN_BODY)
+				message += "<br><span class='notice'>Faint brainwaves detected. Subject can be revived.</span>"
+
 	to_chat(user, message)//Here goes
 
 	return message //To read last scan
+
+/proc/check_can_revive(mob/living/carbon/human/target)
+	ASSERT(istype(target))
+	ASSERT(target.isDead())
+
+	if (!target.mind)
+		return CAN_REVIVE_NO
+
+	if (target.client)
+		return CAN_REVIVE_IN_BODY
+
+	var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+	if (!ghost)
+		return CAN_REVIVE_NO
+
+	var/mob/ghostmob = ghost.get_top_transmogrification()
+	if (!ghostmob)
+		return CAN_REVIVE_NO
+
+	return CAN_REVIVE_GHOSTING
 
 /obj/item/device/healthanalyzer/verb/toggle_mode()
 	set name = "Switch mode"
@@ -580,3 +620,8 @@ Subject's pulse: ??? BPM"})
 /obj/item/device/breathalyzer/examine(mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Its legal limit is set to [legal_limit] units.</span>")
+
+
+#undef CAN_REVIVE_NO
+#undef CAN_REVIVE_GHOSTING
+#undef CAN_REVIVE_IN_BODY

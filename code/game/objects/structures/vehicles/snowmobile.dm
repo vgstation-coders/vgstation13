@@ -54,7 +54,7 @@
 	icon_state = "snowcurity"
 	headlights = FALSE
 
-/obj/structure/bed/chair/vehicle/snowmobile/New()
+/obj/structure/bed/chair/vehicle/snowmobile/security/New()
 	..()
 	new /datum/action/vehicle/toggle_headlights/siren(src)
 

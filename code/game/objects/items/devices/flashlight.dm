@@ -108,7 +108,7 @@
 /obj/item/device/flashlight/tactical
 	name = "tactical light"
 	desc = "A compact, tactical flashlight with automatic self-attaching screws. Fits on armor and headgear."
-	icon_state = "tacticoollight"
+	icon_state = "taclight"
 	item_state = ""
 	
 /obj/item/device/flashlight/tactical/preattack(atom/target, mob/user, proximity_flag, click_parameters)

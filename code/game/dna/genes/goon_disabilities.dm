@@ -60,8 +60,6 @@
 	activation_message = "You feel blubbery and lethargic!"
 	deactivation_message = "You feel fit!"
 
-	mutation = M_OBESITY
-
 /datum/dna/gene/disability/fat/can_activate(var/mob/M, var/flags)
 	if(!ishuman(M))
 		return 0
@@ -71,6 +69,10 @@
 		return 0
 
 	return 1
+
+/datum/dna/gene/disability/fat/activate(var/mob/M)
+	if(M.overeatduration < 500)
+		M.overeatduration = 600 // This ensures M_FAT activates if the mob isn't already fat
 
 /datum/dna/gene/disability/fat/New()
 	..()
@@ -260,7 +262,7 @@
 		var/cword = pick(words)
 		words.Remove(cword)
 		var/suffix = copytext(cword,length(cword)-1,length(cword))
-		while(length(cword)>0 && suffix in list(".",",",";","!",":","?"))
+		while(length(cword)>0 && (suffix in list(".",",",";","!",":","?")))
 			cword  = copytext(cword,1              ,length(cword)-1)
 			suffix = copytext(cword,length(cword)-1,length(cword)  )
 		if(length(cword))
@@ -293,6 +295,7 @@
 	activation_message = "A pair of horns erupt from your head."
 	deactivation_message = "Your horns crumble away into nothing."
 	flags = GENE_UNNATURAL
+	mutation = M_HORNS
 
 /datum/dna/gene/disability/horns/New()
 	..()
@@ -382,6 +385,7 @@
 	for(var/mob/M in targets)
 		if (istype(M,/mob/living/carbon/human/))
 			var/mob/living/carbon/human/H = M
+			var/no_blood = (H.species.flags & NO_BLOOD)
 			if(isskellington(H))
 				to_chat(H, "<span class='warning'>You have no flesh left to melt!</span>")
 				return 0
@@ -390,13 +394,12 @@
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
-				gibs(H.loc, H.virus2, H.dna)
-				return
-
-			if(H.set_species("Skellington"))
+			else if(H.set_species("Skellington"))
 				H.regenerate_icons()
 				H.visible_message("<span class='danger'>[H.name]'s flesh melts right off! Holy shit!</span>")
 				H.drop_all()
+
+			if (!no_blood)
 				gibs(H.loc, H.virus2, H.dna)
 		else
 			M.visible_message("<span class='danger'>[usr.name] melts into a pile of bloody viscera!</span>")

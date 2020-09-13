@@ -124,7 +124,7 @@
 								Re-entering your corpse will cause the tray's lights to turn green, which will let people know you're still there, and just maybe improve your chances of being revived. No promises.</span>")
 	qdel(connected)
 
-/obj/structure/morgue/attackby(P as obj, mob/user as mob)
+/obj/structure/morgue/attackby(obj/item/P, mob/user)
 	if(iscrowbar(P)&&!contents.len)
 		user.visible_message("<span class='notice'>\The [user] begins dismantling \the [src].</span>", "<span class='notice'>You begin dismantling \the [src].</span>")
 		if(do_after(user, src,50))
@@ -133,8 +133,8 @@
 			new /obj/structure/closet/body_bag(src.loc)
 			new /obj/item/stack/sheet/metal(src.loc,5)
 			qdel(src)
-	if(iswrench(P))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(P.is_wrench(user))
+		P.playtoolsound(src, 50)
 		if(dir==4)
 			dir=8
 		else
@@ -433,8 +433,10 @@
 
 /obj/machinery/crema_switch/attack_hand(mob/user as mob)
 	if (allowed(user))
+		playsound(src,'sound/misc/click.ogg',30,0,-1)
 		for (var/obj/structure/crematorium/C in crematorium_list)
 			if (C.id == id)
 				C.cremate(user)
 	else
+		playsound(src,'sound/machines/denied.ogg',30,0,-1)
 		to_chat(user, "<SPAN CLASS='alert'>Access denied.</SPAN>")

@@ -16,9 +16,9 @@
 	return ..()
 
 /obj/structure/bed/chair/e_chair/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		var/obj/structure/bed/chair/C = new /obj/structure/bed/chair(loc)
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		C.dir = dir
 		part.forceMove(loc)
 		part.master = null

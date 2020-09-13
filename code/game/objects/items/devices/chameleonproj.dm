@@ -125,6 +125,7 @@
 	icon_state = new_iconstate
 	overlays = new_overlays
 	dir = O.dir
+	unlock_from()
 	M.forceMove(src)
 	M.layer = OBJ_LAYER //Needed for some things, notably lockers
 	M.plane = OBJ_PLANE
@@ -163,6 +164,9 @@
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
 	if(istype(loc, /turf/space))
 		return //No magical space movement!
+
+	if(istype(loc, /obj/structure/disposalholder))
+		return loc.relaymove(user,direction) //clang!
 
 	if(can_move)
 		can_move = 0

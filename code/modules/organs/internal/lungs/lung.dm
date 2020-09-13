@@ -99,7 +99,7 @@
 
 /datum/organ/internal/lungs/process()
 	..()
-	if((owner.species && owner.species.flags & NO_BREATHE) || M_NO_BREATH in owner.mutations)
+	if((owner.species && owner.species.flags & NO_BREATHE) || (M_NO_BREATH in owner.mutations))
 		return
 
 	if (germ_level > INFECTION_LEVEL_ONE)
@@ -138,3 +138,14 @@
 		new /datum/lung_gas/waste(GAS_CARBON,         max_pp=10),
 		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
 	)
+
+/datum/organ/internal/lungs/insectoid
+	name = "\improper Insectoid lungs"
+	removed_type = /obj/item/organ/internal/lungs/insectoid
+
+	gasses = list(
+		new /datum/lung_gas/metabolizable(OXYGEN, min_pp=16, max_pp=140),
+		new /datum/lung_gas/waste(GAS_CARBON,         max_pp=10),
+		new /datum/lung_gas/sleep_agent(GAS_SLEEPING, min_giggle_pp=0.15, min_para_pp=1, min_sleep_pp=5),
+	)
+

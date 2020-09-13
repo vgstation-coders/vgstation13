@@ -3,7 +3,7 @@
 	desc = "Mends basic wounds in the target."
 	abbreviation = "HL"
 	user_type = USER_TYPE_WIZARD
-	specialization = UTILITY
+	specialization = SSUTILITY
 	spell_levels = list(Sp_SPEED = 0, Sp_POWER = 0, Sp_RANGE = 0)
 
 	school = "transmutation"

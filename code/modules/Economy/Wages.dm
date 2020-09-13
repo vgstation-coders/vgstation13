@@ -25,9 +25,9 @@ var/adjusted_wage_gain = 0
 	for(var/datum/money_account/Acc in all_money_accounts)
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
-	
+
 	if(requested_payroll_amount > global.allowable_payroll_amount)
-		payroll_reduction_modifier = global.allowable_payroll_amount / requested_payroll_amount 
+		payroll_reduction_modifier = global.allowable_payroll_amount / requested_payroll_amount
 	else
 		payroll_reduction_modifier = 1
 
@@ -54,7 +54,6 @@ var/adjusted_wage_gain = 0
 /proc/WageLoop()
 	set waitfor = 0
 	usr = null
-	src = null
 	while(1) //looping
 		sleep(15 MINUTES)
 		if(wages_enabled)

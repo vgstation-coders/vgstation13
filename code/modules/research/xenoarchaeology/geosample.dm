@@ -16,107 +16,42 @@
 
 /obj/item/weapon/rocksliver
 	name = "rock sliver"
-	desc = "It looks extremely delicate."
+	desc = "A piece of rock precisely extracted. Must be ground into powder for further analysis."
 	icon = 'icons/obj/xenoarchaeology.dmi'
-	icon_state = "sliver1"	//0-4
+	icon_state = "sliver"
 	w_class = W_CLASS_TINY
-	//item_state = "electronic"
-	var/source_rock = "/turf/unsimulated/mineral/"
 	var/datum/geosample/geological_data
+
+/obj/item/weapon/rocksliver/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+		set_tiny_label(user)
+	else
+		return ..()
 
 /obj/item/weapon/rocksliver/New()
 	. = ..()
-	icon_state = "sliver[rand(1,3)]"
+	icon_state = "sliver"
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/rocksliver/Destroy()
+	geological_data = null
+	..()
+
+/obj/item/weapon/rocksliver/throw_impact(atom/hit_atom)
+	var/turf/T = get_turf(src)
+	if (T && !istype(T, /turf/space))
+		visible_message("<span class='danger'>The rock sample shatters on impact!</span>")
+		playsound(src, 'sound/effects/pop.ogg', 100, 1, -2)
+		new /obj/effect/decal/cleanable/dirt(T)
+	qdel(src)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Geosample datum
 
 /datum/geosample
-	var/age = 0								//age can correspond to different archaeological finds
-	var/age_thousand = 0
-	var/age_million = 0
-	var/age_billion = 0
 	var/artifact_id = ""					//id of a nearby artifact, if there is one
 	var/artifact_distance = -1				//proportional to distance
-	var/source_mineral = "chlorine"			//machines will pop up a warning telling players that the sample may be confused
-	var/total_spread = 0
-	//
-	//var/source_mineral
-	//all potential finds are initialised to null, so nullcheck before you access them
-	var/list/find_presence = list()
-
-/datum/geosample/New(var/turf/unsimulated/mineral/container)
-	UpdateTurf(container)
-
-//this should only need to be called once
-/datum/geosample/proc/UpdateTurf(var/turf/unsimulated/mineral/container)
-	if(!container || !istype(container))
-		return
-
-	age = rand(1,999)
-
-	if(container.mineral)
-		switch(container.mineral.name)
-			if("Uranium")
-				age_million = rand(1, 704)
-				age_thousand = rand(1,999)
-				find_presence["potassium"] = rand(1,1000) / 100
-				source_mineral = "potassium"
-			if("Iron")
-				age_thousand = rand(1, 999)
-				age_million = rand(1, 999)
-				find_presence["iron"] = rand(1,1000) / 100
-				source_mineral = "iron"
-			if("Diamond")
-				age_thousand = rand(1,999)
-				age_million = rand(1,999)
-				find_presence["nitrogen"] = rand(1,1000) / 100
-				source_mineral = "nitrogen"
-			if("Gold")
-				age_thousand = rand(1,999)
-				age_million = rand(1,999)
-				age_billion = rand(3,4)
-				find_presence["iron"] = rand(1,1000) / 100
-				source_mineral = "iron"
-			if("Silver")
-				age_thousand = rand(1,999)
-				age_million = rand(1,999)
-				find_presence["iron"] = rand(1,1000) / 100
-				source_mineral = "iron"
-			if("Plasma")
-				age_thousand = rand(1,999)
-				age_million = rand(1,999)
-				age_billion = rand(10, 13)
-				find_presence["plasma"] = rand(1,1000) / 100
-				source_mineral = "plasma"
-			if("Clown")
-				age = rand(-1,-999)				//thats the joke
-				age_thousand = rand(-1,-999)
-				find_presence["plasma"] = rand(1,1000) / 100
-				source_mineral = "plasma"
-
-	if(prob(75))
-		find_presence["phosphorus"] = rand(1,500) / 100
-	if(prob(25))
-		find_presence["mercury"] = rand(1,500) / 100
-	find_presence["chlorine"] = rand(500,2500) / 100
-
-	//loop over finds, grab any relevant stuff
-	for(var/datum/find/F in container.finds)
-		var/responsive_reagent = F.responsive_reagent
-		find_presence[responsive_reagent] = F.dissonance_spread
-
-	//loop over again to reset values to percentages
-	var/total_presence = 0
-	for(var/carrier in find_presence)
-		total_presence += find_presence[carrier]
-	for(var/carrier in find_presence)
-		find_presence[carrier] = find_presence[carrier] / total_presence
-
-	for(var/entry in find_presence)
-		total_spread += find_presence[entry]
 
 //have this separate from UpdateTurf() so that we dont have a billion turfs being updated (redundantly) every time an artifact spawns
 /datum/geosample/proc/UpdateNearbyArtifactInfo(var/turf/unsimulated/mineral/container)
@@ -124,18 +59,21 @@
 		return
 
 	if(container.artifact_find)
-		artifact_distance = rand()
+		artifact_distance = rand() // 0-1
 		artifact_id = container.artifact_find.artifact_id
-	else
-		if(SSxenoarch) //Sanity check due to runtimes ~Z
-			for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
-				if(T.artifact_find)
-					var/cur_dist = get_dist(container, T) * 2
-					if( (artifact_distance < 0 || cur_dist < artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range )
-						artifact_distance = cur_dist + rand() * 2 - 1
-						artifact_id = T.artifact_find.artifact_id
-				else
-					SSxenoarch.artifact_spawning_turfs.Remove(T)
+		return
+
+	if(!SSxenoarch) //Sanity check due to runtimes ~Z
+		return
+
+	for(var/turf/unsimulated/mineral/T in SSxenoarch.artifact_spawning_turfs)
+		if(T.artifact_find)
+			var/cur_dist = sqrt(get_dist_squared(container, T))
+			if( (artifact_distance < 0 || cur_dist < artifact_distance) && cur_dist <= T.artifact_find.artifact_detect_range )
+				artifact_distance = cur_dist + rand() * 2 - 1
+				artifact_id = T.artifact_find.artifact_id
+		else
+			SSxenoarch.artifact_spawning_turfs.Remove(T)
 
 /*
 #undef FIND_PLANT

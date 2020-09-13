@@ -12,7 +12,9 @@
 	maxhealth = 100
 	fire_dam_coeff = 0.7
 	brute_dam_coeff = 0.5
-
+	steps_per = 2
+	control_filter = RADIO_SECBOT
+	var/cuffing = 0
 	var/lastfired = 0
 	var/shot_delay = 3 //.3 seconds between shots
 	var/lasercolor = null
@@ -20,42 +22,19 @@
 
 	//var/lasers = 0
 
-	var/mob/living/carbon/target
-	var/oldtarget_name
 	var/threatlevel = 0
-	var/target_lastloc //Loc of target when arrested.
-	var/last_found //There's a delay
-	var/frustration = 0
 //var/emagged = 0 //Emagged Secbots view everyone as a criminal
 	var/check_records = 1 //Does it check security records?
 	var/arrest_type = 0 //If true, don't handcuff
 
 	var/projectile = /obj/item/projectile/energy/electrode
-
-	var/mode = 0
 	bot_type = SEC_BOT
 
-	var/auto_patrol = 0		// set to make bot automatically patrol
-
-	var/beacon_freq = 1445		// navigation beacon frequency
-	var/control_freq = 1447		// bot control frequency
-
-
-	var/turf/patrol_target	// this is turf to navigate to (location of beacon)
-	var/new_destination		// pending new destination (waiting for beacon response)
-	var/destination			// destination description tag
-	var/next_destination	// the next destination in the patrol route
-	var/list/path = new				// list of path turfs
-
-	var/blockcount = 0		//number of times retried a blocked path
-	var/awaiting_beacon	= 0	// count of pticks awaiting a beacon response
-
-	var/nearest_beacon			// the nearest beacon's tag
-	var/turf/nearest_beacon_loc	// the nearest beacon's location
+	auto_patrol = 0		// set to make bot automatically patrol
 	var/declare_arrests = 1 //When making an arrest, should it notify everyone wearing sechuds?
 	var/idcheck = 1 //If true, arrest people with no IDs
 	var/weaponscheck = 1 //If true, arrest people for weapons if they don't have access
-
+	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL|BOT_DENSE
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
 		/obj/item/weapon/gun/energy/tag,
@@ -65,6 +44,8 @@
 		/obj/item/weapon/melee/defibrillator
 		)
 
+	target_chasing_distance = 12
+	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/ed209_assembly
 	name = "ED-209 assembly"
@@ -85,20 +66,16 @@
 	projectile = /obj/item/projectile/beam/lasertag/red
 
 /obj/machinery/bot/ed209/New(loc,created_name,created_lasercolor)
-	..()
+	. = ..()
 	if(created_name)
 		name = created_name
 	if(created_lasercolor)
 		lasercolor = created_lasercolor
-	src.icon_state = "[lasercolor][icon_initial][src.on]"
+	icon_state = "[lasercolor][icon_initial][on]"
 	spawn(3)
-		src.botcard = new /obj/item/weapon/card/id(src)
+		botcard = new /obj/item/weapon/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
-		src.botcard.access = J.get_access()
-
-		if(radio_controller)
-			radio_controller.add_object(src, control_freq, filter = RADIO_SECBOT)
-			radio_controller.add_object(src, beacon_freq, filter = RADIO_NAVBEACONS)
+		botcard.access = J.get_access()
 		if(lasercolor)
 			shot_delay = 6//Longer shot delay because JESUS CHRIST
 			check_records = 0//Don't actively target people set to arrest
@@ -117,21 +94,19 @@
 
 /obj/machinery/bot/ed209/turn_on()
 	. = ..()
-	src.icon_state = "[lasercolor][icon_initial][src.on]"
-	src.mode = SECBOT_IDLE
-	src.updateUsrDialog()
+	icon_state = "[lasercolor][icon_initial][on]"
+	updateUsrDialog()
 
 /obj/machinery/bot/ed209/turn_off()
 	..()
-	src.target = null
-	src.oldtarget_name = null
-	src.anchored = 0
-	src.mode = SECBOT_IDLE
+	target = null
+	anchored = 0
+	old_targets = list()
 	start_walk_to(0)
-	src.icon_state = "[lasercolor][icon_initial][src.on]"
-	src.updateUsrDialog()
+	icon_state = "[lasercolor][icon_initial][on]"
+	updateUsrDialog()
 
-/obj/machinery/bot/ed209/attack_hand(mob/user as mob)
+/obj/machinery/bot/ed209/attack_hand(mob/user)
 	. = ..()
 	if (.)
 		return
@@ -140,12 +115,12 @@
 	dat += text({"
 <TT><B>Automatic Security Unit v2.5</B></TT><BR><BR>
 Status: []<BR>
-Behaviour controls are [src.locked ? "locked" : "unlocked"]<BR>
-Maintenance panel panel is [src.open ? "opened" : "closed"]"},
+Behaviour controls are [locked ? "locked" : "unlocked"]<BR>
+Maintenance panel panel is [open ? "opened" : "closed"]"},
 
-"<A href='?src=\ref[src];power=1'>[src.on ? "On" : "Off"]</A>" )
+"<A href='?src=\ref[src];power=1'>[on ? "On" : "Off"]</A>" )
 
-	if(!src.locked || issilicon(user))
+	if(!locked || issilicon(user))
 		if(!lasercolor)
 			dat += text({"<BR>
 Arrest for No ID: [] <BR>
@@ -156,11 +131,11 @@ Operating Mode: []<BR>
 Report Arrests: []<BR>
 Auto Patrol: []"},
 
-"<A href='?src=\ref[src];operation=idcheck'>[src.idcheck ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=idcheck'>[idcheck ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=weaponscheck'>[weaponscheck ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=ignorerec'>[src.check_records ? "Yes" : "No"]</A>",
-"<A href='?src=\ref[src];operation=switchmode'>[src.arrest_type ? "Detain" : "Arrest"]</A>",
-"<A href='?src=\ref[src];operation=declarearrests'>[src.declare_arrests ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=ignorerec'>[check_records ? "Yes" : "No"]</A>",
+"<A href='?src=\ref[src];operation=switchmode'>[arrest_type ? "Detain" : "Arrest"]</A>",
+"<A href='?src=\ref[src];operation=declarearrests'>[declare_arrests ? "Yes" : "No"]</A>",
 "<A href='?src=\ref[src];operation=patrol'>[auto_patrol ? "On" : "Off"]</A>" )
 		else
 			dat += text({"<BR>
@@ -177,15 +152,15 @@ Auto Patrol: []"},
 	if (..())
 		return
 	usr.set_machine(src)
-	src.add_fingerprint(usr)
+	add_fingerprint(usr)
 	if(lasercolor && (istype(usr,/mob/living/carbon/human)))
 		var/mob/living/carbon/human/H = usr
 		if((lasercolor == "b") && iswearingredtag(H))//Opposing team cannot operate it
 			return
 		else if((lasercolor == "r") && iswearingbluetag(H))
 			return
-	if ((href_list["power"]) && (src.allowed(usr)))
-		if (src.on)
+	if ((href_list["power"]) && (allowed(usr)))
+		if (on)
 			turn_off()
 		else
 			turn_on()
@@ -193,30 +168,29 @@ Auto Patrol: []"},
 
 	switch(href_list["operation"])
 		if ("idcheck")
-			src.idcheck = !src.idcheck
-			src.updateUsrDialog()
+			idcheck = !idcheck
+			updateUsrDialog()
 		if("weaponscheck")
 			weaponscheck = !weaponscheck
 			updateUsrDialog()
 		if ("ignorerec")
-			src.check_records = !src.check_records
-			src.updateUsrDialog()
+			check_records = !check_records
+			updateUsrDialog()
 		if ("switchmode")
-			src.arrest_type = !src.arrest_type
-			src.updateUsrDialog()
+			arrest_type = !arrest_type
+			updateUsrDialog()
 		if("patrol")
 			auto_patrol = !auto_patrol
-			mode = SECBOT_IDLE
 			updateUsrDialog()
 		if("declarearrests")
-			src.declare_arrests = !src.declare_arrests
-			src.updateUsrDialog()
+			declare_arrests = !declare_arrests
+			updateUsrDialog()
 
 /obj/machinery/bot/ed209/attackby(obj/item/weapon/W, mob/user)
 	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
-			to_chat(user, "<span class='notice'>Controls are now [src.locked ? "locked" : "unlocked"].</span>")
+			to_chat(user, "<span class='notice'>Controls are now [locked ? "locked" : "unlocked"].</span>")
 			updateUsrDialog()
 		else
 			if(emagged)
@@ -233,511 +207,77 @@ Auto Patrol: []"},
 			if(threatlevel > 0)
 				target = user
 				shootAt(user)
-				mode = SECBOT_HUNT
 
 /obj/machinery/bot/ed209/kick_act(mob/living/H)
 	..()
-
+	summoned = FALSE // Anger
 	threatlevel = H.assess_threat(src)
 	threatlevel += PERP_LEVEL_ARREST_MORE
 
 	if(threatlevel > 0)
-		src.target = H
-		src.shootAt(H)
-		src.mode = SECBOT_HUNT
+		target = H
+		shootAt(H)
 
-/obj/machinery/bot/ed209/Emag(mob/user as mob)
+/obj/machinery/bot/ed209/Emag(mob/user)
 	..()
 	if(open && !locked)
 		if(user)
 			to_chat(user, "<span class='warning'>You short out [src]'s target assessment circuits.</span>")
-		spawn(0)
-			for(var/mob/O in hearers(src, null))
-				O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
-		src.target = null
-		if(user)
-			src.oldtarget_name = user.name
-		src.last_found = world.time
-		src.anchored = 0
-		src.emagged = 2
-		src.on = 1
-		src.icon_state = "[lasercolor][icon_initial][src.on]"
+		for(var/mob/O in hearers(src, null))
+			O.show_message("<span class='danger'>[src] buzzes oddly!</span>", 1)
+		target = null
+		add_oldtarget(user.name, 12)
+		anchored = 0
+		emagged = TRUE
+		on = 1
+		steps_per = 3 // Gotta go fast
+		icon_state = "[lasercolor][icon_initial][on]"
 		if(lasercolor)
 			projectile = /obj/item/projectile/beam/lasertag/omni
 		else
 			projectile = /obj/item/projectile/beam
-		mode = SECBOT_IDLE
-		src.shot_delay = 6//Longer shot delay because JESUS CHRIST
-		src.check_records = 0//Don't actively target people set to arrest
-		src.arrest_type = 1//Don't even try to cuff
-		src.declare_arrests = 0
-
-/obj/machinery/bot/ed209/process()
-	//set background = 1
-
-	if (!src.on)
-		return
-	var/list/targets = list()
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a target
-		var/threatlevel = 0
-		if ((C.stat) || (C.lying))
-			continue
-		if (istype(C, /mob/living/carbon/human))
-			threatlevel = C.assess_threat(src,lasercolor)
-		else if ((istype(C, /mob/living/carbon/monkey)) && (C.client) && (ticker.mode.name == "monkey"))
-			threatlevel = PERP_LEVEL_ARREST
-		//src.speak(C.real_name + text(": threat: []", threatlevel))
-		if (threatlevel < PERP_LEVEL_ARREST )
-			continue
-
-		var/dst = get_dist(src, C)
-		if ( dst < 1 || dst > 12)
-			continue
-
-		targets += C
-	if (targets.len>0)
-		var/mob/t = pick(targets)
-		if (t.stat != 2 && !t.lying)
-			shootAt(t)
-
-	switch(mode)
-
-		if(SECBOT_IDLE)		// idle
-			start_walk_to(0)
-			look_for_perp()	// see if any criminals are in range
-			if(!mode && auto_patrol)	// still idle, and set to patrol
-				mode = SECBOT_START_PATROL	// switch to patrol mode
-
-		if(SECBOT_HUNT)		// hunting for perp
-			if(src.lasercolor)//Lasertag bots do not tase or arrest anyone, just patrol and shoot and whatnot
-				mode = SECBOT_IDLE
-				return
-			// if can't reach perp for long enough, go idle
-			if (src.frustration >= 8)
-		//		for(var/mob/O in hearers(src, null))
-//					to_chat(O, "<span class='game say'><span class='name'>[src]</span> beeps, \"Backup requested! Suspect has evaded arrest.\"")
-				src.target = null
-				src.last_found = world.time
-				src.frustration = 0
-				src.mode = 0
-				start_walk_to(0)
-
-			if (target)		// make sure target exists
-				if(!istype(target.loc, /turf))
-					return
-				if (Adjacent(target))		// if right next to perp
-					playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
-					src.icon_state = "[lasercolor][icon_initial]-c"
-					spawn(2)
-						src.icon_state = "[lasercolor][icon_initial][src.on]"
-					var/mob/living/carbon/M = src.target
-					var/maxstuns = 4
-					if (istype(M, /mob/living/carbon/human))
-						if (M.stuttering < 10 && (!(M_HULK in M.mutations))  /*&& (!istype(M:wear_suit, /obj/item/clothing/suit/judgerobe))*/)
-							M.stuttering = 10
-						M.Stun(10)
-						M.Knockdown(10)
-					else
-						M.Knockdown(10)
-						M.stuttering = 10
-						M.Stun(10)
-					maxstuns--
-					if (maxstuns <= 0)
-						target = null
-
-					if(declare_arrests)
-						var/area/location = get_area(src)
-						broadcast_security_hud_message("[src.name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[target]</b> in <b>[location]</b>", src)
-					visible_message("<span class='danger'>[src.target] has been stunned by [src]!</span>")
-
-					mode = SECBOT_PREP_ARREST
-					src.anchored = 1
-					src.target_lastloc = M.loc
-					return
-
-				else								// not next to perp
-					var/turf/olddist = get_dist(src, src.target)
-					start_walk_to(src.target,1,4)
-					shootAt(target)
-					if ((get_dist(src, src.target)) >= (olddist))
-						src.frustration++
-					else
-						src.frustration = 0
-
-		if(SECBOT_PREP_ARREST)		// preparing to arrest target
-			if(src.lasercolor)
-				mode = SECBOT_IDLE
-				return
-			if (!target)
-				mode = SECBOT_IDLE
-				src.anchored = 0
-				return
-			// see if he got away
-			if ((!Adjacent(target)) || ((src.target:loc != src.target_lastloc) && src.target:knockdown < 2))
-				src.anchored = 0
-				mode = SECBOT_HUNT
-				return
-
-			if(istype(src.target,/mob/living/carbon))
-				if (!src.target.handcuffed && !src.arrest_type)
-					playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
-					mode = SECBOT_ARREST
-					visible_message("<span class='danger'>[src] is trying to put handcuffs on [src.target]!</span>")
-
-					spawn(60)
-						if (Adjacent(target))
-							if (src.target.handcuffed)
-								return
-
-							if(istype(src.target,/mob/living/carbon))
-								src.target.handcuffed = new /obj/item/weapon/handcuffs(src.target)
-								target.update_inv_handcuffed()	//update handcuff overlays
-
-							mode = SECBOT_IDLE
-							src.target = null
-							src.anchored = 0
-							src.last_found = world.time
-							src.frustration = 0
-
-		//					playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
-		//					var/arrest_message = pick("Have a secure day!","I AM THE LAW.", "God made tomorrow for the crooks we don't catch today.","You can't outrun a radio.")
-		//					src.speak(arrest_message)
-			else
-				mode = SECBOT_IDLE
-				src.target = null
-				src.anchored = 0
-				src.last_found = world.time
-				src.frustration = 0
-
-		if(SECBOT_ARREST)		// arresting
-			if(src.lasercolor)
-				mode = SECBOT_IDLE
-				return
-			// see if he got away
-			if (!target || src.target.handcuffed || !Adjacent(target))
-				src.anchored = 0
-				mode = SECBOT_IDLE
-				return
-
-
-		if(SECBOT_START_PATROL)	// start a patrol
-			if(!path || !istype(path))
-				path = list()
-			if(path.len > 0 && patrol_target)	// have a valid path, so just resume
-				mode = SECBOT_PATROL
-				return
-
-			else if(patrol_target)		// has patrol target already
-				spawn(0)
-					calc_path()		// so just find a route to it
-					if(path.len == 0)
-						patrol_target = 0
-						return
-					mode = SECBOT_PATROL
-
-
-			else					// no patrol target, so need a new one
-				find_patrol_target()
-				speak("Engaging patrol mode.")
-
-
-		if(SECBOT_PATROL)		// patrol mode
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/2))
-			patrol_step()
-			spawn(SS_WAIT_MACHINERY/2)
-				if(mode == SECBOT_PATROL)
-					patrol_step()
-
-		if(SECBOT_SUMMON)		// summoned to PDA
-			set_glide_size(DELAY2GLIDESIZE(SS_WAIT_MACHINERY/3))
-			patrol_step()
-			spawn(SS_WAIT_MACHINERY/3)
-				if(mode == SECBOT_SUMMON)
-					patrol_step()
-					spawn(SS_WAIT_MACHINERY/3)
-					patrol_step()
-
-	return
-
-
-// perform a single patrol step
-
-/obj/machinery/bot/ed209/proc/patrol_step()
-	if(!isturf(loc))
-		return
-
-
-	if(loc == patrol_target)		// reached target
-		at_patrol_target()
-		return
-	if(!path || !istype(path))
-		path = list()
-	else if(path.len > 0 && patrol_target)		// valid path
-
-		var/turf/next = path[1]
-		if(next == loc)
-			path -= next
-			return
-
-
-		if(istype( next, /turf/simulated))
-
-			var/moved = step_towards(src, next)	// attempt to move
-			if(moved)	// successful move
-				blockcount = 0
-				path -= loc
-
-				look_for_perp()
-				if(lasercolor)
-					sleep(20)
-			else		// failed to move
-
-				blockcount++
-
-				if(blockcount > 5)	// attempt 5 times before recomputing
-					// find new path excluding blocked turf
-
-					spawn(2)
-						calc_path(next)
-						if(path.len == 0)
-							find_patrol_target()
-						else
-							blockcount = 0
-
-					return
-
-				return
-
-		else	// not a valid turf
-			mode = SECBOT_IDLE
-			return
-
-	else	// no path, so calculate new one
-		mode = SECBOT_START_PATROL
-
-
-// finds a new patrol target
-/obj/machinery/bot/ed209/proc/find_patrol_target()
-	send_status()
-	if(awaiting_beacon)			// awaiting beacon response
-		awaiting_beacon++
-		if(awaiting_beacon > 5)	// wait 5 secs for beacon response
-			find_nearest_beacon()	// then go to nearest instead
-		return
-
-	if(next_destination)
-		set_destination(next_destination)
-	else
-		find_nearest_beacon()
-	return
-
-
-// finds the nearest beacon to self
-// signals all beacons matching the patrol code
-/obj/machinery/bot/ed209/proc/find_nearest_beacon()
-	nearest_beacon = null
-	new_destination = "__nearest__"
-	post_signal(beacon_freq, "findbeacon", "patrol")
-	awaiting_beacon = 1
-	spawn(10)
-		awaiting_beacon = 0
-		if(nearest_beacon)
-			set_destination(nearest_beacon)
-		else
-			auto_patrol = 0
-			mode = SECBOT_IDLE
-			speak("Disengaging patrol mode.")
-			send_status()
-
-
-/obj/machinery/bot/ed209/proc/at_patrol_target()
-	find_patrol_target()
-	return
-
-
-// sets the current destination
-// signals all beacons matching the patrol code
-// beacons will return a signal giving their locations
-/obj/machinery/bot/ed209/proc/set_destination(var/new_dest)
-	new_destination = new_dest
-	post_signal(beacon_freq, "findbeacon", "patrol")
-	awaiting_beacon = 1
-
-
-// receive a radio signal
-// used for beacon reception
-
-/obj/machinery/bot/ed209/receive_signal(datum/signal/signal)
-
-	if(!on)
-		return
-
-	/*
-	to_chat(world, "rec signal: [signal.source]")
-	for(var/x in signal.data)
-		to_chat(world, "* [x] = [signal.data[x]]")
-	*/
-
-	var/recv = signal.data["command"]
-	// process all-bot input
-	if(recv=="bot_status")
-		send_status()
-
-	// check to see if we are the commanded bot
-	if(signal.data["active"] == src)
-	// process control input
-		switch(recv)
-			if("stop")
-				mode = SECBOT_IDLE
-				auto_patrol = 0
-				return
-
-			if("go")
-				mode = SECBOT_IDLE
-				auto_patrol = 1
-				return
-
-			if("summon")
-				patrol_target = signal.data["target"]
-				next_destination = destination
-				destination = null
-				awaiting_beacon = 0
-				mode = SECBOT_SUMMON
-				calc_path()
-				speak("Responding.")
-
-				return
-
-
-
-	// receive response from beacon
-	recv = signal.data["beacon"]
-	var/valid = signal.data["patrol"]
-	if(!recv || !valid)
-		return
-
-	if(recv == new_destination)	// if the recvd beacon location matches the set destination
-								// the we will navigate there
-		destination = new_destination
-		patrol_target = signal.source.loc
-		next_destination = signal.data["next_patrol"]
-		awaiting_beacon = 0
-
-	// if looking for nearest beacon
-	else if(new_destination == "__nearest__")
-		var/dist = get_dist(src,signal.source.loc)
-		if(nearest_beacon)
-
-			// note we ignore the beacon we are located at
-			if(dist > 1 && dist < get_dist(src,nearest_beacon_loc))
-				nearest_beacon = recv
-				nearest_beacon_loc = signal.source.loc
-				return
-			else
-				return
-		else if(dist > 1)
-			nearest_beacon = recv
-			nearest_beacon_loc = signal.source.loc
-	return
-
-
-// send a radio signal with a single data key/value pair
-/obj/machinery/bot/ed209/proc/post_signal(var/freq, var/key, var/value)
-	post_signal_multiple(freq, list("[key]" = value) )
-
-// send a radio signal with multiple data key/values
-/obj/machinery/bot/ed209/proc/post_signal_multiple(var/freq, var/list/keyval)
-
-
-	var/datum/radio_frequency/frequency = radio_controller.return_frequency(freq)
-
-	if(!frequency)
-		return
-
-	var/datum/signal/signal = getFromPool(/datum/signal)
-	signal.source = src
-	signal.transmission_method = 1
-	//for(var/key in keyval)
-	//	signal.data[key] = keyval[key]
-//		to_chat(world, "sent [key],[keyval[key]] on [freq]")
-	signal.data = keyval
-	if (signal.data["findbeacon"])
-		frequency.post_signal(src, signal, filter = RADIO_NAVBEACONS)
-	else if (signal.data["type"] == "secbot")
-		frequency.post_signal(src, signal, filter = RADIO_SECBOT)
-	else
-		frequency.post_signal(src, signal)
-
-// signals bot status etc. to controller
-/obj/machinery/bot/ed209/proc/send_status()
-	var/list/kv = list(
-		"type" = "secbot",
-		"name" = name,
-		"loca" = loc.loc,	// area
-		"mode" = mode,
-	)
-	post_signal_multiple(control_freq, kv)
-
-
-
-// calculates a path to the current destination
-// given an optional turf to avoid
-/obj/machinery/bot/ed209/proc/calc_path(var/turf/avoid = null)
-	src.path = AStar(src.loc, patrol_target, /turf/proc/CardinalTurfsWithAccess, /turf/proc/Distance, 0, 120, id=botcard, exclude=avoid)
-	if (!src.path)
-		src.path = list()
-
-
-// look for a criminal in view of the bot
-
-/obj/machinery/bot/ed209/proc/look_for_perp()
-	if(src.disabled)
-		return
-	src.anchored = 0
-	src.threatlevel = 0
-	for (var/mob/living/carbon/C in view(12,src)) //Let's find us a criminal
+		shot_delay = 6//Longer shot delay because JESUS CHRIST
+		check_records = 0//Don't actively target people set to arrest
+		arrest_type = 1//Don't even try to cuff
+		declare_arrests = 0
+
+/obj/machinery/bot/ed209/target_selection()
+	anchored = 0
+	threatlevel = 0
+	for (var/mob/living/carbon/C in view(target_chasing_distance,src)) //Let's find us a criminal
 		if ((C.stat) || (C.handcuffed))
 			continue
 
-		if((src.lasercolor) && (C.lying))
+		if((lasercolor) && (C.lying))
 			continue//Does not shoot at people lyind down when in lasertag mode, because it's just annoying, and they can fire once they get up.
 
-		if ((C.name == src.oldtarget_name) && (world.time < src.last_found + 100))
+		if (C.name in old_targets)
 			continue
 
 		if (istype(C, /mob/living/carbon/human))
-			src.threatlevel = src.assess_perp(C)
-		else if ((istype(C, /mob/living/carbon/monkey)) && (C.client) && (ticker.mode.name == "monkey"))
-			src.threatlevel = PERP_LEVEL_ARREST
+			threatlevel = assess_perp(C)
 
-		if (!src.threatlevel)
+		if (!threatlevel)
 			continue
 
-		else if (src.threatlevel >= PERP_LEVEL_ARREST)
-			src.target = C
-			src.oldtarget_name = C.name
-			src.speak("Level [src.threatlevel] infraction alert!")
-			if(!src.lasercolor)
+		else if (threatlevel >= PERP_LEVEL_ARREST)
+			target = C
+			speak("Level [threatlevel] infraction alert!")
+			if(!lasercolor)
 				playsound(src, pick('sound/voice/ed209_20sec.ogg', 'sound/voice/EDPlaceholder.ogg'), 50, 0)
-			src.visible_message("<b>[src]</b> points at [C.name]!")
-			mode = SECBOT_HUNT
-			spawn(0)
-				process()	// ensure bot quickly responds to a perp
-			break
-		else
-			continue
-
+			visible_message("<b>[src]</b> points at [C.name]!")
+			process_path()
 
 //If the security records say to arrest them, arrest them
 //Or if they have weapons and aren't security, arrest them.
 //THIS CODE IS COPYPASTED IN secbot.dm AND metaldetector.dm, with slight variations
-/obj/machinery/bot/ed209/proc/assess_perp(mob/living/carbon/human/perp as mob)
+/obj/machinery/bot/ed209/proc/assess_perp(mob/living/carbon/human/perp)
 	var/threatcount = 0 //If threat >= PERP_LEVEL_ARREST at the end, they get arrested
 
-	if(src.emagged == 2)
+	if(emagged)
 		return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5) //Everyone is a criminal!
 
-	if(!src.allowed(perp)) //cops can do no wrong, unless set to arrest.
+	if(!allowed(perp)) //cops can do no wrong, unless set to arrest.
 
 		if(weaponscheck && !wpermit(perp))
 			for(var/obj/item/W in perp.held_items)
@@ -764,7 +304,7 @@ Auto Patrol: []"},
 		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
 			threatcount -= PERP_LEVEL_ARREST/2
 
-	if(src.lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
+	if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
 		if(iswearingredtag(perp))
 			threatcount += PERP_LEVEL_ARREST
@@ -773,7 +313,7 @@ Auto Patrol: []"},
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST/2
 
-	if(src.lasercolor == "r")
+	if(lasercolor == "r")
 		threatcount = 0
 		if(iswearingbluetag(perp))
 			threatcount += PERP_LEVEL_ARREST
@@ -782,7 +322,7 @@ Auto Patrol: []"},
 		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST/2
 
-	if(src.check_records)
+	if(check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
 			var/obj/item/weapon/card/id/id = perp.get_visible_id()
@@ -800,24 +340,63 @@ Auto Patrol: []"},
 
 	return threatcount
 
-/obj/machinery/bot/ed209/to_bump(M as mob|obj) //Leave no door unopened!
-	if ((istype(M, /obj/machinery/door)) && (!isnull(src.botcard)))
-		var/obj/machinery/door/D = M
-		if (!istype(D, /obj/machinery/door/firedoor) && D.check_access(src.botcard))
-			D.open()
-			src.frustration = 0
-	else if ((istype(M, /mob/living/)) && (!src.anchored))
-		src.forceMove(M:loc)
-		src.frustration = 0
-	return
+/obj/machinery/bot/ed209/can_path()
+	return !cuffing
 
-/* terrible
-/obj/machinery/bot/ed209/Bumped(atom/movable/M as mob|obj)
-	spawn(0)
-		if (M)
-			var/turf/T = get_turf(src)
-			M:forceMove(T)
-*/
+/obj/machinery/bot/ed209/process_bot()
+	if (can_abandon_target())
+		target = null
+		find_target()
+
+	decay_oldtargets()
+
+	if (target)		// make sure target exists
+		if(!istype(target.loc, /turf))
+			return
+		if (Adjacent(target))		// if right next to perp
+			var/mob/living/carbon/M = target
+			target = null // Don't teabag them
+			path = list() // Kill our path
+			add_oldtarget(M.name, 12)
+			var/beat_them = (!M.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
+			if (beat_them)
+				playsound(src, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+				icon_state = "[lasercolor][icon_initial]-c"
+				spawn(2)
+					icon_state = "[lasercolor][icon_initial][on]"
+				if (istype(M, /mob/living/carbon/human))
+					if (M.stuttering < 10 && (!(M_HULK in M.mutations)))
+						M.stuttering = 10
+				else
+					M.stuttering = 10
+				M.Stun(10)
+				M.Knockdown(10)
+			if (cuffing)
+				return
+			playsound(src, 'sound/weapons/handcuffs.ogg', 30, 1, -2)
+			visible_message("<span class='danger'>[src] is trying to put handcuffs on [M]!</span>")
+			if (!arrest_type)
+				cuffing = 1
+				var/cuff_time = emagged ? 2 SECONDS : 6 SECONDS
+				spawn(cuff_time)
+					cuffing = 0
+					if (Adjacent(M))
+						if (!istype(M))
+							return
+						if (M.handcuffed)
+							return
+						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.update_inv_handcuffed()	//update handcuff overlays
+			if(declare_arrests)
+				var/area/location = get_area(src)
+				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)
+			visible_message("<span class='danger'>[M] has been stunned by [src]!</span>")
+
+			anchored = 1
+			return
+
+		else								// not next to perp
+			shootAt(target)
 
 /obj/machinery/bot/ed209/proc/speak(var/message)
 	visible_message("<span class='game say'><span class='name'>[src]</span> beeps, \"[message]\"",\
@@ -826,13 +405,13 @@ Auto Patrol: []"},
 
 /obj/machinery/bot/ed209/explode()
 	start_walk_to(0)
-	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
+	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
 	var/obj/item/weapon/ed209_assembly/Sa = new /obj/item/weapon/ed209_assembly(Tsec)
 	Sa.build_step = 1
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
-	Sa.created_name = src.name
+	Sa.created_name = name
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 
 	if(!lasercolor)
@@ -862,8 +441,7 @@ Auto Patrol: []"},
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/gib = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	gib.New(gib.loc)
+	new /obj/effect/decal/cleanable/blood/oil(loc)
 	qdel(src)
 
 
@@ -887,6 +465,9 @@ Auto Patrol: []"},
 
 	if (!( istype(U, /turf) ))
 		return
+	var/shoot_them = (!target.incapacitated() || emagged) // Only stun people non-stunned. Stun forever if we're emagged
+	if (!shoot_them)
+		return
 	var/obj/item/projectile/A = new projectile (loc)
 	A.original = target
 	A.target = target
@@ -900,11 +481,10 @@ Auto Patrol: []"},
 		return
 	return
 
-/obj/machinery/bot/ed209/attack_alien(var/mob/living/carbon/alien/user as mob)
+/obj/machinery/bot/ed209/attack_alien(var/mob/living/carbon/alien/user)
 	..()
 	if (!isalien(target))
-		src.target = user
-		src.mode = SECBOT_HUNT
+		target = user
 
 
 /obj/machinery/bot/ed209/emp_act(severity)
@@ -912,7 +492,7 @@ Auto Patrol: []"},
 	if(severity==2 && prob(70))
 		..(severity-1)
 	else
-		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( src.loc )
+		var/obj/effect/overlay/pulse2 = new/obj/effect/overlay ( loc )
 		pulse2.icon = 'icons/effects/effects.dmi'
 		pulse2.icon_state = "empdisable"
 		pulse2.name = "emp sparks"
@@ -940,39 +520,55 @@ Auto Patrol: []"},
 				if(targets.len)
 					var/mob/toarrest = pick(targets)
 					if (toarrest)
-						src.target = toarrest
-						src.mode = SECBOT_HUNT
+						target = toarrest
+
+/obj/machinery/bot/ed209/return_status()
+	if (target)
+		return "Chasing prep"
+	if (auto_patrol)
+		return "Patrolling"
+	return ..()
 
 
+#define ED209_BUILD_STEP_INITIAL 0
+#define ED209_BUILD_STEP_ONELEG 1
+#define ED209_BUILD_STEP_VEST 2
+#define ED209_BUILD_STEP_WELD 3
+#define ED209_BUILD_STEP_HELMET 4
+#define ED209_BUILD_STEP_PROX_SENSOR 5
+#define ED209_BUILD_STEP_CABLE 6
+#define ED209_BUILD_STEP_WEAPON 7
+#define ED209_BUILD_STEP_SCREWDRIVER 8
+#define ED209_BUILD_STEP_FINAL 9
 
-/obj/item/weapon/ed209_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/weapon/ed209_assembly/attackby(obj/item/weapon/W, mob/user)
 	..()
 
 	if(istype(W, /obj/item/weapon/pen))
-		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
+		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
 		if(!t)
 			return
-		if(!in_range(src, usr) && src.loc != usr)
+		if(!in_range(src, user) && loc != user)
 			return
 		created_name = t
 		return
 
 	switch(build_step)
-		if(0,1)
+		if(ED209_BUILD_STEP_INITIAL, ED209_BUILD_STEP_ONELEG)
 			if( istype(W, /obj/item/robot_parts/l_leg) || istype(W, /obj/item/robot_parts/r_leg) )
 				if(user.drop_item(W))
 					qdel(W)
 					build_step++
 					to_chat(user, "<span class='notice'>You add the robot leg to [src].</span>")
 					name = "legs/frame assembly"
-					if(build_step == 1)
+					if(build_step == ED209_BUILD_STEP_ONELEG)
 						item_state = "ed209_leg"
 						icon_state = "ed209_leg"
 					else
 						item_state = "ed209_legs"
 						icon_state = "ed209_legs"
 
-		if(2)
+		if(ED209_BUILD_STEP_VEST)
 			if( istype(W, /obj/item/clothing/suit/tag/redtag) )
 				lasercolor = "r"
 			else if( istype(W, /obj/item/clothing/suit/tag/bluetag) )
@@ -986,14 +582,14 @@ Auto Patrol: []"},
 					item_state = "[lasercolor]ed209_shell"
 					icon_state = "[lasercolor]ed209_shell"
 
-		if(3)
+		if(ED209_BUILD_STEP_WELD)
 			if( iswelder(W) )
 				var/obj/item/weapon/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"
 					to_chat(user, "<span class='notice'>You welded the vest to [src].</span>")
-		if(4)
+		if(ED209_BUILD_STEP_HELMET)
 			if( istype(W, /obj/item/clothing/head/helmet/tactical/sec) )
 				if(user.drop_item(W))
 					qdel(W)
@@ -1003,7 +599,7 @@ Auto Patrol: []"},
 					item_state = "[lasercolor]ed209_hat"
 					icon_state = "[lasercolor]ed209_hat"
 
-		if(5)
+		if(ED209_BUILD_STEP_PROX_SENSOR)
 			if( isprox(W) )
 				if(user.drop_item(W))
 					qdel(W)
@@ -1013,7 +609,7 @@ Auto Patrol: []"},
 					item_state = "[lasercolor]ed209_prox"
 					icon_state = "[lasercolor]ed209_prox"
 
-		if(6)
+		if(ED209_BUILD_STEP_CABLE)
 			if( istype(W, /obj/item/stack/cable_coil) )
 				var/obj/item/stack/cable_coil/coil = W
 				var/turf/T = get_turf(user)
@@ -1025,7 +621,7 @@ Auto Patrol: []"},
 					to_chat(user, "<span class='notice'>You wire the ED-209 assembly.</span>")
 					name = "wired ED-209 assembly"
 
-		if(7)
+		if(ED209_BUILD_STEP_WEAPON)
 			if(!user.drop_item(W))
 				return
 
@@ -1046,13 +642,13 @@ Auto Patrol: []"},
 					return
 			build_step++
 			to_chat(user, "<span class='notice'>You add [W] to [src].</span>")
-			src.item_state = "[lasercolor]ed209_taser"
-			src.icon_state = "[lasercolor]ed209_taser"
+			item_state = "[lasercolor]ed209_taser"
+			icon_state = "[lasercolor]ed209_taser"
 			qdel(W)
 
-		if(8)
+		if(ED209_BUILD_STEP_SCREWDRIVER)
 			if( W.is_screwdriver(user) )
-				playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				var/turf/T = get_turf(user)
 				to_chat(user, "<span class='notice'>Now attaching the gun to the frame...</span>")
 				sleep(40)
@@ -1061,7 +657,7 @@ Auto Patrol: []"},
 					name = "armed [name]"
 					to_chat(user, "<span class='notice'>Taser gun attached.</span>")
 
-		if(9)
+		if(ED209_BUILD_STEP_FINAL)
 			if( istype(W, /obj/item/weapon/cell) )
 				if(!user.drop_item(W))
 					return
@@ -1076,22 +672,22 @@ Auto Patrol: []"},
 
 
 /obj/machinery/bot/ed209/bullet_act(var/obj/item/projectile/Proj)
-	if((src.lasercolor == "b") && (src.disabled == 0))
+	if((lasercolor == "b") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/red))
-			src.disabled = 1
+			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
-			src.disabled = 0
+			disabled = 0
 		else
 			..()
-	else if((src.lasercolor == "r") && (src.disabled == 0))
+	else if((lasercolor == "r") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
-			src.disabled = 1
+			disabled = 1
 			//del (Proj)
-			returnToPool(Proj)
+			qdel(Proj)
 			sleep(100)
-			src.disabled = 0
+			disabled = 0
 		else
 			..()
 	else

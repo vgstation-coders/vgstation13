@@ -63,6 +63,8 @@ var/list/potential_bonus_items = list(
 	var/list/dept_objective = list()
 	var/list/bonus_items_of_the_day = list()
 
+	var/complete_failure = FALSE // Set to TRUE when a non-raider uses the shuttle to return home.
+
 	var/got_personnel = 0
 	var/got_items = 0
 
@@ -106,14 +108,15 @@ var/list/potential_bonus_items = list(
 
 	for (var/i = 1 to 4)
 		var/chosen_one = pick(potential_bonus_items_temp)
-		potential_bonus_items_temp =- chosen_one
+		potential_bonus_items_temp -= chosen_one
 		bonus_items_of_the_day += chosen_one
 
-	AppendObjective(/datum/objective/steal_priority)
+	var/datum/objective/steal_priority/SP = new(bonus_items_of_the_day)
+	AppendObjective(SP)
 
 /datum/faction/vox_shoal/GetScoreboard()
 	. = ..()
-	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b> minutes"
 	if (time_left < 0)
 		. += "<br/> <span class='danger'>The raid took too long.</span>"
 	. += "<br/> The raiders took <b>[got_personnel]</b> people to the Shoal."
@@ -124,6 +127,71 @@ var/list/potential_bonus_items = list(
 /datum/faction/vox_shoal/AdminPanelEntry()
 	. = ..()
 	. += "<br/> Time left: <b>[num2text((time_left /(2*60)))]:[add_zero(num2text(time_left/2 % 60), 2)]</b>"
+
+/datum/faction/vox_shoal/OnPostSetup()
+	..()
+	var/list/turf/vox_spawn = list()
+
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name == "voxstart")
+			vox_spawn += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+		if (A.name == "vox_locker")
+			var/obj/structure/closet/loot/L = new(get_turf(A))
+			our_bounty_lockers += L
+			qdel(A)
+			A = null
+			continue
+
+	var/spawn_count = 1
+
+	for(var/datum/role/vox_raider/V in members)
+		if(spawn_count > vox_spawn.len)
+			spawn_count = 1
+		var/datum/mind/synd_mind = V.antag
+		synd_mind.current.forceMove(vox_spawn[spawn_count])
+		spawn_count++
+		equip_raider(synd_mind.current, spawn_count)
+
+/datum/faction/vox_shoal/proc/equip_raider(var/mob/living/carbon/human/vox, var/index)
+	vox.age = rand(12,20)
+	if(vox.overeatduration) //We need to do this here and now, otherwise a lot of gear will fail to spawn
+		vox.overeatduration = 0 //Fat-B-Gone
+		if(vox.nutrition > 400) //We are also overeating nutriment-wise
+			vox.nutrition = 400 //Fix that
+		vox.mutations.Remove(M_FAT)
+		vox.update_mutantrace(0)
+		vox.update_mutations(0)
+		vox.update_inv_w_uniform(0)
+		vox.update_inv_wear_suit()
+
+	vox.my_appearance.s_tone = random_skin_tone("Vox")
+	vox.dna.mutantrace = "vox"
+	vox.set_species("Vox")
+	vox.fully_replace_character_name(vox.real_name, vox.generate_name())
+	vox.mind.name = vox.name
+	//vox.languages = HUMAN // Removing language from chargen.
+	vox.default_language = all_languages[LANGUAGE_VOX]
+	vox.flavor_text = ""
+	vox.species.default_language = LANGUAGE_VOX
+	vox.remove_language(LANGUAGE_GALACTIC_COMMON)
+	vox.my_appearance.h_style = "Short Vox Quills"
+	vox.my_appearance.f_style = "Shaved"
+	for(var/datum/organ/external/limb in vox.organs)
+		limb.status &= ~(ORGAN_DESTROYED | ORGAN_ROBOT | ORGAN_PEG)
+	var/datum/outfit/striketeam/voxraider/concrete_outfit = new
+	concrete_outfit.equip(vox)
+	vox.regenerate_icons()
+	vox.store_memory("The priority items for the day are: [english_list(bonus_items_of_the_day)]")
+
+	/*
+	spawn()
+		var/chosen_loadout = input(vox, "The raid is about to begin. What kind of operations would you like to specialize into ?") in list("Raider", "Engineer", "Saboteur", "Medic")
+		concrete_outfit.chosen_spec = chosen_loadout
+		concrete_outfit.equip_special_items(vox)
+	*/
 
 /datum/faction/vox_shoal/process()
 	if (completed)
@@ -150,8 +218,7 @@ var/list/potential_bonus_items = list(
 					total_points += 500
 			else
 				count_score(H)
-				to_chat(H, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.")
-				H.send_back_to_main_station()
+				H.send_back_to_main_station(complete_failure)
 
 		for (var/obj/structure/closet/loot/L in our_bounty_lockers)
 			for (var/obj/O in L)
@@ -190,6 +257,14 @@ var/list/potential_bonus_items = list(
 
 
 /datum/faction/vox_shoal/proc/count_human_score(var/mob/living/carbon/human/H)
+	if (!H.mind)
+		if (H.old_assigned_role in command_positions)
+			total_points += 300
+		if (H.old_assigned_role in dept_objective)
+			total_points += 200
+			got_personnel++
+		return
+
 	if (H.mind.assigned_role in command_positions)
 		total_points += 300
 	if (H.mind.assigned_role in dept_objective)
@@ -204,7 +279,14 @@ var/list/potential_bonus_items = list(
 
 // -- Mobs procs --
 
-/mob/living/proc/send_back_to_main_station()
+/mob/living/proc/send_back_to_main_station(var/complete_failure = FALSE)
+	if (complete_failure) // Non-vox somehow used the vox shuttle.
+		to_chat(src, "<span class='danger'>After hours of aimlessly wandering through space in hostile Vox territory, the shuttle quickly ran out of fuel. You and your companions decided to abandon the ship and throw escape shelters in the general direction of the station.</span>")
+		var/obj/structure/inflatable/shelter/S = new(get_turf(src))
+		forceMove(S)
+		S.ThrowAtStation()
+		return
+	to_chat(src, "<span class='warning'>You can't really remember the details, but somehow, you managed to escape. Your situation is still far from ideal, however.</span>")
 	delete_all_equipped_items()
 	if (ishuman(src))
 		var/obj/item/clothing/under/color/grey/G = new(src)
@@ -213,7 +295,7 @@ var/list/potential_bonus_items = list(
 		equip_to_appropriate_slot(B)
 		var/obj/item/device/radio/R = new(src)
 		put_in_hands(R)
-	var/obj/structure/inflatable/shelter/S = new(src)
+	var/obj/structure/inflatable/shelter/S = new(get_turf(src))
 	forceMove(S)
 	S.ThrowAtStation()
 
@@ -295,4 +377,4 @@ var/list/potential_bonus_items = list(
 		/obj/item/weapon/storage/box/large/vox_equipment/saboteur = 2,
 		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
 		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
-		)
+	)

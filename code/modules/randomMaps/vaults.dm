@@ -79,7 +79,7 @@
 	message_admins("<span class='info'>Spawning [vault_number] vaults in space!</span>")
 
 	var/area/A = locate(/area/random_vault)
-	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE)
+	var/result = populate_area_with_vaults(A, amount = vault_number, population_density = POPULATION_SCARCE, filter_function=/proc/stay_on_map)
 
 	for(var/turf/TURF in A) //Replace all of the temporary areas with space
 		TURF.set_area(space)
@@ -99,6 +99,10 @@
 	var/list/dimensions = E.get_dimensions()
 	var/result = check_complex_placement(start_turf,dimensions[1], dimensions[2])
 	return result
+
+/proc/stay_on_map(var/datum/map_element/E, var/turf/start_turf)
+	return start_turf && (start_turf.z <= map.zDeepSpace)
+
 //Proc that populates a single area with many vaults, randomly
 //A is the area OR a list of turfs where the placement happens
 //map_element_objects is a list of vaults that have to be placed. Defaults to subtypes of /datum/map_element/vault (meaning all vaults are spawned)

@@ -18,6 +18,7 @@
 #define BLOBCONGLOMERATE "blob conglomerate"
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
+#define SPIDERCLAN "spider clan"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -57,12 +58,15 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define MAGICIAN_ARTIFACT "Magical Archeologist"
+#define POTION "Potion Seller"
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
+#define STREAMER "streamer"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -73,6 +77,7 @@
 #define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
+#define GREET_SYNDBEACON	"syndbeacon"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"

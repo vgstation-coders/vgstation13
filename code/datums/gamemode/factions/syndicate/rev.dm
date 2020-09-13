@@ -116,24 +116,6 @@
 		if(objective.IsFulfilled())
 			remaining_targets--
 
-	if(stage < FACTION_ENDGAME)
-		var/living_revs = 0
-		var/total_valid_living = 0
-		for (var/mob/living/L in player_list)
-			if (issilicon(L)||isborer(L))
-				continue
-			if (L.stat == DEAD)
-				continue
-			if (isrev(L))
-				living_revs++
-			total_valid_living++
-		var/threshold = 50 //the percentage of living revs at which point the announcement is triggered
-		if(living_revs > 0 && total_valid_living > 0)
-			var/revs_percentage = round((living_revs * 100)/total_valid_living)
-			if(revs_percentage >= threshold)
-				stage(FACTION_ENDGAME)
-				command_alert(/datum/command_alert/revolution)
-
 	switch(remaining_targets)
 		if(0)
 			if(stage < FACTION_VICTORY)
@@ -149,7 +131,7 @@
 	if(stage >= FACTION_ENDGAME)
 		var/anyone = FALSE
 		for(var/datum/role/R in members)
-			if(!R.antag.current.stat)
+			if(R.antag.current && !R.antag.current.stat)
 				anyone = TRUE //If one rev is still not incapacitated
 		if(!anyone)
 			stage(FACTION_DEFEATED)
@@ -176,5 +158,6 @@
 	switch (result)
 		if (ALL_HEADS_DEAD)
 			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
+			ticker.revolutionary_victory = 1
 		if (ALL_REVS_DEAD)
 			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")

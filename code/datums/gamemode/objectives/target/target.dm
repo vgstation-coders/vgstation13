@@ -51,7 +51,6 @@
 		if((possible_target != owner) && ishuman(possible_target.current) && (possible_target.current.z != map.zCentcomm) && ((role_type ? possible_target.special_role : possible_target.assigned_role) == role) && !(possible_target.assigned_role in bad_assassinate_targets))
 			target = possible_target
 			return TRUE
-			break
 	return FALSE
 
 /datum/objective/target/proc/is_valid_target(var/datum/mind/possible_target)
@@ -75,7 +74,6 @@
 		target = new_target
 		explanation_text = format_explanation()
 		return TRUE
-	return FALSE
 
 /datum/objective/target/proc/format_explanation()
 	return "Somebody didn't override the format explanation text here. Objective type is [type]. Target is [target.name], have fun."

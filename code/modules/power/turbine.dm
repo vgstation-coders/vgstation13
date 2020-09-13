@@ -34,7 +34,7 @@
 	density = 1
 	var/obj/machinery/compressor/compressor
 	var/list/obj/machinery/door/poddoor/doors
-	var/id_tag = 0
+	id_tag = 0
 	var/door_status = 0
 
 	light_color = LIGHT_COLOR_BLUE
@@ -219,12 +219,12 @@
 
 /obj/machinery/computer/turbine_computer/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_screwdriver(user))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
 					C.forceMove(src.loc)

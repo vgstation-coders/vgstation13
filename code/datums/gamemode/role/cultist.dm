@@ -67,7 +67,7 @@
 	if (holywarning_cooldown > 0)
 		holywarning_cooldown--
 
-	if (veil_thickness == CULT_MENDED && antag.current)
+	if (veil_thickness == CULT_MENDED && antag?.current)
 		if (ishuman(antag.current))
 			var/mob/living/carbon/human/H = antag.current
 			if(H.get_heart() && prob(10))
@@ -101,7 +101,9 @@
 				H.adjustOxyLoss(20)
 				H.adjustToxLoss(10)
 		else
-			antag.current.adjustBruteLoss(rand(20,50))
+			if(isliving(antag.current))
+				var/mob/living/L = antag.current
+				L.adjustBruteLoss(rand(20,50))
 
 /datum/role/cultist/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -157,7 +159,7 @@
 	update_cult_hud()
 
 /datum/role/cultist/proc/update_cult_hud()
-	var/mob/M = antag.current
+	var/mob/M = antag?.current
 	if(M && M.client && M.hud_used)
 		if(!M.hud_used.cult_Act_display)
 			M.hud_used.cult_hud()
@@ -209,6 +211,9 @@
 		M.hud_used.cult_tattoo_display.name = "Arcane Tattoos: [tattoos_names]"
 
 		if (isshade(M) && M.gui_icons && istype(M.loc,/obj/item/weapon/melee/soulblade))
+			if(!M.gui_icons.soulblade_bgLEFT)
+				M.hud_used.shade_hud()
+
 			M.client.screen += list(
 				M.gui_icons.soulblade_bgLEFT,
 				M.gui_icons.soulblade_coverLEFT,

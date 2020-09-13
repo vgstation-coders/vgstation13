@@ -100,7 +100,7 @@ var/specops_shuttle_timeleft = 0
 		data=0,
 		compression=0,
 		level=list(0,1))
-	returnToPool(speech)
+	qdel(speech)
 
 /proc/specops_process()
 	var/area/centcom/specops/special_ops = locate()//Where is the specops area located?

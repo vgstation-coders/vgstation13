@@ -302,6 +302,12 @@
 	amount = 1 //Only the back left foot is considered lucky.
 	butcher_time = 10
 
+/datum/butchering_product/snail_carapace
+	result = /obj/item/clothing/head/helmet/snail_helm
+	verb_name = "remove carapace"
+	verb_gerund = "removing the carapace from"
+	butcher_time = 10
+
 
 #define TEETH_FEW		/datum/butchering_product/teeth/few		//4-8
 #define TEETH_BUNCH		/datum/butchering_product/teeth/bunch	//8-16
@@ -327,6 +333,7 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/deer/flesh		= list(/datum/butchering_product/skin/deer, /datum/butchering_product/deer_head),
 	/mob/living/carbon/monkey							= list(/datum/butchering_product/skin/monkey, TEETH_FEW),
 	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
+	/mob/living/simple_animal/snail						= list(/datum/butchering_product/snail_carapace),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
 	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),

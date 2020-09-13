@@ -81,7 +81,7 @@
 		toggle_cover(usr)
 
 /obj/structure/cage/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			to_chat(user, "<span class='info'>You start unsecuring \the [src] from \the [loc].</span>")
 		else
@@ -91,7 +91,7 @@
 			to_chat(user, "<span class='info'>You start securing \the [src] to \the [loc].</span>")
 
 		spawn()
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			W.playtoolsound(src, 100)
 			if(do_after(user, src, 50))
 				anchored = !anchored
 				to_chat(user, "<span class='info'>[anchored ? "You successfully secure \the [src] to \the [loc]." : "You successfully unsecure \the [src] from \the [loc]."]")

@@ -839,7 +839,7 @@ var/list/hive_pylons = list()
 		var/mob/living/L = loc
 		L.Stun(stunforce)
 		L.Knockdown(stunforce)
-		L.apply_effect(STUTTER, stunforce)
+		L.apply_effect(stunforce, STUTTER)
 
 		if(L)
 			to_chat(L, "<span class='userdanger'>As you approach \the [source], your [src] explodes in a burst of energy, knocking you back. Phew, that was close.</span>")

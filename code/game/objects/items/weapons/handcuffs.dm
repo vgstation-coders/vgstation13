@@ -18,7 +18,7 @@
 	w_type = RECYK_METAL
 	melt_temperature = MELTPOINT_STEEL
 	origin_tech = Tc_MATERIALS + "=1"
-	restraint_apply_sound = 'sound/weapons/handcuffs.ogg'
+	toolsounds = list('sound/weapons/handcuffs.ogg')
 	restraint_resist_time = 2 MINUTES
 	var/list/mutual_handcuffed_mobs = list()
 
@@ -112,7 +112,7 @@
 	icon_state = "cuff_red"
 	_color = "red"
 	restraint_resist_time = 30 SECONDS
-	restraint_apply_sound = 'sound/weapons/cablecuff.ogg'
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/weapon/handcuffs/cable/red
 	icon_state = "cuff_red"

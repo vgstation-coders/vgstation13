@@ -16,7 +16,7 @@
 
 	return ..(gibbed)
 
-/mob/living/carbon/brain/gib()
+/mob/living/carbon/brain/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

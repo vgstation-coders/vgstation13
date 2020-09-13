@@ -15,6 +15,14 @@
 	var/hidecount = 0
 	var/extinguishingProb = 15
 
+//Sound stuff
+//sound_change flags are CLOTHING_SOUND_SCREAM and CLOTHING_SOUND_COUGH
+//sound_priority are CLOTHING_SOUND_[level]_PRIORITY, replace [level] with LOW/MED/HIGH
+	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
+	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
+	var/list/sound_file //The actual files to be played, it will pick from the list
+	var/list/sound_respect_species //Species will not play sounds from clothing
+
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
 		accessories.Remove(A)
@@ -465,6 +473,7 @@
 	species_restricted = list("exclude","Unathi","Tajaran","Muton")
 	var/step_sound = ""
 	var/stepstaken = 1
+	var/modulo_steps = 2 //if stepstaken is a multiplier of modulo_steps, play the sound. Does not work if modulo_steps < 1
 
 /obj/item/clothing/shoes/proc/step_action()
 	stepstaken++
@@ -472,7 +481,7 @@
 		var/mob/living/carbon/human/H = loc
 		switch(H.m_intent)
 			if("run")
-				if(stepstaken % 2 == 1)
+				if(stepstaken % modulo_steps == 0)
 					playsound(H, step_sound, 50, 1) // this will NEVER GET ANNOYING!
 			if("walk")
 				playsound(H, step_sound, 20, 1)
@@ -533,12 +542,14 @@
 	permeability_coefficient = 0.01
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_visible_override = EYES
 	siemens_coefficient = 0.9
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_restricted = list("exclude","Diona","Muton")
 	eyeprot = 1
 	cold_breath_protection = 230
 	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 /obj/item/clothing/suit/space
 	name = "Space suit"
@@ -560,6 +571,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	clothing_flags = CANEXTINGUISH
 	sterility = 100
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
 //Under clothing
 /obj/item/clothing/under
@@ -581,6 +593,20 @@
 		*/
 	var/displays_id = 1
 	clothing_flags = CANEXTINGUISH
+	var/icon/jersey_overlays
+
+// Associative list of exact type -> number
+var/list/jersey_numbers = list()
+
+/obj/item/clothing/under/New()
+	..()
+	if(jersey_overlays)
+		var/number = jersey_numbers[type]++ % 99
+		var/first_digit = num2text(round((number / 10) % 10))
+		var/second_digit = num2text(round(number % 10))
+		var/image/jersey_overlay = image(jersey_overlays, src, "[first_digit]-")
+		jersey_overlay.overlays += image(jersey_overlays, src, second_digit)
+		dynamic_overlay["[UNIFORM_LAYER]"] = jersey_overlay
 
 /obj/item/clothing/under/examine(mob/user)
 	..()

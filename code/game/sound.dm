@@ -16,6 +16,7 @@ var/list/polaroid_sound = list('sound/items/polaroid1.ogg', 'sound/items/polaroi
 var/list/male_scream_sound = list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg')
 var/list/female_scream_sound = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 var/list/vox_shriek_sound = list('sound/misc/shriek1.ogg')
+var/list/insectoid_chitter_sound = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
 var/list/male_cough_sound = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
 var/list/female_cough_sound = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
 var/list/lightning_sound = list('sound/effects/lightning/chainlightning1.ogg', 'sound/effects/lightning/chainlightning2.ogg', 'sound/effects/lightning/chainlightning3.ogg', 'sound/effects/lightning/chainlightning4.ogg', 'sound/effects/lightning/chainlightning5.ogg', 'sound/effects/lightning/chainlightning6.ogg', 'sound/effects/lightning/chainlightning7.ogg')
@@ -33,13 +34,13 @@ var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuck
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
+/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
 
-	var/frequency = get_rand_frequency() // Same frequency for everybody
+	var/frequency = vary ? get_rand_frequency() : 1 // Same frequency for everybody
 
 /* What's going on in this block?
 	If the proc isn't set to not be modified by air, the following steps occur:

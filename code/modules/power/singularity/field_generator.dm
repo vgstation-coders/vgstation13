@@ -103,7 +103,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 		to_chat(user, "The [src] needs to be firmly secured to the floor first.")
 		return 0
 
-/obj/machinery/field_generator/wrenchAnchor(var/mob/user)
+/obj/machinery/field_generator/wrenchAnchor(var/mob/user, var/obj/item/I)
 	if(active)
 		to_chat(user, "Turn off the [src] first.")
 		return FALSE

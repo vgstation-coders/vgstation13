@@ -10,7 +10,8 @@
 	if(ismalf(src))
 		to_chat(src, "<b>These laws may be changed by other players, or by you being the traitor.</b>")
 
-	for(var/obj/effect/rune/rune in global_runesets["blood_cult"].rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	for(var/obj/effect/rune/rune in rune_set.rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
 		client.images += rune.blood_image
 	regenerate_icons()
 

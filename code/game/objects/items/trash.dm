@@ -112,6 +112,14 @@
 	name = "\improper Discount Dan's Chocolate Bar"
 	icon_state = "danbar"
 
+/obj/item/trash/donitos
+	name = "Donitos"
+	icon_state = "donitos"
+
+/obj/item/trash/donitos_coolranch
+	name = "Donitos Cool Ranch"
+	icon_state = "donitos_coolranch"
+
 /obj/item/trash/danitos
 	name = "\improper Danitos"
 	icon_state = "danitos"
@@ -123,6 +131,24 @@
 /obj/item/trash/plate
 	name = "plate"
 	icon_state = "plate"
+	var/clean = FALSE
+/obj/item/trash/plate/clean
+	icon_state = "cleanplate"
+	desc = "Clean enough to eat on, probably."
+	clean = TRUE
+/obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
+	if(istype(I,/obj/item/weapon/soap))
+		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
+		clean = TRUE
+		update_icon()
+		return TRUE
+	return ..()
+
+/obj/item/trash/plate/update_icon()
+	if(clean)
+		icon_state = "cleanplate"
+	else
+		icon_state = "plate"
 
 /obj/item/trash/pietin
 	name = "pie tin"
@@ -178,6 +204,7 @@
 	icon_state = "kfc_bucket"
 	starting_materials = list(MAT_CARDBOARD = 3750)
 	w_type=RECYK_MISC
+	armor = list(melee = 1, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_HEAD
 
 /obj/item/trash/mannequin/cultify()
@@ -240,3 +267,8 @@ var/list/crushed_cans_cache = list()
 /obj/item/trash/soda_cans/post_mapsave2atom(var/list/L)
 	name = color
 	color = null
+
+/obj/item/trash/slag
+	name = "slag"
+	desc = "Electronics burnt to a crisp"
+	icon_state = "slag"

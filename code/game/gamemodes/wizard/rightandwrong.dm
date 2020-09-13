@@ -12,6 +12,10 @@
 			survivor_type = /datum/role/survivor/crusader/
 		if ("magic")
 			survivor_type = /datum/role/wizard/summon_magic/
+		if ("artifact")
+			survivor_type = /datum/role/wizard/summon_magic/artifact/
+		if ("potions")
+			survivor_type = /datum/role/wizard/summon_potions/
 		else
 			survivor_type = /datum/role/survivor/
 
@@ -50,11 +54,15 @@
 			return equip_swords(R)
 		if (/datum/role/wizard/summon_magic)
 			return equip_magician(R)
+		if (/datum/role/wizard/summon_magic/artifact/)
+			return equip_artifact(R)
+		if (/datum/role/wizard/summon_potions)
+			return equip_potions(R)
 		else
 			return equip_guns(R)
 
 /mob/living/carbon/human/proc/equip_guns(var/datum/role/R)
-	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag")
+	var/randomizeguns = pick("taser","stunrevolver","egun","laser","retro","laserak","revolver","detective","c20r","nuclear","deagle","gyrojet","pulse","silenced","cannon","doublebarrel","shotgun","combatshotgun","mateba","smg","uzi","microuzi","crossbow","saw","hecate","osipr","gatling","bison","ricochet","spur","mosin","obrez","beegun","beretta","usp","glock","luger","colt","plasmapistol","plasmarifle", "ionpistol", "ioncarbine", "bulletstorm", "combustioncannon", "laserpistol", "siren", "lawgiver", "nt12", "automag", "lolly_lobber")
 	switch (randomizeguns)
 		if("taser")
 			new /obj/item/weapon/gun/energy/taser(get_turf(src))
@@ -73,7 +81,7 @@
 		if("plasmarifle")
 			new /obj/item/weapon/gun/energy/plasma/light(get_turf(src))
 		if("revolver")
-			new /obj/item/weapon/gun/projectile(get_turf(src))
+			new /obj/item/weapon/gun/projectile/revolver(get_turf(src))
 		if("detective")
 			new /obj/item/weapon/gun/projectile/detective(get_turf(src))
 		if("c20r")
@@ -156,8 +164,11 @@
 			new /obj/item/weapon/gun/bulletstorm(get_turf(src))
 		if("nt12")
 			new /obj/item/weapon/gun/projectile/shotgun/nt12(get_turf(src))
-		if ("automag")
+		if("automag")
 			new /obj/item/weapon/gun/projectile/automag/prestige(get_turf(src))
+		if("lolly_lobber")
+			new /obj/item/weapon/gun/lolly_lobber(get_turf(src))
+
 	var/datum/role/survivor/S = R
 	if(istype(S))
 		S.summons_received = randomizeguns
@@ -165,7 +176,7 @@
 	score["gunsspawned"]++
 
 /mob/living/carbon/human/proc/equip_swords(var/datum/role/R)
-	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity")
+	var/randomizeswords = pick("unlucky", "misc", "throw", "armblade", "pickaxe", "pcutter", "esword", "alt-esword", "machete", "kitchen", "medieval", "katana", "axe", "boot", "saw", "scalpel", "switchtool", "shitcurity", "whip")
 	var/randomizeknightcolor = pick("green", "yellow", "blue", "red", "templar", "roman")
 	switch (randomizeknightcolor) //everyone gets some armor as well
 		if("green")
@@ -208,10 +219,7 @@
 			new miscpick(get_turf(src))
 		if("throw")
 			if(prob(20))
-				if(prob(50))
-					new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
-				else
-					new /obj/item/weapon/bullwhip(get_turf(src))
+				new /obj/item/weapon/kitchen/utensil/knife/nazi(get_turf(src))
 			else
 				new /obj/item/weapon/hatchet(get_turf(src))
 		if("armblade") // good luck getting it off. Maybe cut your own arm off :^)
@@ -299,13 +307,20 @@
 		if("shitcurity") //Might as well give the Redtide a taste of their own medicine.
 			var/shitcurity = pick(/obj/item/weapon/melee/telebaton, /obj/item/weapon/melee/classic_baton, /obj/item/weapon/melee/baton/loaded, /obj/item/weapon/melee/baton/cattleprod,/obj/item/weapon/melee/chainofcommand)
 			new shitcurity(get_turf(src))
+		if("whip")
+			if(prob(50))
+				new /obj/item/weapon/gun/hookshot/whip(get_turf(src))
+			else
+				new /obj/item/projectile/hookshot/whip/liquorice(get_turf(src))
+
 	var/datum/role/survivor/crusader/S = R
 	if(istype(S))
 		S.summons_received = randomizeswords
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
+
 /mob/living/carbon/human/proc/equip_magician(var/datum/role/R)
-	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie")
+	var/randomizemagic = pick("fireball","smoke","blind","forcewall","knock","horsemask","blink","disorient","clowncurse", "mimecurse", "shoesnatch","emp", "magicmissile", "mutate", "teleport", "jaunt", "buttbot", "lightning", "timestop", "ringoffire", "painmirror", "bound_object", "firebreath", "snakes", "push", "pie", "alchemy")
 	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
 	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
 		if("magician")
@@ -413,6 +428,127 @@
 			new /obj/item/weapon/spellbook/oneuse/pie(get_turf(src))
 		if("ice_barrage")
 			new /obj/item/weapon/spellbook/oneuse/ice_barrage(get_turf(src))
+		if("alchemy")
+			new /obj/item/weapon/spellbook/oneuse/alchemy(get_turf(src))
+	 
+	var/receive_absorb = !(locate(/spell/targeted/absorb) in spell_list)
+
+	if(receive_absorb)
+		add_spell(/spell/targeted/absorb)
+
 	var/datum/role/wizard/summon_magic/S = R
 	if(istype(S))
 		S.summons_received = randomizemagic
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)
+
+
+/mob/living/carbon/human/proc/equip_artifact(var/datum/role/R)
+	var/randomizeartifact = pick("staffswap", "staffmental", "soulstone", "rigsuit", "staffanimate", "staffnecro", "apprentice", "scyingorb", "cloak", "gloworb", "phylactery", "speedboots")
+	var/randomizemagecolor = pick("magician", "magusred", "magusblue", "blue", "red", "necromancer", "clown", "purple", "lich", "skelelich", "marisa", "fake")
+	switch (randomizemagecolor) //everyone can put on their robes and their wizard hat
+		if("magician")
+			new /obj/item/clothing/head/that/magic(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/magician(get_turf(src))
+			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
+		if("magusred")
+			new /obj/item/clothing/head/wizard/magus(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/magusred(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("magusblue")
+			new /obj/item/clothing/head/wizard/magus(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/magusblue(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("blue")
+			new /obj/item/clothing/head/wizard(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("red")
+			new /obj/item/clothing/head/wizard/red(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/red(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("necromancer")
+			new /obj/item/clothing/head/wizard/necro(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/necro(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("clown")
+			new /obj/item/clothing/head/wizard/clown(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/clown(get_turf(src))
+			new /obj/item/clothing/mask/gas/clown_hat/wiz(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("purple")
+			new /obj/item/clothing/head/wizard/amp(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/psypurple(get_turf(src))
+			new /obj/item/clothing/shoes/sandal/marisa/leather(get_turf(src))
+		if("lich")
+			new /obj/item/clothing/head/wizard/lich(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/lich(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("skelelich")
+			new /obj/item/clothing/head/wizard/skelelich(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/skelelich(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+		if("marisa")
+			new /obj/item/clothing/head/wizard/marisa(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/marisa(get_turf(src))
+			new /obj/item/clothing/shoes/sandal/marisa(get_turf(src))
+		if("fake")
+			new /obj/item/clothing/head/wizard/fake(get_turf(src))
+			new /obj/item/clothing/suit/wizrobe/fake(get_turf(src))
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+
+	switch (randomizeartifact)
+//		if("staffchange")
+//			new /obj/item/weapon/gun/energy/staff/change(get_turf(src))
+		if("staffswap")
+			new /obj/item/weapon/gun/energy/staff/swapper(get_turf(src))
+		if("staffmental")
+			new /obj/item/weapon/gun/energy/staff/focus(get_turf(src))
+		if("soulstone")
+			new /obj/item/weapon/storage/belt/soulstone/full(get_turf(src))
+			add_spell(new /spell/aoe_turf/conjure/construct, iswizard = TRUE)
+			add_language(LANGUAGE_CULT)
+		if("rigsuit")
+			new /obj/item/clothing/shoes/sandal(get_turf(src))
+			new /obj/item/clothing/gloves/purple/wizard(get_turf(src))
+			new /obj/item/clothing/suit/space/rig/wizard(get_turf(src))
+			new /obj/item/weapon/tank/emergency_oxygen/double/wizard(get_turf(src))
+		if("staffanimate")
+			new /obj/item/weapon/gun/energy/staff/animate(get_turf(src))
+		if("staffnecro")
+			new /obj/item/weapon/gun/energy/staff/necro(get_turf(src))
+		if("apprentice") //lol
+			new /obj/item/wizard_apprentice_contract(get_turf(src))
+		if("scyingorb")
+			new /obj/item/weapon/scrying(get_turf(src))
+			mutations.Add(M_XRAY)
+			change_sight(adding = SEE_MOBS|SEE_OBJS|SEE_TURFS)
+			see_in_dark = 8
+			see_invisible = SEE_INVISIBLE_LEVEL_TWO
+		if("cloak")
+			new /obj/item/weapon/cloakingcloak(get_turf(src))
+		if("gloworb")
+			new /obj/item/weapon/glow_orb(get_turf(src))
+			new /obj/item/weapon/glow_orb(get_turf(src))
+			new /obj/item/weapon/glow_orb(get_turf(src))
+//		if("knife")
+//			new /obj/item/weapon/butterflyknife/viscerator/magic(get_turf(src))
+		if("phylactery")
+			new /obj/item/phylactery(get_turf(src))
+		if("speedboots")
+			new /obj/item/clothing/shoes/blindingspeed(get_turf(src))
+
+	var/datum/role/wizard/summon_magic/artifact/S = R
+	if(istype(S))
+		S.summons_received = randomizeartifact
+
+/mob/living/carbon/human/proc/equip_potions(var/datum/role/R)
+	var/datum/role/survivor/S = R
+	for(var/i=0, i<3, i++)
+		var/obj/item/potion/randompotion = get_random_potion()
+		var/obj/item/potion/P = new randompotion(get_turf(src))
+		if(istype(S))
+			S.summons_received = P.name
+		if(istype(P, /obj/item/potion/deception))	//Warn someone if that healing potion they just got is a fake one.
+			to_chat(src, "You feel like it's a bad idea to drink the [P.name] yourself...")
+
+	playsound(src,'sound/effects/summon_guns.ogg', 50, 1)

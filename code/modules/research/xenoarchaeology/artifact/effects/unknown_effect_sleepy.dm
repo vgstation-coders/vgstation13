@@ -2,6 +2,7 @@
 //todo
 /datum/artifact_effect/sleepy
 	effecttype = "sleepy"
+	valid_style_types = list(ARTIFACT_STYLE_ANOMALY, ARTIFACT_STYLE_ANCIENT)
 	effect = list(ARTIFACT_EFFECT_TOUCH, ARTIFACT_EFFECT_AURA, ARTIFACT_EFFECT_PULSE)
 
 /datum/artifact_effect/sleepy/New()
@@ -23,7 +24,7 @@
 
 /datum/artifact_effect/sleepy/DoEffectAura()
 	if(holder)
-		for (var/mob/living/carbon/human/H in range(src.effectrange,holder))
+		for (var/mob/living/carbon/human/H in range(src.effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(H)
 			if(prob(weakness * 100))
 				if(prob(10))
@@ -36,7 +37,7 @@
 
 /datum/artifact_effect/sleepy/DoEffectPulse()
 	if(holder)
-		for(var/mob/living/carbon/human/H in range(src.effectrange, holder))
+		for(var/mob/living/carbon/human/H in range(src.effectrange, get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(H)
 			if(prob(weakness * 100))
 				to_chat(H, pick("<span class='notice'>You feel like taking a nap.</span>","<span class='notice'>You feel a yawn coming on.</span>","<span class='notice'>You feel a little tired.</span>"))

@@ -25,58 +25,60 @@ var/list/special_fruits = list()
 		if(initial(G.hydroflags) & filter)
 			. += T
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/New(atom/loc, custom_plantname)
 	..()
+	if(custom_plantname)
+		plantname = custom_plantname
 	if(ticker)
 		initialize()
-
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/initialize()
 
 	//Handle some post-spawn var stuff.
-	spawn()
-		//Fill the object up with the appropriate reagents.
-		if(!isnull(plantname))
-			seed = SSplant.seeds[plantname]
-			if(!seed)
-				return
-			icon = seed.plant_dmi
-			potency = round(seed.potency)
-			force = seed.thorny ? 5+seed.carnivorous*3 : 0
+	//Fill the object up with the appropriate reagents.
+	if(!isnull(plantname))
+		seed = SSplant.seeds[plantname]
+		if(!seed)
+			return
+		icon = seed.plant_dmi
+		icon_state = seed.plant_icon_state
+		potency = round(seed.potency)
+		force = seed.thorny ? 5+seed.carnivorous*3 : 0
+		throwforce = seed.thorny ? 5+seed.carnivorous*3 : 0
 
-			if(seed.teleporting)
-				name = "blue-space [name]"
-			if(seed.stinging)
-				name = "stinging [name]"
-			if(seed.juicy == 2)
-				name = "slippery [name]"
+		if(seed.teleporting)
+			name = "blue-space [name]"
+		if(seed.stinging)
+			name = "stinging [name]"
+		if(seed.juicy == 2)
+			name = "slippery [name]"
 
-			if(!seed.chems)
-				return
+		if(!seed.chems)
+			return
 
-			var/totalreagents = 0
+		var/totalreagents = 0
+		for(var/rid in seed.chems)
+			var/list/reagent_data = seed.chems[rid]
+			var/rtotal = reagent_data[1]
+			if(reagent_data.len > 1 && potency > 0)
+				rtotal += round(potency/reagent_data[2])
+			totalreagents += rtotal
+
+		if(totalreagents)
+			var/coeff = min(reagents.maximum_volume / totalreagents, 1)
+
 			for(var/rid in seed.chems)
 				var/list/reagent_data = seed.chems[rid]
 				var/rtotal = reagent_data[1]
 				if(reagent_data.len > 1 && potency > 0)
 					rtotal += round(potency/reagent_data[2])
-				totalreagents += rtotal
+				reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
 
-			if(totalreagents)
-				var/coeff = min(reagents.maximum_volume / totalreagents, 1)
-
-				for(var/rid in seed.chems)
-					var/list/reagent_data = seed.chems[rid]
-					var/rtotal = reagent_data[1]
-					if(reagent_data.len > 1 && potency > 0)
-						rtotal += round(potency/reagent_data[2])
-					reagents.add_reagent(rid, max(0.1, round(rtotal*coeff, 0.1)))
-
-		if(reagents.total_volume > 0)
-			bitesize = 1 + round(reagents.total_volume/2, 1)
+	if(reagents.total_volume > 0)
+		bitesize = 1 + round(reagents.total_volume/2, 1)
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
-	
+
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/throw_impact(atom/hit_atom)
 	..()
@@ -198,8 +200,7 @@ var/list/special_fruits = list()
 		to_chat(user, traits)
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/proc/splat_decal(turf/T)
-	var/obj/effect/decal/cleanable/S = getFromPool(seed.splat_type,T)
-	S.New(S.loc)
+	var/obj/effect/decal/cleanable/S = new seed.splat_type(T)
 	if(seed.splat_type == /obj/effect/decal/cleanable/fruit_smudge/)
 		if(filling_color != "#FFFFFF")
 			S.color = filling_color
@@ -353,6 +354,43 @@ var/list/special_fruits = list()
 	filling_color = "857e27"
 	potency = 25
 	plantname = "peanut"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut
+	name = "rocknut"
+	desc = "A mutated nut with a rock hard exterior and soft chewy core."
+	filling_color = "#583922"
+	potency = 25
+	plantname = "rocknut"
+	force = 10
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/New(atom/loc, custom_plantname)
+	..()
+	throwforce = throwforce + round((5+potency/7.5), 1) ///it's a rock, add bonus damage that scales with potency
+	eatverb = pick("crunch","gnaw","bite")
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut/before_consume(mob/living/carbon/eater)
+	if(!seed.juicy)//juicy mutated rock nuts will not return your teeth
+		var/mob/living/carbon/C = eater
+		if(istype(C))//we carbon?
+			var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in C.butchering_drops //used in tooth check
+			if(istype(T)&&T.amount == 0)//we're a creature with teeth but we don't have any right now
+				to_chat(eater, "<span class='warning'>I can't eat \the [src] because I have no teeth!</span>")
+				return //don't call consume
+			else if((istype(T) && T.amount != 0) && prob(round(potency/2.5)))//tooth check and potency probability
+				playsound(src, 'sound/effects/tooth_crack.ogg', 50, 1)
+				C.adjustBruteLoss(potency/25)
+				to_chat(eater, "<span class='warning'>OUCH! I broke a tooth!</span>")
+				eater.visible_message("<span class='warning'>[eater] broke a tooth trying to eat \the [src]!</span>")
+				T.spawn_result(get_turf(eater), eater, 1)
+				return..()//call consume
+			else//didn't pass potency probability or some other shit
+				C.adjustBruteLoss(potency/50)
+				to_chat(eater, "<span class='warning'>OW! I nearly broke a tooth!</span>")
+				return..()
+		else //not even a carbon, fuck it
+			to_chat(eater, "<span class='notice'>\The [src]'s rock hard shell prevents you from biting into it.</span>")
+			return
+	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage
 	name = "cabbage"
@@ -863,7 +901,7 @@ var/list/special_fruits = list()
 	var/current_path = null
 	var/counter = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New()
+/obj/item/weapon/reagent_containers/food/snacks/grown/nofruit/New(atom/loc, custom_plantname)
 	..()
 	available_fruits = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown) - get_special_fruits()
 	available_fruits = shuffle(available_fruits)
@@ -999,3 +1037,11 @@ var/list/special_fruits = list()
 	potency = 15
 	filling_color = "#DFE88B"
 	plantname = "silverpear"
+
+/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant
+	name = "mustard flowers"
+	desc = "A bunch of bright yellow flowers, unrelated to mustard gas"
+	potency = 10
+	filling_color = "#DFE88B"
+	plantname = "mustardplant"
+	fragrance = INCENSE_MUSTARDPLANT

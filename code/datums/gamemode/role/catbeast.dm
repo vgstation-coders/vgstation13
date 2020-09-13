@@ -46,7 +46,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	D1.origin = "Loose Catbeast"
 	D1.makerandom(str, rob, anti, bad)
 	H.infect_disease2(D1, 1, "Loose Catbeast")
-	antag.store_memory(D1.get_info())
+	antag.store_memory(D1.get_info(), forced = 1)
 	antag.store_memory("<hr>")
 
 /datum/role/catbeast/proc/infect_catbeast_tier1(mob/living/carbon/human/H)

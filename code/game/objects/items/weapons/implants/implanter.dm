@@ -50,6 +50,10 @@
 		..()
 		update()
 
+/obj/item/weapon/implanter/spesstv
+	name = "promotional Spess.TV implanter"
+	desc = "Does anyone know where the implanter went? I have a lockbox full of loyalty implants here..."
+
 /obj/item/weapon/implanter/traitor
 	name = "greytide conversion kit"
 	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."

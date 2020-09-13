@@ -22,7 +22,7 @@
 	anchored = 1
 	density = 1
 	noghostspin = 1 //You guys are no fun
-
+	buckle_range = 1
 	var/empstun = 0
 	var/health = 100
 	var/max_health = 100
@@ -174,9 +174,9 @@
 		return 0
 
 	//If we're in space or our area has no gravity...
-	var/turf/T = get_turf(loc)
-	if(!T)
-		return 0
+	var/turf/T = loc
+	if(!istype(T))
+		return 0 //location isn't a turf or doesn't exist
 	if(!T.has_gravity())
 		// Block relaymove() if needed.
 		if(!Process_Spacemove(0))
@@ -238,7 +238,6 @@
 		"<span class='notice'>You climb onto \the [nick]!</span>")
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
-	M.throw_alert(SCREEN_ALARM_BUCKLE, /obj/abstract/screen/alert/object/buckled, new_master = src)
 
 	add_fingerprint(user)
 

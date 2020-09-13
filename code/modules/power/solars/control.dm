@@ -13,7 +13,7 @@
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
-	var/id_tag = 0
+	id_tag = 0
 	var/cdir = 0
 	var/gen = 0
 	var/lastgen = 0
@@ -83,13 +83,13 @@
 
 /obj/machinery/power/solar/control/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_screwdriver(user))
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if(src.stat & BROKEN)
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
 				"You clear the broken monitor off of [src]")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
@@ -115,7 +115,7 @@
 
 // called by solar tracker when sun position changes (somehow, that's not supposed to be in process)
 /obj/machinery/power/solar/control/proc/tracker_update(angle)
-	if(track != 2 || stat & (NOPOWER | BROKEN))
+	if(track != TRACK_AUTOMATIC || stat & (NOPOWER | BROKEN))
 		return
 
 	cdir = angle

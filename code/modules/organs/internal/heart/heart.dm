@@ -14,6 +14,12 @@
 	min_broken_damage = 30
 	var/obj/item/weapon/cell/cell
 
+/datum/organ/internal/heart/insect
+	name = "insectoid heart"
+	parent_organ = LIMB_CHEST
+	organ_type = "heart"
+	removed_type = /obj/item/organ/internal/heart/insectoid
+
 /datum/organ/internal/heart/cell/New()
 	..()
 	if(!cell)

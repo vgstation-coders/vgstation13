@@ -206,6 +206,15 @@
 					overlays += icon('icons/obj/fish.dmi', "sharkspin", FISH_LAYER)
 				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "shrk", FISH_LAYER)
+
+		else if("lobster" in fish_list) // the small sprites dont work well sharing a tank
+			switch(tank_type)
+				if (FISH_BOWL)
+					overlays += icon('icons/obj/fish.dmi', "lobster_bowl", FISH_LAYER)
+				if (FISH_TANK)
+					overlays += icon('icons/obj/fish.dmi', "lobster_tank", FISH_LAYER)
+				if (FISH_WALL)
+					overlays += icon('icons/obj/fish.dmi', "lobster_wall", FISH_LAYER)
 		else
 			switch(tank_type)
 				if (FISH_BOWL)
@@ -214,7 +223,6 @@
 					overlays += icon('icons/obj/fish.dmi', "feesh_medium", FISH_LAYER)
 				if (FISH_WALL)
 					overlays += icon('icons/obj/fish.dmi', "feesh", FISH_LAYER)
-
 	//Update water overlay
 	if(water_level == 0)
 		return							//Skip the rest of this if there is no water in the aquarium
@@ -688,10 +696,10 @@
 
 			return TRUE
 	//Wrenches can deconstruct empty tanks, but not tanks with any water. Kills any fish left inside and destroys any unharvested eggs in the process
-	if(iswrench(O))
+	if(O.is_wrench(user))
 		if (water_level == 0)
 			to_chat(user, "<span class='notice'>Now disassembling \the [src].</span>")
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			O.playtoolsound(loc, 50)
 			if(do_after(user,50, target = src))
 				destroy(1)
 		else
@@ -813,7 +821,7 @@
 	else
 		return 0
 
-/obj/machinery/power/conduction_plate/wrenchAnchor(var/mob/user)
+/obj/machinery/power/conduction_plate/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
 		return

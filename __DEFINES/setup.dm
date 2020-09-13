@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
-#if DM_VERSION < 512
-#error Your version of byond is too old, you need version 512 or higher
+#if DM_VERSION < 513
+#error Your version of byond is too old, you need version 513 or higher
 #endif
 #define RUNWARNING // disable if they re-enable run() in 507 or newer.
                    // They did, tested in 508.1296 - N3X
@@ -202,6 +202,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define TIMELESS		32768 // Immune to time manipulation.
 
 #define SILENTCONTAINER	65536 //reactions inside make no noise
+#define ATOM_INITIALIZED 131072 // initialize() was called
 
 #define ALL ~0
 #define NONE 0
@@ -276,6 +277,30 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_legcuffed 17
 #define slot_legs 18
 
+//slots, but in string format.
+#define slot_back_str "1"
+#define slot_wear_mask_str "2"
+#define slot_handcuffed_str "3"
+#define slot_belt_str "4"
+#define slot_wear_id_str "5"
+#define slot_ears_str "6"
+#define slot_glasses_str "7"
+#define slot_gloves_str "8"
+#define slot_head_str "9"
+#define slot_shoes_str "10"
+#define slot_wear_suit_str "11"
+#define slot_w_uniform_str "12"
+#define slot_l_store_str "13"
+#define slot_r_store_str "14"
+#define slot_s_store_str "15"
+#define slot_in_backpack_str "16"
+#define slot_legcuffed_str "17"
+#define slot_legs_str "18"
+
+#define ACCESSORY_ITEM "accessory item"
+#define SURVIVAL_BOX "Survival Box"
+
+
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
@@ -302,7 +327,7 @@ var/MAX_EXPLOSION_RANGE = 14
 // bitflags for clothing parts
 
 #define FULL_TORSO		(UPPER_TORSO|LOWER_TORSO)
-#define FACE			(EYES|MOUTH|BEARD)
+#define FACE			(EYES|MOUTH|BEARD)	//38912
 #define BEARD			32768
 #define FULL_HEAD		(HEAD|EYES|MOUTH|EARS)
 #define LEGS			(LEG_LEFT|LEG_RIGHT) 		// 24
@@ -326,7 +351,7 @@ var/MAX_EXPLOSION_RANGE = 14
 #define HIDEHEADHAIR 		65536
 #define MASKHEADHAIR		131072
 #define HIDEBEARDHAIR		BEARD
-#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)
+#define HIDEHAIR			(HIDEHEADHAIR|HIDEBEARDHAIR)//98304
 #define	HIDESUITSTORAGE		LOWER_TORSO
 
 // bitflags for the percentual amount of protection a piece of clothing which covers the body part offers.
@@ -436,7 +461,6 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
-#define M_OBESITY       200		// Decreased metabolism
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
@@ -444,17 +468,18 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_SUPER_FART    205		// Duh
 #define M_SMILE         206		// :)
 #define M_ELVIS         207		// You ain't nothin' but a hound dog.
+#define M_HORNS         208
 
 // /vg/ muts
-#define M_LOUD		208		// CAUSES INTENSE YELLING
-#define M_WHISPER	209		// causes quiet whispering
-#define M_DIZZY		210		// Trippy.
-#define M_SANS		211		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'fuck comic sans' IN YOUR PR.
-#define M_FARSIGHT	212		// Increases mob's view range by 2
-#define M_NOIR		213		// aww yis detective noir
-#define M_VEGAN		214
-#define M_ASTHMA	215
-#define M_LACTOSE	216
+#define M_LOUD		308		// CAUSES INTENSE YELLING
+#define M_WHISPER	309		// causes quiet whispering
+#define M_DIZZY		310		// Trippy.
+#define M_SANS		311		// IF YOU SEE THIS WHILST BROWSING CODE, YOU HAVE BEEN VISITED BY: THE FONT OF SHITPOSTING. GREAT LUCK AND WEALTH WILL COME TO YOU, BUT ONLY IF YOU SAY 'I love comic sans' IN YOUR PR.
+#define M_FARSIGHT	312		// Increases mob's view range by 2
+#define M_NOIR		313		// aww yis detective noir
+#define M_VEGAN		314
+#define M_ASTHMA	315
+#define M_LACTOSE	316
 
 var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 				 				  0.33,0.33,0.33,0,\
@@ -521,9 +546,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define GAS_CO2	(1 << 3)
 #define GAS_N2O	(1 << 4)
 
-#define CC_PER_SHEET_METAL 3750
-#define CC_PER_SHEET_GLASS 3750
-#define CC_PER_SHEET_MISC 2000
 
 #define INV_SLOT_SIGHT "sight_slot"
 #define INV_SLOT_TOOL "tool_slot"
@@ -655,7 +677,7 @@ var/list/liftable_structures = list(\
 #define SEE_INVISIBLE_LIVING 25		//This what players have by default.
 
 #define SEE_INVISIBLE_LEVEL_ONE 35	//Used by mobs under certain conditions.
-#define INVISIBILITY_LEVEL_ONE 35	//Unused.
+#define INVISIBILITY_LEVEL_ONE 35	//Used by infrared beams.
 
 #define SEE_INVISIBLE_LEVEL_TWO 45	//Used by mobs under certain conditions.
 #define INVISIBILITY_LEVEL_TWO 45	//Used by turrets inside their covers.
@@ -731,6 +753,11 @@ SEE_PIXELS	256
 #define VERM_SYPHONER 11
 #define VERM_GREMTIDE 12
 #define VERM_CRABS 13
+#define VERM_DIONA 14
+#define VERM_MUSHMEN 15
+#define VERM_FROGS 14
+#define VERM_SNAILS 15
+#define VERM_HEADCRABS 16
 
 
 #define MONSTER_BEAR    0
@@ -772,25 +799,6 @@ SEE_PIXELS	256
 #define ORGAN_PEG			4096 // ROB'S MAGICAL PEGLEGS v2
 #define ORGAN_MALFUNCTIONING 8192
 
-//////////////////MATERIAL DEFINES/////////////////
-
-#define MAT_IRON		"$iron"
-#define MAT_GLASS		"$glass"
-#define MAT_GOLD		"$gold"
-#define MAT_SILVER		"$silver"
-#define MAT_URANIUM		"$uranium"
-#define MAT_DIAMOND		"$diamond"
-#define MAT_PHAZON		"$phazon"
-#define MAT_PLASMA		"$plasma"
-#define MAT_CLOWN		"$clown"
-#define MAT_PLASTIC		"$plastic"
-#define MAT_CARDBOARD   "$cardboard"
-#define MAT_WOOD		"$wood"
-#define MAT_BRASS   	"$brass"
-#define MAT_RALLOY   	"$ralloy"
-#define MAT_ICE			"$ice"
-#define MAT_MYTHRIL		"$mythril"
-#define MAT_TELECRYSTAL	"$telecrystal"
 
 //Admin Permissions
 //Please don't edit these values without speaking to [current /vg/ host here] first
@@ -834,7 +842,7 @@ SEE_PIXELS	256
 #define CHAT_GHOSTRADIO 8192
 #define SOUND_STREAMING 16384 // /vg/
 #define CHAT_GHOSTPDA   32768
-
+#define AUTO_DEADMIN	65536
 
 #define TOGGLES_DEFAULT (SOUND_ADMINHELP|SOUND_MIDI|SOUND_AMBIENCE|SOUND_LOBBY|CHAT_OOC|CHAT_DEAD|CHAT_GHOSTEARS|CHAT_GHOSTSIGHT|CHAT_PRAYER|CHAT_RADIO|CHAT_ATTACKLOGS|CHAT_LOOC|SOUND_STREAMING)
 
@@ -938,8 +946,9 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define PLASMA_IMMUNE 512
 #define RAD_GLOW 1024
 #define ELECTRIC_HEAL 2048
-#define IS_SPECIES_MUTE 4096
-#define REQUIRE_DARK 8192
+#define SPECIES_NO_MOUTH 4096
+//#define REQUIRE_DARK 8192
+#define RAD_IMMUNE 16384
 
 //Species anatomical flags.
 #define HAS_SKIN_TONE 1
@@ -955,6 +964,8 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define NO_STRUCTURE 1024	//no vessels, muscles, or any sort of internal structure, uniform throughout
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
+#define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 16384
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1131,17 +1142,6 @@ var/default_colour_matrix = list(1,0,0,0,\
 
 #define MAX_N_OF_ITEMS 999 // Used for certain storage machinery, BYOND infinite loop detector doesn't look things over 1000.
 
-//gun shit - prepare to have various things added to this
-#define SILENCECOMP  1 		//Silencer-compatible
-#define AUTOMAGDROP  2		//Does the mag drop when it's empty?
-#define EMPTYCASINGS 4		//Does the gun eject empty casings?
-
-//projectiles bouncing off and phasing through obstacles
-#define PROJREACT_WALLS		1//includes opaque doors
-#define PROJREACT_WINDOWS	2//includes transparent doors
-#define PROJREACT_OBJS		4//structures, machines and items
-#define PROJREACT_MOBS		8//all mobs
-#define PROJREACT_BLOB		16//blob
 
 ///////////////////////
 ///////RESEARCH////////
@@ -1257,9 +1257,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII			105
 #define PDA_APP_MINESWEEPER		106
 #define PDA_APP_SPESSPETS		107
+#define PDA_APP_NEWSREADER		108
 
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1298,6 +1303,8 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_GOLEM "Golem"
 #define LANGUAGE_SLIME "Slime"
 #define LANGUAGE_MARTIAN "Martian"
+#define LANGUAGE_INSECT "Insectoid"
+#define LANGUAGE_DEATHSQUAD "Deathsquad"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
@@ -1306,6 +1313,19 @@ var/default_colour_matrix = list(1,0,0,0,\
 #else
 	#define say_testing(a,x)
 //	null << "[x][a]")
+#endif
+
+#define ASTAR_DEBUG 0
+#if ASTAR_DEBUG == 1
+#warn "Astar debug is on. Don't forget to turn it off after you've done :)"
+#define astar_debug(text) to_chat(world, text)
+#else
+#define astar_debug(text)
+#endif
+
+#define BSQL_DEBUG_CONNECTION 0
+#if BSQL_DEBUG_CONNECTION == 1
+#warn "BSQL_DEBUG_CONNECTION MUST BE SET TO 0 BEFORE COMMITING."
 #endif
 
 //#define JUSTFUCKMYSHITUP 1
@@ -1345,8 +1365,10 @@ var/proccalls = 1
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0
 #define INCORPOREAL_GHOST		1
+#define INCORPOREAL_ETHEREAL_IMPROVED 1.5
 #define INCORPOREAL_ETHEREAL	2
 #define GHOST_MOVEDELAY 1
+#define ETHEREAL_IMPROVED_MOVEDELAY 1.5
 #define ETHEREAL_MOVEDELAY 2
 
 
@@ -1414,6 +1436,7 @@ var/proccalls = 1
 
 #define log_blobspeak(text) diary << html_decode("\[[time_stamp()]]BLOB: [text]")
 #define log_blobtelepathy(text) diary << html_decode("\[[time_stamp()]]BLOBTELE: [text]")
+#define log_tgui(text) diary << html_decode("\[[time_stamp()]]TGUI: [text]")
 
 //OOC isbanned
 #define oocban_isbanned(key) oocban_keylist.Find("[ckey(key)]")
@@ -1513,16 +1536,20 @@ var/proccalls = 1
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  1
-#define HONORABLE_HIGHLANDER 2
-#define HONORABLE_NINJA      4
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
+#define HONORABLE_BOMBERMAN  262144
+#define HONORABLE_HIGHLANDER 524288
+#define HONORABLE_NINJA      1048576
+#define HONORABLE_NOGUNALLOWED	2097152
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
+
+#define GRASP_RIGHT_HAND_STR "1"
+#define GRASP_LEFT_HAND_STR "2"
 
 #define BLOB_CORE_PROPORTION 20
 
@@ -1572,9 +1599,17 @@ var/proccalls = 1
 #define HOLOMAP_DRAW_NORMAL	0
 #define HOLOMAP_DRAW_FULL	1
 #define HOLOMAP_DRAW_EMPTY	2
+#define HOLOMAP_DRAW_PATH	3
+#define HOLOMAP_DRAW_HALLWAY	4
+
+#define HUMAN_DNA	1
+#define XENO_DNA	2
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
+#define ALIEN_BLOOD "#05EE05"
+#define ALIEN_FLESH "#34334B"
+#define ROBOT_OIL "#030303"
 
 //Return values for /obj/machinery/proc/npc_tamper_act(mob/living/L)
 #define NPC_TAMPER_ACT_FORGET 1 //Don't try to tamper with this again
@@ -1636,3 +1671,10 @@ var/proccalls = 1
 
 // How many times to retry winset()ing window parameters before giving up
 #define WINSET_MAX_ATTEMPTS 10
+
+// E-Sports teams
+#define ESPORTS_CULTISTS "Team Geometer"
+#define ESPORTS_SECURITY "Team Security"
+
+var/list/weekend_days = list("Friday", "Saturday", "Sunday")
+#define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))

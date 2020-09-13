@@ -224,6 +224,11 @@
 	targetvendomat = /obj/machinery/vending/games
 	icon_state = "games"
 
+/obj/structure/vendomatpack/team_security
+	name = "Team Security recharge pack"
+	targetvendomat = /obj/machinery/vending/team_security
+	icon_state = "team_security"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack

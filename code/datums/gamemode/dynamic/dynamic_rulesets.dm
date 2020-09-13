@@ -10,9 +10,12 @@
 	var/list/exclusive_to_jobs = list()//if set, rule will only accept candidates from those jobs
 	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
-	var/required_enemies = list(1,1,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of enemy job workers needed per threat_level range (0-10,10-20,etc)
+	var/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
+	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
+	var/list/weekday_rule_boost = list()
+	var/list/timeslot_rule_boost = list()
 	var/cost = 0//threat cost for this rule.
 	var/logo = ""//any state from /icons/logos.dmi
 	var/calledBy //who dunnit, for round end scoreboard
@@ -80,7 +83,7 @@
 		return 0
 	return 1
 
-// Returns TRUE if there are sufficient enemies to execute this ruleset
+// Returns TRUE if there is enough pop to execute this ruleset
 /datum/dynamic_ruleset/proc/check_enemy_jobs(var/dead_dont_count = FALSE)
 	if (!enemy_jobs.len)
 		return TRUE
@@ -96,22 +99,54 @@
 		for (var/mob/M in mode.candidates)
 			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
+	
+	var/pop_and_enemies
+	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
+		pop_and_enemies += mode.living_players.len
+	else
+		pop_and_enemies += mode.roundstart_pop_ready
+
+	pop_and_enemies += enemies_count // Enemies count twice
 
 	var/threat = round(mode.threat_level/10)
-	if (enemies_count >= required_enemies[threat])
+	if (enemies_count <= required_enemies[threat])
+		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies])")
+		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies])")
+		return FALSE
+	if (pop_and_enemies >= required_pop[threat])
 		return TRUE
 	if (!dead_dont_count)//roundstart check only
-		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
-		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs ready ([enemies_count] out of [required_enemies[threat]])")
+		message_admins("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
+		log_admin("Dynamic Mode: Despite [name] having enough candidates, there are not enough enemy jobs and pop ready ([enemies_count] and [mode.roundstart_pop_ready] out of [required_pop[threat]])")
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
-	if(repeatable && weight > 1)
-		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-			if(istype(DR,src.type))
-				weight = max(weight-2,1)
-	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
-	return weight
+	var/result = weight
+	result *= weight_time_day()
+	var/halve_result = FALSE
+	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
+		if(DR.role_category == src.role_category) // Same kind of antag.
+			halve_result = TRUE
+			break
+	if(!halve_result)
+		for(var/entry in mode.last_round_executed_rules)
+			var/datum/dynamic_ruleset/DR = entry
+			if(initial(DR.role_category) == src.role_category)
+				halve_result = TRUE
+				break
+	if(halve_result)
+		result /= 2
+	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
+	return result
+
+//Return a multiplicative weight. 1 for nothing special.
+/datum/dynamic_ruleset/proc/weight_time_day()
+	var/weigh = 1
+	if(time2text(world.timeofday, "DDD") in weekday_rule_boost)
+		weigh *= 2
+	if(getTimeslot() in timeslot_rule_boost)
+		weigh *= 2
+	return weigh
 
 /datum/dynamic_ruleset/proc/trim_candidates()
 	return
@@ -261,7 +296,18 @@
 			continue
 
 /datum/dynamic_ruleset/roundstart/ready(var/forced = 0)
+	message_admins("[name]: [length(candidates)] candidates")
 	if (!forced)
 		if(!check_enemy_jobs(FALSE))
 			return 0
 	return ..()
+
+/datum/dynamic_ruleset/proc/latejoinprompt(var/mob/user, var/ruleset)
+	if(alert(user,"The gamemode is trying to select you for [ruleset], do you want this?",,"Yes","No") == "Yes")
+		return 1
+	return 0
+
+/datum/dynamic_ruleset/proc/generate_ruleset_body(mob/applicant)
+	var/mob/living/carbon/human/new_character = makeBody(applicant)
+	new_character.dna.ResetSE()
+	return new_character

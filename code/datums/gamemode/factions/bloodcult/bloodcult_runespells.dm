@@ -167,7 +167,6 @@
 		if (RITUALABORT_OUTPOST)
 			if (activator)
 				to_chat(activator, "<span class='sinister'>The veil here is still too dense to allow raising structures from the realm of Nar-Sie. We must raise our structure in the heart of the station.</span>")
-	..()
 
 
 	for(var/mob/living/L in contributors)
@@ -181,7 +180,7 @@
 	if (progbar)
 		progbar.loc = null
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_RUNE
 		holomarker.color = null
@@ -408,7 +407,7 @@
 	while(failsafe < 1000)
 		failsafe++
 		//are our payers still here and about?
-		var/summoners = 0
+		var/summoners = 0//the higher, the easier it is to perform the ritual without many cultists. default=0
 		for(var/mob/living/L in contributors)
 			if (iscultist(L) && (L in range(spell_holder,1)) && (L.stat == CONSCIOUS))
 				summoners++
@@ -502,7 +501,7 @@
 	var/reminder = input("Write the reminder.", text("Cult reminder")) as null | message
 	if (!reminder)
 		return
-	reminder = utf8_sanitize(reminder) // No weird HTML
+	reminder = strip_html_simple(reminder) // No weird HTML
 	var/number = cult.cult_reminders.len
 	var/text = "[number + 1]) [reminder], by [user.real_name]."
 	cult.cult_reminders += text
@@ -713,7 +712,7 @@
 	else
 		if (pay_blood())
 			R.one_pulse()
-			spell_holder.visible_message("<span class='rose'>The blood drops merge into each others, and a talisman takes form in their place</span>")
+			spell_holder.visible_message("<span class='rose'>The blood drops merge into each other, and a talisman takes form in their place.</span>")
 			var/turf/T = get_turf(spell_holder)
 			AT = new (T)
 			anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_imbue")
@@ -853,14 +852,14 @@
 	var/turf/T = R.loc
 	var/list/targets = list()
 
-	//first lets check for a victim above
+	//first lets check for a victim on top of the rune
 	for (var/mob/living/silicon/S in T) // Has science gone too far????
 		if (S.cult_permitted || Holiday == APRIL_FOOLS_DAY)
 			if (!iscultist(S))
 				targets.Add(S)
 
-	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons.
-		if (!iscultist(C))
+	for (var/mob/living/carbon/C in T)//all carbons can be converted...but only carbons. no cult silicons. (unless it's April 1st)
+		if (!iscultist(C) && !C.isDead())//no more corpse conversions!
 			targets.Add(C)
 	if (targets.len > 0)
 		victim = pick(targets)
@@ -1037,6 +1036,10 @@
 			else
 				message_admins("Blood Cult: A conversion ritual occured...but we cannot find the cult faction...")//failsafe in case of admin varedit fuckery
 			cult_risk(activator)//risk of exposing the cult early if too many conversions
+			var/datum/role/streamer/streamer_role = activator?.mind?.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				streamer_role.conversions += IS_WEEKEND ? 2 : 1
+				streamer_role.update_antag_hud()
 
 		switch (success)
 			if (CONVERSION_ACCEPT)
@@ -1068,6 +1071,12 @@
 					if (isrobot(S))
 						var/mob/living/silicon/robot/robit = S
 						robit.disconnect_AI()
+				if (istype(victim, /mob/living/carbon/complex/gondola)) //fug.....
+					var/mob/living/carbon/complex/gondola/gondola = victim
+					gondola.icon_state_standing = pick("gondola_c","gondola_c_tome")
+					gondola.icon_state_lying = "[gondola.icon_state_standing]_lying"
+					gondola.icon_state_dead = "gondola_skull"
+					gondola.icon_state = gondola.icon_state_standing
 				return
 			if (CONVERSION_NOCHOICE)
 				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
@@ -1346,7 +1355,7 @@ var/list/blind_victims = list()
 	if (specific_victim)
 		potential_victims.Add(specific_victim)
 	else
-		for(var/mob/living/M in viewers(T))
+		for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			potential_victims.Add(M)
 
 	for(var/mob/living/M in potential_victims)
@@ -1372,8 +1381,10 @@ var/list/blind_victims = list()
 			spawn(5)
 				M.clear_fullscreen("blindblack", animate = 0)
 				M.flash_eyes(visual = 1)
+
+	//now to blind cameras, the effects on cameras do not time out, but they can be fixed
 	if (!specific_victim)
-		for(var/obj/machinery/camera/C in view(T))//the effects on cameras do not time out, but they can be fixed
+		for(var/obj/machinery/camera/C in dview(world.view, T, INVISIBILITY_MAXIMUM))
 			shadow(C,T)
 			var/col = C.color
 			animate(C, color = col, time = 4)
@@ -1609,17 +1620,18 @@ var/list/blind_victims = list()
 		last_threshold = world.time
 		var/list/seers = list()
 		for (var/mob/living/seer in range(7, get_turf(spell_holder)))
-			if (iscultist(seer) && seer.client && seer.client.screen)
+			if (iscultist(seer) && seer.client)
 				var/image/image_intruder = image(L, loc = seer, layer = ABOVE_LIGHTING_LAYER, dir = L.dir)
 				var/delta_x = (L.x - seer.x)
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				seers += seer
-				seer << image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = 0, offY = 0, plane = LIGHTING_PLANE)
+				seer.client.images += image_intruder // see the mover for a set period of time
+				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -delta_x, offY = -delta_y, plane = LIGHTING_PLANE)
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 		var/count = 10 SECONDS
 		do
 			for (var/mob/living/seer in seers)
@@ -1631,9 +1643,10 @@ var/list/blind_victims = list()
 				var/delta_y = (L.y - seer.y)
 				image_intruder.pixel_x = delta_x*WORLD_ICON_SIZE
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
-				seer << image_intruder
+				seer.client.images += image_intruder // see the mover for a set period of time
 				spawn(3)
-					del image_intruder
+					seer.client.images -= image_intruder // see the mover for a set period of time
+					qdel(image_intruder)
 			count--
 		while (count && seers.len)
 
@@ -2236,7 +2249,7 @@ var/list/blind_victims = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now let you travel through the \"[network]\" Path.</span>")
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_ENTRANCE
 		holomarker.color = W.color
@@ -2300,7 +2313,8 @@ var/list/bloodcult_exitportals = list()
 	var/obj/effect/rune/R = spell_holder
 	R.one_pulse()
 
-	var/list/available_networks = global_runesets["blood_cult"].words_english.Copy()
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	var/list/available_networks = rune_set.words_english.Copy()
 	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
 		if (P.network)
 			available_networks -= P.network
@@ -2315,7 +2329,7 @@ var/list/bloodcult_exitportals = list()
 		qdel(src)
 		return
 
-	var/datum/runeword/blood_cult/W = global_runesets["blood_cult"].words[network]
+	var/datum/runeword/blood_cult/W = rune_set.words[network]
 
 	invoke(activator, "[W.rune]")
 	var/image/I_crystals = image('icons/obj/cult.dmi',"path_crystals")
@@ -2348,7 +2362,7 @@ var/list/bloodcult_exitportals = list()
 
 	to_chat(activator, "<span class='notice'>This rune will now serve as a destination for the \"[network]\" Path.</span>")
 
-	if (HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]" in holomap_markers)
+	if ((HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]") in holomap_markers)
 		var/datum/holomap_marker/holomarker = holomap_markers[HOLOMAP_MARKER_CULT_RUNE+"_\ref[spell_holder]"]
 		holomarker.id = HOLOMAP_MARKER_CULT_EXIT
 		holomarker.color = W.color
@@ -2699,6 +2713,33 @@ var/list/bloodcult_exitportals = list()
 	plane = ABOVE_HUMAN_PLANE
 	mouse_opacity = 0
 
+//RUNE XXI
+/datum/rune_spell/blood_cult/stream
+	name = "Stream"
+	desc = "Start or stop streaming on Spess.TV"
+	desc_talisman = "Start or stop streaming on Spess.TV"
+	Act_restriction = CULT_PROLOGUE
+	invocation = "L'k' c'mm'nt 'n' s'bscr'b! P'g ch'mp! Kappah!"
+	word1 = /datum/runeword/blood_cult/other
+	word2 = /datum/runeword/blood_cult/see
+	word3 = /datum/runeword/blood_cult/self
+	page = "This rune lets you start (or stop) streaming on Spess.TV so that you can let your audience watch and cheer for you while you slay infidels in the name of Nar-sie. #Sponsored"
 
+/datum/rune_spell/blood_cult/stream/cast()
+	var/datum/role/streamer/streamer = activator.mind.GetRole(STREAMER)
+	if(!streamer)
+		streamer = new /datum/role/streamer
+		streamer.team = ESPORTS_CULTISTS
+		if(!streamer.AssignToRole(activator.mind, 1))
+			streamer.Drop()
+			return
+		streamer.OnPostSetup()
+		streamer.Greet(GREET_DEFAULT)
+		streamer.AnnounceObjectives()
+	streamer.team = ESPORTS_CULTISTS
+	if(!streamer.camera)
+		streamer.set_camera(new /obj/machinery/camera/arena/spesstv(activator))
+	streamer.toggle_streaming()
+	qdel(src)
 
 #undef RUNE_STAND

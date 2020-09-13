@@ -45,12 +45,30 @@
 	icon_state = "spoon"
 	attack_verb = list("attacks", "pokes", "hits")
 	melt_temperature = MELTPOINT_STEEL
+	var/bendable = TRUE
+	var/bent = FALSE
+
+/obj/item/weapon/kitchen/utensil/spoon/attack_self(mob/user)
+	if(!bendable || !(M_TK in user.mutations))
+		visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
+		return
+	bend(user)
+
+/obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
+	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
+	if(!bent)
+		bent = TRUE
+		icon_state = initial(icon_state) + "_bent"
+		return
+	bent = FALSE
+	icon_state = initial(icon_state)
 
 /obj/item/weapon/kitchen/utensil/spoon/plastic
 	name = "plastic spoon"
 	desc = "Super dull action!"
 	icon_state = "pspoon"
 	melt_temperature = MELTPOINT_PLASTIC
+	bendable = FALSE
 
 /*
  * Forks
@@ -83,6 +101,9 @@
 
 	if (src.loaded_food)
 		reagents.update_total()
+		if(!M.hasmouth())
+			to_chat(user, "<span class='warning'>[M] can't eat that with no mouth!</span>")
+			return
 		if(M == user)
 			user.visible_message("<span class='notice'>[user] eats a delicious forkful of [loaded_food_name]!</span>")
 			feed_to(user, user)
@@ -243,7 +264,7 @@
 		var/obj/item/weapon/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
-			playsound(user, 'sound/items/Welder.ogg', 50, 1)
+			WT.playtoolsound(user, 50)
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
@@ -292,6 +313,7 @@
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	name = "meat cleaver"
 	icon_state = "mcleaver"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
 	desc = "A huge thing used for chopping and chopping up meat. This includes clowns and clown-by-products."
 	armor_penetration = 50
 	force = 25.0

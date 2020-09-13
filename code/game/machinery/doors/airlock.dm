@@ -59,6 +59,7 @@
 
 	emag_cost = 1 // in MJ
 	machine_flags = SCREWTOGGLE | WIREJACK
+	animation_delay = 5
 
 /obj/machinery/door/airlock/Destroy()
 	if(wires)
@@ -143,7 +144,7 @@
 	icon = 'icons/obj/doors/Doorhatchmaint2.dmi'
 	opacity = 1
 	assembly_type = /obj/structure/door_assembly/door_assembly_mhatch
-	animation_delay = 12
+	animation_delay = 6
 
 /obj/machinery/door/airlock/glass_command
 	name = "Maintenance Hatch"
@@ -1124,10 +1125,10 @@ About the new airlock wires panel:
 
 
 //You can ALWAYS screwdriver a door. Period. Well, at least you can even if it's open
-/obj/machinery/door/airlock/togglePanelOpen(var/obj/toggleitem, mob/user)
+/obj/machinery/door/airlock/togglePanelOpen(var/obj/item/toggleitem, mob/user)
 	if(!operating)
 		panel_open = !panel_open
-		playsound(src, 'sound/items/Screwdriver.ogg', 25, 1, -6)
+		toggleitem.playtoolsound(src, 50, TRUE, -6)
 		to_chat(user, "<span class='notice'>You [panel_open?"open":"close"] the panel.</span>")
 		update_icon()
 		return 1
@@ -1212,7 +1213,7 @@ About the new airlock wires panel:
 		else
 			beingcrowbarred = 0
 		if( beingcrowbarred && (operating == -1 || density && welded && !operating && src.panel_open && (!src.arePowerSystemsOn() || stat & NOPOWER) && !src.locked) )
-			playsound(src.loc, 'sound/items/Crowbar.ogg', 100, 1)
+			I.playtoolsound(loc, 100)
 			user.visible_message("[user] removes the electronics from the airlock assembly.", "You start to remove electronics from the airlock assembly.")
 			// TODO: refactor the called proc
 			if (do_after(user, src, 40))
@@ -1316,6 +1317,9 @@ About the new airlock wires panel:
 		return 0
 	if(!forced)
 		if( !arePowerSystemsOn() || (stat & NOPOWER) || isWireCut(AIRLOCK_WIRE_OPEN_DOOR) )
+			return 0
+	for(var/obj/O in loc) //A redundant check that exists in the parent
+		if (O.blocks_doors()) //But it exists in the parent because it also affects firelocks.
 			return 0
 	use_power(50)
 	playsound(src, soundeffect, pitch, 1)

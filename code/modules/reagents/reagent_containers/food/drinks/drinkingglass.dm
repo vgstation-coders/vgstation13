@@ -495,7 +495,7 @@
 			if(SYNDICATEBOMB)
 				icon_state = "syndicatebomb"
 				name = "\improper Syndicate Bomb"
-				desc = "Somebody set us up the bomb!"
+				desc = "Somebody set up us the bomb!"
 				isGlass = 0//blablabla hidden features, blablabla joke material
 			if(ERIKASURPRISE)
 				icon_state = "erikasurprise"
@@ -620,6 +620,10 @@
 				icon_state = "waifu"
 				name = "\improper Waifu"
 				desc = "Don't drink more than one waifu if you value your laifu."
+			if(HUSBANDO)
+				icon_state = "husbando"
+				name = "\improper Husbando"
+				desc = "Don't talk shit about my husbando."
 			if(BEEPSKY_CLASSIC)
 				icon_state = "beepsky_classic"
 				name = "\improper Beepsky Classic"
@@ -741,6 +745,14 @@
 				icon_state= "firerita"
 				name = "firerita"
 				desc = "Looks pretty, offends a sane person's taste buds. Then again, anyone who orders this probably lacks one of those two traits."
+			if(MAGICA)
+				icon_state= "magica"
+				name = "magica"
+				desc = "Bitter, with an annoying aftertaste of spice. Supposedly inspired by wearers of bath robes."
+			if(MAGICADELUXE)
+				icon_state= "magicadeluxe"
+				name = "magica deluxe"
+				desc = "Makes you feel positively enchanted, until the aftertaste hits you."
 
 			else
 				icon_state ="glass_colour"
@@ -793,6 +805,14 @@
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
+	on_reagent_change()
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
+	name = "glass of sake"
+
+/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake/New()
+	..()
+	reagents.add_reagent(SAKE, 50)
 	on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.

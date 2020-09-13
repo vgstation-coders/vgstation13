@@ -28,7 +28,7 @@
 
 /turf/simulated/wall/mineral/wood/ex_act(var/severity)
 	if(severity < 3)
-		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	..()
 
 /turf/simulated/wall/mineral/brick
@@ -204,3 +204,10 @@
 
 /turf/simulated/wall/mineral/clockwork/clockworkify()
 	return
+
+/turf/simulated/wall/mineral/gingerbread
+	name = "gingerbread wall"
+	desc = "Extremely stale and generally unappetizing."
+	icon_state = "gingerbread0"
+	walltype = "gingerbread"
+	mineral = "gingerbread"

@@ -119,7 +119,8 @@
 					M.dna.UpdateSE()
 				else
 					M.dna.SetSEValue(block,src.GetValue())
-				domutcheck(M, null, nofail)
+				spawn() //domutcheck can include monkeyization which is long and stops the proc until it's done, this fixes it
+					domutcheck(M, null, nofail)
 				uses--
 				//if(prob(5))
 					//trigger_side_effect(M)

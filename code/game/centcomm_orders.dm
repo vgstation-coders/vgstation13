@@ -227,6 +227,7 @@ var/global/current_centcomm_order_id=124901
 	requested = list(
 		/obj/structure/poutineocean/poutinecitadel = 1
 	)
+	must_be_in_crate = 0
 	worth = rand(1000,3000)*requested[requested[1]]
 
 /datum/centcomm_order/department/civilian/sweetsundaeramen/New()
@@ -255,6 +256,7 @@ var/global/current_centcomm_order_id=124901
 	requested = list(
 		/obj/structure/popout_cake = 1
 	)
+	must_be_in_crate = 0
 	worth = rand(600,1200)*requested[requested[1]]
 
 /datum/centcomm_order/department/civilian/bkipper/New()

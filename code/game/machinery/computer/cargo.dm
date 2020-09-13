@@ -196,12 +196,12 @@ For vending packs, see vending_packs.dm*/
 		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
-		playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+		I.playtoolsound(loc, 50)
 		if(do_after(user, src, 20))
 			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
 				for (var/obj/C in src)
 					C.forceMove(loc)
@@ -451,7 +451,7 @@ For vending packs, see vending_packs.dm*/
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command

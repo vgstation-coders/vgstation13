@@ -12,7 +12,7 @@
 /obj/structure/plasticflaps/attackby(obj/item/I as obj, mob/user as mob)
 	if(iscrowbar(I) && anchored == 1)
 		if(airtight == 0)
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 		else
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.", "You [airtight? "loosen the [src] from" : "tighten the [src] into"] an airtight position.")
@@ -20,9 +20,9 @@
 		name = "\improper [airtight? "Airtight p" : "P"]lastic flaps"
 		desc = "[airtight? "Heavy duty, airtight, plastic flaps." : "I definitely can't get past those. No way."]"
 		return 1
-	if(iswrench(I) && airtight != 1)
+	if(I.is_wrench(user) && airtight != 1)
 		if(anchored == 0)
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 		else
 			playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		user.visible_message("[user] [anchored? "loosens" : "tightens"] the flap from its anchoring.", "You [anchored? "loosen" : "tighten"] the flap from its anchoring.")

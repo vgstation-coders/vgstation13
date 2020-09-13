@@ -70,6 +70,13 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 		if(!procname)
 			return
 
+		// Do not make this a global reference. Global references can be cleared out.
+		if (istype(target, /datum/subsystem/dbcore/))
+			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
+			message_admins("[key_name(usr)] used atom proc call on the db controller.")
+			log_admin("[key_name(usr)] used atom proc call on the db controller.")
+			return FALSE
+
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
 			return
@@ -499,7 +506,7 @@ Pressure: [env.pressure]"}
 		if(A && !(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
-	for(var/obj/machinery/requests_console/RC in allConsoles)
+	for(var/obj/machinery/requests_console/RC in requests_consoles)
 		var/area/A = get_area(RC)
 		if(A && !(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
@@ -704,20 +711,6 @@ Pressure: [env.pressure]"}
 	else
 		alert("Invalid mob")
 
-
-/client/proc/cmd_admin_dump_instances()
-	set category = "Debug"
-	set name = "Dump Instance Counts"
-	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F=file("data/logs/profiling/[date_string]_instances.csv")
-	fdel(F)
-	F << "Types,Number of Instances"
-	for(var/key in type_instances)
-		F << "[key],[type_instances[key]]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
-
 /client/proc/cmd_admin_find_bad_blood_tracks()
 	set category = "Debug"
 	set name = "Find broken blood tracks"
@@ -861,10 +854,10 @@ var/global/blood_virus_spreading_disabled = 0
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		return M:Cluwneize()
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a cluwne.</span>", 1)
 		feedback_add_details("admin_verb","MKCLU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 		log_admin("[key_name(src)] has cluwne-ified [M.key].")
+		return M.Cluwneize()
 	else
 		alert("Invalid mob, needs to be a human.")
 
@@ -1243,7 +1236,7 @@ client/proc/check_convertables()
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1354,14 +1347,30 @@ client/proc/check_convertables()
 		holder.diseases_panel()
 		log_admin("[key_name(usr)] checked the Diseases Panel.")
 	feedback_add_details("admin_verb","DIS")
-	return
+
+/client/proc/artifacts_panel()
+	set name = "Artifacts Panel"
+	set category = "Admin"
+	if(holder)
+		holder.artifacts_panel()
+		log_admin("[key_name(usr)] checked the Artifacts Panel.")
+	feedback_add_details("admin_verb","ART")
+
+/client/proc/climate_panel()
+	set name = "Climate Panel"
+	set category = "Admin"
+	if(holder)
+		holder.climate_panel()
+		log_admin("[key_name(usr)] checked the Climate Panel.")
+	feedback_add_details("admin_verb","CLI")
+
 
 /client/proc/start_line_profiling()
 	set category = "Profile"
 	set name = "Start line profiling"
 	set desc = "Starts tracking line by line profiling for code lines that support it"
 
-	PROFILE_START
+	LINE_PROFILE_START
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
 	feedback_add_details("admin_verb","Start line profiling")
@@ -1372,7 +1381,7 @@ client/proc/check_convertables()
 	set name = "Stop line profiling"
 	set desc = "Stops tracking line by line profiling for code lines that support it"
 
-	PROFILE_STOP
+	LINE_PROFILE_STOP
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
 	feedback_add_details("admin_verb","Stop line profiling")

@@ -18,9 +18,6 @@
 
 	immune_system = new (src)
 
-	on_resist = new(owner = src)
-	on_life = new(owner = src)
-
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -44,14 +41,6 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
-
-	if(on_resist)
-		qdel(on_resist)
-		on_resist = null
-
-	if(on_life)
-		qdel(on_life)
-		on_life = null
 
 	. = ..()
 
@@ -109,28 +98,6 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
-
-	INVOKE_EVENT(on_life, list())
-
-	/*if(mind)
-		if(mind in ticker.mode.implanted)
-			if(implanting)
-				return 0
-//			to_chat(world, "[src.name]")
-			var/datum/mind/head = ticker.mode.implanted[mind]
-			//var/list/removal
-			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
-//				to_chat(world, "doesn't have an implant")
-				ticker.mode.remove_traitor_mind(mind, head)
-
-				if((head in ticker.mode.implanters))
-					ticker.mode.implanter[head] -= src.mind
-				ticker.mode.implanted -= src.mind
-				if(src.mind in ticker.mode.traitors)
-					ticker.mode.traitors -= src.mind
-					special_role = null
-					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
-				*/
 	return 1
 
 // Apply connect damage
@@ -183,7 +150,6 @@
 
 /mob/living/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
-
 	// Figure out how much damage to deal.
 	// Formula: (deciseconds_since_connect/10 deciseconds)*B.get_damage()
 	var/damage = ((world.time - lastcheck)/10)  * B.get_damage()
@@ -278,7 +244,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -290,7 +256,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = OXY, "amount" = amount)))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -307,7 +273,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = TOX, "amount" = amount)))
 		return 0
 
 	var/mult = 1
@@ -331,7 +297,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -343,7 +309,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = CLONE, "amount" = amount)))
 		return 0
 
 	if(ishuman(src))
@@ -365,7 +331,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRAIN, "amount" = amount)))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -446,7 +412,7 @@
 		return L
 
 /mob/living/proc/electrocute_act(const/shock_damage, const/obj/source, const/siemens_coeff = 1.0)
-	if(status_flags & GODMODE || M_NO_SHOCK in src.mutations)
+	if(status_flags & GODMODE || (M_NO_SHOCK in src.mutations))
 		return 0
 
 	var/damage = shock_damage * siemens_coeff
@@ -474,6 +440,7 @@
 	..()
 
 /mob/living/proc/get_organ(zone)
+	RETURN_TYPE(/datum/organ/external)
 	return
 
 //A proc that turns organ strings into a list of organ datums
@@ -743,7 +710,9 @@ Thanks.
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
 							M.stop_pulling()
+							M.StartMoving()
 							pulling.Move(T, get_dir(pulling, T), glide_size_override = src.glide_size)
+							M.EndMoving()
 							if(M && secondarypull)
 								M.start_pulling(secondarypull)
 					else
@@ -802,9 +771,6 @@ Thanks.
 				hook.override_starting_X--
 				hook.override_target_X--
 
-/mob/living
-	var/event/on_resist
-
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
@@ -812,7 +778,7 @@ Thanks.
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
-	INVOKE_EVENT(on_resist, list())
+	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -922,24 +888,32 @@ Thanks.
 		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
-				returnToPool(G)
+				qdel(G)
 			else
 				if (G.state == GRAB_AGGRESSIVE)
 					if (prob(25))
 						L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s grip!</span>", \
 							drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s hug!</span>")
-						returnToPool(G)
+						qdel(G)
 				else
 					if (G.state == GRAB_NECK)
 						if (prob(5))
 							L.visible_message("<span class='danger'>[L] has broken free of [G.assailant]'s headlock!</span>", \
 								drugged_message="<span class='danger'>[L] has broken free of [G.assailant]'s passionate hug!</span>")
-							returnToPool(G)
+							qdel(G)
 		if(resisting)
 			L.visible_message("<span class='danger'>[L] resists!</span>")
 
 
 	if(L.locked_to && !L.isUnconscious())
+		// unbeartrapping yourself
+		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
+			if (iscarbon(L))
+				var/mob/living/carbon/C = L
+				if (C.handcuffed)
+					return
+			L.locked_to.attack_hand(L)
+			return
 		//unbuckling yourself
 		if(istype(L.locked_to, /obj/structure/bed))
 			var/obj/structure/bed/B = L.locked_to
@@ -979,7 +953,8 @@ Thanks.
 									return
 								C.visible_message("<span class='danger'>[C] manages to forcefully unbuckle!</span>",
 								                  "<span class='notice'>You successfully forcefully unbuckle.</span>")
-								C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+								if(!isalien(C))
+									C.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 								B.manual_unbuckle(C)
 							else
 								to_chat(C, "<span class='warning'>Your unbuckling attempt was interrupted.</span>")
@@ -1067,6 +1042,33 @@ Thanks.
 						BD.attack_hand(usr)
 					C.open()
 
+	//Removing a headcrab
+	if(ishuman(L))
+		var/on_head = L.get_item_by_slot(slot_head)
+		if(istype(on_head, /obj/item/clothing/mask/facehugger/headcrab))
+			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
+			if(crab.is_being_resisted)
+				return
+			crab.is_being_resisted = 1
+			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
+			if(do_after(L, crab, 3 SECONDS))
+				var/rng = 50
+				if(crab.stat == DEAD)	
+					rng = 100
+				if(prob(rng))
+					if(L.get_item_by_slot(slot_head) == crab)
+						L.drop_from_inventory(crab)
+						crab.GoIdle(10 SECONDS) 
+						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+						crab.is_being_resisted = 0
+						crab.escaping = 1
+						crab.GoActive()
+				else
+					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
+					crab.is_being_resisted = 0
+					return
+			crab.is_being_resisted = 0 //If the do_after is cancelled.
+
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
 		locked_to.attack_hand(src)
@@ -1122,7 +1124,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.handcuffed]!</span>",
 										   "<span class='notice'>You successfully break \the [CM.handcuffed].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						var/obj/item/cuffs = CM.handcuffed
 						CM.drop_from_inventory(cuffs)
 						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
@@ -1161,7 +1164,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break the legcuffs!</span>",
 										   "<span class='notice'>You successfully break your legcuffs.</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						qdel(CM.legcuffed)
 						CM.legcuffed = null
 						CM.update_inv_legcuffed()
@@ -1195,7 +1199,8 @@ Thanks.
 							return
 						CM.visible_message("<span class='danger'>[CM] manages to break \the [CM.mutual_handcuffs]!</span>",
 										   "<span class='notice'>You successfully break \the [CM.mutual_handcuffs].</span>")
-						CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
+						if(!isalien(CM))
+							CM.say(pick(";RAAAAAAAARGH!", ";HNNNNNNNNNGGGGGGH!", ";GWAAAAAAAARRRHHH!", "NNNNNNNNGGGGGGGGHH!", ";AAAAAAARRRGH!" ))
 						var/obj/item/cuffs = CM.mutual_handcuffs
 						CM.drop_from_inventory(cuffs)
 						if(!cuffs.gcDestroyed) //If these were not qdel'd already (exploding cuffs, anyone?)
@@ -1267,7 +1272,7 @@ Thanks.
 	return
 
 //same as above
-/mob/living/pointed(atom/A as mob|obj|turf in view(get_turf(src)))
+/mob/living/pointed(atom/A as mob|obj|turf in tview(src))
 	if(src.incapacitated())
 		return 0
 	if(!..())
@@ -1395,7 +1400,13 @@ Thanks.
 							now_pushing = 0
 							return
 					AM.set_glide_size(src.glide_size)
-					step(AM, t)
+					if (ismob(AM))
+						var/mob/M = AM
+						M.StartMoving()
+						step(M, t)
+						M.EndMoving()
+					else
+						step(AM, t)
 				now_pushing = 0
 			return
 	return
@@ -1571,7 +1582,7 @@ Thanks.
 	if(!holder_type)
 		return 0
 
-	var/obj/item/weapon/holder/D = getFromPool(holder_type, loc, src)
+	var/obj/item/weapon/holder/D = new holder_type(loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
@@ -1579,7 +1590,7 @@ Thanks.
 		src.forceMove(D) //Only move the mob into the holder after we're sure he has been picked up!
 		return 1
 	else
-		returnToPool(D)
+		qdel(D)
 
 	return 0
 
@@ -1728,7 +1739,7 @@ Thanks.
 					M.LAssailant = null
 				else
 					M.LAssailant = usr
-				returnToPool(G)
+				qdel(G)
 	if(!item)
 		return FAILED_THROW	//Grab processing has a chance of returning null
 	if(isitem(item))
@@ -1895,6 +1906,9 @@ Thanks.
 	if (istype(disease_list) && disease_list.len > 0)
 		for(var/ID in disease_list)
 			var/datum/disease2/disease/V = disease_list[ID]
+			if (!V)
+				message_admins("[key_name(src)] is trying to assume contact diseases from touching \a [source], but the disease_list contains an ID ([ID]) that isn't associated to an actual disease datum! Ping Deity about it please.")
+				return
 			if(!blocked && V.spread & SPREAD_CONTACT)
 				infect_disease2(V, notes="(Contact, from [source])")
 			else if(suitable_colony() && V.spread & SPREAD_COLONY)
@@ -1998,7 +2012,7 @@ Thanks.
 					strength += V.infectionchance
 				strength = round(strength/airborne_viruses.len)
 				while (strength > 0)//stronger viruses create more clouds at once
-					getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), src, virus_copylist(airborne_viruses))
+					new /obj/effect/effect/pathogen_cloud/core(get_turf(src), src, virus_copylist(airborne_viruses))
 					strength -= 40
 
 /mob/living/proc/handle_virus_updates()

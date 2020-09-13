@@ -75,7 +75,7 @@
 	if(istype(W,/obj/item/weapon/pickaxe))
 		var/obj/item/weapon/pickaxe/digTool = W
 		to_chat(user, "You start digging \the [src].")
-		if(do_after(user, src, digTool.digspeed*hardness) && src)
+		if(do_after(user, src, (100*digTool.toolspeed)*hardness) && src)
 			to_chat(user, "You finished digging.")
 			return Dismantle()
 	else if(istype(W, /obj/item/weapon/card))
@@ -96,7 +96,7 @@
 /obj/machinery/door/mineral/proc/Dismantle(devastated = 0)
 	var/obj/item/stack/ore
 	if(src.prefix == "metal")
-		ore = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+		ore = new /obj/item/stack/sheet/metal(get_turf(src))
 	else
 		var/P = text2path("/obj/item/stack/sheet/mineral/[prefix]")
 		if(P)
@@ -349,3 +349,9 @@
 	update_icon()
 	if(health <= 0)
 		qdel(src)
+
+/obj/machinery/door/mineral/gingerbread
+	prefix = "gingerbread"
+	icon_state = "gingerbreaddoor_closed"
+	hardness = 0.5
+	soundeffect = 'sound/effects/tooth_crack.ogg'

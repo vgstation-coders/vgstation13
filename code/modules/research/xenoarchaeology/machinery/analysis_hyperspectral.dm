@@ -1,5 +1,6 @@
 /obj/machinery/anomaly/hyperspectral
-	name = "Hyperspectral Imager"
+	name = "hyperspectral imager"
+	desc = "A specialised, complex analysis machine. Can determine the signature of the nearest anomalous exotic energies."
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "hyperspectral"
 	light_power = 0.75

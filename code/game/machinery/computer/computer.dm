@@ -106,10 +106,10 @@
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/togglePanelOpen(var/obj/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
+/obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
-	playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+	toggleitem.playtoolsound(src, 50)
 	user.visible_message(	"[user] begins to unscrew \the [src]'s monitor.",
 							"You begin to unscrew the monitor...")
 	if (do_after(user, src, 20) && (circuit || CC))
@@ -124,7 +124,7 @@
 			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 			A.state = 3
 			A.icon_state = "3"
 		else
@@ -137,11 +137,8 @@
 	else
 		return 1 // Needed, otherwise the computer UI will pop open
 
-	return
-
 /obj/machinery/computer/attackby(I as obj, user as mob)
 	if(..(I,user))
 		return
 	else
 		src.attack_hand(user)
-	return

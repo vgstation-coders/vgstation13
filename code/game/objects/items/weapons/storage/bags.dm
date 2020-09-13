@@ -112,7 +112,6 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	icon_state = "tech_satchel"
 	actions_types = list(/datum/action/item_action/toggle_auto_handling)
 	var/handling = FALSE
-	var/event_key = null
 
 /datum/action/item_action/toggle_auto_handling
 	name = "Toggle Ore Loader"
@@ -133,10 +132,9 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		T.event_key = user.on_moved.Add(T, "mob_moved")
+		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.on_moved.Remove(T, "mob_moved")
-		T.event_key = null
+		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
@@ -149,26 +147,28 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		box = holder.pulling
 	if(box)
 		for(var/obj/item/stack/ore/ore in contents)
-			if(ore.material)
+			if(box.try_add_ore(ore))
 				remove_from_storage(ore)
-				box.materials.addAmount(ore.material, ore.amount)
 				qdel(ore)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(isrobot(holder))
-		var/mob/living/silicon/robot/S = holder
+/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+	if(isrobot(mover))
+		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())
 			auto_collect(get_turf(src))
-			auto_fill(holder)
-	else
-		if(holder.is_holding_item(src))
+			auto_fill(mover)
+	else if(isliving(mover))
+		var/mob/living/living_mover = mover
+		if(living_mover.is_holding_item(src))
 			auto_collect(get_turf(src))
-			auto_fill(holder)
+			auto_fill(living_mover)
+
+/obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
+	if(handling)
+		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
-	if(event_key)
-		user.on_moved.Remove(src, "mob_moved")
-		event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
@@ -184,6 +184,26 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	w_class = W_CLASS_TINY
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
+
+
+/obj/item/weapon/storage/bag/plants/CtrlClick()
+	if(isturf(loc))
+		return ..()
+	if(!usr.isUnconscious() && Adjacent(usr))
+		change()
+		return
+	return ..()
+
+var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "green blue stripe", "green yellow stripe", "green purple stripe", "green lime stripe", "green black stripe", "green white stripe", "cyan", "cyan red stripe", "cyan blue stripe", "cyan yellow stripe", "cyan purple stripe", "cyan lime stripe", "cyan black stripe", "cyan white stripe")
+/obj/item/weapon/storage/bag/plants/verb/change()
+	set name = "Change Bag Colour"
+	set category = "Object"
+	set src in usr
+	var/plantbag_colour
+	plantbag_colour = input("Select Colour to change it to", "Plant Bag Colour", plantbag_colour) as null|anything in plantbag_colour_choices
+	if(!plantbag_colour||(usr.stat))
+		return
+	icon_state = plantbag_colour
 
 /obj/item/weapon/storage/bag/plants/portactor
 	name = "portable seed extractor"
@@ -216,6 +236,10 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 		P.orient2hud(user)
 		if(user.s_active)
 			user.s_active.show_to(user)
+
+
+/obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
+	return
 
 // -----------------------------
 //          Food bag
@@ -396,7 +420,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	update_icon()
 
 // Instead of removing
-/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W as obj, atom/new_location)
+/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/stack/sheet/S = W
 	if(!istype(S))
 		return FALSE
@@ -441,11 +465,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 /obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
-		if(B.get_rating() < lowest_rating)
-			lowest_rating = B.get_rating()
+		if(B.rped_rating() < lowest_rating)
+			lowest_rating = B.rped_rating()
 
 	for(var/obj/item/B in contents) //Now that we have the lowest rating we can dump only parts at the lowest rating.
-		if(B.get_rating() > lowest_rating)
+		if(B.rped_rating() > lowest_rating)
 			continue
 		remove_from_storage(B, A)
 
@@ -540,7 +564,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."
 	icon_state = "ammo_pouch"
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/weapon/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET

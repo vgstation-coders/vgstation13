@@ -21,7 +21,6 @@
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 /obj/item/device/maracas/pickup(mob/user)
-	user.callOnFace |= "\ref[src]"
 	user.callOnFace["\ref[src]"] = "chickchicky"
 	chickchicky()
 

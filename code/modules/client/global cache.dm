@@ -141,11 +141,13 @@
 
 //If you don't need anything complicated.
 /datum/asset/simple
-	var/assets = list()
+	var/list/assets = list()
 
 /datum/asset/simple/register()
 	for(var/asset_name in assets)
 		register_asset(asset_name, assets[asset_name])
+
+
 
 //DEFINITIONS FOR ASSET DATUMS START HERE.
 
@@ -370,3 +372,44 @@
 
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
+
+/datum/asset/simple/emoji_list
+	assets = list(
+		"emoji-happy.png"		=	'icons/pda_icons/emoji/happy.png',
+		"emoji-sad.png"		=	'icons/pda_icons/emoji/sad.png',
+		"emoji-angry.png"		=	'icons/pda_icons/emoji/angry.png',
+		"emoji-confused.png"		=	'icons/pda_icons/emoji/confused.png',
+		"emoji-pensive.png"		=	'icons/pda_icons/emoji/pensive.png',
+		"emoji-rolling_eyes.png"		=	'icons/pda_icons/emoji/rolling_eyes.png',
+		"emoji-noface.png"		=	'icons/pda_icons/emoji/noface.png',
+		"emoji-joy.png"		=	'icons/pda_icons/emoji/joy.png',
+		"emoji-gun.png"		=	'icons/pda_icons/emoji/gun.png',
+		"emoji-ok_hand.png"		=	'icons/pda_icons/emoji/ok_hand.png',
+		"emoji-middle_finger.png"		=	'icons/pda_icons/emoji/middle_finger.png',
+		"emoji-thinking.png"		=	'icons/pda_icons/emoji/thinking.png',
+		"emoji-thumbs_up.png"		=	'icons/pda_icons/emoji/thumbs_up.png',
+		"emoji-thumbs_down.png"		=	'icons/pda_icons/emoji/thumbs_down.png',
+		"emoji-rocket_ship.png"		=	'icons/pda_icons/emoji/rocket_ship.png',
+		"emoji-tada.png"		=	'icons/pda_icons/emoji/tada.png',
+		"emoji-heart.png"		=	'icons/pda_icons/emoji/heart.png',
+		"emoji-carp.png"		=	'icons/pda_icons/emoji/carp.png',
+		"emoji-clown.png"		=	'icons/pda_icons/emoji/clown.png',
+		"emoji-prohibited.png"		=	'icons/pda_icons/emoji/prohibited.png',
+		"emoji-sunglasses.png"		=	'icons/pda_icons/emoji/sunglasses.png'
+	)
+
+/datum/asset/simple/fontawesome
+	assets = list(
+		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
+		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
+		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
+		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
+		"font-awesome.css"    = 'html/font-awesome/css/all.min.css',
+		"v4shim.css"          = 'html/font-awesome/css/v4-shims.min.css'
+	)
+
+/datum/asset/simple/tgui
+	assets = list(
+		"tgui.bundle.js" = 'tgui/packages/tgui/public/tgui.bundle.js',
+		"tgui.bundle.css" = 'tgui/packages/tgui/public/tgui.bundle.css',
+	)

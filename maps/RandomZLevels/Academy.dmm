@@ -40,7 +40,7 @@
 "aN" = (/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"; pixel_y = 0},/obj/machinery/light{icon_state = "tube1"; dir = 8},/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)
 "aO" = (/obj/structure/cult_legacy/tome,/obj/item/weapon/staff,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
 "aP" = (/obj/structure/bed/chair/wood/wings{dir = 8},/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
-"aQ" = (/obj/item/clothing/suit/space/rig/wizard,/obj/item/clothing/head/helmet/space/rig/wizard,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
+"aQ" = (/obj/item/clothing/suit/space/rig/wizard,/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/academy/headmaster)
 "aR" = (/obj/structure/table/reinforced,/obj/item/weapon/storage/briefcase,/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)
 "aS" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/full/reinforced/tinted,/turf/simulated/floor/plating,/area/awaymission/academy/headmaster)
 "aT" = (/obj/structure/table/reinforced,/obj/item/weapon/coin/plasma,/turf/simulated/floor/carpet,/area/awaymission/academy/headmaster)

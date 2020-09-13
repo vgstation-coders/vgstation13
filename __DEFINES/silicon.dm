@@ -73,6 +73,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define MODULE_HAS_PROJ_RES 4096		//Doesn't slow down from being hit by boolets
 #define MODULE_HAS_FLASH_RES 8192		//Recovers from being flashed twice as fast.
 #define MODULE_IS_FLASHPROOF 16384		//Flashes do nothing.
+#define MODULE_CAN_CLOSE_CLOSETS 32768	//Can open and close closets.
 
 #define HAS_MODULE_QUIRK(R, Q) (R.module && (R.module.quirk_flags & Q))
 
@@ -80,6 +81,7 @@ var/global/list/all_robot_modules = default_nanotrasen_robot_modules + emergency
 #define CYBORG_STARTING_TONER 40
 #define CYBORG_MAX_TONER 100
 #define CYBORG_PHOTO_COST 20
+#define ROBOT_LOW_POWER 100
 
 //Respawnable defines
 #define MEDICAL_MAX_KIT 10

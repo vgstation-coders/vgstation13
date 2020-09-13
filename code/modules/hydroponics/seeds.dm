@@ -44,15 +44,6 @@
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
 
-/obj/item/seeds/cutting
-	name = "cuttings"
-	desc = "Some plant cuttings."
-
-/obj/item/seeds/cutting/update_appearance()
-	..()
-	icon = seed.plant_dmi
-	src.name = "packet of [seed.seed_name] cuttings"
-
 /obj/item/seeds/random
 	seed_type = null
 
@@ -100,6 +91,10 @@
 /obj/item/seeds/peanutseed
 	name = "packet of peanut seeds"
 	seed_type = "peanut"
+
+/obj/item/seeds/rocknut
+	name = "packet of rocknut seeds"
+	seed_type = "rocknut"
 
 /obj/item/seeds/cabbageseed
 	name = "packet of cabbage seeds"
@@ -281,6 +276,11 @@
 /obj/item/seeds/sunflowerseed
 	name = "packet of sunflower seeds"
 	seed_type = "sunflowers"
+	vending_cat = "flowers"
+
+/obj/item/seeds/mustardplantseed
+	name = "packet of mustardplant seeds"
+	seed_type = "mustardplants"
 	vending_cat = "flowers"
 
 /obj/item/seeds/moonflowerseed
@@ -815,7 +815,7 @@
 	name = "mold"
 	seed_name = "brown mold"
 	display_name = "brown mold"
-	plant_dmi = "icons/obj/hydroponics/mold.dmi"
+	plant_dmi = 'icons/obj/hydroponics/mold.dmi'
 	products = null
 	mutants = null
 	//mutants = list("wallrot") //TBD.
@@ -1042,6 +1042,22 @@
 
 	large = 0
 
+/datum/seed/flower/mustardplant //yes this is a real plant
+	name = "mustardplants"
+	seed_name = "mustardplant"
+	display_name = "mustardplants"
+	plant_dmi = 'icons/obj/hydroponics/mustardplant.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/mustardplant)
+	chems = list(MUSTARD_POWDER = list(4,10))
+
+	lifespan = 40 //real mustard plants live for like two months
+	maturation = 6
+	growth_stages = 3
+	ideal_light = 8
+	water_consumption = 6
+	nutrient_consumption = 0 //these are a bunch of flowers, not an actual food
+	large = 0
+
 //Grapes/varieties
 /datum/seed/grapes
 	name = "grapes"
@@ -1079,6 +1095,7 @@
 	display_name = "peanut vines"
 	plant_dmi = 'icons/obj/hydroponics/peanut.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/peanut)
+	mutants = list("rocknut")
 	harvest_repeat = 1
 	chems = list(NUTRIMENT = list(1,10))
 
@@ -1088,6 +1105,21 @@
 	yield = 6
 	potency = 10
 	ideal_light = 8
+
+/datum/seed/rocknut
+	name = "rocknut"
+	seed_name = "rocknut"
+	display_name = "quarry bush"
+	plant_dmi = 'icons/obj/hydroponics/rocknut.dmi'
+	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/rocknut)
+	harvest_repeat = 1
+	chems = list(NUTRIMENT = list(1,10),IRON = list(3,5))
+
+	lifespan = 70
+	maturation = 6
+	production = 6
+	yield = 4
+	potency = 10
 
 /datum/seed/cabbage
 	name = "cabbage"
@@ -1163,6 +1195,7 @@
 	plant_dmi = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana)
 	mutants = null
+	chems = list(BANANA = list(1,10), HONKSERUM = list(1,10))
 
 /datum/seed/corn
 	name = "corn"
@@ -1553,25 +1586,6 @@
 	yield = 2
 	potency = 30
 	ideal_light = 0
-
-
-/datum/seed/test
-	name = "test"
-	seed_name = "testing"
-	seed_noun = "data"
-	display_name = "runtimes"
-	products = list(/mob/living/simple_animal/cat/Runtime)
-
-	nutrient_consumption = 0
-	water_consumption = 0
-	pest_tolerance = 11
-	weed_tolerance = 11
-	lifespan = 1000
-	endurance = 100
-	maturation = 1
-	production = 1
-	yield = 1
-	potency = 1
 
 /datum/seed/nofruit
 	name = "nofruit"

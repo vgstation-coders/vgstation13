@@ -30,9 +30,11 @@ var/list/global_singularity_pool
 	var/last_warning
 	appearance_flags = LONG_GLIDE
 	var/chained = 0 //Adminbus chain-grab
+	var/modifier = "" //for memes
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
+	icon_state = modifier + icon_state
 	admin_investigate_setup()
 	energy = starting_energy
 
@@ -169,7 +171,6 @@ var/list/global_singularity_pool
 		if(STAGE_ONE)
 			current_size = 1
 			icon = 'icons/obj/singularity.dmi'
-			icon_state = "singularity_s1"
 			pixel_x = 0
 			pixel_y = 0
 			bound_width = WORLD_ICON_SIZE
@@ -188,7 +189,6 @@ var/list/global_singularity_pool
 		if(STAGE_TWO)
 			current_size = 3
 			icon = 'icons/effects/96x96.dmi'
-			icon_state = "singularity_s3"
 			pixel_x = -32 * PIXEL_MULTIPLIER
 			pixel_y = -32 * PIXEL_MULTIPLIER
 			bound_width = 3 * WORLD_ICON_SIZE
@@ -210,7 +210,6 @@ var/list/global_singularity_pool
 		if(STAGE_THREE)
 			current_size = 5
 			icon = 'icons/effects/160x160.dmi'
-			icon_state = "singularity_s5"
 			pixel_x = -64 * PIXEL_MULTIPLIER
 			pixel_y = -64 * PIXEL_MULTIPLIER
 			bound_width = 5 * WORLD_ICON_SIZE
@@ -232,7 +231,6 @@ var/list/global_singularity_pool
 		if(STAGE_FOUR)
 			current_size = 7
 			icon = 'icons/effects/224x224.dmi'
-			icon_state = "singularity_s7"
 			pixel_x = -96 * PIXEL_MULTIPLIER
 			pixel_y = -96 * PIXEL_MULTIPLIER
 			bound_width = 7 * WORLD_ICON_SIZE
@@ -254,7 +252,6 @@ var/list/global_singularity_pool
 		if(STAGE_FIVE)
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
-			icon_state = "singularity_s9"
 			pixel_x = -128 * PIXEL_MULTIPLIER
 			pixel_y = -128 * PIXEL_MULTIPLIER
 			bound_width = 9 * WORLD_ICON_SIZE
@@ -279,7 +276,6 @@ var/list/global_singularity_pool
 			desc = "The final form of Lord Singuloth. <b>It has the power to destroy worlds.</b> It can most likely still be used to power arcades too, <b>if you dare.</b>"
 			current_size = 11
 			icon = 'icons/effects/352x352.dmi'
-			icon_state = "singularity_s11" //Uh, whoever drew that, you know that black holes are supposed to look dark right? What's this, the clown's singulo?
 			pixel_x = -160 * PIXEL_MULTIPLIER
 			pixel_y = -160 * PIXEL_MULTIPLIER
 			bound_width = 11 * WORLD_ICON_SIZE
@@ -299,7 +295,6 @@ var/list/global_singularity_pool
 			desc = "The true final form of Lord Singuloth. <b>It has the power to destroy galaxies.</b> It can most likely still be used to power arcades too, <b>if you dare.</b>"
 			current_size = 13
 			icon = 'icons/effects/384x384.dmi'
-			icon_state = "singularity_s13" //black holes being black is so 2525
 			pixel_x = -192 * PIXEL_MULTIPLIER
 			pixel_y = -192 * PIXEL_MULTIPLIER
 			bound_width = 13 * WORLD_ICON_SIZE
@@ -342,6 +337,8 @@ var/list/global_singularity_pool
 			expand(null, 0)
 		else
 			expand(null, 1)
+	if(icon_state != modifier + "singularity_s[current_size]")
+		icon_state = modifier + "singularity_s[current_size]"
 	return 1
 
 /obj/machinery/singularity/proc/eat()
@@ -929,3 +926,11 @@ var/list/global_singularity_pool
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
 						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")	
+
+/obj/machinery/singularity/special
+	name = "specialarity"
+	modifier = "special_"
+
+/obj/machinery/singularity/scrungulartiy
+	name = "grabibational scrungulartiy"
+	modifier = "scrung_"

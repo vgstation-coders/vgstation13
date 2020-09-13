@@ -59,10 +59,9 @@
 			if(istype(O, /obj/item/stack/ore) && W.ore_box)
 				var/count = 0
 				for(var/obj/item/stack/ore/I in get_turf(target))
-					if(I.material)
-						W.ore_box.materials.addAmount(I.material, I.amount)
-						returnToPool(I)
-						count++
+					if(W.ore_box.try_add_ore(I))
+						qdel(I)
+						count += I.amount
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
 					occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
@@ -176,10 +175,9 @@
 				if(W.hydraulic_clamp && W.ore_box)
 					var/count = 0
 					for(var/obj/item/stack/ore/ore in range(chassis,1))
-						if(get_dir(chassis,ore)&chassis.dir && ore.material)
-							W.ore_box.materials.addAmount(ore.material,ore.amount)
-							returnToPool(ore)
-							count++
+						if(get_dir(chassis,ore)&chassis.dir && W.ore_box.try_add_ore(ore))
+							qdel(ore)
+							count += ore.amount
 					if(count)
 						occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
 
@@ -197,9 +195,9 @@
 					M.gets_dug()
 					if(hydraulic_clamp && ore_box)
 						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
-							ore_box.materials.addAmount(sandore.material,sandore.amount)
-							returnToPool(sandore)
-							count++
+							if (ore_box.try_add_ore(sandore))
+								qdel(sandore)
+								count += sandore.amount
 			log_message("Drilled through [target]")
 			if(count)
 				occupant_message("<span class='notice'>[count] sand successfully loaded into cargo compartment.</span>")
@@ -992,9 +990,9 @@
 	var/list/use_channels = list(EQUIP,ENVIRON,LIGHT)
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/New()
-	..()
 	pr_energy_relay = new /datum/global_iterator/mecha_energy_relay(list(src),0)
 	pr_energy_relay.set_delay(equip_cooldown)
+	..()
 	return
 
 /obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/Destroy()

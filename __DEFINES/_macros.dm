@@ -16,6 +16,8 @@
 
 #define isvox(A) (ishuman(A) && istype(A:species, /datum/species/vox))
 
+#define isinsectoid(A) (ishuman(A) && istype(A:species, /datum/species/insectoid))
+
 #define isdiona(A) (ishuman(A) && istype(A:species, /datum/species/diona))
 
 #define isgrey(A) (ishuman(A) && istype(A:species, /datum/species/grey))
@@ -136,8 +138,6 @@
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswrench(A) istype(A, /obj/item/weapon/wrench)
-
 #define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
 
 #define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
@@ -186,7 +186,7 @@
 
 #define isgripper(G) (istype(G, /obj/item/weapon/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod))
+#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
 
 #define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
 
@@ -199,10 +199,6 @@
 #define isclient(A) (istype(A, /client))
 
 #define isatom(A) isloc(A)
-
-#if DM_VERSION < 513
-#define ismovable(A) (istype(A, /atom/movable))
-#endif
 
 #define isrealobject(A) (istype(A, /obj/item) || istype(A, /obj/structure) || istype(A, /obj/machinery) || istype(A, /obj/mecha))
 
@@ -220,7 +216,7 @@
 
 #define isfloor(A) (istype(A, /turf/simulated/floor) || istype(A, /turf/unsimulated/floor) || istype(A, /turf/simulated/shuttle/floor) || istype(A, /turf/simulated/shuttle/floor4))
 
-#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & IS_SPECIES_MUTE))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
+#define issilent(A) (A.silent || (ishuman(A) && (A.mind && A.mind.miming || A:species:flags & SPECIES_NO_MOUTH))) //Remember that silent is not the same as miming. Miming you can emote, silent you can't gesticulate at all
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
@@ -229,6 +225,10 @@
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
 #define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+
+#define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
+
+#define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
@@ -246,6 +246,8 @@
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
@@ -265,9 +267,13 @@
 
 #define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
 
+#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -275,7 +281,7 @@
 
 #define isbadmonkey(H) ((/datum/disease/jungle_fever in H.viruses) || (H.mind && H.mind.GetRole(MADMONKEY)))
 
-#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUAD))
+#define isdeathsquad(H) (H.mind && H.mind.GetRole(DEATHSQUADIE))
 
 #define isbomberman(H) (H.mind && H.mind.GetRole(BOMBERMAN))
 
@@ -298,7 +304,7 @@
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
@@ -334,12 +340,6 @@ proc/get_space_area()
 	return 0
 
 //1 line helper procs compressed into defines.
-#if DM_VERSION < 513
-#define clamp(x, y, z) 	min(max(x, y), z)
-//x is the number you want to clamp
-//y is the minimum
-//z is the maximum
-#endif
 
 //Returns 1 if the variable contains a protected list that can't be edited
 #define variable_contains_protected_list(var_name) (((var_name) == "contents") || ((var_name) == "locs") || ((var_name) == "vars"))
@@ -396,3 +396,6 @@ proc/get_space_area()
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

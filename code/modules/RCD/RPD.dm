@@ -38,6 +38,7 @@
 		/datum/rcd_schematic/pipe/filter,
 		/datum/rcd_schematic/pipe/mixer,
 		/datum/rcd_schematic/pipe/thermal_plate,
+		/datum/rcd_schematic/pipe/heat_pump,
 		/datum/rcd_schematic/pipe/injector,
 		/datum/rcd_schematic/pipe/dp_vent,
 
@@ -70,25 +71,22 @@
 
 /obj/item/device/rcd/rpd/pickup(var/mob/living/L)
 	..()
-
-	hook_key = L.on_clickon.Add(src, "mob_onclickon")
+	L.lazy_register_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
 
 /obj/item/device/rcd/rpd/dropped(var/mob/living/L)
 	..()
-
-	L.on_clickon.Remove(hook_key)
+	L.lazy_unregister_event(/lazy_event/on_clickon, src, .proc/mob_onclickon)
 	hook_key = null
 
 // If the RPD is held, some modifiers are removed.
 // This is to prevent the mouse wheel bindings (which require alt and such)
-// From being a pain to use, because alt click intercepts regular clicks.
-/obj/item/device/rcd/rpd/proc/mob_onclickon(var/list/event_args, var/mob/living/L)
-	if (L.get_active_hand() != src)
+// from being a pain to use, because alt click intercepts regular clicks.
+/obj/item/device/rcd/rpd/proc/mob_onclickon(mob/user, list/modifiers, atom/target)
+	if (user.get_active_hand() != src)
 		return
-	if(istype(event_args["target"], /mob/living/carbon))
+	if(istype(target, /mob/living/carbon))
 		return //If we're alt clicking a carbon, let's assume we want to interact with them.
 
-	var/list/modifiers = event_args["modifiers"]
 	modifiers -= list("alt", "shift", "ctrl")
 
 /obj/item/device/rcd/rpd/mech/Topic(var/href, var/list/href_list)

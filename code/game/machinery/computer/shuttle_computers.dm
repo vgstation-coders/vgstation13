@@ -116,6 +116,7 @@
 
 /obj/item/weapon/card/shuttle_pass/Destroy()
 	destination = null
+	..()
 
 /obj/item/weapon/card/shuttle_pass/ert
 	name = "\improper ERT shuttle pass"

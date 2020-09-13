@@ -91,3 +91,12 @@
 		to_chat(M, "<span class='warning'>\The [src] buzzes.</span>")
 		return 1
 	return ..()
+
+/obj/item/weapon/gun/energy/attackby(obj/item/I, mob/user)
+	..()
+	if(istype(I,/obj/item/ammo_storage/speedloader/energy) && power_supply.charge < power_supply.maxcharge)
+		power_supply.give(charge_cost*2) //worth 2 more shots
+		qdel(I)
+		update_icon()
+		to_chat(user,"<span class='notice'>\The [I] transfers some power to \the [src].</span>")
+		playsound(src, 'sound/machines/charge_finish.ogg', 50)

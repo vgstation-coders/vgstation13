@@ -420,10 +420,10 @@
 	update_icon()
 	return
 
-/obj/machinery/biogenerator/crowbarDestroy(mob/user)
+/obj/machinery/biogenerator/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(beaker)
 		to_chat(user, "<span class='warning'>A beaker is loaded, you cannot deconstruct \the [src].</span>")
-		return
+		return FALSE
 	return ..()
 
 /obj/machinery/biogenerator/togglePanelOpen(var/obj/toggleitem, mob/user)

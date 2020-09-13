@@ -28,7 +28,6 @@
 	var/age = 0
 	var/limited_growth = 0
 	var/plant_damage_noun = "Thorns"
-	var/tmp/on_resist_key //For resisting out of vines.
 
 /obj/effect/plantsegment/creeper
 	limited_growth = 1
@@ -130,6 +129,14 @@
 		arbitrary_measurement_of_how_lush_I_am_right_now -= round(-(health - max_health)/(max_health/3))
 
 	arbitrary_measurement_of_how_lush_I_am_right_now = max(1, arbitrary_measurement_of_how_lush_I_am_right_now)
+
+	color = null
+	if (seed.hematophage && seed.ligneous)
+		color = "#804040"
+	else if (seed.hematophage)
+		color = "#800000"
+	else if (seed.ligneous)
+		color = "#808080"
 
 	switch(arbitrary_measurement_of_how_lush_I_am_right_now)
 		if(1)

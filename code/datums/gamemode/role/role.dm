@@ -347,10 +347,10 @@
 			count++
 		if (!faction)
 			if(win)
-				text += "<br><font color='green'><B>The [name] was successful!</B></font>"
+				text += "<br><font color='green'><B>\The [name] was successful!</B></font>"
 				feedback_add_details("[id]_success","SUCCESS")
 			else
-				text += "<br><font color='red'><B>The [name] has failed.</B></font>"
+				text += "<br><font color='red'><B>\The [name] has failed.</B></font>"
 				feedback_add_details("[id]_success","FAIL")
 	if(objectives.objectives.len > 0)
 		text += "</ul>"
@@ -493,7 +493,7 @@
 /datum/role/proc/handle_splashed_reagent(var/reagent_id)
 	return
 
-//Does the role have special clothign restrictions?
+//Does the role have special clothing restrictions?
 /datum/role/proc/can_wear(var/obj/item/clothing/C)
 	return TRUE
 
@@ -627,6 +627,8 @@ Once done, you will be able to interface with all systems, notably the onboard n
 /datum/role/greytide/Drop(silent = TRUE)
 	if (!silent)
 		antag.current.visible_message("<span class='userdanger'>[antag.current] briefly convulses!</span>" ,"<span class='userdanger'>Your loyalty to the greytide fades and vanishes. You are free of your actions again.</span>")
+	for (var/datum/role/greytide_leader/big_boss in faction.members)
+		big_boss.former_minions[antag.key] = antag.name
 	return ..()
 
 /datum/role/greytide/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
@@ -641,3 +643,28 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	name = IMPLANTLEADER
 	id = IMPLANTLEADER
 	logo_state = "greytide_leader-logo"
+	var/list/former_minions = list()
+
+/datum/role/greytide_leader/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
+	if (!(former_minions.len))
+		return ..()
+	// else...
+	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
+	var/list/dat = list()
+	dat += ..()
+	dat += "<br/>The greytide leader's former slaves were: <br/>"
+	for (var/ckey in former_minions)
+		dat += "[show_logo ? "<img src='data:image/png;base64,[icon2base64(logo_slave)]' style='position: relative; top: 10;'/> " : "" ] <b>[ckey]</b> as <b>[former_minions[ckey]]</b> <br/>"
+	return jointext(dat, "")
+
+/datum/role/greytide_leader/Declare()
+	if (!(former_minions.len))
+		return ..()
+	// else...
+	var/icon/logo_slave = icon('icons/logos.dmi', "greytide-logo")
+	var/list/dat = list()
+	dat += ..()
+	dat += "<br/>The greytide leader's former slaves were: <br/>"
+	for (var/ckey in former_minions)
+		dat += "<img src='data:image/png;base64,[icon2base64(logo_slave)]' style='position: relative; top: 10;'/> <b>[ckey]</b> as <b>[former_minions[ckey]]</b><br/>"
+	return jointext(dat, "")

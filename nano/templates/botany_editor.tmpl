@@ -22,16 +22,6 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 				{{:data.sourceName}}
 			</div>
 			<div class="itemLabel">
-				Gene decay:
-			</div>
-			<div class="itemContent">
-				{{if data.degradation <= 100}}
-					{{:data.degradation}}%
-				{{else}}
-					<font = '#FF0000'><b>FURTHER AMENDMENTS NONVIABLE</b></font>
-				{{/if}}
-			</div>
-			<div class="itemLabel">
 				Locus:
 			</div>
 			<div class="itemContent">
@@ -51,9 +41,7 @@ Used In File(s): \code\modules\hydroponics\seed_machines.dm
 			<div class = "itemContent">
 				{{:data.loaded}}
 			</div>
-			{{if data.degradation <= 100}}
-				{{:helper.link('Apply Gene Mods', 'gear', {'apply_gene' : 1}, null)}}
-			{{/if}}
+			{{:helper.link('Apply Gene Mods', 'gear', {'apply_gene' : 1}, null)}}
 			{{:helper.link('Eject Target', 'circle-arrow-e', {'eject_packet' : 1}, null)}}
 		</div>
 		<br>

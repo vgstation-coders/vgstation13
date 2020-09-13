@@ -467,16 +467,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /mob/living/carbon/slime/show_inv(mob/user)
 	return
 
-	user.set_machine(src)
-	var/dat = {"
-	<B><HR><FONT size=3>[name]</FONT></B>
-	<BR><HR><BR>
-	<BR><A href='?src=\ref[user];mach_close=mob[name]'>Close</A>
-	<BR>"}
-	user << browse(dat, text("window=mob[name];size=340x480"))
-	onclose(user, "mob[name]")
-	return
-
 /mob/living/carbon/slime/updatehealth()
 	if(status_flags & GODMODE)
 		health = maxHealth
@@ -589,9 +579,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		if(enhanced == 1)
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
-		if(Uses == 0)
-			to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
-			return ..()
 		to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
 		Uses = 3
 		enhanced = 1
@@ -616,7 +603,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 /obj/item/slime_extract/grey
 	name = "grey slime extract"
 	icon_state = "grey slime extract"
-	primarytype = /mob/living/carbon/slime/gold
+	primarytype = /mob/living/carbon/slime
 
 /obj/item/slime_extract/gold
 	name = "gold slime extract"
@@ -855,19 +842,6 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
 	w_class = W_CLASS_TINY
-
-	/*afterattack(obj/target, mob/user , flag)
-		if(istype(target, /obj/item/slime_extract))
-			if(target.enhanced == 1)
-				to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
-				return ..()
-			if(target.Uses == 0)
-				to_chat(user, "<span class='warning'>You can't enhance a used extract!</span>")
-				return ..()
-			to_chat(user, "You apply the enhancer. It now has triple the amount of uses.")
-			target.Uses = 3
-			target.enahnced = 1
-			del (src)*/
 
 /obj/item/weapon/slimedupe
 	name = "slime duplicator"

@@ -175,6 +175,8 @@
 	anchor.timeleft = 60
 	anchor.timetotal = anchor.timeleft
 
+	global_anchor_bloodstone = anchor
+
 	//Adding the anchor to the bloodstones holomap, so cultists can quickly go there to perform the final summoning
 	var/icon/updated_map = icon(extraMiniMaps[HOLOMAP_EXTRA_CULTMAP])
 	var/datum/holomap_marker/holomarker = new()
@@ -219,7 +221,7 @@
 /datum/objective/bloodcult_feast
 	explanation_text = "The Feast: This is your victory, you may take part in the celebrations of a work well done."
 	name = "Blood Cult: Epilogue"
-	var/timer = 200 SECONDS
+	var/timer = 2 MINUTES
 
 /datum/objective/bloodcult_feast/PostAppend()
 	message_admins("Blood Cult: The cult has won.")

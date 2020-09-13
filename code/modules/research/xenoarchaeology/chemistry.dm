@@ -20,18 +20,9 @@ datum/reagent/lithiumsodiumtungstate
 datum/reagent/ground_rock
 	name = "Ground Rock"
 	id = GROUND_ROCK
-	description = "A fine dust made of ground up rock."
+	description = "A fine dust made of ground up rock. Adding a reducing agent would separate the waste from the useful elements."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#A0522D"   //rgb: 160, 82, 45, brown
-
-datum/reagent/density_separated_sample
-	name = "Density separated sample"
-	id = DENSITY_SEPARATED_SAMPLE
-	description = "A watery paste used in chemical analysis, there are some chunks floating in it."
-	reagent_state = REAGENT_STATE_LIQUID
-	color = "#DEB887"   //rgb: 222, 184, 135, light brown
-	density = 3.79
-	specheatcap = 3.99
 
 datum/reagent/analysis_sample
 	name = "Analysis liquid"
@@ -49,8 +40,6 @@ datum/reagent/chemical_waste
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#ADFF2F"   //rgb: 173, 255, 47, toxic green
 
-
-
 /datum/chemical_reaction/lithiumsodiumtungstate	//LiNa2WO4, not the easiest chem to mix
 	name = "Lithium Sodium Tungstate"
 	id = LITHIUMSODIUMTUNGSTATE
@@ -58,27 +47,18 @@ datum/reagent/chemical_waste
 	required_reagents = list(LITHIUM = 1, SODIUM = 2, TUNGSTEN = 1, OXYGEN = 4)
 	result_amount = 8
 
-/datum/chemical_reaction/density_separated_liquid
-	name = "Density separated sample"
-	id = DENSITY_SEPARATED_SAMPLE
-	result = DENSITY_SEPARATED_SAMPLE
-	secondary_results = list(CHEMICAL_WASTE = 1)
-	required_reagents = list(GROUND_ROCK = 1, LITHIUMSODIUMTUNGSTATE = 2)
-	result_amount = 2
-
 /datum/chemical_reaction/analysis_liquid
 	name = "Analysis sample"
 	id = ANALYSIS_SAMPLE
 	result = ANALYSIS_SAMPLE
 	secondary_results = list(CHEMICAL_WASTE = 1)
-	required_reagents = list(DENSITY_SEPARATED_SAMPLE = 5)
-	result_amount = 4
-	required_temp = 971.15 //Melting point of Sodium tungstate
+	required_reagents = list(GROUND_ROCK = 1, LITHIUMSODIUMTUNGSTATE = 2)
+	result_amount = 2
 
 /obj/item/weapon/reagent_containers/glass/solution_tray
 	name = "solution tray"
 	desc = "A small, open-topped glass container for delicate research samples. It sports a re-useable strip for labelling with a pen."
-	icon = 'icons/obj/device.dmi'
+	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "solution_tray"
 	starting_materials = list(MAT_GLASS = 20)
 	w_type = RECYK_GLASS
@@ -87,6 +67,32 @@ datum/reagent/chemical_waste
 	possible_transfer_amounts = list(1, 2)
 	volume = 2
 	flags = FPRINT | OPENCONTAINER
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/on_reagent_change()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/pickup(mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/dropped(mob/user)
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/attack_hand()
+	..()
+	update_icon()
+
+/obj/item/weapon/reagent_containers/glass/solution_tray/update_icon()
+	overlays.len = 0
+
+	if(reagents?.total_volume)
+		var/image/filling = image(icon, src, "solution_tray-fillings")
+
+		filling.icon += mix_color_from_reagents(reagents.reagent_list)
+		filling.alpha = mix_alpha_from_reagents(reagents.reagent_list)
+
+		overlays += filling
 
 /obj/item/weapon/reagent_containers/glass/solution_tray/mop_act(obj/item/weapon/mop/M, mob/user)
 	return 1

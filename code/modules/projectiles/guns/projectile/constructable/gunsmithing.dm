@@ -1,14 +1,5 @@
 //This file will contain all the intermediary parts used in the crafting of craftable weapons, before they actually become said weapons.
 
-
-/obj/item/weapon/ghetto_ansible //Currently only used in the black market radio construction
-	name = "crude ansible"
-	desc = "A piece of metal, welded into the shape of an ansible."
-	icon = 'icons/obj/weaponsmithing.dmi'
-	icon_state = "ghetto_ansible"
-	w_class = W_CLASS_TINY
-	
-	
 /obj/item/weapon/aluminum_cylinder
 	name = "aluminum cylinder"
 	desc = "A soda can that has had the top and bottom cut out."
@@ -426,9 +417,9 @@
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
 	switch(state)
 		if("stock_reservoir_assembly")
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You securely fasten the fuel reservoir to \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir"
 				update_assembly()
 		if("stock_reservoir")
@@ -446,9 +437,9 @@
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 				C.use(5)
-			if(iswrench(W))
+			if(W.is_wrench(user))
 				to_chat(user, "You loosen the fuel reservoir on \the [src].")
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_reservoir_assembly"
 				update_assembly()
 
@@ -471,7 +462,7 @@
 		if("blunderbuss_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the igniter to \the [src].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/blunderbuss/I = new (get_turf(user))
@@ -485,12 +476,12 @@
 		if("stock_capacitorbank_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You tighten the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank"
 				update_assembly()
 			if(iswirecutter(W))
 				to_chat(user, "You cut the wires out of the capacitor bank.")
-				playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
+				W.playtoolsound(user, 50)
 				state = "stock_reservoir"
 				update_assembly()
 				var/obj/item/stack/cable_coil/C = new (get_turf(user))
@@ -503,7 +494,7 @@
 				qdel(W)
 			if(W.is_screwdriver(user))
 				to_chat(user, "You loosen the wires in \the [src]'s capacitor bank.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_capacitorbank_assembly"
 				update_assembly()
 		if("stock_capacitorbank_barrel_assembly")
@@ -523,7 +514,7 @@
 		if("railgun_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(src.loc == user)
 					user.drop_item(src, force_drop = 1)
 					var/obj/item/weapon/gun/projectile/railgun/I = new (get_turf(user))
@@ -593,7 +584,7 @@
 		if("stock_ansible_amplifier_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace amplifier.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "stock_ansible_amplifier"
 				update_assembly()
 		if("stock_ansible_amplifier")
@@ -605,7 +596,7 @@
 		if("stock_ansible_amplifier_transmitter_assembly")
 			if(W.is_screwdriver(user))
 				to_chat(user, "You secure \the [src]'s subspace transmitter.")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				state = "subspacetunneler_assembly"
 				update_assembly()
 		if("subspacetunneler_assembly")
@@ -752,6 +743,81 @@
 			update_wheelchair_assembly()
 //CANNON END///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//WIND-UP BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/obj/item/weapon/windup_assembly
+	name = "wind-up assembly"
+	desc = "A spring in a shoe and all the associated possibilities."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	var/windupState = 1
+	icon_state = "windup_assembly_spring"
+	var/list/windup_adhesive = list(
+		/obj/item/gum,
+		/obj/item/taperoll/police,
+		/obj/item/taperoll/engineering,
+		/obj/item/taperoll/atmos,
+		/obj/item/taperoll/syndie,
+		/obj/item/device/label_roll,
+		/obj/item/weapon/glue,
+		/obj/item/weapon/bonegel,
+		/obj/item/stack/package_wrap,
+		/obj/item/stack/medical/bruise_pack/bandaid,
+		)
+
+/obj/item/spring/attackby(var/obj/item/I, mob/user)
+	if((istype(I, /obj/item/clothing/shoes)) && (user.drop_item(I)))
+		playsound(src,'sound/effects/spring.ogg', 50,1)
+		var/obj/item/weapon/windup_assembly/W = new /obj/item/weapon/windup_assembly(get_turf(src))
+		user.before_take_item(src)
+		user.put_in_hands(W)
+		if(prob(10))
+			to_chat(user,"<span  class='notice'>You put some spring in your step.</span>")
+		else
+			to_chat(user,"<span  class='notice'>You stuff the [src] firmly into the [I].</span>")
+		qdel(I)
+		qdel(src)
+
+/obj/item/weapon/windup_assembly/attackby(var/obj/item/K, mob/user as mob)
+	#define WINDUP_CARDBOARD 1
+	#define WINDUP_RODS 2
+	#define WINDUP_ADHESIVE 3
+	#define WINDUP_CRAYON 4
+	switch(windupState)
+		if(WINDUP_CARDBOARD)
+			if(istype(K, /obj/item/stack/sheet/cardboard))
+				var/obj/item/stack/sheet/cardboard/C = K
+				if(C.use(6))
+					windupState = WINDUP_RODS
+					playsound(src,'sound/items/can_crushed.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You build a box around the assembly.</span>")
+					icon_state = "windup_assembly_cardboard"
+		if(WINDUP_RODS)
+			if(istype(K, /obj/item/stack/rods))
+				var/obj/item/stack/rods/C = K
+				if(C.use(3))
+					windupState = WINDUP_ADHESIVE
+					playsound(src,'sound/items/crank.ogg', 50,1)
+					to_chat(user,"<span  class='notice'>You add a crank to the box.</span>")
+					icon_state = "windup_assembly_rods"
+		if(WINDUP_ADHESIVE)
+			if(is_type_in_list(K, windup_adhesive) && user.drop_item(K, src))
+				windupState = WINDUP_CRAYON
+				playsound(src,'sound/items/poster_ripped.ogg', 50,1)
+				to_chat(user,"<span  class='notice'>You patch up and reinforce the box.</span>")
+				qdel(K)
+				icon_state = "windup_assembly_adhesive"
+		if(WINDUP_CRAYON)
+			if(istype(K, /obj/item/toy/crayon) && user.drop_item(K,src))
+				playsound(src,'sound/misc/balloon_twist_short.ogg', 25,1)
+				to_chat(user,"<span  class='notice'>You write B for boot.</span>")
+				var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/B = new (get_turf(user))
+				qdel(src)
+				user.put_in_hands(B)
+
+
+
+//WIND-UP END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /obj/machinery/power/secured_capacitor
 	name = "capacitor"
 	desc = "A basic capacitor used in the construction of a variety of devices."
@@ -807,12 +873,12 @@
 		to_chat(user, "<span class='notice'>\The [src.name] is uncharged.</span>")
 
 /obj/machinery/power/secured_capacitor/attackby(obj/item/weapon/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(charging)
 			to_chat(user, "<span class='warning'>\The [src.name] needs to be turned off first.</span>")
 			return
 		to_chat(user, "You unsecure \the [src.name] from the floor.")
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		power_machines.Remove(src)
 		switch(name)
 			if("capacitor")

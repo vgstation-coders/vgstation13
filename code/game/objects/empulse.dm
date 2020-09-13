@@ -1,4 +1,4 @@
-proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
+/proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 	if(!epicenter)
 		return
 
@@ -38,13 +38,13 @@ proc/empulse(turf/epicenter, heavy_range, light_range, log=0)
 						M << 'sound/effects/EMPulse.ogg'
 
 		for(var/turf/T in spiral_block(epicenter,max_range))
+			CHECK_TICK
 			var/dist = cheap_pythag(T.x - x0, T.y - y0)
 			if(dist > max_range)
 				continue
 			var/act = 2
 			if(dist <= heavy_range)
 				act = 1
-
 			for(var/atom/movable/A in T.contents)
 				A.emp_act(act)
 	return

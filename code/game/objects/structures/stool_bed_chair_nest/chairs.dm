@@ -57,8 +57,13 @@
 			qdel(src)
 			return
 
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+	if(W.is_wrench(user))
+		if (locked_atoms && locked_atoms.len)
+			for (var/mob/living/L in locked_atoms)
+				visible_message("<span class='warning'>\The [L] slips from the chair!</span>'")
+				L.unlock_from(src)
+				L.Stun(2)
+		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, sheet_amt, user)
 		qdel(src)
 		return
@@ -157,21 +162,21 @@
 			return
 	change_dir(direction)
 	return 1
-	
+
 /obj/structure/bed/chair/AltClick(mob/user as mob)
-	buckle_chair(user,user)	
+	buckle_chair(user,user)
 
 /obj/structure/bed/chair/MouseDropTo(mob/M as mob, mob/user as mob)
 	buckle_chair(M,user)
 
 /obj/structure/bed/chair/proc/buckle_chair(mob/M as mob, mob/user as mob)
 	if(!istype(M))
-		return ..()
+		return
 
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
 		target = M
-		
+
 	if(!user.Adjacent(M) || !user.Adjacent(src))
 		return
 
@@ -181,7 +186,7 @@
 				"<span class='notice'>[M.name] has no butt, and slides right out of [src]!</span>",\
 				"Having no butt, you slide right out of the [src]",\
 				"You hear metal clanking.")
-				
+
 			M.Knockdown(5)
 			M.Stun(5)
 		else
@@ -283,7 +288,7 @@
 
 
 /obj/structure/bed/chair/comfy/attackby(var/obj/item/W, var/mob/user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		for (var/atom/movable/AM in src)
 			AM.forceMove(loc)
 
@@ -616,7 +621,7 @@
 	if(istype(W, /obj/item/assembly/shock_kit))
 		to_chat(user,"<span class='warning'>\The [W] cannot be rigged onto \the [src].</span>")
 		return
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		to_chat(user,"<span class='warning'>You cannot find any bolts to unwrench on \the [src].</span>")
 		return
 	if (iswelder(W))
@@ -683,3 +688,19 @@
 
 /obj/structure/bed/chair/shuttle/gamer/spin(var/mob/M)
 	change_dir(turn(dir, 90))
+
+//Plastic chairs
+/obj/structure/bed/chair/plastic
+	sheet_type = /obj/item/stack/sheet/mineral/plastic
+	sheet_amt = 3
+	anchored = 0
+
+/obj/structure/bed/chair/plastic/plastic_chair
+	icon_state = "plastic_chair"
+	name = "plastic chair"
+	desc = "All ready for the barbecue."
+
+/obj/structure/bed/chair/plastic/plastic_chair/New()
+	..()
+	buckle_overlay = image("icons/obj/stools-chairs-beds.dmi", "[icon_state]_armrest", CHAIR_ARMREST_LAYER)
+	buckle_overlay.plane = ABOVE_HUMAN_PLANE

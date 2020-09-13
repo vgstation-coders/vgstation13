@@ -32,13 +32,13 @@
 
 /obj/machinery/light_construct/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
-	if (iswrench(W))
+	if (W.is_wrench(user))
 		if (src.stage == 1)
-			playsound(src, 'sound/items/Ratchet.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			to_chat(usr, "You begin deconstructing [src].")
 			if (!do_after(usr, src, 30))
 				return
-			var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+			var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 			M.amount = sheets_refunded
 			user.visible_message("[user.name] deconstructs [src].", \
 				"You deconstruct [src].", "You hear a noise.")
@@ -364,7 +364,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	// attempt to deconstruct / stick weapon into light socket
 	else if(!current_bulb)
 		if(iswirecutter(W)) //If it's a wirecutter take out the wires
-			playsound(src, 'sound/items/Wirecutter.ogg', 75, 1)
+			W.playtoolsound(src, 75)
 			user.visible_message("[user.name] removes \the [src]'s wires.", \
 				"You remove \the [src]'s wires.", "You hear a noise.")
 			var/obj/machinery/light_construct/newlight = null
@@ -495,8 +495,8 @@ var/global/list/obj/machinery/light/alllights = list()
 					prot = (G.max_heat_protection_temperature > 360)
 		else
 			prot = 1
-
-		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || (user.get_active_hand_organ()).is_robotic())
+		var/datum/organ/external/active_hand_organ = user.get_active_hand_organ()
+		if(prot > 0 || (M_RESIST_HEAT in user.mutations) || active_hand_organ?.is_robotic())
 			to_chat(user, "You remove the light [fitting]")
 		else
 			to_chat(user, "You try to remove the light [fitting], but it's too hot and you don't want to burn your hand.")

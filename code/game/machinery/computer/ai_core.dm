@@ -34,8 +34,8 @@
 			icon_state = "4"
 
 /obj/structure/AIcore/attackby(var/obj/item/P, var/mob/user)
-	if(iswrench(P))
-		wrenchAnchor(user, time_to_wrench = 2 SECONDS)
+	if(P.is_wrench(user))
+		wrenchAnchor(user, P, time_to_wrench = 2 SECONDS)
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
@@ -54,18 +54,18 @@
 					state = UNSECURED_CIRCUITBOARD
 		if(UNSECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You screw the circuit board into place.</span>")
 				state = SECURED_CIRCUITBOARD
 			if(iscrowbar(P) && circuit)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the circuit board.</span>")
 				state = NOCIRCUITBOARD
 				circuit.forceMove(loc)
 				circuit = null
 		if(SECURED_CIRCUITBOARD)
 			if(P.is_screwdriver(user) && circuit)
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You unfasten the circuit board.</span>")
 				state = UNSECURED_CIRCUITBOARD
 			if(iscablecoil(P))
@@ -82,7 +82,7 @@
 				if(brain)
 					to_chat(user, "Get that brain out of there first!")
 				else
-					playsound(loc, 'sound/items/Wirecutter.ogg', 50, 1)
+					P.playtoolsound(loc, 50)
 					to_chat(user, "<span class='notice'>You remove the cables.</span>")
 					state = SECURED_CIRCUITBOARD
 					drop_stack(/obj/item/stack/cable_coil, loc, 5, user)
@@ -119,19 +119,19 @@
 						to_chat(user, "Added [P].")
 
 			if(iscrowbar(P) && brain)
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the brain.</span>")
 				brain.forceMove(loc)
 				brain = null
 
 		if(GLASS_PANELED)
 			if(iscrowbar(P))
-				playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You remove the glass panel.</span>")
 				state = WIREDFRAME
 				drop_stack(/obj/item/stack/sheet/glass/rglass, loc, 2, user)
 			else if(P.is_screwdriver(user))
-				playsound(loc, 'sound/items/Screwdriver.ogg', 50, 1)
+				P.playtoolsound(loc, 50)
 				to_chat(user, "<span class='notice'>You connect the monitor.</span>")
 				var/mob/living/silicon/ai/A = new /mob/living/silicon/ai ( loc, laws, brain )
 				if(A) //if there's no brain, the mob is deleted and a structure/AIcore is created
@@ -243,7 +243,12 @@ That prevents a few funky behaviors.
 								else
 									C.icon_state = "aicard-full"
 									T.overlays -= image('icons/obj/computer.dmi', "ai-fixer-full")
-								to_chat(T.occupant, "You have been downloaded to a mobile storage device. Still no remote access.")
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								for(var/mob/living/silicon/ai/A in C)
+									if(A.control_disabled == 1)
+										to_chat(T.occupant, "Remote access disabled.")
+									else
+										to_chat(T.occupant, "Remote access enabled.")
 								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
 								T.occupant.forceMove(C)
 								T.occupant.cancel_camera()
@@ -254,6 +259,47 @@ That prevents a few funky behaviors.
 								to_chat(U, "<span class='danger'>ERROR:</span> Reconstruction in progress.")
 							else if (!T.occupant)
 								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
+			if("AIUPLOAD")//AI Upload terminal.
+				var/obj/machinery/computer/aiupload/T = target
+				switch(interaction)
+					if("AICARD")
+						var/obj/item/device/aicard/C = src
+						if(!T.contents.len)
+							if (!C.contents.len)
+								to_chat(U, "No AI to copy over!")//Well duh
+
+							else
+								for(var/mob/living/silicon/ai/A in C)
+									C.icon_state = "aicard"
+									C.name = "inteliCard"
+									C.overlays.len = 0
+									A.forceMove(T)
+									T.occupant = A
+									A.control_disabled = 1
+									A.cancel_camera()
+									to_chat(A, "You have been uploaded to a stationary terminal. Sadly, there is no remote access from here.")
+									to_chat(U, "<span class='notice'><b>Transfer successful</b>:</span> [A.name] ([rand(1000,9999)].exe) installed and executed successfully. Local copy has been removed.")
+						else
+							if(!C.contents.len && T.occupant)
+								C.name = "inteliCard - [T.occupant.name]"
+								if (T.occupant.stat == 2)
+									C.icon_state = "aicard-404"
+								else
+									C.icon_state = "aicard-full"
+								to_chat(T.occupant, "You have been downloaded to a mobile storage device.")
+								for(var/mob/living/silicon/ai/A in C)
+									if(A.control_disabled == 1)
+										to_chat(T.occupant, "Remote access disabled.")
+									else
+										to_chat(T.occupant, "Remote access enabled.")
+								to_chat(U, "<span class='notice'><b>Transfer succesful</b>:</span> [T.occupant.name] ([rand(1000,9999)].exe) removed from host terminal and stored within local memory.")
+								T.occupant.forceMove(C)
+								T.occupant.cancel_camera()
+								T.occupant = null
+							else if (C.contents.len)
+								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
+							else if (!T.occupant)
+								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")		
 	else
 		to_chat(U, "<span class='danger'>ERROR:</span> AI flush is in progress, cannot execute transfer protocol.")
 	return

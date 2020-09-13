@@ -71,7 +71,7 @@
 					L.locked_to.unlock_atom(L)
 				L.Stun(2)
 				L.Knockdown(2)
-				L.apply_effect(STUTTER, 5)
+				L.apply_effect(5, STUTTER)
 				playsound(src, 'sound/weapons/heavysmash.ogg', 50, 0, 0)
 				breakthrough = 1
 		else
@@ -130,7 +130,7 @@
 /mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
 	if(ranged_cooldown <= 0 && ammo)
 		ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg')
+		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg', src)
 	return ..()
 
 /obj/item/projectile/wraithnail
@@ -394,14 +394,23 @@
 
 /mob/living/simple_animal/hostile/hex/New()
 	..()
+
+	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
+
+/mob/living/simple_animal/hostile/hex/proc/setupglow(glowcolor)
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	if(layer != MOB_LAYER) // ie it's hiding
+		overlay_layer = FLOAT_LAYER
+		overlay_plane = FLOAT_PLANE
+	
+	var/icon/glowicon = icon(icon,"glow-[icon_state]")
+	glowicon.Blend(glowcolor, ICON_ADD)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
-	animate(src, pixel_y = 4 * PIXEL_MULTIPLIER , time = 10, loop = -1, easing = SINE_EASING)
-	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 10, loop = -1, easing = SINE_EASING)
 
 /mob/living/simple_animal/hostile/hex/Destroy()
 	if (master)

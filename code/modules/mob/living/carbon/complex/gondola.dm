@@ -26,6 +26,19 @@
 	icon_state_dead = "[icon_state_dead]_dead"
 	..()
 
+/mob/living/carbon/complex/gondola/Destroy()
+	if(client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+		var/turf/T = get_turf(src)
+		if (T)
+			var/mob/living/simple_animal/shade/gondola/shade = new (T)
+			playsound(T, 'sound/hallucinations/growl1.ogg', 50, 1)
+			shade.name = "[real_name] the Shade"
+			shade.real_name = "[real_name]"
+			mind.transfer_to(shade)
+			update_faction_icons()
+			to_chat(shade, "<span class='sinister'>Dark energies rip your dying body appart, anchoring your soul inside the form of a Shade. You retain your memories, and devotion to the cult.</span>")
+	..()
+
 /mob/living/carbon/complex/gondola/say()
 	return
 

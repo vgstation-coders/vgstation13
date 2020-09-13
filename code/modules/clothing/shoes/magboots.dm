@@ -5,7 +5,7 @@
 	var/base_state = "magboots"
 //	clothing_flags = NOSLIP //disabled by default
 	actions_types = list(/datum/action/item_action/toggle_magboots)
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints/magboots
 	w_class = W_CLASS_LARGE
 
@@ -17,16 +17,19 @@
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
 
-/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user)
+/obj/item/clothing/shoes/magboots/mob_can_equip(mob/living/carbon/human/user, slot, disable_warning = 0)
 	var/mob/living/carbon/human/H = user
 	if(!istype(H) || stored_shoes)
 		return ..()
+	if(slot != slot_shoes)
+		return CANNOT_EQUIP
 	if(H.shoes)
 		stored_shoes = H.shoes
 		if(stored_shoes.w_class >= w_class)
-			to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
+			if(!disable_warning)
+				to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.shoes] are in the way.</span>")
 			stored_shoes = null
-			return FALSE
+			return CANNOT_EQUIP
 		H.remove_from_mob(stored_shoes)
 		stored_shoes.forceMove(src)
 
@@ -35,11 +38,11 @@
 			if(!H.equip_to_slot_if_possible(stored_shoes, slot_shoes))
 				stored_shoes.forceMove(get_turf(src))
 			stored_shoes = null
-		return FALSE
+		return CANNOT_EQUIP
 
 	if(stored_shoes)
 		to_chat(H, "<span class='info'>You slip \the [src] on over \the [stored_shoes].</span>")
-	return TRUE
+	return CAN_EQUIP
 
 /obj/item/clothing/shoes/magboots/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()
@@ -150,14 +153,14 @@
 	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/shoes/magboots/syndie/elite
 	name = "advanced blood-red magboots"
 	desc = "Reverse-engineered red magnetic boots that have a heavy magnetic pull. These ones include brand new magnet technology stolen from NT. A tag on it says \"Property of Gorlex Marauders\"."
 	icon_state = "syndiemag0"
 	base_state = "syndiemag"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	mag_slow = MAGBOOTS_SLOWDOWN_LOW
 
 //Captain

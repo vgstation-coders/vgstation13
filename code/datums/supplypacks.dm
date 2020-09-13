@@ -10,6 +10,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs
 	var/name = null
 	var/list/contains = list()
+	var/list/selection_from = list()//list of lists, system picks one & adds contents to container on creation
 	var/manifest = ""
 	var/amount = null
 	var/cost = null
@@ -729,6 +730,41 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
 	group = "Clothing"
+	
+/datum/supply_packs/security_formal_wear
+	var/Blue = list(/obj/item/clothing/suit/secdressjacket/hos_blue,
+					/obj/item/clothing/suit/secdressjacket/warden_blue,
+					/obj/item/clothing/suit/secdressjacket/officer_blue,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_blue,
+					/obj/item/clothing/under/rank/secformal/warden_blue,
+					/obj/item/clothing/under/rank/secformal/officer_blue)
+	var/Navy = list(/obj/item/clothing/suit/secdressjacket/hos_navy,
+					/obj/item/clothing/suit/secdressjacket/warden_navy,
+					/obj/item/clothing/suit/secdressjacket/officer_navy,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_navy,
+					/obj/item/clothing/under/rank/secformal/warden_navy,
+					/obj/item/clothing/under/rank/secformal/officer_navy)
+	var/Tan = list(/obj/item/clothing/suit/secdressjacket/hos_tan,
+					/obj/item/clothing/suit/secdressjacket/warden_tan,
+					/obj/item/clothing/suit/secdressjacket/officer_tan,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_tan,
+					/obj/item/clothing/under/rank/secformal/warden_tan,
+					/obj/item/clothing/under/rank/secformal/officer_tan)
+	contains = list(/obj/item/clothing/head/beret/headofsecurity,
+					/obj/item/clothing/head/beret/warden,
+					/obj/item/clothing/head/beret/officer,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes)
+	name = "Security Formalwear Closet"
+	cost = 30
+	containertype = /obj/structure/closet/secure_closet/security/empty
+	containername = "Security Formalwear"
+	access = list(access_security)
+	group = "Clothing"
+	
+/datum/supply_packs/security_formal_wear/New()
+	selection_from = list(Blue, Navy, Tan)
 
 //Winter Coats//
 
@@ -1008,6 +1044,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "loyalty implant crate"
+	access = list(access_armory)
+	group = "Security"
+
+/datum/supply_packs/exile
+	name = "Exile implants"
+	contains = list (/obj/item/weapon/storage/lockbox/exile)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "exile implant crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -1982,6 +2027,9 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/device/assembly/prox_sensor,
 					/obj/item/device/assembly/prox_sensor,
 					/obj/item/device/assembly/prox_sensor,
+					/obj/item/device/assembly/infra,
+					/obj/item/device/assembly/infra,
+					/obj/item/device/assembly/infra,
 					/obj/item/device/assembly/timer,
 					/obj/item/device/assembly/timer,
 					/obj/item/device/assembly/timer)
@@ -2090,6 +2138,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/fish_eggs/salmon,
 					/obj/item/fish_eggs/shrimp,
 					/obj/item/fish_eggs/shrimp,
+					/obj/item/fish_eggs/lobster,
+					/obj/item/fish_eggs/lobster,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,
 					/obj/item/weapon/circuitboard/fishtank,
@@ -2163,6 +2213,14 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 30
 	containertype = /obj/structure/largecrate/cat
 	containername = "cat crate"
+	group = "Hydroponics"
+
+/datum/supply_packs/snails
+	name = "Snails"
+	contains = list()
+	cost = 25
+	containertype = /obj/structure/largecrate/snails
+	containername = "snail crate"
 	group = "Hydroponics"
 
 /datum/supply_packs/weedcontrol
@@ -2431,3 +2489,11 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Al's Fun And Games stack of packs"
 	group = "Vending Machine Packs"
+
+/datum/supply_packs/teamsecurity
+	name = "Team Security stack of packs"
+	contains = list(/obj/structure/vendomatpack/team_security, /obj/structure/vendomatpack/team_security)
+	cost = 10
+	containertype = /obj/structure/stackopacks
+	containername = "Team Security stack of packs"
+	group = "Vending Machine packs"

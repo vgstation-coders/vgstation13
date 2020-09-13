@@ -255,10 +255,6 @@ About Recipes:
 			The container the recipe has to take place in in order to happen. Leave this blank/null
 			if you want the reaction to happen anywhere.
 
-		required_other
-			Basically like a reagent's data variable. You can set extra requirements for a
-			reaction with this.
-
 
 About the Tools:
 

@@ -3,7 +3,7 @@
 	abbreviation = "PP"
 	desc = "This spell summons a random pie, and throws it at the location of your choosing. More power means more pies."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	school = "evocation"
 	charge_max = 100

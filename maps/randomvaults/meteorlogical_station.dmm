@@ -35,7 +35,7 @@
 "aJ" = (/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "aK" = (/obj/machinery/door/airlock/external{req_access_txt = "150"},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aL" = (/obj/structure/bed,/obj/structure/curtain/open/bed,/obj/item/weapon/bedsheet/red,/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
-"aM" = (/obj/item/weapon/legcuffs/beartrap{armed = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
+"aM" = (/obj/item/weapon/beartrap{armed = 1},/turf/simulated/shuttle/floor4,/area/vault/meteorlogical)
 "aN" = (/turf/simulated/wall/r_wall,/area/vault/meteorlogical)
 "aO" = (/turf/unsimulated/mineral/random,/area)
 "aP" = (/obj/structure/flora/pottedplant/random,/turf/simulated/floor{icon_state = "dark"; dir = 6},/area/vault/meteorlogical)
@@ -69,7 +69,7 @@
 "br" = (/obj/structure/hanging_lantern{dir = 8},/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
 "bs" = (/obj/machinery/floodlight,/turf/unsimulated/floor/asteroid/plating,/area/vault/meteorlogical)
 "bt" = (/obj/item/weapon/pickaxe/excavationdrill,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
-"bu" = (/obj/item/weapon/legcuffs/beartrap,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
+"bu" = (/obj/item/weapon/beartrap,/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 "bv" = (/obj/structure/hanging_lantern{dir = 1},/turf/unsimulated/floor/asteroid,/area/vault/meteorlogical)
 
 (1,1,1) = {"

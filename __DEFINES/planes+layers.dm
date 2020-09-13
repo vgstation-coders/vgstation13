@@ -175,6 +175,7 @@ What is the naming convention for planes or layers?
 	// OBJ_LAYER 	 				3
 	// ABOVE_OBJ_LAYER				4
 	#define CLOSED_CURTAIN_LAYER	5
+	#define CHAT_LAYER				6
 
 #define BLOB_PLANE 				17			// For Blobs, which are above humans.
 
@@ -195,6 +196,7 @@ What is the naming convention for planes or layers?
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
 	#define SNOW_OVERLAY_LAYER		9
+	#define HORIZON_EXHAUST_LAYER	10
 
 #define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
 
@@ -323,7 +325,7 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	if(ghost_planemaster_dummy)
 		screen -= ghost_planemaster_dummy
 		qdel(ghost_planemaster_dummy)
-	ghost_planemaster = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster)
+	ghost_planemaster = new /obj/abstract/screen/plane_master/ghost_planemaster
 	screen |= ghost_planemaster
-	ghost_planemaster_dummy = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster_dummy)
+	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy

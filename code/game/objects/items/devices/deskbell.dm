@@ -29,12 +29,12 @@
 	var/wrenching = 0
 
 /obj/item/device/deskbell/attackby(obj/item/W, mob/user)
-	if(iswrench(W) && isturf(src.loc))
+	if(W.is_wrench(user) && isturf(src.loc))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 
 		if(wrenching)
 			return
@@ -52,7 +52,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -132,12 +132,12 @@
 			radio_connection = radio_controller.add_object(src, frequency, RADIO_CHAT)
 
 /obj/item/device/deskbell/signaler/attackby(obj/item/W, mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		user.visible_message(
 			"[user] begins to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts.",
 			"You begin to [anchored ? "undo" : "wrench"] \the [src]'s securing bolts..."
 			)
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+		W.playtoolsound(loc, 50)
 
 		if(wrenching)
 			return
@@ -154,7 +154,7 @@
 
 		return
 
-	if(istype(W,/obj/item/weapon/screwdriver))
+	if(W.is_screwdriver(user))
 		if(anchored)
 			to_chat(user, "You need to unwrench \the [src] first.")
 			return
@@ -188,7 +188,7 @@
 		if(!radio_connection)
 			return	//the desk bell also works like a simple send-only signaler.
 
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.source = src
 		signal.encryption = code					//Since its default code is 0, which cannot be set on a remote signaling device,
 		signal.data["message"] = "ACTIVATE"			//there is no risk that one of the desk bells already there at round start could trigger a signaler
@@ -279,11 +279,11 @@
 	else
 		switch(build_step)
 			if(0)
-				if(iswrench(W))
+				if(W.is_wrench(user))
 					to_chat(user, "<span class='notice'>You deconstruct \the [src].</span>")
-					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					//new /obj/item/stack/sheet/metal( get_turf(src.loc), 2)
-					var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 					M.amount = 2
 					qdel(src)
 					return
@@ -312,7 +312,7 @@
 					build_step--
 					update_icon()
 					return
-				if(istype(W,/obj/item/weapon/screwdriver))
+				if(W.is_screwdriver(user))
 					var/obj/item/device/deskbell/D = null
 					if(has_signaler)
 						D = new /obj/item/device/deskbell/signaler(get_turf(src))

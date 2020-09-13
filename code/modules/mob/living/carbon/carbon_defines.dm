@@ -9,7 +9,6 @@
 	var/number_wounds = 0
 
 	var/mob/living/carbon/mutual_handcuffed_to = null
-	var/mutual_handcuffed_to_event_key = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
 	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
 	var/mutual_handcuff_forcemove_time = 0 //last teleport time when user moves ontop of another
@@ -21,7 +20,6 @@
 
 	var/hasmouth = 1 // Used for food, etc.
 	var/give_check = FALSE
-	var/event/on_emote = new ()
 	var/base_insulation = 0
 	var/unslippable = 0 //Whether the mob can be slipped
 	var/list/body_alphas = list()	//Alpha values applied to just the body sprite of humans/monkeys, rather than their whole icon
@@ -33,3 +31,6 @@
 	if (mutual_handcuffs && mutual_handcuffed_to)
 		mutual_handcuffs.remove_mutual_cuff_events(mutual_handcuffed_to)
 	. = ..()
+
+/mob/living/carbon/proc/hasmouth()
+	return hasmouth

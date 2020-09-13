@@ -212,9 +212,7 @@ var/list/shuttle_log = list()
 					return
 				var/response = alert("Are you sure you wish to call the shuttle?", "Confirm", "Yes", "Cancel")
 				if(response == "Yes")
-					if(call_shuttle_proc(usr, justification))
-						if(!isobserver(usr))
-							shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
+					call_shuttle_proc(usr, justification)
 					if(emergency_shuttle.online)
 						post_status("shuttle")
 			setMenuState(usr,COMM_SCREEN_MAIN)
@@ -558,6 +556,8 @@ var/list/shuttle_log = list()
 	emergency_shuttle.incall()
 	if(!justification)
 		justification = "#??!7E/_1$*/ARR-CON�FAIL!!*$^?" //Can happen for reasons, let's deal with it IC
+	if(!isobserver(user))
+		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
 	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
@@ -631,7 +631,7 @@ var/list/shuttle_log = list()
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command

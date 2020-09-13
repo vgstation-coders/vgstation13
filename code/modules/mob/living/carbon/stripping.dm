@@ -4,8 +4,13 @@
 	else
 		return I
 
-/mob/living/carbon/proc/strip_time()
+/mob/living/proc/strip_time()
 	return HUMAN_STRIP_DELAY
+
+/mob/living/carbon/strip_time()
+	if(isGoodPickpocket())
+		return HUMAN_STRIP_DELAY/2
+	return ..()
 
 /mob/living/carbon/proc/reversestrip_time()
 	return HUMAN_REVERSESTRIP_DELAY
@@ -260,7 +265,7 @@
 		return
 	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s suit sensors.</span>", "<span class='danger'>\The [user] is trying to set your suit sensors!</span>")
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, user.strip_time()))
 		var/newmode = suit.set_sensors(user)
 		if(newmode)
 			src.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had their sensors set to [newmode] by [user.name] ([user.ckey])</font>")
@@ -275,7 +280,7 @@
 /mob/living/carbon/proc/set_internals(var/mob/living/user)
 	if(user.incapacitated())
 		return
-	
+
 	if(!has_breathing_mask())
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return
@@ -288,6 +293,6 @@
 	if(!user.isGoodPickpocket())
 		visible_message("<span class='warning'>\The [user] is trying to set [src]'s internals.</span>", "<span class='danger'>\The [user] is trying to set your internals!</span>")
 
-	if(do_mob(user, src, HUMAN_STRIP_DELAY))
+	if(do_mob(user, src, user.strip_time()))
 		src.toggle_internals(user, T)
 		show_inv(user)

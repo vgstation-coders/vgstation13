@@ -140,11 +140,11 @@
 		return
 
 	var/mob/living/carbon/human/H = mob
-	var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new /obj/item/clothing/glasses/sunglasses/virus
-	if(H.glasses && !istype(H.glasses, /obj/item/clothing/glasses/sunglasses/virus))
-		mob.u_equip(H.glasses,1)
-		mob.equip_to_slot(virussunglasses, slot_glasses)
-	if(!slot_glasses)
+	var/obj/item/clothing/glasses/H_glasses = H.get_item_by_slot(slot_glasses)
+
+	if(!istype(H_glasses, /obj/item/clothing/glasses/sunglasses/virus))
+		var/obj/item/clothing/glasses/sunglasses/virus/virussunglasses = new
+		mob.u_equip(H_glasses,1)
 		mob.equip_to_slot(virussunglasses, slot_glasses)
 	mob.confused += 10
 
@@ -282,8 +282,8 @@
 			if(multiplier >= 2)
 				if(multiplier >=2.3)
 					//Cursed, pure evil cat ears that should not have been created
-					var/obj/item/clothing/head/kitty/cursed/kitty_c = new /obj/item/clothing/head/kitty/cursed
-					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/cursed))
+					var/obj/item/clothing/head/kitty/anime/cursed/kitty_c = new /obj/item/clothing/head/kitty/anime/cursed
+					if(affected.head && !istype(affected.head, /obj/item/clothing/head/kitty/anime/cursed))
 						affected.u_equip(affected.head,1)
 						affected.equip_to_slot(kitty_c, slot_head)
 					if(!affected.head)
@@ -516,8 +516,23 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	badness = EFFECT_DANGER_HINDRANCE
 
 /datum/disease2/effect/colorsmoke/activate(var/mob/living/mob)
+	if (ismouse(mob))//people don't like infected mice ruining maint
+		var/mob/living/simple_animal/mouse/M = mob
+		if (!initial(M.infectable))
+			return
 	to_chat(mob, "<span class='notice'>You feel colorful!</span>")
 	mob.reagents.add_reagent(COLORFUL_REAGENT, 5)
+	mob.reagents.add_reagent(PAISMOKE, 5)
+
+/datum/disease2/effect/cleansmoke
+	name = "Cleaning Syndrome"
+	desc = "Causes the infected to synthesize smoke & space cleaner."
+	stage = 3
+	badness = EFFECT_DANGER_HELPFUL
+
+/datum/disease2/effect/cleansmoke/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='notice'>You feel clean!</span>")
+	mob.reagents.add_reagent(CLEANER, 5)
 	mob.reagents.add_reagent(PAISMOKE, 5)
 
 /datum/disease2/effect/chimera

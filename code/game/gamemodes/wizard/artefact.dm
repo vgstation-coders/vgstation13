@@ -105,11 +105,10 @@
 	w_class = W_CLASS_MEDIUM
 	force = 0
 	flags = FPRINT | TWOHANDABLE
-	var/event_key
 
-/obj/item/weapon/cloakingcloak/proc/mob_moved(var/list/event_args, var/mob/holder)
-	if(iscarbon(holder) && wielded)
-		var/mob/living/carbon/C = holder
+/obj/item/weapon/cloakingcloak/proc/mob_moved(atom/movable/mover)
+	if(iscarbon(mover) && wielded)
+		var/mob/living/carbon/C = mover
 		if(C.m_intent == "run" && prob(10))
 			if(C.Slip(4, 5))
 				step(C, C.dir)
@@ -121,13 +120,12 @@
 		user.update_inv_hands()
 		if(wielded)
 			user.visible_message("<span class='danger'>\The [user] throws \the [src] over \himself and disappears!</span>","<span class='notice'>You throw \the [src] over yourself and disappear.</span>")
-			event_key = user.on_moved.Add(src, "mob_moved")
+			user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 			user.alpha = 1	//to cloak immediately instead of on the next Life() tick
 			user.alphas[CLOAKINGCLOAK] = 1
 		else
 			user.visible_message("<span class='warning'>\The [user] appears out of thin air!</span>","<span class='notice'>You take \the [src] off and become visible again.</span>")
-			user.on_moved.Remove(event_key)
-			event_key = null
+			user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 			user.alpha = initial(user.alpha)
 			user.alphas.Remove(CLOAKINGCLOAK)
 
@@ -198,9 +196,13 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
-	var/soulbound
-	var/z_bound
 	var/mob/bound_soul
+	var/datum/mind/bound_mind
+
+/obj/item/phylactery/examine(mob/user, size, show_name)
+	..()
+	if(iswizard(user))
+		to_chat(user, "<span class='sinister'>You can use charged soulstones to refill it. The more charges you have, the faster you will revive.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/device/soulstone))
@@ -216,21 +218,19 @@
 		..()
 
 /obj/item/phylactery/Destroy()
-	if(bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
-	soulbound = null
 	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
 		to_chat(bound_soul, "<span class = 'warning'><b>You feel your form begin to unwind!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS))
 			bound_soul.dust()
 			bound_soul = null
+			unbind_mind()
 	..()
 
 
 /obj/item/phylactery/update_icon()
-	if(soulbound)
+	if(bound_soul)
 		if(charges >= 1)
 			icon_state = "phylactery"
 		else
@@ -239,22 +239,25 @@
 		icon_state = "phylactery_empty_noglow"
 
 /obj/item/phylactery/attack_self(mob/user)
-	if(!soulbound && ishuman(user))
+	if(!bound_soul && ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/datum/organ/external/E = H.get_active_hand_organ()
 		if(locate(/datum/wound) in E.wounds)
 			to_chat(user, "<span class = 'warning'>You bind your life essence to \the [src].</span>")
+			if(user.mind)
+				bind_mind(user.mind)
 			bind(user)
 			charges++
 			update_icon()
 	else
 		..()
 
-/obj/item/phylactery/proc/revive_soul(list/arguments)
+/obj/item/phylactery/proc/revive_soul(mob/user, body_destroyed)
 	if(charges <= 0)
+		unbind_mind()
 		unbind()
 		return
-	var/mob/living/original = arguments["user"]
+	var/mob/living/original = user
 	if(original.mind)
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human/lich(src)
 		H.real_name = original.real_name
@@ -262,13 +265,16 @@
 		for(var/spell/S in original.spell_list)
 			original.remove_spell(S)
 			H.add_spell(S)
-		H.Paralyse(30)
-		original.mind.transfer_to(H)
-		unbind()
-		bind(H)
-		if(!arguments["body_destroyed"])
+		//Let's give the lich some spooky clothes. Including non-wizards.
+		H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/skelelich(H), slot_head)
+		H.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/skelelich(H), slot_wear_suit)
+		H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal(H), slot_shoes)
+		H.equip_to_slot_or_del(new /obj/item/clothing/under/lightpurple(H), slot_w_uniform)
+		original.mind.transfer_to(H) // rebinding on transfer now handled by mind
+		if(!body_destroyed)
 			original.dust()
-		var/release_time = rand(60 SECONDS, 120 SECONDS)/charges
+		var/release_time = round(rand(60 SECONDS, 120 SECONDS)/charges, 10) //In deciseconds
+		H.Paralyse(release_time/20) //Divide by 20 because Paralyse goes down by 1 every Life() tick (roughly every 2 secs)
 		to_chat(H, "<span class = 'notice'>\The [src] will permit you exit in [release_time/10] seconds.</span>")
 		spawn(release_time)
 			to_chat(H, "<span class = 'notice'>\The [src] permits you exit from it.</span>")
@@ -277,29 +283,39 @@
 	update_icon()
 
 /obj/item/phylactery/proc/unbind()
-	if(bound_soul.on_death)
-		bound_soul.on_death.Remove(soulbound)
-	if(bound_soul.on_z_transition)
-		bound_soul.on_z_transition.Remove(z_bound)
-	z_bound = null
-	soulbound = null
+	if(bound_soul)
+		bound_soul.lazy_unregister_event(/lazy_event/on_z_transition, src, .proc/z_block)
+		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/revive_soul)
 	bound_soul = null
 	update_icon()
 
 /obj/item/phylactery/proc/bind(var/mob/to_bind)
-	soulbound = to_bind.on_death.Add(src, "revive_soul")
-	z_bound = to_bind.on_z_transition.Add(src, "z_block")
+	to_bind.lazy_register_event(/lazy_event/on_death, src, .proc/revive_soul)
+	to_bind.lazy_register_event(/lazy_event/on_z_transition, src, .proc/z_block)
 	bound_soul = to_bind
 
-/obj/item/phylactery/proc/z_block(list/arguments)
-	var/mob/user = arguments["user"]
+/obj/item/phylactery/proc/unbind_mind()
+	if(bound_mind)
+		bound_mind.lazy_unregister_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
+	bound_mind = null
+
+/obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
+	to_bind.lazy_register_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
+	bound_mind = to_bind
+
+/obj/item/phylactery/proc/follow_mind()
+	unbind()
+	bind(bound_mind.current)
+	update_icon()
+
+/obj/item/phylactery/proc/z_block(mob/user, to_z, from_z)
 	if(user != bound_soul)
 		unbind()
 		return
 	if(is_holder_of(user, src))
 		return //We're in their pocket, you ash-happy bottle of soul!
 	var/turf/T = get_turf(src)
-	if(arguments["to_z"] != T.z)
+	if(to_z != T.z)
 		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
 			if(user.gcDestroyed)
@@ -310,10 +326,12 @@
 
 /obj/item/clothing/shoes/blindingspeed
 	name = "boots of blinding speed"
-	desc = "Blinds you while moving."
+	desc = "Blinds you while moving. Temporarily pass on their curse with a kick."
 	icon_state = "blindingspeed"
 	item_state = "blindingspeed"
 	wizard_garb = 1
+	bonus_kick_damage = 5
+	var/blinding = TRUE
 	var/speed_modifier = 4
 
 /obj/item/clothing/shoes/blindingspeed/equipped(mob/living/carbon/human/H, equipped_slot)
@@ -324,7 +342,19 @@
 
 /obj/item/clothing/shoes/blindingspeed/step_action()
 	var/mob/living/carbon/human/H = loc
-	H.change_sight(adding = BLIND)
+	if(blinding)
+		H.change_sight(adding = BLIND)
+
+/obj/item/clothing/shoes/blindingspeed/on_kick(mob/living/user, mob/living/victim)	//Everybody was kung-fu fighting
+	if(blinding)
+		if(iscarbon(victim))
+			var/mob/living/carbon/C = victim
+			C.eye_blind += 3
+			C.eye_blurry += 5
+			C.Knockdown(1)	//Those kicks were fast as lightning
+		blinding = FALSE	//In fact it was a little bit frightening
+		spawn(5 SECONDS)	//But they fought with expert timing
+			blinding = TRUE
 
 /obj/item/clothing/shoes/blindingspeed/unequipped(mob/living/carbon/human/H, var/from_slot = null)
 	..()
@@ -338,14 +368,111 @@
 	item_state = "fuckup"
 	wizard_garb = 1
 	w_class = W_CLASS_LARGE
-	step_sound = "fuckupstep"
+
+	var/active = 0
+	var/max_steps = 4
+	var/current_step = 0
+	var/equip_cooldown = 50
+
+	var/step_cooldown = 1 SECONDS // The step delay.
+
+	var/warmup_steps = 4
+	var/current_warmup_steps = 0
+
 
 /obj/item/clothing/shoes/fuckup/step_action()
+	if (equip_cooldown)
+		equip_cooldown--
+		return ..()
+	if (!active)
+		return ..()
+	if (current_warmup_steps < warmup_steps)
+		current_warmup_steps++
+		return ..()
+	if (current_step >= max_steps)
+		deactivate()
+		return ..()
+
 	var/mob/living/carbon/human/H = loc
-	H.delayNextMove(15)
+	H.delayNextMove(step_cooldown)
 	playsound(H, step_sound, 50, 1)
 	if(istype(H.loc,/turf/simulated))
 		var/turf/simulated/T = H.loc
 		T.ex_act(1)
 	for (var/turf/simulated/T in orange(1,get_turf(H)))
 		T.ex_act(3)
+	current_step++
+
+/obj/item/clothing/shoes/fuckup/proc/activate()
+	active = 1
+	current_step = 0
+	current_warmup_steps = 0
+	step_sound = "fuckupstep"
+
+/obj/item/clothing/shoes/fuckup/proc/deactivate()
+	active = 0
+	step_sound = initial(step_sound)
+
+/obj/item/clothing/shoes/fuckup/equipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	var/spell/fuckup/F = new
+	H.add_spell(/spell/fuckup)
+	H.lazy_register_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
+	return ..()
+
+/obj/item/clothing/shoes/fuckup/unequipped(mob/living/carbon/human/H, equipped_slot)
+	equip_cooldown = initial(equip_cooldown)
+	for (var/spell/fuckup/F in H.spell_list)
+		H.remove_spell(F)
+		H.lazy_unregister_event(/lazy_event/on_spellcast, F, /spell/fuckup/proc/on_spellcast)
+	return ..()
+
+// -- Fuckup boot spell
+
+/spell/fuckup
+	name = "Activate fuckup boots (toggle)"
+	desc = "Unleash the power of fuckup boots."
+	abbreviation = "FU"
+
+	user_type = USER_TYPE_ARTIFACT
+
+	charge_type = Sp_RECHARGE
+	charge_max = 30 SECONDS
+	invocation_type = SpI_SHOUT
+	invocation = "FA'R N' AL'ENC'ED"
+	range = 0
+	spell_flags = NEEDSCLOTHES | NEEDSHUMAN
+	cooldown_min = 30 SECONDS
+	var/cooldown_on_blink = 4 SECONDS // The cooldown given upon blinking. Reduce to 0 for "fun".
+
+	hud_state = "wiz_fuckup"
+
+/spell/fuckup/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	. = ..()
+	if (!.) // No need to go further.
+		return FALSE
+	var/mob/living/carbon/human/H = user // not false because NEEDSHUMAN
+	if (!istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+		return FALSE
+	return TRUE
+
+/spell/fuckup/choose_targets(var/mob/user = usr)
+	return list(user) // Self-cast
+
+/spell/fuckup/cast(var/list/targets, var/mob/user)
+	var/mob/living/carbon/human/H = user
+	var/obj/item/clothing/shoes/fuckup/F = H.shoes
+	F.activate()
+	spawn (7 SECONDS)
+		if (F)
+			F.deactivate()
+
+/spell/fuckup/proc/on_spellcast(spell/spell, mob/user, list/targets)
+	if (!ishuman(user))
+		return
+	var/mob/living/carbon/human/H = user
+	if (istype(spell, /spell/aoe_turf/blink) || istype(spell, /spell/targeted/ethereal_jaunt))
+		charge_counter = min(charge_counter, cooldown_min - cooldown_on_blink)
+		if (istype(H.shoes, /obj/item/clothing/shoes/fuckup))
+			var/obj/item/clothing/shoes/fuckup/F = H.shoes
+			F.deactivate()

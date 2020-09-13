@@ -191,7 +191,7 @@
 
 
 
-/mob/living/simple_animal/mouse/revive()
+/mob/living/simple_animal/mouse/revive(refreshbutcher = 1)
 	for (var/ID in virus2)
 		var/datum/disease2/disease/V = virus2[ID]
 		V.cure(src)
@@ -517,5 +517,6 @@
 
 /mob/living/simple_animal/mouse/mouse_op/death(var/gibbed = FALSE)
 	..(TRUE)
-	if(gibbed == FALSE)
-		src.gib()
+	if(!gibbed && !suiciding && loc != null)
+		explosion(get_turf(loc),-1,0,2)
+		gib()

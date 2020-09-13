@@ -7,15 +7,18 @@
 	flags = FPRINT
 	clothing_flags = PLASMAGUARD
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
-	body_parts_covered = HEAD|EARS|EYES|MOUTH
+	body_parts_covered = HEAD|EARS|EYES|MOUTH|HIDEHAIR
+	body_parts_visible_override = EYES|BEARD
 	siemens_coefficient = 0.9
 	sterility = 100
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/bio_suit
 	name = "bio suit"
 	desc = "A suit that protects against biological contamination."
 	icon_state = "bio"
 	item_state = "bio_suit"
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	w_class = W_CLASS_LARGE//bulky item
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
@@ -47,10 +50,32 @@
 
 //Security biosuit, grey with red stripe across the chest
 /obj/item/clothing/head/bio_hood/security
+	name = "security bio hood"
+	desc = "A hood that protects the head and face from biological comtaminants. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
+	armor = list(melee = 25, bullet = 10, laser = 15, energy = 5, bomb = 5, bio = 100, rad = 20)
 
 /obj/item/clothing/suit/bio_suit/security
+	name = "security bio suit"
+	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
+	allowed = list(
+		/obj/item/weapon/gun/energy,
+		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/weapon/gun/projectile,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/gun/lawgiver,
+		/obj/item/weapon/gun/siren,
+		/obj/item/weapon/gun/mahoguny,
+		/obj/item/weapon/gun/grenadelauncher,
+		/obj/item/weapon/bikehorn/baton,
+		/obj/item/weapon/blunderbuss,
+		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/device/hailer)
+	armor = list(melee = 25, bullet = 10, laser = 15, energy = 5, bomb = 5, bio = 100, rad = 20)
 
 
 //Janitor's biosuit, grey with purple arms
@@ -90,6 +115,8 @@
 
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 30, rad = 0)
 	sterility = 50
+
+	body_parts_visible_override = FACE
 
 
 //Plague Dr mask can be found in clothing/masks/gasmask.dm

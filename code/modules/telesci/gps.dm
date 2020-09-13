@@ -49,12 +49,17 @@ var/list/SPS_list = list()
 	emped = TRUE
 	transmitting = FALSE
 	update_icon()
+	SStgui.update_uis(src)
 	spawn(30 SECONDS)
 		emped = FALSE
 		update_icon()
+		SStgui.update_uis(src)
 
 /obj/item/device/gps/attack_self(mob/user)
-	ui_interact(user)
+	if(user.client.prefs.tgui_fancy)
+		tgui_interact(user)
+	else
+		ui_interact(user)
 
 /obj/item/device/gps/examine(mob/user)
 	if(Adjacent(user) || isobserver(user))
@@ -74,7 +79,65 @@ var/list/SPS_list = list()
 	else
 		return "[format_text(device_area.name)] ([device_turf.x-WORLD_X_OFFSET[device_turf.z]], [device_turf.y-WORLD_Y_OFFSET[device_turf.z]], [device_turf.z])"
 
+// Begin tgui
+/obj/item/device/gps/tgui_interact(mob/user, ui_key = "main", datum/tgui/ui = null, force_open = FALSE, datum/tgui/master_ui = null, datum/ui_state/state = global.adjacent_state)
+	ui = SStgui.try_update_ui(user, src, ui_key, ui, force_open)
+	if(!ui)
+		ui = new(user, src, ui_key, "Gps", name, 500, 500, master_ui, state)
+		ui.open()
+	ui.set_autoupdate(autorefreshing)
 
+/obj/item/device/gps/ui_data()
+	var/list/data = list()
+	data["emped"] = emped
+	data["transmitting"] = transmitting
+	data["gpstag"] = gpstag
+	data["autorefresh"] = autorefreshing
+	data["location_text"] = get_location_name()
+	var/list/devices = list()
+	if(!emped && transmitting)
+		for(var/obj/item/device/gps/other in gps_list)
+			if(!other.transmitting || other == src)
+				continue
+			var/list/device_data = list()
+			device_data["tag"] = other.gpstag
+			device_data["location_text"] = other.get_location_name()
+			devices += list(device_data)
+	data["devices"] = devices
+	return data
+
+/obj/item/device/gps/ui_act(action, list/params)
+	if(..())
+		return
+	switch(action)
+		if("turn_on")
+			if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
+				return FALSE
+			transmitting = TRUE
+			update_icon()
+			return TRUE
+		if("set_tag")
+			if(isobserver(usr))
+				to_chat(usr, "No way.")
+				return FALSE
+			if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //no silicons allowed
+				to_chat(usr, "<span class='caution'>You need to have the GPS in your hand to do that!</span>")
+				return TRUE
+			var/new_tag = params["new_tag"]
+			if(!new_tag)
+				return TRUE
+			if(length(new_tag) > 5)
+				to_chat(usr, "<span class='caution'>The tag must have a maximum of five characters!</span>")
+			else
+				gpstag = new_tag
+				update_name()
+			return TRUE
+		if("toggle_refresh")
+			autorefreshing = !autorefreshing
+			return TRUE
+// end tgui
+
+// Begin NanoUI
 /obj/item/device/gps/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 	var/data[0]
 	if(emped)
@@ -101,6 +164,8 @@ var/list/SPS_list = list()
 	ui.set_auto_update(autorefreshing)
 
 /obj/item/device/gps/Topic(href, href_list)
+	if(..())
+		return FALSE
 	if(href_list["turn_on"])
 		if(emped || transmitting || !Adjacent(usr) || usr.incapacitated())
 			return FALSE
@@ -116,15 +181,14 @@ var/list/SPS_list = list()
 			return TRUE
 
 		var/a = input("Please enter desired tag.", name, gpstag) as text|null
-		if(!a) //what a check
-			return TRUE
 
 		if(!builtin && (usr.get_active_hand() != src || usr.incapacitated())) //second check in case some chucklefuck drops the GPS while typing the tag
 			to_chat(usr, "<span class = 'caution'>The GPS needs to be kept in your active hand!</span>")
 			return TRUE
-		a = strict_ascii(a)
-		if(length(a) < 4 || length(a) > 5)
-			to_chat(usr, "<span class = 'caution'>The tag must be between four and five characters long!</span>")
+		if(!a) //what a check
+			return TRUE
+		if(length(a) > 5)
+			to_chat(usr, "<span class = 'caution'>The tag must have a maximum of five characters!</span>")
 		else
 			gpstag = a
 			update_name()
@@ -132,9 +196,7 @@ var/list/SPS_list = list()
 	if(href_list["toggle_refresh"])
 		autorefreshing = !autorefreshing
 		return TRUE
-	if(..())
-		return FALSE
-
+// End NanoUI
 /obj/item/device/gps/science
 	icon_state = "gps-s"
 	base_tag = "SCI"
@@ -168,114 +230,38 @@ var/list/SPS_list = list()
 
 /obj/item/device/gps/secure
 	base_name = "secure positioning system"
-	desc = "A secure channel SPS. If it is transmitting its signal, it will announce the position of the wearer if killed or stripped off to other SPS devices."
+	desc = "A secure channel SPS. Sounds an alarm if seperated from their wearer, be it by stripping or death."
 	icon_state = "sps"
 	base_tag = "SEC"
-
-/obj/item/device/gps/secure/get_gps_list()
-	return SPS_list
 
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
+	send_signal(wearer, src, "SPS [gpstag]: Code Red")
 
-	var/channel_index = 0
-	var/sps_index = gps_list.Find(src)
-	for(var/E in gps_list)
-		var/obj/item/device/gps/secure/S = E //No idea why casting it like this makes it work better instead of just defining it in the for each
-		S.announce(wearer, src, "has detected the death of their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index, dead = TRUE)
-		channel_index++
+/obj/item/device/gps/secure/get_gps_list()
+	return SPS_list
 
 /obj/item/device/gps/secure/stripped(mob/wearer, mob/stripper)
 	if(!transmitting)
 		return
 	. = ..()
-	var/sps_index = gps_list.Find(src)
-	var/channel_index = 0
-	for(var/E in gps_list)
-		var/obj/item/device/gps/secure/S = E
-		S.announce(wearer, src, "has been stripped from their wearer", sps_index, DEATHSOUND_CHANNEL + channel_index)
-		channel_index++
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
 
-var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
-
-/obj/item/device/gps/secure/proc/announce(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/reason,var/num,var/sound_channel,var/dead=FALSE)
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
+	var/boop = FALSE
 	var/turf/pos = get_turf(SPS)
-	deathsound(pos,dead,num,sound_channel)
-	var/mob/living/L = get_holder_of_type(src, /mob/living/)
-	if(L)
-		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>", MESSAGE_HEAR)
-	else if(isturf(loc))
-		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! SPS '[SPS.gpstag]' [reason] at [get_area(SPS)] ([pos.x-WORLD_X_OFFSET[pos.z]], [pos.y-WORLD_Y_OFFSET[pos.z]], [pos.z]).</span>")
-
-/proc/SPS_black_market_alert(var/reason)
-	var/channel_index = 0
-	for(var/E in SPS_list)
-		var/obj/item/device/gps/secure/S = E
-		S.black_market_announce(reason, DEATHSOUND_CHANNEL + channel_index)
-		channel_index++
-		
-/obj/item/device/gps/secure/proc/black_market_announce(var/reason, var/sound_channel) 
-	blackmarket_message(sound_channel)
-	var/mob/living/L = get_holder_of_type(src, /mob/living/)
-	if(L)
-		L.show_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason]", MESSAGE_HEAR)
-	else if(isturf(loc))
-		visible_message("\icon[src] [gpstag] beeps: <span class='danger'>Warning! [reason]</span>")
-		
-var/const/DEATHSOUND_CHANNEL = 300
-
-/obj/item/device/gps/secure/proc/blackmarket_message(var/sound_channel)
-	playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
-	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	if(prob(50))
-		playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	playsound(src, 'sound/items/investigateandreport.wav',100, 0,channel = sound_channel,wait = TRUE)
-	playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	playsound(src, 'sound/items/off2.wav',100, 0,channel = sound_channel,wait = TRUE)
-
-/obj/item/device/gps/secure/proc/deathsound(var/turf/pos,var/dead=FALSE,num,var/sound_channel)
-	if(dead)
-		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
-	if(prob(75))
-		playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		if(prob(50))
-			playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		if(prob(25) && dead) // 25% chance if dead, 0% chance if stripped
-			playsound(src, 'sound/items/unitdeserviced.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
-			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(pos.z,sound_channel,src)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
-			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playnum(gps_list.Find(src),sound_channel,src)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		else	// 25% chance if dead, 50% chance if stripped
-			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		if(prob(50))
-			playsound(src, 'sound/items/investigateandreport.wav',100, 0,channel = sound_channel,wait = TRUE)
-			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playsound(src, 'sound/items/off2.wav',100, 0,channel = sound_channel,wait = TRUE)
-
-
-var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/two.wav', "3" = 'sound/items/three.wav',"4" = 'sound/items/four.wav',"5" = 'sound/items/five.wav',"6" = 'sound/items/six.wav',"7" = 'sound/items/seven.wav',"8" = 'sound/items/eight.wav',"9" = 'sound/items/nine.wav',"0" = 'sound/items/zero.wav')
-/proc/playnum(var/num,var/sound_channel,var/source)
-	var/list/splitnumber = list()
-	if(num)
-		var/base = round(log(10,num))
-		for(var/n = 0 to base)
-			splitnumber += num2text(num/(10**(base-n)) % 10)
-	else splitnumber += "0"
-	for(var/n in splitnumber)
-		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)
+	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
+	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
+	var/z0 = pos.z
+	var/alerttype = code
+	var/alertarea = get_area(SPS)
+	var/alerttime = worldtime2text()
+	var/verbose = TRUE
+	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
+	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
+		if(receiver && !receiver.stat)
+			receiver.receive_alert(alerttype, transmission_data, verbose)
+			boop = TRUE
+	if (boop)
+		playsound(src,'sound/machines/radioboop.ogg',40,1)

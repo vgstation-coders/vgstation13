@@ -51,26 +51,32 @@
 
 		var/ckeytext = ckey(key)
 
-		if(!establish_db_connection())
+		if(!SSdbcore.Connect())
 			world.log << "Ban database connection failure. Key [ckeytext] not checked"
 			diary << "Ban database connection failure. Key [ckeytext] not checked"
 			return
+
 		var/failedcid = 1
 		var/failedip = 1
 
-		var/ipquery = ""
-		var/cidquery = ""
 		if(address)
 			failedip = 0
-			ipquery = " OR ip = '[address]' "
 
 		if(computer_id)
 			failedcid = 0
-			cidquery = " OR computerid = '[computer_id]' "
 
-		var/DBQuery/query = dbcon.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = '[ckeytext]' [ipquery] [cidquery]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)",
+			list(
+				"ckey" = "[ckeytext]",
+				"address" = "[address]",
+				"computer_id" = "[computer_id]"
+		))
 
-		query.Execute()
+		if(!query.Execute())
+			message_admins("Error: [query.ErrorMsg()]")
+			log_sql("Error: [query.ErrorMsg()]")
+			qdel(query)
+			return
 		while(query.NextRow())
 			var/pckey = query.item[1]
 			//var/pip = query.item[2]
@@ -92,9 +98,10 @@
 			else
 				desc = "\nReason: You, or another user of this computer or connection ([pckey]) is banned from playing here. The ban reason is:\n[reason]\nThis ban was applied by [ackey] on [bantime] \nBan type: [bantype] \nExpires: [expires] \nAppeal: <span class='warning'>No ban appeals link set</span>"
 			log_access("Failed Login: [key] [computer_id] [address] - Banned [desc]")
+			qdel(query)
 			return list("reason"="[bantype]", "desc"="[desc]")
 			//return "[bantype][desc]"
-
+		qdel(query)
 		if (failedcid)
 			message_admins("[key] has logged in with a blank computer id in the ban check.")
 		if (failedip)

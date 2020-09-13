@@ -379,6 +379,12 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert = 'sound/AI/ionstorm.ogg'
 	message = "Ion storm detected near the station. Please check all AI-controlled equipment for errors."
 
+/datum/command_alert/ion_storm_malicious
+	name = "Ion Storm - AI affected"
+	alert_title = "Anomaly Alert"
+	alert = 'sound/AI/ionstorm.ogg'
+	message = "Abnormal ion activity detected. Please check all AI-controlled equipment for errors. Additional data has been downloaded and printed out at all communications consoles."
+
 /datum/command_alert/ion_storm_large
 	name = "Ion Storm - All Affected"
 	alert_title = "Anomaly Alert"
@@ -419,16 +425,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/command_link_lost
 	name = "Centcom Link Lost"
 	alert_title = "Automated Announcement"
-	alert = 'sound/AI/loss.ogg'
-	message = "This is an automated announcement. The link with central command has been lost. Repeat: The link with central command has been lost. Attempting to re-establish communications in T-10."
+	alert = 'sound/AI/connection_lost.ogg'
+	message = "Critical alert: Bluespace connection to Central Command has been lost. The emergency shuttle is be unable to be called or recalled until further notice."
 
 /datum/command_alert/command_link_restored
 	name = "Centcom Link Restored"
-	alert_title = "Link Established"
-
-/datum/command_alert/command_link_restored/announce()
-	message = "A link to Central Command has been established on [station_name()]."
-	..()
+	alert_title = "Automated Announcement"
+	alert = 'sound/AI/connection_made.ogg'
+	alert_title = "Link with Central Command has been re-established successfully. The emergency shuttle can now be called or recalled."
 
 /////////HOSTILE CREATURES
 
@@ -485,7 +489,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	force_report = 1
 
 /datum/command_alert/bloodstones_anchor/announce()
-	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. Destroy it at all costs, do not let any cultist near it."
+	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
 	..()
 
 /datum/command_alert/bloodstones_broken
@@ -578,10 +582,9 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	message = "Automated meteorological warning alert: the blizzard has been confirmed to be no longer active. Thank you for your cooperation with standard safety procedures."
 
 /datum/command_alert/blizzard_start
-	alert_title = "Blizzard Warning"
-	message = "Automated meteorological warning alert: formation of a blizzard has been detected near your station. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
+	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
 
 /datum/command_alert/omega_blizzard
-	alert_title = "Urgent Warning - Omega Blizzard"
-	message = "Automated meteorological warning alert: rapid formation of a powerful blizzard has been detected near your station. This formation is projected to last at least four months. Station safety procedures are in full effect, and command should determine whether evacuation is necessary."
-
+	alert_title = "Urgent Warning - Dark Season"
+	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."

@@ -72,7 +72,7 @@
 	if(T)
 		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		getFromPool(/obj/item/weapon/shard, get_turf(src))
+		new /obj/item/weapon/shard(get_turf(src))
 	if(full)
 		if(ismob(hit_atom))
 			impact_mob(hit_atom)
@@ -201,7 +201,9 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath,
 		/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider,
 		/mob/living/simple_animal/hostile/retaliate/cockatrice,
-		/mob/living/simple_animal/hostile/retaliate/malf_drone,
+		/mob/living/simple_animal/construct/armoured/perfect,
+		/mob/living/simple_animal/hostile/necro/zombie/putrid,
+		/mob/living/simple_animal/hostile/humanoid/frostgolem/knight,
 		/mob/living/simple_animal/hostile/gingerbread,
 		/mob/living/simple_animal/vox/armalis,
 		/mob/living/carbon/alien/humanoid/hunter

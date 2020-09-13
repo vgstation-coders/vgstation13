@@ -127,6 +127,12 @@
 	desc = "It appears to be modeled after a human."
 	target_type = /mob/living/carbon/human
 	icon_state = "human_mask"
+	
+/obj/item/clothing/mask/morphing/goat
+	name = "mask of the goat"
+	desc = "It appears to be modeled after a goat."
+	target_type = /mob/living/simple_animal/hostile/retaliate/goat
+	icon_state = "goat_mask"	
 
 /obj/item/clothing/mask/morphing/amorphous
 	name = "amorphous mask"

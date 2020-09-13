@@ -40,7 +40,7 @@
 	qdel(src)
 
 
-/mob/proc/monkeyize(var/ignore_primitive = TRUE, var/choose_name = FALSE)
+/mob/proc/monkeyize(var/ignore_primitive = FALSE, var/choose_name = FALSE)
 	if(ismonkey(src)) //What's the point
 		return
 	if(!Premorph())
@@ -50,12 +50,13 @@
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
 		animation.master = src
-		flick("h2monkey", animation)
+		var/moneky_anim = get_monkey_anim()
+		flick(moneky_anim, animation)
 		sleep(MONKEY_ANIM_TIME)
 		animation.master = null
 		qdel(animation)
 	var/mob/living/carbon/monkey/Mo
-	if(ignore_primitive)
+	if(ignore_primitive || !ishuman(src))
 		Mo = new /mob/living/carbon/monkey(loc)
 	else
 		var/mob/living/carbon/human/H = src
@@ -70,7 +71,7 @@
 	if(isliving(src))
 		var/mob/living/L = src
 		Mo.suiciding = L.suiciding
-		Mo.take_overall_damage(L.getBruteLoss(), L.getFireLoss())
+		Mo.take_overall_damage(L.getBruteLoss() + L.getCloneLoss(), L.getFireLoss())
 		Mo.setToxLoss(L.getToxLoss())
 		Mo.setOxyLoss(L.getOxyLoss())
 		Mo.stat = L.stat
@@ -85,8 +86,13 @@
 	Postmorph(Mo, choose_name, "You have been turned into a monkey! Pick a monkey name for your new monkey self.")
 	return Mo
 
-/mob/living/carbon/human/monkeyize(ignore_primitive = FALSE, choose_name = FALSE)
-	.=..()
+/mob/proc/get_monkey_anim()
+	return "h2monkey"
+
+/mob/living/carbon/human/get_monkey_anim()
+	if (species)
+		return species.monkey_anim
+	return ..()
 
 /mob/proc/Cluwneize()
 	if(!Premorph())
@@ -140,7 +146,6 @@
 			comm.ai += O
 	if(mind)
 		mind.transfer_to(O)
-		O.mind.original = O
 	else
 		O.key = key
 	O.verbs += /mob/living/silicon/ai/proc/show_laws_verb
@@ -159,7 +164,6 @@
 	if(mind)		//TODO
 		mind.transfer_to(O)
 		if(O.mind.assigned_role == "Cyborg")
-			O.mind.original = O
 		else if(mind && mind.special_role)
 			O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 	else
@@ -167,12 +171,12 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	if(jobban_isbanned(O, "Cyborg")) //You somehow managed to get borged, congrats.
+	if(jobban_isbanned(O, "Cyborg") || !job_master.GetJob("Cyborg").player_old_enough(O.client)) //You somehow managed to get borged, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
 		to_chat(src, "<span class='danger'>Self-destruct mechanism engaged.</span>")
 		O.self_destruct()
-		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
-		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban.")
+		message_admins("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
+		log_game("[key_name(O)] was forcefully transformed into a [job] and had its self-destruct mechanism engaged due \his job ban or lack of player age.")
 	if(!skipnaming)
 		spawn()
 			O.Namepick()
@@ -187,7 +191,6 @@
 	if(mind)		//TODO
 		mind.transfer_to(O)
 		if(O.mind.assigned_role == "Cyborg")
-			O.mind.original = O
 		else if(mind && mind.special_role)
 			O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
 	else
@@ -275,8 +278,7 @@
 		new_human.setGender(gender) //The new human will inherit its gender
 	else //If its gender is NEUTRAL or PLURAL,
 		new_human.setGender(pick(MALE, FEMALE)) //The new human's gender will be random
-	var/datum/preferences/A = new()	//Randomize appearance for the human
-	A.randomize_appearance_for(new_human)
+	new_human.randomise_appearance_for(new_human.gender)
 	if(!new_species || !(new_species in all_species))
 		var/list/restricted = list("Krampus", "Horror", "Manifested")
 		new_species = pick(all_species - restricted)
@@ -354,7 +356,7 @@
 			M.equip_to_slot(BG, slot_gloves)
 			BG.canremove = 0
 		my_appearance.s_tone = -250
-		lip_style = "red" 
+		lip_style = "red"
 		update_body() //daar word aan de deur geklopt
 		if(my_appearance.h_style != "Afro")
 			my_appearance.h_style = "Afro"

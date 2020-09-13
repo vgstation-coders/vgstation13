@@ -2,19 +2,19 @@ var/global/datum/migration_controller/mysql/migration_controller_mysql = null
 
 /datum/migration_controller/mysql
 	id="mysql"
-	var/DBConnection/db
+	var/datum/subsystem/dbcore/db
 
 /datum/migration_controller/mysql/setup()
-	if(!dbcon || !istype(dbcon) || !dbcon.IsConnected())
-		warning("Something wrong with dbcon.")
+	if(!SSdbcore || !istype(SSdbcore) || !SSdbcore.IsConnected())
+		warning("Something wrong with SSdbcore.")
 		return FALSE
-	var/DBQuery/Q = dbcon.NewQuery()
+	var/datum/DBQuery/Q = SSdbcore.NewQuery()
 	if(!Q)
-		warning("Something wrong with dbcon.NewQuery()")
+		warning("Something wrong with SSdbcore.NewQuery()")
 		return FALSE
-	Q.Close()
+	qdel(Q)
 	//testing("MySQL is okay")
-	db = dbcon
+	db = SSdbcore
 	return TRUE
 
 /datum/migration_controller/mysql/createMigrationTable()
@@ -27,25 +27,28 @@ CREATE TABLE IF NOT EXISTS [TABLE_NAME] (
 	execute(tableSQL)
 
 /datum/migration_controller/mysql/query(var/sql)
-	var/DBQuery/query = execute(sql)
+	var/datum/DBQuery/query = execute(sql)
 
 	var/list/rows=list()
 	while(query.NextRow())
 		rows[++rows.len] = query.item.Copy()
 
+	qdel(query)
+
 	return rows
 
 /datum/migration_controller/mysql/hasResult(var/sql)
-	var/DBQuery/query = execute(sql)
-
+	var/datum/DBQuery/query = execute(sql)
 	if (query.NextRow())
+		qdel(query)
 		return TRUE
+	qdel(query)
 	return FALSE
 
 /datum/migration_controller/mysql/execute(var/sql)
-	var/DBQuery/query = db.NewQuery(sql)
+	var/datum/DBQuery/query = db.NewQuery(sql)
 	query.Execute()
-	return query
+	. = query
 
 /datum/migration_controller/mysql/hasTable(var/tableName)
-	return hasResult("SHOW TABLES LIKE '[tableName]")
+	return hasResult("SHOW TABLES LIKE '[tableName]'")

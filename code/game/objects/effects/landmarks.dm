@@ -9,6 +9,7 @@
 	. = ..()
 	tag = text("landmark*[]", name)
 	invisibility = 101
+	landmarks_list += src
 
 	switch(name)			//some of these are probably obsolete
 		if("shuttle")
@@ -86,8 +87,9 @@
 
 		if("voxlocker")
 			voxlocker += loc
-
-	landmarks_list += src
+			
+		if("ninjastart")
+			ninjastart += loc
 	return 1
 
 /obj/effect/landmark/Destroy()
@@ -102,7 +104,6 @@
 
 /obj/effect/landmark/start/New()
 	..()
-	tag = "start*[name]"
 	invisibility = 101
 
 	return 1

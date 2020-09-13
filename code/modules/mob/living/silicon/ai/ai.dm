@@ -37,10 +37,13 @@ var/list/ai_list = list()
 	var/obj/item/device/camera/silicon/aicamera = null
 	var/busy = FALSE //Toggle Floor Bolt busy var.
 	var/chosen_core_icon_state = "ai"
+	var/datum/intercom_settings/intercom_clipboard = null //Clipboard for copy/pasting intercom settings
+	var/mentions_on = FALSE
+	var/list/holopadoverlays = list()
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
-
+	var/vox_corrupted = FALSE
 //Hud stuff
 
 	//MALFUNCTION
@@ -170,6 +173,15 @@ var/list/ai_list = list()
 		anchored = !anchored
 		to_chat(src, "You are now <b>[anchored ? "" : "un"]anchored</b>.")
 	busy = FALSE
+
+/mob/living/silicon/ai/verb/toggle_holopadoverlays()
+	set category = "AI Commands"
+	set name = "Toggle Holopad Overlays"
+
+	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
+		return
+	toggleholopadoverlays()
+	to_chat(src, "<span class='notice' style=\"font-family:Courier\">Holopad overlays <b>[holopadoverlays.len ? "en" : "dis"]abled</b>.</span>")
 
 /mob/living/silicon/ai/verb/radio_interact()
 	set category = "AI Commands"
@@ -338,24 +350,32 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/proc/ai_roster()
 	show_station_manifest()
 
-/mob/living/silicon/ai/proc/ai_call_shuttle()
+/mob/living/silicon/ai/proc/ai_call_or_recall_shuttle()
 	if(isDead())
-		to_chat(src, "You can't call the shuttle because you are dead!")
+		to_chat(src, "<span class='warning'>You can't call/recall the shuttle because you are dead!</span>")
 		return
 	if(istype(usr,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/AI = src
 		if(AI.control_disabled)
-			to_chat(usr, "Wireless control is disabled!")
+			to_chat(usr, "<span class='warning'>Wireless control is disabled!</span>")
 			return
+	switch(emergency_shuttle.direction)
+		if(EMERGENCY_SHUTTLE_RECALLED)
+			to_chat(usr, "<span class='warning'>Wait until the shuttle arrives at Centcomm and try again</span>")
+		if(EMERGENCY_SHUTTLE_STANDBY)
+			ai_call_shuttle()
+		if(EMERGENCY_SHUTTLE_GOING_TO_STATION)
+			ai_recall_shuttle()
+		if(EMERGENCY_SHUTTLE_GOING_TO_CENTCOMM)
+			to_chat(usr, "<span class='warning'>Too late!</span>")
 
+/mob/living/silicon/ai/proc/ai_call_shuttle()
 	var/justification = stripped_input(usr, "Please input a concise justification for the shuttle call. Note that failure to properly justify a shuttle call may lead to recall or termination.", "Nanotrasen Anti-Comdom Systems")
 	if(!justification)
 		return
 	var/confirm = alert("Are you sure you want to call the shuttle?", "Confirm Shuttle Call", "Yes", "Cancel")
 	if(confirm == "Yes")
-		if(call_shuttle_proc(src, justification))
-			if(!isobserver(usr))
-				shuttle_log += "\[[worldtime2text()]] Called from [get_area(usr)]."
+		call_shuttle_proc(src, justification)
 
 	// hack to display shuttle timer
 	if(emergency_shuttle.online)
@@ -363,20 +383,17 @@ var/list/ai_list = list()
 		if(C)
 			C.post_status("shuttle")
 
-	return
-
-/mob/living/silicon/ai/proc/ai_cancel_call()
-	set category = "AI Commands"
-
-	if(isDead())
-		to_chat(src, "You can't send the shuttle back because you are dead!")
+/mob/living/silicon/ai/proc/ai_recall_shuttle()
+	if(!ismalf(src))
+		to_chat(usr, "<span class='warning'>Your morality core throws an error. Recalling an emergency shuttle is a symptom of a malfunctioning artificial intelligence.</span>")
 		return
-	if(istype(usr,/mob/living/silicon/ai))
-		var/mob/living/silicon/ai/AI = src
-		if(AI.control_disabled)
-			to_chat(src, "Wireless control is disabled!")
-			return
-	recall_shuttle(src)
+	var/datum/faction/malf/M = find_active_faction_by_member(mind.GetRole(MALF))
+	if(M?.stage != FACTION_ENDGAME)
+		to_chat(usr, "<span class='warning'>You need to initiate the takeover first</span>")
+		return
+	var/confirm = alert("Are you sure you want to recall the shuttle?", "Confirm Recall Shuttle", "Yes", "Cancel")
+	if(confirm == "Yes")
+		recall_shuttle(src)
 
 /mob/living/silicon/ai/check_eye(var/mob/user as mob)
 	if(!current)
@@ -409,7 +426,8 @@ var/list/ai_list = list()
 			if(1)
 				view_core()
 			if(2)
-				ai_call_shuttle()
+				if(call_shuttle_proc(src))
+					message_admins("[key_name_admin(src)] called the shuttle due to being hit with an EMP.'.")
 	..()
 
 /mob/living/silicon/ai/ex_act(severity)
@@ -471,27 +489,15 @@ var/list/ai_list = list()
 	#endif
 
 	if(href_list["track"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-			A.ai_actual_track(target)
-		return
-
-	else if(href_list["faketrack"])
-		var/mob/target = locate(href_list["track"]) in mob_list
-		var/mob/living/silicon/ai/A = locate(href_list["track2"]) in mob_list
-		if(A && target)
-
-			A.cameraFollow = target
-			to_chat(A, text("Now tracking [] on camera.", target.name))
-			if(usr.machine == null)
-				usr.machine = usr
-
-			while (src.cameraFollow == target)
-				to_chat(usr, "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb).")
-				sleep(40)
+		var/name_to_track = href_list["track"]
+		for(var/mob/some_mob in mob_list)
+			if(some_mob.name != name_to_track)
 				continue
-
+			if(!can_track_atom(some_mob))
+				continue
+			ai_actual_track(some_mob)
+			return
+		to_chat(src, "<span class='warning'>Unable to track [name_to_track].</span>")
 		return
 
 	if(href_list["open"])
@@ -513,6 +519,10 @@ var/list/ai_list = list()
 		to_chat(usr, "VOX voice set to [vox_voice].")
 		make_announcement()
 		return
+
+	if(href_list["voice_corrupted"])
+		vox_corrupted = text2num(href_list["voice_corrupted"]) // even if client hacks the value, we only care if it's true or false.
+		make_announcement()
 
 	// play_announcement=word1+word2... - Plays an announcement to the station.
 	if(href_list["play_announcement"])
@@ -721,6 +731,7 @@ var/list/ai_list = list()
 		"343",
 		"Auto",
 		"Boy",
+		"Beach Ball",
 		"Corgi",
 		"Cortano",
 		"Floating face",
@@ -762,6 +773,8 @@ var/list/ai_list = list()
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo12"))
 				if("Mothman")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo13"))
+				if("Beach Ball")
+					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"beachball"))
 
 	return
 
@@ -811,6 +824,21 @@ var/list/ai_list = list()
 	to_chat(src, "Camera lights activated.")
 	return
 
+/mob/living/silicon/ai/verb/toggle_ai_mentions()
+	set name = "Toggle AI Mentions"
+	set desc = "Toggles highlighting and beeping on AI mentions"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+
+	mentions_on = !mentions_on
+
+	if(!mentions_on)
+		to_chat(src, "AI mentions deactivated.")
+	else
+		to_chat(src, "AI mentions activated.")
+
+
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"
 	set desc = "Toggle station holomap on your screen"
@@ -844,7 +872,7 @@ var/list/ai_list = list()
 
 
 /mob/living/silicon/ai/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(anchored)
 			user.visible_message("<span class='notice'>\The [user] starts to unbolt \the [src] from the plating...</span>")
 			if(!do_after(user, src,40))

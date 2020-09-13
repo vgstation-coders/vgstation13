@@ -9,7 +9,7 @@
 		to_chat(src, "<span class='notice'>You cannot grab \the [target], \he is buckled in!</span>")
 		return
 
-	var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab, src, target)
+	var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(src, target)
 	if(!G)	//the grab will delete itself in New if affecting is anchored
 		return
 
@@ -128,8 +128,8 @@
 	target.unarmed_attacked(src, damage, damage_type, zone)
 	after_unarmed_attack(target, damage, damage_type, affecting, armor_block)
 
+	INVOKE_EVENT(on_touched, list("user" = target, "unarmed attacked by" = src))
 	add_logs(src, target, "attacked ([damage_done]dmg)", admin = (src.ckey && target.ckey) ? TRUE : FALSE) //Only add this to the server logs if both mobs were controlled by player
-
 	return damage_done
 
 /mob/living/proc/after_unarmed_attack(mob/living/target, damage, damage_type, organ, armor)

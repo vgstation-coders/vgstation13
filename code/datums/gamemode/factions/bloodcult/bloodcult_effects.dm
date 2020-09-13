@@ -380,7 +380,7 @@
 
 ///////////////////////////////////////BLOODSTONE DEFENSES////////////////////////////////////////////////
 
-var/list/bloodstone_backup = 0
+var/bloodstone_backup = 0
 
 /obj/effect/cult_ritual/backup_spawn
 	name = "gateway"

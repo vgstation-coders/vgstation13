@@ -18,6 +18,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/xenoarch.dmi', "right_hand" = 'icons/mob/in-hand/right/xenoarch.dmi')
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
+	body_parts_visible_override = EYES|BEARD
 
 /obj/item/clothing/suit/bio_suit/anomaly/old
 	name = "Anomaly suit"
@@ -50,3 +51,4 @@
 	icon_state = "cespace_helmet"
 	item_state = "cespace_helmet"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
+	body_parts_visible_override = EYES|BEARD

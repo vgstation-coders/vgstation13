@@ -122,6 +122,14 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	icon_living = "bestborer"
 	icon_dead = "bestborer"
 
+/mob/living/simple_animal/borer/defected_borer/singularity_act(current_size, obj/machinery/singularity/S)
+	if(S.modifier != "special_")
+		to_chat(world, "<span class='numb'><font size='15'>You feel Very Nice.</font></span>")
+		S.modifier = "special_"
+		S.name = "specialarity"
+		world << sound('sound/effects/explosionfar.ogg')
+	..()
+
 /mob/living/simple_animal/borer/New(var/loc, var/egg_prefix_index = 1)
 	..(loc)
 	name_prefix_index = min(egg_prefix_index, 10)
@@ -153,6 +161,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			borer_avail_unlocks_leg.Add(U)
 
 	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
+
 
 /*
 /mob/living/simple_animal/borer/Login()
@@ -670,8 +679,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					U.relock()
 				U.on_detached()
 
-		host.on_emote.Remove(eh_emote)
-
 	if(host_brain && host_brain.ckey)
 		src.ckey = host.ckey
 		host.ckey = host_brain.ckey
@@ -922,8 +929,6 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 
 	host_brain.name = M.name
 	host_brain.real_name = M.real_name
-
-	eh_emote = host.on_emote.Add(src,"host_emote")
 
 	// Tell our upgrades that we've attached.
 	for(var/uid in research.unlocked.Copy())

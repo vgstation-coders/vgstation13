@@ -9,7 +9,6 @@ var/list/cyborg_list = list()
 	health = 300
 	flashed = FALSE
 
-	var/sight_mode = 0
 	var/custom_name = ""
 	var/namepick_uses = 1 // /vg/: Allows AI to disable namepick().
 	var/base_icon
@@ -173,13 +172,18 @@ var/list/cyborg_list = list()
 	if(istype(new_AI))
 		connected_ai = new_AI
 		connected_ai.connected_robots += src
+		to_chat(src, "<span class='notice' style=\"font-family:Courier\">Notice: Linked to [connected_ai].</span>")
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: Link to [src] established.</span>")
 		lawsync()
 		lawupdate = TRUE
 	else
 		lawupdate = FALSE
 
-/mob/living/silicon/robot/proc/disconnect_AI()
+/mob/living/silicon/robot/proc/disconnect_AI(var/announce = FALSE)
 	if(connected_ai)
+		to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Unlinked from [connected_ai].</span>")
+		if(announce)
+			to_chat(connected_ai, "<span class='alert' style=\"font-family:Courier\">Notice: Link to [src] lost.</span>")
 		connected_ai.connected_robots -= src
 		connected_ai = null
 
@@ -208,27 +212,27 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/remove_screen_objs()
 	..()
 	if(inv1)
-		returnToPool(inv1)
+		qdel(inv1)
 		if(client)
 			client.screen -= inv1
 		inv1 = null
 	if(inv2)
-		returnToPool(inv2)
+		qdel(inv2)
 		if(client)
 			client.screen -= inv2
 		inv2 = null
 	if(inv3)
-		returnToPool(inv3)
+		qdel(inv3)
 		if(client)
 			client.screen -= inv3
 		inv3 = null
 	if(robot_modules_background)
-		returnToPool(robot_modules_background)
+		qdel(robot_modules_background)
 		if(client)
 			client.screen -= robot_modules_background
 		robot_modules_background = null
 	if(sensor)
-		returnToPool(sensor)
+		qdel(sensor)
 		if(client)
 			client.screen -= sensor
 		sensor = null
@@ -294,6 +298,8 @@ var/list/cyborg_list = list()
 		changed_name = custom_name
 	else
 		changed_name = "[modtype] [braintype]-[num2text(ident)]"
+	if(connected_ai)
+		to_chat(connected_ai, "<span class='notice' style=\"font-family:Courier\">Notice: unit [name] renamed to [changed_name].</span>")
 	real_name = changed_name
 	name = real_name
 
@@ -371,7 +377,6 @@ var/list/cyborg_list = list()
 	else
 		gib()
 		return TRUE
-	return FALSE
 
 // this function shows information about the malf_ai gameplay type in the status screen
 /mob/living/silicon/robot/show_malf_ai()
@@ -991,7 +996,7 @@ var/list/cyborg_list = list()
 	if(!istype(I, /obj/item/weapon/card/id) && istype(I, /obj/item))
 		I = I.GetID()
 	if(!I || !I.access) //not ID or no access
-		return TRUE
+		return FALSE
 	for(var/req in req_access)
 		if(!(req in I.access)) //doesn't have this access
 			return FALSE
@@ -1333,3 +1338,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/toggle_modulelock()
 	modulelock = !modulelock
 	return modulelock
+
+//Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
+/mob/living/silicon/robot/proc/get_percentage_power_for_movement()
+	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)

@@ -249,6 +249,7 @@
 				is_destroyed["[temp.display_name]"] = 1
 				wound_flavor_text["[temp.display_name]"] = "<span class='danger'>[t_He] [t_is] missing [t_his] [temp.display_name].</span>\n"
 				continue
+
 			if(temp.status & ORGAN_PEG)
 				if(!(temp.brute_dam + temp.burn_dam))
 					wound_flavor_text["[temp.display_name]"] = "<span class='warning'>[t_He] [t_has] a peg [temp.display_name]!</span>\n"
@@ -350,6 +351,15 @@
 					is_bleeding["[temp.display_name]"] = 1
 			else
 				wound_flavor_text["[temp.display_name]"] = ""
+			if(temp.open == 3) // Magic number! Someone #define this.
+				var/organ_text = list("<span class='notice'>[capitalize(t_his)] [temp.display_name] is <span class='danger'>wide open</span>. ")
+				if(length(temp.implants))
+					if(length(temp.implants) == 1)
+						organ_text += "\A [temp.implants[1]] is visible inside it."
+					else
+						organ_text += "[english_list(temp.implants)] are visible inside it."
+				organ_text += "</span><br>"
+				wound_flavor_text["[temp.display_name]"] += jointext(organ_text, null)
 
 	//Handles the text strings being added to the actual description.
 	//If they have something that covers the limb, and it is not missing, put flavortext.  If it is covered but bleeding, add other flavortext.

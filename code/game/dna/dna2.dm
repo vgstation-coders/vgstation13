@@ -225,16 +225,15 @@ var/global/list/facial_hair_styles_female_list	= list()
 	if (block<=0)
 		return
 	ASSERT(maxvalue<=4095)
-	var/range = (4095 / maxvalue)
-	if(value)
-		SetUIValue(block,round(value * range),defer)
+	var/mapped_value = round(map_range(value, 0, maxvalue, 0, 0xFFF))
+	SetUIValue(block, mapped_value, defer)
 
 // Getter version of above.
 /datum/dna/proc/GetUIValueRange(var/block,var/maxvalue)
 	if (block<=0)
 		return 0
 	var/value = GetUIValue(block)
-	return round(1 +(value / 4096)*maxvalue)
+	return round(map_range(value, 0, 0xFFF, 0, maxvalue))
 
 // Is the UI gene "on" or "off"?
 // For UI, this is simply a check of if the value is > 2050.

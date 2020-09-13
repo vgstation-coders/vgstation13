@@ -2,7 +2,7 @@
 	name = "Doppelganger"
 	desc = "This spell summons a construct with your appearance."
 	user_type = USER_TYPE_WIZARD
-	specialization = OFFENSIVE
+	specialization = SSOFFENSIVE
 
 	summon_type = list(/mob/living/simple_animal/hostile/humanoid/wizard/doppelganger/melee)
 

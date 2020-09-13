@@ -23,8 +23,7 @@
 
 	var/blocks_air = 0
 
-	//associated PathNode in the A* algorithm
-	var/PathNode/PNode = null
+	var/list/PathNodes = null
 
 	// Bot shit
 	var/targetted_by=null
@@ -71,6 +70,8 @@
 	var/junction = 0
 
 	var/volume_mult = 1 //how loud are things on this turf?
+
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 /turf/examine(mob/user)
 	..()
@@ -203,9 +204,9 @@
 			if(ZL.transitionLoops)
 				locked_to_current_z = z
 
-			for(var/obj/item/weapon/disk/nuclear/nuclear in contents_brought)
-				locked_to_current_z = map.zMainStation
-				break
+			var/obj/item/weapon/disk/nuclear/nuclear = locate() in contents_brought
+			if(nuclear)
+				qdel(nuclear)
 
 			//Check if it's a mob pulling an object
 			var/obj/was_pulling = null
@@ -240,9 +241,9 @@
 			if(!move_to_z)
 				return
 
-			INVOKE_EVENT(A.on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
-			for(var/atom/AA in contents_brought)
-				INVOKE_EVENT(AA.on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
+			A.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/movable/AA in contents_brought)
+				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
@@ -271,6 +272,10 @@
 				if (istype(A,/obj/item/projectile))
 					var/obj/item/projectile/P = A
 					P.reset()//fixing linear projectile movement
+
+			A.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = A, "from_z" = A.z, "to_z" = move_to_z))
+			for(var/atom/movable/AA in contents_brought)
+				AA.lazy_invoke_event(/lazy_event/on_post_z_transition, list("user" = AA, "from_z" = AA.z, "to_z" = move_to_z))
 
 	if(A && A.opacity)
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
@@ -349,6 +354,7 @@
 	var/old_lighting_overlay = lighting_overlay
 	var/old_corners = corners
 	var/old_density = density
+	var/old_holomap_draw_override = holomap_draw_override
 
 	var/old_holomap = holomap_data
 //	to_chat(world, "Replacing [src.type] with [N]")
@@ -371,7 +377,7 @@
 	if(istype(src,/turf/simulated/floor))
 		var/turf/simulated/floor/F = src
 		if(F.floor_tile)
-			returnToPool(F.floor_tile)
+			qdel(F.floor_tile)
 			F.floor_tile = null
 		F = null
 
@@ -432,6 +438,8 @@
 			else
 				lighting_clear_overlay()
 
+	if (!ticker)
+		holomap_draw_override = old_holomap_draw_override//we don't want roid/snowmap cave tunnels appearing on holomaps
 	holomap_data = old_holomap // Holomap persists through everything...
 	update_holomap_planes() // But we might need to recalculate it.
 	if(density != old_density)
@@ -737,3 +745,14 @@
 
 /turf/proc/remove_rot()
 	return
+
+//Pathnode stuff
+
+/turf/proc/FindPathNode(var/id)
+	return PathNodes ? PathNodes["[id]"] : null
+
+/turf/proc/AddPathNode(var/PathNode/PN, var/id)
+	ASSERT(!PathNodes || !PathNodes["[id]"])
+	if (!PathNodes)
+		PathNodes = list()
+	PathNodes["[id]"] = PN

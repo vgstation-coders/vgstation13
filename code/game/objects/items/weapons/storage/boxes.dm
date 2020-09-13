@@ -358,6 +358,7 @@
 	new /obj/item/weapon/implanter(src)
 	new /obj/item/weapon/implantpad(src)
 	new /obj/item/weapon/locator(src)
+	new /obj/item/device/locator_holomap(src)
 
 /obj/item/weapon/storage/box/chemimp
 	name = "chemical implant kit"
@@ -554,6 +555,7 @@
 	new /obj/item/weapon/reagent_containers/spray/pepper(src)
 	new /obj/item/taperoll/police(src)
 	new /obj/item/device/hailer(src)
+	new /obj/item/device/law_planner(src)
 
 /obj/item/weapon/storage/box/large/detectivegear
 	name = "detective essentials"
@@ -601,7 +603,7 @@
 
 /obj/item/weapon/storage/box/lethalshells
 	name = "12-gauge slugs"
-	icon_state = "lethal shells"
+	icon_state = "slug_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/lethalshells/New()
@@ -611,7 +613,7 @@
 
 /obj/item/weapon/storage/box/beanbagshells
 	name = "12-gauge beanbag shells"
-	icon_state = "bean bag shells"
+	icon_state = "beanbag_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/beanbagshells/New()
@@ -621,7 +623,7 @@
 
 /obj/item/weapon/storage/box/stunshells
 	name = "12-gauge stun shells"
-	icon_state = "stun shells"
+	icon_state = "stun_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/stunshells/New()
@@ -631,7 +633,7 @@
 
 /obj/item/weapon/storage/box/dartshells
 	name = "12-gauge darts"
-	icon_state = "dart shells"
+	icon_state = "dart_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/dartshells/New()
@@ -641,13 +643,33 @@
 
 /obj/item/weapon/storage/box/buckshotshells
 	name = "12-gauge 00 buckshot shells"
-	icon_state = "lethal shells"
+	icon_state = "buckshot_shells"
 	storage_slots = 16
 
 /obj/item/weapon/storage/box/buckshotshells/New()
 	..()
 	for(var/i in 1 to 16)
 		new /obj/item/ammo_casing/shotgun/buckshot(src)
+
+/obj/item/weapon/storage/box/dragonsbreathshells
+	name = "12-gauge dragon's breath shells"
+	icon_state = "dragonsbreath_shells"
+	storage_slots = 16
+
+/obj/item/weapon/storage/box/dragonsbreathshells/New()
+	..()
+	for(var/i in 1 to 16)
+		new /obj/item/ammo_casing/shotgun/dragonsbreath(src)
+
+/obj/item/weapon/storage/box/fragshells
+	name = "12-gauge high-explosive fragmentation shells"
+	icon_state = "frag_shells"
+	storage_slots = 16
+
+/obj/item/weapon/storage/box/fragshells/New()
+	..()
+	for(var/i in 1 to 16)
+		new /obj/item/ammo_casing/shotgun/frag(src)
 
 /obj/item/weapon/storage/box/labels
 	name = "label roll box"
@@ -854,17 +876,16 @@
 
 /obj/item/weapon/storage/box/spellbook/New()
 	..()
-	var/list/possible_books = typesof(/obj/item/weapon/spellbook/oneuse)
-	possible_books -= /obj/item/weapon/spellbook/oneuse
-	possible_books -= /obj/item/weapon/spellbook/oneuse/charge
+	var/list/possible_books = subtypesof(/obj/item/weapon/spellbook/oneuse)
+	for(var/S in possible_books)
+		var/obj/item/weapon/spellbook/oneuse/O = S
+		if(initial(O.disabled_from_bundle))
+			possible_books -= O
 	for(var/i =1; i <= 7; i++)
 		var/randombook = pick(possible_books)
 		var/book = new randombook(src)
 		src.contents += book
 		possible_books -= randombook
-
-/obj/item/weapon/storage/box/spellbook/random/New()
-	..()
 	var/randomsprite = pick("a","b")
 	icon_state = "wizbox-[randomsprite]"
 
@@ -1375,3 +1396,14 @@
 	new /obj/item/clothing/under/clownpsyche(src)
 	new /obj/item/clothing/shoes/clownshoespsyche(src)
 	..()
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit
+	name = "Gemsuit outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/gemsuit/New()
+	new /obj/item/clothing/suit/space/rig/wizard(src)
+	new /obj/item/clothing/head/helmet/space/rig/wizard(src)
+	new /obj/item/clothing/gloves/purple(src)
+	new /obj/item/clothing/shoes/sandal(src)
+	..()
+

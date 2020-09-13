@@ -25,7 +25,7 @@
 							"<span class='warning'>You hear the sound of wood being cut</span>"
 							)
 		qdel(src)
-		getFromPool(material, get_turf(src), 2)
+		new material(get_turf(src), 2)
 	else
 		..()
 
@@ -38,23 +38,23 @@
 		icon_state = "displaced_wood"
 
 /obj/structure/girder/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(state == 0) //Normal girder or wooden girder
 			if(anchored && !istype(src, /obj/structure/girder/displaced)) //Anchored, destroy it
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 				if(do_after(user, src, construction_length))
 					user.visible_message("<span class='warning'>[user] dissasembles \the [src].</span>", \
 					"<span class='notice'>You dissasemble \the [src].</span>")
-					getFromPool(material, get_turf(src), 2)
+					new material(get_turf(src), 2)
 					qdel(src)
 			else if(!anchored) //Unanchored, anchor it
 				if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring shit to shuttles / space
 					to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
 					return
 
-				playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+				W.playtoolsound(src, 100)
 				user.visible_message("<span class='notice'>[user] starts securing \the [src].</span>", \
 				"<span class='notice'>You start securing \the [src].</span>")
 				if(do_after(user, src, construction_length))
@@ -65,7 +65,7 @@
 					anchored = 1
 					update_icon()
 		else if(state == 1 || state == 2) //Clearly a reinforced girder
-			playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+			W.playtoolsound(src, 100)
 			user.visible_message("<span class='notice'>[user] starts [anchored ? "un" : ""]securing \the [src].</span>", \
 			"<span class='notice'>You start [anchored ? "un" : ""]securing \the [src].</span>")
 			if(do_after(user, src, construction_length))
@@ -86,11 +86,11 @@
 		if(do_after(user, src, 30))
 			user.visible_message("<span class='warning'>[user] destroys \the [src]!</span>", \
 			"<span class='notice'>Your [PK] tears through the last of \the [src]!</span>")
-			getFromPool(material, get_turf(src))
+			new material(get_turf(src))
 			qdel(src)
 
 	else if(W.is_screwdriver(user) && state == 2) //Unsecuring support struts, stage 2 to 1
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts unsecuring \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start unsecuring \the [src]'s internal support struts.</span>")
 		if(do_after(user, src, construction_length))
@@ -102,7 +102,7 @@
 			update_icon()
 
 	else if(W.is_screwdriver(user) && state == 1) //Securing support struts, stage 1 to 2
-		playsound(src, 'sound/items/Screwdriver.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='notice'>[user] starts securing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start securing \the [src]'s internal support struts.</span>")
 		if(do_after(user, src, construction_length))
@@ -114,7 +114,7 @@
 			update_icon()
 
 	else if(iswirecutter(W) && state == 1) //Removing support struts, stage 1 to 0 (normal girder)
-		playsound(src, 'sound/items/Wirecutter.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts removing \the [src]'s internal support struts.</span>", \
 		"<span class='notice'>You start removing \the [src]'s internal support struts.</span>")
 		if(do_after(user, src, construction_length))
@@ -122,7 +122,7 @@
 			"<span class='notice'>You remove \the [src]'s internal support struts.</span>")
 			add_hiddenprint(user)
 			add_fingerprint(user)
-			getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+			new /obj/item/stack/rods(get_turf(src), 2)
 			state = 0
 			update_icon()
 
@@ -147,7 +147,7 @@
 			update_icon()
 
 	else if(iscrowbar(W) && state == 0 && anchored) //Turning normal girder into disloged girder
-		playsound(src, 'sound/items/Crowbar.ogg', 100, 1)
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='warning'>[user] starts dislodging \the [src].</span>", \
 		"<span class='notice'>You start dislodging \the [src].</span>")
 		if(do_after(user, src, construction_length))
@@ -303,7 +303,7 @@
 			"<span class='notice'>You slice through \the [src].</span>", \
 			"<span class='warning'>You hear slicing noises.</span>")
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			getFromPool(material, get_turf(src), 2)
+			new material(get_turf(src), 2)
 			qdel(src)
 
 	//Wait, what, WHAT ?
@@ -331,7 +331,7 @@
 	switch(severity)
 		if(1.0)
 			if(prob(25) && state == 2) //Strong enough to have a chance to stand if finished, but not in one piece
-				getFromPool(/obj/item/stack/rods, get_turf(src)) //Lose one rod
+				new /obj/item/stack/rods(get_turf(src)) //Lose one ro)
 				state = 0
 				update_icon()
 			else //Not finished or not lucky
@@ -343,30 +343,30 @@
 					state = 1
 					update_icon()
 				if(state == 1)
-					getFromPool(/obj/item/stack/rods, get_turf(src))
+					new /obj/item/stack/rods(get_turf(src))
 					state = 0
 					update_icon()
 				else
-					getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+					new /obj/item/stack/sheet/metal(get_turf(src))
 					qdel(src)
 			return
 		if(3.0)
 			if((state == 0) && prob(5))
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+				new /obj/item/stack/sheet/metal(get_turf(src))
 				qdel(src)
 			else if(prob(15))
 				if(state == 2)
 					state = 1
 					update_icon()
 				if(state == 1)
-					getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+					new /obj/item/stack/rods(get_turf(src), 2)
 					state = 0
 					update_icon()
 			return
 	return
 
 /obj/structure/girder/mech_drill_act(severity)
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src))
+	new /obj/item/stack/sheet/metal(get_turf(src))
 	qdel(src)
 	return
 
@@ -414,8 +414,8 @@
 	return
 
 /obj/structure/cultgirder/attackby(obj/item/W as obj, mob/user as mob)
-	if(iswrench(W))
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+	if(W.is_wrench(user))
+		W.playtoolsound(src, 100)
 		user.visible_message("<span class='notice'>[user] starts disassembling \the [src].</span>", \
 		"<span class='notice'>You start disassembling \the [src].</span>")
 		if(do_after(user, src,40))

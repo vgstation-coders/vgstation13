@@ -248,7 +248,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 	return 1
 
 //Generalised helper proc for letting mobs rename themselves. Used to be clname() and ainame()
-//Last modified by Carn
+//Also used for the screen alarm rename option
 /mob/proc/rename_self(var/role, var/allow_numbers=0, var/namepick_message = "You are a [role]. Would you like to change your name to something else?")
 	spawn(0)
 		var/oldname = real_name
@@ -275,6 +275,9 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		if(cmptext("ai",role))
 			if(isAI(src))
 				var/mob/living/silicon/ai/A = src
+				if(A.connected_robots.len) //let the borgs know what their master's new name is
+					for(var/mob/living/silicon/robot/robitt in A.connected_robots)
+						to_chat(robitt, "<span class='notice' style=\"font-family:Courier\">Notice: Linked AI [oldname] renamed to [newname].</span>")
 				oldname = null//don't bother with the records update crap
 //				to_chat(world, "<b>[newname] is the AI!</b>")
 //				world << sound('sound/AI/newAI.ogg')
@@ -288,6 +291,7 @@ Turf and target are seperate in case you want to teleport some distance from a t
 					A.aiPDA.name = newname + " (" + A.aiPDA.ownjob + ")"
 
 
+		to_chat(src, "<span class='notice'>You will now be known as [newname].</span>")
 		fully_replace_character_name(oldname,newname)
 
 
@@ -731,7 +735,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	progress_bar.pixel_z = WORLD_ICON_SIZE
 	progress_bar.plane = HUD_PLANE
 	progress_bar.layer = HUD_ABOVE_ITEM_LAYER
-	progress_bar.appearance_flags = RESET_COLOR
+	progress_bar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 	return progress_bar
 
 /proc/remove_progress_bar(var/mob/user, var/image/progress_bar)
@@ -813,7 +817,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.pixel_z = WORLD_ICON_SIZE
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
-			progbar.appearance_flags = RESET_COLOR
+			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 		//if(!barbar)
 			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
 			//barbar.pixel_y = 36
@@ -825,7 +829,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.pixel_z = WORLD_ICON_SIZE
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
-				progbar.appearance_flags = RESET_COLOR
+				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
 			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
@@ -865,14 +869,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	flick(icon_state, A)
 	sleep(time)
 	return 1
-
-//Takes: Anything that could possibly have variables and a varname to check.
-//Returns: 1 if found, 0 if not.
-/proc/hasvar(var/datum/A, var/varname)
-	if(A.vars.Find(lowertext(varname)))
-		return 1
-	else
-		return 0
 
 //Returns sortedAreas list if populated
 //else populates the list first before returning it
@@ -965,22 +961,20 @@ proc/GaussRandRound(var/sigma,var/roundto)
 	var/datum/coords/CR = new(x_pos+C.x_pos,y_pos+C.y_pos,z_pos+C.z_pos)
 	return CR
 
-proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
-	if(!original)
-		return null
-
-	var/obj/O = null
-
-	if(sameloc)
-		O=new original.type(original.loc)
-	else
-		O=new original.type(locate(0,0,0))
-
-	if(perfectcopy)
-		if((O) && (original))
-			for(var/V in original.vars - variables_not_to_be_copied)
-				O.vars[V] = original.vars[V]
-	return O
+// If you're looking at this proc and thinking "that's exactly what I need!"
+// then you're wrong and you need to take a step back and reconsider.
+/atom/movable/proc/DuplicateObject(var/location)
+	var/atom/movable/duplicate = new src.type(location)
+	duplicate.change_dir(dir)
+	duplicate.plane = plane
+	duplicate.layer = layer
+	duplicate.name = name
+	duplicate.desc = desc
+	duplicate.pixel_x = pixel_x
+	duplicate.pixel_y = pixel_y
+	duplicate.pixel_w = pixel_w
+	duplicate.pixel_z = pixel_z
+	return duplicate
 
 
 /area/proc/copy_contents_to(var/area/A , var/platingRequired = 0 )
@@ -1039,6 +1033,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 				var/datum/coords/C_trg = refined_trg[B]
 				if(C_src.x_pos == C_trg.x_pos && C_src.y_pos == C_trg.y_pos)
 
+					var/old_name = T.name
 					var/old_dir1 = T.dir
 					var/old_icon_state1 = T.icon_state
 					var/old_icon1 = T.icon
@@ -1048,9 +1043,12 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 							continue moving
 
 					var/turf/X = B.ChangeTurf(T.type)
+					X.name = old_name
 					X.dir = old_dir1
 					X.icon_state = old_icon_state1
 					X.icon = old_icon1 //Shuttle floors are in shuttle.dmi while the defaults are floors.dmi
+
+					X.return_air().copy_from(T.return_air())
 
 					var/list/objs = new/list()
 					var/list/newobjs = new/list()
@@ -1066,11 +1064,7 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 
 
 					for(var/obj/O in objs)
-						newobjs += DuplicateObject(O , 1)
-
-
-					for(var/obj/O in newobjs)
-						O.forceMove(X)
+						newobjs += O.DuplicateObject(X)
 
 					for(var/mob/M in T)
 
@@ -1079,24 +1073,10 @@ proc/DuplicateObject(obj/original, var/perfectcopy = 0 , var/sameloc = 0)
 						mobs += M
 
 					for(var/mob/M in mobs)
-						newmobs += DuplicateObject(M , 1)
-
-					for(var/mob/M in newmobs)
-						M.forceMove(X)
+						newmobs += M.DuplicateObject(X)
 
 					copiedobjs += newobjs
 					copiedobjs += newmobs
-
-
-
-					for(var/V in T.vars - variables_not_to_be_copied)
-						X.vars[V] = T.vars[V]
-
-//					var/area/AR = X.loc
-
-//					if(AR.dynamic_lighting)
-//						X.opacity = !X.opacity
-//						X.sd_SetOpacity(!X.opacity)			//TODO: rewrite this code so it's not messed by lighting ~Carn
 
 					toupdate += X
 
@@ -1373,7 +1353,31 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 	return
 
 /mob/dview/Destroy()
-    CRASH("Somebody called qdel on dview. That's extremely rude.")
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on dview. That's extremely rude.")
+
+//Returns a list of everything target can see, taking into account its sight, but without being blocked by being inside an object.
+//No, view(client) does not work for this, despite what the Ref says.
+//This could be made into a define if you don't mind leaving tview_mob lying around. This could cause bugs though.
+/proc/tview(mob/target)
+	. = view(target.client?.view || world.view, setup_tview(target))
+	tview_mob.loc = null
+
+/proc/setup_tview(mob/target)
+	tview_mob.loc = get_turf(target)
+	tview_mob.sight = target.sight
+	tview_mob.see_in_dark = target.see_in_dark
+	tview_mob.see_invisible = target.see_invisible
+	tview_mob.see_infrared = target.see_infrared //I'm pretty sure we don't actually use this but might as well include it
+	return tview_mob
+
+//Aside from usage, this proc is the only difference between tview and dview.
+/mob/dview/tview/Destroy()
+	SHOULD_CALL_PARENT(FALSE)
+	CRASH("Somebody called qdel on tview. That's extremely rude.")
+
+//They SHOULD both be independent children of a common parent, but dview has been around much longer and I don't really want to change it
+var/mob/dview/tview/tview_mob = new()
 
 //Gets the Z level datum for this atom's Z level
 /proc/get_z_level(var/atom/A)
@@ -1562,6 +1566,9 @@ proc/rotate_icon(file, state, step = 1, aa = FALSE)
 			colour += temp_col
 	return colour
 
+/proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
+	return pick(subtypesof(/obj/item/potion) - /obj/item/potion/mutation)
+			
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
@@ -1655,11 +1662,11 @@ Game Mode config tags:
 
 // A standard proc for generic output to the msay window, Not useful for things that have their own prefs settings (prayers for instance)
 /proc/output_to_msay(msg)
-	var/sane_msg = strict_ascii(msg)
 	for(var/client/C in admins)
-		C.output_to_special_tab(sane_msg)
+		C.output_to_special_tab(msg)
 
-/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound)
+// This is awful and probably should be thrown away at some point.
+/proc/generic_projectile_fire(var/atom/target, var/atom/source, var/obj/item/projectile/projectile, var/shot_sound, var/mob/firer)
 	var/turf/T = get_turf(source)
 	var/turf/U = get_turf(target)
 	if (!T || !U)
@@ -1677,8 +1684,8 @@ Game Mode config tags:
 	projectile.original = target
 	projectile.target = U
 	projectile.shot_from = source
-	if(istype(source, /mob))
-		projectile.firer = source
+	projectile.firer = firer
+
 	projectile.current = T
 	projectile.starting = T
 	projectile.yo = U.y - T.y

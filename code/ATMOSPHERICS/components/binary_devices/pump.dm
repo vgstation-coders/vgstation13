@@ -24,7 +24,7 @@ air2.volume
 	var/target_pressure = ONE_ATMOSPHERE
 
 	var/frequency = 0
-	var/id_tag = null
+
 	var/datum/radio_frequency/radio_connection
 
 	machine_flags = MULTITOOL_MENU
@@ -84,7 +84,7 @@ air2.volume
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -202,7 +202,7 @@ air2.volume
 	update_icon()
 
 /obj/machinery/atmospherics/binary/pump/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

@@ -43,7 +43,7 @@
 	icon_state = "culthood"
 	desc = "A hood worn by the followers of Nar-Sie."
 	armor = list(melee = 30, bullet = 10, laser = 5,energy = 5, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = EARS|HEAD|HIDEHAIR
+	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
@@ -53,6 +53,7 @@
 /obj/item/clothing/head/legacy_culthood/alt
 	icon_state = "culthelmet_old"
 	item_state = "culthelmet_old"
+	body_parts_visible_override = EYES
 
 /obj/item/clothing/suit/legacy_cultrobes/alt
 	icon_state = "cultarmor_old"
@@ -94,7 +95,7 @@
 
 
 /obj/item/clothing/head/helmet/space/legacy_cult
-	name = "cult helmet"
+	name = "ancient cult helmet"
 	desc = "A space worthy helmet used by the followers of Nar-Sie"
 	icon_state = "culthelmet_old"
 	item_state = "cult_helmet"
@@ -102,7 +103,7 @@
 	siemens_coefficient = 0
 
 /obj/item/clothing/suit/space/legacy_cult
-	name = "cult armor"
+	name = "ancient cult armor"
 	icon_state = "cultarmor_old"
 	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."

@@ -226,6 +226,28 @@
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
+	name = "supermatter beaker"
+	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
+	icon_state = "beakersupermatter"
+	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_MATERIALS + "=4"
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/New()
+	..()
+	processing_objects += src
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/Destroy()
+	processing_objects -= src
+	..()
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
+	if(reagents.total_volume)
+		reagents.heating(9000, TEMPERATURE_PLASMA)
+	if(ishuman(loc))
+		//held or in pocket of a human
+		var/mob/living/L = loc
+		L.apply_radiation(3, RAD_EXTERNAL)
+
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
@@ -337,9 +359,20 @@
 	w_class = W_CLASS_MEDIUM
 	amount_per_transfer_from_this = 20
 	possible_transfer_amounts = list(10,20,25,30,50,100,150)
+	armor = list(melee = 8, bullet = 3, laser = 3, energy = 0, bomb = 1, bio = 1, rad = 0)
 	volume = 150
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
+
+/obj/item/weapon/reagent_containers/glass/bucket/equipped(var/mob/M, var/slot)
+	..()
+	if(slot == slot_head)
+		if(reagents.total_volume)
+			for(var/atom/movable/O in M.loc)
+				reagents.reaction(O, TOUCH)
+			reagents.reaction(M.loc, TOUCH)
+			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
+			reagents.clear_reagents()
 
 /obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
 	if(..())

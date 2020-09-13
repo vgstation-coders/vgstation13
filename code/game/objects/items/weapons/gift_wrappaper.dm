@@ -23,7 +23,7 @@
 	w_class = W
 	gift = target
 	update_icon()
-	
+
 /obj/item/weapon/gift/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/weapon/pen))
 		var/str = copytext(sanitize(input(user,"What should the label read? (max 52 characters)","Write a personal message!","") as message|null),1,MAX_NAME_LEN * 2)
@@ -301,6 +301,11 @@
 	density = 1
 	anchored = 0
 	w_type=NOT_RECYCLABLE
+
+/obj/structure/strange_present/Destroy()
+	for(var/atom/movable/AM in contents)
+		AM.forceMove(get_turf(src))
+	..()
 
 /obj/structure/strange_present/relaymove(mob/user as mob)
 	if (user.stat)

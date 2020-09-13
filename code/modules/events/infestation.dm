@@ -1,4 +1,5 @@
 /datum/event/infestation
+	startWhen = 5// so overrides have time to be processed
 	announceWhen = 15
 	endWhen = 20
 	var/locstring
@@ -50,7 +51,7 @@
 	var/max_number = 4
 
 	vermin = pick(VERM_MICE, VERM_LIZARDS, VERM_SPIDERS, VERM_SLIMES, VERM_BATS, VERM_BORERS, VERM_MIMICS, VERM_ROACHES, VERM_GREMLINS, VERM_BEES, VERM_HORNETS,
-	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS)
+	VERM_SYPHONER, VERM_GREMTIDE, VERM_CRABS, VERM_DIONA, VERM_MUSHMEN, VERM_FROGS, VERM_SNAILS, VERM_HEADCRABS)
 
 	if (override_vermin)
 		vermin = override_vermin
@@ -109,6 +110,25 @@
 			spawn_types = list(/mob/living/simple_animal/crab, /mob/living/simple_animal/crab/kickstool, /mob/living/simple_animal/crab/snowy)
 			vermstring = "crabs"
 			max_number = 5
+		if(VERM_DIONA)
+			spawn_types = /mob/living/carbon/monkey/diona
+			vermstring = "diona nymphs"
+		if(VERM_MUSHMEN)
+			spawn_types = /mob/living/carbon/monkey/mushroom
+			vermstring = "mushroom pinheads"
+		if(VERM_FROGS)
+			spawn_types = /mob/living/simple_animal/hostile/lizard/frog
+			vermstring = "frogs"
+			max_number = 12
+		if(VERM_SNAILS)
+			spawn_types = /mob/living/simple_animal/snail
+			vermstring = "snails"
+			max_number = 7
+		if(VERM_HEADCRABS)
+			spawn_types = /obj/item/clothing/mask/facehugger/headcrab
+			vermstring = "headcrabs"
+			max_number = 12
+
 
 	var/number = rand(2, max_number)
 
@@ -131,7 +151,7 @@
 			S.amount_grown = 0
 		else
 			var/spawn_type = pick(spawn_types)
-			var/mob/M = new spawn_type(picked)
+			var/atom/movable/M = new spawn_type(picked)
 			if(M.density)
 				valid -= picked
 		if(!valid.len)

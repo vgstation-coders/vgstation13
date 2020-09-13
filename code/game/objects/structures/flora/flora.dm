@@ -349,8 +349,8 @@
 		to_chat(user, "<span class='info'>You can see [plant_name] planted in it.</span>")
 
 /obj/structure/flora/pottedplant/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/wrench))
-		playsound(loc, 'sound/items/Ratchet.ogg', 50, 1)
+	if(O.is_wrench(user))
+		O.playtoolsound(loc, 50)
 		if(do_after(user, src, 30))
 			anchored = !anchored
 			user.visible_message(	"<span class='notice'>[user] [anchored ? "wrench" : "unwrench"]es \the [src] [anchored ? "in place" : "from its fixture"].</span>",
@@ -383,6 +383,7 @@
 	icon = 'icons/obj/flora/ausflora.dmi'
 	icon_state = "firstbush_1"
 	anchored = 1
+	shovelaway = TRUE
 
 /obj/structure/flora/ausbushes/New()
 	..()

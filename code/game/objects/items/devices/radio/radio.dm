@@ -4,7 +4,6 @@
 	suffix = "\[3\]"
 	icon_state = "walkietalkie"
 	item_state = "walkietalkie"
-	var/illegalradio_construction = 0
 	var/on = 1 // 0 for off
 	var/last_transmission
 	var/frequency = 1459
@@ -51,8 +50,8 @@
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
 	secure_radio_connections = new
-	..(loc)
-	if(radio_controller)
+	..()
+	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
 
 /obj/item/device/radio/Destroy()
@@ -60,8 +59,8 @@
 	remove_radio_all(src) //Just to be sure
 	..()
 
-
 /obj/item/device/radio/initialize()
+	. = ..()
 	frequency = COMMON_FREQ //common chat
 	if(freerange)
 		if(frequency < 1200 || frequency > 1600)
@@ -91,8 +90,7 @@
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
-	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
-		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+	dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
 
 	dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
@@ -142,30 +140,6 @@
 		var/mob/living/silicon/ai/A = locate(href_list["open2"])
 		if(A && target)
 			A.open_nearest_door(target)
-		return
-
-	if (href_list["track"])
-		var/mob/target = locate(href_list["track"])
-		var/mob/living/silicon/ai/A = locate(href_list["track2"])
-		if(A && target)
-			A.ai_actual_track(target)
-		return
-
-	else if (href_list["faketrack"])
-		var/mob/target = locate(href_list["track"])
-		var/mob/living/silicon/ai/A = locate(href_list["track2"])
-		if(A && target)
-
-			A:cameraFollow = target
-			to_chat(A, text("Now tracking [] on camera.", target.name))
-			if (usr.machine == null)
-				usr.machine = usr
-
-			while (usr:cameraFollow == target)
-				to_chat(usr, "Target is not on or near any active cameras on the station. We'll check again in 5 seconds (unless you use the cancel-camera verb).")
-				sleep(40)
-				continue
-
 		return
 
 	else if("set_freq" in href_list)
@@ -269,7 +243,7 @@
 			speech.frequency = secure_radio_connections[channel]
 			if(!channels[channel])
 				say_testing(loc, "\[Radio\] - Unable to find channel \"[channel]\".")
-				returnToPool(speech)
+				qdel(speech)
 				return
 		else
 			speech.frequency = frequency
@@ -337,7 +311,7 @@
 
 	if(subspace_transmission)
 		// First, we want to generate a new radio signal
-		var/datum/signal/signal = getFromPool(/datum/signal)
+		var/datum/signal/signal = new /datum/signal
 		signal.transmission_method = 2 // 2 would be a subspace transmission.
 									   // transmission_method could probably be enumerated through #define. Would be neater.
 
@@ -387,7 +361,7 @@
 			R.receive_signal(signal)
 
 		// Receiving code can be located in Telecommunications.dm
-		returnToPool(speech)
+		qdel(speech)
 		return
 
 
@@ -400,7 +374,7 @@
 		filter_type = 1
 
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 2
 
 
@@ -442,15 +416,15 @@
 
 	spawn(rand(10,25)) // wait a little...
 
-		if(signal.data["done"] && position.z in signal.data["level"])
+		if(signal.data["done"] && (position.z in signal.data["level"]))
 			// we're done here.
-			returnToPool(speech)
+			qdel(speech)
 			return
 
 		// Oh my god; the comms are down or something because the signal hasn't been broadcasted yet in our level.
 		// Send a mundane broadcast with limited targets:
 		Broadcast_Message(speech, voicemask, filter_type, signal.data["compression"], list(position.z))
-		returnToPool(speech)
+		qdel(speech)
 
 /obj/item/device/radio/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(!speech.speaker || speech.frequency)
@@ -525,78 +499,15 @@
 
 
 /obj/item/device/radio/attack_self(mob/user)
-	if(illegalradio_construction == 0)
-		user.set_machine(src)
-		interact(user)
-	else if(illegalradio_construction == 1)
-		to_chat(user, "You remove the crude ansible from \the [src].")
-		new /obj/item/weapon/ghetto_ansible(get_turf(src.loc))
-		illegalradio_construction = 0
-		updateDialog()
-		update_icon()
-	else if(illegalradio_construction == 2)
-		to_chat(user, "You need wirecutters to remove the wiring!")
+	user.set_machine(src)
+	interact(user)
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
-	if(W.is_screwdriver(user))
-		if(illegalradio_construction == 0)
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			b_stat = !( b_stat )
-			if (b_stat)
-				user.show_message("<span class = 'notice'>\The [src] can now be attached and modified!</span>")
-			else
-				user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
-		else if(illegalradio_construction == 2)
-			to_chat(user, "You forcefully tighten the radio's back cover.")
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
-			if(src.loc == user)
-				user.drop_item(src, force_drop = 1)
-				var/obj/item/device/illegalradio/I = new (get_turf(user))
-				user.put_in_hands(I)
-				message_admins("[key_name(user)] just built a ghetto radio. ([formatJumpTo(get_turf(user))])")
-				var/text = "[key_name(user)] just built a ghetto radio."
-				log_game(text)
-				log_admin(text)
-			else
-				new /obj/item/device/illegalradio(get_turf(src.loc))
-			qdel(src)
-		else
-			to_chat(user, "You can't close the cover with the ansible inside!")
-	else if(istype(W, /obj/item/weapon/ghetto_ansible) && illegalradio_construction == 0 && b_stat)
-		to_chat(user, "You wedge \the [W] in the back of \the [src].")
-		illegalradio_construction = 1
-		qdel(W)
-	else if(istype(W, /obj/item/stack/cable_coil) && illegalradio_construction == 1 && b_stat)
-		var/obj/item/stack/cable_coil/C = W
-		if(C.amount < 3)
-			to_chat(user, "You don't have enough cables to wire the radio!")
-			return
-		to_chat(user, "You add high-voltage wires to the radio.")
-		illegalradio_construction = 2
-		C.use(3)
-	else if(iswirecutter(W) && illegalradio_construction == 2 && b_stat)
-		to_chat(user, "You cut the extra wires out of the radio.")
-		playsound(user, 'sound/items/Wirecutter.ogg', 50, 1)
-		illegalradio_construction = 1
-		var/obj/item/stack/cable_coil/C = new (get_turf(user))
-		C.amount = 3
 	updateDialog()
 	update_icon()
 	add_fingerprint(user)
-
-/obj/item/device/radio/update_icon()
-	..()
-	if(illegalradio_construction == 0)
-		icon_state = "walkietalkie"
-		item_state = "walkietalkie"
-	else if(illegalradio_construction == 1)
-		icon_state = "radio_build1"
-		item_state = "radio_build1"
-	else
-		icon_state = "radio_build2"
-		item_state = "radio_build2"
 
 /obj/item/device/radio/emp_act(severity)
 	broadcasting = 0

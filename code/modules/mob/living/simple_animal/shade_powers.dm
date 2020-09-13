@@ -17,6 +17,8 @@
 		return
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 1
+		if(!gui_icons.soulblade_bgLEFT)
+			hud_used.shade_hud()
 		client.screen += list(
 			gui_icons.soulblade_bgLEFT,
 			gui_icons.soulblade_coverLEFT,

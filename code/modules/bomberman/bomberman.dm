@@ -1384,8 +1384,8 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	arena = a
 
 /obj/structure/planner/Destroy()
+	arena.planners -= src
 	..()
-	arena = null
 
 /obj/structure/planner/ex_act(severity)
 	return

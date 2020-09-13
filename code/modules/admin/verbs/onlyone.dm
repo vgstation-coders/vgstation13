@@ -88,13 +88,6 @@
 /datum/only_one/highlander
 	name = "Highlander"
 
-/datum/only_one/highlander/check_eligibility(var/mob/M)
-	if(!..())
-		return 0
-	//if(is_special_character(M))
-	//	return 0
-	return 1
-
 /datum/only_one/highlander/convert_mob(var/mob/M)
 	var/mob/living/carbon/human/H = ..()
 

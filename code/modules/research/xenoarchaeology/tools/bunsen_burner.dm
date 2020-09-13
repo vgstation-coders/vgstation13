@@ -50,6 +50,7 @@
 		held_container.forceMove(get_turf(src))
 		held_container = null
 	processing_objects.Remove(src)
+	set_light(0)
 	..()
 
 /obj/machinery/bunsen_burner/examine(mob/user)
@@ -81,10 +82,10 @@
 				add_fingerprint(user)
 				load_item(W)
 				return 1 // avoid afterattack() being called
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		user.visible_message("<span class = 'warning'>[user] starts to deconstruct \the [src]!</span>","<span class = 'notice'>You start to deconstruct \the [src].</span>")
 		if(do_after(user, src, 5 SECONDS))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			drop_stack(sheet_type, loc, rand(3,4), user)
 			qdel(src)
 	else
@@ -139,6 +140,7 @@
 
 	if(!heating || heating == BUNSEN_OPEN)
 		processing_objects.Remove(src)
+		set_light(0)
 
 /obj/machinery/bunsen_burner/update_icon()
 	icon_state = "bunsen[heating]"
@@ -174,6 +176,7 @@
 		return
 	heating = !heating
 	update_icon()
+	set_light(heating)
 	if(heating == BUNSEN_ON)
 		processing_objects.Add(src)
 	else

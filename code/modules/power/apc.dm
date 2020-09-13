@@ -54,6 +54,7 @@
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
+	var/cell_type_path = /obj/item/weapon/cell
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
 	var/lighting = 3
@@ -157,7 +158,7 @@
 	has_electronics = 2 //installed and secured
 	// is starting with a power cell installed, create it and set its charge level
 	if(cell_type)
-		src.cell = new/obj/item/weapon/cell(src)
+		src.cell = new cell_type_path(src)
 		cell.maxcharge = cell_type	// cell_type is maximum charge (old default was 1000 or 2500 (values one and two respectively)
 		cell.charge = start_charge * cell.maxcharge / 100.0 		// (convert percentage to actual value)
 
@@ -399,7 +400,7 @@
 			if (terminal)
 				to_chat(user, "<span class='warning'>Disconnect wires first.</span>")
 				return
-			playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			to_chat(user, "You are trying to remove the power control board...")//lpeters - fixed grammar issues
 
 			if (do_after(user, src, 50) && opened && !terminal && has_electronics == 1)
@@ -460,12 +461,12 @@
 				if (has_electronics==1 && terminal)
 					has_electronics = 2
 					stat &= ~MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "You screw the circuit electronics into place.")
 				else if (has_electronics==2)
 					has_electronics = 1
 					stat |= MAINT
-					playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					to_chat(user, "You unfasten the electronics.")
 				else /* has_electronics==0 */
 					to_chat(user, "<span class='warning'>There is nothing to secure.</span>")
@@ -475,7 +476,7 @@
 			if(has_electronics == 2 && !(stat & BROKEN))
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-				playsound(src, 'sound/items/screwdriver.ogg', 25, 1, -6)
+				W.playtoolsound(src, 25, extrarange = -6)
 				update_icon()
 			else
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
@@ -537,7 +538,7 @@
 			if (prob(50) && electrocute_mob(usr, terminal.get_powernet(), terminal))
 				spark(src, 5)
 				return
-			getFromPool(/obj/item/stack/cable_coil, get_turf(user), 10)
+			new /obj/item/stack/cable_coil(get_turf(user), 10)
 			user.visible_message(\
 				"<span class='warning'>[user.name] cut the cables and dismantled the power terminal.</span>",\
 				"You cut the cables and dismantle the power terminal.")
@@ -559,7 +560,7 @@
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
-				getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 1)
+				new /obj/item/stack/sheet/metal(get_turf(src), 1)
 				user.visible_message(\
 					"<span class='warning'>[src] has been cut apart by [user.name] with the weldingtool.</span>",\
 					"You disassembled the broken APC frame.",\
@@ -925,10 +926,11 @@
 			if (malfai.malfhacking)
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
-			to_chat(malfai, "Beginning override of APC systems. This takes some time, and you cannot perform other actions during the process.")
+			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
+			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
-			sleep(600)
+			sleep(time_required)
 			if(src && malfai)
 				if (!src.aidisabled)
 					malfai.malfhack = null

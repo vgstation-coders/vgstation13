@@ -25,11 +25,15 @@
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES
 	speak_override = TRUE
 
+	var/anger_chance = 1
+
+	var/gives_milk = TRUE
 	var/datum/reagents/udder = null
 
 /mob/living/simple_animal/hostile/retaliate/goat/New()
-	udder = new(50)
-	udder.my_atom = src
+	if(gives_milk)
+		udder = new(50)
+		udder.my_atom = src
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/goat/Life()
@@ -38,7 +42,7 @@
 	. = ..()
 	if(.)
 		//chance to go crazy and start wacking stuff
-		if(!enemies.len && prob(1))
+		if(!enemies.len && prob(anger_chance))
 			Retaliate()
 
 		if(enemies.len && prob(10))
@@ -128,18 +132,15 @@
 	size = SIZE_BIG
 	holder_type = /obj/item/weapon/holder/animal/cow
 
-	var/datum/reagents/udder = null
-
 /mob/living/simple_animal/cow/New()
-	udder = new(50)
-	udder.my_atom = src
 	..()
+	reagents.maximum_volume = 50
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = O
-		var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
+		var/transfered = reagents.trans_id_to(G, MILK, rand(5,10))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
 		if(!transfered)
@@ -152,8 +153,8 @@
 		return 0 //under effects of time magick
 	. = ..()
 	if(stat == CONSCIOUS)
-		if(udder && prob(5))
-			udder.add_reagent(MILK, rand(5, 10))
+		if(reagents && prob(5))
+			reagents.add_reagent(MILK, rand(5, 10))
 
 /mob/living/simple_animal/cow/attack_hand(mob/living/carbon/M as mob)
 	if(!stat && M.a_intent == I_DISARM && icon_state != icon_dead)

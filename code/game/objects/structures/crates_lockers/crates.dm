@@ -155,8 +155,8 @@
 	icon_closed = "largebin"
 
 /obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
-        return wrenchAnchor(user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/bin/wrenchable()
@@ -220,8 +220,8 @@
 	emag = "largebinemag"
 
 /obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
-    if(iswrench(W) && wrenchable())
-        return wrenchAnchor(user)
+    if(W.is_wrench(user) && wrenchable())
+        return wrenchAnchor(user, W)
     ..()
 
 /obj/structure/closet/crate/secure/bin/wrenchable()
@@ -402,9 +402,9 @@
 
 /obj/structure/closet/crate/rcd/New()
 	..()
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
-	new /obj/item/weapon/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
+	new /obj/item/stack/rcd_ammo(src)
 	new /obj/item/device/rcd/matter/engineering(src)
 
 /obj/structure/closet/crate/radiation/New()
@@ -536,7 +536,7 @@
 	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
 		togglelock(user)
 		return
-	else if(istype(W, /obj/item/weapon/screwdriver) && !opened && !locked && src.has_lockless_type)
+	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
 		remove_lock(user)
 		return
 	return ..()
@@ -609,7 +609,7 @@
 	else if(iswirecutter(W))
 		if(rigged)
 			to_chat(user, "<span class='notice'>You cut away the wiring.</span>")
-			playsound(loc, 'sound/items/Wirecutter.ogg', 100, 1)
+			W.playtoolsound(loc, 100)
 			rigged = 0
 			return
 	else if(!place(user, W))
@@ -674,7 +674,7 @@
 /obj/structure/closet/crate/secure/weapon/experimental/New()
 	..()
 	if(!chosen_set)
-		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell")
+		chosen_set = pick("ricochet","bison","spur","gatling","stickybomb","nikita","osipr","hecate","gravitywell", "clown")
 
 	switch(chosen_set)
 		if("ricochet")
@@ -721,6 +721,13 @@
 			new/obj/item/clothing/head/radiation(src)
 			new/obj/item/clothing/shoes/magboots(src)
 			new/obj/item/weapon/gun/gravitywell(src)
+		if("clown")
+			new/obj/item/clothing/under/clownpsyche(src)
+			new/obj/item/clothing/mask/gas/clownmaskpsyche(src)
+			new/obj/item/clothing/shoes/clownshoespsyche(src)
+			new/obj/item/weapon/storage/backpack/clownpackpsyche(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
+			new/obj/item/weapon/gun/energy/laser/rainbow(src)
 
 /obj/structure/closet/crate/secure/weapon/experimental/ricochet
 	chosen_set = "ricochet"

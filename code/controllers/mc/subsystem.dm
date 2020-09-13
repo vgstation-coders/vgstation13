@@ -68,6 +68,7 @@
 	can_fire = 0
 	flags |= SS_NO_FIRE
 	Master.subsystems -= src
+	..()
 
 // Queue it to run.
 //   (we loop thru a linked list until we get to the end or find the right point)
@@ -155,6 +156,7 @@
 /datum/subsystem/proc/Initialize(start_timeofday)
 	var/time = (world.timeofday - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] seconds!"
+	log_debug(msg)
 	to_chat(world, "<span class='danger'>[msg]</span>")
 	initialized = TRUE
 	return time

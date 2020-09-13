@@ -61,7 +61,7 @@
 	if(W.is_screwdriver(user))
 		panel = !panel
 		to_chat(user, "<span class='notify'>You [panel ? "open" : "close"] the panel on \the [src].</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		update_icon()
 		return 1
 
@@ -202,12 +202,12 @@
 	if(I.is_screwdriver(user))
 		if(c_mode==0)
 			c_mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(c_mode==1)
 			c_mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && c_mode==1)

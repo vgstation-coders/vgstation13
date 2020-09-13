@@ -39,7 +39,11 @@
 			snow_state = i
 			blizzard_parent.UpdateSnowfall()
 		snowtiles_setup = 1
-	snow_state = snow_intensity
+	if(map && map.climate && istype(map.climate.current_weather,/datum/weather/snow))
+		var/datum/weather/snow/S = map.climate.current_weather
+		snow_state = S.snow_intensity
+	else
+		snow_state = SNOW_CALM
 	if(real_snow_tile)
 		if(initial_snowballs == -1)
 			snowballs = rand(5, 10)
@@ -57,6 +61,7 @@
 		qdel(snowprint_parent)
 	if(blizzard_parent)
 		qdel(blizzard_parent)
+	..()
 
 /turf/unsimulated/floor/snow/proc/update_environment()
 	if(real_snow_tile)
@@ -70,16 +75,16 @@
 	switch(snow_state)
 		if(SNOW_CALM)
 			temperature = T_ARCTIC
-			turf_speed_multiplier = 1
+			turf_speed_multiplier = 1 //higher numbers mean slower
 		if(SNOW_AVERAGE)
 			temperature = T_ARCTIC-5
-			turf_speed_multiplier = 1.15 //For some reason, higher numbers mean slower.
+			turf_speed_multiplier = 1
 		if(SNOW_HARD)
 			temperature = T_ARCTIC-10
-			turf_speed_multiplier = 1.6
+			turf_speed_multiplier = 1.4
 		if(SNOW_BLIZZARD)
 			temperature = T_ARCTIC-20
-			turf_speed_multiplier = 2.9
+			turf_speed_multiplier = 2.8
 	turf_speed_multiplier *= 1+(snowballs/10)
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
@@ -233,20 +238,18 @@
 			to_chat(user,"<span class='info'>It seems almost entirely devoid of snow, exposing the permafrost below.</span>")
 
 /turf/unsimulated/floor/snow/proc/change_snowballs(var/delta, var/limit) //Changes snowball count by delta, but to be no lower/greater than limit. Updates texture, too.
-	if(delta >= 0)
-		snowballs += delta
-		if(snowballs > limit)
-			snowballs = limit
+	snowballs += delta //this can be negative, in which case it subtracts
+	if(delta>=0)
+		snowballs = min(snowballs, limit) //no more than the limit
 	else
-		snowballs -= delta
-		if(snowballs < limit)
-			snowballs = limit
-		else if(snowballs < 0)
-			snowballs = 0
+		snowballs = max(snowballs, 0)
+	//This is a rare situation where we can't use Clamp(), because we don't want the limit to apply if subtracting
 	update_environment()
 
 /turf/unsimulated/floor/snow/proc/extract_snowballs(var/snowball_amount = 0, var/pick_up = FALSE, var/mob/user, var/obj/item/stack/sheet/snow/snowball_stack = null)
-
+	if(!Adjacent(user))
+		to_chat(user,"<span class='warning'>You're too far away to scoop snow.</span>")
+		return
 	if(!snowball_amount)
 		return
 
@@ -298,6 +301,12 @@
 	real_snow_tile = FALSE
 	name = "asphalt"
 	desc = "Specially treated Centcomm asphalt, designed to disintegrate all snow that touches it."
+	holomap_draw_override = HOLOMAP_DRAW_HALLWAY
+
+/turf/unsimulated/floor/snow/asphalt/mine
+	name = "mine road"
+	desc = "Made of asphalt. If you get lost, just follow the old mining road..."
+	ignore_blizzard_updates = TRUE
 
 /turf/unsimulated/floor/snow/permafrost
 	icon_state = "permafrost_full"
@@ -324,12 +333,18 @@
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
 
+/turf/unsimulated/floor/snow/cave/rock
+	name = "rocky cave floor"
+	real_snow_tile = FALSE
+	icon_state = "permafrost_full"
+
 /turf/unsimulated/floor/snow/heavy_blizzard
 	name = "heavy blizzard"
 	desc = "Without cover or landmarks, dense blizzards are easy to get lost in."
 	snowprints = FALSE
 	ignore_blizzard_updates = TRUE
 	icon_state = "blizz_placeholder" //easy to see for mapping, updates in new()
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /turf/unsimulated/floor/snow/heavy_blizzard/update_environment()
 	snow_state = SNOW_BLIZZARD //forces this to always be blizzarding regardless of blizzard rules
@@ -394,7 +409,7 @@
 		var/obj/glacier/adj_glacier = locate(/obj/glacier) in adj_tile
 		if(adj_glacier)
 			junction |= dir_to_smoothingdir(direction)
-			if(adj_glacier.isedge && direction in cardinal)
+			if(adj_glacier.isedge && (direction in cardinal))
 				edgenum |= direction
 				edgesnum = adj_glacier.isedge
 	if(junction == SMOOTHING_ALLDIRS) // you win the not-having-to-smooth-lotterys

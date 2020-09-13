@@ -29,7 +29,6 @@
 var/explosion_shake_message_cooldown = 0
 
 /proc/explosion(turf/epicenter, const/devastation_range, const/heavy_impact_range, const/light_impact_range, const/flash_range, adminlog = 1, ignored = 0, verbose = 1)
-	src = null	//so we don't abort once src is deleted
 	var/explosion_time = world.time
 
 	spawn()
@@ -136,6 +135,9 @@ var/explosion_shake_message_cooldown = 0
 
 					for (var/obj/effect/forcefield/F in Trajectory.contents)
 						dist += F.explosion_block
+
+					for (var/obj/effect/energy_field/E in Trajectory.contents)
+						dist += E.explosion_block
 
 			if(dist < devastation_range)
 				dist = 1

@@ -301,7 +301,7 @@
 		return jobName
 	if(alt_jobName in get_all_job_icons()) //Check if the base job has a hud icon
 		return alt_jobName
-	if(jobName in get_all_centcom_jobs() || alt_jobName in get_all_centcom_jobs()) //Return with the NT logo if it is a Centcom job
+	if(jobName in get_all_centcom_jobs() || (alt_jobName in get_all_centcom_jobs())) //Return with the NT logo if it is a Centcom job
 		return "Centcom"
 	return "Unknown" //Return unknown if none of the above apply
 
@@ -355,7 +355,7 @@
 			return
 		src.registered_name = n
 
-		var/u = strict_ascii(sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+		var/u = sanitize(stripped_input(user, "What occupation would you like to put on this card?\nNote: this will not grant or remove any access levels.", "Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 		if(!u)
 			alert("Invalid assignment.")
 			src.registered_name = null
@@ -396,7 +396,7 @@
 						to_chat(user, "Name changed to [new_name].")
 
 					if("Occupation")
-						var/new_job = strict_ascii(sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN)))
+						var/new_job = sanitize(stripped_input(user,"What job would you like to put on this card?\nChanging occupation will not grant or remove any access levels.","Nanotrasen undercover ID: occupation", "Detective", MAX_MESSAGE_LEN))
 						if (!Adjacent(user) || user.incapacitated())
 							return
 						if (!new_job)
@@ -409,12 +409,21 @@
 	else
 		..()
 
+#define AGENT_CARD_DEFAULT_ACCESS list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+
 /obj/item/weapon/card/id/syndicate
 	name = "agent card"
-	access = list(access_maint_tunnels, access_syndicate, access_external_airlocks)
+	access = AGENT_CARD_DEFAULT_ACCESS
 	base_access = list(access_syndicate)
 	origin_tech = Tc_SYNDICATE + "=3"
 	var/registered_user=null
+
+/obj/item/weapon/card/id/syndicate/commando
+	name = "Hacked syndie card"
+
+/obj/item/weapon/card/id/syndicate/commando/New()
+	..()
+	access = get_all_accesses()
 
 /obj/item/weapon/card/id/syndicate/afterattack(var/obj/item/weapon/O as obj, mob/user as mob)
 	if(istype(O, /obj/item/weapon/card/id))
@@ -560,12 +569,18 @@
 						blood_type = initial(blood_type)
 						dna_hash = initial(dna_hash)
 						fingerprint_hash = initial(fingerprint_hash)
-						access = initial(access)
+						access = AGENT_CARD_DEFAULT_ACCESS
 						registered_user = null
 
 						to_chat(user, "<span class='notice'>All information has been deleted from \the [src].</span>")
 	else
 		..()
+
+/obj/item/weapon/card/id/syndicate/raider
+	access = list(access_syndicate, access_trade)
+	assignment = "Trader"
+
+#undef AGENT_CARD_DEFAULT_ACCESS
 
 /obj/item/weapon/card/id/syndicate_command
 	name = "syndicate ID card"
@@ -741,8 +756,17 @@
 	icon_state = "deathsquad"
 
 /obj/item/weapon/card/id/death_commando/New()
-	..()
+	. = ..()
 	access = get_centcom_access("Death Commando")
+
+/obj/item/weapon/card/id/death_commando_leader
+	name = "Sgt.Reaper ID card"
+	assignment = "Death Commander"
+	icon_state = "creed"
+
+/obj/item/weapon/card/id/death_commando_leader/New()
+	. = ..()
+	access = get_centcom_access("Creed Commander")
 
 /obj/item/weapon/card/id/syndicate/commando
 	name = "Syndicate Commando ID card"
@@ -800,6 +824,15 @@
 /obj/item/weapon/card/id/emergency_responder/New()
 	..()
 	access = get_centcom_access("Emergency Responder")
+
+/obj/item/weapon/card/id/emergency_responder_leader
+	name = "Emergency Responder Leader ID card"
+	assignment = "Emergency Responder Leader"
+	icon_state = "ERT_leader"
+
+/obj/item/weapon/card/id/emergency_responder_leader/New()
+	..()
+	access = get_centcom_access("Emergency Responders Leader")
 
 /obj/item/weapon/card/id/special_operations
 	name = "Special Operations Officer ID card"

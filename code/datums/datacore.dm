@@ -148,6 +148,8 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 			preview_icon.Blend(rgb(H.my_appearance.s_tone, H.my_appearance.s_tone, H.my_appearance.s_tone), ICON_ADD)
 		else
 			preview_icon.Blend(rgb(-H.my_appearance.s_tone,  -H.my_appearance.s_tone,  -H.my_appearance.s_tone), ICON_SUBTRACT)
+	else if(H.species.anatomy_flags & RGBSKINTONE)
+		preview_icon.Blend(rgb(H.my_appearance.r_hair, H.my_appearance.g_hair, H.my_appearance.b_hair), ICON_ADD)
 
 	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = H.species ? H.species.eyes : "eyes_s")
 
@@ -242,7 +244,7 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
 			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "detective"), ICON_OVERLAY)
 		if("Security Officer")
-			clothes_s = new /icon('icons/mob/uniform.dmi', "secred_s")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "security_s")
 			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "jackboots"), ICON_UNDERLAY)
 		if("Chief Engineer")
 			clothes_s = new /icon('icons/mob/uniform.dmi', "chief_s")

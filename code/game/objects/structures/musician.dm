@@ -60,11 +60,14 @@
 	for(var/mob/M in get_hearers_in_view(15, source))
 		if(!M.client)
 			continue
-		if(M.client.prefs.hear_instruments)
-			M.playsound_local(source, soundfile, 100, falloff = 5)
+		if(M.is_deaf())
+			continue
 		if(istype(instrumentObj,/obj/item/device/instrument))
 			var/obj/item/device/instrument/INS = instrumentObj
 			INS.OnPlayed(user,M)
+		if(!M.client.prefs.hear_instruments)
+			continue
+		M.playsound_local(source, soundfile, 100, falloff = 5)
 
 /datum/song/proc/shouldStopPlaying(mob/user)
 	if(instrumentObj)
@@ -260,6 +263,8 @@
 	else if(href_list["tempo"])
 		tempo = sanitize_tempo(tempo + text2num(href_list["tempo"]))
 	else if(href_list["play"])
+		if(playing)
+			return
 		playing = 1
 		spawn()
 			playsong(usr)
@@ -379,9 +384,9 @@
 	song.interact(user)
 
 /obj/structure/piano/attackby(obj/item/O, mob/user, params)
-	if (istype(O, /obj/item/weapon/wrench))
+	if (O.is_wrench(user))
 		if (!anchored && !istype(get_turf(src),/turf/space))
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			O.playtoolsound(src, 50)
 			user << "<span class='notice'> You begin to tighten \the [src] to the floor...</span>"
 			if (do_after(user, 20, target = src))
 				user.visible_message( \
@@ -390,7 +395,7 @@
 					"<span class='italics'>You hear a ratchet.</span>")
 				anchored = 1
 		else if(anchored)
-			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
+			O.playtoolsound(src, 50)
 			user << "<span class='notice'> You begin to loosen \the [src]'s casters...</span>"
 			if (do_after(user, 40, target = src))
 				user.visible_message( \

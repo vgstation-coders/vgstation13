@@ -75,7 +75,10 @@
 #define SPELL_NECROTIC 16 //Necromantic spells
 
 //Spell specializations, used for spellbook lists
-#define SPELL_SPECIALIZATION_DEFAULT 1 //So it doesn't gorge on a word that could be used for better things
-#define OFFENSIVE 2
-#define DEFENSIVE 4
-#define UTILITY 8
+#define SPELL_SPECIALIZATION_OFFENSIVE 1
+#define SPELL_SPECIALIZATION_DEFENSIVE 2
+#define SPELL_SPECIALIZATION_UTILITY 4
+
+#define SSOFFENSIVE SPELL_SPECIALIZATION_OFFENSIVE
+#define SSDEFENSIVE SPELL_SPECIALIZATION_DEFENSIVE
+#define SSUTILITY SPELL_SPECIALIZATION_UTILITY

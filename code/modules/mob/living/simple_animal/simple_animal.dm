@@ -228,16 +228,18 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			turns_since_move++
 			if(turns_since_move >= turns_per_move)
 				if(!(stop_automated_movement_when_pulled && pulledby)) //Some animals don't move when pulled
+					StartMoving()
 					var/destination = get_step(src, pick(cardinal))
 					wander_move(destination)
 					turns_since_move = 0
+					EndMoving()
 
 	handle_automated_speech()
 
 	var/datum/gas_mixture/environment
 	if(loc)
 		environment = loc.return_air()
-		
+
 	handle_environment(environment)
 	handle_regular_hud_updates()
 
@@ -405,8 +407,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
 		return
-	adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src, 0)
+	adjustBruteLoss(Proj.damage)
 	return 0
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
@@ -580,7 +582,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -596,7 +598,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -718,9 +720,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(name != initial(name)) //Not chicken
 		new_animal.name = name
+	if(mind)
+		mind.transfer_to(new_animal)
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
 
 	if(colour)
 		new_animal.colour = colour
@@ -800,9 +802,3 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
-
-
-/mob/living/simple_animal/resetVariables()
-	..("emote_hear", "emote_see", args)
-	emote_hear = list()
-	emote_see = list()

@@ -24,6 +24,8 @@
 	var/list/mob_type_ignore_stat_typelist
 	var/voxemote = TRUE //Flags if a vox CAN use an emote. Defaults to can.
 	var/voxrestrictedemote = FALSE //Flags if Non-Vox CANNOT use an emote. Defaults to CAN.
+	var/insectoidemote = TRUE
+	var/insectoidrestrictedemote = FALSE
 	var/stat_allowed = CONSCIOUS
 	var/static/list/emote_list = list()
 
@@ -51,6 +53,7 @@
 	if(!msg)
 		return
 
+	var/msg_runechat = msg
 	msg = "<b>[user]</b> " + msg
 
 	for(var/mob/M in dead_mob_list)
@@ -59,12 +62,19 @@
 		var/T = get_turf(user)
 		if(isobserver(M) && M.client && (M.client.prefs.toggles & CHAT_GHOSTSIGHT) && !(M in viewers(T)))
 			M.show_message("<a href='?src=\ref[M];follow=\ref[user]'>(Follow)</a> " + msg)
+			if (user.client && M?.client?.prefs.mob_chat_on_map && get_dist(M, user) < M?.client.view)
+				M.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
+		for (var/mob/O in viewers(world.view, user))
+			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS)
+				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
+			if (user.client && O?.client?.prefs.mob_chat_on_map && O.stat != UNCONSCIOUS && !O.is_deaf())
+				O.create_chat_message(user, null, msg_runechat, "", list("italics"))
 
 	var/turf/T = get_turf(user)
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
@@ -135,6 +145,12 @@
 	if(is_type_in_list(user, mob_type_blacklist_typelist))
 		return FALSE
 
+	if((isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return TRUE
+	if((!isinsectoid(user)) && insectoidrestrictedemote == TRUE)
+		return FALSE
+	if((isinsectoid(user)) && insectoidemote == FALSE)
+		return FALSE
 	if((isvox(user) || isskelevox(user)) && voxrestrictedemote == TRUE)
 		return TRUE
 	if((!isvox(user) || !isskelevox(user)) && voxrestrictedemote == TRUE)
@@ -182,6 +198,10 @@
 	if(isvox(src) || isskelevox(src))
 		emote("shrieks", message = TRUE, ignore_status = TRUE)
 		return
-
+	if(isinsectoid(src))
+		emote("chitters", message = TRUE, ignore_status = TRUE)
+		return
 	else
 		emote("screams", message = TRUE, ignore_status = TRUE) // So it's forced
+
+

@@ -4,6 +4,8 @@
 /obj/item/ammo_storage/magazine
 	desc = "A magazine capable of holding bullets. Can be loaded into certain weapons."
 	exact = 1 //we only load the thing we want to load
+	materials = list(MAT_IRON = 200)
+
 
 /obj/item/ammo_storage/magazine/mc9mm
 	name = "magazine (9mm)"
@@ -234,6 +236,8 @@
 	icon_state = "uzi45"
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/c45"
+	exact = 0
+	caliber = POINT45
 	max_ammo = 16
 	multiple_sprites = 1
 	sprite_modulo = 4

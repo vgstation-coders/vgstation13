@@ -281,11 +281,11 @@
 		return
 	if(reagents.total_volume <= 0 && max_health < HEALTH_FOR_FREE_MOVEMENT) //No fuel
 		if(user)
-			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
-			unlock_atom(user)
 			activated = 0
-			user.Knockdown(5) //Only Weaken after unbuckling
-			user.Stun(5)
+			to_chat(user, "<span class='warning'>[src] has no fuel, it activates its ejection seat as soon as you jam down the pedal!</span>")
+			if(unlock_atom(user))
+				user.Knockdown(5) //Only Weaken after unbuckling
+				user.Stun(5)
 		return
 	if(activated)
 		var/old_pos = get_turf(src)

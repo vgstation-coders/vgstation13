@@ -10,6 +10,10 @@
 	..(container)
 	holder=_holder
 
+/datum/component/controller/Destroy()
+	holder = null
+	return ..()
+
 // Called when we are bumped by another movable atom.
 /datum/component/controller/proc/OnBumped(var/atom/A)
 	if(istype(A, /atom/movable))

@@ -127,7 +127,7 @@
 	var/datum/disease2/disease/D = blob_diseases[looks]
 	var/list/L = list()
 	L["[D.uniqueID]-[D.subID]"] = D
-	getFromPool(/obj/effect/effect/pathogen_cloud,get_turf(src),null,virus_copylist(L),FALSE)
+	new /obj/effect/effect/pathogen_cloud(get_turf(src), null, virus_copylist(L), FALSE)
 	if(factory)
 		factory.spores -= src
 	..()

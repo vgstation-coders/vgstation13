@@ -71,6 +71,7 @@
 			if (!B.bee_species.angery || prob(max(0,100-B.bees.len*5)))
 				for (var/datum/bee/BEES in B.bees)
 					caught_bees.Add(BEES)
+					B.bees.Remove(BEES)
 					BEES.home = null
 					if (B.home)
 						B.home.bees_outside_hive.Remove(BEES)
@@ -202,6 +203,7 @@
 /obj/item/weapon/book/manual/hydroponics_beekeeping
 	name = "The Ins and Outs of Apiculture - A Precise Art"
 	icon_state ="bookHydroponicsBees"
+	item_state ="bookHydroponicsBees"
 	author = "Beekeeper Dave"
 	title = "The Ins and Outs of Apiculture - A Precise Art"
 	dat = {"<html>

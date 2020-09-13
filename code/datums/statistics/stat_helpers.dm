@@ -156,8 +156,11 @@
 
 	// check for survivors
 	for(var/datum/mind/M in ticker.minds)
-		// add_objectives(M)
-		manifest_entries.Add(new /datum/stat_collector(M))
+		// i'd like manifest stats, eventually, to be something that doesn't depend on
+		// all data being 'pristine' at round end; for instance, an ayy'd player
+		// will probably have a different entry than what they were at roundstart
+		// and that's gross
+		manifest_entries.Add(new /datum/stat/manifest_entry(M))
 		if(istype(M.current, /mob/living) && !M.current.isDead())
 			add_survivor_stat(M.current)
 

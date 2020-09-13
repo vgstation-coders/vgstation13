@@ -9,7 +9,6 @@
 
 	level				= 1
 
-	var/id_tag			= null
 	var/frequency		= 1439
 	var/datum/radio_frequency/radio_connection
 
@@ -115,7 +114,7 @@
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 	signal.data = list(
@@ -400,7 +399,7 @@
 				investigation_log(I_ATMOS, "has been unwelded by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 				welded = 0
 				update_icon()
-	if (!iswrench(W))
+	if (!W.is_wrench(user))
 		return ..()
 	if (!(stat & NOPOWER) && on)
 		to_chat(user, "<span class='warning'>You cannot unwrench this [src], turn it off first.</span>")

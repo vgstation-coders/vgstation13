@@ -28,6 +28,7 @@
 	desc = "An armored vest that protects against some damage."
 	icon_state = "armor"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
@@ -41,15 +42,50 @@
 
 /obj/item/clothing/suit/armor/vest/security
 	name = "security armor"
-	desc = "An armored vest that protects against some damage. This one has Nanotrasen corporate badge."
+	desc = "An armored vest that protects against some damage. This one has a Nanotrasen corporate security badge."
 	icon_state = "armorsec"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	var/clowned = FALSE //so clowns can deface this item
+
+/obj/item/clothing/suit/armor/vest/security/attackby(var/obj/item/A, mob/user)
+	if(clowned == FALSE && istype(A,/obj/item/toy/crayon/rainbow))
+		to_chat(user, "<span class = 'notice'>You begin modifying \the [src].</span>")
+		if(do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class = 'notice'>You finish modifying \the [src]!</span>")
+			clowned = TRUE
+			update_icon()
+	..()
+
+/obj/item/clothing/suit/armor/vest/security/decontaminate()
+	..()
+	if(clowned)
+		clowned = FALSE
+		update_icon()
+
+/obj/item/clothing/suit/armor/vest/security/update_icon()
+	icon_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+	item_state = initial(icon_state) + "[clowned == TRUE ? "c" : ""]"
+
+/obj/item/clothing/suit/armor/vest/security/clown/New()
+	clowned = TRUE
+	update_icon()
 
 /obj/item/clothing/suit/armor/vest/warden
 	name = "Warden's jacket"
 	desc = "An armoured jacket with silver rank pips and livery."
 	icon_state = "warden_jacket"
 	item_state = "armor"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/suit/armor/vest/wardenshort
+	name = "Warden's short jacket"
+	desc = "A short, armored jacket, perfect for desk duty."
+	icon_state = "wardenjacket"
+	item_state = "wardenjacket"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list (VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/vest/neorussian
 	name = "neo-Russian vest"
@@ -62,6 +98,7 @@
 	desc = "A series of chains linked together in a way to look like a suit."
 	icon_state = "chainmail_torso"
 	item_state = "chainmail_torso"
+	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/riot
@@ -69,6 +106,7 @@
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
 	icon_state = "riot"
 	item_state = "swat_suit"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS|IGNORE_INV
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 80, bullet = 10, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
@@ -93,6 +131,14 @@
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
 	clothing_flags = GOLIATHREINFORCE
 
+
+/obj/item/clothing/suit/armor/samurai
+	name = "samurai armor"
+	desc = "Forged long ago, in a distant land."
+	icon_state = "samurai"
+	item_state = "samurai"
+	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/knight/yellow
 	icon_state = "knight_yellow"
@@ -158,6 +204,8 @@
 	desc = "A vest that excels in protecting the wearer against high-velocity solid projectiles."
 	icon_state = "bulletproof"
 	item_state = "armor"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 80, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.7
@@ -167,6 +215,8 @@
 	desc = "A vest that excels in protecting the wearer against energy projectiles."
 	icon_state = "armor_reflec"
 	item_state = "armor_reflec"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	blood_overlay_type = "armor"
 	armor = list(melee = 10, bullet = 10, laser = 80, energy = 50, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0
@@ -198,6 +248,7 @@
 	desc = "An armored jacket used in special operations."
 	icon_state = "detective"
 	item_state = "det_suit"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "coat"
 
 /obj/item/clothing/suit/armor/det_suit
@@ -205,6 +256,7 @@
 	desc = "An armored vest with a detective's badge on it."
 	icon_state = "detective-armor"
 	item_state = "armor"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
@@ -252,29 +304,9 @@
 	if(L.wear_suit != src) //Not worn
 		return 0 //Don't do anything
 
-	var/list/turfs = new/list()
-
-	for(var/turf/T in orange(6, loc))
-		if(istype(T,/turf/space))
-			continue
-		if(T.density)
-			continue
-		if(T.x>world.maxx-6 || T.x<6)
-			continue
-		if(T.y>world.maxy-6 || T.y<6)
-			continue
-		turfs += T
-	if(!turfs.len)
-		turfs += pick(/turf in orange(6))
-	var/turf/picked = pick(turfs)
-	if(!isturf(picked))
-		return
-
+	L.teleport_radius(6)
 	L.visible_message("<span class='danger'>The reactive teleport system flings [L] clear of \the [blocked]!</span>", "<span class='notice'>The reactive teleport system flings you clear of \the [blocked].</span>")
-
-	playsound(L, 'sound/effects/teleport.ogg', 30, 1)
-
-	L.forceMove(picked)
+	playsound(L, 'sound/effects/teleport.ogg', 50, 1)
 
 	return 1
 

@@ -108,7 +108,7 @@
 				</div>
 			</body>
 			</html>"}
-	usr << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
+	src << browse(dat, "window=pai;size=640x480;border=0;can_close=1;can_resize=1;can_minimize=1;titlebar=1")
 	onclose(usr, "pai")
 	temp = null
 	return
@@ -275,7 +275,7 @@
 		if("pps")
 			if(!pps_device)
 				pps_device = new(src)
-			pps_device.ui_interact(src)
+			pps_device.attack_self(src)
 		if("holomap")
 			if(href_list["switch_target"])
 				if(holo_target == initial(holo_target))

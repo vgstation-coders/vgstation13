@@ -27,8 +27,9 @@
 /obj/machinery/mineral/unloading_machine/process()
 	if(output && input)
 		var/obj/structure/ore_box/BOX = locate(/obj/structure/ore_box, input.loc)
-		if(BOX)
-			BOX.materials.makeAndRemoveOre(get_turf(output))
+		if (BOX)
+			BOX.dump_everything(get_turf(output))
+
 		var/obj/item/I = locate(/obj/item, input.loc)
 		if(I)
 			I.forceMove(get_turf(output))

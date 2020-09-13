@@ -107,12 +107,12 @@
 				return
 			if(mode==0) // It's off but still not unscrewed
 				mode=-1 // Set it to doubleoff l0l
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You remove the screws around the power connection.")
 				return
 			else if(mode==-1)
 				mode=0
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				I.playtoolsound(src, 50)
 				to_chat(user, "You attach the screws around the power connection.")
 				return
 		else if(iswelder(I) && mode==-1)
@@ -472,7 +472,7 @@
 		return
 
 	//We are restrained or can't move, this will compromise taking out the trash
-	if(user.restrained() || !user.canmove)
+	if(user.restrained() || !user.canmove || user.incapacitated())
 		return
 	if(!Adjacent(user) || !user.Adjacent(dropping))
 		return
@@ -486,7 +486,7 @@
 			attackby(dropping, user)
 		else if(istype(dropping, /obj/structure/closet/crate) && can_load_crates())
 			if(do_after(user,src,20))
-				if(dropping.locked_to || user.restrained() || !user.canmove)
+				if(dropping.locked_to || !user.canmove || user.incapacitated() || !isturf(dropping.loc))
 					return
 				user.visible_message("[user] hoists \the [dropping] into \the [src].", "You hoist \the [dropping] into \the [src].")
 				add_fingerprint(user)
@@ -1596,12 +1596,12 @@
 	if(I.is_screwdriver(user))
 		if(mode==0)
 			mode=1
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You remove the screws around the power connection.")
 			return
 		else if(mode==1)
 			mode=0
-			playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+			I.playtoolsound(src, 50)
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)

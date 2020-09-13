@@ -50,18 +50,12 @@
 		return 0
 	if(C.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You begin undoing the screws holding the catwalk together.</span>")
-		playsound(src, 'sound/items/Screwdriver.ogg', 80, 1)
+		C.playtoolsound(src, 80)
 		if(do_after(user, src, 30) && src)
 			to_chat(user, "<span class='notice'>You finish taking taking the catwalk apart.</span>")
 			new /obj/item/stack/rods(src.loc, 2)
 			new /obj/structure/lattice(src.loc)
 			qdel(src)
-		return
-
-	if(istype(C, /obj/item/stack/cable_coil))
-		var/obj/item/stack/cable_coil/coil = C
-		if(get_turf(src) == src.loc)
-			coil.turf_place(src.loc, user)
 
 /obj/structure/catwalk/invulnerable/ex_act()
 	return

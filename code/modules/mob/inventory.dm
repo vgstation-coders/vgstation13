@@ -207,7 +207,7 @@
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
 /mob/proc/put_in_hand_check(var/obj/item/W, index)
-	if(lying) //&& !(W.flags & ABSTRACT))
+	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
 		return 0
 	if(!isitem(W))
 		return 0
@@ -299,7 +299,7 @@
 	for (var/obj/item/I in get_all_slots())
 		drop_from_inventory(I)
 	drop_hands()
-	
+
 // deletes all and only equipped items, including items in hand
 /mob/proc/delete_all_equipped_items()
 	for (var/obj/item/I in get_all_slots())
@@ -346,7 +346,7 @@
 /mob/proc/drop_hands(var/atom/Target, force_drop = 0) //drops both items
 	for(var/obj/item/I in held_items)
 		drop_item(I, Target, force_drop = force_drop)
-		
+
 /mob/proc/delete_held_items(var/atom/Target) //deletes both items
 	for(var/obj/item/I in held_items)
 		qdel(I)

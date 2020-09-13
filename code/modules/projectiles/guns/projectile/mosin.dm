@@ -2,7 +2,8 @@
 	name = "mosin nagant"
 	desc = "JOY OF HAVING MOSIN NAGANT RIFLE IS JOY THAT MONEY CANNOT AFFORD. "
 	fire_sound = 'sound/weapons/mosin.ogg'
-	icon_state = "mosin"
+	icon = 'icons/obj/biggun.dmi'
+	icon_state = "mosinlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	max_shells = 5
@@ -81,7 +82,8 @@
 	name = "obrez"
 	desc = "WHEN YOU SHOW OBREZ TO ENEMY, HE THINKS YOU ARE CRAZED LUNATIC, LIKE KRUSCHEV POUNDING SHOE ON DESK AND SHOUTING ANGRY PLAN TO BURY NATO IN DEEP GRAVE. YOU FIRE WITH FLAME BURSTING LIKE FIRE OF DRAGON, TWISTING BOLT LIKE MANIAC BETWEEN FIRINGS AND EJECTING EMPTY CASE AS BIG AS BEER CAN FROM ACTION."
 	fire_sound = 'sound/weapons/obrez.ogg'
-	icon_state = "obrez"
+	icon = 'icons/obj/biggun.dmi'
+	icon_state = "obrezlarge"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	w_class = W_CLASS_MEDIUM
@@ -90,7 +92,7 @@
 /obj/item/weapon/gun/projectile/mosin/obrez/isHandgun()
 	return TRUE //WHY NOT
 
-/obj/item/weapon/gun/projectile/mosin/obrez/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0, struggle = 0)
+/obj/item/weapon/gun/projectile/mosin/obrez/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(current_shell && current_shell.BB)
 		//explosion(src.loc,-1,1,2)
 		spark(user, 3, FALSE)
@@ -118,7 +120,7 @@
 		return
 	if(!T.density && !istype(T, /turf/space))
 		new /obj/effect/fire(T) //add some fire as an effect because low intensity liquid fuel looks weak
-		getFromPool(/obj/effect/decal/cleanable/liquid_fuel, T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the turf
+		new /obj/effect/decal/cleanable/liquid_fuel(T, 0.1, get_dir(T.loc, T)) //spawn some fuel at the tur)
 		T.hotspot_expose(500,500) //light it on fire
 		previousturf = null
 

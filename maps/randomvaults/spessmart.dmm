@@ -217,7 +217,7 @@
 "ei" = (/turf/simulated/floor{icon_state = "red"; dir = 5},/area/vault/supermarket/entrance)
 "ej" = (/obj/structure/bed/chair/comfy/black{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "redcorner"},/area/vault/supermarket/entrance)
 "ek" = (/obj/structure/bed/chair/comfy/beige{dir = 4},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
-"el" = (/obj/machinery/bot/cleanbot{name = "Roger WillClean"},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
+"el" = (/obj/machinery/bot/cleanbot{auto_patrol = 0; name = "Roger WillClean"},/turf/simulated/floor{icon_state = "bar"},/area/vault/supermarket/entrance)
 "em" = (/obj/effect/decal/cleanable/ash,/obj/effect/landmark/corpse/civilian{pixel_x = 4; pixel_y = -1},/obj/effect/landmark/corpse/civilian{pixel_x = 6; pixel_y = 3},/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
 "en" = (/obj/item/weapon/wrench,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
 "eo" = (/obj/effect/landmark/corpse/civilian,/turf/simulated/floor/plating/airless,/area/vault/supermarket/restricted)
@@ -295,7 +295,7 @@ aaaaaaaaaNaabMdBbWdFdGdHdIdxbWbWbWbWdJbWbWbWbWdndAdAdAdnbWabaaaaaaaaaaaa
 aaaaaaaaaNaNbMcabWdFdGdHdxdxdKdxdIdEdzdEdIdxdLdAdAdAdMdAbWabaaaaaaaaaaaa
 aaaaaaaaaNaabMdBbWdFdGdHdxdxbWdxdxdNdOdPdxdxbWdAdAdAdQdRbWabaaaaaaaaaaaa
 aaaaaaabbMbMbMdSbWdFdGdHdTdUbWdVdxdWdXdYdxdZbWdAdMdAdAeabWabaaaaaaaaaaaa
-aaaaaaabbMebbMecbWbWbWbWbWedbWeeefegehegeiejbWekdQdAeldAbWabaaaaaaaaaaaa
+aaaaaaabbMebbMecbWbWbWbWbWedbWeeefegehegeiejbWekdQeldAdAbWabaaaaaaaaaaaa
 aaaaaaabbMemeneoepbWeqereqeqbWesdxdTeteudxevbWdAdAdAdAdAbWabaaaaaaaaaaaa
 aaaaaaabbMbMbMbMbMbWewexeyezbWeAdxeBeCeDdxeEbWeFeGeHeIeJbWabaaaaaaaaaaaa
 aaaaaaababababababbWbWbWbWbWbWeKeLeMeKeNeOeKbWbWbWbWbWbWbWabaaaaaaaaaaaa

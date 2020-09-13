@@ -560,7 +560,7 @@ var/global/list/airalarm_presets = list(
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -700,7 +700,7 @@ var/global/list/airalarm_presets = list(
 	if(!frequency)
 		return
 
-	var/datum/signal/alert_signal = getFromPool(/datum/signal)
+	var/datum/signal/alert_signal = new /datum/signal
 	alert_signal.source = src
 	alert_signal.transmission_method = 1
 	var/area/this_area = get_area(src)
@@ -1059,7 +1059,7 @@ var/global/list/airalarm_presets = list(
 			if(W.is_screwdriver(user))  // Opening that Air Alarm up.
 				wiresexposed = !wiresexposed
 				to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-				playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				update_icon()
 				return
 
@@ -1069,8 +1069,8 @@ var/global/list/airalarm_presets = list(
 				buildstage = 1
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
-				playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
-				getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+				W.playtoolsound(src, 50)
+				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
 			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN))
@@ -1104,7 +1104,7 @@ var/global/list/airalarm_presets = list(
 
 			else if(iscrowbar(W))
 				to_chat(user, "You start prying out the circuit...")
-				playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				if(do_after(user, src, 20) && buildstage == 1)
 					to_chat(user, "You pry out the circuit!")
 					new /obj/item/weapon/circuitboard/air_alarm(get_turf(user))
@@ -1120,10 +1120,10 @@ var/global/list/airalarm_presets = list(
 				update_icon()
 				return
 
-			else if(iswrench(W))
+			else if(W.is_wrench(user))
 				to_chat(user, "You remove the air alarm assembly from the wall!")
 				new /obj/item/mounted/frame/alarm_frame(get_turf(user))
-				playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+				W.playtoolsound(src, 50)
 				qdel(src)
 				return
 
@@ -1256,7 +1256,7 @@ FIRE ALARM
 	if (W.is_screwdriver(user) && buildstage == 2)
 		wiresexposed = !wiresexposed
 		to_chat(user, "The wires have been [wiresexposed ? "exposed" : "unexposed"].")
-		playsound(src, 'sound/items/Screwdriver.ogg', 50, 1)
+		W.playtoolsound(src, 50)
 		update_icon()
 		return
 
@@ -1265,16 +1265,16 @@ FIRE ALARM
 			if(2)
 				if (ismultitool(W))
 					src.detecting = !( src.detecting )
-					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]reconnected [src]'s detecting unit.")
+					user.visible_message("<span class='attack'>[user] has [detecting ? "re" : "dis"]connected [src]'s detecting unit!</span>", "You have [detecting ? "re" : "dis"]connected [src]'s detecting unit.")
 					playsound(src, 'sound/items/healthanalyzer.ogg', 50, 1)
 				if(iswirecutter(W))
 					to_chat(user, "You begin to cut the wiring...")
-					playsound(src, 'sound/items/Wirecutter.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if (do_after(user, src,  50) && buildstage == 2 && wiresexposed)
 						buildstage=1
 						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 						update_icon()
-						getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+						new /obj/item/stack/cable_coil(get_turf(user), 5)
 			if(1)
 				if(iscablecoil(W))
 					var/obj/item/stack/cable_coil/coil = W
@@ -1289,7 +1289,7 @@ FIRE ALARM
 
 				else if(iscrowbar(W))
 					to_chat(user, "You start prying out the circuit...")
-					playsound(src, 'sound/items/Crowbar.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					if (do_after(user, src,  20) && buildstage == 1)
 						to_chat(user, "You pry out the circuit!")
 						new /obj/item/weapon/circuitboard/fire_alarm(get_turf(user))
@@ -1303,10 +1303,10 @@ FIRE ALARM
 					buildstage = 1
 					update_icon()
 
-				else if(iswrench(W))
+				else if(W.is_wrench(user))
 					to_chat(user, "You remove the fire alarm assembly from the wall!")
 					new /obj/item/mounted/frame/firealarm(get_turf(user))
-					playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+					W.playtoolsound(src, 50)
 					qdel(src)
 		return
 

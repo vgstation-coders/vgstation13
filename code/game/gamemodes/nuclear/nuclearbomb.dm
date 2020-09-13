@@ -83,7 +83,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(3)
-				if(istype(O,/obj/item/weapon/wrench))
+				if(O.is_wrench(user))
 
 					user.visible_message("[user] begins unwrenching the anchoring bolts on [src].", "You begin unwrenching the anchoring bolts...")
 
@@ -311,6 +311,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
 	return TRUE
+
 /obj/item/weapon/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."

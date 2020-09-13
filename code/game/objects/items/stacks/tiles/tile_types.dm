@@ -15,24 +15,24 @@
 /obj/item/stack/tile/ex_act(severity)
 	switch(severity)
 		if(1.0)
-			returnToPool(src)
+			qdel(src)
 			return
 		if(2.0)
 			if (prob(50))
-				returnToPool(src)
+				qdel(src)
 				return
 		if(3.0)
 			if (prob(5))
-				returnToPool(src)
+				qdel(src)
 				return
 		else
 	return
 
 /obj/item/stack/tile/blob_act()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/stack/tile/singularity_act()
-	returnToPool(src)
+	qdel(src)
 	return 2
 
 /*
@@ -102,9 +102,9 @@
 					qdel(L)
 
 /obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(iswrench(W))
+	if(W.is_wrench(user))
 		if(use(4))
-			playsound(src, 'sound/items/Ratchet.ogg', 50, 1)
+			W.playtoolsound(src, 50)
 			drop_stack(sheet_type, get_turf(user), 1, user)
 		else
 			to_chat(user, "<span class='warning'>You need at least 4 [src]\s to get a wooden plank back!</span>")

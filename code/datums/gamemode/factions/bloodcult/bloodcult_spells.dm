@@ -1,4 +1,4 @@
-var/list/uristrune_cache = list() 
+var/list/uristrune_cache = list()
 
 /spell/cult
 	panel = "Cult"
@@ -26,22 +26,22 @@ var/list/uristrune_cache = list()
 	var/obj/effect/rune/rune = null
 	var/datum/rune_spell/spell = null
 	var/continue_drawing = 0
-	var/blood_cost = 1	
+	var/blood_cost = 1
 
 /spell/cult/trace_rune/choose_targets(var/mob/user = usr)
 	return list(user)
-	
+
 /spell/cult/trace_rune/before_channel(mob/user)
 	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
 		continue_drawing = 0
 	else
 		spell = null
 	return 0
-	
+
 /spell/cult/trace_rune/spell_do_after(var/mob/user, var/delay, var/numticks = 3)
 	return ..()
 	//Each variant of rune is handled in their respective class.
-	
+
 /spell/cult/trace_rune/cast(var/list/targets, var/mob/living/carbon/user)
 	if(rune)
 		if(rune.word1 && rune.word2 && rune.word3)
@@ -50,10 +50,12 @@ var/list/uristrune_cache = list()
 		else if(rune.runeset_identifier != runeset_identifier)
 			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
 			return
-	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word]) > 1)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	if(write_rune_word(get_turf(user), data["blood"], word = rune_set.words[word], caster = user) > 1)
 		continue_drawing = 1
-		perform(user) //Recursion for drawing runes in a row with tome. 
-			
+
+		perform(user) //Recursion for drawing runes in a row with tome.
+
 ////////////////////BLOOD CULT DRAW RUNE////////////////////////
 
 /spell/cult/trace_rune/blood_cult
@@ -63,7 +65,7 @@ var/list/uristrune_cache = list()
 	cast_delay = 15
 
 	runeset_identifier = "blood_cult"
-	
+
 /spell/cult/trace_rune/blood_cult/before_channel(mob/user)
 	if(continue_drawing) //Resets the current spell (tome selection) if continue_drawing is not 1.
 		continue_drawing = 0
@@ -90,7 +92,7 @@ var/list/uristrune_cache = list()
 		return 0
 
 	var/turf/T = get_turf(user)
-	rune = locate() in T 
+	rune = locate() in T
 
 	if(rune)
 		if (rune.invisibility == INVISIBILITY_OBSERVER)
@@ -99,13 +101,13 @@ var/list/uristrune_cache = list()
 		else if (rune.word1 && rune.word2 && rune.word3)
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return 0
-			
+
 	var/obj/item/weapon/tome/tome = locate() in user.held_items
 
 	if(spell) //If player already begun drawing a rune with help of a tome
 		if(!tome)
 			to_chat(user, "<span class='warning'>Without reading the tome, you have trouble continuing to draw the arcane words.</span>")
-			return 0		
+			return 0
 		else
 			var/datum/runeword/blood_cult/instance
 			if(!rune)
@@ -141,7 +143,7 @@ var/list/uristrune_cache = list()
 			playsound(user, "pageturn", 50, 1, -5)
 			tome.state = TOME_OPEN
 		var/spell_name = input(user,"Draw a rune with the help of the Arcane Tome.", "Trace Complete Rune", null) as null|anything in available_runes
-		spell = available_runes[spell_name]	
+		spell = available_runes[spell_name]
 		var/datum/runeword/blood_cult/instance
 		if(!rune)
 			instance = initial(spell.word1)
@@ -159,15 +161,16 @@ var/list/uristrune_cache = list()
 		else
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return 0
-		word = initial(instance.english)		
+		word = initial(instance.english)
 
-		
+
 	else //Otherwise they want to begin drawing each word manually
-		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in global_runesets[runeset_identifier].words
+		var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+		word = input(user,"Choose a word to add to the rune.", "Trace Rune Word", null) as null|anything in rune_set.words
 	if (!word)
 		return 0
 
-	data = use_available_blood(user, blood_cost) 
+	data = use_available_blood(user, blood_cost)
 	if (data[BLOODCOST_RESULT] == BLOODCOST_FAILURE)
 		return 0
 
@@ -181,7 +184,9 @@ var/list/uristrune_cache = list()
 				"<span class='warning'>You hear some chanting.</span>")
 
 	if(!user.checkTattoo(TATTOO_SILENT))
-		user.whisper("...[global_runesets[runeset_identifier].words[word].rune]...")
+		var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+		var/datum/runeword/rune_word = rune_set.words[word]
+		user.whisper("...[rune_word.rune]...")
 	return ..()
 
 /spell/cult/trace_rune/blood_cult/cast(var/list/targets, var/mob/living/carbon/user)
@@ -192,9 +197,10 @@ var/list/uristrune_cache = list()
 		else if(rune.runeset_identifier != runeset_identifier)
 			to_chat(user, "<span class='warning'>This type of rune is incompatible with the one on the ground.</span>")
 			return
-	if(write_rune_word(get_turf(user), data["blood"], word = global_runesets[runeset_identifier].words[word]) > 1)
+	var/datum/runeset/rune_set = global_runesets[runeset_identifier]
+	if(write_rune_word(get_turf(user), data["blood"], word = rune_set.words[word], caster = user) > 1)
 		continue_drawing = 1
-		perform(user) //Recursion for drawing runes in a row with tome. 
+		perform(user) //Recursion for drawing runes in a row with tome.
 	else
 		var/obj/item/weapon/tome/tome = locate() in user.held_items
 		if(tome && tome.state == TOME_OPEN)

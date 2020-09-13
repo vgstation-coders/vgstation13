@@ -76,10 +76,10 @@
 		return terminal.surplus()
 	return 0
 
-/obj/machinery/power/battery_port/crowbarDestroy(mob/user)
+/obj/machinery/power/battery_port/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(connected)
 		to_chat(user, "You can't disconnect \the [src] while it has \the [connected] attached.")
-		return -1
+		return FALSE
 	return ..()
 
 /obj/machinery/power/battery_port/proc/connect_battery(obj/machinery/power/battery/portable/portable)

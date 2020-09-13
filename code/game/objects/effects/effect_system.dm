@@ -180,7 +180,7 @@ steam.start() -- spawns the effect
 /obj/effect/effect/sparks/process()
 	if(energy==0)
 		processing_objects.Remove(src)
-		returnToPool(src)
+		qdel(src)
 		return
 	else
 		step(src,move_dir)
@@ -210,7 +210,7 @@ steam.start() -- spawns the effect
 	for (var/i = 1 to number)
 		var/nextdir=pick_n_take(directions)
 		if(nextdir)
-			var/obj/effect/effect/sparks/sparks = getFromPool(/obj/effect/effect/sparks, location)
+			var/obj/effect/effect/sparks/sparks = new /obj/effect/effect/sparks(location)
 			sparks.start(nextdir)
 
 // This sparks.
@@ -245,7 +245,7 @@ steam.start() -- spawns the effect
 	spawn(time_to_live)
 		qdel(src)
 
-/obj/effect/effect/smoke/Crossed(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/Crossed(mob/living/carbon/M)
 	..()
 	if(istype(M))
 		affect(M)
@@ -305,7 +305,7 @@ steam.start() -- spawns the effect
 	for(var/mob/living/carbon/M in get_turf(src))
 		affect(M)
 
-/obj/effect/effect/smoke/sleepy/affect(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/sleepy/affect(mob/living/carbon/M)
 	if (!..())
 		return 0
 
@@ -355,7 +355,11 @@ steam.start() -- spawns the effect
 		return 0
 
 	R.burn_skin(2)
-	M.bodytemperature = min(60, M.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
+	R.bodytemperature = min(60, R.bodytemperature + (30 * TEMPERATURE_DAMAGE_COEFFICIENT))
+
+
+/obj/effect/effect/smoke/transparent
+	opacity = FALSE
 
 /////////////////////////////////////////////
 // Smoke spread
@@ -417,6 +421,9 @@ steam.start() -- spawns the effect
 /datum/effect/effect/system/smoke_spread/heat
 	smoke_type = /obj/effect/effect/smoke/heat
 
+/datum/effect/effect/system/smoke_spread/transparent
+	smoke_type = /obj/effect/effect/smoke/transparent
+
 /////////////////////////////////////////////
 // Chem smoke
 /////////////////////////////////////////////
@@ -438,7 +445,7 @@ steam.start() -- spawns the effect
 
 	return
 
-/obj/effect/effect/smoke/chem/affect(mob/living/carbon/M as mob )
+/obj/effect/effect/smoke/chem/affect(mob/living/carbon/M)
 	reagents.reaction(M)
 
 /datum/effect/effect/system/smoke_spread/chem
@@ -558,7 +565,7 @@ steam.start() -- spawns the effect
 	icon_state = "blank"
 	spawn( 20 )
 		if(src)
-			returnToPool(src)
+			qdel(src)
 
 /obj/effect/effect/trails/ion
 	base_name = "ion"
@@ -584,7 +591,7 @@ steam.start() -- spawns the effect
 			var/turf/T = get_turf(src.holder)
 			if(T != src.oldposition)
 				if(istype(T, /turf/space))
-					var/obj/effect/effect/trails/I = getFromPool(trail_type,src.oldposition)
+					var/obj/effect/effect/trails/I = new trail_type(src.oldposition)
 					src.oldposition = T
 					I.dir = src.holder.dir
 					I.Play()
@@ -615,26 +622,21 @@ steam.start() -- spawns the effect
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, SOUTH)
 						src.oldloc = get_step(oldposition,EAST)
-						//src.oldloc = get_step(oldloc, SOUTH)
 					if(SOUTH) // More difficult, offset to the north!
 						src.oldposition = get_step(holder,NORTH)
 						src.oldposition = get_step(oldposition,NORTH)
 						src.oldloc = get_step(oldposition,EAST)
-						//src.oldloc = get_step(oldloc,NORTH)
 					if(EAST) // Just one to the north should suffice
 						src.oldposition = T
 						src.oldposition = get_step(oldposition, WEST)
 						src.oldloc = get_step(oldposition,NORTH)
-						//src.oldloc = get_step(oldloc,WEST)
 					if(WEST) // One to the east and north from there
 						src.oldposition = get_step(holder,EAST)
 						src.oldposition = get_step(oldposition,EAST)
 						src.oldloc = get_step(oldposition,NORTH)
-						//src.oldloc = get_step(oldloc,EAST)
 				if(istype(T, /turf/space))
-					var/obj/effect/effect/trails/ion/I = getFromPool(/obj/effect/effect/trails/ion,src.oldposition)
-					var/obj/effect/effect/trails/ion/II = getFromPool(/obj/effect/effect/trails/ion,src.oldloc)
-					//src.oldposition = T
+					var/obj/effect/effect/trails/ion/I = new /obj/effect/effect/trails/ion(src.oldposition)
+					var/obj/effect/effect/trails/ion/II = new /obj/effect/effect/trails/ion(src.oldloc)
 					I.dir = src.holder.dir
 					II.dir = src.holder.dir
 					flick("ion_fade", I)
@@ -643,9 +645,9 @@ steam.start() -- spawns the effect
 					II.icon_state = "blank"
 					spawn( 20 )
 						if(I)
-							returnToPool(I)
+							qdel(I)
 						if(II)
-							returnToPool(II)
+							qdel(II)
 
 			spawn(2)
 				if(src.on)
@@ -715,7 +717,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-	var/lowest_temperature = 0
+	var/lowest_temperature = T0C
 
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
@@ -752,31 +754,22 @@ steam.start() -- spawns the effect
 	if(ccolor)
 		icon += ccolor
 	var/savedtemp
-	//playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
 	if(reagents.has_reagent(WATER))
 		var/turf/simulated/T = get_turf(src)
 		var/datum/gas_mixture/old_air = T.return_air()
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.temperature = max(min(lowertemp.temperature - 500, lowertemp.temperature / 2), 1) //Reaching exactly 0K causes problems
-			lowertemp.react()
+			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/10)))
 			T.assume_air(lowertemp)
 	spawn(3)
 		process()
 	spawn(120)
 		processing_objects.Remove(src)
 		sleep(30)
-		var/turf/simulated/T = get_turf(src)
-		var/datum/gas_mixture/local_air = T.return_air()
 		flick("[icon_state]-disolve", src)
-		if((local_air.temperature < lowest_temperature) && (savedtemp > lowest_temperature)) //ie, we have over-chilled
-			local_air.temperature = lowest_temperature
-		else if((local_air.temperature < lowest_temperature) && (savedtemp < lowest_temperature) && savedtemp) //ie it chilled when it shouldn't have
-			local_air.temperature = savedtemp
 		sleep(5)
 		qdel(src)
-	AddToProfiler()
 
 /obj/effect/effect/foam/fire/process()
 	if(--amount < 0)
@@ -945,7 +938,7 @@ steam.start() -- spawns the effect
 		var/obj/item/weapon/grab/G = I
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
-		returnToPool(I)
+		qdel(I)
 		qdel(src)
 		return
 
@@ -999,7 +992,7 @@ steam.start() -- spawns the effect
 	else
 		to_chat(user, "<span class='notice'>You hit \the [src] but bounce off it.</span>")
 
-/turf/simulated/floor/foamedmetal/attackby(obj/item/C as obj, mob/living/user as mob)
+/turf/simulated/floor/foamedmetal/attackby(obj/item/C, mob/living/user)
 	if(!(locate(/obj/structure/lattice) in contents))
 		if(istype(C, /obj/item/stack/rods))
 			return
@@ -1011,7 +1004,7 @@ steam.start() -- spawns the effect
 		var/obj/item/weapon/grab/G = C
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
-		returnToPool(C)
+		qdel(C)
 		src.ChangeTurf(get_base_turf(src.z))
 		return
 
@@ -1086,20 +1079,6 @@ steam.start() -- spawns the effect
 		heavy = round(min(5, range * 0.5)) // clamps to 5 heavy range for grenades
 		light = min(7, range) // clamps to 7 light range for grenades
 		flash = range * 1.5
-		/*
-		if (round(amount/12) > 0)
-			devastation = min (MAX_EXPLOSION_RANGE, devastation + round(amount/12))
-
-		if (round(amount/6) > 0)
-			heavy = min (MAX_EXPLOSION_RANGE, heavy + round(amount/6))
-
-		if (round(amount/3) > 0)
-			light = min (MAX_EXPLOSION_RANGE, light + round(amount/3))
-
-		if (flash && flashing_factor)
-			flash += (round(amount/4) * flashing_factor)
-		*/
-
 		for(var/mob/M in viewers(8, location))
 			to_chat(M, "<span class='warning'>The solution violently explodes.</span>")
 

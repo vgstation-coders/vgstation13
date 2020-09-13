@@ -21,10 +21,6 @@
 	master = null
 	..()
 
-/obj/abstract/screen/resetVariables()
-	..("icon","icon_state","name","master", "screen_loc", args)
-	animate(src)
-
 /obj/abstract/screen/text
 	icon = null
 	icon_state = null
@@ -158,7 +154,14 @@
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
-		return 1
+		if(istype(master,/obj/item/weapon/storage)) //should always be true, but sanity
+			var/obj/item/weapon/storage/S = master
+			if(!S.distance_interact(usr))
+				return 1
+			//else... continue onward to master.attackby
+		else
+			//master isn't storage, exit
+			return 1
 	if(master)
 		var/obj/item/I = usr.get_active_hand()
 		if(I)
@@ -303,6 +306,9 @@
 /obj/abstract/screen/Click(location, control, params)
 	if(!usr)
 		return 1
+
+	if(map.special_ui(src,usr))
+		return 1 //exit early, we found our UI on map
 
 	switch(name)
 		if("toggle")
@@ -492,10 +498,10 @@
 				var/mob/living/silicon/ai/AI = usr
 				AI.make_announcement()
 
-		if("Call Emergency Shuttle")
+		if("(Re)Call Emergency Shuttle")
 			if(isAI(usr))
 				var/mob/living/silicon/ai/AI = usr
-				AI.ai_call_shuttle()
+				AI.ai_call_or_recall_shuttle()
 
 		if("State Laws")
 			if(isAI(usr))
@@ -789,7 +795,7 @@
 /client/proc/reset_screen()
 	for(var/obj/abstract/screen/objects in src.screen)
 		if(!objects.globalscreen)
-			returnToPool(objects)
+			qdel(objects)
 	src.screen = null
 
 /obj/abstract/screen/acidable()

@@ -3,7 +3,7 @@
 var/req_console_assistance = list()
 var/req_console_supplies = list()
 var/req_console_information = list()
-var/list/obj/machinery/requests_console/allConsoles = list()
+var/list/obj/machinery/requests_console/requests_consoles = list()
 
 /obj/machinery/requests_console
 	name = "requests console"
@@ -69,9 +69,13 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 			icon_state = "req_comp0"
 
 /obj/machinery/requests_console/New()
-	allConsoles.Add(src)
+	requests_consoles += src
 	set_department(department,departmentType)
 	return ..()
+
+/obj/machinery/requests_console/Destroy()
+	requests_consoles -= src
+	..()
 
 /obj/machinery/requests_console/proc/set_department(var/name, var/D)
 	department = name
@@ -182,7 +186,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 			if(8)	//view messages
 				if(!isAdminGhost(user)) //Do not clear if admin
-					for (var/obj/machinery/requests_console/Console in allConsoles)
+					for (var/obj/machinery/requests_console/Console in requests_consoles)
 						if (Console.department == department)
 							Console.newmessagepriority = 0
 							Console.icon_state = "req_comp0"
@@ -301,7 +305,7 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 
 			if(pass)
 
-				for (var/obj/machinery/requests_console/Console in allConsoles)
+				for (var/obj/machinery/requests_console/Console in requests_consoles)
 					if (ckey(Console.department) == ckey(href_list["department"]))
 						screen = 6
 						switch(priority)
@@ -447,9 +451,9 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				icon_state="req_comp_open"
 		else
 			to_chat(user, "You can't do much with that.")
-	if(iswrench(O) && open && !departmentType)
+	if(O.is_wrench(user) && open && !departmentType)
 		user.visible_message("<span class='notice'>[user] disassembles the [src]!</span>", "<span class='notice'>You disassemble the [src]</span>")
-		playsound(src, 'sound/items/Ratchet.ogg', 100, 1)
+		O.playtoolsound(src, 100)
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return

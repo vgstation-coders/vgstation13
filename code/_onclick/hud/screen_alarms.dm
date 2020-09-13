@@ -43,7 +43,7 @@
 		var/old_plane = new_master.plane
 		new_master.layer = FLOAT_LAYER
 		new_master.plane = FLOAT_PLANE
-		new_alert.overlays. += new_master
+		new_alert.overlays += new_master
 		new_master.layer = old_layer
 		new_master.plane = old_plane
 		new_alert.master = new_master

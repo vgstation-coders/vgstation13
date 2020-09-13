@@ -3,7 +3,7 @@
 	name = "Pain Mirror"
 	desc = "An unholy charm that lasts for 5 seconds. While active, it redirects all incoming damage to everybody around you, leaving you unharmed."
 	user_type = USER_TYPE_WIZARD
-	specialization = DEFENSIVE
+	specialization = SSDEFENSIVE
 
 	school = "necromancy"
 	charge_max = 90 SECONDS
@@ -39,18 +39,17 @@
 		for(var/mob/living/T in view(L))
 			if(!T.isDead() && (T != L))
 				to_chat(T, "<span class='sinister'>An unholy charm binds your life to [L]. While the spell is active, any pain \he receive\s will be redirected to you.</span>")
-		var/event_key = L.on_damaged.Add(src, "reflect")
+		L.lazy_register_event(/lazy_event/on_damaged, src, .proc/reflect)
 		L.overlays.Add(user_overlay)
 		playsound(L, 'sound/effects/vampire_intro.ogg', 80, 1, "vary" = 0)
 
 		spawn(duration)
 			to_chat(L, "<span class='sinister'>Your life essence is no longer bound to this plane. You won't reflect received damage to your enemies anymore.</span>")
-			L.on_damaged.Remove(event_key)
+			L.lazy_unregister_event(/lazy_event/on_damaged, src, .proc/reflect)
 			L.overlays.Remove(user_overlay)
 
-/spell/mirror_of_pain/proc/reflect(list/arguments)
-	var/damage_type = arguments["type"]
-	var/amount = arguments["amount"]
+/spell/mirror_of_pain/proc/reflect(kind, amount)
+	var/damage_type = kind
 
 	if(amount <= 0)
 		return

@@ -210,3 +210,7 @@
 	if(A)
 		for(var/obj/effect/beam/B in src)
 			B.Crossed(A)
+
+/turf/space/can_place_cables()
+	var/obj/structure/catwalk/support = locate() in src
+	return !isnull(support)

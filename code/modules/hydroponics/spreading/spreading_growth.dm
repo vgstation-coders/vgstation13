@@ -17,7 +17,7 @@
 		if(locate(/obj/effect/plantsegment) in T.contents)
 			continue
 		if(T.density)
-			if(!isnull(seed.chems[PHENOL]))
+			if(seed.chems && !isnull(seed.chems[PHENOL]))
 				spawn(rand(5,25))
 					T.ex_act(prob(80) ? 3 : 2)
 			continue
