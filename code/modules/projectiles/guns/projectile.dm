@@ -180,7 +180,7 @@
 			silenced = A	//dodgy?
 			w_class = W_CLASS_MEDIUM
 			if(silencer_offset.len)
-				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "[A.name]_mounted")
+				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "[A.icon_state]_mounted")
 				silence_overlay.pixel_x += silencer_offset[SILENCER_OFFSET_X]
 				silence_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
 				overlays += silence_overlay
@@ -314,7 +314,7 @@
 //			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
 		var/obj/item/gun_part/silencer/A = silenced
-		to_chat(user, "<span class='warning'>It has a [A.name] attached to the barrel.</span>")
+		to_chat(user, "<span class='warning'>It has \a [A.name] attached to the barrel.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0
@@ -347,7 +347,7 @@
 	if(silenced)
 		var/obj/item/gun_part/silencer/A = silenced
 		for(var/image/ol in gun_part_overlays)
-			if(ol.icon_state == "[A.name]_mounted")
+			if(ol.icon_state == "[A.icon_state]_mounted")
 				overlays -= ol
 				gun_part_overlays -= ol
 		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")

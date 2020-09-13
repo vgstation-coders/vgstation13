@@ -125,10 +125,10 @@
 	if(silenced)
 		var/obj/item/gun_part/silencer/A = silenced
 		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/A.mute_multi, 1)
+			playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/A.mute_multi, 1)
-		if(A.mute_multi <= 1)
+			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
+		if(A.volume_mult <= 1)
 			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
 			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
 			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
@@ -359,9 +359,9 @@
 			if(silenced)
 				var/obj/item/gun_part/silencer/A = silenced
 				if(fire_sound)
-					playsound(user, fire_sound, fire_volume/A.mute_multi, 1)
+					playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 				else if (in_chamber.fire_sound)
-					playsound(user, in_chamber.fire_sound, fire_volume/A.mute_multi, 1)
+					playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 			else
 				if(fire_sound)
 					playsound(user, fire_sound, fire_volume, 1)

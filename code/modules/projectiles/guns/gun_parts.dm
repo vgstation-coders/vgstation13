@@ -15,7 +15,7 @@
 	name = "silencer"
 	desc = "Suppresses the muzzle report of the weapon, making it harder to detect visibly and audibly."
 	icon_state = "silencer"
-	var/mute_multi = 5 //if the number is bigger than 1, the gunshot sound is quiter, works the other way around too
+	var/volume_mult = 5 //if the number is bigger than 1, the gunshot sound is quieter, works the other way around too
 
 /obj/item/gun_part/scope
 	name = "telescopic sight"
@@ -37,4 +37,4 @@
 	name = "loudencer"
 	desc = "Enhances the muzzle report of the weapon, making it harder to hear anything other than gunshots."
 	icon_state = "loudencer"
-	mute_multi = 0.2
+	volume_mult = 0.2
