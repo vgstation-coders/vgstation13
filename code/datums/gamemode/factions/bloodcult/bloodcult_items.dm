@@ -1134,11 +1134,13 @@ var/list/arcane_tomes = list()
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
 /obj/item/clothing/head/culthood/old
+	name = "forgotten cult hood"
 	icon_state = "culthood_old"
 	item_state = "culthood_old"
 	species_fit = list()
 
 /obj/item/clothing/suit/cultrobes/old
+	name = "forgotten cult robes"
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
 	species_fit = list()
