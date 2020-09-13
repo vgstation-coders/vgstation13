@@ -61,7 +61,7 @@
 	var/image/menu_holder
 	var/finished = FALSE
 
-	var/datum/callback/custom_check
+	var/callback/custom_check
 	var/next_check = 0
 	var/check_delay = DEFAULT_CHECK_DELAY
 
@@ -317,7 +317,7 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/datum/callback/custom_check,var/uniqueid,var/radius,var/min_angle)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle)
 	if(!user || !anchor || !length(choices))
 		return
 

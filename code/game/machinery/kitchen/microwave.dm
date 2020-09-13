@@ -539,7 +539,7 @@
 			list("Examine", "radial_examine")
 		)
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = CALLBACK(src, .proc/radial_check, user))
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 		if(!radial_check(usr))
 			return
 

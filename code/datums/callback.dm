@@ -1,15 +1,15 @@
-/datum/callback
+/callback
 	var/datum/thing_to_call
 	var/proc_to_call
 	var/list/arguments
 
-/datum/callback/New(datum/thing_to_call, proc_to_call, ...)
+/callback/New(datum/thing_to_call, proc_to_call, ...)
 	src.thing_to_call = thing_to_call
 	src.proc_to_call = proc_to_call
 	if(length(args) > 2)
 		arguments = args.Copy(3)
 
-/datum/callback/proc/invoke(...)
+/callback/proc/invoke(...)
 	if(!thing_to_call)
 		return
 
@@ -24,7 +24,7 @@
 		return call(proc_to_call)(arglist(calling_arguments))
 	return call(thing_to_call, proc_to_call)(arglist(calling_arguments))
 
-/datum/callback/proc/invoke_async(...)
+/callback/proc/invoke_async(...)
 	set waitfor = FALSE
 	invoke(arglist(args))
 

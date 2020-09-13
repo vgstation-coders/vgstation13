@@ -342,7 +342,7 @@
 			var/event/menu_event = new(owner = user)
 			menu_event.Add(src, "radial_check_handler")
 
-			var/task = show_radial_menu(usr,loc,choices,custom_check = CALLBACK(src, .proc/radial_check, user))
+			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 			if(!radial_check(user))
 				return
 			switch(task)
