@@ -1008,8 +1008,6 @@ var/list/cyborg_list = list()
 	update_fire()
 	if(!stat && cell != null)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)
-		if(isshell(src))	//Make them white.
-			eyesicon.Blend(rgb(255,255,255), ICON_ADD)
 		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
 
@@ -1433,3 +1431,13 @@ var/list/cyborg_list = list()
 		log_game("[key_name(user)] emagged cyborg shell [key_name(src)].  Shell destroyed.")
 	return FALSE
 
+/mob/living/silicon/robot/shell/updateicon()
+	..()
+	overlays.Cut()
+	if(!stat && cell != null)
+		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
+		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
+		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
+		eyes.plane = overlay_plane
+
+		overlays += eyes
