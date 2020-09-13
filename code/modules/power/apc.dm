@@ -941,10 +941,9 @@
 						src.malfai = usr:parent
 					else
 						src.malfai = usr
-					if(malfai.deployed)
-						to_chat(malfai.shell, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
-					else
-						to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					var/target_malf = malfai.shell || malfai
+						to_chat(target_malf, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+						
 					update_icon()
 
 	else if (href_list["occupyapc"])
