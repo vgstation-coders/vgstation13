@@ -20,7 +20,7 @@
 			slot_belt_str = /obj/item/device/radio,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/trader,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/trader,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 		/datum/species/mushroom = list(
 			slot_w_uniform_str = /obj/item/clothing/under/stilsuit,

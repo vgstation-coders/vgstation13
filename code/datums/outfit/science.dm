@@ -34,7 +34,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/brown,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science/rd,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science/rd,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -145,7 +145,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
 			)
@@ -207,7 +207,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science/roboticist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science/roboticist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 

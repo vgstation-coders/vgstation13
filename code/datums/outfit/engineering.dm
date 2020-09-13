@@ -40,7 +40,7 @@
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/ce,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -121,7 +121,7 @@
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/full,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -181,7 +181,7 @@
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/atmostech,
 			slot_gloves_str = /obj/item/clothing/gloves/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/engineer/atmos,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -236,7 +236,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mechanic,
 			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mechanic,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 

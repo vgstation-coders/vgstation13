@@ -36,7 +36,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
