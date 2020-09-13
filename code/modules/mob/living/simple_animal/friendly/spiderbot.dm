@@ -11,6 +11,7 @@
 	var/obj/item/weapon/cell/cell = null
 	var/obj/machinery/camera/camera = null
 	var/obj/item/device/mmi/mmi = null
+	var/mob/living/simple_animal/mouse/mouse = null
 	var/list/req_access = list(access_robotics) //Access needed to pop out the brain.
 
 	name = "Spider-bot"
@@ -101,8 +102,8 @@
 			to_chat(user, "Need more welding fuel!")
 			return
 	else if(istype(O, /obj/item/weapon/card/id)||istype(O, /obj/item/device/pda))
-		if (!mmi)
-			to_chat(user, "<span class='warning'>There's no reason to swipe your ID - the spiderbot has no brain to remove.</span>")
+		if (!mmi && !mouse)
+			to_chat(user, "<span class='warning'>There's no reason to swipe your ID - the spiderbot has nothing to remove.</span>")
 			return 0
 
 		var/obj/item/weapon/card/id/id_card
@@ -114,7 +115,10 @@
 			id_card = pda.id
 
 		if(access_robotics in id_card.access)
-			to_chat(user, "<span class='notice'>You swipe your access card and pop the brain out of [src].</span>")
+			if(mouse)
+				to_chat(user, "<span class='notice'>You swipe your access card and pop the mouse out of [src].</span>")
+			else
+				to_chat(user, "<span class='notice'>You swipe your access card and pop the brain out of [src].</span>")
 			eject_brain()
 
 			if(held_item)
@@ -139,20 +143,26 @@
 	else
 		return ..()
 
+/mob/living/simple_animal/spiderbot/attack_animal(var/mob/user as mob)
+	if(istype(user,/mob/living/simple_animal/mouse) && !(src.mmi || src.mouse))
+		visible_message("<span class='warning'>The [user.name] climbs into the spider-bot chassis!</span>")
+		user.mind.transfer_to(src)
+		src.name = "Spider-bot ([user.name])"
+		src.mouse = user
+		add_language(LANGUAGE_MOUSE)
+		user.forceMove(src)
+		src.update_icon()
+	else
+		..()
+
 /mob/living/simple_animal/spiderbot/proc/transfer_personality(var/obj/item/device/mmi/M as obj)
-
-
-		src.mind = M.brainmob.mind
-		src.mind.key = M.brainmob.key
-		src.ckey = M.brainmob.ckey
-		src.name = "Spider-bot ([M.brainmob.name])"
+	src.mind = M.brainmob.mind
+	src.mind.key = M.brainmob.key
+	src.ckey = M.brainmob.ckey
+	src.name = "Spider-bot ([M.brainmob.name])"
 
 /mob/living/simple_animal/spiderbot/proc/explode() //When emagged.
-	for(var/mob/M in viewers(src, null))
-		if ((M.client && !( M.blinded )))
-			M.show_message("<span class='warning'>[src] makes an odd warbling noise, fizzles, and explodes.</span>")
 	explosion(get_turf(loc), -1, -1, 3, 5)
-	eject_brain()
 	death()
 
 /mob/living/simple_animal/spiderbot/update_icon()
@@ -163,21 +173,31 @@
 		if(istype(mmi, /obj/item/device/mmi/posibrain))
 			icon_state = "spiderbot-chassis-posi"
 			icon_living = "spiderbot-chassis-posi"
-
+	else if(mouse)
+		var/color = mouse._color
+		icon_state = "spiderbot-chassis-mouse-[color]"
+		icon_living = "spiderbot-chassis-mouse-[color]"
 	else
 		icon_state = "spiderbot-chassis"
 		icon_living = "spiderbot-chassis"
 
 /mob/living/simple_animal/spiderbot/proc/eject_brain()
+	var/turf/T = get_turf(src)
 	if(mmi)
-		var/turf/T = get_turf(loc)
 		if(T)
 			mmi.forceMove(T)
 		if(mind)
 			mind.transfer_to(mmi.brainmob)
 		mmi = null
-		src.name = "Spider-bot"
-		update_icon()
+	if(mouse)
+		if(T)
+			mouse.forceMove(T)
+			mind.transfer_to(mouse)
+			mouse = null
+			remove_language(LANGUAGE_MOUSE)
+
+	src.name = "Spider-bot"
+	update_icon()
 
 /mob/living/simple_animal/spiderbot/Destroy()
 	eject_brain()
@@ -200,6 +220,9 @@
 		held_item.forceMove(src.loc)
 		held_item = null
 
+	visible_message("<span class='warning'>The spider-bot explodes!</span>")
+	if(mouse)
+		visible_message("<span class='warning'>The [mouse.name] springs free of the wreckage!</span>")
 	robogibs(src.loc, virus2)
 	qdel(src)
 
