@@ -303,7 +303,7 @@
 	to_bind.lazy_register_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
 	bound_mind = to_bind
 
-/obj/item/phylactery/proc/follow_mind()
+/obj/item/phylactery/proc/follow_mind(datum/mind/mind)
 	unbind()
 	bind(bound_mind.current)
 	update_icon()
