@@ -314,7 +314,7 @@
 //			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
 		var/obj/item/gun_part/silencer/A = silenced
-		to_chat(user, "<span class='warning'>It has \a [A.name] attached to the barrel.</span>")
+		to_chat(user, "<span class='warning'>It has \a [A] attached to the barrel.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0
