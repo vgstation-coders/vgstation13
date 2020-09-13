@@ -481,7 +481,6 @@
 	responsive_reagent = POTASSIUM
 
 /datum/find/cultrobes/spawn_item()
-	var/list/possible_spawns = list()
 
 	//75% chance to get a headgear
 	//25% chance to get a suit
