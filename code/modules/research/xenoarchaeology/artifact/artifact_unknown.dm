@@ -1,4 +1,6 @@
 var/list/excavated_large_artifacts = list()
+var/list/destroyed_large_artifacts = list()
+var/list/razed_large_artifacts = list()//destroyed while still inside a rock wall/boulder
 
 /obj/machinery/artifact
 	name = "alien artifact"
@@ -149,6 +151,7 @@ var/list/excavated_large_artifacts = list()
 
 	src.add_fingerprint(user)
 	to_chat(user, "<b>You touch [src].</b>")
+	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
@@ -223,8 +226,6 @@ var/list/excavated_large_artifacts = list()
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
 	qdel(on_beam); on_beam = null
-
-	excavated_large_artifacts -= artifact_id
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
