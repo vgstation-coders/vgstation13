@@ -559,12 +559,9 @@ var/list/cyborg_list = list()
 				if(prob(50))
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].")
-					if(isshell(src))	//Putting this here would be cleaner than shoving it in a child proc
-						gib()
-						log_game("[key_name(user)] emagged cyborg shell [key_name(src)].  Shell destroyed.")
-						return FALSE
 					sleep(6)
-					SetEmagged(TRUE)
+					if(!SetEmagged(TRUE))
+						return
 					SetLockdown(TRUE)
 					lawupdate = FALSE
 					disconnect_AI()
@@ -1245,6 +1242,7 @@ var/list/cyborg_list = list()
 	if(hud_used)
 		hud_used.update_robot_modules_display()
 	update_icons()
+	return new_state
 
 
 /mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE)
@@ -1428,4 +1426,10 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/disconnect_AI()
 	to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Connection to cyborg shell has been cut.</span>")
 	SetLockdown(TRUE)
+
+/mob/living/silicon/robot/shell/SetEmagged(var/new_state)
+	if(new_state)
+		gib()
+		log_game("[key_name(user)] emagged cyborg shell [key_name(src)].  Shell destroyed.")
+	return FALSE
 
