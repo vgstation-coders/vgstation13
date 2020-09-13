@@ -560,8 +560,7 @@ var/list/cyborg_list = list()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].")
 					sleep(6)
-					if(!SetEmagged(TRUE))
-						return
+					SetEmagged(TRUE)						return
 					SetLockdown(TRUE)
 					lawupdate = FALSE
 					disconnect_AI()
@@ -1240,7 +1239,6 @@ var/list/cyborg_list = list()
 	if(hud_used)
 		hud_used.update_robot_modules_display()
 	update_icons()
-	return new_state
 
 
 /mob/living/silicon/robot/proc/SetLockdown(var/state = TRUE)
@@ -1425,11 +1423,36 @@ var/list/cyborg_list = list()
 	to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Connection to cyborg shell has been cut.</span>")
 	SetLockdown(TRUE)
 
-/mob/living/silicon/robot/shell/SetEmagged(var/new_state)
-	if(new_state)
-		gib()
-		log_game("AI-Cyborg shell [key_name(src)] was emagged and destroyed.")
-	return FALSE
+/mob/living/silicon/robot/shell/emag_act(mob/user as mob)
+	if(user != src)
+		spark(src, 5, FALSE)
+		if(!opened)
+			if(locked)
+				if(prob(90))
+					to_chat(user, "You emag the cover lock.")
+					locked = FALSE
+				else
+					to_chat(user, "You fail to emag the cover lock.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+			else
+				to_chat(user, "The cover is already open.")
+		else
+			if(emagged)
+				return TRUE
+			if(wiresexposed)
+				to_chat(user, "The wires get in your way.")
+			else
+				if(prob(50))
+					to_chat(user, "You emag [src]'s interface")
+					message_admins("[key_name_admin(user)] emagged AI-Cyborg shell [key_name_admin(src)] and destroyed it.")
+					sleep(6)
+					gib()
+				else
+					to_chat(user, "You fail to unlock [src]'s interface.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+	return TRUE
 
 /mob/living/silicon/robot/shell/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
 	..(overlay_layer, overlay_plane)
