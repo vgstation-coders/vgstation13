@@ -459,18 +459,27 @@
 
 /datum/find/cultrobes/spawn_item()
 	var/list/possible_spawns = list()
-	if (prob(1))
-		possible_spawns = list(/obj/item/clothing/head/legacy_culthood,
-							/obj/item/clothing/head/legacy_magus,
-							/obj/item/clothing/head/legacy_culthood/alt,
-							/obj/item/clothing/head/helmet/space/legacy_cult)
-	else
-		possible_spawns = list(
-			/obj/item/clothing/head/culthood,
-			/obj/item/clothing/head/culthood/old,
-			/obj/item/clothing/head/magus,
-			/obj/item/clothing/head/helmet/space/cult)
-	var/choice = pick(possible_spawns)
+
+	//75% chance to get a headgear
+	//25% chance to get a suit
+
+	//33% chance to get current cult hood/robes
+	//26.6% chance to get red cult hood/robes
+	//20% chance to get magus hood/robes
+	//13% chance to get current cult helmet/armor
+	//6.6% chance to get legacy cult helmet/armor
+
+	var/choice = pick(
+	75;/obj/item/clothing/head/culthood,
+	25;/obj/item/clothing/suit/cultrobes
+	60;/obj/item/clothing/head/culthood/old,
+	20;/obj/item/clothing/suit/cultrobes/old
+	45;/obj/item/clothing/head/magus,
+	15;/obj/item/clothing/suit/magusred,
+	30;/obj/item/clothing/head/helmet/space/cult,
+	10;/obj/item/clothing/suit/space/cult,
+	15;/obj/item/clothing/head/helmet/space/legacy_cult
+	5;/obj/item/clothing/suit/space/legacy_cult)
 	return new choice
 
 /datum/find/soulstone
@@ -568,10 +577,10 @@
 	new_gun.desc = ""
 
 	//Randomize it!
-	
+
 	new_gun.projectile_type = pickweight(list(		//Randomize the beam it fires. Standard laser deals 30 burn.
 
-		/obj/item/projectile/beam 							= 250,	
+		/obj/item/projectile/beam 							= 250,
 		/obj/item/projectile/beam/captain					= 80,	//40 damage
 		/obj/item/projectile/beam/retro						= 120,
 		/obj/item/projectile/beam/practice					= 130,	//Deals no damage.
@@ -612,16 +621,16 @@
 		/obj/item/projectile/swap							= 50,	//swap staff bolts
 		/obj/item/projectile/forcebolt						= 50,	//mental focus bolts
 		/obj/item/projectile/beam/mindflayer				= 50,	//deals brain damage
-	))	
-	
-	var/delay = rand(1, 20)	
+	))
+
+	var/delay = rand(1, 20)
 	new_gun.fire_delay = delay		//Randomize the fire delay
 	new_gun.attack_delay = delay
 	new_gun.charge_cost = rand(25, 225)		//Randomize the cost-per-fire (how many shots it has)
 
 	if(istype(new_gun.projectile_type, /obj/item/projectile/gravitywell))	//If its a gravity gun set the charge to 200 so the game doesnt break.
-		new_gun.charge_cost = 200			
-		
+		new_gun.charge_cost = 200
+
 	new_gun.fire_sound = pick(list(				//Randomize the sound it makes
 		'sound/weapons/alien_laser1.ogg',
 		'sound/weapons/alien_laser2.ogg',
@@ -641,7 +650,7 @@
 		'sound/weapons/Taser.ogg',
 		'sound/weapons/Taser2.ogg'
 	))
-	
+
 
 	//5% chance to explode when first fired
 	//10% chance to have an unchargeable cell
