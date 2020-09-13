@@ -30,7 +30,7 @@ jobs:
       - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
       - tools/travis/install_spaceman_dmm.sh dreamchecker
       script:
-      - python tools/travis/check_map_files.py maps/
+      - python3 tools/travis/check_map_files.py maps/
       - python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
       - ~/dreamchecker
