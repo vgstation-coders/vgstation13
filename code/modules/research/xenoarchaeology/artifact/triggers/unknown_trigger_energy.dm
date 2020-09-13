@@ -3,11 +3,13 @@
 	scanned_trigger = SCAN_PHYSICAL_ENERGETIC
 	var/key_attackby
 	var/key_projectile
+	var/key_beam
 
 /datum/artifact_trigger/energy/New()
 	..()
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 	key_projectile = my_artifact.on_projectile.Add(src, "owner_projectile")
+	key_beam = my_artifact.on_beam.Add(src, "owner_beam")
 
 /datum/artifact_trigger/energy/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
@@ -31,7 +33,15 @@
 		istype(item,/obj/item/projectile/energy))
 		Triggered(toucher, context, item)
 
+/datum/artifact_trigger/energy/proc/owner_beam(var/list/event_args, var/source)
+	var/obj/effect/beam/B = event_args[1]
+	var/context = event_args[2]
+
+	if (B?.get_damage())
+		Triggered(null, context, B)
+
 /datum/artifact_trigger/energy/Destroy()
 	my_artifact.on_attackby.Remove(key_attackby)
 	my_artifact.on_projectile.Remove(key_projectile)
+	my_artifact.on_beam.Remove(key_beam)
 	..()
