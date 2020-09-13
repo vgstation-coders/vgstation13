@@ -58,7 +58,6 @@
 		hook_media_sources()
 	if(on)
 		update_on()
-	power_connection.power_changed.Add(src,"cable_power_change")
 	power_connection.connect()
 	update_icon()
 
