@@ -759,6 +759,9 @@
 	var/mob/L = O
 	if(!istype(L))
 		return
+	if(iscluwnebanned(L))
+		to_chat(user, "<span class='notice'>You consider loading the pod, but something tells you that would be a bad idea.</span>")
+		return
 	for(var/mob/living/carbon/slime/M in range(1,L))
 		if(M.Victim == L)
 			to_chat(usr, "<span class='notice'>[L] will not fit into the pod because they have a slime latched onto their head.</span>")
