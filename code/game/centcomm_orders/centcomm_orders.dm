@@ -287,7 +287,7 @@ var/global/current_centcomm_order_id=124901
 
 	for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
 		if (O.acct_by_string in order_exists)
-			order_exists[O.acct_by_strong] += 1
+			order_exists[O.acct_by_string] += 1
 
 	for(var/dept in order_exists)
 		department_weights[dept] = max(1, department_weights[dept] - order_exists[dept])//the more active orders a department has, the less likely it'll get another one
