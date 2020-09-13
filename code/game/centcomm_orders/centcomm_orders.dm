@@ -88,6 +88,10 @@ var/global/current_centcomm_order_id=124901
 		acct = station_account
 		acct_by_string = station_name()
 
+/datum/centcomm_order/Destroy()
+	acct = null
+	..()
+
 /datum/centcomm_order/proc/ExtraChecks(var/atom/movable/AM)
 	return 1
 
@@ -96,12 +100,12 @@ var/global/current_centcomm_order_id=124901
 		return 0
 	if(!O)
 		return 0
-	if(O.type in requested)
+	if(is_type_in_list(O, requested))
 		var/amount = 1
 		if(istype(O, /obj/item/stack))
 			var/obj/item/stack/S = O
 			amount = S.amount
-		if(!(O.type in fulfilled))
+		if(!is_type_in_list(O, fulfilled))
 			fulfilled[O.type] = 0
 		// Don't claim stuff that other orders may want.
 		if(fulfilled[O.type] == requested[O.type])
@@ -206,12 +210,12 @@ var/global/current_centcomm_order_id=124901
 		return 0
 	if(!O)
 		return 0
-	if(O.type in requested)
+	if(is_type_in_list(O, requested))
 		var/amount = 1
 		if(istype(O, /obj/item/stack))
 			var/obj/item/stack/S = O
 			amount = S.amount
-		if(!(O.type in left_to_check))
+		if(!is_type_in_list(O, left_to_check))
 			left_to_check[O.type]=0
 		if (!ExtraChecks(O))
 			return 0
@@ -263,7 +267,7 @@ var/global/current_centcomm_order_id=124901
 
 	var/list/department_weights = list(
 		"Cargo" = 3,
-		"Service" = 5,
+		"Civilian" = 5,
 		"Medical" = 5,
 		"Science" = 5,
 		"Engineering" = 5,
@@ -275,44 +279,31 @@ var/global/current_centcomm_order_id=124901
 
 	var/list/order_exists = list(
 		"Cargo" = 0,
-		"Service" = 0,
+		"Civilian" = 0,
 		"Medical" = 0,
 		"Science" = 0,
 		"Engineering" = 0,
 		)
 
 	for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
-		if (istype(O, /datum/centcomm_order/per_unit/department/cargo))
-			order_exists["Cargo"] += 1
-		if (istype(O, /datum/centcomm_order/department/science))
-			order_exists["Science"] += 1
-		if (istype(O, /datum/centcomm_order/department/medical))
-			order_exists["Medical"] += 1
-		if (istype(O, /datum/centcomm_order/department/engineering))
-			order_exists["Engineering"] += 1
-		if (istype(O, /datum/centcomm_order/per_unit/department/civilian))
-			order_exists["Service"] += 1
-		if (istype(O, /datum/centcomm_order/department/civilian))
-			order_exists["Service"] += 1
+		if (O.acct_by_string in order_exists)
+			order_exists[O.acct_by_strong] += 1
 
 	for(var/dept in order_exists)
 		department_weights[dept] = max(1, department_weights[dept] - order_exists[dept])//the more active orders a department has, the less likely it'll get another one
 
 	var/chosen_dept = pick(
 		department_weights["Cargo"];"Cargo",
-		department_weights["Service"];"Service",
+		department_weights["Civilian"];"Civilian",
 		department_weights["Medical"];"Medical",
 		department_weights["Science"];"Science",
 		department_weights["Engineering"];"Engineering")
-
-	if (!chosen_dept)
-		return
 
 	var/list/orders = list()
 	switch(chosen_dept)
 		if ("Cargo")
 			orders.Add(subtypesof(/datum/centcomm_order/per_unit/department/cargo))
-		if ("Service")
+		if ("Civilian")
 			orders.Add(subtypesof(/datum/centcomm_order/department/civilian))
 			orders.Add(subtypesof(/datum/centcomm_order/per_unit/department/civilian))
 		if ("Medical")

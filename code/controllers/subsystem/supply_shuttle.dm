@@ -81,12 +81,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		var/new_cooldown = 1 + round(data_core.general.len / 5)
 		var/modified_min = CENTCOMM_ORDER_DELAY_MIN
 		var/modified_max = CENTCOMM_ORDER_DELAY_MAX
-		while(new_cooldown > centcomm_orders.len)
-			new_cooldown--
-			modified_max = max(modified_min, modified_max - 5 MINUTES)
-		while(new_cooldown < centcomm_orders.len)
-			new_cooldown++
-			modified_min = min(modified_max, modified_min + 5 MINUTES)
+
+		var/delta = (centcomm_orders.len - new_cooldown)// Sign tells us if we need to add or substract time
+		new_cooldown = centcomm_orders.len
+		modified_max = max(modified_min, modified_max - 5 * delta MINUTES)
 
 		centcomm_last_order = world.time
 		centcomm_order_cooldown = rand(modified_min,modified_max)
