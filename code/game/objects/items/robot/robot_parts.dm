@@ -261,6 +261,8 @@
 		ai_control = 1
 
 /obj/item/robot_parts/robot_suit/attack_ai(mob/user)
+	if(!isAI(user))
+		return
 	if(!check_completion())
 		return
 	if(!ai_control)
@@ -269,7 +271,8 @@
 	var/mob/living/silicon/ai/A = user
 	if(!A.shell)
 		A.create_shell(src)
-
+	else 
+		to_chat(user, "<span class='warning'>You already have a shell. Destroy it to create a new one.</span>")
 
 /obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
 	if(P.damage > 10)
