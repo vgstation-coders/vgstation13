@@ -1370,6 +1370,7 @@ var/list/cyborg_list = list()
 		radio.subspace_transmission = TRUE
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
+	updateicon()
 
 /datum/action/undeployment
 	name = "Disconnect from shell"
@@ -1407,6 +1408,7 @@ var/list/cyborg_list = list()
 		radio.recalculateChannels()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
+	updateicon()
 	
 /mob/living/silicon/robot/shell/proc/close_connection()
 	if(deployed)
@@ -1457,9 +1459,10 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
 	..(overlay_layer, overlay_plane)
 	overlays.Cut()
-	if(!stat && cell != null)
+	if(!stat && cell != null && deployed)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
-		eyesicon.Blend(rgb(210,210,210), ICON_ADD)
+		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
+		eyesicon.Blend(rgb(65,65,65), ICON_SUBTRACT)
 		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
 
