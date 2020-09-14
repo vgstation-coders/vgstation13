@@ -95,7 +95,7 @@ var/list/beam_master = list()
 	if(!gcDestroyed)
 		past_rays += shot_ray
 
-	var/distance = MAX_BEAM_DISTANCE;
+	var/distance = MAX_BEAM_DISTANCE
 	if((isnull(hits) || hits.len == 0))
 		if(travel_range)
 			distance = travel_range
