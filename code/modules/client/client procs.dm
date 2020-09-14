@@ -238,14 +238,14 @@
 				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
 				to_chat(src, "<span class='notice'>This ban has been revoked by [unbanned_ckey] at time [unbanned_datetime].</span>")
 				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
-				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
 				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
 			else
 				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
 				if (duration > 0)
 					to_chat(src, "<span class='notice'>This ban expired on [expiration].</span>")
 				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
-				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
 				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
 
 			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET unbanned_notification = 1 WHERE id = [id]")
