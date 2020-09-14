@@ -62,14 +62,12 @@
 	high_population_requirement = 30
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
-	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
-	for (var/i = 1 to num_changelings)
-		var/mob/M = pick(candidates)
-		assigned += M
-		candidates -= M
-		var/datum/role/changeling/newChangeling = new
-		newChangeling.AssignToRole(M.mind,1)
-		newChangeling.Greet(GREET_ROUNDSTART)
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/changeling/newChangeling = new
+	newChangeling.AssignToRole(M.mind,1)
+	newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 
 
