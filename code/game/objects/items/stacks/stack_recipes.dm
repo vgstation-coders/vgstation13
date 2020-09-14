@@ -191,15 +191,31 @@
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
 	new/datum/stack_recipe/blacksmithing("hammer head", /obj/item/item_head/hammer_head,			4, time = 5 SECONDS, required_strikes = 6),
 	new/datum/stack_recipe/blacksmithing("pickaxe head", /obj/item/item_head/pickaxe_head,			4, time = 5 SECONDS, required_strikes = 8),
+	new/datum/stack_recipe/blacksmithing("shovel head", /obj/item/item_head/tool/shovel,			4, time = 5 SECONDS, required_strikes = 8),
 	new/datum/stack_recipe/blacksmithing("pitchfork head", /obj/item/item_head/pitchfork_head,		4, time = 5 SECONDS, required_strikes = 6),
 	new/datum/stack_recipe/blacksmithing("sword crossguard", /obj/item/cross_guard,					4, time = 5 SECONDS, required_strikes = 4),
 	null,
+	new/datum/stack_recipe/blacksmithing("knife blade", /obj/item/item_head/knife,					4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("axe head", /obj/item/item_head/axe,						8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("sword blade", /obj/item/item_head/sword,					8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("scimitar blade", /obj/item/item_head/sword/scimitar,		8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("shortsword blade", /obj/item/item_head/sword/shortsword,	8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("gladius blade", /obj/item/item_head/sword/gladius,		8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("sabre blade", /obj/item/item_head/sword/sabre,			8, time = 8 SECONDS, required_strikes = 13),
 	new/datum/stack_recipe/blacksmithing("tower shield", /obj/item/item_head/tower_shield,			20, time = 10 SECONDS, required_strikes = 20, other_reqs = list(/obj/item/stack/sheet/plasteel = 5)),
+	null,
+	new/datum/stack_recipe/blacksmithing("wrench", /obj/item/item_head/tool/wrench,					4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("crowbar", /obj/item/item_head/tool/crowbar,				4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("screwdriver", /obj/item/item_head/tool/screwdriver,		4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("scissors", /obj/item/item_head/tool/scissors,				4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("hoe", /obj/item/item_head/tool/hoe,						4, time = 5 SECONDS, required_strikes = 6),
+	null,
+	new/datum/stack_recipe/blacksmithing("bucket", /obj/item/item_head/tool/bucket,					4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("mug", /obj/item/item_head/tool/mug,						4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("toolbox", /obj/item/item_head/tool/toolbox,				4, time = 5 SECONDS, required_strikes = 6),
+	new/datum/stack_recipe/blacksmithing("ashtray", /obj/item/item_head/tool/ashtray,				4, time = 5 SECONDS, required_strikes = 6),
+	
+	
 	))
 
 

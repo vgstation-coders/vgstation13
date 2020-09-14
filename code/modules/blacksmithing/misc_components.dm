@@ -106,3 +106,109 @@
 	icon_state = "large_plate"
 	finishing_requirements = list(/obj/item/stack/leather_strip)
 	result = /obj/item/weapon/shield/riot/tower
+
+/obj/item/item_head/tool
+	name = "unfinished tool"
+	finishing_requirements = list(/obj/item/sword_handle)
+
+/obj/item/item_head/tool/shovel
+	name = "shovel"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a shovel."
+	result = /obj/item/weapon/pickaxe/shovel/smithed
+	finishing_requirements = list(/obj/item/item_handle)
+
+/obj/item/item_head/knife
+	name = "knife"
+	icon_state = "large_metal_blade"
+	desc = "Yup, it's a knife."
+	result = /obj/item/weapon/kitchen/utensil/knife/smithed
+	
+/obj/item/item_head/axe
+	name = "axe"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a axe."
+	result = /obj/item/weapon/hatchet/axe
+	finishing_requirements = list(/obj/item/item_handle)
+		
+/obj/item/item_head/tool/wrench
+	name = "wrench"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a wrench."
+	result = /obj/item/weapon/wrench/smithed
+	
+/obj/item/item_head/tool/crowbar
+	name = "crowbar"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a crowbar."
+	result = /obj/item/weapon/crowbar/smithed
+	
+/obj/item/item_head/tool/screwdriver
+	name = "screwdriver"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a screwdriver."
+	result = /obj/item/weapon/screwdriver/smithed
+	finishing_requirements = list(/obj/item/stack/leather_strip)	
+	
+/obj/item/item_head/tool/scissors
+	name = "scissors"
+	icon_state = "large_metal_blade"
+	desc = "Yup, it's a pair of scissors."
+	result = /obj/item/weapon/wirecutters/scissors
+	finishing_requirements = list(/obj/item/stack/leather_strip)
+
+/obj/item/item_head/tool/bonesetter
+	name = "bonesetter"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a bonesetter."
+	result = /obj/item/weapon/bonesetter/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/retractor
+	name = "retractor"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a retractor."
+	result = /obj/item/weapon/retractor/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/hemostat
+	name = "hemostat"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a hemostat."
+	result = /obj/item/weapon/hemostat/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/hoe
+	name = "hoe"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a hoe."
+	result = /obj/item/weapon/minihoe/smithed
+	finishing_requirements = list(/obj/item/item_handle)
+	
+/obj/item/item_head/tool/bucket
+	name = "bucket"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a bucket."
+	result = /obj/item/weapon/reagent_containers/glass/bucket/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/mug
+	name = "mug"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a mug."
+	result = /obj/item/weapon/reagent_containers/food/drinks/mug/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/toolbox
+	name = "toolbox"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a toolbox."
+	result = /obj/item/weapon/storage/toolbox/smithed
+	finishing_requirements = list()
+	
+/obj/item/item_head/tool/ashtray
+	name = "ashtray"
+	icon_state = "hammer_head"
+	desc = "Yup, it's a ashtray."
+	result = /obj/item/ashtray/smithed
+	finishing_requirements = list()
