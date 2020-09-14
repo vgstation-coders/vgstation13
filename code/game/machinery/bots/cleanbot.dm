@@ -412,7 +412,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else if (istype(W, /obj/item/clothing/head/maidhat))
 		to_chat(user, "<span class='notice'>\the [src] is already wearing one of those!</span>")
 		return
-	else if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large) && !armed && user.a_intent != I_HURT)
+	else if(W.type == /obj/item/weapon/kitchen/utensil/knife/large && !armed && user.a_intent != I_HURT)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>\the [src] extends a tiny arm from a hidden compartment and grasps \the [W]. Its light blinks excitedly for a moment before returning to normal.</span>")
