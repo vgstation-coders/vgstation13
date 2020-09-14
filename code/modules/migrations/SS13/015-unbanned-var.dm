@@ -1,8 +1,8 @@
-/datum/migration/mysql/ss13/_014
-	id = 14
+/datum/migration/mysql/ss13/_015
+	id = 15
 	name = "Add unbanned notification for players"
 
-/datum/migration/mysql/ss13/_014/up()
+/datum/migration/mysql/ss13/_015/up()
 	if(!hasColumn("erro_ban","unbanned_notification"))
 		var/sql1 = execute("ALTER TABLE erro_ban ADD COLUMN `unbanned_notification` int(2) NOT NULL DEFAULT '0';");
 		var/sql2 = execute("UPDATE erro_ban SET `unbanned_notification` = 1;") // Every previous ban gets an unban notification
@@ -12,7 +12,7 @@
 
 	return TRUE
 
-/datum/migration/mysql/ss13/_013/down()
+/datum/migration/mysql/ss13/_015/down()
 	if(hasColumn("erro_ban","unbanned_notification"))
 		return execute("ALTER TABLE erro_ban DROP COLUMN `unbanned_notification` NOT NULL DEFAULT '0';");
 	else
