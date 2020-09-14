@@ -58,8 +58,8 @@
 	required_candidates = 1
 	weight = 1
 	cost = 18
-	requirements = list(80,60,40,20,20,10,10,10,10,10)
-	high_population_requirement = 30
+	requirements = list(80,80,50,30,30,20,20,20,10,10)
+	high_population_requirement = 10
 
 /datum/dynamic_ruleset/roundstart/changeling/execute()
 	var/num_changelings = min(round(mode.candidates.len / 10) + 1, candidates.len)
