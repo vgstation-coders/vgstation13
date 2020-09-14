@@ -144,8 +144,7 @@
 			load_dungeon(T)
 
 /datum/map/proc/map_ruleset(var/datum/dynamic_ruleset/DR)
-	if(ispath(DR.role_category,/datum/role/changeling))
-		return FALSE
+
 
 	return TRUE //If false, fails Ready()
 
