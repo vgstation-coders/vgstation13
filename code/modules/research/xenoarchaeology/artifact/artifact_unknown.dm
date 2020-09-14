@@ -21,6 +21,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	var/event/on_attackby
 	var/event/on_explode
 	var/event/on_projectile
+	var/event/on_beam
 	var/analyzed = 0 //set to 1 after having been analyzed successfully
 	var/safe_delete = FALSE
 
@@ -36,6 +37,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	on_attackby = new(owner = src)
 	on_explode = new(owner = src)
 	on_projectile = new(owner = src)
+	on_beam = new(owner = src)
 	//event arguement list format (user, "context", item)
 
 	if(generate_effect)
@@ -187,6 +189,10 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
 	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
 
+/obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
+	..()
+	on_beam.Invoke(list(B, "BEAMCONNECT"))
+
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
 		if(1.0)
@@ -219,6 +225,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
+	qdel(on_beam); on_beam = null
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
