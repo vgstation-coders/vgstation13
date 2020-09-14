@@ -560,7 +560,7 @@ var/list/cyborg_list = list()
 					to_chat(user, "You emag [src]'s interface")
 					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].")
 					sleep(6)
-					SetEmagged(TRUE)						return
+					SetEmagged(TRUE)						
 					SetLockdown(TRUE)
 					lawupdate = FALSE
 					disconnect_AI()
