@@ -317,3 +317,9 @@
 	..()
 	name = "ancient flatpack (electrolytic chemmaster)"
 	machine = new /obj/machinery/chem_master/electrolytic(src)
+
+/obj/structure/closet/crate/flatpack/medalmaker/New()
+	..()
+	name = "flatpack (medal printer)"
+	machine = new /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/medal_printer(src)
+	storage_capacity = 1 //cuz it's a crate subtype it'll try to suck up everything on its loc otherwise

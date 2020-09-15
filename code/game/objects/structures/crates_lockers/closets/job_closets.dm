@@ -64,6 +64,7 @@
 
 /obj/structure/closet/lawcloset/atoms_to_spawn()
 	return list(
+		/obj/structure/closet/crate/flatpack/medalmaker,
 		/obj/item/clothing/under/cia,
 		/obj/item/clothing/under/lawyer/female,
 		/obj/item/clothing/under/lawyer/black,
