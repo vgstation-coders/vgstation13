@@ -333,10 +333,10 @@
 				var/mob/living/L = usr
 				L.resist()
 
-	if("mov_intent")
-		if (iscarbon(usr))
-			var/mob/living/carbon/C = usr
-			C.toggle_move_intent()
+		if("mov_intent")
+			if (iscarbon(usr))
+				var/mob/living/carbon/C = usr
+				C.toggle_move_intent()
 
 		if("m_intent")
 			if(!usr.m_int)
