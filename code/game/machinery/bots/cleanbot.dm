@@ -274,10 +274,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	else if (istype(W, /obj/item/clothing/head/maidhat))
 		var/obj/machinery/bot/cleanbot/roomba/meido/M = new(get_turf(src))
 		M.name = name
-		if(integratedpai)
-			integratedpai.forceMove(M)
-			M.integratedpai = integratedpai
-			integratedpai = null
+		M.install_pai(eject_integratedpai_if_present())
 		to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It makes a soft booping noise and its light blinks excitedly for a moment.</span>")
 		qdel(src)
 	else
