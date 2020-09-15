@@ -229,6 +229,11 @@
 	targetvendomat = /obj/machinery/vending/team_security
 	icon_state = "team_security"
 
+/obj/structure/vendomatpack/telecomms
+	name = "Telecommunications Supplies recharge pack"
+	targetvendomat = /obj/machinery/vending/telecomms
+	icon_state = "telecomms"
+
 //////EMPTY PACKS//////
 
 /obj/item/emptyvendomatpack
