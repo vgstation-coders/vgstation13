@@ -620,7 +620,7 @@
 			usr.hud_used.move_intent.icon_state = "walking"
 		if(M_INTENT_WALK)
 			usr.m_intent = M_INTENT_RUN
-			sr.hud_used.move_intent.icon_state = "running"
+			usr.hud_used.move_intent.icon_state = "running"
 	if(istype(usr,/mob/living/carbon/alien/humanoid))
 		usr.update_icons()
 
@@ -634,7 +634,7 @@
 	set desc = "Switch between walking and running."
 
 	if(iscarbon(usr))
-    	var/mob/living/carbon/dude = usr
+		var/mob/living/carbon/dude = usr
 		dude.toggle_move_intent()
 
 
