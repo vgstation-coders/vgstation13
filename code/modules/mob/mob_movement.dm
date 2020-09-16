@@ -605,27 +605,21 @@
 		if(movement_speed_modifier)
 			. *= (1/movement_speed_modifier)
 
-
-
-
 /mob/living/carbon/proc/toggle_move_intent()
-	if(src.legcuffed)
-		to_chat(src, "<span class='notice'>You are legcuffed! You cannot run until you get [src.legcuffed] removed!</span>")
-		src.m_intent = M_INTENT_WALK	//Just incase
-		src.hud_used.move_intent.icon_state = "walking"
+	if(legcuffed)
+		to_chat(src, "<span class='notice'>You are legcuffed! You cannot run until you get [legcuffed] removed!</span>")
+		m_intent = M_INTENT_WALK	//Just incase
+		hud_used.move_intent.icon_state = "walking"
 		return 1
-	switch(usr.m_intent)
+	switch(m_intent)
 		if(M_INTENT_RUN)
-			usr.m_intent = M_INTENT_WALK
-			usr.hud_used.move_intent.icon_state = "walking"
+			m_intent = M_INTENT_WALK
+			hud_used.move_intent.icon_state = "walking"
 		if(M_INTENT_WALK)
-			usr.m_intent = M_INTENT_RUN
-			usr.hud_used.move_intent.icon_state = "running"
-	if(istype(usr,/mob/living/carbon/alien/humanoid))
-		usr.update_icons()
-
-
-
+			m_intent = M_INTENT_RUN
+			hud_used.move_intent.icon_state = "running"
+	if(istype(src,/mob/living/carbon/alien/humanoid))
+		update_icons()
 
 /mob/living/carbon/verb/toggle_move_intent_verb()
 
@@ -633,8 +627,6 @@
 	set category = "IC"
 	set desc = "Switch between walking and running."
 
-	if(iscarbon(usr))
-		var/mob/living/carbon/dude = usr
-		dude.toggle_move_intent()
+	toggle_move_intent()
 
 
