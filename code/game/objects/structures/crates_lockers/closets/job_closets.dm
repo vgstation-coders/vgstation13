@@ -63,8 +63,7 @@
 	icon_closed = "blue"
 
 /obj/structure/closet/lawcloset/atoms_to_spawn()
-	return list(
-		/obj/structure/closet/crate/flatpack/medalmaker,
+	var/list/R = list(
 		/obj/item/clothing/under/cia,
 		/obj/item/clothing/under/lawyer/female,
 		/obj/item/clothing/under/lawyer/black,
@@ -76,6 +75,9 @@
 		/obj/item/clothing/shoes/brown,
 		/obj/item/clothing/shoes/black,
 	)
+	if(istype(loc.loc,/area/lawoffice))
+		R += /obj/structure/closet/crate/flatpack/medalmaker
+	return R
 
 /obj/structure/closet/paramedic
 	name = "Paramedic Wardrobe"
