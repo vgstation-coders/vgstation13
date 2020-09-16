@@ -335,7 +335,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
-		flick(icon_gib, src)
+		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
 	if(meat && meat_type)
 		for(var/i = 0; i < (src.size - meat_taken); i++)
