@@ -292,12 +292,10 @@ rcd light flash thingy on matter drain
 			to_chat(user, "No more charges.")
 			return 1
 		var/datum/command_alert/C = possible_announcements[chosen_announcement]
-		command_alert(C)
-		if(C.theme)
-			to_chat(world, "test1")
-			ticker.StartThematic(C.theme)
-		else
-			to_chat(world, "test2")
+		var/datum/command_alert/announcement = new C
+		command_alert(announcement)
+		if(announcement.theme)
+			ticker.StartThematic(initial(announcement.theme))
 		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 

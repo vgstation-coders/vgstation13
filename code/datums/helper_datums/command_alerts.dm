@@ -8,7 +8,7 @@
 	var/alert = 'sound/AI/commandreport.ogg'//sound
 	var/noalert = 0
 
-	var/theme= "" //Whatever theme is associated with this announcement
+	var/theme = "" //Whatever theme is associated with this announcement
 
 /datum/command_alert/proc/announce()
 	command_alert(message, alert_title, force_report, alert, noalert)
