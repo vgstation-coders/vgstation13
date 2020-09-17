@@ -928,7 +928,7 @@
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
 			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
-			malfai.throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
+			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
 			malfai.malfhack = src
 			malfai.malfhacking = 1
 			hacking_ai = malfai

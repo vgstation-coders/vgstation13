@@ -76,7 +76,7 @@
 		return FALSE
 	if(alert.override_alerts && !clear_override)
 		return FALSE
-	alerts -= category
+	alerts -= alert
 	if(client && hud_used)
 		hud_used.reorganize_alerts()
 		client.screen -= alert
