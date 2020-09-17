@@ -140,6 +140,8 @@ var/global/list/screen_alarms_locs = list(
 #define SCREEN_ALARM_ROBOT_HACK "robot_hack"
 #define SCREEN_ALARM_ROBOT_LOCK "robot_lock"
 
+#define SCREEN_ALARM_APC_HACKING "apc_hacking"
+
 #define SCREEN_ALARM_NAMEPICK "namepick"
 
 /obj/abstract/screen/alert
@@ -325,6 +327,11 @@ var/global/list/screen_alarms_locs = list(
 	name = "On Fire"
 	desc = "This unit is on fire."
 	icon_state = "silicon_fire"
+
+/obj/abstract/screen/alert/robot/apc_hacking
+	icon_state = "hacking"
+	name = "Overriding APC"
+	desc = "You are currently overriding an APC's programming."
 
 /obj/abstract/screen/alert/robot/hacked
 	name = "Hacked"

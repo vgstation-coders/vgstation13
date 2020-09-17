@@ -76,6 +76,7 @@
 	var/wiresexposed = 0
 	powernet = 0		// set so that APCs aren't found as powernet nodes //Hackish, Horrible, was like this before I changed it :(
 	var/malfhack = 0 //New var for my changes to AI malf. --NeoFite
+	var/mob/living/silicon/ai/hacking_ai = null     //The AI that is currently attempting to hack this APC
 	var/mob/living/silicon/ai/malfai = null //See above --NeoFite
 	var/malflocked = 0 //used for malfs locking down APCs
 //	luminosity = 1
@@ -927,14 +928,17 @@
 				to_chat(malfai, "You are already hacking an APC.")
 				return 1
 			var/time_required = calculate_malf_hack_APC_cooldown(M.apcs)
-			to_chat(malfai, "Beginning override of APC systems. This will take [time_required/10] seconds, and you cannot hack other APC's during the process.")
+			malfai.throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
 			malfai.malfhack = src
 			malfai.malfhacking = 1
+			hacking_ai = malfai
+			malfai.handle_regular_hud_updates()
 			sleep(time_required)
 			if(src && malfai)
 				if (!src.aidisabled)
 					malfai.malfhack = null
 					malfai.malfhacking = 0
+					hacking_ai = null
 					locked = 1
 					if(M && STATION_Z == z)
 						M.apcs++
@@ -943,6 +947,7 @@
 					else
 						src.malfai = usr
 					to_chat(malfai, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
+					malfai.handle_regular_hud_updates()
 					update_icon()
 
 	else if (href_list["occupyapc"])
@@ -1335,6 +1340,10 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	var/area/this_area = get_area(src)
 	if(this_area.areaapc == src)
 		this_area.remove_apc(src)
+		if(hacking_ai)	//APC got destroyed mid-hack
+			hacking_ai.malfhack = null
+			hacking_ai.malfhacking = 0
+			to_chat(hacking_ai, "<span class='warning'>The APC you were currently hacking was destroyed.</span>")
 		if(malfai && operating)
 			var/datum/faction/malf/M = find_active_faction_by_type(/datum/faction/malf)
 			if (M && STATION_Z == z)
