@@ -747,13 +747,14 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, r
 	update_icon()
 
 /obj/item/weapon/gun/energy/bison/update_icon()
-	if(power_supply.charge >= power_supply.maxcharge)
-		icon_state = "bison100"
-	else if (power_supply.charge > 0)
-		icon_state = "bison50"
-	else
-		icon_state = "bison0"
-	return
+	if(icon == 'icons/obj/gun_experimental.dmi')	//Quick fix for xenoarch guns
+		if(power_supply.charge >= power_supply.maxcharge)
+			icon_state = "bison100"
+		else if (power_supply.charge > 0)
+			icon_state = "bison50"
+		else
+			icon_state = "bison0"
+		return
 
 #define SPUR_FULL_POWER 4
 #define SPUR_HIGH_POWER 3
