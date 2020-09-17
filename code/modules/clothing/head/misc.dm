@@ -548,6 +548,12 @@
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
 
+/obj/item/clothing/head/rice_hat/ronin
+	name = "Roningasa"
+	desc = "A conical amigasa with a flat top, often worn by ronin."
+	icon_state = "kasa"
+	item_state = "kasa"
+
 /obj/item/clothing/head/inquisitor
 	name = "cappello romano"
 	desc = "A round wide-brimmed hat worn by more traditional Roman Catholic clergy."
