@@ -604,3 +604,29 @@
 			. = T.adjust_slowdown(src, .)
 		if(movement_speed_modifier)
 			. *= (1/movement_speed_modifier)
+
+/mob/living/carbon/proc/toggle_move_intent()
+	if(legcuffed)
+		to_chat(src, "<span class='notice'>You are legcuffed! You cannot run until you get [legcuffed] removed!</span>")
+		m_intent = M_INTENT_WALK	//Just incase
+		hud_used.move_intent.icon_state = "walking"
+		return 1
+	switch(m_intent)
+		if(M_INTENT_RUN)
+			m_intent = M_INTENT_WALK
+			hud_used.move_intent.icon_state = "walking"
+		if(M_INTENT_WALK)
+			m_intent = M_INTENT_RUN
+			hud_used.move_intent.icon_state = "running"
+	if(istype(src,/mob/living/carbon/alien/humanoid))
+		update_icons()
+
+/mob/living/carbon/verb/toggle_move_intent_verb()
+
+	set name = "Toggle-Walk"
+	set category = "IC"
+	set desc = "Switch between walking and running."
+
+	toggle_move_intent()
+
+
