@@ -350,7 +350,7 @@ var/global/resethearers = 0
 	. = new/list()
 
 	for(var/obj/item/device/radio/radio in radios)
-		if(radio)
+		if(radio && !radio.scramble_message)
 			var/turf/turf = get_turf(radio)
 
 			if(turf)

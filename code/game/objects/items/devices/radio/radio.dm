@@ -54,14 +54,18 @@
 	..()
 	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
-	radio_list += src
 
 /obj/item/device/radio/Destroy()
 	wires = null
 	remove_radio_all(src) //Just to be sure
 	..()
-	radio_list -= src
 
+/obj/item/device/radio/proc/scramble()
+	if(scramble_message)
+		return
+	scramble_message = 1
+	visible_message("*BZZZT*", range = 1)
+	
 /obj/item/device/radio/initialize()
 	. = ..()
 	frequency = COMMON_FREQ //common chat
