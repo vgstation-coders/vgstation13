@@ -753,7 +753,6 @@ obj/item/weapon/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, r
 		icon_state = "bison50"
 	else
 		icon_state = "bison0"
-	return
 
 /obj/item/weapon/gun/energy/bison/alien
 	name = "alien gun"
