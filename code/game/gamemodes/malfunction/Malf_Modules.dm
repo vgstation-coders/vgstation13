@@ -279,12 +279,12 @@ rcd light flash thingy on matter drain
 
 	else
 		var/list/possible_announcements = typesof(/datum/command_alert)
+		var/list/choices = list()
 		for(var/A in possible_announcements)
 			var/datum/command_alert/CA = A
-			possible_announcements[initial(CA.name)] = A
-			possible_announcements.Remove(A)
-
-		var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
+			choices[initial(CA.name)] = A
+		
+		var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in choices
 		if(!chosen_announcement)
 			to_chat(user, "Selection cancelled.")
 			return 1

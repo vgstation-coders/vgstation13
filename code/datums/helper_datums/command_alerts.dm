@@ -93,6 +93,7 @@
 
 /datum/command_alert/FUBAR/announce()
 	message = "Due to intense sustained damage to the station, Nanotrasen have deemed it fitting to evacuate remaining assets and personnel through an escape shuttle that was previously already en route."
+	..()
 
 ////////BLOB (mini)
 
