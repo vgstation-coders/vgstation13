@@ -3,7 +3,7 @@
 /obj/machinery/computer/aiupload
 	name = "AI Upload"
 	desc = "Used to upload laws to the AI using a cheap radio transceiver."
-	icon_state = "command"
+	icon_state = "upload"
 	circuit = "/obj/item/weapon/circuitboard/aiupload"
 	var/mob/living/silicon/ai/current = null
 	var/mob/living/silicon/ai/occupant = null
@@ -18,6 +18,7 @@
 			return
 		var/obj/item/card = I
 		card.transfer_ai("AIUPLOAD","AICARD",src,user)
+		update_icon()
 		return
 	return ..()
 
@@ -291,3 +292,14 @@
 
 /obj/machinery/computer/aiupload/longrange/same_zlevel()
 	return TRUE
+
+/obj/machinery/computer/aiupload/update_icon()
+	..()
+	overlays = 0
+
+	if (occupant)
+		switch (occupant.stat)
+			if (0)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
+			if (2)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
