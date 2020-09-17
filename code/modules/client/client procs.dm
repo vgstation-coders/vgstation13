@@ -254,6 +254,14 @@
 				log_sql("Error: [update_query.ErrorMsg()]")
 				qdel(update_query)
 
+	if (prefs && prefs.show_warning_next_time)
+		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.warning_admin].</b></span>")
+		to_chat(src, "<span class='notice'>The reason was: '[prefs.last_warned_message]'.</span>")
+		to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+		to_chat(src, "<span class='notice'><b>You can now play the game.</b></span>")
+		prefs.show_warning_next_time = 0
+		prefs.save_preferences_sqlite(src, src.ckey)
+
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)
