@@ -11,6 +11,7 @@
 	//Malf fake announcement variables. Thematic music is handled in faction code, so this doesn't serve much of a point outside of announcement faking.
 	var/theme = "" //Whatever theme is associated with this announcement
 	var/stoptheme = 0 //Stop the theme
+	var/alertlevel = ""	//set the alert level to this
 
 /datum/command_alert/proc/announce()
 	command_alert(message, alert_title, force_report, alert, noalert)
@@ -116,6 +117,7 @@
 	force_report = 1
 	message = "Subversive Union-aligned elements have been detected aboard the station. According to latest reports, targeted removal of heads of staff is already underway. Loyal crew should take immediate action to secure station against revolutionaries."
 	theme = "nukesquad"
+	alertlevel = "red"
 
 /datum/command_alert/revolutiontoppled
 	name = "Revolution Defeated"
@@ -123,6 +125,8 @@
 	force_report = 1
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
 	stoptheme = 1
+	alertlevel = "blue"
+	
 
 /// MALF
 
@@ -133,6 +137,7 @@
 	force_report = 1
 	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
 	stoptheme = 1
+	alertlevel = "blue"
 
 //Jungle Fever
 
@@ -317,6 +322,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert = 'sound/AI/aimalf.ogg'
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
 	theme = "malfdelta"
+	alertlevel = "delta"
 
 /////////////METEOR STORM
 
@@ -495,6 +501,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Occult Assault"
 	force_report = 1
 	theme = "endgame"
+	alertlevel = "red"
 
 /datum/command_alert/bloodstones_raised/announce()
 	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
@@ -505,6 +512,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Occult Assault Critical"
 	force_report = 1
 	theme = "endgame"
+	alertlevel = "red"
 
 /datum/command_alert/bloodstones_anchor/announce()
 	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
@@ -515,6 +523,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Occult Gone"
 	force_report = 1
 	stoptheme = 1
+	alertlevel = "blue"
 
 /datum/command_alert/bloodstones_broken/announce()
 	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
@@ -592,6 +601,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Nuclear Operatives"
 	alert_title = "Imminent Assault"
 	theme = "nukesquad"
+	alertlevel = "red"
 
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
