@@ -3,7 +3,8 @@
 		return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)
-		playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
+		if(!explosive)
+			playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
 	stat = DEAD
 	update_icon()
 
@@ -44,10 +45,10 @@
 		shuttle_autocall()
 
 	if(explosive && !gibbed)
-		visible_message("<span class'danger'>[name] begins to spark violently!</span>")
-		playsound(src, 'sound/machines/Alarm_short.ogg', 50, FALSE)
-		spawn(28)
-			explosion(src.loc, 2, 4, 8, 10)
+		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
+		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
+		spawn(35)
+			explosion(src.loc, 2, 5, 8, 10)
 			gibbed = TRUE
 			gib()
 

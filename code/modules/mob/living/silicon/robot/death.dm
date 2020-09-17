@@ -41,7 +41,7 @@
 	if(connected_ai)
 		if(connected_ai.explosive_cyborgs) 
 			visible_message("<span class='notice'>You hear a soft beep.</span>")
-			spawn(5)
+			spawn(30)
 				explosion(src.loc, 1, 3, 5, 6)
 				gib()
 				return
