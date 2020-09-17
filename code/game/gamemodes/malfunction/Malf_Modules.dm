@@ -294,8 +294,17 @@ rcd light flash thingy on matter drain
 		var/datum/command_alert/C = possible_announcements[chosen_announcement]
 		var/datum/command_alert/announcement = new C
 		command_alert(announcement)
-		if(announcement.theme)
-			ticker.StartThematic(initial(announcement.theme))
+		var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+		if(M)
+			if(M.stage < FACTION_ENDGAME)
+				to_chat(world, M.stage)
+				to_chat(world, "test")
+				if(announcement.theme && !stoptheme)
+					ticker.StartThematic(initial(announcement.theme))
+					to_chat(world, "test1")
+				if(stoptheme)
+					ticker.StopThematic()
+					to_chat(world, "test2")
 		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 

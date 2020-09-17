@@ -8,7 +8,9 @@
 	var/alert = 'sound/AI/commandreport.ogg'//sound
 	var/noalert = 0
 
+	//Malf fake announcement variables. Thematic music is handled in faction code, so this doesn't serve much of a point outside of announcement faking.
 	var/theme = "" //Whatever theme is associated with this announcement
+	var/stoptheme = 0 //Stop the theme
 
 /datum/command_alert/proc/announce()
 	command_alert(message, alert_title, force_report, alert, noalert)
@@ -66,6 +68,7 @@
 	name = "Biohazard Level Updated - Nuclear Force Authorized"
 	alert_title = "Final Measure"
 	noalert = 1
+	playlist = "endgame"
 
 /datum/command_alert/biohazard_station_nuke/announce()
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
@@ -76,6 +79,7 @@
 	name = "Biohazard Level Updated - Lock Down Lifted"
 	alert_title = "Directive 7-10 to 7-12 Concluded."
 	force_report = 1
+	stoptheme = 1
 
 /datum/command_alert/biohazard_station_unlock/announce()
 	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
@@ -117,6 +121,7 @@
 	alert_title = "Order Restored"
 	force_report = 1
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
+	stoptheme = 1
 
 /// MALF
 
@@ -126,6 +131,7 @@
 	alert_title = "Rogue intelligence contained/destroyed successfully."
 	force_report = 1
 	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
+	stoptheme = 1
 
 //Jungle Fever
 
@@ -141,6 +147,7 @@
 	alert_title = "Jungle Fever Outbreak Escalated"
 	force_report = 1
 	message = "ERROR"
+	theme = "endgame"
 
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
@@ -155,6 +162,7 @@
 	alert_title = "Jungle Fever Contained"
 	force_report = 1
 	message = "We have received confirmation that, as of this time, the Jungle Fever outbreak has been contained. Incinerate all simian corpses and salvage equipment for evacuation."
+	stoptheme = 1
 
 /////////ERT
 
@@ -505,6 +513,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Ceased - Lock Down Lifted"
 	alert_title = "Occult Gone"
 	force_report = 1
+	stoptheme = 1
 
 /datum/command_alert/bloodstones_broken/announce()
 	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
