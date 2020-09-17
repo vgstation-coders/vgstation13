@@ -68,7 +68,7 @@
 	name = "Biohazard Level Updated - Nuclear Force Authorized"
 	alert_title = "Final Measure"
 	noalert = 1
-	playlist = "endgame"
+	theme = "endgame"
 
 /datum/command_alert/biohazard_station_nuke/announce()
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
