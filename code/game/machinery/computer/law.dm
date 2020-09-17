@@ -18,6 +18,7 @@
 			return
 		var/obj/item/card = I
 		card.transfer_ai("AIUPLOAD","AICARD",src,user)
+		attack_hand(user)
 		update_icon()
 		return
 	return ..()
@@ -146,6 +147,10 @@
 
 	if (occupant)
 		current = occupant
+	else if (current)
+		current = null
+		update_icon()
+		return
 	else
 		current = select_active_ai(user)
 		update_icon()
