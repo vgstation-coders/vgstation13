@@ -76,6 +76,7 @@ var/global/list/escape_list = list()
 var/list/bots_list = list()
 
 
+var/radio_list = list()
 var/list/rcd_list = list()
 var/list/red_tool_list = list()
 var/list/brig_lockers = list()

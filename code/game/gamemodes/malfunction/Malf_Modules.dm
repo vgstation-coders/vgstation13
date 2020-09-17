@@ -69,30 +69,6 @@ rcd light flash thingy on matter drain
 		turret.shot_delay = 20
 	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
 
-/datum/AI_Module/large/disable_rcd
-	module_name = "RCD disable"
-	mod_pick_name = "rcd"
-	description = "Send a specialised pulse to break all RCD devices on the station."
-	cost = 50
-
-	power_type = /spell/aoe_turf/disable_rcd
-
-/spell/aoe_turf/disable_rcd
-	name = "Disable RCDs"
-	user_type = USER_TYPE_MALFAI
-	panel = MALFUNCTION
-	charge_type = Sp_CHARGES
-	charge_max = 1
-	hud_state = "rcd_disable"
-	override_base = "grey"
-
-/spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
-	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
-		rcd.disabled = 1
-	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in red_tool_list)
-		red.disabled = 1
-	to_chat(src, "RCD-disabling pulse emitted.")
-
 /datum/AI_Module/small/overload_machine
 	module_name = "Machine overload"
 	mod_pick_name = "overload"
@@ -204,8 +180,8 @@ rcd light flash thingy on matter drain
 /datum/AI_Module/small/blackout
 	module_name = "Blackout"
 	mod_pick_name = "blackout"
-	description = "Attempts to overload the lighting circuits on the station, destroying some bulbs. 3 uses."
-	uses = 3
+	description = "Sends out a high-frequency electromagnetic pulse that disables some basic circuitry on the station. Renders any pre-existing radios and Rapid-Construction-Devices useless in addition to breaking lights."
+	uses = 1
 	cost = 15
 
 	power_type = /spell/aoe_turf/blackout
@@ -215,16 +191,22 @@ rcd light flash thingy on matter drain
 	user_type = USER_TYPE_MALFAI
 	panel = MALFUNCTION
 	charge_type = Sp_CHARGES
-	charge_max = 3
+	charge_max = 1
 	hud_state = "blackout"
 	override_base = "grey"
 
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
-		if(prob(30*apc.overload))
-			apc.overload_lighting()
-		else
-			apc.overload++
+		apc.overload_lighting()
+	for(var/obj/item/device/radio/radio in radio_list)
+		radio.scramble_message = 1
+		radio.visible_message("*BZZZT*", range = 1)
+	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
+		rcd.disabled = 1
+	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in red_tool_list)
+		red.disabled = 1
+	to_chat(user, "<span class='warning'>Electromagnetic pulse sent.</span>")
+
 
 /datum/AI_Module/small/interhack
 	module_name = "Fake Centcom Announcement"

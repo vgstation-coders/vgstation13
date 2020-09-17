@@ -19,6 +19,7 @@
 	var/freerange = 0 // 0 - Sanitize frequencies, 1 - Full range
 	var/list/channels = list() //see communications.dm for full list. First channes is a "default" for :h
 	var/subspace_transmission = 0
+	var/scramble_message = 0   //If enabled, all recieved messages will be incomprehensible.
 	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
 	var/raider = 0//same as above but for raiders
 	var/maxf = 1499
@@ -53,11 +54,13 @@
 	..()
 	if(ticker && ticker.current_state != GAME_STATE_PREGAME) // So that equipped headset during set up are correctly initialized.
 		initialize()
+	radio_list += src
 
 /obj/item/device/radio/Destroy()
 	wires = null
 	remove_radio_all(src) //Just to be sure
 	..()
+	radio_list -= src
 
 /obj/item/device/radio/initialize()
 	. = ..()
@@ -218,6 +221,8 @@
 		be prepared to disregard any comments in all of tcomms code. i tried my best to keep them somewhat up-to-date, but eh
 	*/
 	var/datum/speech/speech=speech_orig.clone()
+	if(scramble_message)
+		speech.message = Gibberish(speech.message, 90)
 	speech.radio=src
 	#ifdef SAY_DEBUG
 	var/msgclasses  = speech.render_message_classes(", ")
