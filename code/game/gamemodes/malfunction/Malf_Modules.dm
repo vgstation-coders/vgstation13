@@ -249,22 +249,57 @@ rcd light flash thingy on matter drain
 	//list( "Alert 1" = /datum/command_alert_1, "Alert 5" = /datum/command_alert_5, ...)
 	//Then ask the AI to pick one announcement from the list
 
-	var/list/possible_announcements = typesof(/datum/command_alert)
-	for(var/A in possible_announcements)
-		var/datum/command_alert/CA = A
-		possible_announcements[initial(CA.name)] = A
-		possible_announcements.Remove(A)
+	if(alert("Would you like to create your own announcement or use a pre-existing one?","Confirm","Custom","Pre-Existing") == "Custom") 
+		
+		var/input = input(user, "Please enter anything you want. Anything.", "What?", "") as message|null
+		var/customname = input(user, "Pick a title for the report.", "Title") as text|null
+		if(!input)
+			to_chat(user, "Announcement Cancelled.")
+			return 1
+		if(!customname)
+			customname = "Nanotrasen Update"
+		for (var/obj/machinery/computer/communications/C in machines)
+			if(! (C.stat & (BROKEN|NOPOWER) ) )
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
+				P.name = "'[command_name()] Update.'"
+				P.info = input
+				P.update_icon()
+				C.messagetitle.Add("[command_name()] Update")
+				C.messagetext.Add(P.info)
 
-	var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
-	if(!chosen_announcement)
-		to_chat(user, "Selection cancelled.")
-		return 1
-	if(!charge_counter)
-		to_chat(user, "No more charges.")
-		return 1
-	command_alert(possible_announcements[chosen_announcement])
-	log_game("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
-	message_admins("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+		switch(alert("Should this be announced to the general population?",,"Yes","No"))
+			if("Yes")
+				command_alert(input, customname,1);
+			if("No")
+				to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+
+		world << sound('sound/AI/commandreport.ogg', volume = 60)
+		log_admin("Malfunctioning AI: [key_name(user)] has created a custom command report: [input]")
+		message_admins("Malfunctioning AI: [key_name_admin(user)] has created a custom command report", 1)
+
+	else
+		var/list/possible_announcements = typesof(/datum/command_alert)
+		for(var/A in possible_announcements)
+			var/datum/command_alert/CA = A
+			possible_announcements[initial(CA.name)] = A
+			possible_announcements.Remove(A)
+
+		var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
+		if(!chosen_announcement)
+			to_chat(user, "Selection cancelled.")
+			return 1
+		if(!charge_counter)
+			to_chat(user, "No more charges.")
+			return 1
+		var/datum/command_alert/C = possible_announcements[chosen_announcement]
+		command_alert(C)
+		if(C.theme)
+			to_chat(world, "test1")
+			ticker.StartThematic(C.theme)
+		else
+			to_chat(world, "test2")
+		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
 
 /datum/AI_Module/small/reactivate_camera
 	module_name = "Reactivate camera"

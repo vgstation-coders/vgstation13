@@ -8,6 +8,8 @@
 	var/alert = 'sound/AI/commandreport.ogg'//sound
 	var/noalert = 0
 
+	var/theme= "" //Whatever theme is associated with this announcement
+
 /datum/command_alert/proc/announce()
 	command_alert(message, alert_title, force_report, alert, noalert)
 
@@ -108,6 +110,7 @@
 	alert_title = "Subversive Elements"
 	force_report = 1
 	message = "Subversive Union-aligned elements have been detected aboard the station. According to latest reports, targeted removal of heads of staff is already underway. Loyal crew should take immediate action to secure station against revolutionaries."
+	theme = "nukesquad"
 
 /datum/command_alert/revolutiontoppled
 	name = "Revolution Defeated"
@@ -131,6 +134,7 @@
 	alert_title = "Jungle Fever Outbreak"
 	force_report = 1
 	message = "Early symptoms of a Jungle Fever outbreak have been detected aboard your station. SHOOT MONKEYS ON SIGHT. Weld ducting and ventilation. Avoid contact with disease carriers at any personal cost. Command staff should secure nuclear authentication disk and nuclear fission explosive."
+	theme = "endgame"
 
 /datum/command_alert/jungle_endgame
 	name = "Jungle Fever Outbreak Escalated"
@@ -249,6 +253,7 @@
 /datum/command_alert/supermatter_cascade
 	name = "Supermatter Cascade Start"
 	alert_title = "SUPERMATTER CASCADE DETECTED"
+	theme = "endgame"
 
 /datum/command_alert/supermatter_cascade/announce()
 	message = {"
@@ -302,6 +307,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Anomaly Alert"
 	alert = 'sound/AI/aimalf.ogg'
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
+	theme = "malfdelta"
 
 /////////////METEOR STORM
 
@@ -309,9 +315,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Major Meteor Storm Warning"
 	alert_title = "Space Weather Automated Announcements"
 	alert = 'sound/AI/meteorround.ogg'
+	theme = "endgame"
 
 	var/meteor_delay = 2000
 	var/supply_delay = 100
+	
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
@@ -319,7 +327,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
 	else
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 1800, meteor_delay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
-
 	..()
 
 ////small meteor storm
@@ -478,6 +485,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Detected - Station Locked Down"
 	alert_title = "Occult Assault"
 	force_report = 1
+	theme = "endgame"
 
 /datum/command_alert/bloodstones_raised/announce()
 	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
@@ -487,6 +495,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Critical - Breach of Space-Time Detected"
 	alert_title = "Occult Assault Critical"
 	force_report = 1
+	theme = "endgame"
 
 /datum/command_alert/bloodstones_anchor/announce()
 	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
@@ -572,6 +581,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/nuclear_operatives
 	name = "Nuclear Operatives"
 	alert_title = "Imminent Assault"
+	theme = "nukesquad"
 
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."
