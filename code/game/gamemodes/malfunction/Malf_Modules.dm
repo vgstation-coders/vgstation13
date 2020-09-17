@@ -291,7 +291,7 @@ rcd light flash thingy on matter drain
 		if(!charge_counter)
 			to_chat(user, "No more charges.")
 			return 1
-		var/datum/command_alert/C = possible_announcements[chosen_announcement]
+		var/datum/command_alert/C = choices[chosen_announcement]
 		var/datum/command_alert/announcement = new C
 		command_alert(announcement)
 		var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
@@ -303,8 +303,8 @@ rcd light flash thingy on matter drain
 					set_security_level(announcement.alertlevel)
 				if(announcement.stoptheme)
 					ticker.StopThematic()
-		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
-		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [choices[chosen_announcement]]!")
+		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [choices[chosen_announcement]]!")
 
 /datum/AI_Module/small/reactivate_camera
 	module_name = "Reactivate camera"
