@@ -76,11 +76,15 @@
 		return FALSE
 	if(alert.override_alerts && !clear_override)
 		return FALSE
-	alerts -= alert
+	alerts -= category
 	if(client && hud_used)
 		hud_used.reorganize_alerts()
 		client.screen -= alert
 	qdel(alert)
+
+/mob/proc/clear_all_alerts()
+	for(var/category in alerts)
+		clear_alert(category)
 
 
 // PRIVATE = only edit, use, or override these if you're editing the system as a whole
@@ -97,6 +101,8 @@ var/global/list/screen_alarms_locs = list(
 /datum/hud/proc/reorganize_alerts()
 	var/list/alerts = mymob.alerts
 	var/icon_pref
+	if(!alerts.len)
+		return FALSE
 	if(!hud_shown)
 		for(var/i = 1, i <= alerts.len, i++)
 			mymob.client.screen -= alerts[alerts[i]]

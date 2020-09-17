@@ -13,6 +13,8 @@
 	for(var/obj/effect/rune/rune in rune_set.rune_list) //HOLY FUCK WHO THOUGHT LOOPING THROUGH THE WORLD WAS A GOOD IDEA
 		client.images += rune.blood_image
 	regenerate_icons()
+
+	clear_all_alerts()	//fuck alerts
 	handle_regular_hud_updates()
 
 	if(stat != DEAD)
