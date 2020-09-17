@@ -46,7 +46,7 @@
 
 /obj/item/device/radio/New()
 	wires = new(src)
-
+	radio_list += src
 	if(prison_radio)
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
@@ -57,14 +57,9 @@
 
 /obj/item/device/radio/Destroy()
 	wires = null
+	radio_list -= src
 	remove_radio_all(src) //Just to be sure
 	..()
-
-/obj/item/device/radio/proc/scramble()
-	if(scramble_message)
-		return
-	scramble_message = 1
-	visible_message("*BZZZT*", range = 1)
 	
 /obj/item/device/radio/initialize()
 	. = ..()
@@ -225,8 +220,6 @@
 		be prepared to disregard any comments in all of tcomms code. i tried my best to keep them somewhat up-to-date, but eh
 	*/
 	var/datum/speech/speech=speech_orig.clone()
-	if(scramble_message)
-		speech.message = Gibberish(speech.message, 90)
 	speech.radio=src
 	#ifdef SAY_DEBUG
 	var/msgclasses  = speech.render_message_classes(", ")

@@ -198,9 +198,9 @@ rcd light flash thingy on matter drain
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
 		apc.overload_lighting()
-	for(var/frequency in all_radios)
-		for(var/obj/item/radio/R in frequency)
-			R.scramble()
+	to_chat(world, radio_list.len)
+	for(var/obj/item/device/radio/R in radio_list)
+		R.scramble_message = 1
 	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
 		rcd.disabled = 1
 	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in red_tool_list)

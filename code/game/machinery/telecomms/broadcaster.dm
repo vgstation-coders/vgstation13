@@ -249,6 +249,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/data,                // ???
 		var/compression,         // Level of compression
 		var/list/level)          // z-levels that can hear us
+
 #ifdef SAY_DEBUG
 	if(speech.speaker)
 		say_testing(speech.speaker, "broadcast_message start - Sending \"[html_encode(speech.message)]\" to [speech.frequency]")
@@ -261,6 +262,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		return
 
 	var/list/radios = list()
+	var/list/scrambled_radios = list()
 
 	var/atom/movable/virtualspeaker/virt = new /atom/movable/virtualspeaker(null)
 	virt.name = speech.name
@@ -276,18 +278,27 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		if (1) // broadcast only to intercom devices
 			for (var/obj/item/device/radio/intercom/R in all_radios["[speech.frequency]"])
 				if (R && R.receive_range(speech.frequency, level) > -1)
-					radios += R
+					if(R.scramble_message)
+						scrambled_radios += R
+					else
+						radios += R
 		if (2) // broadcast only to intercoms and station-bounced radios
 			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
 				if (istype(R, /obj/item/device/radio/headset))
 					continue
 
 				if (R && R.receive_range(speech.frequency, level) > -1)
-					radios += R
+					if(R.scramble_message)
+						scrambled_radios += R
+					else
+						radios += R
 		else // broadcast to ALL radio devices
 			for (var/obj/item/device/radio/R in all_radios["[speech.frequency]"])
 				if (R && R.receive_range(speech.frequency, level) > -1)
-					radios += R
+					if(R.scramble_message)
+						scrambled_radios += R
+					else
+						radios += R
 
 			/*
 			 * Syndicate radios use magic that allows them to hear everything.
@@ -301,15 +312,14 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	// get a list of mobs who can hear from the radios we collected and observers
 	var/list/listeners = get_mobs_in_radio_ranges(radios) | observers
+	var/list/scrambled_listeners = difflist(get_mobs_in_radio_ranges(scrambled_radios), listeners)
 
 	radios = null
 
 	// TODO: Review this usage.
 	var/rendered = virt.render_speech(speech) // always call this on the virtualspeaker to advoid issues
-	//var/listeners_sent = 0
 	for (var/atom/movable/listener in listeners)
 		if (listener)
-			//listeners_sent++
 			listener.Hear(speech, rendered)
 
 	if (length(listeners))
@@ -351,6 +361,13 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	if(speech.speaker)
 		say_testing(speech.speaker, "Broadcast_Message finished with [listeners ? listeners.len : 0] listener\s getting our message, [speech.message] lang = [speech.language ? speech.language.name : "none"]")
 #endif
+
+	//Send scrambled message after everything else.
+	speech.message = Gibberish(speech.message, 95)
+	var/rendered_scramble = virt.render_speech(speech)
+	for (var/atom/movable/listener in scrambled_listeners)
+		if (listener)
+			listener.Hear(speech, rendered_scramble)
 
 	spawn(50)
 		qdel(virt)
