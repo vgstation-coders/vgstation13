@@ -140,10 +140,13 @@ var/list/alldepartments = list("Central Command")
 						flick("faxreceive",src)
 						playsound(loc, "sound/effects/fax.ogg", 50, 1)
 						spawn(2 SECONDS)
+							var/obj/item/RW
 							if(findtext(tofax.name,"Demotion"))
-								new /obj/item/demote_chip(loc)
+								RW = new /obj/item/demote_chip(loc)
 							if(findtext(tofax.name,"Commendation"))
-								new /obj/item/mounted/poster(loc,new /datum/poster/special/goldstar)
+								RW = new /obj/item/mounted/poster(loc,new /datum/poster/special/goldstar)
+							if(RW)
+								log_game("[usr]/([usr.ckey]) received [RW.name] as an automated fax response.") //born to code, forced to log.
 					else
 						Centcomm_fax(tofax, tofax.name, usr, dpt)
 			else
