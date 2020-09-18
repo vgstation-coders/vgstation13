@@ -185,11 +185,7 @@ var/VOX_AVAILABLE_VOICES = list(
 /mob/living/silicon/ai/proc/announcement_checks()
 	//I am kill but here
 	if(isUnconscious())
-		return FALSE
-
-	// If we're in an APC, and APC is ded, ABORT
-	if(parent && istype(parent) && parent.stat)
-		to_chat(usr, "You're in a dead APC, no")
+		to_chat(usr, "Not while you're incapacitated.")
 		return FALSE
 
 	if(istype(usr,/mob/living/silicon/ai))
