@@ -111,11 +111,16 @@ rcd light flash thingy on matter drain
 	charge_max = 2
 	hud_state = "overload"
 	override_base = "grey"
+	var/list/blacklist = typesof(
+	/obj/machinery/atmospherics, 
+	/obj/machinery/power,
+	/obj/machinery/singularity,
+	/obj/machinery/conveyor
+	)
 
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
-	if (istype(target, /obj/machinery))
-		var/obj/machinery/M = target
-		return M.can_overload()
+	if (istype(target, /obj/machinery) || istype(target, /obj/item/device/radio/intercom))
+		return !is_type_in_list(target, blacklist)
 	else
 		to_chat(holder, "That is not a machine.")
 

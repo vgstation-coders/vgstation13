@@ -647,9 +647,6 @@ Class Procs:
 		return 0
 	return 1
 
-/obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
-	return(src in machines)
-
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
 		return 0
