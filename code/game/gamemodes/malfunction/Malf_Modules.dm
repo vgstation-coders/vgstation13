@@ -111,11 +111,14 @@ rcd light flash thingy on matter drain
 	charge_max = 2
 	hud_state = "overload"
 	override_base = "grey"
-	var/list/blacklist = typesof(
-	/obj/machinery/atmospherics, 
-	/obj/machinery/power,
-	/obj/machinery/singularity,
-	/obj/machinery/conveyor
+	var/list/blacklist 
+
+/spell/targeted/overload_machine/New()
+	blacklist = typesof(
+		/obj/machinery/atmospherics, 
+		/obj/machinery/power,
+		/obj/machinery/singularity,
+		/obj/machinery/conveyor
 	)
 
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
