@@ -160,9 +160,14 @@ Used In File(s): \code\game\supplyshuttle.dm
 							#{{:value.id}}<br>
 							Requested:<br>
 								{{:value.requested}}<br>
+								{{if value.extra}}
+							 		<i>{{:value.extra}}</i><br>
+								{{/if}}
 							Fulfilled:<br>
-							 	{{:value.fulfilled}}<br>
-							for {{:value.name}}: worth {{:value.worth}} to {{:value.to}}<br>
+								{{if value.fulfilled}}
+							 		{{:value.fulfilled}}<br>
+								{{/if}}
+							for {{:value.name}}: worth {{:value.worth}} to {{:value.to}}<hr>
 						</div>
 					{{empty}}
 						No active requests.

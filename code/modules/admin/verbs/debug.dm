@@ -1319,6 +1319,18 @@ client/proc/check_convertables()
 
 	error_cache.show_to(src)
 
+/client/proc/add_centcomm_order()
+	set category = "Fun"
+	set name = "Central Command Request"
+	set desc = "Send a Central Command Request"
+
+	if (!check_rights(R_FUN))
+		return
+
+	var/ordertype = input("Select a Request.","Central Command Request",1) as null|anything in (subtypesof(/datum/centcomm_order) - /datum/centcomm_order/per_unit)
+	if (ordertype)
+		SSsupply_shuttle.add_centcomm_order(new ordertype)
+
 /client/proc/emergency_shuttle_panel()
 	set name = "Emergency Shuttle Panel"
 	set category = "Debug"

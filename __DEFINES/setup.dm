@@ -1605,6 +1605,11 @@ var/proccalls = 1
 #define HUMAN_DNA	1
 #define XENO_DNA	2
 
+// Buffer datatype flags.
+#define DNA2_BUF_UI 1
+#define DNA2_BUF_UE 2
+#define DNA2_BUF_SE 4
+
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
 #define ALIEN_BLOOD "#05EE05"
