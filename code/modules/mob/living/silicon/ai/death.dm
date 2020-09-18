@@ -44,7 +44,7 @@
 	if(callshuttle == 3) //if all three conditions are met
 		shuttle_autocall()
 
-	if(explosive && !gibbed)
+	if(explosive && !gibbed && !istype(loc, /obj/machinery/power/apc))
 		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
 		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
 		spawn(30)
