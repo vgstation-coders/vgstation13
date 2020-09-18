@@ -1038,6 +1038,8 @@
 			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
+/obj/machinery/power/apc/can_overload()
+	return 1
 
 /obj/machinery/power/apc/proc/ion_act()
 	//intended to be exactly the same as an AI malf attack

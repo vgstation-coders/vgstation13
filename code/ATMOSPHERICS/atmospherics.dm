@@ -395,6 +395,9 @@ Pipelines + Other Objects -> Pipe network
 /obj/machinery/atmospherics/is_airtight() //Technically, smoke would be able to pop up from a vent, but enabling ventcrawling mobs to do that still doesn't sound like a good idea
 	return 1
 
+/obj/machinery/atmospherics/can_overload()
+	return 0
+
 // Tiny helper to see if the object is "exposed".
 // Basically whether it's partially covered up by a floor tile or not.
 /obj/machinery/atmospherics/proc/exposed()
