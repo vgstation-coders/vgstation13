@@ -249,7 +249,11 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!cancorruptvox())
 		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
 	var/freq = 1
-	var/z_level = get_z_level(loc)
+
+	if(!loc) //nullspace
+		return
+	var/z_level = z ? z : loc.z
+
 	for(var/word in words)
 		if(vox_corrupted && cancorruptvox())
 
