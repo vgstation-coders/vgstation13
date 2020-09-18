@@ -398,7 +398,7 @@ rcd light flash thingy on matter drain
 
 /datum/module_picker
 	var/temp = null
-	var/processing_time = 999
+	var/processing_time = 100
 	var/list/possible_modules = list()
 
 /datum/module_picker/New()
