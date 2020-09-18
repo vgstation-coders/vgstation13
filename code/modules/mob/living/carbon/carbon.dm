@@ -730,3 +730,8 @@
 				visible_message("<span class='warning'>[src] slips on the icy floor!</span>", \
 				"<span class='warning'>You slip on the icy floor!</span>")
 	return TRUE
+
+//Will check what sounds will play for what audible emote.
+//Since carbons cannot do any audible emotes yet it is initially excluded.
+/mob/living/carbon/proc/audible_emote_sound(var/emote)
+	return

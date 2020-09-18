@@ -86,7 +86,8 @@
 	sound_change = list(CLOTHING_SOUND_SCREAM)
 	sound_priority = CLOTHING_SOUND_LOW_PRIORITY
 	sound_file = list('sound/misc/science_scream1.ogg', 'sound/misc/science_scream2.ogg', 'sound/misc/science_scream3.ogg', 'sound/misc/science_scream4.ogg', 'sound/misc/science_scream5.ogg', 'sound/misc/science_scream6.ogg')
-	sound_respect_species = list("Vox", "Skeletal Vox", "Diona")
+	sound_species_whitelist = list("Human")
+	sound_genders_allowed = list(MALE)
 
 /obj/item/clothing/suit/storage/labcoat/oncologist
 	name = "oncologist labcoat"

@@ -1887,7 +1887,7 @@ mob/living/carbon/human/isincrit()
 		T.virus2 = virus_copylist(virus2)
 		T.get_clothes(src, T)
 		T.name = real_name
-		T.host = src	
+		T.host = src
 		forceMove(null)
 		return T
 	else
@@ -2026,3 +2026,36 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+//Start audible emote code
+
+var/list/male_screams =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
+var/list/female_screams = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
+
+var/list/vox_shrieks = list('sound/misc/shriek1.ogg')
+
+var/list/insectoid_chittering = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
+
+var/list/male_coughs = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
+var/list/female_coughs = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
+
+//Run a bunch of arbitrary checks based on code in code/modules/mob/living/carbon/emote.dm
+/mob/living/carbon/human/audible_emote_sound(emote)
+	if(emote == "scream")
+		if(gender == FEMALE)
+			return female_screams
+		else
+			return male_screams
+	if(emote == "cough")
+		if(gender == FEMALE)
+			return female_coughs
+		else
+			return male_coughs
+	if(emote == "shriek")
+		if(species.name == "Vox")
+			return vox_shrieks
+	if(emote == "chitter")
+		if(species.name == "Insectoid")
+			return insectoid_chittering
+
+//End audible emote code
