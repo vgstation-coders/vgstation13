@@ -235,6 +235,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	announcing_vox = world.time + VOX_DELAY
 
+
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 
 	// Same logic as play_vox_sound, so everyone that can hear the sound sees this.
@@ -248,6 +249,7 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!cancorruptvox())
 		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
 	var/freq = 1
+	var/z_level = istype(loc, /obj/machinery/power/apc) ? 1 : src.z
 	for(var/word in words)
 		if(vox_corrupted && cancorruptvox())
 
@@ -255,12 +257,13 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(freq>20450)
 				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
 					freq = freq + (freq/5)
-					play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+					play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
 				freq = rand(11000,14000)
-			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+			play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
 		else
 			//play it normally
-			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+			play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
+
 
 
 #endif // DISABLE_VOX
