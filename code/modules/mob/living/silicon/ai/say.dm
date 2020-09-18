@@ -250,9 +250,7 @@ var/VOX_AVAILABLE_VOICES = list(
 		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
 	var/freq = 1
 
-	if(!loc) //nullspace
-		return
-	var/z_level = z ? z : loc.z
+	var/turf/T = get_turf(src)
 
 	for(var/word in words)
 		if(vox_corrupted && cancorruptvox())
@@ -261,12 +259,12 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(freq>20450)
 				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
 					freq = freq + (freq/5)
-					play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
+					play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
 				freq = rand(11000,14000)
-			play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
 		else
 			//play it normally
-			play_vox_word(word, vox_voice, z_level, null, TRUE, freq)
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
 
 
 
