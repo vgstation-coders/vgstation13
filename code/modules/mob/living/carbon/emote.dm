@@ -317,9 +317,9 @@
 	for(var/obj/item/clothing/C in user.get_equipped_items())
 		if(!C.sound_file)
 			continue
-		if(user.species && !(user.species.name in C.sound_species_whitelist))
+		if(!(user?.species?.name in C.sound_species_whitelist))
 			continue
-		if(user.gender && !(user.gender in C.sound_genders_allowed))
+		if(!(user?.gender in C.sound_genders_allowed))
 			continue
 		if(!(sound_key in C.sound_change))
 			continue

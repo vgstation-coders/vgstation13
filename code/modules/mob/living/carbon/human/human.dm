@@ -2041,21 +2041,22 @@ var/list/female_coughs = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough
 
 //Run a bunch of arbitrary checks based on code in code/modules/mob/living/carbon/emote.dm
 /mob/living/carbon/human/audible_emote_sound(emote)
-	if(emote == "scream")
-		if(gender == FEMALE)
-			return female_screams
-		else
-			return male_screams
-	if(emote == "cough")
-		if(gender == FEMALE)
-			return female_coughs
-		else
-			return male_coughs
-	if(emote == "shriek")
-		if(species.name == "Vox")
-			return vox_shrieks
-	if(emote == "chitter")
-		if(species.name == "Insectoid")
-			return insectoid_chittering
+	switch(emote)
+		if("scream")
+			if(gender == FEMALE)
+				return female_screams
+			else
+				return male_screams
+		if("cough")
+			if(gender == FEMALE)
+				return female_coughs
+			else
+				return male_coughs
+		if("shriek")
+			if(species.name == "Vox")
+				return vox_shrieks
+		if("chitter")
+			if(species.name == "Insectoid")
+				return insectoid_chittering
 
 //End audible emote code
