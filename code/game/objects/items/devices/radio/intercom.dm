@@ -180,6 +180,15 @@
 	broadcasting = 1
 	listening = 0
 
+/obj/item/device/radio/intercom/aiprivate
+	name = "Private AI Channel"
+	broadcasting = 1
+	listening = 1
+
+/obj/item/device/radio/intercom/aiprivate/initialize()
+	..()
+	set_frequency(AIPRIV_FREQ)
+
 /obj/item/device/radio/intercom/security
 	name = "station intercom (Security)"
 
@@ -233,12 +242,12 @@
 	src.frequency = copy.frequency
 	src.broadcasting = copy.broadcasting
 	src.listening = copy.listening
-	
+
 /obj/item/device/radio/intercom/AIShiftClick(var/mob/living/silicon/ai/clicker)
 	if(clicker.intercom_clipboard)
 		src.frequency = clicker.intercom_clipboard.frequency
 		src.broadcasting = clicker.intercom_clipboard.broadcasting
-		src.listening = clicker.intercom_clipboard.listening		
+		src.listening = clicker.intercom_clipboard.listening
 
 		src.updateDialog()
 
