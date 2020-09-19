@@ -27,11 +27,13 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 30 //3 seconds between shots
+	var/fire_twice = 0
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
 //	var/list/targets
 	var/atom/movable/cur_target
+	var/atom/movable/prev_target
 	var/targeting_active = 0
 	var/area/protected_area
 
@@ -89,9 +91,15 @@
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
 	if(T && (T in protected_area.turretTargets))
 		var/area/area_T = get_area(T)
-		if( !area_T || (area_T.type != protected_area.type) )
-			protected_area.Exited(T)
-			return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
+		if(!area_T || (area_T.type != protected_area.type))
+			if(prev_target == T && fire_twice)
+				to_chat(world, "test1")
+				prev_target = null
+				return 1
+			else
+				to_chat(world, "test2")
+				protected_area.Exited(T)
+				return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
 		if( ismob(T) )
 			var/mob/M = T
 			if((M.flags & INVULNERABLE) || M.faction == faction)
@@ -225,6 +233,7 @@
 		fire_sound = 'sound/weapons/Taser.ogg'
 		use_power(200)
 
+	prev_target = target
 	A.original = target
 	A.target = U
 	A.current = T

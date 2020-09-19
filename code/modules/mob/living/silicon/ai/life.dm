@@ -26,7 +26,7 @@
 	malfhack = null
 
 /mob/living/silicon/ai/proc/life_handle_power_damage()
-	if(aiRestorePowerRoutine != 0)
+	if(aiRestorePowerRoutine != 0 || ai_flags & COREFORTIFY)
 		// Lost power
 		adjustOxyLoss(1)
 	else
@@ -181,10 +181,15 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else
+		var/damage_taken
 		if(ai_flags & COREFIRERESIST)
-			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
-		else
-			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+			damage_taken = getOxyLoss() + getToxLoss() + getBruteLoss()
+		else 
+			damage_taken = getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss()
+		if(ai_flags & COREFORTIFY)
+			damage_taken = round(damage_taken*0.85)
+
+		health = maxHealth - damage_taken
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
 	return FALSE

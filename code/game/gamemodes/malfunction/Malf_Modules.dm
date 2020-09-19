@@ -45,29 +45,55 @@ rcd light flash thingy on matter drain
 			var/datum/stat/faction/malf/MS = mf.stat_datum
 			MS.modules.Add(new /datum/stat/malf_module_purchase(src))
 
-/datum/AI_Module/large/fireproof_core
-	module_name = "Core upgrade"
-	mod_pick_name = "coreup"
-	description = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
-	cost = 50
-	one_time = 1
-
-/datum/AI_Module/large/fireproof_core/on_purchase(mob/living/silicon/ai/user)
-	user.ai_flags |= COREFIRERESIST
-	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
-
-/datum/AI_Module/large/upgrade_turrets
-	module_name = "AI Turret upgrade"
+/datum/AI_Module/large/upgrade_defenses
+	module_name = "Core Defense Upgrade"
 	mod_pick_name = "turret"
-	description = "Improves the firing speed and health of all AI turrets. This effect is permanent."
-	cost = 50
+	description = "Improves the firing speed and health of all AI turrets, and causes them to shoot highly-lethal pulse beams. You core also strengthens its circuitry, making it immune to the burn damage. This effect is permanent."
+	cost = 30
 	one_time = 1
 
-/datum/AI_Module/large/upgrade_turrets/on_purchase(mob/living/silicon/ai/user)
+	power_type = /spell/aoe_turf/fortify_core
+
+/datum/AI_Module/large/upgrade_defenses/on_purchase(mob/living/silicon/ai/user)
+	user.ai_flags |= COREFIRERESIST
 	for(var/obj/machinery/turret/turret in machines)
-		turret.health += 30
-		turret.shot_delay = 20
-	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
+		turret.health += 120	//200 Totaldw
+		turret.shot_delay = 15
+		turret.lasertype = 3
+		turret.fire_twice = 1
+	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
+
+/spell/aoe_turf/fortify_core
+	name = "Fortify Core"
+	desc = "Reroutes your internal energy to a built-in blast shield within your core, greatly reducing damage taken. The shield will drain your energy while active."
+	user_type = USER_TYPE_MALFAI
+	panel = MALFUNCTION
+	charge_type = Sp_RECHARGE
+	charge_max = 1 SECONDS
+	hud_state = "fortify"
+	override_base = "grey"
+	cooldown_min = 1 SECONDS
+	spell_flags = STATALLOWED	
+
+/spell/aoe_turf/fortify_core/before_target(mob/user)
+	if(!isAI(user))
+		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
+		return 1
+
+/spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
+	var/mob/living/silicon/ai/A = user
+	if(A.ai_flags & COREFORTIFY)
+		if(A.overlays)
+			flick("lockdown-open", A.overlays[0])
+		A.ai_flags &= ~COREFORTIFY
+		A.overlays = 0
+	else
+		var/icon/lock = new('icons/mob/ai.dmi', "lockdown")
+		A.overlays += lock
+		flick("lockdown-close", lock)
+		A.ai_flags |= COREFORTIFY
+	to_chat(user, "<span class='notice'>You [A.ai_flags & COREFORTIFY ? "forfity" : "unfortify"] your core.</span>")
+
 
 /datum/AI_Module/large/disable_rcd
 	module_name = "RCD disable"
