@@ -184,6 +184,7 @@
 	name = "Private AI Channel"
 	broadcasting = 1
 	listening = 1
+	freerange = 1
 
 /obj/item/device/radio/intercom/aiprivate/initialize()
 	..()
