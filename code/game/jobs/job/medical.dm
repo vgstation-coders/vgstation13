@@ -73,7 +73,7 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
-	wage_payout = 45
+	wage_payout = 55
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
