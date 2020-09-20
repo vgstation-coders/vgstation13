@@ -1,7 +1,4 @@
 <!--
-Pull requests must be atomic.  Change one set of related things at a time.  Bundling sucks for everyone.
-This means, primarily, that you shouldn't fix bugs and add content in the same PR. When we mean 'bundling', we mean making one PR for multiple, unrelated changes.
-
 Test your changes. PRs that do not compile will not be accepted.
 Testing your changes locally is incredibly important. If you break the serb we will be very upset with you.
 
