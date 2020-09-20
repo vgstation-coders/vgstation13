@@ -82,6 +82,7 @@ rcd light flash thingy on matter drain
 	layer = LIGHTING_LAYER
 	icon = 'icons/mob/ai.dmi'
 	icon_state = "lockdown-up"
+	vis_flags = VIS_INHERIT_ID
 
 /obj/effect/overlay/ai_shield/proc/lower()
 	flick("lockdown-open", src)
