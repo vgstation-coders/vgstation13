@@ -49,7 +49,7 @@ rcd light flash thingy on matter drain
 	module_name = "Core Defense Upgrade"
 	mod_pick_name = "coredefense"
 	description = "Improves the firing speed and health of all AI turrets, and causes them to shoot highly-lethal pulse beams. You core also strengthens its circuitry, making it immune to the burn damage. This effect is permanent."
-	cost = 30
+	cost = 35
 	one_time = 1
 	power_type = /spell/aoe_turf/fortify_core
 
@@ -60,8 +60,9 @@ rcd light flash thingy on matter drain
 		turret.health += 120	//200 Totaldw
 		turret.shot_delay = 15
 		turret.lasertype = 3
-		turret.persistent_target = 1
+		turret.fire_twice = 1
 	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
+	user.vis_contents += new /obj/effect/overlay/ai_shield
 
 /spell/aoe_turf/fortify_core
 	name = "Fortify Core (Toggle)"
@@ -75,32 +76,44 @@ rcd light flash thingy on matter drain
 	cooldown_min = 1 SECONDS
 	spell_flags = STATALLOWED	
 
+/obj/effect/overlay/ai_shield
+	name = "AI Blast Shield"
+	desc = "You can see the words 'FUCK C4RB0NS' etched on to it."
+	layer = LIGHTING_LAYER
+	icon = 'icons/mob/ai.dmi'
+	icon_state = "lockdown-up"
+
+/obj/effect/overlay/ai_shield/proc/lower()
+	flick("lockdown-open", src)
+	icon_state = "lockdown-up"
+
+/obj/effect/overlay/ai_shield/proc/raise()
+	flick("lockdown-close", src)
+	icon_state = "lockdown"
+
 /spell/aoe_turf/fortify_core/before_target(mob/user)
 	if(!isAI(user))
 		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
 		return 1
-	to_chat(world, "Before_target passed.")
 	return
-
+	
 /spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
-	to_chat(world, "Attempting to cast spell.")
+	to_chat(world, "Attempting to cast spell.")	
 	var/mob/living/silicon/ai/A = user
-	A.overlays = 0
+	var/obj/effect/overlay/ai_shield/shield 
+	for(var/content in A.vis_contents)
+		if(istype(content, /obj/effect/overlay/ai_shield))
+			shield = content
+			break
 	if(A.ai_flags & COREFORTIFY)
 		to_chat(world, "Flicking open overlay.")
-		var/icon/lockopen = new('icons/mob/ai.dmi', "lockdown-open")
-		A.overlays += lockopen
+		shield.lower()
 		sleep(7)
-		A.overlays = 0
 		A.ai_flags &= ~COREFORTIFY
 	else
 		to_chat(world, "Flicking close overlay.")
-		var/icon/lockclose = new('icons/mob/ai.dmi', "lockdown-close")
-		A.overlays += lockclose
+		shield.raise()
 		sleep(7)
-		A.overlays = 0
-		var/icon/locked = new('icons/mob/ai.dmi', "lockdown")
-		A.overlays += locked
 		A.ai_flags |= COREFORTIFY
 	to_chat(user, "<span class='notice'>You [A.ai_flags & COREFORTIFY ? "forfity" : "unfortify"] your core.</span>")
 

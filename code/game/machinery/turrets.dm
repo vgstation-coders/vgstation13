@@ -27,9 +27,7 @@
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 30 //3 seconds between shots
-	var/persistent_target = 0	//fire once more, even after target leaves the area
-	var/persisted = 0	//helper variables for above
-	var/fire_again = 0
+	var/fire_twice = 0
 
 	use_power = 1
 	idle_power_usage = 50
@@ -129,7 +127,6 @@
 /obj/machinery/turret/proc/get_new_target()
 	var/list/new_targets = new
 	var/new_target
-	persisted = 0
 	for(var/mob/M in protected_area.turretTargets)
 		if(issilicon(M))
 			if(!shootsilicons || istype(M, /mob/living/silicon/ai))
@@ -168,11 +165,12 @@
 			popDown()
 		return
 	if(!check_target(cur_target)) //if current target fails target check
-		if(!cur_target || !(persistent_target && !persisted))
-			cur_target = get_new_target() 
+		if(fire_twice)
+			src.dir = get_dir(src, cur_target)
+			shootAt(cur_target)
+			cur_target = get_new_target()
 		else
-			fire_again = 1
-
+			cur_target = get_new_target() 
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
 		if(!isPopping())
@@ -210,9 +208,6 @@
 	var/fire_sound = 'sound/weapons/Laser.ogg'
 	if (!T || !U)
 		return
-	if(fire_again)
-		persisted = 1
-		fire_again = 0
 	var/obj/item/projectile/A
 	if (src.lasers)
 		switch(lasertype)

@@ -159,6 +159,11 @@
 	if(life_handle_health())
 		return
 
+	if(ai_flags & COREFORTIFY)
+		brute_damage_modifier = 0.15
+	else
+		brute_damage_modifier = 1
+		
 	life_handle_camera()
 	life_handle_malf()
 	life_handle_power_damage()
@@ -183,12 +188,10 @@
 	else
 		var/damage_taken
 		if(ai_flags & COREFIRERESIST)
-			damage_taken = getOxyLoss() + getToxLoss() + getBruteLoss()
+			damage_taken = getToxLoss() + getBruteLoss() + getOxyLoss()
 		else 
-			damage_taken = getOxyLoss() + getToxLoss() + getFireLoss() + getBruteLoss()
-		if(ai_flags & COREFORTIFY)
-			damage_taken = round(damage_taken*0.85)
-
+			damage_taken = getToxLoss() + getFireLoss() + getBruteLoss() + getOxyLoss()
+ 
 		health = maxHealth - damage_taken
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
