@@ -160,10 +160,10 @@
 		return
 
 	if(ai_flags & COREFORTIFY)
-		brute_damage_modifier = 0.15
+		brute_damage_modifier = 0.25
 	else
 		brute_damage_modifier = 1
-		
+
 	life_handle_camera()
 	life_handle_malf()
 	life_handle_power_damage()
