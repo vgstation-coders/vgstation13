@@ -533,6 +533,8 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
+	if((ai_flags & COREFIRERESIST) && Proj.damage_type == BURN)
+		return 
 	..(Proj)
 	updatehealth()
 	return 2
