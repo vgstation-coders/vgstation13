@@ -586,8 +586,8 @@
 /datum/find/laser/spawn_item()
 
 	var/gun_base = pickweight(list(
-		/obj/item/weapon/gun/energy/laser/alien				=	70,		//70% chance to be a normal gun
-		/obj/item/weapon/gun/energy/laser/captain/alien	=	15,		//15% chance to be self-recharging
+		/obj/item/weapon/gun/energy/laser/alien				=	75,		//75% chance to be a normal gun
+		/obj/item/weapon/gun/energy/laser/captain/alien	=	20,		//20% chance to be self-recharging
 		/obj/item/weapon/gun/energy/bison/alien			= 	5,		//5% chance to be pump-charge
 	))
 	var/obj/item/weapon/gun/energy/new_gun = new gun_base
