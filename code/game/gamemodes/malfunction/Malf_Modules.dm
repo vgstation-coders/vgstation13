@@ -63,6 +63,9 @@ rcd light flash thingy on matter drain
 		turret.fire_twice = 1
 	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
 	user.vis_contents += new /obj/effect/overlay/ai_shield
+	user.can_shunt = 0
+	to_chat(user, "<span class='warning'>You cannot shunt anymore.</span>")
+
 
 /spell/aoe_turf/fortify_core
 	name = "Fortify Core (Toggle)"
