@@ -33,8 +33,10 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 /datum/command_alert/wages
 	name = "wage payout"
+	alert_title = "Quarter-Hourly Salary"
 	message = "Payroll has been processed. All eligible accounts have received their paycheck as a direct deposit."
 	noalert = 1
+	small = 1
 
 /datum/command_alert/wage/announce()
 	message = "Payroll has been processed. All eligible accounts have received their paycheck as a direct deposit."
@@ -42,8 +44,10 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 /datum/command_alert/wage_increase
 	name = "wage raise"
+	alert_title = "Quarter-Hourly Salary"
 	message = "Payroll has been processed. Thanks to the high productivity of the station staff, all wages have been increased by ERROR."
 	noalert = 1
+	small = 1
 
 /datum/command_alert/wage_increase/announce()
 	message = "Payroll has been processed. Thanks to the high productivity of the station staff, all wages have been increased by [round(100*payroll_modifier - 100)]%."
@@ -51,8 +55,10 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 
 /datum/command_alert/wage_reduction
 	name = "wage reduction"
+	alert_title = "Quarter-Hourly Salary"
 	message = "Payroll has been processed. Financial mismanagement has resulted in all wages being reduced by ERROR."
 	noalert = 1
+	small = 1
 
 /datum/command_alert/wage_reduction/announce()
 	message = "Payroll has been processed. Financial mismanagement has resulted in all wages being reduced by [round(100*payroll_modifier - 100)]%."
