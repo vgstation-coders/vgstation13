@@ -49,7 +49,7 @@ rcd light flash thingy on matter drain
 	module_name = "Core Defense Upgrade"
 	mod_pick_name = "coredefense"
 	description = "Improves the firing speed and health of all AI turrets, and causes them to shoot highly-lethal pulse beams. You core also strengthens its circuitry, making it immune to the burn damage. This effect is permanent."
-	cost = 30
+	cost = 50
 	one_time = 1
 	power_type = /spell/aoe_turf/fortify_core
 
