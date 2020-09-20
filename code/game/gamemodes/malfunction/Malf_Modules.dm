@@ -77,7 +77,6 @@ rcd light flash thingy on matter drain
 	hud_state = "fortify"
 	override_base = "grey"
 	cooldown_min = 1 SECONDS
-	spell_flags = STATALLOWED	
 
 /obj/effect/overlay/ai_shield
 	name = "AI Blast Shield"
@@ -99,22 +98,18 @@ rcd light flash thingy on matter drain
 	if(!isAI(user))
 		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
 		return 1
-	return
 	
 /spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
 	var/mob/living/silicon/ai/A = user
 	var/obj/effect/overlay/ai_shield/shield 
-	for(var/content in A.vis_contents)
-		if(istype(content, /obj/effect/overlay/ai_shield))
-			shield = content
-			break
+	shield = locate(/obj/effect/overlay/ai_shield) in A.vis_contents
 	if(A.ai_flags & COREFORTIFY)
-		shield.lower()
-		sleep(7)
+		if(shield)
+			shield.lower()
 		A.ai_flags &= ~COREFORTIFY
 	else
-		shield.raise()
-		sleep(7)
+		if(shield)
+			shield.raise()
 		A.ai_flags |= COREFORTIFY
 	to_chat(user, "<span class='notice'>You [A.ai_flags & COREFORTIFY ? "forfity" : "unfortify"] your core.</span>")
 

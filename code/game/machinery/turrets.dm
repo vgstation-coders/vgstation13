@@ -34,7 +34,6 @@
 	active_power_usage = 300
 //	var/list/targets
 	var/atom/movable/cur_target
-	var/atom/movable/prev_target
 	var/targeting_active = 0
 	var/area/protected_area
 
@@ -232,7 +231,6 @@
 		fire_sound = 'sound/weapons/Taser.ogg'
 		use_power(200)
 
-	prev_target = target
 	A.original = target
 	A.target = U
 	A.current = T
