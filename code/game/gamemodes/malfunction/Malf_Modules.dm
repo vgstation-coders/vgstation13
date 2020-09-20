@@ -99,7 +99,6 @@ rcd light flash thingy on matter drain
 	return
 	
 /spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
-	to_chat(world, "Attempting to cast spell.")	
 	var/mob/living/silicon/ai/A = user
 	var/obj/effect/overlay/ai_shield/shield 
 	for(var/content in A.vis_contents)
@@ -107,12 +106,10 @@ rcd light flash thingy on matter drain
 			shield = content
 			break
 	if(A.ai_flags & COREFORTIFY)
-		to_chat(world, "Flicking open overlay.")
 		shield.lower()
 		sleep(7)
 		A.ai_flags &= ~COREFORTIFY
 	else
-		to_chat(world, "Flicking close overlay.")
 		shield.raise()
 		sleep(7)
 		A.ai_flags |= COREFORTIFY
