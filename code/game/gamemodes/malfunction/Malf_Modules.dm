@@ -36,7 +36,7 @@ rcd light flash thingy on matter drain
 			if (istype(S,power_type))
 				S.charge_counter += uses
 				return
-		user.add_spell(new power_type, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		user.add_spell(new power_type, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
 	// statistics collection - malf module purchases
 	if(user.mind && istype(user.mind.faction, /datum/faction/malf))
@@ -84,7 +84,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "rcd_disable"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
@@ -110,7 +110,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 2
 	hud_state = "overload"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
 	if (istype(target, /obj/machinery))
@@ -144,7 +144,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	summon_type = list(/obj/machinery/autoborger/conveyor)
 	hud_state = "autoborger"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/conjure/place_autoborger/New()
 	..()
@@ -217,7 +217,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "blackout"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -241,7 +241,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "fakemessage"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -283,7 +283,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	spell_flags = WAIT_FOR_CLICK
 	hud_state = "camera_reactivate"
-	override_base = "grey"
+	override_base = "malf"
 	var/list/camera_images = list()
 
 /spell/targeted/reactivate_camera/before_channel(mob/user)
@@ -343,7 +343,7 @@ rcd light flash thingy on matter drain
 	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
 	hud_state = "camera_upgrade"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
 	if(!istype(target, /obj/machinery/camera))
@@ -382,7 +382,7 @@ rcd light flash thingy on matter drain
 	var/datum/module_picker/MP
 	charge_max = 10
 	hud_state = "choose_module"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/module_picker/New()
 	..()
@@ -456,7 +456,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "systemtakeover"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/takeover/before_target(mob/user)
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
@@ -496,7 +496,7 @@ rcd light flash thingy on matter drain
 	max_targets = 1
 
 	hud_state = "radiation"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/ai_win/before_target(mob/user)
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
