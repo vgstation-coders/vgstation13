@@ -8,6 +8,10 @@
 	step_in = 1
 	wreckage = /obj/effect/decal/mecha_wreckage/hoverpod
 
+/obj/mecha/working/hoverpod/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 //duplicate of parent proc, but without space drifting
 /obj/mecha/working/hoverpod/dyndomove(direction)
 	stopMechWalking()

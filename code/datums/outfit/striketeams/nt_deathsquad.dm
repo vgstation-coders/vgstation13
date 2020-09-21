@@ -54,6 +54,7 @@
 	camera.c_tag = H.real_name
 
 /datum/outfit/striketeam/nt_deathsquad/post_equip(var/mob/living/carbon/human/H)
+	..()
 	if (is_leader)
 		equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/deathsquad,  /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)

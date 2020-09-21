@@ -1119,6 +1119,18 @@
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/donutburger
+	name = "donut burger"
+	desc = "Illegal to have out on code green."
+	icon_state = "donutburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SPRINKLES, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 	name = "avocado burger"
 	desc = "Blurring the line between ingredient and condiment."

@@ -162,6 +162,35 @@
 	temp = tank_one.air_contents.remove_ratio(1)
 	tank_two.air_contents.merge(temp)
 
+/obj/item/device/transfer_valve/proc/simulate_merge()
+	//This proc basically reproduces step by step the gas changes that would lead to an explosion
+	//And returns said explosion's Epicenter radius (aka Devastation radius, or "Dev")
+
+	var/datum/gas_mixture/temp_first = new (tank_one.air_contents)
+	var/datum/gas_mixture/temp_second = new (tank_two.air_contents)
+
+	temp_first.merge(temp_second)
+
+	temp_first.react()
+
+	var/pressure = temp_first.return_pressure()/2
+
+	if(pressure <= TANK_FRAGMENT_PRESSURE)
+		return 0
+
+	temp_first.react()
+	temp_first.react()
+	temp_first.react()
+
+	pressure = temp_first.return_pressure()/2
+
+	var/range = (pressure-TANK_FRAGMENT_PRESSURE)/TANK_FRAGMENT_SCALE
+
+	var/dev = round(range*0.25)
+
+	return dev
+
+
 /obj/item/device/transfer_valve/proc/split_gases()
 	if (!valve_open || !tank_one || !tank_two)
 		return

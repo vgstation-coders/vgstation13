@@ -16,7 +16,7 @@
 
 /obj/item/projectile/change/proc/wabbajack(var/mob/living/M,var/type) //WHY: as mob in living_mob_list
 	if(istype(M, /mob/living) && M.stat != DEAD)
-		if(ismanifested(M))
+		if(ismanifested(M) || iscluwnebanned(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
 		if(isshell(M))	//Kick out the AI if its a shell
@@ -75,7 +75,7 @@
 	flag = "energy"
 	var/changetype=null
 	fire_sound = 'sound/weapons/radgun.ogg'
-	
+
 /obj/item/projectile/zwartepiet/on_hit(var/atom/pietje)
 	var/type = changetype
 	spawn(1)

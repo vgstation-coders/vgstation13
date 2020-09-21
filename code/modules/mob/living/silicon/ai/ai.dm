@@ -50,7 +50,7 @@ var/list/ai_list = list()
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
-
+	var/vox_corrupted = FALSE
 //Hud stuff
 
 	//MALFUNCTION
@@ -188,7 +188,7 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/verb/toggle_holopadoverlays()
 	set category = "AI Commands"
 	set name = "Toggle Holopad Overlays"
-	
+
 	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
 		return
 	toggleholopadoverlays()
@@ -530,6 +530,10 @@ var/list/ai_list = list()
 		to_chat(usr, "VOX voice set to [vox_voice].")
 		make_announcement()
 		return
+
+	if(href_list["voice_corrupted"])
+		vox_corrupted = text2num(href_list["voice_corrupted"]) // even if client hacks the value, we only care if it's true or false.
+		make_announcement()
 
 	// play_announcement=word1+word2... - Plays an announcement to the station.
 	if(href_list["play_announcement"])

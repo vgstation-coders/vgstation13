@@ -60,7 +60,12 @@
 				binary = binaries
 				continue
 		if(skipping < 3)
-			all_maps[potential] = path + binary
+			var/fullpath = path+binary
+			if(copytext(fullpath,-4,0) == ".dmb")
+				all_maps[potential] = path + binary
+			else
+				binary = null
+				continue
 		if(skipping)
 			message_admins("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")
 			warning("Skipping map [potential] due to [skipping == 1 ? "not enough players." : "too many players."] Players min = [min] || max = [max]")

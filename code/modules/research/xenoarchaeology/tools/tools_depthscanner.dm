@@ -28,7 +28,7 @@
 	if(istype(A,/turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		if(M.finds.len || M.artifact_find)
-
+			playsound(user, 'sound/machines/info.ogg', 20, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
 			D.coords = "[M.x-WORLD_X_OFFSET[M.z]].[rand(0,9)]:[M.y-WORLD_Y_OFFSET[M.z]].[rand(0,9)]:[10 * M.z].[rand(0,9)]"
@@ -48,10 +48,13 @@
 
 			for(var/mob/L in range(src, 1))
 				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings.</span>")
+		else
+			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 	else if(istype(A,/obj/structure/boulder))
 		var/obj/structure/boulder/B = A
 		if(B.artifact_find)
+			playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 			//create a new scanlog entry
 			var/datum/depth_scan/D = new()
 			D.coords = "[10 * (B.x-WORLD_X_OFFSET[B.z])].[rand(0,9)]:[10 * (B.y-WORLD_Y_OFFSET[B.z])].[rand(0,9)]:[10 * B.z].[rand(0,9)]"
@@ -66,6 +69,8 @@
 
 			for(var/mob/L in range(src, 1))
 				to_chat(L, "<span class='notice'>[bicon(src)] [src] pings [pick("madly","wildly","excitedly","crazily")]!</span>")
+		else
+			playsound(user, 'sound/items/detscan.ogg', 10, 1)
 
 /obj/item/device/depth_scanner/attack_self(var/mob/user as mob)
 	return src.interact(user)

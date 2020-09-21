@@ -115,7 +115,7 @@
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
 
-		finish_setup(new_character, i)
+		finish_setup(new_character, candidate_checks - (i-1)) // i = N, N - 1.... so that N - (i-1) = 1, 2, ...
 
 	applicants.Cut()
 

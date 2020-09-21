@@ -722,10 +722,10 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/medical/zombievirus
-	name = "Zombie Virus Syndrome"
-	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a virus data disk, requires full virus splicing and growth to deploy. Avoid ingesting end results if possible, and ensure you create spare virus data disks if needed."
-	item = /obj/item/weapon/disk/disease/zombie
+/datum/uplink_item/jobspecific/medical/viruscollection
+	name = "Deadly Syndrome Collection"
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
@@ -1018,9 +1018,24 @@ var/list/uplink_items = list()
 /datum/uplink_item/jobspecific/trader
 	category = "Trader Specials"
 
+/datum/uplink_item/jobspecific/trader/dartgun
+	name = "Chemical Dart Gun"
+	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
+	item = /obj/item/weapon/gun/dartgun/vox/raider
+	cost = 16
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/dart_cartridge
+	name = "Dart Cartridge"
+	desc = "A spare cartridge to refill your dart gun."
+	item = /obj/item/weapon/dart_cartridge
+	cost = 2
+	jobs_exclusive = list("Trader")
+	
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
 	jobs_exclusive = list("Trader")
+

@@ -342,6 +342,7 @@
 	icon_state = "map_diskbox"
 	item_state = "diskbox"
 	can_only_hold = list("/obj/item/weapon/disk")
+	cant_hold = list("/obj/item/weapon/disk/harddiskdrive")
 	fits_max_w_class = 3
 	w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.

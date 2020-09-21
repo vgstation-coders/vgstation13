@@ -30,7 +30,7 @@ jobs:
       - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
       - tools/travis/install_spaceman_dmm.sh dreamchecker
       script:
-      - python tools/travis/check_map_files.py maps/
+      - python3 tools/travis/check_map_files.py maps/
       - python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
       - ~/dreamchecker
@@ -81,7 +81,7 @@ jobs:
         # --jobs 1 to prevent threading problems with the BYOND crate.
         - cargo test --jobs 1 --verbose
         - cd -
-        - tools/travis/build.py
+        - tools/travis/build.py 2>&1 | tee /dev/stderr | sponge | awk '/warning:|error:/ { exit 1 }'
         - cp tools/travis/config/config.txt config/
         - tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 

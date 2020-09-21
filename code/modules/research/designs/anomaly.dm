@@ -59,7 +59,6 @@
 	category = "Anomaly"
 	build_path = /obj/item/clothing/accessory/glowstick/phazon
 
-
 //ANOMALY LEVEL 3
 /datum/design/xenoarch_scanner
 	name = "Xenoarchaeology digsite locator"
@@ -71,7 +70,6 @@
 	category = "Anomaly"
 	build_path = /obj/item/device/xenoarch_scanner
 
-
 //ANOMALY LEVEL 4
 /datum/design/xenoarch_scanner_adv//lets you find large artifacts buried in view
 	name = "Advanced xenoarchaeology digsite locator"
@@ -82,6 +80,26 @@
 	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
 	category = "Anomaly"
 	build_path = /obj/item/device/xenoarch_scanner/adv
+
+/datum/design/anodevice
+	name = "Anomaly power utilizer"
+	desc = "Offers a measure of control over the exotic energies extracted from alien artifacts."
+	id = "anodevice"
+	req_tech  =list(Tc_MAGNETS = 4, Tc_ANOMALY = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 3500, MAT_SILVER = 150, MAT_GOLD = 500)
+	category = "Anomaly"
+	build_path = /obj/item/weapon/anodevice
+
+/datum/design/anobattery
+	name = "Anomaly power battery"
+	desc = "A radioactive procedure allows for anomalous exotic particles to be stored inside, until they may exploited by a power utilizer."
+	id = "anobattery"
+	req_tech  =list(Tc_POWERSTORAGE = 3, Tc_ANOMALY = 4)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 700, MAT_GLASS = 70, MAT_URANIUM = 70)
+	category = "Anomaly"
+	build_path = /obj/item/weapon/anobattery
 
 //ANOMALY LEVEL 5
 /datum/design/ano_scanner//easily lets you quickly find every large artifact buried on the Z-Level

@@ -306,7 +306,7 @@
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 

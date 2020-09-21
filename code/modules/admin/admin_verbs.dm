@@ -88,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
+	/client/proc/artifacts_panel,
 	/client/proc/climate_panel
 )
 var/list/admin_verbs_ban = list(
@@ -130,6 +131,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/set_teleport_pref,
 	/client/proc/deadchat_singularity,
 	/client/proc/view_all_rods,
+	/client/proc/add_centcomm_order,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances

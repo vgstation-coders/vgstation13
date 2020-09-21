@@ -89,6 +89,7 @@
 
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
+		/obj/item/projectile/bullet/APS,
 	)
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme

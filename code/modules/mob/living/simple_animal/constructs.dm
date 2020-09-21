@@ -102,7 +102,7 @@
 			remove_language(LANGUAGE_CULT)
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
-			if(iswizard(creator))
+			if(iswizard(creator) || isapprentice(creator))
 				construct_color = rgb(157, 1, 196)
 			else
 				construct_color = rgb(0, 153, 255)

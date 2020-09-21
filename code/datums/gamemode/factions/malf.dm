@@ -41,7 +41,7 @@
 				continue
 			if((isAI(R.antag.current) || isshell(R.antag.current)) && !R.antag.current.isDead())
 				living_ais++
-		if(!living_ais)
+		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
 			stage(FACTION_DEFEATED)
 			return
@@ -78,13 +78,18 @@ You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
 		if(isshell(malfAI.antag.current))
 			var/mob/living/silicon/robot/shell/S = malfAI.antag.current
-			S.mainframe.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+			S.mainframe.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 		else
-			malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "grey_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
-
+			malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
 	return
 
 /datum/faction/malf/get_statpanel_addition()
 	if(stage >= FACTION_ENDGAME)
 		return "Station integrity: [round((AI_win_timeleft/MALF_INITIAL_TIMER)*100)]%"
 	return null
+
+/proc/calculate_malf_hack_APC_cooldown(var/apcs)
+	// if you can come up with a better proc name be my guest
+	// 60 seconds at no APC and 1 APC, 45 seconds at 2 APCs, 30 seconds
+	//return round(max(300, 600 * (apcs > 1 ? (1/apcs + 0.5/apcs) : 1)), 10)
+	return 600

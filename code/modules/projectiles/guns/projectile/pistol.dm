@@ -57,7 +57,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/a75"
 	load_method = 2
 	recoil = 4
-
+	silencer_offset = list(24,7) //please no
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 	update_icon()
@@ -277,6 +277,7 @@
 	mag_type = "/obj/item/ammo_storage/magazine/beretta"
 	load_method = 2
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+	silencer_offset = list(25,9)
 
 /obj/item/weapon/gun/projectile/beretta/update_icon()
 	..()
@@ -295,6 +296,7 @@
 	load_method = 2
 	recoil = 3
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+	silencer_offset = list(27,4)
 
 /obj/item/weapon/gun/projectile/automag/update_icon()
 	..()

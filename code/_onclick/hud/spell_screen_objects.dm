@@ -177,7 +177,7 @@
 
 /obj/abstract/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
-	icon_state = "grey_spell_ready"
+	icon_state = "malf_spell_ready"
 
 	open_state = "malf_open"
 	closed_state = "malf_closed"

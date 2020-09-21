@@ -19,6 +19,10 @@
 	var/selfdestructing = FALSE
 	var/ready= TRUE
 
+/obj/machinery/syndicate_beacon/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/machinery/syndicate_beacon/attack_hand(var/mob/user)
 	if(isobserver(user))
 		to_chat(user, "<span class='rose'>Your ghostly hand goes right through!</span>")

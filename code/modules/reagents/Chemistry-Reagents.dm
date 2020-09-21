@@ -7973,8 +7973,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(..())
 		return 1
 
-	if(volume >= 5 && T.can_thermite)
-		T:rot()
+	if(volume >= 5 && T.can_thermite && istype(T, /turf/simulated/wall))
+		var/turf/simulated/wall/W = T
+		W.rot()
 
 /datum/reagent/ironrot/on_mob_life(var/mob/living/M)
 	if(..())
@@ -7995,8 +7996,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 	if(method == TOUCH)
 		if(issilicon(M))//borgs are hurt on touch by this chem
-			M.adjustFireLoss(5*REM)
-			M.adjustBruteLoss(5*REM)
+			M.adjustFireLoss(10)
+			M.adjustBruteLoss(10)
+//todo : mech and pod damage
 
 
 /datum/reagent/diabeetusol

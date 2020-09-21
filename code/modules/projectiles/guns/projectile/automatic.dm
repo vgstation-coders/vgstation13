@@ -16,6 +16,7 @@
 	var/burstfiring = 0
 	load_method = 2
 	mag_type = "/obj/item/ammo_storage/magazine/smg9mm"
+	silencer_offset = list(22,6)
 
 
 /obj/item/weapon/gun/projectile/automatic/isHandgun()
@@ -34,7 +35,7 @@
 
 /obj/item/weapon/gun/projectile/automatic/update_icon()
 	..()
-	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][silenced ? "-silencer":""][chambered ? "" : "-e"]"
+	icon_state = "[initial(icon_state)][stored_magazine ? "-[stored_magazine.max_ammo]" : ""][chambered ? "" : "-e"]"
 	return
 
 /obj/item/weapon/gun/projectile/automatic/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
@@ -88,6 +89,7 @@
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/uzi45"
 	recoil = 2
+	silencer_offset = list(23,10)
 
 /obj/item/weapon/gun/projectile/automatic/uzi/isHandgun()
 	return TRUE
@@ -119,13 +121,14 @@
 	w_class = W_CLASS_SMALL
 	ammo_type = "/obj/item/ammo_casing/c9mm"
 	mag_type = "/obj/item/ammo_storage/magazine/microuzi9"
+	silencer_offset = list(20,8)
 
 /obj/item/weapon/gun/projectile/automatic/microuzi/isHandgun()
 	return TRUE
 
 /obj/item/weapon/gun/projectile/automatic/microuzi/update_icon()
 	..()
-	icon_state = "micro-uzi[silenced ? "-silencer" : ""][stored_magazine ? "" : "-e"]"
+	icon_state = "micro-uzi[stored_magazine ? "" : "-e"]"
 
 
 /obj/item/weapon/gun/projectile/automatic/c20r
@@ -146,7 +149,7 @@
 	automagdrop_delay_time = 0
 	load_method = 2
 	recoil = 2
-
+	silencer_offset = list(27,5)
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
 
 /obj/item/weapon/gun/projectile/automatic/c20r/isHandgun()
@@ -177,6 +180,7 @@
 	load_method = 2
 	recoil = 2
 	gun_flags = AUTOMAGDROP | EMPTYCASINGS
+	silencer_offset = list(26,5)
 
 /obj/item/weapon/gun/projectile/automatic/xcom/isHandgun()
 	return FALSE
@@ -203,12 +207,16 @@
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	load_method = 2
 	recoil = 2
+	silencer_offset = list(27,6)
 	var/cover_open = 0
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/isHandgun()
 	return FALSE
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/attack_self(mob/user as mob)
+	if(silenced)
+		RemoveAttach(user)
+		return
 	cover_open = !cover_open
 	to_chat(user, "<span class='notice'>You [cover_open ? "open" : "close"] [src]'s cover.</span>")
 	update_icon()
@@ -243,12 +251,12 @@
 		to_chat(user, "<span class='notice'>You remove the magazine from [src].</span>")
 
 
-/obj/item/weapon/gun/projectile/automatic/l6_saw/attackby(obj/item/ammo_storage/magazine/a762/A as obj, mob/user as mob)
-	if(!cover_open)
-		to_chat(user, "<span class='notice'>[src]'s cover is closed! You can't insert a new mag!</span>")
-		return
-	else if(cover_open)
-		..()
+/obj/item/weapon/gun/projectile/automatic/l6_saw/attackby(var/obj/item/A, mob/user)
+	if(istype(A,/obj/item/ammo_storage/magazine))
+		if(!cover_open)
+			to_chat(user, "<span class='notice'>[src]'s cover is closed! You can't insert a new mag!</span>")
+			return
+	..()
 
 /obj/item/weapon/gun/projectile/automatic/l6_saw/force_removeMag() //special because of its cover
 	if(!cover_open)
@@ -273,6 +281,7 @@
 	burst_count = 2
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=1"
 	starting_materials = list(MAT_IRON = 6250, MAT_GLASS = 1500, MAT_PLASTIC = 2500)
+	silencer_offset = list(25,4)
 	var/receiver
 
 /obj/item/weapon/gun/projectile/automatic/vector/isHandgun()

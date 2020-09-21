@@ -12,6 +12,7 @@
 	set_light(3,5,LIGHT_COLOR_RED)
 
 /obj/structure/essence_printer/Destroy()
+	new /datum/artifact_postmortem_data(src)
 	if(bound_soul)
 		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/print)
 		bound_soul = null

@@ -797,6 +797,18 @@ obj/item/clothing/suit/cassock
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
+/obj/item/clothing/suit/kimono/happi
+	name = "haori"
+	desc = "A traditional Japanese jacket worn over a kimono. The symbol on their backs referred to the group with which they were associated."
+	icon_state = "haori"
+	item_state = "haori"
+
+/obj/item/clothing/suit/jack
+	name = "white kimono"
+	desc = "A white and plain looking kimono."
+	icon_state = "jack_robe"
+	item_state = "jack_robe"
+
 /obj/item/clothing/suit/kimono/ronin
 	name = "black kimono"
 	desc = "A black and plain looking kimono."

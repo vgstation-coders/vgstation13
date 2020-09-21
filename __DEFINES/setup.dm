@@ -461,7 +461,6 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
-#define M_OBESITY       200		// Decreased metabolism
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
@@ -758,6 +757,7 @@ SEE_PIXELS	256
 #define VERM_MUSHMEN 15
 #define VERM_FROGS 14
 #define VERM_SNAILS 15
+#define VERM_HEADCRABS 16
 
 
 #define MONSTER_BEAR    0
@@ -1604,6 +1604,11 @@ var/proccalls = 1
 
 #define HUMAN_DNA	1
 #define XENO_DNA	2
+
+// Buffer datatype flags.
+#define DNA2_BUF_UI 1
+#define DNA2_BUF_UE 2
+#define DNA2_BUF_SE 4
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"

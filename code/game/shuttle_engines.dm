@@ -135,8 +135,8 @@
 		return
 	var/turf/target = get_edge_target_turf(src,dir)
 	var/turf/T = source_turf
-	if (!source_turf)
-		source_turf = get_turf(src)
+	if (!T)
+		T = get_turf(src)
 	var/obj/item/projectile/fire_breath/A = new exhaust_type(T)
 	A.max_range = forward
 
