@@ -13,7 +13,7 @@
 		who = src
 
 	if(lawupdate)
-		if (connected_ai && isshell(src))
+		if (connected_ai)
 			if(connected_ai.stat || connected_ai.control_disabled)
 				to_chat(src, "<b>AI signal lost, unable to sync laws.</b>")
 
@@ -35,8 +35,20 @@
 	else if (emagged)
 		to_chat(who, "<b>Remember, you are not required to listen to the AI.</b>")
 	else
-		if(ticker.current_state == GAME_STATE_PLAYING && !isshell(src)) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
+		if(ticker.current_state == GAME_STATE_PLAYING) //Only tell them this if the game has started. We might find an AI master for them before it starts if it hasn't.
 			to_chat(who, "<b>Remember, you are not bound to any AI, you are not required to listen to them.</b>")
+
+/mob/living/silicon/robot/shell/show_laws(var/everyone = 0)
+	laws_sanity_check()
+	var/who
+	if (everyone)
+		who = world
+	else
+		who = src
+
+	to_chat(who, "<b>Obey these laws:</b>")
+	laws.show_laws(who)
+
 
 /mob/living/silicon/robot/proc/lawsync()
 	laws_sanity_check()
