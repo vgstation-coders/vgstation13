@@ -55,7 +55,7 @@ rcd light flash thingy on matter drain
 
 /datum/AI_Module/large/upgrade_defenses/on_purchase(mob/living/silicon/ai/user)
 	..()
-	user.ai_flags |= COREFIRERESIST
+//	user.ai_flags |= COREFIRERESIST
 	for(var/obj/machinery/turret/turret in machines)
 		turret.health += 120	//200 Totaldw
 		turret.shot_delay = 15
