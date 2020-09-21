@@ -1640,6 +1640,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.my_appearance.h_style = h_style
 	character.my_appearance.f_style = f_style
 
+	character.dna.ResetUIFrom(character)
 
 	character.skills = skills
 
