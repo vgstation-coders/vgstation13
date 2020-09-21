@@ -1,6 +1,7 @@
 /obj/item/weapon/boomerang
 	name = "boomerang"
 	desc = "A heavy, curved piece of wood used by Space Australians for hunting, sport, entertainment, cooking, religious rituals and warfare. When thrown, it will either deal a devastating blow to somebody's head, or return back to the thrower." //also used for shitposting
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "boomerang"
 
 	w_class = W_CLASS_MEDIUM

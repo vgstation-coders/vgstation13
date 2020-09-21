@@ -1,5 +1,6 @@
 /obj/item/weapon/robot_module
 	name = "robot module"
+	icon = 'icons/obj/weapons.dmi'
 	w_class = W_CLASS_GIANT
 
 	var/speed_modifier = CYBORG_STANDARD_SPEED_MODIFIER

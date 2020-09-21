@@ -579,6 +579,7 @@
 /obj/item/weapon/groans
 	name = "Groan-o-matic 9000"
 	desc = "This is for testing reasons."
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "toddler"
 
 /obj/item/weapon/groans/attack_self(mob/user as mob)

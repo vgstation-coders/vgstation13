@@ -474,6 +474,7 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/weapon/depocket_wand
 	name = "depocket wand"
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 

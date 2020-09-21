@@ -1,10 +1,10 @@
 /obj/item/weapon/shield
 	name = "shield"
+	icon = 'icons/obj/weapons.dmi'
 
 /obj/item/weapon/shield/riot
 	name = "riot shield"
 	desc = "A shield adept at blocking blunt objects from connecting with the shield's wielder."
-	icon = 'icons/obj/weapons.dmi'
 	icon_state = "riot"
 	flags = FPRINT
 	siemens_coefficient = 1

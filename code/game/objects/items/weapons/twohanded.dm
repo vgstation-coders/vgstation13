@@ -58,6 +58,7 @@
  * Fireaxe
  */
 /obj/item/weapon/fireaxe  // DEM AXES MAN, marker -Agouri
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "fireaxe0"
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	name = "fire axe"
@@ -137,9 +138,9 @@
 
 //spears
 /obj/item/weapon/spear
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "spearglass0"
 	var/base_state = "spearglass"
-
 	name = "spear"
 	desc = "A haphazardly-constructed yet still deadly weapon of ancient design."
 	force = 10
@@ -220,6 +221,7 @@
 			C.changeView(C.view - 7)
 
 /obj/item/weapon/bloodlust
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "bloodlust0"
 	name = "high-frequency pincer blade \"bloodlust\""
 	desc = "A scissor-like weapon made using two high-frequency machetes. Don't run with it in your hands."

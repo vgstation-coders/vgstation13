@@ -1,5 +1,4 @@
 /obj/item/weapon/arrow
-
 	name = "bolt"
 	desc = "It's got a tip for you - get the point?"
 	icon = 'icons/obj/weapons.dmi'
@@ -37,7 +36,6 @@
 		qdel(src)
 
 /obj/item/weapon/crossbow
-
 	name = "powered crossbow"
 	desc = "A 2557AD twist on an old classic. Pick up that can."
 	icon = 'icons/obj/weapons.dmi'

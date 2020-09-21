@@ -418,7 +418,7 @@
 /obj/item/weapon/revivalprod
 	name = "revival prod"
 	desc = "A revival prod used to awaken sleeping patients."
-	//icon = 'icons/obj/surgery.dmi'
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "stun baton"
 	force = 0
 

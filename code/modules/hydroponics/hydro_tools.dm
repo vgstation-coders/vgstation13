@@ -401,6 +401,7 @@
 	attack_verb = list("rips", "tears", "cuts")
 
 /obj/item/weapon/scythe
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "scythe0"
 	name = "scythe"
 	desc = "A sharp and curved blade on a long fibremetal handle, this tool makes it easy to reap what you sow."

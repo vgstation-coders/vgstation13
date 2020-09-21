@@ -1,6 +1,7 @@
 /obj/item/weapon/nullrod
 	name = "null rod"
 	desc = "A rod of pure obsidian, its very presence disrupts and dampens the powers of paranormal phenomenae."
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "nullrod"
 	item_state = "nullrod"
 	flags = FPRINT
@@ -128,7 +129,7 @@
 		M.drop_item(src, force_drop = TRUE)
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
-		
+
 /obj/item/weapon/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"

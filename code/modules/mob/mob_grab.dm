@@ -3,6 +3,7 @@
 
 /obj/item/weapon/grab
 	name = "grab"
+	icon = 'icons/obj/weapons.dmi'
 	flags = NO_ATTACK_MSG
 	var/obj/abstract/screen/grab/hud = null
 	var/mob/affecting = null

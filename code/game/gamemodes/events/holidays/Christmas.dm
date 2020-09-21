@@ -18,6 +18,9 @@
 		qdel(xmas)
 		xmas = null
 
+/obj/item/weapon/toy
+	icon = 'icons/obj/weapons.dmi'
+
 /obj/item/weapon/toy/xmas_cracker
 	name = "xmas cracker"
 	icon = 'icons/obj/christmas.dmi'

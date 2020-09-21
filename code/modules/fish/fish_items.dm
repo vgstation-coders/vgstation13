@@ -18,10 +18,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 //			Aquarium Supplies				//
 //////////////////////////////////////////////
 
+/obj/item/weapon/fishtools
+	icon = 'icons/obj/fish_items.dmi'
+
 /obj/item/weapon/fishtools/fish_egg_scoop
 	name = "fish egg scoop"
 	desc = "A small scoop to collect fish eggs with."
-	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "egg_scoop"
 	slot_flags = SLOT_BELT
 	throwforce = 0
@@ -32,7 +34,6 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 /obj/item/weapon/fishtools/fish_net
 	name = "fish net"
 	desc = "A tiny net to capture fish with. It's a death sentence!"
-	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "net"
 	slot_flags = SLOT_BELT
 	throwforce = 0
@@ -47,7 +48,6 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 /obj/item/weapon/fishtools/fish_food
 	name = "fish food can"
 	desc = "A small can of Carp's Choice brand fish flakes. The label shows a smiling Space Carp."
-	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "fish_food"
 	throwforce = 1
 	w_class = W_CLASS_SMALL
@@ -57,7 +57,6 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 /obj/item/weapon/fishtools/fish_tank_brush
 	name = "aquarium brush"
 	desc = "A brush for cleaning the inside of aquariums. Contains a built-in odor neutralizer."
-	icon = 'icons/obj/fish_items.dmi'
 	icon_state = "brush"
 	slot_flags = SLOT_BELT
 	throwforce = 0

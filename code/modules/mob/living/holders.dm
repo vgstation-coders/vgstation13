@@ -3,6 +3,7 @@
 
 /obj/item/weapon/holder
 	name = "holder"
+	icon = 'icons/obj/weapons.dmi'
 	desc = "You shouldn't ever see this."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/mob_holders.dmi', "right_hand" = 'icons/mob/in-hand/right/mob_holders.dmi')
 

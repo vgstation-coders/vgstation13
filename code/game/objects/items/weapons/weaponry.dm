@@ -19,6 +19,7 @@
 /obj/item/weapon/sord
 	name = "\improper SORD"
 	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "sord"
 	item_state = "sord"
 	flags = FPRINT
@@ -42,6 +43,7 @@
 	name = "claymore"
 	desc = "What are you standing around staring at this for? Get to killing!"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "claymore"
 	item_state = null
 	hitsound = 'sound/weapons/bloodyslice.ogg'
@@ -71,6 +73,7 @@
 	name = "katana"
 	desc = "Woefully underpowered in D20"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "katana"
 	item_state = null
 	hitsound = 'sound/weapons/bloodyslice.ogg'
@@ -116,6 +119,7 @@
 	sharpness = 1.2
 	sharpness_flags = SHARP_TIP
 	desc = "Tharr she blows!"
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "harpoon"
 	item_state = "harpoon"
 	hitsound = 'sound/weapons/bladeslice.ogg'
@@ -127,6 +131,7 @@
 obj/item/weapon/wirerod
 	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "wiredrod"
 	item_state = "rods"
 	flags = FPRINT
@@ -297,6 +302,7 @@ obj/item/weapon/banhammer/admin
 	name = "wooden paddle"
 	desc = "This doesn't look like it's capable of much damage."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
+	icon = 'icons/obj/weapons.dmi'
 	icon_state = "macuahuitl"
 	item_state = "macuahuitl"
 	hitsound = "sound/weapons/smash.ogg"

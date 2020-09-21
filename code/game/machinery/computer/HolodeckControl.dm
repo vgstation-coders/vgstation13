@@ -517,6 +517,7 @@
 
 
 /obj/item/weapon/holo
+	icon = 'icons/obj/weapons.dmi'
 	damtype = HALLOSS
 
 /obj/item/weapon/holo/esword
