@@ -41,6 +41,13 @@ var/list/ai_list = list()
 	var/mentions_on = FALSE
 	var/list/holopadoverlays = list()
 
+	//Shell stuff
+	var/mob/living/silicon/robot/shell/shell = null  //The shell the AI currently owns
+	var/datum/action/deploy_shell/deploy_action = new
+	var/datum/action/detonate/destroy_action = new
+	var/deployed = 0		//Is the AI currently controlling a borg
+	var/greeted = 0		//Shitty fix for being repeatedly told the AI greeting
+
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
 	var/vox_corrupted = FALSE
@@ -108,6 +115,10 @@ var/list/ai_list = list()
 
 	proc_holder_list = new()
 
+	//Action Buttons
+	deploy_action.Grant(src)
+	destroy_action.Grant(src)
+
 	//Determine the AI's lawset
 	if(L && istype(L,/datum/ai_laws))
 		src.laws = L
@@ -152,7 +163,7 @@ var/list/ai_list = list()
 				spawn(1)
 					mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 				stored_freqs = 1
-
+			greeted = 1
 			job = "AI"
 	ai_list += src
 	..()
@@ -849,6 +860,107 @@ var/list/ai_list = list()
 		return
 
 	station_holomap.toggleHolomap(src,1)
+
+/mob/living/silicon/ai/verb/deploy_to_shell()	//Pop into a shell if you own one
+	set category = "AI Commands"
+	set name = "Deploy to Shell"
+
+	if(incapacitated())
+		to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
+		return
+	if(control_disabled)
+		to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
+		return
+	if(istype(loc, /obj/machinery/power/apc))
+		to_chat(src, "<span class='warning'>You can't control a shell while shunted.</span>")
+		return
+
+	if(shell)	//If the silicon already has a linked shell, go to that one!
+		sleep(1)	//spamming the verb breaks things
+		if (shell.deployed || shell.mainframe != src)
+			return
+		if(mind)
+			to_chat(src, "Taking control of cyborg shell...")
+			deployed = 1
+			mind.transfer_to(shell)
+			shell.deploy_init(src)
+			
+	else		//Otherwise, lets see if we can create a new shell
+		var/list/potential_shells = list()
+		for(var/obj/item/robot_parts/robot_suit/emptyborg in world)	//Looping through the world might not be good
+			if(!cameranet.checkCameraVis(emptyborg))	//Must be visible
+				continue	
+			if(!emptyborg.check_completion())	//Must be ready to have a posi/MMI inserted
+				continue
+			if(!emptyborg.ai_control)		//AI control was disabled
+				continue
+			potential_shells.Add(emptyborg)
+		if(potential_shells.len == 0)
+			to_chat(src, "<span class='warning'>No potential cyborg shells available.</span>")
+			return
+		var/list/options = list()	
+		for(var/obj/item/robot_parts/robot_suit/S in potential_shells)	
+			options["Exoskeleton #[potential_shells.Find(S)] in [get_area(S)]"] = S
+		var/choice = input(src, "Which exoskeleton to control?") as null|anything in options
+		if(shell)	//no exploits allowed
+			to_chat(src, "<span class='warning'>You already have a shell.</span>")
+		if(choice)
+			create_shell(options[choice])
+
+			
+/mob/living/silicon/ai/proc/create_shell(var/obj/item/robot_parts/robot_suit/suit)		
+	if(mind && !shell)
+		deployed = 1
+		to_chat(src, "Taking control of cyborg shell...")
+		var/mob/living/silicon/robot/shell/R = suit.create_robot(is_shell = 1)
+		shell = R
+		mind.transfer_to(R)
+		R.deploy_init(src)
+
+/datum/action/deploy_shell
+	name = "Deploy to AI Shell"
+	desc = "Wirelessly control your personal cyborg shell or create a new one from an empty exoskeleton."
+	icon_icon = 'icons/mob/robots.dmi'
+	button_icon_state = "robot"
+
+/datum/action/deploy_shell/Trigger()
+	var/mob/living/silicon/ai/AI = owner
+	if(!AI)
+		return
+	AI.deploy_to_shell()
+
+/datum/action/detonate/
+	name = "Destroy shell"
+	desc = "Destroy your current shell and make room for a new one."
+	icon_icon = 'icons/mob/robots.dmi'
+	button_icon_state = "gibup"
+
+/datum/action/detonate/Trigger()
+	if(istype(owner, /mob/living/silicon/robot/shell))		//Pressing the button as a shell
+		var/mob/living/silicon/robot/shell/R = owner
+		R.mainframe.shell = null
+		R.gib()
+		return TRUE
+		
+	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
+		var/mob/living/silicon/ai/R = owner
+		if(R.incapacitated())
+			to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
+			return FALSE
+		if(R.control_disabled)
+			to_chat(src, "<span class='warning'>Wireless networking module is offline.</span>")
+			return FALSE 
+		if(R.shell)	
+			R.shell.gib()					
+			return TRUE
+		else
+			to_chat("<span class='warning'>You have no shell.</span>")
+			return FALSE
+	else
+		to_chat("<span class='warning'>You can't do that.</span>")
+		return FALSE
+
+
 
 //AI_CAMERA_LUMINOSITY
 

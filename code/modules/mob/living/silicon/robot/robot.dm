@@ -557,13 +557,13 @@ var/list/cyborg_list = list()
 				to_chat(user, "The wires get in your way.")
 			else
 				if(prob(50))
+					to_chat(user, "You emag [src]'s interface")
+					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)].")
 					sleep(6)
-					SetEmagged(TRUE)
+					SetEmagged(TRUE)						
 					SetLockdown(TRUE)
 					lawupdate = FALSE
 					disconnect_AI()
-					to_chat(user, "You emag [src]'s interface")
-					message_admins("[key_name_admin(user)] emagged cyborg [key_name_admin(src)]. Laws overidden.")
 					log_game("[key_name(user)] emagged cyborg [key_name(src)].  Laws overridden.")
 					clear_supplied_laws()
 					clear_inherent_laws()
@@ -1006,8 +1006,10 @@ var/list/cyborg_list = list()
 	overlays.Cut()
 	update_fire()
 	if(!stat && cell != null)
-		eyes = image(icon,"eyes-[icon_state]", overlay_layer)
+		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)
+		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
+
 		overlays += eyes
 
 	if(opened)
@@ -1342,3 +1344,126 @@ var/list/cyborg_list = list()
 //Currently only used for borg movement, to avoid awkward situations where borgs with RTG or basic cells are always slowed down
 /mob/living/silicon/robot/proc/get_percentage_power_for_movement()
 	return clamp(round(cell.maxcharge/4), 0, SILI_LOW_TRIGGER)
+
+
+//AI Shell Control
+
+/mob/living/silicon/robot/shell
+	var/deployed = FALSE		//Is the shell being controlled right now
+	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
+	var/datum/action/undeployment/undeployment_action = new 
+	var/datum/action/detonate/destroy_action = new
+	braintype = "AI Shell"
+
+
+/mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
+	deployed = TRUE
+	connected_ai = AI
+	real_name = "Shell of [AI.name]"
+	name = real_name
+	mainframe = AI
+	mainframe.connected_robots |= src
+	lawupdate = TRUE
+	lawsync()
+	if(radio && AI.radio)
+		radio.channels = AI.radio.channels
+		radio.subspace_transmission = TRUE
+	undeployment_action.Grant(src)
+	destroy_action.Grant(src)
+	updateicon()
+
+/datum/action/undeployment
+	name = "Disconnect from shell"
+	desc = "Stop controlling your shell and resume normal core operations."
+	icon_icon = 'icons/mob/AI.dmi'
+	button_icon_state = "ai"
+
+/datum/action/undeployment/UpdateButtonIcon()
+	var/mob/living/silicon/robot/shell/R = owner
+	if(R.mainframe)
+		button_icon_state = "[R.mainframe.icon_state]"
+	else
+		button_icon_state = "ai"
+	..()
+
+/datum/action/undeployment/Trigger()
+	if(!..())
+		return FALSE
+	var/mob/living/silicon/robot/shell/R = owner
+
+	R.undeploy()
+	return TRUE
+
+/mob/living/silicon/robot/shell/proc/undeploy()
+	if(!deployed || !mind || !mainframe)
+		return
+	sleep(1)	//spamming this breaks things
+	to_chat(src,"Releasing control of cyborg shell...")
+	mind.transfer_to(mainframe)
+	mainframe.deployed = 0
+	deployed = FALSE
+	undeployment_action.Remove(src)
+	destroy_action.Remove(src)
+	if(radio) //Recalculate the radio channel
+		radio.recalculateChannels()
+	if(mainframe.eyeobj)
+		mainframe.eyeobj.forceMove(loc)
+	updateicon()
+	
+/mob/living/silicon/robot/shell/proc/close_connection()
+	if(deployed)
+		undeploy()
+	if(mainframe)
+		mainframe.shell = null
+		mainframe = null
+
+/mob/living/silicon/robot/shell/connect_AI()
+	to_chat(mainframe, "<span class='notice' style=\"font-family:Courier\">Notice: Connection to cyborg shell re-established.</span>" )
+	SetLockdown(FALSE)
+
+/mob/living/silicon/robot/shell/disconnect_AI()
+	to_chat(src, "<span class='alert' style=\"font-family:Courier\">Notice: Connection to cyborg shell has been cut.</span>")
+	SetLockdown(TRUE)
+
+/mob/living/silicon/robot/shell/emag_act(mob/user as mob)
+	if(user != src)
+		spark(src, 5, FALSE)
+		if(!opened)
+			if(locked)
+				if(prob(90))
+					to_chat(user, "You emag the cover lock.")
+					locked = FALSE
+				else
+					to_chat(user, "You fail to emag the cover lock.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+			else
+				to_chat(user, "The cover is already open.")
+		else
+			if(emagged)
+				return TRUE
+			if(wiresexposed)
+				to_chat(user, "The wires get in your way.")
+			else
+				if(prob(50))
+					to_chat(user, "You emag [src]'s interface")
+					message_admins("[key_name_admin(user)] emagged AI-Cyborg shell [key_name_admin(src)] and destroyed it.")
+					sleep(6)
+					gib()
+				else
+					to_chat(user, "You fail to unlock [src]'s interface.")
+					if(prob(25))
+						to_chat(src, "<span class='danger'><span style=\"font-family:Courier\">Hack attempt detected.</span>")
+	return TRUE
+
+/mob/living/silicon/robot/shell/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
+	..(overlay_layer, overlay_plane)
+	overlays.Cut()
+	if(!stat && cell != null && deployed)
+		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
+		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
+		eyesicon.Blend(rgb(65,65,65), ICON_SUBTRACT)
+		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
+		eyes.plane = overlay_plane
+
+		overlays += eyes

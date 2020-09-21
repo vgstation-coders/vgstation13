@@ -37,8 +37,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return
 
 	vessel.add_reagent(BLOOD,560)
-	spawn(1)
-		fixblood()
+	fixblood()
 
 //Resets blood data
 /mob/living/carbon/human/proc/fixblood()

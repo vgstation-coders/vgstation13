@@ -185,11 +185,7 @@ var/VOX_AVAILABLE_VOICES = list(
 /mob/living/silicon/ai/proc/announcement_checks()
 	//I am kill but here
 	if(isUnconscious())
-		return FALSE
-
-	// If we're in an APC, and APC is ded, ABORT
-	if(parent && istype(parent) && parent.stat)
-		to_chat(usr, "You're in a dead APC, no")
+		to_chat(usr, "Not while you're incapacitated.")
 		return FALSE
 
 	if(istype(usr,/mob/living/silicon/ai))
@@ -239,6 +235,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	announcing_vox = world.time + VOX_DELAY
 
+
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 
 	// Same logic as play_vox_sound, so everyone that can hear the sound sees this.
@@ -252,6 +249,9 @@ var/VOX_AVAILABLE_VOICES = list(
 	if(!cancorruptvox())
 		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
 	var/freq = 1
+
+	var/turf/T = get_turf(src)
+
 	for(var/word in words)
 		if(vox_corrupted && cancorruptvox())
 
@@ -259,12 +259,13 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(freq>20450)
 				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
 					freq = freq + (freq/5)
-					play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+					play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
 				freq = rand(11000,14000)
-			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
 		else
 			//play it normally
-			play_vox_word(word, vox_voice, src.z, null, TRUE, freq)
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
+
 
 
 #endif // DISABLE_VOX

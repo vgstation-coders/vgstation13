@@ -61,7 +61,7 @@
 	var/image/menu_holder
 	var/finished = FALSE
 
-	var/event/custom_check
+	var/callback/custom_check
 	var/next_check = 0
 	var/check_delay = DEFAULT_CHECK_DELAY
 
@@ -298,8 +298,8 @@
 
 /datum/radial_menu/proc/wait()
 	while (!gcDestroyed && current_user && !finished && !selected_choice)
-		if(istype(custom_check) && next_check < world.time)
-			if(!INVOKE_EVENT(custom_check, list()))
+		if(custom_check && next_check < world.time)
+			if(!custom_check.invoke())
 				return
 			else
 				next_check = world.time + check_delay
@@ -308,8 +308,8 @@
 /datum/radial_menu/Destroy()
 	Reset()
 	hide()
-	if(istype(custom_check))
-		custom_check.holder = null
+	if(custom_check)
+		qdel(custom_check)
 		custom_check = null
 	. = ..()
 /*
@@ -317,7 +317,7 @@
 	Choices should be a list where list keys are movables or text used for element names and return value
 	and list values are movables/icons/images used for element icons
 */
-/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/event/custom_check,var/uniqueid,var/radius,var/min_angle)
+/proc/show_radial_menu(mob/user,atom/anchor,list/choices,var/icon_file,var/tooltip_theme,var/callback/custom_check,var/uniqueid,var/radius,var/min_angle)
 	if(!user || !anchor || !length(choices))
 		return
 
