@@ -109,7 +109,7 @@
 	alert = 'sound/AI/shuttledock.ogg'
 
 /datum/command_alert/emergency_shuttle_docked/announce()
-	message = "The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle."
+	message = "The Emergency Shuttle has docked with the station. You have [round(emergency_shuttle.timeleft()/60,1)] minutes to board the Emergency Shuttle."
 	..()
 
 /datum/command_alert/emergency_shuttle_left
@@ -118,7 +118,7 @@
 	force_report = 1
 
 /datum/command_alert/emergency_shuttle_left/announce()
-	message = "The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command."
+	message = "The Emergency Shuttle has left the station. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the shuttle docks at Central Command."
 	..()
 
 
