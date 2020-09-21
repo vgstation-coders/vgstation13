@@ -754,10 +754,10 @@ obj/item/gun/energy/ricochet/Fire(atom/target, mob/living/user, params, reflex =
 	else
 		icon_state = "bison0"
 
-/obj/item/weapon/gun/energy/bison/alien
+/obj/item/gun/energy/bison/alien
 	name = "alien gun"
 
-/obj/item/weapon/gun/energy/bison/alien/update_icon()
+/obj/item/gun/energy/bison/alien/update_icon()
 	return
 
 #define SPUR_FULL_POWER 4

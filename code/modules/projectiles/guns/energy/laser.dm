@@ -163,7 +163,7 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/laser/captain/alien
+/obj/item/gun/energy/laser/captain/alien
 	name = "alien gun"
 
 

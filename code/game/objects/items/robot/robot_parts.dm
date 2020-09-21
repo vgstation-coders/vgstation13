@@ -45,7 +45,7 @@
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
 
 /obj/item/robot_parts/chest/complete
-	cell = new /obj/item/weapon/cell/high
+	cell = new /obj/item/cell/high
 	wires = 1.0
 
 /obj/item/robot_parts/chest/get_cell()
@@ -78,7 +78,7 @@
 	var/obj/item/robot_parts/chest/chest = null
 	var/obj/item/robot_parts/head/head = null
 	var/created_name = ""
-	var/ai_control = 1 
+	var/ai_control = 1
 
 /obj/item/robot_parts/robot_suit/mapped
 	l_arm = new /obj/item/robot_parts/l_arm
@@ -129,7 +129,7 @@
 				feedback_inc("cyborg_frames_built",1)
 				return 1
 	return 0
-	
+
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
@@ -231,10 +231,10 @@
 					if(L == P)
 						L.forceMove(T)
 						M.contents -= L
-					
+
 			create_robot(M)
 
-			
+
 		else
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
@@ -271,7 +271,7 @@
 	var/mob/living/silicon/ai/A = user
 	if(!A.shell)
 		A.create_shell(src)
-	else 
+	else
 		to_chat(user, "<span class='warning'>You already have a shell. Destroy it to create a new one.</span>")
 
 /obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
