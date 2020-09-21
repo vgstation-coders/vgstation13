@@ -360,14 +360,10 @@
 	//Bad Things
 	score["crewscore"] -= deathpoints
 
-	if(find_active_faction_by_type(/datum/faction/malf))	//Dead silicons on malf are good
-		score["crewscore"] += siliconpoints
-		if(score["deadaipenalty"])
-			score["crewscore"] += 1000 //Give a harsh punishment for killing the AI
-	else
-		score["crewscore"] -= siliconpoints
-		if(score["deadaipenalty"])
-			score["crewscore"] -= 1000 //Give a harsh punishment for killing the AI
+	var/multi = find_active_faction_by_type(/datum/faction/malf)) ? 1 : -1 //Dead silicons on malf are good	
+	score["crewscore"] += (siliconpoints*multi)
+	if(score["deadaipenalty"])
+		score["crewscore"] += (1000*multi) //Give a harsh punishment for killing the AI
 
 	score["crewscore"] -= power
 	//score["crewscore"] -= atmos
