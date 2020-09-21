@@ -359,9 +359,16 @@
 
 	//Bad Things
 	score["crewscore"] -= deathpoints
-	score["crewscore"] -= siliconpoints
-	if(score["deadaipenalty"])
-		score["crewscore"] -= 1000 //Give a harsh punishment for killing the AI
+
+	if(find_active_faction_by_type(/datum/faction/malf))	//Dead silicons on malf are good
+		score["crewscore"] += siliconpoints
+		if(score["deadaipenalty"])
+			score["crewscore"] += 1000 //Give a harsh punishment for killing the AI
+	else
+		score["crewscore"] -= siliconpoints
+		if(score["deadaipenalty"])
+			score["crewscore"] -= 1000 //Give a harsh punishment for killing the AI
+
 	score["crewscore"] -= power
 	//score["crewscore"] -= atmos
 	//if(score["crewscore"] != 0) //Dont divide by zero!
@@ -530,8 +537,8 @@
 
 	<U>THE BAD:</U><BR>
 	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 250] Points)<BR>
-	<B>Destroyed Silicons:</B> [score["deadsilicon"]] (-[score["deadsilicon"] * 500] Points)<BR>
-	<B>AIs Destroyed:</B> [score["deadaipenalty"]] (-[score["deadaipenalty"] * 1000] Points)<BR>
+	<B>Destroyed Silicons:</B> [score["deadsilicon"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadsilicon"] * 500 : score["deadsilicon"] * -500] Points)<BR>
+	<B>AIs Destroyed:</B> [score["deadaipenalty"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadaipenalty"] * 1000 : score["deadaipenalty"] * -1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
 	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
