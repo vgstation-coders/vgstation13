@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/arcade
+	build_path = /obj/item/circuitboard/arcade
 
 /datum/design/ordercomp
 	name = "Circuit Design (Supply ordering console)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/ordercomp
+	build_path = /obj/item/circuitboard/ordercomp
 
 /datum/design/supplycomp
 	name = "Circuit Design (Supply shuttle console)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/supplycomp
+	build_path = /obj/item/circuitboard/supplycomp
 
 /datum/design/mining
 	name = "Circuit Design (Outpost Status Display)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/mining
+	build_path = /obj/item/circuitboard/mining
 
 /datum/design/pda_terminal
 	name = "Circuit Design (PDA Terminal)"
@@ -48,7 +48,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/pda_terminal
+	build_path = /obj/item/circuitboard/pda_terminal
 
 /datum/design/pod
 	name = "Circuit Design (Mass Driver and Pod Doors Control)"
@@ -58,7 +58,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/pod
+	build_path = /obj/item/circuitboard/pod
 
 /datum/design/smeltcomp
 	name = "Circuit Design (Ore Processing Console)"
@@ -68,7 +68,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/smeltcomp
+	build_path = /obj/item/circuitboard/smeltcomp
 
 /datum/design/stacking_unit_console
 	name = "Circuit Design (Stacking Machine Console)"
@@ -78,7 +78,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/stacking_machine_console
+	build_path = /obj/item/circuitboard/stacking_machine_console
 
 /datum/design/shuttle_control
 	name = "Circuit Design (Universal Shuttle Control)"
@@ -88,4 +88,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/shuttle_control
+	build_path = /obj/item/circuitboard/shuttle_control

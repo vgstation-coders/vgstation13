@@ -40,14 +40,14 @@
 	if(istype(target, /mob/living))
 		charged_item = mob_charge(target)
 
-	if(istype(target, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = target
+	if(istype(target, /obj/item/grab))
+		var/obj/item/grab/G = target
 		if(G.affecting)
 			var/mob/M = G.affecting
 			charged_item = mob_charge(M)
 
-	if(istype(target, /obj/item/weapon/spellbook/oneuse))
-		var/obj/item/weapon/spellbook/oneuse/I = target
+	if(istype(target, /obj/item/spellbook/oneuse))
+		var/obj/item/spellbook/oneuse/I = target
 		if(prob(50))
 			I.visible_message("<span class='warning'>[I] catches fire!</span>")
 			qdel(I)
@@ -56,8 +56,8 @@
 			I.used = 0
 			charged_item = I
 
-	if(istype(target, /obj/item/weapon/cell/))
-		var/obj/item/weapon/cell/C = target
+	if(istype(target, /obj/item/cell/))
+		var/obj/item/cell/C = target
 		if(prob(80))
 			C.maxcharge -= 200
 			if(C.maxcharge <= 1) //Div by 0 protection

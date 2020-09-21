@@ -3,7 +3,7 @@
 var/global/list/cached_icons = list()
 var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 
-/obj/item/weapon/reagent_containers/glass/paint
+/obj/item/reagent_containers/glass/paint
 	desc = "A bucket containing paint."
 	name = "paint bucket"
 	icon = 'icons/obj/items.dmi'
@@ -19,14 +19,14 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	flags = FPRINT | OPENCONTAINER
 	var/paint_type = ""
 
-/obj/item/weapon/reagent_containers/glass/paint/suicide_act(mob/user)
+/obj/item/reagent_containers/glass/paint/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is taking \his hand and eating the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/reagent_containers/glass/paint/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/paint/mop_act(obj/item/mop/M, mob/user)
 	return 0
 
-/obj/item/weapon/reagent_containers/glass/paint/afterattack(turf/simulated/target, mob/user , flag)
+/obj/item/reagent_containers/glass/paint/afterattack(turf/simulated/target, mob/user , flag)
 	if(!flag || user.stat)
 		return ..()
 
@@ -39,7 +39,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	else
 		return ..()
 
-/obj/item/weapon/reagent_containers/glass/paint/New()
+/obj/item/reagent_containers/glass/paint/New()
 	if(paint_type == "remover")
 		name = "paint remover bucket"
 	else if(paint_type && length(paint_type) > 0)
@@ -47,38 +47,38 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	..()
 	reagents.add_reagent("paint_[paint_type]", volume)
 
-/obj/item/weapon/reagent_containers/glass/paint/red
+/obj/item/reagent_containers/glass/paint/red
 	icon_state = "paint_red"
 	paint_type = "red"
 
-/obj/item/weapon/reagent_containers/glass/paint/green
+/obj/item/reagent_containers/glass/paint/green
 	icon_state = "paint_green"
 	paint_type = "green"
 
-/obj/item/weapon/reagent_containers/glass/paint/blue
+/obj/item/reagent_containers/glass/paint/blue
 	icon_state = "paint_blue"
 	paint_type = "blue"
 
-/obj/item/weapon/reagent_containers/glass/paint/yellow
+/obj/item/reagent_containers/glass/paint/yellow
 	icon_state = "paint_yellow"
 	paint_type = "yellow"
 
-/obj/item/weapon/reagent_containers/glass/paint/violet
+/obj/item/reagent_containers/glass/paint/violet
 	icon_state = "paint_violet"
 	paint_type = "violet"
 
-/obj/item/weapon/reagent_containers/glass/paint/black
+/obj/item/reagent_containers/glass/paint/black
 	icon_state = "paint_black"
 	paint_type = "black"
 
-/obj/item/weapon/reagent_containers/glass/paint/white
+/obj/item/reagent_containers/glass/paint/white
 	icon_state = "paint_white"
 	paint_type = "white"
 
-/obj/item/weapon/reagent_containers/glass/paint/remover
+/obj/item/reagent_containers/glass/paint/remover
 	paint_type = "remover"
 /*
-/obj/item/weapon/paint
+/obj/item/paint
 	name = "Paint Can"
 	desc = "Used to recolor floors and walls. Can not be removed by the janitor."
 	icon = 'icons/obj/items.dmi'
@@ -87,43 +87,43 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 	item_state = "paintcan"
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/paint/red
+/obj/item/paint/red
 	name = "Red paint"
 	color = "FF0000"
 	icon_state = "paint_red"
 
-/obj/item/weapon/paint/green
+/obj/item/paint/green
 	name = "Green paint"
 	color = "00FF00"
 	icon_state = "paint_green"
 
-/obj/item/weapon/paint/blue
+/obj/item/paint/blue
 	name = "Blue paint"
 	color = "0000FF"
 	icon_state = "paint_blue"
 
-/obj/item/weapon/paint/yellow
+/obj/item/paint/yellow
 	name = "Yellow paint"
 	color = "FFFF00"
 	icon_state = "paint_yellow"
 
-/obj/item/weapon/paint/violet
+/obj/item/paint/violet
 	name = "Violet paint"
 	color = "FF00FF"
 	icon_state = "paint_violet"
 
-/obj/item/weapon/paint/black
+/obj/item/paint/black
 	name = "Black paint"
 	color = "333333"
 	icon_state = "paint_black"
 
-/obj/item/weapon/paint/white
+/obj/item/paint/white
 	name = "White paint"
 	color = "FFFFFF"
 	icon_state = "paint_white"
 
 
-/obj/item/weapon/paint/anycolor
+/obj/item/paint/anycolor
 	name = "Any color"
 	icon_state = "paint_neutral"
 
@@ -151,7 +151,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 		return
 
 
-/obj/item/weapon/paint/afterattack(turf/target, mob/user as mob)
+/obj/item/paint/afterattack(turf/target, mob/user as mob)
 	if(!istype(target) || istype(target, /turf/space))
 		return
 	var/ind = "[initial(target.icon)][color]"
@@ -165,7 +165,7 @@ var/global/list/paint_types = subtypesof(/datum/reagent/paint)
 		target.icon = cached_icons[ind]
 	return
 
-/obj/item/weapon/paint/paint_remover
+/obj/item/paint/paint_remover
 	name = "Paint remover"
 	icon_state = "paint_neutral"
 

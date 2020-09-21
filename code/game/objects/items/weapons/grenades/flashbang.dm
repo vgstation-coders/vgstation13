@@ -1,11 +1,11 @@
-/obj/item/weapon/grenade/flashbang
+/obj/item/grenade/flashbang
 	name = "flashbang"
 	icon_state = "flashbang"
 	item_state = "flashbang"
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	var/banglet = 0
 
-/obj/item/weapon/grenade/flashbang/prime(banglet)
+/obj/item/grenade/flashbang/prime(banglet)
 	flashbangprime(delsrc = TRUE, isbanglet = banglet)
 	
 atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isbanglet = FALSE)
@@ -37,8 +37,8 @@ atom/proc/flashbangprime(var/delsrc = FALSE, var/ignore_protection = FALSE, isba
 		qdel(src)
 
 atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var/isbanglet = FALSE)
-	if (locate(/obj/item/weapon/cloaking_device, M))			// Called during the loop that bangs people in lockers/containers and when banging
-		for(var/obj/item/weapon/cloaking_device/S in M)			// people in normal view.  Could theroetically be called during other explosions.
+	if (locate(/obj/item/cloaking_device, M))			// Called during the loop that bangs people in lockers/containers and when banging
+		for(var/obj/item/cloaking_device/S in M)			// people in normal view.  Could theroetically be called during other explosions.
 			S.active = 0										// -- Polymorph
 			S.icon_state = "shield0"
 
@@ -145,12 +145,12 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 		var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
 		if (E && E.damage >= E.min_bruised_damage)
 			to_chat(M, "<span class='warning'>Your eyes start to burn badly!</span>")
-			if(!isbanglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
+			if(!isbanglet && !(istype(src , /obj/item/grenade/flashbang/clusterbang)))
 				if (E.damage >= E.min_broken_damage)
 					to_chat(M, "<span class='warning'>You can't see anything!</span>")
 	if (M.ear_damage >= 15)
 		to_chat(M, "<span class='warning'>Your ears start to ring badly!</span>")
-		if(!isbanglet && !(istype(src , /obj/item/weapon/grenade/flashbang/clusterbang)))
+		if(!isbanglet && !(istype(src , /obj/item/grenade/flashbang/clusterbang)))
 			if (prob(M.ear_damage - 10 + 5))
 				to_chat(M, "<span class='warning'>You can't hear anything!</span>")
 				M.sdisabilities |= DEAF
@@ -169,13 +169,13 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 	..()
 	set_light(15)
 
-/obj/item/weapon/grenade/flashbang/clusterbang//Created by Polymorph, fixed by Sieve
+/obj/item/grenade/flashbang/clusterbang//Created by Polymorph, fixed by Sieve
 	desc = "Use of this weapon may constiute a war crime in your area, consult your local captain."
 	name = "clusterbang"
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "clusterbang"
 
-/obj/item/weapon/grenade/flashbang/clusterbang/prime()
+/obj/item/grenade/flashbang/clusterbang/prime()
 	var/numspawned = rand(4,8)
 	var/again = 0
 	for(var/more = numspawned,more > 0,more--)
@@ -185,24 +185,24 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)//Launches flashbangs
+			new /obj/item/grenade/flashbang/cluster(src.loc)//Launches flashbangs
 			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 
 	for(,again > 0, again--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
+			new /obj/item/grenade/flashbang/clusterbang/segment(src.loc)//Creates a 'segment' that launches a few more flashbangs
 			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return
 
-/obj/item/weapon/grenade/flashbang/clusterbang/segment
+/obj/item/grenade/flashbang/clusterbang/segment
 	desc = "A smaller segment of a clusterbang. Better run."
 	name = "clusterbang segment"
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "clusterbang_segment"
 
-/obj/item/weapon/grenade/flashbang/clusterbang/segment/New()//Segments should never exist except part of the clusterbang, since these immediately 'do their thing' and asplode
+/obj/item/grenade/flashbang/clusterbang/segment/New()//Segments should never exist except part of the clusterbang, since these immediately 'do their thing' and asplode
 	icon_state = "clusterbang_segment_active"
 	active = 1
 	banglet = 1
@@ -214,7 +214,7 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 		prime()
 	..()
 
-/obj/item/weapon/grenade/flashbang/clusterbang/segment/prime()
+/obj/item/grenade/flashbang/clusterbang/segment/prime()
 	var/numspawned = rand(4,8)
 	for(var/more = numspawned,more > 0,more--)
 		if(prob(35))
@@ -222,13 +222,13 @@ atom/proc/flashbang(var/turf/T, var/mob/living/M, var/ignore_protection = 0, var
 
 	for(,numspawned > 0, numspawned--)
 		spawn(0)
-			new /obj/item/weapon/grenade/flashbang/cluster(src.loc)
+			new /obj/item/grenade/flashbang/cluster(src.loc)
 			playsound(src, 'sound/weapons/armbomb.ogg', 75, 1, -3)
 	spawn(0)
 		qdel(src)
 		return
 
-/obj/item/weapon/grenade/flashbang/cluster/New()//Same concept as the segments, so that all of the parts don't become reliant on the clusterbang
+/obj/item/grenade/flashbang/cluster/New()//Same concept as the segments, so that all of the parts don't become reliant on the clusterbang
 	spawn(0)
 		icon_state = "flashbang_active"
 		active = 1

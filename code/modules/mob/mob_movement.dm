@@ -76,7 +76,7 @@
 						for(var/mob/living/simple_animal/borer/B in borers_in_host)
 							var/datum/organ/external/OE = H.get_organ(B.hostlimb)
 							if(OE.grasp_id == H.active_hand)
-								var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+								var/obj/item/gun/hookshot/flesh/F = B.extend_o_arm
 								F.to_be_dropped = H.get_active_hand()
 								F.item_overlay = null
 				drop_item()
@@ -98,7 +98,7 @@
 					var/datum/organ/external/OE = H.get_organ(B.hostlimb) //Borer is occupying an arm
 					if(OE.grasp_id)
 						if(B.extend_o_arm)
-							var/obj/item/weapon/gun/hookshot/flesh/F = B.extend_o_arm
+							var/obj/item/gun/hookshot/flesh/F = B.extend_o_arm
 							var/obj/item/held = H.get_held_item_by_index(OE.grasp_id)
 
 							if(held)
@@ -350,7 +350,7 @@
 
 		mob.StartMoving()
 		// Something with pulling things
-		var/obj/item/weapon/grab/Findgrab = locate() in mob
+		var/obj/item/grab/Findgrab = locate() in mob
 		if(Findgrab)
 			var/list/L = mob.ret_grab()
 			if(istype(L, /list))
@@ -437,13 +437,13 @@
 ///Called by client/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 ///Checks to see if you are being grabbed and if so attemps to break it
 /client/proc/Process_Grab()
-	if(locate(/obj/item/weapon/grab, locate(/obj/item/weapon/grab, mob.grabbed_by.len)))
+	if(locate(/obj/item/grab, locate(/obj/item/grab, mob.grabbed_by.len)))
 		var/list/grabbing = list()
 
-		for(var/obj/item/weapon/grab/G in mob.held_items)
+		for(var/obj/item/grab/G in mob.held_items)
 			grabbing += G.affecting
 
-		for(var/obj/item/weapon/grab/G in mob.grabbed_by)
+		for(var/obj/item/grab/G in mob.grabbed_by)
 			if((G.state == GRAB_PASSIVE)&&(!grabbing.Find(G.assailant)))
 				qdel(G)
 				mob.grabbed_by.Remove(G)
@@ -592,7 +592,7 @@
 		if("walk")
 			. += MOB_WALK_TALLY+config.walk_speed
 
-	var/obj/item/weapon/grab/Findgrab = locate() in src
+	var/obj/item/grab/Findgrab = locate() in src
 	if(Findgrab)
 		. += 7
 

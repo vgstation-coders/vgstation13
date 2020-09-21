@@ -56,7 +56,7 @@
 				current_temp = MELTPOINT_GOLD
 			fuel_time += 10
 			return 1
-	else if(istype(I, /obj/item/weapon/grown/log))
+	else if(istype(I, /obj/item/grown/log))
 		to_chat(user, "<span class = 'notice'>You toss \the [I] into \the [src].</span>")
 		user.drop_item(I)
 		qdel(I)

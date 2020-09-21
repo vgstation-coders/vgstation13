@@ -187,7 +187,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)
 						var/mob/M = C.antag.current
-						for(var/obj/item/weapon/implant/loyalty/I in M)
+						for(var/obj/item/implant/loyalty/I in M)
 							I.forceMove(get_turf(M))
 							I.implanted = 0
 							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
@@ -382,7 +382,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		return data
 
 	//Is the cultist currently grabbing a bleeding mob/corpse that still has blood in it?
-	var/obj/item/weapon/grab/Grab = locate() in user
+	var/obj/item/grab/Grab = locate() in user
 	if (Grab)
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
@@ -419,11 +419,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		data[BLOODCOST_RESULT] = BLOODCOST_TARGET_BLEEDER
 		return data
 
-	for(var/obj/item/weapon/reagent_containers/G_held in H_user.held_items) //Accounts for if the person has multiple grasping organs
+	for(var/obj/item/reagent_containers/G_held in H_user.held_items) //Accounts for if the person has multiple grasping organs
 		if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
 			continue
-		if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
-			var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+		if(istype(G_held, /obj/item/reagent_containers/blood)) //Bloodbags have their own functionality
+			var/obj/item/reagent_containers/blood/blood_pack = G_held
 			var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
 			if (blood_volume)
 				data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
@@ -454,7 +454,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 
 	//Is there a reagent container on the turf that has blood in it?
-	for (var/obj/item/weapon/reagent_containers/G in T)
+	for (var/obj/item/reagent_containers/G in T)
 		var/blood_volume = round(G.reagents.get_reagent_amount(BLOOD))
 		if (blood_volume)
 			data[BLOODCOST_TARGET_CONTAINER] = G
@@ -469,10 +469,10 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	var/mob/living/silicon/robot/robot_user = user
 	if(istype(robot_user))
 		var/module_items = robot_user.get_equipped_items() //This function allows robot modules to be used as blood sources. Somewhat important, considering silicons have no blood.
-		for(var/obj/item/weapon/gripper/G_held in module_items)
-			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/weapon/reagent_containers))
+		for(var/obj/item/gripper/G_held in module_items)
+			if (!istype(G_held) || !G_held.wrapped || !istype(G_held.wrapped,/obj/item/reagent_containers))
 				continue
-			var/obj/item/weapon/reagent_containers/gripper_item = G_held.wrapped
+			var/obj/item/reagent_containers/gripper_item = G_held.wrapped
 			if(round(gripper_item.reagents.get_reagent_amount(BLOOD)))
 				var/blood_volume = round(gripper_item.reagents.get_reagent_amount(BLOOD))
 				if (blood_volume)
@@ -488,12 +488,12 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					data[BLOODCOST_RESULT] = BLOODCOST_TARGET_HELD
 					return data
 
-		for(var/obj/item/weapon/reagent_containers/G_held in module_items)
+		for(var/obj/item/reagent_containers/G_held in module_items)
 			if (!istype(G_held) || !round(G_held.reagents.get_reagent_amount(BLOOD)))
 				continue
 
-			if(istype(G_held, /obj/item/weapon/reagent_containers/blood)) //Bloodbags have their own functionality
-				var/obj/item/weapon/reagent_containers/blood/blood_pack = G_held
+			if(istype(G_held, /obj/item/reagent_containers/blood)) //Bloodbags have their own functionality
+				var/obj/item/reagent_containers/blood/blood_pack = G_held
 				var/blood_volume = round(blood_pack.reagents.get_reagent_amount(BLOOD))
 				if (blood_volume)
 					data[BLOODCOST_TARGET_BLOODPACK] = blood_pack
@@ -621,13 +621,13 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 							blood.data["virus2"] = list()
 						blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(HU.virus2),required = SPREAD_BLOOD)
 					if (BLOODCOST_TARGET_HELD)
-						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
+						var/obj/item/reagent_containers/G = communion_data[BLOODCOST_TARGET_HELD]
 						blood = locate() in G.reagents.reagent_list
 					if (BLOODCOST_TARGET_BLOODPACK)
-						var/obj/item/weapon/reagent_containers/blood/B = communion_data[BLOODCOST_TARGET_BLOODPACK]
+						var/obj/item/reagent_containers/blood/B = communion_data[BLOODCOST_TARGET_BLOODPACK]
 						blood = locate() in B.reagents.reagent_list
 					if (BLOODCOST_TARGET_CONTAINER)
-						var/obj/item/weapon/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
+						var/obj/item/reagent_containers/G = communion_data[BLOODCOST_TARGET_CONTAINER]
 						blood = locate() in G.reagents.reagent_list
 					if (BLOODCOST_TARGET_USER)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
@@ -686,21 +686,21 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				blood.data["virus2"] = list()
 			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
 		if (BLOODCOST_TARGET_HELD)
-			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
+			var/obj/item/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			blood = locate() in G.reagents.reagent_list
 			if (!tribute && previous_result != BLOODCOST_TARGET_HELD)
 				user.visible_message("<span class='warning'>\The [user] tips \the [data[BLOODCOST_TARGET_HELD]], pouring blood!</span>",
 									"<span class='rose'>You tip \the [data[BLOODCOST_TARGET_HELD]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_BLOODPACK)
-			var/obj/item/weapon/reagent_containers/blood/B = data[BLOODCOST_TARGET_BLOODPACK]
+			var/obj/item/reagent_containers/blood/B = data[BLOODCOST_TARGET_BLOODPACK]
 			blood = locate() in B.reagents.reagent_list
 			if (!tribute && previous_result != BLOODCOST_TARGET_BLOODPACK)
 				user.visible_message("<span class='warning'>\The [user] squeezes \the [data[BLOODCOST_TARGET_BLOODPACK]], pouring blood!</span>",
 									"<span class='rose'>You squeeze \the [data[BLOODCOST_TARGET_BLOODPACK]] to pour the blood contained inside.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
 		if (BLOODCOST_TARGET_CONTAINER)
-			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
+			var/obj/item/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
 			blood = locate() in G.reagents.reagent_list
 			if (!tribute && previous_result != BLOODCOST_TARGET_CONTAINER)
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_CONTAINER]], covering them in blood!</span>",
@@ -721,11 +721,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
 			if (previous_result != BLOODCOST_TARGET_USER)
 				if(!tribute && istype(H))
-					var/obj/item/weapon/W = H.get_active_hand()
+					var/obj/item/W = H.get_active_hand()
 					if (W && W.sharpness_flags & SHARP_BLADE)
 						to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
 					else
-						var/obj/item/weapon/W2 = H.get_inactive_hand()
+						var/obj/item/W2 = H.get_inactive_hand()
 						if (W2 && W2.sharpness_flags & SHARP_BLADE)
 							to_chat(user, "<span class='rose'>You slice open your finger with \the [W] to let a bit of blood flow.</span>")
 						else
@@ -766,15 +766,15 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			H.take_overall_damage(data[BLOODCOST_AMOUNT_BLEEDER] ? 0.1 : 0)
 		if (data[BLOODCOST_TARGET_HELD])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_HELD]
-			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
+			var/obj/item/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_HELD])
 		if (data[BLOODCOST_TARGET_BLOODPACK])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLOODPACK]
-			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
+			var/obj/item/reagent_containers/G = data[BLOODCOST_TARGET_BLOODPACK]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_BLOODPACK])
 		if (data[BLOODCOST_TARGET_CONTAINER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_CONTAINER]
-			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
+			var/obj/item/reagent_containers/G = data[BLOODCOST_TARGET_CONTAINER]
 			G.reagents.remove_reagent(BLOOD, data[BLOODCOST_AMOUNT_CONTAINER])
 		if (data[BLOODCOST_TARGET_USER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_USER]

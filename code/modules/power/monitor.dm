@@ -16,7 +16,7 @@
 	//computer stuff
 	density = 1
 	anchored = 1.0
-	var/circuit = /obj/item/weapon/circuitboard/powermonitor
+	var/circuit = /obj/item/circuitboard/powermonitor
 	use_power = 1
 	idle_power_usage = 300
 	active_power_usage = 300
@@ -145,14 +145,14 @@
 		I.playtoolsound(loc, 50)
 		if(do_after(user,src,20))
 			var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-			var/obj/item/weapon/circuitboard/M = new circuit( A )
+			var/obj/item/circuitboard/M = new circuit( A )
 			A.circuit = M
 			A.anchored = 1
 			for (var/obj/C in src)
 				C.forceMove(src.loc)
 			if (src.stat & BROKEN)
 				user.show_message("<span class=\"info\">The broken glass falls out.</span>")
-				new /obj/item/weapon/shard( src.loc )
+				new /obj/item/shard( src.loc )
 				A.state = 3
 				A.icon_state = "3"
 			else

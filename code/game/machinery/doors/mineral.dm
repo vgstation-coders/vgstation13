@@ -71,14 +71,14 @@
 	playsound(src, soundeffect, 100, 1)
 	return ..()
 
-/obj/machinery/door/mineral/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/digTool = W
+/obj/machinery/door/mineral/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/pickaxe))
+		var/obj/item/pickaxe/digTool = W
 		to_chat(user, "You start digging \the [src].")
 		if(do_after(user, src, (100*digTool.toolspeed)*hardness) && src)
 			to_chat(user, "You finished digging.")
 			return Dismantle()
-	else if(istype(W, /obj/item/weapon/card))
+	else if(istype(W, /obj/item/card))
 		to_chat(user, "You swipe your card at \the [src], petulantly expecting a result.")
 		return
 	else
@@ -161,9 +161,9 @@
 	icon_state = "plasmadoor_closed"
 	hardness = 4
 
-/obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/door/mineral/transparent/plasma/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(0, user))
 			TemperatureAct(100)
 	return ..()
@@ -333,8 +333,8 @@
 		health -= Proj.damage
 		CheckHardness()
 
-/obj/machinery/door/mineral/cult/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/card))
+/obj/machinery/door/mineral/cult/attackby(var/obj/item/W, var/mob/user)
+	if(istype(W, /obj/item/card))
 		user.visible_message("\The [user] swipes their card at \the [src], petulantly expecting a result.</span>",
 							"You swipe your card at \the [src], petulantly expecting a result.")
 	else

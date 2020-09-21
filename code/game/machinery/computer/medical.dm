@@ -12,7 +12,7 @@
 	desc = "This can be used to check medical records."
 	icon_state = "medcomp"
 	req_one_access = list(access_medical, access_forensics_lockers)
-	circuit = "/obj/item/weapon/circuitboard/med_data"
+	circuit = "/obj/item/circuitboard/med_data"
 	var/authenticated = null
 	var/rank = null
 	var/screen = null
@@ -179,7 +179,7 @@
 
 			else
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/card/id))
+				if (istype(I, /obj/item/card/id))
 					if(usr.drop_item(I, src))
 						scan = I
 		else if (href_list["logout"])
@@ -211,7 +211,7 @@
 				rank = "[R.modtype] [R.braintype]"
 				screen = 1
 
-			else if (istype(scan, /obj/item/weapon/card/id))
+			else if (istype(scan, /obj/item/card/id))
 				active1 = null
 				active2 = null
 				if (check_access(scan))
@@ -517,7 +517,7 @@
 				if (!( printing ))
 					printing = 1
 					sleep(50)
-					var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( loc )
+					var/obj/item/paper/P = new /obj/item/paper( loc )
 					P.info = "<CENTER><B>Medical Record</B></CENTER><BR>"
 					if ((istype(active1, /datum/data/record) && data_core.general.Find(active1)))
 						P.info += text("Name: [] ID: []<BR>\nSex: []<BR>\nAge: []<BR>\nFingerprint: []<BR>\nPhysical Status: []<BR>\nMental Status: []<BR>", active1.fields["name"], active1.fields["id"], active1.fields["sex"], active1.fields["age"], active1.fields["fingerprint"], active1.fields["p_stat"], active1.fields["m_stat"])

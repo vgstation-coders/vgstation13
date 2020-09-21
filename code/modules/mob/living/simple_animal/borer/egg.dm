@@ -1,7 +1,7 @@
 // Amount of time between retries for recruits. As to not spam ghosts every minute.
 #define BORER_EGG_RERECRUITE_DELAY 5.0 MINUTES
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg
+/obj/item/reagent_containers/food/snacks/borer_egg
 	name = "borer egg"
 	desc = "A small, gelatinous egg."
 	icon = 'icons/mob/mob.dmi'
@@ -21,14 +21,14 @@
 		GAS_OXYGEN = 5 / CELL_VOLUME
 	)
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/New()
+/obj/item/reagent_containers/food/snacks/borer_egg/New()
 	..()
 	last_ping_time = world.time
 	reagents.add_reagent(NUTRIMENT, 4)
 	spawn(rand(1200,1500))//the egg takes a while to "ripen"
 		Grow()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Grow()
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/Grow()
 	grown = 1
 	icon_state = "borer egg-grown"
 	processing_objects.Add(src)
@@ -46,7 +46,7 @@
 
 		recruiter.recruited.Add(src, "recruiter_recruited")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/Hatch()
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/Hatch()
 	if(hatching)
 		return
 	processing_objects.Remove(src)
@@ -55,17 +55,17 @@
 	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
 	recruiter.request_player()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruiting(var/list/args)
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class='recruit'>\The [src] is starting to hatch. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_not_recruiting(var/list/args)
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class='recruit'>\The [src] is starting to hatch. ([controls])</span>")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	if(O)
 		var/turf/T = get_turf(src)
@@ -83,10 +83,10 @@
 		spawn (BORER_EGG_RERECRUITE_DELAY)
 			Grow() // Reset egg, check for hatchability.
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/proc/pick_type()
+/obj/item/reagent_containers/food/snacks/borer_egg/proc/pick_type()
 	return (rand(1,10000) == 666 ? /mob/living/simple_animal/borer/defected_borer : /mob/living/simple_animal/borer)
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/process()
+/obj/item/reagent_containers/food/snacks/borer_egg/process()
 	var/turf/location = get_turf(src)
 	if(!location)
 		return
@@ -99,29 +99,29 @@
 	if(meets_conditions)
 		src.Hatch()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/reagent_containers/food/snacks/borer_egg/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype( W, /obj/item/toy/crayon ))
 		return
 	else
 		..()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/attack_ghost(var/mob/dead/observer/O)
+/obj/item/reagent_containers/food/snacks/borer_egg/attack_ghost(var/mob/dead/observer/O)
 	if(last_ping_time + ping_cooldown <= world.time)
 		visible_message(message = "<span class='notice'>\The [src] wriggles vigorously.</span>", blind_message = "<span class='danger'>You hear what you think is someone jiggling a jelly.</span>")
 		last_ping_time = world.time
 	else
 		to_chat(O, "The egg is recovering. Try again in a few moments.")
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/Destroy()
+/obj/item/reagent_containers/food/snacks/borer_egg/Destroy()
 	qdel(recruiter)
 	recruiter = null
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected
+/obj/item/reagent_containers/food/snacks/borer_egg/defected
 	name = "special borer egg"
 	desc = "A small, gelatinous egg. This one is destined to do great things."
 
-/obj/item/weapon/reagent_containers/food/snacks/borer_egg/defected/pick_type()
+/obj/item/reagent_containers/food/snacks/borer_egg/defected/pick_type()
 	return /mob/living/simple_animal/borer/defected_borer
 
 #undef BORER_EGG_RERECRUITE_DELAY

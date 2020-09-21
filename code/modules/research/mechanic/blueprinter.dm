@@ -17,11 +17,11 @@
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/blueprinter,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module
+		/obj/item/circuitboard/blueprinter,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/scanning_module
 	)
 
 	RefreshParts()
@@ -30,7 +30,7 @@
 	var/list/bins = list()
 	if(!component_parts)
 		return
-	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/MB in component_parts)
 		if(istype(MB))
 			bins  += MB.rating
 	max_paper = 10 * bins[1]
@@ -40,9 +40,9 @@
 	if(..())
 		return 1
 
-	if(istype(A, /obj/item/weapon/paper))
-		var/obj/item/weapon/paper/P = A
-		if(istype(P, /obj/item/weapon/paper/nano))
+	if(istype(A, /obj/item/paper))
+		var/obj/item/paper/P = A
+		if(istype(P, /obj/item/paper/nano))
 			if(max_nano > nano_loaded)
 				nano_loaded++
 				qdel(P)
@@ -56,8 +56,8 @@
 				to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 		return
 
-	if(istype(A, /obj/item/weapon/paper_pack))
-		var/obj/item/weapon/paper_pack/PP = A
+	if(istype(A, /obj/item/paper_pack))
+		var/obj/item/paper_pack/PP = A
 		var/usingamount = 0
 		if(!PP.amount)
 			to_chat(user, "<span class='notice'>You have to have paper to load the [src]!</span>")

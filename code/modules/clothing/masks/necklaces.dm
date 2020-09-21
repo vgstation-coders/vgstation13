@@ -101,7 +101,7 @@
 		if(some_apc.z != map.zMainStation)
 			continue
 		total_apcs++
-		var/obj/item/weapon/cell/battery = some_apc.get_cell()
+		var/obj/item/cell/battery = some_apc.get_cell()
 		var/const/minimum_power_cell_charge_percent = 80
 		if(battery?.percent() > minimum_power_cell_charge_percent || some_apc.charging)
 			good_apcs++
@@ -114,7 +114,7 @@
 		if(isnull(cached_rating))
 			continue
 		var/rating = 0
-		for(var/obj/item/weapon/stock_parts/SP in machine.component_parts)
+		for(var/obj/item/stock_parts/SP in machine.component_parts)
 			rating += SP.rating
 		if(rating > cached_rating)
 			machines_upgraded++

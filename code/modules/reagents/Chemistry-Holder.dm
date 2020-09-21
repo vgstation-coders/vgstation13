@@ -457,7 +457,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 						for(var/S in C.secondary_results)
 							add_reagent(S, C.result_amount * C.secondary_results[S] * multiplier, reagtemp = chem_temp)
 
-					if	(istype(my_atom, /obj/item/weapon/grenade/chem_grenade) && !quiet)
+					if	(istype(my_atom, /obj/item/grenade/chem_grenade) && !quiet)
 						my_atom.visible_message("<span class='caution'>[bicon(my_atom)] Something comes out of \the [my_atom].</span>")
 						//Logging inside chem_grenade.dm, prime()
 					else if	(istype(my_atom, /mob/living/carbon/human) && !quiet)
@@ -888,7 +888,7 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 	if(obscured && !vis_override)
 		to_chat(user, "<span class='info'>You can't quite make out the contents.</span>")
 		return
-	if (istype(my_atom,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
+	if (istype(my_atom,/obj/item/reagent_containers/food/drinks/drinkingglass) && reagent_list.len)
 		to_chat(user, "<span class='info'>It contains [total_volume] units of what looks like [get_master_reagent_name()].</span>")
 		return
 	to_chat(user, "It contains:")

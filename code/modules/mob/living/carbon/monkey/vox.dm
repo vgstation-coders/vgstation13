@@ -7,7 +7,7 @@
 	speak_emote = list("clucks","croons")
 	attack_text = "pecks"
 	species_type = /mob/living/carbon/monkey/vox
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/rawchicken
 	canWearClothes = 0
 	canWearGlasses = 0
 	safe_oxygen_min = 0
@@ -59,7 +59,7 @@
 	return ..(message)
 
 /mob/living/carbon/monkey/vox/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
+	if(istype(O, /obj/item/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
 			if(!user.drop_item(O))
 				to_chat(user, "<span class='notice'>You can't let go of \the [O]!</span>")
@@ -86,7 +86,7 @@
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		nutrition -= eggcost
 		eggsleft--
-		var/obj/item/weapon/reagent_containers/food/snacks/egg/vox/E = new(get_turf(src))
+		var/obj/item/reagent_containers/food/snacks/egg/vox/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(prob(25))

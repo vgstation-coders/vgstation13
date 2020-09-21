@@ -9,7 +9,7 @@
 		to_chat(src, "<span class='notice'>You cannot grab \the [target], \he is buckled in!</span>")
 		return
 
-	var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(src, target)
+	var/obj/item/grab/G = new /obj/item/grab(src, target)
 	if(!G)	//the grab will delete itself in New if affecting is anchored
 		return
 
@@ -34,7 +34,7 @@
 	return FALSE
 
 /mob/living/proc/break_grabs(mob/living/target)
-	for(var/obj/item/weapon/grab/G in target.held_items)
+	for(var/obj/item/grab/G in target.held_items)
 		if(G.affecting)
 			visible_message("<span class='danger'>[src] has broken [target]'s grip on [G.affecting]!</span>")
 		spawn(1)

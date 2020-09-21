@@ -1,4 +1,4 @@
-/obj/item/weapon/folder
+/obj/item/folder
 	name = "folder"
 	desc = "A folder."
 	icon = 'icons/obj/bureaucracy.dmi'
@@ -9,50 +9,50 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 1
 
-/obj/item/weapon/folder/blue
+/obj/item/folder/blue
 	desc = "A blue folder."
 	icon_state = "folder_blue"
 
-/obj/item/weapon/folder/red
+/obj/item/folder/red
 	desc = "A red folder."
 	icon_state = "folder_red"
 
-/obj/item/weapon/folder/yellow
+/obj/item/folder/yellow
 	desc = "A yellow folder."
 	icon_state = "folder_yellow"
 
-/obj/item/weapon/folder/white
+/obj/item/folder/white
 	desc = "A white folder."
 	icon_state = "folder_white"
 
-/obj/item/weapon/folder/update_icon()
+/obj/item/folder/update_icon()
 	overlays.len = 0
 	if(contents.len)
 		overlays += image(icon = icon, icon_state = "folder_paper")
 	return
 
-/obj/item/weapon/folder/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/weapon/photo))
+/obj/item/folder/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/paper) || istype(W, /obj/item/photo))
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put the [W] into \the [src].</span>")
 			update_icon()
-	else if(istype(W, /obj/item/weapon/pen))
+	else if(istype(W, /obj/item/pen))
 		set_tiny_label(user, " - '", "'")
 	return
 
-/obj/item/weapon/folder/attack_self(mob/user as mob)
+/obj/item/folder/attack_self(mob/user as mob)
 	var/dat = "<title>[name]</title>"
 
-	for(var/obj/item/weapon/paper/P in src)
+	for(var/obj/item/paper/P in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[P]'>Remove</A> - <A href='?src=\ref[src];read=\ref[P]'>[P.name]</A><BR>"
-	for(var/obj/item/weapon/photo/Ph in src)
+	for(var/obj/item/photo/Ph in src)
 		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
 	user << browse(dat, "window=folder")
 	onclose(user, "folder")
 	add_fingerprint(usr)
 	return
 
-/obj/item/weapon/folder/Topic(href, href_list)
+/obj/item/folder/Topic(href, href_list)
 	..()
 	if((usr.stat || usr.restrained()))
 		return
@@ -61,7 +61,7 @@
 
 		if(href_list["remove"])
 			var/obj/item/P = locate(href_list["remove"])
-			if(!(istype(P, /obj/item/weapon/paper)) && !(istype(P, /obj/item/weapon/photo)))
+			if(!(istype(P, /obj/item/paper)) && !(istype(P, /obj/item/photo)))
 				var/message = "<span class='warning'>[usr]([usr.key]) has tried to remove something other than a paper/photo from a folder.<span>"
 				message_admins(message)
 				message += "[P]"
@@ -80,11 +80,11 @@
 				usr.put_in_hands(P)
 
 		if(href_list["read"])
-			var/obj/item/weapon/paper/P = locate(href_list["read"])
+			var/obj/item/paper/P = locate(href_list["read"])
 			if(P)
 				P.show_text(usr)
 		if(href_list["look"])
-			var/obj/item/weapon/photo/P = locate(href_list["look"])
+			var/obj/item/photo/P = locate(href_list["look"])
 			if(P)
 				P.show(usr)
 

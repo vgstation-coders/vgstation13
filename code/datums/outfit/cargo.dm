@@ -7,10 +7,10 @@
 	associated_job = /datum/job/hop
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -38,16 +38,16 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/storage/box/ids = GRASP_RIGHT_HAND,
+		/obj/item/storage/box/ids = GRASP_RIGHT_HAND,
 	)
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty/,
+		/obj/item/implant/loyalty/,
 	)
 
 	pda_type = /obj/item/device/pda/heads/hop
 	pda_slot = slot_l_store
-	id_type = /obj/item/weapon/card/id/silver
+	id_type = /obj/item/card/id/silver
 
 // -- QM
 
@@ -57,10 +57,10 @@
 	associated_job = /datum/job/qm
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -92,11 +92,11 @@
 
 	pda_type = /obj/item/device/pda/quartermaster
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/supply
+	id_type = /obj/item/card/id/supply
 
 /datum/outfit/qm/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
+	H.put_in_hands(new /obj/item/storage/bag/clipboard(H))
 
 // -- Cargo techie
 
@@ -106,10 +106,10 @@
 	associated_job = /datum/job/cargo_tech
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -138,11 +138,11 @@
 
 	pda_type = /obj/item/device/pda/cargo
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/supply
+	id_type = /obj/item/card/id/supply
 
 /datum/outfit/cargo_tech/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	H.put_in_hands(new /obj/item/storage/bag/plasticbag(H))
 
 // -- Shaft Miner
 
@@ -152,10 +152,10 @@
 	associated_job = /datum/job/mining
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -183,21 +183,21 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/crowbar = GRASP_LEFT_HAND,
-		/obj/item/weapon/storage/bag/ore = slot_l_store_str,
+		/obj/item/crowbar = GRASP_LEFT_HAND,
+		/obj/item/storage/bag/ore = slot_l_store_str,
 	)
 
 	equip_survival_gear = list(
-		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/storage/box/survival/engineer,
 	)
 
 	pda_type = /obj/item/device/pda/shaftminer
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/supply
+	id_type = /obj/item/card/id/supply
 
 /datum/outfit/mining/post_equip_priority(var/mob/living/carbon/human/H)
-	H.put_in_hands(new /obj/item/weapon/pickaxe/drill(get_turf(H)))
+	H.put_in_hands(new /obj/item/pickaxe/drill(get_turf(H)))
 	return ..()

@@ -40,7 +40,7 @@
 		"darkgygax",
 	)
 	paintable = 0
-	cell_type = /obj/item/weapon/cell/hyper
+	cell_type = /obj/item/cell/hyper
 
 /obj/mecha/combat/gygax/New()
 	..()

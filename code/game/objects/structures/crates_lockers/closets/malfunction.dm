@@ -7,12 +7,12 @@
 
 /obj/structure/closet/malf/suits/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/tank/jetpack/void,
+		/obj/item/tank/jetpack/void,
 		/obj/item/clothing/mask/breath,
 		/obj/item/clothing/head/helmet/space/nasavoid,
 		/obj/item/clothing/suit/space/nasavoid,
 		/obj/item/clothing/shoes/magboots/nasavoid,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/cell,
+		/obj/item/crowbar,
+		/obj/item/cell,
 		/obj/item/device/multitool,
 	)

@@ -104,7 +104,7 @@
 	light_range = 2
 	light_color = LIGHT_COLOR_RED
 
-/obj/structure/cult_legacy/tome/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/cult_legacy/tome/attackby(obj/item/W as obj, mob/user as mob)
 	user.drop_item(W, src.loc)
 	return 1
 
@@ -188,7 +188,7 @@
 				Robot.mmi = null
 		else
 			for(var/obj/item/W in M)
-				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
+				if(istype(W, /obj/item/implant))	//TODO: Carn. give implants a dropped() or something
 					qdel(W)
 					continue
 				W.layer = initial(W.layer)

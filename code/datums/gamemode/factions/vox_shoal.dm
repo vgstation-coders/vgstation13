@@ -1,47 +1,47 @@
 var/list/low_score_items = list(
 	/obj/item/stack,
 	/obj/item/clothing,
-	/obj/item/weapon/reagent_containers,
+	/obj/item/reagent_containers,
 	/obj/item/trash,
-	/obj/item/weapon/stock_parts/,
-	/obj/item/weapon/cell,
+	/obj/item/stock_parts/,
+	/obj/item/cell,
 	/obj/item/clothing/gloves/yellow,
 )
 
 var/list/medium_score_items = list(
-	/obj/item/weapon/disk/,
+	/obj/item/disk/,
 	/obj/item/clothing/shoes/magboots,
-	/obj/item/weapon/storage/belt/utility,
-	/obj/item/weapon/circuitboard,
+	/obj/item/storage/belt/utility,
+	/obj/item/circuitboard,
 	/obj/item/stack/sheet/mineral/diamond,
 	/obj/item/stack/sheet/mineral/gold,
-	/obj/item/weapon/gun,
-	/obj/item/weapon/melee,
-	/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-	/obj/item/weapon/switchtool,
+	/obj/item/gun,
+	/obj/item/melee,
+	/obj/item/reagent_containers/glass/beaker/bluespace,
+	/obj/item/switchtool,
 	/obj/item/device/am_shielding_container,
 	/obj/item/ammo_storage,
 )
 
 var/list/high_score_items = list(
-	/obj/item/weapon/pinpointer,
-	/obj/item/weapon/disk/nuclear,
-	/obj/item/weapon/hand_tele,
+	/obj/item/pinpointer,
+	/obj/item/disk/nuclear,
+	/obj/item/hand_tele,
 	/obj/item/clothing/suit/space/rig/captain,
 	/obj/item/clothing/shoes/magboots/elite,
-	/obj/item/weapon/planning_frame,
-	/obj/item/weapon/storage/belt/utility/chief,
-	/obj/item/weapon/switchtool/holo,
-	/obj/item/weapon/circuitboard/telesci_computer,
-	/obj/item/weapon/card/emag,
-	/obj/item/weapon/am_containment,
+	/obj/item/planning_frame,
+	/obj/item/storage/belt/utility/chief,
+	/obj/item/switchtool/holo,
+	/obj/item/circuitboard/telesci_computer,
+	/obj/item/card/emag,
+	/obj/item/am_containment,
 )
 
 var/list/potential_bonus_items = list(
-	/obj/item/weapon/pinpointer,
-	/obj/item/weapon/bikehorn/rubberducky,
-	/obj/item/weapon/circuitboard/borgupload,
-	/obj/item/weapon/stock_parts/subspace/amplifier,
+	/obj/item/pinpointer,
+	/obj/item/bikehorn/rubberducky,
+	/obj/item/circuitboard/borgupload,
+	/obj/item/stock_parts/subspace/amplifier,
 	/obj/item/clothing/mask/gas/clown_hat,
 )
 
@@ -299,10 +299,10 @@ var/list/potential_bonus_items = list(
 	forceMove(S)
 	S.ThrowAtStation()
 
-/obj/item/weapon/paper/vox_paper
+/obj/item/paper/vox_paper
 	name = "Shoal objectives"
 
-/obj/item/weapon/paper/vox_paper/initialize()
+/obj/item/paper/vox_paper/initialize()
 	var/vox_raider_data = SSpersistence_misc.read_data(/datum/persistence_task/vox_raiders)
 	var/score_to_beat = vox_raider_data["best_score"]
 	var/best_team = vox_raider_data["winning_team"]
@@ -311,7 +311,7 @@ var/list/potential_bonus_items = list(
 	Our best agents of all time were able to gather an estimate of [score_to_beat] voxcoins in assets, on [vox_raider_data["MM"]]/[vox_raider_data["DD"]]/[vox_raider_data["YY"]]. <br/>
 	Their names are as follows: [best_team]."}
 
-/obj/item/weapon/coin/raider
+/obj/item/coin/raider
 	name = "raider coin"
 	icon_state = "coin_gold"
 
@@ -319,62 +319,62 @@ var/list/potential_bonus_items = list(
 	file_path = "maps/misc/voxshuttle.dmm"
 	unique = TRUE
 
-/obj/item/weapon/storage/box/large/vox_equipment
+/obj/item/storage/box/large/vox_equipment
 	name = "Vox equipment box"
 	desc = "A Vox Box for short."
 
-/obj/item/weapon/storage/box/large/vox_equipment/raider/New()
+/obj/item/storage/box/large/vox_equipment/raider/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
-	new /obj/item/weapon/melee/telebaton(src)
+	new /obj/item/melee/telebaton(src)
 	new /obj/item/clothing/glasses/thermal/monocle(src)
 	new /obj/item/device/chameleon(src)
-	var/obj/item/weapon/crossbow/W = new(src)
-	W.cell = new /obj/item/weapon/cell/crap(W)
+	var/obj/item/crossbow/W = new(src)
+	W.cell = new /obj/item/cell/crap(W)
 	W.cell.charge = 500
 	var/obj/item/stack/rods/A = new(src)
 	A.amount = 20
 
-/obj/item/weapon/storage/box/large/vox_equipment/engineer/New()
+/obj/item/storage/box/large/vox_equipment/engineer/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/pressure(src)
 	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
-	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/scanner/meson(src)
-	new /obj/item/weapon/storage/box/emps(src)
+	new /obj/item/storage/box/emps(src)
 	new /obj/item/device/multitool(src)
-	var/obj/item/weapon/paper/vox_paper/VP = new(src)
+	var/obj/item/paper/vox_paper/VP = new(src)
 	VP.initialize()
 
-/obj/item/weapon/storage/box/large/vox_equipment/saboteur/New()
+/obj/item/storage/box/large/vox_equipment/saboteur/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/carapace(src)
 	new /obj/item/clothing/head/helmet/space/vox/carapace(src)
-	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/thermal/monocle(src)
-	new /obj/item/weapon/card/emag(src)
-	new /obj/item/weapon/gun/dartgun/vox/raider(src)
+	new /obj/item/card/emag(src)
+	new /obj/item/gun/dartgun/vox/raider(src)
 	new /obj/item/device/multitool(src)
 
-/obj/item/weapon/storage/box/large/vox_equipment/medic/New()
+/obj/item/storage/box/large/vox_equipment/medic/New()
 	..()
 	new /obj/item/clothing/suit/space/vox/pressure(src)
 	new /obj/item/clothing/head/helmet/space/vox/pressure(src)
-	new /obj/item/weapon/storage/belt/utility/full(src)
+	new /obj/item/storage/belt/utility/full(src)
 	new /obj/item/clothing/glasses/hud/health(src)
-	new /obj/item/weapon/circular_saw(src)
-	new /obj/item/weapon/gun/dartgun/vox/medical(src)
+	new /obj/item/circular_saw(src)
+	new /obj/item/gun/dartgun/vox/medical(src)
 
 /obj/machinery/vending/raider
 	name = "\improper Raider Surplus"
 	icon_state = "voxseed"
 	vend_reply = "Happy hunting!"
 	unhackable = TRUE
-	accepted_coins = list(/obj/item/weapon/coin/raider)
+	accepted_coins = list(/obj/item/coin/raider)
 	premium = list(
-		/obj/item/weapon/storage/box/large/vox_equipment/medic = 2,
-		/obj/item/weapon/storage/box/large/vox_equipment/saboteur = 2,
-		/obj/item/weapon/storage/box/large/vox_equipment/engineer = 2,
-		/obj/item/weapon/storage/box/large/vox_equipment/raider = 2
+		/obj/item/storage/box/large/vox_equipment/medic = 2,
+		/obj/item/storage/box/large/vox_equipment/saboteur = 2,
+		/obj/item/storage/box/large/vox_equipment/engineer = 2,
+		/obj/item/storage/box/large/vox_equipment/raider = 2
 	)

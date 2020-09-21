@@ -22,4 +22,4 @@
 	for(var/mob/living/target in targets)
 		to_chat(target, "<span class = 'userwarning'>\The [src] has been forced onto you by \the [user]! Find somebody else to give it to before it consumes your head!</span>")
 		target.drop_item(target.get_active_hand(), force_drop = 1)
-		target.put_in_hands(new /obj/item/weapon/carnivorous_pumpkin(target))
+		target.put_in_hands(new /obj/item/carnivorous_pumpkin(target))

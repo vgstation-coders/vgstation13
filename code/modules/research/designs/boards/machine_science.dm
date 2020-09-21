@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/destructive_analyzer
+	build_path = /obj/item/circuitboard/destructive_analyzer
 
 /datum/design/protolathe
 	name = "Circuit Design(Protolathe)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/protolathe
+	build_path = /obj/item/circuitboard/protolathe
 
 /datum/design/circuit_imprinter
 	name = "Circuit Design(Circuit Imprinter)"
@@ -26,7 +26,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/circuit_imprinter
+	build_path = /obj/item/circuitboard/circuit_imprinter
 
 /datum/design/autolathe
 	name = "Circuit Design(Autolathe)"
@@ -36,7 +36,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/autolathe
+	build_path = /obj/item/circuitboard/autolathe
 
 /datum/design/rdserver
 	name = "Circuit Design(R&D Server)"
@@ -46,7 +46,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/rdserver
+	build_path = /obj/item/circuitboard/rdserver
 
 /datum/design/mechfab
 	name = "Circuit Design(Exosuit Fabricator)"
@@ -56,7 +56,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/mechfab
+	build_path = /obj/item/circuitboard/mechfab
 
 /datum/design/monkey_recycler
 	name = "Circuit Design (Monkey Recycler)"
@@ -66,7 +66,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/monkey_recycler
+	build_path = /obj/item/circuitboard/monkey_recycler
 
 /datum/design/mechapowerport
 	name = "Circuit Design (Mech Bay Power Port)"
@@ -76,7 +76,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/mech_bay_power_port
+	build_path = /obj/item/circuitboard/mech_bay_power_port
 
 /datum/design/mechapowerfloor
 	name = "Circuit Design (Recharge Station)"
@@ -86,7 +86,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/mech_bay_recharge_station
+	build_path = /obj/item/circuitboard/mech_bay_recharge_station
 
 /datum/design/anom
 	name = "Circuit Design (Fourier Transform Spectroscope)"
@@ -96,9 +96,9 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/anom
+	build_path = /obj/item/circuitboard/anom
 
 /datum/design/anom/hyper
 	name = "Circuit Design (Hyperspectral Imager)"
 	id = "hyperspectral"
-	build_path = /obj/item/weapon/circuitboard/anom/hyper
+	build_path = /obj/item/circuitboard/anom/hyper

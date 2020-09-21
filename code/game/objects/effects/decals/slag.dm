@@ -84,7 +84,7 @@
 		var/mob/living/L=M
 		L.apply_damage(125, BURN)
 
-/obj/effect/decal/slag/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/effect/decal/slag/attackby(obj/item/W as obj, mob/user as mob)
 	if(molten)
 		user.show_message("<span class=\"warning\">You need to wait for \the [src] to cool.</span>")
 		return

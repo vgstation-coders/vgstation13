@@ -22,7 +22,7 @@
 	if(jobban_isbanned(H, "revolutionary") || isantagbanned(H))
 		return ADD_REVOLUTIONARY_FAIL_IS_JOBBANNED
 
-	for(var/obj/item/weapon/implant/loyalty/L in H) // check loyalty implant in the contents
+	for(var/obj/item/implant/loyalty/L in H) // check loyalty implant in the contents
 		if(L.imp_in == H) // a check if it's actually implanted
 			return ADD_REVOLUTIONARY_FAIL_IS_IMPLANTED
 

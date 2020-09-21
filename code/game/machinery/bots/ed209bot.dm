@@ -37,17 +37,17 @@
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL|BOT_DENSE
 	//List of weapons that secbots will not arrest for, also copypasted in secbot.dm and metaldetector.dm
 	var/safe_weapons = list(
-		/obj/item/weapon/gun/energy/tag,
-		/obj/item/weapon/gun/energy/laser/practice,
-		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
-		/obj/item/weapon/melee/defibrillator
+		/obj/item/gun/energy/tag,
+		/obj/item/gun/energy/laser/practice,
+		/obj/item/gun/hookshot,
+		/obj/item/gun/energy/floragun,
+		/obj/item/melee/defibrillator
 		)
 
 	target_chasing_distance = 12
 	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
-/obj/item/weapon/ed209_assembly
+/obj/item/ed209_assembly
 	name = "ED-209 assembly"
 	desc = "Some sort of bizarre assembly."
 	icon = 'icons/obj/aibots.dmi'
@@ -73,7 +73,7 @@
 		lasercolor = created_lasercolor
 	icon_state = "[lasercolor][icon_initial][on]"
 	spawn(3)
-		botcard = new /obj/item/weapon/card/id(src)
+		botcard = new /obj/item/card/id(src)
 		var/datum/job/detective/J = new/datum/job/detective
 		botcard.access = J.get_access()
 		if(lasercolor)
@@ -186,8 +186,8 @@ Auto Patrol: []"},
 			declare_arrests = !declare_arrests
 			updateUsrDialog()
 
-/obj/machinery/bot/ed209/attackby(obj/item/weapon/W, mob/user)
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+/obj/machinery/bot/ed209/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [locked ? "locked" : "unlocked"].</span>")
@@ -284,7 +284,7 @@ Auto Patrol: []"},
 				if(check_for_weapons(W))
 					threatcount += PERP_LEVEL_ARREST
 
-			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
+			if(istype(perp.belt, /obj/item/gun) || istype(perp.belt, /obj/item/melee))
 				if(!(perp.belt.type in safe_weapons))
 					threatcount += PERP_LEVEL_ARREST/2
 
@@ -301,31 +301,31 @@ Auto Patrol: []"},
 				threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
-		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
+		if(istype(visible_id, /obj/item/card/id/syndicate))
 			threatcount -= PERP_LEVEL_ARREST/2
 
 	if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//They will not, however shoot at people who have guns, because it gets really fucking annoying
 		if(iswearingredtag(perp))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
+		if(perp.find_held_item_by_type(/obj/item/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/red))
+		if(istype(perp.belt, /obj/item/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if(lasercolor == "r")
 		threatcount = 0
 		if(iswearingbluetag(perp))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
+		if(perp.find_held_item_by_type(/obj/item/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/blue))
+		if(istype(perp.belt, /obj/item/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if(check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			var/obj/item/weapon/card/id/id = perp.get_visible_id()
+			var/obj/item/card/id/id = perp.get_visible_id()
 			if(id)
 				perpname = id.registered_name
 
@@ -385,7 +385,7 @@ Auto Patrol: []"},
 							return
 						if (M.handcuffed)
 							return
-						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.handcuffed = new /obj/item/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 			if(declare_arrests)
 				var/area/location = get_area(src)
@@ -408,20 +408,20 @@ Auto Patrol: []"},
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/obj/item/weapon/ed209_assembly/Sa = new /obj/item/weapon/ed209_assembly(Tsec)
+	var/obj/item/ed209_assembly/Sa = new /obj/item/ed209_assembly(Tsec)
 	Sa.build_step = 1
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
 	Sa.created_name = name
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 
 	if(!lasercolor)
-		var/obj/item/weapon/gun/energy/taser/G = new /obj/item/weapon/gun/energy/taser(Tsec)
+		var/obj/item/gun/energy/taser/G = new /obj/item/gun/energy/taser(Tsec)
 		G.power_supply.charge = 0
 	else if(lasercolor == "b")
-		var/obj/item/weapon/gun/energy/tag/blue/G = new /obj/item/weapon/gun/energy/tag/blue(Tsec)
+		var/obj/item/gun/energy/tag/blue/G = new /obj/item/gun/energy/tag/blue(Tsec)
 		G.power_supply.charge = 0
 	else if(lasercolor == "r")
-		var/obj/item/weapon/gun/energy/tag/red/G = new /obj/item/weapon/gun/energy/tag/red(Tsec)
+		var/obj/item/gun/energy/tag/red/G = new /obj/item/gun/energy/tag/red(Tsec)
 		G.power_supply.charge = 0
 
 	if (prob(50))
@@ -541,10 +541,10 @@ Auto Patrol: []"},
 #define ED209_BUILD_STEP_SCREWDRIVER 8
 #define ED209_BUILD_STEP_FINAL 9
 
-/obj/item/weapon/ed209_assembly/attackby(obj/item/weapon/W, mob/user)
+/obj/item/ed209_assembly/attackby(obj/item/W, mob/user)
 	..()
 
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
 		if(!t)
 			return
@@ -584,7 +584,7 @@ Auto Patrol: []"},
 
 		if(ED209_BUILD_STEP_WELD)
 			if( iswelder(W) )
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				if(WT.remove_fuel(0,user))
 					build_step++
 					name = "shielded frame assembly"
@@ -627,15 +627,15 @@ Auto Patrol: []"},
 
 			switch(lasercolor)
 				if("b")
-					if( !istype(W, /obj/item/weapon/gun/energy/tag/blue) )
+					if( !istype(W, /obj/item/gun/energy/tag/blue) )
 						return
 					name = "bluetag ED-209 assembly"
 				if("r")
-					if( !istype(W, /obj/item/weapon/gun/energy/tag/red) )
+					if( !istype(W, /obj/item/gun/energy/tag/red) )
 						return
 					name = "redtag ED-209 assembly"
 				if(null)
-					if( !istype(W, /obj/item/weapon/gun/energy/taser) )
+					if( !istype(W, /obj/item/gun/energy/taser) )
 						return
 					name = "taser ED-209 assembly"
 				else
@@ -658,7 +658,7 @@ Auto Patrol: []"},
 					to_chat(user, "<span class='notice'>Taser gun attached.</span>")
 
 		if(ED209_BUILD_STEP_FINAL)
-			if( istype(W, /obj/item/weapon/cell) )
+			if( istype(W, /obj/item/cell) )
 				if(!user.drop_item(W))
 					return
 
@@ -694,7 +694,7 @@ Auto Patrol: []"},
 		..()
 
 /obj/machinery/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
-	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
+	if(istype(slot_item, /obj/item/gun) || istype(slot_item, /obj/item/melee))
 		if(!(slot_item.type in safe_weapons))
 			return 1
 	return 0

@@ -20,7 +20,7 @@
 	)
 	starting_materials = list() //Makes the new datum
 	var/stack_amt = 50 //Amount to stack before releasing
-	var/obj/item/weapon/card/id/inserted_id
+	var/obj/item/card/id/inserted_id
 	var/credits = 0
 
 /obj/machinery/mineral/ore_redemption/initialize()
@@ -33,13 +33,13 @@
 		if(src.output)
 			break
 
-/obj/machinery/mineral/ore_redemption/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(istype(W,/obj/item/weapon/card/id))
+/obj/machinery/mineral/ore_redemption/attackby(var/obj/item/W, var/mob/user)
+	if(istype(W,/obj/item/card/id))
 		// N3X - Fixes people's IDs getting eaten when a new card is inserted
 		if(istype(inserted_id))
 			to_chat(user, "<span class='warning'>There already is an ID in \the [src].</span>")
 			return
-		var/obj/item/weapon/card/id/I = usr.get_active_hand()
+		var/obj/item/card/id/I = usr.get_active_hand()
 		if(istype(I))
 			if(usr.drop_item(I, src))
 				inserted_id = I
@@ -134,7 +134,7 @@
 				else
 					to_chat(usr, "<span class='warning'>Failed to claim credits.</span>")
 		else if(href_list["choice"] == "insert")
-			var/obj/item/weapon/card/id/I = usr.get_active_hand()
+			var/obj/item/card/id/I = usr.get_active_hand()
 			if(istype(I))
 				if(usr.drop_item(I, src))
 					inserted_id = I

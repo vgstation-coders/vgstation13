@@ -143,12 +143,12 @@
 			icon_state = "mirror"
 			playsound(src, 'sound/items/Deconstruct.ogg', 80, 1)
 
-	else if(istype(I, /obj/item/weapon/crowbar))
+	else if(istype(I, /obj/item/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
 			if(shattered)
-				new /obj/item/weapon/shard(loc)
+				new /obj/item/shard(loc)
 				new /obj/item/stack/sheet/metal(loc, 1)
 			else
 				new /obj/item/stack/sheet/metal(loc, 1)

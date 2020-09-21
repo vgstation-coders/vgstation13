@@ -122,8 +122,8 @@
 
 /obj/abstract/screen/close/Click()
 	if(master)
-		if(istype(master, /obj/item/weapon/storage))
-			var/obj/item/weapon/storage/S = master
+		if(istype(master, /obj/item/storage))
+			var/obj/item/storage/S = master
 			S.close(usr)
 		else if(istype(master, /obj/item/device/rcd))
 			var/obj/item/device/rcd/rcd = master
@@ -134,7 +134,7 @@
 	name = "grab"
 
 /obj/abstract/screen/grab/Click()
-	var/obj/item/weapon/grab/G = master
+	var/obj/item/grab/G = master
 	G.s_click(src)
 	return 1
 
@@ -154,8 +154,8 @@
 	if(usr.incapacitated())
 		return 1
 	if (istype(usr.loc,/obj/mecha)) // stops inventory actions in a mech
-		if(istype(master,/obj/item/weapon/storage)) //should always be true, but sanity
-			var/obj/item/weapon/storage/S = master
+		if(istype(master,/obj/item/storage)) //should always be true, but sanity
+			var/obj/item/storage/S = master
 			if(!S.distance_interact(usr))
 				return 1
 			//else... continue onward to master.attackby
@@ -530,7 +530,7 @@
 		if("Allow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetMove()
@@ -539,7 +539,7 @@
 		if("Disallow Walking")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetMove()
@@ -548,7 +548,7 @@
 		if("Allow Running")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetRun()
@@ -557,7 +557,7 @@
 		if("Disallow Running")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetRun()
@@ -566,7 +566,7 @@
 		if("Allow Item Use")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetClick()
@@ -576,7 +576,7 @@
 		if("Disallow Item Use")
 			if(gun_click_time > world.time - 30)	//give them 3 seconds between mode changes.
 				return
-			if(!istype(usr.get_active_hand(),/obj/item/weapon/gun))
+			if(!istype(usr.get_active_hand(),/obj/item/gun))
 				to_chat(usr, "You need your gun in your active hand to do that!")
 				return
 			usr.client.AllowTargetClick()

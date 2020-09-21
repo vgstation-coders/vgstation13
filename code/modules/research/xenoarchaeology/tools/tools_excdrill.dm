@@ -1,4 +1,4 @@
-/obj/item/weapon/pickaxe/excavationdrill
+/obj/item/pickaxe/excavationdrill
 	name = "excavation drill"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "excavationdrill0"
@@ -15,7 +15,7 @@
 	attack_verb = list("drills")
 	hitsound = 'sound/weapons/circsawhit.ogg'
 
-/obj/item/weapon/pickaxe/excavationdrill/attack_self(mob/user as mob)
+/obj/item/pickaxe/excavationdrill/attack_self(mob/user as mob)
 	var/depth = round(input("Put the desired depth (1-15 centimeters).", "Set Depth", excavation_amount) as num)
 	if(depth>15 || depth<1)
 		to_chat(user, "<span class='notice'>Invalid depth.</span>")
@@ -39,11 +39,11 @@
 	else
 		icon_state = "excavationdrill7"
 
-/obj/item/weapon/pickaxe/excavationdrill/examine(mob/user)
+/obj/item/pickaxe/excavationdrill/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It is currently set at [excavation_amount]cm.</span>")
 
-/obj/item/weapon/pickaxe/excavationdrill/adv
+/obj/item/pickaxe/excavationdrill/adv
 	name = "diamond excavation drill"
 	icon = 'icons/obj/xenoarchaeology.dmi'
 	icon_state = "Dexcavationdrill0"
@@ -52,7 +52,7 @@
 	toolspeed = 0.15
 	desc = "Advanced archaeological drill combining ultrasonic excitation and bluespace manipulation to provide extreme precision. The diamond tip is adjustable from 1 to 50 cms."
 
-/obj/item/weapon/pickaxe/excavationdrill/adv/attack_self(mob/user as mob)
+/obj/item/pickaxe/excavationdrill/adv/attack_self(mob/user as mob)
 	var/depth = round(input("Put the desired depth (1-50 centimeters).", "Set Depth", excavation_amount) as num)
 	if(depth>50 || depth<1)
 		to_chat(user, "<span class='notice'>Invalid depth.</span>")

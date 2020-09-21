@@ -92,7 +92,7 @@
 			return -2
 
 		if(M.component_parts)
-			for(var/obj/item/weapon/circuitboard/CB in M.component_parts) //fetching the circuit by looking in the parts
+			for(var/obj/item/circuitboard/CB in M.component_parts) //fetching the circuit by looking in the parts
 				if(istype(CB))
 					techlist = ConvertReqString2List(CB.origin_tech)
 					break
@@ -100,7 +100,7 @@
 		else if(istype(M, /obj/machinery/computer))
 			var/obj/machinery/computer/C = M
 			if(C.circuit)
-				var/obj/item/weapon/circuitboard/comp_circuit = text2path(C.circuit)
+				var/obj/item/circuitboard/comp_circuit = text2path(C.circuit)
 				techlist = ConvertReqString2List(initial(comp_circuit.origin_tech))
 
 	else if(istype(O, /obj/item))

@@ -6,7 +6,7 @@
 
 //Food items that aren't eaten normally and leave an empty container behind
 //To clarify, these are special containers used to hold reagents specific to cooking, produced from the Kitchen CondiMaster
-/obj/item/weapon/reagent_containers/food/condiment
+/obj/item/reagent_containers/food/condiment
 	name = "condiment container"
 	desc = "Just your average condiment container."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/drinkingglass.dmi', "right_hand" = 'icons/mob/in-hand/right/drinkingglass.dmi')
@@ -17,16 +17,16 @@
 	possible_transfer_amounts = list(1,5,10)
 	volume = 50
 
-/obj/item/weapon/reagent_containers/food/condiment/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/reagent_containers/food/condiment/attackby(obj/item/W as obj, mob/user as mob)
 
 	return
 
-/obj/item/weapon/reagent_containers/food/condiment/attack_self(mob/user as mob)
+/obj/item/reagent_containers/food/condiment/attack_self(mob/user as mob)
 
 	attack(user, user)
 	return
 
-/obj/item/weapon/reagent_containers/food/condiment/attack(mob/living/M as mob, mob/user as mob, def_zone)
+/obj/item/reagent_containers/food/condiment/attack(mob/living/M as mob, mob/user as mob, def_zone)
 
 	var/datum/reagents/R = src.reagents
 
@@ -75,7 +75,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
+/obj/item/reagent_containers/food/condiment/afterattack(obj/target, mob/user , flag)
 	if(!flag || ismob(target))
 		return 0
 	if(istype(target, /obj/structure/reagent_dispensers)) //A dispenser. Transfer FROM it TO us.
@@ -92,7 +92,7 @@
 		to_chat(user, "<span class='notice'>You fill [src] with [trans] units of the contents of [target].</span>")
 
 	//Something like a glass or a food item. Player probably wants to transfer TO it.
-	else if(target.is_open_container() || istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+	else if(target.is_open_container() || istype(target, /obj/item/reagent_containers/food/snacks))
 		if(!reagents.total_volume)
 			to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 			return
@@ -102,7 +102,7 @@
 		var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
 		to_chat(user, "<span class='notice'>You transfer [trans] units of the condiment to \the [target].</span>")
 
-/obj/item/weapon/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
+/obj/item/reagent_containers/food/condiment/on_reagent_change() //Due to the way condiment bottles work, we define "special types" here
 
 	if(reagents.reagent_list.len > 0)
 
@@ -227,220 +227,220 @@
 
 //Specific condiment bottle entities for mapping and potentially spawning (these are NOT used for any above procs)
 
-/obj/item/weapon/reagent_containers/food/condiment/enzyme
+/obj/item/reagent_containers/food/condiment/enzyme
 	name = "universal enzyme"
 	desc = "Used in cooking various dishes."
 	icon_state = ENZYME
 
-/obj/item/weapon/reagent_containers/food/condiment/enzyme/New()
+/obj/item/reagent_containers/food/condiment/enzyme/New()
 	..()
 	reagents.add_reagent(ENZYME, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/enzyme/restock()
-	if(istype(src,/obj/item/weapon/reagent_containers/food/condiment/enzyme))
+/obj/item/reagent_containers/food/condiment/enzyme/restock()
+	if(istype(src,/obj/item/reagent_containers/food/condiment/enzyme))
 		if(reagents.get_reagent_amount(ENZYME) < 50)
 			reagents.add_reagent(ENZYME, 2)
 
-/obj/item/weapon/reagent_containers/food/condiment/ketchup
+/obj/item/reagent_containers/food/condiment/ketchup
 	name = "ketchup"
 	desc = "You feel more American already."
 
-/obj/item/weapon/reagent_containers/food/condiment/ketchup/New()
+/obj/item/reagent_containers/food/condiment/ketchup/New()
 	..()
 	reagents.add_reagent(KETCHUP, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/mustard
+/obj/item/reagent_containers/food/condiment/mustard
 	name = "mustard"
 	desc = "A spicy yellow paste."
 
-/obj/item/weapon/reagent_containers/food/condiment/mustard/New()
+/obj/item/reagent_containers/food/condiment/mustard/New()
 	..()
 	reagents.add_reagent(MUSTARD, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/relish
+/obj/item/reagent_containers/food/condiment/relish
 	name = "relish"
 	desc = "A pickled cucumber jam. Tasty!"
 
-/obj/item/weapon/reagent_containers/food/condiment/relish/New()
+/obj/item/reagent_containers/food/condiment/relish/New()
 	..()
 	reagents.add_reagent(RELISH, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/hotsauce
+/obj/item/reagent_containers/food/condiment/hotsauce
 	name = "hotsauce"
 	desc = "You can almost TASTE the stomach ulcers now!"
 
-/obj/item/weapon/reagent_containers/food/condiment/hotsauce/New()
+/obj/item/reagent_containers/food/condiment/hotsauce/New()
 	..()
 	reagents.add_reagent(CAPSAICIN, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/flour
+/obj/item/reagent_containers/food/condiment/flour
 	name = "flour sack"
 	desc = "A big bag of flour. Good for baking!"
 
-/obj/item/weapon/reagent_containers/food/condiment/flour/New()
+/obj/item/reagent_containers/food/condiment/flour/New()
 	..()
 	reagents.add_reagent(FLOUR, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/spacemilk
+/obj/item/reagent_containers/food/condiment/spacemilk
 	name = "space milk"
 	desc = "It's milk. White and nutritious goodness!"
 
-/obj/item/weapon/reagent_containers/food/condiment/spacemilk/New()
+/obj/item/reagent_containers/food/condiment/spacemilk/New()
 	..()
 	reagents.add_reagent(MILK, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/soymilk
+/obj/item/reagent_containers/food/condiment/soymilk
 	name = "soy milk"
 	desc = "It's soy milk. White and nutritious goodness!"
 
-/obj/item/weapon/reagent_containers/food/condiment/soymilk/New()
+/obj/item/reagent_containers/food/condiment/soymilk/New()
 	..()
 	reagents.add_reagent(SOYMILK, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/rice
+/obj/item/reagent_containers/food/condiment/rice
 	name = "rice sack"
 	desc = "A taste of Asia in the kitchen."
 
-/obj/item/weapon/reagent_containers/food/condiment/rice/New()
+/obj/item/reagent_containers/food/condiment/rice/New()
 	..()
 	reagents.add_reagent(RICE, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/soysauce
+/obj/item/reagent_containers/food/condiment/soysauce
 	name = "soy sauce"
 	desc = "A salty soy-based flavoring."
 
-/obj/item/weapon/reagent_containers/food/condiment/soysauce/New()
+/obj/item/reagent_containers/food/condiment/soysauce/New()
 	..()
 	reagents.add_reagent(SOYSAUCE, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/coldsauce
+/obj/item/reagent_containers/food/condiment/coldsauce
 	name = "coldsauce"
 	desc = "Leaves the tongue numb in its passage."
 
-/obj/item/weapon/reagent_containers/food/condiment/coldsauce/New()
+/obj/item/reagent_containers/food/condiment/coldsauce/New()
 	..()
 	reagents.add_reagent(FROSTOIL, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/cornoil
+/obj/item/reagent_containers/food/condiment/cornoil
 	name = "corn oil"
 	desc = "A delicious oil used in cooking. Made from corn."
 
-/obj/item/weapon/reagent_containers/food/condiment/cornoil/New()
+/obj/item/reagent_containers/food/condiment/cornoil/New()
 	..()
 	reagents.add_reagent(CORNOIL, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/sugar
+/obj/item/reagent_containers/food/condiment/sugar
 	name = "sugar"
 	desc = "Tasty space sugar!"
 
-/obj/item/weapon/reagent_containers/food/condiment/sugar/New()
+/obj/item/reagent_containers/food/condiment/sugar/New()
 	..()
 	reagents.add_reagent(SUGAR, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/caramel
+/obj/item/reagent_containers/food/condiment/caramel
 	name = "caramel"
 	desc = "Tasty caramel cubes!"
 
-/obj/item/weapon/reagent_containers/food/condiment/caramel/New()
+/obj/item/reagent_containers/food/condiment/caramel/New()
 	..()
 	reagents.add_reagent(CARAMEL, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/honey
+/obj/item/reagent_containers/food/condiment/honey
 	name = "honey pot"
 	desc = "Sweet and healthy!"
 
-/obj/item/weapon/reagent_containers/food/condiment/honey/New()
+/obj/item/reagent_containers/food/condiment/honey/New()
 	..()
 	reagents.add_reagent(HONEY, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/royaljelly
+/obj/item/reagent_containers/food/condiment/royaljelly
 	name = "royal jelly pot"
 	desc = "Spicy and healthy!"
 
-/obj/item/weapon/reagent_containers/food/condiment/royaljelly/New()
+/obj/item/reagent_containers/food/condiment/royaljelly/New()
 	..()
 	reagents.add_reagent(ROYALJELLY, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/cinnamon
+/obj/item/reagent_containers/food/condiment/cinnamon
 	name = "cinnamon shaker"
 	desc = "A spice, obtained from the bark of cinnamomum trees."
 
-/obj/item/weapon/reagent_containers/food/condiment/cinnamon/New()
+/obj/item/reagent_containers/food/condiment/cinnamon/New()
 	..()
 	reagents.add_reagent(CINNAMON, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker
+/obj/item/reagent_containers/food/condiment/saltshaker
 	name = "salt shaker"
 	desc = "Salt. From space oceans, presumably."
 	icon_state = "saltshakersmall"
 	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
 	amount_per_transfer_from_this = 1
 
-/obj/item/weapon/reagent_containers/food/condiment/saltshaker/New()
+/obj/item/reagent_containers/food/condiment/saltshaker/New()
 	..()
 	reagents.add_reagent(SODIUMCHLORIDE, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/peppermill
+/obj/item/reagent_containers/food/condiment/peppermill
 	name = "pepper mill"
 	desc = "Often used to flavor food or make people sneeze."
 	icon_state = "peppermillsmall"
 	possible_transfer_amounts = list(1, 50) //For clowns turning the lid off.
 	amount_per_transfer_from_this = 1
 
-/obj/item/weapon/reagent_containers/food/condiment/peppermill/New()
+/obj/item/reagent_containers/food/condiment/peppermill/New()
 	..()
 	reagents.add_reagent(BLACKPEPPER, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/syndisauce
+/obj/item/reagent_containers/food/condiment/syndisauce
 	name = "Chef Excellence's Special Sauce"
 	desc = "A potent sauce distilled from the toxin glands of 1000 Space Carp with an extra touch of LSD, because why not?"
 	amount_per_transfer_from_this = 1
 
-/obj/item/weapon/reagent_containers/food/condiment/syndisauce/New()
+/obj/item/reagent_containers/food/condiment/syndisauce/New()
 	..()
 	reagents.add_reagent(CHEFSPECIAL, 20)
 
-/obj/item/weapon/reagent_containers/food/condiment/vinegar
+/obj/item/reagent_containers/food/condiment/vinegar
 	name = "malt vinegar bottle"
 	desc = "Perfect for fish and chips."
 
-/obj/item/weapon/reagent_containers/food/condiment/vinegar/New()
+/obj/item/reagent_containers/food/condiment/vinegar/New()
 	..()
 	reagents.add_reagent(VINEGAR, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/gravy
+/obj/item/reagent_containers/food/condiment/gravy
 	name = "gravy boat"
 	desc = "Too small to set sail on."
 	volume = 10 //So nutrment isn't added
 
-/obj/item/weapon/reagent_containers/food/condiment/gravy/New()
+/obj/item/reagent_containers/food/condiment/gravy/New()
 	..()
 	reagents.add_reagent(GRAVY, 10)
 
-/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig
+/obj/item/reagent_containers/food/condiment/gravy/gravybig
 	name = "gravy cruise"
 	desc = "Still a bit too small to sail on."
 	volume = 50
 
-/obj/item/weapon/reagent_containers/food/condiment/gravy/gravybig/New()
+/obj/item/reagent_containers/food/condiment/gravy/gravybig/New()
 	..()
 	reagents.add_reagent(GRAVY, 50)
 
-/obj/item/weapon/reagent_containers/food/condiment/exotic
+/obj/item/reagent_containers/food/condiment/exotic
 	name = "exotic bottle"
 	desc = "If you can see this label, something is wrong."
 	//~9% chance of anything but special sauce, which is .09 chance
 	var/global/list/possible_exotic_condiments = list(ENZYME=10,BLACKPEPPER=10,VINEGAR=10,SODIUMCHLORIDE=10,CINNAMON=10,CHEFSPECIAL=1,FROSTOIL=10,SOYSAUCE=10,CAPSAICIN=10,HONEY=10,ROYALJELLY=5,KETCHUP=10,MUSTARD=10,RELISH=10,COCO=10)
 
-/obj/item/weapon/reagent_containers/food/condiment/exotic/New()
+/obj/item/reagent_containers/food/condiment/exotic/New()
 	..()
 	reagents.add_reagent(pickweight(possible_exotic_condiments), 30)
 
 
-/obj/item/weapon/reagent_containers/food/condiment/mayo
+/obj/item/reagent_containers/food/condiment/mayo
 	name = "mayonnaise jar"
 	desc = "we have such sights to show you."
 
-/obj/item/weapon/reagent_containers/food/condiment/mayo/New()
+/obj/item/reagent_containers/food/condiment/mayo/New()
 	..()
 	reagents.add_reagent(MAYO, 50)

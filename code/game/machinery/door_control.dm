@@ -49,7 +49,7 @@
 	req_one_access = list()
 	playsound(src, "sparks", 100, 1)
 
-/obj/machinery/door_control/attackby(obj/item/weapon/W, mob/user as mob)
+/obj/machinery/door_control/attackby(obj/item/W, mob/user as mob)
 	..()
 	/* For later implementation
 	if (W.is_screwdriver(user))
@@ -135,7 +135,7 @@
 /obj/machinery/driver_button/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/driver_button/attackby(obj/item/weapon/W, mob/user as mob)
+/obj/machinery/driver_button/attackby(obj/item/W, mob/user as mob)
 	. = ..()
 	if(.)
 		return .

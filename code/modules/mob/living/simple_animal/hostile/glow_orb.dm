@@ -3,7 +3,7 @@ As the name implies, just exists to glow a slight blue light.
 
 If touched by somebody on help intent, will attempt to follow them until they move out of view.
 
-If attacked or hit by anything, powers down back into /obj/item/weapon/glow_orb
+If attacked or hit by anything, powers down back into /obj/item/glow_orb
 
 If hit by lightning, overpowers and explodes like a flashbang, blinding everyone in immediate vicinity
 */
@@ -102,7 +102,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 	spawn(10)
 		playsound(src, 'sound/weapons/orb_deactivate.ogg', 50,1)
 		set_light(0)
-		new/obj/item/weapon/glow_orb(get_turf(src))
+		new/obj/item/glow_orb(get_turf(src))
 		qdel(src)
 		return
 

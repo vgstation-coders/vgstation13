@@ -374,7 +374,7 @@ var/list/all_doors = list()
 		open()
 	return ..()
 
-/obj/machinery/door/proc/CanAStarPass(var/obj/item/weapon/card/id/ID)
+/obj/machinery/door/proc/CanAStarPass(var/obj/item/card/id/ID)
 	return !density || check_access(ID)
 
 

@@ -31,7 +31,7 @@
 	ranged_cooldown_cap = 9
 
 	corpse = /obj/effect/landmark/corpse/vox/crossbow
-	items_to_drop = list(/obj/item/weapon/crossbow, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill, /obj/item/weapon/arrow/quill)
+	items_to_drop = list(/obj/item/crossbow, /obj/item/arrow/quill, /obj/item/arrow/quill, /obj/item/arrow/quill)
 
 /mob/living/simple_animal/hostile/humanoid/vox/crossbow/Shoot(var/target, var/start, var/user, var/bullet = 0)
 	if(target == start)
@@ -39,7 +39,7 @@
 	if(!istype(target, /turf))
 		return
 
-	var/obj/item/weapon/arrow/A = new /obj/item/weapon/arrow/quill(get_turf(src))
+	var/obj/item/arrow/A = new /obj/item/arrow/quill(get_turf(src))
 
 	A.throw_at(target,10,25)
 
@@ -71,7 +71,7 @@
 	projectilesound = 'sound/weapons/ion.ogg'
 	ranged_cooldown_cap = 4
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/ionrifle)
+	items_to_drop = list(/obj/item/gun/energy/ionrifle)
 
 	corpse = /obj/effect/landmark/corpse/vox/ion
 

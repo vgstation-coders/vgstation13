@@ -14,10 +14,10 @@
 	pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 	pixel_x = rand(-6, 6) * PIXEL_MULTIPLIER
 
-/obj/item/ashtray/attackby(obj/item/weapon/W, mob/user)
+/obj/item/ashtray/attackby(obj/item/W, mob/user)
 	if (health < 1)
 		return
-	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match) || istype(W, /obj/item/trash/cigbutt))
+	if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/match) || istype(W, /obj/item/trash/cigbutt))
 		if(!user)
 			return
 		if (contents.len >= max_butts)
@@ -29,7 +29,7 @@
 		var/obj/item/clothing/mask/cigarette/cig = W
 		if(istype(cig, /obj/item/trash/cigbutt))
 			to_chat(user, "<span class='notice'>You drop the [cig] into [src].</span>")
-		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/weapon/match))
+		if (istype(W,/obj/item/clothing/mask/cigarette) || istype(W, /obj/item/match))
 			if (cig.lit == 1)
 				visible_message("<span class='notice'>[user] crushes [cig] in [src], putting it out.</span>")
 			else if (cig.lit == 0)

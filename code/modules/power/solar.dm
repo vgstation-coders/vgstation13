@@ -23,7 +23,7 @@ var/list/solars_list = list()
 	connect_to_network()
 
 // this is here because it is fucking here. If you found this, you're lucky !
-/obj/item/weapon/paper/solar
+/obj/item/paper/solar
 	name = "paper - 'Going green with Greencorps! Instrunctions on setting up your own solar array.'"
 	info = "<h1>Welcome</h1><p>We at Greencorps we love the environment, and space. With this package you will help mother nature and produce energy without using fossil fuel or plasma! The Singularity Engine is dangerous while solar energy is safe, which is why it's better. Now here is how you setup your own solar array.</p><p>You can make a solar panel by wrenching the solar assembly onto a cable node. Add a glass panel, reinforced or regular glass will do, which will finish the construction of your solar panel. It's that easy!.</p><p>Now after setting up 19 more of these solar panels you will want to create a solar tracker to keep track of mother nature's gift, the sun. These are the same steps as before except you insert the tracker equipment circuit into the assembly before performing the final step of adding the glass. You now have a tracker! Now the last step is to add a computer to calculate the sun's movements and to send commands to the solar panels to change direction with the sun. Setting up the solar computer is the same as setting up any computer, so you should have no trouble in doing that. You do need to put a wire node under the computer, and the wire needs to be connected to the tracker.</p><p>Congratulations, you should have a working solar array. If you are having trouble, here are some tips. Make sure all solar equipment are on a cable node, even the computer. You can always deconstruct your creations if you make a mistake.</p><p>That's all to it, be safe, be green!</p>"
 
@@ -45,7 +45,7 @@ var/list/solars_list = list()
 		S.amount = 2
 		glass_type = null //Memory vars ho !
 
-/obj/machinery/power/solar_assembly/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/machinery/power/solar_assembly/attackby(var/obj/item/W, var/mob/user)
 	if(!anchored && isturf(loc))
 		if(W.is_wrench(user))
 			anchored = 1
@@ -78,7 +78,7 @@ var/list/solars_list = list()
 			return 1
 
 	if(!tracker)
-		if(istype(W, /obj/item/weapon/tracker_electronics))
+		if(istype(W, /obj/item/tracker_electronics))
 			if(user.drop_item(W))
 				tracker = 1
 				qdel(W)
@@ -87,7 +87,7 @@ var/list/solars_list = list()
 				return 1
 	else
 		if(iscrowbar(W))
-			new /obj/item/weapon/tracker_electronics(src.loc)
+			new /obj/item/tracker_electronics(src.loc)
 			tracker = 0
 			user.visible_message("<span class='notice'>[user] takes the electronics out of [src].</span>", \
 			"<span class='notice'>You take the electronics out of [src].</span>")

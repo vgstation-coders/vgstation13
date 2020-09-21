@@ -1,11 +1,11 @@
 //first second and third can be different if one player is trying to cuff two others, or third can be equal to first or second if one player is cuffing himself to another
-/obj/item/weapon/handcuffs/proc/apply_mutual_cuffs(mob/first, mob/second, mob/third)
+/obj/item/handcuffs/proc/apply_mutual_cuffs(mob/first, mob/second, mob/third)
 	if (restraint_resist_time > 0)
 		if (restraint_apply_check(first, second))
 			return attempt_apply_mutual_restraints(first, second, third)
 
 
-/obj/item/weapon/handcuffs/proc/attempt_apply_mutual_restraints(mob/living/carbon/first, mob/living/carbon/second, mob/living/carbon/third)
+/obj/item/handcuffs/proc/attempt_apply_mutual_restraints(mob/living/carbon/first, mob/living/carbon/second, mob/living/carbon/third)
 	if(!istype(first) || !istype(second) || !istype(third))
 		return FALSE
 
@@ -33,13 +33,13 @@
 		second.attack_log += text("\[[time_stamp()]\] <font color='red'>Restrained with \the [src] by \the [key_name_third] (mutual cuff)</font>")
 		log_attack("\The [key_name_third] has restrained \the [key_name_first] and \the [key_name_second] with \the [src] (mutual cuff)")
 
-		var/obj/item/weapon/handcuffs/cuffs = src
+		var/obj/item/handcuffs/cuffs = src
 
 		third.drop_from_inventory(cuffs)
 		handle_mutual_cuff_event_logic(first, second, cuffs)
 		return TRUE
 
-/obj/item/weapon/handcuffs/proc/handle_mutual_cuff_event_logic(var/mob/living/carbon/first, var/mob/living/carbon/second, var/obj/item/weapon/handcuffs/cuffs)
+/obj/item/handcuffs/proc/handle_mutual_cuff_event_logic(var/mob/living/carbon/first, var/mob/living/carbon/second, var/obj/item/handcuffs/cuffs)
 	//don't mess up the order of the following code
 	first.mutual_handcuffed_to = second
 	second.mutual_handcuffed_to = first
@@ -62,11 +62,11 @@
 	cuffs.on_restraint_apply(first)
 	cuffs.on_restraint_apply(second)
 
-/obj/item/weapon/handcuffs/on_restraint_removal(mob/living/carbon/C)
+/obj/item/handcuffs/on_restraint_removal(mob/living/carbon/C)
 	remove_mutual_cuff_events(C)
 	. = FALSE
 
-/obj/item/weapon/handcuffs/proc/remove_mutual_cuff_events(mob/living/carbon/C)
+/obj/item/handcuffs/proc/remove_mutual_cuff_events(mob/living/carbon/C)
 	var/mob/living/carbon/handcuffed_to = C.mutual_handcuffed_to
 
 	if (C && handcuffed_to)
@@ -94,7 +94,7 @@
 
 /mob/living/carbon/proc/on_mutual_cuffed_move(atom/movable/mover)
 	if (!isturf(loc) || (mutual_handcuffed_to && get_dist(mutual_handcuffed_to, src) > 3)) // We moved to a mech, a sleeper, or a locker, or got teleported
-		var/obj/item/weapon/handcuffs/H = mutual_handcuffs
+		var/obj/item/handcuffs/H = mutual_handcuffs
 		if (!istype(H))
 			return
 		H.visible_message("<span class='warning'>\The [H] breaks!</span>")

@@ -13,7 +13,7 @@
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
 	corpse = /obj/effect/landmark/corpse/pirate
-	items_to_drop = list(/obj/item/weapon/melee/energy/sword/pirate)
+	items_to_drop = list(/obj/item/melee/energy/sword/pirate)
 
 	faction = "pirate"
 
@@ -34,4 +34,4 @@
 	projectiletype = /obj/item/projectile/beam
 
 	corpse = /obj/effect/landmark/corpse/pirate/ranged
-	items_to_drop = list(/obj/item/weapon/gun/energy/laser)
+	items_to_drop = list(/obj/item/gun/energy/laser)

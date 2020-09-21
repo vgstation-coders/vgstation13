@@ -26,20 +26,20 @@
 
 /datum/rcd_schematic/rsf/dosh
 	name		= "Dosh"
-	spawn_type	= /obj/item/weapon/spacecash/c10
+	spawn_type	= /obj/item/spacecash/c10
 	energy_cost	= 4
 
 /datum/rcd_schematic/rsf/glass
 	name		= "Glass"
-	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/drinkingglass
+	spawn_type	= /obj/item/reagent_containers/food/drinks/drinkingglass
 
 /datum/rcd_schematic/rsf/flask
 	name		= "Flask"
-	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/flask/barflask
+	spawn_type	= /obj/item/reagent_containers/food/drinks/flask/barflask
 
 /datum/rcd_schematic/rsf/paper
 	name		= "Paper"
-	spawn_type	= /obj/item/weapon/paper
+	spawn_type	= /obj/item/paper
 
 /datum/rcd_schematic/rsf/candle
 	name		= "Candle"
@@ -47,7 +47,7 @@
 
 /datum/rcd_schematic/rsf/dice
 	name		= "Dice"
-	spawn_type	= /obj/item/weapon/storage/pill_bottle/dice
+	spawn_type	= /obj/item/storage/pill_bottle/dice
 
 /datum/rcd_schematic/rsf/cards
 	name		= "Deck of cards"
@@ -59,16 +59,16 @@
 
 /datum/rcd_schematic/rsf/mug
 	name		= "Mug"
-	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/mug
+	spawn_type	= /obj/item/reagent_containers/food/drinks/mug
 
 /datum/rcd_schematic/rsf/zippo
 	name		= "Zippo Lighter"
-	spawn_type	= /obj/item/weapon/lighter/zippo
+	spawn_type	= /obj/item/lighter/zippo
 	energy_cost	= 2
 
 /datum/rcd_schematic/rsf/pen
 	name		= "Pen"
-	spawn_type	= /obj/item/weapon/pen
+	spawn_type	= /obj/item/pen
 
 /datum/rcd_schematic/rsf/cardboard
 	name		= "Cardboard Sheet"
@@ -91,20 +91,20 @@
 
 /datum/rcd_schematic/rsf/cigarettes
 	name		= "Cigarette Packet"
-	spawn_type	= /obj/item/weapon/storage/fancy/cigarettes
+	spawn_type	= /obj/item/storage/fancy/cigarettes
 	energy_cost	= 3
 
 /datum/rcd_schematic/rsf/fork
 	name		= "Fork"
-	spawn_type	= /obj/item/weapon/kitchen/utensil/fork
+	spawn_type	= /obj/item/kitchen/utensil/fork
 
 /datum/rcd_schematic/rsf/vodka
 	name		= "Tunguska Triple Distilled"
-	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/vodka
+	spawn_type	= /obj/item/reagent_containers/food/drinks/bottle/vodka
 
 /datum/rcd_schematic/rsf/greyshit_vodka
 	name		= "Greyshit Vodka"
-	spawn_type	= /obj/item/weapon/reagent_containers/food/drinks/bottle/greyvodka
+	spawn_type	= /obj/item/reagent_containers/food/drinks/bottle/greyvodka
 
 /datum/rcd_schematic/rsf/ushanka
 	name		= "Ushanka"

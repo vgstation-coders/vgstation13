@@ -62,7 +62,7 @@
 	if(user!=M && M.reagents && !M.reagents.has_reagent(CHILLWAX,1))
 		M.reagents.add_reagent(CHILLWAX,0.3)
 
-/obj/item/weapon/reagent_containers/food/snacks/quiche/frittata/New()
+/obj/item/reagent_containers/food/snacks/quiche/frittata/New()
 	..()
 	name = "frittata"
 	desc = "Now you have no need to eat balls for breakfast."
@@ -118,11 +118,11 @@
 	F.mutations += M_NO_BREATH
 	F.dna.SetSEState(NOBREATHBLOCK,1)
 	F.add_spell(new /spell/targeted/lockinvow)
-	F.equip_or_collect(new /obj/item/weapon/storage/backpack/satchel, slot_back)
+	F.equip_or_collect(new /obj/item/storage/backpack/satchel, slot_back)
 	F.equip_or_collect(new /obj/item/clothing/mask/necklace/crystal, slot_wear_mask)
 	F.equip_or_collect(new /obj/item/clothing/shoes/white, slot_shoes)
 	F.put_in_hands(new /obj/item/device/instrument/recorder/shakashuri)
-	F.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/quiche/frittata, slot_in_backpack)
+	F.equip_or_collect(new /obj/item/reagent_containers/food/snacks/quiche/frittata, slot_in_backpack)
 
 /proc/name_rambler(var/mob/living/carbon/human/H)
 	var/randomname = pick("Xavier","Renegade","Angel")

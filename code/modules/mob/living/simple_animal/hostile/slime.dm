@@ -19,7 +19,7 @@
 	faction = "slimesummon"
 	speed = 5
 	can_butcher = FALSE
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/slime
 
 	colour = "grey"
 	held_items = list()

@@ -260,7 +260,7 @@
 						break
 
 				if (found)
-					var/obj/item/weapon/reagent_containers/food/F = new foodType(get_turf(src))
+					var/obj/item/reagent_containers/food/F = new foodType(get_turf(src))
 					var/mob/M = get_holder_of_type(loc, /mob)
 					if(M)
 						M.put_in_hands(F)

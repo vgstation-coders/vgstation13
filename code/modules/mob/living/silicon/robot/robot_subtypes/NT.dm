@@ -1,6 +1,6 @@
 //Combat module debug subtype.
 /mob/living/silicon/robot/debug_droideka
-	cell_type = /obj/item/weapon/cell/hyper
+	cell_type = /obj/item/cell/hyper
 	startup_sound = 'sound/mecha/nominalnano.ogg'
 	startup_vary = FALSE
 

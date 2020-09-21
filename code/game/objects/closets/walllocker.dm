@@ -21,7 +21,7 @@
 /obj/structure/closet/walllocker/emerglocker
 	name = "emergency locker"
 	desc = "A wall mounted locker with emergency supplies"
-	var/list/spawnitems = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/clothing/mask/breath,/obj/item/weapon/crowbar)
+	var/list/spawnitems = list(/obj/item/tank/emergency_oxygen,/obj/item/clothing/mask/breath,/obj/item/crowbar)
 	var/amount = 3 // spawns each items X times.
 	icon_state = "emerg"
 
@@ -61,11 +61,11 @@
 	icon_state = "medical_wall"
 	icon_opened = "medical_wall_open"
 	icon_closed = "medical_wall"
-	var/obj/item/weapon/melee/defibrillator/defib
+	var/obj/item/melee/defibrillator/defib
 
 /obj/structure/closet/walllocker/defiblocker/New()
 	..()
-	defib = new /obj/item/weapon/melee/defibrillator(src)
+	defib = new /obj/item/melee/defibrillator(src)
 
 /obj/structure/closet/walllocker/defiblocker/take_contents() //we don't want these to hoover up items below them
 	return
@@ -87,14 +87,14 @@
 		return
 	if(defib)
 		to_chat(usr, "<span class='notice'>You take out an emergency defibrillator from \the [src].</san>")
-		//new /obj/item/weapon/melee/defibrillator(src.loc)
+		//new /obj/item/melee/defibrillator(src.loc)
 		usr.put_in_hands(defib)
 		defib = null
 		update_icon()
 	return
 
-/obj/structure/closet/walllocker/defiblocker/attackby(obj/item/weapon/G as obj, mob/user as mob)
-	if(istype(G, /obj/item/weapon/melee/defibrillator))
+/obj/structure/closet/walllocker/defiblocker/attackby(obj/item/G as obj, mob/user as mob)
+	if(istype(G, /obj/item/melee/defibrillator))
 		if(defib)
 			to_chat(usr, "<spawn class='notice'>The locker is full.")
 			return

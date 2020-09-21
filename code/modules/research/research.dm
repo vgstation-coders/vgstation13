@@ -290,24 +290,24 @@ datum/tech/robotics
 */
 
 
-/obj/item/weapon/disk/tech_disk
+/obj/item/disk/tech_disk
 	name = "technology data disk"
 	desc = "A disk for storing technology data for further research."
 	icon_state = "disk_tech"
 	var/datum/tech/stored
 
-/obj/item/weapon/disk/tech_disk/New()
+/obj/item/disk/tech_disk/New()
 	..()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/disk/tech_disk/nanotrasen
+/obj/item/disk/tech_disk/nanotrasen
 	name = "Technology Disk (Nanotrasen 1)"
 
-/obj/item/weapon/disk/tech_disk/nanotrasen/New()
+/obj/item/disk/tech_disk/nanotrasen/New()
 	..()
 	stored = new/datum/tech/nanotrasen(src)
 
-/obj/item/weapon/paper/tech_nanotrasen
+/obj/item/paper/tech_nanotrasen
 	name = "paper - 'Nanotrasen Experimental Technologies'"
 	info = "<B>Thank you for participating in this Nanotrasen-sponsored initiative!</B><BR><BR>This technology disk will open you the doors of Nanotrasen's most bleeding-edge experimental devices, and we look forward to you testing them for us! Also, note that you will still need to perform some research before these designs become available for you to print, but here's a guide to the tech levels that they will require.<br><ol><li><b>Hookshot</b>: Materials=2, Engineering=5, Electromagnetic=2</li><li><b>Ricochet Rifle</b>: Materials=3, Power=3, Combat=3</li><li><b>Gravity Well Gun</b>: Materials=7, Bluespace=5, Electromagnetic=5</li><li><b>Machine-Man Interface</b>: Biotech=4, Data Theory=4</li></ol> <li><b>Plasma Cutter</b>: Materials=4, Plasma=3, Engineering=3</li></ol> <br>, We look forward to the results of your experiments. Depending on their success we might grant you access to even more bleeding-edge technologies in the future! Make Science proud!<br><br><i>Central Command R&D Lab</i>"

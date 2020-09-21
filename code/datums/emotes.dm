@@ -47,7 +47,7 @@
 
 	if(isliving(user))
 		var/mob/living/L = user
-		for(var/obj/item/weapon/implant/I in L)
+		for(var/obj/item/implant/I in L)
 			I.trigger(key, L)
 
 	if(!msg)

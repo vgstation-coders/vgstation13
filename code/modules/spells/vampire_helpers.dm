@@ -44,12 +44,12 @@
 		to_chat(src, "<span class ='warning'> You cannot do this while restrained! </span>")
 		return 0
 	if(!(VAMP_CHARISMA in V.powers)) //Charisma allows implanted targets to be enthralled.
-		for(var/obj/item/weapon/implant/loyalty/L in H)
+		for(var/obj/item/implant/loyalty/L in H)
 			if(L && L.implanted)
 				implanted = TRUE
 				break
 		/* Greytide implantes - to fix
-		for(var/obj/item/weapon/implant/traitor/T in H)
+		for(var/obj/item/implant/traitor/T in H)
 			if(T && T.implanted)
 				enthrall_safe = TRUE
 				break
@@ -87,7 +87,7 @@
 			return 0
 		// Null rod nullifies vampire powers, unless we're a young vamp.
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
-		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
+		var/obj/item/nullrod/N = locate(/obj/item/nullrod) in get_contents_in_object(src)
 		if (N)
 			if (VAMP_UNDYING in V.powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")

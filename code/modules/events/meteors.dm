@@ -65,7 +65,7 @@
 
 var/global/list/thing_storm_types = list(
 	"meaty gore storm" = list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/human,
+		/obj/item/reagent_containers/food/snacks/meat/human,
 		/obj/item/organ/internal/eyes,
 		/obj/item/organ/internal/kidneys,
 		/obj/item/organ/internal/heart,
@@ -81,8 +81,8 @@ var/global/list/thing_storm_types = list(
 		/obj/item/organ/external/l_foot,
 	),
 	"sausage party" = list(
-		/obj/item/weapon/reagent_containers/food/snacks/sausage,
-		/obj/item/weapon/reagent_containers/food/snacks/faggot,
+		/obj/item/reagent_containers/food/snacks/sausage,
+		/obj/item/reagent_containers/food/snacks/faggot,
 	),
 	"blob shower" = list(
 		/obj/item/projectile/meteor/blob,

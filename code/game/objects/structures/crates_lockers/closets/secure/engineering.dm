@@ -11,9 +11,9 @@
 /obj/structure/closet/secure_closet/engineering_chief/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng,
-			/obj/item/weapon/storage/backpack/messenger/engi,
+			/obj/item/storage/backpack/industrial,
+			/obj/item/storage/backpack/satchel_eng,
+			/obj/item/storage/backpack/messenger/engi,
 			),
 		/obj/item/blueprints/primary,
 		/obj/item/clothing/under/rank/chief_engineer,
@@ -21,11 +21,11 @@
 		/obj/item/clothing/head/welding,
 		/obj/item/clothing/gloves/yellow,
 		/obj/item/clothing/shoes/workboots,
-		/obj/item/weapon/cartridge/ce,
+		/obj/item/cartridge/ce,
 		/obj/item/device/radio/headset/heads/ce,
-		/obj/item/weapon/storage/box/inflatables,
-		/obj/item/weapon/inflatable_dispenser,
-		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/storage/box/inflatables,
+		/obj/item/inflatable_dispenser,
+		/obj/item/storage/toolbox/mechanical,
 		/obj/item/device/t_scanner/advanced,
 		/obj/item/device/device_analyser/advanced,
 		/obj/item/clothing/suit/storage/hazardvest,
@@ -33,9 +33,9 @@
 		/obj/item/device/multitool,
 		/obj/item/device/flash,
 		/obj/item/device/gps/engineering,
-		/obj/item/weapon/storage/belt/utility/chief,
+		/obj/item/storage/belt/utility/chief,
 		/obj/item/clothing/glasses/scanner/material,
-		/obj/item/weapon/card/debit/preferred/department/engineering,
+		/obj/item/card/debit/preferred/department/engineering,
 	)
 
 /obj/structure/closet/secure_closet/engineering_electrical
@@ -50,9 +50,9 @@
 
 /obj/structure/closet/secure_closet/engineering_electrical/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/toolbox/electrical = 3,
-		/obj/item/weapon/rcl,
-		/obj/item/weapon/circuitboard/power_control = 3,
+		/obj/item/storage/toolbox/electrical = 3,
+		/obj/item/rcl,
+		/obj/item/circuitboard/power_control = 3,
 		/obj/item/clothing/gloves/yellow = 2,
 		/obj/item/device/multitool = 3,
 	)
@@ -70,7 +70,7 @@
 /obj/structure/closet/secure_closet/engineering_welding/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/head/welding = 3,
-		/obj/item/weapon/weldingtool/largetank = 3,
+		/obj/item/weldingtool/largetank = 3,
 	)
 
 /obj/structure/closet/secure_closet/engineering_personal
@@ -86,14 +86,14 @@
 /obj/structure/closet/secure_closet/engineering_personal/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng,
-			/obj/item/weapon/storage/backpack/messenger/engi,
+			/obj/item/storage/backpack/industrial,
+			/obj/item/storage/backpack/satchel_eng,
+			/obj/item/storage/backpack/messenger/engi,
 			),
 		/obj/item/clothing/under/rank/engineer,
 		/obj/item/clothing/shoes/workboots,
-		/obj/item/weapon/storage/box/inflatables,
-		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/storage/box/inflatables,
+		/obj/item/storage/toolbox/mechanical,
 		/obj/item/device/radio/headset/headset_eng,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/mask/gas,
@@ -119,22 +119,22 @@
 /obj/structure/closet/secure_closet/engineering_atmos/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng,
-			/obj/item/weapon/storage/backpack/messenger/engi,
+			/obj/item/storage/backpack/industrial,
+			/obj/item/storage/backpack/satchel_eng,
+			/obj/item/storage/backpack/messenger/engi,
 			),
 		/obj/item/clothing/under/rank/atmospheric_technician,
 		/obj/item/clothing/shoes/workboots,
-		/obj/item/weapon/storage/box/inflatables,
-		/obj/item/weapon/storage/toolbox/mechanical,
-		/obj/item/weapon/extinguisher/foam,
+		/obj/item/storage/box/inflatables,
+		/obj/item/storage/toolbox/mechanical,
+		/obj/item/extinguisher/foam,
 		/obj/item/device/radio/headset/headset_eng,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/clothing/mask/gas,
 		/obj/item/taperoll/atmos,
 		/obj/item/pipe_planner,
-		/obj/item/weapon/wrench/socket,
-		/obj/item/weapon/gun/projectile/flare,
+		/obj/item/wrench/socket,
+		/obj/item/gun/projectile/flare,
 		/obj/item/ammo_storage/box/flare,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/analyzer,
@@ -155,18 +155,18 @@
 /obj/structure/closet/secure_closet/engineering_mechanic/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/industrial,
-			/obj/item/weapon/storage/backpack/satchel_eng,
-			/obj/item/weapon/storage/backpack/messenger/engi,
+			/obj/item/storage/backpack/industrial,
+			/obj/item/storage/backpack/satchel_eng,
+			/obj/item/storage/backpack/messenger/engi,
 			),
-		/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED,
+		/obj/item/storage/bag/gadgets/part_replacer/basic_PED,
 		/obj/item/clothing/under/rank/mechanic,
 		/obj/item/clothing/shoes/workboots,
-		/obj/item/weapon/storage/toolbox/mechanical,
+		/obj/item/storage/toolbox/mechanical,
 		/obj/item/device/radio/headset/headset_engsci,
 		/obj/item/clothing/suit/storage/hazardvest,
 		/obj/item/device/device_analyser,
-		/obj/item/weapon/soap/nanotrasen,
+		/obj/item/soap/nanotrasen,
 		/obj/item/clothing/gloves/black,
 		/obj/item/device/assembly_frame = 2,
 		pick(

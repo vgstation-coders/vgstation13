@@ -32,7 +32,7 @@
 		icon_state_to_appearance[icon_state] = appearance
 	snowballs = rand(5, 10) //Used to be (30, 50). A quick way to overload the server with atom instances.
 
-/turf/simulated/floor/plating/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/plating/snow/attackby(obj/item/W as obj, mob/user as mob)
 
 	..()
 
@@ -127,5 +127,5 @@
 	name = "concrete"
 	desc = "Concrete is a substantially stronger, more resistant vehicle surface than asphalt, though it grips somewhat less making it better suited for short, low-speed drives."
 
-/turf/simulated/floor/engine/cement/attackby(obj/item/weapon/C, mob/user)
+/turf/simulated/floor/engine/cement/attackby(obj/item/C, mob/user)
 	return //no deconstruct

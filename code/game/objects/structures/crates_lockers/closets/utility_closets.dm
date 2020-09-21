@@ -21,28 +21,28 @@
 
 /obj/structure/closet/emcloset/atoms_to_spawn()
 	var/static/list/small = list(
-		/obj/item/weapon/tank/emergency_oxygen = 2,
+		/obj/item/tank/emergency_oxygen = 2,
 		/obj/item/clothing/mask/breath = 2,
-		/obj/item/weapon/storage/toolbox/emergency,
+		/obj/item/storage/toolbox/emergency,
 	)
 	var/static/list/aid = list(
-		/obj/item/weapon/tank/emergency_oxygen,
-		/obj/item/weapon/storage/toolbox/emergency,
+		/obj/item/tank/emergency_oxygen,
+		/obj/item/storage/toolbox/emergency,
 		/obj/item/clothing/mask/breath,
-		/obj/item/weapon/storage/firstaid/o2,
+		/obj/item/storage/firstaid/o2,
 	)
 	var/static/list/tank = list(
-		/obj/item/weapon/tank/emergency_oxygen/engi,
+		/obj/item/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
-		/obj/item/weapon/tank/emergency_oxygen/engi,
+		/obj/item/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
-		/obj/item/weapon/storage/firstaid/o2,
+		/obj/item/storage/firstaid/o2,
 	)
 	var/static/list/both = list(
-		/obj/item/weapon/storage/toolbox/emergency,
-		/obj/item/weapon/tank/emergency_oxygen/engi,
+		/obj/item/storage/toolbox/emergency,
+		/obj/item/tank/emergency_oxygen/engi,
 		/obj/item/clothing/mask/breath,
-		/obj/item/weapon/storage/firstaid/o2,
+		/obj/item/storage/firstaid/o2,
 	)
 	var/list/choices = list()
 	choices[small] = 55
@@ -53,7 +53,7 @@
 
 /obj/structure/closet/emcloset/legacy/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/tank/oxygen,
+		/obj/item/tank/oxygen,
 		/obj/item/clothing/mask/gas,
 	)
 
@@ -67,7 +67,7 @@
 
 /obj/structure/closet/emcloset/vox/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/tank/nitrogen = 2,
+		/obj/item/tank/nitrogen = 2,
 		/obj/item/clothing/mask/breath/vox = 2,
 	)
 
@@ -85,8 +85,8 @@
 	return list(
 		/obj/item/clothing/suit/fire/firefighter,
 		/obj/item/clothing/mask/gas,
-		/obj/item/weapon/tank/oxygen/red,
-		/obj/item/weapon/extinguisher,
+		/obj/item/tank/oxygen/red,
+		/obj/item/extinguisher,
 		/obj/item/clothing/head/hardhat/red,
 	)
 
@@ -117,19 +117,19 @@
 	if(prob(70))
 		. += /obj/item/device/flashlight
 	if(prob(70))
-		. += /obj/item/weapon/screwdriver
+		. += /obj/item/screwdriver
 	if(prob(70))
-		. += /obj/item/weapon/wrench
+		. += /obj/item/wrench
 	if(prob(70))
-		. += /obj/item/weapon/weldingtool
+		. += /obj/item/weldingtool
 	if(prob(70))
-		. += /obj/item/weapon/crowbar
+		. += /obj/item/crowbar
 	if(prob(70))
-		. += /obj/item/weapon/wirecutters
+		. += /obj/item/wirecutters
 	if(prob(70))
 		. += /obj/item/device/t_scanner
 	if(prob(20))
-		. += /obj/item/weapon/storage/belt/utility
+		. += /obj/item/storage/belt/utility
 	if(prob(30))
 		. += /obj/item/stack/cable_coil/random
 	if(prob(30))
@@ -213,8 +213,8 @@
 	return list(
 		/obj/item/clothing/suit/fire/firefighter,
 		/obj/item/clothing/mask/gas,
-		/obj/item/weapon/tank/oxygen/red,
-		/obj/item/weapon/extinguisher,
+		/obj/item/tank/oxygen/red,
+		/obj/item/extinguisher,
 		/obj/item/clothing/head/hardhat/red,
 	)
 

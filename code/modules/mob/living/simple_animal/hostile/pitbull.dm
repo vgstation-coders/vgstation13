@@ -72,7 +72,7 @@
 
 /mob/living/simple_animal/hostile/pitbull/attackby(obj/item/I, mob/user)
 	..()
-	if(istype(I,/obj/item/weapon/pickaxe/shovel))
+	if(istype(I,/obj/item/pickaxe/shovel))
 		if(prob(10))
 			gib()
 		else
@@ -80,7 +80,7 @@
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull
 	faction = "wizard"
-	meat_type = /obj/item/weapon/ectoplasm //a magical dog
+	meat_type = /obj/item/ectoplasm //a magical dog
 
 /mob/living/simple_animal/hostile/pitbull/summoned_pitbull/death(var/gibbed = FALSE)
 	..()

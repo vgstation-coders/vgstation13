@@ -36,7 +36,7 @@
 			breakthrough = 1
 
 		else if(istype(obstacle, /obj/structure/rack))
-			new /obj/item/weapon/rack_parts(obstacle.loc)
+			new /obj/item/rack_parts(obstacle.loc)
 			qdel(obstacle)
 			breakthrough = 1
 
@@ -426,7 +426,7 @@
 /mob/living/simple_animal/hostile/hex/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
 	for(var/i=0;i<3;i++)
-		new /obj/item/weapon/ectoplasm (src.loc)
+		new /obj/item/ectoplasm (src.loc)
 	visible_message("<span class='warning'>\The [src] collapses in a shattered heap. </span>")
 	qdel (src)
 

@@ -153,7 +153,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 	to_chat(user, "<b>You touch [src].</b>")
 	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
 
-/obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/artifact/attackby(obj/item/W as obj, mob/living/user as mob)
 
 	..()
 	user.delayNextAttack(8)

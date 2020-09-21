@@ -10,7 +10,7 @@
 "j" = (/mob/living/simple_animal/hostile/humanoid/pirate,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
 "k" = (/mob/living/simple_animal/hostile/humanoid/pirate/ranged,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
 "l" = (/obj/structure/table/woodentable,/obj/item/toy/cards,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
-"m" = (/obj/item/weapon/stool,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
+"m" = (/obj/item/stool,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
 "n" = (/obj/machinery/door/airlock/vault{icon_state = "door_locked"; locked = 1; name = "Secure Armory"; req_access_txt = ""},/obj/effect/gibspawner/blood,/obj/effect/gibspawner/blood_drip,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
 "o" = (/obj/machinery/vending/discount,/turf/simulated/floor{icon_state = "pattern_yellow"},/area/vault/sokoban/level)
 

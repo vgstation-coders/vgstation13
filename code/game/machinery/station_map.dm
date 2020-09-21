@@ -48,7 +48,7 @@ var/list/station_holomaps = list()
 	holomap_datum = null
 	..()
 
-/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/weapon/crowbar/C)
+/obj/machinery/station_map/crowbarDestroy(mob/user, obj/item/crowbar/C)
 	user.visible_message(	"[user] begins to pry out \the [src] from the wall.",
 							"You begin to pry out \the [src] from the wall...")
 	if(do_after(user, src, 40))
@@ -60,7 +60,7 @@ var/list/station_holomaps = list()
 		for(var/obj/I in src)
 			qdel(I)
 
-		new /obj/item/weapon/circuitboard/station_map(src.loc)
+		new /obj/item/circuitboard/station_map(src.loc)
 		new /obj/item/stack/cable_coil(loc,5)
 		new /obj/item/stack/sheet/glass/glass(loc,1)
 

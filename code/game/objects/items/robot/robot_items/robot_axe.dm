@@ -1,4 +1,4 @@
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe
+/obj/item/pickaxe/plasmacutter/heat_axe
 	name = "heat axe type7 \"Caesar\""
 	desc = "And Caesar’s spirit, ranging for revenge, With Ate by his side come hot from hell, Shall in these confines with a monarch’s voice Cry “Havoc!” and let slip the dogs of war."
 	icon = 'icons/obj/syndieweapons.dmi'
@@ -16,26 +16,26 @@
 	var/active = FALSE
 	var/overheat = FALSE
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/attack_self(mob/living/user)
+/obj/item/pickaxe/plasmacutter/heat_axe/attack_self(mob/living/user)
 	toggleActive()
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/is_hot()
+/obj/item/pickaxe/plasmacutter/heat_axe/is_hot()
 	if(active)
 		return source_temperature
 	return initial(source_temperature)
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/is_sharp()
+/obj/item/pickaxe/plasmacutter/heat_axe/is_sharp()
 	if(active)
 		return sharpness
 	return FALSE
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/update_icon()
+/obj/item/pickaxe/plasmacutter/heat_axe/update_icon()
 	icon_state = "heataxe_[active ? "1" : "0"]"
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/dropped()
+/obj/item/pickaxe/plasmacutter/heat_axe/dropped()
 	toggleActive()
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/toggleActive()
+/obj/item/pickaxe/plasmacutter/heat_axe/proc/toggleActive()
 	active = !active
 	force = active ? 25 : initial(force)
 	damtype = active ? BURN : BRUTE
@@ -50,7 +50,7 @@
 	update_icon()
 	(active && isrobot(loc)) ? processing_objects.Add(src) : processing_objects.Remove(src)
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/process()
+/obj/item/pickaxe/plasmacutter/heat_axe/process()
 	if(isrobot(loc)) //Sanity is never enough.
 		var/mob/living/silicon/robot/robot = loc
 		if(active && robot && robot.cell)
@@ -61,13 +61,13 @@
 	else
 		toggleActive()
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)
+/obj/item/pickaxe/plasmacutter/heat_axe/proc/HellFire(var/mob/living/victim)
 	if(isliving(victim) && active) //Just to be sure.
 		victim.adjust_fire_stacks(1)
 		if(victim.IgniteMob())
 			to_chat(victim, "<span class='danger'>You are lit on fire from the intense heat of the [name]!</span>")
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/preattack(atom/target, mob/user, proximity_flag)
+/obj/item/pickaxe/plasmacutter/heat_axe/preattack(atom/target, mob/user, proximity_flag)
 	if(!proximity_flag)
 		return
 	if(ismecha(target) && active)
@@ -76,7 +76,7 @@
 			HellFire(M.occupant)
 	..()
 
-/obj/item/weapon/pickaxe/plasmacutter/heat_axe/attack(mob/living/target, mob/living/user)
+/obj/item/pickaxe/plasmacutter/heat_axe/attack(mob/living/target, mob/living/user)
 	if(target)
 		HellFire(target)
 	..()

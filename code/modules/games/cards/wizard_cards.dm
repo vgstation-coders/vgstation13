@@ -247,7 +247,7 @@ var/global/list/wizard_cards_normal = list(
 	desc = "Ian is a strong neutral entity. Legends say that the one who kills Ian will forever be cursed."
 	cardname = "ian"
 
-/obj/item/weapon/storage/bag/wiz_cards
+/obj/item/storage/bag/wiz_cards
 	icon = 'icons/obj/wiz_cards.dmi'
 	icon_state = "cardpack"
 	name = "Wizard Card Pack"
@@ -255,9 +255,9 @@ var/global/list/wizard_cards_normal = list(
 	fits_max_w_class = 3
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/toy/wizard_card","/obj/item/weapon/reagent_containers/food/snacks/chocofrog")
+	can_only_hold = list("/obj/item/toy/wizard_card","/obj/item/reagent_containers/food/snacks/chocofrog")
 
-/obj/item/weapon/storage/bag/wiz_cards/full/New()
+/obj/item/storage/bag/wiz_cards/full/New()
 	..()
 	new /obj/item/toy/cards/wizard/full(src)
 
@@ -287,17 +287,17 @@ var/global/list/wizard_cards_normal = list(
 		var/newcard = new card(src)
 		cards += newcard
 
-/obj/item/weapon/storage/bag/wiz_cards/attack_self(mob/user)
+/obj/item/storage/bag/wiz_cards/attack_self(mob/user)
 	icon_state = "cardpack_open"
 	.=..()
 
-/obj/item/weapon/storage/bag/wiz_cards/show_to(mob/user as mob)
+/obj/item/storage/bag/wiz_cards/show_to(mob/user as mob)
 	icon_state = "cardpack_open"
 	.=..()
 
-/obj/item/weapon/storage/bag/wiz_cards/frog/New()
+/obj/item/storage/bag/wiz_cards/frog/New()
 	..()
-	contents += new /obj/item/weapon/reagent_containers/food/snacks/chocofrog
+	contents += new /obj/item/reagent_containers/food/snacks/chocofrog
 	var/card
 	if(prob(80)) //80% chance for a classic card, 20% for a legendary
 		card=pick(wizard_cards_normal)

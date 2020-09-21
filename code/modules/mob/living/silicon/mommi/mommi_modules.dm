@@ -1,5 +1,5 @@
 
-/obj/item/weapon/robot_module/mommi
+/obj/item/robot_module/mommi
 	name = "mobile mmi robot module"
 	quirk_flags = MODULE_CAN_BE_PUSHED | MODULE_HAS_MAGPULSE | MODULE_CAN_HANDLE_CHEMS | MODULE_CAN_BUY | MODULE_IS_DEFINITIVE | MODULE_CAN_HANDLE_FOOD
 	languages = list()
@@ -10,19 +10,19 @@
 	var/ae_type = "Default" //Anti-emancipation override type, pretty much just fluffy.
 	var/law_type = "Default"
 
-/obj/item/weapon/robot_module/mommi/New(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/mommi/New(var/mob/living/silicon/robot/R)
 	..()
 
-	modules += new /obj/item/weapon/weldingtool/largetank(src)
-	modules += new /obj/item/weapon/screwdriver(src)
-	modules += new /obj/item/weapon/wrench(src)
-	modules += new /obj/item/weapon/crowbar(src)
-	modules += new /obj/item/weapon/wirecutters(src)
+	modules += new /obj/item/weldingtool/largetank(src)
+	modules += new /obj/item/screwdriver(src)
+	modules += new /obj/item/wrench(src)
+	modules += new /obj/item/crowbar(src)
+	modules += new /obj/item/wirecutters(src)
 	modules += new /obj/item/device/multitool(src)
 	modules += new /obj/item/device/t_scanner(src)
 	modules += new /obj/item/device/analyzer(src)
-	modules += new /obj/item/weapon/extinguisher(src)
-	modules += new /obj/item/weapon/extinguisher/foam(src)
+	modules += new /obj/item/extinguisher(src)
+	modules += new /obj/item/extinguisher/foam(src)
 	modules += new /obj/item/device/rcd/rpd(src)
 	modules += new /obj/item/device/rcd/tile_painter(src)
 	modules += new /obj/item/blueprints/mommiprints(src)
@@ -42,7 +42,7 @@
 	fix_modules()
 
 //Nanotrasen's MoMMI
-/obj/item/weapon/robot_module/mommi/nt
+/obj/item/robot_module/mommi/nt
 	name = "nanotrasen mobile mmi robot module"
 	networks = list(CAMERANET_ENGI)
 	radio_key = /obj/item/device/encryptionkey/headset_eng
@@ -60,7 +60,7 @@
 		)
 	speed_modifier = MOMMI_NT_SPEED_MODIFIER
 
-/obj/item/weapon/robot_module/mommi/nt/New(var/mob/living/silicon/robot/R)
+/obj/item/robot_module/mommi/nt/New(var/mob/living/silicon/robot/R)
 	..()
 
 	modules += new /obj/item/device/material_synth/robot/mommi(src)
@@ -68,7 +68,7 @@
 	fix_modules()
 
 //Derelict MoMMI
-/obj/item/weapon/robot_module/mommi/soviet
+/obj/item/robot_module/mommi/soviet
 	name = "russian remont robot module"
 	ae_type = "Начато отмену"
 	speed_modifier = MOMMI_SOVIET_SPEED_MODIFIER
@@ -76,20 +76,20 @@
 		"RuskieBot" = "ruskiebot"
 		)
 
-/obj/item/weapon/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
+/obj/item/robot_module/mommi/soviet/New(var/mob/living/silicon/robot/R) //Powercreep!
 	..()
 
 	modules += new /obj/item/device/material_synth/robot/soviet(src)
 	modules += new /obj/item/device/rcd/borg/engineering(src)
 	modules += new /obj/item/device/instrument/instrument_synth(src)
 	modules += new /obj/item/device/rcd/borg/rsf/soviet(src)
-	modules += new /obj/item/weapon/soap/syndie(src)
-	modules += new /obj/item/weapon/pickaxe/plasmacutter(src)
-	modules += new /obj/item/weapon/storage/bag/ore/auto(src)
+	modules += new /obj/item/soap/syndie(src)
+	modules += new /obj/item/pickaxe/plasmacutter(src)
+	modules += new /obj/item/storage/bag/ore/auto(src)
 
 	fix_modules()
 
-/obj/item/weapon/robot_module/mommi/cogspider
+/obj/item/robot_module/mommi/cogspider
 	name = "Gravekeeper belt of holding."
 	speed_modifier = COGSPIDER_SPEED_MODIFIER
 	sprites = list(

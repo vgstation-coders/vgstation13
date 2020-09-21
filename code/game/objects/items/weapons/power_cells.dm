@@ -1,4 +1,4 @@
-/obj/item/weapon/cell
+/obj/item/cell
 	name = "power cell"
 	desc = "A rechargeable electrochemical power cell."
 	icon = 'icons/obj/power.dmi'
@@ -22,94 +22,94 @@
 	var/electronics_damage = 0 //Used by cyborgs
 	var/starch_cell = 0
 
-/obj/item/weapon/cell/suicide_act(mob/user)
+/obj/item/cell/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is licking the electrodes of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/cell/empty/New()
+/obj/item/cell/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/crap
+/obj/item/cell/crap
 	name = "\improper Nanotrasen brand rechargeable AA battery"
 	desc = "You can't top the plasma top." //TOTALLY TRADEMARK INFRINGEMENT
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 500
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
-/obj/item/weapon/cell/crap/empty/New()
+/obj/item/cell/crap/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/crap/better
+/obj/item/cell/crap/better
 	name = "\improper Nanotrasen brand rechargeable D battery"
 	maxcharge = 700 //for the ion carbine
 
-/obj/item/weapon/cell/secborg
+/obj/item/cell/secborg
 	name = "\improper Security borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
 
-/obj/item/weapon/cell/secborg/empty/New()
+/obj/item/cell/secborg/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/miningborg
+/obj/item/cell/miningborg
 	name = "\improper Mining borg rechargeable D battery"
 	origin_tech = Tc_POWERSTORAGE + "=0"
 	maxcharge = 600	//600 max charge / 100 charge per shot = six shots
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 40)
 
 
-/obj/item/weapon/cell/miningborg/empty/New()
+/obj/item/cell/miningborg/empty/New()
 	..()
 	charge = 0
 
 
-/obj/item/weapon/cell/high
+/obj/item/cell/high
 	name = "high-capacity power cell"
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	icon_state = "hcell"
 	maxcharge = 10000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 60)
 
-/obj/item/weapon/cell/high/cyborg
+/obj/item/cell/high/cyborg
 	name = "cyborg rechargeable power cell"
 	maxcharge = 7500
 
-/obj/item/weapon/cell/high/mecha
+/obj/item/cell/high/mecha
 	name = "custom high-capacity power cell"
 	maxcharge = 15000
 
-/obj/item/weapon/cell/high/empty/New()
+/obj/item/cell/high/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/super
+/obj/item/cell/super
 	name = "super-capacity power cell"
 	origin_tech = Tc_POWERSTORAGE + "=5"
 	icon_state = "scell"
 	maxcharge = 20000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 70)
 
-/obj/item/weapon/cell/super/empty/New()
+/obj/item/cell/super/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/hyper
+/obj/item/cell/hyper
 	name = "hyper-capacity power cell"
 	origin_tech = Tc_POWERSTORAGE + "=6"
 	icon_state = "hpcell"
 	maxcharge = 30000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 
-/obj/item/weapon/cell/hyper/empty/New()
+/obj/item/cell/hyper/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/potato
+/obj/item/cell/potato
 	name = "potato battery"
 	desc = "A rechargeable starch based power cell."
 	origin_tech = Tc_POWERSTORAGE + "=1"
@@ -122,12 +122,12 @@
 	minor_fault = 1
 	starch_cell = 1
 
-/obj/item/weapon/cell/potato/soviet
+/obj/item/cell/potato/soviet
 	charge = 15000
 	maxcharge = 15000
 	minor_fault = 0
 
-/obj/item/weapon/cell/crepe
+/obj/item/cell/crepe
 	name = "power crêpe"
 	desc = "Warning: May contain dairy products, 12,000kJ of searing death, gluten."
 	origin_tech = Tc_POWERSTORAGE + "=3"
@@ -138,12 +138,12 @@
 	minor_fault = 1
 	starch_cell = 1
 
-/obj/item/weapon/cell/crepe/mommi
+/obj/item/cell/crepe/mommi
 	maxcharge = 10000
 	charge = 10000
 	minor_fault = 0
 
-/obj/item/weapon/cell/crepe/attack_self(var/mob/living/user)
+/obj/item/cell/crepe/attack_self(var/mob/living/user)
 	if(charge)
 		user.visible_message("<span class = 'notice'>\The [user] takes a bite out of \the [src]</span>", "<span class = 'warning'>You take a bite out of \the [src]</span>")
 		spawn(rand(1,3) SECONDS)
@@ -159,7 +159,7 @@
 	else
 		to_chat(user, "<span class = 'notice'>\The [src] doesn't seem to have much of a tingle to it.</span>")
 
-/obj/item/weapon/cell/slime
+/obj/item/cell/slime
 	name = "charged slime core"
 	desc = "A yellow slime core infused with plasma, it crackles with power."
 	origin_tech = Tc_POWERSTORAGE + "=2;" + Tc_BIOTECH + "=4"
@@ -170,13 +170,13 @@
 	w_type = RECYK_BIOLOGICAL
 
 
-/obj/item/weapon/cell/temperaturegun
+/obj/item/cell/temperaturegun
 	name = "temperature gun cell"
 	desc = "A specially designed power cell for heating and cooling projectiles"
 	icon_state = "icell"
 	maxcharge = 900
 
-/obj/item/weapon/cell/send_to_past(var/duration)
+/obj/item/cell/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
 		"charge",
@@ -188,34 +188,34 @@
 	reset_vars_after_duration(resettable_vars, duration)
 
 
-/obj/item/weapon/cell/infinite
+/obj/item/cell/infinite
 	name = "infinite-capacity power cell!"
 	icon_state = "icell"
 	origin_tech = null
 	maxcharge = 35000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 
-/obj/item/weapon/cell/infinite/New()
+/obj/item/cell/infinite/New()
 	..()
 	desc = "This cell is the latest in NT technology, having the capability to perpetually recharge itself. It has a power rating of Infinity!"
 
-/obj/item/weapon/cell/infinite/use()
+/obj/item/cell/infinite/use()
 	..()
 	charge = maxcharge
 	return 1
 
-/obj/item/weapon/cell/ultra
+/obj/item/cell/ultra
 	name = "ultra-capacity power cell"
 	origin_tech = Tc_POWERSTORAGE + "=8"
 	icon_state = "ucell"
 	maxcharge = 50000
 	starting_materials = list(MAT_IRON = 700, MAT_GLASS = 80)
 
-/obj/item/weapon/cell/ultra/empty/New()
+/obj/item/cell/ultra/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/rad
+/obj/item/cell/rad
 	name = "RTG power cell"
 	origin_tech = Tc_POWERSTORAGE + "=7"
 	icon_state = "rcell"
@@ -223,22 +223,22 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_URANIUM = 40)
 	var/charge_rate = 100
 
-/obj/item/weapon/cell/rad/empty/New()
+/obj/item/cell/rad/empty/New()
 	..()
 	charge = 0
 
-/obj/item/weapon/cell/rad/New()
+/obj/item/cell/rad/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/cell/rad/Destroy()
+/obj/item/cell/rad/Destroy()
 	..()
 	processing_objects.Remove(src)
 
-/obj/item/weapon/cell/rad/give()
+/obj/item/cell/rad/give()
 	return
 
-/obj/item/weapon/cell/rad/process()
+/obj/item/cell/rad/process()
 	if(maxcharge <= charge)
 		return 0
 	var/power_used = min(maxcharge-charge,charge_rate)
@@ -247,7 +247,7 @@
 		for(var/mob/living/L in view(get_turf(src), max(5,(maxcharge/charge))))
 			L.apply_radiation(charge_rate/10, RAD_EXTERNAL)
 
-/obj/item/weapon/cell/rad/large
+/obj/item/cell/rad/large
 	name = "PDTG power cell"
 	origin_tech = Tc_POWERSTORAGE + "=9"
 	icon_state = "pcell"
@@ -255,6 +255,6 @@
 	starting_materials = list(MAT_IRON = 600, MAT_GLASS = 90, MAT_PHAZON = 100)
 	charge_rate = 250
 
-/obj/item/weapon/cell/rad/large/empty/New()
+/obj/item/cell/rad/large/empty/New()
 	..()
 	charge = 0

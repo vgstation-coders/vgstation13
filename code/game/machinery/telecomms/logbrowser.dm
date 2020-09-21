@@ -17,7 +17,7 @@
 
 	var/universal_translate = 0 // set to 1 if it can translate nonhuman speech
 
-	circuit = "/obj/item/weapon/circuitboard/comm_server"
+	circuit = "/obj/item/circuitboard/comm_server"
 
 	req_access = list(access_tcomsat)
 
@@ -229,7 +229,7 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/computer/telecomms/server/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/telecomms/server/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	if(..())
 		return 1
 	src.updateUsrDialog()

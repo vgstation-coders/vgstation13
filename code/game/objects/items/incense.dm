@@ -116,7 +116,7 @@
 		return source_temperature
 	return 0
 
-/obj/item/incense_stick/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/incense_stick/attackby(var/obj/item/W, var/mob/user)
 	..()
 	if(lit)
 		to_chat(user, "<span class='warning'>\The [src] is already lit.</span>")
@@ -147,8 +147,8 @@
 	attack_verb = unlit_attack_verb
 	update_icon()
 	set_light(0)
-	if (istype(loc,/obj/item/weapon/thurible))
-		var/obj/item/weapon/thurible/T = loc
+	if (istype(loc,/obj/item/thurible))
+		var/obj/item/thurible/T = loc
 		T.update_icon()
 
 /obj/item/incense_stick/proc/burn()
@@ -160,18 +160,18 @@
 	attack_verb = lit_attack_verb
 	update_icon()
 	set_light(1)
-	if (istype(loc,/obj/item/weapon/thurible))
-		var/obj/item/weapon/thurible/T = loc
+	if (istype(loc,/obj/item/thurible))
+		var/obj/item/thurible/T = loc
 		T.update_icon()
 	while (!gcDestroyed && loc && lit)
-		if (istype(loc,/obj/item/weapon/thurible))
+		if (istype(loc,/obj/item/thurible))
 			combustible -= 3
 		else
 			combustible -= 5
 		var/turf/simulated/location = get_turf(src)
 
 		//are we on a turf? or held by a mob that's on a turf? or in a thurible (that's on the ground or held by a mob?)
-		if (istype(location) && (isturf(loc) || (ismob(loc) && isturf(loc.loc)) || (istype(loc,/obj/item/weapon/thurible) && (isturf(loc.loc) || (ismob(loc.loc) && isturf(loc.loc.loc))))))//I'm sorry
+		if (istype(location) && (isturf(loc) || (ismob(loc) && isturf(loc.loc)) || (istype(loc,/obj/item/thurible) && (isturf(loc.loc) || (ismob(loc.loc) && isturf(loc.loc.loc))))))//I'm sorry
 			if (location)
 				location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 				anim(target = location, a_icon = 'icons/effects/160x160.dmi', flick_anim = "incense", offX = -WORLD_ICON_SIZE*2+pixel_x, offY = -WORLD_ICON_SIZE*2+pixel_y)
@@ -214,8 +214,8 @@
 		if (combustible <= 0)
 			exting()
 			new /obj/effect/decal/cleanable/ash(location)
-			if (istype(loc,/obj/item/weapon/thurible))
-				var/obj/item/weapon/thurible/T = loc
+			if (istype(loc,/obj/item/thurible))
+				var/obj/item/thurible/T = loc
 				T.incense = null
 			qdel(src)
 			return
@@ -247,7 +247,7 @@
 	return TRUE
 
 
-/obj/item/weapon/storage/fancy/incensebox
+/obj/item/storage/fancy/incensebox
 	name = "box of incense"
 	desc = "A wooden box used to store aromatic incense sticks."
 	icon = 'icons/obj/incense.dmi'
@@ -267,60 +267,60 @@
 	vending_cat = "incense material"
 	var/fragrance = null
 
-/obj/item/weapon/storage/fancy/incensebox/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
+/obj/item/storage/fancy/incensebox/fire_act(var/datum/gas_mixture/air, var/exposed_temperature, var/exposed_volume)
 	for (var/obj/item/incense_stick/S in contents)
 		if(S.lit)
 			return
 		S.burn()//mwahaha
 
-/obj/item/weapon/storage/fancy/incensebox/update_icon()
+/obj/item/storage/fancy/incensebox/update_icon()
 	if (contents.len > 0)
 		icon_state = "incensebox_[min(4,1+round(contents.len / 4))]"
 	else
 		icon_state = "incensebox_0"
 
-/obj/item/weapon/storage/fancy/incensebox/empty
+/obj/item/storage/fancy/incensebox/empty
 	empty = 1
 	icon_state = "incensebox_0"
 
-/obj/item/weapon/storage/fancy/incensebox/harebells
+/obj/item/storage/fancy/incensebox/harebells
 	fragrance = INCENSE_HAREBELLS
 
-/obj/item/weapon/storage/fancy/incensebox/poppies
+/obj/item/storage/fancy/incensebox/poppies
 	fragrance = INCENSE_POPPIES
 
-/obj/item/weapon/storage/fancy/incensebox/sunflowers
+/obj/item/storage/fancy/incensebox/sunflowers
 	fragrance = INCENSE_SUNFLOWERS
 
-/obj/item/weapon/storage/fancy/incensebox/moonflowers
+/obj/item/storage/fancy/incensebox/moonflowers
 	fragrance = INCENSE_MOONFLOWERS
 
-/obj/item/weapon/storage/fancy/incensebox/novaflowers
+/obj/item/storage/fancy/incensebox/novaflowers
 	fragrance = INCENSE_NOVAFLOWERS
 
-/obj/item/weapon/storage/fancy/incensebox/banana
+/obj/item/storage/fancy/incensebox/banana
 	fragrance = INCENSE_BANANA
 
-/obj/item/weapon/storage/fancy/incensebox/leafy
+/obj/item/storage/fancy/incensebox/leafy
 	fragrance = INCENSE_LEAFY
 
-/obj/item/weapon/storage/fancy/incensebox/booze
+/obj/item/storage/fancy/incensebox/booze
 	fragrance = INCENSE_BOOZE
 
-/obj/item/weapon/storage/fancy/incensebox/vapor
+/obj/item/storage/fancy/incensebox/vapor
 	fragrance = INCENSE_VAPOR
 
-/obj/item/weapon/storage/fancy/incensebox/dense
+/obj/item/storage/fancy/incensebox/dense
 	fragrance = INCENSE_DENSE
 
-/obj/item/weapon/storage/fancy/incensebox/vale
+/obj/item/storage/fancy/incensebox/vale
 	fragrance = INCENSE_CRAVE
 
-/obj/item/weapon/storage/fancy/incensebox/cornoil
+/obj/item/storage/fancy/incensebox/cornoil
 	fragrance = INCENSE_CORNOIL
 
 
-/obj/item/weapon/storage/fancy/incensebox/New()
+/obj/item/storage/fancy/incensebox/New()
 	..()
 	if (empty)
 		return
@@ -329,7 +329,7 @@
 			var/obj/item/incense_stick/IS = new(src)
 			IS.set_fragrance(fragrance)
 
-/obj/item/weapon/storage/fancy/incensebox/variety/New()
+/obj/item/storage/fancy/incensebox/variety/New()
 	..()
 	new /obj/item/incense_stick/harebells(src)
 	new /obj/item/incense_stick/poppies(src)
@@ -412,7 +412,7 @@
 	fragrance = INCENSE_CORNOIL
 	adjective = "hunger-inducing"
 
-/obj/item/incense_oilbox/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/incense_oilbox/attackby(var/obj/item/W, var/mob/user)
 	if (istype (W, /obj/item/incense_stick))
 		if(!fragrance)
 			to_chat(user, "<span class='warning'>A floral product must be blended inside first!</span>")
@@ -421,7 +421,7 @@
 		if(S.set_fragrance(fragrance))
 			to_chat(user, "<span class='notice'>You dip the stick in the container, carefully applying the [adjective] oils on it.</span>")
 		return
-	if (istype (W,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(W,/obj/item/weapon/grown))
+	if (istype (W,/obj/item/reagent_containers/food/snacks/grown) || istype(W,/obj/item/grown))
 		if(W:fragrance) //for both types this is null by default, so it's "safe" to use the trusted operator
 			user.drop_item(W, force_drop = 1)
 			qdel(W)
@@ -436,7 +436,7 @@
 	..()
 
 
-/obj/item/weapon/thurible
+/obj/item/thurible
 	name = "thurible"
 	desc = "A silver vessel made for burning incense, suspended by chains. Used by some chaplains during worship service."
 	icon = 'icons/obj/incense.dmi'
@@ -456,18 +456,18 @@
 	var/obj/item/incense_stick/incense = null
 
 
-/obj/item/weapon/thurible/Destroy()
+/obj/item/thurible/Destroy()
 	if (incense)
 		qdel(incense)
 		incense = null
 	..()
 
-/obj/item/weapon/thurible/examine(mob/user)
+/obj/item/thurible/examine(mob/user)
 	..()
 	if(incense && incense.lit)
 		to_chat(user,"<span class='info'>A [incense.adjective] fragrance wafts from within!</span>")
 
-/obj/item/weapon/thurible/update_icon()
+/obj/item/thurible/update_icon()
 	if (incense && incense.lit)
 		icon_state = "thurible_lit"
 		item_state = "thurible_lit"
@@ -481,7 +481,7 @@
 		var/mob/M = loc
 		M.update_inv_hands()
 
-/obj/item/weapon/thurible/attack(var/mob/M, var/mob/living/user)
+/obj/item/thurible/attack(var/mob/M, var/mob/living/user)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/role/vampire/V = isvampire(H)
@@ -496,7 +496,7 @@
 	. = ..()
 	force = 10
 
-/obj/item/weapon/thurible/pickup(var/mob/living/user)
+/obj/item/thurible/pickup(var/mob/living/user)
 	if(user.mind)
 		if(ishuman(user))
 			var/datum/role/vampire/V = isvampire(user)
@@ -504,7 +504,7 @@
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>\The [src] sears your hand!</span>")
 
-/obj/item/weapon/thurible/attack_self(var/mob/user)
+/obj/item/thurible/attack_self(var/mob/user)
 	if(incense)
 		if (incense.lit)
 			incense.exting()
@@ -520,7 +520,7 @@
 	else
 		to_chat(user,"<span class='warning'>Put some incense in there first.</span>")
 
-/obj/item/weapon/thurible/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/thurible/attackby(var/obj/item/W, var/mob/user)
 	if (istype (W, /obj/item/incense_stick))
 		if (incense)
 			to_chat(user,"<span class='warning'>There's already some incense in there.</span>")

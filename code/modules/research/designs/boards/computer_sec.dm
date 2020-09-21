@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/security
+	build_path = /obj/item/circuitboard/security
 
 /datum/design/advseccamera
 	name = "Circuit Design (Advanced Security Cameras)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/security/advanced
+	build_path = /obj/item/circuitboard/security/advanced
 
 /datum/design/secdata
 	name = "Circuit Design (Security Records Console)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/secure_data
+	build_path = /obj/item/circuitboard/secure_data
 
 /datum/design/prisonmanage
 	name = "Circuit Design (Prisoner Management Console)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/prisoner
+	build_path = /obj/item/circuitboard/prisoner
 	
 /datum/design/securityalerts
 	name = "Circuit Design (Security Alerts Computer)"
@@ -48,4 +48,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/security_alerts
+	build_path = /obj/item/circuitboard/security_alerts

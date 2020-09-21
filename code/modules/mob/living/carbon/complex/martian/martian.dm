@@ -135,8 +135,8 @@
 		stat(null, "Move Mode: [m_intent]")
 		if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
 			var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
-			if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
-				var/obj/item/weapon/tank/internal = fishbowl.tank
+			if(fishbowl.tank && istype(fishbowl.tank, /obj/item/tank))
+				var/obj/item/tank/internal = fishbowl.tank
 				stat("Internal Atmosphere Info", internal.name)
 				stat("Tank Pressure", internal.air_contents.return_pressure())
 				stat("Distribution Pressure", internal.distribute_pressure)

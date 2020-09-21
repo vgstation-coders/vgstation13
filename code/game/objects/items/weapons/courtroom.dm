@@ -2,7 +2,7 @@
 // Gavel Hammer
 // Gavel Block
 
-/obj/item/weapon/gavelhammer
+/obj/item/gavelhammer
 	name = "gavel hammer"
 	desc = "Order, order! No bombs in my courthouse."
 	icon = 'icons/obj/items.dmi'
@@ -14,12 +14,12 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 2
 
-/obj/item/weapon/gavelhammer/suicide_act(mob/user)
+/obj/item/gavelhammer/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] has sentenced \himself to death with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	playsound(loc, 'sound/items/gavel.ogg', 50, 1, -1)
 	return SUICIDE_ACT_BRUTELOSS
 
-/obj/item/weapon/gavelblock
+/obj/item/gavelblock
 	name = "gavel block"
 	desc = "Smack it with a gavel hammer when the assistants get rowdy."
 	icon = 'icons/obj/items.dmi'
@@ -31,8 +31,8 @@
 	fire_fuel = 2
 	var/cooldown = 0
 
-/obj/item/weapon/gavelblock/attackby(obj/item/I, mob/user, params)
-	if(istype(I, /obj/item/weapon/gavelhammer))
+/obj/item/gavelblock/attackby(obj/item/I, mob/user, params)
+	if(istype(I, /obj/item/gavelhammer))
 		if(cooldown < world.time - 8)
 			playsound(loc, 'sound/items/gavel.ogg', 100, 1)
 			user.visible_message("<span class='warning'>[user] strikes \the [src] with \the [I].</span>")

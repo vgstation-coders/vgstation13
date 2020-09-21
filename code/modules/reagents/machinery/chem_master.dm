@@ -13,13 +13,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	icon_state = "mixer"
 	use_power = 1
 	idle_power_usage = 20
-	var/obj/item/weapon/reagent_containers/container = null
-	var/list/accepted_containers = list(/obj/item/weapon/reagent_containers/glass, /obj/item/weapon/reagent_containers/food/drinks)
-	var/obj/item/weapon/storage/pill_bottle/loaded_pill_bottle = null
+	var/obj/item/reagent_containers/container = null
+	var/list/accepted_containers = list(/obj/item/reagent_containers/glass, /obj/item/reagent_containers/food/drinks)
+	var/obj/item/storage/pill_bottle/loaded_pill_bottle = null
 	var/mode = 1 //1 = from buffer to container. 0 = from buffer to disposals.
 	var/slurpmode = 0 //1 = from obj to container. 0 = from obj to buffer.
-	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/weapon/reagent_containers/glass/bucket,
-		/obj/item/weapon/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
+	var/slurp_types = list(/obj/structure/reagent_dispensers, /obj/item/reagent_containers/glass/bucket,
+		/obj/item/reagent_containers/glass/jar, /obj/structure/mopbucket) //types of objects we can slurp from when adjacent
 	var/condi = 0
 	var/windowtype = "chem_master" //For the browser windows
 	var/useramount = 30 // Last used amount
@@ -31,7 +31,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 
 	var/global/list/pill_icon_cache
 
-	var/chem_board = /obj/item/weapon/circuitboard/chemmaster3000
+	var/chem_board = /obj/item/circuitboard/chemmaster3000
 	var/max_bottle_size = 30
 	var/max_pill_count = 20
 	var/max_pill_size = 50
@@ -56,13 +56,13 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	create_reagents(1000)
 
 	component_parts = newlist(
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	component_parts += new chem_board
@@ -76,10 +76,10 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 /obj/machinery/chem_master/RefreshParts()
 	var/lasercount = 0
 	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/manipulator))
 			manipcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	max_bottle_size = initial(max_bottle_size) + lasercount*5
 	max_pill_count = initial(max_pill_count) + manipcount*5
@@ -99,7 +99,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	if(prob(50))
 		qdel(src)
 
-/obj/machinery/chem_master/attackby(var/obj/item/weapon/B as obj, var/mob/user as mob)
+/obj/machinery/chem_master/attackby(var/obj/item/B as obj, var/mob/user as mob)
 	if(..())
 		return 1
 
@@ -122,7 +122,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		update_icon()
 		return 1
 
-	else if(istype(B, /obj/item/weapon/storage/pill_bottle))
+	else if(istype(B, /obj/item/storage/pill_bottle))
 		if(windowtype != "chem_master") //Only the chemmaster will accept pill bottles
 			to_chat(user, "<span class='warning'>This [name] does not come with a pill dispenser unit built-in.</span>")
 			return
@@ -140,7 +140,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		src.updateUsrDialog()
 		return 1
 
-	else if(istype(B, /obj/item/weapon/reagent_containers/pill))
+	else if(istype(B, /obj/item/reagent_containers/pill))
 		B.icon_state = "pill"+pillsprite
 		var/name = stripped_input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)")
 		if(name)
@@ -387,7 +387,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				if(amount_per_pill == 0 || reagents.total_volume == 0)
 					break
 
-				var/obj/item/weapon/reagent_containers/pill/P = new/obj/item/weapon/reagent_containers/pill(src.loc)
+				var/obj/item/reagent_containers/pill/P = new/obj/item/reagent_containers/pill(src.loc)
 				if(!name)
 					name = "[reagents.get_master_reagent_name()] ([amount_per_pill] units)"
 				P.name = "[name] pill"
@@ -429,7 +429,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 					if(amount_per_bottle == 0 || reagents.total_volume == 0)
 						break
 
-					var/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/weapon/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
+					var/obj/item/reagent_containers/glass/bottle/unrecyclable/P = new/obj/item/reagent_containers/glass/bottle/unrecyclable/(src.loc,max_bottle_size)
 					P.name = "[name] bottle"
 					P.pixel_x = rand(-7, 7) * PIXEL_MULTIPLIER//random position
 					P.pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
@@ -438,7 +438,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 				src.updateUsrDialog()
 				return 1
 			else
-				var/obj/item/weapon/reagent_containers/food/condiment/P = new/obj/item/weapon/reagent_containers/food/condiment(src.loc)
+				var/obj/item/reagent_containers/food/condiment/P = new/obj/item/reagent_containers/food/condiment(src.loc)
 				reagents.trans_to(P, 50)
 				src.updateUsrDialog()
 				return 1
@@ -709,7 +709,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 	name = "\improper CondiMaster 3000"
 	condi = 1
 	icon_state = "condimaster"
-	chem_board = /obj/item/weapon/circuitboard/condimaster
+	chem_board = /obj/item/circuitboard/condimaster
 	windowtype = "condi_master"
 
 /obj/machinery/chem_master/electrolytic

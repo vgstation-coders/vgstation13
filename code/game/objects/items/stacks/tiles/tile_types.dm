@@ -101,7 +101,7 @@
 				if(T.canBuildPlating(S) == BUILD_SUCCESS)
 					qdel(L)
 
-/obj/item/stack/tile/wood/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/stack/tile/wood/attackby(var/obj/item/W, var/mob/user)
 	if(W.is_wrench(user))
 		if(use(4))
 			W.playtoolsound(user, 50)

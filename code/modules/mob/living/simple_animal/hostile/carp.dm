@@ -11,7 +11,7 @@
 	icon_gib = "carp_gib"
 	speak_chance = 0
 	turns_per_move = 5
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/carpmeat
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
@@ -24,7 +24,7 @@
 	can_breed = 1
 	childtype = /mob/living/simple_animal/hostile/carp/baby
 	child_amount = 1
-	holder_type = /obj/item/weapon/holder/animal/carp
+	holder_type = /obj/item/holder/animal/carp
 
 
 	harm_intent_damage = 8
@@ -142,8 +142,8 @@
 /mob/living/simple_animal/hostile/carp/baby/attackby(obj/W, mob/user)
 	..()
 
-	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
-		var/obj/item/weapon/reagent_containers/food/snacks/F = W
+	if(!isDead() && istype(W, /obj/item/reagent_containers/food/snacks))
+		var/obj/item/reagent_containers/food/snacks/F = W
 
 		if((F.food_flags & FOOD_MEAT) && (growth_stage < req_growth_to_grow_up)) //Any meaty dish goes!
 			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)

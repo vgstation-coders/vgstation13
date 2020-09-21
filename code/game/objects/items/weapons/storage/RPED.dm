@@ -1,4 +1,4 @@
-/obj/item/weapon/storage/bag/gadgets/part_replacer //Bag because disposals bin snowflake code is shit
+/obj/item/storage/bag/gadgets/part_replacer //Bag because disposals bin snowflake code is shit
 	name = "rapid part exchange device"
 	desc = "Special mechanical module made to store, sort, and apply standard machine parts."
 	icon_state = "RPED"
@@ -12,7 +12,7 @@
 	display_contents_with_number = TRUE
 	var/bluespace = FALSE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
+/obj/item/storage/bag/gadgets/part_replacer/discount_bluespace
 	name = "Prototype bluespace rapid part exchange device" //Alternative name: Discount BRPED, therefore denoted as DBRPED
 	desc = "Not as good as the real deal, but still good. This device is a better variant of the RPED that can hold twice as many parts and can function on machines that do not have their panels open."
 	icon_state = "DBRPED"
@@ -21,7 +21,7 @@
 	storage_slots = 100
 	bluespace = TRUE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/proc/play_rped_sound()
+/obj/item/storage/bag/gadgets/part_replacer/proc/play_rped_sound()
 	//Plays the sound for RPED exhanging or installing parts.
 	playsound(src, 'sound/items/rped.ogg', 40, 1)
 
@@ -30,9 +30,9 @@
 /proc/cmp_rped_sort(var/obj/item/A, var/obj/item/B)
 	return B.rped_rating() - A.rped_rating()
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/storage/bag/gadgets)) //I guess this allows for moving stuff between RPEDs, honk.
-		var/obj/item/weapon/storage/bag/gadgets/A = W
+/obj/item/storage/bag/gadgets/part_replacer/attackby(var/obj/item/W, var/mob/user)
+	if(istype(W, /obj/item/storage/bag/gadgets)) //I guess this allows for moving stuff between RPEDs, honk.
+		var/obj/item/storage/bag/gadgets/A = W
 		if(A.contents.len <= 0)
 			to_chat(user, "<span class='notify'>\the [A] is empty!</span>")
 			return 1
@@ -45,42 +45,42 @@
 
 	return ..()
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/pre_loaded/New() //Comes preloaded with loads of parts for testing
+/obj/item/storage/bag/gadgets/part_replacer/pre_loaded/New() //Comes preloaded with loads of parts for testing
 	..()
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace(src)
+		new /obj/item/stock_parts/matter_bin/adv/super/bluespace(src)
 	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/manipulator/nano/pico(src)
+		new /obj/item/stock_parts/manipulator/nano/pico(src)
 	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
+		new /obj/item/stock_parts/matter_bin/adv/super(src)
 	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/micro_laser/high/ultra(src)
+		new /obj/item/stock_parts/micro_laser/high/ultra(src)
 	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/scanning_module/adv/phasic(src)
+		new /obj/item/stock_parts/scanning_module/adv/phasic(src)
 	for(var/i in 1 to 5)
-		new /obj/item/weapon/stock_parts/capacitor/adv/super(src)
+		new /obj/item/stock_parts/capacitor/adv/super(src)
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/manipulator/nano(src)
+		new /obj/item/stock_parts/manipulator/nano(src)
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/matter_bin/adv(src)
+		new /obj/item/stock_parts/matter_bin/adv(src)
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/micro_laser/high(src)
+		new /obj/item/stock_parts/micro_laser/high(src)
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/scanning_module/adv(src)
+		new /obj/item/stock_parts/scanning_module/adv(src)
 	for(var/i in 1 to 3)
-		new /obj/item/weapon/stock_parts/capacitor/adv(src)
+		new /obj/item/stock_parts/capacitor/adv(src)
 	for(var/i in 1 to 8)
-		new /obj/item/weapon/stock_parts/console_screen(src)
+		new /obj/item/stock_parts/console_screen(src)
 
 //Takes a tier 1 stock part path and a target rating
 //Returns a part object
 /proc/part_subtype(var/basepath, var/target)
 	for(var/path in subtypesof(basepath))
-		var/obj/item/weapon/stock_parts/SP = path
+		var/obj/item/stock_parts/SP = path
 		if(initial(SP.rating) == target)
 			return new SP
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector
+/obj/item/storage/bag/gadgets/part_replacer/injector
 	name = "upgrade injector"
 	desc = "A single use upgrade injector. Just stab it into the side of a machine and it will dissolve away."
 	icon = 'icons/obj/syringe.dmi'
@@ -92,20 +92,20 @@
 	use_to_pickup = FALSE
 	var/base_rating = 2
 	var/parts_each = 3
-	var/list/part_types = list(/obj/item/weapon/stock_parts/manipulator,
-								/obj/item/weapon/stock_parts/matter_bin,
-								/obj/item/weapon/stock_parts/scanning_module,
-								/obj/item/weapon/stock_parts/capacitor,
-								/obj/item/weapon/stock_parts/micro_laser)
+	var/list/part_types = list(/obj/item/stock_parts/manipulator,
+								/obj/item/stock_parts/matter_bin,
+								/obj/item/stock_parts/scanning_module,
+								/obj/item/stock_parts/capacitor,
+								/obj/item/stock_parts/micro_laser)
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super
+/obj/item/storage/bag/gadgets/part_replacer/injector/super
 	name = "super upgrade injector"
 	icon_state = "combat_hypo_s"
 	base_rating = 3
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/New()
+/obj/item/storage/bag/gadgets/part_replacer/injector/New()
 	..()
-	var/obj/item/weapon/stock_parts/SP
+	var/obj/item/stock_parts/SP
 	for(var/i in 1 to parts_each)
 		for(var/path in part_types)
 			var/target_rating = base_rating
@@ -114,26 +114,26 @@
 			SP = part_subtype(path,target_rating)
 			SP.forceMove(src)
 			SP.mech_flags |= MECH_SCAN_FAIL
-		new /obj/item/weapon/stock_parts/console_screen(src)
+		new /obj/item/stock_parts/console_screen(src)
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
+/obj/item/storage/bag/gadgets/part_replacer/injector/attackby(obj/O,mob/user)
 	return
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W, stop_messages = 0)
+/obj/item/storage/bag/gadgets/part_replacer/injector/can_be_inserted(obj/item/W, stop_messages = 0)
 	return FALSE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/storage/bag/gadgets/part_replacer/injector/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	if(force)
 		return ..()
 	else
 		return FALSE
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/play_rped_sound()
+/obj/item/storage/bag/gadgets/part_replacer/injector/play_rped_sound()
 	..()
 	qdel(src) //We've had a successful upgrade, time to die.
 
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED
+/obj/item/storage/bag/gadgets/part_replacer/basic_PED
 	name = "part exchange device"
 	desc = "A tool for replacing components in machines. Requires the user to manually guide and articulate it."
 	icon_state = "PED"
@@ -141,7 +141,7 @@
 	storage_slots = 35
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 
-/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED/preattack(var/atom/A, mob/user)
+/obj/item/storage/bag/gadgets/part_replacer/basic_PED/preattack(var/atom/A, mob/user)
 	if(istype(A, /obj/machinery))
 		var/obj/machinery/M = A
 		if(!M.panel_open)

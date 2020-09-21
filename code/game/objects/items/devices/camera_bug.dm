@@ -17,7 +17,7 @@
 		/turf/space,
 		/turf/simulated/shuttle,
 		/mob/living/carbon,
-		/obj/item/weapon/storage
+		/obj/item/storage
 	)
 
 /obj/item/device/camera_bug/attack_self(var/mob/user)

@@ -104,7 +104,7 @@
 /area/crew_quarters/bar)
 "aC" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/food/snacks/donkpocket,
+/obj/item/reagent_containers/food/snacks/donkpocket,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aD" = (
@@ -140,7 +140,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aJ" = (
-/obj/item/weapon/spellbook,
+/obj/item/spellbook,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aK" = (
@@ -159,15 +159,15 @@
 /area/crew_quarters/bar)
 "aO" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
-/obj/item/weapon/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
+/obj/item/card/id/captains_spare,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "aP" = (
@@ -427,12 +427,12 @@
 /obj/structure/sign/biohazard{
 	pixel_x = -32
 	},
-/obj/item/weapon/storage/firstaid/regular,
+/obj/item/storage/firstaid/regular,
 /turf/simulated/floor,
 /area/gateway)
 "bA" = (
 /obj/structure/table,
-/obj/item/weapon/paper/pamphlet,
+/obj/item/paper/pamphlet,
 /turf/simulated/floor,
 /area/gateway)
 "bB" = (
@@ -517,7 +517,7 @@
 /turf/simulated/floor,
 /area/gateway)
 "bK" = (
-/obj/item/weapon/stool,
+/obj/item/stool,
 /turf/simulated/floor,
 /area/gateway)
 "bL" = (
@@ -535,7 +535,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "bO" = (
-/obj/item/weapon/cell/infinite,
+/obj/item/cell/infinite,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "bP" = (
@@ -642,7 +642,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cb" = (
-/obj/item/weapon/switchtool/surgery,
+/obj/item/switchtool/surgery,
 /obj/structure/table,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
@@ -656,13 +656,13 @@
 /area/crew_quarters/bar)
 "ce" = (
 /obj/structure/table,
-/obj/item/weapon/hemostat{
+/obj/item/hemostat{
 	pixel_y = 4
 	},
-/obj/item/weapon/cautery{
+/obj/item/cautery{
 	pixel_y = 4
 	},
-/obj/item/weapon/FixOVein{
+/obj/item/FixOVein{
 	pixel_x = -6;
 	pixel_y = 1
 	},
@@ -671,25 +671,25 @@
 "cf" = (
 /obj/structure/table,
 /obj/item/stack/medical/bruise_pack,
-/obj/item/weapon/retractor{
+/obj/item/retractor{
 	pixel_y = 6
 	},
-/obj/item/weapon/scalpel,
+/obj/item/scalpel,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cg" = (
 /obj/structure/table,
-/obj/item/weapon/bonegel{
+/obj/item/bonegel{
 	pixel_x = 4;
 	pixel_y = 3
 	},
-/obj/item/weapon/bonesetter,
+/obj/item/bonesetter,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ch" = (
 /obj/structure/table,
-/obj/item/weapon/surgicaldrill,
-/obj/item/weapon/circular_saw,
+/obj/item/surgicaldrill,
+/obj/item/circular_saw,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ci" = (
@@ -697,9 +697,9 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cj" = (
-/obj/item/weapon/reagent_containers/glass/beaker/large,
-/obj/item/weapon/reagent_containers/glass/beaker/large,
-/obj/item/weapon/reagent_containers/glass/beaker/large,
+/obj/item/reagent_containers/glass/beaker/large,
+/obj/item/reagent_containers/glass/beaker/large,
+/obj/item/reagent_containers/glass/beaker/large,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ck" = (
@@ -749,18 +749,18 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cp" = (
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace,
+/obj/item/reagent_containers/glass/beaker/bluespace,
+/obj/item/reagent_containers/glass/beaker/bluespace,
+/obj/item/reagent_containers/glass/beaker/bluespace,
+/obj/item/reagent_containers/glass/beaker/bluespace,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cq" = (
 /obj/structure/closet/secure_closet/hydroponics,
 /obj/item/device/radio/headset/headset_service,
-/obj/item/weapon/pickaxe/shovel/spade,
-/obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/pickaxe/shovel/spade,
+/obj/item/reagent_containers/glass/bucket,
+/obj/item/wirecutters/clippers,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cr" = (
@@ -769,9 +769,9 @@
 	},
 /obj/structure/closet/secure_closet/hydroponics,
 /obj/item/device/radio/headset/headset_service,
-/obj/item/weapon/pickaxe/shovel/spade,
-/obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/wirecutters/clippers,
+/obj/item/pickaxe/shovel/spade,
+/obj/item/reagent_containers/glass/bucket,
+/obj/item/wirecutters/clippers,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cs" = (
@@ -801,14 +801,14 @@
 	dir = 4
 	},
 /obj/structure/table/reinforced,
-/obj/item/weapon/crowbar,
-/obj/item/weapon/wrench{
+/obj/item/crowbar,
+/obj/item/wrench{
 	pixel_x = 5;
 	pixel_y = -5
 	},
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone,
-/obj/item/weapon/reagent_containers/spray/cleaner,
+/obj/item/reagent_containers/glass/beaker/cryoxadone,
+/obj/item/reagent_containers/glass/beaker/cryoxadone,
+/obj/item/reagent_containers/spray/cleaner,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cw" = (
@@ -851,9 +851,9 @@
 	},
 /area/crew_quarters/bar)
 "cA" = (
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/large,
+/obj/item/reagent_containers/glass/beaker/noreact/large,
+/obj/item/reagent_containers/glass/beaker/noreact/large,
+/obj/item/reagent_containers/glass/beaker/noreact/large,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cB" = (
@@ -916,29 +916,29 @@
 /area/crew_quarters/bar)
 "cK" = (
 /obj/machinery/r_n_d/fabricator/circuit_imprinter,
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric,
+/obj/item/reagent_containers/glass/beaker/sulphuric,
 /turf/simulated/floor{
 	icon_state = "dark"
 	},
 /area/crew_quarters/bar)
 "cL" = (
-/obj/item/weapon/reagent_containers/glass/beaker,
-/obj/item/weapon/reagent_containers/glass/beaker,
-/obj/item/weapon/reagent_containers/glass/beaker,
+/obj/item/reagent_containers/glass/beaker,
+/obj/item/reagent_containers/glass/beaker,
+/obj/item/reagent_containers/glass/beaker,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cM" = (
 /obj/structure/closet/crate/hydroponics,
-/obj/item/weapon/pickaxe/shovel/spade,
-/obj/item/weapon/wrench,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/reagent_containers/glass/bucket,
-/obj/item/weapon/paper/hydroponics,
-/obj/item/weapon/book/manual/hydroponics_beekeeping,
+/obj/item/pickaxe/shovel/spade,
+/obj/item/wrench,
+/obj/item/screwdriver,
+/obj/item/reagent_containers/glass/bucket,
+/obj/item/paper/hydroponics,
+/obj/item/book/manual/hydroponics_beekeeping,
 /obj/item/device/eftpos{
 	eftpos_name = "Botany EFTPOS scanner"
 	},
-/obj/item/weapon/book/manual/hydroponics_pod_people,
+/obj/item/book/manual/hydroponics_pod_people,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cN" = (
@@ -961,11 +961,11 @@
 /area/crew_quarters/bar)
 "cP" = (
 /obj/structure/table,
-/obj/item/weapon/paper_bin{
+/obj/item/paper_bin{
 	pixel_x = -4;
 	pixel_y = 4
 	},
-/obj/item/weapon/hand_labeler{
+/obj/item/hand_labeler{
 	pixel_x = 1;
 	pixel_y = 12
 	},
@@ -973,24 +973,24 @@
 /area/crew_quarters/bar)
 "cQ" = (
 /obj/structure/table,
-/obj/item/weapon/folder/yellow,
-/obj/item/weapon/pen,
+/obj/item/folder/yellow,
+/obj/item/pen,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cR" = (
 /obj/structure/table,
-/obj/item/weapon/reagent_containers/spray/plantbgone{
+/obj/item/reagent_containers/spray/plantbgone{
 	pixel_y = 3
 	},
-/obj/item/weapon/reagent_containers/spray/plantbgone{
+/obj/item/reagent_containers/spray/plantbgone{
 	pixel_x = 8;
 	pixel_y = 8
 	},
-/obj/item/weapon/reagent_containers/spray/plantbgone{
+/obj/item/reagent_containers/spray/plantbgone{
 	pixel_x = 13;
 	pixel_y = 5
 	},
-/obj/item/weapon/storage/box/botanydisk,
+/obj/item/storage/box/botanydisk,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "cS" = (
@@ -1019,11 +1019,11 @@
 	pixel_y = 1
 	},
 /obj/structure/table,
-/obj/item/weapon/storage/toolbox/mechanical{
+/obj/item/storage/toolbox/mechanical{
 	pixel_x = 2;
 	pixel_y = 3
 	},
-/obj/item/weapon/storage/toolbox/mechanical{
+/obj/item/storage/toolbox/mechanical{
 	pixel_x = -2;
 	pixel_y = -1
 	},
@@ -1360,14 +1360,14 @@
 	},
 /area/crew_quarters/bar)
 "dI" = (
-/obj/item/weapon/stool,
+/obj/item/stool,
 /obj/effect/landmark/start{
 	name = "Botanist"
 	},
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "dJ" = (
-/obj/item/weapon/reagent_containers/glass/bucket,
+/obj/item/reagent_containers/glass/bucket,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "dK" = (
@@ -1496,11 +1496,11 @@
 /area)
 "dZ" = (
 /obj/structure/table/reinforced,
-/obj/item/weapon/storage/belt/utility/chief/full,
-/obj/item/weapon/storage/belt/utility/chief/full,
-/obj/item/weapon/storage/belt/utility/chief/full,
-/obj/item/weapon/storage/belt/utility/chief/full,
-/obj/item/weapon/storage/belt/utility/chief/full,
+/obj/item/storage/belt/utility/chief/full,
+/obj/item/storage/belt/utility/chief/full,
+/obj/item/storage/belt/utility/chief/full,
+/obj/item/storage/belt/utility/chief/full,
+/obj/item/storage/belt/utility/chief/full,
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ea" = (
@@ -1536,7 +1536,7 @@
 /turf/simulated/floor,
 /area/crew_quarters/bar)
 "ee" = (
-/obj/item/weapon/spellbook,
+/obj/item/spellbook,
 /obj/effect/landmark{
 	name = "wizard"
 	},

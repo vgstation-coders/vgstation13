@@ -5,7 +5,7 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "explosive"
 	req_access = list(access_armory)
-	circuit = "/obj/item/weapon/circuitboard/prisoner"
+	circuit = "/obj/item/circuitboard/prisoner"
 	var/id = 0.0
 	var/temp = null
 	var/status = 0
@@ -32,7 +32,7 @@
 	else if(screen == 1)
 		dat += "Chemical Implants<BR>"
 		var/turf/Tr = null
-		for(var/obj/item/weapon/implant/chem/C in chemical_implants)
+		for(var/obj/item/implant/chem/C in chemical_implants)
 			Tr = get_turf(C)
 			if((Tr) && (Tr.z != src.z))
 				continue//Out of range
@@ -45,7 +45,7 @@
 				<A href='?src=\ref[src];inject10=\ref[C]'>(<font color=red>(10)</font>)</A><BR>
 				********************************<BR>"}
 		dat += "<HR>Tracking Implants<BR>"
-		for(var/obj/item/weapon/implant/tracking/T in tracking_implants)
+		for(var/obj/item/implant/tracking/T in tracking_implants)
 			Tr = get_turf(T)
 			if((Tr) && (Tr.z != src.z))
 				continue//Out of range
@@ -84,17 +84,17 @@
 		usr.set_machine(src)
 
 		if(href_list["inject1"])
-			var/obj/item/weapon/implant/I = locate(href_list["inject1"])
+			var/obj/item/implant/I = locate(href_list["inject1"])
 			if(istype(I))
 				I.activate(1)
 
 		else if(href_list["inject5"])
-			var/obj/item/weapon/implant/I = locate(href_list["inject5"])
+			var/obj/item/implant/I = locate(href_list["inject5"])
 			if(istype(I))
 				I.activate(5)
 
 		else if(href_list["inject10"])
-			var/obj/item/weapon/implant/I = locate(href_list["inject10"])
+			var/obj/item/implant/I = locate(href_list["inject10"])
 			if(istype(I))
 				I.activate(10)
 
@@ -105,7 +105,7 @@
 				to_chat(usr, "Unauthorized Access.")
 
 		else if(href_list["warn"])
-			var/obj/item/weapon/implant/tracking/I = locate(href_list["warn"])
+			var/obj/item/implant/tracking/I = locate(href_list["warn"])
 			if(!istype(I) || !I.imp_in)
 				return
 			var/warning = copytext(sanitize(input(usr,"Message:","Enter your message here!","")),1,MAX_MESSAGE_LEN)

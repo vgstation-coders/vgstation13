@@ -1,5 +1,5 @@
 
-/obj/item/weapon/book/manual/excavation
+/obj/item/book/manual/excavation
 	name = "Out on the dig: NEW EDITION!"
 	icon_state = "excavation"
 	item_state = "excavation"
@@ -95,7 +95,7 @@
 				</html>
 			"}
 
-/obj/item/weapon/book/manual/excavation/old
+/obj/item/book/manual/excavation/old
 	name = "Out on the dig"
 	icon_state = "excavation_old"
 	item_state = "book6"
@@ -208,7 +208,7 @@
 				</html>
 			"}
 
-/obj/item/weapon/book/manual/mass_spectrometry
+/obj/item/book/manual/mass_spectrometry
 	name = "High power mass spectrometry, a comprehensive guide"
 	icon_state = "analysis"
 	item_state = "book6"
@@ -279,7 +279,7 @@
 				</html>
 			"}
 
-/obj/item/weapon/book/manual/anomaly_spectroscopy
+/obj/item/book/manual/anomaly_spectroscopy
 	name = "Spectroscopy: Analysing the anomalies of the cosmos"
 	icon_state = "anomaly"
 	item_state = "book6"
@@ -303,7 +303,7 @@
 				certainly an exciting time to be alive. For the moment the Hydrolian hasn't seen two spatial anomalies alike but the day will come and it is soon, I can feel it.
 			"}
 
-/obj/item/weapon/book/manual/materials_chemistry_analysis
+/obj/item/book/manual/materials_chemistry_analysis
 	name = "Materials analysis and the chemical implications"
 	icon_state = "chemistry"
 	item_state = "book6"
@@ -330,7 +330,7 @@
 				a new element that defies classification. I defy you to classify it without reviving this once great field!
 			"}
 
-/obj/item/weapon/book/manual/anomaly_testing
+/obj/item/book/manual/anomaly_testing
 	name = "Anomalous materials and energies"
 	icon_state = "triangulate"
 	item_state = "book6"
@@ -408,7 +408,7 @@
 				</html>
 			"}
 
-/obj/item/weapon/book/manual/stasis
+/obj/item/book/manual/stasis
 	name = "Cellular suspension, the new Cryogenics?"
 	icon_state = "stasis"
 	item_state = "book6"

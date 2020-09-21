@@ -3,13 +3,13 @@
 //MEDBOT ASSEMBLY
 #define INJECTION_TIME 30
 
-/obj/item/weapon/medbot_cube
+/obj/item/medbot_cube
 	name = "advanced medibot cube"
 	desc = "Compressed Nanotrasen Advanced Medibot, ready for deployment. Just unwrap the cube!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "medbotcube"
 
-/obj/item/weapon/medbot_cube/attack_self(mob/user)
+/obj/item/medbot_cube/attack_self(mob/user)
 	user.visible_message("<span class='warning'>\The [src] suddenly expands into a fully functional medibot!</span>", \
 	"<span class='warning'>You carefully unwrap \the [src] and it suddenly expands into a fully functional medibot!</span>")
 	new /obj/machinery/bot/medbot/mysterious/nanotrasen(get_turf(src))
@@ -31,7 +31,7 @@
 	can_take_pai = TRUE
 	var/stunned = 0 //It can be stunned by tasers. Delicate circuits.
 	var/list/botcard_access = list(access_medical)
-	var/obj/item/weapon/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
+	var/obj/item/reagent_containers/glass/reagent_glass = null //Can be set to draw from this for reagents.
 	var/skin = null //Set to "tox", "ointment" or "o2" for the other two firstaid kits.
 	var/last_newpatient_speak = 0 //Don't spam the "HEY I'M COMING" messages
 	var/currently_healing = 0
@@ -69,7 +69,7 @@
 	desc = "Not entirely a replacement for a real doctor."
 	skin = "nanotrasen"
 
-/obj/item/weapon/firstaid_arm_assembly
+/obj/item/firstaid_arm_assembly
 	name = "first aid/robot arm assembly"
 	desc = "A first aid kit with a robot arm permanently grafted to it."
 	icon = 'icons/obj/aibots.dmi'
@@ -79,7 +79,7 @@
 	var/skin = null //Same as medbot, set to tox or ointment for the respective kits.
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/firstaid_arm_assembly/New()
+/obj/item/firstaid_arm_assembly/New()
 	..()
 	spawn(5)
 		if(skin)
@@ -100,7 +100,7 @@
 					treatment_oxy = DEXALIN
 		else
 			treatment_brute = BICARIDINE
-		botcard = new /obj/item/weapon/card/id(src)
+		botcard = new /obj/item/card/id(src)
 		if(isnull(botcard_access) || (botcard_access.len < 1))
 			var/datum/job/doctor/J = new/datum/job/doctor
 			botcard.access = J.get_access()
@@ -215,8 +215,8 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/bot/medbot/attackby(obj/item/weapon/W, mob/user)
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+/obj/machinery/bot/medbot/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [locked ? "locked." : "unlocked."]</span>")
@@ -229,7 +229,7 @@
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 
-	else if (istype(W, /obj/item/weapon/reagent_containers/glass))
+	else if (istype(W, /obj/item/reagent_containers/glass))
 		if(locked)
 			to_chat(user, "<span class='notice'>You cannot insert a beaker because the panel is locked.</span>")
 			return
@@ -428,13 +428,13 @@
 
 	switch(skin)
 		if("tox")
-			new /obj/item/weapon/storage/firstaid/toxin/empty(Tsec)
+			new /obj/item/storage/firstaid/toxin/empty(Tsec)
 		if("ointment")
-			new /obj/item/weapon/storage/firstaid/fire/empty(Tsec)
+			new /obj/item/storage/firstaid/fire/empty(Tsec)
 		if("o2")
-			new /obj/item/weapon/storage/firstaid/o2/empty(Tsec)
+			new /obj/item/storage/firstaid/o2/empty(Tsec)
 		else
-			new /obj/item/weapon/storage/firstaid(Tsec)
+			new /obj/item/storage/firstaid(Tsec)
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 	new /obj/item/device/healthanalyzer(Tsec)
@@ -528,7 +528,7 @@
  *	Medbot Assembly -- Can be made out of all three medkits.
  */
 
-/obj/item/weapon/storage/firstaid/attackby(var/obj/item/robot_parts/S, mob/user as mob)
+/obj/item/storage/firstaid/attackby(var/obj/item/robot_parts/S, mob/user as mob)
 
 	if ((!istype(S, /obj/item/robot_parts/l_arm)) && (!istype(S, /obj/item/robot_parts/r_arm)))
 		. = ..()
@@ -539,12 +539,12 @@
 		to_chat(user, "<span class='notice'>You need to empty [src] out first.</span>")
 		return
 
-	var/obj/item/weapon/firstaid_arm_assembly/A = new /obj/item/weapon/firstaid_arm_assembly
-	if(istype(src,/obj/item/weapon/storage/firstaid/fire))
+	var/obj/item/firstaid_arm_assembly/A = new /obj/item/firstaid_arm_assembly
+	if(istype(src,/obj/item/storage/firstaid/fire))
 		A.skin = "ointment"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/toxin))
+	else if(istype(src,/obj/item/storage/firstaid/toxin))
 		A.skin = "tox"
-	else if(istype(src,/obj/item/weapon/storage/firstaid/o2))
+	else if(istype(src,/obj/item/storage/firstaid/o2))
 		A.skin = "o2"
 
 	qdel(S)
@@ -555,9 +555,9 @@
 	qdel(src)
 
 
-/obj/item/weapon/firstaid_arm_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/firstaid_arm_assembly/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
 		if (!t)
 			return

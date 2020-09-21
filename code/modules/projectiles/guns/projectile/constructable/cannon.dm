@@ -9,10 +9,10 @@
 	var/loaded_item = null
 	var/damage_multiplier = 2
 	var/list/prohibited_items = list( //Certain common items that, due to a combination of their throwforce and w_class, are too powerful to be allowed as ammunition.
-		/obj/item/weapon/shard,
-		/obj/item/weapon/batteringram,
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/storage/pneumatic,
+		/obj/item/shard,
+		/obj/item/batteringram,
+		/obj/item/hatchet,
+		/obj/item/storage/pneumatic,
 		/obj/item/device/detective_scanner,
 		)
 
@@ -113,7 +113,7 @@
 	else
 		. = ..()
 
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/proc/transfer_fuel(obj/item/weapon/reagent_containers/S, mob/user as mob)
+/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/proc/transfer_fuel(obj/item/reagent_containers/S, mob/user as mob)
 	if(!S.is_open_container())
 		return
 	if(!istype(S))

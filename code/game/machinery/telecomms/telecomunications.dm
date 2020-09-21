@@ -289,12 +289,12 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/receiver,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/telecomms/receiver,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()
@@ -380,11 +380,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/hub,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/telecomms/hub,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -435,11 +435,11 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/relay,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/telecomms/relay,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -498,10 +498,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/bus,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/telecomms/bus,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -567,15 +567,15 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/processor,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/amplifier
+		/obj/item/circuitboard/telecomms/processor,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/subspace/treatment,
+		/obj/item/stock_parts/subspace/treatment,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/subspace/amplifier
 	)
 
 	RefreshParts()
@@ -642,10 +642,10 @@ var/global/list/obj/machinery/telecomms/telecomms_list = list()
 	server_radio = new()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/server,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/telecomms/server,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()

@@ -39,7 +39,7 @@
 	attacktext = "slashes"
 
 	corpse = /obj/effect/landmark/corpse/skellington/corsaire
-	items_to_drop = list(/obj/item/weapon/sword)
+	items_to_drop = list(/obj/item/sword)
 
 /mob/living/simple_animal/hostile/humanoid/skellington/cannoneer //o shit
 	name = "skellington cannoneer"
@@ -62,7 +62,7 @@
 	attacktext = "kicks"
 
 	corpse = /obj/effect/landmark/corpse/skellington/cannoneer
-	items_to_drop = list(/obj/item/weapon/gun/energy/laser/cannon/empty)
+	items_to_drop = list(/obj/item/gun/energy/laser/cannon/empty)
 
 //Skellington petards
 //Explode on attack or death

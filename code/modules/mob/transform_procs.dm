@@ -13,7 +13,7 @@
 	delayNextAttack(5 SECONDS)
 
 	for(var/obj/item/W in src)
-		if(istype(W, /obj/item/weapon/implant))
+		if(istype(W, /obj/item/implant))
 			qdel(W)
 			continue
 		if(delete_items || issilicon(src)) //Don't drop your non-module crap(holomap, radio, yadda yadda).

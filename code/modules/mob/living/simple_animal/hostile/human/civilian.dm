@@ -4,7 +4,7 @@
 	icon = 'icons/mob/hostile_humanoid.dmi'
 	icon_state = "chef"
 	corpse = /obj/effect/landmark/corpse/chef
-	items_to_drop = list(/obj/item/weapon/gun/gatling, /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled)
+	items_to_drop = list(/obj/item/gun/gatling, /obj/item/reagent_containers/food/snacks/pie/acid_filled)
 	faction = "syndicate"
 
 	maxHealth = 200
@@ -31,7 +31,7 @@
 /mob/living/simple_animal/hostile/humanoid/chef/Shoot(var/atom/target, var/atom/start, var/mob/user)
 	if(prob(30))
 		visible_message("<span class = 'warning'>\The [src] throws a pie towards \the [target]!</span>")
-		var/atom/movable/pie_to_throw = new /obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled(get_turf(src))
+		var/atom/movable/pie_to_throw = new /obj/item/reagent_containers/food/snacks/pie/acid_filled(get_turf(src))
 		pie_to_throw.throw_at(target,10,25)
 	else
 		..()
@@ -44,7 +44,7 @@
 	icon_state = "janitor"
 
 	corpse = /obj/effect/landmark/corpse/janitor/chempack
-	items_to_drop = list(/obj/item/weapon/gun/projectile/pistol)
+	items_to_drop = list(/obj/item/gun/projectile/pistol)
 
 	speak = list("Clean up on aisle 3","You're getting the floor dirty!","Watch your step!")
 	speak_chance = 15
@@ -60,14 +60,14 @@
 	needs_to_reload = TRUE
 	bullets_remaining = 8
 	drop_on_reload = /obj/item/ammo_storage/magazine/mc9mm/empty
-	var/obj/item/weapon/reagent_containers/spray/chemsprayer/CS
+	var/obj/item/reagent_containers/spray/chemsprayer/CS
 	armor = list(melee = 15, bullet = 35, laser = 45,energy = 35, bomb = 0, bio = 100, rad = 0)
 
 	visible_items = list('icons/mob/in-hand/right/items_righthand.dmi' = "chemsprayer", 'icons/mob/in-hand/left/items_lefthand.dmi' = "gun")
 
 /mob/living/simple_animal/hostile/humanoid/janitor/New()
 	..()
-	CS = new /obj/item/weapon/reagent_containers/spray/chemsprayer/lube(src)
+	CS = new /obj/item/reagent_containers/spray/chemsprayer/lube(src)
 	CS.reagents.add_reagent(LUBE, 600)
 
 /mob/living/simple_animal/hostile/humanoid/janitor/Aggro()
@@ -95,7 +95,7 @@
 	icon_state = "pilot"
 
 	corpse = /obj/effect/landmark/corpse/pilot
-	items_to_drop = list(/obj/item/weapon/gun/projectile/revolver)
+	items_to_drop = list(/obj/item/gun/projectile/revolver)
 
 	faction = "syndicate"
 

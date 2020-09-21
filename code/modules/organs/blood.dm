@@ -211,7 +211,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 ****************************************************/
 
 //Gets blood from mob to the container, preserving all data in it.
-/mob/living/proc/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/proc/take_blood(obj/item/reagent_containers/container, var/amount)
 	var/datum/reagent/B = (container ? get_blood(container.reagents) : null)
 	if(!B)
 		B = new /datum/reagent/blood
@@ -310,7 +310,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	return blood_data
 
 //For humans, blood does not appear from blue, it comes from vessels.
-/mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/carbon/human/take_blood(obj/item/reagent_containers/container, var/amount)
 
 	if(species && species.anatomy_flags & NO_BLOOD)
 		return null
@@ -321,18 +321,18 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	. = ..()
 	vessel.remove_reagent(BLOOD,amount) // Removes blood if human
 
-/mob/living/carbon/monkey/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/carbon/monkey/take_blood(obj/item/reagent_containers/container, var/amount)
 	if(!isDead())
 		adjustOxyLoss(amount)
 	. = ..()
 
-/mob/living/simple_animal/mouse/take_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/simple_animal/mouse/take_blood(obj/item/reagent_containers/container, var/amount)
 	if(!isDead())
 		adjustOxyLoss(amount)
 	. = ..()
 
 //Transfers blood from container ot vessels
-/mob/living/carbon/proc/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/carbon/proc/inject_blood(obj/item/reagent_containers/container, var/amount)
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 	if (!injected)
 		return
@@ -352,7 +352,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	container.reagents.remove_reagent(BLOOD, amount)
 
 //Transfers blood from container ot vessels, respecting blood types compatability.
-/mob/living/carbon/human/inject_blood(obj/item/weapon/reagent_containers/container, var/amount)
+/mob/living/carbon/human/inject_blood(obj/item/reagent_containers/container, var/amount)
 
 	var/datum/reagent/blood/injected = get_blood(container.reagents)
 
@@ -367,7 +367,7 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return
 
 	var/toxic = 0
-	if (istype(container,/obj/item/weapon/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
+	if (istype(container,/obj/item/reagent_containers/food/drinks/cult))//drinking from this cup is always toxic to non cultists, and safe to cultists
 		if (!iscultist(src))
 			toxic = 2
 	else if (blood_incompatible(injected.data["blood_type"],our.data["blood_type"]))

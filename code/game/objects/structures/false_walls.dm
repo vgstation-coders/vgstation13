@@ -178,7 +178,7 @@
 	else
 		icon_state = "[mineral]fwall_open"
 
-/obj/structure/falsewall/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/falsewall/attackby(obj/item/W as obj, mob/user as mob)
 	if(opening)
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
@@ -197,7 +197,7 @@
 			qdel(src)
 
 		if( iswelder(W) )
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			if(WT.welding )
 				if(!mineral)
 					T.ChangeTurf(/turf/simulated/wall)
@@ -210,8 +210,8 @@
 	else
 		to_chat(user, "<span class='notice'>You can't reach, close it first!</span>")
 
-	if( istype(W, /obj/item/weapon/pickaxe) )
-		var/obj/item/weapon/pickaxe/used_pick = W
+	if( istype(W, /obj/item/pickaxe) )
+		var/obj/item/pickaxe/used_pick = W
 		if(!(used_pick.diggables & DIG_WALLS))
 			return
 		var/turf/T = get_turf(src)
@@ -289,7 +289,7 @@
 	var/junction=findSmoothingNeighbors()
 	icon_state = "rwall[junction]"
 
-/obj/structure/falserwall/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/falserwall/attackby(obj/item/W as obj, mob/user as mob)
 	if(opening)
 		to_chat(user, "<span class='warning'>You must wait until the door has stopped moving.</span>")
 		return
@@ -301,7 +301,7 @@
 		qdel(src)
 
 	if( iswelder(W) )
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if( WT.remove_fuel(0,user) )
 			var/turf/T = get_turf(src)
 			T.ChangeTurf(/turf/simulated/wall)
@@ -309,8 +309,8 @@
 			T.attackby(W,user)
 			qdel(src)
 
-	else if( istype(W, /obj/item/weapon/pickaxe) )
-		var/obj/item/weapon/pickaxe/used_pick = W
+	else if( istype(W, /obj/item/pickaxe) )
+		var/obj/item/pickaxe/used_pick = W
 		if(!(used_pick.diggables & DIG_WALLS))
 			return
 		var/turf/T = get_turf(src)
@@ -332,7 +332,7 @@
 	var/active = null
 	var/last_event = 0
 
-/obj/structure/falsewall/uranium/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/falsewall/uranium/attackby(obj/item/W as obj, mob/user as mob)
 	radiate()
 	..()
 

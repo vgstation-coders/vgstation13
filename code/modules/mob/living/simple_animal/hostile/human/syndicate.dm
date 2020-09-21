@@ -31,7 +31,7 @@
 	icon_state = "syndicatemelee"
 	icon_living = "syndicatemelee"
 
-	items_to_drop = list(/obj/item/weapon/melee/energy/sword/red, /obj/item/weapon/shield/energy)
+	items_to_drop = list(/obj/item/melee/energy/sword/red, /obj/item/shield/energy)
 
 	attacktext = "slashes"
 	status_flags = 0
@@ -92,13 +92,13 @@
 	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
 	projectiletype = /obj/item/projectile/bullet/midbullet2
 
-	items_to_drop = list(/obj/item/weapon/gun/projectile/automatic/c20r)
+	items_to_drop = list(/obj/item/gun/projectile/automatic/c20r)
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/laser
 	projectilesound = 'sound/weapons/Laser.ogg'
 	projectiletype = /obj/item/projectile/beam
 
-	items_to_drop = list(/obj/item/weapon/gun/energy/laser)
+	items_to_drop = list(/obj/item/gun/energy/laser)
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/ranged/space
 	icon_state = "syndicaterangedpsace"

@@ -25,11 +25,11 @@
 
 	//List of weapons that metaldetector will not flash for, also copypasted in secbot.dm and ed209bot.dm
 	var/safe_weapons = list(
-		/obj/item/weapon/gun/energy/tag,
-		/obj/item/weapon/gun/energy/laser/practice,
-		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
-		/obj/item/weapon/melee/defibrillator
+		/obj/item/gun/energy/tag,
+		/obj/item/gun/energy/laser/practice,
+		/obj/item/gun/hookshot,
+		/obj/item/gun/energy/floragun,
+		/obj/item/melee/defibrillator
 		)
 
 //THIS CODE IS COPYPASTED IN ed209bot.dm AND secbot.dm, with slight variations
@@ -53,9 +53,9 @@
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST/2
 
-			if(perp.back && istype(perp.back, /obj/item/weapon/storage/backpack))
-				var/obj/item/weapon/storage/backpack/B = perp.back
-				for(var/obj/item/weapon/thing in B.contents)
+			if(perp.back && istype(perp.back, /obj/item/storage/backpack))
+				var/obj/item/storage/backpack/B = perp.back
+				for(var/obj/item/thing in B.contents)
 					if(check_for_weapons(thing))
 						threatcount += PERP_LEVEL_ARREST/2
 
@@ -75,7 +75,7 @@
 			threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
-		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate))
+		if(perp.wear_id && istype(perp.wear_id.GetID(), /obj/item/card/id/syndicate))
 			threatcount -= PERP_LEVEL_ARREST/2
 
 	var/passperpname = ""
@@ -83,7 +83,7 @@
 		var/perpname = perp.name
 
 		if(perp.wear_id)
-			var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
+			var/obj/item/card/id/id = perp.wear_id.GetID()
 
 			if(id)
 				perpname = id.registered_name
@@ -229,7 +229,7 @@
 
 
 /obj/machinery/detector/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
-	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))
+	if(istype(slot_item, /obj/item/gun) || istype(slot_item, /obj/item/melee))
 		if(!(slot_item.type in safe_weapons))
 			return 1
 	return 0

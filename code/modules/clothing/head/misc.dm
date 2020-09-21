@@ -41,7 +41,7 @@
 
 /obj/item/clothing/head/that/attackby(obj/item/W, mob/user)
 	if(wizard_garb)
-		var/static/list/allowed_wands = list(/obj/item/item_handle, /obj/item/weapon/cane, /obj/item/weapon/nullrod, /obj/item/weapon/staff)
+		var/static/list/allowed_wands = list(/obj/item/item_handle, /obj/item/cane, /obj/item/nullrod, /obj/item/staff)
 		if(is_type_in_list(W, allowed_wands))
 			if(world.time - timer >= 20 SECONDS)
 				timer = world.time

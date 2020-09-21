@@ -517,7 +517,7 @@
 	var/disabled = 0 //malf
 	var/obj/item/device/rcd/rpd/mech/RPD
 	var/obj/item/device/rcd/mech/RCD
-	var/obj/item/weapon/wrench/socket/sock
+	var/obj/item/wrench/socket/sock
 
 /obj/item/mecha_parts/mecha_equipment/tool/red/New()
 	..()
@@ -776,7 +776,7 @@
 		return
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name]"
 
-/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mecha_parts/mecha_equipment/anticcw_armor_booster/proc/dynattackby(obj/item/W as obj, mob/user as mob)
 	if(!action_checks(user))
 		return chassis.dynattackby(W,user)
 	chassis.log_message("Attacked by [W]. Attacker - [user]")
@@ -1379,7 +1379,7 @@
 	energy_drain = 50
 	range = MELEE|RANGED
 	var/datum/global_iterator/pr_switchtool
-	var/obj/item/weapon/switchtool/engineering/mech/switchtool
+	var/obj/item/switchtool/engineering/mech/switchtool
 
 /obj/item/mecha_parts/mecha_equipment/tool/switchtool/can_attach(var/obj/mecha/working/clarke/M)
 	if(..())
@@ -1437,7 +1437,7 @@
 		return
 	for(var/obj/item/I in mech_switchtool.switchtool.stored_modules)
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/weldingtool/W = I
 			if(W.reagents.total_volume <= W.max_fuel-10)
 				W.reagents.add_reagent(FUEL, 10)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
@@ -1447,7 +1447,7 @@
 				C.add(5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain/2)
 		else if(issolder(I))
-			var/obj/item/weapon/solder/S = I
+			var/obj/item/solder/S = I
 			if(S.reagents.total_volume < S.max_fuel-5)
 				S.reagents.add_reagent(SACID, 5)
 				mech_switchtool.chassis.use_power(mech_switchtool.energy_drain)
@@ -1540,7 +1540,7 @@
 	..()
 
 /obj/item/mecha_parts/mecha_equipment/tool/collector/action(atom/target)
-	var/obj/item/weapon/tank/plasma/plas = target
+	var/obj/item/tank/plasma/plas = target
 	if(istype(plas))
 		if(collector.P)
 			occupant_message("There is already a tank in the radiation collector array.")

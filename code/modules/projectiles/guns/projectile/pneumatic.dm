@@ -1,7 +1,7 @@
 #define PNEUMATIC_SPEED_CAP 40
 #define PNEUMATIC_SPEED_DIVISOR 400
 
-/obj/item/weapon/storage/pneumatic
+/obj/item/storage/pneumatic
 	name = "pneumatic cannon"
 	desc = "A launcher powered by compressed air."
 	icon = 'icons/obj/gun.dmi'
@@ -15,15 +15,15 @@
 	max_combined_w_class = 20
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_ENGINEERING + "=3"
 
-	var/obj/item/weapon/tank/tank = null                // Tank of gas for use in firing the cannon.
-	var/obj/item/weapon/storage/tank_container = new()  // Something to hold the tank item so we don't accidentally fire it.
+	var/obj/item/tank/tank = null                // Tank of gas for use in firing the cannon.
+	var/obj/item/storage/tank_container = new()  // Something to hold the tank item so we don't accidentally fire it.
 	var/pressure_setting = 10                           // Percentage of the gas in the tank used to fire the projectile.
 	var/possible_pressure_amounts = list(5,10,20,25,50) // Possible pressure settings.
 	var/minimum_tank_pressure = 10                      // Minimum pressure to fire the gun.
 	var/cooldown = 0                                    // Whether or not we're cooling down.
 	var/cooldown_time = 30                              // Time between shots.
 
-/obj/item/weapon/storage/pneumatic/verb/set_pressure() //set amount of tank pressure.
+/obj/item/storage/pneumatic/verb/set_pressure() //set amount of tank pressure.
 
 
 	set name = "Set valve pressure"
@@ -34,7 +34,7 @@
 		pressure_setting = N
 		to_chat(usr, "You dial the pressure valve to [pressure_setting]%.")
 
-/obj/item/weapon/storage/pneumatic/verb/eject_tank() //Remove the tank.
+/obj/item/storage/pneumatic/verb/eject_tank() //Remove the tank.
 
 
 	set name = "Eject tank"
@@ -51,8 +51,8 @@
 	else
 		to_chat(usr, "There's no tank in [src].")
 
-/obj/item/weapon/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
-	if(!tank && istype(W,/obj/item/weapon/tank))
+/obj/item/storage/pneumatic/attackby(obj/item/W as obj, mob/user as mob)
+	if(!tank && istype(W,/obj/item/tank))
 		if(!user.drop_item(W, src.tank_container))
 			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 			return
@@ -65,7 +65,7 @@
 	else
 		. = ..()
 
-/obj/item/weapon/storage/pneumatic/examine(mob/user)
+/obj/item/storage/pneumatic/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>The valve is dialed to [pressure_setting]%.</span>")
 	if(tank)
@@ -73,8 +73,8 @@
 	else
 		to_chat(user, "<span class='warning'>Nothing is attached to the tank valve!</span>")
 
-/obj/item/weapon/storage/pneumatic/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+/obj/item/storage/pneumatic/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
+	if (istype(target, /obj/item/storage/backpack ))
 		return
 
 	else if (target.loc == user.loc)
@@ -92,7 +92,7 @@
 	else
 		spawn(0) Fire(target,user,params)
 
-/obj/item/weapon/storage/pneumatic/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/storage/pneumatic/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if (length(contents) > 0)
 		if(user.a_intent == I_HURT)
 			user.visible_message("<span class='danger'>\The [user] fires \the [src] point blank at [M]!</span>")
@@ -102,7 +102,7 @@
 			Fire(M,user)
 			return
 
-/obj/item/weapon/storage/pneumatic/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/storage/pneumatic/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
 
 
 	if (!tank)
@@ -146,7 +146,7 @@
 	object.throw_at(target,10,speed)
 
 	//if we're throwing food and the target doesn't have its mouth covered, it takes a bite.
-	if(istype(object,/obj/item/weapon/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
+	if(istype(object,/obj/item/reagent_containers/food/snacks) && ishuman(target) && object.Adjacent(target))
 		var/mob/living/carbon/human/victim = target
 		if(!victim.check_body_part_coverage(MOUTH))
 			object.attack(target,target)

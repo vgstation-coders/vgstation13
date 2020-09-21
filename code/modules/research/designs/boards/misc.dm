@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/air_alarm
+	build_path = /obj/item/circuitboard/air_alarm
 
 /datum/design/fire_alarm
 	name = "Circuit Design (Fire Alarm)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/fire_alarm
+	build_path = /obj/item/circuitboard/fire_alarm
 
 /datum/design/airlock
 	name = "Circuit Design (Airlock)"
@@ -26,7 +26,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/airlock
+	build_path = /obj/item/circuitboard/airlock
 
 /datum/design/intercom
 	name = "Circuit Design (Intercom)"
@@ -36,7 +36,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/intercom_electronics
+	build_path = /obj/item/intercom_electronics
 
 /datum/design/apc_board
 	name = "Circuit Design (Power Control Module)"
@@ -46,7 +46,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/power_control
+	build_path = /obj/item/circuitboard/power_control
 
 /datum/design/station_map
 	name = "Circuit Design (Station Holomap)"
@@ -56,7 +56,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/station_map
+	build_path = /obj/item/circuitboard/station_map
 
 //ECBs
 
@@ -68,7 +68,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/ecb/access_controller
+	build_path = /obj/item/circuitboard/ecb/access_controller
 
 /datum/design/airlock_control
 	name = "Circuit Design (Airlock Control)"
@@ -78,7 +78,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/ecb/airlock_controller
+	build_path = /obj/item/circuitboard/ecb/airlock_controller
 
 /datum/design/advanced_airlock_control
 	name = "Circuit Design (Advanced Airlock Control)"
@@ -89,7 +89,7 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	circuitboard/ecb/access_controller
 	category = "Engineering Boards"
-	build_path = /obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
+	build_path = /obj/item/circuitboard/ecb/advanced_airlock_controller
 
 //RIG suit modules
 

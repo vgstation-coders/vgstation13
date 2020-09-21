@@ -1,10 +1,10 @@
 //improvised explosives//
 
 //iedcasing assembly crafting//
-/obj/item/weapon/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/reagent_containers/food/drinks/soda_cans/attackby(var/obj/item/I, mob/user as mob)
 	if(istype(I, /obj/item/device/assembly/igniter))
 		var/obj/item/device/assembly/igniter/G = I
-		var/obj/item/weapon/grenade/iedcasing/W = new /obj/item/weapon/grenade/iedcasing
+		var/obj/item/grenade/iedcasing/W = new /obj/item/grenade/iedcasing
 		user.before_take_item(G)
 		user.before_take_item(src)
 		user.put_in_hands(W)
@@ -18,15 +18,15 @@
 		I.playtoolsound(user, 50)
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/aluminum_cylinder/W = new (get_turf(user))
+			var/obj/item/aluminum_cylinder/W = new (get_turf(user))
 			user.put_in_hands(W)
 			qdel(src)
 		else
-			new /obj/item/weapon/aluminum_cylinder(get_turf(src.loc))
+			new /obj/item/aluminum_cylinder(get_turf(src.loc))
 			qdel(src)
 
 
-/obj/item/weapon/grenade/iedcasing
+/obj/item/grenade/iedcasing
 	name = "improvised explosive assembly"
 	desc = "An igniter stuffed into an aluminum shell."
 	w_class = W_CLASS_SMALL
@@ -46,7 +46,7 @@
 	var/current_shrapnel = 0
 
 
-/obj/item/weapon/grenade/iedcasing/afterattack(atom/target, mob/user , flag) //Filling up the can
+/obj/item/grenade/iedcasing/afterattack(atom/target, mob/user , flag) //Filling up the can
 	if(assembled == 0)
 		if(istype(target, /obj/structure/reagent_dispensers/fueltank) && target.Adjacent(user))
 			if(target.reagents.total_volume < 50)
@@ -62,7 +62,7 @@
 			return
 
 
-/obj/item/weapon/grenade/iedcasing/attackby(var/obj/item/I, mob/user as mob) //Wiring the can for ignition
+/obj/item/grenade/iedcasing/attackby(var/obj/item/I, mob/user as mob) //Wiring the can for ignition
 	if(istype(I, /obj/item/stack/cable_coil))
 		if(assembled == 1)
 			var/obj/item/stack/cable_coil/C = I
@@ -80,7 +80,7 @@
 
 
 
-/obj/item/weapon/grenade/iedcasing/verb/remove_shrapnel()
+/obj/item/grenade/iedcasing/verb/remove_shrapnel()
 
 	set name = "Remove shrapnel"
 	set category = "Object"
@@ -95,7 +95,7 @@
 			shrapnel_list.Remove(shrapnel)
 		current_shrapnel = 0
 
-/obj/item/weapon/grenade/iedcasing/attack_self(mob/user as mob) //Activating the IED
+/obj/item/grenade/iedcasing/attack_self(mob/user as mob) //Activating the IED
 	if(!active)
 		if(clown_check(user))
 			to_chat(user, "<span class='warning'>You light the [name]!</span>")
@@ -117,7 +117,7 @@
 					prime()
 
 
-/obj/item/weapon/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
+/obj/item/grenade/iedcasing/proc/add_shrapnel(var/obj/item/I, mob/user as mob)
 
 	if(assembled == 2)
 		if((current_shrapnel + I.shrapnel_size)<= max_shrapnel )
@@ -134,13 +134,13 @@
 			to_chat(user, "<span  class='notice'>There is no room for \the [I] in the improvised explosive!.</span>")
 
 
-/obj/item/weapon/grenade/iedcasing/prime() //Blowing that can up
+/obj/item/grenade/iedcasing/prime() //Blowing that can up
 	update_mob()
 	process_shrapnel()
 	explosion(get_turf(src.loc),-1,0,2)
 
-	if(istype(loc, /obj/item/weapon/beartrap))
-		var/obj/item/weapon/beartrap/boomtrap = loc
+	if(istype(loc, /obj/item/beartrap))
+		var/obj/item/beartrap/boomtrap = loc
 		if(istype(boomtrap.loc, /mob/living/carbon/human))
 			var/mob/living/carbon/human/H = loc.loc
 			if(H.legcuffed == boomtrap)
@@ -155,7 +155,7 @@
 	qdel(src)
 
 
-/obj/item/weapon/grenade/iedcasing/proc/process_shrapnel()
+/obj/item/grenade/iedcasing/proc/process_shrapnel()
 
 	if(shrapnel_list.len > 0)
 		var/atom/target
@@ -177,7 +177,7 @@
 				shrapnel.forceMove(curloc)
 				shrapnel.throw_at(target,9,10)
 
-/obj/item/weapon/grenade/iedcasing/examine(mob/user)
+/obj/item/grenade/iedcasing/examine(mob/user)
 	..()
 	if(assembled == 3)
 		to_chat(user, "<span class='info'>You can't tell when it will explode!</span>")//Stops you from checking the time to detonation unlike regular grenades
@@ -186,22 +186,22 @@
 
 
 
-/obj/item/weapon/grenade/iedcasing/preassembled
+/obj/item/grenade/iedcasing/preassembled
     name = "improvised explosive"
     desc = "A weak, improvised explosive."
     assembled = 2
     active = 0
 
-/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel
+/obj/item/grenade/iedcasing/preassembled/withshrapnel
 	name = "shrapnel loaded improvised explosive"
 
-/obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel/New()
+/obj/item/grenade/iedcasing/preassembled/withshrapnel/New()
 	..()
 	for(var/i = 1, i<=4,i++)
-		add_shrapnel(new /obj/item/weapon/shard(src), null)
+		add_shrapnel(new /obj/item/shard(src), null)
 
 
-/obj/item/weapon/grenade/iedcasing/preassembled/New()
+/obj/item/grenade/iedcasing/preassembled/New()
     ..()
     underlays += image('icons/obj/drinks.dmi', icon_state = "greyshitvodka")
     det_time = rand(30,80)

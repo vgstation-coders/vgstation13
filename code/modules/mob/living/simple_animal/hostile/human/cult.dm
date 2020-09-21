@@ -22,7 +22,7 @@
 	attack_sound = 'sound/weapons/bloodyslice.ogg'
 
 	corpse = /obj/effect/landmark/corpse/cult/champion
-	items_to_drop = list(/obj/item/weapon/melee/legacy_cultblade)
+	items_to_drop = list(/obj/item/melee/legacy_cultblade)
 
 	min_oxy = 0
 	max_oxy = 0
@@ -90,7 +90,7 @@
 	corpseshoes = /obj/item/clothing/shoes/cult
 	corpsesuit = /obj/item/clothing/suit/legacy_cultrobes
 	corpsemask = /obj/item/clothing/mask/gas/death_commando
-	corpseback = /obj/item/weapon/storage/backpack/cultpack
+	corpseback = /obj/item/storage/backpack/cultpack
 
 /obj/effect/landmark/corpse/cult/New()
 	corpseuniform = existing_typesof(/obj/item/clothing/under/color)

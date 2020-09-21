@@ -126,7 +126,7 @@
 	emote_hear = list("wails","screeches")
 
 /mob/living/simple_animal/hostile/mannequin/cult/breakDown()
-	new /obj/item/weapon/ectoplasm(loc)
+	new /obj/item/ectoplasm(loc)
 	..()
 
 /mob/living/simple_animal/hostile/mannequin/cult/CanAttack(var/atom/the_target)

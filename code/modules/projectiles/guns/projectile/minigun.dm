@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/gatling
+/obj/item/gun/gatling
 	name = "gatling gun"
 	desc = "Ya-ta-ta-ta-ta-ta-ta-ta ya-ta-ta-ta-ta-ta-ta-ta do-de-da-va-da-da-dada! Kaboom-Kaboom!"
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -16,11 +16,11 @@
 	var/max_shells = 200
 	var/current_shells = 200
 
-/obj/item/weapon/gun/gatling/examine(mob/user)
+/obj/item/gun/gatling/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Has [current_shells] round\s remaining.</span>")
 
-/obj/item/weapon/gun/gatling/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/gatling/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -32,7 +32,7 @@
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
-/obj/item/weapon/gun/gatling/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/gatling/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	..()
 	var/list/turf/possible_turfs = list()
 	for(var/turf/T in orange(target,1))
@@ -43,14 +43,14 @@
 			var/newturf = pick(possible_turfs)
 			..(newturf,user,params,reflex,struggle)
 
-/obj/item/weapon/gun/gatling/update_wield(mob/user)
+/obj/item/gun/gatling/update_wield(mob/user)
 	item_state = "minigun[wielded ? 1 : 0]"
 	if(wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
 		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
-/obj/item/weapon/gun/gatling/process_chambered()
+/obj/item/gun/gatling/process_chambered()
 	if(in_chamber)
 		return 1
 	if(current_shells)
@@ -61,11 +61,11 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/gatling/can_discharge() //Why is this gun not a child of gun/projectile?
+/obj/item/gun/gatling/can_discharge() //Why is this gun not a child of gun/projectile?
 	if (current_shells && wielded)
 		return 1
 
-/obj/item/weapon/gun/gatling/update_icon()
+/obj/item/gun/gatling/update_icon()
 	switch(current_shells)
 		if(150 to INFINITY)
 			icon_state = "minigun100"
@@ -78,7 +78,7 @@
 		else
 			icon_state = "minigun0"
 
-/obj/item/weapon/gun/gatling/attack_self(mob/user)
+/obj/item/gun/gatling/attack_self(mob/user)
 	if(wielded)
 		unwield(user)
 	else
@@ -101,7 +101,7 @@
 	pixel_y = rand(-10.0, 10) * PIXEL_MULTIPLIER
 	dir = pick(cardinal)
 
-/obj/item/weapon/gun/gatling/beegun
+/obj/item/gun/gatling/beegun
 	name = "bee gun"
 	desc = "The apocalypse hasn't even begun!"//I'm not even sorry
 	icon_state = "beegun"
@@ -111,14 +111,14 @@
 	var/base_icon_state = "beegun"
 	var/bug_ammo = /obj/item/projectile/bullet/beegun
 
-/obj/item/weapon/gun/gatling/beegun/update_wield(mob/user)
+/obj/item/gun/gatling/beegun/update_wield(mob/user)
 	item_state = "[base_icon_state][wielded ? 1 : 0]"
 	if(wielded)
 		slowdown = MINIGUN_SLOWDOWN_WIELDED
 	else
 		slowdown = MINIGUN_SLOWDOWN_NONWIELDED
 
-/obj/item/weapon/gun/gatling/beegun/process_chambered()
+/obj/item/gun/gatling/beegun/process_chambered()
 	if(in_chamber)
 		return 1
 	if(current_shells)
@@ -128,7 +128,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/gatling/beegun/update_icon()
+/obj/item/gun/gatling/beegun/update_icon()
 	switch(current_shells)
 		if(150 to INFINITY)
 			icon_state = "[base_icon_state]100"
@@ -141,7 +141,7 @@
 		else
 			icon_state = "[base_icon_state]0"
 
-/obj/item/weapon/gun/gatling/beegun/hornetgun
+/obj/item/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
 	desc = "Doesn't actually use .22 Hornet cartridges"
 	icon_state = "hornetgun"

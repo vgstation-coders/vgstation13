@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/detective
+/obj/item/gun/projectile/detective
 	desc = "A cheap Martian knock-off of a Smith & Wesson Model 10. Uses .38-Special rounds."
 	name = "revolver"
 	icon_state = "detective"
@@ -44,9 +44,9 @@
 
 	attackby(var/obj/item/A as obj, mob/user as mob)
 		..()
-		if(A.is_screwdriver(user) || istype(A, /obj/item/weapon/conversion_kit))
-			var/obj/item/weapon/conversion_kit/CK
-			if(istype(A, /obj/item/weapon/conversion_kit))
+		if(A.is_screwdriver(user) || istype(A, /obj/item/conversion_kit))
+			var/obj/item/conversion_kit/CK
+			if(istype(A, /obj/item/conversion_kit))
 				CK = A
 				if(!CK.open)
 					to_chat(user, "<span class='notice'>This [CK.name] is useless unless you open it first. </span>")
@@ -86,7 +86,7 @@
 
 
 
-/obj/item/weapon/gun/projectile/mateba
+/obj/item/gun/projectile/mateba
 	name = "mateba"
 	desc = "When you absolutely, positively need a 10mm hole in the other guy. Uses .357 ammo."	//>10mm hole >.357
 	icon_state = "mateba"
@@ -94,7 +94,7 @@
 	recoil = 3
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
-/obj/item/weapon/gun/projectile/nagant //revolver that simple mob russians use
+/obj/item/gun/projectile/nagant //revolver that simple mob russians use
 	name = "nagant revolver"
 	desc = "Just like in those neo-russian spy movies! Uses 7.62x38R ammo."
 	icon_state = "nagant"
@@ -107,7 +107,7 @@
 	recoil = 3
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT | SILENCECOMP
 
-/obj/item/weapon/gun/projectile/nagant/update_icon()
+/obj/item/gun/projectile/nagant/update_icon()
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
 	return
@@ -117,7 +117,7 @@
 // You can spin the chamber to randomize the position of the bullet.
 // Makes liberal use of cut() to move around the rounds after firing.
 
-/obj/item/weapon/gun/projectile/russian
+/obj/item/gun/projectile/russian
 	name = "russian revolver"
 	desc = "A Russian made revolver. Uses .357 ammo. It has six slots for ammo."
 	max_shells = 6
@@ -125,16 +125,16 @@
 	fire_delay = 1
 	recoil = 3
 
-/obj/item/weapon/gun/projectile/russian/New()
+/obj/item/gun/projectile/russian/New()
 	loaded = new/list(6) //imperative that this keeps 6 entries at all times
 	loaded[1] = new ammo_type(src)
 	Spin() //randomize where the first round is located
 	update_icon()
 
-/obj/item/weapon/gun/projectile/russian/proc/Spin()
+/obj/item/gun/projectile/russian/proc/Spin()
 	loaded = shuffle(loaded)
 
-/obj/item/weapon/gun/projectile/russian/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/projectile/russian/attackby(var/obj/item/A as obj, mob/user as mob)
 
 	if(!A)
 		return
@@ -179,14 +179,14 @@
 	update_icon()
 	return
 
-/obj/item/weapon/gun/projectile/russian/attack_self(mob/user as mob)
+/obj/item/gun/projectile/russian/attack_self(mob/user as mob)
 
 	user.visible_message("<span class='warning'>[user] spins the chamber of the revolver.</span>", "<span class='warning'>You spin the revolver's chamber.</span>")
 	playsound(user, 'sound/weapons/revolver_spin.ogg', 50, 1)
 	if(getAmmo() > 0)
 		Spin()
 
-/obj/item/weapon/gun/projectile/russian/attack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
+/obj/item/gun/projectile/russian/attack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(isliving(target) && isliving(user) && target == user)
@@ -230,7 +230,7 @@
 
 	..()
 
-/obj/item/weapon/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/projectile/russian/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	var/obj/item/ammo_casing/AC = loaded[1]
 	if(!AC || !AC.BB)
 		user.visible_message("<span class='warning'>*click*</span>")
@@ -243,7 +243,7 @@
 	loaded += AC
 	AC.forceMove(src) //get back in there you
 
-/obj/item/weapon/gun/projectile/russian/force_removeMag()
+/obj/item/gun/projectile/russian/force_removeMag()
 	if(usr.incapacitated())
 		return
 	if(getAmmo() > 0)
@@ -254,10 +254,10 @@
 	visible_message("<span class='warning'>[src] empties onto the ground!</span>")
 
 
-/obj/item/weapon/gun/projectile/russian/empty/New()
+/obj/item/gun/projectile/russian/empty/New()
 	update_icon()
 
-/obj/item/weapon/gun/projectile/colt
+/obj/item/gun/projectile/colt
 	name = "\improper Colt Single Action Army"
 	desc = "The greatest handgun ever made."
 	icon_state = "colt"
@@ -268,18 +268,18 @@
 	var/spin_delay = 1 SECONDS	//let's not get crazy
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT
 
-/obj/item/weapon/gun/projectile/colt/examine(mob/user)
+/obj/item/gun/projectile/colt/examine(mob/user)
 	..()
 	if(user.is_holding_item(src))
 		to_chat(user,"<span class='info'>Alt-click to spin the gun.</span>")
 
-/obj/item/weapon/gun/projectile/colt/update_icon()
+/obj/item/gun/projectile/colt/update_icon()
 	if(cocked)
 		icon_state = "colt_cocked"
 	else
 		icon_state = "colt"
 
-/obj/item/weapon/gun/projectile/colt/attack_self(mob/user)
+/obj/item/gun/projectile/colt/attack_self(mob/user)
 	if(cocked)
 		return ..(user)
 	else
@@ -288,7 +288,7 @@
 		to_chat(user, "You cock \the [src].")
 		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
 
-/obj/item/weapon/gun/projectile/colt/AltClick(var/mob/user) //spin to win with alt-click
+/obj/item/gun/projectile/colt/AltClick(var/mob/user) //spin to win with alt-click
 	if(cocked)
 		if(!last_spin || (world.time - last_spin) >= spin_delay)
 			user.visible_message("\The [user] spins \the [src] around \his finger.","You spin \the [src] around your finger.")
@@ -302,13 +302,13 @@
 		to_chat(user, "You cock \the [src].")
 		playsound(user, 'sound/weapons/revolver_cock.ogg', 50, 1)
 
-/obj/item/weapon/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/projectile/colt/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(cocked)
 		..()
 		cocked = FALSE
 		update_icon()
 
-/obj/item/weapon/gun/projectile/banana
+/obj/item/gun/projectile/banana
 	name = "banana"
 	desc = "It's an excellent prop for a comedy."
 	icon = 'icons/obj/hydroponics/banana.dmi'
@@ -319,17 +319,17 @@
 	conventional_firearm = 0
 	clumsy_check = 0
 
-/obj/item/weapon/gun/projectile/banana/proc/make_peel(mob/user)
+/obj/item/gun/projectile/banana/proc/make_peel(mob/user)
 	user.drop_item(src, force_drop = 1)
-	var/obj/item/weapon/bananapeel/B = new(get_turf(src))
+	var/obj/item/bananapeel/B = new(get_turf(src))
 	user.put_in_hands(B)
 	qdel(src)
 
-/obj/item/weapon/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/projectile/banana/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	make_peel(user)
 
-/obj/item/weapon/gun/projectile/banana/attack_self(mob/living/user)
+/obj/item/gun/projectile/banana/attack_self(mob/living/user)
 	if(process_chambered())
 		playsound(user, fire_sound, fire_volume, 1)
 		in_chamber.on_hit(user)
@@ -339,5 +339,5 @@
 		make_peel(user)
 		user.visible_message("<span class='danger'>\The [src] explodes as \the [user] bites into it!</span>","<span class='danger'>\The [src] explodes as you bite into it!</span>")
 
-/obj/item/weapon/gun/projectile/revolver	//a copy of parent to define traitor revolver as separate, because fuck you for making a class prototype not just that
+/obj/item/gun/projectile/revolver	//a copy of parent to define traitor revolver as separate, because fuck you for making a class prototype not just that
 	gun_flags = EMPTYCASINGS | CHAMBERSPENT

@@ -15,7 +15,7 @@
 			src.r_store = W
 			update_inv_pockets(redraw_mob)
 		if(slot_handcuffed)
-			var/obj/item/weapon/handcuffs/cuffs = W
+			var/obj/item/handcuffs/cuffs = W
 			if (istype(cuffs) && cuffs.mutual_handcuffed_mobs.len) //if those are regular cuffs, and there are mobs cuffed to each other, do the mutual handcuff logic
 				src.mutual_handcuffs = cuffs
 				update_inv_mutual_handcuffed(redraw_mob)

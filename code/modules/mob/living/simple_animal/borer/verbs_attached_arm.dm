@@ -58,10 +58,10 @@
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
-		var/obj/item/weapon/melee/bone_sword/S = new(get_turf(host), src)
+		var/obj/item/melee/bone_sword/S = new(get_turf(host), src)
 		if(hostlimb == LIMB_RIGHT_ARM)
 			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_sword))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
 					qdel(S)
 					return
@@ -69,7 +69,7 @@
 			host.put_in_r_hand(S)
 		else
 			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_sword))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/melee/bone_sword))
 					to_chat(src, "<span class='warning'>Your host already has a bone sword on this arm.</span>")
 					qdel(S)
 					return
@@ -123,10 +123,10 @@
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
-		var/obj/item/weapon/melee/bone_hammer/S = new(get_turf(host), src)
+		var/obj/item/melee/bone_hammer/S = new(get_turf(host), src)
 		if(hostlimb == LIMB_RIGHT_ARM)
 			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/melee/bone_hammer))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
 					qdel(S)
 					return
@@ -134,7 +134,7 @@
 			host.put_in_r_hand(S)
 		else
 			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/melee/bone_hammer))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/melee/bone_hammer))
 					to_chat(src, "<span class='warning'>Your host already has a bone hammer on this arm.</span>")
 					qdel(S)
 					return
@@ -189,10 +189,10 @@
 		to_chat(src, "<span class='warning'>You don't have enough chemicals stored to do this.</span>")
 		return
 	else
-		var/obj/item/weapon/shield/riot/bone/S = new(get_turf(host), src)
+		var/obj/item/shield/riot/bone/S = new(get_turf(host), src)
 		if(hostlimb == LIMB_RIGHT_ARM)
 			if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/shield/riot/bone))
+				if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
 					qdel(S)
 					return
@@ -200,7 +200,7 @@
 			host.put_in_r_hand(S)
 		else
 			if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/shield/riot/bone))
+				if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/shield/riot/bone))
 					to_chat(src, "<span class='warning'>Your host already has a bone shield on this arm.</span>")
 					qdel(S)
 					return

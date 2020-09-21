@@ -29,7 +29,7 @@
 /obj/item/queen_bee/initialize()
 	species = bees_species[BEESPECIES_NORMAL]
 
-/obj/item/weapon/bee_net
+/obj/item/bee_net
 	name = "bug net"
 	desc = "For catching insects."
 	icon = 'icons/obj/apiary_bees_etc.dmi'
@@ -40,14 +40,14 @@
 	var/list/caught_bees = list()
 	var/datum/bee_species/current_species = null
 
-/obj/item/weapon/bee_net/examine(mob/user)
+/obj/item/bee_net/examine(mob/user)
 	..()
 	if(caught_bees.len > 0)
 		to_chat(user, "<span class='info'>There's [caught_bees.len] caught [current_species.common_name]\s in it!</span>")
 	else
 		to_chat(user, "<span class='info'>It has no bugs in it.</span>")
 
-/obj/item/weapon/bee_net/afterattack(var/atom/A, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/bee_net/afterattack(var/atom/A, var/mob/user, var/proximity_flag, var/click_parameters)
 	if(!proximity_flag)
 		return
 	if(istype(A,/obj/machinery/apiary))
@@ -92,10 +92,10 @@
 	if (!caught_bees.len)
 		current_species = null
 
-/obj/item/weapon/bee_net/attack_self(mob/user as mob)
+/obj/item/bee_net/attack_self(mob/user as mob)
 	empty_bees()
 
-/obj/item/weapon/bee_net/verb/empty_bees()
+/obj/item/bee_net/verb/empty_bees()
 	set src in usr
 	set name = "Empty bee net"
 	set category = "Object"
@@ -146,7 +146,7 @@
 	w_class = W_CLASS_HUGE
 
 
-/obj/item/weapon/reagent_containers/food/snacks/beezeez
+/obj/item/reagent_containers/food/snacks/beezeez
 	name = "packet of BeezEez"
 	desc = "Delicious nutrients for domesticated bees. Helps jumpstarting a new colony, and purging an existing one from toxins."
 	icon = 'icons/obj/apiary_bees_etc.dmi'
@@ -154,7 +154,7 @@
 	trash = /obj/item/trash/beezeez
 	volume = 3
 
-/obj/item/weapon/reagent_containers/food/snacks/beezeez/New()
+/obj/item/reagent_containers/food/snacks/beezeez/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 3)
 	bitesize = 1
@@ -166,13 +166,13 @@
 	icon_state = "beezeez-empty"
 
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb
+/obj/item/reagent_containers/food/snacks/honeycomb
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness. Grind it to separate the honey."
 	var/list/authentic = list()
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
+/obj/item/reagent_containers/food/snacks/honeycomb/New()
 	. = ..()
 	reagents.add_reagent(HONEY,10)
 	reagents.add_reagent(NUTRIMENT, 0.5)
@@ -184,11 +184,11 @@
 	icon_state = "honeycomb-base"
 	overlays += I
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill
+/obj/item/reagent_containers/food/snacks/honeycomb/chill
 	name = "honeycomb"
 	icon_state = "honeycomb"
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb/chill/New()
+/obj/item/reagent_containers/food/snacks/honeycomb/chill/New()
 	. = ..()
 	reagents.clear_reagents()
 	reagents.add_reagent(CHILLWAX,10)
@@ -201,12 +201,12 @@
 	icon_state = "chill_honeycomb-base"
 	overlays += I
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/authentify()
+/obj/item/reagent_containers/food/snacks/honeycomb/proc/authentify()
 	authentic = list()
 	for (var/datum/reagent/R in reagents.reagent_list)
 		authentic[R.id] = R.volume
 
-/obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/verify()
+/obj/item/reagent_containers/food/snacks/honeycomb/proc/verify()
 	for (var/datum/reagent/R in reagents.reagent_list)
 		if (!(R.id in authentic) || (authentic[R.id] != R.volume))//making sure that no reagent has been added or changed
 			return FALSE
@@ -217,7 +217,7 @@
 		return TRUE
 	return FALSE
 
-/obj/item/weapon/book/manual/hydroponics_beekeeping
+/obj/item/book/manual/hydroponics_beekeeping
 	name = "The Ins and Outs of Apiculture - A Precise Art"
 	icon_state ="bookHydroponicsBees"
 	item_state ="bookHydroponicsBees"

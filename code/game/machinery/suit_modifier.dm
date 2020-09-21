@@ -18,7 +18,7 @@
 	icon_state = "suitmodifier"
 
 	var/list/modules_to_install = list()
-	var/obj/item/weapon/cell/cell = null
+	var/obj/item/cell/cell = null
 	var/image/suit_overlay
 	var/activated = FALSE
 	idle_power_usage = 50
@@ -43,7 +43,7 @@
 		say("\The [I] installed.", class = "binaryradio")
 		modules_to_install.Add(I)
 		return
-	if(istype(I, /obj/item/weapon/cell) && !cell && user.drop_item(I, src))
+	if(istype(I, /obj/item/cell) && !cell && user.drop_item(I, src))
 		say("\The [I] installed.", class = "binaryradio")
 		cell = I
 		return

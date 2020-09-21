@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/borghypo
+/obj/item/reagent_containers/borghypo
 	name = "cyborg hypospray"
 	desc = "An advanced chemical synthesizer and injection system, designed for heavy-duty medical equipment."
 	icon = 'icons/obj/syringe.dmi'
@@ -16,7 +16,7 @@
 	var/list/reagent_ids = list(TRICORDRAZINE, INAPROVALINE, SPACEACILLIN)
 	//var/list/reagent_ids = list(DEXALIN, KELOTANE, BICARIDINE, ANTI_TOXIN, INAPROVALINE, SPACEACILLIN)
 
-/obj/item/weapon/reagent_containers/borghypo/New(loc)
+/obj/item/reagent_containers/borghypo/New(loc)
 	..(loc)
 	qdel(reagents)
 	reagents = null
@@ -29,7 +29,7 @@
 
 	processing_objects += src
 
-/obj/item/weapon/reagent_containers/borghypo/Destroy()
+/obj/item/reagent_containers/borghypo/Destroy()
 	for(var/datum/reagents/reagents in reagent_list)
 		qdel(reagents)
 
@@ -38,7 +38,7 @@
 	processing_objects -= src
 	..()
 
-/obj/item/weapon/reagent_containers/borghypo/process() //Every [recharge_time] seconds, recharge some reagents for the cyborg
+/obj/item/reagent_containers/borghypo/process() //Every [recharge_time] seconds, recharge some reagents for the cyborg
 	if(++charge_tick < recharge_time)
 		return 0
 
@@ -57,7 +57,7 @@
 	return 1
 
 
-/obj/item/weapon/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
+/obj/item/reagent_containers/borghypo/attack(mob/M as mob, mob/user as mob)
 	var/datum/reagents/reagents = reagent_list[mode]
 
 	if(!reagents.total_volume)
@@ -82,7 +82,7 @@
 		to_chat(user, "<span class='notice'>[transferred] units injected. [reagents.total_volume] units remaining.</span>")
 		add_logs(user, M, "injected [transferred]u [reagent_ids[mode]] with \the [src]", admin = (user.ckey && M.ckey)) //We don't care about monkeymen, right?
 
-/obj/item/weapon/reagent_containers/borghypo/attack_self(mob/user as mob)
+/obj/item/reagent_containers/borghypo/attack_self(mob/user as mob)
 	playsound(src, 'sound/effects/pop.ogg', 50, 0) // change the mode
 
 	if(++mode > reagent_list.len)
@@ -92,48 +92,48 @@
 
 	to_chat(user, "<span class='notice'>Synthesizer is now producing '[reagent_ids[mode]]'.</span>")
 
-/obj/item/weapon/reagent_containers/borghypo/examine(mob/user)
+/obj/item/reagent_containers/borghypo/examine(mob/user)
 	..()
 	var/contents_count = 0
 	for(var/datum/reagents/reagents in reagent_list)
 		to_chat(user, "<span class='info'>It currently has [reagents.total_volume] units of [reagent_ids[++contents_count]] stored.</span>")
 	to_chat(user, "<span class='info'>It's currently producing '[reagent_ids[mode]]'.</span>")
 
-/obj/item/weapon/reagent_containers/borghypo/upgraded
+/obj/item/reagent_containers/borghypo/upgraded
 	name = "upgraded cyborg hypospray"
 	desc = "An upgraded hypospray with more potent chemicals and a larger storage capacity."
 	reagent_ids = list(DOCTORSDELIGHT, DEXALINP, SPACEACILLIN, CHARCOAL)
 	volume = 50
 	recharge_time = 3 // time it takes for shots to recharge (in seconds)
 
-/obj/item/weapon/reagent_containers/borghypo/peace
+/obj/item/reagent_containers/borghypo/peace
 	name = "peace hypospray"
 	desc = "A tranquilizer synthesizer and injection system. These drugs are capable of inducing a state of relaxation, or euphoria."
 	reagent_ids = list(STOXIN,CRYPTOBIOLIN,CHILLWAX)
 	volume = 5
 	recharge_time = 20
 
-/obj/item/weapon/reagent_containers/borghypo/peace/hacked
+/obj/item/reagent_containers/borghypo/peace/hacked
 	desc = "Everything's peaceful in death!"
 	icon_state = "borghypo_s"
 	reagent_ids = list(CYANIDE)
 	volume = 10
 	recharge_time = 10
 
-/obj/item/weapon/reagent_containers/borghypo/biofoam
+/obj/item/reagent_containers/borghypo/biofoam
 	name = "biofoam hypospray"
 	icon_state = "biofoam1"
 	reagent_ids = list(BIOFOAM)
 	volume = 15
 	recharge_time = 30
 
-/obj/item/weapon/reagent_containers/borghypo/biofoam/update_icon()
+/obj/item/reagent_containers/borghypo/biofoam/update_icon()
 	if(reagents.total_volume > 0)
 		icon_state = "biofoam1"
 	else
 		icon_state = "biofoam0"
 
-/obj/item/weapon/reagent_containers/borghypo/crisis
+/obj/item/reagent_containers/borghypo/crisis
 	name = "crisis hypospray"
 	desc = "A syndicate-exclusive emergency hypospray filled with potent stimulants and painkillers."
 	icon_state = "borghypo_s"

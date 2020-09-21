@@ -110,7 +110,7 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	H.equip_to_slot_or_del(new chosen_shirt, slot_w_uniform)
 	disable_suit_sensors(H)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal/catbeast, slot_shoes)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/storage/backpack/messenger, slot_back)
 	//Null old name because we're from ghosts
 	H.fully_replace_character_name(null,pick(catbeast_names))
 

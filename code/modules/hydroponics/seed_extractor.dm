@@ -19,35 +19,35 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/seed_extractor,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/seed_extractor,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
 
 /obj/machinery/seed_extractor/RefreshParts()
 	var/B=0
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		B += (M.rating-1)*0.5
 	min_seeds=1+B
 
 	B=0
-	for(var/obj/item/weapon/stock_parts/scanning_module/M in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/M in component_parts)
 		B += M.rating-1
 	max_seeds=4+B
 
 obj/machinery/seed_extractor/attackby(var/obj/item/O as obj, var/mob/user as mob)
 
 	// Emptying a plant bag
-	if (istype(O,/obj/item/weapon/storage/bag/plants))
+	if (istype(O,/obj/item/storage/bag/plants))
 		if (!hasSpaceCheck(user))
 			return
-		var/obj/item/weapon/storage/P = O
+		var/obj/item/storage/P = O
 		var/loaded = 0
 		for(var/obj/item/seeds/G in P.contents)
 			++loaded
@@ -276,8 +276,8 @@ obj/machinery/seed_extractor/Topic(var/href, var/list/href_list)
 		return
 
 obj/machinery/seed_extractor/proc/moveToStorage(var/obj/item/seeds/O as obj)
-	if(istype(O.loc,/obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S = O.loc
+	if(istype(O.loc,/obj/item/storage))
+		var/obj/item/storage/S = O.loc
 		S.remove_from_storage(O,src)
 
 	O.forceMove(src)

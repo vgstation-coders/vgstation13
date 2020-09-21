@@ -29,7 +29,7 @@
 "aF" = (/obj/structure/hanging_lantern{dir = 8},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
 "aG" = (/turf/simulated/floor/wood,/area/awaymission/snowplanet)
 "aH" = (/obj/machinery/space_heater/campfire/stove/fireplace,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
-"aI" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/lighter/zippo,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
+"aI" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/lighter/zippo,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
 "aJ" = (/obj/structure/bed/chair/comfy/brown{dir = 4},/turf/simulated/floor/wood,/area/awaymission/snowplanet)
 "aK" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area/awaymission/snowplanet)
 "aL" = (/obj/structure/bed/chair/comfy/brown{dir = 8},/turf/simulated/floor/wood,/area/awaymission/snowplanet)

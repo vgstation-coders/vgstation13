@@ -34,7 +34,7 @@
 		/obj/item/clothing/shoes = 1,
 		/obj/item/clothing/suit = 1,
 		/obj/item/stack/cable_coil = 1,
-		/obj/item/weapon/bedsheet = 1
+		/obj/item/bedsheet = 1
 		)
 	var/list/blacklist_list = list(
 		//Tier 1 and above
@@ -71,19 +71,19 @@
 /obj/machinery/washing_machine/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/washing_machine,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin
+		/obj/item/circuitboard/washing_machine,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin
 	)
 	RefreshParts()
 
 /obj/machinery/washing_machine/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		T += M.rating
 	speed_coefficient = 1/T
 	T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/MB in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/MB in component_parts)
 		T += MB.rating
 	size_coefficient = T
 
@@ -122,8 +122,8 @@
 		if(istype(crayon,/obj/item/toy/crayon))
 			var/obj/item/toy/crayon/CR = crayon
 			color = CR.colourName
-		else if(istype(crayon,/obj/item/weapon/stamp))
-			var/obj/item/weapon/stamp/ST = crayon
+		else if(istype(crayon,/obj/item/stamp))
+			var/obj/item/stamp/ST = crayon
 			color = ST._color
 
 		if(color)
@@ -173,8 +173,8 @@
 					break
 				qdel(S)
 				S = null
-			for(var/T in typesof(/obj/item/weapon/bedsheet))
-				var/obj/item/weapon/bedsheet/B = new T
+			for(var/T in typesof(/obj/item/bedsheet))
+				var/obj/item/bedsheet/B = new T
 				if(color == B._color)
 					new_sheet_icon_state = B.icon_state
 					new_sheet_name = B.name
@@ -223,13 +223,13 @@
 					if (S.chained == 1)
 						S.chained = 0
 						S.slowdown = NO_SLOWDOWN
-						new /obj/item/weapon/handcuffs( src )
+						new /obj/item/handcuffs( src )
 					S.icon_state = new_shoe_icon_state
 					S._color = color
 					S.name = new_shoe_name
 					S.desc = new_desc
 			if(new_sheet_icon_state && new_sheet_name)
-				for(var/obj/item/weapon/bedsheet/B in contents)
+				for(var/obj/item/bedsheet/B in contents)
 					B.icon_state = new_sheet_icon_state
 					B._color = color
 					B.name = new_sheet_name
@@ -273,22 +273,22 @@
 /obj/machinery/washing_machine/update_icon()
 	icon_state = "wm_[wash_state][panel_open]"
 
-/obj/machinery/washing_machine/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/washing_machine/attackby(obj/item/W, mob/user)
 	if(..())
 		update_icon()
 		return 1
 	else if(is_in_blacklist(W))
 		to_chat(user, "This item does not fit.")
 		return
-	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/weapon/stamp))
+	else if(istype(W,/obj/item/toy/crayon) ||istype(W,/obj/item/stamp))
 		if(wash_state in list(	1, 3, 6 ))
 			if(!crayon)
 				if(user.drop_item(W, src))
 					crayon = W
-	else if(istype(W,/obj/item/weapon/grab))
+	else if(istype(W,/obj/item/grab))
 		if(contents.len < (5 * size_coefficient))
 			if((wash_state == 1) && hacked)
-				var/obj/item/weapon/grab/G = W
+				var/obj/item/grab/G = W
 				if(ishuman(G.assailant) && isliving(G.affecting) && !is_in_blacklist(G.affecting))
 					G.affecting.forceMove(src)
 					qdel(G)
@@ -296,14 +296,14 @@
 					wash_state = 3
 		else
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
-	else if(istype(W,/obj/item/weapon/holder/animal))
+	else if(istype(W,/obj/item/holder/animal))
 		if(contents.len < (5 * size_coefficient))
 			if((wash_state == 1) && hacked)
 				if(user.drop_item(W, src))
 					wash_state = 3
-					var/obj/item/weapon/holder/animal/A = locate(/obj/item/weapon/holder/animal, contents)
+					var/obj/item/holder/animal/A = locate(/obj/item/holder/animal, contents)
 					contents.Add(A.stored_mob)
-					qdel(locate(contents,/obj/item/weapon/holder/animal))
+					qdel(locate(contents,/obj/item/holder/animal))
 		else
 			to_chat(user, "<span class='notice'>\The [src] is full.</span>")
 	else if(is_in_whitelist(W))

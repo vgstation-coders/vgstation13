@@ -225,7 +225,7 @@
 							var/sourcejob = job
 
 
-							var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
+							var/obj/item/reagent_containers/food/snacks/meat/human/newmeat = new(get_turf(src))
 							newmeat.name = sourcename + " " + newmeat.name
 							newmeat.subjectname = sourcename
 							newmeat.subjectjob = sourcejob

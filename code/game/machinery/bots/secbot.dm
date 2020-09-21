@@ -29,17 +29,17 @@
 	var/threatlevel = 0
 
 	var/list/unsafe_weapons = list( //things that the secbot will check for
-		/obj/item/weapon/gun,
-		/obj/item/weapon/melee
+		/obj/item/gun,
+		/obj/item/melee
 		)
 
 	//List of weapons that secbots will not arrest for, also copypasted in ed209.dm and metaldetector.dm
 	var/list/safe_weapons = list(
-		/obj/item/weapon/gun/energy/tag,
-		/obj/item/weapon/gun/energy/laser/practice,
-		/obj/item/weapon/gun/hookshot,
-		/obj/item/weapon/gun/energy/floragun,
-		/obj/item/weapon/melee/defibrillator
+		/obj/item/gun/energy/tag,
+		/obj/item/gun/energy/laser/practice,
+		/obj/item/gun/hookshot,
+		/obj/item/gun/energy/floragun,
+		/obj/item/melee/defibrillator
 		)
 
 	var/list/cannot_open = list(
@@ -49,9 +49,9 @@
 		)
 	light_color = LIGHT_COLOR_RED
 	bot_flags = BOT_PATROL|BOT_BEACON|BOT_CONTROL
-	var/obj/item/weapon/melee/baton/baton = null
-	var/baton_type = /obj/item/weapon/melee/baton/
-	var/secbot_assembly_type = /obj/item/weapon/secbot_assembly/
+	var/obj/item/melee/baton/baton = null
+	var/baton_type = /obj/item/melee/baton/
+	var/secbot_assembly_type = /obj/item/secbot_assembly/
 
 	commanding_radio = /obj/item/radio/integrated/signal/bot/beepsky
 
@@ -68,7 +68,7 @@
 	auto_patrol = 1
 	declare_arrests = 1
 
-/obj/item/weapon/secbot_assembly
+/obj/item/secbot_assembly
 	name = "helmet/signaler assembly"
 	desc = "Some sort of bizarre assembly."
 	icon = 'icons/obj/aibots.dmi'
@@ -80,7 +80,7 @@
 /obj/machinery/bot/secbot/New()
 	. = ..()
 	icon_state = "[src.icon_initial][src.on]"
-	botcard = new /obj/item/weapon/card/id(src)
+	botcard = new /obj/item/card/id(src)
 	var/datum/job/detective/J = new/datum/job/detective
 	botcard.access = J.get_access()
 
@@ -183,8 +183,8 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/can_patrol()
 	return steps_per == initial_steps_per
 
-/obj/machinery/bot/secbot/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+/obj/machinery/bot/secbot/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if(allowed(user) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "Controls are now [locked ? "locked." : "unlocked."]")
@@ -295,7 +295,7 @@ Auto Patrol: []"},
 							return
 						if (M.handcuffed)
 							return
-						M.handcuffed = new /obj/item/weapon/handcuffs(M)
+						M.handcuffed = new /obj/item/handcuffs(M)
 						M.update_inv_handcuffed()	//update handcuff overlays
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 						spawn (1.5 SECONDS)
@@ -338,7 +338,7 @@ Auto Patrol: []"},
 				if(check_for_weapons(I))
 					threatcount += PERP_LEVEL_ARREST
 
-			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee))
+			if(istype(perp.belt, /obj/item/gun) || istype(perp.belt, /obj/item/melee))
 				if(!(perp.belt.type in safe_weapons))
 					threatcount += PERP_LEVEL_ARREST/2
 
@@ -355,13 +355,13 @@ Auto Patrol: []"},
 				threatcount += PERP_LEVEL_ARREST/2
 
 		//Agent cards lower threatlevel.
-		if(istype(visible_id, /obj/item/weapon/card/id/syndicate))
+		if(istype(visible_id, /obj/item/card/id/syndicate))
 			threatcount -= PERP_LEVEL_ARREST/2
 
 	if(src.check_records)
 		for (var/datum/data/record/E in data_core.general)
 			var/perpname = perp.name
-			var/obj/item/weapon/card/id/id = perp.get_visible_id()
+			var/obj/item/card/id/id = perp.get_visible_id()
 			if(id)
 				perpname = id.registered_name
 
@@ -387,7 +387,7 @@ Auto Patrol: []"},
 	src.visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	var/obj/item/weapon/secbot_assembly/Sa = new secbot_assembly_type(Tsec)
+	var/obj/item/secbot_assembly/Sa = new secbot_assembly_type(Tsec)
 	Sa.build_step = 1
 	Sa.overlays += image('icons/obj/aibots.dmi', "hs_hole")
 	Sa.created_name = src.name
@@ -421,7 +421,7 @@ Auto Patrol: []"},
 
 	if(S.secured)
 		qdel(S)
-		var/obj/item/weapon/secbot_assembly/A = new /obj/item/weapon/secbot_assembly
+		var/obj/item/secbot_assembly/A = new /obj/item/secbot_assembly
 		user.put_in_hands(A)
 		to_chat(user, "You add the signaler to the helmet.")
 		user.drop_from_inventory(src)
@@ -429,10 +429,10 @@ Auto Patrol: []"},
 	else
 		return
 
-/obj/item/weapon/secbot_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/secbot_assembly/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "hs_hole")
@@ -454,7 +454,7 @@ Auto Patrol: []"},
 			src.overlays += image('icons/obj/aibots.dmi', "hs_arm")
 			qdel(W)
 
-	else if((istype(W, /obj/item/weapon/melee/baton)) && (src.build_step >= 3))
+	else if((istype(W, /obj/item/melee/baton)) && (src.build_step >= 3))
 		if(user.drop_item(W))
 			src.build_step++
 			to_chat(user, "You complete the Securitron! Beep boop.")
@@ -465,7 +465,7 @@ Auto Patrol: []"},
 			S.baton = W
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/pen))
+	else if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
 		if(!t)
 			return
@@ -572,7 +572,7 @@ Auto Patrol: []"},
 	maxhealth = 15
 //Cheapsky Construction
 
-/obj/item/weapon/secbot_assembly/cheapsky
+/obj/item/secbot_assembly/cheapsky
 	name = "box/signaler assembly"
 	desc = "Some sort of bizarre assembly."
 	icon = 'icons/obj/aibots.dmi'
@@ -588,13 +588,13 @@ Auto Patrol: []"},
 
 	if(S.secured)
 		qdel(S)
-		var/obj/item/weapon/secbot_assembly/cheapsky/A = new /obj/item/weapon/secbot_assembly/cheapsky
+		var/obj/item/secbot_assembly/cheapsky/A = new /obj/item/secbot_assembly/cheapsky
 		user.put_in_hands(A)
 		to_chat(user, "You add the signaler to \the [src].")
 		user.drop_from_inventory(src)
 		qdel(src)
 
-/obj/item/weapon/secbot_assembly/cheapsky/attackby(obj/item/weapon/W, mob/user)
+/obj/item/secbot_assembly/cheapsky/attackby(obj/item/W, mob/user)
 	if(W.sharpness && W.sharpness_flags & SHARP_BLADE && (!src.build_step))
 		src.build_step++
 		src.overlays += image('icons/obj/aibots.dmi', "bs_hole")
@@ -609,7 +609,7 @@ Auto Patrol: []"},
 			qdel(W)
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/pen))
+	else if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", src.name, src.created_name),1,MAX_NAME_LEN)
 		if(!t)
 			return
@@ -632,37 +632,37 @@ Auto Patrol: []"},
 	weaponscheck = 1
 
 	unsafe_weapons =list(
-		/obj/item/weapon/gun,
-		/obj/item/weapon/melee,
+		/obj/item/gun,
+		/obj/item/melee,
 		/obj/item/toy/,
 		/obj/item/ashtray,
 		/obj/item/candle,
-		/obj/item/weapon/bananapeel,
-		/obj/item/weapon/soap,
-		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/wrench,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/solder,
-		/obj/item/weapon/scalpel,
-		/obj/item/weapon/surgicaldrill,
-		/obj/item/weapon/circular_saw,
-		/obj/item/weapon/bonesetter,
-		/obj/item/weapon/match,
-		/obj/item/weapon/lighter,
-		/obj/item/weapon/kitchen,
-		/obj/item/weapon/reagent_containers/pill
+		/obj/item/bananapeel,
+		/obj/item/soap,
+		/obj/item/bikehorn,
+		/obj/item/wrench,
+		/obj/item/screwdriver,
+		/obj/item/wirecutters,
+		/obj/item/weldingtool,
+		/obj/item/crowbar,
+		/obj/item/solder,
+		/obj/item/scalpel,
+		/obj/item/surgicaldrill,
+		/obj/item/circular_saw,
+		/obj/item/bonesetter,
+		/obj/item/match,
+		/obj/item/lighter,
+		/obj/item/kitchen,
+		/obj/item/reagent_containers/pill
 		)
 	safe_weapons = null //no safe weapons for britsky
 
-	baton_type = /obj/item/weapon/melee/classic_baton/
-	secbot_assembly_type = /obj/item/weapon/secbot_assembly/britsky
+	baton_type = /obj/item/melee/classic_baton/
+	secbot_assembly_type = /obj/item/secbot_assembly/britsky
 
 //Britsky Construction
 
-/obj/item/weapon/secbot_assembly/britsky
+/obj/item/secbot_assembly/britsky
 	name = "custodian signaler assembly"
 	desc = "some sort of british assembly."
 	icon = 'icons/obj/aibots.dmi'
@@ -678,16 +678,16 @@ Auto Patrol: []"},
 
 	if(S.secured)
 		qdel(S)
-		var/obj/item/weapon/secbot_assembly/britsky/A = new /obj/item/weapon/secbot_assembly/britsky
+		var/obj/item/secbot_assembly/britsky/A = new /obj/item/secbot_assembly/britsky
 		user.put_in_hands(A)
 		to_chat(user, "You add the signaler to \the [src]!")
 		user.drop_from_inventory(src)
 		qdel(src)
 
-/obj/item/weapon/secbot_assembly/britsky/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/secbot_assembly/britsky/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if((iswelder(W)) && (!src.build_step))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(0,user))
 			src.build_step++
 			src.overlays += image('icons/obj/aibots.dmi', "bhs_hole")
@@ -709,7 +709,7 @@ Auto Patrol: []"},
 			src.overlays += image('icons/obj/aibots.dmi', "bhs_arm")
 			qdel(W)
 
-	else if((istype(W, /obj/item/weapon/melee/classic_baton)) && (src.build_step >= 3))
+	else if((istype(W, /obj/item/melee/classic_baton)) && (src.build_step >= 3))
 		if(user.drop_item(W))
 			src.build_step++
 			to_chat(user, "You complete the Securitron! Beep boop.")

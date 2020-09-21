@@ -50,9 +50,9 @@
 
 			var/obj/item/Item = new path()
 	//		testing("Adding new custom item [query.item[1]] to [key_name_admin(M)]...")
-			if(istype(Item,/obj/item/weapon/card/id))
-				var/obj/item/weapon/card/id/I = Item
-				for(var/obj/item/weapon/card/id/C in M)
+			if(istype(Item,/obj/item/card/id))
+				var/obj/item/card/id/I = Item
+				for(var/obj/item/card/id/C in M)
 					//default settings
 					I.name = "[M.real_name]'s ID Card ([M.mind.role_alt_title ? M.mind.role_alt_title : M.mind.assigned_role])"
 					I.registered_name = M.real_name
@@ -68,15 +68,15 @@
 					ok = M.equip_if_possible(I, slot_wear_id, 0)	//if 1, last argument deletes on fail
 					break
 	//			testing("Replaced ID!")
-			else if(istype(M.back, /obj/item/weapon/storage)) // Try to place it in something on the mob's back
-				var/obj/item/weapon/storage/backpack = M.back
+			else if(istype(M.back, /obj/item/storage)) // Try to place it in something on the mob's back
+				var/obj/item/storage/backpack = M.back
 				if(backpack.contents.len < backpack.storage_slots)
 					Item.forceMove(M.back)
 					ok = 1
 		//			testing("Added to [M.back.name]!")
 					to_chat(M, "<span class='notice'>Your [Item.name] has been added to your [M.back.name].</span>")
 			else
-				for(var/obj/item/weapon/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
+				for(var/obj/item/storage/S in M.contents) // Try to place it in any item that can store stuff, on the mob.
 					if (S.contents.len < S.storage_slots)
 						Item.forceMove(S)
 						ok = 1

@@ -154,7 +154,7 @@
 	icon_opened = "largebinopen"
 	icon_closed = "largebin"
 
-/obj/structure/closet/crate/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/structure/closet/crate/bin/attackby(var/obj/item/W, var/mob/user)
     if(W.is_wrench(user) && wrenchable())
         return wrenchAnchor(user, W)
     ..()
@@ -219,7 +219,7 @@
 	sparks = "largebinsparks"
 	emag = "largebinemag"
 
-/obj/structure/closet/crate/secure/bin/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/structure/closet/crate/secure/bin/attackby(var/obj/item/W, var/mob/user)
     if(W.is_wrench(user) && wrenchable())
         return wrenchAnchor(user, W)
     ..()
@@ -386,14 +386,14 @@
 	var/count=10
 /obj/structure/closet/crate/secure/plasma/prefilled/New()
 	for(var/i=0;i<count;i++)
-		new /obj/item/weapon/tank/plasma(src)
+		new /obj/item/tank/plasma(src)
 
 //This exists so the prespawned hydro crates spawn with their contents.
 /obj/structure/closet/crate/hydroponics/prespawned/New()
 	..()
-	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-	new /obj/item/weapon/reagent_containers/spray/plantbgone(src)
-	new /obj/item/weapon/minihoe(src)
+	new /obj/item/reagent_containers/spray/plantbgone(src)
+	new /obj/item/reagent_containers/spray/plantbgone(src)
+	new /obj/item/minihoe(src)
 
 
 /obj/structure/closet/crate/secure/New()
@@ -522,8 +522,8 @@
 	else
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 
-/obj/structure/closet/crate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if ( istype(W, /obj/item/weapon/card/emag) && locked &&!broken)
+/obj/structure/closet/crate/secure/attackby(obj/item/W as obj, mob/user as mob)
+	if ( istype(W, /obj/item/card/emag) && locked &&!broken)
 		overlays.len = 0
 		overlays += emag
 		overlays += sparks
@@ -533,7 +533,7 @@
 		src.broken = 1
 		to_chat(user, "<span class='notice'>You unlock \the [src].</span>")
 		return
-	else if(istype(W, /obj/item/weapon/card) && !opened && !broken)
+	else if(istype(W, /obj/item/card) && !opened && !broken)
 		togglelock(user)
 		return
 	else if(W.is_screwdriver(user) && !opened && !locked && src.has_lockless_type)
@@ -582,10 +582,10 @@
 /obj/structure/closet/crate/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/closet/crate/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/closet/crate/attackby(obj/item/W as obj, mob/user as mob)
 	if(opened)
 		return ..()
-	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type)
+	else if(istype(W, /obj/item/circuitboard/airlock) && src.has_lock_type)
 		add_lock(W, user)
 		return
 	else if(istype(W, /obj/item/stack/package_wrap))
@@ -679,40 +679,40 @@
 	switch(chosen_set)
 		if("ricochet")
 			new/obj/item/clothing/suit/armor/laserproof(src)
-			new/obj/item/weapon/gun/energy/ricochet(src)
-			new/obj/item/weapon/gun/energy/ricochet(src)
+			new/obj/item/gun/energy/ricochet(src)
+			new/obj/item/gun/energy/ricochet(src)
 		if("bison")
 			new/obj/item/clothing/shoes/jackboots(src)
 			new/obj/item/clothing/suit/hgpirate(src)
 			new/obj/item/clothing/head/hgpiratecap(src)
 			new/obj/item/clothing/glasses/eyepatch(src)
-			new/obj/item/weapon/gun/energy/bison(src)
+			new/obj/item/gun/energy/bison(src)
 		if("spur")
 			new/obj/item/clothing/suit/cardborg(src)
 			new/obj/item/clothing/head/cardborg(src)
 			new/obj/item/device/modkit/spur_parts(src)
-			new/obj/item/weapon/gun/energy/polarstar(src)
+			new/obj/item/gun/energy/polarstar(src)
 		if("gatling")
 			new/obj/item/clothing/suit/armor/riot(src)
 			new/obj/item/clothing/head/helmet/tactical/riot(src)
 			new/obj/item/clothing/shoes/swat(src)
 			new/obj/item/clothing/gloves/swat(src)
-			new/obj/item/weapon/gun/gatling(src)
+			new/obj/item/gun/gatling(src)
 		if("stickybomb")
 			new/obj/item/clothing/suit/bomb_suit/security(src)
 			new/obj/item/clothing/head/bomb_hood/security(src)
-			new/obj/item/weapon/gun/stickybomb(src)
-			new/obj/item/weapon/storage/box/stickybombs(src)
+			new/obj/item/gun/stickybomb(src)
+			new/obj/item/storage/box/stickybombs(src)
 		if("nikita")
 			for(var/i=1;i<=5;i++)
 				new/obj/item/ammo_casing/rocket_rpg/nikita(src)
-			new/obj/item/weapon/gun/projectile/rocketlauncher/nikita(src)
+			new/obj/item/gun/projectile/rocketlauncher/nikita(src)
 		if("osipr")
 			new/obj/item/clothing/suit/space/syndicate/black(src)
 			new/obj/item/clothing/head/helmet/space/syndicate/black(src)
-			new/obj/item/weapon/gun/osipr(src)
+			new/obj/item/gun/osipr(src)
 		if("hecate")
-			new/obj/item/weapon/gun/projectile/hecate(src)
+			new/obj/item/gun/projectile/hecate(src)
 			new/obj/item/ammo_storage/box/BMG50(src)
 			new/obj/item/device/radio/headset/headset_earmuffs(src)
 			new/obj/item/clothing/glasses/thermal(src)
@@ -720,14 +720,14 @@
 			new/obj/item/clothing/suit/radiation(src)
 			new/obj/item/clothing/head/radiation(src)
 			new/obj/item/clothing/shoes/magboots(src)
-			new/obj/item/weapon/gun/gravitywell(src)
+			new/obj/item/gun/gravitywell(src)
 		if("clown")
 			new/obj/item/clothing/under/clownpsyche(src)
 			new/obj/item/clothing/mask/gas/clownmaskpsyche(src)
 			new/obj/item/clothing/shoes/clownshoespsyche(src)
-			new/obj/item/weapon/storage/backpack/clownpackpsyche(src)
-			new/obj/item/weapon/gun/energy/laser/rainbow(src)
-			new/obj/item/weapon/gun/energy/laser/rainbow(src)
+			new/obj/item/storage/backpack/clownpackpsyche(src)
+			new/obj/item/gun/energy/laser/rainbow(src)
+			new/obj/item/gun/energy/laser/rainbow(src)
 
 /obj/structure/closet/crate/secure/weapon/experimental/ricochet
 	chosen_set = "ricochet"

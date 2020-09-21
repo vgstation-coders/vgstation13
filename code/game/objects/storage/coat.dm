@@ -1,7 +1,7 @@
 /obj/item/clothing/suit/storage
 	body_parts_covered = FULL_TORSO|ARMS
 
-	var/obj/item/weapon/storage/internal/hold
+	var/obj/item/storage/internal/hold
 	var/list/can_only_hold = new/list() //List of objects which this item can store (if set, it can't store anything else)
 	var/list/cant_hold = new/list() //List of objects which this item can't store (even if it's in the can_only_hold list)
 	var/fits_max_w_class = W_CLASS_SMALL //Max size of objects that this object can store (in effect even if can_only_hold is set)
@@ -31,7 +31,7 @@
 	else
 		return ..()
 
-/obj/item/clothing/suit/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/suit/storage/attackby(obj/item/W as obj, mob/user as mob)
 	hold.attackby(W,user)
 	return 1
 

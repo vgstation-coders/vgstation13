@@ -190,7 +190,7 @@ var/global/list/all_docking_ports = list()
 /obj/docking_port/destination/Destroy()
 	..()
 
-	for(var/obj/item/weapon/disk/shuttle_coords/C in disk_references)
+	for(var/obj/item/disk/shuttle_coords/C in disk_references)
 		C.reset()
 	disk_references = list()
 

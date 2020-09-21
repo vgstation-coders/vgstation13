@@ -2,7 +2,7 @@
 // Defibrillator
 //**************************************************************
 
-/obj/item/weapon/melee/defibrillator
+/obj/item/melee/defibrillator
 	name = "emergency defibrillator"
 	desc = "Used to restore fibrillating patients."
 	icon = 'icons/obj/weapons.dmi'
@@ -18,15 +18,15 @@
 	var/ready = 0
 	var/emagged = 0
 
-/obj/item/weapon/melee/defibrillator/New()
+/obj/item/melee/defibrillator/New()
 	return ..()
 
-/obj/item/weapon/melee/defibrillator/suicide_act(mob/user)
+/obj/item/melee/defibrillator/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='warning'>[user] is putting the live paddles on \his chest! It looks like \he's trying to commit suicide.</span>")
 	playsound(src,'sound/items/defib.ogg',50,1)
 	return (SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/melee/defibrillator/update_icon()
+/obj/item/melee/defibrillator/update_icon()
 	icon_state = "defib"
 	if(ready)
 		icon_state += "paddleout"
@@ -43,7 +43,7 @@
 			icon_state += "_empty"
 	return
 
-/obj/item/weapon/melee/defibrillator/attack_self(mob/user)
+/obj/item/melee/defibrillator/attack_self(mob/user)
 	if(charges || ready)
 		if(clumsy_check(user) && prob(50) && charges)
 			to_chat(user, "<span class='warning'>You touch the paddles together, shorting the device.</span>")
@@ -66,15 +66,15 @@
 	add_fingerprint(user)
 	return
 
-/obj/item/weapon/melee/defibrillator/update_wield(mob/user)
+/obj/item/melee/defibrillator/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
 	force = wielded ? 40 : 10
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/melee/defibrillator/attackby(obj/item/weapon/W,mob/user)
-	if(istype(W,/obj/item/weapon/card/emag))
+/obj/item/melee/defibrillator/attackby(obj/item/W,mob/user)
+	if(istype(W,/obj/item/card/emag))
 		emagged = !src.emagged
 		if(emagged)
 			to_chat(user, "<span class='warning'>You short out [src]'s safety protocols.</span>")
@@ -86,7 +86,7 @@
 		. = ..()
 	return
 
-/obj/item/weapon/melee/defibrillator/attack(mob/M,mob/user)
+/obj/item/melee/defibrillator/attack(mob/M,mob/user)
 	if(!ishuman(M))
 		to_chat(user, "<span class='warning'>You can't defibrilate [M]. You don't even know where to put the paddles!</span>")
 	else if(!charges)
@@ -104,7 +104,7 @@
 			attemptDefib(target,user)
 	return
 
-/obj/item/weapon/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
+/obj/item/melee/defibrillator/proc/shockAttack(mob/living/carbon/human/target,mob/user)
 	var/damage = rand(30, 60)
 	if (!target.electrocute_act(damage, src, def_zone = LIMB_CHEST))
 		return
@@ -125,7 +125,7 @@
 	update_icon()
 	return
 
-/obj/item/weapon/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
+/obj/item/melee/defibrillator/proc/attemptDefib(mob/living/carbon/human/target,mob/user)
 	user.visible_message("<span class='notice'>[user] starts setting up the paddles on [target]'s chest.</span>", \
 	"<span class='notice'>You start setting up the paddles on [target]'s chest</span>")
 	if(do_after(user,target,30))
@@ -196,5 +196,5 @@
 			target.visible_message("<span class='warning'>[src] buzzes: Defibrillation failed. Patient's condition does not allow reviving.</span>")
 		return
 
-/obj/item/weapon/melee/defibrillator/restock()
+/obj/item/melee/defibrillator/restock()
 	charges = initial(charges)

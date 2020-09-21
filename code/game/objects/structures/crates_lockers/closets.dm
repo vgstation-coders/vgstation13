@@ -25,7 +25,7 @@
 	var/has_electronics = 0
 	var/has_lock_type = null //The type this closet should be converted to if made ID secured
 	var/has_lockless_type = null //The type this closet should be converted to if made no longer ID secured
-	var/obj/item/weapon/circuitboard/airlock/electronics
+	var/obj/item/circuitboard/airlock/electronics
 
 	starting_materials = list(MAT_IRON = 2*CC_PER_SHEET_METAL)
 	w_type = RECYK_METAL
@@ -216,7 +216,7 @@
 		return src.close(user)
 	return src.open(user)
 
-/obj/structure/closet/proc/add_lock(var/obj/item/weapon/circuitboard/airlock/E, var/mob/user)
+/obj/structure/closet/proc/add_lock(var/obj/item/circuitboard/airlock/E, var/mob/user)
 	if(has_lock_type && !electronics && E && E.icon_state != "door_electronics_smoked")
 		E.playtoolsound(src, 100)
 		user.visible_message("[user] is installing electronics on \the [src].", "You start to install electronics into \the [src].")
@@ -267,9 +267,9 @@
 		to_chat(user, "<span class='notice'>You can't get the electronics out</span>")
 
 /obj/structure/closet/proc/dump_electronics()
-	var/obj/item/weapon/circuitboard/airlock/E
+	var/obj/item/circuitboard/airlock/E
 	if (!electronics)
-		E = new/obj/item/weapon/circuitboard/airlock(loc)
+		E = new/obj/item/circuitboard/airlock(loc)
 		if(req_access && req_access.len)
 			E.conf_access = req_access
 		else if(req_one_access && req_one_access.len)
@@ -318,7 +318,7 @@
 
 // this should probably use dump_contents()
 /obj/structure/closet/ex_act(severity)
-	var/obj/item/weapon/circuitboard/airlock/E
+	var/obj/item/circuitboard/airlock/E
 	switch(severity)
 		if(1)
 			broken = 1
@@ -431,11 +431,11 @@
 			A.forceMove(src.loc)
 		qdel(src)
 
-/obj/structure/closet/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/closet/attackby(obj/item/W as obj, mob/user as mob)
 	if(src.opened)
-		if(istype(W, /obj/item/weapon/grab))
+		if(istype(W, /obj/item/grab))
 			if(src.large)
-				var/obj/item/weapon/grab/G = W
+				var/obj/item/grab/G = W
 				src.MouseDropTo(G.affecting, user)	//act like they were dragged onto the closet
 			else
 				to_chat(user, "<span class='notice'>The locker is too small to stuff [W] into!</span>")
@@ -443,7 +443,7 @@
 			return 0
 
 		if(iswelder(W) && canweld())
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			materials.makeSheets(src)
@@ -459,14 +459,14 @@
 	else if(istype(W, /obj/item/stack/package_wrap))
 		return
 	else if(iswelder(W) && canweld())
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		src.welded =! src.welded
 		src.update_icon()
 		for(var/mob/M in viewers(src))
 			M.show_message("<span class='warning'>[src] has been [welded?"welded shut":"unwelded"] by [user.name].</span>", 1, "You hear welding.", 2)
-	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later
+	else if(istype(W, /obj/item/circuitboard/airlock) && src.has_lock_type) //testing with crowbars for now, will use circuits later
 		add_lock(W, user)
 		return
 	else if(!place(user, W))

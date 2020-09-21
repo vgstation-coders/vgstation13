@@ -36,7 +36,7 @@
 	armor = list(melee = 30, bullet = 25, laser = 15, energy = 15, bomb = 15, bio = 100, rad = 30)
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/radio, /obj/item/weapon/gun, /obj/item/weapon/grenade)
+	allowed = list(/obj/item/device/flashlight, /obj/item/tank, /obj/item/device/radio, /obj/item/gun, /obj/item/grenade)
 	siemens_coefficient = 0.6
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	var/suit_active = FALSE

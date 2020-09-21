@@ -28,7 +28,7 @@
 	var/health = 80			// the turret's health
 	var/locked = 1			// if the turret's behaviour control access is locked
 
-	var/obj/item/weapon/gun/installed = null		// the type of weapon installed
+	var/obj/item/gun/installed = null		// the type of weapon installed
 
 	var/reqpower = 750 //power used per shot
 
@@ -61,13 +61,13 @@
 
 /obj/machinery/porta_turret/proc/update_gun()
 	if(!installed)// if for some reason the turret has no gun (ie, admin spawned) it resorts to basic taser shots
-		installed = new /obj/item/weapon/gun/energy/taser(src)
+		installed = new /obj/item/gun/energy/taser(src)
 
 	else
-		var/obj/item/weapon/gun/energy/E = installed
+		var/obj/item/gun/energy/E = installed
 
 		switch(E.type)
-			if(/obj/item/weapon/gun/energy/tag/blue)
+			if(/obj/item/gun/energy/tag/blue)
 				lasercolor = "b"
 				req_access = list(access_maint_tunnels)
 				check_records = 0
@@ -76,7 +76,7 @@
 				stun_all = 0
 				check_anomalies = 0
 
-			if(/obj/item/weapon/gun/energy/tag/red)
+			if(/obj/item/gun/energy/tag/red)
 				lasercolor = "r"
 				req_access = list(access_maint_tunnels)
 				check_records = 0
@@ -206,8 +206,8 @@ Status: []<BR>"},
 			cover.visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
 		else //But when unsecured the cover is gone, so it shows the message itself
 			visible_message("<span class='warning'>[src] hums oddly...</span>", "<span class='warning'>You hear an odd humming.</span>")
-		if(istype(installed, /obj/item/weapon/gun/energy/tag/red) || istype(installed, /obj/item/weapon/gun/energy/tag/red))
-			var/obj/item/weapon/gun/energy/E = installed
+		if(istype(installed, /obj/item/gun/energy/tag/red) || istype(installed, /obj/item/gun/energy/tag/red))
+			var/obj/item/gun/energy/E = installed
 			E.projectile_type = /obj/item/projectile/beam/lasertag/omni //if you manage to get this gun back out, good for you
 		emagged = 1
 		req_access = list()
@@ -261,7 +261,7 @@ Status: []<BR>"},
 			invisibility = 0
 			qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
 
-	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	else if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
 		if (allowed(user))
 			locked = !src.locked
@@ -526,40 +526,40 @@ Status: []<BR>"},
 			return PERP_LEVEL_ARREST + rand(PERP_LEVEL_ARREST, PERP_LEVEL_ARREST*5)
 
 	if(auth_weapons) // check for weapon authorization
-		if((isnull(perp.wear_id)) || (istype(perp.wear_id.GetID(), /obj/item/weapon/card/id/syndicate)))
+		if((isnull(perp.wear_id)) || (istype(perp.wear_id.GetID(), /obj/item/card/id/syndicate)))
 
 			if((src.allowed(perp)) && !(src.lasercolor)) // if the perp has security access, return 0
 				return 0
 
 			for(var/obj/item/G in perp.held_items)
-				if(istype(G, /obj/item/weapon/gun))
-					if(istype(G, /obj/item/weapon/gun/projectile/shotgun))
+				if(istype(G, /obj/item/gun))
+					if(istype(G, /obj/item/gun/projectile/shotgun))
 						continue
-				else if(!istype(G, /obj/item/weapon/melee/baton))
+				else if(!istype(G, /obj/item/melee/baton))
 					continue
 				//Scan for guns and stun batons. Bartender's shotgun doesn't trigger the turret
 
 				threatcount += PERP_LEVEL_ARREST
 
-			if(istype(perp.belt, /obj/item/weapon/gun) || istype(perp.belt, /obj/item/weapon/melee/baton))
+			if(istype(perp.belt, /obj/item/gun) || istype(perp.belt, /obj/item/melee/baton))
 				threatcount += PERP_LEVEL_ARREST/2
 
 	if((src.lasercolor) == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
 		threatcount = 0//But does not target anyone else
 		if(iswearingredtag(perp))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
+		if(perp.find_held_item_by_type(/obj/item/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/red))
+		if(istype(perp.belt, /obj/item/gun/energy/tag/red))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if((src.lasercolor) == "r")
 		threatcount = 0
 		if(iswearingbluetag(perp))
 			threatcount += PERP_LEVEL_ARREST
-		if(perp.find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
+		if(perp.find_held_item_by_type(/obj/item/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST
-		if(istype(perp.belt, /obj/item/weapon/gun/energy/tag/blue))
+		if(istype(perp.belt, /obj/item/gun/energy/tag/blue))
 			threatcount += PERP_LEVEL_ARREST/2
 
 	if (src.check_records) // if the turret can check the records, check if they are set to *Arrest* on records
@@ -567,7 +567,7 @@ Status: []<BR>"},
 
 			var/perpname = perp.name
 			if (perp.wear_id)
-				var/obj/item/weapon/card/id/id = perp.wear_id.GetID()
+				var/obj/item/card/id/id = perp.wear_id.GetID()
 				if (id)
 					perpname = id.registered_name
 
@@ -612,12 +612,12 @@ Status: []<BR>"},
 //		 //Shooting Code:
 	playsound(src, installed.fire_sound, 75, 1)
 	var/obj/item/projectile/A
-	if(istype(installed, /obj/item/weapon/gun/projectile/roulette_revolver))
-		var/obj/item/weapon/gun/projectile/roulette_revolver/R = installed
+	if(istype(installed, /obj/item/gun/projectile/roulette_revolver))
+		var/obj/item/gun/projectile/roulette_revolver/R = installed
 		R.choose_projectile()
 		A = new R.in_chamber.type(loc)
 	else
-		var/obj/item/weapon/gun/energy/E = installed
+		var/obj/item/gun/energy/E = installed
 		A = new E.projectile_type(loc)
 	A.original = target
 	A.starting = T
@@ -652,7 +652,7 @@ Status: []<BR>"},
 	density=1
 	var/build_step = 0 // the current step in the building process
 	var/finish_name="turret" // the name applied to the product turret
-	var/obj/item/weapon/gun/energy/installed = null // the gun installed
+	var/obj/item/gun/energy/installed = null // the gun installed
 	machine_flags = SHUTTLEWRENCH
 
 
@@ -700,7 +700,7 @@ Status: []<BR>"},
 				return
 
 			else if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				if (WT.do_weld(user, src, 20, 5))
 					if(gcDestroyed)
 						return
@@ -712,7 +712,7 @@ Status: []<BR>"},
 
 
 		if(3)
-			if(istype(W, /obj/item/weapon/gun/energy) || istype(W, /obj/item/weapon/gun/projectile/roulette_revolver)) // the gun installation part
+			if(istype(W, /obj/item/gun/energy) || istype(W, /obj/item/gun/projectile/roulette_revolver)) // the gun installation part
 				if(!user.drop_item(W, src))
 					to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 					return
@@ -769,7 +769,7 @@ Status: []<BR>"},
 
 		if(7)
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				if(WT.do_weld(user, src, 30,5))
 					build_step = 8
 					to_chat(user, "<span class='notice'>You weld the turret's armor down.</span>")
@@ -789,7 +789,7 @@ Status: []<BR>"},
 				build_step = 6
 				return
 
-	if (istype(W, /obj/item/weapon/pen)) // you can rename turrets like bots!
+	if (istype(W, /obj/item/pen)) // you can rename turrets like bots!
 		var/t = input(user, "Enter new turret name", src.name, src.finish_name) as text
 		t = copytext(sanitize(t), 1, MAX_MESSAGE_LEN)
 		if (!t)
@@ -855,5 +855,5 @@ Status: []<BR>"},
 	emagged = 1
 
 /obj/machinery/porta_turret/stationary/New()
-	installed = new/obj/item/weapon/gun/energy/laser(src)
+	installed = new/obj/item/gun/energy/laser(src)
 	..()

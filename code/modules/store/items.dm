@@ -4,17 +4,17 @@
 /datum/storeitem
 	var/name="Thing"
 	var/desc="It's a thing."
-	var/typepath=/obj/item/weapon/storage/box
+	var/typepath=/obj/item/storage/box
 	var/cost=0
 	var/stock = -1 //-1 = unlimited stock. Any other value means the item will become unavailable at 0.
 	var/category = "misc"
 
 /datum/storeitem/proc/deliver(var/mob/user,var/obj/machinery/computer/merch/merchcomp)
-	if(istype(typepath,/obj/item/weapon/storage))
+	if(istype(typepath,/obj/item/storage))
 		var/thing = new typepath(merchcomp.loc)
 		user.put_in_hands(thing)
 	//else if(istype(typepath,/obj/item))
-	//	var/obj/item/weapon/storage/box/box=new(loc)
+	//	var/obj/item/storage/box/box=new(loc)
 	//	new typepath(box)
 	//	box.name="[name] package"
 	//	box.desc="A special gift for doing your job."
@@ -29,13 +29,13 @@
 /datum/storeitem/menu1
 	name = "Fast-Food Menu"
 	desc = "The normal sized average american meal. Courtesy of Nanotrasen."
-	typepath = /obj/item/weapon/storage/bag/food/menu1
+	typepath = /obj/item/storage/bag/food/menu1
 	cost = 25
 
 /datum/storeitem/menu2
 	name = "Fast-Food Menu (XL)"
 	desc = "For when you're 100% starved and want to become fat in 1 easy step."
-	typepath = /obj/item/weapon/storage/bag/food/menu2
+	typepath = /obj/item/storage/bag/food/menu2
 	cost = 50
 
 /////////////////////////////
@@ -44,7 +44,7 @@
 /datum/storeitem/pen
 	name = "Pen"
 	desc = "Just a simple pen."
-	typepath = /obj/item/weapon/pen
+	typepath = /obj/item/pen
 	cost = 2
 
 /datum/storeitem/wrapping_paper
@@ -65,13 +65,13 @@
 /datum/storeitem/diskettebox
 	name = "Diskette Box"
 	desc = "A lockable box for storing data disks. Comes with a few useless blank disks."
-	typepath = /obj/item/weapon/storage/lockbox/diskettebox/open/blanks
+	typepath = /obj/item/storage/lockbox/diskettebox/open/blanks
 	cost = 20
 
 /datum/storeitem/diskettebox_large
 	name = "Large Diskette Box"
 	desc = "A larger lockable box for storing data disks. Comes with a few useless blank disks."
-	typepath = /obj/item/weapon/storage/lockbox/diskettebox/large/open/blanks
+	typepath = /obj/item/storage/lockbox/diskettebox/large/open/blanks
 	cost = 50
 
 /////////////////////////////
@@ -80,25 +80,25 @@
 /datum/storeitem/snap_pops
 	name = "Snap-Pops"
 	desc = "Ten-thousand-year-old chinese fireworks: IN SPACE"
-	typepath = /obj/item/weapon/storage/box/snappops
+	typepath = /obj/item/storage/box/snappops
 	cost = 10
 
 /datum/storeitem/crayons
 	name = "Crayons"
 	desc = "Let security know how they're doing by scrawling lovenotes all over their hallways."
-	typepath = /obj/item/weapon/storage/fancy/crayons
+	typepath = /obj/item/storage/fancy/crayons
 	cost = 15 
 
 /datum/storeitem/beachball
 	name = "Beach Ball"
 	desc = "Summer up your office with this cheap vinyl beachball made by prisoners!"
-	typepath = /obj/item/weapon/beach_ball
+	typepath = /obj/item/beach_ball
 	cost = 5
 
 /datum/storeitem/dorkcube
 	name = "Loot Box"
 	desc = "A single month subscription to Loot Box!"
-	typepath = /obj/item/weapon/winter_gift/dorkcube
+	typepath = /obj/item/winter_gift/dorkcube
 	cost = 30
 
 /datum/storeitem/unecards
@@ -135,13 +135,13 @@
 /datum/storeitem/wallet
 	name = "Wallet"
 	desc = "A convenient way to carry IDs, credits, coins, papers, and a bunch of other small items."
-	typepath = /obj/item/weapon/storage/wallet
+	typepath = /obj/item/storage/wallet
 	cost = 30
 
 /datum/storeitem/photo_album
 	name = "Photo Album"
 	desc = "Clearly all your photos of the clown's shenanigans deserve this investment."
-	typepath = /obj/item/weapon/storage/photo_album
+	typepath = /obj/item/storage/photo_album
 	cost = 30
 
 /datum/storeitem/poster
@@ -168,5 +168,5 @@
 /datum/storeitem/valentinechocolatebar
 	name = "Valentine's Day chocolate bar"
 	desc = "Show your loved ones how you feel on this special occasion!"
-	typepath = /obj/item/weapon/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
+	typepath = /obj/item/reagent_containers/food/snacks/chocolatebar/wrapped/valentine
 	cost = 80

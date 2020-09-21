@@ -1,4 +1,4 @@
-/obj/item/weapon/boomerang
+/obj/item/boomerang
 	name = "boomerang"
 	desc = "A heavy, curved piece of wood used by Space Australians for hunting, sport, entertainment, cooking, religious rituals and warfare. When thrown, it will either deal a devastating blow to somebody's head, or return back to the thrower." //also used for shitposting
 	icon = 'icons/obj/weapons.dmi'
@@ -15,12 +15,12 @@
 	autoignition_temperature = AUTOIGNITION_WOOD
 	fire_fuel = 3
 
-/obj/item/weapon/boomerang/Destroy()
+/obj/item/boomerang/Destroy()
 	..()
 
 	throwing = 0
 
-/obj/item/weapon/boomerang/toy
+/obj/item/boomerang/toy
 	name = "toy boomerang"
 	desc = "A small plastic boomerang for children."
 
@@ -34,7 +34,7 @@
 	starting_materials = list(MAT_PLASTIC = 1200)
 	melt_temperature = MELTPOINT_PLASTIC
 
-/obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = 1)
+/obj/item/boomerang/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
 		return ..()
 
@@ -77,7 +77,7 @@
 
 	..(original, range, speed, override, fly_speed = 1)
 
-/obj/item/weapon/boomerang/throw_impact(atom/hit_atom, var/speed, user)
+/obj/item/boomerang/throw_impact(atom/hit_atom, var/speed, user)
 	if(iscarbon(hit_atom) && !isslime(hit_atom))
 		if(user == hit_atom)
 			var/mob/living/carbon/L = hit_atom

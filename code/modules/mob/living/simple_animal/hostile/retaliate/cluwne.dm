@@ -97,7 +97,7 @@
 	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 	health = currenthealth
 	//only knowledge can kill a cluwne
-	if(istype(O,/obj/item/weapon/book))
+	if(istype(O,/obj/item/book))
 		gib()
 		return
 	/*if(O.force)
@@ -183,8 +183,8 @@
 
 	melee_damage_type = "BRAIN"
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/weapon/pen)) //Renaming
+/mob/living/simple_animal/hostile/retaliate/cluwne/goblin/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/pen)) //Renaming
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this clown goblin?", "Clown Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"
@@ -219,8 +219,8 @@
 	melee_damage_type = "BRAIN"
 	var/spacedrugs_chance = 30
 
-/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/weapon/pen)) //Renaming
+/mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/pen)) //Renaming
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this psychedelic clown goblin?", "Clown Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"

@@ -33,7 +33,7 @@
 /obj/item/offhand/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
-	if(istype(target, /obj/item/weapon/storage)) //we place automatically
+	if(istype(target, /obj/item/storage)) //we place automatically
 		return
 	if(wielding)
 		if(!target.attackby(wielding, user))
@@ -57,7 +57,7 @@
 /*
  * Fireaxe
  */
-/obj/item/weapon/fireaxe  // DEM AXES MAN, marker -Agouri
+/obj/item/fireaxe  // DEM AXES MAN, marker -Agouri
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "fireaxe0"
 	hitsound = "sound/weapons/bloodyslice.ogg"
@@ -72,18 +72,18 @@
 	flags = FPRINT | TWOHANDABLE | SLOWDOWN_WHEN_CARRIED
 	slowdown = FIREAXE_SLOWDOWN
 
-/obj/item/weapon/fireaxe/update_wield(mob/user)
+/obj/item/fireaxe/update_wield(mob/user)
 	..()
 	item_state = "fireaxe[wielded ? 1 : 0]"
 	force = wielded ? 40 : initial(force)
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/fireaxe/suicide_act(mob/user)
+/obj/item/fireaxe/suicide_act(mob/user)
 		to_chat(viewers(user), "<span class='danger'>[user] is smashing \himself in the head with the [src.name]! It looks like \he's commit suicide!</span>")
 		return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
+/obj/item/fireaxe/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
 	if(!proximity)
 		return
 	..()
@@ -103,7 +103,7 @@
 /*
  * High-Frequency Blade
  */
-/obj/item/weapon/katana/hfrequency
+/obj/item/katana/hfrequency
 	icon_state = "hfrequency0"
 	item_state = "hfrequency0"
 	name = "high-frequency blade"
@@ -119,7 +119,7 @@
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_MAGNETS + "=4;" + Tc_COMBAT + "=5"
 
-/obj/item/weapon/katana/hfrequency/update_wield(mob/user)
+/obj/item/katana/hfrequency/update_wield(mob/user)
 	..()
 	item_state = "hfrequency[wielded ? 1 : 0]"
 	force = wielded ? 200 : 50
@@ -129,7 +129,7 @@
 		user.update_inv_hands()
 	return
 
-/obj/item/weapon/katana/hfrequency/IsShield()
+/obj/item/katana/hfrequency/IsShield()
 	if(wielded)
 		return 1
 	else
@@ -137,7 +137,7 @@
 
 
 //spears
-/obj/item/weapon/spear
+/obj/item/spear
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "spearglass0"
 	var/base_state = "spearglass"
@@ -155,7 +155,7 @@
 
 	var/base_force = 10
 
-/obj/item/weapon/spear/update_wield(mob/user)
+/obj/item/spear/update_wield(mob/user)
 	icon_state = "[base_state][wielded ? 1 : 0]"
 	item_state = "[base_state][wielded ? 1 : 0]"
 
@@ -167,7 +167,7 @@
 		user.update_inv_hands()
 	return
 
-/obj/item/weapon/spear/attackby(obj/item/weapon/W, mob/user)
+/obj/item/spear/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/organ/external/head))
 		if(loc == user)
@@ -175,7 +175,7 @@
 		var/obj/structure/headpole/H = new (get_turf(src), W, src)
 		user.drop_item(W, H, force_drop = 1)
 
-/obj/item/weapon/spear/wooden
+/obj/item/spear/wooden
 	name = "steel spear"
 	desc = "An ancient weapon of an ancient design, with a smooth wooden handle and a sharp steel blade."
 	icon_state = "spear0"
@@ -220,7 +220,7 @@
 			var/client/C = user.client
 			C.changeView(C.view - 7)
 
-/obj/item/weapon/bloodlust
+/obj/item/bloodlust
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "bloodlust0"
 	name = "high-frequency pincer blade \"bloodlust\""
@@ -238,7 +238,7 @@
 	origin_tech = Tc_COMBAT + "=6" + Tc_SYNDICATE + "=6"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/bloodlust/update_wield(mob/user)
+/obj/item/bloodlust/update_wield(mob/user)
 	..()
 	icon_state = "bloodlust[wielded ? 1 : 0]"
 	item_state = icon_state
@@ -255,7 +255,7 @@
 	else
 		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
-/obj/item/weapon/bloodlust/attack(target as mob, mob/living/user)
+/obj/item/bloodlust/attack(target as mob, mob/living/user)
 	if(isliving(target))
 		playsound(target, get_sfx("machete_hit"),50, 0)
 	if(clumsy_check(user) && prob(50))
@@ -265,32 +265,32 @@
 		return
 	..()
 
-/obj/item/weapon/bloodlust/proc/mob_moved(atom/movable/mover)
+/obj/item/bloodlust/proc/mob_moved(atom/movable/mover)
 	if(iscarbon(mover) && wielded)
 		for(var/obj/effect/plantsegment/P in range(mover,0))
 			qdel(P)
 
-/obj/item/weapon/bloodlust/IsShield()
+/obj/item/bloodlust/IsShield()
 	if(wielded)
 		return 1
 	else
 		return 0
 
-/obj/item/weapon/bloodlust/pickup(mob/user)
+/obj/item/bloodlust/pickup(mob/user)
 	playsound(src.loc, 'sound/weapons/Genhit.ogg', 50, 1)
 	to_chat(user, "<span class='notice'>You attach [src] to your arm.</span>")
 	cant_drop = 1
 
-/obj/item/weapon/bloodlust/attackby(obj/item/weapon/W, mob/living/user)
+/obj/item/bloodlust/attackby(obj/item/W, mob/living/user)
 	..()
 	if(W.is_screwdriver(user) && user.is_holding_item(src))
 		W.playtoolsound(loc, 50)
 		to_chat(user, "<span class='notice'>You detach [src] from your arm.</span>")
-		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
-		new /obj/item/weapon/melee/energy/hfmachete(user.loc)
+		new /obj/item/melee/energy/hfmachete(user.loc)
+		new /obj/item/melee/energy/hfmachete(user.loc)
 		qdel(src)
 
-/obj/item/weapon/bloodlust/suicide_act(mob/user)
+/obj/item/bloodlust/suicide_act(mob/user)
 	. = (SUICIDE_ACT_OXYLOSS)
 	user.visible_message("<span class='danger'>[user] is putting \his neck between \the [src]s blades! It looks like \he's trying to commit suicide.</span>")
 	spawn(2 SECONDS) //Adds drama.

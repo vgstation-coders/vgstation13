@@ -69,7 +69,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	var/temp = ""
 	var/canclear = 1
 	var/authenticated = 0
-	circuit = "/obj/item/weapon/circuitboard/forensic_computer"
+	circuit = "/obj/item/circuitboard/forensic_computer"
 	light_color = LIGHT_COLOR_RED
 
 //Here's the structure for files: each entry is a list, and entry one in that list is the string of their
@@ -83,7 +83,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 	var/list/files
 //This holds objects (1) without prints, and their fibers(2) and blood(3).
 	var/list/misc
-	var/obj/item/weapon/f_card/card
+	var/obj/item/f_card/card
 
 	var/scan_data = ""
 	var/scan_name = ""
@@ -167,13 +167,13 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			var/obj/item/I = M.get_active_hand()
 			if(I && istype(I))
 				if(isgripper(I))
-					var/obj/item/weapon/gripper/G = I
+					var/obj/item/gripper/G = I
 					if(G.wrapped)
 						scanning = G.wrapped //We add it as scanned object first because we'll lose the wrapped reference once we drop it.
 						G.drop_item(G.wrapped, src)
 				else
-					if(istype(I, /obj/item/weapon/storage/evidencebag) && I.contents.len)
-						var/obj/item/weapon/storage/evidencebag/EVB = I
+					if(istype(I, /obj/item/storage/evidencebag) && I.contents.len)
+						var/obj/item/storage/evidencebag/EVB = I
 						scanning = EVB.contents[1]
 						EVB.remove_from_storage(scanning, src, TRUE, TRUE)
 					else
@@ -184,9 +184,9 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		if("card")  //Processing a fingerprint card.
 			var/mob/M = usr
 			var/obj/item/I = M.get_active_hand()
-			if(!(I && istype(I,/obj/item/weapon/f_card)))
+			if(!(I && istype(I,/obj/item/f_card)))
 				I = card
-			if(I && istype(I,/obj/item/weapon/f_card))
+			if(I && istype(I,/obj/item/f_card))
 				card = I
 				if(!card.fingerprints)
 					card.fingerprints = list()
@@ -281,7 +281,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			temp += "<br><a href='?src=\ref[src];operation=database'>{Return}</a>"
 		if("databaseprint") //Printing from the "files" database.
 			if(files)
-				var/obj/item/weapon/paper/P = new(loc)
+				var/obj/item/paper/P = new(loc)
 				var/list/dossier = files[href_list["identifier"]]
 				P.name = "\improper Database File ([dossier[2]])"
 				P.overlays += image(icon = P.icon, icon_state = "paper_words")
@@ -361,7 +361,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			temp += "<br><a href='?src=\ref[src];operation=database'>{Return}</a>"
 		if("auxiliaryprint") //Printing from the "misc" database.
 			if(misc)
-				var/obj/item/weapon/paper/P = new(loc)
+				var/obj/item/paper/P = new(loc)
 				var/list/outputs = misc[href_list["identifier"]]
 				P.name = "\improper Auxiliary Database File ([outputs[3]])"
 				P.overlays += image(icon = P.icon, icon_state = "paper_words")
@@ -395,7 +395,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 			else
 				to_chat(usr, "ERROR.  Database not found!<br>")
 		if("scan")
-			if(istype(scanning,/obj/item/weapon/f_card))
+			if(istype(scanning,/obj/item/f_card))
 				card = scanning
 				scanning = initial(scanning)
 				process_card()
@@ -465,7 +465,7 @@ var/const/FINGERPRINT_COMPLETE = 6	//This is the output of the stringpercent(pri
 		if("print") //Printing scan data
 			if(scan_data)
 				temp = "Scan Data Printed."
-				var/obj/item/weapon/paper/P = new(loc)
+				var/obj/item/paper/P = new(loc)
 				P.name = "\improper Scan Data ([scan_name])"
 				P.info = "<tt>[scan_data]</tt>"
 				P.overlays += image(icon = P.icon, icon_state = "paper_words")

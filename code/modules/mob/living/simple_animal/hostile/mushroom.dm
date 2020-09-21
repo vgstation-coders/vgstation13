@@ -9,7 +9,7 @@
 	maxHealth = 10
 	health = 10
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	meat_type = /obj/item/reagent_containers/food/snacks/hugemushroomslice
 	size = SIZE_SMALL
 
 	response_help  = "pets"
@@ -128,7 +128,7 @@
 		bruised = 1
 
 /mob/living/simple_animal/hostile/mushroom/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom))
+	if(istype(I, /obj/item/reagent_containers/food/snacks/grown/mushroom))
 		if(stat == DEAD && !recovery_cooldown)
 			Recover()
 			qdel(I)

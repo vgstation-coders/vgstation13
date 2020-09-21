@@ -130,9 +130,9 @@
 			O.show_message("<span class='warning'>[user] slices the [name] apart!</span>", 1)
 	healthcheck()
 
-/obj/effect/alien/resin/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	/*if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
+/obj/effect/alien/resin/attackby(obj/item/W as obj, mob/living/user as mob)
+	/*if (istype(W, /obj/item/grab) && get_dist(src,user)<2)
+		var/obj/item/grab/G = W
 		if(isalien(user)&&(ishuman(G.affecting)||ismonkey(G.affecting)))
 		//Only aliens can stick humans and monkeys into resin walls. Also, the wall must not have a person inside already.
 			if(!affecting)
@@ -315,7 +315,7 @@
 			if (prob(5))
 				qdel(src)
 
-/obj/effect/alien/weeds/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/effect/alien/weeds/attackby(var/obj/item/W, var/mob/user)
 	user.delayNextAttack(10)
 	if(W.attack_verb && W.attack_verb.len)
 		visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>")
@@ -532,7 +532,7 @@
 	healthcheck()
 
 
-/obj/effect/alien/egg/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/effect/alien/egg/attackby(var/obj/item/W, var/mob/user)
 	user.delayNextAttack(10)
 	if(W.attack_verb && W.attack_verb.len)
 		src.visible_message("<span class='warning'><B>[user] [pick(W.attack_verb)] \the [src] with \the [W]!</span>")

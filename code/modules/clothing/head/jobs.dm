@@ -116,7 +116,7 @@
 	siemens_coefficient = 0.9
 	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/head/beret/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/head/beret/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/gloves/white))
 		new /mob/living/simple_animal/hostile/retaliate/faguette/goblin(get_turf(src))

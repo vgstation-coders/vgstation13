@@ -268,7 +268,7 @@
 	if(!changeling)
 		return
 
-	var/obj/item/weapon/grab/G = src.get_active_hand()
+	var/obj/item/grab/G = src.get_active_hand()
 	if(!istype(G))
 		to_chat(src, "<span class='warning'>We must be grabbing a creature in our active hand to absorb them.</span>")
 		return
@@ -1153,7 +1153,7 @@ var/list/datum/dna/hivemind_bank = list()
 	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
 	if(!changeling)
 		return 0
-	for(var/obj/item/weapon/armblade/W in src)
+	for(var/obj/item/armblade/W in src)
 		visible_message("<span class='warning'>With a sickening crunch, [src] reforms their arm blade into an arm!</span>",
 		"<span class='notice'>We assimilate the weapon back into our body.</span>",
 		"<span class='italics'>You hear organic matter ripping and tearing!</span>")
@@ -1173,7 +1173,7 @@ var/list/datum/dna/hivemind_bank = list()
 				break
 	if(good_hand)
 		drop_item(held_items[good_hand], force_drop = 1)
-		var/obj/item/weapon/armblade/A = new (src)
+		var/obj/item/armblade/A = new (src)
 		put_in_hand(good_hand, A)
 		H.visible_message("<span class='warning'>A grotesque blade forms around [name]\'s arm!</span>",
 			"<span class='warning'>Our arm twists and mutates, transforming it into a deadly blade.</span>",

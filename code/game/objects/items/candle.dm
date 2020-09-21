@@ -22,7 +22,7 @@
 	else i = 3
 	icon_state = "candle[i][lit ? "_lit" : ""]"
 
-/obj/item/candle/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/candle/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(source_temperature && (W.is_hot() || W.sharpness_flags & (HOT_EDGE)))
 		light("<span class='notice'>[user] lights [src] with [W].</span>")
@@ -68,7 +68,7 @@
 		return source_temperature
 	return 0
 
-/obj/item/weapon/match/is_hot()
+/obj/item/match/is_hot()
 	if(lit)
 		return source_temperature
 	return 0
@@ -109,7 +109,7 @@
 	update_icon()
 	light("<span class='notice'>[user] flips \the [src]'s switch.</span>")
 
-/obj/item/candle/holo/attackby(obj/item/weapon/W, mob/user)
+/obj/item/candle/holo/attackby(obj/item/W, mob/user)
 	var/list/choices = list("red","blue","purple","green","yellow")
 	if(ismultitool(W))
 		wax = input("What color would do you want?","Color Selection") as anything in choices

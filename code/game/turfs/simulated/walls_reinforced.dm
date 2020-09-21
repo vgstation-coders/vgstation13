@@ -60,8 +60,8 @@
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/solder) && bullet_marks)
+		var/obj/item/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -81,7 +81,7 @@
 			playsound(src, 'sound/items/Welder.ogg', 10, 1)
 			remove_rot()
 			return
-		if(istype(W,/obj/item/weapon/soap))
+		if(istype(W,/obj/item/soap))
 			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
 			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
 			remove_rot()
@@ -134,7 +134,7 @@
 
 			//Repairing outer grille, use welding tool
 			else if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins mending the damage on \the [src]'s outer grille.</span>", \
 				"<span class='notice'>You begin mending the damage on \the [src]'s outer grille.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -148,7 +148,7 @@
 
 		if(WALLCOVERUNSECURED)
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -193,7 +193,7 @@
 			//Fix welding damage caused above, by welding shit into place again
 			else if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins fixing the welding damage on \the [src]'s external cover.</span>", \
 				"<span class='notice'>You begin fixing the welding damage on \the [src]'s external cover.</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -240,7 +240,7 @@
 		if(WALLRODSUNSECURED)
 			if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")
 
@@ -251,7 +251,7 @@
 					"<span class='notice'>You slice through \the [src]'s external support rods, exposing its internal cover.</span>")
 				return
 
-			if(istype(W, /obj/item/weapon/pickaxe/plasmacutter))
+			if(istype(W, /obj/item/pickaxe/plasmacutter))
 
 				user.visible_message("<span class='warning'>[user] begins slicing through \the [src]'s external support rods.</span>", \
 				"<span class='notice'>You begin slicing through \the [src]'s external support rods.</span>")
@@ -303,7 +303,7 @@
 			//Repair the external support rods welded through in the previous step, with a welding tool. Naturally
 			else if(iswelder(W))
 
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				if(WT.remove_fuel(1,user))
 					user.visible_message("<span class='notice'>[user] begins mending \the [src]'s external support rods.</span>", \
 					"<span class='notice'>You begin mending \the [src]'s external support rods.</span>")
@@ -322,9 +322,9 @@
 
 	//Drilling
 	//Needs a diamond drill or equivalent
-	if(istype(W, /obj/item/weapon/pickaxe))
+	if(istype(W, /obj/item/pickaxe))
 
-		var/obj/item/weapon/pickaxe/PK = W
+		var/obj/item/pickaxe/PK = W
 		if(!(PK.diggables & DIG_RWALLS))
 			return
 

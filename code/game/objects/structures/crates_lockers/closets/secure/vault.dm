@@ -33,13 +33,13 @@
 /obj/structure/closet/secure_closet/vault/armory/atoms_to_spawn()
 	if(Holiday == APRIL_FOOLS_DAY)
 		return list(
-			/obj/item/weapon/gun/projectile/rocketlauncher = 1,
+			/obj/item/gun/projectile/rocketlauncher = 1,
 			/obj/item/ammo_casing/rocket_rpg = 3,
 		)
 
 /obj/structure/closet/secure_closet/vault/armory/lawgiver/New()
 	..()
-	new /obj/item/weapon/storage/lockbox/lawgiver(src)
+	new /obj/item/storage/lockbox/lawgiver(src)
 
 /obj/structure/closet/secure_closet/vault/vault
 	req_access = list(access_heads_vault)

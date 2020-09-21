@@ -26,7 +26,7 @@
 	noghostspin = 0
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/janicart
 	var/amount_per_transfer_from_this = 5 //shit I dunno, adding this so syringes stop runtime erroring. --NeoFite
-	var/obj/item/weapon/storage/bag/trash/mybag	= null
+	var/obj/item/storage/bag/trash/mybag	= null
 
 	var/upgraded = 0
 
@@ -64,7 +64,7 @@
 			upgraded = 1
 			name = "upgraded [name]"
 			icon_state = "pussywagon_upgraded"
-	else if(istype(W, /obj/item/weapon/storage/bag/trash))
+	else if(istype(W, /obj/item/storage/bag/trash))
 		if(mybag)
 			to_chat(user, "<span class='warning'>There's already a [W.name] on \the [nick]!</span>")
 			return
@@ -72,7 +72,7 @@
 			to_chat(user, "<span class='notice'>You hook \the [W] onto \the [nick].</span>")
 			mybag = W
 
-/obj/structure/bed/chair/vehicle/janicart/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/structure/bed/chair/vehicle/janicart/mop_act(obj/item/mop/M, mob/user)
 	if(istype(M))
 		if(reagents.total_volume >= 2)
 			reagents.trans_to(M, 3)

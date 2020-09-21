@@ -144,7 +144,7 @@
 		return FALSE
 	. = ..()
 
-/obj/structure/mannequin/attackby(var/obj/item/weapon/W,var/mob/user)
+/obj/structure/mannequin/attackby(var/obj/item/W,var/mob/user)
 	if(W.is_wrench(user))
 		return wrenchAnchor(user, W, 5 SECONDS)
 	else if(user.a_intent == I_HURT)
@@ -773,10 +773,10 @@
 		)
 
 
-/obj/structure/block/attackby(var/obj/item/weapon/W,var/mob/user)
+/obj/structure/block/attackby(var/obj/item/W,var/mob/user)
 	if(W.is_wrench(user))
 		return wrenchAnchor(user, W, 5 SECONDS)
-	else if(istype(W, /obj/item/weapon/chisel))
+	else if(istype(W, /obj/item/chisel))
 
 		var/chosen_sculpture = input("Choose a sculpture type.", "[name]") as null|anything in available_sculptures
 
@@ -857,7 +857,7 @@
 			new part(loc)
 
 	if(prob(40))
-		var/obj/item/weapon/circuitboard/airlock/C = new(loc)
+		var/obj/item/circuitboard/airlock/C = new(loc)
 		C.one_access=!(req_access && req_access.len>0)
 		if(!C.one_access)
 			C.conf_access=req_access
@@ -874,7 +874,7 @@
 				qdel(src)
 			else
 				destroyed = 1
-				new /obj/item/weapon/shard(loc)
+				new /obj/item/shard(loc)
 				playsound(src, "shatter", 100, 1)
 				shield = 0
 				update_icon()
@@ -909,7 +909,7 @@
 		if(shield <= 0)
 			destroyed = 1
 			locked = 0
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			playsound(src, "shatter", 100, 1)
 			update_icon()
 		else
@@ -919,12 +919,12 @@
 		visible_message("\The [src] collapses.")
 		breakDown()
 
-/obj/structure/mannequin/cyber/attackby(var/obj/item/weapon/W,var/mob/user)
-	if(istype(W, /obj/item/weapon/card/id))
+/obj/structure/mannequin/cyber/attackby(var/obj/item/W,var/mob/user)
+	if(istype(W, /obj/item/card/id))
 		if(destroyed)
 			to_chat(user, "<span class='warning'>There is no longer any lock to toggle.</span>")
 		else
-			var/obj/item/weapon/card/id/I=W
+			var/obj/item/card/id/I=W
 			if(!check_access(I))
 				to_chat(user, "<span class='rose'>Access denied.</span>")
 				return
@@ -942,7 +942,7 @@
 		W.playtoolsound(T, 50)
 
 		if(do_after(user, src, 100))
-			var/obj/item/weapon/circuitboard/airlock/C = new(src)
+			var/obj/item/circuitboard/airlock/C = new(src)
 			C.one_access=!(req_access && req_access.len>0)
 
 			if(!C.one_access)
@@ -968,7 +968,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
@@ -984,7 +984,7 @@
 			if(health >= maxHealth)
 				to_chat(user, "<span class='warning'>Nothing to fix here!</span>")
 				return
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			if(WT.remove_fuel(5))
 				WT.playtoolsound(loc, 50)
 				health = min(health + 20, maxHealth)
@@ -1130,7 +1130,7 @@
 			),
 		list(
 			Co_DESC="The frame needs an airlock circuitboard.",
-			Co_KEY=/obj/item/weapon/circuitboard/airlock,
+			Co_KEY=/obj/item/circuitboard/airlock,
 			Co_AMOUNT = 1,
 			Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
 			)
@@ -1140,8 +1140,8 @@
 	if(!..())
 		return 0
 
-	if(istype(used_atom, /obj/item/weapon/circuitboard/airlock))
-		var/obj/item/weapon/circuitboard/airlock/circuit = used_atom
+	if(istype(used_atom, /obj/item/circuitboard/airlock))
+		var/obj/item/circuitboard/airlock/circuit = used_atom
 		var/obj/structure/mannequin_frame/const_holder = holder
 		if(circuit.one_access)
 			const_holder.req_access = null

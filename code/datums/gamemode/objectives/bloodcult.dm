@@ -95,7 +95,7 @@
 		if(player_turf.z != STATION_Z)//We only look for people currently aboard the station
 			continue
 		var/is_implanted = FALSE
-		for(var/obj/item/weapon/implant/loyalty/loyalty_implant in player)
+		for(var/obj/item/implant/loyalty/loyalty_implant in player)
 			if(loyalty_implant.implanted)
 				is_implanted = TRUE
 				break

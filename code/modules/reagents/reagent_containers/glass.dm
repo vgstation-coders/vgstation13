@@ -2,7 +2,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// (Mixing) Glass.
 ////////////////////////////////////////////////////////////////////////////////
-/obj/item/weapon/reagent_containers/glass
+/obj/item/reagent_containers/glass
 	name = " "
 	desc = " "
 	icon = 'icons/obj/chemical.dmi'
@@ -25,14 +25,14 @@
 		/obj/structure/closet,
 		/obj/structure/sink,
 		/obj/structure/centrifuge,
-		/obj/item/weapon/storage,
-		/obj/item/weapon/solder,
+		/obj/item/storage,
+		/obj/item/solder,
 		/obj/machinery/atmospherics/unary/cryo_cell,
 		/obj/machinery/dna_scannernew,
-		/obj/item/weapon/grenade/chem_grenade,
-		/obj/item/weapon/electrolyzer,
+		/obj/item/grenade/chem_grenade,
+		/obj/item/electrolyzer,
 		/obj/machinery/bot/medbot,
-		/obj/item/weapon/storage/secure/safe,
+		/obj/item/storage/secure/safe,
 		/obj/machinery/iv_drip,
 		/obj/machinery/disease2/incubator,
 		/obj/machinery/disease2/centrifuge,
@@ -44,27 +44,27 @@
 		/obj/machinery/sleeper,
 		/obj/machinery/anomaly,
 		/obj/machinery/bunsen_burner,
-		/obj/item/weapon/sword/venom,
-		/obj/item/weapon/cylinder,
+		/obj/item/sword/venom,
+		/obj/item/cylinder,
 		/obj/item/clothing/gloves/powerfist,
 		)
 
-/obj/item/weapon/reagent_containers/glass/get_rating()
+/obj/item/reagent_containers/glass/get_rating()
 	return volume / 50
 
-/obj/item/weapon/reagent_containers/glass/New()
+/obj/item/reagent_containers/glass/New()
 	..()
 	update_icon() //Used by all subtypes for reagent filling, and allows roundstart lids
 
-/obj/item/weapon/reagent_containers/glass/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/mop_act(obj/item/mop/M, mob/user)
 	return is_open_container()
 
-/obj/item/weapon/reagent_containers/glass/examine(mob/user)
+/obj/item/reagent_containers/glass/examine(mob/user)
 	..()
 	if(!is_open_container())
 		to_chat(user, "<span class='info'>An airtight lid seals it completely.</span>")
 
-/obj/item/weapon/reagent_containers/glass/attack_self()
+/obj/item/reagent_containers/glass/attack_self()
 	..()
 	if(is_open_container())
 		to_chat(usr, "<span class = 'notice'>You put the lid on \the [src].")
@@ -74,7 +74,7 @@
 		flags |= OPENCONTAINER
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
+/obj/item/reagent_containers/glass/afterattack(var/atom/target, var/mob/user, var/adjacency_flag, var/click_params)
 	if (!adjacency_flag)
 		return
 
@@ -89,15 +89,15 @@
 	if((transfer_result > 10) && (isturf(target) || istype(target, /obj/machinery/portable_atmospherics/hydroponics)))	//if we're splashing a decent amount of reagent on the floor
 		playsound(target, 'sound/effects/slosh.ogg', 25, 1)													//or in an hydro tray, then we make some noise.
 
-/obj/item/weapon/reagent_containers/glass/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+/obj/item/reagent_containers/glass/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 	attempt_heating(W, user)
 
-/obj/item/weapon/reagent_containers/glass/fits_in_iv_drip()
+/obj/item/reagent_containers/glass/fits_in_iv_drip()
 	return 1
 
-/obj/item/weapon/reagent_containers/glass/beaker
+/obj/item/reagent_containers/glass/beaker
 	name = "beaker"
 	desc = "A beaker. Can hold up to 50 units."
 	icon = 'icons/obj/chemical.dmi'
@@ -107,23 +107,23 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	layer = ABOVE_OBJ_LAYER //So it always gets layered above pills and bottles
 
-/obj/item/weapon/reagent_containers/glass/beaker/attackby(obj/item/weapon/W, mob/user)
-	if(src.type == /obj/item/weapon/reagent_containers/glass/beaker && istype(W, /obj/item/weapon/surgicaldrill)) //regular beakers only
+/obj/item/reagent_containers/glass/beaker/attackby(obj/item/W, mob/user)
+	if(src.type == /obj/item/reagent_containers/glass/beaker && istype(W, /obj/item/surgicaldrill)) //regular beakers only
 		to_chat(user, "You begin drilling holes into the bottom of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 60))
 			to_chat(user, "You drill six holes through the bottom of \the [src].")
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/cylinder/I = new (get_turf(user))
+				var/obj/item/cylinder/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/cylinder(get_turf(src.loc))
+				new /obj/item/cylinder(get_turf(src.loc))
 			qdel(src)
 		return
 	return ..()
 
-/obj/item/weapon/reagent_containers/glass/beaker/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/beaker/mop_act(obj/item/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)
 			switch(src.reagents.total_volume)
@@ -155,22 +155,22 @@
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 		return 1
 
-/obj/item/weapon/reagent_containers/glass/beaker/on_reagent_change()
+/obj/item/reagent_containers/glass/beaker/on_reagent_change()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/pickup(mob/user)
+/obj/item/reagent_containers/glass/beaker/pickup(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/dropped(mob/user)
+/obj/item/reagent_containers/glass/beaker/dropped(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/attack_hand()
+/obj/item/reagent_containers/glass/beaker/attack_hand()
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/update_icon()
+/obj/item/reagent_containers/glass/beaker/update_icon()
 	overlays.len = 0
 
 	if(!opaque && reagents && reagents.total_volume)
@@ -202,17 +202,17 @@
 		var/image/lid = image(icon, src, "lid_[initial(icon_state)]")
 		overlays += lid
 
-/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer
+/obj/item/reagent_containers/glass/beaker/erlenmeyer
 	name = "small erlenmeyer flask"
 	desc = "It's like a cute little snub-nosed beaker. Can hold up to 50 units."
 	icon_state = "erlenmeyersmall"
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer
+/obj/item/reagent_containers/glass/beaker/large/erlenmeyer
 	name = "erlenmeyer flask"
 	desc = "Colloquially known as the 'long beaker'. Can hold up to 100 units."
 	icon_state = "erlenmeyerlarge"
 
-/obj/item/weapon/reagent_containers/glass/beaker/large
+/obj/item/reagent_containers/glass/beaker/large
 	name = "large beaker"
 	desc = "A large beaker. Can hold up to 100 units."
 	icon_state = "beakerlarge"
@@ -220,27 +220,27 @@
 	volume = 100
 	possible_transfer_amounts = list(5,10,15,25,30,50,100)
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+/obj/item/reagent_containers/glass/beaker/large/plasma
 	name = "plasma beaker"
 	desc = "A beaker with plasma lining, designed to act as a catalyst for some particular reactions."
 	icon_state = "beakerplasma"
 	origin_tech = Tc_PLASMATECH + "=4;" + Tc_MATERIALS + "=4"
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter
+/obj/item/reagent_containers/glass/beaker/large/supermatter
 	name = "supermatter beaker"
 	desc = "A beaker with a supermatter sliver. It heats fluids inside, but holding it makes your hand feel strange..."
 	icon_state = "beakersupermatter"
 	origin_tech = Tc_POWERSTORAGE + "=4;" + Tc_MATERIALS + "=4"
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/New()
+/obj/item/reagent_containers/glass/beaker/large/supermatter/New()
 	..()
 	processing_objects += src
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/Destroy()
+/obj/item/reagent_containers/glass/beaker/large/supermatter/Destroy()
 	processing_objects -= src
 	..()
 
-/obj/item/weapon/reagent_containers/glass/beaker/large/supermatter/process()
+/obj/item/reagent_containers/glass/beaker/large/supermatter/process()
 	if(reagents.total_volume)
 		reagents.heating(9000, TEMPERATURE_PLASMA)
 	if(ishuman(loc))
@@ -248,7 +248,7 @@
 		var/mob/living/L = loc
 		L.apply_radiation(3, RAD_EXTERNAL)
 
-/obj/item/weapon/reagent_containers/glass/beaker/noreact
+/obj/item/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
 	icon_state = "beakernoreact"
@@ -258,7 +258,7 @@
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
 
-/obj/item/weapon/reagent_containers/glass/beaker/noreact/large
+/obj/item/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
 	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreactlarge"
@@ -266,7 +266,7 @@
 	volume = 100
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace
+/obj/item/reagent_containers/glass/beaker/bluespace
 	name = "bluespace beaker"
 	desc = "A newly-developed high-capacity beaker that uses advances in bluespace research. Can hold up to 200 units."
 	icon_state = "beakerbluespace"
@@ -278,7 +278,7 @@
 	origin_tech = Tc_BLUESPACE + "=2;" + Tc_MATERIALS + "=3"
 	opaque = TRUE
 
-/obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
+/obj/item/reagent_containers/glass/beaker/bluespace/large
 	name = "large bluespace beaker"
 	desc = "A prototype ultra-capacity beaker that uses advances in bluespace research. Can hold up to 300 units."
 	icon_state = "beakerbluespacelarge"
@@ -287,7 +287,7 @@
 	possible_transfer_amounts = list(5,10,15,25,30,50,100,150,200,300)
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial
+/obj/item/reagent_containers/glass/beaker/vial
 	name = "vial"
 	desc = "A small glass vial. Can hold up to 25 units."
 	icon_state = "vial"
@@ -295,60 +295,60 @@
 	volume = 25
 	possible_transfer_amounts = list(5,10,15,25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/beaker/vial/mop_act(obj/item/mop/M, mob/user)
 	return 0
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/on_reagent_change()
+/obj/item/reagent_containers/glass/beaker/vial/on_reagent_change()
 	..()
-	if (istype(loc,/obj/item/weapon/storage/fancy/vials) || istype(loc,/obj/item/weapon/storage/lockbox/vials))
-		var/obj/item/weapon/storage/S = loc
+	if (istype(loc,/obj/item/storage/fancy/vials) || istype(loc,/obj/item/storage/lockbox/vials))
+		var/obj/item/storage/S = loc
 		S.update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/uranium/New()
+/obj/item/reagent_containers/glass/beaker/vial/uranium/New()
 	..()
 	reagents.add_reagent(URANIUM, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tencarbon/New()
+/obj/item/reagent_containers/glass/beaker/vial/tencarbon/New()
 	..()
 	reagents.add_reagent(CARBON, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tenwater/New()
+/obj/item/reagent_containers/glass/beaker/vial/tenwater/New()
 	..()
 	reagents.add_reagent(WATER, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/tenantitox/New()
+/obj/item/reagent_containers/glass/beaker/vial/tenantitox/New()
 	..()
 	reagents.add_reagent(ANTI_TOXIN, 10)
 
-/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
+/obj/item/reagent_containers/glass/beaker/erlenmeyer/lemonlime/New()
 	..()
 	reagents.add_reagent(LEMON_LIME, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
+/obj/item/reagent_containers/glass/beaker/erlenmeyer/sodawater/New()
 	..()
 	reagents.add_reagent(SODAWATER, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/cryoxadone/New()
+/obj/item/reagent_containers/glass/beaker/cryoxadone/New()
 	..()
 	reagents.add_reagent(CRYOXADONE, 30)
 
-/obj/item/weapon/reagent_containers/glass/beaker/sulphuric/New()
+/obj/item/reagent_containers/glass/beaker/sulphuric/New()
 	..()
 	reagents.add_reagent(SACID, 50)
 
-/obj/item/weapon/reagent_containers/glass/beaker/slime/New()
+/obj/item/reagent_containers/glass/beaker/slime/New()
 	..()
 	reagents.add_reagent(SLIMEJELLY, 50)
 
-/obj/item/weapon/reagent_containers/glass/beaker/mednanobots
+/obj/item/reagent_containers/glass/beaker/mednanobots
 	name = "beaker 'nanobots'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/mednanobots/New()
+/obj/item/reagent_containers/glass/beaker/mednanobots/New()
 	..()
 	reagents.add_reagent("mednanobots", 25)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/bucket
+/obj/item/reagent_containers/glass/bucket
 	desc = "It's a bucket."
 	name = "bucket"
 	icon = 'icons/obj/janitor.dmi'
@@ -364,7 +364,7 @@
 	flags = FPRINT | OPENCONTAINER
 	slot_flags = SLOT_HEAD
 
-/obj/item/weapon/reagent_containers/glass/bucket/equipped(var/mob/M, var/slot)
+/obj/item/reagent_containers/glass/bucket/equipped(var/mob/M, var/slot)
 	..()
 	if(slot == slot_head)
 		if(reagents.total_volume)
@@ -374,7 +374,7 @@
 			visible_message("<span class='warning'>The bucket's content spills on [src]</span>")
 			reagents.clear_reagents()
 
-/obj/item/weapon/reagent_containers/glass/bucket/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/bucket/mop_act(obj/item/mop/M, mob/user)
 	if(..())
 		if (src.reagents.total_volume >= 1)
 			switch(src.reagents.total_volume)
@@ -406,21 +406,21 @@
 			to_chat(user, "<span class='notice'>Nothing left to wet [M] with!</span>")
 		return 1
 
-/obj/item/weapon/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
+/obj/item/reagent_containers/glass/bucket/attackby(var/obj/D, mob/user as mob)
 	if(isprox(D))
 		to_chat(user, "You add \the [D] to \the [src].")
 		qdel(D)
 		D = null
-		user.put_in_hands(new /obj/item/weapon/bucket_sensor)
+		user.put_in_hands(new /obj/item/bucket_sensor)
 		user.drop_from_inventory(src)
 		qdel(src)
 		return
 	attempt_heating(D, user)
 
-/obj/item/weapon/reagent_containers/glass/bucket/on_reagent_change()
+/obj/item/reagent_containers/glass/bucket/on_reagent_change()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/bucket/update_icon()
+/obj/item/reagent_containers/glass/bucket/update_icon()
 	overlays.len = 0
 
 	if(reagents.total_volume)
@@ -431,13 +431,13 @@
 
 		overlays += filling
 
-/obj/item/weapon/reagent_containers/glass/bucket/water_filled/New()
+/obj/item/reagent_containers/glass/bucket/water_filled/New()
 	..()
 	reagents.add_reagent(WATER, 150)
 	update_icon()
 
 /*
-/obj/item/weapon/reagent_containers/glass/blender_jug
+/obj/item/reagent_containers/glass/blender_jug
 	name = "Blender Jug"
 	desc = "A blender jug, part of a blender."
 	icon = 'icons/obj/kitchen.dmi'
@@ -453,7 +453,7 @@
 			if(76 to 100)
 				icon_state = "blender_jug_f"
 
-/obj/item/weapon/reagent_containers/glass/canister		//not used apparantly
+/obj/item/reagent_containers/glass/canister		//not used apparantly
 	desc = "It's a canister. Mainly used for transporting fuel."
 	name = "canister"
 	icon = 'icons/obj/tank.dmi'
@@ -468,7 +468,7 @@
 	volume = 120
 	flags = FPRINT
 
-/obj/item/weapon/reagent_containers/glass/dispenser
+/obj/item/reagent_containers/glass/dispenser
 	name = "reagent glass"
 	desc = "A reagent glass."
 	icon = 'icons/obj/chemical.dmi'
@@ -476,18 +476,18 @@
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
 
-/obj/item/weapon/reagent_containers/glass/dispenser/surfactant
+/obj/item/reagent_containers/glass/dispenser/surfactant
 	name = "reagent glass (surfactant)"
 	icon_state = "liquid"
 
-/obj/item/weapon/reagent_containers/glass/dispenser/surfactant/New()
+/obj/item/reagent_containers/glass/dispenser/surfactant/New()
 	..()
 	reagents.add_reagent(FLUOROSURFACTANT, 20)
 
 */
 
 //No idea if this actually works anymore. Please handle carefully
-/obj/item/weapon/reagent_containers/glass/kettle
+/obj/item/reagent_containers/glass/kettle
 	name = "Kettle"
 	desc = "A pot made for holding hot drinks. Can hold up to 75 units."
 	icon_state = "kettle"
@@ -497,14 +497,14 @@
 	amount_per_transfer_from_this = 10
 	flags = FPRINT  | OPENCONTAINER
 
-/obj/item/weapon/reagent_containers/glass/kettle/red
+/obj/item/reagent_containers/glass/kettle/red
 	icon_state = "kettle_red"
 
-/obj/item/weapon/reagent_containers/glass/kettle/blue
+/obj/item/reagent_containers/glass/kettle/blue
 	icon_state = "kettle_blue"
 
-/obj/item/weapon/reagent_containers/glass/kettle/purple
+/obj/item/reagent_containers/glass/kettle/purple
 	icon_state = "kettle_purple"
 
-/obj/item/weapon/reagent_containers/glass/kettle/green
+/obj/item/reagent_containers/glass/kettle/green
 	icon_state = "kettle_green"

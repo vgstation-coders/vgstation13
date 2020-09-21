@@ -11,14 +11,14 @@
 /obj/structure/closet/secure_closet/scientist/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/satchel_tox,
-			/obj/item/weapon/storage/backpack/messenger/tox,
+			/obj/item/storage/backpack/satchel_tox,
+			/obj/item/storage/backpack/messenger/tox,
 			),
 		/obj/item/clothing/under/rank/scientist,
 		/obj/item/clothing/suit/storage/labcoat/science,
 		/obj/item/clothing/shoes/white,
 		/obj/item/device/radio/headset/headset_sci,
-		/obj/item/weapon/tank/air,
+		/obj/item/tank/air,
 		/obj/item/clothing/mask/gas,
 	)
 
@@ -40,14 +40,14 @@
 		/obj/item/clothing/under/rank/research_director,
 		/obj/item/clothing/under/dress/dress_rd,
 		/obj/item/clothing/suit/storage/labcoat/rd,
-		/obj/item/weapon/cartridge/rd,
+		/obj/item/cartridge/rd,
 		/obj/item/clothing/shoes/white,
 		/obj/item/clothing/gloves/latex,
 		/obj/item/device/radio/headset/heads/rd,
-		/obj/item/weapon/tank/air,
+		/obj/item/tank/air,
 		/obj/item/clothing/mask/gas,
 		/obj/item/device/flash,
-		/obj/item/weapon/switchtool/holo,
-		/obj/item/weapon/card/debit/preferred/department/science,
+		/obj/item/switchtool/holo,
+		/obj/item/card/debit/preferred/department/science,
 		/obj/item/device/artifact_finder,
 	)

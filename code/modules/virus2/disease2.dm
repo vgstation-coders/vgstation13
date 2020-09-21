@@ -135,7 +135,7 @@ var/global/list/disease2_list = list()
 		if (ID in I.virus2)
 			return
 	var/dishes = 0
-	for (var/obj/item/weapon/virusdish/dish in virusdishes)
+	for (var/obj/item/virusdish/dish in virusdishes)
 		if (dish.contained_virus)
 			if (ID == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
 				dishes++
@@ -193,7 +193,7 @@ var/global/list/disease2_list = list()
 
 	//admin panel
 	if (origin == "Unknown")
-		if (istype(source,/obj/item/weapon/virusdish))
+		if (istype(source,/obj/item/virusdish))
 			if (istype(source.loc,/obj/structure/closet/crate/secure/medsec))
 				origin = "Cargo Order"
 			else if (isturf(source.loc))
@@ -444,7 +444,7 @@ var/global/list/disease2_list = list()
 		message_admins("[infectedMob] was infected with  [D.form] #[add_zero("[D.uniqueID]", 4)]-[add_zero("[D.subID]", 4)][nickname] by [C.ckey]")
 		D.AddToGoggleView(infectedMob)
 	else
-		var/obj/item/weapon/virusdish/dish = new(C.mob.loc)
+		var/obj/item/virusdish/dish = new(C.mob.loc)
 		dish.contained_virus = D
 		dish.growth = rand(5, 50)
 		dish.name = "growth dish (Unknown [D.form])"
@@ -573,12 +573,12 @@ var/global/list/disease2_list = list()
 	mutatechance *= mutation_modifier
 
 	var/mob/living/body = null
-	var/obj/item/weapon/virusdish/dish = null
+	var/obj/item/virusdish/dish = null
 	var/obj/machinery/disease2/incubator/machine = null
 
 	if (isliving(incubator))
 		body = incubator
-	else if (istype(incubator,/obj/item/weapon/virusdish))
+	else if (istype(incubator,/obj/item/virusdish))
 		dish = incubator
 		if (istype(dish.loc,/obj/machinery/disease2/incubator))
 			machine = dish.loc

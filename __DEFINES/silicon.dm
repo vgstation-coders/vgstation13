@@ -18,33 +18,33 @@
 #define GRAVEKEEPER_MOMMI "Gravekeeper"
 
 var/global/list/default_nanotrasen_robot_modules = list(
-	STANDARD_MODULE			= /obj/item/weapon/robot_module/standard,
-	SERVICE_MODULE			= /obj/item/weapon/robot_module/butler,
-	SUPPLY_MODULE 			= /obj/item/weapon/robot_module/miner,
-	MEDICAL_MODULE			= /obj/item/weapon/robot_module/medical,
-	SECURITY_MODULE			= /obj/item/weapon/robot_module/security,
-	ENGINEERING_MODULE		= /obj/item/weapon/robot_module/engineering,
-	JANITOR_MODULE			= /obj/item/weapon/robot_module/janitor,
+	STANDARD_MODULE			= /obj/item/robot_module/standard,
+	SERVICE_MODULE			= /obj/item/robot_module/butler,
+	SUPPLY_MODULE 			= /obj/item/robot_module/miner,
+	MEDICAL_MODULE			= /obj/item/robot_module/medical,
+	SECURITY_MODULE			= /obj/item/robot_module/security,
+	ENGINEERING_MODULE		= /obj/item/robot_module/engineering,
+	JANITOR_MODULE			= /obj/item/robot_module/janitor,
     )
 
 var/global/list/emergency_nanotrasen_robot_modules = list(
-	COMBAT_MODULE 			= /obj/item/weapon/robot_module/combat
+	COMBAT_MODULE 			= /obj/item/robot_module/combat
 	)
 
 var/global/list/syndicate_robot_modules = list(
-	SYNDIE_BLITZ_MODULE		= /obj/item/weapon/robot_module/syndicate/blitzkrieg,
-	SYNDIE_CRISIS_MODULE	= /obj/item/weapon/robot_module/syndicate/crisis,
+	SYNDIE_BLITZ_MODULE		= /obj/item/robot_module/syndicate/blitzkrieg,
+	SYNDIE_CRISIS_MODULE	= /obj/item/robot_module/syndicate/crisis,
     )
 
 var/global/list/special_robot_modules = list(
-	HUG_MODULE				= /obj/item/weapon/robot_module/tg17355,
-	STARMAN_MODULE			= /obj/item/weapon/robot_module/starman
+	HUG_MODULE				= /obj/item/robot_module/tg17355,
+	STARMAN_MODULE			= /obj/item/robot_module/starman
     )
 
 var/global/list/mommi_modules = list(
-	NANOTRASEN_MOMMI   		= /obj/item/weapon/robot_module/mommi/nt,
-	SOVIET_MOMMI 	    	= /obj/item/weapon/robot_module/mommi/soviet,
-	GRAVEKEEPER_MOMMI		= /obj/item/weapon/robot_module/mommi/cogspider
+	NANOTRASEN_MOMMI   		= /obj/item/robot_module/mommi/nt,
+	SOVIET_MOMMI 	    	= /obj/item/robot_module/mommi/soviet,
+	GRAVEKEEPER_MOMMI		= /obj/item/robot_module/mommi/cogspider
 	)
 
 //Global list of all Cyborg/MoMMI modules. If you add a new list and forget to add it to this one i'll fucking break your neck.

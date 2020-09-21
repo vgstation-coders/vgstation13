@@ -172,21 +172,21 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		if(perp.head && istype(perp.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
 			C.images += holder
 			continue
-		var/obj/item/weapon/card/id/card = perp.get_id_card()
+		var/obj/item/card/id/card = perp.get_id_card()
 		if(card)
 			holder.icon_state = "hud[ckey(card.GetJobName())]"
 		C.images += holder
 
 		if(advanced_mode) //If set, the SecHUD will display the implants a person has.
-			for(var/obj/item/weapon/implant/I in perp)
+			for(var/obj/item/implant/I in perp)
 				if(I.implanted)
-					if(istype(I,/obj/item/weapon/implant/tracking))
+					if(istype(I,/obj/item/implant/tracking))
 						holder = perp.hud_list[IMPTRACK_HUD]
 						holder.icon_state = "hud_imp_tracking"
-					else if(istype(I,/obj/item/weapon/implant/loyalty))
+					else if(istype(I,/obj/item/implant/loyalty))
 						holder = perp.hud_list[IMPLOYAL_HUD]
 						holder.icon_state = "hud_imp_loyal"
-					else if(istype(I,/obj/item/weapon/implant/chem))
+					else if(istype(I,/obj/item/implant/chem))
 						holder = perp.hud_list[IMPCHEM_HUD]
 						holder.icon_state = "hud_imp_chem"
 					else
@@ -239,7 +239,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = borg.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/borg_cell = borg.get_cell()
+			var/obj/item/cell/borg_cell = borg.get_cell()
 			if(!borg_cell)
 				holder.icon_state = "hudnobatt"
 			else
@@ -259,7 +259,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		holder = exosuit.hud_list[DIAG_CELL_HUD]
 		if(holder)
 			C.images += holder
-			var/obj/item/weapon/cell/exosuit_cell = exosuit.get_cell()
+			var/obj/item/cell/exosuit_cell = exosuit.get_cell()
 			if(!exosuit_cell)
 				holder.icon_state = "hudnobatt"
 			else

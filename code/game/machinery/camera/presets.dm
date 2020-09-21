@@ -64,7 +64,7 @@
 	return O
 
 /obj/machinery/camera/proc/isXRay()
-	var/O = locate(/obj/item/weapon/reagent_containers/food/snacks/grown/carrot) in assembly.upgrades
+	var/O = locate(/obj/item/reagent_containers/food/snacks/grown/carrot) in assembly.upgrades
 	return O
 
 /obj/machinery/camera/proc/isMotion()
@@ -82,7 +82,7 @@
 	update_upgrades()
 
 /obj/machinery/camera/proc/upgradeXRay()
-	assembly.upgrades.Add(new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(assembly))
+	assembly.upgrades.Add(new /obj/item/reagent_containers/food/snacks/grown/carrot(assembly))
 	update_upgrades()
 
 // If you are upgrading Motion, and it isn't in the camera's New(), add it to the machines list.

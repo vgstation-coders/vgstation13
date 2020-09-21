@@ -87,7 +87,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 	var/channeling_bone_cocoon = 0
 	var/channeling_night_vision = 0
 
-	var/obj/item/weapon/gun/hookshot/flesh/extend_o_arm = null
+	var/obj/item/gun/hookshot/flesh/extend_o_arm = null
 	var/extend_o_arm_unlocked = 0
 
 	// Event handles
@@ -160,7 +160,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if(U.id!="")
 			borer_avail_unlocks_leg.Add(U)
 
-	extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
+	extend_o_arm = new /obj/item/gun/hookshot/flesh(src, src)
 
 
 /*
@@ -1025,7 +1025,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 			playsound(T, 'sound/effects/splat.ogg', 50, 1)
 			if(istype(T, /turf/simulated))
 				T.add_vomit_floor(null, 1)
-			var/obj/item/weapon/reagent_containers/food/snacks/borer_egg/E = new (T)
+			var/obj/item/reagent_containers/food/snacks/borer_egg/E = new (T)
 			E.child_prefix_index = (name_prefix_index + 1)
 		busy=0
 
@@ -1182,7 +1182,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 		if(extend_o_arm_unlocked)
 			if(hostlimb == LIMB_RIGHT_ARM || hostlimb == LIMB_LEFT_ARM)
 				if(!extend_o_arm)
-					extend_o_arm = new /obj/item/weapon/gun/hookshot/flesh(src, src)
+					extend_o_arm = new /obj/item/gun/hookshot/flesh(src, src)
 					extend_o_arm.forceMove(host)
 				if(!check_can_do())
 					return
@@ -1228,7 +1228,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 					return
 				if(hostlimb == LIMB_RIGHT_ARM)
 					if(host.get_held_item_by_index(GRASP_RIGHT_HAND))
-						if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/gun/hookshot)) //I don't want to deal with the fleshshot interacting with hookshots
+						if(istype(host.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/gun/hookshot)) //I don't want to deal with the fleshshot interacting with hookshots
 							return
 						if(chemicals < 10)
 							to_chat(src, "<span class='warning'>You don't have enough chemicals stored to swing an item with this arm!</span>")
@@ -1238,7 +1238,7 @@ var/global/borer_unlock_types_leg = typesof(/datum/unlockable/borer/leg) - /datu
 								chemicals -= 10		//It costs 10 chems to fire the fleshshot while holding an item.
 				else if(hostlimb == LIMB_LEFT_ARM)
 					if(host.get_held_item_by_index(GRASP_LEFT_HAND))
-						if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/weapon/gun/hookshot))
+						if(istype(host.get_held_item_by_index(GRASP_LEFT_HAND), /obj/item/gun/hookshot))
 							return
 						if(chemicals < 10)
 							to_chat(src, "<span class='warning'>You don't have enough chemicals stored to swing an item with this arm!</span>")

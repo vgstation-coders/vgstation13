@@ -11,7 +11,7 @@
 	melee_damage_upper = 15
 
 	corpse = /obj/effect/landmark/corpse/russian
-	items_to_drop = list(/obj/item/weapon/kitchen/utensil/knife/large)
+	items_to_drop = list(/obj/item/kitchen/utensil/knife/large)
 
 	faction = "russian"
 
@@ -24,7 +24,7 @@
 	icon_living = "russianranged"
 
 	corpse = /obj/effect/landmark/corpse/russian/ranged
-	items_to_drop = list(/obj/item/weapon/gun/projectile/nagant)
+	items_to_drop = list(/obj/item/gun/projectile/nagant)
 
 	melee_damage_lower = 5
 	melee_damage_upper = 5

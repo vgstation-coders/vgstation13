@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/receiver
+	build_path = /obj/item/circuitboard/telecomms/receiver
 
 /datum/design/telecomms_bus
 	name = "Circuit Design (telecommunications bus)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/bus
+	build_path = /obj/item/circuitboard/telecomms/bus
 
 /datum/design/telecomms_hub
 	name = "Circuit Design (telecommunications hub)"
@@ -26,7 +26,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/hub
+	build_path = /obj/item/circuitboard/telecomms/hub
 
 /datum/design/telecomms_relay
 	name = "Circuit Design (telecommunications relay)"
@@ -36,7 +36,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/relay
+	build_path = /obj/item/circuitboard/telecomms/relay
 
 /datum/design/telecomms_processor
 	name = "Circuit Design (telecommunications processor)"
@@ -46,7 +46,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/processor
+	build_path = /obj/item/circuitboard/telecomms/processor
 
 /datum/design/telecomms_server
 	name = "Circuit Design (telecommunications server)"
@@ -56,7 +56,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/server
+	build_path = /obj/item/circuitboard/telecomms/server
 
 /datum/design/subspace_broadcaster
 	name = "Circuit Design (telecommunications subspace broadcaster)"
@@ -66,4 +66,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telecomms/broadcaster
+	build_path = /obj/item/circuitboard/telecomms/broadcaster

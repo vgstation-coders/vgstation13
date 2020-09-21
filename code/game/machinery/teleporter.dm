@@ -2,7 +2,7 @@
 	name = "Teleporter"
 	desc = "Used to control a linked teleportation Hub and Station."
 	icon_state = "teleport"
-	circuit = "/obj/item/weapon/circuitboard/teleporter"
+	circuit = "/obj/item/circuitboard/teleporter"
 	var/obj/item/locked = null
 	var/id = null
 	var/one_time_use = 0 //Used for one-time-use teleport cards (such as clown planet coordinates.)
@@ -18,8 +18,8 @@
 /obj/machinery/computer/teleporter/attackby(I as obj, mob/living/user as mob)
 	if(..())
 		return 1
-	else if(istype(I, /obj/item/weapon/card/data/))
-		var/obj/item/weapon/card/data/C = I
+	else if(istype(I, /obj/item/card/data/))
+		var/obj/item/card/data/C = I
 		if(stat & (NOPOWER|BROKEN) & (C.function != "teleporter"))
 			src.attack_hand()
 
@@ -147,7 +147,7 @@
 			areaindex[tmpname] = 1
 		L[tmpname] = R
 
-	for (var/obj/item/weapon/implant/tracking/I in tracking_implants)
+	for (var/obj/item/implant/tracking/I in tracking_implants)
 		if (!I.implanted || !ismob(I.loc))
 			continue
 		else
@@ -202,29 +202,29 @@
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telehub,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/capacitor/adv/super,
-		/obj/item/weapon/stock_parts/capacitor/adv/super,
-		/obj/item/weapon/stock_parts/capacitor/adv/super,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/transmitter
+		/obj/item/circuitboard/telehub,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/capacitor/adv/super,
+		/obj/item/stock_parts/capacitor/adv/super,
+		/obj/item/stock_parts/capacitor/adv/super,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/treatment,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/subspace/transmitter,
+		/obj/item/stock_parts/subspace/transmitter,
+		/obj/item/stock_parts/subspace/transmitter,
+		/obj/item/stock_parts/subspace/transmitter
 	)
 	density = 0
 
 /obj/machinery/teleport/hub/RefreshParts()
 	var/T = 1
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-3
 	teleport_power_usage = initial(teleport_power_usage)/T
 
@@ -300,22 +300,22 @@
 	active_power_usage = 2000
 	var/teleport_power_usage = 5000
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telestation,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/capacitor/adv/super,
-		/obj/item/weapon/stock_parts/capacitor/adv/super,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/analyzer
+		/obj/item/circuitboard/telestation,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/capacitor/adv/super,
+		/obj/item/stock_parts/capacitor/adv/super,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/subspace/analyzer
 	)
 
 /obj/machinery/teleport/station/RefreshParts()
 	var/T = 1
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-3
 	teleport_power_usage = initial(teleport_power_usage)/T
 
@@ -331,7 +331,7 @@
 	else
 		icon_state = "controller"
 
-/obj/machinery/teleport/station/attackby(var/obj/item/weapon/W, var/mob/user as mob)
+/obj/machinery/teleport/station/attackby(var/obj/item/W, var/mob/user as mob)
 	if (..())
 		return 1
 	else

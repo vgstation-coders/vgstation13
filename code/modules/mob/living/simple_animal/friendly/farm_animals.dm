@@ -86,15 +86,15 @@
 
 /mob/living/simple_animal/hostile/retaliate/goat/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(stat == CONSCIOUS)
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
+		if(istype(O, /obj/item/reagent_containers/glass))
 			user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
-			var/obj/item/weapon/reagent_containers/glass/G = O
+			var/obj/item/reagent_containers/glass/G = O
 			var/transfered = udder.trans_id_to(G, MILK, rand(5,10))
 			if(G.reagents.total_volume >= G.volume)
 				to_chat(user, "<span class='warning'>[O] is full.</span>")
 			if(!transfered)
 				to_chat(user, "<span class='warning'>The udder is dry. Wait a bit longer...</span>")
-		else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/cabbage))
+		else if(istype(O, /obj/item/reagent_containers/food/snacks/grown/cabbage))
 			Calm()
 			playsound(src, 'sound/items/eatfood.ogg', rand(10,50), 1)
 			visible_message("<span class='notice'>[user] feeds \the [O] to [src].</span>")
@@ -130,16 +130,16 @@
 	speak_override = TRUE
 
 	size = SIZE_BIG
-	holder_type = /obj/item/weapon/holder/animal/cow
+	holder_type = /obj/item/holder/animal/cow
 
 /mob/living/simple_animal/cow/New()
 	..()
 	reagents.maximum_volume = 50
 
 /mob/living/simple_animal/cow/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(stat == CONSCIOUS && istype(O, /obj/item/weapon/reagent_containers/glass))
+	if(stat == CONSCIOUS && istype(O, /obj/item/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [O].</span>")
-		var/obj/item/weapon/reagent_containers/glass/G = O
+		var/obj/item/reagent_containers/glass/G = O
 		var/transfered = reagents.trans_id_to(G, MILK, rand(5,10))
 		if(G.reagents.total_volume >= G.volume)
 			to_chat(user, "<span class='warning'>[O] is full.</span>")
@@ -186,7 +186,7 @@
 	emote_sound = list("sound/voice/chick.ogg")
 	speak_chance = 2
 	turns_per_move = 2
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/rawchicken
 	species_type = /mob/living/simple_animal/chicken
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
@@ -227,7 +227,7 @@
 	emote_sound = list("sound/voice/chicken.ogg")
 	speak_chance = 2
 	turns_per_move = 3
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/rawchicken
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"
@@ -254,7 +254,7 @@
 	pixel_y = rand(0, 10) * PIXEL_MULTIPLIER
 
 /mob/living/simple_animal/chicken/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
+	if(istype(O, /obj/item/reagent_containers/food/snacks/grown/wheat)) //feedin' dem chickens
 		if(!stat && eggsleft < 8)
 			if(!user.drop_item(O))
 				user << "<span class='notice'>You can't let go of \the [O]!</span>"
@@ -266,8 +266,8 @@
 //			to_chat(world, eggsleft)
 		else
 			to_chat(user, "<span class='notice'>[name] doesn't seem hungry!</span>")
-	else if(istype(O, /obj/item/weapon/dnainjector))
-		var/obj/item/weapon/dnainjector/I = O
+	else if(istype(O, /obj/item/dnainjector))
+		var/obj/item/dnainjector/I = O
 		I.inject(src, user)
 	else
 		..()
@@ -281,7 +281,7 @@
 	if(!stat && prob(3) && eggsleft > 0)
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 		eggsleft--
-		var/obj/item/weapon/reagent_containers/food/snacks/egg/E = new(get_turf(src))
+		var/obj/item/reagent_containers/food/snacks/egg/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6) * PIXEL_MULTIPLIER
 		E.pixel_y = rand(-6,6) * PIXEL_MULTIPLIER
 		if(animal_count[src.type] < ANIMAL_CHILD_CAP && prob(10))
@@ -300,7 +300,7 @@
 	emote_sound = list("sound/voice/pigsnort.ogg","sound/voice/pigsqueal.ogg")
 	speak_chance = 1
 	turns_per_move = 6
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/box
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"
@@ -371,7 +371,7 @@
 	playsound(src, 'sound/effects/box_scream.ogg', 100, 1)
 
 /mob/living/simple_animal/hostile/retaliate/box/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
+	if(istype(O, /obj/item/reagent_containers/food/snacks/grown/mushroom/chickenshroom)) //Pigs like mushrooms
 		if(!stat && size < SIZE_BIG)
 			if(!user.drop_item(O))
 				user << "<span class='notice'>You can't let go of \the [O]!</span>"
@@ -389,7 +389,7 @@
 	icon_state = "pig"
 	icon_living = "pig"
 	icon_dead = "pig"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/box/pig
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/box/pig
 	min_oxy = 5
 	max_oxy = 0
 	min_n2 = 0

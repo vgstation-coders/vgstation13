@@ -13,7 +13,7 @@
 
 //Giving the spells
 /mob/living/simple_animal/shade/proc/give_blade_powers()
-	if (!istype(loc, /obj/item/weapon/melee/soulblade))
+	if (!istype(loc, /obj/item/melee/soulblade))
 		return
 	if (client)
 		client.CAN_MOVE_DIAGONALLY = 1
@@ -25,7 +25,7 @@
 			gui_icons.soulblade_bloodbar,
 			healths2,
 			)
-	var/obj/item/weapon/melee/soulblade/SB = loc
+	var/obj/item/melee/soulblade/SB = loc
 	var/datum/control/new_control = new /datum/control/soulblade(src, SB)
 	control_object.Add(new_control)
 	new_control.take_control()
@@ -65,7 +65,7 @@
 	var/blood_cost = 0
 
 /spell/soulblade/cast_check(skipcharge = 0,mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	if (SB.blood < blood_cost)
 		to_chat(user, "<span class='danger'>You don't have enough blood left for this move.</span>")
 		return 0
@@ -73,7 +73,7 @@
 
 /spell/soulblade/after_cast(list/targets)
 	..()
-	var/obj/item/weapon/melee/soulblade/SB = holder.loc
+	var/obj/item/melee/soulblade/SB = holder.loc
 	SB.blood = max(0,SB.blood-blood_cost)
 	var/mob/shade = holder
 	var/matrix/M = matrix()
@@ -129,7 +129,7 @@
 	blood_cost = 5
 
 /spell/soulblade/blade_spin/choose_targets(var/mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	if (!isturf(SB.loc) && !istype(SB.loc,/obj/item/projectile))
 		if (ismob(SB.loc))
 			var/mob/M = SB.loc
@@ -157,7 +157,7 @@
 				my_targets += M
 		else
 			//BREAK EVERYTHING
-			if (!istype(A, /obj/item/weapon/storage))
+			if (!istype(A, /obj/item/storage))
 				my_targets += A
 	for (var/atom/A in get_step(T,dir))
 		if (istype(A,/atom/movable/lighting_overlay))
@@ -168,7 +168,7 @@
 				my_targets += M
 		else
 			//BREAK EVERYTHING
-			if (!istype(A, /obj/item/weapon/storage))
+			if (!istype(A, /obj/item/storage))
 				my_targets += A
 
 	return my_targets
@@ -178,7 +178,7 @@
 
 /spell/soulblade/blade_spin/cast(var/list/targets, var/mob/user)
 	..()
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	SB.throwing = 0
 	if (istype(SB.loc,/obj/item/projectile))
 		var/obj/item/projectile/P = SB.loc
@@ -215,7 +215,7 @@
 	blood_cost = 20
 
 /spell/soulblade/blade_perforate/choose_targets(var/mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	if (!isturf(SB.loc))
 		return null
 	return list(get_step(get_turf(SB),SB.dir))
@@ -225,7 +225,7 @@
 
 /spell/soulblade/blade_perforate/cast(var/list/targets, var/mob/user)
 	..()
-	var/obj/item/weapon/melee/soulblade/blade = user.loc
+	var/obj/item/melee/soulblade/blade = user.loc
 	if (istype(blade.loc,/obj/item/projectile))
 		var/obj/item/projectile/P = blade.loc
 		qdel(P)
@@ -250,9 +250,9 @@
 
 
 /client/MouseDrop(src_object,over_object,src_location,over_location,src_control,over_control,params)
-	if(!mob || !isshade(mob) || !istype(mob.loc,/obj/item/weapon/melee/soulblade))
+	if(!mob || !isshade(mob) || !istype(mob.loc,/obj/item/melee/soulblade))
 		return ..()
-	var/obj/item/weapon/melee/soulblade/SB = mob.loc
+	var/obj/item/melee/soulblade/SB = mob.loc
 	if(!isturf(src_location) || !isturf(over_location))
 		return ..()
 	if(src_location == over_location)
@@ -286,7 +286,7 @@
 	blood_cost = 10
 
 /spell/soulblade/blade_mend/choose_targets(var/mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	if (!ismob(SB.loc))
 		return null
 	var/mob/living/wielder = SB.loc
@@ -338,7 +338,7 @@
 	blood_cost = 10
 
 /spell/soulblade/blade_boil/choose_targets(var/mob/user = usr)
-	var/obj/item/weapon/melee/soulblade/SB = user.loc
+	var/obj/item/melee/soulblade/SB = user.loc
 	if (!ismob(SB.loc))
 		to_chat(user,"<span class='notice'>You need someone to hold you first.<//span>")
 		return null

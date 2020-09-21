@@ -331,7 +331,7 @@
 	siemens_coefficient = 0.50
 	sterility = 50
 	var/wired = 0
-	var/obj/item/weapon/cell/cell = 0
+	var/obj/item/cell/cell = 0
 	var/clipped = 0
 	body_parts_covered = HANDS
 	slot_flags = SLOT_GLOVES
@@ -518,7 +518,7 @@
 	name = "suit"
 	var/fire_resist = T0C+100
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	slot_flags = SLOT_OCLOTHING
 	heat_conductivity = ARMOUR_HEAT_CONDUCTIVITY
@@ -563,7 +563,7 @@
 	flags = FPRINT
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank/)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 50)
 	siemens_coefficient = 0.9

@@ -1,4 +1,4 @@
-/obj/item/weapon/mop
+/obj/item/mop
 	desc = "The world of janitalia wouldn't be complete without a mop."
 	name = "mop"
 	icon = 'icons/obj/janitor.dmi'
@@ -12,16 +12,16 @@
 	flags = FPRINT
 	attack_verb = list("mops", "bashes", "bludgeons", "whacks", "slaps", "whips")
 
-/obj/item/weapon/mop/New()
+/obj/item/mop/New()
 	. = ..()
 	create_reagents(50)
 	mop_list.Add(src)
 
-/obj/item/weapon/mop/Destroy()
+/obj/item/mop/Destroy()
 	mop_list.Remove(src)
 	..()
 
-/obj/item/weapon/mop/update_icon()
+/obj/item/mop/update_icon()
 	..()
 	overlays.len = 0
 	if (reagents.total_volume >= 1)
@@ -30,7 +30,7 @@
 		covering.alpha = mix_alpha_from_reagents(reagents.reagent_list)
 		overlays += covering
 
-/obj/item/weapon/mop/proc/clean(turf/simulated/A as turf)
+/obj/item/mop/proc/clean(turf/simulated/A as turf)
 	for(var/obj/effect/O in A)
 		if(iscleanaway(O))
 			qdel(O)
@@ -38,12 +38,12 @@
 	A.clean_blood()
 	playsound(src, get_sfx("mop"), 25, 1)
 
-/obj/effect/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/mop))
+/obj/effect/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/mop))
 		return
 	..()
 
-/obj/item/weapon/mop/afterattack(atom/A, mob/user as mob)
+/obj/item/mop/afterattack(atom/A, mob/user as mob)
 	if(!user.Adjacent(A))
 		return
 	if(A.mop_act(src, user))

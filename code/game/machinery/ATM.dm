@@ -32,7 +32,7 @@ log transactions
 	var/machine_id = ""
 	var/view_screen = NO_SCREEN
 	var/lastprint = 0 // Printer needs time to cooldown
-	var/obj/item/weapon/card/atm_card = null // Since there's debit cards now, scan doesn't work for us.
+	var/obj/item/card/atm_card = null // Since there's debit cards now, scan doesn't work for us.
 
 	machine_flags = PURCHASER //not strictly true, but it connects it to the account
 
@@ -80,7 +80,7 @@ log transactions
 				atm_card = null
 			qdel(src)
 			return
-	if(istype(I, /obj/item/weapon/card))
+	if(istype(I, /obj/item/card))
 		if(!atm_card && is_valid_atm_card(I))
 			if(usr.drop_item(I, src))
 				atm_card = I
@@ -88,8 +88,8 @@ log transactions
 					authenticated_account = null
 				src.attack_hand(user)
 	else if(CAN_INTERACT_WITH_ACCOUNT)
-		if(istype(I,/obj/item/weapon/spacecash))
-			var/obj/item/weapon/spacecash/dosh = I
+		if(istype(I,/obj/item/spacecash))
+			var/obj/item/spacecash/dosh = I
 			//consume the money
 			authenticated_account.money += dosh.worth * dosh.amount
 			if(prob(50))
@@ -115,17 +115,17 @@ log transactions
 
 /obj/machinery/atm/proc/is_valid_atm_card(obj/item/I)
 	// Since we can now have IDs and debit cards that can be used
-	if(istype(I, /obj/item/weapon/card/debit) || istype(I, /obj/item/weapon/card/id))
+	if(istype(I, /obj/item/card/debit) || istype(I, /obj/item/card/id))
 		return TRUE
 	else
 		return FALSE
 /obj/machinery/atm/proc/get_card_name_or_account()
 	if(!atm_card)
 		return "------"
-	if(istype(atm_card, /obj/item/weapon/card/debit))
+	if(istype(atm_card, /obj/item/card/debit))
 		return "DEBIT [atm_card.associated_account_number]"
-	if(istype(atm_card, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/card_id = atm_card
+	if(istype(atm_card, /obj/item/card/id))
+		var/obj/item/card/id/card_id = atm_card
 		return card_id.name
 
 /obj/machinery/atm/attack_hand(mob/user as mob,var/fail_safe=0)
@@ -219,8 +219,8 @@ log transactions
 							</form><hr>
 							"}
 						if(atm_card)
-							if(istype(atm_card, /obj/item/weapon/card/id))
-								var/obj/item/weapon/card/id/card_id = atm_card
+							if(istype(atm_card, /obj/item/card/id))
+								var/obj/item/card/id/card_id = atm_card
 								dat += {"
 									<b>Virtual Wallet balance:</b> $[card_id.virtual_wallet.money]<br>
 									<form name='withdraw_to_wallet' action='?src=\ref[src]' method='get'>
@@ -234,8 +234,8 @@ log transactions
 									<input type='text' name='funds_amount' value='' style='width:200px; background-color:white;'><input type='submit' value='Deposit from virtual wallet'><br>
 									</form><hr>
 									"}
-							else if(istype(atm_card, /obj/item/weapon/card/debit))
-								var/obj/item/weapon/card/debit/card_debit = atm_card
+							else if(istype(atm_card, /obj/item/card/debit))
+								var/obj/item/card/debit/card_debit = atm_card
 								dat += {"
 									<b>Debit Card Authorized User:</b> [card_debit.authorized_name]<br>
 									<form name='change_debit_authorized_name' action='?src=\ref[src]' method='get'>
@@ -396,11 +396,11 @@ log transactions
 			if("withdraw_to_wallet")
 				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/amount = max(text2num(href_list["funds_amount"]),0)
-					if(!istype(atm_card, /obj/item/weapon/card/id))
+					if(!istype(atm_card, /obj/item/card/id))
 						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds to it.</span>")
 						return
 
-					var/obj/item/weapon/card/id/card_id = atm_card
+					var/obj/item/card/id/card_id = atm_card
 					if(amount <= 0)
 						alert("That is not a valid amount.")
 					else if(authenticated_account && amount > 0)
@@ -431,11 +431,11 @@ log transactions
 			if("deposit_from_wallet")
 				if(CAN_INTERACT_WITH_ACCOUNT)
 					var/amount = max(text2num(href_list["funds_amount"]),0)
-					if(!istype(atm_card, /obj/item/weapon/card/id))
+					if(!istype(atm_card, /obj/item/card/id))
 						to_chat(usr, "<span class='notice'>You must insert your ID card before you can transfer funds from its virtual wallet.</span>")
 						return
 
-					var/obj/item/weapon/card/id/card_id = atm_card
+					var/obj/item/card/id/card_id = atm_card
 					if(amount <= 0)
 						alert("That is not a valid amount.")
 					else if(authenticated_account && amount > 0)
@@ -469,7 +469,7 @@ log transactions
 						to_chat(usr, "<span class='notice'>The [src.name] flashes an error on its display.</span>")
 						return
 					lastprint = world.timeofday
-					var/obj/item/weapon/paper/R = new(src.loc)
+					var/obj/item/paper/R = new(src.loc)
 					R.name = "Account balance: [authenticated_account.owner_name]"
 					R.info = {"<b>NT Automated Teller Account Statement</b><br><br>
 						<i>Account holder:</i> [authenticated_account.owner_name]<br>
@@ -483,7 +483,7 @@ log transactions
 					stampoverlay.icon_state = "paper_stamp-cent"
 					if(!R.stamped)
 						R.stamped = new
-					R.stamped += /obj/item/weapon/stamp
+					R.stamped += /obj/item/stamp
 					R.overlays += stampoverlay
 					R.stamps += "<HR><i>This paper has been stamped by the Automatic Teller Machine.</i>"
 					playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
@@ -495,14 +495,14 @@ log transactions
 					var/desired_authorized_name = input(usr, "Enter authorized name", "Set Authorized Name", authenticated_account.owner_name) as text
 					if(authenticated_account.charge(DEBIT_CARD_COST, null, "New debit card", machine_id, null, "Terminal"))
 						lastprint = world.timeofday
-						var/obj/item/weapon/card/debit/debit_card = new(src.loc, authenticated_account.account_number, desired_authorized_name)
+						var/obj/item/card/debit/debit_card = new(src.loc, authenticated_account.account_number, desired_authorized_name)
 						debit_card.name = authenticated_account.owner_name + "'s " + debit_card.name
 						playsound(loc, pick('sound/items/polaroid1.ogg', 'sound/items/polaroid2.ogg'), 50, 1)
 					else
 						playsound(loc, 'sound/machines/buzz-sigh.ogg', 50, 1)
 			if("change_debit_authorized_name")
-				if(atm_card && istype(atm_card, /obj/item/weapon/card/debit/))
-					var/obj/item/weapon/card/debit/debit_card = atm_card
+				if(atm_card && istype(atm_card, /obj/item/card/debit/))
+					var/obj/item/card/debit/debit_card = atm_card
 					debit_card.change_authorized_name(href_list["new_debit_name"])
 			if("insert_card")
 				if(atm_card)
@@ -528,7 +528,7 @@ log transactions
 /obj/machinery/atm/proc/withdraw_arbitrary_sum(var/mob/user,var/arbitrary_sum)
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
-		if(istype(H.wear_id,/obj/item/weapon/storage/wallet))
+		if(istype(H.wear_id,/obj/item/storage/wallet))
 			dispense_cash(arbitrary_sum,H.wear_id)
 			to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your physical wallet!</span>")
 			return
@@ -537,21 +537,21 @@ log transactions
 			if(P.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
-		if(istype(H.wear_id, /obj/item/weapon/card/id))
-			var/obj/item/weapon/card/id/ID = H.wear_id
+		if(istype(H.wear_id, /obj/item/card/id))
+			var/obj/item/card/id/ID = H.wear_id
 			if(ID.add_to_virtual_wallet(arbitrary_sum, user, src))
 				to_chat(usr, "[bicon(src)]<span class='notice'>Funds were transferred into your virtual wallet!</span>")
 				return
 		var/list/cash = dispense_cash(arbitrary_sum, H.loc)
-		for(var/obj/item/weapon/spacecash/dosh in cash)
+		for(var/obj/item/spacecash/dosh in cash)
 			H.put_in_hands(dosh)
 
 //stolen wholesale and then edited a bit from newscasters, which are awesome and by Agouri
 /obj/machinery/atm/proc/scan_user(mob/living/carbon/human/human_user as mob)
 	if(!authenticated_account && linked_db)
 		if(human_user.wear_id)
-			var/obj/item/weapon/card/id/I
-			if(istype(human_user.wear_id, /obj/item/weapon/card/id) )
+			var/obj/item/card/id/I
+			if(istype(human_user.wear_id, /obj/item/card/id) )
 				I = human_user.wear_id
 			else if(istype(human_user.wear_id, /obj/item/device/pda) )
 				var/obj/item/device/pda/P = human_user.wear_id

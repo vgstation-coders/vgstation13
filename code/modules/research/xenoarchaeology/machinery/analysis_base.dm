@@ -23,7 +23,7 @@
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 
-	var/obj/item/weapon/reagent_containers/glass/held_container
+	var/obj/item/reagent_containers/glass/held_container
 	var/target_scan_ticks = 30
 	var/report_num = 0
 	// How far into a scan we are.
@@ -40,7 +40,7 @@
 
 /obj/machinery/anomaly/RefreshParts()
 	var/scancount = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SP in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/SP in component_parts)
 		scancount += SP.rating-1
 
 	target_scan_ticks = initial(target_scan_ticks) - scancount*4
@@ -120,8 +120,8 @@
 /obj/machinery/anomaly/attack_hand(var/mob/user)
 	ui_interact(user)
 
-obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/glass))
+obj/machinery/anomaly/attackby(obj/item/W, mob/living/user)
+	if(istype(W, /obj/item/reagent_containers/glass))
 		if(held_container)
 			to_chat(user, "<span class='warning'>You must remove \the [held_container] first.</span>")
 			return TRUE
@@ -147,10 +147,10 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 	if(held_container)
 		alert_noise("ping")
 		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", "You hear an insistent chime.")
-		var/obj/item/weapon/paper/P = new(loc)
+		var/obj/item/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
 		P.info = "<b>[src] analysis report #[report_num]</b><br><br>" + ScanResults()
-		P.stamped = list(/obj/item/weapon/stamp)
+		P.stamped = list(/obj/item/stamp)
 		P.overlays += "paper_stamp-qm"
 	else
 		visible_message("<span class='notice'>[bicon(src)] makes a low buzzing noise.</span>", "You hear a low buzz.")

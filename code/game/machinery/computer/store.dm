@@ -2,7 +2,7 @@
 	name = "Merch Computer"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "store"
-	circuit = "/obj/item/weapon/circuitboard/merch"
+	circuit = "/obj/item/circuitboard/merch"
 	var/datum/html_interface/interface
 	var/tmp/next_process = 0
 	var/machine_id = ""
@@ -95,7 +95,7 @@
 	qdel(interface)
 	interface = null
 
-/obj/item/weapon/circuitboard/merch
+/obj/item/circuitboard/merch
 	name = "\improper Merchandise Computer Circuitboard"
 	build_path = /obj/machinery/computer/merch
 

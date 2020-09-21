@@ -33,5 +33,5 @@
 	corpsesuit = /obj/item/clothing/suit/space/grey
 	corpseuniform = /obj/item/clothing/under/color/grey
 	corpseshoes = /obj/item/clothing/shoes/black
-	corpseback = /obj/item/weapon/tank/oxygen
+	corpseback = /obj/item/tank/oxygen
 	corpsehelmet = /obj/item/clothing/head/helmet/space/grey

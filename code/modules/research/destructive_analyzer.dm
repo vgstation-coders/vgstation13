@@ -10,7 +10,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 /obj/machinery/r_n_d/destructive_analyzer
 	name = "Destructive Analyzer"
 	icon_state = "d_analyzer"
-	var/obj/item/weapon/loaded_item = null
+	var/obj/item/loaded_item = null
 	var/decon_mod = 1
 
 	research_flags = CONSOLECONTROL
@@ -19,10 +19,10 @@ Note: Must be placed within 3 tiles of the R&D Console
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/destructive_analyzer,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/destructive_analyzer,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()
@@ -35,7 +35,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 
 /obj/machinery/r_n_d/destructive_analyzer/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/S in component_parts)
+	for(var/obj/item/stock_parts/S in component_parts)
 		T += S.rating * 0.1
 	T = clamp(T, 0, 1)
 	decon_mod = T
@@ -52,7 +52,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		return -1
 	return ..()
 
-/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/r_n_d/destructive_analyzer/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(..())
 		if(loaded_item)
 			loaded_item.forceMove(loc)
@@ -126,7 +126,7 @@ Note: Must be placed within 3 tiles of the R&D Console
 		linked_console.deconstruct_item(H)
 
 //For testing purposes only.
-/*/obj/item/weapon/deconstruction_test
+/*/obj/item/deconstruction_test
 	name = "Test Item"
 	desc = "WTF?"
 	icon = 'icons/obj/weapons.dmi'

@@ -18,15 +18,15 @@
 /obj/machinery/keyfab/New()
 	..()
 	component_parts = newlist(
-							/obj/item/weapon/circuitboard/keyfab,
-							/obj/item/weapon/stock_parts/micro_laser
+							/obj/item/circuitboard/keyfab,
+							/obj/item/stock_parts/micro_laser
 							)
 	RefreshParts()
 	update_icon()
 
 /obj/machinery/keyfab/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/ML in component_parts)
 		T = ML.rating
 	build_time = 20 SECONDS - ((T - 1) * 5 SECONDS)
 

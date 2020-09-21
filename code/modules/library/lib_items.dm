@@ -23,11 +23,11 @@
 
 	var/health = 50
 	var/tmp/busy = 0
-	var/list/valid_types = list(/obj/item/weapon/book, \
-								/obj/item/weapon/tome, \
-								/obj/item/weapon/tome_legacy, \
-								/obj/item/weapon/spellbook, \
-								/obj/item/weapon/storage/bible)
+	var/list/valid_types = list(/obj/item/book, \
+								/obj/item/tome, \
+								/obj/item/tome_legacy, \
+								/obj/item/spellbook, \
+								/obj/item/storage/bible)
 
 /obj/structure/bookcase/cultify()
 	return
@@ -76,7 +76,7 @@
 		O.playtoolsound(src, 50)
 		user.visible_message("<span class='warning'>[user] [anchored ? "":"un"]anchors \the [src] [anchored ? "to":"from"] the floor.</span>", \
 		"<span class='notice'>You [anchored ? "":"un"]anchor the [src] [anchored ? "to":"from"] the floor.</span>")
-	else if(istype(O, /obj/item/weapon/pen))
+	else if(istype(O, /obj/item/pen))
 		set_tiny_label(user)
 	else if(O.damtype == BRUTE || O.damtype == BURN)
 		user.delayNextAttack(10) //We are attacking the bookshelf
@@ -94,7 +94,7 @@
 
 /obj/structure/bookcase/attack_hand(var/mob/user as mob)
 	if(contents.len)
-		var/obj/item/weapon/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
+		var/obj/item/book/choice = input("Which book would you like to remove from \the [src]?") as null|obj in contents
 		if(choice)
 			if(user.incapacitated() || user.lying || get_dist(user, src) > 1)
 				return
@@ -106,7 +106,7 @@
 
 /obj/structure/bookcase/attack_ghost(mob/dead/observer/user as mob)
 	if(contents.len && in_range(user, src))
-		var/obj/item/weapon/book/choice = input("Which book would you like to read?") as null|obj in contents
+		var/obj/item/book/choice = input("Which book would you like to read?") as null|obj in contents
 		if(choice)
 			if(!istype(choice)) //spellbook, cult tome, or the one weird bible storage
 				to_chat(user,"A mysterious force is keeping you from reading that.")
@@ -150,10 +150,10 @@
 
 /obj/structure/bookcase/manuals/medical/New()
 	..()
-	new /obj/item/weapon/book/manual/medical_cloning(src)
-	new /obj/item/weapon/book/manual/chemistry_manual(src)
-	new /obj/item/weapon/book/manual/virology_guide(src)
-	new /obj/item/weapon/book/manual/virology_encyclopedia(src)
+	new /obj/item/book/manual/medical_cloning(src)
+	new /obj/item/book/manual/chemistry_manual(src)
+	new /obj/item/book/manual/virology_guide(src)
+	new /obj/item/book/manual/virology_encyclopedia(src)
 	update_icon()
 
 
@@ -162,12 +162,12 @@
 
 /obj/structure/bookcase/manuals/engineering/New()
 	..()
-	new /obj/item/weapon/book/manual/engineering_construction(src)
-	new /obj/item/weapon/book/manual/engineering_particle_accelerator(src)
-	new /obj/item/weapon/book/manual/engineering_hacking(src)
-	new /obj/item/weapon/book/manual/engineering_guide(src)
-	new /obj/item/weapon/book/manual/engineering_singularity_safety(src)
-	new /obj/item/weapon/book/manual/robotics_cyborgs(src)
+	new /obj/item/book/manual/engineering_construction(src)
+	new /obj/item/book/manual/engineering_particle_accelerator(src)
+	new /obj/item/book/manual/engineering_hacking(src)
+	new /obj/item/book/manual/engineering_guide(src)
+	new /obj/item/book/manual/engineering_singularity_safety(src)
+	new /obj/item/book/manual/robotics_cyborgs(src)
 	update_icon()
 
 /obj/structure/bookcase/manuals/research_and_development
@@ -175,14 +175,14 @@
 
 /obj/structure/bookcase/manuals/research_and_development/New()
 	..()
-	new /obj/item/weapon/book/manual/research_and_development(src)
+	new /obj/item/book/manual/research_and_development(src)
 	update_icon()
 
 
 /*
  * Book
  */
-/obj/item/weapon/book
+/obj/item/book
 	name = "book"
 	icon = 'icons/obj/library.dmi'
 	icon_state ="book"
@@ -212,7 +212,7 @@
 	var/book_width = 400
 	var/book_height = 400
 
-/obj/item/weapon/book/New()
+/obj/item/book/New()
 	..()
 	if(wiki_page)
 		dat = {"
@@ -223,11 +223,11 @@
 		</html>
 		"}
 
-/obj/item/weapon/book/cultify()
-	new /obj/item/weapon/tome_legacy(loc)
+/obj/item/book/cultify()
+	new /obj/item/tome_legacy(loc)
 	..()
 
-/obj/item/weapon/book/proc/read_a_motherfucking_book(mob/user)
+/obj/item/book/proc/read_a_motherfucking_book(mob/user)
 	if(carved)
 		to_chat(user, "<span class='notice'>The pages of [title] have been cut out!</span>")
 		return
@@ -243,7 +243,7 @@
 	else
 		to_chat(user, "This book is completely blank!")
 
-/obj/item/weapon/book/attack_self(var/mob/user as mob)
+/obj/item/book/attack_self(var/mob/user as mob)
 	if(store)
 		to_chat(user, "<span class='notice'>[store] falls out of [title]!</span>")
 		store.forceMove(get_turf(src))
@@ -268,13 +268,13 @@
 		M.hallucination = max(0, M.hallucination + rand(60,90))
 	read_a_motherfucking_book(user)
 
-/obj/item/weapon/book/examine(mob/user)
+/obj/item/book/examine(mob/user)
 	if(isobserver(user) && in_range(src,user) && occult == 0)
 		read_a_motherfucking_book(user)
 	else
 		..()
 
-/obj/item/weapon/book/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/book/attackby(obj/item/W as obj, mob/user as mob)
 	if(!carved && W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You begin to carve out [title].</span>")
 		if(do_after(user, src, 30 / W.sharpness))
@@ -295,7 +295,7 @@
 		else
 			to_chat(user, "<span class='notice'>There's already something in [title]!</span>")
 			return
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		if(unique)
 			to_chat(user, "These pages don't seem to take the ink well. Looks like you can't modify it.")
 			return
@@ -325,8 +325,8 @@
 					src.author = newauthor
 			else
 				return
-	else if(istype(W, /obj/item/weapon/barcodescanner))
-		var/obj/item/weapon/barcodescanner/scanner = W
+	else if(istype(W, /obj/item/barcodescanner))
+		var/obj/item/barcodescanner/scanner = W
 		if(!scanner.computer)
 			to_chat(user, "[W]'s screen flashes: 'No associated computer found!'")
 		else
@@ -348,15 +348,15 @@
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. No active check-out record found for current title.'")
 				if(3)
 					scanner.book = src
-					for(var/obj/item/weapon/book in scanner.computer.inventory)
+					for(var/obj/item/book in scanner.computer.inventory)
 						if(book == src)
 							to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title already present in inventory, aborting to avoid duplicate entry.'")
 							return
 					scanner.computer.inventory.Add(src)
 					to_chat(user, "[W]'s screen flashes: 'Book stored in buffer. Title added to general inventory.'")
 
-	else if(istype(W, /obj/item/weapon/paper/talisman))
-		var/obj/item/weapon/paper/talisman/talisman = W
+	else if(istype(W, /obj/item/paper/talisman))
+		var/obj/item/paper/talisman/talisman = W
 		if(runestun)
 			to_chat(user, "<span class='notice'>There is already a talisman between the pages.</span>")
 			return
@@ -378,7 +378,7 @@
  */
 
 
-/obj/item/weapon/book/occult
+/obj/item/book/occult
 	name = "The King in Yellow"
 	title = "The King in Yellow"
 	occult = 1
@@ -387,7 +387,7 @@
 	"The Necronomicon", "The Funniest Joke in the World", "Woody Got Wood", "Peggy's Revenge", "House of Leaves", "A True and Accurate History of the Shadowless Kings", "The Book of Nod",
 	"Atlas Shrugged", "The Serenity of the Black Wood", "The World Does Not Weep")
 
-/obj/item/weapon/book/occult/New()
+/obj/item/book/occult/New()
 	..()
 	name = pick(possible_names)
 	title = name
@@ -396,7 +396,7 @@
 /*
  * Barcode Scanner
  */
-/obj/item/weapon/barcodescanner
+/obj/item/barcodescanner
 	name = "barcode scanner"
 	icon = 'icons/obj/library.dmi'
 	icon_state ="scanner"
@@ -405,7 +405,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	var/obj/machinery/computer/library/checkout/computer // Associated computer - Modes 1 to 3 use this
-	var/obj/item/weapon/book/book	 //  Currently scanned book
+	var/obj/item/book/book	 //  Currently scanned book
 	var/mode = 0 					// 0 - Scan only, 1 - Scan and Set Buffer, 2 - Scan and Attempt to Check In, 3 - Scan and Attempt to Add to Inventory
 
 	attack_self(mob/user as mob)

@@ -1,7 +1,7 @@
 #define BLOODPACK_NORMAL 1
 #define BLOODPACK_CUT 2
 
-/obj/item/weapon/reagent_containers/blood
+/obj/item/reagent_containers/blood
 	name = "\improper bloodpack"
 	desc = "Contains blood used for transfusion."
 	icon = 'icons/obj/bloodpack.dmi'
@@ -12,14 +12,14 @@
 	var/holes = 0
 	var/mode = BLOODPACK_NORMAL
 
-/obj/item/weapon/reagent_containers/blood/New()
+/obj/item/reagent_containers/blood/New()
 	..()
 	if(blood_type != null)
 		name = "\improper[blood_type] bloodpack"
 	reagents.add_reagent(BLOOD, 200, list("donor"=null,"viruses"=null,"blood_DNA"=null,"blood_type"=blood_type,"resistances"=null,"trace_chem"=null, "virus2"=list()))
 	update_icon()
 
-/obj/item/weapon/reagent_containers/blood/on_reagent_change()
+/obj/item/reagent_containers/blood/on_reagent_change()
 	update_icon()
 
 	if (mode == BLOODPACK_CUT)
@@ -43,7 +43,7 @@
 			name = "\improper murky bloodpack"
 			desc = "A bloodpack that's clearly not filled with blood."
 
-/obj/item/weapon/reagent_containers/blood/update_icon()
+/obj/item/reagent_containers/blood/update_icon()
 	if (mode == BLOODPACK_CUT)
 		name = "cut bloodpack"
 		icon_state = "[icon_state]_cut"
@@ -78,7 +78,7 @@
 
 		overlays += filling
 
-/obj/item/weapon/reagent_containers/blood/examine(mob/user)
+/obj/item/reagent_containers/blood/examine(mob/user)
 	//I don't want this to be an open container.
 	..()
 	if(mode == BLOODPACK_CUT)
@@ -90,41 +90,41 @@
 	if(reagents)
 		reagents.get_examine(user, blood_type = TRUE)
 
-/obj/item/weapon/reagent_containers/blood/fits_in_iv_drip()
+/obj/item/reagent_containers/blood/fits_in_iv_drip()
 	if (mode == BLOODPACK_NORMAL)
 		return 1
 
 //These should be kept for legacy purposes, probably. At least until they disappear from maps.
-/obj/item/weapon/reagent_containers/blood/APlus
+/obj/item/reagent_containers/blood/APlus
 	blood_type = "A+"
 
-/obj/item/weapon/reagent_containers/blood/AMinus
+/obj/item/reagent_containers/blood/AMinus
 	blood_type = "A-"
 
-/obj/item/weapon/reagent_containers/blood/BPlus
+/obj/item/reagent_containers/blood/BPlus
 	blood_type = "B+"
 
-/obj/item/weapon/reagent_containers/blood/BMinus
+/obj/item/reagent_containers/blood/BMinus
 	blood_type = "B-"
 
-/obj/item/weapon/reagent_containers/blood/OPlus
+/obj/item/reagent_containers/blood/OPlus
 	blood_type = "O+"
 
-/obj/item/weapon/reagent_containers/blood/OMinus
+/obj/item/reagent_containers/blood/OMinus
 	blood_type = "O-"
 
-/obj/item/weapon/reagent_containers/blood/empty
+/obj/item/reagent_containers/blood/empty
 	name = "\improper empty bloodpack"
 	desc = "Seems pretty useless... Maybe if there were a way to fill it?"
 	icon_state = "bloodpack"
 
-/obj/item/weapon/reagent_containers/blood/empty/New()
+/obj/item/reagent_containers/blood/empty/New()
 	..()
 	blood_type = null
 	reagents.clear_reagents()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/blood/chemo
+/obj/item/reagent_containers/blood/chemo
 	name = "\improper phalanximine IV kit"
 	desc = "IV kit for chemotherapy."
 
@@ -135,20 +135,20 @@
 //not needed anymore
 //	icon = 'icons/obj/chemopack.dmi'
 ////////////////////////////////////////
-/obj/item/weapon/reagent_containers/blood/chemo/New()
+/obj/item/reagent_containers/blood/chemo/New()
 	..()
 	reagents.clear_reagents()
 	reagents.add_reagent(PHALANXIMINE, 200)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/blood/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/reagent_containers/blood/attackby(obj/item/W as obj, mob/user as mob)
 	var/turf/T = get_turf(src)
 	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in reagents.reagent_list
 
 	if(mode == BLOODPACK_CUT)
 		return
 
-	if(istype(W, /obj/item/weapon/reagent_containers/syringe))
+	if(istype(W, /obj/item/reagent_containers/syringe))
 		var/datum/reagent/blood/S = locate(/datum/reagent/blood) in W.reagents.reagent_list
 		//if a syringe with infected blood is used, it infects the blood inside the bloodpack.
 		if (S != null && S.data["virus2"] && reagents.has_reagent(BLOOD))
@@ -194,7 +194,7 @@
 				mode = BLOODPACK_CUT
 				update_icon()
 
-/obj/item/weapon/reagent_containers/blood/process()
+/obj/item/reagent_containers/blood/process()
 	var/datum/reagent/blood/B = locate(/datum/reagent/blood) in reagents.reagent_list
 	var/turf/T = get_turf(src)
 
@@ -223,11 +223,11 @@
 					R.reaction_turf(T, A)
 					reagents.remove_reagent(R.id, A)
 
-/obj/item/weapon/reagent_containers/blood/Destroy()
+/obj/item/reagent_containers/blood/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/reagent_containers/blood/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/obj/item/reagent_containers/blood/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	if(mode == BLOODPACK_CUT)
 		to_chat(user, "<span class='warning'>With so many cuts in it... not a good idea.</span>")
 		return INJECTION_RESULT_FAIL

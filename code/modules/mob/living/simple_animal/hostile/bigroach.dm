@@ -30,7 +30,7 @@
 	min_n2 = 0
 	max_n2 = 0
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/roach/big
 
 	melee_damage_lower = 5
 	melee_damage_upper = 10
@@ -64,7 +64,7 @@
 
 	stat_attack = UNCONSCIOUS //Attack unconscious mobs to lay eggs
 
-	var/egg_type = /obj/item/weapon/reagent_containers/food/snacks/egg/bigroach
+	var/egg_type = /obj/item/reagent_containers/food/snacks/egg/bigroach
 
 /mob/living/simple_animal/hostile/bigroach/queen/AttackingTarget()
 	if(isliving(target))
@@ -93,10 +93,10 @@
 	playsound(src, pick('sound/effects/gib1.ogg','sound/effects/gib2.ogg','sound/effects/gib3.ogg'), 40, 1) //Splat
 
 /mob/living/simple_animal/hostile/bigroach/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/newspaper))
+	if(istype(W, /obj/item/newspaper))
 		to_chat(user, "<span class='notice'>You're gonna need a bigger newspaper.</span>")
-	else if(istype(W, /obj/item/weapon/plantspray/pests))
-		var/obj/item/weapon/plantspray/pests/P = W
+	else if(istype(W, /obj/item/plantspray/pests))
+		var/obj/item/plantspray/pests/P = W
 		if(P.use(1))
 			to_chat(user, "<span class='notice'>\The [P] doesn't seem to be very effective.</span>")
 			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)

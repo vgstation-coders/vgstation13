@@ -55,7 +55,7 @@ datum/reagent/chemical_waste
 	required_reagents = list(GROUND_ROCK = 1, LITHIUMSODIUMTUNGSTATE = 2)
 	result_amount = 2
 
-/obj/item/weapon/reagent_containers/glass/solution_tray
+/obj/item/reagent_containers/glass/solution_tray
 	name = "solution tray"
 	desc = "A small, open-topped glass container for delicate research samples. It sports a re-useable strip for labelling with a pen."
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -68,22 +68,22 @@ datum/reagent/chemical_waste
 	volume = 2
 	flags = FPRINT | OPENCONTAINER
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/on_reagent_change()
+/obj/item/reagent_containers/glass/solution_tray/on_reagent_change()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/pickup(mob/user)
+/obj/item/reagent_containers/glass/solution_tray/pickup(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/dropped(mob/user)
+/obj/item/reagent_containers/glass/solution_tray/dropped(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/attack_hand()
+/obj/item/reagent_containers/glass/solution_tray/attack_hand()
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/update_icon()
+/obj/item/reagent_containers/glass/solution_tray/update_icon()
 	overlays.len = 0
 
 	if(reagents?.total_volume)
@@ -94,72 +94,72 @@ datum/reagent/chemical_waste
 
 		overlays += filling
 
-/obj/item/weapon/reagent_containers/glass/solution_tray/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/solution_tray/mop_act(obj/item/mop/M, mob/user)
 	return 1
-obj/item/weapon/reagent_containers/glass/solution_tray/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
-	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+obj/item/reagent_containers/glass/solution_tray/attackby(obj/item/W as obj, mob/living/user as mob)
+	if(istype(W, /obj/item/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 	else
 		..(W, user)
 
-/obj/item/weapon/storage/box/solution_trays
+/obj/item/storage/box/solution_trays
 	name = "solution tray box"
 	icon_state = "solution_trays"
 
-/obj/item/weapon/storage/box/solution_trays/New()
+/obj/item/storage/box/solution_trays/New()
 	..()
 	for(var/i = 1 to 7)
-		new /obj/item/weapon/reagent_containers/glass/solution_tray( src )
+		new /obj/item/reagent_containers/glass/solution_tray( src )
 
 
-/obj/item/weapon/reagent_containers/glass/beaker/tungsten
+/obj/item/reagent_containers/glass/beaker/tungsten
 	name = "beaker 'tungsten'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/tungsten/New()
+/obj/item/reagent_containers/glass/beaker/tungsten/New()
 	..()
 	reagents.add_reagent(TUNGSTEN,50)
 	update_icon()
 
 
-/obj/item/weapon/reagent_containers/glass/beaker/oxygen
+/obj/item/reagent_containers/glass/beaker/oxygen
 	name = "beaker 'oxygen'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/oxygen/New()
+/obj/item/reagent_containers/glass/beaker/oxygen/New()
 	..()
 	reagents.add_reagent(OXYGEN,50)
 	update_icon()
 
 
-/obj/item/weapon/reagent_containers/glass/beaker/sodium
+/obj/item/reagent_containers/glass/beaker/sodium
 	name = "beaker 'sodium'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/sodium/New()
+/obj/item/reagent_containers/glass/beaker/sodium/New()
 	..()
 	reagents.add_reagent(SODIUM,50)
 	update_icon()
 
 
-/obj/item/weapon/reagent_containers/glass/beaker/lithium
+/obj/item/reagent_containers/glass/beaker/lithium
 	name = "beaker 'lithium'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/lithium/New()
+/obj/item/reagent_containers/glass/beaker/lithium/New()
 	..()
 	reagents.add_reagent(LITHIUM,50)
 	update_icon()
 
 
-/obj/item/weapon/reagent_containers/glass/beaker/water
+/obj/item/reagent_containers/glass/beaker/water
 	name = "beaker 'water'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/water/New()
+/obj/item/reagent_containers/glass/beaker/water/New()
 	..()
 	reagents.add_reagent(WATER,50)
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/beaker/fuel
+/obj/item/reagent_containers/glass/beaker/fuel
 	name = "beaker 'fuel'"
 
-/obj/item/weapon/reagent_containers/glass/beaker/fuel/New()
+/obj/item/reagent_containers/glass/beaker/fuel/New()
 	..()
 	reagents.add_reagent(FUEL,50)
 	update_icon()

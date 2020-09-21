@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/med_data
+	build_path = /obj/item/circuitboard/med_data
 
 /datum/design/operating
 	name = "Circuit Design (Operating Computer)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/operating
+	build_path = /obj/item/circuitboard/operating
 
 ///datum/design/pandemic
 //	name = "Circuit Design (PanD.E.M.I.C. 2200)"
@@ -28,7 +28,7 @@
 //	build_type = IMPRINTER
 //	materials = list(MAT_GLASS = 2000, SACID = 20)
 //	category = "Console Boards"
-//	build_path = /obj/item/weapon/circuitboard/pandemic
+//	build_path = /obj/item/circuitboard/pandemic
 
 /datum/design/crewconsole
 	name = "Circuit Design (Crew monitoring computer)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/crew
+	build_path = /obj/item/circuitboard/crew
 
 /datum/design/clonecontrol
 	name = "Circuit Design (Cloning Machine Console)"
@@ -48,4 +48,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/cloning
+	build_path = /obj/item/circuitboard/cloning

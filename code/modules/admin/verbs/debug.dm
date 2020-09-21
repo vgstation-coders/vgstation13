@@ -364,7 +364,7 @@ Pressure: [env.pressure]"}
 		else
 			if(alert("Spawn that person a tome?",,"Yes","No")=="Yes")
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie. A tome, a message from your new master, appears on the ground.</span>")
-				new /obj/item/weapon/tome_legacy(M.loc)
+				new /obj/item/tome_legacy(M.loc)
 			else
 				to_chat(M, "<span class='warning'>You catch a glimpse of the Realm of Nar-Sie, The Geometer of Blood. You now see how flimsy the world is, you see that it should be open to the knowledge of Nar-Sie.</span>")
 			var/glimpse=pick("1","2","3","4","5","6","7","8")
@@ -437,14 +437,14 @@ Pressure: [env.pressure]"}
 	if (istype(M, /mob/living/carbon/human))
 		var/mob/living/carbon/human/H = M
 		if (H.wear_id)
-			var/obj/item/weapon/card/id/id = H.wear_id
+			var/obj/item/card/id/id = H.wear_id
 			if(istype(H.wear_id, /obj/item/device/pda))
 				var/obj/item/device/pda/pda = H.wear_id
 				id = pda.id
 			id.icon_state = "gold"
 			id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
 		else
-			var/obj/item/weapon/card/id/id = new/obj/item/weapon/card/id(M);
+			var/obj/item/card/id/id = new/obj/item/card/id(M);
 			id.icon_state = "gold"
 			id:access = get_all_accesses()+get_all_centcom_access()+get_all_syndicate_access()
 			id.registered_name = H.real_name
@@ -593,7 +593,7 @@ Pressure: [env.pressure]"}
 	for(var/obj/machinery/power/rad_collector/Rad in rad_collectors)
 		if(Rad.anchored)
 			if(!Rad.P)
-				var/obj/item/weapon/tank/plasma/Plasma = new/obj/item/weapon/tank/plasma(Rad)
+				var/obj/item/tank/plasma/Plasma = new/obj/item/tank/plasma(Rad)
 				Plasma.air_contents[GAS_PLASMA] = 100 //Don't need to explain, space magic
 				Plasma.air_contents.temperature = 73.15 //Perfect freezer cooling
 				Plasma.air_contents.update_values()
@@ -916,7 +916,7 @@ client/proc/delete_all_bomberman()
 	for(var/obj/structure/bomberman/O in bombermangear)
 		qdel(O)
 
-	for(var/obj/item/weapon/bomberman/O in bombermangear)
+	for(var/obj/item/bomberman/O in bombermangear)
 		if(istype(O.loc, /mob/living/carbon/))
 			var/mob/living/carbon/C = O.loc
 			C.u_equip(O,1)

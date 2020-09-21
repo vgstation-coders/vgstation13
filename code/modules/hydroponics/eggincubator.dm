@@ -10,10 +10,10 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	flags = OPENCONTAINER | NOREACT
 	pass_flags = PASSTABLE
-	var/input_path = /obj/item/weapon/reagent_containers/food/snacks/egg
+	var/input_path = /obj/item/reagent_containers/food/snacks/egg
 	var/limit = 1
 	var/speed_bonus = 0
-	var/circuitpath = /obj/item/weapon/circuitboard/egg_incubator
+	var/circuitpath = /obj/item/circuitboard/egg_incubator
 	var/active_state = "incubator_old_on"
 
 /obj/machinery/egg_incubator/New()
@@ -21,9 +21,9 @@
 
 	component_parts = newlist(
 		circuitpath,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/matter_bin
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/matter_bin
 	)
 
 	RefreshParts()
@@ -31,10 +31,10 @@
 /obj/machinery/egg_incubator/RefreshParts()
 	var/bincount = 0
 	var/capcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/capacitor))
 			capcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+		if(istype(SP, /obj/item/stock_parts/matter_bin))
 			bincount += SP.rating
 	limit = bincount
 	speed_bonus = round(capcount/2,1)
@@ -78,21 +78,21 @@
 	var/counter = 0
 	if(!(contents.len))
 		dat += "\The [src] is empty."
-	for (var/obj/item/weapon/reagent_containers/food/snacks/E in contents)
+	for (var/obj/item/reagent_containers/food/snacks/E in contents)
 		counter++
 		dat += "Slot [counter]: [getProgress(E)]% grown. <A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
 
 	user << browse("<HEAD><TITLE>[capitalize(name)]</TITLE></HEAD><TT>[dat]</TT>", "window=egg_incubator")
 	onclose(user, "egg_incubator")
 
-/obj/machinery/egg_incubator/proc/getProgress(var/obj/item/weapon/reagent_containers/food/snacks/egg/E)
+/obj/machinery/egg_incubator/proc/getProgress(var/obj/item/reagent_containers/food/snacks/egg/E)
 	if(istype(E))
 		return E.amount_grown
 
 /obj/machinery/egg_incubator/Topic(href, href_list)
 	if(..())
 		return 1
-	var/obj/item/weapon/reagent_containers/food/snacks/E = locate(href_list["slot"])
+	var/obj/item/reagent_containers/food/snacks/E = locate(href_list["slot"])
 	if(!istype(E))
 		return //How did we get here at all?
 	eject(E)
@@ -112,7 +112,7 @@
 
 /obj/machinery/egg_incubator/proc/handle_growth(var/list/incubating_objects)
 	var/any_hatch = 0
-	for(var/obj/item/weapon/reagent_containers/food/snacks/egg/E in incubating_objects)
+	for(var/obj/item/reagent_containers/food/snacks/egg/E in incubating_objects)
 		E.amount_grown += rand(2,3)+speed_bonus
 		if(E.amount_grown>=100)
 			eject(E)
@@ -133,12 +133,12 @@
 	icon = 'icons/obj/cloning.dmi'
 	icon_state = "pod_0"
 	active_state = "pod_g"
-	input_path = /obj/item/weapon/reagent_containers/food/snacks/meat/box
-	circuitpath = /obj/item/weapon/circuitboard/box_cloner
+	input_path = /obj/item/reagent_containers/food/snacks/meat/box
+	circuitpath = /obj/item/circuitboard/box_cloner
 
 /obj/machinery/egg_incubator/box_cloner/handle_growth(var/list/incubating_objects)
 	var/any_hatch = 0
-	for(var/obj/item/weapon/reagent_containers/food/snacks/meat/box/B in incubating_objects)
+	for(var/obj/item/reagent_containers/food/snacks/meat/box/B in incubating_objects)
 		B.amount_cloned += rand(2,3)+speed_bonus
 		if(B.amount_cloned>=100)
 			eject(B)
@@ -147,6 +147,6 @@
 			any_hatch = 1
 	return any_hatch
 
-/obj/machinery/egg_incubator/box_cloner/getProgress(var/obj/item/weapon/reagent_containers/food/snacks/meat/box/B)
+/obj/machinery/egg_incubator/box_cloner/getProgress(var/obj/item/reagent_containers/food/snacks/meat/box/B)
 	if(istype(B))
 		return B.amount_cloned

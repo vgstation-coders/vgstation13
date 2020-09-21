@@ -20,7 +20,7 @@ var/list/obj/machinery/prism/prism_list = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/prism
+		/obj/item/circuitboard/prism
 	)
 	prism_list += src
 

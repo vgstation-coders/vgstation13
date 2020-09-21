@@ -76,13 +76,13 @@
 
 /obj/structure/closet/cabinet/medivault/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/box/masks,
-		/obj/item/weapon/storage/backpack/satchel_med,
+		/obj/item/storage/box/masks,
+		/obj/item/storage/backpack/satchel_med,
 		/obj/item/clothing/under/rank/medical,
 		/obj/item/clothing/head/bio_hood/virology,
 		/obj/item/clothing/suit/bio_suit/virology,
 		/obj/item/clothing/shoes/white,
-		/obj/item/weapon/paper/pamphlet/medivault,
+		/obj/item/paper/pamphlet/medivault,
 	)
 
 /obj/structure/closet/acloset
@@ -150,10 +150,10 @@
 /obj/structure/closet/thunderdome/tdred/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/suit/armor/tdome/red = 3,
-		/obj/item/weapon/melee/energy/sword = 3,
-		/obj/item/weapon/gun/energy/laser = 3,
-		/obj/item/weapon/melee/baton/loaded = 3,
-		/obj/item/weapon/storage/box/flashbangs = 3,
+		/obj/item/melee/energy/sword = 3,
+		/obj/item/gun/energy/laser = 3,
+		/obj/item/melee/baton/loaded = 3,
+		/obj/item/storage/box/flashbangs = 3,
 		/obj/item/clothing/head/helmet/thunderdome = 3,
 	)
 
@@ -166,10 +166,10 @@
 /obj/structure/closet/thunderdome/tdgreen/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/suit/armor/tdome/green = 3,
-		/obj/item/weapon/melee/energy/sword = 3,
-		/obj/item/weapon/gun/energy/laser = 3,
-		/obj/item/weapon/melee/baton/loaded = 3,
-		/obj/item/weapon/storage/box/flashbangs = 3,
+		/obj/item/melee/energy/sword = 3,
+		/obj/item/gun/energy/laser = 3,
+		/obj/item/melee/baton/loaded = 3,
+		/obj/item/storage/box/flashbangs = 3,
 		/obj/item/clothing/head/helmet/thunderdome = 3,
 	)
 

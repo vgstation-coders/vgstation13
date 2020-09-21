@@ -57,7 +57,7 @@
 /obj/machinery/bot/farmbot/New()
 	..()
 	src.icon_state = "[src.icon_initial][src.on]"
-	src.botcard = new /obj/item/weapon/card/id(src)
+	src.botcard = new /obj/item/card/id(src)
 	src.botcard.access = req_access
 
 	if ( !tank ) //Should be set as part of making it... but lets check anyway
@@ -87,7 +87,7 @@
 
 /obj/machinery/bot/farmbot/proc/get_total_ferts()
 	var total_fert = 0
-	for(var/obj/item/weapon/reagent_containers/glass/fert in contents)
+	for(var/obj/item/reagent_containers/glass/fert in contents)
 		total_fert++
 	return total_fert
 
@@ -146,14 +146,14 @@
 		setting_ignoreEmpty = !setting_ignoreEmpty
 	else if (href_list["eject"] )
 		flick("[src.icon_initial]_hatch",src)
-		for (var/obj/item/weapon/reagent_containers/glass/fert in contents)
+		for (var/obj/item/reagent_containers/glass/fert in contents)
 			fert.forceMove(get_turf(src))
 
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/bot/farmbot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+/obj/machinery/bot/farmbot/attackby(obj/item/W as obj, mob/user as mob)
+	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
 			src.locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")
@@ -161,7 +161,7 @@
 		else
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 
-	else if (istype(W, /obj/item/weapon/reagent_containers/glass))
+	else if (istype(W, /obj/item/reagent_containers/glass))
 		if ( get_total_ferts() >= Max_Fertilizers )
 			to_chat(user, "The fertilizer storage is full!")
 			return
@@ -195,15 +195,15 @@
 	visible_message("<span class='danger'>[src] blows apart!</span>", 1)
 	var/turf/Tsec = get_turf(src)
 
-	new /obj/item/weapon/minihoe(Tsec)
-	new /obj/item/weapon/reagent_containers/glass/bucket(Tsec)
+	new /obj/item/minihoe(Tsec)
+	new /obj/item/reagent_containers/glass/bucket(Tsec)
 	new /obj/item/device/assembly/prox_sensor(Tsec)
 	new /obj/item/device/analyzer/plant_analyzer(Tsec)
 
 	if ( tank )
 		tank.forceMove(Tsec)
 
-	for ( var/obj/item/weapon/reagent_containers/glass/fert in contents )
+	for ( var/obj/item/reagent_containers/glass/fert in contents )
 		if ( prob(50) )
 			fert.forceMove(Tsec)
 
@@ -266,8 +266,8 @@
 
 	if ( mode == FARMBOT_MODE_FERTILIZE )
 		//Find which fertilizer to use
-		var/obj/item/weapon/reagent_containers/glass/fert
-		for ( var/obj/item/weapon/reagent_containers/glass/nut in contents )
+		var/obj/item/reagent_containers/glass/fert
+		for ( var/obj/item/reagent_containers/glass/nut in contents )
 			fert = nut
 			break
 		if ( !fert )
@@ -334,7 +334,7 @@
 	return 0
 
 
-/obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/weapon/reagent_containers/glass/fert)
+/obj/machinery/bot/farmbot/proc/fertilize(var/obj/item/reagent_containers/glass/fert)
 	if ( !fert )
 		target = null
 		mode = 0
@@ -456,7 +456,7 @@
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 
 
-/obj/item/weapon/farmbot_arm_assembly
+/obj/item/farmbot_arm_assembly
 	name = "water tank/robot arm assembly"
 	desc = "A water tank with a robot arm permanently grafted to it."
 	icon = 'icons/obj/aibots.dmi'
@@ -465,7 +465,7 @@
 	var/created_name = "Farmbot" //To preserve the name if it's a unique farmbot I guess
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/farmbot_arm_assembly/New()
+/obj/item/farmbot_arm_assembly/New()
 	..()
 	spawn(4) // If an admin spawned it, it won't have a watertank it, so lets make one for em!
 		var tank = locate(/obj/structure/reagent_dispensers/watertank) in contents
@@ -481,7 +481,7 @@
 
 	//Making a farmbot!
 
-	var/obj/item/weapon/farmbot_arm_assembly/A = new /obj/item/weapon/farmbot_arm_assembly
+	var/obj/item/farmbot_arm_assembly/A = new /obj/item/farmbot_arm_assembly
 
 	A.forceMove(src.loc)
 	to_chat(user, "You add the robot arm to the [src]")
@@ -490,7 +490,7 @@
 	qdel(S)
 	S = null
 
-/obj/item/weapon/farmbot_arm_assembly/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/farmbot_arm_assembly/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if((istype(W, /obj/item/device/analyzer/plant_analyzer)) && (!src.build_step))
 		src.build_step++
@@ -499,14 +499,14 @@
 		qdel(W)
 		W = null
 
-	else if(( istype(W, /obj/item/weapon/reagent_containers/glass/bucket)) && (src.build_step == 1))
+	else if(( istype(W, /obj/item/reagent_containers/glass/bucket)) && (src.build_step == 1))
 		src.build_step++
 		to_chat(user, "You add a bucket to [src]!")
 		src.name = "farmbot assembly with bucket"
 		qdel(W)
 		W = null
 
-	else if(( istype(W, /obj/item/weapon/minihoe)) && (src.build_step == 2))
+	else if(( istype(W, /obj/item/minihoe)) && (src.build_step == 2))
 		src.build_step++
 		to_chat(user, "You add a minihoe to [src]!")
 		src.name = "farmbot assembly with bucket and minihoe"
@@ -526,7 +526,7 @@
 		W = null
 		qdel(src)
 
-	else if(istype(W, /obj/item/weapon/pen))
+	else if(istype(W, /obj/item/pen))
 		var/t = input(user, "Enter new robot name", src.name, src.created_name) as text
 		t = copytext(sanitize(t), 1, MAX_NAME_LEN)
 		if (!t)

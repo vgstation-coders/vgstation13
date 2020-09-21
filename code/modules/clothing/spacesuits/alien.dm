@@ -19,17 +19,17 @@
 	species_restricted = list(UNATHI_SHAPED)
 	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
-		/obj/item/weapon/gun,
+		/obj/item/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/tank,
+		/obj/item/melee/baton,
+		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/handcuffs,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 	)
 	clothing_flags = PLASMAGUARD
 
@@ -52,17 +52,17 @@
 	species_restricted = list(UNATHI_SHAPED)
 	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
-		/obj/item/weapon/gun,
+		/obj/item/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/tank,
+		/obj/item/melee/baton,
+		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/handcuffs,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_BULKY
 
@@ -85,17 +85,17 @@
 	species_restricted = list(UNATHI_SHAPED)
 	species_fit = list(UNATHI_SHAPED)
 	allowed = list(
-		/obj/item/weapon/gun,
+		/obj/item/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/tank,
+		/obj/item/melee/baton,
+		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/handcuffs,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 
@@ -106,7 +106,7 @@
 //Raider Gear
 /obj/item/clothing/suit/space/vox
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs,/obj/item/tank)
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
@@ -350,7 +350,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers."
 	icon_state = "vox-civ-assistant"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/tank,/obj/item/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 25)
 	pressure_resistance = 5 * ONE_ATMOSPHERE
 
@@ -445,7 +445,7 @@
 	icon_state = "vox-civ-engineer"
 	item_state = "vox-pressure-engineer"
 	armor = list(melee = 5, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 
@@ -534,7 +534,7 @@
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for medical personnel."
 	icon_state = "vox-civ-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/tank,/obj/item/device/flashlight,/obj/item/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical
@@ -579,7 +579,7 @@
 	name = "vox paramedic pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for paramedics."
 	icon_state = "vox-civ-paramedic"
-	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/tank,/obj/item/device/flashlight,/obj/item/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
 	name = "vox paramedic pressure helmet"
@@ -590,7 +590,7 @@
 	name = "vox CMO pressure suit"
 	desc = "A cheap and oddly-shaped pressure suit made for vox crewmembers. This one is for the CMO."
 	icon_state = "vox-civ-cmo"
-	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
+	allowed = list(/obj/item/tank,/obj/item/device/flashlight,/obj/item/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
 	name = "vox CMO pressure helmet"
@@ -604,7 +604,7 @@
 	icon_state = "vox-civ-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/tank,/obj/item/gun,/obj/item/device/flashlight,/obj/item/tank,/obj/item/melee/baton)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
 /obj/item/clothing/head/helmet/space/vox/civ/security
@@ -622,7 +622,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team."
 	icon_state = "vox-pressure-normal"
 	item_state = "vox-pressure-normal"
-	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/tank,/obj/item/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 10)
 	species_restricted = list(VOX_SHAPED)
 
@@ -663,7 +663,7 @@
 	desc = "A modernized pressure suit for Vox who've decided to work for the winning team.  This one's for medical personnel."
 	icon_state = "vox-pressure-medical"
 	item_state = "vox-pressure-medical"
-	allowed = list(/obj/item/weapon/tank,/obj/item/device/flashlight,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
+	allowed = list(/obj/item/tank,/obj/item/device/flashlight,/obj/item/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/medical
 	name = "vox medical pressure helmet"
@@ -677,7 +677,7 @@
 	icon_state = "vox-pressure-security"
 	item_state = "vox-pressure-security"
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
-	allowed = list(/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/baton)
+	allowed = list(/obj/item/tank,/obj/item/gun,/obj/item/device/flashlight,/obj/item/tank,/obj/item/melee/baton)
 
 /obj/item/clothing/head/helmet/space/vox/civ/old/security
 	name = "vox security pressure helmet"
@@ -722,10 +722,10 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_HEAD|IGNORE_INV
 	species_restricted = list("Martian")
-	var/obj/item/weapon/tank/tank
+	var/obj/item/tank/tank
 
 /obj/item/clothing/head/helmet/space/martian/attackby(obj/item/W,mob/user)
-	if(istype(W, /obj/item/weapon/tank) && !tank)
+	if(istype(W, /obj/item/tank) && !tank)
 		to_chat(user, "<span class = 'notice'>You start attaching \the [W] to \the [src].</span>")
 		if(do_after(user,src, 50))
 			if(user.drop_item(W, src))
@@ -772,17 +772,17 @@
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
 	allowed = list(
-		/obj/item/weapon/gun,
+		/obj/item/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/tank,
+		/obj/item/melee/baton,
+		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/handcuffs,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 	)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 
@@ -804,5 +804,5 @@
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
 	species_restricted = list(SKRELL_SHAPED)
 	species_fit = list(SKRELL_SHAPED)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/storage/)
 	slowdown = HARDSUIT_SLOWDOWN_LOW

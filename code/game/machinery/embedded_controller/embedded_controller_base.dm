@@ -9,8 +9,8 @@
 	var/on = 1
 
 	var/build=2        // Build state
-	var/boardtype=null // /obj/item/weapon/circuitboard/ecb
-	var/obj/item/weapon/circuitboard/_circuitboard
+	var/boardtype=null // /obj/item/circuitboard/ecb
+	var/obj/item/circuitboard/_circuitboard
 	machine_flags = MULTITOOL_MENU
 /obj/machinery/embedded_controller/New(turf/loc, var/ndir, var/building=0)
 	..()
@@ -45,8 +45,8 @@
 						new /obj/item/mounted/frame/airlock_controller(get_turf(src))
 						qdel(src)
 					return 1
-				if(istype(W, /obj/item/weapon/circuitboard))
-					var/obj/item/weapon/circuitboard/C=W
+				if(istype(W, /obj/item/circuitboard))
+					var/obj/item/circuitboard/C=W
 					if(C.board_type!= EMBEDDED_CONTROLLER)
 						to_chat(user, "<span class='warning'>You cannot install this type of board into an embedded controller.</span>")
 						return
@@ -66,7 +66,7 @@
 						playsound(src, 'sound/effects/pop.ogg', 50, 0)
 						build--
 						update_icon()
-						var/obj/item/weapon/circuitboard/C
+						var/obj/item/circuitboard/C
 						if(_circuitboard)
 							_circuitboard.forceMove(get_turf(src))
 							C=_circuitboard

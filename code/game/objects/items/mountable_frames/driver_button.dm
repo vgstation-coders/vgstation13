@@ -22,7 +22,7 @@
 	I.frequency = src.frequency
 	qdel(src)
 
-/obj/item/mounted/frame/driver_button/signaler_button/attackby(obj/item/weapon/W, mob/user)
+/obj/item/mounted/frame/driver_button/signaler_button/attackby(obj/item/W, mob/user)
 	if(W.is_wrench(user))
 		new /obj/item/stack/sheet/metal(get_turf(src.loc))
 		var/obj/item/device/assembly/signaler/I = new (get_turf(src.loc))

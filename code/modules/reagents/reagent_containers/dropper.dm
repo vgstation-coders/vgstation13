@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// Droppers.
 ////////////////////////////////////////////////////////////////////////////////
-/obj/item/weapon/reagent_containers/dropper
+/obj/item/reagent_containers/dropper
 	name = "Dropper"
 	desc = "A dropper. Transfers 5 units."
 	icon = 'icons/obj/chemical.dmi'
@@ -11,18 +11,18 @@
 	volume = 5
 	// List of types that can be injected regardless of the CONTAINEROPEN flag
 	// TODO Remove snowflake
-	var/injectable_types = list(/obj/item/weapon/reagent_containers/food,
+	var/injectable_types = list(/obj/item/reagent_containers/food,
 	                            /obj/item/slime_extract,
 	                            /obj/item/clothing/mask/cigarette,
-	                            /obj/item/weapon/storage/fancy/cigarettes,
-	                            /obj/item/weapon/implantcase/chem,
-	                            /obj/item/weapon/reagent_containers/pill/time_release,
-	                            /obj/item/weapon/fossil/egg)
+	                            /obj/item/storage/fancy/cigarettes,
+	                            /obj/item/implantcase/chem,
+	                            /obj/item/reagent_containers/pill/time_release,
+	                            /obj/item/fossil/egg)
 
-/obj/item/weapon/reagent_containers/dropper/update_icon()
+/obj/item/reagent_containers/dropper/update_icon()
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
-/obj/item/weapon/reagent_containers/dropper/attack(mob/M as mob, mob/user as mob)
+/obj/item/reagent_containers/dropper/attack(mob/M as mob, mob/user as mob)
 	if(!reagents.total_volume && M.is_open_container())
 		to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
 		return
@@ -48,7 +48,7 @@
 	update_icon()
 	return
 
-/obj/item/weapon/reagent_containers/dropper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
+/obj/item/reagent_containers/dropper/afterattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(!proximity_flag)
 		return
 
@@ -92,17 +92,17 @@
 
 	return
 
-/obj/item/weapon/reagent_containers/dropper/baster
+/obj/item/reagent_containers/dropper/baster
 	name = "baster"
 	desc = "A specialized tool for precise addition of chemicals."
 	icon_state = "baster"
 	possible_transfer_amounts = list(1,2,3,4,5,10,15)
 	volume = 15
 
-/obj/item/weapon/reagent_containers/dropper/baster/update_icon()
+/obj/item/reagent_containers/dropper/baster/update_icon()
 	return
 
-/obj/item/weapon/reagent_containers/dropper/robodropper
+/obj/item/reagent_containers/dropper/robodropper
 	name = "Industrial Dropper"
 	desc = "A larger dropper. Transfers 10 units."
 	icon = 'icons/obj/chemical.dmi'

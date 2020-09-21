@@ -115,12 +115,12 @@
 				var/cashscore = 0
 				var/dmgscore = 0
 
-				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
+				for(var/obj/item/card/id/C1 in get_contents_in_object(player, /obj/item/card/id))
 					cashscore += C1.GetBalance() //From bank account
 					if(istype(C1.virtual_wallet))
 						cashscore += C1.virtual_wallet.money
 
-				for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
+				for(var/obj/item/spacecash/C2 in get_contents_in_object(player, /obj/item/spacecash))
 					cashscore += (C2.amount * C2.worth)
 
 				var/datum/record/money/record = new(player.key, player.job, cashscore)
@@ -160,7 +160,7 @@
 			score["allarrested"] = 1
 
 		score["disc"] = 1
-		for(var/obj/item/weapon/disk/nuclear/A in world)
+		for(var/obj/item/disk/nuclear/A in world)
 			if(A.loc != /mob/living/carbon)
 				continue
 			var/turf/location = get_turf(A.loc)
@@ -225,7 +225,7 @@
 		for(var/obj/machinery/power/apc/A in power_machines)
 			if(A.z != map.zMainStation)
 				continue
-			for(var/obj/item/weapon/cell/C in A.contents)
+			for(var/obj/item/cell/C in A.contents)
 				if(C.percent() < 30)
 					score["powerloss"]++ //Enough to auto-cut equipment, so alarm
 	for(var/datum/powernet/PN in powernets)
@@ -421,7 +421,7 @@
 				continue
 			crewcount++
 
-		for(var/obj/item/weapon/disk/nuclear/N in world)
+		for(var/obj/item/disk/nuclear/N in world)
 			if(!N)
 				continue
 			var/atom/disk_loc = N.loc

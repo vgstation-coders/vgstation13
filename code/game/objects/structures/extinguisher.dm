@@ -5,7 +5,7 @@
 	icon_state = "extinguisher_closed"
 	anchored = 1
 	density = FALSE
-	var/obj/item/weapon/extinguisher/has_extinguisher = new/obj/item/weapon/extinguisher
+	var/obj/item/extinguisher/has_extinguisher = new/obj/item/extinguisher
 	var/opened = 0
 
 /obj/structure/extinguisher_cabinet/empty
@@ -19,7 +19,7 @@
 /obj/structure/extinguisher_cabinet/attackby(obj/item/O, mob/user)
 	if(isrobot(user) || isalien(user))
 		return
-	if(istype(O, /obj/item/weapon/extinguisher))
+	if(istype(O, /obj/item/extinguisher))
 		if(!has_extinguisher && opened)
 			if(user.drop_item(O, src))
 				has_extinguisher = O
@@ -72,7 +72,7 @@
 		icon_state = "extinguisher_closed"
 		return
 	if(has_extinguisher)
-		if(istype(has_extinguisher, /obj/item/weapon/extinguisher/mini))
+		if(istype(has_extinguisher, /obj/item/extinguisher/mini))
 			icon_state = "extinguisher_mini"
 		else
 			icon_state = "extinguisher_full"
@@ -80,7 +80,7 @@
 		icon_state = "extinguisher_empty"
 
 
-/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/structure/extinguisher_cabinet/proc/weld(var/obj/item/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(has_extinguisher)

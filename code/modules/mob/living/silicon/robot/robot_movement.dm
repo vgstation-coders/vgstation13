@@ -19,8 +19,8 @@
 
 /mob/living/silicon/robot/Process_Spacemove(var/check_drift = FALSE)
 	if(module)
-		for(var/obj/item/weapon/tank/jetpack/J in module.modules)
-			if(J && istype(J, /obj/item/weapon/tank/jetpack))
+		for(var/obj/item/tank/jetpack/J in module.modules)
+			if(J && istype(J, /obj/item/tank/jetpack))
 				if(((!check_drift) || (check_drift && J.stabilization_on)) && (J.allow_thrust(0.01, src)))
 					inertia_dir = FALSE
 					return TRUE

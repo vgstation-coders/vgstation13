@@ -1,6 +1,6 @@
 /datum/unit_test/circuitboards/start()
-	for(var/cb_type in subtypesof(/obj/item/weapon/circuitboard))
-		var/obj/item/weapon/circuitboard/instance = new cb_type
+	for(var/cb_type in subtypesof(/obj/item/circuitboard))
+		var/obj/item/circuitboard/instance = new cb_type
 
 		var/req_components = instance.req_components
 		for(var/component in req_components)
@@ -15,8 +15,8 @@
 			
 		var/build_path = instance.build_path
 		var/list/abstract_types = list(
-			/obj/item/weapon/circuitboard/sorting_machine,
-			/obj/item/weapon/circuitboard/telecomms,
+			/obj/item/circuitboard/sorting_machine,
+			/obj/item/circuitboard/telecomms,
 		)
 		if(cb_type in abstract_types)
 			continue

@@ -16,7 +16,7 @@
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/tank, /obj/item/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/pickaxe, /obj/item/device/rcd, /obj/item/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer
@@ -43,7 +43,7 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
-	cell_type = /obj/item/weapon/cell/super
+	cell_type = /obj/item/cell/super
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
 
 /obj/item/clothing/head/helmet/space/rig/engineer/elite/test
@@ -59,8 +59,8 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite/test
 	gloves_type = /obj/item/clothing/gloves/yellow
 	boots_type = /obj/item/clothing/shoes/magboots/elite
-	tank_type = /obj/item/weapon/tank/oxygen
-	cell_type = /obj/item/weapon/cell/rad/large
+	tank_type = /obj/item/tank/oxygen
+	cell_type = /obj/item/cell/rad/large
 	initial_modules = list(/obj/item/rig_module/health_readout, /obj/item/rig_module/tank_refiller)
 
 //Mining rig
@@ -87,11 +87,11 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
 	allowed = list(
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/storage/bag/ore,
+		/obj/item/tank,
+		/obj/item/storage/bag/ore,
 		/obj/item/device/mining_scanner,
-		/obj/item/weapon/pickaxe,
-		/obj/item/weapon/gun/energy/kinetic_accelerator)
+		/obj/item/pickaxe,
+		/obj/item/gun/energy/kinetic_accelerator)
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
@@ -132,7 +132,7 @@
 	species_fit = list(VOX_SHAPED, SKRELL_SHAPED, UNATHI_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs)
 	siemens_coefficient = 0.6
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 
@@ -177,7 +177,7 @@
 	item_state = "syndicate-black"
 	w_class = W_CLASS_MEDIUM
 	armor = list(melee = 70, bullet = 60, laser = 40, energy = 25, bomb = 50, bio = 100, rad = 60)
-	allowed = list(/obj/item/weapon/gun/osipr, /obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/gun, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton, /obj/item/weapon/melee/energy/sword, /obj/item/weapon/handcuffs)
+	allowed = list(/obj/item/gun/osipr, /obj/item/device/flashlight, /obj/item/tank, /obj/item/gun, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/melee/baton, /obj/item/melee/energy/sword, /obj/item/handcuffs)
 	siemens_coefficient = 0.5
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
@@ -220,7 +220,7 @@
 
 	species_restricted = null
 	head_type = /obj/item/clothing/head/helmet/space/rig/wizard
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/teleportation_scroll,/obj/item/weapon/gun/energy/staff)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/teleportation_scroll,/obj/item/gun/energy/staff)
 
 /obj/item/clothing/suit/space/rig/wizard/acidable()
 	return 0
@@ -259,7 +259,7 @@
 	item_state = "medical_hardsuit"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/storage/firstaid,/obj/item/device/healthanalyzer,/obj/item/stack/medical, /obj/item/roller)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/medical
 
@@ -286,17 +286,17 @@
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 60, bullet = 10, laser = 30, energy = 5, bomb = 45, bio = 100, rad = 10)
 	allowed = list(
-		/obj/item/weapon/gun,
+		/obj/item/gun,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/reagent_containers/spray/pepper,
+		/obj/item/tank,
+		/obj/item/melee/baton,
+		/obj/item/reagent_containers/spray/pepper,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/handcuffs,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 	)
 	siemens_coefficient = 0.7
 	pressure_resistance = 40 * ONE_ATMOSPHERE
@@ -385,7 +385,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	species_fit = list(GREY_SHAPED,INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 5, laser = 40,energy = 5, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/extinguisher, /obj/item/weapon/extinguisher/foam, /obj/item/weapon/storage/toolbox, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/storage/backpack/satchel_norm,/obj/item/device/t_scanner,/obj/item/pickaxe, /obj/item/device/rcd, /obj/item/extinguisher, /obj/item/extinguisher/foam, /obj/item/storage/toolbox, /obj/item/wrench/socket)
 	head_type = /obj/item/clothing/head/helmet/space/rig/atmos/gold
 
 //ADMINBUS RIGS. SOVIET + NAZI
@@ -409,7 +409,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
-	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
+	allowed = list(/obj/item/gun,/obj/item/device/flashlight,/obj/item/tank,/obj/item/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/nazi
 
@@ -433,7 +433,7 @@
 	species_fit = list(GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
-	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
+	allowed = list(/obj/item/gun,/obj/item/device/flashlight,/obj/item/tank,/obj/item/melee/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	head_type = /obj/item/clothing/head/helmet/space/rig/soviet
 
@@ -456,7 +456,7 @@
 	desc = "A heavily armored suit that protects against a lot of things. Used in special operations."
 	icon_state = "rig-deathsquad"
 	item_state = "rig-deathsquad"
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pinpointer,/obj/item/weapon/shield/energy,/obj/item/weapon/c4,/obj/item/weapon/disk/nuclear)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/handcuffs,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/pinpointer,/obj/item/shield/energy,/obj/item/c4,/obj/item/disk/nuclear)
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 25, bomb = 60, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
@@ -486,7 +486,7 @@
 	desc = "A well polished set of armour belonging to a Space-Knight. Maidens Rescued in Space: 100, Maidens who have slept with me in Space: 0."
 	icon_state = "rig-knight"
 	item_state = "rig-knight"
-	allowed = list(/obj/item/weapon/gun,/obj/item/weapon/melee/baton,/obj/item/weapon/tank,/obj/item/weapon/shield/energy,/obj/item/weapon/claymore)
+	allowed = list(/obj/item/gun,/obj/item/melee/baton,/obj/item/tank,/obj/item/shield/energy,/obj/item/claymore)
 	armor = list(melee = 60, bullet = 40, laser = 40,energy = 30, bomb = 50, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.5
@@ -584,7 +584,7 @@
 	item_state = "ghettorig"
 	desc = "A firesuit jury-rigged into being 'space-proof' somehow."
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/extinguisher)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/extinguisher)
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	slowdown = 5 //just wear a firesuit instead if you want to go fast
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE

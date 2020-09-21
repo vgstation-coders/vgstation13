@@ -33,8 +33,8 @@
 	for(var/mob/living/carbon/target in targets)
 		target.drop_hands(force_drop = 1)
 		if(target.find_empty_hand_index())
-			var/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack/S = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack(target.loc)
-			var/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink/D = new /obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink(target.loc)
+			var/obj/item/reagent_containers/food/snacks/summoned/summoned_snack/S = new /obj/item/reagent_containers/food/snacks/summoned/summoned_snack(target.loc)
+			var/obj/item/reagent_containers/food/snacks/summoned/summoned_drink/D = new /obj/item/reagent_containers/food/snacks/summoned/summoned_drink(target.loc)
 			S.spellInherit(menuType, spell_levels[Sp_AMOUNT], spell_levels[Sp_POWER])
 			S.menuOrder(menuType)
 			D.spellInherit(menuType, spell_levels[Sp_AMOUNT], spell_levels[Sp_POWER])
@@ -116,14 +116,14 @@
 		if(Sp_MOVE)
 			return "Changes the type of snack and drink. Resets at max level to allow cycling through the menu. Level 0: Filling, Level 1: Discount, Level 2: Horrible, Level 3: Pub, Level 4: Patrol, Level 5: Spicy."
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned
+/obj/item/reagent_containers/food/snacks/summoned
 	name = "wizard snack"
 	desc = "Magically delicious."
 	icon_state = "spellburger"
 	cant_drop = 1
 	laying_pickup = TRUE
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned/proc/spellInherit(var/menu, var/biteS, var/diabeetus)
+/obj/item/reagent_containers/food/snacks/summoned/proc/spellInherit(var/menu, var/biteS, var/diabeetus)
 	switch(menu)
 		if(SUMMON_SNACKS_FILLING)
 			reagents.add_reagent(NUTRIMENT, 5)
@@ -155,10 +155,10 @@
 	if(diabeetus)
 		reagents.add_reagent(DIABEETUSOL, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned/proc/menuOrder(var/onMenu)
+/obj/item/reagent_containers/food/snacks/summoned/proc/menuOrder(var/onMenu)
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_snack/menuOrder(onMenu)
+/obj/item/reagent_containers/food/snacks/summoned/summoned_snack/menuOrder(onMenu)
 	switch(onMenu)
 		if(SUMMON_SNACKS_FILLING)
 			icon_state = "sandwich"
@@ -182,11 +182,11 @@
 			icon_state = "herbsalad"
 			name = "summoned kebab"
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink
+/obj/item/reagent_containers/food/snacks/summoned/summoned_drink
 	icon = 'icons/obj/drinks.dmi'
 	icon_state = "groans"
 
-/obj/item/weapon/reagent_containers/food/snacks/summoned/summoned_drink/menuOrder(onMenu)
+/obj/item/reagent_containers/food/snacks/summoned/summoned_drink/menuOrder(onMenu)
 	switch(onMenu)
 		if(SUMMON_SNACKS_FILLING)
 			icon_state = "tomatosoup"

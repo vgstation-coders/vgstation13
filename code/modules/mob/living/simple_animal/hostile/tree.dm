@@ -73,4 +73,4 @@
 
 /mob/living/simple_animal/hostile/tree/festivus/spawn_reward()
 	visible_message("<span class='warning'><b>[src]</b> is hacked into pieces!</span>")
-	new /obj/item/weapon/nullrod(loc)
+	new /obj/item/nullrod(loc)

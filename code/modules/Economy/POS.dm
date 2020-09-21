@@ -170,7 +170,7 @@ var/const/POS_HEADER = {"<html>
 		amount = credits_held
 		credits_held = 0
 	if(amount > 0)
-		var/obj/item/weapon/storage/box/B = new(loc)
+		var/obj/item/storage/box/B = new(loc)
 		dispense_cash(amount,B)
 		B.name="change"
 		B.desc="A box of change."
@@ -229,7 +229,7 @@ var/const/POS_HEADER = {"<html>
 		</tr>"}
 	receipt += "</table></body></html>"
 
-	var/obj/item/weapon/paper/P = new(loc)
+	var/obj/item/paper/P = new(loc)
 	P.name="Receipt #[id]-[++sales]"
 	P.info=receipt
 
@@ -444,7 +444,7 @@ var/const/POS_HEADER = {"<html>
 	onclose(user, "pos")
 	return
 
-/obj/machinery/pos/scan_card(var/obj/item/weapon/card/C)
+/obj/machinery/pos/scan_card(var/obj/item/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held
 	var/area/this_area = get_area(src)
 	var/pos_name = "[this_area.name] POS#[id]"
@@ -580,9 +580,9 @@ var/const/POS_HEADER = {"<html>
 	src.attack_hand(usr)
 
 /obj/machinery/pos/attackby(var/atom/movable/A, var/mob/user)
-	if(istype(A,/obj/item/weapon/card))
-		var/obj/item/weapon/card/id/C = A
-		if(istype(C,/obj/item/weapon/card/id) && !logged_in)
+	if(istype(A,/obj/item/card))
+		var/obj/item/card/id/C = A
+		if(istype(C,/obj/item/card/id) && !logged_in)
 			// /atom/mob/visible_message(all_message, self_message, blind_message,...)
 			user.visible_message("<span class='notice'>The machine beeps, and logs [user] in.</span>", "<span class='notice'>The machine beeps, and logs you in.</span>", "You hear a beep.")
 			logged_in = user
@@ -596,7 +596,7 @@ var/const/POS_HEADER = {"<html>
 				flick(src,"pos-error")
 				return
 			connect_account(user, C)
-	else if(istype(A,/obj/item/weapon/spacecash))
+	else if(istype(A,/obj/item/spacecash))
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			flick(src,"pos-error")
@@ -605,7 +605,7 @@ var/const/POS_HEADER = {"<html>
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			flick(src,"pos-error")
 			return
-		var/obj/item/weapon/spacecash/C=A
+		var/obj/item/spacecash/C=A
 		credits_held += C.get_total()
 		qdel(C)
 		if(credits_held >= credits_needed)

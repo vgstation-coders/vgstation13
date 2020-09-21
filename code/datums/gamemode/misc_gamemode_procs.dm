@@ -93,7 +93,7 @@
 
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
-			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			var/obj/item/paper/intercept = new /obj/item/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
 
@@ -142,7 +142,7 @@
 
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
-			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			var/obj/item/paper/intercept = new /obj/item/paper( comm.loc )
 			intercept.name = "paper- '[command_name()] Status Summary'"
 			intercept.info = intercepttext
 
@@ -178,7 +178,7 @@
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe/red(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard/red(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+			var/obj/item/spellbook/S = new /obj/item/spellbook(wizard_mob)
 		//	S.uses = Sp_BASE_PRICE * 3.5
 		//	S.max_uses = Sp_BASE_PRICE * 3.5
 			wizard_mob.put_in_hands(S)
@@ -186,7 +186,7 @@
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
 			wizard_mob.add_spell(new /spell/targeted/absorb)
-			var/obj/item/weapon/spellbook/S = new /obj/item/weapon/spellbook(wizard_mob)
+			var/obj/item/spellbook/S = new /obj/item/spellbook(wizard_mob)
 		//	S.uses = Sp_BASE_PRICE * 3.5
 		//	S.max_uses = Sp_BASE_PRICE * 3.5
 			wizard_mob.put_in_hands(S)
@@ -194,22 +194,22 @@
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 			wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
 			if(!apprentice)
-				wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+				wizard_mob.put_in_hands(new /obj/item/spellbook(wizard_mob))
 	else //No wizwar, give them normal robes
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/wizrobe(wizard_mob), slot_wear_suit)
 		wizard_mob.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(wizard_mob), slot_head)
 		if(!apprentice)
-			wizard_mob.put_in_hands(new /obj/item/weapon/spellbook(wizard_mob))
+			wizard_mob.put_in_hands(new /obj/item/spellbook(wizard_mob))
 	if(wizard_mob.backbag == 2)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(wizard_mob), slot_back)
+		wizard_mob.equip_to_slot_or_del(new /obj/item/storage/backpack(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 3)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(wizard_mob), slot_back)
+		wizard_mob.equip_to_slot_or_del(new /obj/item/storage/backpack/satchel_norm(wizard_mob), slot_back)
 	if(wizard_mob.backbag == 4)
-		wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(wizard_mob), slot_back)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival(wizard_mob), slot_in_backpack)
-	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
-//	wizard_mob.equip_to_slot_or_del(new /obj/item/weapon/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
-	var/scroll_type = apprentice ? /obj/item/weapon/teleportation_scroll/apprentice : /obj/item/weapon/teleportation_scroll
+		wizard_mob.equip_to_slot_or_del(new /obj/item/storage/backpack/satchel(wizard_mob), slot_back)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/storage/box/survival(wizard_mob), slot_in_backpack)
+	wizard_mob.equip_to_slot_or_del(new /obj/item/hair_dye/skin_dye(wizard_mob), slot_in_backpack)
+//	wizard_mob.equip_to_slot_or_del(new /obj/item/scrying_gem(wizard_mob), slot_l_store) For scrying gem.
+	var/scroll_type = apprentice ? /obj/item/teleportation_scroll/apprentice : /obj/item/teleportation_scroll
 	wizard_mob.equip_to_slot_or_del(new scroll_type(wizard_mob), slot_r_store)
 
 	wizard_mob.make_all_robot_parts_organic()
@@ -238,11 +238,11 @@
 	var/static/list/plasmaman_items = list(
 		/obj/item/clothing/suit/space/plasmaman,
 		/obj/item/clothing/head/helmet/space/plasmaman,
-		/obj/item/weapon/tank/plasma/plasmaman,
+		/obj/item/tank/plasma/plasmaman,
 		/obj/item/clothing/mask/breath)
 
 	var/static/list/vox_items = list(
-		/obj/item/weapon/tank/nitrogen,
+		/obj/item/tank/nitrogen,
 		/obj/item/clothing/mask/breath/vox)
 
 	highlander_human.mutations.Add(M_HULK) //all highlanders are permahulks
@@ -253,7 +253,7 @@
 	highlander_human.update_body()
 
 	for (var/obj/item/I in highlander_human)
-		if (istype(I, /obj/item/weapon/implant))
+		if (istype(I, /obj/item/implant))
 			continue
 		if(isplasmaman(highlander_human) && is_type_in_list(I, plasmaman_items)) //Plasmamen don't lose their plasma gear since they need it to live.
 			continue
@@ -265,11 +265,11 @@
 	highlander_human.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(highlander_human), slot_ears)
 	if(!isplasmaman(highlander_human)) //Plasmamen don't get a beret since they need their helmet to not burn to death.
 		highlander_human.equip_to_slot_or_del(new /obj/item/clothing/head/beret(highlander_human), slot_head)
-	highlander_human.put_in_hands(new /obj/item/weapon/claymore(highlander_human))
+	highlander_human.put_in_hands(new /obj/item/claymore(highlander_human))
 	highlander_human.equip_to_slot_or_del(new /obj/item/clothing/shoes/combat(highlander_human), slot_shoes)
-	highlander_human.equip_to_slot_or_del(new /obj/item/weapon/pinpointer(highlander_human), slot_l_store)
+	highlander_human.equip_to_slot_or_del(new /obj/item/pinpointer(highlander_human), slot_l_store)
 
-	var/obj/item/weapon/card/id/new_id = new(highlander_human)
+	var/obj/item/card/id/new_id = new(highlander_human)
 	new_id.name = "[highlander_human.real_name]'s ID Card"
 	new_id.icon_state = "centcom"
 	new_id.access = get_all_accesses()
@@ -462,18 +462,18 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/yellow/vox, slot_gloves) // AS ABOVE.
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox, slot_wear_mask)
-	H.equip_to_slot_or_del(new /obj/item/weapon/tank/nitrogen, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/tank/nitrogen, slot_back)
 	H.equip_to_slot_or_del(new /obj/item/device/flashlight, slot_r_store)
 
-	var/obj/item/weapon/card/id/syndicate/C = new
+	var/obj/item/card/id/syndicate/C = new
 	C.registered_name = H.real_name
 	C.assignment = "Trader"
 	C.UpdateName()
 	C.SetOwnerInfo(H)
 	C.icon_state = "trader"
 	C.access = list(access_syndicate, access_trade)
-	var/obj/item/weapon/storage/wallet/W = new
+	var/obj/item/storage/wallet/W = new
 	W.handle_item_insertion(C)
-	W.handle_item_insertion(new /obj/item/weapon/coin/raider)
+	W.handle_item_insertion(new /obj/item/coin/raider)
 	H.equip_to_slot_or_del(W, slot_wear_id)
 	return 1

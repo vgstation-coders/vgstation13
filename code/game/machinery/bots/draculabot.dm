@@ -19,21 +19,21 @@
 	var/currently_drawing_blood = 0 //One patient at a time.
 	var/quiet = 0
 	var/since_last_reward = 0 //Once every 55u, dispense reward
-	var/list/possible_rewards = list(/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped,
-								/obj/item/weapon/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
+	var/list/possible_rewards = list(/obj/item/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/reagent_containers/food/snacks/ijzerkoekje,
+								/obj/item/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/reagent_containers/food/snacks/chococoin/wrapped,
+								/obj/item/reagent_containers/food/snacks/ijzerkoekje_helper_dummy) //3/7 chance for one cookie, 3/7 chance for chococoin, 1/7 for many cookies!
 	var/list/contained_bags = list()
-	var/obj/item/weapon/reagent_containers/blood/last_bag
+	var/obj/item/reagent_containers/blood/last_bag
 
 
 /obj/machinery/bot/bloodbot/New()
 	..()
 	for(var/i = 1 to 8)
-		contained_bags += new /obj/item/weapon/reagent_containers/blood/empty(src)
+		contained_bags += new /obj/item/reagent_containers/blood/empty(src)
 
 /obj/machinery/bot/bloodbot/Destroy()
 	for(var/obj/O in contained_bags)
@@ -86,7 +86,7 @@
 		var/counter = 0
 		if(!contents.len)
 			dat += "There are no blood packs available.<BR>"
-		for (var/obj/item/weapon/reagent_containers/blood/E in contained_bags)
+		for (var/obj/item/reagent_containers/blood/E in contained_bags)
 			counter++
 			dat += "Slot [counter]: [E] ([100 * E.reagents.total_volume / E.reagents.maximum_volume]% filled)<A href='?src=\ref[src];slot=\ref[E]'>(Eject)</A><BR>"
 		dat += "</TT>The speaker switch is [src.quiet ? "off" : "on"]. <a href='?src=\ref[src];togglevoice=[1]'>Toggle</a><br>"
@@ -108,7 +108,7 @@
 			turn_on()
 
 	else if(href_list["slot"] && contained_bags.len && allowed(usr))
-		var/obj/item/weapon/reagent_containers/blood/E = locate(href_list["slot"])
+		var/obj/item/reagent_containers/blood/E = locate(href_list["slot"])
 		if(E.loc != src)
 			return //No fishing items with href exploits
 		usr.put_in_hands(E) //Try to put it in the user's hands if available.
@@ -134,8 +134,8 @@
 
 	updateUsrDialog()
 
-/obj/machinery/bot/bloodbot/attackby(obj/item/weapon/W, mob/user)
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+/obj/machinery/bot/bloodbot/attackby(obj/item/W, mob/user)
+	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (allowed(user) && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>Controls are now [locked ? "locked" : "unlocked"].</span>")
@@ -147,8 +147,8 @@
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/reagent_containers/blood))
-		var/obj/item/weapon/reagent_containers/blood/B = W
+	if(istype(W,/obj/item/reagent_containers/blood))
+		var/obj/item/reagent_containers/blood/B = W
 		if(B.reagents.is_full())
 			speak("Sorry, nurse. There's no room for more blood in that one.")
 		else
@@ -223,7 +223,7 @@
 			update_icon()
 			return
 		//look for our last used bag and see if it's still valid.
-		var/obj/item/weapon/reagent_containers/blood/B = null
+		var/obj/item/reagent_containers/blood/B = null
 		var/datum/reagent/blood/target_blood = get_blood(H.vessel)
 		if(last_bag && !last_bag.reagents.is_full() && last_bag.blood_type == target_blood.data["blood_type"])
 			B = last_bag
@@ -259,13 +259,13 @@
 	if(!contained_bags.len)
 		speak("Error: No bags inserted.")
 		return null
-	for(var/obj/item/weapon/reagent_containers/blood/B in contained_bags)
+	for(var/obj/item/reagent_containers/blood/B in contained_bags)
 		if(B.reagents.is_full() || B.blood_type != existing_type)
 			continue
 		last_bag = B
 		return B
 	//We don't have a matching bag, but what about an empty bag?
-	for(var/obj/item/weapon/reagent_containers/blood/B in contained_bags)
+	for(var/obj/item/reagent_containers/blood/B in contained_bags)
 		if(B.reagents.is_empty())
 			last_bag = B
 			return B

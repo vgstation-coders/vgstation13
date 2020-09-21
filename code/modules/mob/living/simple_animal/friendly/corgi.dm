@@ -26,8 +26,8 @@
 
 	speak_override = TRUE
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
-	holder_type = /obj/item/weapon/holder/animal/corgi
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/animal/corgi
+	holder_type = /obj/item/holder/animal/corgi
 
 	response_help  = "pets"
 	response_disarm = "bops"
@@ -108,7 +108,7 @@
 					if(movement_target)
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
-						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
+						if(istype(movement_target,/obj/item/reagent_containers/food/snacks))
 							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
@@ -176,7 +176,7 @@
 	return
 
 /mob/living/simple_animal/corgi/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/newspaper))
+	if(istype(O, /obj/item/newspaper))
 		if(!stat)
 			user.visible_message("<span class='notice'>[user] baps [name] on the nose with the rolled up [O]</span>")
 			spawn(0)
@@ -241,7 +241,7 @@
 					if(!item_to_add)
 						usr.visible_message("<span class='notice'>[usr] pets [src]</span>","<span class='notice'>You rest your hand on [src]'s back for a moment.</span>")
 						return
-					if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
+					if(istype(item_to_add,/obj/item/c4)) // last thing he ever wears, I guess
 						item_to_add.afterattack(src,usr,1)
 						return
 
@@ -252,9 +252,9 @@
 						/obj/item/device/radio,
 						/obj/item/device/radio/off,
 						/obj/item/clothing/suit/cardborg,
-						/obj/item/weapon/tank/oxygen,
-						/obj/item/weapon/tank/air,
-						/obj/item/weapon/extinguisher,
+						/obj/item/tank/oxygen,
+						/obj/item/tank/air,
+						/obj/item/extinguisher,
 						/obj/item/clothing/suit/space/rig
 					)
 
@@ -287,7 +287,7 @@
 /mob/living/simple_animal/corgi/proc/place_on_head(obj/item/item_to_add)
 
 
-	if(istype(item_to_add,/obj/item/weapon/c4)) // last thing he ever wears, I guess
+	if(istype(item_to_add,/obj/item/c4)) // last thing he ever wears, I guess
 		item_to_add.afterattack(src,usr,1)
 		return
 
@@ -305,7 +305,7 @@
 	//Various hats and items (worn on his head) change Ian's behaviour. His attributes are reset when a hat is removed.
 	switch(item_to_add.type)
 		if( /obj/item/clothing/glasses/sunglasses, /obj/item/clothing/head/that, /obj/item/clothing/head/collectable/paper,
-				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/weapon/p_folded/hat )
+				/obj/item/clothing/head/hardhat, /obj/item/clothing/head/collectable/hardhat,/obj/item/clothing/head/hardhat/white, /obj/item/p_folded/hat )
 			valid = 1
 
 		if(/obj/item/clothing/head/helmet/tactical/sec,/obj/item/clothing/head/helmet/tactical/sec/preattached)
@@ -394,7 +394,7 @@
 			desc = "Result of robotics budget cuts."
 			valid = 1
 
-		if(/obj/item/weapon/bedsheet)
+		if(/obj/item/bedsheet)
 			name = "\improper Ghost"
 			speak = list("WoooOOOooo~","AuuuuuUuUuUuUuUuUuu~")
 			emote_see = list("stumbles around.", "shivers.")
@@ -549,14 +549,14 @@
 /mob/living/simple_animal/corgi/proc/get_target()
 	var/vision_range = 5
 	var/list/can_see = view(src, vision_range)
-	for(var/obj/item/weapon/reagent_containers/food/snacks/S in can_see)
+	for(var/obj/item/reagent_containers/food/snacks/S in can_see)
 		if(isturf(S.loc) || ishuman(S.loc))
 			movement_target = S
 			corgi_status = BEGIN_FOOD_HUNTING
 			return
 	for(var/mob/living/carbon/M in can_see)
 		for(var/obj/item/H in M.held_items)
-			if(istype(H, /obj/item/weapon/reagent_containers/food/snacks))
+			if(istype(H, /obj/item/reagent_containers/food/snacks))
 				movement_target = H
 				corgi_status = BEGIN_FOOD_HUNTING
 				return
@@ -732,7 +732,7 @@
 	is_pet = TRUE
 
 	species_type = /mob/living/simple_animal/corgi/sasha
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/animal
 
 //Sasha can't wear hats!
 /mob/living/simple_animal/corgi/sasha/Topic(href, href_list)
@@ -741,7 +741,7 @@
 		return
 	..()
 
-/obj/item/weapon/reagent_containers/glass/replenishing/rescue
+/obj/item/reagent_containers/glass/replenishing/rescue
 	name = "rescue barrel"
 	reagent_list = list(LEPORAZINE)
 
@@ -758,7 +758,7 @@
 	var/turns_since_scan = 0
 	var/mob/living/carbon/victim = null
 	can_breed = FALSE //tfw no gf
-	var/obj/item/weapon/reagent_containers/glass/replenishing/rescue/barrel = null
+	var/obj/item/reagent_containers/glass/replenishing/rescue/barrel = null
 
 /mob/living/simple_animal/corgi/saint/death(var/gibbed = FALSE)
 	if(barrel)
@@ -775,7 +775,7 @@
 	if(!M || !Adjacent(M))
 		return
 	if(!barrel)
-		barrel = new /obj/item/weapon/reagent_containers/glass/replenishing/rescue(src)
+		barrel = new /obj/item/reagent_containers/glass/replenishing/rescue(src)
 	barrel.attack(M,src)
 
 /mob/living/simple_animal/corgi/saint/proc/IsVictim(var/mob/M)

@@ -1,4 +1,4 @@
-/obj/item/weapon/p_folded
+/obj/item/p_folded
 	name = "paper"
 	gender = NEUTER
 	icon = 'icons/obj/paper.dmi'
@@ -13,10 +13,10 @@
 
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
-	var/obj/item/weapon/paper/unfolded
+	var/obj/item/paper/unfolded
 	var/nano = 0
 
-/obj/item/weapon/p_folded/New(loc, var/obj/item/weapon/paper/unfolds_into)
+/obj/item/p_folded/New(loc, var/obj/item/paper/unfolds_into)
 	..()
 	if(istype(unfolds_into))
 		unfolded = unfolds_into
@@ -24,20 +24,20 @@
 		unfolded = new(src)
 
 
-/obj/item/weapon/p_folded/Destroy()
+/obj/item/p_folded/Destroy()
 	if (unfolded)
 		qdel(unfolded)
 		unfolded = null
 	return ..()
 
-/obj/item/weapon/p_folded/attack_self(mob/user as mob)
+/obj/item/p_folded/attack_self(mob/user as mob)
 	if (!canunfold(src, user))
 		return
 	processunfolding(user)
 	return
 
-/obj/item/weapon/p_folded/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/weapon/pen))
+/obj/item/p_folded/attackby(obj/item/I, mob/user)
+	if(istype(I,/obj/item/pen))
 		var/N = copytext(sanitize(input(user, "What would you like to name [src.name]?", "Paper Labelling", null) as text), 1, MAX_NAME_LEN)
 		if(N && Adjacent(user) && !user.incapacitated())
 			src.name = N
@@ -50,12 +50,12 @@
 		return
 	return ..()
 
-/obj/item/weapon/p_folded/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/p_folded/throw_at(var/atom/A, throw_range, throw_speed)
 	pixel_y = rand(-7, 7) * PIXEL_MULTIPLIER
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	..()
 
-/obj/item/weapon/p_folded/verb/unfold()
+/obj/item/p_folded/verb/unfold()
 	set category = "Object"
 	set name = "Unfold"
 	set src in usr
@@ -64,7 +64,7 @@
 	processunfolding(usr) //this is a verb so we have to use usr
 	return
 
-/obj/item/weapon/p_folded/proc/processunfolding(mob/user)
+/obj/item/p_folded/proc/processunfolding(mob/user)
 	transfer_fingerprints(src, unfolded)
 
 	user.drop_item(src, force_drop = 1) //drop the item first to free our hand, but don't delete it yet because it contains the unfolding result.
@@ -76,7 +76,7 @@
 	unfolded = null
 	qdel(src) //goodbye cruel world
 
-/obj/item/weapon/p_folded/proc/canunfold(var/obj/item/weapon/p_folded/P, mob/user)
+/obj/item/p_folded/proc/canunfold(var/obj/item/p_folded/P, mob/user)
 	if(!user)
 		return 0
 	if(user.incapacitated())
@@ -87,19 +87,19 @@
 		return 0
 	return 1
 
-/obj/item/weapon/p_folded/crane
+/obj/item/p_folded/crane
 	name = "paper crane"
 	desc = "They say if you fold one thousand cranes, you will be granted a wish!" //good luck folding 1000 cranes in one shift
 	icon_state = "crane_1"
 	var/frame = 0
-/obj/item/weapon/p_folded/crane/attack_self(mob/user)
+/obj/item/p_folded/crane/attack_self(mob/user)
 	if(user.stat || user.restrained())
 		to_chat(user, "<span class='notice'>You can't do that while restrained.</span>")
 		return 0
 	frame = !frame
 	icon_state = (frame ? "crane_2" : "crane_1")
 
-/obj/item/weapon/p_folded/plane
+/obj/item/p_folded/plane
 	name = "paper airplane"
 	icon_state = "plane_east"
 	attack_verb = list("stabs", "jabs")
@@ -107,7 +107,7 @@
 	desc = "Not terribly intimidating, but just might put someone's eye out."
 	throw_range = 12
 	throw_speed = 1
-/obj/item/weapon/p_folded/plane/throw_impact(var/atom/target, speed, mob/user)
+/obj/item/p_folded/plane/throw_impact(var/atom/target, speed, mob/user)
 	..()
 	if(user) //runtimes not allowed
 		if(ishuman(target) && (user.zone_sel.selecting == "eyes" || prob(20)))
@@ -127,20 +127,20 @@
 					H.eye_blurry = max(H.eye_blurry, rand(3,6))
 					H.eye_blind = max(H.eye_blind, src.nano)
 //at last, my block at a rest, bereft of all mortal doubts, I have been enlightened, touched by the sage wisdom, my undying gratitude goes to Comic in this emotional moment
-/obj/item/weapon/p_folded/plane/throw_at(var/atom/A, throw_range, throw_speed)
+/obj/item/p_folded/plane/throw_at(var/atom/A, throw_range, throw_speed)
 	if (A.x > src.x)
 		src.icon_state = "plane_east"
 	else
 		src.icon_state = "plane_west"
 	return ..()
 
-/obj/item/weapon/p_folded/ball
+/obj/item/p_folded/ball
 	name = "ball of paper"
 	icon_state = "paperball"
 	throw_range = 6
 	throw_speed = 3
 
-/obj/item/weapon/p_folded/hat
+/obj/item/p_folded/hat
 	name = "paper hat"
 	desc = "What looks like an ordinary paper hat, IS actually an ordinary paper hat, in no way collectible. Wow!"
 	icon = 'icons/obj/clothing/hats.dmi'
@@ -148,23 +148,23 @@
 	slot_flags = SLOT_HEAD
 	body_parts_covered = HEAD
 
-/obj/item/weapon/p_folded/note_small
+/obj/item/p_folded/note_small
 	name = "folded note"
 	icon_state = "note_small"
 	desc = "Open me!"
 	throw_range = 3
 
-/obj/item/weapon/p_folded/folded_heart
+/obj/item/p_folded/folded_heart
 	name = "origami heart"
 	icon_state = "folded_heart"
 	desc = "Is it for you?"
 
-/obj/item/weapon/p_folded/boat
+/obj/item/p_folded/boat
 	name = "origami boat"
 	desc = "Sailing the starry sea."
 	icon_state = "folded_boat"
 /*
-/obj/item/weapon/p_folded/fortune	//Sadly after a hastily-made test I realized this really, really wouldn't work
+/obj/item/p_folded/fortune	//Sadly after a hastily-made test I realized this really, really wouldn't work
 	name = "fortune teller"			//RIP fortuneteller you were never meant to be
 	desc = "Like a paper 8-ball."
 	var/list/colors = list("red", "blue", "green", "yellow")
@@ -180,7 +180,7 @@
 		"The [pick("Clown","Head of Security","Chaplain","Janitor")] is after you.")
 	var/flop = 0
 	icon_state = "fortuneteller_closed"
-/obj/item/weapon/p_folded/fortune/attack_self(mob/user)
+/obj/item/p_folded/fortune/attack_self(mob/user)
 	flop = rand(0,1)
 	for (var/i = 1 to length(input("Pick a color!") in colors))
 		icon_state = "fortuneteller_closed"

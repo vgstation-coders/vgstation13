@@ -1,4 +1,4 @@
-/obj/item/weapon/storage/bible
+/obj/item/storage/bible
 	name = "bible"
 	desc = "Apply to head repeatedly."
 	icon = 'icons/obj/storage/bibles.dmi'
@@ -19,7 +19,7 @@
 	autoignition_temperature = 522 // Kelvin
 	fire_fuel = 2
 
-/obj/item/weapon/storage/bible/suicide_act(mob/living/user)
+/obj/item/storage/bible/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
 	spawn(10) //Wait for it
@@ -29,32 +29,32 @@
 		return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
 //"Special" Bible with a little gift on introduction
-/obj/item/weapon/storage/bible/booze
+/obj/item/storage/bible/booze
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
 
-/obj/item/weapon/storage/bible/booze/New()
+/obj/item/storage/bible/booze/New()
 	. = ..()
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
-	new /obj/item/weapon/spacecash(src)
+	new /obj/item/reagent_containers/food/drinks/beer(src)
+	new /obj/item/reagent_containers/food/drinks/beer(src)
+	new /obj/item/spacecash(src)
+	new /obj/item/spacecash(src)
+	new /obj/item/spacecash(src)
 
 //Even more "Special" Bible with a nicer gift on introduction
-/obj/item/weapon/storage/bible/traitor_gun
+/obj/item/storage/bible/traitor_gun
 
 	autoignition_temperature = 0 //Not actually paper
 	fire_fuel = 0
 
-/obj/item/weapon/storage/bible/traitor_gun/New()
+/obj/item/storage/bible/traitor_gun/New()
 	. = ..()
-	new /obj/item/weapon/gun/projectile/luger/small(src)
+	new /obj/item/gun/projectile/luger/small(src)
 	new /obj/item/ammo_storage/magazine/mc9mm(src)
 
 //What happens when you slap things with the Bible in general
-/obj/item/weapon/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/storage/bible/attack(mob/living/M as mob, mob/living/user as mob)
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
@@ -136,7 +136,7 @@
 		bless_mob(user, H) //Let's outsource the healing code, because we can
 
 //Bless thee. Heals followers fairly, potentially heals everyone a bit (or gives them brain damage)
-/obj/item/weapon/storage/bible/proc/bless_mob(mob/living/carbon/human/user, mob/living/carbon/human/H)
+/obj/item/storage/bible/proc/bless_mob(mob/living/carbon/human/user, mob/living/carbon/human/H)
 	var/datum/organ/internal/brain/sponge = H.internal_organs_by_name["brain"]
 	if(sponge && sponge.damage >= 60) //Massive brain damage
 		to_chat(user, "<span class='warning'>[H] responds to \the [src]'s blessing with drooling and an empty stare. [my_rel.deity_name]'s teachings appear to be lost on this poor soul.</span>")
@@ -151,7 +151,7 @@
 	return //Nothing else to add
 
 //We're done working on mobs, let's check if we're blessing something else
-/obj/item/weapon/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
+/obj/item/storage/bible/afterattack(var/atom/A, var/mob/user, var/proximity_flag)
 	if(!proximity_flag)
 		return
 	user.delayNextAttack(5)
@@ -164,12 +164,12 @@
 			A.reagents.del_reagent(WATER)
 			A.reagents.add_reagent(HOLYWATER, water2holy)
 
-/obj/item/weapon/storage/bible/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/storage/bible/attackby(obj/item/W as obj, mob/user as mob)
 	if(!stealthy(user))
 		playsound(src, "rustle", 50, 1, -5)
 	. = ..()
 
-/obj/item/weapon/storage/bible/pickup(mob/living/user as mob)
+/obj/item/storage/bible/pickup(mob/living/user as mob)
 	if(my_rel.leadsThisReligion(user)) //We are the religious leader, yes we are
 		to_chat(user, "<span class ='notice'>You feel [my_rel.deity_name]'s holy presence as you pick up \the [src].</span>")
 	if(ishuman(user)) //We are checking for antagonists, only humans can be antagonists
@@ -189,7 +189,7 @@
 	desc = "Convert someone next to you."
 
 /datum/action/item_action/convert/Trigger()
-	var/obj/item/weapon/storage/bible/B = target
+	var/obj/item/storage/bible/B = target
 
 	if (owner.incapacitated() || owner.lying || owner.locked_to || !ishigherbeing(owner)) // Sanity
 		return FALSE

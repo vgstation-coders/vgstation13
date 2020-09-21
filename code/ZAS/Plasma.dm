@@ -33,7 +33,7 @@ var/image/contamination_overlay = image('icons/effects/contamination.dmi')
 			suit_contamination() //Plasma can sometimes get through such an open suit.
 
 //Cannot wash backpacks currently.
-//	if(istype(back,/obj/item/weapon/storage/backpack))
+//	if(istype(back,/obj/item/storage/backpack))
 //		back.contaminate()
 
 /mob/proc/pl_effects()

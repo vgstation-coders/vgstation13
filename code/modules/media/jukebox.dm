@@ -389,7 +389,7 @@ var/global/list/loopModeNames=list(
 	var/area/this_area = get_area(src)
 	return "[this_area.name] [name]"
 
-/obj/machinery/media/jukebox/scan_card(var/obj/item/weapon/card/C)
+/obj/machinery/media/jukebox/scan_card(var/obj/item/card/C)
 	var/remaining_credits_needed = credits_needed - credits_held
 	var/pos_name = generate_name()
 	var/charge_response = charge_flow(linked_db, C, usr, remaining_credits_needed, linked_account, "Song Selection", pos_name, 0)
@@ -426,7 +426,7 @@ var/global/list/loopModeNames=list(
 		amount = credits_held
 		credits_held = 0
 	if(amount > 0)
-		var/obj/item/weapon/storage/box/B = new(loc)
+		var/obj/item/storage/box/B = new(loc)
 		dispense_cash(amount,B)
 		B.name="change"
 		B.desc="A box of change."
@@ -439,21 +439,21 @@ var/global/list/loopModeNames=list(
 		if(panel_open)
 			wires.Interact(user)
 		return
-	if(istype(W,/obj/item/weapon/card))
+	if(istype(W,/obj/item/card))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
-		var/obj/item/weapon/card/I = W
+		var/obj/item/card/I = W
 		connect_account(user, I)
 		attack_hand(user)
-	else if(istype(W,/obj/item/weapon/spacecash))
+	else if(istype(W,/obj/item/spacecash))
 		if(!selected_song || screen!=JUKEBOX_SCREEN_PAYMENT)
 			visible_message("<span class='notice'>The machine buzzes.</span>","<span class='warning'>You hear a buzz.</span>")
 			return
 		if(!linked_account)
 			visible_message("<span class='warning'>The machine buzzes, and flashes \"NO LINKED ACCOUNT\" on the screen.</span>","You hear a buzz.")
 			return
-		var/obj/item/weapon/spacecash/C=W
+		var/obj/item/spacecash/C=W
 		credits_held += C.get_total()
 		qdel(C)
 		if(credits_held >= credits_needed)
@@ -619,7 +619,7 @@ var/global/list/loopModeNames=list(
 		if(isobserver(usr) && !canGhostWrite(usr,src,""))
 			to_chat(usr, "<span class='warning'>You can't do that.</span>")
 			return
-		var/obj/item/weapon/vinyl/V = usr.get_active_hand()
+		var/obj/item/vinyl/V = usr.get_active_hand()
 		if(istype(V))
 			insert(V)
 
@@ -696,7 +696,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/proc/eject(var/playlist_name)
 	if(playlists.Find(playlist_name))
-		new /obj/item/weapon/vinyl(get_turf(src), playlist_name, playlists[playlist_name])
+		new /obj/item/vinyl(get_turf(src), playlist_name, playlists[playlist_name])
 		playlists.Remove(playlist_name)
 		if(playlist == playlist_name)
 			stop_playing()
@@ -705,7 +705,7 @@ var/global/list/loopModeNames=list(
 		visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to eject the vinyl.</span>")
 
 /obj/machinery/media/jukebox/proc/insert(var/obj/O)
-	var/obj/item/weapon/vinyl/V = O
+	var/obj/item/vinyl/V = O
 	if(!istype(V))
 		return
 	if(playlists.Find(V.unformatted))
@@ -868,7 +868,7 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/attackby(obj/item/W, mob/user)
 	// NO FUN ALLOWED.  Emag list is included, anyway.
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(istype(W, /obj/item/card/emag))
 		to_chat(user, "<span class='warning'>Your [W] refuses to touch \the [src]!</span>")
 		return
 	..()
@@ -963,7 +963,7 @@ var/global/list/loopModeNames=list(
 	return
 
 
-/obj/item/weapon/vinyl
+/obj/item/vinyl
 	name = "nanovinyl"
 	desc = "In reality, the bulk of the disc serves only decorative purposes and the many songs are recorded on a very small microchip near the center."
 	icon = 'icons/obj/jukebox.dmi'
@@ -980,7 +980,7 @@ var/global/list/loopModeNames=list(
 	var/unformatted
 	var/formatted
 
-/obj/item/weapon/vinyl/New(loc,U,F)
+/obj/item/vinyl/New(loc,U,F)
 	..(loc)
 	if(U)
 		unformatted = U
@@ -989,105 +989,105 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - [formatted]"
 
 //Premades
-/obj/item/weapon/vinyl/bar
+/obj/item/vinyl/bar
 	name = "nanovinyl - bar"
 	unformatted = "bar"
 	formatted = "Bar"
-/obj/item/weapon/vinyl/bomberman
+/obj/item/vinyl/bomberman
 	name = "nanovinyl - bomberman"
 	unformatted = "bomberman"
 	formatted = "Bomberman"
-/obj/item/weapon/vinyl/depresso
+/obj/item/vinyl/depresso
 	name = "nanovinyl - depresso"
 	unformatted = "depresso"
 	formatted = "Depresso"
-/obj/item/weapon/vinyl/echoes
+/obj/item/vinyl/echoes
 	name = "nanovinyl - echoes"
 	unformatted = "echoes"
 	formatted = "Echoes"
-/obj/item/weapon/vinyl/electronica
+/obj/item/vinyl/electronica
 	name = "nanovinyl - electronic"
 	unformatted = "electronica"
 	formatted = "Electronic"
-/obj/item/weapon/vinyl/emagged
+/obj/item/vinyl/emagged
 	name = "nanovinyl - syndicate"
 	unformatted = "emagged"
 	formatted = "Syndicate Mix"
-/obj/item/weapon/vinyl/endgame
+/obj/item/vinyl/endgame
 	name = "nanovinyl - apocalypse"
 	unformatted = "endgame"
 	formatted = "Apocalypse"
-/obj/item/weapon/vinyl/filk
+/obj/item/vinyl/filk
 	name = "nanovinyl - filk"
 	unformatted = "filk"
 	formatted = "Filk"
-/obj/item/weapon/vinyl/folk
+/obj/item/vinyl/folk
 	name = "nanovinyl - folk"
 	unformatted = "folk"
 	formatted = "Folk"
-/obj/item/weapon/vinyl/jazz
+/obj/item/vinyl/jazz
 	name = "nanovinyl - jazz & swing"
 	unformatted = "jazzswing"
 	formatted = "Jazz & Swing"
-/obj/item/weapon/vinyl/malf
+/obj/item/vinyl/malf
 	name = "nanovinyl - silicon assault"
 	unformatted = "malfdelta"
 	formatted = "Silicon Assault"
-/obj/item/weapon/vinyl/medbay
+/obj/item/vinyl/medbay
 	name = "nanovinyl - medbay"
 	unformatted = "medbay"
 	formatted = "Medbay"
-/obj/item/weapon/vinyl/metal
+/obj/item/vinyl/metal
 	name = "nanovinyl - heavy metal"
 	unformatted = "metal"
 	formatted = "Heavy Metal"
-/obj/item/weapon/vinyl/muzakjazz
+/obj/item/vinyl/muzakjazz
 	name = "nanovinyl - jazzy muzak"
 	unformatted = "muzakjazz"
 	formatted = "Muzak"
-/obj/item/weapon/vinyl/syndie_assault
+/obj/item/vinyl/syndie_assault
 	name = "nanovinyl - syndicate assault"
 	unformatted = "nukesquad"
 	formatted = "Syndicate Assault"
-/obj/item/weapon/vinyl/rap
+/obj/item/vinyl/rap
 	name = "nanovinyl - rap"
 	unformatted = "rap"
 	formatted = "Rap"
-/obj/item/weapon/vinyl/rock
+/obj/item/vinyl/rock
 	name = "nanovinyl - rock"
 	unformatted = "rock"
 	formatted = "Rock"
-/obj/item/weapon/vinyl/security
+/obj/item/vinyl/security
 	name = "nanovinyl - security"
 	unformatted = "security"
 	formatted = "Security"
-/obj/item/weapon/vinyl/shuttle
+/obj/item/vinyl/shuttle
 	name = "nanovinyl - shuttle"
 	unformatted = "shuttle"
 	formatted = "Shuttle"
-/obj/item/weapon/vinyl/thunderdome
+/obj/item/vinyl/thunderdome
 	name = "nanovinyl - thunderdome"
 	unformatted = "thunderdome"
 	formatted =	"Thunderdome"
-/obj/item/weapon/vinyl/upbeat_dance
+/obj/item/vinyl/upbeat_dance
 	name = "nanovinyl - dance"
 	unformatted = "upbeathypedancejam"
 	formatted = "Dance"
-/obj/item/weapon/vinyl/scotland
+/obj/item/vinyl/scotland
 	name = "nanovinyl - highlander"
 	desc = "Oh no."
 	unformatted = "SCOTLANDFOREVER"
 	formatted = "Highlander"
-/obj/item/weapon/vinyl/halloween
+/obj/item/vinyl/halloween
 	name = "nanovinyl - halloween"
 	unformatted = "halloween"
 	formatted = "Halloween"
-/obj/item/weapon/vinyl/slugger
+/obj/item/vinyl/slugger
 	name = "nanovynil - slugger"
 	desc = "A go-to for bars all over the sector. Every time you walk in one, you can almost bet it's playing."
 	unformatted = "lilslugger"
 	formatted = "Battle of Lil Slugger"
-obj/item/weapon/vinyl/christmas
+obj/item/vinyl/christmas
 	name = "nanovynil - christmas"
 	unformatted = "christmas"
 	formatted = "Christmas Jingles"

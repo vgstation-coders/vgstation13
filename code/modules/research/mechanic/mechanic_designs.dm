@@ -23,8 +23,8 @@
 		if(M.component_parts && M.component_parts.len)
 			category = "Machines"
 			for(var/obj/item/I in M.component_parts) //fetching the circuit by looking in the parts
-				if(istype(I, /obj/item/weapon/circuitboard))
-					var/obj/item/weapon/circuitboard/CB = I
+				if(istype(I, /obj/item/circuitboard))
+					var/obj/item/circuitboard/CB = I
 					req_tech = ConvertReqString2List(CB.origin_tech) //our tech is the circuit's requirement
 
 				var/datum/design/part_design = FindDesign(I)
@@ -35,7 +35,7 @@
 			category = "Computers"
 			var/obj/machinery/computer/C = M
 			if(C.circuit)
-				var/obj/item/weapon/circuitboard/CB = text2path(C.circuit)
+				var/obj/item/circuitboard/CB = text2path(C.circuit)
 				req_tech = ConvertReqString2List(initial(CB.origin_tech)) //have to use initial because it's a path
 				var/datum/design/circuit_design = FindTypeDesign(CB)
 				if(circuit_design)

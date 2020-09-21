@@ -4,8 +4,8 @@
 //Icons are in chemical.dm, chempack.dmi (left), chempack.dmi (right), and back.dmi
 
 //This item is designed to be a supplement to items which spray reagents, as well as the chemical mask.
-//Currently, this applies to /obj/item/weapon/reagent_containers/spray and its childre, including the chemsprayer,
-//as well as /obj/item/weapon/extinguisher and its children. When these items are empty, and attempt to spray,
+//Currently, this applies to /obj/item/reagent_containers/spray and its childre, including the chemsprayer,
+//as well as /obj/item/extinguisher and its children. When these items are empty, and attempt to spray,
 //they will draw just enough reagents out of the chemical pack to make a full spray, after which they are again empty.
 //This means that the sprayers serve more as a nozzle for the chemical pack, rather than the chemical pack serving as a
 //refilling system.
@@ -21,7 +21,7 @@
 //reagents from this container using a syringe, but frankly it would be faster to just fill four bluespace beakers rather
 //than fill one of these and then extract all 1200u 15u at a time.
 
-/obj/item/weapon/reagent_containers/chempack
+/obj/item/reagent_containers/chempack
 	name = "chemical pack"
 	desc = "Useful for the storage and transport of large volumes of chemicals. Can be used in conjunction with a wide range of chemical-dispensing devices."
 	icon = 'icons/obj/chemical.dmi'
@@ -43,14 +43,14 @@
 	var/possible_fill_amounts = list(5,10,15,25,30,50,100,200,500,1000)
 	var/fill_amount = 10
 
-/obj/item/weapon/reagent_containers/chempack/equipped(M as mob, back)
+/obj/item/reagent_containers/chempack/equipped(M as mob, back)
 	var/mob/living/carbon/human/H = M
 	if(H.back == src)
 		if(H.wear_mask && istype(H.wear_mask, /obj/item/clothing/mask/chemmask))
 			var/obj/item/clothing/mask/chemmask/C = H.wear_mask
 			C.update_verbs()
 
-/obj/item/weapon/reagent_containers/chempack/proc/can_use_verbs(mob/user)
+/obj/item/reagent_containers/chempack/proc/can_use_verbs(mob/user)
 	var/mob/living/carbon/human/M = user
 	if (M.stat == DEAD)
 		to_chat(user, "You can't do that while you're dead!")
@@ -64,17 +64,17 @@
 	else
 		return 1
 
-/obj/item/weapon/reagent_containers/chempack/examine(mob/user)
+/obj/item/reagent_containers/chempack/examine(mob/user)
 	..()
 	if(beaker)
 		to_chat(user, "[bicon(beaker)] There is \a [beaker] in \the [src]'s auxiliary chamber.")
-		var/obj/item/weapon/reagent_containers/glass/B = beaker
+		var/obj/item/reagent_containers/glass/B = beaker
 		B.reagents.get_examine(user)
 
-/obj/item/weapon/reagent_containers/chempack/on_reagent_change()
+/obj/item/reagent_containers/chempack/on_reagent_change()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/chempack/update_icon()
+/obj/item/reagent_containers/chempack/update_icon()
 	var/mob/living/carbon/human/H = loc
 	overlays.len = 0
 
@@ -132,7 +132,7 @@
 			H.update_inv_back()
 			H.update_inv_hands()
 
-/obj/item/weapon/reagent_containers/chempack/verb/flush_tanks() //Completely empties the chempack's tanks, since you can't pour it onto the floor or into something else.
+/obj/item/reagent_containers/chempack/verb/flush_tanks() //Completely empties the chempack's tanks, since you can't pour it onto the floor or into something else.
 	set name = "Flush chemical tanks"
 	set category = "Object"
 	set src in usr
@@ -144,7 +144,7 @@
 	to_chat(usr, "<span class='notice'>You flush the contents of \the [src].</span>")
 	src.update_icon()
 
-obj/item/weapon/reagent_containers/chempack/verb/set_fill()
+obj/item/reagent_containers/chempack/verb/set_fill()
 	set name = "Set fill amount"
 	set category = "Object"
 	set src in usr
@@ -156,18 +156,18 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 	if (N)
 		fill_amount = N
 
-/obj/item/weapon/reagent_containers/chempack/attack()
+/obj/item/reagent_containers/chempack/attack()
 	return
 
-/obj/item/weapon/reagent_containers/chempack/afterattack(atom/A as obj, mob/user as mob, var/adjacency_flag)
+/obj/item/reagent_containers/chempack/afterattack(atom/A as obj, mob/user as mob, var/adjacency_flag)
 	if (istype(A, /obj/structure/reagent_dispensers) && adjacency_flag)
 		var/tx_amount = transfer_sub(A, src, fill_amount, user)
 		if (tx_amount > 0)
 			to_chat(user, "<span class='notice'>You fill \the [src][src.is_full() ? " to the brim" : ""] with [tx_amount] units of the contents of \the [A].</span>")
 			return
 
-/obj/item/weapon/reagent_containers/chempack/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/glass))
+/obj/item/reagent_containers/chempack/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/reagent_containers/glass))
 		if(src.safety && auxiliary)
 			if(stage)
 				to_chat(user, "<span class='warning'>You need to secure the maintenance panel before you can insert a beaker!</span>")
@@ -219,7 +219,7 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				return
 			else
 				if (iscrowbar(W) && src.beaker && auxiliary)
-					var/obj/item/weapon/reagent_containers/glass/B = beaker
+					var/obj/item/reagent_containers/glass/B = beaker
 					if ((user.get_inactive_hand() == src) || (user.back == src))
 						B.forceMove(user.loc)
 					else
@@ -294,19 +294,19 @@ obj/item/weapon/reagent_containers/chempack/verb/set_fill()
 				user.update_inv_hands()
 				return
 
-/obj/item/weapon/reagent_containers/chempack/override
+/obj/item/reagent_containers/chempack/override
 	safety = 1
 
-/obj/item/weapon/reagent_containers/chempack/override/New()
+/obj/item/reagent_containers/chempack/override/New()
 	..()
 	icon_state = "[initial(icon_state)]1"
 
-/obj/item/weapon/reagent_containers/chempack/override/fully_loaded
+/obj/item/reagent_containers/chempack/override/fully_loaded
 
-/obj/item/weapon/reagent_containers/chempack/override/fully_loaded/New()
+/obj/item/reagent_containers/chempack/override/fully_loaded/New()
 	..()
-	beaker = new /obj/item/weapon/reagent_containers/glass/beaker/large
-	var/obj/item/weapon/reagent_containers/glass/B = beaker
+	beaker = new /obj/item/reagent_containers/glass/beaker/large
+	var/obj/item/reagent_containers/glass/B = beaker
 	B.reagents.add_reagent(CREATINE,100)
 	reagents.add_reagent(KELOTANE, 125)
 	reagents.add_reagent(DERMALINE, 125)

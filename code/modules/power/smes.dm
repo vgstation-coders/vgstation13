@@ -22,17 +22,17 @@ var/list/smes_list = list()
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smes,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smes,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	smes_list |= src
@@ -59,7 +59,7 @@ var/list/smes_list = list()
 
 	initialize()
 
-/obj/machinery/power/battery/smes/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob) //these can only be moved by being reconstructed, solves having to remake the powernet.
+/obj/machinery/power/battery/smes/attackby(var/obj/item/W as obj, var/mob/user as mob) //these can only be moved by being reconstructed, solves having to remake the powernet.
 	if(iscrowbar(W) && panel_open && terminal)
 		to_chat(user, "<span class='warning'>You must first cut the terminal from the SMES!</span>")
 		return 1

@@ -1,15 +1,15 @@
 // Remember to update the LOWEST_DENOMINATION define if you add a smaller denomination
 // WARNING: Update cash.dm's dispense_cash proc to permit denominations below $1, else it'll runtime. - CW
 var/global/list/moneytypes = list(
-	/obj/item/weapon/spacecash/c1000 = 1000,
-	/obj/item/weapon/spacecash/c100  = 100,
-	/obj/item/weapon/spacecash/c10   = 10,
-	/obj/item/weapon/spacecash       = 1,
-	// /obj/item/weapon/coin/plasma       = 0.1,
-	// /obj/item/weapon/coin/iron       = 0.01,
+	/obj/item/spacecash/c1000 = 1000,
+	/obj/item/spacecash/c100  = 100,
+	/obj/item/spacecash/c10   = 10,
+	/obj/item/spacecash       = 1,
+	// /obj/item/coin/plasma       = 0.1,
+	// /obj/item/coin/iron       = 0.01,
 )
 
-/obj/item/weapon/spacecash
+/obj/item/spacecash
 	name = "credit chip"
 	desc = "Money money money."
 	gender = PLURAL
@@ -30,15 +30,15 @@ var/global/list/moneytypes = list(
 	var/stack_color = "#4E054F"
 	autoignition_temperature=AUTOIGNITION_PAPER
 
-/obj/item/weapon/spacecash/New(var/new_loc,var/new_amount=1)
+/obj/item/spacecash/New(var/new_loc,var/new_amount=1)
 	. = ..(new_loc)
 	name = "[worth] credit chip"
 	amount = new_amount
 	update_icon()
 
-/obj/item/weapon/spacecash/attack_hand(mob/user as mob)
+/obj/item/spacecash/attack_hand(mob/user as mob)
 	if (user.get_inactive_hand() == src)
-		var/obj/item/weapon/spacecash/C = new src.type(user, new_amount=1)
+		var/obj/item/spacecash/C = new src.type(user, new_amount=1)
 		C.copy_evidences(src)
 		user.put_in_hands(C)
 		src.add_fingerprint(user)
@@ -51,21 +51,21 @@ var/global/list/moneytypes = list(
 	else
 		return ..()
 
-/obj/item/weapon/spacecash/proc/copy_evidences(obj/item/stack/from as obj)
+/obj/item/spacecash/proc/copy_evidences(obj/item/stack/from as obj)
 	src.blood_DNA = from.blood_DNA
 	src.fingerprints  = from.fingerprints
 	src.fingerprintshidden  = from.fingerprintshidden
 	src.fingerprintslast  = from.fingerprintslast
 
-/obj/item/weapon/spacecash/proc/can_stack_with(obj/item/other_stack)
+/obj/item/spacecash/proc/can_stack_with(obj/item/other_stack)
 	return src.type == other_stack.type
 
-/obj/item/weapon/spacecash/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/spacecash/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
 
 	if (can_stack_with(target))
-		var/obj/item/weapon/spacecash/S = target
+		var/obj/item/spacecash/S = target
 		if (amount >= 10)
 			to_chat(user, "\The [src] cannot hold anymore chips.")
 			return 1
@@ -83,7 +83,7 @@ var/global/list/moneytypes = list(
 		return 1
 	return ..()
 
-/obj/item/weapon/spacecash/examine(mob/user)
+/obj/item/spacecash/examine(mob/user)
 	if(amount > 1)
 		setGender(PLURAL)
 	else
@@ -93,7 +93,7 @@ var/global/list/moneytypes = list(
 		to_chat(user, "It's a stack holding [amount] chips.")
 	to_chat(user, "<span class='info'>It's worth [worth*amount] credits.</span>")
 
-/obj/item/weapon/spacecash/update_icon()
+/obj/item/spacecash/update_icon()
 	icon_state = "cash[worth]"
 	//Up to 100 items per stack.
 	overlays = 0
@@ -110,7 +110,7 @@ var/global/list/moneytypes = list(
 		stack.color=stack_color
 		overlays += stack
 
-/obj/item/weapon/spacecash/proc/collect_from(var/obj/item/weapon/spacecash/cash)
+/obj/item/spacecash/proc/collect_from(var/obj/item/spacecash/cash)
 	if(cash.worth == src.worth)
 		var/taking = min(10-src.amount,cash.amount)
 		cash.amount -= taking
@@ -120,52 +120,52 @@ var/global/list/moneytypes = list(
 		return taking
 	return 0
 
-/obj/item/weapon/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
-	if(istype(A, /obj/item/weapon/spacecash))
-		var/obj/item/weapon/spacecash/cash = A
+/obj/item/spacecash/afterattack(atom/A as mob|obj, mob/user as mob)
+	if(istype(A, /obj/item/spacecash))
+		var/obj/item/spacecash/cash = A
 		var/collected = src.collect_from(cash)
 		if(collected)
 			update_icon()
 			to_chat(user, "<span class='notice'>You add [collected] [src.name][amount > 1 ? "s":""] to your stack of cash.</span>")
 
-/obj/item/weapon/spacecash/proc/get_total()//I can't believe this didn't exist here already.
+/obj/item/spacecash/proc/get_total()//I can't believe this didn't exist here already.
 	return worth * amount
 
-/obj/item/weapon/spacecash/c10
+/obj/item/spacecash/c10
 	icon_state = "cash10"
 	worth = 10
 	stack_color = "#663200"
 
-/obj/item/weapon/spacecash/c100
+/obj/item/spacecash/c100
 	icon_state = "cash100"
 	worth = 100
 	stack_color = "#084407"
 
-/obj/item/weapon/spacecash/c1000
+/obj/item/spacecash/c1000
 	icon_state = "cash1000"
 	worth = 1000
 	stack_color = "#333333"
 
 /obj/structure/closet/cash_closet/spawn_contents()
-	var/list/types = typesof(/obj/item/weapon/spacecash)-/obj/item/weapon/spacecash/cN
+	var/list/types = typesof(/obj/item/spacecash)-/obj/item/spacecash/cN
 	for(var/i = 1 to rand(3,10))
 		var/typepath = pick(types)
 		new typepath(src)
 	..()
 
-/obj/item/weapon/spacecash/cN
+/obj/item/spacecash/cN
 	icon_state = "cashN"
 	worth = 1
 	stack_color = "#FFD700"
 
-/obj/item/weapon/spacecash/cN/update_icon()
+/obj/item/spacecash/cN/update_icon()
 	return //There's no going higher or lower
 
 // TODO: Allow denominations below $1
 /proc/dispense_cash(var/amount, var/loc)
 	var/list/cash_spawned = list()
 	if(amount > 100000)
-		var/obj/item/weapon/spacecash/SC = new /obj/item/weapon/spacecash/cN(loc, 1)
+		var/obj/item/spacecash/SC = new /obj/item/spacecash/cN(loc, 1)
 		SC.worth = amount
 		SC.name = "[SC.worth] credit chip"
 		cash_spawned.Add(SC)
@@ -184,5 +184,5 @@ var/global/list/moneytypes = list(
 
 /proc/count_cash(var/list/cash)
 	. = 0
-	for(var/obj/item/weapon/spacecash/C in cash)
+	for(var/obj/item/spacecash/C in cash)
 		. += C.get_total()

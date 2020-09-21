@@ -113,7 +113,7 @@
 			usr.put_in_hands(O)
 	O.add_fingerprint(usr)
 	//BubbleWrap - so newly formed boxes are empty //This is pretty shitcode but I'm not fixing it because even if sloth is a sin I am already going to hell anyways
-	if (istype(O, /obj/item/weapon/storage) )
+	if (istype(O, /obj/item/storage) )
 		for(var/obj/item/I in O)
 			qdel(I)
 
@@ -225,8 +225,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("brown comfy chair",  /obj/structure/bed/chair/comfy/brown,  1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("lime comfy chair",   /obj/structure/bed/chair/comfy/lime,   1, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("teal comfy chair",   /obj/structure/bed/chair/comfy/teal,   1, one_per_turf = 1, on_floor = 1),
-		new/datum/stack_recipe/chair("stool",              /obj/item/weapon/stool												   ),
-		new/datum/stack_recipe/chair("bar stool",          /obj/item/weapon/stool/bar                                              ),
+		new/datum/stack_recipe/chair("stool",              /obj/item/stool												   ),
+		new/datum/stack_recipe/chair("bar stool",          /obj/item/stool/bar                                              ),
 		new/datum/stack_recipe/chair("chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("folding chair",      /obj/structure/bed/chair/folding,         one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe("bed",                      /obj/structure/bed,                    2, one_per_turf = 1, on_floor = 1),
@@ -269,8 +269,8 @@ var/list/datum/stack_recipe/metal_recipes = list (
 		new/datum/stack_recipe/chair("red couch inwards turn",    /obj/structure/bed/chair/comfy/couch/turn/inward/red,    2, one_per_turf = 1, on_floor = 1),
 		new/datum/stack_recipe/chair("red couch outwards turn",   /obj/structure/bed/chair/comfy/couch/turn/outward/red,   2, one_per_turf = 1, on_floor = 1),
 		)),
-	new/datum/stack_recipe("table parts", /obj/item/weapon/table_parts,                           2                                ),
-	new/datum/stack_recipe("rack parts",  /obj/item/weapon/rack_parts                                                              ),
+	new/datum/stack_recipe("table parts", /obj/item/table_parts,                           2                                ),
+	new/datum/stack_recipe("rack parts",  /obj/item/rack_parts                                                              ),
 	new/datum/stack_recipe("closet",      /obj/structure/closet/basic,                            2, one_per_turf = 1, time = 15   ),
 	new/datum/stack_recipe("metal crate", /obj/structure/closet/crate/basic,                      2, one_per_turf = 1,  time = 15   ),
 	null,
@@ -299,7 +299,7 @@ var/list/datum/stack_recipe/metal_recipes = list (
 	new/datum/stack_recipe("cauldron",        /obj/structure/reagent_dispensers/cauldron,                       20, time = 5 SECONDS, one_per_turf = 1,	  ),
 	new/datum/stack_recipe("iv drip",         /obj/machinery/iv_drip,                         2, time = 25, one_per_turf = 1			  ),
 	new/datum/stack_recipe("meat spike",      /obj/structure/kitchenspike,                    2, time = 25, one_per_turf = 1, on_floor = 1),
-	new/datum/stack_recipe("grenade casing",  /obj/item/weapon/grenade/chem_grenade                                                       ),
+	new/datum/stack_recipe("grenade casing",  /obj/item/grenade/chem_grenade                                                       ),
 	new/datum/stack_recipe("desk bell shell", /obj/item/device/deskbell_assembly,             2                                           ),
 	new/datum/stack_recipe("bunsen burner",   /obj/machinery/bunsen_burner,                   4, time = 50, one_per_turf = 1, on_floor = 1),
 	null,
@@ -354,10 +354,10 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("wood floor tile",	/obj/item/stack/tile/wood,				1,4,20												),
 	new/datum/stack_recipe("wall girders",		/obj/structure/girder/wood,				2, 		time = 25, 	one_per_turf = 1, 	on_floor = 1),
 	new/datum/stack_recipe("wooden door",		/obj/machinery/door/mineral/wood,		10,		time = 20,	one_per_turf = 1,	on_floor = 1),
-	new/datum/stack_recipe("barricade kit",		/obj/item/weapon/barricade_kit,			5													),
+	new/datum/stack_recipe("barricade kit",		/obj/item/barricade_kit,			5													),
 	null,
 	new/datum/stack_recipe("barrel",            /obj/structure/reagent_dispensers/cauldron/barrel/wood, 20, time = 5 SECONDS, one_per_turf = 1   ),
-	new/datum/stack_recipe("table parts",		/obj/item/weapon/table_parts/wood,		2													),
+	new/datum/stack_recipe("table parts",		/obj/item/table_parts/wood,		2													),
 	new/datum/stack_recipe("wooden chair",		/obj/structure/bed/chair/wood/normal,	1,		time = 10,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
 	new/datum/stack_recipe("throne",			/obj/structure/bed/chair/wood/throne,	40,		time = 100,	one_per_turf = 1,	on_floor = 1),
@@ -376,36 +376,36 @@ var/list/datum/stack_recipe/wood_recipes = list (
 	new/datum/stack_recipe("notice board",		/obj/structure/noticeboard,				2,		time = 15,	one_per_turf = 1,	on_floor = 1),
 	null,
 	new/datum/stack_recipe("wooden sandals",	/obj/item/clothing/shoes/sandal																),
-	new/datum/stack_recipe("peg limb",			/obj/item/weapon/peglimb,				2,		time = 50									),
-	new/datum/stack_recipe("clipboard",			/obj/item/weapon/storage/bag/clipboard,	1													),
+	new/datum/stack_recipe("peg limb",			/obj/item/peglimb,				2,		time = 50									),
+	new/datum/stack_recipe("clipboard",			/obj/item/storage/bag/clipboard,	1													),
 	new/datum/stack_recipe("bowl",				/obj/item/trash/bowl,					1													),
 	null,
-	new/datum/stack_recipe("boomerang",			/obj/item/weapon/boomerang,				6,		time = 50									),
-	new/datum/stack_recipe("buckler",			/obj/item/weapon/shield/riot/buckler,	5,		time = 50									),
+	new/datum/stack_recipe("boomerang",			/obj/item/boomerang,				6,		time = 50									),
+	new/datum/stack_recipe("buckler",			/obj/item/shield/riot/buckler,	5,		time = 50									),
 	new/datum/stack_recipe("item handle",		/obj/item/item_handle,					1,2,20,	time = 2 SECONDS							),
 	new/datum/stack_recipe("sword handle",		/obj/item/sword_handle,					1,2,10,	time = 2 SECONDS,							other_reqs = list(/obj/item/stack/sheet/metal = 1)),
-	new/datum/stack_recipe("wooden paddle",		/obj/item/weapon/macuahuitl,			1,		time = 50									),
+	new/datum/stack_recipe("wooden paddle",		/obj/item/macuahuitl,			1,		time = 50									),
 	)
 
 /* =========================================================================
 							CARDBOARD RECIPES
 ========================================================================= */
 var/list/datum/stack_recipe/cardboard_recipes = list (
-	new/datum/stack_recipe("box",                           /obj/item/weapon/storage/box                            ),
-	new/datum/stack_recipe("large box",                     /obj/item/weapon/storage/box/large,                  4  ),
-	new/datum/stack_recipe("light tubes box",               /obj/item/weapon/storage/box/lights/tubes               ),
-	new/datum/stack_recipe("light bulbs box",               /obj/item/weapon/storage/box/lights/bulbs               ),
-	new/datum/stack_recipe("mouse traps box",               /obj/item/weapon/storage/box/mousetraps                 ),
-	new/datum/stack_recipe("candle box",                    /obj/item/weapon/storage/fancy/candle_box/empty         ),
-	new/datum/stack_recipe("crayon box",                    /obj/item/weapon/storage/fancy/crayons/empty            ),
+	new/datum/stack_recipe("box",                           /obj/item/storage/box                            ),
+	new/datum/stack_recipe("large box",                     /obj/item/storage/box/large,                  4  ),
+	new/datum/stack_recipe("light tubes box",               /obj/item/storage/box/lights/tubes               ),
+	new/datum/stack_recipe("light bulbs box",               /obj/item/storage/box/lights/bulbs               ),
+	new/datum/stack_recipe("mouse traps box",               /obj/item/storage/box/mousetraps                 ),
+	new/datum/stack_recipe("candle box",                    /obj/item/storage/fancy/candle_box/empty         ),
+	new/datum/stack_recipe("crayon box",                    /obj/item/storage/fancy/crayons/empty            ),
 	new/datum/stack_recipe("cardborg suit",                 /obj/item/clothing/suit/cardborg,                    3  ),
 	new/datum/stack_recipe("cardborg helmet",               /obj/item/clothing/head/cardborg                        ),
 	new/datum/stack_recipe("pizza box",                     /obj/item/pizzabox                                      ),
-	new/datum/stack_recipe("folder",                        /obj/item/weapon/folder                                 ),
-	new/datum/stack_recipe("flare box",                     /obj/item/weapon/storage/fancy/flares/empty             ),
-	new/datum/stack_recipe("donut box",                     /obj/item/weapon/storage/fancy/donut_box/empty          ),
-	new/datum/stack_recipe("eggbox",                        /obj/item/weapon/storage/fancy/egg_box/empty            ),
-	new/datum/stack_recipe("paper bin",                     /obj/item/weapon/paper_bin/empty                        ),
+	new/datum/stack_recipe("folder",                        /obj/item/folder                                 ),
+	new/datum/stack_recipe("flare box",                     /obj/item/storage/fancy/flares/empty             ),
+	new/datum/stack_recipe("donut box",                     /obj/item/storage/fancy/donut_box/empty          ),
+	new/datum/stack_recipe("eggbox",                        /obj/item/storage/fancy/egg_box/empty            ),
+	new/datum/stack_recipe("paper bin",                     /obj/item/paper_bin/empty                        ),
 	new/datum/stack_recipe("empty recharge pack",           /obj/structure/vendomatpack/custom,                  4  ),
 	)
 
@@ -422,17 +422,17 @@ var/list/datum/stack_recipe/cardboard_recipes = list (
 	return 1
 
 var/list/datum/stack_recipe/leather_recipes = list (
-	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/weapon/gun/hookshot/whip,					10,	time = 100,),
+	new/datum/stack_recipe/leather("Bullwhip",		/obj/item/gun/hookshot/whip,					10,	time = 100,),
 	new/datum/stack_recipe/leather("Cowboy hat",	/obj/item/clothing/head/cowboy,				4,	time = 70,),
 	new/datum/stack_recipe/leather("Cowboy boots",	/obj/item/clothing/shoes/jackboots/cowboy,	4, 	time = 80,),
 	new/datum/stack_recipe/leather("Leather gloves",/obj/item/clothing/gloves/botanic_leather,	2,	time = 90,),
 	new/datum/stack_recipe/leather("Leather shoes",	/obj/item/clothing/shoes/leather,			4,	time = 80,),
-	new/datum/stack_recipe/leather("Leather satchel",/obj/item/weapon/storage/backpack/satchel,	12,	time = 130,),
-	new/datum/stack_recipe/leather("Leather wallet",/obj/item/weapon/storage/wallet,			4,	time = 90,),
+	new/datum/stack_recipe/leather("Leather satchel",/obj/item/storage/backpack/satchel,	12,	time = 130,),
+	new/datum/stack_recipe/leather("Leather wallet",/obj/item/storage/wallet,			4,	time = 90,),
 	new/datum/stack_recipe/leather("Leather helmet",/obj/item/clothing/head/leather,			3,	time = 90,on_floor = 1),
 	new/datum/stack_recipe/leather("Leather armor",/obj/item/clothing/suit/leather,				6,	time = 90,on_floor = 1),
 	new/datum/stack_recipe/leather("Leather strip",/obj/item/stack/leather_strip,				1,4,20,time = 2 SECONDS, on_floor = 1),
-	new/datum/stack_recipe/leather("Ammunition Pouch",/obj/item/weapon/storage/bag/ammo_pouch,	4,	time = 4 SECONDS,on_floor = 1),
+	new/datum/stack_recipe/leather("Ammunition Pouch",/obj/item/storage/bag/ammo_pouch,	4,	time = 4 SECONDS,on_floor = 1),
 	)
 
 /* ========================================================================
@@ -440,7 +440,7 @@ var/list/datum/stack_recipe/leather_recipes = list (
 ======================================================================== */
 
 var/list/datum/stack_recipe/brass_recipes = list (
-	new/datum/stack_recipe("brass table parts", /obj/item/weapon/table_parts/clockwork, 4),
+	new/datum/stack_recipe("brass table parts", /obj/item/table_parts/clockwork, 4),
 	null,
 	new/datum/stack_recipe("clockwork airlock", /obj/structure/door_assembly/clockwork, 4, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 4)),
 	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 3)),
@@ -449,7 +449,7 @@ var/list/datum/stack_recipe/brass_recipes = list (
 	new/datum/stack_recipe("brass full window", /obj/structure/window/full/reinforced/clockwork/loose, 4, time = 20, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/ralloy = 1)),
 	null,
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)
 
 /* ========================================================================
@@ -463,5 +463,5 @@ var/list/datum/stack_recipe/ralloy_recipes = list (
 	new/datum/stack_recipe("clockwork girders", /obj/structure/girder/clockwork, 3, time = 70, one_per_turf = TRUE, on_floor = TRUE, other_reqs = list(/obj/item/stack/sheet/brass = 3)),
 	null,
 	new/datum/stack_recipe/dorf("dorf chair", /obj/structure/bed/chair, one_per_turf = TRUE, on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
+	new/datum/stack_recipe/dorf("training sword", /obj/item/melee/training_sword, 4, time = 12,	on_floor = TRUE, inherit_material = TRUE, gen_quality = TRUE),
 	)

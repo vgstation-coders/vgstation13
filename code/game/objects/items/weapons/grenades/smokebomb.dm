@@ -1,4 +1,4 @@
-/obj/item/weapon/grenade/smokebomb
+/obj/item/grenade/smokebomb
 	desc = "Generates a cloud of harmless, vision-obscuring smoke upon detonation."
 	name = "smoke bomb"
 	icon = 'icons/obj/grenade.dmi'
@@ -10,12 +10,12 @@
 	var/datum/effect/effect/system/smoke_spread/bad/smoke
 	mech_flags = null
 
-/obj/item/weapon/grenade/smokebomb/New()
+/obj/item/grenade/smokebomb/New()
 	..()
 	smoke = new /datum/effect/effect/system/smoke_spread/bad
 	smoke.attach(src)
 
-/obj/item/weapon/grenade/smokebomb/prime()
+/obj/item/grenade/smokebomb/prime()
 	playsound(src, 'sound/effects/smoke.ogg', 50, 1, -3)
 	smoke.set_up(10, 0, usr.loc)
 	spawn(0)

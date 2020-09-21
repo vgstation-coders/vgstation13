@@ -23,11 +23,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/freezer,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/freezer,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -39,8 +39,8 @@
 
 /obj/machinery/atmospherics/unary/cold_sink/freezer/RefreshParts()
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) - 5*lasercount
 
@@ -54,7 +54,7 @@
 		icon_state = "freezer_0"
 	..()
 
-/obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/cold_sink/freezer/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(on)
 		to_chat(user, "You have to turn off \the [src]!")
 		return FALSE
@@ -196,11 +196,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/heater,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/heater,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -212,8 +212,8 @@
 
 /obj/machinery/atmospherics/unary/heat_reservoir/heater/RefreshParts()
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	temp_offset = initial(temp_offset) + 5*lasercount
 
@@ -228,7 +228,7 @@
 	..()
 	return
 
-/obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/atmospherics/unary/heat_reservoir/heater/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(on)
 		to_chat(user, "You have to turn off \the [src]!")
 		return FALSE

@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/hookshot	//-by Deity Link
+/obj/item/gun/hookshot	//-by Deity Link
 	name = "hookshot"
 	desc = "Used to create tethers! It's a very experimental device, recently developed by Nanotrasen."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -26,7 +26,7 @@
 	var/atom/movable/extremity = null
 	var/panic = 0	//set to 1 by a part of the hookchain that got destroyed.
 
-/obj/item/weapon/gun/hookshot/update_icon()
+/obj/item/gun/hookshot/update_icon()
 	if(hook || chain_datum)
 		icon_state = "hookshot0"
 		item_state = "hookshot0"
@@ -37,14 +37,14 @@
 		var/mob/M = loc
 		M.regenerate_icons()
 
-/obj/item/weapon/gun/hookshot/New()
+/obj/item/gun/hookshot/New()
 	..()
 	for(var/i = 0;i <= maxlength; i++)
 		var/obj/effect/overlay/hookchain/HC = new chaintype(src)
 		HC.shot_from = src
 		links["[i]"] = HC
 
-/obj/item/weapon/gun/hookshot/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
+/obj/item/gun/hookshot/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(chain_datum)
 		chain_datum.Delete_Chain()
 
@@ -54,7 +54,7 @@
 		links["[i]"] = null
 	..()
 
-/obj/item/weapon/gun/hookshot/attack_self(mob/user)//clicking on the hookshot while tethered rewinds the chain without pulling the target.
+/obj/item/gun/hookshot/attack_self(mob/user)//clicking on the hookshot while tethered rewinds the chain without pulling the target.
 	if(check_tether())
 		var/atom/movable/AM = chain_datum.extremity_B
 		if(AM)
@@ -62,7 +62,7 @@
 		chain_datum.extremity_B = null
 		chain_datum.rewind_chain()
 
-/obj/item/weapon/gun/hookshot/process_chambered()
+/obj/item/gun/hookshot/process_chambered()
 	if(in_chamber)
 		return 1
 
@@ -85,7 +85,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
+/obj/item/gun/hookshot/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)//clicking anywhere reels the target to the player.
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(check_tether())
@@ -95,11 +95,11 @@
 		return
 	..()
 
-/obj/item/weapon/gun/hookshot/proc/display_reel_message()
+/obj/item/gun/hookshot/proc/display_reel_message()
 	var/mob/living/carbon/C = chain_datum.extremity_B
 	to_chat(C, "<span class='warning'>\The [src] reels you in!</span>")
 
-/obj/item/weapon/gun/hookshot/dropped(mob/user as mob)
+/obj/item/gun/hookshot/dropped(mob/user as mob)
 	if(!clockwerk && !rewinding)
 		rewind_chain()
 
@@ -122,7 +122,7 @@
 					chain_datum.rewind_chain()
 	..()
 
-/obj/item/weapon/gun/hookshot/attack_hand(mob/user)
+/obj/item/gun/hookshot/attack_hand(mob/user)
 	if(chain_datum && (chain_datum.extremity_A == src))
 		if(user.tether)
 			return//we cannot pick up a hookshot that is part of a tether if we are part of a different tether ourselves (for now)
@@ -135,7 +135,7 @@
 			src.tether = null
 	..()
 
-/obj/item/weapon/gun/hookshot/proc/check_tether()//checking whether the hookshot is currently sustaining a tether with its user as the base
+/obj/item/gun/hookshot/proc/check_tether()//checking whether the hookshot is currently sustaining a tether with its user as the base
 	if(chain_datum && istype(loc,/mob/living))
 		var/mob/living/L = loc
 		if(L.tether)
@@ -144,7 +144,7 @@
 				return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/proc/rewind_chain()//brings the links back toward the player
+/obj/item/gun/hookshot/proc/rewind_chain()//brings the links back toward the player
 	if(rewinding)
 		return
 	rewinding = 1
@@ -153,7 +153,7 @@
 	rewinding = 0
 	update_icon()
 
-/obj/item/weapon/gun/hookshot/proc/rewind_loop()
+/obj/item/gun/hookshot/proc/rewind_loop()
 	var/pause = 0
 	for(var/i = maxlength; i > 0; i--)
 		var/obj/effect/overlay/hookchain/HC = links["[i]"]
@@ -175,16 +175,16 @@
 	apply_item_overlay()
 	sleep(pause)
 
-/obj/item/weapon/gun/hookshot/proc/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)	//fleshshot only
+/obj/item/gun/hookshot/proc/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)	//fleshshot only
 	return
 
-/obj/item/weapon/gun/hookshot/proc/set_end_of_chain(var/i)	//fleshshot only
+/obj/item/gun/hookshot/proc/set_end_of_chain(var/i)	//fleshshot only
 	return
 
-/obj/item/weapon/gun/hookshot/proc/apply_item_overlay()	//fleshshot only
+/obj/item/gun/hookshot/proc/apply_item_overlay()	//fleshshot only
 	return
 
-/obj/item/weapon/gun/hookshot/proc/cancel_chain()//instantly sends all the links back into the hookshot. replaces those that got destroyed.
+/obj/item/gun/hookshot/proc/cancel_chain()//instantly sends all the links back into the hookshot. replaces those that got destroyed.
 	for(var/j = 1; j <= maxlength; j++)
 		var/obj/effect/overlay/hookchain/HC = links["[j]"]
 		if(HC)
@@ -197,7 +197,7 @@
 	clockwerk = 0
 	update_icon()
 
-/obj/item/weapon/gun/hookshot/proc/clockwerk_chain(var/length)//reel the player toward his target
+/obj/item/gun/hookshot/proc/clockwerk_chain(var/length)//reel the player toward his target
 	if(clockwerk)
 		return
 	clockwerk = 1
@@ -225,7 +225,7 @@
 	var/list/links = list()
 	var/atom/movable/extremity_A = null
 	var/atom/movable/extremity_B = null
-	var/obj/item/weapon/gun/hookshot/hookshot = null
+	var/obj/item/gun/hookshot/hookshot = null
 	var/undergoing_deletion = 0
 	var/snap = 0
 	var/rewinding = 0
@@ -321,7 +321,7 @@
 	icon = 'icons/obj/projectiles_experimental.dmi'
 	icon_state = "hookshot_chain"
 	animate_movement = 0
-	var/obj/item/weapon/gun/hookshot/shot_from = null
+	var/obj/item/gun/hookshot/shot_from = null
 
 /obj/effect/overlay/hookchain/Destroy()
 	if(shot_from)
@@ -464,7 +464,7 @@
 		chain_datum.Delete_Chain()
 	..()
 
-/obj/item/weapon/gun/hookshot/whip
+/obj/item/gun/hookshot/whip
 	name = "bullwhip"
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "bullwhip"
@@ -477,10 +477,10 @@
 	empty_sound = null
 	slot_flags = SLOT_BELT
 
-/obj/item/weapon/gun/hookshot/whip/update_icon()
+/obj/item/gun/hookshot/whip/update_icon()
 	return
 
-/obj/item/weapon/gun/hookshot/whip/liquorice
+/obj/item/gun/hookshot/whip/liquorice
 	name = "liquoricium whip"
 	icon_state = "liquorice"
 	desc = "Although clearly just an iron chain covered in candy, the jagged pieces of caramel look like they'd sting quite a bit."
@@ -492,7 +492,7 @@
 	hooktype = /obj/item/projectile/hookshot/whip/liquorice
 	empty_sound = null
 
-/obj/item/weapon/gun/hookshot/whip/vampkiller
+/obj/item/gun/hookshot/whip/vampkiller
 	name = "vampire killer"
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It's said to be imbued with holy powers, but this one looks like a cheap replica."
 	icon_state = "vampkiller"
@@ -501,13 +501,13 @@
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller
 	fire_sound = 'sound/weapons/vampkiller.ogg'
 
-/obj/item/weapon/gun/hookshot/whip/vampkiller/true
+/obj/item/gun/hookshot/whip/vampkiller/true
 	desc = "A brutal looking weapon consisting of a morning star head attached to a chain lash. It is blessed to be effective against the undead and radiates an awesome holy aura."
 	icon_state = "vampkiller_true"
 	hooktype = /obj/item/projectile/hookshot/whip/vampkiller/true
 
 //Windup-Boxes/////////////////////////////////////////////////////
-/obj/item/weapon/gun/hookshot/whip/windup_box
+/obj/item/gun/hookshot/whip/windup_box
 	name = "windup-box"
 	icon = 'icons/obj/wind_up.dmi'
 	icon_state = ""
@@ -529,17 +529,17 @@
 	var/list/fireSound = null
 	var/fireVolume = 0
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/New()
+/obj/item/gun/hookshot/whip/windup_box/New()
 	..()
 	maxlength = lengthDecider
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/attack_self(mob/user)
+/obj/item/gun/hookshot/whip/windup_box/attack_self(mob/user)
 	if(user.incapacitated())
 		return 1
 	state = !state
 	update_icon()
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/Fire(atom/target, mob/living/user, params, reflex =0, struggle = 0, use_shooter_turf = FALSE) //4 winds minimum
+/obj/item/gun/hookshot/whip/windup_box/Fire(atom/target, mob/living/user, params, reflex =0, struggle = 0, use_shooter_turf = FALSE) //4 winds minimum
 	maxlength = lengthDecider
 	if(windUp < minWindUp)
 		playsound(src,'sound/items/metal_impact.ogg', 25,1)
@@ -548,7 +548,7 @@
 	playsound(src, fireSound, fireVolume,1)
 	return ..()
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox
+/obj/item/gun/hookshot/whip/windup_box/bootbox
 	name = "boot-in-a-box"
 	icon = 'icons/obj/wind_up.dmi'
 	icon_state = "bootbox-0"
@@ -560,10 +560,10 @@
 	fireSound = 'sound/effects/fence_smash.ogg'
 	fireVolume = 50
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/update_icon()
+/obj/item/gun/hookshot/whip/windup_box/bootbox/update_icon()
 	icon_state = "bootbox-[state]"
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/attack_self(mob/user)
+/obj/item/gun/hookshot/whip/windup_box/bootbox/attack_self(mob/user)
 	if(..())
 		return 1
 	if(prob(windUp*springForce)) //prob 0 before they start forcing it, perfectly safe
@@ -589,7 +589,7 @@
 	update_icon()
 	windUp++
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox
+/obj/item/gun/hookshot/whip/windup_box/clownbox
 	name = "\improper Punchline"
 	icon = 'icons/obj/wind_up.dmi'
 	icon_state = "clownbox-0"
@@ -602,10 +602,10 @@
 	fireSound = 'sound/effects/party_horn.ogg'
 	fireVolume = 100
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox/update_icon()
+/obj/item/gun/hookshot/whip/windup_box/clownbox/update_icon()
 	icon_state = "clownbox-[state]"
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/clownbox/attack_self(mob/user)
+/obj/item/gun/hookshot/whip/windup_box/clownbox/attack_self(mob/user)
 	if(..())
 		return 1
 	if(prob(springForce*10)) //Every crank past the threshold has 10% higher chance of teleporting you a number of times equal to those cranks.

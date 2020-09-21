@@ -26,7 +26,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_GLASS = 500, MAT_IRON = 1000, MAT_GOLD = 500)
 	category = "Data"
-	build_path = /obj/item/weapon/paper_bin/nano
+	build_path = /obj/item/paper_bin/nano
 
 /datum/design/design_disk
 	name = "Design Storage Disk"
@@ -36,7 +36,7 @@
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"
-	build_path = /obj/item/weapon/disk/design_disk
+	build_path = /obj/item/disk/design_disk
 
 /datum/design/tech_disk
 	name = "Technology Data Storage Disk"
@@ -46,7 +46,7 @@
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"
-	build_path = /obj/item/weapon/disk/tech_disk
+	build_path = /obj/item/disk/tech_disk
 
 /datum/design/botany_disk
 	name = "Floral Data Disk"
@@ -56,7 +56,7 @@
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"
-	build_path = /obj/item/weapon/disk/botany
+	build_path = /obj/item/disk/botany
 
 /datum/design/cloning_disk
 	name = "Genetic Data Disk"
@@ -66,4 +66,4 @@
 	build_type = PROTOLATHE | AUTOLATHE
 	materials = list(MAT_IRON = 30, MAT_GLASS = 10)
 	category = "Data"
-	build_path = /obj/item/weapon/disk/data
+	build_path = /obj/item/disk/data

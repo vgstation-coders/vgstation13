@@ -5,7 +5,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 1)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 50)
-	build_path = /obj/item/weapon/cell/empty
+	build_path = /obj/item/cell/empty
 	category = "Engineering"
 
 /datum/design/high_cell
@@ -15,7 +15,7 @@
 	req_tech = list(Tc_POWERSTORAGE = 2)
 	build_type = PROTOLATHE | AUTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 60)
-	build_path = /obj/item/weapon/cell/high/empty
+	build_path = /obj/item/cell/high/empty
 	category = "Engineering"
 
 /datum/design/super_cell
@@ -26,7 +26,7 @@
 	reliability_base = 75
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 700, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/super/empty
+	build_path = /obj/item/cell/super/empty
 	category = "Engineering"
 
 /datum/design/hyper_cell
@@ -37,7 +37,7 @@
 	reliability_base = 70
 	build_type = PROTOLATHE | MECHFAB | PODFAB
 	materials = list(MAT_IRON = 400, MAT_GOLD = 150, MAT_SILVER = 150, MAT_GLASS = 70)
-	build_path = /obj/item/weapon/cell/hyper/empty
+	build_path = /obj/item/cell/hyper/empty
 	category = "Engineering"
 
 /datum/design/ultra_cell
@@ -48,7 +48,7 @@
 	reliability_base = 70
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100)
-	build_path = /obj/item/weapon/cell/ultra/empty
+	build_path = /obj/item/cell/ultra/empty
 	category = "Engineering"
 
 /datum/design/rad_cell
@@ -59,7 +59,7 @@
 	reliability_base = 70
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_URANIUM = 150)
-	build_path = /obj/item/weapon/cell/rad/empty
+	build_path = /obj/item/cell/rad/empty
 	category = "Engineering"
 
 /datum/design/phazon_cell
@@ -70,7 +70,7 @@
 	reliability_base = 70
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_GOLD = 300, MAT_SILVER = 300, MAT_GLASS = 100, MAT_PHAZON = 200)
-	build_path = /obj/item/weapon/cell/rad/large/empty
+	build_path = /obj/item/cell/rad/large/empty
 	category = "Engineering"
 
 /datum/design/light_replacer
@@ -123,7 +123,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 500, MAT_GLASS = 1000, MAT_GOLD = 200, MAT_SILVER = 200)
 	category = "Engineering"
-	build_path = /obj/item/weapon/storage/component_exchanger
+	build_path = /obj/item/storage/component_exchanger
 */
 
 /datum/design/RPED
@@ -133,7 +133,7 @@
 	req_tech = list(Tc_ENGINEERING = 4, Tc_MATERIALS = 4, Tc_PROGRAMMING = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 7000, MAT_GLASS = 3500, MAT_GOLD = 600)
-	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer
+	build_path = /obj/item/storage/bag/gadgets/part_replacer
 	category = "Engineering"
 
 /datum/design/DBRPED
@@ -143,7 +143,7 @@
 	req_tech = list(Tc_ENGINEERING = 5, Tc_MATERIALS = 6, Tc_PROGRAMMING = 3, Tc_BLUESPACE = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 9000, MAT_GLASS = 5500, MAT_GOLD = 1200, MAT_DIAMOND = 3000)
-	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/discount_bluespace
+	build_path = /obj/item/storage/bag/gadgets/part_replacer/discount_bluespace
 	category = "Engineering"
 
 /datum/design/PED
@@ -153,7 +153,7 @@
 	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
-	build_path = /obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED
+	build_path = /obj/item/storage/bag/gadgets/part_replacer/basic_PED
 	category = "Engineering"
 
 /datum/design/mat_synth
@@ -223,5 +223,5 @@
 	req_tech = list(Tc_ENGINEERING = 5, Tc_BLUESPACE = 2)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 18750, MAT_GLASS = 9375)
-	build_path = /obj/item/weapon/weldingtool/gatling/empty
+	build_path = /obj/item/weldingtool/gatling/empty
 	category = "Engineering"

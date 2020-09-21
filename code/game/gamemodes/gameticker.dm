@@ -630,7 +630,7 @@ var/datum/controller/gameticker/ticker
 
 	var/list/bronze_tier = list()
 	for (var/mob/living/carbon/M in player_list)
-		if(locate(/obj/item/weapon/bomberman/) in M)
+		if(locate(/obj/item/bomberman/) in M)
 			bronze_tier += M
 	var/list/silver_tier = list()
 	for (var/mob/M in bronze_tier)
@@ -654,7 +654,7 @@ var/datum/controller/gameticker/ticker
 
 	var/list/special_tier = list()
 	for (var/mob/living/silicon/robot/mommi/M in player_list)
-		if(istype(M.head_state, /obj/item/clothing/head/helmet/space/bomberman) && istype(M.tool_state, /obj/item/weapon/bomberman/))
+		if(istype(M.head_state, /obj/item/clothing/head/helmet/space/bomberman) && istype(M.tool_state, /obj/item/bomberman/))
 			special_tier += M
 
 	var/text = {"<img src="logo_[tempstatebomberhead].png"> <font size=5><b>Bomberman Mode Results</b></font> <img src="logo_[tempstatebomberhead].png">"}

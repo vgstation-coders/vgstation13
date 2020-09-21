@@ -7,10 +7,10 @@
 	associated_job = /datum/job/assistant
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -57,14 +57,14 @@
 
 	pda_type = /obj/item/device/pda
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	H.put_in_hands(new /obj/item/storage/bag/plasticbag(H))
 
 /datum/outfit/assistant/post_equip_priority(var/mob/living/carbon/human/H)
-	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	H.put_in_hands(new /obj/item/storage/toolbox/mechanical(get_turf(H)))
 	return ..()
 
 // -- Bartender
@@ -75,10 +75,10 @@
 	associated_job = /datum/job/bartender
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -107,23 +107,23 @@
 
 	items_to_collect = list(
 		/obj/abstract/spawn_all/bartender = SURVIVAL_BOX,
-		/obj/item/weapon/reagent_containers/food/drinks/shaker = slot_l_store_str,
+		/obj/item/reagent_containers/food/drinks/shaker = slot_l_store_str,
 	)
 
 	pda_type = /obj/item/device/pda/bar
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	H.put_in_hands(new /obj/item/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
 
 /datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
-	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser] = SURVIVAL_BOX
+	items_to_collect[/obj/item/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
+	items_to_collect[/obj/item/circuitboard/chem_dispenser/booze_dispenser] = SURVIVAL_BOX
 	return ..()
 
 /obj/abstract/spawn_all/bartender
@@ -143,10 +143,10 @@
 	associated_job = /datum/job/chef
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -176,7 +176,7 @@
 
 	pda_type = /obj/item/device/pda/chef
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/chef/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/abstract/spawn_all/chef] = SURVIVAL_BOX
@@ -185,8 +185,8 @@
 /obj/abstract/spawn_all/chef
 	where_to_spawn = SPAWN_ON_LOC
 	to_spawn = list(
-		/obj/item/weapon/reagent_containers/food/drinks/flour,
-		/obj/item/weapon/reagent_containers/food/drinks/flour
+		/obj/item/reagent_containers/food/drinks/flour,
+		/obj/item/reagent_containers/food/drinks/flour
 	)
 
 // -- Botanist
@@ -197,10 +197,10 @@
 	associated_job = /datum/job/hydro
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_hyd,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/hyd,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_hyd,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/hyd,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -257,11 +257,11 @@
 
 	pda_type = /obj/item/device/pda/botanist
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+	H.put_in_hands(new /obj/item/storage/bag/plasticbag(H))
 
 /datum/outfit/hydro/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/abstract/spawn_all/hydro] = SURVIVAL_BOX
@@ -270,8 +270,8 @@
 /obj/abstract/spawn_all/hydro
 	where_to_spawn = SPAWN_ON_LOC
 	to_spawn = list(
-		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
-		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine
+		/obj/item/reagent_containers/glass/bottle/diethylamine,
+		/obj/item/reagent_containers/glass/bottle/diethylamine
 	)
 
 // -- Clown
@@ -284,7 +284,7 @@
 	use_pref_bag = FALSE
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/clown,
+		BACKPACK_STRING = /obj/item/storage/backpack/clown,
 	)
 
 	items_to_spawn = list(
@@ -334,17 +334,17 @@
 	)
 
 	items_to_collect = list( // No backup slots ; backbag pref ignored
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana = null,
-		/obj/item/weapon/bikehorn = null,
-		/obj/item/weapon/stamp/clown = null,
+		/obj/item/reagent_containers/food/snacks/grown/banana = null,
+		/obj/item/bikehorn = null,
+		/obj/item/stamp/clown = null,
 		/obj/item/toy/crayon/rainbow = null,
-		/obj/item/weapon/storage/fancy/crayons = null,
+		/obj/item/storage/fancy/crayons = null,
 		/obj/item/toy/waterflower = null,
 	)
 
 	pda_type = /obj/item/device/pda/clown
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/clown
+	id_type = /obj/item/card/id/clown
 
 /datum/outfit/clown/post_equip(var/mob/living/carbon/human/H)
 	..()
@@ -354,7 +354,7 @@
 	mob_rename_self(H,"clown")
 
 /datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	items_to_collect[/obj/item/coin/clown] = SURVIVAL_BOX
 	return ..()
 
 
@@ -366,10 +366,10 @@
 	associated_job = /datum/job/mime
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -406,13 +406,13 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/bottleofnothing = GRASP_LEFT_HAND,
-		/obj/item/weapon/stamp/mime = slot_r_store_str,
+		/obj/item/reagent_containers/food/drinks/bottle/bottleofnothing = GRASP_LEFT_HAND,
+		/obj/item/stamp/mime = slot_r_store_str,
 	)
 
 	pda_type = /obj/item/device/pda/mime
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/mime
+	id_type = /obj/item/card/id/mime
 
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
 	..()
@@ -423,7 +423,7 @@
 		H.mind.miming = MIMING_OUT_OF_CHOICE
 
 /datum/outfit/mime/post_equip_priority(var/mob/living/carbon/human/H)
-	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	items_to_collect[/obj/item/coin/clown] = SURVIVAL_BOX
 	return ..()
 
 // -- Janitor
@@ -434,10 +434,10 @@
 	associated_job = /datum/job/janitor
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -466,7 +466,7 @@
 
 	pda_type = /obj/item/device/pda/janitor
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/janitor/post_equip(var/mob/living/carbon/human/H)
 	..()
@@ -474,8 +474,8 @@
 	to_chat(H, "<span class = 'notice'>Decades of roaming maintenance tunnels and interacting with its denizens have granted you the ability to understand the speech of mice and rats.</span>")
 
 /datum/outfit/janitor/post_equip_priority(var/mob/living/carbon/human/H)
-	items_to_collect[/obj/item/weapon/grenade/chem_grenade/cleaner] = SURVIVAL_BOX
-	items_to_collect[/obj/item/weapon/reagent_containers/spray/cleaner] = SURVIVAL_BOX
+	items_to_collect[/obj/item/grenade/chem_grenade/cleaner] = SURVIVAL_BOX
+	items_to_collect[/obj/item/reagent_containers/spray/cleaner] = SURVIVAL_BOX
 	return ..()
 
 // -- Librarian
@@ -486,10 +486,10 @@
 	associated_job = /datum/job/librarian
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -517,22 +517,22 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/barcodescanner = GRASP_RIGHT_HAND,
+		/obj/item/barcodescanner = GRASP_RIGHT_HAND,
 	)
 
 	alt_title_items_to_collect = list(
 		"Game Master" = list(
-			/obj/item/weapon/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
+			/obj/item/storage/pill_bottle/dice/with_die = GRASP_LEFT_HAND,
 		)
 	)
 
 	pda_type = /obj/item/device/pda/librarian
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
 	..()
-	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
+	var/obj/item/storage/bag/plasticbag/P = new /obj/item/storage/bag/plasticbag(H)
 	H.put_in_hands(P)
 	var/list/new_languages = list()
 	for(var/L in all_languages)
@@ -552,10 +552,10 @@
 	associated_job = /datum/job/iaa
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -639,16 +639,16 @@
 	)
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty,
+		/obj/item/implant/loyalty,
 	)
 
 	pda_type = /obj/item/device/pda/lawyer
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/centcom
+	id_type = /obj/item/card/id/centcom
 
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
+	H.put_in_hands(new /obj/item/storage/briefcase/centcomm(H))
 
 // -- Chaplain
 
@@ -657,10 +657,10 @@
 	associated_job = /datum/job/chaplain
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_norm,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_norm,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger,
 	)
 
 	items_to_spawn = list(
@@ -668,7 +668,7 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/chaplain,
 			slot_shoes_str = /obj/item/clothing/shoes/laceup,
-			slot_l_store_str = /obj/item/weapon/nullrod,
+			slot_l_store_str = /obj/item/nullrod,
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
@@ -677,7 +677,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/chaplain,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/chaplain,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_l_store_str = /obj/item/weapon/nullrod,
+			slot_l_store_str = /obj/item/nullrod,
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = /obj/item/device/radio/headset,
@@ -686,21 +686,21 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/chaplain,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/chaplain,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
-			slot_l_store_str = /obj/item/weapon/nullrod,
+			slot_l_store_str = /obj/item/nullrod,
 		),
 	)
 
 	pda_type = /obj/item/device/pda/chaplain
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id
+	id_type = /obj/item/card/id
 
 /datum/outfit/chaplain/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.add_language("Spooky")
-	H.put_in_hands(new /obj/item/weapon/thurible(H))
+	H.put_in_hands(new /obj/item/thurible(H))
 	spawn(0)
 		ChooseReligion(H) // Contains an input() proc and hence must be spawn()ed.
 
 /datum/outfit/chaplain/post_equip_priority(var/mob/living/carbon/human/H)
-	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater] = SURVIVAL_BOX
+	items_to_collect[/obj/item/reagent_containers/food/drinks/bottle/holywater] = SURVIVAL_BOX
 	return ..()

@@ -26,7 +26,7 @@
 	luminosity = 3
 	use_power = 0
 	var/icon_initial //To get around all that pesky hardcoding of icon states, don't put modifiers on this one
-	var/obj/item/weapon/card/id/botcard			// the ID card that the bot "holds"
+	var/obj/item/card/id/botcard			// the ID card that the bot "holds"
 	var/on = 1
 	var/health = 0 //do not forget to set health for your bot!
 	var/maxhealth = 0
@@ -631,7 +631,7 @@
 			huduser.show_message(declare_message,1)
 
 
-/obj/machinery/bot/attackby(obj/item/weapon/W, mob/living/user)
+/obj/machinery/bot/attackby(obj/item/W, mob/living/user)
 	if(flags & INVULNERABLE)
 		return
 	user.delayNextAttack(W.attack_delay)
@@ -645,7 +645,7 @@
 	else if(iswelder(W) && user.a_intent != I_HURT)
 		if(health < maxhealth)
 			if(open)
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				if(WT.remove_fuel(0))
 					health = min(maxhealth, health+10)
 					user.visible_message("<span class='danger'>[user] repairs [src]!</span>","<span class='notice'>You repair [src]!</span>")
@@ -653,7 +653,7 @@
 				to_chat(user, "<span class='notice'>Unable to repair with the maintenance panel closed.</span>")
 		else
 			to_chat(user, "<span class='notice'>[src] does not need a repair.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && emagged < 2)
+	else if (istype(W, /obj/item/card/emag) && emagged < 2)
 		Emag(user)
 	else
 		if(isobj(W))

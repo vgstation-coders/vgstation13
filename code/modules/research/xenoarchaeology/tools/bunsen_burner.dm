@@ -8,7 +8,7 @@
 	icon_state = "bunsen0"
 	pass_flags = PASSTABLE
 	var/heating = BUNSEN_OFF //whether the bunsen is turned on
-	var/obj/item/weapon/reagent_containers/held_container
+	var/obj/item/reagent_containers/held_container
 	var/list/possible_fuels = list(
 		PLASMA = list(
 				"max_temperature" = TEMPERATURE_PLASMA,
@@ -65,9 +65,9 @@
 		to_chat(user, "<span class='info'>It is holding a:</span>")
 		held_container.examine(user)
 
-/obj/machinery/bunsen_burner/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/R = W
+/obj/machinery/bunsen_burner/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/reagent_containers))
+		var/obj/item/reagent_containers/R = W
 		if(heating == BUNSEN_OPEN && R.is_open_container())
 			for(var/possible_fuel in possible_fuels)
 				if(R.reagents.has_reagent(possible_fuel) && (reagents.has_reagent(possible_fuel) || !reagents.reagent_list.len))
@@ -91,7 +91,7 @@
 	else
 		..()
 
-/obj/machinery/bunsen_burner/proc/load_item(obj/item/weapon/W)
+/obj/machinery/bunsen_burner/proc/load_item(obj/item/W)
 	held_container = W
 	var/image/I = image("icon"=W, "layer"=FLOAT_LAYER, "pixel_x" = 2 * PIXEL_MULTIPLIER, "pixel_y" = 22 * PIXEL_MULTIPLIER - empty_Y_space(new /icon(W.icon, W.icon_state)))
 	var/image/I2 = image("icon"=src.icon, icon_state ="bunsen_prong", "layer"=FLOAT_LAYER)
@@ -241,7 +241,7 @@
 obj/machinery/bunsen_burner/mapped/New()
 	..()
 	desc = "[initial(desc)] Perfect for keeping your coffee hot."
-	var/obj/item/weapon/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/weapon/reagent_containers/food/drinks/mug
+	var/obj/item/reagent_containers/food/drinks/mug/coffeemug = new /obj/item/reagent_containers/food/drinks/mug
 	coffeemug.reagents.add_reagent(COFFEE, 30)
 	load_item(coffeemug)
 

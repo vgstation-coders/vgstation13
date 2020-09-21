@@ -20,12 +20,12 @@
 	var/tick_power = 0 //How much power did we produce last count?
 	var/power_efficiency = 1 //Based on parts
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/treadmill,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/treadmill,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/console_screen
 	)
 
 /obj/machinery/power/treadmill/New()
@@ -36,8 +36,8 @@
 
 /obj/machinery/power/treadmill/RefreshParts()
 	var/calc = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/capacitor))
 			calc+=SP.rating
 	power_efficiency = calc/4 //Possible results 1, 2, and 3 -- basically, what tier we have
 

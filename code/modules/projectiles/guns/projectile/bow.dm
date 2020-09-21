@@ -1,4 +1,4 @@
-/obj/item/weapon/arrow
+/obj/item/arrow
 	name = "bolt"
 	desc = "It's got a tip for you - get the point?"
 	icon = 'icons/obj/weapons.dmi'
@@ -10,10 +10,10 @@
 	sharpness = 1
 	sharpness_flags = SHARP_TIP
 
-/obj/item/weapon/arrow/proc/removed() //Helper for metal rods falling apart.
+/obj/item/arrow/proc/removed() //Helper for metal rods falling apart.
 	return
 
-/obj/item/weapon/arrow/quill
+/obj/item/arrow/quill
 
 	name = "vox quill"
 	desc = "A wickedly barbed quill from some bizarre animal."
@@ -22,20 +22,20 @@
 	item_state = "quill"
 	throwforce = 5
 
-/obj/item/weapon/arrow/rod
+/obj/item/arrow/rod
 
 	name = "metal rod"
 	desc = "Don't cry for me, Orithena."
 	icon_state = "metal-rod"
 
-/obj/item/weapon/arrow/rod/removed(mob/user)
+/obj/item/arrow/rod/removed(mob/user)
 	if(throwforce == 15) // The rod has been superheated - we don't want it to be useable when removed from the bow.
 		to_chat(user, "[src] shatters into a scattering of overstressed metal shards as it leaves the crossbow.")
-		var/obj/item/weapon/shard/shrapnel/S = new()
+		var/obj/item/shard/shrapnel/S = new()
 		S.forceMove(get_turf(src))
 		qdel(src)
 
-/obj/item/weapon/crossbow
+/obj/item/crossbow
 	name = "powered crossbow"
 	desc = "A 2557AD twist on an old classic. Pick up that can."
 	icon = 'icons/obj/weapons.dmi'
@@ -52,15 +52,15 @@
 	var/max_tension = 5                   // Highest possible tension.
 	var/release_speed = 5                 // Speed per unit of tension.
 	var/mob/living/current_user = null    // Used to see if the person drawing the bow started drawing it.
-	var/obj/item/weapon/arrow = null      // Nocked arrow.
-	var/obj/item/weapon/cell/cell = null  // Used for firing special projectiles like rods.
+	var/obj/item/arrow = null      // Nocked arrow.
+	var/obj/item/cell/cell = null  // Used for firing special projectiles like rods.
 
-/obj/item/weapon/crossbow/get_cell()
+/obj/item/crossbow/get_cell()
 	return cell
 
-/obj/item/weapon/crossbow/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/crossbow/attackby(obj/item/W as obj, mob/user as mob)
 	if(!arrow)
-		if (istype(W,/obj/item/weapon/arrow))
+		if (istype(W,/obj/item/arrow))
 			if(!user.drop_item(W, src))
 				user << "<span class='warning'>You can't let go of \the [W]!</span>"
 				return
@@ -72,7 +72,7 @@
 		else if(istype(W,/obj/item/stack/rods))
 			var/obj/item/stack/rods/R = W
 			R.use(1)
-			arrow = new /obj/item/weapon/arrow/rod(src)
+			arrow = new /obj/item/arrow/rod(src)
 			arrow.fingerprintslast = src.fingerprintslast
 			arrow.forceMove(src)
 			icon_state = "crossbow-nocked"
@@ -85,7 +85,7 @@
 					cell.charge -= 500
 			return
 
-	if(istype(W, /obj/item/weapon/cell))
+	if(istype(W, /obj/item/cell))
 		if(!cell)
 			if(!user.drop_item(W, src))
 				user << "<span class='warning'>You can't let go of \the [W]!</span>"
@@ -94,7 +94,7 @@
 			cell = W
 			to_chat(user, "<span class='notice'>You jam [cell] into [src] and wire it to the firing coil.</span>")
 			if(arrow)
-				if(istype(arrow,/obj/item/weapon/arrow/rod) && arrow.throwforce < 15 && cell.charge >= 500)
+				if(istype(arrow,/obj/item/arrow/rod) && arrow.throwforce < 15 && cell.charge >= 500)
 					to_chat(user, "<span class='notice'>[arrow] plinks and crackles as it begins to glow red-hot.</span>")
 					arrow.throwforce = 15
 					arrow.icon_state = "metal-rod-superheated"
@@ -114,11 +114,11 @@
 	else
 		..()
 
-/obj/item/weapon/crossbow/attack_self(mob/living/user as mob)
+/obj/item/crossbow/attack_self(mob/living/user as mob)
 	if(tension)
 		if(arrow)
 			user.visible_message("[user] relaxes the tension on [src]'s string and removes [arrow].","You relax the tension on [src]'s string and remove [arrow].")
-			var/obj/item/weapon/arrow/A = arrow
+			var/obj/item/arrow/A = arrow
 			A.forceMove(get_turf(src))
 			A.removed(user)
 			arrow = null
@@ -129,7 +129,7 @@
 	else
 		draw(user)
 
-/obj/item/weapon/crossbow/proc/draw(var/mob/user as mob)
+/obj/item/crossbow/proc/draw(var/mob/user as mob)
 
 
 	if(!arrow)
@@ -145,7 +145,7 @@
 	tension = 1
 	spawn(25) increase_tension(user)
 
-/obj/item/weapon/crossbow/proc/increase_tension(var/mob/user as mob)
+/obj/item/crossbow/proc/increase_tension(var/mob/user as mob)
 
 
 	if(!arrow || !tension || current_user != user) //Arrow has been fired, bow has been relaxed or user has changed.
@@ -161,9 +161,9 @@
 		user.visible_message("[usr] draws back the string of [src]!","You continue drawing back the string of [src]!")
 		spawn(25) increase_tension(user)
 
-/obj/item/weapon/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
+/obj/item/crossbow/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
 
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+	if (istype(target, /obj/item/storage/backpack ))
 		src.dropped()
 		return
 
@@ -186,7 +186,7 @@
 	else
 		spawn(0) Fire(target,user,params)
 
-/obj/item/weapon/crossbow/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/crossbow/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
 
 
 	add_fingerprint(user)
@@ -198,16 +198,16 @@
 
 	user.visible_message("<span class='danger'>[user] releases [src] and sends [arrow] streaking toward [target]!</span>","<span class='danger'>You release [src] and send [arrow] streaking toward [target]!</span>")
 
-	var/obj/item/weapon/arrow/A = arrow
+	var/obj/item/arrow/A = arrow
 	A.forceMove(get_turf(user))
 	A.throw_at(target,10,tension*release_speed)
 	arrow = null
 	tension = 0
 	icon_state = "crossbow"
 
-/obj/item/weapon/crossbow/dropped(mob/user)
+/obj/item/crossbow/dropped(mob/user)
 	if(arrow)
-		var/obj/item/weapon/arrow/A = arrow
+		var/obj/item/arrow/A = arrow
 		A.forceMove(get_turf(src))
 		A.removed(user)
 		arrow = null
@@ -250,7 +250,7 @@
 			return
 	else if(iswelder(W))
 		if(buildstate == 1)
-			var/obj/item/weapon/weldingtool/T = W
+			var/obj/item/weldingtool/T = W
 			if(T.remove_fuel(0,user))
 				if(!src || !T.isOn()) return
 				playsound(src.loc, 'sound/items/Welder2.ogg', 100, 1)
@@ -297,7 +297,7 @@
 	else if(W.is_screwdriver(user))
 		if(buildstate == 5)
 			to_chat(user, "<span class='notice'>You secure the crossbow's various parts.</span>")
-			new /obj/item/weapon/crossbow(get_turf(src))
+			new /obj/item/crossbow(get_turf(src))
 			qdel(src)
 		return
 	else

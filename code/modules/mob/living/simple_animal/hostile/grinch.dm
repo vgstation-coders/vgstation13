@@ -210,7 +210,7 @@
 
 /mob/living/simple_animal/hostile/gremlin/grinch/canEnterVentWith()
 	var/list/allowed = ..()
-	allowed += /obj/item/weapon/storage/backpack/holding/grinch
+	allowed += /obj/item/storage/backpack/holding/grinch
 	return allowed
 
 /mob/living/simple_animal/hostile/gremlin/grinch/reagent_act(id, method, volume)
@@ -226,20 +226,20 @@
 // -- Grinch items.
 
 // Modified BoH
-/obj/item/weapon/storage/backpack/holding/grinch
+/obj/item/storage/backpack/holding/grinch
 	name = "Grinch's bag"
 	desc = "He's coming to steal your presents."
 	item_state = "grinchbag"
 	icon_state = "grinchbag"
 	origin_tech = null
 
-/obj/item/weapon/storage/backpack/holding/grinch/mob_can_equip(var/mob/M, slot, disable_warning = 0, automatic = 0)
+/obj/item/storage/backpack/holding/grinch/mob_can_equip(var/mob/M, slot, disable_warning = 0, automatic = 0)
 	if (!..())
 		return FALSE
 	return isgrinch(M)
 
-/obj/item/weapon/storage/backpack/holding/grinch/attackby(obj/item/weapon/W, mob/user)
-	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
-	if(H || istype(W, /obj/item/weapon/storage/backpack/holding))
+/obj/item/storage/backpack/holding/grinch/attackby(obj/item/W, mob/user)
+	var/obj/item/storage/backpack/holding/H = locate(/obj/item/storage/backpack/holding) in W
+	if(H || istype(W, /obj/item/storage/backpack/holding))
 		return
 	return ..()

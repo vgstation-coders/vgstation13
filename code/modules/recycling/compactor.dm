@@ -30,7 +30,7 @@
 			T.update_icon()
 		if(emagged)
 			for(var/mob/M in src)
-				var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube/H = new(src)
+				var/obj/item/reagent_containers/food/snacks/monkeycube/humancube/H = new(src)
 				H.contained_mob = M
 				M.forceMove(H)
 				launch(H)
@@ -101,7 +101,7 @@
 		wrenchAnchor(user, I)
 		power_change()
 		return
-	if(!emagged && istype(I,/obj/item/weapon/card/emag))
+	if(!emagged && istype(I,/obj/item/card/emag))
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		to_chat(user, "<span class='notice'>You disable the safety features.</span>")

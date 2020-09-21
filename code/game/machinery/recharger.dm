@@ -17,7 +17,7 @@
 	var/charging_speed_modifier = 1 //The higher this value is, the faster the charging (increases energy used and deposited to gun each process() call, multiplier)
 	var/efficiency_modifier = 1 // This value is the multiplier of excess power loss, the closer it is to zero, the less energy is wasted, min cap is 50% of usual loss
 
-	var/obj/item/weapon/charging = null
+	var/obj/item/charging = null
 
 	var/appearance_backup = null
 
@@ -27,10 +27,10 @@
 /obj/machinery/recharger/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/recharger,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/recharger,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor
 	) // Fashioned from the cell charger, they both serve a similar purpose
 	RefreshParts()
 	if(self_powered)
@@ -40,11 +40,11 @@
 
 /obj/machinery/recharger/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts) // 1x - 0.5x loss multiplier
+	for(var/obj/item/stock_parts/scanning_module/SM in component_parts) // 1x - 0.5x loss multiplier
 		T += SM.rating
 	efficiency_modifier = 0.25*(5-T)
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts) // 1x - 3x charging multiplier
+	for(var/obj/item/stock_parts/capacitor/C in component_parts) // 1x - 3x charging multiplier
 		T += C.rating
 	charging_speed_modifier = round(T/2) // rounds down because fractional speed modifiers can cause problems with weapons that have clearly defined "energy units" such as the lawgiver and the pulse rifle, it is unlikely that someone's not going to muster up two of the same capacitor when modifying the charger
 	T = 0
@@ -59,7 +59,7 @@
 	appearance_backup=null
 	..()
 
-/obj/machinery/recharger/attackby(obj/item/weapon/G, mob/user)
+/obj/machinery/recharger/attackby(obj/item/G, mob/user)
 	. = ..()
 	if(.)
 		return
@@ -85,11 +85,11 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
-		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
+	if(istype(G, /obj/item/gun/energy) || istype(G, /obj/item/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/rcs))
+		if (istype(G, /obj/item/gun/energy/gun/nuclear) || istype(G, /obj/item/gun/energy/crossbow))
 			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
 			return 1
-		if (istype(G, /obj/item/weapon/gun/energy/staff))
+		if (istype(G, /obj/item/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return 1
 		if(!user.drop_item(G, src))
@@ -173,8 +173,8 @@
 		if(istype(charging, /obj/item))
 			charging.recharger_process(src)
 		var/charge_unit
-		if(istype(charging, /obj/item/weapon/gun/energy)) // Original values: 100e charged, 150e wasted,
-			var/obj/item/weapon/gun/energy/E = charging
+		if(istype(charging, /obj/item/gun/energy)) // Original values: 100e charged, 150e wasted,
+			var/obj/item/gun/energy/E = charging
 			charge_unit = 100 * charging_speed_modifier
 			if((E.power_supply.charge + charge_unit) < E.power_supply.maxcharge)
 				E.power_supply.give(charge_unit)
@@ -204,8 +204,8 @@
 				update_icon()
 				icon_state = "recharger2"
 			return
-		else if(istype(charging, /obj/item/weapon/melee/baton)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
-			var/obj/item/weapon/melee/baton/B = charging
+		else if(istype(charging, /obj/item/melee/baton)) //25e power loss is so minor that the game shouldn't bother calculating the efficiency of better parts for it
+			var/obj/item/melee/baton/B = charging
 			if(B.bcell)
 				if(B.bcell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
@@ -219,8 +219,8 @@
 			else
 				icon_state = "recharger0"
 
-		else if(istype(charging, /obj/item/weapon/rcs))
-			var/obj/item/weapon/rcs/rcs = charging
+		else if(istype(charging, /obj/item/rcs))
+			var/obj/item/rcs/rcs = charging
 			if(rcs.cell)
 				if(rcs.cell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
@@ -241,13 +241,13 @@
 		..(severity)
 		return
 
-	if(istype(charging,  /obj/item/weapon/gun/energy))
-		var/obj/item/weapon/gun/energy/E = charging
+	if(istype(charging,  /obj/item/gun/energy))
+		var/obj/item/gun/energy/E = charging
 		if(E.power_supply)
 			E.power_supply.emp_act(severity)
 
-	else if(istype(charging, /obj/item/weapon/melee/baton))
-		var/obj/item/weapon/melee/baton/B = charging
+	else if(istype(charging, /obj/item/melee/baton))
+		var/obj/item/melee/baton/B = charging
 		if(B.bcell)
 			B.bcell.charge = 0
 	..(severity)
@@ -280,8 +280,8 @@
 		return
 
 	if(charging)
-		if(istype(charging, /obj/item/weapon/gun/energy))
-			var/obj/item/weapon/gun/energy/E = charging
+		if(istype(charging, /obj/item/gun/energy))
+			var/obj/item/gun/energy/E = charging
 			if(E.power_supply.charge < E.power_supply.maxcharge)
 				E.power_supply.give(100)
 				icon_state = "wrecharger1"
@@ -290,8 +290,8 @@
 			else
 				icon_state = "wrecharger2"
 			return
-		if(istype(charging, /obj/item/weapon/melee/baton))
-			var/obj/item/weapon/melee/baton/B = charging
+		if(istype(charging, /obj/item/melee/baton))
+			var/obj/item/melee/baton/B = charging
 			if(B.bcell)
 				if(B.bcell.give(175))
 					icon_state = "wrecharger1"

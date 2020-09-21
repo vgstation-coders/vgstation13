@@ -39,7 +39,7 @@
 										"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard/lich_king,
 										"[slot_shoes]" = /obj/item/clothing/shoes/lich_king,
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
-										"[slot_s_store]" = /obj/item/weapon/tank/oxygen/yellow)
+										"[slot_s_store]" = /obj/item/tank/oxygen/yellow)
 
 			else
 				equipped_summons = list("[slot_head]" = /obj/item/clothing/head/wizard/skelelich,
@@ -68,7 +68,7 @@
 										"[slot_wear_suit]" = /obj/item/clothing/suit/space/rig/wizard,
 										"[slot_shoes]" = /obj/item/clothing/shoes/sandal,
 										"[slot_wear_mask]" = /obj/item/clothing/mask/breath,
-										"[slot_s_store]" = /obj/item/weapon/tank/oxygen/yellow)
+										"[slot_s_store]" = /obj/item/tank/oxygen/yellow)
 
 	user.visible_message("<span class='danger'>[user] puts on \his robe and wizard hat!</span>", \
 						"<span class='danger'>You put on your robe and wizard hat!</span>")

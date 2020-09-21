@@ -6,7 +6,7 @@ var/list/climatecomps = list()
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "climate"
 	light_color = LIGHT_COLOR_CYAN
-	circuit = "/obj/item/weapon/circuitboard/labor"
+	circuit = "/obj/item/circuitboard/labor"
 
 /obj/machinery/computer/climate/New()
 	..()

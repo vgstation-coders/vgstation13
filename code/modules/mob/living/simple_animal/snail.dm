@@ -18,7 +18,7 @@ var/max_snails = 40
 	maxHealth = 12
 	health = 12
 
-	holder_type = /obj/item/weapon/holder/animal/snail
+	holder_type = /obj/item/holder/animal/snail
 
 	size = SIZE_TINY
 
@@ -29,7 +29,7 @@ var/max_snails = 40
 
 	density = 0
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/snail
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/snail
 
 	var/in_shell = 0
 	var/being_romantic = 0
@@ -65,7 +65,7 @@ var/max_snails = 40
 	if (being_romantic)
 		being_romantic--
 		if (being_romantic == 0)
-			new /obj/item/weapon/reagent_containers/food/snacks/egg/snail(get_turf(src))
+			new /obj/item/reagent_containers/food/snacks/egg/snail(get_turf(src))
 			visible_message("<span class='notice'>\The [src] gently goes off its partner.</span>")
 			loving_partner.being_romantic = 0
 			loving_partner.loving_partner = null

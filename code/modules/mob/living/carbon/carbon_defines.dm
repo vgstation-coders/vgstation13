@@ -10,7 +10,7 @@
 
 	var/mob/living/carbon/mutual_handcuffed_to = null
 	var/obj/item/handcuffed = null //Whether or not the mob is handcuffed.
-	var/obj/item/weapon/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
+	var/obj/item/handcuffs/mutual_handcuffs = null // whether or not cuffed to somebody else
 	var/mutual_handcuff_forcemove_time = 0 //last teleport time when user moves ontop of another
 	var/obj/item/legcuffed = null  //Same as handcuffs but for legs. Bear traps use this.
 	//Surgery info

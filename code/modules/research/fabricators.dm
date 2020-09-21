@@ -60,19 +60,19 @@
 
 /obj/machinery/r_n_d/fabricator/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/M in component_parts)
 		T += M.rating - 1
 	max_material_storage = (initial(max_material_storage)+(T * 187500))
 
 	T = 0
 	var/datum/tech/Tech = files.known_tech["materials"]
-	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+	for(var/obj/item/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
 	resource_coeff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((Tech.level - 1)+(T * 2)))/25,0.01), min_cap_C)
 
 	T = 0
 	Tech = files.known_tech["programming"]
-	for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/Ml in component_parts)
 		T += Ml.rating - 1
 	time_coeff = max(round(initial(time_coeff) - (initial(time_coeff)*((Tech.level - 1)+(T * 3)))/25,0.01), min_cap_T)
 
@@ -223,7 +223,7 @@
 
 		else if(!(research_flags & IGNORE_CHEMS))
 			var/left_to_remove = get_resource_cost_w_coeff(part, M)
-			for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+			for(var/obj/item/reagent_containers/RC in component_parts)
 				var/remove_amount = min(RC.reagents.get_reagent_amount(M), left_to_remove)
 				RC.reagents.remove_reagent(M, remove_amount)
 				left_to_remove -= remove_amount
@@ -234,7 +234,7 @@
 	return 1
 
 /obj/machinery/r_n_d/fabricator/proc/has_bluespace_bin()
-	var/I = /obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace/
+	var/I = /obj/item/stock_parts/matter_bin/adv/super/bluespace/
 	//return (I in component_parts)
 	return locate(I,component_parts)
 
@@ -259,7 +259,7 @@
 		return materials.getAmount(material)
 	else
 		var/reagent_total = 0
-		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		for(var/obj/item/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(material)
 		return reagent_total
 
@@ -284,7 +284,7 @@
 		if(research_flags & IGNORE_CHEMS)
 			return 1
 		var/reagent_total = 0
-		for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+		for(var/obj/item/reagent_containers/RC in component_parts)
 			reagent_total += RC.reagents.get_reagent_amount(M)
 		return round(reagent_total / get_resource_cost_w_coeff(being_built, M))
 
@@ -340,13 +340,13 @@
 			being_built.materials.storage = initial_materials.Copy()
 			being_built.materials.addAmount(matID, get_resource_cost_w_coeff(part,matID)) //slap in what we built with - matching the cost
 		if(part.locked && research_flags &LOCKBOXES)
-			var/obj/item/weapon/storage/lockbox/L
+			var/obj/item/storage/lockbox/L
 			//if(research_flags &TRUELOCKS)
-			L = new/obj/item/weapon/storage/lockbox/oneuse(src) //Make a lockbox
+			L = new/obj/item/storage/lockbox/oneuse(src) //Make a lockbox
 			L.req_one_access = part.req_lock_access //we set the access from the design
 			/*
 			else
-				L = new /obj/item/weapon/storage/lockbox/unlockable(src) //Make an unlockable lockbox
+				L = new /obj/item/storage/lockbox/unlockable(src) //Make an unlockable lockbox
 			*/
 			being_built.forceMove(L) //Put the thing in the lockbox
 			L.name += " ([being_built.name])"
@@ -417,7 +417,7 @@
 	var/datum/tech/T = files.known_tech["materials"]
 	if(T && T.level > 1)
 		var/pmat = 0//Calculations to make up for the fact that these parts and tech modify the same thing
-		for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+		for(var/obj/item/stock_parts/manipulator/Ma in component_parts)
 			pmat += Ma.rating - 1
 		diff = max(round(initial(resource_coeff) - (initial(resource_coeff)*((T.level - 1)+(pmat*2)))/25,0.01), min_cap_C)
 		if(resource_coeff!=diff)
@@ -426,7 +426,7 @@
 	T = files.known_tech["programming"]
 	if(T && T.level > 1)
 		var/ptime = 0
-		for(var/obj/item/weapon/stock_parts/micro_laser/Ml in component_parts)
+		for(var/obj/item/stock_parts/micro_laser/Ml in component_parts)
 			ptime += Ml.rating - 1
 		diff = max(round(initial(time_coeff) - (initial(time_coeff)*((T.level - 1)+(ptime*3)))/25,0.1), min_cap_T)
 		if(time_coeff!=diff)

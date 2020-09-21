@@ -40,9 +40,9 @@
 	speak_override = FALSE
 
 	size = SIZE_TINY
-	holder_type = /obj/item/weapon/holder/animal/mouse
+	holder_type = /obj/item/holder/animal/mouse
 	held_items = list()
-	var/obj/item/weapon/reagent_containers/food/snacks/food_target //What food we're walking towards
+	var/obj/item/reagent_containers/food/snacks/food_target //What food we're walking towards
 	var/is_fat = 0
 	var/can_chew_wires = 0
 	var/splat = 0
@@ -144,7 +144,7 @@
 				dir = pick(cardinal - dir)
 
 		if(!food_target && !client) //Regular mice will be moved towards food, mice with a client won't be
-			for(var/obj/item/weapon/reagent_containers/food/snacks/C in can_see)
+			for(var/obj/item/reagent_containers/food/snacks/C in can_see)
 				food_target = C
 				break
 		if(!(food_target in can_see) || (client && nutrition > MOUSEHUNGRY)) //lets the client regain control if the mouse at enough

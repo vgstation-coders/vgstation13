@@ -301,7 +301,7 @@
 					theme = "clown"
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Internal Affairs Agent")
 					var/chance = 250
-					if(H.find_held_item_by_type(/obj/item/weapon/storage/briefcase))
+					if(H.find_held_item_by_type(/obj/item/storage/briefcase))
 						chance += 500
 					if(H.is_wearing_any(list(/obj/item/clothing/suit/storage/lawyer, /obj/item/clothing/suit/storage/internalaffairs)))
 						chance += 500
@@ -310,7 +310,7 @@
 					episode_names += new /datum/episode_name/rare("DEVIL'S ADVOCATE", "The IAA was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Detective")
 					var/chance = 250
-					if(H.find_held_item_by_type(/obj/item/weapon/gun/projectile/detective))
+					if(H.find_held_item_by_type(/obj/item/gun/projectile/detective))
 						chance += 1000
 					if(H.is_wearing_item(/obj/item/clothing/head/det_hat))
 						chance += 500
@@ -321,7 +321,7 @@
 					episode_names += new /datum/episode_name/rare("[uppertext(H.real_name)]: LOOSE CANNON", "The Detective was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Shaft Miner")
 					var/chance = 250
-					if(H.find_held_item_by_type(/obj/item/weapon/pickaxe))
+					if(H.find_held_item_by_type(/obj/item/pickaxe))
 						chance += 1000
 					if(H.is_wearing_item(/obj/item/clothing/suit/space/rig/mining))
 						chance += 500
@@ -332,7 +332,7 @@
 					episode_names += new /datum/episode_name/rare("[pick("YOU KNOW THE DRILL", "CAN YOU DIG IT?", "JOURNEY TO THE CENTER OF THE ASTEROI", "CAVE STORY", "QUARRY ON")]", "The Miner was the only survivor in the shuttle.", chance)
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Librarian")
 					var/chance = 750
-					if(H.find_held_item_by_type(/obj/item/weapon/book))
+					if(H.find_held_item_by_type(/obj/item/book))
 						chance += 1000
 					if(H.is_wearing_item(/obj/item/clothing/under/suit_jacket/red))
 						chance += 500
@@ -352,7 +352,7 @@
 				else if(!H.isUnconscious() && H.mind && H.mind.assigned_role == "Chaplain") //We don't check for uniform here because the chaplain's thing kind of is to improvise their garment gimmick
 					episode_names += new /datum/episode_name/rare("BLESS THIS MESS", "The Chaplain was the only survivor in the shuttle.", 1250)
 
-				if(H.is_wearing_item(/obj/item/clothing/suit/raincoat) && H.find_held_item_by_type(/obj/item/weapon/fireaxe))
+				if(H.is_wearing_item(/obj/item/clothing/suit/raincoat) && H.find_held_item_by_type(/obj/item/fireaxe))
 					episode_names += new /datum/episode_name/rare("[pick("SPACE AMERICAN PSYCHO", "NANOTRASEN PSYCHO", "[uppr_name] PSYCHO")]", "The only survivor in the shuttle wore a raincoat and held a fireaxe.", 1500)
 				if(H.is_wearing_item(/obj/item/clothing/mask/luchador) && H.is_wearing_item(/obj/item/clothing/gloves/boxing))
 					episode_names += new /datum/episode_name/rare("[pick("THE CREW, ON THE ROPES", "THE CREW, DOWN FOR THE COUNT", "[uppr_name], DOWN AND OUT")]", "The only survivor in the shuttle wore a luchador mask and boxing gloves.", 1500)
@@ -381,7 +381,7 @@
 				for(var/obj/item/organ/external/head/H in shuttle) //they gotta be on the floor
 					headcount++
 				var/mob/living/carbon/human/trait = human_escapees[1]
-				var/obj/item/weapon/storage/belt/skull/trophybelt = trait.is_wearing_item(/obj/item/weapon/storage/belt/skull)
+				var/obj/item/storage/belt/skull/trophybelt = trait.is_wearing_item(/obj/item/storage/belt/skull)
 				if(trophybelt)
 					for(var/obj/item/organ/external/head/H in trophybelt)
 						headcount++

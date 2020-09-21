@@ -1,5 +1,5 @@
 
-/obj/item/weapon/gun/energy/taser
+/obj/item/gun/energy/taser
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
 	icon_state = "taser"
@@ -7,32 +7,32 @@
 	fire_sound = 'sound/weapons/Taser.ogg'
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/electrode"
-	cell_type = "/obj/item/weapon/cell/crap"
+	cell_type = "/obj/item/cell/crap"
 
-/obj/item/weapon/gun/energy/taser/isHandgun()
+/obj/item/gun/energy/taser/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/taser/cyborg
+/obj/item/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
 	icon_state = "taser"
 	fire_sound = 'sound/weapons/Taser.ogg'
 	charge_cost = 100
 	projectile_type = "/obj/item/projectile/energy/electrode"
-	cell_type = "/obj/item/weapon/cell/secborg"
+	cell_type = "/obj/item/cell/secborg"
 	var/charge_tick = 0
 	var/recharge_time = 10 //Time it takes for shots to recharge (in ticks)
 
-/obj/item/weapon/gun/energy/taser/cyborg/New()
+/obj/item/gun/energy/taser/cyborg/New()
 	..()
 	processing_objects.Add(src)
 
 
-/obj/item/weapon/gun/energy/taser/cyborg/Destroy()
+/obj/item/gun/energy/taser/cyborg/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/energy/taser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
+/obj/item/gun/energy/taser/cyborg/process() //Every [recharge_time] ticks, recharge a shot for the cyborg
 	charge_tick++
 	if(charge_tick < recharge_time)
 		return 0
@@ -49,20 +49,20 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/taser/cyborg/restock()
+/obj/item/gun/energy/taser/cyborg/restock()
 	if(power_supply.charge < power_supply.maxcharge)
 		power_supply.give(charge_cost)
 		update_icon()
 	else
 		charge_tick = 0
 
-/obj/item/weapon/gun/energy/taser/team_security
+/obj/item/gun/energy/taser/team_security
 	name = "\improper Team Security sniper taser gun"
 	icon_state = "taser"
 	charge_cost = 500
 	fire_sound = 'sound/effects/intervention.ogg'
 
-/obj/item/weapon/gun/energy/stunrevolver
+/obj/item/gun/energy/stunrevolver
 	name = "stun revolver"
 	desc = "A high-tech revolver that fires stun cartridges. The stun cartridges can be recharged using a conventional energy weapon recharger."
 	icon_state = "stunrevolver"
@@ -72,12 +72,12 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=3;" + Tc_POWERSTORAGE + "=2"
 	charge_cost = 125
 	projectile_type = "/obj/item/projectile/energy/electrode"
-	cell_type = "/obj/item/weapon/cell"
+	cell_type = "/obj/item/cell"
 
-/obj/item/weapon/gun/energy/stunrevolver/isHandgun()
+/obj/item/gun/energy/stunrevolver/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/stunrevolver/failure_check(var/mob/living/carbon/human/M)
+/obj/item/gun/energy/stunrevolver/failure_check(var/mob/living/carbon/human/M)
 	if(prob(15))
 		fire_delay += 2
 		to_chat(M, "<span class='warning'>\The [src] buzzes.</span>")
@@ -98,7 +98,7 @@
 
 
 
-/obj/item/weapon/gun/energy/crossbow
+/obj/item/gun/energy/crossbow
 	name = "mini energy-crossbow"
 	desc = "A weapon favored by many of the syndicates stealth specialists."
 	icon_state = "crossbow"
@@ -111,23 +111,23 @@
 	silenced = 1
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"
-	cell_type = "/obj/item/weapon/cell/crap"
+	cell_type = "/obj/item/cell/crap"
 	var/charge_tick = 0
 
-/obj/item/weapon/gun/energy/crossbow/isHandgun()
+/obj/item/gun/energy/crossbow/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/crossbow/New()
+/obj/item/gun/energy/crossbow/New()
 	..()
 	processing_objects.Add(src)
 
 
-/obj/item/weapon/gun/energy/crossbow/Destroy()
+/obj/item/gun/energy/crossbow/Destroy()
 	processing_objects.Remove(src)
 	..()
 
 
-/obj/item/weapon/gun/energy/crossbow/process()
+/obj/item/gun/energy/crossbow/process()
 	charge_tick++
 	if(charge_tick < 4)
 		return 0
@@ -138,11 +138,11 @@
 	return 1
 
 
-/obj/item/weapon/gun/energy/crossbow/update_icon()
+/obj/item/gun/energy/crossbow/update_icon()
 	return
 
 
-/obj/item/weapon/gun/energy/crossbow/largecrossbow
+/obj/item/gun/energy/crossbow/largecrossbow
 	name = "Energy Crossbow"
 	desc = "A weapon favored by syndicate infiltration teams."
 	w_class = W_CLASS_LARGE
@@ -151,7 +151,7 @@
 	w_type = RECYK_ELECTRONIC
 	projectile_type = "/obj/item/projectile/energy/bolt/large"
 
-/obj/item/weapon/gun/energy/crossbow/failure_check(var/mob/living/carbon/human/M)
+/obj/item/gun/energy/crossbow/failure_check(var/mob/living/carbon/human/M)
 	if(silenced && prob(50))
 		silenced = 0
 		to_chat(M, "<span class='warning'>\The [src] makes a noise.</span>")
@@ -171,7 +171,7 @@
 
 #define SPEEDMODE 0
 #define SCATTERMODE 1
-/obj/item/weapon/gun/energy/shotgun
+/obj/item/gun/energy/shotgun
 	name = "energy shotgun"
 	desc = "An experimental energy shotgun from Alcatraz IV. It has two modes that fire experimental stun electrodes codenamed HUNTER and SWEEPER."
 	icon_state = "eshotgun"
@@ -181,23 +181,23 @@
 	projectile_type = "/obj/item/projectile/energy/electrode/fast"
 	fire_sound = 'sound/weapons/Gunshot_smg.ogg'
 	charge_cost = 100
-	cell_type = "/obj/item/weapon/cell/crap"
+	cell_type = "/obj/item/cell/crap"
 	w_class = W_CLASS_LARGE
 	var/pumped = FALSE
 	var/mode = SPEEDMODE
 
-/obj/item/weapon/gun/energy/shotgun/process_chambered()
+/obj/item/gun/energy/shotgun/process_chambered()
 	if(!pumped)
 		return FALSE
 	else
 		return ..()
 
-/obj/item/weapon/gun/energy/shotgun/Fire(atom/target, mob/living/user, params, reflex, struggle, use_shooter_turf)
+/obj/item/gun/energy/shotgun/Fire(atom/target, mob/living/user, params, reflex, struggle, use_shooter_turf)
 	if(..()) //gun successfully fired
 		pumped = FALSE
 		return TRUE
 
-/obj/item/weapon/gun/energy/shotgun/proc/pump(mob/M as mob)
+/obj/item/gun/energy/shotgun/proc/pump(mob/M as mob)
 	if(world.time > pumped + 1 SECONDS)
 		if(power_supply.charge >= charge_cost)
 			playsound(src, 'sound/weapons/shotgunpump.ogg', 60, 1)
@@ -205,16 +205,16 @@
 		else
 			click_empty(M)
 
-/obj/item/weapon/gun/energy/shotgun/examine(mob/user)
+/obj/item/gun/energy/shotgun/examine(mob/user)
 	..()
 	if(is_holder_of(user, src) && !user.incapacitated())
 		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode.</span>")
 
-/obj/item/weapon/gun/energy/shotgun/attack_self(mob/user)
+/obj/item/gun/energy/shotgun/attack_self(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())
 		pump()
 
-/obj/item/weapon/gun/energy/shotgun/AltClick(mob/user)
+/obj/item/gun/energy/shotgun/AltClick(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())
 		mode = !mode
 		to_chat(user,"<span class='notice'>You flick the toggle into the [mode ? "SWEEPER" : "HUNTER"] position.</span>")

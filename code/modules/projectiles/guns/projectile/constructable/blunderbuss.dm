@@ -1,4 +1,4 @@
-/obj/item/weapon/blunderbuss
+/obj/item/blunderbuss
 	name = "blunderbuss"
 	desc = "A muzzle-loaded firearm powered by welding fuel. It might not be a good idea to use more than 10u of fuel in one shot."
 	icon = 'icons/obj/gun.dmi'
@@ -18,44 +18,44 @@
 	var/max_fuel = 30
 	var/obj/item/loaded_item = null
 	var/list/prohibited_items = list( //Certain common items that, due to a combination of their throwforce and w_class, are too powerful to be allowed as ammunition.
-		/obj/item/weapon/shard,
-		/obj/item/weapon/batteringram,
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/harpoon,
-		/obj/item/weapon/gun,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/storage/pneumatic,
+		/obj/item/shard,
+		/obj/item/batteringram,
+		/obj/item/hatchet,
+		/obj/item/harpoon,
+		/obj/item/gun,
+		/obj/item/blunderbuss,
+		/obj/item/storage/pneumatic,
 		/obj/item/device/detective_scanner,
 		)
 	var/flawless = 0
 	var/dont_shoot = 0 //I couldn't get attack() to play nice with afterattack() for some reason, so I'm jury-rigging the melee stuff.
 
-/obj/item/weapon/blunderbuss/Destroy()
+/obj/item/blunderbuss/Destroy()
 	if(loaded_item)
 		qdel(loaded_item)
 		loaded_item = null
 	..()
 
-/obj/item/weapon/blunderbuss/proc/update_verbs()
+/obj/item/blunderbuss/proc/update_verbs()
 	if(loaded_item)
-		verbs += /obj/item/weapon/blunderbuss/verb/unload_item
+		verbs += /obj/item/blunderbuss/verb/unload_item
 	else
-		verbs -= /obj/item/weapon/blunderbuss/verb/unload_item
+		verbs -= /obj/item/blunderbuss/verb/unload_item
 
 	if(fuel_level > 0)
-		verbs += /obj/item/weapon/blunderbuss/verb/empty_fuel
+		verbs += /obj/item/blunderbuss/verb/empty_fuel
 	else
-		verbs -= /obj/item/weapon/blunderbuss/verb/empty_fuel
+		verbs -= /obj/item/blunderbuss/verb/empty_fuel
 
-/obj/item/weapon/blunderbuss/pickup(mob/user as mob)
+/obj/item/blunderbuss/pickup(mob/user as mob)
 	..()
 	update_verbs()
 
-/obj/item/weapon/blunderbuss/dropped(mob/user as mob)
+/obj/item/blunderbuss/dropped(mob/user as mob)
 	..()
 	update_verbs()
 
-/obj/item/weapon/blunderbuss/verb/unload_item() //Remove the loaded item.
+/obj/item/blunderbuss/verb/unload_item() //Remove the loaded item.
 	set name = "Unload blunderbuss"
 	set category = "Object"
 	set src in range(0)
@@ -73,7 +73,7 @@
 		to_chat(usr, "You remove \the [loaded_item] from \the [src].")
 	update_verbs()
 
-/obj/item/weapon/blunderbuss/verb/empty_fuel() //Empty the fuel reservoir.
+/obj/item/blunderbuss/verb/empty_fuel() //Empty the fuel reservoir.
 	set name = "Empty blunderbuss fuel"
 	set category = "Object"
 	set src in range(0)
@@ -92,7 +92,7 @@
 		to_chat(usr, "You pour the fuel out of \the [src].")
 	update_verbs()
 
-/obj/item/weapon/blunderbuss/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/blunderbuss/attackby(obj/item/W as obj, mob/user as mob)
 	var/item_prohibited = 0
 	for(var/i=1, i<=prohibited_items.len, i++)
 		if(istype(W,prohibited_items[i]))
@@ -126,7 +126,7 @@
 	else
 		. = ..()
 
-/obj/item/weapon/blunderbuss/proc/transfer_fuel(obj/item/weapon/reagent_containers/S, mob/user as mob)
+/obj/item/blunderbuss/proc/transfer_fuel(obj/item/reagent_containers/S, mob/user as mob)
 	if(!S.is_open_container())
 		return
 	if(!istype(S))
@@ -157,15 +157,15 @@
 		to_chat(user, "<span class='notice'>You pour [transfer_amount] units of fuel into \the [src].</span>")
 	update_verbs()
 
-/obj/item/weapon/blunderbuss/examine(mob/user)
+/obj/item/blunderbuss/examine(mob/user)
 	..()
 	if(fuel_level)
 		to_chat(user, "<span class='info'>It contains [fuel_level] units of fuel.</span>")
 	if(loaded_item)
 		to_chat(user, "<span class='info'>There [loaded_item.gender == PLURAL ? "are \a [loaded_item]s" : "is \a [loaded_item]"] jammed into the barrel.</span>")
 
-/obj/item/weapon/blunderbuss/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
-	if (istype(target, /obj/item/weapon/storage/backpack ))
+/obj/item/blunderbuss/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag, params)
+	if (istype(target, /obj/item/storage/backpack ))
 		return
 
 	else if (target.loc == user.loc)
@@ -196,7 +196,7 @@
 	else
 		Fire(target,user,params)
 
-/obj/item/weapon/blunderbuss/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/blunderbuss/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	dont_shoot = 1
 	if (loaded_item)
 		if(user.a_intent == I_HURT)
@@ -208,7 +208,7 @@
 	else
 		return ..()
 
-/obj/item/weapon/blunderbuss/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/blunderbuss/proc/Fire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, reflex = 0)
 	if (!loaded_item)
 		to_chat(user, "There's nothing in \the [src] to fire!")
 		return 0
@@ -255,7 +255,7 @@
 	loaded_item = null
 	fuel_level = 0
 
-/obj/item/weapon/blunderbuss/proc/explode(mob/user)
+/obj/item/blunderbuss/proc/explode(mob/user)
 	to_chat(user, "<span class='danger'>\The [src]'s firing mechanism fails!</span>")
 	loaded_item.forceMove(user.loc)
 	loaded_item = null
@@ -263,10 +263,10 @@
 	qdel(src)
 	return
 
-/obj/item/weapon/blunderbuss/flawless
+/obj/item/blunderbuss/flawless
 	name = "flawless blunderbuss"
 	desc = "A muzzle-loaded firearm powered by welding fuel. This one is of exceptionally high quality, and will never fail."
 
-/obj/item/weapon/blunderbuss/flawless/New()
+/obj/item/blunderbuss/flawless/New()
 	..()
 	flawless = 1

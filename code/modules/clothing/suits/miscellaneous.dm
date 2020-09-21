@@ -238,14 +238,14 @@ var/list/tag_suits_list = list()
 	desc = "Blue Pride, Station Wide."
 	icon_state = "bluetag"
 	item_state = "bluetag"
-	allowed = list (/obj/item/weapon/gun/energy/tag/blue)
+	allowed = list (/obj/item/gun/energy/tag/blue)
 
 /obj/item/clothing/suit/tag/redtag
 	name = "red laser tag armour"
 	desc = "Pew pew pew."
 	icon_state = "redtag"
 	item_state = "redtag"
-	allowed = list (/obj/item/weapon/gun/energy/tag/red)
+	allowed = list (/obj/item/gun/energy/tag/red)
 
 /*
  * Costume
@@ -304,7 +304,7 @@ var/list/tag_suits_list = list()
 	icon_state = "judge"
 	item_state = "judge"
 	clothing_flags = ONESIZEFITSALL
-	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
+	allowed = list(/obj/item/storage/fancy/cigarettes,/obj/item/spacecash)
 
 
 /obj/item/clothing/suit/wcoat
@@ -332,7 +332,7 @@ var/list/tag_suits_list = list()
 	desc = "A plastic replica of the syndicate space suit, you'll look just like a real murderous syndicate agent in this! This is a toy, it is not made for use in space!"
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	species_fit = list(INSECT_SHAPED)
 
@@ -343,7 +343,7 @@ var/list/tag_suits_list = list()
 	desc = "A plastic replica of a ninja suit, you'll look just like a real murderous space ninja in this! This is a toy, it is not made for use in space!"
 	w_class = W_CLASS_MEDIUM
 	flags = FPRINT
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/toy)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/toy)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 
 /obj/item/clothing/suit/sith
@@ -354,7 +354,7 @@ var/list/tag_suits_list = list()
 	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	wizard_garb = 1 //Allows lightning to be used
-	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/melee/energy/sword/dualsaber) //Fits e-swords
+	allowed = list(/obj/item/melee/energy/sword, /obj/item/melee/energy/sword/dualsaber) //Fits e-swords
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -591,7 +591,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "simonjacket"
 	species_fit = list(VOX_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	allowed = list (/obj/item/weapon/pickaxe/drill)
+	allowed = list (/obj/item/pickaxe/drill)
 
 /obj/item/clothing/suit/kaminacape
 	name = "Kamina's Cape"
@@ -615,7 +615,7 @@ obj/item/clothing/suit/cassock
 	name = "russian fur coat"
 	desc = "Let the land do the fighting for you."
 	icon_state = "russofurcoat"
-	allowed = list(/obj/item/weapon/gun)
+	allowed = list(/obj/item/gun)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	species_fit = list(INSECT_SHAPED)
 
@@ -629,14 +629,14 @@ obj/item/clothing/suit/cassock
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
-	allowed = list (/obj/item/weapon/gun)
+	allowed = list (/obj/item/gun)
 
 /obj/item/clothing/suit/raincoat
 	name = "Raincoat"
 	desc = "Do you like Huey Lewis and the News?"
 	icon_state = "raincoat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV //transparent
-	allowed = list (/obj/item/weapon/fireaxe)
+	allowed = list (/obj/item/fireaxe)
 	sterility = 100
 
 /obj/item/clothing/suit/kefkarobe
@@ -655,7 +655,7 @@ obj/item/clothing/suit/cassock
 	desc = "What is a man? A miserable little pile of secrets."
 	icon_state = "draculacoat"
 	blood_overlay_type = "coat"
-	cant_hold = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	cant_hold = list(/obj/item/nullrod, /obj/item/storage/bible)
 	armor = list(melee = 30, bullet = 20, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
@@ -828,7 +828,7 @@ obj/item/clothing/suit/cassock
 	item_state = "clockwork"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
+	allowed = list(/obj/item/storage/bible, /obj/item/nullrod/spear)
 
 
 /obj/item/clothing/suit/inquisitor
@@ -838,7 +838,7 @@ obj/item/clothing/suit/cassock
 	item_state = "coat-church"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
-	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
+	allowed = list(/obj/item/nullrod, /obj/item/storage/bible)
 	armor = list(melee = 40, bullet = 25, laser = 5, energy = 0, bomb = 0, bio = 0, rad = 0)
 	wizard_garb = TRUE
 
@@ -850,7 +850,7 @@ obj/item/clothing/suit/cassock
 	item_state = "apronleather"
 	flags = FPRINT
 	body_parts_covered = FULL_TORSO|IGNORE_INV
-	allowed = list(/obj/item/weapon/hammer)
+	allowed = list(/obj/item/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
 

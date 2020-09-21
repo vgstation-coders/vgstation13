@@ -45,11 +45,11 @@
 
 /obj/machinery/bot/chefbot/proc/yell()
 	if(prob(50))
-		var/obj/item/weapon/reagent_containers/food/snacks/shitfood
+		var/obj/item/reagent_containers/food/snacks/shitfood
 		var/mob/living/carbon/human/thechef
 		var/mob/dork
 		var/is_thechef_the_chef = 0
-		for(var/obj/item/weapon/reagent_containers/food/snacks/probablyshitfood in view(7, src))
+		for(var/obj/item/reagent_containers/food/snacks/probablyshitfood in view(7, src))
 			if(probablyshitfood in calledout)
 				continue
 			if(probablyshitfood.reagents)
@@ -69,7 +69,7 @@
 						is_thechef_the_chef = 1
 						break
 				if(M.wear_id)
-					var/obj/item/weapon/card/id/id = M.wear_id
+					var/obj/item/card/id/id = M.wear_id
 					if(istype(M.wear_id, /obj/item/device/pda))
 						var/obj/item/device/pda/pda = M.wear_id
 						id = pda.id
@@ -147,7 +147,7 @@
 		update_icon()
 		walk(src,0)
 
-/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
+/obj/machinery/bot/chefbot/emag_act(var/mob/user, var/obj/item/card/emag/E)
 	if(!src.emagged)
 		spark(src, 1)
 		src.emagged = 1
@@ -164,7 +164,7 @@
 
 /obj/machinery/bot/chefbot/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/card/emag))
+	if(istype(W, /obj/item/card/emag))
 		emag_act(user, W)
 	else
 		src.visible_message("<span class = 'warning'>[user] hits [src] with [W]!</span>")

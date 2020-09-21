@@ -1,4 +1,4 @@
-/obj/item/weapon/hatchet/tomahawk
+/obj/item/hatchet/tomahawk
 	name = "tomahawk"
 	desc = "A makeshift handaxe with a crude blade of broken glass."
 	icon_state = "tomahawk"
@@ -8,9 +8,9 @@
 	var/ismetal = 0
 	var/ispipe = 0
 
-/obj/item/weapon/hatchet/tomahawk/attackby(obj/item/weapon/W, mob/user)
+/obj/item/hatchet/tomahawk/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/surgicaldrill))
+	if(istype(W, /obj/item/surgicaldrill))
 		to_chat(user, "You begin drilling a hole through the handle of \the [src].")
 		playsound(user, 'sound/machines/juicer.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -18,24 +18,24 @@
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
 				if(ismetal)
-					var/obj/item/weapon/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
+					var/obj/item/hatchet/tomahawk/metal/drilled/I = new (get_turf(user))
 					user.put_in_hands(I)
 				else
-					var/obj/item/weapon/hatchet/tomahawk/drilled/I = new (get_turf(user))
+					var/obj/item/hatchet/tomahawk/drilled/I = new (get_turf(user))
 					user.put_in_hands(I)
 			else
 				if(ismetal)
-					new /obj/item/weapon/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
+					new /obj/item/hatchet/tomahawk/metal/drilled(get_turf(src.loc))
 				else
-					new /obj/item/weapon/hatchet/tomahawk/drilled(get_turf(src.loc))
+					new /obj/item/hatchet/tomahawk/drilled(get_turf(src.loc))
 			qdel(src)
 
-/obj/item/weapon/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/hatchet/tomahawk/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	var/parent_return = ..()
 	degrade(user)
 	return parent_return //Originally returned ..() itself, but I couldn't do that if I wanted the attack to appear before the break in the chat logs.
 
-/obj/item/weapon/hatchet/tomahawk/proc/degrade(mob/user)
+/obj/item/hatchet/tomahawk/proc/degrade(mob/user)
 	if(ismetal)
 		return
 	var/deg_chance = 0
@@ -63,30 +63,30 @@
 			w_condition++
 	return
 
-/obj/item/weapon/hatchet/tomahawk/proc/shatter(mob/user)
+/obj/item/hatchet/tomahawk/proc/shatter(mob/user)
 	if(ismetal)
 		return
 	to_chat(user, "<span class='warning'>\The [src]'s blade shatters!</span>")
 	playsound(user, "shatter", 50, 1)
 	if(src.loc == user)
 		user.drop_item(src, force_drop = 1)
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
-			var/obj/item/weapon/hatchet/tomahawk/pipe/P = src
+		if(istype(src, /obj/item/hatchet/tomahawk/pipe))
+			var/obj/item/hatchet/tomahawk/pipe/P = src
 			if(P.current_blunt)
 				to_chat(user, "The crushed [P.blunt_name] falls out of \the [src].")
-			var/obj/item/weapon/broken_pipe_tomahawk/I = new (get_turf(user))
+			var/obj/item/broken_pipe_tomahawk/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			var/obj/item/weapon/wrench/I = new (get_turf(user))
+			var/obj/item/wrench/I = new (get_turf(user))
 			user.put_in_hands(I)
 	else
-		if(istype(src, /obj/item/weapon/hatchet/tomahawk/pipe))
-			new /obj/item/weapon/broken_pipe_tomahawk(get_turf(src.loc))
+		if(istype(src, /obj/item/hatchet/tomahawk/pipe))
+			new /obj/item/broken_pipe_tomahawk(get_turf(src.loc))
 		else
-			new /obj/item/weapon/wrench(get_turf(src.loc))
+			new /obj/item/wrench(get_turf(src.loc))
 	qdel(src)
 
-/obj/item/weapon/hatchet/tomahawk/examine(mob/user)
+/obj/item/hatchet/tomahawk/examine(mob/user)
 	..()
 	if(ismetal)
 		return
@@ -102,50 +102,50 @@
 		if(5)
 			to_chat(user, "<span class='warning'>\The [src] looks like it could fall apart at any moment!</span>")
 
-/obj/item/weapon/hatchet/tomahawk/drilled
+/obj/item/hatchet/tomahawk/drilled
 
-/obj/item/weapon/hatchet/tomahawk/drilled/examine(mob/user)
+/obj/item/hatchet/tomahawk/drilled/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>There is a hole drilled through the handle.</span>")
 
-/obj/item/weapon/hatchet/tomahawk/drilled/attackby(obj/item/weapon/W, mob/user)
+/obj/item/hatchet/tomahawk/drilled/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
+			var/obj/item/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
+			new /obj/item/hatchet/tomahawk/pipe(get_turf(src.loc))
 		qdel(src)
 		qdel(W)
 
-/obj/item/weapon/hatchet/tomahawk/metal
+/obj/item/hatchet/tomahawk/metal
 	ismetal = 1
 	desc = "A well-made handaxe with a fine blade of strong metal."
 	icon_state = "tomahawk_metal"
 
-/obj/item/weapon/hatchet/tomahawk/metal/drilled
+/obj/item/hatchet/tomahawk/metal/drilled
 
-/obj/item/weapon/hatchet/tomahawk/metal/drilled/examine(mob/user)
+/obj/item/hatchet/tomahawk/metal/drilled/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>There is a hole drilled through the handle.</span>")
 
-/obj/item/weapon/hatchet/tomahawk/metal/drilled/attackby(obj/item/weapon/W, mob/user)
+/obj/item/hatchet/tomahawk/metal/drilled/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/ashtray))
 		to_chat(user, "You affix \the [W] to the end of \the [src].")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/metal/I = new (get_turf(user))
+			var/obj/item/hatchet/tomahawk/pipe/metal/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe/metal(get_turf(src.loc))
+			new /obj/item/hatchet/tomahawk/pipe/metal(get_turf(src.loc))
 		qdel(src)
 		qdel(W)
 
-/obj/item/weapon/hatchet/tomahawk/pipe
+/obj/item/hatchet/tomahawk/pipe
 	name = "pipe tomahawk"
 	desc = "Smokum peace pipe."
 	icon = 'icons/obj/clothing/masks.dmi'
@@ -158,22 +158,22 @@
 	var/not_burned_out = 0 //prevent the going-out message from qdel()s other than the blunt's own qdel().
 	slot_flags = SLOT_MASK
 
-/obj/item/weapon/hatchet/tomahawk/pipe/Destroy()
+/obj/item/hatchet/tomahawk/pipe/Destroy()
 	if(current_blunt)
 		current_blunt.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/burnout)
 		qdel(current_blunt)
 		current_blunt = null
 	..()
 
-/obj/item/weapon/hatchet/tomahawk/pipe/examine(mob/user)
+/obj/item/hatchet/tomahawk/pipe/examine(mob/user)
 	..()
 	if(current_blunt)
 		to_chat(user, "<span class='info'>There is crushed [blunt_name] in the bowl.</span>")
 	if(is_lit)
 		to_chat(user, "<span class='info'>\The [src] is lit.</span>")
 
-/obj/item/weapon/hatchet/tomahawk/pipe/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
+/obj/item/hatchet/tomahawk/pipe/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/reagent_containers/food/snacks/grown))
 		if(current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")
 			return
@@ -188,7 +188,7 @@
 		blunt_name = "[W.name]"
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
-		verbs += /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
+		verbs += /obj/item/hatchet/tomahawk/pipe/verb/empty_pipe
 		return
 	if(W.is_hot())
 		if(current_blunt)
@@ -213,7 +213,7 @@
 		else
 			to_chat(user, "<span class='notice'>There's nothing in the bowl to light.</span>")
 
-/obj/item/weapon/hatchet/tomahawk/pipe/attack_self(mob/user as mob)
+/obj/item/hatchet/tomahawk/pipe/attack_self(mob/user as mob)
 	if(!is_lit)
 		return
 	if(current_blunt)
@@ -230,7 +230,7 @@
 			icon_state = "pipe_tomahawk_glass"
 			item_state = "pipe_tomahawk_glass"
 
-/obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe()
+/obj/item/hatchet/tomahawk/pipe/verb/empty_pipe()
 	set name = "Empty pipe"
 	set category = "Object"
 	set src in range(0)
@@ -244,9 +244,9 @@
 		not_burned_out = 1
 		qdel(current_blunt)
 		current_blunt = null
-		verbs -= /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
+		verbs -= /obj/item/hatchet/tomahawk/pipe/verb/empty_pipe
 
-/obj/item/weapon/hatchet/tomahawk/pipe/proc/burnout()
+/obj/item/hatchet/tomahawk/pipe/proc/burnout()
 	current_blunt = null
 	set_light(0)
 	is_lit = 0
@@ -263,16 +263,16 @@
 	if (istype(loc,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
 		H.update_inv_wear_mask()
-	verbs -= /obj/item/weapon/hatchet/tomahawk/pipe/verb/empty_pipe
+	verbs -= /obj/item/hatchet/tomahawk/pipe/verb/empty_pipe
 
-/obj/item/weapon/hatchet/tomahawk/pipe/metal
+/obj/item/hatchet/tomahawk/pipe/metal
 	ismetal = 1
 	icon_state = "pipe_tomahawk_metal"
 	item_state = "pipe_tomahawk_metal"
 
 //BROKEN PIPE TOMAHAWK BEGIN
 
-/obj/item/weapon/broken_pipe_tomahawk
+/obj/item/broken_pipe_tomahawk
 	name = "broken pipe tomahawk"
 	desc = "Its blade appears to have broken off. What poor craftsmanship."
 	icon = 'icons/obj/clothing/masks.dmi'
@@ -296,27 +296,27 @@
 	var/blunt_hook = null
 	var/not_burned_out = 0 //prevent the going-out message from qdel()s other than the blunt's own qdel().
 
-/obj/item/weapon/broken_pipe_tomahawk/examine(mob/user)
+/obj/item/broken_pipe_tomahawk/examine(mob/user)
 	..()
 	if(current_blunt)
 		to_chat(user, "<span class='info'>There is crushed [blunt_name] in the bowl.</span>")
 	if(is_lit)
 		to_chat(user, "<span class='info'>\The [src] is lit.</span>")
 
-/obj/item/weapon/broken_pipe_tomahawk/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/shard))
+/obj/item/broken_pipe_tomahawk/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/shard))
 		to_chat(user, "You fasten \the [W] to \the [src].")
 		if(current_blunt)
 			to_chat(user, "The crushed [blunt_name] falls out in the process.")
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/hatchet/tomahawk/pipe/I = new (get_turf(user))
+			var/obj/item/hatchet/tomahawk/pipe/I = new (get_turf(user))
 			user.put_in_hands(I)
 		else
-			new /obj/item/weapon/hatchet/tomahawk/pipe(get_turf(src.loc))
+			new /obj/item/hatchet/tomahawk/pipe(get_turf(src.loc))
 		qdel(src)
 		qdel(W)
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown))
+	if(istype(W, /obj/item/reagent_containers/food/snacks/grown))
 		if(current_blunt)
 			to_chat(user, "<span class='notice'>There is already crushed [blunt_name] in the bowl.</span>")
 			return
@@ -331,7 +331,7 @@
 		blunt_name = "[W.name]"
 		user.drop_item(W, force_drop = 1)
 		qdel(W)
-		verbs += /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
+		verbs += /obj/item/broken_pipe_tomahawk/verb/empty_pipe
 		return
 	if(W.is_hot())
 		if(current_blunt)
@@ -352,7 +352,7 @@
 		else
 			to_chat(user, "<span class='notice'>There's nothing in the bowl to light.</span>")
 
-/obj/item/weapon/broken_pipe_tomahawk/attack_self(mob/user as mob)
+/obj/item/broken_pipe_tomahawk/attack_self(mob/user as mob)
 	if(!is_lit)
 		return
 	if(current_blunt)
@@ -365,7 +365,7 @@
 		icon_state = "pipe_tomahawk_broken"
 		item_state = "pipe_tomahawk_broken"
 
-/obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe()
+/obj/item/broken_pipe_tomahawk/verb/empty_pipe()
 	set name = "Empty pipe"
 	set category = "Object"
 	set src in range(0)
@@ -379,9 +379,9 @@
 		not_burned_out = 1
 		qdel(current_blunt)
 		current_blunt = null
-		verbs -= /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
+		verbs -= /obj/item/broken_pipe_tomahawk/verb/empty_pipe
 
-/obj/item/weapon/broken_pipe_tomahawk/proc/burnout(datum/thing)
+/obj/item/broken_pipe_tomahawk/proc/burnout(datum/thing)
 	current_blunt = null
 	set_light(0)
 	is_lit = 0
@@ -394,6 +394,6 @@
 	if (istype(loc,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = loc
 		H.update_inv_wear_mask()
-	verbs -= /obj/item/weapon/broken_pipe_tomahawk/verb/empty_pipe
+	verbs -= /obj/item/broken_pipe_tomahawk/verb/empty_pipe
 
 //BROKEN PIPE TOMAHAWK END

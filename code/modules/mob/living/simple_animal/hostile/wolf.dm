@@ -167,8 +167,8 @@
 /mob/living/simple_animal/hostile/wolf/attackby(obj/W, mob/user)
 	..()
 
-	if(!isDead() && istype(W, /obj/item/weapon/reagent_containers/food/snacks))
-		var/obj/item/weapon/reagent_containers/food/snacks/F = W
+	if(!isDead() && istype(W, /obj/item/reagent_containers/food/snacks))
+		var/obj/item/reagent_containers/food/snacks/F = W
 
 		if(F.food_flags & FOOD_MEAT) //Any meaty dish goes!
 			playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)

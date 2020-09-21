@@ -59,8 +59,8 @@
 		return
 	..()
 
-/mob/living/simple_animal/hostile/retaliate/faguette/attackby(obj/item/weapon/O, mob/user)
-	if(istype(O,/obj/item/weapon/book))
+/mob/living/simple_animal/hostile/retaliate/faguette/attackby(obj/item/O, mob/user)
+	if(istype(O,/obj/item/book))
 		gib()
 
 /mob/living/simple_animal/hostile/retaliate/faguette/proc/handle_disabilities()
@@ -102,8 +102,8 @@
 
 	melee_damage_type = "BRAIN"
 
-/mob/living/simple_animal/hostile/retaliate/faguette/goblin/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/weapon/pen)) //Renaming
+/mob/living/simple_animal/hostile/retaliate/faguette/goblin/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/pen)) //Renaming
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this mime goblin?", "Mime Goblin Name", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"

@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/verb/toggle_firerate()
+/obj/item/gun/verb/toggle_firerate()
 	set name = "Toggle Firerate"
 	set category = "Object"
 	firerate = !firerate
@@ -7,7 +7,7 @@
 	else
 		to_chat(loc, "You will now only fire once, then lower your aim, when your target moves.")
 
-/obj/item/weapon/gun/verb/lower_aim()
+/obj/item/gun/verb/lower_aim()
 	set name = "Lower Aim"
 	set category = "Object"
 	if(target)
@@ -17,18 +17,18 @@
 	return 0
 
 //Clicking gun will still lower aim for guns that don't overwrite this
-/obj/item/weapon/gun/attack_self()
+/obj/item/gun/attack_self()
 	if(!lower_aim())
 		return ..()
 
 //Removing the lock and the buttons.
-/obj/item/weapon/gun/dropped(mob/user as mob)
+/obj/item/gun/dropped(mob/user as mob)
 	stop_aim()
 	if (user && user.client)
 		user.client.remove_gun_icons()
 	return ..()
 
-/obj/item/weapon/gun/equipped(var/mob/user, var/slot, hand_index)
+/obj/item/gun/equipped(var/mob/user, var/slot, hand_index)
 	if(!hand_index)
 		stop_aim()
 		if (user && user.client)
@@ -36,7 +36,7 @@
 	return ..()
 
 //Removes lock fro mall targets
-/obj/item/weapon/gun/proc/stop_aim()
+/obj/item/gun/proc/stop_aim()
 	if(target)
 		for(var/mob/living/M in target)
 			if(M)
@@ -45,7 +45,7 @@
 		target = null
 
 //Compute how to fire.....
-/obj/item/weapon/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
+/obj/item/gun/proc/PreFire(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0)
 	//Lets not spam it.
 	if(lock_time > world.time - 2)
 		return
@@ -61,7 +61,7 @@
 	usr.dir = get_cardinal_dir(src, A)
 
 //Aiming at the target mob.
-/obj/item/weapon/gun/proc/Aim(var/mob/living/M)
+/obj/item/gun/proc/Aim(var/mob/living/M)
 	if(!target || !(M in target))
 		lock_time = world.time
 		if(target && !automatic) //If they're targeting someone and they have a non automatic weapon.
@@ -76,7 +76,7 @@
 		M.Targeted(src)
 
 //HE MOVED, SHOOT HIM!
-/obj/item/weapon/gun/proc/TargetActed(var/mob/living/T)
+/obj/item/gun/proc/TargetActed(var/mob/living/T)
 	var/mob/living/M = loc
 	if(M == T)
 		return
@@ -162,7 +162,7 @@ mob/var
 	last_target_click = -5
 	target_locked = null
 
-mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
+mob/living/proc/Targeted(var/obj/item/gun/I) //Self explanitory.
 	if(!I.target)
 		I.target = list(src)
 	else if(I.automatic && I.target.len < 5) //Automatic weapon, they can hold down a room.
@@ -230,7 +230,7 @@ mob/living/proc/Targeted(var/obj/item/weapon/gun/I) //Self explanitory.
 				I.last_moved_mob = src
 			sleep(1)
 
-mob/living/proc/NotTargeted(var/obj/item/weapon/gun/I)
+mob/living/proc/NotTargeted(var/obj/item/gun/I)
 	if(!I.silenced)
 		for(var/mob/living/M in viewers(src))
 			M << 'sound/weapons/TargetOff.ogg'
@@ -299,7 +299,7 @@ client/verb/ToggleGunMode()
 		add_gun_icons()
 	else
 		to_chat(usr, "You will now shoot where you target.")
-		for(var/obj/item/weapon/gun/G in usr)
+		for(var/obj/item/gun/G in usr)
 			G.stop_aim()
 		remove_gun_icons()
 	if(usr.gun_setting_icon)
@@ -327,7 +327,7 @@ client/verb/AllowTargetMove()
 		usr.gun_move_icon.name = "[target_can_move ? "Disallow" : "Allow"] Walking"
 
 	//Handling change for all the guns on client
-	for(var/obj/item/weapon/gun/G in usr)
+	for(var/obj/item/gun/G in usr)
 		G.lock_time = world.time + 5
 		if(G.target)
 			for(var/mob/living/M in G.target)
@@ -363,7 +363,7 @@ client/verb/AllowTargetRun()
 		usr.gun_run_icon.name = "[target_can_run ? "Disallow" : "Allow"] Running"
 
 	//Handling change for all the guns on client
-	for(var/obj/item/weapon/gun/G in src)
+	for(var/obj/item/gun/G in src)
 		G.lock_time = world.time + 5
 		if(G.target)
 			for(var/mob/living/M in G.target)
@@ -387,7 +387,7 @@ client/verb/AllowTargetClick()
 		usr.item_use_icon.name = "[target_can_click ? "Disallow" : "Allow"] Item Use"
 
 	//Handling change for all the guns on client
-	for(var/obj/item/weapon/gun/G in src)
+	for(var/obj/item/gun/G in src)
 		G.lock_time = world.time + 5
 		if(G.target)
 			for(var/mob/living/M in G.target)

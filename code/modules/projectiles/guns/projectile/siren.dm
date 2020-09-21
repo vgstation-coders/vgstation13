@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/siren
+/obj/item/gun/siren
 	name = "siren"
 	desc = "Despite being entirely liquid, this gun's projectiles still pack a punch."
 	icon = 'icons/obj/gun.dmi'
@@ -16,15 +16,15 @@
 	var/max_reagents = 50
 	var/projectile_type = /obj/item/projectile/bullet/liquid_blob
 
-/obj/item/weapon/gun/siren/isHandgun()
+/obj/item/gun/siren/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/siren/New()
+/obj/item/gun/siren/New()
 	..()
 	create_reagents(max_reagents)
 	reagents.add_reagent(WATER, max_reagents)
 
-/obj/item/weapon/gun/siren/verb/flush_reagents()
+/obj/item/gun/siren/verb/flush_reagents()
 	set name = "Flush contents"
 	set category = "Object"
 	set src in usr
@@ -39,7 +39,7 @@
 		qdel(in_chamber)
 		in_chamber = null
 
-/obj/item/weapon/gun/siren/examine(mob/user)
+/obj/item/gun/siren/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [round(reagents.total_volume/10)] round\s remaining.</span>")
 	if(hard >= 0)
@@ -48,7 +48,7 @@
 		else
 			to_chat(user, "<span class='info'>It is set to \"soft liquid\".</span>")
 
-/obj/item/weapon/gun/siren/attack_self(mob/user as mob)
+/obj/item/gun/siren/attack_self(mob/user as mob)
 	hard = !hard
 	if(hard)
 		to_chat(user, "<span class='info'>You set \the [src] to fire hard liquid.</span>")
@@ -61,7 +61,7 @@
 		fire_sound = 'sound/items/egg_squash.ogg'
 		recoil = 0
 
-/obj/item/weapon/gun/siren/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/siren/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -87,14 +87,14 @@
 			in_chamber.reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id)*4)
 	Fire(A,user,params, "struggle" = struggle)
 
-/obj/item/weapon/gun/siren/process_chambered()
+/obj/item/gun/siren/process_chambered()
 	return in_chamber
 
-/obj/item/weapon/gun/siren/can_discharge()
+/obj/item/gun/siren/can_discharge()
 	if(reagents.total_volume < 10)
 		return 1
 
-/obj/item/weapon/gun/siren/caduceus
+/obj/item/gun/siren/caduceus
 	name = "Caduceus"
 	desc = "For smiting and revitalizing. A paladin's friend, with handy refilling barrels and an ultra-sharp blade for butchering zombies instantly."
 	icon_state = "caduceus"
@@ -109,16 +109,16 @@
 	light_range = 6
 	light_color = LIGHT_COLOR_SLIME_LAMP
 
-/obj/item/weapon/gun/siren/caduceus/New()
+/obj/item/gun/siren/caduceus/New()
 	..()
 	processing_objects.Add(src)
 	create_reagents(max_reagents)
 	reagents.add_reagent(spawning_ammo, max_reagents)
 
-/obj/item/weapon/gun/siren/caduceus/process()
+/obj/item/gun/siren/caduceus/process()
 	reagents.add_reagent(spawning_ammo, 10)
 
-/obj/item/weapon/gun/siren/supersoaker
+/obj/item/gun/siren/supersoaker
 	name = "super soaker"
 	desc = "For ages 10 and up."
 	icon_state = "super_soaker"
@@ -135,7 +135,7 @@
 	var/last_pump = 0
 	var/pumps = 0
 
-/obj/item/weapon/gun/siren/supersoaker/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/siren/supersoaker/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -151,7 +151,7 @@
 		in_chamber = new projectile_type(src)
 		reagents.trans_to(in_chamber, 10)
 
-/obj/item/weapon/gun/siren/supersoaker/attack_self(mob/user)
+/obj/item/gun/siren/supersoaker/attack_self(mob/user)
 	if(world.time - last_pump >= 1)
 		if(pumps >= 24)
 			return
@@ -163,17 +163,17 @@
 			if(istype(L))
 				L.adjust_strength(max(3+(round(pumps/2)),15))
 
-/obj/item/weapon/gun/siren/supersoaker/pistol
+/obj/item/gun/siren/supersoaker/pistol
 	name = "squirt gun"
 	desc = "Fun for all ages!"
 	icon_state = "squirt_gun"
 	item_state = "squirt_gun"
 	max_reagents = 50
 
-/obj/item/weapon/gun/siren/supersoaker/pistol/isHandgun()
+/obj/item/gun/siren/supersoaker/pistol/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/siren/supersoaker/pistol/attack_self(mob/user)
+/obj/item/gun/siren/supersoaker/pistol/attack_self(mob/user)
 	if(!reagents.total_volume)
 		to_chat(user, "<span class='warning'>\The [src] is already empty.</span>")
 		return

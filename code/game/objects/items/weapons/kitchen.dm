@@ -10,13 +10,13 @@
  *		Trays
  */
 
-/obj/item/weapon/kitchen
+/obj/item/kitchen
 	icon = 'icons/obj/kitchen.dmi'
 
 /*
  * Utensils
  */
-/obj/item/weapon/kitchen/utensil
+/obj/item/kitchen/utensil
 	force = 5.0
 	w_class = W_CLASS_TINY
 	throwforce = 5.0
@@ -30,7 +30,7 @@
 	shrapnel_size = 2
 	shrapnel_type = /obj/item/projectile/bullet/shrapnel
 
-/obj/item/weapon/kitchen/utensil/New()
+/obj/item/kitchen/utensil/New()
 	. = ..()
 
 	if (prob(60))
@@ -39,7 +39,7 @@
 /*
  * Spoons
  */
-/obj/item/weapon/kitchen/utensil/spoon
+/obj/item/kitchen/utensil/spoon
 	name = "spoon"
 	desc = "SPOON!"
 	icon_state = "spoon"
@@ -48,13 +48,13 @@
 	var/bendable = TRUE
 	var/bent = FALSE
 
-/obj/item/weapon/kitchen/utensil/spoon/attack_self(mob/user)
+/obj/item/kitchen/utensil/spoon/attack_self(mob/user)
 	if(!bendable || !(M_TK in user.mutations))
 		visible_message("[user] holds up [src] and stares at it intently. What a weirdo.")
 		return
 	bend(user)
 
-/obj/item/weapon/kitchen/utensil/spoon/proc/bend(mob/user)
+/obj/item/kitchen/utensil/spoon/proc/bend(mob/user)
 	visible_message(message = "<span class='warning'>Whoa, [user] looks at [src] and it bends like clay!</span>")
 	if(!bent)
 		bent = TRUE
@@ -63,7 +63,7 @@
 	bent = FALSE
 	icon_state = initial(icon_state)
 
-/obj/item/weapon/kitchen/utensil/spoon/plastic
+/obj/item/kitchen/utensil/spoon/plastic
 	name = "plastic spoon"
 	desc = "Super dull action!"
 	icon_state = "pspoon"
@@ -73,7 +73,7 @@
 /*
  * Forks
  */
-/obj/item/weapon/kitchen/utensil/fork
+/obj/item/kitchen/utensil/fork
 	name = "fork"
 	desc = "Pointy."
 	icon_state = "fork"
@@ -83,16 +83,16 @@
 	var/image/loaded_food
 	melt_temperature = MELTPOINT_STEEL
 
-/obj/item/weapon/kitchen/utensil/fork/New()
+/obj/item/kitchen/utensil/fork/New()
 	..()
 	reagents = new(10)
 	reagents.my_atom = src
 
-/obj/item/weapon/kitchen/utensil/fork/attack_self(var/mob/living/carbon/user)
+/obj/item/kitchen/utensil/fork/attack_self(var/mob/living/carbon/user)
 	if(loaded_food)
 		attack(user,user)
 
-/obj/item/weapon/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/kitchen/utensil/fork/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M) || !istype(user))
 		return ..()
 
@@ -123,12 +123,12 @@
 		else
 			return eyestab(M, user)
 
-/obj/item/weapon/kitchen/utensil/fork/examine(mob/user)
+/obj/item/kitchen/utensil/fork/examine(mob/user)
 	..()
 	if(loaded_food)
 		user.show_message("It has a forkful of [loaded_food_name] on it.")
 
-/obj/item/weapon/kitchen/utensil/fork/proc/load_food(obj/item/weapon/reagent_containers/food/snacks/snack, mob/user)
+/obj/item/kitchen/utensil/fork/proc/load_food(obj/item/reagent_containers/food/snacks/snack, mob/user)
 	if(!snack || !user || !istype(snack) || !istype(user))
 		return
 
@@ -164,7 +164,7 @@
 			snack.after_consume(user)
 	return 1
 
-/obj/item/weapon/kitchen/utensil/fork/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
+/obj/item/kitchen/utensil/fork/proc/feed_to(mob/living/carbon/user, mob/living/carbon/target)
 	reagents.reaction(target, INGEST)
 	reagents.trans_to(target.reagents, reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 	overlays -= loaded_food
@@ -172,7 +172,7 @@
 	loaded_food = null
 	loaded_food_name = null
 
-/obj/item/weapon/kitchen/utensil/fork/plastic
+/obj/item/kitchen/utensil/fork/plastic
 	name = "plastic fork"
 	desc = "Yay, no washing up to do."
 	icon_state = "pfork"
@@ -181,7 +181,7 @@
 /*
  * Knives
  */
-/obj/item/weapon/kitchen/utensil/knife
+/obj/item/kitchen/utensil/knife
 	name = "small knife"
 	desc = "Can cut through any food."
 	icon_state = "smallknife"
@@ -193,13 +193,13 @@
 	melt_temperature = MELTPOINT_STEEL
 	hitsound = 'sound/weapons/bladeslice.ogg'
 
-/obj/item/weapon/kitchen/utensil/knife/suicide_act(mob/user)
+/obj/item/kitchen/utensil/knife/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
+/obj/item/kitchen/utensil/knife/attack(target as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You accidentally cut yourself with the [src].</span>")
 		user.take_organ_damage(2 * force)
@@ -207,7 +207,7 @@
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
-/obj/item/weapon/kitchen/utensil/knife/plastic
+/obj/item/kitchen/utensil/knife/plastic
 	name = "plastic knife"
 	desc = "The bluntest of blades."
 	icon_state = "pknife"
@@ -216,7 +216,7 @@
 	sharpness = 0.8
 	melt_temperature = MELTPOINT_PLASTIC
 
-/obj/item/weapon/kitchen/utensil/knife/nazi
+/obj/item/kitchen/utensil/knife/nazi
 	name = "nazi knife"
 	desc = "There's a svastika at the base of the blade. Powerful when thrown."
 	icon_state = "knifenazi"
@@ -236,7 +236,7 @@
 /*
  * Kitchen knives
  */
-/obj/item/weapon/kitchen/utensil/knife/large
+/obj/item/kitchen/utensil/knife/large
 	name = "kitchen knife"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "knife"
@@ -256,31 +256,31 @@
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	shrapnel_amount = 0
 
-/obj/item/weapon/kitchen/utensil/knife/large/attackby(obj/item/weapon/W, mob/user)
+/obj/item/kitchen/utensil/knife/large/attackby(obj/item/W, mob/user)
 	..()
 	if(user.is_in_modules(src))
 		return
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			to_chat(user, "You slice the handle off of \the [src].")
 			WT.playtoolsound(user, 50)
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/metal_blade/I = new (get_turf(user))
+				var/obj/item/metal_blade/I = new (get_turf(user))
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/metal_blade(get_turf(src.loc))
+				new /obj/item/metal_blade(get_turf(src.loc))
 			qdel(src)
 			return
 
-/obj/item/weapon/kitchen/utensil/knife/large/suicide_act(mob/user)
+/obj/item/kitchen/utensil/knife/large/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his wrists with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his throat with the [src.name]! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/kitchen/utensil/knife/large/ritual
+/obj/item/kitchen/utensil/knife/large/ritual
 	name = "ritual knife"
 	desc = "The unearthly energies that once powered this blade are now dormant."
 	icon = 'icons/obj/wizard.dmi'
@@ -289,7 +289,7 @@
 /*
  * Butcher's cleaver
  */
-/obj/item/weapon/kitchen/utensil/knife/large/butch
+/obj/item/kitchen/utensil/knife/large/butch
 	name = "butcher's cleaver"
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "butch"
@@ -310,7 +310,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("cleaves", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
+/obj/item/kitchen/utensil/knife/large/butch/meatcleaver
 	name = "meat cleaver"
 	icon_state = "mcleaver"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/newsprites_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/newsprites_righthand.dmi')
@@ -319,7 +319,7 @@
 	force = 25.0
 	throwforce = 15.0
 
-/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
+/obj/item/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
 	if(istype(hit_atom, /mob/living) && prob(85))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
@@ -327,7 +327,7 @@
 	return ..()
 
 
-/obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
+/obj/item/kitchen/utensil/knife/large/butch/meatcleaver/attack(mob/M, mob/user)
 	if (!M.isDead())
 		..()
 	else
@@ -355,7 +355,7 @@
  * Rolling Pins
  */
 
-/obj/item/weapon/kitchen/rollingpin
+/obj/item/kitchen/rollingpin
 	name = "rolling pin"
 	desc = "Used to knock out the Bartender."
 	icon_state = "rolling_pin"
@@ -368,7 +368,7 @@
 	autoignition_temperature=AUTOIGNITION_WOOD
 	attack_verb = list("bashes", "batters", "bludgeons", "thrashes", "whacks") //I think the rollingpin attackby will end up ignoring this anyway.
 
-/obj/item/weapon/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/kitchen/rollingpin/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
@@ -409,7 +409,7 @@
 /*
  * Trays - Agouri
  */
-/obj/item/weapon/tray
+/obj/item/tray
 	name = "tray"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "tray"
@@ -430,13 +430,13 @@
 					   // w_class = W_CLASS_MEDIUM -- takes up 5
 	var/cooldown = 0	//shield bash cooldown. based on world.time
 
-/obj/item/weapon/tray/Destroy()
+/obj/item/tray/Destroy()
 	for(var/atom/thing in carrying)
 		qdel(thing)
 	carrying = null
 	..()
 
-/obj/item/weapon/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/tray/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 
 	// Drop all the things. All of them.
 	send_items_flying()
@@ -566,10 +566,10 @@
 	if(w_class == W_CLASS_MEDIUM)
 		return 5
 
-/obj/item/weapon/tray/attackby(obj/item/W as obj, mob/user as mob, params)
+/obj/item/tray/attackby(obj/item/W as obj, mob/user as mob, params)
 	if(isrobot(user) && !isMoMMI(user))
 		return
-	if(istype(W, /obj/item/weapon/kitchen/rollingpin)) //shield bash
+	if(istype(W, /obj/item/kitchen/rollingpin)) //shield bash
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -584,7 +584,7 @@
 	if(weight + calc_carry() > max_carry)
 		to_chat(user, "<span class='warning'>The tray is carrying too much!</span>")
 		return
-	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray, /obj/item/weapon/holder/) ) )
+	if( W == src || W.anchored || is_type_in_list(W, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/tray, /obj/item/holder/) ) )
 		to_chat(user, "<span class='warning'>This doesn't seem like a good idea.</span>")
 		return
 	if(user.drop_item(W, user.loc))
@@ -599,21 +599,21 @@
 		overlays += image
 	else
 		..()
-/obj/item/weapon/tray/proc/calc_carry()
+/obj/item/tray/proc/calc_carry()
 	// calculate the weight of the items on the tray
 	. = 0 // value to return
 
 	for(var/obj/item/I in carrying)
 		. += I.get_trayweight() || INFINITY
 /* previous functionality of trays,
-/obj/item/weapon/tray/prepickup(mob/user)
+/obj/item/tray/prepickup(mob/user)
 	..()
 
 	if(!isturf(loc))
 		return
 
 	for(var/obj/item/I in loc)
-		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/weapon/tray)) )
+		if( I != src && !I.anchored && !is_type_in_list(I, list(/obj/item/clothing/under, /obj/item/clothing/suit, /obj/item/projectile, /obj/item/tray)) )
 			var/add = 0
 			if(I.w_class > W_CLASS_TINY)
 				add = 1
@@ -637,7 +637,7 @@
 			overlays += image
 			//overlays += image("icon" = I.icon, "icon_state" = I.icon_state, "layer" = 30 + I.layer)
 */
-/obj/item/weapon/tray/dropped(mob/user)
+/obj/item/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
 			return ..()
@@ -653,18 +653,18 @@
 			whoops()
 		..()
 
-/obj/item/weapon/tray/throw_impact(atom/hit_atom)
+/obj/item/tray/throw_impact(atom/hit_atom)
 	if(isturf(hit_atom))
 		whoops()
 	..()
 
-/obj/item/weapon/tray/proc/remove_items()
+/obj/item/tray/proc/remove_items()
 	overlays.len = 0
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
 		carrying.Remove(I)
 
-/obj/item/weapon/tray/proc/send_items_flying()
+/obj/item/tray/proc/send_items_flying()
 	overlays.len = 0
 	for(var/obj/item/I in carrying)
 		I.forceMove(get_turf(src))
@@ -673,7 +673,7 @@
 			if(I && prob(75))
 				step(I, pick(alldirs))
 
-/obj/item/weapon/tray/proc/whoops()
+/obj/item/tray/proc/whoops()
 	if(prob(50))
 		playsound(src, 'sound/items/trayhit1.ogg', 35, 1)
 	else

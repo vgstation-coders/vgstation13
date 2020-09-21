@@ -10,7 +10,7 @@
 	idle_power_usage = 20
 	var/temphtml = ""
 	var/wait = null
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/reagent_containers/glass/beaker = null
 
 	light_color = LIGHT_COLOR_BLUE
 
@@ -21,7 +21,7 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/pandemic
+		/obj/item/circuitboard/pandemic
 	)
 
 	RefreshParts()
@@ -60,7 +60,7 @@
 
 	if (href_list["create_vaccine"])
 		if(!src.wait)
-			var/obj/item/weapon/reagent_containers/glass/bottle/B = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc)
+			var/obj/item/reagent_containers/glass/bottle/B = new/obj/item/reagent_containers/glass/bottle(src.loc)
 			if(B)
 				var/path = href_list["create_vaccine"]
 				var/vaccine_type = text2path(path)
@@ -92,7 +92,7 @@
 		return
 	else if (href_list["create_virus_culture"])
 		if(!wait)
-			var/obj/item/weapon/reagent_containers/glass/bottle/B = new/obj/item/weapon/reagent_containers/glass/bottle(src.loc)
+			var/obj/item/reagent_containers/glass/bottle/B = new/obj/item/reagent_containers/glass/bottle(src.loc)
 			B.icon_state = "bottle3"
 			var/type = text2path(href_list["create_virus_culture"])//the path is received as string - converting
 			var/datum/disease/D = null
@@ -266,7 +266,7 @@
 /obj/machinery/computer/pandemic/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(..())
 		return 1
-	else if(istype(I, /obj/item/weapon/reagent_containers/glass))
+	else if(istype(I, /obj/item/reagent_containers/glass))
 		if(stat & (NOPOWER|BROKEN))
 			return
 		if(src.beaker)

@@ -108,7 +108,7 @@ var/global/ingredientLimit = 10
 		create_reagents(cks_max_volume) // maximum volume is set by the machine var
 
 /obj/machinery/cooking/proc/getFoodChoices()
-	return (typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/cook))
+	return (typesof(/obj/item/reagent_containers/food/snacks/customizable/cook)-(/obj/item/reagent_containers/food/snacks/customizable/cook))
 
 /obj/machinery/cooking/is_open_container()
 	if(cooks_in_reagents)
@@ -186,15 +186,15 @@ var/global/ingredientLimit = 10
 
 //Returns "valid" or the reason for denial.
 /obj/machinery/cooking/proc/validateIngredient(var/obj/item/I, var/force_cook)
-	if(istype(I,/obj/item/weapon/grab) || istype(I,/obj/item/tk_grab))
+	if(istype(I,/obj/item/grab) || istype(I,/obj/item/tk_grab))
 		. = "It won't fit."
-	else if(istype(I,/obj/item/weapon/disk/nuclear))
+	else if(istype(I,/obj/item/disk/nuclear))
 		. = "It's the fucking nuke disk!"
-	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/weapon/reagent_containers/food/snacks/customizable))
+	else if(!recursive_ingredients && !recursiveFood && istype(I, /obj/item/reagent_containers/food/snacks/customizable))
 		. = "It would be a straining topological exercise."
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/holder) || deepFriedEverything || force_cook)
+	else if(istype(I,/obj/item/reagent_containers/food/snacks) || istype(I,/obj/item/holder) || deepFriedEverything || force_cook)
 		. = "valid"
-	else if(istype(I,/obj/item/weapon/reagent_containers))
+	else if(istype(I,/obj/item/reagent_containers))
 		. = "transto"
 	else if(istype(I,/obj/item/organ/internal))
 		var/obj/item/organ/internal/organ = I
@@ -235,7 +235,7 @@ var/global/ingredientLimit = 10
 	if(!target_food || !src.reagents || !src.reagents.total_volume) //we have nothing to transfer to or nothing to transfer from
 		return
 
-	if(istype(target_food,/obj/item/weapon/reagent_containers))
+	if(istype(target_food,/obj/item/reagent_containers))
 		for(var/datum/reagent/reagent in reagents.reagent_list)
 			src.reagents.trans_id_to(target_food, reagent.id, max(5, target_food.w_class * 5) / reagents.reagent_list.len)
 	return
@@ -259,8 +259,8 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/proc/makeFood(var/foodType)
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(src.ingredient, /obj/item/holder))
+		var/obj/item/holder/H = src.ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
@@ -269,7 +269,7 @@ var/global/ingredientLimit = 10
 			H.stored_mob = null
 
 	var/obj/item/I = src.ingredient
-	var/obj/item/weapon/reagent_containers/food/new_food = new foodType(src.loc,I)
+	var/obj/item/reagent_containers/food/new_food = new foodType(src.loc,I)
 	for(var/obj/item/embedded in I.contents)
 		embedded.forceMove(src.loc)
 	if(cooks_in_reagents)
@@ -278,13 +278,13 @@ var/global/ingredientLimit = 10
 	if(I.reagents)
 		I.reagents.trans_to(new_food,I.reagents.total_volume)
 
-	if (istype(new_food, /obj/item/weapon/reagent_containers/food/snacks/customizable))
-		var/obj/item/weapon/reagent_containers/food/snacks/customizable/F = new_food
+	if (istype(new_food, /obj/item/reagent_containers/food/snacks/customizable))
+		var/obj/item/reagent_containers/food/snacks/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
-	else if (istype(new_food, /obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
-		var/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable/F = new_food
+	else if (istype(new_food, /obj/item/reagent_containers/food/drinks/bottle/customizable))
+		var/obj/item/reagent_containers/food/drinks/bottle/customizable/F = new_food
 		F.ingredients += I
 		F.updateName()
 		F.overlays += F.generateFilling(I)
@@ -311,12 +311,12 @@ var/global/ingredientLimit = 10
 
 /*/obj/machinery/cooking/candy/makeFood(var/foodType)
 	var/old_food = src.ingredient.name
-	var/obj/item/weapon/reagent_containers/food/new_food = ..()
+	var/obj/item/reagent_containers/food/new_food = ..()
 	new_food.name = "[old_food] [new_food.name]"
 	return new_food*/
 
 /obj/machinery/cooking/candy/getFoodChoices()
-	return (typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy)-(/obj/item/weapon/reagent_containers/food/snacks/customizable/candy))
+	return (typesof(/obj/item/reagent_containers/food/snacks/customizable/candy)-(/obj/item/reagent_containers/food/snacks/customizable/candy))
 
 
 // Still ///////////////////////////////////////////////////////
@@ -329,14 +329,14 @@ var/global/ingredientLimit = 10
 	cookSound = 'sound/machines/juicer.ogg'
 
 /obj/machinery/cooking/still/validateIngredient(var/obj/item/I)
-	if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/grown))
+	if(istype(I,/obj/item/reagent_containers/food/snacks/grown))
 		. = "valid"
 	else
 		. = "It ain't grown food!"
 	return
 
 /obj/machinery/cooking/still/getFoodChoices()
-	return (typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)-(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable))
+	return (typesof(/obj/item/reagent_containers/food/drinks/bottle/customizable)-(/obj/item/reagent_containers/food/drinks/bottle/customizable))
 
 // Cereal Maker ////////////////////////////////////////////////
 
@@ -355,7 +355,7 @@ var/global/ingredientLimit = 10
 	return
 
 /obj/machinery/cooking/cerealmaker/makeFood()
-	var/obj/item/weapon/reagent_containers/food/snacks/cereal/C = new(src.loc)
+	var/obj/item/reagent_containers/food/snacks/cereal/C = new(src.loc)
 	for(var/obj/item/embedded in src.ingredient.contents)
 		embedded.forceMove(src.loc)
 	if(src.ingredient.reagents)
@@ -367,8 +367,8 @@ var/global/ingredientLimit = 10
 	I.transform *= 0.7
 	C.overlays += I
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(src.ingredient, /obj/item/holder))
+		var/obj/item/holder/H = src.ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
@@ -434,7 +434,7 @@ var/global/ingredientLimit = 10
 	empty_icon()
 
 /obj/machinery/cooking/deepfryer/makeFood(var/obj/item/I)
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food/snacks))
+	if(istype(src.ingredient,/obj/item/reagent_containers/food/snacks))
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(src.ingredient)
 		src.ingredient.name = "deep fried [src.ingredient.name]"
@@ -443,7 +443,7 @@ var/global/ingredientLimit = 10
 		for(var/obj/item/embedded in src.ingredient.contents)
 			embedded.forceMove(ingredient)
 	else //some admin enabled funfood and we're frying the captain's ID or someshit
-		var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
+		var/obj/item/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 		if(cooks_in_reagents)
 			src.transfer_reagents_to_food(D)
 		D.name = "deep fried [src.ingredient.name]"
@@ -452,8 +452,8 @@ var/global/ingredientLimit = 10
 		D.icon_state = src.ingredient.icon_state
 		D.overlays = src.ingredient.overlays
 
-		if(istype(src.ingredient, /obj/item/weapon/holder))
-			var/obj/item/weapon/holder/H = src.ingredient
+		if(istype(src.ingredient, /obj/item/holder))
+			var/obj/item/holder/H = src.ingredient
 			if(H.stored_mob)
 				H.stored_mob.ghostize()
 				H.stored_mob.death()
@@ -506,10 +506,10 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/deepfryer/confectionator/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/confectionator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/matter_bin
+		/obj/item/circuitboard/confectionator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/matter_bin
 	)
 
 	RefreshParts()
@@ -549,7 +549,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/deepfryer/confectionator/makeFood(var/obj/item/I)
 
-	var/obj/item/weapon/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
+	var/obj/item/reagent_containers/food/snacks/deepfryholder/D = new(src.loc)
 	if(cooks_in_reagents)
 		src.transfer_reagents_to_food(D)
 	D.appearance = src.ingredient.appearance
@@ -619,8 +619,8 @@ var/global/ingredientLimit = 10
 /obj/machinery/cooking/grill/makeFood()
 	if(cooks_in_reagents)
 		src.transfer_reagents_to_food()
-	if(istype(src.ingredient,/obj/item/weapon/reagent_containers/food))
-		var/obj/item/weapon/reagent_containers/food/F = src.ingredient
+	if(istype(src.ingredient,/obj/item/reagent_containers/food))
+		var/obj/item/reagent_containers/food/F = src.ingredient
 		F.reagents.add_reagent(NUTRIMENT,10)
 		F.reagents.trans_to(src.ingredient,src.ingredient.reagents.total_volume)
 	src.ingredient.mouse_opacity = 1
@@ -628,8 +628,8 @@ var/global/ingredientLimit = 10
 		src.ingredient.name = "grilled [src.ingredient.name]"
 	src.ingredient.forceMove(src.loc)
 
-	if(istype(src.ingredient, /obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.ingredient
+	if(istype(src.ingredient, /obj/item/holder))
+		var/obj/item/holder/H = src.ingredient
 		if(H.stored_mob)
 			H.stored_mob.ghostize()
 			H.stored_mob.death()
@@ -657,7 +657,7 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/cooking/grill/spit/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(30)
-	if(istype(I,/obj/item/weapon/crowbar) && do_after(user,src,30))
+	if(istype(I,/obj/item/crowbar) && do_after(user,src,30))
 		user.visible_message("<span class='notice'>[user] dissassembles the [src].</span>", "<span class='notice'>You dissassemble \the [src].</span>")
 		if(src.ingredient)
 			ingredient.forceMove(src.loc)
@@ -698,17 +698,17 @@ var/global/ingredientLimit = 10
 	anchored = 1
 	use_power = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	var/obj/item/weapon/reagent_containers/within
+	var/obj/item/reagent_containers/within
 
 /obj/machinery/oven/New()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/oven,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/oven,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -722,25 +722,25 @@ var/global/ingredientLimit = 10
 
 /obj/machinery/oven/RefreshParts()
 	var/T = 1
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-1
 	active_power_usage = initial(active_power_usage)/T
 	T = 1
-	for(var/obj/item/weapon/stock_parts/micro_laser/M in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/M in component_parts)
 		T += M.rating-1
 	heat_production = initial(heat_production)*T
 	source_temperature = initial(source_temperature)+(T>1 ? T*10: 0)
 
 /obj/machinery/oven/attackby(obj/item/I, mob/user)
 	..()
-	if(istype(I,/obj/item/weapon/reagent_containers) && !within)
+	if(istype(I,/obj/item/reagent_containers) && !within)
 		if(user.drop_item(I,src))
 			to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 			within = I
 			toggle(user)
 		return 1 //Return 1 when handling reagent containers so they don't splash stuff everywhere
-	if(istype(I, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = I
+	if(istype(I, /obj/item/grab))
+		var/obj/item/grab/G = I
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			user.visible_message("<span class = 'warning'>\The [user] begins to slam \the [M]'s head into \the [src]!</span>",

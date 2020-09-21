@@ -36,12 +36,12 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/medal_printer,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/medal_printer,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 	RefreshParts()
 

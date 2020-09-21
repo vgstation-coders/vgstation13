@@ -6,7 +6,7 @@
 	icon_state = "mecha_rack"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;"
 	is_activateable = FALSE
-	var/obj/item/weapon/storage/mechrack/rack
+	var/obj/item/storage/mechrack/rack
 
 /obj/item/mecha_parts/mecha_equipment/passive/rack/New()
 	..()
@@ -23,7 +23,7 @@
 	rack.empty_contents_to(chassis)
 	..()
 
-/obj/item/weapon/storage/mechrack
+/obj/item/storage/mechrack
 	name = "exosuit storage rack"
 	desc = "A large rack for an exosuit."
 	icon = 'icons/mecha/mecha_equipment.dmi'
@@ -34,11 +34,11 @@
 	rustle_sound = "rustle-metal"
 	var/obj/item/mecha_parts/mecha_equipment/mech_part
 
-/obj/item/weapon/storage/mechrack/Destroy()
+/obj/item/storage/mechrack/Destroy()
 	mech_part = null
 	..()
 
-/obj/item/weapon/storage/mechrack/distance_interact(mob/user)
+/obj/item/storage/mechrack/distance_interact(mob/user)
 	var/obj/mecha/M = mech_part.chassis
 	if(istype(M) && M.operation_allowed(user))
 		if(in_range(user,M))

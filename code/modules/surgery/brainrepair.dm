@@ -6,9 +6,9 @@
 //////BONE CHIPS////////
 /datum/surgery_step/brain/bone_chips
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 20,
+		/obj/item/hemostat = 100,
+		/obj/item/wirecutters = 75,
+		/obj/item/kitchen/utensil/fork = 20,
 		)
 
 	priority = 3
@@ -41,7 +41,7 @@
 ///////HEMATOMA////////
 /datum/surgery_step/brain/hematoma
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		)
 

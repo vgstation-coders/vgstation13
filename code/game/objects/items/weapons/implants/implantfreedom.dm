@@ -1,6 +1,6 @@
 
 
-/obj/item/weapon/implant/freedom
+/obj/item/implant/freedom
 	name = "freedom"
 	desc = "Use this to escape from those evil Red Shirts."
 	_color = "r"
@@ -8,13 +8,13 @@
 	var/uses = 5
 
 
-/obj/item/weapon/implant/freedom/New()
+/obj/item/implant/freedom/New()
 	src.activation_emote = pick("blink", "blink_r", "eyebrow", "chuckle", "twitch_s", "frown", "nod", "blush", "giggle", "grin", "groan", "shrug", "smile", "pale", "sniff", "whimper", "wink")
 	..()
 	return
 
 
-/obj/item/weapon/implant/freedom/trigger(emote, mob/living/carbon/source as mob)
+/obj/item/implant/freedom/trigger(emote, mob/living/carbon/source as mob)
 	if (src.uses < 1)
 		return 0
 	if (emote == src.activation_emote)
@@ -27,13 +27,13 @@
 	return
 
 
-/obj/item/weapon/implant/freedom/implanted(mob/living/carbon/source)
+/obj/item/implant/freedom/implanted(mob/living/carbon/source)
 	source.mind.store_memory("Freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.", 0, 0)
 	to_chat(source, "The implanted freedom implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
 	return 1
 
 
-/obj/item/weapon/implant/freedom/get_data()
+/obj/item/implant/freedom/get_data()
 	var/dat = {"
 <b>Implant Specifications:</b><BR>
 <b>Name:</b> Freedom Beacon<BR>

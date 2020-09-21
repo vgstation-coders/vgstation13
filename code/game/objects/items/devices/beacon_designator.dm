@@ -7,7 +7,7 @@
 
 	var/id = 1//1 to 4
 
-/obj/item/weapon/beacon_dispenser
+/obj/item/beacon_dispenser
 	name = "beacon based area designator"
 	desc = "Guide to using: 1. spawn beacons in the shape of the future area, 2. use the 'Create an area' command, 3. ???, 4. ADMINBUS"
 	icon = 'icons/obj/bluespace_beacon.dmi'
@@ -17,13 +17,13 @@
 	var/list/areas = list()
 	var/id = 1//1 to 4
 
-/obj/item/weapon/beacon_dispenser/attack_self(mob/user)
+/obj/item/beacon_dispenser/attack_self(mob/user)
 	id++
 	if(id>4)
 		id=1
 	to_chat(user, "Spawning beacons with ID: [id]")
 
-/obj/item/weapon/beacon_dispenser/afterattack(atom/A, mob/user as mob)
+/obj/item/beacon_dispenser/afterattack(atom/A, mob/user as mob)
 	var/turf/T = get_turf(A)
 
 	if(istype(A,/obj/item/bluespace_beacon))
@@ -43,7 +43,7 @@
 	else
 		to_chat(usr, "There is already an area there.")
 
-/obj/item/weapon/beacon_dispenser/verb/commit()
+/obj/item/beacon_dispenser/verb/commit()
 	set name = "Create an area"
 	//set category = "Object" //This is admin-only, the default category 'Commands' will do
 

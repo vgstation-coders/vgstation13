@@ -1,6 +1,6 @@
 #define STARTING_USES 5 * Sp_BASE_PRICE
 
-/obj/item/weapon/spellbook
+/obj/item/spellbook
 	name = "spell book"
 	desc = "The legendary book of spells of the wizard."
 	icon = 'icons/obj/library.dmi'
@@ -52,11 +52,11 @@
 
 	var/op = 1
 
-/obj/item/weapon/spellbook/admin
+/obj/item/spellbook/admin
 	uses = 30 * Sp_BASE_PRICE
 	op = 0
 
-/obj/item/weapon/spellbook/New()
+/obj/item/spellbook/New()
 	..()
 
 	available_artifacts = typesof(/datum/spellbook_artifact) - /datum/spellbook_artifact
@@ -85,7 +85,7 @@
 #define book_background_color "#F1F1D4"
 #define book_window_size "550x600"
 
-/obj/item/weapon/spellbook/attack_self(var/mob/user)
+/obj/item/spellbook/attack_self(var/mob/user)
 	if(!user)
 		return
 
@@ -207,7 +207,7 @@
 	user << browse(dat, "window=spellbook;size=[book_window_size]")
 	onclose(user, "spellbook")
 
-/obj/item/weapon/spellbook/proc/build_description(var/mob/user, var/spell_path) //Building sounds more coderlike doesn't it
+/obj/item/spellbook/proc/build_description(var/mob/user, var/spell_path) //Building sounds more coderlike doesn't it
 	var/dat
 	var/spell/abstract_spell = spell_path
 	var/spell_name = initial(abstract_spell.name)
@@ -225,7 +225,7 @@
 	dat += "<br>"
 	return dat
 
-/obj/item/weapon/spellbook/proc/get_spell_properties(flags, mob/user)
+/obj/item/spellbook/proc/get_spell_properties(flags, mob/user)
 	var/list/properties = list()
 
 	if(flags & NEEDSCLOTHES)
@@ -244,7 +244,7 @@
 
 	return properties
 
-/obj/item/weapon/spellbook/proc/get_spell_cooldown_string(charges, charge_type)
+/obj/item/spellbook/proc/get_spell_cooldown_string(charges, charge_type)
 	if(charges == 0)
 		return
 
@@ -254,7 +254,7 @@
 		if(Sp_RECHARGE)
 			return " - cooldown: [(charges/10)]s"
 
-/obj/item/weapon/spellbook/proc/get_spell_price(spell/spell_type)
+/obj/item/spellbook/proc/get_spell_price(spell/spell_type)
 	if(ispath(spell_type, /spell))
 		return initial(spell_type.price)
 	else if(istype(spell_type))
@@ -262,14 +262,14 @@
 	else
 		return 0
 
-/obj/item/weapon/spellbook/proc/use(amount)
+/obj/item/spellbook/proc/use(amount)
 	if(uses >= amount)
 		uses -= amount
 
 		return 1
 
 
-/obj/item/weapon/spellbook/proc/refund(mob/user)
+/obj/item/spellbook/proc/refund(mob/user)
 	if(!istype(get_area(user), /area/wizard_station))
 		to_chat(user, "<span class='notice'>No refunds once you leave your den.</span>")
 		return
@@ -291,7 +291,7 @@
 
 		return 1
 
-/obj/item/weapon/spellbook/Topic(href, href_list)
+/obj/item/spellbook/Topic(href, href_list)
 	if(..())
 		return
 

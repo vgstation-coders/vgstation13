@@ -4,7 +4,7 @@ BEDSHEETS
 LINEN BINS
 */
 
-/obj/item/weapon/bedsheet
+/obj/item/bedsheet
 	plane = ABOVE_OBJ_PLANE
 	layer = BLANKIES_LAYER
 	name = "bedsheet"
@@ -22,7 +22,7 @@ LINEN BINS
 	toolsounds = list("rustle")
 
 //cutting the bedsheet into rags
-/obj/item/weapon/bedsheet/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/bedsheet/attackby(var/obj/item/I, mob/user as mob)
 	var/cut_time=0
 	if(I.is_sharp())
 		cut_time = 60 / I.sharpness
@@ -34,7 +34,7 @@ LINEN BINS
 			to_chat(user, "<span  class='notice'>You have cut the [src] into rags.</span>")
 			var/turf/location = get_turf(src)
 			for(var/x=0; x<=8; x++)
-				var/obj/item/weapon/reagent_containers/glass/rag/S = new/obj/item/weapon/reagent_containers/glass/rag/(location)
+				var/obj/item/reagent_containers/glass/rag/S = new/obj/item/reagent_containers/glass/rag/(location)
 				S.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 				S.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 			qdel(src)
@@ -46,78 +46,78 @@ LINEN BINS
 //todo: sharp thing code/game/objects/objs.dm
 
 
-/obj/item/weapon/bedsheet/blue
+/obj/item/bedsheet/blue
 	icon_state = "sheetblue"
 	_color = "blue"
 
-/obj/item/weapon/bedsheet/green
+/obj/item/bedsheet/green
 	icon_state = "sheetgreen"
 	_color = "green"
 
-/obj/item/weapon/bedsheet/orange
+/obj/item/bedsheet/orange
 	icon_state = "sheetorange"
 	_color = "orange"
 
-/obj/item/weapon/bedsheet/purple
+/obj/item/bedsheet/purple
 	icon_state = "sheetpurple"
 	_color = "purple"
 
-/obj/item/weapon/bedsheet/rainbow
+/obj/item/bedsheet/rainbow
 	icon_state = "sheetrainbow"
 	_color = "rainbow"
 
-/obj/item/weapon/bedsheet/red
+/obj/item/bedsheet/red
 	icon_state = "sheetred"
 	_color = "red"
 
-/obj/item/weapon/bedsheet/red/redcoat
+/obj/item/bedsheet/red/redcoat
 	_color = "redcoat" //for denied stamp
 
-/obj/item/weapon/bedsheet/yellow
+/obj/item/bedsheet/yellow
 	icon_state = "sheetyellow"
 	_color = "yellow"
 
-/obj/item/weapon/bedsheet/mime
+/obj/item/bedsheet/mime
 	icon_state = "sheetmime"
 	_color = "mime"
 
-/obj/item/weapon/bedsheet/clown
+/obj/item/bedsheet/clown
 	icon_state = "sheetclown"
 	_color = "clown"
 
-/obj/item/weapon/bedsheet/black
+/obj/item/bedsheet/black
 	icon_state = "sheetblack"
 	_color = "black"
 
-/obj/item/weapon/bedsheet/captain
+/obj/item/bedsheet/captain
 	icon_state = "sheetcaptain"
 	_color = "captain"
 
-/obj/item/weapon/bedsheet/rd
+/obj/item/bedsheet/rd
 	icon_state = "sheetrd"
 	_color = "director"
 
-/obj/item/weapon/bedsheet/medical
+/obj/item/bedsheet/medical
 	icon_state = "sheetmedical"
 	_color = "medical"
 
-/obj/item/weapon/bedsheet/hos
+/obj/item/bedsheet/hos
 	icon_state = "sheethos"
 	_color = "hosred"
 
-/obj/item/weapon/bedsheet/hop
+/obj/item/bedsheet/hop
 	icon_state = "sheethop"
 	_color = "hop"
 
-/obj/item/weapon/bedsheet/ce
+/obj/item/bedsheet/ce
 	icon_state = "sheetce"
 	_color = "chief"
 
-/obj/item/weapon/bedsheet/brown
+/obj/item/bedsheet/brown
 	icon_state = "sheetbrown"
 	_color = "brown"
 
-/obj/item/weapon/bedsheet/brown/cargo
+/obj/item/bedsheet/brown/cargo
 	_color = "cargo"		//exists for washing machines, is not different from brown bedsheet in any way
 
 /obj/structure/bedsheetbin
@@ -167,7 +167,7 @@ LINEN BINS
 		if(anchored)
 			to_chat(user, "<span class='warning'>\The [src] is still secured to whatever surface it is on. Unsecure it first!</span>")
 			return
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		if(W.remove_fuel(2,user))
 			to_chat(user, "<span class='notice'>You break \the [src] down into a pile of rods.</span>")
 			new /obj/item/stack/rods(get_turf(src),rand(3,5))
@@ -176,7 +176,7 @@ LINEN BINS
 				amount--
 			sheets.Cut()
 			while(amount > 0)
-				new /obj/item/weapon/bedsheet(loc)
+				new /obj/item/bedsheet(loc)
 				amount--
 			if(hidden)
 				to_chat(user, "<span class='notice'>\The [hidden] falls out of \the [src]!</span>")
@@ -184,7 +184,7 @@ LINEN BINS
 				hidden = null
 			qdel(src)
 			return
-	if(istype(I, /obj/item/weapon/bedsheet))
+	if(istype(I, /obj/item/bedsheet))
 		if(user.drop_item(I, src))
 			sheets.Add(I)
 			amount++
@@ -203,13 +203,13 @@ LINEN BINS
 	if(amount >= 1)
 		amount--
 
-		var/obj/item/weapon/bedsheet/B
+		var/obj/item/bedsheet/B
 		if(sheets.len > 0)
 			B = sheets[sheets.len]
 			sheets.Remove(B)
 
 		else
-			B = new /obj/item/weapon/bedsheet(loc)
+			B = new /obj/item/bedsheet(loc)
 
 		B.forceMove(user.loc)
 		user.put_in_hands(B)
@@ -227,13 +227,13 @@ LINEN BINS
 	if(amount >= 1)
 		amount--
 
-		var/obj/item/weapon/bedsheet/B
+		var/obj/item/bedsheet/B
 		if(sheets.len > 0)
 			B = sheets[sheets.len]
 			sheets.Remove(B)
 
 		else
-			B = new /obj/item/weapon/bedsheet(loc)
+			B = new /obj/item/bedsheet(loc)
 
 		B.forceMove(loc)
 		to_chat(user, "<span class='notice'>You telekinetically remove [B] from [src].</span>")

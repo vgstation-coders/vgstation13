@@ -10,7 +10,7 @@
 	var/exit_sound = 'sound/effects/portal_exit.ogg'
 	density = 0
 	var/obj/target = null
-	var/obj/item/weapon/creator = null
+	var/obj/item/creator = null
 	var/mob/owner = null
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
@@ -25,7 +25,7 @@
 		spawn()
 			src.teleport(user)
 
-/obj/effect/portal/attackby(obj/item/weapon/O as obj, mob/user as mob)
+/obj/effect/portal/attackby(obj/item/O as obj, mob/user as mob)
 	if(O == creator)
 		to_chat(user, "<span class='warning'>You close the portal prematurely.</span>")
 		qdel(src)
@@ -105,16 +105,16 @@
 	purge_beams()
 	owner = null
 	if(target)
-		if(istype(target,/obj/effect/portal) && !istype(creator,/obj/item/weapon/gun/portalgun))
+		if(istype(target,/obj/effect/portal) && !istype(creator,/obj/item/gun/portalgun))
 			qdel(target)
 		target = null
 	if(creator)
-		if(istype(creator,/obj/item/weapon/hand_tele))
-			var/obj/item/weapon/hand_tele/H = creator
+		if(istype(creator,/obj/item/hand_tele))
+			var/obj/item/hand_tele/H = creator
 			H.portals -= src
 			creator = null
-		else if(istype(creator,/obj/item/weapon/gun/portalgun))
-			var/obj/item/weapon/gun/portalgun/P = creator
+		else if(istype(creator,/obj/item/gun/portalgun))
+			var/obj/item/gun/portalgun/P = creator
 			if(src == P.blue_portal)
 				P.blue_portal = null
 				P.sync_portals()

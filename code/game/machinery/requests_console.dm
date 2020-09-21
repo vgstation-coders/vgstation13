@@ -430,7 +430,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			make_announcement(msg, G)
 
 					//deconstruction and hacking
-/obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
+/obj/machinery/requests_console/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if (iscrowbar(O))
 		if(open)
 			open = 0
@@ -457,9 +457,9 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		new /obj/item/stack/sheet/metal (src.loc,2)
 		qdel(src)
 		return
-	if (istype(O, /obj/item/weapon/card/id) || istype(O, /obj/item/device/pda))
+	if (istype(O, /obj/item/card/id) || istype(O, /obj/item/device/pda))
 		if(screen == 5)
-			var/obj/item/weapon/card/id/ID = O.GetID()
+			var/obj/item/card/id/ID = O.GetID()
 			if (hackState || ID.access.Find(access_engine_equip))
 				announceAuth = 1
 			else
@@ -467,11 +467,11 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				to_chat(user, "<span class='warning'>You are not authorized to configure this panel.</span>")
 			updateUsrDialog()
 		if(screen == 9)
-			var/obj/item/weapon/card/id/ID = O.GetID()
+			var/obj/item/card/id/ID = O.GetID()
 			msgVerified = "<font color='green'><b>Verified by [ID.registered_name] ([ID.assignment])</b></font>"
 			updateUsrDialog()
 		if (screen == 10)
-			var/obj/item/weapon/card/id/ID = O.GetID()
+			var/obj/item/card/id/ID = O.GetID()
 
 			if (!isnull(ID) && ID.access.Find(access_RC_announce) || hackState)
 				announceAuth = TRUE
@@ -480,9 +480,9 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				to_chat(user, "<span class='warning'>You are not authorized to send announcements.</span>")
 
 			updateUsrDialog()
-	if (istype(O, /obj/item/weapon/stamp))
+	if (istype(O, /obj/item/stamp))
 		if(screen == 9)
-			var/obj/item/weapon/stamp/T = O
+			var/obj/item/stamp/T = O
 			msgStamped = text("<font color='blue'><b>Stamped with the [T.name]</b></font>")
 			updateUsrDialog()
 	return

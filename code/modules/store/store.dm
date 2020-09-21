@@ -32,7 +32,7 @@ var/global/datum/store/centcomm_store=new
 	if(!user)
 		//testing("No initial_account")
 		return 0
-	var/obj/item/weapon/card/card = user.get_card()
+	var/obj/item/card/card = user.get_card()
 	if(!card)
 		return 0
 

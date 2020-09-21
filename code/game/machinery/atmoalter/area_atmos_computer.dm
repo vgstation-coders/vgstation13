@@ -2,7 +2,7 @@
 	name = "Area Atmos Computer"
 	desc = "A computer used to control the stationary scrubbers and pumps in the area."
 	icon_state = "area_atmos"
-	circuit = "/obj/item/weapon/circuitboard/area_atmos"
+	circuit = "/obj/item/circuitboard/area_atmos"
 
 	var/list/connectedscrubbers = new()
 

@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/atmos_alert
+	build_path = /obj/item/circuitboard/atmos_alert
 
 /datum/design/air_management
 	name = "Circuit Design (Atmospheric General Monitor)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/air_management
+	build_path = /obj/item/circuitboard/air_management
 
 /datum/design/atmos_automation
 	name = "Circuit Design (Atmospherics Automation Console)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/atmos_automation
+	build_path = /obj/item/circuitboard/atmos_automation
 
 /datum/design/large_tank_control
 	name = "Circuit Design (Atmospheric Tank Control)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/large_tank_control
+	build_path = /obj/item/circuitboard/large_tank_control
 
 /* Uncomment if someone makes these buildable
 /datum/design/general_alert
@@ -48,7 +48,7 @@
 	req_tech = list(Tc_PROGRAMMING = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/general_alert
+	build_path = /obj/item/circuitboard/general_alert
 */
 
 /datum/design/powermonitor
@@ -59,7 +59,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/powermonitor
+	build_path = /obj/item/circuitboard/powermonitor
 
 /datum/design/solarcontrol
 	name = "Circuit Design (Solar Control)"
@@ -69,7 +69,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/solar_control
+	build_path = /obj/item/circuitboard/solar_control
 
 //Tcomms
 
@@ -81,7 +81,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/comm_monitor
+	build_path = /obj/item/circuitboard/comm_monitor
 
 /datum/design/comm_server
 	name = "Circuit Design (telecommunications server monitoring console)"
@@ -91,7 +91,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/comm_server
+	build_path = /obj/item/circuitboard/comm_server
 
 /datum/design/traffic_control
 	name = "Circuit Design (telecommunications traffic control console)"
@@ -101,7 +101,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/comm_traffic
+	build_path = /obj/item/circuitboard/comm_traffic
 
 /datum/design/message_monitor
 	name = "Circuit Design (Messaging Monitor Console)"
@@ -111,7 +111,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/message_monitor
+	build_path = /obj/item/circuitboard/message_monitor
 
 //Best engine (design wise)
 
@@ -123,7 +123,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_gyrotron_control
+	build_path = /obj/item/circuitboard/rust_gyrotron_control
 
 /datum/design/rust_fuel_control
 	name = "Circuit Design (R-UST Mk. 7 fuel controller)"
@@ -133,7 +133,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_fuel_control
+	build_path = /obj/item/circuitboard/rust_fuel_control
 
 /datum/design/rust_core_monitor
 	name = "Circuit Design (R-UST Mk. 7 core monitor)"
@@ -143,7 +143,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_core_monitor
+	build_path = /obj/item/circuitboard/rust_core_monitor
 
 /datum/design/rust_core_control
 	name = "Circuit Design (R-UST Mk. 7 core controller)"
@@ -153,7 +153,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_core_control
+	build_path = /obj/item/circuitboard/rust_core_control
 
 /datum/design/supermattermonitor
 	name = "Circuit Design (Supermatter Monitor)"
@@ -163,7 +163,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/supermatter
+	build_path = /obj/item/circuitboard/supermatter
 
 /datum/design/atmoscontrol
 	name = "Circuit Design (Central Atmosherics Computer)"
@@ -173,4 +173,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/atmoscontrol
+	build_path = /obj/item/circuitboard/atmoscontrol

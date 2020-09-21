@@ -26,7 +26,7 @@
 		/obj/item/clothing/shoes/black = 2,
 		/obj/item/clothing/shoes/purplepumps = 2,
 		/obj/item/clothing/monkeyclothes = 2,
-		/obj/item/weapon/reagent_containers/food/drinks/coloring,
+		/obj/item/reagent_containers/food/drinks/coloring,
 	)
 
 /*
@@ -41,16 +41,16 @@
 /obj/structure/closet/jcloset/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/under/rank/janitor,
-		/obj/item/weapon/cartridge/janitor,
+		/obj/item/cartridge/janitor,
 		/obj/item/device/flashlight,
 		/obj/item/clothing/shoes/galoshes,
-		/obj/item/weapon/caution = 6,
-		/obj/item/weapon/storage/bag/trash,
+		/obj/item/caution = 6,
+		/obj/item/storage/bag/trash,
 		/obj/item/device/lightreplacer/loaded/mixed,
 		/obj/item/clothing/gloves/black,
 		/obj/item/clothing/head/soft/purple,
-		/obj/item/weapon/storage/box/lights/he = 2,
-		/obj/item/weapon/storage/belt/janitor,
+		/obj/item/storage/box/lights/he = 2,
+		/obj/item/storage/belt/janitor,
 	)
 
 /*
@@ -91,7 +91,7 @@
 		/obj/item/clothing/gloves/latex = 2,
 		/obj/item/clothing/shoes/black = 2,
 		/obj/item/clothing/suit/storage/paramedic = 2,
-		/obj/item/weapon/storage/box/inflatables = 2,
-		/obj/item/weapon/tank/emergency_oxygen/engi = 2,
+		/obj/item/storage/box/inflatables = 2,
+		/obj/item/tank/emergency_oxygen/engi = 2,
 		/obj/item/device/gps/paramedic = 2,
 	)

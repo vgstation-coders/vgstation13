@@ -9,10 +9,10 @@
 	var/scanning = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/fullbodyscanner,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module
+		/obj/item/circuitboard/fullbodyscanner,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module
 	)
 	var/mob/living/carbon/occupant
 	var/obj/item/device/antibody_scanner/immune
@@ -20,7 +20,7 @@
 	light_color = LIGHT_COLOR_GREEN
 	light_range_on = 3
 	light_power_on = 2
-	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
+	var/known_implants = list(/obj/item/implant/chem, /obj/item/implant/death_alarm, /obj/item/implant/loyalty, /obj/item/implant/tracking)
 	var/delete
 	var/temphtml
 	flags = FPRINT | HEAR
@@ -44,7 +44,7 @@
 
 /obj/machinery/bodyscanner/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+	for(var/obj/item/stock_parts/SP in component_parts)
 		T += SP.rating
 	scanning = round(T/3) //9 = Reagent details, Blood Type; 6 = Blood Type; 3 = basic. This value is also transformed into efficiency 1 to 1.
 
@@ -198,17 +198,17 @@
 	update_icon()
 	set_light(0)
 
-/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE
 	return ..()
 
-/obj/machinery/bodyscanner/attackby(obj/item/weapon/W as obj, user as mob)
-	if(!istype(W, /obj/item/weapon/grab))
+/obj/machinery/bodyscanner/attackby(obj/item/W as obj, user as mob)
+	if(!istype(W, /obj/item/grab))
 		return ..()
-	var/obj/item/weapon/grab/G = W
-	if((!( istype(G, /obj/item/weapon/grab) ) || !( ismob(G.affecting) )))
+	var/obj/item/grab/G = W
+	if((!( istype(G, /obj/item/grab) ) || !( ismob(G.affecting) )))
 		return
 	if(src.occupant)
 		to_chat(user, "<span class='notice'>\The [src] is already occupied!</span>")
@@ -317,7 +317,7 @@
 		if(!istype(occupant,/mob/living/carbon/human))
 			to_chat(usr, "[bicon(src)]<span class='warning'>\The [src] cannot scan that lifeform.</span>")
 			return
-		var/obj/item/weapon/paper/R = new(loc)
+		var/obj/item/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
 		R.info = format_occupant_data(get_occupant_data(occupant),scanning)
 
@@ -370,7 +370,7 @@
 
 
 /proc/format_occupant_data(var/list/occ,var/efficiency=0)
-	var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
+	var/known_implants = list(/obj/item/implant/chem, /obj/item/implant/death_alarm, /obj/item/implant/loyalty, /obj/item/implant/tracking)
 	var/dat = "<font color='blue'><b>Scan performed at [occ["stationtime"]]</b></font><br>"
 	dat += "<font color='blue'><b>Occupant Statistics:</b></font><br>"
 	var/aux
@@ -585,7 +585,7 @@
 			if(!occupant||!istype(occupant,/mob/living/carbon/human))
 				return
 			say("Now outputting diagnostic.")
-			var/obj/item/weapon/paper/R = new(src.loc)
+			var/obj/item/paper/R = new(src.loc)
 			R.name = "paper - 'body scan report'"
 			R.info = format_occupant_data(get_occupant_data(occupant),scanning)
 
@@ -593,8 +593,8 @@
 /obj/machinery/bodyscanner/upgraded
 	name = "advanced body scanner"
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/fullbodyscanner,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
+		/obj/item/circuitboard/fullbodyscanner,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
 	)

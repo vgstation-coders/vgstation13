@@ -167,7 +167,7 @@ var/bee_mobs_count = 0
 //DEALING WITH DAMAGE
 /mob/living/simple_animal/bee/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	user.delayNextAttack(8)
-	if (istype(O,/obj/item/weapon/bee_net)) return
+	if (istype(O,/obj/item/bee_net)) return
 	if (user.is_pacified(VIOLENCE_DEFAULT,src)) return
 	if(O.force)
 		var/damage = O.force

@@ -43,7 +43,7 @@
 
 	return alpha
 
-/proc/get_reagent_name(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/DG, var/mug = FALSE)
+/proc/get_reagent_name(var/obj/item/reagent_containers/food/drinks/drinkingglass/DG, var/mug = FALSE)
 	if(!DG)
 		return
 	var/glassormug = "glass"

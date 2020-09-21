@@ -9,7 +9,7 @@
 
 /*
 ////content://///
-* BOMB DISPENSER	/obj/item/weapon/bomberman/
+* BOMB DISPENSER	/obj/item/bomberman/
 * BOMB				/obj/structure/bomberman
 * FLAME/EXPLOSION	/obj/structure/bomberflame
 * SOFT WALLS		/obj/structure/softwall
@@ -32,7 +32,7 @@
 
 ///////////////////////////////BOMB DISPENSER//////////////////////////
 var/global/list/bombermangear = list()
-/obj/item/weapon/bomberman/
+/obj/item/bomberman/
 	name = "Bomberman's Bomb Dispenser"
 	desc = "Now to not get yourself stuck in a corner."
 	w_class = W_CLASS_HUGE
@@ -61,7 +61,7 @@ var/global/list/bombermangear = list()
 	var/datum/bomberman_arena/arena = null
 
 
-/obj/item/weapon/bomberman/New()
+/obj/item/bomberman/New()
 	..()
 	if(bomberman_hurt)
 		hurt_players = 1
@@ -69,12 +69,12 @@ var/global/list/bombermangear = list()
 		destroy_environnement = 1
 	bombermangear += src
 
-/obj/item/weapon/bomberman/Destroy()
+/obj/item/bomberman/Destroy()
 	..()
 	bombermangear -= src
 	arena = null
 
-/obj/item/weapon/bomberman/attack_self(mob/user)
+/obj/item/bomberman/attack_self(mob/user)
 	var/turf/T = get_turf(src)
 	if(bomblimit && !no_bomb)
 		var/power = bombpower
@@ -93,7 +93,7 @@ var/global/list/bombermangear = list()
 			bomblimit--
 			new /obj/structure/bomberman(T, power, destroy_environnement, hurt_players, src, user.dir)
 
-/obj/item/weapon/bomberman/proc/cure(var/disease)
+/obj/item/bomberman/proc/cure(var/disease)
 	spawn(400)
 		switch(disease)
 			if("Low Power Disease")
@@ -108,7 +108,7 @@ var/global/list/bombermangear = list()
 				fast = 0
 				speed_bonus = skate
 
-/obj/item/weapon/bomberman/proc/lost()
+/obj/item/bomberman/proc/lost()
 	if(arena)
 		arena.tools -= src
 		var/datum/bomberman_arena/pastarena = arena
@@ -147,7 +147,7 @@ var/global/list/bombermangear = list()
 	var/destroy_environnement = 0
 	var/hurt_players = 0
 
-	var/obj/item/weapon/bomberman/parent = null
+	var/obj/item/bomberman/parent = null
 
 	var/countdown = 3
 	var/kicked = 0
@@ -186,7 +186,7 @@ var/global/list/bombermangear = list()
 	..()
 
 /obj/structure/bomberman/Bumped(M as mob|obj)	//kick bomb
-	for (var/obj/item/weapon/bomberman/dispenser in M)
+	for (var/obj/item/bomberman/dispenser in M)
 		if (dispenser.can_kick && !kicked)
 			kicked = 1
 			kicked(get_dir(M,src))
@@ -310,12 +310,12 @@ obj/structure/bomberflame/Destroy()
 
 /obj/structure/bomberflame/proc/collisions(var/turf/T)
 
-	for(var/obj/item/weapon/bomberman/dispenser in T)
+	for(var/obj/item/bomberman/dispenser in T)
 		dispenser.lost()
 		T.turf_animation('icons/obj/bomberman.dmi',"dispenser_break",0,0,MOB_LAYER-0.1,'sound/bomberman/bombed.ogg',anim_plane = MOB_PLANE)
 
 	for(var/mob/living/L in T)
-		for(var/obj/item/weapon/bomberman/dispenser in L)
+		for(var/obj/item/bomberman/dispenser in L)
 			L.u_equip(dispenser,1)
 			dispenser.forceMove(L.loc)
 			//dispenser.dropped(C)
@@ -528,7 +528,7 @@ obj/structure/bomberflame/Destroy()
 	name = "skull"
 	icon_state = "skull"
 
-/obj/structure/powerup/attackby(var/obj/item/weapon/bomberman/dispenser, var/mob/user)
+/obj/structure/powerup/attackby(var/obj/item/bomberman/dispenser, var/mob/user)
 	if(istype(dispenser))
 		apply_power(dispenser)
 	..()
@@ -539,7 +539,7 @@ obj/structure/bomberflame/Destroy()
 		step(M, get_dir(M,src))
 		spawn(1)	//to prevent an infinite loop when a player with no BBD is trying to walk over a tile with at least two power-ups.
 			setDensity(TRUE)
-	var/obj/item/weapon/bomberman/dispenser = locate() in M
+	var/obj/item/bomberman/dispenser = locate() in M
 	if (dispenser)
 		apply_power(dispenser)
 	if (istype(M, /obj/structure/bomberflame))
@@ -549,50 +549,50 @@ obj/structure/bomberflame/Destroy()
 
 	..()
 
-/obj/structure/powerup/proc/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/proc/apply_power(var/obj/item/bomberman/dispenser)
 	playsound(src, 'sound/bomberman/powerup.ogg', 50, 1)
 	qdel(src)
 	return
 
-/obj/structure/powerup/bombup/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/bombup/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.bomblimit++
 	dispenser.bombtotal++
 	..()
 	return
 
-/obj/structure/powerup/fire/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/fire/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.bombpower = min(MAX_BOMB_POWER, dispenser.bombpower + 1)
 	..()
 	return
 
-/obj/structure/powerup/full/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/full/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.bombpower = MAX_BOMB_POWER
 	..()
 	return
 
-/obj/structure/powerup/kick/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/kick/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.can_kick = 1
 	..()
 	return
 
-/obj/structure/powerup/line/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/line/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.can_line = 1
 	..()
 	return
 
-/obj/structure/powerup/power/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/power/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.has_power = 1
 	..()
 	return
 
-/obj/structure/powerup/skate/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/skate/apply_power(var/obj/item/bomberman/dispenser)
 	dispenser.skate = min(MAX_SPEED_BONUS, dispenser.skate + SPEED_BONUS_PER_SKATE)
 	if(!dispenser.slow)
 		dispenser.speed_bonus = min(MAX_SPEED_BONUS, dispenser.speed_bonus + SPEED_BONUS_PER_SKATE)
 	..()
 	return
 
-/obj/structure/powerup/skull/apply_power(var/obj/item/weapon/bomberman/dispenser)
+/obj/structure/powerup/skull/apply_power(var/obj/item/bomberman/dispenser)
 	playsound(src, 'sound/bomberman/disease.ogg', 50, 1)
 	var/list/diseases = list(
 		"Low Power Disease",
@@ -624,7 +624,7 @@ obj/structure/bomberflame/Destroy()
 			dispenser.cure(disease)
 		if("Change")
 			for(var/mob/living/L_other in player_list)
-				var/obj/item/weapon/bomberman/target = locate() in L_other
+				var/obj/item/bomberman/target = locate() in L_other
 				if(target)
 					var/mob/living/L_self = src.loc
 					var/turf/T_self = get_turf(L_self)
@@ -669,7 +669,7 @@ obj/structure/bomberflame/Destroy()
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
-	allowed = list(/obj/item/weapon/bomberman/)
+	allowed = list(/obj/item/bomberman/)
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	species_restricted = list("exclude")
 	var/never_removed = 1
@@ -1003,7 +1003,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 	var/obj/item/clothing/suit/space/bomberman/bombsuit = new(M)
 	M.equip_to_slot_or_del(bombsuit, slot_wear_suit)
 	M.equip_to_slot_or_del(new /obj/item/clothing/gloves/purple(M), slot_gloves)
-	var/obj/item/weapon/bomberman/B = new(M)
+	var/obj/item/bomberman/B = new(M)
 	tools += B
 	B.arena = src
 	if(violence)
@@ -1105,7 +1105,7 @@ var/global/list/arena_spawnpoints = list()//used by /mob/dead/observer/Logout()
 		return
 	status = ARENA_ENDGAME
 	var/mob/living/winner = null
-	for(var/obj/item/weapon/bomberman/W in tools)
+	for(var/obj/item/bomberman/W in tools)
 		W.hurt_players = 1	//FINISH THEM!
 		if(istype(W.loc, /mob/living))
 			winner = W.loc

@@ -10,13 +10,13 @@
 
 /obj/effect/decal/remains/human/attack_hand(mob/user)
 	if(icon_state == "remains")
-		user.put_in_hands(new /obj/item/weapon/skull(user))
+		user.put_in_hands(new /obj/item/skull(user))
 		icon_state = "remains_noskull"
 
 /obj/effect/decal/remains/human/noskull
 	icon_state = "remains_noskull"
 
-/obj/item/weapon/skull
+/obj/item/skull
 	name = "skull"
 	desc = "To be or not to be..."
 	icon = 'icons/effects/blood.dmi'

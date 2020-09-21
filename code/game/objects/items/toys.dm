@@ -50,7 +50,7 @@
 	return
 
 /obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/glass))
+	if(istype(O, /obj/item/reagent_containers/glass))
 		if(O.reagents)
 			if(O.reagents.total_volume < 1)
 				to_chat(user, "The [O] is empty.")
@@ -137,7 +137,7 @@
 
 
 /*
- * Toy gun: Why isnt this an /obj/item/weapon/gun?
+ * Toy gun: Why isnt this an /obj/item/gun?
  */
 /obj/item/toy/gun
 	name = "cap gun"
@@ -222,7 +222,7 @@
  */
 
 
-/obj/item/weapon/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
+/obj/item/gun/energy/pulse_rifle/destroyer/lasertag //subtype because of attack_self override
 	name = "pulse destroyer"
 	desc = "A heavy-duty, pulse-based lasertag weapon."
 	projectile_type = "/obj/item/projectile/beam/lasertag/blue"
@@ -232,7 +232,7 @@
  */
 
 
-/obj/item/weapon/gun/energy/fireworkslauncher
+/obj/item/gun/energy/fireworkslauncher
 	name = "fireworks launcher"
 	desc = "Celebrate in style!"
 	icon_state = "fireworkslauncher"
@@ -241,7 +241,7 @@
 	projectile_type = "/obj/item/projectile/meteor/firework"	
 	charge_cost = 0 //infinite ammo!
 	
-/obj/item/weapon/gun/energy/fireworkslauncher/update_icon()
+/obj/item/gun/energy/fireworkslauncher/update_icon()
 	return
 
 /*
@@ -488,7 +488,7 @@
 
 	style = new style_type
 
-/obj/item/toy/crayon/proc/Format(var/mob/user,var/text,var/obj/item/weapon/paper/P)
+/obj/item/toy/crayon/proc/Format(var/mob/user,var/text,var/obj/item/paper/P)
 	return style.Format(text,src,user,P)
 
 /obj/item/toy/crayon/suicide_act(mob/user)
@@ -582,7 +582,7 @@
 
 /obj/item/toy/waterflower/afterattack(atom/A as mob|obj, mob/user as mob, proximity_flag)
 
-	if (istype(A, /obj/item/weapon/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
+	if (istype(A, /obj/item/storage/backpack ) || istype(A, /obj/structure/bed/chair/vehicle/clowncart))
 		return
 
 	else if (locate (/obj/structure/table, src.loc))
@@ -1244,7 +1244,7 @@
 /obj/item/toy/balloon/inflated/attack_self(mob/user)
 	return
 
-/obj/item/toy/balloon/inflated/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/attackby(obj/item/W, mob/user)
 	if(W.sharpness_flags & (SHARP_TIP|HOT_EDGE))
 		user.visible_message("<span class='warning'>\The [user] pops \the [src]!</span>","You pop \the [src].")
 		pop()
@@ -1413,7 +1413,7 @@
 	if(desc)
 		to_chat(user, desc)
 
-/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/weapon/W, mob/user)
+/obj/item/toy/balloon/inflated/decoy/attackby(obj/item/W, mob/user)
 	..()
 	if(!src.gcDestroyed)
 		attack_hand(user)

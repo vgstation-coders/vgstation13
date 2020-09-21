@@ -44,11 +44,11 @@ var/const/HOLOPAD_MODE = 0
 /obj/machinery/hologram/holopad/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/holopad,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/holopad,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser
 	)
 
 /obj/machinery/hologram/holopad/GhostsAlwaysHear()

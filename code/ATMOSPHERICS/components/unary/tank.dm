@@ -173,14 +173,14 @@
 			network = null
 		update_icon()
 
-/obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+/obj/machinery/atmospherics/unary/tank/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	if (istype(W, /obj/item/device/analyzer) && get_dist(user, src) <= 1)
 		var/obj/item/device/analyzer/analyzer = W
 		user.show_message(analyzer.output_gas_scan(air_contents, src, 0), 1)
 	
 	//deconstruction
 	if(iswelder(W) && !anchored)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(!WT.remove_fuel(1,user))
 			return
 		playsound(src, 'sound/items/Welder2.ogg', 100, 1)

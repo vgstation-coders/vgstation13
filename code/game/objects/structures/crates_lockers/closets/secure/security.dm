@@ -11,27 +11,27 @@
 /obj/structure/closet/secure_closet/captains/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/captain,
-			/obj/item/weapon/storage/backpack/satchel_cap,
-			/obj/item/weapon/storage/backpack/messenger/com,
+			/obj/item/storage/backpack/captain,
+			/obj/item/storage/backpack/satchel_cap,
+			/obj/item/storage/backpack/messenger/com,
 			),
 		/obj/item/clothing/suit/captunic,
 		/obj/item/clothing/suit/storage/capjacket,
 		/obj/item/clothing/head/cap,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
-		/obj/item/weapon/cartridge/captain,
+		/obj/item/cartridge/captain,
 		/obj/item/clothing/head/helmet/tactical/swat,
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/heads/captain,
 		/obj/item/clothing/gloves/captain,
 		/obj/item/clothing/shoes/magboots/captain,
-		/obj/item/weapon/gun/energy/gun,
+		/obj/item/gun/energy/gun,
 		/obj/item/clothing/suit/space/rig/captain,
-		/obj/item/weapon/melee/telebaton,
+		/obj/item/melee/telebaton,
 		/obj/item/clothing/under/dress/dress_cap,
 		/obj/item/device/gps/secure,
-		/obj/item/weapon/card/debit/preferred/department/elite/command,
+		/obj/item/card/debit/preferred/department/elite/command,
 	)
 
 
@@ -50,13 +50,13 @@
 		/obj/item/clothing/glasses/sunglasses,
 		/obj/item/clothing/suit/storage/Hop_Coat,
 		/obj/item/clothing/head/hopcap,
-		/obj/item/weapon/cartridge/hop,
+		/obj/item/cartridge/hop,
 		/obj/item/device/radio/headset/heads/hop,
-		/obj/item/weapon/storage/box/ids = 2,
-		/obj/item/weapon/gun/energy/gun,
+		/obj/item/storage/box/ids = 2,
+		/obj/item/gun/energy/gun,
 		/obj/item/device/flash,
 		/obj/item/device/gps/secure,
-		/obj/item/weapon/card/debit/preferred/department/civilian,
+		/obj/item/card/debit/preferred/department/civilian,
 	)
 
 /obj/structure/closet/secure_closet/hop2
@@ -100,9 +100,9 @@
 /obj/structure/closet/secure_closet/hos/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/security,
-			/obj/item/weapon/storage/backpack/satchel_sec,
-			/obj/item/weapon/storage/backpack/messenger/sec,
+			/obj/item/storage/backpack/security,
+			/obj/item/storage/backpack/satchel_sec,
+			/obj/item/storage/backpack/messenger/sec,
 		),
 		/obj/item/clothing/head/HoS,
 		/obj/item/clothing/under/rank/head_of_security/jensen,
@@ -111,18 +111,18 @@
 			/obj/item/clothing/suit/armor/hos/sundowner),
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
-		/obj/item/weapon/cartridge/hos,
+		/obj/item/cartridge/hos,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/radio/headset/heads/hos,
-		/obj/item/weapon/shield/riot,
-		/obj/item/weapon/storage/lockbox/loyalty,
-		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/lockbox/lawgiver/with_magazine,
+		/obj/item/shield/riot,
+		/obj/item/storage/lockbox/loyalty,
+		/obj/item/storage/box/flashbangs,
+		/obj/item/storage/lockbox/lawgiver/with_magazine,
 		/obj/item/clothing/accessory/holster/handgun/waist,
-		/obj/item/weapon/melee/telebaton,
-		/obj/item/weapon/card/debit/preferred/department/security,
-		/obj/item/weapon/pinpointer,
-		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/melee/telebaton,
+		/obj/item/card/debit/preferred/department/security,
+		/obj/item/pinpointer,
+		/obj/item/storage/box/large/securitygear,
 	)
 
 /obj/structure/closet/secure_closet/warden
@@ -139,18 +139,18 @@
 /obj/structure/closet/secure_closet/warden/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/security,
-			/obj/item/weapon/storage/backpack/satchel_sec,
-			/obj/item/weapon/storage/backpack/messenger/sec,
+			/obj/item/storage/backpack/security,
+			/obj/item/storage/backpack/satchel_sec,
+			/obj/item/storage/backpack/messenger/sec,
 			),
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,
 		/obj/item/clothing/head/warden,
-		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/box/bolas,
-		/obj/item/weapon/batteringram,
-		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/storage/box/flashbangs,
+		/obj/item/storage/box/bolas,
+		/obj/item/batteringram,
+		/obj/item/storage/box/large/securitygear,
 	)
 
 /obj/structure/closet/secure_closet/security
@@ -166,13 +166,13 @@
 /obj/structure/closet/secure_closet/security/atoms_to_spawn()
 	return list(
 		pick(
-			/obj/item/weapon/storage/backpack/security,
-			/obj/item/weapon/storage/backpack/satchel_sec,
-			/obj/item/weapon/storage/backpack/messenger/sec,
+			/obj/item/storage/backpack/security,
+			/obj/item/storage/backpack/satchel_sec,
+			/obj/item/storage/backpack/messenger/sec,
 			),
 		/obj/item/clothing/suit/armor/vest/security,
 		/obj/item/clothing/head/helmet/tactical/sec/preattached,
-		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/storage/box/large/securitygear,
 	)
 
 
@@ -241,8 +241,8 @@
 		/obj/item/clothing/shoes/laceup,
 		/obj/item/clothing/suit/armor/det_suit,
 		/obj/item/clothing/accessory/holster/handgun/wornout,
-		/obj/item/weapon/gun/projectile/detective,
-		/obj/item/weapon/storage/box/large/detectivegear,
+		/obj/item/gun/projectile/detective,
+		/obj/item/storage/box/large/detectivegear,
 	)
 
 /obj/structure/closet/secure_closet/detective/update_icon()
@@ -263,7 +263,7 @@
 
 /obj/structure/closet/secure_closet/injection/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/reagent_containers/syringe/giant/chloral = 2,
+		/obj/item/reagent_containers/syringe/giant/chloral = 2,
 	)
 
 
@@ -295,11 +295,11 @@
 /obj/structure/closet/secure_closet/courtroom/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/shoes/brown,
-		/obj/item/weapon/paper/Court = 3,
-		/obj/item/weapon/pen,
+		/obj/item/paper/Court = 3,
+		/obj/item/pen,
 		/obj/item/clothing/suit/judgerobe,
 		/obj/item/clothing/head/powdered_wig,
-		/obj/item/weapon/storage/briefcase,
+		/obj/item/storage/briefcase,
 	)
 
 

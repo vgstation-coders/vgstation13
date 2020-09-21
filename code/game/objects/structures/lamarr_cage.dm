@@ -12,7 +12,7 @@
 /obj/structure/lamarr/ex_act(severity)
 	switch(severity)
 		if (1)
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			Break()
 			qdel(src)
 		if (2)
@@ -34,7 +34,7 @@
 
 /obj/structure/lamarr/blob_act()
 	if (prob(75))
-		new /obj/item/weapon/shard(loc)
+		new /obj/item/shard(loc)
 		Break()
 		qdel(src)
 
@@ -43,7 +43,7 @@
 		if (!( src.destroyed ))
 			setDensity(FALSE)
 			src.destroyed = 1
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			playsound(src, "shatter", 70, 1)
 			Break()
 	else
@@ -58,7 +58,7 @@
 	return
 
 
-/obj/structure/lamarr/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/lamarr/attackby(obj/item/W as obj, mob/user as mob)
 	src.health -= W.force
 	src.healthcheck()
 	..()
@@ -109,7 +109,7 @@
 					var/index = H.is_holding_item(src)
 
 					H.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/gun/projectile/hivehand/I = new (get_turf(H))
+					var/obj/item/gun/projectile/hivehand/I = new (get_turf(H))
 
 					if(index)
 						H.put_in_hand(index, I)
@@ -119,11 +119,11 @@
 		reagents.clear_reagents()
 	..()
 
-/obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/weapon/W, mob/user)
-	if(!istype(W, /obj/item/weapon/reagent_containers/syringe))
+/obj/item/clothing/mask/facehugger/lamarr/attackby(obj/item/W, mob/user)
+	if(!istype(W, /obj/item/reagent_containers/syringe))
 		..(W, user)
 
-/obj/item/clothing/mask/facehugger/lamarr/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/obj/item/clothing/mask/facehugger/lamarr/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	if(!user.is_holding_item(src) && stat != DEAD)
 		to_chat(user, "<span class='warning'>[src] is squirming around too much. She needs to be held still.</span>")
 		return INJECTION_RESULT_FAIL

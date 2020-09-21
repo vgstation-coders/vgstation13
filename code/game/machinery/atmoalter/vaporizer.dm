@@ -13,7 +13,7 @@
 	stat = NOPOWER
 	req_access = list(access_atmospherics)
 
-	var/obj/item/weapon/reagent_containers/glass/beaker/noreact/large/mixing_chamber = null //We can't just use a holder because the machine is NOREACT,
+	var/obj/item/reagent_containers/glass/beaker/noreact/large/mixing_chamber = null //We can't just use a holder because the machine is NOREACT,
 																					//we need an internal holder without that flag.
 
 	var/mixrate = 0 //Rate at which Vapor Salts are added. Cannot be higher than 50.
@@ -110,7 +110,7 @@
 /obj/machinery/vaporizer/attack_hand(var/mob/user as mob)
 	return ui_interact(user)
 
-/obj/machinery/vaporizer/attackby(obj/item/weapon/W, mob/living/user)
+/obj/machinery/vaporizer/attackby(obj/item/W, mob/living/user)
 	if(isID(W)||isPDA(W) && (emagged || allowed(user)))
 		unlocked = !unlocked
 		to_chat(user,"<span class='notice'>\The [src] is now [unlocked ? "unlocked" : "locked"].</span>")

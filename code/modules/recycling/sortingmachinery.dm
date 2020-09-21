@@ -140,7 +140,7 @@
 	if(AM.anchored)
 		return
 
-	if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/weapon/dummy))
+	if(istype(AM, /obj/item/projectile) || istype(AM, /obj/item/dummy))
 		return
 
 	if(dir != get_dir(src, AM))
@@ -211,7 +211,7 @@
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && c_mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the delivery chute.")
 		if(W.do_weld(user, src,20, 0))
 			if(gcDestroyed)
@@ -268,12 +268,12 @@
 
 /obj/machinery/sorting_machine/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/bin in component_parts)
 		T += bin.rating//intentionally not doing '- 1' here, for the math below
 	max_items_moved = initial(max_items_moved) * (T / 3) //Usefull upgrade/10, that's an increase from 10 (base matter bins) to 30 (super matter bins)
 
 	T = 0//reusing T here because muh RAM
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
@@ -381,11 +381,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sorting_machine/recycling,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/sorting_machine/recycling,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/capacitor
 	)
 	RefreshParts()
 
@@ -457,11 +457,11 @@
 		destinations[i] = uppertext(destinations[i])
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sorting_machine/destination,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/sorting_machine/destination,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/capacitor
 	)
 	RefreshParts()
 

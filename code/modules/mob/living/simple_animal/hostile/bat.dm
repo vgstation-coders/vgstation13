@@ -174,7 +174,7 @@
 	attacktext = "clamps shut on"
 	attack_sound = 'sound/effects/pageturn3.ogg'
 
-	holder_type = /obj/item/weapon/holder/animal //CAN pick up a single book!
+	holder_type = /obj/item/holder/animal //CAN pick up a single book!
 
 mob/living/simple_animal/hostile/scarybat/book/New()
 	..()

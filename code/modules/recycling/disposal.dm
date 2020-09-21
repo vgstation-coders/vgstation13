@@ -119,7 +119,7 @@
 			if(contents.len > 0)
 				to_chat(user, "Eject the items first!")
 				return
-			var/obj/item/weapon/weldingtool/W = I
+			var/obj/item/weldingtool/W = I
 			to_chat(user, "You start slicing the floorweld off the disposal unit.")
 			if(W.do_weld(user, src,20, 0))
 				if(gcDestroyed)
@@ -134,11 +134,11 @@
 				qdel(src)
 			return
 
-	if(isrobot(user) && !istype(I, /obj/item/weapon/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
+	if(isrobot(user) && !istype(I, /obj/item/storage/bag/trash) && !isgripper(user.get_active_hand()) && !isMoMMI(user) )
 		return
 
-	if(istype(I, /obj/item/weapon/storage/bag/))
-		var/obj/item/weapon/storage/bag/B = I
+	if(istype(I, /obj/item/storage/bag/))
+		var/obj/item/storage/bag/B = I
 		if(B.contents.len == 0)
 			if(user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You throw away \the empty [B].</span>")
@@ -149,7 +149,7 @@
 		update_icon()
 		return
 
-	var/obj/item/weapon/grab/G = I
+	var/obj/item/grab/G = I
 	if(istype(G))	// handle grabbed mob
 		if(ismob(G.affecting))
 			var/mob/GM = G.affecting
@@ -387,7 +387,7 @@
 	var/obj/structure/disposalholder/H = new()	// virtual holder object which actually
 										// travels through the pipes.
 	for(var/obj/item/I in src)
-		if(istype(I, /obj/item/delivery) || istype(I, /obj/item/weapon/paper/envelope))
+		if(istype(I, /obj/item/delivery) || istype(I, /obj/item/paper/envelope))
 			wrapcheck = 1
 
 	if(wrapcheck == 1)
@@ -449,7 +449,7 @@
 /obj/machinery/disposal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if (istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
-		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
+		if(istype(I, /obj/item/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(75) || (mob && mob.reagents.get_sportiness()>=5))
@@ -598,8 +598,8 @@
 		if(istype(AM, /obj/item/delivery) && !hasmob)
 			var/obj/item/delivery/T = AM
 			src.destinationTag = T.sortTag
-		if(istype(AM, /obj/item/weapon/paper/envelope) && !hasmob)
-			var/obj/item/weapon/paper/envelope/E = AM
+		if(istype(AM, /obj/item/paper/envelope) && !hasmob)
+			var/obj/item/paper/envelope/E = AM
 			src.destinationTag = E.sortTag
 
 // start the movement process
@@ -959,7 +959,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS, 0))
 			if(gcDestroyed)
@@ -1458,7 +1458,7 @@
 		return
 	src.add_fingerprint(user)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		to_chat(user, "You start slicing the disposal pipe.")
 		if(W.do_weld(user, src, 3 SECONDS))
 			if(gcDestroyed)
@@ -1605,7 +1605,7 @@
 			to_chat(user, "You attach the screws around the power connection.")
 			return
 	else if(iswelder(I) && mode==1)
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		to_chat(user, "You start slicing the floorweld off the disposal outlet.")
 		if(W.do_weld(user, src, 20, 0))
 			if(gcDestroyed)

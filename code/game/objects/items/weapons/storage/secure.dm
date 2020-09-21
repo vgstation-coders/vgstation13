@@ -1,5 +1,5 @@
 /*
- *	Absorbs /obj/item/weapon/secstorage.
+ *	Absorbs /obj/item/secstorage.
  *	Reimplements it only slightly to use existing storage functionality.
  *
  *	Contains:
@@ -10,7 +10,7 @@
 // -----------------------------
 //         Generic Item
 // -----------------------------
-/obj/item/weapon/storage/secure
+/obj/item/storage/secure
 	name = "secstorage"
 	var/icon_locking = "secureb"
 	var/icon_sparking = "securespark"
@@ -27,17 +27,17 @@
 	fits_max_w_class = W_CLASS_SMALL
 	max_combined_w_class = 14
 
-/obj/item/weapon/storage/secure/examine(mob/user)
+/obj/item/storage/secure/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>The service panel is [src.open ? "open" : "closed"].</span>")
 
-/obj/item/weapon/storage/secure/AltClick()
+/obj/item/storage/secure/AltClick()
 	if(!locked)
 		..()
 
-/obj/item/weapon/storage/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/storage/secure/attackby(obj/item/W as obj, mob/user as mob)
 	if(locked)
-		if ( istype(W, /obj/item/weapon/card/emag) && (!src.emagged))
+		if ( istype(W, /obj/item/card/emag) && (!src.emagged))
 			emagged = 1
 			src.overlays += image('icons/obj/storage/storage.dmi', icon_sparking)
 			sleep(6)
@@ -77,7 +77,7 @@
 	. = ..()
 
 
-/obj/item/weapon/storage/secure/MouseDropFrom(over_object, src_location, over_location)
+/obj/item/storage/secure/MouseDropFrom(over_object, src_location, over_location)
 	if (locked)
 		if(Adjacent(usr))
 			src.add_fingerprint(usr)
@@ -85,10 +85,10 @@
 	..()
 
 
-/obj/item/weapon/storage/secure/attack_self(mob/user)
+/obj/item/storage/secure/attack_self(mob/user)
 	showInterface(user)
 
-/obj/item/weapon/storage/secure/proc/showInterface(mob/user)
+/obj/item/storage/secure/proc/showInterface(mob/user)
 	user.set_machine(src)
 	var/dat = text("<TT><B>[]</B><BR>\n\nLock Status: []",src, (src.locked ? "LOCKED" : "UNLOCKED"))
 	var/message = "Code"
@@ -104,7 +104,7 @@
 	dat += text("<HR>\n>[]<BR>\n<A href='?src=\ref[];type=1'>1</A>-<A href='?src=\ref[];type=2'>2</A>-<A href='?src=\ref[];type=3'>3</A><BR>\n<A href='?src=\ref[];type=4'>4</A>-<A href='?src=\ref[];type=5'>5</A>-<A href='?src=\ref[];type=6'>6</A><BR>\n<A href='?src=\ref[];type=7'>7</A>-<A href='?src=\ref[];type=8'>8</A>-<A href='?src=\ref[];type=9'>9</A><BR>\n<A href='?src=\ref[];type=R'>R</A>-<A href='?src=\ref[];type=0'>0</A>-<A href='?src=\ref[];type=E'>E</A><BR>\n</TT>", message, src, src, src, src, src, src, src, src, src, src, src, src)
 	user << browse(dat, "window=caselock;size=300x280")
 
-/obj/item/weapon/storage/secure/Topic(href, href_list)
+/obj/item/storage/secure/Topic(href, href_list)
 	..()
 	if ((usr.stat || usr.restrained()) || (get_dist(src, usr) > 1))
 		return
@@ -136,7 +136,7 @@
 // -----------------------------
 //        Secure Briefcase
 // -----------------------------
-/obj/item/weapon/storage/secure/briefcase
+/obj/item/storage/secure/briefcase
 	name = "secure briefcase"
 	icon = 'icons/obj/storage/storage.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
@@ -153,12 +153,12 @@
 	max_combined_w_class = 16
 	hitsound = "swing_hit"
 
-/obj/item/weapon/storage/secure/briefcase/paperpen/New()
+/obj/item/storage/secure/briefcase/paperpen/New()
 	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
+	new /obj/item/paper(src)
+	new /obj/item/pen(src)
 
-/obj/item/weapon/storage/secure/briefcase/attack_hand(mob/user as mob)
+/obj/item/storage/secure/briefcase/attack_hand(mob/user as mob)
 	if ((src.loc == user) && (src.locked == 1))
 		to_chat(user, "<span class='warning'>[src] is locked and cannot be opened!</span>")
 	else if ((src.loc == user) && (!src.locked))
@@ -175,15 +175,15 @@
 		src.orient2hud(user)
 	src.add_fingerprint(user)
 
-/obj/item/weapon/storage/secure/briefcase/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/storage/secure/briefcase/attackby(var/obj/item/W, var/mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/storage/secure/briefcase/Topic(href, href_list)
+/obj/item/storage/secure/briefcase/Topic(href, href_list)
 	..()
 	update_icon()
 
-/obj/item/weapon/storage/secure/briefcase/update_icon()
+/obj/item/storage/secure/briefcase/update_icon()
 	if(locked || emagged)
 		item_state = "secure-g"
 	else
@@ -230,20 +230,20 @@
 
 		return*/
 
-/obj/item/weapon/storage/secure/briefcase/assassin/New()
+/obj/item/storage/secure/briefcase/assassin/New()
 	..()
 	for(var/i = 1 to 3)
-		new /obj/item/weapon/spacecash/c1000(src)
-	new /obj/item/weapon/gun/energy/crossbow(src)
-	new /obj/item/weapon/gun/projectile/mateba(src)
+		new /obj/item/spacecash/c1000(src)
+	new /obj/item/gun/energy/crossbow(src)
+	new /obj/item/gun/projectile/mateba(src)
 	new /obj/item/ammo_storage/box/a357(src)
-	new /obj/item/weapon/c4(src)
+	new /obj/item/c4(src)
 
 // -----------------------------
 //        Secure Safe
 // -----------------------------
 
-/obj/item/weapon/storage/secure/safe
+/obj/item/storage/secure/safe
 	name = "secure safe"
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "safe"
@@ -256,14 +256,14 @@
 	fits_max_w_class = 8
 	anchored = 1.0
 	density = 0
-	cant_hold = list("/obj/item/weapon/storage/secure/briefcase")
+	cant_hold = list("/obj/item/storage/secure/briefcase")
 
-/obj/item/weapon/storage/secure/safe/New()
+/obj/item/storage/secure/safe/New()
 	..()
-	new /obj/item/weapon/paper(src)
-	new /obj/item/weapon/pen(src)
+	new /obj/item/paper(src)
+	new /obj/item/pen(src)
 
-/obj/item/weapon/storage/secure/safe/attack_hand(mob/user as mob)
+/obj/item/storage/secure/safe/attack_hand(mob/user as mob)
 	if(!locked)
 		if(user.s_active)
 			user.s_active.close(user) //Close and re-open
@@ -271,13 +271,13 @@
 	showInterface(user)
 
 // Clown planet WMD storage
-/obj/item/weapon/storage/secure/safe/clown
+/obj/item/storage/secure/safe/clown
 	name="WMD Storage"
 
-/obj/item/weapon/storage/secure/safe/clown/New()
+/obj/item/storage/secure/safe/clown/New()
 	for(var/i=0;i<10;i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/pie(src)
+		new /obj/item/reagent_containers/food/snacks/pie(src)
 
-/obj/item/weapon/storage/secure/safe/HoS/New()
+/obj/item/storage/secure/safe/HoS/New()
 	..()
-	//new /obj/item/weapon/storage/lockbox/clusterbang(src) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)
+	//new /obj/item/storage/lockbox/clusterbang(src) This item is currently broken... and probably shouldnt exist to begin with (even though it's cool)

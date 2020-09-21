@@ -20,7 +20,7 @@
 	global.cargo_telepads -= src
 	return ..()
 
-/obj/machinery/telepad_cargo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/telepad_cargo/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
 		W.playtoolsound(src, 50)
 		anchored = !anchored
@@ -63,7 +63,7 @@
 #define MODE_RANDOM 1
 
 ///HANDHELD TELEPAD USER///
-/obj/item/weapon/rcs
+/obj/item/rcs
 	name = "rapid-crate-sender (RCS)"
 	desc = "Use this to send crates to cargo telepads."
 	icon = 'icons/obj/telescience.dmi'
@@ -75,7 +75,7 @@
 	throwforce  = 10
 	throw_speed = 1
 	throw_range = 5
-	var/obj/item/weapon/cell/high/cell = null
+	var/obj/item/cell/high/cell = null
 	var/mode    = MODE_NORMAL
 	var/emagged = FALSE
 	var/send_cost = 1500
@@ -84,24 +84,24 @@
 	var/tmp/teleporting = FALSE
 	starting_materials	= list(MAT_IRON = 50000)
 
-/obj/item/weapon/rcs/get_cell()
+/obj/item/rcs/get_cell()
 	return cell
 
-/obj/item/weapon/rcs/New()
+/obj/item/rcs/New()
 	..()
 	cell = new (src)
 
-/obj/item/weapon/rcs/examine(mob/user)
+/obj/item/rcs/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>There are [round(cell.charge / send_cost)] charges left.</span>")
 
-/obj/item/weapon/rcs/Destroy()
+/obj/item/rcs/Destroy()
 	if (cell)
 		qdel(cell)
 		cell = null
 	..()
 
-/obj/item/weapon/rcs/attack_self(mob/user)
+/obj/item/rcs/attack_self(mob/user)
 	if(emagged)
 		mode = !mode
 		playsound(src, 'sound/effects/pop.ogg', 50, 0)
@@ -111,13 +111,13 @@
 			to_chat(user, "<span class = 'caution'> The telepad locator has become uncalibrated.</span>")
 
 
-/obj/item/weapon/rcs/attackby(var/obj/item/W, var/mob/user)
+/obj/item/rcs/attackby(var/obj/item/W, var/mob/user)
 	if(isEmag(W) && !emagged)
 		emagged = 1
 		spark(src, 5)
 		to_chat(user, "<span class = 'caution'>You emag the RCS. Click on it to toggle between modes.</span>")
 
-/obj/item/weapon/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/rcs/preattack(var/obj/structure/closet/crate/target, var/mob/user, var/proximity_flag, var/click_parameters)
 	if (!istype(target) || target.opened || !proximity_flag || !cell || teleporting)
 		return
 
@@ -160,7 +160,7 @@
 	else if (mode == MODE_RANDOM)
 		teleport_target = locate(rand(50, 450), rand(50, 450), 6)
 
-	var/obj/item/weapon/paper/P
+	var/obj/item/paper/P
 
 	if(send_note)
 		var/note = input("Would you like to attach a note?", "Autoletter") as null|text
@@ -193,7 +193,7 @@
 	to_chat(user, "<span class='notice'>Teleport successful. [send_cost ? "[round(cell.charge / send_cost)] charge\s left." : "Caw."]</span>")
 	return 1
 
-/obj/item/weapon/rcs/salvage
+/obj/item/rcs/salvage
 	name = "salvage-crate-sender (SCS)"
 	desc = "An old RCS model that has been modified for longterm use."
 	icon = 'icons/obj/device.dmi'
@@ -202,7 +202,7 @@
 	send_note = TRUE
 	no_station = TRUE
 
-/obj/item/weapon/rcs/salvage/syndicate
+/obj/item/rcs/salvage/syndicate
 	desc = "An old RCS model that has been modified for longterm use. Upon closer inspection, it appears that the safety features on this device are disabled."
 	no_station = FALSE
 	emagged = 1

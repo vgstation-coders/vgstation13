@@ -275,7 +275,7 @@
 	multiple_sprites = 1
 	sprite_modulo = 2
 	var/list/ammo_counters
-	var/compatible_gun_type = /obj/item/weapon/gun/lawgiver
+	var/compatible_gun_type = /obj/item/gun/lawgiver
 
 /obj/item/ammo_storage/magazine/lawgiver/New()
 	..()
@@ -346,7 +346,7 @@
 
 /obj/item/ammo_storage/magazine/lawgiver/demolition
 	desc = "State-of-the-art bluespace technology allows this magazine to generate new rounds from energy, requiring only a power source to refill the full suite of ammunition types. This model is outfitted with high-explosive rounds."
-	compatible_gun_type = /obj/item/weapon/gun/lawgiver/demolition
+	compatible_gun_type = /obj/item/gun/lawgiver/demolition
 
 /obj/item/ammo_storage/magazine/invisible
 	desc = "Reading how many shots you had left just got a lot more difficult."

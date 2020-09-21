@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer
 	name = "\improper Pintpointer"
 	desc = "An attempt to create a navigation system which even a drunk spaceman can use."
 	icon_state = "pintdist5"
@@ -7,20 +7,20 @@
 	var/mob/creator
 	var/smashed
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/New()
 	..()
 	update_icon()
 	processing_objects.Add(src)
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/process()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/process()
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/update_icon()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/update_icon()
 	var/dist = calculate_distance()
 	icon_state = "pintdist[dist]"
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/proc/calculate_distance()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/proc/calculate_distance()
 	if(!creator)
 		return round(reagents.total_volume/10)
 	else if(creator.gcDestroyed)
@@ -40,22 +40,22 @@
 		if(41 to INFINITY)
 			. = 0
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/on_reagent_change()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/on_reagent_change()
 	update_icon()
 	if(reagents.get_master_reagent_id() != PINTPOINTER && !smashed)
-		var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D = new (get_turf(src))
+		var/obj/item/reagent_containers/food/drinks/drinkingglass/D = new (get_turf(src))
 		reagents.trans_to(D, reagents.total_volume)
 		qdel(src)
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/Destroy()
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/Destroy()
 	creator = null
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/smash(mob/living/M, mob/living/user)
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/smash(mob/living/M, mob/living/user)
 	smashed = TRUE
 	..()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/throw_impact(atom/hit_atom)
+/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/throw_impact(atom/hit_atom)
 	smashed = TRUE
 	..()

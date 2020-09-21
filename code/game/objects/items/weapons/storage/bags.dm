@@ -14,7 +14,7 @@
  */
 
 //  Generic non-item
-/obj/item/weapon/storage/bag
+/obj/item/storage/bag
 	allow_quick_gather = TRUE
 	allow_quick_empty = TRUE
 	display_contents_with_number = FALSE // UNStABLE AS FuCK, turn on when it stops crashing clients
@@ -25,7 +25,7 @@
 // -----------------------------
 //          Trash bag
 // -----------------------------
-/obj/item/weapon/storage/bag/trash
+/obj/item/storage/bag/trash
 	name = "trash bag"
 	desc = "It's the heavy-duty black polymer kind. Time to take out the trash!"
 	icon = 'icons/obj/trash.dmi'
@@ -37,11 +37,11 @@
 	storage_slots = 21
 	max_combined_w_class = 21
 	can_only_hold = list() // any
-	cant_hold = list("/obj/item/weapon/disk/nuclear", "/obj/item/weapon/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
+	cant_hold = list("/obj/item/disk/nuclear", "/obj/item/pinpointer") //No janiborg, stop stealing the pinpointer with your bag.
 	slot_flags = SLOT_BELT | SLOT_OCLOTHING
 	no_storage_slot = list(slot_wear_suit) //when worn on the suit slot it will function purely as a suit and will not store items
 
-/obj/item/weapon/storage/bag/trash/update_icon()
+/obj/item/storage/bag/trash/update_icon()
 	if(contents.len == 0)
 		icon_state = "trashbag0"
 		slowdown = 1
@@ -60,7 +60,7 @@
 //        Plastic Bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/plasticbag
+/obj/item/storage/bag/plasticbag
 	name = "plastic bag"
 	desc = "It's a very flimsy, very noisy alternative to a bag."
 	icon = 'icons/obj/trash.dmi'
@@ -71,20 +71,20 @@
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
 	can_only_hold = list() // any
-	cant_hold = list("/obj/item/weapon/disk/nuclear")
+	cant_hold = list("/obj/item/disk/nuclear")
 	body_parts_covered = FULL_HEAD|BEARD
 	slot_flags = SLOT_BELT | SLOT_HEAD
 	clothing_flags = BLOCK_BREATHING | BLOCK_GAS_SMOKE_EFFECT
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 
-obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
+obj/item/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)
 
-obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
+obj/item/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return handle_item_insertion(I,0)
 
-/obj/item/weapon/storage/bag/plasticbag/suicide_act(mob/user)
+/obj/item/storage/bag/plasticbag/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] puts the [src.name] over \his head and tightens the handles around \his neck! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
@@ -93,7 +93,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 //        Mining Satchel
 // -----------------------------
 
-/obj/item/weapon/storage/bag/ore
+/obj/item/storage/bag/ore
 	name = "\improper Mining Satchel" //need the improper for the
 	desc = "This little bugger can be used to store and transport ores."
 	icon = 'icons/obj/mining.dmi'
@@ -106,7 +106,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	can_only_hold = list("/obj/item/stack/ore")
 	display_contents_with_number = TRUE
 
-/obj/item/weapon/storage/bag/ore/auto
+/obj/item/storage/bag/ore/auto
 	name = "automatic ore loader"
 	desc = "A mining satchel with a built-in inserter used to automatically move ore over short distances."
 	icon_state = "tech_satchel"
@@ -117,7 +117,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	name = "Toggle Ore Loader"
 
 /datum/action/item_action/toggle_auto_handling/Trigger()
-	var/obj/item/weapon/storage/bag/ore/auto/T = target
+	var/obj/item/storage/bag/ore/auto/T = target
 	var/mob/user = usr
 
 	if(!usr)
@@ -132,16 +132,16 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	to_chat(user, "You turn \the [T.name] [T.handling? "on":"off"].")
 
 	if(T.handling == TRUE)
-		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.lazy_register_event(/lazy_event/on_moved, T, /obj/item/storage/bag/ore/auto/proc/mob_moved)
 	else
-		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/weapon/storage/bag/ore/auto/proc/mob_moved)
+		user.lazy_unregister_event(/lazy_event/on_moved, T, /obj/item/storage/bag/ore/auto/proc/mob_moved)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
+/obj/item/storage/bag/ore/auto/proc/auto_collect(var/turf/collect_loc)
 	for(var/obj/item/stack/ore/ore in collect_loc.contents)
 		preattack(collect_loc, src, TRUE)
 		break
 
-/obj/item/weapon/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
+/obj/item/storage/bag/ore/auto/proc/auto_fill(var/mob/holder)
 	var/obj/structure/ore_box/box = null
 	if(istype(holder.pulling, /obj/structure/ore_box))
 		box = holder.pulling
@@ -151,7 +151,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 				remove_from_storage(ore)
 				qdel(ore)
 
-/obj/item/weapon/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
+/obj/item/storage/bag/ore/auto/proc/mob_moved(atom/movable/mover)
 	if(isrobot(mover))
 		var/mob/living/silicon/robot/S = mover
 		if(locate(src) in S.get_all_slots())
@@ -163,18 +163,18 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 			auto_collect(get_turf(src))
 			auto_fill(living_mover)
 
-/obj/item/weapon/storage/bag/ore/auto/pickup(mob/user)
+/obj/item/storage/bag/ore/auto/pickup(mob/user)
 	if(handling)
 		user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
-/obj/item/weapon/storage/bag/ore/auto/dropped(mob/user)
+/obj/item/storage/bag/ore/auto/dropped(mob/user)
 	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 // -----------------------------
 //          Plant bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/plants
+/obj/item/storage/bag/plants
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	icon_state = "plantbag"
 	name = "Plant Bag"
@@ -182,11 +182,11 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/weapon/grown", "/obj/item/weapon/reagent_containers/food/snacks/meat", "/obj/item/weapon/reagent_containers/food/snacks/egg", "/obj/item/weapon/reagent_containers/food/snacks/honeycomb")
+	can_only_hold = list("/obj/item/reagent_containers/food/snacks/grown","/obj/item/seeds","/obj/item/grown", "/obj/item/reagent_containers/food/snacks/meat", "/obj/item/reagent_containers/food/snacks/egg", "/obj/item/reagent_containers/food/snacks/honeycomb")
 	display_contents_with_number = TRUE
 
 
-/obj/item/weapon/storage/bag/plants/CtrlClick()
+/obj/item/storage/bag/plants/CtrlClick()
 	if(isturf(loc))
 		return ..()
 	if(!usr.isUnconscious() && Adjacent(usr))
@@ -195,7 +195,7 @@ obj/item/weapon/storage/bag/plasticbag/quick_store(var/obj/item/I)
 	return ..()
 
 var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "green blue stripe", "green yellow stripe", "green purple stripe", "green lime stripe", "green black stripe", "green white stripe", "cyan", "cyan red stripe", "cyan blue stripe", "cyan yellow stripe", "cyan purple stripe", "cyan lime stripe", "cyan black stripe", "cyan white stripe")
-/obj/item/weapon/storage/bag/plants/verb/change()
+/obj/item/storage/bag/plants/verb/change()
 	set name = "Change Bag Colour"
 	set category = "Object"
 	set src in usr
@@ -205,7 +205,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 		return
 	icon_state = plantbag_colour
 
-/obj/item/weapon/storage/bag/plants/portactor
+/obj/item/storage/bag/plants/portactor
 	name = "portable seed extractor"
 	desc = "A heavy-duty, yet portable seed extractor. Less efficient than the stationary machine, this version can extract at most two seeds per sample."
 	icon_state = "portaseeder"
@@ -216,7 +216,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	desc = "Activate to convert the harvested contents into plantable seeds."
 
 /datum/action/item_action/dissolve_contents/Trigger()
-	var/obj/item/weapon/storage/bag/plants/portactor/P = target
+	var/obj/item/storage/bag/plants/portactor/P = target
 	var/mob/user = usr
 
 	if(!usr)
@@ -238,14 +238,14 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 			user.s_active.show_to(user)
 
 
-/obj/item/weapon/storage/bag/plants/portactor/CtrlClick()
+/obj/item/storage/bag/plants/portactor/CtrlClick()
 	return
 
 // -----------------------------
 //          Food bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/food
+/obj/item/storage/bag/food
 	icon = 'icons/obj/kitchen.dmi'
 	icon_state = "foodbag0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
@@ -254,32 +254,32 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 28 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_MEDIUM
-	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks")
+	can_only_hold = list("/obj/item/reagent_containers/food/snacks")
 
-/obj/item/weapon/storage/bag/food/update_icon()
+/obj/item/storage/bag/food/update_icon()
 	if(contents.len < 1)
 		icon_state = "foodbag0"
 	else icon_state = "foodbag1"
 
-/obj/item/weapon/storage/bag/food/menu1/New()
+/obj/item/storage/bag/food/menu1/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/fries(src)//4 nutriments
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
+	new/obj/item/reagent_containers/food/snacks/monkeyburger(src)//6 nutriments
+	new/obj/item/reagent_containers/food/snacks/fries(src)//4 nutriments
+	new/obj/item/reagent_containers/food/drinks/soda_cans/cola(src)//-3 drowsy
 	update_icon()
 
-/obj/item/weapon/storage/bag/food/menu2/New()
+/obj/item/storage/bag/food/menu2/New()
 	..()
-	new/obj/item/weapon/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
-	new/obj/item/weapon/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
-	new/obj/item/weapon/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
+	new/obj/item/reagent_containers/food/snacks/bigbiteburger(src)//14 nutriments
+	new/obj/item/reagent_containers/food/snacks/cheesyfries(src)//6 nutriments
+	new/obj/item/reagent_containers/food/drinks/soda_cans/space_mountain_wind(src)//-7 drowsy, -1 sleepy
 	update_icon()
 
 // -----------------------------
 //          Borg Food bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/food/borg
+/obj/item/storage/bag/food/borg
 	name = "Food Transport Bag"
 	desc = "Useful for manipulating food items in the kitchen."
 
@@ -287,7 +287,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 //          Pill Collector
 // -----------------------------
 
-/obj/item/weapon/storage/bag/chem
+/obj/item/storage/bag/chem
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "pcollector"
 	name = "Pill Collector"
@@ -297,7 +297,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 3
 	max_combined_w_class = 200 //Doesn't matter what this is, so long as it's more or equal to storage_slots * plants.w_class
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/reagent_containers/glass/bottle","/obj/item/weapon/reagent_containers/pill","/obj/item/weapon/reagent_containers/syringe")
+	can_only_hold = list("/obj/item/reagent_containers/glass/bottle","/obj/item/reagent_containers/pill","/obj/item/reagent_containers/syringe")
 
 // -----------------------------
 //        Sheet Snatcher
@@ -305,7 +305,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 // Because it stacks stacks, this doesn't operate normally.
 // However, making it a storage/bag allows us to reuse existing code in some places. -Sayu
 
-/obj/item/weapon/storage/bag/sheetsnatcher
+/obj/item/storage/bag/sheetsnatcher
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "sheetsnatcher"
 	name = "Sheet Snatcher"
@@ -316,12 +316,12 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 	allow_quick_empty = 1 // this function is superceded
 
-/obj/item/weapon/storage/bag/sheetsnatcher/New()
+/obj/item/storage/bag/sheetsnatcher/New()
 	..()
-	//verbs -= /obj/item/weapon/storage/verb/quick_empty
-	//verbs += /obj/item/weapon/storage/bag/sheetsnatcher/quick_empty
+	//verbs -= /obj/item/storage/verb/quick_empty
+	//verbs += /obj/item/storage/bag/sheetsnatcher/quick_empty
 
-/obj/item/weapon/storage/bag/sheetsnatcher/can_be_inserted(obj/item/W as obj, stop_messages = FALSE)
+/obj/item/storage/bag/sheetsnatcher/can_be_inserted(obj/item/W as obj, stop_messages = FALSE)
 	if(!istype(W,/obj/item/stack/sheet) || istype(W,/obj/item/stack/sheet/mineral/sandstone) || istype(W,/obj/item/stack/sheet/wood))
 		if(!stop_messages)
 			to_chat(usr, "The snatcher does not accept [W].")
@@ -337,7 +337,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 
 // Modified handle_item_insertion.  Would prefer not to, but...
-/obj/item/weapon/storage/bag/sheetsnatcher/handle_item_insertion(obj/item/W as obj, prevent_warning = FALSE)
+/obj/item/storage/bag/sheetsnatcher/handle_item_insertion(obj/item/W as obj, prevent_warning = FALSE)
 	var/obj/item/stack/sheet/S = W
 	if(!istype(S))
 		return FALSE
@@ -380,7 +380,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 // Sets up numbered display to show the stack size of each stored mineral
 // NOTE: numbered display is turned off currently because it's broken
-/obj/item/weapon/storage/bag/sheetsnatcher/orient2hud(mob/user as mob)
+/obj/item/storage/bag/sheetsnatcher/orient2hud(mob/user as mob)
 	var/adjusted_contents = contents.len
 
 	//Numbered contents display
@@ -403,7 +403,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 
 
 // Modified quick_empty verb drops appropriate sized stacks
-/obj/item/weapon/storage/bag/sheetsnatcher/quick_empty()
+/obj/item/storage/bag/sheetsnatcher/quick_empty()
 	var/location = get_turf(src)
 	for(var/obj/item/stack/sheet/S in contents)
 		while(S.amount)
@@ -420,7 +420,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	update_icon()
 
 // Instead of removing
-/obj/item/weapon/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
+/obj/item/storage/bag/sheetsnatcher/remove_from_storage(obj/item/W, atom/new_location, var/force = 0, var/refresh = 1)
 	var/obj/item/stack/sheet/S = W
 	if(!istype(S))
 		return FALSE
@@ -441,7 +441,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 //    Sheet Snatcher (Cyborg)
 // -----------------------------
 
-/obj/item/weapon/storage/bag/sheetsnatcher/borg
+/obj/item/storage/bag/sheetsnatcher/borg
 	name = "Sheet Snatcher 9000"
 	desc = ""
 	capacity = 500//Borgs get more because >specialization
@@ -450,7 +450,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 //          Gadget Bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/gadgets
+/obj/item/storage/bag/gadgets
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "gadget_bag"
 	slot_flags = SLOT_BELT
@@ -459,10 +459,10 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	storage_slots = 25;
 	max_combined_w_class = 200
 	w_class = W_CLASS_TINY
-	can_only_hold = list("/obj/item/weapon/stock_parts", "/obj/item/weapon/reagent_containers/glass/beaker", "/obj/item/weapon/cell")
+	can_only_hold = list("/obj/item/stock_parts", "/obj/item/reagent_containers/glass/beaker", "/obj/item/cell")
 	display_contents_with_number = TRUE
 
-/obj/item/weapon/storage/bag/gadgets/mass_remove(atom/A)
+/obj/item/storage/bag/gadgets/mass_remove(atom/A)
 	var/lowest_rating = INFINITY //Get the lowest rating, so only mass drop the lowest parts.
 	for(var/obj/item/B in contents)
 		if(B.rped_rating() < lowest_rating)
@@ -477,9 +477,9 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 //          Money Bag
 // -----------------------------
 
-// This used to be /obj/item/weapon/moneybag
+// This used to be /obj/item/moneybag
 
-/obj/item/weapon/storage/bag/money
+/obj/item/storage/bag/money
 	icon = 'icons/obj/storage/storage.dmi'
 	name = "money bag"
 	icon_state = "moneybag"
@@ -492,23 +492,23 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	fits_max_w_class = 300 //There is no way this could go wrong, right?
 	max_combined_w_class = 300
 	display_contents_with_number = TRUE //With lods of emone, you're gonna need some compression
-	can_only_hold = list("/obj/item/weapon/coin", "/obj/item/stack/ore", "/obj/item/weapon/spacecash")
+	can_only_hold = list("/obj/item/coin", "/obj/item/stack/ore", "/obj/item/spacecash")
 	cant_hold = list()
 
-/obj/item/weapon/storage/bag/money/treasure
+/obj/item/storage/bag/money/treasure
 	name = "bag of treasure"
 	desc = "Some pirate must have spent a long time collecting this."
 
-/obj/item/weapon/storage/bag/money/treasure/New()
+/obj/item/storage/bag/money/treasure/New()
 	..()
 	for(var/i = 1 to storage_slots)
-		new /obj/item/weapon/coin/gold(src)
+		new /obj/item/coin/gold(src)
 
 // -----------------------------
 //          Potion Bag
 // -----------------------------
 
-/obj/item/weapon/storage/bag/potion
+/obj/item/storage/bag/potion
 	name = "\improper Bag of potions"
 	desc = "Not too dissimilar to the fabled bag of alcohol. The wizard federation is not responsible for possible rainbow puking."
 	icon = 'icons/obj/pbag.dmi'
@@ -522,49 +522,49 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	w_class = W_CLASS_SMALL
 	can_only_hold = list("/obj/item/potion")
 
-/obj/item/weapon/storage/bag/potion/bundle
+/obj/item/storage/bag/potion/bundle
 	name = "Potion bundle"
 	desc = "What could potionly go wrong?"
 
-/obj/item/weapon/storage/bag/potion/bundle/New()
+/obj/item/storage/bag/potion/bundle/New()
 	..()
 	for(var/i=1 to 50)
 		new /obj/item/potion/random(src)
 
-/obj/item/weapon/storage/bag/potion/lesser_bundle
+/obj/item/storage/bag/potion/lesser_bundle
 	name = "Lesser potion bundle"
 	desc = "What could potionly go slightly less wrong?"
 
-/obj/item/weapon/storage/bag/potion/lesser_bundle/New()
+/obj/item/storage/bag/potion/lesser_bundle/New()
 	..()
 	for(var/i=1 to 12)
 		new /obj/item/potion/random(src)
 
-/obj/item/weapon/storage/bag/potion/predicted_potion_bundle
+/obj/item/storage/bag/potion/predicted_potion_bundle
 	name = "Predicted potion bundle"
 	desc = "What could potionly go right?"
 
-/obj/item/weapon/storage/bag/potion/predicted_potion_bundle/New()
+/obj/item/storage/bag/potion/predicted_potion_bundle/New()
 	..()
 	for(var/i = 1 to 40)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 
-/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle
+/obj/item/storage/bag/potion/lesser_predicted_potion_bundle
 	name = "Lesser predicted potion bundle"
 	desc = "What could potionly go slightly more right?"
 
-/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle/New()
+/obj/item/storage/bag/potion/lesser_predicted_potion_bundle/New()
 	..()
 	for(var/i = 1 to 10)
 		var/potiontype = pick(existing_typesof(/obj/item/potion))
 		new potiontype(src)
 
-/obj/item/weapon/storage/bag/ammo_pouch
+/obj/item/storage/bag/ammo_pouch
 	name = "ammunition pouch"
 	desc = "Designed to hold stray magazines and spare bullets."
 	icon_state = "ammo_pouch"
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/grenade")
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET

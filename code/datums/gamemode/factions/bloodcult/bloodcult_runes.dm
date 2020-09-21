@@ -396,10 +396,10 @@
 		to_chat(user, "<span class='notice'>You disrupt the vile magic with the deadening field of \the [I]!</span>")
 		qdel(src)
 		return
-	if(istype(I, /obj/item/weapon/tome) || istype(I, /obj/item/weapon/melee/cultblade) || istype(I, /obj/item/weapon/melee/soulblade))
+	if(istype(I, /obj/item/tome) || istype(I, /obj/item/melee/cultblade) || istype(I, /obj/item/melee/soulblade))
 		trigger(user)
-	if(istype(I, /obj/item/weapon/talisman))
-		var/obj/item/weapon/talisman/T = I
+	if(istype(I, /obj/item/talisman))
+		var/obj/item/talisman/T = I
 		T.imbue(user,src)
 	return
 

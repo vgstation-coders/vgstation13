@@ -38,7 +38,7 @@
 		/obj/structure/noticeboard,								//notice boards
 		/obj/machinery/space_heater/campfire/stove/fireplace,	//fireplaces
 		/obj/structure/painting,								//paintings
-		/obj/item/weapon/storage/secure/safe,					//wall-mounted safes
+		/obj/item/storage/secure/safe,					//wall-mounted safes
 		/obj/machinery/door_timer,								//brig cell timers
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins

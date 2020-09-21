@@ -1,6 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
-/obj/item/weapon/circuitboard/airlock
+/obj/item/circuitboard/airlock
 	name = "airlock electronics"
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"
@@ -18,15 +18,15 @@
 	var/installed = 0
 
 	// Allow dicking with it while it's on the floor.
-/obj/item/weapon/circuitboard/airlock/attack_robot(mob/user as mob)
+/obj/item/circuitboard/airlock/attack_robot(mob/user as mob)
 	if(isMoMMI(user))
 		return ..()
 	attack_self(user)
 	return 1
 
-/obj/item/weapon/circuitboard/airlock/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/circuitboard/airlock/attackby(obj/item/W as obj, mob/user as mob)
 	if(issolder(W))
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/solder/S = W
 		if(icon_state == "door_electronics_smoked")
 			if(!S.remove_fuel(4,user))
 				return
@@ -36,7 +36,7 @@
 				icon_state = "door_electronics"
 				to_chat(user, "<span class='notice'>You repair the blown fuses on the circuitboard.</span>")
 
-/obj/item/weapon/circuitboard/airlock/attack_self(mob/user as mob)
+/obj/item/circuitboard/airlock/attack_self(mob/user as mob)
 	if (!ishigherbeing(user) && !isrobot(user))
 		return ..()
 
@@ -50,7 +50,7 @@
 
 	interact(user)
 
-/obj/item/weapon/circuitboard/airlock/interact(mob/user as mob)
+/obj/item/circuitboard/airlock/interact(mob/user as mob)
 	var/t1 = text("<B>Access control</B><br>\n")
 
 	if (last_configurator)
@@ -87,7 +87,7 @@
 	user << browse(t1, "window=airlock_electronics")
 	onclose(user, "airlock")
 
-/obj/item/weapon/circuitboard/airlock/Topic(href, href_list)
+/obj/item/circuitboard/airlock/Topic(href, href_list)
 	if(..())
 		return 1 //Its not as though this does ANYTHING
 	if(!Adjacent(usr) || usr.incapacitated() || (!ishigherbeing(usr) && !isrobot(usr)) || icon_state == "door_electronics_smoked" || installed)
@@ -98,7 +98,7 @@
 
 	if(href_list["login"])
 		if(ishuman(usr))
-			var/obj/item/weapon/card/id/I = usr.get_id_card()
+			var/obj/item/card/id/I = usr.get_id_card()
 			if(istype(I) && src.check_access(I))
 				src.locked = 0
 				src.last_configurator = I.registered_name
@@ -121,7 +121,7 @@
 
 	interact(usr)
 
-/obj/item/weapon/circuitboard/airlock/proc/toggle_access(var/acc)
+/obj/item/circuitboard/airlock/proc/toggle_access(var/acc)
 	if (acc == "all")
 		conf_access = null
 	else

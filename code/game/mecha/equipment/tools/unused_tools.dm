@@ -26,7 +26,7 @@
 	chassis.proc_res["dynattackby"] = src
 	return
 
-/obj/item/mecha_parts/mecha_equipment/defence_shocker/proc/dynattackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mecha_parts/mecha_equipment/defence_shocker/proc/dynattackby(obj/item/W as obj, mob/user as mob)
 	if(!action_checks(user) || !active)
 		return
 	user.electrocute_act(shock_damage, src)

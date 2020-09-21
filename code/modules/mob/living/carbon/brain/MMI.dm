@@ -9,7 +9,7 @@
 	origin_tech = Tc_BIOTECH + "=3"
 
 	var/list/mommi_assembly_parts = list(
-		/obj/item/weapon/cell = 1,
+		/obj/item/cell = 1,
 		/obj/item/robot_parts/l_leg = 2,
 		/obj/item/robot_parts/r_leg = 2,
 		/obj/item/robot_parts/r_arm = 1,
@@ -80,7 +80,7 @@ obj/item/device/mmi/Destroy()
 
 		M.job = "MoMMI"
 
-		M.cell = locate(/obj/item/weapon/cell) in contents
+		M.cell = locate(/obj/item/cell) in contents
 		M.cell.forceMove(M)
 		src.forceMove(M)//Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
 		M.mmi = src
@@ -160,7 +160,7 @@ obj/item/device/mmi/Destroy()
 
 		return TRUE
 
-	if((istype(O,/obj/item/weapon/card/id)||istype(O,/obj/item/device/pda)) && brainmob)
+	if((istype(O,/obj/item/card/id)||istype(O,/obj/item/device/pda)) && brainmob)
 		if(allowed(user))
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] \the [src].</span>")
@@ -168,7 +168,7 @@ obj/item/device/mmi/Destroy()
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 		return TRUE
 
-	if(istype(O, /obj/item/weapon/implanter))
+	if(istype(O, /obj/item/implanter))
 		return//toplel
 
 	..()

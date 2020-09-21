@@ -46,7 +46,7 @@
 /obj/item/projectile/temp/OnFired()
 	..()
 
-	var/obj/item/weapon/gun/energy/temperature/T = shot_from
+	var/obj/item/gun/energy/temperature/T = shot_from
 	if(istype(T))
 		src.temperature = T.temperature
 	else
@@ -330,11 +330,11 @@ obj/item/projectile/kinetic/New()
 		return
 	bumped = 1
 
-	if(!istype(shot_from,/obj/item/weapon/gun/portalgun))
+	if(!istype(shot_from,/obj/item/gun/portalgun))
 		bullet_die()
 		return
 
-	var/obj/item/weapon/gun/portalgun/P = shot_from
+	var/obj/item/gun/portalgun/P = shot_from
 
 	if(isliving(A))
 		forceMove(get_step(loc,dir))

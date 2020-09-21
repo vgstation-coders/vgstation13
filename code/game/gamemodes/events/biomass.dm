@@ -24,7 +24,7 @@
 		master.vines -= src
 		master = null
 
-/obj/effect/biomass/attackby(var/obj/item/weapon/W, mob/user)
+/obj/effect/biomass/attackby(var/obj/item/W, mob/user)
 	if(W.sharpness_flags & SHARP_BLADE && prob(50)) //Not a guarantee
 		if(prob(30))
 			user.visible_message("<span class = 'warning'>\The [user] cuts through \the [src] with \the [W]'s sharp edge.</span>",\

@@ -1,4 +1,4 @@
-/obj/item/weapon/melee/legacy_cultblade
+/obj/item/melee/legacy_cultblade
 	name = "Cult Blade"
 	desc = "An arcane weapon wielded by the followers of Nar-Sie."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -13,14 +13,14 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	var/checkcult = 1 // If we have to be a cultist to use it or not.
 
-/obj/item/weapon/melee/legacy_cultblade/nocult
+/obj/item/melee/legacy_cultblade/nocult
 	checkcult = 0
 	force = 15
 
-/obj/item/weapon/melee/legacy_cultblade/cultify()
+/obj/item/melee/legacy_cultblade/cultify()
 	return
 
-/obj/item/weapon/melee/legacy_cultblade/attack(mob/living/target as mob, mob/living/carbon/human/user as mob)
+/obj/item/melee/legacy_cultblade/attack(mob/living/target as mob, mob/living/carbon/human/user as mob)
 	if(!checkcult || islegacycultist(user))
 		playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 		return ..()
@@ -32,7 +32,7 @@
 			user.UpdateDamageIcon()
 
 
-/obj/item/weapon/melee/legacy_cultblade/pickup(mob/living/user as mob)
+/obj/item/melee/legacy_cultblade/pickup(mob/living/user as mob)
 	if(checkcult && !islegacycultist(user))
 		to_chat(user, "<span class='warning'>An overwhelming feeling of dread comes over you as you pick up the cultist's sword. It would be wise to rid yourself of this blade quickly.</span>")
 		user.Dizzy(120)
@@ -65,7 +65,7 @@
 	icon_state = "cultrobes"
 	item_state = "cultrobes"
 	flags = FPRINT
-	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade)
+	allowed = list(/obj/item/tome_legacy,/obj/item/melee/legacy_cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
@@ -89,7 +89,7 @@
 	item_state = "magusred"
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
-	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade)
+	allowed = list(/obj/item/tome_legacy,/obj/item/melee/legacy_cultblade)
 	armor = list(melee = 50, bullet = 30, laser = 50,energy = 20, bomb = 25, bio = 10, rad = 0)
 	siemens_coefficient = 0
 
@@ -108,7 +108,7 @@
 	item_state = "cult_armour"
 	desc = "A bulky suit of armor bristling with spikes. It looks space proof."
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/tome_legacy,/obj/item/weapon/melee/legacy_cultblade,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/tome_legacy,/obj/item/melee/legacy_cultblade,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen)
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0

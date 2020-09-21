@@ -633,7 +633,7 @@ var/global/list/damage_icon_parts = list()
 		wear_id.screen_loc = ui_id	//TODO
 		if(w_uniform && w_uniform:displays_id)
 			var/obj/abstract/Overlays/O = obj_overlays[ID_LAYER]
-			var/obj/item/weapon/card/ID_worn = wear_id
+			var/obj/item/card/ID_worn = wear_id
 			O.icon = 'icons/mob/ids.dmi'
 			O.icon_state = ID_worn.icon_state
 			if(species.name in ID_worn.species_fit) //Allows clothes to display differently for multiple species

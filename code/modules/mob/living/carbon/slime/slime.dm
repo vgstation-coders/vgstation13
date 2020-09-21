@@ -19,7 +19,7 @@
 	hasmouth = 0
 
 	can_butcher = FALSE
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/slime
 
 	// canstun and CANKNOCKDOWN don't affect slimes because they ignore stun and knockdown variables
 	// for the sake of cleanliness, though, here they are.
@@ -477,7 +477,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 /mob/living/carbon/slime/proc/get_obstacle_ok(atom/A)
 	var/direct = get_dir(src, A)
-	var/obj/item/weapon/dummy/D = new /obj/item/weapon/dummy( src.loc )
+	var/obj/item/dummy/D = new /obj/item/dummy( src.loc )
 	var/ok = 0
 	if ( (direct - 1) & direct)
 		var/turf/Step_1
@@ -575,7 +575,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	var/primarytype = /mob/living/carbon/slime
 
 /obj/item/slime_extract/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/slimesteroid2))
+	if(istype(O, /obj/item/slimesteroid2))
 		if(enhanced == 1)
 			to_chat(user, "<span class='warning'>This extract has already been enhanced!</span>")
 			return ..()
@@ -585,7 +585,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		qdel(O)
 
 	//slime res
-	if(istype(O, /obj/item/weapon/slimeres))
+	if(istype(O, /obj/item/slimeres))
 		if(Uses == 0)
 			to_chat(user, "<span class='warning'>The solution doesn't work on used extracts!</span>")
 			return ..()
@@ -708,7 +708,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 ////Pet Slime Creation///
 
-/obj/item/weapon/slimepotion
+/obj/item/slimepotion
 	name = "docility potion"
 	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame."
 	icon = 'icons/obj/chemical.dmi'
@@ -747,7 +747,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		pet.real_name = newname
 		qdel (src)
 
-/obj/item/weapon/slimepotion2
+/obj/item/slimepotion2
 	name = "advanced docility potion"
 	desc = "A potent chemical mix that will nullify a slime's powers, causing it to become docile and tame. This one is meant for adult slimes"
 	icon = 'icons/obj/chemical.dmi'
@@ -783,7 +783,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		pet.real_name = newname
 		qdel (src)
 
-/obj/item/weapon/slimesteroid
+/obj/item/slimesteroid
 	name = "slime steroid"
 	desc = "A potent chemical mix that will cause a slime to generate more extract."
 	icon = 'icons/obj/chemical.dmi'
@@ -809,7 +809,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		qdel (src)
 
 
-/obj/item/weapon/slimenutrient
+/obj/item/slimenutrient
 	name = "slime nutrient"
 	desc = "A potent chemical mix that is a great nutrient for slimes."
 	icon = 'icons/obj/chemical.dmi'
@@ -817,7 +817,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	w_class = W_CLASS_TINY
 	var/Uses = 2
 
-/obj/item/weapon/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+/obj/item/slimenutrient/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 	if(!istype(M))//If target is not a slime.
 		to_chat(user, "<span class='warning'>The steroid only works on slimes!</span>")
 		return ..()
@@ -836,21 +836,21 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	if (Uses == 0)
 		qdel (src)
 
-/obj/item/weapon/slimesteroid2
+/obj/item/slimesteroid2
 	name = "extract enhancer"
 	desc = "A potent chemical mix that will give a slime extract three uses."
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle17"
 	w_class = W_CLASS_TINY
 
-/obj/item/weapon/slimedupe
+/obj/item/slimedupe
 	name = "slime duplicator"
 	desc = "A potent chemical mix that will force a child slime to split in two!"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle15"
 	w_class = W_CLASS_TINY
 
-/obj/item/weapon/slimedupe/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
+/obj/item/slimedupe/attack(mob/living/carbon/slime/M as mob, mob/user as mob)
 	if(!istype(M, /mob/living/carbon/slime))//target is not a slime
 		to_chat(user, "<span class='warning'>The solution only works on slimes!</span>")
 		return ..()
@@ -868,7 +868,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	S.forceMove(get_turf(M))
 	qdel(src)
 
-/obj/item/weapon/slimeres
+/obj/item/slimeres
 	name = "slime resurrection serum"
 	desc = "A potent chemical mix that when used on a slime extact, will bring it to life!"
 	icon = 'icons/obj/chemical.dmi'
@@ -1110,7 +1110,7 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 
 
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime
+/obj/item/reagent_containers/food/snacks/egg/slime
 	name = "slime egg"
 	desc = "A small, gelatinous egg."
 	icon = 'icons/mob/mob.dmi'
@@ -1119,20 +1119,20 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 	origin_tech = Tc_BIOTECH + "=4"
 	var/grown = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime/New()
+/obj/item/reagent_containers/food/snacks/egg/slime/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 4)
 	reagents.add_reagent(SLIMEJELLY, 1)
 	spawn(rand(1200,1500))//the egg takes a while to "ripen"
 		Grow()
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime/proc/Grow()
+/obj/item/reagent_containers/food/snacks/egg/slime/proc/Grow()
 	grown = 1
 	icon_state = "slime egg-grown"
 	processing_objects.Add(src)
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime/proc/Hatch()
+/obj/item/reagent_containers/food/snacks/egg/slime/proc/Hatch()
 	processing_objects.Remove(src)
 	var/turf/T = get_turf(src)
 	src.visible_message("<span class='notice'>The [name] pulsates and quivers!</span>")
@@ -1142,13 +1142,13 @@ mob/living/carbon/slime/var/temperature_resistance = T0C+75
 		qdel(src)
 
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime/process()
+/obj/item/reagent_containers/food/snacks/egg/slime/process()
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
 	if (environment.molar_density(GAS_PLASMA) > MOLES_PLASMA_VISIBLE / CELL_VOLUME)//plasma exposure causes the egg to hatch
 		src.Hatch()
 
-/obj/item/weapon/reagent_containers/food/snacks/egg/slime/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/reagent_containers/food/snacks/egg/slime/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype( W, /obj/item/toy/crayon ))
 		return
 	else

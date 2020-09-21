@@ -3,7 +3,7 @@
 		return 0
 	if(istype(mind.current, /mob/living/carbon/human) && (mind.assigned_role == "Chaplain"))
 		return 0
-	for(var/obj/item/weapon/implant/loyalty/L in mind.current)
+	for(var/obj/item/implant/loyalty/L in mind.current)
 		if(L && (L.imp_in == mind.current))//Checks to see if the person contains an implant, then checks that the implant is actually inside of them
 			return 0
 	return 1
@@ -159,11 +159,11 @@
 /obj/effect/rune_legacy/proc/tomesummon(var/mob/user, var/whisper = FALSE)
 	if(!whisper)
 		user.say("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
-		new /obj/item/weapon/tome_legacy(src.loc)
+		new /obj/item/tome_legacy(src.loc)
 		src.invocation("tome_spawn")
 	else
 		user.whisper("N[pick("'","`")]ath reth sh'yro eth d'raggathnor!")
-		new /obj/item/weapon/tome_legacy(user.loc)
+		new /obj/item/tome_legacy(user.loc)
 
 	usr.visible_message("<span class='warning'>Rune disappears with a flash of red light, and in its place now a book lies.</span>", \
 	"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that now instead of the rune there's a book.</span>", \
@@ -655,7 +655,7 @@
 	sleep(10)
 	D.real_name = "Unknown"
 	var/chose_name = 0
-	for(var/obj/item/weapon/paper/P in this_rune.loc)
+	for(var/obj/item/paper/P in this_rune.loc)
 		if(P.info)
 			D.real_name = copytext(P.info, 1, MAX_NAME_LEN)
 			chose_name = 1
@@ -697,13 +697,13 @@
 /////////////////////////////////////////TWELFTH RUNE
 
 /obj/effect/rune_legacy/proc/talisman()//only tome, communicate, hide, reveal, emp, teleport, deafen, blind, stun and armor runes can be imbued
-	var/obj/item/weapon/paper/newtalisman
+	var/obj/item/paper/newtalisman
 	var/papers[] = new()
-	for(var/obj/item/weapon/paper/O in src.loc)
+	for(var/obj/item/paper/O in src.loc)
 		papers += O
 	var/unsuitable_newtalisman = 0
-	for(var/obj/item/weapon/paper/P in papers)
-		if(!(P.info || istype(P, /obj/item/weapon/paper/talisman)))
+	for(var/obj/item/paper/P in papers)
+		if(!(P.info || istype(P, /obj/item/paper/talisman)))
 			newtalisman = P
 			break
 		else if(P.info && papers.len == 1)
@@ -713,12 +713,12 @@
 			to_chat(usr, "<span class='warning'>The blank is tainted. It is unsuitable.</span>")
 		return fizzle()
 
-	if (istype(newtalisman, /obj/item/weapon/paper/nano))//I mean, cult and technology don't mix well together right?
+	if (istype(newtalisman, /obj/item/paper/nano))//I mean, cult and technology don't mix well together right?
 		to_chat(usr, "<span class='warning'>This piece of technologically advanced paper is unsuitable.</span>")
 		return fizzle()
 
 	var/obj/effect/rune_legacy/imbued_from
-	var/obj/item/weapon/paper/talisman/T
+	var/obj/item/paper/talisman/T
 	for(var/obj/effect/rune_legacy/R in orange(1,src))
 		if(R==src)
 			continue
@@ -1011,7 +1011,7 @@
 	if(istype(W,/obj/effect/rune_legacy))
 		rad = 6
 		go = 1
-	if (istype(W,/obj/item/weapon/paper/talisman))
+	if (istype(W,/obj/item/paper/talisman))
 		rad = 4
 		go = 1
 	if (isholyweapon(W))
@@ -1032,7 +1032,7 @@
 				V.show_message("<span class='warning'>The rune turns into red dust, revealing the surrounding runes.</span>", 1)
 			qdel(src)
 			return
-		if(istype(W,/obj/item/weapon/paper/talisman))
+		if(istype(W,/obj/item/paper/talisman))
 			usr.whisper("Nikt[pick("'","`")]o barada kla'atu!")
 			to_chat(usr, "<span class='warning'>Your talisman turns into red dust, revealing the surrounding runes.</span>")
 			for (var/mob/V in orange(1,usr.loc))
@@ -1042,7 +1042,7 @@
 		return
 	if(istype(W,/obj/effect/rune_legacy))
 		return	fizzle()
-	if(istype(W,/obj/item/weapon/paper/talisman))
+	if(istype(W,/obj/item/paper/talisman))
 		call(/obj/effect/rune_legacy/proc/fizzle)()
 		return
 
@@ -1360,18 +1360,18 @@
 				user.equip_to_slot_or_del(new /obj/item/clothing/head/legacy_culthood/alt(user), slot_head)
 				user.equip_to_slot_or_del(new /obj/item/clothing/suit/legacy_cultrobes/alt(user), slot_wear_suit)
 			user.equip_to_slot_or_del(new /obj/item/clothing/shoes/cult_legacy(user), slot_shoes)
-			user.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/cultpack(user), slot_back)
+			user.equip_to_slot_or_del(new /obj/item/storage/backpack/cultpack(user), slot_back)
 			//the above update their overlay icons cache but do not call update_icons()
 			//the below calls update_icons() at the end, which will update overlay icons by using the (now updated) cache
-			user.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(user))	//put in hands or on floor
+			user.put_in_hands(new /obj/item/melee/legacy_cultblade(user))	//put in hands or on floor
 		else if(ismonkey(user))
 			var/mob/living/carbon/monkey/K = user
 			K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 			"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
 			K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
 			K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
-			K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
-			K.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(K))
+			K.equip_to_slot_or_drop(new /obj/item/storage/backpack/cultpack, slot_back)
+			K.put_in_hands(new /obj/item/melee/legacy_cultblade(K))
 		return
 	else
 		usr.say("Sa tatha najin")
@@ -1391,16 +1391,16 @@
 						M.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt(M), slot_head)
 						M.equip_to_slot_or_drop(new /obj/item/clothing/suit/legacy_cultrobes/alt(M), slot_wear_suit)
 					M.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult_legacy(M), slot_shoes)
-					M.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack(M), slot_back)
-					M.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(M))
+					M.equip_to_slot_or_drop(new /obj/item/storage/backpack/cultpack(M), slot_back)
+					M.put_in_hands(new /obj/item/melee/legacy_cultblade(M))
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
 					K.visible_message("<span class='warning'> The rune disappears with a flash of red light, [K] now looks like the cutest of all followers of Nar-Sie...</span>", \
 					"<span class='warning'>You are blinded by the flash of red light! After you're able to see again, you see that you are now wearing a set of armor. Might not offer much protection due to its size though.</span>")
 					K.equip_to_slot_or_drop(new /obj/item/clothing/monkeyclothes/cultrobes, slot_w_uniform)
 					K.equip_to_slot_or_drop(new /obj/item/clothing/head/legacy_culthood/alt, slot_head)
-					K.equip_to_slot_or_drop(new /obj/item/weapon/storage/backpack/cultpack, slot_back)
-					K.put_in_hands(new /obj/item/weapon/melee/legacy_cultblade(K))
+					K.equip_to_slot_or_drop(new /obj/item/storage/backpack/cultpack, slot_back)
+					K.put_in_hands(new /obj/item/melee/legacy_cultblade(K))
 				else if(isconstruct(M))
 					var/construct_class
 					if(universe.name == "Hell Rising")

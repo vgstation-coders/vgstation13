@@ -8,7 +8,7 @@
 	icon = 'icons/obj/stock_parts.dmi'
 	icon_state = "0"
 	var/state = 0
-	var/obj/item/weapon/circuitboard/circuit = null
+	var/obj/item/circuitboard/circuit = null
 //	weight = 1.0E8
 
 /obj/structure/computerframe/Destroy()
@@ -16,7 +16,7 @@
 	qdel(circuit)
 	circuit = null
 
-/obj/item/weapon/circuitboard
+/obj/item/circuitboard
 	density = 0
 	anchored = 0
 	w_class = W_CLASS_SMALL
@@ -39,332 +39,332 @@
 	var/contain_parts = 1
 	toolsounds = list('sound/items/Screwdriver.ogg')
 
-/obj/item/weapon/circuitboard/message_monitor
+/obj/item/circuitboard/message_monitor
 	name = "Circuit board (Message Monitor)"
 	desc = "A circuit board for running a computer used for telecommunications monitoring."
 	build_path = /obj/machinery/computer/message_monitor
 	origin_tech = Tc_PROGRAMMING + "=3"
-/obj/item/weapon/circuitboard/security
+/obj/item/circuitboard/security
 	name = "Circuit board (Security Cameras)"
 	desc = "A circuit board for running a computer used for viewing security cameras."
 	build_path = /obj/machinery/computer/security
-/obj/item/weapon/circuitboard/security/wooden_tv
+/obj/item/circuitboard/security/wooden_tv
 	name = "Circuit board (Security Cameras TV)"
 	build_path = /obj/machinery/computer/security/wooden_tv
-/obj/item/weapon/circuitboard/security/spesstv
+/obj/item/circuitboard/security/spesstv
 	name = "Circuit board (high-definition Spess.TV telescreen)"
 	build_path = /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen
-/obj/item/weapon/circuitboard/security/engineering
+/obj/item/circuitboard/security/engineering
 	name = "Circuit board (Engineering Cameras)"
 	desc = "A circuit board for running a computer used for viewing engineering cameras."
 	build_path = /obj/machinery/computer/security/engineering
-/obj/item/weapon/circuitboard/aicore
+/obj/item/circuitboard/aicore
 	name = "Circuit board (AI core)"
 	desc = "A circuit board that allows the intelligence in an AI core to interface with the world around it."
 	origin_tech = Tc_PROGRAMMING + "=4;" + Tc_BIOTECH + "=2"
 	board_type = OTHER
-/obj/item/weapon/circuitboard/aiupload
+/obj/item/circuitboard/aiupload
 	name = "Circuit board (AI Upload)"
 	desc = "A circuit board for running a computer used for modifying AI laws."
 	build_path = /obj/machinery/computer/aiupload
 	origin_tech = Tc_PROGRAMMING + "=4"
-/obj/item/weapon/circuitboard/aiupload/longrange
+/obj/item/circuitboard/aiupload/longrange
 	name = "Circuit board (Long Range AI Upload)"
 	desc = "A circuit board for running a computer used for modifying AI laws."
 	build_path = /obj/machinery/computer/aiupload/longrange
 	origin_tech = Tc_PROGRAMMING + "=4" + Tc_MATERIALS + "=9" + Tc_BLUESPACE + "=3" + Tc_MAGNETS + "=5"
-/obj/item/weapon/circuitboard/borgupload
+/obj/item/circuitboard/borgupload
 	name = "Circuit board (Cyborg Upload)"
 	desc = "A circuit board for running a computer used for modifying cyborg laws."
 	build_path = /obj/machinery/computer/borgupload
 	origin_tech = Tc_PROGRAMMING + "=4"
-/obj/item/weapon/circuitboard/med_data
+/obj/item/circuitboard/med_data
 	name = "Circuit board (Medical Records)"
 	desc = "A circuit board for running a computer used for viewing medical records."
 	build_path = /obj/machinery/computer/med_data
-///obj/item/weapon/circuitboard/pandemic
+///obj/item/circuitboard/pandemic
 //	name = "Circuit board (PanD.E.M.I.C. 2200)"
 //	desc = "A circuit board for running a computer used in Virology."
 //	build_path = /obj/machinery/computer/pandemic
 //	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
-/obj/item/weapon/circuitboard/scan_consolenew
+/obj/item/circuitboard/scan_consolenew
 	name = "Circuit board (DNA Machine)"
 	desc = "A circuit board for running a computer used in Genetics."
 	build_path = /obj/machinery/computer/scan_consolenew
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
-/obj/item/weapon/circuitboard/communications
+/obj/item/circuitboard/communications
 	name = "Circuit board (Communications)"
 	desc = "A circuit board for running a computer used to communicate with Central Command."
 	build_path = /obj/machinery/computer/communications
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MAGNETS + "=2"
-/obj/item/weapon/circuitboard/card
+/obj/item/circuitboard/card
 	name = "Circuit board (ID Computer)"
 	desc = "A circuit board for running a computer used for modifying access on ID cards."
 	build_path = /obj/machinery/computer/card
-/obj/item/weapon/circuitboard/card/centcom
+/obj/item/circuitboard/card/centcom
 	name = "Circuit board (CentCom ID Computer)"
 	desc = "A circuit board for running a computer used for granting access to areas at Central Command.."
 	build_path = /obj/machinery/computer/card/centcom
-//obj/item/weapon/circuitboard/shield
+//obj/item/circuitboard/shield
 //	name = "Circuit board (Shield Control)"
 //	build_path = /obj/machinery/computer/stationshield
-/obj/item/weapon/circuitboard/teleporter
+/obj/item/circuitboard/teleporter
 	name = "Circuit board (Teleporter)"
 	build_path = /obj/machinery/computer/teleporter
 	desc = "A circuit board for running a computer used for selecting teleporter locations."
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BLUESPACE + "=2"
-/obj/item/weapon/circuitboard/secure_data
+/obj/item/circuitboard/secure_data
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
-/obj/item/weapon/circuitboard/security_alerts
+/obj/item/circuitboard/security_alerts
 	name = "Circuit board (Security Records)"
 	desc = "A circuit board for running a computer used for viewing security alerts."
 	build_path = /obj/machinery/computer/security_alerts
-/obj/item/weapon/circuitboard/stationalert
+/obj/item/circuitboard/stationalert
 	name = "Circuit board (Station Alerts)"
 	desc = "A circuit board for running a computer used for viewing station alerts."
 	build_path = /obj/machinery/computer/station_alert
-/*/obj/item/weapon/circuitboard/atmospheresiphonswitch
+/*/obj/item/circuitboard/atmospheresiphonswitch
 	name = "Circuit board (Atmosphere siphon control)"
 	build_path = /obj/machinery/computer/atmosphere/siphonswitch*/
-/obj/item/weapon/circuitboard/air_management
+/obj/item/circuitboard/air_management
 	name = "Circuit board (Atmospheric General Monitor)"
 	desc = "A circuit board for running a computer used for monitoring amospherical sensor inputs."
 	build_path = /obj/machinery/computer/general_air_control
-/obj/item/weapon/circuitboard/atmos_automation
+/obj/item/circuitboard/atmos_automation
 	name = "Circuit board (Atmospherics Automation)"
 	desc = "A circuit board for running a computer used for automating atmospherical devices, such as valves."
 	build_path = /obj/machinery/computer/general_air_control/atmos_automation
-/obj/item/weapon/circuitboard/large_tank_control
+/obj/item/circuitboard/large_tank_control
 	name = "Circuit board (Atmospheric Tank Control)"
 	desc = "A circuit board for running a computer used for monitoring atmosphere in the gas tank chambers."
 	build_path = /obj/machinery/computer/general_air_control/large_tank_control
-/obj/item/weapon/circuitboard/injector_control
+/obj/item/circuitboard/injector_control
 	name = "Circuit board (Injector control)"
 	desc = "A circuit board for running an obsolete computer used for injecting fuel."
 	build_path = /obj/machinery/computer/general_air_control/fuel_injection
-/obj/item/weapon/circuitboard/atmos_alert
+/obj/item/circuitboard/atmos_alert
 	name = "Circuit board (Atmospheric Alert)"
 	desc = "A circuit board for running a computer used for viewing air alarm alerts."
 	build_path = /obj/machinery/computer/atmos_alert
-/obj/item/weapon/circuitboard/supermatter
+/obj/item/circuitboard/supermatter
 	name = "Circuit board (Supermatter Monitor)"
 	desc = "A circuit board for the supermatter monitoring computer."
 	build_path = /obj/machinery/computer/supermatter
-/obj/item/weapon/circuitboard/pod
+/obj/item/circuitboard/pod
 	name = "Circuit board (Massdriver control)"
 	desc = "A circuit board for running a computer used for controlling mass drivers and blast doors."
 	build_path = /obj/machinery/computer/pod
-/obj/item/weapon/circuitboard/robotics
+/obj/item/circuitboard/robotics
 	name = "Circuit board (Robotics Control)"
 	desc = "A circuit board for running a computer used for monitoring and locking or destroying cyborgs."
 	build_path = /obj/machinery/computer/robotics
 	origin_tech = Tc_PROGRAMMING + "=3"
-/obj/item/weapon/circuitboard/cloning
+/obj/item/circuitboard/cloning
 	name = "Circuit board (Cloning Console)"
 	desc = "A circuit board for running a computer used for saving and applying cloning records."
 	build_path = /obj/machinery/computer/cloning
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=3"
-/obj/item/weapon/circuitboard/arcade
+/obj/item/circuitboard/arcade
 	name = "Circuit board (Arcade)"
 	desc = "A circuit board for running a computer used for the popular 'Random Encounter!' series videogames."
 	build_path = /obj/machinery/computer/arcade
 	origin_tech = Tc_PROGRAMMING + "=1"
 	var/list/game_data = list()
-/obj/item/weapon/circuitboard/turbine_control
+/obj/item/circuitboard/turbine_control
 	name = "Circuit board (Turbine control)"
 	desc = "A circuit board for running an obsolete computer used for controlling a gas turbine."
 	build_path = /obj/machinery/computer/turbine_computer
-/obj/item/weapon/circuitboard/solar_control
+/obj/item/circuitboard/solar_control
 	name = "Circuit board (Solar Control)"  //name fixed 250810
 	desc = "A circuit board for running a computer used for monitoring solar panel rotation and output."
 	build_path = /obj/machinery/power/solar/control
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=2"
-/obj/item/weapon/circuitboard/powermonitor
+/obj/item/circuitboard/powermonitor
 	name = "Circuit board (Power Monitor)"  //name fixed 250810
 	desc = "A circuit board for running a computer used for monitoring power generation, load and demand."
 	build_path = /obj/machinery/power/monitor
-/obj/item/weapon/circuitboard/olddoor
+/obj/item/circuitboard/olddoor
 	name = "Circuit board (DoorMex)"
 	desc = "A circuit board for running a very outdated computer used for opening doors."
 	build_path = /obj/machinery/computer/pod/old
-/obj/item/weapon/circuitboard/syndicatedoor
+/obj/item/circuitboard/syndicatedoor
 	name = "Circuit board (ProComp Executive)"
 	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Property of Cybersun Industries\"."
 	build_path = /obj/machinery/computer/pod/old/syndicate
-/obj/item/weapon/circuitboard/swfdoor
+/obj/item/circuitboard/swfdoor
 	name = "Circuit board (Magix)"
 	desc = "A circuit board for running a very outdated computer used for opening doors. A tag on it says \"Federation Use Only\"."
 	build_path = /obj/machinery/computer/pod/old/swf
-/obj/item/weapon/circuitboard/prisoner
+/obj/item/circuitboard/prisoner
 	name = "Circuit board (Prisoner Management)"
 	desc = "A circuit board for running a computer used for monitoring and manipulating prisoner implants."
 	build_path = /obj/machinery/computer/prisoner
-/obj/item/weapon/circuitboard/labor
+/obj/item/circuitboard/labor
 	name = "Circuit board (Labor Administration)"
 	desc = "A circuit board for running a computer used for administrating station jobs."
 	build_path = /obj/machinery/computer/labor
 
-/obj/item/weapon/circuitboard/rdconsole
+/obj/item/circuitboard/rdconsole
 	name = "Circuit Board (R&D Console)"
 	desc = "A circuit board for running the core computer used in Research and Development."
 	build_path = /obj/machinery/computer/rdconsole/core
-/obj/item/weapon/circuitboard/rdconsole/mommi
+/obj/item/circuitboard/rdconsole/mommi
 	name = "Circuit Board (MoMMI R&D Console)"
 	desc = "A circuit board for running a R&D console for Mobile MMIs."
 	build_path = /obj/machinery/computer/rdconsole/mommi
-/obj/item/weapon/circuitboard/rdconsole/robotics
+/obj/item/circuitboard/rdconsole/robotics
 	name = "Circuit Board (Robotics R&D Console)"
 	desc = "A circuit board for running a R&D console for Robotics."
 	build_path = /obj/machinery/computer/rdconsole/robotics
-/obj/item/weapon/circuitboard/rdconsole/mechanic
+/obj/item/circuitboard/rdconsole/mechanic
 	name = "Circuit Board (Mechanic R&D Console)"
 	desc = "A circuit board for running a R&D console for Mechanics."
 	build_path = /obj/machinery/computer/rdconsole/mechanic
-/obj/item/weapon/circuitboard/rdconsole/pod
+/obj/item/circuitboard/rdconsole/pod
 	name = "Circuit Board (Pod Bay R&D Console)"
 	desc = "A circuit board for running a R&D console for the Pod Bay."
 	build_path = /obj/machinery/computer/rdconsole/pod
-/obj/item/weapon/circuitboard/rdconsole/derelict
+/obj/item/circuitboard/rdconsole/derelict
 	name = "Circuit Board (Derelict R&D Console)"
 	desc = "A circuit board for running a R&D console for the Derelict."
 	build_path = /obj/machinery/computer/rdconsole/derelict
 
-/obj/item/weapon/circuitboard/mecha_control
+/obj/item/circuitboard/mecha_control
 	name = "Circuit Board (Exosuit Control Console)"
 	desc = "A circuit board for running a computer used to monitor and remotely lock exosuits."
 	build_path = /obj/machinery/computer/mecha
-/obj/item/weapon/circuitboard/rdservercontrol
+/obj/item/circuitboard/rdservercontrol
 	name = "Circuit Board (R&D Server Control)"
 	desc = "A circuit board for running a computer used to monitor and delete research data."
 	build_path = /obj/machinery/computer/rdservercontrol
-/obj/item/weapon/circuitboard/crew
+/obj/item/circuitboard/crew
 	name = "Circuit board (Crew monitoring computer)"
 	desc = "A circuit board for running a computer used to monitor suit sensor data."
 	build_path = /obj/machinery/computer/crew
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2;" + Tc_MAGNETS + "=2"
-/obj/item/weapon/circuitboard/mech_bay_power_console
+/obj/item/circuitboard/mech_bay_power_console
 	name = "Circuit board (Mech Bay Power Control Console)"
 	desc = "A circuit board for running a computer used to monitor exosuit cell charging."
 	build_path = /obj/machinery/computer/mech_bay_power_console
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_POWERSTORAGE + "=3"
-/obj/item/weapon/circuitboard/ordercomp
+/obj/item/circuitboard/ordercomp
 	name = "Circuit board (Supply ordering console)"
 	desc = "A circuit board for running a computer used to order items from Cargo."
 	build_path = /obj/machinery/computer/ordercomp
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/supplycomp
+/obj/item/circuitboard/supplycomp
 	name = "Circuit board (Supply shuttle console)"
 	desc = "A circuit board for running a computer used by Cargo to order items and call the Supply Shuttle."
 	build_path = /obj/machinery/computer/supplycomp
 	origin_tech = Tc_PROGRAMMING + "=3"
 	var/contraband_enabled = 0
-/obj/item/weapon/circuitboard/operating
+/obj/item/circuitboard/operating
 	name = "Circuit board (Operating Computer)"
 	desc = "A circuit board for running a computer used to monitor patients during surgery."
 	build_path = /obj/machinery/computer/operating
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_BIOTECH + "=2"
-/obj/item/weapon/circuitboard/mining
+/obj/item/circuitboard/mining
 	name = "Circuit board (Mining Outpost Cameras)"
 	desc = "A circuit board for running a computer used to view Mining Outpost cameras."
 	build_path = /obj/machinery/computer/security/mining
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/comm_monitor
+/obj/item/circuitboard/comm_monitor
 	name = "Circuit board (Telecommunications Monitor)"
 	desc = "A circuit board for running a computer used to view the entities and links between entities in a telecommunications network."
 	build_path = /obj/machinery/computer/telecomms/monitor
 	origin_tech = Tc_PROGRAMMING + "=3"
-/obj/item/weapon/circuitboard/comm_server
+/obj/item/circuitboard/comm_server
 	name = "Circuit board (Telecommunications Server Monitor)"
 	desc = "A circuit board for running a computer used to view active telecommunications servers and their message logs."
 	build_path = /obj/machinery/computer/telecomms/server
 	origin_tech = Tc_PROGRAMMING + "=3"
-/obj/item/weapon/circuitboard/comm_traffic
+/obj/item/circuitboard/comm_traffic
 	name = "Circuitboard (Telecommunications Traffic Control)"
 	desc = "A circuit board for running a computer used to manipulate telecommunications traffic."
 	build_path = /obj/machinery/computer/telecomms/traffic
 	origin_tech = Tc_PROGRAMMING + "=3"
-/*/obj/item/weapon/circuitboard/curefab
+/*/obj/item/circuitboard/curefab
 	name = "Circuit board (Cure fab)"
 	desc = "A circuit board for running a computer used to fabricate cures for virusses."
 	build_path = /obj/machinery/computer/curer*/
-/obj/item/weapon/circuitboard/splicer
+/obj/item/circuitboard/splicer
 	name = "Circuit board (Disease Splicer)"
 	desc = "A circuit board for running a computer used to splice DNA strands in virusses."
 	build_path = /obj/machinery/computer/diseasesplicer
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=4"
 
-/obj/item/weapon/circuitboard/shuttle_control
+/obj/item/circuitboard/shuttle_control
 	name = "Circuit board (Shuttle Control)"
 	desc = "A circuit board for running a computer used to control space shuttles."
 	build_path = /obj/machinery/computer/shuttle_control
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 
-/obj/item/weapon/circuitboard/HolodeckControl // Not going to let people get this, but it's just here for future
+/obj/item/circuitboard/HolodeckControl // Not going to let people get this, but it's just here for future
 	name = "Circuit board (Holodeck Control)"
 	desc = "A circuit board for running a computer used to control the holodeck."
 	build_path = /obj/machinery/computer/HolodeckControl
 	origin_tech = Tc_PROGRAMMING + "=4"
-/obj/item/weapon/circuitboard/aifixer
+/obj/item/circuitboard/aifixer
 	name = "Circuit board (AI Integrity Restorer)"
 	desc = "A circuit board for running a computer used to restore the integrity of a destroyed AI."
 	build_path = /obj/machinery/computer/aifixer
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2"
-/obj/item/weapon/circuitboard/area_atmos
+/obj/item/circuitboard/area_atmos
 	name = "Circuit board (Area Air Control)"
 	desc = "A circuit board for running a computer used to operate large scrubbers in the vicinity."
 	build_path = /obj/machinery/computer/area_atmos
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/prison_shuttle
+/obj/item/circuitboard/prison_shuttle
 	name = "Circuit board (Prison Shuttle)"
 	desc = "A circuit board for running an obsolete computer used to control the prison shuttle on an ancient station."
 	build_path = /obj/machinery/computer/prison_shuttle
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/bhangmeter
+/obj/item/circuitboard/bhangmeter
 	name = "Circuit board (Bhangmeter)"
 	desc = "A circuit board for running a computer used to monitor the locations and intensity of explosions."
 	build_path = /obj/machinery/computer/bhangmeter
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/telesci_computer
+/obj/item/circuitboard/telesci_computer
 	name = "Circuit board (Telepad Control Console)"
 	desc = "A circuit board for running a computer used to operate the Telescience Telepad."
 	build_path = /obj/machinery/computer/telescience
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BLUESPACE + "=2"
 	mech_flags = MECH_SCAN_FAIL
-/obj/item/weapon/circuitboard/forensic_computer
+/obj/item/circuitboard/forensic_computer
 	name = "Circuit board (Forensics Console)"
 	desc = "A circuit board for running a computer used to scan objects and view data from portable scanners."
 	build_path = /obj/machinery/computer/forensic_scanning
 	origin_tech = Tc_PROGRAMMING + "=2"
-/obj/item/weapon/circuitboard/pda_terminal
+/obj/item/circuitboard/pda_terminal
 	name = "Circuit board (PDA Terminal)"
 	desc = "A circuit board for running a computer used to download applications to PDAs."
 	build_path = /obj/machinery/computer/pda_terminal
 	origin_tech = Tc_PROGRAMMING + "=2"
 
-/obj/item/weapon/circuitboard/smeltcomp
+/obj/item/circuitboard/smeltcomp
 	name = "Circuit board (Ore Processing Console)"
 	desc = "A circuit board for running a computer used to operate ore smelting machines."
 	build_path = /obj/machinery/computer/smelting
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
-/obj/item/weapon/circuitboard/stacking_machine_console
+/obj/item/circuitboard/stacking_machine_console
 	name = "Circuit board (Stacking Machine Console)"
 	desc = "A circuit board for running a computer used to operate stacking machines."
 	build_path = /obj/machinery/computer/stacking_unit
 	origin_tech = Tc_PROGRAMMING + "=2;" + Tc_MATERIALS + "=2"
 
 
-/obj/item/weapon/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
+/obj/item/circuitboard/attackby(obj/item/I as obj, mob/user as mob)
 	if(issolder(I))
-		var/obj/item/weapon/solder/S = I
+		var/obj/item/solder/S = I
 		if(S.remove_fuel(2,user))
 			solder_improve(user)
 	else if(iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/weldingtool/WT = I
 		if(WT.remove_fuel(1,user))
-			var/obj/item/weapon/circuitboard/blank/B = new /obj/item/weapon/circuitboard/blank(src.loc)
+			var/obj/item/circuitboard/blank/B = new /obj/item/circuitboard/blank(src.loc)
 			to_chat(user, "<span class='notice'>You melt away the circuitry, leaving behind a blank.</span>")
 			I.playtoolsound(B.loc, 30)
 			if(user.get_inactive_hand() == src)
@@ -374,38 +374,38 @@
 			return
 	return
 
-/obj/item/weapon/circuitboard/proc/solder_improve(mob/user)
+/obj/item/circuitboard/proc/solder_improve(mob/user)
 	to_chat(user, "<span class='warning'>You fiddle with a few random fuses but can't find a routing that doesn't short the board.</span>")
 
 
 
-/obj/item/weapon/circuitboard/fishtank/solder_improve(mob/user)
+/obj/item/circuitboard/fishtank/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You modify the circuitry to support a larger tank.</span>")
-	var/obj/item/weapon/circuitboard/fishwall/A = new /obj/item/weapon/circuitboard/fishwall(src.loc)
+	var/obj/item/circuitboard/fishwall/A = new /obj/item/circuitboard/fishwall(src.loc)
 	user.put_in_hands(A)
 	qdel(src)
 
 
-/obj/item/weapon/circuitboard/fishwall/solder_improve(mob/user)
+/obj/item/circuitboard/fishwall/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You modify the circuitry to support a smaller tank.</span>")
-	var/obj/item/weapon/circuitboard/fishtank/A = new /obj/item/weapon/circuitboard/fishtank(src.loc)
+	var/obj/item/circuitboard/fishtank/A = new /obj/item/circuitboard/fishtank(src.loc)
 	user.put_in_hands(A)
 	qdel(src)
 
 
-/obj/item/weapon/circuitboard/supplycomp/solder_improve(mob/user)
+/obj/item/circuitboard/supplycomp/solder_improve(mob/user)
 	to_chat(user, "<span class='notice'>You [contraband_enabled ? "" : "un"]connect the mysterious fuse.</span>")
 	contraband_enabled = !contraband_enabled
 
 
-/obj/item/weapon/circuitboard/security/solder_improve(mob/user)
-	if(istype(src,/obj/item/weapon/circuitboard/security/advanced))
+/obj/item/circuitboard/security/solder_improve(mob/user)
+	if(istype(src,/obj/item/circuitboard/security/advanced))
 		return ..()
-	if(istype(src,/obj/item/weapon/circuitboard/security/engineering))
+	if(istype(src,/obj/item/circuitboard/security/engineering))
 		return ..()
 	else
 		to_chat(user, "<span class='notice'>You locate a short that makes the feed circuitry more elegant.</span>")
-		var/obj/item/weapon/circuitboard/security/advanced/A = new /obj/item/weapon/circuitboard/security/advanced(src.loc)
+		var/obj/item/circuitboard/security/advanced/A = new /obj/item/circuitboard/security/advanced(src.loc)
 		user.put_in_hands(A)
 		qdel(src)
 
@@ -416,7 +416,7 @@
 				src.state = 1
 				return 1
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/weldingtool/WT = P
 				to_chat(user, "<span class='notice'>You start welding the frame back into metal.</span>")
 				if(WT.do_weld(user, src, 10, 0) && state == 0)
 					if(gcDestroyed)
@@ -431,8 +431,8 @@
 			if(P.is_wrench(user) && wrenchAnchor(user, P))
 				src.state = 0
 				return 1
-			if(istype(P, /obj/item/weapon/circuitboard) && !circuit)
-				var/obj/item/weapon/circuitboard/B = P
+			if(istype(P, /obj/item/circuitboard) && !circuit)
+				var/obj/item/circuitboard/B = P
 				if(B.board_type == COMPUTER)
 					if(!user.drop_item(B, src))
 						return
@@ -525,13 +525,13 @@
 					B:records = circuit.records
 				if(circuit.frequency)
 					B:frequency = circuit.frequency
-				if(istype(circuit,/obj/item/weapon/circuitboard/supplycomp))
+				if(istype(circuit,/obj/item/circuitboard/supplycomp))
 					var/obj/machinery/computer/supplycomp/SC = B
-					var/obj/item/weapon/circuitboard/supplycomp/C = circuit
+					var/obj/item/circuitboard/supplycomp/C = circuit
 					SC.can_order_contraband = C.contraband_enabled
-				else if(istype(circuit,/obj/item/weapon/circuitboard/arcade))
+				else if(istype(circuit,/obj/item/circuitboard/arcade))
 					var/obj/machinery/computer/arcade/arcade = B
-					var/obj/item/weapon/circuitboard/arcade/C = circuit
+					var/obj/item/circuitboard/arcade/C = circuit
 					arcade.import_game_data(C)
 				var/obj/machinery/MA = B
 				if(istype(MA))

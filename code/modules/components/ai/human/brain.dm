@@ -127,7 +127,7 @@
 						if(DESIRE_CONFLICT)
 							break processing_desires
 						if(DESIRE_FOOD)
-							if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
+							if(istype(I, /obj/item/reagent_containers/food/snacks))
 								goal = I
 						if(DESIRE_UNDERCLOTHING)
 							if((I.slot_flags & SLOT_ICLOTHING) && I.mob_can_equip(H, slot_w_uniform))
@@ -166,7 +166,7 @@
 /datum/component/ai/human_brain/proc/AcquireItem(mob/living/carbon/human/H, obj/item/I)
 	SendSignal(COMSIG_ACTVEMPTYHAND, list())
 	SendSignal(COMSIG_CLICKON, list("target" = I))
-	if(istype(I, /obj/item/weapon/reagent_containers/food/snacks))
+	if(istype(I, /obj/item/reagent_containers/food/snacks))
 		ConsumeFood(H, I)
 	else
 		SendSignal(COMSIG_EQUIPACTVHAND, list())

@@ -1,6 +1,6 @@
 ///////////////////////////Veil Render//////////////////////
 
-/obj/item/weapon/veilrender
+/obj/item/veilrender
 	name = "veil render"
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast city."
 	icon = 'icons/obj/wizard.dmi'
@@ -46,23 +46,23 @@
 		return
 	..()
 
-/obj/item/weapon/veilrender/attack_self(mob/user)
+/obj/item/veilrender/attack_self(mob/user)
 	if(charged > 0)
 		create_rend(user)
 		charged--
 	else
 		to_chat(user, "<span class='warning'>The unearthly energies that powered the blade are now dormant.</span>")
 
-/obj/item/weapon/veilrender/proc/create_rend(mob/user)
+/obj/item/veilrender/proc/create_rend(mob/user)
 	new rendtype(get_turf(user))
 	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to reality itself!</span>")
 
-/obj/item/weapon/veilrender/vealrender
+/obj/item/veilrender/vealrender
 	name = "veal render"
 	desc = "A wicked curved blade of alien origin, recovered from the ruins of a vast farm."
 	rendtype = /obj/effect/rend/cow
 
-/obj/item/weapon/veilrender/vealrender/create_rend(mob/user)
+/obj/item/veilrender/vealrender/create_rend(mob/user)
 	new rendtype(get_turf(user))
 	visible_message("<span class='danger'>[src] hums with power as \the [user] deals a blow to hunger itself!</span>")
 
@@ -72,7 +72,7 @@
 
 /////////////////////////////////////////Scrying///////////////////
 
-/obj/item/weapon/scrying
+/obj/item/scrying
 	name = "scrying orb"
 	desc = "An incandescent orb of otherworldly energy, staring into it gives you vision beyond mortal means."
 	icon = 'icons/obj/projectiles.dmi'
@@ -84,7 +84,7 @@
 	force = 15
 	hitsound = 'sound/items/welder2.ogg'
 
-/obj/item/weapon/scrying/attack_self(mob/user as mob)
+/obj/item/scrying/attack_self(mob/user as mob)
 	to_chat(user, "<span class='notice'>You can see...everything!</span>")
 	visible_message("<span class='danger'>[usr] stares into [src], their eyes glazing over.</span>")
 	user.ghostize(1)
@@ -97,7 +97,7 @@
 
 #define CLOAKINGCLOAK "cloakingcloak"
 
-/obj/item/weapon/cloakingcloak
+/obj/item/cloakingcloak
 	name = "cloak of cloaking"
 	desc = "A silk cloak that will hide you from anything with eyes."
 	icon = 'icons/obj/wizard.dmi'
@@ -106,7 +106,7 @@
 	force = 0
 	flags = FPRINT | TWOHANDABLE
 
-/obj/item/weapon/cloakingcloak/proc/mob_moved(atom/movable/mover)
+/obj/item/cloakingcloak/proc/mob_moved(atom/movable/mover)
 	if(iscarbon(mover) && wielded)
 		var/mob/living/carbon/C = mover
 		if(C.m_intent == "run" && prob(10))
@@ -114,7 +114,7 @@
 				step(C, C.dir)
 				C.visible_message("<span class='warning'>\The [C] trips over \his [name] and appears out of thin air!</span>","<span class='warning'>You trip over your [name] and become visible again!</span>")
 
-/obj/item/weapon/cloakingcloak/update_wield(mob/user)
+/obj/item/cloakingcloak/update_wield(mob/user)
 	..()
 	if(user)
 		user.update_inv_hands()
@@ -130,7 +130,7 @@
 			user.alphas.Remove(CLOAKINGCLOAK)
 
 
-/obj/item/weapon/glow_orb
+/obj/item/glow_orb
 	name = "inert stone"
 	desc = "A peculiar fist-sized stone which hums with dormant energy."
 	icon = 'icons/obj/wizard.dmi'
@@ -141,7 +141,7 @@
 	var/crit_failure = 0
 	var/activating = 0
 
-/obj/item/weapon/glow_orb/attack_self(mob/user)
+/obj/item/glow_orb/attack_self(mob/user)
 	if(crit_failure)
 		to_chat(user, "<span class = 'warning'>\The [src] is vibrating erratically!</span>")
 		return
@@ -166,7 +166,7 @@
 				failure()
 		to_chat(user, "<span class = 'notice'>You fiddle with \the [src], but find nothing of interest.</span>")
 
-/obj/item/weapon/glow_orb/proc/activate()
+/obj/item/glow_orb/proc/activate()
 	activating = 1
 	spawn(prime_time)
 		if(crit_failure) //Damn it clown
@@ -180,7 +180,7 @@
 			new/mob/living/simple_animal/hostile/glow_orb(get_turf(src))
 			qdel(src)
 
-/obj/item/weapon/glow_orb/proc/failure()
+/obj/item/glow_orb/proc/failure()
 	visible_message("<span class = 'notice'>\The [src] begins to glow increasingly in a brilliant manner...</span>")
 	crit_failure = 1
 	spawn(1 SECONDS)

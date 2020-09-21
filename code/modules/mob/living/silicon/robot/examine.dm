@@ -19,7 +19,7 @@
 		var/obj/item/I = module_active
 		msg += "It's using [I.gender==PLURAL?"some":"a"] [bicon(I)] [I.name] as its active module.\n"
 		if(isgripper(I))
-			var/obj/item/weapon/gripper/G = module_active
+			var/obj/item/gripper/G = module_active
 			if(G.wrapped)
 				msg += "Its [G.name] is gripping [G.wrapped.gender==PLURAL?"some":"a"] [bicon(G.wrapped)] [G.wrapped.name].\n"
 

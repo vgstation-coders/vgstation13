@@ -28,7 +28,7 @@
 	status_flags = CANPUSH
 	supernatural = TRUE
 	flying = TRUE
-	meat_type = /obj/item/weapon/ectoplasm
+	meat_type = /obj/item/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
 
 /mob/living/simple_animal/shade/New()
@@ -44,7 +44,7 @@
 /mob/living/simple_animal/shade/Login()
 	..()
 	hud_used.shade_hud()
-	if (istype(loc, /obj/item/weapon/melee/soulblade))
+	if (istype(loc, /obj/item/melee/soulblade))
 		client.CAN_MOVE_DIAGONALLY = 1
 		client.screen += list(
 			gui_icons.soulblade_bgLEFT,
@@ -76,14 +76,14 @@
 	regular_hud_updates()
 	if(isDead())
 		for(var/i=0;i<3;i++)
-			new /obj/item/weapon/ectoplasm (src.loc)
+			new /obj/item/ectoplasm (src.loc)
 		visible_message("<span class='warning'> [src] lets out a contented sigh as their form unwinds.</span>")
 		ghostize()
 		qdel (src)
 		return
 
-	if (istype(loc,/obj/item/weapon/melee/soulblade))
-		var/obj/item/weapon/melee/soulblade/SB = loc
+	if (istype(loc,/obj/item/melee/soulblade))
+		var/obj/item/melee/soulblade/SB = loc
 		if (istype(SB.loc,/obj/structure/cult/altar))
 			if (SB.blood < SB.maxblood)
 				SB.blood = min(SB.maxblood,SB.blood+5)//faster blood regen when planted on an altar
@@ -99,7 +99,7 @@
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)
-	if(istype(O, /obj/item/device/soulstone) || istype(O, /obj/item/weapon/melee/soulblade))
+	if(istype(O, /obj/item/device/soulstone) || istype(O, /obj/item/melee/soulblade))
 		O.transfer_soul("SHADE", src, user)
 	else
 		if(O.force)
@@ -132,8 +132,8 @@
 /mob/living/simple_animal/shade/regular_hud_updates()
 	update_pull_icon() //why is this here?
 
-	if(istype(loc, /obj/item/weapon/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
-		var/obj/item/weapon/melee/soulblade/SB = loc
+	if(istype(loc, /obj/item/melee/soulblade) && hud_used && gui_icons && gui_icons.soulblade_bloodbar)
+		var/obj/item/melee/soulblade/SB = loc
 		if(healths2)
 			switch(SB.health)
 				if(-INFINITY to 18)
@@ -210,16 +210,16 @@
 	death()
 
 /mob/living/simple_animal/shade/sword/death(var/gibbed = FALSE)
-	if(istype(loc, /obj/item/weapon/nullrod/sword/chaos))
-		var/obj/item/weapon/nullrod/sword/chaos/C = loc
+	if(istype(loc, /obj/item/nullrod/sword/chaos))
+		var/obj/item/nullrod/sword/chaos/C = loc
 		C.possessed = FALSE
 		C.icon_state = "talking_sword"
 	..(gibbed)
 
 ////////////////////////////////SOUL BLADE STUFF//////////////////////////////////////////////////////
 /mob/living/simple_animal/shade/ClickOn(var/atom/A, var/params)
-	if (istype(loc, /obj/item/weapon/melee/soulblade))
-		var/obj/item/weapon/melee/soulblade/SB = loc
+	if (istype(loc, /obj/item/melee/soulblade))
+		var/obj/item/melee/soulblade/SB = loc
 		SB.dir = get_dir(get_turf(SB), A)
 		var/spell/soulblade/blade_spin/BS = locate() in spell_list
 		if (BS)

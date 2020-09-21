@@ -126,7 +126,7 @@
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "plasmawindow0"
 	base_state = "plasmawindow"
-	shardtype = /obj/item/weapon/shard/plasma
+	shardtype = /obj/item/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
@@ -144,7 +144,7 @@
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow0"
 	base_state = "plasmarwindow"
-	shardtype = /obj/item/weapon/shard/plasma
+	shardtype = /obj/item/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7

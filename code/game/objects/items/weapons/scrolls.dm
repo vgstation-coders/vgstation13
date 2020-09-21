@@ -1,4 +1,4 @@
-/obj/item/weapon/teleportation_scroll
+/obj/item/teleportation_scroll
 	name = "scroll of teleportation"
 	desc = "A scroll allowing limited uses of transportation."
 	icon = 'icons/obj/wizard.dmi'
@@ -12,14 +12,14 @@
 	origin_tech = Tc_BLUESPACE + "=4"
 	mech_flags = MECH_SCAN_FAIL // Because why should the crew be able to make scrolls out of nothing
 
-/obj/item/weapon/teleportation_scroll/apprentice
+/obj/item/teleportation_scroll/apprentice
 	name = "lesser scroll of teleportation"
 	uses = 1
 	origin_tech = Tc_BLUESPACE + "=2"
 
 
 
-/obj/item/weapon/teleportation_scroll/attack_self(mob/user as mob)
+/obj/item/teleportation_scroll/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat = "<B>Teleportation Scroll:</B><BR>"
 	dat += "Number of uses: [src.uses]<BR>"
@@ -31,7 +31,7 @@
 	onclose(user, "scroll")
 	return
 
-/obj/item/weapon/teleportation_scroll/Topic(href, href_list)
+/obj/item/teleportation_scroll/Topic(href, href_list)
 	..()
 	if (usr.stat || usr.restrained() || src.loc != usr)
 		return
@@ -47,7 +47,7 @@
 		attack_self(H)
 	return
 
-/obj/item/weapon/teleportation_scroll/proc/teleportscroll(var/mob/user)
+/obj/item/teleportation_scroll/proc/teleportscroll(var/mob/user)
 	var/A
 	A = input(user, "Area to jump to", "BOOYEA", A) as null|anything in teleportlocs
 

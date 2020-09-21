@@ -43,7 +43,7 @@
 
 	return 1
 
-/obj/machinery/shield/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/shield/attackby(obj/item/W as obj, mob/living/user as mob)
 	if(!istype(W))
 		return
 
@@ -269,7 +269,7 @@
 		return FALSE
 	. = ..()
 
-/obj/machinery/shieldgen/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/shieldgen/attackby(obj/item/W as obj, mob/user as mob)
 	if(..())
 		return 1
 
@@ -287,7 +287,7 @@
 			update_icon()
 		return
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/card/id) || istype(W, /obj/item/device/pda))
 		if(src.allowed(user))
 			src.locked = !src.locked
 			to_chat(user, "The controls are now [src.locked ? "locked." : "unlocked."]")
@@ -489,7 +489,7 @@
 	if(..())
 		return 1
 
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
 			src.locked = !src.locked
 			to_chat(user, "Controls are now [src.locked ? "locked." : "unlocked."]")

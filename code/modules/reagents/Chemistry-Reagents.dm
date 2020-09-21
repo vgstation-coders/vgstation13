@@ -585,8 +585,8 @@
 		var/turf/T = get_turf(O)
 		self.reaction_turf(T, volume)
 
-	if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/monkeycube))
-		var/obj/item/weapon/reagent_containers/food/snacks/monkeycube/cube = O
+	if(istype(O, /obj/item/reagent_containers/food/snacks/monkeycube))
+		var/obj/item/reagent_containers/food/snacks/monkeycube/cube = O
 		if(!cube.wrapped)
 			cube.Expand()
 	else if(istype(O,/obj/machinery/space_heater/campfire))
@@ -914,7 +914,7 @@
 			C.overlays.len = 0
 			C.invisibility = 101
 			for(var/obj/item/W in C)
-				if(istype(W, /obj/item/weapon/implant))	//TODO: Carn. give implants a dropped() or something
+				if(istype(W, /obj/item/implant))	//TODO: Carn. give implants a dropped() or something
 					qdel(W)
 					continue
 				W.reset_plane_and_layer()
@@ -1453,7 +1453,7 @@
 					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
 				return
 
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
+			if(H.head && !istype(H.head, /obj/item/reagent_containers/glass/bucket))
 				if(prob(15) && H.head.acidable())
 					qdel(H.head)
 					H.head = null
@@ -1543,7 +1543,7 @@
 					to_chat(H, "<span class='warning'>Your mask protects you from the acid!</span>")
 				return
 
-			if(H.head && !istype(H.head, /obj/item/weapon/reagent_containers/glass/bucket))
+			if(H.head && !istype(H.head, /obj/item/reagent_containers/glass/bucket))
 				if(prob(15) && H.head.acidable())
 					qdel(H.head)
 					H.head = null
@@ -1892,7 +1892,7 @@
 	O.clean_blood()
 	if(istype(O, /obj/effect/decal/cleanable))
 		qdel(O)
-	else if(O.color && istype(O, /obj/item/weapon/paper))
+	else if(O.color && istype(O, /obj/item/paper))
 		O.color = null
 
 /datum/reagent/vaporsalt
@@ -5561,15 +5561,15 @@
 	if(..())
 		return 1
 
-	if(istype(O, /obj/item/weapon/paper))
-		var/obj/item/weapon/paper/paperaffected = O
+	if(istype(O, /obj/item/paper))
+		var/obj/item/paper/paperaffected = O
 		if(paperaffected.info || paperaffected.stamps)
 			paperaffected.clearpaper()
 			O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")
 
-	if(istype(O, /obj/item/weapon/book))
+	if(istype(O, /obj/item/book))
 		if(volume >= 5)
-			var/obj/item/weapon/book/affectedbook = O
+			var/obj/item/book/affectedbook = O
 			if(affectedbook.dat)
 				affectedbook.dat = null
 				O.visible_message("<span class='warning'>The solution melts away \the [O]'s ink.</span>")

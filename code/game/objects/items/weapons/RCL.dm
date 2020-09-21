@@ -1,4 +1,4 @@
-/obj/item/weapon/rcl
+/obj/item/rcl
 	name = "rapid cable layer (RCL)"
 	desc = "A device used to rapidly deploy cables. It has screws on the side which can be removed to slide off the cables."
 	icon = 'icons/obj/items.dmi'
@@ -21,7 +21,7 @@
 	var/obj/structure/cable/last = null
 	var/obj/item/stack/cable_coil/loaded = null
 
-/obj/item/weapon/rcl/attackby(obj/item/weapon/W, mob/user)
+/obj/item/rcl/attackby(obj/item/W, mob/user)
 	if(istype(W,/obj/item/stack/cable_coil))
 		if(!loaded)
 			if(user.drop_item(W,src))
@@ -51,12 +51,12 @@
 	else
 		..()
 
-/obj/item/weapon/rcl/examine(mob/user)
+/obj/item/rcl/examine(mob/user)
 	..()
 	if(loaded)
 		to_chat(user, "<span class='info'>It contains [loaded.amount]/90 cables.</span>")
 
-/obj/item/weapon/rcl/Destroy()
+/obj/item/rcl/Destroy()
 	qdel(loaded)
 	loaded = null
 	last = null
@@ -64,7 +64,7 @@
 	set_move_event()
 	..()
 
-/obj/item/weapon/rcl/update_icon()
+/obj/item/rcl/update_icon()
 	if(!loaded)
 		icon_state = "rcl-0"
 		item_state = "rcl-0"
@@ -83,7 +83,7 @@
 			icon_state = "rcl-0"
 			item_state = "rcl-0"
 
-/obj/item/weapon/rcl/proc/is_empty(mob/user)
+/obj/item/rcl/proc/is_empty(mob/user)
 	update_icon()
 	if(loaded && !loaded.amount)
 		to_chat(user, "<span class='notice'>The last of the cables unreel from \the [src].</span>")
@@ -93,12 +93,12 @@
 		return 1
 	return 0
 
-/obj/item/weapon/rcl/dropped(mob/wearer as mob)
+/obj/item/rcl/dropped(mob/wearer as mob)
 	..()
 	active = 0
 	set_move_event(wearer)
 
-/obj/item/weapon/rcl/proc/set_move_event(mob/user)
+/obj/item/rcl/proc/set_move_event(mob/user)
 	if(user)
 		if(active)
 			trigger(user)
@@ -106,16 +106,16 @@
 			return
 		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/holder_moved)
 
-/obj/item/weapon/rcl/attack_self(mob/user as mob)
+/obj/item/rcl/attack_self(mob/user as mob)
 	active = !active
 	to_chat(user, "<span class='notice'>You turn \the [src] [active ? "on" : "off"].<span>")
 	set_move_event(user)
 
-/obj/item/weapon/rcl/proc/holder_moved(atom/movable/mover)
+/obj/item/rcl/proc/holder_moved(atom/movable/mover)
 	if(active)
 		trigger(mover)
 
-/obj/item/weapon/rcl/proc/trigger(mob/user as mob)
+/obj/item/rcl/proc/trigger(mob/user as mob)
 	if(!loaded)
 		to_chat(user, "<span class='warning'>\The [src] is empty!</span>")
 		return
@@ -135,7 +135,7 @@
 	last = loaded.turf_place(get_turf(src.loc),user,turn(user.dir,180))
 	is_empty(user) //If we've run out, display message
 
-/obj/item/weapon/rcl/pre_loaded/New() //Comes preloaded with cable, for testing stuff
+/obj/item/rcl/pre_loaded/New() //Comes preloaded with cable, for testing stuff
 	..()
 	loaded = new()
 	loaded.max_amount = max_amount

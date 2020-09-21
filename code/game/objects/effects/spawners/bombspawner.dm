@@ -37,8 +37,8 @@ var/list/syndicate_bomb_spawners = list()
 
 /obj/effect/spawner/newbomb/proc/spawnbomb()
 	var/obj/item/device/transfer_valve/mediumsize/V = new(src.loc)
-	var/obj/item/weapon/tank/plasma/PT = new(V)
-	var/obj/item/weapon/tank/oxygen/OT = new(V)
+	var/obj/item/tank/plasma/PT = new(V)
+	var/obj/item/tank/oxygen/OT = new(V)
 
 	V.tank_one = PT
 	V.tank_two = OT
@@ -47,7 +47,7 @@ var/list/syndicate_bomb_spawners = list()
 	PT.air_contents.temperature = T0C + 170
 	OT.air_contents.temperature = T0C - 100
 
-	for(var/obj/item/weapon/tank/T in list(PT, OT))
+	for(var/obj/item/tank/T in list(PT, OT))
 		T.master = V
 		var/datum/gas_mixture/G = T.air_contents
 		G.update_values()

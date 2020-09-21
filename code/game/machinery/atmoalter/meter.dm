@@ -148,7 +148,7 @@
 		<li>[format_tag("ID Tag","id_tag")]</li>
 	</ul>"}
 
-/obj/machinery/meter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+/obj/machinery/meter/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	if(!W.is_wrench(user))
 		return ..()
 
@@ -174,5 +174,5 @@
 	if (!target)
 		src.target = loc
 
-/obj/machinery/meter/turf/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+/obj/machinery/meter/turf/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	return

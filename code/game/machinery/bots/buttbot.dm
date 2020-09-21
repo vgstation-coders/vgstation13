@@ -97,7 +97,7 @@ Here it is: Buttbot.
 
 		user.drop_from_inventory(src)
 		qdel(src)
-	else if (istype(W, /obj/item/weapon/pen))
+	else if (istype(W, /obj/item/pen))
 		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name)
 
 		if (!t)

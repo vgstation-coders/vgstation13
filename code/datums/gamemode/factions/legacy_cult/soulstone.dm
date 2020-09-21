@@ -282,7 +282,7 @@
 				anim(target = T, a_icon = 'icons/mob/mob.dmi', flick_anim = "dust-h", sleeptime = 26)
 
 		if(body.decapitated && (body.decapitated == target))//just making sure we're dealing with the right head
-			new /obj/item/weapon/skull(get_turf(target))
+			new /obj/item/skull(get_turf(target))
 
 	target.invisibility = 101 //It's not possible to interact with the body normally now, but we don't want to delete it just yet
 
@@ -295,7 +295,7 @@
 		var/mob/living/carbon/brain/BM = H.brainmob
 		mind = BM.mind
 		true_name = BM.real_name
-		new /obj/item/weapon/skull(get_turf(target))
+		new /obj/item/skull(get_turf(target))
 
 	//Scary sound
 	playsound(get_turf(src), get_sfx("soulstone"), 50,1)
@@ -332,7 +332,7 @@
 		icon_state = "soulstone2"
 		item_state = "shard-soulstone2"
 		name = "Soul Stone: [true_name]"
-	else if (istype(src, /obj/item/weapon/melee/soulblade))
+	else if (istype(src, /obj/item/melee/soulblade))
 		shadeMob.give_blade_powers()
 		dir = NORTH
 		update_icon()
@@ -409,7 +409,7 @@
 						icon_state = "soulstone2"
 						item_state = "shard-soulstone2"
 						name = "Soul Stone: [T.real_name]"
-					else if (istype(src, /obj/item/weapon/melee/soulblade))
+					else if (istype(src, /obj/item/melee/soulblade))
 						T.give_blade_powers()
 						dir = NORTH
 						update_icon()

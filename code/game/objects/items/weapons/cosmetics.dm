@@ -1,4 +1,4 @@
-/obj/item/weapon/lipstick
+/obj/item/lipstick
 	name = "red lipstick"
 	desc = "A generic brand of lipstick."
 	icon = 'icons/obj/items.dmi'
@@ -9,34 +9,34 @@
 	var/open = 0
 
 
-/obj/item/weapon/lipstick/purple
+/obj/item/lipstick/purple
 	name = "purple lipstick"
 	colour = "purple"
 
-/obj/item/weapon/lipstick/jade
+/obj/item/lipstick/jade
 	name = "jade lipstick"
 	colour = "jade"
 
-/obj/item/weapon/lipstick/black
+/obj/item/lipstick/black
 	name = "black lipstick"
 	colour = "black"
 
 
-/obj/item/weapon/lipstick/blue
+/obj/item/lipstick/blue
 	name = "blue lipstick"
 	colour = "blue"
 
 
-/obj/item/weapon/lipstick/random
+/obj/item/lipstick/random
 	name = "lipstick"
 
-/obj/item/weapon/lipstick/random/New()
+/obj/item/lipstick/random/New()
 	colour = pick("red","purple","jade","black","blue")
 	name = "[colour] lipstick"
 	..()
 
 
-/obj/item/weapon/lipstick/attack_self(mob/user as mob)
+/obj/item/lipstick/attack_self(mob/user as mob)
 	to_chat(user, "<span class='notice'>You twist \the [src] [open ? "closed" : "open"].</span>")
 	open = !open
 	if(open)
@@ -44,7 +44,7 @@
 	else
 		icon_state = initial(icon_state)
 
-/obj/item/weapon/lipstick/attack(mob/M as mob, mob/user as mob)
+/obj/item/lipstick/attack(mob/M as mob, mob/user as mob)
 	if(!open)
 		return
 
@@ -86,7 +86,7 @@
 	else
 		to_chat(user, "<span class='notice'>That would look stupid.</span>")
 
-/obj/item/weapon/eyeshadow
+/obj/item/eyeshadow
 	name = "black eyeshadow"
 	desc = "A generic brand of eyeshadow."
 	icon = 'icons/obj/items.dmi'
@@ -97,23 +97,23 @@
 	var/open = 0
 
 
-/obj/item/weapon/eyeshadow/purple
+/obj/item/eyeshadow/purple
 	name = "purple eyeshadow"
 	colour = "purple"
 
-/obj/item/weapon/eyeshadow/jade
+/obj/item/eyeshadow/jade
 	name = "jade eyeshadow"
 	colour = "jade"
 
-/obj/item/weapon/eyeshadow/random
+/obj/item/eyeshadow/random
 	name = "eyeshadow"
 
-/obj/item/weapon/eyeshadow/random/New()
+/obj/item/eyeshadow/random/New()
 	colour = pick("purple","jade","black")
 	name = "[colour] eyeshadow"
 	..()
 
-/obj/item/weapon/eyeshadow/attack(mob/M, mob/user)
+/obj/item/eyeshadow/attack(mob/M, mob/user)
 	if(!istype(M, /mob))
 		return
 
@@ -139,7 +139,7 @@
 		to_chat(user, "<span class='notice'>Where are the eyes on that?</span>")
 
 //you can wipe off eyeshadow with paper!
-/obj/item/weapon/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/paper/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!ishuman(M))
 		return
 
@@ -174,7 +174,7 @@
 	else
 		..()
 
-/obj/item/weapon/hair_dye
+/obj/item/hair_dye
 	name = "can of hair dye"
 	desc = "A can of sprayable hair dye. There is a dial on the top for color selection."
 	icon = 'icons/obj/items.dmi'
@@ -185,20 +185,20 @@
 	var/color_g = 255
 	var/color_b = 255
 
-/obj/item/weapon/hair_dye/New()
+/obj/item/hair_dye/New()
 	..()
 	color_r = rand(0,255)
 	color_g = rand(0,255)
 	color_b = rand(0,255)
 	update_icon()
 
-/obj/item/weapon/hair_dye/update_icon()
+/obj/item/hair_dye/update_icon()
 	overlays.len = 0
 	var/icon/dye_color = new/icon("icon" = 'icons/obj/items.dmi', "icon_state" = "dye_color_overlay")
 	dye_color.Blend(rgb(color_r, color_g, color_b), ICON_ADD)
 	overlays += dye_color
 
-/obj/item/weapon/hair_dye/attack_self(mob/user as mob)
+/obj/item/hair_dye/attack_self(mob/user as mob)
 	var/new_color = input(user, "Choose the dye's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
@@ -206,7 +206,7 @@
 		color_b = hex2num(copytext(new_color, 6, 8))
 	update_icon()
 
-/obj/item/weapon/hair_dye/attack(mob/M as mob, mob/user as mob)
+/obj/item/hair_dye/attack(mob/M as mob, mob/user as mob)
 	if(!istype(M, /mob))
 		return
 
@@ -261,7 +261,7 @@
 	else
 		to_chat(user, "<span class='notice'>\The [M] doesn't seem to have any hair!</span>")
 
-/obj/item/weapon/hair_dye/proc/color_hair(mob/living/carbon/human/H, var/facial = 0)
+/obj/item/hair_dye/proc/color_hair(mob/living/carbon/human/H, var/facial = 0)
 	if(!H)
 		return
 	if(facial)
@@ -277,16 +277,16 @@
 		H.update_body()
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
-/obj/item/weapon/hair_dye/skin_dye
+/obj/item/hair_dye/skin_dye
 	name = "magic skin dye"
 	desc = "Bubble, bubble, toil and trouble!"
 	var/uses = 3
 
-/obj/item/weapon/hair_dye/skin_dye/examine(mob/user)
+/obj/item/hair_dye/skin_dye/examine(mob/user)
 	..()
 	to_chat(user,"<span class='info'>It has [uses] uses left.</span>")
 
-/obj/item/weapon/hair_dye/skin_dye/attack(mob/M, mob/user)
+/obj/item/hair_dye/skin_dye/attack(mob/M, mob/user)
 	if(!ishuman(M))
 		return
 	var/mob/living/carbon/human/H = M
@@ -301,7 +301,7 @@
 	else
 		dye(H)
 
-/obj/item/weapon/hair_dye/skin_dye/proc/dye(mob/living/carbon/human/H)
+/obj/item/hair_dye/skin_dye/proc/dye(mob/living/carbon/human/H)
 	H.species.anatomy_flags |= MULTICOLOR
 	H.multicolor_skin_r = color_r
 	H.multicolor_skin_g = color_g
@@ -316,15 +316,15 @@
 	if(!uses)
 		qdel(src)
 
-/obj/item/weapon/hair_dye/skin_dye/discount
+/obj/item/hair_dye/skin_dye/discount
 	name = "discount skin dye"
 	desc = "This is... probably no more unhealthy than a spray-on tan, right?"
 
-/obj/item/weapon/hair_dye/skin_dye/discount/dye(mob/living/carbon/human/H)
+/obj/item/hair_dye/skin_dye/discount/dye(mob/living/carbon/human/H)
 	..()
 	H.reagents.add_reagent(TOXIN,1)
 
-/obj/item/weapon/invisible_spray
+/obj/item/invisible_spray
 	name = "can of invisible spray"
 	desc = "A can of... invisibility? The label reads: \"Wears off after five minutes.\""
 	icon = 'icons/obj/items.dmi'
@@ -337,7 +337,7 @@
 	var/static/list/prohibited_objects = list( //For fun removal
 		)
 
-/obj/item/weapon/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
+/obj/item/invisible_spray/preattack(atom/movable/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return 0
 	if(!istype(target))
@@ -403,11 +403,11 @@
 		return 0
 	return 1
 
-/obj/item/weapon/invisible_spray/permanent
+/obj/item/invisible_spray/permanent
 	desc = "A can of... invisibility?"
 	permanent = 1
 
-/obj/item/weapon/razor
+/obj/item/razor
 	name = "electric razor"
 	desc = "The latest and greatest power razor born from the science of shaving."
 	icon = 'icons/obj/items.dmi'
@@ -415,7 +415,7 @@
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_IRON = 340)
 
-/obj/item/weapon/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
+/obj/item/razor/proc/shave(mob/living/carbon/human/H, location = "mouth")
 	if(location == "mouth")
 		H.my_appearance.f_style = "Shaved"
 	else
@@ -425,7 +425,7 @@
 	playsound(loc, 'sound/items/Welder2.ogg', 20, 1)
 
 
-/obj/item/weapon/razor/attack(mob/M, mob/user)
+/obj/item/razor/attack(mob/M, mob/user)
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/location = user.zone_sel.selecting
@@ -482,7 +482,7 @@
 	else
 		..()
 
-/obj/item/weapon/pocket_mirror //shamelessly copypasted from [mirror.dm]
+/obj/item/pocket_mirror //shamelessly copypasted from [mirror.dm]
 	name = "pocket mirror"
 	desc = "Mirror mirror on the wall, who's the most robust of them all? Touching the mirror will bring out Nanotrasen's state of the art hair modification system."
 	icon = 'icons/obj/items.dmi'
@@ -492,7 +492,7 @@
 
 	var/shattered = 0
 
-/obj/item/weapon/pocket_mirror/attack_self(mob/user)
+/obj/item/pocket_mirror/attack_self(mob/user)
 	if (shattered)
 		return
 
@@ -521,7 +521,7 @@
 					return
 		handle_hair(H)
 
-/obj/item/weapon/pocket_mirror/proc/handle_hair(mob/user)
+/obj/item/pocket_mirror/proc/handle_hair(mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, (H.species.name || null))
@@ -534,7 +534,7 @@
 				H.my_appearance.h_style = new_style
 				H.update_hair()
 
-/obj/item/weapon/pocket_mirror/proc/shatter()
+/obj/item/pocket_mirror/proc/shatter()
 	if (shattered)
 		return
 	shattered = 1
@@ -542,32 +542,32 @@
 	playsound(src, "shatter", 70, 1)
 	desc = "Oh no, seven years of bad luck!"
 
-/obj/item/weapon/pocket_mirror/kick_act()
+/obj/item/pocket_mirror/kick_act()
 	shatter()
 	..()
 
-/obj/item/weapon/pocket_mirror/throw_impact(atom/hit_atom)
+/obj/item/pocket_mirror/throw_impact(atom/hit_atom)
 	..()
 	if(!isturf(hit_atom))
 		return
 	if (prob(25))
 		shatter()
 
-/obj/item/weapon/pocket_mirror/comb
+/obj/item/pocket_mirror/comb
 	name = "hair comb"
 	desc = "Despite the name honey is not included nor recommended for use with this."
 	icon_state = "comb"
 
-/obj/item/weapon/pocket_mirror/comb/shatter()
+/obj/item/pocket_mirror/comb/shatter()
 	return
 
-/obj/item/weapon/pocket_mirror/comb/attack(mob/M, mob/user)
+/obj/item/pocket_mirror/comb/attack(mob/M, mob/user)
 	if(M == user)
 		handle_hair(user)
 	else
 		..()
 
-/obj/item/weapon/nanitecontacts
+/obj/item/nanitecontacts
 	name = "nanite contacts"
 	desc = "Deploys nanobots to your eyes to change their color."
 	icon = 'icons/obj/items.dmi'
@@ -578,20 +578,20 @@
 	var/color_g = 255
 	var/color_b = 255
 
-/obj/item/weapon/nanitecontacts/New()
+/obj/item/nanitecontacts/New()
 	..()
 	color_r = rand(0,255)
 	color_g = rand(0,255)
 	color_b = rand(0,255)
 	update_icon()
 
-/obj/item/weapon/nanitecontacts/update_icon()
+/obj/item/nanitecontacts/update_icon()
 	overlays.len = 0
 	var/image/I = image(icon = 'icons/obj/items.dmi', icon_state = "contacts_overlay")
 	I.color = rgb(color_r, color_g, color_b)
 	overlays += I
 
-/obj/item/weapon/nanitecontacts/attack_self(mob/user)
+/obj/item/nanitecontacts/attack_self(mob/user)
 	var/new_color = input(user, "Choose the contact's color:", "Color Select", rgb(color_r, color_g, color_b)) as color|null
 	if(new_color)
 		color_r = hex2num(copytext(new_color, 2, 4))
@@ -599,7 +599,7 @@
 		color_b = hex2num(copytext(new_color, 6, 8))
 	update_icon()
 
-/obj/item/weapon/nanitecontacts/attack(mob/M, mob/user)
+/obj/item/nanitecontacts/attack(mob/M, mob/user)
 	if(!istype(M))
 		return
 
@@ -625,7 +625,7 @@
 	else
 		to_chat(user, "<span class='notice'>\The [M]'s eyes don't fit in the contacts!</span>")
 
-/obj/item/weapon/nanitecontacts/proc/color_eyes(mob/living/carbon/human/H)
+/obj/item/nanitecontacts/proc/color_eyes(mob/living/carbon/human/H)
 	if(!H)
 		return
 	else

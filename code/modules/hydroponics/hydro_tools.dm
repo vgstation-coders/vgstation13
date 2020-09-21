@@ -1,13 +1,13 @@
 //Analyzer, pestkillers, weedkillers, nutrients, hatchets, cutters.
 
-/obj/item/weapon/wirecutters/clippers
+/obj/item/wirecutters/clippers
 	name = "plant clippers"
 	desc = "A tool used to take samples from plants."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/misc_tools.dmi', "right_hand" = 'icons/mob/in-hand/right/misc_tools.dmi')
 	icon_state = "plantclippers"
 	item_state = "plantclippers"
 
-/obj/item/weapon/wirecutters/clippers/New()
+/obj/item/wirecutters/clippers/New()
 	..()
 	icon_state = "plantclippers"
 	item_state = "plantclippers"
@@ -29,15 +29,15 @@
 	var/datum/reagents/grown_reagents
 	if(istype(target,/obj/structure/rack) || istype(target,/obj/structure/table))
 		return ..()
-	else if(istype(target,/obj/item/weapon/reagent_containers/food/snacks/grown))
+	else if(istype(target,/obj/item/reagent_containers/food/snacks/grown))
 
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/G = target
+		var/obj/item/reagent_containers/food/snacks/grown/G = target
 		grown_seed = SSplant.seeds[G.plantname]
 		grown_reagents = G.reagents
 
-	else if(istype(target,/obj/item/weapon/grown))
+	else if(istype(target,/obj/item/grown))
 
-		var/obj/item/weapon/grown/G = target
+		var/obj/item/grown/G = target
 		grown_seed = SSplant.seeds[G.plantname]
 		grown_reagents = G.reagents
 
@@ -245,7 +245,7 @@
 		to_chat(user, "<span class='warning'>[bicon(src)] \The [src] is not yet ready to print again.</span>")
 		return
 	last_print = world.time
-	var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(get_turf(src))
+	var/obj/item/paper/P = new /obj/item/paper(get_turf(src))
 	P.name = "paper - [form_title]"
 	P.info = "[last_data]"
 	if(istype(user,/mob/living/carbon/human))
@@ -257,7 +257,7 @@
 // Hydroponics Tools
 // *************************************
 
-/obj/item/weapon/plantspray
+/obj/item/plantspray
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
 	item_state = "spray"
 	flags = FPRINT | NO_ATTACK_MSG
@@ -270,20 +270,20 @@
 	var/pest_kill_str = 0
 	var/weed_kill_str = 0
 
-/obj/item/weapon/plantspray/weeds // -- Skie
+/obj/item/plantspray/weeds // -- Skie
 
 	name = "weed-spray"
 	desc = "It's a toxic mixture, in spray form, to kill small weeds."
 	icon_state = "weedspray"
 	weed_kill_str = 6
 
-/obj/item/weapon/plantspray/pests
+/obj/item/plantspray/pests
 	name = "pest-spray"
 	desc = "It's some pest eliminator spray! <I>Do not inhale!</I>"
 	icon_state = "pestspray"
 	pest_kill_str = 6
 
-/obj/item/weapon/plantspray/pests/proc/use(amount = 1)
+/obj/item/plantspray/pests/proc/use(amount = 1)
 	if(pest_kill_str >= amount)
 		pest_kill_str -= amount
 
@@ -293,30 +293,30 @@
 		return TRUE
 	return FALSE
 
-/obj/item/weapon/plantspray/pests/old
+/obj/item/plantspray/pests/old
 	name = "bottle of pestkiller"
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "bottle16"
 
-/obj/item/weapon/plantspray/pests/old/carbaryl
+/obj/item/plantspray/pests/old/carbaryl
 	name = "bottle of carbaryl"
 	icon_state = "bottle16"
 	toxicity = 4
 	pest_kill_str = 2
 
-/obj/item/weapon/plantspray/pests/old/lindane
+/obj/item/plantspray/pests/old/lindane
 	name = "bottle of lindane"
 	icon_state = "bottle18"
 	toxicity = 6
 	pest_kill_str = 4
 
-/obj/item/weapon/plantspray/pests/old/phosmet
+/obj/item/plantspray/pests/old/phosmet
 	name = "bottle of phosmet"
 	icon_state = "bottle15"
 	toxicity = 8
 	pest_kill_str = 7
 
-/obj/item/weapon/minihoe // -- Numbers
+/obj/item/minihoe // -- Numbers
 	name = "mini hoe"
 	desc = "It's used for removing weeds or scratching your back."
 	icon = 'icons/obj/weapons.dmi'
@@ -369,7 +369,7 @@
 	weed_kill_str = 7
 
 //Hatchets and things to kill kudzu
-/obj/item/weapon/hatchet
+/obj/item/hatchet
 	name = "hatchet"
 	desc = "A very sharp axe blade upon a short fibremetal handle. It has a long history of chopping things, but now it is used for chopping wood."
 	icon = 'icons/obj/weapons.dmi'
@@ -388,19 +388,19 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=1"
 	attack_verb = list("chops", "tears", "cuts")
 
-/obj/item/weapon/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/hatchet/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(loc, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	return ..()
 
 //If it's a hatchet it goes here. I guess
-/obj/item/weapon/hatchet/unathiknife
+/obj/item/hatchet/unathiknife
 	name = "dueling knife"
 	desc = "A length of leather-bound wood studded with razor-sharp teeth. How crude."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "unathiknife"
 	attack_verb = list("rips", "tears", "cuts")
 
-/obj/item/weapon/scythe
+/obj/item/scythe
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "scythe0"
 	name = "scythe"
@@ -417,7 +417,7 @@
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_COMBAT + "=2"
 	attack_verb = list("chops", "slices", "cuts", "reaps")
 
-/obj/item/weapon/scythe/afterattack(atom/A, mob/user as mob, proximity)
+/obj/item/scythe/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)
 		return
 	if(istype(A, /obj/effect/plantsegment) || istype(A, /turf/simulated/floor) || istype(A, /obj/effect/biomass) || istype(A, /obj/structure/cable/powercreeper))
@@ -459,7 +459,7 @@
 	var/being_potted = FALSE
 
 /obj/item/claypot/attackby(var/obj/item/O,var/mob/user)
-	if(istype(O,/obj/item/weapon/reagent_containers/food/snacks/grown) || istype(O,/obj/item/weapon/grown))
+	if(istype(O,/obj/item/reagent_containers/food/snacks/grown) || istype(O,/obj/item/grown))
 		to_chat(user, "<span class='warning'>You have to transplant the plant into the pot directly from the hydroponic tray, using a spade.</span>")
 	else if(isshovel(O))
 		to_chat(user, "<span class='warning'>There is no plant to remove in \the [src].</span>")

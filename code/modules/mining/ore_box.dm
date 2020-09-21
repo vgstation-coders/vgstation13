@@ -10,7 +10,7 @@
 	starting_materials = list()
 	var/list/stored_ores = list()
 
-/obj/structure/ore_box/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/ore_box/attackby(obj/item/W as obj, mob/user as mob)
 	// this makes it possible for supply cyborgs to interact with the box
 	if (istype(W, /obj/item/device/mining_scanner))
 		attack_hand(user)
@@ -21,9 +21,9 @@
 			user.u_equip(W,0)
 			qdel(W)
 
-	if (istype(W, /obj/item/weapon/storage))
+	if (istype(W, /obj/item/storage))
 		var/turf/T=get_turf(src)
-		var/obj/item/weapon/storage/S = W
+		var/obj/item/storage/S = W
 		S.hide_from(usr)
 		for(var/obj/item/stack/ore/O in S.contents)
 			if(try_add_ore(O))

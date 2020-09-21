@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/energy/temperature
+/obj/item/gun/energy/temperature
 	name = "temperature gun"
 	icon = 'icons/obj/gun_temperature.dmi'
 	icon_state = "tempgun_4"
@@ -13,7 +13,7 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=4;" + Tc_POWERSTORAGE + "=3;" + Tc_MAGNETS + "=2"
 
 	projectile_type = "/obj/item/projectile/temp"
-	cell_type = "/obj/item/weapon/cell/temperaturegun"
+	cell_type = "/obj/item/cell/temperaturegun"
 
 	var/powercost = ""
 	var/powercostcolor = ""
@@ -21,31 +21,31 @@
 	var/emagged = 0			//ups the temperature cap from 500 to 1000, targets hit by beams over 500 Kelvin will burst into flames
 	var/dat = ""
 
-/obj/item/weapon/gun/energy/temperature/New()
+/obj/item/gun/energy/temperature/New()
 	..()
 	update_icon()
 	processing_objects.Add(src)
 
 
-/obj/item/weapon/gun/energy/temperature/Destroy()
+/obj/item/gun/energy/temperature/Destroy()
 	processing_objects.Remove(src)
 	..()
 
 
-/obj/item/weapon/gun/energy/temperature/attack_self(mob/living/user as mob)
+/obj/item/gun/energy/temperature/attack_self(mob/living/user as mob)
 	user.set_machine(src)
 	update_dat()
 
 	user << browse("<TITLE>Temperature Gun Configuration</TITLE><HR>[dat]", "window=tempgun;size=510x102")
 	onclose(user, "tempgun")
 
-/obj/item/weapon/gun/energy/temperature/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/gun/energy/temperature/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/card/emag) && !emagged)
 		emagged = 1
 		to_chat(user, "<span class='caution'>You double the gun's temperature cap ! Targets hit by searing beams will burst into flames !</span>")
 		desc = "A gun that changes the body temperature of its targets. Its temperature cap has been hacked"
 
-/obj/item/weapon/gun/energy/temperature/Topic(href, href_list)
+/obj/item/gun/energy/temperature/Topic(href, href_list)
 	if (..())
 		return
 	usr.set_machine(src)
@@ -63,7 +63,7 @@
 	return
 
 
-/obj/item/weapon/gun/energy/temperature/process()
+/obj/item/gun/energy/temperature/process()
 	switch(temperature)
 		if(0 to 100)
 			charge_cost = 300
@@ -110,7 +110,7 @@
 		update_icon()
 	return
 
-/obj/item/weapon/gun/energy/temperature/proc/update_dat()
+/obj/item/gun/energy/temperature/proc/update_dat()
 	dat = ""
 	dat += "Current output temperature: "
 	if(temperature > 500)
@@ -135,7 +135,7 @@
 	dat += "Power cost: "
 	dat += "<FONT color=[powercostcolor]><B>[powercost]</B></FONT>"
 
-/obj/item/weapon/gun/energy/temperature/proc/update_temperature()
+/obj/item/gun/energy/temperature/proc/update_temperature()
 	switch(temperature)
 		if(501 to INFINITY)
 			item_state = "tempgun_8"
@@ -157,7 +157,7 @@
 			item_state = "tempgun_0"
 	icon_state = item_state
 
-/obj/item/weapon/gun/energy/temperature/proc/update_charge()
+/obj/item/gun/energy/temperature/proc/update_charge()
 	var/charge = power_supply.charge
 	switch(charge)
 		if(900 to INFINITY)
@@ -181,13 +181,13 @@
 		if(-INFINITY to 100)
 			overlays += image(icon = icon, icon_state = "0")
 
-/obj/item/weapon/gun/energy/temperature/proc/update_user()
+/obj/item/gun/energy/temperature/proc/update_user()
 	if (istype(loc,/mob/living/carbon))
 		var/mob/living/carbon/M = loc
 		M.update_inv_back()
 		M.update_inv_hands()
 
-/obj/item/weapon/gun/energy/temperature/update_icon()
+/obj/item/gun/energy/temperature/update_icon()
 	overlays = 0
 	update_temperature()
 	update_user()

@@ -24,7 +24,7 @@
 	corpse = /obj/effect/landmark/corpse/nazi
 
 	items_to_drop = list(
-		/obj/item/weapon/kitchen/utensil/knife/nazi,
+		/obj/item/kitchen/utensil/knife/nazi,
 		)
 
 	faction = "nazi"
@@ -82,7 +82,7 @@
 			ranged = 0
 
 /mob/living/simple_animal/hostile/humanoid/nazi/proc/droploot()
-	var/obj/item/weapon/gun/projectile/luger/dropgun = new(loc)
+	var/obj/item/gun/projectile/luger/dropgun = new(loc)
 	if(!ammo)
 		qdel(dropgun.chambered)
 		dropgun.chambered = null
@@ -169,8 +169,8 @@
 				ranged = 1
 
 /mob/living/simple_animal/hostile/humanoid/nazi/soldier/droploot()
-	var/obj/item/weapon/gun/energy/plasma/MP40k/dropgun = new(loc)
-	var/obj/item/weapon/cell/guncell = dropgun.power_supply
+	var/obj/item/gun/energy/plasma/MP40k/dropgun = new(loc)
+	var/obj/item/cell/guncell = dropgun.power_supply
 	guncell.charge = min(guncell.maxcharge,25+(75 * ammo))
 
 
@@ -210,7 +210,7 @@
 					say("Come over here. I promise I will kill you!")
 
 /mob/living/simple_animal/hostile/humanoid/nazi/officer/droploot()
-	var/obj/item/weapon/gun/projectile/mateba/M = new(loc)
+	var/obj/item/gun/projectile/mateba/M = new(loc)
 	M.loaded = list()
 	for(var/i=1;i<=ammo;i++)
 		M.loaded += new /obj/item/ammo_casing/a357(M)
@@ -374,4 +374,4 @@
 	var/turf/eloc = get_turf(loc)
 	qdel(src)
 	explosion(eloc,1,2,3)
-	new /obj/item/weapon/gun/gatling(eloc)
+	new /obj/item/gun/gatling(eloc)

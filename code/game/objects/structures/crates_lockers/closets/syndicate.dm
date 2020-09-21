@@ -11,16 +11,16 @@
 
 /obj/structure/closet/syndicate/personal/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/tank/jetpack/oxygen/nukeops,
+		/obj/item/tank/jetpack/oxygen/nukeops,
 		/obj/item/clothing/mask/gas/syndicate,
 		/obj/item/clothing/under/syndicate,
 		/obj/item/clothing/suit/space/rig/syndi, //Helmet's in the rig.
-		/obj/item/weapon/cell/high,
+		/obj/item/cell/high,
 		/obj/item/device/pda/syndicate/door,
-		/obj/item/weapon/pinpointer/nukeop,
-		/obj/item/weapon/shield/energy,
+		/obj/item/pinpointer/nukeop,
+		/obj/item/shield/energy,
 		/obj/item/clothing/shoes/magboots/syndie,
-		/obj/item/weapon/storage/bag/ammo_pouch,
+		/obj/item/storage/bag/ammo_pouch,
 		/obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical,
 		/obj/item/clothing/accessory/holster/handgun/waist,
 		/obj/item/clothing/accessory/storage/bandolier,
@@ -32,10 +32,10 @@
 /obj/structure/closet/syndicate/nuclear/atoms_to_spawn()
 	return list(
 		/obj/item/ammo_storage/magazine/a12mm/ops = 5,
-		/obj/item/weapon/storage/box/handcuffs,
-		/obj/item/weapon/storage/box/flashbangs,
-		/obj/item/weapon/storage/box/emps,
-		/obj/item/weapon/gun/energy/gun = 5,
+		/obj/item/storage/box/handcuffs,
+		/obj/item/storage/box/flashbangs,
+		/obj/item/storage/box/emps,
+		/obj/item/gun/energy/gun = 5,
 		/obj/item/device/pda/syndicate,
 		/obj/item/device/radio/uplink/nukeops,
 	)
@@ -54,7 +54,7 @@
 
 	//Sad trombone
 	if(pickednum == 1)
-		var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(src)
+		var/obj/item/paper/P = new /obj/item/paper(src)
 		P.name = "IOU"
 		P.info = "Sorry man, we needed the money so we sold your stash. It's ok, we'll double our money for sure this time!"
 
@@ -93,7 +93,7 @@
 
 	//Jetpack (You hit the jackpot!)
 	if(pickednum == 50)
-		new /obj/item/weapon/tank/jetpack/carbondioxide(src)
+		new /obj/item/tank/jetpack/carbondioxide(src)
 
 /obj/structure/closet/syndicate/resources/everything
 	desc = "It's an emergency storage closet for repairs."
@@ -131,7 +131,7 @@
 		/obj/item/clothing/shoes/magboots/vox,
 		/obj/item/clothing/suit/space/vox/pressure,
 		/obj/item/clothing/under/vox/vox_casual,
-		/obj/item/weapon/tank/jetpack/nitrogen,
+		/obj/item/tank/jetpack/nitrogen,
 	)
 
 
@@ -148,7 +148,7 @@
 		/obj/item/clothing/mask/breath/vox,
 		/obj/item/clothing/shoes/magboots/vox,
 		/obj/item/clothing/under/vox/vox_casual,
-		/obj/item/weapon/tank/jetpack/nitrogen,
+		/obj/item/tank/jetpack/nitrogen,
 		/obj/item/clothing/suit/space/vox/civ/mushmen,
 		/obj/item/clothing/head/helmet/space/vox/civ/mushmen,
 	)

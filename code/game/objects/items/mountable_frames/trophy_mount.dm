@@ -50,7 +50,7 @@
 	if(held_item)
 		held_item.examine(user, "", FALSE)
 
-/obj/item/mounted/frame/trophy_mount/attackby(obj/item/weapon/W, mob/user, params)
+/obj/item/mounted/frame/trophy_mount/attackby(obj/item/W, mob/user, params)
 	if(W.is_wrench(user) && held_item)
 		to_chat(user, "<span class='notice'>\The [held_item] is in the way!</span>")
 		return
@@ -65,7 +65,7 @@
 		params_list = list()
 		mount_item(I, user)
 
-/obj/item/mounted/frame/trophy_mount/proc/mount_item(obj/item/weapon/W, mob/user)
+/obj/item/mounted/frame/trophy_mount/proc/mount_item(obj/item/W, mob/user)
 	if(!isturf(loc))
 		if(user)
 			to_chat(user, "<span class = 'warning'>You can't quite mount \the [W] onto \the [src]. Try placing it down on something.</span>")
@@ -136,7 +136,7 @@
 /obj/structure/trophy_mount/attack_hand(mob/user)
 	to_chat(user, "<span class='notice'>\The [src] is mounted securely. You'll need something to pry it off the wall.</span>")
 
-/obj/structure/trophy_mount/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/trophy_mount/attackby(obj/item/W, mob/user)
 	if(iscrowbar(W))
 		to_chat(user, "You begin prying \the [initial(name)] off the wall.")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)

@@ -26,11 +26,11 @@ var/global/no_pin_for_debit = TRUE
 			return D
 
 
-/obj/proc/get_card_account(var/obj/item/weapon/card/I, var/mob/user=null, var/terminal_name="", var/transaction_purpose="", var/require_pin=0)
+/obj/proc/get_card_account(var/obj/item/card/I, var/mob/user=null, var/terminal_name="", var/transaction_purpose="", var/require_pin=0)
 	if(terminal_name=="")
 		terminal_name=src.name
-	if (istype(I, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/C = I
+	if (istype(I, /obj/item/card/id))
+		var/obj/item/card/id/C = I
 		var/attempt_pin=0
 		var/datum/money_account/D = get_money_account(C.associated_account_number)
 		if(require_pin && user)
@@ -42,7 +42,7 @@ var/global/no_pin_for_debit = TRUE
 
 /mob/proc/get_worn_id_account(var/require_pin=0, var/mob/user=null)
 	if(ishuman(src))
-		var/obj/item/weapon/card/id/I = get_id_card()
+		var/obj/item/card/id/I = get_id_card()
 		var/attempt_pin=0
 		if(!istype(I))
 			return null
@@ -104,7 +104,7 @@ var/global/no_pin_for_debit = TRUE
 	For checking if the mob can gain access to an account.
 	obj/proc/charge_flow_verify_security(
 		obj/machinery/account_database/linked_db = Account database for account lookup, however it isn't required if you've already gathered the account already.
-		obj/item/weapon/card/card 				 = Card for presence checking and account fetching if missing account.
+		obj/item/card/card 				 = Card for presence checking and account fetching if missing account.
 		mob/user								 = Who to prompt for information and send informational messages.
 		datum/money_account/account				 = The account to check security for. It can be null if a card is present.
 	)
@@ -117,7 +117,7 @@ var/global/no_pin_for_debit = TRUE
 	CARD_CAPTURE_FAILURE_USER_CANCELED
 */
 
-/obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/datum/money_account/account, var/debit_requires_pin)
+/obj/proc/charge_flow_verify_security(var/obj/machinery/account_database/linked_db, var/obj/item/card/card, var/mob/user, var/datum/money_account/account, var/debit_requires_pin)
 	if(!account)
 		if(linked_db)
 			if(!linked_db.activated || linked_db.stat & (BROKEN|NOPOWER))
@@ -148,7 +148,7 @@ var/global/no_pin_for_debit = TRUE
 				// Security level is 2 and the card is not present, fail.
 				to_chat(user, "[bicon(src)] <span class='warning'>Card Not Present transactions are not allowed for this account.</span>")
 				return CARD_CAPTURE_FAILURE_SECURITY_LEVEL
-			if(no_pin_for_debit && !debit_requires_pin && account.security_level < 2 && istype(card, /obj/item/weapon/card/debit))
+			if(no_pin_for_debit && !debit_requires_pin && account.security_level < 2 && istype(card, /obj/item/card/debit))
 				// Oh boy. The fun is engaged and everyone can swipe a debit without it's PIN.
 				// May your select deity help you if you lost your debit and have a security level of 0,
 				// letting free the flow of your funds to anyone who made a debit card with your account on it.
@@ -176,7 +176,7 @@ var/global/no_pin_for_debit = TRUE
 	Do-it-all proc to standardize card swipe processing.
 	obj/proc/charge_flow(
 		obj/machinery/account_database/linked_db	= The account database we will use to look up accounts.
-		obj/item/weapon/card/card					= The card we will attempt to charge, but it is optional if the terminal will allow manual entry
+		obj/item/card/card					= The card we will attempt to charge, but it is optional if the terminal will allow manual entry
 		mob/user									= The user who we will prompt for pins, account information, and such.
 		transaction_amount							= The amount we will charge
 		datum/money_account/dest					= The destination of the funds
@@ -204,7 +204,7 @@ var/global/no_pin_for_debit = TRUE
 #define SECONDARY_SAME_AS_DEST (transaction_amount_secondary && secondary_money_account.account_number == dest.account_number)
 // Defines to prevent spaghetti code and improve readability.
 
-/obj/proc/charge_flow(var/obj/machinery/account_database/linked_db, var/obj/item/weapon/card/card, var/mob/user, var/transaction_amount, var/datum/money_account/dest, var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN")
+/obj/proc/charge_flow(var/obj/machinery/account_database/linked_db, var/obj/item/card/card, var/mob/user, var/transaction_amount, var/datum/money_account/dest, var/transaction_purpose, var/terminal_name="", var/terminal_id=0, var/dest_name = "UNKNOWN")
 	var/datum/money_account/primary_money_account
 	// Primary payment.
 	var/datum/money_account/secondary_money_account
@@ -231,12 +231,12 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Destination account disabled.</span>")
 		return CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT
 
-	if(istype(card, /obj/item/weapon/card))
+	if(istype(card, /obj/item/card))
 		// The card is present, so we can fetch the account information ourselves.
 		visible_message("<span class='info'>[user] swipes a card through [src].</span>")
-		if(istype(card, /obj/item/weapon/card/id))
+		if(istype(card, /obj/item/card/id))
 			// Expect more cards with virtual accounts.
-			var/obj/item/weapon/card/id/card_id = card
+			var/obj/item/card/id/card_id = card
 			primary_money_account = card_id.virtual_wallet
 			if(!primary_money_account)
 				// A lot of machines keep doing this so for the sake of conformity we'll do it here too.
@@ -318,9 +318,9 @@ var/global/no_pin_for_debit = TRUE
 		to_chat(user, "[bicon(src)] <span class='warning'>Not enough funds to process transaction.</span>")
 		return CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS
 
-	if(card && istype(card, /obj/item/weapon/card/debit))
+	if(card && istype(card, /obj/item/card/debit))
 		// Using debit, find the authorized name.
-		var/obj/item/weapon/card/debit/debit_card = card
+		var/obj/item/card/debit/debit_card = card
 		authorized = debit_card.authorized_name
 
 	if(transaction_amount_secondary)

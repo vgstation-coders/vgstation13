@@ -22,7 +22,7 @@
 		return
 	return ..()
 
-/obj/structure/reagent_dispensers/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/reagent_dispensers/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && wrenchable())
 		return wrenchAnchor(user, W)
 
@@ -122,7 +122,7 @@
 				rig = null
 			overlays = new/list()
 
-/obj/structure/reagent_dispensers/fueltank/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/reagent_dispensers/fueltank/attackby(obj/item/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
 		user.visible_message("[user] wrenches [src]'s faucet [modded ? "closed" : "open"].", \
 			"You wrench [src]'s faucet [modded ? "closed" : "open"]")
@@ -246,7 +246,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/attack_hand(mob/user as mob)
 	if(paper_cups > 0)
-		user.put_in_hands(new/obj/item/weapon/reagent_containers/food/drinks/sillycup())
+		user.put_in_hands(new/obj/item/reagent_containers/food/drinks/sillycup())
 		to_chat(user, "You pick up an empty paper cup from \the [src]")
 		paper_cups--
 		desc = "[initial(desc)] There's [paper_cups] paper cups stored inside."
@@ -256,7 +256,7 @@
 
 /obj/structure/reagent_dispensers/water_cooler/attackby(obj/item/I as obj, mob/user as mob)
 	if (iswelder(I))
-		var/obj/item/weapon/weldingtool/WT = I
+		var/obj/item/weldingtool/WT = I
 		if(WT.remove_fuel(0, user))
 			new /obj/item/stack/sheet/mineral/plastic (src.loc,4)
 			qdel(src)
@@ -389,7 +389,7 @@
 /obj/structure/reagent_dispensers/cauldron/hide_own_reagents()
 	return TRUE
 
-/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/weapon/reagent_containers/R, var/mob/user)
+/obj/structure/reagent_dispensers/cauldron/can_transfer(var/obj/item/reagent_containers/R, var/mob/user)
 	if(user.a_intent != I_HELP)
 		return TRUE
 	return FALSE
@@ -425,11 +425,11 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 
-/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user))
 		return
-	if(istype(W,/obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
+	if(istype(W,/obj/item/grab))
+		var/obj/item/grab/G = W
 		var/mob/living/target = G.affecting
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the barrel!</span>")
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time

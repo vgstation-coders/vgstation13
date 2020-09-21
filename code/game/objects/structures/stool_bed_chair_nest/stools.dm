@@ -1,4 +1,4 @@
-/obj/item/weapon/stool
+/obj/item/stool
 	name = "stool"
 	desc = "Apply butt."
 	icon = 'icons/obj/stools-chairs-beds.dmi'
@@ -9,20 +9,20 @@
 	w_class = W_CLASS_HUGE
 	sheet_type = /obj/item/stack/sheet/metal
 
-/obj/item/weapon/stool/bar
+/obj/item/stool/bar
 	name = "bar stool"
 	desc = "Apply butt. Get drunk."
 	icon_state = "bar-stool"
 	
-/obj/item/weapon/stool/cushion
+/obj/item/stool/cushion
 	name = "cushion"
 	desc = "Apply butt. Get comfy."
 	icon_state = "cushion"
 
-/obj/item/weapon/stool/hologram
+/obj/item/stool/hologram
 	sheet_type = null
 
-/obj/item/weapon/stool/piano
+/obj/item/stool/piano
 	name = "piano stool"
 	desc = "Apply butt. Become Mozart."
 	icon_state = "stool_piano"
@@ -30,15 +30,15 @@
 	fire_fuel = 3
 	sheet_type = /obj/item/stack/sheet/wood
 
-/obj/item/weapon/stool/piano/initialize()
+/obj/item/stool/piano/initialize()
 	..()
 	handle_layer()
 
 //So they don't get picked up.
-/obj/item/weapon/stool/piano/attack_hand()
+/obj/item/stool/piano/attack_hand()
 	return
 
-/obj/item/weapon/stool/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/stool/attackby(var/obj/item/W, var/mob/user)
 	if(W.is_wrench(user) && sheet_type)
 		W.playtoolsound(src, 50)
 		drop_stack(sheet_type, loc, 1, user)
@@ -46,12 +46,12 @@
 
 	. = ..()
 
-/obj/item/weapon/stool/cultify()
+/obj/item/stool/cultify()
 	var/obj/structure/bed/chair/wood/wings/I = new /obj/structure/bed/chair/wood/wings(loc)
 	I.dir = dir
 	. = ..()
 
-/obj/item/weapon/stool/attack(mob/M as mob, mob/user as mob)
+/obj/item/stool/attack(mob/M as mob, mob/user as mob)
 	if(prob(5) && istype(M, /mob/living) && sheet_type)
 		user.visible_message("<span class='warning'>[user] breaks \the [src] over [M]'s back!.</span>")
 		user.u_equip(src, 0)
@@ -67,12 +67,12 @@
 
 	. = ..()
 
-/obj/item/weapon/stool/piano/update_dir()
+/obj/item/stool/piano/update_dir()
 	..()
 
 	handle_layer()
 
-/obj/item/weapon/stool/piano/proc/handle_layer()
+/obj/item/stool/piano/proc/handle_layer()
 	if(dir == NORTH)
 		plane = ABOVE_HUMAN_PLANE
 	else

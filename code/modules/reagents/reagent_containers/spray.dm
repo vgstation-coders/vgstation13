@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/spray
+/obj/item/reagent_containers/spray
 	name = "spray bottle"
 	desc = "A spray bottle, with an unscrewable top."
 	icon = 'icons/obj/janitor.dmi'
@@ -20,9 +20,9 @@
 	var/delay_spraying = TRUE // Whether to delay the next attack after using it
 
 	//! List of things to avoid spraying on close range. TODO Remove snowflake, handle this in every attackby() properly.
-	var/list/ignore_spray_types = list(/obj/item/weapon/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
+	var/list/ignore_spray_types = list(/obj/item/storage, /obj/structure/table, /obj/structure/rack, /obj/structure/closet, /obj/structure/sink)
 
-/obj/item/weapon/reagent_containers/spray/attackby(obj/item/weapon/W, mob/user)
+/obj/item/reagent_containers/spray/attackby(obj/item/W, mob/user)
 	if(user.is_in_modules(src))
 		return
 	if(!melted)
@@ -35,15 +35,15 @@
 			var/obj/item/stack/rods/R = W
 			if(src.loc == user)
 				user.drop_item(src, force_drop = 1)
-				var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
+				var/obj/item/gun_assembly/I = new (get_turf(user), "spraybottle_assembly")
 				user.put_in_hands(I)
 			else
-				new /obj/item/weapon/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
+				new /obj/item/gun_assembly(get_turf(src.loc), "spraybottle_assembly")
 			R.use(1)
 			qdel(src)
 
 
-/obj/item/weapon/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)
+/obj/item/reagent_containers/spray/afterattack(atom/A as mob|obj, mob/user as mob, var/adjacency_flag, var/click_params)
 	if (adjacency_flag && is_type_in_list(A, ignore_spray_types))
 		return
 
@@ -56,11 +56,11 @@
 
 	if (is_empty()) //If empty, checks for a nonempty chempack on the user.
 		var/mob/living/M = user
-		if (M && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack))
-			var/obj/item/weapon/reagent_containers/chempack/P = M.back
+		if (M && M.back && istype(M.back,/obj/item/reagent_containers/chempack))
+			var/obj/item/reagent_containers/chempack/P = M.back
 			if (!P.safety)
 				if (!P.is_empty())
-					if (istype(src,/obj/item/weapon/reagent_containers/spray/chemsprayer)) //The chemsprayer uses three times its amount_per_transfer_from_this per spray.
+					if (istype(src,/obj/item/reagent_containers/spray/chemsprayer)) //The chemsprayer uses three times its amount_per_transfer_from_this per spray.
 						transfer_sub(P, src, amount_per_transfer_from_this*3, user)
 					else
 						transfer_sub(P, src, amount_per_transfer_from_this, user)
@@ -81,17 +81,17 @@
 	// Override for your custom puff behaviour
 	make_puff(A, user)
 
-/obj/item/weapon/reagent_containers/spray/attack_self(var/mob/user)
+/obj/item/reagent_containers/spray/attack_self(var/mob/user)
 	amount_per_transfer_from_this = (amount_per_transfer_from_this == 10 ? 5 : 10)
 	to_chat(user, "<span class='notice'>You switched [amount_per_transfer_from_this == 10 ? "on" : "off"] the pressure nozzle. You'll now use [amount_per_transfer_from_this] units per spray.</span>")
 
-/obj/item/weapon/reagent_containers/spray/restock()
+/obj/item/reagent_containers/spray/restock()
 	if(name == "Polyacid spray")
 		reagents.add_reagent(PACID, 2)
 	else if(name == "Lube spray")
 		reagents.add_reagent(LUBE, 2)
 
-/obj/item/weapon/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
+/obj/item/reagent_containers/spray/proc/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.
@@ -112,16 +112,16 @@
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
 //space cleaner
-/obj/item/weapon/reagent_containers/spray/cleaner
+/obj/item/reagent_containers/spray/cleaner
 	name = "space cleaner"
 	desc = "BLAM!-brand non-foaming space cleaner!"
 
-/obj/item/weapon/reagent_containers/spray/cleaner/New()
+/obj/item/reagent_containers/spray/cleaner/New()
 	..()
 	reagents.add_reagent(CLEANER, 250)
 
 //pepperspray
-/obj/item/weapon/reagent_containers/spray/pepper
+/obj/item/reagent_containers/spray/pepper
 	name = "pepperspray"
 	desc = "Manufactured by UhangInc, used to blind and down an opponent quickly."
 	icon = 'icons/obj/weapons.dmi'
@@ -130,21 +130,21 @@
 	volume = 40
 	amount_per_transfer_from_this = 10
 
-/obj/item/weapon/reagent_containers/spray/pepper/New()
+/obj/item/reagent_containers/spray/pepper/New()
 	..()
 	reagents.add_reagent(CONDENSEDCAPSAICIN, 40)
 
 // Luminol
-/obj/item/weapon/reagent_containers/spray/luminol
+/obj/item/reagent_containers/spray/luminol
 	name = "spray bottle (luminol)"
 	desc = "A spray bottle with an unscrewable top. A label on the side reads 'Contains: Luminol'."
 
-/obj/item/weapon/reagent_containers/spray/luminol/New()
+/obj/item/reagent_containers/spray/luminol/New()
 	..()
 	reagents.add_reagent(LUMINOL, 250)
 
 // Plant-B-Gone
-/obj/item/weapon/reagent_containers/spray/plantbgone // -- Skie
+/obj/item/reagent_containers/spray/plantbgone // -- Skie
 	name = "Plant-B-Gone"
 	desc = "Kills those pesky weeds!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
@@ -152,11 +152,11 @@
 	item_state = "plantbgone"
 	volume = 100
 
-/obj/item/weapon/reagent_containers/spray/plantbgone/New()
+/obj/item/reagent_containers/spray/plantbgone/New()
 	..()
 	reagents.add_reagent(PLANTBGONE, 100)
 
-/obj/item/weapon/reagent_containers/spray/bugzapper
+/obj/item/reagent_containers/spray/bugzapper
 	name = "Bug Zapper"
 	desc = "Kills those pesky bugs!"
 	icon = 'icons/obj/hydroponics/hydro_tools.dmi'
@@ -164,12 +164,12 @@
 	item_state = "plantbgone"
 	volume = 100
 
-/obj/item/weapon/reagent_containers/spray/bugzapper/New()
+/obj/item/reagent_containers/spray/bugzapper/New()
 	..()
 	reagents.add_reagent(TOXIN, 100)
 
 //chemsprayer
-/obj/item/weapon/reagent_containers/spray/chemsprayer
+/obj/item/reagent_containers/spray/chemsprayer
 	name = "chem sprayer"
 	desc = "A utility used to spray large amounts of reagent in a given area."
 	icon = 'icons/obj/gun.dmi'
@@ -182,7 +182,7 @@
 
 	delay_spraying = FALSE
 
-/obj/item/weapon/reagent_containers/spray/chemsprayer/make_puff(var/atom/target, var/mob/user)
+/obj/item/reagent_containers/spray/chemsprayer/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puffs
 	var/mix_color = mix_color_from_reagents(reagents.reagent_list)
 	var/Sprays[3]
@@ -221,7 +221,7 @@
 
 	playsound(src, 'sound/effects/spray2.ogg', 50, 1, -6)
 
-/obj/item/weapon/reagent_containers/spray/noreact
+/obj/item/reagent_containers/spray/noreact
 	name = "stasis spray"
 	icon_state = "cleaner_noreact"
 	desc = "The label says 'Finally, a use for that pesky experimental bluespace technology for the whole house to enjoy!'\n\
@@ -231,7 +231,7 @@
 	amount_per_transfer_from_this = 25
 
 
-/obj/item/weapon/reagent_containers/spray/noreact/make_puff(var/atom/target, var/mob/user)
+/obj/item/reagent_containers/spray/noreact/make_puff(var/atom/target, var/mob/user)
 	// Create the chemical puff
 	var/transfer_amount = amount_per_transfer_from_this
 	if (!can_transfer_an_APTFT() && !is_empty()) //If it doesn't contain enough reagents to fulfill its amount_per_transfer_from_this, but also isn't empty, it'll spray whatever it has left.

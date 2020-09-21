@@ -7,7 +7,7 @@
 /*
  * Locator
  */
-/obj/item/weapon/locator
+/obj/item/locator
 	name = "locator"
 	desc = "Used to track those with locater implants."
 	icon = 'icons/obj/device.dmi'
@@ -26,7 +26,7 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_MAGNETS + "=1"
 
-/obj/item/weapon/locator/attack_self(mob/user as mob)
+/obj/item/locator/attack_self(mob/user as mob)
 	user.set_machine(src)
 	var/dat
 	if (src.temp)
@@ -45,7 +45,7 @@ Frequency:
 	onclose(user, "radio")
 	return
 
-/obj/item/weapon/locator/Topic(href, href_list)
+/obj/item/locator/Topic(href, href_list)
 	..()
 	if (usr.stat || usr.restrained())
 		return
@@ -79,7 +79,7 @@ Frequency:
 							src.temp += "[W.code]-[dir2text(get_dir(sr, tr))]-[direct]<BR>"
 
 				src.temp += "<B>Extranneous Signals:</B><BR>"
-				for (var/obj/item/weapon/implant/tracking/W in tracking_implants)
+				for (var/obj/item/implant/tracking/W in tracking_implants)
 					if (!W.implanted || !(istype(W.loc,/datum/organ/external) || ismob(W.loc)))
 						continue
 					else
@@ -120,14 +120,14 @@ Frequency:
 					src.attack_self(M)
 	return
 
-/obj/item/weapon/bananapeel/bluespace
+/obj/item/bananapeel/bluespace
 	name = "bluespace banana peel"
 	desc = "A peel from a bluespace banana."
 	icon = 'icons/obj/hydroponics/bluespacebanana.dmi'
 	icon_state = "peel"
 	item_state = "bluespacebanana_peel"
 
-/obj/item/weapon/bananapeel/bluespace/Crossed(AM as mob|obj)
+/obj/item/bananapeel/bluespace/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(2, 2, 1))
@@ -147,7 +147,7 @@ Frequency:
  */
  #define HANDTELE_MAX_CHARGE	45
  #define HANDTELE_PORTAL_COST	15
-/obj/item/weapon/hand_tele
+/obj/item/hand_tele
 	name = "hand tele"
 	desc = "A portable item using blue-space technology."
 	icon = 'icons/obj/device.dmi'
@@ -166,12 +166,12 @@ Frequency:
 	var/destination_id
 	var/destination_name
 
-/obj/item/weapon/hand_tele/examine(var/mob/user)
+/obj/item/hand_tele/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>Alt-Click the hand tele to set portal destination. Defaults to your last choice.</span>")
 	to_chat(user, "<span class='notice'>Charge: [charge]/[HANDTELE_MAX_CHARGE] ([charge/HANDTELE_PORTAL_COST]/[HANDTELE_MAX_CHARGE/HANDTELE_PORTAL_COST])</span>")
 
-/obj/item/weapon/hand_tele/attack_self(mob/user as mob)
+/obj/item/hand_tele/attack_self(mob/user as mob)
 	var/turf/current_location = get_turf(user)//What turf is the user on?
 	if(!current_location||current_location.z==2||current_location.z>=7)//If turf was not found or they're on z level 2 or >7 which does not currently exist.
 		to_chat(user, "<span class='notice'>\The [src] is malfunctioning.</span>")
@@ -211,7 +211,7 @@ Frequency:
 		recharging = 1
 		processing_objects.Add(src)
 
-/obj/item/weapon/hand_tele/proc/choose_destination(var/mob/user)
+/obj/item/hand_tele/proc/choose_destination(var/mob/user)
 	var/list/L = list(  )
 	for(var/obj/machinery/computer/teleporter/R in machines)
 		for(var/obj/machinery/teleport/station/S in orange(1,R))
@@ -248,12 +248,12 @@ Frequency:
 		src.destination_id = destination_id
 		return 1
 
-/obj/item/weapon/hand_tele/AltClick(var/mob/usr)
+/obj/item/hand_tele/AltClick(var/mob/usr)
 	if((usr.incapacitated() || !Adjacent(usr)))
 		return
 	choose_destination(usr)
 
-/obj/item/weapon/hand_tele/process()
+/obj/item/hand_tele/process()
 	charge = min(HANDTELE_MAX_CHARGE,charge+1)
 	if(charge >= HANDTELE_MAX_CHARGE)
 		processing_objects.Remove(src)

@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/railgun
+/obj/item/gun/projectile/railgun
 	name = "railgun"
 	desc = "A weapon that uses the Lorentz force to propel an armature carrying a projectile to incredible velocities."
 	icon = 'icons/obj/gun.dmi'
@@ -16,16 +16,16 @@
 	ammo_type = null
 	fire_sound = 'sound/weapons/railgun_lowpower.ogg'
 	conventional_firearm = 0
-	var/obj/item/weapon/rail_assembly/loadedassembly = null //The internal rail assembly
+	var/obj/item/rail_assembly/loadedassembly = null //The internal rail assembly
 	var/rails_secure = 0
 	var/obj/item/loadedammo = null
-	var/obj/item/weapon/stock_parts/capacitor/loadedcapacitor = null
+	var/obj/item/stock_parts/capacitor/loadedcapacitor = null
 	var/strength = 0
 
-/obj/item/weapon/gun/projectile/railgun/isHandgun()
+/obj/item/gun/projectile/railgun/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/railgun/Destroy()
+/obj/item/gun/projectile/railgun/Destroy()
 	if(loadedassembly)
 		qdel(loadedassembly)
 		loadedassembly = null
@@ -37,7 +37,7 @@
 		loadedammo = null
 	..()
 
-/obj/item/weapon/gun/projectile/railgun/attack_self(mob/user as mob)
+/obj/item/gun/projectile/railgun/attack_self(mob/user as mob)
 	if(user.isUnconscious())
 		to_chat(user, "You can't do that while unconscious.")
 		return
@@ -52,30 +52,30 @@
 		return
 	return
 
-/obj/item/weapon/gun/projectile/railgun/update_icon()
+/obj/item/gun/projectile/railgun/update_icon()
 	overlays.len = 0
 
-	if(istype(loadedammo, /obj/item/weapon/coin))
+	if(istype(loadedammo, /obj/item/coin))
 		var/image/coin = image('icons/obj/weaponsmithing.dmi', src, "railgun_coin_overlay")
 		overlays += coin
 	else if (loadedammo)
 		var/image/rod = image('icons/obj/weaponsmithing.dmi', src, "railgun_rod_overlay")
 		overlays += rod
 	if(loadedcapacitor)
-		if(istype(loadedcapacitor, /obj/item/weapon/stock_parts/capacitor/adv/super/ultra))
+		if(istype(loadedcapacitor, /obj/item/stock_parts/capacitor/adv/super/ultra))
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_adv_super_ultra_overlay")
 			overlays += capacitor
-		else if(istype(loadedcapacitor, /obj/item/weapon/stock_parts/capacitor/adv/super))
+		else if(istype(loadedcapacitor, /obj/item/stock_parts/capacitor/adv/super))
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_adv_super_overlay")
 			overlays += capacitor
-		else if(istype(loadedcapacitor, /obj/item/weapon/stock_parts/capacitor/adv))
+		else if(istype(loadedcapacitor, /obj/item/stock_parts/capacitor/adv))
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_adv_overlay")
 			overlays += capacitor
 		else
 			var/image/capacitor = image('icons/obj/weaponsmithing.dmi', src, "railgun_capacitor_overlay")
 			overlays += capacitor
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_ammunition(var/mob/user)
+/obj/item/gun/projectile/railgun/proc/remove_ammunition(var/mob/user)
 	if(!loadedammo)
 		return
 	loadedammo.forceMove(user.loc)
@@ -85,7 +85,7 @@
 
 	update_icon()
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_capacitor(var/mob/user)
+/obj/item/gun/projectile/railgun/proc/remove_capacitor(var/mob/user)
 	if(!loadedcapacitor)
 		return
 
@@ -96,7 +96,7 @@
 
 	update_icon()
 
-/obj/item/weapon/gun/projectile/railgun/proc/remove_rails(var/mob/user)
+/obj/item/gun/projectile/railgun/proc/remove_rails(var/mob/user)
 	if(!loadedassembly)
 		return
 
@@ -107,8 +107,8 @@
 	update_icon()
 
 
-/obj/item/weapon/gun/projectile/railgun/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/rail_assembly))
+/obj/item/gun/projectile/railgun/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/rail_assembly))
 		if(loadedassembly)
 			to_chat(user, "There is already a set of rails in \the [src].")
 			return
@@ -119,7 +119,7 @@
 		W.forceMove(src)
 		loadedassembly = W
 		return
-	if(istype(W, /obj/item/weapon/stock_parts/capacitor))
+	if(istype(W, /obj/item/stock_parts/capacitor))
 		if(loadedcapacitor)
 			to_chat(user, "There is already a capacitor in the capacitor bank of \the [src].")
 			return
@@ -132,7 +132,7 @@
 		update_icon()
 		return
 
-	if(rails_secure && (istype(W, /obj/item/stack/rods) || istype(W, /obj/item/weapon/coin) ||  istype(W, /obj/item/weapon/nullrod)))
+	if(rails_secure && (istype(W, /obj/item/stack/rods) || istype(W, /obj/item/coin) ||  istype(W, /obj/item/nullrod)))
 		if(!loadedassembly)
 			to_chat(user, "\The [src] needs a set of rails before it can hold \a [W].")
 			return
@@ -144,13 +144,13 @@
 			var/obj/item/stack/rods/R = W
 			R.use(1)
 			loadedammo = new /obj/item/stack/rods(null)
-		else if(istype(W, /obj/item/weapon/nullrod))
+		else if(istype(W, /obj/item/nullrod))
 			if(!user.drop_item(W, src))
 				to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
 				return 1
 			loadedammo = W
-		else if(istype(W, /obj/item/weapon/coin))
-			var/obj/item/weapon/coin/C = W
+		else if(istype(W, /obj/item/coin))
+			var/obj/item/coin/C = W
 			if (C.string_attached)
 				to_chat(user, "Remove the string from \the [C] first.")
 				return
@@ -174,7 +174,7 @@
 	else
 		to_chat(user, "<span class='warning'>\The [W] won't fit inside \the [src].</span>")
 
-/obj/item/weapon/gun/projectile/railgun/examine(mob/user)
+/obj/item/gun/projectile/railgun/examine(mob/user)
 	..()
 	if(loadedcapacitor)
 		to_chat(user, "<span class='info'>There is \a [loadedcapacitor] in the capacitor bank.</span>")
@@ -189,8 +189,8 @@
 	if(!rails_secure && loadedassembly)
 		to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] is unsecured.</span>")
 
-/obj/item/weapon/gun/projectile/railgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if (istype(A, /obj/item/weapon/storage/backpack ))
+/obj/item/gun/projectile/railgun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/storage/backpack ))
 		return
 
 	else if (A.loc == user.loc)
@@ -217,7 +217,7 @@
 
 	calculate_strength(A,user,params, "struggle" = struggle)
 
-/obj/item/weapon/gun/projectile/railgun/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
+/obj/item/gun/projectile/railgun/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
 	if(!loadedcapacitor || !loadedammo)
 		return
 
@@ -231,7 +231,7 @@
 
 	if(strength)
 		var/obj/item/projectile/bullet/APS/B = new(null)
-		if(istype(loadedammo, /obj/item/weapon/coin))
+		if(istype(loadedammo, /obj/item/coin))
 			strength = strength / loadedammo.siemens_coefficient
 		B.damage = strength
 		B.kill_count += strength
@@ -245,7 +245,7 @@
 			if(strength == 101)
 				B.penetration -= 1
 			B.projectile_speed = 0.66
-			if(istype(loadedammo, /obj/item/weapon/nullrod))
+			if(istype(loadedammo, /obj/item/nullrod))
 				B.blessed = TRUE
 		else if(strength == 90)
 			B.penetration = 10
@@ -275,7 +275,7 @@
 
 		update_icon()
 
-/obj/item/weapon/gun/projectile/railgun/proc/throw_ammo(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
+/obj/item/gun/projectile/railgun/proc/throw_ammo(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 	add_fingerprint(user)
 
 	var/turf/curloc = get_turf(user)
@@ -293,21 +293,21 @@
 	loadedammo.throw_at(target,distance,speed)
 	loadedammo = null
 
-/obj/item/weapon/gun/projectile/railgun/preloaded
-	var/ammotype = /obj/item/weapon/coin/iron
-	var/capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super
+/obj/item/gun/projectile/railgun/preloaded
+	var/ammotype = /obj/item/coin/iron
+	var/capacitortype = /obj/item/stock_parts/capacitor/adv/super
 
-/obj/item/weapon/gun/projectile/railgun/preloaded/New()
+/obj/item/gun/projectile/railgun/preloaded/New()
 	..()
-	loadedassembly = new /obj/item/weapon/rail_assembly(src)
+	loadedassembly = new /obj/item/rail_assembly(src)
 	rails_secure = 1
 	loadedammo = new ammotype(src)
 	loadedcapacitor = new capacitortype(src)
 	loadedcapacitor.stored_charge = loadedcapacitor.maximum_charge
 
-/obj/item/weapon/gun/projectile/railgun/preloaded/godslayer
-	ammotype = /obj/item/weapon/nullrod
-	capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super/ultra
+/obj/item/gun/projectile/railgun/preloaded/godslayer
+	ammotype = /obj/item/nullrod
+	capacitortype = /obj/item/stock_parts/capacitor/adv/super/ultra
 
 #undef MEGAWATT
 #undef TEN_MEGAWATTS

@@ -15,7 +15,7 @@ For vending packs, see vending_packs.dm*/
 
 /proc/get_account_info(mob/user, var/obj/machinery/account_database/linked_db)
 	var/list/acc_info = new
-	var/obj/item/weapon/card/id/usr_id = user.get_id_card()
+	var/obj/item/card/id/usr_id = user.get_id_card()
 	acc_info["authorized_name"] = ""
 	if(ishuman(user))
 		if(usr_id == null)
@@ -31,7 +31,7 @@ For vending packs, see vending_packs.dm*/
 			acc_info["check"] = FALSE
 		else
 			// Humans, or really physical people at the terminal, can present a debit card. Let's find one or just find the same ID.
-			var/obj/item/weapon/card/debit/debit_card = user.get_card()
+			var/obj/item/card/debit/debit_card = user.get_card()
 			var/using_debit = FALSE
 			var/account_number = null
 			if(istype(debit_card))
@@ -86,7 +86,7 @@ For vending packs, see vending_packs.dm*/
 #undef MENTION_DB_OFFLINE
 #undef USE_ACCOUNT_ON_ID
 
-/obj/item/weapon/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No reason provided.")
+/obj/item/paper/request_form/New(var/loc, var/list/account_information, var/datum/supply_packs/pack, var/number_of_crates, var/reason = "No reason provided.")
 	. = ..(loc)
 	name = "[pack.name] Requisition Form - [account_information["idname"]], [account_information["idrank"]]"
 	info += {"<h3>[station_name] Supply Requisition Form</h3><hr>
@@ -114,7 +114,7 @@ For vending packs, see vending_packs.dm*/
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "supply"
 	req_access = list(access_cargo)
-	circuit = "/obj/item/weapon/circuitboard/supplycomp"
+	circuit = "/obj/item/circuitboard/supplycomp"
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/hacked = 0
 	var/can_order_contraband = 0
@@ -188,7 +188,7 @@ For vending packs, see vending_packs.dm*/
 	onclose(user, "computer")
 
 /obj/machinery/computer/supplycomp/attackby(obj/item/I as obj, user as mob)
-	if(istype(I,/obj/item/weapon/card/emag) && !hacked)
+	if(istype(I,/obj/item/card/emag) && !hacked)
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
 		can_order_contraband = 1
@@ -199,8 +199,8 @@ For vending packs, see vending_packs.dm*/
 			if (stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
-				new /obj/item/weapon/shard(loc)
-				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
+				new /obj/item/shard(loc)
+				var/obj/item/circuitboard/supplycomp/M = new /obj/item/circuitboard/supplycomp( A )
 				for (var/obj/C in src)
 					C.forceMove(loc)
 				A.circuit = M
@@ -211,7 +211,7 @@ For vending packs, see vending_packs.dm*/
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( loc )
-				var/obj/item/weapon/circuitboard/supplycomp/M = new /obj/item/weapon/circuitboard/supplycomp( A )
+				var/obj/item/circuitboard/supplycomp/M = new /obj/item/circuitboard/supplycomp( A )
 				if(can_order_contraband)
 					M.contraband_enabled = 1
 					req_access = list()
@@ -375,7 +375,7 @@ For vending packs, see vending_packs.dm*/
 		if(!reason)
 			return
 
-		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
+		new /obj/item/paper/request_form(loc, current_acct, P, crates, reason)
 		reqtime = (world.time + 5) % 1e5
 		//make our supply_order datum
 		for(var/i = 1; i <= crates; i++)
@@ -463,7 +463,7 @@ For vending packs, see vending_packs.dm*/
 	name = "Supply ordering console"
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "request"
-	circuit = "/obj/item/weapon/circuitboard/ordercomp"
+	circuit = "/obj/item/circuitboard/ordercomp"
 	var/reqtime = 0 //Cooldown for requisitions - Quarxink
 	var/last_viewed_group = "Supplies" // not sure how to get around hard coding this
 	var/list/current_acct
@@ -512,7 +512,7 @@ For vending packs, see vending_packs.dm*/
 				// command1 is for a single crate order, command2 is for multi crate order
 	data["supply_packs"] = packs_list
 
-	var/obj/item/weapon/card/id/I = user.get_id_card()
+	var/obj/item/card/id/I = user.get_id_card()
 	// current usr's cargo requests
 	var/requests_list[0]
 	for(var/set_name in SSsupply_shuttle.requestlist)
@@ -601,7 +601,7 @@ For vending packs, see vending_packs.dm*/
 		if(!reason)
 			return
 
-		new /obj/item/weapon/paper/request_form(loc, current_acct, P, crates, reason)
+		new /obj/item/paper/request_form(loc, current_acct, P, crates, reason)
 		reqtime = (world.time + 5) % 1e5
 
 		//make our supply_order datum

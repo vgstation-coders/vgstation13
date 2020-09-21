@@ -78,4 +78,4 @@ var/datum/subsystem/persistence_map/SSpersistence_map
 	filthCreatedCount++
 	if(filthCreatedCount % 100 == 0)
 		for(var/obj/effect/landmark/xtra_cleanergrenades/xtra in landmarks_list)
-			new /obj/item/weapon/grenade/chem_grenade/cleaner(get_turf(xtra))
+			new /obj/item/grenade/chem_grenade/cleaner(get_turf(xtra))

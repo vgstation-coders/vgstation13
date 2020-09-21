@@ -102,7 +102,7 @@ var/list/uristrune_cache = list()
 			to_chat(user, "<span class='warning'>You cannot add more than 3 words to a rune.</span>")
 			return 0
 
-	var/obj/item/weapon/tome/tome = locate() in user.held_items
+	var/obj/item/tome/tome = locate() in user.held_items
 
 	if(spell) //If player already begun drawing a rune with help of a tome
 		if(!tome)
@@ -202,7 +202,7 @@ var/list/uristrune_cache = list()
 		continue_drawing = 1
 		perform(user) //Recursion for drawing runes in a row with tome.
 	else
-		var/obj/item/weapon/tome/tome = locate() in user.held_items
+		var/obj/item/tome/tome = locate() in user.held_items
 		if(tome && tome.state == TOME_OPEN)
 			tome.icon_state = "tome"
 			tome.item_state = "tome"
@@ -282,7 +282,7 @@ var/list/uristrune_cache = list()
 				break
 	if(good_hand)
 		H.drop_item(H.held_items[good_hand], force_drop = 1)
-		var/obj/item/weapon/melee/blood_dagger/BD = new (H)
+		var/obj/item/melee/blood_dagger/BD = new (H)
 		BD.originator = user
 		if (dagger_color != DEFAULT_BLOOD)
 			BD.icon_state += "-color"
@@ -310,7 +310,7 @@ var/list/arcane_pockets = list()
 
 	cast_delay = 0
 
-	var/obj/item/weapon/tome/stored_tome = null
+	var/obj/item/tome/stored_tome = null
 
 /spell/cult/arcane_dimension/New()
 	..()
@@ -341,7 +341,7 @@ var/list/arcane_pockets = list()
 		connected_button.MouseExited()
 		return
 
-	var/obj/item/weapon/tome/held_tome = locate() in user.held_items
+	var/obj/item/tome/held_tome = locate() in user.held_items
 	if (held_tome)
 		if (held_tome.state == TOME_OPEN)
 			held_tome.icon_state = "tome"

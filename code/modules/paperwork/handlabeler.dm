@@ -1,4 +1,4 @@
-/obj/item/weapon/hand_labeler
+/obj/item/hand_labeler
 	name = "hand labeler"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "labeler0"
@@ -10,7 +10,7 @@
 	var/chars_left = 250 //Like in an actual label maker, uses an amount per character rather than per label.
 	var/mode = 0	//off or on.
 
-/obj/item/weapon/hand_labeler/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/hand_labeler/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if (!proximity_flag)
 		return
 
@@ -59,7 +59,7 @@
 		to_chat(user, "<span class='notice'>The labeler is almost empty.</span>")
 		label = copytext(label,1,min(chars_left, length(label) + 1))
 
-/obj/item/weapon/hand_labeler/attack_self(mob/user as mob)
+/obj/item/hand_labeler/attack_self(mob/user as mob)
 	if(!chars_left)
 		to_chat(user, "<span class='notice'>It's empty.</span>")
 		return
@@ -77,7 +77,7 @@
 	else
 		to_chat(user, "<span class='notice'>You turn off \the [src].</span>")
 
-/obj/item/weapon/hand_labeler/attackby(obj/item/O, mob/user)
+/obj/item/hand_labeler/attackby(obj/item/O, mob/user)
 	if(istype(O, /obj/item/device/label_roll))
 		if(mode)
 			to_chat(user, "<span class='notice'>Turn it off first.</span>")
@@ -94,7 +94,7 @@
 			to_chat(user, "<span class='notice'>You replace the label roll.</span>")
 			icon_state = "labeler0"
 
-/obj/item/weapon/hand_labeler/attack_hand(mob/user) //Shamelessly stolen from stack.dm.
+/obj/item/hand_labeler/attack_hand(mob/user) //Shamelessly stolen from stack.dm.
 	if (!mode && user.get_inactive_hand() == src)
 		var/obj/item/device/label_roll/LR = new(user, amount=chars_left)
 		user.put_in_hands(LR)
@@ -104,7 +104,7 @@
 	else
 		..()
 
-/obj/item/weapon/hand_labeler/examine(mob/user) //Shamelessly stolen from the paper bin.
+/obj/item/hand_labeler/examine(mob/user) //Shamelessly stolen from the paper bin.
 	..()
 	if(chars_left)
 		to_chat(user, "<span class='info'>There " + (chars_left > 1 ? "are [chars_left] letters" : "is one letter") + " worth of label on the roll.</span>")

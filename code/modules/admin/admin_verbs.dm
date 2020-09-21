@@ -953,7 +953,7 @@ var/list/admin_verbs_mod = list(
 	var/obj/item/award
 	achoice = alert("What award should they be given?","Award choice","Gold medal","Gold cup","Dunce cap")
 	if(achoice == "Gold cup")
-		award = /obj/item/weapon/reagent_containers/food/drinks/golden_cup
+		award = /obj/item/reagent_containers/food/drinks/golden_cup
 	if(achoice == "Gold medal")
 		award = /obj/item/clothing/accessory/medal/gold
 	if(achoice == "Dunce cap")
@@ -971,7 +971,7 @@ var/list/admin_verbs_mod = list(
 		return
 	var/obj/award
 	if(!award_path)
-		award = new /obj/item/weapon/reagent_containers/food/drinks/golden_cup()
+		award = new /obj/item/reagent_containers/food/drinks/golden_cup()
 	else
 		award = new award_path()
 	award.name = name

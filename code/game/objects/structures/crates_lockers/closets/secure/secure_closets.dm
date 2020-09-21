@@ -56,12 +56,12 @@
 		to_chat(user, "<span class='notice'>Access Denied.</span>")
 	update_icon()
 
-/obj/structure/closet/secure_closet/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/closet/secure_closet/attackby(obj/item/W, mob/user)
 	if(opened)
 		return ..()
 	else if(broken)
 		if(issolder(W))
-			var/obj/item/weapon/solder/S = W
+			var/obj/item/solder/S = W
 			if(!S.remove_fuel(4,user))
 				return
 			S.playtoolsound(loc, 100)
@@ -84,7 +84,7 @@
 		update_icon()
 	else
 		if(iswelder(W))
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			if(!WT.remove_fuel(1,user))
 				return
 			welded =! welded

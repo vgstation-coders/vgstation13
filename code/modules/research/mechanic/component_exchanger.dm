@@ -2,7 +2,7 @@
 //It can load up a maximum of twenty-one machinery modules and can replace machinery modules without even having to rebuild them
 //Useful if you want to replace a large amount of modules quickly and painlessly
 
-/obj/item/weapon/storage/component_exchanger
+/obj/item/storage/component_exchanger
 	name = "rapid machinery component exchanger"
 	desc = "A tool used to replace machinery components without having to deconstruct the entire machine. It can load up to twenty-one components at once"
 	icon = 'icons/obj/device.dmi'
@@ -22,14 +22,14 @@
 	use_to_pickup = 1
 	allow_quick_empty = 1
 	storage_slots = 21
-	can_only_hold = list("/obj/item/weapon/stock_parts")
+	can_only_hold = list("/obj/item/stock_parts")
 
-/obj/item/weapon/storage/component_exchanger/attackby(var/atom/A, mob/user)
-	if(istype(A, /obj/item/weapon/storage/bag/gadgets))
-		var/obj/item/weapon/storage/bag/gadgets/G = A
+/obj/item/storage/component_exchanger/attackby(var/atom/A, mob/user)
+	if(istype(A, /obj/item/storage/bag/gadgets))
+		var/obj/item/storage/bag/gadgets/G = A
 		if(!contents)
 			to_chat(user, "<span class='warning'>\The [G] is empty.</span>")
-		for(var/obj/item/weapon/stock_parts/S in G.contents)
+		for(var/obj/item/stock_parts/S in G.contents)
 			if(src.contents.len < storage_slots)
 				src.contents += S
 			else
@@ -41,7 +41,7 @@
 		. = ..()
 
 //Redirect the attack only if it's a machine, otherwise don't bother
-/obj/item/weapon/storage/component_exchanger/preattack(var/atom/A, var/mob/user, proximity_flag)
+/obj/item/storage/component_exchanger/preattack(var/atom/A, var/mob/user, proximity_flag)
 
 	if(!A.Adjacent(user))
 		return 1
@@ -89,7 +89,7 @@
 			return 1
 	return 1
 
-/obj/item/weapon/storage/component_exchanger/proc/component_interaction(obj/machinery/M, mob/user)
+/obj/item/storage/component_exchanger/proc/component_interaction(obj/machinery/M, mob/user)
 
 
 	if(!M.Adjacent(user)) //We aren't hugging the machine, so don't bother. This'll prop up often
@@ -114,7 +114,7 @@
 
 		to_chat(user, "<span class='notice'><B>Scanning results for \the [M] :</B></span>")
 		if(M.component_parts.len)
-			for(var/obj/item/weapon/stock_parts/P in M.component_parts)
+			for(var/obj/item/stock_parts/P in M.component_parts)
 				sleep(5) //Slow the fuck down, we don't want to kill the user's UI, you can't read that fast anyways
 				to_chat(user, "<span class='notice'><B>Detected :</B> [P] of effective quality rating [P.rating].</span>")
 				ratingpool += P.rating
@@ -138,34 +138,34 @@
 		user.visible_message("<span class='notice'>[user] carefully fits \the [src] into \the [M] as it rattles and starts replacing components.</span>", \
 		"<span class='notice'>\The [src]'s HUD flashes, a message appears stating it has started scanning and replacing \the [M]'s components.</span>")
 
-		for(var/obj/item/weapon/stock_parts/P in M.component_parts)
+		for(var/obj/item/stock_parts/P in M.component_parts)
 			if(!M.Adjacent(user)) //Make sure the user doesn't move
 				to_chat(user, "<span class='warning'>A blue screen suddenly flashes on \the [src]'s HUD. It appears the critical failure was caused by suddenly yanking it out of \the [M]'s maintenance hatch.</span>")
 				return
 			//Yes, an istype list. We don't have helpers for this, and this coder is not that sharp
-			if(istype(P, /obj/item/weapon/stock_parts/capacitor))
-				for(var/obj/item/weapon/stock_parts/capacitor/R in src.contents)
+			if(istype(P, /obj/item/stock_parts/capacitor))
+				for(var/obj/item/stock_parts/capacitor/R in src.contents)
 					if(R.rating > P.rating && (P in M.component_parts)) //Kind of a hack, but makes sure we don't replace components that already were
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
 						//Do not break in case we find even better
-			if(istype(P, /obj/item/weapon/stock_parts/scanning_module))
-				for(var/obj/item/weapon/stock_parts/scanning_module/R in src.contents)
+			if(istype(P, /obj/item/stock_parts/scanning_module))
+				for(var/obj/item/stock_parts/scanning_module/R in src.contents)
 					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
-			if(istype(P, /obj/item/weapon/stock_parts/manipulator))
-				for(var/obj/item/weapon/stock_parts/manipulator/R in src.contents)
+			if(istype(P, /obj/item/stock_parts/manipulator))
+				for(var/obj/item/stock_parts/manipulator/R in src.contents)
 					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
-			if(istype(P, /obj/item/weapon/stock_parts/micro_laser))
-				for(var/obj/item/weapon/stock_parts/micro_laser/R in src.contents)
+			if(istype(P, /obj/item/stock_parts/micro_laser))
+				for(var/obj/item/stock_parts/micro_laser/R in src.contents)
 					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
-			if(istype(P, /obj/item/weapon/stock_parts/matter_bin))
-				for(var/obj/item/weapon/stock_parts/matter_bin/R in src.contents)
+			if(istype(P, /obj/item/stock_parts/matter_bin))
+				for(var/obj/item/stock_parts/matter_bin/R in src.contents)
 					if(R.rating > P.rating && (P in M.component_parts))
 						sleep(5) //Half a second per component
 						perform_indiv_replace(P, R, M)
@@ -179,7 +179,7 @@
 			component_interaction(M, user)
 
 //So we don't copy the same thing a thousand fucking times
-/obj/item/weapon/storage/component_exchanger/proc/perform_indiv_replace(var/obj/item/weapon/stock_parts/P, var/obj/item/weapon/stock_parts/R, var/obj/machinery/M)
+/obj/item/storage/component_exchanger/proc/perform_indiv_replace(var/obj/item/stock_parts/P, var/obj/item/stock_parts/R, var/obj/machinery/M)
 
 
 	//Move the old part into our component exchanger

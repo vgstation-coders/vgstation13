@@ -2,7 +2,7 @@
 	Makes an instant station
 **/
 
-/obj/item/weapon/grenade/station
+/obj/item/grenade/station
 	name = "Syndicate pocket sat"
 	desc = "A pocket satellite for your nefarious deeds. Find a nice empty space to prime and set it down - don't be right under it when you trigger it."
 	var/range = 7
@@ -12,7 +12,7 @@
 	var/soundpath = 'sound/effects/bumpinthenight.ogg'
 	var/insidedoor = null
 
-/obj/item/weapon/grenade/station/prime()
+/obj/item/grenade/station/prime()
 	var/turf/source = get_turf(src)
 	if(!istype(source, get_base_turf(source.z)))
 		playsound(src, soundpath, 75, 1) //you'll only ever hear this if it's not on space anyway
@@ -41,7 +41,7 @@
 //First arg should be a list of turfs that are eligible to put things in. Instant room only returns the interior turfs.
 //Second arg is the type of floor that is our freshly created floor. This should be a special floor type so that decorations
 //only get placed inside the generated room and not in maint or something if it is made close to the station.
-/obj/item/weapon/grenade/station/proc/decorate(var/list/interior,var/floortype)
+/obj/item/grenade/station/proc/decorate(var/list/interior,var/floortype)
 	var/list/possible_gear = list(/obj/machinery/optable,
 								/obj/machinery/computer/security/selfpower,
 								/obj/machinery/computer/crew/selfpower,
@@ -77,15 +77,15 @@
 				new /obj/item/clothing/mask/gas/syndicate(T)
 				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(T)
 				new /obj/item/clothing/gloves/swat(T)
-				new /obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating(T)
-				new /obj/item/weapon/storage/toolbox/syndicate(T)
+				new /obj/item/reagent_containers/food/snacks/donkpocket/self_heating(T)
+				new /obj/item/storage/toolbox/syndicate(T)
 				new /obj/item/clothing/accessory/storage/bandolier(T)
 
 			if(/obj/structure/bed/chair)
 				//new /obj/item/clothing/head/helmet(T) electric chairs are cool, but they need a powered area
 				new /obj/item/device/radio/electropack(T)
 				new /obj/item/device/assembly/signaler(T)
-				new /obj/item/weapon/handcuffs(T)
+				new /obj/item/handcuffs(T)
 
 			if(/obj/machinery/recharger) //place a table under
 				new /obj/structure/table/reinforced(T)
@@ -96,20 +96,20 @@
 
 
 
-/obj/item/weapon/grenade/station/proc/below_center(mob/M)
+/obj/item/grenade/station/proc/below_center(mob/M)
 	if(!istype(M))
 		return
 	M.gib()
 
-/obj/item/weapon/grenade/station/proc/under_edge(mob/M, turf/source)
+/obj/item/grenade/station/proc/under_edge(mob/M, turf/source)
 	var/turf/T = get_turf(M)
 	T.turf_animation('icons/effects/effects.dmi',"at_shield2")
 	to_chat(M, "<span class='sinister'>The Syndicate Satellite beeps, \"Welcome aboard\".</span>")
 
-/obj/item/weapon/grenade/station/proc/centerpiece(var/turf/source)
+/obj/item/grenade/station/proc/centerpiece(var/turf/source)
 	new /obj/item/beacon(source)
 
-/obj/item/weapon/grenade/station/discount
+/obj/item/grenade/station/discount
 	name = "Discount Dan's Inflatable Station-in-a-Can"
 	desc = "Packed full of inflatable bits! Do not chew."
 	walltype = /obj/structure/inflatable/wall
@@ -118,7 +118,7 @@
 	insidedoor = /obj/structure/inflatable/door
 	soundpath = 'sound/items/zip.ogg'
 
-/obj/item/weapon/grenade/station/discount/decorate(var/list/interior,var/floortype)
+/obj/item/grenade/station/discount/decorate(var/list/interior,var/floortype)
 	var/list/possible_trash = subtypesof(/obj/item/trash)-typesof(/obj/item/trash/mannequin)
 	for(var/turf/T in interior)
 		if(!istype(T,floortype))
@@ -127,17 +127,17 @@
 			var/new_trash = pick(possible_trash)
 			new new_trash(T)
 
-/obj/item/weapon/grenade/station/discount/centerpiece(var/turf/source)
+/obj/item/grenade/station/discount/centerpiece(var/turf/source)
 	var/obj/structure/inflatable/R = new /obj/structure/inflatable/wall(source)
 	R.spawn_undeployed = FALSE
 
-/obj/item/weapon/grenade/station/discount/below_center(mob/living/M)
+/obj/item/grenade/station/discount/below_center(mob/living/M)
 	if(istype(M))
 		return
 	M.apply_effects(10,10) //10 stun, 10 weaken
 	to_chat(M, "<big><span class = 'warning'>BOING!</span></big>")
 
-/obj/item/weapon/grenade/station/discount/under_edge(mob/M, turf/source)
+/obj/item/grenade/station/discount/under_edge(mob/M, turf/source)
 	to_chat(M, "<span class = 'warning'>You are bounced away from \the [src] as it deploys!</span>")
 	M.throw_at(get_ranged_target_turf(source, get_dir(source, M), range*3), 50, 3)
 

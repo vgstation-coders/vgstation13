@@ -315,7 +315,7 @@ proc/add_ghostlogs(var/mob/user, var/obj/target, var/what_done, var/admin=1, var
 
 //not to be confused with is_loyalty_implanted in human/human.dm L290
 /mob/proc/is_implanted(var/type)
-	for(var/obj/item/weapon/implant/I in src)
+	for(var/obj/item/implant/I in src)
 		if(I.implanted && istype(I,type))
 			return TRUE
 	return FALSE

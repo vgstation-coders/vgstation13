@@ -13,7 +13,7 @@
 		processing_objects.Remove(src)
 		return
 
-	for(var/obj/item/weapon/reagent_containers/R in contents)
+	for(var/obj/item/reagent_containers/R in contents)
 		if(R.reagents)
 			R.reagents.heating(rand(-200,-800), T0C)
 
@@ -81,8 +81,8 @@
 
 /obj/structure/closet/secure_closet/freezer/kitchen/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/reagent_containers/food/drinks/flour = 3,
-		/obj/item/weapon/reagent_containers/food/condiment/sugar,
+		/obj/item/reagent_containers/food/drinks/flour = 3,
+		/obj/item/reagent_containers/food/condiment/sugar,
 	)
 
 /obj/structure/closet/secure_closet/freezer/kitchen/mining
@@ -102,7 +102,7 @@
 
 /obj/structure/closet/secure_closet/freezer/meat/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey = 4,
+		/obj/item/reagent_containers/food/snacks/meat/animal/monkey = 4,
 	)
 
 
@@ -117,10 +117,10 @@
 
 /obj/structure/closet/secure_closet/freezer/fridge/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/reagent_containers/food/drinks/milk = 5,
-		/obj/item/weapon/reagent_containers/food/drinks/soymilk = 5,
-		/obj/item/weapon/storage/fancy/egg_box = 2,
-		/obj/item/weapon/reagent_containers/food/snacks/mint = 1
+		/obj/item/reagent_containers/food/drinks/milk = 5,
+		/obj/item/reagent_containers/food/drinks/soymilk = 5,
+		/obj/item/storage/fancy/egg_box = 2,
+		/obj/item/reagent_containers/food/snacks/mint = 1
 	)
 
 

@@ -2,7 +2,7 @@
 	name = "telecommunications traffic control console"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "traffic_control"
-	circuit = "/obj/item/weapon/circuitboard/comm_traffic"
+	circuit = "/obj/item/circuitboard/comm_traffic"
 
 	var/screen = 0				// the screen number:
 	var/list/servers = list()	// the servers located by the computer
@@ -15,7 +15,7 @@
 	var/temp = ""				// temporary feedback messages
 
 	var/storedcode = ""			// code stored
-	var/obj/item/weapon/card/id/auth = null
+	var/obj/item/card/id/auth = null
 	var/list/access_log = list()
 	var/process = 0
 
@@ -171,7 +171,7 @@
 		if(iscarbon(usr))
 			var/mob/living/carbon/C = usr
 			if(!auth)
-				var/obj/item/weapon/card/id/I = C.get_active_hand()
+				var/obj/item/card/id/I = C.get_active_hand()
 				if(istype(I))
 					if(check_access(I))
 						if(C.drop_item(I, src))
@@ -275,7 +275,7 @@
 	updateUsrDialog()
 	return
 
-/obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/telecomms/traffic/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	return ..()
 
 /obj/machinery/computer/telecomms/emag(mob/user)

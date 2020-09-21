@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/aicore
+	build_path = /obj/item/circuitboard/aicore
 	locked = 1
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
@@ -20,7 +20,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pdapainter
+	build_path = /obj/item/circuitboard/pdapainter
 
 /datum/design/telehub
 	name = "Circuit Design (Teleporter Generator)"
@@ -30,7 +30,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telehub
+	build_path = /obj/item/circuitboard/telehub
 
 /datum/design/telestation
 	name = "Circuit Design (Teleporter Controller)"
@@ -40,7 +40,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/telestation
+	build_path = /obj/item/circuitboard/telestation
 
 /datum/design/laborconsole
 	name = "Circuit Design (Labor Administration Console)"
@@ -50,4 +50,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/labor
+	build_path = /obj/item/circuitboard/labor

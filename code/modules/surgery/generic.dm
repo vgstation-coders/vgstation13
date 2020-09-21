@@ -35,8 +35,8 @@
 
 /datum/surgery_step/generic/cut_with_laser
 	allowed_tools = list(
-		/obj/item/weapon/scalpel/laser = 100,
-		/obj/item/weapon/melee/energy/sword = 5 //haha, oh god what
+		/obj/item/scalpel/laser = 100,
+		/obj/item/melee/energy/sword = 5 //haha, oh god what
 		)
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
@@ -75,8 +75,8 @@
 	"<span class='warning'>Your hand slips as the blade sputters, searing a long gash in [target]'s [affected.display_name] with \the [tool]!</span>")
 	affected.createwound(CUT, 7.5)
 	affected.createwound(BURN, 12.5)
-	if(istype(tool,/obj/item/weapon/scalpel))
-		var/obj/item/weapon/scalpel/S = tool
+	if(istype(tool,/obj/item/scalpel))
+		var/obj/item/scalpel/S = tool
 		S.icon_state = "[initial(S.icon_state)]_off"
 
 
@@ -84,7 +84,7 @@
 //////INCISION MANAGER(cut+clamp+retract)//////////
 /datum/surgery_step/generic/incision_manager
 	allowed_tools = list(
-		/obj/item/weapon/retractor/manager = 100
+		/obj/item/retractor/manager = 100
 		)
 
 	priority = 0.1 //so the tool checks for this step before /generic/cut_open
@@ -139,9 +139,9 @@
 
 /datum/surgery_step/generic/cut_open
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large = 75,
-		/obj/item/weapon/shard = 50,
+		/obj/item/scalpel = 100,
+		/obj/item/kitchen/utensil/knife/large = 75,
+		/obj/item/shard = 50,
 		)
 
 	priority = 0
@@ -185,7 +185,7 @@
 ///////CLAMP BLEEDERS/////
 /datum/surgery_step/generic/clamp_bleeders
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 20,
 		)
@@ -226,9 +226,9 @@
 ////////RETRACT SKIN//////
 /datum/surgery_step/generic/retract_skin
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 50
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 50
 		)
 
 	duration = 3 SECONDS
@@ -293,11 +293,11 @@
 	return 0
 /datum/surgery_step/generic/cauterize
 	allowed_tools = list(
-	/obj/item/weapon/cautery = 100,
-	/obj/item/weapon/scalpel/laser = 100,
+	/obj/item/cautery = 100,
+	/obj/item/scalpel/laser = 100,
 	/obj/item/clothing/mask/cigarette = 75,
-	/obj/item/weapon/lighter = 50,
-	/obj/item/weapon/weldingtool = 25,
+	/obj/item/lighter = 50,
+	/obj/item/weldingtool = 25,
 	)
 
 	duration = 3 SECONDS
@@ -335,9 +335,9 @@
 ////////CUT LIMB/////////
 /datum/surgery_step/generic/cut_limb
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
-		/obj/item/weapon/hatchet = 75,
+		/obj/item/circular_saw = 100,
+		/obj/item/kitchen/utensil/knife/large/butch = 75,
+		/obj/item/hatchet = 75,
 		)
 
 	duration = 11 SECONDS
@@ -386,7 +386,7 @@
 
 /datum/surgery_step/generic/injectfoam
 	allowed_tools = list(
-	/obj/item/weapon/FixOVein/clot = 100,
+	/obj/item/FixOVein/clot = 100,
 	)
 
 	priority = 0.1 //Tries to inject biofoam before other steps
@@ -408,7 +408,7 @@
 	target.custom_pain("You feel a tiny prick in your [affected.display_name]!",1, scream=TRUE)
 	..()
 
-/datum/surgery_step/generic/injectfoam/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/weapon/FixOVein/clot/tool)
+/datum/surgery_step/generic/injectfoam/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/FixOVein/clot/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/amount = tool.foam
 	user.visible_message("<span class='notice'>[user] injects biofoam into [target]'s [affected.display_name] with \the [tool].</span>", \

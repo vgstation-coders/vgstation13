@@ -50,12 +50,12 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/clonepod,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/clonepod,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -63,12 +63,12 @@
 /obj/machinery/cloning/clonepod/RefreshParts()
 	var/total = 0
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/SM in component_parts)
 		T += SM.rating //First rank is two times more efficient, second rank is two and a half times, third is three times. For reference, there's TWO scanning modules
 		total += SM.rating
 	time_coeff = T/2
 	T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+	for(var/obj/item/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating //Ditto above
 		total += MA.rating
 	resource_efficiency = T/2
@@ -80,7 +80,7 @@
 
 //The return of data disks?? Just for transferring between genetics machine/cloning machine.
 //TO-DO: Make the genetics machine accept them.
-/obj/item/weapon/disk/data
+/obj/item/disk/data
 	name = "cloning data disk"
 	desc = "A disk for storing DNA data, and to transfer it between a cloning console and a DNA modifier."
 	icon = 'icons/obj/datadisks.dmi'
@@ -89,25 +89,25 @@
 	var/list/datum/block_label/labels[DNA_SE_LENGTH] //This is not related to cloning, these are colored tabs for Genetics machinery. Multipurpose floppies, why not?
 	var/read_only = 0 //Well,it's still a floppy disk
 
-/obj/item/weapon/disk/data/New()
+/obj/item/disk/data/New()
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
 		labels[i] = new /datum/block_label
 
-/obj/item/weapon/disk/data/Destroy()
+/obj/item/disk/data/Destroy()
 	for(var/datum/block_label/label in labels)
 		qdel(label)
 	labels.Cut()
 	..()
 
-/obj/item/weapon/disk/data/proc/Initialize()
+/obj/item/disk/data/proc/Initialize()
 	buf = new
 	buf.dna = new
 
-/obj/item/weapon/disk/data/demo
+/obj/item/disk/data/demo
 	name = "data disk - 'God Emperor of Mankind'"
 	read_only = 1
 
-/obj/item/weapon/disk/data/demo/New()
+/obj/item/disk/data/demo/New()
 	..()
 	Initialize()
 	buf.types=DNA2_BUF_UE|DNA2_BUF_UI
@@ -119,11 +119,11 @@
 	//buf.dna.UI=list(0x0C8,0x0C8,0x0C8,0x0C8,0x0C8,0x0C8,0x000,0x000,0x000,0x000,0x161,0xFBD,0xDEF) // Farmer Jeff
 	buf.dna.UpdateUI()
 
-/obj/item/weapon/disk/data/monkey
+/obj/item/disk/data/monkey
 	name = "data disk - 'Mr. Muggles'"
 	read_only = TRUE
 
-/obj/item/weapon/disk/data/monkey/New()
+/obj/item/disk/data/monkey/New()
 	..()
 	Initialize()
 	buf.types=DNA2_BUF_SE
@@ -154,21 +154,21 @@
 	return selected
 
 //Disk stuff.
-/obj/item/weapon/disk/data/attack_self(mob/user as mob)
+/obj/item/disk/data/attack_self(mob/user as mob)
 	read_only = !read_only
 	to_chat(user, "You flip the write-protect tab to [read_only ? "protected" : "unprotected"].")
 
-/obj/item/weapon/disk/data/examine(mob/user)
+/obj/item/disk/data/examine(mob/user)
 	..()
 	to_chat(user, "The write-protect tab is set to [read_only ? "protected" : "unprotected"].")
 
 //Health Tracker Implant
 
-/obj/item/weapon/implant/health
+/obj/item/implant/health
 	name = "health implant"
 	var/healthstring = ""
 
-/obj/item/weapon/implant/health/proc/sensehealth()
+/obj/item/implant/health/proc/sensehealth()
 	if (!implanted)
 		return "ERROR"
 	else
@@ -348,12 +348,12 @@
 	go_out()
 	return
 
-/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/cloning/clonepod/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
 		return FALSE
 	for(biomass; biomass > 0;biomass -= BIOMASS_CHUNK)
-		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(loc)
+		new /obj/item/reagent_containers/food/snacks/meat/syntiflesh(loc)
 	return..()
 
 /obj/machinery/cloning/clonepod/Destroy()
@@ -366,11 +366,11 @@
 	. = ..()
 
 //Let's unlock this early I guess.  Might be too early, needs tweaking.
-/obj/machinery/cloning/clonepod/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/cloning/clonepod/attackby(obj/item/W as obj, mob/user as mob)
 	. = ..()
 	if(.)
 		return .
-	if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (!check_access(W))
 			to_chat(user, "<span class='warning'>Access Denied.</span>")
 			return
@@ -379,7 +379,7 @@
 		else
 			locked = FALSE
 			to_chat(user, "System unlocked.")
-	if (istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
+	if (istype(W, /obj/item/reagent_containers/food/snacks/meat))
 		if(user.drop_item(W))
 			playsound(src, 'sound/machines/juicerfast.ogg', 30, 1)
 			to_chat(user, "<span class='notice'>\The [src] processes \the [W].</span>")
@@ -531,7 +531,7 @@
 		else
 	return
 
-/obj/machinery/cloning/clonepod/MouseDropTo(obj/item/weapon/reagent_containers/food/snacks/meat/M, mob/living/user)
+/obj/machinery/cloning/clonepod/MouseDropTo(obj/item/reagent_containers/food/snacks/meat/M, mob/living/user)
 	var/busy = FALSE
 	var/visible_message = FALSE
 
@@ -552,7 +552,7 @@
 
 	if(!busy)
 		busy = TRUE
-		for(var/obj/item/weapon/reagent_containers/food/snacks/meat/meat in M.loc)
+		for(var/obj/item/reagent_containers/food/snacks/meat/meat in M.loc)
 			biomass += BIOMASS_CHUNK
 			qdel(meat)
 			visible_message = TRUE // Prevent chatspam when multiple meat are near
@@ -575,25 +575,25 @@
  *	Diskette Box
  */
 
-/obj/item/weapon/storage/box/disks
+/obj/item/storage/box/disks
 	name = "Diskette Box"
 	icon_state = "disk_kit"
 
-/obj/item/weapon/storage/box/disks/New()
+/obj/item/storage/box/disks/New()
 	. = ..()
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
-	new /obj/item/weapon/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
+	new /obj/item/disk/data(src)
 
 /*
  *	Manual -- A big ol' manual.
  */
 
-/obj/item/weapon/paper/Cloning
+/obj/item/paper/Cloning
 	name = "paper - 'H-87 Cloning Apparatus Manual"
 	info = {"<h4>Getting Started</h4>
 	Congratulations, your station has purchased the H-87 industrial cloning device!<br>

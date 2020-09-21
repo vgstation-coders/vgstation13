@@ -18,11 +18,11 @@
 		/obj/structure/table,
 		/obj/structure/rack,
 		/obj/item/delivery,
-		/obj/item/weapon/gift,
-		/obj/item/weapon/winter_gift,
-		/obj/item/weapon/storage/evidencebag,
-		/obj/item/weapon/storage/backpack/holding,
-		/obj/item/weapon/legcuffs/bolas
+		/obj/item/gift,
+		/obj/item/winter_gift,
+		/obj/item/storage/evidencebag,
+		/obj/item/storage/backpack/holding,
+		/obj/item/legcuffs/bolas
 		)
 
 	var/list/wrappable_big_stuff = list(
@@ -35,7 +35,7 @@
 	if(!istype(target, /atom/movable) || !proximity_flag)
 		return
 	if(!is_type_in_list(target, cannot_wrap))
-		if(istype(target, /obj/item/weapon/storage))
+		if(istype(target, /obj/item/storage))
 			to_chat(user, "<span class='notice'>You start wrapping \the [target] with \the [src].</span>")
 			if(do_after(user, target, 10))
 				afterattack(target, user, proximity_flag)//this item is now wrapped!
@@ -130,7 +130,7 @@
 	name = "gift wrap"
 	desc = "A festive wrap for hand-delivered presents. Not compatible with mail."
 	icon_state = "wrap_paper"
-	smallpath = /obj/item/weapon/gift
+	smallpath = /obj/item/gift
 	bigpath = null
 	manpath = /obj/structure/strange_present
 
@@ -180,7 +180,7 @@
 			overlays += image(icon = icon, icon_state = "deliverytag")
 			src.desc = "A small wrapped package. It has a label reading [tag]"
 
-	else if(istype(W, /obj/item/weapon/pen))
+	else if(istype(W, /obj/item/pen))
 		var/str = copytext(sanitize(input(user,"Label text?","Set label","")),1,MAX_NAME_LEN)
 		if (!Adjacent(user) || user.stat)
 			return

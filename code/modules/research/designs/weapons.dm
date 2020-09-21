@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 400, MAT_PLASMA = 4000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/kinetic_accelerator
+	build_path = /obj/item/gun/energy/kinetic_accelerator
 	locked = TRUE
 	req_lock_access = list(access_mining)
 
@@ -30,7 +30,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 4000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/stunrevolver
+	build_path = /obj/item/gun/energy/stunrevolver
 	locked = TRUE
 	req_lock_access = list(access_security, access_weapons)
 
@@ -42,7 +42,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/laser/cannon
+	build_path = /obj/item/gun/energy/laser/cannon
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -54,7 +54,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 12000, MAT_URANIUM = 4000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/plasma/pistol
+	build_path = /obj/item/gun/energy/plasma/pistol
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -66,7 +66,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 3000, MAT_PLASMA = 28000, MAT_URANIUM = 12000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/plasma/rifle
+	build_path = /obj/item/gun/energy/plasma/rifle
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -78,7 +78,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_PLASMA = 20000, MAT_URANIUM = 8000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/plasma/light
+	build_path = /obj/item/gun/energy/plasma/light
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -90,7 +90,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 2000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/laser/rifle
+	build_path = /obj/item/gun/energy/laser/rifle
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -102,7 +102,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/laser/pistol
+	build_path = /obj/item/gun/energy/laser/pistol
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -114,7 +114,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 1000, MAT_DIAMOND = 1000, MAT_URANIUM = 8000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/ionrifle/ioncarbine
+	build_path = /obj/item/gun/energy/ionrifle/ioncarbine
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -126,7 +126,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 12500)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/projectile/automatic/xcom/lockbox
+	build_path = /obj/item/gun/projectile/automatic/xcom/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -138,7 +138,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GOLD = 5000,MAT_URANIUM = 10000) //, MUTAGEN = 40)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/decloner
+	build_path = /obj/item/gun/energy/decloner
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -151,7 +151,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	reliability_base = 100
 	category = "Weapons"
-	build_path = /obj/item/weapon/reagent_containers/spray/chemsprayer
+	build_path = /obj/item/reagent_containers/spray/chemsprayer
 	req_lock_access = list(access_medical, access_cmo)
 
 /datum/design/rapidsyringe
@@ -162,7 +162,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/syringe/rapidsyringe
+	build_path = /obj/item/gun/syringe/rapidsyringe
 
 /datum/design/largecrossbow
 	name = "Energy Crossbow"
@@ -172,7 +172,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_URANIUM = 1000, MAT_SILVER = 1000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/crossbow/largecrossbow
+	build_path = /obj/item/gun/energy/crossbow/largecrossbow
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -184,7 +184,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 500, MAT_SILVER = 3000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/energy/temperature
+	build_path = /obj/item/gun/energy/temperature
 	locked = TRUE
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
@@ -197,7 +197,7 @@
 	materials = list(MAT_IRON = 3000)
 	reliability_base = 79
 	category = "Weapons"
-	build_path = /obj/item/weapon/grenade/chem_grenade/large
+	build_path = /obj/item/grenade/chem_grenade/large
 
 /datum/design/ex_grenade
 	name = "EX Grenade"
@@ -208,7 +208,7 @@
 	materials = list(MAT_IRON = 3000)
 	reliability_base = 79
 	category = "Weapons"
-	build_path = /obj/item/weapon/grenade/chem_grenade/exgrenade
+	build_path = /obj/item/grenade/chem_grenade/exgrenade
 
 /datum/design/smg
 	name = "Submachine Gun"
@@ -218,7 +218,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 10000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/gun/projectile/automatic/lockbox
+	build_path = /obj/item/gun/projectile/automatic/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -230,7 +230,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 12000)
 	category = "Weapons"
-	build_path = /obj/item/weapon/storage/pneumatic
+	build_path = /obj/item/storage/pneumatic
 
 //Ammolathe designs. They lack research values so they can't be researched.
 //Weapons
@@ -241,7 +241,7 @@
 	id = "glock"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 10000, MAT_GLASS = 2000, MAT_PLASTIC = 4000)
-	build_path = /obj/item/weapon/gun/projectile/glock/lockbox
+	build_path = /obj/item/gun/projectile/glock/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -251,7 +251,7 @@
 	id = "vector"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 12500, MAT_GLASS = 3000, MAT_PLASTIC = 5000)
-	build_path = /obj/item/weapon/gun/projectile/automatic/vector/lockbox
+	build_path = /obj/item/gun/projectile/automatic/vector/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -261,7 +261,7 @@
 	id = "shotgun"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 15000, MAT_WOOD = 7500)
-	build_path = /obj/item/weapon/gun/projectile/shotgun/pump
+	build_path = /obj/item/gun/projectile/shotgun/pump
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -271,7 +271,7 @@
 	id = "RPG"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 50000, MAT_GLASS = 15000, MAT_PLASTIC = 25000, MAT_GOLD = 6000)
-	build_path = /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
+	build_path = /obj/item/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -437,7 +437,7 @@
 	id = "ammo_12ga_slug"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
-	build_path = /obj/item/weapon/storage/box/lethalshells
+	build_path = /obj/item/storage/box/lethalshells
 
 /datum/design/ammo_shotgun/buckshot
 	name = "Ammunition box (12ga. 00 buckshot)"
@@ -445,7 +445,7 @@
 	id = "ammo_12ga_buckshot"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
-	build_path = /obj/item/weapon/storage/box/buckshotshells
+	build_path = /obj/item/storage/box/buckshotshells
 
 /datum/design/ammo_shotgun/beanbag
 	name = "Ammunition box (12ga. beanbag)"
@@ -453,7 +453,7 @@
 	id = "ammo_12ga_beanbag"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
-	build_path = /obj/item/weapon/storage/box/beanbagshells
+	build_path = /obj/item/storage/box/beanbagshells
 
 /datum/design/ammo_shotgun/stun
 	name = "Ammunition box (12ga. stun shell)"
@@ -461,7 +461,7 @@
 	id = "ammo_12ga_stun"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
-	build_path = /obj/item/weapon/storage/box/stunshells
+	build_path = /obj/item/storage/box/stunshells
 
 /datum/design/ammo_shotgun/dart
 	name = "Ammunition box (12ga. dart)"
@@ -469,7 +469,7 @@
 	id = "ammo_12ga_dart"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000)
-	build_path = /obj/item/weapon/storage/box/dartshells
+	build_path = /obj/item/storage/box/dartshells
 
 /datum/design/ammo_shotgun/flare
 	name = "Ammunition box (12ga. flare)"
@@ -485,7 +485,7 @@
 	id = "ammo_12ga_flare"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 32000)
-	build_path = /obj/item/weapon/storage/box/dragonsbreathshells
+	build_path = /obj/item/storage/box/dragonsbreathshells
 
 /datum/design/ammo_shotgun/frag
 	name = "Ammunition box (12ga. frag)"
@@ -493,7 +493,7 @@
 	id = "ammo_12ga_flare"
 	build_type = AMMOLATHE
 	materials = list(MAT_IRON = 8000, MAT_PLASMA = 128000)
-	build_path = /obj/item/weapon/storage/box/fragshells
+	build_path = /obj/item/storage/box/fragshells
 
 /datum/design/ammo_12mm
 	name = "Ammunition box (12mm)"

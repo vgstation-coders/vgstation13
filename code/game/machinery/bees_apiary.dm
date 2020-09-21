@@ -36,7 +36,7 @@ var/list/apiaries_list = list()
 
 	var/hydrotray_type = /obj/machinery/portable_atmospherics/hydroponics
 
-	var/obj/item/weapon/reagent_containers/glass/consume = null
+	var/obj/item/reagent_containers/glass/consume = null
 
 	var/wild = 0
 
@@ -167,7 +167,7 @@ var/list/apiaries_list = list()
 			queen_bees_inside++
 			qdel(bee_packet)
 			to_chat(user, "<span class='notice'>You carefully insert the queen into \the [src], she gets busy managing the hive.</span>")
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/beezeez))
 		var/i = O.reagents.trans_id_to(consume,NUTRIMENT,3)
 		if (i)
 			beezeez += i * 10
@@ -181,7 +181,7 @@ var/list/apiaries_list = list()
 		var/obj/item/trash/beezeez/TrashItem = new /obj/item/trash/beezeez(user)
 		user.put_in_hands(TrashItem)
 		qdel(O)
-	else if(istype(O, /obj/item/weapon/hatchet))
+	else if(istype(O, /obj/item/hatchet))
 		if(reagents.total_volume > 0)
 			user.visible_message("<span class='notice'>\the [user] begins harvesting the honeycombs.</span>","<span class='danger'>You begin harvesting the honeycombs.</span>")
 		else
@@ -213,8 +213,8 @@ var/list/apiaries_list = list()
 
 			qdel(src)
 
-	else if(istype(O, /obj/item/weapon/bee_net))
-		var/obj/item/weapon/bee_net/N = O
+	else if(istype(O, /obj/item/bee_net))
+		var/obj/item/bee_net/N = O
 		if(N.caught_bees.len)
 			if (N.caught_bees.len+worker_bees_inside+queen_bees_inside+bees_outside_hive.len <= MAX_BEES_PER_HIVE)
 				for (var/datum/bee/B in N.caught_bees)
@@ -325,7 +325,7 @@ var/list/apiaries_list = list()
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 
 	for (var/i = 1 to number_of_honeycombs)
-		var/obj/item/weapon/reagent_containers/food/snacks/honeycomb/H = new(T)
+		var/obj/item/reagent_containers/food/snacks/honeycomb/H = new(T)
 		H.reagents.clear_reagents()
 		H.reagents.add_reagent(NUTRIMENT, 0.5)
 		H.icon_state = "[species.prefix]honeycomb-base"
@@ -580,7 +580,7 @@ var/list/apiaries_list = list()
 		return
 	if(istype(O, /obj/item/queen_bee))
 		to_chat(user, "<span class='warning'>This type of bee hive isn't fit for domesticated bees.</span>")
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/beezeez))
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/beezeez))
 		to_chat(user, "<span class='warning'>These bees don't want your candies, they want your blood!</span>")
 	else if(O.force)
 		to_chat(user,"<span class='warning'>You hit \the [src] with your [O].</span>")

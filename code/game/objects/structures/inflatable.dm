@@ -56,7 +56,7 @@
 		weld(I, user)
 	..()
 
-/obj/item/inflatable/proc/weld(var/obj/item/weapon/weldingtool/WE, var/mob/user)
+/obj/item/inflatable/proc/weld(var/obj/item/weldingtool/WE, var/mob/user)
 	if(!istype(WE))
 		return
 	if(!WE.remove_fuel(1, user))
@@ -171,7 +171,7 @@
 			take_damage(rand(15,45), 0)
 
 /obj/structure/inflatable/attackby(obj/item/I, mob/user)
-	if(!istype(I) || istype(I, /obj/item/weapon/inflatable_dispenser))
+	if(!istype(I) || istype(I, /obj/item/inflatable_dispenser))
 		return
 
 	if((I.damtype == BRUTE && I.is_sharp()) || I.damtype == BURN)
@@ -370,9 +370,9 @@
 		if(do_after(user, src, 10))
 			enter_shelter(user)
 
-/obj/structure/inflatable/shelter/attackby(obj/item/weapon/W,mob/user)
-	if(istype(W,/obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
+/obj/structure/inflatable/shelter/attackby(obj/item/W,mob/user)
+	if(istype(W,/obj/item/grab))
+		var/obj/item/grab/G = W
 		var/mob/living/target = G.affecting
 		user.visible_message("<span class='danger'>[user] begins to drag [target] into the shelter!</span>")
 		if(do_after_many(user,list(target,src),20)) //Twice the normal time

@@ -27,21 +27,21 @@
 	desc = "An artefact that spits bolts of coruscating energy which cause the target's very form to reshape itself."
 	abbreviation = "ST"
 	price = 2 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/change)
+	spawned_items = list(/obj/item/gun/energy/staff/change)
 
 /datum/spellbook_artifact/staff_of_swapping
 	name = "Staff of Swapping"
 	desc = "An artefact that fires a glowing bolt of energy which transfers the caster and targets position in space. Wielding in it both hands increases the power of the staff, and allows it to pass through certain objects.."
 	abbreviation = "SW"
 	price = 20
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/swapper)
+	spawned_items = list(/obj/item/gun/energy/staff/swapper)
 
 /datum/spellbook_artifact/staff_of_sinterklaas
 	name = "Staff of Sinterklaas"
 	desc = "An artefact that fires a glowing bolt of energy which turns the target into a jovial helper."
 	abbreviation = "SS"
 	price = 5
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
+	spawned_items = list(/obj/item/gun/energy/staff/sinterklaas, /obj/item/clothing/head/wizard/sinterklaas)
 
 /datum/spellbook_artifact/staff_of_sinterklaas/can_buy(var/mob/user)
 	return (Holiday == SINTERKLAAS)
@@ -50,13 +50,13 @@
 	name = "Mental Focus"
 	desc = "An artefact that channels the will of the user into destructive bolts of force."
 	abbreviation = "MF"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/focus)
+	spawned_items = list(/obj/item/gun/energy/staff/focus)
 
 /datum/spellbook_artifact/shards
 	name = "Soul Stone Bundle"
 	desc = "Grants you a soul stone belt with six empty shards, and the Artificer spell. Soul stone shards are ancient tools capable of capturing and harnessing the spirits of the dead and dying. The Artificer spell allows you to create arcane machines for the captured souls to pilot."
 	abbreviation = "SS"
-	spawned_items = list(/obj/item/weapon/storage/belt/soulstone/full)
+	spawned_items = list(/obj/item/storage/belt/soulstone/full)
 
 /datum/spellbook_artifact/shards/purchased(mob/living/carbon/human/H)
 	..()
@@ -73,19 +73,19 @@
 	/obj/item/clothing/shoes/sandal,\
 	/obj/item/clothing/gloves/purple/wizard,\
 	/obj/item/clothing/suit/space/rig/wizard,\
-	/obj/item/weapon/tank/emergency_oxygen/double/wizard)
+	/obj/item/tank/emergency_oxygen/double/wizard)
 
 /datum/spellbook_artifact/staff_of_animation
 	name = "Staff of Animation"
 	desc = "An arcane staff capable of shooting bolts of eldritch energy which cause inanimate objects to come to life. This magic doesn't affect machines."
 	abbreviation = "SA"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/animate)
+	spawned_items = list(/obj/item/gun/energy/staff/animate)
 
 /datum/spellbook_artifact/staff_of_necro
 	name = "Staff of Necromancy"
 	desc = "An arcane staff capable of summoning undying minions from the corpses of your enemies. This magic doesn't affect machines."
 	abbreviation = "SN"
-	spawned_items = list(/obj/item/weapon/gun/energy/staff/necro)
+	spawned_items = list(/obj/item/gun/energy/staff/necro)
 
 /datum/spellbook_artifact/apprentice
 	name = "Contract of Apprenticeship"
@@ -98,39 +98,39 @@
 	desc = "Feeling adventurous? Buy this bundle and recieve seven random spellbooks! Who knows what spells you will get? (Warning, each spell book may only be used once! No refunds)."
 	abbreviation = "SB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/box/spellbook)
+	spawned_items = list(/obj/item/storage/box/spellbook)
 
 /datum/spellbook_artifact/potion_bundle
 	name = "Potion bundle"
 	desc = "As a dead wizard once said, life is a bag of potions. You never know what you're gonna get."
 	abbreviation = "PB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/bag/potion/bundle)
+	spawned_items = list(/obj/item/storage/bag/potion/bundle)
 
 /datum/spellbook_artifact/lesser_potion_bundle
 	name = "Lesser potion bundle"
 	desc = "Contains 12 unknown potions. For wizards that are unwilling to go all-in."
 	abbreviation = "LPB"
-	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_bundle)
+	spawned_items = list(/obj/item/storage/bag/potion/lesser_bundle)
 
 /datum/spellbook_artifact/predicted_potion_bundle
 	name = "Predicted potion bundle"
 	desc = "Contains 40 potions. I like the blue ones myself."
 	abbreviation = "LPB"
 	price = 4 * Sp_BASE_PRICE
-	spawned_items = list(/obj/item/weapon/storage/bag/potion/predicted_potion_bundle)
+	spawned_items = list(/obj/item/storage/bag/potion/predicted_potion_bundle)
 
 /datum/spellbook_artifact/lesser_predicted_potion_bundle
 	name = "Lesser predicted potion bundle"
 	desc = "Contains 10 potions. Don't go using them all in one place!"
 	abbreviation = "LPB"
-	spawned_items = list(/obj/item/weapon/storage/bag/potion/lesser_predicted_potion_bundle)
+	spawned_items = list(/obj/item/storage/bag/potion/lesser_predicted_potion_bundle)
 
 /datum/spellbook_artifact/scrying
 	name = "Scrying Orb"
 	desc = "An incandescent orb of crackling energy, using it will allow you to ghost while alive, allowing you to spy upon the station with ease. In addition, buying it will permanently grant you x-ray vision."
 	abbreviation = "SO"
-	spawned_items = list(/obj/item/weapon/scrying)
+	spawned_items = list(/obj/item/scrying)
 
 /datum/spellbook_artifact/scrying/purchased(mob/living/carbon/human/H)
 	..()
@@ -146,7 +146,7 @@
 	name = "Cloak of Cloaking"
 	desc = "A delicate satin sheet that will render you invisible when you cover yourself with it. It is somewhat cumbersome, and running while underneath it is sure to cause you to trip."
 	abbreviation = "CC"
-	spawned_items = list(/obj/item/weapon/cloakingcloak)
+	spawned_items = list(/obj/item/cloakingcloak)
 
 //WIZARDS, NO SENSE OF RIGHT OR WRONG
 /datum/spellbook_artifact/proc/is_roundstart_wizard(var/mob/user)
@@ -259,16 +259,16 @@
 	name = "Bundle of glow orbs"
 	desc = "Useful for lighting up the dark so you can read more books, touch-sensitive to assign a user. Warning - Do not expose to electricity."
 	abbreviation = "GO"
-	spawned_items = list(/obj/item/weapon/glow_orb,\
-						/obj/item/weapon/glow_orb,\
-						/obj/item/weapon/glow_orb,\
+	spawned_items = list(/obj/item/glow_orb,\
+						/obj/item/glow_orb,\
+						/obj/item/glow_orb,\
 						)
 
 /datum/spellbook_artifact/butterflyknife
 	name = "Crystal Butterfly Knife"
 	desc = "A butterfly knife made of colored crystals. It's infused with summoning magic so when it's flipped it will summon a crystal butterfly that attacks anything but it's summoner."
 	abbreviation = "BK"
-	spawned_items = list(/obj/item/weapon/butterflyknife/viscerator/magic)
+	spawned_items = list(/obj/item/butterflyknife/viscerator/magic)
 
 //SANTA BUNDLE
 
@@ -284,7 +284,7 @@
 	santahat.canremove = 0
 	var/obj/item/clothing/santasuit = new /obj/item/clothing/suit/space/santa
 	santasuit.canremove = 0
-	var/obj/item/weapon/storage/backpack/santabag = new /obj/item/weapon/storage/backpack/santabag
+	var/obj/item/storage/backpack/santabag = new /obj/item/storage/backpack/santabag
 	santabag.canremove = 0
 
 	if(H.head)

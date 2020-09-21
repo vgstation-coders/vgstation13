@@ -202,7 +202,7 @@
 
 
 
-/turf/unsimulated/floor/snow/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/unsimulated/floor/snow/attackby(obj/item/W as obj, mob/user as mob)
 
 	..()
 

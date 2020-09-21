@@ -27,7 +27,7 @@
 	var/passengers_allowed = 1 //If the pilot allows people to jump in the side seats.
 	var/list/occupants = list()
 	var/datum/spacepod/equipment/ES
-	var/obj/item/weapon/cell/battery
+	var/obj/item/cell/battery
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/effect/effect/system/trail/space_trail/ion_trail
@@ -71,7 +71,7 @@
 	bound_width = 2*WORLD_ICON_SIZE
 	bound_height = 2*WORLD_ICON_SIZE
 	dir = EAST
-	battery = new /obj/item/weapon/cell/high()
+	battery = new /obj/item/cell/high()
 	add_cabin()
 	add_airtank()
 	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
@@ -198,13 +198,13 @@
 				visible_message("<span class='warning'>With a clatter, [anyitem > 1 ? "some items land" : "an item lands"] at the feet of [user].</span>")
 		return
 	if(health < maxHealth && iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.do_weld(user, src, 30, 5))
 			to_chat(user, "<span class='notice'>You patch up \the [src].</span>")
 			adjust_health(-rand(15,30))
 			return
 
-	if(istype(W, /obj/item/weapon/cell))
+	if(istype(W, /obj/item/cell))
 		if(!hatch_open)
 			return ..()
 		if(battery)
@@ -310,7 +310,7 @@
 				to_chat(user, "<span class='warning'>You need an open hand to do that.</span>")
 		*/
 
-/obj/spacepod/emag_act(var/mob/user, var/obj/item/weapon/card/emag/E)
+/obj/spacepod/emag_act(var/mob/user, var/obj/item/card/emag/E)
 	locked = FALSE
 	visible_message("<span class = 'warning'>\The [src] beeps twice.</span>")
 
@@ -773,7 +773,7 @@
 		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch. [hatch_open ? "There's nothing inside." : ""]</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/cell))
+	if(istype(W, /obj/item/cell))
 		if(!hatch_open)
 			return
 		else

@@ -34,7 +34,7 @@
 
 /mob/living/carbon/brain/say(var/message)
 	if (container && istype(container, /obj/item/device/mmi))
-		if(istype(container.loc,/obj/item/weapon/storage/belt/silicon))
+		if(istype(container.loc,/obj/item/storage/belt/silicon))
 			RenderBeltChat(container.loc,src,message)
 			return 1
 		else

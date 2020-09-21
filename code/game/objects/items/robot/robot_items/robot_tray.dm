@@ -2,11 +2,11 @@
 // Click on table to unload, click on item to load. Otherwise works identically to a tray.
 // Unlike the base item "tray", robotrays ONLY pick up food, drinks and condiments.
 
-/obj/item/weapon/tray/robotray
+/obj/item/tray/robotray
 	name = "RoboTray"
 	desc = "An autoloading tray specialized for carrying refreshments."
 
-/obj/item/weapon/tray/robotray/afterattack(atom/target, mob/user as mob, proximity_flag)
+/obj/item/tray/robotray/afterattack(atom/target, mob/user as mob, proximity_flag)
 	if(!target)
 		return
 
@@ -22,7 +22,7 @@
 		var/turf/pickup = target.loc
 		var/addedSomething = 0
 
-		for(var/obj/item/weapon/reagent_containers/food/I in pickup)
+		for(var/obj/item/reagent_containers/food/I in pickup)
 			if(I != src && !I.anchored && !istype(I, /obj/item/clothing/under) && !istype(I, /obj/item/clothing/suit) && !istype(I, /obj/item/projectile))
 				var/add = 0
 				if(I.w_class > W_CLASS_TINY)

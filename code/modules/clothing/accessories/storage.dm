@@ -6,7 +6,7 @@
 	var/storage_slots = 3
 	var/list/can_only_hold = list() //I would add the other storage item variables, but nothing would use them yet, so there's no point.
 	var/list/cant_hold = list("/obj/item/clothing/accessory/storage", "/obj/item/clothing/under") //NO RECURSION
-	var/obj/item/weapon/storage/internal/hold
+	var/obj/item/storage/internal/hold
 	accessory_exclusion = STORAGE | HOLSTER
 
 /obj/item/clothing/accessory/storage/New()
@@ -36,7 +36,7 @@
 		hold.remove_from_storage(I, T)
 	src.add_fingerprint(user)
 
-/obj/item/clothing/accessory/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/accessory/storage/attackby(obj/item/W as obj, mob/user as mob)
 	hold.attackby(W,user)
 	return 1
 
@@ -49,16 +49,16 @@
 		hold = null
 	return ..()
 
-/obj/item/weapon/storage/internal
+/obj/item/storage/internal
 	name = "storage"
 	var/master_item		//item it belongs to
 	internal_store = 3
 
-/obj/item/weapon/storage/internal/close(mob/user as mob)
+/obj/item/storage/internal/close(mob/user as mob)
 	..()
 	loc = master_item
 
-/obj/item/weapon/storage/internal/Destroy()
+/obj/item/storage/internal/Destroy()
 	master_item = null
 	return ..()
 
@@ -96,7 +96,7 @@
 	icon_state = "bandolier"
 	_color = "bandolier"
 	storage_slots = 8
-	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/weapon/grenade")
+	can_only_hold = list("/obj/item/ammo_casing", "/obj/item/projectile/bullet", "/obj/item/ammo_storage/magazine", "/obj/item/ammo_storage/speedloader", "/obj/item/stack/rcd_ammo", "/obj/item/grenade")
 
 /obj/item/clothing/accessory/storage/knifeharness
 	name = "decorated harness"
@@ -104,7 +104,7 @@
 	icon_state = "unathiharness2"
 	_color = "unathiharness2"
 	storage_slots = 2
-	can_only_hold = list("/obj/item/weapon/hatchet", "/obj/item/weapon/kitchen/utensil/knife")
+	can_only_hold = list("/obj/item/hatchet", "/obj/item/kitchen/utensil/knife")
 
 /obj/item/clothing/accessory/storage/neorussian
 	name = "neo-Russian webbing"
@@ -119,7 +119,7 @@
 /obj/item/clothing/accessory/storage/knifeharness/proc/update()
 	var/count = 0
 	for(var/obj/item/I in hold)
-		if(istype(I,/obj/item/weapon/hatchet/unathiknife))
+		if(istype(I,/obj/item/hatchet/unathiknife))
 			count++
 	if(count>2)
 		count = 2
@@ -135,5 +135,5 @@
 
 /obj/item/clothing/accessory/storage/knifeharness/New()
 	..()
-	new /obj/item/weapon/hatchet/unathiknife(hold)
-	new /obj/item/weapon/hatchet/unathiknife(hold)
+	new /obj/item/hatchet/unathiknife(hold)
+	new /obj/item/hatchet/unathiknife(hold)

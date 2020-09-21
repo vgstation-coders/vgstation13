@@ -159,7 +159,7 @@
 	healthcheck(hitsound = 1)
 	return 0
 
-/obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/grille/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if(isglasssheet(W))
 		var/obj/item/stack/sheet/glass/G = W
@@ -187,9 +187,9 @@
 			"<span class='notice'>You [anchored ? "fasten" : "unfasten"] the grille [anchored ? "to" : "from"] the floor.</span>")
 			return
 	var/dam = 0
-	if(istype(W, /obj/item/weapon/fireaxe)) //Fireaxes instantly kill grilles
+	if(istype(W, /obj/item/fireaxe)) //Fireaxes instantly kill grilles
 		dam = health
-	else if(istype(W, /obj/item/weapon/shard))
+	else if(istype(W, /obj/item/shard))
 		dam = W.force * 0.1 //Turns the base shard into a .5 damage item. If you want to break an electrified grille with that, you're going to EARN IT, ROD. BY. ROD.
 	else
 		switch(W.damtype)

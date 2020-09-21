@@ -1,6 +1,6 @@
 // The lighting system
 //
-// consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/weapon/light)
+// consists of light fixtures (/obj/machinery/light) and light tube/bulb items (/obj/item/light)
 
 /obj/machinery/light_construct
 	name = "light fixture frame"
@@ -30,7 +30,7 @@
 			mode = "It's wired."
 	to_chat(user, "<span class='info'>[mode]</span>")
 
-/obj/machinery/light_construct/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/light_construct/attackby(obj/item/W as obj, mob/user as mob)
 	src.add_fingerprint(user)
 	if (W.is_wrench(user))
 		if (src.stage == 1)
@@ -115,8 +115,8 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/on_gs = 0
 	var/static_power_used = 0
 	var/flickering = 0
-	var/obj/item/weapon/light/current_bulb = null
-	var/spawn_with_bulb = /obj/item/weapon/light/tube
+	var/obj/item/light/current_bulb = null
+	var/spawn_with_bulb = /obj/item/light/tube
 	var/fitting = "tube"
 
 	// No ghost interaction.
@@ -176,34 +176,34 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/broken
 	icon_state = "ltube-broken" //for the mapper
-	spawn_with_bulb = /obj/item/weapon/light/tube/broken
+	spawn_with_bulb = /obj/item/light/tube/broken
 
 /obj/machinery/light/he
 	icon_state = "lhetube1"
-	spawn_with_bulb = /obj/item/weapon/light/tube/he
+	spawn_with_bulb = /obj/item/light/tube/he
 
 /obj/machinery/light/he/broken
 	icon_state = "lhetube-broken" //for the mapper
-	spawn_with_bulb = /obj/item/weapon/light/tube/he/broken
+	spawn_with_bulb = /obj/item/light/tube/he/broken
 
 /obj/machinery/light/he/burned
 	icon_state = "lhetube-burned" //for the mapper
-	spawn_with_bulb = /obj/item/weapon/light/tube/he/burned
+	spawn_with_bulb = /obj/item/light/tube/he/burned
 
 /obj/machinery/light/small
 	icon_state = "lbulb1"
 	fitting = "bulb"
 	desc = "A small lighting fixture."
-	spawn_with_bulb = /obj/item/weapon/light/bulb
+	spawn_with_bulb = /obj/item/light/bulb
 
 /obj/machinery/light/small/broken
 	icon_state = "lbulb-broken" //for the mapper
-	spawn_with_bulb = /obj/item/weapon/light/bulb/broken
+	spawn_with_bulb = /obj/item/light/bulb/broken
 
 /obj/machinery/light/spot
 	name = "spotlight"
 	fitting = "large tube"
-	spawn_with_bulb = /obj/item/weapon/light/tube/large
+	spawn_with_bulb = /obj/item/light/tube/large
 
 /obj/machinery/light/built
 	icon_state = "ltube-empty" //for the mapper
@@ -312,13 +312,13 @@ var/global/list/obj/machinery/light/alllights = list()
 			return
 
 	// attempt to insert light
-	if(istype(W, /obj/item/weapon/light))
+	if(istype(W, /obj/item/light))
 		if(current_bulb)
 			to_chat(user, "There is a [fitting] already inserted.")
 			return
 		else
 			src.add_fingerprint(user)
-			var/obj/item/weapon/light/L = W
+			var/obj/item/light/L = W
 			if(L.fitting == fitting)
 				if(!user.drop_item(L, src))
 					user << "<span class='warning'>You can't let go of \the [L]!</span>"
@@ -581,7 +581,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // can be tube or bulb subtypes
 // will fit into empty /obj/machinery/light of the corresponding type
 
-/obj/item/weapon/light
+/obj/item/light
 	icon = 'icons/obj/lighting.dmi'
 	flags = FPRINT
 	force = 2
@@ -599,7 +599,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	var/fitting = "tube"
 	var/frequency = 1500 //for smart lights
 
-/obj/item/weapon/light/tube
+/obj/item/light/tube
 	name = "light tube"
 	desc = "A replacement light tube."
 	icon_state = "tube"
@@ -612,7 +612,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_color = LIGHT_COLOR_TUNGSTEN
 	cost = 8
 
-/obj/item/weapon/light/tube/he
+/obj/item/light/tube/he
 	name = "high efficiency light tube"
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hetube"
@@ -622,7 +622,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_color = LIGHT_COLOR_HALOGEN
 	cost = 2
 
-/obj/item/weapon/light/tube/smart
+/obj/item/light/tube/smart
 	name = "smart light tube"
 	desc = "An LED light tube with built-in electronics to control various properties."
 	base_state = "hetube"
@@ -632,19 +632,19 @@ var/global/list/obj/machinery/light/alllights = list()
 	brightness_color = "#FFFFFF"
 	cost = 2
 
-/obj/item/weapon/light/tube/broken
+/obj/item/light/tube/broken
 	status = LIGHT_BROKEN
 
-/obj/item/weapon/light/tube/burned
+/obj/item/light/tube/burned
 	status = LIGHT_BURNED
 
-/obj/item/weapon/light/tube/he/broken
+/obj/item/light/tube/he/broken
 	status = LIGHT_BROKEN
 
-/obj/item/weapon/light/tube/he/burned
+/obj/item/light/tube/he/burned
 	status = LIGHT_BURNED
 
-/obj/item/weapon/light/tube/large
+/obj/item/light/tube/large
 	w_class = W_CLASS_SMALL
 	name = "large light tube"
 	brightness_range = 15
@@ -652,7 +652,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	starting_materials = list(MAT_GLASS = 200, MAT_IRON = 100)
 	cost = 15
 
-/obj/item/weapon/light/bulb
+/obj/item/light/bulb
 	name = "light bulb"
 	desc = "A replacement light bulb."
 	icon_state = "bulb"
@@ -666,10 +666,10 @@ var/global/list/obj/machinery/light/alllights = list()
 	cost = 5
 	w_type = RECYK_GLASS
 
-/obj/item/weapon/light/bulb/broken
+/obj/item/light/bulb/broken
 	status = LIGHT_BROKEN
 
-/obj/item/weapon/light/bulb/he
+/obj/item/light/bulb/he
 	name = "high efficiency light bulb"
 	desc = "An efficient light used to reduce strain on the station's power grid."
 	base_state = "hebulb"
@@ -679,7 +679,7 @@ var/global/list/obj/machinery/light/alllights = list()
 	cost = 1
 	starting_materials = list(MAT_GLASS = 150, MAT_IRON = 30)
 
-/obj/item/weapon/light/bulb/smart
+/obj/item/light/bulb/smart
 	name = "smart light bulb"
 	desc = "An LED light bulb with built-in electronics to control various properties."
 	base_state = "hebulb"
@@ -689,18 +689,18 @@ var/global/list/obj/machinery/light/alllights = list()
 	cost = 1
 	starting_materials = list(MAT_GLASS = 100, MAT_IRON = 30)
 
-/obj/item/weapon/light/attackby(obj/item/W, mob/user)
+/obj/item/light/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/device/lightreplacer))
 		var/obj/item/device/lightreplacer/LR = W
 		if(LR.insert_if_possible(src))
 			to_chat(user, "<span class='notice'>\the [LR] picks up \the [src].</span>")
 	..()
 
-/obj/item/weapon/light/throw_impact(atom/hit_atom)
+/obj/item/light/throw_impact(atom/hit_atom)
 	..()
 	shatter()
 
-/obj/item/weapon/light/bulb/fire
+/obj/item/light/bulb/fire
 	name = "fire bulb"
 	desc = "A replacement fire bulb."
 	icon_state = "fbulb"
@@ -712,7 +712,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 // update the icon state and description of the light
 
-/obj/item/weapon/light/proc/update()
+/obj/item/light/proc/update()
 	switch(status)
 		if(LIGHT_OK)
 			icon_state = base_state
@@ -725,12 +725,12 @@ var/global/list/obj/machinery/light/alllights = list()
 			desc = "A broken [name]."
 
 
-/obj/item/weapon/light/New()
+/obj/item/light/New()
 	..()
 	update()
 
 // A syringe can inject plasma to make the light explode when it turns on.
-/obj/item/weapon/light/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/obj/item/light/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	var/datum/reagents/syringe_reagents = tool.reagents
 	if(rigged)
 		to_chat(user, "<span class='warning'>\The [src] is already full!</span>")
@@ -750,7 +750,7 @@ var/global/list/obj/machinery/light/alllights = list()
 // shatter light, unless it was an attempt to put it in a light socket
 // now only shatter if the intent was harm
 
-/obj/item/weapon/light/afterattack(atom/target, mob/user)
+/obj/item/light/afterattack(atom/target, mob/user)
 	if(istype(target, /obj/machinery/light))
 		return
 	if(user.a_intent != I_HURT)
@@ -758,7 +758,7 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	shatter()
 
-/obj/item/weapon/light/proc/shatter(verbose = TRUE)
+/obj/item/light/proc/shatter(verbose = TRUE)
 	if(status == LIGHT_OK || status == LIGHT_BURNED)
 		if(verbose)
 			src.visible_message("<span class='warning'>[name] shatters.</span>","<span class='warning'>You hear a small glass object shatter.</span>")

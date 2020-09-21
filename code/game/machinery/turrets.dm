@@ -274,7 +274,7 @@
 		src.die()
 	return
 
-/obj/machinery/turret/attackby(obj/item/weapon/W, mob/living/user)//I can't believe no one added this before/N
+/obj/machinery/turret/attackby(obj/item/W, mob/living/user)//I can't believe no one added this before/N
 	user.do_attack_animation(src, W)
 	user.delayNextAttack(10)
 	if(..())
@@ -387,7 +387,7 @@
 		return 1
 	return
 
-/obj/machinery/turretid/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/turretid/attackby(obj/item/W, mob/user)
 	if(stat & BROKEN)
 		return
 	if(issilicon(user))

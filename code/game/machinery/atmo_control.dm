@@ -117,7 +117,7 @@
 /obj/machinery/computer/general_air_control
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "tank"
-	circuit = "/obj/item/weapon/circuitboard/air_management"
+	circuit = "/obj/item/circuitboard/air_management"
 
 	name = "Computer"
 
@@ -338,7 +338,7 @@ font-weight:bold;
 /obj/machinery/computer/general_air_control/large_tank_control
 		icon = 'icons/obj/computer.dmi'
 		icon_state = "tank"
-		circuit = "/obj/item/weapon/circuitboard/large_tank_control"
+		circuit = "/obj/item/circuitboard/large_tank_control"
 
 		var/input_tag
 		var/output_tag
@@ -565,7 +565,7 @@ font-weight:bold;
 /obj/machinery/computer/general_air_control/fuel_injection
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "atmos"
-	circuit = "/obj/item/weapon/circuitboard/injector_control"
+	circuit = "/obj/item/circuitboard/injector_control"
 
 	var/device_tag
 	var/list/device_info

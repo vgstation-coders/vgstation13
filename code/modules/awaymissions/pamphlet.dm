@@ -1,4 +1,4 @@
-/obj/item/weapon/paper/pamphlet
+/obj/item/paper/pamphlet
 	name = "pamphlet"
 	icon_state = "pamphlet"
 	info = "<b>Welcome to the Nanotrasen Gateway project...</b><br>\
@@ -34,15 +34,15 @@
 			environs."
 
 //we don't want the silly text overlay!
-/obj/item/weapon/paper/pamphlet/update_icon()
+/obj/item/paper/pamphlet/update_icon()
 	return
 
-/obj/item/weapon/paper/pamphlet/medivault
+/obj/item/paper/pamphlet/medivault
 	info = "<b>Welcome to the Nanotrasen Research and Medical facility...</b></br>\
 			If you are reading this pamphlet then congratulations on your recent reassignment \
 			to this new, state of the art medical facility! You'll be involved in exciting and \
 			ground-breaking research projects and together with other Nanotrasen Medical \
-			Researchers, you will pave the way for a bright, new Nanotrasen Approved™ universe! <br><br> \
+			Researchers, you will pave the way for a bright, new Nanotrasen Approvedï¿½ universe! <br><br> \
 			<b>Notes on Security Protocol</b><br>\
 			Security is of the utmost concern, and here at Nanotrasen we are always working to \
 			ensure that all of our employees can enjoy a safe working environment. Given the \

@@ -1,4 +1,4 @@
-/obj/item/weapon/anobattery
+/obj/item/anobattery
 	name = "anomaly power battery"
 	desc = "A radioactive procedure allows for anomalous exotic particles to be stored inside, until they may exploited by a power utilizer."
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -9,7 +9,7 @@
 	var/capacity = 200
 	var/stored_charge = 0
 	var/effect_id = ""
-	var/obj/item/weapon/anodevice/inserted_device
+	var/obj/item/anodevice/inserted_device
 	origin_tech = Tc_POWERSTORAGE + "=2"
 	flags = FPRINT
 	force = 5.0
@@ -18,16 +18,16 @@
 	throw_range = 5
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/anobattery/New()
+/obj/item/anobattery/New()
 	. = ..()
 	battery_effect = new()
 
-/obj/item/weapon/anobattery/update_icon()
+/obj/item/anobattery/update_icon()
 	var/p = (stored_charge/capacity)*100
 	p = min(p, 100)
 	icon_state = "anobattery[round(p,25)]"
 
-/obj/item/weapon/anobattery/Destroy()
+/obj/item/anobattery/Destroy()
 	if (inserted_device)
 		inserted_device = null
 	..()
@@ -35,7 +35,7 @@
 
 var/list/anomaly_power_utilizers = list()
 
-/obj/item/weapon/anodevice
+/obj/item/anodevice
 	name = "anomaly power utilizer"
 	desc = "Features a large socket where a battery might fit."
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -47,32 +47,32 @@ var/list/anomaly_power_utilizers = list()
 	var/timing = 0
 	var/time = 50
 	var/archived_time = 50
-	var/obj/item/weapon/anobattery/inserted_battery
+	var/obj/item/anobattery/inserted_battery
 	var/turf/archived_loc
 
-/obj/item/weapon/anodevice/New()
+/obj/item/anodevice/New()
 	. = ..()
 	anomaly_power_utilizers += src
 	processing_objects.Add(src)
 
-/obj/item/weapon/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/anobattery))
+/obj/item/anodevice/attackby(var/obj/I as obj, var/mob/user as mob)
+	if(istype(I, /obj/item/anobattery))
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
 				to_chat(user, "<span class='notice'>You insert the battery.</span>")
 				playsound(src, 'sound/items/Deconstruct.ogg', 40, 0, -2)
 				inserted_battery = I
-				var/obj/item/weapon/anobattery/B = I
+				var/obj/item/anobattery/B = I
 				B.inserted_device = src
 				update_icon()
 	else
 		return ..()
 
-/obj/item/weapon/anodevice/attack_self(var/mob/user as mob)
+/obj/item/anodevice/attack_self(var/mob/user as mob)
 	if(in_range(src, user))
 		return src.interact(user)
 
-/obj/item/weapon/anodevice/interact(var/mob/user)
+/obj/item/anodevice/interact(var/mob/user)
 
 	user.set_machine(src)
 	var/dat = "<b>Anomalous Materials Energy Utilizer</b><br>"
@@ -115,7 +115,7 @@ var/list/anomaly_power_utilizers = list()
 	user << browse(dat, "window=anodevice;size=400x500")
 	onclose(user, "anodevice")
 
-/obj/item/weapon/anodevice/process()
+/obj/item/anodevice/process()
 	if(cooldown > 0)
 		cooldown -= 1
 		if(cooldown <= 0)
@@ -157,7 +157,7 @@ var/list/anomaly_power_utilizers = list()
 			shutdown()
 	update_icon()
 
-/obj/item/weapon/anodevice/throw_impact(var/atom/hit_atom)
+/obj/item/anodevice/throw_impact(var/atom/hit_atom)
 	if(cooldown <= 0 && activated && inserted_battery?.battery_effect && inserted_battery.battery_effect.effect == ARTIFACT_EFFECT_TOUCH && isliving(hit_atom))
 		var/mob/living/L = hit_atom
 		to_chat(L, "<span class='warning'>\The [src] vibrates as it slams into you.</span>")
@@ -176,7 +176,7 @@ var/list/anomaly_power_utilizers = list()
 		else
 			L.LAssailant = null
 
-/obj/item/weapon/anodevice/attack(var/mob/M, var/mob/user)
+/obj/item/anodevice/attack(var/mob/M, var/mob/user)
 	var/clumsy = FALSE
 	if (isliving(M))
 		if(clumsy_check(user) && prob(50))
@@ -200,7 +200,7 @@ var/list/anomaly_power_utilizers = list()
 			else
 				M.LAssailant = user
 
-/obj/item/weapon/anodevice/proc/shutdown_emission()
+/obj/item/anodevice/proc/shutdown_emission()
 	if(activated)
 		activated = 0
 		timing = 0
@@ -212,7 +212,7 @@ var/list/anomaly_power_utilizers = list()
 		if(inserted_battery.battery_effect.activated)
 			inserted_battery.battery_effect.ToggleActivate(1)
 
-/obj/item/weapon/anodevice/Topic(href, href_list)
+/obj/item/anodevice/Topic(href, href_list)
 	. = ..()
 	if(.)
 		return
@@ -278,7 +278,7 @@ var/list/anomaly_power_utilizers = list()
 	..()
 	updateDialog()
 
-/obj/item/weapon/anodevice/update_icon()
+/obj/item/anodevice/update_icon()
 	overlays.len = 0
 	if(!inserted_battery)
 		icon_state = "anodev"
@@ -297,7 +297,7 @@ var/list/anomaly_power_utilizers = list()
 		if (src in L.held_items)
 			L.update_inv_hands()
 
-/obj/item/weapon/anodevice/Destroy()
+/obj/item/anodevice/Destroy()
 	processing_objects.Remove(src)
 	anomaly_power_utilizers -= src
 	if (inserted_battery)

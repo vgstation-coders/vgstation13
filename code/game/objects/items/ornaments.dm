@@ -13,9 +13,9 @@
 								"rainbow" = /obj/item/ornament/magenta,
 								"gray" = /obj/item/ornament/silver)
 
-/obj/item/ornament/attackby(obj/item/weapon/W, mob/user)
+/obj/item/ornament/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/toy/crayon) || istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/toy/crayon) || istype(W, /obj/item/pen))
 		var/obj/item/ornament/O
 		var/type_to_spawn
 		var/color_string = null
@@ -62,7 +62,7 @@
 	if(get_turf(src))
 		playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(src)) // Create a glass shard at the hit location)
+		new /obj/item/shard(get_turf(src)) // Create a glass shard at the hit location)
 	qdel(src)
 
 /obj/item/ornament/red

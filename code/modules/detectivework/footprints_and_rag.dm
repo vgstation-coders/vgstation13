@@ -13,7 +13,7 @@
 /obj/item/clothing/shoes
 	var/track_blood = 0
 
-/obj/item/weapon/reagent_containers/glass/rag
+/obj/item/reagent_containers/glass/rag
 	name = "rag" //changed to "rag" from "damp rag" - Hinaichigo
 	desc = "For cleaning up messes, you suppose."
 	w_class = W_CLASS_TINY
@@ -24,13 +24,13 @@
 	volume = 5
 	can_be_placed_into = null
 
-/obj/item/weapon/reagent_containers/glass/rag/attack_self(mob/user as mob)
+/obj/item/reagent_containers/glass/rag/attack_self(mob/user as mob)
 	return
 
-/obj/item/weapon/reagent_containers/glass/rag/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/item/reagent_containers/glass/rag/mop_act(obj/item/mop/M, mob/user)
 	return 0
 
-/obj/item/weapon/reagent_containers/glass/rag/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/reagent_containers/glass/rag/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if (!ismob(M))
 		..()
 	if(user.zone_sel.selecting == "mouth")
@@ -57,7 +57,7 @@
 		else
 			..()
 
-/obj/item/weapon/reagent_containers/glass/rag/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/reagent_containers/glass/rag/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(!user.is_holding_item(src))
 		return  //we used the rag as a bandage
 	if(!proximity_flag)

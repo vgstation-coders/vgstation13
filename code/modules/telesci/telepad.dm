@@ -24,18 +24,18 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sci_telepad,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/sci_telepad,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()
 
 /obj/machinery/telepad/RefreshParts()
 	var/count
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+	for(var/obj/item/stock_parts/SP in component_parts)
 		count += SP.rating
 	teles_left = rand(2, 3) * count
 	if(count >= 16) //All components are T4
@@ -96,7 +96,7 @@
 		amplifier=null
 		return
 
-/obj/machinery/telepad/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/telepad/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/bluespace_crystal) && panel_open)
 		if(amplifier)

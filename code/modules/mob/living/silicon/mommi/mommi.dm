@@ -25,7 +25,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	startup_sound = 'sound/misc/interference.ogg'
 
 	//This is no cyborg boy, no cyborg!
-	cell_type = /obj/item/weapon/cell/crepe/mommi //The secret behind MoMMIs, literal powercreep.
+	cell_type = /obj/item/cell/crepe/mommi //The secret behind MoMMIs, literal powercreep.
 	wiring_type = /datum/wires/robot/mommi
 
 	AIlink = FALSE //Fuck AIs, you're a crab.
@@ -76,7 +76,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/emag_act(mob/user)
 	if(user == src && !emagged)//Dont shitpost inside the game, thats just going too far
 		if(module)
-			var/obj/item/weapon/robot_module/mommi/mymodule = module
+			var/obj/item/robot_module/mommi/mymodule = module
 			to_chat(user, "<span class='warning'>[mymodule.ae_type] anti-emancipation override initiated.</span>")
 		playsound(src, 'sound/machines/buzz-sigh.ogg', 50, 0)
 		return TRUE
@@ -93,7 +93,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	if(!HAS_MODULE_QUIRK(src, MODULE_CAN_HANDLE_FOOD))
 		module.quirk_flags |= MODULE_CAN_HANDLE_FOOD
 
-/mob/living/silicon/robot/mommi/attackby(obj/item/weapon/W, mob/living/user)
+/mob/living/silicon/robot/mommi/attackby(obj/item/W, mob/living/user)
 	if(istype(W, /obj/item/stack/cable_coil) && wiresexposed)
 		var/obj/item/stack/cable_coil/coil = W
 		adjustFireLoss(-30)
@@ -134,7 +134,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 				opened = TRUE
 				updateicon()
 
-	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+	else if(istype(W, /obj/item/cell) && opened)	// trying to put a cell inside
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
 		else if(cell)

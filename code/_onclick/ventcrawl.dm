@@ -13,14 +13,14 @@ var/list/ventcrawl_machinery = list(/obj/machinery/atmospherics/unary/vent_pump,
 // Vent crawling whitelisted items, whoo
 /mob/living/proc/canEnterVentWith()
 	var/static/list/allowed_items = list(
-		/obj/item/weapon/implant,
+		/obj/item/implant,
 		/obj/item/clothing/mask/facehugger,
 		/obj/item/device/radio/borg,
 		/obj/machinery/camera,
 		/mob/living/simple_animal/borer,
 		/obj/transmog_body_container,
 		/obj/item/verbs,
-		/obj/item/weapon/gun/hookshot/flesh,
+		/obj/item/gun/hookshot/flesh,
 	)
 	return allowed_items
 

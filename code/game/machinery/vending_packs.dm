@@ -25,11 +25,11 @@
 	overlays += image('icons/obj/vending_pack.dmi',"emptypack")
 
 /obj/structure/vendomatpack/custom/attackby(obj/item/O, mob/user)
-	var/list/nuke_disks = O.search_contents_for(/obj/item/weapon/disk/nuclear)
+	var/list/nuke_disks = O.search_contents_for(/obj/item/disk/nuclear)
 	if(nuke_disks.len) //There's something, it's a nuke disk, no need to recheck
 		to_chat(user, "<span class='warning'>Suddenly your hand stops responding. You can't put that in, something forbidden is within it.</span>")
 		return
-	if(istype(O, /obj/item/weapon/disk/nuclear)) //Need to check separately if it's the thing you're shoving in
+	if(istype(O, /obj/item/disk/nuclear)) //Need to check separately if it's the thing you're shoving in
 		to_chat(user, "<span class='warning'>Suddenly your hand stops responding. You can't put that in a vending machine.</span>")
 		return
 	user.drop_item(O, src)
@@ -266,8 +266,8 @@
 	to_chat(user, "<span class='notice'>You need some wirecutters to remove the coil first!</span>")
 	return
 
-/obj/structure/stackopacks/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/wirecutters) || istype(W,/obj/item/weapon/shard) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large) || istype(W,/obj/item/weapon/circular_saw) || istype(W, /obj/item/weapon/hatchet) || istype(W, /obj/item/weapon/kitchen/utensil/knife))
+/obj/structure/stackopacks/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/wirecutters) || istype(W,/obj/item/shard) || istype(W,/obj/item/kitchen/utensil/knife/large) || istype(W,/obj/item/circular_saw) || istype(W, /obj/item/hatchet) || istype(W, /obj/item/kitchen/utensil/knife))
 		var/turf/T = get_turf(src)
 		for(var/obj/O in contents)
 			O.forceMove(T)

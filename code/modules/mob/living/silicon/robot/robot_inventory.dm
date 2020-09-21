@@ -33,7 +33,7 @@
 		module.forceMove(src.module)
 		module.dropped(src)
 		if(isgripper(module))
-			var/obj/item/weapon/gripper/G = module
+			var/obj/item/gripper/G = module
 			G.drop_item(force_drop = TRUE)
 	if(hud_used)
 		hud_used.update_robot_modules_display()
@@ -48,7 +48,7 @@
 		return
 
 	if(isgripper(MA))
-		var/obj/item/weapon/gripper/G = MA
+		var/obj/item/gripper/G = MA
 		if(G.wrapped)
 			G.drop_item(force_drop = TRUE)
 			return
@@ -280,7 +280,7 @@
 /mob/living/silicon/robot/drop_item(var/obj/item/to_drop, var/atom/target, force_drop = FALSE, dontsay = null)
 	if(!target)
 		target = loc
-	for(var/obj/item/weapon/gripper/G in get_all_slots())
+	for(var/obj/item/gripper/G in get_all_slots())
 		return G.drop_item(to_drop, target, force_drop, dontsay)
 	return FALSE
 
@@ -295,7 +295,7 @@
 	if(cell && cell.charge <= ROBOT_LOW_POWER)
 		drop_from_inventory(W)
 		return FALSE
-	for(var/obj/item/weapon/gripper/G in get_all_slots())
+	for(var/obj/item/gripper/G in get_all_slots())
 		if(!G.wrapped && G.grip_item(W, src, 1))
 			return TRUE
 	W.forceMove(get_turf(src))

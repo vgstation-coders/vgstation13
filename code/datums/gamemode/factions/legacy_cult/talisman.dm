@@ -1,10 +1,10 @@
-/obj/item/weapon/paper/talisman
+/obj/item/paper/talisman
 	icon_state = "paper_talisman"
 	var/imbue = null
 	var/uses = 1
 	var/nullblock = 0
 
-/obj/item/weapon/paper/talisman/update_icon()
+/obj/item/paper/talisman/update_icon()
 	var/suffix = ""
 	if(imbue)
 		suffix = imbue
@@ -15,7 +15,7 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
-/obj/item/weapon/paper/talisman/examine(mob/user)
+/obj/item/paper/talisman/examine(mob/user)
 	..()
 	if(islegacycultist(user) || isobserver(user))
 		switch(imbue)
@@ -46,7 +46,7 @@
 	else
 		to_chat(user, "Something about the blood stains on this paper fills you with uneasiness.")
 
-/obj/item/weapon/paper/talisman/proc/findNullRod(var/atom/target)
+/obj/item/paper/talisman/proc/findNullRod(var/atom/target)
 	if(isholyprotection(target))
 		var/turf/T = get_turf(target)
 		nullblock = 1
@@ -57,13 +57,13 @@
 			findNullRod(A)
 	return 0
 
-/obj/item/weapon/paper/talisman/New()
+/obj/item/paper/talisman/New()
 	..()
 	pixel_x=0
 	pixel_y=0
 
 
-/obj/item/weapon/paper/talisman/attack_self(mob/living/user as mob)
+/obj/item/paper/talisman/attack_self(mob/living/user as mob)
 	if(islegacycultist(user))
 		var/use_charge = 1
 		var/obj/effect/rune_legacy/R = new
@@ -111,7 +111,7 @@
 		return
 
 
-/obj/item/weapon/paper/talisman/attack(mob/living/carbon/T as mob, mob/living/user as mob)
+/obj/item/paper/talisman/attack(mob/living/carbon/T as mob, mob/living/user as mob)
 	if(islegacycultist(user))
 		if(imbue == "runestun")
 			user.take_organ_damage(5, 0)
@@ -122,11 +122,11 @@
 	else
 		..()
 
-/obj/item/weapon/paper/talisman/attack_animal(var/mob/living/simple_animal/M as mob)
+/obj/item/paper/talisman/attack_animal(var/mob/living/simple_animal/M as mob)
 	if(istype(M, /mob/living/simple_animal/construct/harvester))
 		attack_self(M)
 
-/obj/item/weapon/paper/talisman/proc/supply(var/key)
+/obj/item/paper/talisman/proc/supply(var/key)
 	if (!src.uses)
 		qdel(src)
 		return
@@ -147,7 +147,7 @@
 	return
 
 
-/obj/item/weapon/paper/talisman/Topic(href, href_list)
+/obj/item/paper/talisman/Topic(href, href_list)
 	if(!src)
 		return
 	if (usr.stat || usr.restrained() || !in_range(src, usr))
@@ -156,26 +156,26 @@
 	if (href_list["rune"])
 		switch(href_list["rune"])
 			if("newtome")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				T.imbue = "newtome"
 			if("teleport")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				var/list/words = list("ire" = "ire", "ego" = "ego", "nahlizet" = "nahlizet", "certum" = "certum", "veri" = "veri", "jatkaa" = "jatkaa", "balaq" = "balaq", "mgar" = "mgar", "karazet" = "karazet", "geeri" = "geeri")
 				T.imbue = input("Write your teleport destination rune:", "Rune Scribing") in words
 			if("emp")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				T.imbue = "emp"
 			if("conceal")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				T.imbue = "conceal"
 			if("communicate")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman/communicate(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman/communicate(get_turf(usr))
 				T.imbue = "communicate"
 			if("runestun")
-				var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				T.imbue = "runestun"
 			//if("armor")
-				//var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
+				//var/obj/item/paper/talisman/T = new /obj/item/paper/talisman(get_turf(usr))
 				//T.imbue = "armor"
 			if("soulstone")
 				new /obj/item/device/soulstone(get_turf(usr))
@@ -186,16 +186,16 @@
 	return
 
 
-/obj/item/weapon/paper/talisman/supply
+/obj/item/paper/talisman/supply
 	imbue = "supply"
 	uses = 5
 
-/obj/item/weapon/paper/talisman/communicate
+/obj/item/paper/talisman/communicate
 	imbue = "communicate"
 	uses = 5
 
 //imbued talismans invocation for a few runes, since calling the proc causes a runtime error due to src = null
-/obj/item/weapon/paper/talisman/proc/runestun(var/mob/living/T as mob)//When invoked as talisman, stun and mute the target mob.
+/obj/item/paper/talisman/proc/runestun(var/mob/living/T as mob)//When invoked as talisman, stun and mute the target mob.
 	usr.say("Dream sign ''Evil sealing talisman'[pick("'","`")]!")
 	nullblock = 0
 	for(var/turf/TU in range(T,1))
@@ -217,7 +217,7 @@
 			C.Stun(25)
 	return
 
-/obj/item/weapon/paper/talisman/proc/blind()
+/obj/item/paper/talisman/proc/blind()
 	var/affected = 0
 	for(var/mob/living/carbon/C in view(3,usr))
 		if (islegacycultist(C))
@@ -237,7 +237,7 @@
 		to_chat(usr, "<span class='warning'>Your talisman turns into gray dust, blinding those who not follow the Nar-Sie.</span>")
 
 
-/obj/item/weapon/paper/talisman/proc/deafen()
+/obj/item/paper/talisman/proc/deafen()
 	var/affected = 0
 	for(var/mob/living/carbon/C in range(7,usr))
 		if (islegacycultist(C))

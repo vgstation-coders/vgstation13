@@ -277,7 +277,7 @@
 		else
 			invoke(activator,invocation)
 			cast()
-	else if(istype (spell_holder,/obj/item/weapon/talisman))
+	else if(istype (spell_holder,/obj/item/talisman))
 		invoke(activator,invocation,1)//talisman incantations are whispered
 		cast_talisman()
 
@@ -619,7 +619,7 @@
 	if (pay_blood())
 		spell_holder.visible_message("<span class='rose'>The rune's symbols merge into each others, and an Arcane Tome takes form in their place</span>")
 		var/turf/T = get_turf(spell_holder)
-		var/obj/item/weapon/tome/AT = new (T)
+		var/obj/item/tome/AT = new (T)
 		anim(target = AT, a_icon = 'icons/effects/effects.dmi', flick_anim = "tome_spawn")
 		qdel(spell_holder)
 	else
@@ -627,7 +627,7 @@
 
 /datum/rune_spell/blood_cult/summontome/cast_talisman()//The talisman simply turns into a tome.
 	var/turf/T = get_turf(spell_holder)
-	var/obj/item/weapon/tome/AT = new (T)
+	var/obj/item/tome/AT = new (T)
 	if (spell_holder == activator.get_active_hand())
 		activator.drop_item(spell_holder, T)
 		activator.put_in_active_hand(AT)
@@ -650,8 +650,8 @@
 	cost_upkeep = 1
 	remaining_cost = 5
 	talisman_absorb = RUNE_CANNOT
-	var/obj/item/weapon/tome/target = null
-	var/obj/item/weapon/talisman/tool = null
+	var/obj/item/tome/target = null
+	var/obj/item/talisman/tool = null
 	page = "Runes are powerful, but they're not always convenient. They require time to be set up, cannot be moved, and more importantly, are highly visible, unless hidden, \
 		which would require additional preparation. With that in mind, cultists need an alternative to use their powers reliably. This rune provides that alternative in the form \
 		of talismans. Created in exchange of a drop of blood, these sheets can absorb a rune, and then be used to channel its power. They're easy to conceal until used, and can be stored \
@@ -663,13 +663,13 @@
 
 /datum/rune_spell/blood_cult/conjuretalisman/cast()
 	var/obj/effect/rune/R = spell_holder
-	var/obj/item/weapon/talisman/AT = locate() in get_turf(spell_holder)
+	var/obj/item/talisman/AT = locate() in get_turf(spell_holder)
 	if (AT)
 		if (AT.spell_type)
 			var/mob/living/user = activator
 			var/list/valid_tomes = list()
 			var/i = 0
-			for (var/obj/item/weapon/tome/T in arcane_tomes)
+			for (var/obj/item/tome/T in arcane_tomes)
 				var/mob/M = get_holder_of_type(T,/mob/living)
 				if (M && iscultist(M))
 					i++
@@ -897,7 +897,7 @@
 			to_chat(victim, "<span class='warning'>Your devotion to higher causes impedes the ritual.</span>")
 			to_chat(activator, "<span class='warning'>Their willpower is amazing, the ritual will be exhausting.</span>")
 
-	for(var/obj/item/weapon/implant/loyalty/I in victim)
+	for(var/obj/item/implant/loyalty/I in victim)
 		if(I.implanted)
 			to_chat(victim, "<span class='warning'>Your loyalty implants drastically slows down the ritual's progression.</span>")
 			to_chat(activator, "<span class='warning'>Their mind seems to reject the ritual by reflex. The ritual will take much longer.</span>")
@@ -939,7 +939,7 @@
 				var/progress = 10//10 seconds to reach second phase for a naked cultist
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
-				for(var/obj/item/weapon/implant/loyalty/I in victim)
+				for(var/obj/item/implant/loyalty/I in victim)
 					if(I.implanted)
 						delay = 1
 						progress = progress/4
@@ -1053,7 +1053,7 @@
 				victim.SetStunned(0)
 				victim.SetSilent(0)
 				//and their loyalty implants are removed, so they can't mislead security
-				for(var/obj/item/weapon/implant/loyalty/I in victim)
+				for(var/obj/item/implant/loyalty/I in victim)
 					I.forceMove(T)
 					I.implanted = 0
 					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
@@ -1098,12 +1098,12 @@
 		flick("rune_convert_failure",conversion)
 
 		//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
-		var/obj/item/weapon/storage/cult/coffer = new(T)
-		var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
+		var/obj/item/storage/cult/coffer = new(T)
+		var/obj/item/reagent_containers/food/drinks/cult/cup = new(coffer)
 		if (istype(victim,/mob/living/carbon/human) && victim.dna)
 			victim.take_blood(cup, cup.volume)//Up to 60u
 			cup.on_reagent_change()//so we get the reagentsfillings overlay
-			new/obj/item/weapon/skull(coffer)
+			new/obj/item/skull(coffer)
 			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a portion of the blood left in their body, along with their skull to potentially use in a resurrection ritual.</span>")
 		if (isslime(victim))
 			cup.reagents.add_reagent(SLIMEJELLY, 50)
@@ -1112,7 +1112,7 @@
 			cup.reagents.add_reagent(RADIUM, 50)
 			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a green radioactive liquid.</span>")
 
-		for(var/obj/item/weapon/implant/loyalty/I in victim)
+		for(var/obj/item/implant/loyalty/I in victim)
 			I.implanted = 0
 		for(var/obj/item/I in victim)
 			victim.u_equip(I)
@@ -1144,7 +1144,7 @@
 		flick("rune_convert_abort",conversion)
 		abort(RITUALABORT_REMOVED)
 
-/datum/rune_spell/blood_cult/conversion/cast_talisman()//handled by /obj/item/weapon/talisman/proc/trigger instead
+/datum/rune_spell/blood_cult/conversion/cast_talisman()//handled by /obj/item/talisman/proc/trigger instead
 	return
 
 /datum/rune_spell/blood_cult/conversion/abort(var/cause)
@@ -1196,7 +1196,7 @@
 	if (istype (spell_holder,/obj/effect/rune))
 		invoke(user,invocation)
 		cast()
-	else if (istype (spell_holder,/obj/item/weapon/talisman))
+	else if (istype (spell_holder,/obj/item/talisman))
 		invoke(user,invocation,1)
 		cast_talisman()
 
@@ -1828,9 +1828,9 @@ var/list/blind_victims = list()
 
 	anim(target = activator, a_icon = 'icons/effects/64x64.dmi', flick_anim = "rune_robes", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2, plane = LIGHTING_PLANE)
 
-	var/obj/item/weapon/blood_tesseract/BT = new(get_turf(activator))
-	if (istype (spell_holder,/obj/item/weapon/talisman))
-		var/obj/item/weapon/talisman/T = spell_holder
+	var/obj/item/blood_tesseract/BT = new(get_turf(activator))
+	if (istype (spell_holder,/obj/item/talisman))
+		var/obj/item/talisman/T = spell_holder
 		activator.u_equip(spell_holder)
 		if (T.uses > 1)
 			BT.remaining = spell_holder
@@ -1844,8 +1844,8 @@ var/list/blind_victims = list()
 	for(var/slot in BT.stored_gear)
 		var/obj/item/user_slot = BT.stored_gear[slot]
 		BT.stored_gear[slot] = user_slot
-		if(istype(user_slot, /obj/item/weapon/storage))
-			var/obj/item/weapon/storage/S = user_slot
+		if(istype(user_slot, /obj/item/storage))
+			var/obj/item/storage/S = user_slot
 			S.close(activator)
 		activator.u_equip(user_slot)
 		user_slot.forceMove(BT)
@@ -1864,10 +1864,10 @@ var/list/blind_victims = list()
 		activator.equip_to_slot_or_drop(new /obj/item/clothing/shoes/cult(activator), slot_shoes)
 
 	//transferring backpack items
-	var/obj/item/weapon/storage/backpack/cultpack/new_pack = new (activator)
+	var/obj/item/storage/backpack/cultpack/new_pack = new (activator)
 	if ((num2text(slot_back) in BT.stored_gear))
 		var/obj/item/stored_slot = BT.stored_gear[num2text(slot_back)]
-		if (istype (stored_slot,/obj/item/weapon/storage/backpack))
+		if (istype (stored_slot,/obj/item/storage/backpack))
 			for(var/obj/item/I in stored_slot)
 				I.forceMove(new_pack)
 	activator.equip_to_slot_or_drop(new_pack, slot_back)
@@ -2258,7 +2258,7 @@ var/list/blind_victims = list()
 	talisman_absorb = RUNE_CAN_ATTUNE//once the network has been set, talismans will attune instead of imbue
 
 /datum/rune_spell/blood_cult/portalentrance/midcast(var/mob/add_cultist)
-	if (istype(spell_holder, /obj/item/weapon/talisman))
+	if (istype(spell_holder, /obj/item/talisman))
 		invoke(add_cultist,invocation,1)
 	else
 		invoke(add_cultist,invocation)
@@ -2380,7 +2380,7 @@ var/list/bloodcult_exitportals = list()
 	new /obj/effect/bloodcult_jaunt (T, add_cultist, get_turf(spell_holder))
 
 /datum/rune_spell/blood_cult/portalexit/cast_talisman()
-	var/obj/item/weapon/talisman/T = spell_holder
+	var/obj/item/talisman/T = spell_holder
 	T.uses++//so the talisman isn't deleted when setting the network
 	var/list/valid_choices = list()
 	for (var/datum/rune_spell/blood_cult/portalexit/P in bloodcult_exitportals)
@@ -2540,9 +2540,9 @@ var/list/bloodcult_exitportals = list()
 	    a Ghost made visible (which can be done by hitting one with your Arcane Tome, after using the Seer rune)\
 		It is recommended that multiple cultists participate in this ritual, or that a stockpile of blood be used, since each participating cultists will pay 5u of blood per second, until 300u of blood is paid in total. The resurrected's cultist body has the properties of the Manifested Ghost tattoo by default."
 	ingredients = list(
-		/obj/item/weapon/skull,
+		/obj/item/skull,
 		/obj/effect/decal/cleanable/ash,
-		/obj/item/weapon/reagent_containers/food/snacks/meat,
+		/obj/item/reagent_containers/food/snacks/meat,
 		)
 	cost_upkeep = 5
 	remaining_cost = 300

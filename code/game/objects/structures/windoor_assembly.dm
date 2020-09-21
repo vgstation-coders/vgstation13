@@ -17,7 +17,7 @@
 	dir = NORTH
 
 	var/ini_dir
-	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/obj/item/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
 
@@ -95,7 +95,7 @@ obj/structure/windoor_assembly/Destroy()
 
 /obj/structure/windoor_assembly/attackby(obj/item/W, mob/user)
 	if(iswelder(W) && (!anchored && !wired && !electronics))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		user.visible_message("[user] dissassembles [src].", "You start to dissassemble [src].")
 		if(WT.do_weld(user, src, 40, 0))
 			if(gcDestroyed)
@@ -169,8 +169,8 @@ obj/structure/windoor_assembly/Destroy()
 
 
 	//Adding airlock electronics for access. Step 6 complete.
-	if(istype(W, /obj/item/weapon/circuitboard/airlock) && anchored)
-		var/obj/item/weapon/circuitboard/airlock/AE = W
+	if(istype(W, /obj/item/circuitboard/airlock) && anchored)
+		var/obj/item/circuitboard/airlock/AE = W
 		if(AE.icon_state =="door_electronics_smoked")
 			to_chat(user, "<span class='notice'>\The [AE.name] is too damaged to work.</span>")
 			return
@@ -196,7 +196,7 @@ obj/structure/windoor_assembly/Destroy()
 			if(gcDestroyed)
 				return
 			to_chat(user, "<span class='notice'>You've removed [electronics]!</span>")
-			var/obj/item/weapon/circuitboard/airlock/ae
+			var/obj/item/circuitboard/airlock/ae
 			ae = electronics
 			ae.installed = FALSE
 			electronics = null

@@ -16,7 +16,7 @@
 	desc = "A paramedic space suit. Used in the recovery of bodies from space."
 	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/roller)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/roller)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 //Space santa outfit suit
@@ -51,7 +51,7 @@
 	icon_state = "pirate"
 	item_state = "pirate"
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/handcuffs,/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen)
 	slowdown = NO_SLOWDOWN
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.9
@@ -61,7 +61,7 @@
 	icon_state = "nasa"
 	item_state = "nasa"
 	desc = "Drifting, falling, floating, weightless, coming home."
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank)
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
 	species_restricted = list("Human")
 
@@ -87,7 +87,7 @@
 	icon_state = "clown-eva"
 	item_state = "clown-eva"
 	species_restricted = list("exclude",VOX_SHAPED)
-	allowed = list(/obj/item/weapon/reagent_containers/food/snacks/grown/banana, /obj/item/weapon/bananapeel, /obj/item/weapon/soap, /obj/item/weapon/reagent_containers/spray, /obj/item/weapon/tank)
+	allowed = list(/obj/item/reagent_containers/food/snacks/grown/banana, /obj/item/bananapeel, /obj/item/soap, /obj/item/reagent_containers/spray, /obj/item/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 
 	var/step_sound = "clownstep"

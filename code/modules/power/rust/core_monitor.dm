@@ -2,7 +2,7 @@
 	name = "R-UST Mk. 7 Tokamak Core Monitoring Computer"
 	icon_state = "power"
 	light_color = LIGHT_COLOR_YELLOW
-	circuit = /obj/item/weapon/circuitboard/rust_core_monitor
+	circuit = /obj/item/circuitboard/rust_core_monitor
 
 	var/obj/machinery/power/rust_core/linked_core
 

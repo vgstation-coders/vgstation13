@@ -1,5 +1,5 @@
 var/bomb_set
-var/obj/item/weapon/disk/nuclear/nukedisk
+var/obj/item/disk/nuclear/nukedisk
 
 /obj/machinery/nuclearbomb
 	name = "\improper Nuclear Fission Explosive"
@@ -15,7 +15,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 	var/code = ""
 	var/yes_code = 0
 	var/safety = 1
-	var/obj/item/weapon/disk/nuclear/auth = null
+	var/obj/item/disk/nuclear/auth = null
 	var/removal_stage = 0 // 0 is no removal, 1 is covers removed, 2 is covers open,
 	                      // 3 is sealant open, 4 is unwrenched, 5 is removed from bolts.
 	flags = FPRINT
@@ -35,9 +35,9 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if((M.client && M.machine == src))
 				attack_hand(M)
 
-/obj/machinery/nuclearbomb/attackby(obj/item/weapon/O as obj, mob/user as mob)
+/obj/machinery/nuclearbomb/attackby(obj/item/O as obj, mob/user as mob)
 	if (src.extended)
-		if (istype(O, /obj/item/weapon/disk/nuclear))
+		if (istype(O, /obj/item/disk/nuclear))
 			usr.drop_item(O, src, force_drop = 1)
 			src.auth = O
 			src.add_fingerprint(user)
@@ -48,7 +48,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(0)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/weldingtool/WT = O
 					user.visible_message("[user] starts cutting loose the anchoring bolt covers on [src].", "You start cutting loose the anchoring bolt covers with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -59,7 +59,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(1)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/crowbar))
 					user.visible_message("[user] starts forcing open the bolt covers on [src].", "You start forcing open the anchoring bolt covers with [O]...")
 
 					if(do_after(user,  src, 15))
@@ -72,7 +72,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 			if(2)
 				if(iswelder(O))
 
-					var/obj/item/weapon/weldingtool/WT = O
+					var/obj/item/weldingtool/WT = O
 					user.visible_message("[user] starts cutting apart the anchoring system sealant on [src].", "You start cutting apart the anchoring system's sealant with [O]...")
 
 					if(WT.do_weld(user, src, 40, 5))
@@ -95,7 +95,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				return
 
 			if(4)
-				if(istype(O,/obj/item/weapon/crowbar))
+				if(istype(O,/obj/item/crowbar))
 
 					user.visible_message("[user] begins lifting [src] off of the anchors.", "You begin lifting the device off the anchors...")
 
@@ -184,7 +184,7 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 				src.auth = null
 			else
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/disk/nuclear))
+				if (istype(I, /obj/item/disk/nuclear))
 					usr.drop_item(I, src, force_drop = 1) //FORCE DROP for balance reasons
 					src.auth = I
 		if (src.auth)
@@ -312,20 +312,20 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 /obj/machinery/nuclearbomb/isacidhardened() // Requires Aliens to channel acidspit on the nuke.
 	return TRUE
 
-/obj/item/weapon/disk/nuclear
+/obj/item/disk/nuclear
 	name = "nuclear authentication disk"
 	desc = "Better keep this safe."
 	icon_state = "disk_nuke"
 	flags = FPRINT | TIMELESS
 	var/respawned = 0
 
-/obj/item/weapon/disk/nuclear/New()
+/obj/item/disk/nuclear/New()
 	..()
 	if(!nukedisk)
 		nukedisk = src
 	processing_objects.Add(src)
 
-/obj/item/weapon/disk/nuclear/Destroy()
+/obj/item/disk/nuclear/Destroy()
 	processing_objects.Remove(src)
 	..()
 	replace_disk()
@@ -333,22 +333,22 @@ var/obj/item/weapon/disk/nuclear/nukedisk
 /**
  * NOTE: Don't change it to Destroy().
  */
-/obj/item/weapon/disk/nuclear/Del()
+/obj/item/disk/nuclear/Del()
 	processing_objects.Remove(src)
 	replace_disk()
 	..()
 
-/obj/item/weapon/disk/nuclear/proc/replace_disk()
+/obj/item/disk/nuclear/proc/replace_disk()
 	if(blobstart.len > 0 && !respawned && (nukedisk == src))
 		var/picked_turf = get_turf(pick(blobstart))
 		var/picked_area = formatLocation(picked_turf)
 		var/log_message = "[type] has been destroyed. Creating one at"
 		log_game("[log_message] [picked_area]")
 		message_admins("[log_message] [formatJumpTo(picked_turf, picked_area)]")
-		nukedisk = new /obj/item/weapon/disk/nuclear(picked_turf)
+		nukedisk = new /obj/item/disk/nuclear(picked_turf)
 		respawned = 1
 
-/obj/item/weapon/disk/nuclear/process()
+/obj/item/disk/nuclear/process()
 	var/turf/T = get_turf(src)
 	if(!T)
 		var/atom/A

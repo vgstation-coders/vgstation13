@@ -15,13 +15,13 @@
 "o" = (/obj/abstract/mover/redirector/northwest,/turf/simulated/floor/wood,/area/vault/rattlemebones)
 "p" = (/obj/abstract/mover/redirector/southeast,/turf/simulated/floor/wood,/area/vault/rattlemebones)
 "q" = (/obj/abstract/mover/redirector/northeast,/turf/simulated/floor/wood,/area/vault/rattlemebones)
-"r" = (/obj/item/weapon/dnainjector/nofail/melt,/turf/simulated/floor/wood,/area/vault/rattlemebones)
-"s" = (/obj/item/weapon/coin/gold,/turf/simulated/floor/wood,/area/vault/rattlemebones)
-"t" = (/obj/item/weapon/melee/energy/sword/pirate,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"r" = (/obj/item/dnainjector/nofail/melt,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"s" = (/obj/item/coin/gold,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"t" = (/obj/item/melee/energy/sword/pirate,/turf/simulated/floor/wood,/area/vault/rattlemebones)
 "u" = (/obj/structure/disposalpipe/trunk/no_deconstruct{dir = 4},/obj/structure/disposaloutlet/no_deconstruct{dir = 8},/turf/simulated/floor/wood,/area/vault/rattlemebones)
 "v" = (/obj/structure/disposalpipe/segment/no_deconstruct{dir = 4},/turf/simulated/wall/invulnerable,/area/vault/rattlemebones)
 "w" = (/obj/structure/disposalpipe/trunk/no_deconstruct{dir = 8},/obj/machinery/disposal/deliveryChute/no_deconstruct{dir = 4},/turf/simulated/floor/wood,/area/vault/rattlemebones)
-"x" = (/obj/item/weapon/storage/bag/money/treasure,/turf/simulated/floor/wood,/area/vault/rattlemebones)
+"x" = (/obj/item/storage/bag/money/treasure,/turf/simulated/floor/wood,/area/vault/rattlemebones)
 "y" = (/obj/effect/decal/remains/human,/obj/item/clothing/under/pirate,/obj/item/clothing/accessory/medal/gold,/obj/item/clothing/suit/armor/vest/piratelord,/obj/item/clothing/glasses/thermal/eyepatch,/obj/item/clothing/head/helmet/piratelord,/turf/simulated/floor/wood,/area/vault/rattlemebones)
 
 (1,1,1) = {"

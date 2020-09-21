@@ -1,6 +1,6 @@
 //Docking port disks
 //Insert into a shuttle computer to unlock a new destination
-/obj/item/weapon/disk/shuttle_coords
+/obj/item/disk/shuttle_coords
 	name = "shuttle destination disk"
 	desc = "A small disk containing encrypted coordinates and tracking data."
 	icon = 'icons/obj/datadisks.dmi'
@@ -15,27 +15,27 @@
 	var/list/allowed_shuttles = list() //List of allowed shuttles. Accepts paths (for example /datum/shuttle/arrival). If empty, all shuttles are allowed
 	starting_materials = list(MAT_GLASS = 1250)
 //Example:
-/obj/item/weapon/disk/shuttle_coords/station_arrivals
+/obj/item/disk/shuttle_coords/station_arrivals
 	destination = /obj/docking_port/destination/transport/station
 	header = "station arrivals"
 
-/obj/item/weapon/disk/shuttle_coords/station_auxillary
+/obj/item/disk/shuttle_coords/station_auxillary
 	name = "auxillary docking disk"
 	header = "station auxillary docking"
 	destination = /obj/docking_port/destination/salvage/arrivals
 	allowed_shuttles = list(/datum/shuttle/custom)
 
-/obj/item/weapon/disk/shuttle_coords/disk_jockey
+/obj/item/disk/shuttle_coords/disk_jockey
 	name = "Russian propaganda station destination disk"
 	header = "DJ station"
 	destination = /obj/docking_port/destination/salvage/dj
 	starting_materials = list(MAT_GLASS = 1250, MAT_GOLD = 1250)
 
-/obj/item/weapon/disk/shuttle_coords/vault
+/obj/item/disk/shuttle_coords/vault
 	allowed_shuttles = list(/datum/shuttle/mining, /datum/shuttle/research, /datum/shuttle/security)
 
-///obj/item/weapon/disk/shuttle_coords/vault/random -> leads to a random vault with a docking port!
-/obj/item/weapon/disk/shuttle_coords/vault/random/initialize()
+///obj/item/disk/shuttle_coords/vault/random -> leads to a random vault with a docking port!
+/obj/item/disk/shuttle_coords/vault/random/initialize()
 	var/list/L = list()
 	for(var/obj/docking_port/destination/vault/V in all_docking_ports)
 		if(!V.valid_random_destination)
@@ -53,13 +53,13 @@
 
 //This disk will link to station's arrivals when spawned
 
-/obj/item/weapon/disk/shuttle_coords/New()
+/obj/item/disk/shuttle_coords/New()
 	..()
 
 	if(ticker)
 		initialize()
 
-/obj/item/weapon/disk/shuttle_coords/initialize()
+/obj/item/disk/shuttle_coords/initialize()
 	if(ispath(destination))
 		spawn()
 			destination = locate(destination) in all_docking_ports
@@ -68,35 +68,35 @@
 	else
 		header = "ERROR"
 
-/obj/item/weapon/disk/shuttle_coords/Destroy()
+/obj/item/disk/shuttle_coords/Destroy()
 	if(destination)
 		destination.disk_references.Remove(src)
 		destination = null
 
 	..()
 
-/obj/item/weapon/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
+/obj/item/disk/shuttle_coords/proc/compactible(datum/shuttle/S)
 	if(!allowed_shuttles.len)
 		return TRUE
 
 	return is_type_in_list(S, allowed_shuttles)
 
-/obj/item/weapon/disk/shuttle_coords/proc/reset()
+/obj/item/disk/shuttle_coords/proc/reset()
 	destination = null
 	header = "ERROR"
 
-/obj/item/weapon/disk/shuttle_coords/free_move
+/obj/item/disk/shuttle_coords/free_move
 	name = "shuttle free-movement driver"
 	desc = "This disk contains a piece of software which converts coordinates into subspace trajectories, which shuttle computers are able to use."
 	header = "FREE-MOVE DRIVER"
 
-/obj/item/weapon/disk/shuttle_coords/free_move/initialize()
+/obj/item/disk/shuttle_coords/free_move/initialize()
 	..()
 	header = initial(header)
 
 /obj/docking_port/destination/coord //Specific subtype to hunt for when doing cleanup
 
-/obj/item/weapon/card/shuttle_pass
+/obj/item/card/shuttle_pass
 	name = "shuttle pass"
 	desc = "A one-use shuttle activation pass, for limited access to high-security transportation."
 	icon_state = "data"
@@ -104,21 +104,21 @@
 	var/obj/docking_port/destination/destination
 	var/allowed_shuttle
 
-/obj/item/weapon/card/shuttle_pass/New()
+/obj/item/card/shuttle_pass/New()
 	..()
 	if(ticker)
 		initialize()
 
-/obj/item/weapon/card/shuttle_pass/initialize()
+/obj/item/card/shuttle_pass/initialize()
 	if(ispath(destination))
 		spawn()
 			destination = locate(destination) in all_docking_ports
 
-/obj/item/weapon/card/shuttle_pass/Destroy()
+/obj/item/card/shuttle_pass/Destroy()
 	destination = null
 	..()
 
-/obj/item/weapon/card/shuttle_pass/ert
+/obj/item/card/shuttle_pass/ert
 	name = "\improper ERT shuttle pass"
 	destination = /obj/docking_port/destination/transport/station
 	allowed_shuttle = /datum/shuttle/transport
@@ -130,7 +130,7 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "shuttle"
 	req_access = null
-	circuit = "/obj/item/weapon/circuitboard/shuttle_control"
+	circuit = "/obj/item/circuitboard/shuttle_control"
 
 	machine_flags = EMAGGABLE | SCREWTOGGLE
 
@@ -146,7 +146,7 @@
 	var/allow_silicons = 1		//If 0, AIs and cyborgs can't use this computer
 								//used for admin-only shuttles so that borgs cant hijack 'em
 
-	var/obj/item/weapon/disk/shuttle_coords/disk
+	var/obj/item/disk/shuttle_coords/disk
 
 	//Variables used for custom destinations
 	var/custom_x = 0
@@ -191,10 +191,10 @@
 	return "[span_s][name][span_e]"
 
 /obj/machinery/computer/shuttle_control/attackby(obj/item/O, mob/user)
-	if(istype(O, /obj/item/weapon/disk/shuttle_coords))
+	if(istype(O, /obj/item/disk/shuttle_coords))
 		insert_disk(O, user)
 
-	if(istype(O, /obj/item/weapon/card/shuttle_pass))
+	if(istype(O, /obj/item/card/shuttle_pass))
 		use_pass(O, user)
 
 	return ..()
@@ -261,7 +261,7 @@
 			dat += "<center>[shuttle_name]:<br> <b><A href='?src=\ref[src];move=[1]'>Send[selected_port ? " to [selected_port.areaname]" : ""]</A></b></center><BR>"
 			dat += "<div align=\"right\"><a href='?src=\ref[src];disk=1'>Disk: [disk ? disk.header : "--------"]</a></div>"
 
-			if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+			if(istype(disk, /obj/item/disk/shuttle_coords/free_move))
 				dat += {"<div align=\"left\"><b>COORDINATE INPUTS</b>:<br>
 				<a href='?src=\ref[src];custom_coord=x'>X Offset:</a> [custom_x]</a><br>
 				<a href='?src=\ref[src];custom_coord=y'>Y Offset:</a> [custom_y]</a><br>
@@ -415,7 +415,7 @@
 		src.updateUsrDialog()
 
 	if(href_list["process_custom_coord"])
-		if(istype(disk, /obj/item/weapon/disk/shuttle_coords/free_move))
+		if(istype(disk, /obj/item/disk/shuttle_coords/free_move))
 			var/turf/dest = locate(\
 			shuttle.linked_port.x + custom_x,\
 			shuttle.linked_port.y + custom_y,\
@@ -523,7 +523,7 @@
 		src.updateUsrDialog()
 	if(href_list["disk"])
 		if(!disk) //No disk inserted - grab one from user's hand
-			var/obj/item/weapon/disk/shuttle_coords/D = usr.get_active_hand()
+			var/obj/item/disk/shuttle_coords/D = usr.get_active_hand()
 
 			insert_disk(D, usr)
 		else
@@ -535,13 +535,13 @@
 			disk = null
 			src.updateUsrDialog()
 
-/obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/weapon/disk/shuttle_coords/SC, mob/user)
+/obj/machinery/computer/shuttle_control/proc/insert_disk(obj/item/disk/shuttle_coords/SC, mob/user)
 	if(!shuttle)
 		to_chat(user, "<span class='info'>\The [src] is unresponsive.</span>")
 		return
 
 	if(!istype(SC))
-		if(istype(SC, /obj/item/weapon/disk)) //It's a disk, but not a compactible one
+		if(istype(SC, /obj/item/disk)) //It's a disk, but not a compactible one
 			to_chat(user, "<span class='info'>The disk is rejected by \the [src].</span>")
 
 		return
@@ -557,7 +557,7 @@
 		to_chat(user, "<span class='info'>You insert \the [SC] into \the [src].</span>")
 		src.updateUsrDialog()
 
-/obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/weapon/card/shuttle_pass/P, mob/user)
+/obj/machinery/computer/shuttle_control/proc/use_pass(obj/item/card/shuttle_pass/P, mob/user)
 	if(!istype(P))
 		return
 

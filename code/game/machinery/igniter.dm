@@ -61,9 +61,9 @@ var/global/list/igniters = list()
 	else
 		icon_state = "igniter0"
 
-/obj/machinery/igniter/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
+/obj/machinery/igniter/attackby(var/obj/item/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.assembly)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to cut \the [src] off the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			user.visible_message( \
@@ -111,7 +111,7 @@ var/global/list/igniters = list()
 		icon_state = "[base_state]-p"
 //		src.sd_SetLuminosity(0)
 
-/obj/machinery/sparker/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/sparker/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/device/detective_scanner))
 		return
 	if (W.is_screwdriver(user))
@@ -164,7 +164,7 @@ var/global/list/igniters = list()
 /obj/machinery/ignition_switch/attack_paw(mob/user as mob)
 	return src.attack_hand(user)
 
-/obj/machinery/ignition_switch/attackby(obj/item/weapon/W, mob/user as mob)
+/obj/machinery/ignition_switch/attackby(obj/item/W, mob/user as mob)
 	return src.attack_hand(user)
 
 /obj/machinery/ignition_switch/attack_hand(mob/user as mob)

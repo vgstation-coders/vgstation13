@@ -32,7 +32,7 @@
 	solar_assembly.forceMove(src)
 	update_icon()
 
-/obj/machinery/power/solar/panel/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/power/solar/panel/attackby(obj/item/W, mob/user)
 	if(iscrowbar(W))
 		var/turf/T = get_turf(src)
 		var/obj/item/stack/sheet/glass/G = solar_assembly.glass_type
@@ -143,12 +143,12 @@
 		if(1.0)
 			solar_assembly.glass_type = null //The glass you're looking for is below pal
 			if(prob(15))
-				new /obj/item/weapon/shard(loc)
+				new /obj/item/shard(loc)
 			kill()
 		if(2.0)
 			if(prob(25))
 				solar_assembly.glass_type = null //The glass you're looking for is below pal
-				new /obj/item/weapon/shard(loc)
+				new /obj/item/shard(loc)
 				kill()
 			else
 				broken()

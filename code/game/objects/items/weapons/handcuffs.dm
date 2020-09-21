@@ -1,7 +1,7 @@
 #define SYNDICUFFS_ON_APPLY 0
 #define SYNDICUFFS_ON_REMOVE 1
 
-/obj/item/weapon/handcuffs
+/obj/item/handcuffs
 	name = "handcuffs"
 	desc = "Use this to keep prisoners in line."
 	gender = PLURAL
@@ -22,28 +22,28 @@
 	restraint_resist_time = 2 MINUTES
 	var/list/mutual_handcuffed_mobs = list()
 
-/obj/item/weapon/handcuffs/Destroy()
+/obj/item/handcuffs/Destroy()
 	for (var/mob/living/carbon/cuffed_mob in mutual_handcuffed_mobs)
 		src.remove_mutual_cuff_events(cuffed_mob)
 	. = ..()
 	
-/obj/item/weapon/handcuffs/restraint_apply_intent_check(mob/user)
+/obj/item/handcuffs/restraint_apply_intent_check(mob/user)
 	return 1
 
-/obj/item/weapon/handcuffs/cyborg
+/obj/item/handcuffs/cyborg
 //This space intentionally left blank
 
-/obj/item/weapon/handcuffs/cyborg/on_restraint_removal(var/mob/living/carbon/C)
+/obj/item/handcuffs/cyborg/on_restraint_removal(var/mob/living/carbon/C)
 	spawn(1)
 		qdel(src)
 
 //Syndicate Cuffs. Disguised as regular cuffs, they are pretty explosive
-/obj/item/weapon/handcuffs/syndicate
+/obj/item/handcuffs/syndicate
 	var/countdown_time   = 3 SECONDS
 	var/mode             = SYNDICUFFS_ON_APPLY //Handled at this level, Syndicate Cuffs code
 	var/charge_detonated = FALSE
 
-/obj/item/weapon/handcuffs/syndicate/attack_self(mob/user)
+/obj/item/handcuffs/syndicate/attack_self(mob/user)
 
 	mode = !mode
 
@@ -53,19 +53,19 @@
 		if(SYNDICUFFS_ON_REMOVE)
 			to_chat(user, "<span class='notice'>You pull the rotating arm back until you hear one click. \The [src] will detonate when removed.</span>")
 
-/obj/item/weapon/handcuffs/syndicate/equipped(var/mob/user, var/slot)
+/obj/item/handcuffs/syndicate/equipped(var/mob/user, var/slot)
 	..()
 
 	if(slot == slot_handcuffed && mode == SYNDICUFFS_ON_APPLY && !charge_detonated)
 		detonate(1)
 
-/obj/item/weapon/handcuffs/syndicate/on_restraint_removal(mob/living/carbon/C)
+/obj/item/handcuffs/syndicate/on_restraint_removal(mob/living/carbon/C)
 	if(mode == SYNDICUFFS_ON_REMOVE && !charge_detonated)
 		detonate(0) //This handles cleaning up the inventory already
 		return //Don't clean up twice, we don't want runtimes
 
 //C4 and EMPs don't mix, will always explode at severity 1, and likely to explode at severity 2
-/obj/item/weapon/handcuffs/syndicate/emp_act(severity)
+/obj/item/handcuffs/syndicate/emp_act(severity)
 
 	switch(severity)
 		if(1)
@@ -77,7 +77,7 @@
 			if(prob(50))
 				detonate(1)
 
-/obj/item/weapon/handcuffs/syndicate/ex_act(severity)
+/obj/item/handcuffs/syndicate/ex_act(severity)
 
 	switch(severity)
 		if(1)
@@ -94,7 +94,7 @@
 
 	qdel(src)
 
-/obj/item/weapon/handcuffs/syndicate/proc/detonate(countdown)
+/obj/item/handcuffs/syndicate/proc/detonate(countdown)
 	set waitfor = FALSE
 	if(charge_detonated)
 		return
@@ -106,7 +106,7 @@
 	explosion(get_turf(src), 0, 1, 3, 0)
 	qdel(src)
 
-/obj/item/weapon/handcuffs/cable
+/obj/item/handcuffs/cable
 	name = "cable restraints"
 	desc = "Looks like some cables tied together. Could be used to tie something up."
 	icon_state = "cuff_red"
@@ -114,46 +114,46 @@
 	restraint_resist_time = 30 SECONDS
 	toolsounds = list('sound/weapons/cablecuff.ogg')
 
-/obj/item/weapon/handcuffs/cable/red
+/obj/item/handcuffs/cable/red
 	icon_state = "cuff_red"
 
-/obj/item/weapon/handcuffs/cable/yellow
+/obj/item/handcuffs/cable/yellow
 	icon_state = "cuff_yellow"
 	_color = "yellow"
 
-/obj/item/weapon/handcuffs/cable/blue
+/obj/item/handcuffs/cable/blue
 	icon_state = "cuff_blue"
 	_color = "blue"
 
-/obj/item/weapon/handcuffs/cable/green
+/obj/item/handcuffs/cable/green
 	icon_state = "cuff_green"
 	_color = "green"
 
-/obj/item/weapon/handcuffs/cable/pink
+/obj/item/handcuffs/cable/pink
 	icon_state = "cuff_pink"
 	_color = "pink"
 
-/obj/item/weapon/handcuffs/cable/orange
+/obj/item/handcuffs/cable/orange
 	icon_state = "cuff_orange"
 	_color = "orange"
 
-/obj/item/weapon/handcuffs/cable/cyan
+/obj/item/handcuffs/cable/cyan
 	icon_state = "cuff_cyan"
 	_color = "cyan"
 
-/obj/item/weapon/handcuffs/cable/white
+/obj/item/handcuffs/cable/white
 	icon_state = "cuff_white"
 	_color = "white"
 
-/obj/item/weapon/handcuffs/cable/update_icon()
+/obj/item/handcuffs/cable/update_icon()
 	if(_color)
 		icon_state = "cuff_[_color]"
 
-/obj/item/weapon/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
+/obj/item/handcuffs/cable/attackby(var/obj/item/I, mob/user as mob)
 	..()
 	if(istype(I, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = I
-		var/obj/item/weapon/wirerod/W = new /obj/item/weapon/wirerod
+		var/obj/item/wirerod/W = new /obj/item/wirerod
 		R.use(1)
 
 		user.before_take_item(src)

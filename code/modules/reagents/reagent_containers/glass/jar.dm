@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/glass/jar
+/obj/item/reagent_containers/glass/jar
 	name = "jar"
 	desc = "A large jar. Holds 250 units."
 	icon = 'icons/obj/chemical.dmi'
@@ -13,20 +13,20 @@
 	melt_temperature = MELTPOINT_GLASS
 	origin_tech = Tc_MATERIALS + "=1"
 	var/obj/held_item = null
-	var/list/forbidden_items = list(/obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/syringe, \
-		/obj/item/weapon/reagent_containers/glass/jar, /obj/item/weapon/reagent_containers/pill)
+	var/list/forbidden_items = list(/obj/item/reagent_containers/dropper, /obj/item/reagent_containers/syringe, \
+		/obj/item/reagent_containers/glass/jar, /obj/item/reagent_containers/pill)
 
-/obj/item/weapon/reagent_containers/glass/jar/New()
+/obj/item/reagent_containers/glass/jar/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/reagent_containers/glass/jar/Destroy()
+/obj/item/reagent_containers/glass/jar/Destroy()
 	qdel(held_item)
 	held_item = null
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/reagent_containers/glass/jar/update_icon()
+/obj/item/reagent_containers/glass/jar/update_icon()
 	overlays.len = 0
 	underlays.len = 0
 	if(reagents.total_volume)
@@ -56,7 +56,7 @@
 		contained_within.transform = M
 		underlays += contained_within
 
-/obj/item/weapon/reagent_containers/glass/jar/attackby(obj/item/I, mob/user, params)
+/obj/item/reagent_containers/glass/jar/attackby(obj/item/I, mob/user, params)
 	..()
 	if(!held_item && I.w_class <= w_class && !I.is_open_container() && !is_type_in_list(I, forbidden_items))
 		if(user.drop_item(I, src))
@@ -65,43 +65,43 @@
 			update_icon()
 
 
-/obj/item/weapon/reagent_containers/glass/jar/attack_self(mob/user)
+/obj/item/reagent_containers/glass/jar/attack_self(mob/user)
 	if(held_item)
 		to_chat(user, "<span class = 'notice'>You remove \the [held_item] from \the [src].</span>")
 		user.put_in_hands(held_item)
 		held_item = null
 		update_icon()
 
-/obj/item/weapon/reagent_containers/glass/jar/examine(mob/user)
+/obj/item/reagent_containers/glass/jar/examine(mob/user)
 	..()
 	if(held_item)
 		to_chat(user, "<span class = 'info'>It has \a [held_item] floating within.</span>")
 		to_chat(user, "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[held_item]'>Take a closer look.</a></span>")
 
-/obj/item/weapon/reagent_containers/glass/jar/recyclable()
+/obj/item/reagent_containers/glass/jar/recyclable()
 	if(held_item)
 		return FALSE
 	return TRUE
 
-/obj/item/weapon/reagent_containers/glass/jar/on_reagent_change()
+/obj/item/reagent_containers/glass/jar/on_reagent_change()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/jar/pickup(mob/user)
+/obj/item/reagent_containers/glass/jar/pickup(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/jar/dropped(mob/user)
+/obj/item/reagent_containers/glass/jar/dropped(mob/user)
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/jar/attack_hand()
+/obj/item/reagent_containers/glass/jar/attack_hand()
 	..()
 	update_icon()
 
-/obj/item/weapon/reagent_containers/glass/jar/proc/safe_holder()
+/obj/item/reagent_containers/glass/jar/proc/safe_holder()
 	return reagents.has_any_reagents(list(SALINE, CLONEXADONE), volume/2)
 
-/obj/item/weapon/reagent_containers/glass/jar/process()
+/obj/item/reagent_containers/glass/jar/process()
 	if(!held_item)
 		return
 
@@ -112,7 +112,7 @@
 
 	reagents.reaction(held_item)
 
-/obj/item/weapon/reagent_containers/glass/jar/throw_impact(atom/hit_atom, var/speed, mob/user)
+/obj/item/reagent_containers/glass/jar/throw_impact(atom/hit_atom, var/speed, mob/user)
 	..()
 	if(hit_atom)
 		src.visible_message("<span  class='warning'>The [src.name] shatters!</span>","<span  class='warning'>You hear a shatter!</span>")
@@ -123,10 +123,10 @@
 		if(held_item)
 			held_item.forceMove(loc)
 			held_item = null
-		new /obj/item/weapon/shard(loc)
+		new /obj/item/shard(loc)
 		qdel(src)
 
-/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer
+/obj/item/reagent_containers/glass/jar/erlenmeyer
 	name = "comically large erlenmeyer flask"
 	desc = "Careful, they don't even make these anymore. Can hold 250 units."
 	icon_state = "erlenmeyerhuge"

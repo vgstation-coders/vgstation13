@@ -139,7 +139,7 @@
 			dir=8
 		else
 			dir=4
-	if (istype(P, /obj/item/weapon/pen))
+	if (istype(P, /obj/item/pen))
 		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
@@ -180,7 +180,7 @@
 	layer = TABLE_LAYER
 
 /obj/structure/m_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (istype(mover, /obj/item/weapon/dummy))
+	if (istype(mover, /obj/item/dummy))
 		return 1
 	else
 		return ..()
@@ -309,7 +309,7 @@
 	update()
 
 /obj/structure/crematorium/attackby(P as obj, mob/user as mob)
-	if (istype(P, /obj/item/weapon/pen))
+	if (istype(P, /obj/item/pen))
 		set_tiny_label(user, " - '", "'", maxlength=32)
 	src.add_fingerprint(user)
 
@@ -345,7 +345,7 @@
 	else
 		var/inside = get_contents_in_object(src)
 
-		if (locate(/obj/item/weapon/disk/nuclear) in inside)
+		if (locate(/obj/item/disk/nuclear) in inside)
 			to_chat(user, "<SPAN CLASS='warning'>You get the feeling that you shouldn't cremate one of the items in the cremator.</SPAN>")
 			return
 		if(locate(/mob/living/simple_animal/scp_173) in inside)
@@ -401,7 +401,7 @@
 	layer = TABLE_LAYER
 
 /obj/structure/c_tray/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if (istype(mover, /obj/item/weapon/dummy))
+	if (istype(mover, /obj/item/dummy))
 		return 1
 	else
 		return ..()

@@ -6,13 +6,13 @@
 	density = 0
 	anchored = 1
 	var/list/cans = new/list() //These are the empty containers.
-	var/obj/item/weapon/reagent_containers/beaker = null // This is the active container
+	var/obj/item/reagent_containers/beaker = null // This is the active container
 
 /obj/structure/centrifuge/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It contains [cans.len] empty containers[beaker ? " and an active container!" : "."]</span>")
 
-/obj/structure/centrifuge/attackby(obj/item/weapon/reagent_containers/W as obj, mob/user as mob)
+/obj/structure/centrifuge/attackby(obj/item/reagent_containers/W as obj, mob/user as mob)
 	if(iscrowbar(W))
 		var/obj/structure/toilet/T = new /obj/structure/toilet(src.loc)
 		T.open = 1
@@ -65,7 +65,7 @@
 	add_fingerprint(usr)
 	to_chat(usr, "<span class='notice'>\The [src] groans as it spits out containers.</span>")
 	while(cans.len>0 && beaker.reagents.reagent_list.len>0)
-		var/obj/item/weapon/reagent_containers/C = cans[1]
+		var/obj/item/reagent_containers/C = cans[1]
 		var/datum/reagent/R = beaker.reagents.reagent_list[1]
 		beaker.reagents.trans_id_to(C,R.id,50)
 		C.forceMove(src.loc)

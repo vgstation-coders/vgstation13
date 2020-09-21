@@ -60,7 +60,7 @@
 	var/moving = 0
 
 	var/list/cant_leave_zlevel = list(
-		/obj/item/weapon/disk/nuclear = "The nuclear authentication disk can't be transported on a shuttle.",
+		/obj/item/disk/nuclear = "The nuclear authentication disk can't be transported on a shuttle.",
 		)
 
 	//This list is transferred to all linked shuttle control consoles

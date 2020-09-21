@@ -246,9 +246,9 @@ var/list/DummyCache = list()
 /proc/CanReachThrough(turf/srcturf, turf/targetturf, atom/target, var/pass_flags=0)
 
 
-	var/obj/item/weapon/dummy/D = locate() in DummyCache
+	var/obj/item/dummy/D = locate() in DummyCache
 	if(!D)
-		D = new /obj/item/weapon/dummy( srcturf )
+		D = new /obj/item/dummy( srcturf )
 	else
 		DummyCache.Remove(D)
 		D.forceMove(srcturf)

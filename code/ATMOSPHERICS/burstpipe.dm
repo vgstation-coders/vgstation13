@@ -38,7 +38,7 @@
 		node1.initialize()
 		node1.build_network()
 
-/obj/machinery/atmospherics/unary/vent/burstpipe/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/machinery/atmospherics/unary/vent/burstpipe/attackby(var/obj/item/W, var/mob/user)
 	if(!W.is_wrench(user))
 		return ..()
 	var/turf/T = get_turf(src)

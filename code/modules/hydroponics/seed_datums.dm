@@ -82,7 +82,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 	mysterious = 1
 
 	seed_noun = pick("spores","nodes","cuttings","seeds")
-	products = list(pick(subtypesof(/obj/item/weapon/reagent_containers/food/snacks/grown)))
+	products = list(pick(subtypesof(/obj/item/reagent_containers/food/snacks/grown)))
 	potency = rand(5,30)
 
 	randomize_icon()
@@ -506,7 +506,7 @@ var/global/list/gene_tag_masks = list()   // Gene obfuscation for delicious tria
 
 		if(ispath(product_type, /obj/item/stack))
 			product = drop_stack(product_type, T, 1, null)
-		else if(ispath(product_type, /obj/item/weapon/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/weapon/grown))
+		else if(ispath(product_type, /obj/item/reagent_containers/food/snacks/grown) || ispath(product_type, /obj/item/grown))
 			product = new product_type(T, custom_plantname = name)
 		else
 			product = new product_type(T)

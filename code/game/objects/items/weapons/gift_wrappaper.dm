@@ -7,7 +7,7 @@
 
 ////WRAPPED GIFTS////
 
-/obj/item/weapon/gift
+/obj/item/gift
 	name = "gift"
 	desc = "A wrapped item."
 	icon = 'icons/obj/items.dmi'
@@ -18,14 +18,14 @@
 	w_class = W_CLASS_MEDIUM
 	autoignition_temperature=AUTOIGNITION_PAPER
 
-/obj/item/weapon/gift/New(turf/loc, var/obj/item/target, var/W)
+/obj/item/gift/New(turf/loc, var/obj/item/target, var/W)
 	..()
 	w_class = W
 	gift = target
 	update_icon()
 
-/obj/item/weapon/gift/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/pen))
+/obj/item/gift/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/pen))
 		var/str = copytext(sanitize(input(user,"What should the label read? (max 52 characters)","Write a personal message!","") as message|null),1,MAX_NAME_LEN * 2)
 		if (!Adjacent(user) || user.stat)
 			return
@@ -37,7 +37,7 @@
 		src.desc = "A wrapped item. The label reads: [str]"
 		log_admin("[user.key]/([user.name]) tagged a gift with \"[str]\" at [get_turf(user)]")
 
-/obj/item/weapon/gift/update_icon()
+/obj/item/gift/update_icon()
 	switch(w_class)
 		if(W_CLASS_TINY,W_CLASS_SMALL)
 			icon_state = "gift-small"
@@ -49,7 +49,7 @@
 			icon_state = "gift-large"
 			item_state = "gift-large"
 
-/obj/item/weapon/gift/attack_self(mob/user as mob)
+/obj/item/gift/attack_self(mob/user as mob)
 	user.drop_item(src, force_drop = 1)
 	if(gift)
 		user.put_in_active_hand(gift)
@@ -60,14 +60,14 @@
 	qdel(src)
 	return
 
-/obj/item/weapon/gift/ashify()//so the content of player-made gifts can be recovered.
+/obj/item/gift/ashify()//so the content of player-made gifts can be recovered.
 	if(gift)
 		gift.forceMove(get_turf(src))
 	..()
 
 ////WINTER GIFTS////
 
-/obj/item/weapon/winter_gift
+/obj/item/winter_gift
 	name = "gift"
 	desc = ""
 	icon = 'icons/obj/items.dmi'
@@ -76,66 +76,66 @@
 	w_class = W_CLASS_LARGE
 	autoignition_temperature=AUTOIGNITION_PAPER
 
-/obj/item/weapon/winter_gift/New()
+/obj/item/winter_gift/New()
 	..()
 	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/winter_gift/ex_act()
+/obj/item/winter_gift/ex_act()
 	qdel(src)
 	return
 
-/obj/item/weapon/winter_gift/regular
+/obj/item/winter_gift/regular
 	desc = "What are you waiting for? Tear that paper apart!"
 	icon_state = "gift_winter-1"
 	item_state = "gift_winter-1"
 
-/obj/item/weapon/winter_gift/food
+/obj/item/winter_gift/food
 	desc = "That one smells really good!"
 	icon_state = "gift_winter-2"
 	item_state = "gift_winter-2"
 
-/obj/item/weapon/winter_gift/cloth
+/obj/item/winter_gift/cloth
 	desc = "That one feels warm to the touch!"
 	icon_state = "gift_winter-3"
 	item_state = "gift_winter-3"
 
-/obj/item/weapon/winter_gift/special
+/obj/item/winter_gift/special
 	desc = "There is something eerie about that one...opening it might or might not be a good idea."
 	icon_state = "gift_winter-4"
 	item_state = "gift_winter-4"
 
 
-/obj/item/weapon/winter_gift/attack_self(mob/M as mob)
+/obj/item/winter_gift/attack_self(mob/M as mob)
 	to_chat(M, "<span class='notice'>The gift was empty!</span>")
 	M.u_equip(src,0)
 	qdel(src)
 	return
 
-/obj/item/weapon/winter_gift/regular/attack_self(mob/M as mob)
+/obj/item/winter_gift/regular/attack_self(mob/M as mob)
 	var/gift_type = pick(
-		/obj/item/weapon/sord,
-		/obj/item/weapon/storage/wallet,
+		/obj/item/sord,
+		/obj/item/storage/wallet,
 		/obj/item/device/camera,
 		/obj/item/device/camera/sepia,
-		/obj/item/weapon/storage/photo_album,
-		/obj/item/weapon/storage/box/snappops,
-		/obj/item/weapon/storage/fancy/crayons,
-		/obj/item/weapon/storage/backpack/holding,
-		/obj/item/weapon/storage/belt/champion,
-		/obj/item/weapon/soap/deluxe,
-		/obj/item/weapon/pickaxe/silver,
-		/obj/item/weapon/pen/invisible,
-		/obj/item/weapon/lipstick/random,
-		/obj/item/weapon/grenade/smokebomb,
-//		/obj/item/weapon/corncob,
+		/obj/item/storage/photo_album,
+		/obj/item/storage/box/snappops,
+		/obj/item/storage/fancy/crayons,
+		/obj/item/storage/backpack/holding,
+		/obj/item/storage/belt/champion,
+		/obj/item/soap/deluxe,
+		/obj/item/pickaxe/silver,
+		/obj/item/pen/invisible,
+		/obj/item/lipstick/random,
+		/obj/item/grenade/smokebomb,
+//		/obj/item/corncob,
 		/obj/item/mounted/poster,
-//		/obj/item/weapon/book/manual/barman_recipes,	//we're in December 2014 and those books are still empty
-//		/obj/item/weapon/book/manual/chef_recipes,
-		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/beach_ball,
-//		/obj/item/weapon/beach_ball/holoball,
-		/obj/item/weapon/banhammer,
+//		/obj/item/book/manual/barman_recipes,	//we're in December 2014 and those books are still empty
+//		/obj/item/book/manual/chef_recipes,
+		/obj/item/bikehorn,
+		/obj/item/beach_ball,
+//		/obj/item/beach_ball/holoball,
+		/obj/item/banhammer,
 		/obj/item/toy/waterballoon,
 //		/obj/item/toy/blink,	//this one reaaally needs a revamp. there's a limit to how lame a toy can be.
 		/obj/item/toy/crossbow,
@@ -159,11 +159,11 @@
 		/obj/item/clothing/mask/cigarette/blunt/cruciatus,
 		/obj/item/device/paicard,
 		/obj/item/device/instrument/violin,
-		/obj/item/weapon/storage/belt/utility/complete,
+		/obj/item/storage/belt/utility/complete,
 		/obj/item/clothing/accessory/tie/horrible,
 		/obj/item/device/maracas,
-		/obj/item/weapon/gun/energy/temperature,
-		/obj/item/weapon/pickaxe/shovel,
+		/obj/item/gun/energy/temperature,
+		/obj/item/pickaxe/shovel,
 		/obj/item/clothing/shoes/galoshes,
 		)
 
@@ -176,11 +176,11 @@
 	return
 
 //christmas and festive food
-/obj/item/weapon/winter_gift/food/attack_self(mob/M as mob)
+/obj/item/winter_gift/food/attack_self(mob/M as mob)
 	var/gift_type = pick(
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/birthdaycake,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/buchedenoel,
-		/obj/item/weapon/reagent_containers/food/snacks/sliceable/turkey,
+		/obj/item/reagent_containers/food/snacks/sliceable/birthdaycake,
+		/obj/item/reagent_containers/food/snacks/sliceable/buchedenoel,
+		/obj/item/reagent_containers/food/snacks/sliceable/turkey,
 		)
 
 	var/obj/item/I = new gift_type(M)
@@ -192,7 +192,7 @@
 	return
 
 //warm clothes
-/obj/item/weapon/winter_gift/cloth/attack_self(mob/M as mob)
+/obj/item/winter_gift/cloth/attack_self(mob/M as mob)
 	if(prob(30))
 		cloth_bundle()
 		to_chat(M, "<span class='notice'>You unwrapped a bundle of clothes! Looks comfy!</span>")
@@ -213,7 +213,7 @@
 	qdel(src)
 	return
 
-/obj/item/weapon/winter_gift/cloth/proc/cloth_bundle()
+/obj/item/winter_gift/cloth/proc/cloth_bundle()
 	var/bundle = pick(
 		3;"batman",
 		10;"russian fur",
@@ -224,7 +224,7 @@
 
 	switch(bundle)
 		if("batman")
-			new /obj/item/weapon/storage/belt/security/batmanbelt(get_turf(loc))
+			new /obj/item/storage/belt/security/batmanbelt(get_turf(loc))
 			new /obj/item/clothing/head/batman(get_turf(loc))
 			new /obj/item/clothing/gloves/batmangloves(get_turf(loc))
 			new /obj/item/clothing/shoes/jackboots/batmanboots(get_turf(loc))
@@ -247,12 +247,12 @@
 			new /obj/item/device/maracas(get_turf(loc))
 
 //dangerous items
-/obj/item/weapon/winter_gift/special/attack_self(mob/M as mob)
+/obj/item/winter_gift/special/attack_self(mob/M as mob)
 	var/gift_type = pick(
 		/obj/item/device/fuse_bomb,
-		/obj/item/weapon/card/emag,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned,
-		/obj/item/weapon/tome_legacy,
+		/obj/item/card/emag,
+		/obj/item/reagent_containers/food/snacks/grown/apple/poisoned,
+		/obj/item/tome_legacy,
 		)
 
 	var/obj/item/I = new gift_type(M)
@@ -282,12 +282,12 @@
 	return
 
 //black gifts have 2% chance to spawn by default.
-/obj/item/weapon/winter_gift/proc/pick_a_gift(var/turf/T,var/special_chance = 2)
+/obj/item/winter_gift/proc/pick_a_gift(var/turf/T,var/special_chance = 2)
 	var/gift_type = pick(
-		50;/obj/item/weapon/winter_gift/regular,
-		25;/obj/item/weapon/winter_gift/food,
-		25;/obj/item/weapon/winter_gift/cloth,
-		special_chance;/obj/item/weapon/winter_gift/special,
+		50;/obj/item/winter_gift/regular,
+		25;/obj/item/winter_gift/food,
+		25;/obj/item/winter_gift/cloth,
+		special_chance;/obj/item/winter_gift/special,
 		)
 	new gift_type(T)
 
@@ -312,7 +312,7 @@
 		return
 	to_chat(user, "<span class='notice'>You can't move.</span>")
 
-/obj/structure/strange_present/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/strange_present/attackby(obj/item/W as obj, mob/user as mob)
 	if (iswirecutter(W))
 		to_chat(user, "<span class='notice'>You cut open the present.</span>")
 
@@ -333,7 +333,7 @@
 	return
 
 ///Loot crate///
-/obj/item/weapon/winter_gift/dorkcube
+/obj/item/winter_gift/dorkcube
 	name = "loot box"
 	desc = "Don't forget to shout the magic phrase when you open it! It smells faintly of iron."
 	icon = 'icons/obj/storage/storage.dmi'
@@ -341,7 +341,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/toolbox_ihl.dmi', "right_hand" = 'icons/mob/in-hand/right/toolbox_ihr.dmi')
 	item_state = "lootbox_purple"
 
-/obj/item/weapon/winter_gift/dorkcube/attack_self(mob/user)
+/obj/item/winter_gift/dorkcube/attack_self(mob/user)
 	to_chat(user, "<span class='notice'>You begin ripping into the wrapper.</span>")
 	playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
 	if (do_after(user, src, 2 SECONDS))
@@ -353,7 +353,7 @@
 			A.add_blood(blooddonor)
 		bloodmess_splatter(T, null, null, null, DEFAULT_BLOOD)
 		qdel(src)
-		var/obj/item/weapon/storage/toolbox/usedlootbox = new /obj/item/weapon/storage/toolbox
+		var/obj/item/storage/toolbox/usedlootbox = new /obj/item/storage/toolbox
 		usedlootbox.add_blood(blooddonor)
 		user.put_in_hands(usedlootbox)
 		user.regenerate_icons()

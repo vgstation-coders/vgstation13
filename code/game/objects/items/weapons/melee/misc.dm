@@ -1,4 +1,4 @@
-/obj/item/weapon/melee/chainofcommand
+/obj/item/melee/chainofcommand
 	name = "chain of command"
 	desc = "A tool used by great men to placate the frothing masses."
 	icon_state = "chain"
@@ -13,11 +13,11 @@
 	origin_tech = Tc_COMBAT + "=4"
 	attack_verb = list("flogs", "whips", "lashes", "disciplines")
 
-/obj/item/weapon/melee/chainofcommand/suicide_act(mob/user)
+/obj/item/melee/chainofcommand/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is strangling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/melee/morningstar
+/obj/item/melee/morningstar
 	name = "morningstar"
 	desc = "A long mace with a round, spiky end. Very heavy."
 	icon_state = "morningstar"

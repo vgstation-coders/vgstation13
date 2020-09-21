@@ -2,9 +2,9 @@
 //////PREPARE GENITALS///////
 /datum/surgery_step/prepare_genitals
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 50,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 50,
 		)
 
 	priority = 1
@@ -41,10 +41,10 @@
 
 /datum/surgery_step/reshape_genitals
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large = 75,
-		/obj/item/weapon/hatchet = 50,
-		/obj/item/weapon/wirecutters = 35,
+		/obj/item/scalpel = 100,
+		/obj/item/kitchen/utensil/knife/large = 75,
+		/obj/item/hatchet = 50,
+		/obj/item/wirecutters = 35,
 		)
 
 	priority = 10 //Fuck sakes

@@ -77,7 +77,7 @@
 		return
 	..()
 
-/obj/item/device/radio/intercom/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/intercom/attackby(obj/item/W as obj, mob/user as mob)
 	switch(buildstage)
 		if(3)
 			if(iswirecutter(W) && b_stat && wires.IsAllCut())
@@ -122,12 +122,12 @@
 				to_chat(user, "<span class='notice'>You begin removing the electronics...</span>")
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, 10))
-					new /obj/item/weapon/intercom_electronics(get_turf(src))
+					new /obj/item/intercom_electronics(get_turf(src))
 					to_chat(user, "<span class='notice'>The circuitboard pops out!</span>")
 					buildstage = 0
 				return 1
 		if(0)
-			if(istype(W,/obj/item/weapon/intercom_electronics))
+			if(istype(W,/obj/item/intercom_electronics))
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				if(do_after(user, src, 10))
 					qdel(W)
@@ -135,7 +135,7 @@
 					buildstage = 1
 				return 1
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT=W
+				var/obj/item/weldingtool/WT=W
 				if(WT.do_weld(user, src, 10, 5))
 					to_chat(user, "<span class='notice'>You cut the intercom frame from the wall!</span>")
 					new /obj/item/mounted/frame/intercom(get_turf(src))
@@ -159,7 +159,7 @@
 		on = this_area.powered(EQUIP) // set "on" to the power status
 		update_icon()
 
-/obj/item/weapon/intercom_electronics
+/obj/item/intercom_electronics
 	name = "intercom electronics"
 	icon = 'icons/obj/doors/door_assembly.dmi'
 	icon_state = "door_electronics"

@@ -6,10 +6,10 @@
 	associated_job = /datum/job/captain
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/captain,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_cap,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/com,
+		BACKPACK_STRING = /obj/item/storage/backpack/captain,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_cap,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/com,
 	)
 
 	items_to_spawn = list(
@@ -41,17 +41,17 @@
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/storage/box/ids = GRASP_RIGHT_HAND,
-		/obj/item/weapon/gun/energy/gun = GRASP_LEFT_HAND,
+		/obj/item/storage/box/ids = GRASP_RIGHT_HAND,
+		/obj/item/gun/energy/gun = GRASP_LEFT_HAND,
 	)
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty/,
+		/obj/item/implant/loyalty/,
 	)
 
 	pda_type = /obj/item/device/pda/captain
 	pda_slot = slot_l_store
-	id_type = /obj/item/weapon/card/id/gold
+	id_type = /obj/item/card/id/gold
 
 
 /datum/outfit/captain/post_equip(var/mob/living/carbon/human/H)

@@ -1,6 +1,6 @@
 
 ////////////////////////////////////ENERGY GUN/////////////////////////////////////////////////////
-/obj/item/weapon/gun/energy/gun
+/obj/item/gun/energy/gun
 	name = "energy gun"
 	desc = "A basic energy-based gun with two settings: Stun and kill."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
@@ -16,10 +16,10 @@
 
 	var/mode = 0 //0 = stun, 1 = kill
 
-/obj/item/weapon/gun/energy/gun/isHandgun()
+/obj/item/gun/energy/gun/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/gun/attack_self(mob/living/user as mob)
+/obj/item/gun/energy/gun/attack_self(mob/living/user as mob)
 	switch(mode)
 		if(0)
 			mode = 1
@@ -47,7 +47,7 @@
 
 ////////////////////////////ADVANCED ENERGY GUN////////////////////////////////////////////////////
 
-/obj/item/weapon/gun/energy/gun/nuclear
+/obj/item/gun/energy/gun/nuclear
 	name = "\improper Advanced Energy Gun"
 	desc = "An improved energy gun featuring a miniaturized fission reactor that recharges its battery over time. Susceptible to EMPs."
 	icon_state = "nucgun"
@@ -57,16 +57,16 @@
 	var/core_stability = 10
 	var/charge_tick = 0
 
-/obj/item/weapon/gun/energy/gun/nuclear/New()
+/obj/item/gun/energy/gun/nuclear/New()
 	..()
 	processing_objects.Add(src)
 	update_icon()
 
-/obj/item/weapon/gun/energy/gun/nuclear/Destroy()
+/obj/item/gun/energy/gun/nuclear/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/energy/gun/nuclear/process()
+/obj/item/gun/energy/gun/nuclear/process()
 	if (core_stability < 10)
 		if (prob(core_stability))//the core will slowly stabilize itself over time if it hasn't overloaded yet
 			core_stability++
@@ -80,7 +80,7 @@
 			power_supply.give(core_stability*10)
 			update_icon()
 
-/obj/item/weapon/gun/energy/gun/nuclear/proc/critfail()
+/obj/item/gun/energy/gun/nuclear/proc/critfail()
 	if(power_supply)
 		power_supply.charge = 0
 
@@ -92,13 +92,13 @@
 
 	processing_objects.Remove(src)
 
-/obj/item/weapon/gun/energy/gun/nuclear/emp_act(severity)
+/obj/item/gun/energy/gun/nuclear/emp_act(severity)
 	..()
 	core_stability -= round(4/severity)
 	if (core_stability <= 0)
 		critfail()
 
-/obj/item/weapon/gun/energy/gun/nuclear/update_icon()
+/obj/item/gun/energy/gun/nuclear/update_icon()
 	overlays.len = 0
 
 	var/stunkill = "stun"
@@ -143,13 +143,13 @@
 
 ////////////////////////////ADVANCED ENERGY GUN (old)//////////////////////////////////////////////
 
-/obj/item/weapon/gun/energy/gun/nuclear/experimental
+/obj/item/gun/energy/gun/nuclear/experimental
 	name = "\improper Advanced Energy Gun"
 	desc = "An energy gun with an experimental miniaturized reactor."
 	icon_state = "nucgunold"
 	item_state = "nucgunold"
 
-/obj/item/weapon/gun/energy/gun/nuclear/experimental/update_icon()
+/obj/item/gun/energy/gun/nuclear/experimental/update_icon()
 	overlays.len = 0
 
 	var/ratio = 0

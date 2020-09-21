@@ -7,7 +7,7 @@
 	req_access = list(access_science)
 
 	var/obj/machinery/artifact/contained
-	var/obj/item/weapon/paper/anomaly/report
+	var/obj/item/paper/anomaly/report
 	var/broken = FALSE
 	var/health = 1000
 
@@ -35,9 +35,9 @@
 	if(href_list["examine"])
 		report.show_text(usr)
 
-/obj/structure/anomaly_container/attackby(var/obj/item/weapon/P, var/mob/user)
+/obj/structure/anomaly_container/attackby(var/obj/item/P, var/mob/user)
 	..()
-	if (istype(P,/obj/item/weapon/paper/anomaly))
+	if (istype(P,/obj/item/paper/anomaly))
 		if (report)
 			to_chat(user, "<span class='notice'>You swap the reports.</span>")
 			report.forceMove(src.loc)

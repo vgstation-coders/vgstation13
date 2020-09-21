@@ -29,7 +29,7 @@
 	icon_state = "candle1[on ? "_lit" : ""]"
 
 
-/obj/item/debug/screamer/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/debug/screamer/attackby(var/obj/item/W, var/mob/user)
 	..()
 	if(!on && W.is_hot())
 		visible_message("<span class='notice'>[user] lights [src] with [W].</span>")

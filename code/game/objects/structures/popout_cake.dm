@@ -89,11 +89,11 @@
 /obj/structure/popout_cake/proc/drop_slice()
 	slices_amount--
 
-	return new /obj/item/weapon/reagent_containers/food/snacks/plaincakeslice/full(get_turf(src))
+	return new /obj/item/reagent_containers/food/snacks/plaincakeslice/full(get_turf(src))
 
 /obj/structure/popout_cake/proc/check_slices()
 	if(slices_amount <= 0)
-		new /obj/item/weapon/storage/box/large(get_turf(src))
+		new /obj/item/storage/box/large(get_turf(src))
 
 		qdel(src)
 

@@ -81,9 +81,9 @@ STI KALY - blind
 	else
 		var/mob/living/carbon/H = affected_mob
 		if(prob(chance))
-			if(!istype(H.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
+			if(!istype(H.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/staff))
 				if(H.drop_item(H.get_held_item_by_index(GRASP_RIGHT_HAND)))
-					H.put_in_r_hand( new /obj/item/weapon/staff(H) )
+					H.put_in_r_hand( new /obj/item/staff(H) )
 			return
 	return
 

@@ -7,8 +7,8 @@
         return TRUE
     
     if (owner && owner.current)
-        for(var/obj/item/weapon/reagent_containers/O in recursive_type_check(owner.current, /obj/item/weapon/reagent_containers))
-            if (istype(O, /obj/item/weapon/reagent_containers/food/drinks/bottle/sake))
+        for(var/obj/item/reagent_containers/O in recursive_type_check(owner.current, /obj/item/reagent_containers))
+            if (istype(O, /obj/item/reagent_containers/food/drinks/bottle/sake))
                 return TRUE
             else if(O.reagents.has_reagent(SAKE))
                 return TRUE

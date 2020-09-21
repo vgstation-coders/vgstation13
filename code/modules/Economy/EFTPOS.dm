@@ -26,7 +26,7 @@
 	linked_account = station_account
 
 /obj/item/device/eftpos/proc/print_reference()
-	var/obj/item/weapon/paper/R = new(src.loc)
+	var/obj/item/paper/R = new(src.loc)
 	R.name = "Reference: [eftpos_name]"
 
 	R.info = {"<b>[eftpos_name] reference</b><br><br>
@@ -37,7 +37,7 @@
 	stampoverlay.icon_state = "paper_stamp-cent"
 	if(!R.stamped)
 		R.stamped = new
-	R.stamped += /obj/item/weapon/stamp
+	R.stamped += /obj/item/stamp
 	R.overlays += stampoverlay
 	R.stamps += "<HR><i>This paper has been stamped by the EFTPOS device.</i>"
 	var/obj/item/delivery/D = new(R.loc)
@@ -87,13 +87,13 @@
 		user << browse(null,"window=eftpos")
 
 /obj/item/device/eftpos/attackby(O as obj, user as mob)
-	if(istype(O, /obj/item/weapon/card))
+	if(istype(O, /obj/item/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
 			reconnect_database()
 		if(linked_db)
 			if(linked_account)
-				var/obj/item/weapon/card/I = O
+				var/obj/item/card/I = O
 				scan_card(I)
 			else
 				to_chat(usr, "[bicon(src)] <span class='warning'>Unable to connect to linked account.</span>")
@@ -162,18 +162,18 @@
 			if("reset")
 				//reset the access code - requires HoP/captain access
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/card))
-					var/obj/item/weapon/card/id/C = I
+				if (istype(I, /obj/item/card))
+					var/obj/item/card/id/C = I
 					if((access_cent_captain in C.access) || (access_hop in C.access) || (access_captain in C.access))
 						access_code = 0
 						to_chat(usr, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
-				else if (istype(I, /obj/item/weapon/card/emag))
+				else if (istype(I, /obj/item/card/emag))
 					access_code = 0
 					to_chat(usr, "[bicon(src)] <span class='info'>Access code reset to 0.</span>")
 
 	src.attack_self(usr)
 
-/obj/item/device/eftpos/proc/charge_card(var/obj/item/weapon/card/I)
+/obj/item/device/eftpos/proc/charge_card(var/obj/item/card/I)
 	if(transaction_locked && !transaction_paid)
 		var/charge_response = charge_flow(linked_db, I, usr, transaction_amount, linked_account, transaction_purpose, eftpos_name, machine_id)
 		if(charge_response == CARD_CAPTURE_SUCCESS)
@@ -185,7 +185,7 @@
 			visible_message("[bicon(src)] \The [src] buzzes.")
 
 
-/obj/item/device/eftpos/proc/scan_card(var/obj/item/weapon/card/I)
-	if (istype(I, /obj/item/weapon/card))
+/obj/item/device/eftpos/proc/scan_card(var/obj/item/card/I)
+	if (istype(I, /obj/item/card))
 		charge_card(I)
 	//emag?

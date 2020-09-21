@@ -220,7 +220,7 @@ var/global/list/alert_overlays_global = list()
 	if(ismob(AM))
 		var/mob/M = AM
 		var/obj/item/I = M.get_active_hand()
-		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
+		if((iscrowbar(I)||istype(I,/obj/item/fireaxe)) && M.a_intent == I_HURT)
 			attackby(I,M)
 	return 0
 
@@ -273,12 +273,12 @@ var/global/list/alert_overlays_global = list()
 		return 1
 	return 0
 
-/obj/machinery/door/firedoor/attackby(var/obj/item/weapon/C, var/mob/user)
+/obj/machinery/door/firedoor/attackby(var/obj/item/C, var/mob/user)
 	if(operating)
 		return//Already doing something.
 
 	if(iswelder(C))
-		var/obj/item/weapon/weldingtool/W = C
+		var/obj/item/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
 			user.visible_message("<span class='attack'>\The [user] [blocked ? "welds" : "unwelds"] \the [src] with \a [W].</span>",\
@@ -287,7 +287,7 @@ var/global/list/alert_overlays_global = list()
 			update_icon()
 			return
 
-	if(iscrowbar(C) || (istype(C,/obj/item/weapon/fireaxe) && C.wielded))
+	if(iscrowbar(C) || (istype(C,/obj/item/fireaxe) && C.wielded))
 		force_open(user, C)
 		return
 
@@ -339,7 +339,7 @@ var/global/list/alert_overlays_global = list()
 
 	do_interaction(user, C)
 
-/obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/weapon/C, var/no_reruns = FALSE)
+/obj/machinery/door/firedoor/proc/do_interaction(var/mob/user, var/obj/item/C, var/no_reruns = FALSE)
 	if(operating)
 		return//Already doing something.
 
@@ -362,7 +362,7 @@ var/global/list/alert_overlays_global = list()
 		users_name = "Unknown"
 
 	if(ishuman(user) && !stat && (isID(C) || isPDA(C)))
-		var/obj/item/weapon/card/id/ID = C
+		var/obj/item/card/id/ID = C
 
 		if(isPDA(C))
 			var/obj/item/device/pda/pda = C
@@ -637,7 +637,7 @@ var/global/list/alert_overlays_global = list()
 		B.change_dir(user.dir)
 		qdel(src)
 
-/obj/item/firedoor_frame/attackby(var/obj/item/weapon/C, var/mob/user)
+/obj/item/firedoor_frame/attackby(var/obj/item/C, var/mob/user)
 	if(C.is_wrench(user))
 		user.visible_message("<span class='notice'>\The [user] deconstructs \the [src] with \a [C].</span>",\
 		"You deconstruct \the [src] with \the [C]!")

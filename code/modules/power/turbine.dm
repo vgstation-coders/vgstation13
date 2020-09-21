@@ -224,8 +224,8 @@
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				new /obj/item/weapon/shard(loc)
-				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
+				new /obj/item/shard(loc)
+				var/obj/item/circuitboard/turbine_control/M = new /obj/item/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				M.id_tag = src.id_tag
@@ -237,7 +237,7 @@
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				var/obj/item/weapon/circuitboard/turbine_control/M = new /obj/item/weapon/circuitboard/turbine_control( A )
+				var/obj/item/circuitboard/turbine_control/M = new /obj/item/circuitboard/turbine_control( A )
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				M.id_tag = src.id_tag

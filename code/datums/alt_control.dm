@@ -78,7 +78,7 @@
 ///////////////////////////////SOULBLADE CONTROLLER///////////////////////////////
 
 /datum/control/soulblade
-	var/obj/item/weapon/melee/soulblade/blade = null
+	var/obj/item/melee/soulblade/blade = null
 	var/move_delay = 0
 
 /datum/control/soulblade/New(var/mob/new_controller, var/atom/new_controlled)

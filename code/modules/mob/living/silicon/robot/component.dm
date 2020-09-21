@@ -216,7 +216,7 @@
 	vulnerability = 0.35
 	isupgrade = TRUE
 
-/obj/item/broken_device/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/item/broken_device/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/stack/nanopaste))
 		if(do_after(user,src,30))
 			var/obj/item/stack/nanopaste/C = W

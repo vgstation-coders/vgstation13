@@ -161,8 +161,8 @@
 	else
 		set_light(0)
 
-/obj/effect/plantsegment/attackby(var/obj/item/weapon/W, var/mob/user)
-	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+/obj/effect/plantsegment/attackby(var/obj/item/W, var/mob/user)
+	if(user.a_intent == I_HELP && is_type_in_list(W, list(/obj/item/wirecutters, /obj/item/scalpel)))
 		if(sampled)
 			to_chat(user, "<span class='warning'>\The [src] has already been sampled recently.</span>")
 			return
@@ -181,10 +181,10 @@
 		health -= (rand(3,5)*5)
 		sampled = 1
 		SSplant.add_plant(src)
-	else if (istype(W, /obj/item/weapon/storage/bag/plants))
+	else if (istype(W, /obj/item/storage/bag/plants))
 		attack_hand(user)
-		var/obj/item/weapon/storage/bag/plants/S = W
-		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in locate(user.x,user.y,user.z))
+		var/obj/item/storage/bag/plants/S = W
+		for (var/obj/item/reagent_containers/food/snacks/grown/G in locate(user.x,user.y,user.z))
 			if(!S.can_be_inserted(G))
 				return
 			S.handle_item_insertion(G, 1)
@@ -193,7 +193,7 @@
 		take_damage(W)
 		user.delayNextAttack(10)
 
-/obj/effect/plantsegment/proc/take_damage(var/obj/item/weapon/W)
+/obj/effect/plantsegment/proc/take_damage(var/obj/item/W)
 	if(!W.force)
 		return 0
 	var/dmg = W.force

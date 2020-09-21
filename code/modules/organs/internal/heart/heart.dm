@@ -12,7 +12,7 @@
 	robotic = 2
 	min_bruised_damage = 15
 	min_broken_damage = 30
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 
 /datum/organ/internal/heart/insect
 	name = "insectoid heart"
@@ -23,7 +23,7 @@
 /datum/organ/internal/heart/cell/New()
 	..()
 	if(!cell)
-		cell = new /obj/item/weapon/cell/empty()
+		cell = new /obj/item/cell/empty()
 
 /datum/organ/internal/heart/cell/Life()
 	if(owner && owner.nutrition > 5)

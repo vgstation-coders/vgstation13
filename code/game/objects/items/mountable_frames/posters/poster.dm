@@ -73,7 +73,7 @@
 	var/type = pick(poster_designs)
 	design = new type
 
-/obj/structure/sign/poster/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/sign/poster/attackby(obj/item/W as obj, mob/user as mob)
 	if(iswirecutter(W))
 		W.playtoolsound(loc, 100)
 		if(ruined)

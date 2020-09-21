@@ -38,10 +38,10 @@
 					var/obj/structure/safe/SA = S
 					SA.open = 1
 				S.update_icon()
-		for(var/obj/item/weapon/storage/lockbox/L in T.contents)
+		for(var/obj/item/storage/lockbox/L in T.contents)
 			spawn(1)
-				if(istype(L,/obj/item/weapon/storage/lockbox))
-					var/obj/item/weapon/storage/lockbox/LL = L
+				if(istype(L,/obj/item/storage/lockbox))
+					var/obj/item/storage/lockbox/LL = L
 					LL.locked = 0
 				L.update_icon()
 	return

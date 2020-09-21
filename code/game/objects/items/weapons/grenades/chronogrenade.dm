@@ -1,4 +1,4 @@
-/obj/item/weapon/grenade/chronogrenade
+/obj/item/grenade/chronogrenade
 	name = "chrono grenade"
 	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds."
 	icon = 'icons/obj/grenade.dmi'
@@ -9,25 +9,25 @@
 	var/radius = 5		//in tiles
 	mech_flags = MECH_SCAN_FAIL
 
-/obj/item/weapon/grenade/chronogrenade/prime()
+/obj/item/grenade/chronogrenade/prime()
 	timestop(src, duration, radius)
 	qdel(src)
 	
-/obj/item/weapon/grenade/chronogrenade/carbon
+/obj/item/grenade/chronogrenade/carbon
 	name = "chrono-carbon grenade"
 	desc = "This experimental weapon will halt the progression of time in the local area for ten seconds. Carbon lifeforms are not affected by the field."
 	icon_state = "past_grenade"
 	duration = 15 SECONDS
 
-/obj/item/weapon/grenade/chronogrenade/carbon/prime()
+/obj/item/grenade/chronogrenade/carbon/prime()
 	timestop(src, duration, radius, 0, /mob/living/carbon/)
 	qdel(src)	
 	
-/obj/item/weapon/grenade/chronogrenade/future
+/obj/item/grenade/chronogrenade/future
 	desc = "This experimental weapon will send all entities in the local area ten seconds into the future."
 	icon_state = "future_grenade"
 
-/obj/item/weapon/grenade/chronogrenade/future/prime()
+/obj/item/grenade/chronogrenade/future/prime()
 	future_rift(src, duration, radius)
 	qdel(src)
 
@@ -68,12 +68,12 @@
 		M.playsound_local(M, 'sound/effects/fall2.ogg', 100, 0, 0, 0, 0)
 
 
-/obj/item/weapon/grenade/chronogrenade/past
+/obj/item/grenade/chronogrenade/past
 	desc = "This experimental weapon will, 30 seconds after detonation, reset everything in the local area at the time of detonation to its state at the time of detonation."
 	icon_state = "past_grenade"
 	duration = 30 SECONDS
 
-/obj/item/weapon/grenade/chronogrenade/past/prime()
+/obj/item/grenade/chronogrenade/past/prime()
 	past_rift(src, duration, radius)
 	qdel(src)
 

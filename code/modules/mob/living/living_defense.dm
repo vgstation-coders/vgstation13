@@ -48,7 +48,7 @@
 
 
 /mob/living/bullet_act(var/obj/item/projectile/P, var/def_zone)
-	var/obj/item/weapon/cloaking_device/C = locate(/obj/item/weapon/cloaking_device) in src
+	var/obj/item/cloaking_device/C = locate(/obj/item/cloaking_device) in src
 	if(C && C.active)
 		C.attack_self(src)//Should shut it off
 		update_icons()
@@ -87,8 +87,8 @@
 		var/obj/O = AM
 		var/zone = ran_zone(LIMB_CHEST,75)//Hits a random part of the body, geared towards the chest
 		var/dtype = BRUTE
-		if(istype(O,/obj/item/weapon))
-			var/obj/item/weapon/W = O
+		if(istype(O,/obj/item))
+			var/obj/item/W = O
 			dtype = W.damtype
 		src.visible_message("<span class='warning'>[src] has been hit by [O].</span>")
 		if(O.impactsound)
@@ -119,7 +119,7 @@
 			M = assailant.mob
 
 		if(speed >= EMBED_THROWING_SPEED)
-			var/obj/item/weapon/W = O
+			var/obj/item/W = O
 			var/momentum = speed/2
 
 			visible_message("<span class='warning'>[src] staggers under the impact!</span>","<span class='warning'>You stagger under the impact!</span>")

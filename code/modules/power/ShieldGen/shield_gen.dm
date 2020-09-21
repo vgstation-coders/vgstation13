@@ -39,7 +39,7 @@
 	var/field_strength_cap = 100
 	var/time_since_fail = 100
 	var/energy_conversion_rate = 0.01	//how many renwicks per watt?
-	var/board_path = /obj/item/weapon/circuitboard/shield_gen // overridden by subtype
+	var/board_path = /obj/item/circuitboard/shield_gen // overridden by subtype
 	var/icon_prefix = "regular" // used in update_icon and animations
 
 /obj/machinery/shield_gen/New()
@@ -49,19 +49,19 @@
 
 	component_parts = newlist(
 		board_path,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/subspace/transmitter,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/amplifier,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/subspace/transmitter,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/subspace/amplifier,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
 
 /obj/machinery/shield_gen/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/Ma in component_parts)
+	for(var/obj/item/stock_parts/manipulator/Ma in component_parts)
 		T += Ma.rating - 1
 		energy_conversion_rate = (initial(energy_conversion_rate)+(T * 0.01))
 		max_strengthen_rate = (initial(max_strengthen_rate)+(T))
@@ -106,7 +106,7 @@
 /obj/machinery/shield_gen/attackby(var/obj/item/W, var/mob/user)
 	if(..())
 		return 1
-	else if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	else if(istype(W, /obj/item/card/id) || istype(W, /obj/item/device/pda))
 		if(check_access(W))
 			toggle_lock(user)
 		else

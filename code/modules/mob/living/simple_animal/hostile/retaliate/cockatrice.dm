@@ -36,7 +36,7 @@
 	species_type = /mob/living/simple_animal/hostile/retaliate/cockatrice
 	childtype = /mob/living/simple_animal/hostile/retaliate/cockatrice/chick
 	holder_type = null
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/cockatrice
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/rawchicken/cockatrice
 
 	var/egg_layer = 1
 
@@ -176,7 +176,7 @@
 
 		visible_message("[src] [pick("lays an egg.","squats down and croons.","begins making a huge racket.","begins clucking raucously.")]")
 
-		var/obj/item/weapon/reagent_containers/food/snacks/egg/cockatrice/E = new(get_turf(src))
+		var/obj/item/reagent_containers/food/snacks/egg/cockatrice/E = new(get_turf(src))
 		E.pixel_x = rand(-6,6)
 		E.pixel_y = rand(-6,6)
 		if(animal_count[src.species_type] < ANIMAL_CHILD_CAP && prob(50))

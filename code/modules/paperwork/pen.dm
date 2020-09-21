@@ -8,7 +8,7 @@
 #define ACT_BBCODE_IMG /datum/speech_filter_action/bbcode/img
 #define ACT_BBCODE_VIDEO /datum/speech_filter_action/bbcode/video
 #define ACT_BBCODE_YOUTUBE /datum/speech_filter_action/bbcode/youtube
-#define CHECK_NANO /obj/item/weapon/pen
+#define CHECK_NANO /obj/item/pen
 // MACROS
 #define REG_NOTBB "\[^\\\[\]+"    // [^\]]+
 
@@ -129,7 +129,7 @@ var/paperwork_library
 	return call(paperwork_library,"render_html")(command_args)
 
 
-/datum/writing_style/proc/Format(var/t, var/obj/item/weapon/pen/P, var/mob/user, var/obj/item/weapon/paper/paper)
+/datum/writing_style/proc/Format(var/t, var/obj/item/pen/P, var/mob/user, var/obj/item/paper/paper)
 	if(paperwork)
 		t = parse_markdown(t)
 	else
@@ -157,7 +157,7 @@ var/paperwork_library
 		t = replacetext(t, "\[cell\]", "<td>")
 
 	var/text_color
-	if(istype(P, /obj/item/weapon/pen))
+	if(istype(P, /obj/item/pen))
 		text_color = P.color
 	else if(istype(P, /obj/item/toy/crayon))
 		var/obj/item/toy/crayon/C = P
@@ -212,7 +212,7 @@ var/paperwork_library
 /*
  * Pens
  */
-/obj/item/weapon/pen
+/obj/item/pen
 	desc = "It's a normal black ink pen."
 	name = "pen"
 	icon = 'icons/obj/bureaucracy.dmi'
@@ -237,56 +237,56 @@ var/paperwork_library
 	var/datum/writing_style/style
 	var/datum/writing_style/nano_style // stlyle when used on nano_paper
 
-/obj/item/weapon/pen/New()
+/obj/item/pen/New()
 	..()
 
 	style = new style_type
 	nano_style = new nano_style_type
 
 // checks if its used on nano paper, if it is, use the nano paper formatting
-/obj/item/weapon/pen/proc/Format(var/mob/user, var/text, var/obj/item/weapon/paper/P)
-	if(istype(P,/obj/item/weapon/paper/nano))
+/obj/item/pen/proc/Format(var/mob/user, var/text, var/obj/item/paper/P)
+	if(istype(P,/obj/item/paper/nano))
 		return nano_style.Format(text,src,user,P)
 	else
 		return style.Format(text,src,user,P)
 
-/obj/item/weapon/pen/suicide_act(mob/user)
+/obj/item/pen/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is jamming the [src.name] into \his ear! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/pen/blue
+/obj/item/pen/blue
 	desc = "It's a normal blue ink pen."
 	icon_state = "pen_blue"
 	colour = "blue"
 
-/obj/item/weapon/pen/red
+/obj/item/pen/red
 	desc = "It's a normal red ink pen."
 	icon_state = "pen_red"
 	colour = "red"
 
-/obj/item/weapon/pen/invisible
+/obj/item/pen/invisible
 	desc = "It's an invisble pen marker."
 	icon_state = "pen"
 	colour = "white"
 
-/obj/item/weapon/pen/NT
+/obj/item/pen/NT
 	name = "promotional Nanotrasen pen"
 	desc = "Just a cheap plastic pen. It reads: \"For our most valued customers\". They probably meant 'employees'."
 
-/obj/item/weapon/pen/tactical
+/obj/item/pen/tactical
 	name = "tacpen"
 	desc = "Tactical pen. The tip is self heating and can light things, the reverse can be used as a screwdriver. It contains a one-time reservoir of biofoam that cannot be refilled."
 	sharpness_flags = SHARP_TIP | HOT_EDGE
 
-/obj/item/weapon/pen/tactical/New()
+/obj/item/pen/tactical/New()
 	..()
 	create_reagents(9)
 	reagents.add_reagent(BIOFOAM, 9) //90 ticks, about 3 minutes
 
-/obj/item/weapon/pen/tactical/is_screwdriver(mob/user)
+/obj/item/pen/tactical/is_screwdriver(mob/user)
 	return TRUE
 
-/obj/item/weapon/pen/attack(mob/M as mob, mob/user as mob)
+/obj/item/pen/attack(mob/M as mob, mob/user as mob)
 	if(!ismob(M))
 		return
 	to_chat(user, "<span class='warning'>You stab [M] with the pen.</span>")
@@ -305,14 +305,14 @@ var/paperwork_library
 /*
  * Sleepy Pens
  */
-/obj/item/weapon/pen/sleepypen
+/obj/item/pen/sleepypen
 	desc = "It's a black ink pen with a sharp point and a carefully engraved \"Waffle Co.\""
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
 
-/obj/item/weapon/pen/sleepypen/New()
+/obj/item/pen/sleepypen/New()
 	. = ..()
 	create_reagents(30) // Used to be 300
 	reagents.add_reagent(CHLORALHYDRATE, 22) // Used to be 100 sleep toxin // 30 Chloral seems to be fatal, reducing it to 22. /N
@@ -320,12 +320,12 @@ var/paperwork_library
 /*
  * Parapens
  */
- /obj/item/weapon/pen/paralysis
+ /obj/item/pen/paralysis
 	flags = FPRINT  | OPENCONTAINER
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=5"
 
-/obj/item/weapon/pen/paralysis/New()
+/obj/item/pen/paralysis/New()
 	var/datum/reagents/R = new/datum/reagents(25)
 	reagents = R
 	R.my_atom = src

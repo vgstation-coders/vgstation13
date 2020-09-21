@@ -9,10 +9,10 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/anom,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module
+		/obj/item/circuitboard/anom,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module
 	)
 
 	RefreshParts()

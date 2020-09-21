@@ -1,14 +1,14 @@
 
-/obj/item/weapon/implanter/exile
+/obj/item/implanter/exile
 	name = "implanter-exile"
 
-/obj/item/weapon/implanter/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile(src)
+/obj/item/implanter/exile/New()
+	src.imp = new /obj/item/implant/exile(src)
 	..()
 	update()
 	return
 
-/obj/item/weapon/implant/exile
+/obj/item/implant/exile
 	name = "exile"
 	desc = "Prevents returning to where you were implanted."
 	var/illegalZ = null
@@ -19,7 +19,7 @@
 	var/disablePhrase = ""
 	var/list/zlevels = list(STATION_Z, TELECOMM_Z, DERELICT_Z, ASTEROID_Z, SPACEPIRATE_Z)
 
-/obj/item/weapon/implant/exile/get_data()
+/obj/item/implant/exile/get_data()
 	var/dat = {"
 <b>Implant Specifications:</b><BR>
 <b>Name:</b> Nanotrasen Employee Exile Implant<BR>
@@ -27,7 +27,7 @@
 <b>For non-permanent use a disable phrase may be assigned on application.<BR>"}
 	return dat
 
-/obj/item/weapon/implant/exile/implanted(mob/source, mob/user)
+/obj/item/implant/exile/implanted(mob/source, mob/user)
 	theExile = source
 	disablePhrase = stripped_input(user, "Choose a phrase that disables the implant:")
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
@@ -40,7 +40,7 @@
 	theExile.lazy_register_event(/lazy_event/on_moved, src, .proc/zBan)
 	return 1
 
-/obj/item/weapon/implant/exile/proc/zBan(atom/movable/mover)
+/obj/item/implant/exile/proc/zBan(atom/movable/mover)
 	var/turf/T = get_turf(src)
 	if(!beenSpaced)
 		if(T.z != illegalZ)
@@ -49,7 +49,7 @@
 		beingDeported = TRUE
 		teleDeport()
 
-/obj/item/weapon/implant/exile/proc/teleDeport()
+/obj/item/implant/exile/proc/teleDeport()
 	to_chat(theExile, "<span class='notice'>Your insides churn and your skin tingles. Something inside your body is emitting a low hum.</span>")
 	spawn(10 SECONDS)
 		var/turf/T = get_turf(src)
@@ -71,7 +71,7 @@
 			to_chat(theExile, "<span class='notice'>Something inside your body emits a feint chime. The tingling stops.</span>")
 		beingDeported = FALSE
 
-/obj/item/weapon/implant/exile/emp_act()
+/obj/item/implant/exile/emp_act()
 	if(malfunction)
 		return
 	malfunction = 1
@@ -100,11 +100,11 @@
 	#undef IMPLANTED_SITE_PORT
 
 
-/obj/item/weapon/implant/exile/Hear(var/datum/speech/speech, var/rendered_speech="")
+/obj/item/implant/exile/Hear(var/datum/speech/speech, var/rendered_speech="")
 	hear(speech.message)
 	return
 
-/obj/item/weapon/implant/exile/hear(var/msg)
+/obj/item/implant/exile/hear(var/msg)
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	msg = sanitize_simple(msg, replacechars)
 	if(!disablePhrase)
@@ -112,7 +112,7 @@
 	if(findtext(msg, disablePhrase))
 		freeFromExile()
 
-/obj/item/weapon/implant/exile/proc/freeFromExile()
+/obj/item/implant/exile/proc/freeFromExile()
 	playsound(theExile, "sound/machines/notify.ogg", 100, 1)
 	to_chat(theExile, "<span class='notice'>You feel a sudden shooting pain. The film-like sensation fades. Your implant has jaunted out of your body.</span>" )
 	imp_in = null
@@ -120,15 +120,15 @@
 	src.forceMove(siteOfImplant)
 	theExile = null
 
-/obj/item/weapon/implantcase/exile
+/obj/item/implantcase/exile
 	name = "Glass Case- 'Exile'"
 	desc = "A case containing an exile implant."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implantcase-r"
 
 
-/obj/item/weapon/implantcase/exile/New()
-	src.imp = new /obj/item/weapon/implant/exile( src )
+/obj/item/implantcase/exile/New()
+	src.imp = new /obj/item/implant/exile( src )
 	..()
 	return
 
@@ -138,5 +138,5 @@
 
 /obj/structure/closet/secure_closet/exile/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/lockbox/exile = 2
+		/obj/item/storage/lockbox/exile = 2
 	)

@@ -47,7 +47,7 @@ var/list/shuttle_log = list()
 	desc = "A console that is used for various important Command functions."
 	icon_state = "comm"
 	req_access = list(access_heads)
-	circuit = "/obj/item/weapon/circuitboard/communications"
+	circuit = "/obj/item/circuitboard/communications"
 	var/prints_intercept = 1
 	var/authenticated = UNAUTH //1 = normal login, 2 = emagged or had access_captain, 0 = logged out. Gremlins can set to 1 or 0.
 	var/list/messagetitle = list()
@@ -329,7 +329,7 @@ var/list/shuttle_log = list()
 			if(issilicon(usr))
 				return
 			var/mob/M = usr
-			var/obj/item/weapon/card/id/I = M.get_id_card()
+			var/obj/item/card/id/I = M.get_id_card()
 			if (I || isAdminGhost(usr))
 				if(isAdminGhost(usr) || (access_hos in I.access) || ((access_heads in I.access) && security_level >= SEC_LEVEL_RED))
 					if(ports_open)
@@ -670,8 +670,8 @@ var/list/shuttle_log = list()
 		if(istype(commconsole.loc,/turf) && commconsole != src && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
-		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard.z != map.zCentcomm)
+	for(var/obj/item/circuitboard/communications/commboard in communications_circuitboards)
+		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/storage)) && commboard.z != map.zCentcomm)
 			return ..()
 
 	for(var/mob/living/silicon/ai/shuttlecaller in player_list)
@@ -684,18 +684,18 @@ var/list/shuttle_log = list()
 	shuttle_autocall()
 	..()
 
-/obj/item/weapon/circuitboard/communications/New()
+/obj/item/circuitboard/communications/New()
 	..()
 	communications_circuitboards.Add(src)
 
-/obj/item/weapon/circuitboard/communications/Destroy()
+/obj/item/circuitboard/communications/Destroy()
 	communications_circuitboards.Remove(src)
 	for(var/obj/machinery/computer/communications/commconsole in machines)
 		if(istype(commconsole.loc,/turf) && commconsole.z != map.zCentcomm)
 			return ..()
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
-		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage)) && commboard != src && commboard.z != map.zCentcomm)
+	for(var/obj/item/circuitboard/communications/commboard in communications_circuitboards)
+		if((istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/storage)) && commboard != src && commboard.z != map.zCentcomm)
 			return ..()
 
 	for(var/mob/living/silicon/ai/shuttlecaller in player_list)

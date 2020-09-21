@@ -28,9 +28,9 @@
 	steam.set_up(10, 0, mobloc)
 	steam.start()
 
-	var/obj/item/weapon/katana/magic/sword
+	var/obj/item/katana/magic/sword
 	for(var/obj/item/I in L.held_items)
-		if(istype(I, /obj/item/weapon/katana/magic))
+		if(istype(I, /obj/item/katana/magic))
 			sword = I
 			break
 	if(!sword)

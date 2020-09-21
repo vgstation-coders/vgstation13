@@ -14,7 +14,7 @@
 	var/health=80 // 2x that of an rwindow
 	var/sheetamount = 1 //Number of sheets needed to build this floor (determines how much shit is spawned via Destroy())
 	var/cracked_base = "fcrack"
-	var/shardtype = /obj/item/weapon/shard
+	var/shardtype = /obj/item/shard
 	var/sheettype = /obj/item/stack/sheet/glass/rglass //Used for deconstruction
 	var/glass_state = "glass_floor" // State of the glass itself.
 	var/reinforced = 0
@@ -207,7 +207,7 @@
 	attack_generic(user, rand(10, 15))
 
 /turf/simulated/floor/glass/attackby(var/obj/item/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
+	if(istype(W, /obj/item/grab) && Adjacent(user))
 		if(handle_grabslam(W, user))
 			return
 	if(issilicatesprayer(W))
@@ -242,7 +242,7 @@
 				return
 
 			if(iswelder(W))
-				var/obj/item/weapon/weldingtool/WT = W
+				var/obj/item/weldingtool/WT = W
 				user.visible_message("<span class='notice'>[user] begins removing \the [src].</span>", \
 				"<span class='notice'>You begin removing \the [src].</span>", \
 				"<span class='warning'>You hear welding noises.</span>")
@@ -275,7 +275,7 @@
 		return TRUE
 	return FALSE
 
-/turf/simulated/floor/glass/proc/handle_grabslam(var/obj/item/weapon/grab/G, var/mob/user)
+/turf/simulated/floor/glass/proc/handle_grabslam(var/obj/item/grab/G, var/mob/user)
 	if(istype(G.affecting, /mob/living))
 		var/mob/living/M = G.affecting
 		var/gstate = G.state
@@ -315,7 +315,7 @@
 /turf/simulated/floor/glass/plasma
 	name = "plasma glass floor"
 	desc = "A floor made of reinforced plasma glass, used for looking into the void."
-	shardtype = /obj/item/weapon/shard/plasma
+	shardtype = /obj/item/shard/plasma
 	sheettype = /obj/item/stack/sheet/glass/plasmarglass
 	glass_state = "plasma_glass_floor"
 	health = 160

@@ -1,4 +1,4 @@
-/obj/item/weapon/grenade
+/obj/item/grenade
 	name = "grenade"
 	desc = "A hand held grenade, with an adjustable timer."
 	w_class = W_CLASS_SMALL
@@ -14,7 +14,7 @@
 	var/det_time = 5 SECONDS
 	mech_flags = MECH_SCAN_ILLEGAL
 
-/obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
+/obj/item/grenade/proc/clown_check(var/mob/living/user)
 	if(clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>Huh? How does this thing work?</span>")
 
@@ -26,10 +26,10 @@
 	return 1
 
 
-/*/obj/item/weapon/grenade/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
-	if (istype(target, /obj/item/weapon/storage))
+/*/obj/item/grenade/afterattack(atom/target as mob|obj|turf|area, mob/user as mob)
+	if (istype(target, /obj/item/storage))
 		return ..() // Trying to put it in a full container
-	if (istype(target, /obj/item/weapon/gun/grenadelauncher))
+	if (istype(target, /obj/item/gun/grenadelauncher))
 		return ..()
 	if((user.get_active_hand() == src) && (!active) && (clown_check(user)) && target.loc != src.loc)
 		to_chat(user, "<span class='warning'>You prime the [name]! [det_time/10] seconds!</span>")
@@ -46,7 +46,7 @@
 	return*/
 
 
-/obj/item/weapon/grenade/examine(mob/user)
+/obj/item/grenade/examine(mob/user)
 	..()
 	if(det_time > 1)
 		to_chat(user, "<span class='info'>The timer is set to [det_time/10] seconds.</span>")
@@ -54,7 +54,7 @@
 	to_chat(user, "<span class='warning'>\The [src] is set for instant detonation.</span>")
 
 
-/obj/item/weapon/grenade/attack_self(mob/user as mob)
+/obj/item/grenade/attack_self(mob/user as mob)
 	if(!active)
 		if(clown_check(user))
 			to_chat(user, "<span class='attack'>You prime \the [name]! [det_time/10] seconds!</span>")
@@ -67,7 +67,7 @@
 	return
 
 
-/obj/item/weapon/grenade/proc/activate(mob/user as mob)
+/obj/item/grenade/proc/activate(mob/user as mob)
 	if(active)
 		return
 
@@ -86,19 +86,19 @@
 		prime(user)
 
 
-/obj/item/weapon/grenade/proc/prime()
+/obj/item/grenade/proc/prime()
 //	playsound(loc, 'sound/items/Welder2.ogg', 25, 1)
 	var/turf/T = get_turf(src)
 	if(T)
 		T.hotspot_expose(700,125,surfaces=istype(loc,/turf))
 
-/obj/item/weapon/grenade/proc/update_mob()
+/obj/item/grenade/proc/update_mob()
 	if(ismob(loc))
 		var/mob/M = loc
 		M.drop_from_inventory(src)
 
 
-/obj/item/weapon/grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/grenade/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_screwdriver(user))
 		if(active)
 			to_chat(user, "<span class = 'warning'>It's already primed!</span>")
@@ -116,10 +116,10 @@
 	..()
 	return
 
-/obj/item/weapon/grenade/attack_hand()
+/obj/item/grenade/attack_hand()
 	walk(src, null, null)
 	..()
 	return
 
-/obj/item/weapon/grenade/attack_paw(mob/user as mob)
+/obj/item/grenade/attack_paw(mob/user as mob)
 	return attack_hand(user)

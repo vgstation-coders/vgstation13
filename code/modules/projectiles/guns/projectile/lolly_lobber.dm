@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/lolly_lobber
+/obj/item/gun/lolly_lobber
 	name = "Lolly Lobber"
 	desc = "A horrible combination of steel and sweets. Custom made to weaponize candy canes with questionable success."
 	icon = 'icons/obj/gun.dmi'
@@ -14,20 +14,20 @@
 	var/max_ammo = 13 //baker's dozen
 	var/current_ammo = 13
 
-/obj/item/weapon/gun/lolly_lobber/New()
+/obj/item/gun/lolly_lobber/New()
 	..()
 	chamber_if_possible()
 
-/obj/item/weapon/gun/lolly_lobber/examine(mob/user)
+/obj/item/gun/lolly_lobber/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
-/obj/item/weapon/gun/lolly_lobber/proc/chamber_if_possible()
+/obj/item/gun/lolly_lobber/proc/chamber_if_possible()
 	if(current_ammo > 0)
 		if(!process_chambered())
 			in_chamber = new /obj/item/projectile/bullet/syringe/candycane (src)
 
-/obj/item/weapon/gun/lolly_lobber/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/lolly_lobber/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return
 	if(harm_labeled >= min_harm_label)
@@ -41,12 +41,12 @@
 		current_ammo--
 		chamber_if_possible()
 
-/obj/item/weapon/gun/lolly_lobber/process_chambered()
+/obj/item/gun/lolly_lobber/process_chambered()
 	return in_chamber
 
-/obj/item/weapon/gun/lolly_lobber/attackby(obj/item/W, mob/user)
+/obj/item/gun/lolly_lobber/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/candy_cane))
+	if(istype(W, /obj/item/reagent_containers/food/snacks/candy_cane))
 		if(current_ammo >= max_ammo)
 			return
 		if(user.drop_item(W))
@@ -55,6 +55,6 @@
 			playsound(src, 'sound/items/Deconstruct.ogg', 25, 1)
 			qdel(W)
 
-/obj/item/weapon/gun/lolly_lobber/can_discharge()
+/obj/item/gun/lolly_lobber/can_discharge()
 	if(current_ammo)
 		return 1

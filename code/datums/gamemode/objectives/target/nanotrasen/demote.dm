@@ -10,7 +10,7 @@
 	if (..())
 		return TRUE
 	if(target && target.current && istype(target,/mob/living/carbon/human))
-		var/obj/item/weapon/card/id/I = target.current:wear_id
+		var/obj/item/card/id/I = target.current:wear_id
 		if(istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/P = I
 			I = P.id

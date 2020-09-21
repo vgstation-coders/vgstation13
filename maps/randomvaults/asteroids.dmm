@@ -5,7 +5,7 @@
 "e" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 "f" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/mob/living/simple_animal/hostile/asteroid/basilisk,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 "g" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/mob/living/simple_animal/hostile/asteroid/goliath,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
-"h" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/weapon/pickaxe/drill/diamond,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
+"h" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/pickaxe/drill/diamond,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 "i" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/mob/living/simple_animal/hostile/asteroid/hivelord,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 "j" = (/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/ore/phazon,/obj/item/stack/sheet/mineral/diamond,/turf/unsimulated/floor/asteroid,/area/mine/unexplored)
 

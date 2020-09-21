@@ -109,7 +109,7 @@
 	kill_count = 100
 	layer = PROJECTILE_LAYER
 	var/mob/living/carbon/mob = null
-	var/obj/item/weapon/gun/projectile/rocketlauncher/nikita/nikita = null
+	var/obj/item/gun/projectile/rocketlauncher/nikita/nikita = null
 	var/steps_since_last_turn = 0
 	var/last_dir = null
 	var/emagged = 0//the value is set by the Nikita when it fires it

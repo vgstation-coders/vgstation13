@@ -81,7 +81,7 @@ var/global/list/reagents_to_log = list(FUEL, PLASMA, PACID, SACID, AMUTATIONTOXI
 	integratedpai = P
 	verbs += /obj/proc/remove_pai
 
-/obj/attackby(obj/item/weapon/W, mob/user)
+/obj/attackby(obj/item/W, mob/user)
 	if(can_take_pai && istype(W, /obj/item/device/paicard))
 		if(integratedpai)
 			to_chat(user, "<span class = 'notice'>There's already a Personal AI inserted.</span>")

@@ -227,7 +227,7 @@ var/list/science_goggles_wearers = list()
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/weapon/shard/S = new(get_turf(src))
+	var/obj/item/shard/S = new(get_turf(src))
 	S.Crossed()
 
 	qdel(src)
@@ -272,7 +272,7 @@ var/list/science_goggles_wearers = list()
 	H.visible_message("<span class='danger'>[H] stomps on \the [src], crushing them!</span>", "<span class='danger'>You crush \the [src] under your foot.</span>")
 	playsound(src, "shatter", 50, 1)
 
-	var/obj/item/weapon/shard/S = new(get_turf(src))
+	var/obj/item/shard/S = new(get_turf(src))
 	S.Crossed()
 
 	qdel(src)
@@ -409,7 +409,7 @@ var/list/science_goggles_wearers = list()
 	if(!defective)
 		..()
 		if(prob(15))
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			playsound(src, "shatter", 50, 1)
 			qdel(src)
 			return

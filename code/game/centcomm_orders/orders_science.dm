@@ -40,16 +40,16 @@
 			required_tech =  /datum/tech/magnets
 			required_level = 5
 	requested = list(
-		/obj/item/weapon/disk/tech_disk = 1
+		/obj/item/disk/tech_disk = 1
 	)
 	name_override = list(
-		/obj/item/weapon/disk/tech_disk = "Technology Data Disk"
+		/obj/item/disk/tech_disk = "Technology Data Disk"
 	)
 	var/datum/tech/DT = required_tech
 	extra_requirements = "tech required: [initial(DT.name)] (Level [required_level])"
 	worth = 750
 
-/datum/centcomm_order/department/science/technology/ExtraChecks(var/obj/item/weapon/disk/tech_disk/TD)
+/datum/centcomm_order/department/science/technology/ExtraChecks(var/obj/item/disk/tech_disk/TD)
 	if (!istype(TD))
 		return 0
 	if (istype(TD.stored, required_tech))
@@ -85,15 +85,15 @@
 			required_comp = /datum/design/gravitywell
 			worth = 1000
 	requested = list(
-		/obj/item/weapon/disk/design_disk = 1
+		/obj/item/disk/design_disk = 1
 	)
 	name_override = list(
-		/obj/item/weapon/disk/design_disk = "Component Design Disk"
+		/obj/item/disk/design_disk = "Component Design Disk"
 	)
 	var/obj/item/I = required_comp
 	extra_requirements = "blueprint required: [initial(I.name)]"
 
-/datum/centcomm_order/department/science/design/ExtraChecks(var/obj/item/weapon/disk/design_disk/DD)
+/datum/centcomm_order/department/science/design/ExtraChecks(var/obj/item/disk/design_disk/DD)
 	if (!istype(DD))
 		return 0
 	if (istype(DD.blueprint, required_comp))
@@ -105,28 +105,28 @@
 	..()
 	name = "CentComm's ERT"
 	requested = list(
-		/obj/item/weapon/gun/energy/gun/nuclear = rand(1,5)
+		/obj/item/gun/energy/gun/nuclear = rand(1,5)
 	)
 	worth = 750*requested[requested[1]]
 
 /datum/centcomm_order/department/science/plasmacutter/New()
 	..()
 	requested = list(
-		/obj/item/weapon/pickaxe/plasmacutter/accelerator = rand(1,5)
+		/obj/item/pickaxe/plasmacutter/accelerator = rand(1,5)
 	)
 	worth = 500*requested[requested[1]]
 
 /datum/centcomm_order/department/science/lasercannon/New()
 	..()
 	requested = list(
-		/obj/item/weapon/gun/energy/laser/cannon = rand(1,5)
+		/obj/item/gun/energy/laser/cannon = rand(1,5)
 	)
 	worth = 500*requested[requested[1]]
 
 /datum/centcomm_order/department/science/assaultrifle/New()
 	..()
 	requested = list(
-		/obj/item/weapon/gun/projectile/automatic/xcom = rand(1,5)
+		/obj/item/gun/projectile/automatic/xcom = rand(1,5)
 	)
 	worth = 500*requested[requested[1]]
 
@@ -134,28 +134,28 @@
 /datum/centcomm_order/department/science/long_range_ai_upload/New()
 	..()
 	requested = list(
-		/obj/item/weapon/circuitboard/aiupload/longrange = 1
+		/obj/item/circuitboard/aiupload/longrange = 1
 	)
 	worth = 500
 
 /datum/centcomm_order/department/science/supermatter_board/New()
 	..()
 	requested = list(
-		/obj/item/weapon/circuitboard/supermatter = 1
+		/obj/item/circuitboard/supermatter = 1
 	)
 	worth = 500
 
 /datum/centcomm_order/department/science/telestation/New()
 	..()
 	requested = list(
-		/obj/item/weapon/circuitboard/telestation = 1
+		/obj/item/circuitboard/telestation = 1
 	)
 	worth = 500
 
 /datum/centcomm_order/department/science/rust_core/New()
 	..()
 	requested = list(
-		/obj/item/weapon/circuitboard/rust_core = 1
+		/obj/item/circuitboard/rust_core = 1
 	)
 	worth = 500
 
@@ -414,7 +414,7 @@
 		return 0
 	if (istype(AC.contained) && istype(AC.report))
 		var/obj/machinery/artifact/contained = AC.contained
-		var/obj/item/weapon/paper/anomaly/report = AC.report
+		var/obj/item/paper/anomaly/report = AC.report
 		if ((report.artifact == contained) && contained.primary_effect?.triggered)
 			return 1
 	return 0

@@ -11,14 +11,14 @@
 	plane = ABOVE_HUMAN_PLANE //Make it so it appears above all mobs (AI included), it's a border object anyway
 	layer = WINDOOR_LAYER //Below curtains
 	opacity = 0
-	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/obj/item/circuitboard/airlock/electronics = null
 	var/secure = FALSE
 	explosion_resistance = 5
 	air_properties_vary_with_direction = 1
 	ghost_read = 0
 	machine_flags = EMAGGABLE
 	soundeffect = 'sound/machines/windowdoor.ogg'
-	var/shard_type = /obj/item/weapon/shard
+	var/shard_type = /obj/item/shard
 	penetration_dampening = 2
 	animation_delay = 7
 	var/obj/machinery/smartglass_electronics/smartwindow
@@ -115,7 +115,7 @@
 		return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
-/obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
+/obj/machinery/door/window/CanAStarPass(var/obj/item/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
 /obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
@@ -248,7 +248,7 @@
 	visible_message("<span class='warning'>\The [M.name] [M.attacktext] against \the [name].</span>", 1)
 	take_damage(M.melee_damage_upper)
 
-/obj/machinery/door/window/attackby(obj/item/weapon/I, mob/living/user)
+/obj/machinery/door/window/attackby(obj/item/I, mob/living/user)
 	// Make emagged/open doors able to be deconstructed
 	if(!density && operating != 1 && iscrowbar(I))
 		user.visible_message("[user] is removing \the [electronics.name] from \the [name].", "You start to remove \the [electronics.name] from \the [name].")
@@ -287,7 +287,7 @@
 		return
 
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
-	if(density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
+	if(density && istype(I, /obj/item) && !istype(I, /obj/item/card))
 		var/aforce = I.force
 		user.do_attack_animation(src, I)
 		user.delayNextAttack(8)
@@ -356,7 +356,7 @@
 
 /obj/machinery/door/window/proc/set_electronics()
 	if(!electronics)
-		electronics = new /obj/item/weapon/circuitboard/airlock(src)
+		electronics = new /obj/item/circuitboard/airlock(src)
 		electronics.installed = TRUE
 	if(req_access && req_access.len > 0)
 		electronics.conf_access = req_access
@@ -390,7 +390,7 @@
 	icon = 'icons/obj/doors/plasmawindoor.dmi'
 	health = 150
 	assembly_type = /obj/structure/windoor_assembly/plasma
-	shard_type = /obj/item/weapon/shard/plasma
+	shard_type = /obj/item/shard/plasma
 	penetration_dampening = 6
 
 /obj/machinery/door/window/plasma/secure

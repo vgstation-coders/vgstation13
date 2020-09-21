@@ -51,7 +51,7 @@ var/datum/subsystem/more_init/SSmore_init
 	for(var/obj/machinery/machine in all_machines)
 		if(!cache[machine.type])
 			var/rating = 0
-			for(var/obj/item/weapon/stock_parts/SP in machine.component_parts)
+			for(var/obj/item/stock_parts/SP in machine.component_parts)
 				rating += SP.rating
 			cache[machine.type] = rating
 	return cache

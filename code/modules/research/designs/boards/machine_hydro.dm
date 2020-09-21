@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/botany_centrifuge
+	build_path = /obj/item/circuitboard/botany_centrifuge
 
 /datum/design/botany_bioballistic
 	name = "Circuit Design (Bioballistic Delivery System)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/botany_bioballistic
+	build_path = /obj/item/circuitboard/botany_bioballistic
 
 /datum/design/biogenerator
 	name = "Circuit Design (Biogenerator)"
@@ -26,7 +26,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/biogenerator
+	build_path = /obj/item/circuitboard/biogenerator
 
 /datum/design/seed_extractor
 	name = "Circuit Design (Seed Extractor)"
@@ -36,7 +36,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/seed_extractor
+	build_path = /obj/item/circuitboard/seed_extractor
 
 /datum/design/hydroponics
 	name = "Circuit Design (Hydroponics Tray)"
@@ -46,7 +46,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/hydroponics
+	build_path = /obj/item/circuitboard/hydroponics
 
 /datum/design/oven_circuit
 	name = "Circuit Design (Electric Oven)"
@@ -56,4 +56,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/oven
+	build_path = /obj/item/circuitboard/oven

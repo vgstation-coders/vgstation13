@@ -95,20 +95,20 @@
 			if(is_valid_door(hidden_door))
 				hidden_door.toggle()
 
-/obj/item/weapon/skull/rigged/Crossed(atom/movable/L)
+/obj/item/skull/rigged/Crossed(atom/movable/L)
 	..()
 
-	if(istype(L, /mob/living/carbon) || istype(L, /mob/living/silicon) || istype(L, /obj/item/weapon/skull/rigged)) //Another rigged skull or a mob entered our turf
+	if(istype(L, /mob/living/carbon) || istype(L, /mob/living/silicon) || istype(L, /obj/item/skull/rigged)) //Another rigged skull or a mob entered our turf
 		activate()
 
-/obj/item/weapon/skull/rigged/pickup(mob/living/user)
+/obj/item/skull/rigged/pickup(mob/living/user)
 	..()
 
 	if(istype(user))
 		if(user.drop_item(src))
 			activate()
 
-/obj/item/weapon/skull/rigged/proc/activate()
+/obj/item/skull/rigged/proc/activate()
 	visible_message("<span class='danger'>All of a sudden, \the [src] comes to life!</span>")
 
 	var/mob/living/simple_animal/hostile/viscerator/flying_skull/FS = new(get_turf(src))
@@ -121,7 +121,7 @@
 /obj/effect/landmark/corpse/mummy/rafid
 	name = "Rafid the Mad"
 
-	corpsebelt = /obj/item/weapon/storage/belt/soulstone/full
+	corpsebelt = /obj/item/storage/belt/soulstone/full
 	corpsemask = /obj/item/clothing/mask/happy
 
 /obj/structure/sacrificial_altar
@@ -211,7 +211,7 @@
 	..()
 
 /obj/machinery/door/mineral/sandstone/tomb/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/coin/adamantine))
+	if(istype(W, /obj/item/coin/adamantine))
 		to_chat(user, "<span class='info'>You unseal \the [src].</span>")
 		unlocked = 1
 
@@ -365,7 +365,7 @@
 /obj/structure/button/door_switch/is_valid_door(obj/effect/hidden_door/D)
 	return (..() || (D.icon_state == "wildcard")) //Activate wildcard doors too
 
-/obj/item/weapon/paper/tomb_notes
+/obj/item/paper/tomb_notes
 	name = "paper- 'My Notes'"
 	info = {"<i>You can't go through this room without a partner, so I can't advance any further. I hope these notes will help you.<BR>
 	The water is powered by magic, there is no better explanation for its behaviour. I can't touch it or jump into it. In the water there are metal platforms that you can walk on. There are also 6 buttons on the wall.<BR>
@@ -397,13 +397,13 @@
 //REWARD ITEMS
 
 //Artifact horse
-/obj/item/weapon/staff/broom/horsebroom/charger
+/obj/item/staff/broom/horsebroom/charger
 	name = "Spirit Charger"
 	desc = "When the magician struck down the warlord's most beloved horse, he cut its head off, stuck it to a broom and mounted it high up for everybody in the village to see. Some say the horse's spirit still lives on in this somewhat comical artifact."
 
 	slowdown = -30 //Sonic speed when wielded
 
-/obj/item/weapon/staff/broom/horsebroom/update_wield(mob/user)
+/obj/item/staff/broom/horsebroom/update_wield(mob/user)
 	..()
 	item_state = "horsebroom[wielded ? 1 : 0]"
 	if(wielded)
@@ -412,7 +412,7 @@
 		flags &= ~SLOWDOWN_WHEN_CARRIED
 
 //Artifact lance
-/obj/item/weapon/melee/lance/dire
+/obj/item/melee/lance/dire
 	name = "Dire Lance"
 	desc = "A legendary lance that once belonged to a merciless warlord. It has been enchanted with blood magic, preventing it from breaking or corroding, and keeping it as powerful as it was thousands of years ago."
 

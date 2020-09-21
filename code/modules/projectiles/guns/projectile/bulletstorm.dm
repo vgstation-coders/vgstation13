@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/bulletstorm
+/obj/item/gun/bulletstorm
 	name = "\improper Bullet Storm"
 	desc = "You only get one shot, so make it count."
 	icon = 'icons/obj/gun.dmi'
@@ -13,14 +13,14 @@
 	fire_sound = 'sound/weapons/railgun_highpower.ogg'
 	var/projectile_type = /obj/item/projectile/bullet/buckshot/bullet_storm
 
-/obj/item/weapon/gun/bulletstorm/isHandgun()
+/obj/item/gun/bulletstorm/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/bulletstorm/New()
+/obj/item/gun/bulletstorm/New()
 	..()
 	in_chamber = new projectile_type(src)
 
-/obj/item/weapon/gun/bulletstorm/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/bulletstorm/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -30,9 +30,9 @@
 
 	Fire(A,user,params, "struggle" = struggle)
 
-/obj/item/weapon/gun/bulletstorm/can_discharge()
+/obj/item/gun/bulletstorm/can_discharge()
 	if(in_chamber)
 		return 1
 
-/obj/item/weapon/gun/bulletstorm/process_chambered()
+/obj/item/gun/bulletstorm/process_chambered()
 	return in_chamber

@@ -7,7 +7,7 @@
 	accessory_exclusion = HOLSTER
 	var/holster_verb_name = "Holster"
 
-/obj/item/clothing/accessory/holster/proc/can_holster(obj/item/weapon/gun/W)
+/obj/item/clothing/accessory/holster/proc/can_holster(obj/item/gun/W)
 	return
 
 /obj/item/clothing/accessory/holster/proc/holster(obj/item/I, mob/user as mob)
@@ -123,8 +123,8 @@
 	desc = "A handgun holster that clips to a suit. Perfect for concealed carry."
 	holster_verb_name = "Holster (Handgun)"
 
-/obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/weapon/W)
-	if(!isgun(W) && !isbanana(W) && !istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacebanana))
+/obj/item/clothing/accessory/holster/handgun/can_holster(obj/item/W)
+	if(!isgun(W) && !isbanana(W) && !istype(W, /obj/item/reagent_containers/food/snacks/grown/bluespacebanana))
 		return
 	return W.isHandgun()
 
@@ -157,19 +157,19 @@
 		update_icon()
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/mateba
-	gun_type = /obj/item/weapon/gun/projectile/mateba
+	gun_type = /obj/item/gun/projectile/mateba
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP
-	gun_type = /obj/item/weapon/gun/projectile/NTUSP
+	gun_type = /obj/item/gun/projectile/NTUSP
 
 /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy
-	gun_type = /obj/item/weapon/gun/projectile/NTUSP/fancy
+	gun_type = /obj/item/gun/projectile/NTUSP/fancy
 	
 /obj/item/clothing/accessory/holster/handgun/preloaded/glock
-	gun_type = /obj/item/weapon/gun/projectile/glock
+	gun_type = /obj/item/gun/projectile/glock
 	
 /obj/item/clothing/accessory/holster/handgun/preloaded/glock/fancy
-	gun_type = /obj/item/weapon/gun/projectile/glock/fancy
+	gun_type = /obj/item/gun/projectile/glock/fancy
 
 //
 // Knives
@@ -179,28 +179,28 @@
 	desc = "A holster that takes knives. The possibilities are endless."
 	holster_verb_name = "Holster (Knife)"
 
-/obj/item/clothing/accessory/holster/knife/can_holster(obj/item/weapon/W)
+/obj/item/clothing/accessory/holster/knife/can_holster(obj/item/W)
 	if(!istype(W))
 		return
-	if(istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch))
+	if(istype(W, /obj/item/kitchen/utensil/knife/large/butch))
 		return
-	if(istype(W, /obj/item/weapon/melee/energy/sword))
-		var/obj/item/weapon/melee/energy/sword/S = W
+	if(istype(W, /obj/item/melee/energy/sword))
+		var/obj/item/melee/energy/sword/S = W
 		if(S.active == 0)
 			return 1
 
 	return is_type_in_list(W, list(\
-		/obj/item/weapon/kitchen/utensil, \
-		/obj/item/weapon/screwdriver, \
-		/obj/item/weapon/wirecutters, \
-		/obj/item/weapon/pen, \
-		/obj/item/weapon/scalpel, \
-		/obj/item/weapon/minihoe, \
-		/obj/item/weapon/hatchet, \
-		/obj/item/weapon/pickaxe/shovel/spade, \
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana, \
-		/obj/item/weapon/bikehorn, \
-		/obj/item/weapon/gun/projectile/banana
+		/obj/item/kitchen/utensil, \
+		/obj/item/screwdriver, \
+		/obj/item/wirecutters, \
+		/obj/item/pen, \
+		/obj/item/scalpel, \
+		/obj/item/minihoe, \
+		/obj/item/hatchet, \
+		/obj/item/pickaxe/shovel/spade, \
+		/obj/item/reagent_containers/food/snacks/grown/banana, \
+		/obj/item/bikehorn, \
+		/obj/item/gun/projectile/banana
 		)) //honk
 
 /obj/item/clothing/accessory/holster/knife/unholster_message(mob/user)
@@ -239,10 +239,10 @@
 		update_icon()
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical
-	knife_type = /obj/item/weapon/kitchen/utensil/knife/tactical
+	knife_type = /obj/item/kitchen/utensil/knife/tactical
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/skinning
-	knife_type = /obj/item/weapon/kitchen/utensil/knife/skinning
+	knife_type = /obj/item/kitchen/utensil/knife/skinning
 
 /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword
-	knife_type = /obj/item/weapon/melee/energy/sword
+	knife_type = /obj/item/melee/energy/sword

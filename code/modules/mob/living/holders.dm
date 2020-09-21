@@ -1,7 +1,7 @@
 //Helper object for picking dionaea (and other creatures) up.
-// /obj/item/weapon/holder/animal works with ANY animal!
+// /obj/item/holder/animal works with ANY animal!
 
-/obj/item/weapon/holder
+/obj/item/holder
 	name = "holder"
 	icon = 'icons/obj/weapons.dmi'
 	desc = "You shouldn't ever see this."
@@ -11,7 +11,7 @@
 	var/update_itemstate_on_twohand = FALSE //If there are different item states for holding this with one and two hands, this must be 1
 	var/const/itemstate_twohand_suffix = "_2hand" //The item state
 
-/obj/item/weapon/holder/New(loc, mob/M)
+/obj/item/holder/New(loc, mob/M)
 	..()
 	processing_objects.Add(src)
 	if(M)
@@ -19,7 +19,7 @@
 
 		src.stored_mob = M
 
-/obj/item/weapon/holder/Destroy()
+/obj/item/holder/Destroy()
 	//Hopefully this will stop the icon from remaining on human mobs.
 	if(istype(loc,/mob/living))
 		var/mob/living/A = src.loc
@@ -34,27 +34,27 @@
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/holder/supermatter_act(atom/source)
+/obj/item/holder/supermatter_act(atom/source)
 	if(stored_mob)
 		stored_mob.supermatter_act(source, SUPERMATTER_DUST)
 		qdel(stored_mob) //better safe than sorry, sorry mice.
 	qdel(src)
 	return TRUE
 
-/obj/item/weapon/holder/process()
+/obj/item/holder/process()
 	if(!loc)
 		return qdel(src)
 	else if(istype(loc,/turf) || !(contents.len))
 		return qdel(src)
 
-/obj/item/weapon/holder/relaymove(mob/M, direction)
+/obj/item/holder/relaymove(mob/M, direction)
 	qdel(src) //This calls Destroy(), and frees the mob
 
-/obj/item/weapon/holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/holder/attackby(obj/item/W as obj, mob/user as mob)
 	for(var/mob/M in src.contents)
 		M.attackby(W,user)
 
-/obj/item/weapon/holder/update_wield(mob/user)
+/obj/item/holder/update_wield(mob/user)
 	..()
 
 	if(update_itemstate_on_twohand)
@@ -63,19 +63,19 @@
 		if(user)
 			user.update_inv_hands()
 
-/obj/item/weapon/holder/kick_act(mob/user)
+/obj/item/holder/kick_act(mob/user)
 	..()
 
 	if(stored_mob)
 		stored_mob.kick_act(user)
 
-/obj/item/weapon/holder/bite_act(mob/user)
+/obj/item/holder/bite_act(mob/user)
 	if(stored_mob)
 		stored_mob.bite_act(user)
 
 //Nymph holder
 
-/obj/item/weapon/holder/diona
+/obj/item/holder/diona
 	name = "diona nymph"
 	desc = "It's a tiny plant critter."
 	icon = 'icons/obj/objects.dmi'
@@ -83,16 +83,16 @@
 	slot_flags = SLOT_HEAD
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_BIOTECH + "=5"
 
-/obj/item/weapon/holder/diona/New(loc, mob/M)
+/obj/item/holder/diona/New(loc, mob/M)
 	..()
 	if(M)
 		name = M.name
 
-/obj/item/weapon/holder/animal
+/obj/item/holder/animal
 	name = "animal holder"
 	desc = "This holder takes the mob's appearance, so it will work with any mob!"
 
-/obj/item/weapon/holder/animal/New(loc, mob/M)
+/obj/item/holder/animal/New(loc, mob/M)
 	..()
 	if(M)
 		appearance = M.appearance
@@ -112,13 +112,13 @@
 
 //MICE
 
-/obj/item/weapon/holder/animal/mouse
+/obj/item/holder/animal/mouse
 	name = "mouse holder"
 	desc = "This one has icon states!"
 	slot_flags = SLOT_HEAD
 	item_state = "mouse" //Credit to Hubblenaut for sprites! https://github.com/Baystation12/Baystation12/pull/9416
 
-/obj/item/weapon/holder/animal/mouse/New(loc, mob/M)
+/obj/item/holder/animal/mouse/New(loc, mob/M)
 	..()
 	if(istype(M, /mob/living/simple_animal/mouse))
 		var/mob/living/simple_animal/mouse/mouse = M
@@ -129,7 +129,7 @@
 
 //CORGI
 
-/obj/item/weapon/holder/animal/corgi
+/obj/item/holder/animal/corgi
 	name = "corgi holder"
 	desc = "Icon states yay!"
 	item_state = "corgi"
@@ -138,7 +138,7 @@
 
 //CARP
 
-/obj/item/weapon/holder/animal/carp
+/obj/item/holder/animal/carp
 	name = "carp holder"
 	item_state = "carp"
 
@@ -146,14 +146,14 @@
 
 //COWS
 
-/obj/item/weapon/holder/animal/cow
+/obj/item/holder/animal/cow
 	name = "cow holder"
 	desc = "Pretty heavy"
 	item_state = "cow"
 
 //CATS
 
-/obj/item/weapon/holder/animal/cat
+/obj/item/holder/animal/cat
 	name = "cat holder"
 	desc = "Runtime error"
 	item_state = "cat1"
@@ -162,7 +162,7 @@
 
 //FROG
 
-/obj/item/weapon/holder/animal/frog
+/obj/item/holder/animal/frog
 	name = "frog holder"
 	desc = "Don't hold it too tight."
 	item_state = "frog"
@@ -170,7 +170,7 @@
 
 //SNAIL
 
-/obj/item/weapon/holder/animal/snail
+/obj/item/holder/animal/snail
 	name = "snail holder"
 	desc = "Eh, it's all gooey and sticky."
 	item_state = "snail"
@@ -178,7 +178,7 @@
 
 //SALEM
 
-/obj/item/weapon/holder/animal/salem
+/obj/item/holder/animal/salem
 	name = "salem holder"
 	desc = "Esp!"
 	item_state = "salem"
@@ -187,31 +187,31 @@
 
 //SNAKES
 
-/obj/item/weapon/holder/animal/snek
+/obj/item/holder/animal/snek
 	name = "snake holder"
 	desc = "Kept you waiting?"
 	item_state = "snek"
 
 //SLIMES
-/obj/item/weapon/holder/animal/slime
+/obj/item/holder/animal/slime
 	name = "slime holder"
 	desc = "It seeps through your fingers"
 
-/obj/item/weapon/holder/animal/slime/proc/unfreeze()
+/obj/item/holder/animal/slime/proc/unfreeze()
 	var/mob/living/simple_animal/slime/S = stored_mob
 	S.canmove = TRUE
 	S.icon_state = "[S.colour] [istype(S,/mob/living/simple_animal/slime/adult) ? "adult" : "baby"] slime"
 	qdel(src)
 
-/obj/item/weapon/holder/animal/slime/throw_impact(atom/hit_atom)
+/obj/item/holder/animal/slime/throw_impact(atom/hit_atom)
 	..()
 	unfreeze()
 
-/obj/item/weapon/holder/animal/slime/attack_self(mob/user)
+/obj/item/holder/animal/slime/attack_self(mob/user)
 	..()
 	unfreeze()
 
-/obj/item/weapon/holder/animal/pillow
+/obj/item/holder/animal/pillow
 	name = "pillow holder"
 	desc = "Comforbable"
 	item_state = "pillow"

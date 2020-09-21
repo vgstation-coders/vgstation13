@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/cryo
+	build_path = /obj/item/circuitboard/cryo
 
 /datum/design/chem_dispenser
 	name = "Circuit Design (Chemistry Dispenser)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/chem_dispenser
+	build_path = /obj/item/circuitboard/chem_dispenser
 
 /datum/design/scan_console
 	name = "Circuit Design (DNA Machine)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/scan_consolenew
+	build_path = /obj/item/circuitboard/scan_consolenew
 
 /datum/design/defib_recharger
 	name = "Circuit Design (Defib Recharger)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/defib_recharger
+	build_path = /obj/item/circuitboard/defib_recharger
 
 /datum/design/chemmaster3000
 	name = "Circuit Design (ChemMaster 3000)"
@@ -48,7 +48,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/chemmaster3000
+	build_path = /obj/item/circuitboard/chemmaster3000
 
 /datum/design/clonepod
 	name = "Circuit Design (Clone Pod)"
@@ -58,7 +58,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/clonepod
+	build_path = /obj/item/circuitboard/clonepod
 
 /datum/design/clonescanner
 	name = "Circuit Design (Cloning Scanner)"
@@ -68,7 +68,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/clonescanner
+	build_path = /obj/item/circuitboard/clonescanner
 
 /datum/design/fbs
 	name = "Circuit Design (Body Scanner)"
@@ -77,7 +77,7 @@
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/fullbodyscanner
+	build_path = /obj/item/circuitboard/fullbodyscanner
 
 /datum/design/sleeper
 	name = "Circuit Design (Sleeper)"
@@ -86,7 +86,7 @@
 	req_tech = list(Tc_BIOTECH = 2)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/sleeper
+	build_path = /obj/item/circuitboard/sleeper
 
 /datum/design/bioprinter
 	name = "Circuit Design (Bioprinter)"
@@ -96,7 +96,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/bioprinter
+	build_path = /obj/item/circuitboard/bioprinter
 
 //CHEM HEATING/COOLING
 
@@ -108,7 +108,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/chemheater
+	build_path = /obj/item/circuitboard/chemheater
 
 /datum/design/chemcooler
 	name = "Circuit Design (Cryonic Wave Projector)"
@@ -118,7 +118,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/chemcooler
+	build_path = /obj/item/circuitboard/chemcooler
 
 //VIROLOGY
 
@@ -130,7 +130,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/incubator
+	build_path = /obj/item/circuitboard/incubator
 
 /datum/design/diseaseanalyser
 	name = "Circuit Design (Disease Analyser)"
@@ -140,7 +140,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/diseaseanalyser
+	build_path = /obj/item/circuitboard/diseaseanalyser
 
 /datum/design/splicer
 	name = "Circuit Design (Disease Splicer)"
@@ -150,7 +150,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/splicer
+	build_path = /obj/item/circuitboard/splicer
 
 /datum/design/centrifuge
 	name = "Circuit Design (Isolation Centrifuge)"
@@ -160,7 +160,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/centrifuge
+	build_path = /obj/item/circuitboard/centrifuge
 
 /datum/design/mind_machine_hub
 	name = "Circuit Design (Mind Machine Hub)"
@@ -170,7 +170,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/mind_machine_hub
+	build_path = /obj/item/circuitboard/mind_machine_hub
 
 /datum/design/mind_machine_pod
 	name = "Circuit Design (Mind Machine Pod)"
@@ -180,5 +180,5 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/mind_machine_pod
+	build_path = /obj/item/circuitboard/mind_machine_pod
 

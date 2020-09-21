@@ -2,8 +2,8 @@
 	name = "alien"
 	icon_state = "alien_s"
 
-	var/obj/item/weapon/r_store = null
-	var/obj/item/weapon/l_store = null
+	var/obj/item/r_store = null
+	var/obj/item/l_store = null
 	var/caste = ""
 	update_icon = TRUE
 

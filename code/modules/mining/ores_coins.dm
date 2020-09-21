@@ -252,7 +252,7 @@
 	color = pick("#FF0000","#0000FF","#008000","#FFFF00")
 
 /obj/item/stack/ore/cytine/attack_hand(mob/user as mob)
-	var/obj/item/weapon/glowstick/G = new /obj/item/weapon/glowstick(user.loc)
+	var/obj/item/glowstick/G = new /obj/item/glowstick(user.loc)
 	G.color = color
 	G.light_color = color
 	qdel(src)
@@ -275,7 +275,7 @@
 	icon_state = "cobryl"
 	starting_materials = list(MAT_MYTHRIL = CC_PER_SHEET_MYTHRIL)
 
-/obj/item/weapon/gibtonite
+/obj/item/gibtonite
 	name = "Gibtonite ore"
 	desc = "Extremely explosive if struck with mining equipment, Gibtonite is often used by miners to speed up their work by using it as a mining charge. This material is illegal to possess by unauthorized personnel under space law."
 	icon = 'icons/obj/mining.dmi'
@@ -288,11 +288,11 @@
 	var/det_time = 100
 	var/det_quality = 1 //How pure this gibtonite is, determines the explosion produced by it and is derived from the det_time of the rock wall it was taken from, higher shipping_value = better
 
-/obj/item/weapon/gibtonite/can_be_pulled()
+/obj/item/gibtonite/can_be_pulled()
 	return FALSE
 
-/obj/item/weapon/gibtonite/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/pickaxe) || istype(I, /obj/item/weapon/resonator))
+/obj/item/gibtonite/attackby(obj/item/I, mob/user)
+	if(istype(I, /obj/item/pickaxe) || istype(I, /obj/item/resonator))
 		GibtoniteReaction(user)
 		return
 	if(istype(I, /obj/item/device/mining_scanner) && primed)
@@ -303,15 +303,15 @@
 		return
 	..()
 
-/obj/item/weapon/gibtonite/bullet_act(var/obj/item/projectile/P)
+/obj/item/gibtonite/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/bullet))
 		GibtoniteReaction(P.firer)
 	..()
 
-/obj/item/weapon/gibtonite/ex_act()
+/obj/item/gibtonite/ex_act()
 	GibtoniteReaction(triggered_by_explosive = 1)
 
-/obj/item/weapon/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by_explosive = 0)
+/obj/item/gibtonite/proc/GibtoniteReaction(mob/user, triggered_by_explosive = 0)
 	if(!primed)
 		playsound(src,'sound/effects/hit_on_shattered_glass.ogg',50,1)
 		primed = 1
@@ -352,7 +352,7 @@
 /obj/item/stack/ore/ex_act()
 	return
 
-/obj/item/stack/ore/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/stack/ore/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/device/core_sampler))
 		var/obj/item/device/core_sampler/C = W
 		C.sample_item(src, user)
@@ -361,7 +361,7 @@
 
 /*****************************Coin********************************/
 
-/obj/item/weapon/coin
+/obj/item/coin
 	icon = 'icons/obj/items.dmi'
 	name = "coin"
 	desc = "Long phased out in favor of galactic credits."
@@ -376,23 +376,23 @@
 	var/credits = 0 // How many credits is this coin worth?
 	var/sideup = "heads." //heads, tails or on its side?
 
-/obj/item/weapon/coin/New()
+/obj/item/coin/New()
 	. = ..()
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/coin/recycle(var/datum/materials/rec)
+/obj/item/coin/recycle(var/datum/materials/rec)
 	if(material==null)
 		return NOT_RECYCLABLE
 	rec.addAmount(material, 0.2 * get_material_cc_per_sheet(material)) // 5 coins per sheet.
 	return w_type
 
-/obj/item/weapon/coin/is_screwdriver(var/mob/user)
+/obj/item/coin/is_screwdriver(var/mob/user)
 	if(user.a_intent == I_HURT)
 		to_chat(user, "<span class='warning'>You forcefully press with \the [src]!</span>")
 	return user.a_intent == I_HURT
 
-/obj/item/weapon/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
+/obj/item/coin/proc/coinflip(var/mob/user, thrown, rigged = FALSE)
 	var/matrix/flipit = matrix()
 	flipit.Scale(0.2,1)
 	animate(src, transform = flipit, time = 2, easing = QUAD_EASING)
@@ -425,23 +425,23 @@
 		if(!throwing) //coin was thrown and is coming to rest
 			visible_message("<span class='notice'>[src] stops spinning, landing [sideup]</span>")
 
-/obj/item/weapon/coin/examine(var/mob/user)
+/obj/item/coin/examine(var/mob/user)
 	..()
 	to_chat(user, "<span class='notice'>[src] is [sideup]</span>")
 
-/obj/item/weapon/coin/equipped(var/mob/user)
+/obj/item/coin/equipped(var/mob/user)
 	..()
 	sideup = "heads-up."
 	transform = null
 
-/obj/item/weapon/coin/attack_self(var/mob/user)
+/obj/item/coin/attack_self(var/mob/user)
 	coinflip(user, 0)
 
-/obj/item/weapon/coin/throw_impact(atom/hit_atom, speed, user)
+/obj/item/coin/throw_impact(atom/hit_atom, speed, user)
 	..()
 	coinflip(user, 1)
 
-/obj/item/weapon/coin/gold
+/obj/item/coin/gold
 	material=MAT_GOLD
 	name = "gold coin"
 	desc = "Worth its weight in gold!"
@@ -450,7 +450,7 @@
 	melt_temperature=1064+T0C
 	siemens_coefficient = 1.3
 
-/obj/item/weapon/coin/silver
+/obj/item/coin/silver
 	material=MAT_SILVER
 	name = "silver coin"
 	desc = "Not worth a lot, but it sure is shiny."
@@ -459,7 +459,7 @@
 	melt_temperature=961+T0C
 	siemens_coefficient = 1
 
-/obj/item/weapon/coin/diamond
+/obj/item/coin/diamond
 	material=MAT_DIAMOND
 	name = "diamond coin"
 	desc = "A girl's second-best friend!"
@@ -467,7 +467,7 @@
 	credits = 1
 	siemens_coefficient = 0.1
 
-/obj/item/weapon/coin/iron
+/obj/item/coin/iron
 	material=MAT_IRON
 	name = "iron coin"
 	desc = "Practically worthless, even for a coin."
@@ -476,7 +476,7 @@
 	melt_temperature=MELTPOINT_STEEL
 	siemens_coefficient = 1
 
-/obj/item/weapon/coin/plasma
+/obj/item/coin/plasma
 	material=MAT_PLASMA
 	name = "solid plasma coin"
 	desc = "Not worth a lot, but safer to handle than raw plasma."
@@ -485,7 +485,7 @@
 	melt_temperature=MELTPOINT_STEEL+500
 	siemens_coefficient = 0.6
 
-/obj/item/weapon/coin/uranium
+/obj/item/coin/uranium
 	material=MAT_URANIUM
 	name = "uranium coin"
 	desc = "A heavy coin that is always warm to the touch."
@@ -496,7 +496,7 @@
 	melt_temperature=1070+T0C
 	siemens_coefficient = 0.5
 
-/obj/item/weapon/coin/clown
+/obj/item/coin/clown
 	material=MAT_CLOWN
 	name = "bananium coin"
 	desc = "A funny, rare coin minted from pure banana essence. Honk!"
@@ -505,18 +505,18 @@
 	melt_temperature=MELTPOINT_GLASS
 	siemens_coefficient = 0.5
 
-/obj/item/weapon/coin/phazon
+/obj/item/coin/phazon
 	material=MAT_PHAZON
 	name = "phazon coin"
 	icon_state = "coin_phazon"
 	desc = "You're not sure how much this is worth, considering the constantly warping engravings."
 	melt_temperature=MELTPOINT_GLASS
 
-/obj/item/weapon/coin/phazon/New()
+/obj/item/coin/phazon/New()
 	siemens_coefficient = rand(0,200) / 100
 	credits = rand(1,1000)
 
-/obj/item/weapon/coin/adamantine
+/obj/item/coin/adamantine
 	material="adamantine"
 	name = "adamantine coin"
 	icon_state = "coin_adamantine"
@@ -526,7 +526,7 @@
 	siemens_coefficient = 3
 	credits = 1000
 
-/obj/item/weapon/coin/mythril
+/obj/item/coin/mythril
 	material="mythril"
 	name = "mythril coin"
 	desc = "An expensive coin minted long ago from extremely rare, light, non-conductive metal."
@@ -534,7 +534,7 @@
 	credits = 1000
 	siemens_coefficient = 0
 
-/obj/item/weapon/coin/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/coin/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/stack/cable_coil) )
 		var/obj/item/stack/cable_coil/CC = W
 		if(string_attached)
@@ -551,7 +551,7 @@
 		string_attached = 1
 		to_chat(user, "<span class='notice'>You attach a string to the coin.</span>")
 		CC.use(1)
-	else if(istype(W,/obj/item/weapon/wirecutters) )
+	else if(istype(W,/obj/item/wirecutters) )
 		if(!string_attached)
 			..()
 			return

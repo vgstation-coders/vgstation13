@@ -19,7 +19,7 @@
 		/obj/item/stack/sheet/animalhide/lizard =   /obj/item/clothing/mask/morphing/lizard,
 		/obj/item/stack/sheet/animalhide/xeno   =   /obj/item/clothing/mask/morphing/xeno,
 		/obj/item/stack/sheet/animalhide/human  =   /obj/item/clothing/mask/morphing/human,
-		/obj/item/weapon/ectoplasm              =   /obj/item/clothing/mask/morphing/ghost)
+		/obj/item/ectoplasm              =   /obj/item/clothing/mask/morphing/ghost)
 
 /obj/item/clothing/mask/morphing/New()
 	..()
@@ -48,7 +48,7 @@
 				else
 					C.transmogrify(target_type, revert_spell_type || TRUE)
 
-/obj/item/clothing/mask/morphing/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/mask/morphing/attackby(obj/item/W, mob/user)
 	if(!target_type)
 		var/obj/item/clothing/mask/morphing/T
 		for(var/i in skin_to_mask)

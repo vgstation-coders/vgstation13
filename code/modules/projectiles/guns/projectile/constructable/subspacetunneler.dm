@@ -1,6 +1,6 @@
 #define MAX_BIN_MASS 10
 
-/obj/item/weapon/subspacetunneler
+/obj/item/subspacetunneler
 	name = "subspace tunneler"
 	desc = "A device that uses subspace machinery components to focus and make use of the energy found in bluespace crystals."
 	icon = 'icons/obj/gun.dmi'
@@ -21,7 +21,7 @@
 	var/stored_item_mass = 0
 
 	var/list/invuln = list( //Items too powerful to be allowed to be stored.
-		/obj/item/weapon/disk/nuclear,							//nuclear authentication disk
+		/obj/item/disk/nuclear,							//nuclear authentication disk
 		/obj/machinery/power/supermatter,						//supermatter crystals and shards
 		/obj/machinery/nuclearbomb,								//the nuke itself
 		)
@@ -47,7 +47,7 @@
 		/obj/structure/noticeboard,								//notice boards
 		/obj/machinery/space_heater/campfire/stove/fireplace,	//fireplaces
 		/obj/structure/painting,								//paintings
-		/obj/item/weapon/storage/secure/safe,					//wall-mounted safes
+		/obj/item/storage/secure/safe,					//wall-mounted safes
 		/obj/machinery/door_timer,								//brig cell timers
 		/obj/structure/closet/secure_closet/brig,				//brig cell closets
 		/obj/machinery/disposal,								//disposal bins
@@ -62,7 +62,7 @@
 		/obj/structure/catwalk,									//catwalks
 		)
 
-/obj/item/weapon/subspacetunneler/Destroy()
+/obj/item/subspacetunneler/Destroy()
 	var/turf/currturf = get_turf(src)
 	if(loaded_crystal)
 		qdel(loaded_crystal)
@@ -83,7 +83,7 @@
 				sleep(1)
 	..()
 
-/obj/item/weapon/subspacetunneler/attack_self(mob/user as mob)
+/obj/item/subspacetunneler/attack_self(mob/user as mob)
 	if(!loaded_crystal)
 		return
 
@@ -96,7 +96,7 @@
 	update_icon()
 	update_verbs()
 
-/obj/item/weapon/subspacetunneler/update_icon()
+/obj/item/subspacetunneler/update_icon()
 	overlays.len = 0
 
 	if(loaded_crystal)
@@ -104,25 +104,25 @@
 		overlays += crystal_overlay
 	if(loaded_matter_bin)
 		var/image/matter_bin_overlay
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
+		var/obj/item/stock_parts/matter_bin/M = loaded_matter_bin
 		switch(M.type)
-			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+			if(/obj/item/stock_parts/matter_bin/adv/super/bluespace)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_bluespacematterbin_overlay")
-			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
+			if(/obj/item/stock_parts/matter_bin/adv/super)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_supermatterbin_overlay")
-			if(/obj/item/weapon/stock_parts/matter_bin/adv)
+			if(/obj/item/stock_parts/matter_bin/adv)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_advancedmatterbin_overlay")
-			if(/obj/item/weapon/stock_parts/matter_bin)
+			if(/obj/item/stock_parts/matter_bin)
 				matter_bin_overlay = image('icons/obj/weaponsmithing.dmi', src, "subspacetunneler_matterbin_overlay")
 		overlays += matter_bin_overlay
 
-/obj/item/weapon/subspacetunneler/proc/update_verbs()
+/obj/item/subspacetunneler/proc/update_verbs()
 	if(loaded_matter_bin)
-		verbs += /obj/item/weapon/subspacetunneler/verb/remove_matter_bin
+		verbs += /obj/item/subspacetunneler/verb/remove_matter_bin
 	else
-		verbs -= /obj/item/weapon/subspacetunneler/verb/remove_matter_bin
+		verbs -= /obj/item/subspacetunneler/verb/remove_matter_bin
 
-/obj/item/weapon/subspacetunneler/verb/remove_matter_bin()
+/obj/item/subspacetunneler/verb/remove_matter_bin()
 	set name = "Remove matter bin"
 	set category = "Object"
 	set src in range(0)
@@ -137,7 +137,7 @@
 		to_chat(usr, "<span class='warning'>You can't remove the matter bin while there are still objects inside it!</span>")
 		return
 	else
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
+		var/obj/item/stock_parts/matter_bin/M = loaded_matter_bin
 		M.forceMove(usr.loc)
 		usr.put_in_hands(M)
 		loaded_matter_bin = null
@@ -145,7 +145,7 @@
 	update_verbs()
 	update_icon()
 
-/obj/item/weapon/subspacetunneler/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/subspacetunneler/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/bluespace_crystal))
 		if(loaded_crystal)
 			var/obj/item/bluespace_crystal/B = loaded_crystal
@@ -155,9 +155,9 @@
 			return 1
 		loaded_crystal = W
 		user.visible_message("[user] inserts \the [W] into \the [src].","You insert \the [W] into \the [src].")
-	if(istype(W, /obj/item/weapon/stock_parts/matter_bin))
+	if(istype(W, /obj/item/stock_parts/matter_bin))
 		if(loaded_matter_bin)
-			var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
+			var/obj/item/stock_parts/matter_bin/M = loaded_matter_bin
 			to_chat(user, "<span class='warning'>There is already \a [M.name] attached to \the [src].</span>")
 			return
 		if(!user.drop_item(W, src))
@@ -168,14 +168,14 @@
 	update_verbs()
 	update_icon()
 
-/obj/item/weapon/subspacetunneler/examine(mob/user)
+/obj/item/subspacetunneler/examine(mob/user)
 	..()
 	if(loaded_matter_bin)
 		if(stored_items.len)
-			var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
+			var/obj/item/stock_parts/matter_bin/M = loaded_matter_bin
 			to_chat(user, "<span class='info'>The gauge on \the [src]'s [M.name] indicates that there [stored_items.len > 1 ? "are [stored_items.len] objects" : "is [stored_items.len] object"] stored inside it.</span>")
 
-/obj/item/weapon/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
+/obj/item/subspacetunneler/afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj)
 	if (target.loc == user)
 		return
 
@@ -202,10 +202,10 @@
 			receive(target,user)
 			return
 
-/obj/item/weapon/subspacetunneler/remote_attack(atom/target, mob/user, atom/movable/eye)
+/obj/item/subspacetunneler/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return afterattack(target, user) //Allow using the tunneler through cameras and remote view
 
-/obj/item/weapon/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj)
+/obj/item/subspacetunneler/proc/send(turf/T as turf, mob/living/user as mob|obj)
 	if(!T)
 		T = get_random_nearby_turf()
 	if(!T)
@@ -228,13 +228,13 @@
 		playsound(O, 'sound/effects/phasein.ogg', 50, 1)
 		anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 
-/obj/item/weapon/subspacetunneler/proc/get_random_nearby_turf()
+/obj/item/subspacetunneler/proc/get_random_nearby_turf()
 	var/turf/currturf = get_turf(src)
 	var/offset_x = rand(-3,3)
 	var/offset_y = rand(-3,3)
 	return locate(currturf.x+offset_x, currturf.y+offset_y, currturf.z)
 
-/obj/item/weapon/subspacetunneler/proc/break_out(mob/living/captive)
+/obj/item/subspacetunneler/proc/break_out(mob/living/captive)
 	if(!captive)
 		return
 	var/turf/T = get_random_nearby_turf()
@@ -249,7 +249,7 @@
 			playsound(captive, 'sound/effects/phasein.ogg', 50, 1)
 			anim(location = T,a_icon = 'icons/obj/weaponsmithing.dmi',flick_anim = "subspace_rift",name = "subspace rift")
 
-/obj/item/weapon/subspacetunneler/proc/receive(obj/O as obj, mob/living/user as mob|obj, params, reflex = 0)
+/obj/item/subspacetunneler/proc/receive(obj/O as obj, mob/living/user as mob|obj, params, reflex = 0)
 	if(!loaded_crystal)
 		return
 
@@ -258,7 +258,7 @@
 			to_chat(user, "<span class='warning'>That entity is too powerful to be pulled into subspace!</span>")
 			return
 
-	var/list/diskcheck = O.search_contents_for(/obj/item/weapon/disk/nuclear)
+	var/list/diskcheck = O.search_contents_for(/obj/item/disk/nuclear)
 	if(!isemptylist(diskcheck))
 		to_chat(user, "<span class='warning'>There's something inside that entity that is too powerful to be pulled into subspace!</span>")
 		return
@@ -285,9 +285,9 @@
 			user.visible_message("[user] pulls \the [I] to \himself through a subspace rift!","You pull \the [I] to yourself through a subspace rift.")
 			consume_crystal(user)
 	else
-		var/obj/item/weapon/stock_parts/matter_bin/M = loaded_matter_bin
+		var/obj/item/stock_parts/matter_bin/M = loaded_matter_bin
 		var/obj/item/bluespace_crystal/C = loaded_crystal
-		if(!istype(O, /obj/item) && !istype(M, /obj/item/weapon/stock_parts/matter_bin/adv/super))
+		if(!istype(O, /obj/item) && !istype(M, /obj/item/stock_parts/matter_bin/adv/super))
 			to_chat(user, "<span class='warning'>\The [src] doesn't have the equipment to retrieve an object that large.</span>")
 			return
 		else if(!istype(O, /obj/item) && istype(C, /obj/item/bluespace_crystal/artificial))
@@ -301,11 +301,11 @@
 			mass = 5
 		var/multiplication = 1
 		switch(M.type)
-			if(/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace)
+			if(/obj/item/stock_parts/matter_bin/adv/super/bluespace)
 				multiplication = 4
-			if(/obj/item/weapon/stock_parts/matter_bin/adv/super)
+			if(/obj/item/stock_parts/matter_bin/adv/super)
 				multiplication = 3
-			if(/obj/item/weapon/stock_parts/matter_bin/adv)
+			if(/obj/item/stock_parts/matter_bin/adv)
 				multiplication = 2
 		if((stored_item_mass + mass) > MAX_BIN_MASS * multiplication)
 			to_chat(user, "<span class='warning'>\The [src]'s [M.name] is too full to retrieve that object!</span>")
@@ -327,7 +327,7 @@
 	update_verbs()
 	update_icon()
 
-/obj/item/weapon/subspacetunneler/proc/consume_crystal(mob/user)
+/obj/item/subspacetunneler/proc/consume_crystal(mob/user)
 	spark(src)
 	var/obj/item/bluespace_crystal/B = loaded_crystal
 	if(istype(B, /obj/item/bluespace_crystal/artificial))
@@ -346,10 +346,10 @@
 	if(!loaded_crystal)
 		to_chat(user, "<span class='notice'>\The [B] is consumed by the eruption of bluespace energy.</span>")
 
-/obj/item/weapon/subspacetunneler/complete/New() //Comes with a flawless bluespace crystal and supermatter bin by default
+/obj/item/subspacetunneler/complete/New() //Comes with a flawless bluespace crystal and supermatter bin by default
 	..()
 	loaded_crystal = new /obj/item/bluespace_crystal/flawless(src)
-	loaded_matter_bin = new /obj/item/weapon/stock_parts/matter_bin/adv/super(src)
+	loaded_matter_bin = new /obj/item/stock_parts/matter_bin/adv/super(src)
 	update_icon()
 
 #undef MAX_BIN_MASS

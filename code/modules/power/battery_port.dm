@@ -16,11 +16,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/battery_port,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/battery_port,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -76,7 +76,7 @@
 		return terminal.surplus()
 	return 0
 
-/obj/machinery/power/battery_port/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/power/battery_port/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(connected)
 		to_chat(user, "You can't disconnect \the [src] while it has \the [connected] attached.")
 		return FALSE

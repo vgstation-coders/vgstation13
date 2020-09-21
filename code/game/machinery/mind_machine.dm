@@ -74,20 +74,20 @@
 		/mob/living/simple_animal/hostile/mining_drone
 		)
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/mind_machine_hub,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/manipulator/nano,
-		/obj/item/weapon/stock_parts/manipulator/nano,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/amplifier
+		/obj/item/circuitboard/mind_machine_hub,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/manipulator/nano,
+		/obj/item/stock_parts/manipulator/nano,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/amplifier
 	)
 	RefreshParts()
 
 /obj/machinery/mind_machine/mind_machine_hub/RefreshParts()
 	var/manipCount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/manipulator))
 			manipCount += SP.rating
 	manipRating = manipCount
 
@@ -460,7 +460,7 @@
 		unlockPods()
 
 /obj/machinery/mind_machine/mind_machine_hub/proc/flyTally(var/mob/living/M)
-	for(var/obj/item/weapon/holder/i in get_contents_in_object(M))  //Carp in pack? Outta luck, Jack
+	for(var/obj/item/holder/i in get_contents_in_object(M))  //Carp in pack? Outta luck, Jack
 		theFly += i
 	var/list/borers = M.get_brain_worms()
 	for(var/mob/living/simple_animal/borer/B in borers) //borers in the body are counted
@@ -627,7 +627,7 @@
 	var/list/simpFly = list()
 	var/mob/living/MO = occupantOne
 	var/mob/living/MT = occupantTwo
-	for(var/obj/item/weapon/holder/D in theFly)
+	for(var/obj/item/holder/D in theFly)
 		for(var/mob/M in D.contents)
 			theFly += M //Gets the mob stored in the holder, adds it to the list
 		qdel(D)
@@ -695,21 +695,21 @@
 /obj/machinery/mind_machine/mind_machine_pod/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/mind_machine_pod,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/ansible,
-		/obj/item/weapon/stock_parts/subspace/amplifier,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/subspace/transmitter
+		/obj/item/circuitboard/mind_machine_pod,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/subspace/treatment,
+		/obj/item/stock_parts/subspace/ansible,
+		/obj/item/stock_parts/subspace/amplifier,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/subspace/transmitter
 		)
 	RefreshParts()
 
 /obj/machinery/mind_machine/mind_machine_pod/RefreshParts()
 	var/scanCount = 0
-	for(var/obj/item/weapon/stock_parts/SC in component_parts)
-		if(istype(SC, /obj/item/weapon/stock_parts/scanning_module))
+	for(var/obj/item/stock_parts/SC in component_parts)
+		if(istype(SC, /obj/item/stock_parts/scanning_module))
 			scanCount += SC.rating
 			switch(podNumber)
 				if(1)
@@ -728,7 +728,7 @@
 				connectedHub.connectTwo = null
 	..()
 
-/obj/machinery/mind_machine/mind_machine_pod/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/mind_machine/mind_machine_pod/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>[occupant] is inside the [src]!</span>")
 		return FALSE

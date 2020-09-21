@@ -32,7 +32,7 @@
 	var/content
 	var/programmatic=0                // Is the book programmatically added to the catalog?
 	var/forbidden=0
-	var/path = /obj/item/weapon/book // Type path of the book to generate
+	var/path = /obj/item/book // Type path of the book to generate
 
 /datum/cachedbook/proc/LoadFromRow(var/list/row)
 	id = row["id"]
@@ -68,8 +68,8 @@
 
 /datum/library_catalog/proc/initialize()
 	var/newid=1
-	for(var/typepath in typesof(/obj/item/weapon/book/manual)-/obj/item/weapon/book/manual)
-		var/obj/item/weapon/book/B = new typepath(null)
+	for(var/typepath in typesof(/obj/item/book/manual)-/obj/item/book/manual)
+		var/obj/item/book/B = new typepath(null)
 		var/datum/cachedbook/CB = new()
 		CB.forbidden=B.forbidden
 		CB.title = B.name
@@ -139,12 +139,12 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	icon_state = "bigscanner"
 	anchored = 1
 	density = 1
-	var/obj/item/weapon/book/cache		// Last scanned book
+	var/obj/item/book/cache		// Last scanned book
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/libraryscanner/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/book))
+	if(istype(O, /obj/item/book))
 		user.drop_item(O, src)
 	else
 		return ..()
@@ -174,13 +174,13 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 		return
 
 	if(href_list["scan"])
-		for(var/obj/item/weapon/book/B in contents)
+		for(var/obj/item/book/B in contents)
 			cache = B
 			break
 	if(href_list["clear"])
 		cache = null
 	if(href_list["eject"])
-		for(var/obj/item/weapon/book/B in contents)
+		for(var/obj/item/book/B in contents)
 			B.forceMove(src.loc)
 	src.add_fingerprint(usr)
 	src.updateUsrDialog()
@@ -199,13 +199,13 @@ var/global/list/library_section_names = list("Fiction", "Non-Fiction", "Adult", 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/bookbinder/attackby(var/obj/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/paper/nano))
+	if(istype(O, /obj/item/paper) || istype(O, /obj/item/paper/nano))
 		if(user.drop_item(O, src))
 			user.visible_message("[user] loads some paper into [src].", "You load some paper into [src].")
 			src.visible_message("[src] begins to hum as it warms up its printing drums.")
 			sleep(rand(200,400))
 			src.visible_message("[src] whirs as it prints and binds a new book.")
-			var/obj/item/weapon/book/b = new(src.loc)
+			var/obj/item/book/b = new(src.loc)
 			b.dat = O:info
 			b.name = "Print Job #[rand(100, 999)]"
 			b.icon_state = "book[rand(1,9)]"

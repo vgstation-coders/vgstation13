@@ -113,7 +113,7 @@
 	radiate()
 	..()
 
-/turf/simulated/wall/mineral/uranium/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/wall/mineral/uranium/attackby(obj/item/W as obj, mob/user as mob)
 	radiate()
 	..()
 
@@ -128,7 +128,7 @@
 	walltype = "plasma"
 	mineral = "plasma"
 
-/turf/simulated/wall/mineral/plasma/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/wall/mineral/plasma/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_hot() > 300)//If the temperature of the object is over 300, then ignite
 		ignite(W.is_hot())
 		return
@@ -184,7 +184,7 @@
 	else
 		return 0
 
-/turf/simulated/wall/mineral/proc/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/wall/mineral/proc/attackby(obj/item/W as obj, mob/user as mob)
 	if((mineral == "gold") || (mineral == "silver"))
 		if(shocked)
 			shock()

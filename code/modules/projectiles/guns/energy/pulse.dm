@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/energy/pulse_rifle
+/obj/item/gun/energy/pulse_rifle
 	name = "pulse rifle"
 	desc = "A heavy-duty, pulse-based energy weapon, preferred by front-line combat personnel."
 	icon_state = "pulse"
@@ -7,7 +7,7 @@
 	fire_sound = 'sound/weapons/pulse.ogg'
 	charge_cost = 200
 	projectile_type = "/obj/item/projectile/beam/pulse"
-	cell_type = "/obj/item/weapon/cell/super"
+	cell_type = "/obj/item/cell/super"
 	var/mode = 2
 	fire_delay = 2
 
@@ -33,7 +33,7 @@
 				projectile_type = "/obj/item/projectile/beam/pulse"
 		return
 
-/obj/item/weapon/gun/energy/pulse_rifle/cyborg/process_chambered()
+/obj/item/gun/energy/pulse_rifle/cyborg/process_chambered()
 	if(in_chamber)
 		return 1
 	if(isrobot(src.loc))
@@ -45,23 +45,23 @@
 	return 0
 
 
-/obj/item/weapon/gun/energy/pulse_rifle/destroyer
+/obj/item/gun/energy/pulse_rifle/destroyer
 	name = "pulse destroyer"
 	desc = "A heavy-duty, pulse-based energy weapon."
-	cell_type = "/obj/item/weapon/cell/infinite"
+	cell_type = "/obj/item/cell/infinite"
 
 	attack_self(mob/living/user as mob)
 		to_chat(user, "<span class='warning'>\The [src] has three settings, and they are all DESTROY.</span>")
 
 
 
-/obj/item/weapon/gun/energy/pulse_rifle/M1911
+/obj/item/gun/energy/pulse_rifle/M1911
 	name = "m1911-P"
 	desc = "It's not the size of the gun, it's the size of the hole it puts through people."
 	icon_state = "m1911-p"
 	item_state = null
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
-	cell_type = "/obj/item/weapon/cell/infinite"
+	cell_type = "/obj/item/cell/infinite"
 
-/obj/item/weapon/gun/energy/pulse_rifle/M1911/isHandgun()
+/obj/item/gun/energy/pulse_rifle/M1911/isHandgun()
 	return TRUE

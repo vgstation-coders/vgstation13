@@ -23,7 +23,7 @@
 	can_breed = 1
 	species_type = /mob/living/simple_animal/cat
 	childtype = /mob/living/simple_animal/cat/kitten
-	holder_type = /obj/item/weapon/holder/animal/cat
+	holder_type = /obj/item/holder/animal/cat
 
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
@@ -58,7 +58,7 @@
 	icon_living= "salem"
 	icon_dead= "salem_dead"
 	gender = FEMALE
-	holder_type = /obj/item/weapon/holder/animal/salem
+	holder_type = /obj/item/holder/animal/salem
 
 /mob/living/simple_animal/cat/kitten
 	name = "kitten"
@@ -151,7 +151,7 @@
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
 	childtype = null
-	holder_type = /obj/item/weapon/holder/animal/snek
+	holder_type = /obj/item/holder/animal/snek
 
 /mob/living/simple_animal/cat/snek/corpus
 	name = "Corpus"
@@ -197,4 +197,4 @@ var/list/wizard_snakes = list()
 	species_type = /mob/living/simple_animal/cat/snek
 	butchering_drops = null
 	childtype = null
-	holder_type = /obj/item/weapon/holder/animal/snek
+	holder_type = /obj/item/holder/animal/snek

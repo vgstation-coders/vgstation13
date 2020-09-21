@@ -60,14 +60,14 @@
 	connect()
 	update_icon()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/hydroponics,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/hydroponics,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/reagent_containers/glass/beaker,
+		/obj/item/reagent_containers/glass/beaker,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -78,11 +78,11 @@
 	var/capcount = 0
 	//var/scancount = 0
 	var/mattercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/capacitor))
 			capcount += SP.rating
-		//if(istype(SP, /obj/item/weapon/stock_parts/scanning_module)) scancount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/matter_bin))
+		//if(istype(SP, /obj/item/stock_parts/scanning_module)) scancount += SP.rating-1
+		if(istype(SP, /obj/item/stock_parts/matter_bin))
 			mattercount += SP.rating
 	//decay_reduction = scancount
 	weed_coefficient = 2/mattercount
@@ -299,7 +299,7 @@
 			C.being_potted = FALSE
 		return
 
-	else if(is_type_in_list(O, list(/obj/item/weapon/wirecutters, /obj/item/weapon/scalpel)))
+	else if(is_type_in_list(O, list(/obj/item/wirecutters, /obj/item/scalpel)))
 
 		if(!seed)
 			to_chat(user, "There is nothing to take a sample from in \the [src].")
@@ -338,19 +338,19 @@
 		else
 			to_chat(user, "<span class='alert'>This plot is completely devoid of weeds. It doesn't need uprooting.</span>")
 
-	else if (istype(O, /obj/item/weapon/storage/bag/plants))
+	else if (istype(O, /obj/item/storage/bag/plants))
 
 		attack_hand(user)
 
-		var/obj/item/weapon/storage/bag/plants/S = O
-		for (var/obj/item/weapon/reagent_containers/food/snacks/grown/G in locate(user.x,user.y,user.z))
+		var/obj/item/storage/bag/plants/S = O
+		for (var/obj/item/reagent_containers/food/snacks/grown/G in locate(user.x,user.y,user.z))
 			if(!S.can_be_inserted(G))
 				return
 			S.handle_item_insertion(G, 1)
 
-	else if ( istype(O, /obj/item/weapon/plantspray) )
+	else if ( istype(O, /obj/item/plantspray) )
 
-		var/obj/item/weapon/plantspray/spray = O
+		var/obj/item/plantspray/spray = O
 		user.drop_item(spray, force_drop = 1)
 		toxins += spray.toxicity
 		pestlevel -= spray.pest_kill_str
@@ -362,7 +362,7 @@
 		check_level_sanity()
 		update_icon()
 
-	else if(istype(O, /obj/item/weapon/tank))
+	else if(istype(O, /obj/item/tank))
 		return // Maybe someday make it draw atmos from it so you don't need a whoopin canister, but for now, nothing.
 
 	else if(O.is_wrench(user) && istype(src, /obj/machinery/portable_atmospherics/hydroponics/soil)) //Soil isn't a portable atmospherics machine by any means
@@ -389,7 +389,7 @@
 	else if((O.sharpness_flags & (SHARP_BLADE|SERRATED_BLADE)) && harvest)
 		attack_hand(user)
 
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown)) //composting
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/grown)) //composting
 		to_chat(user, "You use \the [O] as compost for \the [src].")
 		O.reagents.trans_to(src, O.reagents.total_volume, log_transfer = TRUE, whodunnit = user)
 		qdel(O)

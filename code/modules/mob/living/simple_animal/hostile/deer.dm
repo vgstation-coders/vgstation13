@@ -47,9 +47,9 @@
 			if(istype(H.get_item_by_slot(slot_head), /obj/item/clothing/head/leather/deer/horned))
 				spook_prob -= 10
 		for(var/obj/item/I in H.held_items)
-			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/apple))
+			if(istype(I, /obj/item/reagent_containers/food/snacks/grown/apple))
 				spook_prob -= 10
-			if(istype(I, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))
+			if(istype(I, /obj/item/reagent_containers/food/snacks/grown/goldapple))
 				spook_prob -= 20
 		if(prob(spook_prob))
 			return 1
@@ -88,14 +88,14 @@
 
 
 /mob/living/simple_animal/hostile/deer/attackby(obj/W, mob/user)
-	if(!isDead() && (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple) || (istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))))
-		var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/A = W
+	if(!isDead() && (istype(W, /obj/item/reagent_containers/food/snacks/grown/apple) || (istype (W, /obj/item/reagent_containers/food/snacks/grown/goldapple))))
+		var/obj/item/reagent_containers/food/snacks/grown/apple/A = W
 
 		playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
 		visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 		//user.drop_item(A, force_drop = 1)
 
-		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))
+		if(istype (W, /obj/item/reagent_containers/food/snacks/grown/goldapple))
 			icon_living = "deer_flower"
 			icon_dead = "deer_dead"
 			icon_state = "deer_flower"
@@ -107,7 +107,7 @@
 			name_mob(user)
 		qdel(A)
 
-		if(istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple/poisoned))
+		if(istype (W, /obj/item/reagent_containers/food/snacks/grown/apple/poisoned))
 			spawn(rand(50,150))
 				death() //You dick
 		return

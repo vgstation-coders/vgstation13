@@ -1,4 +1,4 @@
-/obj/item/weapon/dice
+/obj/item/dice
 	name = "d6"
 	desc = "A die with six sides. Basic and servicable."
 	icon = 'icons/obj/dice.dmi'
@@ -9,74 +9,74 @@
 	var/result = null
 	var/multiplier = 0 //For modifying the result (d00 etc)
 
-/obj/item/weapon/dice/New()
+/obj/item/dice/New()
 	..()
 	result = rand(minsides, sides)
 	update_icon()
 
-/obj/item/weapon/dice/d2
+/obj/item/dice/d2
 	name = "d2"
 	desc = "A die with two sides. Coins are undignified!"
 	icon_state = "d2"
 	sides = 2
 
-/obj/item/weapon/dice/d4
+/obj/item/dice/d4
 	name = "d4"
 	desc = "A die with four sides. The nerd's caltrop."
 	icon_state = "d4"
 	sides = 4
 
-/obj/item/weapon/dice/d8
+/obj/item/dice/d8
 	name = "d8"
 	desc = "A die with eight sides. It feels... lucky."
 	icon_state = "d8"
 	sides = 8
 
-/obj/item/weapon/dice/d10
+/obj/item/dice/d10
 	name = "d10"
 	desc = "A die with ten sides. Useful for percentages."
 	icon_state = "d10"
 	sides = 10
 
-/obj/item/weapon/dice/d00
+/obj/item/dice/d00
 	name = "d00"
 	desc = "A die with ten sides. Works better for d100 rolls than a golfball."
 	icon_state = "d00"
 	sides = 10
 	multiplier = 10
 
-/obj/item/weapon/dice/d12
+/obj/item/dice/d12
 	name = "d12"
 	desc = "A die with twelve sides. There's an air of neglect about it."
 	icon_state = "d12"
 	sides = 12
 
-/obj/item/weapon/dice/d20
+/obj/item/dice/d20
 	name = "d20"
 	desc = "A die with twenty sides. The prefered die to throw at the GM."
 	icon_state = "d20"
 	sides = 20
 
-/obj/item/weapon/dice/loaded
+/obj/item/dice/loaded
 	desc = "A die with six even sides. Basic and servicable."
 
-/obj/item/weapon/dice/loaded/d20
+/obj/item/dice/loaded/d20
 	name = "d20"
 	desc = "A die with twenty even sides. The prefered die to throw at the GM."
 	icon_state = "d20"
 	sides = 20
 
-/obj/item/weapon/dice/d20/e20
+/obj/item/dice/d20/e20
 	var/triggered = 0
 
-/obj/item/weapon/dice/attack_self(mob/user as mob)
+/obj/item/dice/attack_self(mob/user as mob)
 	diceroll(user, 0)
 
-/obj/item/weapon/dice/throw_impact(atom/hit_atom, speed, user)
+/obj/item/dice/throw_impact(atom/hit_atom, speed, user)
 	..()
 	diceroll(user, 1)
 
-/obj/item/weapon/dice/proc/show_roll(mob/user as mob, thrown, result)
+/obj/item/dice/proc/show_roll(mob/user as mob, thrown, result)
 	var/comment = ""
 	if(sides == 20)
 		if(result == 20)
@@ -93,27 +93,27 @@
 	else if(src.throwing == 0) //Dice was thrown and is coming to rest
 		visible_message("<span class='notice'>[src] rolls to a stop, landing on [result]. [comment]</span>")
 
-/obj/item/weapon/dice/proc/diceroll(mob/user as mob, thrown)
+/obj/item/dice/proc/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides)
 	show_roll(user, thrown, result)
 
-/obj/item/weapon/dice/loaded/diceroll(mob/user as mob, thrown)
+/obj/item/dice/loaded/diceroll(mob/user as mob, thrown)
 	result = rand(minsides, sides * 1.5)
 	result = min(result, sides)
 	show_roll(user, thrown, result)
 
-/obj/item/weapon/dice/d4/Crossed(var/mob/living/carbon/human/H)
+/obj/item/dice/d4/Crossed(var/mob/living/carbon/human/H)
 	if(istype(H) && !H.shoes)
 		to_chat(H, "<span class='danger'>You step on the D4!</span>")
 		H.apply_damage(4,BRUTE,(pick(LIMB_LEFT_LEG, LIMB_RIGHT_LEG)))
 		H.Knockdown(3)
 		H.Stun(3)
 
-/obj/item/weapon/dice/update_icon()
+/obj/item/dice/update_icon()
 	overlays.len = 0
 	overlays += image(icon = icon, icon_state = "[src.icon_state][src.result]")
 
-/obj/item/weapon/dice/d20/e20/diceroll(mob/user as mob, thrown)
+/obj/item/dice/d20/e20/diceroll(mob/user as mob, thrown)
 	if(!istype(user))
 		return 0
 	if(triggered)
@@ -147,19 +147,19 @@
 						bhangmeter.sense_explosion(epicenter.x,epicenter.y,epicenter.z,round(uncapped*0.25), round(uncapped*0.5), round(uncapped),"???", cap)
 
 
-/obj/item/weapon/dice/d20/cursed
+/obj/item/dice/d20/cursed
 	name = "\improper Mysterious d20"
 	desc = "Something about this dice seems wrong"
 	var/deactivated = 0 //Eventually the dice runs out of power
 	var/infinite = 0 //dice with 1 will not run out
 	mech_flags = MECH_SCAN_ILLEGAL
 
-/obj/item/weapon/dice/d20/cursed/pickup(mob/user as mob)
+/obj/item/dice/d20/cursed/pickup(mob/user as mob)
 	..()
 	if(deactivated == 0)
 		to_chat(user, "<span class='sinister'>Are you feeling lucky?</span>")
 
-/obj/item/weapon/dice/d20/cursed/diceroll(mob/user as mob, thrown)
+/obj/item/dice/d20/cursed/diceroll(mob/user as mob, thrown)
 	..()
 	if(deactivated == 0) //If the dice has power then something will happen
 		if(istype(user,/mob/living/carbon/human)) //check that a humanoid is rolling the dice; Xenomorphs / Sillicons need not apply.
@@ -358,32 +358,32 @@
 	else
 		return 0
 
-/obj/item/weapon/dice/d20/cursed/infinite
+/obj/item/dice/d20/cursed/infinite
 	infinite = 1
 
-/obj/item/weapon/dice/d20/cursed/unfair
+/obj/item/dice/d20/cursed/unfair
 	sides = 12 //unfair varient will never roll higher then 12, but it looks like a normal mysterious d20 and otherwise acts like one
 
 //####Borg Die
-/obj/item/weapon/dice/borg //8 in 1
+/obj/item/dice/borg //8 in 1
 	name = "digi-d6"
 	desc = "A device that simulates dice rolls.\nIt has a small button to change the mode."
 	var/possible_sides = list(2,4,6,8,10,12,20,100)
 	var/datum/context_click/digi_die/dd
 
-/obj/item/weapon/dice/borg/New()
+/obj/item/dice/borg/New()
 	..()
 	underlays.len = 0
 	underlays += image(icon = icon, icon_state = "ddbg")
 	dd = new(src)
 
-/obj/item/weapon/dice/borg/attack_self(mob/user, params)
+/obj/item/dice/borg/attack_self(mob/user, params)
 	if(!user.incapacitated() && is_holder_of(user, src))
 		if(dd.action(null, user, params))
 			return
 		..()
 
-/obj/item/weapon/dice/borg/AltClick()
+/obj/item/dice/borg/AltClick()
 	if(usr.incapacitated() || !is_holder_of(usr, src))
 		return ..()
 	set_sides(usr)
@@ -394,12 +394,12 @@
 			return 1
 
 /datum/context_click/digi_die/action(obj/item/used_item, mob/user, params)
-	var/obj/item/weapon/dice/borg/d = holder
+	var/obj/item/dice/borg/d = holder
 	if(return_clicked_id_by_params(params))
 		d.set_sides(user)
 		return 1
 
-/obj/item/weapon/dice/borg/proc/set_sides(mob/user)
+/obj/item/dice/borg/proc/set_sides(mob/user)
 	var/S = input("Number of sides:") as null|anything in possible_sides
 	if(user.incapacitated() || !is_holder_of(user, src)) //sanity
 		return

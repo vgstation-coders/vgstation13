@@ -60,7 +60,7 @@ var/list/laser_tag_games = list()
             dat += "<hr/>"
     
     var/text = jointext(dat,"")
-    var/obj/item/weapon/paper/P = new(get_turf(M))
+    var/obj/item/paper/P = new(get_turf(M))
     P.info = text
     P.name = "Laser tag scoreboard"
     M.put_in_hands(P)

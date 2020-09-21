@@ -40,7 +40,7 @@
 /obj/item/voucher/warp/kinetic_accelerator
 	name = "warp voucher - kinetic accelerator"
 	desc = "Uses bluespace technology to send you an item once certain conditions are met. This one is triggered by entering an NT designated mining area."
-	redeem_path = /obj/item/weapon/gun/energy/kinetic_accelerator
+	redeem_path = /obj/item/gun/energy/kinetic_accelerator
 
 /obj/item/voucher/warp/kinetic_accelerator/vouch_condition()
 	var/turf/T = get_turf(src)
@@ -60,7 +60,7 @@
 	name = "free hot drink voucher"
 	desc = "Perk Up Your Day, with this handy free hot drink from your trusted name-brand vending machines."
 
-	freebies = list(/obj/item/weapon/reagent_containers/food/drinks/coffee, /obj/item/weapon/reagent_containers/food/drinks/tea, /obj/item/weapon/reagent_containers/food/drinks/h_chocolate)
+	freebies = list(/obj/item/reagent_containers/food/drinks/coffee, /obj/item/reagent_containers/food/drinks/tea, /obj/item/reagent_containers/food/drinks/h_chocolate)
 	vend_amount = 1
 	shred_on_use = 0
 
@@ -68,7 +68,7 @@
 	name = "free snack voucher"
 	desc = "Perk Up Your Day, with this handy free snack from your trusted name-brand vending machines."
 
-	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/candy,/obj/item/weapon/reagent_containers/food/drinks/dry_ramen,/obj/item/weapon/reagent_containers/food/snacks/chips,/obj/item/weapon/reagent_containers/food/snacks/sosjerky,/obj/item/weapon/reagent_containers/food/snacks/no_raisin,/obj/item/weapon/reagent_containers/food/snacks/spacetwinkie,/obj/item/weapon/reagent_containers/food/snacks/cheesiehonkers)
+	freebies = list(/obj/item/reagent_containers/food/snacks/candy,/obj/item/reagent_containers/food/drinks/dry_ramen,/obj/item/reagent_containers/food/snacks/chips,/obj/item/reagent_containers/food/snacks/sosjerky,/obj/item/reagent_containers/food/snacks/no_raisin,/obj/item/reagent_containers/food/snacks/spacetwinkie,/obj/item/reagent_containers/food/snacks/cheesiehonkers)
 	vend_amount = 1
 	shred_on_use = 0
 
@@ -76,7 +76,7 @@
 	name = "free donk-pocket voucher"
 	desc = "Perk Up Your Day, with this handy free snack from your trusted name-brand vending machines."
 
-	freebies = list(/obj/item/weapon/reagent_containers/food/snacks/donkpocket/self_heating)
+	freebies = list(/obj/item/reagent_containers/food/snacks/donkpocket/self_heating)
 	vend_amount = 1
 	shred_on_use = 0
 
@@ -84,7 +84,7 @@
 	name = "glowing voucher"
 	desc = "Don't bother appealing to a vendomat without this!"
 	icon_state = "glowingvoucher"
-	freebies = list(/obj/item/weapon/glowstick, /obj/item/weapon/glowstick/red, /obj/item/weapon/glowstick/blue, /obj/item/weapon/glowstick/yellow, /obj/item/weapon/glowstick/magenta)
+	freebies = list(/obj/item/glowstick, /obj/item/glowstick/red, /obj/item/glowstick/blue, /obj/item/glowstick/yellow, /obj/item/glowstick/magenta)
 	vend_amount = 5 //All five types
 	single_items = 1 //One of each
 	shred_on_use = 1
@@ -105,6 +105,6 @@
 	name = "medibot voucher"
 	desc = "Stay healthy! This voucher entitles you to a single (1) Nanotrasen Advanced Medibot! Redeem at a NanoMedPlus."
 	icon_state = "medvoucher"
-	freebies = list(/obj/item/weapon/medbot_cube)
+	freebies = list(/obj/item/medbot_cube)
 	vend_amount = 1
 	single_items = 1

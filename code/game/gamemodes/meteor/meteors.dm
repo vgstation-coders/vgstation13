@@ -296,8 +296,8 @@
 	explosion(get_turf(src), 7, 14, 28, 32, 0, 1, 0) //adios
 	qdel(src)	
 
-/obj/item/projectile/meteor/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/pickaxe)) //Yeah, you can totally do that
+/obj/item/projectile/meteor/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/pickaxe)) //Yeah, you can totally do that
 		qdel(src)
 		return
 	..()
@@ -413,7 +413,7 @@ var/list/blob_candidates = list()
 	message_admins("Blob core meteor impacted at [formatJumpTo(loc)] controlled by [key_name(blob_candidate)].")
 
 //It's a tool to debug and test stuff, ok? Pls don't hand them out to players unless you just want to set the world on fire.
-/obj/item/weapon/meteor_gun
+/obj/item/meteor_gun
 	name = "Meteor Gun"
 	desc = "Jesus fucking christ."
 	icon = 'icons/obj/gun.dmi'
@@ -429,7 +429,7 @@ var/list/blob_candidates = list()
 	force = 5.0
 	var/projectile_type = /obj/item/projectile/meteor
 
-/obj/item/weapon/meteor_gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/meteor_gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 
@@ -443,7 +443,7 @@ var/list/blob_candidates = list()
 
 	add_logs(user,A,"fired \the [src] (proj:[in_chamber.name]) at ",addition="([A.x],[A.y],[A.z])")
 
-/obj/item/weapon/meteor_gun/attack_self(mob/user as mob)
+/obj/item/meteor_gun/attack_self(mob/user as mob)
 	projectile_type = input(user, "Pick a meteor type.", "Projectile Choice") in typesof(/obj/item/projectile/meteor)
 
 

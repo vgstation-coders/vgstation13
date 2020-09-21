@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/roulette_revolver
+/obj/item/gun/projectile/roulette_revolver
 	name = "\improper Roulette Revolver"
 	desc = "A strange-looking revolver. Its construction appears somewhat slapdash."
 	icon_state = "roulette_revolver"
@@ -36,30 +36,30 @@
 		/obj/item/projectile/portalgun,
 		)
 
-/obj/item/weapon/gun/projectile/roulette_revolver/New()
+/obj/item/gun/projectile/roulette_revolver/New()
 	..()
 	available_projectiles = existing_typesof(/obj/item/projectile)
 	processing_objects.Add(src)
 
-/obj/item/weapon/gun/projectile/roulette_revolver/Destroy()
+/obj/item/gun/projectile/roulette_revolver/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/projectile/roulette_revolver/process()
+/obj/item/gun/projectile/roulette_revolver/process()
 	if(time_since_last_recharge >= 8)
 		if(shots_left < 6)
 			shots_left++
 		time_since_last_recharge = 0
 	time_since_last_recharge++
 
-/obj/item/weapon/gun/projectile/roulette_revolver/examine(mob/user)
+/obj/item/gun/projectile/roulette_revolver/examine(mob/user)
 	..()
 	if(!shots_left)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
 	else
 		to_chat(user, "<span class='info'>\The [src] has [shots_left] shots left.</span>")
 
-/obj/item/weapon/gun/projectile/roulette_revolver/proc/choose_projectile()
+/obj/item/gun/projectile/roulette_revolver/proc/choose_projectile()
 	var/chosen_projectile = pick(available_projectiles)
 	for(var/I in restricted_projectiles)
 		if(chosen_projectile == I)
@@ -71,7 +71,7 @@
 		choose_projectile()
 		return
 
-/obj/item/weapon/gun/projectile/roulette_revolver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/projectile/roulette_revolver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -100,5 +100,5 @@
 		else
 			qdel(P)
 
-/obj/item/weapon/gun/projectile/roulette_revolver/infinite
+/obj/item/gun/projectile/roulette_revolver/infinite
 	infinite = 1

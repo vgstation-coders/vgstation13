@@ -1,6 +1,6 @@
 //CONTAINS: Evidence bags and fingerprint cards
 
-/obj/item/weapon/storage/evidencebag
+/obj/item/storage/evidencebag
 	name = "evidence bag"
 	desc = "An empty evidence bag."
 	icon = 'icons/obj/storage/storage.dmi'
@@ -13,7 +13,7 @@
 	fits_max_w_class = W_CLASS_MEDIUM
 	storage_slots = 1
 
-/obj/item/weapon/storage/evidencebag/update_icon()
+/obj/item/storage/evidencebag/update_icon()
 	var/obj/item/I = locate() in contents
 	if(I)
 		var/xx = I.pixel_x	//save the offset of the item
@@ -34,22 +34,22 @@
 		w_class = initial(w_class)
 		overlays.Cut()
 
-/obj/item/weapon/storage/box/evidence
+/obj/item/storage/box/evidence
 	name = "evidence bag box"
 	desc = "A box containing evidence bags."
 	icon_state = "evidencebox"
 
-/obj/item/weapon/storage/box/evidence/New()
-	new /obj/item/weapon/storage/evidencebag(src)
-	new /obj/item/weapon/storage/evidencebag(src)
-	new /obj/item/weapon/storage/evidencebag(src)
-	new /obj/item/weapon/storage/evidencebag(src)
-	new /obj/item/weapon/storage/evidencebag(src)
-	new /obj/item/weapon/storage/evidencebag(src)
+/obj/item/storage/box/evidence/New()
+	new /obj/item/storage/evidencebag(src)
+	new /obj/item/storage/evidencebag(src)
+	new /obj/item/storage/evidencebag(src)
+	new /obj/item/storage/evidencebag(src)
+	new /obj/item/storage/evidencebag(src)
+	new /obj/item/storage/evidencebag(src)
 	..()
 	return
 
-/obj/item/weapon/f_card
+/obj/item/f_card
 	name = "finger print card"
 	desc = "Used to take fingerprints."
 	icon = 'icons/obj/card.dmi'
@@ -62,7 +62,7 @@
 	throw_range = 5
 
 
-/obj/item/weapon/fcardholder
+/obj/item/fcardholder
 	name = "fingerprint card case"
 	desc = "Apply finger print card."
 	icon = 'icons/obj/items.dmi'

@@ -4,7 +4,7 @@
 #define SILENCER_OFFSET_X 1
 #define SILENCER_OFFSET_Y 2
 
-/obj/item/weapon/gun
+/obj/item/gun
 	name = "gun"
 	desc = "Its a gun. It's pretty terrible, though."
 	icon = 'icons/obj/gun.dmi'
@@ -61,7 +61,7 @@
 	var/last_fired = 0
 	var/delay_user = 4	//how much to delay the user's next attack by after firing
 
-	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/weapon/gun/projectile will display the amount of rounds remaining.
+	var/conventional_firearm = 1	//Used to determine whether, when examined, an /obj/item/gun/projectile will display the amount of rounds remaining.
 	var/jammed = 0
 
 	var/projectile_color = null
@@ -71,43 +71,43 @@
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
 
-/obj/item/weapon/gun/Destroy()
+/obj/item/gun/Destroy()
 	if(in_chamber)
 		qdel(in_chamber)
 		in_chamber = null
 	..()
 
-/obj/item/weapon/gun/proc/ready_to_fire()
+/obj/item/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
 		last_fired = world.time
 		return 1
 	else
 		return 0
 
-/obj/item/weapon/gun/proc/process_chambered()
+/obj/item/gun/proc/process_chambered()
 	return 0
 
-/obj/item/weapon/gun/proc/special_check(var/mob/M) //Placeholder for any special checks, like detective's revolver.
+/obj/item/gun/proc/special_check(var/mob/M) //Placeholder for any special checks, like detective's revolver.
 	return 1
 
-/obj/item/weapon/gun/proc/failure_check(var/mob/M) //special_check, but in a different place
+/obj/item/gun/proc/failure_check(var/mob/M) //special_check, but in a different place
 	return 1
 
-/obj/item/weapon/gun/emp_act(severity)
+/obj/item/gun/emp_act(severity)
 	for(var/obj/O in contents)
 		O.emp_act(severity)
 
-/obj/item/weapon/gun/proc/can_discharge() //because process_chambered() is an atrocity
+/obj/item/gun/proc/can_discharge() //because process_chambered() is an atrocity
 	return 0
 
-/obj/item/weapon/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
+	if(istype(target, /obj/machinery/recharger) && istype(src, /obj/item/gun/energy))
 		return//Shouldnt flag take care of this?
 
 	if (user.is_pacified(VIOLENCE_GUN,A,src))
@@ -118,10 +118,10 @@
 	else
 		Fire(A,user,params, "struggle" = struggle) //Otherwise, fire normally.
 
-/obj/item/weapon/proc/isHandgun()
+/obj/item/proc/isHandgun()
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
-/obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
+/obj/item/gun/proc/play_firesound(mob/user, var/reflex)
 	if(silenced)
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume/5, 1)
@@ -136,7 +136,7 @@
 		"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
 		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
-/obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
+/obj/item/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
 		if (!user.IsAdvancedToolUser())
@@ -178,7 +178,7 @@
 			return 0
 	return 1
 
-/obj/item/weapon/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/proc/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	//Exclude lasertag guns from the M_CLUMSY check.
 	var/explode = FALSE
 	var/dehand = FALSE
@@ -235,7 +235,7 @@
 	if(defective)
 		if(!failure_check(user))
 			return
-	if(!istype(src, /obj/item/weapon/gun/energy/tag))
+	if(!istype(src, /obj/item/gun/energy/tag))
 		log_attack("[user.name] ([user.ckey]) fired \the [src] (proj:[in_chamber.name]) at [originaltarget] [ismob(target) ? "([originaltarget:ckey])" : ""] ([originaltarget.x],[originaltarget.y],[originaltarget.z])[struggle ? " due to being disarmed." :""]" )
 	in_chamber.firer = user
 
@@ -321,13 +321,13 @@
 
 	return 1
 
-/obj/item/weapon/gun/proc/canbe_fired()
+/obj/item/gun/proc/canbe_fired()
 	return process_chambered()
 
-/obj/item/weapon/gun/proc/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
+/obj/item/gun/proc/can_hit(var/mob/living/target as mob, var/mob/living/user as mob)
 	return in_chamber.check_fire(target,user)
 
-/obj/item/weapon/gun/proc/click_empty(mob/user = null)
+/obj/item/gun/proc/click_empty(mob/user = null)
 	if (user)
 		if(empty_sound)
 			user.visible_message("*click click*", "<span class='danger'>*click*</span>")
@@ -337,7 +337,7 @@
 			src.visible_message("*click click*")
 			playsound(src, empty_sound, 100, 1)
 
-/obj/item/weapon/gun/attack(mob/living/M, mob/living/user, def_zone)
+/obj/item/gun/attack(mob/living/M, mob/living/user, def_zone)
 	//Suicide handling.
 	if (M == user && user.zone_sel.selecting == "mouth" && !mouthshoot)
 		if(istype(M.wear_mask, /obj/item/clothing/mask/happy))
@@ -401,25 +401,25 @@
 	else
 		return ..() //Pistolwhippin'
 
-/obj/item/weapon/gun/state_controls_pai(obj/item/device/paicard/P)
+/obj/item/gun/state_controls_pai(obj/item/device/paicard/P)
 	if(P.pai)
 		to_chat(P.pai, "<span class='info'><b>You have been connected to \a [src].</b></span>")
 		to_chat(P.pai, "<span class='info'>Your controls are:</span>")
 		to_chat(P.pai, "<span class='info'>- PageDown / Z(hotkey mode): Connect or disconnect from \the [src]'s firing mechanism.</span>")
 		to_chat(P.pai, "<span class='info'>- Click on a target: Fire \the [src] at the target.</span>")
 
-/obj/item/weapon/gun/attack_integrated_pai(mob/living/silicon/pai/user)
+/obj/item/gun/attack_integrated_pai(mob/living/silicon/pai/user)
 	if(!pai_safety)
 		to_chat(user, "<span class='notice'>You connect to \the [src]'s firing mechanism.</span>")
 	else
 		to_chat(user, "<span class='notice'>You disconnect from \the [src]'s firing mechanism.</span>")
 	pai_safety = !pai_safety
 
-/obj/item/weapon/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
+/obj/item/gun/on_integrated_pai_click(mob/living/silicon/pai/user, var/atom/A)	//to allow any gun to be pAI-compatible, on a basic level, just by varediting
 	if(check_pai_can_fire(user))
 		Fire(A,user,use_shooter_turf = TRUE)
 
-/obj/item/weapon/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
+/obj/item/gun/proc/check_pai_can_fire(mob/living/silicon/pai/user)	//for various restrictions on when pAIs can fire a gun into which they're integrated
 	if(get_holder_of_type(user, /obj/structure/disposalpipe) || get_holder_of_type(user, /obj/machinery/atmospherics/pipe))	//can't fire the gun from inside pipes or disposal pipes
 		to_chat(user, "<span class='warning'>You can't aim \the [src] properly from this location!</span>")
 		return FALSE
@@ -429,11 +429,11 @@
 	else
 		return TRUE
 
-/obj/item/weapon/gun/attackby(var/obj/item/A, mob/user)
-	if(istype(A, /obj/item/weapon/gun))
-		var/obj/item/weapon/gun/G = A
+/obj/item/gun/attackby(var/obj/item/A, mob/user)
+	if(istype(A, /obj/item/gun))
+		var/obj/item/gun/G = A
 		if(isHandgun() && G.isHandgun())
-			var/obj/item/weapon/gun/akimbo/AA = new /obj/item/weapon/gun/akimbo(get_turf(src),src,G)
+			var/obj/item/gun/akimbo/AA = new /obj/item/gun/akimbo(get_turf(src),src,G)
 			if(user.drop_item(G, AA) && user.drop_item(src, AA))
 				user.put_in_hands(AA)
 				AA.update_icon(user)
@@ -448,14 +448,14 @@
 			update_icon()
 	..()
 
-/obj/item/weapon/gun/decontaminate()
+/obj/item/gun/decontaminate()
 	..()
 	if(clowned == CLOWNED)
 		clowned = CLOWNABLE
 		update_icon()
 
-/obj/item/weapon/gun/update_icon()
+/obj/item/gun/update_icon()
 	icon_state = initial(icon_state) + "[clowned == CLOWNED ? "c" : ""]"
 
-/obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
+/obj/item/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
 	return

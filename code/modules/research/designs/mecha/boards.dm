@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/ripley/main
+	build_path = /obj/item/circuitboard/mecha/ripley/main
 
 /datum/design/ripley_peri
 	name = "Circuit Design (APLU \"Ripley\" Peripherals Control module)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/ripley/peripherals
+	build_path = /obj/item/circuitboard/mecha/ripley/peripherals
 
 //ODYSSEUS
 
@@ -30,7 +30,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/odysseus/main
+	build_path = /obj/item/circuitboard/mecha/odysseus/main
 
 /datum/design/odysseus_peri
 	name = "Circuit Design (\"Odysseus\" Peripherals Control module)"
@@ -40,7 +40,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/odysseus/peripherals
+	build_path = /obj/item/circuitboard/mecha/odysseus/peripherals
 
 //CLARKE
 
@@ -52,7 +52,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/clarke/main
+	build_path = /obj/item/circuitboard/mecha/clarke/main
 
 /datum/design/clarke_peri
 	name = "Circuit Design (\"Clarke\" Peripherals Control module)"
@@ -62,7 +62,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/clarke/peripherals
+	build_path = /obj/item/circuitboard/mecha/clarke/peripherals
 
 //PHAZON
 
@@ -74,7 +74,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/phazon/main
+	build_path = /obj/item/circuitboard/mecha/phazon/main
 
 /datum/design/phazon_peri
 	name = "Circuit Design (\"Phazon\" Peripherals Control module)"
@@ -84,7 +84,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/phazon/peripherals
+	build_path = /obj/item/circuitboard/mecha/phazon/peripherals
 
 //GYGAX
 
@@ -96,7 +96,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/gygax/main
+	build_path = /obj/item/circuitboard/mecha/gygax/main
 
 /datum/design/gygax_peri
 	name = "Circuit Design (\"Gygax\" Peripherals Control module)"
@@ -106,7 +106,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/gygax/peripherals
+	build_path = /obj/item/circuitboard/mecha/gygax/peripherals
 
 /datum/design/gygax_targ
 	name = "Circuit Design (\"Gygax\" Weapons & Targeting Control module)"
@@ -116,7 +116,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/gygax/targeting
+	build_path = /obj/item/circuitboard/mecha/gygax/targeting
 
 //DURAND
 
@@ -128,7 +128,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/durand/main
+	build_path = /obj/item/circuitboard/mecha/durand/main
 
 /datum/design/durand_peri
 	name = "Circuit Design (\"Durand\" Peripherals Control module)"
@@ -138,7 +138,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/durand/peripherals
+	build_path = /obj/item/circuitboard/mecha/durand/peripherals
 
 /datum/design/durand_targ
 	name = "Circuit Design (\"Durand\" Weapons & Targeting Control module)"
@@ -148,7 +148,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/durand/targeting
+	build_path = /obj/item/circuitboard/mecha/durand/targeting
 
 //MARAUDER
 
@@ -160,7 +160,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/marauder/main
+	build_path = /obj/item/circuitboard/mecha/marauder/main
 
 /datum/design/marauder_peri
 	name = "Circuit Design (\"Marauder\" Peripherals Control module)"
@@ -170,7 +170,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/marauder/peripherals
+	build_path = /obj/item/circuitboard/mecha/marauder/peripherals
 
 /datum/design/marauder_targ
 	name = "Circuit Design (\"Marauder\" Weapons & Targeting Control module)"
@@ -180,7 +180,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/marauder/targeting
+	build_path = /obj/item/circuitboard/mecha/marauder/targeting
 
 //HONKER FUK U PJB
 
@@ -192,7 +192,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/honker/main
+	build_path = /obj/item/circuitboard/mecha/honker/main
 
 /datum/design/honker_peri
 	name = "Circuit Design (\"H.O.N.K\" Peripherals Control module)"
@@ -202,7 +202,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/honker/peripherals
+	build_path = /obj/item/circuitboard/mecha/honker/peripherals
 
 /datum/design/honker_targ
 	name = "Circuit Design (\"H.O.N.K\" Weapons & Targeting Control module)"
@@ -212,4 +212,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Mecha Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha/honker/targeting
+	build_path = /obj/item/circuitboard/mecha/honker/targeting

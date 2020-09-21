@@ -16,15 +16,15 @@
 
 /obj/machinery/mech_bay_recharge_floor/New()
 	..()
-	component_parts = newlist(/obj/item/weapon/circuitboard/mech_bay_recharge_station,
-								/obj/item/weapon/stock_parts/scanning_module,
-								/obj/item/weapon/stock_parts/capacitor,
-								/obj/item/weapon/stock_parts/capacitor)
+	component_parts = newlist(/obj/item/circuitboard/mech_bay_recharge_station,
+								/obj/item/stock_parts/scanning_module,
+								/obj/item/stock_parts/capacitor,
+								/obj/item/stock_parts/capacitor)
 
 /obj/machinery/mech_bay_recharge_floor/RefreshParts()
 	var/capcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/capacitor))
 			capcount += SP.rating-1
 	capacitor_max = initial(capacitor_max)+(capcount * 750)
 
@@ -90,10 +90,10 @@
 /obj/machinery/mech_bay_recharge_port/New()
 	..()
 
-	component_parts = newlist(/obj/item/weapon/circuitboard/mech_bay_power_port,
-								/obj/item/weapon/stock_parts/micro_laser,
-								/obj/item/weapon/stock_parts/micro_laser,
-								/obj/item/weapon/stock_parts/console_screen)
+	component_parts = newlist(/obj/item/circuitboard/mech_bay_power_port,
+								/obj/item/stock_parts/micro_laser,
+								/obj/item/stock_parts/micro_laser,
+								/obj/item/stock_parts/console_screen)
 
 	pr_recharger = new /datum/global_iterator/mech_bay_recharger(null,0)
 
@@ -102,8 +102,8 @@
 
 /obj/machinery/mech_bay_recharge_port/RefreshParts()
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	set_voltage(450+lasercount*100)
 
@@ -178,7 +178,7 @@
 	anchored = 1
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "recharge_comp"
-	circuit = "/obj/item/weapon/circuitboard/mech_bay_power_console"
+	circuit = "/obj/item/circuitboard/mech_bay_power_console"
 	var/autostart = 1
 	var/voltage = 45
 	var/obj/machinery/mech_bay_recharge_floor/recharge_floor

@@ -5,7 +5,7 @@
 /obj/machinery/shield_gen/external
 	name = "\improper Starscreen-EX external shield generator"
 	desc = "Generates a hull-hugging wall of energy when active. Place near space."
-	board_path = /obj/item/weapon/circuitboard/shield_gen_ex
+	board_path = /obj/item/circuitboard/shield_gen_ex
 	icon_state = "generator_external_off"
 	icon_prefix = "external"
 

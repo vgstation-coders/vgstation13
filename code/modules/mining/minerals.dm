@@ -190,7 +190,7 @@ mineral/gibtonite
 	name = "Gibtonite"
 	result_amount = 1
 	spread = 1
-	ore = /obj/item/weapon/gibtonite
+	ore = /obj/item/gibtonite
 
 mineral/gibtonite/UpdateTurf(var/turf/unsimulated/mineral/T)
 	if(!istype(T,/turf/unsimulated/mineral/gibtonite))

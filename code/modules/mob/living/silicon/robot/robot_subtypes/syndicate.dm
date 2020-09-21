@@ -4,7 +4,7 @@
 	modtype = "Syndicate"
 	icon_state = "robot_old"
 	req_access = list(access_syndicate)
-	cell_type = /obj/item/weapon/cell/hyper
+	cell_type = /obj/item/cell/hyper
 	lawupdate = FALSE
 	AIlink = FALSE
 	scrambledcodes = TRUE

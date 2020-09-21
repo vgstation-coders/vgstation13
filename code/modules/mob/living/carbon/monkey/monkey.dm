@@ -7,7 +7,7 @@
 	gender = NEUTER
 	pass_flags = PASSTABLE
 	update_icon = 0		///no need to call regenerate_icon
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/monkey
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/animal/monkey
 	species_type = /mob/living/carbon/monkey
 	treadmill_speed = 0.8 //Slow apes!
 	var/attack_text = "bites"
@@ -33,7 +33,7 @@
 	var/obj/item/clothing/head/hat = null
 	var/obj/item/clothing/glasses/glasses = null
 
-	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
+	var/obj/item/card/id/wear_id = null // Fix for station bounced radios -- Skie
 	var/greaterform = "Human"                  // Used when humanizing a monkey.
 	icon_state = "monkey1"
 	//var/uni_append = "12C4E2"                // Small appearance modifier for different species.
@@ -432,11 +432,11 @@
 	//Lasertag bullshit
 	if(lasercolor)
 		if(lasercolor == "b")//Lasertag turrets target the opposing team, how great is that? -Sieve
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
+			if(find_held_item_by_type(/obj/item/gun/energy/tag/red))
 				threatcount += 4
 
 		if(lasercolor == "r")
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
+			if(find_held_item_by_type(/obj/item/gun/energy/tag/blue))
 				threatcount += 4
 
 		return threatcount
@@ -490,7 +490,7 @@
 	icon_state = "mushroom"
 	greaterform = "Mushroom"
 	species_type = /mob/living/carbon/monkey/mushroom
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 	canWearClothes = 0
 	canWearHats = 0
 	canWearGlasses = 0
@@ -541,8 +541,8 @@
 			transferImplantsTo(adult)
 			transferBorers(adult)
 
-			if(istype(loc,/obj/item/weapon/holder))
-				var/obj/item/weapon/holder/L = loc
+			if(istype(loc,/obj/item/holder))
+				var/obj/item/holder/L = loc
 				src.forceMove(get_turf(L))
 				L = null
 				qdel(L)

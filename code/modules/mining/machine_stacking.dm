@@ -5,7 +5,7 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "stacking_machine_console"
 	light_color = LIGHT_COLOR_BLUE
-	circuit = "/obj/item/weapon/circuitboard/stacking_machine_console"
+	circuit = "/obj/item/circuitboard/stacking_machine_console"
 
 	var/stacker_tag//The ID of the stacker this console should control
 	var/frequency = FREQ_DISPOSAL
@@ -146,12 +146,12 @@
 
 /obj/machinery/mineral/stacking_machine/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/bin in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/bin in component_parts)
 		T += bin.rating
 	max_moved = initial(max_moved) * (T / 3)
 
 	T = 0 //reusing T here because muh RAM.
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating - 1
 	idle_power_usage = initial(idle_power_usage) - (T * (initial(idle_power_usage) / 4))//25% power usage reduction for an advanced capacitor, 50% for a super one.
 
@@ -159,11 +159,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/stacking_unit,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/stacking_unit,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/capacitor
 	)
 
 	RefreshParts()

@@ -1,2 +1,2 @@
-/obj/item/weapon/melee
+/obj/item/melee
 	icon = 'icons/obj/weapons.dmi'

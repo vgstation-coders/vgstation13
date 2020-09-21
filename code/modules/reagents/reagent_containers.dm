@@ -1,7 +1,7 @@
 // Reagents to log when splashing non-mobs (all mob splashes are logged automatically)
 var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
-/obj/item/weapon/reagent_containers
+/obj/item/reagent_containers
 	name = "Container"
 	desc = "..."
 	icon = 'icons/obj/chemical.dmi'
@@ -12,7 +12,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/volume = 30
 	var/amount_per_imbibe = 5
 
-/obj/item/weapon/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
+/obj/item/reagent_containers/verb/set_APTFT() //set amount_per_transfer_from_this
 	set name = "Set transfer amount"
 	set category = "Object"
 	set src in range(0)
@@ -22,7 +22,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	if (N)
 		amount_per_transfer_from_this = N
 
-/obj/item/weapon/reagent_containers/verb/empty_contents() //Just dump it out on the floor
+/obj/item/reagent_containers/verb/empty_contents() //Just dump it out on the floor
 	set name = "Dump contents"
 	set category = "Object"
 	set src in usr
@@ -46,7 +46,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		usr.visible_message("<span class='warning'>[usr] splashes something onto the floor!</span>",
 						 "<span class='notice'>You empty \the [src] onto the floor.</span>")
 
-/obj/item/weapon/reagent_containers/proc/drain_into(mob/user, var/atom/where) //We're flushing our contents down the drain!
+/obj/item/reagent_containers/proc/drain_into(mob/user, var/atom/where) //We're flushing our contents down the drain!
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='warning'>You can't do that while incapacitated.</span>")
 		return
@@ -62,31 +62,31 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	to_chat(user, "<span class='notice'>You flush \the [src] down \the [where].</span>")
 
 
-/obj/item/weapon/reagent_containers/AltClick()
+/obj/item/reagent_containers/AltClick()
 	if(is_holder_of(usr, src) && possible_transfer_amounts)
 		set_APTFT()
 		return
 	return ..()
 
-/obj/item/weapon/reagent_containers/New()
+/obj/item/reagent_containers/New()
 	..()
 	create_reagents(volume)
 
 	if(!is_open_container(src))
-		src.verbs -= /obj/item/weapon/reagent_containers/verb/empty_contents
+		src.verbs -= /obj/item/reagent_containers/verb/empty_contents
 	if(!possible_transfer_amounts)
-		src.verbs -= /obj/item/weapon/reagent_containers/verb/set_APTFT
+		src.verbs -= /obj/item/reagent_containers/verb/set_APTFT
 
-/obj/item/weapon/reagent_containers/Destroy()
+/obj/item/reagent_containers/Destroy()
 	if(istype(loc, /obj/machinery/iv_drip))
 		var/obj/machinery/iv_drip/holder = loc
 		holder.remove_container()
  . = ..()
 
-/obj/item/weapon/reagent_containers/attack_self(mob/user as mob)
+/obj/item/reagent_containers/attack_self(mob/user as mob)
 	return
 
-/obj/item/weapon/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
+/obj/item/reagent_containers/attack(mob/M as mob, mob/user as mob, def_zone)
 	//If harm intent, splash it on em, else try to feed em it
 	if(!M.reagents)
 		return
@@ -140,7 +140,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
  * If your container is splashing/transferring things at a distance, your `afterattack()`
  * isn't checking for adjacency. For that, check that `adjacency_flag` is `TRUE`.
  */
-/obj/item/weapon/reagent_containers/afterattack(var/obj/target, var/mob/user, var/adjacency_flag, var/click_params)
+/obj/item/reagent_containers/afterattack(var/obj/target, var/mob/user, var/adjacency_flag, var/click_params)
 	return
 
 /**
@@ -151,8 +151,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	var/source_empty
 	var/target_full
 
-	if (istype(source, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/S = source
+	if (istype(source, /obj/item/reagent_containers))
+		var/obj/item/reagent_containers/S = source
 		source_empty = S.is_empty()
 	else if (istype(source, /obj/structure/reagent_dispensers))
 		var/obj/structure/reagent_dispensers/S = source
@@ -164,8 +164,8 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 		//return
 
 
-	if (istype(target, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/T = target
+	if (istype(target, /obj/item/reagent_containers))
+		var/obj/item/reagent_containers/T = target
 		target_full = T.is_full()
 	// Reagent dispensers can't be refilled (yet) through normal means (TODO?)
 	/*else if (istype(target, /obj/structure/reagent_dispensers))
@@ -234,7 +234,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
  *
  * @return If we have transferred reagents, the amount transferred; otherwise, -1 if the transfer has failed, 0 if was a splash.
  */
-/obj/item/weapon/reagent_containers/proc/transfer(var/atom/target, var/mob/user, var/can_send = TRUE, var/can_receive = TRUE, var/splashable_units = 0)
+/obj/item/reagent_containers/proc/transfer(var/atom/target, var/mob/user, var/can_send = TRUE, var/can_receive = TRUE, var/splashable_units = 0)
 	if (!istype(target) || !is_open_container())
 		return -1
 
@@ -250,7 +250,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	// Transfer to container
 	if (can_send /*&& target.reagents**/)
 		var/obj/container = target
-		if (!container.is_open_container() && istype(container,/obj/item/weapon/reagent_containers) && !istype(container,/obj/item/weapon/reagent_containers/food/snacks))
+		if (!container.is_open_container() && istype(container,/obj/item/reagent_containers) && !istype(container,/obj/item/reagent_containers/food/snacks))
 			return -1
 
 		if(target.is_open_container())
@@ -290,34 +290,34 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 					return (to_splash)
 	return 0
 
-/obj/item/weapon/reagent_containers/proc/is_empty()
+/obj/item/reagent_containers/proc/is_empty()
 	if(!reagents)
 		return TRUE
 	return reagents.total_volume <= 0
 
-/obj/item/weapon/reagent_containers/proc/is_full()
+/obj/item/reagent_containers/proc/is_full()
 	if(!reagents)
 		return FALSE
 	return reagents.total_volume >= reagents.maximum_volume
 
-/obj/item/weapon/reagent_containers/proc/can_transfer_an_APTFT()
+/obj/item/reagent_containers/proc/can_transfer_an_APTFT()
 	return reagents.total_volume >= amount_per_transfer_from_this
 
-/obj/item/weapon/reagent_containers/proc/get_reagent_names()
+/obj/item/reagent_containers/proc/get_reagent_names()
 	var/list/reagent_names = list()
 	for (var/datum/reagent/R in reagents.reagent_list)
 		reagent_names += R.name
 
 	return reagent_names
 
-/obj/item/weapon/reagent_containers/proc/get_reagent_ids()
+/obj/item/reagent_containers/proc/get_reagent_ids()
 	var/list/reagent_ids = list()
 	for (var/datum/reagent/R in reagents.reagent_list)
 		reagent_ids += R.id
 
 	return reagent_ids
 
-/obj/item/weapon/reagent_containers/proc/reagentlist(var/obj/item/weapon/reagent_containers/snack) //Attack logs for regents in pills
+/obj/item/reagent_containers/proc/reagentlist(var/obj/item/reagent_containers/snack) //Attack logs for regents in pills
 	var/data
 	if(snack.reagents.reagent_list && snack.reagents.reagent_list.len) //find a reagent list if there is and check if it has entries
 		for (var/datum/reagent/R in snack.reagents.reagent_list) //no reagents will be left behind
@@ -326,13 +326,13 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 	else
 		return "No reagents"
 
-/obj/item/weapon/reagent_containers/proc/fits_in_iv_drip()
+/obj/item/reagent_containers/proc/fits_in_iv_drip()
 	return FALSE
 
-/obj/item/weapon/reagent_containers/proc/should_qdel_if_empty()
+/obj/item/reagent_containers/proc/should_qdel_if_empty()
 	return FALSE
 
-/obj/item/weapon/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
+/obj/item/reagent_containers/proc/imbibe(mob/user) //Drink the liquid within
 	if(!can_drink(user))
 		return 0
 	to_chat(user, "<span  class='notice'>You swallow a gulp of \the [src].</span>")
@@ -350,7 +350,7 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	return 1
 
-/obj/item/weapon/reagent_containers/proc/can_drink(mob/user)
+/obj/item/reagent_containers/proc/can_drink(mob/user)
 	if (ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.species.flags & SPECIES_NO_MOUTH)
@@ -365,15 +365,15 @@ var/list/LOGGED_SPLASH_REAGENTS = list(FUEL, THERMITE)
 
 	return 1
 
-/obj/item/weapon/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+/obj/item/reagent_containers/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	reagents.heating(1000, exposed_temperature)
 	..()
 
-/obj/item/weapon/reagent_containers/attackby(obj/item/I, mob/user, params)
+/obj/item/reagent_containers/attackby(obj/item/I, mob/user, params)
 	..()
 	attempt_heating(I, user)
 
-/obj/item/weapon/reagent_containers/attempt_heating(atom/A, mob/user)
+/obj/item/reagent_containers/attempt_heating(atom/A, mob/user)
 	var/temperature = A.is_hot()
 	if(temperature && reagents)
 		reagents.heating(A.thermal_energy_transfer(), temperature)

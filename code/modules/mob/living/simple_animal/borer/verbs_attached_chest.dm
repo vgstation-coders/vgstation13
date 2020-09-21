@@ -207,7 +207,7 @@
 			if (INFECTION_LEVEL_THREE to INFINITY)
 				infected = "Septic:"
 
-		var/known_implants = list(/obj/item/weapon/implant/chem, /obj/item/weapon/implant/death_alarm, /obj/item/weapon/implant/loyalty, /obj/item/weapon/implant/tracking)
+		var/known_implants = list(/obj/item/implant/chem, /obj/item/implant/death_alarm, /obj/item/implant/loyalty, /obj/item/implant/tracking)
 		if(e.implants.len)
 			var/unknown_body = 0
 			for(var/I in e.implants)

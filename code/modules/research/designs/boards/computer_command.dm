@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/aiupload
+	build_path = /obj/item/circuitboard/aiupload
 	locked = 1
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
@@ -18,7 +18,7 @@
 	id = "aiuploadlongrange"
 	req_tech = list(Tc_PROGRAMMING = 4, Tc_MATERIALS = 9, Tc_BLUESPACE = 3, Tc_MAGNETS = 5)
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/aiupload/longrange
+	build_path = /obj/item/circuitboard/aiupload/longrange
 
 /datum/design/borgupload
 	name = "Circuit Design (Cyborg Upload)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/borgupload
+	build_path = /obj/item/circuitboard/borgupload
 	locked = 1
 	req_lock_access = list(access_rnd, access_robotics, access_rd)
 
@@ -40,7 +40,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/communications
+	build_path = /obj/item/circuitboard/communications
 
 /datum/design/idcardconsole
 	name = "Circuit Design (ID Computer)"
@@ -50,7 +50,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/card
+	build_path = /obj/item/circuitboard/card
 
 /datum/design/teleconsole
 	name = "Circuit Design (Teleporter Console)"
@@ -60,4 +60,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/teleporter
+	build_path = /obj/item/circuitboard/teleporter

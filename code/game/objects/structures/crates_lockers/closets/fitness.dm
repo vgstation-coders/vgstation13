@@ -51,7 +51,7 @@
 
 /obj/structure/closet/lasertag/red/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/gun/energy/tag/red = 6,
+		/obj/item/gun/energy/tag/red = 6,
 		/obj/item/clothing/suit/tag/redtag = 6,
 	)
 
@@ -64,6 +64,6 @@
 
 /obj/structure/closet/lasertag/blue/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/gun/energy/tag/blue = 6,
+		/obj/item/gun/energy/tag/blue = 6,
 		/obj/item/clothing/suit/tag/bluetag = 6,
 	)

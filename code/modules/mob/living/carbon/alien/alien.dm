@@ -12,13 +12,13 @@
 	mob_swap_flags = ALLMOBS
 	mob_push_flags = ALLMOBS ^ ROBOT
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/xenomeat
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/xenomeat
 
 	var/plasma = 250
 	var/max_plasma = 500
 	var/neurotoxin_cooldown = 0
 
-	var/obj/item/weapon/card/id/wear_id = null // Fix for station bounced radios -- Skie
+	var/obj/item/card/id/wear_id = null // Fix for station bounced radios -- Skie
 	var/has_fine_manipulation = 0
 
 	var/move_delay_add = 0 // movement delay to add
@@ -32,7 +32,7 @@
 	var/fire_alert = 0
 
 	var/heat_protection = 0.5
-	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/weapon/grab) //What types of object can the alien pick up?
+	var/list/can_only_pickup = list(/obj/item/clothing/mask/facehugger, /obj/item/grab) //What types of object can the alien pick up?
 
 /mob/living/carbon/alien/AdjustPlasma(amount)
 	plasma = min(max(plasma + amount,0),max_plasma) //upper limit of max_plasma, lower limit of 0

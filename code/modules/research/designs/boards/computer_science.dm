@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/robotics
+	build_path = /obj/item/circuitboard/robotics
 
 /datum/design/mechacontrol
 	name = "Circuit Design (Exosuit Control Console)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/mecha_control
+	build_path = /obj/item/circuitboard/mecha_control
 
 /datum/design/mechapower
 	name = "Circuit Design (Mech Bay Power Control Console)"
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/mech_bay_power_console
+	build_path = /obj/item/circuitboard/mech_bay_power_console
 
 /datum/design/rdconsole
 	name = "Circuit Design (Core R&D Console)"
@@ -38,32 +38,32 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/rdconsole
+	build_path = /obj/item/circuitboard/rdconsole
 
 /datum/design/rdconsole/robotics
 	name = "Circuit Design (Robotics R&D Console)"
 	id = "rdconsole_robotics"
-	build_path = /obj/item/weapon/circuitboard/rdconsole/robotics
+	build_path = /obj/item/circuitboard/rdconsole/robotics
 
 /datum/design/rdconsole/mechanic
 	name = "Circuit Design (Mechanic R&D Console)"
 	id = "rdconsole_mechanic"
-	build_path = /obj/item/weapon/circuitboard/rdconsole/mechanic
+	build_path = /obj/item/circuitboard/rdconsole/mechanic
 
 /datum/design/rdconsole/mommi
 	name = "Circuit Design (MoMMI R&D Console)"
 	id = "rdconsole_mommi"
-	build_path = /obj/item/weapon/circuitboard/rdconsole/mommi
+	build_path = /obj/item/circuitboard/rdconsole/mommi
 
 /datum/design/rdconsole/pod
 	name = "Circuit Design (Pod Bay R&D Console)"
 	id = "rdconsole_pod"
-	build_path = /obj/item/weapon/circuitboard/rdconsole/pod
+	build_path = /obj/item/circuitboard/rdconsole/pod
 
 /datum/design/rdconsole/derelict
 	name = "Circuit Design (Derelict R&D Console)"
 	id = "rdconsole_derelict"
-	build_path = /obj/item/weapon/circuitboard/rdconsole/derelict
+	build_path = /obj/item/circuitboard/rdconsole/derelict
 
 /datum/design/aifixer
 	name = "Circuit Design (AI Integrity Restorer)"
@@ -73,7 +73,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/aifixer
+	build_path = /obj/item/circuitboard/aifixer
 
 /datum/design/bhangmeter
 	name = "Circuit Design (Bhangmeter)"
@@ -83,7 +83,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/bhangmeter
+	build_path = /obj/item/circuitboard/bhangmeter
 
 /datum/design/rdservercontrol
 	name = "Circuit Design(R&D Server Control Console)"
@@ -93,4 +93,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
-	build_path = /obj/item/weapon/circuitboard/rdservercontrol
+	build_path = /obj/item/circuitboard/rdservercontrol

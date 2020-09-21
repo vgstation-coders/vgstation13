@@ -120,7 +120,7 @@
 		to_chat(H, "<B>Objective #[obj_count++]</B>: [OBJ.explanation_text]")
 
 	for(var/obj/item/I in H)
-		if(!istype(I, /obj/item/weapon/implant))
+		if(!istype(I, /obj/item/implant))
 			qdel(I)
 
 	if(isplasmaman(H))
@@ -134,17 +134,17 @@
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/wizard(H), slot_head)
 	switch(H.backbag)
 		if(3) //No need to have a case for if they select the normal backpack type, as that's the default in case they haven't selected one.
-			H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel_norm(H), slot_back)
+			H.equip_to_slot_or_del(new /obj/item/storage/backpack/satchel_norm(H), slot_back)
 		if(4)
-			H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(H), slot_back)
+			H.equip_to_slot_or_del(new /obj/item/storage/backpack/satchel(H), slot_back)
 		else
-			H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack(H), slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box(H), slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/teleportation_scroll(H), slot_r_store)
-	H.equip_to_slot_or_del(new /obj/item/weapon/spellbook(H), slot_in_backpack)
+			H.equip_to_slot_or_del(new /obj/item/storage/backpack(H), slot_back)
+	H.equip_to_slot_or_del(new /obj/item/storage/box(H), slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/teleportation_scroll(H), slot_r_store)
+	H.equip_to_slot_or_del(new /obj/item/spellbook(H), slot_in_backpack)
 	if(isvox(H))
 		H.equip_to_slot_or_del(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-		var/obj/item/weapon/tank/nitrogen/T = new(H)
+		var/obj/item/tank/nitrogen/T = new(H)
 		H.put_in_hands(T)
 		H.internal = T
 		if(H.internals)

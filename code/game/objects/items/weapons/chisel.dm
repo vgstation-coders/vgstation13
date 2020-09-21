@@ -1,4 +1,4 @@
-/obj/item/weapon/chisel
+/obj/item/chisel
 	name = "chisel"
 	desc = "A tool for engraving"
 
@@ -15,14 +15,14 @@
 
 	var/use_name
 
-/obj/item/weapon/chisel/attack_self(mob/user as mob)
+/obj/item/chisel/attack_self(mob/user as mob)
 	use_name = !use_name
 	if(use_name)
 		to_chat(user, "You will now sign your work.")
 	else
 		to_chat(user, "You will no longer sign your work.")
 
-/obj/item/weapon/chisel/attack(mob/M as mob, mob/user as mob)
+/obj/item/chisel/attack(mob/M as mob, mob/user as mob)
 	..()
 	if(istype(M, /mob/living/simple_animal/scp_173))
 		var/engraving = sanitize(input(usr, "What do you want to write on \the [M.real_name]?") as text)
@@ -37,7 +37,7 @@
 
 		M.desc += engraving
 
-/obj/item/weapon/chisel/afterattack(atom/target, mob/user as mob, proximity)
+/obj/item/chisel/afterattack(atom/target, mob/user as mob, proximity)
 	if(!proximity)
 		return
 	if(istype(target,/turf/simulated/wall))

@@ -42,19 +42,19 @@
 	name = "hammer head"
 	icon_state = "hammer_head"
 	desc = "unlike the shark, this one lacks bite."
-	result = /obj/item/weapon/hammer
+	result = /obj/item/hammer
 
 /obj/item/item_head/pitchfork_head
 	name = "pitchfork head"
 	icon_state = "pitchfork_head"
 	desc = "The revolution is not going to start itself."
-	result = /obj/item/weapon/pitchfork
+	result = /obj/item/pitchfork
 
 /obj/item/item_head/pickaxe_head
 	name = "pickaxe head"
 	icon_state = "pickaxe_head"
 	desc = "To strike the earth, you will need a handle on the situation"
-	result = /obj/item/weapon/pickaxe
+	result = /obj/item/pickaxe
 
 /obj/item/item_handle
 	name = "item handle"
@@ -79,30 +79,30 @@
 	icon_state = "large_metal_blade"
 	desc = "Rather unwieldy without a hilt."
 	finishing_requirements = list(/obj/item/sword_handle, /obj/item/cross_guard)
-	result = /obj/item/weapon/sword
+	result = /obj/item/sword
 
 /obj/item/item_head/sword/scimitar
 	name = "scimitar blade"
 	icon_state = "large_curved_blade"
 	desc = "Curved. Swords."
-	result = /obj/item/weapon/sword/scimitar
+	result = /obj/item/sword/scimitar
 
 /obj/item/item_head/sword/shortsword
 	name = "shortsword blade"
-	result = /obj/item/weapon/sword/shortsword
+	result = /obj/item/sword/shortsword
 
 /obj/item/item_head/sword/gladius
 	name = "gladius blade"
-	result = /obj/item/weapon/sword/gladius
+	result = /obj/item/sword/gladius
 	finishing_requirements = list(/obj/item/sword_handle)
 
 /obj/item/item_head/sword/sabre
 	name = "sabre blade"
 	icon_state = "large_curved_blade"
-	result = /obj/item/weapon/sword/sabre
+	result = /obj/item/sword/sabre
 
 /obj/item/item_head/tower_shield
 	name = "unstrapped tower shield"
 	icon_state = "large_plate"
 	finishing_requirements = list(/obj/item/stack/leather_strip)
-	result = /obj/item/weapon/shield/riot/tower
+	result = /obj/item/shield/riot/tower

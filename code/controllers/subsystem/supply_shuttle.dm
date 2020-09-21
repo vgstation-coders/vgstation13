@@ -139,7 +139,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	return 1
 
 /datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate,var/preserve = FALSE)
-	if (istype(A,/obj/item/weapon/storage/lockbox))
+	if (istype(A,/obj/item/storage/lockbox))
 		for (var/atom/A2 in A)
 			SellObjToOrders(A2, 1)
 			if(A2 && !preserve)
@@ -174,8 +174,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 			var/find_slip = 1
 			for(var/obj/A in MA)
-				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
-					var/obj/item/weapon/paper/slip = A
+				if(find_slip && istype(A,/obj/item/paper/manifest))
+					var/obj/item/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
 						var/datum/transaction/T = new()
 						T.target_name = "Central Command Administration"
@@ -261,7 +261,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 		//supply manifest generation begin
 
-		var/obj/item/weapon/paper/manifest/slip = new /obj/item/weapon/paper/manifest(A)
+		var/obj/item/paper/manifest/slip = new /obj/item/paper/manifest(A)
 
 		slip.name = "Shipping Manifest for [SO.orderedby]'s Order"
 		slip.info = {"<h3>[command_name()] Shipping Manifest for [SO.orderedby]'s Order</h3><hr><br>
@@ -315,7 +315,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		if(!istype(M, /mob/living/simple_animal/hostile/mimic))
 			return TRUE
 
-	if (locate(/obj/item/weapon/disk/nuclear) in contents)
+	if (locate(/obj/item/disk/nuclear) in contents)
 		return TRUE
 	if (locate(/obj/machinery/nuclearbomb) in contents)
 		return TRUE
@@ -362,7 +362,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if (C.silent)
 		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
-		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
+		var/obj/item/paper/reqform = new /obj/item/paper(S.loc)
 		reqform.name = name
 		reqform.info = info
 		reqform.update_icon()

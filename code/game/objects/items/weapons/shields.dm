@@ -1,8 +1,8 @@
-/obj/item/weapon/shield
+/obj/item/shield
 	name = "shield"
 	icon = 'icons/obj/weapons.dmi'
 
-/obj/item/weapon/shield/riot
+/obj/item/shield/riot
 	name = "riot shield"
 	desc = "A shield adept at blocking blunt objects from connecting with the shield's wielder."
 	icon_state = "riot"
@@ -20,15 +20,15 @@
 	attack_verb = list("shoves", "bashes")
 	var/cooldown = 0 //shield bash cooldown. based on world.time
 
-/obj/item/weapon/shield/riot/suicide_act(mob/user)
+/obj/item/shield/riot/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing \his face into the [src.name]! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/shield/riot/IsShield()
+/obj/item/shield/riot/IsShield()
 	return 1
 
-/obj/item/weapon/shield/riot/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/melee/baton) || istype(W, /obj/item/weapon/melee/telebaton) || istype(W, /obj/item/weapon/melee/classic_baton))
+/obj/item/shield/riot/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/melee/baton) || istype(W, /obj/item/melee/telebaton) || istype(W, /obj/item/melee/classic_baton))
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -36,7 +36,7 @@
 	else
 		..()
 
-/obj/item/weapon/shield/riot/buckler
+/obj/item/shield/riot/buckler
 	name = "buckler"
 	desc = "A small wooden shield. Its surface area is small, but it's still somewhat effective."
 	icon_state = "buckler"
@@ -44,10 +44,10 @@
 	slot_flags = 0
 	starting_materials = list()
 
-/obj/item/weapon/shield/riot/buckler/IsShield()
+/obj/item/shield/riot/buckler/IsShield()
 	return prob(33) //Only attempt to block 1/3 of attacks
 
-/obj/item/weapon/shield/riot/buckler/on_block(damage, atom/blocked)
+/obj/item/shield/riot/buckler/on_block(damage, atom/blocked)
 	if(damage > 10)
 		if(prob(min(10*(damage-10), 75))) //Bucklers are prone to breaking apart
 			var/turf/T = get_turf(src)
@@ -62,16 +62,16 @@
 
 	return ..()
 
-/obj/item/weapon/shield/riot/roman
+/obj/item/shield/riot/roman
 	name = "roman shield"
 	desc = "Bears an inscription on the inside: <i>\"Romanes venio domus\"</i>."
 	icon_state = "roman_shield"
 
-/obj/item/weapon/shield/riot/roman/IsShield()
+/obj/item/shield/riot/roman/IsShield()
 	return 1
 
-/obj/item/weapon/shield/riot/roman/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
+/obj/item/shield/riot/roman/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/spear))
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -81,7 +81,7 @@
 
 
 
-/obj/item/weapon/shield/energy
+/obj/item/shield/energy
 	name = "energy combat shield"
 	desc = "A shield capable of stopping most projectile and melee attacks. It can be retracted, expanded, and stored anywhere."
 	icon = 'icons/obj/weapons.dmi'
@@ -98,17 +98,17 @@
 	attack_verb = list("shoves", "bashes")
 	var/active = 0
 
-/obj/item/weapon/shield/energy/suicide_act(mob/user)
+/obj/item/shield/energy/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is putting the [src.name] to their head and activating it! It looks like \he's  trying to commit suicide!</span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/shield/energy/IsShield()
+/obj/item/shield/energy/IsShield()
 	if(active)
 		return 1
 	else
 		return 0
 
-/obj/item/weapon/shield/energy/attack_self(mob/living/user as mob)
+/obj/item/shield/energy/attack_self(mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You beat yourself in the head with [src].</span>")
 		user.take_organ_damage(5)
@@ -130,7 +130,7 @@
 	return
 
 
-/obj/item/weapon/cloaking_device
+/obj/item/cloaking_device
 	name = "cloaking device"
 	desc = "Use this to become invisible to the human eyesocket."
 	icon = 'icons/obj/device.dmi'
@@ -146,7 +146,7 @@
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 
 
-/obj/item/weapon/cloaking_device/attack_self(mob/user as mob)
+/obj/item/cloaking_device/attack_self(mob/user as mob)
 	src.active = !( src.active )
 	if (src.active)
 		to_chat(user, "<span class='notice'>The cloaking device is now active.</span>")
@@ -157,24 +157,24 @@
 	src.add_fingerprint(user)
 	return
 
-/obj/item/weapon/cloaking_device/emp_act(severity)
+/obj/item/cloaking_device/emp_act(severity)
 	active = 0
 	icon_state = "shield0"
 	if(ismob(loc))
 		loc:update_icons()
 	..()
 
-/obj/item/weapon/shield/riot/proto
+/obj/item/shield/riot/proto
 	name = "Prototype Shield"
 	desc = "Doubles as a sled!"
 	icon_state = "protoshield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
-/obj/item/weapon/shield/riot/proto/IsShield()
+/obj/item/shield/riot/proto/IsShield()
 	return 1
 
-/obj/item/weapon/shield/riot/proto/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
+/obj/item/shield/riot/proto/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/spear))
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -183,17 +183,17 @@
 		..()
 
 
-/obj/item/weapon/shield/riot/joe
+/obj/item/shield/riot/joe
 	name = "Sniper Shield"
 	desc = "Very useful for close-quarters sniping, regardless of how stupid that idea is."
 	icon_state = "joeshield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 
-/obj/item/weapon/shield/riot/joe/IsShield()
+/obj/item/shield/riot/joe/IsShield()
 	return 1
 
-/obj/item/weapon/shield/riot/joe/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/spear))
+/obj/item/shield/riot/joe/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/spear))
 		if(cooldown < world.time - 25)
 			user.visible_message("<span class='warning'>[user] bashes [src] with [W]!</span>")
 			playsound(user.loc, 'sound/effects/shieldbash.ogg', 50, 1)
@@ -201,7 +201,7 @@
 	else
 		..()
 
-/obj/item/weapon/shield/riot/bone
+/obj/item/shield/riot/bone
 	name = "bone shield"
 	desc = "A somewhat gruesome shield that appears to be made of solid bone."
 	icon = 'icons/obj/weapons.dmi'
@@ -218,7 +218,7 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/shield/riot/bone/New(atom/A, var/p_borer = null)
+/obj/item/shield/riot/bone/New(atom/A, var/p_borer = null)
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
@@ -227,7 +227,7 @@
 	else
 		processing_objects.Add(src)
 
-/obj/item/weapon/shield/riot/bone/Destroy()
+/obj/item/shield/riot/bone/Destroy()
 	if(parent_borer)
 		if(parent_borer.channeling_bone_shield)
 			parent_borer.channeling_bone_shield = 0
@@ -237,7 +237,7 @@
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/shield/riot/bone/process()
+/obj/item/shield/riot/bone/process()
 	set waitfor = 0
 	if(!parent_borer)
 		return
@@ -248,14 +248,14 @@
 	else
 		parent_borer.chemicals -= 3
 
-/obj/item/weapon/shield/riot/tower
+/obj/item/shield/riot/tower
 	name = "tower shield"
 	desc = "A veritable wall of defense."
 	icon_state = "tower_shield"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shields.dmi', "right_hand" = 'icons/mob/in-hand/right/shields.dmi')
 	slowdown = 4
 
-/obj/item/weapon/shield/riot/rune
+/obj/item/shield/riot/rune
 	name = "rune kiteshield"
 	desc = "A large metal shield."
 	icon = 'icons/obj/weapons.dmi'
@@ -269,5 +269,5 @@
 	throw_range = 6
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/shield/riot/tower/IsShield()
+/obj/item/shield/riot/tower/IsShield()
 	return 2 //Considering its size, twice as effective as a normal shield, but difficult to lug around

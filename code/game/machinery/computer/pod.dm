@@ -4,7 +4,7 @@
 	name = "Mass Drivers and Pod Doors Control"
 	desc = "A controll for launching pods. Some people prefer firing Mechas."
 	icon_state = "mass_drivers"
-	circuit = /obj/item/weapon/circuitboard/pod
+	circuit = /obj/item/circuitboard/pod
 	var/list/id_tags = list()
 	var/list/door_only_tags = list()
 	var/list/synced = list()
@@ -280,14 +280,14 @@
 /obj/machinery/computer/pod/old
 	icon_state = "old"
 	name = "DoorMex Control Computer"
-	circuit = /obj/item/weapon/circuitboard/olddoor
+	circuit = /obj/item/circuitboard/olddoor
 
 
 /obj/machinery/computer/pod/old/syndicate
 	name = "External Airlock Controls"
 	desc = "The Syndicate operate on a tight budget. Operates external airlocks."
 	req_access = list(access_syndicate)
-	circuit = /obj/item/weapon/circuitboard/syndicatedoor
+	circuit = /obj/item/circuitboard/syndicatedoor
 	light_color = null
 
 /obj/machinery/computer/pod/old/syndicate/attack_hand(var/mob/user as mob)
@@ -300,4 +300,4 @@
 /obj/machinery/computer/pod/old/swf
 	name = "Magix System IV"
 	desc = "An arcane artifact that holds much magic. Running E-Knock 2.2: Sorceror's Edition"
-	circuit = /obj/item/weapon/circuitboard/swfdoor
+	circuit = /obj/item/circuitboard/swfdoor

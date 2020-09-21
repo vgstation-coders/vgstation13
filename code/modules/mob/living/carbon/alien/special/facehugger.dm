@@ -170,7 +170,7 @@
 		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
 	return
 
-/obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
+/obj/item/clothing/mask/facehugger/attackby(obj/item/W)
 	if(W.force)
 		health -= W.force
 		healthcheck()
@@ -276,7 +276,7 @@
 	if(iscarbon(L))
 		var/mob/living/carbon/target = L
 		var/obj/item/clothing/W = target.get_item_by_slot(slot_wear_mask)
-		var/obj/item/weapon/tank/had_internal = target.internal
+		var/obj/item/tank/had_internal = target.internal
 
 		if(W && W != src)
 			if(prob(CHANCE_TO_NOT_REMOVE_MASKS))
@@ -476,7 +476,7 @@
 
 
 
-/obj/item/clothing/mask/facehugger/headcrab/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/mask/facehugger/headcrab/attackby(obj/item/W, mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/U = user
 		var/obj/item/clothing/mask/facehugger/headcrab/H = U.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)

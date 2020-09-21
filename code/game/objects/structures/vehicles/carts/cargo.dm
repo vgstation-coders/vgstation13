@@ -4,7 +4,7 @@
 /obj/machinery/cart/cargo
 	name = "cargo cart"
 	desc = "A cart for transporting crates. Designed to attach to a tractor."
-	var/obj/item/weapon/cell/internal_battery = null
+	var/obj/item/cell/internal_battery = null
 	var/maintenance = 0
 	var/obj/machinery/loaded_machine = null
 	var/list/prohibited = list(
@@ -32,7 +32,7 @@
 	else
 		to_chat(user, "<span class='warning'>There is no battery inserted.</span>")
 
-/obj/machinery/cart/cargo/attackby(obj/item/weapon/W as obj, mob/user)
+/obj/machinery/cart/cargo/attackby(obj/item/W as obj, mob/user)
 	if(W.is_screwdriver(user))
 		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
 		playsound(src, 'sound/items/Screwdriver2.ogg', 50, 1)
@@ -46,7 +46,7 @@
 				loaded_machine.power_change()
 		user.visible_message("<span class='notice'>[user] pries out \the [src]'s battery.</span>", "<span class='notice'>You pry out \the [src]'s battery.</span>", "You hear a clunk.")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-	else if(istype(W,/obj/item/weapon/cell)&&maintenance&&!internal_battery)
+	else if(istype(W,/obj/item/cell)&&maintenance&&!internal_battery)
 		if(user.drop_item(W,src))
 			internal_battery = W
 			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")

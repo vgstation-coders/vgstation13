@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/shotgun
+/obj/item/gun/projectile/shotgun
 	reloadsound = 'sound/weapons/shotgun_shell_insert.ogg'
 	casingsound = 'sound/weapons/shotgun_shell_bounce.ogg'
 	w_class = W_CLASS_LARGE
@@ -10,10 +10,10 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MATERIALS + "=1"
 	recoil = 4
 
-/obj/item/weapon/gun/projectile/shotgun/isHandgun()
+/obj/item/gun/projectile/shotgun/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/shotgun/pump
+/obj/item/gun/projectile/shotgun/pump
 	name = "shotgun"
 	desc = "Useful for sweeping alleys."
 	fire_sound = 'sound/weapons/shotgun.ogg'
@@ -30,7 +30,7 @@
 	gun_flags = 0
 	starting_materials = list(MAT_IRON = 7500, MAT_WOOD = 3750)
 
-/obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
+/obj/item/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)
 		return
 	pump(user)
@@ -39,7 +39,7 @@
 		recentpump = 0
 	return
 
-/obj/item/weapon/gun/projectile/shotgun/pump/process_chambered()
+/obj/item/gun/projectile/shotgun/pump/process_chambered()
 	if(in_chamber)
 		return 1
 	else if(current_shell && current_shell.BB)
@@ -50,7 +50,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/shotgun/pump/proc/pump(mob/M as mob)
+/obj/item/gun/projectile/shotgun/pump/proc/pump(mob/M as mob)
 	if(clowned == CLOWNED)
 		playsound(M, 'sound/items/quack.ogg', 60, 1)
 	else
@@ -70,7 +70,7 @@
 	update_icon()	//I.E. fix the desc
 	return 1
 
-/obj/item/weapon/gun/projectile/shotgun/pump/combat
+/obj/item/gun/projectile/shotgun/pump/combat
 	name = "combat shotgun"
 	icon_state = "cshotgun"
 	clowned = UNCLOWN
@@ -81,7 +81,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun"
 	silencer_offset = list(28,5)
 
-/obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
+/obj/item/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
 	name = "combat shorty"
 	desc = "Handy for close encounters."
 	icon_state = "scshotgun"
@@ -91,7 +91,7 @@
 	silencer_offset = list(22,5)
 
 //this is largely hacky and bad :(	-Pete
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel
+/obj/item/gun/projectile/shotgun/doublebarrel
 	name = "double-barreled shotgun"
 	desc = "A true classic."
 	icon_state = "dshotgun"
@@ -101,7 +101,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/beanbag"
 	fire_sound = 'sound/weapons/shotgun_small.ogg'
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/process_chambered()
+/obj/item/gun/projectile/shotgun/doublebarrel/process_chambered()
 	if(in_chamber)
 		return 1
 	if(!getAmmo())
@@ -117,7 +117,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/attack_self(mob/living/user as mob)
+/obj/item/gun/projectile/shotgun/doublebarrel/attack_self(mob/living/user as mob)
 	if(!(locate(/obj/item/ammo_casing/shotgun) in src) && !getAmmo())
 		to_chat(user, "<span class='notice'>\The [src] is empty.</span>")
 		return
@@ -136,11 +136,11 @@
 	to_chat(user, "<span class='notice'>You break \the [src].</span>")
 	update_icon()
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/projectile/shotgun/doublebarrel/attackby(var/obj/item/A as obj, mob/user as mob)
 	..()
 	A.update_icon()
 	update_icon()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/circular_saw) || istype(A, /obj/item/melee/energy) || istype(A, /obj/item/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(getAmmo())
 			afterattack(user, user)	//will this work?
@@ -161,7 +161,7 @@
 				var/mob/living/carbon/human/H = user
 				H.update_inv_hands()
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
+/obj/item/gun/projectile/shotgun/doublebarrel/sawnoff
 	name = "sawn-off shotgun"
 	desc = "Omar's coming!"
 	icon_state = "sawnshotgun"
@@ -170,19 +170,19 @@
 	slot_flags = SLOT_BELT
 	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super
+/obj/item/gun/projectile/shotgun/doublebarrel/super
 	name = "super shotgun"
 	desc = "bang-bang, click, tack, shoomph, click"
 	icon_state = "supershotgun"
 	item_state = "sawnshotgun"
 	fire_delay = 0
 
-/obj/item/weapon/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/projectile/shotgun/doublebarrel/super/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(..())
 		..()
 		attack_self(user)
 
-/obj/item/weapon/gun/projectile/shotgun/nt12
+/obj/item/gun/projectile/shotgun/nt12
 	name = "\improper NT-12"
 	desc = "The NT-12 is a new development in shotgun technology, produced by a NanoTrasen subsidiary. It is a 12-gauge semi-automatic bullpup shotgun fed with box or drum magazines."
 	icon_state = "nt12"
@@ -198,7 +198,7 @@
 	gun_flags = EMPTYCASINGS
 	silencer_offset = list(28,5)
 
-/obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
+/obj/item/gun/projectile/shotgun/nt12/update_icon()
 	..()
 	var/MT = stored_magazine ? "[stored_magazine.max_ammo > 4 ? "-drum-20" : "-mag-4"]" : ""
 	icon_state = "[initial(icon_state)]["[MT]"][stored_magazine ? "" : "-m"][chambered ? "" : "-e"]"

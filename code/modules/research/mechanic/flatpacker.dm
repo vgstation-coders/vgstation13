@@ -13,10 +13,10 @@
 	design_types = list(FLATPACKER)
 
 	var/build_parts =  list(
-		/obj/item/weapon/stock_parts/micro_laser = 1,
-		/obj/item/weapon/stock_parts/manipulator = 1,
-		/obj/item/weapon/stock_parts/matter_bin = 1,
-		/obj/item/weapon/stock_parts/scanning_module = 1
+		/obj/item/stock_parts/micro_laser = 1,
+		/obj/item/stock_parts/manipulator = 1,
+		/obj/item/stock_parts/matter_bin = 1,
+		/obj/item/stock_parts/scanning_module = 1
 		)
 
 	one_part_set_only = 0
@@ -29,16 +29,16 @@
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/flatpacker,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module
+		/obj/item/circuitboard/flatpacker,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/reagent_containers/glass/beaker,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module
 	)
 
 	RefreshParts()

@@ -430,7 +430,7 @@
 			//O.dropped(character)
 		character.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(character), slot_head)
 		character.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(character), slot_wear_suit)
-		character.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(character), slot_s_store)
+		character.equip_to_slot_or_del(new /obj/item/bomberman/(character), slot_s_store)
 		character.update_icons()
 		to_chat(character, "<span class='notice'>Tip: Use the BBD in your suit's pocket to place bombs.</span>")
 		to_chat(character, "<span class='notice'>Try to keep your BBD and escape this hell hole alive!</span>")
@@ -442,7 +442,7 @@
 			if(character.mind.assigned_role == "Trader")
 				//If we're a trader, instead send a message to PDAs with the trader cartridge
 				for (var/obj/item/device/pda/P in PDAs)
-					if(istype(P.cartridge,/obj/item/weapon/cartridge/trader))
+					if(istype(P.cartridge,/obj/item/cartridge/trader))
 						var/mob/living/L = get_holder_of_type(P,/mob/living)
 						if(L)
 							L.show_message("[bicon(P)] <b>Message from U*{*,*;8AYE1*;*;*a;1 (0x034ac15e), </b>\"Caw. Cousin [character.real_name] detected in sector.\".", 2)

@@ -1,18 +1,18 @@
-/obj/item/weapon/paper/envelope
+/obj/item/paper/envelope
 	name = "envelope"
 	icon_state = "envelope_open"
 
-	var/list/never_allowed = list(/obj/item/weapon/paper/envelope)	//Not allowed out of sanity/necessity, not convenience.
-	var/list/not_allowed = list(/obj/item/weapon/pen,	//These have interactions with paper/envelopes and it would really be a nuisance if they were stuck into envelopes every time they were used on one.
+	var/list/never_allowed = list(/obj/item/paper/envelope)	//Not allowed out of sanity/necessity, not convenience.
+	var/list/not_allowed = list(/obj/item/pen,	//These have interactions with paper/envelopes and it would really be a nuisance if they were stuck into envelopes every time they were used on one.
 								/obj/item/toy/crayon,
-								/obj/item/weapon/stamp,
+								/obj/item/stamp,
 								/obj/item/device/destTagger)
 	var/obj/item/contained_item
 	var/open = TRUE
 	var/torn = FALSE
 	var/sortTag
 
-/obj/item/weapon/paper/envelope/update_icon()
+/obj/item/paper/envelope/update_icon()
 	overlays.len = 0
 	if(open)
 		var/overlay_state = "envelope_open_overlay"
@@ -35,16 +35,16 @@
 
 	reapply_stamps()
 
-/obj/item/weapon/paper/envelope/proc/reapply_stamps()
+/obj/item/paper/envelope/proc/reapply_stamps()
 	if(!src.stamped)
 		return	
 	for(var/typepath in src.stamped)
 		var/suffix = ""
-		if(typepath == /obj/item/weapon/stamp/denied)
+		if(typepath == /obj/item/stamp/denied)
 			suffix = "deny"
-		else if(typepath == /obj/item/weapon/stamp/judge || typepath == /obj/item/weapon/stamp/captain)
+		else if(typepath == /obj/item/stamp/judge || typepath == /obj/item/stamp/captain)
 			suffix = "cap"
-		else if(typepath == /obj/item/weapon/stamp)		
+		else if(typepath == /obj/item/stamp)		
 			suffix = "qm"
 		else
 			suffix = copytext("[typepath]", 24)			
@@ -53,7 +53,7 @@
 		overlay.pixel_y = -2 * PIXEL_MULTIPLIER
 		overlays += overlay;		
 
-/obj/item/weapon/paper/envelope/attackby(obj/item/weapon/P, mob/user)
+/obj/item/paper/envelope/attackby(obj/item/P, mob/user)
 	. = ..()
 	if(.)
 		return
@@ -79,7 +79,7 @@
 			playsound(src, 'sound/machines/twobeep.ogg', 100, 1)			
 			desc = "It has a label reading [tag]."
 
-/obj/item/weapon/paper/envelope/AltClick(mob/user)
+/obj/item/paper/envelope/AltClick(mob/user)
 	if(open)
 		if(contained_item)
 			if(!user.put_in_active_hand(contained_item))
@@ -92,7 +92,7 @@
 			if(I != src)
 				insert_item(user, I)
 
-/obj/item/weapon/paper/envelope/proc/insert_item(mob/user, obj/item/I)
+/obj/item/paper/envelope/proc/insert_item(mob/user, obj/item/I)
 	if(istype(I) && I.w_class == W_CLASS_TINY && !is_type_in_list(I, never_allowed))
 		if(contained_item)
 			to_chat(user, "<span class='notice'>There is already \a [contained_item] inside \the [src].</span>")
@@ -103,13 +103,13 @@
 			user.visible_message("\The [user] puts something into \the [src].","You put \the [I] into \the [src].")
 			update_icon()
 
-/obj/item/weapon/paper/envelope/Destroy()
+/obj/item/paper/envelope/Destroy()
 	if(contained_item)
 		qdel(contained_item)
 		contained_item = null
 	..()
 
-/obj/item/weapon/paper/envelope/attack_self(mob/living/user)
+/obj/item/paper/envelope/attack_self(mob/living/user)
 	if(!torn)
 		if(open)
 			seal()
@@ -121,11 +121,11 @@
 	else
 		AltClick(user)
 
-/obj/item/weapon/paper/envelope/proc/seal()
+/obj/item/paper/envelope/proc/seal()
 	open = FALSE
 	update_icon()
 
-/obj/item/weapon/paper/envelope/proc/open()
+/obj/item/paper/envelope/proc/open()
 	open = TRUE
 	torn = TRUE
 	sortTag = null

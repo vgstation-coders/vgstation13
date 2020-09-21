@@ -103,8 +103,8 @@
 
 /obj/item/clothing/shoes/orange/attackby(var/obj/O, loc)
 	..()
-	if ((istype(O, /obj/item/weapon/handcuffs) && !( src.chained )))
-		var/obj/item/weapon/handcuffs/H=O
+	if ((istype(O, /obj/item/handcuffs) && !( src.chained )))
+		var/obj/item/handcuffs/H=O
 		//H = null
 		if (src.icon_state != "orange")
 			return

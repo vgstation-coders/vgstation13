@@ -7,10 +7,10 @@
 	associated_job = /datum/job/rd
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/tox,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_tox,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/tox,
 	)
 
 	items_to_spawn = list(
@@ -40,17 +40,17 @@
 
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty/,
+		/obj/item/implant/loyalty/,
 	)
 
 	pda_type = /obj/item/device/pda/heads/rd
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/rd
+	id_type = /obj/item/card/id/rd
 
 /datum/outfit/rd/post_equip(var/mob/living/carbon/human/H)
 	..()
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
-	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
+	H.put_in_hands(new /obj/item/storage/bag/clipboard(H))
 
 
 // -- Scientist
@@ -61,10 +61,10 @@
 	associated_job = /datum/job/scientist
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/tox,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_tox,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/tox,
 	)
 
 	items_to_spawn = list(
@@ -154,7 +154,7 @@
 
 	pda_type = /obj/item/device/pda/toxins
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/research
+	id_type = /obj/item/card/id/research
 
 /datum/outfit/scientist/post_equip(var/mob/living/carbon/human/H)
 	..()
@@ -168,10 +168,10 @@
 	associated_job = /datum/job/roboticist
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/tox,
+		BACKPACK_STRING = /obj/item/storage/backpack,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_tox,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/tox,
 	)
 
 	items_to_spawn = list(
@@ -213,7 +213,7 @@
 
 	pda_type = /obj/item/device/pda/roboticist
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/research
+	id_type = /obj/item/card/id/research
 
 /datum/outfit/roboticist/post_equip(var/mob/living/carbon/human/H)
 	..()

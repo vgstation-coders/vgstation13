@@ -4,7 +4,7 @@
 	name = "plasmaman suit"
 	desc = "A special containment suit designed to protect a plasmaman's volatile body from outside exposure and quickly extinguish it in emergencies."
 	w_class = W_CLASS_MEDIUM
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs,/obj/item/tank)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 0)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
@@ -76,7 +76,7 @@
 	name = "plasmaman atmospheric suit"
 	icon_state = "plasmamanAtmos_suit"
 	armor = list(melee = 20, bullet = 0, laser = 0,energy = 0, bomb = 25, bio = 100, rad = 0)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/wrench/socket)
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -95,7 +95,7 @@
 	name = "plasmaman engineer suit"
 	icon_state = "plasmamanEngineer_suit"
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
-	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight, /obj/item/tank, /obj/item/device/t_scanner, /obj/item/device/rcd, /obj/item/wrench/socket)
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 
@@ -246,7 +246,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic suit"
 	icon_state = "plasmaman_Paramedic"
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs,/obj/item/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic
 	name = "plasmaman paramedic helmet"
@@ -265,7 +265,7 @@
 /obj/item/clothing/suit/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer suit"
 	icon_state = "plasmaman_CMO"
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank,/obj/item/roller)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs,/obj/item/tank,/obj/item/roller)
 
 /obj/item/clothing/head/helmet/space/plasmaman/medical/cmo
 	name = "plasmaman chief medical officer helmet"
@@ -353,7 +353,7 @@
 	icon_state = "plasmaman_prisoner_suit"
 	max_heat_protection_temperature = null
 	pressure_resistance = null
-	allowed = list(/obj/item/weapon/tank)
+	allowed = list(/obj/item/tank)
 
 /obj/item/clothing/head/helmet/space/plasmaman/prisoner
 	name = "plasmaman prisoner helmet"
@@ -379,7 +379,7 @@
 	name = "blood red plasmaman suit"
 	icon_state = "plasmaman_Nukeops"
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 60)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs)
 	siemens_coefficient = 0.6
 
 /obj/item/clothing/head/helmet/space/plasmaman/nuclear

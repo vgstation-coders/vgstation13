@@ -26,7 +26,7 @@
 	clothing_flags = PLASMAGUARD
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
-	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen,/obj/item/weapon/pen,/obj/item/device/flashlight/pen)
+	allowed = list(/obj/item/tank/emergency_oxygen,/obj/item/tank/emergency_nitrogen,/obj/item/pen,/obj/item/device/flashlight/pen)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 20)
 	siemens_coefficient = 0.9
 	sterility = 100
@@ -60,20 +60,20 @@
 	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
 	allowed = list(
-		/obj/item/weapon/gun/energy,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/gun/projectile,
+		/obj/item/gun/energy,
+		/obj/item/reagent_containers/spray/pepper,
+		/obj/item/gun/projectile,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/gun/lawgiver,
-		/obj/item/weapon/gun/siren,
-		/obj/item/weapon/gun/mahoguny,
-		/obj/item/weapon/gun/grenadelauncher,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/melee/baton,
+		/obj/item/handcuffs,
+		/obj/item/gun/lawgiver,
+		/obj/item/gun/siren,
+		/obj/item/gun/mahoguny,
+		/obj/item/gun/grenadelauncher,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 		/obj/item/device/hailer)
 	armor = list(melee = 25, bullet = 10, laser = 15, energy = 5, bomb = 5, bio = 100, rad = 20)
 

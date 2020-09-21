@@ -14,12 +14,12 @@
 	var/cistern = 0			//if the cistern bit is open
 	var/w_items = 0			//the combined w_class of all the items in the cistern
 	var/mob/living/swirlie = null	//the mob being given a swirlie
-	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/obj/item/reagent_containers/glass/beaker/water/watersource = null
 
 /obj/structure/toilet/New()
 	. = ..()
 	open = round(rand(0, 1))
-	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
+	watersource = new /obj/item/reagent_containers/glass/beaker/water()
 	update_icon()
 
 /obj/structure/toilet/verb/empty_container_into()
@@ -32,7 +32,7 @@
 	if(!open)
 		to_chat(usr, "<span class='warning'>\The [src] is closed!</span>")
 		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	var/obj/item/reagent_containers/container = usr.get_active_hand()
 	if(!istype(container))
 		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
 		return
@@ -89,14 +89,14 @@
 		R.use(2)
 		state = RODSADDED //State 0 -> 1
 		return
-	if(open && cistern && state == RODSADDED && istype(I,/obj/item/weapon/paper)) //State = 1 if rods are added
+	if(open && cistern && state == RODSADDED && istype(I,/obj/item/paper)) //State = 1 if rods are added
 		to_chat(user, "<span class='notice'>You create a filter with the paper and insert it.</span>")
 		var/obj/structure/centrifuge/C = new /obj/structure/centrifuge(src.loc)
 		C.dir = src.dir
 		qdel(I)
 		qdel(src)
 		return
-	if(iscrowbar(I) || istype(I,/obj/item/weapon/chisel))
+	if(iscrowbar(I) || istype(I,/obj/item/chisel))
 		to_chat(user, "<span class='notice'>You start to [cistern ? "replace the lid on the cistern" : "lift the lid off the cistern"].</span>")
 		playsound(loc, 'sound/effects/stonedoor_openclose.ogg', 50, 1)
 		if(do_after(user, src, 30))
@@ -105,8 +105,8 @@
 			update_icon()
 			return
 
-	if(istype(I, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = I
+	if(istype(I, /obj/item/grab))
+		var/obj/item/grab/G = I
 
 		if(isliving(G.affecting))
 			var/mob/living/GM = G.affecting
@@ -177,7 +177,7 @@
 
 	if(!usr || !isturf(usr.loc))
 		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	var/obj/item/reagent_containers/container = usr.get_active_hand()
 	if(!istype(container))
 		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
 		return
@@ -195,7 +195,7 @@
 	if(!anchored)
 		return
 
-	if(istype(I, /obj/item/weapon/crowbar))
+	if(istype(I, /obj/item/crowbar))
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
@@ -203,8 +203,8 @@
 			qdel(src)
 		return
 
-	if(istype(I, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = I
+	if(istype(I, /obj/item/grab))
+		var/obj/item/grab/G = I
 		if(isliving(G.affecting))
 			var/mob/living/GM = G.affecting
 			if(G.state>1)
@@ -232,7 +232,7 @@
 	var/obj/effect/mist/mymist = null
 	var/ismist = 0 //Needs a var so we can make it linger~
 	var/watertemp = "cool" //Freezing, normal, or boiling
-	var/obj/item/weapon/reagent_containers/glass/beaker/water/watersource = null
+	var/obj/item/reagent_containers/glass/beaker/water/watersource = null
 
 	machine_flags = SCREWTOGGLE
 
@@ -241,7 +241,7 @@
 
 /obj/machinery/shower/New() //Our showers actually wet people and floors now
 	..()
-	watersource = new /obj/item/weapon/reagent_containers/glass/beaker/water()
+	watersource = new /obj/item/reagent_containers/glass/beaker/water()
 
 //Add heat controls? When emagged, you can freeze to death in it?
 
@@ -441,8 +441,8 @@
 			check_heat(C)
 		wash(O)
 		watersource.reagents.reaction(O, TOUCH)
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
-			var/obj/item/weapon/reagent_containers/glass/G = O
+		if(istype(O, /obj/item/reagent_containers/glass))
+			var/obj/item/reagent_containers/glass/G = O
 			G.reagents.add_reagent(WATER, 5)
 	watersource.reagents.reaction(get_turf(src), TOUCH)
 
@@ -484,7 +484,7 @@
 
 	if(!usr || !isturf(usr.loc))
 		return
-	var/obj/item/weapon/reagent_containers/container = usr.get_active_hand()
+	var/obj/item/reagent_containers/container = usr.get_active_hand()
 	if(!istype(container))
 		to_chat(usr, "<span class='warning'>You need a reagent container in your active hand to do that.</span>")
 		return
@@ -530,7 +530,7 @@
 	for(var/mob/V in viewers(src, null))
 		V.show_message("<span class='notice'>[M] washes their hands using \the [src].</span>")
 
-/obj/structure/sink/mop_act(obj/item/weapon/mop/M, mob/user)
+/obj/structure/sink/mop_act(obj/item/mop/M, mob/user)
 	if(busy)
 		return 1
 	user.visible_message("<span class='notice'>[user] puts \the [M] underneath the running water.","<span class='notice'>You put \the [M] underneath the running water.</span>")
@@ -557,16 +557,16 @@
 	if(!anchored)
 		return
 
-	if(istype(O, /obj/item/weapon/mop))
+	if(istype(O, /obj/item/mop))
 		return
 
-	if (istype(O, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/RG = O
+	if (istype(O, /obj/item/reagent_containers))
+		var/obj/item/reagent_containers/RG = O
 		if(RG.reagents.total_volume >= RG.reagents.maximum_volume)
 			to_chat(user, "<span class='warning'>\The [RG] is full.</span>")
 			return
-		if (istype(RG, /obj/item/weapon/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
-			var/obj/item/weapon/reagent_containers/chempack/C = RG
+		if (istype(RG, /obj/item/reagent_containers/chempack)) //Chempack can't use amount_per_transfer_from_this, so it needs its own if statement.
+			var/obj/item/reagent_containers/chempack/C = RG
 			C.reagents.add_reagent(WATER, C.fill_amount)
 		else
 			RG.reagents.add_reagent(WATER, min(RG.volume - RG.reagents.total_volume, RG.amount_per_transfer_from_this))
@@ -578,8 +578,8 @@
 		the_plate.clean = TRUE
 		O.update_icon()
 
-	else if (istype(O, /obj/item/weapon/melee/baton))
-		var/obj/item/weapon/melee/baton/B = O
+	else if (istype(O, /obj/item/melee/baton))
+		var/obj/item/melee/baton/B = O
 		if (B.bcell && B.bcell.charge > 0 && B.status == 1)
 			flick("baton_active", src)
 			user.Stun(10)

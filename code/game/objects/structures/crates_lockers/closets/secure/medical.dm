@@ -12,11 +12,11 @@
 
 /obj/structure/closet/secure_closet/medical1/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/box/syringes,
-		/obj/item/weapon/reagent_containers/dropper = 2,
-		/obj/item/weapon/reagent_containers/glass/beaker = 2,
-		/obj/item/weapon/reagent_containers/glass/bottle/inaprovaline = 2,
-		/obj/item/weapon/reagent_containers/glass/bottle/antitoxin = 2,
+		/obj/item/storage/box/syringes,
+		/obj/item/reagent_containers/dropper = 2,
+		/obj/item/reagent_containers/glass/beaker = 2,
+		/obj/item/reagent_containers/glass/bottle/inaprovaline = 2,
+		/obj/item/reagent_containers/glass/bottle/antitoxin = 2,
 	)
 
 
@@ -34,7 +34,7 @@
 
 /obj/structure/closet/secure_closet/medical2/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/tank/anesthetic = 3,
+		/obj/item/tank/anesthetic = 3,
 		/obj/item/clothing/mask/breath/medical = 3,
 	)
 
@@ -54,9 +54,9 @@
 	. = list(
 		/obj/item/clothing/monkeyclothes/doctor = 2,
 		pick(
-			/obj/item/weapon/storage/backpack/medic,
-			/obj/item/weapon/storage/backpack/satchel_med,
-			/obj/item/weapon/storage/backpack/messenger/med,),
+			/obj/item/storage/backpack/medic,
+			/obj/item/storage/backpack/satchel_med,
+			/obj/item/storage/backpack/messenger/med,),
 		/obj/item/clothing/under/rank/nursesuit,
 		/obj/item/clothing/head/nursehat,
 	)
@@ -88,7 +88,7 @@
 		/obj/item/clothing/suit/storage/fr_jacket,
 		/obj/item/clothing/shoes/white,
 		/obj/item/device/radio/headset/headset_med,
-		/obj/item/weapon/storage/belt/medical,
+		/obj/item/storage/belt/medical,
 		/obj/item/clothing/glasses/hud/health/prescription,
 	)
 
@@ -106,9 +106,9 @@
 /obj/structure/closet/secure_closet/CMO/atoms_to_spawn()
 	. = list(
 		pick(
-			/obj/item/weapon/storage/backpack/medic,
-			/obj/item/weapon/storage/backpack/satchel_med,
-			/obj/item/weapon/storage/backpack/messenger/med),
+			/obj/item/storage/backpack/medic,
+			/obj/item/storage/backpack/satchel_med,
+			/obj/item/storage/backpack/messenger/med),
 		/obj/item/clothing/head/bio_hood/cmo,
 		/obj/item/clothing/suit/bio_suit/cmo,
 		/obj/item/clothing/shoes/white,
@@ -126,16 +126,16 @@
 	. += list(
 		/obj/item/clothing/under/rank/chief_medical_officer,
 		/obj/item/clothing/suit/storage/labcoat/cmo,
-		/obj/item/weapon/cartridge/cmo,
+		/obj/item/cartridge/cmo,
 		/obj/item/clothing/gloves/latex,
 		/obj/item/clothing/shoes/brown,
 		/obj/item/device/radio/headset/heads/cmo,
-		/obj/item/weapon/storage/belt/medical,
+		/obj/item/storage/belt/medical,
 		/obj/item/device/flash,
-		/obj/item/weapon/reagent_containers/hypospray,
-		/obj/item/weapon/card/debit/preferred/department/medical,
-		/obj/item/weapon/switchtool/surgery,
-		/obj/item/weapon/autopsy_scanner/healthanalyzerpro
+		/obj/item/reagent_containers/hypospray,
+		/obj/item/card/debit/preferred/department/medical,
+		/obj/item/switchtool/surgery,
+		/obj/item/autopsy_scanner/healthanalyzerpro
 	)
 
 
@@ -163,10 +163,10 @@
 
 /obj/structure/closet/secure_closet/chemical/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/fancy/vials,
-		/obj/item/weapon/storage/box/pillbottles = 2,
-		/obj/item/weapon/book/manual/chemistry_manual,
-		/obj/item/weapon/reagent_containers/glass/jar/erlenmeyer = 2
+		/obj/item/storage/fancy/vials,
+		/obj/item/storage/box/pillbottles = 2,
+		/obj/item/book/manual/chemistry_manual,
+		/obj/item/reagent_containers/glass/jar/erlenmeyer = 2
 	)
 
 /obj/structure/closet/secure_closet/medical_wall
@@ -212,5 +212,5 @@
 		/obj/item/clothing/head/helmet/space/paramedic,
 		/obj/item/clothing/shoes/magboots/para,
 		/obj/item/clothing/accessory/storage/webbing/paramed,
-		/obj/item/weapon/storage/firstaid/internalbleed = 2,
+		/obj/item/storage/firstaid/internalbleed = 2,
 	)

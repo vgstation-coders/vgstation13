@@ -5,7 +5,7 @@
  * this basicaly a modified copy/paste of paper.dm
  */
 
-/obj/item/weapon/paper/nano
+/obj/item/paper/nano
 	name = "nano paper"
 	icon = 'icons/obj/bureaucracy.dmi'
 	icon_state = "nano_paper"
@@ -14,7 +14,7 @@
 
 	fire_fuel = 1
 
-/obj/item/weapon/paper/nano/New()
+/obj/item/paper/nano/New()
 	..()
 	pixel_y = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_x = rand(-9, 9) * PIXEL_MULTIPLIER
@@ -23,7 +23,7 @@
 		updateinfolinks()
 		return
 
-/obj/item/weapon/paper/nano/rename()
+/obj/item/paper/nano/rename()
 	set name = "Rename paper"
 	set category = "Object"
 	set src in usr
@@ -39,7 +39,7 @@
 	add_fingerprint(usr)
 	return
 
-/obj/item/weapon/paper/nano/openhelp(mob/user as mob)
+/obj/item/paper/nano/openhelp(mob/user as mob)
 	user << browse({"<HTML><HEAD><TITLE>Pen Help</TITLE></HEAD>
 	<BODY>
 		<b><center>Valid BBcodes</center></b><br>

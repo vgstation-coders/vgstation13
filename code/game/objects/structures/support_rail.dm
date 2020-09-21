@@ -14,7 +14,7 @@
 	var/destroyed = 0
 	var/mob/living/carbon/human/supported_mob
 
-/obj/structure/support_rail/attackby(obj/item/weapon/W, mob/living/carbon/human/user as mob)
+/obj/structure/support_rail/attackby(obj/item/W, mob/living/carbon/human/user as mob)
 	if(W.is_wrench(user))
 		W.playtoolsound(src, 50)
 		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))

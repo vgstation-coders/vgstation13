@@ -16,7 +16,7 @@
 	desc = "Has a tag on it: Totally not property of a hostile corporation, honest!"
 	w_class = W_CLASS_MEDIUM
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
-	allowed = list(/obj/item/weapon/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/melee/energy/sword,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/jetpack,/obj/item/weapon/tank/jetpack/void,/obj/item/weapon/tank/jetpack/oxygen,/obj/item/weapon/tank/jetpack/nitrogen,/obj/item/weapon/tank/jetpack/carbondioxide,/obj/item/weapon/tank/oxygen,/obj/item/weapon/tank/air)
+	allowed = list(/obj/item/gun,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/melee/baton,/obj/item/melee/energy/sword,/obj/item/handcuffs,/obj/item/tank/jetpack,/obj/item/tank/jetpack/void,/obj/item/tank/jetpack/oxygen,/obj/item/tank/jetpack/nitrogen,/obj/item/tank/jetpack/carbondioxide,/obj/item/tank/oxygen,/obj/item/tank/air)
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
 	siemens_coefficient = 0.8

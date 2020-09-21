@@ -25,11 +25,11 @@
 /obj/structure/dispenser/New()
 	. = ..()
 	while(oxygentanks>0)
-		var/obj/item/weapon/tank/oxygen/O = new(src)
+		var/obj/item/tank/oxygen/O = new(src)
 		oxytanks.Add(O)
 		oxygentanks--
 	while(plasmatanks>0)
-		var/obj/item/weapon/tank/plasma/P = new(src)
+		var/obj/item/tank/plasma/P = new(src)
 		platanks.Add(P)
 		plasmatanks--
 	update_icon()
@@ -63,7 +63,7 @@
 
 
 /obj/structure/dispenser/attackby(obj/item/I as obj, mob/user as mob)
-	if(istype(I, /obj/item/weapon/tank/oxygen) || istype(I, /obj/item/weapon/tank/air) || istype(I, /obj/item/weapon/tank/anesthetic))
+	if(istype(I, /obj/item/tank/oxygen) || istype(I, /obj/item/tank/air) || istype(I, /obj/item/tank/anesthetic))
 		if(oxytanks.len < 10)
 			if(user.drop_item(I, src))
 				oxytanks.Add(I)
@@ -73,7 +73,7 @@
 			to_chat(user, "<span class='notice'>[src] is full.</span>")
 		updateUsrDialog()
 		return
-	if(istype(I, /obj/item/weapon/tank/plasma))
+	if(istype(I, /obj/item/tank/plasma))
 		if(platanks.len < 10)
 			if(user.drop_item(I, src))
 				platanks.Add(I)
@@ -100,14 +100,14 @@
 		usr.set_machine(src)
 		if(href_list["oxygen"])
 			if(oxytanks.len > 0)
-				var/obj/item/weapon/tank/oxygen/O = oxytanks[oxytanks.len]
+				var/obj/item/tank/oxygen/O = oxytanks[oxytanks.len]
 				oxytanks.Remove(O)
 				usr.put_in_hands(O)
 				to_chat(usr, "<span class='notice'>You take [O] out of [src].</span>")
 				update_icon()
 		if(href_list["plasma"])
 			if(platanks.len > 0)
-				var/obj/item/weapon/tank/plasma/P = platanks[platanks.len]
+				var/obj/item/tank/plasma/P = platanks[platanks.len]
 				platanks.Remove(P)
 				usr.put_in_hands(P)
 				to_chat(usr, "<span class='notice'>You take [P] out of [src].</span>")

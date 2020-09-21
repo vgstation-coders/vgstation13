@@ -311,12 +311,12 @@
 /obj/machinery/computer/slot_machine/attackby(obj/item/I as obj, mob/user as mob)
 	..()
 
-	if(istype(I,/obj/item/weapon/spacecash))
+	if(istype(I,/obj/item/spacecash))
 		if(!can_play())
 			to_chat(user, "<span class='notice'>[src] rejects your money.</span>")
 			return
 
-		var/obj/item/weapon/spacecash/S = I
+		var/obj/item/spacecash/S = I
 		var/money_add = S.amount * S.worth
 
 		if(user.drop_item(I))

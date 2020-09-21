@@ -7,10 +7,10 @@
 	associated_job = /datum/job/cmo
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_med,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/med,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_med,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/med,
 	)
 
 	items_to_spawn = list(
@@ -43,19 +43,19 @@
 	)
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty/,
+		/obj/item/implant/loyalty/,
 	)
 
 	pda_type = /obj/item/device/pda/heads/cmo
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/cmo
+	id_type = /obj/item/card/id/cmo
 
 /datum/outfit/cmo/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
+	H.put_in_hands(new /obj/item/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Doctor
@@ -66,10 +66,10 @@
 	associated_job = /datum/job/doctor
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_med,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/med,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_med,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/med,
 	)
 
 	items_to_spawn = list(
@@ -122,7 +122,7 @@
 
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/medical
+	id_type = /obj/item/card/id/medical
 
 	special_snowflakes = list(
 		"Default" = list(
@@ -150,10 +150,10 @@
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
+	H.put_in_hands(new /obj/item/storage/firstaid/regular(get_turf(H)))
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Chemist
@@ -164,10 +164,10 @@
 	associated_job = /datum/job/chemist
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_chem,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/chem,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_chem,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/chem,
 	)
 
 	items_to_spawn = list(
@@ -209,10 +209,10 @@
 
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/medical
+	id_type = /obj/item/card/id/medical
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/storage/bag/chem] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Paramedic
@@ -223,10 +223,10 @@
 	associated_job = /datum/job/paramedic
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_med,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/med,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_med,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/med,
 	)
 
 	items_to_spawn = list(
@@ -239,7 +239,7 @@
 			slot_s_store_str = /obj/item/device/flashlight/pen,
 			slot_head_str = /obj/item/clothing/head/soft/paramedic,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
+			slot_l_store_str = /obj/item/reagent_containers/hypospray/autoinjector/biofoam_injector,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
@@ -248,7 +248,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/medical/paramedic,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
+			slot_l_store_str = /obj/item/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 		),
 		/datum/species/vox = list(
@@ -258,16 +258,16 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
-			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
+			slot_l_store_str = /obj/item/reagent_containers/hypospray/autoinjector/biofoam_injector,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
 	equip_survival_gear = list(
-		/datum/species/human = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/diona = /obj/item/weapon/storage/box/survival/engineer,
-		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/engineer,
+		/datum/species/human = /obj/item/storage/box/survival/engineer,
+		/datum/species/plasmaman = /obj/item/storage/box/survival/engineer,
+		/datum/species/diona = /obj/item/storage/box/survival/engineer,
+		/datum/species/insectoid = /obj/item/storage/box/survival/engineer,
 	)
 
 	items_to_collect = list(
@@ -276,10 +276,10 @@
 
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/medical
+	id_type = /obj/item/card/id/medical
 
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Geneticist
@@ -290,10 +290,10 @@
 	associated_job = /datum/job/geneticist
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_gen,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/med,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_gen,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/med,
 	)
 
 	items_to_spawn = list(
@@ -327,10 +327,10 @@
 
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/medical
+	id_type = /obj/item/card/id/medical
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/storage/belt/medical] = GRASP_LEFT_HAND
 	return ..()
 
 // -- Virologist
@@ -341,10 +341,10 @@
 	associated_job = /datum/job/virologist
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/medic,
-		SATCHEL_NORM_STRING = /obj/item/weapon/storage/backpack/satchel_vir,
-		SATCHEL_ALT_STRING = /obj/item/weapon/storage/backpack/satchel,
-		MESSENGER_BAG_STRING = /obj/item/weapon/storage/backpack/messenger/viro,
+		BACKPACK_STRING = /obj/item/storage/backpack/medic,
+		SATCHEL_NORM_STRING = /obj/item/storage/backpack/satchel_vir,
+		SATCHEL_ALT_STRING = /obj/item/storage/backpack/satchel,
+		MESSENGER_BAG_STRING = /obj/item/storage/backpack/messenger/viro,
 	)
 
 	items_to_spawn = list(
@@ -378,12 +378,12 @@
 
 	pda_type = /obj/item/device/pda/viro
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/medical
+	id_type = /obj/item/card/id/medical
 
 /datum/outfit/virologist/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
+	H.put_in_hands(new /obj/item/book/manual/virology_guide(H))
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
-	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND
+	items_to_collect[/obj/item/virusdish/random] = GRASP_LEFT_HAND
 	return ..()

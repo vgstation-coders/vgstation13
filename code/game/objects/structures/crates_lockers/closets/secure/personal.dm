@@ -6,7 +6,7 @@
 
 /obj/structure/closet/secure_closet/personal/atoms_to_spawn()
 	return list(
-		pick(/obj/item/weapon/storage/backpack, /obj/item/weapon/storage/backpack/satchel_norm, /obj/item/weapon/storage/backpack/messenger),
+		pick(/obj/item/storage/backpack, /obj/item/storage/backpack/satchel_norm, /obj/item/storage/backpack/messenger),
 		/obj/item/device/radio/headset,
 	)
 
@@ -43,16 +43,16 @@
 
 /obj/structure/closet/secure_closet/personal/cabinet/atoms_to_spawn()
 	return list(
-		/obj/item/weapon/storage/backpack/satchel/withwallet,
+		/obj/item/storage/backpack/satchel/withwallet,
 		/obj/item/device/radio/headset,
 	)
 
-/obj/structure/closet/secure_closet/personal/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/id))
+/obj/structure/closet/secure_closet/personal/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/card/id))
 		if(src.broken)
 			to_chat(user, "<span flags='rose'>It appears to be broken.</span>")
 			return
-		var/obj/item/weapon/card/id/I = W
+		var/obj/item/card/id/I = W
 		if(!I || !I.registered_name)
 			return
 		togglelock(user, I.registered_name)

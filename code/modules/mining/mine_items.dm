@@ -22,21 +22,21 @@
 	..()
 	sleep(2)
 	if(prob(50))
-		new /obj/item/weapon/storage/backpack/industrial(src)
+		new /obj/item/storage/backpack/industrial(src)
 	else
-		new /obj/item/weapon/storage/backpack/satchel_eng(src)
+		new /obj/item/storage/backpack/satchel_eng(src)
 	new /obj/item/device/radio/headset/headset_mining(src)
 	new /obj/item/clothing/under/rank/miner(src)
 	new /obj/item/clothing/gloves/black(src)
 	new /obj/item/clothing/shoes/black(src)
 	new /obj/item/device/mining_scanner(src)
-	new /obj/item/weapon/storage/bag/ore(src)
+	new /obj/item/storage/bag/ore(src)
 	new /obj/item/device/flashlight/lantern(src)
-	new /obj/item/weapon/pickaxe/shovel(src)
-	new /obj/item/weapon/pickaxe(src)
+	new /obj/item/pickaxe/shovel(src)
+	new /obj/item/pickaxe(src)
 	new /obj/item/clothing/glasses/scanner/meson(src)
 	new /obj/item/device/gps/mining(src)
-	new /obj/item/weapon/storage/belt/mining(src)
+	new /obj/item/storage/belt/mining(src)
 
 
 /**********************Shuttle Computer**************************/
@@ -58,7 +58,7 @@ proc/move_mining_shuttle()
 		else
 			fromArea = locate(/area/shuttle/mining/station)
 			toArea = locate(/area/shuttle/mining/outpost)
-			var/list/search = fromArea.search_contents_for(/obj/item/weapon/disk/nuclear)
+			var/list/search = fromArea.search_contents_for(/obj/item/disk/nuclear)
 			if(!isemptylist(search))
 				mining_shuttle_moving = 0
 				return
@@ -117,7 +117,7 @@ proc/move_mining_shuttle()
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "shuttle"
 	req_access = list(access_mining)
-	circuit = "/obj/item/weapon/circuitboard/mining_shuttle"
+	circuit = "/obj/item/circuitboard/mining_shuttle"
 	var/location = 0 //0 = station, 1 = mining base
 	machine_flags = EMAGGABLE | SCREWTOGGLE
 	light_color = LIGHT_COLOR_CYAN
@@ -141,7 +141,7 @@ proc/move_mining_shuttle()
 				return
 		var/area/A = locate(/area/shuttle/mining/station)
 		if(!mining_shuttle_location)
-			var/list/search = A.search_contents_for(/obj/item/weapon/disk/nuclear)
+			var/list/search = A.search_contents_for(/obj/item/disk/nuclear)
 			if(!isemptylist(search))
 				to_chat(usr, "<span class='notice'>The nuclear disk is too precious for Nanotrasen to send it to an Asteroid.</span>")
 				return
@@ -183,7 +183,7 @@ proc/move_mining_shuttle()
 
 //Dig constants defined in setup.dm
 
-/obj/item/weapon/pickaxe
+/obj/item/pickaxe
 	name = "pickaxe"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "pickaxe"
@@ -207,13 +207,13 @@ proc/move_mining_shuttle()
 
 	var/excavation_amount = 100
 
-/obj/item/weapon/pickaxe/hammer
+/obj/item/pickaxe/hammer
 	name = "sledgehammer"
 	//icon_state = "sledgehammer" Waiting on sprite
 	desc = "A mining hammer made of reinforced metal. You feel like smashing your boss in the face with this."
 	drill_verb = "hammering"
 
-/obj/item/weapon/pickaxe/silver
+/obj/item/pickaxe/silver
 	name = "silver pickaxe"
 	icon_state = "spickaxe"
 	item_state = "spickaxe"
@@ -221,7 +221,7 @@ proc/move_mining_shuttle()
 	origin_tech = Tc_MATERIALS + "=3"
 	desc = "This makes no metallurgic sense."
 
-/obj/item/weapon/pickaxe/jackhammer
+/obj/item/pickaxe/jackhammer
 	name = "sonic jackhammer"
 	icon_state = "jackhammer"
 	item_state = "jackhammer"
@@ -230,7 +230,7 @@ proc/move_mining_shuttle()
 	desc = "Cracks rocks with sonic blasts, perfect for killing cave lizards."
 	drill_verb = "hammering"
 
-/obj/item/weapon/pickaxe/jackhammer/combat
+/obj/item/pickaxe/jackhammer/combat
 	name = "impact hammer"
 	hitsound = "sound/weapons/tablehitslow.ogg"
 	force = 30.0
@@ -240,10 +240,10 @@ proc/move_mining_shuttle()
 	desc = "Re-purposed mining equipment, built to kill."
 	attack_verb = list("hits", "hammers", "impacts", "attacks")
 
-/obj/item/weapon/pickaxe/jackhammer/combat/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
+/obj/item/pickaxe/jackhammer/combat/afterattack(atom/A as mob|obj|turf|area, mob/user as mob, proximity)
 	user.delayNextAttack(25)
 
-/obj/item/weapon/pickaxe/gold
+/obj/item/pickaxe/gold
 	name = "golden pickaxe"
 	icon_state = "gpickaxe"
 	item_state = "gpickaxe"
@@ -251,7 +251,7 @@ proc/move_mining_shuttle()
 	origin_tech = Tc_MATERIALS + "=4"
 	desc = "This makes no metallurgic sense."
 
-/obj/item/weapon/pickaxe/plasmacutter
+/obj/item/pickaxe/plasmacutter
 	name = "plasma torch"
 	icon_state = "plasmacutter"
 	item_state = "gun"
@@ -268,7 +268,7 @@ proc/move_mining_shuttle()
 	drill_verb = "cutting"
 	toolsounds = list('sound/items/Welder.ogg')
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator
+/obj/item/pickaxe/plasmacutter/accelerator
 	name = "plasma cutter"
 	desc = "A rock cutter that's powerful enough to cut through rocks and xenos with ease. Ingeniously, it's powered by putting solid plasma directly into it - even plasma ore, for those miners on the go."
 	toolspeed = 0.05
@@ -277,11 +277,11 @@ proc/move_mining_shuttle()
 	var/max_ammo = 15
 	var/current_ammo = 15
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator/attack_self(mob/user)
+/obj/item/pickaxe/plasmacutter/accelerator/attack_self(mob/user)
 	safety = !safety
 	to_chat(user, "<span class ='notice'>You toggle \the [src]'s safety [safety ? "on" : "off"].</span>")
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
+/obj/item/pickaxe/plasmacutter/accelerator/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
 	if (!user.IsAdvancedToolUser() || isMoMMI(user) || istype(user, /mob/living/carbon/monkey/diona))
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
@@ -301,7 +301,7 @@ proc/move_mining_shuttle()
 		src.visible_message("*click click*")
 		playsound(src, 'sound/weapons/empty.ogg', 100, 1)
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
+/obj/item/pickaxe/plasmacutter/accelerator/attackby(atom/target, mob/user, proximity_flag)
 	if(proximity_flag && istype(target, /obj/item/stack/ore/plasma))
 		var/obj/item/stack/ore/plasma/A = target
 		if(current_ammo < max_ammo)
@@ -322,11 +322,11 @@ proc/move_mining_shuttle()
 		else
 			to_chat(user, "<span class='notice'>\The [src] is already loaded.</span>")
 
-/obj/item/weapon/pickaxe/plasmacutter/accelerator/examine(mob/user)
+/obj/item/pickaxe/plasmacutter/accelerator/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining. The safety is [safety ? "on" : "off"].</span>")
 
-/obj/item/weapon/pickaxe/diamond
+/obj/item/pickaxe/diamond
 	name = "diamond pickaxe"
 	icon_state = "dpickaxe"
 	item_state = "dpickaxe"
@@ -335,7 +335,7 @@ proc/move_mining_shuttle()
 	origin_tech = Tc_MATERIALS + "=6;" + Tc_ENGINEERING + "=4"
 	desc = "A pickaxe with a diamond pick head, this is just like minecraft."
 
-/obj/item/weapon/pickaxe/drill
+/obj/item/pickaxe/drill
 	name = "mining drill" // Can dig sand as well!
 	icon_state = "handdrill"
 	item_state = "jackhammer"
@@ -346,7 +346,7 @@ proc/move_mining_shuttle()
 
 	diggables = DIG_ROCKS | DIG_SOIL //drills are multipurpose
 
-/obj/item/weapon/pickaxe/drill/diamond //When people ask about the badass leader of the mining tools, they are talking about ME!
+/obj/item/pickaxe/drill/diamond //When people ask about the badass leader of the mining tools, they are talking about ME!
 	name = "diamond mining drill"
 	icon_state = "diamonddrill"
 	item_state = "jackhammer"
@@ -356,7 +356,7 @@ proc/move_mining_shuttle()
 
 	diggables = DIG_ROCKS | DIG_SOIL | DIG_WALLS | DIG_RWALLS
 
-/obj/item/weapon/pickaxe/drill/borg
+/obj/item/pickaxe/drill/borg
 	name = "cyborg mining drill"
 	icon_state = "diamonddrill"
 	item_state = "jackhammer"
@@ -365,7 +365,7 @@ proc/move_mining_shuttle()
 
 /*****************************Shovel********************************/
 
-/obj/item/weapon/pickaxe/shovel
+/obj/item/pickaxe/shovel
 	name = "shovel"
 	desc = "A large tool for digging and moving dirt."
 	icon_state = "shovel"
@@ -383,7 +383,7 @@ proc/move_mining_shuttle()
 	toolspeed = 0.4
 	diggables = DIG_SOIL //soil only
 
-/obj/item/weapon/pickaxe/shovel/spade
+/obj/item/pickaxe/shovel/spade
 	name = "spade"
 	desc = "A small tool for digging and moving dirt."
 	icon_state = "spade"
@@ -496,7 +496,7 @@ proc/move_mining_shuttle()
 
 /**********************Resonator**********************/
 
-/obj/item/weapon/resonator
+/obj/item/resonator
 	name = "resonator"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "resonator"
@@ -507,7 +507,7 @@ proc/move_mining_shuttle()
 	throwforce = 10
 	var/cooldown = 0
 
-/obj/item/weapon/resonator/proc/CreateResonance(var/target, var/creator)
+/obj/item/resonator/proc/CreateResonance(var/target, var/creator)
 	if(cooldown <= 0)
 		playsound(src,'sound/effects/stealthoff.ogg',50,1)
 		var/obj/effect/resonance/R = new /obj/effect/resonance(get_turf(target))
@@ -516,11 +516,11 @@ proc/move_mining_shuttle()
 		spawn(20)
 			cooldown = 0
 
-/obj/item/weapon/resonator/attack_self(mob/user as mob)
+/obj/item/resonator/attack_self(mob/user as mob)
 	CreateResonance(src, user)
 	..()
 
-/obj/item/weapon/resonator/afterattack(atom/target, mob/user, proximity_flag)
+/obj/item/resonator/afterattack(atom/target, mob/user, proximity_flag)
 	if(target in user.contents)
 		return
 	if(proximity_flag)
@@ -578,13 +578,13 @@ proc/move_mining_shuttle()
 
 /**********************Mining drone cube**********************/
 
-/obj/item/weapon/mining_drone_cube
+/obj/item/mining_drone_cube
 	name = "mining drone cube"
 	desc = "Compressed mining drone, ready for deployment. Just unwrap the cube!"
 	icon = 'icons/obj/aibots.dmi'
 	icon_state = "minedronecube"
 
-/obj/item/weapon/mining_drone_cube/attack_self(mob/user)
+/obj/item/mining_drone_cube/attack_self(mob/user)
 
 	user.visible_message("<span class='warning'>\The [src] suddenly expands into a fully functional mining drone!</span>", \
 	"<span class='warning'>You carefully unwrap \the [src] and it suddenly expands into a fully functional mining drone!</span>")
@@ -635,7 +635,7 @@ proc/move_mining_shuttle()
 
 /mob/living/simple_animal/hostile/mining_drone/attackby(obj/item/I as obj, mob/user as mob)
 	if(iswelder(I))
-		var/obj/item/weapon/weldingtool/W = I
+		var/obj/item/weldingtool/W = I
 		if(W.welding && !stat)
 			if(stance != HOSTILE_STANCE_IDLE)
 				to_chat(user, "<span class='warning'>\The [src] is moving around too much to repair!</span>")
@@ -778,7 +778,7 @@ proc/move_mining_shuttle()
 
 /**********************Lazarus Injector**********************/
 
-/obj/item/weapon/lazarus_injector
+/obj/item/lazarus_injector
 	name = "lazarus injector"
 	desc = "An injector containing a cocktail of rejuvenating chemicals, this device can seemingly raise animals from the dead and make them friendly to the user (but retains previous nature aside from that). Unfortunately, the process is useless on higher lifeforms and incredibly costly, so these were stored away until an executive thought they'd be great motivation for some of their employees."
 	icon = 'icons/obj/syringe.dmi'
@@ -791,14 +791,14 @@ proc/move_mining_shuttle()
 	var/loaded = 1
 	var/refreshes_drops = FALSE
 
-/obj/item/weapon/lazarus_injector/update_icon()
+/obj/item/lazarus_injector/update_icon()
 	..()
 	if(loaded)
 		icon_state = "lazarus_hypo"
 	else
 		icon_state = "lazarus_empty"
 
-/obj/item/weapon/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
+/obj/item/lazarus_injector/afterattack(atom/target, mob/user, proximity_flag)
 	if(!loaded)
 		return
 	if(istype(target, /mob/living) && proximity_flag)
@@ -833,18 +833,18 @@ proc/move_mining_shuttle()
 			to_chat(user, "<span class='warning'>\The [src] is only effective on lesser beings.</span>")
 			return
 
-/obj/item/weapon/lazarus_injector/examine(mob/user)
+/obj/item/lazarus_injector/examine(mob/user)
 	..()
 	if(!loaded)
 		to_chat(user, "<span class='info'>\The [src] is empty.</span>")
 
-/obj/item/weapon/lazarus_injector/advanced
+/obj/item/lazarus_injector/advanced
 	name = "advanced lazarus injector"
 	desc = "A lazarus injector further enhanced with a nanomachine solution. Allows for the complete regeneration of lesser beings."
 	icon_state = "adv_lazarus_hypo"
 	refreshes_drops = TRUE
 
-/obj/item/weapon/lazarus_injector/advanced/update_icon()
+/obj/item/lazarus_injector/advanced/update_icon()
 	..()
 	if(loaded)
 		icon_state = "adv_lazarus_hypo"
@@ -871,7 +871,7 @@ proc/move_mining_shuttle()
 	var/mob/contained_mob
 
 /obj/item/device/mobcapsule/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		if(user != capsuleowner)
 			to_chat(user, "<span class='warning'>\The [src] briefly flashes an error.</span>")
 			return 0

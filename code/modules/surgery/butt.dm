@@ -16,9 +16,9 @@
 /////SLICE CHEEK////////
 /datum/surgery_step/butt/slice_cheek
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75, \
-		/obj/item/weapon/hatchet = 75,
+		/obj/item/circular_saw = 100,
+		/obj/item/kitchen/utensil/knife/large/butch = 75, \
+		/obj/item/hatchet = 75,
 		)
 
 	duration = 5 SECONDS
@@ -56,9 +56,9 @@
 
 /datum/surgery_step/butt/seperate_anus
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large = 75,
-		/obj/item/weapon/shard = 50,
+		/obj/item/scalpel = 100,
+		/obj/item/kitchen/utensil/knife/large = 75,
+		/obj/item/shard = 50,
 		)
 
 	duration = 8 SECONDS
@@ -90,9 +90,9 @@
 //////SAW HIP///////
 /datum/surgery_step/butt/saw_hip
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75,
-		/obj/item/weapon/hatchet = 75,
+		/obj/item/circular_saw = 100,
+		/obj/item/kitchen/utensil/knife/large/butch = 75,
+		/obj/item/hatchet = 75,
 		)
 
 	duration = 5 SECONDS
@@ -127,11 +127,11 @@
 	return 0
 /datum/surgery_step/butt/cauterize_butt
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/cautery = 100,
+		/obj/item/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
-		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/lighter = 50,
+		/obj/item/weldingtool = 25,
 		)
 
 	duration = 5 SECONDS
@@ -174,9 +174,9 @@
 /////PULL FLESH////////
 /datum/surgery_step/butt_replace/peel
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 50,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 50,
 		)
 
 	duration = 8 SECONDS
@@ -204,9 +204,9 @@
 //////REPAIR HIPS///////
 /datum/surgery_step/butt_replace/hips
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/bonesetter/bone_mender = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/bonegel = 100,
+		/obj/item/bonesetter/bone_mender = 100,
+		/obj/item/screwdriver = 75,
 		)
 
 	duration = 5 SECONDS
@@ -235,7 +235,7 @@
 //////SHAPE///////
 /datum/surgery_step/butt_replace/shape
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
@@ -308,11 +308,11 @@
 	return 0
 /datum/surgery_step/butt_replace/cauterize
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/cautery = 100,
+		/obj/item/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
-		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/lighter = 50,
+		/obj/item/weldingtool = 25,
 		)
 
 	duration = 5 SECONDS

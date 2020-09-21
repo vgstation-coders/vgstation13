@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/mahoguny
+/obj/item/gun/mahoguny
 	name = "mahoguny"
 	desc = "A rare example of diona ingenuity."
 	icon = 'icons/obj/gun.dmi'
@@ -15,15 +15,15 @@
 	var/max_ammo = 10
 	var/current_ammo = 10
 
-/obj/item/weapon/gun/mahoguny/examine(mob/user)
+/obj/item/gun/mahoguny/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>It has [current_ammo] round\s remaining.</span>")
 
-/obj/item/weapon/gun/mahoguny/can_discharge()
+/obj/item/gun/mahoguny/can_discharge()
 	if (current_ammo)
 		return 1
 
-/obj/item/weapon/gun/mahoguny/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/mahoguny/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -39,7 +39,7 @@
 	if(Fire(A,user,params, "struggle" = struggle))
 		current_ammo--
 
-/obj/item/weapon/gun/mahoguny/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/mahoguny/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	. = ..()
 	if(.)
 		var/list/turf/possible_turfs = list()
@@ -51,12 +51,12 @@
 				in_chamber = new/obj/item/projectile/bullet/leaf(src)
 				..(newturf,user,params,reflex,struggle)
 
-/obj/item/weapon/gun/mahoguny/process_chambered()
+/obj/item/gun/mahoguny/process_chambered()
 	if(in_chamber)
 		return 1
 	return 0
 
-/obj/item/weapon/gun/mahoguny/attackby(obj/item/W, mob/user)
+/obj/item/gun/mahoguny/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/stack/sheet/wood))
 		if(current_ammo >= max_ammo)

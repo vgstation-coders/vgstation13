@@ -1,27 +1,27 @@
 
 
-var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
-									"clownfish" = /obj/item/weapon/bananapeel/clownfish,
-									"shark" = /obj/item/weapon/fish/shark,
-									//"baby space carp" = /obj/item/weapon/fish/babycarp,
-									"catfish" = /obj/item/weapon/fish/catfish,
-									"feederfish" = /obj/item/weapon/reagent_containers/food/snacks/feederfish,
-									"salmon" = /obj/item/weapon/fish/salmon,
-									"shrimp" = /obj/item/weapon/reagent_containers/food/snacks/shrimp,
-									"electric eel" = /obj/item/weapon/fish/electric_eel,
-									"glofish" = /obj/item/weapon/fish/glofish,
+var/list/fish_items_list = list("goldfish" = /obj/item/fish/goldfish,
+									"clownfish" = /obj/item/bananapeel/clownfish,
+									"shark" = /obj/item/fish/shark,
+									//"baby space carp" = /obj/item/fish/babycarp,
+									"catfish" = /obj/item/fish/catfish,
+									"feederfish" = /obj/item/reagent_containers/food/snacks/feederfish,
+									"salmon" = /obj/item/fish/salmon,
+									"shrimp" = /obj/item/reagent_containers/food/snacks/shrimp,
+									"electric eel" = /obj/item/fish/electric_eel,
+									"glofish" = /obj/item/fish/glofish,
 ,									"sea devil" = /obj/item/fish_eggs/seadevil, //You can fish a sea devil straight back out and stick it in another tank.
-									"lobster" = /obj/item/weapon/lobster
+									"lobster" = /obj/item/lobster
 									)
 
 //////////////////////////////////////////////
 //			Aquarium Supplies				//
 //////////////////////////////////////////////
 
-/obj/item/weapon/fishtools
+/obj/item/fishtools
 	icon = 'icons/obj/fish_items.dmi'
 
-/obj/item/weapon/fishtools/fish_egg_scoop
+/obj/item/fishtools/fish_egg_scoop
 	name = "fish egg scoop"
 	desc = "A small scoop to collect fish eggs with."
 	icon_state = "egg_scoop"
@@ -31,7 +31,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_speed = 3
 	throw_range = 7
 
-/obj/item/weapon/fishtools/fish_net
+/obj/item/fishtools/fish_net
 	name = "fish net"
 	desc = "A tiny net to capture fish with. It's a death sentence!"
 	icon_state = "net"
@@ -41,11 +41,11 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_speed = 3
 	throw_range = 7
 
-/obj/item/weapon/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
+/obj/item/fishtools/fish_net/suicide_act(mob/user)			//"A tiny net is a death sentence: it's a net and it's tiny!" https://www.youtube.com/watch?v=FCI9Y4VGCVw
 	visible_message("<span class='warning'>\The [user] places \the [src] on top of \his head, \his fingers tangled in the netting! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/fishtools/fish_food
+/obj/item/fishtools/fish_food
 	name = "fish food can"
 	desc = "A small can of Carp's Choice brand fish flakes. The label shows a smiling Space Carp."
 	icon_state = "fish_food"
@@ -54,7 +54,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_speed = 3
 	throw_range = 7
 
-/obj/item/weapon/fishtools/fish_tank_brush
+/obj/item/fishtools/fish_tank_brush
 	name = "aquarium brush"
 	desc = "A brush for cleaning the inside of aquariums. Contains a built-in odor neutralizer."
 	icon_state = "brush"
@@ -65,7 +65,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	throw_range = 7
 	attack_verb = list("scrubbed", "brushed", "scraped")
 
-/obj/item/weapon/fishtools/fish_tank_brush/suicide_act(mob/user)
+/obj/item/fishtools/fish_tank_brush/suicide_act(mob/user)
 	visible_message("<span class='warning'>\The [user] is vigorously scrubbing \himself raw with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
@@ -73,7 +73,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 //				Fish Items					//
 //////////////////////////////////////////////
 
-/obj/item/weapon/reagent_containers/food/snacks/shrimp
+/obj/item/reagent_containers/food/snacks/shrimp
 	name = "shrimp"
 	desc = "A single raw shrimp."
 	icon = 'icons/obj/seafood.dmi'
@@ -81,12 +81,12 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	filling_color = "#FF1C1C"
 	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/shrimp/New()
+/obj/item/reagent_containers/food/snacks/shrimp/New()
 	..()
 	desc = pick("Anyway, like I was sayin', shrimp is the fruit of the sea.", "You can barbecue it, boil it, broil it, bake it, saute it.")
 	reagents.add_reagent(NUTRIMENT, 1)
 
-/obj/item/weapon/reagent_containers/food/snacks/feederfish
+/obj/item/reagent_containers/food/snacks/feederfish
 	name = "feeder fish"
 	desc = "A tiny feeder fish. Sure doesn't look very filling..."
 	icon = 'icons/obj/seafood.dmi'
@@ -94,11 +94,11 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	filling_color = "#FF1C1C"
 	bitesize = 1
 
-/obj/item/weapon/reagent_containers/food/snacks/feederfish/New()
+/obj/item/reagent_containers/food/snacks/feederfish/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 
-/obj/item/weapon/fish
+/obj/item/fish
 	name = "fish"
 	desc = "A generic fish"
 	icon = 'icons/obj/fish_items.dmi'
@@ -112,38 +112,38 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	hitsound = 'sound/effects/snap.ogg'
 	var/meat_type
 
-/obj/item/weapon/fish/glofish
+/obj/item/fish/glofish
 	name = "glofish"
 	desc = "A small bio-luminescent fish. Not very bright, but at least it's pretty!"
 	icon_state = "glofish"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/glofishmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/glofishmeat
 
-/obj/item/weapon/fish/glofish/New()
+/obj/item/fish/glofish/New()
 	..()
 	set_light(2,1,"#99FF66")
 
-/obj/item/weapon/fish/electric_eel
+/obj/item/fish/electric_eel
 	name = "electric eel"
 	desc = "An eel capable of producing a mild electric shock. Luckily it's rather weak out of water."
 	icon_state = "electric_eel"
 
-/obj/item/weapon/fish/shark
+/obj/item/fish/shark
 	name = "shark"
 	desc = "Warning: Keep away from tornadoes."
 	icon_state = "shark"
 	hitsound = 'sound/weapons/bite.ogg'
 	force = 3
 
-/obj/item/weapon/fish/shark/attackby(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/wirecutters))
+/obj/item/fish/shark/attackby(var/obj/item/O, var/mob/user)
+	if(istype(O, /obj/item/wirecutters))
 		to_chat(user, "You rip out the teeth of \the [src]!")
-		new /obj/item/weapon/fish/toothless_shark(get_turf(src))
+		new /obj/item/fish/toothless_shark(get_turf(src))
 		new /obj/item/stack/teeth/shark(get_turf(src), 10)
 		qdel(src)
 		return
 	..()
 
-/obj/item/weapon/fish/toothless_shark
+/obj/item/fish/toothless_shark
 	name = "toothless shark"
 	desc = "Looks like someone ripped it's teeth out!"
 	icon_state = "shark"
@@ -162,40 +162,40 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	src.pixel_x = rand(-5,5)
 	src.pixel_y = rand(-5,5)
 
-/obj/item/weapon/fish/catfish
+/obj/item/fish/catfish
 	name = "catfish"
 	desc = "Apparently, catfish don't purr like you might have expected them to. Such a confusing name!"
 	icon_state = "catfish"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/catfishmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/catfishmeat
 
-/obj/item/weapon/fish/goldfish
+/obj/item/fish/goldfish
 	name = "goldfish"
 	desc = "A goldfish, just like the one you never won at the county fair."
 	icon_state = "goldfish"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/goldfishmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/goldfishmeat
 
-/obj/item/weapon/fish/salmon
+/obj/item/fish/salmon
 	name = "salmon"
 	desc = "The second-favorite food of Space Bears, right behind crew members."
 	icon_state = "salmon"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/salmonmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/salmonmeat
 
-/*/obj/item/weapon/fish/babycarp
+/*/obj/item/fish/babycarp
 	name = "baby space carp"
 	desc = "Substantially smaller than the space carp lurking outside the hull, but still unsettling."
 	icon_state = "babycarp"
 	hitsound = 'sound/weapons/bite.ogg'
 	force = 3*/
 
-/*/obj/item/weapon/fish/babycarp/attackby(var/obj/item/O, var/mob/user)
+/*/obj/item/fish/babycarp/attackby(var/obj/item/O, var/mob/user)
 	if(is_sharp(O))
 		to_chat(user, "You carefully clean and gut \the [src.name].")
-		new /obj/item/weapon/reagent_containers/food/snacks/carpmeat(get_turf(src)) //just one fillet; this is a baby, afterall.
+		new /obj/item/reagent_containers/food/snacks/carpmeat(get_turf(src)) //just one fillet; this is a baby, afterall.
 		qdel(src)
 		return
 	..()   removed because we already have babycarp */
 
-/obj/item/weapon/bananapeel/clownfish
+/obj/item/bananapeel/clownfish
 	name = "clown fish"
 	desc = "Even underwater, you cannot escape HONKing."
 	icon = 'icons/obj/fish_items.dmi'
@@ -205,7 +205,7 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 	hitsound = 'sound/items/bikehorn.ogg'
 	attack_verb = list("slapped", "humiliated", "hit", "rubbed")
 
-/obj/item/weapon/fish/attackby(var/obj/item/O, var/mob/user)
+/obj/item/fish/attackby(var/obj/item/O, var/mob/user)
 	if(meat_type && O.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "You carefully clean and gut \the [src].")
 		new meat_type(get_turf(src))
@@ -214,55 +214,55 @@ var/list/fish_items_list = list("goldfish" = /obj/item/weapon/fish/goldfish,
 		return TRUE
 	..()
 
-/obj/item/weapon/lobster
+/obj/item/lobster
 	name = "lobster"
 	desc = "The cousin of the crab, genetically modified to be unable to snap at anyone, its innate anger and hatred is kept intact."
 	icon_state = "lobster"
 	icon = 'icons/obj/fish_items.dmi'
 
-/obj/item/weapon/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
+/obj/item/lobster/attackby(var/obj/item/O, var/mob/user) // extracting tail and claw meat from a sea cockroach
 	if(iswirecutter(O))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src] and pull out the claw meat while separating the tail!")
-		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
-		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
-		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/raw_lobster_tail(get_turf(src))
 		qdel(src)
 		return
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
+/obj/item/reagent_containers/food/snacks/raw_lobster_tail/attackby(var/obj/item/O, var/mob/user) // extracting the meat from the tail, just makes normal lobster meat
 	if(iswirecutter(O))
 		to_chat(user, "<span class='notice'>You crack open the remains of the shell from \the [src] and pull out the meat!")
-		new /obj/item/weapon/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/raw_lobster_meat(get_turf(src))
 		qdel(src)
 		return
 	..()
 
 
-/obj/item/weapon/steamed_lobster_simple_uncracked // a cooked lobster without its shell cracked
+/obj/item/steamed_lobster_simple_uncracked // a cooked lobster without its shell cracked
 	name = "Steamed Lobster"
 	desc = "A steamed lobster, you can almost hear its screams. Its shell isnt cracked open yet"
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_simple"
 
-/obj/item/weapon/steamed_lobster_simple_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
-	if(istype(O, /obj/item/weapon/wirecutters))
+/obj/item/steamed_lobster_simple_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso, simple version
+	if(istype(O, /obj/item/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
-		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/steamed_lobster_simple(get_turf(src))
 		qdel(src)
 		return
 	..()
 
-/obj/item/weapon/steamed_lobster_deluxe_uncracked // a cooked lobster without its shell cracked, deluxe edition
+/obj/item/steamed_lobster_deluxe_uncracked // a cooked lobster without its shell cracked, deluxe edition
 	name = "Steamed Lobster"
 	desc = "A steamed lobster, Served with a side of melted butter and a slice of lemon, you can still feel its hatred. Its shell isnt cracked open yet" //if anyones got a better desc im all ears
 	icon = 'icons/obj/food.dmi'
 	icon_state = "lobster_steamed_deluxe"
 
-/obj/item/weapon/steamed_lobster_deluxe_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
-	if(istype(O, /obj/item/weapon/wirecutters))
+/obj/item/steamed_lobster_deluxe_uncracked/attackby(var/obj/item/O, var/mob/user) // cracking the shell of a steamed lobstroso
+	if(istype(O, /obj/item/wirecutters))
 		to_chat(user, "<span class='notice'>You crack open the shell of \the [src]!")
-		new /obj/item/weapon/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
+		new /obj/item/reagent_containers/food/snacks/steamed_lobster_deluxe(get_turf(src))
 		qdel(src)
 		return
 	..()

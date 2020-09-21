@@ -1,5 +1,5 @@
 /mob/living/silicon/robot/starman
-	cell_type = /obj/item/weapon/cell/ultra
+	cell_type = /obj/item/cell/ultra
 	deny_client_move = 1
 	anchored = 1
 	namepick_uses = 0
@@ -315,14 +315,14 @@
 	..()
 	
 	
-/obj/item/weapon/gun/energy/starman_beam
+/obj/item/gun/energy/starman_beam
 	name = "Psi Beam Vestibule"
 	desc = "Used to channel psionic energy into a deadly form."
 	icon_state = "pulse"
 	item_state = "gun"
 	fire_sound = 'sound/effects/psi/psi_beam.ogg'
 	fire_delay = 3 SECONDS
-	cell_type = "/obj/item/weapon/cell/infinite"
+	cell_type = "/obj/item/cell/infinite"
 	projectile_type = "/obj/item/projectile/beam/pulse"
 	force = 10
 	

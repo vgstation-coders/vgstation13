@@ -8,7 +8,7 @@
 	idle_power_usage = 5
 	active_power_usage = 1000
 	var/mob/living/occupant = null
-	var/list/acceptable_upgradeables = list(/obj/item/weapon/cell) // battery for now
+	var/list/acceptable_upgradeables = list(/obj/item/cell) // battery for now
 	var/list/upgrade_holder = list()
 	var/obj/upgrading = 0 // are we upgrading a nigga?
 	var/upgrade_finished = -1 // time the upgrade should finish
@@ -23,22 +23,22 @@
 	build_icon()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/recharge_station,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin
+		/obj/item/circuitboard/recharge_station,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin
 	)
 
 	RefreshParts()
 
 /obj/machinery/recharge_station/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
 	manipulator_coeff = initial(manipulator_coeff)+(T)
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-1
 	transfer_rate_coeff = initial(transfer_rate_coeff)+(T * 0.2)
 	capacitor_max = initial(capacitor_max)+(T * 750)
@@ -58,7 +58,7 @@
 			return
 		if(2.0)
 			if (prob(50))
-				new /obj/item/weapon/circuitboard/recharge_station(src.loc)
+				new /obj/item/circuitboard/recharge_station(src.loc)
 				qdel(src)
 				return
 		if(3.0)
@@ -78,7 +78,7 @@
 	else
 		process_capacitors()
 	if(upgrade_holder.len)
-		var/obj/item/weapon/cell/C = locate() in upgrade_holder
+		var/obj/item/cell/C = locate() in upgrade_holder
 		charge_cell(C)
 	return 1
 
@@ -96,7 +96,7 @@
 		upgrade_finished = -1
 		return
 	if(world.timeofday >= upgrade_finished && upgrade_finished != -1)
-		if(istype(upgrading, /obj/item/weapon/cell))
+		if(istype(upgrading, /obj/item/cell))
 			if(R.cell)
 				R.cell.updateicon()
 				R.cell.forceMove(get_turf(src))
@@ -137,7 +137,7 @@
 		var/obj/removed = input(user, "Choose an item to remove.",upgrade_holder[1]) as null|anything in upgrade_holder
 		if(!removed || upgrading)
 			return
-		var/obj/item/weapon/cell/rcell = removed
+		var/obj/item/cell/rcell = removed
 		if(istype(rcell))
 			rcell.updateicon()
 		user.put_in_hands(removed)
@@ -213,7 +213,7 @@
 			restock_modules()
 		charge_cell(occupant.get_cell())
 
-/obj/machinery/recharge_station/proc/charge_cell(var/obj/item/weapon/cell/C)
+/obj/machinery/recharge_station/proc/charge_cell(var/obj/item/cell/C)
 	if(!istype(C))
 		return
 	if (capacitor_stored > 0)
@@ -300,8 +300,8 @@
 	if(isrobot(R))
 		var/mob/living/silicon/robot/RR = R
 		for(var/obj/O in upgrade_holder)
-			if(istype(O, /obj/item/weapon/cell))
-				var/obj/item/weapon/cell/some_cell = O
+			if(istype(O, /obj/item/cell))
+				var/obj/item/cell/some_cell = O
 				if(!RR.cell)
 					to_chat(usr, "<big><span class='notice'>Power Cell replacement available. You may opt in with the 'Apply Cell Upgrade' verb in the Object tab.</span></big>")
 				else
@@ -314,7 +314,7 @@
 		return -1
 	return ..()
 
-/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/recharge_station/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='notice'>You can't do that while this charger is occupied.</span>")
 		return 0
@@ -328,4 +328,4 @@
 /obj/machinery/recharge_station/get_cell()
 	if(occupant)
 		return occupant.get_cell()
-	return locate(/obj/item/weapon/cell) in upgrade_holder
+	return locate(/obj/item/cell) in upgrade_holder

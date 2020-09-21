@@ -75,7 +75,7 @@
 		src.say(pick("You, come fight me!","I say!","Coward!"))
 
 /mob/living/simple_animal/hostile/retaliate/snowman/attackby(var/obj/item/W, var/mob/user)
-	if(!carrot && istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot))
+	if(!carrot && istype(W, /obj/item/reagent_containers/food/snacks/grown/carrot))
 		if(user.drop_item(W, src))
 			visible_message("<span class='notice'>[user] puts \a [W] on \the [src]'s nose.</span>")
 			carrot = W
@@ -83,7 +83,7 @@
 			speak -= "Would you happen to have a carrot for my nose?"
 			src.say("Ah, most excellent!")
 			if(prob(30))
-				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(src.loc)
+				call(/obj/item/winter_gift/proc/pick_a_gift)(src.loc)
 
 	else if(istype(W,/obj/item/clothing/head/))
 		if(hat)

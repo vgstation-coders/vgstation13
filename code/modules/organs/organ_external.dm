@@ -338,7 +338,7 @@
 
 	//Remove embedded objects and drop them on the floor
 	for(var/obj/implanted_object in implants)
-		if(!istype(implanted_object,/obj/item/weapon/implant))	//We don't want to remove REAL implants. Just shrapnel etc.
+		if(!istype(implanted_object,/obj/item/implant))	//We don't want to remove REAL implants. Just shrapnel etc.
 			implanted_object.forceMove(owner.loc)
 			implants -= implanted_object
 
@@ -727,7 +727,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 	return "[tbrute][tburn]"
 
 /datum/organ/external/proc/rejuvenate_limb()
-	for(var/obj/item/weapon/shard/shrapnel/s in implants)
+	for(var/obj/item/shard/shrapnel/s in implants)
 		if(istype(s))
 			implants -= s
 			owner.contents -= s
@@ -768,7 +768,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
 		//spawning a skull where the head would have been
-		var/obj/item/weapon/skull/sk = new (get_turf(owner))
+		var/obj/item/skull/sk = new (get_turf(owner))
 		var/randomdir = pick(cardinal)
 		step(sk, randomdir)
 		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
@@ -1087,7 +1087,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 			owner.internal_organs_by_name[organ.organ_data.organ_type].owner = owner
 
 
-	else if(istype(I, /obj/item/weapon/peglimb)) //Attaching a peg limb
+	else if(istype(I, /obj/item/peglimb)) //Attaching a peg limb
 		src.peggify()
 
 	else if(istype(I, /obj/item/robot_parts)) //Robotic limb
@@ -1204,7 +1204,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 		spark(src, 5, FALSE)
 		owner.drop_item(c_hand)
 
-/datum/organ/external/proc/embed(var/obj/item/weapon/W, var/silent = 0)
+/datum/organ/external/proc/embed(var/obj/item/W, var/silent = 0)
 	if(!silent)
 		owner.visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
 	implants += W
@@ -1285,7 +1285,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/l_leg(owner.loc)
@@ -1323,7 +1323,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_leg/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_leg(owner.loc)
@@ -1346,7 +1346,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_arm/generate_dropped_organ(current_organ)
 	if(status & ORGAN_PEG)
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(status & ORGAN_ROBOT)
 			current_organ= new /obj/item/robot_parts/l_arm(owner.loc)
@@ -1367,7 +1367,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_arm/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(is_robotic())
 			current_organ = new /obj/item/robot_parts/r_arm(owner.loc)
@@ -1389,7 +1389,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_foot(owner.loc, owner, src)
@@ -1409,7 +1409,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_foot/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_foot(owner.loc, owner, src)
@@ -1430,7 +1430,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/r_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/r_hand(owner.loc, owner, src)
@@ -1451,7 +1451,7 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /datum/organ/external/l_hand/generate_dropped_organ(current_organ)
 	if(is_peg())
-		current_organ = new /obj/item/weapon/peglimb(owner.loc)
+		current_organ = new /obj/item/peglimb(owner.loc)
 	if(!current_organ)
 		if(!is_robotic())
 			current_organ = new /obj/item/organ/external/l_hand(owner.loc, owner, src)
@@ -1775,7 +1775,7 @@ obj/item/organ/external/r_leg/New(loc, mob/living/carbon/human/H)
 	var/mob/living/carbon/human/origin_body = null
 
 /obj/item/organ/external/head/ashtype()
-	return /obj/item/weapon/skull
+	return /obj/item/skull
 
 obj/item/organ/external/head/Destroy()
 	if(brainmob)
@@ -1867,8 +1867,8 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.default_language = H.default_language
 	brainmob.container = src
 
-obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/scalpel) || istype(W,/obj/item/weapon/shard) || (istype(W,/obj/item/weapon/kitchen/utensil/knife/large) && !istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch)))
+obj/item/organ/external/head/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W,/obj/item/scalpel) || istype(W,/obj/item/shard) || (istype(W,/obj/item/kitchen/utensil/knife/large) && !istype(W,/obj/item/kitchen/utensil/knife/large/butch)))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(0)
@@ -1888,7 +1888,7 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
 
-	else if(istype(W,/obj/item/weapon/circular_saw) || istype(W,/obj/item/weapon/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/weapon/hatchet))
+	else if(istype(W,/obj/item/circular_saw) || istype(W,/obj/item/kitchen/utensil/knife/large/butch) || istype(W,/obj/item/hatchet))
 		if(organ_data)
 			switch(brain_op_stage)
 				if(1)

@@ -55,7 +55,7 @@
 		to_chat(user, "This one isn't producing any light, most likely missing something important.")
 
 
-/obj/structure/hanging_lantern/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/hanging_lantern/attackby(obj/item/W as obj, mob/user as mob)
 
 	add_fingerprint(user)
 

@@ -62,7 +62,7 @@
 	active_power_usage = 300
 	var/locked = 0
 	var/mob/living/carbon/occupant = null
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/reagent_containers/glass/beaker = null
 	var/injector_cooldown = 150 //Used by attachment
 	machine_flags = SCREWTOGGLE | CROWDESTROY
 	var/obj/machinery/computer/connected
@@ -77,18 +77,18 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/clonescanner,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/clonescanner,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
 
 /obj/machinery/dna_scannernew/RefreshParts()
 	var/efficiency = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts) efficiency += SP.rating-1
+	for(var/obj/item/stock_parts/SP in component_parts) efficiency += SP.rating-1
 	injector_cooldown = initial(injector_cooldown) - 15*(efficiency)
 
 /obj/machinery/dna_scannernew/allow_drop()
@@ -114,7 +114,7 @@
 	add_fingerprint(usr)
 	return
 
-/obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/dna_scannernew/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>\the [src] is occupied.</span>")
 		return FALSE
@@ -236,8 +236,8 @@
 		visible_message("[usr] removes [occupant.name] from \the [src].")
 	go_out(over_location, ejector = usr)
 
-/obj/machinery/dna_scannernew/attackby(var/obj/item/weapon/item as obj, var/mob/user as mob)
-	if(istype(item, /obj/item/weapon/reagent_containers/glass))
+/obj/machinery/dna_scannernew/attackby(var/obj/item/item as obj, var/mob/user as mob)
+	if(istype(item, /obj/item/reagent_containers/glass))
 		if(item.w_class > W_CLASS_SMALL)
 			to_chat(user, "<span class='warning'>\The [item] is too big to fit.</span>")
 			return
@@ -250,8 +250,8 @@
 			if(connected)
 				nanomanager.update_uis(connected)
 			return
-	else if(istype(item, /obj/item/weapon/grab)) //sanity checks, you chucklefucks
-		var/obj/item/weapon/grab/G = item
+	else if(istype(item, /obj/item/grab)) //sanity checks, you chucklefucks
+		var/obj/item/grab/G = item
 		if (!ismob(G.affecting))
 			return
 		if (src.occupant)
@@ -403,7 +403,7 @@
 	anchored = 1
 	idle_power_usage = 200
 	active_power_usage = 400
-	circuit = "/obj/item/weapon/circuitboard/scan_consolenew"
+	circuit = "/obj/item/circuitboard/scan_consolenew"
 
 	var/selected_ui_block = 1.0
 	var/selected_ui_subblock = 1.0
@@ -418,7 +418,7 @@
 	var/list/datum/block_label/labels[DNA_SE_LENGTH]
 	var/injector_ready = 0
 	var/obj/machinery/dna_scannernew/connected
-	var/obj/item/weapon/disk/data/disk
+	var/obj/item/disk/data/disk
 	var/selected_menu_key
 	var/waiting_for_user_input = 0
 
@@ -447,7 +447,7 @@
 
 /obj/machinery/computer/scan_consolenew/attackby(obj/O as obj, mob/user as mob)
 	..()
-	if (istype(O, /obj/item/weapon/disk/data)) //INSERT SOME diskS
+	if (istype(O, /obj/item/disk/data)) //INSERT SOME diskS
 		if (!disk)
 			if (user.drop_item(O, src))
 				disk = O
@@ -495,7 +495,7 @@
 		arr += "[i]:[EncodeDNABlock(buffer[i])]"
 	return arr
 
-/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/weapon/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
+/obj/machinery/computer/scan_consolenew/proc/setInjectorBlock(var/obj/item/dnainjector/I, var/blk, var/datum/dna2/record/buffer)
 	var/pos = findtext(blk,":")
 	if(!pos)
 		return 0
@@ -887,7 +887,7 @@
 
 	if(href_list["ejectBeaker"])
 		if(connected.beaker)
-			var/obj/item/weapon/reagent_containers/glass/B = connected.beaker
+			var/obj/item/reagent_containers/glass/B = connected.beaker
 			B.forceMove(connected.loc)
 			connected.beaker = null
 		return 1
@@ -1061,7 +1061,7 @@
 			if (src.injector_ready || waiting_for_user_input)
 
 				var/success = 1
-				var/obj/item/weapon/dnainjector/I = new /obj/item/weapon/dnainjector
+				var/obj/item/dnainjector/I = new /obj/item/dnainjector
 				var/datum/dna2/record/buf = src.buffers[bufferId]
 				if(href_list["createBlockInjector"])
 					waiting_for_user_input=1

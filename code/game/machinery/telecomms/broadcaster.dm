@@ -25,13 +25,13 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 /obj/machinery/telecomms/broadcaster/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/telecomms/broadcaster,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/micro_laser/high,
-		/obj/item/weapon/stock_parts/micro_laser/high
+		/obj/item/circuitboard/telecomms/broadcaster,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/micro_laser/high,
+		/obj/item/stock_parts/micro_laser/high
 	)
 
 	RefreshParts()

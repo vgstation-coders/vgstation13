@@ -81,10 +81,10 @@ var/global/list/battery_online =	list(
 /obj/machinery/power/battery/RefreshParts()
 	var/capcount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/capacitor))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/capacitor))
 			capcount += SP.rating-1
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating-1
 	capacity = initial(capacity) + capcount*125e4
 	max_input = initial(max_input) + lasercount*50000

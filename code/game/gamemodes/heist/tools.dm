@@ -2,7 +2,7 @@
  * Handy-Dandy Organ Remover Doohicky
  * SHOULD ONLY BE MAPPED ON VOX RAIDER SHIPS.
  */
-/obj/item/weapon/organ_remover
+/obj/item/organ_remover
 	name = "organics extractor"
 	desc = "A highly sophisticated tool made for alien hands."
 	icon='icons/obj/surgery.dmi'
@@ -33,7 +33,7 @@
 	)
 	var/target_type="eyes"
 
-/obj/item/weapon/organ_remover/examine(var/mob/user, var/override = FALSE)
+/obj/item/organ_remover/examine(var/mob/user, var/override = FALSE)
 	if(override)
 		return ..(user)
 	if(ishuman(user))
@@ -44,7 +44,7 @@
 			return
 	to_chat(user, "Some weird alien thing, doesn't look like it'd even fit in human hands.")
 
-/obj/item/weapon/organ_remover/attack(var/mob/living/M, var/mob/living/user)
+/obj/item/organ_remover/attack(var/mob/living/M, var/mob/living/user)
 	if(!can_use(user))
 		to_chat(user, "<span class='warning'>The object remains inert and useless.  It doesn't even <em>feel</em> right in your grip.</span>")
 		return
@@ -98,7 +98,7 @@
 			playsound(src, 'sound/machines/juicer.ogg', 50, 1)
 	in_use = FALSE
 
-/obj/item/weapon/organ_remover/proc/can_use(var/mob/user)
+/obj/item/organ_remover/proc/can_use(var/mob/user)
 	// Something something vox bioelectric fields something nanites.
 	// I'd rather not have shitters picking these up and removing the clown's lungs for giggles.
 	if(!ishigherbeing(user))
@@ -109,17 +109,17 @@
 
 	var/mob/living/carbon/human/UH=user
 	return isvox(UH)
-/obj/item/weapon/organ_remover/attack_self(mob/user)
+/obj/item/organ_remover/attack_self(mob/user)
 	if(!can_use(user))
 		to_chat(user, "<span class='warning'>The object remains inert and useless.  It doesn't even <em>feel</em> right in your grip.</span>")
 		return
 	target_type=input(user, "Select desired organ.") in valid_targets
 	to_chat(user, "<span class='info'>[target_type] selected.</span>")
 
-/obj/item/weapon/organ_remover/adminbus_edition
+/obj/item/organ_remover/adminbus_edition
 	vox_only = FALSE
 
-/obj/item/weapon/organ_remover/traitor
+/obj/item/organ_remover/traitor
 	desc = "A knock-off of the vox-only organ extractor, this one has been modified to be able to be used by anyone, and works twice as fast as the real deal. However, it can no longer extract hearts."
 	vox_only = FALSE
 	delay=7.5 SECONDS
@@ -131,5 +131,5 @@
 		"appendix"
 	)
 
-/obj/item/weapon/organ_remover/traitor/examine(var/mob/user)
+/obj/item/organ_remover/traitor/examine(var/mob/user)
     ..(user, TRUE)

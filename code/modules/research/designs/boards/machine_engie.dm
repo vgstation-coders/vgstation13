@@ -12,7 +12,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/smes
+	build_path = /obj/item/circuitboard/smes
 
 /datum/design/portable_smes
 	name = "Circuit Design (Portable SMES) "
@@ -22,7 +22,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/port_smes
+	build_path = /obj/item/circuitboard/port_smes
 
 /datum/design/portable_smes_port //Needed to connect the portable SMES.
 	name = "Circuit Design (Portable SMES Port) "
@@ -32,7 +32,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/battery_port
+	build_path = /obj/item/circuitboard/battery_port
 
 /datum/design/treadmill
 	name = "Circuit Design (Treadmill Generator)"
@@ -42,7 +42,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/treadmill
+	build_path = /obj/item/circuitboard/treadmill
 
 /datum/design/cell_charger
 	name = "Circuit Design (Cell Charger)"
@@ -52,7 +52,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/cell_charger
+	build_path = /obj/item/circuitboard/cell_charger
 
 /datum/design/tracker_electronics
 	name = "Circuit Design (Tracker Electronics)"
@@ -62,7 +62,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/tracker_electronics
+	build_path = /obj/item/tracker_electronics
 
 //
 //P.A.C.M.A.N
@@ -77,7 +77,7 @@
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pacman
+	build_path = /obj/item/circuitboard/pacman
 
 /datum/design/superpacman
 	name = "SUPERPACMAN-type Generator Board"
@@ -88,7 +88,7 @@
 	reliability_base = 76
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pacman/super
+	build_path = /obj/item/circuitboard/pacman/super
 
 /datum/design/mrspacman
 	name = "MRSPACMAN-type Generator Board"
@@ -99,7 +99,7 @@
 	reliability_base = 74
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pacman/mrs
+	build_path = /obj/item/circuitboard/pacman/mrs
 
 //
 //ATMOSPHERIC MACHINERY.
@@ -113,7 +113,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/freezer
+	build_path = /obj/item/circuitboard/freezer
 
 /datum/design/heater
 	name = "Circuit Design (Heater)"
@@ -123,7 +123,7 @@
 	build_type = IMPRINTER
 	materials = list (MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/heater
+	build_path = /obj/item/circuitboard/heater
 
 /datum/design/pipedispenser
 	name = "Circuit Design (Pipe Dispenser)"
@@ -133,7 +133,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pipedispenser
+	build_path = /obj/item/circuitboard/pipedispenser
 
 /datum/design/pipedispenser/disposal
 	name = "Circuit Design (Disposal Pipe Dispenser)"
@@ -143,7 +143,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/pipedispenser/disposal
+	build_path = /obj/item/circuitboard/pipedispenser/disposal
 
 //
 //MECHANICS MACHINES.
@@ -157,7 +157,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/reverse_engine
+	build_path = /obj/item/circuitboard/reverse_engine
 
 /datum/design/blueprinter
 	name = "Circuit Design (Blueprint Printer)"
@@ -167,7 +167,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/blueprinter
+	build_path = /obj/item/circuitboard/blueprinter
 
 /datum/design/general_fab
 	name = "Circuit Design (General Fabricator)"
@@ -177,7 +177,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/generalfab
+	build_path = /obj/item/circuitboard/generalfab
 
 /datum/design/flatpacker
 	name = "Circuit Design (Flatpack Fabricator)"
@@ -187,7 +187,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/flatpacker
+	build_path = /obj/item/circuitboard/flatpacker
 
 //BEAMS.
 
@@ -199,7 +199,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/prism
+	build_path = /obj/item/circuitboard/prism
 
 //BEST ENGINE (DESIGN WISE)
 
@@ -211,7 +211,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_URANIUM = 3000)
 	category = "Misc"
-	build_path = /obj/item/weapon/module/rust_fuel_port
+	build_path = /obj/item/module/rust_fuel_port
 
 /datum/design/rust_fuel_compressor
 	name = "Circuit Design (R-UST Mk. 7 fuel compressor)"
@@ -221,7 +221,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 1000)
 	category = "Misc"
-	build_path = /obj/item/weapon/module/rust_fuel_compressor
+	build_path = /obj/item/module/rust_fuel_compressor
 
 /datum/design/rust_core
 	name = "Internal circuitry (R-UST Mk. 7 tokamak core)"
@@ -232,7 +232,7 @@
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_DIAMOND = 2000)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_core
+	build_path = /obj/item/circuitboard/rust_core
 
 /datum/design/rust_injector
 	name = "Internal circuitry (R-UST Mk. 7 fuel injector)"
@@ -243,7 +243,7 @@
 	reliability_base = 79
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_PLASMA = 3000, MAT_URANIUM = 2000)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/rust_injector
+	build_path = /obj/item/circuitboard/rust_injector
 
 //Cael shield gen designs.
 
@@ -254,7 +254,7 @@
 	req_tech = list(Tc_BLUESPACE = 4, Tc_PLASMATECH = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 2000, MAT_GOLD = 2000)
-	build_path = /obj/item/weapon/circuitboard/shield_gen_ex
+	build_path = /obj/item/circuitboard/shield_gen_ex
 
 /datum/design/shield_gen
 	name = "Circuit Design (Starscreen shield generator)"
@@ -272,4 +272,4 @@
 	req_tech = list(Tc_MAGNETS = 3, Tc_POWERSTORAGE = 4)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 2000)
-	build_path = /obj/item/weapon/circuitboard/shield_cap
+	build_path = /obj/item/circuitboard/shield_cap

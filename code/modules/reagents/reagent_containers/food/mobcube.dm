@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube
+/obj/item/reagent_containers/food/snacks/monkeycube
 	name = "monkey cube"
 	desc = "Just add water!"
 	icon_state = "monkeycube"
@@ -7,17 +7,17 @@
 	edible_by_utensil = FALSE
 	var/contained_mob = /mob/living/carbon/monkey
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/New()
+/obj/item/reagent_containers/food/snacks/monkeycube/New()
 	..()
 	reagents.add_reagent(NUTRIMENT,10)
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/Destroy()
+/obj/item/reagent_containers/food/snacks/monkeycube/Destroy()
 	if(contained_mob && isdatum(contained_mob))
 		qdel(contained_mob)
 		contained_mob = null
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
+/obj/item/reagent_containers/food/snacks/monkeycube/afterattack(obj/O, mob/user,proximity)
 	if(!proximity)
 		return
 	if(istype(O,/obj/structure/sink) && !wrapped)
@@ -25,11 +25,11 @@
 		return Expand()
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/attack_self(mob/user)
+/obj/item/reagent_containers/food/snacks/monkeycube/attack_self(mob/user)
 	if(wrapped)
 		Unwrap(user)
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
+/obj/item/reagent_containers/food/snacks/monkeycube/after_consume(var/mob/M)
 
 	if(!contained_mob)
 		return
@@ -43,7 +43,7 @@
 
 	if (istype(M, /mob/living/carbon/human))
 		//Do not try to understand.
-		var/obj/item/weapon/surprise = new/obj/item/weapon(M)
+		var/obj/item/surprise = new/obj/item(M)
 		surprise.icon = C.icon
 		surprise.icon_state = C.icon_state
 		surprise.name = "malformed [C.name]"
@@ -72,7 +72,7 @@
 		M.gib()
 	..()
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/proc/Expand()
+/obj/item/reagent_containers/food/snacks/monkeycube/proc/Expand()
 
 	for(var/mob/M in viewers(src,7))
 		to_chat(M, "<span class='warning'>\The [src] expands!</span>")
@@ -86,7 +86,7 @@
 	contained_mob = null
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/proc/Unwrap(mob/user as mob)
+/obj/item/reagent_containers/food/snacks/monkeycube/proc/Unwrap(mob/user as mob)
 
 	icon_state = "monkeycube"
 	desc = "Just add water!"
@@ -94,45 +94,45 @@
 	wrapped = 0
 	return
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped
+/obj/item/reagent_containers/food/snacks/monkeycube/wrapped
 	desc = "Still wrapped in some paper."
 	icon_state = "monkeycubewrap"
 	wrapped = 1
 
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/farwacube
+/obj/item/reagent_containers/food/snacks/monkeycube/farwacube
 	name = "farwa cube"
 	contained_mob = /mob/living/carbon/monkey/tajara
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/farwacube
+/obj/item/reagent_containers/food/snacks/monkeycube/wrapped/farwacube
 	name = "farwa cube"
 	contained_mob = /mob/living/carbon/monkey/tajara
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/stokcube
+/obj/item/reagent_containers/food/snacks/monkeycube/stokcube
 	name = "stok cube"
 	contained_mob = /mob/living/carbon/monkey/unathi
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/stokcube
+/obj/item/reagent_containers/food/snacks/monkeycube/wrapped/stokcube
 	name = "stok cube"
 	contained_mob = /mob/living/carbon/monkey/unathi
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/neaeracube
+/obj/item/reagent_containers/food/snacks/monkeycube/neaeracube
 	name = "neaera cube"
 	contained_mob = /mob/living/carbon/monkey/skrell
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube
+/obj/item/reagent_containers/food/snacks/monkeycube/wrapped/neaeracube
 	name = "neaera cube"
 	contained_mob = /mob/living/carbon/monkey/skrell
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/humancube
+/obj/item/reagent_containers/food/snacks/monkeycube/humancube
 	name = "humanoid cube"
 	desc = "Freshly compressed. Add water to release the creature within."
 	contained_mob = null
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/mousecube
+/obj/item/reagent_containers/food/snacks/monkeycube/mousecube
 	name = "lab mouse cube"
 	contained_mob = /mob/living/simple_animal/mouse/balbc
 
-/obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped/mousecube
+/obj/item/reagent_containers/food/snacks/monkeycube/wrapped/mousecube
 	name = "lab mouse cube"
 	contained_mob = /mob/living/simple_animal/mouse/balbc

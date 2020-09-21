@@ -28,20 +28,20 @@
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/shield_cap,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/subspace/treatment,
-		/obj/item/weapon/stock_parts/subspace/analyzer,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/shield_cap,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/subspace/treatment,
+		/obj/item/stock_parts/subspace/analyzer,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
 
 /obj/machinery/shield_capacitor/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/Ca in component_parts)
+	for(var/obj/item/stock_parts/capacitor/Ca in component_parts)
 		T += Ca.rating - 1
 		max_charge = (initial(max_charge)+(T * 10000000))
 		max_charge_rate = (initial(max_charge_rate)+(T * 10000000))
@@ -77,7 +77,7 @@
 /obj/machinery/shield_capacitor/attackby(var/obj/item/W, var/mob/user)
 	if(..())
 		return 1
-	else if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	else if(istype(W, /obj/item/card/id) || istype(W, /obj/item/device/pda))
 		if(check_access(W))
 			toggle_lock(user)
 		else

@@ -17,8 +17,8 @@
 /datum/theft_objective/proc/get_contents(var/obj/O) //What a pile of shit. "What is this OOP you speak of?"
 	var/list/L = list()
 
-	if(istype(O,/obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S=O
+	if(istype(O,/obj/item/storage))
+		var/obj/item/storage/S=O
 		L += S.return_inv()
 
 	else if(istype(O,/obj/item/clothing/accessory/storage))
@@ -29,10 +29,10 @@
 		var/obj/item/clothing/suit/storage/S=O
 		L += S.hold.return_inv()
 
-	else if(istype(O,/obj/item/weapon/gift))
-		var/obj/item/weapon/gift/G = O
+	else if(istype(O,/obj/item/gift))
+		var/obj/item/gift/G = O
 		L += G.gift
-		if(istype(G.gift, /obj/item/weapon/storage))
+		if(istype(G.gift, /obj/item/storage))
 			L += get_contents(G.gift)
 
 	else if(istype(O,/obj/item/delivery))
@@ -55,7 +55,7 @@
 		for (var/obj/O in all_items)
 
 			if (istype(O, typepath))
-				if (istype(O, /obj/item/weapon/reagent_containers/hypospray/autoinjector)) // stealing the cheap autoinjector doesn't count
+				if (istype(O, /obj/item/reagent_containers/hypospray/autoinjector)) // stealing the cheap autoinjector doesn't count
 					continue
 
 				if (areas.len)
@@ -68,12 +68,12 @@
 
 /datum/theft_objective/traitor/antique_laser_gun
 	name = "the captain's antique laser gun"
-	typepath = /obj/item/weapon/gun/energy/laser/captain
+	typepath = /obj/item/gun/energy/laser/captain
 	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/hand_tele
 	name = "a hand teleporter"
-	typepath = /obj/item/weapon/hand_tele
+	typepath = /obj/item/hand_tele
 	protected_jobs = list("Captain", "Research Director", "Head of Personnel")
 
 /datum/theft_objective/traitor/cap_hardsuit
@@ -83,7 +83,7 @@
 
 /datum/theft_objective/traitor/cap_stamp
 	name = "the captain's rubber stamp"
-	typepath = /obj/item/weapon/stamp/captain
+	typepath = /obj/item/stamp/captain
 	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/cap_jumpsuit
@@ -118,7 +118,7 @@
 
 /datum/theft_objective/traitor/corgi
 	name = "a piece of corgi meat"
-	typepath = /obj/item/weapon/reagent_containers/food/snacks/meat/animal/corgi
+	typepath = /obj/item/reagent_containers/food/snacks/meat/animal/corgi
 	protected_jobs = list("Captain", "Head of Personnel") //Really HoP? Your own dog?
 
 /datum/theft_objective/traitor/rd_jumpsuit
@@ -148,12 +148,12 @@
 
 /datum/theft_objective/traitor/hypospray
 	name = "a hypospray"
-	typepath = /obj/item/weapon/reagent_containers/hypospray
+	typepath = /obj/item/reagent_containers/hypospray
 	protected_jobs = list("Chief Medical Officer")
 
 /datum/theft_objective/traitor/pinpointer
 	name = "the captain's pinpointer"
-	typepath = /obj/item/weapon/pinpointer
+	typepath = /obj/item/pinpointer
 	protected_jobs = list("Captain")
 
 /datum/theft_objective/traitor/ablative
@@ -163,17 +163,17 @@
 
 /datum/theft_objective/traitor/telebaton
 	name = "a telescopic baton"
-	typepath = /obj/item/weapon/melee/telebaton
+	typepath = /obj/item/melee/telebaton
 	protected_jobs = list("Captain", "Head of Security")
 
 /datum/theft_objective/traitor/planningframe
 	name = "the law planning frame"
-	typepath = /obj/item/weapon/planning_frame
+	typepath = /obj/item/planning_frame
 	protected_jobs = list("Captain", "Research Director", "Chief Engineer", "Head of Personnel")
 
 /datum/theft_objective/traitor/belt
 	name = "the chief engineer's advanced toolbelt"
-	typepath = /obj/item/weapon/storage/belt/utility/chief
+	typepath = /obj/item/storage/belt/utility/chief
 	protected_jobs = list("Captain", "Chief Engineer")
 
 /datum/theft_objective/traitor/ttv
@@ -183,18 +183,18 @@
 
 /datum/theft_objective/traitor/Holotool
 	name = "the holo switchtool"
-	typepath = /obj/item/weapon/switchtool/holo
+	typepath = /obj/item/switchtool/holo
 	protected_jobs = list("Research Director")
 
 /datum/theft_objective/traitor/telesci
 	name = "the telescience computer's circuit"
-	typepath = /obj/item/weapon/circuitboard/telesci_computer
+	typepath = /obj/item/circuitboard/telesci_computer
 	protected_jobs = list("Research Director", "Scientist", "Roboticist", "Mechanic", "Paramedic")
 
 
 /datum/theft_objective/traitor/lawgiver
 	name = "the lawgiver"
-	typepath = /obj/item/weapon/gun/lawgiver
+	typepath = /obj/item/gun/lawgiver
 	protected_jobs = list("Head of Security")
 
 /datum/theft_objective/number
@@ -231,7 +231,7 @@
 			if(istype(I, typepath))
 
 				//Stealing the cheap autoinjector doesn't count
-				if(istype(I, /obj/item/weapon/reagent_containers/hypospray/autoinjector))
+				if(istype(I, /obj/item/reagent_containers/hypospray/autoinjector))
 					continue
 
 				if(istype(I,/obj/item/device/aicard))
@@ -257,12 +257,12 @@
 
 /datum/theft_objective/number/traitor/plasma_gas
 	name = "moles of plasma (full tank)"
-	typepath = /obj/item/weapon/tank
+	typepath = /obj/item/tank
 	min=28
 	max=28
 	protected_jobs = list("Research Director", "Scientist")
 
-/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/weapon/tank/I)
+/datum/theft_objective/number/traitor/plasma_gas/getAmountStolen(var/obj/item/tank/I)
 	return I.air_contents[GAS_PLASMA]
 
 /datum/theft_objective/number/traitor/coins
@@ -278,9 +278,9 @@
 		return 0
 	var/list/all_items = owner.current.get_contents()
 	var/found_amount=0.0
-	for(var/obj/item/weapon/storage/bag/money/B in all_items)
+	for(var/obj/item/storage/bag/money/B in all_items)
 		if(B)
-			for(var/obj/item/weapon/coin/C in B)
+			for(var/obj/item/coin/C in B)
 				found_amount += C.credits
 	return found_amount >= required_amount
 
@@ -293,19 +293,19 @@
 
 /datum/theft_objective/special/nuke_gun
 	name = "nuclear gun"
-	typepath = /obj/item/weapon/gun/energy/gun/nuclear
+	typepath = /obj/item/gun/energy/gun/nuclear
 
 /datum/theft_objective/special/diamond_drill
 	name = "diamond drill"
-	typepath = /obj/item/weapon/pickaxe/drill/diamond
+	typepath = /obj/item/pickaxe/drill/diamond
 
 /datum/theft_objective/special/boh
 	name = "bag of holding"
-	typepath = /obj/item/weapon/storage/backpack/holding
+	typepath = /obj/item/storage/backpack/holding
 
 /datum/theft_objective/special/hyper_cell
 	name = "hyper-capacity cell"
-	typepath = /obj/item/weapon/cell/hyper
+	typepath = /obj/item/cell/hyper
 
 /datum/theft_objective/number/special
 	flags = THEFT_SPECIAL
@@ -385,7 +385,7 @@
 
 /datum/theft_objective/number/heist_easy/gun
 	name = "guns"
-	typepath = /obj/item/weapon/gun
+	typepath = /obj/item/gun
 	min = 4
 	max = 6
 
@@ -483,19 +483,19 @@
 
 /datum/theft_objective/number/heist_hard/duck
 	name = "rubber ducky"
-	typepath = /obj/item/weapon/bikehorn/rubberducky
+	typepath = /obj/item/bikehorn/rubberducky
 	min = 1
 	max = 1
 
 /datum/theft_objective/number/heist_hard/borgupload
 	name = "cyborg upload console circuit board"
-	typepath = /obj/item/weapon/circuitboard/borgupload
+	typepath = /obj/item/circuitboard/borgupload
 	min = 1
 	max = 1
 
 /datum/theft_objective/number/heist_hard/amplifier
 	name = "subspace amplifiers"
-	typepath = /obj/item/weapon/stock_parts/subspace/amplifier
+	typepath = /obj/item/stock_parts/subspace/amplifier
 	min = 4
 	max = 6
 

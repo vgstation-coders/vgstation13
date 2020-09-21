@@ -8,7 +8,7 @@
 	anchored = 0
 	density = 0 //Tired of these blocking up the station
 	var/mode = IVDRIP_INJECTING
-	var/obj/item/weapon/reagent_containers/beaker = null
+	var/obj/item/reagent_containers/beaker = null
 	var/mob/living/carbon/human/attached = null
 
 /obj/machinery/iv_drip/update_icon()
@@ -68,7 +68,7 @@
 		src.attached = over_object
 		src.update_icon()
 
-/obj/machinery/iv_drip/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/iv_drip/attackby(obj/item/W as obj, mob/user as mob)
 	if(isobserver(user))
 		return
 	if(user.stat)
@@ -81,8 +81,8 @@
 			src.remove_container()
 		to_chat(user, "<span class='notice'>You dismantle \the [name].</span>")
 		qdel(src)
-	if (istype(W, /obj/item/weapon/reagent_containers))
-		var/obj/item/weapon/reagent_containers/R = W
+	if (istype(W, /obj/item/reagent_containers))
+		var/obj/item/reagent_containers/R = W
 		if(R.fits_in_iv_drip())
 			if(!isnull(src.beaker))
 				to_chat(user, "There is already a reagent container loaded!")

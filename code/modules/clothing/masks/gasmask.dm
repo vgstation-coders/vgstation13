@@ -181,7 +181,7 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/clown_hat/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/mask/gas/clown_hat/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/shoes/clown_shoes))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
@@ -315,7 +315,7 @@
 	can_flip = 0
 	canstage = 0
 
-/obj/item/clothing/mask/gas/clownmaskpsyche/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/mask/gas/clownmaskpsyche/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/shoes/clownshoespsyche))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))

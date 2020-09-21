@@ -1,6 +1,6 @@
 #define MAX_STICKYBOMBS 4
 
-/obj/item/weapon/gun/stickybomb
+/obj/item/gun/stickybomb
 	name = "stickybomb launcher"
 	desc = "Fired stickybombs take 5 seconds to become live. After which they'll progressively merge with their surroundings."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -19,10 +19,10 @@
 
 	var/current_shells = 200
 
-/obj/item/weapon/gun/stickybomb/isHandgun()
+/obj/item/gun/stickybomb/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/stickybomb/New()
+/obj/item/gun/stickybomb/New()
 	..()
 	loaded = list(
 		new /obj/item/stickybomb(src),
@@ -33,7 +33,7 @@
 		new /obj/item/stickybomb(src),
 		)
 
-/obj/item/weapon/gun/stickybomb/Destroy()
+/obj/item/gun/stickybomb/Destroy()
 	for(var/obj/item/stickybomb/S in loaded)
 		qdel(S)
 	loaded = null
@@ -42,14 +42,14 @@
 		B.unstick()
 	..()
 
-/obj/item/weapon/gun/stickybomb/examine(mob/user)
+/obj/item/gun/stickybomb/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Has [loaded.len] stickybomb\s loaded, and [fired.len] stickybomb\s placed.</span>")
 
-/obj/item/weapon/gun/stickybomb/update_icon()
+/obj/item/gun/stickybomb/update_icon()
 	return
 
-/obj/item/weapon/gun/stickybomb/attack_self(mob/user)
+/obj/item/gun/stickybomb/attack_self(mob/user)
 	if(fired.len)
 		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		for(var/obj/item/stickybomb/B in fired)
@@ -57,7 +57,7 @@
 				if(B.live)
 					B.detonate()
 
-/obj/item/weapon/gun/stickybomb/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/stickybomb/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/stickybomb))
 		var/obj/item/stickybomb/B = A
 		if(B.live)
@@ -72,7 +72,7 @@
 	else
 		..()
 
-/obj/item/weapon/gun/stickybomb/process_chambered()
+/obj/item/gun/stickybomb/process_chambered()
 	if(in_chamber)
 		return 1
 	if(loaded.len)
@@ -93,7 +93,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/stickybomb/can_discharge()
+/obj/item/gun/stickybomb/can_discharge()
 	return loaded.len
 	
 /obj/item/stickybomb
@@ -105,7 +105,7 @@
 	force = 1
 	throwforce = 1
 	w_class = W_CLASS_TINY
-	var/obj/item/weapon/gun/stickybomb/fired_from = null
+	var/obj/item/gun/stickybomb/fired_from = null
 	var/live = 0
 	var/atom/stuck_to = null
 	var/image/self_overlay = null

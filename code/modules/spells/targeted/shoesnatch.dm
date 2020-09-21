@@ -43,7 +43,7 @@
 
 /spell/targeted/shoesnatch/proc/summon_shards(turf/T, list/dirlist)
 	for(var/D in dirlist)
-		var/obj/item/weapon/shard/S = new(T)
+		var/obj/item/shard/S = new(T)
 		step(S, D)
 		S.alpha = 0
 		animate(S, alpha = 255, time = 10)

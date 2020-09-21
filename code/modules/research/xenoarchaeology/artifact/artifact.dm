@@ -18,7 +18,7 @@
 	5;/obj/machinery/syndicate_beacon,
 	5;/obj/item/clothing/mask/stone,
 	5;/obj/item/changeling_vial,
-	5;/obj/item/weapon/bloodcult_pamphlet/oneuse,
+	5;/obj/item/bloodcult_pamphlet/oneuse,
 	25;/obj/machinery/singularity_beacon,
 	25;/obj/machinery/power/supermatter,
 	50;/obj/structure/constructshell,
@@ -77,7 +77,7 @@ var/list/boulders = list()
 	icon_state = "boulder[rand(1,4)]"
 	excavation_level = rand(5,50)
 
-/obj/structure/boulder/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/boulder/attackby(obj/item/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/device/core_sampler) && geological_data)
 		src.geological_data.artifact_distance = rand(-100,100) / 100
 		src.geological_data.artifact_id = artifact_find.artifact_id
@@ -97,8 +97,8 @@ var/list/boulders = list()
 		to_chat(user, "<span class='notice'>[bicon(P)] [src] has been excavated to a depth of [src.excavation_level]cm.</span>")
 		return
 
-	if (istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/P = W
+	if (istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/P = W
 
 		if(!(P.diggables & DIG_ROCKS))
 			return
@@ -168,14 +168,14 @@ var/list/boulders = list()
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
+		if(istype(H.get_active_hand(),/obj/item/pickaxe))
 			attackby(H.get_active_hand(), H)
-		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
+		else if(istype(H.get_inactive_hand(),/obj/item/pickaxe))
 			attackby(H.get_inactive_hand(), H)
 
 	else if(istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
-		if(istype(R.module_active,/obj/item/weapon/pickaxe))
+		if(istype(R.module_active,/obj/item/pickaxe))
 			attackby(R.module_active, R)
 
 	else if(istype(AM,/obj/mecha))

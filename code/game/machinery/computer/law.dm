@@ -4,7 +4,7 @@
 	name = "AI Upload"
 	desc = "Used to upload laws to the AI using a cheap radio transceiver."
 	icon_state = "command"
-	circuit = "/obj/item/weapon/circuitboard/aiupload"
+	circuit = "/obj/item/circuitboard/aiupload"
 	var/mob/living/silicon/ai/current = null
 	var/mob/living/silicon/ai/occupant = null
 	var/opened = 0
@@ -35,7 +35,7 @@
 	else
 		to_chat(usr, "<span class='notice'>The access panel is now closed.</span>")
 
-/obj/machinery/computer/aiupload/proc/install_module(var/obj/item/weapon/aiModule/O, var/mob/user)
+/obj/machinery/computer/aiupload/proc/install_module(var/obj/item/aiModule/O, var/mob/user)
 	if(stat & NOPOWER)
 		to_chat(usr, "The upload computer has no power!")
 		return 0
@@ -57,7 +57,7 @@
 	else
 		// Modules should throw their own errors.
 		// Our responsibility is to prevent success messages.
-		var/obj/item/weapon/aiModule/M = O
+		var/obj/item/aiModule/M = O
 		if(!M.validate(current.laws,current,user))
 			return 0
 		if(!M.upload(current.laws,current,user))
@@ -84,14 +84,14 @@
 		return FALSE
 	return TRUE
 
-/obj/machinery/computer/aiupload/attackby(obj/item/weapon/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/aiModule))
+/obj/machinery/computer/aiupload/attackby(obj/item/O as obj, mob/user as mob)
+	if(istype(O, /obj/item/aiModule))
 		if(!same_zlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
 			return
 		if(install_module(O,user))
 			announce_law_changes(user)
-	else if(istype(O, /obj/item/weapon/planning_frame))
+	else if(istype(O, /obj/item/planning_frame))
 		if(!same_zlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target AI!")
 			return
@@ -114,13 +114,13 @@
 		else if(current.aiRestorePowerRoutine)
 			to_chat(usr, "Upload failed. Only a faint signal is being detected from the AI, and it is not responding to our requests. It may be low on power.")
 		else
-			var/obj/item/weapon/planning_frame/frame=O
+			var/obj/item/planning_frame/frame=O
 			if(frame.modules.len>0)
 				to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
 				if(do_after(user, src,50))
 					var/failed=0
 					for(var/i=1;i<=frame.modules.len;i++)
-						var/obj/item/weapon/aiModule/M = frame.modules[i]
+						var/obj/item/aiModule/M = frame.modules[i]
 						to_chat(user, "<span class='notice'>Running [M]...</span>")
 						if(!install_module(M,user))
 							failed=1
@@ -160,7 +160,7 @@
 	name = "Cyborg Upload"
 	desc = "Used to upload laws to Cyborgs."
 	icon_state = "command"
-	circuit = "/obj/item/weapon/circuitboard/borgupload"
+	circuit = "/obj/item/circuitboard/borgupload"
 	var/mob/living/silicon/robot/current = null
 	light_color = "#555555"
 
@@ -171,7 +171,7 @@
 	current.throw_alert(SCREEN_ALARM_ROBOT_LAW, /obj/abstract/screen/alert/robot/newlaw)
 	to_chat(usr, "<span class='notice'>Upload complete. The robot's laws have been modified.</span>")
 
-/obj/machinery/computer/borgupload/proc/install_module(var/obj/item/weapon/aiModule/M,var/mob/user)
+/obj/machinery/computer/borgupload/proc/install_module(var/obj/item/aiModule/M,var/mob/user)
 	if(stat & NOPOWER)
 		to_chat(usr, "The upload computer has no power!")
 		return 0
@@ -211,8 +211,8 @@
 		return FALSE
 	return TRUE
 
-/obj/machinery/computer/borgupload/attackby(var/obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/aiModule))
+/obj/machinery/computer/borgupload/attackby(var/obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/aiModule))
 		if(!same_zlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
 			return
@@ -222,7 +222,7 @@
 				to_chat(user, "<span class='warning'>[current] is operating in KEEPER mode and cannot be accessed via control signals.</span>")
 				return ..()
 		install_module(W,user)
-	else if(istype(W, /obj/item/weapon/planning_frame))
+	else if(istype(W, /obj/item/planning_frame))
 		if(!same_zlevel())
 			to_chat(user, "<span class='danger'>Unable to establish a connection</span>: You're too far away from the target silicon!")
 			return
@@ -247,13 +247,13 @@
 		else if(current.connected_ai)
 			to_chat(user, "Upload failed. The robot is slaved to an AI.")
 		else
-			var/obj/item/weapon/planning_frame/frame=W
+			var/obj/item/planning_frame/frame=W
 			if(frame.modules.len>0)
 				to_chat(user, "<span class='notice'>You begin to load \the [frame] into \the [src]...</span>")
 				if(do_after(user, src,50))
 					var/failed=0
 					for(var/i=1;i<=frame.modules.len;i++)
-						var/obj/item/weapon/aiModule/M = frame.modules[i]
+						var/obj/item/aiModule/M = frame.modules[i]
 						to_chat(user, "<span class='notice'>Running [M]...</span>")
 						if(!install_module(M,user))
 							failed=1
@@ -287,7 +287,7 @@
 /obj/machinery/computer/aiupload/longrange
 	name = "Long Range AI Upload"
 	desc = "Used to upload laws to the AI using a powerful subspace transceiver."
-	circuit = "/obj/item/weapon/circuitboard/aiupload/longrange"
+	circuit = "/obj/item/circuitboard/aiupload/longrange"
 
 /obj/machinery/computer/aiupload/longrange/same_zlevel()
 	return TRUE

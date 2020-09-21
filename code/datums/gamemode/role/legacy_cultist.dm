@@ -21,7 +21,7 @@
 	if (!equip)
 		return 1
 
-	var/obj/item/weapon/paper/talisman/supply/T = new(cult_mob)
+	var/obj/item/paper/talisman/supply/T = new(cult_mob)
 	var/list/slots = list (
 		"backpack" = slot_in_backpack,
 		"left pocket" = slot_l_store,

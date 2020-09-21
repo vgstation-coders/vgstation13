@@ -42,7 +42,7 @@
 	icon_living = "penguin_chick"
 	icon_dead = ("penguin_chick_dead")
 	size = SIZE_SMALL
-	holder_type = /obj/item/weapon/holder/animal // bomber making an inhand for baby penguins when
+	holder_type = /obj/item/holder/animal // bomber making an inhand for baby penguins when
 	speak_emote = list("peeps", "calls")
 
 /mob/living/simple_animal/penguin/sombrero

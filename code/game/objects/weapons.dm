@@ -1,2 +1,2 @@
-/obj/item/weapon
+/obj/item
 	name = "weapon"

@@ -1,4 +1,4 @@
-/obj/item/weapon/armblade
+/obj/item/armblade
 	name = "arm blade"
 	desc = "A vicious looking blade made of flesh and bone that tears through people with horrifying ease."
 	icon = 'icons/obj/weapons.dmi'
@@ -15,8 +15,8 @@
 	hitsound = "sound/weapons/bloodyslice.ogg"
 	cant_drop = 1
 
-/obj/item/weapon/armblade/IsShield()
+/obj/item/armblade/IsShield()
     return 1
 
-/obj/item/weapon/armblade/dropped()
+/obj/item/armblade/dropped()
 	qdel(src)

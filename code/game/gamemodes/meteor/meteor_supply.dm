@@ -53,13 +53,13 @@
 
 	..()
 	//Three boxes containing seven black gloves each
-	new /obj/item/weapon/storage/box/bgloves(src)
-	new /obj/item/weapon/storage/box/bgloves(src)
-	new /obj/item/weapon/storage/box/bgloves(src)
+	new /obj/item/storage/box/bgloves(src)
+	new /obj/item/storage/box/bgloves(src)
+	new /obj/item/storage/box/bgloves(src)
 	//Three boxes containing seven sunglasses each
-	new /obj/item/weapon/storage/box/sunglasses(src)
-	new /obj/item/weapon/storage/box/sunglasses(src)
-	new /obj/item/weapon/storage/box/sunglasses(src)
+	new /obj/item/storage/box/sunglasses(src)
+	new /obj/item/storage/box/sunglasses(src)
+	new /obj/item/storage/box/sunglasses(src)
 
 //Building gear
 /obj/structure/closet/crate/engi/meteor_buildgear
@@ -69,9 +69,9 @@
 /obj/structure/closet/crate/engi/meteor_buildgear/New()
 
 	..()
-	new /obj/item/weapon/storage/belt/utility/complete(src)
-	new /obj/item/weapon/storage/belt/utility/complete(src)
-	new /obj/item/weapon/storage/belt/utility/complete(src)
+	new /obj/item/storage/belt/utility/complete(src)
+	new /obj/item/storage/belt/utility/complete(src)
+	new /obj/item/storage/belt/utility/complete(src)
 	new /obj/item/clothing/head/welding(src)
 	new /obj/item/clothing/head/welding(src)
 	new /obj/item/clothing/head/welding(src)
@@ -90,7 +90,7 @@
 	new /obj/item/pizzabox/meat(src)
 	new /obj/item/pizzabox/meat(src)
 	new /obj/item/pizzabox/vegetable(src)
-	new /obj/item/weapon/kitchen/utensil/knife/large(src)
+	new /obj/item/kitchen/utensil/knife/large(src)
 
 //Flavor and flares
 /obj/structure/closet/crate/meteor_panic
@@ -100,11 +100,11 @@
 /obj/structure/closet/crate/meteor_panic/New()
 
 	new /obj/item/device/instrument/violin(src) //My tune will go on
-	new /obj/item/weapon/phone(src)
-	new /obj/item/weapon/storage/fancy/flares(src)
-	new /obj/item/weapon/storage/fancy/flares(src)
-	new /obj/item/weapon/paper_bin(src) //Any last wishes ?
-	new /obj/item/weapon/pen/red(src)
+	new /obj/item/phone(src)
+	new /obj/item/storage/fancy/flares(src)
+	new /obj/item/storage/fancy/flares(src)
+	new /obj/item/paper_bin(src) //Any last wishes ?
+	new /obj/item/pen/red(src)
 
 //Will create a large forcefield if given enough power
 /obj/structure/closet/crate/secure/large/meteor_shieldwallgen
@@ -153,5 +153,5 @@
 	new /obj/item/taperoll/atmos(src)
 	new /obj/item/taperoll/atmos(src)
 	new /obj/item/taperoll/atmos(src)
-	new /obj/item/weapon/storage/box/foam(src)
-	new /obj/item/weapon/storage/box/foam(src)
+	new /obj/item/storage/box/foam(src)
+	new /obj/item/storage/box/foam(src)

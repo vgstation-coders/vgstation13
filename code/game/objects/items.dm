@@ -204,7 +204,7 @@
 				return FALSE
 			attack_hand(user)
 	else if(isrobot(user))
-		if(!istype(loc, /obj/item/weapon/robot_module))
+		if(!istype(loc, /obj/item/robot_module))
 			return
 		var/mob/living/silicon/robot/R = user
 		R.activate_module(src)
@@ -214,9 +214,9 @@
 	if (!user)
 		return
 
-	if (istype(loc, /obj/item/weapon/storage))
+	if (istype(loc, /obj/item/storage))
 		//If the item is in a storage item, take it out.
-		var/obj/item/weapon/storage/S = loc
+		var/obj/item/storage/S = loc
 		if(!S.remove_from_storage(src, user))
 			return
 
@@ -248,7 +248,7 @@
 	return TRUE
 
 /obj/item/attack_paw(mob/user as mob)
-	if (istype(loc, /obj/item/weapon/storage))
+	if (istype(loc, /obj/item/storage))
 		for(var/mob/M in range(1, loc))
 			if (M.s_active == loc)
 				if (M.client)
@@ -272,7 +272,7 @@
 
 // Due to storage type consolidation this should get used more now.
 // I have cleaned it up a little, but it could probably use more.  -Sayu
-/obj/item/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/attackby(obj/item/W as obj, mob/user as mob)
 	return ..()
 
 /obj/item/proc/talk_into(var/datum/speech/speech, var/channel=null)
@@ -307,11 +307,11 @@
 	return
 
 // called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.
-/obj/item/proc/on_exit_storage(obj/item/weapon/storage/S as obj)
+/obj/item/proc/on_exit_storage(obj/item/storage/S as obj)
 	return
 
 // called when this item is added into a storage item, which is passed on as S. The loc variable is already set to the storage item.
-/obj/item/proc/on_enter_storage(obj/item/weapon/storage/S as obj)
+/obj/item/proc/on_enter_storage(obj/item/storage/S as obj)
 	return
 
 // called when "found" in pockets and storage items. Returns 1 if the search should end.
@@ -664,7 +664,7 @@
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return CANNOT_EQUIP
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/pen) || is_type_in_list(src, H.wear_suit.allowed) )
 					if(H.s_store)
 						if(automatic)
 							if(H.check_for_open_slot(src))
@@ -681,18 +681,18 @@
 					return CANNOT_EQUIP
 				if (H.mutual_handcuffs)
 					return CANNOT_EQUIP
-				if(!istype(src, /obj/item/weapon/handcuffs))
+				if(!istype(src, /obj/item/handcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_legcuffed)
 				if(H.legcuffed)
 					return CANNOT_EQUIP
-				if(!istype(src, /obj/item/weapon/legcuffs))
+				if(!istype(src, /obj/item/legcuffs))
 					return CANNOT_EQUIP
 				return CAN_EQUIP
 			if(slot_in_backpack)
-				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
-					var/obj/item/weapon/storage/backpack/B = H.back
+				if (H.back && istype(H.back, /obj/item/storage/backpack))
+					var/obj/item/storage/backpack/B = H.back
 					if(!B.storage_slots && w_class <= B.fits_max_w_class)
 						return CAN_EQUIP
 					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
@@ -867,7 +867,7 @@
 	//All checks are done, time to pick it up!
 	if(isMoMMI(user))
 		// Otherwise, we get MoMMIs changing their own laws.
-		if(istype(src,/obj/item/weapon/aiModule))
+		if(istype(src,/obj/item/aiModule))
 			to_chat(src, "<span class='warning'>Your firmware prevents you from picking up [src]!</span>")
 			return
 		if(user.get_active_hand() == null)
@@ -1340,8 +1340,8 @@ var/global/list/image/blood_overlays = list()
 		log_attack("[user.name] ([user.ckey]) has restrained [C.name] ([C.ckey]) with \the [src]")
 
 		var/obj/item/cuffs = src
-		if(istype(src, /obj/item/weapon/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
-			cuffs = new /obj/item/weapon/handcuffs/cyborg(get_turf(user))
+		if(istype(src, /obj/item/handcuffs/cyborg)) //There's GOT to be a better way to check for this.
+			cuffs = new /obj/item/handcuffs/cyborg(get_turf(user))
 		else
 			user.drop_from_inventory(cuffs)
 		C.equip_to_slot(cuffs, slot_handcuffed)
@@ -1370,13 +1370,13 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/stealthy(var/mob/living/carbon/human/H)
 	return H.isGoodPickpocket()
 
-/obj/item/proc/can_be_stored(var/obj/item/weapon/storage/S)
+/obj/item/proc/can_be_stored(var/obj/item/storage/S)
 	return TRUE
 
 /obj/item/MouseDropFrom(var/obj/over_object)
-	if(istype(loc, /obj/item/weapon/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
+	if(istype(loc, /obj/item/storage) && !usr.incapacitated()) //This is the code for re-ordering items inside a storage item via mouse drag and drop.
 		if(loc == over_object.loc) //Swapping to another object in the same storage item
-			var/obj/item/weapon/storage/storageobj = loc
+			var/obj/item/storage/storageobj = loc
 			if(usr in storageobj.is_seeing)
 				//Almost none of BYOND's list procs work with contents because contents is a snowflake list and BYOND hates you, so enter the kludge.
 				//And yes, this is Lummox-sanctioned kludge: http://www.byond.com/forum/?post=271125
@@ -1391,7 +1391,7 @@ var/global/list/image/blood_overlays = list()
 		else if(istype(over_object, /obj/abstract/screen/storage)) //Drag and dropped to an empty slot inside the storage item
 			//Since contents are always ordered to the left we assume the user wants to move this item to the rightmost slot possible.
 			var/obj/abstract/screen/storage/screenobj = over_object
-			var/obj/item/weapon/storage/storageobj = screenobj.master
+			var/obj/item/storage/storageobj = screenobj.master
 			if(storageobj == loc && (usr in storageobj.is_seeing))
 				//If anybody knows a better way to move ourselves to the end of a list, that actually works with BYOND's finickity handling of the contents list, then you are a greater man than I
 				storageobj.contents -= src

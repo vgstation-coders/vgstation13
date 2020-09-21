@@ -2,7 +2,7 @@
 	name = "\improper PDA Terminal"
 	desc = "It can be used to download Apps on your PDA."
 	icon_state = "pdaterm"
-	circuit = "/obj/item/weapon/circuitboard/pda_terminal"
+	circuit = "/obj/item/circuitboard/pda_terminal"
 	light_color = LIGHT_COLOR_ORANGE
 
 	var/obj/item/device/pda/pda_device = null
@@ -143,7 +143,7 @@
 					return
 
 				if(istype(usr, /mob/living))
-					var/obj/item/weapon/card/card = usr.get_card()
+					var/obj/item/card/card = usr.get_card()
 
 					if(!card && pda_device)
 						card = pda_device.id
@@ -161,7 +161,7 @@
 
 		if ("new_pda")
 			if(istype(usr, /mob/living))
-				var/obj/item/weapon/card/card = usr.get_card()
+				var/obj/item/card/card = usr.get_card()
 
 				if(!card && pda_device)
 					card = pda_device.id
@@ -181,7 +181,7 @@
 					flick("pdaterm-problem", src)
 	return 1
 
-/obj/machinery/computer/pda_terminal/connect_account(var/mob/user,var/obj/item/weapon/card/W,var/appdatum)
+/obj/machinery/computer/pda_terminal/connect_account(var/mob/user,var/obj/item/card/W,var/appdatum)
 	if(istype(W))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
@@ -195,7 +195,7 @@
 			to_chat(user, "[bicon(src)]<span class='warning'>Unable to connect to accounts database.</span>")
 	return	0
 
-/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/weapon/card/C,var/datum/pda_app/appdatum)
+/obj/machinery/computer/pda_terminal/scan_card(var/mob/user,var/obj/item/card/C,var/datum/pda_app/appdatum)
 	if(istype(C))
 		if(linked_account)
 			if(charge_flow(linked_db, C, user, (appdatum ? appdatum.price : 100) /* New PDA if no appdatum */, linked_account, "Purchase of [appdatum ? "[appdatum.name]" : "a new PDA"]", machine_id) != CARD_CAPTURE_SUCCESS)

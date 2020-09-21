@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/portalgun	//-by Deity Link
+/obj/item/gun/portalgun	//-by Deity Link
 	name = "\improper Portal Gun"
 	desc = "There's a hole in the sky... through which I can fly."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -16,7 +16,7 @@
 	var/obj/effect/portal/blue_portal = null
 	var/obj/effect/portal/red_portal = null
 
-/obj/item/weapon/gun/portalgun/examine(mob/user)
+/obj/item/gun/portalgun/examine(mob/user)
 	..()
 	switch(setting)
 		if(0)
@@ -24,7 +24,7 @@
 		if(1)
 			to_chat(user, "It's current setting is <span style='color: #FF6600;'>red</span>.")
 
-/obj/item/weapon/gun/portalgun/Destroy()
+/obj/item/gun/portalgun/Destroy()
 	if(blue_portal)
 		qdel(blue_portal)
 		blue_portal = null
@@ -33,7 +33,7 @@
 		red_portal = null
 	..()
 
-/obj/item/weapon/gun/portalgun/process_chambered()
+/obj/item/gun/portalgun/process_chambered()
 	if(in_chamber)
 		return 1
 	in_chamber = new/obj/item/projectile/portalgun(src)
@@ -42,7 +42,7 @@
 	P.setting = setting
 	return 1
 
-/obj/item/weapon/gun/portalgun/attack_self(mob/user)
+/obj/item/gun/portalgun/attack_self(mob/user)
 	switch(setting)
 		if(0)
 			setting = 1
@@ -55,11 +55,11 @@
 	update_icon()
 	user.regenerate_icons()
 
-/obj/item/weapon/gun/portalgun/update_icon()
+/obj/item/gun/portalgun/update_icon()
 	icon_state = "portalgun[setting]"
 	item_state = "portalgun[setting]"
 
-/obj/item/weapon/gun/portalgun/proc/open_portal(var/proj_setting,var/turf/T,var/atom/A = null,var/mob/firer)
+/obj/item/gun/portalgun/proc/open_portal(var/proj_setting,var/turf/T,var/atom/A = null,var/mob/firer)
 	if(!T)
 		return
 
@@ -87,7 +87,7 @@
 	if(A && isliving(A))
 		new_portal.Crossed(A)
 
-/obj/item/weapon/gun/portalgun/proc/sync_portals()
+/obj/item/gun/portalgun/proc/sync_portals()
 	if(!blue_portal)
 		if(red_portal)
 			red_portal.overlays.len = 0

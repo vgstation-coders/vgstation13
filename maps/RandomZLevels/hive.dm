@@ -54,11 +54,11 @@
 	var/difficulty = DIFF_HARDCORE
 
 	var/static/reward_types = list(\
-	/obj/item/weapon/gun/energy/pulse_rifle,
-	/obj/item/weapon/gun/stickybomb,
-	/obj/item/weapon/gun/projectile/rocketlauncher/nikita,
-	/obj/item/weapon/cloakingcloak/hive,
-	/obj/item/weapon/invisible_spray,
+	/obj/item/gun/energy/pulse_rifle,
+	/obj/item/gun/stickybomb,
+	/obj/item/gun/projectile/rocketlauncher/nikita,
+	/obj/item/cloakingcloak/hive,
+	/obj/item/invisible_spray,
 	/obj/item/clothing/gloves/powerfist,
 	/obj/item/clothing/glasses/thermal/eyepatch
 	)
@@ -193,7 +193,7 @@
 ///////////////////////////////////////////****NARRATIONS****/////////////////////////////////////////////
 //Briefing
 
-/obj/item/weapon/photo/hive_map/New()
+/obj/item/photo/hive_map/New()
 	..()
 
 	img = icon('icons/effects/224x224.dmi', "hive_map")
@@ -223,10 +223,10 @@
 
 	for (var/obj/machinery/computer/communications/comm in machines)
 		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
-			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			var/obj/item/paper/intercept = new /obj/item/paper( comm.loc )
 			intercept.name = "paper- 'Hostile Spaceship Summary'"
 			intercept.info = summary_text
-			intercept.img = new /obj/item/weapon/photo/hive_map(src)
+			intercept.img = new /obj/item/photo/hive_map(src)
 
 			comm.messagetitle.Add("[command_name()] Status Summary")
 			comm.messagetext.Add(summary_text)
@@ -258,7 +258,7 @@
 	play_sound = 'sound/ambience/shipambience.ogg' //background noise
 
 ////////PAPERWORKS///////
-/obj/item/weapon/paper/hive/birthday_note
+/obj/item/paper/hive/birthday_note
 	name = "paper- 'Happy Birthday, Chechen'"
 	info = {"You only care about two things in your life - eating cakes and perving at Russian chicks, so we got you an appropriate present. Never change, you fat piece of shit.<br><br>
 
@@ -270,12 +270,12 @@
 //all info you need to find the marauder parts. if you ctrl+F the map for them you'll have 7 days of bad luck
 //lueduozhe = marauder in google-translate-mandarin
 
-/obj/item/weapon/paper/hive/marauder_lost
+/obj/item/paper/hive/marauder_lost
 	name = "paper- 'HOW THE HELL DID YOU LOSE AN ENTIRE LUEDUOZHE'"
 	info = {"Give me a single reason not to stick all of your retarded asses in the deprotonizer. Lueduozhe 1 is gone and there's a toy in its place. I demand answers.<br>
 	<i>Omar</i> <b>ID: 1C/1</b>"}
 
-/obj/item/weapon/paper/hive/marauder_rescue
+/obj/item/paper/hive/marauder_rescue
 	name = "paper- 'Re:Re:Re: The blueblood mech disappeared and Commander wants to deprotonize our asses'"
 	info = {"After concluding an investigation, I found out that the Lueduozhe was disassembled in Mech Bay, and its parts were shipped all over the station. I have an access to the mail trackers and got their location:<br><br>
 	<b>Chassis</b>: Kitchen in meat fridge<br>
@@ -294,27 +294,27 @@
 	<i>Amara</i> <b>ID: 222F/4</b>
 	"}
 
-/obj/item/weapon/paper/hive/fluff/unisex
+/obj/item/paper/hive/fluff/unisex
 	name = "paper- 'Re: Bathroom C is now unisex'"
 	info = {"Does this mean that we at DET no longer have a safe place to hide from Barb? Just do me a favor and fucking kill me.<br>
 	<i>Qun Lee</i>"}
 
-/obj/item/weapon/paper/hive/fluff/chain_letter
+/obj/item/paper/hive/fluff/chain_letter
 	name = "paper- 'Re:Fwd: Forward this to 5 people or DEMONS will invade your station and kill you'"
 	info = {"I'll see that your mail permissions are revoked, Todd. You're the laughing stock of the division. Do you seriously believe in that crap?<br>
 	<i>Szpindel</i>"}
 
-/obj/item/weapon/paper/hive/stickybomb
+/obj/item/paper/hive/stickybomb
 	name = "paper- 'Re:Re:Re:Re:Re:Re:Re:Re:Re: Minor adjustments to the stickybomb launcher'"
 	info = {"Again, I'm working in a tiny shed with shit for tools!! I'm not going to do anything until you move me to R&D-15.<br>
 	<i>Dan</i>"}
 
-/obj/item/weapon/paper/hive/nikita
+/obj/item/paper/hive/nikita
 	name = "paper- 'Is Nikita a male or female name?'"
 	info = {"Just got an email from ChanDE saying that apparently I ordered a \"Nikita\" 2 weeks ago (on New Years when we got shitfaced) and the shuttle is arriving tomorrow. The Consensus gives me mixed results and I really want to know the gender of this mail whore before it arrives<br>
 	<i>Yi Cheng</i> <b>ID: 12C/3"}
 
-/obj/item/weapon/paper/hive/shielding
+/obj/item/paper/hive/shielding
 	name = "paper- 'Are you a clumsy ass? Don't forget to grab a SASS'"
 	info = {"The supermatter power generator has claimed two engineer lives last week: Margat and Ivan. To prevent any further deaths, we have ordered
 	ten Spherical Anti-Supermatter Safeguard units from TianGong-5.<br>
@@ -322,7 +322,7 @@
 	touch the shard, the SASS will protect you from disintegration - once.<br><br>
 	<i>Cunningham</i> <b>ID: 2E/2</b>"}
 
-/obj/item/weapon/paper/hive/powerfist
+/obj/item/paper/hive/powerfist
 	name = "paper- 'Powerfists forbidden on board HangTianBao 1'"
 	info = {"Quanfen gloves, also known as "Powerfists" are now considered class 1 weaponry. Crewmembers have until <b>1-44-122-4</b> to give up their powerfists to classified security personnel. After that date, possession of a powerfist will be considered a major A-level offense, and will be prosecuted accordingly.<br>
 
@@ -848,7 +848,7 @@ var/list/hive_pylons = list()
 		.=..()
 
 //Rewards
-/obj/item/weapon/cloakingcloak/hive
+/obj/item/cloakingcloak/hive
 	name = "alien cloak"
 	desc = "Soft to the tough."
 

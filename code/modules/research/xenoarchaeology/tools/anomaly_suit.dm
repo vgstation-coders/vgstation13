@@ -7,7 +7,7 @@
 	item_state = "engspace_suit"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank)
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/bio_hood/anomaly
@@ -43,7 +43,7 @@
 	icon_state = "cespace_suit"
 	item_state = "cespace_suit"
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 100, rad = 100)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank)
 
 /obj/item/clothing/head/helmet/space/anomaly
 	name = "Excavation hood"

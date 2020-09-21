@@ -6,7 +6,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500, MAT_SILVER = 500)
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/jackhammer
+	build_path = /obj/item/pickaxe/jackhammer
 
 /datum/design/drill
 	name = "Mining Drill"
@@ -16,7 +16,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 6000, MAT_GLASS = 1000) //expensive, but no need for miners.
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/drill
+	build_path = /obj/item/pickaxe/drill
 
 /datum/design/plasmacutter
 	name = "Plasma Torch"
@@ -27,7 +27,7 @@
 	materials = list(MAT_IRON = 1500, MAT_GLASS = 500, MAT_GOLD = 500, MAT_PLASMA = 500)
 	reliability_base = 79
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/plasmacutter
+	build_path = /obj/item/pickaxe/plasmacutter
 
 /datum/design/plasmacutterkit
 	name = "Plasma Cutter Conversion kit"
@@ -48,7 +48,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_DIAMOND = 3000)
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/diamond
+	build_path = /obj/item/pickaxe/diamond
 
 /datum/design/drill_diamond
 	name = "Diamond Mining Drill"
@@ -59,7 +59,7 @@
 	materials = list(MAT_IRON = 3000, MAT_GLASS = 1000, MAT_DIAMOND = 3750) //Yes, a whole diamond is needed.
 	reliability_base = 79
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/drill/diamond
+	build_path = /obj/item/pickaxe/drill/diamond
 
 /datum/design/auto_ore
 	name = "Automatic Ore Loader"
@@ -70,7 +70,7 @@
 	materials = list(MAT_IRON = 1500, MAT_GLASS = 1000, MAT_SILVER = 200, MAT_GOLD = 200)
 	reliability_base = 79
 	category = "Mining"
-	build_path = /obj/item/weapon/storage/bag/ore/auto
+	build_path = /obj/item/storage/bag/ore/auto
 
 /datum/design/mesons
 	name = "Optical Meson Scanners"
@@ -90,7 +90,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 6000, MAT_GLASS = 1000)
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/excavationdrill
+	build_path = /obj/item/pickaxe/excavationdrill
 
 /datum/design/Dexcavationdrill
 	name = "Diamond Excavation Drill"
@@ -100,4 +100,4 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000, MAT_SILVER = 1000, MAT_DIAMOND = 750)
 	category = "Mining"
-	build_path = /obj/item/weapon/pickaxe/excavationdrill/adv
+	build_path = /obj/item/pickaxe/excavationdrill/adv

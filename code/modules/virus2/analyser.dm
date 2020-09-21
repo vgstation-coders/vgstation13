@@ -15,7 +15,7 @@
 
 	var/process_time = 5
 	var/minimum_growth = 100
-	var/obj/item/weapon/virusdish/dish = null
+	var/obj/item/virusdish/dish = null
 	var/last_scan_name = ""
 	var/last_scan_info = ""
 
@@ -24,20 +24,20 @@
 /obj/machinery/disease2/diseaseanalyser/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/diseaseanalyser,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
+		/obj/item/circuitboard/diseaseanalyser,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
 	)
 
 	RefreshParts()
 
 /obj/machinery/disease2/diseaseanalyser/RefreshParts()
 	var/scancount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/scanning_module))
 			scancount += SP.rating-1
 	minimum_growth = round((initial(minimum_growth) - (scancount * 6)))
 
@@ -56,13 +56,13 @@
 		return
 
 	if (dish)
-		if (istype(I,/obj/item/weapon/virusdish))
+		if (istype(I,/obj/item/virusdish))
 			to_chat(user, "<span class='warning'>There is already a dish in there. Alt+Click or perform the analysis to retrieve it first.</span>")
-		else if (istype(I,/obj/item/weapon/reagent_containers))
+		else if (istype(I,/obj/item/reagent_containers))
 			dish.attackby(I,user)
 	else
-		if (istype(I,/obj/item/weapon/virusdish))
-			var/obj/item/weapon/virusdish/D = I
+		if (istype(I,/obj/item/virusdish))
+			var/obj/item/virusdish/D = I
 			if (D.open)
 				visible_message("<span class='notice'>\The [user] inserts \the [I] in \the [src].</span>","<span class='notice'>You insert \the [I] in \the [src].</span>")
 				playsound(loc, 'sound/machines/click.ogg', 50, 1)
@@ -221,7 +221,7 @@
 	anim(target = src, a_icon = icon, flick_anim = "analyser-paper", sleeptime = 30)
 	visible_message("\The [src] prints a sheet of paper.")
 	spawn(10)
-		var/obj/item/weapon/paper/P = new(T)
+		var/obj/item/paper/P = new(T)
 		P.name = last_scan_name
 		P.info = last_scan_info
 		P.pixel_x = 8

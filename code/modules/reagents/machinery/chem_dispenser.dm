@@ -13,7 +13,7 @@
 	var/max_energy = 50
 	var/rechargerate = 2
 	var/amount = 30
-	var/obj/item/weapon/reagent_containers/container = null
+	var/obj/item/reagent_containers/container = null
 	var/beaker_height
 	var/recharged = 0
 	var/custom = 0
@@ -62,15 +62,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/chem_dispenser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -79,17 +79,17 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		T += M.rating-1
 	max_energy = initial(max_energy)+(T * 50 / 4)
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/Ma in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/Ma in component_parts)
 		T += Ma.rating-1
 	rechargerate = initial(rechargerate) + (T / 2)
 
 /*
-	for(var/obj/item/weapon/stock_parts/scanning_module/Ml in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/Ml in component_parts)
 		T += Ml.rating
 	//Who even knows what to use the scanning module for
 */
@@ -244,7 +244,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/proc/dispense_reagent(reagent, amount)
 	if (dispensable_reagents.Find(reagent) && container != null)
-		var/obj/item/weapon/reagent_containers/B = src.container
+		var/obj/item/reagent_containers/B = src.container
 		var/datum/reagents/R = B.reagents
 		if(!R)
 			if(!B.gcDestroyed)
@@ -265,7 +265,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 /obj/machinery/chem_dispenser/proc/detach()
 	if(container)
-		var/obj/item/weapon/reagent_containers/B = container
+		var/obj/item/reagent_containers/B = container
 		B.forceMove(loc)
 		container = null
 		update_icon()
@@ -284,9 +284,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	return ..()
 
 /obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
-	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
+	return istype(I, /obj/item/reagent_containers/glass) || istype(I, /obj/item/reagent_containers/food/drinks)
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
+/obj/machinery/chem_dispenser/attackby(var/obj/item/D as obj, var/mob/user as mob) //to be worked on
 
 	if(..())
 		return 1
@@ -342,9 +342,9 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 
 		var/image/overlay
 
-		if(istype(container, /obj/item/weapon/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/weapon/reagent_containers/glass/beaker/noreact))
+		if(istype(container, /obj/item/reagent_containers/glass/beaker/bluespace) || istype(container, /obj/item/reagent_containers/glass/beaker/noreact))
 			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_bluesp")
-		else if(istype(container, /obj/item/weapon/reagent_containers/food/drinks/soda_cans))
+		else if(istype(container, /obj/item/reagent_containers/food/drinks/soda_cans))
 			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_soda")
 		else
 			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
@@ -375,15 +375,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/brewer/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser/brewer,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/chem_dispenser/brewer,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 	RefreshParts()
 
@@ -404,15 +404,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/soda_dispenser/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/chem_dispenser/soda_dispenser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 	RefreshParts()
 
@@ -458,15 +458,15 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/booze_dispenser/New()
 	. = ..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/chem_dispenser/booze_dispenser,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 	RefreshParts()
 
@@ -497,7 +497,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/chem_dispenser/condiment/can_insert(obj/item/I)
-	return istype(I,/obj/item/weapon/reagent_containers/food/snacks) || istype(I,/obj/item/weapon/reagent_containers/food/condiment)
+	return istype(I,/obj/item/reagent_containers/food/snacks) || istype(I,/obj/item/reagent_containers/food/condiment)
 
 /obj/machinery/chem_dispenser/condiment/update_icon()
 	return //no overlays for this one, it takes special inputs

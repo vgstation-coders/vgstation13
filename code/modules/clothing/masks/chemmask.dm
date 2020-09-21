@@ -10,7 +10,7 @@
 //based on that reagent's custom_metabolism value, in order to avoid taking too much of a reagent just because that reagent
 //happens to metabolize more slowly than others.
 
-//Additionally, the chemical pack has an auxiliary chamber which can store any /obj/item/weapon/reagent_containers/glass item.
+//Additionally, the chemical pack has an auxiliary chamber which can store any /obj/item/reagent_containers/glass item.
 //While capped at the largest beaker size, currently 300u, this chamber offers more control over the way in which reagents
 //are administered from it. It defaults to a threshold-based system, in which it injects 10u of creatine when the user falls
 //below 10u of creatine in their body. However, the user can alter the settings and change it to a time-based system, change
@@ -84,7 +84,7 @@
 		H = loc
 	else
 		return
-	if (istype(H.back,/obj/item/weapon/reagent_containers/chempack))
+	if (istype(H.back,/obj/item/reagent_containers/chempack))
 		verbs += /obj/item/clothing/mask/chemmask/verb/set_tank_usage
 	else
 		verbs -= /obj/item/clothing/mask/chemmask/verb/set_tank_usage
@@ -159,8 +159,8 @@
 
 	if (!power)
 		var/mob/living/M = usr
-		if (istype(M.back,/obj/item/weapon/reagent_containers/chempack))
-			var/obj/item/weapon/reagent_containers/chempack/P = M.back
+		if (istype(M.back,/obj/item/reagent_containers/chempack))
+			var/obj/item/reagent_containers/chempack/P = M.back
 			if (P.safety)
 				to_chat(usr, "<span class='notice'>You activate \the [src].</span>")
 				power = 1
@@ -265,8 +265,8 @@
 	if (!can_use_verbs(usr))
 		return
 
-	var/obj/item/weapon/reagent_containers/chempack/P = usr.back
-	var/obj/item/weapon/reagent_containers/glass/B = P.beaker
+	var/obj/item/reagent_containers/chempack/P = usr.back
+	var/obj/item/reagent_containers/glass/B = P.beaker
 	var/beaker_threshold_reagents = B.get_reagent_ids()
 
 	var/N = input("Set the reagent for which the minimum threshold must be reached to cause \the [src] to administer more chemicals from the auxiliary beaker:","[src]") as null|anything in beaker_threshold_reagents
@@ -287,7 +287,7 @@
 
 /obj/item/clothing/mask/chemmask/proc/pack_check(mob/user) //Shuts off mask if the user is not wearing a chempack.
 	var/mob/living/M = user
-	if (!(istype(M) && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack)))
+	if (!(istype(M) && M.back && istype(M.back,/obj/item/reagent_containers/chempack)))
 		mask_shutdown(user)
 		to_chat(user, "<span class='notice'>\The [src] shuts off!</span>")
 		return 0
@@ -308,7 +308,7 @@
 		return 1
 
 /obj/item/clothing/mask/chemmask/proc/tank_volume_check(mob/user) //Alerts the user when the tank runs out of reagents. Does not alert them more than once per emptying, it must be refilled and then run dry again to alert them again.
-	var/obj/item/weapon/reagent_containers/chempack/P = user.back
+	var/obj/item/reagent_containers/chempack/P = user.back
 	if (P.is_empty() && firstalert_tank == 0 && tankactive)
 		firstalert_tank = 1
 		to_chat(user, "<span class='warning'>The chemical pack is empty!</span>")
@@ -316,13 +316,13 @@
 		firstalert_tank = 0
 
 /obj/item/clothing/mask/chemmask/proc/has_beaker(mob/user) //Checks whether there is a beaker in the pack, in order to determine whether to show the beaker-specific verbs.
-	if(user.back && istype(user.back, /obj/item/weapon/reagent_containers/chempack))
-		var/obj/item/weapon/reagent_containers/chempack/P = user.back
+	if(user.back && istype(user.back, /obj/item/reagent_containers/chempack))
+		var/obj/item/reagent_containers/chempack/P = user.back
 		return !isnull(P.beaker)
 
 /obj/item/clothing/mask/chemmask/proc/beaker_volume_check(mob/user) //Alerts the user when the auxiliary beaker is empty. Unlike the tank alert, this alert plays a sound, since the auxiliary beaker will most likely have higher-priority chems in it.
-	var/obj/item/weapon/reagent_containers/chempack/P = user.back
-	var/obj/item/weapon/reagent_containers/glass/B = P.beaker
+	var/obj/item/reagent_containers/chempack/P = user.back
+	var/obj/item/reagent_containers/glass/B = P.beaker
 	if (B.is_empty() && firstalert_beaker == 0)
 		firstalert_beaker = 1
 		playsound(src,'sound/mecha/internaldmgalarm.ogg', 100, 1)
@@ -366,7 +366,7 @@
 				beaker_volume_check(H)
 
 /obj/item/clothing/mask/chemmask/proc/inject(mob/user)
-	var/obj/item/weapon/reagent_containers/chempack/P = user.back
+	var/obj/item/reagent_containers/chempack/P = user.back
 	for(var/datum/reagent/R in P.reagents.reagent_list)
 		var/custom_injection_rate = (tank_injection_rate/(REAGENTS_METABOLISM/R.custom_metabolism))
 		if (R.custom_metabolism == 0.03)
@@ -376,8 +376,8 @@
 		P.reagents.trans_id_to(user, R.id, custom_injection_rate)
 
 /obj/item/clothing/mask/chemmask/proc/beakerinject(mob/user)
-	var/obj/item/weapon/reagent_containers/chempack/P = user.back
-	var/obj/item/weapon/reagent_containers/glass/B = P.beaker
+	var/obj/item/reagent_containers/chempack/P = user.back
+	var/obj/item/reagent_containers/glass/B = P.beaker
 	if (beaker_injection_method == INJECTION_METHOD_TIME)
 		B.reagents.trans_to(user, beaker_injection_rate)
 	else if (beaker_injection_method == INJECTION_METHOD_THRESHOLD)

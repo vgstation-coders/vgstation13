@@ -74,7 +74,7 @@
 				say("OUT OF RANGE")
 				return
 			else
-				var/obj/item/weapon/reagent_containers/glass/X = src.container
+				var/obj/item/reagent_containers/glass/X = src.container
 				var/datum/reagents/U = X.reagents
 				if(!U)
 					if(!X.gcDestroyed)

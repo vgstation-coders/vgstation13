@@ -118,7 +118,7 @@
 
 	if(istype(bundle, /datum/uplink_item/badass/bundle))
 		var/datum/stat/uplink_badass_bundle_stat/BAD = new
-		var/obj/item/weapon/storage/box/B = resulting_item
+		var/obj/item/storage/box/B = resulting_item
 		for(var/obj/O in B.contents)
 			BAD.contains.Add(O.type)
 		BAD.purchaser_key = ckey(user.mind.key)

@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/flamethrower
+/obj/item/gun/projectile/flamethrower
 	name = "flamethrower"
 	desc = "You are a firestarter!"
 	icon = 'icons/obj/flamethrower.dmi'
@@ -28,15 +28,15 @@
 	var/lit = 0	//on or off
 	var/operating = 0//cooldown
 	var/turf/previousturf = null
-	var/obj/item/weapon/weldingtool/weldtool = null
+	var/obj/item/weldingtool/weldtool = null
 	var/obj/item/device/assembly/igniter/igniter = null
-	var/obj/item/weapon/tank/plasma/ptank = null
+	var/obj/item/tank/plasma/ptank = null
 	var/window_open = 0
 
-/obj/item/weapon/gun/projectile/flamethrower/isHandgun()
+/obj/item/gun/projectile/flamethrower/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/flamethrower/Destroy()
+/obj/item/gun/projectile/flamethrower/Destroy()
 	if(weldtool)
 		qdel(weldtool)
 		weldtool = null
@@ -50,7 +50,7 @@
 	return
 
 
-/obj/item/weapon/gun/projectile/flamethrower/process()
+/obj/item/gun/projectile/flamethrower/process()
 	if(!lit)
 		processing_objects.Remove(src)
 		return null
@@ -64,7 +64,7 @@
 	return
 
 
-/obj/item/weapon/gun/projectile/flamethrower/update_icon()
+/obj/item/gun/projectile/flamethrower/update_icon()
 	overlays.len = 0
 	if(igniter)
 		overlays += image(icon = icon, icon_state = "+igniter[status]")
@@ -77,8 +77,8 @@
 		item_state = "flamethrower_0"
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if (istype(A, /obj/item/weapon/storage/backpack ))
+/obj/item/gun/projectile/flamethrower/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/storage/backpack ))
 		return
 
 	else if (A.loc == user.loc)
@@ -135,7 +135,7 @@
 		src.updateUsrDialog()
 		flamethrower_window(user)
 
-/obj/item/weapon/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
+/obj/item/gun/projectile/flamethrower/attackby(obj/item/W as obj, mob/user as mob)
 	if(user.stat || user.restrained() || user.lying)
 		return
 	if(W.is_wrench(user) && !status)//Taking this apart
@@ -170,7 +170,7 @@
 			update_icon()
 			return
 
-	if(istype(W,/obj/item/weapon/tank/plasma))
+	if(istype(W,/obj/item/tank/plasma))
 		if(ptank)
 			to_chat(user, "<span class='notice'>There appears to already be a plasma tank loaded in [src]!</span>")
 			return
@@ -190,21 +190,21 @@
 	return
 
 
-/obj/item/weapon/gun/projectile/flamethrower/attack_self(mob/user as mob)
+/obj/item/gun/projectile/flamethrower/attack_self(mob/user as mob)
 	if(user.stat || user.restrained() || user.lying)
 		return
 	window_open = 1
 	flamethrower_window(user)
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/proc/flamethrower_window(mob/user)
+/obj/item/gun/projectile/flamethrower/proc/flamethrower_window(mob/user)
 	if(window_open)
 		user.set_machine(src)
 		var/dat = text("<TT><B>Flamethrower (<A HREF='?src=\ref[src];light=1'>[lit ? "<font color='red'>Lit</font>" : "Unlit"]</a>)</B><BR>\n Tank Pressure: [ptank ? "[ptank.air_contents.return_pressure()]" : "No tank loaded."]<BR>\nPercentage to throw: <A HREF='?src=\ref[src];amount=-100'>-</A> <A HREF='?src=\ref[src];amount=-10'>-</A> <A HREF='?src=\ref[src];amount=-1'>-</A> [throw_percent] <A HREF='?src=\ref[src];amount=1'>+</A> <A HREF='?src=\ref[src];amount=10'>+</A> <A HREF='?src=\ref[src];amount=100'>+</A><BR>\n<A HREF='?src=\ref[src];remove=1'>Remove plasmatank</A> - <A HREF='?src=\ref[src];close=1'>Close</A></TT>")
 		user << browse(dat, "window=flamethrower;size=600x300")
 		onclose(user, "flamethrower", src)
 
-/obj/item/weapon/gun/projectile/flamethrower/Topic(href,href_list[])
+/obj/item/gun/projectile/flamethrower/Topic(href,href_list[])
 	if (..())
 		return
 	if(href_list["close"])
@@ -239,9 +239,9 @@
 		C.update_inv_hands()
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/full/New(var/loc)
+/obj/item/gun/projectile/flamethrower/full/New(var/loc)
 	..()
-	weldtool = new /obj/item/weapon/weldingtool(src)
+	weldtool = new /obj/item/weldingtool(src)
 	weldtool.status = 0
 	igniter = new /obj/item/device/assembly/igniter(src)
 	igniter.secured = 0
@@ -249,9 +249,9 @@
 	update_icon()
 	return
 
-/obj/item/weapon/gun/projectile/flamethrower/full/tank/New(var/loc)
+/obj/item/gun/projectile/flamethrower/full/tank/New(var/loc)
 	..()
-	ptank = new /obj/item/weapon/tank/plasma(src)
+	ptank = new /obj/item/tank/plasma(src)
 	var/datum/gas_mixture/gas_tank = ptank.air_contents
 	gas_tank.adjust_gas(GAS_PLASMA, 29.1)
 	update_icon()

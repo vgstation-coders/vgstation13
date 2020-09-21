@@ -20,10 +20,10 @@
 	one_part_set_only = 0
 	part_sets = list(
 		"Weapons"=list(
-		new /obj/item/weapon/gun/projectile/glock/lockbox(), \
-		new /obj/item/weapon/gun/projectile/automatic/vector/lockbox(), \
-		new /obj/item/weapon/gun/projectile/shotgun/pump(), \
-		new /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
+		new /obj/item/gun/projectile/glock/lockbox(), \
+		new /obj/item/gun/projectile/automatic/vector/lockbox(), \
+		new /obj/item/gun/projectile/shotgun/pump(), \
+		new /obj/item/gun/projectile/rocketlauncher/nanotrasen/lockbox(), \
 		),
 		"Single_ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
@@ -44,11 +44,11 @@
 		new /obj/item/ammo_storage/box/c45/practice(), \
 		new /obj/item/ammo_storage/box/c45/rubber(), \
 		new /obj/item/ammo_storage/box/a50(), \
-		new /obj/item/weapon/storage/box/lethalshells(), \
-		new /obj/item/weapon/storage/box/buckshotshells(), \
-		new /obj/item/weapon/storage/box/beanbagshells(), \
-		new /obj/item/weapon/storage/box/stunshells(), \
-		new /obj/item/weapon/storage/box/dartshells(), \
+		new /obj/item/storage/box/lethalshells(), \
+		new /obj/item/storage/box/buckshotshells(), \
+		new /obj/item/storage/box/beanbagshells(), \
+		new /obj/item/storage/box/stunshells(), \
+		new /obj/item/storage/box/dartshells(), \
 		new /obj/item/ammo_storage/box/flare(), \
 		),
 		"Magazines"=list(
@@ -79,7 +79,7 @@
 		new /obj/item/ammo_storage/magazine/a75/empty(), \
 		new /obj/item/ammo_storage/box/a75(), \
 		new /obj/item/ammo_casing/shotgun/dragonsbreath(), \
-		new /obj/item/weapon/storage/box/dragonsbreathshells(), \
+		new /obj/item/storage/box/dragonsbreathshells(), \
 		)
 	)
 
@@ -87,12 +87,12 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/ammolathe,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/ammolathe,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()

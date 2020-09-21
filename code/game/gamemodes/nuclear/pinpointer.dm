@@ -1,4 +1,4 @@
-/obj/item/weapon/pinpointer
+/obj/item/pinpointer
 	name = "pinpointer"
 	icon = 'icons/obj/device.dmi'
 	icon_state = "pinoff"
@@ -18,23 +18,23 @@
 	var/pinpointable = TRUE//is it being tracked by the pinpointer pinpointer
 var/list/pinpointerpinpointer_list = list()
 
-/obj/item/weapon/pinpointer/New()
+/obj/item/pinpointer/New()
 	..()
 	pinpointer_list.Add(src)
 	if (pinpointable == TRUE)
 		pinpointerpinpointer_list.Add(src)
 
-/obj/item/weapon/pinpointer/Destroy()
+/obj/item/pinpointer/Destroy()
 	fast_objects -= src
 	pinpointer_list.Remove(src)
 	pinpointerpinpointer_list.Remove(src)
 
 	..()
 
-/obj/item/weapon/pinpointer/acidable()
+/obj/item/pinpointer/acidable()
 	return FALSE
 
-/obj/item/weapon/pinpointer/attack_self()
+/obj/item/pinpointer/attack_self()
 	if(!active)
 		active = TRUE
 		workdisk()
@@ -47,16 +47,16 @@ var/list/pinpointerpinpointer_list = list()
 		to_chat(usr,"<span class='notice'>You deactivate \the [src]</span>")
 		fast_objects -= src
 
-/obj/item/weapon/pinpointer/proc/workdisk()
+/obj/item/pinpointer/proc/workdisk()
 	process()
 
-/obj/item/weapon/pinpointer/process()
+/obj/item/pinpointer/process()
 	if(target)
 		point_at(target)
 		return
 	point_at(nukedisk)
 
-/obj/item/weapon/pinpointer/proc/point_at(atom/target)
+/obj/item/pinpointer/proc/point_at(atom/target)
 	if(!active)
 		return
 	if(!target)
@@ -67,7 +67,7 @@ var/list/pinpointerpinpointer_list = list()
 	var/turf/L = get_turf(src)
 	update_icon(L,T)
 
-/obj/item/weapon/pinpointer/update_icon(turf/location,turf/target)
+/obj/item/pinpointer/update_icon(turf/location,turf/target)
 	if(!target || !location)
 		icon_state = "pinonnull"
 		return
@@ -85,7 +85,7 @@ var/list/pinpointerpinpointer_list = list()
 			if(16 to INFINITY)
 				icon_state = "pinonfar"
 
-/obj/item/weapon/pinpointer/examine(mob/user)
+/obj/item/pinpointer/examine(mob/user)
 	..()
 	if(watches_nuke)
 		var/bomb_timeleft
@@ -97,7 +97,7 @@ var/list/pinpointerpinpointer_list = list()
 		else
 			to_chat(user,"<span class='info'>No active nuclear devices detected.</span>")
 
-/obj/item/weapon/pinpointer/advpinpointer
+/obj/item/pinpointer/advpinpointer
 	name = "Advanced Pinpointer"
 	icon = 'icons/obj/device.dmi'
 	desc = "A larger version of the normal pinpointer, this unit features a helpful quantum entanglement detection system to locate various objects that do not broadcast a locator signal."
@@ -106,7 +106,7 @@ var/list/pinpointerpinpointer_list = list()
 	watches_nuke = FALSE
 	pinpointable = FALSE
 
-/obj/item/weapon/pinpointer/advpinpointer/attack_self()
+/obj/item/pinpointer/advpinpointer/attack_self()
 	if(!active)
 		active = TRUE
 		fast_objects += src
@@ -118,7 +118,7 @@ var/list/pinpointerpinpointer_list = list()
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 
-/obj/item/weapon/pinpointer/advpinpointer/process()
+/obj/item/pinpointer/advpinpointer/process()
 	switch(mode)
 		if(0)
 			point_at(nukedisk)
@@ -127,7 +127,7 @@ var/list/pinpointerpinpointer_list = list()
 		if(2)
 			point_at(target)
 
-/obj/item/weapon/pinpointer/advpinpointer/verb/toggle_mode()
+/obj/item/pinpointer/advpinpointer/verb/toggle_mode()
 	set category = "Object"
 	set name = "Toggle Pinpointer Mode"
 	set src in view(1)
@@ -199,13 +199,13 @@ var/list/pinpointerpinpointer_list = list()
 ///////////////////////
 
 
-/obj/item/weapon/pinpointer/nukeop
+/obj/item/pinpointer/nukeop
 	var/mode = 0	//Mode 0 locates disk, mode 1 locates the shuttle
 	var/obj/machinery/computer/shuttle_control/syndicate/home = null
 	pinpointable = FALSE
 
 
-/obj/item/weapon/pinpointer/nukeop/attack_self(mob/user as mob)
+/obj/item/pinpointer/nukeop/attack_self(mob/user as mob)
 	if(!active)
 		active = TRUE
 		if(!mode)
@@ -221,13 +221,13 @@ var/list/pinpointerpinpointer_list = list()
 		fast_objects -= src
 
 
-/obj/item/weapon/pinpointer/nukeop/process()
+/obj/item/pinpointer/nukeop/process()
 	if(mode)		//Check in case the mode changes while operating
 		worklocation()
 	else
 		workdisk()
 
-/obj/item/weapon/pinpointer/nukeop/workdisk()
+/obj/item/pinpointer/nukeop/workdisk()
 	if(bomb_set)	//If the bomb is set, lead to the shuttle
 		mode = 1	//Ensures worklocation() continues to work
 		worklocation()
@@ -236,7 +236,7 @@ var/list/pinpointerpinpointer_list = list()
 		return		//Get outta here
 	point_at(nukedisk)
 
-/obj/item/weapon/pinpointer/nukeop/proc/worklocation()
+/obj/item/pinpointer/nukeop/proc/worklocation()
 	if(!bomb_set)
 		mode = 0
 		workdisk()
@@ -250,14 +250,14 @@ var/list/pinpointerpinpointer_list = list()
 			return
 	point_at(home)
 
-/obj/item/weapon/pinpointer/pdapinpointer
+/obj/item/pinpointer/pdapinpointer
 	name = "pda pinpointer"
 	desc = "A pinpointer that has been illegally modified to track the PDA of a crewmember for malicious reasons."
 	var/used = FALSE
 	watches_nuke = FALSE
 	pinpointable = FALSE
 
-/obj/item/weapon/pinpointer/pdapinpointer/attack_self()
+/obj/item/pinpointer/pdapinpointer/attack_self()
 	if(!active)
 		active = TRUE
 		process()
@@ -269,10 +269,10 @@ var/list/pinpointerpinpointer_list = list()
 		icon_state = "pinoff"
 		to_chat(usr,"<span class='notice'>You deactivate the pinpointer</span>")
 
-/obj/item/weapon/pinpointer/pdapinpointer/process()
+/obj/item/pinpointer/pdapinpointer/process()
 	point_at(target)
 
-/obj/item/weapon/pinpointer/pdapinpointer/verb/select_pda()
+/obj/item/pinpointer/pdapinpointer/verb/select_pda()
 	set category = "Object"
 	set name = "Select pinpointer target"
 	set src in view(1)
@@ -302,7 +302,7 @@ var/list/pinpointerpinpointer_list = list()
 	used = TRUE
 
 
-/obj/item/weapon/pinpointer/pdapinpointer/examine(mob/user)
+/obj/item/pinpointer/pdapinpointer/examine(mob/user)
 	..()
 	if (target)
 		to_chat(user,"<span class='notice'>Tracking [target]</span>")
@@ -311,18 +311,18 @@ var/list/pinpointerpinpointer_list = list()
 //pinpointer pinpointers//
 //////////////////////////
 
-/obj/item/weapon/pinpointer/pinpointerpinpointer
+/obj/item/pinpointer/pinpointerpinpointer
 	name = "pinpointer pinpointer"
 	desc = "Where did that darn pinpointer go? Hmmm... well, good thing I have this trusty pinpointer pinpointer to find it."
 	watches_nuke = FALSE
 	pinpointable = FALSE
 
 
-/obj/item/weapon/pinpointer/pinpointerpinpointer/New()
+/obj/item/pinpointer/pinpointerpinpointer/New()
 	..()
 	overlays += "pinpointerpinpointer"
 
-/obj/item/weapon/pinpointer/pinpointerpinpointer/process()
+/obj/item/pinpointer/pinpointerpinpointer/process()
 	var/closest_distance = INFINITY
 	var/turf/L = get_turf(src)
 	for(var/atom/P in pinpointerpinpointer_list)
@@ -334,16 +334,16 @@ var/list/pinpointerpinpointer_list = list()
 	point_at(target)
 	..()
 
-/obj/item/weapon/pinpointer/implant
+/obj/item/pinpointer/implant
 	name = "implant pinpointer"
 	watches_nuke = FALSE
 
-/obj/item/weapon/pinpointer/implant/process()
+/obj/item/pinpointer/implant/process()
 	var/closest_distance = INFINITY
 	var/turf/this_pos = get_turf(src)
 	target = null
 	for(var/mob/living/dude in living_mob_list)
-		if(dude.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/weapon/implant/loyalty))
+		if(dude.z != this_pos.z || dude.stat == DEAD || !dude.is_implanted(/obj/item/implant/loyalty))
 			continue
 		var/turf/dude_pos = get_turf(dude)
 		var/distance = abs(cheap_pythag(this_pos.x - dude_pos.x, this_pos.y - dude_pos.y))

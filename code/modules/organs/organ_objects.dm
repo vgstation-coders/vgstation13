@@ -81,8 +81,8 @@
 	if(is_type_in_list(loc,safe_containers))
 		return
 
-	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
-		var/obj/item/weapon/reagent_containers/glass/jar/J = loc
+	if(istype(loc,/obj/item/reagent_containers/glass/jar))
+		var/obj/item/reagent_containers/glass/jar/J = loc
 		if(J.safe_holder())
 			return
 
@@ -189,7 +189,7 @@
 		C.cell = null
 
 /obj/item/organ/internal/heart/cell/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/weapon/cell) && !get_cell() && organ_data && user.drop_item(I, src))
+	if(istype(I, /obj/item/cell) && !get_cell() && organ_data && user.drop_item(I, src))
 		var/datum/organ/internal/heart/cell/C = organ_data
 		to_chat(user, "<span class = 'notice'>You place \the [I] into \the [src].</span>")
 		C.cell = I
@@ -424,7 +424,7 @@
 
 
 	user.drop_from_inventory(src)
-	var/obj/item/weapon/reagent_containers/food/snacks/organ/O = new(get_turf(src))
+	var/obj/item/reagent_containers/food/snacks/organ/O = new(get_turf(src))
 	O.name = name
 	O.icon_state = dead_icon ? dead_icon : icon_state
 

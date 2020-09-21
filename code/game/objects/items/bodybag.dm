@@ -12,7 +12,7 @@
 	qdel(src)
 
 
-/obj/item/weapon/storage/box/bodybags
+/obj/item/storage/box/bodybags
 	name = "body bag kit"
 	desc = "A kit specifically designed to fit bodybags."
 	icon_state = "bodybags" //Consider respriting this to a kit some day
@@ -20,7 +20,7 @@
 	max_combined_w_class = 21
 	can_only_hold = list("/obj/item/bodybag") //Needed due to the last two variables, figures
 
-/obj/item/weapon/storage/box/bodybags/New()
+/obj/item/storage/box/bodybags/New()
 		..()
 		new /obj/item/bodybag(src)
 		new /obj/item/bodybag(src)
@@ -49,7 +49,7 @@
 		S.use(5)
 		new /obj/structure/morgue(src.loc)
 		qdel(src)
-	else if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+	else if(istype(W, /obj/item/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user, maxlength=32)
 	else if(iswirecutter(W))
 		remove_label()

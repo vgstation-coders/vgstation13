@@ -11,17 +11,17 @@
 				break
 
 //Normally where the transaction itself takes place - logs the transation datums for future reference
-/obj/machinery/proc/scan_card(var/mob/user,var/obj/item/weapon/card/C)
+/obj/machinery/proc/scan_card(var/mob/user,var/obj/item/card/C)
 	return
 
 /obj/machinery/proc/connect_account(var/mob/user, var/obj/item/W)
-	if(istype(W, /obj/item/weapon/card))
+	if(istype(W, /obj/item/card))
 		//attempt to connect to a new db, and if that doesn't work then fail
 		if(!linked_db)
 			reconnect_database()
 		if(linked_db)
 			if(linked_account)
-				var/obj/item/weapon/card/I = W
+				var/obj/item/card/I = W
 				scan_card(I)
 			else
 				to_chat(user, "[bicon(src)]<span class='warning'>Unable to connect to linked account.</span>")

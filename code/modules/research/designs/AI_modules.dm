@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/targetted/safeguard
+	build_path = /obj/item/aiModule/targetted/safeguard
 
 /datum/design/onehuman_module
 	name = "Module Design (OneHuman)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/targetted/oneHuman
+	build_path = /obj/item/aiModule/targetted/oneHuman
 	locked = 1
 	req_lock_access = list(access_captain)
 
@@ -28,7 +28,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/standard/protectStation
+	build_path = /obj/item/aiModule/standard/protectStation
 
 /datum/design/notele_module
 	name = "Module Design (TeleporterOffline Module)"
@@ -38,7 +38,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/standard/teleporterOffline
+	build_path = /obj/item/aiModule/standard/teleporterOffline
 
 /datum/design/quarantine_module
 	name = "Module Design (Quarantine)"
@@ -48,7 +48,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/standard/quarantine
+	build_path = /obj/item/aiModule/standard/quarantine
 
 /datum/design/oxygen_module
 	name = "Module Design (OxygenIsToxicToHumans)"
@@ -58,7 +58,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/standard/oxygen
+	build_path = /obj/item/aiModule/standard/oxygen
 	locked = 1
 	req_lock_access = list(access_captain)
 
@@ -70,7 +70,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/freeform
+	build_path = /obj/item/aiModule/freeform
 
 /datum/design/reset_module
 	name = "Module Design (Reset)"
@@ -80,7 +80,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_GOLD = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/reset
+	build_path = /obj/item/aiModule/reset
 
 /datum/design/purge_module //tempted to lock this, have a vote on it - Comic
 	name = "Module Design (Purge)"
@@ -90,7 +90,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/purge
+	build_path = /obj/item/aiModule/purge
 
 /datum/design/freeformcore_module
 	name = "Core Module Design (Freeform)"
@@ -100,7 +100,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/freeform/core
+	build_path = /obj/item/aiModule/freeform/core
 
 /datum/design/asimov
 	name = "Core Module Design (Asimov)"
@@ -110,7 +110,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/asimov
+	build_path = /obj/item/aiModule/core/asimov
 
 /datum/design/paladin_module
 	name = "Core Module Design (P.A.L.A.D.I.N.)"
@@ -120,7 +120,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/paladin
+	build_path = /obj/item/aiModule/core/paladin
 
 /datum/design/tyrant_module
 	name = "Core Module Design (T.Y.R.A.N.T.)"
@@ -130,7 +130,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/tyrant
+	build_path = /obj/item/aiModule/core/tyrant
 	locked = 1
 	req_lock_access = list(access_captain)
 
@@ -142,7 +142,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/nanotrasen
+	build_path = /obj/item/aiModule/core/nanotrasen
 
 /datum/design/robocop
 	name = "Core Module Design (Robocop)"
@@ -152,7 +152,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/robocop
+	build_path = /obj/item/aiModule/core/robocop
 
 
 /datum/design/lazymov
@@ -163,4 +163,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20, MAT_DIAMOND = 100)
 	category = "Module Boards"
-	build_path = /obj/item/weapon/aiModule/core/lazymov
+	build_path = /obj/item/aiModule/core/lazymov

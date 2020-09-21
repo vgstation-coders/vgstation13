@@ -14,7 +14,7 @@
 	turns_per_move = 5
 	see_in_dark = 6
 	species = /mob/living/simple_animal/gorilla
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat
+	meat_type = /obj/item/reagent_containers/food/snacks/meat
 	response_help  = "pats"
 	response_disarm = "gently pushes aside"
 	response_harm   = "kicks"

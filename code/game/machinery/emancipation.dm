@@ -63,7 +63,7 @@
 
 
 /obj/machinery/emancipation_grill/pro_duck
-	obj_whitelist = list(/obj/item/weapon/bikehorn/rubberducky)
+	obj_whitelist = list(/obj/item/bikehorn/rubberducky)
 
 /obj/machinery/emancipation_grill/anti_duck
-	obj_blacklist = list(/obj/item/weapon/bikehorn/rubberducky)
+	obj_blacklist = list(/obj/item/bikehorn/rubberducky)

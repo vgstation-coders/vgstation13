@@ -48,7 +48,7 @@ var/list/existing_vaults = list()
 	var/obj/effect/true_spawn = pick(all_spawns)
 	all_spawns.Remove(true_spawn)
 
-	var/obj/item/weapon/melee/morningstar/catechizer/original = new(get_turf(true_spawn))
+	var/obj/item/melee/morningstar/catechizer/original = new(get_turf(true_spawn))
 	qdel(true_spawn)
 	for(var/obj/effect/S in all_spawns)
 		new /mob/living/simple_animal/hostile/mimic/crate/item(get_turf(S), original) //Make copies

@@ -215,14 +215,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	. = ..()
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if(istype(H.get_active_hand(),/obj/item/weapon/pickaxe))
+		if(istype(H.get_active_hand(),/obj/item/pickaxe))
 			attackby(H.get_active_hand(), H)
-		else if(istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe))
+		else if(istype(H.get_inactive_hand(),/obj/item/pickaxe))
 			attackby(H.get_inactive_hand(), H)
 
 	else if(istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
-		if(istype(R.module_active,/obj/item/weapon/pickaxe))
+		if(istype(R.module_active,/obj/item/pickaxe))
 			attackby(R.module_active, R)
 
 	else if(istype(AM,/obj/mecha))
@@ -256,7 +256,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	name = "\improper [mineral.display_name] deposit"
 	update_icon()
 
-/turf/unsimulated/mineral/attackby(obj/item/weapon/W, mob/user)
+/turf/unsimulated/mineral/attackby(obj/item/W, mob/user)
 
 	if(busy)
 		return
@@ -305,11 +305,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				X.dismantle_type = old_type
 				X.add_fingerprint(user)
 
-	if (istype(W, /obj/item/weapon/pickaxe))
+	if (istype(W, /obj/item/pickaxe))
 		if(user.loc != get_turf(user))
 			return //if we aren't in the tile we are located in, return
 
-		var/obj/item/weapon/pickaxe/P = W
+		var/obj/item/pickaxe/P = W
 
 		if(!istype(P))
 			return
@@ -392,7 +392,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 				if(I == 1)
 					switch(polarstar)
 						if(0)
-							new/obj/item/weapon/gun/energy/polarstar(src)
+							new/obj/item/gun/energy/polarstar(src)
 							polarstar = 1
 							visible_message("<span class='notice'>A gun was buried within!</span>")
 						if(1)
@@ -495,7 +495,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(prob(1))
 			switch(polarstar)
 				if(0)
-					new/obj/item/weapon/gun/energy/polarstar(src)
+					new/obj/item/gun/energy/polarstar(src)
 					polarstar = 1
 					visible_message("<span class='notice'>A gun was buried within!</span>")
 				if(1)
@@ -524,11 +524,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 /turf/unsimulated/mineral/proc/excavate_find(var/prob_clean = 0, var/datum/find/F)
 	//with skill or luck, players can cleanly extract finds
 	//otherwise, they come out inside a chunk of rock
-	var/obj/item/weapon/X
+	var/obj/item/X
 	if(prob_clean)
 		X = F.create_find(src)
 	else
-		X = new /obj/item/weapon/strangerock(src, F)
+		X = new /obj/item/strangerock(src, F)
 		if(!geologic_data)
 			geologic_data = new/datum/geosample(src)
 		geologic_data.UpdateNearbyArtifactInfo(src)
@@ -562,11 +562,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			if(4)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					new /obj/item/weapon/shard(loc)
+					new /obj/item/shard(loc)
 			if(5)
 				var/quantity = rand(1,3)
 				for(var/i=0, i<quantity, i++)
-					new /obj/item/weapon/shard/plasma(loc)
+					new /obj/item/shard/plasma(loc)
 
 /turf/unsimulated/mineral/dense
 	name = "dense rock"
@@ -631,13 +631,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 			gets_dug()
 	return
 
-/turf/unsimulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
+/turf/unsimulated/floor/asteroid/attackby(obj/item/W, mob/user)
 
 	if(!W || !user)
 		return 0
 
-	if (istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+	if (istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/used_digging = W //cast for dig speed and flags
 		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
 			return
 
@@ -734,11 +734,11 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		if(1.0)
 			gets_dug()
 
-/turf/simulated/floor/asteroid/attackby(obj/item/weapon/W, mob/user)
+/turf/simulated/floor/asteroid/attackby(obj/item/W, mob/user)
 	if(!W || !user)
 		return 0
-	if (istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/used_digging = W //cast for dig speed and flags
+	if (istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/used_digging = W //cast for dig speed and flags
 		if (get_turf(user) != user.loc) //if we aren't somehow on the turf we're in
 			return
 		if(!(used_digging.diggables & DIG_SOIL)) //if the pickaxe can't dig soil, we don't
@@ -968,13 +968,13 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	var/bump_reject = 0
 	if(istype(AM,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = AM
-		if((istype(H.get_active_hand(),/obj/item/weapon/pickaxe) || istype(H.get_inactive_hand(),/obj/item/weapon/pickaxe)) && src.stage == 1)
+		if((istype(H.get_active_hand(),/obj/item/pickaxe) || istype(H.get_inactive_hand(),/obj/item/pickaxe)) && src.stage == 1)
 			to_chat(H, "<span class='warning'>You don't think that's a good idea...</span>")
 			bump_reject = 1
 
 	else if(istype(AM,/mob/living/silicon/robot))
 		var/mob/living/silicon/robot/R = AM
-		if(istype(R.module_active, /obj/item/weapon/pickaxe))
+		if(istype(R.module_active, /obj/item/pickaxe))
 			to_chat(R, "<span class='warning'>You don't think that's a good idea...</span>")
 			bump_reject = 1
 		else if(istype(R.module_active, /obj/item/device/mining_scanner))
@@ -987,7 +987,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	if(((istype(I, /obj/item/device/mining_scanner)) || (istype(I, /obj/item/device/depth_scanner))) && stage == 1)
 		user.visible_message("<span class='notice'>You use [I] to locate where to cut off the chain reaction and attempt to stop it...</span>")
 		defuse()
-	if(istype(I, /obj/item/weapon/pickaxe))
+	if(istype(I, /obj/item/pickaxe))
 		src.activated_ckey = "[user.ckey]"
 		src.activated_name = "[user.name]"
 	..()
@@ -1040,7 +1040,7 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 		mineral.result_amount = 0
 		explosion(bombturf,1,2,5, adminlog = 0)
 	if(stage == 2) //Gibtonite deposit is now benign and extractable. Depending on how close you were to it blowing up before defusing, you get better quality ore.
-		var/obj/item/weapon/gibtonite/G = new /obj/item/weapon/gibtonite/(src)
+		var/obj/item/gibtonite/G = new /obj/item/gibtonite/(src)
 		if(det_time <= 0)
 			G.det_quality = 3
 			G.icon_state = "Gibtonite ore 3"

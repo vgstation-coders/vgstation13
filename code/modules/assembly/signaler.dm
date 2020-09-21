@@ -32,7 +32,7 @@
 		set_frequency(frequency)
 	return
 
-/obj/item/device/assembly/signaler/attackby(obj/item/weapon/W, mob/user)
+/obj/item/device/assembly/signaler/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = W
@@ -262,8 +262,8 @@
 		icon_state = "launcherbtt"
 		activated = 0
 
-/obj/item/device/assembly/signaler/signaler_button/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W,/obj/item/weapon/pen)) //Naming the button without having to use a labeler
+/obj/item/device/assembly/signaler/signaler_button/attackby(obj/item/W, mob/user)
+	if(istype(W,/obj/item/pen)) //Naming the button without having to use a labeler
 		var/n_name = copytext(sanitize(input(user, "What would you like to name this button?", "Button Labeling", null) as text|null), 1, MAX_NAME_LEN*3)
 		if(n_name && Adjacent(user) && !user.stat)
 			name = "[n_name]"

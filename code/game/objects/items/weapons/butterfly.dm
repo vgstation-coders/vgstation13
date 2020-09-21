@@ -1,4 +1,4 @@
-/obj/item/weapon/butterflyknife
+/obj/item/butterflyknife
 	name = "butterfly knife"
 	desc = "A folding type knife that stores the blade between its two handles when flipped."
 	icon = 'icons/obj/butterfly.dmi'
@@ -22,12 +22,12 @@
 	var/open = FALSE
 	var/knifetype = "plain"
 
-/obj/item/weapon/butterflyknife/attack_self(mob/user)
+/obj/item/butterflyknife/attack_self(mob/user)
 	if(user.stat || user.restrained())
 		return
 	fold(user)
 
-/obj/item/weapon/butterflyknife/proc/fold(mob/user)
+/obj/item/butterflyknife/proc/fold(mob/user)
 	open = !open
 	to_chat(user, "You flip \the [src] [open ? "open" : "closed"].")
 	icon_state = "Bflyknife_[knifetype][open ? "_open" : ""]"
@@ -39,10 +39,10 @@
 	attack_verb = open ? initial(attack_verb) : list("jabs", "pokes")
 	after_fold(user)
 
-/obj/item/weapon/butterflyknife/proc/after_fold(mob/user)
+/obj/item/butterflyknife/proc/after_fold(mob/user)
 	playsound(src,'sound/items/zippo_open.ogg', 50, 1)
 
-/obj/item/weapon/butterflyknife/viscerator
+/obj/item/butterflyknife/viscerator
 	desc = "A folding type knife that stores the blade between its two handles when flipped. It hums slightly."
 	icon_state = "Bflyknife_red"
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
@@ -51,26 +51,26 @@
 	var/last_spawned = 0
 	var/bug = /mob/living/simple_animal/hostile/viscerator/butterfly
 
-/obj/item/weapon/butterflyknife/viscerator/New()
+/obj/item/butterflyknife/viscerator/New()
 	..()
 	processing_objects.Add(src)
 
-/obj/item/weapon/butterflyknife/viscerator/Destroy()
+/obj/item/butterflyknife/viscerator/Destroy()
 	processing_objects -= src
 	..()
 
-/obj/item/weapon/butterflyknife/viscerator/process()
+/obj/item/butterflyknife/viscerator/process()
 	if(!bug && world.time >= 25 SECONDS + last_spawned)
 		rearm()
 
-/obj/item/weapon/butterflyknife/viscerator/proc/rearm()
+/obj/item/butterflyknife/viscerator/proc/rearm()
 	bug = initial(bug)
 	playsound(src, 'sound/items/healthanalyzer.ogg', 10, 1)
 	visible_message("<span class='notice'>\The [src] chimes.</span>")
 	var/turf/T = get_turf(src)
 	T.turf_animation('icons/effects/effects.dmi',"butterfly")
 
-/obj/item/weapon/butterflyknife/viscerator/preattack(var/mob/living/target, mob/user) //"Putting away" a butterfly early.
+/obj/item/butterflyknife/viscerator/preattack(var/mob/living/target, mob/user) //"Putting away" a butterfly early.
 	if(open && istype(target, /mob/living/simple_animal/hostile/viscerator/butterfly))
 		qdel(target)
 		rearm()
@@ -79,7 +79,7 @@
 	else
 		..()
 
-/obj/item/weapon/butterflyknife/viscerator/after_fold(mob/user)
+/obj/item/butterflyknife/viscerator/after_fold(mob/user)
 	if(open)
 		if(bug)
 			var/mob/living/simple_animal/hostile/viscerator/butterfly/B = new bug(get_turf(src))
@@ -94,7 +94,7 @@
 	//if closed, or no bug made
 	..()
 
-/obj/item/weapon/butterflyknife/viscerator/magic
+/obj/item/butterflyknife/viscerator/magic
 	name = "crystal butterfly knife"
 	desc = "A folding type knife that stores the blade between its two handles when flipped. It's made of colored crystals and is engraved with the number 553."
 	icon_state = "Bflyknife_wiz"
@@ -103,7 +103,7 @@
 	bug = /mob/living/simple_animal/hostile/viscerator/butterfly/magic
 	knifetype = "wiz"
 
-/obj/item/weapon/butterflyknife/viscerator/bunny
+/obj/item/butterflyknife/viscerator/bunny
 	name = "mechanical toybox"
 	desc = "A small box that rapidly assembles shaudy, barely working wind-up toys."
 	icon = 'icons/obj/butterfly.dmi'

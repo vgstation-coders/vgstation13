@@ -14,7 +14,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Rock sliver
 
-/obj/item/weapon/rocksliver
+/obj/item/rocksliver
 	name = "rock sliver"
 	desc = "A piece of rock precisely extracted. Must be ground into powder for further analysis."
 	icon = 'icons/obj/xenoarchaeology.dmi'
@@ -22,23 +22,23 @@
 	w_class = W_CLASS_TINY
 	var/datum/geosample/geological_data
 
-/obj/item/weapon/rocksliver/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/pen) || istype(W, /obj/item/device/flashlight/pen))
+/obj/item/rocksliver/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/pen) || istype(W, /obj/item/device/flashlight/pen))
 		set_tiny_label(user)
 	else
 		return ..()
 
-/obj/item/weapon/rocksliver/New()
+/obj/item/rocksliver/New()
 	. = ..()
 	icon_state = "sliver"
 	pixel_x = rand(-8, 8) * PIXEL_MULTIPLIER
 	pixel_y = rand(-8, 0) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/rocksliver/Destroy()
+/obj/item/rocksliver/Destroy()
 	geological_data = null
 	..()
 
-/obj/item/weapon/rocksliver/throw_impact(atom/hit_atom)
+/obj/item/rocksliver/throw_impact(atom/hit_atom)
 	var/turf/T = get_turf(src)
 	if (T && !istype(T, /turf/space))
 		visible_message("<span class='danger'>The rock sample shatters on impact!</span>")

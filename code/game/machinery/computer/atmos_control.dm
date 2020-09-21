@@ -2,7 +2,7 @@
 #define ACA_SCREEN_ADMINPANEL 2
 
 var/global/list/atmos_controllers = list()
-/obj/item/weapon/circuitboard/atmoscontrol
+/obj/item/circuitboard/atmoscontrol
 	name = "\improper Central Atmospherics Computer Circuitboard"
 	build_path = /obj/machinery/computer/atmoscontrol
 
@@ -12,10 +12,10 @@ var/global/list/atmos_controllers = list()
 	icon_state = "tank"
 	density = 1
 	anchored = 1.0
-	circuit = "/obj/item/weapon/circuitboard/atmoscontrol"
+	circuit = "/obj/item/circuitboard/atmoscontrol"
 	var/obj/machinery/alarm/current
 	var/list/filter=null
-	var/obj/item/weapon/card/id/log_in_id = null //the ID that's currently logged in
+	var/obj/item/card/id/log_in_id = null //the ID that's currently logged in
 	var/screen = ACA_SCREEN_DETAILSVIEW //the current screen in the UI
 	var/datum/airalarm_preset/selected_preset = null //stores the preset settings while they're being edited
 	machine_flags = EMAGGABLE
@@ -59,14 +59,14 @@ var/global/list/atmos_controllers = list()
 	return interact(user)
 
 /obj/machinery/computer/atmoscontrol/attackby(var/obj/item/I as obj, var/mob/user as mob)
-	if(istype(I, /obj/item/weapon/card/emag))
+	if(istype(I, /obj/item/card/emag))
 		return //lazy hackfix for the UI opening and not updating when using an emag with the UI closed
 	return ..()
 
 /obj/machinery/computer/atmoscontrol/interact(mob/user)
 	return ui_interact(user)
 
-/obj/machinery/computer/atmoscontrol/emag_act(var/mob/user as mob, var/obj/item/weapon/card/E as obj)
+/obj/machinery/computer/atmoscontrol/emag_act(var/mob/user as mob, var/obj/item/card/E as obj)
 	if(!emagged)
 		emagged = 1
 		spark(src, 1, FALSE)
@@ -282,11 +282,11 @@ var/global/list/atmos_controllers = list()
 		if(log_in_id || emagged)
 			return 1
 		var/mob/M = usr
-		var/obj/item/weapon/card/id/I = M.get_active_hand()
+		var/obj/item/card/id/I = M.get_active_hand()
 		if (istype(I, /obj/item/device/pda))
 			var/obj/item/device/pda/pda = I
 			I = pda.id
-		if (istype(I,/obj/item/weapon/card/emag))
+		if (istype(I,/obj/item/card/emag))
 			emag_act(I, usr)
 		if (I && istype(I))
 			log_in_id = I

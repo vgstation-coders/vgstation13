@@ -18,11 +18,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/monkey_recycler,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/monkey_recycler,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()
@@ -30,10 +30,10 @@
 /obj/machinery/monkey_recycler/RefreshParts()
 	var/manipcount = 0
 	var/lasercount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/manipulator))
 			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/micro_laser))
+		if(istype(SP, /obj/item/stock_parts/micro_laser))
 			lasercount += SP.rating
 	minimum_monkeys = max(1,4 - (manipcount/2)) //Tier 1 = 3, Tier 2 = 2, Tier 3 = 1
 	if(lasercount >= 3)
@@ -45,8 +45,8 @@
 	process_monkey(O, user)
 
 /obj/machinery/monkey_recycler/proc/process_monkey(var/obj/item/O, var/mob/user)
-	if(istype(O, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = O
+	if(istype(O, /obj/item/grab))
+		var/obj/item/grab/G = O
 		var/grabbed = G.affecting
 		if(ismonkey(grabbed))
 			var/mob/living/carbon/monkey/target = grabbed
@@ -90,7 +90,7 @@
 		to_chat(user, "<span class='notice'>The machine hisses loudly as it condenses the grinded monkey meat. After a moment, it dispenses a brand new monkey cube.</span>")
 		playsound(src, 'sound/machines/hiss.ogg', 50, 1)
 		grinded -= minimum_monkeys
-		new /obj/item/weapon/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
+		new /obj/item/reagent_containers/food/snacks/monkeycube/wrapped(src.loc)
 		to_chat(user, "<span class='notice'>The machine's display flashes that it has [grinded] monkeys worth of material left.</span>")
 	else
 		to_chat(user, "<span class='warning'>The machine needs at least 3 monkeys worth of material to produce a monkey cube. It only has [grinded].</span>")

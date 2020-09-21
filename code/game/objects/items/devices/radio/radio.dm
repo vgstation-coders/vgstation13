@@ -502,7 +502,7 @@
 	user.set_machine(src)
 	interact(user)
 
-/obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
 	updateDialog()

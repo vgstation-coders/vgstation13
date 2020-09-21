@@ -8,7 +8,7 @@
 	desc = "A vest designed to comfortably hold interchangable armor plates."
 	icon_state = "tactical_armor"
 	item_state = "tactical_armor"
-	var/obj/item/weapon/armor_plate/P
+	var/obj/item/armor_plate/P
 
 /obj/item/clothing/suit/armor/plate_carrier/get_armor(var/type)
 	var/armor_value = armor[type]
@@ -40,7 +40,7 @@
 
 /obj/item/clothing/suit/armor/plate_carrier/attackby(obj/item/W,mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/armor_plate))
+	if(istype(W, /obj/item/armor_plate))
 		if(P)
 			to_chat(user, "<span class = 'notice'>There is already \a [P] installed on \the [src].</span>")
 			return
@@ -70,7 +70,7 @@
 	item_state = "security_armor"
 	armor = list(melee = 10, bullet = 15, laser = 25, energy = 15, bomb = 5, bio = 0, rad = 0)
 
-/obj/item/weapon/armor_plate
+/obj/item/armor_plate
 	icon = 'icons/obj/items.dmi'
 	icon_state = "plate_1"
 	name = "ceramic armor plate"
@@ -80,7 +80,7 @@
 	armor_absorb = list(melee = 25, bullet = 5, laser = 60, energy = -5, bomb = 0, bio = 0, rad = 0)
 
 
-/obj/item/weapon/armor_plate/proc/receive_damage(var/type, var/amount)
+/obj/item/armor_plate/proc/receive_damage(var/type, var/amount)
 	if(type == BRUTE || type == BURN)
 		health -= amount
 	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
@@ -90,12 +90,12 @@
 		playsound(T, "shatter", 70, 1)
 		new /obj/effect/decal/cleanable/dirt(T)
 		if(prob(75))
-			var/obj/item/weapon/shard/shrapnel/S = new(T)
+			var/obj/item/shard/shrapnel/S = new(T)
 			S.name = "[src] shrapnel"
 			S.desc = "[S.desc] It looks like it's from \a [src]."
 		qdel(src)
 
-/obj/item/weapon/armor_plate/examine(var/mob/user)
+/obj/item/armor_plate/examine(var/mob/user)
 	..()
 	switch(health)
 		if(initial(health) to initial(health)/2)
@@ -105,7 +105,7 @@
 		if(initial(health)/4-1 to 0)
 			to_chat(user, "<span class = 'warning'>\The [src] is falling apart!</span>")
 
-/obj/item/weapon/armor_plate/bullet_resistant
+/obj/item/armor_plate/bullet_resistant
 	name = "plasteel armor plate"
 	desc = "An armor plate for use in plate carriers. This one is optimized for impact negation."
 	icon_state = "plate_2"
@@ -113,7 +113,7 @@
 	armor = list(melee = 50, bullet = 90, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	armor_absorb = list(melee = 25, bullet = 20, laser = 10, energy = -5, bomb = 35, bio = 0, rad = 0)
 
-/obj/item/weapon/armor_plate/laser_resistant
+/obj/item/armor_plate/laser_resistant
 	name = "ablated ceramite armor plate"
 	desc = "An armor plate for use in plate carriers. This one is optimized for heat dissipation."
 	icon_state = "plate_3"

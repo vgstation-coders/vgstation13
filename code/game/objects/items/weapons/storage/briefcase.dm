@@ -1,4 +1,4 @@
-/obj/item/weapon/storage/briefcase
+/obj/item/storage/briefcase
 	name = "briefcase"
 	desc = "It's made of AUTHENTIC faux-leather and has a price-tag still attached. Its owner must be a real professional."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/backpacks_n_bags.dmi', "right_hand" = 'icons/mob/in-hand/right/backpacks_n_bags.dmi')
@@ -13,23 +13,23 @@
 	max_combined_w_class = 16
 	hitsound = "swing_hit"
 
-/obj/item/weapon/storage/briefcase/centcomm
+/obj/item/storage/briefcase/centcomm
 	icon_state = "briefcase-centcomm"
 
-/obj/item/weapon/storage/briefcase/biogen
+/obj/item/storage/briefcase/biogen
 	desc = "Smells faintly of potato."
 
-/obj/item/weapon/storage/briefcase/suicide_act(mob/user)
+/obj/item/storage/briefcase/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'><b>[user] is smashing \his head inside the [src.name]! It looks like \he's  trying to commit suicide!</b></span>")
 	return (SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/storage/briefcase/centcomm/New()
+/obj/item/storage/briefcase/centcomm/New()
 	..()
-	new /obj/item/weapon/paper/demotion_key(src)
-	new /obj/item/weapon/paper/commendation_key(src)
-	new /obj/item/weapon/pen/NT(src)
+	new /obj/item/paper/demotion_key(src)
+	new /obj/item/paper/commendation_key(src)
+	new /obj/item/pen/NT(src)
 
-/obj/item/weapon/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/storage/briefcase/attack(mob/living/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>The [src] slips out of your hand and hits your head.</span>")
 		user.take_organ_damage(10)
@@ -38,7 +38,7 @@
 		return
 	..()
 
-/obj/item/weapon/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/storage/briefcase/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
 	if(!proximity_flag)
 		return
 
@@ -63,7 +63,7 @@
 			M.visible_message("<span class='warning'>\The [user] tried to knock \the [M] unconcious!</span>", "<span class='warning'>\The [user] tried to knock you unconcious!</span>")
 			M.eye_blurry += 3
 
-/obj/item/weapon/storage/briefcase/false_bottomed
+/obj/item/storage/briefcase/false_bottomed
 	name = "briefcase"
 	desc = "It's made of AUTHENTIC faux-leather and has a price-tag still attached. This one feels a bit heavier than normal for how much fits in it."
 	icon_state = "briefcase"
@@ -78,20 +78,20 @@
 	var/bottom_open = 0 //is the false bottom open?
 	var/obj/item/stored_item = null //what's in the false bottom. If it's a gun, we can fire it
 
-/obj/item/weapon/storage/briefcase/false_bottomed/Destroy()
+/obj/item/storage/briefcase/false_bottomed/Destroy()
 	if(stored_item)//since the stored_item isn't in the briefcase' contents we gotta remind the game to delete it here.
 		qdel(stored_item)
 		stored_item = null
 	..()
 
-/obj/item/weapon/storage/briefcase/false_bottomed/afterattack(var/atom/A, mob/user)
+/obj/item/storage/briefcase/false_bottomed/afterattack(var/atom/A, mob/user)
 	..()
-	if(stored_item && istype(stored_item, /obj/item/weapon/gun) && get_dist(A, user) > 1)
-		var/obj/item/weapon/gun/stored_gun = stored_item
+	if(stored_item && istype(stored_item, /obj/item/gun) && get_dist(A, user) > 1)
+		var/obj/item/gun/stored_gun = stored_item
 		stored_gun.Fire(A, user)
 	return
 
-/obj/item/weapon/storage/briefcase/false_bottomed/attackby(var/obj/item/item, mob/user)
+/obj/item/storage/briefcase/false_bottomed/attackby(var/obj/item/item, mob/user)
 	if(item.is_screwdriver(user))
 		if(!bottom_open && !busy_hunting)
 			to_chat(user, "You begin to hunt around the rim of \the [src]...")
@@ -122,7 +122,7 @@
 	else
 		return ..()
 
-/obj/item/weapon/storage/briefcase/false_bottomed/attack_hand(mob/user)
+/obj/item/storage/briefcase/false_bottomed/attack_hand(mob/user)
 	if(bottom_open && stored_item)
 		user.put_in_hands(stored_item)
 		to_chat(user, "You pull out \the [stored_item] from \the [src]'s false bottom.")
@@ -132,25 +132,25 @@
 		return ..()
 
 
-/obj/item/weapon/storage/briefcase/false_bottomed/smg
+/obj/item/storage/briefcase/false_bottomed/smg
 
 
-/obj/item/weapon/storage/briefcase/false_bottomed/smg/New()
+/obj/item/storage/briefcase/false_bottomed/smg/New()
 	..()
-	var/obj/item/weapon/gun/projectile/automatic/uzi/bigmag/SMG = new
+	var/obj/item/gun/projectile/automatic/uzi/bigmag/SMG = new
 	SMG.gun_flags &= ~AUTOMAGDROP //dont want to drop mags in null space, do we?
 	stored_item = SMG
 
-/obj/item/weapon/storage/briefcase/bees
+/obj/item/storage/briefcase/bees
 	var/released = FALSE
 
-/obj/item/weapon/storage/briefcase/bees/show_to(mob/user as mob)
+/obj/item/storage/briefcase/bees/show_to(mob/user as mob)
 	if(!released)
 		release(user)
 	..()
 
 //You can hit someone with the briefcase, and the bees will swarm at them
-/obj/item/weapon/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
+/obj/item/storage/briefcase/bees/afterattack(var/atom/target, var/mob/user, var/proximity_flag, var/click_parameters)
 	if(!proximity_flag)
 		return
 
@@ -161,7 +161,7 @@
 		release(target)
 
 //The bees will attack whoever opens the briefcase
-/obj/item/weapon/storage/briefcase/bees/proc/release(var/mob/user)
+/obj/item/storage/briefcase/bees/proc/release(var/mob/user)
 	released = TRUE
 	visible_message("<span class='danger'>A swarm of bees pours out of \the [src]!</span>")
 	var/mob/living/simple_animal/bee/swarm/BEES = new(get_turf(src))

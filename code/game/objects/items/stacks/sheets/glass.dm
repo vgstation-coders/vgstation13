@@ -16,14 +16,14 @@
 	var/glass_quality = 0.5 //Quality of a solar made from this
 	var/shealth = 5 //Health of a solar made from this
 	var/sname = "glass"
-	var/shard_type = /obj/item/weapon/shard
+	var/shard_type = /obj/item/shard
 	mat_type = MAT_GLASS
 	siemens_coefficient = 0 //does not conduct
 	perunit = CC_PER_SHEET_GLASS
 
 /obj/item/stack/sheet/glass/attackby(obj/item/W, mob/user)
 	if(issolder(W))
-		new /obj/item/weapon/circuitboard/blank(user.loc)
+		new /obj/item/circuitboard/blank(user.loc)
 		to_chat(user, "<span class='notice'>You fashion a blank circuitboard out of the glass.</span>")
 		W.playtoolsound(loc, 35)
 		src.use(1)
@@ -122,7 +122,7 @@
 	melt_temperature = MELTPOINT_STEEL + 500
 	glass_quality = 1.15 //Can you imagine a world in which plasmaglass is worse than rglass
 	shealth = 20
-	shard_type = /obj/item/weapon/shard/plasma
+	shard_type = /obj/item/shard/plasma
 
 /obj/item/stack/sheet/glass/plasmaglass/New(var/loc, var/amount=null)
 	recipes = plasmaglass_recipes
@@ -145,7 +145,7 @@
 	reinforced = 1
 	glass_quality = 1.3
 	shealth = 30
-	shard_type = /obj/item/weapon/shard/plasma
+	shard_type = /obj/item/shard/plasma
 
 /obj/item/stack/sheet/glass/plasmarglass/New(var/loc, var/amount=null)
 	recipes = plasmarglass_recipes

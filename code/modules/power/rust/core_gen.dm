@@ -70,12 +70,12 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/rust_core,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/micro_laser/high/ultra,
-		/obj/item/weapon/stock_parts/subspace/crystal,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/rust_core,
+		/obj/item/stock_parts/manipulator/nano/pico,
+		/obj/item/stock_parts/manipulator/nano/pico,
+		/obj/item/stock_parts/micro_laser/high/ultra,
+		/obj/item/stock_parts/subspace/crystal,
+		/obj/item/stock_parts/console_screen
 	)
 
 	if(ticker)
@@ -90,7 +90,7 @@ max volume of plasma storeable by the field = the total volume of a number of ti
 	if(stat & BROKEN || !powernet)
 		Shutdown()
 
-/obj/machinery/power/rust_core/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/power/rust_core/weldToFloor(var/obj/item/weldingtool/WT, mob/user)
 	if(owned_field)
 		to_chat(user, "<span class='warning'>Turn \the [src] off first!</span>")
 		return -1

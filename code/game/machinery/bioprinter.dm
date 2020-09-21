@@ -42,17 +42,17 @@
 		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/bioprinter,\
-		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/manipulator,\
-		/obj/item/weapon/stock_parts/matter_bin,\
-		/obj/item/weapon/stock_parts/matter_bin,\
-		/obj/item/weapon/stock_parts/micro_laser,\
-		/obj/item/weapon/stock_parts/micro_laser,\
-		/obj/item/weapon/stock_parts/micro_laser,\
-		/obj/item/weapon/stock_parts/scanning_module,\
-		/obj/item/weapon/stock_parts/scanning_module,\
-		/obj/item/weapon/stock_parts/console_screen\
+		/obj/item/circuitboard/bioprinter,\
+		/obj/item/stock_parts/manipulator,\
+		/obj/item/stock_parts/manipulator,\
+		/obj/item/stock_parts/matter_bin,\
+		/obj/item/stock_parts/matter_bin,\
+		/obj/item/stock_parts/micro_laser,\
+		/obj/item/stock_parts/micro_laser,\
+		/obj/item/stock_parts/micro_laser,\
+		/obj/item/stock_parts/scanning_module,\
+		/obj/item/stock_parts/scanning_module,\
+		/obj/item/stock_parts/console_screen\
 	)
 
 	RefreshParts()
@@ -89,15 +89,15 @@
 	else
 		visible_message("<span class='warning'>\The [src]'s error light flickers. It can't make new organs out of thin air, fill it up first.</span>")
 
-/obj/machinery/bioprinter/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/bioprinter/attackby(obj/item/W, mob/user)
 
 	// DNA sample from syringe.
-	if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/syringe))
+	if(!prints_prosthetics && istype(W, /obj/item/reagent_containers/syringe))
 		//Finish the feature first, muh immulsions
 //		to_chat(user, "<span class='notice'>You inject the blood sample into \the [src], but it simply drains away through a tube in the back.</span>.")
 		return
 	// Meat for biomass.
-	else if(!prints_prosthetics && istype(W, /obj/item/weapon/reagent_containers/food/snacks/meat))
+	else if(!prints_prosthetics && istype(W, /obj/item/reagent_containers/food/snacks/meat))
 		if(user.drop_item(W))
 			visible_message("<span class='notice'>\The [src] processes \the [W].</span>")
 			stored_matter += 50

@@ -16,7 +16,7 @@
 /datum/artifact_trigger/force/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
 	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+	var/obj/item/item = event_args[3]
 
 	if(context == "THROW" && item:throwforce >= FORCE_THRESHOLD)
 		Triggered(toucher, context, item)

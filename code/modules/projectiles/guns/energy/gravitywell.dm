@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/gravitywell	//-by Deity Link
+/obj/item/gun/gravitywell	//-by Deity Link
 	name = "\improper Gravity Well Gun"
 	desc = "Whoever created that gun had a taste for organized chaos..."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -15,16 +15,16 @@
 	var/charge = 100
 	var/maxcharge = 100//admins can varedit this var to 0 to allow the gun to fire non-stop. I decline all responsibilities for lag-induced server crashes caused by gravity wells spam.
 
-/obj/item/weapon/gun/gravitywell/examine(mob/user)
+/obj/item/gun/gravitywell/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>Charge = [charge]%</span>")
 
-/obj/item/weapon/gun/gravitywell/Destroy()
+/obj/item/gun/gravitywell/Destroy()
 	if(charge < maxcharge)
 		processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/gravitywell/process_chambered()
+/obj/item/gun/gravitywell/process_chambered()
 	if(in_chamber)
 		return 1
 	if(charge >= maxcharge)
@@ -35,7 +35,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/gravitywell/process()//it takes 100 seconds to recharge and be able to fire again
+/obj/item/gun/gravitywell/process()//it takes 100 seconds to recharge and be able to fire again
 	charge = min(maxcharge,charge+1)
 	if(charge >= maxcharge)
 		update_icon()
@@ -45,7 +45,7 @@
 		processing_objects.Remove(src)
 	return 1
 
-/obj/item/weapon/gun/gravitywell/update_icon()
+/obj/item/gun/gravitywell/update_icon()
 	if(charge == maxcharge)
 		icon_state = "gravitywell"
 		item_state = "gravitywell"
@@ -53,7 +53,7 @@
 		icon_state = "gravitywell0"
 		item_state = "gravitywell0"
 
-/obj/item/weapon/gun/gravitywell/failure_check(var/mob/living/carbon/human/M)
+/obj/item/gun/gravitywell/failure_check(var/mob/living/carbon/human/M)
 	if(prob(25))
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_LEFT_HAND, src)
 		M.adjustBruteLossByPart(rand(5, 20), LIMB_RIGHT_HAND, src)

@@ -1,4 +1,4 @@
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass
+/obj/item/reagent_containers/food/drinks/drinkingglass
 	name = "drinking glass"
 	desc = "Your standard drinking glass."
 	icon_state = "glass_empty"
@@ -13,7 +13,7 @@
 	melt_temperature = MELTPOINT_GLASS
 	w_type=RECYK_GLASS
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
+/obj/item/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
 	/*if(reagents.reagent_list.len > 1 )
 		icon_state = "glass_brown"
@@ -581,7 +581,7 @@
 				name = "glass of greyshirt vodka"
 				desc = "A questionable concoction of ingredients found within maintenance. Tastes just like you'd expect."
 			if(PINTPOINTER)
-				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
+				var/obj/item/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
 				if(reagents.last_ckey_transferred_to_this)
 					for(var/client/C in clients)
 						if(C.ckey == reagents.last_ckey_transferred_to_this)
@@ -778,46 +778,46 @@
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
+/obj/item/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
 	..()
 	if(reagents.get_master_reagent_id() == METABUDDY && istype(user) && user.client)
 		to_chat(user,"<span class='warning'>This one is made out to 'My very best friend, [user.client.ckey]'</span>")
 
 // for /obj/machinery/vending/sovietsoda
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/soda/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/soda/New()
 	..()
 	reagents.add_reagent(SODAWATER, 50)
 	on_reagent_change()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/cola/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/cola/New()
 	..()
 	reagents.add_reagent(COLA, 50)
 	on_reagent_change()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/toxinsspecial/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/toxinsspecial/New()
 	..()
 	reagents.add_reagent(TOXINSSPECIAL, 30)
 	on_reagent_change()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee
+/obj/item/reagent_containers/food/drinks/drinkingglass/irishcoffee
 	name = "irish coffee"
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/irishcoffee/New()
 	..()
 	reagents.add_reagent(IRISHCOFFEE, 50)
 	on_reagent_change()
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake
+/obj/item/reagent_containers/food/drinks/drinkingglass/sake
 	name = "glass of sake"
 
-/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/sake/New()
+/obj/item/reagent_containers/food/drinks/drinkingglass/sake/New()
 	..()
 	reagents.add_reagent(SAKE, 50)
 	on_reagent_change()
 
 // Cafe Stuff. Mugs act the same as drinking glasses, but they don't break when thrown.
 
-/obj/item/weapon/reagent_containers/food/drinks/mug
+/obj/item/reagent_containers/food/drinks/mug
 	name = "mug"
 	desc = "A simple mug."
 	icon = 'icons/obj/cafe.dmi'
@@ -828,7 +828,7 @@
 	volume = 30
 	starting_materials = list(MAT_IRON = 500)
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/on_reagent_change()
+/obj/item/reagent_containers/food/drinks/mug/on_reagent_change()
 
 	if (reagents.reagent_list.len > 0)
 		item_state = "mug_empty"
@@ -963,7 +963,7 @@
 		desc = "A simple mug."
 		return
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
+/obj/item/reagent_containers/food/drinks/mug/proc/make_reagent_overlay()
 	overlays.len = 0
 	icon_state ="mug_empty"
 	var/image/filling = image('icons/obj/reagentfillings.dmi', src, "mug")

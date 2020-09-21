@@ -134,41 +134,41 @@
 
 #define iswearingbluetag(A) istype(get_tag_armor(A), /obj/item/clothing/suit/tag/bluetag)
 
-#define isEmag(A) istype(A, /obj/item/weapon/card/emag)
+#define isEmag(A) istype(A, /obj/item/card/emag)
 
 #define istool(A) is_type_in_list(A, common_tools)
 
-#define iswelder(A) istype(A, /obj/item/weapon/weldingtool)
+#define iswelder(A) istype(A, /obj/item/weldingtool)
 
-#define isshovel(A) istype(A, /obj/item/weapon/pickaxe/shovel)
+#define isshovel(A) istype(A, /obj/item/pickaxe/shovel)
 
-#define ishammer(A) is_type_in_list(A, list(/obj/item/weapon/hammer, /obj/item/weapon/storage/toolbox))
+#define ishammer(A) is_type_in_list(A, list(/obj/item/hammer, /obj/item/storage/toolbox))
 
 #define iscablecoil(A) istype(A, /obj/item/stack/cable_coil)
 
-#define iscoin(A) is_type_in_list(A, list(/obj/item/weapon/coin, /obj/item/weapon/reagent_containers/food/snacks/chococoin))
+#define iscoin(A) is_type_in_list(A, list(/obj/item/coin, /obj/item/reagent_containers/food/snacks/chococoin))
 
-#define iswirecutter(A) istype(A, /obj/item/weapon/wirecutters)
+#define iswirecutter(A) istype(A, /obj/item/wirecutters)
 
 #define iswiretool(A) (iswirecutter(A) || ismultitool(A) || issignaler(A))
 
-#define isbikehorn(A) istype(A, /obj/item/weapon/bikehorn)
+#define isbikehorn(A) istype(A, /obj/item/bikehorn)
 
-#define isbanana(A) istype(A, /obj/item/weapon/reagent_containers/food/snacks/grown/banana)
+#define isbanana(A) istype(A, /obj/item/reagent_containers/food/snacks/grown/banana)
 
-#define isgun(A) istype(A, /obj/item/weapon/gun)
+#define isgun(A) istype(A, /obj/item/gun)
 
-#define ispowercell(A) istype(A, /obj/item/weapon/cell)
+#define ispowercell(A) istype(A, /obj/item/cell)
 
 #define ismultitool(A) istype(A, /obj/item/device/multitool)
 
-#define iscrowbar(A) istype(A, /obj/item/weapon/crowbar)
+#define iscrowbar(A) istype(A, /obj/item/crowbar)
 
-#define issolder(A) istype(A, /obj/item/weapon/solder)
+#define issolder(A) istype(A, /obj/item/solder)
 
-#define issocketwrench(A) istype(A, /obj/item/weapon/wrench/socket)
+#define issocketwrench(A) istype(A, /obj/item/wrench/socket)
 
-#define isswitchtool(A) istype(A, /obj/item/weapon/switchtool)
+#define isswitchtool(A) istype(A, /obj/item/switchtool)
 
 #define isglasssheet(A) istype(A, /obj/item/stack/sheet/glass)
 
@@ -184,11 +184,11 @@
 
 #define iswindow(A) (istype(A, /obj/structure/window))
 
-#define isgripper(G) (istype(G, /obj/item/weapon/gripper))
+#define isgripper(G) (istype(G, /obj/item/gripper))
 
-#define isholyweapon(I) (istype(I, /obj/item/weapon/nullrod) || istype(I, /obj/item/weapon/gun/hookshot/whip/vampkiller))
+#define isholyweapon(I) (istype(I, /obj/item/nullrod) || istype(I, /obj/item/gun/hookshot/whip/vampkiller))
 
-#define isholyprotection(I) (istype(I, /obj/item/weapon/nullrod))
+#define isholyprotection(I) (istype(I, /obj/item/nullrod))
 
 #define isAPC(A) istype(A, /obj/machinery/power/apc)
 
@@ -208,9 +208,9 @@
 
 #define ismecha(A) (istype(A, /obj/mecha))
 
-#define isID(A) (istype(A, /obj/item/weapon/card/id))
+#define isID(A) (istype(A, /obj/item/card/id))
 
-#define isRoboID(A) (istype(A, /obj/item/weapon/card/robot))
+#define isRoboID(A) (istype(A, /obj/item/card/robot))
 
 #define isPDA(A) (istype(A, /obj/item/device/pda))
 
@@ -220,11 +220,11 @@
 
 #define hasanvil(H) (isturf(H) && (locate(/obj/item/anvil) in H))
 
-#define ishoe(O) (is_type_in_list(O, list(/obj/item/weapon/minihoe, /obj/item/weapon/kitchen/utensil/fork)))
+#define ishoe(O) (is_type_in_list(O, list(/obj/item/minihoe, /obj/item/kitchen/utensil/fork)))
 
 #define isbeam(I) (istype(I, /obj/item/projectile/beam) || istype(I, /obj/effect/beam))
 
-#define isbelt(O) (istype(O, /obj/item/weapon/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
+#define isbelt(O) (istype(O, /obj/item/storage/belt) || istype(O, /obj/item/red_ribbon_arm))
 
 #define isrig(O) (istype(O, /obj/item/clothing/suit/space/rig))
 

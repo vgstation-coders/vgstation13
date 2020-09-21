@@ -20,13 +20,13 @@
 /turf/simulated/shuttle/wall/shuttle_rotate(angle) //delete this when autosmooth is added
 	src.transform = turn(src.transform, angle)
 
-/turf/simulated/shuttle/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/shuttle/wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/solder) && bullet_marks)
+		var/obj/item/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		S.playtoolsound(loc, 100)

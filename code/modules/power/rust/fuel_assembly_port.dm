@@ -5,7 +5,7 @@
 	icon = 'icons/obj/machines/rust.dmi'
 	icon_state = "port2"
 	density = FALSE
-	var/obj/item/weapon/fuel_assembly/cur_assembly
+	var/obj/item/fuel_assembly/cur_assembly
 	var/busy = 0
 	anchored = 1
 	ghost_read = 0
@@ -14,7 +14,7 @@
 	var/has_electronics = 0 // 0 - none, bit 1 - circuitboard, bit 2 - wires
 
 /obj/machinery/rust_fuel_assembly_port/attackby(var/obj/item/I, var/mob/user)
-	if(istype(I,/obj/item/weapon/fuel_assembly) && !opened)
+	if(istype(I,/obj/item/fuel_assembly) && !opened)
 		if(cur_assembly)
 			to_chat(user, "<span class='warning'>There is already a fuel rod assembly in there!</span>")
 		else

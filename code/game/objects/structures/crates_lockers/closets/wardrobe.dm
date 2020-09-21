@@ -68,8 +68,8 @@
 		/obj/item/clothing/head/chaplain_hood,
 		/obj/item/clothing/suit/holidaypriest,
 		/obj/item/clothing/under/wedding/bride_white,
-		/obj/item/weapon/storage/backpack/cultpack,
-		/obj/item/weapon/storage/fancy/candle_box = 2,
+		/obj/item/storage/backpack/cultpack,
+		/obj/item/storage/fancy/candle_box = 2,
 	)
 
 
@@ -226,8 +226,8 @@
 		/obj/item/clothing/under/rank/pharma = 2,
 		/obj/item/clothing/shoes/white = 2,
 		/obj/item/clothing/suit/storage/labcoat/chemist = 2,
-		/obj/item/weapon/storage/backpack/messenger/chem,
-		/obj/item/weapon/storage/backpack/satchel_chem,
+		/obj/item/storage/backpack/messenger/chem,
+		/obj/item/storage/backpack/satchel_chem,
 	)
 
 
@@ -253,7 +253,7 @@
 		/obj/item/clothing/under/rank/geneticist = 2,
 		/obj/item/clothing/shoes/white = 2,
 		/obj/item/clothing/suit/storage/labcoat/genetics = 2,
-		/obj/item/weapon/storage/backpack/satchel_gen,
+		/obj/item/storage/backpack/satchel_gen,
 	)
 
 
@@ -265,10 +265,10 @@
 /obj/structure/closet/wardrobe/virology_white/atoms_to_spawn()
 	return list(
 		/obj/item/clothing/monkeyclothes/doctor = 2,
-		/obj/item/weapon/storage/backpack/messenger/viro,
-		/obj/item/weapon/storage/backpack/satchel_vir,
-		/obj/item/weapon/book/manual/virology_encyclopedia,
-		/obj/item/weapon/book/manual/virology_guide,
+		/obj/item/storage/backpack/messenger/viro,
+		/obj/item/storage/backpack/satchel_vir,
+		/obj/item/book/manual/virology_encyclopedia,
+		/obj/item/book/manual/virology_guide,
 		/obj/item/device/antibody_scanner = 2,
 		/obj/item/clothing/suit/storage/labcoat/virologist = 2,
 		/obj/item/clothing/under/rank/virologist = 2,

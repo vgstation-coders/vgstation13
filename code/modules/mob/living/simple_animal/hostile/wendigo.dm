@@ -31,7 +31,7 @@
 	attacktext = "bites"
 	attack_sound = 'sound/weapons/bite.ogg'
 	meat_amount = 1 //Only one piece of meat
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/wendigo
 	var/list/names = list() //List of names of the people it's eaten
 	var/consumes = 0 //How many people it has eaten
 	speak_chance = 15

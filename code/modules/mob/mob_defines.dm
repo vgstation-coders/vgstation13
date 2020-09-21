@@ -145,17 +145,17 @@
 	var/lastKnownIP = null
 
 	//Tank used as internals
-	var/obj/item/weapon/tank/internal = null
+	var/obj/item/tank/internal = null
 
 	//Active storage item (i.e. the backpack or cardboard box that you're looking inside of)
-	var/obj/item/weapon/storage/s_active = null
+	var/obj/item/storage/s_active = null
 
 	//Inventory
 
 	var/active_hand = 1 //Current active hand. Contains an index of the held_items list
 	var/list/obj/item/held_items = list(null, null) //Contains items held in hands
 
-	var/obj/item/weapon/back = null
+	var/obj/item/back = null
 	var/obj/item/clothing/mask/wear_mask = null
 
 	var/seer = 0 // Legacy Cult

@@ -46,7 +46,7 @@
 	melee_damage_upper = 18
 
 	corpse = /obj/effect/landmark/corpse/diona
-	items_to_drop = list(/obj/item/weapon/spear)
+	items_to_drop = list(/obj/item/spear)
 
 /mob/living/simple_animal/hostile/humanoid/diona/junkie //based on a true story
 	name = "diona chemist"
@@ -65,7 +65,7 @@
 	melee_damage_upper = 12
 
 	corpse = /obj/effect/landmark/corpse/diona/junkie
-	items_to_drop = list(/obj/item/weapon/hatchet, /obj/item/weapon/hatchet)
+	items_to_drop = list(/obj/item/hatchet, /obj/item/hatchet)
 
 /mob/living/simple_animal/hostile/humanoid/diona/junkie/AttackingTarget() //Dual wielding hatchets ftw
 	target.attack_animal(src)
@@ -80,7 +80,7 @@
 
 /obj/effect/landmark/corpse/diona/junkie
 	corpsesuit = /obj/item/clothing/suit/storage/labcoat/chemist
-	corpseback = /obj/item/weapon/reagent_containers/chempack
+	corpseback = /obj/item/reagent_containers/chempack
 	corpseshoes = /obj/item/clothing/shoes/swat
 	corpsegloves = /obj/item/clothing/gloves/swat
 

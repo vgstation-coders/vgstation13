@@ -46,8 +46,8 @@
 	size = SIZE_TINY
 	stop_automated_movement_when_pulled = 0
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach
-	var/egg_type = /obj/item/weapon/reagent_containers/food/snacks/roach_eggs
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/roach
+	var/egg_type = /obj/item/reagent_containers/food/snacks/roach_eggs
 
 	var/last_laid_eggs = 0
 
@@ -110,7 +110,7 @@
 	//(A food item must not be roach eggs, and must have some nutriment)
 	//When food is used for egg-laying, some of its nutriment is swapped for toxins
 	//This means that after a while, the food's nutriment is replaced with toxins, and the food item can no longer be used for egg-laying
-	for(var/obj/item/weapon/reagent_containers/food/F in loc)
+	for(var/obj/item/reagent_containers/food/F in loc)
 		if(istype(F, egg_type))
 			continue
 		if(!F.reagents || !F.reagents.has_reagent(NUTRIMENT))
@@ -250,7 +250,7 @@
 		last_laid_eggs = world.time
 		return
 
-	var/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/E = new egg_type(get_turf(src))
+	var/obj/item/reagent_containers/food/snacks/roach_eggs/E = new egg_type(get_turf(src))
 
 	E.layer = layer //If we're hiding, the eggs are hidden too
 	E.plane = plane
@@ -266,13 +266,13 @@
 		last_laid_eggs = world.time - 60 SECONDS //If roaches can't breed, they lay eggs slower.
 
 /mob/living/simple_animal/cockroach/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/newspaper))
+	if(istype(W, /obj/item/newspaper))
 		user.visible_message("<span class='danger'>[user] swats \the [src] with \the [W]!</span>", "<span class='danger'>You swat \the [src] with \the [W].</span>")
 		W.desc = "[initial(W.desc)] <span class='notice'>There is a splattered [src] on the back.</span>"
 
 		adjustBruteLoss(5)
-	else if(istype(W, /obj/item/weapon/plantspray/pests))
-		var/obj/item/weapon/plantspray/pests/P = W
+	else if(istype(W, /obj/item/plantspray/pests))
+		var/obj/item/plantspray/pests/P = W
 		if(P.use(1))
 			to_chat(user, "You spray \the [src] with \the [P].")
 			playsound(loc, 'sound/effects/spray3.ogg', 50, 1, -6)

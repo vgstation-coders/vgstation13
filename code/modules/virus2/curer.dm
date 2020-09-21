@@ -5,21 +5,21 @@
 	var/curing
 	var/virusing
 
-	var/obj/item/weapon/reagent_containers/container = null
+	var/obj/item/reagent_containers/container = null
 
 /obj/machinery/computer/curer/attackby(var/obj/item/I as obj, var/mob/user as mob)
 	if(I.is_screwdriver(user))
 		return ..(I,user)
-	if(istype(I,/obj/item/weapon/reagent_containers))
+	if(istype(I,/obj/item/reagent_containers))
 		var/mob/living/carbon/C = user
 		if(!container)
 			if(C.drop_item(I, src))
 				container = I
-	if(istype(I,/obj/item/weapon/virusdish))
+	if(istype(I,/obj/item/virusdish))
 		if(virusing)
 			to_chat(user, "<b>The pathogen materializer is still recharging..")
 			return
-		var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
+		var/obj/item/reagent_containers/glass/beaker/product = new(src.loc)
 
 		var/list/data = list("viruses"=null,"blood_DNA"=null,"blood_type"=null,"resistances"=null,"trace_chem"=null,"virus2"=list(),"antibodies"=0)
 		data["virus2"] |= I:virus2
@@ -100,8 +100,8 @@
 	return
 
 
-/obj/machinery/computer/curer/proc/createcure(var/obj/item/weapon/reagent_containers/container)
-	var/obj/item/weapon/reagent_containers/glass/beaker/product = new(src.loc)
+/obj/machinery/computer/curer/proc/createcure(var/obj/item/reagent_containers/container)
+	var/obj/item/reagent_containers/glass/beaker/product = new(src.loc)
 
 	var/datum/reagent/blood/B = locate() in container.reagents.reagent_list
 

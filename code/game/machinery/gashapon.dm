@@ -11,15 +11,15 @@
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
 /obj/machinery/gashapon/attackby(var/obj/O as obj, var/mob/user as mob)
-	if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	if (is_type_in_list(O, list(/obj/item/coin/, /obj/item/reagent_containers/food/snacks/chococoin)))
 		if(user.drop_item(O, src))
 			user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.</span>", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
 			src.visible_message("<span class='notice'>[src] clicks softly.</span>")
 			sleep(rand(10,15))
 			src.visible_message("<span class='notice'>[src] dispenses a capsule!</span>")
-			new /obj/item/weapon/capsule(src.loc)
-			if(istype(O, /obj/item/weapon/coin/))
-				var/obj/item/weapon/coin/real_coin = O
+			new /obj/item/capsule(src.loc)
+			if(istype(O, /obj/item/coin/))
+				var/obj/item/coin/real_coin = O
 				if(real_coin.string_attached)
 					if(prob(30))
 						to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled the coin out before [src] could swallow it.</SPAN>")
@@ -29,31 +29,31 @@
 						qdel(O)
 			else
 				qdel(O)
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/customizable/candy/coin))
 		to_chat(user, "<span class='rose'>That coin is smudgy and oddly soft, you don't think that would work.</span>")
 		return
 	else
 		return ..()
 
 
-/obj/item/weapon/capsule
+/obj/item/capsule
 	name = "capsule"
 	desc = "A capsule from a gashapon machine. What are you waiting for? Open it!"
 	icon = 'icons/obj/gashapon.dmi'
 	icon_state = "capsule"
 	item_state = "capsule"
 
-/obj/item/weapon/capsule/New()
+/obj/item/capsule/New()
 	..()
 	icon_state = "capsule[rand(1,12)]"
 	pixel_x = rand(-10,10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10,10) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/capsule/ex_act()
+/obj/item/capsule/ex_act()
 	qdel(src)
 	return
 
-/obj/item/weapon/capsule/attack_self(mob/M as mob)
+/obj/item/capsule/attack_self(mob/M as mob)
 	var/capsule_prize = pick(
 		/obj/item/toy/gasha/greyshirt,
 		/obj/item/toy/gasha/greytide,

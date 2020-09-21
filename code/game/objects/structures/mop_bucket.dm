@@ -34,10 +34,10 @@
 		icon_state = "mopbucket"
 
 /obj/structure/mopbucket/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/mop))
+	if(istype(W, /obj/item/mop))
 		return 0
 	return ..()
-/obj/structure/mopbucket/mop_act(obj/item/weapon/mop/M, mob/user as mob)
+/obj/structure/mopbucket/mop_act(obj/item/mop/M, mob/user as mob)
 	if (istype(M))
 		if (src.reagents.total_volume >= 1)
 			if(M.reagents.total_volume >= 25)

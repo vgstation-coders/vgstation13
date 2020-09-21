@@ -934,8 +934,8 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/attackby(var/obj/item/I, var/mob/living/user)
 	user.do_attack_animation(src, I)
 	user.delayNextAttack(10)
-	if (istype(I, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = I
+	if (istype(I, /obj/item/grab))
+		var/obj/item/grab/G = I
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		qdel(I)
@@ -1000,8 +1000,8 @@ steam.start() -- spawns the effect
 		return
 	user.delayNextAttack(10)
 	user.do_attack_animation(src, C)
-	if (istype(C, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = C
+	if (istype(C, /obj/item/grab))
+		var/obj/item/grab/G = C
 		G.affecting.forceMove(src.loc)
 		visible_message("<span class='warning'>[G.assailant] smashes [G.affecting] through \the [src].</span>")
 		qdel(C)

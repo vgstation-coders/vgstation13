@@ -2,7 +2,7 @@
 #define FROM_BOX 1
 #define MAGAZINE 2 //the gun takes a magazine into gun storage
 
-/obj/item/weapon/gun/projectile
+/obj/item/gun/projectile
 	desc = "A classic revolver. Uses .357 ammo."
 	name = "revolver"
 	icon_state = "revolver"
@@ -30,10 +30,10 @@
 	var/scoped //a reference to a scope object
 	var/list/refuse = list() //made to store spent casings in chamber
 
-/obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
+/obj/item/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
 	return TRUE
 
-/obj/item/weapon/gun/projectile/New()
+/obj/item/gun/projectile/New()
 	..()
 	if(mag_type && load_method == 2 && spawn_mag)
 		stored_magazine = new mag_type(src)
@@ -46,7 +46,7 @@
 	return
 
 //loads the argument magazine into the gun
-/obj/item/weapon/gun/projectile/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
+/obj/item/gun/projectile/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, text2path(mag_type)) && !stored_magazine)
 		for(var/T in mag_type_restricted)
 			if (istype(AM, T))
@@ -67,7 +67,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/proc/RemoveMag(var/mob/user)
+/obj/item/gun/projectile/proc/RemoveMag(var/mob/user)
 	if(stored_magazine)
 		if(jammed)
 			to_chat(usr, "<span class='notice'>You begin unjamming \the [name]...</span>")
@@ -104,7 +104,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/verb/force_removeMag()
+/obj/item/gun/projectile/verb/force_removeMag()
 	set name = "Remove Ammo / Magazine"
 	set category = "Object"
 	set src in range(0)
@@ -117,7 +117,7 @@
 		to_chat(usr, "<span class='rose'>There is no magazine to remove!</span>")
 
 
-/obj/item/weapon/gun/projectile/proc/chamber_round() //Only used by guns with magazine
+/obj/item/gun/projectile/proc/chamber_round() //Only used by guns with magazine
 	if(chambered || !stored_magazine)
 		return 0
 	else
@@ -128,7 +128,7 @@
 			return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/proc/getAC()
+/obj/item/gun/projectile/proc/getAC()
 	var/obj/item/ammo_casing/AC = null
 	if(mag_type && load_method == 2)
 		AC = chambered
@@ -136,7 +136,7 @@
 		AC = loaded[1] //load next casing.
 	return AC
 
-/obj/item/weapon/gun/projectile/process_chambered()
+/obj/item/gun/projectile/process_chambered()
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
 		return 1 //{R}
@@ -162,7 +162,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/projectile/can_discharge()
+/obj/item/gun/projectile/can_discharge()
 	var/obj/item/ammo_casing/AC = getAC()
 	if(in_chamber)
 		return 1
@@ -172,7 +172,7 @@
 		return 1
 
 
-/obj/item/weapon/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/projectile/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/gun_part/silencer) && src.gun_flags & SILENCECOMP && !silenced)
 
 		if(user.drop_item(A, src)) //put the silencer into the gun
@@ -252,7 +252,7 @@
 			to_chat(user, "<span class='notice'>You destroy the strange magwell attachment.</span>")
 			return
 
-/obj/item/weapon/gun/projectile/attack_self(mob/user as mob)
+/obj/item/gun/projectile/attack_self(mob/user as mob)
 	if (target)
 		return ..()
 	if (loaded.len || stored_magazine || refuse.len)
@@ -290,7 +290,7 @@
 	else
 		to_chat(user, "<span class='warning'>Nothing loaded in \the [src]!</span>")
 
-/obj/item/weapon/gun/projectile/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/projectile/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	..()
 	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags & AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
 		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
@@ -302,7 +302,7 @@
 
 	return
 
-/obj/item/weapon/gun/projectile/examine(mob/user)
+/obj/item/gun/projectile/examine(mob/user)
 	..()
 	if(conventional_firearm)
 		to_chat(user, "<span class='info'>Has [getAmmo()] round\s remaining.</span>")
@@ -315,7 +315,7 @@
 	if(istype(silenced, /obj/item/gun_part/silencer))
 		to_chat(user, "<span class='warning'>It has a suppressor attached to the barrel.</span>")
 
-/obj/item/weapon/gun/projectile/proc/getAmmo()
+/obj/item/gun/projectile/proc/getAmmo()
 	var/bullets = 0
 	if(mag_type && load_method == 2)
 		if(stored_magazine)
@@ -328,13 +328,13 @@
 				bullets += 1
 	return bullets
 
-/obj/item/weapon/gun/projectile/proc/getSpent()
+/obj/item/gun/projectile/proc/getSpent()
 	var/spent = 0
 	for(var/obj/item/ammo_casing/AC in refuse)
 		spent += 1
 	return spent
 
-/obj/item/weapon/gun/projectile/failure_check(var/mob/living/carbon/human/M)
+/obj/item/gun/projectile/failure_check(var/mob/living/carbon/human/M)
 	if(load_method == MAGAZINE && prob(3))
 		jammed = 1
 		M.visible_message("*click click*", "<span class='danger'>*click*</span>")
@@ -342,7 +342,7 @@
 		return 0
 	return ..()
 
-/obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
+/obj/item/gun/projectile/proc/RemoveAttach(var/mob/user)
 	if(silenced)
 		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
 		user.put_in_hands(silenced)
@@ -362,7 +362,7 @@
 				qdel(A)
 	update_icon()
 
-/obj/item/weapon/gun/projectile/verb/RemoveAttachments()
+/obj/item/gun/projectile/verb/RemoveAttachments()
 	set name = "Remove Attachments"
 	set category = "Object"
 	set src in usr

@@ -15,10 +15,10 @@
 	not_next_to=list()
 
 	decorations=list(
-		/obj/item/weapon/screwdriver=2,
-		/obj/item/weapon/crowbar=2,
+		/obj/item/screwdriver=2,
+		/obj/item/crowbar=2,
 		/obj/item/stack/metal=1,
-		/obj/item/weapon/wrench=2
+		/obj/item/wrench=2
 	)
 
 /layout_rule/place_adjacent/workbench/wooden
@@ -69,15 +69,15 @@
 		/turf/simulated/wall=100
 	)
 	spawntypes = list(
-		/obj/item/weapon/pickaxe/silver					=4,
-		/obj/item/weapon/pickaxe/drill					=4,
-		/obj/item/weapon/pickaxe/jackhammer				=4,
-		/obj/item/weapon/pickaxe/diamond				=3,
-		/obj/item/weapon/pickaxe/drill/diamond			=3,
-		/obj/item/weapon/pickaxe/gold					=3,
-		/obj/item/weapon/pickaxe/plasmacutter/accelerator			=2,
+		/obj/item/pickaxe/silver					=4,
+		/obj/item/pickaxe/drill					=4,
+		/obj/item/pickaxe/jackhammer				=4,
+		/obj/item/pickaxe/diamond				=3,
+		/obj/item/pickaxe/drill/diamond			=3,
+		/obj/item/pickaxe/gold					=3,
+		/obj/item/pickaxe/plasmacutter/accelerator			=2,
 		/obj/structure/closet/syndicate/resources		=2,
-		/obj/item/weapon/melee/energy/sword/pirate		=1,
+		/obj/item/melee/energy/sword/pirate		=1,
 		/obj/mecha/working/ripley/mining				=1
 	)
 	complex_max_size=2

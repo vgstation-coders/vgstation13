@@ -130,8 +130,8 @@ var/list/impact_master = list()
 	if(!isliving(atarget))
 		return 0
 
-	if(istype(shot_from,/obj/item/weapon/gun))
-		var/obj/item/weapon/gun/G = shot_from
+	if(istype(shot_from,/obj/item/gun))
+		var/obj/item/gun/G = shot_from
 		G.bullet_hitting(src,atarget)
 
 	// FUCK mice. - N3X
@@ -215,8 +215,8 @@ var/list/impact_master = list()
 		// close distance, actually RAISE the chance to hit.
 		var/distance = get_dist(starting,loc)
 		var/miss_modifier = -30
-		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
-			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
+		if (istype(shot_from,/obj/item/gun))	//If you aim at someone beforehead, it'll hit more often.
+			var/obj/item/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
 				miss_modifier += -30
 		if(istype(src, /obj/item/projectile/beam/lightning)) //Lightning is quite accurate

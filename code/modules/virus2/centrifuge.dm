@@ -44,9 +44,9 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/centrifuge,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/centrifuge,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -54,8 +54,8 @@
 
 /obj/machinery/disease2/centrifuge/RefreshParts()
 	var/manipcount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/manipulator))
 			manipcount += SP.rating
 	base_efficiency = 1 + upgrade_efficiency * (manipcount-2)
 
@@ -70,7 +70,7 @@
 	if (.)
 		return
 
-	if (!istype(I, /obj/item/weapon/reagent_containers/glass/beaker/vial))
+	if (!istype(I, /obj/item/reagent_containers/glass/beaker/vial))
 		return FALSE
 
 	special = CENTRIFUGE_LIGHTSPECIAL_OFF
@@ -78,7 +78,7 @@
 		to_chat(user, "<span class='warning'>You cannot add or remove vials while the centrifuge is active. Turn it Off first.</span>")
 		return TRUE
 
-	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = I
+	var/obj/item/reagent_containers/glass/beaker/vial/vial = I
 	for (var/i = 1 to vial_data.len)
 		var/isolation_centrifuge_vial/vial_datum = vial_data[i]
 		if (vial_datum != null)
@@ -96,7 +96,7 @@
 	return TRUE
 
 
-/obj/machinery/disease2/centrifuge/proc/vial_has_antibodies(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial)
+/obj/machinery/disease2/centrifuge/proc/vial_has_antibodies(var/obj/item/reagent_containers/glass/beaker/vial/vial)
 	if (vial == null)
 		return FALSE
 
@@ -160,7 +160,7 @@
 			add_vial_sprite(vial_datum.vial, i)
 
 
-/obj/machinery/disease2/centrifuge/proc/add_vial_sprite(var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/slot)
+/obj/machinery/disease2/centrifuge/proc/add_vial_sprite(var/obj/item/reagent_containers/glass/beaker/vial/vial, var/slot)
 	var/spin = on
 	if(stat & (BROKEN|NOPOWER))
 		spin = FALSE
@@ -186,7 +186,7 @@
 			if (vial_datum == null)
 				continue
 
-			var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
+			var/obj/item/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
 			playsound(loc, 'sound/machines/click.ogg', 50, 1)
 			vial.forceMove(loc)
 			vial_data[i] = null
@@ -350,7 +350,7 @@
 		if (!isliving(user))
 			return TRUE
 
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = user.get_active_hand()
+		var/obj/item/reagent_containers/glass/beaker/vial/vial = user.get_active_hand()
 		if (!istype(vial))
 			to_chat(user,"<span class='warning'>You're not holding a vial!</span>")
 			return TRUE
@@ -387,7 +387,7 @@
 		if (vial_datum == null)
 			return TRUE
 
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
+		var/obj/item/reagent_containers/glass/beaker/vial/vial = vial_datum.vial
 		vial.forceMove(loc)
 		if (Adjacent(usr))
 			usr.put_in_hands(vial)
@@ -537,7 +537,7 @@
 	anim(target = src, a_icon = icon, flick_anim = "centrifuge_print_color", sleeptime = 10, col = D.color)
 	visible_message("\The [src] prints a growth dish.")
 	spawn(10)
-		var/obj/item/weapon/virusdish/dish = new/obj/item/weapon/virusdish(src.loc)
+		var/obj/item/virusdish/dish = new/obj/item/virusdish(src.loc)
 		dish.contained_virus = D.getcopy()
 		dish.contained_virus.infectionchance = dish.contained_virus.infectionchance_base
 		dish.update_icon()
@@ -559,7 +559,7 @@
 	..()
 
 
-/obj/machinery/disease2/centrifuge/proc/insert_vial(var/index, var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial, var/mob/user)
+/obj/machinery/disease2/centrifuge/proc/insert_vial(var/index, var/obj/item/reagent_containers/glass/beaker/vial/vial, var/mob/user)
 	var/isolation_centrifuge_vial/vial_datum = new
 	vial_data[index] = vial_datum
 	vial_datum.vial = vial
@@ -583,7 +583,7 @@
 
 
 /isolation_centrifuge_vial
-	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial
+	var/obj/item/reagent_containers/glass/beaker/vial/vial
 	var/isolation_centrifuge_task/current_task
 	var/valid_for_antibodies
 

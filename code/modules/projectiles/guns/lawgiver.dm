@@ -95,14 +95,14 @@
 	activation_message = "DOUBLE WHAMMY."
 
 var/list/lawgiver_modes = list(
-	/obj/item/weapon/gun/lawgiver = newlist(
+	/obj/item/gun/lawgiver = newlist(
 		/datum/lawgiver_mode/stun,
 		/datum/lawgiver_mode/laser,
 		/datum/lawgiver_mode/rapid_fire,
 		/datum/lawgiver_mode/flare,
 		/datum/lawgiver_mode/ricochet,
 	),
-	/obj/item/weapon/gun/lawgiver/demolition = newlist(
+	/obj/item/gun/lawgiver/demolition = newlist(
 		/datum/lawgiver_mode/stun,
 		/datum/lawgiver_mode/laser,
 		/datum/lawgiver_mode/rapid_fire,
@@ -112,7 +112,7 @@ var/list/lawgiver_modes = list(
 	),
 )
 
-/obj/item/weapon/gun/lawgiver
+/obj/item/gun/lawgiver
 	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET written in small print on its barreling."
 	name = "lawgiver"
 	icon_state = "lawgiver"
@@ -136,33 +136,33 @@ var/list/lawgiver_modes = list(
 	var/damage_multiplier = 1
 	var/has_played_alert = 0
 
-/obj/item/weapon/gun/lawgiver/proc/available_modes()
+/obj/item/gun/lawgiver/proc/available_modes()
 	return lawgiver_modes[type]
 
-/obj/item/weapon/gun/lawgiver/isHandgun()
+/obj/item/gun/lawgiver/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/lawgiver/New()
+/obj/item/gun/lawgiver/New()
 	..()
 	magazine = new magazine_type(src)
-	verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+	verbs -= /obj/item/gun/lawgiver/verb/erase_DNA_sample
 	firing_mode_datum = available_modes()[1]
 	update_icon()
 
-/obj/item/weapon/gun/lawgiver/Destroy()
+/obj/item/gun/lawgiver/Destroy()
 	if(magazine)
 		qdel(magazine)
 		magazine = null
 	..()
 
-/obj/item/weapon/gun/lawgiver/GetVoice()
+/obj/item/gun/lawgiver/GetVoice()
 	var/the_name = "The [name]"
 	return the_name
 
-/obj/item/weapon/gun/lawgiver/equipped(M as mob, hand)
+/obj/item/gun/lawgiver/equipped(M as mob, hand)
 	update_icon()
 
-/obj/item/weapon/gun/lawgiver/update_icon()
+/obj/item/gun/lawgiver/update_icon()
 	overlays.len = 0
 	if(magazine)
 		item_state = "[initial(icon_state)]1"
@@ -188,7 +188,7 @@ var/list/lawgiver_modes = list(
 		H.update_inv_hands()
 
 
-/obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample()
+/obj/item/gun/lawgiver/verb/submit_DNA_sample()
 	set name = "Submit DNA sample"
 	set category = "Object"
 	set src in usr
@@ -198,17 +198,17 @@ var/list/lawgiver_modes = list(
 	if(!dna_profile)
 		dna_profile = H.dna.unique_enzymes
 		to_chat(usr, "<span class='notice'>You submit a DNA sample to \the [src].</span>")
-		verbs += /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
-		verbs -= /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
+		verbs += /obj/item/gun/lawgiver/verb/erase_DNA_sample
+		verbs -= /obj/item/gun/lawgiver/verb/submit_DNA_sample
 		update_icon()
 		return 1
 
-/obj/item/weapon/gun/lawgiver/AltClick()
+/obj/item/gun/lawgiver/AltClick()
 	if(submit_DNA_sample())
 		return
 	return ..()
 
-/obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample()
+/obj/item/gun/lawgiver/verb/erase_DNA_sample()
 	set name = "Erase DNA sample"
 	set category = "Object"
 	set src in usr
@@ -219,13 +219,13 @@ var/list/lawgiver_modes = list(
 		if(dna_profile == H.dna.unique_enzymes)
 			dna_profile = null
 			to_chat(usr, "<span class='notice'>You erase the DNA profile from \the [src].</span>")
-			verbs += /obj/item/weapon/gun/lawgiver/verb/submit_DNA_sample
-			verbs -= /obj/item/weapon/gun/lawgiver/verb/erase_DNA_sample
+			verbs += /obj/item/gun/lawgiver/verb/submit_DNA_sample
+			verbs -= /obj/item/gun/lawgiver/verb/erase_DNA_sample
 			update_icon()
 		else
 			self_destruct(H)
 
-/obj/item/weapon/gun/lawgiver/proc/self_destruct(mob/user)
+/obj/item/gun/lawgiver/proc/self_destruct(mob/user)
 	var/req_access = list(access_security)
 	if(can_access(user.GetAccess(),req_access))
 		say("ERROR: DNA PROFILE DOES NOT MATCH.")
@@ -237,7 +237,7 @@ var/list/lawgiver_modes = list(
 	explosion(user, -1, 0, 2)
 	qdel(src)
 
-/obj/item/weapon/gun/lawgiver/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
+/obj/item/gun/lawgiver/proc/LoadMag(var/obj/item/ammo_storage/magazine/AM, var/mob/user)
 	if(istype(AM, /obj/item/ammo_storage/magazine/lawgiver) && !magazine)
 		if(user)
 			if(user.drop_item(AM, src))
@@ -251,7 +251,7 @@ var/list/lawgiver_modes = list(
 		return 1
 	return 0
 
-/obj/item/weapon/gun/lawgiver/proc/RemoveMag(var/mob/user)
+/obj/item/gun/lawgiver/proc/RemoveMag(var/mob/user)
 	if(magazine)
 		magazine.forceMove(get_turf(src.loc))
 		if(user)
@@ -263,7 +263,7 @@ var/list/lawgiver_modes = list(
 		return 1
 	return 0
 
-/obj/item/weapon/gun/lawgiver/proc/activate_mode(var/datum/lawgiver_mode/mode)
+/obj/item/gun/lawgiver/proc/activate_mode(var/datum/lawgiver_mode/mode)
 	set waitfor = FALSE
 
 	firing_mode_datum = mode
@@ -277,7 +277,7 @@ var/list/lawgiver_modes = list(
 	sleep(0.3 SECONDS)
 	say(mode.activation_message)
 
-/obj/item/weapon/gun/lawgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
+/obj/item/gun/lawgiver/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(speech.speaker != loc || speech.frequency || !dna_profile)
 		return
 	var/mob/living/carbon/human/H = loc
@@ -291,11 +291,11 @@ var/list/lawgiver_modes = list(
 				return
 
 
-/obj/item/weapon/gun/lawgiver/process_chambered()
+/obj/item/gun/lawgiver/process_chambered()
 	if(dna_check())
 		return chamber_round()
 
-/obj/item/weapon/gun/lawgiver/proc/rapidFire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0) //Burst fires don't work well except by calling Fire() multiple times
+/obj/item/gun/lawgiver/proc/rapidFire(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, params, struggle = 0) //Burst fires don't work well except by calling Fire() multiple times
 	rapidFirecheck = 1
 	recoil = 1
 	for (var/i = 1; i <= 3; i++)
@@ -310,7 +310,7 @@ var/list/lawgiver_modes = list(
 	fire_volume /= 5
 	rapidFirecheck = 0
 
-/obj/item/weapon/gun/lawgiver/proc/fire_double_whammy(var/atom/target, var/mob/living/user, var/list/params, var/struggle)
+/obj/item/gun/lawgiver/proc/fire_double_whammy(var/atom/target, var/mob/living/user, var/list/params, var/struggle)
 	var/turf/origin_turf = get_turf(src)
 	var/turf/target_turf = get_turf(target)
 	var/orientation = get_dir(origin_turf, target_turf)
@@ -322,7 +322,7 @@ var/list/lawgiver_modes = list(
 		in_chamber = new projectile_type(src)
 	Fire(projectile2_target, user, params, struggle)
 
-/obj/item/weapon/gun/lawgiver/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
+/obj/item/gun/lawgiver/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE) //Overriding this due to introducing the DNA check, and the fact that the round is to be chambered only just before it is fired
 	..()
 	if(!firing_mode_datum.ammo_casing_type)
 		return
@@ -330,7 +330,7 @@ var/list/lawgiver_modes = list(
 	new_casing.BB = null
 	new_casing.update_icon()
 
-/obj/item/weapon/gun/lawgiver/proc/chamber_round()
+/obj/item/gun/lawgiver/proc/chamber_round()
 	if(in_chamber)
 		if(in_chamber.type == projectile_type)
 			return 1
@@ -352,7 +352,7 @@ var/list/lawgiver_modes = list(
 	magazine.ammo_counters[firing_mode_datum] -= firing_mode_datum.ammo_per_shot
 	return 1
 
-/obj/item/weapon/gun/lawgiver/can_discharge()
+/obj/item/gun/lawgiver/can_discharge()
 	if(!dna_check())
 		return FALSE
 	if(!magazine)
@@ -365,7 +365,7 @@ var/list/lawgiver_modes = list(
 		return FALSE
 	return TRUE
 
-/obj/item/weapon/gun/lawgiver/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/lawgiver/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/ammo_storage/magazine/lawgiver))
 		if(!check_mag_type(A, user))
 			return
@@ -377,13 +377,13 @@ var/list/lawgiver_modes = list(
 	else if (istype(A, /obj/item/ammo_storage/magazine))
 		to_chat(user, "<span class='warning'>You can't load \the [src] with that kind of magazine!</span>")
 
-/obj/item/weapon/gun/lawgiver/proc/check_mag_type(obj/item/I, mob/user)
+/obj/item/gun/lawgiver/proc/check_mag_type(obj/item/I, mob/user)
 	if(istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
 		to_chat(user, "<span class='warning'>You can't load a demolition-model magazine into this [src.name]!</span>")
 		return 0
 	return 1
 
-/obj/item/weapon/gun/lawgiver/attack_self(mob/user as mob)
+/obj/item/gun/lawgiver/attack_self(mob/user as mob)
 	if (target)
 		return ..()
 	if (magazine)
@@ -391,13 +391,13 @@ var/list/lawgiver_modes = list(
 	else
 		to_chat(user, "<span class='warning'>There's no magazine loaded in \the [src]!</span>")
 
-/obj/item/weapon/gun/lawgiver/special_check()
+/obj/item/gun/lawgiver/special_check()
 	if(world.time >= last_fired + fire_delay)
 		return 1
 	else
 		return 0
 
-/obj/item/weapon/gun/lawgiver/proc/dna_check(var/mob/user)
+/obj/item/gun/lawgiver/proc/dna_check(var/mob/user)
 	if(!user)
 		if(ismob(loc))
 			user = loc
@@ -413,14 +413,14 @@ var/list/lawgiver_modes = list(
 		return 0
 	return 1
 
-/obj/item/weapon/gun/lawgiver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/lawgiver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 
 		return
-	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/weapon/gun/energy))
+	if(istype(A, /obj/machinery/recharger) && istype(src, /obj/item/gun/energy))
 		return//Shouldnt flag take care of this?
 
 	if(!dna_check(user))
@@ -459,23 +459,23 @@ var/list/lawgiver_modes = list(
 		else
 			has_played_alert = FALSE
 
-/obj/item/weapon/gun/lawgiver/examine(mob/user)
+/obj/item/gun/lawgiver/examine(mob/user)
 	..()
 	if(!magazine)
 		return
 	to_chat(user, magazine.generate_description())
 
-/obj/item/weapon/gun/lawgiver/say(var/message)
+/obj/item/gun/lawgiver/say(var/message)
 	..(message, class = "siliconsay")
 
-/obj/item/weapon/gun/lawgiver/say_quote(var/message)
+/obj/item/gun/lawgiver/say_quote(var/message)
 	return "reports, [message]"
 
-/obj/item/weapon/gun/lawgiver/demolition
+/obj/item/gun/lawgiver/demolition
 	desc = "The Lawgiver II. A twenty-five round sidearm with mission-variable voice-programmed ammunition. You can see the words STUN, LASER, RAPID, FLARE and RICOCHET written in small print on the barreling, alongside HI EX and DOUBLE WHAMMY."
 	magazine_type = /obj/item/ammo_storage/magazine/lawgiver/demolition
 
-/obj/item/weapon/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)
+/obj/item/gun/lawgiver/demolition/check_mag_type(obj/item/I, mob/user)
 	if(!istype(I, /obj/item/ammo_storage/magazine/lawgiver/demolition))
 		to_chat(user, "<span class='warning'>This demolition-model [src.name] can't take a standard lawgiver magazine!</span>")
 		return 0

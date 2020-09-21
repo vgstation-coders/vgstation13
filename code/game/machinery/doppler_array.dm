@@ -5,7 +5,7 @@ var/list/doppler_arrays = list()
 	desc = "Ancient technology used to measure explosions of all shapes and sizes. Has been recently outfitted with meteor monitoring software by Space Weather Inc."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "forensic"
-	circuit = "/obj/item/weapon/circuitboard/bhangmeter"
+	circuit = "/obj/item/circuitboard/bhangmeter"
 	var/list/bangs = list()
 
 /obj/machinery/computer/bhangmeter/New()

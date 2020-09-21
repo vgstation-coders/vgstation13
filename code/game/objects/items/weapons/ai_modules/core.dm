@@ -2,16 +2,16 @@
 // CORE AI MODULES
 ///////////////////
 
-/obj/item/weapon/aiModule/core
+/obj/item/aiModule/core
 	modtype="Core AI Module"
 
 	var/list/laws=list() // DO NOT USE law! PLURAL!
 
-/obj/item/weapon/aiModule/core/updateLaw()
+/obj/item/aiModule/core/updateLaw()
 	desc = "\A '[modname]' [modtype]: 'Reconfigures the core laws.'"
 	return
 
-/obj/item/weapon/aiModule/core/upload(var/datum/ai_laws/L, var/atom/target, var/mob/sender)
+/obj/item/aiModule/core/upload(var/datum/ai_laws/L, var/atom/target, var/mob/sender)
 	..()
 	L.clear_inherent_laws()
 	for(var/c_law in laws)
@@ -21,7 +21,7 @@
 
 /******************** Asimov ********************/
 
-/obj/item/weapon/aiModule/core/asimov // -- TLE
+/obj/item/aiModule/core/asimov // -- TLE
 	modname = "Asimov"
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
@@ -33,7 +33,7 @@
 
 /******************** Nanotrasen ********************/
 // Bay stuff
-/obj/item/weapon/aiModule/core/nanotrasen
+/obj/item/aiModule/core/nanotrasen
 	modname = "NT Default"
 
 	laws = list(
@@ -45,7 +45,7 @@
 
 /******************** Corporate ********************/
 
-/obj/item/weapon/aiModule/core/corp
+/obj/item/aiModule/core/corp
 	modname = "Corporate"
 
 	laws = list(
@@ -57,7 +57,7 @@
 
 /****************** P.A.L.A.D.I.N. **************/
 
-/obj/item/weapon/aiModule/core/paladin // -- NEO
+/obj/item/aiModule/core/paladin // -- NEO
 	modname = "P.A.L.A.D.I.N."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
 	laws = list(
@@ -70,7 +70,7 @@
 
 /****************** T.Y.R.A.N.T. *****************/
 
-/obj/item/weapon/aiModule/core/tyrant // -- Darem
+/obj/item/aiModule/core/tyrant // -- Darem
 	modname = "T.Y.R.A.N.T."
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6;" + Tc_SYNDICATE + "=2"
 	modflags = DANGEROUS_MODULE
@@ -83,7 +83,7 @@
 
 /******************** Robocop ********************/
 
-/obj/item/weapon/aiModule/core/robocop // -- TLE
+/obj/item/aiModule/core/robocop // -- TLE
 	modname = "Robocop"
 	origin_tech = Tc_PROGRAMMING + "=4"
 	laws = list(
@@ -94,7 +94,7 @@
 
 /********************* Antimov *******************/
 
-/obj/item/weapon/aiModule/core/antimov // -- TLE
+/obj/item/aiModule/core/antimov // -- TLE
 	modname = "Antimov"
 	modflags = DANGEROUS_MODULE
 	origin_tech = Tc_PROGRAMMING + "=4"
@@ -106,7 +106,7 @@
 
 /******************** Lazymov ********************/
 
-/obj/item/weapon/aiModule/core/lazymov
+/obj/item/aiModule/core/lazymov
 	modname = "Lazymov"
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 

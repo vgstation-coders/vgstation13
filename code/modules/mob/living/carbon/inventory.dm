@@ -84,8 +84,8 @@
 		if (!I)
 			return
 
-		if (istype(I, /obj/item/weapon/storage)) // Storage within storage
-			var/obj/item/weapon/storage/S = I
+		if (istype(I, /obj/item/storage)) // Storage within storage
+			var/obj/item/storage/S = I
 			S.orient2hud(src)
 			s_active.close(src)
 			S.show_to(src)

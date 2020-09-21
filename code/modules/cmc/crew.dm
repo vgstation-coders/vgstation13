@@ -25,7 +25,7 @@ Crew Monitor by Paul, based on the holomaps by Deity
 	use_power = 1
 	idle_power_usage = 250
 	active_power_usage = 500
-	circuit = "/obj/item/weapon/circuitboard/crew"
+	circuit = "/obj/item/circuitboard/crew"
 
 	light_color = LIGHT_COLOR_BLUE
 	light_range_on = 2
@@ -218,7 +218,7 @@ GENERAL PROCS
 				if (H.z == 0 && (!pos || pos.z != z))
 					continue
 
-				var/obj/item/weapon/card/id/I = H.wear_id ? H.wear_id.GetID() : null
+				var/obj/item/card/id/I = H.wear_id ? H.wear_id.GetID() : null
 
 				if (I)
 					name = I.registered_name
@@ -253,7 +253,7 @@ GENERAL PROCS
 		if(!isnull(A))
 			parea = format_text(A.name)
 
-		if(istype(M.loc,/obj/item/weapon/storage/belt/silicon))
+		if(istype(M.loc,/obj/item/storage/belt/silicon))
 			continue
 
 		var/turf/pos = get_turf(B)

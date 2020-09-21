@@ -6,7 +6,7 @@
   namepick_uses = 0 
 
   startup_sound = 'sound/misc/soviet.ogg'
-  cell_type = /obj/item/weapon/cell/potato/soviet
+  cell_type = /obj/item/cell/potato/soviet
 
 /mob/living/silicon/robot/mommi/soviet/updatename() // Fuck individualism
   name = "[prefix] [num2text(ident)]"

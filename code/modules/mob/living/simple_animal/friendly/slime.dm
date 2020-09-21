@@ -12,18 +12,18 @@
 	response_disarm = "shoos"
 	response_harm   = "stomps on"
 	emote_see = list("jiggles", "bounces in place")
-	holder_type = /obj/item/weapon/holder/animal/slime
+	holder_type = /obj/item/holder/animal/slime
 	colour = "grey"
 	var/paralyzed = 0
 	can_butcher = FALSE
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/slime
 
 	mob_bump_flag = SLIME
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	mob_push_flags = MONKEY|SLIME|SIMPLE_ANIMAL
 	held_items = list()
 
-/mob/living/simple_animal/slime/attackby(var/obj/item/weapon/slimeparapotion/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/slime/attackby(var/obj/item/slimeparapotion/O as obj, var/mob/user as mob)
 	if(istype(O))
 		canmove = 0
 		icon_state = "[colour] baby slime dead"
@@ -80,7 +80,7 @@
 		scoop_up(M)
 	return ..()
 
-/obj/item/weapon/slimeparapotion
+/obj/item/slimeparapotion
 	name = "slime paralyzing solution"
 	desc = "An exotic chemical which paralyzes a slime, allowing it to be safely picked up and transported."
 	icon = 'icons/obj/chemical.dmi'

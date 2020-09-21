@@ -87,9 +87,9 @@
 	takeDamage(Proj.damage)
 	..()
 
-/obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
-	if (istype(W, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = W
+/obj/structure/cult/attackby(var/obj/item/W, var/mob/user)
+	if (istype(W, /obj/item/grab))
+		var/obj/item/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
 			qdel(W)
@@ -202,7 +202,7 @@
 	sound_damaged = 'sound/effects/stone_hit.ogg'
 	sound_destroyed = 'sound/effects/stone_crumble.ogg'
 	layer = TABLE_LAYER
-	var/obj/item/weapon/melee/soulblade/blade = null
+	var/obj/item/melee/soulblade/blade = null
 	var/lock_type = /datum/locking_category/buckle/bed
 	var/altar_task = ALTARTASK_NONE
 	var/gem_delay = 300
@@ -251,7 +251,7 @@
 /obj/structure/cult/altar/attackby(var/obj/item/I, var/mob/user)
 	if (altar_task)
 		return ..()
-	if(istype(I,/obj/item/weapon/melee/soulblade) || (istype(I,/obj/item/weapon/melee/cultblade) && !istype(I,/obj/item/weapon/melee/cultblade/nocult)))
+	if(istype(I,/obj/item/melee/soulblade) || (istype(I,/obj/item/melee/cultblade) && !istype(I,/obj/item/melee/cultblade/nocult)))
 		if (blade)
 			to_chat(user,"<span class='warning'>You must remove \the [blade] planted into \the [src] first.</span>")
 			return 1
@@ -283,11 +283,11 @@
 						if (cultist.second_chance)
 							to_chat(M, "[bicon(logo_icon)]<span class='recruit'>\The [user] has planted a Soul Blade on an altar, opening a small crack in the veil that allows you to become the blade's resident shade. (<a href='?src=\ref[src];signup=\ref[M]'>Possess now!</a>)</span>[bicon(logo_icon)]")
 		return 1
-	if (istype(I, /obj/item/weapon/grab))
+	if (istype(I, /obj/item/grab))
 		if (blade)
 			to_chat(user,"<span class='warning'>You must remove \the [blade] planted on \the [src] first.</span>")
 			return 1
-		var/obj/item/weapon/grab/G = I
+		var/obj/item/grab/G = I
 		if(iscarbon(G.affecting))
 			var/mob/living/carbon/C = G.affecting
 			C.unlock_from()
@@ -697,7 +697,7 @@
 		if(!isobserver(M) || !iscultist(M))
 			return
 		var/mob/dead/observer/O = M
-		var/obj/item/weapon/melee/soulblade/blade = locate() in src
+		var/obj/item/melee/soulblade/blade = locate() in src
 		if (!istype(blade))
 			to_chat(usr, "<span class='warning'>The blade was removed from \the [src].</span>")
 			return
@@ -1157,7 +1157,7 @@ var/list/cult_spires = list()
 		var/obj/item/clothing/mask/cigarette/fag = I
 		fag.light("<span class='notice'>\The [user] lights \the [fag] by bringing its tip close to \the [src]'s molten flow.</span>")
 		return 1
-	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper) || istype(I,/obj/item/weapon/tome))
+	if(istype(I,/obj/item/talisman) || istype(I,/obj/item/paper) || istype(I,/obj/item/tome))
 		I.ashify_item(user)
 		return 1
 	..()
@@ -1213,7 +1213,7 @@ var/list/cult_spires = list()
 	var/forge_icon = ""
 	switch (task)
 		if ("Forge Blade")
-			template = /obj/item/weapon/melee/cultblade
+			template = /obj/item/melee/cultblade
 			timeleft = 10
 			forge_icon = "forge_blade"
 		if ("Forge Armor")
@@ -1345,7 +1345,7 @@ var/list/bloodstone_list = list()
 
 	bloodstone_list.Add(src)
 	for (var/obj/O in loc)
-		if (O != src && !istype(O,/obj/item/weapon/melee/soulblade))
+		if (O != src && !istype(O,/obj/item/melee/soulblade))
 			O.ex_act(2)
 	safe_space()
 	set_light(3)
@@ -1393,7 +1393,7 @@ var/list/bloodstone_list = list()
 /obj/structure/cult/bloodstone/Destroy()
 	bloodstone_list.Remove(src)
 	new /obj/effect/decal/cleanable/ash(loc)
-	new /obj/item/weapon/ectoplasm(loc)
+	new /obj/item/ectoplasm(loc)
 
 	var/datum/holomap_marker/holomarker = new()
 	holomarker.id = HOLOMAP_MARKER_BLOODSTONE_BROKEN

@@ -24,10 +24,10 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/processor,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/processor,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()
@@ -35,10 +35,10 @@
 /obj/machinery/processor/RefreshParts()
 	var/manipcount = 0
 	var/scancount = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
-		if(istype(SP, /obj/item/weapon/stock_parts/manipulator))
+	for(var/obj/item/stock_parts/SP in component_parts)
+		if(istype(SP, /obj/item/stock_parts/manipulator))
 			manipcount += SP.rating
-		if(istype(SP, /obj/item/weapon/stock_parts/scanning_module))
+		if(istype(SP, /obj/item/stock_parts/scanning_module))
 			scancount += SP.rating
 	time_coeff = 2/manipcount
 	content_limit = 3 * scancount
@@ -57,8 +57,8 @@
 
 /* objs */
 /datum/food_processor_process/poison/process(loc, atom/movable/what)
-	if(loc && istype(what,/obj/item/weapon/reagent_containers/food/snacks/meat))
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/M = what
+	if(loc && istype(what,/obj/item/reagent_containers/food/snacks/meat))
+		var/obj/item/reagent_containers/food/snacks/meat/M = what
 		if(M.poisonsacs)
 			M.poisonsacs.forceMove(loc)
 			M.poisonsacs = null
@@ -68,29 +68,29 @@
 		what.forceMove(loc)
 
 /datum/food_processor_process/poison/spiderleg
-	input = /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg
+	input = /obj/item/reagent_containers/food/snacks/meat/spiderleg
 
 /datum/food_processor_process/poison/spidermeat
-	input = /obj/item/weapon/reagent_containers/food/snacks/meat/spidermeat
+	input = /obj/item/reagent_containers/food/snacks/meat/spidermeat
 
 /datum/food_processor_process/poison/carpmeat
-	input = /obj/item/weapon/reagent_containers/food/snacks/meat/carpmeat
+	input = /obj/item/reagent_containers/food/snacks/meat/carpmeat
 
 /datum/food_processor_process/food/meat
-	input = /obj/item/weapon/reagent_containers/food/snacks/meat
-	output = /obj/item/weapon/reagent_containers/food/snacks/faggot/processed
+	input = /obj/item/reagent_containers/food/snacks/meat
+	output = /obj/item/reagent_containers/food/snacks/faggot/processed
 
 /datum/food_processor_process/food/potato
-	input = /obj/item/weapon/reagent_containers/food/snacks/grown/potato
-	output = /obj/item/weapon/reagent_containers/food/snacks/fries/processed
+	input = /obj/item/reagent_containers/food/snacks/grown/potato
+	output = /obj/item/reagent_containers/food/snacks/fries/processed
 
 /datum/food_processor_process/food/carrot
-	input = /obj/item/weapon/reagent_containers/food/snacks/grown/carrot
-	output = /obj/item/weapon/reagent_containers/food/snacks/carrotfries/processed
+	input = /obj/item/reagent_containers/food/snacks/grown/carrot
+	output = /obj/item/reagent_containers/food/snacks/carrotfries/processed
 
 /datum/food_processor_process/food/soybeans
-	input = /obj/item/weapon/reagent_containers/food/snacks/grown/soybeans
-	output = /obj/item/weapon/reagent_containers/food/snacks/soydope/processed
+	input = /obj/item/reagent_containers/food/snacks/grown/soybeans
+	output = /obj/item/reagent_containers/food/snacks/soydope/processed
 
 
 /datum/food_processor_process/food/process(loc, var/obj/what)
@@ -127,13 +127,13 @@
 				"You hear a slimy sound")
 		O.forceMove(loc)
 		return
-	var/obj/item/weapon/reagent_containers/glass/bucket/bucket_of_blood = new(loc)
+	var/obj/item/reagent_containers/glass/bucket/bucket_of_blood = new(loc)
 	O.take_blood(bucket_of_blood, 70)
 	..()
 
 /datum/food_processor_process/mob/chicken
 	input = /mob/living/simple_animal/chicken
-	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
+	output = /obj/item/reagent_containers/food/snacks/chicken_nuggets
 
 
 /datum/food_processor_process/mob/chicken/process(loc, what)
@@ -142,7 +142,7 @@
 
 /datum/food_processor_process/mob/chick
 	input = /mob/living/simple_animal/chick
-	output = /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets
+	output = /obj/item/reagent_containers/food/snacks/chicken_nuggets
 
 
 /datum/food_processor_process/mob/chick/process(loc, what)
@@ -173,7 +173,7 @@
 		qdel(target)
 		target = null
 		for(var/i = 1;i<=6;i++)
-			new /obj/item/weapon/reagent_containers/food/snacks/chicken_nuggets(loc)
+			new /obj/item/reagent_containers/food/snacks/chicken_nuggets(loc)
 			sleep(2)
 		..()
 	else
@@ -188,7 +188,7 @@
 		return P
 	return 0
 
-/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/processor/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(contents.len)
 		to_chat(user, "You can't do that while something is loaded in \the [src].")
 		return 0
@@ -198,7 +198,7 @@
 	if(..())
 		return 1
 
-	if(istype(O, /obj/item/weapon/storage/bag/plants))
+	if(istype(O, /obj/item/storage/bag/plants))
 		return fill(O, user)
 
 	return add_to(O, user)
@@ -210,8 +210,8 @@
 	if(is_full()) //TODO: several items at once? several different items?
 		warn_full(user)
 		return 1
-	if (istype(A, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = A
+	if (istype(A, /obj/item/grab))
+		var/obj/item/grab/G = A
 		A = G.affecting
 
 	var/datum/food_processor_process/P = select_recipe(A)
@@ -273,7 +273,7 @@
 		return
 	if(!ishigherbeing(user) && !isrobot(user))
 		return
-	if(istype(O, /obj/item/weapon/storage/bag/plants))
+	if(istype(O, /obj/item/storage/bag/plants))
 		fill(O, user)
 		return
 	add_to(O,user)
@@ -284,7 +284,7 @@
 /obj/machinery/processor/proc/is_full()
 	return src.contents.len >= content_limit
 
-/obj/machinery/processor/proc/fill(var/obj/item/weapon/storage/bag/plants/bag, var/mob/user)
+/obj/machinery/processor/proc/fill(var/obj/item/storage/bag/plants/bag, var/mob/user)
 	if(src.processing)
 		to_chat(user, "<span class='warning'>[src] is already processing!</span>")
 		return

@@ -13,8 +13,8 @@
 	var/toucher = event_args[1]
 	var/obj/item = event_args[3]
 
-	if (istype(item, /obj/item/weapon/reagent_containers/glass) && item.is_open_container() ||\
-		istype(item, /obj/item/weapon/reagent_containers/dropper))
+	if (istype(item, /obj/item/reagent_containers/glass) && item.is_open_container() ||\
+		istype(item, /obj/item/reagent_containers/dropper))
 		if(reagent_group == "WATER" && (item.reagents.has_reagent(HYDROGEN, 1) || item.reagents.has_reagent(WATER, 1)))
 			Triggered(toucher, reagent_group, item)
 		else if(reagent_group == "ACID" && (item.reagents.has_reagent(SACID, 1) || item.reagents.has_reagent(PACID, 1) || item.reagents.has_reagent(DIETHYLAMINE, 1)))

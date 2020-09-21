@@ -11,7 +11,7 @@
 	speak_chance = 1
 	speak = list("")
 	speak_emote = list("crumbles","grumbles","shouts")
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/gingerbread_man
+	meat_type = /obj/item/reagent_containers/food/snacks/gingerbread_man
 	response_help = "doughs up"
 	response_disarm = "crumbs"
 	response_harm = "breaks into"
@@ -114,7 +114,7 @@
 	speak_chance = 1
 	speak = list("h-hhhe-el", "wh-why")
 	speak_emote = list("crumbles","sputters","whimpers")
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/human
 	//Why did I do this. This started as a cute gingerbread house.
 	maxHealth = 30
 	health = 30
@@ -136,7 +136,7 @@
 	pixel_x = -16 * PIXEL_MULTIPLIER
 	wander = 0
 	move_to_delay = 40
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/gingerbroodmother
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/gingerbroodmother
 	meat_amount = 1
 	ranged = 1
 	vision_range = 8

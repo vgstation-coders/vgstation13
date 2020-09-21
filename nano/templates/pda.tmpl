@@ -219,8 +219,8 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                 {{if data.cartridge.charges}}
                     <div class="item">
                         <b>{{:data.cartridge.charges}}
-                        {{if data.cartridge.type == "/obj/item/weapon/cartridge/syndicate"}} detonation charges left. {{/if}}
-                        {{if data.cartridge.type == "/obj/item/weapon/cartridge/clown" || data.cartridge.type == "/obj/item/weapon/cartridge/mime"}} viral files left. {{/if}}
+                        {{if data.cartridge.type == "/obj/item/cartridge/syndicate"}} detonation charges left. {{/if}}
+                        {{if data.cartridge.type == "/obj/item/cartridge/clown" || data.cartridge.type == "/obj/item/cartridge/mime"}} viral files left. {{/if}}
                         </b>
                         <br><br>
                     </div>
@@ -235,13 +235,13 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                     <div class="item">
                         {{:helper.link(value.Name, 'circle-arrow-s', {'choice' : "Select Conversation", 'convo' : value.Reference } , null, value.fixedLeftWider)}}
                         {{if value.cartridge}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/syndicate" && value.Detonate == 1}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/syndicate" && value.Detonate == 1}}
                                 {{:helper.link('*Detonate*', 'radiation', {'choice' : "Detonate", 'target' : value.Reference}, null, 'fixedLeft')}}
                             {{/if}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/clown"}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/clown"}}
                                 {{:helper.link('*Send Virus*', 'star', {'choice' : "Send Honk", 'target' : value.Reference}, null, 'fixedLeft')}}
                             {{/if}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/mime"}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/mime"}}
                                 {{:helper.link('*Send Virus*', 'circle-arrow-s', {'choice' : "Send Silence", 'target' : value.Reference}, null, 'fixedLeft')}}
                             {{/if}}
                         {{/if}}
@@ -252,9 +252,9 @@ Used In File(s): \code\game\objects\items\devices\PDA\PDA.dm
                     <div class="item">
                         {{:helper.link(value.Name, 'circle-arrow-s', {'choice' : "Message", 'target' : value.Reference}, null, value.fixedLeftWider)}}
                         {{if value.cartridge}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/syndicate" && value.Detonate == 1}} {{:helper.link('*Detonate*', 'radiation', {'choice' : "Detonate", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/clown"}} {{:helper.link('*Send Virus*', 'star', {'choice' : "Send Honk", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
-                            {{if value.cartridge.type == "/obj/item/weapon/cartridge/mime"}}  {{:helper.link('*Send Virus*', 'circle-arrow-s', {'choice' : "Send Silence", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/syndicate" && value.Detonate == 1}} {{:helper.link('*Detonate*', 'radiation', {'choice' : "Detonate", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/clown"}} {{:helper.link('*Send Virus*', 'star', {'choice' : "Send Honk", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
+                            {{if value.cartridge.type == "/obj/item/cartridge/mime"}}  {{:helper.link('*Send Virus*', 'circle-arrow-s', {'choice' : "Send Silence", 'target' : value.Reference}, null, 'fixedLeft')}}  {{/if}}
                         {{/if}}
                     </div>
                 {{/for}}

@@ -18,10 +18,10 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/rdserver,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/rdserver,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor
 	)
 
 	icon_state_open = icon_state // needs to be here to override what's done in the parent's New()
@@ -35,7 +35,7 @@
 
 /obj/machinery/r_n_d/server/RefreshParts()
 	var/tot_rating = 0
-	for(var/obj/item/weapon/stock_parts/SP in src)
+	for(var/obj/item/stock_parts/SP in src)
 		tot_rating += SP.rating
 	heat_gen /= max(1, tot_rating)
 
@@ -302,15 +302,15 @@
 	onclose(user, "server_control")
 	return
 
-/obj/machinery/computer/rdservercontrol/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/rdservercontrol/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	if(D.is_screwdriver(user))
 		D.playtoolsound(src, 50)
 		if(do_after(user, src, 20))
 			if (src.stat & BROKEN)
 				to_chat(user, "<span class='notice'>The broken glass falls out.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				new /obj/item/weapon/shard(loc)
-				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
+				new /obj/item/shard(loc)
+				var/obj/item/circuitboard/rdservercontrol/M = new /obj/item/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				A.circuit = M
@@ -321,7 +321,7 @@
 			else
 				to_chat(user, "<span class='notice'>You disconnect the monitor.</span>")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe( src.loc )
-				var/obj/item/weapon/circuitboard/rdservercontrol/M = new /obj/item/weapon/circuitboard/rdservercontrol( A )
+				var/obj/item/circuitboard/rdservercontrol/M = new /obj/item/circuitboard/rdservercontrol( A )
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				A.circuit = M
@@ -329,7 +329,7 @@
 				A.icon_state = "4"
 				A.anchored = 1
 				qdel(src)
-	else if(istype(D, /obj/item/weapon/card/emag) && !emagged)
+	else if(istype(D, /obj/item/card/emag) && !emagged)
 		playsound(src, 'sound/effects/sparks4.ogg', 75, 1)
 		emagged = 1
 		to_chat(user, "<span class='notice'>You disable the security protocols</span>")

@@ -372,7 +372,7 @@
 /obj/machinery/power/supermatter/proc/transfer_energy()
 	emitted_harvestable_radiation(get_turf(src), power, range = 15)
 
-/obj/machinery/power/supermatter/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/machinery/power/supermatter/attackby(obj/item/W as obj, mob/living/user as mob)
 	. = ..()
 	if(.)
 		return .
@@ -501,7 +501,7 @@
 	name = "supermatter monitoring computer"
 	desc = "Monitors ambient temperature and stability of a linked shard to provide early warning information regarding delamination. Can be linked up to supermatter with a matching frequency and id_tag using a multitool. While using a multitool on supermatter is safe, Nanotrasen accepts no responsibility or liability for sudden rushes of wind or radiation poisoning."
 	icon_state = "sme"
-	circuit = "/obj/item/weapon/circuitboard/supermatter"
+	circuit = "/obj/item/circuitboard/supermatter"
 	light_color = LIGHT_COLOR_YELLOW
 	var/frequency = 1333
 	var/datum/radio_frequency/radio_connection

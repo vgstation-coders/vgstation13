@@ -308,14 +308,14 @@
 			if(1) // Losing flesh
 				to_chat(H, "<span class='warning'>A chunk of meat falls off of you!</span>")
 				var/totalslabs = 1
-				var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
+				var/obj/item/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 				var/sourcename = H.real_name
 				var/sourcejob = H.job
 				var/sourcenutriment = H.nutrition / 15
 				//var/sourcetotalreagents = mob.reagents.total_volume
 
 				for(var/i = 1 to totalslabs)
-					var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
+					var/obj/item/reagent_containers/food/snacks/meat/human/newmeat = new
 					newmeat.name = sourcename + newmeat.name
 					newmeat.subjectname = sourcename
 					newmeat.subjectjob = sourcejob
@@ -696,9 +696,9 @@
 	if (iscarbon(mob))
 		var/mob/living/carbon/C = mob
 		if(prob(50))
-			if(!istype(C.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/weapon/staff))
+			if(!istype(C.get_held_item_by_index(GRASP_RIGHT_HAND), /obj/item/staff))
 				if(C.drop_item(C.get_held_item_by_index(GRASP_RIGHT_HAND)))
-					C.put_in_r_hand( new /obj/item/weapon/staff(C) )
+					C.put_in_r_hand( new /obj/item/staff(C) )
 
 /datum/disease2/effect/wizarditis/activate(var/mob/living/mob)
 	if (count == 0)
@@ -771,10 +771,10 @@
 										var/obj/structure/safe/SA = S
 										SA.open = 1
 									S.update_icon()
-							for(var/obj/item/weapon/storage/lockbox/L in T.contents)
+							for(var/obj/item/storage/lockbox/L in T.contents)
 								spawn(1)
-									if(istype(L,/obj/item/weapon/storage/lockbox))
-										var/obj/item/weapon/storage/lockbox/LL = L
+									if(istype(L,/obj/item/storage/lockbox))
+										var/obj/item/storage/lockbox/LL = L
 										LL.locked = 0
 									L.update_icon()
 					if ("STI KALY!")

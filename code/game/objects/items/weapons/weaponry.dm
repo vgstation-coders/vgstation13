@@ -1,4 +1,4 @@
-/obj/item/weapon/banhammer
+/obj/item/banhammer
 	desc = "A banhammer"
 	name = "banhammer"
 	icon = 'icons/obj/items.dmi'
@@ -12,11 +12,11 @@
 	attack_verb = list("bans")
 
 
-/obj/item/weapon/banhammer/suicide_act(mob/user)
+/obj/item/banhammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is hitting \himself with the [src.name]! It looks like \he's trying to ban \himself from life.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS|SUICIDE_ACT_TOXLOSS|SUICIDE_ACT_OXYLOSS)
 
-/obj/item/weapon/sord
+/obj/item/sord
 	name = "\improper SORD"
 	desc = "This thing is so unspeakably shitty you are having a hard time even holding it."
 	icon = 'icons/obj/weapons.dmi'
@@ -30,16 +30,16 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
-/obj/item/weapon/sord/suicide_act(mob/user)
+/obj/item/sord/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is impaling \himself with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/sord/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	playsound(src, 'sound/weapons/bladeslice.ogg', 50, 1, -1)
 	user.adjustBruteLoss(0.5)
 	return ..()
 
-/obj/item/weapon/claymore
+/obj/item/claymore
 	name = "claymore"
 	desc = "What are you standing around staring at this for? Get to killing!"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -58,18 +58,18 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
 
-/obj/item/weapon/claymore/IsShield()
+/obj/item/claymore/IsShield()
 	return 1
 
-/obj/item/weapon/claymore/suicide_act(mob/user)
+/obj/item/claymore/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/claymore/cultify()
-	new /obj/item/weapon/melee/legacy_cultblade(loc)
+/obj/item/claymore/cultify()
+	new /obj/item/melee/legacy_cultblade(loc)
 	..()
 
-/obj/item/weapon/katana
+/obj/item/katana
 	name = "katana"
 	desc = "Woefully underpowered in D20"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -87,16 +87,16 @@
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/katana/suicide_act(mob/user)
+/obj/item/katana/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/katana/IsShield()
+/obj/item/katana/IsShield()
 	return 1
 
 //Special weeb katana in ninja.dm
 
-/obj/item/weapon/katana/magic
+/obj/item/katana/magic
 	name = "moonlight-enchanted sword"
 	desc = "Capable of cutting through anything except the things it can't cut through."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -104,17 +104,17 @@
 	item_state = "enchanted"
 	w_class = W_CLASS_GIANT//don't want it stored anywhere"
 
-/obj/item/weapon/katana/magic/dropped(mob/user)
+/obj/item/katana/magic/dropped(mob/user)
 	..()
 	qdel(src)
 
-/obj/item/weapon/katana/magic/Destroy()
+/obj/item/katana/magic/Destroy()
 	var/turf/T = get_turf(src)
 	if (T)
 		anim(target = T, a_icon = 'icons/effects/effects.dmi', flick_anim = "empdisable")
 	..()
 
-/obj/item/weapon/harpoon
+/obj/item/harpoon
 	name = "harpoon"
 	sharpness = 1.2
 	sharpness_flags = SHARP_TIP
@@ -128,7 +128,7 @@
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("jabs","stabs","rips")
 
-obj/item/weapon/wirerod
+obj/item/wirerod
 	name = "wired rod"
 	desc = "A rod with some wire wrapped around the top. It'd be easy to attach something to the top bit."
 	icon = 'icons/obj/weapons.dmi'
@@ -144,9 +144,9 @@ obj/item/weapon/wirerod
 	attack_verb = list("hits", "bludgeons", "whacks", "bonks")
 
 
-obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
+obj/item/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	..()
-	if(istype(I, /obj/item/weapon/shard))
+	if(istype(I, /obj/item/shard))
 		user.visible_message("<span class='notice'>[user] starts securing \the [I] to the top of \the [src].</span>",\
 		"<span class='info'>You attempt to create a spear by securing \the [I] to \the [src].</span>")
 
@@ -160,7 +160,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 
 			user.drop_item(src, force_drop = 1)
 
-			var/obj/item/weapon/spear/S = new /obj/item/weapon/spear
+			var/obj/item/spear/S = new /obj/item/spear
 
 			S.base_force = 5 + I.force
 			S.force = S.base_force
@@ -190,7 +190,7 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 			qdel(src)
 
 	else if(iswirecutter(I))
-		var/obj/item/weapon/melee/baton/cattleprod/P = new /obj/item/weapon/melee/baton/cattleprod
+		var/obj/item/melee/baton/cattleprod/P = new /obj/item/melee/baton/cattleprod
 
 		user.before_take_item(I)
 		user.before_take_item(src)
@@ -206,14 +206,14 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 		var/obj/item/stack/rods/R = I
 		if(src.loc == user)
 			user.drop_item(src, force_drop = 1)
-			var/obj/item/weapon/rail_assembly/Q = new (get_turf(user))
+			var/obj/item/rail_assembly/Q = new (get_turf(user))
 			user.put_in_hands(Q)
 		else
-			new /obj/item/weapon/rail_assembly(get_turf(src.loc))
+			new /obj/item/rail_assembly(get_turf(src.loc))
 		R.use(1)
 		qdel(src)
 
-/obj/item/weapon/kitchen/utensil/knife/tactical
+/obj/item/kitchen/utensil/knife/tactical
 	name = "tactical knife"
 	desc = "It makes you run faster."
 	icon = 'icons/obj/weapons.dmi'
@@ -223,12 +223,12 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	flags = FPRINT | SLOWDOWN_WHEN_CARRIED
 	slowdown = 0.999
 
-/obj/item/weapon/kitchen/utensil/knife/tactical/New()
+/obj/item/kitchen/utensil/knife/tactical/New()
 	..()
 	if(Holiday == APRIL_FOOLS_DAY)
 		slowdown = 0.8
 
-/obj/item/weapon/kitchen/utensil/knife/skinning
+/obj/item/kitchen/utensil/knife/skinning
 	name = "skinning knife"
 	desc = "Stalwart Goliath butchering edge. This, my friend, is a tool with a purpose."
 	icon = 'icons/obj/weapons.dmi'
@@ -236,12 +236,12 @@ obj/item/weapon/wirerod/attackby(var/obj/item/I, mob/user as mob)
 	item_state = "skinningknife"
 	force = 10
 
-obj/item/weapon/banhammer/admin
+obj/item/banhammer/admin
 	desc = "A banhammer specifically reserved for admins. Legends tell of a weapon that destroys the target to the utmost capacity."
 	throwforce = 999
 	force = 999
 
-/obj/item/weapon/melee/bone_hammer
+/obj/item/melee/bone_hammer
 	name = "bone hammer"
 	desc = "A large growth that appears to be made of solid bone. It looks heavy."
 	icon_state = "bone_hammer"
@@ -260,14 +260,14 @@ obj/item/weapon/banhammer/admin
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_hammer/suicide_act(mob/user)
+/obj/item/melee/bone_hammer/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is smashing his face with \the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
+/obj/item/melee/bone_hammer/afterattack(null, mob/living/user as mob|obj, null, null, null)
 	user.delayNextAttack(50) //five times the regular attack delay
 
-/obj/item/weapon/melee/bone_hammer/New(atom/A, var/p_borer = null)
+/obj/item/melee/bone_hammer/New(atom/A, var/p_borer = null)
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
@@ -276,7 +276,7 @@ obj/item/weapon/banhammer/admin
 	else
 		processing_objects.Add(src)
 
-/obj/item/weapon/melee/bone_hammer/Destroy()
+/obj/item/melee/bone_hammer/Destroy()
 	if(parent_borer)
 		if(parent_borer.channeling_bone_hammer)
 			parent_borer.channeling_bone_hammer = 0
@@ -286,7 +286,7 @@ obj/item/weapon/banhammer/admin
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/melee/bone_hammer/process()
+/obj/item/melee/bone_hammer/process()
 	set waitfor = 0
 	if(!parent_borer)
 		return
@@ -298,7 +298,7 @@ obj/item/weapon/banhammer/admin
 		parent_borer.chemicals -= 10
 		sleep(10)
 
-/obj/item/weapon/macuahuitl
+/obj/item/macuahuitl
 	name = "wooden paddle"
 	desc = "This doesn't look like it's capable of much damage."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
@@ -326,14 +326,14 @@ obj/item/weapon/banhammer/admin
 		"blade_10" = null)
 	var/image/base_overlay		//This is a workaround for underlays somehow not showing up when the item is on the UI
 
-/obj/item/weapon/macuahuitl/New()
+/obj/item/macuahuitl/New()
 	..()
 	base_overlay = new
 	base_overlay.appearance = appearance
 	base_overlay.plane = FLOAT_PLANE
 	overlays += base_overlay
 
-/obj/item/weapon/macuahuitl/Destroy()
+/obj/item/macuahuitl/Destroy()
 	if(blades.len)
 		for(var/i in blades)
 			var/blade = blades[i]
@@ -342,20 +342,20 @@ obj/item/weapon/banhammer/admin
 			blade = null
 	..()
 
-/obj/item/weapon/macuahuitl/proc/get_current_blade_count()
+/obj/item/macuahuitl/proc/get_current_blade_count()
 	var/blades_left = 0
 	for(var/i in blades)
 		if(blades[i])
 			blades_left++
 	return blades_left
 
-/obj/item/weapon/macuahuitl/examine(mob/user)
+/obj/item/macuahuitl/examine(mob/user)
 	..()
 	var/blades_left = get_current_blade_count()
 	if(blades_left)
 		to_chat(user, "<span class='info'>It has [blades_left] blade\s left.</span>")
 
-/obj/item/weapon/macuahuitl/proc/update_blades()
+/obj/item/macuahuitl/proc/update_blades()
 	var/blades_left = get_current_blade_count()
 	if(blades_left)
 		name = "macuahuitl"
@@ -374,19 +374,19 @@ obj/item/weapon/banhammer/admin
 		attack_verb = list("smacks")
 		sharpness_flags = 0
 
-/obj/item/weapon/macuahuitl/attack(mob/M, mob/user)
+/obj/item/macuahuitl/attack(mob/M, mob/user)
 	..()
 	if(blades.len)
 		for(var/i in blades)
-			var/obj/item/weapon/shard/S = blades[i]
+			var/obj/item/shard/S = blades[i]
 			var/break_chance = 15
-			if(istype(S, /obj/item/weapon/shard/plasma))
+			if(istype(S, /obj/item/shard/plasma))
 				break_chance = round(break_chance * 0.66)
 			if(prob(break_chance))
 				break_shard(S, i)
 	update_blades()
 
-/obj/item/weapon/macuahuitl/proc/break_shard(var/obj/item/weapon/shard/to_break, var/slot_index)
+/obj/item/macuahuitl/proc/break_shard(var/obj/item/shard/to_break, var/slot_index)
 	if(!to_break || !slot_index)
 		return
 	blades[slot_index] = null
@@ -395,9 +395,9 @@ obj/item/weapon/banhammer/admin
 	playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 50, 1)
 	qdel(to_break)
 
-/obj/item/weapon/macuahuitl/attackby(obj/item/weapon/W, mob/user)
+/obj/item/macuahuitl/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/shard))
+	if(istype(W, /obj/item/shard))
 		var/slot_index
 		for(var/i in blades)
 			if(!blades[i])
@@ -410,7 +410,7 @@ obj/item/weapon/banhammer/admin
 			to_chat(user, "You press \the [W] into the side of \the [src].")
 			add_shard(W, slot_index)
 
-/obj/item/weapon/macuahuitl/proc/add_shard(var/obj/item/weapon/shard/to_add, var/slot_index)
+/obj/item/macuahuitl/proc/add_shard(var/obj/item/shard/to_add, var/slot_index)
 	if(!to_add || !slot_index)
 		return
 	blades[slot_index] = to_add
@@ -458,7 +458,7 @@ obj/item/weapon/banhammer/admin
 //		overlays += base_overlay
 
 
-/obj/item/weapon/hammer
+/obj/item/hammer
 	name = "smithing hammer"
 	desc = "for those with a predeliction for applying concussive maintenance"
 	icon = 'icons/obj/blacksmithing/hammer.dmi'
@@ -467,7 +467,7 @@ obj/item/weapon/banhammer/admin
 	force = 8
 	hitsound = 'sound/weapons/toolbox.ogg'
 
-/obj/item/weapon/pitchfork
+/obj/item/pitchfork
 	name = "pitchfork"
 	desc = "Down with the current state of things!"
 	icon = 'icons/obj/weapons.dmi'

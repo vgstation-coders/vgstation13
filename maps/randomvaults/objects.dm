@@ -91,7 +91,7 @@
 /obj/docking_port/destination/vault
 	var/valid_random_destination = TRUE //If FALSE, random shuttle destination disks can't pick this docking port
 
-/obj/item/weapon/disk/shuttle_coords/vault/prison
+/obj/item/disk/shuttle_coords/vault/prison
 	destination = /obj/docking_port/destination/vault/prison
 
 /obj/docking_port/destination/vault/prison
@@ -102,7 +102,7 @@
 /area/vault/listening
 	requires_power = 1
 
-/obj/item/weapon/disk/shuttle_coords/vault/listening
+/obj/item/disk/shuttle_coords/vault/listening
 	destination = /obj/docking_port/destination/vault/listening
 
 /obj/docking_port/destination/vault/listening
@@ -112,7 +112,7 @@
 
 //biodome
 
-/obj/item/weapon/disk/shuttle_coords/vault/biodome
+/obj/item/disk/shuttle_coords/vault/biodome
 	destination = /obj/docking_port/destination/vault/biodome
 
 /obj/docking_port/destination/vault/biodome
@@ -216,10 +216,10 @@
 	valid_random_destination = FALSE
 	areaname = "Medicial Research Facility"
 
-/obj/item/weapon/disk/shuttle_coords/vault/research
+/obj/item/disk/shuttle_coords/vault/research
 	destination = /obj/docking_port/destination/vault/research
 
-/obj/item/weapon/gun/projectile/pistol/empty
+/obj/item/gun/projectile/pistol/empty
 	max_shells = 0
 	spawn_mag = FALSE
 
@@ -265,19 +265,19 @@
 		var/area/vault/droneship/DS = A
 		id_tag = DS.pod_code
 
-/obj/item/weapon/p_folded/ball/droneship
+/obj/item/p_folded/ball/droneship
 	name = "crushed ball of paper"
 
-/obj/item/weapon/p_folded/ball/droneship/New()
+/obj/item/p_folded/ball/droneship/New()
 	..()
 	qdel(unfolded)
-	unfolded = new /obj/item/weapon/paper/crumpled/droneship(src)
+	unfolded = new /obj/item/paper/crumpled/droneship(src)
 
-/obj/item/weapon/paper/crumpled/droneship
+/obj/item/paper/crumpled/droneship
 	name = "paper- 'OSIPR Pod-Door ID'"
 	info = "denied"
 
-/obj/item/weapon/paper/crumpled/droneship/New()
+/obj/item/paper/crumpled/droneship/New()
 	var/area/A = get_area(src)
 	if(A && istype(A,/area/vault/droneship))
 		var/area/vault/droneship/DS = A
@@ -286,7 +286,7 @@
 /mob/living/simple_animal/hostile/monster/cyber_horror/quiet
 	speak_chance = 1 //shut the fuck up
 
-/obj/item/weapon/bananapeel/traitorpeel/curse
+/obj/item/bananapeel/traitorpeel/curse
 	name = "cursed banana peel"
 	desc = "A peel from a banana, surrounded by an evil aura of trickery and mischief. "
 
@@ -295,7 +295,7 @@
 
 	slip_power = 10
 
-/obj/item/weapon/melee/morningstar/catechizer
+/obj/item/melee/morningstar/catechizer
 	name = "The Catechizer"
 	desc = "An unholy weapon forged eons ago by a servant of Nar-Sie."
 	origin_tech = null
@@ -314,10 +314,10 @@
 	name   = "tokamak yadro ventilyatsionnyy"
 	id_tag = "tokamak_yadro_ventilyatsionnyy"
 
-/obj/item/weapon/fuel_assembly/trilithium
+/obj/item/fuel_assembly/trilithium
 	name = "trilithium fuel rod assembly"
 
-/obj/item/weapon/fuel_assembly/trilithium/New()
+/obj/item/fuel_assembly/trilithium/New()
 	. = ..()
 	rod_quantities["Trilithium"] = 300
 
@@ -348,7 +348,7 @@
 /obj/item/device/rcd/matter/engineering/rust_vault
 	name = "\improper Bystroye Stroitel'stvo Ustroystv (BSU)"
 
-/obj/item/weapon/paper/tommyboy
+/obj/item/paper/tommyboy
 	name = "failed message transcript"
 	info = {"This is Major Tom to Ground Control<br>
 			I'm stepping through the door<br>
@@ -360,14 +360,14 @@
 			And there's nothing I can do.
 			"}
 
-/obj/item/weapon/paper/asteroidfield
+/obj/item/paper/asteroidfield
 	name = "dear diary"
 	info = {"It's all HONKING HONKED.  I left for bananium and it HONKED itself to pieces!  Our planet is HONKED!  What am I going to do?"}
 
 /obj/machinery/atmospherics/binary/msgs/rust_vault
 	name = "\improper Magnitno Priostanovleno Blok Khraneniya Gaza"
 
-/obj/item/weapon/paper/iou
+/obj/item/paper/iou
 	name = "paper- 'IOU'"
 	info = "I owe you a rod of destruction. Redeemable at Milliway's at the end of time."
 
@@ -398,7 +398,7 @@
 	update_icon()
 
 /obj/machinery/floodlight/on/infinite
-	cell = /obj/item/weapon/cell/infinite
+	cell = /obj/item/cell/infinite
 
 /obj/machinery/bot/farmbot/duey
 	name = "Duey"
@@ -438,13 +438,13 @@
 	ai = 1
 
 /obj/machinery/porta_turret/AIvault/New()
-	installed = new/obj/item/weapon/gun/energy/laser/retro/ancient(src)
+	installed = new/obj/item/gun/energy/laser/retro/ancient(src)
 	..()
 	if(prob(25))
 		dir = pick(alldirs)
 		die()
 
-/obj/item/weapon/gun/energy/laser/retro/ancient
+/obj/item/gun/energy/laser/retro/ancient
 	name = "ancient laser gun"
 	desc = "Once a highly dangerous weapon, this laser has degraded over decades into a still somewhat dangerous weapon."
 	projectile_type = /obj/item/projectile/beam/retro/weak
@@ -468,11 +468,11 @@
 	generate_random_mob_name = 1
 	mutantrace = "Skellington"
 	corpseradio = /obj/item/device/radio/headset
-	corpseback = /obj/item/weapon/storage/backpack
+	corpseback = /obj/item/storage/backpack
 	corpsebelt = null
 
 /obj/machinery/light/burnt
-	spawn_with_bulb = /obj/item/weapon/light/tube/burned
+	spawn_with_bulb = /obj/item/light/tube/burned
 
 /obj/structure/closet/welded/New()
 	..()
@@ -587,7 +587,7 @@
 
 	qdel(src)
 
-/obj/item/weapon/paper/feeding_schedule
+/obj/item/paper/feeding_schedule
 	name = "note"
 	info = {"
 	Reminder to wear full body coverage when being anywhere near the cockatrice pen. As Forrest has already shown you (may he forever bloom in the black peat), shorts are NOT a substitute for pants - borrow your friend's if yours are damaged or lost.
@@ -717,8 +717,8 @@
 			if(!triggered)
 				triggered = TRUE
 				say("Codephrase accepted. Welcome, Agent. Releasing gathered information and current co-ordinates of home base.")
-				new /obj/item/weapon/disk/tech_disk/random(get_turf(src))
-				new /obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment(get_turf(src))
+				new /obj/item/disk/tech_disk/random(get_turf(src))
+				new /obj/item/disk/shuttle_coords/vault/satellite_deployment(get_turf(src))
 
 /obj/machinery/power/magtape_deck/syndicate/attack_hand(mob/user)
 	if(stat & (BROKEN|NOPOWER))
@@ -731,13 +731,13 @@
 		return
 	..()
 
-/obj/item/weapon/disk/tech_disk/random/New()
+/obj/item/disk/tech_disk/random/New()
 	..()
 	var/possible_research = pick(subtypesof(/datum/tech))
 	stored = new possible_research
 	stored.level = rand(1,stored.max_level)
 
-/obj/item/weapon/disk/shuttle_coords/vault/satellite_deployment
+/obj/item/disk/shuttle_coords/vault/satellite_deployment
 	destination = /obj/docking_port/destination/vault/satellite_deployment
 
 /obj/docking_port/destination/vault/satellite_deployment
@@ -753,7 +753,7 @@
 /obj/machinery/door_control/satellite_deployment
 	id_tag = "spacetime"
 
-/obj/item/weapon/paper/satellite_deployment/no_smoking
+/obj/item/paper/satellite_deployment/no_smoking
 	name = "Note to all would-be smokers"
 	info = {"If you'll take a minute to look around, you'll notice we don't have<br>
 			any regular atmospheric regulation like most station, and due to our predicament of <br>
@@ -766,7 +766,7 @@
 			~ Ensign Willhelm
 			"}
 
-/obj/item/weapon/paper/satellite_deployment/space_saving
+/obj/item/paper/satellite_deployment/space_saving
 	name = "Discussion on space allocation"
 	info = {"As you are aware we don't have much in the ways of room, but the engineer insists that<br>
 		despite engineering consisting of 2 glorified petrol engines and an SMES, he needs all the space<br>
@@ -776,7 +776,7 @@
 		~ Ensign Willhelm
 		"}
 
-/obj/item/weapon/paper/satellite_deployment/complaints
+/obj/item/paper/satellite_deployment/complaints
 	name = "Complaints"
 	info = {"Getting real tired of Willhelm's shit.<br>
 		The pod bay doors only have a button on the outside, how does he expect us to trust one another smoking?<br>
@@ -787,7 +787,7 @@
 		Why does the chef get a minigun while medical gets a syringe gun?
 		"}
 
-/obj/item/weapon/paper/satellite_deployment/complaints_reply
+/obj/item/paper/satellite_deployment/complaints_reply
 	name = "Regarding complaints"
 	info = {"Complaining is not good for crew morale.<br>
 		It draws unwanted attention towards the negative side of serving here. Look on the bright side.<br>
@@ -797,18 +797,18 @@
 		~ Ensign Willhelm
 		"}
 
-/obj/item/weapon/paper/satellite_deployment/further_complaints
+/obj/item/paper/satellite_deployment/further_complaints
 	name = "Further complaints"
 	info = {"It wasn't the medical doctor, you half-witted clown.<br>
 		Now what do we do if somebody gets hurt?<br>
 		You'd best watch your step around the pod bay, Ensign. Lest you find out.
 		"}
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled
+/obj/item/reagent_containers/food/snacks/pie/acid_filled
 	name = "acid pie"
 	desc = "Tangy tasting"
 
-/obj/item/weapon/reagent_containers/food/snacks/pie/acid_filled/New()
+/obj/item/reagent_containers/food/snacks/pie/acid_filled/New()
 	..()
 	reagents.clear_reagents()
 	var/room_remaining = reagents.maximum_volume
@@ -820,7 +820,7 @@
 	room_remaining -= sulph_to_add
 	reagents.add_reagent(NUTRIMENT, room_remaining)
 
-/obj/item/weapon/reagent_containers/spray/chemsprayer/lube/New()
+/obj/item/reagent_containers/spray/chemsprayer/lube/New()
 	..()
 	reagents.add_reagent(LUBE, rand(50,volume))
 
@@ -830,7 +830,7 @@
 
 //Iron Chef
 
-/obj/item/weapon/disk/shuttle_coords/vault/ironchef
+/obj/item/disk/shuttle_coords/vault/ironchef
 	destination = /obj/docking_port/destination/vault/ironchef
 
 /obj/docking_port/destination/vault/ironchef
@@ -846,24 +846,24 @@
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor
+/obj/item/reagent_containers/glass/beaker/vial/flavor
 	name = "essence of pure flavor"
 	desc = "This will really knock any dish up a notch. Bam!"
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/flavor/New()
+/obj/item/reagent_containers/glass/beaker/vial/flavor/New()
 	..()
 	reagents.add_reagent(MINDBREAKER, 25)
 
-/obj/item/weapon/reagent_containers/glass/beaker/vial/radium/New()
+/obj/item/reagent_containers/glass/beaker/vial/radium/New()
 	..()
 	reagents.add_reagent(RADIUM, 25)
 
 /obj/machinery/microwave/upgraded
 	component_parts = newlist(\
-		/obj/item/weapon/circuitboard/microwave,\
-		/obj/item/weapon/stock_parts/micro_laser/high/ultra,\
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,\
-		/obj/item/weapon/stock_parts/console_screen\
+		/obj/item/circuitboard/microwave,\
+		/obj/item/stock_parts/micro_laser/high/ultra,\
+		/obj/item/stock_parts/scanning_module/adv/phasic,\
+		/obj/item/stock_parts/console_screen\
 	)
 
 

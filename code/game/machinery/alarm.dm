@@ -1072,7 +1072,7 @@ var/global/list/airalarm_presets = list(
 				W.playtoolsound(src, 50)
 				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
-			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
+			if(istype(W, /obj/item/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN))
 					to_chat(user, "It does nothing")
 					return
@@ -1107,12 +1107,12 @@ var/global/list/airalarm_presets = list(
 				W.playtoolsound(src, 50)
 				if(do_after(user, src, 20) && buildstage == 1)
 					to_chat(user, "You pry out the circuit!")
-					new /obj/item/weapon/circuitboard/air_alarm(get_turf(user))
+					new /obj/item/circuitboard/air_alarm(get_turf(user))
 					buildstage = 0
 					update_icon()
 				return
 		if(0)
-			if(istype(W, /obj/item/weapon/circuitboard/air_alarm))
+			if(istype(W, /obj/item/circuitboard/air_alarm))
 				to_chat(user, "You insert the circuit!")
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 				qdel(W)
@@ -1292,11 +1292,11 @@ FIRE ALARM
 					W.playtoolsound(src, 50)
 					if (do_after(user, src,  20) && buildstage == 1)
 						to_chat(user, "You pry out the circuit!")
-						new /obj/item/weapon/circuitboard/fire_alarm(get_turf(user))
+						new /obj/item/circuitboard/fire_alarm(get_turf(user))
 						buildstage = 0
 						update_icon()
 			if(0)
-				if(istype(W, /obj/item/weapon/circuitboard/fire_alarm))
+				if(istype(W, /obj/item/circuitboard/fire_alarm))
 					to_chat(user, "You insert the circuit!")
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					qdel(W)

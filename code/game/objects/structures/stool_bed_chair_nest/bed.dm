@@ -175,13 +175,13 @@
 			locked.audible_scream()
 	..()
 
-/obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/bed/attackby(obj/item/W, mob/user)
 	if(W.is_wrench(user))
 		wrench_act(W,user)
 	else
 		..()
 
-/obj/structure/bed/proc/wrench_act(obj/item/weapon/W,mob/user)
+/obj/structure/bed/proc/wrench_act(obj/item/W,mob/user)
 	W.playtoolsound(src, 50)
 	drop_stack(sheet_type, loc, 2, user)
 	qdel(src)
@@ -221,7 +221,7 @@
 		H.pain_shock_stage = max(0, H.pain_shock_stage-rand(2,3))
 		H.dir = 8 //face up on couch
 
-/obj/structure/bed/therapy/wrench_act(obj/item/weapon/W,mob/user)
+/obj/structure/bed/therapy/wrench_act(obj/item/W,mob/user)
 	if(wrenchAnchor(user,W) && !anchored)
 		var/mob/living/locked = get_locked(mob_lock_type)[1]
 		if(locked)

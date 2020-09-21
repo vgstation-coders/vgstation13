@@ -23,7 +23,7 @@
 /*
  * Photo
  */
-/obj/item/weapon/photo
+/obj/item/photo
 	name = "photo"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "photo"
@@ -38,18 +38,18 @@
 	fire_fuel = TRUE
 
 
-/obj/item/weapon/photo/attack_self(mob/user)
+/obj/item/photo/attack_self(mob/user)
 	show(user)
 
 
-/obj/item/weapon/photo/proc/photocreate(var/inicon, var/inimg, var/ininfo, var/inblueprints)
+/obj/item/photo/proc/photocreate(var/inicon, var/inimg, var/ininfo, var/inblueprints)
 	icon = inicon
 	img = inimg
 	info = ininfo
 	blueprints = inblueprints
 
-/obj/item/weapon/photo/attackby(obj/item/weapon/P, mob/user)
-	if(istype(P, /obj/item/weapon/pen) || istype(P, /obj/item/toy/crayon))
+/obj/item/photo/attackby(obj/item/P, mob/user)
+	if(istype(P, /obj/item/pen) || istype(P, /obj/item/toy/crayon))
 		var/txt = sanitize(input(user, "What would you like to write on the back?", "Photo Writing", null)  as text)
 		txt = copytext(txt, 1, 128)
 		if(Adjacent(user) && !user.stat)
@@ -57,7 +57,7 @@
 	..()
 
 
-/obj/item/weapon/photo/examine(mob/user)
+/obj/item/photo/examine(mob/user)
 	if(Adjacent(user))
 		show(user)
 	else
@@ -65,7 +65,7 @@
 		to_chat(user, "<span class='notice'>You can't make out the picture from here.</span>")
 
 
-/obj/item/weapon/photo/proc/show(mob/user)
+/obj/item/photo/proc/show(mob/user)
 	user << browse_rsc(img, "tmp_photo.png")
 	var/displaylength = 192
 	switch(photo_size)
@@ -84,7 +84,7 @@
 	onclose(user, "[name]")
 
 
-/obj/item/weapon/photo/verb/rename()
+/obj/item/photo/verb/rename()
 	set name = "Rename photo"
 	set category = "Object"
 	set src in usr
@@ -99,12 +99,12 @@
 /*
  * Photo album
  */
-/obj/item/weapon/storage/photo_album
+/obj/item/storage/photo_album
 	name = "photo album"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "album"
 	item_state = "briefcase"
-	can_only_hold = list("/obj/item/weapon/photo",)
+	can_only_hold = list("/obj/item/photo",)
 	storage_slots = 50
 	max_combined_w_class = 200
 
@@ -138,7 +138,7 @@
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
 
 	var/panelopen = FALSE
-	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/obj/item/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
 
 /obj/item/device/camera/New(var/empty = FALSE)
@@ -444,7 +444,7 @@
 		aipicture(user, temp, mobs, user, blueprints)
 
 /obj/item/device/camera/proc/printpicture(mob/user, icon/temp, mobs, flag) //Normal camera proc for creating photos
-	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	var/obj/item/photo/P = new/obj/item/photo()
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
@@ -462,7 +462,7 @@
 		blueprints = FALSE
 
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
-	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	var/obj/item/photo/P = new/obj/item/photo()
 	user.put_in_hands(P)
 	var/icon/small_img = icon(temp)
 	var/icon/ic = icon('icons/obj/items.dmi',"photo")
@@ -565,7 +565,7 @@
 	for(var/datum/picture/i in targetloc.aipictures)
 		nametemp += i.fields["name"]
 	find = input("Select image (numbered in order taken)") in nametemp
-	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
+	var/obj/item/photo/P = new/obj/item/photo()
 
 	for(var/datum/picture/q in targetloc.aipictures)
 		if(q.fields["name"] == find)
@@ -644,7 +644,7 @@
 		if(q.fields["name"] == find)
 			selection = q
 			break
-	var/obj/item/weapon/photo/p = new /obj/item/weapon/photo(C.loc)
+	var/obj/item/photo/p = new /obj/item/photo(C.loc)
 	p.photocreate(selection.fields["icon"], selection.fields["img"], selection.fields["info"], selection.fields["blueprints"])
 	p.pixel_x = rand(-10, 10)
 	p.pixel_y = rand(-10, 10)

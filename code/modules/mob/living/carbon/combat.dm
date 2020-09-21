@@ -70,7 +70,7 @@
 
 /mob/living/carbon/proc/check_shields(var/damage = 0, var/atom/A)
 	if(!incapacitated())
-		for(var/obj/item/weapon/I in held_items)
+		for(var/obj/item/I in held_items)
 			if(I.IsShield() && I.on_block(damage, A))
 				return 1
 

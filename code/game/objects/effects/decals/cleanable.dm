@@ -141,7 +141,7 @@ var/list/infected_cleanables = list()
 
 
 /obj/effect/decal/cleanable/attackby(obj/item/O as obj, mob/user as mob)
-	if(istype(O,/obj/item/weapon/mop))
+	if(istype(O,/obj/item/mop))
 		return ..()
 	return 0 //No more "X HITS THE BLOOD WITH AN RCD"
 

@@ -23,10 +23,10 @@
 			break
 		callshuttle++
 
-	for(var/obj/item/weapon/circuitboard/communications/commboard in communications_circuitboards)
+	for(var/obj/item/circuitboard/communications/commboard in communications_circuitboards)
 		if(commboard.z == map.zCentcomm)
 			continue
-		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/weapon/storage))
+		if(istype(commboard.loc,/turf) || istype(commboard.loc,/obj/item/storage))
 			break
 		callshuttle++
 

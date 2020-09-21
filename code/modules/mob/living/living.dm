@@ -368,46 +368,46 @@
 
 
 //Recursive function to find everything a mob is holding.
-/mob/living/get_contents(var/obj/item/weapon/storage/Storage = null)
+/mob/living/get_contents(var/obj/item/storage/Storage = null)
 	var/list/L = list()
 
 	if(Storage) //If it called itself
 		L += Storage.return_inv()
 
 		//Leave this commented out, it will cause storage items to exponentially add duplicate to the list
-		//for(var/obj/item/weapon/storage/S in Storage.return_inv()) //Check for storage items
+		//for(var/obj/item/storage/S in Storage.return_inv()) //Check for storage items
 		//	L += get_contents(S)
 
-		for(var/obj/item/weapon/gift/G in Storage.return_inv()) //Check for gift-wrapped items
+		for(var/obj/item/gift/G in Storage.return_inv()) //Check for gift-wrapped items
 			L += G.gift
-			if(istype(G.gift, /obj/item/weapon/storage))
+			if(istype(G.gift, /obj/item/storage))
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in Storage.return_inv()) //Check for package wrapped items
 			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
 				L += wrapped
-				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+				if(istype(wrapped, /obj/item/storage)) //this should never happen
 					L += get_contents(wrapped)
 		return L
 
 	else
 
 		L += src.contents
-		for(var/obj/item/weapon/storage/S in src.contents)	//Check for storage items
+		for(var/obj/item/storage/S in src.contents)	//Check for storage items
 			L += get_contents(S)
 		for(var/obj/item/clothing/suit/storage/S in src.contents)//Check for labcoats and jackets
 			L += get_contents(S.hold)
 		for(var/obj/item/clothing/accessory/storage/S in src.contents)//Check for holsters
 			L += get_contents(S.hold)
-		for(var/obj/item/weapon/gift/G in src.contents) //Check for gift-wrapped items
+		for(var/obj/item/gift/G in src.contents) //Check for gift-wrapped items
 			L += G.gift
-			if(istype(G.gift, /obj/item/weapon/storage))
+			if(istype(G.gift, /obj/item/storage))
 				L += get_contents(G.gift)
 
 		for(var/obj/item/delivery/D in src.contents) //Check for package wrapped items
 			for(var/atom/movable/wrapped in D) //Basically always only one thing, but could theoretically be more
 				L += wrapped
-				if(istype(wrapped, /obj/item/weapon/storage)) //this should never happen
+				if(istype(wrapped, /obj/item/storage)) //this should never happen
 					L += get_contents(wrapped)
 		return L
 
@@ -576,7 +576,7 @@ Thanks.
 			H.fixblood()
 		for(var/organ_name in H.organs_by_name)
 			var/datum/organ/external/O = H.organs_by_name[organ_name]
-			for(var/obj/item/weapon/shard/shrapnel/s in O.implants)
+			for(var/obj/item/shard/shrapnel/s in O.implants)
 				if(istype(s))
 					O.implants -= s
 					H.contents -= s
@@ -696,16 +696,16 @@ Thanks.
 					if (isliving(pulling))
 						M = pulling
 						var/ok = 1
-						if (locate(/obj/item/weapon/grab, M.grabbed_by))
+						if (locate(/obj/item/grab, M.grabbed_by))
 							if (prob(75))
-								var/obj/item/weapon/grab/G = pick(M.grabbed_by)
-								if (istype(G, /obj/item/weapon/grab))
+								var/obj/item/grab/G = pick(M.grabbed_by)
+								if (istype(G, /obj/item/grab))
 									visible_message("<span class='danger'>[src] has pulled [G.affecting] from [G.assailant]'s grip.</span>",
 										drugged_message="<span class='danger'>[src] has pulled [G.affecting] from [G.assailant]'s hug.</span>")
 									qdel(G)
 							else
 								ok = 0
-							if (locate(/obj/item/weapon/grab, M.grabbed_by.len))
+							if (locate(/obj/item/grab, M.grabbed_by.len))
 								ok = 0
 						if (ok)
 							var/atom/movable/secondarypull = M.pulling
@@ -735,18 +735,18 @@ Thanks.
 		handle_hookchain(Dir)
 
 	if(.)
-		for(var/obj/item/weapon/gun/G in targeted_by) //Handle moving out of the gunner's view.
+		for(var/obj/item/gun/G in targeted_by) //Handle moving out of the gunner's view.
 			var/mob/living/M = G.loc
 			if(!(M in view(src)))
 				NotTargeted(G)
-		for(var/obj/item/weapon/gun/G in src) //Handle the gunner losing sight of their target/s
+		for(var/obj/item/gun/G in src) //Handle the gunner losing sight of their target/s
 			if(G.target)
 				for(var/mob/living/M in G.target)
 					if(M && !(M in view(src)))
 						M.NotTargeted(G)
 
 /mob/living/proc/handle_hookchain(var/direct)
-	for(var/obj/item/weapon/gun/hookshot/hookshot in src)
+	for(var/obj/item/gun/hookshot/hookshot in src)
 		if(hookshot.clockwerk)
 			continue
 
@@ -785,13 +785,13 @@ Thanks.
 	var/mob/living/L = usr
 
 	//Escaping from within a subspace tunneler.
-	var/obj/item/weapon/subspacetunneler/inside_tunneler = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+	var/obj/item/subspacetunneler/inside_tunneler = get_holder_of_type(L, /obj/item/subspacetunneler)
 	if(inside_tunneler)
 		var/breakout_time = 0.5 //30 seconds by default
 		L.visible_message("<span class='danger'>\The [inside_tunneler]'s storage bin shudders.</span>","<span class='warning'>You wander through subspace, looking for a way out (this will take about [breakout_time * 60] seconds).</span>")
 		spawn(0)
 			if(do_after(usr,src,breakout_time * 60 * 10)) //minutes * 60seconds * 10deciseconds
-				var/obj/item/weapon/subspacetunneler/still_in = get_holder_of_type(L, /obj/item/weapon/subspacetunneler)
+				var/obj/item/subspacetunneler/still_in = get_holder_of_type(L, /obj/item/subspacetunneler)
 				if(!inside_tunneler || !L || L.stat != CONSCIOUS || !still_in) //tunneler/user destroyed OR user dead/unconcious OR user no longer in tunneler
 					return
 
@@ -800,8 +800,8 @@ Thanks.
 		return
 
 	//Getting out of someone's inventory.
-	if(istype(src.loc,/obj/item/weapon/holder))
-		var/obj/item/weapon/holder/H = src.loc
+	if(istype(src.loc,/obj/item/holder))
+		var/obj/item/holder/H = src.loc
 		forceMove(get_turf(src))
 		if(istype(H.loc, /mob/living))
 			var/mob/living/Location = H.loc
@@ -885,7 +885,7 @@ Thanks.
 			qdel(O)
 			O = null
 			resisting++
-		for(var/obj/item/weapon/grab/G in usr.grabbed_by)
+		for(var/obj/item/grab/G in usr.grabbed_by)
 			resisting++
 			if (G.state == GRAB_PASSIVE)
 				qdel(G)
@@ -907,7 +907,7 @@ Thanks.
 
 	if(L.locked_to && !L.isUnconscious())
 		// unbeartrapping yourself
-		if (istype(L.locked_to, /obj/item/weapon/beartrap/))
+		if (istype(L.locked_to, /obj/item/beartrap/))
 			if (iscarbon(L))
 				var/mob/living/carbon/C = L
 				if (C.handcuffed)
@@ -1172,7 +1172,7 @@ Thanks.
 					else
 						to_chat(CM, "<span class='warning'>Your legcuffing breaking attempt was interrupted.</span>")
 			else
-				var/obj/item/weapon/legcuffs/HC = CM.legcuffed
+				var/obj/item/legcuffs/HC = CM.legcuffed
 				var/breakouttime = HC.breakouttime
 				if(!(breakouttime))
 					breakouttime = 1200 //Default
@@ -1324,7 +1324,7 @@ Thanks.
 					now_pushing = 0
 					return
 			for(var/mob/living/M in range(tmob, 1)) //no pushing prisoners or people pulling prisoners
-				if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/weapon/grab, tmob.grabbed_by.len)))
+				if(tmob.pinned.len ||  ((M.pulling == tmob && (tmob.restrained() && !(M.restrained()) && M.stat == 0)) || locate(/obj/item/grab, tmob.grabbed_by.len)))
 					to_chat(src, "<span class='warning'>[tmob] is restrained, you can't push past.</span>")
 					now_pushing = 0
 					return
@@ -1372,7 +1372,7 @@ Thanks.
 					now_pushing = 0
 					return
 
-			for(var/obj/item/weapon/shield/riot/R in tmob.held_items)
+			for(var/obj/item/shield/riot/R in tmob.held_items)
 				if(prob(99))
 					now_pushing = 0
 					return
@@ -1418,7 +1418,7 @@ Thanks.
 	if(!meat_type)
 		return 0
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/M
+	var/obj/item/reagent_containers/food/snacks/meat/M
 	if(istype(src, /mob/living/carbon/human))
 		M = new meat_type(location, src)
 	else
@@ -1431,7 +1431,7 @@ Thanks.
 			if (D.spread & SPREAD_BLOOD)
 				M.infect_disease2(D,1,"(Butchered, from [src])",0)
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
+	var/obj/item/reagent_containers/food/snacks/meat/animal/A = M
 
 	if(istype(A))
 		var/mob/living/simple_animal/source_animal = src
@@ -1582,7 +1582,7 @@ Thanks.
 	if(!holder_type)
 		return 0
 
-	var/obj/item/weapon/holder/D = new holder_type(loc, src)
+	var/obj/item/holder/D = new holder_type(loc, src)
 
 	if(M.put_in_active_hand(D))
 		to_chat(M, "You scoop up [src].")
@@ -1654,7 +1654,7 @@ Thanks.
 		universal_understand = !universal_understand
 
 	maxHealth = rand(50,200)
-	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+	meat_type = pick(typesof(/obj/item/reagent_containers/food/snacks/meat))
 	if(prob(5))
 		cap_calorie_burning_bodytemp = !cap_calorie_burning_bodytemp
 	if(prob(10))
@@ -1720,8 +1720,8 @@ Thanks.
 			src.throw_item(target, offhand.wielding)
 			return FAILED_THROW
 
-	else if (istype(item, /obj/item/weapon/grab))
-		var/obj/item/weapon/grab/G = item
+	else if (istype(item, /obj/item/grab))
+		var/obj/item/grab/G = item
 		item = G.toss() //throw the person instead of the grab
 		if(ismob(item))
 			var/turf/start_T = get_turf(loc) //Get the start and target tile for the descriptors
@@ -1867,7 +1867,7 @@ Thanks.
 /mob/living/proc/SetSilent(amount)
 	silent = max(amount,0)
 
-/mob/living/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/mob/living/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	if(src == user)
 		return ..()
 	// Attempting to inject someone else takes time
@@ -1928,10 +1928,10 @@ Thanks.
 	//Virus Dishes aren't toys, handle with care, especially when they're open.
 	for(var/obj/effect/decal/cleanable/virusdish/dish in T)
 		dish.infection_attempt(src)
-	for(var/obj/item/weapon/virusdish/dish in T)
+	for(var/obj/item/virusdish/dish in T)
 		if (dish.open && dish.contained_virus)
 			dish.infection_attempt(src,dish.contained_virus)
-	var/obj/item/weapon/virusdish/dish = locate() in held_items
+	var/obj/item/virusdish/dish = locate() in held_items
 	if (dish && dish.open && dish.contained_virus)
 		dish.infection_attempt(src,dish.contained_virus)
 

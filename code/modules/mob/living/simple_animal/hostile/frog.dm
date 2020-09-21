@@ -54,7 +54,7 @@
 	if(locked_to) //Don't leap/throw spear if already on top of a mob
 		return 0
 
-	for(var/obj/item/weapon/spear/S in contents) //Look for a spear in inventory
+	for(var/obj/item/spear/S in contents) //Look for a spear in inventory
 		S.forceMove(get_turf(src))
 
 		S.throw_at(target, 10, 4)
@@ -80,7 +80,7 @@
 	update_spear()
 	..(gibbed)
 
-/mob/living/simple_animal/hostile/frog/Cross(obj/item/weapon/spear/S)
+/mob/living/simple_animal/hostile/frog/Cross(obj/item/spear/S)
 	.=..()
 
 	if(!locked_to && !throwing && !isDead() && istype(S) && S.throwing && isturf(S.loc))
@@ -92,7 +92,7 @@
 	..()
 
 	if(!isDead() && isturf(loc) && !locked_to && !throwing)
-		for(var/obj/item/weapon/spear/S in loc)
+		for(var/obj/item/spear/S in loc)
 			S.forceMove(src)
 			update_spear()
 
@@ -118,7 +118,7 @@
 		return detach()
 
 /mob/living/simple_animal/hostile/frog/proc/update_spear()
-	if(locate(/obj/item/weapon/spear) in contents)
+	if(locate(/obj/item/spear) in contents)
 		icon_state = "frog_spear"
 		icon_living = "frog_spear"
 		melee_damage_lower = 10
@@ -180,7 +180,7 @@
 /mob/living/simple_animal/hostile/frog/centurion/New()
 	..()
 
-	new /obj/item/weapon/spear(src)
+	new /obj/item/spear(src)
 	update_spear()
 
 /mob/living/simple_animal/hostile/frog/javelineer
@@ -199,6 +199,6 @@
 	..()
 
 	for(var/i = 0 to 3)
-		new /obj/item/weapon/spear(src)
+		new /obj/item/spear(src)
 
 	update_spear()

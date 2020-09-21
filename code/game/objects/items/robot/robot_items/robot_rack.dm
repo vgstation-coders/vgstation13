@@ -83,7 +83,7 @@
 	desc = "ADMINS STOP SPAWNING ME"
 	initial_type = /obj/item/ammo_storage/magazine
 	object_type = /obj/item/ammo_storage/magazine
-	var/reload_type = /obj/item/weapon/gun/projectile/automatic
+	var/reload_type = /obj/item/gun/projectile/automatic
 	starting_objects = 0
 	capacity = 1
 	var/charge = 0
@@ -100,7 +100,7 @@
 /obj/item/robot_rack/ammo/attackby(obj/O, mob/user)
 	if(istype(O, reload_type))
 		if(held && (length(held) > 0))
-			var/obj/item/weapon/gun/projectile/automatic/G = O
+			var/obj/item/gun/projectile/automatic/G = O
 			var/obj/item/ammo_storage/magazine/M = held[length(held)]
 			if(!G.stored_magazine)
 				playsound(src, 'sound/weapons/magdrop_1.ogg',20)
@@ -120,7 +120,7 @@
 	icon_state = "ammopack_0"
 	initial_type = /obj/item/ammo_storage/magazine/a12mm/ops
 	object_type = /obj/item/ammo_storage/magazine/a12mm
-	reload_type = /obj/item/weapon/gun/projectile/automatic/c20r
+	reload_type = /obj/item/gun/projectile/automatic/c20r
 	starting_objects = 4
 	capacity = 4
 

@@ -53,7 +53,7 @@
 	var/bites = 3
 
 /mob/living/simple_animal/hostile/necro/meat_ghoul/proc/ghoulifyMeat(M)
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/mType = M
+	var/obj/item/reagent_containers/food/snacks/meat/mType = M
 	bites = mType.bitesize
 	maxHealth += bites + mType.reagents.get_reagent_amount(NUTRIMENT)
 	health = maxHealth
@@ -177,7 +177,7 @@
 	icon_gib = "zombie"
 	speak_chance = 0
 	turns_per_move = 5
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/animal
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/animal
 	response_help = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm = "hits the"
@@ -414,15 +414,15 @@
 	..()
 
 
-/mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/weapon/W, var/mob/user)
+/mob/living/simple_animal/hostile/necro/zombie/turned/attackby(var/obj/item/W, var/mob/user)
 	..()
 	if(stat == DEAD) //Can only attempt to unzombify if they're dead
-		if(istype (W, /obj/item/weapon/storage/bible)) //This calls for divine intervention
+		if(istype (W, /obj/item/storage/bible)) //This calls for divine intervention
 			if(being_unzombified)
 				to_chat(user, "<span class='warning'>\The [src] is already being repeatedly whacked!</span>")
 				return
 			being_unzombified = TRUE
-			var/obj/item/weapon/storage/bible/bible = W
+			var/obj/item/storage/bible/bible = W
 			user.visible_message("\The [user] begins whacking at [src] repeatedly with a bible for some reason.", "<span class='notice'>You attempt to invoke the power of [bible.my_rel.deity_name] to bring this poor soul back from the brink.</span>")
 
 			var/chaplain = 0 //Are we the Chaplain ? Used for simplification

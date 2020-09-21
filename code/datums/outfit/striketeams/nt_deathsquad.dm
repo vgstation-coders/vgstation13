@@ -3,7 +3,7 @@
 	use_pref_bag = FALSE
 
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/security
+		BACKPACK_STRING = /obj/item/storage/backpack/security
 	)
 
 	items_to_spawn = list(
@@ -15,39 +15,39 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/deathsquad,
-			slot_s_store_str = /obj/item/weapon/tank/emergency_oxygen/double,
-			slot_belt_str = /obj/item/weapon/gun/energy/pulse_rifle,
+			slot_s_store_str = /obj/item/tank/emergency_oxygen/double,
+			slot_belt_str = /obj/item/gun/energy/pulse_rifle,
 		),
 	)
 
 	equip_survival_gear = list(
-		"Default" = /obj/item/weapon/storage/box/survival/ert,
+		"Default" = /obj/item/storage/box/survival/ert,
 	)
 
 	items_to_collect = list(
-		/obj/item/weapon/storage/box,
+		/obj/item/storage/box,
 		/obj/item/ammo_storage/speedloader/a357,
-		/obj/item/weapon/storage/firstaid/regular,
-		/obj/item/weapon/pinpointer,
-		/obj/item/weapon/shield/energy,
+		/obj/item/storage/firstaid/regular,
+		/obj/item/pinpointer,
+		/obj/item/shield/energy,
 	)
 
 	implant_types = list(
-		/obj/item/weapon/implant/loyalty/,
-		/obj/item/weapon/implant/explosive/,
+		/obj/item/implant/loyalty/,
+		/obj/item/implant/explosive/,
 	)
 
-	id_type = /obj/item/weapon/card/id/death_commando
-	id_type_leader = /obj/item/weapon/card/id/death_commando_leader
+	id_type = /obj/item/card/id/death_commando
+	id_type_leader = /obj/item/card/id/death_commando_leader
 	assignment_leader = "Death Commando"
 	assignment_member = "Death Commander"
 
 /datum/outfit/striketeam/nt_deathsquad/pre_equip(var/mob/living/carbon/human/H)
 	if (is_leader)
-		items_to_collect += /obj/item/weapon/disk/nuclear
+		items_to_collect += /obj/item/disk/nuclear
 		items_to_spawn["Default"][slot_w_uniform_str] = /obj/item/clothing/under/rank/centcom_officer/
 	else
-		items_to_collect += /obj/item/weapon/c4
+		items_to_collect += /obj/item/c4
 
 	var/obj/machinery/camera/camera = new /obj/machinery/camera(H) //Gives all the commandos internals cameras.
 	camera.network = list(CAMERANET_CREED)

@@ -120,13 +120,13 @@
 
 // -- Same as above, for priority arrivals
 /datum/outfit/proc/pre_equip_priority(var/mob/living/carbon/human/H)
-	items_to_collect[/obj/item/weapon/storage/box/priority_care] = GRASP_RIGHT_HAND
+	items_to_collect[/obj/item/storage/box/priority_care] = GRASP_RIGHT_HAND
 
 // -- Handle disabilities
 /datum/outfit/proc/pre_equip_disabilities(var/mob/living/carbon/human/H, var/list/items_to_equip)
 	if (H.client?.IsByondMember())
 		to_chat(H, "Thank you for supporting BYOND!")
-		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
+		items_to_collect[/obj/item/storage/box/byond] = GRASP_LEFT_HAND
 
 	if (!give_disabilities_equipment)
 		return
@@ -200,7 +200,7 @@
 	// -- No backbag, let's improvise
 
 	else
-		var/obj/item/weapon/storage/box/survival/pack
+		var/obj/item/storage/box/survival/pack
 		if (equip_survival_gear.len)
 			if (ispath(equip_survival_gear[species]))
 				pack = new equip_survival_gear(H)
@@ -232,7 +232,7 @@
 // -- Implant the dude
 /datum/outfit/proc/give_implants(var/mob/living/carbon/human/H)
 	for (var/imp_type in implant_types)
-		var/obj/item/weapon/implant/I = new imp_type(H)
+		var/obj/item/implant/I = new imp_type(H)
 		I.imp_in = H
 		I.implanted = 1
 		var/datum/organ/external/affected = H.get_organ(LIMB_HEAD) // By default, all implants go to the head.
@@ -250,7 +250,7 @@
 		CRASH("Outfit [outfit_name] has no associated job, and the proc to spawn the ID is not overriden.")
 	var/datum/job/concrete_job = new associated_job
 
-	var/obj/item/weapon/card/id/C
+	var/obj/item/card/id/C
 	C = new id_type(H)
 	C.access = concrete_job.get_access()
 	C.registered_name = H.real_name
@@ -329,7 +329,7 @@
 	var/id_type_leader = null
 
 /datum/outfit/striketeam/spawn_id(var/mob/living/carbon/human/H, rank)
-	var/obj/item/weapon/card/id/W
+	var/obj/item/card/id/W
 	if(is_leader)
 		W = new id_type_leader(get_turf(H))
 		W.assignment = assignment_leader

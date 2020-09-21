@@ -86,7 +86,7 @@
 	if(user)
 		to_chat(user, "<span class = 'notice'>You heat \the [src].</span>")
 	if(iswelder(A) && user)
-		var/obj/item/weapon/weldingtool/W = A
+		var/obj/item/weldingtool/W = A
 		if(!W.do_weld(user, src, 4 SECONDS/(temperature/material_type.melt_temperature), 5))
 			return
 	else if(user && !do_after(user, A, 4 SECONDS/(temperature/material_type.melt_temperature)))
@@ -113,9 +113,9 @@
 			qdel(result)
 			qdel(src)
 			return
-	if(istype(A,/obj/item/weapon/hammer))
+	if(istype(A,/obj/item/hammer))
 		strikes+=max(1, round(A.quality/2, 1))
-	else if(istype(A,/obj/item/weapon/storage/toolbox))
+	else if(istype(A,/obj/item/storage/toolbox))
 		strikes+=0.25
 	if(strikes == strikes_required)
 		to_chat(user, "<span class = 'notice'>\The [src] seems to have taken shape nicely.</span>")

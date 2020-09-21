@@ -20,7 +20,7 @@
 	var/laser_kind = 0
 	var/onstage = null
 
-	var/obj/item/weapon/reagent_containers/held_container
+	var/obj/item/reagent_containers/held_container
 	var/heating = FALSE
 	var/had_item = FALSE
 
@@ -28,21 +28,21 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chemheater,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/chemheater,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/capacitor
 	)
 	RefreshParts()
 
 /obj/machinery/chemheater/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/L in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/L in component_parts)
 		T += L.rating
 		laser_kind = L.rating //Sets what tier of laser we have
 	thermal_energy_transfer = initial(thermal_energy_transfer) * T
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-1
 	idle_power_usage = initial(idle_power_usage) - (T * 10) //T1: 25w, T2: 15w, T3: 5w
 	active_power_usage = initial(active_power_usage) - (T * 2000) //T1: 5000w, T2: 3000w, T3: 1000w
@@ -65,8 +65,8 @@
 	if(held_container && heating)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 
-/obj/machinery/chemheater/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers) && anchored)
+/obj/machinery/chemheater/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/reagent_containers) && anchored)
 		if(!held_container)
 			if(user.drop_item(W, src))
 				held_container = W
@@ -161,7 +161,7 @@
 	var/scanner_kind = 0
 	var/onstage = null
 
-	var/obj/item/weapon/reagent_containers/held_container
+	var/obj/item/reagent_containers/held_container
 	var/cooling = FALSE
 	var/had_item = FALSE
 
@@ -169,21 +169,21 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/chemcooler,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/chemcooler,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor
 	)
 	RefreshParts()
 
 /obj/machinery/chemcooler/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/S in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/S in component_parts)
 		T += S.rating
 		scanner_kind = S.rating //Sets what tier of scanner we have
 	thermal_energy_transfer = initial(thermal_energy_transfer) * T
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		T += C.rating-1
 	idle_power_usage = initial(idle_power_usage) - (T * 10) //T1: 25w, T2: 15w, T3: 5w
 	active_power_usage = initial(active_power_usage) - (T * 2000) //T1: 5000w, T2: 2500w, T3: 1250w
@@ -206,8 +206,8 @@
 	if(held_container && cooling)
 		held_container.reagents.heating(thermal_energy_transfer, max_temperature)
 
-/obj/machinery/chemcooler/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/reagent_containers) && anchored)
+/obj/machinery/chemcooler/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/reagent_containers) && anchored)
 		if(!held_container)
 			if(user.drop_item(W, src))
 				held_container = W

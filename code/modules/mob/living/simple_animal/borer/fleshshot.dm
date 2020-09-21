@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/hookshot/flesh //only intended to be used by borers
+/obj/item/gun/hookshot/flesh //only intended to be used by borers
 	name = "fleshshot"
 	desc = "It looks like a hookshot made of muscle and skin."
 	slot_flags = null
@@ -24,24 +24,24 @@
 
 	var/end_of_chain
 
-/obj/item/weapon/gun/hookshot/flesh/New(atom/A, var/p_borer = null)
+/obj/item/gun/hookshot/flesh/New(atom/A, var/p_borer = null)
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
 	if(!parent_borer)
 		qdel(src)
 
-/obj/item/weapon/gun/hookshot/flesh/dropped()
+/obj/item/gun/hookshot/flesh/dropped()
 	..()
 	qdel(src)
 
-/obj/item/weapon/gun/hookshot/flesh/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
+/obj/item/gun/hookshot/flesh/Destroy()//if a single link of the chain is destroyed, the rest of the chain is instantly destroyed as well.
 	if(parent_borer)
 		if(parent_borer.extend_o_arm == src)
 			parent_borer.extend_o_arm = null
 	..()
 
-/obj/item/weapon/gun/hookshot/flesh/process_chambered()
+/obj/item/gun/hookshot/flesh/process_chambered()
 	if(in_chamber)
 		return 1
 
@@ -64,7 +64,7 @@
 		return 1
 	return 0
 
-/obj/item/weapon/gun/hookshot/flesh/display_reel_message()
+/obj/item/gun/hookshot/flesh/display_reel_message()
 	if(parent_borer)
 		if(parent_borer.host)
 			var/mob/living/carbon/C = chain_datum.extremity_B
@@ -72,24 +72,24 @@
 			var/datum/organ/external/hostlimb = borer_owner.get_organ(parent_borer.hostlimb)
 			to_chat(C, "<span class='warning'>\The [parent_borer.host]'s [hostlimb.display_name] reels you in!</span>")
 
-/obj/item/weapon/gun/hookshot/flesh/rewind_chain()//brings the links back toward the player
+/obj/item/gun/hookshot/flesh/rewind_chain()//brings the links back toward the player
 	..()
 	item_overlay = null
 	update_icon()
 
-/obj/item/weapon/gun/hookshot/flesh/rewind_loop()
+/obj/item/gun/hookshot/flesh/rewind_loop()
 	end_of_chain = 1
 	..()
 
-/obj/item/weapon/gun/hookshot/flesh/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)
+/obj/item/gun/hookshot/flesh/reset_hookchain_overlays(var/obj/effect/overlay/hookchain/HC)
 	if(HC.overlays.len)
 		HC.overlays.len = 0
 
-/obj/item/weapon/gun/hookshot/flesh/set_end_of_chain(var/i)
+/obj/item/gun/hookshot/flesh/set_end_of_chain(var/i)
 	if(i > end_of_chain)
 		end_of_chain = i
 
-/obj/item/weapon/gun/hookshot/flesh/apply_item_overlay()	//The item overlay fails to appear when retracting only when fired at specific angles and I don't know why.
+/obj/item/gun/hookshot/flesh/apply_item_overlay()	//The item overlay fails to appear when retracting only when fired at specific angles and I don't know why.
 	var/obj/effect/overlay/hookchain/chain_end = links["[end_of_chain]"]
 	if(chain_end && chain_end.loc != src)
 		chain_end.overlays += item_overlay
@@ -108,16 +108,16 @@
 /datum/chain/flesh/New()
 	spawn()
 		while(!parent_borer)
-			if(istype(hookshot, /obj/item/weapon/gun/hookshot/flesh))
-				var/obj/item/weapon/gun/hookshot/flesh/F = hookshot
+			if(istype(hookshot, /obj/item/gun/hookshot/flesh))
+				var/obj/item/gun/hookshot/flesh/F = hookshot
 				parent_borer = F.parent_borer
 			sleep(1)
 	..()
 
 /datum/chain/flesh/process()
 	if(!parent_borer)
-		if(istype(hookshot, /obj/item/weapon/gun/hookshot/flesh))
-			var/obj/item/weapon/gun/hookshot/flesh/F = hookshot
+		if(istype(hookshot, /obj/item/gun/hookshot/flesh))
+			var/obj/item/gun/hookshot/flesh/F = hookshot
 			parent_borer = F.parent_borer
 	..()
 
@@ -190,11 +190,11 @@
 
 		overlays += item_overlay
 		if(shot_from)
-			var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
+			var/obj/item/gun/hookshot/flesh/hookshot = shot_from
 			hookshot.item_overlay = item_overlay
 
 /obj/item/projectile/hookshot/flesh/drop_item()
-	var/obj/item/weapon/gun/hookshot/flesh/hookshot = shot_from
+	var/obj/item/gun/hookshot/flesh/hookshot = shot_from
 	if(!hookshot.item_overlay)
 		item_overlay = null
 		update_icon()

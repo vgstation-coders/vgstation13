@@ -21,7 +21,7 @@ var/list/one_way_windows
 	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
 	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
-	var/shardtype = /obj/item/weapon/shard
+	var/shardtype = /obj/item/shard
 	var/reinforcetype = /obj/item/stack/rods
 	sheet_type = /obj/item/stack/sheet/glass/glass //Used for deconstruction
 	var/sheetamount = 1 //Number of sheets needed to build this window (determines how much shit is spawned via Destroy())
@@ -302,10 +302,10 @@ var/list/one_way_windows
 		set_opacity(1)
 	return opacity
 
-/obj/structure/window/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/structure/window/attackby(obj/item/W as obj, mob/living/user as mob)
 
-	if(istype(W, /obj/item/weapon/grab) && Adjacent(user))
-		var/obj/item/weapon/grab/G = W
+	if(istype(W, /obj/item/grab) && Adjacent(user))
+		var/obj/item/grab/G = W
 		if(istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			var/gstate = G.state
@@ -467,7 +467,7 @@ var/list/one_way_windows
 					return
 
 				if(iswelder(W))
-					var/obj/item/weapon/weldingtool/WT = W
+					var/obj/item/weldingtool/WT = W
 					user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 						"<span class='notice'>You start disassembling \the [src].</span>")
 					if(WT.do_weld(user, src, 40, 1) && d_state == WINDOWLOOSE) //Extra condition needed to avoid cheesing
@@ -494,7 +494,7 @@ var/list/one_way_windows
 			return
 
 		if(iswelder(W) && !d_state)
-			var/obj/item/weapon/weldingtool/WT = W
+			var/obj/item/weldingtool/WT = W
 			user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 				"<span class='notice'>You start disassembling \the [src].</span>")
 			if(WT.do_weld(user, src, 40, 0) && d_state == WINDOWLOOSE) //Ditto above
@@ -665,7 +665,7 @@ var/list/one_way_windows
 	name = "plasma window"
 	desc = "A window made out of a plasma-silicate alloy. It looks insanely tough to break and burn through."
 	icon_state = "plasmawindow"
-	shardtype = /obj/item/weapon/shard/plasma
+	shardtype = /obj/item/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmaglass
 	health = 120
 	penetration_dampening = 5
@@ -686,7 +686,7 @@ var/list/one_way_windows
 	name = "reinforced plasma window"
 	desc = "A window made out of a plasma-silicate alloy and a rod matrix. It looks hopelessly tough to break and is most likely nigh fireproof."
 	icon_state = "plasmarwindow"
-	shardtype = /obj/item/weapon/shard/plasma
+	shardtype = /obj/item/shard/plasma
 	sheet_type = /obj/item/stack/sheet/glass/plasmarglass
 	health = 160
 	penetration_dampening = 7

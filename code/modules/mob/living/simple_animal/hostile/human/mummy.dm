@@ -96,7 +96,7 @@
 	ranged_cooldown_cap = 30
 	stat_attack = 0 //Only attack living dudes
 
-	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife)
+	items_to_drop = list(/obj/item/hatchet/unathiknife)
 
 /mob/living/simple_animal/hostile/humanoid/mummy/priest/Shoot()
 	var/mob/living/L = target
@@ -157,7 +157,7 @@
 	attacktext = "stabs"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
 
-	items_to_drop = list(/obj/item/weapon/shield/riot/buckler, /obj/item/weapon/spear/wooden)
+	items_to_drop = list(/obj/item/shield/riot/buckler, /obj/item/spear/wooden)
 
 //Mummy high priests
 //A lot of health. Can shoot bolts of change and invoke a stronger version of mummy curses
@@ -188,7 +188,7 @@
 
 	heat_damage_per_tick = 0
 
-	items_to_drop = list(/obj/item/weapon/hatchet/unathiknife, /obj/item/weapon/coin/adamantine)
+	items_to_drop = list(/obj/item/hatchet/unathiknife, /obj/item/coin/adamantine)
 
 /mob/living/simple_animal/hostile/humanoid/mummy/high_priest/Shoot()
 	if(prob(50)) //50% chance to shoot a normal projectile

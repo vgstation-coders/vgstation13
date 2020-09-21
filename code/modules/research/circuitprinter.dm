@@ -46,11 +46,11 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/circuit_imprinter,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/reagent_containers/glass/beaker,
-		/obj/item/weapon/reagent_containers/glass/beaker
+		/obj/item/circuitboard/circuit_imprinter,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/reagent_containers/glass/beaker,
+		/obj/item/reagent_containers/glass/beaker
 	)
 
 	RefreshParts()
@@ -65,12 +65,12 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/RefreshParts()
 	..()
 	var/T = 0
-	for(var/obj/item/weapon/reagent_containers/glass/G in component_parts)
+	for(var/obj/item/reagent_containers/glass/G in component_parts)
 		T += G.reagents.maximum_volume - G.reagents.total_volume
 	create_reagents(T) // This is only a buffer for handling reagents poured into the imprinter before they flow into the beakers
 
 	T = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/M in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/M in component_parts)
 		T += M.rating
 	max_material_storage = T * 75000
 
@@ -85,7 +85,7 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/drain_to_beakers()
 	draining = TRUE
-	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+	for(var/obj/item/reagent_containers/RC in component_parts)
 		if(RC.reagents.is_full())
 			continue
 		var/empty_volume = RC.reagents.maximum_volume - RC.reagents.total_volume
@@ -98,13 +98,13 @@ using metal and glass, it uses glass and reagents (usually sulfuric acis).
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/update_buffer_size()
 	var/total_empty_volume = 0
-	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+	for(var/obj/item/reagent_containers/RC in component_parts)
 		total_empty_volume += RC.reagents.maximum_volume - RC.reagents.total_volume
 	reagents.maximum_volume = total_empty_volume
 
 /obj/machinery/r_n_d/fabricator/circuit_imprinter/proc/get_total_volume()
 	var/all_volume = 0
-	for(var/obj/item/weapon/reagent_containers/RC in component_parts)
+	for(var/obj/item/reagent_containers/RC in component_parts)
 		all_volume += RC.reagents.total_volume
 	return all_volume
 

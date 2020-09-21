@@ -313,7 +313,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 				S.enemies = list()
 				S.LoseTarget()
 				S.say("Ah, I give up, you've got a pretty good swing.")
-				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(S.loc)
+				call(/obj/item/winter_gift/proc/pick_a_gift)(S.loc)
 			else
 				S.say(pick("Didn't feel anything","You call that snowballing?"))
 		else
@@ -467,8 +467,8 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/sappling/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
-		/obj/item/weapon/minihoe,
-		/obj/item/weapon/scythe,
+		/obj/item/minihoe,
+		/obj/item/scythe,
 		)
 	if(is_type_in_list(W,cutting))
 		qdel(src)
@@ -537,7 +537,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		if(!(locate(/obj/structure/snow) in get_turf(src)))
 			axe_hits++
 			if(axe_hits >= 3)
-				new/obj/item/weapon/grown/log(get_turf(src))
+				new/obj/item/grown/log(get_turf(src))
 				qdel(src)
 
 		sleep(TICK_JIGGLE(50 * snowTickMod))
@@ -546,14 +546,14 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/fireaxe,
+		/obj/item/hatchet,
+		/obj/item/fireaxe,
 		)
 	if(is_type_in_list(W,cutting))
 		axe_hits++
 		user.visible_message("<span class='warning'>[user] hits \the [src] with \the [W].</span>")
 		if(axe_hits >= 3)
-			new/obj/item/weapon/grown/log(get_turf(src))
+			new/obj/item/grown/log(get_turf(src))
 			qdel(src)
 
 /obj/structure/snow_flora/tree/pine
@@ -583,16 +583,16 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 
 /obj/structure/snow_flora/tree/pine/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/fireaxe,
+		/obj/item/hatchet,
+		/obj/item/fireaxe,
 		)
 	if(is_type_in_list(W,cutting))
 		axe_hits++
 		user.visible_message("<span class='warning'>[user] hits \the [src] with \the [W].</span>")
 		if(axe_hits >= 5)
-			new/obj/item/weapon/grown/log(get_turf(src))
-			new/obj/item/weapon/grown/log(get_turf(src))
-			new/obj/item/weapon/grown/log(get_turf(src))
+			new/obj/item/grown/log(get_turf(src))
+			new/obj/item/grown/log(get_turf(src))
+			new/obj/item/grown/log(get_turf(src))
 			qdel(src)
 
 /obj/structure/snow_flora/tree/pine/idle()
@@ -601,9 +601,9 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		if(!(locate(/obj/structure/snow) in get_turf(src)))
 			axe_hits++
 			if(axe_hits >= 5)
-				new/obj/item/weapon/grown/log(get_turf(src))
-				new/obj/item/weapon/grown/log(get_turf(src))
-				new/obj/item/weapon/grown/log(get_turf(src))
+				new/obj/item/grown/log(get_turf(src))
+				new/obj/item/grown/log(get_turf(src))
+				new/obj/item/grown/log(get_turf(src))
 				qdel(src)
 				return
 		sleep(TICK_JIGGLE(50 * snowTickMod))
@@ -628,7 +628,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			continue
 
 		for(var/i=1,i<=rand(1,3),i++)
-			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(T,5)
+			call(/obj/item/winter_gift/proc/pick_a_gift)(T,5)
 
 
 /obj/structure/snow_flora/tree/pine/xmas/vg/New()

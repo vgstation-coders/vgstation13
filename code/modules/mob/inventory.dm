@@ -526,8 +526,8 @@
 				src.s_store = W
 				equipped = 1
 		if(slot_in_backpack)
-			if (src.back && istype(src.back, /obj/item/weapon/storage/backpack))
-				var/obj/item/weapon/storage/backpack/B = src.back
+			if (src.back && istype(src.back, /obj/item/storage/backpack))
+				var/obj/item/storage/backpack/B = src.back
 				if(B.contents.len < B.storage_slots && W.w_class <= B.fits_max_w_class)
 					W.forceMove(B)
 					equipped = 1
@@ -554,7 +554,7 @@
 /mob/proc/get_card()
 	// Try to find a debit card first.
 	var/list/all_slots = held_items + src.get_all_slots()
-	var/obj/item/weapon/card/debit/debit_card = locate(/obj/item/weapon/card/debit/) in all_slots
+	var/obj/item/card/debit/debit_card = locate(/obj/item/card/debit/) in all_slots
 	if(debit_card)
 		return debit_card
 	else

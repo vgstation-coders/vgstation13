@@ -30,7 +30,7 @@ var/list/cyborg_list = list()
 	var/obj/abstract/screen/robot_modules_background
 
 	//3 Modules can be activated at any one time.
-	var/obj/item/weapon/robot_module/module = null
+	var/obj/item/robot_module/module = null
 	var/module_active = null
 	var/module_state_1 = null
 	var/module_state_2 = null
@@ -39,8 +39,8 @@ var/list/cyborg_list = list()
 	var/mob/living/silicon/ai/connected_ai = null
 	var/AIlink = TRUE //Do we start linked to an AI?
 
-	var/obj/item/weapon/cell/cell = null
-	var/cell_type = /obj/item/weapon/cell/high/cyborg //The cell_type we're actually using.
+	var/obj/item/cell/cell = null
+	var/cell_type = /obj/item/cell/high/cyborg //The cell_type we're actually using.
 
 	var/obj/machinery/camera/camera = null
 
@@ -395,7 +395,7 @@ var/list/cyborg_list = list()
 // this function displays jetpack pressure in the stat panel
 /mob/living/silicon/robot/proc/show_jetpack_pressure()
 	// if you have a jetpack, show the internal tank pressure
-	var/obj/item/weapon/tank/jetpack/current_jetpack = installed_jetpack()
+	var/obj/item/tank/jetpack/current_jetpack = installed_jetpack()
 	if(current_jetpack)
 		stat("Internal Atmosphere Info", current_jetpack.name)
 		stat("Tank Pressure", current_jetpack.air_contents.return_pressure())
@@ -403,7 +403,7 @@ var/list/cyborg_list = list()
 // this function returns the robots jetpack, if one is installed
 /mob/living/silicon/robot/proc/installed_jetpack()
 	if(module)
-		return (locate(/obj/item/weapon/tank/jetpack) in module.modules)
+		return (locate(/obj/item/tank/jetpack) in module.modules)
 	return FALSE
 /mob/living/silicon/robot/proc/installed_module(var/typepath)
 	if(module)
@@ -418,7 +418,7 @@ var/list/cyborg_list = list()
 		stat(null, text("No Cell Inserted!"))
 
 /mob/living/silicon/robot/proc/show_welding_fuel()
-	var/obj/item/weapon/weldingtool/WT = installed_module(/obj/item/weapon/weldingtool)
+	var/obj/item/weldingtool/WT = installed_module(/obj/item/weldingtool)
 	if(WT)
 		stat(null, text("Welding fuel: [WT.get_fuel()]/[WT.max_fuel]"))
 
@@ -598,7 +598,7 @@ var/list/cyborg_list = list()
 	return TRUE
 
 
-/mob/living/silicon/robot/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/mob/living/silicon/robot/attackby(obj/item/W as obj, mob/user as mob)
 	if(opened) // Are they trying to insert something?
 		for(var/V in components)
 			var/datum/robot_component/C = components[V]
@@ -623,7 +623,7 @@ var/list/cyborg_list = list()
 		if(!getBruteLoss())
 			to_chat(user, "Nothing to fix here!")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(0))
 			var/starting_health = health
 			adjustBruteLoss(-30)
@@ -714,13 +714,13 @@ var/list/cyborg_list = list()
 				opened = TRUE
 				updateicon()
 
-	else if(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+	else if(istype(W, /obj/item/cell) && opened)	// trying to put a cell inside
 		var/datum/robot_component/C = components["power cell"]
 		if(wiresexposed)
 			to_chat(user, "Close the panel first.")
 		else if(cell)
 			to_chat(user, "You swap the power cell within with the new cell in your hand.")
-			var/obj/item/weapon/cell/oldpowercell = cell
+			var/obj/item/cell/oldpowercell = cell
 			C.wrapped = null
 			C.installed = COMPONENT_MISSING
 			cell = W
@@ -781,7 +781,7 @@ var/list/cyborg_list = list()
 		else
 			to_chat(user, "Unable to locate a radio.")
 
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
+	else if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)//still allow them to open the cover
 			to_chat(user, "The interface seems slightly damaged")
 		if(opened)
@@ -986,14 +986,14 @@ var/list/cyborg_list = list()
 			return check_access(george.get_active_hand())
 	return FALSE
 
-/mob/living/silicon/robot/proc/check_access(obj/item/weapon/card/id/I)
+/mob/living/silicon/robot/proc/check_access(obj/item/card/id/I)
 	if(!istype(req_access, /list)) //something's very wrong
 		return TRUE
 
 	var/list/L = req_access
 	if(!L.len) //no requirements
 		return TRUE
-	if(!istype(I, /obj/item/weapon/card/id) && istype(I, /obj/item))
+	if(!istype(I, /obj/item/card/id) && istype(I, /obj/item))
 		I = I.GetID()
 	if(!I || !I.access) //not ID or no access
 		return FALSE

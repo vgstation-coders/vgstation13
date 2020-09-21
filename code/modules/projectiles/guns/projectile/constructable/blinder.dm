@@ -11,8 +11,8 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
 	starting_materials = list(MAT_IRON = 2000)
 	w_type = RECYK_ELECTRONIC
-	var/obj/item/weapon/cell/cell = null
-	var/obj/item/weapon/light/bulb/flashbulb = null
+	var/obj/item/cell/cell = null
+	var/obj/item/light/bulb/flashbulb = null
 	var/start_with_bulb = TRUE
 	var/decon_path = /obj/item/device/camera
 	var/powercost = 10000
@@ -151,8 +151,8 @@
 		flashbulb = null
 	update_verbs()
 
-/obj/item/device/blinder/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/cell))
+/obj/item/device/blinder/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/cell))
 		if(cell)
 			to_chat(user, "<span class='warning'>There is already a power cell inside \the [src].</span>")
 			return
@@ -164,7 +164,7 @@
 		update_desc()
 		update_verbs()
 
-	if(istype(W, /obj/item/weapon/light/bulb))
+	if(istype(W, /obj/item/light/bulb))
 		if(flashbulb)
 			if(flashbulb.status >= LIGHT_BROKEN)
 				to_chat(user, "<span class='warning'>You need to remove the damaged bulb first.</span>")
@@ -172,7 +172,7 @@
 			else
 				to_chat(user, "There is already a perfectly good bulb inside \the [src].")
 				return
-		var/obj/item/weapon/light/bulb/B = W
+		var/obj/item/light/bulb/B = W
 		if(B.status == LIGHT_BROKEN)
 			to_chat(user, "<span class='warning'>That [B.name] is broken, it won't function in \the [src].</span>")
 			return

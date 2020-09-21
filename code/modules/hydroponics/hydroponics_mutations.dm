@@ -360,7 +360,7 @@
 			visible_message("<span class='notice'>\The [seed.display_name] suddenly looks a little different.</span>")
 
 		if("fruit_exotic")
-			seed.products += pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/grown)-/obj/item/weapon/reagent_containers/food/snacks/grown)
+			seed.products += pick(typesof(/obj/item/reagent_containers/food/snacks/grown)-/obj/item/reagent_containers/food/snacks/grown)
 			visible_message("<span class='notice'>\The [seed.display_name] seems to be growing something weird.</span>")
 
 		if("chemical_exotic")

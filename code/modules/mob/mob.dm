@@ -607,17 +607,17 @@
 /mob/living/carbon/human/proc/equip_or_collect(var/obj/item/W, var/slot)
 	if(!equip_to_slot_or_drop(W, slot))
 		// Do I have a backpack?
-		var/obj/item/weapon/storage/B = back
+		var/obj/item/storage/B = back
 
 		// Do I have a plastic bag?
 		if(!B)
-			var/index = find_held_item_by_type(/obj/item/weapon/storage/bag/plasticbag)
+			var/index = find_held_item_by_type(/obj/item/storage/bag/plasticbag)
 			if(index)
 				B = held_items[index]
 
 		if(!B)
 			// Gimme one.
-			B=new /obj/item/weapon/storage/bag/plasticbag(null) // Null in case of failed equip.
+			B=new /obj/item/storage/bag/plasticbag(null) // Null in case of failed equip.
 			if(!put_in_hands(B,slot_back))
 				return // Fuck it
 		B.handle_item_insertion(W,1)
@@ -707,7 +707,7 @@ Use this proc preferably at the end of an equipment loadout
 				has_succeeded_once = TRUE
 				L.Remove(I)
 	if(L.len)
-		var/obj/item/weapon/storage/B = back
+		var/obj/item/storage/B = back
 		for(var/obj/item/I in L)
 			if(istype(B))
 				B.handle_item_insertion(I,1)
@@ -880,7 +880,7 @@ Use this proc preferably at the end of an equipment loadout
 					if(!disable_warning)
 						to_chat(usr, "The [name] is too big to attach.")
 					return 0
-				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/weapon/pen) || is_type_in_list(src, H.wear_suit.allowed) )
+				if( istype(src, /obj/item/device/pda) || istype(src, /obj/item/pen) || is_type_in_list(src, H.wear_suit.allowed) )
 					if(H.s_store)
 						if(H.s_store.canremove)
 							return 2
@@ -892,18 +892,18 @@ Use this proc preferably at the end of an equipment loadout
 			if(slot_handcuffed)
 				if(H.handcuffed || H.mutual_handcuffs)
 					return 0
-				if(!istype(src, /obj/item/weapon/handcuffs))
+				if(!istype(src, /obj/item/handcuffs))
 					return 0
 				return 1
 			if(slot_legcuffed)
 				if(H.legcuffed)
 					return 0
-				if(!istype(src, /obj/item/weapon/legcuffs))
+				if(!istype(src, /obj/item/legcuffs))
 					return 0
 				return 1
 			if(slot_in_backpack)
-				if (H.back && istype(H.back, /obj/item/weapon/storage/backpack))
-					var/obj/item/weapon/storage/backpack/B = H.back
+				if (H.back && istype(H.back, /obj/item/storage/backpack))
+					var/obj/item/storage/backpack/B = H.back
 					if(!B.storage_slots && w_class <= B.fits_max_w_class)
 						return 1
 					if(B.contents.len < B.storage_slots && w_class <= B.fits_max_w_class)
@@ -944,7 +944,7 @@ Use this proc preferably at the end of an equipment loadout
 	return
 
 /mob/proc/ret_grab(obj/effect/list_container/mobl/L as obj, flag)
-	if (!find_held_item_by_type(/obj/item/weapon/grab)) //No grab in hands
+	if (!find_held_item_by_type(/obj/item/grab)) //No grab in hands
 		if (!( L ))
 			return null
 		else
@@ -955,9 +955,9 @@ Use this proc preferably at the end of an equipment loadout
 			L.container += src
 			L.master = src
 
-		var/grab_in_hands = find_held_item_by_type(/obj/item/weapon/grab)
+		var/grab_in_hands = find_held_item_by_type(/obj/item/grab)
 		if(grab_in_hands)
-			var/obj/item/weapon/grab/G = held_items[grab_in_hands]
+			var/obj/item/grab/G = held_items[grab_in_hands]
 			if (!( L.container.Find(G.affecting) ))
 				L.container += G.affecting
 				if (G.affecting)
@@ -1772,7 +1772,7 @@ Use this proc preferably at the end of an equipment loadout
 	if(S == U)
 		self = 1 // Removing object from yourself.
 
-	for(var/obj/item/weapon/W in embedded)
+	for(var/obj/item/W in embedded)
 		if(W.w_class <= W_CLASS_SMALL)
 			valid_objects += W
 
@@ -1783,7 +1783,7 @@ Use this proc preferably at the end of an equipment loadout
 			to_chat(U, "[src] has nothing stuck in their wounds that is large enough to remove.")
 		return
 
-	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
+	var/obj/item/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
 	if(self)
 		to_chat(src, "<span class='warning'>You attempt to get a good grip on the [selection] in your body.</span></span>")
@@ -1802,7 +1802,7 @@ Use this proc preferably at the end of an equipment loadout
 
 	selection.forceMove(get_turf(src))
 
-	for(var/obj/item/weapon/O in pinned)
+	for(var/obj/item/O in pinned)
 		if(O == selection)
 			pinned -= O
 		if(!pinned.len)
@@ -2163,7 +2163,7 @@ mob/proc/on_foot()
 				to_chat(src, "<span class='notice'>[pick("Hey that's dangerous...wouldn't want hurting people.","You don't feel like firing \the [weapon] at \the [target].","Peace, my [gender == FEMALE ? "girl" : "man"]...")]</span>")
 		return TRUE
 
-	for (var/obj/item/weapon/implant/peace/target_implant in src.contents)
+	for (var/obj/item/implant/peace/target_implant in src.contents)
 		if (!target_implant.malfunction && target_implant.imp_alive && target_implant.imp_in == src)
 			if (message != VIOLENCE_SILENT)
 				to_chat(src, "<span class='warning'>\The [target_implant] inside you prevents this!</span>")

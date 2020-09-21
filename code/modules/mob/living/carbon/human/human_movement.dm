@@ -50,10 +50,10 @@
 			if(!E || (E.status & ORGAN_DESTROYED))
 				. += 4*multiplier
 			if(E.status & ORGAN_SPLINTED)
-				if(!find_held_item_by_type(/obj/item/weapon/cane))
+				if(!find_held_item_by_type(/obj/item/cane))
 					. += 0.5*multiplier
 			else if(E.status & ORGAN_BROKEN)
-				if(!find_held_item_by_type(/obj/item/weapon/cane))
+				if(!find_held_item_by_type(/obj/item/cane))
 					. += 1*multiplier
 				. += 0.5*multiplier
 
@@ -81,7 +81,7 @@
 	// Bomberman stuff
 	var/skate_bonus = 0
 	var/disease_slow = 0
-	for(var/obj/item/weapon/bomberman/dispenser in src)
+	for(var/obj/item/bomberman/dispenser in src)
 		disease_slow = max(disease_slow, dispenser.slow)
 		skate_bonus = max(skate_bonus, dispenser.speed_bonus) // if the player is carrying multiple BBD for some reason, he'll benefit from the speed bonus of the most upgraded one
 
@@ -97,8 +97,8 @@
 		return 0
 
 	//Do we have a working jetpack
-	if(istype(back, /obj/item/weapon/tank/jetpack))
-		var/obj/item/weapon/tank/jetpack/J = back
+	if(istype(back, /obj/item/tank/jetpack))
+		var/obj/item/tank/jetpack/J = back
 		if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(0.01, src)))
 			inertia_dir = 0
 			return 1
@@ -145,7 +145,7 @@
 			var/obj/item/clothing/suit/SU = wear_suit
 			SU.step_action()
 
-		for(var/obj/item/weapon/bomberman/dispenser in src)
+		for(var/obj/item/bomberman/dispenser in src)
 			if(dispenser.spam_bomb)
 				dispenser.attack_self(src)
 

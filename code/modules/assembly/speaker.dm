@@ -31,7 +31,7 @@
 
 /obj/item/device/assembly/speaker/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W,/obj/item/weapon/pen)) //pen
+	if(istype(W,/obj/item/pen)) //pen
 		var/new_name = sanitize(input(user,"Enter new name for the [src]","NanoSpeaker Settings",name))
 		if(!Adjacent(user) || user.incapacitated())
 			return

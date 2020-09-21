@@ -179,7 +179,7 @@ var/global/list/organ_damage_overlays = list(
 	name = get_visible_name()
 	handle_regular_hud_updates()
 	pulse = handle_pulse()
-	for(var/obj/item/weapon/grab/G in src)
+	for(var/obj/item/grab/G in src)
 		G.process()
 	handle_alpha()
 	if(update_overlays)

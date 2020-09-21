@@ -1,4 +1,4 @@
-/obj/item/weapon/nullrod
+/obj/item/nullrod
 	name = "null rod"
 	desc = "A rod of pure obsidian, its very presence disrupts and dampens the powers of paranormal phenomenae."
 	icon = 'icons/obj/weapons.dmi'
@@ -14,14 +14,14 @@
 	mech_flags = MECH_SCAN_ILLEGAL // FUCK MECHANICS
 	var/reskinned = FALSE
 	var/reskin_selectable = TRUE // set to FALSE if a subtype is meant to not normally be available as a reskin option (fluff ones will get re-added through their list)
-	var/list/fluff_transformations = list() //does it have any special transformations only accessible to it? Should only be subtypes of /obj/item/weapon/nullrod
+	var/list/fluff_transformations = list() //does it have any special transformations only accessible to it? Should only be subtypes of /obj/item/nullrod
 	var/fluff_pickup = "pulverize"
 
-/obj/item/weapon/nullrod/suicide_act(mob/user)
+/obj/item/nullrod/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
+/obj/item/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
@@ -58,7 +58,7 @@
 
 	. = ..() //Whack their shit regardless. It's an obsidian rod, it breaks skulls
 
-/obj/item/weapon/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
+/obj/item/nullrod/afterattack(var/atom/A, var/mob/user, var/prox_flag, var/params)
 	if(!prox_flag)
 		return
 	if(istype(A, /turf/simulated/floor))
@@ -82,7 +82,7 @@
 			to_chat(user, "<span class='warning'>A structure suddenly emerges from the ground!</span>")
 		call(/obj/effect/rune_legacy/proc/revealrunes)(src)//revealing legacy runes as well because why not
 
-/obj/item/weapon/nullrod/pickup(mob/living/user as mob)
+/obj/item/nullrod/pickup(mob/living/user as mob)
 	if(user.mind)
 		if(isReligiousLeader(user))
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
@@ -92,16 +92,16 @@
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
 
-/obj/item/weapon/nullrod/attack_self(mob/user)
+/obj/item/nullrod/attack_self(mob/user)
 	if(reskinned)
 		return
 	if(isReligiousLeader(user))
 		reskin_holy_weapon(user)
 
-/obj/item/weapon/nullrod/proc/reskin_holy_weapon(mob/living/M)
-	var/list/holy_weapons_list = typesof(/obj/item/weapon/nullrod)
+/obj/item/nullrod/proc/reskin_holy_weapon(mob/living/M)
+	var/list/holy_weapons_list = typesof(/obj/item/nullrod)
 	for(var/entry in holy_weapons_list)
-		var/obj/item/weapon/nullrod/variant = entry
+		var/obj/item/nullrod/variant = entry
 		if(!initial(variant.reskin_selectable))
 			holy_weapons_list -= variant
 	if(fluff_transformations.len)
@@ -119,7 +119,7 @@
 	var/index = display_names.Find(choice)
 	var/A = holy_weapons_list[index]
 
-	var/obj/item/weapon/nullrod/holy_weapon = new A
+	var/obj/item/nullrod/holy_weapon = new A
 
 	feedback_set_details("chaplain_weapon","[choice]")
 
@@ -130,7 +130,7 @@
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
 
-/obj/item/weapon/nullrod/sword
+/obj/item/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"
 	icon_state = "avenger"
@@ -142,16 +142,16 @@
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	fluff_pickup = "dice"
 
-/obj/item/weapon/nullrod/sword/IsShield()
+/obj/item/nullrod/sword/IsShield()
 	return prob(10) //Only TRIES to block 10% of the attacks. SO MANY LAYERS OF RNG but hey.
 
-/obj/item/weapon/nullrod/sword/cult //Muh cult religion.
+/obj/item/nullrod/sword/cult //Muh cult religion.
 	name = "cult blade"
 	desc = "Spread the glory of the blood god!"
 	icon_state = "cultblade"
 	item_state = "cultblade"
 
-/obj/item/weapon/nullrod/sword/katana //*tips fedora*
+/obj/item/nullrod/sword/katana //*tips fedora*
 	name = "saint katana"
 	desc = "This weapon can cut clean through plasteel because its blade was folded over a thousand times, making it vastly superior to any other holy weapon."
 	icon_state = "katana"
@@ -159,7 +159,7 @@
 	fluff_pickup = "bisect"
 
 
-/obj/item/weapon/nullrod/toolbox //Syndicate/Robust religion
+/obj/item/nullrod/toolbox //Syndicate/Robust religion
 	name = "nullbox"
 	desc = "The holder of nothingness. If your holy book isn't working, try this one instead."
 	icon = 'icons/obj/storage/storage.dmi'
@@ -171,7 +171,7 @@
 	w_class = W_CLASS_LARGE
 	fluff_pickup = "robust"
 
-/obj/item/weapon/nullrod/crozius //The Imperial Creed
+/obj/item/nullrod/crozius //The Imperial Creed
 	name = "\improper Crozius Arcanum"
 	desc = "Repent! For tomorrow you die!"
 	icon_state = "crozius"
@@ -180,7 +180,7 @@
 	attack_verb = list("mauls", "batters", "bashes")
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/nullrod/spear //Ratvar? How!
+/obj/item/nullrod/spear //Ratvar? How!
 	name = "divine brass spear"
 	desc = "A holy, bronze weapon of ancient design."
 	hitsound = 'sound/weapons/bladeslice.ogg'
@@ -192,19 +192,19 @@
 	flags = TWOHANDABLE | FPRINT
 	fluff_pickup = "skewer"
 
-/obj/item/weapon/nullrod/spear/update_wield(var/mob/user)
+/obj/item/nullrod/spear/update_wield(var/mob/user)
 	icon_state = "clockwork[wielded ? 1 : 0]"
 	item_state = icon_state
 	if(user)
 		user.update_inv_hands()
 
-/obj/item/weapon/nullrod/spear/attack_self(mob/user)
+/obj/item/nullrod/spear/attack_self(mob/user)
 	if(wielded)
 		unwield(user)
 	else
 		wield(user)
 
-/obj/item/weapon/nullrod/staff //Wizard religion
+/obj/item/nullrod/staff //Wizard religion
 	name = "staff of nullmancy"
 	desc = "A wicked looking staff that pulses with holy energy."
 	icon = 'icons/obj/wizard.dmi'
@@ -213,7 +213,7 @@
 	w_class = W_CLASS_LARGE
 	fluff_pickup = "banish"
 
-/obj/item/weapon/nullrod/chain //Comdom religion
+/obj/item/nullrod/chain //Comdom religion
 	name = "heavenly chain"
 	desc = "A holy tool used by chaplains to placate the heretic masses."
 	icon_state = "chain"
@@ -224,7 +224,7 @@
 	attack_verb = list("flogs", "whips", "lashes", "disciplines")
 	fluff_pickup = "dominate"
 
-/obj/item/weapon/nullrod/honk //CLown religion
+/obj/item/nullrod/honk //CLown religion
 	name = "honk rod"
 	desc = "A holy rod for honking people with."
 	icon = 'icons/obj/weapons.dmi'
@@ -236,7 +236,7 @@
 	attack_verb = list("HONKS")
 	fluff_pickup = "prank"
 
-/obj/item/weapon/nullrod/baguette //Mime religion
+/obj/item/nullrod/baguette //Mime religion
 	name = "french rod"
 	desc = "It's not edible food."
 	icon = 'icons/obj/food.dmi'
@@ -245,7 +245,7 @@
 	w_class = W_CLASS_MEDIUM
 	fluff_pickup = "retreat from"
 
-/obj/item/weapon/nullrod/cane
+/obj/item/nullrod/cane
 	name = "blessed cane"
 	desc = "A holy cane used by chaplains. Not very good at supporting body weight."
 	icon_state = "cane"
@@ -253,7 +253,7 @@
 	w_class = W_CLASS_SMALL
 	attack_verb = list("bludgeons", "whacks", "disciplines", "thrashes")
 
-/obj/item/weapon/nullrod/morningstar
+/obj/item/nullrod/morningstar
 	name = "septerion morningstar"
 	desc = "A ritualistic mace with a round, spiky end. Very heavy."
 	icon_state = "morningstar"
@@ -265,7 +265,7 @@
 	fluff_pickup = "smite"
 
 
-/obj/item/weapon/nullrod/vampkiller
+/obj/item/nullrod/vampkiller
 	name = "holy whip"
 	desc = "A brutal looking, holy weapon consisting of a morning star head attached to a chain lash. The chain on this one seems a bit shorter than described in legend."
 	icon_state = "vampkiller"
@@ -278,7 +278,7 @@
 	slot_flags = SLOT_BELT
 
 
-/obj/item/weapon/nullrod/mosinnagant
+/obj/item/nullrod/mosinnagant
 	name = "mosin nagant"
 	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
 	icon = 'icons/obj/gun.dmi'
@@ -290,16 +290,16 @@
 	attack_verb = list("bashes", "smashes", "buttstrokes")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
-/obj/item/weapon/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
+/obj/item/nullrod/mosinnagant/attackby(var/obj/item/A, mob/living/user)
 	..()
-	if(istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+	if(istype(A, /obj/item/circular_saw) || istype(A, /obj/item/melee/energy) || istype(A, /obj/item/pickaxe/plasmacutter))
 		to_chat(user, "<span class='notice'>You begin to shorten the barrel of \the [src].</span>")
 		if(do_after(user, src, 30))
-			new /obj/item/weapon/nullrod/mosinnagant/obrez(get_turf(src))
+			new /obj/item/nullrod/mosinnagant/obrez(get_turf(src))
 			qdel(src)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 
-/obj/item/weapon/nullrod/mosinnagant/obrez
+/obj/item/nullrod/mosinnagant/obrez
 	name = "obrez"
 	desc = "Holding this makes you feel like you want to obtain an SKS and go deeper in space. This one cannot be fired."
 	icon = 'icons/obj/gun.dmi'
@@ -311,14 +311,14 @@
 	attack_verb = list("bashes", "smashes", "pistol-whips", "clubs")
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
-/obj/item/weapon/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
-    if (istype(A, /obj/item/weapon/circular_saw) || istype(A, /obj/item/weapon/melee/energy) || istype(A, /obj/item/weapon/pickaxe/plasmacutter))
+/obj/item/nullrod/mosinnagant/obrez/attackby(var/obj/item/A, mob/living/user)
+    if (istype(A, /obj/item/circular_saw) || istype(A, /obj/item/melee/energy) || istype(A, /obj/item/pickaxe/plasmacutter))
         return
     else
         return ..()
 
 // The chaos blade, a ghost role talking sword. Unlike the nullrod skins this thing works as a proper shield and has sharpness.
-/obj/item/weapon/nullrod/sword/chaos
+/obj/item/nullrod/sword/chaos
 	name = "chaos blade"
 	desc = "Considered a 'cursed blade' legend says that anyone that tries to wield it end corrupted by chaos. It has three yellow eyes, two near the base of the hilt and one at the pommel, and a decorative jewel between its eyes."
 	icon_state = "talking_sword"
@@ -332,14 +332,14 @@
 	var/ping_cooldown = 5 SECONDS
 	reskin_selectable = FALSE //No fun allowed.
 
-/obj/item/weapon/nullrod/sword/chaos/attack_self(mob/living/user)
+/obj/item/nullrod/sword/chaos/attack_self(mob/living/user)
 	if(possessed)
 		return
 
 	awaken()
 
 
-/obj/item/weapon/nullrod/sword/chaos/proc/awaken()
+/obj/item/nullrod/sword/chaos/proc/awaken()
 	if(awakening)
 		return
 	awakening = TRUE
@@ -360,18 +360,18 @@
 
 	recruiter.request_player()
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
+/obj/item/nullrod/sword/chaos/proc/recruiter_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class='recruit'>\The [name] is awakening. You have been added to the list of potential ghosts. ([controls])</span>")
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
+/obj/item/nullrod/sword/chaos/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
 	to_chat(O, "<span class='recruit'>\The [src] is awakening. ([controls])</span>")
 
 
-/obj/item/weapon/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
+/obj/item/nullrod/sword/chaos/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	if(O)
 		possessed = TRUE
@@ -400,7 +400,7 @@
 		icon_state = initial(icon_state)
 		visible_message("<span class='notice'>\The [name] calms down.</span>")
 
-/obj/item/weapon/nullrod/sword/chaos/Destroy()
+/obj/item/nullrod/sword/chaos/Destroy()
 	for(var/mob/living/simple_animal/shade/sword/S in contents)
 		to_chat(S, "You were destroyed!")
 		qdel(S)
@@ -409,7 +409,7 @@
 		recruiter = null
 	..()
 
-/obj/item/weapon/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)
+/obj/item/nullrod/sword/chaos/attack_ghost(var/mob/dead/observer/O)
 	if(possessed)
 		return
 	if(last_ping_time + ping_cooldown <= world.time)
@@ -418,5 +418,5 @@
 	else
 		to_chat(O, "\The [name]'s power is low. Try again in a few moments.")
 
-/obj/item/weapon/nullrod/sword/chaos/IsShield()
+/obj/item/nullrod/sword/chaos/IsShield()
 	return TRUE

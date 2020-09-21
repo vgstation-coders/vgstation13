@@ -498,7 +498,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				if (!(is_type_in_list(target_tag, enemy_vest_types)))
 					return 1
 				if(!M.lying) //Kick a man while he's down, will ya
-					var/obj/item/weapon/gun/energy/tag/taggun = shot_from
+					var/obj/item/gun/energy/tag/taggun = shot_from
 					if(istype(taggun))
 						taggun.score()
 				M.Knockdown(2)
@@ -518,13 +518,13 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 					firer_player.total_hits++
 					target_player.total_hit_by++
 					target_player.hit_by[firer_player.nametag]++
-				var/taggun_index = M.find_held_item_by_type(/obj/item/weapon/gun/energy/tag)
+				var/taggun_index = M.find_held_item_by_type(/obj/item/gun/energy/tag)
 				if (taggun_index)
-					var/obj/item/weapon/gun/energy/tag/their_gun = M.held_items[taggun_index]
+					var/obj/item/gun/energy/tag/their_gun = M.held_items[taggun_index]
 					their_gun.cooldown(target_tag.my_laser_tag_game.disable_time/2)
 				M.Knockdown(target_tag.my_laser_tag_game.stun_time/2)
 				M.Stun(target_tag.my_laser_tag_game.stun_time/2)
-				var/obj/item/weapon/gun/energy/tag/taggun = shot_from
+				var/obj/item/gun/energy/tag/taggun = shot_from
 				if(istype(taggun))
 					taggun.score()
 	return 1

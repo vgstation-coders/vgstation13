@@ -2,7 +2,7 @@
 //moved these here from code/defines/obj/weapon.dm
 //please preference put stuff where it's easy to find - C
 
-/obj/item/weapon/autopsy_scanner
+/obj/item/autopsy_scanner
 	name = "autopsy scanner"
 	desc = "Extracts information on wounds."
 	icon = 'icons/obj/autopsy_scanner.dmi'
@@ -39,7 +39,7 @@
 	W.time_inflicted = time_inflicted
 	return W
 
-/obj/item/weapon/autopsy_scanner/proc/add_data(var/datum/organ/external/O)
+/obj/item/autopsy_scanner/proc/add_data(var/datum/organ/external/O)
 	if(istype(O,/datum/organ/external/chest))
 		var/mob/living/carbon/human/H = O.owner
 		if(H)
@@ -89,7 +89,7 @@
 		if(O.trace_chemicals[V] > 0 && !chemtraces.Find(V))
 			chemtraces += V
 
-/obj/item/weapon/autopsy_scanner/proc/format_autopsy_data() //modified code to allow OOP
+/obj/item/autopsy_scanner/proc/format_autopsy_data() //modified code to allow OOP
 	var/scan_data = ""
 	if(timeofdeath)
 		scan_data += "<b>Time of death:</b> [worldtime2text(timeofdeath)]<br><br>"
@@ -146,7 +146,7 @@
 	scan_data += "<br>[advanced_butchery]<br>"
 	return scan_data
 
-/obj/item/weapon/autopsy_scanner/verb/print_data()
+/obj/item/autopsy_scanner/verb/print_data()
 	set category = "Object"
 	set src in usr
 	set name = "Print Data"
@@ -160,14 +160,14 @@
 
 	sleep(1 SECONDS)
 
-	var/obj/item/weapon/paper/P = new(user.loc)
+	var/obj/item/paper/P = new(user.loc)
 	P.name = "Autopsy Data ([target_name])"
 	P.info = "<tt>[format_autopsy_data()]</tt>"
 	P.overlays += image(icon = P.icon, icon_state = "paper_words")
 
 	user.put_in_hands(P)
 
-/obj/item/weapon/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
+/obj/item/autopsy_scanner/attack(mob/living/carbon/human/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M))
 		return
 

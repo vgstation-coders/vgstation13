@@ -32,8 +32,8 @@
 	var/deflect_chance = 10 //chance to deflect the incoming projectiles, hits, or lesser the effect of ex_act.
 	//the values in this list show how much damage will pass through, not how much will be absorbed.
 	var/list/damage_absorption = list("brute"=0.8,"fire"=1.2,"bullet"=0.9,"laser"=1,"energy"=1,"bomb"=1)
-	var/obj/item/weapon/cell/cell = null
-	var/cell_type = /obj/item/weapon/cell/high/mecha
+	var/obj/item/cell/cell = null
+	var/cell_type = /obj/item/cell/high/mecha
 	var/state = STATE_BOLTSHIDDEN
 	var/list/log = new //Holds the log of what the mecha has done (Attacked, fired at, been attacked by, gone into maintenance mode, etc.)
 	var/last_message = 0 // Used in occupant_message()
@@ -439,7 +439,7 @@
 		breakthrough = 1
 
 	else if(istype(obstacle, /obj/structure/rack))
-		new /obj/item/weapon/rack_parts(obstacle.loc)
+		new /obj/item/rack_parts(obstacle.loc)
 		qdel(obstacle)
 		breakthrough = 1
 
@@ -732,7 +732,7 @@
 		src.check_for_internal_damage(list(MECHA_INT_FIRE, MECHA_INT_TEMP_CONTROL))
 	return
 
-/obj/mecha/proc/dynattackby(obj/item/weapon/W as obj, mob/living/user as mob)
+/obj/mecha/proc/dynattackby(obj/item/W as obj, mob/living/user as mob)
 	user.delayNextAttack(8)
 	user.do_attack_animation(src, W)
 	src.log_message("Attacked by [W]. Attacker - [user]")
@@ -755,7 +755,7 @@
 ////// AttackBy //////
 //////////////////////
 
-/obj/mecha/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/mecha/attackby(obj/item/W as obj, mob/user as mob)
 
 
 	if(istype(W, /obj/item/device/mmi))
@@ -779,11 +779,11 @@
 			else
 				to_chat(user, "You were unable to attach [W] to [src]")
 		return
-	if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if(add_req_access || maint_access)
 			if(internals_access_allowed(usr))
-				var/obj/item/weapon/card/id/id_card
-				if(istype(W, /obj/item/weapon/card/id))
+				var/obj/item/card/id/id_card
+				if(istype(W, /obj/item/card/id))
 					id_card = W
 				else
 					var/obj/item/device/pda/pda = W
@@ -854,7 +854,7 @@
 			clearInternalDamage(MECHA_INT_TEMP_CONTROL)
 			to_chat(user, "You repair the damaged temperature controller.")
 		return
-	else if(istype(W, /obj/item/weapon/cell))
+	else if(istype(W, /obj/item/cell))
 		if(state==STATE_BOLTSOPENED)
 			if(!cell)
 				if(user.drop_item(W, src))
@@ -889,7 +889,7 @@
 		return
 
 	else if(iswelder(W) && user.a_intent != I_HURT)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if (WT.remove_fuel(0,user))
 			if (hasInternalDamage(MECHA_INT_TANK_BREACH))
 				clearInternalDamage(MECHA_INT_TANK_BREACH)
@@ -1421,7 +1421,7 @@
 		return 0
 
 
-/obj/mecha/check_access(obj/item/weapon/card/id/I, list/access_list)
+/obj/mecha/check_access(obj/item/card/id/I, list/access_list)
 	if(!istype(access_list))
 		return 1
 	if(!access_list.len) //no requirements
@@ -1613,7 +1613,7 @@
 	return output
 
 
-/obj/mecha/proc/output_access_dialog(obj/item/weapon/card/id/id_card, mob/user)
+/obj/mecha/proc/output_access_dialog(obj/item/card/id/id_card, mob/user)
 	if(!id_card || !user)
 		return
 	var/output = {"<html>
@@ -1647,7 +1647,7 @@
 	onclose(user, "exosuit_add_access")
 	return
 
-/obj/mecha/proc/output_maintenance_dialog(obj/item/weapon/card/id/id_card,mob/user)
+/obj/mecha/proc/output_maintenance_dialog(obj/item/card/id/id_card,mob/user)
 	if(!id_card || !user)
 		return
 	var/output = {"<html>
@@ -1857,7 +1857,7 @@
 	if(href_list["add_all_req_access"] && add_req_access && topic_filter.getObj("id_card"))
 		if(!in_range(src, usr))
 			return
-		var/obj/item/weapon/card/id/mycard = topic_filter.getObj("id_card")
+		var/obj/item/card/id/mycard = topic_filter.getObj("id_card")
 		var/list/myaccess = mycard.access
 		for(var/a in myaccess)
 			operation_req_access += a

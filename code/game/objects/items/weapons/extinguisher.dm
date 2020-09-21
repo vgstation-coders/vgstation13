@@ -1,6 +1,6 @@
 #define REAGENT_USE 5 // amount of reagent used on each spray
 
-/obj/item/weapon/extinguisher
+/obj/item/extinguisher
 	name = "fire extinguisher"
 	desc = "A traditional red fire extinguisher."
 	icon = 'icons/obj/items.dmi'
@@ -23,16 +23,16 @@
 	var/safety = 1
 	var/sprite_name = "fire_extinguisher"
 
-/obj/item/weapon/extinguisher/New()
+/obj/item/extinguisher/New()
 	. = ..()
 	create_reagents(max_water)
 	reagents.add_reagent(WATER, max_water)
 
-/obj/item/weapon/extinguisher/empty/New()
+/obj/item/extinguisher/empty/New()
 	. = ..()
 	reagents.clear_reagents()
 
-/obj/item/weapon/extinguisher/mini
+/obj/item/extinguisher/mini
 	name = "fire extinguisher"
 	desc = "A light and compact fibreglass-framed model fire extinguisher."
 	icon_state = "miniFE0"
@@ -46,17 +46,17 @@
 	max_water = 30
 	sprite_name = "miniFE"
 
-/obj/item/weapon/extinguisher/foam
+/obj/item/extinguisher/foam
 	name = "foam fire extinguisher"
 	desc = "A modern foam fire supression system."
 	icon_state = "foam_extinguisher0"
 	item_state = "foam_extinguisher"
 	sprite_name = "foam_extinguisher"
 
-/proc/pack_check(mob/user, var/obj/item/weapon/extinguisher/E) //Checks the user for a nonempty chempack.
+/proc/pack_check(mob/user, var/obj/item/extinguisher/E) //Checks the user for a nonempty chempack.
 	var/mob/living/M = user
-	if (M && M.back && istype(M.back,/obj/item/weapon/reagent_containers/chempack))
-		var/obj/item/weapon/reagent_containers/chempack/P = M.back
+	if (M && M.back && istype(M.back,/obj/item/reagent_containers/chempack))
+		var/obj/item/reagent_containers/chempack/P = M.back
 		if (!P.safety)
 			if (!P.is_empty())
 				transfer_sub(P, E, 5, user)
@@ -67,21 +67,21 @@
 		else
 			return 0
 
-/obj/item/weapon/extinguisher/examine(mob/user)
+/obj/item/extinguisher/examine(mob/user)
 	..()
 	if(!is_open_container())
 		reagents.get_examine(user)
 	for(var/thing in src)
 		to_chat(user, "<span class='warning'>\A [thing] is jammed into the nozzle!</span>")
 
-/obj/item/weapon/extinguisher/attack_self(mob/user as mob)
+/obj/item/extinguisher/attack_self(mob/user as mob)
 	safety = !safety
 	src.icon_state = "[sprite_name][!safety]"
 	src.desc = "The safety is [safety ? "on" : "off"]."
 	to_chat(user, "The safety is [safety ? "on" : "off"].")
 	return
 
-/obj/item/weapon/extinguisher/attackby(obj/item/W, mob/user)
+/obj/item/extinguisher/attackby(obj/item/W, mob/user)
 	if(user.stat || user.restrained() || user.lying)
 		return
 	if (W.is_wrench(user))
@@ -99,7 +99,7 @@
 				flags &= ~OPENCONTAINER
 		return
 
-	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/weapon/extinguisher/foam) && !istype(W, /obj/item/weapon/storage/evidencebag))
+	if (istype(W, /obj/item) && !is_open_container() && !istype(src, /obj/item/extinguisher/foam) && !istype(W, /obj/item/storage/evidencebag))
 		if(W.is_open_container())
 			return //We're probably trying to fill it
 		if(W.w_class > W_CLASS_TINY)
@@ -115,7 +115,7 @@
 			to_chat(user, "You cram \the [W] into the nozzle of \the [src].")
 			message_admins("[user]/[user.ckey] has crammed \a [W] into a [src].")
 
-/obj/item/weapon/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/extinguisher/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
 		if((istype(target, /obj/structure/reagent_dispensers)))
 			target.reagents.trans_to(src, 50, log_transfer = TRUE, whodunnit = user)
@@ -217,7 +217,7 @@
 
 
 
-/obj/item/weapon/extinguisher/foam/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/extinguisher/foam/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag)
 		if((istype(target, /obj/structure/reagent_dispensers/watertank)))
 			var/obj/o = target

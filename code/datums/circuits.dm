@@ -15,7 +15,7 @@
 /datum/circuits
 	var/atom/holder = null //Which specific board are we pointing at?
 	var/list/fuse_point_names = list("Alpha" = ALPHA, "Beta" = BETA, "Gamma" = GAMMA, "Delta" = DELTA, "Eta" = ETA, "Theta" = THETA, "Iota" = IOTA)
-	var/list/possible_boards = list(/obj/item/weapon/circuitboard/autolathe,/obj/item/weapon/circuitboard/seed_extractor,/obj/item/weapon/circuitboard/air_alarm,/obj/item/weapon/circuitboard/fire_alarm,/obj/item/weapon/circuitboard/airlock,/obj/item/weapon/circuitboard/power_control,/obj/item/weapon/circuitboard/station_map,/obj/item/weapon/circuitboard/vendomat,/obj/item/weapon/circuitboard/microwave)
+	var/list/possible_boards = list(/obj/item/circuitboard/autolathe,/obj/item/circuitboard/seed_extractor,/obj/item/circuitboard/air_alarm,/obj/item/circuitboard/fire_alarm,/obj/item/circuitboard/airlock,/obj/item/circuitboard/power_control,/obj/item/circuitboard/station_map,/obj/item/circuitboard/vendomat,/obj/item/circuitboard/microwave)
 	var/global/list/assigned_boards = list()
 	//Each bitflag points to a board!
 	var/localbit = 0 //What are WE programmed to? Always start as 0
@@ -108,7 +108,7 @@
 			holder.add_hiddenprint(L)
 			if(href_list["fuse"]) // Toggles the fuse/unfuse status
 				if(issolder(I))
-					var/obj/item/weapon/solder/S = I
+					var/obj/item/solder/S = I
 					if(S.remove_fuel(1,L))
 						I.playtoolsound(L.loc, 25)
 						var/greek = href_list["fuse"]

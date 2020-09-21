@@ -76,14 +76,14 @@
 		singleAlchemy(target, user)
 
 /spell/targeted/alchemy/proc/singleAlchemy(target, mob/user)
-	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
+	var/obj/item/reagent_containers/pill/streetAlchElixir/elixir = null
 	if(spell_levels[Sp_POWER])
-		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
+		elixir = new /obj/item/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
-		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
+		elixir = new /obj/item/reagent_containers/pill/streetAlchElixir(src)
 	if(user.find_empty_hand_index())
 		user.put_in_hands(elixir)
-	if((iscarbon(target)) || (istype(target, /obj/structure)) || (istype(target, /obj/item/weapon)) || (istype(target, /obj/machinery)))
+	if((iscarbon(target)) || (istype(target, /obj/structure)) || (istype(target, /obj/item)) || (istype(target, /obj/machinery)))
 		legitAlchemy(target, user, elixir)
 	if(elixir.is_empty())
 		to_chat(user, "You found nothing of alchemic value.")
@@ -98,15 +98,15 @@
 	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
 
 /spell/targeted/alchemy/proc/aoeAlchemy(target, mob/user)
-	var/obj/item/weapon/reagent_containers/pill/streetAlchElixir/elixir = null
+	var/obj/item/reagent_containers/pill/streetAlchElixir/elixir = null
 	if(spell_levels[Sp_POWER])
-		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
+		elixir = new /obj/item/reagent_containers/pill/streetAlchElixir/hypoElixir(src)
 	else
-		elixir = new /obj/item/weapon/reagent_containers/pill/streetAlchElixir(src)
+		elixir = new /obj/item/reagent_containers/pill/streetAlchElixir(src)
 	if(user.find_empty_hand_index())
 		user.put_in_hands(elixir)
 	for(var/T in range(1, target))
-		if((iscarbon(T)) || (istype(T, /obj/structure)) || (istype(T, /obj/item/weapon)) || (istype(T, /obj/machinery)))
+		if((iscarbon(T)) || (istype(T, /obj/structure)) || (istype(T, /obj/item)) || (istype(T, /obj/machinery)))
 			legitAlchemy(T, user, elixir)
 	if(elixir.is_empty())
 		to_chat(user, "You found nothing of alchemic value.")
@@ -121,7 +121,7 @@
 	playsound(user, "sound/effects/bubbles.ogg", 75, 1)
 
 
-/spell/targeted/alchemy/proc/legitAlchemy(var/atom/C, mob/user, var/obj/item/weapon/reagent_containers/pill/elixir)
+/spell/targeted/alchemy/proc/legitAlchemy(var/atom/C, mob/user, var/obj/item/reagent_containers/pill/elixir)
 	var/numThefts = 0
 	if(C.reagents)
 		C.reagents.trans_to(elixir, C.reagents.total_volume)
@@ -135,7 +135,7 @@
 			R.reagents.trans_to(elixir, R.reagents.total_volume)
 	playsound(C, "sound/effects/bubbles.ogg", 75, 1)
 
-/obj/item/weapon/reagent_containers/pill/streetAlchElixir
+/obj/item/reagent_containers/pill/streetAlchElixir
 	name = "alchemic elixir"
 	desc = "An elixir of various reagents gathered through legitimate alchemical practice."
 	icon = 'icons/obj/potions.dmi'
@@ -145,7 +145,7 @@
 	flags = NOREACT
 	layer = ABOVE_OBJ_LAYER
 
-/obj/item/weapon/reagent_containers/pill/streetAlchElixir/examine(mob/user)
+/obj/item/reagent_containers/pill/streetAlchElixir/examine(mob/user)
 	..()
 	if(get_dist(user,src) > 3)
 		to_chat(user, "<span class='info'>You can't make out the contents.</span>")
@@ -153,7 +153,7 @@
 	if(reagents)
 		reagents.get_examine(user)
 
-/obj/item/weapon/reagent_containers/pill/streetAlchElixir/hypoElixir/throw_impact(atom/hit_atom)
+/obj/item/reagent_containers/pill/streetAlchElixir/hypoElixir/throw_impact(atom/hit_atom)
 	if(ishuman(hit_atom))
 		var/mob/living/carbon/human/H = hit_atom
 		src.reagents.trans_to(H,src.reagents.total_volume)

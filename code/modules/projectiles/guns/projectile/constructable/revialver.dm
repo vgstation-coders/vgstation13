@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/revialver
+/obj/item/gun/projectile/revialver
 	name = "revialver"
 	desc = "A makeshift single-action revolver, this weapon utilizes liquid pressure from the spray bottle to launch glass vials."
 	icon = 'icons/obj/gun.dmi'
@@ -18,30 +18,30 @@
 	conventional_firearm = 0
 	var/cylinder = null
 
-/obj/item/weapon/gun/projectile/revialver/Destroy()
+/obj/item/gun/projectile/revialver/Destroy()
 	if(cylinder)
 		qdel(cylinder)
 		cylinder = null
 	..()
 
-/obj/item/weapon/gun/projectile/revialver/attack_self(mob/user as mob)
+/obj/item/gun/projectile/revialver/attack_self(mob/user as mob)
 	if(!cylinder)
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
+	var/obj/item/cylinder/C = cylinder
 	C.cycle()
 	to_chat(user, "You cycle \the [src]'s [C] to the next chamber.")
 	playsound(user, 'sound/weapons/switchblade.ogg', 50, 1)
 
-/obj/item/weapon/gun/projectile/revialver/proc/spin()
+/obj/item/gun/projectile/revialver/proc/spin()
 	if(!cylinder)
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
+	var/obj/item/cylinder/C = cylinder
 	C.current_chamber = rand(1,6)
 
-/obj/item/weapon/gun/projectile/revialver/attackby(obj/item/weapon/W, mob/user)
-	if(istype(W, /obj/item/weapon/cylinder))
+/obj/item/gun/projectile/revialver/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/cylinder))
 		if(cylinder)
 			to_chat(user, "There is already a cylinder loaded into \the [src].")
 			return
@@ -54,15 +54,15 @@
 		user.update_inv_hands()
 	update_verbs()
 
-/obj/item/weapon/gun/projectile/revialver/proc/update_verbs()
+/obj/item/gun/projectile/revialver/proc/update_verbs()
 	if(cylinder)
-		verbs += /obj/item/weapon/gun/projectile/revialver/verb/remove_cylinder
-		verbs += /obj/item/weapon/gun/projectile/revialver/verb/spin_cylinder
+		verbs += /obj/item/gun/projectile/revialver/verb/remove_cylinder
+		verbs += /obj/item/gun/projectile/revialver/verb/spin_cylinder
 	else
-		verbs -= /obj/item/weapon/gun/projectile/revialver/verb/remove_cylinder
-		verbs -= /obj/item/weapon/gun/projectile/revialver/verb/spin_cylinder
+		verbs -= /obj/item/gun/projectile/revialver/verb/remove_cylinder
+		verbs -= /obj/item/gun/projectile/revialver/verb/spin_cylinder
 
-/obj/item/weapon/gun/projectile/revialver/verb/remove_cylinder()
+/obj/item/gun/projectile/revialver/verb/remove_cylinder()
 	set name = "Remove cylinder"
 	set category = "Object"
 	set src in range(0)
@@ -74,7 +74,7 @@
 	if(!cylinder)
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
+	var/obj/item/cylinder/C = cylinder
 	C.forceMove(usr.loc)
 	usr.put_in_hands(C)
 	cylinder = null
@@ -84,7 +84,7 @@
 
 	update_verbs()
 
-/obj/item/weapon/gun/projectile/revialver/verb/spin_cylinder()
+/obj/item/gun/projectile/revialver/verb/spin_cylinder()
 	set name = "Spin cylinder"
 	set category = "Object"
 	set src in range(0)
@@ -102,10 +102,10 @@
 
 	update_verbs()
 
-/obj/item/weapon/gun/projectile/revialver/examine(mob/user)
+/obj/item/gun/projectile/revialver/examine(mob/user)
 	..()
 	if(cylinder)
-		var/obj/item/weapon/cylinder/C = cylinder
+		var/obj/item/cylinder/C = cylinder
 		var/chambercount = 0
 		for(var/i = 1; i<=6; i++)
 			if(C.chambers[i])
@@ -115,8 +115,8 @@
 	else
 		to_chat(user, "<span class='info'>There doesn't appear to be a cylinder loaded into \the [src].</span>")
 
-/obj/item/weapon/gun/projectile/revialver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if (istype(A, /obj/item/weapon/storage/backpack ))
+/obj/item/gun/projectile/revialver/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/storage/backpack ))
 		return
 
 	else if (A.loc == user.loc)
@@ -128,7 +128,7 @@
 	else if (locate (/obj/structure/table, src.loc))
 		return
 
-	var/obj/item/weapon/cylinder/C = cylinder
+	var/obj/item/cylinder/C = cylinder
 	if(!(istype(C) && C.chambers[C.current_chamber]))
 		click_empty(user)
 		return
@@ -140,7 +140,7 @@
 		return
 
 	var/obj/item/projectile/bullet/vial/V = new(null)
-	var/obj/item/weapon/reagent_containers/glass/beaker/vial/I
+	var/obj/item/reagent_containers/glass/beaker/vial/I
 	I = C.chambers[C.current_chamber]
 	I.forceMove(V)
 	V.vial = I

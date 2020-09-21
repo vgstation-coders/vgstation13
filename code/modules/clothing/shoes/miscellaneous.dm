@@ -163,7 +163,7 @@
 	if(Holiday == APRIL_FOOLS_DAY)
 		modulo_steps = 1 //Honk on every step
 
-/obj/item/clothing/shoes/clown_shoes/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/shoes/clown_shoes/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/mask/gas/clown_hat))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/goblin(get_turf(src))
@@ -545,7 +545,7 @@ obj/item/clothing/shoes/jackboots/cowboy
 
 	step_sound = "clownstep"
 
-/obj/item/clothing/shoes/clownshoespsyche/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/shoes/clownshoespsyche/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/mask/gas/clownmaskpsyche))
 		new /mob/living/simple_animal/hostile/retaliate/cluwne/psychedelicgoblin(get_turf(src))

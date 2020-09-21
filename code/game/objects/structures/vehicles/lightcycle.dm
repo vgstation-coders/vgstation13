@@ -256,7 +256,7 @@
 		icon += l_color
 	set_light(1,5,l_color)
 
-/obj/effect/lightribbon/attackby(obj/item/weapon/W, mob/user)
+/obj/effect/lightribbon/attackby(obj/item/W, mob/user)
 	if(!(user.locked_to && istype(user.locked_to, /obj/structure/bed/chair/vehicle/lightcycle)))
 		to_chat(user, "\The [src] dissipates as you hit it with \the [W].")
 		erase(src)

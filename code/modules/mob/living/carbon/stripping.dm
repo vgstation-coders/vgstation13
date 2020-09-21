@@ -285,7 +285,7 @@
 		to_chat(user, "<span class='warning'>\The [src] is not wearing a breathing mask.</span>")
 		return
 
-	var/obj/item/weapon/tank/T = src.get_internals_tank()
+	var/obj/item/tank/T = src.get_internals_tank()
 	if(!T)
 		to_chat(user, "<span class='warning'>\The [src] does not have a tank to connect to.</span>")
 		return

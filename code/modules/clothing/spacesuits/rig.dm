@@ -119,7 +119,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	species_fit = list(GREY_SHAPED, TAJARAN_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 80)
-	allowed = list(/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	allowed = list(/obj/item/device/flashlight,/obj/item/tank,/obj/item/storage/bag/ore,/obj/item/device/t_scanner,/obj/item/pickaxe, /obj/item/device/rcd, /obj/item/wrench/socket)
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	actions_types = list(/datum/action/item_action/toggle_rig_suit)
@@ -131,15 +131,15 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	var/obj/item/clothing/head/helmet/space/rig/H = null
 	var/obj/item/clothing/gloves/G = null
 	var/obj/item/clothing/shoes/magboots/MB = null
-	var/obj/item/weapon/tank/T = null
-	var/obj/item/weapon/cell/cell = null
+	var/obj/item/tank/T = null
+	var/obj/item/cell/cell = null
 	var/list/all_hardsuit_parts = list()
 
 	var/head_type = /obj/item/clothing/head/helmet/space/rig
 	var/boots_type =  null
 	var/gloves_type = null
 	var/tank_type = null
-	var/cell_type = /obj/item/weapon/cell/high //The cell_type we're actually using
+	var/cell_type = /obj/item/cell/high //The cell_type we're actually using
 
 	var/mob/living/carbon/human/wearer = null
 

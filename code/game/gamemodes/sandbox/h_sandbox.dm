@@ -35,17 +35,17 @@ var/list
 		sandbox.update()
 
 var/global/list/banned_sandbox_types=list(
-	// /obj/item/weapon/gun,
+	// /obj/item/gun,
 	// /obj/item/assembly,
 	// /obj/item/device/camera,
-	// /obj/item/weapon/cloaking_device,
-	// /obj/item/weapon/dummy,
-	// /obj/item/weapon/melee/energy/sword,
-	// /obj/item/weapon/veilrender,
-	/obj/item/weapon/reagent_containers/glass/bottle/wizarditis,
-	// /obj/item/weapon/spellbook,
+	// /obj/item/cloaking_device,
+	// /obj/item/dummy,
+	// /obj/item/melee/energy/sword,
+	// /obj/item/veilrender,
+	/obj/item/reagent_containers/glass/bottle/wizarditis,
+	// /obj/item/spellbook,
 	/obj/machinery/singularity,
-	// /obj/item/weapon/gun/energy/staff
+	// /obj/item/gun/energy/staff
 	)
 
 proc/is_banned_type(typepath)
@@ -154,7 +154,7 @@ datum/hSB/Topic(href, href_list)
 					P.back.forceMove(P.loc)
 					P.back.layer = initial(P.back.layer)
 					P.back = null
-				P.back = new/obj/item/weapon/tank/jetpack/void(P)
+				P.back = new/obj/item/tank/jetpack/void(P)
 				P.back.hud_layerise()
 
 				P.regenerate_icons()
@@ -185,11 +185,11 @@ datum/hSB/Topic(href, href_list)
 			if("hsbwatertank")
 				new /obj/structure/reagent_dispensers/watertank(usr.loc)
 			if("hsbtoolbox")
-				var/obj/item/weapon/storage/hsb = new/obj/item/weapon/storage/toolbox/mechanical
+				var/obj/item/storage/hsb = new/obj/item/storage/toolbox/mechanical
 				for(var/obj/item/device/radio/T in hsb)
 					qdel(T)
-				new/obj/item/weapon/crowbar (hsb)
+				new/obj/item/crowbar (hsb)
 				hsb.forceMove(usr.loc)
 			if("hsbmedkit")
-				var/obj/item/weapon/storage/firstaid/hsb = new/obj/item/weapon/storage/firstaid/regular
+				var/obj/item/storage/firstaid/hsb = new/obj/item/storage/firstaid/regular
 				hsb.forceMove(usr.loc)

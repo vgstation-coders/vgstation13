@@ -170,7 +170,7 @@
 		victim = null
 		update_icon()
 
-/obj/structure/bed/guillotine/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/bed/guillotine/attackby(obj/item/W, mob/user)
 	if(user == victim)
 		return
 	if(W.is_wrench(user))

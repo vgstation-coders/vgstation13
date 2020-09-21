@@ -58,7 +58,7 @@
 
 /datum/role/ninja/extraPanelButtons()
 	var/dat = ""
-	if(istype(GetNinjaWeapon(antag.current),/obj/item/weapon/katana/hesfast))
+	if(istype(GetNinjaWeapon(antag.current),/obj/item/katana/hesfast))
 		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=ninja;'>(Make ninja)</a><br>"
 	else
 		dat = " - <a href='?src=\ref[antag];mind=\ref[antag];role=\ref[src];toggleweeb=weeb;'>(Make weeaboo)</a><br>"
@@ -152,7 +152,7 @@
 		H.put_in_hands(src)
 
 //Shield
-/obj/item/weapon/substitutionhologram
+/obj/item/substitutionhologram
 	name = "hologram projector"
 	desc = "Projects a hologram and displaces the user, allowing them to escape if attacked."
 	w_class = W_CLASS_MEDIUM
@@ -161,10 +161,10 @@
 	var/reject_message = "Your hand passes right through it!"
 	var/activate_message = "Too slow."
 
-/obj/item/weapon/substitutionhologram/IsShield()
+/obj/item/substitutionhologram/IsShield()
 	return SHIELD_ADVANCED
 
-/obj/item/weapon/substitutionhologram/on_block(damage, atom/blocked)
+/obj/item/substitutionhologram/on_block(damage, atom/blocked)
 	if(ishuman(loc))
 		var/mob/living/carbon/human/H = loc
 		if(H.mind.GetRole(NINJA))
@@ -210,7 +210,7 @@
 
 	return FALSE
 
-/obj/item/weapon/substitutionhologram/prepickup(mob/living/user)
+/obj/item/substitutionhologram/prepickup(mob/living/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(NINJA))
@@ -219,7 +219,7 @@
 			to_chat(H,"<span class='warning'>[reject_message]</span>")
 			return TRUE
 
-/obj/item/weapon/substitutionhologram/can_be_pulled(mob/user)
+/obj/item/substitutionhologram/can_be_pulled(mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(NINJA))
@@ -247,7 +247,7 @@
 	if(ishuman(user) && user.is_wearing_item(src))
 		var/mob/living/carbon/human/H = user
 		if(H.mind.GetRole(NINJA))
-			var/obj/item/weapon/cell/C = H.get_cell()
+			var/obj/item/cell/C = H.get_cell()
 			if(C)
 				to_chat(H, "<span class='notice'>You have [C.get_charge()] charge remaining.</span>")
 			if(cooldown-world.time>0)
@@ -267,8 +267,8 @@
 						var/obj/machinery/power/apc/APC = A
 						APC.charging = 0
 						APC.chargecount = 0
-					else if(istype(A,/obj/item/weapon/melee/baton))
-						var/obj/item/weapon/melee/baton/B = A
+					else if(istype(A,/obj/item/melee/baton))
+						var/obj/item/melee/baton/B = A
 						B.status = 0
 					var/turf/simulated/floor/T = get_turf(A)
 					if(istype(T))
@@ -278,13 +278,13 @@
 	else
 		..()
 
-/obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/weapon/cell/C,mob/user)
+/obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/cell/C,mob/user)
 	if(C.charge<100)
 		return FALSE
 	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
-		var/obj/item/weapon/cell/CC = H.get_cell()
+		var/obj/item/cell/CC = H.get_cell()
 		if(CC)
 			CC.give(C.charge)
 	C.use(C.charge)
@@ -352,7 +352,7 @@
 	..()
 
 /obj/item/clothing/gloves/ninja/proc/make_shuriken(mob/user)
-	var/obj/item/weapon/cell/C = user.get_cell()
+	var/obj/item/cell/C = user.get_cell()
 	if(!C)
 		to_chat(user, "<span class = 'notice'>You do not have a cell to draw power from.</span>")
 	if(C.use(MAKE_SHURIKEN_COST))
@@ -368,7 +368,7 @@
 		to_chat(user,"<span class='warning'>You need [MAKE_SHURIKEN_COST] charge to make a shuriken!</span>")
 
 /obj/item/clothing/gloves/ninja/proc/charge_sword(mob/user)
-	var/obj/item/weapon/oursword = GetNinjaWeapon(user)
+	var/obj/item/oursword = GetNinjaWeapon(user)
 	if(!oursword)
 		to_chat(user,"<span class='warning'>You need to hold the sword to channel power into it!</span>")
 		return
@@ -380,7 +380,7 @@
 	if(difference<=0)
 		to_chat(user,"<span class='warning'>Your blade is already fully charged!</span>")
 		return
-	var/obj/item/weapon/cell/C = user.get_cell()
+	var/obj/item/cell/C = user.get_cell()
 	var/to_subtract = min(difference,C.get_charge()) //Take the least between: how much we need, how much we have
 	T.cooldown -= to_subtract/CHARGE_COST_MULTIPLIER
 	C.use(to_subtract)
@@ -491,17 +491,17 @@ Helpers For Both Variants
 	if(!istype(M))
 		return
 	else
-		var/obj/item/weapon/W = locate(/obj/item/weapon/melee/energy/sword/ninja) in M.held_items
+		var/obj/item/W = locate(/obj/item/melee/energy/sword/ninja) in M.held_items
 		if(W)
 			return W
 		else
-			return locate(/obj/item/weapon/katana/hesfast) in M.held_items
+			return locate(/obj/item/katana/hesfast) in M.held_items
 
 /datum/action/item_action/toggle_teleport
 	name = "Toggle Teleport"
 
 /datum/action/item_action/toggle_teleport/Trigger()
-	var/obj/item/weapon/W = GetNinjaWeapon(owner)
+	var/obj/item/W = GetNinjaWeapon(owner)
 	if(!istype(W))
 		return
 	if(!ismob(owner) || !isninja(owner))
@@ -509,10 +509,10 @@ Helpers For Both Variants
 	if(W.daemon && istype(W.daemon,/datum/daemon/teleport))
 		W.daemon.activate()
 		to_chat(owner,"<span class='notice'>Teleportation is now [W.daemon.active ? "active" : "inactive"].</span>")
-		if(!W.daemon.active && istype(W,/obj/item/weapon/katana/hesfast))
+		if(!W.daemon.active && istype(W,/obj/item/katana/hesfast))
 			owner.whisper("Not today, katana-san.")
 
-/obj/item/weapon/melee/energy/sword/ninja
+/obj/item/melee/energy/sword/ninja
 	name = "energy blade"
 	desc = "Hot damn."
 	icon_state = "blade0"
@@ -524,11 +524,11 @@ Helpers For Both Variants
 	onsound = null
 	actions_types = list(/datum/action/item_action/toggle_teleport)
 
-/obj/item/weapon/melee/energy/sword/ninja/New()
+/obj/item/melee/energy/sword/ninja/New()
 	..()
 	daemon = new /datum/daemon/teleport(src,"Weakness",null)
 
-/obj/item/weapon/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
+/obj/item/melee/energy/sword/ninja/toggleActive(mob/user, var/togglestate = "")
 	if(togglestate) //override
 		..()
 		checkdroppable()
@@ -540,19 +540,19 @@ Helpers For Both Variants
 		to_chat(user,"<span class='warning'>There are no buttons on \the [src].</span>")
 		return
 
-/obj/item/weapon/melee/energy/sword/update_icon()
+/obj/item/melee/energy/sword/update_icon()
 	icon_state = "[base_state][active]"
 
-/obj/item/weapon/melee/energy/sword/ninja/proc/checkdroppable()
+/obj/item/melee/energy/sword/ninja/proc/checkdroppable()
 	return cant_drop = active //they should be the same value every time
 
-/obj/item/weapon/melee/energy/sword/ninja/attackby(obj/item/weapon/W, mob/living/user)
-	if(istype(W,/obj/item/weapon/melee/energy/sword))
+/obj/item/melee/energy/sword/ninja/attackby(obj/item/W, mob/living/user)
+	if(istype(W,/obj/item/melee/energy/sword))
 		return
 	else
 		return ..()
 
-/obj/item/weapon/melee/energy/sword/ninja/examine(mob/user)
+/obj/item/melee/energy/sword/ninja/examine(mob/user)
 	..()
 	if(!isninja(user))
 		return
@@ -562,19 +562,19 @@ Helpers For Both Variants
 	to_chat(user,"<span class='notice'>The hilt displays its status in the form of a cryptic readout.</span>")
 	to_chat(user,"<span class='notice'>TP: </span>[daemon.active ? "<span class='good'>I":"<span class='warning'>O"]</span><span class='notice'>; CD: [cc ? "[cc]s ([cc*10*CHARGE_COST_MULTIPLIER]J)</span>" : "</span><span class='warning'><B>X</B></span>"]")
 
-/obj/item/weapon/melee/energy/sword/ninja/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/melee/energy/sword/ninja/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(target == user)
 		examine(user)
 		return 1
 	else
 		return ..()
 
-/obj/item/weapon/melee/energy/sword/ninja/dropped(mob/user)
+/obj/item/melee/energy/sword/ninja/dropped(mob/user)
 	if(active)
 		toggleActive(user,togglestate = "off")
 	..()
 
-/obj/item/weapon/melee/energy/sword/ninja/equipped(mob/user)
+/obj/item/melee/energy/sword/ninja/equipped(mob/user)
 	if(!isninja(user) && active)
 		toggleActive(user,togglestate = "off")
 		to_chat(user,"<span class='warning'>The [src] shuts off.</span>")
@@ -627,18 +627,18 @@ Suit and assorted
 	slowdown = NO_SLOWDOWN
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
 	armor = list(melee = 60, bullet = 50, laser = 30,energy = 15, bomb = 30, bio = 30, rad = 30)
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/cell,/obj/item/weapon/melee/energy/sword,/obj/item/stack/shuriken,/obj/item/weapon/storage/box/syndie_kit/smokebombs,/obj/item/toy/snappop/smokebomb,/obj/item/weapon/substitutionhologram,/obj/item/mounted/poster/stealth)
+	allowed = list(/obj/item/tank, /obj/item/cell,/obj/item/melee/energy/sword,/obj/item/stack/shuriken,/obj/item/storage/box/syndie_kit/smokebombs,/obj/item/toy/snappop/smokebomb,/obj/item/substitutionhologram,/obj/item/mounted/poster/stealth)
 	species_fit = list("Human")
 	species_restricted = list("Human") //only have human sprites :/
 	can_take_pai = 1
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 
 /obj/item/clothing/suit/space/ninja/New()
 	..()
 	equip_cell()
 
 /obj/item/clothing/suit/space/ninja/proc/equip_cell()
-	cell = new /obj/item/weapon/cell/high/empty()
+	cell = new /obj/item/cell/high/empty()
 
 /obj/item/clothing/suit/space/ninja/get_cell()
 	return cell
@@ -738,7 +738,7 @@ Suit and assorted
 	desc = "Combines the power of 'Nen' (sense) with grease-resistant properties so you can still eat your tendies. Use your open hand on anything containing a cell to unleash your hacker skills from community college."
 	shuriken_icon = "radial_cook"
 
-/obj/item/weapon/substitutionhologram/dakimakura
+/obj/item/substitutionhologram/dakimakura
 	name = "dakimakura"
 	desc = "Like the classic pocket monster doll or even the humble log, a true ninja can use this to perform a substitution no jutsu when held."
 	icon = 'icons/obj/weapons.dmi'
@@ -753,16 +753,16 @@ Suit and assorted
 	design = new /datum/poster/special/ninja/anime
 
 //Special Katana. Main katana in weaponry.dm
-/obj/item/weapon/katana/hesfast
+/obj/item/katana/hesfast
 	siemens_coefficient = 0
 	cant_drop = TRUE
 	actions_types = list(/datum/action/item_action/toggle_teleport)
 
-/obj/item/weapon/katana/hesfast/New()
+/obj/item/katana/hesfast/New()
 	..()
 	daemon = new /datum/daemon/teleport(src,"sound/weapons/shing.ogg", "Pshh... nothing personnel... kid...")
 
-/obj/item/weapon/katana/hesfast/examine(mob/user)
+/obj/item/katana/hesfast/examine(mob/user)
 	..()
 	if(!isninja(user))
 		return
@@ -781,11 +781,11 @@ Suit and assorted
 		message += " Your teleport is inactive, just like a no-warp trap room in Aincrad.</span>"
 	to_chat(user, "[message]")
 
-/obj/item/weapon/katana/hesfast/suicide_act(mob/user)
+/obj/item/katana/hesfast/suicide_act(mob/user)
 	visible_message("<span class='danger'>[user] is slicing \his chest open with the [src.name]! It looks like \he's trying to commit [pick("seppuku","sudoku","harikari","crossword puzzle")].</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+/obj/item/katana/hesfast/preattack(atom/target, mob/user, proximity_flag, click_parameters)
 	if(target == user)
 		examine(user)
 		return 1
@@ -810,17 +810,17 @@ Suit and assorted
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/suit/space/ninja/apprentice, slot_wear_suit)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/shoes/ninja/apprentice, slot_shoes)
 	spaceninja.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja, slot_gloves)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/melee/energy/sword/ninja(), slot_s_store)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/melee/energy/sword/ninja(), slot_s_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/storage/belt/silicon, slot_belt)
+	spaceninja.equip_to_slot_or_del(new /obj/item/storage/backpack/messenger/black, slot_back)
+	spaceninja.equip_to_slot_or_del(new /obj/item/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/substitutionhologram, slot_in_backpack)
+	spaceninja.equip_to_slot_or_del(new /obj/item/substitutionhologram, slot_in_backpack)
 	spaceninja.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth, slot_in_backpack)
 	spaceninja.equip_to_slot_or_del(new /obj/item/stack/shuriken(spaceninja,10), slot_l_store)
 	spaceninja.equip_to_slot_or_del(new /obj/item/device/radio/headset, slot_ears)
-	spaceninja.equip_to_slot_or_del(new /obj/item/weapon/tank/emergency_oxygen/double(spaceninja), slot_r_store)
+	spaceninja.equip_to_slot_or_del(new /obj/item/tank/emergency_oxygen/double(spaceninja), slot_r_store)
 	spaceninja.internal = spaceninja.get_item_by_slot(slot_r_store)
 	if (spaceninja.internals)
 		spaceninja.internals.icon_state = "internal1"
@@ -831,21 +831,21 @@ Suit and assorted
 	if(!istype(H))
 		return 0
 	H.delete_all_equipped_items()
-	H.put_in_hands(new /obj/item/weapon/katana/hesfast)
+	H.put_in_hands(new /obj/item/katana/hesfast)
 
 	H.equip_to_slot_or_del(new /obj/item/clothing/head/rice_hat, slot_head)
 	H.equip_to_slot_or_del(new /obj/item/clothing/mask/balaclava, slot_wear_mask)
 	H.equip_to_slot_or_del(new /obj/item/clothing/suit/kimono/ronin, slot_wear_suit)
 	H.equip_to_slot_or_del(new /obj/item/clothing/under/color/black, slot_w_uniform)
 	disable_suit_sensors(H)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/silicon, slot_belt)
+	H.equip_to_slot_or_del(new /obj/item/storage/belt/silicon, slot_belt)
 	H.equip_to_slot_or_del(new /obj/item/clothing/shoes/sandal, slot_shoes)
 	H.equip_to_slot_or_del(new /obj/item/clothing/gloves/ninja/nentendiepower, slot_gloves)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/messenger/black, slot_back)
-	H.equip_to_slot_or_del(new /obj/item/weapon/storage/box/syndie_kit/smokebombs, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
-	H.equip_to_slot_or_del(new /obj/item/weapon/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/storage/backpack/messenger/black, slot_back)
+	H.equip_to_slot_or_del(new /obj/item/storage/box/syndie_kit/smokebombs, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/substitutionhologram/dakimakura, slot_in_backpack)
+	H.equip_to_slot_or_del(new /obj/item/substitutionhologram/dakimakura, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/mounted/poster/stealth/anime, slot_in_backpack)
 	H.equip_to_slot_or_del(new /obj/item/stack/shuriken/pizza(H,10), slot_l_store)
 

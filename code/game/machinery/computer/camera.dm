@@ -10,7 +10,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	name = "Security Cameras"
 	desc = "Used to access the various cameras on the station."
 	icon_state = "cameras"
-	circuit = "/obj/item/weapon/circuitboard/security"
+	circuit = "/obj/item/circuitboard/security"
 	var/obj/machinery/camera/current = null
 	var/last_pic = 1.0
 	var/list/network = list(CAMERANET_SS13)
@@ -176,7 +176,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	name = "high-definition Spess.TV telescreen"
 	icon = 'icons/obj/status_display.dmi'
 	icon_state = "entertainment"
-	circuit = /obj/item/weapon/circuitboard/security/spesstv
+	circuit = /obj/item/circuitboard/security/spesstv
 
 /obj/machinery/computer/security/telescreen/entertainment/spesstv/flatscreen/New()
 	..()
@@ -190,7 +190,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	name = "Security Cameras"
 	desc = "An old TV hooked into the stations camera network."
 	icon_state = "security_det"
-	circuit = /obj/item/weapon/circuitboard/security/wooden_tv
+	circuit = /obj/item/circuitboard/security/wooden_tv
 	light_color = null
 	pass_flags = PASSTABLE
 
@@ -199,7 +199,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	desc = "Used to access the various cameras on the outpost."
 	icon_state = "miningcameras"
 	network = list(CAMERANET_MINE)
-	circuit = "/obj/item/weapon/circuitboard/mining"
+	circuit = "/obj/item/circuitboard/mining"
 
 	light_color = LIGHT_COLOR_PINK
 
@@ -274,7 +274,7 @@ var/list/obj/machinery/camera/cyborg_cams = list(
 	desc = "Used to monitor engineering silicons and alarms."
 	icon_state = "engineeringcameras"
 	network = list(CAMERANET_ENGI,CAMERANET_POWERALARMS,CAMERANET_ATMOSALARMS,CAMERANET_FIREALARMS)
-	circuit = "/obj/item/weapon/circuitboard/security/engineering"
+	circuit = "/obj/item/circuitboard/security/engineering"
 
 	light_color = LIGHT_COLOR_YELLOW
 

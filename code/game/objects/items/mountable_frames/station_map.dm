@@ -53,9 +53,9 @@
 	steps = list(
 					//1
 					 list(Co_DESC="The glass screen is in place.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/screwdriver,
 					 		Co_VIS_MSG = "{USER} close{s} the panel."),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} the glass screen from {HOLDER}.",
 					 		Co_START_MSG = "{USER} begin{s} removing the glass screen...",
 					 		Co_DELAY = 30,)
@@ -67,7 +67,7 @@
 					 		Co_VIS_MSG = "{USER} install{s} the glass screen to {HOLDER}.",
 					 		Co_START_MSG = "{USER} begin{s} installing the glass screen...",
 					 		Co_DELAY = 30),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/wirecutters,
 					 		Co_VIS_MSG = "{USER} remove{s} the wiring from {HOLDER}.")
 					 	),
 					 //3
@@ -76,15 +76,15 @@
 					 		Co_AMOUNT = 5,
 					 		Co_VIS_MSG = "{USER} add{s} the wiring to {HOLDER}.",
 					 		Co_DELAY = 20),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/crowbar,
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/crowbar,
 					 		Co_VIS_MSG = "{USER} prie{s} the glass screen from {HOLDER}.")
 					 	),
 					 //4
 					 list(Co_DESC="The frame is on the wall.",
-					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/circuitboard/station_map,
+					 	Co_NEXTSTEP = list(Co_KEY=/obj/item/circuitboard/station_map,
 					 		Co_VIS_MSG = "{USER} install{s} the circuitboard into {HOLDER}.",
 					 		Co_AMOUNT = 1),
-					 	Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+					 	Co_BACKSTEP = list(Co_KEY=/obj/item/screwdriver,
 					 		Co_VIS_MSG = "{USER} unfasten{s} {HOLDER} from the wall.",
 					 		Co_START_MSG = "{USER} begin{s} removing {HOLDER}'s screws...",
 					 		Co_DELAY = 30)

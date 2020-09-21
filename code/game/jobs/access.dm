@@ -485,9 +485,9 @@ var/global/list/all_jobs
 
 proc/FindNameFromID(var/mob/living/carbon/human/H)
 	ASSERT(istype(H))
-	var/obj/item/weapon/card/id/C = H.get_active_hand()
+	var/obj/item/card/id/C = H.get_active_hand()
 	if( istype(C) || istype(C, /obj/item/device/pda) )
-		var/obj/item/weapon/card/id/ID = C
+		var/obj/item/card/id/ID = C
 
 		if( istype(C, /obj/item/device/pda) )
 			var/obj/item/device/pda/pda = C
@@ -501,7 +501,7 @@ proc/FindNameFromID(var/mob/living/carbon/human/H)
 	C = H.wear_id
 
 	if( istype(C) || istype(C, /obj/item/device/pda) )
-		var/obj/item/weapon/card/id/ID = C
+		var/obj/item/card/id/ID = C
 
 		if( istype(C, /obj/item/device/pda) )
 			var/obj/item/device/pda/pda = C

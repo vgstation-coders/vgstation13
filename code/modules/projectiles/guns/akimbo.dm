@@ -1,30 +1,30 @@
-/obj/item/weapon/gun/akimbo
+/obj/item/gun/akimbo
 	name = "akimbo weapons"
-	var/obj/item/weapon/gun/left
-	var/obj/item/weapon/gun/right
+	var/obj/item/gun/left
+	var/obj/item/gun/right
 	var/broken = FALSE
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 
-/obj/item/weapon/gun/akimbo/New(loc, var/obj/item/weapon/gun/in_left, var/obj/item/weapon/gun/in_right)
+/obj/item/gun/akimbo/New(loc, var/obj/item/gun/in_left, var/obj/item/gun/in_right)
 	left = in_left
 	right = in_right
 	name = "\a [in_left] and \a [in_right]"
 	..()
 
-/obj/item/weapon/gun/akimbo/dropped(mob/user)
+/obj/item/gun/akimbo/dropped(mob/user)
 	..()
 	if(!broken)
 		Break(user)
 
-/obj/item/weapon/gun/akimbo/stripped(mob/wearer, mob/stripper)
+/obj/item/gun/akimbo/stripped(mob/wearer, mob/stripper)
 	if(!broken)
 		Break()
 	..()
 
-/obj/item/weapon/gun/akimbo/pickup(mob/user)
+/obj/item/gun/akimbo/pickup(mob/user)
 	update_icon(user)
 
-/obj/item/weapon/gun/akimbo/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+/obj/item/gun/akimbo/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	if(flag)
 		return //we're placing gun on a table or in backpack
 	if(harm_labeled >= min_harm_label)
@@ -36,16 +36,16 @@
 	else
 		to_chat(user, "<span class='warning'>You must dual-wield \the [src] before you can fire it!</span>")
 
-/obj/item/weapon/gun/akimbo/attack_self(mob/user)
+/obj/item/gun/akimbo/attack_self(mob/user)
 	Break(user)
 
-/obj/item/weapon/gun/akimbo/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+/obj/item/gun/akimbo/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(!(left.Fire(target,user,params,reflex,struggle,use_shooter_turf)) || !(right.Fire(target,user,params,reflex,struggle,use_shooter_turf)))
 		Break(user)
 		return
 	update_icon(user)
 
-/obj/item/weapon/gun/akimbo/proc/Break(mob/living/user)
+/obj/item/gun/akimbo/proc/Break(mob/living/user)
 	broken = TRUE
 	if(left && right)
 		var/turf/T = get_turf(src)
@@ -59,7 +59,7 @@
 		right = null
 	qdel(src)
 
-/obj/item/weapon/gun/akimbo/update_icon(mob/user)
+/obj/item/gun/akimbo/update_icon(mob/user)
 	//right over left
 	icon = left.icon
 	icon_state = left.icon_state

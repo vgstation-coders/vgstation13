@@ -597,7 +597,7 @@
 
 /obj/machinery/suit_storage_unit/attackby(obj/item/I as obj, mob/user as mob)
 	if((stat & BROKEN) && issolder(I))
-		var/obj/item/weapon/solder/S = I
+		var/obj/item/solder/S = I
 		if(!S.remove_fuel(4,user))
 			return
 		S.playtoolsound(loc, 100)
@@ -615,8 +615,8 @@
 		return
 	if(..())
 		return 1
-	if ( istype(I, /obj/item/weapon/grab) )
-		var/obj/item/weapon/grab/G = I
+	if ( istype(I, /obj/item/grab) )
+		var/obj/item/grab/G = I
 		if( !(ismob(G.affecting)) )
 			return
 		if (!isopen)

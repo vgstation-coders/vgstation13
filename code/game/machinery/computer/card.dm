@@ -5,8 +5,8 @@
 	desc = "Terminal for programming Nanotrasen employee ID cards to access parts of the station."
 	icon_state = "id"
 	req_access = list(access_change_ids)
-	circuit = "/obj/item/weapon/circuitboard/card"
-	var/obj/item/weapon/card/id/modify = null
+	circuit = "/obj/item/circuitboard/card"
+	var/obj/item/card/id/modify = null
 	var/mode = 0.0
 	var/printing = null
 	var/list/card_skins = list(
@@ -103,7 +103,7 @@
 		to_chat(usr, "There is nothing to remove from the console.")
 	return
 
-/obj/machinery/computer/card/attackby(obj/item/weapon/card/id/id_card, mob/user)
+/obj/machinery/computer/card/attackby(obj/item/card/id/id_card, mob/user)
 	if(!istype(id_card))
 		return ..()
 
@@ -225,7 +225,7 @@
 				modify = null
 			else
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/card/id))
+				if (istype(I, /obj/item/card/id))
 					if(usr.drop_item(I, src))
 						modify = I
 
@@ -237,7 +237,7 @@
 				scan = null
 			else
 				var/obj/item/I = usr.get_active_hand()
-				if (istype(I, /obj/item/weapon/card/id))
+				if (istype(I, /obj/item/card/id))
 					if(usr.drop_item(I, src))
 						scan = I
 
@@ -331,7 +331,7 @@
 					printing = null
 					nanomanager.update_uis(src)
 
-					var/obj/item/weapon/paper/P = new(loc)
+					var/obj/item/paper/P = new(loc)
 					if (mode)
 						P.name = text("crew manifest ([])", worldtime2text())
 						P.info = {"<h4>Crew Manifest</h4>
@@ -368,7 +368,7 @@
 
 /obj/machinery/computer/card/centcom
 	name = "CentCom Identification Computer"
-	circuit = "/obj/item/weapon/circuitboard/card/centcom"
+	circuit = "/obj/item/circuitboard/card/centcom"
 	req_access = list(
 		access_cent_creed,
 		access_cent_captain,

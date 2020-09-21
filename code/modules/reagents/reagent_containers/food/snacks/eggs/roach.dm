@@ -1,6 +1,6 @@
 var/global/cockroach_egg_amount = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs
+/obj/item/reagent_containers/food/snacks/roach_eggs
 	name = "cockroach eggs"
 	desc = "A bunch of tiny, brown eggs, each of them housing a bunch of cockroach larvae."
 
@@ -10,7 +10,7 @@ var/global/cockroach_egg_amount = 0
 
 	var/amount_grown = 0
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/New()
+/obj/item/reagent_containers/food/snacks/roach_eggs/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 2)
 	reagents.add_reagent(ROACHSHELL, rand(1,4))
@@ -21,7 +21,7 @@ var/global/cockroach_egg_amount = 0
 
 	cockroach_egg_amount++
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/process()
+/obj/item/reagent_containers/food/snacks/roach_eggs/process()
 	if(is_in_valid_nest(src)) //_macros.dm
 		amount_grown += rand(1,2)
 
@@ -33,7 +33,7 @@ var/global/cockroach_egg_amount = 0
 	else
 		die()
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/Destroy()
+/obj/item/reagent_containers/food/snacks/roach_eggs/Destroy()
 	if(amount_grown)
 		die()
 
@@ -41,18 +41,18 @@ var/global/cockroach_egg_amount = 0
 
 	return ..()
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/hatch()
+/obj/item/reagent_containers/food/snacks/roach_eggs/proc/hatch()
 	new /mob/living/simple_animal/cockroach(get_turf(src))
 
 	processing_objects.Remove(src)
 	qdel(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/fertilize()
+/obj/item/reagent_containers/food/snacks/roach_eggs/proc/fertilize()
 	processing_objects.Add(src)
 
 	amount_grown = 1 //So there's a way of checking if the egg is fertilized without doing processing_objects.Find(src)
 
-/obj/item/weapon/reagent_containers/food/snacks/roach_eggs/proc/die()
+/obj/item/reagent_containers/food/snacks/roach_eggs/proc/die()
 	processing_objects.Remove(src)
 
 	amount_grown = 0

@@ -67,7 +67,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 9000, MAT_SILVER = 250, MAT_GLASS = 10000)
 	category = "Medical"
-	build_path = /obj/item/weapon/melee/defibrillator
+	build_path = /obj/item/melee/defibrillator
 
 /datum/design/healthanalyzer
 	name = "Health Analyzer"
@@ -87,7 +87,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 1000, MAT_GLASS = 1000)
 	category = "Medical"
-	build_path = /obj/item/weapon/thermometer/electronic
+	build_path = /obj/item/thermometer/electronic
 
 /datum/design/health_hud
 	name = "Health Scanner HUD"
@@ -127,4 +127,4 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 3750, MAT_PLASMA = 8000)
 	category = "Medical"
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+	build_path = /obj/item/reagent_containers/glass/beaker/large/plasma

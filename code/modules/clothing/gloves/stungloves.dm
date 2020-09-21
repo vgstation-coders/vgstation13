@@ -1,6 +1,6 @@
 #define STUNGLOVES_CHARGE_COST 2500
 
-/obj/item/clothing/gloves/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/gloves/attackby(obj/item/W, mob/user)
 	if(istype(src, /obj/item/clothing/gloves/boxing))	//quick fix for stunglove overlay not working nicely with boxing gloves.
 		to_chat(user, "<span class='notice'>That won't work.</span>")//i'm not putting my lips on that!
 
@@ -20,7 +20,7 @@
 		else
 			to_chat(user, "<span class='notice'>[src] are already wired.</span>")
 
-	else if(istype(W, /obj/item/weapon/cell))
+	else if(istype(W, /obj/item/cell))
 		if(!wired)
 			to_chat(user, "<span class='notice'>[src] need to be wired first.</span>")
 		else if(!cell)

@@ -9,7 +9,7 @@ var/global/list/rad_collectors = list()
 	anchored = 0
 	density = 1
 	req_access = list(access_engine_equip)
-	var/obj/item/weapon/tank/plasma/P = null
+	var/obj/item/tank/plasma/P = null
 	var/last_power = 0
 	var/active = 0
 	var/locked = 0
@@ -59,7 +59,7 @@ var/global/list/rad_collectors = list()
 		else
 			to_chat(user, "<span class='notice'>\The [W] registers that the unit is currently not producing power.</span>")
 		return 1
-	else if(istype(W, /obj/item/weapon/tank/plasma))
+	else if(istype(W, /obj/item/tank/plasma))
 		if(!src.anchored)
 			to_chat(user, "<span class='warning'>\The [src] needs to be secured to the floor first.</span>")
 			return 1
@@ -73,7 +73,7 @@ var/global/list/rad_collectors = list()
 		if(P && !src.locked)
 			eject()
 			return 1
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	else if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if (src.allowed(user))
 			if(active)
 				src.locked = !src.locked

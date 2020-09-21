@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/microwave
+	build_path = /obj/item/circuitboard/microwave
 
 /datum/design/reagentgrinder
 	name = "Circuit Design (All-In-One Grinder)"
@@ -16,7 +16,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/reagentgrinder
+	build_path = /obj/item/circuitboard/reagentgrinder
 
 /datum/design/smartfridge
 	name = "Circuit Design (SmartFridge)"
@@ -26,7 +26,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/smartfridge
+	build_path = /obj/item/circuitboard/smartfridge
 
 /datum/design/gibber
 	name = "Circuit Design (Gibber)"
@@ -36,7 +36,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/gibber
+	build_path = /obj/item/circuitboard/gibber
 
 /datum/design/processor
 	name = "Circuit Design (Food Processor)"
@@ -46,7 +46,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/processor
+	build_path = /obj/item/circuitboard/processor
 
 /datum/design/eggincubator
 	name = "Circuit Design (Egg Incubator)"
@@ -56,7 +56,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/egg_incubator
+	build_path = /obj/item/circuitboard/egg_incubator
 
 /datum/design/confectionator
 	name = "Circuit Design (Confectionator)"
@@ -66,7 +66,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/confectionator
+	build_path = /obj/item/circuitboard/confectionator
 
 /datum/design/fishtank
 	name = "Circuit Design (Fishtank Filter)"
@@ -76,7 +76,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fishtank
+	build_path = /obj/item/circuitboard/fishtank
 
 /datum/design/fishwall
 	name = "Circuit Design (Large Fishtank Filter)"
@@ -86,7 +86,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fishwall
+	build_path = /obj/item/circuitboard/fishwall
 
 /datum/design/conduction_plate
 	name = "Circuit Design (Conduction Plate)"
@@ -96,4 +96,4 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/conduction_plate
+	build_path = /obj/item/circuitboard/conduction_plate

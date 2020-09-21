@@ -12,19 +12,19 @@
 	for(var/obj/item/I in loc)
 		if(notices > 4)
 			break
-		if(istype(I, /obj/item/weapon/paper))
+		if(istype(I, /obj/item/paper))
 			I.forceMove(src)
 			notices++
 	icon_state = "nboard0[notices]"
 
 //attaching papers!!
-/obj/structure/noticeboard/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
+/obj/structure/noticeboard/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(O.is_wrench(user))
 		to_chat(user, "<span class='notice'>You disassemble \the [src].</span>")
 		O.playtoolsound(src, 100)
 		new /obj/item/stack/sheet/wood (src.loc,2)
 		qdel(src)
-	if(istype(O, /obj/item/weapon/paper))
+	if(istype(O, /obj/item/paper))
 		if(notices < 5)
 			O.add_fingerprint(user)
 			add_fingerprint(user)
@@ -37,7 +37,7 @@
 
 /obj/structure/noticeboard/attack_hand(user as mob)
 	var/dat = "<B>Noticeboard</B><BR>"
-	for(var/obj/item/weapon/paper/P in src)
+	for(var/obj/item/paper/P in src)
 		dat += "<A href='?src=\ref[src];read=\ref[P]'>[P.name]</A> <A href='?src=\ref[src];write=\ref[P]'>Write</A> <A href='?src=\ref[src];remove=\ref[P]'>Remove</A><BR>"
 	user << browse("<HEAD><TITLE>Notices</TITLE></HEAD>[dat]","window=noticeboard")
 	onclose(user, "noticeboard")
@@ -63,16 +63,16 @@
 		var/obj/item/P = locate(href_list["write"])
 
 		if((P && P.loc == src)) //ifthe paper's on the board
-			var/pen_index = usr.find_held_item_by_type(/obj/item/weapon/pen)
+			var/pen_index = usr.find_held_item_by_type(/obj/item/pen)
 			if(pen_index)
-				var/obj/item/weapon/pen/pen = usr.held_items[pen_index]
+				var/obj/item/pen/pen = usr.held_items[pen_index]
 				add_fingerprint(usr)
 				P.attackby(pen, usr)
 			else
 				to_chat(usr, "<span class='notice'>You'll need something to write with!</span>")
 
 	if(href_list["read"])
-		var/obj/item/weapon/paper/P = locate(href_list["read"])
+		var/obj/item/paper/P = locate(href_list["read"])
 		if((P && P.loc == src))
 			P.show_text(usr)
 	return

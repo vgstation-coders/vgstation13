@@ -14,12 +14,12 @@
 /datum/artifact_trigger/energy/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
 	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+	var/obj/item/item = event_args[3]
 
-	if(istype(item,/obj/item/weapon/melee/baton) && item:status ||\
-			istype(item,/obj/item/weapon/melee/energy) ||\
-			istype(item,/obj/item/weapon/melee/legacy_cultblade) ||\
-			istype(item,/obj/item/weapon/card/emag) ||\
+	if(istype(item,/obj/item/melee/baton) && item:status ||\
+			istype(item,/obj/item/melee/energy) ||\
+			istype(item,/obj/item/melee/legacy_cultblade) ||\
+			istype(item,/obj/item/card/emag) ||\
 			istype(item,/obj/item/device/multitool))
 		Triggered(toucher, context, item)
 

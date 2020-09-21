@@ -1,4 +1,4 @@
-/obj/item/weapon/disk/botany
+/obj/item/disk/botany
 	name = "flora data disk"
 	desc = "A small disk used for carrying data on plant genetics."
 	icon = 'icons/obj/datadisks.dmi'
@@ -6,12 +6,12 @@
 	var/list/genes = list()
 	var/genesource = "unknown"
 
-/obj/item/weapon/disk/botany/New()
+/obj/item/disk/botany/New()
 	..()
 	pixel_x = rand(-5,5) * PIXEL_MULTIPLIER
 	pixel_y = rand(-5,5) * PIXEL_MULTIPLIER
 
-/obj/item/weapon/disk/botany/attack_self(var/mob/user as mob)
+/obj/item/disk/botany/attack_self(var/mob/user as mob)
 	if(genes.len)
 		var/choice = alert(user, "Are you sure you want to wipe the disk?", "Xenobotany Data", "No", "Yes")
 		if(src && user && genes && choice && choice == "Yes" && user.get_active_hand() == src)
@@ -31,7 +31,7 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK | EJECTNOTDEL
 
 	var/obj/item/seeds/loaded_seed // Currently loaded seed packet.
-	var/obj/item/weapon/disk/botany/loaded_disk //Currently loaded data disk.
+	var/obj/item/disk/botany/loaded_disk //Currently loaded data disk.
 
 	var/open = 0
 	var/active = 0
@@ -44,10 +44,10 @@
 
 /obj/machinery/botany/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/ML in component_parts)
 		T += ML.rating
 	T = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/MA in component_parts)
+	for(var/obj/item/stock_parts/manipulator/MA in component_parts)
 		T += MA.rating
 	time_coeff = T
 
@@ -86,7 +86,7 @@
 
 	nanomanager.update_uis(src)
 
-/obj/machinery/botany/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/botany/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/seeds))
 		if(loaded_seed)
 			to_chat(user, "There is already a seed loaded.")
@@ -103,12 +103,12 @@
 			nanomanager.update_uis(src)
 		return
 
-	if(istype(W,/obj/item/weapon/disk/botany))
+	if(istype(W,/obj/item/disk/botany))
 		if(loaded_disk)
 			to_chat(user, "There is already a data disk loaded.")
 			return
 		else
-			var/obj/item/weapon/disk/botany/B = W
+			var/obj/item/disk/botany/B = W
 
 			if(B.genes && B.genes.len)
 				if(!disk_needs_genes)
@@ -139,15 +139,15 @@
 /obj/machinery/botany/extractor/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/botany_centrifuge,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/matter_bin,
+		/obj/item/circuitboard/botany_centrifuge,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/matter_bin,
 	)
 
 	RefreshParts()
@@ -292,13 +292,13 @@
 /obj/machinery/botany/editor/New()
 	..()
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/botany_bioballistic,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/circuitboard/botany_bioballistic,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen,
 	)
 
 	RefreshParts()

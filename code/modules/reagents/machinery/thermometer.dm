@@ -1,4 +1,4 @@
-/obj/item/weapon/thermometer
+/obj/item/thermometer
 	name = "thermometer"
 	desc = "A device that measures temperature using the expansion of mercury when exposed to heat."
 	icon = 'icons/obj/items.dmi'
@@ -14,15 +14,15 @@
 	var/last_temperature
 	var/last_temperature_string
 
-/obj/item/weapon/thermometer/New()
+/obj/item/thermometer/New()
 	..()
 	initial_thermometer()
 
-/obj/item/weapon/thermometer/proc/initial_thermometer()
+/obj/item/thermometer/proc/initial_thermometer()
 	create_reagents(5)
 	reagents.add_reagent(MERCURY, 5)
 
-/obj/item/weapon/thermometer/update_icon()
+/obj/item/thermometer/update_icon()
 	if(last_temperature >= 373.15)
 		icon_state = "therm_mercury_high"
 	else if(last_temperature <= 273.15)
@@ -30,16 +30,16 @@
 	else
 		icon_state = "therm_mercury"
 
-/obj/item/weapon/thermometer/proc/crit_fail(mob/living/carbon/human/C, mob/user)
+/obj/item/thermometer/proc/crit_fail(mob/living/carbon/human/C, mob/user)
 	user.visible_message("<span class = 'attack'>\The [user] smashes \the [src] over \the [C]'s head!</span>",\
 			"<span class = 'warning'>You smash \the [src] over \the [C]'s head.</span>")
 	splash_sub(reagents, C, -1, user)
 	user.drop_item(src)
 	playsound(src, "shatter", 70, 1)
-	new /obj/item/weapon/broken_thermometer(get_turf(src))
+	new /obj/item/broken_thermometer(get_turf(src))
 	qdel(src)
 
-/obj/item/weapon/thermometer/preattack(obj/target, mob/user, proximity_flag, click_parameters)
+/obj/item/thermometer/preattack(obj/target, mob/user, proximity_flag, click_parameters)
 	if(proximity_flag == 0) // not adjacent
 		return
 
@@ -80,18 +80,18 @@
 
 	return 1
 
-/obj/item/weapon/thermometer/attack_self(mob/user)
+/obj/item/thermometer/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>Last recorded temperature: [last_temperature_string]</span>")
 
-/obj/item/weapon/thermometer/proc/measure_human_temperature(mob/living/carbon/human/C)
+/obj/item/thermometer/proc/measure_human_temperature(mob/living/carbon/human/C)
 	last_temperature = C.bodytemperature
 	return "[round(last_temperature-273.15,5)] C"
 
-/obj/item/weapon/thermometer/proc/measure_obj_temperature(obj/target)
+/obj/item/thermometer/proc/measure_obj_temperature(obj/target)
 	last_temperature = target.reagents.chem_temp
 	return "[round(last_temperature-273.15, 5)] C"
 
-/obj/item/weapon/thermometer/electronic
+/obj/item/thermometer/electronic
 	name = "electronic thermometer"
 	desc = "An electronic thermal probe, boasting greater precision and less mercury than its analogue counterparts."
 	icon_state = "therm_digi_1"
@@ -101,25 +101,25 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_GLASS
 
-/obj/item/weapon/thermometer/electronic/initial_thermometer()
+/obj/item/thermometer/electronic/initial_thermometer()
 	return
 
-/obj/item/weapon/thermometer/electronic/update_icon()
+/obj/item/thermometer/electronic/update_icon()
 	return
 
-/obj/item/weapon/thermometer/electronic/crit_fail()
+/obj/item/thermometer/electronic/crit_fail()
 	return
 
-/obj/item/weapon/thermometer/electronic/measure_human_temperature(mob/living/carbon/human/C)
+/obj/item/thermometer/electronic/measure_human_temperature(mob/living/carbon/human/C)
 	last_temperature = C.bodytemperature
 	return "[last_temperature-273.15] C"
 
-/obj/item/weapon/thermometer/electronic/measure_obj_temperature(obj/target)
+/obj/item/thermometer/electronic/measure_obj_temperature(obj/target)
 	last_temperature = target.reagents.chem_temp
 	return "[last_temperature-273.15] C"
 
 
-/obj/item/weapon/broken_thermometer
+/obj/item/broken_thermometer
 	name = "broken thermometer"
 	desc = "Once used to measure temperature, now it just grows cold."
 	icon = 'icons/obj/items.dmi'
@@ -137,15 +137,15 @@
 	w_type=RECYK_GLASS
 	hitsound = 'sound/weapons/bladeslice.ogg'
 	
-/obj/item/weapon/thermometer/byond
+/obj/item/thermometer/byond
 	desc = "A device that measures temperature using the expansion of blood when exposed to heat. There's an imprint on the glass that says \"Made in BYOND\"."
 	icon_state = "therm_byond"
 
-/obj/item/weapon/thermometer/byond/initial_thermometer()
+/obj/item/thermometer/byond/initial_thermometer()
 	create_reagents(5)
 	reagents.add_reagent(BLOOD, 5)
 
-/obj/item/weapon/thermometer/byond/update_icon()
+/obj/item/thermometer/byond/update_icon()
 	if(last_temperature >= 373.15)
 		icon_state = "therm_byond_high"
 	else if(last_temperature <= 273.15)

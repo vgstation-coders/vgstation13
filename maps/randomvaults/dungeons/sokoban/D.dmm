@@ -31,7 +31,7 @@
 "E" = (/obj/structure/table/holotable/wood,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "F" = (/obj/structure/bed/chair/comfy/brown,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "G" = (/obj/structure/bed/chair/comfy/brown{dir = 1},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
-"H" = (/obj/structure/table/holotable/wood,/obj/item/weapon/coin/silver,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
+"H" = (/obj/structure/table/holotable/wood,/obj/item/coin/silver,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "I" = (/obj/structure/flora/pottedplant,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "J" = (/obj/machinery/door/airlock/diamond{name = "Shopping Area"},/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)
 "K" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor{icon_state = "pattern_red"},/area/vault/sokoban/level)

@@ -15,10 +15,10 @@
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sleeper,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/sleeper,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 	light_color = LIGHT_COLOR_CYAN
 	light_range_on = 3
@@ -53,7 +53,7 @@
 
 /obj/machinery/sleeper/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/SP in component_parts)
+	for(var/obj/item/stock_parts/SP in component_parts)
 		T += SP.rating
 	if(T >= 12) //Congrats you got T4 components
 		works_in_crit = TRUE
@@ -253,21 +253,21 @@
 		qdel(src)
 	return
 
-/obj/machinery/sleeper/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/sleeper/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupied.</span>")
 		return 0
 	return ..()
 
-/obj/machinery/sleeper/attackby(obj/item/weapon/obj_used, mob/user)
+/obj/machinery/sleeper/attackby(obj/item/obj_used, mob/user)
 
-	if(!istype(obj_used, /obj/item/weapon/grab))
+	if(!istype(obj_used, /obj/item/grab))
 		return ..()
 	else
 		if(..())
 			return TRUE
 
-	var/obj/item/weapon/grab/tar_grab = obj_used
+	var/obj/item/grab/tar_grab = obj_used
 	if(!(ismob(tar_grab.affecting)) || tar_grab.affecting.locked_to)
 		return
 
@@ -482,10 +482,10 @@
 /obj/machinery/sleeper/upgraded
 	name = "advanced sleeper"
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sleeper,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico
+		/obj/item/circuitboard/sleeper,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/manipulator/nano/pico,
+		/obj/item/stock_parts/manipulator/nano/pico
 	)
 
 
@@ -499,10 +499,10 @@
 	base_icon = "mancrowave"
 	icon_state = "mancrowave_open"
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/sleeper/mancrowave,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/sleeper/mancrowave,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator
 	)
 	setting = "Thermoregulate"
 	available_options = list("Thermoregulate" = 50)
@@ -599,7 +599,7 @@
 			to_chat(usr, "<span class='danger'>\The [src] is already turned on!</span>")
 			return
 		if(occupant)
-			if((locate(/obj/item/weapon/disk/nuclear) in get_contents_in_object(occupant)) && href_list["cook"] != "Thermoregulate" )
+			if((locate(/obj/item/disk/nuclear) in get_contents_in_object(occupant)) && href_list["cook"] != "Thermoregulate" )
 				to_chat(usr, "<span class='danger'>Even with the safety features turned off, \the [src] refuses to cook something inside of it!</span>")
 			else
 				cook(href_list["cook"])
@@ -649,12 +649,12 @@
 				qdel(occupant)
 				occupant = null
 				for(var/i = 1;i < 5;i++)
-					new /obj/item/weapon/reagent_containers/food/snacks/soylentgreen(loc)
+					new /obj/item/reagent_containers/food/snacks/soylentgreen(loc)
 			if("Medium")
 				qdel(occupant)
 				occupant = null
 				for(var/i = 1;i < 5;i++)
-					new /obj/item/weapon/reagent_containers/food/snacks/badrecipe(loc)
+					new /obj/item/reagent_containers/food/snacks/badrecipe(loc)
 			if("Well Done")
 				qdel(occupant)
 				occupant = null

@@ -361,14 +361,14 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang
 	name = "\improper SGL-6 Grenade Launcher"
 	icon_state = "mecha_grenadelnchr"
-	projectile = /obj/item/weapon/grenade/flashbang
+	projectile = /obj/item/grenade/flashbang
 	fire_sound = 'sound/weapons/grenadelauncher.ogg'
 	max_projectiles = 6
 	missile_speed = 1.5
 	projectile_energy_cost = 800
 	equip_cooldown = 60
 	var/det_time = 20
-	var/obj/item/weapon/grenade/grenade
+	var/obj/item/grenade/grenade
 	var/can_pre_detonate = FALSE
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/action(target)
@@ -379,7 +379,7 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/grenade/G = new projectile(chassis.loc)
+	var/obj/item/grenade/G = new projectile(chassis.loc)
 	grenade = G
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
@@ -399,7 +399,7 @@
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang//Because I am a heartless bastard -Sieve
 	name = "\improper SOP-6 Grenade Launcher"
-	projectile = /obj/item/weapon/grenade/flashbang/clusterbang
+	projectile = /obj/item/grenade/flashbang/clusterbang
 
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/clusterbang/limited/get_equip_info()//Limited version of the clusterbang launcher that can't reload
 	return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[chassis.selected==src?"<b>":"<a href='?src=\ref[chassis];select_equip=\ref[src]'>"][src.name][chassis.selected==src?"</b>":"</a>"]\[[src.projectiles]\]"
@@ -410,7 +410,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/metalfoam
 	name = "\improper Metal Foam Grenade Launcher"
 	desc = "An exosuit-mounted Metal Foam Grenade Launcher. (Can be attached to: Engineering exosuits)"
-	projectile = /obj/item/weapon/grenade/chem_grenade/metalfoam
+	projectile = /obj/item/grenade/chem_grenade/metalfoam
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=2;" + Tc_ENGINEERING + "=3"
 	can_pre_detonate = TRUE
 	equip_cooldown = 30
@@ -423,7 +423,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/flashbang/inflatable
 	name = "\improper Inflatable Barrier Launcher"
 	desc = "An exosuit-mounted Inflatable Barrier Launcher. (Can be attached to: Engineering exosuits)"
-	projectile = /obj/item/weapon/grenade/inflatable
+	projectile = /obj/item/grenade/inflatable
 	origin_tech = Tc_MATERIALS + "=2;" + Tc_MAGNETS + "=1;" + Tc_PROGRAMMING + "=3;" + Tc_ENGINEERING + "=2"
 	can_pre_detonate = TRUE
 	equip_cooldown = 10
@@ -437,10 +437,10 @@
 	if(href_list["inflatable_type"])
 		inflatable_type = !inflatable_type
 		if(inflatable_type)
-			projectile = /obj/item/weapon/grenade/inflatable/door
+			projectile = /obj/item/grenade/inflatable/door
 			occupant_message("Now set to launch inflatable doors.")
 		else
-			projectile = /obj/item/weapon/grenade/inflatable
+			projectile = /obj/item/grenade/inflatable
 			occupant_message("Now set to launch inflatable walls.")
 	if(href_list["mode"])
 		mode = !mode
@@ -478,7 +478,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/banana_mortar
 	name = "\improper Banana Mortar"
 	icon_state = "mecha_bananamrtr"
-	projectile = /obj/item/weapon/bananapeel
+	projectile = /obj/item/bananapeel
 	fire_sound = 'sound/items/bikehorn.ogg'
 	max_projectiles = 15
 	missile_speed = 1.5
@@ -495,7 +495,7 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/bananapeel/B = new projectile(chassis.loc)
+	var/obj/item/bananapeel/B = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
 	B.throw_at(target, missile_range, missile_speed)
 	projectiles--
@@ -539,7 +539,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/creampie_mortar //why waste perfectly good food synthetizing technology in solving world hunger when you can have clowntide instead?
 	name = "\improper Rapid-Fire Cream Pie Mortar"
 	icon_state = "mecha_bananamrtr"
-	projectile = /obj/item/weapon/reagent_containers/food/snacks/pie/empty //because some chucklefuck will try to catch the pie somehow for free nutriment
+	projectile = /obj/item/reagent_containers/food/snacks/pie/empty //because some chucklefuck will try to catch the pie somehow for free nutriment
 	fire_sound = 'sound/items/bikehorn.ogg'
 	max_projectiles = 15
 	missile_speed = 0.75 //for maximum pie-traveling
@@ -557,7 +557,7 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/reagent_containers/food/snacks/pie/P = new projectile(chassis.loc)
+	var/obj/item/reagent_containers/food/snacks/pie/P = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 60, 1)
 	P.throw_at(target, missile_range, missile_speed)
 	projectiles--
@@ -570,7 +570,7 @@
 /obj/item/mecha_parts/mecha_equipment/weapon/ballistic/missile_rack/bolas
 	name = "\improper PCMK-6 Bolas Launcher"
 	icon_state = "mecha_bolas"
-	projectile = /obj/item/weapon/legcuffs/bolas/mech
+	projectile = /obj/item/legcuffs/bolas/mech
 	fire_sound = 'sound/weapons/whip.ogg'
 	max_projectiles = 10
 	missile_speed = 1
@@ -583,7 +583,7 @@
 	if(!action_checks(target))
 		return
 	set_ready_state(0)
-	var/obj/item/weapon/legcuffs/bolas/mech/M = new projectile(chassis.loc)
+	var/obj/item/legcuffs/bolas/mech/M = new projectile(chassis.loc)
 	playsound(chassis, fire_sound, 50, 1)
 	var/originaltarget = target
 	if(defective)
@@ -625,7 +625,7 @@
 							 "<span class='danger'>You try to handcuff \the [C]!</span>")
 
 		if(do_after(user, C, 3 SECONDS, 10, FALSE, TRUE))
-			var/obj/item/weapon/handcuffs/cuffs = new(src)
+			var/obj/item/handcuffs/cuffs = new(src)
 			feedback_add_details("handcuffs", "H")
 
 			user.visible_message("<span class='danger'>\The [M] has put \the [cuffs] on \the [C]!</span>")

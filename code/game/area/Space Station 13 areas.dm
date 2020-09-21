@@ -1588,7 +1588,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Prisoner Education Chamber"
 	icon_state = "interrog"
 
-/obj/item/weapon/paper/Gaschamber
+/obj/item/paper/Gaschamber
 	name = "paper - 'Gas Chambers for Idiots'"
 	info = {"<h4>Gas Chambers for Idiots</h4>
 <p>So here you are, with a fancy, new gas chamber thanks to cheap MoMMI labor.  Now you've got a guy you need to die and have no idea what to do.</p>

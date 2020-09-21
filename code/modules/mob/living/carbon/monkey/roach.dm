@@ -3,7 +3,7 @@
 	voice_name = "roach"
 	speak_emote = list("hisses")
 	icon_state = "bigroach"
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/roach/big
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/roach/big
 	species_type = /mob/living/carbon/monkey/roach
 	flag = RAD_IMMUNE
 

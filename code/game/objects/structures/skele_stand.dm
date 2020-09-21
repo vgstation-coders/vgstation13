@@ -31,7 +31,7 @@
 /obj/structure/skele_stand/Bumped(atom/thing)
 	rattle_bones(null, thing)
 
-/obj/structure/skele_stand/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/skele_stand/attackby(obj/item/W, mob/user)
 	rattle_bones(user, W)
 
 obj/structure/skele_stand/spook(mob/user)

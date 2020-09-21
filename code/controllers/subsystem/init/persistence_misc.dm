@@ -172,7 +172,7 @@ var/datum/subsystem/persistence_misc/SSpersistence_misc
 /datum/persistence_task/highscores/proc/announce_new_highest_record(var/datum/record/money/record)
 	var/name = "Richest escape ever"
 	var/desc = "You broke the record of the richest escape! $[record.cash] chips accumulated."
-	give_award(record.ckey, /obj/item/weapon/reagent_containers/food/drinks/golden_cup, name, desc)
+	give_award(record.ckey, /obj/item/reagent_containers/food/drinks/golden_cup, name, desc)
 
 /datum/persistence_task/highscores/proc/announce_new_record(var/datum/record/money/record)
 	var/name = "Good rich escape"

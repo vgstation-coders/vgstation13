@@ -1,32 +1,32 @@
 var/list/shop_prices = list( //Cost in space credits
 //Misc objects
 
-/obj/item/weapon/soap = 5,
-/obj/item/weapon/soap/syndie = 20,
-/obj/item/weapon/soap/nanotrasen = 20,
-/obj/item/weapon/soap/deluxe = 30,
+/obj/item/soap = 5,
+/obj/item/soap/syndie = 20,
+/obj/item/soap/nanotrasen = 20,
+/obj/item/soap/deluxe = 30,
 
 /obj/item/voucher/free_item/glowing = 400,
-/obj/item/weapon/phone = 30,
-/obj/item/weapon/mop = 10,
-/obj/item/weapon/lipstick/random = 20,
-/obj/item/weapon/lazarus_injector = 50,
-/obj/item/weapon/lazarus_injector/advanced = 150,
-/obj/item/weapon/kitchen/rollingpin = 20,
-/obj/item/weapon/hand_labeler = 10,
+/obj/item/phone = 30,
+/obj/item/mop = 10,
+/obj/item/lipstick/random = 20,
+/obj/item/lazarus_injector = 50,
+/obj/item/lazarus_injector/advanced = 150,
+/obj/item/kitchen/rollingpin = 20,
+/obj/item/hand_labeler = 10,
 
-/obj/item/weapon/extinguisher = 10,
-/obj/item/weapon/extinguisher/mini = 5,
-/obj/item/weapon/extinguisher/foam = 20,
+/obj/item/extinguisher = 10,
+/obj/item/extinguisher/mini = 5,
+/obj/item/extinguisher/foam = 20,
 
 /obj/item/device/multitool = 8,
-/obj/item/weapon/crowbar/red = 5,
-/obj/item/weapon/bikehorn/rubberducky = 5,
-/obj/item/weapon/bikehorn = 5,
-/obj/item/weapon/lighter/zippo = 20,
-/obj/item/weapon/screwdriver = 3,
-/obj/item/weapon/wrench = 3,
-/obj/item/weapon/wrench/socket = 100,
+/obj/item/crowbar/red = 5,
+/obj/item/bikehorn/rubberducky = 5,
+/obj/item/bikehorn = 5,
+/obj/item/lighter/zippo = 20,
+/obj/item/screwdriver = 3,
+/obj/item/wrench = 3,
+/obj/item/wrench/socket = 100,
 /obj/item/queen_bee = 5,
 /obj/item/toy/gooncode = 400, //honk
 /obj/item/mounted/poster = 20,
@@ -34,47 +34,47 @@ var/list/shop_prices = list( //Cost in space credits
 
 /obj/item/asteroid/goliath_hide = 50,
 
-/obj/item/weapon/storage/backpack/clown = 20,
-/obj/item/weapon/storage/backpack/captain = 40,
-/obj/item/weapon/storage/briefcase/centcomm = 80,
+/obj/item/storage/backpack/clown = 20,
+/obj/item/storage/backpack/captain = 40,
+/obj/item/storage/briefcase/centcomm = 80,
 
 //Medicine and chemistry
-/obj/item/weapon/reagent_containers/pill/happy = 20,
-/obj/item/weapon/reagent_containers/pill/stox = 80,
-/obj/item/weapon/reagent_containers/pill/zoom = 160,
-/obj/item/weapon/reagent_containers/pill/cyanide = 240,
-/obj/item/weapon/reagent_containers/pill/nanobot = 240,
-/obj/item/weapon/reagent_containers/pill/creatine_safe = 360,
-/obj/item/weapon/reagent_containers/chempack = 150,
+/obj/item/reagent_containers/pill/happy = 20,
+/obj/item/reagent_containers/pill/stox = 80,
+/obj/item/reagent_containers/pill/zoom = 160,
+/obj/item/reagent_containers/pill/cyanide = 240,
+/obj/item/reagent_containers/pill/nanobot = 240,
+/obj/item/reagent_containers/pill/creatine_safe = 360,
+/obj/item/reagent_containers/chempack = 150,
 /obj/item/clothing/mask/chemmask = 100,
 
 //DNA injectors with powers
-/obj/item/weapon/dnainjector/nofail/elvis = 50,
-/obj/item/weapon/dnainjector/nofail/sweedish = 50,
-/obj/item/weapon/dnainjector/nofail/melt = 100,
-/obj/item/weapon/dnainjector/nofail/jumpy = 200,
-/obj/item/weapon/dnainjector/nofail/mattereater = 200,
-/obj/item/weapon/dnainjector/nofail/hulkmut = 400,
+/obj/item/dnainjector/nofail/elvis = 50,
+/obj/item/dnainjector/nofail/sweedish = 50,
+/obj/item/dnainjector/nofail/melt = 100,
+/obj/item/dnainjector/nofail/jumpy = 200,
+/obj/item/dnainjector/nofail/mattereater = 200,
+/obj/item/dnainjector/nofail/hulkmut = 400,
 
 //disk leading to a random vault. If there doesn't exist a valid vault, it shows up as a blank disk
-/obj/item/weapon/disk/shuttle_coords/vault/random = 90,
+/obj/item/disk/shuttle_coords/vault/random = 90,
 
 //tools
-/obj/item/weapon/surgicaldrill = 100,
-/obj/item/weapon/circular_saw = 100,
-/obj/item/weapon/scalpel/laser/tier2 = 120,
-/obj/item/weapon/scalpel = 70,
-/obj/item/weapon/retractor = 30,
-/obj/item/weapon/cautery = 30,
-/obj/item/weapon/bonegel = 30,
-/obj/item/weapon/FixOVein = 30,
+/obj/item/surgicaldrill = 100,
+/obj/item/circular_saw = 100,
+/obj/item/scalpel/laser/tier2 = 120,
+/obj/item/scalpel = 70,
+/obj/item/retractor = 30,
+/obj/item/cautery = 30,
+/obj/item/bonegel = 30,
+/obj/item/FixOVein = 30,
 
-/obj/item/weapon/switchtool/surgery = 100,
-/obj/item/weapon/switchtool/swiss_army_knife = 300,
-/obj/item/weapon/rcl = 50,
-/obj/item/weapon/glue = 400,
-/obj/item/weapon/chisel = 20,
-/obj/item/weapon/scythe = 50,
+/obj/item/switchtool/surgery = 100,
+/obj/item/switchtool/swiss_army_knife = 300,
+/obj/item/rcl = 50,
+/obj/item/glue = 400,
+/obj/item/chisel = 20,
+/obj/item/scythe = 50,
 /obj/item/bluespace_crystal/flawless = 1800,
 /obj/item/bluespace_crystal/artificial = 100,
 /obj/item/bluespace_crystal = 300,
@@ -103,13 +103,13 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/toy/balloon/decoy = 150,
 /obj/item/toy/syndicateballoon = 300,
 /obj/item/toy/syndicateballoon/ntballoon = 80,
-/obj/item/weapon/am_containment = 10,
-/obj/item/weapon/cane = 5,
-/obj/item/weapon/beartrap = 50,
+/obj/item/am_containment = 10,
+/obj/item/cane = 5,
+/obj/item/beartrap = 50,
 /obj/item/stack/rcd_ammo = 10,
-/obj/item/weapon/storage/pneumatic = 40,
-/obj/item/weapon/resonator = 100,
-/obj/item/weapon/gun/energy/kinetic_accelerator = 80,
+/obj/item/storage/pneumatic = 40,
+/obj/item/resonator = 100,
+/obj/item/gun/energy/kinetic_accelerator = 80,
 /obj/item/device/modkit/aeg_parts = 99,
 /obj/item/device/modkit/gold_rig = 50,
 /obj/item/device/modkit/storm_rig = 50,
@@ -120,45 +120,45 @@ var/list/shop_prices = list( //Cost in space credits
 /obj/item/device/reagent_scanner = 50,
 /obj/item/device/mining_scanner = 15,
 /obj/item/device/mobcapsule = 25,
-/obj/item/weapon/solder = 10,
+/obj/item/solder = 10,
 /obj/item/supermatter_shielding = 100,
-/obj/item/weapon/cell/hyper = 50,
-/obj/item/weapon/weldingtool/gatling/empty = 100,
+/obj/item/cell/hyper = 50,
+/obj/item/weldingtool/gatling/empty = 100,
 
 
 //weapons
-/obj/item/weapon/melee/classic_baton = 100,
-/obj/item/weapon/melee/lance = 200,
-/obj/item/weapon/melee/telebaton = 400,
-/obj/item/weapon/claymore = 300,
-/obj/item/weapon/fireaxe  = 150,
-/obj/item/weapon/spear/wooden = 100,
-/obj/item/weapon/spear = 30,
-/obj/item/weapon/crossbow = 100,
-/obj/item/weapon/hatchet = 20,
-/obj/item/weapon/harpoon = 100,
-/obj/item/weapon/boomerang/toy = 5,
-/obj/item/weapon/boomerang = 30,
-/obj/item/weapon/batteringram = 400,
-/obj/item/weapon/shield/riot = 150,
-/obj/item/weapon/shield/riot/buckler = 50,
-/obj/item/weapon/shield/riot/roman = 150,
-/obj/item/weapon/shield/energy = 350,
-/obj/item/weapon/gun/hookshot/whip = 200,
-/obj/item/weapon/melee/morningstar = 250,
-/obj/item/weapon/subspacetunneler = 300,
-/obj/item/weapon/melee/energy/sword = 350,
-/obj/item/weapon/melee/energy/sword/dualsaber = 600,
-/obj/item/weapon/gun/siren/supersoaker/pistol = 35,
-/obj/item/weapon/gun/siren/supersoaker = 70,
+/obj/item/melee/classic_baton = 100,
+/obj/item/melee/lance = 200,
+/obj/item/melee/telebaton = 400,
+/obj/item/claymore = 300,
+/obj/item/fireaxe  = 150,
+/obj/item/spear/wooden = 100,
+/obj/item/spear = 30,
+/obj/item/crossbow = 100,
+/obj/item/hatchet = 20,
+/obj/item/harpoon = 100,
+/obj/item/boomerang/toy = 5,
+/obj/item/boomerang = 30,
+/obj/item/batteringram = 400,
+/obj/item/shield/riot = 150,
+/obj/item/shield/riot/buckler = 50,
+/obj/item/shield/riot/roman = 150,
+/obj/item/shield/energy = 350,
+/obj/item/gun/hookshot/whip = 200,
+/obj/item/melee/morningstar = 250,
+/obj/item/subspacetunneler = 300,
+/obj/item/melee/energy/sword = 350,
+/obj/item/melee/energy/sword/dualsaber = 600,
+/obj/item/gun/siren/supersoaker/pistol = 35,
+/obj/item/gun/siren/supersoaker = 70,
 
 //mischievous items
 /obj/item/gun_part/silencer = 100,
 /obj/item/device/powersink = 500,
-/obj/item/weapon/card/emag = 1000,
-/obj/item/weapon/cloakingcloak = 750,
-/obj/item/weapon/pen/sleepypen = 1200,
-/obj/item/weapon/reagent_containers/spray/chemsprayer = 150,
+/obj/item/card/emag = 1000,
+/obj/item/cloakingcloak = 750,
+/obj/item/pen/sleepypen = 1200,
+/obj/item/reagent_containers/spray/chemsprayer = 150,
 /obj/item/device/device_analyser/syndicate = 1800,
 
 //No guns sorry
@@ -201,7 +201,7 @@ var/list/shop_prices = list( //Cost in space credits
 	S.setup()
 
 
-var/list/circuitboards = existing_typesof(/obj/item/weapon/circuitboard) - /obj/item/weapon/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
+var/list/circuitboards = existing_typesof(/obj/item/circuitboard) - /obj/item/circuitboard/card/centcom //All circuit boards can be bought in Spessmart
 var/list/circuitboard_prices = list()	//gets filled on initialize()
 var/list/clothing = existing_typesof(/obj/item/clothing) - typesof(/obj/item/clothing/suit/space/ert) - typesof(/obj/item/clothing/head/helmet/space/ert) - typesof(/obj/item/clothing/head/helmet/space/rig) - list(/obj/item/clothing/suit/space/rig/engineer/elite, /obj/item/clothing/suit/space/rig/deathsquad, /obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/head/helmet/space/bomberman, /obj/item/clothing/suit/space/bomberman, /obj/item/clothing/mask/stone/infinite, /obj/item/clothing/suit/armor/laserproof/advanced) //What in the world could go wrong
 var/list/clothing_prices = list()	//gets filled on initialize()
@@ -487,7 +487,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 							shop.purchased(I, shop.items[I])
 						if(shop.destination_disks > 0)
 							say("Please take this complimentary Spessmart shuttle destination disk as well. Shop smart, shop Spessmart!")
-							new /obj/item/weapon/disk/shuttle_coords/vault/supermarket(input_loc)
+							new /obj/item/disk/shuttle_coords/vault/supermarket(input_loc)
 							shop.destination_disks--
 
 						loaded_cash -= price
@@ -508,8 +508,8 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 					say("Hello! Please place all items that you wish to purchase on the table in front of me, and activate me again.")
 
 /mob/living/simple_animal/robot/robot_cashier/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/weapon/spacecash))
-		var/obj/item/weapon/spacecash/S = I
+	if(istype(I,/obj/item/spacecash))
+		var/obj/item/spacecash/S = I
 		var/money_add = S.amount * S.worth
 
 		if(user.drop_item(I))
@@ -538,7 +538,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	icon_state = "booty-red"
 
 	var/spawn_sample_on_creation = 1
-	var/obj/item/weapon/reagent_containers/food/snacks/food_type = /obj/item/weapon/reagent_containers/food/snacks/faggot //Type of the food
+	var/obj/item/reagent_containers/food/snacks/food_type = /obj/item/reagent_containers/food/snacks/faggot //Type of the food
 	var/food_vars = list( //Modified vars
 		name = "Faggot's Delight",
 	)
@@ -552,7 +552,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	to_chat(user, "Its ID tag is \"[id_tag]\", and its ID number is \"[id_num]\".")
 
 /mob/living/simple_animal/robot/food_samples/New()
-	var/list/all_food_types = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet))
+	var/list/all_food_types = (existing_typesof(/obj/item/reagent_containers/food/snacks) - typesof(/obj/item/reagent_containers/food/snacks/customizable) - typesof(/obj/item/reagent_containers/food/snacks/sliceable) - /obj/item/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/reagent_containers/food/snacks/sweet))
 	food_type = pick(all_food_types)
 
 	var/name_preffix = "[random_name(pick(MALE, FEMALE), (prob(30) ? "vox" : "human"))]'s "
@@ -596,7 +596,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	if(!(force || (world.time > last_spawned_sample + cooldown_between_samples)))
 		return
 
-	var/obj/item/weapon/reagent_containers/food/snacks/S = new food_type(new_loc)
+	var/obj/item/reagent_containers/food/snacks/S = new food_type(new_loc)
 
 	for(var/D in food_vars)
 		S.vars[D] = food_vars[D]
@@ -756,7 +756,7 @@ var/list/clothing_prices = list()	//gets filled on initialize()
 	to_spawn = clothing_prices
 	return ..()
 
-/obj/item/weapon/disk/shuttle_coords/vault/supermarket
+/obj/item/disk/shuttle_coords/vault/supermarket
 	name = "Spessmart shuttle destination disk"
 	desc = "Thank you for shopping at Spessmart, please come again!"
 	destination = /obj/docking_port/destination/vault/supermarket

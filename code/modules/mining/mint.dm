@@ -21,11 +21,11 @@
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/coin_press,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/coin_press,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser
 	)
 	RefreshParts()
 
@@ -58,7 +58,7 @@
 
 /obj/machinery/mineral/mint/RefreshParts()
 	var/i = 0
-	for(var/obj/item/weapon/stock_parts/manipulator/A in component_parts)
+	for(var/obj/item/stock_parts/manipulator/A in component_parts)
 		i += A.rating
 	coins_per_sheet = initial(coins_per_sheet) * (i / 2) //Better coin ratio, it's something.
 
@@ -212,10 +212,10 @@
 				processing=0
 				return
 			while(materials.storage[chosen] > 0 && coinsToProduce > 0)
-				var/obj/item/weapon/storage/bag/money/tempbag = locate(/obj/item/weapon/storage/bag/money,out_T)
+				var/obj/item/storage/bag/money/tempbag = locate(/obj/item/storage/bag/money,out_T)
 				materials.removeAmount(chosen, 1) //We'll get that money up front don't you worry.
 				for(var/i=0,i<coins_per_sheet,i++)
-					var/obj/item/weapon/coin/co = new po.cointype(out_T)
+					var/obj/item/coin/co = new po.cointype(out_T)
 					if(tempbag)
 						if(tempbag.can_be_inserted(co, 1))
 							tempbag.handle_item_insertion(co, 1)
@@ -235,7 +235,7 @@
 	mover = null
 	..()
 
-/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/mineral/mint/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(..())
 		if(materials)
 			for(var/matID in materials.storage)

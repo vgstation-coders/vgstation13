@@ -66,7 +66,7 @@
 
 	return
 
-/obj/structure/window/barricade/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/window/barricade/attackby(obj/item/W as obj, mob/user as mob)
 
 	if(iscrowbar(W) && user.a_intent == I_HURT && !busy) //Only way to deconstruct, needs harm intent
 		W.playtoolsound(loc, 75)

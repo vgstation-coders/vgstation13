@@ -6,7 +6,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/mecha/pod
+	build_path = /obj/item/circuitboard/mecha/pod
 
 /datum/design/pod_core
 	name = "Spacepod Core"

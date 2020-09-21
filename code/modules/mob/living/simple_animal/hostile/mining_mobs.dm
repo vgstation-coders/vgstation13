@@ -778,10 +778,10 @@ obj/item/asteroid/basilisk_hide/New()
 			new possessed_ore(src.loc)
 
 	if(prob(1))
-		new /obj/item/weapon/vinyl/rock(src.loc) //It is a rock monster after all
+		new /obj/item/vinyl/rock(src.loc) //It is a rock monster after all
 
 	for(var/i = 0 to rand(0,3))
-		new /obj/item/weapon/strangerock(src.loc, get_random_find())
+		new /obj/item/strangerock(src.loc, get_random_find())
 	new /obj/structure/boulder(src.loc)
 
 /mob/living/simple_animal/hostile/asteroid/rockernaut/attack_icon()
@@ -812,10 +812,10 @@ obj/item/asteroid/basilisk_hide/New()
 		for(var/i = 0 to rand(24,46))
 			new possessed_ore(src.loc)
 
-	new /obj/item/weapon/vinyl/filk(src.loc) //The music of the asteroid~
+	new /obj/item/vinyl/filk(src.loc) //The music of the asteroid~
 
 	for(var/i = 0 to rand(5,13))
-		new /obj/item/weapon/strangerock(src.loc, get_random_find())
+		new /obj/item/strangerock(src.loc, get_random_find())
 	new /obj/item/clothing/gloves/mining(src.loc)
 	new /obj/structure/boulder(src.loc)
 
@@ -879,7 +879,7 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_aggro = "pillow"
 	icon_living = "pillow"
 	icon_dead = "pillow_dead"
-	holder_type = /obj/item/weapon/holder/animal/pillow
+	holder_type = /obj/item/holder/animal/pillow
 	size = SIZE_SMALL
 	var/pacify_aura = TRUE
 	var/image/eyes

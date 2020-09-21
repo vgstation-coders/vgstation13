@@ -194,9 +194,9 @@
 
 	if(href_list["export"])
 		//Find a blank sheet of paper on the same turf, export to it
-		var/obj/item/weapon/paper/P
+		var/obj/item/paper/P
 
-		for(var/obj/item/weapon/paper/check in get_turf(src))
+		for(var/obj/item/paper/check in get_turf(src))
 			if(check.info)
 				continue
 
@@ -264,7 +264,7 @@
 		to_chat(user, "<span class='notice'>\The [W] is too big for any of the sockets here. Try taking it apart.")
 		return
 
-	if(istype(W, /obj/item/weapon/paper))
+	if(istype(W, /obj/item/paper))
 
 		to_chat(user, "<span class='info'>You start inserting \the [W] into \the [src].</span>")
 
@@ -274,7 +274,7 @@
 					to_chat(user, "<span class='notice'>Unable to import configuration: the assembly frame must be empty.</span>")
 					return
 
-				var/obj/item/weapon/paper/P = W
+				var/obj/item/paper/P = W
 				var/turf/T = get_turf(src)
 				var/list/used_parts = T.contents.Copy()
 
@@ -310,8 +310,8 @@
 			AS.holder = src
 			assemblies.Add(AS)
 
-	else if(istype(AS.loc, /obj/item/weapon/storage))
-		var/obj/item/weapon/storage/S = AS.loc
+	else if(istype(AS.loc, /obj/item/storage))
+		var/obj/item/storage/S = AS.loc
 		if(S.remove_from_storage(AS, src))
 			AS.holder = src
 			assemblies.Add(AS)
@@ -388,7 +388,7 @@
 	return jointext(mainholder, "<BR>")
 
 /obj/item/device/assembly_frame/proc/debug_to_text() //Spawns a paper with the to_text data
-	var/obj/item/weapon/paper/P = new(get_turf(src))
+	var/obj/item/paper/P = new(get_turf(src))
 	P.info = to_text()
 
 //Fills and sets up the assembly frame from the string given by to_text(). Only works if the frame is empty.
@@ -532,9 +532,9 @@
 		. += assembly_path
 
 /obj/item/device/assembly_frame/proc/debug_from_text(use_parts = 0)
-	var/obj/item/weapon/paper/P = locate() in loc
+	var/obj/item/paper/P = locate() in loc
 	var/list/parts_from = list()
 	if(use_parts)
-		var/obj/item/weapon/storage/box/B = locate() in loc
+		var/obj/item/storage/box/B = locate() in loc
 		parts_from = B.contents
 	return from_text(P.info, use_parts, parts_from)

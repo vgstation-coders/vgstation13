@@ -27,7 +27,7 @@
 	materials = list(MAT_GOLD = 3000, MAT_DIAMOND = 1500, MAT_URANIUM = 250)
 	reliability_base = 80
 	category = "Bluespace"
-	build_path = /obj/item/weapon/storage/backpack/holding
+	build_path = /obj/item/storage/backpack/holding
 
 /datum/design/bluespace_crystal
 	name = "Artificial Bluespace Crystal"
@@ -49,7 +49,7 @@
 	materials = list(MAT_GLASS = 6000, MAT_IRON = 6000)
 	reliability = 100
 	category = "Bluespace"
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/bluespace
+	build_path = /obj/item/reagent_containers/glass/beaker/bluespace
 
 /datum/design/bluespacebeaker_large
 	name = "Large Bluespace Beaker"
@@ -60,7 +60,7 @@
 	materials = list(MAT_DIAMOND = 1500, MAT_IRON = 6000, MAT_GLASS = 6000)
 	reliability = 100
 	category = "Bluespace"
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/bluespace/large
+	build_path = /obj/item/reagent_containers/glass/beaker/bluespace/large
 
 /datum/design/stasisbeaker
 	name = "Stasis Beaker"
@@ -71,7 +71,7 @@
 	materials = list(MAT_URANIUM = 1500, MAT_IRON = 3750, MAT_GLASS = 3750)
 	reliability = 100
 	category = "Bluespace"
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreact
+	build_path = /obj/item/reagent_containers/glass/beaker/noreact
 
 /datum/design/stasisbeaker_large
 	name = "Large Stasis Beaker"
@@ -82,7 +82,7 @@
 	materials = list(MAT_DIAMOND = 1500, MAT_IRON = 3750, MAT_GLASS = 3750, MAT_URANIUM = 1500)
 	reliability = 100
 	category = "Bluespace"
-	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
+	build_path = /obj/item/reagent_containers/glass/beaker/noreact/large
 
 /datum/design/gps
 	name = "Global Positioning System"
@@ -102,7 +102,7 @@
 	build_type = PROTOLATHE
 	materials = list (MAT_IRON = 20000, MAT_GLASS = 5000)
 	category = "Bluespace"
-	build_path = /obj/item/weapon/rcs
+	build_path = /obj/item/rcs
 
 /datum/design/rcs_telepad
 	name = "RCS Telepad Kit"

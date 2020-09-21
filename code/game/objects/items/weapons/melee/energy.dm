@@ -1,4 +1,4 @@
-/obj/item/weapon/melee/energy
+/obj/item/melee/energy
 	var/active = 0
 	sharpness = 1.5 //very very sharp
 	var/sharpness_on = 1.5 //so badmins can VV this!
@@ -7,29 +7,29 @@
 	source_temperature = TEMPERATURE_PLASMA
 	sterility = 0
 
-/obj/item/weapon/melee/energy/suicide_act(mob/user)
+/obj/item/melee/energy/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit seppuku.</span>", \
 						"<span class='danger'>[user] is falling on the [src.name]! It looks like \he's trying to commit suicide.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/melee/energy/is_hot()
+/obj/item/melee/energy/is_hot()
 	if(active)
 		return source_temperature
 	return 0
 
-/obj/item/weapon/melee/energy/is_sharp()
+/obj/item/melee/energy/is_sharp()
 	if(active)
 		return sharpness
 	return 0
 
 //Energy weapons cannot be bloodied. Not even their handle. Don't ask.
-/obj/item/weapon/melee/energy/add_blood(var/mob/living/carbon/human/M)
+/obj/item/melee/energy/add_blood(var/mob/living/carbon/human/M)
 	return FALSE
 
-/obj/item/weapon/melee/energy/add_blood_from_data(var/list/blood_data)
+/obj/item/melee/energy/add_blood_from_data(var/list/blood_data)
 	return FALSE
 
-/obj/item/weapon/melee/energy/axe
+/obj/item/melee/energy/axe
 	name = "energy axe"
 	desc = "An energised battle axe."
 	icon_state = "axe0"
@@ -46,11 +46,11 @@
 	armor_penetration = 50
 
 
-/obj/item/weapon/melee/energy/axe/suicide_act(mob/user)
+/obj/item/melee/energy/axe/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] swings the [src.name] towards /his head! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/melee/energy/axe/rusty
+/obj/item/melee/energy/axe/rusty
 	name = "rusty energy axe"
 	desc = "A rusted energised battle axe."
 	force = 3
@@ -58,7 +58,7 @@
 	throwforce = 5
 	armor_penetration = 50
 
-/obj/item/weapon/melee/energy/sword
+/obj/item/melee/energy/sword
 	name = "energy sword"
 	desc = "May the force be within you."
 	icon_state = "sword0"
@@ -75,9 +75,9 @@
 	flags = FPRINT
 	origin_tech = Tc_MAGNETS + "=3;" + Tc_SYNDICATE + "=4"
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
-	var/dualsaber_type = /obj/item/weapon/melee/energy/sword/dualsaber
+	var/dualsaber_type = /obj/item/melee/energy/sword/dualsaber
 
-/obj/item/weapon/melee/energy/sword/activated/New()
+/obj/item/melee/energy/sword/activated/New()
 	..()
 	active = 1
 	sterility = 100
@@ -90,19 +90,19 @@
 	update_icon()
 
 
-/obj/item/weapon/melee/energy/sword/IsShield()
+/obj/item/melee/energy/sword/IsShield()
 	if(active)
 		return 1
 	return 0
 
-/obj/item/weapon/melee/energy/sword/New()
+/obj/item/melee/energy/sword/New()
 	..()
 	_color = pick("red","blue","green","purple")
 	if(!active_state)
 		active_state = base_state + _color
 	update_icon()
 
-/obj/item/weapon/melee/energy/sword/attack_self(mob/living/user as mob)
+/obj/item/melee/energy/sword/attack_self(mob/living/user as mob)
 	if(!(flags & TWOHANDABLE))
 		if (clumsy_check(user) && prob(50) && active) //only an on blade can cut
 			to_chat(user, "<span class='danger'>You accidentally cut yourself with [src]!</span>")
@@ -114,7 +114,7 @@
 	..()
 
 
-/obj/item/weapon/melee/energy/sword/proc/toggleActive(mob/user, var/togglestate = "") //you can use togglestate to manually set the sword on or off
+/obj/item/melee/energy/sword/proc/toggleActive(mob/user, var/togglestate = "") //you can use togglestate to manually set the sword on or off
 	switch(togglestate)
 		if("on")
 			active = 1
@@ -146,21 +146,21 @@
 		to_chat(user, "<span class='notice'> [src] can now be concealed.</span>")
 	update_icon()
 
-/obj/item/weapon/melee/energy/sword/update_icon()
+/obj/item/melee/energy/sword/update_icon()
 	if(active && _color)
 		icon_state = active_state
 	else
 		icon_state = "[base_state][active]"
 
-/obj/item/weapon/melee/energy/sword/attackby(obj/item/weapon/W, mob/living/user)
+/obj/item/melee/energy/sword/attackby(obj/item/W, mob/living/user)
 	if(combine(W, user))
 		return
 	..()
 
-/obj/item/weapon/melee/energy/sword/proc/combine(obj/item/W, mob/living/user)
+/obj/item/melee/energy/sword/proc/combine(obj/item/W, mob/living/user)
 	if(can_combine_with(W))
 		to_chat(user, "<span class='notice'>You attach the ends of the two energy swords, making a single double-bladed weapon! You're cool.</span>")
-		var/obj/item/weapon/melee/energy/sword/dualsaber/saber = new dualsaber_type(user.loc)
+		var/obj/item/melee/energy/sword/dualsaber/saber = new dualsaber_type(user.loc)
 		saber.colorset = W._color + src._color
 		saber.swords.Add(W, src)
 		user.drop_item(W)
@@ -171,18 +171,18 @@
 		return 1
 	return 0
 
-/obj/item/weapon/melee/energy/sword/proc/can_combine_with(obj/item/W)
-	return istype(W, /obj/item/weapon/melee/energy/sword) && !is_type_in_list(W, list(/obj/item/weapon/melee/energy/sword/bsword, /obj/item/weapon/melee/energy/sword/pirate, /obj/item/weapon/melee/energy/sword/dualsaber))
+/obj/item/melee/energy/sword/proc/can_combine_with(obj/item/W)
+	return istype(W, /obj/item/melee/energy/sword) && !is_type_in_list(W, list(/obj/item/melee/energy/sword/bsword, /obj/item/melee/energy/sword/pirate, /obj/item/melee/energy/sword/dualsaber))
 
-/obj/item/weapon/melee/energy/sword/bsword
+/obj/item/melee/energy/sword/bsword
 	name = "banana"
 	desc = "It's yellow."
 	base_state = "bsword0"
 	active_state = "bsword1"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
-	dualsaber_type = /obj/item/weapon/melee/energy/sword/dualsaber/bananabunch
+	dualsaber_type = /obj/item/melee/energy/sword/dualsaber/bananabunch
 
-/obj/item/weapon/melee/energy/sword/bsword/update_icon()
+/obj/item/melee/energy/sword/bsword/update_icon()
 	if(active)
 		icon_state = active_state
 		name = "energized bananium sword"
@@ -192,32 +192,32 @@
 		name = "banana"
 		desc = "It's yellow."
 
-/obj/item/weapon/melee/energy/sword/bsword/clumsy_check(mob/living/user)
+/obj/item/melee/energy/sword/bsword/clumsy_check(mob/living/user)
 	return 0
 
-/obj/item/weapon/melee/energy/sword/bsword/can_combine_with(obj/item/W)
-	return istype(W, /obj/item/weapon/melee/energy/sword/bsword)
+/obj/item/melee/energy/sword/bsword/can_combine_with(obj/item/W)
+	return istype(W, /obj/item/melee/energy/sword/bsword)
 
-/obj/item/weapon/melee/energy/sword/pirate
+/obj/item/melee/energy/sword/pirate
 	name = "energy cutlass"
 	desc = "Arrrr matey."
 	icon_state = "cutlass0"
 	active_state = "cutlass1"
 	base_state = "cutlass"
 
-/obj/item/weapon/melee/energy/sword/pirate/New()
+/obj/item/melee/energy/sword/pirate/New()
 	..()
 	_color = "red"
 	update_icon()
 
-/obj/item/weapon/melee/energy/sword/pirate/can_combine_with(obj/item/W)
+/obj/item/melee/energy/sword/pirate/can_combine_with(obj/item/W)
 	return 0
 
 /*
  * Double-Bladed Energy Swords
  */
 
-/obj/item/weapon/melee/energy/sword/dualsaber
+/obj/item/melee/energy/sword/dualsaber
 	icon_state = "dualsaber0"
 	name = "double-bladed energy sword"
 	desc = "Handle with care."
@@ -233,19 +233,19 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 	var/list/swords = list()
 
-/obj/item/weapon/melee/energy/sword/dualsaber/can_combine_with(obj/item/W)
+/obj/item/melee/energy/sword/dualsaber/can_combine_with(obj/item/W)
 	return 0
 
-/obj/item/weapon/melee/energy/sword/dualsaber/Destroy()
+/obj/item/melee/energy/sword/dualsaber/Destroy()
 	for(var/obj/item/I in swords)
 		qdel(I)
 	swords.Cut()
 	..()
 
-/obj/item/weapon/melee/energy/sword/dualsaber/toggleActive(mob/user)
+/obj/item/melee/energy/sword/dualsaber/toggleActive(mob/user)
 	update_wield(user)
 
-/obj/item/weapon/melee/energy/sword/dualsaber/update_wield(mob/user)
+/obj/item/melee/energy/sword/dualsaber/update_wield(mob/user)
 	..()
 	force = wielded ? 30 : 3
 	w_class = wielded ? 5 : 2
@@ -258,11 +258,11 @@
 	playsound(src, wielded ? 'sound/weapons/saberon.ogg' : 'sound/weapons/saberoff.ogg', 50, 1)
 	update_icon()
 
-/obj/item/weapon/melee/energy/sword/dualsaber/update_icon()
+/obj/item/melee/energy/sword/dualsaber/update_icon()
 	icon_state = "dualsaber[wielded ? colorset : 0]"
 	item_state = "dualsaber[wielded ? colorset : 0]"
 
-/obj/item/weapon/melee/energy/sword/dualsaber/attack(target as mob, mob/living/user as mob)
+/obj/item/melee/energy/sword/dualsaber/attack(target as mob, mob/living/user as mob)
 	..()
 	if(clumsy_check(user) && (wielded) &&prob(40))
 		to_chat(user, "<span class='warning'>You twirl around a bit before losing your balance and impaling yourself on the [src].</span>")
@@ -273,7 +273,7 @@
 			user.dir = turn(user.dir, 45)
 			sleep(1)
 
-/obj/item/weapon/melee/energy/sword/dualsaber/attackby(obj/item/I, mob/user)
+/obj/item/melee/energy/sword/dualsaber/attackby(obj/item/I, mob/user)
 	if(I.is_screwdriver(user) && do_after(src, user, 1 SECONDS))
 		to_chat(user, "<span class = 'notice'>You deconstruct \the [src] into its components.</span>")
 		for(var/obj/item/II in swords)
@@ -284,13 +284,13 @@
 		return
 	..()
 
-/obj/item/weapon/melee/energy/sword/dualsaber/IsShield()
+/obj/item/melee/energy/sword/dualsaber/IsShield()
 	if(wielded)
 		return 1
 	else
 		return 0
 
-/obj/item/weapon/melee/energy/sword/dualsaber/New()
+/obj/item/melee/energy/sword/dualsaber/New()
 	..()
 	if(!colorset)
 		colorset = pick("redred","blueblue","greengreen","purplepurple")
@@ -299,17 +299,17 @@
 /*
  * Banana Bunch
  */
-/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch
+/obj/item/melee/energy/sword/dualsaber/bananabunch
 	icon_state = "bananabunch0"
 	name = "banana bunch"
 	desc = "Potential for some serious chaos."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
 
-/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/update_icon()
+/obj/item/melee/energy/sword/dualsaber/bananabunch/update_icon()
 	icon_state = "bananabunch[wielded ? 1 : 0]"
 	item_state = "bananabunch[wielded ? 1 : 0]"
 
-/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
+/obj/item/melee/energy/sword/dualsaber/bananabunch/attack(target as mob, mob/living/user as mob)
 	if(user.mind && !(user.mind.assigned_role == "Clown"))
 		to_chat(user, "<span class='warning'>Your clumsy hands fumble and you slice yourself open with [src].</span>")
 		user.take_organ_damage(40,50)
@@ -320,19 +320,19 @@
 			user.dir = turn(user.dir, 45)
 			sleep(1)
 
-/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
+/obj/item/melee/energy/sword/dualsaber/bananabunch/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
 		if (M.Slip(2, 2, 1))
 			M.simple_message("<span class='notice'>You slipped on [src]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
-/obj/item/weapon/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
+/obj/item/melee/energy/sword/dualsaber/bananabunch/clumsy_check(mob/living/user)
 	return 0
 /*
  * High frequency Machete
  */
-/obj/item/weapon/melee/energy/hfmachete
+/obj/item/melee/energy/hfmachete
 	name = "high-frequency machete"
 	desc = "A high-frequency broad blade used either as an implement or in combat like a short sword."
 	icon_state = "hfmachete0"
@@ -351,14 +351,14 @@
 	attack_verb = list("attacks", "dices", "cleaves", "tears", "cuts", "slashes",)
 	armor_penetration = 50
 
-/obj/item/weapon/melee/energy/hfmachete/update_icon()
+/obj/item/melee/energy/hfmachete/update_icon()
 	icon_state = "[base_state][active]"
 
-/obj/item/weapon/melee/energy/hfmachete/attack_self(mob/living/user)
+/obj/item/melee/energy/hfmachete/attack_self(mob/living/user)
 	toggleActive(user)
 	add_fingerprint(user)
 
-/obj/item/weapon/melee/energy/hfmachete/proc/toggleActive(mob/user, var/togglestate = "")
+/obj/item/melee/energy/hfmachete/proc/toggleActive(mob/user, var/togglestate = "")
 	switch(togglestate)
 		if("on")
 			active = 1
@@ -390,10 +390,10 @@
 		user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	update_icon()
 
-/obj/item/weapon/melee/energy/hfmachete/dropped(mob/user)
+/obj/item/melee/energy/hfmachete/dropped(mob/user)
 	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
-/obj/item/weapon/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
+/obj/item/melee/energy/hfmachete/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)
 		return ..()
 	spawn()
@@ -409,13 +409,13 @@
 		animate(src)
 	..(target, range, speed, override, fly_speed = 3)
 
-/obj/item/weapon/melee/energy/hfmachete/throw_impact(atom/hit_atom)
+/obj/item/melee/energy/hfmachete/throw_impact(atom/hit_atom)
 	if(isturf(hit_atom))
 		for(var/mob/M in hit_atom)
 			playsound(M, get_sfx("machete_throw_hit"),60, 0)
 	..()
 
-/obj/item/weapon/melee/energy/hfmachete/attack(target as mob, mob/living/user as mob)
+/obj/item/melee/energy/hfmachete/attack(target as mob, mob/living/user as mob)
 	if(isliving(target))
 		playsound(target, get_sfx("machete_hit"),50, 0)
 	if(clumsy_check(user) && prob(50))
@@ -425,22 +425,22 @@
 		return
 	..()
 
-/obj/item/weapon/melee/energy/hfmachete/proc/mob_moved(atom/movable/mover)
+/obj/item/melee/energy/hfmachete/proc/mob_moved(atom/movable/mover)
 	if(iscarbon(mover) && active)
 		for(var/obj/effect/plantsegment/P in range(mover,0))
 			qdel(P)
 
-/obj/item/weapon/melee/energy/hfmachete/attackby(obj/item/weapon/W, mob/living/user)
+/obj/item/melee/energy/hfmachete/attackby(obj/item/W, mob/living/user)
 	..()
-	if(istype(W, /obj/item/weapon/melee/energy/hfmachete))
+	if(istype(W, /obj/item/melee/energy/hfmachete))
 		to_chat(user, "<span class='notice'>You combine the two [W] together, making a single scissor-bladed weapon! You feel fucking invincible!</span>")
 		qdel(W)
 		W = null
 		qdel(src)
-		var/B = new /obj/item/weapon/bloodlust(user.loc)
+		var/B = new /obj/item/bloodlust(user.loc)
 		user.put_in_hands(B)
 
-/obj/item/weapon/melee/energy/hfmachete/activated/New()
+/obj/item/melee/energy/hfmachete/activated/New()
 	..()
 	active = 1
 	sterility = 100

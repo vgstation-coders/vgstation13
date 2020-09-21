@@ -3,12 +3,12 @@
  *	Feel free to add stuff. Don't forget to add them to the vmachine afterwards.
 */
 
-/obj/item/weapon/coin/trader
+/obj/item/coin/trader
 	material=MAT_GOLD
 	name = "trader coin"
 	icon_state = "coin_mythril"
 
-/obj/item/weapon/storage/trader_chemistry
+/obj/item/storage/trader_chemistry
 	name = "chemist's pallet"
 	desc = "Everything you need to make art."
 	icon = 'icons/obj/storage/smallboxes.dmi'
@@ -16,16 +16,16 @@
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
-/obj/item/weapon/storage/trader_chemistry/New()
+/obj/item/storage/trader_chemistry/New()
 	..()
-	new /obj/item/weapon/reagent_containers/glass/bottle/peridaxon(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/rezadone(src)
-	new /obj/item/weapon/reagent_containers/glass/bottle/nanobotssmall(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/large/supermatter(src)
-	new /obj/item/weapon/reagent_containers/glass/beaker/bluespace(src)
-	new /obj/item/weapon/reagent_containers/glass/jar/erlenmeyer(src)
+	new /obj/item/reagent_containers/glass/bottle/peridaxon(src)
+	new /obj/item/reagent_containers/glass/bottle/rezadone(src)
+	new /obj/item/reagent_containers/glass/bottle/nanobotssmall(src)
+	new /obj/item/reagent_containers/glass/beaker/large/supermatter(src)
+	new /obj/item/reagent_containers/glass/beaker/bluespace(src)
+	new /obj/item/reagent_containers/glass/jar/erlenmeyer(src)
 
-/obj/item/weapon/storage/bluespace_crystal
+/obj/item/storage/bluespace_crystal
 	name = "natural bluespace crystals box"
 	desc = "Hmmm... it smells like tomato."
 	icon = 'icons/obj/storage/smallboxes.dmi'
@@ -33,11 +33,11 @@
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
-/obj/item/weapon/storage/bluespace_crystal/New()
+/obj/item/storage/bluespace_crystal/New()
 	..()
 	for(var/amount = 1 to 6)
 		new /obj/item/bluespace_crystal(src)
-	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
+	new /obj/item/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
@@ -80,7 +80,7 @@
 
 /area/vault/mecha_graveyard
 
-/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard
+/obj/item/disk/shuttle_coords/vault/mecha_graveyard
 	name = "Coordinates to the Mecha Graveyard"
 	desc = "Here lay the dead steel of lost mechas, so says some gypsy."
 	destination = /obj/docking_port/destination/vault/mecha_graveyard
@@ -148,9 +148,9 @@
 	return round(10, nanocoins_rates)
 
 /obj/item/crackerbox/attackby(obj/item/I, mob/user)
-	if(!status && istype(I, /obj/item/weapon/spacecash) && user.drop_item(I, src))
+	if(!status && istype(I, /obj/item/spacecash) && user.drop_item(I, src))
 		status = TRUE
-		var/obj/item/weapon/spacecash/S = I
+		var/obj/item/spacecash/S = I
 		var/crackers_to_dispense = round((S.worth*S.amount)/get_cash2cracker_rate())
 		playsound(loc, 'sound/items/polaroid2.ogg', 50, 1)
 		if(!crackers_to_dispense)
@@ -163,7 +163,7 @@
 				qdel(src)
 				return
 			for(var/x = 1 to crackers_to_dispense)
-				var/obj/II = new /obj/item/weapon/reagent_containers/food/snacks/cracker(get_turf(src))
+				var/obj/II = new /obj/item/reagent_containers/food/snacks/cracker(get_turf(src))
 				II.throw_at(get_turf(pick(orange(7,src))), 1*crackers_to_dispense, 1*crackers_to_dispense)
 				sleep(1)
 			status = FALSE
@@ -178,10 +178,10 @@
 	//6+6+6=18
 var/global/list/alcatraz_stuff = list(
 	//3 of a kind
-	/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,/obj/item/weapon/depocket_wand,
+	/obj/item/depocket_wand,/obj/item/depocket_wand,/obj/item/depocket_wand,
 	/obj/item/pedometer,/obj/item/pedometer,/obj/item/pedometer,
 	//2 of a kind
-	/obj/item/weapon/autocuffer,/obj/item/weapon/autocuffer,
+	/obj/item/autocuffer,/obj/item/autocuffer,
 	/obj/item/clothing/mask/gas/hecu,/obj/item/clothing/mask/gas/hecu,
 	/obj/item/clothing/gloves/swat/operator,/obj/item/clothing/gloves/swat/operator,
 	//1 of a kind
@@ -189,7 +189,7 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/head/helmet/donutgiver,
 	/obj/item/clothing/accessory/bangerboy,
 	/obj/item/key/security/spare,
-	/obj/item/weapon/ram_kit,
+	/obj/item/ram_kit,
 	/obj/item/device/vampirehead,)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
@@ -205,7 +205,7 @@ var/global/list/alcatraz_stuff = list(
 	desc = "The beloved sequel to the Banger Boy Color. Tap it or the clothing item it is attached to with grenades to trigger them for early detonation. Straps nicely onto security armor."
 	icon_state = "bangerboy"
 	mech_flags = MECH_SCAN_FAIL
-	var/obj/item/weapon/screwdriver/S
+	var/obj/item/screwdriver/S
 
 /obj/item/clothing/accessory/bangerboy/New()
 	..()
@@ -217,8 +217,8 @@ var/global/list/alcatraz_stuff = list(
 	..()
 
 /obj/item/clothing/accessory/bangerboy/attackby(obj/item/W, mob/user)
-	if(istype(W,/obj/item/weapon/grenade))
-		var/obj/item/weapon/grenade/G = W
+	if(istype(W,/obj/item/grenade))
+		var/obj/item/grenade/G = W
 		G.det_time = 1.5 SECONDS
 		G.activate(user)
 	else
@@ -328,19 +328,19 @@ var/global/list/alcatraz_stuff = list(
 		var/mob/living/carbon/human/H = loc
 		if(dna_profile == H.dna.unique_enzymes)
 			if(findtext(speech.message, "standard") || findtext(speech.message, "sprinkle") || findtext(speech.message, "traditional"))
-				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+				dispense_path = /obj/item/reagent_containers/food/snacks/donut/normal
 				sleep(3)
 				say("SPRINKLE.")
 			else if(findtext(speech.message, "jelly") || findtext(speech.message, "berry") || findtext(speech.message, "juicy"))
-				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/jelly
+				dispense_path = /obj/item/reagent_containers/food/snacks/donut/jelly
 				sleep(3)
 				say("JELLY.")
 			else if(findtext(speech.message, "chaos") || findtext(speech.message, "gump") || findtext(speech.message, "two-face"))
-				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
+				dispense_path = /obj/item/reagent_containers/food/snacks/donut/chaos
 				sleep(3)
 				say("CHAOS.")
 			else if(findtext(speech.message, "favorite") || findtext(speech.message, "4Kids") || findtext(speech.message, "rice"))
-				dispense_path = /obj/item/weapon/reagent_containers/food/snacks/riceball
+				dispense_path = /obj/item/reagent_containers/food/snacks/riceball
 				sleep(3)
 				say("FAVORITE.")
 		if(dispense_path)
@@ -379,7 +379,7 @@ var/global/list/alcatraz_stuff = list(
 				"Something cracks like a whip.")
 			H.reagents.add_reagent(PARACETAMOL,1)
 
-/obj/item/weapon/ram_kit
+/obj/item/ram_kit
 	name = "battering ram drop-leaf kit"
 	desc = "A device so ingenius there is no way the Vox invented it. Exploits volt-induced superposition to allow battering ram to fold into itself."
 	icon = 'icons/obj/device.dmi'
@@ -397,9 +397,9 @@ var/global/list/alcatraz_stuff = list(
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
 	var/mob_path = /mob/living/simple_animal/hostile/wolf
-	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
+	var/bonus_path = /obj/item/reagent_containers/food/snacks/meat/syntiflesh
 
-/obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/largecrate/secure/attackby(obj/item/W as obj, mob/user as mob)
 	if(!allowed(user))
 		to_chat(user,"<span class='warning'>\The [src]'s secure bolting system flashes hostily.</span>")
 		//Not using elseif here because we want it to continue to attack_hand
@@ -432,7 +432,7 @@ var/global/list/alcatraz_stuff = list(
 	mob_path = null
 	bonus_path = /mob/living/carbon/human/frankenstein
 
-/obj/item/weapon/boxofsnow
+/obj/item/boxofsnow
 	name = "box of winter"
 	desc = "It has a single red button on top. Probably want to be careful where you open this."
 	icon = 'icons/obj/storage/smallboxes.dmi'
@@ -440,7 +440,7 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "box_of_doom"
 	item_state = "box_of_doom"
 
-/obj/item/weapon/boxofsnow/attack_self(mob/user)
+/obj/item/boxofsnow/attack_self(mob/user)
 	var/turf/center = get_turf(loc)
 	for(var/i = 1 to rand(8,24))
 		new /obj/item/stack/sheet/snow(center)
@@ -471,14 +471,14 @@ var/global/list/alcatraz_stuff = list(
 	..()
 	to_chat(user, "<span class='info'>If found, please return to [home_map].")
 
-/obj/item/weapon/depocket_wand
+/obj/item/depocket_wand
 	name = "depocket wand"
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
 	icon = 'icons/obj/weapons.dmi'
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
 
-/obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
+/obj/item/depocket_wand/attack(mob/living/M, mob/living/user)
 
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -491,7 +491,7 @@ var/global/list/alcatraz_stuff = list(
 	else
 		..()
 
-/obj/item/weapon/depocket_wand/proc/scan(mob/living/carbon/human/H, mob/living/user)
+/obj/item/depocket_wand/proc/scan(mob/living/carbon/human/H, mob/living/user)
 	playsound(user, 'sound/items/healthanalyzer.ogg', 50, 1)
 	to_chat(user,"<span class='info'>Pocket Scan Results:<BR>Left: [H.l_store ? H.l_store : "empty"]<BR>Right: [H.r_store ? H.r_store : "empty"]</span>")
 
@@ -548,7 +548,7 @@ var/global/list/alcatraz_stuff = list(
 			return
 	update_icon()
 
-/obj/item/device/vampirehead/on_enter_storage(obj/item/weapon/storage/S)
+/obj/item/device/vampirehead/on_enter_storage(obj/item/storage/S)
 	..()
 	var/mob/living/carbon/human/H = get_holder_of_type(src, /mob/living/carbon/human)
 	if(H && genecheck(H,TRUE)) //If we've been stashed by a valid user. Don't send normal reject messages.
@@ -630,7 +630,7 @@ var/global/list/alcatraz_stuff = list(
 		to_chat(user,"<B>[src]</B> [pick("moans","chokes","groans","complains")], \"<span class='sinister'>[pick(impact_phrases)]</span>\"")
 
 //Autocuffer is like a cyborg handcuff dispenser for carbons
-/obj/item/weapon/autocuffer
+/obj/item/autocuffer
 	name = "autocuffer"
 	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
 	icon = 'icons/obj/bureaucracy.dmi'
@@ -641,18 +641,18 @@ var/global/list/alcatraz_stuff = list(
 	origin_tech = Tc_COMBAT + "=4"
 	restraint_resist_time = TRUE //This doesn't actually matter as long as it is nonzero
 	req_access = list(access_brig) //Brig timers
-	var/obj/item/weapon/handcuffs/cyborg/stored
+	var/obj/item/handcuffs/cyborg/stored
 
-/obj/item/weapon/autocuffer/Destroy()
+/obj/item/autocuffer/Destroy()
 	if(stored)
 		qdel(stored)
 		stored = null
 	..()
 
-/obj/item/weapon/autocuffer/restraint_apply_intent_check(mob/user)
+/obj/item/autocuffer/restraint_apply_intent_check(mob/user)
 	return TRUE
 
-/obj/item/weapon/autocuffer/attempt_apply_restraints(mob/M, mob/user)
+/obj/item/autocuffer/attempt_apply_restraints(mob/M, mob/user)
 	if(!allowed(user))
 		to_chat(user, "<span class='warning'>The access light on \the [src] blinks red.</span>")
 		return FALSE
@@ -664,13 +664,13 @@ var/global/list/alcatraz_stuff = list(
 	else
 		return FALSE
 
-/obj/item/weapon/card/id/vox/extra
+/obj/item/card/id/vox/extra
 	name = "Spare trader ID"
 	desc = "A worn looking ID with access to the tradepost, able to be set once for aspiring traders."
 	assignment = "Trader"
 	var/canSet = TRUE
 
-/obj/item/weapon/card/id/vox/extra/attack_self(mob/user as mob)
+/obj/item/card/id/vox/extra/attack_self(mob/user as mob)
 	if(canSet)
 		var t = reject_bad_name(input(user, "What name would you like to put on this card?", "Trader ID Card Name", ishuman(user) ? user.real_name : user.name))
 		if(!t) //Same as mob/new_player/prefrences.dm
@@ -683,7 +683,7 @@ var/global/list/alcatraz_stuff = list(
 		return
 
 
-/obj/item/weapon/mech_expansion_kit
+/obj/item/mech_expansion_kit
 	name = "exosuit expansion kit"
 	desc = "All the equipment you need to replace that useless legroom with a useful bonus equipment slot on your mech."
 	icon = 'icons/obj/device.dmi'
@@ -693,7 +693,7 @@ var/global/list/alcatraz_stuff = list(
 	w_class = W_CLASS_SMALL
 	var/working = FALSE
 
-/obj/item/weapon/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
+/obj/item/mech_expansion_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
 		return
 	if(!istype(target,/obj/mecha))
@@ -783,7 +783,7 @@ var/global/list/alcatraz_stuff = list(
 		playsound(src, 'sound/effects/slosh.ogg', 25, 1)
 		reagents.clear_reagents()
 		to_chat(usr, "<span class='notice'>You flush \the [src] wet contents down \the [O].</span>")
-	else if(istype(O,/obj/item/weapon/reagent_containers) && O.is_open_container())
+	else if(istype(O,/obj/item/reagent_containers) && O.is_open_container())
 		if(!reagents.total_volume)
 			to_chat(usr,"<span class='warning'>\The [src] wet tank is already empty!</span>")
 			return
@@ -899,14 +899,14 @@ var/global/list/alcatraz_stuff = list(
 	myvac.whrr(get_turf(target))
 	return 1
 
-/obj/item/weapon/fakeposter_kit
+/obj/item/fakeposter_kit
 	name = "cargo cache kit"
 	desc = "Used to create a hidden cache behind what appears to be a cargo poster."
 	icon = 'icons/obj/barricade.dmi'
 	icon_state = "barricade_kit"
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/fakeposter_kit/preattack(atom/target, mob/user , proximity)
+/obj/item/fakeposter_kit/preattack(atom/target, mob/user , proximity)
 	if(!proximity)
 		return
 	if(istype(target,/turf/simulated/wall))
@@ -922,7 +922,7 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/structure/fakecargoposter
 	icon = 'icons/obj/posters.dmi'
-	var/obj/item/weapon/storage/cargocache/cash
+	var/obj/item/storage/cargocache/cash
 	var/turf/access_loc
 
 /obj/structure/fakecargoposter/New()
@@ -945,10 +945,10 @@ var/global/list/alcatraz_stuff = list(
 	cash = null
 	..()
 
-/obj/structure/fakecargoposter/attackby(var/obj/item/weapon/W, mob/user)
+/obj/structure/fakecargoposter/attackby(var/obj/item/W, mob/user)
 	if(iswelder(W))
 		visible_message("<span class='warning'>[user] is destroying the hidden cache disguised as a poster!</span>")
-		var/obj/item/weapon/weldingtool/WT=W
+		var/obj/item/weldingtool/WT=W
 		if(WT.do_weld(user, src, 10 SECONDS, 5))
 			visible_message("<span class='warning'>[user] destroyed the hidden cache!</span>")
 			qdel(src)
@@ -961,7 +961,7 @@ var/global/list/alcatraz_stuff = list(
 	if(user.loc == access_loc)
 		cash.AltClick(user)
 
-/obj/item/weapon/storage/cargocache
+/obj/item/storage/cargocache
 	name = "cargo cache"
 	desc = "A large hidey hole for all your goodies."
 	icon = 'icons/obj/posters.dmi'
@@ -970,7 +970,7 @@ var/global/list/alcatraz_stuff = list(
 	max_combined_w_class = 28
 	slot_flags = 0
 
-/obj/item/weapon/storage/cargocache/distance_interact(mob/user)
+/obj/item/storage/cargocache/distance_interact(mob/user)
 	if(istype(loc,/obj/structure/fakecargoposter) && user.Adjacent(loc))
 		return TRUE
 	return FALSE
@@ -985,9 +985,9 @@ var/global/list/alcatraz_stuff = list(
 	slot_flags = SLOT_BELT
 	var/count = 0
 	var/list/approved_areas = list(/area/maintenance,/area/hallway)
-	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
-	var/list/regular_rewards = list(/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee,
-									/obj/item/weapon/reagent_containers/food/snacks/donutiron,
+	var/list/special_rewards = list(/obj/item/pen/tactical)
+	var/list/regular_rewards = list(/obj/item/reagent_containers/food/drinks/soda_cans/cannedcopcoffee,
+									/obj/item/reagent_containers/food/snacks/donutiron,
 									/obj/item/ammo_storage/speedloader/energy)
 
 /obj/item/pedometer/examine(mob/user)

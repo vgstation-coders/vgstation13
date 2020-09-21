@@ -9,7 +9,7 @@
 	damage_absorption = list("brute"=0.5,"fire"=0.7,"bullet"=0.45,"laser"=0.6,"energy"=0.7,"bomb"=0.7)
 	max_temperature = 60000
 	infra_luminosity = 3
-	cell_type = /obj/item/weapon/cell/super
+	cell_type = /obj/item/cell/super
 	var/zoom = 0
 	var/thrusters = 0
 	var/smoke = 5

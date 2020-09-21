@@ -99,7 +99,7 @@
 /datum/chemical_reaction/soap/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /obj/item/weapon/soap(location)
+		new /obj/item/soap(location)
 
 /datum/chemical_reaction/creatine
 	name = "Creatine"
@@ -386,7 +386,7 @@
 	id = "simpolinol_alternate"
 	result = SIMPOLINOL
 	required_reagents = list(VAPORSALT = 1)
-	required_container = /obj/item/weapon/reagent_containers/food/drinks/soda_cans
+	required_container = /obj/item/reagent_containers/food/drinks/soda_cans
 	result_amount = 1
 
 /datum/chemical_reaction/alkysine
@@ -926,11 +926,11 @@
 	result = null
 	required_reagents = list(BICARIDINE = 10, CLONEXADONE = 10)
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
+	required_container = /obj/item/reagent_containers/glass/beaker/vial //safety net and a case for the "crafting" of the tool
 
 /datum/chemical_reaction/fixoveinmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/FixOVein(location)
+	new /obj/item/FixOVein(location)
 	qdel(holder.my_atom)
 
 /datum/chemical_reaction/bonegelmake
@@ -939,11 +939,11 @@
 	result = null
 	required_reagents = list(MILK = 10, CRYOXADONE = 10) //milk is good for the bones
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/glass/beaker/vial
+	required_container = /obj/item/reagent_containers/glass/beaker/vial
 
 /datum/chemical_reaction/bonegelmake/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)
-	new /obj/item/weapon/bonegel(location)
+	new /obj/item/bonegel(location)
 	qdel(holder.my_atom)
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -1103,7 +1103,7 @@
 	result = DEXALIN
 	required_reagents = list(OXYGEN = 2)
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+	required_container = /obj/item/reagent_containers/glass/beaker/large/plasma
 
 /datum/chemical_reaction/plasmabeakerleporazine
 	name = "Leporazine"
@@ -1111,7 +1111,7 @@
 	result = LEPORAZINE
 	required_reagents = list(SILICON = 1, COPPER = 1)
 	result_amount = 2
-	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+	required_container = /obj/item/reagent_containers/glass/beaker/large/plasma
 
 /datum/chemical_reaction/plasmabeakerclonexadone
 	name = "Clonexadone"
@@ -1119,7 +1119,7 @@
 	result = CLONEXADONE
 	required_reagents = list(CRYOXADONE = 1, SODIUM = 1)
 	result_amount = 2
-	required_container = /obj/item/weapon/reagent_containers/glass/beaker/large/plasma
+	required_container = /obj/item/reagent_containers/glass/beaker/large/plasma
 
 //Special reaction for mimic meat: injecting it with 5 units of blood causes it to turn into a random food item. Makes more sense than hitting it with a fking rolling pin
 /datum/chemical_reaction/mimicshift
@@ -1128,11 +1128,11 @@
 	result = null
 	required_reagents = list(BLOOD = 5)
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
+	required_container = /obj/item/reagent_containers/food/snacks/meat/mimic
 
 /datum/chemical_reaction/mimicshift/on_reaction(var/datum/reagents/holder)
-	if(istype(holder.my_atom, /obj/item/weapon/reagent_containers/food/snacks/meat/mimic))
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/mimic/M = holder.my_atom
+	if(istype(holder.my_atom, /obj/item/reagent_containers/food/snacks/meat/mimic))
+		var/obj/item/reagent_containers/food/snacks/meat/mimic/M = holder.my_atom
 		M.shapeshift()
 
 		if(ismob(holder.my_atom.loc))
@@ -1148,7 +1148,7 @@
 	result_amount = 1
 	var/reagent //If toggled on, will make a container appear on use that contains the reagent
 	var/reagent_amount
-	var/container_type = /obj/item/weapon/reagent_containers/glass/bottle //The type of container, default is a bottle
+	var/container_type = /obj/item/reagent_containers/glass/bottle //The type of container, default is a bottle
 
 /datum/chemical_reaction/slime_extract/required_condition_check(datum/reagents/holder)
 	if(istype(holder.my_atom, /obj/item/slime_extract))
@@ -1160,14 +1160,14 @@
 /datum/chemical_reaction/slime_extract/on_reaction(datum/reagents/holder, created_volume)
 	feedback_add_details("slime_cores_used", "[replacetext(name, " ", "_")]")
 	if(reagent && reagent_amount && container_type)
-		var/obj/item/weapon/reagent_containers/B = new container_type
+		var/obj/item/reagent_containers/B = new container_type
 		B.reagents.add_reagent(reagent, reagent_amount)
 		B.forceMove(get_turf(holder.my_atom))
 	if(istype(holder.my_atom, /obj/item/slime_extract))
 		var/obj/item/slime_extract/S = holder.my_atom
 		S.Uses--
 		if(S.Uses <= 0)
-			if(!istype(S.loc, /obj/item/weapon/grenade/chem_grenade) && !quiet)
+			if(!istype(S.loc, /obj/item/grenade/chem_grenade) && !quiet)
 				S.visible_message("<span class='notice'>[bicon(holder.my_atom)] \The [holder.my_atom]'s power is consumed in the reaction.</span>")
 			qdel(S)
 
@@ -1181,7 +1181,7 @@
 
 /datum/chemical_reaction/slime_extract/slimespawn/on_reaction(var/datum/reagents/holder)
 	if(!is_in_airtight_object(holder.my_atom)) //Don't pop while ventcrawling.
-		if(istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+		if(istype(holder.my_atom.loc,/obj/item/grenade/chem_grenade))
 			holder.my_atom.visible_message("<span class='rose'>The grenade bursts open and a new baby slime emerges from it!</span>")
 		else
 			holder.my_atom.visible_message("<span class='rose'>Infused with plasma, the core begins to quiver and grow, and soon a new baby slime emerges from it!</span>")
@@ -1197,7 +1197,7 @@
 
 /datum/chemical_reaction/slime_extract/slimemonkey/on_reaction(var/datum/reagents/holder)
 	for(var/i = 1, i <= 3, i++)
-		var /obj/item/weapon/reagent_containers/food/snacks/monkeycube/M = new /obj/item/weapon/reagent_containers/food/snacks/monkeycube
+		var /obj/item/reagent_containers/food/snacks/monkeycube/M = new /obj/item/reagent_containers/food/snacks/monkeycube
 		M.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1316,7 +1316,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimecrit/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc, /obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 
@@ -1367,7 +1367,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimecritlesser/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc, /obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently !</span>")
 		sleep(50)
 
@@ -1414,7 +1414,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimecritweak/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc, /obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc, /obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to slowly vibrate!</span>")
 
 	var/atom/location = holder.my_atom.loc
@@ -1463,14 +1463,14 @@
 
 /datum/chemical_reaction/slime_extract/slimebork/on_reaction(var/datum/reagents/holder)
 	var/blocked = list(
-		/obj/item/weapon/reagent_containers/food/snacks,
-		/obj/item/weapon/reagent_containers/food/snacks/snackbar,
-		/obj/item/weapon/reagent_containers/food/snacks/grown,
-		/obj/item/weapon/reagent_containers/food/snacks/deepfryholder
+		/obj/item/reagent_containers/food/snacks,
+		/obj/item/reagent_containers/food/snacks/snackbar,
+		/obj/item/reagent_containers/food/snacks/grown,
+		/obj/item/reagent_containers/food/snacks/deepfryholder
 		)
-	blocked += typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
+	blocked += typesof(/obj/item/reagent_containers/food/snacks/customizable) //Silver-slime spawned customizable food is borked
 
-	var/list/borks = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - blocked
+	var/list/borks = existing_typesof(/obj/item/reagent_containers/food/snacks) - blocked
 
 	//BORK BORK BORK
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
@@ -1494,14 +1494,14 @@
 		if(B)
 			B.forceMove(get_turf(holder.my_atom))
 
-			if(istype(B,/obj/item/weapon/reagent_containers/food/snacks/meat/human))
+			if(istype(B,/obj/item/reagent_containers/food/snacks/meat/human))
 				B.name = "human-meat"
-			if(istype(B,/obj/item/weapon/reagent_containers/food/snacks/human))
+			if(istype(B,/obj/item/reagent_containers/food/snacks/human))
 				B.name = "human-meat burger"
-			if(istype(B,/obj/item/weapon/reagent_containers/food/snacks/fortunecookie))
-				var/obj/item/weapon/paper/paper = new /obj/item/weapon/paper(B)
+			if(istype(B,/obj/item/reagent_containers/food/snacks/fortunecookie))
+				var/obj/item/paper/paper = new /obj/item/paper(B)
 				paper.info = pick("power to the slimes", "have a slime day", "today, you will meet a very special slime", "stay away from cold showers")
-				var/obj/item/weapon/reagent_containers/food/snacks/fortunecookie/cookie = B
+				var/obj/item/reagent_containers/food/snacks/fortunecookie/cookie = B
 				cookie.trash = paper
 
 			if(prob(50))
@@ -1518,12 +1518,12 @@
 /datum/chemical_reaction/slime_extract/slimedrinks/on_reaction(var/datum/reagents/holder)
 
 	var/blocked = list(
-		/obj/item/weapon/reagent_containers/food/drinks,
+		/obj/item/reagent_containers/food/drinks,
 		)
-	blocked += typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)	//Silver-slime spawned customizable food is borked
-	blocked += typesof(/obj/item/weapon/reagent_containers/food/drinks/golden_cup) //Was probably never intended to spawn outside admin events
+	blocked += typesof(/obj/item/reagent_containers/food/drinks/bottle/customizable)	//Silver-slime spawned customizable food is borked
+	blocked += typesof(/obj/item/reagent_containers/food/drinks/golden_cup) //Was probably never intended to spawn outside admin events
 
-	var/list/borks = existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - blocked
+	var/list/borks = existing_typesof(/obj/item/reagent_containers/food/drinks) - blocked
 
 	//BORK BORK BORK
 	playsound(holder.my_atom, 'sound/effects/phasein.ogg', 100, 1)
@@ -1550,13 +1550,13 @@
 		if(B)
 			B.forceMove(get_turf(holder.my_atom))
 
-			if(istype(B,/obj/item/weapon/reagent_containers/food/drinks/sillycup))
+			if(istype(B,/obj/item/reagent_containers/food/drinks/sillycup))
 				B.reagents.add_reagent(WATER, 10)
 
-			if(istype(B,/obj/item/weapon/reagent_containers/food/drinks/flask))
+			if(istype(B,/obj/item/reagent_containers/food/drinks/flask))
 				B.reagents.add_reagent(WHISKEY, 60)
 
-			if(istype(B,/obj/item/weapon/reagent_containers/food/drinks/shaker))
+			if(istype(B,/obj/item/reagent_containers/food/drinks/shaker))
 				B.reagents.add_reagent(GARGLEBLASTER, 100)
 
 			if(prob(50))
@@ -1601,7 +1601,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimefreeze/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc,/obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 
@@ -1619,7 +1619,7 @@
 	required_container = /obj/item/slime_extract/darkblue
 
 /datum/chemical_reaction/slime_extract/slimenutrient/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimenutrient/P = new /obj/item/weapon/slimenutrient
+	var/obj/item/slimenutrient/P = new /obj/item/slimenutrient
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1640,7 +1640,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimefire/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc,/obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 
@@ -1674,7 +1674,7 @@
 	required_container = /obj/item/slime_extract/yellow
 
 /datum/chemical_reaction/slime_extract/slimecell/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/obj/item/weapon/cell/slime/P = new /obj/item/weapon/cell/slime
+	var/obj/item/cell/slime/P = new /obj/item/cell/slime
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1697,7 +1697,7 @@
 	required_container = /obj/item/slime_extract/purple
 
 /datum/chemical_reaction/slime_extract/slimepsteroid/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimesteroid/P = new /obj/item/weapon/slimesteroid
+	var/obj/item/slimesteroid/P = new /obj/item/slimesteroid
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1740,7 +1740,7 @@
 	required_container = /obj/item/slime_extract/red
 
 /datum/chemical_reaction/slime_extract/slimeres/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimeres/P = new /obj/item/weapon/slimeres
+	var/obj/item/slimeres/P = new /obj/item/slimeres
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1768,7 +1768,7 @@
 	required_container = /obj/item/slime_extract/pink
 
 /datum/chemical_reaction/slime_extract/slimeppotion/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimepotion/P = new /obj/item/weapon/slimepotion
+	var/obj/item/slimepotion/P = new /obj/item/slimepotion
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1825,7 +1825,7 @@
 	alert_admins = ALERT_ALL_REAGENTS
 
 /datum/chemical_reaction/slime_extract/slimeexplosion/on_reaction(var/datum/reagents/holder)
-	if(!istype(holder.my_atom.loc,/obj/item/weapon/grenade/chem_grenade))
+	if(!istype(holder.my_atom.loc,/obj/item/grenade/chem_grenade))
 		holder.my_atom.visible_message("<span class='warning'>The slime extract begins to vibrate violently!</span>")
 		sleep(50)
 	explosion(get_turf(holder.my_atom), 1 ,3, 6)
@@ -1853,7 +1853,7 @@
 	required_reagents = list(PLASMA = 5)
 
 /datum/chemical_reaction/slime_extract/slimepotion2/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimepotion2/P = new /obj/item/weapon/slimepotion2
+	var/obj/item/slimepotion2/P = new /obj/item/slimepotion2
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -1864,7 +1864,7 @@
 	required_reagents = list(BLOOD = 5)
 
 /datum/chemical_reaction/slime_extract/slimeparalyze/on_reaction(var/datum/reagents/holder)
-	new /obj/item/weapon/slimeparapotion(get_turf(holder.my_atom))
+	new /obj/item/slimeparapotion(get_turf(holder.my_atom))
 	..()
 
 //Adamantine
@@ -1999,7 +1999,7 @@
 	required_container = /obj/item/slime_extract/cerulean
 
 /datum/chemical_reaction/slime_extract/slimepsteroid2/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimesteroid2/P = new /obj/item/weapon/slimesteroid2
+	var/obj/item/slimesteroid2/P = new /obj/item/slimesteroid2
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -2010,7 +2010,7 @@
 	required_container = /obj/item/slime_extract/cerulean
 
 /datum/chemical_reaction/slime_extract/slimedupe/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/slimedupe/P = new /obj/item/weapon/slimedupe
+	var/obj/item/slimedupe/P = new /obj/item/slimedupe
 	P.forceMove(get_turf(holder.my_atom))
 	..()
 
@@ -2057,7 +2057,7 @@
 	required_container = /obj/item/slime_extract/pyrite
 
 /datum/chemical_reaction/slime_extract/slimepaint/on_reaction(var/datum/reagents/holder)
-	var/list/paints = subtypesof(/obj/item/weapon/reagent_containers/glass/paint)
+	var/list/paints = subtypesof(/obj/item/reagent_containers/glass/paint)
 	var/chosen = pick(paints)
 	var/obj/P = new chosen
 	if(P)
@@ -2071,7 +2071,7 @@
 	required_container = /obj/item/slime_extract/pyrite
 
 /datum/chemical_reaction/slime_extract/slimecash/on_reaction(var/datum/reagents/holder)
-	var/obj/item/weapon/spacecash/c100/C = new /obj/item/weapon/spacecash/c100/
+	var/obj/item/spacecash/c100/C = new /obj/item/spacecash/c100/
 	C.amount = 5
 	C.forceMove(get_turf(holder.my_atom))
 	..()
@@ -2096,7 +2096,7 @@
 /datum/chemical_reaction/tofu/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/tofu(location)
+		new /obj/item/reagent_containers/food/snacks/tofu(location)
 
 /datum/chemical_reaction/chocolate_bar
 	name = "Chocolate Bar"
@@ -2108,7 +2108,7 @@
 /datum/chemical_reaction/chocolate_bar/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/chocolatebar(location)
+		new /obj/item/reagent_containers/food/snacks/chocolatebar(location)
 
 /datum/chemical_reaction/chocolate_bar2
 	name = "Chocolate Bar"
@@ -2120,7 +2120,7 @@
 /datum/chemical_reaction/chocolate_bar2/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i = 1, i <= created_volume, i++)
-		new /obj/item/weapon/reagent_containers/food/snacks/chocolatebar(location)
+		new /obj/item/reagent_containers/food/snacks/chocolatebar(location)
 
 /datum/chemical_reaction/hot_coco
 	name = "Hot Coco"
@@ -2209,7 +2209,7 @@
 /datum/chemical_reaction/cheesewheel/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /obj/item/weapon/reagent_containers/food/snacks/sliceable/cheesewheel(location)
+		new /obj/item/reagent_containers/food/snacks/sliceable/cheesewheel(location)
 
 /datum/chemical_reaction/butter
 	name = "Butter"
@@ -2222,7 +2222,7 @@
 /datum/chemical_reaction/butter/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /obj/item/weapon/reagent_containers/food/snacks/butter(location)
+		new /obj/item/reagent_containers/food/snacks/butter(location)
 
 //Jesus christ how horrible
 /datum/chemical_reaction/cream
@@ -2242,7 +2242,7 @@
 /datum/chemical_reaction/syntiflesh/on_reaction(var/datum/reagents/holder, var/created_volume)
 	var/location = get_turf(holder.my_atom)
 	for(var/i=1 to created_volume)
-		new /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh(location)
+		new /obj/item/reagent_containers/food/snacks/meat/syntiflesh(location)
 
 /datum/chemical_reaction/hot_ramen
 	name = "Hot Ramen"
@@ -3549,7 +3549,7 @@
 	result = null
 	required_reagents = list(NUTRIMENT = 1, AMINOMICIN = 1)
 	result_amount = 1
-	required_container = /obj/item/weapon/reagent_containers/food/snacks/cracker
+	required_container = /obj/item/reagent_containers/food/snacks/cracker
 
 /datum/chemical_reaction/synthparrot/on_reaction(var/datum/reagents/holder)
 	var/location = get_turf(holder.my_atom)

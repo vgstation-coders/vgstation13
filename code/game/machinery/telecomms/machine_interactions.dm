@@ -4,27 +4,27 @@
 	var/temp = "" // output message
 	machine_flags = MULTITOOL_MENU | SCREWTOGGLE | CROWDESTROY
 
-/obj/item/weapon/circuitboard/telecomms
+/obj/item/circuitboard/telecomms
 	var/integrity = TELECOMMS_MAX_INTEGRITY
 
 /obj/machinery/telecomms/proc/get_integrity()
-	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+	var/obj/item/circuitboard/telecomms/C = locate() in component_parts
 	if(istype(C))
 		return C.integrity
 	. = TELECOMMS_MAX_INTEGRITY // If there's no circuitboard (allinone.dm) just treat it as maximum integrity
 
 /obj/machinery/telecomms/proc/set_integrity(var/new_integrity)
-	var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+	var/obj/item/circuitboard/telecomms/C = locate() in component_parts
 	if (!istype(C))
 		return
 	C.integrity = clamp(new_integrity, 0, TELECOMMS_MAX_INTEGRITY)
 
-/obj/item/weapon/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
+/obj/item/circuitboard/telecomms/attackby(var/obj/item/W, var/mob/user, var/params)
 	if(issolder(W))
 		if(integrity >= TELECOMMS_MAX_INTEGRITY)
 			to_chat(user, "It's not damaged.")
 			return
-		var/obj/item/weapon/solder/S = W
+		var/obj/item/solder/S = W
 		if (!S.remove_fuel(2, user))
 			to_chat(user, "You need more fuel.")
 			return
@@ -43,7 +43,7 @@
 		if(!panel_open)
 			to_chat(user, "You need to open the maintenance panel first!")
 			return
-		var/obj/item/weapon/circuitboard/telecomms/C = locate() in component_parts
+		var/obj/item/circuitboard/telecomms/C = locate() in component_parts
 		if(istype(C))
 			C.attackby(W, user)
 	update_power_and_icon()

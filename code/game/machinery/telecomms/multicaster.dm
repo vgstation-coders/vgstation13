@@ -21,9 +21,9 @@ var/list/pda_multicasters = list()
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/pda_multicaster,
-		/obj/item/weapon/stock_parts/subspace/filter,
-		/obj/item/weapon/stock_parts/manipulator
+		/obj/item/circuitboard/pda_multicaster,
+		/obj/item/stock_parts/subspace/filter,
+		/obj/item/stock_parts/manipulator
 	)
 
 	RefreshParts()

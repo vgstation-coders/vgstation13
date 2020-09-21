@@ -27,7 +27,7 @@
 	max_n2 = 0
 	minbodytemp = 0
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hive
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/hive
 
 	melee_damage_lower = 15
 	melee_damage_upper = 20
@@ -86,7 +86,7 @@
 	melee_damage_lower = 5
 	melee_damage_upper = 10
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/hive/turret
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/hive/turret
 
 	ranged = 1
 	projectiletype = /obj/item/projectile/napalm_bomb

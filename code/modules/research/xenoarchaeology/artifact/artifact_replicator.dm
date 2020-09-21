@@ -26,14 +26,14 @@
 
 	var/list/viables = list(
 		//Medical
-		/obj/item/weapon/reagent_containers/glass/bottle/chloralhydrate,
+		/obj/item/reagent_containers/glass/bottle/chloralhydrate,
 		/obj/item/roller,
 		/obj/item/device/healthanalyzer,
-		/obj/item/weapon/reagent_containers/glass/bottle/toxin,
-		/obj/item/weapon/reagent_containers/syringe/inaprovaline,
-		/obj/item/weapon/reagent_containers/glass/bottle/capsaicin,
-		/obj/item/weapon/reagent_containers/glass/bottle/frostoil,
-		/obj/item/weapon/reagent_containers/glass/beaker/large/erlenmeyer,
+		/obj/item/reagent_containers/glass/bottle/toxin,
+		/obj/item/reagent_containers/syringe/inaprovaline,
+		/obj/item/reagent_containers/glass/bottle/capsaicin,
+		/obj/item/reagent_containers/glass/bottle/frostoil,
+		/obj/item/reagent_containers/glass/beaker/large/erlenmeyer,
 		/obj/item/device/reagent_scanner/adv,
 
 		//Robots (and the mimic)
@@ -48,35 +48,35 @@
 		/obj/item/device/flash,
 		/obj/item/device/multitool,
 		/obj/item/device/camera,
-		/obj/item/weapon/crowbar/red,
-		/obj/item/weapon/lighter/zippo,
-		/obj/item/weapon/pickaxe,
-		/obj/item/weapon/pickaxe/shovel,
+		/obj/item/crowbar/red,
+		/obj/item/lighter/zippo,
+		/obj/item/pickaxe,
+		/obj/item/pickaxe/shovel,
 		/obj/item/stack/cable_coil/random,
-		/obj/item/weapon/soap/,
+		/obj/item/soap/,
 
 		//Weapons and Security Gear
-		/obj/item/weapon/kitchen/utensil/knife/large/butch,
-		/obj/item/weapon/kitchen/utensil/knife/large,
+		/obj/item/kitchen/utensil/knife/large/butch,
+		/obj/item/kitchen/utensil/knife/large,
 		/obj/item/clothing/gloves/knuckles,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/hatchet,
+		/obj/item/handcuffs,
+		/obj/item/hatchet,
 		/obj/item/device/hailer,
-		/obj/item/weapon/storage/fancy/donut_box,
+		/obj/item/storage/fancy/donut_box,
 		/obj/item/clothing/accessory/holomap_chip, //Too far?
 
 		//Toys
 		/obj/item/toy/sword,
 		/obj/item/toy/snappop,
 		/obj/item/toy/gun,
-		/obj/item/weapon/beach_ball,
+		/obj/item/beach_ball,
 
 		//Grenades
-		/obj/item/weapon/grenade/chem_grenade/cleaner,
-		/obj/item/weapon/grenade/chem_grenade/metalfoam,
-		/obj/item/weapon/grenade/flashbang,		//Pretty powerful
-		/obj/item/weapon/grenade/smokebomb,
-		/obj/item/weapon/grenade/chem_grenade/wind,
+		/obj/item/grenade/chem_grenade/cleaner,
+		/obj/item/grenade/chem_grenade/metalfoam,
+		/obj/item/grenade/flashbang,		//Pretty powerful
+		/obj/item/grenade/smokebomb,
+		/obj/item/grenade/chem_grenade/wind,
 
 		//Clothing
 		/obj/item/clothing/glasses/sunglasses,
@@ -87,16 +87,16 @@
 		/obj/structure/closet/acloset,
 		/obj/item/beacon,
 		/obj/item/device/paicard,
-		/obj/item/weapon/bikehorn,
-		/obj/item/weapon/caution,
-		/obj/item/weapon/caution/cone,
-		/obj/item/weapon/cell/high,
+		/obj/item/bikehorn,
+		/obj/item/caution,
+		/obj/item/caution/cone,
+		/obj/item/cell/high,
 		/obj/item/device/assembly/mousetrap,
 		/obj/item/pizzabox/meat,		//Pizza boxes: infinite food. Might be an issue
 		/obj/item/pizzabox/margherita,
 		/obj/item/pizzabox/vegetable,
 		/obj/item/pizzabox/mushroom,
-		/obj/item/weapon/beartrap,
+		/obj/item/beartrap,
 		/obj/item/stack/package_wrap/syndie,
 		/obj/item/device/handtv,
 		/obj/item/device/wormhole_jaunter,

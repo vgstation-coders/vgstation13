@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/hivehand
+/obj/item/gun/projectile/hivehand
 	name = "\improper Hivehand"
 	desc = "A living weapon, it can generate and fire mildly toxic stingers. Additionally, it possesses three sharp chitinous growths on the end that can serve as bayonets."
 	icon = 'icons/obj/gun.dmi'
@@ -25,17 +25,17 @@
 	var/shots_remaining = 0
 	var/has_shot = 0
 
-/obj/item/weapon/gun/projectile/hivehand/pickup(mob/user as mob)
+/obj/item/gun/projectile/hivehand/pickup(mob/user as mob)
 	..()
 	to_chat(user, "<span class='warning'>\The [src] latches tightly onto your arm!</span>")
 	user.update_inv_hands()
 	processing_objects.Add(src)
 
-/obj/item/weapon/gun/projectile/hivehand/dropped(mob/user as mob)
+/obj/item/gun/projectile/hivehand/dropped(mob/user as mob)
 	..()
 	processing_objects.Remove(src)
 
-/obj/item/weapon/gun/projectile/hivehand/update_icon()
+/obj/item/gun/projectile/hivehand/update_icon()
 	overlays.len = 0
 
 	var/image/shotsack = null
@@ -53,19 +53,19 @@
 	if(shotsack)
 		overlays += shotsack
 
-/obj/item/weapon/gun/projectile/hivehand/attackby(obj/item/weapon/W, mob/user)
+/obj/item/gun/projectile/hivehand/attackby(obj/item/W, mob/user)
 	if(W.sharpness)
 		to_chat(user, "\The [W] fails to pierce the hard carapace of \the [src].")
 		return
 
-/obj/item/weapon/gun/projectile/hivehand/examine(mob/user)
+/obj/item/gun/projectile/hivehand/examine(mob/user)
 	..()
 	if(!shots_remaining)
 		to_chat(user, "<span class='info'>\The [src] seems to be completely spent at the moment.</span>")
 	else
 		to_chat(user, "<span class='info'>\The [src]'s size suggests it has [shots_remaining] shots stored.</span>")
 
-/obj/item/weapon/gun/projectile/hivehand/process()
+/obj/item/gun/projectile/hivehand/process()
 	set waitfor = 0
 	if(shots_remaining >= 10)
 		return
@@ -77,8 +77,8 @@
 	update_icon()
 	sleep(30)
 
-/obj/item/weapon/gun/projectile/hivehand/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if (istype(A, /obj/item/weapon/storage/backpack ))
+/obj/item/gun/projectile/hivehand/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/storage/backpack ))
 		return
 
 	else if (A.loc == user.loc)

@@ -272,7 +272,7 @@
 	src.updateUsrDialog()
 	return
 
-/obj/machinery/computer/HolodeckControl/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/HolodeckControl/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	..() //This still allows items to unrez even if the computer is deconstructed
 	return
 
@@ -410,7 +410,7 @@
 	holographic_items = A.copy_contents_to(linkedholodeck , 1)
 
 	if(emagged)
-		for(var/obj/item/weapon/holo/esword/H in linkedholodeck)
+		for(var/obj/item/holo/esword/H in linkedholodeck)
 			H.damtype = BRUTE
 
 	spawn(30)
@@ -467,7 +467,7 @@
 	icon_state = "light_on"
 	floor_tile
 
-/turf/simulated/floor/holofloor/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/floor/holofloor/attackby(obj/item/W as obj, mob/user as mob)
 	return
 	// HOLOFLOOR DOES NOT GIVE A FUCK
 
@@ -489,7 +489,7 @@
 	icon_state = "boxingred"
 	item_state = "boxingred"
 
-/obj/structure/window/reinforced/holo/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/window/reinforced/holo/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
@@ -499,7 +499,7 @@
 /obj/structure/window/reinforced/holo/spawnBrokenPieces()
 	return
 
-/obj/structure/window/holo/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/window/holo/attackby(obj/item/W, mob/user)
 	if(W.is_screwdriver(user))
 		to_chat(user, "It's a holowindow! It has no frame!")
 		return
@@ -516,11 +516,11 @@
 	return FALSE
 
 
-/obj/item/weapon/holo
+/obj/item/holo
 	icon = 'icons/obj/weapons.dmi'
 	damtype = HALLOSS
 
-/obj/item/weapon/holo/esword
+/obj/item/holo/esword
 	name = "energy sword"
 	desc = "May the force be within you. Sorta"
 	icon_state = "sword0"
@@ -532,23 +532,23 @@
 	flags = FPRINT | NOBLOODY
 	var/active = 0
 
-/obj/item/weapon/holo/esword/green/New()
+/obj/item/holo/esword/green/New()
 	..()
 	_color = "green"
 
-/obj/item/weapon/holo/esword/red/New()
+/obj/item/holo/esword/red/New()
 	..()
 	_color = "red"
 
-/obj/item/weapon/holo/esword/IsShield()
+/obj/item/holo/esword/IsShield()
 	if(active)
 		return 1
 	return 0
 
-/obj/item/weapon/holo/esword/New()
+/obj/item/holo/esword/New()
 	_color = pick("red","blue","green","purple")
 
-/obj/item/weapon/holo/esword/attack_self(mob/living/user as mob)
+/obj/item/holo/esword/attack_self(mob/living/user as mob)
 	active = !active
 	if(active)
 		force = 30
@@ -567,7 +567,7 @@
 
 //BASKETBALL OBJECTS
 
-/obj/item/weapon/beach_ball/holoball
+/obj/item/beach_ball/holoball
 	icon = 'icons/obj/basketball.dmi'
 	icon_state = "basketball"
 	name = "basketball"
@@ -584,9 +584,9 @@
 	density = 1
 	throwpass = 1
 
-/obj/structure/holohoop/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
+/obj/structure/holohoop/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/grab) && get_dist(src,user)<2)
+		var/obj/item/grab/G = W
 		if(G.state<GRAB_AGGRESSIVE)
 			to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
 			return
@@ -605,7 +605,7 @@
 /obj/structure/holohoop/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover,/obj/item) && mover.throwing)
 		var/obj/item/I = mover
-		if(istype(I, /obj/item/weapon/dummy) || istype(I, /obj/item/projectile))
+		if(istype(I, /obj/item/dummy) || istype(I, /obj/item/projectile))
 			return
 		var/mob/mob = get_mob_by_key(mover.fingerprintslast)
 		if(prob(50) || (mob && mob.reagents.get_sportiness()>=5))
@@ -643,7 +643,7 @@
 /obj/machinery/readybutton/attack_paw(mob/user as mob)
 	to_chat(user, "<span='warning'>You are too primitive to use this device.</span>")
 
-/obj/machinery/readybutton/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/machinery/readybutton/attackby(obj/item/W as obj, mob/user as mob)
 	to_chat(user, "<span='warning'>The device is a solid button, there's nothing you can do with it!</span>")
 
 /obj/machinery/readybutton/attack_hand(mob/user as mob)

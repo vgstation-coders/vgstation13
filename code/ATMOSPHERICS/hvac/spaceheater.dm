@@ -5,7 +5,7 @@
 	icon_state = "sheater0"
 	name = "space heater"
 	desc = "Made by Space Amish using traditional space techniques, this heater is guaranteed not to set the station on fire."
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 	var/on = 0
 	var/set_temperature = 50		// in celcius, add T0C for kelvin
 	var/heating_power = 40000
@@ -133,14 +133,14 @@
 
 /obj/machinery/space_heater/attackby(obj/item/I, mob/user)
 	..()
-	if(istype(I, /obj/item/weapon/cell) && !nocell)
+	if(istype(I, /obj/item/cell) && !nocell)
 		if(panel_open)
 			if(cell)
 				to_chat(user, "There is already a power cell inside.")
 				return
 			else
 				// insert cell
-				var/obj/item/weapon/cell/C = usr.get_active_hand()
+				var/obj/item/cell/C = usr.get_active_hand()
 				if(istype(C))
 					if(user.drop_item(C, src))
 						cell = C
@@ -161,19 +161,19 @@
 	if(!on && cell.charge > 0)
 	//Items with special messages go first - yes, this is all stolen from cigarette code. sue me.
 		if(iswelder(I))
-			var/obj/item/weapon/weldingtool/WT = I
+			var/obj/item/weldingtool/WT = I
 			if(WT.is_hot()) //Badasses dont get blinded while lighting their !!campfire!! with a welding tool
 				light("<span class='notice'>[user] casually lights \the [name] with \the [I], what a badass.</span>")
-		else if(istype(I, /obj/item/weapon/lighter/zippo))
-			var/obj/item/weapon/lighter/zippo/Z = I
+		else if(istype(I, /obj/item/lighter/zippo))
+			var/obj/item/lighter/zippo/Z = I
 			if(Z.is_hot())
 				light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \the [name] with \the [I]. Damn, that's cool.</span>")
-		else if(istype(I, /obj/item/weapon/lighter))
-			var/obj/item/weapon/lighter/L = I
+		else if(istype(I, /obj/item/lighter))
+			var/obj/item/lighter/L = I
 			if(L.is_hot())
 				light("<span class='notice'>After some fiddling, [user] manages to light \the [name] with \the [I].</span>")
-		else if(istype(I, /obj/item/weapon/melee/energy/sword))
-			var/obj/item/weapon/melee/energy/sword/S = I
+		else if(istype(I, /obj/item/melee/energy/sword))
+			var/obj/item/melee/energy/sword/S = I
 			if(S.is_hot())
 				light("<span class='warning'>[user] raises \his [I.name], lighting \the [src]. Holy fucking shit.</span>")
 		else if(istype(I, /obj/item/device/assembly/igniter))
@@ -286,7 +286,7 @@
 
 			if("cellinstall")
 				if(panel_open && !cell)
-					var/obj/item/weapon/cell/C = usr.get_active_hand()
+					var/obj/item/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
 							cell = C
@@ -388,12 +388,12 @@
 	for(var/obj/W in contents)
 		if(istype(W,/obj/item/clothing/shoes))
 			shoesfound = 1
-//		if(istype(W,/obj/item/weapon/gun/projectile))
+//		if(istype(W,/obj/item/gun/projectile))
 //			gunfound = 1
 	if(istype(I,/obj/item/clothing/shoes) && !(shoesfound))
 		user.drop_item(I,src)
 		src.update_icon()
-//	else if(istype(I,/obj/item/weapon/gun/projectile) && !(gunfound))
+//	else if(istype(I,/obj/item/gun/projectile) && !(gunfound))
 	else
 		..()
 

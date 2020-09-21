@@ -698,8 +698,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				newMsg.body = msg
 				newMsg.author_log = key_name(usr)
 				if(photo)
-					if(istype(photo,/obj/item/weapon/photo))
-						var/obj/item/weapon/photo/P = photo
+					if(istype(photo,/obj/item/photo))
+						var/obj/item/photo/P = photo
 						newMsg.img = P.img
 						newMsg.img_info = P.info
 					else if(istype(photo,/datum/picture))
@@ -814,8 +814,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						WANTED.body = msg
 						WANTED.backup_author = scanned_user //I know, a bit wacky
 						if(photo)
-							if(istype(photo,/obj/item/weapon/photo))
-								var/obj/item/weapon/photo/P = photo
+							if(istype(photo,/obj/item/photo))
+								var/obj/item/photo/P = photo
 								WANTED.img = P.img
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
@@ -838,8 +838,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						news_network.wanted_issue.body = msg
 						news_network.wanted_issue.backup_author = scanned_user
 						if(photo)
-							if(istype(photo,/obj/item/weapon/photo))
-								var/obj/item/weapon/photo/P = photo
+							if(istype(photo,/obj/item/photo))
+								var/obj/item/photo/P = photo
 								news_network.wanted_issue.img = P.img
 							else if(istype(photo,/datum/picture))
 								var/datum/picture/P = photo
@@ -1013,14 +1013,14 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				visible_message("<EM>[user.name]</EM> further abuses the shattered [src].")
 
 			else
-				var/obj/item/weapon/photo/P = I
+				var/obj/item/photo/P = I
 				if(istype(P) && !photo && user.drop_item(P, src))
 					photo = P
 					to_chat(user, "<span class='notice'>You add \the [P] to \the [src].</span>")
 					updateUsrDialog()
 
-				else if(istype(I, /obj/item/weapon) )
-					var/obj/item/weapon/W = I
+				else if(istype(I, /obj/item) )
+					var/obj/item/W = I
 					if(W.force <15)
 						visible_message("[user.name] hits the [src] with the [W] with no visible effect." )
 						playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
@@ -1046,15 +1046,15 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if(photo)
 		return EjectPhoto(user)
 
-	var/obj/item/weapon/photo/P = user.get_active_hand()
+	var/obj/item/photo/P = user.get_active_hand()
 	if(istype(P) && user.drop_item(P, src))
 		photo = P
 
 /obj/machinery/newscaster/proc/EjectPhoto(mob/user as mob)
 	if(!photo)
 		return
-	if(istype(photo,/obj/item/weapon/photo))
-		var/obj/item/weapon/photo/P = photo
+	if(istype(photo,/obj/item/photo))
+		var/obj/item/photo/P = photo
 		P.forceMove(loc)
 
 		photo = null
@@ -1085,7 +1085,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 #define NEWSPAPER_CONTENT_PAGE 1
 #define NEWSPAPER_LAST_PAGE 2
 
-/obj/item/weapon/newspaper
+/obj/item/newspaper
 	name = "newspaper"
 	desc = "An issue of The Griffon, the newspaper circulating aboard Nanotrasen Space Stations."
 	icon = 'icons/obj/bureaucracy.dmi'
@@ -1111,7 +1111,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	var/scribble=""
 	var/scribble_page = null
 
-/obj/item/weapon/newspaper/attack_self(var/mob/user)
+/obj/item/newspaper/attack_self(var/mob/user)
 	if (user.incapacitated())
 		return
 	if(ishuman(user))
@@ -1199,7 +1199,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		to_chat(user, "The paper is full of intelligible symbols!")
 
 
-/obj/item/weapon/newspaper/Topic(href, href_list)
+/obj/item/newspaper/Topic(href, href_list)
 	var/mob/U = usr
 	//..() // Allow ghosts to do pretty much everything except add shit
 	if ((src in U.contents) || ( istype(loc, /turf) && in_range(src, U) ))
@@ -1231,8 +1231,8 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			attack_self(loc)
 
 
-obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/pen))
+obj/item/newspaper/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/pen))
 		if(scribble_page == curr_page)
 			to_chat(user, "<span class='notice'>There's already a scribble in this page... You wouldn't want to make things too cluttered, would you?</span>")
 		else
@@ -1274,8 +1274,8 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					scanned_user = "[P.id.registered_name] ([P.id.assignment])"
 				else
 					scanned_user = "Unknown"
-			else if(istype(human_user.wear_id, /obj/item/weapon/card/id) )
-				var/obj/item/weapon/card/id/ID = human_user.wear_id
+			else if(istype(human_user.wear_id, /obj/item/card/id) )
+				var/obj/item/card/id/ID = human_user.wear_id
 				scanned_user ="[ID.registered_name] ([ID.assignment])"
 			else
 				scanned_user ="Unknown"
@@ -1292,7 +1292,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 /obj/machinery/newscaster/proc/print_paper()
 	feedback_inc("newscaster_newspapers_printed",1)
-	var/obj/item/weapon/newspaper/printed_issue = new /obj/item/weapon/newspaper(src)
+	var/obj/item/newspaper/printed_issue = new /obj/item/newspaper(src)
 	for(var/datum/feed_channel/FC in news_network.network_channels)
 		if (!FC.censored)//censored channels aren't printed at all, why waste all this good paper
 			printed_issue.news_content += FC.NewspaperCopy()

@@ -10,7 +10,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
-/obj/item/mounted/frame/rust_fuel_assembly_port/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mounted/frame/rust_fuel_assembly_port/attackby(obj/item/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
 		new /obj/item/stack/sheet/plasteel( get_turf(src.loc), 12 )
 		qdel(src)
@@ -53,7 +53,7 @@
 						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
 						"<span class='notice'>You remove the circuitboard.</span>")
 					has_electronics = 0
-					new /obj/item/weapon/module/rust_fuel_port(loc)
+					new /obj/item/module/rust_fuel_port(loc)
 					has_electronics &= ~1
 			else
 				opened = 0
@@ -94,7 +94,7 @@
 			has_electronics &= ~2
 		return
 
-	else if (istype(W, /obj/item/weapon/module/rust_fuel_port) && opened && !(has_electronics & 1))
+	else if (istype(W, /obj/item/module/rust_fuel_port) && opened && !(has_electronics & 1))
 		to_chat(user, "You try to insert the port control board into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 10))
@@ -104,7 +104,7 @@
 		return
 
 	else if (iswelder(W) && opened && !has_electronics)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "You start welding the port frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			new /obj/item/mounted/frame/rust_fuel_assembly_port(loc)

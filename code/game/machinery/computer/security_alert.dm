@@ -14,7 +14,7 @@ TODO: literally every alarm but SPS alarms.
 /obj/machinery/computer/security_alerts //copied mostly from the bhangometer, see it for comments
 	name = "Security Alerts Computer"
 	desc = "Lists security alerts from various sensors."
-	circuit = "/obj/item/weapon/circuitboard/security_alerts"
+	circuit = "/obj/item/circuitboard/security_alerts"
 	icon_state = "secalert"
 	var/list/saved_security_alerts = list()
 	var/last_alert_time = 0

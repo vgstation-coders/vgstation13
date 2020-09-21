@@ -48,13 +48,13 @@ it creates. All the menus and other manipulation commands are in the R&D console
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/protolathe,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/circuitboard/protolathe,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser,
 	)
 
 	RefreshParts()

@@ -184,7 +184,7 @@
 	else
 		return 0
 
-/obj/item/tape/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/tape/attackby(obj/item/W as obj, mob/user as mob)
 	breaktape(W, user)
 
 /obj/item/tape/attack_hand(mob/user as mob)
@@ -221,7 +221,7 @@
 			return
 	breaktape(null,L, TRUE)
 
-/obj/item/tape/proc/breaktape(obj/item/weapon/W as obj, mob/user as mob, var/override = FALSE)
+/obj/item/tape/proc/breaktape(obj/item/W as obj, mob/user as mob, var/override = FALSE)
 	if(!override && user.a_intent == I_HELP && (!W || !W.is_sharp()) && !src.allowed(user))
 		to_chat(user, "<span class='notice'>You can't break [src] [W ? "with \the [W] " : ""]unless you use force.</span>")
 		return
@@ -233,7 +233,7 @@
 	user.visible_message("<span class='warning'>[user] breaks [src]!</span>")
 	qdel(src)
 
-/obj/item/tape/proc/destroy_tape(var/mob/user, var/obj/item/weapon/W)
+/obj/item/tape/proc/destroy_tape(var/mob/user, var/obj/item/W)
 	var/dir[2]
 	var/icon_dir = src.icon_state
 	if(icon_dir == "[src.icon_base]_h")
@@ -307,7 +307,7 @@
 
 // -- Syndie police tape : it cuffs people attempting to attack it. It's also unbreakable by simple mobs.
 
-/obj/item/tape/police/syndie/destroy_tape(var/mob/user, var/obj/item/weapon/W)
+/obj/item/tape/police/syndie/destroy_tape(var/mob/user, var/obj/item/W)
 	if (istype(W))
 		if (!W.is_sharp() || !(W.force >= 10))
 			to_chat(user, "<span class='warning'>The tape resists your attack!</span>")
@@ -372,7 +372,7 @@
 
 // Atmos syndie tape : hard to break and cut off your hands
 
-/obj/item/tape/atmos/syndie/destroy_tape(var/mob/user, var/obj/item/weapon/W)
+/obj/item/tape/atmos/syndie/destroy_tape(var/mob/user, var/obj/item/W)
 	if (!W)
 		if (istype(user, /mob/living))
 			var/mob/living/L = user

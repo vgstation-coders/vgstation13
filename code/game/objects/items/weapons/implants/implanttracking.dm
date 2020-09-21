@@ -1,17 +1,17 @@
-/obj/item/weapon/implant/tracking
+/obj/item/implant/tracking
 	name = "tracking implant"
 	desc = "Track with this."
 	var/id = 1
 
-/obj/item/weapon/implant/tracking/New()
+/obj/item/implant/tracking/New()
 	..()
 	tracking_implants += src
 
-/obj/item/weapon/implant/tracking/Destroy()
+/obj/item/implant/tracking/Destroy()
 	tracking_implants -= src
 	..()
 
-/obj/item/weapon/implant/tracking/get_data()
+/obj/item/implant/tracking/get_data()
 	var/dat = {"<b>Implant Specifications:</b><BR>
 <b>Name:</b> Tracking Beacon<BR>
 <b>Life:</b> 10 minutes after death of host<BR>
@@ -28,7 +28,7 @@ circuitry. As a result neurotoxins can cause massive damage.<HR>
 Implant Specifics:<BR>"}
 	return dat
 
-/obj/item/weapon/implant/tracking/emp_act(severity)
+/obj/item/implant/tracking/emp_act(severity)
 	if (malfunction)	//no, dawg, you can't malfunction while you are malfunctioning
 		return
 	malfunction = IMPLANT_MALFUNCTION_TEMPORARY
@@ -163,8 +163,8 @@ var/list/locator_holomap_cache = list()
 		holomap_datum.station_map.overlays += holomap_datum.cursor
 
 		//now let's add markers for all the implanted people
-		for(var/obj/item/weapon/implant/tracking/implant in tracking_implants)
-			if (!implant.loc || istype(implant.loc,/obj/item/weapon/implantcase))
+		for(var/obj/item/implant/tracking/implant in tracking_implants)
+			if (!implant.loc || istype(implant.loc,/obj/item/implantcase))
 				continue
 			var/turf/TU = get_turf(implant)
 			if(!TU)

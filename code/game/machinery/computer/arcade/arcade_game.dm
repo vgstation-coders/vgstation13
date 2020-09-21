@@ -74,7 +74,7 @@
 	var/gameover = 0
 	var/blocked = 0 //Player cannot attack/heal while set
 	var/turtle = 0 //Is the player turtling?
-	prizes = list(/obj/item/weapon/storage/box/snappops			= 2,
+	prizes = list(/obj/item/storage/box/snappops			= 2,
 				/obj/item/toy/cards								= 2,
 				/obj/item/toy/blink								= 2,
 				/obj/item/clothing/under/syndicate/tacticool	= 2,
@@ -82,15 +82,15 @@
 				/obj/item/toy/bomb								= 1,
 				list(/obj/item/toy/gun, /obj/item/toy/ammo/gun) = 2,
 				/obj/item/toy/crossbow							= 2,
-				/obj/item/weapon/storage/box/syndicatefake/space = 2,
-				/obj/item/weapon/storage/fancy/crayons			= 2,
+				/obj/item/storage/box/syndicatefake/space = 2,
+				/obj/item/storage/fancy/crayons			= 2,
 				/obj/item/toy/spinningtoy						= 2,
 				/obj/item/toy/minimeteor						= 2,
 				/obj/item/device/whisperphone					= 2,
-				/obj/item/weapon/storage/box/mechfigures		= 1,
-				/obj/item/weapon/boomerang/toy					= 1,
+				/obj/item/storage/box/mechfigures		= 1,
+				/obj/item/boomerang/toy					= 1,
 				/obj/item/toy/foamblade							= 1,
-				/obj/item/weapon/storage/box/actionfigure		= 1,
+				/obj/item/storage/box/actionfigure		= 1,
 				/obj/item/toy/syndicateballoon/ntballoon		= 1,
 				)
 

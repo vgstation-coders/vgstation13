@@ -241,7 +241,7 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/spur/OnFired()
 	..()
-	var/obj/item/weapon/gun/energy/polarstar/spur/quote = shot_from
+	var/obj/item/gun/energy/polarstar/spur/quote = shot_from
 	if(!quote || !istype(quote))
 		return
 	switch(quote.firelevel)
@@ -264,7 +264,7 @@ obj/item/projectile/bullet/suffocationbullet
 
 /obj/item/projectile/spur/polarstar/OnFired()
 	..()
-	var/obj/item/weapon/gun/energy/polarstar/quote = shot_from
+	var/obj/item/gun/energy/polarstar/quote = shot_from
 	if(!quote || !istype(quote))
 		return
 	switch(quote.firelevel)
@@ -525,7 +525,7 @@ obj/item/projectile/bullet/suffocationbullet
 	if(!A)
 		return
 	if(vial)
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/V = vial
+		var/obj/item/reagent_containers/glass/beaker/vial/V = vial
 		if(!V.is_open_container())
 			V.flags |= OPENCONTAINER
 		if(istype(A, /turf/simulated/wall))
@@ -537,7 +537,7 @@ obj/item/projectile/bullet/suffocationbullet
 /obj/item/projectile/bullet/vial/on_hit(var/atom/atarget, var/blocked = 0)
 	..()
 	if(vial)
-		var/obj/item/weapon/reagent_containers/glass/beaker/vial/V = vial
+		var/obj/item/reagent_containers/glass/beaker/vial/V = vial
 		if(!V.is_open_container())
 			V.flags |= OPENCONTAINER
 		if(!V.is_empty())
@@ -908,7 +908,7 @@ obj/item/projectile/bullet/suffocationbullet
 		peel_drop_chance *= 2
 
 /obj/item/projectile/bullet/sabonana/proc/drop_peel()
-	new /obj/item/weapon/bananapeel(get_turf(src))
+	new /obj/item/bananapeel(get_turf(src))
 	icon_state = "sabonana"
 	damage *= 2
 	peel_dropped = TRUE
@@ -937,11 +937,11 @@ obj/item/projectile/bullet/suffocationbullet
 	fire_sound = 'sound/items/syringeproj.ogg'
 	travel_range = 6
 	custom_impact = TRUE
-	decay_type = /obj/item/weapon/reagent_containers/syringe/broken
+	decay_type = /obj/item/reagent_containers/syringe/broken
 	var/capacity = 15
 	var/stealthy = FALSE
 
-/obj/item/projectile/bullet/syringe/New(atom/A, var/obj/item/weapon/reagent_containers/syringe/source_syringe)
+/obj/item/projectile/bullet/syringe/New(atom/A, var/obj/item/reagent_containers/syringe/source_syringe)
 	..()
 	if(source_syringe)
 		create_reagents(source_syringe.reagents.total_volume)

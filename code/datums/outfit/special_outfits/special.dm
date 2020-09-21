@@ -50,7 +50,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -60,7 +60,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/engineer/elite,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -70,7 +70,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/mining,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -80,7 +80,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/syndi,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -90,7 +90,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/medical,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -100,7 +100,7 @@
 		"Default" = list(
 			slot_wear_suit_str = /obj/item/clothing/suit/space/rig/atmos,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	)
 
@@ -116,9 +116,9 @@
 			slot_shoes_str = /obj/item/clothing/shoes/combat,
 			slot_head_str = /obj/item/clothing/head/helmet/dredd,
 			slot_wear_mask_str = /obj/item/clothing/mask/gas/swat,
-			slot_belt_str = /obj/item/weapon/storage/belt/security,
+			slot_belt_str = /obj/item/storage/belt/security,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/xcomsquaddie/dredd,
-			slot_s_store_str = /obj/item/weapon/gun/lawgiver,
+			slot_s_store_str = /obj/item/gun/lawgiver,
 		),
 	)
 
@@ -131,7 +131,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
-			slot_s_store_str = /obj/item/weapon/tank/jetpack/oxygen,
+			slot_s_store_str = /obj/item/tank/jetpack/oxygen,
 		),
 	//Maybe replace with civilian rig whenever that becomes a truely unique rig.
 	)
@@ -146,14 +146,14 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest,
 			slot_head_str = /obj/item/clothing/head/helmet/thunderdome,
-			slot_s_store_str = /obj/item/weapon/gun/energy/pulse_rifle/destroyer,
-			slot_r_store_str = /obj/item/weapon/grenade/smokebomb,
+			slot_s_store_str = /obj/item/gun/energy/pulse_rifle/destroyer,
+			slot_r_store_str = /obj/item/grenade/smokebomb,
 		)
 	)
 
 /datum/outfit/special/tournament_standard_red/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/grenade/smokebomb(H))
+	H.put_in_hands(new /obj/item/grenade/smokebomb(H))
 
 /datum/outfit/special/tournament_standard_green
 	outfit_name = "Tournament standard red"
@@ -163,14 +163,14 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/vest,
 			slot_head_str = /obj/item/clothing/head/helmet/thunderdome,
-			slot_s_store_str = /obj/item/weapon/gun/energy/pulse_rifle/destroyer,
-			slot_r_store_str = /obj/item/weapon/grenade/smokebomb,
+			slot_s_store_str = /obj/item/gun/energy/pulse_rifle/destroyer,
+			slot_r_store_str = /obj/item/grenade/smokebomb,
 		)
 	)
 
 /datum/outfit/special/tournament_standard_green/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/grenade/smokebomb(H))
+	H.put_in_hands(new /obj/item/grenade/smokebomb(H))
 
 /datum/outfit/special/tournament_gangster
 	outfit_name = "Tournament gangster"
@@ -180,8 +180,8 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/det_suit,
 			slot_head_str = /obj/item/clothing/head/det_hat,
-			slot_s_store_str = /obj/item/weapon/gun/projectile,
-			slot_r_store_str = /obj/item/weapon/cloaking_device,
+			slot_s_store_str = /obj/item/gun/projectile,
+			slot_r_store_str = /obj/item/cloaking_device,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 		)
 	)
@@ -189,7 +189,7 @@
 /datum/outfit/special/tournament_chef
 	outfit_name = "Tournament chef"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		BACKPACK_STRING = /obj/item/storage/backpack,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -200,26 +200,26 @@
 		)
 	)
 	items_to_collect = list(
-		/obj/item/weapon/kitchen/utensil/knife/large,
-		/obj/item/weapon/kitchen/utensil/knife/large,
-		/obj/item/weapon/kitchen/utensil/knife/large,
+		/obj/item/kitchen/utensil/knife/large,
+		/obj/item/kitchen/utensil/knife/large,
+		/obj/item/kitchen/utensil/knife/large,
 	)
 
 /datum/outfit/special/tournament_chef/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(H))
+	H.put_in_hands(new /obj/item/kitchen/utensil/knife/large(H))
 
 /datum/outfit/special/tournament_janitor
 	outfit_name = "Tournament janitor"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		BACKPACK_STRING = /obj/item/storage/backpack,
 	)
 	items_to_spawn = list(
 		"Default" = list(
 			slot_w_uniform_str = /obj/item/clothing/under/rank/janitor,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
-			slot_r_store_str = /obj/item/weapon/grenade/chem_grenade/cleaner,
-			slot_l_store_str = /obj/item/weapon/grenade/chem_grenade/cleaner,
+			slot_r_store_str = /obj/item/grenade/chem_grenade/cleaner,
+			slot_l_store_str = /obj/item/grenade/chem_grenade/cleaner,
 		)
 	)
 	items_to_collect = list(
@@ -229,12 +229,12 @@
 		/obj/item/stack/tile/plasteel,
 		/obj/item/stack/tile/plasteel,
 		/obj/item/stack/tile/plasteel,
-		/obj/item/weapon/reagent_containers/glass/bucket/water_filled,
+		/obj/item/reagent_containers/glass/bucket/water_filled,
 	)
 
 /datum/outfit/special/tournament_janitor/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/mop(H))
+	H.put_in_hands(new /obj/item/mop(H))
 
 // ----- MISC FLAVOR THINGS
 
@@ -251,7 +251,7 @@
 
 /datum/outfit/special/pirate/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(H))
+	H.put_in_hands(new /obj/item/melee/energy/sword/pirate(H))
 
 /datum/outfit/special/space_pirate
 	outfit_name = "Space Pirate"
@@ -267,7 +267,7 @@
 
 /datum/outfit/special/space_pirate/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/melee/energy/sword/pirate(H))
+	H.put_in_hands(new /obj/item/melee/energy/sword/pirate(H))
 
 /datum/outfit/special/rune_knight
 	outfit_name = "Rune knight"
@@ -280,8 +280,8 @@
 
 /datum/outfit/special/rune_knight/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/rsscimmy(src))
-	H.put_in_hands(new /obj/item/weapon/shield/riot/rune(src))
+	H.put_in_hands(new /obj/item/rsscimmy(src))
+	H.put_in_hands(new /obj/item/shield/riot/rune(src))
 
 /datum/outfit/special/soviet_soldier
 	outfit_name = "Soviet soldier"
@@ -305,21 +305,21 @@
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/apron,
 			slot_wear_mask_str = /obj/item/clothing/mask/surgical,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_l_store_str = /obj/item/scalpel,
 		),
 	)
 
 /datum/outfit/special/masked_killer/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
-	H.put_in_hands(new /obj/item/weapon/kitchen/utensil/knife/large(H))
+	H.put_in_hands(new /obj/item/fireaxe(H))
+	H.put_in_hands(new /obj/item/kitchen/utensil/knife/large(H))
 	for (var/obj/item/I in H) // Everything is bloody
 		I.add_blood(H)
 
 // ----- Outfit with IDS
 
 /datum/outfit/special/with_id/spawn_id(var/mob/living/carbon/human/H, rank)
-	var/obj/item/weapon/card/id/W
+	var/obj/item/card/id/W
 	W = new id_type(get_turf(H))
 	W.name = "[H.real_name]'s ID Card"
 	W.registered_name = H.real_name
@@ -344,15 +344,15 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_glasses_str = /obj/item/clothing/glasses/thermal/monocle,
 			slot_wear_suit_str = /obj/item/clothing/suit/chaplain_hoodie,
-			slot_r_store_str = /obj/item/weapon/bikehorn,
+			slot_r_store_str = /obj/item/bikehorn,
 		),
 	)
-	id_type = /obj/item/weapon/card/id/tunnel_clown
+	id_type = /obj/item/card/id/tunnel_clown
 
 /datum/outfit/special/with_id/tunnel_clown/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/fireaxe(H))
-	H.put_in_hands(new /obj/item/weapon/reagent_containers/food/snacks/grown/banana(H))
+	H.put_in_hands(new /obj/item/fireaxe(H))
+	H.put_in_hands(new /obj/item/reagent_containers/food/snacks/grown/banana(H))
 
 /datum/outfit/special/with_id/assassin
 	outfit_name = "Assassin"
@@ -364,13 +364,13 @@
 			slot_ears_str = /obj/item/device/radio/headset,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
 			slot_wear_suit_str = /obj/item/clothing/suit/wcoat,
-			slot_r_store_str = /obj/item/weapon/melee/energy/sword,
-			slot_l_store_str = /obj/item/weapon/scalpel,
+			slot_r_store_str = /obj/item/melee/energy/sword,
+			slot_l_store_str = /obj/item/scalpel,
 		),
 	)
 	pda_type = /obj/item/device/pda/heads/assassin
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/syndicate/assassin
+	id_type = /obj/item/card/id/syndicate/assassin
 
 /datum/outfit/special/with_id/nt_rep
 	outfit_name = "Nanotrasen representative"
@@ -385,16 +385,16 @@
 	)
 	pda_type = /obj/item/device/pda/heads/nt_rep
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/nt_rep
+	id_type = /obj/item/card/id/nt_rep
 
 /datum/outfit/special/with_id/nt_rep/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
+	H.put_in_hands(new /obj/item/storage/bag/clipboard(H))
 
 /datum/outfit/special/with_id/nt_officer
 	outfit_name = "Nanotrasen officer"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel,
+		BACKPACK_STRING = /obj/item/storage/backpack/satchel,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -407,17 +407,17 @@
 		),
 	)
 	items_to_collect = list(
-		/obj/item/weapon/gun/energy,
+		/obj/item/gun/energy,
 	)
 	pda_type = /obj/item/device/pda/heads/nt_officer
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/centcom/nt_officer
+	id_type = /obj/item/card/id/centcom/nt_officer
 
 
 /datum/outfit/special/with_id/nt_captain
 	outfit_name = "Nanotrasen captain"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel,
+		BACKPACK_STRING = /obj/item/storage/backpack/satchel,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -430,16 +430,16 @@
 		),
 	)
 	items_to_collect = list(
-		/obj/item/weapon/gun/energy,
+		/obj/item/gun/energy,
 	)
 	pda_type = /obj/item/device/pda/heads/nt_captain
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/centcom/nt_officer
+	id_type = /obj/item/card/id/centcom/nt_officer
 
 /datum/outfit/special/with_id/nt_supreme_commander
 	outfit_name = "Nanotrasen captain"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel,
+		BACKPACK_STRING = /obj/item/storage/backpack/satchel,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -453,16 +453,16 @@
 		),
 	)
 	items_to_collect = list(
-		/obj/item/weapon/gun/energy/laser/captain,
+		/obj/item/gun/energy/laser/captain,
 	)
 	pda_type = /obj/item/device/pda/heads/nt_supreme
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/admin/nt_supreme
+	id_type = /obj/item/card/id/admin/nt_supreme
 
 /datum/outfit/special/with_id/spec_ops_officer
 	outfit_name = "Special ops officer"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel,
+		BACKPACK_STRING = /obj/item/storage/backpack/satchel,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -474,18 +474,18 @@
 			slot_head_str = /obj/item/clothing/head/beret/centcom, // the duality of man
 			slot_wear_suit_str = /obj/item/clothing/suit/armor/swat/officer,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,
-			slot_r_store_str = /obj/item/weapon/lighter/zippo,
+			slot_r_store_str = /obj/item/lighter/zippo,
 		),
 	)
 	items_to_collect = list(
-		/obj/item/weapon/gun/energy/pulse_rifle/M1911,
+		/obj/item/gun/energy/pulse_rifle/M1911,
 	)
-	id_type = /obj/item/weapon/card/id/special_operations
+	id_type = /obj/item/card/id/special_operations
 
 /datum/outfit/special/with_id/soviet_admiral
 	outfit_name = "Soviet admiral officer"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel,
+		BACKPACK_STRING = /obj/item/storage/backpack/satchel,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -497,13 +497,13 @@
 			slot_head_str = /obj/item/clothing/head/hgpiratecap,
 			slot_wear_suit_str = /obj/item/clothing/suit/hgpirate,
 			slot_wear_mask_str = /obj/item/clothing/mask/cigarette/cigar/havana,
-			slot_r_store_str = /obj/item/weapon/lighter/zippo,
+			slot_r_store_str = /obj/item/lighter/zippo,
 		),
 	)
 	items_to_collect = list(
-		/obj/item/weapon/gun/projectile/mateba,
+		/obj/item/gun/projectile/mateba,
 	)
-	id_type = /obj/item/weapon/card/id/soviet_admiral
+	id_type = /obj/item/card/id/soviet_admiral
 
 // ----- Antags
 
@@ -516,7 +516,7 @@
 			slot_gloves_str = /obj/item/clothing/gloves/purple,
 			slot_head_str = /obj/item/clothing/head/helmet/space/bomberman,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/bomberman,
-			slot_s_store_str = /obj/item/weapon/bomberman,
+			slot_s_store_str = /obj/item/bomberman,
 		),
 	)
 
@@ -541,7 +541,7 @@
 	equip_survival_gear = list() // Default survival gear
 	outfit_name = "Blue wizard"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		BACKPACK_STRING = /obj/item/storage/backpack,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -550,20 +550,20 @@
 			slot_head_str = /obj/item/clothing/head/wizard,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
-			slot_l_store_str = /obj/item/weapon/spellbook,
+			slot_r_store_str = /obj/item/teleportation_scroll,
+			slot_l_store_str = /obj/item/spellbook,
 		),
 	)
 
 /datum/outfit/special/blue_wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
+	H.put_in_hands(new /obj/item/staff(H))
 
 /datum/outfit/special/red_wizard
 	equip_survival_gear = list() // Default survival gear
 	outfit_name = "Red wizard"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		BACKPACK_STRING = /obj/item/storage/backpack,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -572,20 +572,20 @@
 			slot_head_str = /obj/item/clothing/head/wizard/red,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/red,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
-			slot_l_store_str = /obj/item/weapon/spellbook,
+			slot_r_store_str = /obj/item/teleportation_scroll,
+			slot_l_store_str = /obj/item/spellbook,
 		),
 	)
 
 /datum/outfit/special/red_wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
+	H.put_in_hands(new /obj/item/staff(H))
 
 /datum/outfit/special/marisa_wizard
 	equip_survival_gear = list() // Default survival gear
 	outfit_name = "Marisa wizard"
 	backpack_types = list(
-		BACKPACK_STRING = /obj/item/weapon/storage/backpack,
+		BACKPACK_STRING = /obj/item/storage/backpack,
 	)
 	items_to_spawn = list(
 		"Default" = list(
@@ -594,11 +594,11 @@
 			slot_head_str = /obj/item/clothing/head/wizard/marisa,
 			slot_wear_suit_str = /obj/item/clothing/suit/wizrobe/marisa,
 			slot_ears_str = /obj/item/device/radio/headset,
-			slot_r_store_str = /obj/item/weapon/teleportation_scroll,
-			slot_l_store_str = /obj/item/weapon/spellbook,
+			slot_r_store_str = /obj/item/teleportation_scroll,
+			slot_l_store_str = /obj/item/spellbook,
 		),
 	)
 
 /datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.put_in_hands(new /obj/item/weapon/staff(H))
+	H.put_in_hands(new /obj/item/staff(H))

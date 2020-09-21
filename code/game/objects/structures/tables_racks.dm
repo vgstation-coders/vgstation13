@@ -20,7 +20,7 @@
 	anchored = 1.0
 	layer = TABLE_LAYER
 	throwpass = 1	//You can throw objects over this, despite its density.
-	var/parts = /obj/item/weapon/table_parts
+	var/parts = /obj/item/table_parts
 	var/flipped = 0
 	var/health = 100
 
@@ -53,8 +53,8 @@
 /obj/structure/table/glass/proc/checkhealth()
 	if(health <= 0)
 		playsound(src, "shatter", 50, 1)
-		new /obj/item/weapon/shard(src.loc)
-		new /obj/item/weapon/table_parts(src.loc)
+		new /obj/item/shard(src.loc)
+		new /obj/item/table_parts(src.loc)
 		qdel(src)
 
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
@@ -378,8 +378,8 @@
 	if (!W)
 		return
 
-	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
+	if (istype(W, /obj/item/grab) && get_dist(src,user)<2)
+		var/obj/item/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
@@ -547,7 +547,7 @@
 	name = "wooden table"
 	desc = "Do not apply fire to this. Rumour says it burns easily."
 	icon_state = "woodtable"
-	parts = /obj/item/weapon/table_parts/wood
+	parts = /obj/item/table_parts/wood
 	health = 50
 	autoignition_temperature = AUTOIGNITION_WOOD // TODO:  Special ash subtype that looks like charred table legs.
 	fire_fuel = 5
@@ -559,7 +559,7 @@
 	name = "gambling table"
 	desc = "A seedy table for seedy dealings in seedy places."
 	icon_state = "pokertable"
-	parts = /obj/item/weapon/table_parts/wood/poker
+	parts = /obj/item/table_parts/wood/poker
 
 /*
  * Reinforced tables
@@ -568,7 +568,7 @@
 	name = "reinforced table"
 	desc = "A version of the four legged table. It is stronger."
 	icon_state = "reinftable"
-	parts = /obj/item/weapon/table_parts/reinforced
+	parts = /obj/item/table_parts/reinforced
 	var/status = 2 //DARE YOU ENTER MY MAGICAL NUMBER REALM?
 	var/can_optable = TRUE
 
@@ -581,13 +581,13 @@
 	else
 		return ..()
 
-/obj/structure/table/reinforced/attackby(obj/item/weapon/W as obj, mob/user as mob, params)
-	if(istype(W,/obj/item/weapon/stock_parts/scanning_module) && can_optable)
+/obj/structure/table/reinforced/attackby(obj/item/W as obj, mob/user as mob, params)
+	if(istype(W,/obj/item/stock_parts/scanning_module) && can_optable)
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 40))
 			if(user.drop_item(W))
 				var/obj/machinery/optable/OPT = new /obj/machinery/optable(src.loc)
-				var/obj/item/weapon/stock_parts/scanning_module/SM = W
+				var/obj/item/stock_parts/scanning_module/SM = W
 				OPT.rating = SM.rating
 
 				qdel(W)
@@ -599,7 +599,7 @@
 				return
 
 	else if (iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.isOn())
 			to_chat(user, "<span class='notice'>Now [status == 2?"weakening":"strenghening"] the reinforced table.</span>")
 			if(WT.do_weld(user, src, 50, 0))
@@ -624,12 +624,12 @@
 	name = "glass table"
 	desc = "A standard table with a fine glass finish."
 	icon_state = "glass_table"
-	parts = /obj/item/weapon/table_parts/glass
+	parts = /obj/item/table_parts/glass
 	health = 30
 
 /obj/structure/table/glass/attackby(obj/item/W as obj, mob/living/user as mob, params)
-	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
-		var/obj/item/weapon/grab/G = W
+	if (istype(W, /obj/item/grab) && get_dist(src,user)<2)
+		var/obj/item/grab/G = W
 		if (istype(G.affecting, /mob/living))
 			var/mob/living/M = G.affecting
 			if (G.state < GRAB_AGGRESSIVE)
@@ -642,8 +642,8 @@
 					visible_message("<span class='warning'>[G.assailant] slams [G.affecting]'s face against \the [src]!</span>")
 					playsound(src, 'sound/weapons/tablehit1.ogg', 50, 1)
 					playsound(src, "shatter", 50, 1) //WRESTLEMANIA tax
-					new /obj/item/weapon/shard(src.loc)
-					new /obj/item/weapon/table_parts(src.loc)
+					new /obj/item/shard(src.loc)
+					new /obj/item/table_parts(src.loc)
 					qdel(src)
 				else
 					to_chat(user, "<span class='warning'>You need a better grip to do that!</span>")
@@ -671,7 +671,7 @@
 	name = "plasma glass table"
 	desc = "A standard table with a reinforced plasma glass finish."
 	icon_state = "plasma_table"
-	parts = /obj/item/weapon/table_parts/glass/plasma
+	parts = /obj/item/table_parts/glass/plasma
 	health = 150
 
 /*
@@ -682,7 +682,7 @@
 	name = "brass table"
 	desc = "A solid, slightly beveled brass table."
 	icon_state = "clock_table"
-	parts = /obj/item/weapon/table_parts/clockwork
+	parts = /obj/item/table_parts/clockwork
 	can_optable = FALSE
 
 /obj/structure/table/reinforced/clockwork/cultify()
@@ -698,7 +698,7 @@ obj/structure/table/plastic
 	name = "plastic table"
 	desc = "A plastic table perfect for on a space patio."
 	icon_state = "plastictable"
-	parts = /obj/item/weapon/table_parts/plastic
+	parts = /obj/item/table_parts/plastic
 
 /*
  * Racks
@@ -713,7 +713,7 @@ obj/structure/table/plastic
 	anchored = 1.0
 	throwpass = 1	//You can throw objects over this, despite its density.
 	layer = TABLE_LAYER //So items are always layered over it
-	var/parts = /obj/item/weapon/rack_parts
+	var/parts = /obj/item/rack_parts
 	var/offset_step = 0
 	var/health = 20
 
@@ -752,7 +752,7 @@ obj/structure/table/plastic
 		destroy()
 
 /obj/structure/rack/proc/spawnParts()
-	new /obj/item/weapon/rack_parts(loc)
+	new /obj/item/rack_parts(loc)
 
 /obj/structure/rack/kick_act()
 	health -= 5
@@ -775,7 +775,7 @@ obj/structure/table/plastic
 /obj/structure/rack/bumped_by_firebird(obj/structure/bed/chair/vehicle/firebird/F)
 	destroy()
 
-/obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/rack/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_wrench(user) && can_disassemble())
 		W.playtoolsound(src, 50)
 		destroy(TRUE)

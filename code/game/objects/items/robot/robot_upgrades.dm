@@ -80,7 +80,7 @@
 		R.module.quirk_flags |= MODULE_IS_THE_LAW
 
 	if(R.modtype == HUG_MODULE)
-		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		var/obj/item/cookiesynth/C = locate_component(/obj/item/cookiesynth, R)
 		if(C)
 			C.Lawize()
 		var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R)
@@ -185,13 +185,13 @@
 	desc = "A carbon dioxide jetpack suitable for low-gravity operations."
 	icon_state = "cyborg_upgrade3"
 	required_modules = list(SUPPLY_MODULE, ENGINEERING_MODULE, COMBAT_MODULE, SYNDIE_BLITZ_MODULE, SYNDIE_CRISIS_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
-	modules_to_add = list(/obj/item/weapon/tank/jetpack/carbondioxide/silicon)
+	modules_to_add = list(/obj/item/tank/jetpack/carbondioxide/silicon)
 
 /obj/item/borg/upgrade/jetpack/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	for(var/obj/item/weapon/tank/jetpack/carbondioxide in R.module.modules)
+	for(var/obj/item/tank/jetpack/carbondioxide in R.module.modules)
 		R.internals = src
 
 /obj/item/borg/upgrade/syndicate
@@ -224,14 +224,14 @@
 	desc = "Used to give a medical cyborg advanced care tools."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
-	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+	modules_to_add = list(/obj/item/melee/defibrillator,/obj/item/reagent_containers/borghypo/upgraded)
 
 /obj/item/borg/upgrade/medical/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
-	modules_to_add = list(/obj/item/weapon/gripper/organ)
+	modules_to_add = list(/obj/item/gripper/organ)
 
 //Engineering stuff
 /obj/item/borg/upgrade/engineering
@@ -239,7 +239,7 @@
 	desc = "Adds several tools and materials for the robot to use."
 	icon_state = "cyborg_upgrade3"
 	required_modules = list(ENGINEERING_MODULE, NANOTRASEN_MOMMI, SOVIET_MOMMI)
-	modules_to_add = list(/obj/item/weapon/wrench/socket)
+	modules_to_add = list(/obj/item/wrench/socket)
 
 /obj/item/borg/upgrade/engineering/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -259,7 +259,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper"
 	required_modules = list(ENGINEERING_MODULE)
-	modules_to_add = list(/obj/item/weapon/gripper/magnetic)
+	modules_to_add = list(/obj/item/gripper/magnetic)
 
 //Service Stuff
 /obj/item/borg/upgrade/cook
@@ -267,41 +267,41 @@
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
 	icon_state = "cyborg_upgrade2"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/kitchen/utensil/knife/large, /obj/item/weapon/kitchen/rollingpin, /obj/item/weapon/storage/bag/food/borg)
+	modules_to_add = list(/obj/item/kitchen/utensil/knife/large, /obj/item/kitchen/rollingpin, /obj/item/storage/bag/food/borg)
 
 /obj/item/borg/upgrade/cook/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	var/obj/item/gripper/service/G = locate_component(/obj/item/gripper/service, R, user)
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold.Add(/obj/item/weapon/reagent_containers/food)
+	G.can_hold.Add(/obj/item/reagent_containers/food)
 
 /obj/item/borg/upgrade/hydro
 	name = "service cyborg H.U.E.Y. upgrade board"
 	desc = "Used to give a service cyborg hydroponics tools and upgrade their service gripper to be able to handle seeds and glass containers."
 	icon_state = "mainboard"
 	required_modules = list(SERVICE_MODULE)
-	modules_to_add = list(/obj/item/weapon/minihoe, /obj/item/weapon/wirecutters/clippers, /obj/item/weapon/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
+	modules_to_add = list(/obj/item/minihoe, /obj/item/wirecutters/clippers, /obj/item/storage/bag/plants/portactor, /obj/item/device/analyzer/plant_analyzer)
 
 /obj/item/borg/upgrade/hydro/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gripper/service/G = locate_component(/obj/item/weapon/gripper/service, R, user)
+	var/obj/item/gripper/service/G = locate_component(/obj/item/gripper/service, R, user)
 	if(!G)
 		return FAILED_TO_ADD
 
-	G.can_hold.Add(/obj/item/seeds, /obj/item/weapon/reagent_containers/glass, /obj/item/weapon/disk/botany)
+	G.can_hold.Add(/obj/item/seeds, /obj/item/reagent_containers/glass, /obj/item/disk/botany)
 
 /obj/item/borg/upgrade/honk
 	name = "service cyborg H.O.N.K. upgrade board"
 	desc = "Used to give a service cyborg fun toys, Honk!"
 	icon_state = "gooncode"
 	required_modules = list(SERVICE_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/bikehorn, /obj/item/weapon/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
+	modules_to_add = list(/obj/item/bikehorn, /obj/item/stamp/clown, /obj/item/toy/crayon/rainbow, /obj/item/toy/waterflower, /obj/item/device/soundsynth)
 
 /obj/item/borg/upgrade/honk/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -314,7 +314,7 @@
 		var/obj/item/device/harmalarm/H = locate_component(/obj/item/device/harmalarm, R)
 		if(H)
 			H.Honkize()
-		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		var/obj/item/cookiesynth/C = locate_component(/obj/item/cookiesynth, R)
 		if(C)
 			C.Honkize()
 
@@ -335,7 +335,7 @@
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R, user)
+	var/obj/item/gun/energy/taser/cyborg/T = locate_component(/obj/item/gun/energy/taser/cyborg, R, user)
 	if(!T)
 		return FAILED_TO_ADD
 
@@ -353,7 +353,7 @@
 	desc = "So that's the way you scientific detectives work. My god! for a fat, middle-aged, hard-boiled, pig-headed guy, you've got the vaguest way of doing things I ever heard of."
 	icon_state = "mainboard"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/gripper/service/noir, /obj/item/weapon/storage/evidencebag, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/weapon/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
+	modules_to_add = list(/obj/item/gripper/service/noir, /obj/item/storage/evidencebag, /obj/item/cyborglens, /obj/item/device/taperecorder, /obj/item/gun/projectile/detective, /obj/item/ammo_storage/speedloader/c38/cyborg)
 
 /obj/item/borg/upgrade/noir/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -370,7 +370,7 @@
 	if(R.modtype == HUG_MODULE)
 		securify_module(R)
 
-		var/obj/item/weapon/cookiesynth/C = locate_component(/obj/item/weapon/cookiesynth, R)
+		var/obj/item/cookiesynth/C = locate_component(/obj/item/cookiesynth, R)
 		if(C)
 			C.Noirize()
 
@@ -379,7 +379,7 @@
 	desc = "Used to give a security cyborg supervisory enforcement tools."
 	icon_state = "mcontroller"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
-	modules_to_add = list(/obj/item/weapon/batteringram, /obj/item/weapon/implanter/cyborg, /obj/item/weapon/card/robot/security, /obj/item/weapon/wrench, /obj/item/weapon/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
+	modules_to_add = list(/obj/item/batteringram, /obj/item/implanter/cyborg, /obj/item/card/robot/security, /obj/item/wrench, /obj/item/handcuffs/cyborg) //Secborgs have cuffs, but hugborgs can't do warden job properly without them.
 
 /obj/item/borg/upgrade/warden/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
@@ -408,17 +408,17 @@
 	icon_state = "mcontroller"
 	required_modules = list(SECURITY_MODULE, HUG_MODULE)
 	required_upgrades = list(/obj/item/borg/upgrade/noir, /obj/item/borg/upgrade/warden)
-	modules_to_add = list(/obj/item/weapon/gun/lawgiver, /obj/item/weapon/gun/grenadelauncher)
+	modules_to_add = list(/obj/item/gun/lawgiver, /obj/item/gun/grenadelauncher)
 
 /obj/item/borg/upgrade/hos/attempt_action(var/mob/living/silicon/robot/R,var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gripper/service/noir/G = locate_component(/obj/item/weapon/gripper/service/noir, R, user)
+	var/obj/item/gripper/service/noir/G = locate_component(/obj/item/gripper/service/noir, R, user)
 	if(!G)
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gun/projectile/detective/PG = locate_component(/obj/item/weapon/gun/projectile/detective, R, user)
+	var/obj/item/gun/projectile/detective/PG = locate_component(/obj/item/gun/projectile/detective, R, user)
 	if(!PG)
 		return FAILED_TO_ADD
 
@@ -426,7 +426,7 @@
 	if(!SL)
 		return FAILED_TO_ADD
 
-	var/obj/item/weapon/gun/energy/taser/cyborg/T = locate_component(/obj/item/weapon/gun/energy/taser/cyborg, R)
+	var/obj/item/gun/energy/taser/cyborg/T = locate_component(/obj/item/gun/energy/taser/cyborg, R)
 
 	if(T) //Since having a taser isn't necessary for this upgrade, this is fine.
 		R.module.modules -= T
@@ -437,7 +437,7 @@
 	qdel(SL)
 
 
-	G.can_hold.Add(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/weapon/grenade, /obj/item/weapon/reagent_containers/food/snacks/donut)
+	G.can_hold.Add(/obj/item/ammo_storage/magazine/lawgiver, /obj/item/grenade, /obj/item/reagent_containers/food/snacks/donut)
 	G.desc += "This one was also tweaked to be able to hold lawgiver magazines, grenades and... DONUTS!"
 
 	if(!R.dna) //Time to get ready to use that lawgiver.
@@ -457,7 +457,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "hookshot"
 	required_modules = list(SUPPLY_MODULE)
-	modules_to_add = list(/obj/item/weapon/gun/hookshot)
+	modules_to_add = list(/obj/item/gun/hookshot)
 
 /obj/item/borg/upgrade/portosmelter
 	name = "supply cyborg portable ore processor upgrade"
@@ -465,6 +465,6 @@
 	icon = 'icons/obj/mining.dmi'
 	icon_state = "portsmelter0"
 	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
-	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
+	modules_to_add = list(/obj/item/storage/bag/ore/furnace)
 
 #undef FAILED_TO_ADD

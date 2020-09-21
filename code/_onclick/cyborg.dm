@@ -68,7 +68,7 @@
 
 	//Handling grippercreep
 	if (isgripper(W))
-		var/obj/item/weapon/gripper/G = W
+		var/obj/item/gripper/G = W
 		//If the gripper contains something, then we will use its contents to attack
 		if (G.wrapped && (G.wrapped.loc == G))
 			GripperClickOn(A, params, G)
@@ -100,7 +100,7 @@
 //This is used when a gripper is used on anything. It does all the handling for it.
 //Lots of sanity checking because i don't want runtimes.
 
-/mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/weapon/gripper/G)
+/mob/living/silicon/robot/proc/GripperClickOn(var/atom/A, var/params, var/obj/item/gripper/G)
 	if(!gripper_sanity_check(G))
 		return
 	if(A.Adjacent(src, MAX_ITEM_DEPTH) && isturf(loc))

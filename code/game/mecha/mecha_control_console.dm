@@ -3,7 +3,7 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "mecha"
 	req_access = list(access_robotics)
-	circuit = "/obj/item/weapon/circuitboard/mecha_control"
+	circuit = "/obj/item/circuitboard/mecha_control"
 	var/list/located = list()
 	var/screen = 0
 	var/stored_data
@@ -169,9 +169,9 @@
 	var/obj/mecha/M = src.loc
 	return M.get_log_html()
 
-/obj/item/weapon/storage/box/mechabeacons
+/obj/item/storage/box/mechabeacons
 	name = "Exosuit Tracking Beacons"
-/obj/item/weapon/storage/box/mechabeacons/New()
+/obj/item/storage/box/mechabeacons/New()
 	..()
 	new /obj/item/mecha_parts/mecha_tracking(src)
 	new /obj/item/mecha_parts/mecha_tracking(src)

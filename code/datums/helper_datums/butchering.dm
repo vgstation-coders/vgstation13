@@ -208,7 +208,7 @@
 //--------------Spider legs-------
 
 /datum/butchering_product/spider_legs
-	result = /obj/item/weapon/reagent_containers/food/snacks/meat/spiderleg
+	result = /obj/item/reagent_containers/food/snacks/meat/spiderleg
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 8 //Amount of legs that all normal spiders have
@@ -232,7 +232,7 @@
 //======frog legs
 
 /datum/butchering_product/frog_leg
-	result = /obj/item/weapon/reagent_containers/food/snacks/frog_leg
+	result = /obj/item/reagent_containers/food/snacks/frog_leg
 	verb_name = "remove legs from"
 	verb_gerund = "removing legs from"
 	amount = 2 //not a magic number, frogs have 2 legs

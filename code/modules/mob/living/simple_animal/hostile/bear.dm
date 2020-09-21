@@ -15,7 +15,7 @@
 	speak_chance = 1
 	turns_per_move = 5
 	see_in_dark = 6
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/bearmeat
 	response_help  = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm   = "hits"
@@ -27,7 +27,7 @@
 	melee_damage_upper = 30
 	size = SIZE_BIG
 	speak_override = TRUE
-	var/obj/item/weapon/reagent_containers/food/snacks/burger = null
+	var/obj/item/reagent_containers/food/snacks/burger = null
 
 	//Space bears aren't affected by atmos.
 	min_oxy = 0
@@ -220,7 +220,7 @@
 	. = ..()
 	if(.)
 		return
-	if(istype(AM,/obj/item/weapon/reagent_containers/food/snacks) && AM.icon_state == "hburger")
+	if(istype(AM,/obj/item/reagent_containers/food/snacks) && AM.icon_state == "hburger")
 		if (burger)
 			burger.forceMove(get_turf(src))
 		visible_message("<span class='danger'>\The [src] catches \the [AM] mid-flight, a jovial look on its face.</span>")
@@ -250,7 +250,7 @@
 		return
 	if (burger)
 		overlays += image(icon, "bearburger")
-	if (istype(locked_to,/obj/item/weapon/beartrap))
+	if (istype(locked_to,/obj/item/beartrap))
 		overlays += image(icon, "beartrapped")
 
 /mob/living/simple_animal/hostile/bear/death()
@@ -261,6 +261,6 @@
 /mob/living/simple_animal/hostile/bear/is_pacified()
 	if (burger)
 		return TRUE
-	if (istype(locked_to,/obj/item/weapon/beartrap))
+	if (istype(locked_to,/obj/item/beartrap))
 		return TRUE
 	return ..()

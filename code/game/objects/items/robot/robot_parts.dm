@@ -41,7 +41,7 @@
 	desc = "A heavily reinforced case containing cyborg logic boards, with space for a standard power cell."
 	icon_state = LIMB_CHEST
 	var/wires = 0.0
-	var/obj/item/weapon/cell/cell = null
+	var/obj/item/cell/cell = null
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
 
 /obj/item/robot_parts/chest/get_cell()
@@ -116,7 +116,7 @@
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
-		var/obj/item/weapon/ed209_assembly/B = new /obj/item/weapon/ed209_assembly
+		var/obj/item/ed209_assembly/B = new /obj/item/ed209_assembly
 		B.forceMove(get_turf(src))
 		to_chat(user, "You armed the robot frame")
 		W:use(1)
@@ -253,7 +253,7 @@
 		else
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
-	if (istype(W, /obj/item/weapon/pen))
+	if (istype(W, /obj/item/pen))
 		var/t = stripped_input(user, "Enter new robot name", src.name, src.created_name, MAX_NAME_LEN)
 		if (!t)
 			return
@@ -266,7 +266,7 @@
 
 /obj/item/robot_parts/chest/attackby(obj/item/W as obj, mob/user as mob)
 	..()
-	if(istype(W, /obj/item/weapon/cell))
+	if(istype(W, /obj/item/cell))
 		if(src.cell)
 			to_chat(user, "<span class='notice'>You have already inserted a cell!</span>")
 			return
@@ -299,7 +299,7 @@
 			if(user.drop_item(W, src))
 				src.flash1 = W
 				to_chat(user, "<span class='notice'>You insert the flash into the eye socket!</span>")
-	else if(istype(W, /obj/item/weapon/stock_parts/manipulator))
+	else if(istype(W, /obj/item/stock_parts/manipulator))
 		if(user.drop_item(W))
 			to_chat(user, "<span class='notice'>You install some manipulators and modify the head, creating a functional spider-bot!</span>")
 			new /mob/living/simple_animal/spiderbot(get_turf(loc))
@@ -310,7 +310,7 @@
 	return
 
 /obj/item/robot_parts/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/weapon/card/emag))
+	if(istype(W,/obj/item/card/emag))
 		if(sabotaged)
 			to_chat(user, "<span class='warning'>[src] is already sabotaged!</span>")
 		else

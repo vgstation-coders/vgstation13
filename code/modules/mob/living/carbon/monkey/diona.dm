@@ -8,7 +8,7 @@
 	speak_emote = list("chirrups")
 	icon_state = "nymph1"
 	species_type = /mob/living/carbon/monkey/diona
-	holder_type = /obj/item/weapon/holder/diona
+	holder_type = /obj/item/holder/diona
 	var/list/donors = list()
 	var/ready_evolve = FALSE
 	canWearHats = TRUE
@@ -16,7 +16,7 @@
 	canWearGlasses = FALSE
 	burn_damage_modifier = 2.5 //TREEEEEES
 	languagetoadd = LANGUAGE_ROOTSPEAK
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/diona
 	flag = NO_BREATHE
 	canPossess = TRUE
 
@@ -111,8 +111,8 @@
 	transferImplantsTo(adult)
 	transferBorers(adult)
 
-	if(istype(loc,/obj/item/weapon/holder/diona))
-		var/obj/item/weapon/holder/diona/L = loc
+	if(istype(loc,/obj/item/holder/diona))
+		var/obj/item/holder/diona/L = loc
 		src.forceMove(get_turf(L))
 		L = null
 		qdel(L)

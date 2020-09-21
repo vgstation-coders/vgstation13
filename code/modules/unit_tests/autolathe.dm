@@ -7,6 +7,6 @@
     var/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/autolathe = new(centre)
     var/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe/ammolathe = new(centre)
     
-    var/obj/item/weapon/light/tube/large/test_object = new(centre)
+    var/obj/item/light/tube/large/test_object = new(centre)
     assert_eq(autolathe.attackby(test_object, test_subject), 1)
     assert_eq(ammolathe.attackby(test_object, test_subject), 0)

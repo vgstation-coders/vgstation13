@@ -29,20 +29,20 @@
 
 /obj/structure/filingcabinet/initialize()
 	for(var/obj/item/I in loc)
-		if(istype(I, /obj/item/weapon/paper) || istype(I, /obj/item/weapon/folder) || istype(I, /obj/item/weapon/photo))
+		if(istype(I, /obj/item/paper) || istype(I, /obj/item/folder) || istype(I, /obj/item/photo))
 			I.forceMove(src)
 
 
 /obj/structure/filingcabinet/attackby(obj/item/P as obj, mob/user as mob)
-	if(istype(P, /obj/item/weapon/paper) || istype(P, /obj/item/weapon/folder) || istype(P, /obj/item/weapon/photo))
+	if(istype(P, /obj/item/paper) || istype(P, /obj/item/folder) || istype(P, /obj/item/photo))
 		if(user.drop_item(P, src))
 			to_chat(user, "<span class='notice'>You put [P] in [src].</span>")
 			flick("[initial(icon_state)]-open",src)
 			updateUsrDialog()
-	else if(istype(P, /obj/item/weapon/storage/bag/clipboard))
-		var/obj/item/weapon/storage/bag/clipboard/C = P
+	else if(istype(P, /obj/item/storage/bag/clipboard))
+		var/obj/item/storage/bag/clipboard/C = P
 		for(var/obj/item/I in C)
-			if(!istype(I, /obj/item/weapon/pen))
+			if(!istype(I, /obj/item/pen))
 				C.remove_from_storage(I,src)
 		C.update_icon()
 		flick("[initial(icon_state)]-open",src)
@@ -100,7 +100,7 @@
 				if((R.fields["name"] == G.fields["name"] || R.fields["id"] == G.fields["id"]))
 					S = R
 					break
-			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(src)
+			var/obj/item/paper/P = new /obj/item/paper(src)
 
 			P.info = {"<CENTER><B>Security Record</B></CENTER><BR>
 				Name: [G.fields["name"]] ID: [G.fields["id"]]<BR>\nSex: [G.fields["sex"]]<BR>\nAge: [G.fields["age"]]<BR>\nFingerprint: [G.fields["fingerprint"]]<BR>\nPhysical Status: [G.fields["p_stat"]]<BR>\nMental Status: [G.fields["m_stat"]]<BR>
@@ -130,7 +130,7 @@
 				if((R.fields["name"] == G.fields["name"] || R.fields["id"] == G.fields["id"]))
 					M = R
 					break
-			var/obj/item/weapon/paper/P = new /obj/item/weapon/paper(src)
+			var/obj/item/paper/P = new /obj/item/paper(src)
 
 			P.info = {"<CENTER><B>Medical Record</B></CENTER><BR>
 				Name: [G.fields["name"]] ID: [G.fields["id"]]<BR>\nSex: [G.fields["sex"]]<BR>\nAge: [G.fields["age"]]<BR>\nFingerprint: [G.fields["fingerprint"]]<BR>\nPhysical Status: [G.fields["p_stat"]]<BR>\nMental Status: [G.fields["m_stat"]]<BR>

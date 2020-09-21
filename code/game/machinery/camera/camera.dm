@@ -23,7 +23,7 @@ var/list/camera_names=list()
 	var/invuln = null
 	var/bugged = 0
 	var/failure_chance = 10
-	var/obj/item/weapon/camera_assembly/assembly = null
+	var/obj/item/camera_assembly/assembly = null
 	var/light_on = 0
 
 	machine_flags = SCREWTOGGLE //| WIREJACK Needs work
@@ -283,14 +283,14 @@ var/list/camera_messages = list()
 			return
 
 	// OTHER
-	else if ((istype(W, /obj/item/weapon/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
+	else if ((istype(W, /obj/item/paper) || istype(W, /obj/item/device/pda)) && isliving(user))
 		user.delayNextAttack(5)
 		var/mob/living/U = user
 		to_chat(U, "You hold [W] up to the camera ...")
 
 		var/info = ""
-		if(istype(W, /obj/item/weapon/paper))
-			var/obj/item/weapon/paper/X = W
+		if(istype(W, /obj/item/paper))
+			var/obj/item/paper/X = W
 			info = X.info
 		else
 			var/obj/item/device/pda/P = W
@@ -446,7 +446,7 @@ var/list/camera_messages = list()
 
 	return null
 
-/obj/machinery/camera/proc/weld(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/camera/proc/weld(var/obj/item/weldingtool/WT, var/mob/user)
 
 
 	if(busy)
@@ -549,7 +549,7 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/arena/spesstv/New()
 	..()
-	for(var/obj/item/weapon/reagent_containers/food/snacks/grown/carrot in assembly.upgrades)
+	for(var/obj/item/reagent_containers/food/snacks/grown/carrot in assembly.upgrades)
 		assembly.upgrades -= carrot
 	update_upgrades()
 	deactivate()

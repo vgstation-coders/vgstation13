@@ -13,7 +13,7 @@ var/global/list/mommi_laws = list(
 /proc/getLawset(var/mob/M)
 	if(isMoMMI(M))
 		var/mob/living/silicon/robot/mommi/MM = M
-		var/obj/item/weapon/robot_module/mommi/mommimodule = MM.module
+		var/obj/item/robot_module/mommi/mommimodule = MM.module
 		var/new_laws
 		if(!mommimodule || !mommi_laws[mommimodule.law_type])
 			new_laws = mommi_laws["Default"]

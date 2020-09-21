@@ -18,7 +18,7 @@
 	var/sleeptime = 1
 	if(src.loc)
 		if(kill_count < 1)
-			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+			var/obj/item/gun/hookshot/hookshot = shot_from
 			if(src.z != firer.z)
 				hookshot.cancel_chain()
 				bullet_die()
@@ -39,7 +39,7 @@
 		bumped = 0
 
 		if(sleeptime)
-			var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+			var/obj/item/gun/hookshot/hookshot = shot_from
 			var/obj/effect/overlay/hookchain/HC = hookshot.links["[length]"]
 			if(!HC)//failsafe to prevent a game-crashing bug tied to missing links.
 				visible_message(failure_message)
@@ -80,14 +80,14 @@
 
 /obj/item/projectile/hookshot/bullet_die()
 	if(shot_from)
-		var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+		var/obj/item/gun/hookshot/hookshot = shot_from
 		hookshot.hook = null
 	spawn()
 		OnDeath()
 		qdel(src)
 
 /obj/item/projectile/hookshot/Destroy()
-	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	var/obj/item/gun/hookshot/hookshot = shot_from
 	if(hookshot)
 		if(!hookshot.clockwerk && !hookshot.rewinding)
 			hookshot.rewind_chain()
@@ -99,7 +99,7 @@
 		return 0
 	bumped = 1
 
-	var/obj/item/weapon/gun/hookshot/hookshot = shot_from
+	var/obj/item/gun/hookshot/hookshot = shot_from
 	spawn()
 		if(!can_tether)
 			..(A)
@@ -196,7 +196,7 @@
 	var/whipitgood_bonus = 5
 
 /obj/item/projectile/hookshot/whip/on_hit(var/atom/atarget, var/blocked = 0)
-	var/obj/item/weapon/gun/hookshot/whip/W = shot_from
+	var/obj/item/gun/hookshot/whip/W = shot_from
 	if(W.firer?.is_wearing_item(/obj/item/clothing/head/energy_dome) && whipitgood_bonus)
 		force += whipitgood_bonus
 		visible_message("<span class='warning'>[W.firer] whips it good!</span>")
@@ -261,7 +261,7 @@
 
 /obj/item/projectile/hookshot/whip/windup_box/OnFired()
 	..()
-	var/obj/item/weapon/gun/hookshot/whip/windup_box/T = shot_from
+	var/obj/item/gun/hookshot/whip/windup_box/T = shot_from
 	if(istype(T))
 		windUp = T.windUp
 		springForce = T.springForce //inherits all the oomph from the box itself
@@ -279,7 +279,7 @@
 
 
 /obj/item/projectile/hookshot/whip/windup_box/bootbox/on_hit(atom/target as mob|obj|turf|area)
-	var/obj/item/weapon/gun/hookshot/whip/windup_box/bootbox/T = shot_from
+	var/obj/item/gun/hookshot/whip/windup_box/bootbox/T = shot_from
 	if(istype(target,/mob/living))
 		var/mob/living/K = target
 		switch(windUp)

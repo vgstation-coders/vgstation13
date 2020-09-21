@@ -38,8 +38,8 @@
 	if (!istype(first) || !second || (first == usr && second == usr) || (first == second)) //if user is dragging only on himself or user drags and drops on the same target
 		return ..()
 	var/obj/item/to_be_handcuffs = usr.get_active_hand()
-	if (first.Adjacent(usr) && second.Adjacent(usr) && istype(to_be_handcuffs, /obj/item/weapon/handcuffs))
-		var/obj/item/weapon/handcuffs/handcuffs = to_be_handcuffs
+	if (first.Adjacent(usr) && second.Adjacent(usr) && istype(to_be_handcuffs, /obj/item/handcuffs))
+		var/obj/item/handcuffs/handcuffs = to_be_handcuffs
 		handcuffs.apply_mutual_cuffs(first, second, usr)
 		return
 	..()
@@ -145,12 +145,12 @@
 			var/resolved = held_item.preattack(A, src, 1, params)
 			if(!resolved)
 				resolved = A.attackby(held_item, src, params)
-				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/weapon/grab)) && !A.gcDestroyed)
+				if((ismob(A) || istype(A, /obj/mecha) || istype(held_item, /obj/item/grab)) && !A.gcDestroyed)
 					delayNextAttack(item_attack_delay)
 				if(!resolved && A && !A.gcDestroyed && held_item)
 					held_item.afterattack(A,src,1,params) // 1 indicates adjacency
 		else
-			if(ismob(A) || istype(held_item, /obj/item/weapon/grab))
+			if(ismob(A) || istype(held_item, /obj/item/grab))
 				delayNextAttack(10)
 			if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 				return

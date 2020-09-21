@@ -1,7 +1,7 @@
 #define TANK_MAX_RELEASE_PRESSURE (3*ONE_ATMOSPHERE)
 #define TANK_DEFAULT_RELEASE_PRESSURE 24
 
-/obj/item/weapon/tank
+/obj/item/tank
 	name = "tank"
 	icon = 'icons/obj/tank.dmi'
 	flags = FPRINT
@@ -21,7 +21,7 @@
 	var/volume = 70
 	var/manipulated_by = null		//Used by _onclick/hud/screen_objects.dm internals to determine if someone has messed with our tank or not.
 						//If they have and we haven't scanned it with the PDA or gas analyzer then we might just breath whatever they put in it.
-/obj/item/weapon/tank/New()
+/obj/item/tank/New()
 	..()
 
 	src.air_contents = new /datum/gas_mixture()
@@ -31,7 +31,7 @@
 	processing_objects.Add(src)
 	return
 
-/obj/item/weapon/tank/Destroy()
+/obj/item/tank/Destroy()
 	if(air_contents)
 		qdel(air_contents)
 		air_contents = null
@@ -44,7 +44,7 @@
 
 	..()
 
-/obj/item/weapon/tank/examine(mob/user)
+/obj/item/tank/examine(mob/user)
 	..()
 	var/obj/icon = src
 	if (istype(src.loc, /obj/item/assembly))
@@ -76,7 +76,7 @@
 		to_chat(user, "<span class='danger'>The meter on the [src.name] indicates you are almost out of gas!</span>")
 		playsound(user, 'sound/effects/alert.ogg', 50, 1)
 
-/obj/item/weapon/tank/blob_act()
+/obj/item/tank/blob_act()
 	if(prob(50))
 		var/turf/location = src.loc
 		if (!( istype(location, /turf) ))
@@ -87,7 +87,7 @@
 
 		qdel(src)
 
-/obj/item/weapon/tank/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/tank/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	var/obj/icon = src
 
@@ -119,13 +119,13 @@
 	if(istype(W, /obj/item/device/assembly_holder))
 		bomb_assemble(W,user)
 
-/obj/item/weapon/tank/attack_self(mob/user as mob)
+/obj/item/tank/attack_self(mob/user as mob)
 	if (!(src.air_contents))
 		return
 
 	ui_interact(user)
 
-/obj/item/weapon/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
+/obj/item/tank/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open=NANOUI_FOCUS)
 
 	var/using_internal
 	if(istype(loc,/mob/living/carbon))
@@ -160,7 +160,7 @@
 		// auto update every Master Controller tick
 		ui.set_auto_update(1)
 
-/obj/item/weapon/tank/Topic(href, href_list)
+/obj/item/tank/Topic(href, href_list)
 	..()
 	if(href_list["close"])
 		if(usr.machine == src)
@@ -202,19 +202,19 @@
 	return 1
 
 
-/obj/item/weapon/tank/remove_air(amount)
+/obj/item/tank/remove_air(amount)
 	return air_contents.remove(amount)
 
-/obj/item/weapon/tank/return_air()
+/obj/item/tank/return_air()
 	return air_contents
 
-/obj/item/weapon/tank/assume_air(datum/gas_mixture/giver)
+/obj/item/tank/assume_air(datum/gas_mixture/giver)
 	air_contents.merge(giver)
 
 	check_status()
 	return 1
 
-/obj/item/weapon/tank/proc/remove_air_volume(volume_to_return)
+/obj/item/tank/proc/remove_air_volume(volume_to_return)
 	if(!air_contents)
 		return null
 
@@ -229,14 +229,14 @@
 	GM.update_values()
 	return GM
 
-/obj/item/weapon/tank/process()
+/obj/item/tank/process()
 	//Allow for reactions
 	if(air_contents)
 		air_contents.react()
 	check_status()
 
 
-/obj/item/weapon/tank/proc/check_status()
+/obj/item/tank/proc/check_status()
 	//Handle exploding, leaking, and rupturing of the tank
 	if(timestopped)
 		return

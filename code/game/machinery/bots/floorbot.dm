@@ -1,5 +1,5 @@
 //Floorbot assemblies
-/obj/item/weapon/toolbox_tiles
+/obj/item/toolbox_tiles
 	desc = "It's a toolbox with tiles sticking out the top."
 	name = "tiles and toolbox"
 	icon = 'icons/obj/aibots.dmi'
@@ -13,7 +13,7 @@
 	var/created_name = "Floorbot"
 	var/skin = null
 
-/obj/item/weapon/toolbox_tiles_sensor
+/obj/item/toolbox_tiles_sensor
 	desc = "It's a toolbox with tiles sticking out the top and a sensor attached."
 	name = "tiles, toolbox and sensor arrangement"
 	icon = 'icons/obj/aibots.dmi'
@@ -57,7 +57,7 @@ var/global/list/floorbot_targets=list()
 
 /obj/machinery/bot/floorbot/New()
 	. = ..()
-	botcard = new /obj/item/weapon/card/id(src)
+	botcard = new /obj/item/card/id(src)
 	var/datum/job/engineer/E = new /datum/job/engineer
 	botcard.access = E.get_access()
 	update_icon()
@@ -115,7 +115,7 @@ var/global/list/floorbot_targets=list()
 		to_chat(user, "<span class='notice'>You load [loaded] tiles into the floorbot. He now contains [amount] tiles.</span>")
 		update_icon()
 		updateUsrDialog()
-	else if(istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
+	else if(istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))
 		if(allowed(usr) && !open && !emagged)
 			locked = !locked
 			to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] \the [src]'s behaviour controls.</span>")
@@ -401,13 +401,13 @@ var/global/list/floorbot_targets=list()
 
 	switch(skin)
 		if("y")
-			var/obj/item/weapon/storage/toolbox/electrical/N = new(Tsec)
+			var/obj/item/storage/toolbox/electrical/N = new(Tsec)
 			N.contents = list()
 		if("r")
-			var/obj/item/weapon/storage/toolbox/emergency/N = new(Tsec)
+			var/obj/item/storage/toolbox/emergency/N = new(Tsec)
 			N.contents = list()
 		else
-			var/obj/item/weapon/storage/toolbox/mechanical/N = new(Tsec)
+			var/obj/item/storage/toolbox/mechanical/N = new(Tsec)
 			N.contents = list()
 
 	new /obj/item/device/assembly/prox_sensor(Tsec)
@@ -443,25 +443,25 @@ var/global/list/floorbot_targets=list()
 
 // -- Toolbox floorbot interactions --
 
-/obj/item/weapon/storage/toolbox/proc/floorbot_type()
+/obj/item/storage/toolbox/proc/floorbot_type()
 	return "no_build"
 
-/obj/item/weapon/storage/toolbox/mechanical/floorbot_type()
+/obj/item/storage/toolbox/mechanical/floorbot_type()
 	return null
 
-/obj/item/weapon/storage/toolbox/emergency/floorbot_type()
+/obj/item/storage/toolbox/emergency/floorbot_type()
 	return "r"
 
-/obj/item/weapon/storage/toolbox/electrical/floorbot_type()
+/obj/item/storage/toolbox/electrical/floorbot_type()
 	return "y"
 
-/obj/item/weapon/storage/toolbox/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
+/obj/item/storage/toolbox/attackby(var/obj/item/stack/tile/plasteel/T, mob/user as mob)
 	if(!istype(T, /obj/item/stack/tile/plasteel) || contents.len >= 1 || floorbot_type() == "no_build") //Only do this if the thing is empty
 		return ..()
 	user.remove_from_mob(T)
 	qdel(T)
 	T = null
-	var/obj/item/weapon/toolbox_tiles/B = new /obj/item/weapon/toolbox_tiles
+	var/obj/item/toolbox_tiles/B = new /obj/item/toolbox_tiles
 	B.skin = floorbot_type()
 	B.icon_state = "[B.skin]toolbox_tiles"
 	user.put_in_hands(B)
@@ -469,12 +469,12 @@ var/global/list/floorbot_targets=list()
 	user.drop_from_inventory(src)
 	qdel(src)
 
-/obj/item/weapon/toolbox_tiles/attackby(var/obj/item/W, mob/user as mob)
+/obj/item/toolbox_tiles/attackby(var/obj/item/W, mob/user as mob)
 	..()
 	if(isprox(W))
 		qdel(W)
 		W = null
-		var/obj/item/weapon/toolbox_tiles_sensor/B = new /obj/item/weapon/toolbox_tiles_sensor()
+		var/obj/item/toolbox_tiles_sensor/B = new /obj/item/toolbox_tiles_sensor()
 		B.created_name = created_name
 		B.skin = skin
 		B.icon_state = "[B.skin]toolbox_tiles_sensor"
@@ -483,7 +483,7 @@ var/global/list/floorbot_targets=list()
 		user.drop_from_inventory(src)
 		qdel(src)
 
-	else if (istype(W, /obj/item/weapon/pen))
+	else if (istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new robot name", name, created_name),1,MAX_NAME_LEN)
 		if (!t)
 			return
@@ -492,7 +492,7 @@ var/global/list/floorbot_targets=list()
 
 		created_name = t
 
-/obj/item/weapon/toolbox_tiles_sensor/attackby(var/obj/item/W, mob/user as mob)
+/obj/item/toolbox_tiles_sensor/attackby(var/obj/item/W, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
 		qdel(W)
@@ -504,7 +504,7 @@ var/global/list/floorbot_targets=list()
 		to_chat(user, "<span class='notice'>You add the robot arm to the odd looking toolbox assembly! Boop beep!</span>")
 		user.drop_from_inventory(src)
 		qdel(src)
-	else if (istype(W, /obj/item/weapon/pen))
+	else if (istype(W, /obj/item/pen))
 		var/t = stripped_input(user, "Enter new robot name", name, created_name)
 
 		if (!t)

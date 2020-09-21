@@ -78,7 +78,7 @@
 			to_chat(user, "<span class='danger'>It appears completely unsalvageable.</span>")
 
 /obj/structure/bed/chair/vehicle/clowncart/attackby(obj/item/W, mob/user)
-	if (istype(W, /obj/item/weapon/bikehorn))
+	if (istype(W, /obj/item/bikehorn))
 		if(honk + 20 > world.timeofday)
 			return
 		add_fingerprint(user)
@@ -103,13 +103,13 @@
 				src.visible_message("<span class='notice'>[nick] honks back happily.</span>")
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 		honk = world.timeofday
-	else if(istype(W, /obj/item/weapon/reagent_containers))
+	else if(istype(W, /obj/item/reagent_containers))
 		if(feed(W,user))
 			visible_message("<span class='notice'>[user] puts [W] into [src].</span>")
 			qdel(W)
-	else if(istype(W, /obj/item/weapon/storage/bag/plants))
+	else if(istype(W, /obj/item/storage/bag/plants))
 		var/ate_anything = 0
-		var/obj/item/weapon/storage/bag/B = W
+		var/obj/item/storage/bag/B = W
 		for(var/obj/item/I in W.contents)
 			if(feed(I,user))
 				ate_anything+=1
@@ -118,7 +118,7 @@
 		if(ate_anything)
 			visible_message("<span class='notice'>[user] empties \the [W] into [src].</span>")
 			to_chat(user, "Added [ate_anything] item\s to \the [src].")
-	else if(istype(W, /obj/item/weapon/bananapeel)) //Banana peels
+	else if(istype(W, /obj/item/bananapeel)) //Banana peels
 		visible_message("<span class='notice'>[user] applies [W] to \the [src].</span>")
 		health += 10 //Banana peels repair some damage
 		empstun -= 1 //And help remove EMP stun
@@ -159,7 +159,7 @@
 
 		var/obj/item/stack/ST = W
 		ST.use(1)
-	else if(istype(W, /obj/item/weapon/coin/clown)) //Bananium coin
+	else if(istype(W, /obj/item/coin/clown)) //Bananium coin
 		user.visible_message("<span class='warning'>[user] inserts a bananium coin into [src].</span>", "<span class='notice'>You insert a bananium coin into [src].</span>")
 		playsound(src, 'sound/machines/ping.ogg', 50, 1)
 		mode += 1
@@ -213,49 +213,49 @@
 				reagents.add_reagent(BANANA, bananas) //adding banan back
 		else
 			to_chat(user, "<span class='warning'>The HONKTech pump is not strong enough to do that yet. Reinforce it with more bananium sheets first.</span>")
-	else if(istype(W, /obj/item/weapon/card/emag)) //emag
+	else if(istype(W, /obj/item/card/emag)) //emag
 		if(!emagged)
 			emagged = 1
 			visible_message("<span class='warning'>[src]'s eyes glow eerily red for a second.</span>")
-	else if(istype(W, /obj/item/weapon/stamp/))
+	else if(istype(W, /obj/item/stamp/))
 		if(mode == MODE_DRAWING)
-			if(istype(W, /obj/item/weapon/stamp/captain))
+			if(istype(W, /obj/item/stamp/captain))
 				colour1 = "#004B8F"
 				colour2 = "#0060B8"
 				to_chat(user, "Selected color: Condom Blue")
-			else if(istype(W, /obj/item/weapon/stamp/ce))
+			else if(istype(W, /obj/item/stamp/ce))
 				colour1 = "#FF6A00"
 				colour2 = "#FF8432"
 				to_chat(user, "Selected color: Powerful Orange")
-			else if(istype(W, /obj/item/weapon/stamp/clown))
+			else if(istype(W, /obj/item/stamp/clown))
 				colour1 = "#FFFF00"
 				colour2 = "#FFD000"
 				to_chat(user, "Selected color: Banana Yellow")
-			else if(istype(W, /obj/item/weapon/stamp/cmo))
+			else if(istype(W, /obj/item/stamp/cmo))
 				colour1 = "#FFFFFF"
 				colour2 = "#ECECEC"
 				to_chat(user, "Selected color: Sanitary White")
-			else if(istype(W, /obj/item/weapon/stamp/denied))
+			else if(istype(W, /obj/item/stamp/denied))
 				colour1 = "#FF0000"
 				colour2 = "#E22C00"
 				to_chat(user, "Selected color: Red Denial")
-			else if(istype(W, /obj/item/weapon/stamp/hop))
+			else if(istype(W, /obj/item/stamp/hop))
 				colour1 = "#1CA800"
 				colour2 = "#238E0E"
 				to_chat(user, "Selected color: Green Access")
-			else if(istype(W, /obj/item/weapon/stamp/iaa))
+			else if(istype(W, /obj/item/stamp/iaa))
 				colour1 = "#004DCE"
 				colour2 = "#0BB5FF"
 				to_chat(user, "Selected color: Legal Blue")
-			else if(istype(W, /obj/item/weapon/stamp/hos) || istype(W, /obj/item/weapon/stamp/warden))
+			else if(istype(W, /obj/item/stamp/hos) || istype(W, /obj/item/stamp/warden))
 				colour1 = "#7F4D21"
 				colour2 = "#B24611"
 				to_chat(user, "Selected color: Shitcurity Brown")
-			else if(istype(W, /obj/item/weapon/stamp/rd))
+			else if(istype(W, /obj/item/stamp/rd))
 				colour1 = "#D22EF7"
 				colour2 = "#D312E5"
 				to_chat(user, "Selected color: Plasma Purple")
-			else if(istype(W, /obj/item/weapon/stamp/chaplain))
+			else if(istype(W, /obj/item/stamp/chaplain))
 				colour1 = "#9B1C31"
 				colour2 = "#FFD700"
 				to_chat(user, "Selected color: Reverend Red")
@@ -303,10 +303,10 @@
 			draw_graffiti(old_pos)
 		else if(mode == MODE_PEELS)
 			if(!emagged)
-				new /obj/item/weapon/bananapeel/(old_pos)
+				new /obj/item/bananapeel/(old_pos)
 				reagents.remove_reagent(BANANA,BANANA_FOR_NORMAL_PEEL)
 			else
-				new /obj/item/weapon/bananapeel/traitorpeel/(old_pos)
+				new /obj/item/bananapeel/traitorpeel/(old_pos)
 				reagents.remove_reagent(BANANA,BANANA_FOR_TRAITOR_PEEL)
 	else
 		if(can_warn())
@@ -318,7 +318,7 @@
 	playsound(src, 'sound/items/bikehorn.ogg', 75, 1)
 	explosion(src.loc, -1, 0, 3, 7, 10)
 	for(var/a = 0, a < round(reagents.total_volume*0.25), a++) //Spawn banana peels in place of the cart
-		new /obj/item/weapon/bananapeel(get_turf(src)) // WHAT STUPID ASSHOLE MADE THESE TATORPEELS
+		new /obj/item/bananapeel(get_turf(src)) // WHAT STUPID ASSHOLE MADE THESE TATORPEELS
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/clowncart/proc/draw_graffiti(var/pos)
@@ -375,7 +375,7 @@
 				modifier=100
 
 		reagents.add_reagent(BANANA, added_banana*modifier)
-		if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/pie))
+		if(istype(W, /obj/item/reagent_containers/food/snacks/pie))
 			playsound(src, 'sound/effects/bubbles.ogg', 50, 1)
 			to_chat(user, "<span class='warning'>[W] starts boiling inside \the [src]!</span>")
 			trail+=5

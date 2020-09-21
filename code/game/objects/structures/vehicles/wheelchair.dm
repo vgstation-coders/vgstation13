@@ -22,10 +22,10 @@
 	wheel_overlay = image("icons/obj/vehicles.dmi", "[icon_state]_overlay", MOB_LAYER + 0.1)
 	wheel_overlay.plane = MOB_PLANE
 
-/obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/bed/chair/vehicle/wheelchair/attackby(obj/item/W, mob/user)
 	if(occupant)
 		return
-	if(istype(W, /obj/item/weapon/gun_barrel))
+	if(istype(W, /obj/item/gun_barrel))
 		to_chat(user, "You place \the [W] on \the [src].")
 		var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/I = new (get_turf(src.loc))
 		I.dir = dir
@@ -206,8 +206,8 @@
 	nick = "cripplin' revenge"
 	desc = "A chair with fitted wheels which is powered by an internal cell. It propels itself without the need for hands as long as it is charged."
 	var/maintenance = 0
-	var/const/default_cell_path = /obj/item/weapon/cell/high
-	var/obj/item/weapon/cell/internal_battery = null
+	var/const/default_cell_path = /obj/item/cell/high
+	var/obj/item/cell/internal_battery = null
 
 /obj/structure/bed/chair/vehicle/wheelchair/motorized/get_cell()
 	return internal_battery
@@ -240,7 +240,7 @@
 	else
 		return ..()
 
-/obj/structure/bed/chair/vehicle/wheelchair/motorized/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/chair/vehicle/wheelchair/motorized/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_screwdriver(user))
 		user.visible_message("<span class='notice'>[user] screws [maintenance ? "closed" : "open"] \the [src]'s battery compartment.</span>", "<span class='notice'>You screw [maintenance ? "closed" : "open"] the battery compartment.</span>", "You hear screws being loosened.")
 		maintenance = !maintenance
@@ -249,7 +249,7 @@
 			user.put_in_hands(internal_battery)
 			internal_battery = null
 		user.visible_message("<span class='notice'>[user] pries out \the [src]'s battery.</span>", "<span class='notice'>You pry out \the [src]'s battery.</span>", "You hear a clunk.")
-	else if(istype(W,/obj/item/weapon/cell)&&maintenance&&!internal_battery)
+	else if(istype(W,/obj/item/cell)&&maintenance&&!internal_battery)
 		if(user.drop_item(W,src))
 			internal_battery = W
 			user.visible_message("<span class='notice'>[user] inserts \the [W] into the \the [src].</span>", "<span class='notice'>You insert \the [W] into \the [src].</span>", "You hear something being slid into place.")

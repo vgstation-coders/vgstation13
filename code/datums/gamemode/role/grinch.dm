@@ -6,7 +6,7 @@
     disallow_job = TRUE
 
     // -- Our bag
-    var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = null
+    var/obj/item/storage/backpack/holding/grinch/our_bag = null
 
 // -- Transforms us into the devlish Grinch
 /datum/role/grinch/OnPostSetup()
@@ -15,7 +15,7 @@
     var/mob/living/simple_animal/hostile/gremlin/grinch/G = new
     G.forceMove(pick(grinchstart))
     antag.transfer_to(G)
-    var/obj/item/weapon/storage/backpack/holding/grinch/our_bag = new(G)
+    var/obj/item/storage/backpack/holding/grinch/our_bag = new(G)
     src.our_bag = our_bag
     G.equip_to_slot(our_bag, slot_back)
     old_mob.forceMove(null) // Get nullspaced

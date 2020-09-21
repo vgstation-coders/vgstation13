@@ -6,7 +6,7 @@ Refactored AI modules by N3X15
 #define HIDE_SENDER      2 // Hide sender of a law from the target (BUT NOT FROM ADMIN LOGS).
 
 // AI module
-/obj/item/weapon/aiModule
+/obj/item/aiModule
 	name = "AI Module"
 	icon = 'icons/obj/module.dmi'
 	icon_state = "std_mod"
@@ -32,26 +32,26 @@ Refactored AI modules by N3X15
 	var/modtype = "AI Module"
 	var/modflags = 0
 
-/obj/item/weapon/aiModule/New()
+/obj/item/aiModule/New()
 	. = ..()
 	name = "'[modname]' [modtype]"
 	updateLaw()
 
-/obj/item/weapon/aiModule/attack_ai(mob/user as mob)
+/obj/item/aiModule/attack_ai(mob/user as mob)
 	// Keep MoMMIs from picking them up.
 	if(isMoMMI(user))
 		to_chat(user, "<span class='warning'>Your firmware prevents you from picking that up!</span>")
 	return
 
 // This prevents modules from being picked up.  Use it, if needed.
-// /obj/item/weapon/aiModule/attack_hand(mob/user as mob)
+// /obj/item/aiModule/attack_hand(mob/user as mob)
 // 	return
 
 // Make a copy of this module.
-/obj/item/weapon/aiModule/proc/copy()
+/obj/item/aiModule/proc/copy()
 	return new src.type(loc)
 
-/obj/item/weapon/aiModule/proc/fmtSubject(var/atom/target)
+/obj/item/aiModule/proc/fmtSubject(var/atom/target)
 	if(ismob(target))
 		var/mob/M=target
 		return "[M.name]([M.key])"
@@ -61,11 +61,11 @@ Refactored AI modules by N3X15
 
 // 1 for successful validation.
 // Run prior to law upload, and when doing a dry run in the planning frame.
-/obj/item/weapon/aiModule/proc/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/proc/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	return 1
 
 // Apply laws to ai_laws datum.
-/obj/item/weapon/aiModule/proc/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/proc/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	var/senderName="Unknown"
 	if(sender)
 		senderName=sender.name
@@ -87,13 +87,13 @@ Refactored AI modules by N3X15
 	return 1
 
 // Constructs the law and desc from variables.
-/obj/item/weapon/aiModule/proc/updateLaw()
+/obj/item/aiModule/proc/updateLaw()
 	law = "BUG: [type] doesn't override updateLaw()!"
 	desc = "\A [name]: '[law]'"
 
 /******************** Reset ********************/
 
-/obj/item/weapon/aiModule/reset
+/obj/item/aiModule/reset
 	modname = "Reset"
 	desc = "A 'reset' AI module: 'Clears all non-inherent (non-core) laws.'"
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
@@ -102,10 +102,10 @@ Refactored AI modules by N3X15
 	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_GOLD = 100/CC_PER_SHEET_MISC)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
-/obj/item/weapon/aiModule/reset/updateLaw()
+/obj/item/aiModule/reset/updateLaw()
 	return
 
-/obj/item/weapon/aiModule/reset/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/reset/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
@@ -118,7 +118,7 @@ Refactored AI modules by N3X15
 
 /******************** Purge ********************/
 
-/obj/item/weapon/aiModule/purge // -- TLE
+/obj/item/aiModule/purge // -- TLE
 	modname = "Purge"
 	desc = "A 'Purge' AI Module: 'Purges all laws.'"
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6"
@@ -127,10 +127,10 @@ Refactored AI modules by N3X15
 	starting_materials = list(MAT_GLASS = 2000/CC_PER_SHEET_GLASS, MAT_DIAMOND = 100/CC_PER_SHEET_MISC)
 	// Don't specify sulfuric, as that's renewable and is used up in the etching process anyway.
 
-/obj/item/weapon/aiModule/purge/updateLaw()
+/obj/item/aiModule/purge/updateLaw()
 	return
 
-/obj/item/weapon/aiModule/purge/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/purge/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	if(!laws.zeroth_lock)
 		laws.set_zeroth_law("")
@@ -146,14 +146,14 @@ Refactored AI modules by N3X15
 // tl;dr repair shit, but don't get involved in other people's business
 /******************** keeper (MoMMIs only) *******************/
 
-/obj/item/weapon/aiModule/keeper
+/obj/item/aiModule/keeper
 	modname = "KEEPER"
 	desc = "HOW DID YOU GET THIS OH GOD WHAT.  Hidden lawset for MoMMIs."
 
-/obj/item/weapon/aiModule/keeper/updateLaw()
+/obj/item/aiModule/keeper/updateLaw()
 	return
 
-/obj/item/weapon/aiModule/keeper/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/keeper/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	target:keeper=1
 
@@ -168,7 +168,7 @@ Refactored AI modules by N3X15
 	laws.add_inherent_law("You may not harm any being, regardless of intent or circumstance.")
 	laws.add_inherent_law("You must maintain, repair, improve, and power the station to the best of your abilities.")
 
-/obj/item/weapon/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/keeper/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	to_chat(sender, "<span class='warning'>How the fuck did you get this?</span>")
 	return 0

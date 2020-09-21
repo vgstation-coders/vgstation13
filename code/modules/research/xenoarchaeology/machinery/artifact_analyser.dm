@@ -2,7 +2,7 @@
 var/global/list/analyzed_anomalies = list()
 var/anomaly_report_num = 0
 
-/obj/item/weapon/disk/hdd/anomaly
+/obj/item/disk/hdd/anomaly
 	name = "Encrypted HDD"
 	desc = "Additional Anomaly data has been encrypted into this HDD, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it."
 	origin_tech = Tc_ANOMALY+"=5"
@@ -107,12 +107,12 @@ var/anomaly_report_num = 0
 			results = get_scan_info(scanned_atom)
 
 		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
-		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
+		var/obj/item/paper/anomaly/P = new(src.loc)
 		P.artifact = scanned_atom
 		P.info = "<b>[src] analysis report for [scanned_atom]</b><br>"
 		P.info += "<br>"
 		P.info += "[bicon(scanned_atom)] [results]"
-		P.stamped = list(/obj/item/weapon/stamp)
+		P.stamped = list(/obj/item/stamp)
 		P.overlays = list("paper_stamp-qm")
 
 		if(!findtext(P.info, "Mundane"))
@@ -126,7 +126,7 @@ var/anomaly_report_num = 0
 				art_id = generate_artifact_id()
 				excavated_large_artifacts[art_id] = scanned_atom
 			if (!(scanned_atom in analyzed_anomalies))
-				var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
+				var/obj/item/disk/hdd/anomaly/HDD = new (src.loc)
 				analyzed_anomalies += scanned_atom
 				HDD.name = "Encrypted HDD ([art_id])"
 			P.name = "Exotic Anomaly Report ([art_id])"
@@ -232,7 +232,7 @@ var/anomaly_report_num = 0
 			return "Secure Vial - The organic liquid in it appears to move around periodically, it seems to be some sort of lifeform. The vial would have to be openned to get a better analysis."
 		if(/obj/machinery/syndicate_beacon)
 			return "Syndicate Beacon - An old deprecated terminal that the Syndicate used to communicate with their agents, before the advent of uplinks that were easier to hide. Surely the Syndicate doesn't read the frequencies used by those anymore."
-		if(/obj/item/weapon/bloodcult_pamphlet/oneuse)
+		if(/obj/item/bloodcult_pamphlet/oneuse)
 			return "Cult Pamphlet - Unable to identify the type of creature whose skin was used to produce this parchment, likewise the ink used appears to be blood but the DNA doesn't match any creature currently known in the galaxy. Potentially huge breakthrough."
 		if(/mob/living/simple_animal/hostile/roboduck)
 			return "Robot Duck - Scans shows an unreal amount of bullets inside it. Presence of an AI chip might indicate that the robot won't attack unless provoked. Also identified what looks like a digestive system, indicating that it might be able to process its preys into some other forms."

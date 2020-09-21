@@ -63,7 +63,7 @@
 		return 0
 	return ..()
 
-/obj/item/gum/afterattack(obj/item/weapon/reagent_containers/glass/glass, mob/user, flag)
+/obj/item/gum/afterattack(obj/item/reagent_containers/glass/glass, mob/user, flag)
 	..()
 	if(wrapped)
 		return
@@ -75,7 +75,7 @@
 				to_chat(user, "<span class='warning'>\The [glass] is empty.</span>")
 				return
 
-/obj/item/gum/proc/transfer_some_reagents(obj/item/weapon/reagent_containers/R, var/amount, var/log = FALSE, var/user)
+/obj/item/gum/proc/transfer_some_reagents(obj/item/reagent_containers/R, var/amount, var/log = FALSE, var/user)
 	if(!amount)
 		amount = replacement_chem_volume
 	reagents.remove_reagent(SUGAR, amount)
@@ -182,7 +182,7 @@
 	if (!proximity_flag)
 		return 0
 	if (chewed)
-		if(ismob(A) || istype(A, /turf/unsimulated) || istype(A, /turf/simulated/shuttle) || istype(A, /obj/item/weapon/storage/))
+		if(ismob(A) || istype(A, /turf/unsimulated) || istype(A, /turf/simulated/shuttle) || istype(A, /obj/item/storage/))
 			return
 		target = A
 
@@ -213,7 +213,7 @@
 	forceMove(null)
 	target = H
 
-/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/obj/item/gum/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	if(replacement_chem_volume <= 0)
 		to_chat(user, "<span class='warning'>\The [src] is full.</span>")
 		return INJECTION_RESULT_FAIL

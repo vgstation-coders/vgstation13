@@ -19,9 +19,9 @@
 //////SAW///////
 /datum/surgery_step/open_encased/saw
 	allowed_tools = list(
-		/obj/item/weapon/circular_saw = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large/butch = 75, \
-		/obj/item/weapon/hatchet = 75,
+		/obj/item/circular_saw = 100,
+		/obj/item/kitchen/utensil/knife/large/butch = 75, \
+		/obj/item/hatchet = 75,
 		)
 
 	duration = 5 SECONDS
@@ -74,9 +74,9 @@
 ///////RETRACT////////
 /datum/surgery_step/open_encased/retract
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 20,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 20,
 		)
 
 	duration = 3 SECONDS
@@ -133,9 +133,9 @@
 ////////CLOSE////////
 /datum/surgery_step/open_encased/close
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 20,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 20,
 		)
 
 	duration = 2 SECONDS
@@ -193,9 +193,9 @@
 ///////MEND///////
 /datum/surgery_step/open_encased/mend
 	allowed_tools = list(
-		/obj/item/weapon/bonegel = 100,
-		/obj/item/weapon/bonesetter/bone_mender = 100,
-		/obj/item/weapon/screwdriver = 75,
+		/obj/item/bonegel = 100,
+		/obj/item/bonesetter/bone_mender = 100,
+		/obj/item/screwdriver = 75,
 		)
 
 	duration = 2 SECONDS

@@ -100,7 +100,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		//create a sealed package containing the account details
 		var/obj/item/delivery/P = new /obj/item/delivery(source_db.loc)
 
-		var/obj/item/weapon/paper/R = new /obj/item/weapon/paper(P)
+		var/obj/item/paper/R = new /obj/item/paper(P)
 		R.name = "Account information: [M.owner_name]"
 
 		R.info = {"<b>Account details (confidential)</b><br><hr><br>
@@ -116,7 +116,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		stampoverlay.icon_state = "paper_stamp-cent"
 		if(!R.stamped)
 			R.stamped = new
-		R.stamped += /obj/item/weapon/stamp
+		R.stamped += /obj/item/stamp
 		R.overlays += stampoverlay
 		R.stamps += "<HR><i>This paper has been stamped by the Accounts Database.</i>"
 
@@ -161,7 +161,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 	req_one_access = list(access_hop, access_captain)
 	var/receipt_num
 	var/machine_id = ""
-	var/obj/item/weapon/card/id/held_card
+	var/obj/item/card/id/held_card
 	var/access_level = 0
 	var/datum/money_account/detailed_account_view
 	var/creating_new_account = 0
@@ -295,7 +295,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 	if(.)
 		return
 	if(isID(O))
-		var/obj/item/weapon/card/id/idcard = O
+		var/obj/item/card/id/idcard = O
 		if(access_level == 3)
 			return attack_hand(user)
 		if(!held_card)
@@ -312,7 +312,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		emagged = 0
 		access_level = 0
 		if(held_card)
-			var/obj/item/weapon/card/id/C = held_card
+			var/obj/item/card/id/C = held_card
 			if(access_cent_captain in C.access)
 				access_level = 2
 			else if((access_hop in C.access) || (access_captain in C.access))
@@ -365,8 +365,8 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 					if(isEmag(I))
 						emag(usr)
 						return
-					if (istype(I, /obj/item/weapon/card/id))
-						var/obj/item/weapon/card/id/C = I
+					if (istype(I, /obj/item/card/id))
+						var/obj/item/card/id/C = I
 						if(usr.drop_item(C, src))
 							held_card = C
 							if(access_level < 3)

@@ -1,11 +1,11 @@
-/obj/item/weapon/reagent_containers/food/snacks/snackbar
+/obj/item/reagent_containers/food/snacks/snackbar
 	name = "snack bar"
 	desc = "Made from your favorite completely harmless reagents!"
 	icon_state = "snackbar"
 	bitesize = 5
 	volume = 10
 
-/obj/item/weapon/reagent_containers/food/snacks/snackbar/on_reagent_change()
+/obj/item/reagent_containers/food/snacks/snackbar/on_reagent_change()
 	if(!reagents.total_volume)  //This should only happen if a chemical reaction removes the reagents from the bar
 		icon_state = "" //So it isn't visible in the 1/10th of a second before it is deleted
 		spawn(1) //A small delay is needed before deleting to allow for reactions to occur
@@ -14,12 +14,12 @@
 		update_icon()
 		update_name()
 
-/obj/item/weapon/reagent_containers/food/snacks/snackbar/update_icon()
+/obj/item/reagent_containers/food/snacks/snackbar/update_icon()
 	var/icon/I = icon('icons/obj/food.dmi', "snackbar")
 	I += mix_color_from_reagents(reagents.reagent_list)
 	src.icon = I
 
-/obj/item/weapon/reagent_containers/food/snacks/snackbar/proc/update_name()
+/obj/item/reagent_containers/food/snacks/snackbar/proc/update_name()
 	var/newname = ""
 	var/i = 0
 	for(var/datum/reagent/r in reagents.reagent_list)
@@ -34,10 +34,10 @@
 
 //Instances for mapping
 
-/obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment
+/obj/item/reagent_containers/food/snacks/snackbar/nutriment
 	name = "nutriment snack bar"
 
-/obj/item/weapon/reagent_containers/food/snacks/snackbar/nutriment/New()
+/obj/item/reagent_containers/food/snacks/snackbar/nutriment/New()
 	..()
 	reagents.add_reagent(NUTRIMENT, 10)
 	update_icon()

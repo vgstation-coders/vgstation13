@@ -105,7 +105,7 @@
 				I.loc = null
 				src.client.images -= I
 			for (var/mob/living/carbon/C in view(7,src))
-				var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(C)
+				var/obj/item/nullrod/N = locate(/obj/item/nullrod) in get_contents_in_object(C)
 				if (N)
 					if (i > V.cached_images.len)
 						var/image/I = image('icons/mob/mob.dmi', loc = C, icon_state = "vampnullrod")

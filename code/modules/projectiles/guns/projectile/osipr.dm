@@ -2,7 +2,7 @@
 #define OSIPR_PRIMARY_FIRE 1
 #define OSIPR_SECONDARY_FIRE 2
 
-/obj/item/weapon/gun/osipr
+/obj/item/gun/osipr
 	name = "\improper Overwatch Standard Issue Pulse Rifle"
 	desc = "Centuries ago those weapons struck fear in all of humanity when the Combine attacked the Earth. Nowadays these are just the best guns that the Syndicate can provide to its Elite Troops with its tight budget."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -19,16 +19,16 @@
 	var/energy_balls = 2
 	var/mode = OSIPR_PRIMARY_FIRE
 
-/obj/item/weapon/gun/osipr/New()
+/obj/item/gun/osipr/New()
 	..()
 	magazine = new(src)
 
-/obj/item/weapon/gun/osipr/Destroy()
+/obj/item/gun/osipr/Destroy()
 	if(magazine)
 		qdel(magazine)
 	..()
 
-/obj/item/weapon/gun/osipr/examine(mob/user)
+/obj/item/gun/osipr/examine(mob/user)
 	..()
 	if(magazine)
 		to_chat(user, "<span class='info'>Has [magazine.bullets] pulse bullet\s remaining.</span>")
@@ -36,13 +36,13 @@
 		to_chat(user, "<span class='info'>It has no pulse magazine inserted!</span>")
 	to_chat(user, "<span class='info'>Has [energy_balls] dark energy core\s remaining.</span>")
 
-/obj/item/weapon/gun/osipr/can_discharge()
+/obj/item/gun/osipr/can_discharge()
 	if (mode & OSIPR_PRIMARY_FIRE && magazine.bullets)
 		return 1
 	if (mode & OSIPR_SECONDARY_FIRE && energy_balls)
 		return 1
 
-/obj/item/weapon/gun/osipr/process_chambered()
+/obj/item/gun/osipr/process_chambered()
 	if(in_chamber)
 		return 1
 	switch(mode)
@@ -61,7 +61,7 @@
 			return 1
 	return 0
 
-/obj/item/weapon/gun/osipr/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/gun/osipr/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/energy_magazine/osipr))
 		if(magazine)
 			to_chat(user, "There is another magazine already inserted. Remove it first.")
@@ -86,7 +86,7 @@
 	else
 		..()
 
-/obj/item/weapon/gun/osipr/attack_hand(mob/user)
+/obj/item/gun/osipr/attack_hand(mob/user)
 	if((user.is_holding_item(src)) && magazine)
 		magazine.update_icon()
 		user.put_in_hands(magazine)
@@ -98,7 +98,7 @@
 	else
 		..()
 
-/obj/item/weapon/gun/osipr/attack_self(mob/user)
+/obj/item/gun/osipr/attack_self(mob/user)
 	switch(mode)
 		if(OSIPR_PRIMARY_FIRE)
 			mode = OSIPR_SECONDARY_FIRE
@@ -111,7 +111,7 @@
 			fire_delay = 0
 			to_chat(user, "<span class='warning'>Now set to fire pulse bullets.</span>")
 
-/obj/item/weapon/gun/osipr/update_icon()
+/obj/item/gun/osipr/update_icon()
 	if(!magazine)
 		icon_state = "osipr-empty"
 		item_state = "osipr-empty"

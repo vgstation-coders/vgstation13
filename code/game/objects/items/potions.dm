@@ -72,7 +72,7 @@
 	if(T)
 		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 	if(prob(33))
-		new /obj/item/weapon/shard(get_turf(src))
+		new /obj/item/shard(get_turf(src))
 	if(full)
 		if(ismob(hit_atom))
 			impact_mob(hit_atom)
@@ -304,7 +304,7 @@
 	user.adjustBruteLoss(30)
 
 /obj/item/potion/sword/impact_atom(atom/target)
-	new /obj/item/weapon/claymore(get_turf(src))
+	new /obj/item/claymore(get_turf(src))
 
 /obj/item/potion/random
 	name = "potion of unpredictability"

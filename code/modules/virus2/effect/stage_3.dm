@@ -80,7 +80,7 @@
 	if (prob(15))
 		mob.emote("me",1,"vomits up a chicken egg!")
 		playsound(mob.loc, 'sound/effects/splat.ogg', 50, 1)
-		new /obj/item/weapon/reagent_containers/food/snacks/egg(get_turf(mob))
+		new /obj/item/reagent_containers/food/snacks/egg(get_turf(mob))
 
 
 /datum/disease2/effect/confusion
@@ -300,8 +300,8 @@
 
 			if(multiplier >= 2.5 && !given_katana)
 				if(multiplier >= 3)
-					//REAL katana /obj/item/weapon/katana
-					var/obj/item/weapon/katana/real_katana = new /obj/item/weapon/katana
+					//REAL katana /obj/item/katana
+					var/obj/item/katana/real_katana = new /obj/item/katana
 					affected.put_in_hands(real_katana)
 				else
 					//Toy katana /obj/item/toy/katana

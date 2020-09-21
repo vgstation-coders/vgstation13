@@ -13,9 +13,9 @@
 	siemens_coefficient = 1
 	slot_flags = SLOT_BELT
 
-/obj/item/device/detective_scanner/attackby(obj/item/weapon/f_card/W as obj, mob/user as mob)
+/obj/item/device/detective_scanner/attackby(obj/item/f_card/W as obj, mob/user as mob)
 	..()
-	if (istype(W, /obj/item/weapon/f_card))
+	if (istype(W, /obj/item/f_card))
 		if (W.fingerprints)
 			return
 		if (src.amount == 20)
@@ -45,7 +45,7 @@
 			to_chat(user, text("<span class='notice'>Fingerprints scanned on [M]. Need more cards to print.</span>"))
 		else
 			src.amount--
-			var/obj/item/weapon/f_card/F = new /obj/item/weapon/f_card( user.loc )
+			var/obj/item/f_card/F = new /obj/item/f_card( user.loc )
 			F.amount = 1
 			F.add_fingerprint(M)
 			F.icon_state = "fingerprint1"
@@ -97,7 +97,7 @@
 		return
 	if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
 		return
-	if(istype(A,/obj/item/weapon/f_card))
+	if(istype(A,/obj/item/f_card))
 		to_chat(user, "The scanner displays on the screen: \"ERROR 43: Object on Excluded Object List.\"")
 		return
 
@@ -294,7 +294,7 @@
 		return
 	if(istype(A,/obj/machinery/computer/forensic_scanning)) //breaks shit.
 		return
-	if(istype(A,/obj/item/weapon/f_card))
+	if(istype(A,/obj/item/f_card))
 		to_chat(user, "The scanner displays on the screen: \"ERROR 43: Object on Excluded Object List.\"")
 		return
 

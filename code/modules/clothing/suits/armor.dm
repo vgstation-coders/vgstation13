@@ -1,19 +1,19 @@
 /obj/item/clothing/suit/armor
 	allowed = list(
-		/obj/item/weapon/gun/energy,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/gun/projectile,
+		/obj/item/gun/energy,
+		/obj/item/reagent_containers/spray/pepper,
+		/obj/item/gun/projectile,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/gun/lawgiver,
-		/obj/item/weapon/gun/siren,
-		/obj/item/weapon/gun/mahoguny,
-		/obj/item/weapon/gun/grenadelauncher,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/melee/baton,
+		/obj/item/handcuffs,
+		/obj/item/gun/lawgiver,
+		/obj/item/gun/siren,
+		/obj/item/gun/mahoguny,
+		/obj/item/gun/grenadelauncher,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 		/obj/item/device/hailer,
 		)
 	body_parts_covered = FULL_TORSO
@@ -34,7 +34,7 @@
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/vest/attackby(obj/item/I, mob/user)
-	if(istype(I,/obj/item/weapon/grenade))
+	if(istype(I,/obj/item/grenade))
 		for(var/obj/item/clothing/accessory/bangerboy/B in accessories)
 			B.attackby(I,user)
 	else

@@ -1,7 +1,7 @@
 #define MODE_WALL 0
 #define MODE_DOOR 1
 
-/obj/item/weapon/inflatable_dispenser
+/obj/item/inflatable_dispenser
 	name = "inflatables dispenser"
 	desc = "A hand-held device which allows rapid deployment and removal of inflatable structures."
 	icon = 'icons/obj/storage/storage.dmi'
@@ -15,7 +15,7 @@
 	var/list/allowed_types = list(/obj/item/inflatable/wall, /obj/item/inflatable/door)
 	var/mode = MODE_WALL
 
-/obj/item/weapon/inflatable_dispenser/New()
+/obj/item/inflatable_dispenser/New()
 	..()
 	for(var/i = 0 to max(max_walls,max_doors))
 		if(stored_walls.len < max_walls)
@@ -23,31 +23,31 @@
 		if(stored_doors.len < max_doors)
 			stored_doors += new /obj/item/inflatable/door(src)
 
-/obj/item/weapon/inflatable_dispenser/Destroy()
+/obj/item/inflatable_dispenser/Destroy()
 	stored_walls = null
 	stored_doors = null
 	..()
 
-/obj/item/weapon/inflatable_dispenser/robot
+/obj/item/inflatable_dispenser/robot
 	w_class = W_CLASS_HUGE
 	max_walls = 10
 	max_doors = 5
 
-/obj/item/weapon/inflatable_dispenser/examine(mob/user)
+/obj/item/inflatable_dispenser/examine(mob/user)
 	..()
 	to_chat(user, "It has [stored_walls.len] wall segment\s and [stored_doors.len] door segment\s stored, and is set to deploy [mode ? "doors" : "walls"].")
 
-/obj/item/weapon/inflatable_dispenser/attack_self()
+/obj/item/inflatable_dispenser/attack_self()
 	mode = !mode
 	to_chat(usr, "You set \the [src] to deploy [mode ? "doors" : "walls"].")
 
-/obj/item/weapon/inflatable_dispenser/attackby(var/obj/item/O, var/mob/user)
+/obj/item/inflatable_dispenser/attackby(var/obj/item/O, var/mob/user)
 	if(O.type in allowed_types)
 		pick_up(O, user)
 		return
 	..()
 
-/obj/item/weapon/inflatable_dispenser/afterattack(var/atom/A, var/mob/user)
+/obj/item/inflatable_dispenser/afterattack(var/atom/A, var/mob/user)
 	..(A, user)
 	if(!user)
 		return
@@ -58,7 +58,7 @@
 	if(istype(A, /obj/item/inflatable) || istype(A, /obj/structure/inflatable))
 		pick_up(A, user)
 
-/obj/item/weapon/inflatable_dispenser/proc/try_deploy(var/turf/T, var/mob/living/user)
+/obj/item/inflatable_dispenser/proc/try_deploy(var/turf/T, var/mob/living/user)
 	if(!istype(T))
 		return
 	if(T.density)
@@ -90,7 +90,7 @@
 	user.visible_message("<span class='danger'>[user] deploys an inflatable [mode ? "door" : "wall"].</span>", \
 	"<span class='notice'>You deploy an inflatable [mode ? "door" : "wall"].</span>")
 
-/obj/item/weapon/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
+/obj/item/inflatable_dispenser/proc/pick_up(var/obj/A, var/mob/living/user)
 	if(istype(A, /obj/structure/inflatable))
 		var/obj/structure/inflatable/I = A
 		I.deflate(0,5)
@@ -109,8 +109,8 @@
 				to_chat(usr, "\The [src] can't hold more doors.")
 				return FALSE
 			stored_doors += I
-		if(istype(I.loc, /obj/item/weapon/storage))
-			var/obj/item/weapon/storage/S = I.loc
+		if(istype(I.loc, /obj/item/storage))
+			var/obj/item/storage/S = I.loc
 			S.remove_from_storage(I,src)
 		else if(istype(I.loc, /mob))
 			var/mob/M = I.loc

@@ -11,7 +11,7 @@
 	name = "telecommunications network monitoring console"
 	icon = 'icons/obj/machines/telecomms.dmi'
 	icon_state = "network_monitor"
-	circuit = "/obj/item/weapon/circuitboard/comm_monitor"
+	circuit = "/obj/item/circuitboard/comm_monitor"
 
 	var/screen = 0				// the screen number:
 	var/list/machinelist = list()	// the machines located by the computer
@@ -207,7 +207,7 @@
 	last_machine = T
 	updateUsrDialog()
 
-/obj/machinery/computer/telecomms/monitor/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/telecomms/monitor/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	if(..())
 		return 1
 	updateUsrDialog()

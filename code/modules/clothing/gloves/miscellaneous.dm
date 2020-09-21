@@ -46,12 +46,12 @@
 
 /obj/item/clothing/gloves/swat/operator/examine(mob/user)
 	..()
-	if(locate(/obj/item/weapon/implant/loyalty) in user)
+	if(locate(/obj/item/implant/loyalty) in user)
 		to_chat(user,"<span class='info'>These gloves can be used to convey messages to other loyalty implanted crew. Use an open hand on yourself while wearing them.</span>")
 
 /obj/item/clothing/gloves/swat/operator/Touch(var/atom/A, mob/user, proximity)
 	if(A == user && !user.incapacitated())
-		if(user.is_implanted(/obj/item/weapon/implant/loyalty))
+		if(user.is_implanted(/obj/item/implant/loyalty))
 			var/list/choices = list(
 				list("Stick together!", "radial_group"),
 				list("Split up!", "radial_split"),
@@ -74,7 +74,7 @@
 			continue //Don't bother, no one to show it to
 		if(M.isUnconscious() || M.eye_blind || M.blinded)
 			continue //can't perceive this message
-		if(M.is_implanted(/obj/item/weapon/implant/loyalty) || istype(M, /mob/dead/observer))
+		if(M.is_implanted(/obj/item/implant/loyalty) || istype(M, /mob/dead/observer))
 			to_chat(M,"[bicon(src)] <span class='info'>[user] signals, <B>[sign]</B></span>")
 			continue
 		else if(isrobot(M))
@@ -227,13 +227,13 @@
 	var/radiation_per_punch = 15
 	var/stunforce = 5
 
-	var/obj/item/weapon/reagent_containers/glass/beaker/vial/vial = /obj/item/weapon/reagent_containers/glass/beaker/vial //Vial with the fuel
+	var/obj/item/reagent_containers/glass/beaker/vial/vial = /obj/item/reagent_containers/glass/beaker/vial //Vial with the fuel
 
 	var/fuel_overlay
 	var/ready_overlay
 
 /obj/item/clothing/gloves/powerfist/full
-	vial = /obj/item/weapon/reagent_containers/glass/beaker/vial/uranium
+	vial = /obj/item/reagent_containers/glass/beaker/vial/uranium
 
 /obj/item/clothing/gloves/powerfist/New()
 	..()
@@ -326,7 +326,7 @@
 	if(vial)
 		return
 
-	if(istype(W, /obj/item/weapon/reagent_containers/glass/beaker/vial))
+	if(istype(W, /obj/item/reagent_containers/glass/beaker/vial))
 		if(user.drop_item(W))
 			to_chat(user, "<span class='info'>You insert \the [W] into \the [src].</span>")
 			W.forceMove(src)

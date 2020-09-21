@@ -10,7 +10,7 @@
 	flags = FPRINT
 	siemens_coefficient = 1
 
-/obj/item/mounted/frame/rust_fuel_compressor/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/mounted/frame/rust_fuel_compressor/attackby(obj/item/W as obj, mob/user as mob)
 	if (W.is_wrench(user))
 		new /obj/item/stack/sheet/plasteel( get_turf(src.loc), 12 )
 		qdel(src)
@@ -54,7 +54,7 @@
 						"<span class='warning'>[user.name] has removed the circuitboard from [src.name]!</span>",\
 						"<span class='notice'>You remove the circuitboard board.</span>")
 					has_electronics = 0
-					new /obj/item/weapon/module/rust_fuel_compressor(loc)
+					new /obj/item/module/rust_fuel_compressor(loc)
 					has_electronics &= ~1
 			else
 				opened = 0
@@ -69,7 +69,7 @@
 				icon_state = "fuel_compressor1"
 		return
 
-	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
+	else if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
@@ -81,7 +81,7 @@
 				to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	else if (istype(W, /obj/item/weapon/card/emag) && !emagged)		// trying to unlock with an emag card
+	else if (istype(W, /obj/item/card/emag) && !emagged)		// trying to unlock with an emag card
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else
@@ -121,7 +121,7 @@
 			has_electronics &= ~2
 		return
 
-	else if (istype(W, /obj/item/weapon/module/rust_fuel_compressor) && opened && !(has_electronics & 1))
+	else if (istype(W, /obj/item/module/rust_fuel_compressor) && opened && !(has_electronics & 1))
 		to_chat(user, "You try to insert the circuitboard into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if(do_after(user, src, 10))
@@ -131,7 +131,7 @@
 		return
 
 	else if (iswelder(W) && opened && !has_electronics)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "You start welding the compressor frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)

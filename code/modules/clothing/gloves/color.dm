@@ -105,9 +105,9 @@
 //Storage pickpocket gloves! Currently only used for thief gloves, feel free to change it when you make storage gloves of any kind
 /obj/item/clothing/gloves/black/thief/storage
 	pickpocket = 2 //Will make pickpocketed items try to search for the gloves' storage to be quietly placed in
-	var/obj/item/weapon/storage/internal/thief_gloves/hold
+	var/obj/item/storage/internal/thief_gloves/hold
 
-/obj/item/weapon/storage/internal/thief_gloves //This is the internal storage
+/obj/item/storage/internal/thief_gloves //This is the internal storage
 	name = "black gloves"
 	cant_hold = list("/obj/item/clothing/gloves/black/thief/storage") //ISHYGDDT
 	fits_max_w_class = W_CLASS_SMALL
@@ -132,7 +132,7 @@
 	else
 		return ..()
 
-/obj/item/clothing/gloves/black/thief/storage/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/gloves/black/thief/storage/attackby(obj/item/W as obj, mob/user as mob)
 	hold.attackby(W,user)
 	return 1
 
@@ -224,7 +224,7 @@
 	_color = "mime"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
-/obj/item/clothing/gloves/white/attackby(obj/item/weapon/W, mob/user)
+/obj/item/clothing/gloves/white/attackby(obj/item/W, mob/user)
 	..()
 	if(istype(W, /obj/item/clothing/head/beret))
 		new /mob/living/simple_animal/hostile/retaliate/faguette/goblin(get_turf(src))
@@ -233,7 +233,7 @@
 
 /obj/item/clothing/gloves/white/advanced //mime traitor gloves, spawn in a silent hand gun with two shots
 	actions_types = list(/datum/action/item_action/toggle_gun)
-	var/obj/item/weapon/gun/projectile/handgun/current_gun = null
+	var/obj/item/gun/projectile/handgun/current_gun = null
 	var/charging = FALSE
 
 /obj/item/clothing/gloves/white/advanced/attack_self(mob/user)
@@ -250,7 +250,7 @@
 		return
 	if(!charging)
 		if(!M.get_active_hand())
-			var/obj/item/weapon/gun/projectile/handgun/G = new
+			var/obj/item/gun/projectile/handgun/G = new
 			current_gun = G
 			if(!issilent(M)) //nonmimes get a loud version
 				G.silenced = FALSE
@@ -265,7 +265,7 @@
 // For Clown Planet's mimes. - N3X
 /obj/item/clothing/gloves/white/stunglove/New()
 	..()
-	cell = new /obj/item/weapon/cell/crap/empty(src)
+	cell = new /obj/item/cell/crap/empty(src)
 
 /obj/item/clothing/gloves/grey
 	name = "grey gloves"

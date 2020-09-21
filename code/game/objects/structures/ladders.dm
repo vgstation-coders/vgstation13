@@ -114,7 +114,7 @@ var/list/ladders = list()
 /obj/structure/ladder/attack_paw(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/ladder/attackby(obj/item/weapon/W, mob/user as mob)
+/obj/structure/ladder/attackby(obj/item/W, mob/user as mob)
 	if(isrobot(user))
 		return
 
@@ -126,7 +126,7 @@ var/list/ladders = list()
 /obj/structure/ladder/proc/climb(mob/user, turf/destination)
 	user.forceMove(destination)
 
-	for(var/obj/item/weapon/grab/G in user.held_items)
+	for(var/obj/item/grab/G in user.held_items)
 		if(G.affecting)
 			G.affecting.forceMove(destination)
 

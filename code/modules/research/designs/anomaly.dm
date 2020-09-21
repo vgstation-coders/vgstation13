@@ -89,7 +89,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 3500, MAT_SILVER = 150, MAT_GOLD = 500)
 	category = "Anomaly"
-	build_path = /obj/item/weapon/anodevice
+	build_path = /obj/item/anodevice
 
 /datum/design/anobattery
 	name = "Anomaly power battery"
@@ -99,7 +99,7 @@
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 700, MAT_GLASS = 70, MAT_URANIUM = 70)
 	category = "Anomaly"
-	build_path = /obj/item/weapon/anobattery
+	build_path = /obj/item/anobattery
 
 //ANOMALY LEVEL 5
 /datum/design/ano_scanner//easily lets you quickly find every large artifact buried on the Z-Level

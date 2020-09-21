@@ -9,7 +9,7 @@
 	icon_state = "crate"
 	icon_living = "crate"
 
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/mimic
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/mimic
 	holder_type = null //Can't pick up
 
 	response_help = "touches"
@@ -352,48 +352,48 @@ var/global/list/crate_mimic_disguises = list(\
 // Lies still until somebody tries to pick it up
 
 var/global/list/item_mimic_disguises = list(
-	"default" = list(/obj/item/alien_embryo, /obj/item/ammo_storage, /obj/item/device/chameleon, /obj/item/toy/crossbow, /obj/item/toy/waterflower, /obj/item/weapon/banhammer/admin,\
-				/obj/item/weapon/beach_ball, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/hand_labeler, /obj/item/weapon/soap, /obj/item/weapon/crowbar,\
-				/obj/item/weapon/caution, /obj/item/weapon/bananapeel, /obj/item/device/chameleon, /obj/item/weapon/storage/pneumatic, /obj/item/trash/discountchocolate,\
-				/obj/item/weapon/fireaxe, /obj/item/weapon/gun/gatling, /obj/item/weapon/table_parts, /obj/item/weapon/wrench/socket, /obj/item/weapon/lighter, /obj/item/weapon/bikehorn/rubberducky,\
-				/obj/item/weapon/lipstick, /obj/item/weapon/stamp/clown, /obj/item/weapon/storage/backpack/holding, /obj/item/clothing/gloves/yellow,\
+	"default" = list(/obj/item/alien_embryo, /obj/item/ammo_storage, /obj/item/device/chameleon, /obj/item/toy/crossbow, /obj/item/toy/waterflower, /obj/item/banhammer/admin,\
+				/obj/item/beach_ball, /obj/item/card/emag, /obj/item/extinguisher, /obj/item/hand_labeler, /obj/item/soap, /obj/item/crowbar,\
+				/obj/item/caution, /obj/item/bananapeel, /obj/item/device/chameleon, /obj/item/storage/pneumatic, /obj/item/trash/discountchocolate,\
+				/obj/item/fireaxe, /obj/item/gun/gatling, /obj/item/table_parts, /obj/item/wrench/socket, /obj/item/lighter, /obj/item/bikehorn/rubberducky,\
+				/obj/item/lipstick, /obj/item/stamp/clown, /obj/item/storage/backpack/holding, /obj/item/clothing/gloves/yellow,\
 				/obj/item/device/aicard, /obj/item/device/analyzer, /obj/item/device/assembly/igniter, /obj/item/device/camera, /obj/item/device/codebreaker, /obj/item/device/device_analyser,\
 				/obj/item/device/flash, /obj/item/device/flashlight, /obj/item/device/hailer, /obj/item/device/material_synth, /obj/item/device/megaphone, /obj/item/device/paicard,\
 				/obj/item/device/pda/clown, /obj/item/device/rcd/matter/engineering, /obj/item/device/radio, /obj/item/device/robotanalyzer, /obj/item/device/soulstone,\
-				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/weapon/gun/portalgun, /obj/item/target), //Common items
+				/obj/item/device/soundsynth, /obj/item/device/instrument/violin, /obj/item/device/wormhole_jaunter, /obj/item/gun/portalgun, /obj/item/target), //Common items
 
-	"medbay" = list(/obj/item/weapon/circular_saw, /obj/item/weapon/melee/defibrillator, /obj/item/weapon/surgicaldrill, /obj/item/weapon/hemostat, /obj/item/weapon/dnainjector/nofail/hulkmut,\
-				/obj/item/weapon/bonesetter, /obj/item/weapon/autopsy_scanner, /obj/item/weapon/FixOVein, /obj/item/stack/medical/ointment, /obj/item/weapon/storage/firstaid,\
-				/obj/item/weapon/gun/syringe/rapidsyringe, /obj/item/weapon/storage/firstaid/fire, /obj/item/weapon/storage/firstaid/o2, /obj/item/weapon/storage/firstaid/toxin,\
-				/obj/item/weapon/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/weapon/coin/clown,\
-				/obj/item/weapon/dice/d4, /obj/item/weapon/dice/d12, /obj/item/weapon/dice/d20, /obj/item/weapon/gun/gravitywell, /obj/item/weapon/harpoon), //Medbay and some common items
+	"medbay" = list(/obj/item/circular_saw, /obj/item/melee/defibrillator, /obj/item/surgicaldrill, /obj/item/hemostat, /obj/item/dnainjector/nofail/hulkmut,\
+				/obj/item/bonesetter, /obj/item/autopsy_scanner, /obj/item/FixOVein, /obj/item/stack/medical/ointment, /obj/item/storage/firstaid,\
+				/obj/item/gun/syringe/rapidsyringe, /obj/item/storage/firstaid/fire, /obj/item/storage/firstaid/o2, /obj/item/storage/firstaid/toxin,\
+				/obj/item/cautery, /obj/item/device/healthanalyzer, /obj/item/pizzabox/margherita, /obj/item/toy/waterballoon, /obj/item/coin/clown,\
+				/obj/item/dice/d4, /obj/item/dice/d12, /obj/item/dice/d20, /obj/item/gun/gravitywell, /obj/item/harpoon), //Medbay and some common items
 
-	"security" = list(/obj/item/device/chameleon, /obj/item/weapon/card/emag, /obj/item/weapon/gun/energy/taser, /obj/item/weapon/melee/baton, /obj/item/weapon/tome_legacy,\
-				/obj/item/weapon/crowbar, /obj/item/weapon/storage/fancy/donut_box, /obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/pneumatic, /obj/item/weapon/gun/gatling,\
-				/obj/item/weapon/handcuffs, /obj/item/weapon/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/weapon/gun/osipr, /obj/item/weapon/gun/energy/staff/animate,\
-				/obj/item/weapon/gun/energy/mindflayer, /obj/item/weapon/gun/energy/laser/cannon, /obj/item/weapon/gun/energy/pulse_rifle, /obj/item/weapon/katana/hfrequency,\
-				/obj/item/weapon/melee/legacy_cultblade, /obj/item/weapon/pickaxe/jackhammer, /obj/item/weapon/tank/plasma, /obj/item/weapon/gibtonite), //Security items and weapons
+	"security" = list(/obj/item/device/chameleon, /obj/item/card/emag, /obj/item/gun/energy/taser, /obj/item/melee/baton, /obj/item/tome_legacy,\
+				/obj/item/crowbar, /obj/item/storage/fancy/donut_box, /obj/item/storage/firstaid, /obj/item/storage/pneumatic, /obj/item/gun/gatling,\
+				/obj/item/handcuffs, /obj/item/melee/energy/sword/green, /obj/item/clothing/gloves/yellow, /obj/item/gun/osipr, /obj/item/gun/energy/staff/animate,\
+				/obj/item/gun/energy/mindflayer, /obj/item/gun/energy/laser/cannon, /obj/item/gun/energy/pulse_rifle, /obj/item/katana/hfrequency,\
+				/obj/item/melee/legacy_cultblade, /obj/item/pickaxe/jackhammer, /obj/item/tank/plasma, /obj/item/gibtonite), //Security items and weapons
 
-	"bar" = (existing_typesof(/obj/item/weapon/reagent_containers/food/drinks) - typesof(/obj/item/weapon/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
+	"bar" = (existing_typesof(/obj/item/reagent_containers/food/drinks) - typesof(/obj/item/reagent_containers/food/drinks/bottle/customizable)),  //All drinks (except for customizable stuff)
 
-	"emergency" = list(/obj/item/clothing/mask/breath, /obj/item/weapon/tank/jetpack/oxygen, /obj/item/weapon/tank/emergency_oxygen, /obj/item/weapon/tank/air, /obj/item/weapon/crowbar,\
-					/obj/item/weapon/storage/firstaid, /obj/item/weapon/storage/backpack/holding, /obj/item/weapon/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
-					/obj/item/clothing/gloves/yellow, /obj/item/weapon/hand_tele, /obj/item/weapon/card/id/captains_spare, /obj/item/weapon/card/emag, /obj/item/weapon/extinguisher, /obj/item/weapon/gun/portalgun), //Focus on breath masks, jetpacks/oxygen tanks and generally useful stuff
+	"emergency" = list(/obj/item/clothing/mask/breath, /obj/item/tank/jetpack/oxygen, /obj/item/tank/emergency_oxygen, /obj/item/tank/air, /obj/item/crowbar,\
+					/obj/item/storage/firstaid, /obj/item/storage/backpack/holding, /obj/item/storage/backpack/security, /obj/item/device/maracas, /obj/item/device/multitool,\
+					/obj/item/clothing/gloves/yellow, /obj/item/hand_tele, /obj/item/card/id/captains_spare, /obj/item/card/emag, /obj/item/extinguisher, /obj/item/gun/portalgun), //Focus on breath masks, jetpacks/oxygen tanks and generally useful stuff
 
-	"lowhealth" = list(/obj/item/trash/cigbutt, /obj/item/weapon/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
+	"lowhealth" = list(/obj/item/trash/cigbutt, /obj/item/shard, /obj/item/toy/blink, /obj/item/toy/ammo/crossbow, /obj/item/ammo_casing/a666), //Small, hard-to-notice items to turn into when at low health
 
 	//All foods except for customizable stuff
-	"kitchen" = (existing_typesof(/obj/item/weapon/reagent_containers/food/snacks) - typesof(/obj/item/weapon/reagent_containers/food/snacks/customizable) - typesof(/obj/item/weapon/reagent_containers/food/snacks/sliceable) - /obj/item/weapon/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/weapon/reagent_containers/food/snacks/sweet)),
+	"kitchen" = (existing_typesof(/obj/item/reagent_containers/food/snacks) - typesof(/obj/item/reagent_containers/food/snacks/customizable) - typesof(/obj/item/reagent_containers/food/snacks/sliceable) - /obj/item/reagent_containers/food/snacks/slimesoup - typesof(/obj/item/reagent_containers/food/snacks/sweet)),
 
-	"library" = typesof(/obj/item/weapon/book), //All default books
+	"library" = typesof(/obj/item/book), //All default books
 
-	"botany" = existing_typesof(/obj/item/weapon/reagent_containers/food/snacks/grown), //All grown items
+	"botany" = existing_typesof(/obj/item/reagent_containers/food/snacks/grown), //All grown items
 
 	//Nuke, nuke disk, all coins, all minerals (except for those with no icons)
-	"vault" = list(/obj/machinery/nuclearbomb, /obj/item/weapon/disk/nuclear) + typesof(/obj/item/weapon/coin) + typesof(/obj/item/stack/sheet/mineral) - /obj/item/stack/sheet/mineral,
+	"vault" = list(/obj/machinery/nuclearbomb, /obj/item/disk/nuclear) + typesof(/obj/item/coin) + typesof(/obj/item/stack/sheet/mineral) - /obj/item/stack/sheet/mineral,
 
-	"chapel" = list(/obj/item/weapon/storage/bible, /obj/item/clothing/head/chaplain_hood, /obj/item/clothing/head/helmet/space/plasmaman/chaplain, /obj/item/clothing/suit/chaplain_hoodie, /obj/item/clothing/suit/space/plasmaman/chaplain,\
-				/obj/item/device/pda/chaplain, /obj/item/weapon/nullrod, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater, /obj/item/weapon/staff), //Chaplain garb, null rod, bible, holy water
+	"chapel" = list(/obj/item/storage/bible, /obj/item/clothing/head/chaplain_hood, /obj/item/clothing/head/helmet/space/plasmaman/chaplain, /obj/item/clothing/suit/chaplain_hoodie, /obj/item/clothing/suit/space/plasmaman/chaplain,\
+				/obj/item/device/pda/chaplain, /obj/item/nullrod, /obj/item/reagent_containers/food/drinks/bottle/holywater, /obj/item/staff), //Chaplain garb, null rod, bible, holy water
 )
 
 /mob/living/simple_animal/hostile/mimic/crate/item

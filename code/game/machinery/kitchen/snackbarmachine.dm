@@ -3,7 +3,7 @@
 	desc = "An explosion of flavour in every bite"
 	condi = 1
 	icon_state = "snackbar"
-	chem_board = /obj/item/weapon/circuitboard/snackbar_machine
+	chem_board = /obj/item/circuitboard/snackbar_machine
 	windowtype = "snackbar_machine"
 
 /obj/machinery/chem_master/snackbar_machine/Topic(href, href_list)
@@ -22,7 +22,7 @@
 	usr.set_machine(src)
 
 	if(container && href_list["createbar"])
-		var/obj/item/weapon/reagent_containers/food/snacks/snackbar/SB = new/obj/item/weapon/reagent_containers/food/snacks/snackbar(src.loc)
+		var/obj/item/reagent_containers/food/snacks/snackbar/SB = new/obj/item/reagent_containers/food/snacks/snackbar(src.loc)
 		reagents.trans_to(SB, 10)
 		src.updateUsrDialog()
 		return 1

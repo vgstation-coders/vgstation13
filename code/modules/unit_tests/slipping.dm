@@ -16,9 +16,9 @@
 	*/
 
 	var/list/items_and_result_humans = list(
-		/obj/item/weapon/reagent_containers/food/snacks/butter = list(TRUE, FALSE, FALSE, FALSE),
-		/obj/item/weapon/bananapeel/ = list(TRUE, TRUE, FALSE, FALSE),
-		/obj/item/weapon/soap/ = list(TRUE, TRUE, FALSE, FALSE),
+		/obj/item/reagent_containers/food/snacks/butter = list(TRUE, FALSE, FALSE, FALSE),
+		/obj/item/bananapeel/ = list(TRUE, TRUE, FALSE, FALSE),
+		/obj/item/soap/ = list(TRUE, TRUE, FALSE, FALSE),
 		/obj/item/device/pda/clown = list(TRUE, TRUE, FALSE, FALSE),
 		)
 

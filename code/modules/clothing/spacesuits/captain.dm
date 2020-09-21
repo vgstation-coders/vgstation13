@@ -34,7 +34,7 @@
 	clothing_flags = ONESIZEFITSALL
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/tank, /obj/item/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/gun/energy, /obj/item/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/melee/baton,/obj/item/handcuffs,/obj/item/tank/emergency_nitrogen)
 	slowdown = HARDSUIT_SLOWDOWN_HIGH
 	armor = list(melee = 65, bullet = 50, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 50)
 	siemens_coefficient = 0.7
@@ -54,7 +54,7 @@
 	permeability_coefficient = 0.02
 	clothing_flags = ONESIZEFITSALL | PLASMAGUARD
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
-	allowed = list(/obj/item/weapon/tank, /obj/item/weapon/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy, /obj/item/weapon/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/tank/emergency_nitrogen)
+	allowed = list(/obj/item/tank, /obj/item/tank/emergency_oxygen, /obj/item/device/flashlight,/obj/item/gun/energy, /obj/item/gun/projectile, /obj/item/ammo_storage, /obj/item/ammo_casing, /obj/item/melee/baton,/obj/item/handcuffs,/obj/item/tank/emergency_nitrogen)
 	armor = list(melee = 65, bullet = 55, laser = 50, energy = 25, bomb = 50, bio = 100, rad = 60)
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY

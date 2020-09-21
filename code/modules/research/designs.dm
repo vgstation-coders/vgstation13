@@ -147,21 +147,21 @@ proc/getScanDesign(var/obj/O)
 //Disks for transporting design datums//
 ////////////////////////////////////////
 
-/obj/item/weapon/disk/design_disk
+/obj/item/disk/design_disk
 	name = "component design disk"
 	desc = "A disk for storing device design data for construction in lathes."
 	icon_state = "disk_design"
 	var/datum/design/blueprint
 
-/obj/item/weapon/disk/design_disk/New()
+/obj/item/disk/design_disk/New()
 	..()
 	src.pixel_x = rand(-5, 5) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-5, 5) * PIXEL_MULTIPLIER
 
 
-/obj/item/weapon/disk/design_disk/ammolathe
+/obj/item/disk/design_disk/ammolathe
 	name = "component design disk (Ammolathe)"
 
-/obj/item/weapon/disk/design_disk/ammolathe/New()
+/obj/item/disk/design_disk/ammolathe/New()
 	..()
 	blueprint = new/datum/design/ammolathe(src)

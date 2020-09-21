@@ -586,16 +586,16 @@ turf/simulated/floor/update_icon()
 			if(prob(10))
 				var/to_spawn = pick(
 					/obj/item/seeds/carrotseed,
-					/obj/item/weapon/reagent_containers/food/snacks/grown/carrot,
+					/obj/item/reagent_containers/food/snacks/grown/carrot,
 					/obj/item/seeds/potatoseed,
-					/obj/item/weapon/reagent_containers/food/snacks/grown/potato,
+					/obj/item/reagent_containers/food/snacks/grown/potato,
 					/obj/item/seeds/whitebeetseed,
-					/obj/item/weapon/reagent_containers/food/snacks/grown/whitebeet,)
+					/obj/item/reagent_containers/food/snacks/grown/whitebeet,)
 				new to_spawn(src)
 				to_chat(user, "<span class='notice'>Something falls out of the grass!</span>")
 			make_plating()
 	else if(iswelder(C))
-		var/obj/item/weapon/weldingtool/welder = C
+		var/obj/item/weldingtool/welder = C
 		if(welder.isOn() && (is_plating()))
 			if(broken || burnt)
 				if(welder.remove_fuel(1,user))

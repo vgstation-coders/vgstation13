@@ -11,7 +11,7 @@
 	icon_state = "message_monitor"
 	var/hack_icon = "message_monitor_hacked"
 	var/normal_icon = "message_monitor"
-	circuit = "/obj/item/weapon/circuitboard/message_monitor"
+	circuit = "/obj/item/circuitboard/message_monitor"
 	//Server linked to.
 	var/obj/machinery/message_server/linkedServer = null
 	//Messages - Saves me time if I want to change something.
@@ -34,7 +34,7 @@
 	light_color = LIGHT_COLOR_GREEN
 
 
-/obj/machinery/computer/message_monitor/attackby(obj/item/weapon/O as obj, mob/living/user as mob)
+/obj/machinery/computer/message_monitor/attackby(obj/item/O as obj, mob/living/user as mob)
 	if(!istype(user))
 		return
 	if(O.is_screwdriver(user) && emagged)
@@ -53,7 +53,7 @@
 			emagged = 1
 			screen = 2
 			spark(src, 5, FALSE)
-			var/obj/item/weapon/paper/monitorkey/MK = new/obj/item/weapon/paper/monitorkey
+			var/obj/item/paper/monitorkey/MK = new/obj/item/paper/monitorkey
 			MK.forceMove(src.loc)
 			// Will help make emagging the console not so easy to get away with.
 			MK.info += "<br><br><font color='red'>�%@%(*$%&(�&?*(%&�/{}</font>"
@@ -494,12 +494,12 @@
 	return src.attack_hand(usr)
 
 
-/obj/item/weapon/paper/monitorkey
+/obj/item/paper/monitorkey
 	//..()
 	name = "Monitor Decryption Key"
 	var/obj/machinery/message_server/server = null
 
-/obj/item/weapon/paper/monitorkey/New()
+/obj/item/paper/monitorkey/New()
 	..()
 	spawn(10)
 		if(message_servers)

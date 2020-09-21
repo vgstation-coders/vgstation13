@@ -39,11 +39,11 @@
 /mob/living/simple_animal/hostile/humanoid/kitchen/poutine/death(var/gibbed = FALSE)
 	..(TRUE)
 	for(var/i=1 to 3)
-		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/poutine, /obj/item/weapon/reagent_containers/food/snacks/poutinedangerous,\
-							/obj/item/weapon/reagent_containers/food/snacks/poutinebarrel)
+		var/to_spawn = pick(/obj/item/reagent_containers/food/snacks/poutine, /obj/item/reagent_containers/food/snacks/poutinedangerous,\
+							/obj/item/reagent_containers/food/snacks/poutinebarrel)
 		new to_spawn (src.loc)
 
-	new /obj/item/weapon/reagent_containers/food/snacks/mapleleaf(src.loc)
+	new /obj/item/reagent_containers/food/snacks/mapleleaf(src.loc)
 	visible_message("<span class='warning'>\The [src] collapses into a formless heap of melted cheese curd.</span>")
 	qdel (src)
 
@@ -101,11 +101,11 @@
 /mob/living/simple_animal/hostile/humanoid/kitchen/meatballer/death(var/gibbed = FALSE)
 	..(TRUE)
 	for(var/i=1 to 3)
-		var/to_spawn = pick(/obj/item/weapon/reagent_containers/food/snacks/spaghetti, /obj/item/weapon/reagent_containers/food/snacks/meatballspaghetti,\
-							/obj/item/weapon/reagent_containers/food/snacks/copypasta)
+		var/to_spawn = pick(/obj/item/reagent_containers/food/snacks/spaghetti, /obj/item/reagent_containers/food/snacks/meatballspaghetti,\
+							/obj/item/reagent_containers/food/snacks/copypasta)
 		new to_spawn (src.loc)
 
-	new /obj/item/weapon/reagent_containers/food/snacks/faggot(src.loc)
+	new /obj/item/reagent_containers/food/snacks/faggot(src.loc)
 	visible_message("<span class='warning'>\The [src] falls apart, revealing a solitary faggot among the remains.</span>")
 	qdel (src)
 
@@ -438,7 +438,7 @@
 	environment_smash_flags = 0
 
 	search_objects = 1
-	var/obj/item/weapon/cell/cell = null
+	var/obj/item/cell/cell = null
 	var/latched = 0
 
 /mob/living/simple_animal/hostile/syphoner/get_cell()
@@ -446,7 +446,7 @@
 
 /mob/living/simple_animal/hostile/syphoner/New()
 	..()
-	cell = new /obj/item/weapon/cell/super/empty(src)
+	cell = new /obj/item/cell/super/empty(src)
 
 /mob/living/simple_animal/hostile/syphoner/update_icon()
 	if(latched)
@@ -470,8 +470,8 @@
 			F.make_plating()
 
 /mob/living/simple_animal/hostile/syphoner/CanAttack(var/atom/the_target)
-	if(!cell && istype(the_target, /obj/item/weapon/cell))
-		var/obj/item/weapon/cell/C = the_target
+	if(!cell && istype(the_target, /obj/item/cell))
+		var/obj/item/cell/C = the_target
 		if(C.percent() < 100)
 			return 1
 	if(cell && cell.percent() >= 100)
@@ -508,8 +508,8 @@
 		else if (latched)
 			//How did we get here? Let's just quietly unlock and forget all about this
 			unlatch()
-	if(istype(target, /obj/item/weapon/cell))
-		var/obj/item/weapon/cell/C = target
+	if(istype(target, /obj/item/cell))
+		var/obj/item/cell/C = target
 		if(C.percent() < 100)
 			visible_message("<span class = 'notice'>\The [src] scoops up \the [C] into its battery compartment.</span>")
 			C.forceMove(src)

@@ -207,8 +207,8 @@ Turf and target are seperate in case you want to teleport some distance from a t
 		var/search_pda = TRUE
 
 		for (var/object in get_contents_in_object(src))
-			if (search_id && istype(object, /obj/item/weapon/card/id))
-				var/obj/item/weapon/card/id/ID = object
+			if (search_id && istype(object, /obj/item/card/id))
+				var/obj/item/card/id/ID = object
 
 				if (ID.registered_name == oldname)
 					ID.registered_name = newname
@@ -1201,21 +1201,21 @@ proc/get_mob_with_client_list()
 //Quick type checks for some tools
 var/global/list/common_tools = list(
 /obj/item/stack/cable_coil,
-/obj/item/weapon/wrench,
-/obj/item/weapon/weldingtool,
-/obj/item/weapon/screwdriver,
-/obj/item/weapon/wirecutters,
+/obj/item/wrench,
+/obj/item/weldingtool,
+/obj/item/screwdriver,
+/obj/item/wirecutters,
 /obj/item/device/multitool,
-/obj/item/weapon/crowbar)
+/obj/item/crowbar)
 
 /proc/is_surgery_tool(obj/item/W as obj)
 	return (	\
-	istype(W, /obj/item/weapon/scalpel)			||	\
-	istype(W, /obj/item/weapon/hemostat)		||	\
-	istype(W, /obj/item/weapon/retractor)		||	\
-	istype(W, /obj/item/weapon/cautery)			||	\
-	istype(W, /obj/item/weapon/bonegel)			||	\
-	istype(W, /obj/item/weapon/bonesetter)
+	istype(W, /obj/item/scalpel)			||	\
+	istype(W, /obj/item/hemostat)		||	\
+	istype(W, /obj/item/retractor)		||	\
+	istype(W, /obj/item/cautery)			||	\
+	istype(W, /obj/item/bonegel)			||	\
+	istype(W, /obj/item/bonesetter)
 	)
 
 //check if mob is lying down on something we can operate him on.
@@ -1241,7 +1241,7 @@ var/list/WALLITEMS = list(
 	"/obj/machinery/status_display", "/obj/machinery/requests_console", "/obj/machinery/light_switch", "/obj/effect/sign",
 	"/obj/machinery/newscaster", "/obj/machinery/firealarm", "/obj/structure/noticeboard", "/obj/machinery/door_control",
 	"/obj/machinery/computer/security/telescreen", "/obj/machinery/embedded_controller/radio/simple_vent_controller",
-	"/obj/item/weapon/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
+	"/obj/item/storage/secure/safe", "/obj/machinery/door_timer", "/obj/machinery/flasher", "/obj/machinery/keycard_auth",
 	"/obj/structure/mirror", "/obj/structure/closet/fireaxecabinet", "obj/structure/sign", "obj/structure/painting"
 	)
 /proc/gotwallitem(loc, dir)
@@ -1743,13 +1743,13 @@ Game Mode config tags:
 
 	var/produce = rand(min_seeds,max_seeds)
 
-	if(istype(O, /obj/item/weapon/grown))
-		var/obj/item/weapon/grown/F = O
+	if(istype(O, /obj/item/grown))
+		var/obj/item/grown/F = O
 		if(F.plantname)
 			new_seed_type = SSplant.seeds[F.plantname]
 	else
-		if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/grown))
-			var/obj/item/weapon/reagent_containers/food/snacks/grown/F = O
+		if(istype(O, /obj/item/reagent_containers/food/snacks/grown))
+			var/obj/item/reagent_containers/food/snacks/grown/F = O
 			if(F.plantname)
 				new_seed_type = SSplant.seeds[F.plantname]
 		else

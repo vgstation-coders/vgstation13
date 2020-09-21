@@ -122,7 +122,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 				var/obj/mecha/M = L.loc
 				if(istype(M.selected,/obj/item/mecha_parts/mecha_equipment/tool/switchtool))
 					var/obj/item/mecha_parts/mecha_equipment/tool/switchtool/S = M.selected
-					var/obj/item/weapon/switchtool/SW = S.switchtool
+					var/obj/item/switchtool/SW = S.switchtool
 					I = SW.deployed
 			else
 				I = L.get_active_hand()

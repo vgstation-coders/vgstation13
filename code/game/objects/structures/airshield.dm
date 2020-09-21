@@ -16,7 +16,7 @@
 		return ..()
 	return FALSE
 
-/obj/structure/airshield/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/airshield/attackby(obj/item/W, mob/user)
 	if(W.is_screwdriver(user))
 		if(user.loc != loc)
 			to_chat(user,"<span class='warning'>You need to be inside \the [src] to do work on it!</span>")
@@ -40,7 +40,7 @@
 		if(construction_step != WIRINGUNSECURE)
 			to_chat(user,"<span class='warning'>The wires are still secure on that!</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		user.visible_message("<span class='warning'>[user] starts disassembling \the [src].</span>", \
 			"<span class='notice'>You start disassembling \the [src].</span>")
 		if(WT.do_weld(user, src, 6 SECONDS, 2))

@@ -74,8 +74,8 @@
 	original[1] = /obj/item/clothing/suit/space/rig/security
 	finished[1] = /obj/item/clothing/suit/space/rig/security/stormtrooper
 	parts[2] =	3
-	original[2] = /obj/item/weapon/gun/energy/laser
-	finished[2] = /obj/item/weapon/gun/energy/laser/blaster
+	original[2] = /obj/item/gun/energy/laser
+	finished[2] = /obj/item/gun/energy/laser/blaster
 
 // /vg/: Old atmos hardsuit.
 /obj/item/device/modkit/gold_rig
@@ -127,8 +127,8 @@
 	finished = new/list(1)
 
 	parts[1] =	1
-	original[1] = /obj/item/weapon/gun/energy/polarstar
-	finished[1] = /obj/item/weapon/gun/energy/polarstar/spur
+	original[1] = /obj/item/gun/energy/polarstar
+	finished[1] = /obj/item/gun/energy/polarstar/spur
 
 /obj/item/device/modkit/aeg_parts
 	name = "advanced energy gun modkit"
@@ -142,8 +142,8 @@
 	finished = new/list(1)
 
 	parts[1] =	1
-	original[1] = /obj/item/weapon/gun/energy/gun
-	finished[1] = /obj/item/weapon/gun/energy/gun/nuclear
+	original[1] = /obj/item/gun/energy/gun
+	finished[1] = /obj/item/gun/energy/gun/nuclear
 
 /obj/item/device/modkit/plasmacutter
 	name = "plasma cutter conversion kit"
@@ -156,14 +156,14 @@
 	finished = new/list(1)
 
 	parts[1] =	0
-	original[1] = /obj/item/weapon/pickaxe/drill/diamond
-	finished[1] = /obj/item/weapon/pickaxe/plasmacutter/accelerator
+	original[1] = /obj/item/pickaxe/drill/diamond
+	finished[1] = /obj/item/pickaxe/plasmacutter/accelerator
 
 /obj/item/device/modkit/plasmacutter/attackby(atom/target, mob/user, proximity_flag)
-	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+	if(proximity_flag && parts[1] == 1 && istype(target, /obj/item/gun/energy/kinetic_accelerator))
 		to_chat(user, "<span class='warning'>\The [src] is already loaded!</span>")
 		return
 
-	else if(proximity_flag && istype(target, /obj/item/weapon/gun/energy/kinetic_accelerator))
+	else if(proximity_flag && istype(target, /obj/item/gun/energy/kinetic_accelerator))
 		parts[1] = 1
 		qdel(target)

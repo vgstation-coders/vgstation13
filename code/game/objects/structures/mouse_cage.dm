@@ -44,8 +44,8 @@
 	. = ..()
 
 	if (isturf(loc))
-		if (!critter && istype (O,/obj/item/weapon/holder/animal))
-			var/obj/item/weapon/holder/animal/store = O
+		if (!critter && istype (O,/obj/item/holder/animal))
+			var/obj/item/holder/animal/store = O
 			var/mob/living/simple_animal/inside = store.stored_mob
 			if (inside.size > SIZE_TINY)
 				to_chat(user, "<span class='warning'>\The [inside] is too big for \the [src]!</span>")
@@ -58,7 +58,7 @@
 			critter.forceMove(loc)
 			lock_atom(critter,lock_type)
 
-		if (istype (O,/obj/item/weapon/reagent_containers/food/snacks))
+		if (istype (O,/obj/item/reagent_containers/food/snacks))
 			if(!user.drop_item(O, loc))
 				to_chat(user, "<span class='warning'>You can't let go of \the [O]!</span>")
 				return

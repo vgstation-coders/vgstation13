@@ -402,10 +402,10 @@ This function restores all organs.
 	if(!organ)
 		return damage
 /*/vg/ EDIT
-	if(istype(used_weapon,/obj/item/weapon))
-		var/obj/item/weapon/W = used_weapon  //Sharp objects will always embed if they do enough damage.
+	if(istype(used_weapon,/obj/item))
+		var/obj/item/W = used_weapon  //Sharp objects will always embed if they do enough damage.
 		if( (damage > (10*W.w_class)) && ( (sharp && !ismob(W.loc)) || prob(damage/W.w_class) ) )
-			if(!istype(W, /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver))
+			if(!istype(W, /obj/item/kitchen/utensil/knife/large/butch/meatcleaver))
 				organ.implants += W
 				visible_message("<span class='danger'>\The [W] sticks in the wound!</span>")
 				W.add_blood(src)
@@ -417,7 +417,7 @@ This function restores all organs.
 	if(istype(used_weapon,/obj/item/projectile/bullet)) //We don't want to use the actual projectile item, so we spawn some shrapnel.
 		var/obj/item/projectile/bullet/P = used_weapon
 		if(prob(75) && damagetype == BRUTE && P.embed)
-			var/obj/item/weapon/shard/shrapnel/S = new()
+			var/obj/item/shard/shrapnel/S = new()
 			S.name = "[P.name] shrapnel"
 			S.desc = "[S.desc] It looks like it was fired from [P.shot_from]."
 			S.forceMove(src)
@@ -427,7 +427,7 @@ This function restores all organs.
 			S.add_blood(src)
 	if(istype(used_weapon,/obj/item/projectile/flare)) //We want them to carry the flare, not a projectile
 		var/obj/item/projectile/flare/F = used_weapon
-		if(damagetype == BURN && F.embed && (istype(F.shot_from, /obj/item/weapon/gun/projectile/flare/syndicate) || istype(F.shot_from, /obj/item/weapon/gun/lawgiver)) && prob(75)) //only syndicate guns are dangerous, except for the lawgiver, which is intended to fire incendiary rounds
+		if(damagetype == BURN && F.embed && (istype(F.shot_from, /obj/item/gun/projectile/flare/syndicate) || istype(F.shot_from, /obj/item/gun/lawgiver)) && prob(75)) //only syndicate guns are dangerous, except for the lawgiver, which is intended to fire incendiary rounds
 			var/obj/item/device/flashlight/flare/FS = new
 			FS.name = "shot [FS.name]"
 			FS.desc = "[FS.desc]. It looks like it was fired from [F.shot_from]."

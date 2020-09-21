@@ -44,7 +44,7 @@
 	if(.)
 		return !noghostspin
 
-/obj/structure/bed/chair/attackby(var/obj/item/weapon/W, var/mob/user)
+/obj/structure/bed/chair/attackby(var/obj/item/W, var/mob/user)
 	if(istype(W, /obj/item/assembly/shock_kit))
 		var/obj/item/assembly/shock_kit/SK = W
 		if(user.drop_item(W))
@@ -267,7 +267,7 @@
 	name = "wooden chair"
 	desc = "Old is never too old to not be in fashion."
 
-/obj/structure/bed/chair/holowood/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bed/chair/holowood/attackby(obj/item/W as obj, mob/user as mob)
 	return
 
 //Comfy chairs
@@ -628,7 +628,7 @@
 		if (locked_atoms && locked_atoms.len > 0)
 			to_chat(user,"<span class='warning'>You cannot downgrade a seat with someone buckled on it.</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "You start welding the plasteel off \the [src]")
 		if (WT.do_weld(user, src, 50, 3))
 			if(gcDestroyed)

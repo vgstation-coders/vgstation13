@@ -17,7 +17,7 @@
 	fire_sound = null
 	mouse_opacity = 1
 	var/turf/secondary_target = null
-	var/obj/item/weapon/melee/soulblade/blade = null
+	var/obj/item/melee/soulblade/blade = null
 	var/mob/living/simple_animal/shade/shade = null
 	var/redirected = 0
 	var/leave_shadows = -1

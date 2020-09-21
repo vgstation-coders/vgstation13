@@ -16,24 +16,24 @@
 /obj/machinery/sweet/attackby(var/obj/O as obj, var/mob/user as mob)
 	if (stat & (NOPOWER|BROKEN))
 		return ..()
-	if (is_type_in_list(O, list(/obj/item/weapon/coin/, /obj/item/weapon/reagent_containers/food/snacks/chococoin)))
+	if (is_type_in_list(O, list(/obj/item/coin/, /obj/item/reagent_containers/food/snacks/chococoin)))
 		if(emagged == 1)
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "You put a coin into [src] and turn the knob.</span>")
 				src.visible_message("<span class='notice'>[src] rattles ominously!</span>")
 				sleep(rand(10,15))
 				src.visible_message("<span class='notice'>[src] dispenses a bag of strange sweets!</span>")
-				new /obj/item/weapon/storage/pill_bottle/sweets/strange(src.loc)
+				new /obj/item/storage/pill_bottle/sweets/strange(src.loc)
 		else
 			if(user.drop_item(O, src))
 				user.visible_message("<span class='notice'>[user] puts a coin into [src] and turns the knob.", "<span class='notice'>You put a coin into [src] and turn the knob.</span>")
 				src.visible_message("<span class='notice'>[src] clicks softly.</span>")
 				sleep(rand(10,15))
 				src.visible_message("<span class='notice'>[src] dispenses a bag of sweets!</span>")
-				new/obj/item/weapon/storage/pill_bottle/sweets(src.loc)
+				new/obj/item/storage/pill_bottle/sweets(src.loc)
 
-		if(istype(O, /obj/item/weapon/coin/))
-			var/obj/item/weapon/coin/real_coin = O
+		if(istype(O, /obj/item/coin/))
+			var/obj/item/coin/real_coin = O
 			if(real_coin.string_attached)
 				if(prob(30))
 					to_chat(user, "<SPAN CLASS='notice'>You were able to force the knob around and successfully pulled the coin out before [src] could swallow it.</SPAN>")
@@ -43,7 +43,7 @@
 					qdel(O)
 		else
 			qdel(O)
-	else if(istype(O, /obj/item/weapon/reagent_containers/food/snacks/customizable/candy/coin))
+	else if(istype(O, /obj/item/reagent_containers/food/snacks/customizable/candy/coin))
 		to_chat(user, "<span class='rose'>That coin is smudgy and oddly soft, you don't think that would work.</span>")
 		return
 	else

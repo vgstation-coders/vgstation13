@@ -52,7 +52,7 @@ var/global/mulebot_count = 0
 	var/auto_return = 1	// true if auto return to home beacon after unload
 	var/auto_pickup = 1 // true if auto-pickup at beacon
 
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 	var/datum/wires/mulebot/wires = null
 						// the installed power cell
 
@@ -98,7 +98,7 @@ var/global/mulebot_count = 0
 		/obj/structure/closet/crate,
 		/obj/structure/vendomatpack,
 		/obj/structure/stackopacks,
-		/obj/item/weapon/gift,
+		/obj/item/gift,
 		)
 
 /obj/machinery/bot/mulebot/Destroy()
@@ -118,21 +118,21 @@ var/global/mulebot_count = 0
 // other: chance to knock rider off bot
 /obj/machinery/bot/mulebot/attackby(obj/item/I, mob/user)
 	user.delayNextAttack(I.attack_delay)
-	if(istype(I,/obj/item/weapon/card/emag))
+	if(istype(I,/obj/item/card/emag))
 		toggle_lock(user, TRUE)
 		to_chat(user, "<span class='notice'>You [locked ? "lock" : "unlock"] [src]'s controls!</span>")
 		flick("[icon_initial]-emagged", src)
 		playsound(src, 'sound/effects/sparks1.ogg', 100, 0)
-	else if(istype(I, /obj/item/weapon/card/id))
+	else if(istype(I, /obj/item/card/id))
 		if(toggle_lock(user))
 			to_chat(user, "<span class='notice'>Controls [(locked ? "locked" : "unlocked")].</span>")
 
-	else if(istype(I,/obj/item/weapon/cell) && open && !cell && user.a_intent != I_HURT)
-		var/obj/item/weapon/cell/C = I
+	else if(istype(I,/obj/item/cell) && open && !cell && user.a_intent != I_HURT)
+		var/obj/item/cell/C = I
 		if(user.drop_item(C, src))
 			cell = C
 			updateDialog()
-	else if((istype(I,/obj/item/weapon/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
+	else if((istype(I,/obj/item/wirecutters)||istype(I,/obj/item/device/multitool)) && user.a_intent != I_HURT)
 		attack_hand(user)
 	else if(I.is_screwdriver(user) && user.a_intent != I_HURT)
 		if(locked)
@@ -336,7 +336,7 @@ var/global/mulebot_count = 0
 
 			if("cellinsert")
 				if(open && !cell)
-					var/obj/item/weapon/cell/C = usr.get_active_hand()
+					var/obj/item/cell/C = usr.get_active_hand()
 					if(istype(C))
 						if(usr.drop_item(C, src))
 							cell = C

@@ -632,8 +632,8 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	return ..()
 
 /datum/role/greytide/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
-	for(var/obj/item/weapon/implant/I in new_character)
-		if(istype(I, /obj/item/weapon/implant/traitor))
+	for(var/obj/item/implant/I in new_character)
+		if(istype(I, /obj/item/implant/traitor))
 			return
 	Drop()
 	return ..()

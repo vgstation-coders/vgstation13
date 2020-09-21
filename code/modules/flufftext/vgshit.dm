@@ -1,4 +1,4 @@
-/obj/item/weapon/paper/derelict_invoice
+/obj/item/paper/derelict_invoice
 	name = "INVOICE"
 	desc = "An invoice.  Someone has angrily scrawled on it in red pen."
 	info = {"

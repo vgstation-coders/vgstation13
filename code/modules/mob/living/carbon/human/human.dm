@@ -6,7 +6,7 @@
 	icon = 'icons/mob/human.dmi'
 	icon_state = "body_m_s"
 	can_butcher = 1
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/human
 	var/datum/species/species //Contains icon generation and language information, set during New().
 	var/embedded_flag	  //To check if we've need to roll for damage on movement while an item is imbedded in us.
 
@@ -103,7 +103,7 @@
 	my_appearance.f_style = pick(facial_hair_styles_list)
 	my_appearance.h_style = pick(hair_styles_list)
 	gender = pick(MALE, FEMALE, NEUTER, PLURAL)
-	meat_type = pick(typesof(/obj/item/weapon/reagent_containers/food/snacks/meat))
+	meat_type = pick(typesof(/obj/item/reagent_containers/food/snacks/meat))
 
 	for(var/datum/organ/external/E in organs)
 		E.species = all_species[pick(valid_species)]
@@ -298,7 +298,7 @@
 
 /mob/living/carbon/human/proc/is_loyalty_implanted(mob/living/carbon/human/M)
 	for(var/L in M.contents)
-		if(istype(L, /obj/item/weapon/implant/loyalty))
+		if(istype(L, /obj/item/implant/loyalty))
 			for(var/datum/organ/external/O in M.organs)
 				if(L in O.implants)
 					return 1
@@ -341,15 +341,15 @@
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_assignment(var/if_no_id = "No id", var/if_no_job = "No job")
 	var/obj/item/device/pda/pda = wear_id
-	var/obj/item/weapon/card/id/id = wear_id
-	var/obj/item/weapon/storage/wallet/wallet = wear_id
+	var/obj/item/card/id/id = wear_id
+	var/obj/item/storage/wallet/wallet = wear_id
 	if (istype(pda))
-		if (pda.id && istype(pda.id, /obj/item/weapon/card/id))
+		if (pda.id && istype(pda.id, /obj/item/card/id))
 			. = pda.id.assignment
 		else
 			. = pda.ownjob
 	else if (istype(wallet))
-		var/obj/item/weapon/card/id/wallet_id = wallet.GetID()
+		var/obj/item/card/id/wallet_id = wallet.GetID()
 		if(istype(wallet_id))
 			. = wallet_id.assignment
 	else if (istype(id))
@@ -367,7 +367,7 @@
 //Useful when player do something with computers
 /mob/living/carbon/human/proc/get_identification_name(var/if_no_id = "Unknown")
 	var/obj/item/device/pda/pda = wear_id
-	var/obj/item/weapon/card/id/id = wear_id
+	var/obj/item/card/id/id = wear_id
 	if (istype(pda))
 		if (pda.id)
 			. = pda.id.registered_name
@@ -618,7 +618,7 @@
 		var/mob/M = usr
 		if(istype(M, /mob/dead) || (!M.isUnconscious() && !M.eye_blind && !M.blinded))
 			var/obj/item/I = locate(href_list["listitems"])
-			var/obj/item/weapon/storage/internal/S = I
+			var/obj/item/storage/internal/S = I
 			if(istype(S))
 				if(istype(S.master_item, /obj/item/clothing/suit/storage/trader))
 					for(var/J in I.contents)
@@ -742,7 +742,7 @@
 					skip_message = 1
 				else //Look for a bucket
 
-					for(var/obj/item/weapon/reagent_containers/glass/G in (location.contents + src.get_active_hand() + src.get_inactive_hand()))
+					for(var/obj/item/reagent_containers/glass/G in (location.contents + src.get_active_hand() + src.get_inactive_hand()))
 						if(!G.reagents)
 							continue
 						if(!G.is_open_container())
@@ -1055,10 +1055,10 @@
 			to_chat(U, "[src] has nothing stuck in their wounds that is large enough to remove without surgery.")
 		return
 
-	var/obj/item/weapon/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
+	var/obj/item/selection = input("What do you want to yank out?", "Embedded objects") in valid_objects
 
 	for(var/datum/organ/external/organ in organs) //Grab the organ holding the implant.
-		for(var/obj/item/weapon/O in organ.implants)
+		for(var/obj/item/O in organ.implants)
 			if(O == selection)
 				affected = organ
 	if(self)
@@ -1084,7 +1084,7 @@
 	affected.implants -= selection
 	pain_shock_stage+=10
 
-	for(var/obj/item/weapon/O in pinned)
+	for(var/obj/item/O in pinned)
 		if(O == selection)
 			pinned -= O
 		if(!pinned.len)
@@ -1101,8 +1101,8 @@
 
 	var/list/visible_implants = list()
 	for(var/datum/organ/external/organ in src.organs)
-		for(var/obj/item/weapon/O in organ.implants)
-			if(!istype(O,/obj/item/weapon/implant) && (O.w_class > class) && !istype(O,/obj/item/weapon/shard/shrapnel))
+		for(var/obj/item/O in organ.implants)
+			if(!istype(O,/obj/item/implant) && (O.w_class > class) && !istype(O,/obj/item/shard/shrapnel))
 				visible_implants += O
 
 	return(visible_implants)
@@ -1116,8 +1116,8 @@
 	for(var/datum/organ/external/organ in src.organs)
 		if(organ.status & ORGAN_SPLINTED) //Splints prevent movement.
 			continue
-		for(var/obj/item/weapon/O in organ.implants)
-			if(!istype(O,/obj/item/weapon/implant) && prob(5)) //Moving with things stuck in you could be bad.
+		for(var/obj/item/O in organ.implants)
+			if(!istype(O,/obj/item/implant) && prob(5)) //Moving with things stuck in you could be bad.
 				// All kinds of embedded objects cause bleeding.
 				var/msg = null
 				switch(rand(1,3))
@@ -1350,20 +1350,20 @@
 		if(lasercolor == "b")//Lasertag turrets target the opposing team.
 			if(iswearingredtag(src))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/red))
+			if(find_held_item_by_type(/obj/item/gun/energy/tag/red))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/tag/red))
+			if(istype(belt, /obj/item/gun/energy/tag/red))
 				threatcount += 2
 		if(lasercolor == "r")
 			if(iswearingbluetag(src))
 				threatcount += 4
-			if(find_held_item_by_type(/obj/item/weapon/gun/energy/tag/blue))
+			if(find_held_item_by_type(/obj/item/gun/energy/tag/blue))
 				threatcount += 4
-			if(istype(belt, /obj/item/weapon/gun/energy/tag/blue))
+			if(istype(belt, /obj/item/gun/energy/tag/blue))
 				threatcount += 2
 		return threatcount
 	//Check for ID
-	var/obj/item/weapon/card/id/idcard = get_id_card()
+	var/obj/item/card/id/idcard = get_id_card()
 	if(judgebot.idcheck && !idcard)
 		threatcount += 4
 	//Check for weapons
@@ -1399,7 +1399,7 @@
 	if(dna && dna.mutantrace && dna.mutantrace != "none")
 		threatcount += 2
 	//Agent cards lower threatlevel.
-	if(istype(idcard, /obj/item/weapon/card/id/syndicate))
+	if(istype(idcard, /obj/item/card/id/syndicate))
 		threatcount -= 2
 /mob/living/carbon/human/has_brain()
 	if(internal_organs_by_name["brain"])
@@ -1920,7 +1920,7 @@ mob/living/carbon/human/isincrit()
 			return is_type_in_list(glasses, list(/obj/item/clothing/glasses/hud/security, /obj/item/clothing/glasses/sunglasses/sechud))
 	return FALSE
 
-/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/weapon/reagent_containers/syringe/tool)
+/mob/living/carbon/human/on_syringe_injection(var/mob/user, var/obj/item/reagent_containers/syringe/tool)
 	ASSERT(species)
 	if(species.chem_flags & NO_INJECT)
 		user.visible_message(
@@ -1994,7 +1994,7 @@ mob/living/carbon/human/isincrit()
 
 //this method handles user getting attacked with an emag - the original logic was in human_defense.dm,
 //but it's better that it belongs to human.dm
-/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/weapon/card/emag)
+/mob/living/carbon/human/emag_act(var/mob/attacker, var/datum/organ/external/affecting, var/obj/item/card/emag)
 	var/hit_area = affecting.display_name
 	if(!(affecting.status & ORGAN_ROBOT))
 		to_chat(attacker, "<span class='warning'>That limb isn't robotic.</span>")

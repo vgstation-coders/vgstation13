@@ -137,7 +137,7 @@ Class Procs:
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
 
-	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
+	var/obj/item/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
 
 	//These are some values to automatically set the light power/range on machines if they have power
@@ -156,7 +156,7 @@ Class Procs:
 	var/emag_cost = 1
 
 	var/inMachineList = 1 // For debugging.
-	var/obj/item/weapon/card/id/scan = null	//ID inserted for identification, if applicable
+	var/obj/item/card/id/scan = null	//ID inserted for identification, if applicable
 	var/id_tag = null // Identify the machine
 
 /obj/machinery/cultify()
@@ -477,7 +477,7 @@ Class Procs:
 		if(prob(destroy_chance))
 			qdel(I)
 		else
-			if(istype(I, /obj/item/weapon/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
+			if(istype(I, /obj/item/reagent_containers/glass/beaker) && src.reagents && src.reagents.total_volume)
 				reagents.trans_to(I, reagents.total_volume)
 			if(I.reliability != 100 && crit_fail)
 				I.crit_fail = 1
@@ -488,7 +488,7 @@ Class Procs:
 		else
 			qdel(I)
 
-/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/proc/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	user.visible_message(	"[user] begins to pry out the circuitboard from \the [src].",
 							"You begin to pry out the circuitboard from \the [src]...")
 	if(do_after(user, src, 40))
@@ -535,7 +535,7 @@ Class Procs:
 	togglePanelOpen(toggleitem, user)
 	return 1
 
-/obj/machinery/proc/weldToFloor(var/obj/item/weapon/weldingtool/WT, mob/user)
+/obj/machinery/proc/weldToFloor(var/obj/item/weldingtool/WT, mob/user)
 	if(!anchored)
 		state = 0 //since this might be wrong, we go sanity
 		to_chat(user, "You need to secure \the [src] before it can be welded.")
@@ -575,10 +575,10 @@ Class Procs:
 /**
  * Returns the cost of emagging this machine (emag_cost by default)
  * @param user /mob The mob that used the emag.
- * @param emag /obj/item/weapon/card/emag The emag used on this device.
+ * @param emag /obj/item/card/emag The emag used on this device.
  * @return number Cost to emag.
  */
-/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/weapon/card/emag/emag)
+/obj/machinery/proc/getEmagCost(var/mob/user, var/obj/item/card/emag/emag)
 	return emag_cost
 
 /obj/machinery/attackby(var/obj/item/O, var/mob/user)
@@ -586,8 +586,8 @@ Class Procs:
 
 	add_fingerprint(user)
 
-	if(istype(O, /obj/item/weapon/card/emag) && machine_flags & EMAGGABLE)
-		var/obj/item/weapon/card/emag/E = O
+	if(istype(O, /obj/item/card/emag) && machine_flags & EMAGGABLE)
+		var/obj/item/card/emag/E = O
 		if(E.canUse(user,src))
 			emag(user)
 			return
@@ -637,7 +637,7 @@ Class Procs:
 			to_chat(user, "<span class='notice'>Wirejack engaged on \the [src].</span>")
 		return 1
 
-	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+	if(istype(O, /obj/item/storage/bag/gadgets/part_replacer))
 		return exchange_parts(user, O)
 
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
@@ -700,11 +700,11 @@ Class Procs:
 /obj/machinery/can_wrench_shuttle()
 	return (machine_flags & SHUTTLEWRENCH)
 
-/obj/machinery/proc/exchange_parts(mob/user, obj/item/weapon/storage/bag/gadgets/part_replacer/W)
+/obj/machinery/proc/exchange_parts(mob/user, obj/item/storage/bag/gadgets/part_replacer/W)
 	var/shouldplaysound = 0
 	if(component_parts)
 		if(panel_open || W.bluespace)
-			var/obj/item/weapon/circuitboard/CB = locate(/obj/item/weapon/circuitboard) in component_parts
+			var/obj/item/circuitboard/CB = locate(/obj/item/circuitboard) in component_parts
 			var/P
 			for(var/obj/item/A in component_parts)
 				for(var/D in CB.req_components)

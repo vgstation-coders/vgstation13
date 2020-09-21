@@ -55,7 +55,7 @@
 		radio_controller.remove_object(src, frequency)
 	..()
 
-/obj/item/device/radio/electropack/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/radio/electropack/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if (W.is_screwdriver())
 		b_stat = !b_stat

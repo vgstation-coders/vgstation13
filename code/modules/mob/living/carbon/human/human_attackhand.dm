@@ -144,7 +144,7 @@
 	apply_damage(damage, BRUTE, affecting)
 
 	if(!stomping) //Kicking somebody while holding them with a grab sends the victim flying
-		var/obj/item/weapon/grab/G = M.get_inactive_hand()
+		var/obj/item/grab/G = M.get_inactive_hand()
 		if(istype(G) && G.affecting == src)
 			spawn()
 				qdel(G)

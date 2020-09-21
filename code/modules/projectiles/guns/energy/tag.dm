@@ -1,5 +1,5 @@
 ////////Laser Tag////////////////////
-/obj/item/weapon/gun/energy/tag
+/obj/item/gun/energy/tag
 	name = "laser tag gun"
 	desc = "Standard issue weapon of the Imperial Guard."
 	item_state = null
@@ -23,18 +23,18 @@
 	var/taser_projectile = /obj/item/projectile/beam/lasertag/omni
 	var/needed_vest = /obj/item/clothing/suit/tag/bluetag
 
-/obj/item/weapon/gun/energy/tag/isHandgun()
+/obj/item/gun/energy/tag/isHandgun()
 	return TRUE
 
-/obj/item/weapon/gun/energy/tag/proc/score()
+/obj/item/gun/energy/tag/proc/score()
     playsound(src, 'sound/weapons/quake.ogg', 60)
     score++
 
-/obj/item/weapon/gun/energy/tag/examine(mob/user)
+/obj/item/gun/energy/tag/examine(mob/user)
 	..()
 	to_chat(user, "<span class='info'>This gun has scored [score] points against the enemy team!</span>")
 
-/obj/item/weapon/gun/energy/tag/verb/clear_score()
+/obj/item/gun/energy/tag/verb/clear_score()
 	set name = "Clear Laser Tag Score"
 	set category = "Object"
 	set src in usr
@@ -47,37 +47,37 @@
 		score = 0
 		to_chat(usr, "<span class='info'>[bicon(src)] You reset the score.</span>")
 
-/obj/item/weapon/gun/energy/tag/blue
+/obj/item/gun/energy/tag/blue
 	icon_state = "bluetag"
 	laser_projectile = /obj/item/projectile/beam/lasertag/blue
 	taser_projectile = /obj/item/projectile/energy/tag/blue
 	needed_vest = /obj/item/clothing/suit/tag/bluetag
 
-/obj/item/weapon/gun/energy/tag/red
+/obj/item/gun/energy/tag/red
 	icon_state = "redtag"
 	laser_projectile = /obj/item/projectile/beam/lasertag/red
 	taser_projectile = /obj/item/projectile/energy/tag/red
 	needed_vest = /obj/item/clothing/suit/tag/redtag
 
-/obj/item/weapon/gun/energy/tag/proc/makeLaser(var/mob/user)
+/obj/item/gun/energy/tag/proc/makeLaser(var/mob/user)
 	projectile_type = laser_projectile
 	fire_sound = 'sound/weapons/Laser.ogg'
 	if(user)
 		to_chat(user, "<span class='warning'>[bicon(src)] Set to laser tag!</span>")
 
-/obj/item/weapon/gun/energy/tag/proc/makeTaser(var/mob/user)
+/obj/item/gun/energy/tag/proc/makeTaser(var/mob/user)
 	projectile_type = taser_projectile
 	fire_sound = 'sound/weapons/Taser.ogg'
 	if(user)
 		to_chat(user, "<span class='warning'>[bicon(src)] Set to taser tag!</span>")
 
-/obj/item/weapon/gun/energy/tag/attack_self(var/mob/user)
+/obj/item/gun/energy/tag/attack_self(var/mob/user)
     if(projectile_type != laser_projectile)
         makeLaser(user)
     else
         makeTaser(user)
 
-/obj/item/weapon/gun/energy/tag/special_check(var/mob/living/M)
+/obj/item/gun/energy/tag/special_check(var/mob/living/M)
 	var/obj/item/clothing/suit/tag/vest = get_tag_armor(M)
 	if(istype(vest, needed_vest))
 		var/obj/item/clothing/suit/tag/our_tag = vest
@@ -96,16 +96,16 @@
 	to_chat(M, "<span class='warning'>You need to be wearing your laser tag vest!</span>")
 	return 0
 
-/obj/item/weapon/gun/energy/tag/New()
+/obj/item/gun/energy/tag/New()
 	..()
 	processing_objects.Add(src)
 	makeLaser()
 
-/obj/item/weapon/gun/energy/tag/Destroy()
+/obj/item/gun/energy/tag/Destroy()
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/gun/energy/tag/process()
+/obj/item/gun/energy/tag/process()
 	charge_tick++
 	if(charge_tick < 4)
 		return 0
@@ -116,7 +116,7 @@
 	update_icon()
 	return 1
 
-/obj/item/weapon/gun/energy/tag/proc/cooldown(var/time)
+/obj/item/gun/energy/tag/proc/cooldown(var/time)
 	if (time > 0)
 		last_disable_time = world.time + (time SECONDS)
 

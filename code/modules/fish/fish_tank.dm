@@ -86,7 +86,7 @@
 	density = TRUE
 	anchored = TRUE
 	throwpass = TRUE				// You can throw objects over this, despite it's density, because it's short enough.
-	circuitboard = /obj/item/weapon/circuitboard/fishtank
+	circuitboard = /obj/item/circuitboard/fishtank
 
 	tank_type = "tank"
 	water_capacity = 200		// Decent sized, holds 2 full large beakers worth
@@ -108,7 +108,7 @@
 	density = TRUE
 	anchored = TRUE
 	throwpass = FALSE				// This thing is the size of a wall, you can't throw past it.
-	circuitboard = /obj/item/weapon/circuitboard/fishwall
+	circuitboard = /obj/item/circuitboard/fishwall
 
 	tank_type = "wall"
 	water_capacity = 500		// This thing fills an entire tile,5 large beakers worth
@@ -442,7 +442,7 @@
 /obj/machinery/fishtank/proc/destroy(var/deconstruct = FALSE)
 	if(!deconstruct)															//Check if we are deconstructing or breaking the tank
 		for(var/i = 0 to shard_count)											//Produce the appropriate number of glass shards
-			new /obj/item/weapon/shard(get_turf(src))
+			new /obj/item/shard(get_turf(src))
 		if(water_level)															//Spill any water that was left in the tank when it broke
 			spill_water()
 	else																//We are deconstructing, make glass sheets instead of shards
@@ -652,11 +652,11 @@
 		return TRUE
 	//Open reagent containers add and remove water
 	if(O.is_open_container())
-		if(istype(O, /obj/item/weapon/reagent_containers/glass))
+		if(istype(O, /obj/item/reagent_containers/glass))
 			if(lid_switch)
 				to_chat(user, "<span class='notice'>Open the lid on \the [src] first!</span>")
 				return TRUE
-			var/obj/item/weapon/reagent_containers/glass/C = O
+			var/obj/item/reagent_containers/glass/C = O
 			//Containers with any reagents will get dumped in
 			if(C.reagents.total_volume)
 				var/water_value = 0
@@ -724,7 +724,7 @@
 		qdel(egg)
 		return TRUE
 	//Fish food
-	else if(istype(O, /obj/item/weapon/fishtools/fish_food))
+	else if(istype(O, /obj/item/fishtools/fish_food))
 		//Only add food if there is water and it isn't already full of food
 		if(!water_level)
 			to_chat(user, "<span class='warning'>\The [src] doesn't have any water in it. You should fill it with water first.</span>")
@@ -741,7 +741,7 @@
 
 		return TRUE
 	//Fish egg scoop
-	else if(istype(O, /obj/item/weapon/fishtools/fish_egg_scoop))
+	else if(istype(O, /obj/item/fishtools/fish_egg_scoop))
 		if(egg_list.len)
 			user.visible_message("\The [user] harvests some fish eggs from \the [src].", "<span class='notice'>You scoop the fish eggs out of \the [src].</span>")
 			harvest_eggs(user)
@@ -749,11 +749,11 @@
 			user.visible_message("\The [user] fails to harvest any fish eggs from \the [src].", "<span class='notice'>There are no fish eggs in \the [src] to scoop out.</span>")
 		return TRUE
 	//Fish net
-	if(istype(O, /obj/item/weapon/fishtools/fish_net))
+	if(istype(O, /obj/item/fishtools/fish_net))
 		harvest_fish(user)
 		return TRUE
 	//Tank brush
-	if(istype(O, /obj/item/weapon/fishtools/fish_tank_brush))
+	if(istype(O, /obj/item/fishtools/fish_tank_brush))
 		if(filth_level == 0)
 			to_chat(user, "\The [src] is already spotless!")
 			return TRUE
@@ -780,8 +780,8 @@
 	machine_flags = SCREWTOGGLE | CROWDESTROY | FIXED2WORK
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/conduction_plate,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/conduction_plate,
+		/obj/item/stock_parts/capacitor
 	)
 
 	var/obj/machinery/fishtank/attached_tank = null
@@ -794,7 +794,7 @@
 	RefreshParts()
 
 /obj/machinery/power/conduction_plate/RefreshParts()
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		multiplier = initial(multiplier) + (C.rating*0.1) //1 to 1.2
 
 /obj/machinery/power/conduction_plate/process()

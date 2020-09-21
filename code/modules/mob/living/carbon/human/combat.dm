@@ -14,7 +14,7 @@
 	if(ishuman(disarmer) && w_uniform)
 		w_uniform.add_fingerprint(disarmer)
 
-	for(var/obj/item/weapon/gun/G in held_items)
+	for(var/obj/item/gun/G in held_items)
 		var/index = is_holding_item(G)
 		var/chance = (index == active_hand ? 40 : 20)
 

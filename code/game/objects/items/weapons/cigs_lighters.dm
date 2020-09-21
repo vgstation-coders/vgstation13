@@ -17,7 +17,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //MATCHES//
 ///////////
 
-/obj/item/weapon/match
+/obj/item/match
 	name = "match"
 	desc = "A budget match stick, used to start fires easily, preferably at the end of a smoke."
 	icon = 'icons/obj/cigarettes.dmi'
@@ -36,24 +36,24 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	attack_verb = list("prods", "pokes")
 	light_color = LIGHT_COLOR_FIRE
 
-/obj/item/weapon/match/New()
+/obj/item/match/New()
 	..()
 	update_brightness() //Useful if you want to spawn burnt matches, or burning ones you maniac
 
-/obj/item/weapon/match/Destroy()
+/obj/item/match/Destroy()
 	. = ..()
 
 	processing_objects -= src
 
-/obj/item/weapon/match/ignite(temperature)
+/obj/item/match/ignite(temperature)
 	. = ..()
 	light()
 
-/obj/item/weapon/match/proc/light()
+/obj/item/match/proc/light()
 	lit = 1
 	update_brightness()
 
-/obj/item/weapon/match/examine(mob/user)
+/obj/item/match/examine(mob/user)
 	..()
 	switch(lit)
 		if(1)
@@ -64,7 +64,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			to_chat(user, "The match is burnt.")
 
 //Also updates the name, the damage and item_state for good measure
-/obj/item/weapon/match/update_icon()
+/obj/item/match/update_icon()
 	switch(lit)
 		if(1)
 			name = "lit [initial(name)]"
@@ -85,7 +85,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 
-/obj/item/weapon/match/proc/update_brightness()
+/obj/item/match/proc/update_brightness()
 	if(lit == 1) //I wish I didn't need the == 1 part, but Dreamkamer is a dumb puppy
 		processing_objects.Add(src)
 		set_light(brightness_on)
@@ -94,7 +94,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		set_light(0)
 	update_icon()
 
-/obj/item/weapon/match/process()
+/obj/item/match/process()
 	var/mob/living/M = get_holder_of_type(src,/mob/living)
 	var/turf/location = get_turf(src)
 	smoketime--
@@ -112,7 +112,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
 		return
 
-/obj/item/weapon/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/match/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(istype(M.wear_mask, /obj/item/clothing/mask/cigarette) && user.zone_sel.selecting == "mouth" && lit == 1)
 		var/obj/item/clothing/mask/cigarette/cig = M.wear_mask
 		if(M == user)
@@ -122,18 +122,18 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	else
 		return ..()
 
-/obj/item/weapon/match/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/match/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_hot() >= autoignition_temperature)
 		light()
 		user.visible_message("[user] lights \the [src] with \the [W].", \
 		"You light \the [src] with \the [W].")
 	..()
 
-/obj/item/weapon/match/strike_anywhere
+/obj/item/match/strike_anywhere
 	name = "strike-anywhere match"
 	desc = "An improved match stick, used to start fires easily, preferably at the end of a smoke. Can be lit against any surface"
 
-/obj/item/weapon/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
+/obj/item/match/strike_anywhere/afterattack(atom/target, mob/user, prox_flags)
 	if(!prox_flags == 1)
 		return
 
@@ -234,7 +234,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		return source_temperature
 	return 0
 
-/obj/item/clothing/mask/cigarette/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/clothing/mask/cigarette/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 
 	if(lit) //The cigarette is already lit
@@ -243,22 +243,22 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	//Items with special messages go first
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.is_hot()) //Badasses dont get blinded while lighting their cig with a welding tool
 			light("<span class='notice'>[user] casually lights \his [name] with \the [W], what a badass.</span>")
 
-	else if(istype(W, /obj/item/weapon/lighter/zippo))
-		var/obj/item/weapon/lighter/zippo/Z = W
+	else if(istype(W, /obj/item/lighter/zippo))
+		var/obj/item/lighter/zippo/Z = W
 		if(Z.is_hot())
 			light("<span class='rose'>With a single flick of their wrist, [user] smoothly lights \his [name] with \the [W]. Damn, that's cool.</span>")
 
-	else if(istype(W, /obj/item/weapon/lighter))
-		var/obj/item/weapon/lighter/L = W
+	else if(istype(W, /obj/item/lighter))
+		var/obj/item/lighter/L = W
 		if(L.is_hot())
 			light("<span class='notice'>After some fiddling, [user] manages to light \his [name] with \the [W].</span>")
 
-	else if(istype(W, /obj/item/weapon/melee/energy))
-		var/obj/item/weapon/melee/energy/sword/S = W
+	else if(istype(W, /obj/item/melee/energy))
+		var/obj/item/melee/energy/sword/S = W
 		if(S.is_hot())
 			light("<span class='warning'>[user] raises \his [W.name], lighting \the [src]. Holy fucking shit.</span>")
 
@@ -591,8 +591,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /*
 //I'll light my cigar with an energy sword if I want to, thanks
-/obj/item/clothing/mask/cigarette/cigar/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/match))
+/obj/item/clothing/mask/cigarette/cigar/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/match))
 		..()
 	else
 		to_chat(user, "<span class='notice'>\The [src] straight out REFUSES to be lit by such uncivilized means.</span>")
@@ -722,8 +722,8 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 /*
 //Ditto above, only a ruffian would refuse to light his pipe with an energy sword
-/obj/item/clothing/mask/cigarette/pipe/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/match))
+/obj/item/clothing/mask/cigarette/pipe/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/match))
 		..()
 	else
 		to_chat(user, "<span class='notice'>\The [src] straight out REFUSES to be lit by such means.</span>")
@@ -740,7 +740,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //CHEAP LIGHTER//
 /////////////////
 
-/obj/item/weapon/lighter
+/obj/item/lighter
 	name = "cheap lighter"
 	var/initial_name	//a lighter that gets renamed for flavor needs to keep its name
 	desc = "A budget lighter. More likely lit more fingers than it did light smokes."
@@ -764,37 +764,37 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	light_color = LIGHT_COLOR_FIRE
 	var/lit = 0
 
-/obj/item/weapon/lighter/New()
+/obj/item/lighter/New()
 	..()
 	update_icon()
 
-/obj/item/weapon/lighter/Destroy()
+/obj/item/lighter/Destroy()
 	. = ..()
 
 	processing_objects -= src
 
-/obj/item/weapon/lighter/red
+/obj/item/lighter/red
 	color_suffix = "-r"
-/obj/item/weapon/lighter/cyan
+/obj/item/lighter/cyan
 	color_suffix = "-c"
-/obj/item/weapon/lighter/yellow
+/obj/item/lighter/yellow
 	color_suffix = "-y"
-/obj/item/weapon/lighter/green
+/obj/item/lighter/green
 	color_suffix = "-g"
-/obj/item/weapon/lighter/NT
+/obj/item/lighter/NT
 	desc = "A limited edition, super-exclusive Nanotrasen-colored cheap lighter. You're not thrilled."
 	color_suffix = "-nt"
 
-/obj/item/weapon/lighter/random/New()
+/obj/item/lighter/random/New()
 	color_suffix = "-[pick("r","c","y","g")]"
 	..()
 
-/obj/item/weapon/lighter/examine(mob/user)
+/obj/item/lighter/examine(mob/user)
 	..()
 	to_chat(user, "The lighter is [lit ? "":"un"]lit")
 
 //Also updates the name, the damage and item_state for good measure
-/obj/item/weapon/lighter/update_icon()
+/obj/item/lighter/update_icon()
 	switch(lit)
 		if(1)
 			initial_name = name
@@ -812,7 +812,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 			damtype = BRUTE
 			attack_verb = unlit_attack_verb
 
-/obj/item/weapon/lighter/proc/update_brightness()
+/obj/item/lighter/proc/update_brightness()
 	if(lit)
 		processing_objects.Add(src)
 		set_light(brightness_on)
@@ -821,7 +821,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		set_light(0)
 	update_icon()
 
-/obj/item/weapon/lighter/afterattack(obj/O, mob/user, proximity)
+/obj/item/lighter/afterattack(obj/O, mob/user, proximity)
 	if(!proximity)
 		return 0
 	if(istype(O, /obj/structure/reagent_dispensers/fueltank))
@@ -831,7 +831,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		playsound(src, 'sound/effects/refill.ogg', 50, 1, -6)
 		return
 
-/obj/item/weapon/lighter/attack_self(mob/living/user)
+/obj/item/lighter/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy
@@ -859,25 +859,25 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 		"<span class='notice'>You quietly shut off \the [src].</span>")
 		update_brightness()
 
-/obj/item/weapon/lighter/is_hot()
+/obj/item/lighter/is_hot()
 	if(lit)
 		return source_temperature
 	return 0
 
-/obj/item/weapon/lighter/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
+/obj/item/lighter/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(istype(M.wear_mask, /obj/item/clothing/mask/cigarette) && user.zone_sel.selecting == "mouth" && lit)
 		var/obj/item/clothing/mask/cigarette/cig = M.wear_mask
 		if(M == user)
 			cig.attackby(src, user)
 		else
-			if(istype(src, /obj/item/weapon/lighter/zippo))
+			if(istype(src, /obj/item/lighter/zippo))
 				cig.light("<span class='rose'>[user] whips \his [name] out and holds it for [M]. Their arm is as steady as the unflickering flame they light \the [cig] with.</span>")
 			else
 				cig.light("<span class='notice'>[user] holds \his [name] out for [M] and lights \the [cig].</span>")
 	else
 		return ..()
 
-/obj/item/weapon/lighter/process()
+/obj/item/lighter/process()
 	var/turf/location = get_turf(src)
 	if(location)
 		location.hotspot_expose(source_temperature, 5, surfaces = istype(loc, /turf))
@@ -901,7 +901,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 //ZIPPO//
 /////////
 
-/obj/item/weapon/lighter/zippo
+/obj/item/lighter/zippo
 	name = "Zippo lighter"
 	desc = "The Zippo lighter. Need to light a smoke? Zippo!"
 	icon_state = "zippo"
@@ -911,7 +911,7 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 	var/close_sound = list('sound/items/zippo_close.ogg')
 	fuel = 100 //Zippos da bes
 
-/obj/item/weapon/lighter/zippo/attack_self(mob/living/user)
+/obj/item/lighter/zippo/attack_self(mob/living/user)
 	var/turf/T = get_turf(src)
 	var/datum/gas_mixture/env = T.return_air()
 	user.delayNextAttack(5) //Hold on there cowboy

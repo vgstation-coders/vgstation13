@@ -3,7 +3,7 @@
 	desc = "Does not support pinball."
 	icon = 'icons/obj/computer.dmi'
 	icon_state = "arcade"
-	circuit = "/obj/item/weapon/circuitboard/arcade"
+	circuit = "/obj/item/circuitboard/arcade"
 	var/datum/arcade_game/game
 	machine_flags = EMAGGABLE | SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
 	emag_cost = 0 // because fun
@@ -27,12 +27,12 @@
 		game = null
 	..()
 
-/obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/weapon/circuitboard/arcade/A)
+/obj/machinery/computer/arcade/proc/import_game_data(var/obj/item/circuitboard/arcade/A)
 	if(!A || !A.game_data || !A.game_data.len)
 		return
 	game.import_data(A.game_data)
 
-/obj/machinery/computer/arcade/proc/export_game_data(var/obj/item/weapon/circuitboard/arcade/A)
+/obj/machinery/computer/arcade/proc/export_game_data(var/obj/item/circuitboard/arcade/A)
 	if(!A)
 		return
 	if(!A.game_data)
@@ -63,7 +63,7 @@
 	if(game.is_cheater(user))
 		return
 
-	var/obj/item/weapon/circuitboard/arcade/A
+	var/obj/item/circuitboard/arcade/A
 	if(circuit)
 		A = new
 		export_game_data(A)

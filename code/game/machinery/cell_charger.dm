@@ -9,7 +9,7 @@
 	idle_power_usage = 10
 	active_power_usage = 10 //Power is already drained to charge batteries
 	power_channel = EQUIP
-	var/obj/item/weapon/cell/charging = null
+	var/obj/item/cell/charging = null
 	var/transfer_rate = 1500 //How much power do we output every process tick ?
 	var/transfer_efficiency = 0.7 //How much power ends up in the battery in percentage ?
 	var/transfer_rate_coeff = 1 //What is the quality of the parts that transfer energy (capacitators) ?
@@ -29,20 +29,20 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/cell_charger,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor
+		/obj/item/circuitboard/cell_charger,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor
 	)
 	RefreshParts()
 
 /obj/machinery/cell_charger/RefreshParts()
 	var/T = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/SM in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/SM in component_parts)
 		T = (SM.rating - 1)*0.1 //There is one scanning module. Level 1 changes nothing (70 %), level 2 transfers 80 % of power, level 3 90 %
 	transfer_efficiency_bonus = T
 	T = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/CA in component_parts)
+	for(var/obj/item/stock_parts/capacitor/CA in component_parts)
 		T += CA.rating //Two capacitors, every upgrade rank acts as a direct multiplier (up to 3 times base for two Level 3 Capacitors)
 	transfer_rate_coeff = T/2
 	T = 0
@@ -68,13 +68,13 @@
 	if(charging)
 		to_chat(user, "Current charge: [round(charging.percent() )]%")
 
-/obj/machinery/cell_charger/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/cell_charger/attackby(obj/item/W, mob/user)
 	if(stat & BROKEN)
 		return
 
 	if(..())
 		return 1
-	if(istype(W, /obj/item/weapon/cell) && anchored)
+	if(istype(W, /obj/item/cell) && anchored)
 		if(charging)
 			to_chat(user, "<span class='warning'>There is already a cell in [src].</span>")
 			return
@@ -157,11 +157,11 @@
 	steps = list(
 					//1
 					list(Co_DESC="The cabling is messily strewn throughout.",
-						Co_NEXTSTEP = list(Co_KEY=/obj/item/weapon/screwdriver,
+						Co_NEXTSTEP = list(Co_KEY=/obj/item/screwdriver,
 							Co_START_MSG = "{USER} begin{s} adjusting the wiring in {HOLDER}...",
 							Co_VIS_MSG = "{USER} adjust{s} the wiring in {HOLDER}.",
 							Co_DELAY = 50),
-						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/wirecutters,
+						Co_BACKSTEP = list(Co_KEY=/obj/item/wirecutters,
 					 		Co_VIS_MSG = "{USER} remove{s} the cables from {HOLDER}.")
 						),
 					//2
@@ -169,7 +169,7 @@
 						Co_NEXTSTEP = list(Co_KEY=/obj/item/stack/cable_coil,
 							Co_VIS_MSG = "{USER} add{s} the cables to {HOLDER}.",
 							Co_AMOUNT = 5),
-						Co_BACKSTEP = list(Co_KEY=/obj/item/weapon/weldingtool,
+						Co_BACKSTEP = list(Co_KEY=/obj/item/weldingtool,
 					 		Co_VIS_MSG = "{USER} remove{s} the rod from {HOLDER}.",
 							Co_AMOUNT = 3,
 					 		Co_START_MSG = "{USER} begin{s} slicing through {HOLDER}'s metal rod...",
@@ -211,7 +211,7 @@
 	w_type = RECYK_ELECTRONIC
 	melt_temperature = MELTPOINT_SILICON
 	origin_tech = Tc_POWERSTORAGE + "=2"
-	var/obj/item/weapon/cell/stored = null
+	var/obj/item/cell/stored = null
 	var/state = 0 //0 if up, 1 if down; only used for icons
 	var/removablecell = TRUE
 
@@ -232,7 +232,7 @@
 		to_chat(user,"<span class='info'>There is no cell loaded.</span>")
 
 /obj/item/device/crank_charger/attackby(obj/item/W, mob/user)
-	if(!stored && istype(W,/obj/item/weapon/cell) && user.drop_item(W,src))
+	if(!stored && istype(W,/obj/item/cell) && user.drop_item(W,src))
 		stored = W
 		update_icon()
 	else
@@ -273,13 +273,13 @@
 	desc = "Uses reverse-engineered ninja power glove technology to transfer energy wirelessly at short range into objects that can be recharged."
 	icon_state = "crankcharger-0"
 	removablecell = FALSE
-	var/list/forbidden_targets = list(/obj/item/weapon/gun)
+	var/list/forbidden_targets = list(/obj/item/gun)
 	var/last_charged
 
 /obj/item/device/crank_charger/generous/New()
 	..()
 	processing_objects += src
-	stored = new /obj/item/weapon/cell/empty(src)
+	stored = new /obj/item/cell/empty(src)
 
 /obj/item/device/crank_charger/generous/Destroy()
 	processing_objects -= src
@@ -294,7 +294,7 @@
 	if(is_type_in_list(target,forbidden_targets))
 		to_chat(user,"<span class='warning'>The generous crank isn't compatible with that.</span>")
 		return
-	var/obj/item/weapon/cell/C = target.get_cell()
+	var/obj/item/cell/C = target.get_cell()
 	if(istype(C))
 		if(!stored.charge)
 			to_chat(user,"<span class='warning'>The loaded cell has no charge.</span>")

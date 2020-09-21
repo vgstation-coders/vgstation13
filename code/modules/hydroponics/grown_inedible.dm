@@ -2,14 +2,14 @@
 // Other harvested materials from plants (that are not food)
 // **********************
 
-/obj/item/weapon/grown // Grown weapons
+/obj/item/grown // Grown weapons
 	name = "grown_weapon"
 	icon = 'icons/obj/hydroponics/nettle.dmi'
 	var/plantname
 	var/potency = 1
 	var/fragrance = null
 
-/obj/item/weapon/grown/New(atom/loc, custom_plantname)
+/obj/item/grown/New(atom/loc, custom_plantname)
 
 	..()
 
@@ -46,10 +46,10 @@
 					rtotal += round(potency/reagent_data[2])
 				reagents.add_reagent(rid,max(1,round(rtotal*coeff, 0.1)))
 
-/obj/item/weapon/grown/proc/changePotency(newValue) //-QualityVan
+/obj/item/grown/proc/changePotency(newValue) //-QualityVan
 	potency = newValue
 
-/obj/item/weapon/grown/log
+/obj/item/grown/log
 	name = "tower-cap log"
 	desc = "It's better than bad, it's good!"
 	icon = 'icons/obj/hydroponics/towercap.dmi'
@@ -63,7 +63,7 @@
 	origin_tech = Tc_MATERIALS + "=1"
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 
-/obj/item/weapon/grown/log/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/grown/log/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.sharpness_flags & CHOPWOOD) // I considered adding serrated to this but c'mon, making planks out of a serrated blade sounds like an awful idea
 		user.show_message("<span class='notice'>You make two planks out of \the [src].</span>", MESSAGE_SEE)
 		playsound(loc, 'sound/effects/woodcutting.ogg', 50, 1)
@@ -72,14 +72,14 @@
 		qdel(src)
 		return
 
-/obj/item/weapon/grown/log/tree
+/obj/item/grown/log/tree
 	name = "log"
 	plantname = "tree"
 	desc = "A very heavy log, a main product of woodcutting. Much heavier than tower-cap logs."
 	force = 10
 	w_class = W_CLASS_LARGE
 
-/obj/item/weapon/grown/sunflower // FLOWER POWER!
+/obj/item/grown/sunflower // FLOWER POWER!
 	plantname = "sunflowers"
 	name = "sunflower"
 	desc = "It's beautiful! A certain person might beat you to death if you trample these."
@@ -94,12 +94,12 @@
 	throw_range = 3
 	fragrance = INCENSE_SUNFLOWERS
 
-/obj/item/weapon/grown/sunflower/attack(mob/M as mob, mob/user as mob)
+/obj/item/grown/sunflower/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<font color='green'><b> [user] smacks you with a sunflower! </font><font color='yellow'><b>FLOWER POWER<b></font>")
 	to_chat(user, "<font color='green'>Your sunflower's </font><font color='yellow'><b>FLOWER POWER</b></font><font color='green'> strikes [M]</font>")
 	//Uh... Doesn't this cancel the rest of attack()?
 
-/obj/item/weapon/grown/novaflower
+/obj/item/grown/novaflower
 	plantname = "novaflowers"
 	name = "novaflower"
 	desc = "These beautiful flowers have a crisp smokey scent, like a summer bonfire."
@@ -116,27 +116,27 @@
 	attack_verb = list("sears", "heats", "whacks", "steams")
 	fragrance = INCENSE_NOVAFLOWERS
 
-/obj/item/weapon/grown/novaflower/New(atom/loc, custom_plantname)
+/obj/item/grown/novaflower/New(atom/loc, custom_plantname)
 	..()
 	reagents.add_reagent(NUTRIMENT, 1)
 	reagents.add_reagent(CAPSAICIN, round(potency, 1))
 
-/obj/item/weapon/grown/novaflower/changePotency(newValue)
+/obj/item/grown/novaflower/changePotency(newValue)
 	potency = newValue
 	force = round((5 + potency / 5), 1)
 
-/obj/item/weapon/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
+/obj/item/grown/novaflower/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..())
 		return
 	if(istype(M, /mob/living))
 		to_chat(M, "<span class='warning'>You are heated by the warmth of the of the [name]!</span>")
 		M.bodytemperature += potency/2 * TEMPERATURE_DAMAGE_COEFFICIENT
-/obj/item/weapon/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
+/obj/item/grown/novaflower/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves)
 		to_chat(user, "<span class='warning'>The [name] burns your bare hand!</span>")
 		user.adjustFireLoss(rand(1,5))
 
-/obj/item/weapon/grown/nettle // -- Skie
+/obj/item/grown/nettle // -- Skie
 	plantname = "nettle"
 	desc = "It's probably <B>not</B> wise to touch it with bare hands..."
 	icon = 'icons/obj/hydroponics/nettle.dmi'
@@ -151,7 +151,7 @@
 	throw_range = 3
 	origin_tech = Tc_COMBAT + "=1"
 
-/obj/item/weapon/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
+/obj/item/grown/nettle/pickup(mob/living/carbon/human/user as mob) //todo this
 	if(istype(user))
 		if(!user.gloves)
 			to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
@@ -162,7 +162,7 @@
 		user.take_organ_damage(0,force)
 		to_chat(user, "<span class='warning'>The nettle burns your bare hand!</span>")
 
-/obj/item/weapon/grown/nettle/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
+/obj/item/grown/nettle/afterattack(atom/A as mob|obj, mob/user as mob, proximity)
 	if(!proximity)
 		return
 	user.delayNextAttack(8)
@@ -174,11 +174,11 @@
 		user.drop_item(src, force_drop = 1)
 		qdel(src)
 
-/obj/item/weapon/grown/nettle/changePotency(newValue) //-QualityVan
+/obj/item/grown/nettle/changePotency(newValue) //-QualityVan
 	potency = newValue
 	force = round((5+potency/5), 1)
 
-/obj/item/weapon/grown/deathnettle // -- Skie
+/obj/item/grown/deathnettle // -- Skie
 	plantname = "deathnettle"
 	desc = "A glowing red nettle that incites rage in you just from looking at it."
 	icon = 'icons/obj/hydroponics/deathnettle.dmi'
@@ -194,11 +194,11 @@
 	origin_tech = Tc_COMBAT + "=3"
 	attack_verb = list("stings, pricks")
 
-/obj/item/weapon/grown/deathnettle/suicide_act(mob/user)
+/obj/item/grown/deathnettle/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is eating some of the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_TOXLOSS)
 
-/obj/item/weapon/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
+/obj/item/grown/deathnettle/pickup(mob/living/carbon/human/user as mob)
 	if(!user.gloves)
 		if(istype(user, /mob/living/carbon/human))
 			var/datum/organ/external/affecting = user.get_active_hand_organ()
@@ -210,7 +210,7 @@
 			user.Paralyse(5)
 			to_chat(user, "<span class='warning'>You are stunned by the Deathnettle when you try picking it up!</span>")
 
-/obj/item/weapon/grown/deathnettle/attack(mob/living/carbon/M as mob, mob/user as mob)
+/obj/item/grown/deathnettle/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(!..())
 		return
 	to_chat(M, "<span class='warning'>You are stunned by the powerful acid of the Deathnettle!</span>")
@@ -234,11 +234,11 @@
 		to_chat(user, "All the leaves have fallen off the deathnettle from violent whacking.")
 		qdel(src)
 
-/obj/item/weapon/grown/deathnettle/changePotency(newValue) //-QualityVan
+/obj/item/grown/deathnettle/changePotency(newValue) //-QualityVan
 	potency = newValue
 	force = round((5+potency/2.5), 1)
 
-/obj/item/weapon/corncob
+/obj/item/corncob
 	name = "corn cob"
 	desc = "A reminder of meals gone by."
 	icon = 'icons/obj/hydroponics/corn.dmi'
@@ -249,7 +249,7 @@
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/corncob/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/corncob/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(W.is_sharp() && W.sharpness_flags & SHARP_BLADE)
 		to_chat(user, "<span class='notice'>You use [W] to fashion a pipe out of the corn cob!</span>")
@@ -258,7 +258,7 @@
 		qdel(src)
 		return
 
-/obj/item/weapon/carnivorous_pumpkin
+/obj/item/carnivorous_pumpkin
 	name = "carnivorous pumpkin"
 	desc = "It hungers. For heads."
 	icon = 'icons/obj/clothing/hats.dmi'
@@ -266,7 +266,7 @@
 	cant_drop = 1
 	laying_pickup = TRUE
 
-/obj/item/weapon/carnivorous_pumpkin/New()
+/obj/item/carnivorous_pumpkin/New()
 	..()
 	spawn(rand(40 SECONDS, 90 SECONDS))
 		if(gcDestroyed)
@@ -279,7 +279,7 @@
 		visible_message("<span class = 'warning'>\The [src] laughs, before disappearing from view.</span>")
 		qdel(src)
 
-/obj/item/weapon/carnivorous_pumpkin/attack(mob/living/carbon/M, mob/living/carbon/user)
+/obj/item/carnivorous_pumpkin/attack(mob/living/carbon/M, mob/living/carbon/user)
 	if(ishuman(M) && M != user)
 		user.drop_item(src, force_drop = 1)
 		M.drop_item(M.get_active_hand(), force_drop = 1)

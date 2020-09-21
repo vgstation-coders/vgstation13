@@ -64,10 +64,10 @@
 /datum/centcomm_order/department/medical/vaccine/New()
 	..()
 	requested = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = 1
+		/obj/item/reagent_containers/glass/beaker/vial = 1
 	)
 	name_override = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = "Vial of Vaccine"
+		/obj/item/reagent_containers/glass/beaker/vial = "Vial of Vaccine"
 	)
 	var/difficulty = rand(1,4)
 	switch (difficulty)
@@ -85,7 +85,7 @@
 			worth = 1600
 	extra_requirements = "Must contain [required_vac] antibodies."
 
-/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/reagent_containers/glass/beaker/vial/V)
 	if (!istype(V))
 		return 0
 	for(var/datum/reagent/vaccine/vaccine in V.reagents?.reagent_list)
@@ -102,16 +102,16 @@
 		"Virology",
 		)
 	requested = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = 1
+		/obj/item/reagent_containers/glass/beaker/vial = 1
 	)
 	name_override = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = "Vial of Infected Blood"
+		/obj/item/reagent_containers/glass/beaker/vial = "Vial of Infected Blood"
 	)
 
 	extra_requirements = "Must contain a dangerous disease with a combined Effect Danger level of at least 13, and a Strength of at least 80."
 	worth = 600
 
-/datum/centcomm_order/department/medical/harmful_disease/ExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+/datum/centcomm_order/department/medical/harmful_disease/ExtraChecks(var/obj/item/reagent_containers/glass/beaker/vial/V)
 	if (!istype(V))
 		return 0
 	var/datum/reagent/blood/blood = locate() in V.reagents.reagent_list
@@ -136,16 +136,16 @@
 		"Virology",
 		)
 	requested = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = 1
+		/obj/item/reagent_containers/glass/beaker/vial = 1
 	)
 	name_override = list(
-		/obj/item/weapon/reagent_containers/glass/beaker/vial = "Vial of Infected Blood"
+		/obj/item/reagent_containers/glass/beaker/vial = "Vial of Infected Blood"
 	)
 
 	extra_requirements = "Must contain a beneficial disease with a combined Effect Danger level of at most 2."
 	worth = 1000
 
-/datum/centcomm_order/department/medical/beneficial_disease/ExtraChecks(var/obj/item/weapon/reagent_containers/glass/beaker/vial/V)
+/datum/centcomm_order/department/medical/beneficial_disease/ExtraChecks(var/obj/item/reagent_containers/glass/beaker/vial/V)
 	if (!istype(V))
 		return 0
 	var/datum/reagent/blood/blood = locate() in V.reagents.reagent_list
@@ -174,16 +174,16 @@
 	..()
 	req_stage = rand(1,4)
 	requested = list(
-		/obj/item/weapon/disk/disease = rand (2,5)
+		/obj/item/disk/disease = rand (2,5)
 	)
 	name_override = list(
-		/obj/item/weapon/disk/disease = "GNA Disks"
+		/obj/item/disk/disease = "GNA Disks"
 	)
 
 	extra_requirements = "Each must contain a different Stage [req_stage] symptom."
 	worth = 300 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/gna_disk/ExtraChecks(var/obj/item/weapon/disk/disease/Disk)
+/datum/centcomm_order/department/medical/gna_disk/ExtraChecks(var/obj/item/disk/disease/Disk)
 	if (!istype(Disk))
 		return 0
 	if ((Disk.stage == req_stage) && Disk.effect && !(Disk.effect.type in already_goten))
@@ -201,14 +201,14 @@
 		"Genetics",
 		)
 	requested = list(
-		/obj/item/weapon/dnainjector = rand (1,5)
+		/obj/item/dnainjector = rand (1,5)
 	)
 	name_override = list(
-		/obj/item/weapon/dnainjector = "Clean SE Injector"
+		/obj/item/dnainjector = "Clean SE Injector"
 	)
 	worth = 100 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (!I.block && I.buf)//Not a block injector
@@ -228,14 +228,14 @@
 		"Genetics",
 		)
 	requested = list(
-		/obj/item/weapon/dnainjector = rand (1,3)
+		/obj/item/dnainjector = rand (1,3)
 	)
 	name_override = list(
-		/obj/item/weapon/dnainjector = "X-Ray SE Block Injector"
+		/obj/item/dnainjector = "X-Ray SE Block Injector"
 	)
 	worth = 200 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/xray/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/xray/ExtraChecks(var/obj/item/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (I.block == XRAYBLOCK && I.buf)//Block Injector
@@ -252,14 +252,14 @@
 		"Genetics",
 		)
 	requested = list(
-		/obj/item/weapon/dnainjector = rand (1,3)
+		/obj/item/dnainjector = rand (1,3)
 	)
 	name_override = list(
-		/obj/item/weapon/dnainjector = "Hulk SE Block Injector"
+		/obj/item/dnainjector = "Hulk SE Block Injector"
 	)
 	worth = 300 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/hulk/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/hulk/ExtraChecks(var/obj/item/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (I.block == HULKBLOCK && I.buf)//Block Injector
@@ -276,14 +276,14 @@
 		"Genetics",
 		)
 	requested = list(
-		/obj/item/weapon/dnainjector = rand (1,3)
+		/obj/item/dnainjector = rand (1,3)
 	)
 	name_override = list(
-		/obj/item/weapon/dnainjector = "Telepathy SE Block Injector"
+		/obj/item/dnainjector = "Telepathy SE Block Injector"
 	)
 	worth = 300 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/telepathy/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/telepathy/ExtraChecks(var/obj/item/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (I.block == REMOTETALKBLOCK && I.buf)//Block Injector
@@ -300,14 +300,14 @@
 		"Genetics",
 		)
 	requested = list(
-		/obj/item/weapon/dnainjector = rand (1,3)
+		/obj/item/dnainjector = rand (1,3)
 	)
 	name_override = list(
-		/obj/item/weapon/dnainjector = "Remote View SE Block Injector"
+		/obj/item/dnainjector = "Remote View SE Block Injector"
 	)
 	worth = 300 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/remoteview/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/remoteview/ExtraChecks(var/obj/item/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (I.block == REMOTEVIEWBLOCK && I.buf)//Block Injector

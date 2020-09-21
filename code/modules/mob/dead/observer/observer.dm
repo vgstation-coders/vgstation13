@@ -138,11 +138,11 @@ var/creating_arena = FALSE
 
 /mob/dead/attackby(obj/item/W, mob/user)
 	// Legacy Cult stuff
-	if(istype(W,/obj/item/weapon/tome_legacy))
+	if(istype(W,/obj/item/tome_legacy))
 		cultify()//takes care of making ghosts visible
     // Big boy modern Cult 3.0 stuff
 	if (iscultist(user))
-		if(istype(W,/obj/item/weapon/tome))
+		if(istype(W,/obj/item/tome))
 			if(invisibility != 0 || icon_state != "ghost-narsie")
 				cultify()
 				user.visible_message(
@@ -150,8 +150,8 @@ var/creating_arena = FALSE
 					"<span class='warning'>You drag a ghost to our plane of reality!</span>"
 				)
 			return
-		else if (istype(W,/obj/item/weapon/talisman))
-			var/obj/item/weapon/talisman/T = W
+		else if (istype(W,/obj/item/talisman))
+			var/obj/item/talisman/T = W
 			if (T.blood_text)
 				to_chat(user, "<span class='warning'>This [W] has already been written on.</span>")
 			var/data = use_available_blood(user, 1)
@@ -175,8 +175,8 @@ var/creating_arena = FALSE
 					if(!(M.dna.unique_enzymes in W.blood_DNA))
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
-		else if (istype(W,/obj/item/weapon/paper))
-			var/obj/item/weapon/paper/P = W
+		else if (istype(W,/obj/item/paper))
+			var/obj/item/paper/P = W
 			if (P.info)
 				to_chat(user, "<span class='warning'>This [W] has already been written on.</span>")
 			var/data = use_available_blood(user, 1)
@@ -200,7 +200,7 @@ var/creating_arena = FALSE
 					if(!(M.dna.unique_enzymes in W.blood_DNA))
 						W.blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 
-	if(istype(W,/obj/item/weapon/storage/bible) || isholyweapon(W))
+	if(istype(W,/obj/item/storage/bible) || isholyweapon(W))
 		var/mob/dead/M = src
 		if(src.invisibility == 0)
 			M.invisibility = 60

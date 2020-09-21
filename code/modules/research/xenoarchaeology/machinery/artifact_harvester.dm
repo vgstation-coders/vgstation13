@@ -10,7 +10,7 @@
 	active_power_usage = 750
 	use_power = 1
 	var/harvesting = 0
-	var/obj/item/weapon/anobattery/inserted_battery
+	var/obj/item/anobattery/inserted_battery
 	var/obj/machinery/artifact/cur_artifact
 	var/datum/artifact_effect/isolated_primary
 	var/datum/artifact_effect/isolated_secondary
@@ -53,7 +53,7 @@
 		owned_scanner.desc = "Can harvest the exotic particles of a large alien artifact that has been isolated in it."
 
 /obj/machinery/artifact_harvester/attackby(var/obj/I as obj, var/mob/user as mob)
-	if(istype(I,/obj/item/weapon/anobattery))
+	if(istype(I,/obj/item/anobattery))
 		if(!inserted_battery)
 			if(user.drop_item(I, src))
 				playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)

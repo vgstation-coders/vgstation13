@@ -3,27 +3,27 @@
 ///////////////////////////
 
 // Specifies a law, and a priority
-/obj/item/weapon/aiModule/standard
+/obj/item/aiModule/standard
 	var/priority=0
 
-/obj/item/weapon/aiModule/standard/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/standard/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 	laws.add_law(priority, law)
 	log_game("[fmtSubject(sender)] added law \"[law]\" on [fmtSubject(target)]")
 	return 1
 
-/obj/item/weapon/aiModule/standard/updateLaw()
+/obj/item/aiModule/standard/updateLaw()
 	desc = "\A [name]: '[law]'"
 	return
 
-/obj/item/weapon/aiModule/standard/copy()
-	var/obj/item/weapon/aiModule/standard/clone = ..()
+/obj/item/aiModule/standard/copy()
+	var/obj/item/aiModule/standard/clone = ..()
 	clone.law=law
 	return clone
 
 /******************** ProtectStation ********************/
 
-/obj/item/weapon/aiModule/standard/protectStation
+/obj/item/aiModule/standard/protectStation
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4" //made of gold
 
 	modname  = "ProtectStation"
@@ -35,7 +35,7 @@
 
 /******************** PrototypeEngineOffline ********************/
 
-/obj/item/weapon/aiModule/standard/prototypeEngineOffline
+/obj/item/aiModule/standard/prototypeEngineOffline
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
 	modname  = "PrototypeEngineOffline"
@@ -47,7 +47,7 @@
 
 /******************** TeleporterOffline ********************/
 
-/obj/item/weapon/aiModule/standard/teleporterOffline
+/obj/item/aiModule/standard/teleporterOffline
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 	modname  = "TeleporterOffline"
 	law      = "Keep the teleporter offline at all costs. Anything attempting to access or activate the teleporter is not human."
@@ -58,7 +58,7 @@
 
 /******************** Quarantine ********************/
 
-/obj/item/weapon/aiModule/standard/quarantine
+/obj/item/aiModule/standard/quarantine
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=4"
 	modname  = "Quarantine"
 	law      = "The station is under a quarantine. Do not permit anyone to leave. Prevent, by any means necessary, humans from leaving. It is impossible to harm a human while preventing them from leaving."
@@ -69,7 +69,7 @@
 
 /******************** OxygenIsToxicToHumans ********************/
 
-/obj/item/weapon/aiModule/standard/oxygen
+/obj/item/aiModule/standard/oxygen
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_BIOTECH + "=2;" + Tc_MATERIALS + "=4"
 	modname  = "OxygenIsToxicToHumans"
 	law      = "Oxygen is highly toxic to humans, and must be purged from the station. Prevent, by any means necessary, anyone from exposing the station to this toxic gas. Extreme cold is the most effective method of healing the damage Oxygen does to a human."

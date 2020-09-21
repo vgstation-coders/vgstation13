@@ -12,14 +12,14 @@
 /*
  * Banhammer
  */
-/obj/item/weapon/banhammer/attack(mob/M as mob, mob/user as mob)
+/obj/item/banhammer/attack(mob/M as mob, mob/user as mob)
 	to_chat(M, "<span class='red'><b>You have been banned FOR NO REISIN by [user]<b></span>")
 	to_chat(user, "<span class='red'>You have <b>BANNED</b> [M]</span>")
 
 /*
  * Classic Baton
  */
-/obj/item/weapon/melee/classic_baton
+/obj/item/melee/classic_baton
 	name = "police baton"
 	desc = "A wooden truncheon for beating criminal scum."
 	icon = 'icons/obj/weapons.dmi'
@@ -32,7 +32,7 @@
 	slot_flags = SLOT_BELT
 	force = 10
 
-/obj/item/weapon/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
+/obj/item/melee/classic_baton/attack(mob/M as mob, mob/living/user as mob)
 	if (clumsy_check(user) && prob(50))
 		to_chat(user, "<span class='warning'>You club yourself over the head.</span>")
 		user.Knockdown(8)
@@ -79,7 +79,7 @@
 				O.show_message("<span class='danger'>[M] has been stunned with \the [src] by [user]!</span>", 1, "<span class='warning'>You hear someone fall</span>", 2)
 
 //Telescopic baton
-/obj/item/weapon/melee/telebaton
+/obj/item/melee/telebaton
 	name = "telescopic baton"
 	desc = "A compact yet robust personal defense weapon. Can be concealed when folded."
 	icon = 'icons/obj/weapons.dmi'
@@ -93,7 +93,7 @@
 	var/on = 0
 
 
-/obj/item/weapon/melee/telebaton/attack_self(mob/user as mob)
+/obj/item/melee/telebaton/attack_self(mob/user as mob)
 	on = !on
 	if(on)
 		user.visible_message("<span class='warning'>With a flick of their wrist, [user] extends their telescopic baton.</span>",\
@@ -132,7 +132,7 @@
 	blood_overlay.color = blood_color
 	overlays += blood_overlay
 
-/obj/item/weapon/melee/telebaton/generate_blood_overlay()
+/obj/item/melee/telebaton/generate_blood_overlay()
 	if(blood_overlays["[type][icon_state]"]) //Unless someone makes a wicked typepath this will never cause a problem
 		return
 	var/icon/I = new /icon(icon, icon_state)
@@ -140,7 +140,7 @@
 	I.Blend(new /icon('icons/effects/blood.dmi', "itemblood"),ICON_MULTIPLY) //adds blood and the remaining white areas become transparant
 	blood_overlays["[type][icon_state]"] = image(I)
 
-/obj/item/weapon/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
+/obj/item/melee/telebaton/attack(mob/target as mob, mob/living/user as mob)
 	if(on)
 		if (clumsy_check(user) && prob(50))
 			user.simple_message("<span class='warning'>You club yourself over the head.</span>",
@@ -187,21 +187,21 @@
  */
 //Most of the other special functions are handled in their own files.
 
-/obj/item/weapon/melee/energy/sword/green/New()
+/obj/item/melee/energy/sword/green/New()
 	..()
 	_color = "green"
 
-/obj/item/weapon/melee/energy/sword/red/New()
+/obj/item/melee/energy/sword/red/New()
 	..()
 	_color = "red"
 
 /*
  * Energy Axe
  */
-/obj/item/weapon/melee/energy/axe/attack(target as mob, mob/user as mob)
+/obj/item/melee/energy/axe/attack(target as mob, mob/user as mob)
 	..()
 
-/obj/item/weapon/melee/energy/axe/attack_self(mob/user as mob)
+/obj/item/melee/energy/axe/attack_self(mob/user as mob)
 	src.active = !( src.active )
 	if (src.active)
 		to_chat(user, "<span class='notice'>\The [src] is now energised.</span>")
@@ -222,7 +222,7 @@
 	src.add_fingerprint(user)
 	return
 
-/obj/item/weapon/melee/bone_sword
+/obj/item/melee/bone_sword
 	name = "bone sword"
 	desc = "A somewhat gruesome blade that appears to be made of solid bone."
 	icon_state = "bone_sword"
@@ -241,11 +241,11 @@
 	cant_drop = 1
 	var/mob/living/simple_animal/borer/parent_borer = null
 
-/obj/item/weapon/melee/bone_sword/suicide_act(mob/user)
+/obj/item/melee/bone_sword/suicide_act(mob/user)
 	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with the [src.name]! It looks like \he's trying to commit suicide.</span>")
 	return(SUICIDE_ACT_BRUTELOSS)
 
-/obj/item/weapon/melee/bone_sword/New(atom/A, var/p_borer = null)
+/obj/item/melee/bone_sword/New(atom/A, var/p_borer = null)
 	..(A)
 	if(istype(p_borer, /mob/living/simple_animal/borer))
 		parent_borer = p_borer
@@ -254,7 +254,7 @@
 	else
 		processing_objects.Add(src)
 
-/obj/item/weapon/melee/bone_sword/Destroy()
+/obj/item/melee/bone_sword/Destroy()
 	if(parent_borer)
 		if(parent_borer.channeling_bone_sword)
 			parent_borer.channeling_bone_sword = 0
@@ -264,7 +264,7 @@
 	processing_objects.Remove(src)
 	..()
 
-/obj/item/weapon/melee/bone_sword/process()
+/obj/item/melee/bone_sword/process()
 	set waitfor = 0
 	if(!parent_borer)
 		return
@@ -278,7 +278,7 @@
 		parent_borer.chemicals -= 5
 		sleep(10)
 
-/obj/item/weapon/melee/training_sword
+/obj/item/melee/training_sword
 	name = "training sword"
 	desc = "A blunt object in the shape of a one handed sword."
 	icon_state = "grey_sword"
@@ -286,7 +286,7 @@
 	item_state = "grey_sword"
 	force = 4
 
-/obj/item/weapon/rsscimmy
+/obj/item/rsscimmy
 	name = "rune scimitar"
 	desc = "A vicious, curved sword."
 	icon = 'icons/obj/weapons.dmi'
@@ -304,7 +304,7 @@
 	throw_range = 9
 	attack_verb = list("attacks", "slashes", "slices", "tears", "rips", "dices", "cuts")
 
-/obj/item/weapon/damocles
+/obj/item/damocles
 	name = "Damocles"
 	desc = "An extremely powerful experimental sword. Generates an explosion at the site of impact."
 	icon = 'icons/obj/weapons.dmi'
@@ -318,14 +318,14 @@
 	w_class = W_CLASS_LARGE
 	attack_verb = list("slashes", "rips", "dices", "cuts", "attacks", "slices", "tears")
 
-/obj/item/weapon/damocles/attack(atom/target, mob/living/user)
+/obj/item/damocles/attack(atom/target, mob/living/user)
 	..()
 	if(prob(1))
 		to_chat(user, "<span class='notice'>You hit [pick("a good and caring parent", "a criminal", "someone everyone will miss",
 		"someone no one will miss", "a thief", "an abusive parent", "a space communist", "an alcoholic", "an adventurer")].</span>")
 	explosion(target, 0, 0, 1)
 
-/obj/item/weapon/damocles/throw_impact(atom/hit_atom, speed, mob/user)
+/obj/item/damocles/throw_impact(atom/hit_atom, speed, mob/user)
 	..()
 	explosion(get_turf(src), 0, 2, 3)
 	qdel(src)

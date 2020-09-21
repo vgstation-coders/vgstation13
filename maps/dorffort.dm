@@ -87,10 +87,10 @@
 
 	fluffitems = list(
 		/obj/machinery/computer/crew					= 1,
-		/obj/item/weapon/storage/bag/chem				= 2,
+		/obj/item/storage/bag/chem				= 2,
 		/obj/effect/decal/cleanable/blood				= 1,
 		/obj/effect/decal/cleanable/blood/gibs			= 2,
-		/obj/item/weapon/melee/defibrillator			= 1,
+		/obj/item/melee/defibrillator			= 1,
 		/obj/structure/closet/secure_closet/medical3	= 2,
 		/obj/structure/closet/secure_closet/medical2	= 2,
 		/obj/structure/bed/roller					= 3,
@@ -146,11 +146,11 @@
 	)
 
 	fluffitems = list(
-		/obj/item/weapon/cell/hyper/empty								= 3,
-		/obj/item/weapon/cell/hyper										= 1,
+		/obj/item/cell/hyper/empty								= 3,
+		/obj/item/cell/hyper										= 1,
 		/obj/item/stack/sheet/mineral/plasma							= 2,
 		/obj/structure/dispenser										= 2,
-		/obj/item/weapon/circuitboard/smes								= 1,
+		/obj/item/circuitboard/smes								= 1,
 		/obj/structure/closet/secure_closet/engineering_electrical		= 1,
 		/obj/structure/closet/secure_closet/engineering_welding			= 2,
 		/obj/item/device/rcd											= 1,
@@ -183,10 +183,10 @@
 	fluffitems = list(
 		/obj/structure/closet/secure_closet/hydroponics					= 2,
 		/obj/structure/closet/crate/hydroponics							= 2,
-		/obj/item/weapon/reagent_containers/spray/plantbgone			= 3,
+		/obj/item/reagent_containers/spray/plantbgone			= 3,
 		/obj/structure/vendomatpack/hydroseeds							= 1,
 		/obj/item/seeds/random											= 2,
-		/obj/item/weapon/storage/fancy/egg_box							= 2,
+		/obj/item/storage/fancy/egg_box							= 2,
 		/mob/living/simple_animal/chicken								= 1,
 		/mob/living/simple_animal/cow									= 1
 	)
@@ -220,7 +220,7 @@
 		/obj/item/device/mmi								= 2,
 		/mob/living/carbon/slime/adult						= 1,
 		/obj/machinery/mommi_spawner/dorf					= 1,
-		/obj/item/weapon/storage/box/monkeycubes			= 3,
+		/obj/item/storage/box/monkeycubes			= 3,
 
 	)
 
@@ -240,8 +240,8 @@
 
 	spawntypes = list(
 		/obj/mecha/working/ripley/mining			= 1,
-		/obj/item/weapon/pickaxe/jackhammer			= 1,
-		/obj/item/weapon/pickaxe/drill/diamond		= 1,
+		/obj/item/pickaxe/jackhammer			= 1,
+		/obj/item/pickaxe/drill/diamond		= 1,
 		/obj/structure/closet/syndicate/resources	= 2,
 		/obj/structure/closet/cash_closet			= 3,
 	)
@@ -250,9 +250,9 @@
 		/obj/effect/decal/cleanable/blood								= 3,
 		/obj/effect/decal/remains/human									= 1,
 		/obj/item/clothing/under/overalls								= 1,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/chili		= 1,
-		/obj/item/weapon/tank/oxygen/red								= 2,
-		/obj/item/weapon/gun/projectile/mateba							= 1
+		/obj/item/reagent_containers/food/snacks/grown/chili		= 1,
+		/obj/item/tank/oxygen/red								= 2,
+		/obj/item/gun/projectile/mateba							= 1
 	)
 
 	complex_max_size=3

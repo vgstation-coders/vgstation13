@@ -187,7 +187,7 @@
 		. =..()
 
 
-	var/obj/item/weapon/storage/bible/B = locate(/obj/item/weapon/storage/bible) in H.loc
+	var/obj/item/storage/bible/B = locate(/obj/item/storage/bible) in H.loc
 	if (!B)
 		return
 	if(isanycultist(H))

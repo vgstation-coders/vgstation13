@@ -3,7 +3,7 @@
 //mainly used for the blueprinter, but planning to nanopaper and paper bin functionality
 //TODO - Sprite this and add to paper bins
 
-/obj/item/weapon/paper_pack
+/obj/item/paper_pack
 	name = "paper pack"
 	desc = "A pack of papers, secured by some red ribbon."
 	icon = 'icons/obj/paper.dmi'
@@ -21,22 +21,22 @@
 	fire_fuel = 1
 	var/amount = 0
 	var/maxamount = 20
-	var/papertype = /obj/item/weapon/paper
+	var/papertype = /obj/item/paper
 	var/pptype = ""
 
-/obj/item/weapon/paper_pack/New()
+/obj/item/paper_pack/New()
 	..()
 	amount = 20
 	pixel_x = rand(-5, 3) * PIXEL_MULTIPLIER
 	pixel_y = rand(-3, 5) * PIXEL_MULTIPLIER
 	update_icon()
 
-/obj/item/weapon/paper_pack/attack_self()
+/obj/item/paper_pack/attack_self()
 	if(usr.loc)
 		new papertype(usr.loc)
 		usepaper(1)
 
-/obj/item/weapon/paper_pack/proc/usepaper(var/sheetcount = 0)
+/obj/item/paper_pack/proc/usepaper(var/sheetcount = 0)
 	var/usedpaper = 0 //tracks the actual paper removed
 	if(sheetcount && sheetcount <= amount)
 		usedpaper = sheetcount
@@ -47,7 +47,7 @@
 	update_icon()
 	return usedpaper
 
-/obj/item/weapon/paper_pack/update_icon()
+/obj/item/paper_pack/update_icon()
 	if(amount)
 		if(amount>14)
 			icon_state = "[pptype]pp_large"
@@ -58,15 +58,15 @@
 		name = "[pptype]paper pack"
 		desc = "A pack of [pptype]papers, secured by some red ribbon."
 	else
-		new/obj/item/weapon/ribbon(get_turf(src))
+		new/obj/item/ribbon(get_turf(src))
 		qdel(src)
 
-/obj/item/weapon/paper_pack/examine(mob/user)
+/obj/item/paper_pack/examine(mob/user)
 	..()
 	if(amount)
 		to_chat(user, "<span class='info'>There are [amount] sheets in the pack.</span>")
 
-/obj/item/weapon/paper_pack/verb/ribbontie()
+/obj/item/paper_pack/verb/ribbontie()
 	set name = "Untie Paper Pack"
 	set category = "Object"
 	set src in usr
@@ -79,12 +79,12 @@
 	else
 		to_chat(usr, "<span class='warning'>You don't think it would be wise to drop this much paper.</span>")
 
-/obj/item/weapon/paper_pack/nano //now in flavours!
-	papertype = /obj/item/weapon/paper/nano
+/obj/item/paper_pack/nano //now in flavours!
+	papertype = /obj/item/paper/nano
 	pptype = "nano"
 	icon_state = "nanopp_large"
 
-/obj/item/weapon/ribbon //yay, pointless things
+/obj/item/ribbon //yay, pointless things
 	name = "red ribbon"
 	desc = "A red ribbon, normally used to tie things up."
 	icon = 'icons/obj/paper.dmi'

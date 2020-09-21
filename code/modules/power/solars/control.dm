@@ -89,8 +89,8 @@
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
 				"You clear the broken monitor off of [src]")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
-				new /obj/item/weapon/shard(loc)
-				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
+				new /obj/item/shard(loc)
+				var/obj/item/circuitboard/solar_control/M = new /obj/item/circuitboard/solar_control(A)
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				A.circuit = M
@@ -102,7 +102,7 @@
 				visible_message("[user] begins to unscrew \the [src]'s monitor.",
 				"You begin to unscrew the monitor...")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
-				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
+				var/obj/item/circuitboard/solar_control/M = new /obj/item/circuitboard/solar_control(A)
 				for (var/obj/C in src)
 					C.forceMove(src.loc)
 				A.circuit = M

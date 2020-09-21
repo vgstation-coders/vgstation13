@@ -6,7 +6,7 @@
 	use_power = 1
 	idle_power_usage = 300
 	active_power_usage = 300
-	var/obj/item/weapon/circuitboard/circuit = null //if circuit==null, computer can't disassembly
+	var/obj/item/circuitboard/circuit = null //if circuit==null, computer can't disassembly
 	var/processing = 0
 	machine_flags = EMAGGABLE | SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | MULTITOOL_MENU | SHUTTLEWRENCH
 
@@ -106,7 +106,7 @@
 	stat |= BROKEN
 	update_icon()
 
-/obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/weapon/circuitboard/CC = null)
+/obj/machinery/computer/togglePanelOpen(var/obj/item/toggleitem, mob/user, var/obj/item/circuitboard/CC = null)
 	if(!circuit) //we can't disassemble with no circuit, so add some fucking circuits if you want disassembly
 		return
 	toggleitem.playtoolsound(src, 50)
@@ -124,7 +124,7 @@
 			C.forceMove(src.loc)
 		if (src.stat & BROKEN)
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			A.state = 3
 			A.icon_state = "3"
 		else

@@ -260,7 +260,7 @@ This ladder stuff looks confusing, so here's an illustration!!!
 /obj/effect/landmark/sokoban_jail
 
 ///////LORE///////
-/obj/item/weapon/paper/sokoban
+/obj/item/paper/sokoban
 	name = "paper- 'The Puzzle'"
 	info = {" This is some sort of a cruel joke. They know they can't fire me, so they're trying to make me quit on my own. The quartermaster built some sort of a puzzle for me to solve. I fucking hate puzzles.
  <br><br>

@@ -1,13 +1,13 @@
 #define MAX_STORED_BAGS 10
 //device to take core samples from mineral turfs - used for various types of analysis
 
-/obj/item/weapon/storage/box/samplebags
+/obj/item/storage/box/samplebags
 	name = "sample bag box"
 	desc = "A box containing sample bags."
 
-/obj/item/weapon/storage/box/samplebags/New()
+/obj/item/storage/box/samplebags/New()
 	for(var/i=0, i<7, i++)
-		new/obj/item/weapon/storage/evidencebag/sample(src)
+		new/obj/item/storage/evidencebag/sample(src)
 	..()
 
 //////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	//slot_flags = SLOT_BELT
-	var/obj/item/weapon/rocksliver/extracted
+	var/obj/item/rocksliver/extracted
 
 /obj/item/device/core_sampler/Destroy()
 	if (extracted)
@@ -45,8 +45,8 @@
 			geo_data = T.geologic_data
 			var/excav_overlay = "overlay_excv1_[rand(1,3)]"
 			T.overlays += excav_overlay
-		else if(istype(item_to_sample, /obj/item/weapon/strangerock))
-			var/obj/item/weapon/strangerock/O = item_to_sample
+		else if(istype(item_to_sample, /obj/item/strangerock))
+			var/obj/item/strangerock/O = item_to_sample
 			geo_data = O.geologic_data
 
 		if(geo_data)
@@ -79,7 +79,7 @@
 		to_chat(user, "<span class='warning'>The core sampler is empty.</span>")
 
 
-/obj/item/weapon/storage/evidencebag/sample
+/obj/item/storage/evidencebag/sample
 	name = "sample bag"
 	desc = "A bag for holding research samples."
 	use_to_pickup = FALSE

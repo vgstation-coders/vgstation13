@@ -6,11 +6,11 @@
 	name = "disease splicer"
 	icon = 'icons/obj/virology.dmi'
 	icon_state = "splicer"
-	circuit = "/obj/item/weapon/circuitboard/splicer"
+	circuit = "/obj/item/circuitboard/splicer"
 
 	var/datum/disease2/effect/memorybank = null
 	var/analysed = FALSE // If the buffered effect came from a dish that had been analyzed this is TRUE
-	var/obj/item/weapon/virusdish/dish = null
+	var/obj/item/virusdish/dish = null
 	var/burning = 0 // Time in process ticks until disk burning is over
 
 	var/splicing = 0 // Time in process ticks until splicing is over
@@ -23,10 +23,10 @@
 	light_color = "#00FF00"
 
 /obj/machinery/computer/diseasesplicer/attackby(var/obj/I, var/mob/user)
-	if(!(istype(I,/obj/item/weapon/virusdish) || istype(I,/obj/item/weapon/disk/disease)))
+	if(!(istype(I,/obj/item/virusdish) || istype(I,/obj/item/disk/disease)))
 		return ..()
 
-	if(istype(I, /obj/item/weapon/virusdish))
+	if(istype(I, /obj/item/virusdish))
 		if(dish)
 			to_chat(user, "<span class='warning'>A virus containment dish is already inside \the [src].</span>")
 			return
@@ -37,8 +37,8 @@
 		playsound(loc, 'sound/machines/click.ogg', 50, 1)
 		update_icon()
 
-	if(istype(I, /obj/item/weapon/disk/disease))
-		var/obj/item/weapon/disk/disease/disk = I
+	if(istype(I, /obj/item/disk/disease))
+		var/obj/item/disk/disease/disk = I
 		visible_message("<span class='notice'>[user] swipes \the [disk] against \the [src].</span>", "<span class='notice'>You swipe \the [disk] against \the [src], copying the data into the machine's buffer.</span>")
 		memorybank = disk.effect
 		anim(target = src, a_icon = icon, flick_anim = "splicer_disk", sleeptime = 15)
@@ -125,7 +125,7 @@
 			update_icon()
 			anim(target = src, a_icon = icon, flick_anim = "splicer_print", sleeptime = 15)
 			nanomanager.update_uis(src)
-			var/obj/item/weapon/disk/disease/d = new /obj/item/weapon/disk/disease(src)
+			var/obj/item/disk/disease/d = new /obj/item/disk/disease(src)
 			if(analysed)
 				d.name = "\improper [memorybank.name] GNA disk (Stage: [memorybank.stage])"
 			else

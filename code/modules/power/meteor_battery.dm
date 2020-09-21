@@ -39,7 +39,7 @@
 	..()
 	return attackby(null, user)
 
-/obj/item/projectile/missile/attackby(obj/item/weapon/W, mob/user)
+/obj/item/projectile/missile/attackby(obj/item/W, mob/user)
 	//can't touch this
 	..()
 	explode()
@@ -219,7 +219,7 @@
 		src.die()
 	return
 
-/obj/machinery/meteor_battery/attackby(obj/item/weapon/W, mob/user)//I can't believe no one added this before/N
+/obj/machinery/meteor_battery/attackby(obj/item/W, mob/user)//I can't believe no one added this before/N
 	..()
 	playsound(src.loc, 'sound/weapons/smash.ogg', 60, 1)
 	spark(src, 5, FALSE)

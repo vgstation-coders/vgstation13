@@ -5,11 +5,11 @@
 	desc = "How did this get here?"
 	density = 0
 	anchored = 1
-	var/obj/item/weapon/spear/spear = null
+	var/obj/item/spear/spear = null
 	var/obj/item/organ/external/head/head = null
 	var/image/display_head = null
 
-/obj/structure/headpole/New(atom/A, var/obj/item/organ/external/head/H, var/obj/item/weapon/spear/S)
+/obj/structure/headpole/New(atom/A, var/obj/item/organ/external/head/H, var/obj/item/spear/S)
 	..(A)
 	if(istype(H))
 		head = H
@@ -28,7 +28,7 @@
 	if(S)
 		spear = S
 		S.forceMove(src)
-		if(istype(S, /obj/item/weapon/spear/wooden))
+		if(istype(S, /obj/item/spear/wooden))
 			icon_state = "wooden_pike"
 	pixel_x = rand(-12,12)
 	pixel_y = rand(0,20)
@@ -36,9 +36,9 @@
 	M.Turn(rand(-20,20))
 	transform = M
 
-/obj/structure/headpole/attackby(obj/item/weapon/W, mob/user)
+/obj/structure/headpole/attackby(obj/item/W, mob/user)
 	..()
-	if(istype(W, /obj/item/weapon/crowbar))
+	if(istype(W, /obj/item/crowbar))
 		to_chat(user, "You pry \the [head] off \the [spear].")
 		if(head)
 			head.forceMove(get_turf(src))
@@ -47,7 +47,7 @@
 			spear.forceMove(get_turf(src))
 			spear = null
 		else
-			new /obj/item/weapon/spear(get_turf(src))
+			new /obj/item/spear(get_turf(src))
 		qdel(src)
 
 /obj/structure/headpole/Destroy()

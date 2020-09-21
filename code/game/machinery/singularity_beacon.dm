@@ -14,7 +14,7 @@
 	light_range_on = 2
 	light_power_on = 2
 
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 	var/power_load = 1000 //A bit ugly. How much power this machine needs per tick. Equivalent to one minute on 30k W battery, two second ticks
 	var/power_draw = 0 //If there's spare power on the grid, cannibalize it to charge the beacon's battery
 	var/active = 0 //It doesn't use APCs, so use_power wouldn't really suit it
@@ -28,7 +28,7 @@
 
 	..()
 
-	cell = new /obj/item/weapon/cell/hyper(src) //Singularity beacons are wasteful as fuck, that state-of-the-art cell will last a single minute
+	cell = new /obj/item/cell/hyper(src) //Singularity beacons are wasteful as fuck, that state-of-the-art cell will last a single minute
 
 /obj/machinery/singularity_beacon/examine(mob/user)
 

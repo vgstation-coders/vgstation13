@@ -1,23 +1,23 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Formerly talking crystals - these procs are now modular so that you can make any /obj/item/weapon 'parrot' player speech back to them
+// Formerly talking crystals - these procs are now modular so that you can make any /obj/item 'parrot' player speech back to them
 // This could be extended to atoms, but it's bad enough as is
 // I genuinely tried to Add and Remove them from var and proc lists, but just couldn't get it working
 
-/obj/item/weapon
+/obj/item
 	var/list/heard_words
 	var/lastsaid
 	var/listening_to_players = 0
 	var/speaking_to_players = 0
 
-/obj/item/weapon/process()
+/obj/item/process()
 	if(!speaking_to_players)
 		processing_objects.Remove(src)
 		return
 	if(prob(10) && world.timeofday >= lastsaid && heard_words.len >= 1)
 		SaySomething()
 
-/obj/item/weapon/proc/catchMessage(var/msg, var/mob/source)
+/obj/item/proc/catchMessage(var/msg, var/mob/source)
 	if(speaking_to_players)
 		var/list/seperate = list()
 		if(findtext(msg,"(("))
@@ -49,7 +49,7 @@
 		for(var/mob/O in viewers(src))
 			O.show_message("<span class='notice'>[src] hums for bit then stops...</span>", 1)
 /*
-/obj/item/weapon/talkingcrystal/proc/debug()
+/obj/item/talkingcrystal/proc/debug()
 	//set src in view()
 	for(var/v in heard_words)
 		to_chat(world, "[uppertext(v)]")
@@ -58,7 +58,7 @@
 			to_chat(world, "[X]")
 */
 
-/obj/item/weapon/proc/SaySomething(var/word = null)
+/obj/item/proc/SaySomething(var/word = null)
 
 
 	var/msg

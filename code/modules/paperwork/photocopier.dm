@@ -11,8 +11,8 @@
 	active_power_usage = 200
 	power_channel = EQUIP
 	var/opened = 0
-	var/obj/item/weapon/paper/copy = null	//what's in the copier!
-	var/obj/item/weapon/photo/photocopy = null
+	var/obj/item/paper/copy = null	//what's in the copier!
+	var/obj/item/photo/photocopy = null
 	var/copies = 1	//how many copies to print!
 	var/toner = 30 //how much toner is left! woooooo~
 	var/maxcopies = 10	//how many copies can be copied at once- idea shamelessly stolen from bs12's copier!
@@ -28,14 +28,14 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/photocopier,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/photocopier,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -60,8 +60,8 @@
 				if(!copying)
 					break
 				if(toner > 0)
-					var/obj/item/weapon/paper/paper_type = copy.type
-					var/obj/item/weapon/paper/c = new paper_type(loc)
+					var/obj/item/paper/paper_type = copy.type
+					var/obj/item/paper/c = new paper_type(loc)
 					if(toner > 3)	//lots of toner, make it dark
 						c.info = "<font color = #101010>"
 					else			//no toner? shitty copies for you!
@@ -89,7 +89,7 @@
 				if(!copying)
 					break
 				if(toner >= 2)  //Was set to = 0, but if there was say 3 toner left and this ran, you would get -2 which would be weird for ink
-					var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
+					var/obj/item/photo/p = new /obj/item/photo (loc)
 					var/icon/I = icon(photocopy.icon, photocopy.icon_state)
 					var/icon/img = icon(photocopy.img)
 					if(greytoggle == "Greyscale")
@@ -142,7 +142,7 @@
 							temp_img = icon("icons/ass/assmale.png")
 					else
 						break
-					var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
+					var/obj/item/photo/p = new /obj/item/photo (loc)
 					p.info = "You see [ass]'s ass on the photo."
 					p.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 					p.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
@@ -248,7 +248,7 @@
 			for(var/datum/picture/t in tempAI.aicamera.aipictures)
 				nametemp += t.fields["name"]
 			find = input("Select image") in nametemp
-			var/obj/item/weapon/photo/p = new /obj/item/weapon/photo (loc)
+			var/obj/item/photo/p = new /obj/item/photo (loc)
 			for(var/datum/picture/q in tempAI.aicamera.aipictures)
 				if(q.fields["name"] == find)
 					selection = q
@@ -297,7 +297,7 @@
 			to_chat(usr, "<span class='warning'>Must wait for current print job to finish.</span>")
 			return
 		copying = 0
-	if(istype(O, /obj/item/weapon/paper))
+	if(istype(O, /obj/item/paper))
 		if(copier_empty())
 			if(user.drop_item(O, src))
 				copy = O
@@ -306,7 +306,7 @@
 				updateUsrDialog()
 		else
 			to_chat(user, "<span class='notice'>There is already something in [src].</span>")
-	else if(istype(O, /obj/item/weapon/photo))
+	else if(istype(O, /obj/item/photo))
 		if(copier_empty())
 			if(user.drop_item(O, src))
 				photocopy = O
@@ -328,8 +328,8 @@
 		O.playtoolsound(loc, 50)
 		anchored = !anchored
 		to_chat(user, "<span class='notice'>You [anchored ? "wrench" : "unwrench"] [src].</span>")
-	else if(istype(O, /obj/item/weapon/grab)) //For ass-copying.
-		var/obj/item/weapon/grab/G = O
+	else if(istype(O, /obj/item/grab)) //For ass-copying.
+		var/obj/item/grab/G = O
 		if(ismob(G.affecting) && G.affecting != ass)
 			var/mob/GM = G.affecting
 			if(GM.locked_to)

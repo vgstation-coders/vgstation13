@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/rocketlauncher
+/obj/item/gun/projectile/rocketlauncher
 	name = "rocket launcher"
 	desc = "Ranged explosions, science marches on."
 	fire_sound = 'sound/weapons/rocket.ogg'
@@ -22,10 +22,10 @@
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
+/obj/item/gun/projectile/rocketlauncher/isHandgun()
 	return FALSE
 
-/obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
+/obj/item/gun/projectile/rocketlauncher/update_icon()
 	if(!getAmmo())
 		icon_state = "rpg_e"
 		item_state = "rpg_e"
@@ -33,14 +33,14 @@
 		icon_state = "rpg"
 		item_state = "rpg"
 
-/obj/item/weapon/gun/projectile/rocketlauncher/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+/obj/item/gun/projectile/rocketlauncher/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if(M == user && user.zone_sel.selecting == "mouth") //Are we trying to suicide by shooting our head off ?
 		user.visible_message("<span class='warning'>[user] tries to fit \the [src] into \his mouth but quickly reconsiders it</span>", \
 		"<span class='warning'>You try to fit \the [src] into your mouth. You feel silly and pull it out</span>")
 		return // Nope
 	..()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
+/obj/item/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
 	if(!src.process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_BRUTELOSS)
@@ -53,7 +53,7 @@
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen
+/obj/item/gun/projectile/rocketlauncher/nanotrasen
 	name = "rocket launcher"
 	desc = "Watch the backblast, you idiot."
 	fire_sound = 'sound/weapons/rocket.ogg'
@@ -78,7 +78,7 @@
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/update_icon()
+/obj/item/gun/projectile/rocketlauncher/nanotrasen/update_icon()
 	if(!getAmmo())
 		icon_state = "rpg_nt_e"
 		item_state = "rpg_nt_e"
@@ -86,10 +86,10 @@
 		icon_state = "rpg_nt"
 		item_state = "rpg_nt"
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
+/obj/item/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	spawn_mag = TRUE
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita
+/obj/item/gun/projectile/rocketlauncher/nikita
 	name = "\improper Nikita"
 	desc = "A miniature cruise missile launcher. Using a pulsed rocket engine and sophisticated TV guidance system."
 	icon = 'icons/obj/gun_experimental.dmi'
@@ -109,15 +109,15 @@
 	var/obj/item/projectile/rocket/nikita/fired = null
 	var/emagged = 0
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/update_icon()
+/obj/item/gun/projectile/rocketlauncher/nikita/update_icon()
 	return
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
+/obj/item/gun/projectile/rocketlauncher/nikita/attack_self(mob/user)
 	if(fired)
 		playsound(src, 'sound/weapons/stickybomb_det.ogg', 30, 1)
 		fired.detonate()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
+/obj/item/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
 		return(SUICIDE_ACT_BRUTELOSS)
@@ -128,14 +128,14 @@
 			return(SUICIDE_ACT_BRUTELOSS)
 	return
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
-	if(istype(A, /obj/item/weapon/card/emag) && !emagged)
+/obj/item/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
+	if(istype(A, /obj/item/card/emag) && !emagged)
 		emagged = 1
 		to_chat(user, "<span class='warning'>You disable \the [src]'s idiot security!</span>")
 	else
 		..()
 
-/obj/item/weapon/gun/projectile/rocketlauncher/nikita/process_chambered()
+/obj/item/gun/projectile/rocketlauncher/nikita/process_chambered()
 	if(..())
 		if(!emagged)
 			fired = in_chamber

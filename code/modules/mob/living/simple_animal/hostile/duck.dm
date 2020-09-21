@@ -144,9 +144,9 @@
 				head_organ.explode()
 		for(var/i = 0 to L.size)
 			if(prob(20))
-				new /obj/item/weapon/bikehorn/rubberducky/quantum(get_turf(L))
+				new /obj/item/bikehorn/rubberducky/quantum(get_turf(L))
 			else
-				new /obj/item/weapon/bikehorn/rubberducky(get_turf(L))
+				new /obj/item/bikehorn/rubberducky(get_turf(L))
 		adjustBruteLoss(-50*L.size)
 		enemies.Remove(L)
 		L.gib()

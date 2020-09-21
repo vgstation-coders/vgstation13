@@ -10,8 +10,8 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	allowed = list(
 		/obj/item/device/flashlight,
-		/obj/item/weapon/tank/emergency_oxygen,
-		/obj/item/weapon/tank/emergency_nitrogen)
+		/obj/item/tank/emergency_oxygen,
+		/obj/item/tank/emergency_nitrogen)
 	var/is_hooded = 0
 	var/nohood = 0
 	var/obj/item/clothing/head/winterhood/hood
@@ -53,20 +53,20 @@
 	icon_state = "coatsecurity"
 	armor = list(melee = 40, bullet = 20, laser = 30, energy = 10, bomb = 20, bio = 0, rad = 0)
 	allowed = list(
-		/obj/item/weapon/gun/energy,
-		/obj/item/weapon/reagent_containers/spray/pepper,
-		/obj/item/weapon/gun/projectile,
+		/obj/item/gun/energy,
+		/obj/item/reagent_containers/spray/pepper,
+		/obj/item/gun/projectile,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/gun/lawgiver,
-		/obj/item/weapon/gun/siren,
-		/obj/item/weapon/gun/mahoguny,
-		/obj/item/weapon/gun/grenadelauncher,
-		/obj/item/weapon/bikehorn/baton,
-		/obj/item/weapon/blunderbuss,
-		/obj/item/weapon/legcuffs/bolas,
+		/obj/item/melee/baton,
+		/obj/item/handcuffs,
+		/obj/item/gun/lawgiver,
+		/obj/item/gun/siren,
+		/obj/item/gun/mahoguny,
+		/obj/item/gun/grenadelauncher,
+		/obj/item/bikehorn/baton,
+		/obj/item/blunderbuss,
+		/obj/item/legcuffs/bolas,
 		/obj/item/device/hailer)
 
 /obj/item/clothing/suit/storage/wintercoat/security/hos
@@ -90,15 +90,15 @@
 		/obj/item/roller,
 		/obj/item/device/analyzer,
 		/obj/item/stack/medical,
-		/obj/item/weapon/dnainjector,
-		/obj/item/weapon/reagent_containers/dropper,
-		/obj/item/weapon/reagent_containers/syringe,
-		/obj/item/weapon/reagent_containers/hypospray,
+		/obj/item/dnainjector,
+		/obj/item/reagent_containers/dropper,
+		/obj/item/reagent_containers/syringe,
+		/obj/item/reagent_containers/hypospray,
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/flashlight/pen,
-		/obj/item/weapon/minihoe,
-		/obj/item/weapon/switchtool,
-		/obj/item/weapon/autopsy_scanner/healthanalyzerpro)
+		/obj/item/minihoe,
+		/obj/item/switchtool,
+		/obj/item/autopsy_scanner/healthanalyzerpro)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"
@@ -115,13 +115,13 @@
 		/obj/item/device/multitool,
 		/obj/item/device/radio,
 		/obj/item/device/t_scanner,
-		/obj/item/weapon/crowbar,
-		/obj/item/weapon/screwdriver,
-		/obj/item/weapon/weldingtool,
-		/obj/item/weapon/wirecutters,
-		/obj/item/weapon/wrench,
-		/obj/item/weapon/tank/emergency_oxygen,
-		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/crowbar,
+		/obj/item/screwdriver,
+		/obj/item/weldingtool,
+		/obj/item/wirecutters,
+		/obj/item/wrench,
+		/obj/item/tank/emergency_oxygen,
+		/obj/item/tank/emergency_nitrogen,
 		/obj/item/device/device_analyser,
 		/obj/item/device/rcd)
 
@@ -133,12 +133,12 @@
 	name = "hydroponics winter coat"
 	icon_state = "coathydro"
 	allowed = list (
-		/obj/item/weapon/reagent_containers/spray/plantbgone,
+		/obj/item/reagent_containers/spray/plantbgone,
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/seeds,
-		/obj/item/weapon/reagent_containers/glass,
-		/obj/item/weapon/wirecutters/clippers,
-		/obj/item/weapon/minihoe)
+		/obj/item/reagent_containers/glass,
+		/obj/item/wirecutters/clippers,
+		/obj/item/minihoe)
 
 /obj/item/clothing/suit/storage/wintercoat/cargo
 	name = "cargo winter coat"
@@ -155,17 +155,17 @@
 	armor = list(melee = 30, bullet = 10, laser = 10, energy = 10, bomb = 15, bio = 0, rad = 0)
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
 	allowed = list(
-		/obj/item/weapon/tank/emergency_oxygen,
-		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/tank/emergency_oxygen,
+		/obj/item/tank/emergency_nitrogen,
 		/obj/item/device/flashlight,
-		/obj/item/weapon/gun/energy,
-		/obj/item/weapon/gun/projectile,
+		/obj/item/gun/energy,
+		/obj/item/gun/projectile,
 		/obj/item/ammo_storage,
 		/obj/item/ammo_casing,
-		/obj/item/weapon/melee/baton,
-		/obj/item/weapon/handcuffs,
-		/obj/item/weapon/storage/fancy/cigarettes,
-		/obj/item/weapon/lighter,
+		/obj/item/melee/baton,
+		/obj/item/handcuffs,
+		/obj/item/storage/fancy/cigarettes,
+		/obj/item/lighter,
 		/obj/item/device/detective_scanner,
 		/obj/item/device/taperecorder)
 
@@ -174,20 +174,20 @@
 	icon_state = "coatminer"
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	allowed = list(
-		/obj/item/weapon/pickaxe,
-		/obj/item/weapon/storage/bag/ore,
+		/obj/item/pickaxe,
+		/obj/item/storage/bag/ore,
 		/obj/item/device/mining_scanner,
-		/obj/item/weapon/gun/energy/kinetic_accelerator)
+		/obj/item/gun/energy/kinetic_accelerator)
 
 /obj/item/clothing/suit/storage/wintercoat/clown
 	name = "Elfen winter coat"
 	icon_state = "coatclown"
 	allowed = list(
-		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
-		/obj/item/weapon/bananapeel,
-		/obj/item/weapon/soap,
-		/obj/item/weapon/reagent_containers/spray,
-		/obj/item/weapon/bikehorn)
+		/obj/item/reagent_containers/food/snacks/grown/banana,
+		/obj/item/bananapeel,
+		/obj/item/soap,
+		/obj/item/reagent_containers/spray,
+		/obj/item/bikehorn)
 
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
@@ -217,9 +217,9 @@
 	desc = "A heavy jacket made from 'synthetic' animal furs. Reinforced to avoid tearing when breaking up bar fights."
 	armor = list(melee = 20, bullet = 10, laser = 10, energy = 0, bomb = 10, bio = 0, rad = 0)
 	allowed = list(
-		/obj/item/weapon/gun/projectile/shotgun/doublebarrel,
-		/obj/item/weapon/reagent_containers/food/drinks/shaker,
-		/obj/item/weapon/reagent_containers/food/drinks/discount_shaker)
+		/obj/item/gun/projectile/shotgun/doublebarrel,
+		/obj/item/reagent_containers/food/drinks/shaker,
+		/obj/item/reagent_containers/food/drinks/discount_shaker)
 
 /obj/item/clothing/suit/storage/wintercoat/druid
 	name = "druid winter robes"

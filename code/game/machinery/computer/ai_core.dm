@@ -12,7 +12,7 @@
 	icon_state = "0"
 	var/state = 0
 	var/datum/ai_laws/laws
-	var/obj/item/weapon/circuitboard/circuit = null
+	var/obj/item/circuitboard/circuit = null
 	var/obj/item/device/mmi/brain = null
 	sheet_type = /obj/item/stack/sheet/plasteel
 
@@ -39,14 +39,14 @@
 	switch(state)
 		if(NOCIRCUITBOARD)
 			if(iswelder(P))
-				var/obj/item/weapon/weldingtool/WT = P
+				var/obj/item/weldingtool/WT = P
 				if(WT.do_weld(user, src, 2 SECONDS, 0))
 					if(gcDestroyed || state != NOCIRCUITBOARD)
 						return
 					to_chat(user, "<span class='notice'>You deconstruct the frame.</span>")
 					drop_stack(sheet_type, loc, 4, user)
 					qdel(src)
-			if(istype(P, /obj/item/weapon/circuitboard/aicore) && !circuit)
+			if(istype(P, /obj/item/circuitboard/aicore) && !circuit)
 				if(user.drop_item(P, src))
 					playsound(loc, 'sound/items/Deconstruct.ogg', 50, 1)
 					to_chat(user, "<span class='notice'>You place the circuit board inside the frame.</span>")

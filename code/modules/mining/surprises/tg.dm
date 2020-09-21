@@ -19,13 +19,13 @@
 	)
 	fluffitems = list(
 		/obj/effect/decal/cleanable/blood=5,
-		/obj/item/weapon/reagent_containers/food/snacks/organ=2, // OM NOM
+		/obj/item/reagent_containers/food/snacks/organ=2, // OM NOM
 		/obj/structure/closet/crate/freezer=2,
 		/obj/machinery/optable=1,
-		/obj/item/weapon/scalpel=1,
-		/obj/item/weapon/storage/firstaid/regular=3,
-		/obj/item/weapon/tank/anesthetic=1,
-		///obj/item/weapon/surgical_drapes=2
+		/obj/item/scalpel=1,
+		/obj/item/storage/firstaid/regular=3,
+		/obj/item/tank/anesthetic=1,
+		///obj/item/surgical_drapes=2
 	)
 
 	flags = CONTIGUOUS_WALLS | CONTIGUOUS_FLOORS
@@ -55,7 +55,7 @@
 		/obj/item/toy/crayon/red=2,
 		/obj/effect/decal/cleanable/blood=4,
 		/obj/structure/table/woodentable=2,
-		/obj/item/weapon/ectoplasm=3
+		/obj/item/ectoplasm=3
 	)
 
 	flags = CONTIGUOUS_WALLS | CONTIGUOUS_FLOORS
@@ -73,7 +73,7 @@
 		/turf/simulated/floor/wood=1
 	)
 	spawntypes = list(
-		// /vg/: Let's not. /obj/item/weapon/veilrender/vealrender=1,
+		// /vg/: Let's not. /obj/item/veilrender/vealrender=1,
 		// /vg/: /obj/item/key=1
 		/obj/item/clothing/glasses/monocle=5,
 		// /vg/:
@@ -82,12 +82,12 @@
 	fluffitems = list(
 		/obj/structure/safe/floor/wizard=1,
 		// /obj/structure/wardrobe=1,
-		/obj/item/weapon/storage/belt/soulstone=1,
+		/obj/item/storage/belt/soulstone=1,
 		/obj/item/trash/candle=3,
-		/obj/item/weapon/dice=3,
-		/obj/item/weapon/staff=2,
+		/obj/item/dice=3,
+		/obj/item/staff=2,
 		/obj/effect/decal/cleanable/dirt=3,
-		/obj/item/weapon/coin/mythril=3
+		/obj/item/coin/mythril=3
 	)
 
 	flags = CONTIGUOUS_WALLS | CONTIGUOUS_FLOORS
@@ -106,15 +106,15 @@
 	)
 	spawntypes = list(
 		/obj/mecha/working/ripley/mining=1,
-		/obj/item/weapon/pickaxe/jackhammer=2,
-		/obj/item/weapon/pickaxe/drill/diamond=2
+		/obj/item/pickaxe/jackhammer=2,
+		/obj/item/pickaxe/drill/diamond=2
 	)
 	fluffitems = list(
 		/obj/effect/decal/cleanable/blood=3,
 		/obj/effect/decal/remains/human=1,
 		/obj/item/clothing/under/overalls=1,
-		/obj/item/weapon/reagent_containers/food/snacks/grown/chili=1,
-		/obj/item/weapon/tank/oxygen/red=2
+		/obj/item/reagent_containers/food/snacks/grown/chili=1,
+		/obj/item/tank/oxygen/red=2
 	)
 
 	complex_max_size=3
@@ -132,17 +132,17 @@
 		/turf/simulated/floor/bluegrid=1
 	)
 	spawntypes = list(
-		/obj/item/weapon/pickaxe/plasmacutter/accelerator=1,
+		/obj/item/pickaxe/plasmacutter/accelerator=1,
 		/obj/machinery/shieldgen=1,
-		/obj/item/weapon/cell/hyper=1
+		/obj/item/cell/hyper=1
 	)
 	fluffitems = list(
 		/obj/structure/table/reinforced=2,
-		/obj/item/weapon/stock_parts/capacitor/adv/super/ultra=3,
-		/obj/item/weapon/stock_parts/micro_laser/high/ultra/giga=3,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico/femto=3,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic/bluespace=3,
-		/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace=3,
+		/obj/item/stock_parts/capacitor/adv/super/ultra=3,
+		/obj/item/stock_parts/micro_laser/high/ultra/giga=3,
+		/obj/item/stock_parts/manipulator/nano/pico/femto=3,
+		/obj/item/stock_parts/scanning_module/adv/phasic/bluespace=3,
+		/obj/item/stock_parts/matter_bin/adv/super/bluespace=3,
 		/obj/item/device/pda/clear=1
 	)
 
@@ -154,16 +154,16 @@
 		/turf/simulated/floor,
 		/turf/simulated/floor/wood)
 	spawntypes = list(
-		/obj/item/weapon/melee/energy/sword/pirate=1,
+		/obj/item/melee/energy/sword/pirate=1,
 		/obj/structure/closet/syndicate/resources=2
 	)
 	fluffitems = list(
 		/obj/structure/table/woodentable=2,
 		/obj/structure/reagent_dispensers/beerkeg=1,
-		/obj/item/weapon/spacecash/c1000=2,
-		/obj/item/weapon/reagent_containers/food/drinks/shaker=1,
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/wine=3,
-		/obj/item/weapon/reagent_containers/food/drinks/bottle/whiskey=3,
+		/obj/item/spacecash/c1000=2,
+		/obj/item/reagent_containers/food/drinks/shaker=1,
+		/obj/item/reagent_containers/food/drinks/bottle/wine=3,
+		/obj/item/reagent_containers/food/drinks/bottle/whiskey=3,
 		/obj/item/clothing/shoes/laceup=2
 	)
 
@@ -172,7 +172,7 @@
 	room_size_max=7
 
 	spawntypes = list(
-		/obj/item/weapon/gun/energy/floragun=1,
+		/obj/item/gun/energy/floragun=1,
 		//obj/item/seeds/novaflowerseed=2,
 		/obj/item/seeds/bluespacetomatoseed=2,
 		// /vg/:
@@ -183,7 +183,7 @@
 		/obj/structure/table/reinforced=2,
 		/obj/machinery/portable_atmospherics/hydroponics=1,
 		/obj/effect/glowshroom/single=2,
-		/obj/item/weapon/reagent_containers/syringe/antitoxin=2,
-		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine=3,
-		/obj/item/weapon/reagent_containers/glass/bottle/ammonia=3
+		/obj/item/reagent_containers/syringe/antitoxin=2,
+		/obj/item/reagent_containers/glass/bottle/diethylamine=3,
+		/obj/item/reagent_containers/glass/bottle/ammonia=3
 	)

@@ -14,10 +14,10 @@
 		pick(
 			/obj/item/clothing/suit/apron,
 			/obj/item/clothing/suit/apron/overalls),
-		/obj/item/weapon/storage/bag/plants,
+		/obj/item/storage/bag/plants,
 		pick(
-			/obj/item/weapon/storage/backpack/satchel_hyd,
-			/obj/item/weapon/storage/backpack/messenger/hyd,
+			/obj/item/storage/backpack/satchel_hyd,
+			/obj/item/storage/backpack/messenger/hyd,
 			),
 		pick(
 			/obj/item/clothing/under/rank/hydroponics,
@@ -25,7 +25,7 @@
 		),
 		/obj/item/device/analyzer/plant_analyzer,
 		/obj/item/clothing/head/greenbandana,
-		/obj/item/weapon/minihoe,
-		/obj/item/weapon/hatchet,
-		/obj/item/weapon/bee_net,
+		/obj/item/minihoe,
+		/obj/item/hatchet,
+		/obj/item/bee_net,
 	)

@@ -76,8 +76,8 @@
 				add_fingerprint(user)
 				update_icon()
 
-	else if(istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/PK = W
+	else if(istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS)) //If we can't dig a wall, we can't dig a girder
 			return
 
@@ -424,8 +424,8 @@
 			//new /obj/effect/decal/remains/human(get_turf(src))	//Commented out until remains are cleanable
 			qdel(src)
 
-	else if(istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/PK = W
+	else if(istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS))
 			return
 

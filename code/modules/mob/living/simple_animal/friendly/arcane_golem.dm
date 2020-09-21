@@ -102,5 +102,5 @@
 						S.charge_counter = 0
 
 	visible_message("<span class='warning'>\The <b>[src]</b> shatters into pieces!</span>")
-	new /obj/item/weapon/ectoplasm (src.loc)
+	new /obj/item/ectoplasm (src.loc)
 	qdel(src)

@@ -1,7 +1,7 @@
 /* Flare gun. Shoots a flare type of shotgun ammo, creating a glowing projectile that produces a flare when it dies
    Useful in emergencies to signal and to light up corridors. Syndicate version is deadly and sets people on fire, and likely going to atmos techs */
 
-/obj/item/weapon/gun/projectile/flare
+/obj/item/gun/projectile/flare
 	name = "flare gun"
 	desc = "Light (people on fire), now at a distance."
 	fire_sound = 'sound/weapons/shotgun.ogg'
@@ -22,7 +22,7 @@
 	ammo_type = "/obj/item/ammo_casing/shotgun/flare"
 	gun_flags = 0
 
-/obj/item/weapon/gun/projectile/flare/syndicate
+/obj/item/gun/projectile/flare/syndicate
 	desc = "An illegal flare gun with a modified hammer, allowing it to fire shotgun shells and flares at dangerous velocities."
 	recoil = 3
 	fire_delay = 5 //faster, because it's also meant to be a weapon

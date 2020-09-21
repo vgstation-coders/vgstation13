@@ -301,25 +301,25 @@
 			throwzone += T
 		switch(goodie_type)
 			if(1)
-				var/obj/item/weapon/card/id/captains_spare/S = new/obj/item/weapon/card/id/captains_spare(src.loc)
+				var/obj/item/card/id/captains_spare/S = new/obj/item/card/id/captains_spare(src.loc)
 				S.throw_at(pick(throwzone),rand(2,5),0)
 			if(2)
 				var/obj/item/fuckingmoney = null
 				fuckingmoney = pick(
-				50;/obj/item/weapon/coin/gold,
-				50;/obj/item/weapon/coin/silver,
-				50;/obj/item/weapon/coin/diamond,
-				40;/obj/item/weapon/coin/iron,
-				50;/obj/item/weapon/coin/plasma,
-				40;/obj/item/weapon/coin/uranium,
-				10;/obj/item/weapon/coin/clown,
-				50;/obj/item/weapon/coin/phazon,
-				30;/obj/item/weapon/coin/adamantine,
-				30;/obj/item/weapon/coin/mythril,
-				200;/obj/item/weapon/spacecash,
-				200;/obj/item/weapon/spacecash/c10,
-				200;/obj/item/weapon/spacecash/c100,
-				300;/obj/item/weapon/spacecash/c1000
+				50;/obj/item/coin/gold,
+				50;/obj/item/coin/silver,
+				50;/obj/item/coin/diamond,
+				40;/obj/item/coin/iron,
+				50;/obj/item/coin/plasma,
+				40;/obj/item/coin/uranium,
+				10;/obj/item/coin/clown,
+				50;/obj/item/coin/phazon,
+				30;/obj/item/coin/adamantine,
+				30;/obj/item/coin/mythril,
+				200;/obj/item/spacecash,
+				200;/obj/item/spacecash/c10,
+				200;/obj/item/spacecash/c100,
+				300;/obj/item/spacecash/c1000
 				)
 				var/obj/item/C = new fuckingmoney(src.loc)
 				C.throw_at(pick(throwzone),rand(2,5),0)
@@ -396,7 +396,7 @@
 	if(is_locking(/datum/locking_category/adminbus))
 		var/mob/living/M = get_locked(/datum/locking_category/adminbus)[1]
 		if(iscarbon(M))
-			var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(M)
+			var/obj/item/gun/energy/laser/admin/L = new /obj/item/gun/energy/laser/admin(M)
 
 			if(M.put_in_hands(L))
 				spawnedlasers += L
@@ -405,7 +405,7 @@
 				qdel(L)
 
 	for(var/mob/living/carbon/C in passengers)
-		var/obj/item/weapon/gun/energy/laser/admin/L = new /obj/item/weapon/gun/energy/laser/admin(C)
+		var/obj/item/gun/energy/laser/admin/L = new /obj/item/gun/energy/laser/admin(C)
 
 		if(C.put_in_hands(L))
 			spawnedlasers += L
@@ -429,7 +429,7 @@
 	var/distributed = 0
 
 	for(var/i=spawnedlasers.len;i>0;i--)
-		var/obj/item/weapon/gun/energy/laser/admin/L = spawnedlasers[i]
+		var/obj/item/gun/energy/laser/admin/L = spawnedlasers[i]
 		if(L)
 			if(istype(L.loc,/mob/living/carbon))
 				var/mob/living/carbon/C = L.loc
@@ -493,8 +493,8 @@
 			T.ChangeTurf(/turf/simulated/wall)
 		qdel(G)
 
-	for(var/obj/item/weapon/shard/S in range(centerloc,repair_range))
-		if(istype(S,/obj/item/weapon/shard/plasma))
+	for(var/obj/item/shard/S in range(centerloc,repair_range))
+		if(istype(S,/obj/item/shard/plasma))
 			new/obj/item/stack/sheet/glass/plasmaglass(S.loc)
 		else
 			new/obj/item/stack/sheet/glass/glass(S.loc)
@@ -702,14 +702,14 @@
 				I.dropped(M)
 				I.forceMove(pack)
 
-		var/obj/item/weapon/card/id/thunderdome/ident = null
+		var/obj/item/card/id/thunderdome/ident = null
 
 		switch(team)
 			if("Green")
-				ident = new /obj/item/weapon/card/id/thunderdome/green(M)
+				ident = new /obj/item/card/id/thunderdome/green(M)
 				ident.name = "[M.real_name]'s Thunderdome Green ID"
 			if("Red")
-				ident = new /obj/item/weapon/card/id/thunderdome/red(M)
+				ident = new /obj/item/card/id/thunderdome/red(M)
 				ident.name = "[M.real_name]'s Thunderdome Red ID"
 
 		if(!iscarbon(M))
@@ -722,7 +722,7 @@
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
-					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(H), slot_belt)
+					H.equip_to_slot_or_del(new /obj/item/storage/belt/thunderdome/green(H), slot_belt)
 					H.regenerate_icons()
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
@@ -740,7 +740,7 @@
 						K.hat = null
 						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
-					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
+					K.put_in_hands(new /obj/item/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
 
 			if("Red")
@@ -749,7 +749,7 @@
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
-					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(H), slot_belt)
+					H.equip_to_slot_or_del(new /obj/item/storage/belt/thunderdome/red(H), slot_belt)
 					H.regenerate_icons()
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
@@ -767,7 +767,7 @@
 						K.hat = null
 						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
-					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
+					K.put_in_hands(new /obj/item/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
 
 		if(pack.contents.len == 0)

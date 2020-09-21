@@ -45,7 +45,7 @@
 	if(!cham_proj_scan) //Is scanning disabled ?
 		return
 	if(!active_dummy)
-		if(istype(target, /obj/item) && !istype(target, /obj/item/weapon/disk/nuclear) || istype(target, /mob))
+		if(istype(target, /obj/item) && !istype(target, /obj/item/disk/nuclear) || istype(target, /mob))
 			playsound(src, 'sound/weapons/flash.ogg', 100, 1, -6)
 			to_chat(user, "<span class='notice'>Scanned [target].</span>")
 			saved_item = target.type

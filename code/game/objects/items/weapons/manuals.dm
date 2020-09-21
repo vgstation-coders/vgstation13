@@ -1,12 +1,12 @@
 /*********************MANUALS (BOOKS)***********************/
 
 //Oh god what the fuck I am not good at computer
-/obj/item/weapon/book/manual
+/obj/item/book/manual
 	icon = 'icons/obj/library.dmi'
 	due_date = 0 // Game time in 1/10th seconds
 	unique = 1   // 0 - Normal book, 1 - Should not be treated as normal book, unable to be copied, unable to be modified
 
-/obj/item/weapon/book/manual/engineering_construction
+/obj/item/book/manual/engineering_construction
 	name = "Station Repairs and Construction"
 	icon_state ="bookEngineering"
 	item_state = "book3"
@@ -14,7 +14,7 @@
 	title = "Station Repairs and Construction"
 	wiki_page = "Guide_to_Construction"
 
-/obj/item/weapon/book/manual/engineering_particle_accelerator
+/obj/item/book/manual/engineering_particle_accelerator
 	name = "Particle Accelerator User's Guide"
 	icon_state ="bookParticleAccelerator"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
@@ -57,14 +57,14 @@
 				</html>"}
 
 
-/obj/item/weapon/book/manual/engineering_hacking
+/obj/item/book/manual/engineering_hacking
 	name = "Hacking"
 	icon_state ="bookHacking"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Hacking"
 	wiki_page = "Hacking"
 
-/obj/item/weapon/book/manual/engineering_singularity_safety
+/obj/item/book/manual/engineering_singularity_safety
 	name = "Singularity Safety in Special Circumstances"
 	icon_state ="bookEngineeringSingularitySafety"
 	author = "Engineering Encyclopedia"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
@@ -112,7 +112,7 @@
 				</html>
 				"}
 
-/obj/item/weapon/book/manual/hydroponics_pod_people
+/obj/item/book/manual/hydroponics_pod_people
 	name = "Growing Dionae and YOU! A book on growing your new best friends!"
 	icon_state ="bookHydroponicsPodPeople"
 	item_state = "book5"
@@ -146,14 +146,14 @@
 				</html>
 				"}
 
-/obj/item/weapon/book/manual/medical_cloning
+/obj/item/book/manual/medical_cloning
 	name = "Cloning techniques of the 26th century"
 	icon_state ="bookCloning"
 	author = "Medical Journal, volume 3"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
 	title = "Cloning techniques of the 26th century"
 	wiki_page = "Guide_to_Cloning"
 
-/obj/item/weapon/book/manual/chemistry_manual
+/obj/item/book/manual/chemistry_manual
 	name = "Chemistry 101"
 	icon_state ="bookChemistry"
 	item_state = "book6"
@@ -162,7 +162,7 @@
 	wiki_page = "Guide_to_Chemistry"
 
 
-/obj/item/weapon/book/manual/ripley_build_and_repair
+/obj/item/book/manual/ripley_build_and_repair
 	name = "APLU \"Ripley\" Construction and Operation Manual"
 	icon_state ="book"
 	author = "Weyland-Yutani Corp"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
@@ -238,7 +238,7 @@
 			"}*/
 
 
-/obj/item/weapon/book/manual/research_and_development
+/obj/item/book/manual/research_and_development
 	name = "Research and Development 101"
 	icon_state = "rdbook"
 	author = "Dr. L. Ight"
@@ -288,7 +288,7 @@
 			"}
 
 
-/obj/item/weapon/book/manual/robotics_cyborgs
+/obj/item/book/manual/robotics_cyborgs
 	name = "Cyborgs for Dummies"
 	icon_state = "borgbook"
 	author = "XISC"
@@ -490,7 +490,7 @@
 		</html>
 		"}
 
-/obj/item/weapon/book/manual/security_space_law
+/obj/item/book/manual/security_space_law
 	name = "Space Law"
 	desc = "A set of Nanotrasen guidelines for keeping law and order on their space stations."
 	icon_state = "bookSpaceLaw"
@@ -499,7 +499,7 @@
 	title = "Space Law"
 	wiki_page = "Space_Law"
 
-/obj/item/weapon/book/manual/engineering_guide
+/obj/item/book/manual/engineering_guide
 	name = "Engineering Textbook"
 	icon_state ="bookEngineering2"
 	author = "Engineering Encyclopedia"
@@ -507,7 +507,7 @@
 	wiki_page = "Guide_to_Engineering"
 
 
-/obj/item/weapon/book/manual/chef_recipes
+/obj/item/book/manual/chef_recipes
 	name = "Chef Recipes"
 	icon_state = "cooked_book"
 	item_state = "cooked_bookold"
@@ -515,7 +515,7 @@
 	title = "Chef Recipes"
 	wiki_page = "Guide_to_Food_and_Drinks"
 
-/obj/item/weapon/book/manual/barman_recipes
+/obj/item/book/manual/barman_recipes
 	name = "Barman Recipes"
 	icon_state = "barbook"
 	item_state = "barbook"
@@ -523,7 +523,7 @@
 	title = "Barman Recipes"
 	wiki_page = "Barman_recipes"
 
-/obj/item/weapon/book/manual/detective
+/obj/item/book/manual/detective
 	name = "The Film Noir: proper Procedures for Investigations"
 	icon_state ="bookDetective"
 	item_state = "book2"
@@ -531,7 +531,7 @@
 	title = "The Film Noir: proper Procedures for Investigations"
 	wiki_page = "Guide_to_Forensics"
 
-/obj/item/weapon/book/manual/nuclear
+/obj/item/book/manual/nuclear
 	name = "Fission Mailed: Nuclear Sabotage 101"
 	icon_state ="bookNuclear"
 	item_state ="bookNuclear"
@@ -540,14 +540,14 @@
 	wiki_page = "Nuclear_Agent"
 	forbidden = 2 // Only available to emagged terminals.
 
-/obj/item/weapon/book/manual/ship_building
+/obj/item/book/manual/ship_building
 	name = "Dummies guide to Interstellar Flight"
 	title = "Dummies guide to Interstellar Flight"
 	icon_state = "bookDummy"
 	author = "David Alcubierre"
 	wiki_page = "Ship_Building"
 
-/obj/item/weapon/book/manual/mailing_guide
+/obj/item/book/manual/mailing_guide
 	name = "Guide to disposal mailing system"
 	icon_state ="book"     // a proper icon would be nice
 	author = "Ulyanovsk Logistics Division"		 // Who wrote the thing, can be changed by pen or PC. It is not automatically assigned
@@ -608,7 +608,7 @@
 				</body>
 				</html>"}
 
-/obj/item/weapon/book/manual/virology_guide
+/obj/item/book/manual/virology_guide
 	name = "A Crash Course in Virology"
 	icon_state ="bookVirologyGuide"
 	item_state ="bookVirologyGuide"
@@ -807,7 +807,7 @@
 
 var/virology_encyclopedia = ""
 
-/obj/item/weapon/book/manual/virology_encyclopedia
+/obj/item/book/manual/virology_encyclopedia
 	name = "Symptom Encyclopedia"
 	icon_state ="bookVirologyEncyclopedia"
 	item_state ="bookVirologyEncyclopedia"
@@ -818,7 +818,7 @@ var/virology_encyclopedia = ""
 	book_height = 516
 
 
-/obj/item/weapon/book/manual/virology_encyclopedia/New()
+/obj/item/book/manual/virology_encyclopedia/New()
 	..()
 	if (!virology_encyclopedia)
 

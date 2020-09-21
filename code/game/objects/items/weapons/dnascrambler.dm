@@ -1,11 +1,11 @@
-/obj/item/weapon/dnascrambler
+/obj/item/dnascrambler
 	name = "dna scrambler"
 	desc = "An illegal genetic serum designed to randomize the user's identity."
 	icon = 'icons/obj/syringe.dmi'
 	item_state = "syringe_0"
 	icon_state = "b10"
 
-/obj/item/weapon/dnascrambler/attack(var/mob/living/carbon/human/M, var/mob/living/carbon/human/user)
+/obj/item/dnascrambler/attack(var/mob/living/carbon/human/M, var/mob/living/carbon/human/user)
 	if(!istype(M) || !istype(user))
 		return
 
@@ -20,7 +20,7 @@
 		else
 			to_chat(user, "<span class='warning'>You fail to inject \the [M].</span>")
 
-/obj/item/weapon/dnascrambler/proc/injected(var/mob/living/carbon/target, var/mob/living/carbon/user)
+/obj/item/dnascrambler/proc/injected(var/mob/living/carbon/target, var/mob/living/carbon/user)
 	target.generate_name()
 
 	scramble(1, target, 100)
@@ -30,7 +30,7 @@
 
 	user.drop_item(src, force_drop = 1)
 	//We don't want to leave an obvious "used dna scrambler" behind, let's just create a harmless syringe.
-	var/obj/item/weapon/reagent_containers/syringe/spent = new(get_turf(user))
+	var/obj/item/reagent_containers/syringe/spent = new(get_turf(user))
 	transfer_fingerprints(src, spent)
 	user.put_in_hands(spent)
 

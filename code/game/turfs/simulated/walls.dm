@@ -165,14 +165,14 @@
 		dismantle_wall()
 		return
 
-/turf/simulated/wall/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/turf/simulated/wall/attackby(obj/item/W as obj, mob/user as mob)
 	user.delayNextAttack(8)
 	if (!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return
 
-	if(istype(W,/obj/item/weapon/solder) && bullet_marks)
-		var/obj/item/weapon/solder/S = W
+	if(istype(W,/obj/item/solder) && bullet_marks)
+		var/obj/item/solder/S = W
 		if(!S.remove_fuel(bullet_marks*2,user))
 			return
 		playsound(loc, 'sound/items/Welder.ogg', 100, 1)
@@ -191,7 +191,7 @@
 			"<span class='notice'>You burn the fungi away with \the [W].</span>")
 			remove_rot()
 			return
-		if(istype(W,/obj/item/weapon/soap))
+		if(istype(W,/obj/item/soap))
 			user.visible_message("<span class='notice'>[user] forcefully scrubs the fungi away with \the [W].</span>", \
 			"<span class='notice'>You forcefully scrub the fungi away with \the [W].</span>")
 			remove_rot()
@@ -220,7 +220,7 @@
 
 	//Deconstruction
 	if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		if(WT.remove_fuel(1, user))
 			if(engraving)
 				to_chat(user, "<span class='notice'>You deform the wall back into its original shape")
@@ -269,8 +269,8 @@
 				message_admins("\The [src] with a pdiff of [pdiff] has been dismantled by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]!")
 			dismantle_wall()
 
-	else if(istype(W, /obj/item/weapon/pickaxe))
-		var/obj/item/weapon/pickaxe/PK = W
+	else if(istype(W, /obj/item/pickaxe))
+		var/obj/item/pickaxe/PK = W
 		if(!(PK.diggables & DIG_WALLS))
 			return
 		if(mineral == "diamond") //Nigger it's a one meter thick wall made out of diamonds

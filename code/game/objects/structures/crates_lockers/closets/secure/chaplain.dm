@@ -27,6 +27,6 @@
 		/obj/item/clothing/suit/imperium_monk,
 		/obj/item/clothing/mask/chapmask,
 		/obj/item/clothing/under/sl_suit,
-		/obj/item/weapon/storage/backpack/cultpack,
-		/obj/item/weapon/storage/fancy/candle_box = 2,
+		/obj/item/storage/backpack/cultpack,
+		/obj/item/storage/fancy/candle_box = 2,
 	)

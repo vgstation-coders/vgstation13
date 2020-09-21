@@ -1,4 +1,4 @@
-/obj/item/weapon/implanter
+/obj/item/implanter
 	name = "implanter"
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implanter0"
@@ -6,13 +6,13 @@
 	throw_speed = 1
 	throw_range = 5
 	w_class = W_CLASS_SMALL
-	var/obj/item/weapon/implant/imp = null
+	var/obj/item/implant/imp = null
 	var/imp_type = null
 
-/obj/item/weapon/implanter/proc/update()
+/obj/item/implanter/proc/update()
 	icon_state = "implanter[imp? 1:0]"
 
-/obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
+/obj/item/implanter/attack(mob/M as mob, mob/user as mob)
 	if(!istype(M, /mob/living/carbon))
 		return
 	if(user && imp)
@@ -44,51 +44,51 @@
 				update()
 
 
-/obj/item/weapon/implanter/New()
+/obj/item/implanter/New()
 	if(imp_type)
 		imp = new imp_type(src)
 		..()
 		update()
 
-/obj/item/weapon/implanter/spesstv
+/obj/item/implanter/spesstv
 	name = "promotional Spess.TV implanter"
 	desc = "Does anyone know where the implanter went? I have a lockbox full of loyalty implants here..."
 
-/obj/item/weapon/implanter/traitor
+/obj/item/implanter/traitor
 	name = "greytide conversion kit"
 	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
-	imp_type = /obj/item/weapon/implant/traitor
+	imp_type = /obj/item/implant/traitor
 
 
-/obj/item/weapon/implanter/loyalty
+/obj/item/implanter/loyalty
 	name = "implanter-loyalty"
-	imp_type = /obj/item/weapon/implant/loyalty
+	imp_type = /obj/item/implant/loyalty
 
-/obj/item/weapon/implanter/explosive
+/obj/item/implanter/explosive
 	name = "implanter (E)"
-	imp_type = /obj/item/weapon/implant/explosive
+	imp_type = /obj/item/implant/explosive
 
-/obj/item/weapon/implanter/adrenalin
+/obj/item/implanter/adrenalin
 	name = "implanter-adrenalin"
-	imp_type = /obj/item/weapon/implant/adrenalin
+	imp_type = /obj/item/implant/adrenalin
 
-/obj/item/weapon/implanter/peace
+/obj/item/implanter/peace
 	name = "implanter-pax"
 	desc = "An implanter containing a pax implant"
-	imp_type = /obj/item/weapon/implant/peace
+	imp_type = /obj/item/implant/peace
 
-/obj/item/weapon/implanter/compressed
+/obj/item/implanter/compressed
 	name = "implanter (C)"
 	icon_state = "cimplanter1"
-	imp_type = /obj/item/weapon/implant/compressed
+	imp_type = /obj/item/implant/compressed
 
 	var/list/forbidden_types=list(
-		// /obj/item/weapon/storage/bible // VG #11 - Recursion.
+		// /obj/item/storage/bible // VG #11 - Recursion.
 	)
 
-/obj/item/weapon/implanter/compressed/update()
+/obj/item/implanter/compressed/update()
 	if(imp)
-		var/obj/item/weapon/implant/compressed/c = imp
+		var/obj/item/implant/compressed/c = imp
 		if(!c.scanned)
 			icon_state = "cimplanter1"
 		else
@@ -96,11 +96,11 @@
 	else
 		icon_state = "cimplanter0"
 
-/obj/item/weapon/implanter/compressed/attack(mob/M as mob, mob/user as mob)
+/obj/item/implanter/compressed/attack(mob/M as mob, mob/user as mob)
 	// Attacking things in your hands tends to make this fuck up.
 	if(!istype(M))
 		return
-	var/obj/item/weapon/implant/compressed/c = imp
+	var/obj/item/implant/compressed/c = imp
 	if(!c)
 		return
 	if(c.scanned == null)
@@ -108,14 +108,14 @@
 		return
 	..()
 
-/obj/item/weapon/implanter/compressed/afterattack(var/obj/item/I, mob/user as mob)
+/obj/item/implanter/compressed/afterattack(var/obj/item/I, mob/user as mob)
 	if(is_type_in_list(I,forbidden_types))
 		to_chat(user, "<span class='warning'>A red light flickers on the implanter.</span>")
 		return
 	if(istype(I) && imp)
-		var/obj/item/weapon/implant/compressed/c = imp
+		var/obj/item/implant/compressed/c = imp
 		if(c.scanned)
-			if(istype(I,/obj/item/weapon/storage))
+			if(istype(I,/obj/item/storage))
 				..()
 				return
 			to_chat(user, "<span class='warning'>Something is already scanned inside the implant!</span>")

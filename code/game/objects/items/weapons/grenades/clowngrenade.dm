@@ -1,4 +1,4 @@
-/obj/item/weapon/grenade/clown_grenade
+/obj/item/grenade/clown_grenade
 	name = "Banana Grenade"
 	desc = "A grenade used for rapid slipping of larger areas. Contains banana peels that release acid when slipped on."
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
@@ -11,10 +11,10 @@
 	var/path = 0
 	var/affected_area = 2
 
-/obj/item/weapon/grenade/clown_grenade/New()
+/obj/item/grenade/clown_grenade/New()
 	icon_state = initial(icon_state)
 
-/obj/item/weapon/grenade/clown_grenade/prime()
+/obj/item/grenade/clown_grenade/prime()
 	..()
 	playsound(src, 'sound/items/bikehorn.ogg', 25, -3)
 	/*
@@ -27,7 +27,7 @@
 	for(var/direction in alldirs)
 		for(i = 0; i < 2; i++)
 			number++
-			var/obj/item/weapon/bananapeel/traitorpeel/peel = new /obj/item/weapon/bananapeel/traitorpeel(get_turf(src.loc))
+			var/obj/item/bananapeel/traitorpeel/peel = new /obj/item/bananapeel/traitorpeel(get_turf(src.loc))
 		/*	var/direction = pick(alldirs)
 			var/spaces = pick(1;150, 2)
 			var/a = 0
@@ -39,21 +39,21 @@
 					step(peel,direction)
 			else
 				step(peel,direction)
-	new /obj/item/weapon/bananapeel/traitorpeel(get_turf(src.loc))
+	new /obj/item/bananapeel/traitorpeel(get_turf(src.loc))
 	qdel(src)
 	return
 /*
-/obj/item/weapon/grenade/clown_grenade/proc/banana(turf/T as turf)
+/obj/item/grenade/clown_grenade/proc/banana(turf/T as turf)
 	if(!T || !istype(T))
 		return
 	if(locate(/obj/structure/grille) in T)
 		return
 	if(locate(/obj/structure/window) in T)
 		return
-	new /obj/item/weapon/bananapeel/traitorpeel(T)
+	new /obj/item/bananapeel/traitorpeel(T)
 */
 
-/obj/item/weapon/bananapeel/traitorpeel
+/obj/item/bananapeel/traitorpeel
 	name = "banana peel"
 	desc = "A peel from a banana."
 	icon = 'icons/obj/hydroponics/banana.dmi'
@@ -66,7 +66,7 @@
 
 	var/slip_power = 4
 
-/obj/item/weapon/bananapeel/traitorpeel/Crossed(AM as mob|obj)
+/obj/item/bananapeel/traitorpeel/Crossed(AM as mob|obj)
 	var/burned = rand(2,5)
 	if(istype(AM, /mob/living))
 		var/mob/living/M = AM
@@ -98,7 +98,7 @@
 			M.Stun(10)
 			M.take_overall_damage(0, burned)
 
-/obj/item/weapon/bananapeel/traitorpeel/throw_impact(atom/hit_atom)
+/obj/item/bananapeel/traitorpeel/throw_impact(atom/hit_atom)
 	var/burned = rand(1,3)
 	if(istype(hit_atom ,/mob/living))
 		var/mob/living/M = hit_atom

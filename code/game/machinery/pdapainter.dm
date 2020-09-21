@@ -30,7 +30,7 @@ Feel free to do whatever with this if you think it lacks.
 /obj/machinery/pdapainter/RefreshParts()
 	var/i = 0
 	var/total_rating = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/ML in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/ML in component_parts)
 		total_rating += ML.rating
 		i++
 	if(!total_rating || !i)
@@ -61,13 +61,13 @@ Feel free to do whatever with this if you think it lacks.
 	..()
 
 	component_parts = newlist(
-							/obj/item/weapon/circuitboard/pdapainter,
-	 						/obj/item/weapon/stock_parts/manipulator,
-							/obj/item/weapon/stock_parts/micro_laser,
-							/obj/item/weapon/stock_parts/micro_laser,
-							/obj/item/weapon/stock_parts/scanning_module,
-							/obj/item/weapon/stock_parts/scanning_module,
-							/obj/item/weapon/stock_parts/console_screen
+							/obj/item/circuitboard/pdapainter,
+	 						/obj/item/stock_parts/manipulator,
+							/obj/item/stock_parts/micro_laser,
+							/obj/item/stock_parts/micro_laser,
+							/obj/item/stock_parts/scanning_module,
+							/obj/item/stock_parts/scanning_module,
+							/obj/item/stock_parts/console_screen
 			)
 
 	for(var/P in typesof(/obj/item/device/pda) - blocked)

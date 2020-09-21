@@ -167,7 +167,7 @@
 	return
 
 
-/obj/item/device/assembly_holder/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/item/device/assembly_holder/attackby(obj/item/W as obj, mob/user as mob)
 	if(W.is_screwdriver(user))
 		if(!a_left || !a_right)
 			to_chat(user, "<span class='warning'>BUG:Assembly part missing, please report this!</span>")
@@ -190,7 +190,7 @@
 		if(!isigniter(a_left) && !isigniter(a_right))
 			to_chat(user, "<span class='warning'>You can't make an igniter without an igniting component!</span>")
 			return
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "<span class='notice'>You begin to weld \the [src] to the floor...</span>")
 		if (WT.do_weld(user, src, 40, 0))
 			var/obj/machinery/igniter/igniter=new(src.loc)
@@ -289,8 +289,8 @@
 
 	if ( !(usr.isUnconscious() || usr.restrained()) )
 		var/obj/item/device/assembly_holder/holder
-		if(istype(src,/obj/item/weapon/grenade/chem_grenade))
-			var/obj/item/weapon/grenade/chem_grenade/gren = src
+		if(istype(src,/obj/item/grenade/chem_grenade))
+			var/obj/item/grenade/chem_grenade/gren = src
 			holder=gren.detonator
 		var/obj/item/device/assembly/timer/tmr = holder.a_left
 		if(!istype(tmr,/obj/item/device/assembly/timer))

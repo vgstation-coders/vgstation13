@@ -1,4 +1,4 @@
-/obj/item/weapon/gun/projectile/blastcannon
+/obj/item/gun/projectile/blastcannon
 	name = "pipe gun"
 	desc = "A pipe welded onto a gun stock. You're not sure how you could even use this."
 	icon = 'icons/obj/gun.dmi'
@@ -22,7 +22,7 @@
 	var/ignorecap = 0
 	var/bomb_appearance = null
 
-/obj/item/weapon/gun/projectile/blastcannon/Destroy()
+/obj/item/gun/projectile/blastcannon/Destroy()
 	if(bomb)
 		qdel(bomb)
 		bomb = null
@@ -31,7 +31,7 @@
 	bomb_air_contents_2 = null
 	..()
 
-/obj/item/weapon/gun/projectile/blastcannon/attack_self(mob/user as mob)
+/obj/item/gun/projectile/blastcannon/attack_self(mob/user as mob)
 	if(!bomb)
 		return
 	else
@@ -45,15 +45,15 @@
 		w_class = W_CLASS_MEDIUM
 	update_icon()
 
-/obj/item/weapon/gun/projectile/blastcannon/pickup(mob/user as mob)
+/obj/item/gun/projectile/blastcannon/pickup(mob/user as mob)
 	..()
 	update_icon()
 
-/obj/item/weapon/gun/projectile/blastcannon/dropped(mob/user as mob)
+/obj/item/gun/projectile/blastcannon/dropped(mob/user as mob)
 	..()
 	update_icon()
 
-/obj/item/weapon/gun/projectile/blastcannon/update_icon()
+/obj/item/gun/projectile/blastcannon/update_icon()
 	overlays.len = 0
 	if(!bomb || !bomb_appearance)
 		return
@@ -66,7 +66,7 @@
 
 	overlays += bomb_icon
 
-/obj/item/weapon/gun/projectile/blastcannon/attackby(obj/item/weapon/W, mob/user)
+/obj/item/gun/projectile/blastcannon/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/device/transfer_valve))
 		if(bomb)
 			to_chat(user, "<span class='warning'>There's already a [bomb.name] attached to \the [src]!</span>")
@@ -87,8 +87,8 @@
 		w_class = W_CLASS_LARGE
 	update_icon()
 
-/obj/item/weapon/gun/projectile/blastcannon/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
-	if (istype(A, /obj/item/weapon/storage/backpack ))
+/obj/item/gun/projectile/blastcannon/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	if (istype(A, /obj/item/storage/backpack ))
 		return
 
 	else if (A.loc == user.loc)

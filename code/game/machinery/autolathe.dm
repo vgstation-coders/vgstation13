@@ -37,27 +37,27 @@
 	part_sets = list(
 		"Tools"=list(
 		new /obj/item/device/multitool(), \
-		new /obj/item/weapon/weldingtool/empty(), \
-		new /obj/item/weapon/crowbar(), \
-		new /obj/item/weapon/screwdriver(), \
-		new /obj/item/weapon/wirecutters(), \
-		new /obj/item/weapon/wrench(), \
-		new /obj/item/weapon/solder(),\
-		new /obj/item/weapon/wirecutters/clippers(),\
-		new /obj/item/weapon/minihoe(),\
+		new /obj/item/weldingtool/empty(), \
+		new /obj/item/crowbar(), \
+		new /obj/item/screwdriver(), \
+		new /obj/item/wirecutters(), \
+		new /obj/item/wrench(), \
+		new /obj/item/solder(),\
+		new /obj/item/wirecutters/clippers(),\
+		new /obj/item/minihoe(),\
 		new /obj/item/device/analyzer(), \
-		new /obj/item/weapon/pickaxe/shovel/spade(), \
+		new /obj/item/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
 		),
 		"Containers"=list(
-		new /obj/item/weapon/reagent_containers/glass/beaker(), \
-		new /obj/item/weapon/reagent_containers/glass/beaker/large(), \
-		new /obj/item/weapon/reagent_containers/glass/bucket(), \
-		new /obj/item/weapon/reagent_containers/glass/beaker/vial(), \
-		new /obj/item/weapon/reagent_containers/food/drinks/mug(), \
-		new /obj/item/weapon/reagent_containers/food/drinks/drinkingglass(), \
-		new /obj/item/weapon/storage/toolbox(), \
-		new /obj/item/weapon/reagent_containers/glass/jar(), \
+		new /obj/item/reagent_containers/glass/beaker(), \
+		new /obj/item/reagent_containers/glass/beaker/large(), \
+		new /obj/item/reagent_containers/glass/bucket(), \
+		new /obj/item/reagent_containers/glass/beaker/vial(), \
+		new /obj/item/reagent_containers/food/drinks/mug(), \
+		new /obj/item/reagent_containers/food/drinks/drinkingglass(), \
+		new /obj/item/storage/toolbox(), \
+		new /obj/item/reagent_containers/glass/jar(), \
 		),
 		"Assemblies"=list(
 		new /obj/item/device/assembly/igniter(), \
@@ -74,22 +74,22 @@
 		new /obj/item/device/assembly/math(), \
 		),
 		"Stock_Parts"=list(
-		new /obj/item/weapon/stock_parts/console_screen(), \
-		new /obj/item/weapon/stock_parts/capacitor(), \
-		new /obj/item/weapon/stock_parts/scanning_module(), \
-		new /obj/item/weapon/stock_parts/manipulator(), \
-		new /obj/item/weapon/stock_parts/micro_laser(), \
-		new /obj/item/weapon/stock_parts/matter_bin(), \
+		new /obj/item/stock_parts/console_screen(), \
+		new /obj/item/stock_parts/capacitor(), \
+		new /obj/item/stock_parts/scanning_module(), \
+		new /obj/item/stock_parts/manipulator(), \
+		new /obj/item/stock_parts/micro_laser(), \
+		new /obj/item/stock_parts/matter_bin(), \
 		),
 		"Medical"=list(
-		new /obj/item/weapon/storage/pill_bottle(),\
-		new /obj/item/weapon/reagent_containers/syringe(), \
-		new /obj/item/weapon/scalpel(), \
-		new /obj/item/weapon/circular_saw(), \
-		new /obj/item/weapon/surgicaldrill(),\
-		new /obj/item/weapon/retractor(),\
-		new /obj/item/weapon/cautery(),\
-		new /obj/item/weapon/hemostat(),\
+		new /obj/item/storage/pill_bottle(),\
+		new /obj/item/reagent_containers/syringe(), \
+		new /obj/item/scalpel(), \
+		new /obj/item/circular_saw(), \
+		new /obj/item/surgicaldrill(),\
+		new /obj/item/retractor(),\
+		new /obj/item/cautery(),\
+		new /obj/item/hemostat(),\
 		),
 		"Ammunition"=list(
 		new /obj/item/ammo_casing/shotgun/blank(), \
@@ -102,47 +102,47 @@
 		),
 		"Misc_Tools"=list(
 		new /obj/item/device/flashlight(), \
-		new /obj/item/weapon/extinguisher/empty(), \
+		new /obj/item/extinguisher/empty(), \
 		new /obj/item/device/radio/headset(), \
 		new /obj/item/device/radio/off(), \
-		new /obj/item/weapon/kitchen/utensil/knife/large(), \
+		new /obj/item/kitchen/utensil/knife/large(), \
 		new /obj/item/clothing/head/welding(), \
 		new /obj/item/device/taperecorder(), \
-		new /obj/item/weapon/chisel(), \
-		new /obj/item/weapon/razor(), \
+		new /obj/item/chisel(), \
+		new /obj/item/razor(), \
 		new /obj/item/device/rcd/tile_painter(), \
 		new /obj/item/device/rcd/matter/rsf(), \
 		new /obj/item/device/destTagger(), \
 		new /obj/item/device/priceTagger(), \
-		new /obj/item/weapon/hand_labeler(), \
+		new /obj/item/hand_labeler(), \
 		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
 		new /obj/item/stack/rcd_ammo(), \
-		new /obj/item/weapon/light/tube(), \
-		new /obj/item/weapon/light/bulb(), \
+		new /obj/item/light/tube(), \
+		new /obj/item/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
-		new /obj/item/weapon/storage/pill_bottle/dice(),\
-		new /obj/item/weapon/camera_assembly(), \
+		new /obj/item/storage/pill_bottle/dice(),\
+		new /obj/item/camera_assembly(), \
 		new /obj/item/stack/sheet/glass/rglass(), \
 		new /obj/item/stack/rods(), \
-		new /obj/item/weapon/storage/box/ornaments(), \
-		new /obj/item/weapon/storage/box/ornaments/teardrop_ornaments(), \
-		new /obj/item/weapon/disk/shuttle_coords/station_auxillary(),\
+		new /obj/item/storage/box/ornaments(), \
+		new /obj/item/storage/box/ornaments/teardrop_ornaments(), \
+		new /obj/item/disk/shuttle_coords/station_auxillary(),\
 		),
 		"Hidden_Items" = list(
-		new /obj/item/weapon/gun/projectile/flamethrower/full(), \
+		new /obj/item/gun/projectile/flamethrower/full(), \
 		new /obj/item/ammo_storage/box/flare(), \
 		new /obj/item/device/rcd/matter/engineering(), \
 		new /obj/item/device/rcd/rpd(),\
 		new /obj/item/device/radio/electropack(), \
-		new /obj/item/weapon/weldingtool/largetank/empty(), \
-		new /obj/item/weapon/handcuffs(), \
+		new /obj/item/weldingtool/largetank/empty(), \
+		new /obj/item/handcuffs(), \
 		new /obj/item/ammo_storage/box/a357(), \
 		new /obj/item/ammo_casing/shotgun(), \
 		new /obj/item/ammo_casing/shotgun/dart(), \
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
-		new /obj/item/weapon/beartrap(),\
+		new /obj/item/beartrap(),\
 		new /obj/item/gun_part/scope(),\
 		)
 	)
@@ -151,12 +151,12 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/autolathe,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/autolathe,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()

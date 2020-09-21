@@ -3,8 +3,8 @@
 	//As this is a race that can only wear helmets, we'll have a fishbowl helmet that can accept tanks in place of having gas mask setups
 	if(head && istype(head, /obj/item/clothing/head/helmet/space/martian))
 		var/obj/item/clothing/head/helmet/space/martian/fishbowl = head
-		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/weapon/tank))
-			var/obj/item/weapon/tank/internals = fishbowl.tank
+		if(fishbowl.tank && istype(fishbowl.tank, /obj/item/tank))
+			var/obj/item/tank/internals = fishbowl.tank
 			return internals.remove_air_volume(volume_needed)
 	return null
 

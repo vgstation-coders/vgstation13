@@ -23,9 +23,9 @@
 
 /datum/surgery_step/generic/cut_face
 	allowed_tools = list(
-		/obj/item/weapon/scalpel = 100,
-		/obj/item/weapon/kitchen/utensil/knife/large = 75,
-		/obj/item/weapon/shard = 50,
+		/obj/item/scalpel = 100,
+		/obj/item/kitchen/utensil/knife/large = 75,
+		/obj/item/shard = 50,
 		)
 
 	duration = 9 SECONDS
@@ -55,7 +55,7 @@
 ///////MEND VOCAL///////
 /datum/surgery_step/face/mend_vocal
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10	//I don't know. Don't ask me. But I'm leaving it because hilarity.
 		)
@@ -85,9 +85,9 @@
 ////////FIX FACE//////
 /datum/surgery_step/face/fix_face
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 55,
-		/obj/item/weapon/kitchen/utensil/fork = 75,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 55,
+		/obj/item/kitchen/utensil/fork = 75,
 		)
 
 	duration = 8 SECONDS
@@ -122,11 +122,11 @@
 	return 0
 /datum/surgery_step/face/cauterize
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/cautery = 100,
+		/obj/item/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
-		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/lighter = 50,
+		/obj/item/weldingtool = 25,
 		)
 
 	duration = 7 SECONDS

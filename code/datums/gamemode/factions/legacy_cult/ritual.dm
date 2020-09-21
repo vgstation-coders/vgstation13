@@ -59,7 +59,7 @@ var/runedec = 0 // Rune cap ?
 
 
 /obj/effect/rune_legacy/attackby(obj/I, mob/user)
-	if(istype(I, /obj/item/weapon/tome_legacy) && islegacycultist(user))
+	if(istype(I, /obj/item/tome_legacy) && islegacycultist(user))
 		to_chat(user, "You retrace your steps, carefully undoing the lines of the rune.")
 		qdel(src)
 		return
@@ -151,7 +151,7 @@ var/runedec = 0 // Rune cap ?
 /obj/effect/rune_legacy/proc/check_icon(var/mob/M = null)
 	get_uristrune_cult(word1, word2, word3, M)
 
-/obj/item/weapon/tome_legacy
+/obj/item/tome_legacy
 	name = "arcane tome"
 	desc = "An old, dusty tome with frayed edges and a sinister looking cover."
 	icon = 'icons/obj/weapons.dmi'
@@ -259,7 +259,7 @@ var/runedec = 0 // Rune cap ?
 				</html>
 				"}
 
-/obj/item/weapon/tome_legacy/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
+/obj/item/tome_legacy/New(var/datum/faction/cult/narsie/our_cult) // Multiple cults with multiple words ? Why not
 	if (!istype(our_cult))
 		our_cult = find_active_faction_by_type(/datum/faction/cult/narsie) // No cult given, let's find ours
 	if (istype(our_cult))
@@ -268,7 +268,7 @@ var/runedec = 0 // Rune cap ?
 		return ..()
 	return FALSE
 
-/obj/item/weapon/tome_legacy/Topic(href,href_list[])
+/obj/item/tome_legacy/Topic(href,href_list[])
 	if (src.loc == usr)
 		var/number = text2num(href_list["number"])
 		if (usr.stat || usr.restrained())
@@ -295,13 +295,13 @@ var/runedec = 0 // Rune cap ?
 					[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 					"}
 		usr << browse("[notedat]", "window=notes")
-//		call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
+//		call(/obj/item/tome_legacy/proc/edit_notes)()
 	else
 		usr << browse(null, "window=notes")
 		return
 
 /*
-/obj/item/weapon/tome_legacy/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
+/obj/item/tome_legacy/proc/edit_notes()     FUCK IT. Cant get it to work properly. - K0000
 	to_chat(world, "its been called! [usr]")
 	notedat = {"
 	<br><b>Word translation notes</b> <br>
@@ -320,7 +320,7 @@ var/runedec = 0 // Rune cap ?
 	usr << browse(null, "window=tank")
 */
 
-/obj/item/weapon/tome_legacy/attack(mob/living/M as mob, mob/living/user as mob)
+/obj/item/tome_legacy/attack(mob/living/M as mob, mob/living/user as mob)
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had the [name] used on him by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used [name] on [M.name] ([M.ckey])</font>")
 	msg_admin_attack("[user.name] ([user.ckey]) used [name] on [M.name] ([M.ckey]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
@@ -348,7 +348,7 @@ var/runedec = 0 // Rune cap ?
 	to_chat(M, "<span class='warning'>You feel searing heat inside!</span>")
 
 
-/obj/item/weapon/tome_legacy/attack_self(mob/living/user as mob)
+/obj/item/tome_legacy/attack_self(mob/living/user as mob)
 	if(!usr.canmove || usr.stat || usr.restrained())
 		return
 
@@ -394,7 +394,7 @@ var/runedec = 0 // Rune cap ?
 				[words[9]] is <a href='byond://?src=\ref[src];number=9;action=change'>[words[words[9]]]</A> <A href='byond://?src=\ref[src];number=9;action=clear'>Clear</A><BR>
 				[words[10]] is <a href='byond://?src=\ref[src];number=10;action=change'>[words[words[10]]]</A> <A href='byond://?src=\ref[src];number=10;action=clear'>Clear</A><BR>
 				"}
-//						call(/obj/item/weapon/tome_legacy/proc/edit_notes)()
+//						call(/obj/item/tome_legacy/proc/edit_notes)()
 					user << browse("[notedat]", "window=notes")
 					return
 		if(usr.get_active_hand() != src)
@@ -450,8 +450,8 @@ var/runedec = 0 // Rune cap ?
 		to_chat(user, "The book seems full of illegible scribbles. Is this a joke?")
 		return
 
-/obj/item/weapon/tome_legacy/attackby(obj/item/weapon/tome_legacy/T as obj, mob/living/user as mob)
-	if(istype(T, /obj/item/weapon/tome_legacy) && islegacycultist(user)) // sanity check to prevent a runtime error
+/obj/item/tome_legacy/attackby(obj/item/tome_legacy/T as obj, mob/living/user as mob)
+	if(istype(T, /obj/item/tome_legacy) && islegacycultist(user)) // sanity check to prevent a runtime error
 		switch(alert("Copy the runes from your tome?",,"Copy", "Cancel"))
 			if("Cancel")
 				return
@@ -461,15 +461,15 @@ var/runedec = 0 // Rune cap ?
 		flick("tome-copied",src)
 
 
-/obj/item/weapon/tome_legacy/examine(mob/user)
+/obj/item/tome_legacy/examine(mob/user)
 	..()
 	if(islegacycultist(user))
 		to_chat(user, "The scriptures of Nar-Sie, The One Who Sees, The Geometer of Blood. Contains the details of every ritual his followers could think of. Most of these are useless, though.")
 
-/obj/item/weapon/tome_legacy/cultify()
+/obj/item/tome_legacy/cultify()
 	return
 
-/obj/item/weapon/tome_legacy/imbued //admin tome, spawns working runes without waiting
+/obj/item/tome_legacy/imbued //admin tome, spawns working runes without waiting
 	w_class = W_CLASS_SMALL
 	var/cultistsonly = 1
 	attack_self(mob/user as mob)

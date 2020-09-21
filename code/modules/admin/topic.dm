@@ -584,7 +584,7 @@
 		var/datum/disease2/disease/D = locate(href_list["diseasepanel_dishes"])
 
 		var/list/dishes = list()
-		for (var/obj/item/weapon/virusdish/dish in virusdishes)
+		for (var/obj/item/virusdish/dish in virusdishes)
 			if (dish.contained_virus)
 				if ("[D.uniqueID]-[D.subID]" == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
 					dishes.Add(dish)
@@ -592,7 +592,7 @@
 		if (!dishes)
 			return
 
-		var/obj/item/weapon/virusdish/dish = input(usr, "Choose a growth dish to check", "Disease Panel") as null | anything in dishes
+		var/obj/item/virusdish/dish = input(usr, "Choose a growth dish to check", "Disease Panel") as null | anything in dishes
 		if (!dish)
 			return
 		if (!dish.loc)
@@ -736,7 +736,7 @@
 				new_mob = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
 			if("soulblade")
 				var/mob/living/simple_animal/shade/new_shade = M.change_mob_type( /mob/living/simple_animal/shade , null, null, delmob )
-				var/obj/item/weapon/melee/soulblade/blade = new(get_turf(M))
+				var/obj/item/melee/soulblade/blade = new(get_turf(M))
 				blade.blood = blade.maxblood
 				new_shade.forceMove(blade)
 				blade.update_icon()
@@ -2161,14 +2161,14 @@
 				//I.dropped(M)
 				I.forceMove(pack)
 
-		var/obj/item/weapon/card/id/thunderdome/ident = null
+		var/obj/item/card/id/thunderdome/ident = null
 
 		switch(team)
 			if("Green")
-				ident = new /obj/item/weapon/card/id/thunderdome/green(M)
+				ident = new /obj/item/card/id/thunderdome/green(M)
 				ident.name = "[M.real_name]'s Thunderdome Green ID"
 			if("Red")
-				ident = new /obj/item/weapon/card/id/thunderdome/red(M)
+				ident = new /obj/item/card/id/thunderdome/red(M)
 				ident.name = "[M.real_name]'s Thunderdome Red ID"
 
 		if(!iscarbon(M))
@@ -2181,7 +2181,7 @@
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/green(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
-					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/green(H), slot_belt)
+					H.equip_to_slot_or_del(new /obj/item/storage/belt/thunderdome/green(H), slot_belt)
 					H.regenerate_icons()
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
@@ -2199,7 +2199,7 @@
 						K.hat = null
 						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
-					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/green(K))
+					K.put_in_hands(new /obj/item/storage/belt/thunderdome/green(K))
 					K.regenerate_icons()
 
 			if("Red")
@@ -2208,7 +2208,7 @@
 					H.equip_to_slot_or_del(new /obj/item/clothing/under/color/red(H), slot_w_uniform)
 					H.equip_to_slot_or_del(new /obj/item/clothing/shoes/brown(H), slot_shoes)
 					H.equip_to_slot_or_del(ident, slot_wear_id)
-					H.equip_to_slot_or_del(new /obj/item/weapon/storage/belt/thunderdome/red(H), slot_belt)
+					H.equip_to_slot_or_del(new /obj/item/storage/belt/thunderdome/red(H), slot_belt)
 					H.regenerate_icons()
 				else if(ismonkey(M))
 					var/mob/living/carbon/monkey/K = M
@@ -2226,7 +2226,7 @@
 						K.hat = null
 						oldhat.forceMove(pack)
 					K.put_in_hands(ident)
-					K.put_in_hands(new /obj/item/weapon/storage/belt/thunderdome/red(K))
+					K.put_in_hands(new /obj/item/storage/belt/thunderdome/red(K))
 					K.regenerate_icons()
 
 		if(pack.contents.len == 0)
@@ -2774,7 +2774,7 @@
 			to_chat(usr, "This can only be used on instances of type /mob/living/carbon")
 			return
 
-		if(!H.put_in_hands( new /obj/item/weapon/reagent_containers/food/snacks/cookie(H)))
+		if(!H.put_in_hands( new /obj/item/reagent_containers/food/snacks/cookie(H)))
 			log_admin("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
 			message_admins("[key_name(H)] has their hands full, so they did not receive their cookie, spawned by [key_name(src.owner)].")
 			return
@@ -2949,7 +2949,7 @@
 		to_chat(M, "<span class='notice'>You hear something crackle from your [receive_type] for a moment before a voice speaks:</span>\n\"Please stand by for a message from your benefactor, agent. Message as follows.\"\n<span class = 'bold'>\"[input]\"</span>")
 
 	else if(href_list["CentcommFaxView"])
-		var/obj/item/weapon/paper/P = locate(href_list["CentcommFaxView"])
+		var/obj/item/paper/P = locate(href_list["CentcommFaxView"])
 		var/info_2 = ""
 		if(P.img)
 			usr << browse_rsc(P.img.img, "tmp_photo.png")
@@ -2967,7 +2967,7 @@
 
 		var/sentname = input(src.owner, "Pick a title for the report", "Title") as text|null
 
-		var/obj/item/weapon/paper/replyfax = SendFax(sent, sentname, centcomm = 1)
+		var/obj/item/paper/replyfax = SendFax(sent, sentname, centcomm = 1)
 		if(!istype(replyfax))
 			to_chat(src.owner, "<span class='warning'>Message reply to [key_name(H)] failed.</span>")
 			return
@@ -3119,7 +3119,7 @@
 			else if(!ispath(path, /obj) && !ispath(path, /turf) && !ispath(path, /mob))
 				removed_paths += dirty_path
 				continue
-			else if(ispath(path, /obj/item/weapon/gun/energy/pulse_rifle))
+			else if(ispath(path, /obj/item/gun/energy/pulse_rifle))
 				if(!check_rights(R_FUN,0))
 					removed_paths += dirty_path
 					continue
@@ -3693,7 +3693,7 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","FG")
 				for(var/obj/item/W in world)
-					if(istype(W, /obj/item/clothing) || istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/weapon/disk) || istype(W, /obj/item/weapon/tank))
+					if(istype(W, /obj/item/clothing) || istype(W, /obj/item/card/id) || istype(W, /obj/item/disk) || istype(W, /obj/item/tank))
 						continue
 					W.icon = 'icons/obj/fakegun.dmi'
 					W.item_state = "gun"
@@ -3893,13 +3893,13 @@
 					newname = "Admin"
 				var/turf/T = get_turf(usr)
 				var/mob/living/carbon/human/dummy/D = new /mob/living/carbon/human/dummy(T)
-				var/obj/item/weapon/card/id/admin/admin_id = new(D)
+				var/obj/item/card/id/admin/admin_id = new(D)
 				admin_id.registered_name = newname
 				D.equip_to_slot_or_del(new /obj/item/clothing/under/color/black(D), slot_w_uniform)
 				D.equip_to_slot_or_del(new /obj/item/clothing/shoes/black(D), slot_shoes)
 				D.equip_to_slot_or_del(new /obj/item/device/radio/headset/heads/captain(D), slot_ears)
-				D.equip_to_slot_or_del(new /obj/item/weapon/storage/backpack/satchel(D), slot_back)
-				D.equip_to_slot_or_del(new /obj/item/weapon/storage/box/survival/engineer(D.back), slot_in_backpack)
+				D.equip_to_slot_or_del(new /obj/item/storage/backpack/satchel(D), slot_back)
+				D.equip_to_slot_or_del(new /obj/item/storage/box/survival/engineer(D.back), slot_in_backpack)
 				D.equip_to_slot_or_del(admin_id, slot_wear_id)
 				T.turf_animation('icons/effects/96x96.dmi',"beamin",-WORLD_ICON_SIZE,0,MOB_LAYER+1,'sound/misc/adminspawn.ogg',anim_plane = MOB_PLANE)
 				D.name = newname
@@ -4003,7 +4003,7 @@
 							//O.dropped(M)
 						M.equip_to_slot_or_del(new /obj/item/clothing/head/helmet/space/bomberman(M), slot_head)
 						M.equip_to_slot_or_del(new /obj/item/clothing/suit/space/bomberman(M), slot_wear_suit)
-						M.equip_to_slot_or_del(new /obj/item/weapon/bomberman/(M), slot_s_store)
+						M.equip_to_slot_or_del(new /obj/item/bomberman/(M), slot_s_store)
 						M.update_icons()
 						M.mind.special_role = BOMBERMAN // CHEAT CHECKS
 						to_chat(M, "Wait...what?")
@@ -4019,7 +4019,7 @@
 				var/choice = alert("Activate Cuban Pete mode? Note that newly spawned BBD will still have player damage deactivated.","Activating Bomberman Bombs Player Damage","Confirm","Cancel")
 				if(choice=="Confirm")
 					bomberman_hurt = 1
-					for(var/obj/item/weapon/bomberman/B in bombermangear)
+					for(var/obj/item/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.hurt_players = 1
 				message_admins("[key_name_admin(usr)] enabled the player damage of the Bomberman Bomb Dispensers currently in the world. Cuban Pete approves.")
@@ -4030,7 +4030,7 @@
 				var/choice = alert("Activate Michael Bay mode? Note that newly spawned BBD will still have environnement damage deactivated.","Activating Bomberman Bombs Environnement Damage","Confirm","Cancel")
 				if(choice=="Confirm")
 					bomberman_destroy = 1
-					for(var/obj/item/weapon/bomberman/B in bombermangear)
+					for(var/obj/item/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.destroy_environnement = 1
 				message_admins("[key_name_admin(usr)] enabled the environnement damage of the Bomberman Bomb Dispensers currently in the world. Michael Bay approves.")
@@ -4041,7 +4041,7 @@
 				var/choice = alert("Disable Cuban Pete mode.","Disable Bomberman Bombs Player Damage","Confirm","Cancel")
 				if(choice=="Confirm")
 					bomberman_hurt = 0
-					for(var/obj/item/weapon/bomberman/B in bombermangear)
+					for(var/obj/item/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.hurt_players = 0
 				message_admins("[key_name_admin(usr)] disabled the player damage of the Bomberman Bomb Dispensers currently in the world.")
@@ -4052,7 +4052,7 @@
 				var/choice = alert("Disable Michael Bay mode?","Disable Bomberman Bombs Environnement Damage","Confirm","Cancel")
 				if(choice=="Confirm")
 					bomberman_destroy = 0
-					for(var/obj/item/weapon/bomberman/B in bombermangear)
+					for(var/obj/item/bomberman/B in bombermangear)
 						if(!B.arena)
 							B.destroy_environnement = 0
 				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
@@ -4089,12 +4089,12 @@
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","TUR")
 				var/list/possible_guns = list()
-				for(var/path in typesof(/obj/item/weapon/gun/energy))
+				for(var/path in typesof(/obj/item/gun/energy))
 					possible_guns += path
 				var/choice = input("What energy gun do you want inside the turret?") in possible_guns
 				if(!choice)
 					return
-				var/obj/item/weapon/gun/energy/gun = new choice()
+				var/obj/item/gun/energy/gun = new choice()
 				var/obj/machinery/porta_turret/Turret = new(get_turf(usr))
 				Turret.installed = gun
 				gun.forceMove(Turret)
@@ -5475,11 +5475,11 @@
 	else if(href_list["ashpaper"])
 		if(!check_rights(R_ADMIN))
 			return
-		var/obj/item/weapon/paper/P = locate(href_list["ashpaper"])
+		var/obj/item/paper/P = locate(href_list["ashpaper"])
 		if(!istype(P))
 			message_admins("The target doesn't exist.")
 			return
-		if(!is_type_in_list(/obj/item/weapon/stamp/chaplain,P.stamped))
+		if(!is_type_in_list(/obj/item/stamp/chaplain,P.stamped))
 			message_admins("That reference isn't for a paper with a chaplain stamp.")
 			return
 		var/ash_type = P.ashtype()
@@ -5491,7 +5491,7 @@
 		else
 			P.visible_message("<span class='sinister'>\The [P] catches fire and smolders into ash!</span>")
 
-		var/obj/item/weapon/storage/bag/clipboard/CB = P.loc
+		var/obj/item/storage/bag/clipboard/CB = P.loc
 		if(istype(CB))
 			CB.remove_from_storage(P, get_turf(CB), force = 1, refresh = 1)
 

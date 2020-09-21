@@ -76,41 +76,41 @@
 /datum/artifact_trigger/pay2use/proc/owner_attackby(var/list/event_args, var/source)
 	var/toucher = event_args[1]
 	var/context = event_args[2]
-	var/obj/item/weapon/item = event_args[3]
+	var/obj/item/item = event_args[3]
 
 	if(context == "MELEE")
 		if(iscoin(item))
 			if(mode == COIN)
 				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || [item] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
 				my_artifact.visible_message("<span class='info'>[toucher] inserts a coin into [my_artifact].</span>")
-				if(istype(item, /obj/item/weapon/coin/clown))
+				if(istype(item, /obj/item/coin/clown))
 					playsound(my_artifact, 'sound/items/bikehorn.ogg', 50, 1)
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/iron))
+				else if(istype(item, /obj/item/coin/iron))
 					time_left += 10
-				else if(istype(item, /obj/item/weapon/coin/silver))
+				else if(istype(item, /obj/item/coin/silver))
 					time_left += 30
-				else if(istype(item, /obj/item/weapon/coin/gold))
+				else if(istype(item, /obj/item/coin/gold))
 					time_left += 60
-				else if(istype(item, /obj/item/weapon/coin/plasma))
+				else if(istype(item, /obj/item/coin/plasma))
 					time_left += 45
-				else if(istype(item, /obj/item/weapon/coin/uranium))
+				else if(istype(item, /obj/item/coin/uranium))
 					time_left += 50
-				else if(istype(item, /obj/item/weapon/coin/diamond))
+				else if(istype(item, /obj/item/coin/diamond))
 					time_left += 100
-				else if(istype(item, /obj/item/weapon/coin/phazon))
+				else if(istype(item, /obj/item/coin/phazon))
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/adamantine))
+				else if(istype(item, /obj/item/coin/adamantine))
 					time_left += 150
-				else if(istype(item, /obj/item/weapon/coin/mythril))
+				else if(istype(item, /obj/item/coin/mythril))
 					time_left += 150
 				qdel(item)
 			else
 				to_chat(toucher, "[bicon(my_artifact)]<span class='warning'>[my_artifact] does not accept coins!</span>")
 
-		else if(istype(item, /obj/item/weapon/spacecash))
+		else if(istype(item, /obj/item/spacecash))
 			if(mode == CREDIT)
-				var/obj/item/weapon/spacecash/dosh = item
+				var/obj/item/spacecash/dosh = item
 				my_artifact.visible_message("<span class='info'>[toucher] inserts a credit chip into [my_artifact].</span>")
 				my_artifact.investigation_log(I_ARTIFACT, "|| effect [my_effect.artifact_id]([my_effect]) || $[dosh.get_total()] [dosh] inserted to ([my_effect.trigger]) || used by [key_name(toucher)].")
 				time_left += (dosh.get_total() * 3) //6 seconds per credit
@@ -122,11 +122,11 @@
 
 	if(mode == BANK_CARD)
 		var/mob/living/M = mob
-		var/obj/item/weapon/card/I = M.get_id_card()
+		var/obj/item/card/I = M.get_id_card()
 		var/bought_time = time / 2
 
-		if (istype(I, /obj/item/weapon/card/id))
-			var/obj/item/weapon/card/id/C = I
+		if (istype(I, /obj/item/card/id))
+			var/obj/item/card/id/C = I
 			my_artifact.visible_message("<span class='info'>[M] swipes a card through [my_artifact].</span>")
 
 			//we start by checking the ID card's virtual wallet

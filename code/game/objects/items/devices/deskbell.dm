@@ -99,8 +99,8 @@
 				to_chat(user, "You must undo the securing bolts before you can pick it up.")
 				return
 			if( !user.get_active_hand() )		//if active hand is empty
-				if(istype(loc, /obj/item/weapon/storage))
-					var/obj/item/weapon/storage/bag = loc
+				if(istype(loc, /obj/item/storage))
+					var/obj/item/storage/bag = loc
 					bag.remove_from_storage(src)
 				user.put_in_hands(src)
 				user.visible_message("<span class='notice'>[user] picks up the [src].</span>", "<span class='notice'>You grab [src] from the floor!</span>")
@@ -269,7 +269,7 @@
 		name = "[initial(name)] labelled as \"[final_name]\""
 
 /obj/item/device/deskbell_assembly/attackby(obj/item/W, mob/user)
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter new desk bell name", src.name, final_name),1,MAX_NAME_LEN)
 		if (!t)
 			return
@@ -301,7 +301,7 @@
 					to_chat(user, "<span class='warning'>You must add wires first.</span>")
 					return
 			if(1)
-				if(istype(W,/obj/item/weapon/wirecutters))
+				if(istype(W,/obj/item/wirecutters))
 					if(has_signaler)
 						to_chat(user, "<span class='warning'>You must remove the signaler first.</span>")
 						return

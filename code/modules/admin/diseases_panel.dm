@@ -46,7 +46,7 @@
 		for (var/obj/item/I in infected_items)
 			if (ID in I.virus2)
 				infctd_items++
-		for (var/obj/item/weapon/virusdish/dish in virusdishes)
+		for (var/obj/item/virusdish/dish in virusdishes)
 			if (dish.contained_virus)
 				if (ID == "[dish.contained_virus.uniqueID]-[dish.contained_virus.subID]")
 					dishes++

@@ -50,11 +50,11 @@
 	use_power = 0
 	req_access = list(access_engine_equip)
 	var/spooky=0
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 	var/start_charge = 90				// initial cell charge %
 	var/old_charge = 0					// how much charge did this thing have before a random event knocked it out
 	var/cell_type = 2500				// 0=no cell, 1=regular, 2=high-cap (x5) <- old, now it's just 0=no cell, otherwise dictate cellcapacity by changing this value. 1 used to be 1000, 2 was 2500
-	var/cell_type_path = /obj/item/weapon/cell
+	var/cell_type_path = /obj/item/cell
 	var/opened = 0                      //0=closed, 1=opened, 2=cover removed
 	var/shorted = 0
 	var/lighting = 3
@@ -415,7 +415,7 @@
 					user.visible_message(\
 						"<span class='warning'>[user.name] has removed the power control board from [src.name]!</span>",\
 						"You remove the power control board.")
-					new /obj/item/weapon/circuitboard/power_control(loc)
+					new /obj/item/circuitboard/power_control(loc)
 		else if (opened!=2) //cover isn't removed
 			opened = 0
 			update_icon()
@@ -428,12 +428,12 @@
 		else
 			opened = 1
 			update_icon()
-	else if	(istype(W, /obj/item/weapon/cell) && opened)	// trying to put a cell inside
+	else if	(istype(W, /obj/item/cell) && opened)	// trying to put a cell inside
 		if(cell)
 
 			if(user.drop_item(W, src))
 				to_chat(user, "You swap the power cell within with the new cell in your hand.")
-				var/obj/item/weapon/oldpowercell = cell
+				var/obj/item/oldpowercell = cell
 				cell = W
 				chargecount = 0
 				update_icon()
@@ -482,7 +482,7 @@
 				to_chat(user, "<span class='warning'>You open the panel and find nothing inside.</span>")
 				return
 
-	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
+	else if (istype(W, /obj/item/card/id)||istype(W, /obj/item/device/pda))			// trying to unlock the interface with an ID card
 		if(emagged)
 			to_chat(user, "The lock seems broken.")
 		else if(opened)
@@ -499,7 +499,7 @@
 				nanomanager.update_uis(src)
 			else
 				to_chat(user, "<span class='warning'>Access denied.</span>")
-	else if (istype(W, /obj/item/weapon/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
+	else if (istype(W, /obj/item/card/emag) && !(emagged || malfhack))		// trying to unlock with an emag card
 		if(opened)
 			to_chat(user, "You must close the cover to swipe an ID card.")
 		else if(wiresexposed)
@@ -544,7 +544,7 @@
 				"You cut the cables and dismantle the power terminal.")
 			qdel(terminal)
 			terminal = null
-	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
+	else if (istype(W, /obj/item/circuitboard/power_control) && opened && has_electronics==0 && !((stat & BROKEN) || malfhack))
 		to_chat(user, "You begin to insert the power control board into the frame...")
 		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 		if (do_after(user, src, 10) && opened && has_electronics == 0 && !((stat & BROKEN) || malfhack))
@@ -552,11 +552,11 @@
 			to_chat(user, "You place the power control board inside the frame.")
 			qdel(W)
 			W = null
-	else if (istype(W, /obj/item/weapon/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
+	else if (istype(W, /obj/item/circuitboard/power_control) && opened && has_electronics==0 && ((stat & BROKEN) || malfhack))
 		to_chat(user, "<span class='warning'>You cannot put the board inside, the frame is damaged.</span>")
 		return
 	else if (iswelder(W) && opened && has_electronics==0 && !terminal)
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 		to_chat(user, "You start welding the APC frame...")
 		if (WT.do_weld(user, src, 50, 3))
 			if (emagged || malfhack || (stat & BROKEN) || opened==2)
@@ -607,7 +607,7 @@
 				&& !opened \
 				&& ( \
 					(W.force >= 5 && W.w_class >= W_CLASS_MEDIUM) \
-					|| istype(W,/obj/item/weapon/crowbar) \
+					|| istype(W,/obj/item/crowbar) \
 				) \
 				&& prob(20) )
 			user.do_attack_animation(src, W)
@@ -1004,7 +1004,7 @@
 	src.occupant.add_spell(new /spell/aoe_turf/corereturn, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 	src.occupant.cancel_camera()
 	if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
-		for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
+		for(var/obj/item/pinpointer/point in pinpointer_list)
 			point.target = src //the pinpointer will detect the shunted AI
 
 	// record that the malf shunted, for statistics
@@ -1023,7 +1023,7 @@
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
 		if (seclevel2num(get_security_level()) == SEC_LEVEL_DELTA)
-			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
+			for(var/obj/item/pinpointer/point in pinpointer_list)
 				var/mob/living/silicon/ai/A = occupant.parent // the current mob the mind owns
 				if(A.stat != DEAD)
 					point.target = A //The pinpointer tracks the AI back into its core.
@@ -1035,7 +1035,7 @@
 			src.occupant.forceMove(src.loc)
 			src.occupant.death()
 			src.occupant.gib()
-			for(var/obj/item/weapon/pinpointer/point in pinpointer_list)
+			for(var/obj/item/pinpointer/point in pinpointer_list)
 				point.target = null //the pinpointer will go back to pointing at the nuke disc.
 
 

@@ -6,7 +6,7 @@
 	icon_state = "computer_generic"//TODO
 	density = 1
 	anchored = 1
-	circuit = "/obj/item/weapon/circuitboard/smeltcomp"
+	circuit = "/obj/item/circuitboard/smeltcomp"
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_mining)
 
@@ -16,7 +16,7 @@
 
 	var/list/smelter_data //All the data we have about the smelter, since it uses radio connection based RC.
 
-	var/obj/item/weapon/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
+	var/obj/item/card/id/id //Ref to the inserted ID card (for claiming points via the smelter).
 
 /obj/machinery/computer/smelting/New()
 	. = ..()
@@ -189,7 +189,7 @@
 			to_chat(usr, "<span class='warning'>The machine rejects your access credentials.</span>")
 			return 1
 
-		var/obj/item/weapon/card/id/I = usr.get_active_hand()
+		var/obj/item/card/id/I = usr.get_active_hand()
 		if(istype(I))
 			if(usr.drop_item(I, src))
 				id = I
@@ -209,7 +209,7 @@
 
 
 /obj/machinery/computer/smelting/attackby(var/obj/item/W, var/mob/user)
-	if(istype(W, /obj/item/weapon/card/id))
+	if(istype(W, /obj/item/card/id))
 		if(smelter_data && smelter_data["credits"] == -1)	//No credit mode.
 			return 1
 
@@ -309,13 +309,13 @@
 
 /obj/machinery/mineral/processing_unit/RefreshParts()
 	var/i = 0
-	for(var/obj/item/weapon/stock_parts/matter_bin/A in component_parts)
+	for(var/obj/item/stock_parts/matter_bin/A in component_parts)
 		i += A.rating
 
 	sheets_per_tick = initial(sheets_per_tick) * (i / 2)
 
 	i = 0
-	for(var/obj/item/weapon/stock_parts/micro_laser/A in component_parts)
+	for(var/obj/item/stock_parts/micro_laser/A in component_parts)
 		i += A.rating - 1
 
 	idle_power_usage = initial(idle_power_usage) - (i * (initial(idle_power_usage) / 4))
@@ -325,11 +325,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/processing_unit,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/processing_unit,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()
@@ -543,11 +543,11 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/processing_unit/recycling,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/micro_laser
+		/obj/item/circuitboard/processing_unit/recycling,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/micro_laser
 	)
 
 	RefreshParts()

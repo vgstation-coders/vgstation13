@@ -21,9 +21,9 @@
 ////////PEEL//////
 /datum/surgery_step/head/peel
 	allowed_tools = list(
-		/obj/item/weapon/retractor = 100,
-		/obj/item/weapon/crowbar = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 50,
+		/obj/item/retractor = 100,
+		/obj/item/crowbar = 75,
+		/obj/item/kitchen/utensil/fork = 50,
 		)
 
 	duration = 8 SECONDS
@@ -53,7 +53,7 @@
 //////SHAPE///////
 /datum/surgery_step/head/shape
 	allowed_tools = list(
-		/obj/item/weapon/FixOVein = 100,
+		/obj/item/FixOVein = 100,
 		/obj/item/stack/cable_coil = 75,
 		/obj/item/device/assembly/mousetrap = 10,	//ok chinsky
 		)
@@ -89,9 +89,9 @@
 //////SUTURE//////
 /datum/surgery_step/head/suture
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
+		/obj/item/hemostat = 100,
 		/obj/item/stack/cable_coil = 60,
-		/obj/item/weapon/FixOVein = 80,
+		/obj/item/FixOVein = 80,
 		)
 
 	duration = 8 SECONDS
@@ -130,11 +130,11 @@
 	return 0
 /datum/surgery_step/head/prepare
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/cautery = 100,
+		/obj/item/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
-		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/lighter = 50,
+		/obj/item/weldingtool = 25,
 		)
 
 	duration = 6 SECONDS

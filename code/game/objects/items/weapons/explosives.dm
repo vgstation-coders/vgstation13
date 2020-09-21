@@ -1,6 +1,6 @@
 
 
-/obj/item/weapon/c4
+/obj/item/c4
 	name = "plastic explosives"
 	desc = "Used to put holes in specific areas without too much extra hole."
 	gender = PLURAL
@@ -15,18 +15,18 @@
 	var/atom/target = null
 	var/open_panel = 0
 
-/obj/item/weapon/c4/New()
+/obj/item/c4/New()
 	. = ..()
 	wires = new(src)
 
-/obj/item/weapon/c4/Destroy()
+/obj/item/c4/Destroy()
 	if(wires)
 		qdel(wires)
 		wires = null
 
 	..()
 
-/obj/item/weapon/c4/suicide_act(var/mob/user)
+/obj/item/c4/suicide_act(var/mob/user)
 	. = (SUICIDE_ACT_BRUTELOSS)
 	to_chat(viewers(user), "<span class='danger'>[user] activates the C4 and holds it above \his head! It looks like \he's going out with a bang!</span>")
 	var/message_say = "FOR NO RAISIN!"
@@ -43,7 +43,7 @@
 	explode(get_turf(user))
 	return .
 
-/obj/item/weapon/c4/attackby(var/obj/item/I, var/mob/user)
+/obj/item/c4/attackby(var/obj/item/I, var/mob/user)
 	if(I.is_screwdriver(user))
 		open_panel = !open_panel
 		to_chat(user, "<span class='notice'>You [open_panel ? "open" : "close"] the wire panel.</span>")
@@ -52,17 +52,17 @@
 	else
 		..()
 
-/obj/item/weapon/c4/attack_self(mob/user as mob)
+/obj/item/c4/attack_self(mob/user as mob)
 	var/newtime = input(usr, "Please set the timer.", "Timer", 10) as num
 	if(newtime > 60000)
 		newtime = 60000
 	timer = newtime
 	to_chat(user, "Timer set for [timer] seconds.")
 
-/obj/item/weapon/c4/afterattack(atom/target as obj|turf, mob/user as mob, flag)
+/obj/item/c4/afterattack(atom/target as obj|turf, mob/user as mob, flag)
 	if (!flag)
 		return
-	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/weapon/storage/))
+	if (istype(target, /turf/unsimulated) || istype(target, /turf/simulated/shuttle) || istype(target, /obj/item/storage/))
 		return
 	to_chat(user, "Planting explosives...")
 	if(ismob(target))
@@ -107,7 +107,7 @@
 		spawn(timer*10)
 			explode(get_turf(target))
 
-/obj/item/weapon/c4/proc/explode(var/location)
+/obj/item/c4/proc/explode(var/location)
 
 
 	if(!target)
@@ -129,5 +129,5 @@
 		//		target = null
 	qdel(src)
 
-/obj/item/weapon/c4/attack(mob/M as mob, mob/user as mob, def_zone)
+/obj/item/c4/attack(mob/M as mob, mob/user as mob, def_zone)
 	return

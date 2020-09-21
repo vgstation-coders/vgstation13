@@ -112,7 +112,7 @@
 		deactivate()
 		return
 	else
-		var/obj/item/weapon/tank/T = H.internal
+		var/obj/item/tank/T = H.internal
 		var/datum/gas_mixture/internals = T.air_contents
 		if(internals.pressure >= 10*ONE_ATMOSPHERE)
 			return

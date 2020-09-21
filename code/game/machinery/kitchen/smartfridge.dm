@@ -19,13 +19,13 @@
 	var/opened = 0.0
 	var/display_miniicons = FALSE
 
-	var/list/accepted_types = list(	/obj/item/weapon/reagent_containers/food/snacks/grown,
-									/obj/item/weapon/grown,
+	var/list/accepted_types = list(	/obj/item/reagent_containers/food/snacks/grown,
+									/obj/item/grown,
 									/obj/item/seeds,
-									/obj/item/weapon/reagent_containers/food/snacks/meat,
-									/obj/item/weapon/reagent_containers/food/snacks/honeycomb,
-									/obj/item/weapon/reagent_containers/food/snacks/egg,
-									/obj/item/weapon/reagent_containers/food/condiment)
+									/obj/item/reagent_containers/food/snacks/meat,
+									/obj/item/reagent_containers/food/snacks/honeycomb,
+									/obj/item/reagent_containers/food/snacks/egg,
+									/obj/item/reagent_containers/food/condiment)
 
 	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
 
@@ -75,16 +75,16 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -121,16 +121,16 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/seeds,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/seeds,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -142,9 +142,9 @@
 	icon_on = "smartfridge_chem"
 	req_one_access = list(access_chemistry, access_medical)
 
-	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
-							/obj/item/weapon/storage/pill_bottle,
-							/obj/item/weapon/reagent_containers/pill)
+	accepted_types = list(	/obj/item/reagent_containers/glass,
+							/obj/item/storage/pill_bottle,
+							/obj/item/reagent_containers/pill)
 
 /obj/machinery/smartfridge/medbay/New()
 	..()
@@ -152,16 +152,16 @@
 		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/medbay,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/medbay,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -170,8 +170,8 @@
 	name = "\improper Smart Chemical Storage"
 	desc = "A refrigerated storage unit for medicine and chemical storage."
 
-	accepted_types = list(	/obj/item/weapon/storage/pill_bottle,
-							/obj/item/weapon/reagent_containers)
+	accepted_types = list(	/obj/item/storage/pill_bottle,
+							/obj/item/reagent_containers)
 
 /obj/machinery/smartfridge/chemistry/New()
 	..()
@@ -179,16 +179,16 @@
 		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/chemistry,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/chemistry,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -197,24 +197,24 @@
 	name = "\improper Drink Showcase"
 	desc = "A refrigerated storage unit for tasty tasty alcohol."
 
-	accepted_types = list(	/obj/item/weapon/reagent_containers/glass,
-							/obj/item/weapon/reagent_containers/food/drinks,
-							/obj/item/weapon/reagent_containers/food/condiment)
+	accepted_types = list(	/obj/item/reagent_containers/glass,
+							/obj/item/reagent_containers/food/drinks,
+							/obj/item/reagent_containers/food/condiment)
 
 /obj/machinery/smartfridge/drinks/New()
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/drinks,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/drinks,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -229,16 +229,16 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/extract,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/extract,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -249,7 +249,7 @@
 	icon_state = "bloodbank"
 	icon_on = "bloodbank"
 
-	accepted_types = list(/obj/item/weapon/reagent_containers/blood)
+	accepted_types = list(/obj/item/reagent_containers/blood)
 
 /obj/machinery/smartfridge/bloodbank/New()
 	. = ..()
@@ -257,16 +257,16 @@
 		icon = 'maps/defficiency/medbay.dmi'
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/smartfridge/bloodbank,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/console_screen,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/smartfridge/bloodbank,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/console_screen,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -276,13 +276,13 @@
 	. = ..()
 
 	for(var/i = 0 to 4)
-		insert_item(new /obj/item/weapon/reagent_containers/blood/APlus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/AMinus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/BPlus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/BMinus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/OPlus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/OMinus(src))
-		insert_item(new /obj/item/weapon/reagent_containers/blood/empty(src))
+		insert_item(new /obj/item/reagent_containers/blood/APlus(src))
+		insert_item(new /obj/item/reagent_containers/blood/AMinus(src))
+		insert_item(new /obj/item/reagent_containers/blood/BPlus(src))
+		insert_item(new /obj/item/reagent_containers/blood/BMinus(src))
+		insert_item(new /obj/item/reagent_containers/blood/OPlus(src))
+		insert_item(new /obj/item/reagent_containers/blood/OMinus(src))
+		insert_item(new /obj/item/reagent_containers/blood/empty(src))
 
 /obj/machinery/smartfridge/bloodbank/power_change()
 	if( powered() )
@@ -323,7 +323,7 @@
 		piles[formatted_name] = new/datum/fridge_pile(formatted_name, src, 1, costly_bicon(O))
 
 
-/obj/machinery/smartfridge/proc/dump_bag(var/obj/item/weapon/storage/bag/B, var/mob/user)
+/obj/machinery/smartfridge/proc/dump_bag(var/obj/item/storage/bag/B, var/mob/user)
 	if(!istype(B))
 		return FALSE
 	var/objects_loaded = 0
@@ -361,7 +361,7 @@
 	if(try_insert_item(O, user))
 		piles = sortList(piles)
 		return 1
-	else if(istype(O, /obj/item/weapon/paper) && user.drop_item(O, src.loc))
+	else if(istype(O, /obj/item/paper) && user.drop_item(O, src.loc))
 		if(O.loc == src.loc && params)
 			O.setPixelOffsetsFromParams(params)
 			O.layer = MACHINERY_LAYER + 0.1 //so it layers below the pills we'll be ejecting from the fridge. resets when picked up - i guess someone COULD drag the paper away but I'm not about to lose sleep over that

@@ -137,7 +137,7 @@
 	desc = "Clean enough to eat on, probably."
 	clean = TRUE
 /obj/item/trash/plate/attackby(obj/item/I,mob/user,params)
-	if(istype(I,/obj/item/weapon/soap))
+	if(istype(I,/obj/item/soap))
 		visible_message("<span class='notice'>[user] cleans \the [src] with \the [I]. </span>")
 		clean = TRUE
 		update_icon()
@@ -163,9 +163,9 @@
 		qdel(W)
 		qdel(src)
 		user.put_in_hands(I)
-	if(istype(W, /obj/item/weapon/reagent_containers/food/snacks/doughslice))
+	if(istype(W, /obj/item/reagent_containers/food/snacks/doughslice))
 		if(user.drop_item(W))
-			new/obj/item/weapon/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
+			new/obj/item/reagent_containers/food/snacks/customizable/cook/pie(get_turf(src),W)
 			qdel(W)
 			qdel(src)
 

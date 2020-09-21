@@ -49,14 +49,14 @@
 			dat += "</ol>"
 
 			if(src.arcanecheckout)
-				new /obj/item/weapon/tome(src.loc)
+				new /obj/item/tome(src.loc)
 				to_chat(user, "<span class='warning'>Your sanity barely endures the seconds spent in the vault's browsing window. The only thing to remind you of this when you stop browsing is a dusty old tome sitting on the desk. You don't really remember printing it.</span>")
 				user.visible_message("[user] stares at the blank screen for a few moments, his expression frozen in fear. When he finally awakens from it, he looks a lot older.", 2)
 				src.arcanecheckout = 0
 		if(1)
 			// Inventory
 			dat += "<h3>Inventory</h3>"
-			for(var/obj/item/weapon/book/b in inventory)
+			for(var/obj/item/book/b in inventory)
 				dat += "[b.name] <A href='?src=\ref[src];delbook=\ref[b]'>(Delete)</A><BR>"
 			dat += "<A href='?src=\ref[src];switchscreen=0'>(Return to main menu)</A><BR>"
 		if(2)
@@ -168,16 +168,16 @@
 			dat += "<table>"
 
 			var/list/forbidden = list(
-				/obj/item/weapon/book/manual
+				/obj/item/book/manual
 			)
 
 			if(!emagged)
-				forbidden |= /obj/item/weapon/book/manual/nuclear
+				forbidden |= /obj/item/book/manual/nuclear
 
 			var/manualcount = 1
-			var/obj/item/weapon/book/manual/M = null
+			var/obj/item/book/manual/M = null
 
-			for(var/manual_type in typesof(/obj/item/weapon/book/manual))
+			for(var/manual_type in typesof(/obj/item/book/manual))
 				if (!(manual_type in forbidden))
 					M = new manual_type()
 					dat += "<tr><td><A href='?src=\ref[src];manual=[manualcount]'>[M.title]</A></td></tr>"
@@ -206,9 +206,9 @@
 		return 1
 	return
 
-/obj/machinery/computer/library/checkout/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/barcodescanner))
-		var/obj/item/weapon/barcodescanner/scanner = W
+/obj/machinery/computer/library/checkout/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/barcodescanner))
+		var/obj/item/barcodescanner/scanner = W
 		scanner.computer = src
 		to_chat(user, "[scanner]'s associated machine has been set to [src].")
 		for (var/mob/V in hearers(src))
@@ -321,11 +321,11 @@
 
 					bibledelay = 1
 
-					var/obj/item/weapon/storage/bible/B = new
+					var/obj/item/storage/bible/B = new
 					B = new(src.loc)
 					if (usr.mind && usr.mind.faith) // The user has a faith
 						var/datum/religion/R = usr.mind.faith
-						var/obj/item/weapon/storage/bible/HB = R.holy_book
+						var/obj/item/storage/bible/HB = R.holy_book
 						if (!HB)
 							B = chooseBible(R, usr)
 						else
@@ -379,7 +379,7 @@
 		var/datum/borrowbook/b = locate(href_list["checkin"])
 		checkouts.Remove(b)
 	if(href_list["delbook"])
-		var/obj/item/weapon/book/b = locate(href_list["delbook"])
+		var/obj/item/book/b = locate(href_list["delbook"])
 		inventory.Remove(b)
 	if(href_list["uploadauthor"])
 		var/newauthor = copytext(sanitize(input("Enter the author's name: ") as text|null),1,MAX_MESSAGE_LEN)
@@ -481,7 +481,7 @@
 /obj/machinery/computer/library/checkout/proc/make_external_book(var/datum/cachedbook/newbook)
 	if(!newbook || !newbook.id)
 		return
-	var/obj/item/weapon/book/B = new newbook.path(src.loc)
+	var/obj/item/book/B = new newbook.path(src.loc)
 
 	if (!newbook.programmatic)
 		var/list/_http = world.Export("http://ss13.moe/index.php/book?id=[newbook.id]")

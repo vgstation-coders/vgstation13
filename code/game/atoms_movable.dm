@@ -264,8 +264,8 @@
 
 	if (istype(AM, /mob/living)) //checks if the atom is a mob, and removes any grabs from the mob to prevent !!FUN!!
 		var/mob/living/M = AM
-		for(var/obj/item/weapon/grab/G in M.grabbed_by)
-			if (istype(G, /obj/item/weapon/grab))
+		for(var/obj/item/grab/G in M.grabbed_by)
+			if (istype(G, /obj/item/grab))
 				qdel(G)
 
 	AM.locked_to = src

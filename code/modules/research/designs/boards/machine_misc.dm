@@ -8,7 +8,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/recharge_station
+	build_path = /obj/item/circuitboard/recharge_station
 
 /datum/design/recharger
 	name = "Circuit Design (Recharger)"
@@ -18,7 +18,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/recharger
+	build_path = /obj/item/circuitboard/recharger
 
 
 /datum/design/photocopier
@@ -29,7 +29,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/photocopier
+	build_path = /obj/item/circuitboard/photocopier
 
 /datum/design/fax
 	name = "Circuit Design (Fax)"
@@ -39,7 +39,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/fax
+	build_path = /obj/item/circuitboard/fax
 
 /datum/design/condimaster
 	name = "Circuit Design (CondiMaster)"
@@ -49,7 +49,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/condimaster
+	build_path = /obj/item/circuitboard/condimaster
 
 /datum/design/snackbarmachine
 	name = "Circuit Design (SnackBar Machine)"
@@ -59,7 +59,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/snackbar_machine
+	build_path = /obj/item/circuitboard/snackbar_machine
 
 /datum/design/processing_unit
 	name = "Circuit Design (Ore Processor)"
@@ -69,13 +69,13 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/processing_unit
+	build_path = /obj/item/circuitboard/processing_unit
 
 /datum/design/processing_unit/recycling
 	name = "Circuit Design (Recycling Furnace)"
 	desc = "Allows for the construction of circuit boards used to build a recycling furnace."
 	id = "smelter_recycling"
-	build_path = /obj/item/weapon/circuitboard/processing_unit/recycling
+	build_path = /obj/item/circuitboard/processing_unit/recycling
 
 /datum/design/stacking_unit
 	name = "Circuit Design (Stacking Machine)"
@@ -85,7 +85,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/stacking_unit
+	build_path = /obj/item/circuitboard/stacking_unit
 
 /datum/design/coin_press
 	name = "Circuit Design (Coin Press)"
@@ -95,7 +95,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/coin_press
+	build_path = /obj/item/circuitboard/coin_press
 
 /datum/design/medal_printer
 	name = "Circuit Design (Medal Printer)"
@@ -105,7 +105,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, MAT_GOLD = 1000, MAT_SILVER = 1000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/medal_printer
+	build_path = /obj/item/circuitboard/medal_printer
 
 /datum/design/vendomat
 	name = "Circuit Design (Vending Machine)"
@@ -115,7 +115,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 3)
 	category = "Misc"
-	build_path = /obj/item/weapon/circuitboard/vendomat
+	build_path = /obj/item/circuitboard/vendomat
 
 /datum/design/sorting_machine
 	name = "Circuit Design (Recycling Sorting Machine)"
@@ -124,13 +124,13 @@
 	req_tech = list(Tc_MATERIALS = 3, Tc_ENGINEERING = 3, Tc_PROGRAMMING = 3)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/sorting_machine/recycling
+	build_path = /obj/item/circuitboard/sorting_machine/recycling
 
 /datum/design/sorting_machine/destination
 	name = "Circuit Design (Destinations Sorting Machine)"
 	desc = "Allows for the construction of circuit boards used to build a destinations sorting machine"
 	id = "destsortingmachine"
-	build_path = /obj/item/weapon/circuitboard/sorting_machine/destination
+	build_path = /obj/item/circuitboard/sorting_machine/destination
 
 /datum/design/washing_machine
 	name = "Circuit Design (Washing Machine)"
@@ -139,7 +139,7 @@
 	req_tech = list(Tc_MATERIALS = 1)
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
-	build_path = /obj/item/weapon/circuitboard/washing_machine
+	build_path = /obj/item/circuitboard/washing_machine
 
 /datum/design/holopad
 	name = "Circuit Design (Holopad)"
@@ -149,7 +149,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/holopad
+	build_path = /obj/item/circuitboard/holopad
 
 /datum/design/ammolathe
 	name = "Circuit Design (Ammolathe)"
@@ -159,7 +159,7 @@
 	build_type = IMPRINTER
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Machine Boards"
-	build_path = /obj/item/weapon/circuitboard/ammolathe
+	build_path = /obj/item/circuitboard/ammolathe
 	locked = TRUE
 	req_lock_access = list(access_armory, access_weapons)
 
@@ -167,16 +167,16 @@
 	name = "Circuit Design (Brewer)"
 	desc = "Allows for the construction of circuit boards used to build a brewer."
 	id = "brewer"
-	build_path = /obj/item/weapon/circuitboard/chem_dispenser/brewer
+	build_path = /obj/item/circuitboard/chem_dispenser/brewer
 
 /datum/design/chem_dispenser/soda_dispenser
 	name = "Circuit Design (Soda Dispenser)"
 	desc = "Allows for the construction of circuit boards used to build a soda dispenser."
 	id = "soda_dispenser"
-	build_path = /obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser
+	build_path = /obj/item/circuitboard/chem_dispenser/soda_dispenser
 
 /datum/design/chem_dispenser/booze_dispenser
 	name = "Circuit Design (Booze Dispenser)"
 	desc = "Allows for the construction of circuit boards used to build a booze dispenser."
 	id = "booze_dispenser"
-	build_path = /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser
+	build_path = /obj/item/circuitboard/chem_dispenser/booze_dispenser

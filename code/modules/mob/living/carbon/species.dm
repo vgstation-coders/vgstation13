@@ -51,7 +51,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/myhuman												// mob reference
 
 	var/breath_type = GAS_OXYGEN   // Non-oxygen gas breathed, if any.
-	var/survival_gear = /obj/item/weapon/storage/box/survival // For spawnin'.
+	var/survival_gear = /obj/item/storage/box/survival // For spawnin'.
 
 	var/cold_level_1 = 220  // Cold damage level 1 below this point.
 	var/cold_level_2 = 200  // Cold damage level 2 below this point.
@@ -135,7 +135,7 @@ var/global/list/whitelisted_species = list("Human")
 	var/move_speed_mod = 0 //Higher value is slower, lower is faster.
 	var/move_speed_multiplier = 1	//This is a multiplier, and can make the mob either faster or slower.
 
-	var/meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/human
+	var/meat_type = /obj/item/reagent_containers/food/snacks/meat/human
 
 	var/gender	//For races with only one or neither
 
@@ -457,7 +457,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/vox/r_voxboney.dmi' //Do bones deform noticeably?
 	known_languages = list(LANGUAGE_VOX, LANGUAGE_CLATTER)
 
-	survival_gear = /obj/item/weapon/storage/box/survival/vox
+	survival_gear = /obj/item/storage/box/survival/vox
 
 	primitive = /mob/living/carbon/monkey/vox/skeletal
 
@@ -739,11 +739,11 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/vox/r_vox.dmi'
 	deform = 'icons/mob/human_races/vox/r_def_vox.dmi'
 	known_languages = list(LANGUAGE_VOX)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/rawchicken/vox
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/rawchicken/vox
 
 	anatomy_flags = HAS_SWEAT_GLANDS
 
-	survival_gear = /obj/item/weapon/storage/box/survival/vox
+	survival_gear = /obj/item/storage/box/survival/vox
 
 	primitive = /mob/living/carbon/monkey/vox
 
@@ -795,9 +795,9 @@ var/global/list/whitelisted_species = list("Human")
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
 	if(tank_slot)
-		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
+		H.equip_or_collect(new/obj/item/tank/nitrogen(H), tank_slot)
 	else
-		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
+		H.put_in_hands(new/obj/item/tank/nitrogen(H))
 	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
 	H.internal = H.get_item_by_slot(tank_slot)
 	if (H.internals)
@@ -847,7 +847,7 @@ var/global/list/whitelisted_species = list("Human")
 	icobase = 'icons/mob/human_races/r_plant.dmi'
 	deform = 'icons/mob/human_races/r_def_plant.dmi'
 	known_languages = list(LANGUAGE_ROOTSPEAK)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/diona
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/diona
 	attack_verb = "slashes"
 	punch_damage = 5
 	primitive = /mob/living/carbon/monkey/diona
@@ -1067,7 +1067,7 @@ var/list/has_died_as_golem = list()
 	icobase = 'icons/mob/human_races/r_slime.dmi'
 	deform = 'icons/mob/human_races/r_def_slime.dmi'
 	known_languages = list(LANGUAGE_SLIME)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/slime
 	attack_verb = "glomps"
 
 	flags = IS_WHITELISTED | NO_BREATHE | ELECTRIC_HEAL
@@ -1120,7 +1120,7 @@ var/list/has_died_as_golem = list()
 	icon = null //'icons/mob/human_races/r_slime.dmi'
 	icon_state = null //"slime_puddle"
 	density = 0
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/meat/slime
+	meat_type = /obj/item/reagent_containers/food/snacks/meat/slime
 	var/mob/living/carbon/human/slime_person
 
 /mob/living/slime_pile/New()
@@ -1251,7 +1251,7 @@ var/list/has_died_as_golem = list()
 	deform = 'icons/mob/human_races/r_mushman.dmi'
 	eyes = "mushroom_eyes"
 	known_languages = list(LANGUAGE_VOX)
-	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
+	meat_type = /obj/item/reagent_containers/food/snacks/hugemushroomslice/mushroom_man
 
 	flags = IS_WHITELISTED | NO_BREATHE | IS_PLANT | SPECIES_NO_MOUTH
 	anatomy_flags = NO_BALD

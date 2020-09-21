@@ -2,7 +2,7 @@
 #define GLOW_RED "#FF0000"
 #define GLOW_BLUE "#0000FF"
 
-/obj/item/weapon/glowstick
+/obj/item/glowstick
 	name = "green glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is green."
 	color = GLOW_GREEN
@@ -12,39 +12,39 @@
 	light_color = GLOW_GREEN
 	w_class = W_CLASS_SMALL
 
-/obj/item/weapon/glowstick/suicide_act(mob/user)
+/obj/item/glowstick/suicide_act(mob/user)
 	user.visible_message("<span class='danger'>[user] is breaking open \the [src] and eating the liquid inside! It looks like \he's trying to commit suicide!</span>")
 	playsound(user.loc,'sound/items/drink.ogg', rand(10,50), 1)
 	qdel(src)
 	return (SUICIDE_ACT_TOXLOSS)
 
 
-/obj/item/weapon/glowstick/New()
+/obj/item/glowstick/New()
 	. = ..()
 	set_light(2, l_color = light_color)
 
-/obj/item/weapon/glowstick/red
+/obj/item/glowstick/red
 	name = "red glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is red."
 	color = GLOW_RED
 
 	light_color = GLOW_RED
 
-/obj/item/weapon/glowstick/blue
+/obj/item/glowstick/blue
 	name = "blue glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is blue."
 	color = GLOW_BLUE
 
 	light_color = GLOW_BLUE
 
-/obj/item/weapon/glowstick/yellow
+/obj/item/glowstick/yellow
 	name = "yellow glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is yellow."
 	color = "#FFFF00"
 
 	light_color = "#FFFF00"
 
-/obj/item/weapon/glowstick/magenta
+/obj/item/glowstick/magenta
 	name = "magenta glowstick"
 	desc = "A plastic stick filled with luminescent liquid, this one is magenta."
 	color = "#FF00FF"

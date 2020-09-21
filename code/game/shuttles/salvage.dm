@@ -42,7 +42,7 @@ var/global/datum/shuttle/salvage/salvage_shuttle = new(starting_area=/area/shutt
 
 /obj/machinery/computer/shuttle_control/salvage/New() //Main shuttle_control code is in code/game/machinery/computer/shuttle_computer.dm
 	link_to(salvage_shuttle)
-	var/obj/item/weapon/paper/manual = new(get_turf(src))
+	var/obj/item/paper/manual = new(get_turf(src))
 
 	manual.name = "Salvage Shuttle manual"
 	manual.info = "Thank you for purchasing the ShuttleTec Salvage Shuttle!<hr>This shuttle's password is: \"<b>[salvage_shuttle.password]</b>\"."

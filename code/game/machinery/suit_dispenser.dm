@@ -281,7 +281,7 @@ var/list/dispenser_presets = list()
 		return suits
 	var/list/suit_list = list()
 	suit_list["Standard"] = suits["Standard"]
-	var/obj/item/weapon/card/id/card = user.get_id_card()
+	var/obj/item/card/id/card = user.get_id_card()
 	if(!card)
 		return suit_list
 	for(var/job in card.access)

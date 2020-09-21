@@ -13,9 +13,9 @@
 	return priority | get_all_slots() | held_items //| operator ensures there are no duplicates
 
 /mob/living/carbon/proc/get_internals_tank()
-	for(var/obj/item/weapon/tank/T in internals_candidates())
+	for(var/obj/item/tank/T in internals_candidates())
 		//We found a tank!
-		if(istype(T, /obj/item/weapon/tank/jetpack)) //Oh... But it's a jetpack... We'll use it if we have to, but let's see if we find something better first
+		if(istype(T, /obj/item/tank/jetpack)) //Oh... But it's a jetpack... We'll use it if we have to, but let's see if we find something better first
 			if(!.) //We already had another jetpack
 				. = T
 			continue
@@ -23,7 +23,7 @@
 			return T
 
 // Set internals on or off.
-/mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/weapon/tank/T)
+/mob/living/carbon/proc/toggle_internals(var/mob/living/user, var/obj/item/tank/T)
 	if(user.incapacitated())
 		return
 

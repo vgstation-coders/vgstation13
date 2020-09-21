@@ -8,7 +8,7 @@
 	var/state = 0
 	var/base_icon_state = ""
 	var/base_name = "Airlock"
-	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/obj/item/circuitboard/airlock/electronics = null
 	var/airlock_type = "" //the type path of the airlock once completed
 	var/glass_type = "/glass"
 	var/glass = 0 // 0 = glass can be installed. -1 = glass can't be installed. 1 = glass is already installed. Text = mineral plating is installed instead.
@@ -160,7 +160,7 @@
 	if(busy)
 		return
 
-	if(istype(W, /obj/item/weapon/pen))
+	if(istype(W, /obj/item/pen))
 		var/t = copytext(stripped_input(user, "Enter the name for the door.", src.name, src.created_name),1,MAX_NAME_LEN)
 		if(!t)
 			return
@@ -170,7 +170,7 @@
 		return
 
 	if (iswelder(W) && ( (istext(glass)) || (glass == 1) || (!anchored) ))
-		var/obj/item/weapon/weldingtool/WT = W
+		var/obj/item/weldingtool/WT = W
 
 		if (WT.remove_fuel(0, user))
 			busy = TRUE
@@ -260,7 +260,7 @@
 			src.state = 0
 		busy = 0
 
-	else if(istype(W, /obj/item/weapon/circuitboard/airlock) && state == 1 && W:icon_state != "door_electronics_smoked")
+	else if(istype(W, /obj/item/circuitboard/airlock) && state == 1 && W:icon_state != "door_electronics_smoked")
 		busy = 1
 		W.playtoolsound(src, 100)
 		user.visible_message("[user] installs the electronics into the airlock assembly.", "You start to install electronics into the airlock assembly.")
@@ -269,7 +269,7 @@
 		if(do_after(user, src, 40))
 			if(!src)
 				return
-			var/obj/item/weapon/circuitboard/airlock/electronic = W
+			var/obj/item/circuitboard/airlock/electronic = W
 			electronic.installed = 1
 			to_chat(user, "<span class='notice'>You installed the airlock electronics!</span>")
 			src.state = 2
@@ -290,9 +290,9 @@
 			to_chat(user, "<span class='notice'>You removed the airlock electronics!</span>")
 			src.state = 1
 			src.name = "Wired Airlock Assembly"
-			var/obj/item/weapon/circuitboard/airlock/ae
+			var/obj/item/circuitboard/airlock/ae
 			if (!electronics)
-				ae = new/obj/item/weapon/circuitboard/airlock( src.loc )
+				ae = new/obj/item/circuitboard/airlock( src.loc )
 			else
 				ae = electronics
 				electronics.installed = 0

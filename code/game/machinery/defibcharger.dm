@@ -18,13 +18,13 @@ obj/machinery/recharger/defibcharger/wallcharger // obj/machinery/recharger/defi
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/defib_recharger,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/defib_recharger,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
@@ -47,8 +47,8 @@ obj/machinery/recharger/defibcharger/wallcharger/emp_act(severity)
 		..(severity)
 		return
 
-	if(istype(charging, /obj/item/weapon/melee/defibrillator))
-		var/obj/item/weapon/melee/defibrillator/B = charging
+	if(istype(charging, /obj/item/melee/defibrillator))
+		var/obj/item/melee/defibrillator/B = charging
 		B.charges = 0
 	..(severity)
 
@@ -65,8 +65,8 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return
 
 	if(charging)
-		if(istype(charging, /obj/item/weapon/melee/defibrillator))
-			var/obj/item/weapon/melee/defibrillator/B = charging
+		if(istype(charging, /obj/item/melee/defibrillator))
+			var/obj/item/melee/defibrillator/B = charging
 			if(B.charges < initial(B.charges))
 				B.charges++
 				icon_state = "wrecharger1"
@@ -83,7 +83,7 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return
 	return(..())
 
-/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
+/obj/machinery/recharger/defibcharger/wallcharger/crowbarDestroy(mob/user, obj/item/crowbar/I)
 	if(..())
 		if(charging)
 			charging.forceMove(src.loc)
@@ -91,11 +91,11 @@ obj/machinery/recharger/defibcharger/wallcharger/process()
 		return TRUE
 	return FALSE
 
-obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/weapon/G as obj, mob/user as mob)
-	if(istype(G, /obj/item/weapon/melee/defibrillator))
+obj/machinery/recharger/defibcharger/wallcharger/attackby(obj/item/G as obj, mob/user as mob)
+	if(istype(G, /obj/item/melee/defibrillator))
 		if(..())
 			return
-		var/obj/item/weapon/melee/defibrillator/D = G
+		var/obj/item/melee/defibrillator/D = G
 		if(D.ready)
 			to_chat(user, "<span class='warning'>\The [D] won't fit. Try putting the paddles back on!</span>")
 			return

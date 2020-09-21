@@ -34,10 +34,10 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 /obj/machinery/computer/rdconsole
 	name = "R&D Console"
 	icon_state = "rdcomp"
-	circuit = "/obj/item/weapon/circuitboard/rdconsole"
+	circuit = "/obj/item/circuitboard/rdconsole"
 	var/datum/research/files							//Stores all the collected research data.
-	var/obj/item/weapon/disk/tech_disk/t_disk = null	//Stores the technology disk.
-	var/obj/item/weapon/disk/design_disk/d_disk = null	//Stores the design disk.
+	var/obj/item/disk/tech_disk/t_disk = null	//Stores the technology disk.
+	var/obj/item/disk/design_disk/d_disk = null	//Stores the design disk.
 
 	var/obj/machinery/r_n_d/destructive_analyzer/linked_destroy = null	//Linked Destructive Analyzer
 	var/obj/machinery/r_n_d/fabricator/protolathe/linked_lathe = null				//Linked Protolathe
@@ -200,18 +200,18 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	griefProtection()
 */
 
-/obj/machinery/computer/rdconsole/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob)
+/obj/machinery/computer/rdconsole/attackby(var/obj/item/D as obj, var/mob/user as mob)
 	if(..())
 		return
-	if(istype(D, /obj/item/weapon/disk))
+	if(istype(D, /obj/item/disk))
 		if(t_disk || d_disk)
 			to_chat(user, "A disk is already loaded into the machine.")
 			return
 
-		if(istype(D, /obj/item/weapon/disk/tech_disk))
+		if(istype(D, /obj/item/disk/tech_disk))
 			if(user.drop_item(D,src))
 				t_disk = D
-		else if (istype(D, /obj/item/weapon/disk/design_disk))
+		else if (istype(D, /obj/item/disk/design_disk))
 			if(user.drop_item(D,src))
 				d_disk = D
 		else
@@ -491,7 +491,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 		if(!src.allowed(usr))
 			to_chat(usr, "Unauthorized Access.")
 			return
-		var/obj/item/weapon/reagent_containers/RC = locate(href_list["beakerI"])
+		var/obj/item/reagent_containers/RC = locate(href_list["beakerI"])
 		if(RC && (RC in linked_imprinter.component_parts))
 			RC.reagents.del_reagent(href_list["disposeI"])
 		linked_imprinter.update_buffer_size()
@@ -501,7 +501,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 			to_chat(usr, "Unauthorized Access.")
 			return
 		if(alert("Are you sure you want to flush all reagents?", "Reagents Purge Confirmation", "Continue", "Cancel") == "Continue")
-			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
+			for(var/obj/item/reagent_containers/RC in linked_imprinter.component_parts)
 				RC.reagents.clear_reagents()
 			linked_imprinter.update_buffer_size()
 
@@ -1014,7 +1014,7 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 				Chemical Storage<HR>"}
 
 			var/beaker_index = 0
-			for(var/obj/item/weapon/reagent_containers/RC in linked_imprinter.component_parts)
+			for(var/obj/item/reagent_containers/RC in linked_imprinter.component_parts)
 				beaker_index++
 				dat += "<b>Reservoir [beaker_index] &mdash; [RC.name]:</b><BR>"
 				if(RC.reagents.reagent_list && RC.reagents.reagent_list.len)
@@ -1097,36 +1097,36 @@ won't update every console in existence) but it's more of a hassle to do. Also, 
 	name = "MoMMI R&D Console"
 	id = 3
 	req_access = list(access_rnd)
-	circuit = "/obj/item/weapon/circuitboard/rdconsole/mommi"
+	circuit = "/obj/item/circuitboard/rdconsole/mommi"
 
 /obj/machinery/computer/rdconsole/robotics
 	name = "Robotics R&D Console"
 	id = 2
 	req_one_access = list(access_robotics)
 	req_access=list()
-	circuit = "/obj/item/weapon/circuitboard/rdconsole/robotics"
+	circuit = "/obj/item/circuitboard/rdconsole/robotics"
 
 /obj/machinery/computer/rdconsole/mechanic
 	name = "Mechanics R&D Console"
 	id = 4
 	req_one_access = list(access_mechanic)
 	req_access=list()
-	circuit = "/obj/item/weapon/circuitboard/rdconsole/mechanic"
+	circuit = "/obj/item/circuitboard/rdconsole/mechanic"
 
 /obj/machinery/computer/rdconsole/core
 	name = "Core R&D Console"
 	id = 1
 	req_access = list(access_rnd)
-	circuit = "/obj/item/weapon/circuitboard/rdconsole"
+	circuit = "/obj/item/circuitboard/rdconsole"
 
 /obj/machinery/computer/rdconsole/pod
 	name = "Pod Bay R&D Console"
 	id = 5
 	req_access=list()
-	circuit = "/obj/item/weapon/circuitboard/rdconsole/pod"
+	circuit = "/obj/item/circuitboard/rdconsole/pod"
 
 /obj/machinery/computer/rdconsole/derelict
 	name = "Derelict R&D Console"
 	id = 6
 	req_access=list()
-	circuit = "/obj/item/weapon/circuitboard/rdconsole/derelict"
+	circuit = "/obj/item/circuitboard/rdconsole/derelict"

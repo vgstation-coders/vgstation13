@@ -1,7 +1,7 @@
 /obj/machinery/computer/rust_gyrotron_controller
 	name = "Gyrotron Remote Controller"
 	icon_state = "engine"
-	circuit = /obj/item/weapon/circuitboard/rust_gyrotron_control
+	circuit = /obj/item/circuitboard/rust_gyrotron_control
 	light_color = LIGHT_COLOR_BLUE
 	var/list/linked_gyrotrons[0] //List of linked gyrotrons.
 

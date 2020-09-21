@@ -20,8 +20,8 @@
 	var/device_mode = LIGHTREPLACER_BASIC
 
 	//Internal storage boxes. Boxes can hold 21 light bulb/tubes by default.
-	var/obj/item/weapon/storage/box/lights/supply = null
-	var/obj/item/weapon/storage/box/lights/waste = null
+	var/obj/item/storage/box/lights/supply = null
+	var/obj/item/storage/box/lights/waste = null
 
 	//Internal resources
 	var/glass = 0
@@ -84,12 +84,12 @@
 		to_chat(user, "<span class='notice'>You insert \the [G] into \the [src].</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/light))
-		var/obj/item/weapon/light/L = W
+	if(istype(W, /obj/item/light))
+		var/obj/item/light/L = W
 		insert_if_possible(L)
 		return
 
-	if(istype(W, /obj/item/weapon/storage/box/lights))
+	if(istype(W, /obj/item/storage/box/lights))
 		if(!supply)
 			if(user.drop_item(W, src))
 				user.visible_message("[user] inserts \a [W] into \the [src]", "You insert \the [W] into \the [src] to be used as the supply container.")
@@ -101,12 +101,12 @@
 				waste = W
 				return
 		else
-			var/obj/item/weapon/storage/box/lights/lsource = W
+			var/obj/item/storage/box/lights/lsource = W
 			if(!lsource.contents.len)
 				to_chat(user, "<span class='notice'>\The [src] has both a supply box and a waste box and this box is empty. Remove one first if you want to insert a new one or use a light box with lights in it to insert them.</span>")
 				return
 			var/hasinserted = 0
-			for(var/obj/item/weapon/light/L in lsource)
+			for(var/obj/item/light/L in lsource)
 				if(insert_if_possible(L))
 					hasinserted = 1
 			if(hasinserted)
@@ -130,10 +130,10 @@
 		"amount" = 0
 	)
 
-	for(var/obj/item/weapon/light/L in supply)
+	for(var/obj/item/light/L in supply)
 		data["supply"]["amount"]++
 
-	for(var/obj/item/weapon/light/L in waste)
+	for(var/obj/item/light/L in waste)
 		data["waste"]["amount"]++
 
 	data["resources"] = list(
@@ -283,13 +283,13 @@
 //If the light works, attempts to place it in the supply box. Otherwise, attempts to place it in the waste box.
 //Fails if the light cannot be placed into the correct box for any reason.
 //Returns 1 if the light is successfully inserted into the correct box, 0 if the insertion fails, and null if the item to be inserted is not a light or something very strange happens.
-/obj/item/device/lightreplacer/proc/insert_if_possible(var/obj/item/weapon/light/L)
+/obj/item/device/lightreplacer/proc/insert_if_possible(var/obj/item/light/L)
 	if(!istype(L))
 		return
 	if(L.status == LIGHT_OK)
 		if(supply && supply.can_be_inserted(L, TRUE))
-			if(istype(L.loc, /obj/item/weapon/storage))
-				var/obj/item/weapon/storage/lsource = L.loc
+			if(istype(L.loc, /obj/item/storage))
+				var/obj/item/storage/lsource = L.loc
 				lsource.remove_from_storage(L, supply)
 			else
 				supply.handle_item_insertion(L, TRUE)
@@ -298,8 +298,8 @@
 			return 0
 	else if(L.status == LIGHT_BROKEN || L.status == LIGHT_BURNED)
 		if(waste && waste.can_be_inserted(L, TRUE))
-			if(istype(L.loc, /obj/item/weapon/storage))
-				var/obj/item/weapon/storage/lsource = L.loc
+			if(istype(L.loc, /obj/item/storage))
+				var/obj/item/storage/lsource = L.loc
 				lsource.remove_from_storage(L, waste)
 			else
 				waste.handle_item_insertion(L, TRUE)
@@ -308,8 +308,8 @@
 			return 0
 
 /obj/item/device/lightreplacer/proc/build_light()
-	var/obj/item/weapon/light/L
-	var/light_path = text2path("/obj/item/weapon/light" + light_types[current_shape] + light_types[current_type])
+	var/obj/item/light/L
+	var/light_path = text2path("/obj/item/light" + light_types[current_shape] + light_types[current_type])
 	L = new light_path
 	if(glass < L.starting_materials[MAT_GLASS] * prod_eff)
 		if(usr)
@@ -320,7 +320,7 @@
 		return 1
 	glass -= (L.starting_materials[MAT_GLASS] * prod_eff)
 	L.switchcount = prod_quality
-	if(istype(L, /obj/item/weapon/light/tube/smart) || istype(L, /obj/item/weapon/light/bulb/smart))
+	if(istype(L, /obj/item/light/tube/smart) || istype(L, /obj/item/light/bulb/smart))
 		L.brightness_range = current_brightness
 		L.brightness_color = current_color
 		L.frequency = current_frequency
@@ -335,7 +335,7 @@
 /obj/item/device/lightreplacer/proc/recycle_waste()
 	if(waste)
 		var/recycledglass = 0 //How much glass is successfully recycled
-		for(var/obj/item/weapon/light/L in waste)
+		for(var/obj/item/light/L in waste)
 			if(istype(L))
 				switch(L.status)
 					if(LIGHT_OK)
@@ -371,7 +371,7 @@
 	return
 
 /obj/item/device/lightreplacer/proc/ReplaceLight(var/obj/machinery/light/target, var/mob/living/user)
-	var/obj/item/weapon/light/best_light = get_best_light(target)
+	var/obj/item/light/best_light = get_best_light(target)
 	if(best_light == 0)
 		to_chat(user, "<span class='warning'>\The [src] has no supply container!</span>")
 		return
@@ -389,7 +389,7 @@
 	supply.remove_from_storage(best_light)
 
 	if(target.current_bulb)
-		var/obj/item/weapon/light/L1 = target.current_bulb
+		var/obj/item/light/L1 = target.current_bulb
 		L1.forceMove(target.loc)
 		L1.update()
 		target.current_bulb = null
@@ -418,14 +418,14 @@
 	var/best_light
 	switch(target.fitting)
 		if("bulb")
-			best_light = ((locate(/obj/item/weapon/light/bulb/smart) in supply) || (locate(/obj/item/weapon/light/bulb/he) in supply) || (locate(/obj/item/weapon/light/bulb) in supply))
+			best_light = ((locate(/obj/item/light/bulb/smart) in supply) || (locate(/obj/item/light/bulb/he) in supply) || (locate(/obj/item/light/bulb) in supply))
 		if("tube")
-			best_light = ((locate(/obj/item/weapon/light/bulb/smart) in supply) || (locate(/obj/item/weapon/light/tube/he) in supply) || (locate(/obj/item/weapon/light/tube) in supply))
+			best_light = ((locate(/obj/item/light/bulb/smart) in supply) || (locate(/obj/item/light/tube/he) in supply) || (locate(/obj/item/light/tube) in supply))
 		if("large tube")
-			best_light = locate(/obj/item/weapon/light/tube/large) in supply
+			best_light = locate(/obj/item/light/tube/large) in supply
 	return best_light
 
-/obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/weapon/light/tested, var/obj/item/weapon/light/comparison)
+/obj/item/device/lightreplacer/proc/is_light_better(var/obj/item/light/tested, var/obj/item/light/comparison)
 	if(tested.status >= LIGHT_BROKEN) //Is tested broken or burnt out? If so, it cannot win.
 		return 0
 	if(tested.status < comparison.status) //Is tested closer to functional than comparison? If so, it wins.
@@ -454,7 +454,7 @@
 
 /obj/item/device/lightreplacer/proc/dump_supply(mob/user)
 	if(supply && get_turf(user))
-		for(var/obj/item/weapon/light/L in supply)
+		for(var/obj/item/light/L in supply)
 			L.forceMove(get_turf(user))
 	return 1
 
@@ -470,21 +470,21 @@
 
 /obj/item/device/lightreplacer/borg/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/storage/box/lights
+	waste = new /obj/item/storage/box/lights
 	add_glass(5 * CC_PER_SHEET_GLASS, 2)
 
 /obj/item/device/lightreplacer/loaded/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/tubes
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/storage/box/lights/tubes
+	waste = new /obj/item/storage/box/lights
 
 /obj/item/device/lightreplacer/loaded/he/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/he
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/storage/box/lights/he
+	waste = new /obj/item/storage/box/lights
 
 /obj/item/device/lightreplacer/loaded/mixed/New()
 	..()
-	supply = new /obj/item/weapon/storage/box/lights/mixed
-	waste = new /obj/item/weapon/storage/box/lights
+	supply = new /obj/item/storage/box/lights/mixed
+	waste = new /obj/item/storage/box/lights

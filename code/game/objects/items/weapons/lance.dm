@@ -1,4 +1,4 @@
-/obj/item/weapon/melee/lance
+/obj/item/melee/lance
 	name = "tournament lance"
 	desc = "A very long and heavy spear, used for jousting. "
 
@@ -26,7 +26,7 @@
 	var/last_used = 0
 	var/use_cooldown = 5 SECONDS
 
-/obj/item/weapon/melee/lance/attack_self(mob/user)
+/obj/item/melee/lance/attack_self(mob/user)
 	if(trigger)
 		raise_lance(user)
 	else
@@ -35,7 +35,7 @@
 		else
 			to_chat(user, "<span class='warning'>You are not ready to couch \the [src] yet!</span>")
 
-/obj/item/weapon/melee/lance/proc/lower_lance(mob/user)
+/obj/item/melee/lance/proc/lower_lance(mob/user)
 	if(!trigger)
 		trigger = new(get_step(usr, usr.dir), usr, src)
 		if(user)
@@ -49,7 +49,7 @@
 
 		owner.update_inv_hand(owner.active_hand)
 
-/obj/item/weapon/melee/lance/proc/raise_lance(mob/user)
+/obj/item/melee/lance/proc/raise_lance(mob/user)
 	if(trigger)
 		qdel(trigger)
 
@@ -67,7 +67,7 @@
 
 		owner.update_inv_hand(owner.active_hand)
 
-/obj/item/weapon/melee/lance/attack(mob/living/M, mob/living/user)
+/obj/item/melee/lance/attack(mob/living/M, mob/living/user)
 	if(istype(M) && trigger) //Lance is couched
 		return trigger.Crossed(M)
 
@@ -83,7 +83,7 @@
 	invisibility = 101
 
 	var/mob/living/owner
-	var/obj/item/weapon/melee/lance/L
+	var/obj/item/melee/lance/L
 
 	var/amount_of_turfs_charged = -999 //Incremented by 1 on every forceMove().
 

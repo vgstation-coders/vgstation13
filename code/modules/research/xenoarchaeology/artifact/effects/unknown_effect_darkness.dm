@@ -14,8 +14,8 @@
 /datum/artifact_effect/darkness/ToggleActivate()
 	..()
 	if(holder)
-		if(istype(holder, /obj/item/weapon/anobattery))
-			var/obj/item/weapon/anobattery/B = holder
+		if(istype(holder, /obj/item/anobattery))
+			var/obj/item/anobattery/B = holder
 			if(!activated) 
 				B.inserted_device.set_light(effectrange, -dark_level)
 			else

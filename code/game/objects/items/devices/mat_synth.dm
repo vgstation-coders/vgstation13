@@ -193,7 +193,7 @@
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
 			RA.use(1)
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
-	if(istype(O, /obj/item/weapon/card/emag))
+	if(istype(O, /obj/item/card/emag))
 		if(!emagged)
 			emagged = 1
 			var/matter_rng = rand(5, 25)

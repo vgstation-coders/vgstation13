@@ -3,7 +3,7 @@
 ///////////////////////////
 
 // Specifies a law, and a priority
-/obj/item/weapon/aiModule/targetted
+/obj/item/aiModule/targetted
 	// Priority, if needed.
 	var/priority=0
 
@@ -14,7 +14,7 @@
 
 	// REPLACES <name> IN LAW WITH TARGET'S NAME!
 
-/obj/item/weapon/aiModule/targetted/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/targetted/upload(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	..()
 
 	// Makes sure the AI isn't a traitor before changing their law 0. --NeoFite
@@ -31,14 +31,14 @@
 	lawchanges.Add("The law specified [targetName]")
 	return 1
 
-/obj/item/weapon/aiModule/targetted/copy()
-	var/obj/item/weapon/aiModule/targetted/clone = ..()
+/obj/item/aiModule/targetted/copy()
+	var/obj/item/aiModule/targetted/clone = ..()
 	clone.targetName=targetName
 	clone.desc = desc
 	clone.law = law
 	return clone
 
-/obj/item/weapon/aiModule/targetted/attack_self(var/mob/user as mob)
+/obj/item/aiModule/targetted/attack_self(var/mob/user as mob)
 	..()
 	var/targName = stripped_input(usr, "Please enter the name of the person to [action].", "Who?", user.name)
 	if (!targName)
@@ -46,14 +46,14 @@
 	targetName = targName
 	updateLaw()
 
-/obj/item/weapon/aiModule/targetted/updateLaw()
+/obj/item/aiModule/targetted/updateLaw()
 	if(!targetName)
 		law = initial(law)
 	else
 		law = replacetext(initial(law),"<name>",targetName)
 	desc = "\A [name]: '[law]'"
 
-/obj/item/weapon/aiModule/targetted/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
+/obj/item/aiModule/targetted/validate(var/datum/ai_laws/laws, var/atom/target, var/mob/sender)
 	if(!targetName)
 		to_chat(usr, "No name detected on module, please enter one.")
 		return 0
@@ -61,7 +61,7 @@
 
 /******************** Safeguard ********************/
 
-/obj/item/weapon/aiModule/targetted/safeguard
+/obj/item/aiModule/targetted/safeguard
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=4"
 
 	modname  = "SafeGuard"
@@ -74,7 +74,7 @@
 
 /******************** OneHuman ********************/
 
-/obj/item/weapon/aiModule/targetted/oneHuman
+/obj/item/aiModule/targetted/oneHuman
 	origin_tech = Tc_PROGRAMMING + "=3;" + Tc_MATERIALS + "=6" //made with diamonds!
 
 	// Recycling

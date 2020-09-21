@@ -12,7 +12,7 @@
 /obj/machinery/cooking/icemachine
 	name = "Cream-Master Deluxe"
 	icon_state = "icecream_vat"
-	var/obj/item/weapon/reagent_containers/glass/beaker = null
+	var/obj/item/reagent_containers/glass/beaker = null
 	var/datum/reagents/to_add
 	var/soda
 	var/alcohol
@@ -53,7 +53,7 @@
 // Processing //////////////////////////////////////////////////
 
 /obj/machinery/cooking/icemachine/takeIngredient(var/obj/item/I,mob/user)
-	if(istype(I,/obj/item/weapon/reagent_containers/glass))
+	if(istype(I,/obj/item/reagent_containers/glass))
 		if(beaker)
 			to_chat(user, "<span class='warning'>The [name] already has a beaker.</span>")
 			return
@@ -68,7 +68,7 @@
 			to_chat(user, "<span class='notice'>You add the [I.name] to the [name].</span>")
 			updateUsrDialog()
 
-	else if(istype(I,/obj/item/weapon/reagent_containers/food/snacks/icecream))
+	else if(istype(I,/obj/item/reagent_containers/food/snacks/icecream))
 		if(!I.reagents.has_reagent(SPRINKLES) && reagents.has_reagent(SPRINKLES))
 			reagents.trans_id_to(I, SPRINKLES, 1)
 			to_chat(user, "<span class = 'notice'>You add sprinkles to \the [I].</span>")
@@ -176,11 +176,11 @@
 			to_chat(usr, "<span class = 'warning'>There is not enough nutrient to create an ice cream cone!</span>")
 			return
 		reagents.remove_reagent(NUTRIMENT, 5)
-		var/obj/item/weapon/reagent_containers/food/C
+		var/obj/item/reagent_containers/food/C
 		if(href_list["createcup"])
-			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcup(loc)
+			C = new/obj/item/reagent_containers/food/snacks/icecream/icecreamcup(loc)
 		else
-			C = new/obj/item/weapon/reagent_containers/food/snacks/icecream/icecreamcone(loc)
+			C = new/obj/item/reagent_containers/food/snacks/icecream/icecreamcone(loc)
 		C.name = "[generateName(to_add.get_master_reagent_name())] [C.name]"
 		C.pixel_x = rand(-8,8) * PIXEL_MULTIPLIER
 		C.pixel_y = -16 * PIXEL_MULTIPLIER

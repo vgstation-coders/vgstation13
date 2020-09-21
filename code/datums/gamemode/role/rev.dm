@@ -69,7 +69,7 @@
 		mob.fully_replace_character_name("Cargonian",random_name(mob.gender)) //This will change the ID name, it MUST be Cargonian!
 	else
 		maybe_equip(new /obj/item/device/flash/rev(get_turf(mob)))
-	maybe_equip(new /obj/item/weapon/pinpointer/implant)
+	maybe_equip(new /obj/item/pinpointer/implant)
 
 /datum/role/revolutionary/proc/maybe_equip(obj/item/thing)
 	var/mob/living/carbon/human/mob = antag.current
@@ -101,34 +101,34 @@
 	update_faction_icons()
 	return ..()
 
-var/list/revsquad_guns = list(/obj/item/weapon/gun/projectile/automatic/uzi, ///obj/item/ammo_storage/magazine/uzi45
-									/obj/item/weapon/gun/projectile/pistol, ///obj/item/ammo_storage/magazine/mc9mm
-									/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff, ///obj/item/ammo_storage/speedloader/shotgun
-									/obj/item/weapon/gun/projectile/automatic/xcom, ///obj/item/ammo_casing/a12mm/assault
-									/obj/item/weapon/gun/projectile/luger, ///obj/item/ammo_storage/magazine/mc9mm
-									/obj/item/weapon/gun/projectile/colt,
-									/obj/item/weapon/gun/projectile/deagle, ///obj/item/ammo_storage/magazine/a50
-									/obj/item/weapon/gun/projectile/deagle/gold,
-									/obj/item/weapon/gun/projectile/deagle/camo,
-									/obj/item/weapon/gun/projectile/gyropistol, ///obj/item/ammo_storage/magazine/a75
-									/obj/item/weapon/gun/projectile/beretta, ///obj/item/ammo_storage/magazine/beretta
+var/list/revsquad_guns = list(/obj/item/gun/projectile/automatic/uzi, ///obj/item/ammo_storage/magazine/uzi45
+									/obj/item/gun/projectile/pistol, ///obj/item/ammo_storage/magazine/mc9mm
+									/obj/item/gun/projectile/shotgun/doublebarrel/sawnoff, ///obj/item/ammo_storage/speedloader/shotgun
+									/obj/item/gun/projectile/automatic/xcom, ///obj/item/ammo_casing/a12mm/assault
+									/obj/item/gun/projectile/luger, ///obj/item/ammo_storage/magazine/mc9mm
+									/obj/item/gun/projectile/colt,
+									/obj/item/gun/projectile/deagle, ///obj/item/ammo_storage/magazine/a50
+									/obj/item/gun/projectile/deagle/gold,
+									/obj/item/gun/projectile/deagle/camo,
+									/obj/item/gun/projectile/gyropistol, ///obj/item/ammo_storage/magazine/a75
+									/obj/item/gun/projectile/beretta, ///obj/item/ammo_storage/magazine/beretta
 									)
 
-var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
+var/list/revsquad_gear = list(/obj/item/card/emag,
 								   /obj/item/clothing/accessory/storage/bandolier/chaos,
 								   //obj/item/gun_part/silencer,
 								   /obj/item/clothing/suit/armor/vest,
-								   /obj/item/weapon/storage/belt/slim/pro,
-								   /obj/item/weapon/storage/box/flashbangs,
+								   /obj/item/storage/belt/slim/pro,
+								   /obj/item/storage/box/flashbangs,
 								   /obj/item/device/flash/rev/revsquad, //each revsquad flash is only worth +1 convert
-								   /obj/item/weapon/storage/box/smokebombs,
-								   /obj/item/weapon/storage/box/handcuffs,
-								   /obj/item/weapon/storage/box/bolas,
-								   /obj/item/weapon/storage/bag/ammo_pouch/rev,
+								   /obj/item/storage/box/smokebombs,
+								   /obj/item/storage/box/handcuffs,
+								   /obj/item/storage/box/bolas,
+								   /obj/item/storage/bag/ammo_pouch/rev,
 								   /obj/item/clothing/glasses/sunglasses/prescription,
-								   /obj/item/weapon/melee/telebaton,
-								   /obj/item/weapon/melee/classic_baton,
-								   /obj/item/weapon/reagent_containers/spray/rev
+								   /obj/item/melee/telebaton,
+								   /obj/item/melee/classic_baton,
+								   /obj/item/reagent_containers/spray/rev
 								  )
 
 // Rev gear
@@ -159,50 +159,50 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 /obj/item/clothing/accessory/storage/bandolier/chaos
 	desc = "A bandolier designed to strap in with an incredible number of IEDs."
 	storage_slots = 14
-	can_only_hold = list("/obj/item/weapon/grenade/iedcasing")
+	can_only_hold = list("/obj/item/grenade/iedcasing")
 
 /obj/item/clothing/accessory/storage/bandolier/chaos/New()
 	..()
 	for(var/i = 1 to storage_slots)
-		new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
+		new /obj/item/grenade/iedcasing/preassembled/withshrapnel(src)
 
-/obj/item/weapon/storage/bag/ammo_pouch/rev
+/obj/item/storage/bag/ammo_pouch/rev
 	desc = "Designed to hold stray magazines and spare bullets. This one has been enlarged significantly."
 	storage_slots = 8
 
-/obj/item/weapon/storage/bag/ammo_pouch/rev/New()
+/obj/item/storage/bag/ammo_pouch/rev/New()
 	..()
 	var/mob/living/carbon/human/H = locate(/mob/living/carbon/human) in get_turf(src)
-	var/obj/item/weapon/storage/S = H.back
+	var/obj/item/storage/S = H.back
 	if(!S)
 		return
-	for(var/obj/item/weapon/gun/projectile/P in S.contents)
+	for(var/obj/item/gun/projectile/P in S.contents)
 		if(P.mag_type)
 			var/path = text2path(P.mag_type)
 			new path(src)
 			new path(src)
-		else if(istype(P,/obj/item/weapon/gun/projectile/shotgun))
+		else if(istype(P,/obj/item/gun/projectile/shotgun))
 			new /obj/item/ammo_storage/speedloader/shotgun/loaded(src)
 			new /obj/item/ammo_storage/speedloader/shotgun/loaded(src)
-		else if(istype(P,/obj/item/weapon/gun/projectile/colt))
+		else if(istype(P,/obj/item/gun/projectile/colt))
 			new /obj/item/ammo_storage/speedloader/a357(src)
 			new /obj/item/ammo_storage/speedloader/a357(src)
 
-/obj/item/weapon/reagent_containers/spray/rev
+/obj/item/reagent_containers/spray/rev
 	name = "Lubricant spray"
 	desc = "Nothing more working class than slipping the floors."
 
-/obj/item/weapon/reagent_containers/spray/rev/New()
+/obj/item/reagent_containers/spray/rev/New()
 	..()
 	reagents.add_reagent(LUBE, 250)
-	new /obj/item/weapon/reagent_containers/spray/antilube(src.loc)
+	new /obj/item/reagent_containers/spray/antilube(src.loc)
 
-/obj/item/weapon/reagent_containers/spray/antilube
+/obj/item/reagent_containers/spray/antilube
 	name = "Antilube Spray"
 	desc = "Use to make ground manueverable, or if you hate fun."
 	color = "#FFAAAA" //Shade it red so it's easy to distinguish
 
-/obj/item/weapon/reagent_containers/spray/antilube/New()
+/obj/item/reagent_containers/spray/antilube/New()
 	..()
 	reagents.add_reagent(SODIUM_POLYACRYLATE, 250)
 
@@ -230,7 +230,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	//Handle Aliens
 	if(istype(rev_mob.species, /datum/species/plasmaman))
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/suit/space/plasmaman/cargo(rev_mob), slot_wear_suit)
-		rev_mob.equip_to_slot_or_del(new /obj/item/weapon/tank/plasma/plasmaman(rev_mob), slot_s_store)
+		rev_mob.equip_to_slot_or_del(new /obj/item/tank/plasma/plasmaman(rev_mob), slot_s_store)
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath(rev_mob), slot_wear_mask)
 		rev_mob.internal = rev_mob.get_item_by_slot(slot_s_store)
 		if (rev_mob.internals)
@@ -240,7 +240,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 		rev_mob.equip_or_collect(new /obj/item/clothing/mask/breath/vox(rev_mob), slot_wear_mask)
 		rev_mob.equip_or_collect(new /obj/item/clothing/suit/space/vox/civ/cargo, slot_wear_suit)
 		rev_mob.equip_or_collect(new /obj/item/clothing/head/helmet/space/vox/civ/cargo, slot_head)
-		var/obj/item/weapon/tank/nitrogen/TN = new(rev_mob)
+		var/obj/item/tank/nitrogen/TN = new(rev_mob)
 		rev_mob.put_in_hands(TN)
 		to_chat(rev_mob, "<span class='notice'>You are now running on nitrogen internals from the [TN] in your hand. Your species finds oxygen toxic, so you must breathe nitrogen (AKA N<sub>2</sub>) only.</span>")
 		rev_mob.internal = TN
@@ -250,11 +250,11 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	else
 		rev_mob.equip_to_slot_or_del(new /obj/item/clothing/head/soft(rev_mob), slot_head) //cargo cap
 
-	var/obj/item/weapon/card/id/supply/ID = new(rev_mob)
+	var/obj/item/card/id/supply/ID = new(rev_mob)
 	ID.assignment = "Cargo Technician"
 	rev_mob.equip_to_slot_or_del(ID, slot_wear_id)
 
-	var/obj/item/weapon/storage/backpack/satchel/BP = new(rev_mob.loc)
+	var/obj/item/storage/backpack/satchel/BP = new(rev_mob.loc)
 	rev_mob.equip_to_slot_or_del(BP, slot_back)
 	rev_mob.equip_to_slot_or_del(new /obj/item/device/flash/rev/revsquad(rev_mob), slot_l_store)
 	rev_mob.equip_to_slot_or_del(new /obj/item/device/pulsar(rev_mob), slot_r_store)
@@ -264,7 +264,7 @@ var/list/revsquad_gear = list(/obj/item/weapon/card/emag,
 	var/list/possible_gear = revsquad_gear.Copy()
 	while(BP.contents.len < BP.storage_slots)
 		var/tospawn = pick_n_take(possible_gear)
-		if(istype(tospawn,/obj/item/weapon/reagent_containers/spray/rev)&&BP.storage_slots-BP.contents.len==1)
+		if(istype(tospawn,/obj/item/reagent_containers/spray/rev)&&BP.storage_slots-BP.contents.len==1)
 			continue //don't spawn the lube bottle as our last item because it needs an extra slot for the antilube
 		new tospawn(BP)
 

@@ -1,4 +1,4 @@
-/obj/item/weapon/peglimb
+/obj/item/peglimb
 	name = "peg limb"
 	desc = "A wooden stake crudely shaped like a limb. It's not pretty, but it works."
 	icon = 'icons/obj/weapons.dmi'

@@ -13,7 +13,7 @@
 	var/locked = 0
 	var/ue=null
 	var/image/occupant_overlay=null
-	var/obj/item/weapon/circuitboard/airlock/circuit
+	var/obj/item/circuitboard/airlock/circuit
 	var/pickup = 0//for mapping purposes
 
 /obj/structure/displaycase/New()
@@ -38,7 +38,7 @@
 			update_icon()
 
 /obj/structure/displaycase/captains_laser/setContent()
-	occupant=new /obj/item/weapon/gun/energy/laser/captain(src)
+	occupant=new /obj/item/gun/energy/laser/captain(src)
 	locked=1
 	req_access=list(access_captain)
 	update_icon()
@@ -82,7 +82,7 @@
 /obj/structure/displaycase/ex_act(severity)
 	switch(severity)
 		if (1)
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			if (occupant)
 				dump()
 			qdel(src)
@@ -105,7 +105,7 @@
 
 /obj/structure/displaycase/blob_act()
 	if (prob(75))
-		new /obj/item/weapon/shard(loc)
+		new /obj/item/shard(loc)
 		if(occupant)
 			dump()
 		qdel(src)
@@ -115,7 +115,7 @@
 		if (!( src.destroyed ))
 			setDensity(FALSE)
 			src.destroyed = 1
-			new /obj/item/weapon/shard(loc)
+			new /obj/item/shard(loc)
 			playsound(src, "shatter", 70, 1)
 			update_icon()
 	else
@@ -143,9 +143,9 @@
 /obj/structure/displaycase/npc_tamper_act(mob/living/L)
 	dump() //Screw fingerprints checking and other crap, gremlin magic
 
-/obj/structure/displaycase/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/card/id))
-		var/obj/item/weapon/card/id/I=W
+/obj/structure/displaycase/attackby(obj/item/W as obj, mob/user as mob)
+	if(istype(W, /obj/item/card/id))
+		var/obj/item/card/id/I=W
 		if(!check_access(I))
 			to_chat(user, "<span class='rose'>Access denied.</span>")
 			return
@@ -162,7 +162,7 @@
 		W.playtoolsound(src, 50)
 		dump()
 
-		var/obj/item/weapon/circuitboard/airlock/C = circuit
+		var/obj/item/circuitboard/airlock/C = circuit
 		if(!C)
 			C = new (src)
 			C.installed = 1

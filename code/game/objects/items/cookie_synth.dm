@@ -1,9 +1,9 @@
-/obj/item/weapon/cookiesynth
+/obj/item/cookiesynth
 	name = "cookie synthesizer"
 	desc = "A self-recharging device used to rapidly deploy cookies."
 	icon = 'icons/obj/RCD.dmi'
 	icon_state = "rcd"
-	var/food_type = /obj/item/weapon/reagent_containers/food/snacks/cookie
+	var/food_type = /obj/item/reagent_containers/food/snacks/cookie
 	var/toxin = FALSE
 	var/toxin_type = CHLORALHYDRATE
 	var/toxin_amount = 10
@@ -13,16 +13,16 @@
 	var/delay = 15 SECONDS
 	w_class = W_CLASS_MEDIUM
 
-/obj/item/weapon/cookiesynth/attackby(obj/item/weapon/W, mob/user)
+/obj/item/cookiesynth/attackby(obj/item/W, mob/user)
 	..()
 	if(isEmag(W))
 		Emag(user)
 
-/obj/item/weapon/cookiesynth/proc/Emag(mob/user)
+/obj/item/cookiesynth/proc/Emag(mob/user)
 	emagged = !emagged
 	spark(src)
 
-/obj/item/weapon/cookiesynth/attack_self(mob/user)
+/obj/item/cookiesynth/attack_self(mob/user)
 	if(isrobot(user))
 		var/mob/living/silicon/robot/R = user
 		if(R.emagged)
@@ -30,11 +30,11 @@
 	if(emagged)
 		toggle_toxins(user)
 
-/obj/item/weapon/cookiesynth/proc/toggle_toxins(mob/user)
+/obj/item/cookiesynth/proc/toggle_toxins(mob/user)
 	toxin = !toxin
 	to_chat(user,"<span class='warning'>You [toxin ? "dis" : "en"]able the [src]'s reagent safety checker!</span>")
 
-/obj/item/weapon/cookiesynth/afterattack(atom/A, mob/user, proximity)
+/obj/item/cookiesynth/afterattack(atom/A, mob/user, proximity)
 	if(cooldown > world.time)
 		return
 	if(!proximity)
@@ -48,7 +48,7 @@
 			return
 	var/turf/T = get_turf(A)
 	playsound(src.loc, sound_type, 10, 1)
-	var/obj/item/weapon/reagent_containers/food/S = new food_type(T)
+	var/obj/item/reagent_containers/food/S = new food_type(T)
 	to_chat(user,"Fabricating [lowertext(S.name)]..")
 	if(toxin)
 		S.reagents.add_reagent(toxin_type, toxin_amount)
@@ -59,29 +59,29 @@
 
 //TODO: Give hugborgs their own custom RSF instead of this snoflakey mess.
 
-/obj/item/weapon/cookiesynth/proc/Honkize()
+/obj/item/cookiesynth/proc/Honkize()
 	name = "banana synthesizer"
 	desc = "A self-recharging device used to rapidly deploy bananas."
-	food_type = /obj/item/weapon/reagent_containers/food/snacks/grown/banana
+	food_type = /obj/item/reagent_containers/food/snacks/grown/banana
 	toxin_type = SPIRITBREAKER
 
-/obj/item/weapon/cookiesynth/proc/Lawize()
+/obj/item/cookiesynth/proc/Lawize()
 	name = "donut synthesizer"
 	desc = "A self-recharging device used to rapidly deploy donuts."
-	food_type = /obj/item/weapon/reagent_containers/food/snacks/donut/normal
+	food_type = /obj/item/reagent_containers/food/snacks/donut/normal
 	toxin_type = CHEESYGLOOP
 
-/obj/item/weapon/cookiesynth/proc/Noirize()
+/obj/item/cookiesynth/proc/Noirize()
 	name = "joe synthesizer"
 	desc = "A self-recharging device used to rapidly deploy bitter, black, and tasteless coffee."
-	food_type = /obj/item/weapon/reagent_containers/food/drinks/mug/joe
+	food_type = /obj/item/reagent_containers/food/drinks/mug/joe
 	toxin_type = HEMOSCYANINE
 
-/obj/item/weapon/reagent_containers/food/drinks/mug/joe/New()
+/obj/item/reagent_containers/food/drinks/mug/joe/New()
 	..()
 	reagents.add_reagent(DETCOFFEE, 20)
 
-/obj/item/weapon/cookiesynth/lollipop
+/obj/item/cookiesynth/lollipop
 	name = "medipop synthesizer"
 	desc = "A self-recharging device used to rapidly deploy medicinal lollipops. Tell your patient they were very brave today."
-	food_type = /obj/item/weapon/reagent_containers/food/snacks/medipop
+	food_type = /obj/item/reagent_containers/food/snacks/medipop

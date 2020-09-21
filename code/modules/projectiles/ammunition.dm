@@ -143,8 +143,8 @@
 	if(!target || !istype(target))
 		return 0
 	var/trying_to_load = 0
-	if(istype(target, /obj/item/weapon/gun/projectile))
-		var/obj/item/weapon/gun/projectile/PW = target
+	if(istype(target, /obj/item/gun/projectile))
+		var/obj/item/gun/projectile/PW = target
 		trying_to_load = min(PW.max_shells - PW.loaded.len - PW.refuse.len, bullets_from.stored_ammo.len) //either we fill to max, or we fill as much as possible
 	else
 		var/obj/item/ammo_storage/AS = target
@@ -188,11 +188,11 @@
 				AS.stored_ammo += loading
 				loading.forceMove(AS)
 				bullets_loaded++
-	if(istype(target, /obj/item/weapon/gun/projectile)) //if we load directly, this is what we want to do
+	if(istype(target, /obj/item/gun/projectile)) //if we load directly, this is what we want to do
 		if(istype(bullets_from, /obj/item/ammo_storage/box))
 			if(!slowLoad(bullets_from, target))
 				return 0
-		var/obj/item/weapon/gun/projectile/PW = target
+		var/obj/item/gun/projectile/PW = target
 		for(var/obj/item/ammo_casing/loading in bullets_from.stored_ammo)
 			if(PW.loaded.len + PW.refuse.len >= PW.max_shells)
 				break

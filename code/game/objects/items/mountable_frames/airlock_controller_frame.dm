@@ -17,7 +17,7 @@
 // Embedded Controller Boards
 /////////////////////////////////////////////////////////////
 
-/obj/item/weapon/circuitboard/ecb
+/obj/item/circuitboard/ecb
 	board_type= EMBEDDED_CONTROLLER
 	icon_state = "mainboard"
 	origin_tech = Tc_PROGRAMMING + "=3"
@@ -25,15 +25,15 @@
 	name = "Embedded Controller Board (Base)"
 	build_path = /obj/machinery/embedded_controller
 
-/obj/item/weapon/circuitboard/ecb/access_controller
+/obj/item/circuitboard/ecb/access_controller
 	name = "Embedded Controller Board (Access Control)"
 	build_path = /obj/machinery/embedded_controller/radio/access_controller
-/obj/item/weapon/circuitboard/ecb/airlock_controller
+/obj/item/circuitboard/ecb/airlock_controller
 	name = "Embedded Controller Board (Airlock Control)"
 	build_path = /obj/machinery/embedded_controller/radio/airlock_controller
-/obj/item/weapon/circuitboard/ecb/advanced_airlock_controller
+/obj/item/circuitboard/ecb/advanced_airlock_controller
 	name = "Embedded Controller Board (Advanced)"
 	build_path = /obj/machinery/embedded_controller/radio/advanced_airlock_controller
-/obj/item/weapon/circuitboard/ecb/embedded_controller/radio/pressure_regulator
+/obj/item/circuitboard/ecb/embedded_controller/radio/pressure_regulator
 	name = "Embedded Controller Board (Pressure Regulator)"
 	build_path = /obj/machinery/embedded_controller/radio/pressure_regulator

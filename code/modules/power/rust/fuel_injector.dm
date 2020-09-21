@@ -10,7 +10,7 @@
 	var/locked = FALSE
 	req_access = list(access_engine)
 
-	var/obj/item/weapon/fuel_assembly/cur_assembly
+	var/obj/item/fuel_assembly/cur_assembly
 	var/fuel_usage = 0.0001			//percentage of available fuel to use per cycle
 	 
 	var/injecting = FALSE
@@ -35,12 +35,12 @@
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/rust_injector,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/manipulator/nano/pico,
-		/obj/item/weapon/stock_parts/scanning_module/adv/phasic,
-		/obj/item/weapon/stock_parts/matter_bin/adv/super,
-		/obj/item/weapon/stock_parts/console_screen,
+		/obj/item/circuitboard/rust_injector,
+		/obj/item/stock_parts/manipulator/nano/pico,
+		/obj/item/stock_parts/manipulator/nano/pico,
+		/obj/item/stock_parts/scanning_module/adv/phasic,
+		/obj/item/stock_parts/matter_bin/adv/super,
+		/obj/item/stock_parts/console_screen,
 	)
 
 	if(ticker)
@@ -79,7 +79,7 @@
 		return FALSE
 	. =  ..()
 
-/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weapon/weldingtool/WT, var/mob/user)
+/obj/machinery/power/rust_fuel_injector/weldToFloor(var/obj/item/weldingtool/WT, var/mob/user)
 	if(..() == 1)
 		switch(state)
 			if(1)
@@ -100,7 +100,7 @@
 	if(..())
 		return 1
 
-	if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))
+	if(istype(W, /obj/item/card/id) || istype(W, /obj/item/device/pda))
 		if(emagged)
 			to_chat(user, "<span class='warning'>The lock seems to be broken.</span>")
 			return
@@ -112,7 +112,7 @@
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	if(istype(W, /obj/item/weapon/fuel_assembly) && !cur_assembly)
+	if(istype(W, /obj/item/fuel_assembly) && !cur_assembly)
 		if(emergency_insert_ready)
 			if(user.drop_item(W, src))
 				cur_assembly = W

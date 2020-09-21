@@ -222,7 +222,7 @@
 	freerange = 1
 	init_keyslot2_type = /obj/item/device/encryptionkey/ert
 
-/obj/item/device/radio/headset/attackby(obj/item/weapon/W, mob/user)
+/obj/item/device/radio/headset/attackby(obj/item/W, mob/user)
 //	..()
 	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
 		return

@@ -15,7 +15,7 @@ var/list/labor_console_categories = list(
 	icon_state = "labor"
 	light_color = LIGHT_COLOR_GREEN
 	req_access = list(access_hop)
-	circuit = "/obj/item/weapon/circuitboard/labor"
+	circuit = "/obj/item/circuitboard/labor"
 
 	var/awaiting_swipe = FALSE
 	var/verifying = FALSE
@@ -126,7 +126,7 @@ var/list/labor_console_categories = list(
 	freeing = ""
 	update_icon()
 
-/obj/machinery/computer/labor/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/computer/labor/attackby(obj/item/W, mob/user)
 	. = ..()
 	if(.)
 		return .

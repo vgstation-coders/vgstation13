@@ -30,21 +30,21 @@ obj/machinery/gibber/New()
 	. = ..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/gibber,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/matter_bin,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/micro_laser/high,
-		/obj/item/weapon/stock_parts/micro_laser/high,
-		/obj/item/weapon/stock_parts/micro_laser/high,
-		/obj/item/weapon/stock_parts/micro_laser/high
+		/obj/item/circuitboard/gibber,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/matter_bin,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/micro_laser/high,
+		/obj/item/stock_parts/micro_laser/high,
+		/obj/item/stock_parts/micro_laser/high,
+		/obj/item/stock_parts/micro_laser/high
 	)
 
 	RefreshParts()
@@ -59,7 +59,7 @@ obj/machinery/gibber/New()
 		return
 
 	..()
-	if(istype(O,/obj/item/weapon/grab))
+	if(istype(O,/obj/item/grab))
 		return handleGrab(O,user)
 	else
 		to_chat(user, "<span class='warning'>This item is not suitable for the gibber!</span>")
@@ -103,15 +103,15 @@ obj/machinery/gibber/New()
 	else
 		src.startgibbing(user)
 
-// OLD /obj/machinery/gibber/attackby(obj/item/weapon/grab/G as obj, mob/user as mob)
-/obj/machinery/gibber/proc/handleGrab(obj/item/weapon/grab/G as obj, mob/user as mob)
+// OLD /obj/machinery/gibber/attackby(obj/item/grab/G as obj, mob/user as mob)
+/obj/machinery/gibber/proc/handleGrab(obj/item/grab/G as obj, mob/user as mob)
 	if(!anchored)
 		to_chat(user, "<span class='warning'>[src] must be anchored first!</span>")
 		return
 	if(src.occupant)
 		to_chat(user, "<span class='warning'>[src] is full! Empty it first.</span>")
 		return
-	if (!( istype(G, /obj/item/weapon/grab)) || !(is_type_in_list(G.affecting, allowed_victims)))
+	if (!( istype(G, /obj/item/grab)) || !(is_type_in_list(G.affecting, allowed_victims)))
 		to_chat(user, "<span class='warning'>This item is not suitable for [src]!</span>")
 		return
 	if(G.affecting.abiotic(1))
@@ -212,13 +212,13 @@ obj/machinery/gibber/New()
 
 	var/totalslabs = src.occupant.size
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
+	var/obj/item/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	var/obj/effect/decal/cleanable/blood/gibs/allgibs[totalslabs]
 	playsound(src, 'sound/machines/blender.ogg', 50, 1)
 	for (var/i=1 to totalslabs)
 		//first we spawn the meat
-		var/obj/item/weapon/newmeat
-		if(istype(occupant.meat_type, /obj/item/weapon/reagent_containers))
+		var/obj/item/newmeat
+		if(istype(occupant.meat_type, /obj/item/reagent_containers))
 			newmeat = new occupant.meat_type(src, occupant)
 			newmeat.reagents.add_reagent (NUTRIMENT, sourcenutriment / totalslabs) // Thehehe. Fat guys go first
 		else
@@ -320,9 +320,9 @@ obj/machinery/gibber/New()
 
 	var/totalslabs = victim.size
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
+	var/obj/item/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat = null
+		var/obj/item/reagent_containers/food/snacks/meat/newmeat = null
 		if(istype(victim, /mob/living/carbon/human))
 			newmeat = new victim.meat_type(src, victim)
 		else

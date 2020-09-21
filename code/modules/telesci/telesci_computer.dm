@@ -13,7 +13,7 @@
 	name = "telepad control console"
 	desc = "Used to teleport objects to and from the telescience telepad."
 	icon_state = "teleport"
-	circuit = "/obj/item/weapon/circuitboard/telesci_computer"
+	circuit = "/obj/item/circuitboard/telesci_computer"
 	var/obj/machinery/telepad/telepad = null
 
 	// VARIABLES //
@@ -29,7 +29,7 @@
 	idle_power_usage = 10
 	active_power_usage = 300
 	power_channel = EQUIP
-	var/obj/item/weapon/cell/cell
+	var/obj/item/cell/cell
 	var/teleport_cell_usage=1000 // 100% of a standard cell
 	processing=1
 	mech_flags = MECH_SCAN_FAIL
@@ -54,7 +54,7 @@
 /obj/machinery/computer/telescience/initialize()
 	..()
 	if(ticker && ticker.current_state < GAME_STATE_PLAYING)
-		cell = new/obj/item/weapon/cell(src) // Stops cell duping, provides one 1000 cell at roundstart
+		cell = new/obj/item/cell(src) // Stops cell duping, provides one 1000 cell at roundstart
 	for(var/obj/machinery/telepad/possible_telepad in range(src, 7))
 		if(telepad)
 			return //Stop checking if we are linked
@@ -112,7 +112,7 @@
 		use_power(used * 2) // This used to use CELLRATE, but CELLRATE is fucking awful. feel free to fix this properly!
 		nanomanager.update_uis(src)
 
-/obj/machinery/computer/telescience/attackby(obj/item/weapon/W, mob/user)
+/obj/machinery/computer/telescience/attackby(obj/item/W, mob/user)
 	if(..())
 		return TRUE
 
@@ -292,7 +292,7 @@
 var/list/telesci_warnings = list(
 	/obj/machinery/power/supermatter,
 	/obj/machinery/the_singularitygen,
-	/obj/item/weapon/grenade,
+	/obj/item/grenade,
 	/obj/item/device/transfer_valve,
 	/obj/item/device/fuse_bomb,
 	/obj/item/device/onetankbomb,

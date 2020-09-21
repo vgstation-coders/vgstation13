@@ -35,8 +35,8 @@
 //////MAKE SPACE//////
 /datum/surgery_step/cavity/make_space
 	allowed_tools = list(
-		/obj/item/weapon/surgicaldrill = 100,
-		/obj/item/weapon/pen = 75,
+		/obj/item/surgicaldrill = 100,
+		/obj/item/pen = 75,
 		/obj/item/stack/rods = 50,
 		)
 
@@ -79,11 +79,11 @@
 /datum/surgery_step/cavity/close_space
 	priority = 2
 	allowed_tools = list(
-		/obj/item/weapon/cautery = 100,
-		/obj/item/weapon/scalpel/laser = 100,
+		/obj/item/cautery = 100,
+		/obj/item/scalpel/laser = 100,
 		/obj/item/clothing/mask/cigarette = 75,
-		/obj/item/weapon/lighter = 50,
-		/obj/item/weapon/weldingtool = 25,
+		/obj/item/lighter = 50,
+		/obj/item/weldingtool = 25,
 		)
 
 	duration = 6 SECONDS
@@ -151,8 +151,8 @@
 	affected.hidden = tool
 	tool.forceMove(target)
 
-	if(istype(tool, /obj/item/weapon/implant))
-		var/obj/item/weapon/implant/disobj = tool
+	if(istype(tool, /obj/item/implant))
+		var/obj/item/implant/disobj = tool
 		disobj.part = affected
 		affected.implants += disobj
 	affected.cavity = 0
@@ -169,9 +169,9 @@
 
 /datum/surgery_step/cavity/implant_removal
 	allowed_tools = list(
-		/obj/item/weapon/hemostat = 100,
-		/obj/item/weapon/wirecutters = 75,
-		/obj/item/weapon/kitchen/utensil/fork = 20,
+		/obj/item/hemostat = 100,
+		/obj/item/wirecutters = 75,
+		/obj/item/kitchen/utensil/fork = 20,
 		)
 
 	duration = 2 SECONDS
@@ -205,8 +205,8 @@
 			worm.detach()
 
 		obj.forceMove(get_turf(target))
-		if(istype(obj,/obj/item/weapon/implant))
-			var/obj/item/weapon/implant/imp = obj
+		if(istype(obj,/obj/item/implant))
+			var/obj/item/implant/imp = obj
 			imp.handle_removal(user)
 			imp.imp_in = null
 			imp.implanted = 0
@@ -235,7 +235,7 @@
 		var/fail_prob = 10
 		fail_prob += 100 - tool_quality(tool)
 		if (prob(fail_prob))
-			var/obj/item/weapon/implant/imp = affected.implants[1]
+			var/obj/item/implant/imp = affected.implants[1]
 			user.visible_message("<span class='warning'>Something beeps inside [target]'s [affected.display_name]!</span>")
 			playsound(imp.loc, 'sound/items/countdown.ogg', 75, 1, -3)
 			spawn(25)

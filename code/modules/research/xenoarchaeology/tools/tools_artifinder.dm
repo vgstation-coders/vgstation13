@@ -44,7 +44,7 @@
 			closest_id = A.artifact_id
 			dir = get_dir(T,U)
 
-	for (var/obj/item/weapon/anodevice/A in anomaly_power_utilizers)
+	for (var/obj/item/anodevice/A in anomaly_power_utilizers)
 		var/turf/U = get_turf(A)
 		if (T.z != U.z)
 			continue

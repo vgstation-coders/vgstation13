@@ -1,5 +1,5 @@
 //Now revamped along with barricades. No longer shitcode, at least for the better part
-/obj/item/weapon/barricade_kit
+/obj/item/barricade_kit
 	name = "wood barricade kit"
 	desc = "Used to create all sorts of wooden fortifications ever since carpentry was invented."
 	icon = 'icons/obj/barricade.dmi'
@@ -12,13 +12,13 @@
 	throw_range = 3
 	var/kit_uses = 3 //Three use of directional or blocking barricades, and one use for full-tile
 
-/obj/item/weapon/barricade_kit/examine(mob/user)
+/obj/item/barricade_kit/examine(mob/user)
 
 	..()
 	to_chat(user, "It has [kit_uses] uses left for regular barricades. It can [kit_uses < 3 ? "no longer be used" : "also be used"] for full barricades.")
 
 //Basically a rip from window construction, because it's the same idea
-/obj/item/weapon/barricade_kit/attack_self(mob/user as mob)
+/obj/item/barricade_kit/attack_self(mob/user as mob)
 	if(!user || !src)
 		return 0
 	if(!istype(user.loc, /turf))
@@ -69,7 +69,7 @@
 				qdel(src) //Use it up
 
 //Preattack to avoid bashing windows or opening airlocks when working
-/obj/item/weapon/barricade_kit/preattack(var/atom/A, mob/user as mob)
+/obj/item/barricade_kit/preattack(var/atom/A, mob/user as mob)
 	if(istype(A, /obj/machinery/door/airlock) || istype(A, /obj/structure/window/full) || istype(A, /obj/structure/grille)) //Apply on a full window or an airlock
 		if(get_dist(user,A) > 1) //There, it's unfucked
 			return
@@ -89,6 +89,6 @@
 				qdel(src) //Get rid of it
 		return TRUE //Don't fire attack, please
 
-/obj/item/weapon/barricade_kit/attack(var/atom/A, mob/user as mob)
+/obj/item/barricade_kit/attack(var/atom/A, mob/user as mob)
 
 	return //Don't attack with it

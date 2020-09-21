@@ -22,31 +22,31 @@
 	..()
 
 	component_parts = newlist(
-		/obj/item/weapon/circuitboard/reverse_engine,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/scanning_module,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/capacitor,
-		/obj/item/weapon/stock_parts/manipulator,
-		/obj/item/weapon/stock_parts/console_screen
+		/obj/item/circuitboard/reverse_engine,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/scanning_module,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/capacitor,
+		/obj/item/stock_parts/manipulator,
+		/obj/item/stock_parts/console_screen
 	)
 
 	RefreshParts()
 
 /obj/machinery/r_n_d/reverse_engine/RefreshParts()
 	var/i = 0
-	for(var/obj/item/weapon/stock_parts/scanning_module/S in component_parts)
+	for(var/obj/item/stock_parts/scanning_module/S in component_parts)
 		i++
 		scan_rating += S.rating //sum
 	scan_rating = scan_rating / i //average
 
 	i = 0
-	for(var/obj/item/weapon/stock_parts/capacitor/C in component_parts)
+	for(var/obj/item/stock_parts/capacitor/C in component_parts)
 		i++
 		cap_rating += C.rating
 	cap_rating = cap_rating / i
 
-	for(var/obj/item/weapon/stock_parts/manipulator/M in component_parts)
+	for(var/obj/item/stock_parts/manipulator/M in component_parts)
 		max_queue_len = 10 * M.rating
 
 /obj/machinery/r_n_d/reverse_engine/attackby(var/obj/O as obj, var/mob/user as mob)

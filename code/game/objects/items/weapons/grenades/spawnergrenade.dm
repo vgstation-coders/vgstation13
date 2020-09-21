@@ -1,4 +1,4 @@
-/obj/item/weapon/grenade/spawnergrenade
+/obj/item/grenade/spawnergrenade
 	desc = "Will unleash an unspecified anomaly into the vicinity when triggered."
 	name = "delivery grenade"
 	icon = 'icons/obj/grenade.dmi'
@@ -10,7 +10,7 @@
 	var/mob/living/owner = null
 	var/mob_faction = ""
 
-/obj/item/weapon/grenade/spawnergrenade/prime(var/mob/living/L = null)
+/obj/item/grenade/spawnergrenade/prime(var/mob/living/L = null)
 	// Prime now just handles the two loops that query for people in lockers and people who can see it.
 	if(spawner_type && deliveryamt)
 		// Make a quick flash
@@ -34,26 +34,26 @@
 	qdel(src)
 	return
 
-/obj/item/weapon/grenade/spawnergrenade/proc/handle_faction(var/mob/living/spawned, var/mob/living/L)
+/obj/item/grenade/spawnergrenade/proc/handle_faction(var/mob/living/spawned, var/mob/living/L)
 	return
 
-/obj/item/weapon/grenade/spawnergrenade/proc/postPrime(var/list/spawned_atoms)
+/obj/item/grenade/spawnergrenade/proc/postPrime(var/list/spawned_atoms)
 	return
 
-/obj/item/weapon/grenade/spawnergrenade/manhacks
+/obj/item/grenade/spawnergrenade/manhacks
 	name = "manhack delivery grenade"
 	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
 	deliveryamt = 5
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 
-/obj/item/weapon/grenade/spawnergrenade/manhacks/handle_faction(var/mob/living/spawned, var/mob/living/L)
+/obj/item/grenade/spawnergrenade/manhacks/handle_faction(var/mob/living/spawned, var/mob/living/L)
 	if(!spawned || !L)
 		return
 
 	spawned.faction = "\ref[L]"
 
-/obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate
+/obj/item/grenade/spawnergrenade/manhacks/syndicate
 	name = "viscerator grenade"
 	desc = "Will unleash a swarm of hostile viscerators that will hack at any nearby targets indiscriminately."
 	spawner_type = /mob/living/simple_animal/hostile/viscerator
@@ -61,21 +61,21 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 	mob_faction = "syndicate"
 
-/obj/item/weapon/grenade/spawnergrenade/manhacks/syndicate/handle_faction(var/mob/living/spawned, var/mob/living/L)
+/obj/item/grenade/spawnergrenade/manhacks/syndicate/handle_faction(var/mob/living/spawned, var/mob/living/L)
 	if(!spawned || !L)
 		return
 
 	if(!isnukeop(L))//"syndicate" faction mobs don't attack nuke ops by default
 		spawned.faction = "\ref[L]"
 
-/obj/item/weapon/grenade/spawnergrenade/spesscarp
+/obj/item/grenade/spawnergrenade/spesscarp
 	name = "carp delivery grenade"
 	desc = "No more need for a space-rod and fish food!"
 	spawner_type = /mob/living/simple_animal/hostile/carp
 	deliveryamt = 5
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_SYNDICATE + "=4"
 
-/obj/item/weapon/grenade/spawnergrenade/beenade
+/obj/item/grenade/spawnergrenade/beenade
 	name = "bee-nade"
 	desc = "Angry bees. When you need them, where you need them."
 	icon_state = "beenade"
@@ -84,13 +84,13 @@
 	origin_tech = Tc_MATERIALS + "=3;" + Tc_MAGNETS + "=4;" + Tc_BIOTECH + "=4"
 
 
-/obj/item/weapon/grenade/spawnergrenade/beenade/postPrime(var/list/spawned_atoms)
+/obj/item/grenade/spawnergrenade/beenade/postPrime(var/list/spawned_atoms)
 	if(!spawned_atoms || !spawned_atoms.len)
 		return
 	playsound(src, 'sound/effects/bees.ogg', 100, 1)
 
 
-/obj/item/weapon/grenade/spawnergrenade/bearnade
+/obj/item/grenade/spawnergrenade/bearnade
 	name = "tactical bearstrike delivery beacon"
 	desc = "HOO HA, HOO-HA"
 	icon_state = "bearnade"

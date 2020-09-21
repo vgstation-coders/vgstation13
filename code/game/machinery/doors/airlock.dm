@@ -46,7 +46,7 @@
 	var/justzap = 0
 	var/safe = 1
 	normalspeed = 1
-	var/obj/item/weapon/circuitboard/airlock/electronics = null
+	var/obj/item/circuitboard/airlock/electronics = null
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	autoclose = 1
 	var/busy = 0
@@ -1161,8 +1161,8 @@ About the new airlock wires panel:
 			open()
 			operating = -1
 
-	if(istype(I, /obj/item/weapon/batteringram))
-		var/obj/item/weapon/batteringram/B = I
+	if(istype(I, /obj/item/batteringram))
+		var/obj/item/batteringram/B = I
 		if(!B.can_ram(user))
 			return
 		user.delayNextAttack(30)
@@ -1185,7 +1185,7 @@ About the new airlock wires panel:
 
 	if (iswelder(I))
 		if (density && !operating)
-			var/obj/item/weapon/weldingtool/WT = I
+			var/obj/item/weldingtool/WT = I
 			if (WT.remove_fuel(0, user))
 				if (!welded)
 					welded = 1
@@ -1203,7 +1203,7 @@ About the new airlock wires panel:
 	else if (iswiretool(I))
 		if (!operating && panel_open)
 			wires.Interact(user)
-	else if (iscrowbar(I) || istype(I, /obj/item/weapon/fireaxe))
+	else if (iscrowbar(I) || istype(I, /obj/item/fireaxe))
 		if(src.busy)
 			return
 		src.busy = 1
@@ -1228,7 +1228,7 @@ About the new airlock wires panel:
 		else if( !welded && !operating )
 			if(density)
 				if(beingcrowbarred == 0) //being fireaxe'd
-					var/obj/item/weapon/fireaxe/F = I
+					var/obj/item/fireaxe/F = I
 					if(F.wielded)
 						spawn(0)	open(1)
 					else
@@ -1237,7 +1237,7 @@ About the new airlock wires panel:
 					spawn(0)	open(1)
 			else
 				if(beingcrowbarred == 0)
-					var/obj/item/weapon/fireaxe/F = I
+					var/obj/item/fireaxe/F = I
 					if(F.wielded)
 						spawn(0)	close(1)
 					else
@@ -1245,7 +1245,7 @@ About the new airlock wires panel:
 				else
 					spawn(0)	close(1)
 		src.busy = 0
-	else if (istype(I, /obj/item/weapon/card/emag))
+	else if (istype(I, /obj/item/card/emag))
 		if (!operating)
 			operating = -1
 			if(density)
@@ -1282,10 +1282,10 @@ About the new airlock wires panel:
 	DA.created_name = name
 	DA.update_state()
 
-	var/obj/item/weapon/circuitboard/airlock/A
+	var/obj/item/circuitboard/airlock/A
 
 	if (!electronics)
-		A = new/obj/item/weapon/circuitboard/airlock(loc)
+		A = new/obj/item/circuitboard/airlock(loc)
 		if(req_access && req_access.len)
 			A.conf_access = req_access
 		else if(req_one_access && req_one_access.len)
