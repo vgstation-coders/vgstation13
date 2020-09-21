@@ -106,7 +106,7 @@
 /obj/machinery/telecomms/bus/preset_four
 	id = "Bus 4"
 	network = "tcommsat"
-	autolinkers = list("processor4", "engineering", "common", "ai private")
+	autolinkers = list("processor4", "engineering", "common")
 
 /obj/machinery/telecomms/bus/preset_four/initialize()
 	..()
