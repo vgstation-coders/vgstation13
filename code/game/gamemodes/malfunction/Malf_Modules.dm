@@ -79,7 +79,7 @@ rcd light flash thingy on matter drain
 	cooldown_min = 1 SECONDS
 
 /obj/effect/overlay/ai_shield
-	name = "AI Blast Shield"
+	name = "AI Firewall"
 	desc = "You can see the words 'FUCK C4RB0NS' etched on to it."
 	layer = LIGHTING_LAYER
 	icon = 'icons/mob/ai.dmi'
@@ -111,7 +111,7 @@ rcd light flash thingy on matter drain
 		if(shield)
 			shield.raise()
 		A.ai_flags |= COREFORTIFY
-	to_chat(user, "<span class='notice'>You [A.ai_flags & COREFORTIFY ? "fortify" : "unfortify"] your core.</span>")
+	to_chat(user, "<span class='warning'>[A.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
 
 
 /datum/AI_Module/large/disable_rcd
