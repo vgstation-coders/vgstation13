@@ -167,13 +167,13 @@
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
 			var/oldpixelx = ol.pixel_x
-			var/newpixelx = chambered ? 0 : -4	
+			var/newpixelx = chambered ? 0 : -4
 			if(oldpixelx != newpixelx)
-				overlays -= ol	
-				ol.pixel_x = chambered ? 0 : -4	
+				overlays -= ol
+				ol.pixel_x = chambered ? 0 : -4
 				overlays += ol
-						
-		
+
+
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
@@ -186,7 +186,7 @@
 			fire_delay = 0
 			desc += "<br>This one seems to have something screwed into it."
 			return 1
-		
+
 	if(conversionkit && A.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
@@ -199,7 +199,7 @@
 		fire_delay = initial(fire_delay)
 		return 1
 	..()
-	
+
 /obj/item/weapon/gun/projectile/glock/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(conversionkit)
 		var/shots_fired = 0
@@ -308,3 +308,23 @@
 /obj/item/weapon/gun/projectile/automag/prestige/update_icon()
 	..()
 	icon_state = "automag-prestige[chambered ? "" : "-e"]"
+
+/obj/item/weapon/gun/projectile/pocket
+	name = "\improper NT-22 pistol"
+	desc = "A tiny pocket gun with the logo of the Corp laser-engraved on the slide. Uses .22LR rounds."
+	icon_state = "pistol"
+	w_class = W_CLASS_TINY
+	max_shells = 10
+	caliber = list(LR22 = 1)
+	silenced = 0
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=2"
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	mag_type = "/obj/item/ammo_storage/magazine/lr22"
+	load_method = 2
+
+	gun_flags = AUTOMAGDROP | EMPTYCASINGS | SILENCECOMP
+
+/obj/item/weapon/gun/projectile/pocket/update_icon()
+	..()
+	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
+	return

@@ -175,6 +175,13 @@
 	penetration = 0
 	projectile_speed = 1
 
+/obj/item/projectile/bullet/LR22
+	damage = 10
+	weaken = 3
+	embed = 1
+	penetration = 1
+	projectile_speed = 1
+
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
 	icon_state = "sshell"
