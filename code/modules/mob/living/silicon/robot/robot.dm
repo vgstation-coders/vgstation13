@@ -1353,6 +1353,7 @@ var/list/cyborg_list = list()
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
 	var/datum/action/undeployment/undeployment_action = new 
 	var/datum/action/detonate/destroy_action = new
+	var/last_swap = 0
 	braintype = "AI Shell"
 
 /mob/living/silicon/robot/shell/proc/set_mainframe(mob/living/silicon/ai/A)
@@ -1362,17 +1363,25 @@ var/list/cyborg_list = list()
 	mainframe = A
 	mainframe.connected_robots |= src
 
-/mob/living/silicon/robot/shell/proc/deploy(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
-	AI.mind.transfer_to(src)
-	AI.is_in_shell = 1
+/mob/living/silicon/robot/shell/proc/deploy()		//called right after the AI pops into the shell.
+	if(is_being_controlled || mainframe.is_in_shell)
+		message_admins("AI/SHELL Error: Deploy() called while is_being_controlled or is_in_shell was set to true")
+		return
+	if(last_swap + 30 > world.time)
+		to_chat(mainframe, "<span class='warning'>Processors rebooting, please wait before redeploying.</span>")
+	//	return
+	mainframe.mind.transfer_to(src)
+	mainframe.is_in_shell = 1
 	is_being_controlled = 1
 	lawupdate = TRUE
 	lawsync()
-	radio.channels = AI.radio.channels
+	radio.channels = mainframe.radio.channels
 	radio.subspace_transmission = TRUE
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
 	updateicon()
+	playsound_local(src, 'sound/machines/paistartup.ogg', 50)
+	last_swap = world.time
 
 /datum/action/undeployment
 	name = "Disconnect from shell"
@@ -1399,12 +1408,13 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/proc/undeploy()
 	if(!is_being_controlled || !mind || !mainframe)
 		return
+	if(last_swap + 30 > world.time)
+		to_chat(src, "<span class='warning'>Processors rebooting, please wait before undeploying.</span>")
+//		return
 	is_being_controlled = 0
 	mainframe.is_in_shell = 0
 	to_chat(src,"Releasing control of cyborg shell...")
 	mind.transfer_to(mainframe)
-	
-	deployed = FALSE
 	undeployment_action.Remove(src)
 	destroy_action.Remove(src)
 	if(radio) //Recalculate the radio channel
@@ -1461,7 +1471,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/updateicon(var/overlay_layer = ABOVE_LIGHTING_LAYER, var/overlay_plane = LIGHTING_PLANE)
 	..(overlay_layer, overlay_plane)
 	overlays.Cut()
-	if(!stat && cell != null && deployed)
+	if(!stat && cell != null && is_being_controlled)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
 		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
 		eyesicon.Blend(rgb(65,65,65), ICON_SUBTRACT)

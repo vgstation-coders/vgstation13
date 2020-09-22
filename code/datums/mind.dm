@@ -75,12 +75,15 @@
 	src.key = key
 
 /datum/mind/proc/transfer_to(mob/new_character)
+	if(!new_character)
+		return
 	if (!current)
 		transfer_to_without_current(new_character)
 		return
-
-	new_character.attack_log += current.attack_log
-	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
+	if(new_character.attack_log)
+		if(current.attack_log && current.attack_log.len)
+			new_character.attack_log += current.attack_log
+		new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
 	for (var/role in antag_roles)
 		var/datum/role/R = antag_roles[role]
