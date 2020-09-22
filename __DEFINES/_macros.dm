@@ -74,8 +74,6 @@
 
 #define isrobot(A) istype(A, /mob/living/silicon/robot)
 
-#define isshell(A) istype(A, /mob/living/silicon/robot/shell)
-
 #define isanimal(A) istype(A, /mob/living/simple_animal)
 
 #define iscorgi(A) istype(A, /mob/living/simple_animal/corgi)

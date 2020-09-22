@@ -39,7 +39,7 @@
 		for (var/datum/role/R in members)
 			if(!R.antag.current)
 				continue
-			if((isAI(R.antag.current) || isshell(R.antag.current)) && !R.antag.current.isDead())
+			if(isAI(R.antag.current) && !R.antag.current.isDead())
 				living_ais++
 		if(!living_ais && stage<MALF_CHOOSING_NUKE)
 			command_alert(/datum/command_alert/malf_destroyed)
@@ -76,11 +76,8 @@
 		to_chat(malfAI.antag.current, {"<span class='notice'>Congratulations! The station is now under your exclusive control.<br>
 You may decide to blow up the station. You have 60 seconds to choose.<br>
 You should now be able to use your Explode spell to interface with the nuclear fission device.</span>"})
-		if(isshell(malfAI.antag.current))
-			var/mob/living/silicon/robot/shell/S = malfAI.antag.current
-			S.mainframe.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
-		else
-			malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+		malfAI.antag.current.add_spell(new /spell/targeted/ai_win, "malf_spell_ready", /obj/abstract/screen/movable/spell_master/malf)
+
 	return
 
 /datum/faction/malf/get_statpanel_addition()

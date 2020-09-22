@@ -534,7 +534,6 @@
 	if (sterile)
 		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
 	return
-	
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(escaping)
 		return FALSE
