@@ -1384,7 +1384,7 @@ var/list/cyborg_list = list()
 	lawsync()
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
-	rbPDA.loc = src		//move the AI PDA to the robot
+	rbPDA.forceMove(src)	//move the AI PDA to the robot
 	updateicon()
 	playsound_local(src, 'sound/machines/paistartup.ogg', 50)
 	last_swap = world.time
@@ -1425,7 +1425,7 @@ var/list/cyborg_list = list()
 	destroy_action.Remove(src)
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
-	rbPDA.loc = mainframe	//return the PDA to the AI
+	rbPDA.forceMove(mainframe)	//return the PDA to the AI
 	updateicon()
 	last_swap = world.time
 	
