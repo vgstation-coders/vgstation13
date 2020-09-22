@@ -876,8 +876,7 @@ var/list/ai_list = list()
 		return
 
 	if(shell)	//If the silicon already has a linked shell, go to that one!
-		if(mind)
-			to_chat(src, "Taking control of cyborg shell...")
+		if(mind)			
 			shell.deploy(src)
 			
 	else		//Otherwise, lets see if we can create a new shell

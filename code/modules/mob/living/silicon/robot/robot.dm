@@ -1375,6 +1375,7 @@ var/list/cyborg_list = list()
 	if(last_swap + 10 > world.time)
 		to_chat(mainframe, "<span class='warning'>Processors rebooting, please wait before redeploying.</span>")
 		return
+	to_chat(mainframe, "Taking control of cyborg shell...")
 	mainframe.mind.transfer_to(src)
 	mainframe.is_in_shell = 1
 	is_being_controlled = 1
@@ -1489,3 +1490,8 @@ var/list/cyborg_list = list()
 	else
 		real_name = "AI Shell"
 		name = real_name
+
+/mob/living/silicon/robot/shell/attack_ai(mob/user)
+	if(user == mainframe)
+		deploy()
+		
