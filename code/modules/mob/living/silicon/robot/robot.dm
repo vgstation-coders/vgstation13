@@ -1367,6 +1367,7 @@ var/list/cyborg_list = list()
 		radio.keyslot = new /obj/item/device/encryptionkey/ai 
 		radio.recalculateChannels()
 		radio.subspace_transmission = TRUE
+	setup_PDA()
 
 /mob/living/silicon/robot/shell/proc/deploy()		//called right after the AI pops into the shell.
 	if(is_being_controlled || mainframe.is_in_shell)
@@ -1383,6 +1384,7 @@ var/list/cyborg_list = list()
 	lawsync()
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
+	rbPDA.loc = src		//move the AI PDA to the robot
 	updateicon()
 	playsound_local(src, 'sound/machines/paistartup.ogg', 50)
 	last_swap = world.time
@@ -1423,6 +1425,7 @@ var/list/cyborg_list = list()
 	destroy_action.Remove(src)
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
+	rbPDA.loc = mainframe	//return the PDA to the AI
 	updateicon()
 	last_swap = world.time
 	
@@ -1495,4 +1498,9 @@ var/list/cyborg_list = list()
 	var/mob/living/silicon/ai/A = user
 	if(A == mainframe)
 		deploy()
+
+/mob/living/silicon/robot/shell/setup_PDA()
+	if(!rbPDA && mainframe)
+		rbPDA = mainframe.aiPDA
+
 		
