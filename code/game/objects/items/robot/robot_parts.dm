@@ -253,6 +253,8 @@
 	return
 
 /obj/item/robot_parts/robot_suit/attack_hand(mob/user)
+	if(!check_completion())
+		return
 	if(ai_control)
 		to_chat(user, "You disable AI control on the cyborg exoskeleton.")
 		ai_control = 0
@@ -262,6 +264,8 @@
 
 /obj/item/robot_parts/robot_suit/attack_ai(mob/user)
 	if(!isAI(user))
+		return
+	if(user.isDead())
 		return
 	if(!check_completion())
 		return

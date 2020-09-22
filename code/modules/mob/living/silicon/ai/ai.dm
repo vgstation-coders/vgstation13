@@ -863,7 +863,7 @@ var/list/ai_list = list()
 	set category = "AI Commands"
 	set name = "Deploy to Shell"
 
-	if(incapacitated())
+	if(isDead())
 		to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
 		return
 	if(control_disabled)
@@ -942,7 +942,7 @@ var/list/ai_list = list()
 		
 	else if(istype(owner, /mob/living/silicon/ai))		//Pressing the button as an AI
 		var/mob/living/silicon/ai/R = owner
-		if(R.incapacitated())
+		if(R.isDead())
 			to_chat(src, "<span class='warning'>Not while you're incapacitated.</span>")
 			return FALSE
 		if(R.control_disabled)
