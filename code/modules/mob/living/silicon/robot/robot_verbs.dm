@@ -165,7 +165,7 @@
 
 /mob/living/silicon/robot/shell/verb/return_to_core()
 	set category = "Robot Commands"
-	set name = "Retun to Core"
+	set name = "Return to Core"
 
 	undeploy()
 
