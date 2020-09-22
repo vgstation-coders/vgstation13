@@ -1,6 +1,5 @@
 /mob/living/silicon/ai/death(gibbed)
 	if(is_in_shell)
-		shell.undeploy()
 		shell.close_connection()
 		shell.gib()
 	if(stat == DEAD)
