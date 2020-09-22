@@ -126,6 +126,8 @@
 /obj/item/weapon/robot_module/proc/ResetEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)
 		return
+	if(isshell(R))
+		return
 	if(radio_key)
 		R.radio.reset_key()
 
