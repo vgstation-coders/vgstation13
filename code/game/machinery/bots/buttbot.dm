@@ -38,7 +38,6 @@ Here it is: Buttbot.
 		return
 	for(var/mob/O in hearers(src, null))
 		O.show_message("<b>[src]</b> beeps, '[message]'")
-	return
 
 /obj/machinery/bot/buttbot/proc/fart()
 	if(can_fart())
