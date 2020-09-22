@@ -45,7 +45,7 @@ var/list/ai_list = list()
 	var/mob/living/silicon/robot/shell/shell = null  //The shell the AI currently owns
 	var/datum/action/deploy_shell/deploy_action = new
 	var/datum/action/detonate/destroy_action = new
-	var/deployed = 0		//Is the AI currently controlling a borg
+	var/is_in_shell = 0		//Is the AI currently controlling a borg
 	var/greeted = 0		//Shitty fix for being repeatedly told the AI greeting
 
 	// See VOX_AVAILABLE_VOICES for available values
@@ -872,16 +872,13 @@ var/list/ai_list = list()
 	if(istype(loc, /obj/machinery/power/apc))
 		to_chat(src, "<span class='warning'>You can't control a shell while shunted.</span>")
 		return
+	if(is_in_shell)	//if this is true, something went wrong
+		return
 
 	if(shell)	//If the silicon already has a linked shell, go to that one!
-		sleep(1)	//spamming the verb breaks things
-		if (shell.deployed || shell.mainframe != src)
-			return
 		if(mind)
 			to_chat(src, "Taking control of cyborg shell...")
-			deployed = 1
-			mind.transfer_to(shell)
-			shell.deploy_init(src)
+			shell.deploy(src)
 			
 	else		//Otherwise, lets see if we can create a new shell
 		var/list/potential_shells = list()
@@ -906,14 +903,16 @@ var/list/ai_list = list()
 			create_shell(options[choice])
 
 			
-/mob/living/silicon/ai/proc/create_shell(var/obj/item/robot_parts/robot_suit/suit)		
-	if(mind && !shell)
-		deployed = 1
+/mob/living/silicon/ai/proc/create_shell(var/obj/item/robot_parts/robot_suit/suit)
+	if(shell)
+		to_chat(src, "<span class='warning'>You already have a shell.</span>")
+		return		
+	if(mind)
 		to_chat(src, "Taking control of cyborg shell...")
 		var/mob/living/silicon/robot/shell/R = suit.create_robot(is_shell = 1)
 		shell = R
-		mind.transfer_to(R)
-		R.deploy_init(src)
+		R.set_mainframe(src)
+		R.deploy()
 
 /datum/action/deploy_shell
 	name = "Deploy to AI Shell"

@@ -1349,25 +1349,27 @@ var/list/cyborg_list = list()
 //AI Shell Control
 
 /mob/living/silicon/robot/shell
-	var/deployed = FALSE		//Is the shell being controlled right now
+	var/is_being_controlled = FALSE		//Is the shell being controlled right now
 	var/mob/living/silicon/ai/mainframe = null		//The AI the shell belongs to.
 	var/datum/action/undeployment/undeployment_action = new 
 	var/datum/action/detonate/destroy_action = new
 	braintype = "AI Shell"
 
-
-/mob/living/silicon/robot/shell/proc/deploy_init(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
-	deployed = TRUE
-	connected_ai = AI
-	real_name = "Shell of [AI.name]"
+/mob/living/silicon/robot/shell/proc/set_mainframe(mob/living/silicon/ai/A)
+	connected_ai = A
+	real_name = "Shell of [A.name]"
 	name = real_name
-	mainframe = AI
+	mainframe = A
 	mainframe.connected_robots |= src
+
+/mob/living/silicon/robot/shell/proc/deploy(mob/living/silicon/ai/AI)		//called right after the AI pops into the shell.
+	AI.mind.transfer_to(src)
+	AI.is_in_shell = 1
+	is_being_controlled = 1
 	lawupdate = TRUE
 	lawsync()
-	if(radio && AI.radio)
-		radio.channels = AI.radio.channels
-		radio.subspace_transmission = TRUE
+	radio.channels = AI.radio.channels
+	radio.subspace_transmission = TRUE
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
 	updateicon()
@@ -1395,12 +1397,13 @@ var/list/cyborg_list = list()
 	return TRUE
 
 /mob/living/silicon/robot/shell/proc/undeploy()
-	if(!deployed || !mind || !mainframe)
+	if(!is_being_controlled || !mind || !mainframe)
 		return
-	sleep(1)	//spamming this breaks things
+	is_being_controlled = 0
+	mainframe.is_in_shell = 0
 	to_chat(src,"Releasing control of cyborg shell...")
 	mind.transfer_to(mainframe)
-	mainframe.deployed = 0
+	
 	deployed = FALSE
 	undeployment_action.Remove(src)
 	destroy_action.Remove(src)
@@ -1411,8 +1414,7 @@ var/list/cyborg_list = list()
 	updateicon()
 	
 /mob/living/silicon/robot/shell/proc/close_connection()
-	if(deployed)
-		undeploy()
+	undeploy()
 	if(mainframe)
 		mainframe.shell = null
 		mainframe = null
