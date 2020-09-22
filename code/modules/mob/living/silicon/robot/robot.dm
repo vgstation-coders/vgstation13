@@ -1382,6 +1382,8 @@ var/list/cyborg_list = list()
 	is_being_controlled = 1
 	lawupdate = TRUE
 	lawsync()
+	if(radio)
+		radio.recalculateChannels()
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
 	rbPDA.forceMove(src)	//move the AI PDA to the robot
