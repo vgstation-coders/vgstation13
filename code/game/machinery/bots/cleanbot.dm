@@ -408,10 +408,10 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 
 /obj/machinery/bot/cleanbot/roomba/meido/attackby(var/obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/kitchen/utensil/fork) || istype(W, /obj/item/weapon/lighter))
-		to_chat(user, "<span class='notice'>\the [src] buzzes and recoils at \the [W]. Perhaps it would prefer something more refined?</span>")
+		to_chat(user, "<span class='notice'>\The [src] buzzes and recoils at \the [W]. Perhaps it would prefer something more refined?</span>")
 		return
 	else if (istype(W, /obj/item/clothing/head/maidhat))
-		to_chat(user, "<span class='notice'>\the [src] is already wearing one of those!</span>")
+		to_chat(user, "<span class='notice'>\The [src] is already wearing one of those!</span>")
 		return
 	else if(W.type == /obj/item/weapon/kitchen/utensil/knife/large && !armed && user.a_intent != I_HURT)
 		if(user.drop_item(W))
