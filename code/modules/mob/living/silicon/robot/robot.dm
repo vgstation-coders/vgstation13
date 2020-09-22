@@ -1480,3 +1480,11 @@ var/list/cyborg_list = list()
 		eyes.plane = overlay_plane
 
 		overlays += eyes
+	
+/mob/living/silicon/robot/shell/updatename()
+	if(mainframe)
+		real_name = "Shell of [mainframe.name]"
+		name = real_name
+	else
+		real_name = "AI Shell"
+		name = real_name
