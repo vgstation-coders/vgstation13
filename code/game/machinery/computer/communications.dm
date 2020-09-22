@@ -560,8 +560,9 @@ var/list/shuttle_log = list()
 		shuttle_log += "\[[worldtime2text()]] Called from [get_area(user)]."
 	log_game("[key_name(user)] has called the shuttle. Justification given : '[justification]'")
 	message_admins("[key_name_admin(user)] has called the shuttle. Justification given : '[justification]'.", 1)
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification : '[justification]'")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+	CA.justification = justification
+	command_alert(CA)
 
 	return 1
 

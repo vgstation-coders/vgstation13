@@ -259,7 +259,10 @@ var/list/factions_with_hud_icons = list()
 	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
 		return
 	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
+	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+	CA.justification = "Recovery of Assets."
+	command_alert(CA)
+
 
 /datum/faction/proc/check_win()
 	return

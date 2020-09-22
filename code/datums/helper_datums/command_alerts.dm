@@ -79,6 +79,48 @@
 	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
 	..()
 
+/datum/command_alert/emergency_shuttle_called
+	name = "Emergency Shuttle Called"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttlecalled.ogg'
+	var/justification = ""
+
+/datum/command_alert/emergency_shuttle_called/announce()
+	message = "The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
+	if(justification)
+		message += " Justification: [justification]"
+	..()
+
+/datum/command_alert/emergency_shuttle_recalled
+	name = "Emergency Shuttle Recalled"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttlerecalled.ogg'
+
+/datum/command_alert/emergency_shuttle_recalled/announce()
+	message = "The emergency shuttle has been recalled."
+	..()
+
+/datum/command_alert/emergency_shuttle_docked
+	name = "Emergency Shuttle Docked"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttledock.ogg'
+
+/datum/command_alert/emergency_shuttle_docked/announce()
+	message = "The Emergency Shuttle has docked with the station. You have [round(emergency_shuttle.timeleft()/60,1)] minutes to board the Emergency Shuttle."
+	..()
+
+/datum/command_alert/emergency_shuttle_left
+	name = "Emergency Shuttle Departed"
+	alert_title = "Priority Announcement"
+	force_report = 1
+
+/datum/command_alert/emergency_shuttle_left/announce()
+	message = "The Emergency Shuttle has left the station. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the shuttle docks at Central Command."
+	..()
+
 
 /datum/command_alert/FUBAR
 	name = "Complimentary escape shuttle sent."
