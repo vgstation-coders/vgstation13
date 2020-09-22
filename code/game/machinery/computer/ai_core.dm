@@ -170,7 +170,9 @@ That prevents a few funky behaviors.
 						if(C.contents.len)//If there is an AI on card.
 							to_chat(U, "<span class='danger'>Transfer failed:</span> Existing AI found on this terminal. Remove existing AI to install a new one.")
 						else
-							if(T.mind.GetRole(MALF))
+							if(T.is_in_shell)	//send them back!
+								T.shell.undeploy()
+							if(T.mind?.GetRole(MALF))
 								to_chat(U, "<span class='danger'>ERROR:</span> Remote transfer interface disabled.")//Do ho ho ho~
 								return
 							new /obj/structure/AIcore/deactivated(T.loc)//Spawns a deactivated terminal at AI location.
@@ -197,6 +199,8 @@ That prevents a few funky behaviors.
 						var/obj/item/device/aicard/C = src
 						var/mob/living/silicon/ai/A = locate() in C//I love locate(). Best proc ever.
 						if(A)//If AI exists on the card. Else nothing since both are empty.
+							if(A.is_in_shell)	//send them back!
+								A.shell.undeploy()
 							A.control_disabled = 0
 							A.forceMove(T.loc)//To replace the terminal.
 							A.update_icon()
@@ -219,6 +223,8 @@ That prevents a few funky behaviors.
 
 							else
 								for(var/mob/living/silicon/ai/A in C)
+									if(A.is_in_shell)	//send them back!
+										A.shell.undeploy()
 									C.icon_state = "aicard"
 									C.name = "inteliCard"
 									C.overlays.len = 0
@@ -270,6 +276,8 @@ That prevents a few funky behaviors.
 
 							else
 								for(var/mob/living/silicon/ai/A in C)
+									if(A.is_in_shell)	//send them back!
+										A.shell.undeploy()
 									C.icon_state = "aicard"
 									C.name = "inteliCard"
 									C.overlays.len = 0

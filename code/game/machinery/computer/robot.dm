@@ -254,7 +254,11 @@
 //								message_admins("<span class='notice'>[key_name_admin(usr)] emagged [R.name] using robotic console!</span>")
 								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
 								R.SetEmagged(TRUE)
-								to_chat(usr, "Hack successful. [R.name] now has access to illegal technology.")
+								var/mob/living/silicon/ai/A = usr
+								if(A.is_in_shell)
+									to_chat(A.shell, "Hack successful. [R.name] now has access to illegal technology.")
+								else
+									to_chat(A, "Hack successful. [R.name] now has access to illegal technology.")
 								if(R.mind.special_role)
 									R.verbs += /mob/living/silicon/robot/proc/ResetSecurityCodes
 								hacking = 0
