@@ -1367,9 +1367,9 @@ var/list/cyborg_list = list()
 	if(is_being_controlled || mainframe.is_in_shell)
 		message_admins("AI/SHELL Error: Deploy() called while is_being_controlled or is_in_shell was set to true")
 		return
-	if(last_swap + 30 > world.time)
+	if(last_swap + 10 > world.time)
 		to_chat(mainframe, "<span class='warning'>Processors rebooting, please wait before redeploying.</span>")
-	//	return
+		return
 	mainframe.mind.transfer_to(src)
 	mainframe.is_in_shell = 1
 	is_being_controlled = 1
@@ -1411,9 +1411,9 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/shell/proc/undeploy()
 	if(!is_being_controlled || !mind || !mainframe)
 		return
-	if(last_swap + 30 > world.time)
+	if(last_swap + 10 > world.time)
 		to_chat(src, "<span class='warning'>Processors rebooting, please wait before undeploying.</span>")
-//		return
+		return
 	is_being_controlled = 0
 	mainframe.is_in_shell = 0
 	to_chat(src,"Releasing control of cyborg shell...")

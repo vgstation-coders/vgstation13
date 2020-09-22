@@ -71,7 +71,8 @@
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,
 		/mob/living/simple_animal/hostile/bear/spare,
 		/mob/living/simple_animal/hostile/asteroid/rockernaut/boss,
-		/mob/living/simple_animal/hostile/mining_drone
+		/mob/living/simple_animal/hostile/mining_drone,
+		/mob/living/silicon/robot/shell
 		)
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/mind_machine_hub,
