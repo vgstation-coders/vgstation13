@@ -270,7 +270,8 @@
 	malf.OnPostSetup()
 	malf.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
-		unction.HandleRecruitedMind(R.mind)
+		if(!isshell(R))
+			unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()
 	unction.AnnounceObjectives()
 	return 1

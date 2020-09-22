@@ -1492,6 +1492,7 @@ var/list/cyborg_list = list()
 		name = real_name
 
 /mob/living/silicon/robot/shell/attack_ai(mob/user)
-	if(user == mainframe)
+	var/mob/living/silicon/ai/A = user
+	if(A == mainframe)
 		deploy()
 		
