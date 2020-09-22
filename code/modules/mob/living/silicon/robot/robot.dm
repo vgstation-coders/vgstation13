@@ -1362,6 +1362,11 @@ var/list/cyborg_list = list()
 	name = real_name
 	mainframe = A
 	mainframe.connected_robots |= src
+	if(radio) //Recalculate the radio channel
+		radio.channels = mainframe.radio.channels
+		radio.keyslot = new /obj/item/device/encryptionkey/ai 
+		radio.recalculateChannels()
+		radio.subspace_transmission = TRUE
 
 /mob/living/silicon/robot/shell/proc/deploy()		//called right after the AI pops into the shell.
 	if(is_being_controlled || mainframe.is_in_shell)
@@ -1375,11 +1380,6 @@ var/list/cyborg_list = list()
 	is_being_controlled = 1
 	lawupdate = TRUE
 	lawsync()
-	if(radio) //Recalculate the radio channel
-		radio.channels = mainframe.radio.channels
-		radio.keyslot = new /obj/item/device/encryptionkey/ai 
-		radio.recalculateChannels()
-		radio.subspace_transmission = TRUE
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
 	updateicon()
@@ -1423,6 +1423,7 @@ var/list/cyborg_list = list()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
 	updateicon()
+	last_swap = world.time
 	
 /mob/living/silicon/robot/shell/proc/close_connection()
 	undeploy()
@@ -1475,7 +1476,7 @@ var/list/cyborg_list = list()
 	if(!stat && cell != null && is_being_controlled)
 		var/icon/eyesicon = icon(icon,"eyes-[icon_state]", overlay_layer)	
 		eyesicon.Blend(rgb(255,255,255), ICON_ADD)
-		eyesicon.Blend(rgb(65,65,65), ICON_SUBTRACT)
+		eyesicon.Blend(rgb(45,45,45), ICON_SUBTRACT)
 		eyes = image(eyesicon,"eyes-[icon_state]", overlay_layer)
 		eyes.plane = overlay_plane
 

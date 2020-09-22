@@ -81,7 +81,7 @@
 		transfer_to_without_current(new_character)
 		return
 	if(new_character.attack_log && current.attack_log)
-		new_character.attack_log += current.attack_log 
+//		new_character.attack_log += current.attack_log 
 		current.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 		new_character.attack_log += "\[[time_stamp()]\]: mind transfer from [current] to [new_character]"
 
