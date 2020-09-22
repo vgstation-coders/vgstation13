@@ -241,7 +241,10 @@
 /datum/emote/living/carbon/sound
 	var/sound_message = null
 
-
+//Depending on the sound will run a bunch of arbitrary checks checking for the user's specifications
+//Since all audible emotes are currently human-only, this only supports humans (for now)
+/datum/emote/living/carbon/sound/proc/choose_sound(var/mob/living/carbon/human/H, var/key)
+	return
 
 /datum/emote/living/carbon/sound/scream
 	key = "scream"
@@ -253,6 +256,17 @@
 	voxemote = FALSE
 	insectoidemote = FALSE
 
+/datum/emote/living/carbon/sound/scream/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Vox")
+		return vox_shriek_sound
+	if(H.species.name == "Insectoid")
+		return insectoid_chitter_sound
+	if(H.gender == FEMALE)
+		return female_scream_sound
+	return male_scream_sound
+
 /datum/emote/living/carbon/sound/shriek
 	key = "shriek"
 	key_third_person = "shrieks"
@@ -262,6 +276,12 @@
 	sound_message = "shrieks in agony!"
 	voxemote = TRUE
 	voxrestrictedemote = TRUE
+
+/datum/emote/living/carbon/sound/shriek/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Vox")
+		return vox_shriek_sound
 
 /datum/emote/living/carbon/sound/chitter
 	key = "chitter"
@@ -273,6 +293,11 @@
 	insectoidemote = TRUE
 	insectoidrestrictedemote = TRUE
 
+/datum/emote/living/carbon/sound/chitter/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Insectoid")
+		return insectoid_chitter_sound
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -280,6 +305,13 @@
 	message = "coughs!"
 	message_mime = "coughs silently!"
 	emote_type = EMOTE_AUDIBLE
+
+/datum/emote/living/carbon/sound/cough/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.gender == FEMALE)
+		return female_cough_sound
+	return male_cough_sound
 
 /datum/emote/living/carbon/sound/run_emote(mob/user, params)
 	var/mob/living/carbon/human/H = user
@@ -295,7 +327,7 @@
 				var/obj/item/clothing/C = search_sound_clothing(H, key)
 				var/sound
 				if(!C)
-					sound = pick(H.audible_emote_sound(key))
+					sound = pick(choose_sound(H, key))
 				else
 					sound = pick(C.sound_file)
 				if(sound) //Sanity
@@ -317,9 +349,9 @@
 	for(var/obj/item/clothing/C in user.get_equipped_items())
 		if(!C.sound_file)
 			continue
-		if(!(user?.species?.name in C.sound_species_whitelist))
+		if(!(user.species.name in C.sound_species_whitelist))
 			continue
-		if(!(user?.gender in C.sound_genders_allowed))
+		if(!(user.gender in C.sound_genders_allowed))
 			continue
 		if(!(sound_key in C.sound_change))
 			continue
