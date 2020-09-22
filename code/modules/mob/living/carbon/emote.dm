@@ -319,8 +319,9 @@
 								sound = pick(female_sounds)
 				else
 					sound = pick(C.sound_file)
-				playsound(user, sound, 50, 0)
-				H.last_emote_sound = world.time
+				if(sound) // will runtime otherwise because noises like /shriek dont come with non-vox variants
+					playsound(user, sound, 50, 0)
+					H.last_emote_sound = world.time
 
 	else
 		message = "makes a very loud noise."

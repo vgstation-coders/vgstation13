@@ -112,6 +112,8 @@ proc/airborne_can_reach(turf/source, turf/target, var/radius=5)
 	return FALSE
 
 /proc/attempt_colony(var/atom/A, var/datum/disease2/disease/D,var/info)
+	if(!D || !A)
+		return FALSE
 	if(!(D.spread & SPREAD_COLONY))
 		return FALSE
 	if(A.suitable_colony())
