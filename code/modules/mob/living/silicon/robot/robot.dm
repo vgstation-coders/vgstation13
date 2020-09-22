@@ -1375,8 +1375,11 @@ var/list/cyborg_list = list()
 	is_being_controlled = 1
 	lawupdate = TRUE
 	lawsync()
-	radio.channels = mainframe.radio.channels
-	radio.subspace_transmission = TRUE
+	if(radio) //Recalculate the radio channel
+		radio.channels = mainframe.radio.channels
+		radio.keyslot = new /obj/item/device/encryptionkey/ai 
+		radio.recalculateChannels()
+		radio.subspace_transmission = TRUE
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
 	updateicon()
@@ -1417,8 +1420,6 @@ var/list/cyborg_list = list()
 	mind.transfer_to(mainframe)
 	undeployment_action.Remove(src)
 	destroy_action.Remove(src)
-	if(radio) //Recalculate the radio channel
-		radio.recalculateChannels()
 	if(mainframe.eyeobj)
 		mainframe.eyeobj.forceMove(loc)
 	updateicon()
