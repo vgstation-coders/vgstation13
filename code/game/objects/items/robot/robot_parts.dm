@@ -78,7 +78,7 @@
 	var/obj/item/robot_parts/chest/chest = null
 	var/obj/item/robot_parts/head/head = null
 	var/created_name = ""
-	var/ai_control = 1 
+	var/ai_control = 1
 
 /obj/item/robot_parts/robot_suit/mapped
 	l_arm = new /obj/item/robot_parts/l_arm
@@ -129,7 +129,7 @@
 				feedback_inc("cyborg_frames_built",1)
 				return 1
 	return 0
-	
+
 /obj/item/robot_parts/robot_suit/attackby(obj/item/W as obj, mob/user as mob)
 	..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !l_arm && !r_arm && !l_leg && !r_leg && !chest && !head)
@@ -231,10 +231,9 @@
 					if(L == P)
 						L.forceMove(T)
 						M.contents -= L
-					
+
 			create_robot(M)
 
-			
 		else
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
@@ -253,6 +252,8 @@
 	return
 
 /obj/item/robot_parts/robot_suit/attack_hand(mob/user)
+	if(!check_completion())
+		return
 	if(ai_control)
 		to_chat(user, "You disable AI control on the cyborg exoskeleton.")
 		ai_control = 0
@@ -262,6 +263,8 @@
 
 /obj/item/robot_parts/robot_suit/attack_ai(mob/user)
 	if(!isAI(user))
+		return
+	if(user.isDead())
 		return
 	if(!check_completion())
 		return

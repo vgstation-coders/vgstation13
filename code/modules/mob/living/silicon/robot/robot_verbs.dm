@@ -162,3 +162,11 @@
 				to_chat(src, "<span class='notice'>Sensor augmentations disabled.</span>")
 		handle_sensor_modes()
 		update_sight_hud()
+
+/mob/living/silicon/robot/shell/verb/return_to_core()
+	set category = "Robot Commands"
+	set name = "Retun to Core"
+
+	undeploy()
+
+

@@ -82,7 +82,7 @@
 
 		if(mind)
 			var/datum/role/mastermalf		//Workaround for shelled AIs causing runtimes
-			mastermalf = connected_ai.deployed ? connected_ai.shell.mind.GetRole(MALF) : connected_ai.mind.GetRole(MALF)
+			mastermalf = connected_ai.is_in_shell ? connected_ai.shell.mind.GetRole(MALF) : connected_ai.mind.GetRole(MALF)
 
 			if(mastermalf)
 				var/datum/faction/my_new_faction = mastermalf.faction

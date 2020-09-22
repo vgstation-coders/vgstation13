@@ -255,7 +255,7 @@
 								log_game("[key_name(usr)] emagged [R.name] using robotic console!")
 								R.SetEmagged(TRUE)
 								var/mob/living/silicon/ai/A = usr
-								if(A.deployed)
+								if(A.is_in_shell)
 									to_chat(A.shell, "Hack successful. [R.name] now has access to illegal technology.")
 								else
 									to_chat(A, "Hack successful. [R.name] now has access to illegal technology.")
