@@ -273,8 +273,12 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			icon_initial = "roombot_battle"
 	else if (istype(W, /obj/item/clothing/head/maidhat))
 		var/obj/machinery/bot/cleanbot/roomba/meido/M = new(get_turf(src))
+
 		if(name != initial(name))
 			M.name = name
+		else
+			name = "maidbot"
+
 		M.install_pai(eject_integratedpai_if_present())
 		to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It makes a soft booping noise and its light blinks excitedly for a moment.</span>")
 		qdel(src)
