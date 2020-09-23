@@ -9,8 +9,8 @@
 	name = "Syndicate Traitors"
 	persistent = 0
 	role_category = /datum/role/traitor
-	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+	//protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
+	//						"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Mobile MMI")
 	required_candidates = 1
 	weight = 1
@@ -50,8 +50,8 @@
 /datum/dynamic_ruleset/roundstart/changeling
 	name = "Changelings"
 	role_category = /datum/role/changeling
-	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+	//protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+	//						"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
@@ -82,8 +82,8 @@
 /datum/dynamic_ruleset/roundstart/vampire
 	name = "Vampires"
 	role_category = /datum/role/vampire
-	protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
-							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+	//protected_from_jobs = list("Security Officer", "Warden","Merchant", "Head of Personnel", "Detective",
+	//						"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
 	restricted_from_jobs = list("AI","Cyborg","Mobile MMI", "Chaplain")
 	enemy_jobs = list("Security Officer","Detective", "Warden", "Head of Security", "Captain", "Chaplain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
@@ -203,7 +203,7 @@
 		if (M)
 			assigned += M
 			candidates -= M
-			var/datum/role/wizard/newWizard = new		
+			var/datum/role/wizard/newWizard = new
 			newWizard.AssignToRole(M.mind,1)
 			if(wizards_number % 2)
 				WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
