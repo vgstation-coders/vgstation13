@@ -354,7 +354,7 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/info = {"<h3>Central Command supply requisition form</h3<><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
-	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]<br>
+	 			MUST BE IN CRATE(S): [C.must_be_in_crate ? "YES" : "NO"]<br>
 	 			REQUESTED ITEMS:<br>
 	 			[C.getRequestsByName(1)]
 	 			WORTH: [C.worth] credits TO [C.acct_by_string]

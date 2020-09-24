@@ -947,7 +947,7 @@
 						src.malfai = usr
             
 					var/mob/target_malf
-					target_malf = malfai.deployed ? malfai.shell : malfai
+					target_malf = malfai.is_in_shell ? malfai.shell : malfai
 					to_chat(target_malf, "Hack complete. The APC is now under your exclusive control. [STATION_Z == z?"You now have [M.apcs] under your control.":"As this APC is not located on the station, it is not contributing to your control of it."]")
 					target_malf.handle_regular_hud_updates()
 

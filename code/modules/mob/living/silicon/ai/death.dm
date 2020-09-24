@@ -1,7 +1,6 @@
 /mob/living/silicon/ai/death(gibbed)
-	if(deployed)
-		shell.undeploy()
-		shell.mainframe = null
+	if(shell)
+		shell.close_connection()
 		shell.gib()
 	if(stat == DEAD)
 		return

@@ -25,8 +25,8 @@
 
 		if(isAI(M))	//Force the AI back if its in a shell
 			var/mob/living/silicon/ai/R = M
-			if(R.deployed)
-				R.shell.undeploy()
+			if(R.is_in_shell)
+				R.shell.close_connection()
 				R.shell.gib()		//Destroy the shell, they wont be needing it anymore
 	
 			
