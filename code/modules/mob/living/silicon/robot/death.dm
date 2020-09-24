@@ -89,3 +89,7 @@
 			ghostize() //Somehow their MMI has no brainmob or something even worse happened. Let's just save their soul from this hell.
 		mmi = null
 	..()
+
+/mob/living/silicon/robot/shell/Destroy()
+	close_connection()
+	..()

@@ -241,7 +241,7 @@
 	..()
 	candidates = candidates[CURRENT_LIVING_PLAYERS]
 	for(var/mob/living/player in candidates)
-		if(!isAI(player))
+		if(!isAI(player) && !isshell(player))
 			candidates -= player
 			continue
 		if(player.z == map.zCentcomm)
@@ -256,14 +256,22 @@
 		unction = ticker.mode.CreateFaction(/datum/faction/malf, null, 1)
 	if(!candidates || !candidates.len)
 		return 0
-	var/mob/living/silicon/ai/M = pick(candidates)
+	var/mob/living/silicon/P = pick(candidates)
+	var/mob/living/silicon/ai/M
+	if(isshell(P))
+		var/mob/living/silicon/robot/shell/S = P
+		S.undeploy()
+		M = S.mainframe
+	else
+		M = P
 	assigned += M
 	candidates -= M
 	var/datum/role/malfAI/malf = unction.HandleNewMind(M.mind)
 	malf.OnPostSetup()
 	malf.Greet()
 	for(var/mob/living/silicon/robot/R in M.connected_robots)
-		unction.HandleRecruitedMind(R.mind)
+		if(!isshell(R))
+			unction.HandleRecruitedMind(R.mind)
 	unction.forgeObjectives()
 	unction.AnnounceObjectives()
 	return 1

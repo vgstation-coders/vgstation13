@@ -312,6 +312,16 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/master_assistant = GetJob("Assistant")
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 
+	var/datum/job/borg = job_master.GetJob("Cyborg")	//spawn a completed cyborg shell if no borgs readied up
+	var/borg_count = borg.current_positions
+	if(!borg_count)
+		for(var/obj/effect/landmark/start/sloc in landmarks_list)
+			if(sloc.name != "Cyborg")
+				continue
+			else
+				new /obj/item/robot_parts/robot_suit/mapped(sloc.loc)
+				break
+
 	// For those who wanted to be assistant if their preferences were filled, here you go.
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
@@ -438,7 +448,12 @@ var/global/datum/controller/occupations/job_master
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
-			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
+
+			if (joined_late)
+				latejoiner_allowance += job.wage_payout + round(job.wage_payout/10)
+			else
+				station_allowance += job.wage_payout + round(job.wage_payout/10)//overhead of 10%
+
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"

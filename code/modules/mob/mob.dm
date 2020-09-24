@@ -1295,9 +1295,9 @@ Use this proc preferably at the end of an equipment loadout
 		'html/changelog.html'
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
+
 	if(prefs.lastchangelog != changelog_hash)
-		prefs.lastchangelog = changelog_hash
-		prefs.save_preferences()
+		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
 
 /mob/verb/observe()

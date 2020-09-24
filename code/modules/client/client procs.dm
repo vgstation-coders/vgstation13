@@ -208,6 +208,60 @@
 
 	send_resources()
 
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id, ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype, unbanned, unbanned_ckey, unbanned_datetime FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND unbanned_notification = 0;",
+		list(
+			"ckey" = ckey,
+			"address" = address,
+			"computer_id" = computer_id,
+	))
+
+	if(!query.Execute())
+		message_admins("Error: [query.ErrorMsg()]")
+		log_sql("Error: [query.ErrorMsg()]")
+		qdel(query)
+	else
+		while(query.NextRow())
+			var/id = query.item[1]
+			var/pckey = query.item[2]
+			//var/pip = query.item[3]
+			//var/pcid = query.item[4]
+			var/ackey = query.item[5]
+			var/reason = query.item[6]
+			var/expiration = query.item[7]
+			var/duration = query.item[8]
+			var/bantime = query.item[9]
+			//var/bantype = query.item[10]
+			var/unbanned = query.item[11]
+			var/unbanned_ckey = query.item[12]
+			var/unbanned_datetime = query.item[13]
+			if (unbanned && unbanned_ckey && unbanned_datetime)
+				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
+				to_chat(src, "<span class='notice'>This ban has been revoked by [unbanned_ckey] at time [unbanned_datetime].</span>")
+				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
+			else
+				to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([pckey]) were banned by [ackey] on [bantime] [duration > 0 ? "for [duration] minutes" : "permanently"].</b></span>")
+				if (duration > 0)
+					to_chat(src, "<span class='notice'>This ban expired on [expiration].</span>")
+				to_chat(src, "<span class='notice'>The reason was: '[reason]'.</span>")
+				to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+				to_chat(src, "<span class='notice'><b>This ban has expired. You can now play the game.</b></span>")
+
+			var/datum/DBQuery/update_query = SSdbcore.NewQuery("UPDATE erro_ban SET unbanned_notification = 1 WHERE id = [id]")
+			if(!update_query.Execute())
+				message_admins("Error: [update_query.ErrorMsg()]")
+				log_sql("Error: [update_query.ErrorMsg()]")
+				qdel(update_query)
+
+	if (prefs && prefs.show_warning_next_time)
+		to_chat(src, "<span class='notice'><b>You, or another user of this ckey ([ckey]) were warned by [prefs.warning_admin].</b></span>")
+		to_chat(src, "<span class='notice'>The reason was: '[prefs.last_warned_message]'.</span>")
+		to_chat(src, "<span class='notice'>For more information, you can ask admins in ahelps or at https://ss13.moe. </span>")
+		to_chat(src, "<span class='notice'><b>You can now play the game.</b></span>")
+		prefs.show_warning_next_time = 0
+		prefs.save_preferences_sqlite(src, src.ckey)
+
 	if(prefs.lastchangelog != changelog_hash) //bolds the changelog button on the interface so we know there are updates.
 		winset(src, "rpane.changelog", "background-color=#eaeaea;font-style=bold")
 		prefs.SetChangelog(ckey,changelog_hash)

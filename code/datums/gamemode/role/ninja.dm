@@ -291,10 +291,6 @@
 	cooldown = world.time + 10 SECONDS
 	return TRUE
 
-/obj/item/clothing/gloves/ninja/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
-
 /obj/item/clothing/gloves/ninja/proc/radial_check(mob/living/user)
 	if(!istype(user))
 		return FALSE
@@ -343,10 +339,8 @@
 				list("Make Shuriken", shuriken_icon, "Fabricate a new shuriken. Cost: [MAKE_SHURIKEN_COST]."),
 				list("Charge Sword", "radial_zap", "Reset the cooldown on your blade's teleport. Cost: [CHARGE_COST_MULTIPLIER]0 per second."),
 			)
-			var/event/menu_event = new(owner = user)
-			menu_event.Add(src, "radial_check_handler")
 
-			var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+			var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 			if(!radial_check(user))
 				return
 			switch(task)
