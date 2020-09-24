@@ -457,7 +457,7 @@
 	)
 	pda_type = /obj/item/device/pda/heads/nt_supreme
 	pda_slot = slot_belt
-	id_type = /obj/item/weapon/card/id/admin/nt_supreme
+	id_type = /obj/item/weapon/card/id/centcom/nt_supreme
 
 /datum/outfit/special/with_id/spec_ops_officer
 	outfit_name = "Special ops officer"

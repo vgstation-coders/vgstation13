@@ -807,11 +807,11 @@
 	access = get_all_accesses()
 	access += get_all_centcom_access()
 
-/obj/item/weapon/card/id/admin/nt_supreme
+/obj/item/weapon/card/id/centcom/nt_supreme
 	name = "Nanotrasen Supreme Commander ID card"
 	assignment = "Nanotrasen Supreme Commander"
 
-/obj/item/weapon/card/id/admin/nt_supreme/New()
+/obj/item/weapon/card/id/centcom/nt_supreme/New()
 	..()
 	access = get_all_accesses()
 	access += get_all_centcom_access()

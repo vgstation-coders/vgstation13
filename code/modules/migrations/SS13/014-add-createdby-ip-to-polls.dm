@@ -10,7 +10,7 @@
 
 	return TRUE
 
-/datum/migration/mysql/ss13/_013/down()
+/datum/migration/mysql/ss13/_014/down()
 	if(hasColumn("erro_poll_question","createdby_ip"))
 		return execute("ALTER TABLE erro_poll_question DROP COLUMN `createdby_ip` VARCHAR(32) NULL;");
 	else
