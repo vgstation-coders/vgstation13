@@ -202,8 +202,6 @@ rcd light flash thingy on matter drain
 		R.scramble_message = 1
 	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
 		rcd.disabled = 1
-	for(var/obj/item/mecha_parts/mecha_equipment/tool/red/red in red_tool_list)
-		red.disabled = 1
 	to_chat(user, "<span class='warning'>Electromagnetic pulse sent.</span>")
 
 
