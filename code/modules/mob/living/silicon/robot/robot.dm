@@ -1380,7 +1380,8 @@ var/list/cyborg_list = list()
 	mainframe.mind.transfer_to(src)
 	mainframe.is_in_shell = 1
 	is_being_controlled = 1
-	lawupdate = TRUE
+	connected_ai = mainframe
+	lawupdate = TRUE	
 	lawsync()
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)
