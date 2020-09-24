@@ -1367,6 +1367,7 @@ var/list/cyborg_list = list()
 		radio.keyslot = new /obj/item/device/encryptionkey/ai 
 		radio.recalculateChannels()
 		radio.subspace_transmission = TRUE
+	lawupdate = TRUE	
 	setup_PDA()
 
 /mob/living/silicon/robot/shell/proc/deploy()		//called right after the AI pops into the shell.
@@ -1381,7 +1382,6 @@ var/list/cyborg_list = list()
 	mainframe.is_in_shell = 1
 	is_being_controlled = 1
 	connected_ai = mainframe
-	lawupdate = TRUE	
 	lawsync()
 	undeployment_action.Grant(src)
 	destroy_action.Grant(src)

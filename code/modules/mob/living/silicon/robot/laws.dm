@@ -40,6 +40,7 @@
 
 /mob/living/silicon/robot/shell/show_laws(var/everyone = 0)
 	laws_sanity_check()
+	lawsync()
 	var/who
 	if (everyone)
 		who = world
