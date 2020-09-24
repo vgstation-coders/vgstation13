@@ -131,6 +131,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/set_teleport_pref,
 	/client/proc/deadchat_singularity,
 	/client/proc/view_all_rods,
+	/client/proc/add_centcomm_order,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances

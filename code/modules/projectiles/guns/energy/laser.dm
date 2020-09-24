@@ -10,6 +10,9 @@
 	origin_tech = Tc_COMBAT + "=3;" + Tc_MAGNETS + "=2"
 	projectile_type = "/obj/item/projectile/beam"
 
+/obj/item/weapon/gun/energy/laser/alien
+	name = "alien gun"
+
 /obj/item/weapon/gun/energy/laser/practice
 	name = "practice laser gun"
 	desc = "A modified version of the basic laser gun, this one fires less concentrated energy bolts designed for target practice."
@@ -159,6 +162,9 @@
 	power_supply.give(100)
 	update_icon()
 	return 1
+
+/obj/item/weapon/gun/energy/laser/captain/alien
+	name = "alien gun"
 
 
 

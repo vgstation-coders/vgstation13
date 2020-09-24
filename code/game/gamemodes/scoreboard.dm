@@ -273,7 +273,8 @@
 		messpoints = score["mess"] //If there are any messes, let's count them
 
 	//--Supply--
-	//var/shipping = score["stuffshipped"] * 5 //Does not work currently
+	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
+	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
 	//--Engineering--
@@ -331,7 +332,8 @@
 		score["crewscore"] -= comdeadpts*/
 
 	//Good Things
-	//score["crewscore"] += shipping
+	score["crewscore"] += plasmashipped
+	score["crewscore"] += shipping
 	score["crewscore"] += harvests
 	score["crewscore"] += mining
 	score["crewscore"] += eventpoints
@@ -518,6 +520,8 @@
 	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
 	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
+	<B>Plasma Shipped:</B> [score["plasmashipped"]] ([score["plasmashipped"] * 0.5] Points)<BR>
+	<B>Centcom Orders Fulfilled:</B> [score["stuffshipped"]] ([score["stuffshipped"] * 100] Points)<BR>
 	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
 	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>
@@ -602,9 +606,15 @@
 		if(score["dmgestdamage"])
 			dat += "<B>Most Battered Escapee:</B> [score["dmgestname"]], [score["dmgestjob"]]: [score["dmgestdamage"]] damage ([score["dmgestkey"]])<BR>"
 		if(score["richestcash"])
-			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: [score["richestcash"]] space credits ([score["richestkey"]])<BR>"
+			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: $[score["richestcash"]] ([score["richestkey"]])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
+
+	dat += "<B>Department Leaderboard:</B><BR>"
+	var/list/dept_leaderboard = get_dept_leaderboard()
+	for (var/i = 1 to dept_leaderboard.len)
+		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+
 	dat += {"<HR><BR>
 
 	<B><U>FINAL SCORE: [score["crewscore"]]</U></B><BR>"}

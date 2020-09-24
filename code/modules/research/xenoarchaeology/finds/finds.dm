@@ -586,9 +586,9 @@
 /datum/find/laser/spawn_item()
 
 	var/gun_base = pickweight(list(
-		/obj/item/weapon/gun/energy/laser			=	70,		//70% chance to be a normal gun
-		/obj/item/weapon/gun/energy/laser/captain	=	15,		//15% chance to be self-recharging
-		/obj/item/weapon/gun/energy/bison			= 	5,		//5% chance to be pump-charge
+		/obj/item/weapon/gun/energy/laser/alien				=	75,		//75% chance to be a normal gun
+		/obj/item/weapon/gun/energy/laser/captain/alien	=	20,		//20% chance to be self-recharging
+		/obj/item/weapon/gun/energy/bison/alien			= 	5,		//5% chance to be pump-charge
 	))
 	var/obj/item/weapon/gun/energy/new_gun = new gun_base
 	new_gun.icon = 'icons/obj/xenoarchaeology.dmi'

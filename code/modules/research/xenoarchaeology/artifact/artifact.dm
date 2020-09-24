@@ -140,6 +140,11 @@ var/list/boulders = list()
 					var/spawn_type = artifact_find.artifact_find_type
 					if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
+					else if (spawn_type == /obj/machinery/power/supermatter)
+						spawn(rand(10 MINUTES, 30 MINUTES))//The time it takes for Nanotrasen to detect it and make the Science dept an offer they cannot refuse.
+							if (!(locate(/datum/centcomm_order/department/science/supermatter) in SSsupply_shuttle.centcomm_orders))
+								SSsupply_shuttle.add_centcomm_order(new /datum/centcomm_order/department/science/supermatter)
+						new spawn_type(get_turf(src))
 					else
 						var/atom/movable/AM = new spawn_type(get_turf(src))
 						excavated_large_artifacts[artifact_find.artifact_id] = AM

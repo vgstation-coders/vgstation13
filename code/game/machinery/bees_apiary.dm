@@ -331,6 +331,7 @@ var/list/apiaries_list = list()
 		H.icon_state = "[species.prefix]honeycomb-base"
 		H.overlays += I
 		reagents.trans_to(H,reagents_per_honeycomb)
+		H.authentify()
 
 	return 1
 
