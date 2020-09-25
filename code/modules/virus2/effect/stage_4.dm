@@ -1024,6 +1024,7 @@
 	desc = "This symptom transplants the genetic code of the intial vector into new hosts."
 	badness = EFFECT_DANGER_HARMFUL
 	stage = 4
+	var/dna_saved
 	var/original_name
 	var/list/original_UI = list()
 	var/list/original_SE = list()
@@ -1035,24 +1036,26 @@
 	if(!iscarbon(mob))
 		return
 	var/mob/living/carbon/C = mob
-	if(!original_dna)
+	if(!dna_saved)
 		original_name = C.real_name
 		original_UI = C.dna.UI.Copy()
 		original_SE = C.dna.SE.Copy()
+		dna_saved = 1
 	to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
-	var/list/newUI = original_dna["UI"]
-	var/list/newSE = original_dna["SE"]
-	C.UpdateAppearance(newUI.Copy())
-	C.dna.SE = newSE.Copy()
+	C.UpdateAppearance(original_UI.Copy())
+	C.dna.SE = original_SE.Copy()
 	C.dna.UpdateSE()
-	C.real_name = original_dna["name"]
+	C.real_name = original_name
 	domutcheck(C)
 	activated = 1
 	
 
 /datum/disease2/effect/dnaspread/getcopy(var/datum/disease2/disease/disease)
 	var/datum/disease2/effect/dnaspread/new_e = ..(disease)
-	new_e.original_dna = original_dna
+	new_e.original_name = original_name
+	new_e.original_SE = original_SE
+	new_e.original_UI = original_UI
+	new_e.dna_saved = dna_saved
 	return new_e
 
 ////////////////////////////////////////////////
@@ -1064,12 +1067,12 @@
 	name = "Transformation Syndrome"
 	desc = "A symptom that transforms the infected into something else. This particular strain doesn't seem to do anything."
 	stage = 4
-	chance = 5
-	max_chance = 10
+	chance = 10
+	max_chance = 20
 	badness = EFFECT_DANGER_DEADLY
 	var/transform_chance = 100			//chance to transform, set to 100 for instant transformations
-	var/say_messages = list()			//messages said by the infected
-	var/infected_messages = list()		//messages seen by only the infected
+	var/list/say_messages = list()			//messages said by the infected
+	var/list/infected_messages = list()		//messages seen by only the infected
 	var/bloody = 0						//if set to 1 will create gibs on transformation
 
 /datum/disease2/effect/transformation/activate(var/mob/living/mob)

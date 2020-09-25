@@ -233,7 +233,7 @@
 	while(stage < 4)
 		if(reagents.has_reagent(SACID) || reagents.has_reagent(PACID) || reagents.has_reagent(ACIDSPIT) || reagents.has_reagent(ACIDTEA))
 			to_chat(src, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
-			return
+			return 0
 		if(iscarbon(src))
 			var/mob/living/carbon/H = src
 			switch(stage)
@@ -250,5 +250,7 @@
 					if(src.turn_into_statue(1))
 						simple_message("<span class='userdanger'>Your body turns to stone.</span>",\
 						"<span class='notice'>You've created a masterwork statue of David!</span>")
+						return 1
 		stage = stage + 1
 		sleep(25)
+

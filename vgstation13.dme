@@ -286,7 +286,6 @@
 #include "code\datums\ui_icons.dm"
 #include "code\datums\uplink_item.dm"
 #include "code\datums\diseases\appendicitis.dm"
-#include "code\datums\diseases\beesease.dm"
 #include "code\datums\diseases\brainrot.dm"
 #include "code\datums\diseases\cold.dm"
 #include "code\datums\diseases\cold9.dm"

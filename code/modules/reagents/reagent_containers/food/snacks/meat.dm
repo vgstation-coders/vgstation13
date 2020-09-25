@@ -308,7 +308,24 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()
 	if(ishuman(eater))
-		eater.contract_disease(new /datum/disease/wendigo_transformation)
+		var/datum/disease2/disease/D = new /datum/disease2/disease()
+		D.origin = "Wendigo Meat"
+		D.form = "Biological Curse"
+		D.max_stage = 1
+		D.stageprob = 0
+		D.stage_variance = 0
+		D.spread = 0
+		D.strength = rand(60,100)
+		D.robustness = 100
+
+		D.uniqueID = rand(0,9999)
+		D.subID = rand(0,9999)
+		D.effects += new /datum/disease2/effect/transformation/wendigo(D)
+		D.antigen = list(pick(antigen_family(ANTIGEN_ALIEN)))
+		D.antigen |= pick(antigen_family(ANTIGEN_ALIEN))
+
+		var/mob/living/M = eater
+		M.infect_disease2(D,1, "Wendigo Meat")
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	name = "gelatin"

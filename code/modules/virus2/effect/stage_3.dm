@@ -617,7 +617,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 /datum/disease2/effect/damage_converter/activate(var/mob/living/mob)
 	if(mob.getFireLoss() < mob.getMaxHealth() || mob.getBruteLoss() < mob.getMaxHealth())
-		var/get_damage = rand(1, 5)
+		var/get_damage = rand(1, 3)
 		mob.adjustFireLoss(-get_damage)
 		mob.adjustBruteLoss(-get_damage)
 		mob.adjustToxLoss(get_damage)

@@ -3477,19 +3477,39 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
-	var/diseasetype = /datum/disease/robotic_transformation
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/effect_type = /datum/disease2/effect/transformation/cyborg
 
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	to_chat(world, "test")
 	if(..())
 		return 1
-
+	to_chat(world, "test2")
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype, 1)
+		to_chat(world, "test3")
+		var/datum/disease2/disease/D = new /datum/disease2/disease()
+		D.origin = name
+		D.form = "Robotic Nanites"
+		D.max_stage = 1
+		D.stageprob = 0
+		D.stage_variance = 0
+		D.spread = 0
+		D.strength = rand(60,100)
+		D.robustness = 100
+
+		D.uniqueID = rand(0,9999)
+		D.subID = rand(0,9999)
+		D.effects += new effect_type(D)
+		D.antigen = list(pick(antigen_family(ANTIGEN_RARE)))
+		D.antigen |= pick(antigen_family(ANTIGEN_RARE))
+
+		M.infect_disease2(D,1, name)
+
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
-	diseasetype = /datum/disease/robotic_transformation/mommi
+	description = "Microscopic construction robots. They look more autistic than usual."
+	effect_type = /datum/disease2/effect/transformation/mommi
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3504,7 +3524,23 @@
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/xeno_transformation(0), 1)
+		var/datum/disease2/disease/D = new /datum/disease2/disease()
+		D.origin = name
+		D.form = "Foreign Microbes"
+		D.max_stage = 1
+		D.stageprob = 0
+		D.stage_variance = 0
+		D.spread = 0
+		D.strength = rand(60,100)
+		D.robustness = 100
+
+		D.uniqueID = rand(0,9999)
+		D.subID = rand(0,9999)
+		D.effects += new /datum/disease2/effect/transformation/xenomorph(D)
+		D.antigen = list(pick(antigen_family(ANTIGEN_ALIEN)))
+		D.antigen |= pick(antigen_family(ANTIGEN_ALIEN))
+
+		M.infect_disease2(D,1, name)
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -7596,17 +7632,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	if(volume >= minimal_dosage && prob(30))
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(locate(/datum/disease/petrification) in H.viruses)
-				return
-
-			var/datum/disease/D = new /datum/disease/petrification
-			D.holder = H
-			D.affected_mob = H
-			H.viruses += D
-		else if(!issilicon(M))
-			if(M.turn_into_statue(1)) //Statue forever
+		if(!issilicon(M))
+			if(M.slow_petrify()) //Statue forever
 				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
 
 //A chemical for curing petrification. It only works after you've been fully petrified
