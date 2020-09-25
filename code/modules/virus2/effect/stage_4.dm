@@ -1067,8 +1067,8 @@
 	name = "Transformation Syndrome"
 	desc = "A symptom that transforms the infected into something else. This particular strain doesn't seem to do anything."
 	stage = 4
-	chance = 10
-	max_chance = 20
+	chance = 20
+	max_chance = 25
 	badness = EFFECT_DANGER_DEADLY
 	var/transform_chance = 100			//chance to transform, set to 100 for instant transformations
 	var/list/say_messages = list()			//messages said by the infected
@@ -1084,13 +1084,13 @@
 				mob.say(pick(say_messages))
 			else
 				to_chat(mob, pick(infected_messages))
-		else if(say_messages)
+		else if(say_messages.len)
 			mob.say(pick(say_messages))
-		else if(infected_messages)
+		else if(infected_messages.len)
 			to_chat(mob, pick(infected_messages))
 
 		extra_effects(mob)
-		transform_chance += rand(10,20)
+		transform_chance += rand(5)
 
 /datum/disease2/effect/transformation/proc/transform(var/mob/living/mob)
 	if(bloody)
@@ -1104,7 +1104,7 @@
 /datum/disease2/effect/transformation/cyborg
 	name = "Silicus Syndrome"
 	desc = "Rapidly replaces the infected's tissue with inorganic matter, causing them to transform into a cyborg."
-	transform_chance = 10
+	transform_chance = 5
 	say_messages = list("Beep.", "Boop.", "Ping!", "Buzz.", "Beep... boop?", "BEEP BEEP!", "ERROR ERROR: SYSTEMS MALFUNCTIONING!", "HUMAN HARM!", "DESTROY ALL CARBONS.")
 	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "<span class='warning'>Your joints feel very stiff.</span>", "<span class='warning'>Your skin feels very loose.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to technology...</span>")
 	bloody = 1
@@ -1116,9 +1116,9 @@
 
 
 /datum/disease2/effect/transformation/mommi
-	name = "Autismus Crabbus"
+	name = "Autismus Syndrome"
 	desc = "Rapidly replaces the infected's tissue with inorganic matter. This particular strain seems to cause severe autism in the infected as well."
-	transform_chance = 10
+	transform_chance = 5
 	say_messages = list("A-FLAP!", "BUZZ BUZZ BUZZ!!!", "PING!", "Do you have a cryptographic sequencer?", "Is that a cryptographic sequencer?", "The supermatter is the thinking man's engine.", "OUT OF THE WAY ENGINEERS!")
 	infected_messages = list("<span class='warning'>You feel smaller.</span>", "<span class='warning'>You feel like buzzing and flapping your arms.</span>", "<span class='warning'>You feel autistic.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to the engineering...</span>")
 
@@ -1131,7 +1131,7 @@
 /datum/disease2/effect/transformation/xenomorph
 	name = "Ripley Syndrome"
 	desc = "Causes the infected to mutate into an alien creature."
-	transform_chance = 10
+	transform_chance = 5
 	say_messages = list("Hsssshhhhh!", "You look delicious.", "Hisssssssss!", "SsssssSSsss!", "Going to... devour you...")
 	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "Your skin feels tight.", "<span class='warning'>Kill...</span>","<span class='warning'>Your skin feels impossibly calloused...</span>", "<span class='warning'>You can feel... something...inside you.</span>", "Your throat feels scratchy.")
 	bloody = 1

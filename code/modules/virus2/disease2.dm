@@ -525,7 +525,9 @@ var/global/list/disease2_list = list()
 
 	// Activating the disease's symptoms
 	for(var/datum/disease2/effect/e in effects)
+		to_chat(world, "test2")
 		if (e.can_run_effect(immune_data[1]))
+			to_chat(world, "test3")
 			e.run_effect(mob)
 
 	var/temp_limit = BODYTEMP_HEAT_DAMAGE_LIMIT

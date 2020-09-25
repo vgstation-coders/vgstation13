@@ -307,6 +307,10 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()
+	var/mob/living/M = eater
+	for(var/datum/disease2/disease/DI in M.virus2)	
+		if(DI.form == "Wendigo Curse")
+			return
 	if(ishuman(eater))
 		var/datum/disease2/disease/D = new /datum/disease2/disease()
 		D.origin = "Wendigo Meat"
@@ -314,9 +318,12 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		D.max_stage = 1
 		D.stageprob = 0
 		D.stage_variance = 0
-		D.spread = 0
+		D.spread = SPREAD_BLOOD
 		D.strength = rand(60,100)
 		D.robustness = 100
+		D.mutation_modifier = 0
+		D.infectionchance = 0
+		D.infectionchance_base = 0
 
 		D.uniqueID = rand(0,9999)
 		D.subID = rand(0,9999)
@@ -324,7 +331,6 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 		D.antigen = list(pick(antigen_family(ANTIGEN_ALIEN)))
 		D.antigen |= pick(antigen_family(ANTIGEN_ALIEN))
 
-		var/mob/living/M = eater
 		M.infect_disease2(D,1, "Wendigo Meat")
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime

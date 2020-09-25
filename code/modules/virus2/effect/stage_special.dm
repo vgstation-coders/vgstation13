@@ -31,17 +31,18 @@
 	stage = 1
 	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
-/datum/disease2/effect/blob_spores
-	name = "Blob Spores"
-	desc = "They seem inert for the most part, but appear to randomly pulsate once in a while."
-	encyclopedia = "They will cause their carrier to spawn blob upon their death, potentially more the longer the pathogen matured in the host's body. Some additional blob spores may even emanate from their body."
+/datum/disease2/effect/transformation/mommi/single
 	stage = 1
-	badness = EFFECT_DANGER_HINDRANCE
-	restricted = 1//symptoms won't randomly mutate into this one
-	chance = 100
-	max_chance = 100
-	var/looks = "new"
+	restricted = 1
 
+/datum/disease2/effect/transformation/cyborg/single
+	stage = 1
+	restricted = 1
+
+/datum/disease2/effect/transformation/xenomorph/single
+	stage = 1
+	restricted = 1
+	
 /datum/disease2/effect/transformation/wendigo
 	name = "Wendigo Curse"
 	desc = "UNKNOWN"
@@ -61,7 +62,6 @@
 		if(prob(20))
 			H.vomit()
 
-
 /datum/disease2/effect/transformation/wendigo/transform(var/mob/living/mob)
 	..()
 	if(ishuman(mob))
@@ -70,6 +70,19 @@
 		W.names += H.real_name
 		H.drop_all()
 		qdel(H)
+
+
+/datum/disease2/effect/blob_spores
+	name = "Blob Spores"
+	desc = "They seem inert for the most part, but appear to randomly pulsate once in a while."
+	encyclopedia = "They will cause their carrier to spawn blob upon their death, potentially more the longer the pathogen matured in the host's body. Some additional blob spores may even emanate from their body."
+	stage = 1
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 1//symptoms won't randomly mutate into this one
+	chance = 100
+	max_chance = 100
+	var/looks = "new"
+
 
 /datum/disease2/effect/blob_spores/on_death(var/mob/living/carbon/mob)
 	//first of all is there a blob on top of us
