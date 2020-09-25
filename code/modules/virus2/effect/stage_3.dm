@@ -605,3 +605,21 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		new_organ.Insert(H)
 
 		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [new_organ.parent_organ].")
+
+
+/datum/disease2/effect/damage_converter
+	name = "Toxic Compensation"
+	desc = "Stimulates cellular growth within the body, causing it to regenerate tissue damage. Repair done by these cells causes toxins to build up in the body."
+	badness = EFFECT_DANGER_FLAVOR
+	stage = 3
+	chance = 10
+	max_chance = 50
+
+/datum/disease2/effect/damage_converter/activate(var/mob/living/mob)
+	if(mob.getFireLoss() < mob.getMaxHealth() || mob.getBruteLoss() < mob.getMaxHealth())
+		var/get_damage = rand(1, 5)
+		mob.adjustFireLoss(-get_damage)
+		mob.adjustBruteLoss(-get_damage)
+		mob.adjustToxLoss(get_damage)
+		
+
