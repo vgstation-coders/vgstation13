@@ -50,8 +50,8 @@
 	restricted = 1
 	chance = 100
 	max_chance = 100
-	transformation_chance = 5
-	infected_messages = list("<span class = 'warning'>Your stomach grumbles.</span>", "<span class = 'notice'>You feel peckish.</span>", "<span class = 'warning'>So hungry.</span>", "<span class = 'notice'>Your stomach feels empty.</span>", "<span class = 'warning'>Hunger...</span>", "<span class = 'warning'>Our mind hurts.</span>", 
+	transform_chance = 5
+	infected_messages = list("<span class = 'warning'>Your stomach grumbles.</span>", "<span class = 'notice'>You feel peckish.</span>", "<span class = 'warning'>So hungry.</span>", "<span class = 'notice'>Your stomach feels empty.</span>", "<span class = 'warning'>Hunger...</span>", "<span class = 'warning'>Our mind hurts.</span>") 
 
 /datum/disease2/effect/transformation/wendigo/extra_effects(var/mob/living/mob)
 	if(ishuman(mob))
@@ -64,10 +64,12 @@
 
 /datum/disease2/effect/transformation/wendigo/transform(var/mob/living/mob)
 	..()
-	var/mob/living/simple_animal/hostile/wendigo/human/W = new /mob/living/simple_animal/hostile/wendigo/human(H.loc)
-	W.names += H.real_name
-	H.drop_all()
-	qdel(H)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		var/mob/living/simple_animal/hostile/wendigo/human/W = new /mob/living/simple_animal/hostile/wendigo/human(H.loc)
+		W.names += H.real_name
+		H.drop_all()
+		qdel(H)
 
 /datum/disease2/effect/blob_spores/on_death(var/mob/living/carbon/mob)
 	//first of all is there a blob on top of us

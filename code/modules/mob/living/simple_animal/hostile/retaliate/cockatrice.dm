@@ -91,11 +91,9 @@
 		add_logs(src, L, "instantly petrified", admin = L.ckey ? TRUE : FALSE)
 
 	else if(ishuman(L))
-		var/mob/living/carbon/human/H = L
 		add_logs(src, L, "petrified", admin = L.ckey ? TRUE : FALSE)
 
-		var/mob/living/mob = L
-		L.petrify()
+		L.slow_petrify()
 
 
 	var/msg = pick("\The [src] hisses at [L]!", "\The [src] hisses angrily at [L]!")
@@ -230,7 +228,7 @@
 	else if(isliving(L))
 		return 1
 
-/mob/living/proc/petrify()
+/mob/living/proc/slow_petrify()
 	var/stage = 1
 	while(stage < 4)
 		if(reagents.has_reagent(SACID) || reagents.has_reagent(PACID) || reagents.has_reagent(ACIDSPIT) || reagents.has_reagent(ACIDTEA))
@@ -241,16 +239,16 @@
 			switch(stage)
 				if(1)
 					//Second message is shown to hallucinating mobs
-					src.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+					simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
 					"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
 					H.pain_shock_stage += 300
 				if(2)
-					affected_mob.simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
+					simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
 					"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
 					H.Stun(3)
 				if(3)
-					if(affected_mob.turn_into_statue(1))
-						affected_mob.simple_message("<span class='userdanger'>Your body turns to stone.</span>",\
+					if(src.turn_into_statue(1))
+						simple_message("<span class='userdanger'>Your body turns to stone.</span>",\
 						"<span class='notice'>You've created a masterwork statue of David!</span>")
 		stage = stage + 1
-		sleep(10)
+		sleep(25)

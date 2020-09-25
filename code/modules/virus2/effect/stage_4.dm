@@ -1024,7 +1024,9 @@
 	desc = "This symptom transplants the genetic code of the intial vector into new hosts."
 	badness = EFFECT_DANGER_HARMFUL
 	stage = 4
-	var/list/original_dna = list()
+	var/original_name
+	var/list/original_UI = list()
+	var/list/original_SE = list()
 	var/activated = 0
 	
 /datum/disease2/effect/dnaspread/activate(var/mob/living/mob)
@@ -1034,18 +1036,19 @@
 		return
 	var/mob/living/carbon/C = mob
 	if(!original_dna)
-		original_dna["name"] = C.real_name
-		original_dna["UI"] = C.dna.UI.Copy()
-		original_dna["SE"] = C.dna.SE.Copy()
-	to_chat(affected_mob, "<span class='warning'>You don't feel like yourself..</span>")
+		original_name = C.real_name
+		original_UI = C.dna.UI.Copy()
+		original_SE = C.dna.SE.Copy()
+	to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
 	var/list/newUI = original_dna["UI"]
 	var/list/newSE = original_dna["SE"]
 	C.UpdateAppearance(newUI.Copy())
 	C.dna.SE = newSE.Copy()
 	C.dna.UpdateSE()
-	C.real_name = strain_data["name"]
+	C.real_name = original_dna["name"]
 	domutcheck(C)
 	activated = 1
+	
 
 /datum/disease2/effect/dnaspread/getcopy(var/datum/disease2/disease/disease)
 	var/datum/disease2/effect/dnaspread/new_e = ..(disease)
@@ -1061,6 +1064,8 @@
 	name = "Transformation Syndrome"
 	desc = "A symptom that transforms the infected into something else. This particular strain doesn't seem to do anything."
 	stage = 4
+	chance = 5
+	max_chance = 10
 	badness = EFFECT_DANGER_DEADLY
 	var/transform_chance = 100			//chance to transform, set to 100 for instant transformations
 	var/say_messages = list()			//messages said by the infected
@@ -1071,7 +1076,7 @@
 	if (prob(transform_chance))
 		transform(mob)
 	else
-		if(say_messages && infected_messages)	
+		if(say_messages.len && infected_messages.len)	
 			if(prob(50))
 				mob.say(pick(say_messages))
 			else
@@ -1082,7 +1087,7 @@
 			to_chat(mob, pick(infected_messages))
 
 		extra_effects(mob)
-		transform_chance += rand(5,15)
+		transform_chance += rand(10,20)
 
 /datum/disease2/effect/transformation/proc/transform(var/mob/living/mob)
 	if(bloody)
@@ -1096,7 +1101,7 @@
 /datum/disease2/effect/transformation/cyborg
 	name = "Silicus Syndrome"
 	desc = "Rapidly replaces the infected's tissue with inorganic matter, causing them to transform into a cyborg."
-	transformation_chance = 10
+	transform_chance = 10
 	say_messages = list("Beep.", "Boop.", "Ping!", "Buzz.", "Beep... boop?", "BEEP BEEP!", "ERROR ERROR: SYSTEMS MALFUNCTIONING!", "HUMAN HARM!", "DESTROY ALL CARBONS.")
 	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "<span class='warning'>Your joints feel very stiff.</span>", "<span class='warning'>Your skin feels very loose.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to technology...</span>")
 	bloody = 1
@@ -1110,7 +1115,7 @@
 /datum/disease2/effect/transformation/mommi
 	name = "Autismus Crabbus"
 	desc = "Rapidly replaces the infected's tissue with inorganic matter. This particular strain seems to cause severe autism in the infected as well."
-	transformation_chance = 10
+	transform_chance = 10
 	say_messages = list("A-FLAP!", "BUZZ BUZZ BUZZ!!!", "PING!", "Do you have a cryptographic sequencer?", "Is that a cryptographic sequencer?", "The supermatter is the thinking man's engine.", "OUT OF THE WAY ENGINEERS!")
 	infected_messages = list("<span class='warning'>You feel smaller.</span>", "<span class='warning'>You feel like buzzing and flapping your arms.</span>", "<span class='warning'>You feel autistic.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to the engineering...</span>")
 
@@ -1123,7 +1128,7 @@
 /datum/disease2/effect/transformation/xenomorph
 	name = "Ripley Syndrome"
 	desc = "Causes the infected to mutate into an alien creature."
-	transformation_chance = 10
+	transform_chance = 10
 	say_messages = list("Hsssshhhhh!", "You look delicious.", "Hisssssssss!", "SsssssSSsss!", "Going to... devour you...")
 	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "Your skin feels tight.", "<span class='warning'>Kill...</span>","<span class='warning'>Your skin feels impossibly calloused...</span>", "<span class='warning'>You can feel... something...inside you.</span>", "Your throat feels scratchy.")
 	bloody = 1
