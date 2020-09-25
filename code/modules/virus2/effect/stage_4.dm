@@ -929,7 +929,6 @@
 	stage = 4
 	badness = EFFECT_DANGER_HARMFUL
 	max_multiplier = 3
-	restricted = 1//symptoms won't randomly mutate into this one
 	var/announced = FALSE
 	chance = 4
 	max_chance = 12
@@ -1103,3 +1102,73 @@
 		if (!announced)
 			emitter.visible_message("<span class='danger'>Superheated beams begin to stream right out of \the [emitter]'s eyes!</span>","<span class='danger'>Beams are coming out of your eyes, holy shit!</span>")
 			announced = TRUE
+
+/datum/disease2/effect/transformation
+	name = "Transformation Syndrome"
+	desc = "A symptom that transforms the infected into something else. This particular strain doesn't seem to do anything."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	var/transform_chance = 100			//chance to transform, set to 100 for instant transformations
+	var/say_messages = list()			//messages said by the infected
+	var/infected_messages = list()		//messages seen by only the infected
+	var/bloody = 0						//if set to 1 will create gibs on transformation
+
+/datum/disease2/effect/transformation/activate(var/mob/living/mob)
+	if (prob(transform_chance))
+		transform()
+	else
+		if(say_messages && infected_messages)	
+			if(prob(50))
+				mob.say(pick(say_messages))
+			else
+				to_chat(mob, pick(infected_messages))
+		else if(say_messages)
+			mob.say(pick(say_messages))
+		else if(infected_messages)
+			to_chat(mob, pick(infected_messages))
+
+		transform_chance += rand(5,15)
+
+/datum/disease2/effect/transformation/proc/transform(var/mob/living/mob)
+	if(bloody)
+		gibs(mob)
+		to_chat(mob, "<span class = 'danger'>[mob.name] suddenly mutates in a shower of gore!</span>")
+
+/datum/disease2/effect/transformation/cyborg
+	name = "Silicus Syndrome"
+	desc = "Rapidly replaces the infected's tissue with inorganic matter, causing them to transform into a cyborg."
+	transformation_chance = 10
+	say_messages = list("Beep.", "Boop.", "Ping!", "Buzz.", "Beep... boop?", "BEEP BEEP!", "ERROR ERROR: SYSTEMS MALFUNCTIONING!", "HUMAN HARM!", "DESTROY ALL CARBONS.")
+	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "<span class='warning'>Your joints feel very stiff.</span>", "<span class='warning'>Your skin feels very loose.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to technology...</span>")
+	bloody = 1
+
+/datum/disease2/effect/transformation/cyborg/transform()
+	..()
+	var/mob/M = mob
+	M.Robotize()
+
+/datum/disease2/effect/transformation/mommi
+	name = "Autismus Crabbus"
+	desc = "Rapidly replaces the infected's tissue with inorganic matter. This particular strain seems to cause severe autism in the infected as well."
+	transformation_chance = 10
+	say_messages = list("A-FLAP!", "BUZZ BUZZ BUZZ!!!", "PING!", "Do you have a cryptographic sequencer?", "Is that a cryptographic sequencer?", "The supermatter is the thinking man's engine.", "OUT OF THE WAY ENGINEERS!")
+	infected_messages = list("<span class='warning'>You feel smaller.</span>", "<span class='warning'>You feel like buzzing and flapping your arms.</span>", "<span class='warning'>You feel autistic.</span>", "<span class='warning'>Your skin feels as if it's about to burst off...</span>", "Your skin feels loose.", "<span class='danger'>You feel a closer connection to the engineering...</span>")
+
+/datum/disease2/effect/transformation/mommi/transform()
+	..()
+	var/mob/M = mob
+	M.MoMMIfy()
+
+/datum/disease2/effect/transformation/xenomorph
+	name = "Ripley Syndrome"
+	desc = "Causes the infected to mutate into an alien creature."
+	transformation_chance = 10
+	say_messages = list("Hsssshhhhh!", "You look delicious.", "Hisssssssss!", "SsssssSSsss!", "Going to... devour you...")
+	infected_messages = list("<span class='warning'>You can feel something move...inside.</span>", "Your skin feels tight.", "<span class='warning'>Kill...</span>","<span class='warning'>Your skin feels impossibly calloused...</span>", "<span class='warning'>You can feel... something...inside you.</span>", "Your throat feels scratchy.")
+	bloody = 1
+
+/datum/disease2/effect/transformation/xenomorph/transform(var/mob/living/mob)
+	..()
+	var/mob/M = mob
+	M.Alienize()
+

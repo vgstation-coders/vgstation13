@@ -42,6 +42,18 @@
 	max_chance = 100
 	var/looks = "new"
 
+/datum/disease2/effect/transformation/wendigo
+	name = "Wendigo Curse"
+	desc = "UNKNOWN"
+	stage = 1
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 1
+	chance = 100
+	max_chance = 100
+	infected_messages = list("<span class = 'warning'>Your stomach grumbles.</span>", "<span class = 'notice'>You feel peckish.</span>", "<span class = 'warning'>So hungry.</span>"
+
+
+
 /datum/disease2/effect/blob_spores/on_death(var/mob/living/carbon/mob)
 	//first of all is there a blob on top of us
 	var/turf/T = get_turf(mob)
