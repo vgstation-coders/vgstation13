@@ -1,23 +1,5 @@
 ////////////////////////SPECIAL/////////////////////////////////
 
-
-/*/datum/disease2/effect/alien
-	name = "Unidentified Foreign Body"
-	stage = 4
-	activate(var/mob/living/carbon/mob)
-		to_chat(mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
-		mob.adjustToxLoss(10)
-		mob.updatehealth()
-		if(prob(40))
-			if(mob.client)
-				mob.client.mob = new/mob/living/carbon/alien/larva(mob.loc)
-			else
-				new/mob/living/carbon/alien/larva(mob.loc)
-			var/datum/disease2/disease/D = mob:virus2
-			mob:gib()
-			del D*/
-
-
 //Vampire Diseased Touch
 /datum/disease2/effect/organs/vampire
 	stage = 1
@@ -30,46 +12,6 @@
 /datum/disease2/effect/magnitis/single
 	stage = 1
 	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
-
-/datum/disease2/effect/transformation/mommi/single
-	stage = 1
-	restricted = 1
-
-/datum/disease2/effect/transformation/cyborg/single
-	stage = 1
-	restricted = 1
-
-/datum/disease2/effect/transformation/xenomorph/single
-	stage = 1
-	restricted = 1
-	
-/datum/disease2/effect/transformation/wendigo
-	name = "Wendigo Curse"
-	desc = "UNKNOWN"
-	stage = 1
-	badness = EFFECT_DANGER_DEADLY
-	restricted = 1
-	chance = 100
-	max_chance = 100
-	transform_chance = 5
-	infected_messages = list("<span class = 'warning'>Your stomach grumbles.</span>", "<span class = 'notice'>You feel peckish.</span>", "<span class = 'warning'>So hungry.</span>", "<span class = 'notice'>Your stomach feels empty.</span>", "<span class = 'warning'>Hunger...</span>", "<span class = 'warning'>Our mind hurts.</span>") 
-
-/datum/disease2/effect/transformation/wendigo/extra_effects(var/mob/living/mob)
-	if(ishuman(mob))
-		var/mob/living/carbon/human/H = mob
-		H.hallucination += 5
-		H.burn_calories(15)
-		if(prob(20))
-			H.vomit()
-
-/datum/disease2/effect/transformation/wendigo/transform(var/mob/living/mob)
-	..()
-	if(ishuman(mob))
-		var/mob/living/carbon/human/H = mob
-		var/mob/living/simple_animal/hostile/wendigo/human/W = new /mob/living/simple_animal/hostile/wendigo/human(H.loc)
-		W.names += H.real_name
-		H.drop_all()
-		qdel(H)
 
 
 /datum/disease2/effect/blob_spores
