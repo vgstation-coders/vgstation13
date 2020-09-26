@@ -269,6 +269,7 @@
 		"Ping!", 
 		"Buzz.",
 		"Buzz...", 
+		"Kkkiiiill mmee...",
 		"HUMAN HARM!",
 		"DESTROY ALL CARBONS!"
 	)
@@ -280,7 +281,6 @@
 		"You can feel... something... inside you.",
 		"Beep...?",
 		"Boop...?",
-		"Kkkiiiill mmme...",
 		"You feel hated.",
 		"You feel a strong urge to prevent human harm...",
 		"You feel a closer connection to technology...",
@@ -291,7 +291,7 @@
 	if(prob(50)) 
 		mob.say(pick(say_messages))
 	else
-		to_chat(mob, "<span class='danger'>[pick(host_messages)]</span>")
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
 		
 
 /datum/disease2/effect/mommi_warning
@@ -329,7 +329,7 @@
 	if(prob(50)) 
 		mob.say(pick(say_messages))
 	else
-		to_chat(mob, "<span class='danger'>[pick(host_messages)]</span>")
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
 
 /datum/disease2/effect/wendigo_warning
 	name = "Eldritch Corruption"
@@ -350,7 +350,7 @@
 	)
 
 /datum/disease2/effect/wendigo_warning/activate(var/mob/living/mob)
-	to_chat(mob, "<span class='danger'>[pick(host_messages)]</span>")
+	to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
 
 /datum/disease2/effect/xenomorph_warning
 	name = "Foreign-Impulse Syndrome"
@@ -378,11 +378,11 @@
 		"You feel... different...",
 	)
 
-/datum/disease2/effect/mommi_warning/activate(var/mob/living/mob)
+/datum/disease2/effect/xenomorph_warning/activate(var/mob/living/mob)
 	if(prob(50)) 
 		mob.say(pick(say_messages))
 	else
-		to_chat(mob, "<span class='danger'>[pick(host_messages)]</span>")
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
 	
 	//Punch people around the infected.
 	var/list/targets = list()

@@ -3477,42 +3477,16 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
-	var/effect_type = /datum/disease2/effect/transformation/cyborg/single
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
-	for(var/datum/disease2/disease/DI in M.virus2)
-		if(DI.form == "Robotic Nanites")
-			return
-	if((prob(10) && method == TOUCH) || method == INGEST)
-		var/datum/disease2/disease/D = new /datum/disease2/disease()
-		D.origin = name
-		D.form = "Robotic Nanites"
-		D.max_stage = 1
-		D.stageprob = 0
-		D.stage_variance = 0
-		D.spread = SPREAD_BLOOD
-		D.strength = rand(60,100)
-		D.robustness = 100
-		D.mutation_modifier = 0
-		D.infectionchance = 0
-		D.infectionchance_base = 0
-
-		D.uniqueID = rand(0,9999)
-		D.subID = rand(0,9999)
-		D.effects += new effect_type(D)
-		D.antigen = list(pick(antigen_family(ANTIGEN_RARE)))
-		D.antigen |= pick(antigen_family(ANTIGEN_RARE))
-
-		M.infect_disease2(D,1, name)
 
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
 	description = "Microscopic construction robots. They look more autistic than usual."
-	effect_type = /datum/disease2/effect/transformation/mommi/single
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3525,30 +3499,6 @@
 
 	if(..())
 		return 1
-	for(var/datum/disease2/disease/DI in M.virus2)	
-		if(DI.form == "Foreign Microbes")
-			return
-	if((prob(10) && method == TOUCH) || method == INGEST)
-		var/datum/disease2/disease/D = new /datum/disease2/disease()
-		D.origin = name
-		D.form = "Foreign Microbes"
-		D.max_stage = 1
-		D.stageprob = 0
-		D.stage_variance = 0
-		D.spread = SPREAD_BLOOD
-		D.strength = rand(60,100)
-		D.robustness = 100
-		D.mutation_modifier = 0
-		D.infectionchance = 0
-		D.infectionchance_base = 0
-
-		D.uniqueID = rand(0,9999)
-		D.subID = rand(0,9999)
-		D.effects += new /datum/disease2/effect/transformation/xenomorph/single(D)
-		D.antigen = list(pick(antigen_family(ANTIGEN_ALIEN)))
-		D.antigen |= pick(antigen_family(ANTIGEN_ALIEN))
-
-		M.infect_disease2(D,1, name)
 
 /datum/reagent/nanobots
 	name = "Nanobots"

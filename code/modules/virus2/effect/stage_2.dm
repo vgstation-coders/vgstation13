@@ -583,3 +583,38 @@
 	var/message=speech.message
 	message = uppertext(message + "!")
 	speech.message = message
+
+/datum/disease2/effect/cyborg_vomit
+	name = "Oily Syndrome"
+	desc = "Causes the infected to internally synthesize oil and other inorganic material."
+	stage = 3
+	badness = EFFECT_DANGER_ANNOYING 
+	restricted = 2
+
+/datum/disease2/effect/cyborg_vomit/activate(var/mob/living/mob)
+	if(prob(90))		//90% chance for just oil
+		mob.visible_message("<span class='danger'>[mob.name] vomits up some oil!</span>")
+		mob.adjustToxLoss(-3)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(get_turf(mob))
+		playsound(O, 'sound/effects/splat.ogg', 50, 1)
+		mob.Stun(5)
+	else				//10% chance for a random bot!
+		to_chat(mob, "<span class='danger'>You feel like something's about to burst out of you!</span>")
+		sleep(100)
+		var/list/possible_bots = list(
+			/obj/machinery/bot/cleanbot,
+			/obj/machinery/bot/cleanbot/roomba,
+			/obj/machinery/bot/bloodbot,
+			/obj/machinery/bot/medbot,
+			/obj/machinery/bot/secbot,
+			/obj/machinery/bot/floorbot,
+			/obj/machinery/bot/buttbot
+		)
+		var/chosen_bot = pick(possible_bots)
+		var/obj/machinery/bot/B = new chosen_bot(get_turf(mob))
+		new /obj/effect/decal/cleanable/blood(get_turf(mob))
+		mob.visible_message("<span class ='danger'>A [B.name] bursts out of [mob.name]'s mouth!</span>")
+		playsound(B, 'sound/effects/splat.ogg', 50, 1)
+		mob.audible_scream()
+		mob.adjustBruteLoss(15)
+		mob.Stun(10)

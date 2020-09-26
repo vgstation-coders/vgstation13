@@ -1160,7 +1160,7 @@
 	name = "Forced Humanity Syndrome"
 	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
 	stage = 4
-	bandess = EFFECT_DANGER_HARMFUL
+	badness = EFFECT_DANGER_HARMFUL
 
 /datum/disease2/effect/human/activate(var/mob/living/mob)
 	if(ishuman(mob) && !isjusthuman(mob))

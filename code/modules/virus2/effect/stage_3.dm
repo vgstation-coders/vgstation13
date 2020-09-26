@@ -621,5 +621,42 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		mob.adjustFireLoss(-get_damage)
 		mob.adjustBruteLoss(-get_damage)
 		mob.adjustToxLoss(get_damage)
+
+
+/datum/disease2/effect/cyborg_limbs
+	name = "Metallica Syndrome"
+	desc = "Rapidly replaces some organic tissue in the body, causing limbs and other organs to become robotic."
+	stage = 3
+	badness = EFFECT_DANGER_HARMFUL
+	restricted = 2
+
+/datum/disease2/effect/cyborg_limbs/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+
+	var/mob/living/carbon/human/H = mob
+
+	var/list/valid_external_organs = list()
+	for(var/datum/organ/external/E in H.organs)
+		if(!E.is_robotic())
+			valid_external_organs += E
+
+	var/list/valid_internal_organs = list()
+	for(var/datum/organ/internal/I in H.internal_organs)
+		if(I.name != "brain" && !I.robotic)
+			valid_internal_organs += I
+
+	if(prob(75) || valid_external_organs.len) 
 		
+		var/datum/organ/external/E = pick(valid_external_organs)
+		E.status |= ORGAN_ROBOT
+		H.update_body()
+
+	else if(valid_internal_organs.len)
+
+		var/datum/organ/internal/I = pick(valid_internal_organs)
+		I.mechanize()
+		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [I.parent_organ].")
+
+
 
