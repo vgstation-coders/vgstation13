@@ -169,4 +169,19 @@
 
 	undeploy()
 
+/mob/living/silicon/robot/shell/verb/toggle_ai_mentions()
+	set category = "Robot Commands"
+	set name = "Toggle AI Mentions"
+	set desc = "Toggles highlighting and beeping on AI mentions"
+
+	if(isUnconscious())
+		return
+
+	mainframe.mentions_on = !mainframe.mentions_on
+
+	if(!mainframe.mentions_on)
+		to_chat(src, "AI mentions deactivated.")
+	else
+		to_chat(src, "AI mentions activated.")
+
 

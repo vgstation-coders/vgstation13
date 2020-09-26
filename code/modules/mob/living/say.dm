@@ -269,13 +269,15 @@ var/list/headset_modes = list(
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
 	//AI mentions
-	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+	if((isAI(src)  || isshell(src)) && speech.frequency && !(findtext(speech.job,"AI")<>0) && (speech.name != src.name))
 		var/mob/living/silicon/ai/ai = src
-		if(ai.mentions_on)
-			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+		var/mob/living/silicon/robot/shell/shell = src
+		if((isAI(src) && ai.mentions_on) || (isshell(src) && shell.mainframe.mentions_on))
+			if(findtextEx(speech.message, "AI") || findtext(rendered_message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
 				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
-				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
+				if(!isshell(src))
+					rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
 
 	// Runechat messages
 	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
