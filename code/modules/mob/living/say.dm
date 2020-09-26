@@ -273,7 +273,7 @@ var/list/headset_modes = list(
 		var/mob/living/silicon/ai/ai = src
 		var/mob/living/silicon/robot/shell/shell = src
 		if((isAI(src) && ai.mentions_on) || (isshell(src) && shell.mainframe.mentions_on))
-			if(findtextEx(speech.message, "AI") || findtext(rendered_message, ai.real_name))
+			if(findtextEx(speech.message, "AI") || (!isshell(src) && findtext(speech.message, ai.real_name)) || (isshell(src) && findtext(speech.message,shell.mainframe.real_name)))
 				ai << 'sound/machines/twobeep.ogg'
 				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
 				if(!isshell(src))
