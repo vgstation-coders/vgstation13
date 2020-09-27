@@ -28,7 +28,6 @@
 	name = "beam"
 	anchored = 1
 	density = 0
-	throwforce = 0
 
 	layer = ABOVE_LIGHTING_LAYER
 	plane = LIGHTING_PLANE
