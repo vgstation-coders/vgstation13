@@ -28,6 +28,7 @@
 	name = "beam"
 	anchored = 1
 	density = 0
+	throwforce = 0
 
 	layer = ABOVE_LIGHTING_LAYER
 	plane = LIGHTING_PLANE
@@ -498,7 +499,4 @@
 	..()
 
 /obj/effect/beam/ex_act(severity)
-	return
-
-/obj/effect/beam/throw_at(atom/target, range, speed, override, fly_speed)
 	return
