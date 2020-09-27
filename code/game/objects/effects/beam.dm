@@ -499,3 +499,6 @@
 
 /obj/effect/beam/ex_act(severity)
 	return
+
+/obj/effect/beam/throw_at(atom/target, range, speed, override, fly_speed)
+	return
