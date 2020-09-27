@@ -269,7 +269,7 @@ var/list/headset_modes = list(
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
 	//AI mentions
-	if((isAI(src)  || isshell(src)) && speech.frequency && !(findtext(speech.job,"AI")<>0) && (speech.name != src.name))
+	if((isAI(src)  || isshell(src)) && speech.frequency && !findtext(speech.job,"AI") && (speech.name != src.name))
 		var/mob/living/silicon/ai/ai = src
 		var/mob/living/silicon/robot/shell/shell = src
 		if((isAI(src) && ai.mentions_on) || (isshell(src) && shell.mainframe.mentions_on))
