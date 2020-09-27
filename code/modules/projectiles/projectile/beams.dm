@@ -149,6 +149,9 @@ var/list/beam_master = list()
 	var/vector/direction = dir2vector(src.dir)
 	fireto(origin, direction)
 
+/obj/item/projectile/beam/throw_at(atom/target, range, speed, override, fly_speed)
+	return
+
 // Special laser the captains gun uses
 /obj/item/projectile/beam/captain
 	name = "captain laser"
