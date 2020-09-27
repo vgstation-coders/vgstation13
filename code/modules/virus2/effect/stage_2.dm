@@ -618,3 +618,51 @@
 		mob.audible_scream()
 		mob.adjustBruteLoss(15)
 		mob.Stun(10)
+
+
+/datum/disease2/effect/mommi_hallucination
+	name = "Supermatter Syndrome"	//names suck
+	desc = "Causes the infected to experience engineering-related hallucinations."
+	stage = 2
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 2
+
+/datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
+	var/mob/living/silicon/robot/mommi/mommi = new /mob/living/silicon/robot/mommi
+	for(var/mob/living/M in viewers(mob))	
+		
+		var/image/crab = image(icon = null)
+		crab.appearance = initial(mommi.appearance)
+
+		crab.icon_state = "mommi-withglow"
+		crab.loc = M
+		crab.override = 1
+
+		var/client/C = mob.client
+		if(C)
+			C.images += crab
+		var/duration = rand(90 SECONDS, 180 SECONDS)
+		
+		spawn(duration)
+			if(C)
+				C.images.Remove(crab) 
+
+	var/list/turf_list = list()
+	for(var/turf/T in spiral_block(get_turf(mob), 30))
+		if(prob(4))
+			turf_list += T
+	if(turf_list.len)
+		for(var/turf/simulated/floor/T in turf_list)
+			var/image/supermatter = image('icons/obj/engine.dmi', T ,"darkmatter_shard", MOB_LAYER+.01)
+
+			var/client/C = mob.client
+			if(C)
+				C.images += supermatter
+			var/duration = rand(60 SECONDS, 120 SECONDS)
+			
+			spawn(duration)
+				if(C)
+					C.images.Remove(supermatter)
+
+	 
+
