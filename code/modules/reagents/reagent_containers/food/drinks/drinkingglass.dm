@@ -409,6 +409,11 @@
 				item_state = "snowwhite"
 				name = "\improper Snow White"
 				desc = "Pale lager mixed with lemon-lime soda. Refreshing and sweet."
+			if(PINKSNOWFLAKE)
+				icon_state = "pinksnowflake"
+				item_state = "snowwhite"
+				name = "\improper Pink Snowflakes"
+				desc = "Do not catch pink snowflakes with your tongue. Unless you're a Plasmaman."
 			if(ALOE)
 				icon_state = "aloe"
 				name = "\improper Aloe"

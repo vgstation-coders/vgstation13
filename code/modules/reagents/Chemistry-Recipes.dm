@@ -2817,6 +2817,13 @@
 	required_reagents = list(BEER = 1, LEMON_LIME = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/pinksnowflake
+	name = "Pink Snowflakes"
+	id = PINKSNOWFLAKE
+	result = PINKSNOWFLAKE
+	required_reagents = list(SNOWWHITE = 1, PLASMA = 1)
+	result_amount = 2
+
 /datum/chemical_reaction/irishcarbomb
 	name = "Irish Car Bomb"
 	id = IRISHCARBOMB
@@ -3385,7 +3392,7 @@
 	result = WAIFU
 	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
 	result_amount = 5
-	
+
 /datum/chemical_reaction/husbando
 	name = "Husbando"
 	id = HUSBANDO

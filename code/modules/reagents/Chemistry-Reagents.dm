@@ -6656,6 +6656,13 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/deadrum/pinksnowflake
+	name = "Pink Snowflakes"
+	id = PINKSNOWFLAKE
+	description = "Do not catch pink snowflakes with your tongue. Unless you're a Plasmaman."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#664300" //rgb: 102, 67, 0
+
 /datum/reagent/ethanol/deadrum/demonsblood
 	name = "Demon's Blood"
 	id = DEMONSBLOOD

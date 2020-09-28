@@ -427,6 +427,7 @@
 #define DIETINE			"dietine"
 #define GATORMIX		"gatormix"
 #define BLISTEROL		"blisterol"
+#define PINKSNOWFLAKE	"pinksnowflake"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
