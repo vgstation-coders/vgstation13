@@ -389,7 +389,8 @@
 	for(var/mob/living/L in range(1, get_turf(mob)))
 		if (L != mob)
 			targets += L
-	var/mob/living/target = pick(targets)
-	if(target)
-		if(!mob.is_pacified(VIOLENCE_DEFAULT,target))
-			mob.unarmed_attack_mob(target)
+	if(targets.len)
+		var/mob/living/target = pick(targets)
+		if(target)
+			if(!mob.is_pacified(VIOLENCE_DEFAULT,target))
+				mob.unarmed_attack_mob(target)

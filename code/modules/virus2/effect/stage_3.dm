@@ -658,5 +658,51 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		I.mechanize()
 		to_chat(mob, "<span class='warning'>You feel a foreign sensation in your [I.parent_organ].")
 
+/datum/disease2/effect/mommi_hallucination
+	name = "Supermatter Syndrome"	//names suck
+	desc = "Causes the infected to experience engineering-related hallucinations."
+	stage = 3
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 2
 
+/datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
+	var/mob/living/silicon/robot/mommi/mommi = /mob/living/silicon/robot/mommi
+	for(var/mob/living/M in viewers(mob))	
+		if(M != mob)
+			continue
+			
+		var/image/crab = image(icon = null)
+		crab.appearance = initial(mommi.appearance)
+
+		crab.icon_state = "mommi-withglow"
+		crab.loc = M
+		crab.override = 1
+
+		var/client/C = mob.client
+		if(C)
+			C.images += crab
+		var/duration = rand(60 SECONDS, 120 SECONDS)
+		
+		spawn(duration)
+			if(C)
+				C.images.Remove(crab) 
+
+	var/list/turf_list = list()
+	for(var/turf/T in spiral_block(get_turf(mob), 40))
+		if(prob(4))
+			turf_list += T
+	if(turf_list.len)
+		for(var/turf/simulated/floor/T in turf_list)
+			var/image/supermatter = image('icons/obj/engine.dmi', T ,"darkmatter_shard", ABOVE_HUMAN_PLANE)
+
+			var/client/C = mob.client
+			if(C)
+				C.images += supermatter
+			var/duration = rand(60 SECONDS, 120 SECONDS)
+			
+			spawn(duration)
+				if(C)
+					C.images.Remove(supermatter)
+
+	 
 

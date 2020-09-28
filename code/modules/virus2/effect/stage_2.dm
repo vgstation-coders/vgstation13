@@ -620,49 +620,34 @@
 		mob.Stun(10)
 
 
-/datum/disease2/effect/mommi_hallucination
-	name = "Supermatter Syndrome"	//names suck
-	desc = "Causes the infected to experience engineering-related hallucinations."
+/datum/disease2/effect/mommi_shrink
+	name = "Dysplasia Syndrome"
+	desc = "Rapidly restructures the body of the infected, causing them to shrink in size."
+	badness = EFFECT_DANGER_FLAVOR
 	stage = 2
-	badness = EFFECT_DANGER_HINDRANCE
 	restricted = 2
+	var/activated = 0
 
-/datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
-	var/mob/living/silicon/robot/mommi/mommi = new /mob/living/silicon/robot/mommi
-	for(var/mob/living/M in viewers(mob))	
+/datum/disease2/effect/mommi_shrink/activate(var/mob/living/mob)
+	if(!activated)
+		to_chat(mob, "<span class = 'warning'>You feel small...</span>")
+		var/matrix/M = matrix()
+		M.Scale(1,0.7)
+		mob.transform = M
+
+		mob.pixel_y = -4 * PIXEL_MULTIPLIER
+
+		mob.pass_flags |= PASSTABLE
 		
-		var/image/crab = image(icon = null)
-		crab.appearance = initial(mommi.appearance)
+		activated = 1
 
-		crab.icon_state = "mommi-withglow"
-		crab.loc = M
-		crab.override = 1
+/datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
+		to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
+		var/matrix/M = matrix()
+		M.Scale(1,1)
+		mob.transform = M
 
-		var/client/C = mob.client
-		if(C)
-			C.images += crab
-		var/duration = rand(90 SECONDS, 180 SECONDS)
-		
-		spawn(duration)
-			if(C)
-				C.images.Remove(crab) 
+		mob.appearance.pixel_y = 0
 
-	var/list/turf_list = list()
-	for(var/turf/T in spiral_block(get_turf(mob), 30))
-		if(prob(4))
-			turf_list += T
-	if(turf_list.len)
-		for(var/turf/simulated/floor/T in turf_list)
-			var/image/supermatter = image('icons/obj/engine.dmi', T ,"darkmatter_shard", MOB_LAYER+.01)
-
-			var/client/C = mob.client
-			if(C)
-				C.images += supermatter
-			var/duration = rand(60 SECONDS, 120 SECONDS)
-			
-			spawn(duration)
-				if(C)
-					C.images.Remove(supermatter)
-
-	 
-
+		mob.pass_flags &= ~PASSTABLE
+		activated = 0

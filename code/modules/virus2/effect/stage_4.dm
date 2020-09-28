@@ -1020,7 +1020,7 @@
 
 
 /datum/disease2/effect/dnaspread
-	name = "Space Retrovirus"
+	name = "Retrotransposis"
 	desc = "This symptom transplants the genetic code of the intial vector into new hosts."
 	badness = EFFECT_DANGER_HARMFUL
 	stage = 4
