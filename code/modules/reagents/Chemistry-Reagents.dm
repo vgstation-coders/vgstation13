@@ -6663,6 +6663,16 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/deadrum/pinksnowflake/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	var/mob/living/carbon/human/H = M
+	if(isplasmaman(H))
+		return 1
+	else
+		M.adjustToxLoss(3 * REM)
+
 /datum/reagent/ethanol/deadrum/demonsblood
 	name = "Demon's Blood"
 	id = DEMONSBLOOD
