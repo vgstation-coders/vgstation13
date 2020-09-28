@@ -207,10 +207,7 @@
 	if(src.occupant)
 		if(isrobot(occupant))
 			var/mob/living/silicon/robot/R = occupant
-			if(R.stat)//no more borgs suiciding in recharge stations to ruin them.
-				go_out()
-				return
-			if(!R.client && !isshell(R))
+			if((R.stat) || (!R.client))//no more borgs suiciding in recharge stations to ruin them.
 				go_out()
 				return
 			restock_modules()
