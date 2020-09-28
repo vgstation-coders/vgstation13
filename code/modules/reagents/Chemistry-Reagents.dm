@@ -6662,14 +6662,13 @@
 	description = "Do not catch pink snowflakes with your tongue. Unless you're a Plasmaman."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
-	passout = 325
 
 /datum/reagent/ethanol/deadrum/pinksnowflake/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	M.dizziness +=5
+	M.dizziness += 5
 	if(isplasmaman(H))
 		return 1
 	else
