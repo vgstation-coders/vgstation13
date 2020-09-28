@@ -6669,7 +6669,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	M.dizzyness +=5
+	M.dizziness +=5
 	if(isplasmaman(H))
 		return 1
 	else
