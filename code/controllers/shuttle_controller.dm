@@ -84,7 +84,7 @@ datum/emergency_shuttle/proc/recall()
 		if(alert == 0)
 			if(timeleft >= 600)
 				return
-			captain_announce("The emergency shuttle has been recalled.")
+			command_alert(/datum/command_alert/emergency_shuttle_recalled)
 			world << sound('sound/AI/shuttlerecalled.ogg')
 			setdirection(-1)
 			online = 1
@@ -231,7 +231,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 				settimeleft(SHUTTLELEAVETIME)
 				send2mainirc("The Emergency Shuttle has docked with the station.")
 				send2maindiscord("The **Emergency Shuttle** has docked with the station.")
-				captain_announce("The Emergency Shuttle has docked with the station. You have [round(timeleft()/60,1)] minutes to board the Emergency Shuttle.")
+				command_alert(/datum/command_alert/emergency_shuttle_docked)
 				world << sound('sound/AI/shuttledock.ogg')
 			if(ticker)
 				ticker.shuttledocked_time = world.time / 10
@@ -258,8 +258,7 @@ datum/emergency_shuttle/proc/shuttle_phase(var/phase, var/casual = 1)
 
 				// Shuttle Radio
 				CallHook("EmergencyShuttleDeparture", list())
-
-				captain_announce("The Emergency Shuttle has left the station. Estimate [round(timeleft()/60,1)] minutes until the shuttle docks at Central Command.")
+				command_alert(/datum/command_alert/emergency_shuttle_left)
 				vote_preload()
 
 			if(shuttle && istype(shuttle,/datum/shuttle/escape))

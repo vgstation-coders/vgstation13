@@ -730,7 +730,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
 	group = "Clothing"
-	
+
 /datum/supply_packs/security_formal_wear
 	var/Blue = list(/obj/item/clothing/suit/secdressjacket/hos_blue,
 					/obj/item/clothing/suit/secdressjacket/warden_blue,
@@ -762,7 +762,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Security Formalwear"
 	access = list(access_security)
 	group = "Clothing"
-	
+
 /datum/supply_packs/security_formal_wear/New()
 	selection_from = list(Blue, Navy, Tan)
 
@@ -2497,3 +2497,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Team Security stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/telecomms
+	name = "Telecommunications Parts stack of packs"
+	contains = list(/obj/structure/vendomatpack/telecomms, /obj/structure/vendomatpack/telecomms)
+	cost = 50
+	containertype = /obj/structure/stackopacks
+	containername = "Telecommunications Parts stack of packs"
+	group = "Vending Machine packs"
+

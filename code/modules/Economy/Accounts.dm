@@ -1,17 +1,19 @@
-var/global/current_date_string
-var/global/num_financial_terminals = 1
-var/global/num_financial_database = 1
-var/global/num_vending_machines = 1
-var/global/num_pda_terminals = 1
-var/global/num_merch_computers = 1
-var/global/datum/money_account/station_account
-var/global/list/datum/money_account/department_accounts = list()
-var/global/next_account_number = 0
-var/global/obj/machinery/account_database/centcomm_account_db
-var/global/datum/money_account/vendor_account
-var/global/list/all_money_accounts = list()
-var/global/datum/money_account/trader_account
-var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command, engineering, medical, security, science, cargo, and civilian
+var/current_date_string
+var/num_financial_terminals = 1
+var/num_financial_database = 1
+var/num_vending_machines = 1
+var/num_pda_terminals = 1
+var/num_merch_computers = 1
+var/datum/money_account/station_account
+var/list/datum/money_account/department_accounts = list()
+var/next_account_number = 0
+var/obj/machinery/account_database/centcomm_account_db
+var/datum/money_account/vendor_account
+var/list/all_money_accounts = list()
+var/datum/money_account/trader_account
+
+var/station_allowance = 0//This is what Nanotrasen will send to the Station Account after every salary, as provision for the next salary.
+var/latejoiner_allowance = 0//Added to station_allowance and reset before every wage payout.
 
 /proc/create_station_account()
 	if(!station_account)
@@ -20,14 +22,14 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		station_account.owner_name = "[station_name()] Station Account"
 		station_account.account_number = rand(11111, 99999)
 		station_account.remote_access_pin = rand(1111, 9999)
-		station_account.money = DEPARTMENT_START_FUNDS
-		station_account.wage_gain = DEPARTMENT_START_WAGE
+		station_account.money = 0//The money is distributed by Nanotrasen in prevision for the next salary.
+		station_account.wage_gain = 0//Salary money is taken from this account, so no more getting money out of nowhere.
 
 		//create an entry in the account transaction log for when it was created
 		var/datum/transaction/T = new()
 		T.target_name = station_account.owner_name
 		T.purpose = "Account creation"
-		T.amount = 750
+		T.amount = 0
 		T.date = "2nd April, [game_year]"
 		T.time = "11:24"
 		T.source_terminal = "Biesel GalaxyNet Terminal #277"
@@ -46,6 +48,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 	department_account.money = DEPARTMENT_START_FUNDS
 	if(recieves_wage == 1)
 		department_account.wage_gain = DEPARTMENT_START_WAGE
+		station_allowance += DEPARTMENT_START_WAGE + round(DEPARTMENT_START_WAGE/10)//overhead of 10%
 
 	//create an entry in the account transaction log for when it was created
 	var/datum/transaction/T = new()
@@ -216,7 +219,7 @@ var/global/allowable_payroll_amount = DEPARTMENT_START_WAGE*8 //Station, command
 		if(access_level > 0 || isAdminGhost(user))
 
 			dat += {"<a href='?src=\ref[src];toggle_activated=1'>[activated ? "Disable" : "Enable"] remote access</a><br>
-				Combined department and personnel budget is currently [global.allowable_payroll_amount] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
+				Combined department and personnel budget is currently [station_allowance] credits. A total of [global.requested_payroll_amount] credits were requested during the last payroll cycle.<br>"}
 			if(creating_new_account)
 
 				dat += {"<br>

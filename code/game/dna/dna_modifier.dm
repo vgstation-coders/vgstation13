@@ -461,13 +461,15 @@
 		buffers[i] = new /datum/dna2/record
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
 		labels[i] = new /datum/block_label
-	spawn(5)
-		connected = findScanner()
+	if(world.has_round_started())
+		initialize()
+	spawn(250)
+		setInjectorReady()
+
+/obj/machinery/computer/scan_consolenew/initialize()
+	connected = findScanner()
+	if(connected)
 		connected.connected = src
-		spawn(250)
-			setInjectorReady()
-		return
-	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)

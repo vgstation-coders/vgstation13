@@ -96,6 +96,9 @@ var/const/MAX_SAVE_SLOTS = 16
 
 	//non-preference stuff
 	var/warns = 0
+	var/show_warning_next_time = 0
+	var/last_warned_message = ""
+	var/warning_admin = ""
 	var/warnbans = 0
 	var/muted = 0
 	var/last_ip
@@ -1640,6 +1643,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 	character.my_appearance.h_style = h_style
 	character.my_appearance.f_style = f_style
 
+	character.dna.ResetUIFrom(character)
 
 	character.skills = skills
 

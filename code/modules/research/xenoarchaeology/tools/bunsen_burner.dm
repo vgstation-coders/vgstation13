@@ -183,8 +183,8 @@
 		processing_objects.Remove(src)
 
 
-/obj/machinery/bunsen_burner/AltClick()
-	if((!usr.Adjacent(src) || usr.incapacitated()) && !isAdminGhost(usr))
+/obj/machinery/bunsen_burner/AltClick(mob/user)
+	if((!user.Adjacent(src) || user.incapacitated()) && !isAdminGhost(user))
 		return ..()
 
 	var/list/choices = list(
@@ -192,11 +192,9 @@
 		list("Toggle Fuelport", (heating == BUNSEN_OPEN ? "radial_lock" : "radial_unlock")),
 		list("Examine", "radial_examine")
 	)
-	var/event/menu_event = new(owner = usr)
-	menu_event.Add(src, "radial_check_handler")
 
-	var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
-	if(!radial_check(usr))
+	var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+	if(!radial_check(user))
 		return
 
 	switch(task)
@@ -205,11 +203,7 @@
 		if("Toggle Fuelport")
 			verb_toggle_fuelport()
 		if("Examine")
-			usr.examination(src)
-
-/obj/machinery/bunsen_burner/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
+			user.examination(src)
 
 /obj/machinery/bunsen_burner/proc/radial_check(mob/living/user)
 	if(!istype(user))

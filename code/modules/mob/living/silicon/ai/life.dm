@@ -152,10 +152,10 @@
 /mob/living/silicon/ai/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
-
 	if (stat == DEAD)
 		return
-
+	if(client)
+		handle_regular_hud_updates()
 	if(life_handle_health())
 		return
 
@@ -188,3 +188,9 @@
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
 	return FALSE
+
+/mob/living/silicon/ai/handle_regular_hud_updates()
+	if(malfhacking)
+		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
+	else 
+		clear_alert(SCREEN_ALARM_APC_HACKING)
