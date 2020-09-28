@@ -568,7 +568,7 @@ var/list/admin_verbs_mod = list(
 	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
 	if(!warn_reason)
 		return
-	notes_add(warned_ckey,warn_reason,src.mob)
+	holder.notes_add(warned_ckey, warn_reason)
 	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
 		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
 		D.warns = 0
