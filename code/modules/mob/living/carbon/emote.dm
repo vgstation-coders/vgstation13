@@ -332,7 +332,7 @@
 					sound = pick(C.sound_file)
 				if(sound) //Sanity
 					playsound(user, sound, 50, 0)
-				H.last_emote_sound = world.time
+					H.last_emote_sound = world.time
 
 	else
 		message = "makes a very loud noise."

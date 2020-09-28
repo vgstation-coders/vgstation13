@@ -111,7 +111,7 @@ var/list/apiaries_list = list()
 			else
 				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
-	if (species.worker_product)
+	if (species?.worker_product)
 		switch(reagents.total_volume)
 			if(30 to 60)
 				to_chat(user, "<span class='info'>Looks like there's a bit of [reagent_name(species.worker_product)] in it.</span>")
