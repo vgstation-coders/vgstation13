@@ -308,7 +308,8 @@
 	update_icon()
 
 /obj/item/toy/singlecard/Destroy()
-	parentdeck.cards -= src
+	if(parentdeck)
+		parentdeck.cards -= src
 	..()
 
 /obj/item/toy/singlecard/update_icon()
