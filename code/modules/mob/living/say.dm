@@ -269,7 +269,7 @@ var/list/headset_modes = list(
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
 	//AI mentions
-	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
 		var/mob/living/silicon/ai/ai = src
 		if(ai.mentions_on)
 			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
