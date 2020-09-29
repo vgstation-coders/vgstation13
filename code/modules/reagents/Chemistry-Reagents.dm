@@ -5400,7 +5400,7 @@
 	name = "Space Mountain Wind"
 	id = SPACEMOUNTAINWIND
 	description = "Blows right through you like a space wind."
-	color = "#102000" //rgb: 16, 32, 0
+	color = "#A4FF8F" //rgb: 164, 255, 143
 	adj_drowsy = -7
 	adj_sleepy = -1
 	glass_icon_state = "Space_mountain_wind_glass"
@@ -6596,7 +6596,6 @@
 	description = "You've really hit rock bottom now... your liver packed its bags and left last night."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
-	glass_icon_state = "glass_clear"
 
 /datum/reagent/ethanol/deadrum/midnightkiss
 	name = "Midnight Kiss"
