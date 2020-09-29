@@ -6051,8 +6051,7 @@
 	dupeable = FALSE
 
 /datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
-	var/datum/reagents/glassreagents = D.reagents
-	if(glassreagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10)
+	if(volume<10)
 		glass_icon_state = "scientists_surprise"
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
