@@ -15,4 +15,5 @@
 #include "outfit_datums.dm"
 #include "ray.dm"
 #include "vector.dm"
+#include "reagent_ids.dm"
 #endif
