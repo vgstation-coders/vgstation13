@@ -223,7 +223,7 @@
 		holder = null
 	..()
 
-/datum/reagent/proc/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/proc/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D) //rip steve
 	return
 
 /datum/reagent/piccolyn
@@ -5914,7 +5914,7 @@
 	color = "#664300"
 	glass_icon_state = "bad_touch"
 	glass_name = "\improper Bad Touch"
-	
+
 
 /datum/reagent/ethanol/bad_touch/on_mob_life(var/mob/living/M) //Hallucinate and take hallucination damage.
 	if(..())
@@ -6050,7 +6050,7 @@
 	custom_metabolism = 0.01
 	dupeable = FALSE
 
-/datum/reagent/ethanol/scientists_serendipity/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	var/datum/reagents/glassreagents = D.reagents
 	if(glassreagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10)
 		glass_icon_state = "scientists_surprise"
@@ -7302,7 +7302,7 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
-/datum/reagent/ethanol/deadrum/pintpointer/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+/datum/reagent/ethanol/deadrum/pintpointer/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
 	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
 	var/datum/reagents/glassreagents = D.reagents
 

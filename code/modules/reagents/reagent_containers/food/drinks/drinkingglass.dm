@@ -33,7 +33,7 @@
 			viewcontents = 0 
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
-			R.steve(src)
+			R.handle_special_behavior(src)
 
 			if(R.light_color)
 				light_color = R.light_color
