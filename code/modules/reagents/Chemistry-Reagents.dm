@@ -5730,33 +5730,6 @@
 	glass_icon_state = "rumglass"
 	glass_desc = "Now you want to pray for a pirate suit, don't you?"
 
-/datum/reagent/ethanol/tequila
-	name = "Tequila"
-	id = TEQUILA
-	description = "A strong and mildly flavoured, mexican produced spirit. Feeling thirsty, hombre?"
-	color = "#FFFF91" //rgb: 255, 255, 145
-	glass_icon_state = "tequilaglass"
-	glass_desc = "Now all that's missing is the weird colored shades!"
-
-/datum/reagent/ethanol/vermouth
-	name = "Vermouth"
-	id = VERMOUTH
-	description = "You suddenly feel a craving for a martini..."
-	color = "#91FF91" //rgb: 145, 255, 145
-	glass_icon_state = "vermouthglass"
-	glass_desc = "You wonder why you're even drinking this straight."
-
-/datum/reagent/ethanol/wine
-	name = "Wine"
-	id = WINE
-	description = "A premium alcoholic beverage made from fermented grape juice."
-	color = "#7E4043" //rgb: 126, 64, 67
-	dizzy_adj = 2
-	slur_start = 65
-	confused_start = 145
-	glass_icon_state = "wineglass"
-	glass_desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
-
 /datum/reagent/ethanol/bwine
 	name = "Berry Wine"
 	id = BWINE
@@ -5787,16 +5760,6 @@
 	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
 	slur_start = 60
 	confused_start = 135
-
-/datum/reagent/ethanol/cognac
-	name = "Cognac"
-	id = COGNAC
-	description = "A sweet and strongly alcoholic drink, twice distilled and left to mature for several years. Classy as fornication."
-	color = "#AB3C05" //rgb: 171, 60, 5
-	dizzy_adj = 4
-	confused_start = 115
-	glass_icon_state = "cognacglass"
-	glass_desc = "You feel aristocratic just holding this."
 
 /datum/reagent/ethanol/hooch
 	name = "Hooch"
@@ -6254,12 +6217,16 @@
 	id = TEQUILA
 	description = "A strong and mildly flavoured, mexican produced spirit. Feeling thirsty, hombre?"
 	color = "#A8B0B7" //rgb: 168, 176, 183
+	glass_icon_state = "tequilaglass"
+	glass_desc = "Now all that's missing is the weird colored shades!"
 
 /datum/reagent/ethanol/deadrum/vermouth
 	name = "Vermouth"
 	id = VERMOUTH
 	description = "You suddenly feel a craving for a martini..."
 	color = "#664300" //rgb: 102, 67, 0
+	glass_icon_state = "vermouthglass"
+	glass_desc = "You wonder why you're even drinking this straight."
 
 /datum/reagent/ethanol/deadrum/wine
 	name = "Wine"
@@ -6269,6 +6236,8 @@
 	dizzy_adj = 2
 	slur_start = 65
 	confused_start = 145
+	glass_icon_state = "wineglass"
+	glass_desc = "A drink enjoyed by intellectuals and middle-aged female alcoholics alike."
 
 /datum/reagent/ethanol/deadrum/cognac
 	name = "Cognac"
@@ -6277,6 +6246,8 @@
 	color = "#664300" //rgb: 102, 67, 0
 	dizzy_adj = 4
 	confused_start = 115
+	glass_icon_state = "cognacglass"
+	glass_desc = "You feel aristocratic just holding this."
 
 /datum/reagent/ethanol/deadrum/hooch
 	name = "Hooch"
