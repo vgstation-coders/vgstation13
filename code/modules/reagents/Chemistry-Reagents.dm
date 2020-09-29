@@ -223,6 +223,9 @@
 		holder = null
 	..()
 
+/datum/reagent/proc/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	return
+
 /datum/reagent/piccolyn
 	name = "Piccolyn"
 	id = PICCOLYN
@@ -5087,7 +5090,7 @@
 	name = "Lemon Juice"
 	id = LEMONJUICE
 	description = "This juice is VERY sour."
-	color = "#FFFF00" //rgb: 255, 255, 000
+	color = "#fff690" //rgb: 255, 246, 144
 	alpha = 170
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	glass_desc = "Sour..."
@@ -6046,6 +6049,18 @@
 	color = "#664300"
 	custom_metabolism = 0.01
 	dupeable = FALSE
+
+/datum/reagent/ethanol/scientists_serendipity/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	var/datum/reagents/glassreagents = D.reagents
+	if(glassreagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10)
+		glass_icon_state = "scientists_surprise"
+		glass_name = "\improper Scientist's Surprise"
+		glass_desc = "There is as yet insufficient data for a meaningful answer."
+	else
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Serendipity"
+		glass_desc = "Knock back a cold glass of R&D."
+		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
 
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
@@ -7287,6 +7302,18 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#664300" //rgb: 102, 67, 0
 
+/datum/reagent/ethanol/deadrum/pintpointer/steve(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
+	var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(D))
+	var/datum/reagents/glassreagents = D.reagents
+
+	if(glassreagents.last_ckey_transferred_to_this)
+		for(var/client/C in clients)
+			if(C.ckey == glassreagents.last_ckey_transferred_to_this)
+				var/mob/M = C.mob
+				P.creator = M
+	glassreagents.trans_to(P, glassreagents.total_volume)
+	spawn(1)
+		qdel(D)
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar

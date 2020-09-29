@@ -33,6 +33,7 @@
 			viewcontents = 0 
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
+			R.steve(src)
 
 			if(R.light_color)
 				light_color = R.light_color
@@ -64,28 +65,6 @@
 	if(iscarbon(loc))
 		var/mob/living/carbon/M = loc
 		M.update_inv_hands()
-
-		/*
-			if(PINTPOINTER)
-				var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/pintpointer/P = new (get_turf(src))
-				if(reagents.last_ckey_transferred_to_this)
-					for(var/client/C in clients)
-						if(C.ckey == reagents.last_ckey_transferred_to_this)
-							var/mob/M = C.mob
-							P.creator = M
-				reagents.trans_to(P, reagents.total_volume)
-				spawn(1)
-					qdel(src)
-			if(SCIENTISTS_SERENDIPITY)
-				if(reagents.get_reagent_amount(SCIENTISTS_SERENDIPITY)<10) //You need at least 10u to get the tech bonus
-					icon_state = "scientists_surprise"
-					name = "\improper Scientist's Surprise"
-					desc = "There is as yet insufficient data for a meaningful answer."
-				else
-					icon_state = "scientists_serendipity"
-					name = "\improper Scientist's Serendipity"
-					desc = "Knock back a cold glass of R&D."
-					origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"*/
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/examine(mob/user)
 	..()
