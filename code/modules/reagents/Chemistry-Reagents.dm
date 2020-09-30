@@ -497,6 +497,11 @@
 		var/obj/item/clothing/mask/stone/S = O
 		S.spikes()
 
+/datum/reagent/blood/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.5, bloody=1)
+	T.adjust_water(0.7)
+
 /datum/reagent/water
 	name = "Water"
 	id = WATER
@@ -626,6 +631,10 @@
 		var/mob/living/simple_animal/bee/B = M
 		B.calming()
 
+/datum/reagent/water/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(1)
+
 /datum/reagent/lube
 	name = "Space Lube"
 	id = LUBE
@@ -723,6 +732,12 @@
 				if(prob(10))
 					H.custom_pain("You feel a horrible throbbing pain in your stomach!",1)
 
+/datum/reagent/anti_toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 10
+	if(T.seed && !T.dead)
+		T.health += 1
+
 /datum/reagent/phalanximine
 	name = "Phalanximine"
 	id = PHALANXIMINE
@@ -756,6 +771,10 @@
 
 	//Toxins are really weak, but without being treated, last very long
 	M.adjustToxLoss(0.2)
+
+/datum/reagent/toxin/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
 
 /datum/reagent/plasticide
 	name = "Plasticide"
@@ -1259,6 +1278,14 @@
 
 	M.take_organ_damage(REM, 0, ignore_inorganics = TRUE)
 
+/datum/reagent/chlorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-0.5)
+	T.toxins += 15
+	T.weedlevel -= 3
+	if(T.seed && !T.dead)
+		T.health -= 1
+
 /datum/reagent/fluorine
 	name = "Fluorine"
 	id = FLUORINE
@@ -1277,6 +1304,14 @@
 	M.adjustToxLoss(REM)
 	if(prob(5) && !M.isUnconscious())
 		M.emote("stare")
+
+/datum/reagent/fluorine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-0.5)
+	T.toxins += 25
+	T.weedlevel -= 4
+	if(T.seed && !T.dead)
+		T.health -= 2
 
 /datum/reagent/chloramine
 	name = "Chloramine"
@@ -1324,6 +1359,12 @@
 	density = 1.823
 	specheatcap = 0.769
 
+/datum/reagent/phosphorus/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(-0.5)
+	T.weedlevel -= 2
+
 /datum/reagent/lithium
 	name = "Lithium"
 	id = LITHIUM
@@ -1354,11 +1395,16 @@
 	specheatcap = 1.244
 
 /datum/reagent/sugar/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
 	M.nutrition += REM
+
+/datum/reagent/sugar/on_plant_life(var/obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.weedlevel += 2
+	T.pestlevel += 2
 
 /datum/reagent/caramel
 	name = "Caramel"
@@ -1524,6 +1570,13 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
+/datum/reagent/sacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	T.weedlevel -= 2
+	if(T.seed && !T.dead)
+		T.health -= 4
+
 /datum/reagent/pacid
 	name = "Polytrinic acid"
 	id = PACID
@@ -1624,6 +1677,13 @@
 		var/obj/effect/dummy/chameleon/projection = O
 		projection.disrupt()
 
+/datum/reagent/pacid/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 20
+	T.weedlevel -= 4
+	if(T.seed && !T.dead)
+		T.health -= 8
+
 /datum/reagent/glycerol
 	name = "Glycerol"
 	id = GLYCEROL
@@ -1666,6 +1726,7 @@
 	color = "#669966" //rgb: 102, 153, 102
 	density = 5
 	specheatcap = 94
+	custom_plant_metabolism = 2
 
 /datum/reagent/radium/on_mob_life(var/mob/living/M)
 
@@ -1689,6 +1750,15 @@
 	if(volume >= 3)
 		if(!(locate(/obj/effect/decal/cleanable/greenglow) in T))
 			new /obj/effect/decal/cleanable/greenglow(T)
+
+/datum/reagent/radium/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.mutation_level += 0.6*T.mutation_mod*custom_plant_metabolism
+	T.toxins += 4
+	if(T.seed && !T.dead)
+		T.health -= 1.5
+		if(prob(20))
+			T.mutation_mod += 0.1 //ha ha
 
 /datum/reagent/ryetalyn
 	name = "Ryetalyn"
@@ -1795,6 +1865,7 @@
 	color = "#13BC5E" //rgb: 19, 188, 94
 	density = 3.35
 	specheatcap = 96.86
+	custom_plant_metabolism = 2
 
 /datum/reagent/mutagen/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 
@@ -1821,6 +1892,10 @@
 	if(..())
 		return 1
 	M.apply_radiation(10,RAD_INTERNAL)
+
+/datum/reagent/mutagen/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.mutation_level += 1*T.mutation_mod*custom_plant_metabolism
 
 /datum/reagent/tramadol
 	name = "Tramadol"
@@ -2253,6 +2328,10 @@
 	density = 1.32
 	specheatcap = 0.60
 
+/datum/reagent/fertilizer/eznutrient/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+
 /datum/reagent/fertilizer/left4zed
 	name = "Left-4-Zed"
 	id = LEFT4ZED
@@ -2261,6 +2340,14 @@
 	density = 1.32
 	specheatcap = 0.60
 
+/datum/reagent/fertilizer/left4zed/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health -= 0.5
+		if(prob(30))
+			T.mutation_mod += 0.2
+
 /datum/reagent/fertilizer/robustharvest
 	name = "Robust Harvest"
 	id = ROBUSTHARVEST
@@ -2268,6 +2355,25 @@
 	color = "#3E901C" // rgb: 62, 144, 28
 	density = 1.32
 	specheatcap = 0.60
+	custom_plant_metabolism = 0.1
+
+/datum/reagent/fertilizer/robustharvest/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.05)
+	if(prob(25*custom_plant_metabolism))
+		T.weedlevel += 1
+	if(T.seed && !T.dead && prob(25*custom_plant_metabolism))
+		T.pestlevel += 1
+	if(T.seed && !T.dead && !T.seed.immutable)
+		var/chance
+		chance = unmix(T.seed.potency, 15, 150)*350*custom_plant_metabolism
+		if(prob(chance))
+			T.check_for_divergence(1)
+			T.seed.potency++
+		chance = unmix(T.seed.yield, 6, 2)*15*custom_plant_metabolism
+		if(prob(chance))
+			T.check_for_divergence(1)
+			T.seed.yield--
 
 /datum/reagent/toxin/plantbgone
 	name = "Plant-B-Gone"
@@ -2339,6 +2445,14 @@
 			if(H.dna)
 				if(H.species.flags & IS_PLANT) //Plantmen take a LOT of damage //aren't they toxin-proof anyways?
 					H.adjustToxLoss(10 * REM)
+
+/datum/reagent/toxin/plantbgone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 6
+	T.weedlevel -= 8
+	if(T.seed && !T.dead)
+		T.health -= 20
+		T.mutation_mod += 0.1
 
 /datum/reagent/plasma
 	name = "Plasma"
@@ -2607,6 +2721,16 @@
 		D2.stage--
 		if(D2.stage < 1)
 			D2.cure(M)
+
+/datum/reagent/adminordrazine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	T.adjust_water(1)
+	T.weedlevel -= 5
+	T.pestlevel -= 5
+	T.toxins -= 5
+	if(T.seed && !T.dead)
+		T.health += 50
 
 /datum/reagent/synaptizine
 	name = "Synaptizine"
@@ -2901,8 +3025,7 @@
 	adj_temp = 40
 	custom_metabolism = 1 //goes through you fast
 
-/datum/reagent/blisterol/on_mob_life(var/mob/living/M)
-
+/datum/reagent/drink/blisterol/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -3081,6 +3204,12 @@
 		M.heal_organ_damage(1,1)
 		M.adjustToxLoss(-1)
 
+/datum/reagent/cryoxadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 3
+	if(T.seed && !T.dead)
+		T.health += 3
+
 /datum/reagent/clonexadone
 	name = "Clonexadone"
 	id = CLONEXADONE
@@ -3089,9 +3218,9 @@
 	color = "#C8A5DC" //rgb: 200, 165, 220
 	density = 1.22
 	specheatcap = 4.27
+	custom_plant_metabolism = 0.5
 
 /datum/reagent/clonexadone/on_mob_life(var/mob/living/M)
-
 	if(..())
 		return 1
 
@@ -3100,6 +3229,21 @@
 		M.adjustOxyLoss(-3)
 		M.heal_organ_damage(3,3)
 		M.adjustToxLoss(-3)
+
+/datum/reagent/clonexadone/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins -= 5
+	if(T.seed && !T.dead)
+		T.health += 5
+		var/datum/seed/S = T.seed
+		var/deviation
+		if(T.age > S.maturation)
+			deviation = max(S.maturation-1, T.age-rand(7,10))
+		else
+			deviation = S.maturation/S.growth_stages
+		T.age -= deviation
+		T.skip_aging++
+		T.force_update = 1
 
 /datum/reagent/rezadone
 	name = "Rezadone"
@@ -3767,6 +3911,12 @@
 	density = 0.51
 	specheatcap = 14.38
 
+/datum/reagent/ammonia/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health += 0.5
+
 /datum/reagent/ultraglue
 	name = "Ultra Glue"
 	id = GLUE
@@ -3781,6 +3931,27 @@
 	color = "#604030" //rgb: 96, 64, 48
 	density = 0.65
 	specheatcap = 35.37
+	custom_plant_metabolism = 0.1
+
+/datum/reagent/diethylamine/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	if(prob(100*custom_plant_metabolism))
+		T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health += 0.1
+		if(prob(200*custom_plant_metabolism))
+			T.affect_growth(1)
+		if(!T.seed.immutable)
+			var/chance
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.lifespan++
+			chance = unmix(T.seed.lifespan, 15, 125)*200*custom_plant_metabolism
+			if(prob(chance))
+				T.check_for_divergence(1)
+				T.seed.endurance++
 //Fuck you, alcohol
 /datum/reagent/ethylredoxrazine
 	name = "Ethylredoxrazine"
@@ -3861,6 +4032,12 @@
 		M.heal_organ_damage(1, 0)
 
 	M.nutrition += nutriment_factor	//For hunger and fatness
+
+/datum/reagent/nutriment/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(1)
+	if(T.seed && !T.dead)
+		T.health += 0.5
 
 //The anti-nutriment
 /datum/reagent/lipozine
@@ -3997,7 +4174,7 @@
 	adj_temp = 10
 	overdose_am = 50
 
-/datum/reagent/gatormix/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/gatormix/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4005,8 +4182,7 @@
 		var/mob/living/carbon/human/H = M
 		H.Jitter(5)
 
-/datum/reagent/gatormix/on_overdose(var/mob/living/M)
-
+/datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/killdney = H.get_kidneys()
@@ -4226,6 +4402,16 @@
 			B.health -= 1
 			to_chat(B, "<span class='warning'>Something in your host's bloodstream burns you!</span>")
 
+/datum/reagent/sodiumchloride/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_water(-3)
+	T.adjust_nutrient(-0.3)
+	T.toxins += 8
+	T.weedlevel -= 2
+	T.pestlevel -= 1
+	if(T.seed && !T.dead)
+		T.health -= 2
+
 /datum/reagent/creatine
 	name = "Creatine"
 	id = CREATINE
@@ -4385,17 +4571,19 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco
+/datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"
 	id = HOT_COCO
-	description = "Made with love! And coco beans."
+	description = "Made with love! And cocoa beans."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * REAGENTS_METABOLISM
+	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
 	mug_desc = "A delicious warm brew of milk and chocolate."
 
-/datum/reagent/hot_coco/on_mob_life(var/mob/living/M)
-
+/datum/reagent/drink/hot_coco/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4404,12 +4592,12 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco/subhuman
+/datum/reagent/drink/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
 	description = "Made with hate! And coco beans."
 	data = 0
 
-/datum/reagent/hot_coco_subhuman/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/hot_coco/subhuman/on_mob_life(var/mob/living/M)
 	..()
 	if(prob(1))
 		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
@@ -5163,6 +5351,11 @@
 	if(prob(50))
 		M.heal_organ_damage(1, 0)
 
+/datum/reagent/drink/milk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(0.9)
+
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
@@ -5181,16 +5374,6 @@
 	density = 2.37
 	specheatcap = 1.38
 	glass_desc = "Like milk, but thicker."
-
-/datum/reagent/drink/hot_coco
-	name = "Hot Chocolate"
-	id = HOT_COCO
-	description = "Made with love! And cocoa beans."
-	nutriment_factor = 2 * FOOD_METABOLISM
-	color = "#403010" //rgb: 64, 48, 16
-	adj_temp = 5
-	density = 1.2
-	specheatcap = 4.18
 
 /datum/reagent/drink/coffee
 	name = "Coffee"
@@ -5329,6 +5512,7 @@
 	M.Jitter(5)
 
 /datum/reagent/drink/cold
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	name = "Cold drink"
 	adj_temp = -5
 
@@ -5349,6 +5533,13 @@
 	adj_dizzy = -5
 	adj_drowsy = -3
 	glass_desc = "Soda water. Why not make a scotch and soda?"
+
+/datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.1)
+	T.adjust_water(1)
+	if(T.seed && !T.dead)
+		T.health += 0.1
 
 /datum/reagent/drink/cold/ice
 	name = "Ice"
@@ -5675,6 +5866,11 @@
 
 	M.jitteriness = max(M.jitteriness - 3, 0)
 
+/datum/reagent/ethanol/beer/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.adjust_nutrient(0.25)
+	T.adjust_water(0.7)
+
 /datum/reagent/ethanol/whiskey
 	name = "Whiskey"
 	id = WHISKEY
@@ -5724,15 +5920,6 @@
 	data++
 	M.hallucination += 5
 
-/datum/reagent/ethanol/rum
-	name = "Rum"
-	id = RUM
-	description = "Yohoho and all that."
-	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 250
-	glass_icon_state = "rumglass"
-	glass_desc = "Now you want to pray for a pirate suit, don't you?"
-
 /datum/reagent/ethanol/bwine
 	name = "Berry Wine"
 	id = BWINE
@@ -5763,17 +5950,6 @@
 	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
 	slur_start = 60
 	confused_start = 135
-
-/datum/reagent/ethanol/hooch
-	name = "Hooch"
-	id = HOOCH
-	description = "A suspiciously viscous off-brown liquid that reeks of fuel. Do you really want to drink that?"
-	color = "#664300" //rgb: 102, 67, 0
-	dizzy_adj = 6
-	slurr_adj = 5
-	slur_start = 35
-	confused_start = 90
-	glass_desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 
 /datum/reagent/ethanol/pwine
 	name = "Poison Wine"
@@ -6168,11 +6344,13 @@
 		holder.remove_reagent(MAGICADELUXE,5)
 
 /datum/reagent/ethanol/deadrum
-	name = "Deadrum"
+	name = "Rum"
 	id = RUM
 	description = "Popular with the sailors. Not very popular with anyone else."
 	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 325
+	pass_out = 250
+	glass_icon_state = "rumglass"
+	glass_desc = "Now you want to pray for a pirate suit, don't you?"
 
 /datum/reagent/ethanol/deadrum/on_mob_life(var/mob/living/M)
 
@@ -6273,6 +6451,7 @@
 	slur_start = 35
 	confused_start = 90
 	pass_out = 250
+	glass_desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 
 /datum/reagent/ethanol/deadrum/triplesec
 	name = "Triple Sec"
@@ -7700,7 +7879,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism =  0.01
 	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
-/datum/reagent/antidepressant/citalopram
+/datum/reagent/citalopram
 	name = "Citalopram"
 	id = CITALOPRAM
 	description = "Stabilizes the mind a little."
@@ -7711,7 +7890,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.01
 	specheatcap = 3.88
 
-/datum/reagent/antidepressant/citalopram/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -7723,7 +7902,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			data = world.time
 			to_chat(M, "<span class='notice'>Your mind feels stable... a little stable.</span>")
 
-/datum/reagent/antidepressant/paroxetine
+/datum/reagent/paroxetine
 	name = "Paroxetine"
 	id = PAROXETINE
 	description = "Stabilizes the mind greatly, but has a chance of adverse effects."
@@ -7734,7 +7913,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.19
 	specheatcap = 3.99
 
-/datum/reagent/antidepressant/paroxetine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -8459,6 +8638,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 //					//
 //////////////////////
 /datum/reagent/incense
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	reagent_state = REAGENT_STATE_GAS
 	density = 3.214
 	specheatcap = 1.34
