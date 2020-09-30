@@ -3025,8 +3025,7 @@
 	adj_temp = 40
 	custom_metabolism = 1 //goes through you fast
 
-/datum/reagent/blisterol/on_mob_life(var/mob/living/M)
-
+/datum/reagent/drink/blisterol/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4175,7 +4174,7 @@
 	adj_temp = 10
 	overdose_am = 50
 
-/datum/reagent/gatormix/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/gatormix/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4183,8 +4182,7 @@
 		var/mob/living/carbon/human/H = M
 		H.Jitter(5)
 
-/datum/reagent/gatormix/on_overdose(var/mob/living/M)
-
+/datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/killdney = H.get_kidneys()
@@ -4573,17 +4571,19 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco
+/datum/reagent/drink/hot_coco
 	name = "Hot Chocolate"
 	id = HOT_COCO
-	description = "Made with love! And coco beans."
+	description = "Made with love! And cocoa beans."
 	reagent_state = REAGENT_STATE_LIQUID
-	nutriment_factor = 2 * REAGENTS_METABOLISM
+	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
 	mug_desc = "A delicious warm brew of milk and chocolate."
 
-/datum/reagent/hot_coco/on_mob_life(var/mob/living/M)
-
+/datum/reagent/drink/hot_coco/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 
@@ -4592,12 +4592,12 @@
 
 	M.nutrition += nutriment_factor
 
-/datum/reagent/hot_coco/subhuman
+/datum/reagent/drink/hot_coco/subhuman
 	id = HOT_COCO_SUBHUMAN
 	description = "Made with hate! And coco beans."
 	data = 0
 
-/datum/reagent/hot_coco_subhuman/on_mob_life(var/mob/living/M)
+/datum/reagent/drink/hot_coco/subhuman/on_mob_life(var/mob/living/M)
 	..()
 	if(prob(1))
 		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
@@ -5375,16 +5375,6 @@
 	specheatcap = 1.38
 	glass_desc = "Like milk, but thicker."
 
-/datum/reagent/drink/hot_coco
-	name = "Hot Chocolate"
-	id = HOT_COCO
-	description = "Made with love! And cocoa beans."
-	nutriment_factor = 2 * FOOD_METABOLISM
-	color = "#403010" //rgb: 64, 48, 16
-	adj_temp = 5
-	density = 1.2
-	specheatcap = 4.18
-
 /datum/reagent/drink/coffee
 	name = "Coffee"
 	id = COFFEE
@@ -5522,6 +5512,7 @@
 	M.Jitter(5)
 
 /datum/reagent/drink/cold
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	name = "Cold drink"
 	adj_temp = -5
 
@@ -5543,7 +5534,7 @@
 	adj_drowsy = -3
 	glass_desc = "Soda water. Why not make a scotch and soda?"
 
-/datum/reagent/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+/datum/reagent/drink/cold/sodawater/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 	T.adjust_nutrient(0.1)
 	T.adjust_water(1)
@@ -5929,15 +5920,6 @@
 	data++
 	M.hallucination += 5
 
-/datum/reagent/ethanol/rum
-	name = "Rum"
-	id = RUM
-	description = "Yohoho and all that."
-	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 250
-	glass_icon_state = "rumglass"
-	glass_desc = "Now you want to pray for a pirate suit, don't you?"
-
 /datum/reagent/ethanol/bwine
 	name = "Berry Wine"
 	id = BWINE
@@ -5968,17 +5950,6 @@
 	dizzy_adj = 3 //dorf wine is a bit stronger than regular stuff
 	slur_start = 60
 	confused_start = 135
-
-/datum/reagent/ethanol/hooch
-	name = "Hooch"
-	id = HOOCH
-	description = "A suspiciously viscous off-brown liquid that reeks of fuel. Do you really want to drink that?"
-	color = "#664300" //rgb: 102, 67, 0
-	dizzy_adj = 6
-	slurr_adj = 5
-	slur_start = 35
-	confused_start = 90
-	glass_desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 
 /datum/reagent/ethanol/pwine
 	name = "Poison Wine"
@@ -6373,11 +6344,13 @@
 		holder.remove_reagent(MAGICADELUXE,5)
 
 /datum/reagent/ethanol/deadrum
-	name = "Deadrum"
+	name = "Rum"
 	id = RUM
 	description = "Popular with the sailors. Not very popular with anyone else."
 	color = "#664300" //rgb: 102, 67, 0
-	pass_out = 325
+	pass_out = 250
+	glass_icon_state = "rumglass"
+	glass_desc = "Now you want to pray for a pirate suit, don't you?"
 
 /datum/reagent/ethanol/deadrum/on_mob_life(var/mob/living/M)
 
@@ -6478,6 +6451,7 @@
 	slur_start = 35
 	confused_start = 90
 	pass_out = 250
+	glass_desc = "You've really hit rock bottom now... your liver packed its bags and left last night."
 
 /datum/reagent/ethanol/deadrum/triplesec
 	name = "Triple Sec"
@@ -7905,7 +7879,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	custom_metabolism =  0.01
 	custom_plant_metabolism = HYDRO_SPEED_MULTIPLIER/5
 
-/datum/reagent/antidepressant/citalopram
+/datum/reagent/citalopram
 	name = "Citalopram"
 	id = CITALOPRAM
 	description = "Stabilizes the mind a little."
@@ -7916,7 +7890,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.01
 	specheatcap = 3.88
 
-/datum/reagent/antidepressant/citalopram/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/citalopram/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -7928,7 +7902,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 			data = world.time
 			to_chat(M, "<span class='notice'>Your mind feels stable... a little stable.</span>")
 
-/datum/reagent/antidepressant/paroxetine
+/datum/reagent/paroxetine
 	name = "Paroxetine"
 	id = PAROXETINE
 	description = "Stabilizes the mind greatly, but has a chance of adverse effects."
@@ -7939,7 +7913,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	density = 1.19
 	specheatcap = 3.99
 
-/datum/reagent/antidepressant/paroxetine/on_mob_life(var/mob/living/M as mob)
+/datum/reagent/paroxetine/on_mob_life(var/mob/living/M as mob)
 	if(..())
 		return 1
 	if(volume <= 0.1)
@@ -8664,6 +8638,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 //					//
 //////////////////////
 /datum/reagent/incense
+	id = EXPLICITLY_INVALID_REAGENT_ID
 	reagent_state = REAGENT_STATE_GAS
 	density = 3.214
 	specheatcap = 1.34
