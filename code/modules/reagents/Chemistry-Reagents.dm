@@ -4545,7 +4545,6 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 20 * REAGENTS_METABOLISM
 	color = "#302000" //rgb: 48, 32, 0
-	var/has_had_heart_explode = 0
 
 /datum/reagent/cornoil/on_mob_life(var/mob/living/M)
 
@@ -4555,28 +4554,20 @@
 	M.nutrition += nutriment_factor
 
 //Now handle corn oil interactions
-	if(!has_had_heart_explode && ishuman(M))
+	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		var/datum/organ/internal/heart/heart = H.internal_organs_by_name["heart"]
-		switch(volume)
-			if(1 to 15)
-				if(prob(5))
-					H.emote("me", 1, "burps.")
-					holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
-			if(15 to 100)
-				if(prob(10))
-					to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
-				if(prob(5))
-					if(heart && !heart.robotic)
-						to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
-						heart.take_damage(0.2, 1)
-			if(100 to INFINITY)//Too much corn oil holy shit, no one should ever get this high
+		if(volume < 15)
+			if(prob(5))
+				H.emote("me", 1, "burps.")
+				holder.remove_reagent(id, 0.1 * FOOD_METABOLISM)
+		else
+			if(prob(10))
+				to_chat(H,"<span class='warning'>You really don't feel very good.</span>")
+			if(prob(5))
 				if(heart && !heart.robotic)
-					to_chat(H, "<span class='danger'>You feel a terrible pain in your chest!</span>")
-					has_had_heart_explode = 1 //That way it doesn't blow up any new transplant hearts
-					qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
-					H.adjustOxyLoss(60)
-					H.adjustBruteLoss(30)
+					to_chat(H,"<span class='warning'>You feel a burn in your chest.</span>")
+					heart.take_damage(0.2, 1)
 
 /datum/reagent/cornoil/reaction_turf(var/turf/simulated/T, var/volume)
 
