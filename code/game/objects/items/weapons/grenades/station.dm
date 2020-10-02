@@ -72,7 +72,7 @@
 					O.dir = get_dir(O,T)
 
 			if(/obj/structure/rack) //some gear here
-				new /obj/item/clothing/under/syndicate/tacticool(T)
+				new /obj/item/clothing/under/syndicate(T)
 				new /obj/item/clothing/under/syndicate/executive(T)
 				new /obj/item/clothing/mask/gas/syndicate(T)
 				new /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical(T)
