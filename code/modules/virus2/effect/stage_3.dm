@@ -668,7 +668,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 /datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
 	var/mob/living/silicon/robot/mommi/mommi = /mob/living/silicon/robot/mommi
 	for(var/mob/living/M in viewers(mob))	
-		if(M != mob)
+		if(M == mob)
 			continue
 
 		var/image/crab = image(icon = null)
