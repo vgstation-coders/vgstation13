@@ -307,7 +307,7 @@
 		switch (occupant.stat)
 			if (0)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
-			if (2)
+			if (DEAD)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
 	else if (current)
 		overlays += image('icons/obj/computer.dmi', "upload_wireless")
