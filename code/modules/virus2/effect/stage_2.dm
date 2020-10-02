@@ -648,7 +648,7 @@
 	M.Scale(1,1.25)
 	mob.transform = M
 
-	mob.appearance.pixel_y = 0
+	mob.appearance.pixel_y = 0 * PIXEL_MULTIPLIER
 
 	mob.pass_flags &= ~PASSTABLE
 	activated = 0
