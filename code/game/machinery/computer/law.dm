@@ -19,7 +19,6 @@
 		var/obj/item/card = I
 		card.transfer_ai("AIUPLOAD","AICARD",src,user)
 		attack_hand(user)
-		update_icon()
 		return
 	return ..()
 
