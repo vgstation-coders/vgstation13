@@ -649,7 +649,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	if(prob(75) || valid_external_organs.len) 
 		
 		var/datum/organ/external/E = pick(valid_external_organs)
-		E.status |= ORGAN_ROBOT
+		E.robotize()
 		H.update_body()
 
 	else if(valid_internal_organs.len)
