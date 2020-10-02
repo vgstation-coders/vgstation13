@@ -585,7 +585,7 @@
 	speech.message = message
 
 /datum/disease2/effect/cyborg_vomit
-	name = "Oily Syndrome"
+	name = "Oleum Syndrome"
 	desc = "Causes the infected to internally synthesize oil and other inorganic material."
 	stage = 3
 	badness = EFFECT_DANGER_ANNOYING 

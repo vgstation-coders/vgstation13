@@ -1031,8 +1031,8 @@
 	var/activated = 0
 	
 /datum/disease2/effect/dnaspread/activate(var/mob/living/mob)
-	if(activated)
-		return
+	if(!activated)
+		to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
 	if(!iscarbon(mob))
 		return
 	var/mob/living/carbon/C = mob
@@ -1041,7 +1041,6 @@
 		original_UI = C.dna.UI.Copy()
 		original_SE = C.dna.SE.Copy()
 		dna_saved = 1
-	to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
 	C.UpdateAppearance(original_UI.Copy())
 	C.dna.SE = original_SE.Copy()
 	C.dna.UpdateSE()
@@ -1049,6 +1048,8 @@
 	domutcheck(C)
 	activated = 1
 	
+/datum/disease2/effect/dnaspread/deactivate(var/mob/living/mob)
+	activated = 0
 
 /datum/disease2/effect/dnaspread/getcopy(var/datum/disease2/disease/disease)
 	var/datum/disease2/effect/dnaspread/new_e = ..(disease)
