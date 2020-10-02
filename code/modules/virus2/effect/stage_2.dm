@@ -655,7 +655,7 @@
 
 /datum/disease2/effect/xenomorph_babel
 	name = "Mega Laryngitis"
-	desc = "Warps the vocal cords of the infected, resulting in normal speech turning into incoherent hisses. The infected seems capable of understanding the hissing, however."
+	desc = "Warps the vocal cords of the infected, resulting in normal speech turning into incoherent hisses. In addition, the infected loses the ability to understand normal language."
 	badness = EFFECT_DANGER_HINDRANCE
 	stage = 2
 	restricted = 2

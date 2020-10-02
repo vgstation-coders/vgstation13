@@ -666,6 +666,9 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	restricted = 2
 
 /datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
+	if(prob(50))
+		mob << sound('sound/effects/supermatter.ogg')
+
 	var/mob/living/silicon/robot/mommi/mommi = /mob/living/silicon/robot/mommi
 	for(var/mob/living/M in viewers(mob))	
 		if(M == mob)
