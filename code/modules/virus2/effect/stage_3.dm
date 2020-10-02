@@ -734,8 +734,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	S.punch_damage = 12
 
 	H.species = S
-	H.change_sight(adding = SEE_MOBS)
-	H.mutations.Add(M_CLAWS, M_RUN)
+	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.update_mutations()
 	H.UpdateDamageIcon()
@@ -749,7 +748,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	var/mob/living/carbon/human/H = mob
 	H.species = old_species
 	H.change_sight(removing = SEE_MOBS)
-	H.mutations.Remove(M_CLAWS, M_RUN)
+	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
 	H.update_mutations()
 	H.UpdateDamageIcon()

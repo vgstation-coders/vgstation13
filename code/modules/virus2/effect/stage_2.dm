@@ -660,6 +660,7 @@
 	stage = 2
 	restricted = 2
 	var/list/original_languages = list()
+	var/old_default
 	var/activated = 0
 
 /datum/disease2/effect/xenomorph_babel/activate(var/mob/living/mob)
@@ -670,6 +671,7 @@
 		mob.remove_language(L.name)
 
 	mob.add_language(LANGUAGE_XENO)
+	old_default = mob.default_language
 	mob.default_language = mob.languages[1]
 
 	to_chat(mob, "<span class='warning'>You feel an off-sensation in your throat.</span>")
@@ -680,6 +682,7 @@
 		for(var/forgotten in original_languages)
 			mob.add_language(forgotten)
 		mob.remove_language(LANGUAGE_XENO)
+		mob.default_language = old_default
 
 		to_chat(mob, "<span class='warning'>Your throat feels normal again.</span>")
 	activated = 0
@@ -699,7 +702,7 @@
 		return
 	
 	var/mob/living/carbon/human/H = mob
-	if(prob(25))
+	if(prob(33))
 		H.vomit(instant = 1)
 	else
 		H.vomit()
