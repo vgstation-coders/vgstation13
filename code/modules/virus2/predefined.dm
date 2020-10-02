@@ -103,7 +103,7 @@ var/list/global_diseases = list()
 	origin = "Xenomicrobes Reagent"
 
 /datum/disease2/disease/predefined/wendigo
-	form = "Malicious Entity"
+	form = "malicious entity"
 	category = DISEASE_WENDIGO
 	infectionchance = 0
 	infectionchance_base = 0

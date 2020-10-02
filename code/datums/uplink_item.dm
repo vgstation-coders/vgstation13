@@ -730,6 +730,13 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
 
+/datum/uplink_item/jobspecific/medical/transformviruses
+	name = "Mutation Reagent Collection"
+	desc = "A box containing four highly dangerous reagent samples. The samples can fed to a human to infect them with their respective viruses, which can then be futher analyzed and modified."
+	item = /obj/item/weapon/storage/box/syndie_kit/transformviruses
+	cost = 21
+	jobs_exclusive = list("Virologist", "Chief Medical Officer")
+	
 /datum/uplink_item/jobspecific/engineering
 	category = "Engineering Specials"
 

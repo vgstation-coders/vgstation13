@@ -368,3 +368,18 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/device/telepad_beacon(src)
 	new /obj/item/weapon/rcs/salvage/syndicate(src)
+
+
+/obj/item/weapon/storage/box/syndie_kit/transformviruses
+	name = "box (VR)"
+
+/obj/item/weapon/stoage/box/syndie_kit/transformviruses/New()
+	..()
+	var/obj/item/weapon/reagent_containers/glass/bottle/B1 = new /obj/item/weapon/reagent_containers/glass/bottle(src)
+	var/obj/item/weapon/reagent_containers/glass/bottle/B2 = new /obj/item/weapon/reagent_containers/glass/bottle(src)
+	var/obj/item/weapon/reagent_containers/glass/bottle/B3 = new /obj/item/weapon/reagent_containers/glass/bottle(src)
+	new /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo(src)
+
+	B1.reagents.add_reagent(NANITES, 1)
+	B2.reagents.add_reagent(AUTISTNANITES, 1)
+	B3.reagents.add_reagent(XENOMICROBES, 1)
