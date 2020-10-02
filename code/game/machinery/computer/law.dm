@@ -305,7 +305,7 @@
 
 	if (occupant)
 		switch (occupant.stat)
-			if (0)
+			if (CONSCIOUS)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
 			if (DEAD)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
