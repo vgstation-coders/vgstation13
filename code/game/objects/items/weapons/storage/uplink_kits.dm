@@ -373,7 +373,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 /obj/item/weapon/storage/box/syndie_kit/transformviruses
 	name = "box (VR)"
 
-/obj/item/weapon/stoage/box/syndie_kit/transformviruses/New()
+/obj/item/weapon/storage/box/syndie_kit/transformviruses/New()
 	..()
 	var/obj/item/weapon/reagent_containers/glass/bottle/B1 = new /obj/item/weapon/reagent_containers/glass/bottle(src)
 	var/obj/item/weapon/reagent_containers/glass/bottle/B2 = new /obj/item/weapon/reagent_containers/glass/bottle(src)
