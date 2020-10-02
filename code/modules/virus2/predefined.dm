@@ -46,9 +46,9 @@ var/list/global_diseases = list()
 	robustness = 100
 	mutation_modifier = 0
 
-	color = "#c0c2be"
+	color = "#414240"
 	pattern = 1
-	pattern_color = "#6b6967"
+	pattern_color = "#ebe7e4"
 
 	origin = "Nanites Reagent"
 
@@ -71,9 +71,9 @@ var/list/global_diseases = list()
 	robustness = 100
 	mutation_modifier = 0
 
-	color = "#c0c2be"
+	color = "#414240"
 	pattern = 1
-	pattern_color = "#6b6967"
+	pattern_color = "#ebe7e4"
 
 	origin = "Autism Nanites Reagent"
 
@@ -123,6 +123,6 @@ var/list/global_diseases = list()
 
 	color = "#353535"
 	pattern = 2
-	pattern_color = "#3f0606"
+	pattern_color = "#680b0b"
 
 	origin = "Wendigo Meat"
