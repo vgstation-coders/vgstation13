@@ -218,6 +218,12 @@ var/list/infected_contact_mobs = list()
 		return 1
 	return 0
 
+/mob/living/proc/infect_disease2_predefined(var/category, var/forced, var/notes)
+	if(!global_diseases[category])
+		return
+	infect_disease2(global_diseases[category], forced, notes)
+
+
 //ITEMS
 var/list/infected_items = list()
 

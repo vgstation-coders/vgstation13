@@ -736,7 +736,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.species = S
 	H.mutations.Add(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
-	H.update_mutations()
 	H.UpdateDamageIcon()
 	H.fixblood()
 	to_chat(mob, "<span class='sinister'>You feel different.</span>")
@@ -750,7 +749,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	H.change_sight(removing = SEE_MOBS)
 	H.mutations.Remove(M_CLAWS, M_RUN, M_THERMALS)
 	domutcheck(H,null,MUTCHK_FORCED)
-	H.update_mutations()
 	H.UpdateDamageIcon()
 	H.fixblood()
 	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
@@ -767,9 +765,9 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 /datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
 	if(!ishuman(mob))	
-		to_chat(world, "test1")
 		return
 	var/mob/living/carbon/human/H = mob
+	H.Jitter(100)
 	if(!activated)
 		mob.overlay_fullscreen("wendigoblur", /obj/abstract/screen/fullscreen/snowfall_blizzard)
 		activated = 1
@@ -777,7 +775,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 			H.species.chem_flags |= NO_EAT
 
 
-	H.Jitter(100)
+
 
 	//creepy sounds copypasted from hallucination code
 	var/list/possible_sounds = list('sound/effects/ghost.ogg', 'sound/effects/ghost2.ogg', 'sound/effects/heart_beat_single.ogg', 'sound/effects/ear_ring_single.ogg', 'sound/effects/screech.ogg',\
@@ -788,7 +786,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	mob << pick(possible_sounds)
 
 
-/datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
+/datum/disease2/effect/wendigo_hallucination/deactivate(var/mob/living/mob)
 	mob.clear_fullscreen("wendigoblur", animate = 0)
 	if(ishuman(mob))
 		var/mob/living/carbon/human/H = mob
@@ -799,6 +797,6 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 
 /datum/disease2/effect/wendigo_hallucination/affect_mob_voice(var/datum/speech/speech)
 	var/message = speech.message
-	message = replacetext(speech.message,"I","we")
-	message = replacetext(speech.message,"me","us")
+	message = replacetext(message,"I","we")
+	message = replacetext(message,"me","us")
 	speech.message = message

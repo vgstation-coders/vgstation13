@@ -3477,16 +3477,20 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
+	var/disease_type = DISEASE_CYBORG
 
 /datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
 
+	if((prob(10) && method == TOUCH) || method == INGEST)
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
 	description = "Microscopic construction robots. They look more autistic than usual."
+	disease_type = DISEASE_MOMMI
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3499,6 +3503,8 @@
 
 	if(..())
 		return 1
+	if((prob(10) && method == TOUCH) || method == INGEST)
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
 
 /datum/reagent/nanobots
 	name = "Nanobots"
