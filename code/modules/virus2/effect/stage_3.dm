@@ -662,7 +662,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	name = "Supermatter Syndrome"	//names suck
 	desc = "Causes the infected to experience engineering-related hallucinations."
 	stage = 3
-	badness = EFFECT_DANGER_HINDRANCE
+	badness = EFFECT_DANGER_ANNOYING
 	restricted = 2
 
 /datum/disease2/effect/mommi_hallucination/activate(var/mob/living/mob)
@@ -670,7 +670,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	for(var/mob/living/M in viewers(mob))	
 		if(M != mob)
 			continue
-			
+
 		var/image/crab = image(icon = null)
 		crab.appearance = initial(mommi.appearance)
 
@@ -704,5 +704,102 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 				if(C)
 					C.images.Remove(supermatter)
 
-	 
 
+/datum/disease2/effect/xenomorph_traits
+	name = "Plasmatic Adaptation"
+	desc = "Induces heavy mutation and optimization in the infected's cellular structure. The infected gains several physical abilities and an affinity for plasma."
+	badness = EFFECT_DANGER_HELPFUL
+	stage = 3
+	restricted = 2
+	var/datum/species/old_species
+	var/activated
+
+/datum/disease2/effect/xenomorph_traits/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	if(activated)
+		return
+	var/mob/living/carbon/human/H = mob
+	var/datum/species/S = H.species
+
+	old_species = new S.type
+	old_species.flags = S.flags
+	old_species.attack_verb = S.attack_verb
+	old_species.blood_color = S.blood_color
+	old_species.punch_damage = S.punch_damage
+
+	S.flags |= PLASMA_IMMUNE
+	S.attack_verb = "claws"
+	S.blood_color = "#05EE05"
+	S.punch_damage = 12
+
+	H.species = S
+	H.change_sight(adding = SEE_MOBS)
+	H.mutations.Add(M_CLAWS, M_RUN)
+	domutcheck(H,null,MUTCHK_FORCED)
+	H.update_mutations()
+	H.UpdateDamageIcon()
+	H.fixblood()
+	to_chat(mob, "<span class='sinister'>You feel different.</span>")
+	activated = 1
+
+/datum/disease2/effect/xenomorph_traits/deactivate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	var/mob/living/carbon/human/H = mob
+	H.species = old_species
+	H.change_sight(removing = SEE_MOBS)
+	H.mutations.Remove(M_CLAWS, M_RUN)
+	domutcheck(H,null,MUTCHK_FORCED)
+	H.update_mutations()
+	H.UpdateDamageIcon()
+	H.fixblood()
+	to_chat(mob, "<span class='warning'>You feel like your old self again.</span>")
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_hallucination
+	name = "Eldritch Mind Syndrome"
+	desc = "UNKNOWN"
+	badness = EFFECT_DANGER_HARMFUL
+	stage = 3
+	restricted = 2
+	var/activated = 0
+
+/datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
+	if(!ishuman(mob))	
+		to_chat(world, "test1")
+		return
+	var/mob/living/carbon/human/H = mob
+	if(!activated)
+		mob.overlay_fullscreen("wendigoblur", /obj/abstract/screen/fullscreen/snowfall_blizzard)
+		activated = 1
+		if(!isskellington(H) && !islich(H))	//ignore skellingtons since they can only eat meat anyway
+			H.species.chem_flags |= NO_EAT
+
+
+	H.Jitter(100)
+
+	//creepy sounds copypasted from hallucination code
+	var/list/possible_sounds = list('sound/effects/ghost.ogg', 'sound/effects/ghost2.ogg', 'sound/effects/heart_beat_single.ogg', 'sound/effects/ear_ring_single.ogg', 'sound/effects/screech.ogg',\
+		'sound/hallucinations/behind_you1.ogg', 'sound/hallucinations/behind_you2.ogg', 'sound/hallucinations/far_noise.ogg', 'sound/hallucinations/growl1.ogg', 'sound/hallucinations/growl2.ogg',\
+		'sound/hallucinations/growl3.ogg', 'sound/hallucinations/im_here1.ogg', 'sound/hallucinations/im_here2.ogg', 'sound/hallucinations/i_see_you1.ogg', 'sound/hallucinations/i_see_you2.ogg',\
+		'sound/hallucinations/look_up1.ogg', 'sound/hallucinations/look_up2.ogg', 'sound/hallucinations/over_here1.ogg', 'sound/hallucinations/over_here2.ogg', 'sound/hallucinations/over_here3.ogg',\
+		'sound/hallucinations/turn_around1.ogg', 'sound/hallucinations/turn_around2.ogg', 'sound/hallucinations/veryfar_noise.ogg', 'sound/hallucinations/wail.ogg')
+	mob << pick(possible_sounds)
+
+
+/datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
+	mob.clear_fullscreen("wendigoblur", animate = 0)
+	if(ishuman(mob))
+		var/mob/living/carbon/human/H = mob
+		if(!isskellington(H) && !islich(H))	//ignore skellingtons since they can only eat meat anyway
+			H.species.chem_flags &= ~NO_EAT
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_hallucination/affect_mob_voice(var/datum/speech/speech)
+	var/message = speech.message
+	message = replacetext(speech.message,"I","we")
+	message = replacetext(speech.message,"me","us")
+	speech.message = message

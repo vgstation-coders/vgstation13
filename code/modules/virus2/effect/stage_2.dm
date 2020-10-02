@@ -629,25 +629,77 @@
 	var/activated = 0
 
 /datum/disease2/effect/mommi_shrink/activate(var/mob/living/mob)
-	if(!activated)
-		to_chat(mob, "<span class = 'warning'>You feel small...</span>")
-		var/matrix/M = matrix()
-		M.Scale(1,0.7)
-		mob.transform = M
+	if(activated)
+		return
+	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
+	var/matrix/M = matrix()
+	M.Scale(1,0.7)
+	mob.transform = M
 
-		mob.pixel_y = -4 * PIXEL_MULTIPLIER
+	mob.pixel_y = -4 * PIXEL_MULTIPLIER
 
-		mob.pass_flags |= PASSTABLE
-		
-		activated = 1
+	mob.pass_flags |= PASSTABLE
+	
+	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
 		to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
 		var/matrix/M = matrix()
-		M.Scale(1,1)
+		M.Scale(1,(1/0.7))
 		mob.transform = M
 
 		mob.appearance.pixel_y = 0
 
 		mob.pass_flags &= ~PASSTABLE
 		activated = 0
+
+/datum/disease2/effect/xenomorph_babel
+	name = "Mega Laryngitis"
+	desc = "Warps the vocal cords of the infected, resulting in normal speech turning into incoherent hisses. The infected seems capable of understanding the hissing, however."
+	badness = EFFECT_DANGER_HINDRANCE
+	stage = 2
+	restricted = 2
+	var/list/original_languages = list()
+	var/activated = 0
+
+/datum/disease2/effect/xenomorph_babel/activate(var/mob/living/mob)
+	if(activated)
+		return
+	for(var/datum/language/L in mob.languages)
+		original_languages += L.name
+		mob.remove_language(L.name)
+
+	mob.add_language(LANGUAGE_XENO)
+	mob.default_language = mob.languages[1]
+
+	to_chat(mob, "<span class='warning'>You feel an off-sensation in your throat.</span>")
+	activated = 1
+
+/datum/disease2/effect/xenomorph_babel/deactivate(var/mob/living/mob)
+	if(original_languages.len)
+		for(var/forgotten in original_languages)
+			mob.add_language(forgotten)
+		mob.remove_language(LANGUAGE_XENO)
+
+		to_chat(mob, "<span class='warning'>Your throat feels normal again.</span>")
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_vomit
+	name = "Gastrointestinal Inflammation"
+	desc = "Inflames the GI tract of the infected, causing relentless vomitting."
+	stage = 2
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 2
+	chance = 6
+	max_chance = 12
+
+/datum/disease2/effect/wendigo_vomit/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+	
+	var/mob/living/carbon/human/H = mob
+	if(prob(25))
+		H.vomit(instant = 1)
+	else
+		H.vomit()

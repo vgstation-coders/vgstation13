@@ -332,10 +332,10 @@
 		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
 
 /datum/disease2/effect/wendigo_warning
-	name = "Eldritch Corruption"
-	desc = "UNKNOWN"
+	name = "Fullness Syndrome"
+	desc = "An unsual symptom that causes the infected to feel hungry, even after eating."
 	stage = 1
-	badness = EFFECT_DANGER_FLAVOR
+	badness = EFFECT_DANGER_ANNOYING
 	restricted = 2
 	var/list/host_messages = list(
 		"Your stomach grumbles.",
@@ -351,6 +351,7 @@
 
 /datum/disease2/effect/wendigo_warning/activate(var/mob/living/mob)
 	to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
+	mob.nutrition -= 25
 
 /datum/disease2/effect/xenomorph_warning
 	name = "Foreign-Impulse Syndrome"
