@@ -67,7 +67,19 @@ rcd light flash thingy on matter drain
 	for(var/obj/machinery/turret/turret in machines)
 		turret.health += 30
 		turret.shot_delay = 20
-	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
+	to_chat(user, "<span class='warning'> Turrets upgraded.</span>")
+
+/datum/AI_Module/large/explosive
+	module_name = "Explosive Hardware"
+	mod_pick_name = "siliconexplode"
+	description = "Overrides the thermal safeties on cyborgs bound to you, causing them to violently explode when destroyed. Your own core is also affected, causing it to explode violently when system integrity reaches zero."
+	cost = 15
+	one_time = 1
+
+/datum/AI_Module/large/explosive/on_purchase(mob/living/silicon/ai/user)
+	user.explosive_cyborgs = TRUE
+	user.explosive = TRUE
+	to_chat(user, "<span class='warning'>You and your cyborgs will now explode on death.</span>")
 
 /datum/AI_Module/large/disable_rcd
 	module_name = "RCD disable"
