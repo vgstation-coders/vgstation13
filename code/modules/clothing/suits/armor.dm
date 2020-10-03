@@ -106,6 +106,14 @@
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 20, bullet = 35, laser = 10, energy = 10, bomb = 25, bio = 0, rad = 0)
 
+/obj/item/clothing/suit/armor/vest/metrocop
+	name = "civil protection armor"
+	desc = "Pick up that can."
+	icon_state = "metrocop_armor"
+	item_state = "armor"
+	species_fit = list()
+	clothing_flags = 0
+
 /obj/item/clothing/suit/armor/riot
 	name = "Riot Suit"
 	desc = "A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement."
@@ -265,6 +273,7 @@
 	blood_overlay_type = "armor"
 	clothing_flags = ONESIZEFITSALL
 	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+
 
 
 //Reactive armor

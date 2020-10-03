@@ -1984,6 +1984,9 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
+		/obj/item/clothing/head/helmet/metrocop = 2,
+		/obj/item/clothing/under/rank/metrocop = 2,
+		/obj/item/clothing/suit/armor/vest/metrocop = 2
 		)
 	premium = list(
 		/obj/item/clothing/head/helmet/siren = 2,

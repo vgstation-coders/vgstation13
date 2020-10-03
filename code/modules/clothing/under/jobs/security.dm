@@ -21,18 +21,21 @@
 	icon_state = "hosblueclothes"
 	item_state = "ba_suit"
 	_color = "hosblueclothes"
+
 /obj/item/clothing/under/rank/secformal/headofsecurity_navy
 	name = "\improper HoS' navy dress uniform"
 	desc = "Head of Security's navy uniform. For formal occasions."
 	icon_state = "hosdnavyclothes"
 	item_state = "jensensuit"
 	_color = "hosdnavyclothes"
+
 /obj/item/clothing/under/rank/secformal/headofsecurity_tan
 	name = "\improper HoS' tan dress uniform"
 	desc = "Head of Security's uniform. For formal occasions."
 	icon_state = "hostanclothes"
 	item_state = "ba_suit"
 	_color = "hostanclothes"
+
 /obj/item/clothing/under/rank/secformal/headofsecurity_navy/trimmed
 	_color = "hosdnavyclothestrimmed"
 
@@ -42,12 +45,14 @@
 	icon_state = "wardenblueclothes"
 	item_state = "ba_suit"
 	_color = "wardenblueclothes"
+
 /obj/item/clothing/under/rank/secformal/warden_navy
 	name = "warden's navy dress uniform"
 	desc = "Warden's navy dress uniform. For formal occasions."
 	icon_state = "wardendnavyclothes"
 	item_state = "jensensuit"
 	_color = "wardendnavyclothes"
+
 /obj/item/clothing/under/rank/secformal/warden_tan
 	name = "warden's tan dress uniform"
 	desc = "Warden's tan dress uniform. For formal occasions."
@@ -61,12 +66,14 @@
 	icon_state = "officerblueclothes"
 	item_state = "ba_suit"
 	_color = "officerblueclothes"
+
 /obj/item/clothing/under/rank/secformal/officer_navy
 	name = "officer's navy dress uniform"
 	desc = "Security officer's navy dress uniform. For formal occasions."
 	icon_state = "officerdnavyclothes"
 	item_state = "jensensuit"
 	_color = "officerdnavyclothes"
+
 /obj/item/clothing/under/rank/secformal/officer_tan
 	name = "officer's tan dress uniform"
 	desc = "Security officer's tan dress uniform. For formal occasions."
@@ -249,3 +256,12 @@
 	item_state = "dg_suit"
 	_color = "centcom"
 	displays_id = 0
+
+/obj/item/clothing/under/rank/metrocop
+	name = "civil protection uniform"
+	desc = 	"Attention, all teams respond, code 3."
+	icon_state = "metrocop"
+	item_state = "r_suit"
+	armor = list(melee = 10, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	siemens_coefficient = 0.9
+
