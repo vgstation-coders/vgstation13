@@ -14,13 +14,7 @@
 	var/faction = null //No shooting our buddies!
 	var/shootsilicons = 0 //You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
 	var/lasers = 0
-	var/lasertype = 1
-		// 1 = lasers
-		// 2 = cannons
-		// 3 = pulse
-		// 4 = change (HONK)
-		// 5 = bluetag
-		// 6 = redtag
+	var/lasertype = /obj/item/projectile/beam
 	var/health = 80
 	var/obj/machinery/turretcover/cover = null
 	var/popping = 0
@@ -209,22 +203,7 @@
 		return
 	var/obj/item/projectile/A
 	if (src.lasers)
-		switch(lasertype)
-			if(1)
-				A = new /obj/item/projectile/beam(loc)
-			if(2)
-				A = new /obj/item/projectile/beam/heavylaser(loc)
-				fire_sound = 'sound/weapons/lasercannonfire.ogg'
-			if(3)
-				A = new /obj/item/projectile/beam/pulse(loc)
-				fire_sound = 'sound/weapons/pulse.ogg'
-			if(4)
-				A = new /obj/item/projectile/change(loc)
-				fire_sound = 'sound/weapons/radgun.ogg'
-			if(5)
-				A = new /obj/item/projectile/beam/lasertag/blue(loc)
-			if(6)
-				A = new /obj/item/projectile/beam/lasertag/red(loc)
+		A = new lasertype(loc)
 		use_power(500)
 	else
 		A = new /obj/item/projectile/energy/electrode( loc )
