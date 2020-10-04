@@ -110,6 +110,7 @@ rcd light flash thingy on matter drain
 		if(shield)
 			shield.raise()
 		A.ai_flags |= COREFORTIFY
+	playsound(user, 'sound/machines/poddoor.ogg', 60, 1)
 	to_chat(user, "<span class='warning'>[A.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
 
 /datum/AI_Module/large/explosive
