@@ -180,6 +180,7 @@
 #define CONVERTIBLE_NEVER	3
 #define CONVERTIBLE_NOMIND	4
 #define CONVERTIBLE_ALREADY	5
+#define CONVERTIBLE_IMPLANT	6
 
 ////////////////////////////////////////////////////////////////////////////////
 

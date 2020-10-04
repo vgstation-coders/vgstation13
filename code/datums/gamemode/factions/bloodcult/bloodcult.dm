@@ -939,12 +939,12 @@ var/static/list/valid_cultpower_slots = list(
 		if (client)
 			acceptance = get_role_desire_str(client.prefs.roles[CULTIST])
 
-		for(var/obj/item/weapon/implant/loyalty/I in src)
-			if(I.implanted)
-				return CONVERTIBLE_NEVER
-
 		if (jobban_isbanned(src, CULTIST) || isantagbanned(src) || (acceptance == "Never"))
 			return CONVERTIBLE_NEVER
+
+		for(var/obj/item/weapon/implant/loyalty/I in src)
+			if(I.implanted)
+				return CONVERTIBLE_IMPLANT
 
 		if (acceptance == "Always" || acceptance == "Yes")
 			return CONVERTIBLE_ALWAYS
@@ -961,8 +961,10 @@ var/static/list/valid_cultpower_slots = list(
 			I.icon_state = "convertible"
 		if (CONVERTIBLE_CHOICE)
 			I.icon_state = "maybeconvertible"
-		if (CONVERTIBLE_NEVER)
+		if (CONVERTIBLE_IMPLANT)
 			I.icon_state = "unconvertible"
+		if (CONVERTIBLE_NEVER)
+			I.icon_state = "unconvertible2"
 
 	I.pixel_y = 16 * PIXEL_MULTIPLIER
 	I.plane = ANTAG_HUD_PLANE
