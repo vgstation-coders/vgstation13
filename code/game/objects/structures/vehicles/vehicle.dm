@@ -99,7 +99,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(iswelder(W))
+	if(iswelder(W) && health < max_health)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
