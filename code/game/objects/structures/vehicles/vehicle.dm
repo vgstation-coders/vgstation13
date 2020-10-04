@@ -14,6 +14,11 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/Destroy()
+	if(paired_to)
+		paired_to.mykey = null
+		paired_to = null
+	..()
 
 /obj/structure/bed/chair/vehicle
 	name = "vehicle"
@@ -85,6 +90,12 @@
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
+	if(mykey)
+		mykey.paired_to = null
+		mykey = null
+	if(heldkey)
+		qdel(heldkey)
+		heldkey = null
 	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
