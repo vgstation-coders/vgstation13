@@ -125,6 +125,8 @@ rcd light flash thingy on matter drain
 	override_base = "malf"
 
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
+	if(istype(target, /obj/item/device/radio/intercom))
+		return 1
 	if (istype(target, /obj/machinery))
 		var/obj/machinery/M = target
 		return M.can_overload()

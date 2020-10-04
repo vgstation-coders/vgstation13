@@ -491,6 +491,9 @@ var/list/apiaries_list = list()
 
 		consume.reagents.clear_reagents()
 
+/obj/machinery/apiary/can_overload()
+	return 0
+
 ///////////////////////////WILD BEEHIVES////////////////////////////
 
 /obj/structure/wild_apiary
