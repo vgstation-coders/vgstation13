@@ -885,6 +885,9 @@ var/list/admin_verbs_mod = list(
 			//associate them with the new admin datum
 			D.associate(src)
 
+			if (isobserver(mob))
+				mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
+
 			if(D.rights & (R_DEBUG|R_SERVER)) // Grant profile/reboot access
 				world.SetConfig("APP/admin", ckey, "role=admin")
 	else
@@ -918,6 +921,8 @@ var/list/admin_verbs_mod = list(
 			log_admin("[src] re-adminned themselves.")
 			feedback_add_details("admin_verb","RAS")
 			verbs -= /client/proc/readmin
+			if (isobserver(mob))
+				mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
 			qdel(query)
 			return
 
