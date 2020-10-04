@@ -1780,7 +1780,7 @@ var/list/blind_victims = list()
 		return
 	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	caster.apply_vision_overrides()
-	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side.</span>")
+	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propension to be successfully converted.</span>")
 
 /obj/effect/cult_ritual/seer/Destroy()
 	processing_objects.Remove(src)
