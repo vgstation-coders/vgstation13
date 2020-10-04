@@ -5,12 +5,10 @@
 
 var/list/global_diseases = list()
 
-
-
 /proc/create_global_diseases()
-	for(var/datum/disease2/disease/predefined/disease_type in /datum/disease2/disease/predefined)
-		new disease_type
-	
+	for(var/disease_type in subtypesof(/datum/disease2/disease/predefined))
+		var/datum/disease2/disease/predefined/D = new disease_type
+		global_diseases[D.category] = D
 	
 
 /datum/disease2/disease/predefined
@@ -23,7 +21,6 @@ var/list/global_diseases = list()
 	subID = rand(0,9999)
 	strength = rand(70,100)
 
-	global_diseases[category] = src
 	update_global_log()
 	..()
 
