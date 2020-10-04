@@ -7,9 +7,10 @@
 	var/force_report = 0
 	var/alert = 'sound/AI/commandreport.ogg'//sound
 	var/noalert = 0
+	var/small = 0
 
 /datum/command_alert/proc/announce()
-	command_alert(message, alert_title, force_report, alert, noalert)
+	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 //////BIOHAZARD
 

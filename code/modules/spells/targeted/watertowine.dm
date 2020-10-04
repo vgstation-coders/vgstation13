@@ -11,7 +11,7 @@
 	level_max = list()
 	hud_state = "bucket"
 	var/convert_from_type = /datum/reagent/water
-	var/convert_to_type = /datum/reagent/ethanol/deadrum/wine
+	var/convert_to_type = /datum/reagent/ethanol/drink/wine
 
 /spell/targeted/watertowine/cast(var/list/targets, mob/user)
 	for(var/atom/A in targets)

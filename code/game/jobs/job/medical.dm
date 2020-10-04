@@ -73,12 +73,26 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "the chief medical officer"
-	wage_payout = 45
+	wage_payout = 55
 	selection_color = "#ffeef0"
 	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
 	outfit_datum = /datum/outfit/virologist
+
+/datum/job/paramedic
+	title = "Paramedic"
+	flag = PARAMEDIC
+	department_flag = MEDSCI
+	faction = "Station"
+	total_positions = 4
+	spawn_positions = 2
+	supervisors = "the chief medical officer"
+	wage_payout = 55
+	selection_color = "#ffeef0"
+	access = list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_surgery)
+	minimal_access=list(access_paramedic, access_medical, access_sec_doors, access_maint_tunnels, access_external_airlocks, access_eva, access_morgue, access_surgery)
+	outfit_datum = /datum/outfit/paramedic
 
 /*
 /datum/job/psychiatrist

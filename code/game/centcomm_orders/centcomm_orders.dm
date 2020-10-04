@@ -201,7 +201,7 @@ var/global/current_centcomm_order_id=124901
 
 		if (cargo_contribution > 0 && acct_by_string != "Cargo")//cargo gets some extra coin from every order shipped
 			var/datum/money_account/cargo_acct = department_accounts["Cargo"]
-			cargo_acct.charge(round(-worth * cargo_contribution),null,"Contribution for partial order #[id]",dest_name = name)
+			cargo_acct.charge(round(-toPay * cargo_contribution),null,"Contribution for partial order #[id]",dest_name = name)
 		toPay = 0
 
 // Same as normal, but will take every last bit of what you provided.

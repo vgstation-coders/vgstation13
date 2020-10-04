@@ -269,10 +269,10 @@ var/list/headset_modes = list(
 			rendered_message = replacetext(rendered_message, T, "<i style='color: red;'>[T]</i>")
 
 	//AI mentions
-	if(istype(src, /mob/living/silicon/ai) && speech.frequency && speech.job != "AI")
+	if(isAI(src) && speech.frequency && !findtextEx(speech.job,"AI") && (speech.name != name))
 		var/mob/living/silicon/ai/ai = src
 		if(ai.mentions_on)
-			if(findtextEx(rendered_message, "AI") || findtext(rendered_message, ai.real_name))
+			if(findtextEx(speech.message, "AI") || findtext(speech.message, ai.real_name))
 				ai << 'sound/machines/twobeep.ogg'
 				rendered_message = replacetextEx(rendered_message, "AI", "<i style='color: blue;'>AI</i>")
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")

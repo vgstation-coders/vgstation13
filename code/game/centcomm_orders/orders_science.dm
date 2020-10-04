@@ -25,20 +25,23 @@
 /datum/centcomm_order/department/science/technology/New()
 	..()
 	name = "Nanotrasen R&D"
-	tech = rand(1,4)
+	tech = rand(1,5)
 	switch(tech)
 		if (1)
 			required_tech = /datum/tech/materials
-			required_level = 8
+			required_level = rand(6,8)
 		if (2)
 			required_tech =  /datum/tech/bluespace
-			required_level = 4
+			required_level = rand(3,4)
 		if (3)
 			required_tech =  /datum/tech/combat
-			required_level = 5
+			required_level = rand(4,5)
 		if (4)
 			required_tech =  /datum/tech/magnets
-			required_level = 5
+			required_level = rand(4,5)
+		if (5)
+			required_tech =  /datum/tech/anomaly
+			required_level = rand(4,6)
 	requested = list(
 		/obj/item/weapon/disk/tech_disk = 1
 	)
@@ -47,7 +50,7 @@
 	)
 	var/datum/tech/DT = required_tech
 	extra_requirements = "tech required: [initial(DT.name)] (Level [required_level])"
-	worth = 750
+	worth = 150 * required_level
 
 /datum/centcomm_order/department/science/technology/ExtraChecks(var/obj/item/weapon/disk/tech_disk/TD)
 	if (!istype(TD))

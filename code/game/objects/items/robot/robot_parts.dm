@@ -44,10 +44,6 @@
 	var/obj/item/weapon/cell/cell = null
 	var/extension = null //For making borgs start with pre-installed better components. Make the var the end of the path including the "/".
 
-/obj/item/robot_parts/chest/complete
-	cell = new /obj/item/weapon/cell/high
-	wires = 1.0
-
 /obj/item/robot_parts/chest/get_cell()
 	return cell
 
@@ -63,10 +59,6 @@
 	var/obj/item/device/flash/flash1 = null
 	var/obj/item/device/flash/flash2 = null
 
-/obj/item/robot_parts/head/complete
-	flash1 = new /obj/item/device/flash
-	flash2 = new /obj/item/device/flash
-
 /obj/item/robot_parts/robot_suit
 	name = "robot endoskeleton"
 	desc = "A complex metal backbone with standard limb sockets and pseudomuscle anchors."
@@ -78,15 +70,6 @@
 	var/obj/item/robot_parts/chest/chest = null
 	var/obj/item/robot_parts/head/head = null
 	var/created_name = ""
-	var/ai_control = 1
-
-/obj/item/robot_parts/robot_suit/mapped
-	l_arm = new /obj/item/robot_parts/l_arm
-	r_arm = new /obj/item/robot_parts/r_arm
-	l_leg = new /obj/item/robot_parts/l_leg
-	r_leg = new /obj/item/robot_parts/r_leg
-	chest = new /obj/item/robot_parts/chest/complete
-	head = new /obj/item/robot_parts/head/complete
 
 /obj/item/robot_parts/robot_suit/New()
 	..()
@@ -226,14 +209,47 @@
 			if(!user.drop_item(W))
 				return
 
+			var/mob/living/silicon/robot/O = new /mob/living/silicon/robot(get_turf(loc))
+
 			for(var/P in M.mommi_assembly_parts) //Let's give back all those mommi creation components
 				for(var/obj/item/L in M.contents)
 					if(L == P)
 						L.forceMove(T)
 						M.contents -= L
 
-			create_robot(M)
+			if(!O)
+				return
 
+			O.mmi = W
+			O.invisibility = 0
+			O.custom_name = created_name
+			O.updatename("Default")
+
+			M.brainmob.mind.transfer_to(O)
+
+			if(O.mind && O.mind.special_role)
+				O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
+
+			O.job = "Cyborg"
+			if(chest.extension)
+				O.component_extension = chest.extension
+				O.upgrade_components()
+			O.cell = chest.cell
+			O.cell.forceMove(O)
+			W.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
+
+			// Since we "magically" installed a cell, we also have to update the correct component.
+			if(O.cell)
+				var/datum/robot_component/cell_component = O.components["power cell"]
+				cell_component.wrapped = O.cell
+				cell_component.installed = 1
+
+			feedback_inc("cyborg_birth",1)
+
+			spawn()
+				O.Namepick()
+
+			qdel(src)
 		else
 			to_chat(user, "<span class='notice'>The MMI must go in after everything else!</span>")
 
@@ -246,112 +262,7 @@
 
 		src.created_name = t
 
-	if(W.force >= 15)	//Smash those skeletons
-		smash()
-
 	return
-
-/obj/item/robot_parts/robot_suit/attack_hand(mob/user)
-	if(!check_completion())
-		return
-	if(ai_control)
-		to_chat(user, "You disable AI control on the cyborg exoskeleton.")
-		ai_control = 0
-	else
-		to_chat(user, "You enable AI control on the cyborg exoskeleton.")
-		ai_control = 1
-
-/obj/item/robot_parts/robot_suit/attack_ai(mob/user)
-	if(!isAI(user))
-		return
-	if(user.isDead())
-		return
-	if(!check_completion())
-		return
-	if(!ai_control)
-		to_chat(user, "<span class='warning'>AI control is disabled on that exoskeleton.</span>")
-		return
-	var/mob/living/silicon/ai/A = user
-	if(!A.shell)
-		A.create_shell(src)
-	else 
-		to_chat(user, "<span class='warning'>You already have a shell. Destroy it to create a new one.</span>")
-
-/obj/item/robot_parts/robot_suit/bullet_act(var/obj/item/projectile/P)
-	if(P.damage > 10)
-		smash()
-
-
-/obj/item/robot_parts/robot_suit/proc/smash()
-	robogibs(loc)
-	visible_message("<span class='danger'>[src] blows apart!</span>")
-	var/turf/T = get_turf(src)
-	if(l_arm)
-		l_arm.forceMove(T)
-		l_arm = null
-	if(r_arm)
-		r_arm.forceMove(T)
-		r_arm = null
-	if(l_leg)
-		l_leg.forceMove(T)
-		l_leg = null
-	if(r_leg)
-		r_leg.forceMove(T)
-		r_leg = null
-	if(chest)
-		chest.forceMove(T)
-		chest = null
-	if(head)
-		head.forceMove(T)
-		head = null
-	qdel(src)
-
-/obj/item/robot_parts/robot_suit/proc/create_robot(var/obj/item/device/mmi/M, is_shell = FALSE)
-	var/robottype
-	if(is_shell)
-		robottype = /mob/living/silicon/robot/shell
-	else
-		robottype = /mob/living/silicon/robot
-	var/mob/living/silicon/robot/O = new robottype(get_turf(loc))
-	if(!O)
-		return
-	if(M)
-		O.mmi = M
-	O.invisibility = 0
-	O.custom_name = created_name
-	O.updatename("Default")
-
-	if(M)
-		M.brainmob.mind.transfer_to(O)
-
-	if(O.mind && O.mind.special_role)
-		O.mind.store_memory("In case you look at this after being borged, the objectives are only here until I find a way to make them not show up for you, as I can't simply delete them without screwing up round-end reporting. --NeoFite")
-
-	O.job = "Cyborg"
-	if(chest.extension)
-		O.component_extension = chest.extension
-		O.upgrade_components()
-	O.cell = chest.cell
-	O.cell.forceMove(O)
-	if(M)
-		M.forceMove(O) //Should fix cybros run time erroring when blown up. It got deleted before, along with the frame.
-
-	// Since we "magically" installed a cell, we also have to update the correct component.
-	if(O.cell)
-		var/datum/robot_component/cell_component = O.components["power cell"]
-		cell_component.wrapped = O.cell
-		cell_component.installed = 1
-
-	feedback_inc("cyborg_birth",1)
-
-	spawn()
-		if(M)
-			O.Namepick()
-
-	qdel(src)
-
-	return O
-
 
 /obj/item/robot_parts/chest/attackby(obj/item/W as obj, mob/user as mob)
 	..()

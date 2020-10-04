@@ -1484,3 +1484,15 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/micro_laser = 2,
 	)
+
+/obj/item/weapon/circuitboard/suspension_gen
+	name = "Circuit Board (Suspension Field Generator)"
+	desc = "A circuit board used to run a suspension field generator"
+	build_path = /obj/machinery/suspension_gen
+	board_type = MACHINE
+	origin_tech = Tc_ENGINEERING + "=3;"+ Tc_POWERSTORAGE + "=1;" + Tc_MAGNETS + "=4"
+	req_components = list(
+		/obj/item/weapon/stock_parts/micro_laser = 2,
+		/obj/item/weapon/stock_parts/manipulator = 1,
+		/obj/item/weapon/stock_parts/capacitor = 1,
+	)

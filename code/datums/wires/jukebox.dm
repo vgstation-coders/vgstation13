@@ -63,6 +63,7 @@ var/const/JUKE_SETTING = 128 //Cut shocks. Pulse toggles settings menu.
 			last = freq_config_data[index]
 		if(JUKE_SHUFFLE)
 			J.current_song=rand(1,J.playlist.len)
+			J.update_music()
 		if(JUKE_CAPITAL)
 			J.change_cost = rand(0,20)
 		if(JUKE_TRANSMIT)
