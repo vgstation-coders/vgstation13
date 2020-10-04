@@ -37,7 +37,9 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return
 
 	vessel.add_reagent(BLOOD,560)
-	fixblood()
+
+	spawn(1)//do not remove, this lets DNA stuff properly initialize first, otherwise the blood in the vessels won't have any DNA.
+		fixblood()
 
 //Resets blood data
 /mob/living/carbon/human/proc/fixblood()
