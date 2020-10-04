@@ -905,6 +905,7 @@ SEE_PIXELS	256
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 #define CONSTRUCT_HUD		"const_health" // Artificer HUD
+#define CONVERSION_HUD		"convertibility" // Convertibility HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine

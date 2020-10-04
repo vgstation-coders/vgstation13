@@ -917,6 +917,76 @@ var/static/list/valid_cultpower_slots = list(
 
 	return power
 
+/mob/proc/get_convertibility()
+	if (!mind || isDead())
+		return CONVERTIBLE_NOMIND
+
+	if (iscultist(src))
+		return CONVERTIBLE_ALREADY
+
+	return 0
+
+/mob/living/carbon/get_convertibility()
+	var/convertibility = ..()
+
+	if (!convertibility)
+		//TODO: chaplain stuff
+		//this'll do in the meantime
+		if (mind.assigned_role == "Chaplain")
+			return CONVERTIBLE_NEVER
+
+		var/acceptance = "Never"
+		if (client)
+			acceptance = get_role_desire_str(client.prefs.roles[CULTIST])
+
+		for(var/obj/item/weapon/implant/loyalty/I in src)
+			if(I.implanted)
+				return CONVERTIBLE_NEVER
+
+		if (jobban_isbanned(src, CULTIST) || isantagbanned(src) || (acceptance == "Never"))
+			return CONVERTIBLE_NEVER
+
+		if (acceptance == "Always" || acceptance == "Yes")
+			return CONVERTIBLE_ALWAYS
+
+		return CONVERTIBLE_CHOICE
+
+	return convertibility//no mind, dead, or already a cultist
+
+/mob/living/carbon/proc/update_convertibility()
+	var/convertibility = get_convertibility()
+	var/image/I =  image('icons/mob/hud.dmi', src, "hudblank")
+	switch(convertibility)
+		if (CONVERTIBLE_ALWAYS)
+			I.icon_state = "convertible"
+		if (CONVERTIBLE_CHOICE)
+			I.icon_state = "maybeconvertible"
+		if (CONVERTIBLE_NEVER)
+			I.icon_state = "unconvertible"
+
+	I.pixel_y = 16 * PIXEL_MULTIPLIER
+	I.plane = ANTAG_HUD_PLANE
+
+	//re-using the rune color matrix because boy am I proud of it
+	animate(I, color = list(1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0), time = 5, loop = -1)//1
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 2)//2
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 2)//3
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1.5)//4
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1.5)//5
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(2,0.67,0.27,0,0.27,2,0.67,0,0.67,0.27,2,0,0,0,0,1,0,0,0,0), time = 5)//9
+	animate(color = list(1.875,0.56,0.19,0,0.19,1.875,0.56,0,0.56,0.19,1.875,0,0,0,0,1,0,0,0,0), time = 1)//8
+	animate(color = list(1.75,0.45,0.12,0,0.12,1.75,0.45,0,0.45,0.12,1.75,0,0,0,0,1,0,0,0,0), time = 1)//7
+	animate(color = list(1.625,0.35,0.06,0,0.06,1.625,0.35,0,0.35,0.06,1.625,0,0,0,0,1,0,0,0,0), time = 1)//6
+	animate(color = list(1.5,0.27,0,0,0,1.5,0.27,0,0.27,0,1.5,0,0,0,0,1,0,0,0,0), time = 1)//5
+	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)//4
+	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)//3
+	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)//2
+
+	hud_list[CONVERSION_HUD] = I
+
 //WARNING: setting to "3" will trigger the rise of bloodstones.
 /client/proc/set_veil_thickness()
 	set category = "Special Verbs"

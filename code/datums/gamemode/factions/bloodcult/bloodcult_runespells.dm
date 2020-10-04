@@ -1709,8 +1709,8 @@ var/list/blind_victims = list()
 //RUNE XI
 /datum/rune_spell/blood_cult/seer
 	name = "Seer"
-	desc = "See the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
-	desc_talisman = "For a few seconds, you may see the invisible, the dead, the concealed. If you give them a writing sheet, they may relay a message to you."
+	desc = "See the invisible, the dead, the concealed, as well as the living's propension to serve our agenda."
+	desc_talisman = "For a whole minute, you may see the invisible, the dead, the concealed, as well as the living's propension to serve our agenda."
 	Act_restriction = CULT_ACT_I
 	invocation = "Rash'tla sektath mal'zua. Zasan therium viortia."
 	rune_flags = RUNE_STAND
@@ -1718,14 +1718,14 @@ var/list/blind_victims = list()
 	word1 = /datum/runeword/blood_cult/see
 	word2 = /datum/runeword/blood_cult/hell
 	word3 = /datum/runeword/blood_cult/join
-	page = "This rune grants you the ability to see the invisible, including observers and concealed runes and structures. The talisman version has 5 uses, which grant you the ability for 8 seconds each. Remember that runes can still be activated while they are concealed! "
+	page = "This rune grants you the ability to see the invisible, including observers and concealed runes and structures. The talisman version has 5 uses, which grant you the ability for an entire minute each, allowing you as well to see how likely each crew members are to accept conversion. Remember to activate the talisman where no one can hear you first. Remember also that runes can still be activated while they are concealed! "
 	cost_invoke = 5
 	var/obj/effect/cult_ritual/seer/seer_ritual = null
-	var/talisman_duration = 80 //tenths of a second
+	var/talisman_duration = 60 SECONDS
 
 /datum/rune_spell/blood_cult/seer/Destroy()
 	destroying_self = 1
-	if (seer_ritual)
+	if (seer_ritual && !seer_ritual.talisman)
 		qdel(seer_ritual)
 	seer_ritual = null
 	..()
@@ -1743,12 +1743,11 @@ var/list/blind_victims = list()
 	var/mob/living/M = activator
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
-	to_chat(M, "<span class='notice'>As the talisman disappears into dust, you find yourself able to see through the gaps in the veil. You can see and interact with the other side, for a few seconds.</span>")
+	to_chat(M, "<span class='notice'>As the talisman disappears into dust, you find yourself able to see through the gaps in the veil. You can see and interact with the other side for a minute, as well as see the living's likelyhood of accepting conversions.</span>")
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
+	var/obj/effect/cult_ritual/seer/ritual = new (activator,activator,null,TRUE)
 	spawn(talisman_duration)
-		M.see_invisible_override = 0
-		M.apply_vision_overrides()
-		to_chat(M, "<span class='notice'>You can no longer discern through the veil.</span>")
+		qdel(ritual)
 	qdel(src)
 
 /obj/effect/cult_ritual/seer
@@ -1765,10 +1764,13 @@ var/list/blind_victims = list()
 	flags = PROXMOVE
 	var/mob/living/caster = null
 	var/datum/rune_spell/blood_cult/seer/source = null
+	var/list/propension = list()
+	var/talisman = FALSE
 
-
-/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell)
+/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell,var/talisman_ritual = FALSE)
 	..()
+	processing_objects.Add(src)
+	talisman = talisman_ritual
 	caster = user
 	source = runespell
 	if (!caster)
@@ -1781,7 +1783,9 @@ var/list/blind_victims = list()
 	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side.</span>")
 
 /obj/effect/cult_ritual/seer/Destroy()
+	processing_objects.Remove(src)
 	if (caster)
+		caster.client.images -= propension
 		caster.see_invisible_override = 0
 		caster.apply_vision_overrides()
 		to_chat(caster, "<span class='notice'>You can no longer discern through the veil.</span>")
@@ -1792,8 +1796,20 @@ var/list/blind_victims = list()
 	..()
 
 /obj/effect/cult_ritual/seer/HasProximity(var/atom/movable/AM)
-	if (!caster || caster.loc != loc)
-		qdel(src)
+	if (!talisman)
+		if (!caster || caster.loc != loc)
+			qdel(src)
+
+/obj/effect/cult_ritual/seer/process()
+	if (caster && caster.client)
+		caster.client.images -= propension
+		propension.len = 0
+
+	for(var/mob/living/carbon/C in dview(world.view, get_turf(src), INVISIBILITY_MAXIMUM))
+		C.update_convertibility()
+		propension += C.hud_list[CONVERSION_HUD]
+
+	caster.client.images += propension
 
 
 //RUNE XII
