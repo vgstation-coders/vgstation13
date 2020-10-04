@@ -29,7 +29,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
+		qdel(AM)
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created

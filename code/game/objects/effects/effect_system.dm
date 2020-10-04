@@ -66,6 +66,10 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/atom/holder
 	var/setup = 0
 
+/datum/effect/effect/system/Destroy()
+	holder = null
+	..()
+
 /datum/effect/effect/system/proc/set_up(n = 3, c = 0, turf/loc)
 	if(n > 10)
 		n = 10
