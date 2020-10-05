@@ -55,6 +55,8 @@
 		for(var/obj/item/I in T)
 			add_module(I, user, 0)
 
+		to_chat("You load everything into the [src].")
+
 
 
 
