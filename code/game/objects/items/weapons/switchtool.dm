@@ -52,10 +52,13 @@
 		else
 			return 
 
+		var/success = 0
 		for(var/obj/item/I in T)
-			add_module(I, user, 0)
+			if(add_module(I, user, 0))
+				success = 1
 
-		to_chat("You load everything into the [src].")
+		if(success)
+			to_chat("You load everything into the [src].")
 
 
 
