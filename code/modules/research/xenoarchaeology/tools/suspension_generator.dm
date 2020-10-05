@@ -27,6 +27,20 @@
 /obj/machinery/suspension_gen/New()
 	src.cell = new/obj/item/weapon/cell/high(src)
 	..()
+	component_parts = newlist(
+		/obj/item/weapon/circuitboard/suspension_gen,
+		/obj/item/weapon/stock_parts/manipulator,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/micro_laser,
+		/obj/item/weapon/stock_parts/capacitor
+	)
+	RefreshParts()
+
+/obj/machinery/suspension_gen/RefreshParts()
+	for(var/obj/item/weapon/stock_parts/parts in component_parts)
+		if(istype(parts, /obj/item/weapon/stock_parts/capacitor))
+			var/pSave = parts.rating*2
+			power_use = 27 - pSave
 
 /obj/machinery/suspension_gen/process()
 	//set background = 1

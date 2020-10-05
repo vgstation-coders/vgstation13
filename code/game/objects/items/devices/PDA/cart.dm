@@ -72,7 +72,6 @@
 	if(radio)
 		qdel(radio)
 		radio = null
-		radio.hostpda = null
 
 	active1 = null
 	active2 = null

@@ -19,17 +19,6 @@
 		if(ismanifested(M) || iscluwnebanned(M))
 			visible_message("<span class='caution'>The bolt of change doesn't seem to affect [M] in any way.</span>")
 			return
-		if(isshell(M))	//Kick out the AI if its a shell
-			var/mob/living/silicon/robot/shell/R = M
-			R.close_connection()
-
-		if(isAI(M))	//Force the AI back if its in a shell
-			var/mob/living/silicon/ai/R = M
-			if(R.is_in_shell)
-				R.shell.close_connection()
-				R.shell.gib()		//Destroy the shell, they wont be needing it anymore
-	
-			
 		var/mob/living/new_mob
 		// Random chance of fucking up
 		if(type!=null && prob(10))

@@ -259,7 +259,7 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	var/armed = 0
 
 /obj/machinery/bot/cleanbot/roomba/attackby(var/obj/item/W, mob/user)
-	if(istype(W,/obj/item/weapon/kitchen/utensil/fork) && !armed && user.a_intent != I_HURT)
+	if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && !armed && user.a_intent != I_HURT)
 		if(user.drop_item(W))
 			qdel(W)
 			to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It looks increasingly concerned about its current situation.</span>")
@@ -271,6 +271,17 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 			armed++
 			icon_state = "roombot_battle[on]"
 			icon_initial = "roombot_battle"
+	else if (istype(W, /obj/item/clothing/head/maidhat))
+		var/obj/machinery/bot/cleanbot/roomba/meido/M = new(get_turf(src))
+
+		if(name != initial(name))
+			M.name = name
+		else
+			name = "maidbot"
+
+		M.install_pai(eject_integratedpai_if_present())
+		to_chat(user, "<span class='notice'>You attach \the [W] to \the [src]. It makes a soft booping noise and its light blinks excitedly for a moment.</span>")
+		qdel(src)
 	else
 		. = ..()
 
@@ -392,3 +403,33 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		to_chat(P.pai, "<span class='info'><b>Welcome to your new body. Remember: you're a pAI inside a cleanbot, so get cleaning.</b></span>")
 		to_chat(P.pai, "<span class='info'>- Click on something: Scrub it clean.</span>")
 		to_chat(P.pai, "<span class='info'>If you want to exit the cleanbot, somebody has to right-click you and press 'Remove pAI'.</span>")
+
+/obj/machinery/bot/cleanbot/roomba/meido
+	name = "maidbot"
+	desc = "A small, plate-like cleaning robot. It looks quite concerned. This one has a frilly headband attached to the top."
+	icon_state = "maidbot0"
+	icon_initial = "maidbot"
+	armed = 0
+
+/obj/machinery/bot/cleanbot/roomba/meido/attackby(var/obj/item/W, mob/user)
+	if(istype(W, /obj/item/weapon/kitchen/utensil/fork) || istype(W, /obj/item/weapon/lighter))
+		to_chat(user, "<span class='notice'>\The [src] buzzes and recoils at \the [W]. Perhaps it would prefer something more refined?</span>")
+		return
+	else if (istype(W, /obj/item/clothing/head/maidhat))
+		to_chat(user, "<span class='notice'>\The [src] is already wearing one of those!</span>")
+		return
+	else if(W.type == /obj/item/weapon/kitchen/utensil/knife/large && !armed && user.a_intent != I_HURT)
+		if(user.drop_item(W))
+			qdel(W)
+			to_chat(user, "<span class='notice'>\the [src] extends a tiny arm from a hidden compartment and grasps \the [W]. Its light blinks excitedly for a moment before returning to normal.</span>")
+			armed++
+			icon_state = "maidbot_battle[on]"
+			icon_initial = "maidbot_battle"
+	else
+		. = ..()
+
+/obj/machinery/bot/cleanbot/roomba/meido/annoy(var/mob/living/L)
+	if(!coolingdown && armed)
+		L.visible_message("<span class = 'warning'>\The [src] [pick("jabs","stabs","pokes")] \the [L]", "<span class = 'warning'>The little shit, \the [src], stabs you with its knife!</span>")
+		L.adjustBruteLoss(rand(4,8))
+	attack_cooldown()

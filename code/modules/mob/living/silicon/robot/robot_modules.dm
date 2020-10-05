@@ -118,8 +118,6 @@
 /obj/item/weapon/robot_module/proc/AddEncryptionKey(var/mob/living/silicon/robot/R)
 	if(!R.radio)
 		return
-	if(isshell(R))
-		return
 	if(radio_key)
 		R.radio.insert_key(new radio_key(R.radio))
 

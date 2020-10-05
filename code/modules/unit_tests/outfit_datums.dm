@@ -12,11 +12,9 @@
 			var/list/to_recycle = list()
 			var/list/L = O.items_to_spawn[species]
 			var/mob/living/carbon/human/H = new(run_loc_top_right)
-			sleep(1)
 			if (species != "Default")
 				var/datum/species/S = species
 				H.set_species(initial(S.name))
-				sleep(1) // set_species has spawns() in it, so we have to wait.
 			for (var/slot in L)
 				if (isnull(text2num(slot)))
 					fail("Outfit [O.type] : list [species] doesn't have a number index at slot [slot].")
@@ -38,4 +36,3 @@
 				qdel(object)
 				to_recycle -= object
 			qdel(H)
-			sleep(1)
