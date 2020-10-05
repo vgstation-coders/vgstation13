@@ -42,6 +42,21 @@
 					stored_modules[module] = null
 			undeploy()
 		return TRUE
+	else
+		if(!proximity_flag)
+			return
+			
+		var/turf/T
+		if(isturf(target.loc))
+			T = target.loc
+		else
+			return 
+
+		for(var/obj/item/I in T)
+			add_module(I, user)
+
+
+
 
 /obj/item/weapon/switchtool/New()
 	..()
@@ -65,8 +80,12 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
-		return remove_module(user)
+	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
+		if(deployed)
+			return remove_module(user)
+		else
+			return remove_all_modules(user)
+
 	if(add_module(used_item, user))
 		return TRUE
 	else
@@ -117,6 +136,16 @@
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy()
+	return TRUE
+
+/obj/item/weapon/switchtool/proc/remove_all_modules(mob/user)
+	if(deployed)		//this shouldnt happen but just in case
+		undeploy()
+	for(var/module in stored_modules)
+		stored_modules[module].forceMove(get_turf(user))
+		stored_modules[module] = null
+	to_chat(user, "You clear out everything from the [src].")
+	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/undeploy()
