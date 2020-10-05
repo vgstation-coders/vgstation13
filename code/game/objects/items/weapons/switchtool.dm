@@ -148,13 +148,19 @@
 /obj/item/weapon/switchtool/proc/remove_all_modules(mob/user)
 	if(deployed)		//this shouldnt happen but just in case
 		undeploy()
+
+	var/success = 0
 	for(var/module in stored_modules)
 		if(stored_modules[module])
+			success = 1
 			stored_modules[module].forceMove(get_turf(user))
 			stored_modules[module] = null
-	to_chat(user, "You clear out everything from the [src].")
-	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
-	return TRUE
+	if(success)
+		to_chat(user, "You clear out everything from the [src].")
+		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+		return TRUE
+	else
+		to_chat(user, "The [src] is empty.")
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(src, undeploy_sound, 10, 1)
