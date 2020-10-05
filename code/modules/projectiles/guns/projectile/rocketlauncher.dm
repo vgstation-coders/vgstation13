@@ -29,23 +29,26 @@
 
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
 	return FALSE
-/*
+
 /obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
-	if(!getAmmo())
-		icon_state = "rpg_e"
-		item_state = "rpg_e"
-	else
-		icon_state = "rpg"
-		item_state = "rpg"
-*/
-/obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
-	visible_message ("<span class='warning'>update icon proc has been called on \the [src] with [src.loaded[1]] : [initial_icon]_[loaded[1].icon_suffix]</span>")
-	if(loaded.len == 0)
+	if(!getAmmo()) //empty
+		overlays.len = 0 //remove missile overlays
+		item_state = initial_icon
+		item_state = "[item_state]_e"
+	else //not empty
 		overlays.len = 0
-	else
 		overlays += image(icon, src, icon_state = "rpg_[loaded[1].icon_suffix]") //for(var/obj/item/ammo_casing/AC in loaded)
+		item_state = initial_icon
 	return
 
+/obj/item/weapon/gun/projectile/rocketlauncher/attack_self(mob/user)
+	..()
+	update_icon()
+	user.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/rocketlauncher/attackby(var/obj/item/A as obj, mob/user as mob)
+	..()
+	user.update_inv_hands()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
 	..()
@@ -56,12 +59,14 @@
 				RemoveMag(user)
 				if(mag_drop_sound)
 					playsound(user, mag_drop_sound, 40, 1)
-					update_icon()
+	update_icon()
+	user.update_inv_hands()
 	return
 
 /obj/item/weapon/gun/projectile/rocketlauncher/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	..()
 	update_icon()
+	user.update_inv_hands()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if(M == user && user.zone_sel.selecting == "mouth") //Are we trying to suicide by shooting our head off ?
@@ -180,13 +185,17 @@
 
 
 /obj/item/weapon/gun/projectile/rocketlauncher/clown
+	//currently this is identical to an rpg in everything but a lack of clumsy check. I plan to repurpose it in the future to fire nonlethal clown missiles possibly
 	name = "shoulder mounted gag launcher"
 	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222"
 	fire_sound = 'sound/weapons/rocket.ogg'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "rpg_clown"
-	item_state = "rpg"//TODO
+	item_state = "rpg_clown"
 	initial_icon = "rpg_clown"
 	max_shells = 1
 	clumsy_check = 0
+	loaded = list()
 
-	//desc = "You've just henked your last honk."
+/obj/item/weapon/gun/projectile/rocketlauncher/clown/New() //spawn empty
+	update_icon()

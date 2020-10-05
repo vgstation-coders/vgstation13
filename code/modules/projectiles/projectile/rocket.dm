@@ -39,7 +39,7 @@
 
 /obj/item/projectile/rocket/lowyield
 	name = "low yield rocket"
-	icon_state = "rpground"
+	icon_state = "rpground_lowyield"
 	damage = 45
 	stun = 10
 	weaken = 10
@@ -50,6 +50,7 @@
 
 /obj/item/projectile/rocket/blank
 	name = "blank rocket"
+	icon_state = "rpground_blank"
 	damage = 5
 	weaken = 10
 	agony = 10
@@ -60,6 +61,7 @@
 
 /obj/item/projectile/rocket/blank/emp
 	name = "EMP rocket"
+	icon_state = "rpground_emp"
 	damage = 10
 	agony = 30
 	emheavy = 3
@@ -73,6 +75,7 @@
 
 /obj/item/projectile/rocket/blank/stun
 	name = "stun rocket"
+	icon_state = "rpground_stun"
 	damage = 15
 	stun = 20
 	weaken = 20
@@ -87,6 +90,7 @@
 
 /obj/item/projectile/rocket/lowyield/extreme
 	name = "extreme yield rocket"
+	icon_state = "rpground_extreme"
 	damage = 200
 	exdev 	= 7
 	exheavy = 14
@@ -243,27 +247,22 @@
 	exlight = 0
 	exflash = 0
 	stun = 5
+	var/payload = TRUE
 	var/payload_type
 	var/payload_power = 5
 	var/payload_radius = 2
 
 
 /obj/item/projectile/rocket/clown/to_bump(var/atom/A)
-	//playsound() //big honk sound
-
-		//if()//istype check for mob, if it's a direct hit then up the stun time
-	launch_payload()
-
+	if(payload)
+		launch_payload()
 	..()
-
 
 
 /obj/item/projectile/rocket/clown/proc/launch_payload()
 	if(payload_type)
 		var/atom/curloc = get_turf(src)
-		//radius = 5
 		var/list/possible_targets= block_borders(locate(curloc.x-payload_radius, curloc.y-payload_radius, curloc.z), locate(curloc.x+payload_radius, curloc.y+payload_radius, curloc.z))  //I want to throw at the outer reaches of the radius
-
 
 		//create the payload and throw at each location
 		for(var/atom/loc in possible_targets)
@@ -271,51 +270,59 @@
 			payload.throw_at(loc,9,payload_power) // the last one is throwspeed, maybe have the payload determine lethality
 
 
-
-/*
-
-		for(var/obj/item/shrapnel in shrapnel_list)
-			var/amount = shrapnel.shrapnel_amount
-			if(amount)
-				while(amount > 0)
-					amount--
-					var/obj/item/projectile/shrapnel_projectile = shrapnel.get_shrapnel_projectile()
-					target=pick(possible_targets)
-					shrapnel_projectile.forceMove(curloc)
-					shrapnel_projectile.launch_at(target,bodyparts[rand(1,bodyparts.len)],curloc,src)
-				qdel(shrapnel)
-			else
-				target =pick(possible_targets)
-				shrapnel.forceMove(curloc)
-				shrapnel.throw_at(target,9,10)
-
-*/
-
-//low risk
-
 /obj/item/projectile/rocket/clown/mouse
+	name = "mouse rocket"
+	icon_state = "rpground_mouse"
 	payload_type = /mob/living/simple_animal/mouse
 
 /obj/item/projectile/rocket/clown/pizza
+	name = "pizza rocket"
+	icon_state = "rpground_pizza"
 	payload_type = /obj/item/weapon/reagent_containers/food/snacks/margheritaslice
 
 /obj/item/projectile/rocket/clown/pie
+	name = "pie rocket"
+	icon_state = "rpground_pie"
 	payload_type = /obj/item/weapon/reagent_containers/food/snacks/pie
 
-//high risk: not necessarily lethal but can create a nuisance
-
 /obj/item/projectile/rocket/clown/cow
+	name = "cow rocket"
+	icon_state = "rpground_cow"
 	payload_type =/mob/living/simple_animal/cow
 
 /obj/item/projectile/rocket/clown/goblin
+	name = "clown goblin rocket"
+	icon_state = "rpground_clowngoblin"
 	payload_type = /mob/living/simple_animal/hostile/retaliate/cluwne/goblin
 
 
-//lethals: some variants of normally non-lethal payloads that fire so fast they'll actually hurt people, or downright lethal payloads
+/obj/item/projectile/rocket/clown/transmog
+	//these missiles transmog victims in an aoe of the explosion depending on the transmog type for a duration
+	name = "rocket"
+	icon_state = "rpground"
+	var/transmog_duration = 100
+	var/transmog_type
+	payload = FALSE
 
 
-//obj/item/projectile/rocket/clown/cat
-//obj/item/projectile/rocket/clown/dimensional_slip //slip, teleport, slip again, teleport again, very rapidly for about 10 seconds then end
-//obj/item/projectile/rocket/clown/shoesnatch
-//obj/item/projectile/rocket/clown/trash
-//obj/item/projectile/rocket/clown/honk
+/obj/item/projectile/rocket/clown/transmog/to_bump(var/atom/A)
+	aoe_transmog()
+	..()
+
+/obj/item/projectile/rocket/clown/transmog/proc/aoe_transmog()
+	var/atom/curloc = get_turf(src)
+	var/list/possible_targets= block(locate(curloc.x-payload_radius, curloc.y-payload_radius, curloc.z), locate(curloc.x+payload_radius, curloc.y+payload_radius, curloc.z))  //I want to throw at the outer reaches of the radius
+	for(var/atom/loc in possible_targets)
+		for(var/mob/living/M in loc)
+			var/mob/living/holder = M.transmogrify(transmog_type)
+			spawn(transmog_duration)
+				holder.transmogrify()
+
+/obj/item/projectile/rocket/clown/transmog/cluwne
+	name = "cluwnification rocket"
+	icon_state = "rpground_clowngoblin"
+	transmog_type = /mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne
+
+/obj/item/projectile/rocket/clown/transmog/cluwne/to_bump(var/atom/A)
+	..()
+	playsound(src,'sound/items/bikehorn.ogg',100)

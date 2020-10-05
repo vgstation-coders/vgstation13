@@ -55,7 +55,7 @@
 //clown missiles///////////////
 
 /obj/item/ammo_casing/rocket_rpg/mouse
-	name = "mousic missile"
+	name = "mouse missile"
 	desc = "It's like a mouse utopia experiment, but said utopia happens to be inside of a rocket propelled explosive warhead. Expect lots of mice if used."
 	projectile_type = "/obj/item/projectile/rocket/clown/mouse"
 	icon_state = "rpground_mouse"
@@ -86,5 +86,12 @@
 	name = "clown goblin rocket"
 	desc = "If you put your ear real close to it you can hear thousands of little honks coming from inside. Not much is know about this rocket except that it was literally created by demons to torture mankind."
 	projectile_type = "/obj/item/projectile/rocket/clown/goblin"
+	icon_state = "rpground_clowngoblin"
+	icon_suffix = "goblin"
+
+/obj/item/ammo_casing/rocket_rpg/cluwne
+	name = "cluwnzerfaust"
+	desc = "NT doesn't want you to know about this. Transforms everyone within its blast into a horrific cluwne for a bit."
+	projectile_type = "/obj/item/projectile/rocket/clown/transmog/cluwne"
 	icon_state = "rpground_clowngoblin"
 	icon_suffix = "goblin"
