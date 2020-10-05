@@ -9,7 +9,7 @@ var/list/global_diseases = list()
 	for(var/disease_type in subtypesof(/datum/disease2/disease/predefined))
 		var/datum/disease2/disease/predefined/D = new disease_type
 		global_diseases[D.category] = D
-	update_global_log()
+		D.update_global_log()
 	
 
 /datum/disease2/disease/predefined
