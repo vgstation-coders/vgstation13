@@ -53,7 +53,7 @@
 			return 
 
 		for(var/obj/item/I in T)
-			add_module(I, user)
+			add_module(I, user, 0)
 
 
 
@@ -110,7 +110,7 @@
 			module_string += "\a [get_module_name(module)], "
 	return module_string
 
-/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
+/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user, var/message = 1)
 	if(!used_item || !user)
 		return FALSE
 
@@ -118,12 +118,14 @@
 		var/type_path = text2path(get_module_type(module))
 		if(istype(used_item, type_path))
 			if(stored_modules[module])
-				to_chat(user, "\The [src] already has a [get_module_name(module)].")
+				if(message)
+					to_chat(user, "\The [src] already has a [get_module_name(module)].")
 				return FALSE
 			else
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
-					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
+					if(message)
+						to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
 					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
