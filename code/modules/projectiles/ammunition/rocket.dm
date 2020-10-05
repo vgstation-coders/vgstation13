@@ -56,28 +56,28 @@
 
 /obj/item/ammo_casing/rocket_rpg/mouse
 	name = "mouse missile"
-	desc = "It's like a mouse utopia experiment, but said utopia happens to be inside of a rocket propelled explosive warhead. Expect lots of mice if used."
+	desc = "It's like a mouse utopia experiment, but said utopia happens to be inside of a rocket propelled explosive warhead."
 	projectile_type = "/obj/item/projectile/rocket/clown/mouse"
 	icon_state = "rpground_mouse"
 	icon_suffix = "mouse"
 
 /obj/item/ammo_casing/rocket_rpg/pizza
 	name = "pizza-delivering strike missile"
-	desc = "Covers the target in pizza slices upon exploding. A young pizza delivery boy's answer for all those unpleasant customers."
+	desc = "Covers the target in pizza slices upon exploding. Your answer for all those unpleasant customers."
 	projectile_type = "/obj/item/projectile/rocket/clown/pizza"
 	icon_state = "rpground_pizza"
 	icon_suffix = "pizza"
 
 /obj/item/ammo_casing/rocket_rpg/pie
 	name = "armor pie-rcing missile"
-	desc = "No amount of armor can prevent the targets from having pie cream splashed over their faces."
+	desc = "No amount of armor can protect the target from having a pie thrown into their face."
 	projectile_type = "/obj/item/projectile/rocket/clown/pie"
 	icon_state = "rpground_pie"
 	icon_suffix = "pie"
 
 /obj/item/ammo_casing/rocket_rpg/cow
 	name = "cluster-cow missile"
-	desc = "Inspired by the legendary cow launcher, this explosive missile releases a cluster of cows on explosion. The milking industry hopes to one day criminalize usage of this missile."
+	desc = "Inspired by the legendary cow launcher, this explosive missile releases a cluster of cows on explosion. The beef industry would do anything to get its hands on one of these."
 	projectile_type = "/obj/item/projectile/rocket/clown/cow"
 	icon_state = "rpground_cow"
 	icon_suffix = "cow"
@@ -91,7 +91,7 @@
 
 /obj/item/ammo_casing/rocket_rpg/cluwne
 	name = "cluwnzerfaust"
-	desc = "NT doesn't want you to know about this. Transforms everyone within its blast into a horrific cluwne for a bit."
+	desc = "NT doesn't want you to know about this..."
 	projectile_type = "/obj/item/projectile/rocket/clown/transmog/cluwne"
 	icon_state = "rpground_clowngoblin"
 	icon_suffix = "goblin"
