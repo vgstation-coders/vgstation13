@@ -149,8 +149,9 @@
 	if(deployed)		//this shouldnt happen but just in case
 		undeploy()
 	for(var/module in stored_modules)
-		stored_modules[module].forceMove(get_turf(user))
-		stored_modules[module] = null
+		if(stored_modules[module])
+			stored_modules[module].forceMove(get_turf(user))
+			stored_modules[module] = null
 	to_chat(user, "You clear out everything from the [src].")
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	return TRUE
