@@ -9,6 +9,7 @@ var/list/global_diseases = list()
 	for(var/disease_type in subtypesof(/datum/disease2/disease/predefined))
 		var/datum/disease2/disease/predefined/D = new disease_type
 		global_diseases[D.category] = D
+	update_global_log()
 	
 
 /datum/disease2/disease/predefined
@@ -21,7 +22,6 @@ var/list/global_diseases = list()
 	subID = rand(0,9999)
 	strength = rand(70,100)
 
-	update_global_log()
 	..()
 
 /datum/disease2/disease/predefined/cyborg
