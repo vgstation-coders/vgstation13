@@ -331,3 +331,32 @@
 
 /obj/effect/decal/cleanable/virusdish/persistent/post_mapsave2atom(var/list/L)
 	icon_state = "brokendish-persistent"
+
+
+/obj/effect/decal/cleanable/salt
+	name = "salt"
+	desc = "Guaranteed to ward off ghouls, ghosts, geists, and low blood pressure."
+	gender = PLURAL
+	reagent = SODIUMCHLORIDE
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "ash"
+	anchored = 1
+
+/obj/effect/decal/cleanable/salt/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	..()
+	if(isliving(mover))
+		var/mob/living/L = mover
+		if(L.mob_property_flags & (MOB_UNDEAD|MOB_SUPERNATURAL))
+			return 0
+		if(iswizard(L) || isapprentice(L))
+			if(prob(75))
+				to_chat(L, "<span class=danger>The salty ward barely manages to repel you!</span>")
+				return 0
+		if(isskellington(L) || isskelevox(L) || islich(L))
+			to_chat(L, "<span class=danger>The salty ward repels you!</span>")
+			return 0
+		if(isvampire(L))
+			var/datum/role/vampire/V = isvampire(L)
+			if(VAMP_CHARISMA in V.powers)	//He's already a powerful vamp, the check is no longer meta
+				return 0
+	return 1

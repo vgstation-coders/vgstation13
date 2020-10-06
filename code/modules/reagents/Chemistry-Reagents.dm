@@ -4391,6 +4391,14 @@
 	density = 2.09
 	specheatcap = 1.65
 
+/datum/reagent/sodiumchloride/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 50 && !(locate(/obj/effect/decal/cleanable/salt) in T))
+		new /obj/effect/decal/cleanable/salt(T)
+
+
 /datum/reagent/sodiumchloride/on_mob_life(var/mob/living/M)
 
 	if(..())
