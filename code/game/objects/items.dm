@@ -79,10 +79,11 @@
 
 /obj/item/New()
 	..()
-	if(force < 5) // Arbitrarily chosen
-		hitsound = 'sound/effects/slap1.ogg'
-	else
-		hitsound = 'sound/weapons/smash.ogg'
+	if(!hitsound)
+		if(force < 5) // Arbitrarily chosen
+			hitsound = 'sound/effects/slap1.ogg'
+		else
+			hitsound = 'sound/weapons/smash.ogg'
 	for(var/path in actions_types)
 		new path(src)
 
