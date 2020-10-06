@@ -18,6 +18,15 @@ var/datum/subsystem/map/SSmap
 		log_startup_progress("Attempting to generate an away mission...")
 		createRandomZlevel()
 
+	log_startup_progress("Considering escape shuttle options...")
+	for(var/shuttle_type in subtypesof(/datum/map_element/shuttle))
+		var/datum/map_element/shuttle/S = shuttle_type
+		if(initial(S.home) == map.map_dir)
+			if(initial(S.name) == SHUTTLE_ABSTRACT)
+				continue
+			S = new shuttle_type()
+			map.escape_shuttles += S
+
 	if (!config.skip_vault_generation)
 		var/watch = start_watch()
 		log_startup_progress("Placing random space structures...")

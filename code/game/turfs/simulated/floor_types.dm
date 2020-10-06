@@ -381,6 +381,14 @@
 
 	. = ..()
 
+//slows down mobs
+/turf/simulated/floor/checkpoint
+	name = "checkpoint floor"
+	desc = "The floor is soft and springy, making it harder to move across quickly."
+	turf_speed_multiplier = 4
+	icon = 'icons/turf/shuttle.dmi'
+	icon_state = "floorcheckpoint"
+
 //syndie themed
 /turf/simulated/floor/dark
 	icon_state = "dark"

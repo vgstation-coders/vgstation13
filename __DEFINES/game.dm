@@ -40,3 +40,5 @@
 #define SPEECH_MODE_SAY     1
 #define SPEECH_MODE_WHISPER 2
 #define SPEECH_MODE_FINAL   3
+
+#define SHUTTLE_ABSTRACT "ignore"

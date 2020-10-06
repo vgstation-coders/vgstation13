@@ -103,6 +103,9 @@
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
 
+	var/list/escape_shuttles = list() //populated in initialization based on map_dir
+	var/escape_shuttle_name = "Classic Shuttle"
+
 	var/list/holodeck_rooms = list(
 		"Basketball Court",
 		"Beach",

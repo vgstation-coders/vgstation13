@@ -5,6 +5,7 @@
 #define COMM_SCREEN_SECLEVEL	4
 #define COMM_SCREEN_ERT			5
 #define COMM_SCREEN_SHUTTLE_LOG 6
+#define COMM_SCREEN_ESCAPE_PICK 7
 
 #define UNAUTH 0
 #define AUTH_HEAD 1
@@ -58,6 +59,7 @@ var/list/shuttle_log = list()
 	var/ai_menu_state = COMM_SCREEN_MAIN
 	var/message_cooldown = 0
 	var/centcomm_message_cooldown = 0
+	var/picked_shuttle_recently = FALSE
 	var/tmp_alertlevel = 0
 
 	var/status_display_freq = "1435"
@@ -149,6 +151,40 @@ var/list/shuttle_log = list()
 				message_cooldown = 1
 				spawn(600)//One minute cooldown
 					message_cooldown = 0
+
+		if("pick_ship")
+			if(authenticated==AUTH_CAPT)
+				var/datum/map_element/shuttle/S = eligible_ship_by_name(href_list["ship_name"])
+				if(!istype(S))
+					return
+				if(picked_shuttle_recently)
+					to_chat(usr, "<span class='warning'>A shuttle request has been made recently.</span>")
+					return
+				if(escape_shuttle.do_not_replace)
+					to_chat(usr, "<span class='warning'>Central Command is not currently accepting shuttle requests.</span>")
+					return
+				if(S.name == map.escape_shuttle_name)
+					to_chat(usr, "<span class='warning'>You already have one of those!</span>")
+					return
+				if(station_account.money < S.cost)
+					to_chat(usr, "<span class='warning'>There isn't enough in the station account!</span>")
+					return
+				var/response = alert(usr,"Are you sure you want to request the [S.name] for [S.cost]?", "Shuttle Purchase", "Yes", "No")
+				if(response != "Yes")
+					return
+				var/datum/transaction/T = new()
+				T.target_name = station_account.owner_name
+				T.purpose = "Purchased [S.name]"
+				T.amount = "-[S.cost]"
+				T.date = current_date_string
+				T.time = worldtime2text()
+				T.source_terminal = "NT Shipyards Secure Terminal"
+				station_account.transaction_log.Add(T)
+				station_account.money -= S.cost
+				escape_shuttle.rebuild(S)
+				picked_shuttle_recently = TRUE
+				spawn(3 MINUTES)
+					picked_shuttle_recently = FALSE
 
 		if("emergency_screen")
 			if(!authenticated)
@@ -369,6 +405,9 @@ var/list/shuttle_log = list()
 				to_chat(usr, "<span class='warning'>You must wear an ID for this function.</span>")
 		if("ViewShuttleLog")
 			setMenuState(usr, COMM_SCREEN_SHUTTLE_LOG)
+		if("ViewShuttlePicker")
+			if(authenticated == 2)
+				setMenuState(usr, COMM_SCREEN_ESCAPE_PICK)
 	return 1
 
 /obj/machinery/computer/communications/attack_ai(var/mob/user as mob)
@@ -406,6 +445,14 @@ var/list/shuttle_log = list()
 		data["shuttle_log"] = list()
 		for(var/entry in shuttle_log)
 			data["shuttle_log"] += list(list("text" = entry))
+
+	if(current_screen == COMM_SCREEN_ESCAPE_PICK)
+		data["sh_picked"] = map.escape_shuttle_name
+		var/list/sh_options = list()
+		for(var/datum/map_element/shuttle/S in map.escape_shuttles)
+			sh_options += list(list("name" = S.name, "desc" = S.desc, "cost" = S.cost))
+		data["sh_options"] = sh_options
+
 	data["screen"] = current_screen
 
 	data["stat_display"] = list(

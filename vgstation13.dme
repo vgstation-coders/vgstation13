@@ -2649,4 +2649,5 @@
 #include "maps\RandomZLevels\stationCollision.dm"
 #include "maps\RandomZLevels\tomb.dm"
 #include "maps\RandomZLevels\wildwest.dm"
+#include "maps\shuttles\alternate_shuttle.dm"
 // END_INCLUDE

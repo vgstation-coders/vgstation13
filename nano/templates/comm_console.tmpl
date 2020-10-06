@@ -55,6 +55,9 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 					{{:helper.link('Message CentComm','mail-closed',{'operation':'MessageCentcomm'})}}
 				{{/if}}
 				</div>
+				<div class="line">
+					{{:helper.link('Escape Shuttle Type', 'flag', {'operation': 'ViewShuttlePicker'})}}
+				</div>
 			{{/if}}
 			<div class="line">
 				{{:helper.link('Change Alert Level','signal-diag',{'operation':'changeseclevel'})}}
@@ -177,6 +180,31 @@ Used In File(s): /code/game/machinery/computers/communications.dm
 					{{/for}}
 				</div>
 			</div>
+		</div>
+	{{else data.screen == 7}}
+		<!-- SHUTTLE PICKER -->
+		<h3>Emergency Shuttle</h3>
+		{{:helper.link('Back', 'home', {'operation': 'main'})}}
+		<div class="item">
+			<div class="line">
+				<div class="itemLabel">
+					Current Style:  
+				</div>
+				<div class="itemContents">
+					{{>data.sh_picked}}
+				</div>
+			</div>
+			<br><br>
+		{{for data.sh_options}}
+			<div class="itemLabel">
+				{{>value.name}}
+			</div>
+			<div class="itemContents">
+				{{>value.cost}} credits {{:helper.link('Buy', 'cart', {'operation':'pick_ship','ship_name':value.name})}}<br>
+			</div>
+			{{>value.desc}}
+			<br><br>
+		{{/for}}
 		</div>
 	{{/if}}<!-- SCREEN -->
 {{/if}}<!-- AUTHENTICATED -->

@@ -13,6 +13,7 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	can_rotate = 0 //Sleepers, body scanners and multi-tile airlocks aren't rotated properly
 
 	destroy_everything = 1 //Can't stop us
+	var/do_not_replace = FALSE //Don't let the crew buy an alternate shuttle
 
 	var/obj/docking_port/destination/dock_centcom
 	var/obj/docking_port/destination/dock_station
@@ -26,6 +27,13 @@ var/global/datum/shuttle/escape/escape_shuttle = new(starting_area=/area/shuttle
 	dock_centcom = add_dock(/obj/docking_port/destination/escape/shuttle/centcom)
 
 	set_transit_dock(/obj/docking_port/destination/escape/shuttle/transit)
+
+/datum/shuttle/escape/proc/rebuild(var/datum/map_element/shuttle/S)
+	map.escape_shuttle_name = S.name
+	for(var/atom/A in linked_area)
+		qdel(A)
+	//this is terrible and probably doesn't work for 2 reasons, placeholder until I get logic for finding bottom left
+	S.load(linked_area.x, linked_area.y, linked_area.z)
 
 //code/game/objects/structures/docking_port.dm
 

@@ -1,0 +1,28 @@
+"a" = (/turf/space,/area)
+"b" = (/turf/simulated/wall,/area/shuttle/escape/centcom)
+"c" = (/obj/structure/grille,/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"d" = (/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"e" = (/obj/docking_port/shuttle{dir = 4},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"f" = (/obj/structure/hanging_lantern{dir = 4},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"g" = (/obj/structure/closet/emcloset,/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"h" = (/obj/structure/closet/crate/engi/meteor_materials,/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"i" = (/obj/structure/closet/crate/engi/meteor_buildgear,/obj/effect/decal/warning_stripes{dir = 4; icon_state = "unloading"},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"j" = (/obj/structure/hanging_lantern{dir = 8},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"k" = (/obj/machinery/media/receiver/boombox/wallmount/shuttle{pixel_y = -40},/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"l" = (/obj/item/weapon/storage/box/wind,/obj/item/weapon/storage/box/wind,/obj/item/weapon/storage/box/wind,/obj/structure/closet/crate,/turf/simulated/shuttle/plating,/area/shuttle/escape/centcom)
+"u" = (/obj/structure/shuttle/engine/propulsion{dir = 8},/turf/space,/area/shuttle/escape/centcom)
+"v" = (/obj/structure/shuttle/engine/heater{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4},/turf/simulated/floor/plating/airless,/area/shuttle/escape/centcom)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaa
+uvbccccccccccccdde
+uvddddddddddddddfb
+uvgdddddhihddddddc
+uvbjddddhlhddddddc
+uvgdddddhihddddddc
+uvkdddddddddddddfb
+uvbccccccccccccddd
+aaaaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaaaa
+"}
