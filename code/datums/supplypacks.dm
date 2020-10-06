@@ -1914,6 +1914,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "lab mouse crate"
 	group = "Medical"
 
+/datum/supply_packs/remains
+	name = "Skeletal remains"
+	contains = list (
+					/obj/item/stack/sheet/bone,
+					/obj/item/stack/sheet/bone,
+					/obj/item/stack/sheet/bone,
+					/obj/item/stack/sheet/bone,
+					/obj/item/stack/sheet/bone,
+					/obj/item/stack/sheet/bone,
+					/obj/item/weapon/skull
+					)
+	cost = 20
+	containertype = /obj/structure/closet/coffin
+	containername = "skeletal remains container"
+	group = "Medical"
+
 //////SCIENCE//////
 
 /datum/supply_packs/research_parts
