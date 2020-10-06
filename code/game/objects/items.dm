@@ -7,7 +7,7 @@
 	var/list/inhand_states = list("left_hand" = 'icons/mob/in-hand/left/items_lefthand.dmi', "right_hand" = 'icons/mob/in-hand/right/items_righthand.dmi')
 	var/r_speed = 1.0
 	var/health = null
-	var/hitsound = null
+	var/hitsound = 'sound/weapons/smash.ogg'
 	var/armor_penetration = 0 // Chance from 0 to 100 to reduce absorb by one, and then rolls the same value. Check living_defense.dm
 
 	var/w_class = W_CLASS_MEDIUM
