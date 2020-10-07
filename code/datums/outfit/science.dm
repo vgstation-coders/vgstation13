@@ -120,6 +120,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
+				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
 			)
 		),
 		/datum/species/vox = list(
