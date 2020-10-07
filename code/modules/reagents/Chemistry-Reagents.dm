@@ -3980,7 +3980,21 @@
 	description = "A powerful sedative."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
-	data = 1 //Used as a tally
+	// There used to be a bug: if someone was injected with chloral once,
+	// and then injected with chloral a second time, this person would
+	// wake up for the duration of a Mob Subsystem tick.
+	// Now, how could this be? This proc was very clearly only ever increasing
+	// the sleeping var, never decreasing it. As it turns out,
+	// /datum/proc/reagents/proc/trans_to takes an argument called
+	// "preserve_data", which, if not null, tells
+	// /datum/reagents/proc/add_reagent to set the data var of
+	// the destination reagent to the one of the source reagent.
+	// add_reagent, in turn, would only override the old data with the new if
+	// the new data was not null. Since /datum/reagent/chloralhydrate/data
+	// was set to 1, it did end up resetting the data var of the existing
+	// chloralhydrate in the spessman's body, waking them up until the
+	// following tick. So that's the reason this var is null here.
+	data = null //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
@@ -3988,13 +4002,18 @@
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(isnull(data))
+		// This is technically not needed: the switch could check for
+		// null instead of 0 and "data++" would automatically convert a null
+		// to a 0, then increase it to 1. It would work. But this is clearer.
+		data = 0
 	switch(data)
-		if(1)
+		if(0)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(1 to 79)
 			M.sleeping++
-		if(81 to INFINITY)
+		if(80 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
 	data++
