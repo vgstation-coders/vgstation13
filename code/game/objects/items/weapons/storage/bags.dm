@@ -568,3 +568,22 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET
+
+
+
+// -----------------------------
+//          Xenobiology Bag
+// -----------------------------
+
+
+/obj/item/weapon/storage/bag/xenobio
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "pcollector"
+	name = "Extract Bag"
+	item_state = "pcollector"
+	origin_tech = Tc_BLUESPACE + "=2" + Tc_MATERIALS + "=2" + Tc_ENGINEERING + "=2"
+	storage_slots = 50; 
+	fits_max_w_class = 3
+	max_combined_w_class = 200 
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe", "/obj/item/weapon/reagent_containers/food/snacks/monkeycube")
