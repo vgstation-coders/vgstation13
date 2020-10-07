@@ -25,5 +25,8 @@
 
 /mob/living/simple_animal/hostile/skeletonjack/death(var/gibbed = FALSE)
 	..(gibbed)
-	ourBucket.forceMove(src.loc)
+	if(ourBucket)
+		ourBucket.forceMove(src.loc)
+	else
+		new /obj/item/clothing/head/pumpkinhead(src.loc)
 	qdel(src)

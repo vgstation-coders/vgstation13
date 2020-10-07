@@ -63,7 +63,12 @@
 	desc = "A spooky bucket for spooky treats or spookier tricks!"
 	density = 1
 	anchored = 1
-	spooky = TRUE
+
+/obj/structure/candybucket/candy_jack/New()
+	..()
+	if(text2num(time2text(world.timeofday, "MM")) == 10)
+		spooky = TRUE
+
 
 /obj/structure/candybucket/candy_jack/spook()
 	if(..())
