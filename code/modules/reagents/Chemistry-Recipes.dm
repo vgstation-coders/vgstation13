@@ -3578,7 +3578,7 @@
 			for(var/i = 1 to created_volume)
 				var/datum/organ/external/E = pick(H.organs)
 				E.fracture()
-		if(created_volume > 9)
+		else
 			if(isskellington(H) || isskelevox(H) || islich(H))
 				bigBoned(H, created_volume)
 			if(isvox(H))						//Copy paste of the melt power, ack ack
