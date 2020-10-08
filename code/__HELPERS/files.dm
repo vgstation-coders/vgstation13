@@ -85,7 +85,7 @@
 				continue
 		if(potential == "Lamprey Station/") //Available if the station is wrecked enough
 			var/crew_score = score["crewscore"] //So that we can use this in the admin messaging
-			if(crew_score >= -20000)
+			if(crew_score > -20000)
 				message_admins("Skipping map [potential], stationrequires lower than -20000 score (is [score]).")
 				warning("Skipping map [potential], station requires lower than -20000 score (is [score]).")
 				binary = null
