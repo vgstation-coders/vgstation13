@@ -717,7 +717,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-	var/lowest_temperature = T0C - 80 //so they're not useless for cooling rooms
+	var/lowest_temperature = T0C
 
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
@@ -760,7 +760,7 @@ steam.start() -- spawns the effect
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/10)))
+			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/2)))
 			T.assume_air(lowertemp)
 	spawn(3)
 		process()
