@@ -717,7 +717,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-	var/lowest_temperature = T0C
+	var/lowest_temperature = T0C - 80 //so they're not useless for cooling rooms
 
 /obj/effect/effect/foam/fire
 	name = "fire supression foam"
