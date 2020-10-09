@@ -52,10 +52,10 @@
 		else
 			return 
 
-		var/success = 0
+		var/success = FALSE
 		for(var/obj/item/I in T)
 			if(add_module(I, user, 0))
-				success = 1
+				success = TRUE
 
 		if(success)
 			to_chat(user, "You load everything into \the [src].")
@@ -115,7 +115,7 @@
 			module_string += "\a [get_module_name(module)], "
 	return module_string
 
-/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user, var/message = 1)
+/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user, var/message = TRUE)
 	if(!used_item || !user)
 		return FALSE
 
@@ -149,10 +149,10 @@
 	if(deployed)		//this shouldnt happen but just in case
 		undeploy()
 
-	var/success = 0
+	var/success = FALSE
 	for(var/module in stored_modules)
 		if(stored_modules[module])
-			success = 1
+			success = TRUE
 			stored_modules[module].forceMove(get_turf(user))
 			stored_modules[module] = null
 	if(success)
