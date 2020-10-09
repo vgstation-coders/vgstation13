@@ -58,7 +58,7 @@
 				success = 1
 
 		if(success)
-			to_chat(user, "You load everything into the [src].")
+			to_chat(user, "You load everything into \the [src].")
 
 
 
