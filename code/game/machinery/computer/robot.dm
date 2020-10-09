@@ -274,14 +274,16 @@
 			
 	icon_state = "robot-alert"
 	do
-		if(src.stop)
+		if(src.stop || stat & NOPOWER)
 			src.stop = 0
 			icon_state = "robot"
+			speak("Emergency self-destruct sequence halted.")
 			return
 		src.timeleft--
 		sleep(10)
 	while(src.timeleft)
 
+	speak("Emergency self-destruct sequence completed.")
 	timeleft = DEFAULT_SEQUENCE_TIME
 	temp = null
 	status = 0
