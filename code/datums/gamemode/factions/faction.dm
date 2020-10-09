@@ -61,7 +61,7 @@ var/list/factions_with_hud_icons = list()
 		factions_with_hud_icons.Add(src)
 
 	for (var/datum/faction/F in factions_with_hud_icons)
-		update_hud_icons()
+		F.update_hud_icons()
 
 	stat_datum = new stat_datum_type()
 
