@@ -45,9 +45,7 @@
 		return
 	user.set_machine(src)
 	var/dat
-	if (src.temp)
-		dat = "<TT>[src.temp]</TT><BR><BR><A href='?src=\ref[src];temp=1'>Clear Screen</A>"
-	else
+	if(!temp)
 		if(screen == 0)
 
 			dat += {"<h3>Cyborg Control Console</h3><BR>
@@ -121,6 +119,12 @@
 		usr.set_machine(src)
 
 		if (href_list["eject"])
+			src.temp = {"
+			Start Robot Destruction Sequence?<BR>
+			<BR><A href='?src=\ref[src];eject2=1'>Yes</A><BR>
+			<A href='?src=\ref[src];temp=1'>No</A>"}
+
+		else if (href_list["eject2"])
 			if (!status)
 				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
