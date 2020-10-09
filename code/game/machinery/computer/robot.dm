@@ -45,7 +45,9 @@
 		return
 	user.set_machine(src)
 	var/dat
-	if(!temp)
+	if(temp)
+		dat += temp
+	else
 		if(screen == 0)
 
 			dat += {"<h3>Cyborg Control Console</h3><BR>
@@ -128,7 +130,6 @@
 			if (!status)
 				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-				status = 1
 				start_sequence()
 				temp = null
 				
@@ -140,9 +141,10 @@
 			<A href='?src=\ref[src];temp=1'>No</A>"}
 
 		else if (href_list["stop2"])
-			stop = 1
+			message_admins("<span class='notice'>[key_name_admin(usr)] has halted the global cyborg killswitch!</span>")
+			log_game("<span class='notice'>[key_name(usr)] has halte the global cyborg killswitch!</span>")
+			stop_sequence()
 			temp = null
-			status = 0
 
 		else if (href_list["reset"])
 			timeleft = DEFAULT_SEQUENCE_TIME
@@ -269,6 +271,7 @@
 /obj/machinery/computer/robotics/proc/start_sequence()
 	speak("Emergency self-destruct sequence initiatied.")
 	icon_state = "robot-alert"
+	status = 1
 
 	for(var/mob/living/silicon/ai/A in mob_list)
 		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
@@ -279,9 +282,7 @@
 			
 	
 	do
-		if(stop)
-			stop = 0
-			stop_sequence()
+		if(!status)	//sequence was stopped
 			return
 		timeleft--
 		sleep(10)
