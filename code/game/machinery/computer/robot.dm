@@ -31,16 +31,16 @@
 	say(message)
 
 /obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
-	src.add_hiddenprint(user)
-	return src.attack_hand(user)
+	add_hiddenprint(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_paw(var/mob/user as mob)
-	return src.attack_hand(user)
+	return attack_hand(user)
 
 /obj/machinery/computer/robotics/attack_hand(var/mob/user as mob)
 	if(..())
 		return
-	if (src.z > 6)
+	if (z > 6)
 		to_chat(user, "<span class='danger'>Unable to establish a connection: </span>You're too far away from the station!")
 		return
 	user.set_machine(src)
@@ -91,10 +91,10 @@
 					<BR>"}
 			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
 		if(screen == 2)
-			if(!src.status)
+			if(!status)
 				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/[DEFAULT_SEQUENCE_TIME] <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
+				\nCountdown: [timeleft]/[DEFAULT_SEQUENCE_TIME] <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
 				\n<BR>
 				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
 				\n<BR>
@@ -102,7 +102,7 @@
 			else
 				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/[DEFAULT_SEQUENCE_TIME]<BR>
+				\nCountdown: [timeleft]/[DEFAULT_SEQUENCE_TIME]<BR>
 				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
 				\n<BR>
 				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
@@ -119,7 +119,7 @@
 		usr.set_machine(src)
 
 		if (href_list["eject"])
-			src.temp = {"
+			temp = {"
 			Start Robot Destruction Sequence?<BR>
 			<BR><A href='?src=\ref[src];eject2=1'>Yes</A><BR>
 			<A href='?src=\ref[src];temp=1'>No</A>"}
@@ -128,27 +128,27 @@
 			if (!status)
 				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-				src.status = 1
-				src.start_sequence()
-				src.temp = null
+				status = 1
+				start_sequence()
+				temp = null
 				
 
 		else if (href_list["stop"])
-			src.temp = {"
+			temp = {"
 			Stop Robot Destruction Sequence?<BR>
 			<BR><A href='?src=\ref[src];stop2=1'>Yes</A><BR>
 			<A href='?src=\ref[src];temp=1'>No</A>"}
 
 		else if (href_list["stop2"])
-			src.stop = 1
-			src.temp = null
-			src.status = 0
+			stop = 1
+			temp = null
+			status = 0
 
 		else if (href_list["reset"])
-			src.timeleft = DEFAULT_SEQUENCE_TIME
+			timeleft = DEFAULT_SEQUENCE_TIME
 
 		else if (href_list["temp"])
-			src.temp = null
+			temp = null
 		else if (href_list["screen"])
 			switch(href_list["screen"])
 				if("0")
@@ -158,7 +158,7 @@
 				if("2")
 					screen = 2
 		else if (href_list["killbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["killbot"])
 				if(R)
 					if(istype(usr, /mob/living/silicon/ai))
@@ -178,7 +178,7 @@
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["lockbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["lockbot"])
 				if(R && istype(R))
 					if(istype(usr, /mob/living/silicon/ai))
@@ -203,7 +203,7 @@
 			else
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 		else if (href_list["stopbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["stopbot"])
 				if(R && istype(R)) // Extra sancheck because of input var references
 					if(istype(usr, /mob/living/silicon/ai))
@@ -233,7 +233,7 @@
 				to_chat(usr, "<span class='warning'>Access Denied.</span>")
 
 		else if (href_list["magbot"])
-			if(src.allowed(usr))
+			if(allowed(usr))
 				var/mob/living/silicon/robot/R = locate(href_list["magbot"])
 				if(istype(usr, /mob/living/silicon/ai))
 					if (R.connected_ai != usr)
@@ -262,8 +262,8 @@
 							else
 								to_chat(usr, "You are already hacking a cyborg.")
 
-		src.add_fingerprint(usr)
-	src.updateUsrDialog()
+		add_fingerprint(usr)
+	updateUsrDialog()
 	return
 
 /obj/machinery/computer/robotics/proc/start_sequence()
