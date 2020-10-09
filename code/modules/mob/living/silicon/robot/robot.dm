@@ -1178,7 +1178,7 @@ var/list/cyborg_list = list()
 		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
-		to_chat(R, "<span class='danger'>Self-Destruct signal recieved.</span>")
+		to_chat(src, "<span class='danger'>Self-Destruct signal recieved.</span>")
 	gib()
 	return TRUE
 
