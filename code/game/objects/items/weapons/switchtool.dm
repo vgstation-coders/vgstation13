@@ -156,7 +156,7 @@
 			stored_modules[module].forceMove(get_turf(user))
 			stored_modules[module] = null
 	if(success)
-		to_chat(user, "You clear out everything from the [src].")
+		to_chat(user, "<span class='notice'>You clear out everything from \the [src].</span>")
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 		return TRUE
 	else
