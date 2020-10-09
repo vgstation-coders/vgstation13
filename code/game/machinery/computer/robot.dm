@@ -304,3 +304,5 @@
 	req_access = list()
 	if(user)
 		to_chat(user, "You disable the console's access requirement.")
+
+#undef DEFAULT_SEQUENCE_TIME
