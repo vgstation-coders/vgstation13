@@ -268,28 +268,24 @@
 
 /obj/machinery/computer/robotics/proc/start_sequence()
 	speak("Emergency self-destruct sequence initiatied.")
+	icon_state = "robot-alert"
+
 	for(var/mob/living/silicon/ai/A in mob_list)
-		to_chat(A, "<b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b>")
+		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
 		A << 'sound/machines/warning-buzzer.ogg'
 	for(var/mob/living/silicon/robot/R in mob_list)
 		if(!R.scrambledcodes)
-			to_chat(R, "<b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b>")
-			R << 'sound/machines/warning-buzzer.ogg'
+			R.start_destruction_sequence(timeleft)
 			
-	icon_state = "robot-alert"
+	
 	do
-		if(stat & NOPOWER || stat & BROKEN)
-			status = 0
+		if(stop)
+			stop = 0
+			stop_destruction_sequence()
 			return
-		if(src.stop)
-			src.stop = 0
-			status = 0
-			icon_state = "robot"
-			speak("Emergency self-destruct sequence halted.")
-			return
-		src.timeleft--
+		timeleft--
 		sleep(10)
-	while(src.timeleft)
+	while(timeleft)
 
 	speak("Emergency self-destruct sequence completed.")
 	timeleft = DEFAULT_SEQUENCE_TIME
@@ -297,11 +293,14 @@
 	status = 0
 	icon_state = "robot"
 
+/obj/machinery/computer/robotics/proc/stop_sequence()
+	speak("Emergency self-destruct sequence halted.")
+	status = 0
+	icon_state = "robot"
 	for(var/mob/living/silicon/robot/R in mob_list)
-		if(!R.scrambledcodes)
-			R.self_destruct()
+		R.stop_destruction_sequence(timeleft)
 
-	return
+
 
 /obj/machinery/computer/robotics/emag(mob/user)
 	..()

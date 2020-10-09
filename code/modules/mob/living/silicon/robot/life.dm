@@ -164,7 +164,7 @@
 	if(killswitch)
 		killswitch_time--
 		if(killswitch_time <= 0)
-			to_chat(src, "<span class='warning' style=\"font-family:Courier\"><B>Killswitch Activated</span>")
+			to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\]Killswitch Activated</b></span>")
 			spawn(5)
 				gib()
 

@@ -72,7 +72,7 @@ var/list/cyborg_list = list()
 	var/jeton = FALSE
 
 	var/killswitch = FALSE
-	var/killswitch_time = 60
+	var/killswitch_time = 120
 	var/modulelock = FALSE
 	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
@@ -1181,6 +1181,18 @@ var/list/cyborg_list = list()
 	to_chat(src, "<span class='danger'>Self-Destruct signal recieved.</span>")
 	gib()
 	return TRUE
+
+/mob/living/silicon/robot/proc/start_destruction_sequence(var/time)
+	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\]Emergency Self-Destruct sequence initiated. This unit will self-destruct in [time] seconds unless a termination signal is recieved.</b></span>")
+	killswitch = TRUE
+	killswitch_time = time/2    //process() happens every two seconds
+	src << 'sound/machines/warning-buzzer.ogg'
+
+/mob/living/silicon/robot/proc/stop_destruction_sequence()
+	if(!killswitch)
+		return
+	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\]Termination signal recieved. Self-Destruct sequence halted.</b></span>")
+	killswitch = FALSE
 
 /mob/living/silicon/robot/proc/UnlinkSelf()
 	if(connected_ai)
