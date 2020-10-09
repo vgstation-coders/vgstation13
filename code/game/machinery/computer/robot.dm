@@ -281,7 +281,7 @@
 	do
 		if(stop)
 			stop = 0
-			stop__sequence()
+			stop_sequence()
 			return
 		timeleft--
 		sleep(10)
