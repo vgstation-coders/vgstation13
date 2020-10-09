@@ -294,7 +294,7 @@
 	timeleft = DEFAULT_SEQUENCE_TIME
 	temp = null
 	status = 0
-	if(icon_state = "robot-alert")
+	if(icon_state == "robot-alert")
 		icon_state = "robot"
 		speak("Emergency self-destruct sequence completed.")
 
