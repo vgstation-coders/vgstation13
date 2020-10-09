@@ -220,6 +220,13 @@
 	..()
 	set_frequency(SUP_FREQ)
 
+/obj/item/device/radio/intercom/aiprivate
+	name = "station intercom (AI Private)"
+
+/obj/item/device/radio/intercom/aiprivate/initialize()
+	..()
+	set_frequency(AIPRIV_FREQ)
+
 /obj/item/device/radio/intercom/supply/broadcast_nospeaker
 	broadcasting = 1
 	listening = 0
