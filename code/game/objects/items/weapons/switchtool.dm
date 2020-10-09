@@ -54,7 +54,7 @@
 
 		var/success = FALSE
 		for(var/obj/item/I in T)
-			if(add_module(I, user, 0))
+			if(add_module(I, user, FALSE))
 				success = TRUE
 
 		if(success)
