@@ -281,7 +281,7 @@
 	do
 		if(stop)
 			stop = 0
-			stop_destruction_sequence()
+			stop__sequence()
 			return
 		timeleft--
 		sleep(10)
