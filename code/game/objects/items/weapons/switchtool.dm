@@ -160,7 +160,7 @@
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 		return TRUE
 	else
-		to_chat(user, "The [src] is empty.")
+		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 
 /obj/item/weapon/switchtool/proc/undeploy()
 	playsound(src, undeploy_sound, 10, 1)
