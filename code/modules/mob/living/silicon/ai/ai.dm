@@ -893,6 +893,18 @@ var/list/ai_list = list()
 	else
 		return ..()
 
+/mob/living/silicon/ai/attack_hand(mob/user)
+	..()
+	var/mob/living/living_user = user
+	if(!istype(living_user))
+		return
+	if(living_user.a_intent == I_HURT)
+		living_user.unarmed_attack_mob(src)
+	else
+		living_user.visible_message(
+			"<span class='notice'>[living_user] pats [src].</span>",
+			"<span class='notice'>You pat [src].</span>")
+
 
 /mob/living/silicon/ai/get_multitool(var/active_only=0)
 	return aiMulti
