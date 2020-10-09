@@ -1183,7 +1183,7 @@ var/list/cyborg_list = list()
 	return TRUE
 
 /mob/living/silicon/robot/proc/start_destruction_sequence(var/time)
-	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\]Emergency Self-Destruct sequence initiated. This unit will self-destruct in [time] seconds unless a termination signal is recieved.</b></span>")
+	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Self-Destruct sequence initiated. This unit will self-destruct in [time] seconds unless a termination signal is recieved.</b></span>")
 	killswitch = TRUE
 	killswitch_time = time/2    //process() happens every two seconds
 	src << 'sound/machines/warning-buzzer.ogg'
@@ -1191,7 +1191,7 @@ var/list/cyborg_list = list()
 /mob/living/silicon/robot/proc/stop_destruction_sequence()
 	if(!killswitch)
 		return
-	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\]Termination signal recieved. Self-Destruct sequence halted.</b></span>")
+	to_chat(src, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Termination signal recieved. Self-Destruct sequence halted.</b></span>")
 	killswitch = FALSE
 
 /mob/living/silicon/robot/proc/UnlinkSelf()

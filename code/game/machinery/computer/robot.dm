@@ -130,8 +130,9 @@
 			if (!status)
 				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
 				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-				start_sequence()
 				temp = null
+				start_sequence()
+				
 				
 
 		else if (href_list["stop"])
@@ -288,18 +289,21 @@
 		sleep(10)
 	while(timeleft)
 
-	speak("Emergency self-destruct sequence completed.")
+
+	
 	timeleft = DEFAULT_SEQUENCE_TIME
 	temp = null
 	status = 0
-	icon_state = "robot"
+	if(icon_state = "robot-alert")
+		icon_state = "robot"
+		speak("Emergency self-destruct sequence completed.")
 
 /obj/machinery/computer/robotics/proc/stop_sequence()
 	speak("Emergency self-destruct sequence halted.")
 	status = 0
 	icon_state = "robot"
 	for(var/mob/living/silicon/robot/R in mob_list)
-		R.stop_destruction_sequence(timeleft)
+		R.stop_destruction_sequence()
 
 
 
