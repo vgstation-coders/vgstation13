@@ -1,5 +1,6 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
+#define DEFAULT_SEQUENCE_TIME	120
 
 /obj/machinery/computer/robotics
 	name = "robotics control"
@@ -13,12 +14,21 @@
 	var/id = 0.0
 	var/temp = null
 	var/status = 0
-	var/timeleft = 60
+	var/timeleft = DEFAULT_SEQUENCE_TIME
 	var/stop = 0.0
 	var/screen = 0 // 0 - Main Menu, 1 - Cyborg Status, 2 - Kill 'em All! -- In text
 
 	light_color = LIGHT_COLOR_PINK
 
+/obj/machinery/computer/robotics/say_quote(text)
+	return "beeps, [text]"
+
+/obj/machinery/computer/robotics/proc/speak(var/message)
+	if(stat & NOPOWER)	//sanity
+		return
+	if (!message)
+		return
+	say(message)
 
 /obj/machinery/computer/robotics/attack_ai(var/mob/user as mob)
 	src.add_hiddenprint(user)
@@ -86,7 +96,7 @@
 			if(!src.status)
 				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/60 <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
+				\nCountdown: [src.timeleft]/[DEFAULT_SEQUENCE_TIME] <A href='?src=\ref[src];reset=1'>\[Reset\]</A><BR>
 				\n<BR>
 				\n<A href='?src=\ref[src];eject=1'>Start Sequence</A><BR>
 				\n<BR>
@@ -94,7 +104,7 @@
 			else
 				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
 				\n<BR>
-				\nCountdown: [src.timeleft]/60 \[Reset\]<BR>
+				\nCountdown: [src.timeleft]/[DEFAULT_SEQUENCE_TIME]<BR>
 				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
 				\n<BR>
 				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
@@ -111,26 +121,13 @@
 		usr.set_machine(src)
 
 		if (href_list["eject"])
-			src.temp = {"Destroy Robots?<BR>
-			<BR><B><A href='?src=\ref[src];eject2=1'>\[Swipe ID to initiate destruction sequence\]</A></B><BR>
-			<A href='?src=\ref[src];temp=1'>Cancel</A>"}
-
-		else if (href_list["eject2"])
-			var/obj/item/weapon/card/id/I = usr.get_active_hand()
-			if (istype(I, /obj/item/device/pda))
-				var/obj/item/device/pda/pda = I
-				I = pda.id
-			if (istype(I))
-				if(src.check_access(I))
-					if (!status)
-						message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
-						log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
-						src.status = 1
-						src.start_sequence()
-						src.temp = null
-
-				else
-					to_chat(usr, "<span class='warning'>Access Denied.</span>")
+			if (!status)
+				message_admins("<span class='notice'>[key_name_admin(usr)] has initiated the global cyborg killswitch!</span>")
+				log_game("<span class='notice'>[key_name(usr)] has initiated the global cyborg killswitch!</span>")
+				src.status = 1
+				src.start_sequence()
+				src.temp = null
+				
 
 		else if (href_list["stop"])
 			src.temp = {"
@@ -144,7 +141,7 @@
 			src.status = 0
 
 		else if (href_list["reset"])
-			src.timeleft = 60
+			src.timeleft = DEFAULT_SEQUENCE_TIME
 
 		else if (href_list["temp"])
 			src.temp = null
@@ -266,15 +263,29 @@
 	return
 
 /obj/machinery/computer/robotics/proc/start_sequence()
-
-
+	speak("Emergency self-destruct sequence initiatied.")
+	for(var/mob/living/silicon/ai/A in mob_list)
+		to_chat(A, "<b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b>")
+		A << 'sound/machines/warning-buzzer.ogg'
+	for(var/mob/living/silicon/robot/R in mob_list)
+		if(!R.scrambledcodes)
+			to_chat(R, "<b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b>")
+			R << 'sound/machines/warning-buzzer.ogg'
+			
+	icon_state = "robot-alert"
 	do
 		if(src.stop)
 			src.stop = 0
+			icon_state = "robot"
 			return
 		src.timeleft--
 		sleep(10)
 	while(src.timeleft)
+
+	timeleft = DEFAULT_SEQUENCE_TIME
+	temp = null
+	status = 0
+	icon_state = "robot"
 
 	for(var/mob/living/silicon/robot/R in mob_list)
 		if(!R.scrambledcodes)
