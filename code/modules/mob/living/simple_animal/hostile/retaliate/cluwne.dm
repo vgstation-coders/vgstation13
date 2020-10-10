@@ -248,9 +248,3 @@
 	maxHealth = 500
 	health = 500
 	bookgib = 0
-
-/mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	var/currenthealth = health
-	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
-	health = currenthealth
-	..()
