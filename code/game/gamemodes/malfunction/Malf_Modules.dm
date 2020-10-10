@@ -45,29 +45,73 @@ rcd light flash thingy on matter drain
 			var/datum/stat/faction/malf/MS = mf.stat_datum
 			MS.modules.Add(new /datum/stat/malf_module_purchase(src))
 
-/datum/AI_Module/large/fireproof_core
-	module_name = "Core upgrade"
-	mod_pick_name = "coreup"
-	description = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
+/datum/AI_Module/large/upgrade_defenses
+	module_name = "Core Defense Upgrade"
+	mod_pick_name = "coredefense"
+	description = "Improves the firing speed and health of all AI turrets, and causes them to shoot highly-lethal pulse beams. You core also strengthens its circuitry, making it immune to the burn damage. This effect is permanent and you will no longer be able to shunt."
 	cost = 50
 	one_time = 1
+	power_type = /spell/aoe_turf/fortify_core
 
-/datum/AI_Module/large/fireproof_core/on_purchase(mob/living/silicon/ai/user)
-	user.ai_flags |= COREFIRERESIST
-	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
-
-/datum/AI_Module/large/upgrade_turrets
-	module_name = "AI Turret upgrade"
-	mod_pick_name = "turret"
-	description = "Improves the firing speed and health of all AI turrets. This effect is permanent."
-	cost = 50
-	one_time = 1
-
-/datum/AI_Module/large/upgrade_turrets/on_purchase(mob/living/silicon/ai/user)
+/datum/AI_Module/large/upgrade_defenses/on_purchase(mob/living/silicon/ai/user)
+	..()
 	for(var/obj/machinery/turret/turret in machines)
-		turret.health += 30
-		turret.shot_delay = 20
-	to_chat(user, "<span class='warning'> Turrets upgraded.</span>")
+		turret.health += 120	//200 Totaldw
+		turret.shot_delay = 15
+		turret.lasertype = /obj/item/projectile/beam/pulse
+		turret.fire_twice = 1
+	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
+	user.vis_contents += new /obj/effect/overlay/ai_shield
+	user.can_shunt = 0
+	to_chat(user, "<span class='warning'>You cannot shunt anymore.</span>")
+
+
+/spell/aoe_turf/fortify_core
+	name = "Fortify Core (Toggle)"
+	desc = "Reroutes your internal energy to a built-in blast shield within your core, greatly reducing damage taken. The shield will drain your power while active."
+	user_type = USER_TYPE_MALFAI
+	panel = MALFUNCTION
+	charge_type = Sp_RECHARGE
+	charge_max = 1 SECONDS
+	hud_state = "fortify"
+	override_base = "grey"
+	cooldown_min = 1 SECONDS
+
+/obj/effect/overlay/ai_shield
+	name = "AI Firewall"
+	desc = "You can see the words 'FUCK C4RB0NS' etched on to it."
+	layer = LIGHTING_LAYER
+	icon = 'icons/mob/ai.dmi'
+	icon_state = "lockdown-up"
+	vis_flags = VIS_INHERIT_ID
+
+/obj/effect/overlay/ai_shield/proc/lower()
+	flick("lockdown-open", src)
+	icon_state = "lockdown-up"
+
+/obj/effect/overlay/ai_shield/proc/raise()
+	flick("lockdown-close", src)
+	icon_state = "lockdown"
+
+/spell/aoe_turf/fortify_core/before_target(mob/user)
+	if(!isAI(user))
+		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
+		return 1
+	
+/spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
+	var/mob/living/silicon/ai/A = user
+	var/obj/effect/overlay/ai_shield/shield 
+	shield = locate(/obj/effect/overlay/ai_shield) in A.vis_contents
+	if(A.ai_flags & COREFORTIFY)
+		if(shield)
+			shield.lower()
+		A.ai_flags &= ~COREFORTIFY
+	else
+		if(shield)
+			shield.raise()
+		A.ai_flags |= COREFORTIFY
+	playsound(user, 'sound/machines/poddoor.ogg', 60, 1)
+	to_chat(user, "<span class='warning'>[A.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
 
 /datum/AI_Module/large/explosive
 	module_name = "Explosive Hardware"
