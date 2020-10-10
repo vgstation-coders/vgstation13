@@ -29,6 +29,14 @@
 		"immunity" = null,
 		)
 
+	var/static/list/safe_containers = list(
+		/obj/item/device/mmi,
+		/obj/item/bodybag/cryobag,
+		/obj/structure/closet/crate/freezer,
+		/obj/structure/closet/crate/medical,
+		/obj/structure/closet/crate/secure/medsec,
+		)
+
 /obj/item/organ/internal/attack_self(mob/user as mob)
 
 	// Convert it to an edible form, yum yum.
@@ -69,10 +77,9 @@
 		processing_objects -= src
 		return
 
-	// Don't process if we're in a freezer, an MMI or a stasis bag. //TODO: ambient temperature?
-	if(istype(loc,/obj/item/device/mmi) || istype(loc,/obj/item/bodybag/cryobag) || istype(loc,/obj/structure/closet/crate/freezer))
+	//TODO: ambient temperature?
+	if(is_type_in_list(loc,safe_containers))
 		return
-
 
 	if(istype(loc,/obj/item/weapon/reagent_containers/glass/jar))
 		var/obj/item/weapon/reagent_containers/glass/jar/J = loc

@@ -662,10 +662,18 @@ About the new airlock wires panel:
 		else
 			Topic("aiDisable=7", list("aiDisable"="7"), 1)
 
+
 /turf/AIShiftClick()
 	for(var/obj/machinery/door/airlock/A in contents)
 		A.AIShiftClick()
 		break
+
+/obj/machinery/door/airlock/AIMiddleShiftClick()  // Turn safeties on and off
+	if(allowed(usr))
+		if(!safe)
+			Topic("aiEnable=8", list("aiEnable"="8"), 1)
+		else
+			Topic("aiDisable=8", list("aiDisable"="8"), 1)
 
 /obj/machinery/door/airlock/CtrlClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
@@ -681,6 +689,12 @@ About the new airlock wires panel:
 /obj/machinery/door/airlock/ShiftClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
 		AIShiftClick()
+	else
+		..()
+
+/obj/machinery/door/airlock/MiddleShiftClick(mob/user)
+	if(isrobot(user) || isAdminGhost(user))
+		AIMiddleShiftClick()
 	else
 		..()
 
@@ -857,6 +871,7 @@ About the new airlock wires panel:
 							to_chat(usr, "<span class='warning'>Nope.</span>")
 							return 0
 						safe = 0
+						to_chat(usr, "Door safeties disabled.")
 						investigation_log(I_WIRES, "|| safeties removed via robot interface by [key_name(usr)]")
 						add_attacklogs(usr, null, " disabled door-crush safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 					else
@@ -997,6 +1012,7 @@ About the new airlock wires panel:
 							to_chat(usr, "<span class='warning'>Nope.</span>")
 							return 0
 						safe = 1
+						to_chat(usr, "Door safeties re-enabled.")
 						investigation_log(I_WIRES, "|| safeties re-enabled via robot interface by [key_name(usr)]")
 						add_attacklogs(usr, null, " enabled safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 						src.updateUsrDialog()

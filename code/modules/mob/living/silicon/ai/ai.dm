@@ -43,7 +43,7 @@ var/list/ai_list = list()
 
 	// See VOX_AVAILABLE_VOICES for available values
 	var/vox_voice = "fem";
-
+	var/vox_corrupted = FALSE
 //Hud stuff
 
 	//MALFUNCTION
@@ -54,6 +54,7 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
+	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
 	var/mob/living/silicon/ai/parent = null
 	var/camera_light_on = FALSE
@@ -177,7 +178,7 @@ var/list/ai_list = list()
 /mob/living/silicon/ai/verb/toggle_holopadoverlays()
 	set category = "AI Commands"
 	set name = "Toggle Holopad Overlays"
-	
+
 	if(incapacitated() || aiRestorePowerRoutine || !isturf(loc) || busy)
 		return
 	toggleholopadoverlays()
@@ -520,6 +521,10 @@ var/list/ai_list = list()
 		make_announcement()
 		return
 
+	if(href_list["voice_corrupted"])
+		vox_corrupted = text2num(href_list["voice_corrupted"]) // even if client hacks the value, we only care if it's true or false.
+		make_announcement()
+
 	// play_announcement=word1+word2... - Plays an announcement to the station.
 	if(href_list["play_announcement"])
 		//to_chat(usr, "Received play_announcement=[href_list["play_announcement"]]")
@@ -529,6 +534,8 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
+	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
+		return 
 	..(Proj)
 	updatehealth()
 	return 2
@@ -887,6 +894,18 @@ var/list/ai_list = list()
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/attack_hand(mob/user)
+	..()
+	var/mob/living/living_user = user
+	if(!istype(living_user))
+		return
+	if(living_user.a_intent == I_HURT)
+		living_user.unarmed_attack_mob(src)
+	else
+		living_user.visible_message(
+			"<span class='notice'>[living_user] pats [src].</span>",
+			"<span class='notice'>You pat [src].</span>")
 
 
 /mob/living/silicon/ai/get_multitool(var/active_only=0)

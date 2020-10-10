@@ -13,12 +13,6 @@
 	minimal_access = list(access_bar,access_weapons)
 	outfit_datum = /datum/outfit/bartender
 
-/datum/job/bartender/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser(H.back), slot_in_backpack)
-
-
 /datum/job/chef
 	title = "Chef"
 	flag = CHEF
@@ -34,12 +28,6 @@
 	alt_titles = list("Cook")
 	outfit_datum = /datum/outfit/chef
 
-/datum/job/chef/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/flour(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/flour(H.back), slot_in_backpack)
-
-
 /datum/job/hydro
 	title = "Botanist"
 	flag = BOTANIST
@@ -54,12 +42,6 @@
 	minimal_access = list(access_hydroponics, access_morgue) // Removed tox and chem access because STOP PISSING OFF THE CHEMIST GUYS // //Removed medical access because WHAT THE FUCK YOU AREN'T A DOCTOR YOU GROW WHEAT //Given Morgue access because they have a viable means of cloning.
 	alt_titles = list("Hydroponicist", "Beekeeper", "Gardener")
 	outfit_datum = /datum/outfit/hydro
-
-/datum/job/hydro/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/glass/bottle/diethylamine(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/glass/bottle/diethylamine(H.back), slot_in_backpack)
-
 
 //Cargo
 /datum/job/qm
@@ -104,11 +86,6 @@
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
 	outfit_datum = /datum/outfit/mining
 
-/datum/job/mining/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.put_in_hands(new /obj/item/weapon/pickaxe/drill(get_turf(H)))
-
-
 /datum/job/clown
 	title = "Clown"
 	flag = CLOWN
@@ -123,10 +100,6 @@
 	minimal_access = list(access_clown, access_theatre)
 	alt_titles = list("Jester")
 	outfit_datum = /datum/outfit/clown
-
-/datum/job/clown/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/coin/clown(H.back), slot_in_backpack)
 
 /datum/job/clown/reject_new_slots()
 	if(Holiday == APRIL_FOOLS_DAY)
@@ -158,10 +131,6 @@
 	access = list(access_mime, access_theatre, access_maint_tunnels)
 	minimal_access = list(access_mime, access_theatre)
 	outfit_datum = /datum/outfit/mime
-
-/datum/job/mime/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/snacks/baguette(H.back), slot_in_backpack)
 
 /datum/job/mime/reject_new_slots()
 	if(!xtra_positions)
@@ -214,12 +183,6 @@
 	minimal_access = list(access_janitor, access_maint_tunnels)
 	outfit_datum = /datum/outfit/janitor
 
-/datum/job/janitor/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/grenade/chem_grenade/cleaner(H.back), slot_in_backpack)
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/spray/cleaner(H.back), slot_in_backpack)
-
-
 //More or less assistants
 /datum/job/librarian
 	title = "Librarian"
@@ -259,12 +222,9 @@
 	total_positions = 1
 	spawn_positions = 1
 	supervisors = "The God(s), the Head of Personnel too"
+	wage_payout = 35
 	selection_color = "#dddddd"
 	access = list(access_morgue, access_chapel_office, access_crematorium, access_maint_tunnels)
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	outfit_datum = /datum/outfit/chaplain
 	var/datum/religion/chap_religion
-
-/datum/job/chaplain/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater(H.back), slot_in_backpack)

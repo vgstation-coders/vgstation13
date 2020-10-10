@@ -38,6 +38,13 @@
 /mob/living/silicon/robot/death(gibbed)
 	if(stat == DEAD)
 		return
+	if(connected_ai)
+		if(connected_ai.explosive_cyborgs) 
+			visible_message("<span class='notice'>You hear a soft beep.</span>")
+			spawn(10)
+				explosion(src.loc, 1, 4, 5, 6)
+				gib()
+				return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)
 	stat = DEAD

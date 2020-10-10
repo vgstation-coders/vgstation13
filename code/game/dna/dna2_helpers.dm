@@ -128,52 +128,48 @@
 
 	return output
 
-// /proc/updateappearance has changed behavior, so it's been removed
-// Use mob.UpdateAppearance() instead.
-
-// Simpler. Don't specify UI in order for the mob to use its own.
+// Don't specify UI in order for the mob to use its own.
 /mob/proc/UpdateAppearance(var/list/UI=null)
-	if(istype(src, /mob/living/carbon/human))
-		if(UI!=null)
-			src.dna.UI=UI
-			src.dna.UpdateUI()
-		dna.check_integrity()
-		var/mob/living/carbon/human/H = src
-		H.my_appearance.r_hair   = dna.GetUIValueRange(DNA_UI_HAIR_R,    255)
-		H.my_appearance.g_hair   = dna.GetUIValueRange(DNA_UI_HAIR_G,    255)
-		H.my_appearance.b_hair   = dna.GetUIValueRange(DNA_UI_HAIR_B,    255)
+	return 0
 
-		H.my_appearance.r_facial = dna.GetUIValueRange(DNA_UI_BEARD_R,   255)
-		H.my_appearance.g_facial = dna.GetUIValueRange(DNA_UI_BEARD_G,   255)
-		H.my_appearance.b_facial = dna.GetUIValueRange(DNA_UI_BEARD_B,   255)
+/mob/living/carbon/human/UpdateAppearance(list/UI=null)
+	if(UI!=null)
+		src.dna.UI=UI
+		src.dna.UpdateUI()
+	dna.check_integrity()
+	my_appearance.r_hair   = dna.GetUIValueRange(DNA_UI_HAIR_R,    255)
+	my_appearance.g_hair   = dna.GetUIValueRange(DNA_UI_HAIR_G,    255)
+	my_appearance.b_hair   = dna.GetUIValueRange(DNA_UI_HAIR_B,    255)
 
-		H.my_appearance.r_eyes   = dna.GetUIValueRange(DNA_UI_EYES_R,    255)
-		H.my_appearance.g_eyes   = dna.GetUIValueRange(DNA_UI_EYES_G,    255)
-		H.my_appearance.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
+	my_appearance.r_facial = dna.GetUIValueRange(DNA_UI_BEARD_R,   255)
+	my_appearance.g_facial = dna.GetUIValueRange(DNA_UI_BEARD_G,   255)
+	my_appearance.b_facial = dna.GetUIValueRange(DNA_UI_BEARD_B,   255)
 
-		H.my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
-		H.setGender(MALE)
-		if (dna.GetUIState(DNA_UI_GENDER))
-			H.setGender(FEMALE)
-		else
-			H.setGender(MALE)
+	my_appearance.r_eyes   = dna.GetUIValueRange(DNA_UI_EYES_R,    255)
+	my_appearance.g_eyes   = dna.GetUIValueRange(DNA_UI_EYES_G,    255)
+	my_appearance.b_eyes   = dna.GetUIValueRange(DNA_UI_EYES_B,    255)
 
-		//Hair
-		var/hair = dna.GetUIValueRange(DNA_UI_HAIR_STYLE,hair_styles_list.len)
-		if((0 < hair) && (hair <= hair_styles_list.len))
-			H.my_appearance.h_style = hair_styles_list[hair]
-
-		//Facial Hair
-		var/beard = dna.GetUIValueRange(DNA_UI_BEARD_STYLE,facial_hair_styles_list.len)
-		if((0 < beard) && (beard <= facial_hair_styles_list.len))
-			H.my_appearance.f_style = facial_hair_styles_list[beard]
-
-		H.update_body(0)
-		H.update_hair()
-
-		return 1
+	my_appearance.s_tone   = 35 - dna.GetUIValueRange(DNA_UI_SKIN_TONE, 220) // Value can be negative.
+	setGender(MALE)
+	if (dna.GetUIState(DNA_UI_GENDER))
+		setGender(FEMALE)
 	else
-		return 0
+		setGender(MALE)
+
+	//Hair
+	var/list/species_hair = valid_sprite_accessories(hair_styles_list, null, species.name)
+	var/hair = clamp(dna.GetUIValueRange(DNA_UI_HAIR_STYLE, species_hair.len) + 1, 1, species_hair.len)
+	my_appearance.h_style = species_hair[hair]
+
+	//Facial Hair
+	var/list/species_facial_hair = valid_sprite_accessories(facial_hair_styles_list, null, species.name)
+	var/beard = clamp(dna.GetUIValueRange(DNA_UI_BEARD_STYLE, species_facial_hair.len) + 1, 1, species_facial_hair.len)
+	my_appearance.f_style = species_facial_hair[beard]
+
+	update_body(0)
+	update_hair()
+
+	return 1
 
 // Used below, simple injection modifier.
 /proc/probinj(var/pr, var/inj)

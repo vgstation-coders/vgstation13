@@ -1,4 +1,6 @@
 var/list/excavated_large_artifacts = list()
+var/list/destroyed_large_artifacts = list()
+var/list/razed_large_artifacts = list()//destroyed while still inside a rock wall/boulder
 
 /obj/machinery/artifact
 	name = "alien artifact"
@@ -19,6 +21,7 @@ var/list/excavated_large_artifacts = list()
 	var/event/on_attackby
 	var/event/on_explode
 	var/event/on_projectile
+	var/event/on_beam
 	var/analyzed = 0 //set to 1 after having been analyzed successfully
 	var/safe_delete = FALSE
 
@@ -34,6 +37,7 @@ var/list/excavated_large_artifacts = list()
 	on_attackby = new(owner = src)
 	on_explode = new(owner = src)
 	on_projectile = new(owner = src)
+	on_beam = new(owner = src)
 	//event arguement list format (user, "context", item)
 
 	if(generate_effect)
@@ -56,7 +60,7 @@ var/list/excavated_large_artifacts = list()
 						src.investigation_log(I_ARTIFACT, "|| secondary effect [secondary_effect.artifact_id] starts triggered by default.")
 						secondary_effect.ToggleActivate(2)
 
-	generate_icon()
+		generate_icon()
 
 /obj/machinery/artifact/proc/generate_icon()
 	prefix = pick(primary_effect.valid_style_types)
@@ -146,30 +150,48 @@ var/list/excavated_large_artifacts = list()
 		return
 
 	src.add_fingerprint(user)
-	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
 	to_chat(user, "<b>You touch [src].</b>")
+	lazy_invoke_event(/lazy_event/on_attackhand, list("user" = user, "target" = src))
 
 /obj/machinery/artifact/attackby(obj/item/weapon/W as obj, mob/living/user as mob)
 
 	..()
+	user.delayNextAttack(8)
+	user.do_attack_animation(src, W)
+	if (W.hitsound)
+		playsound(src, W.hitsound, 50, 1, -1)
+	if (W.attack_verb)
+		visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
+	else
+		visible_message("<span class='warning'>\The [user] hits \the [src] with \the [W].</span>")
 	on_attackby.Invoke(list(user, "MELEE", W))
 
-/obj/machinery/artifact/Bumped(M as mob|obj)
+/obj/machinery/artifact/Bumped(var/atom/A)
+	if (istype(A,/obj))
+		on_attackby.Invoke(list(usr, "THROW", A))
+	else if (isliving(A))
+		var/mob/living/L = A
+		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
+			if (prob(50))
+				to_chat(L, "<b>You accidentally touch [src].<b>")
+				lazy_invoke_event(/lazy_event/on_bumped, list("user" = L, "target" = src))
 	..()
-	if(istype(M,/obj))
-		on_attackby.Invoke(list(usr, "THROW", M))
-	else if(ishuman(M) && !istype(M:gloves,/obj/item/clothing/gloves))
-		var/warn = 0
 
-		if (prob(50))
-			lazy_invoke_event(/lazy_event/on_bumped, list("user" = M, "target" = src))
-			warn = 1
-		if(warn)
-			to_chat(M, "<b>You accidentally touch [src].<b>")
+/obj/machinery/artifact/to_bump(var/atom/A)
+	if (iscarbon(A))
+		var/mob/living/L = A
+		if (!ishuman(L) || !istype(L:gloves,/obj/item/clothing/gloves))
+			if (prob(50))
+				to_chat(L, "<b>\The [src] bumps into you.<b>")
+				lazy_invoke_event(/lazy_event/on_bumped, list("user" = L, "target" = src))
 	..()
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
 	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
+
+/obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
+	..()
+	on_beam.Invoke(list(B, "BEAMCONNECT"))
 
 /obj/machinery/artifact/ex_act(severity)
 	switch(severity)
@@ -196,13 +218,14 @@ var/list/excavated_large_artifacts = list()
 		secondary_effect.UpdateMove()
 
 /obj/machinery/artifact/Destroy()
+	new /datum/artifact_postmortem_data(src)
+
 	qdel(primary_effect); primary_effect = null
 	qdel(secondary_effect); secondary_effect = null
 	qdel(on_attackby); on_attackby = null
 	qdel(on_explode); on_explode = null
 	qdel(on_projectile); on_projectile = null
-
-	excavated_large_artifacts -= artifact_id
+	qdel(on_beam); on_beam = null
 	..()
 
 /proc/ArtifactRepercussion(var/atom/source, var/mob/mob_cause = null, var/other_cause = "", var/artifact_type = "")
@@ -222,3 +245,6 @@ var/list/excavated_large_artifacts = list()
 			if(prob(50))
 				M.Stun(5)
 		M.apply_radiation(25, RAD_EXTERNAL)
+		
+/obj/machinery/artifact/can_overload()
+	return 0

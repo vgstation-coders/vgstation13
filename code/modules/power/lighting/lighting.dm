@@ -83,6 +83,9 @@
 	H.do_attack_animation(src, H)
 	return SPECIAL_ATTACK_FAILED
 
+/obj/machinery/light_construct/can_overload()
+	return 0
+
 
 /obj/machinery/light_construct/small
 	name = "small light fixture frame"
@@ -173,6 +176,9 @@ var/global/list/obj/machinery/light/alllights = list()
 
 	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 	return SPECIAL_ATTACK_FAILED
+
+/obj/machinery/light/can_overload()
+	return 0
 
 /obj/machinery/light/broken
 	icon_state = "ltube-broken" //for the mapper

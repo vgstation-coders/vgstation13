@@ -50,6 +50,8 @@ var/list/all_generated_artifact_ids = list()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Boulders - sometimes turn up after excavating turf - excavate further to try and find large xenoarch finds
 
+var/list/boulders = list()
+
 /obj/structure/boulder
 	name = "rocky debris"
 	desc = "Leftover rock from an excavation. May or may not contain an artifact, but if it does you better use a small pickaxe, lest you destroy it along with the debris."
@@ -64,12 +66,14 @@ var/list/all_generated_artifact_ids = list()
 	var/datum/artifact_find/artifact_find
 
 /obj/structure/boulder/Destroy()
-	..()
+	boulders -= src
 	geological_data = null
 	artifact_find = null
+	..()
 
 /obj/structure/boulder/New()
 	..()
+	boulders += src
 	icon_state = "boulder[rand(1,4)]"
 	excavation_level = rand(5,50)
 
@@ -112,18 +116,35 @@ var/list/all_generated_artifact_ids = list()
 
 			if(excavation_level > 100)
 				//failure
-				src.visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
-				to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught, any secrets it was holding are long gone.</span>")
+				visible_message("<span class='danger'>\The [src] suddenly crumbles away.</span>")
+				if(artifact_find)//destroyed artifacts have weird, unpleasant effects
+					var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
+					destroyed.artifact_id = artifact_find.artifact_id
+					destroyed.last_loc = get_turf(src)
+					destroyed.artifact_type = artifact_find.artifact_find_type
+					if (artifact_find.artifact_find_type == /obj/machinery/artifact)
+						destroyed.primary_effect = "???"
+						destroyed.secondary_effect = "???"
+					razed_large_artifacts[artifact_find.artifact_id] += destroyed
+					to_chat(user, "<span class='red'>As \the [src] disintegrates under your onslaught...</span>")//continued by the message from ArtifactRepercussion()
+					ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
+				else
+					to_chat(user, "<span class='rose'>\The [src] has disintegrated under your onslaught.</span>")
 				qdel(src)
 				return
 
 			if(prob(excavation_level))
 				//success
-				src.visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
+				visible_message("<span class='danger'>[src] suddenly crumbles away.</span>")
 				if(artifact_find)
 					var/spawn_type = artifact_find.artifact_find_type
 					if (spawn_type == /obj/machinery/artifact)
 						new spawn_type(get_turf(src), artifact_find.artifact_id)
+					else if (spawn_type == /obj/machinery/power/supermatter)
+						spawn(rand(10 MINUTES, 30 MINUTES))//The time it takes for Nanotrasen to detect it and make the Science dept an offer they cannot refuse.
+							if (!(locate(/datum/centcomm_order/department/science/supermatter) in SSsupply_shuttle.centcomm_orders))
+								SSsupply_shuttle.add_centcomm_order(new /datum/centcomm_order/department/science/supermatter)
+						new spawn_type(get_turf(src))
 					else
 						var/atom/movable/AM = new spawn_type(get_turf(src))
 						excavated_large_artifacts[artifact_find.artifact_id] = AM
@@ -132,7 +153,6 @@ var/list/all_generated_artifact_ids = list()
 				qdel(src)
 		else
 			busy = 0
-		return
 
 /obj/structure/boulder/attack_construct(var/mob/user)
 	if (!Adjacent(user))

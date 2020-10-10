@@ -320,3 +320,9 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 	assert_eq(count_set_bitflags(65536|32768), 2)
 	assert_eq(count_set_bitflags(1|4|16), 3)
 #endif
+
+// Given a number in the range [old_bottom, old_top],
+// Returns that number mapped to the range [new_bottom, new_top]
+/proc/map_range(old_value, old_bottom, old_top, new_bottom, new_top)
+	var/new_value = (old_value - old_bottom) / (old_top - old_bottom) * (new_top - new_bottom) + new_bottom
+	return new_value

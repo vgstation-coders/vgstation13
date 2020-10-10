@@ -36,7 +36,7 @@ rcd light flash thingy on matter drain
 			if (istype(S,power_type))
 				S.charge_counter += uses
 				return
-		user.add_spell(new power_type, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		user.add_spell(new power_type, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 
 	// statistics collection - malf module purchases
 	if(user.mind && istype(user.mind.faction, /datum/faction/malf))
@@ -45,29 +45,85 @@ rcd light flash thingy on matter drain
 			var/datum/stat/faction/malf/MS = mf.stat_datum
 			MS.modules.Add(new /datum/stat/malf_module_purchase(src))
 
-/datum/AI_Module/large/fireproof_core
-	module_name = "Core upgrade"
-	mod_pick_name = "coreup"
-	description = "An upgrade to improve core resistance, making it immune to fire and heat. This effect is permanent."
+/datum/AI_Module/large/upgrade_defenses
+	module_name = "Core Defense Upgrade"
+	mod_pick_name = "coredefense"
+	description = "Improves the firing speed and health of all AI turrets, and causes them to shoot highly-lethal pulse beams. You core also strengthens its circuitry, making it immune to the burn damage. This effect is permanent and you will no longer be able to shunt."
 	cost = 50
 	one_time = 1
+	power_type = /spell/aoe_turf/fortify_core
 
-/datum/AI_Module/large/fireproof_core/on_purchase(mob/living/silicon/ai/user)
-	user.ai_flags |= COREFIRERESIST
-	to_chat(user, "<span class='warning'>Core fireproofed.</span>")
-
-/datum/AI_Module/large/upgrade_turrets
-	module_name = "AI Turret upgrade"
-	mod_pick_name = "turret"
-	description = "Improves the firing speed and health of all AI turrets. This effect is permanent."
-	cost = 50
-	one_time = 1
-
-/datum/AI_Module/large/upgrade_turrets/on_purchase(mob/living/silicon/ai/user)
+/datum/AI_Module/large/upgrade_defenses/on_purchase(mob/living/silicon/ai/user)
+	..()
 	for(var/obj/machinery/turret/turret in machines)
-		turret.health += 30
-		turret.shot_delay = 20
-	to_chat(user, "<span class='warning' Turrets upgraded.</span>")
+		turret.health += 120	//200 Totaldw
+		turret.shot_delay = 15
+		turret.lasertype = /obj/item/projectile/beam/pulse
+		turret.fire_twice = 1
+	to_chat(user, "<span class='warning'>Core defenses upgraded.</span>")
+	user.vis_contents += new /obj/effect/overlay/ai_shield
+	user.can_shunt = 0
+	to_chat(user, "<span class='warning'>You cannot shunt anymore.</span>")
+
+
+/spell/aoe_turf/fortify_core
+	name = "Fortify Core (Toggle)"
+	desc = "Reroutes your internal energy to a built-in blast shield within your core, greatly reducing damage taken. The shield will drain your power while active."
+	user_type = USER_TYPE_MALFAI
+	panel = MALFUNCTION
+	charge_type = Sp_RECHARGE
+	charge_max = 1 SECONDS
+	hud_state = "fortify"
+	override_base = "grey"
+	cooldown_min = 1 SECONDS
+
+/obj/effect/overlay/ai_shield
+	name = "AI Firewall"
+	desc = "You can see the words 'FUCK C4RB0NS' etched on to it."
+	layer = LIGHTING_LAYER
+	icon = 'icons/mob/ai.dmi'
+	icon_state = "lockdown-up"
+	vis_flags = VIS_INHERIT_ID
+
+/obj/effect/overlay/ai_shield/proc/lower()
+	flick("lockdown-open", src)
+	icon_state = "lockdown-up"
+
+/obj/effect/overlay/ai_shield/proc/raise()
+	flick("lockdown-close", src)
+	icon_state = "lockdown"
+
+/spell/aoe_turf/fortify_core/before_target(mob/user)
+	if(!isAI(user))
+		to_chat(user, "<span class'warning'>Only AIs can cast this spell. You shouldn't have this ability.</span>")
+		return 1
+	
+/spell/aoe_turf/fortify_core/cast(var/list/targets, var/mob/user)
+	var/mob/living/silicon/ai/A = user
+	var/obj/effect/overlay/ai_shield/shield 
+	shield = locate(/obj/effect/overlay/ai_shield) in A.vis_contents
+	if(A.ai_flags & COREFORTIFY)
+		if(shield)
+			shield.lower()
+		A.ai_flags &= ~COREFORTIFY
+	else
+		if(shield)
+			shield.raise()
+		A.ai_flags |= COREFORTIFY
+	playsound(user, 'sound/machines/poddoor.ogg', 60, 1)
+	to_chat(user, "<span class='warning'>[A.ai_flags & COREFORTIFY ? "Firewall Activated" : "Firewall Deactivated"].</span>")
+
+/datum/AI_Module/large/explosive
+	module_name = "Explosive Hardware"
+	mod_pick_name = "siliconexplode"
+	description = "Overrides the thermal safeties on cyborgs bound to you, causing them to violently explode when destroyed. Your own core is also affected, causing it to explode violently when system integrity reaches zero."
+	cost = 15
+	one_time = 1
+
+/datum/AI_Module/large/explosive/on_purchase(mob/living/silicon/ai/user)
+	user.explosive_cyborgs = TRUE
+	user.explosive = TRUE
+	to_chat(user, "<span class='warning'>You and your cyborgs will now explode on death.</span>")
 
 /datum/AI_Module/large/disable_rcd
 	module_name = "RCD disable"
@@ -84,7 +140,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "rcd_disable"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/disable_rcd/cast(list/targets, mob/user)
 	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
@@ -110,9 +166,11 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 2
 	hud_state = "overload"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/overload_machine/is_valid_target(var/atom/target)
+	if(istype(target, /obj/item/device/radio/intercom))
+		return 1
 	if (istype(target, /obj/machinery))
 		var/obj/machinery/M = target
 		return M.can_overload()
@@ -144,7 +202,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	summon_type = list(/obj/machinery/autoborger/conveyor)
 	hud_state = "autoborger"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/conjure/place_autoborger/New()
 	..()
@@ -217,7 +275,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "blackout"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
 	for(var/obj/machinery/power/apc/apc in power_machines)
@@ -241,7 +299,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 3
 	hud_state = "fakemessage"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/interhack/cast(var/list/targets,mob/user)
 
@@ -249,22 +307,62 @@ rcd light flash thingy on matter drain
 	//list( "Alert 1" = /datum/command_alert_1, "Alert 5" = /datum/command_alert_5, ...)
 	//Then ask the AI to pick one announcement from the list
 
-	var/list/possible_announcements = typesof(/datum/command_alert)
-	for(var/A in possible_announcements)
-		var/datum/command_alert/CA = A
-		possible_announcements[initial(CA.name)] = A
-		possible_announcements.Remove(A)
+	if(alert("Would you like to create your own announcement or use a pre-existing one?","Confirm","Custom","Pre-Existing") == "Custom") 
+		
+		var/input = input(user, "Please enter anything you want. Anything.", "What?", "") as message|null
+		var/customname = input(user, "Pick a title for the report.", "Title") as text|null
+		if(!input)
+			to_chat(user, "Announcement Cancelled.")
+			return 1
+		if(!customname)
+			customname = "Nanotrasen Update"
+		for (var/obj/machinery/computer/communications/C in machines)
+			if(! (C.stat & (BROKEN|NOPOWER) ) )
+				var/obj/item/weapon/paper/P = new /obj/item/weapon/paper( C.loc )
+				P.name = "'[command_name()] Update.'"
+				P.info = input
+				P.update_icon()
+				C.messagetitle.Add("[command_name()] Update")
+				C.messagetext.Add(P.info)
 
-	var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in possible_announcements
-	if(!chosen_announcement)
-		to_chat(user, "Selection cancelled.")
-		return 1
-	if(!charge_counter)
-		to_chat(user, "No more charges.")
-		return 1
-	command_alert(possible_announcements[chosen_announcement])
-	log_game("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
-	message_admins("[key_name(user)] faked a centcom announcement: [possible_announcements[chosen_announcement]]!")
+		switch(alert("Should this be announced to the general population?",,"Yes","No"))
+			if("Yes")
+				command_alert(input, customname,1);
+			if("No")
+				to_chat(world, "<span class='warning'>New Nanotrasen Update available at all communication consoles.</span>")
+
+		world << sound('sound/AI/commandreport.ogg', volume = 60)
+		log_admin("Malfunctioning AI: [key_name(user)] has created a custom command report: [input]")
+		message_admins("Malfunctioning AI: [key_name_admin(user)] has created a custom command report", 1)
+
+	else
+		var/list/possible_announcements = typesof(/datum/command_alert)
+		var/list/choices = list()
+		for(var/A in possible_announcements)
+			var/datum/command_alert/CA = A
+			choices[initial(CA.name)] = A
+		
+		var/chosen_announcement = input(user, "Select a fake announcement to send out.", "Interhack") as null|anything in choices
+		if(!chosen_announcement)
+			to_chat(user, "Selection cancelled.")
+			return 1
+		if(!charge_counter)
+			to_chat(user, "No more charges.")
+			return 1
+		var/datum/command_alert/C = choices[chosen_announcement]
+		var/datum/command_alert/announcement = new C
+		command_alert(announcement)
+		var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
+		if(M)
+			if(M.stage < FACTION_ENDGAME)
+				if(announcement.theme && !announcement.stoptheme)
+					ticker.StartThematic(initial(announcement.theme))					
+				if(announcement.alertlevel)
+					set_security_level(announcement.alertlevel)
+				if(announcement.stoptheme)
+					ticker.StopThematic()
+		log_game("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [choices[chosen_announcement]]!")
+		message_admins("Malfunctioning AI: [key_name(user)] faked a centcom announcement: [choices[chosen_announcement]]!")
 
 /datum/AI_Module/small/reactivate_camera
 	module_name = "Reactivate camera"
@@ -283,7 +381,7 @@ rcd light flash thingy on matter drain
 	range = GLOBALCAST
 	spell_flags = WAIT_FOR_CLICK
 	hud_state = "camera_reactivate"
-	override_base = "grey"
+	override_base = "malf"
 	var/list/camera_images = list()
 
 /spell/targeted/reactivate_camera/before_channel(mob/user)
@@ -343,7 +441,7 @@ rcd light flash thingy on matter drain
 	spell_flags = WAIT_FOR_CLICK
 	range = GLOBALCAST
 	hud_state = "camera_upgrade"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/upgrade_camera/is_valid_target(var/atom/target)
 	if(!istype(target, /obj/machinery/camera))
@@ -382,7 +480,7 @@ rcd light flash thingy on matter drain
 	var/datum/module_picker/MP
 	charge_max = 10
 	hud_state = "choose_module"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/module_picker/New()
 	..()
@@ -456,7 +554,7 @@ rcd light flash thingy on matter drain
 	charge_type = Sp_CHARGES
 	charge_max = 1
 	hud_state = "systemtakeover"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/aoe_turf/takeover/before_target(mob/user)
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))
@@ -496,7 +594,7 @@ rcd light flash thingy on matter drain
 	max_targets = 1
 
 	hud_state = "radiation"
-	override_base = "grey"
+	override_base = "malf"
 
 /spell/targeted/ai_win/before_target(mob/user)
 	var/datum/faction/malf/M = find_active_faction_by_member(user.mind.GetRole(MALF))

@@ -438,7 +438,12 @@ var/global/datum/controller/occupations/job_master
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
-			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
+
+			if (joined_late)
+				latejoiner_allowance += job.wage_payout + round(job.wage_payout/10)
+			else
+				station_allowance += job.wage_payout + round(job.wage_payout/10)//overhead of 10%
+
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -474,7 +479,7 @@ var/global/datum/controller/occupations/job_master
 	var/alt_title = null
 
 	if(job)
-		job.equip(H) // Outfit datum.
+		job.equip(H, job.priority) // Outfit datum.
 	else
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
@@ -496,9 +501,8 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	if(job && job.priority)
-		job.priority_reward_equip(H)
-
+	if(job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist

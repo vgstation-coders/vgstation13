@@ -304,3 +304,11 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hats.dmi', "right_hand" = 'icons/mob/in-hand/right/hats.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
+
+/obj/item/clothing/head/helmet/metrocop
+	name = "civil protection helmet"
+	desc = "Attention, ground units. Anti-citizen reported in this community."
+	icon_state = "metrocop_helmet"
+	item_state = "helmet"
+	body_parts_covered = FULL_HEAD
+	species_fit = list()

@@ -93,10 +93,19 @@
 		else
 			adminwho += ", [C]"
 
-	reason = sql_sanitize_text(reason)
-
-	var/sql = "INSERT INTO erro_ban (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`) VALUES (null, Now(), '[serverip]', '[bantype_str]', '[reason]', '[job]', [(duration)?"[duration]":"0"], [(rounds)?"[rounds]":"0"], Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, '[ckey]', '[computerid]', '[ip]', '[a_ckey]', '[a_computerid]', '[a_ip]', '[who]', '[adminwho]', '', null, null, null, null, null)"
-	var/datum/DBQuery/query_insert = SSdbcore.NewQuery(sql)
+	var/sql = "INSERT INTO erro_ban (`id`,`bantime`,`serverip`,`bantype`,`reason`,`job`,`duration`,`rounds`,`expiration_time`,`ckey`,`computerid`,`ip`,`a_ckey`,`a_computerid`,`a_ip`,`who`,`adminwho`,`edits`,`unbanned`,`unbanned_datetime`,`unbanned_ckey`,`unbanned_computerid`,`unbanned_ip`, `unbanned_notification`) VALUES (null, Now(), '[serverip]', '[bantype_str]', :reason, :job, [(duration)?"[duration]":"0"], [(rounds)?"[rounds]":"0"], Now() + INTERVAL [(duration>0) ? duration : 0] MINUTE, :ckey, :computer_id, :ip, :a_ckey, :a_computerid, :a_ip, :who, :admin_who, '', null, null, null, null, null, 0)"
+	var/datum/DBQuery/query_insert = SSdbcore.NewQuery(sql, list(
+		"reason" = reason,
+		"job" = job,
+		"ckey" = ckey,
+		"computer_id" = computerid,
+		"ip" = ip,
+		"a_ckey" = a_ckey,
+		"a_computerid" = a_computerid,
+		"a_ip" = a_ip,
+		"who" = who,
+		"admin_who" = adminwho,
+	))
 	if(!query_insert.Execute())
 		message_admins("Error: [query_insert.ErrorMsg()]")
 		log_sql("Error: [query_insert.ErrorMsg()]")
@@ -367,7 +376,7 @@
 		output += "<option value='[j]'>[j]</option>"
 	for(var/j in nonhuman_positions)
 		output += "<option value='[j]'>[j]</option>"
-	for(var/j in list("traitor","changeling","operative","revolutionary","cultist","wizard"))
+	for(var/j in list("traitor","changeling","operative","revolutionary","cultist","wizard","cluwne"))
 		output += "<option value='[j]'>[j]</option>"
 
 	output += {"</select></td></tr></table>

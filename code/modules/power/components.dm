@@ -144,13 +144,6 @@
 
 	parent_area.use_power(amount, chan)
 
-// called whenever the power settings of the containing area change
-// by default, check equipment channel & set flag
-// can override if needed
-/datum/power_connection/proc/power_change()
-	//parent.power_change()
-	return
-
 // connect the machine to a powernet if a node cable is present on the turf
 /datum/power_connection/proc/connect()
 	var/turf/T = get_turf(parent)
@@ -244,14 +237,8 @@
 	var/idle_usage=1 // watts
 	var/active_usage=2
 
-	var/event/power_changed = null
-
 /datum/power_connection/consumer/New(var/loc,var/obj/parent)
 	..(loc,parent)
-	power_changed = new ("owner"=src)
-
-/datum/power_connection/consumer/power_change()
-	INVOKE_EVENT(power_changed,list("consumer"=src))
 
 /datum/power_connection/consumer/process()
 	if(use)
@@ -268,10 +255,6 @@
 			use_power(active_usage, channel)
 
 	return 1
-
-/datum/power_connection/consumer/proc/set_enabled(var/value)
-	enabled=value
-	power_change()
 
 
 //////////////////////

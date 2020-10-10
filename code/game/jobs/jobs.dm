@@ -95,6 +95,12 @@ var/list/civilian_positions = list(
 	"Assistant"
 )
 
+var/list/service_positions = list(
+	"Bartender",
+	"Botanist",
+	"Chef",
+)
+
 var/list/cargo_positions = list(
 	"Head of Personnel",
 	"Quartermaster",

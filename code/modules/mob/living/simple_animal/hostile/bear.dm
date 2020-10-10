@@ -223,11 +223,10 @@
 	if(istype(AM,/obj/item/weapon/reagent_containers/food/snacks) && AM.icon_state == "hburger")
 		if (burger)
 			burger.forceMove(get_turf(src))
-		overlays.len = 0
-		overlays += image(icon, "bearburger")
 		visible_message("<span class='danger'>\The [src] catches \the [AM] mid-flight, a jovial look on its face.</span>")
 		burger = AM
 		burger.forceMove(src)
+		update_icon()
 		LostTarget()
 	else if (prob(50))
 		dropBurger()
@@ -240,15 +239,28 @@
 /mob/living/simple_animal/hostile/bear/proc/dropBurger(var/alive = TRUE)
 	if (burger)
 		burger.forceMove(get_turf(src))
-		overlays.len = 0
 		visible_message("<span class='danger'>\The [src] loses hold of \the [burger][alive ? ", a mean look on its face" : "as it breaths its last."].</span>")
 		burger = null
+		update_icon()
+
+/mob/living/simple_animal/hostile/bear/update_icon()
+	overlays.len = 0
+	if(stat == DEAD)
+		icon_state = icon_dead
+		return
+	if (burger)
+		overlays += image(icon, "bearburger")
+	if (istype(locked_to,/obj/item/weapon/beartrap))
+		overlays += image(icon, "beartrapped")
 
 /mob/living/simple_animal/hostile/bear/death()
 	dropBurger(FALSE)
+	update_icon()
 	..()
 
 /mob/living/simple_animal/hostile/bear/is_pacified()
 	if (burger)
+		return TRUE
+	if (istype(locked_to,/obj/item/weapon/beartrap))
 		return TRUE
 	return ..()

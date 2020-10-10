@@ -19,15 +19,24 @@ var/anomaly_report_num = 0
 	density = TRUE
 	var/scan_in_progress = FALSE
 	var/scan_num = 0
-	var/obj/scanned_obj
 	var/obj/machinery/artifact_scanpad/owned_scanner = null
 	var/scan_completion_time = 0
 	var/scan_duration = 120
-	var/obj/scanned_object
+	var/atom/movable/scanned_atom
 
 /obj/machinery/artifact_analyser/New()
 	..()
 	reconnect_scanner()
+	update_icon()
+
+/obj/machinery/artifact_harvester/Destroy()
+	if (owned_scanner)
+		owned_scanner.analyser_console = null
+		owned_scanner = null
+	..()
+
+/obj/machinery/artifact_analyser/power_change()
+	..()
 	update_icon()
 
 /obj/machinery/artifact_analyser/update_icon()
@@ -41,7 +50,8 @@ var/anomaly_report_num = 0
 	if(!owned_scanner)
 		owned_scanner = locate(/obj/machinery/artifact_scanpad) in orange(1, src)
 	if(owned_scanner)
-		owned_scanner.owner_console = src
+		owned_scanner.analyser_console = src
+		owned_scanner.desc = "Place anomalies here for scanning. Exotic anomalies may provide data that will be encrypted for use by R&D."
 
 /obj/machinery/artifact_analyser/attack_hand(var/mob/user as mob)
 	if(..())
@@ -79,6 +89,7 @@ var/anomaly_report_num = 0
 
 /obj/machinery/artifact_analyser/process()
 	if(scan_in_progress && world.time > scan_completion_time)
+		alert_noise("beep")
 		//finish scanning
 		scan_in_progress = FALSE
 		update_icon()
@@ -90,17 +101,17 @@ var/anomaly_report_num = 0
 			reconnect_scanner()
 		if(!owned_scanner)
 			results = "Error communicating with scanner."
-		else if(!scanned_object || scanned_object.loc != owned_scanner.loc)
+		else if(!scanned_atom || scanned_atom.loc != owned_scanner.loc)
 			results = "Unable to locate scanned object. Ensure it was not moved in the process."
 		else
-			results = get_scan_info(scanned_object)
+			results = get_scan_info(scanned_atom)
 
 		src.visible_message("<b>[name]</b> states, \"Scanning complete.\"")
 		var/obj/item/weapon/paper/anomaly/P = new(src.loc)
-		P.artifact = scanned_object
-		P.info = "<b>[src] analysis report for [scanned_object]</b><br>"
+		P.artifact = scanned_atom
+		P.info = "<b>[src] analysis report for [scanned_atom]</b><br>"
 		P.info += "<br>"
-		P.info += "[bicon(scanned_object)] [results]"
+		P.info += "[bicon(scanned_atom)] [results]"
 		P.stamped = list(/obj/item/weapon/stamp)
 		P.overlays = list("paper_stamp-qm")
 
@@ -108,23 +119,23 @@ var/anomaly_report_num = 0
 			var/art_id
 			var/found = FALSE
 			for(var/artifact_id in excavated_large_artifacts)
-				if (excavated_large_artifacts[artifact_id] == scanned_object)
+				if (excavated_large_artifacts[artifact_id] == scanned_atom)
 					art_id = artifact_id
 					found = TRUE
 			if (!found)
 				art_id = generate_artifact_id()
-				excavated_large_artifacts[art_id] = scanned_object
-			if (!(scanned_object in analyzed_anomalies))
+				excavated_large_artifacts[art_id] = scanned_atom
+			if (!(scanned_atom in analyzed_anomalies))
 				var/obj/item/weapon/disk/hdd/anomaly/HDD = new (src.loc)
-				analyzed_anomalies += scanned_object
+				analyzed_anomalies += scanned_atom
 				HDD.name = "Encrypted HDD ([art_id])"
 			P.name = "Exotic Anomaly Report ([art_id])"
 		else
 			anomaly_report_num++
 			P.name = "Mundane Anomaly Report #[anomaly_report_num]"
 
-		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
-			var/obj/machinery/artifact/A = scanned_object
+		if(scanned_atom && istype(scanned_atom, /obj/machinery/artifact))
+			var/obj/machinery/artifact/A = scanned_atom
 			A.anchored = FALSE
 			A.being_used = FALSE
 			if (!A.analyzed)
@@ -141,13 +152,13 @@ var/anomaly_report_num = 0
 			reconnect_scanner()
 		if(owned_scanner)
 			var/artifact_in_use = FALSE
-			for(var/obj/O in owned_scanner.loc)
-				if(O == owned_scanner)
+			for(var/atom/movable/AM in owned_scanner.loc)
+				if(AM == owned_scanner)
 					continue
-				if(O.invisibility)
+				if(AM.invisibility)
 					continue
-				if(istype(O, /obj/machinery/artifact))
-					var/obj/machinery/artifact/A = O
+				if(istype(AM, /obj/machinery/artifact))
+					var/obj/machinery/artifact/A = AM
 					if(A.being_used)
 						artifact_in_use = TRUE
 					else
@@ -155,22 +166,23 @@ var/anomaly_report_num = 0
 						A.being_used = TRUE
 
 				if(artifact_in_use)
-					src.visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
+					visible_message("<b>[name]</b> states, \"Cannot harvest. Too much interference.\"")
 				else
-					scanned_object = O
+					scanned_atom = AM
 					scan_in_progress = TRUE
 					update_icon()
 					scan_completion_time = world.time + scan_duration
-					src.visible_message("<b>[name]</b> states, \"Scanning begun.\"")
+					visible_message("<b>[name]</b> states, \"Scanning begun.\"")
+					flick("xenoarch_console-flick",src)
 				break
-			if(!scanned_object)
+			if(!scanned_atom)
 				src.visible_message("<b>[name]</b> states, \"Unable to isolate scan target.\"")
 	if(href_list["halt_scan"])
 		scan_in_progress = FALSE
 		update_icon()
 		src.visible_message("<b>[name]</b> states, \"Scanning halted.\"")
-		if(scanned_object && istype(scanned_object, /obj/machinery/artifact))
-			var/obj/machinery/artifact/A = scanned_object
+		if(scanned_atom && istype(scanned_atom, /obj/machinery/artifact))
+			var/obj/machinery/artifact/A = scanned_atom
 			A.anchored = FALSE
 			A.being_used = FALSE
 
@@ -181,8 +193,8 @@ var/anomaly_report_num = 0
 	updateDialog()
 
 //hardcoded responses, oh well
-/obj/machinery/artifact_analyser/proc/get_scan_info(var/obj/scanned_obj)
-	switch(scanned_obj.type)
+/obj/machinery/artifact_analyser/proc/get_scan_info(var/atom/movable/AM)
+	switch(AM.type)
 		if(/obj/machinery/auto_cloner)
 			return "Automated cloning pod - appears to rely on organic nanomachines with a self perpetuating \
 			ecosystem involving self cannibalism and a symbiotic relationship with the contained liquid.<br><br>\
@@ -214,9 +226,19 @@ var/anomaly_report_num = 0
 			return "Warping Claws - Permits quick travel by ripping straight through the fabric of space. Those claws are quite cumbersome however, do not expect being able to use any machine while wearing them."
 		if(/obj/machinery/singularity_beacon)
 			return "Ominous Beacon - Graviton attraction device. Will converge nearby gravitational singularities toward itself so long as it remains powered."
+		if(/obj/item/clothing/mask/stone)
+			return "Stone Mask - Very ancient. The spikes coming out of it would bury deep into the brain of whoever tried wearing it, obviously killing them."//well this was Dio's first theory when he found out about the mask's spikes.
+		if(/obj/item/changeling_vial)
+			return "Secure Vial - The organic liquid in it appears to move around periodically, it seems to be some sort of lifeform. The vial would have to be openned to get a better analysis."
+		if(/obj/machinery/syndicate_beacon)
+			return "Syndicate Beacon - An old deprecated terminal that the Syndicate used to communicate with their agents, before the advent of uplinks that were easier to hide. Surely the Syndicate doesn't read the frequencies used by those anymore."
+		if(/obj/item/weapon/bloodcult_pamphlet/oneuse)
+			return "Cult Pamphlet - Unable to identify the type of creature whose skin was used to produce this parchment, likewise the ink used appears to be blood but the DNA doesn't match any creature currently known in the galaxy. Potentially huge breakthrough."
+		if(/mob/living/simple_animal/hostile/roboduck)
+			return "Robot Duck - Scans shows an unreal amount of bullets inside it. Presence of an AI chip might indicate that the robot won't attack unless provoked. Also identified what looks like a digestive system, indicating that it might be able to process its preys into some other forms."
 		if(/obj/machinery/artifact)
 			//the fun one
-			var/obj/machinery/artifact/A = scanned_obj
+			var/obj/machinery/artifact/A = AM
 			var/out = "Energy signature ID - [A.artifact_id]<br><br>"
 			out += "Anomalous alien device - Composed of an unknown alloy, "
 
@@ -319,4 +341,11 @@ var/anomaly_report_num = 0
 			return out
 		else
 			//it was an ordinary item
-			return "[scanned_obj.name] - Mundane application, composed of carbo-ferritic alloy composite."
+			var/result = "[AM.name] - Mundane application, composed of carbo-ferritic alloy composite."//TODO: be more descriptive depending on the type of object
+			if (ismob(AM))
+				result = "[AM.name] - Mundane creature."
+				if (iscarbon(AM))
+					result += " carbon-based."
+				if (issilicon(AM))
+					result += " silicon-based."
+			return result

@@ -6,8 +6,6 @@
 	var/said_last_words = 0 // All mobs can now whisper as they die
 	var/list/alerts = list()
 
-	var/event/on_blink
-
 /mob/variable_edited(var_name, old_value, new_value)
 	.=..()
 
@@ -1297,9 +1295,9 @@ Use this proc preferably at the end of an equipment loadout
 		'html/changelog.html'
 		)
 	src << browse('html/changelog.html', "window=changes;size=675x650")
+
 	if(prefs.lastchangelog != changelog_hash)
-		prefs.lastchangelog = changelog_hash
-		prefs.save_preferences()
+		prefs.SetChangelog(ckey, changelog_hash)
 		winset(src, "rpane.changelog", "background-color=none;font-style=;")
 
 /mob/verb/observe()

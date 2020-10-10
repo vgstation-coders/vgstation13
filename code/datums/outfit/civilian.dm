@@ -50,7 +50,7 @@
 			),
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ,
 		),
 	)
@@ -60,9 +60,12 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/assistant/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
+
+/datum/outfit/assistant/post_equip_priority(var/mob/living/carbon/human/H)
+	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	return ..()
 
 // -- Bartender
 
@@ -112,13 +115,16 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/bartender/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	H.check_mutations = 1
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/datum/outfit/bartender/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/soda_dispenser] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/circuitboard/chem_dispenser/booze_dispenser] = SURVIVAL_BOX
+	return ..()
 
 /obj/abstract/spawn_all/bartender
 	where_to_spawn = SPAWN_ON_LOC
@@ -172,10 +178,16 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id
 
-/datum/outfit/chef/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+/datum/outfit/chef/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/abstract/spawn_all/chef] = SURVIVAL_BOX
+	return ..()
+
+/obj/abstract/spawn_all/chef
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/food/drinks/flour,
+		/obj/item/weapon/reagent_containers/food/drinks/flour
+	)
 
 // -- Botanist
 
@@ -248,10 +260,19 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/hydro/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Service:</b> [SER_FREQ]<br/>")
+
+/datum/outfit/hydro/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/abstract/spawn_all/hydro] = SURVIVAL_BOX
+	return ..()
+
+/obj/abstract/spawn_all/hydro
+	where_to_spawn = SPAWN_ON_LOC
+	to_spawn = list(
+		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine,
+		/obj/item/weapon/reagent_containers/glass/bottle/diethylamine
+	)
 
 // -- Clown
 
@@ -326,11 +347,16 @@
 	id_type = /obj/item/weapon/card/id/clown
 
 /datum/outfit/clown/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.mutations.Add(M_CLUMSY)
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
 	mob_rename_self(H,"clown")
-	return 1
+
+/datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
+	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	return ..()
+
 
 // -- Mime
 
@@ -389,12 +415,16 @@
 	id_type = /obj/item/weapon/card/id/mime
 
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 	H.add_spell(new /spell/targeted/oathbreak/)
 	mob_rename_self(H,"mime")
 	if (H.mind)
 		H.mind.miming = MIMING_OUT_OF_CHOICE
-	return 1
+
+/datum/outfit/mime/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
+	return ..()
 
 // -- Janitor
 
@@ -439,9 +469,14 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/janitor/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.add_language(LANGUAGE_MOUSE)
 	to_chat(H, "<span class = 'notice'>Decades of roaming maintenance tunnels and interacting with its denizens have granted you the ability to understand the speech of mice and rats.</span>")
-	return 1
+
+/datum/outfit/janitor/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/grenade/chem_grenade/cleaner] = SURVIVAL_BOX
+	items_to_collect[/obj/item/weapon/reagent_containers/spray/cleaner] = SURVIVAL_BOX
+	return ..()
 
 // -- Librarian
 
@@ -496,6 +531,7 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/librarian/post_equip(var/mob/living/carbon/human/H)
+	..()
 	var/obj/item/weapon/storage/bag/plasticbag/P = new /obj/item/weapon/storage/bag/plasticbag(H)
 	H.put_in_hands(P)
 	var/list/new_languages = list()
@@ -507,7 +543,6 @@
 	var/picked_lang = pick(new_languages)
 	H.add_language(picked_lang)
 	to_chat(H, "<span class = 'notice'>Due to your well read nature, you find yourself versed in the language of [picked_lang]. Check-Known-Languages under the IC tab to use it.</span>")
-	return 1
 
 // -- Lawyer, IAA, Bridge Officer
 
@@ -612,10 +647,8 @@
 	id_type = /obj/item/weapon/card/id/centcom
 
 /datum/outfit/iaa/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/briefcase/centcomm(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/>")
 
 // -- Chaplain
 
@@ -662,8 +695,12 @@
 	id_type = /obj/item/weapon/card/id
 
 /datum/outfit/chaplain/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.add_language("Spooky")
 	H.put_in_hands(new /obj/item/weapon/thurible(H))
 	spawn(0)
 		ChooseReligion(H) // Contains an input() proc and hence must be spawn()ed.
-	return 1
+
+/datum/outfit/chaplain/post_equip_priority(var/mob/living/carbon/human/H)
+	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater] = SURVIVAL_BOX
+	return ..()

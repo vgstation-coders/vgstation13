@@ -63,6 +63,7 @@
 				FinishScan()
 			else if(temperature > XENOARCH_MAX_TEMP)
 				visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>")
+				alert_noise("beep")
 				stop()
 			else if(temperature > XENOARCH_SAFETY_TEMP && prob(10))
 				visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>")
@@ -127,7 +128,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 
 		if(user.drop_item(W, src))
 			to_chat(user, "<span class='notice'>You put \the [W] into the [src].</span>")
-
+			playsound(loc, 'sound/machines/click.ogg', 50, 1)
 			held_container = W
 			nanomanager.update_uis(src)
 
@@ -144,6 +145,7 @@ obj/machinery/anomaly/attackby(obj/item/weapon/W, mob/living/user)
 
 	//determine the results and print a report
 	if(held_container)
+		alert_noise("ping")
 		src.visible_message("<span class='notice'>[bicon(src)] makes an insistent chime.</span>", "You hear an insistent chime.")
 		var/obj/item/weapon/paper/P = new(loc)
 		P.name = "[src] report #[++report_num]"
@@ -172,6 +174,7 @@ obj/machinery/anomaly/Topic(href, href_list)
 
 /obj/machinery/anomaly/proc/eject(var/mob/user)
 	held_container.forceMove(loc)
+	playsound(loc, 'sound/machines/click.ogg', 50, 1)
 	if (user && Adjacent(user))
 		user.put_in_hands(held_container)
 	held_container = null

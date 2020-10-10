@@ -21,7 +21,8 @@
 	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
 	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
 	var/list/sound_file //The actual files to be played, it will pick from the list
-	var/list/sound_respect_species //Species will not play sounds from clothing
+	var/list/sound_species_whitelist
+	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
