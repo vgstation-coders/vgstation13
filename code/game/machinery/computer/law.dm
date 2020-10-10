@@ -3,7 +3,7 @@
 /obj/machinery/computer/aiupload
 	name = "AI Upload"
 	desc = "Used to upload laws to the AI using a cheap radio transceiver."
-	icon_state = "command"
+	icon_state = "upload"
 	circuit = "/obj/item/weapon/circuitboard/aiupload"
 	var/mob/living/silicon/ai/current = null
 	var/mob/living/silicon/ai/occupant = null
@@ -18,6 +18,7 @@
 			return
 		var/obj/item/card = I
 		card.transfer_ai("AIUPLOAD","AICARD",src,user)
+		attack_hand(user)
 		return
 	return ..()
 
@@ -145,8 +146,13 @@
 
 	if (occupant)
 		current = occupant
+	else if (current)
+		current = null
+		update_icon()
+		return
 	else
 		current = select_active_ai(user)
+		update_icon()
 
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
@@ -291,3 +297,16 @@
 
 /obj/machinery/computer/aiupload/longrange/same_zlevel()
 	return TRUE
+
+/obj/machinery/computer/aiupload/update_icon()
+	..()
+	overlays = 0
+
+	if (occupant)
+		switch (occupant.stat)
+			if (CONSCIOUS)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-full")
+			if (DEAD)
+				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
+	else if (current)
+		overlays += image('icons/obj/computer.dmi', "upload_wireless")
