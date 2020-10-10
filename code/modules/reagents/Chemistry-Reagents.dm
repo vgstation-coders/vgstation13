@@ -3980,7 +3980,14 @@
 	description = "A powerful sedative."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
-	data = 1 //Used as a tally
+	// There used to be a bug: if someone was injected with chloral once,
+	// and then injected with chloral a second time, this person would
+	// briefly wake up. proc/add_reagent, called by proc/trans_to, sets the
+	// data var of the destination reagent to the one of the source reagent
+	// if the new data was not null. Since this var was set to 1, it ended up
+	// resetting the data var of the existing chloralhydrate in the spessman's
+	// body, waking them up until the following tick.
+	data = null //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
@@ -3988,13 +3995,18 @@
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(isnull(data))
+		// This is technically not needed: the switch could check for
+		// null instead of 0 and "data++" would automatically convert a null
+		// to a 0, then increase it to 1. It would work. But this is clearer.
+		data = 0
 	switch(data)
-		if(1)
+		if(0)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(1 to 79)
 			M.sleeping++
-		if(81 to INFINITY)
+		if(80 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
 	data++
