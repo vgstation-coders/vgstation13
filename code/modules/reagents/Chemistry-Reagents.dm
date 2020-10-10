@@ -3982,18 +3982,11 @@
 	color = "#000067" //rgb: 0, 0, 103
 	// There used to be a bug: if someone was injected with chloral once,
 	// and then injected with chloral a second time, this person would
-	// wake up for the duration of a Mob Subsystem tick.
-	// Now, how could this be? This proc was very clearly only ever increasing
-	// the sleeping var, never decreasing it. As it turns out,
-	// /datum/proc/reagents/proc/trans_to takes an argument called
-	// "preserve_data", which, if not null, tells
-	// /datum/reagents/proc/add_reagent to set the data var of
-	// the destination reagent to the one of the source reagent.
-	// add_reagent, in turn, would only override the old data with the new if
-	// the new data was not null. Since /datum/reagent/chloralhydrate/data
-	// was set to 1, it did end up resetting the data var of the existing
-	// chloralhydrate in the spessman's body, waking them up until the
-	// following tick. So that's the reason this var is null here.
+	// briefly wake up. proc/add_reagent, called by proc/trans_to, sets the
+	// data var of the destination reagent to the one of the source reagent
+	// if the new data was not null. Since this var was set to 1, it ended up
+	// resetting the data var of the existing chloralhydrate in the spessman's
+	// body, waking them up until the following tick.
 	data = null //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
