@@ -2472,7 +2472,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	if(isplasmaman(H))
+	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
@@ -3640,19 +3640,20 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
-	var/diseasetype = /datum/disease/robotic_transformation
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/disease_type = DISEASE_CYBORG
 
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype, 1)
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
-	diseasetype = /datum/disease/robotic_transformation/mommi
+	description = "Microscopic construction robots. They look more autistic than usual."
+	disease_type = DISEASE_MOMMI
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3665,9 +3666,8 @@
 
 	if(..())
 		return 1
-
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/xeno_transformation(0), 1)
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -8189,17 +8189,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	if(volume >= minimal_dosage && prob(30))
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(locate(/datum/disease/petrification) in H.viruses)
-				return
-
-			var/datum/disease/D = new /datum/disease/petrification
-			D.holder = H
-			D.affected_mob = H
-			H.viruses += D
-		else if(!issilicon(M))
-			if(M.turn_into_statue(1)) //Statue forever
+		if(!issilicon(M))
+			if(M.slow_petrify()) //Statue forever
 				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
 
 //A chemical for curing petrification. It only works after you've been fully petrified
