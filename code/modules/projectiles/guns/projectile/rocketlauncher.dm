@@ -37,7 +37,8 @@
 		item_state = "[item_state]_e"
 	else //not empty
 		overlays.len = 0
-		overlays += image(icon, src, icon_state = "rpg_[loaded[1].icon_suffix]") //for(var/obj/item/ammo_casing/AC in loaded)
+		var/obj/item/ammo_casing/projectile = loaded[1]
+		overlays += image(icon, src, icon_state = "rpg_[projectile.icon_suffix]") //for(var/obj/item/ammo_casing/AC in loaded)
 		item_state = initial_icon
 	return
 
