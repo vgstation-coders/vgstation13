@@ -112,7 +112,7 @@
 	icon_state = "gshell"
 	caliber = GAUGE12
 	projectile_type = /obj/item/projectile/bullet
-	starting_materials = list(MAT_IRON = 12500)
+	starting_materials = list(MAT_IRON = 250)
 	w_type = RECYK_METAL
 
 /obj/item/ammo_casing/shotgun/update_icon()
@@ -126,57 +126,57 @@
 	desc = "A blank shell.  Does not contain any projectile material."
 	icon_state = "blshell"
 	projectile_type = /obj/item/projectile/bullet/blank
-	starting_materials = list(MAT_IRON = 250)
+	starting_materials = list(MAT_IRON = 125)
 
 /obj/item/ammo_casing/shotgun/beanbag
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
 	icon_state = "bshell"
 	projectile_type = /obj/item/projectile/bullet/weakbullet
-	starting_materials = list(MAT_IRON = 500)
+	starting_materials = list(MAT_IRON = 250)
 
 /obj/item/ammo_casing/shotgun/fakebeanbag
 	name = "beanbag shell"
 	desc = "A weak beanbag shell."
 	icon_state = "bshell"
 	projectile_type = /obj/item/projectile/bullet/weakbullet/booze
-	starting_materials = list(MAT_IRON = 12500)
+	starting_materials = list(MAT_IRON = 250)
 
 /obj/item/ammo_casing/shotgun/stunshell
 	name = "stun shell"
 	desc = "A stunning shell."
 	icon_state = "stunshell"
 	projectile_type = /obj/item/projectile/bullet/stunshot
-	starting_materials = list(MAT_IRON = 2500)
+	starting_materials = list(MAT_IRON = 250)
 
 /obj/item/ammo_casing/shotgun/dart
 	name = "shotgun dart"
 	desc = "A dart for use in shotguns."
 	icon_state = "blshell"
 	projectile_type = /obj/item/projectile/bullet/dart
-	starting_materials = list(MAT_IRON = 12500)
+	starting_materials = list(MAT_IRON = 250)
 
 /obj/item/ammo_casing/shotgun/buckshot
 	name = "buckshot shell"
 	desc = "A 12 gauge shell filled with standard double-aught buckshot."
 	icon_state = "bsshell"
 	projectile_type = /obj/item/projectile/bullet/buckshot
-	starting_materials = list(MAT_IRON = 12500)
-	
+	starting_materials = list(MAT_IRON = 250)
+
 /obj/item/ammo_casing/shotgun/dragonsbreath
 	name = "dragon's breath shell"
 	desc = "A 12 gauge shell filled with an incendiary mixture, for lighting up dark areas or setting things on fire."
 	icon_state = "bdbshell"
 	projectile_type = /obj/item/projectile/bullet/fire_plume/dragonsbreath
-	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 2000)
-	
+	starting_materials = list(MAT_IRON = 250, MAT_PLASMA = 1000)
+
 /obj/item/ammo_casing/shotgun/frag
 	name = "explosive shell"
 	desc = "A 12 gauge shell filled with a high-explosive mixture, for heavy anti-personnel usage."
 	icon_state = "fragshell"
 	projectile_type = /obj/item/projectile/bullet/boombullet
-	starting_materials = list(MAT_IRON = 500, MAT_PLASMA = 8000)
-	
+	starting_materials = list(MAT_IRON = 250, MAT_PLASMA = 4000)
+
 
 /obj/item/ammo_casing/a762
 	desc = "A 7.62x51mm bullet casing."
@@ -204,7 +204,7 @@
 	projectile_type = /obj/item/projectile/bullet/a762x55
 	w_type = RECYK_METAL
 	icon_state = "762x55-casing-live"
-	starting_materials = list(MAT_IRON = 12500)
+	starting_materials = list(MAT_IRON = 125)
 
 /obj/item/ammo_casing/a762x55/update_icon()
 	desc = "[initial(desc)][BB ? "" : " This one is spent"]"

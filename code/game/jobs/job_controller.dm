@@ -48,8 +48,8 @@ var/global/datum/controller/occupations/job_master
 	job_debug.Add(text)
 	return 1
 
-
 /datum/controller/occupations/proc/GetJob(var/rank)
+	RETURN_TYPE(/datum/job)
 	if(!rank)
 		return null
 	for(var/datum/job/J in occupations)
@@ -220,41 +220,6 @@ var/global/datum/controller/occupations/job_master
 		AssignRole(candidate, command_position)
 	return
 
-
-/datum/controller/occupations/proc/FillAIPosition()
-	var/ai_selected = 0
-	var/datum/job/job = GetJob("AI")
-	if(!job)
-		return 0
-	if((job.title == "AI") && (config) && (!config.allow_ai))
-		return 0
-
-	for(var/i = job.get_total_positions(), i > 0, i--)
-		for(var/level = 1 to 3)
-			var/list/candidates = list()
-			if(ticker.mode.name == "AI malfunction")//Make sure they want to malf if its malf
-				candidates = FindOccupationCandidates(job, level, MALF)
-			else
-				candidates = FindOccupationCandidates(job, level)
-			if(candidates.len)
-				var/mob/new_player/candidate = pick(candidates)
-				if(AssignRole(candidate, "AI"))
-					ai_selected++
-					break
-		//Malf NEEDS an AI so force one if we didn't get a player who wanted it
-		if((ticker.mode.name == "AI malfunction")&&(!ai_selected))
-			unassigned = shuffle(unassigned)
-			for(var/mob/new_player/player in unassigned)
-				if(jobban_isbanned(player, "AI"))
-					continue
-				if(AssignRole(player, "AI"))
-					ai_selected++
-					break
-		if(ai_selected)
-			return 1
-		return 0
-
-
 /** Proc DivideOccupations
  *  fills var "assigned_role" for all ready players.
  *  This proc must not have any side effect besides of modifying "assigned_role".
@@ -287,11 +252,6 @@ var/global/datum/controller/occupations/job_master
 	unassigned = shuffle(unassigned)
 
 	HandleFeedbackGathering()
-
-	//Check for an AI
-	Debug("DO, Running AI Check")
-	FillAIPosition()
-	Debug("DO, AI Check end")
 
 	//Other jobs are now checked
 	Debug("DO, Running Standard Check")
@@ -393,7 +353,7 @@ var/global/datum/controller/occupations/job_master
 	return 1
 
 /datum/controller/occupations/proc/TryAssignJob(var/mob/new_player/player, var/level, var/datum/job/job)
-	if(!job)
+	if(!job || job.is_disabled())
 		return FALSE
 	if(jobban_isbanned(player, job.title))
 		Debug("DO isbanned failed, Player: [player], Job:[job.title]")
@@ -421,7 +381,7 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions + 1) > (config.assistantratio * count)
+	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
 	if(enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
@@ -440,15 +400,9 @@ var/global/datum/controller/occupations/job_master
 	if(!H)
 		return 0
 	var/datum/job/job = GetJob(rank)
-	if(job)
-		job.equip(H)
-	else
-		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
-
-	H.job = rank
-
 	if(!joined_late)
 		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
 			if(sloc.name != rank)
 				continue
@@ -457,21 +411,39 @@ var/global/datum/controller/occupations/job_master
 			S = sloc
 			break
 		if(!S)
-			S = locate("start*[rank]") // use old stype
-		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
 			H.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			H.forceMove(pick(latejoin))
 
-	var/balance_wallet = 0
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
 		// Total between $200 and $500
 		var/balance_bank = rand(100,250)
-		balance_wallet = rand(100,250)
+		var/balance_wallet = rand(100,250)
 		var/bank_pref_number = H.client.prefs.bank_security
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
-			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
+
+			if (joined_late)
+				latejoiner_allowance += job.wage_payout + round(job.wage_payout/10)
+			else
+				station_allowance += job.wage_payout + round(job.wage_payout/10)//overhead of 10%
+
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -485,6 +457,7 @@ var/global/datum/controller/occupations/job_master
 				H.mind.store_memory(remembered_info)
 
 				H.mind.initial_account = M
+				H.mind.initial_wallet_funds = balance_wallet
 
 			// If they're head, give them the account info for their department
 			if(H.mind && job.head_position)
@@ -504,6 +477,14 @@ var/global/datum/controller/occupations/job_master
 				to_chat(H, "<span class='danger'>Your bank account security level is set to: <span class='darknotice'>[bank_pref]</span></span>")
 
 	var/alt_title = null
+
+	if(job)
+		job.equip(H, job.priority) // Outfit datum.
+	else
+		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
+
+	H.job = rank
+
 	if(H.mind)
 		H.mind.assigned_role = rank
 		alt_title = H.mind.role_alt_title
@@ -512,31 +493,6 @@ var/global/datum/controller/occupations/job_master
 			if("Mobile MMI")
 				H.MoMMIfy()
 				return 1
-			if("AI","Clown","Cyborg")	//don't need bag preference stuff!
-				if(rank=="Clown") // Clowns DO need to breathe, though - N3X
-					H.species.equip(H)
-			else
-				switch(H.backbag) //BS12 EDIT
-					if(1)
-						if(H.species.survival_gear)
-							H.put_in_hand(GRASP_RIGHT_HAND, new H.species.survival_gear(H))
-					if(2)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(3)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel_norm(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-					if(4)
-						var/obj/item/weapon/storage/backpack/BPK = new/obj/item/weapon/storage/backpack/satchel(H)
-						if(H.species.survival_gear)
-							new H.species.survival_gear(BPK)
-						H.equip_to_slot_or_del(BPK, slot_back,1)
-				H.species.equip(H)
-
 	if(job)
 		job.introduce(H, (alt_title ? alt_title : rank))
 	else
@@ -545,94 +501,9 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	spawnId(H, rank, alt_title, balance_wallet)
-
-	if(job && job.priority)
-		job.priority_reward_equip(H)
-
-	if(!job || !job.no_headset)
-		H.equip_to_slot_or_del(new /obj/item/device/radio/headset(H), slot_ears)
-
-	//Gives glasses to the vision impaired
-	if(H.disabilities & DISABILITY_FLAG_NEARSIGHTED)
-		var/equipped = H.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(H), slot_glasses)
-		if(equipped != 1)
-			var/obj/item/clothing/glasses/G = H.glasses
-			G.prescription = 1
-//		H.update_icons()
-
-	//If a character can't stand because of missing limbs, equip them with a wheelchair
-	if(!H.check_stand_ability())
-		var/obj/structure/bed/chair/vehicle/wheelchair/W = new(H.loc)
-		W.buckle_mob(H,H)
-
-	if(H.disabilities & ASTHMA)
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_LEFT_HAND, new /obj/item/device/inhaler(H))
-		else
-			H.equip_or_collect(new /obj/item/device/inhaler(H), slot_in_backpack)
-
-	if (H.client.IsByondMember())
-		to_chat(H, "Thank you for supporting BYOND!")
-		if(H.backbag == 1)
-			H.put_in_hand(GRASP_RIGHT_HAND, new /obj/item/weapon/storage/box/byond(H))
-		else
-			H.equip_or_collect(new /obj/item/weapon/storage/box/byond(H), slot_in_backpack)
-
-	if(Holiday == VG_BIRTHDAY)
-		H.equip_or_collect(new /obj/item/clothing/head/party_hat(H), slot_head)
-
+	if(job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 	return 1
-
-
-/datum/controller/occupations/proc/spawnId(var/mob/living/carbon/human/H, rank, title, wallet_funds=0)
-	if(!H)
-		return 0
-	var/obj/item/weapon/card/id/C = null
-
-	var/datum/job/job = null
-	for(var/datum/job/J in occupations)
-		if(J.title == rank)
-			job = J
-			break
-
-	if(!job || !job.no_pda)
-		H.equip_or_collect(new job.pdatype(H), job.pdaslot)
-
-	if(job)
-		if(job.no_id)
-			return
-		else
-			C = new job.idtype(H)
-			C.access = job.get_access()
-	else
-		C = new /obj/item/weapon/card/id(H)
-
-	if(C)
-		C.registered_name = H.real_name
-		C.rank = rank
-		C.assignment = title ? title : rank
-		C.name = "[C.registered_name]'s ID Card ([C.assignment])"
-
-		//put the player's account number onto the ID
-		if(H.mind && H.mind.initial_account)
-			C.associated_account_number = H.mind.initial_account.account_number
-
-		H.equip_or_collect(C, slot_wear_id)
-
-		if(C.virtual_wallet)
-			C.update_virtual_wallet(wallet_funds)
-
-	if(locate(/obj/item/device/pda,H))
-		var/obj/item/device/pda/pda = locate(/obj/item/device/pda,H)
-		pda.owner = H.real_name
-		pda.ownjob = C.assignment
-		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
-	H.update_inv_belt()
-	H.update_inv_wear_id()
-	return 1
-
-
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist
 	if(!config.load_jobs_from_txt)

@@ -168,8 +168,8 @@
 		)
 
 /obj/structure/bed/chair/vehicle/wheelchair/die()
-	getFromPool(/obj/item/stack/sheet/metal, get_turf(src), 4)
-	getFromPool(/obj/item/stack/rods, get_turf(src), 2)
+	new /obj/item/stack/sheet/metal(get_turf(src), 4)
+	new /obj/item/stack/rods(get_turf(src), 2)
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people
@@ -184,7 +184,7 @@
 
 /obj/structure/bed/chair/vehicle/wheelchair/multi_people/can_buckle(mob/M, mob/user)
 	//Same as parent's, but no occupant check!
-	if(M != user || !Adjacent(user) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || user.locked_to)
+	if(!Adjacent(user) && !user.Adjacent(M) || (!ishigherbeing(user) && !isalien(user) && !ismonkey(user)) || user.restrained() || user.stat || M.locked_to)
 		return 0
 	return 1
 

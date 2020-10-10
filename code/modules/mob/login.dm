@@ -80,7 +80,7 @@
 	reset_view()
 
 	if((flags & HEAR) && !(flags & HEAR_ALWAYS)) //Mobs with HEAR_ALWAYS will already have a virtualhearer
-		getFromPool(/mob/virtualhearer, src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	//Clear ability list and update from mob.
 	client.verbs -= ability_verbs
@@ -118,3 +118,8 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	if(iscluwnebanned(src) && (timeofdeath > 0 || !iscluwne(src)))
+		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")
+		message_admins("<span class='notice'>Cluwnebanned player [key_name(src)] attempted to join and was kicked.</span>", 1)
+		del(client)

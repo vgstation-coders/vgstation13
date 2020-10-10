@@ -1,6 +1,9 @@
 #define UNCLOWN 1
 #define CLOWNABLE 2
 #define CLOWNED 3
+#define SILENCER_OFFSET_X 1
+#define SILENCER_OFFSET_Y 2
+
 /obj/item/weapon/gun
 	name = "gun"
 	desc = "Its a gun. It's pretty terrible, though."
@@ -32,6 +35,8 @@
 	var/obj/item/projectile/in_chamber = null
 	var/list/caliber //the ammo the gun will accept. Now multiple types (make sure to set them to =1)
 	var/silenced = 0
+	var/list/silencer_offset = list() //x,y coords to bump silencer overlay to FROM (4,13) (use barrel end pixel position)
+	var/list/gun_part_overlays = list() //holds copy of overlays to allow for sane manipulation
 	var/recoil = 0
 	var/ejectshell = 1
 
@@ -65,6 +70,12 @@
 
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
+
+/obj/item/weapon/gun/Destroy()
+	if(in_chamber)
+		qdel(in_chamber)
+		in_chamber = null
+	..()
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -112,10 +123,15 @@
 
 /obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
 	if(silenced)
+		var/obj/item/gun_part/silencer/A = silenced
 		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
+			playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
+		if(A.volume_mult <= 1)
+			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 	else
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume, 1)
@@ -341,10 +357,11 @@
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
 			if(silenced)
+				var/obj/item/gun_part/silencer/A = silenced
 				if(fire_sound)
-					playsound(user, fire_sound, fire_volume/5, 1)
+					playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 				else if (in_chamber.fire_sound)
-					playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+					playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 			else
 				if(fire_sound)
 					playsound(user, fire_sound, fire_volume, 1)

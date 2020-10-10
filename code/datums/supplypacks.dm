@@ -10,6 +10,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs
 	var/name = null
 	var/list/contains = list()
+	var/list/selection_from = list()//list of lists, system picks one & adds contents to container on creation
 	var/manifest = ""
 	var/amount = null
 	var/cost = null
@@ -28,7 +29,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
+		qdel(AM)
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created
@@ -730,6 +731,41 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "contacts crate"
 	group = "Clothing"
 
+/datum/supply_packs/security_formal_wear
+	var/Blue = list(/obj/item/clothing/suit/secdressjacket/hos_blue,
+					/obj/item/clothing/suit/secdressjacket/warden_blue,
+					/obj/item/clothing/suit/secdressjacket/officer_blue,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_blue,
+					/obj/item/clothing/under/rank/secformal/warden_blue,
+					/obj/item/clothing/under/rank/secformal/officer_blue)
+	var/Navy = list(/obj/item/clothing/suit/secdressjacket/hos_navy,
+					/obj/item/clothing/suit/secdressjacket/warden_navy,
+					/obj/item/clothing/suit/secdressjacket/officer_navy,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_navy,
+					/obj/item/clothing/under/rank/secformal/warden_navy,
+					/obj/item/clothing/under/rank/secformal/officer_navy)
+	var/Tan = list(/obj/item/clothing/suit/secdressjacket/hos_tan,
+					/obj/item/clothing/suit/secdressjacket/warden_tan,
+					/obj/item/clothing/suit/secdressjacket/officer_tan,
+					/obj/item/clothing/under/rank/secformal/headofsecurity_tan,
+					/obj/item/clothing/under/rank/secformal/warden_tan,
+					/obj/item/clothing/under/rank/secformal/officer_tan)
+	contains = list(/obj/item/clothing/head/beret/headofsecurity,
+					/obj/item/clothing/head/beret/warden,
+					/obj/item/clothing/head/beret/officer,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes,
+					/obj/item/clothing/shoes/secshoes)
+	name = "Security Formalwear Closet"
+	cost = 30
+	containertype = /obj/structure/closet/secure_closet/security/empty
+	containername = "Security Formalwear"
+	access = list(access_security)
+	group = "Clothing"
+
+/datum/supply_packs/security_formal_wear/New()
+	selection_from = list(Blue, Navy, Tan)
+
 //Winter Coats//
 
 /datum/supply_packs/engwinter
@@ -1008,6 +1044,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 60
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "loyalty implant crate"
+	access = list(access_armory)
+	group = "Security"
+
+/datum/supply_packs/exile
+	name = "Exile implants"
+	contains = list (/obj/item/weapon/storage/lockbox/exile)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "exile implant crate"
 	access = list(access_armory)
 	group = "Security"
 
@@ -2452,3 +2497,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Team Security stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/telecomms
+	name = "Telecommunications Parts stack of packs"
+	contains = list(/obj/structure/vendomatpack/telecomms, /obj/structure/vendomatpack/telecomms)
+	cost = 50
+	containertype = /obj/structure/stackopacks
+	containername = "Telecommunications Parts stack of packs"
+	group = "Vending Machine packs"
+

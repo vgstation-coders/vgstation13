@@ -40,6 +40,7 @@
 	var/cant_remove_msg = " cannot be taken off!"
 	var/cant_drop = FALSE //If 1, can't drop it from hands!
 	var/cant_drop_msg = " sticks to your hand!"
+	var/laying_pickup = FALSE //Allows things to be placed in hands while the owner of those hands is laying
 
 	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -92,13 +93,8 @@
 	if(istype(loc, /mob))
 		var/mob/H = loc
 		H.drop_from_inventory(src) // items at the very least get unequipped from their mob before being deleted
-	if(hasvar(src, "holder"))
-		src:holder = null
 	for(var/x in actions)
 		qdel(x)
-	/*  BROKEN, FUCK BYOND
-	if(hasvar(src, "my_atom"))
-		src:my_atom = null*/
 	..()
 
 
@@ -895,7 +891,7 @@
 		return
 
 	if(!wielded)
-		wielded = getFromPool(/obj/item/offhand)
+		wielded = new /obj/item/offhand
 
 		//Long line ahead, let's break that up!
 		//
@@ -927,7 +923,7 @@
 		wielded.wielding = null
 		user.u_equip(wielded,1)
 		if(wielded)
-			returnToPool(wielded)
+			qdel(wielded)
 			wielded = null
 	update_wield(user)
 
@@ -1046,8 +1042,6 @@
 /obj/item/add_blood(var/mob/living/carbon/human/M)
 	if (!..())
 		return FALSE
-	if(istype(src, /obj/item/weapon/melee/energy))
-		return
 
 	//if we haven't made our blood_overlay already
 	if(!blood_overlays[type])
@@ -1080,6 +1074,45 @@
 	blood_DNA[M.dna.unique_enzymes] = M.dna.b_type
 	had_blood = TRUE
 	return TRUE //we applied blood to the item
+
+
+/obj/item/add_blood_from_data(var/list/blood_data)
+	if (!..())
+		return FALSE
+
+	//if we haven't made our blood_overlay already
+	if(!blood_overlays[type])
+		generate_blood_overlay()
+
+	if(!blood_overlay)
+		blood_overlay = blood_overlays[type]
+	else
+		overlays.Remove(blood_overlay)
+
+	//apply the blood-splatter overlay if it isn't already in there, else it updates it.
+	blood_overlay.color = blood_color
+	overlays += blood_overlay
+	//if this blood isn't already in the list, add it
+	if(!blood_data)
+		return
+
+	if (length(blood_data["virus2"]))
+		var/list/blood_diseases = filter_disease_by_spread(blood_data["virus2"],required = SPREAD_BLOOD)
+		if (blood_diseases?.len)
+			for (var/ID in blood_diseases)
+				var/datum/disease2/disease/D = blood_diseases[ID]
+				infect_disease2(D, notes="(Blood, coming from a blood splattering)")
+				if (isliving(loc))
+					var/mob/living/L = loc
+					infection_attempt(L,D)//Wear gloves when doing surgery or beating that catbeast to death!
+
+	if(blood_DNA[blood_data["blood_DNA"]])
+		return FALSE //already bloodied with this blood. Cannot add more.
+	blood_DNA[blood_data["blood_DNA"]] = blood_data["blood_type"]
+	had_blood = TRUE
+	return TRUE //we applied blood to the item
+
+
 
 var/global/list/image/blood_overlays = list()
 /obj/item/proc/generate_blood_overlay()

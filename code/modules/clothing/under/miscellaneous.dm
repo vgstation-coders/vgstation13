@@ -750,6 +750,16 @@
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED, VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/under/casualsec
+	name = "plainclothes uniform"
+	desc = "The Western District way, gentlemen."
+	icon_state = "casualsec"
+	item_state = "casualsec"
+	_color = "casualsec"
+	clothing_flags = ONESIZEFITSALL
+	species_restricted = list("exclude", VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED)
+
 /obj/item/clothing/under/inquisitor
 	name = "inquisitor's suit"
 	desc = "Historically, inquisitors were cathar detectives who investigated crimes both mundane and supernatural. They were known for traveling to remote parishes plagued by unexplained murders, and for exposing the wicked living among normal humans."
@@ -785,6 +795,13 @@
 	icon_state = "galo"
 	item_state = "galo"
 	_color = "galo"
+
+/obj/item/clothing/under/callum
+	name = "gaelic suit"
+	desc = "Smells faintly of alcohol."
+	icon_state = "callum_suit"
+	item_state = "callum_suit"
+	_color = "callum_suit"
 
 /obj/item/clothing/under/clownsuit
 	name = "formal clown outfit"

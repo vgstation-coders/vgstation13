@@ -358,7 +358,7 @@ var/global/list/floorbot_targets=list()
 			T.amount -= i
 		else
 			amount += T.amount
-			returnToPool(T)
+			qdel(T)
 		update_icon()
 		repairing = 0
 
@@ -376,7 +376,7 @@ var/global/list/floorbot_targets=list()
 		var/obj/item/stack/tile/plasteel/T = new /obj/item/stack/tile/plasteel(get_turf(M))
 		T.amount = 4
 		if(M.amount==1)
-			returnToPool(M)
+			qdel(M)
 			//qdel(M)
 		else
 			M.amount--

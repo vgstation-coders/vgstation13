@@ -31,14 +31,14 @@
 	draggable = null
 
 /obj/abstract/screen/fuckbyond/MouseUp()
-	returnToPool(draggable)
+	qdel(draggable)
 ///////////////////////////////////////////////
 
 
 /obj/abstract/screen/draggable/New(loc, mob/user)
 	..()
 //But no seriously, fuck byond
-	fuckbyond = getFromPool(/obj/abstract/screen/fuckbyond, src)
+	fuckbyond = new /obj/abstract/screen/fuckbyond(src)
 
 //References to the object/user
 	attachedobject = loc
@@ -61,7 +61,7 @@
 		attachedmob.client.screen -= fuckbyond
 	attachedmob = null
 	if(fuckbyond)
-		returnToPool(fuckbyond)
+		qdel(fuckbyond)
 		fuckbyond = null
 
 /obj/abstract/screen/draggable/MouseDown(turf/location,control,params)
@@ -82,7 +82,7 @@
 			var/turf/T = locate(attachedmob.x + centerdist_x, attachedmob.y + centerdist_y, attachedmob.z)
 			if(T && attachedobject.can_drag_use(attachedmob, T))
 				if(attachedobject.drag_use(attachedmob, T)) //cancel our continuous use
-					returnToPool(src)
+					qdel(src)
 					break
 		sleep(world.tick_lag)
 
@@ -91,13 +91,13 @@
 		centerdist_x = over_location.x - attachedmob.x //maintains distance from usr in case usr moves
 		centerdist_y = over_location.y - attachedmob.y
 	if(fuckbyond) //This isn't a single click, therefore we can remove the FUCK BYOND object
-		returnToPool(fuckbyond)
+		qdel(fuckbyond)
 		fuckbyond = null
 
 /obj/abstract/screen/draggable/MouseDrop(over_object,src_location,over_location,src_control,over_control,params)
 	if(attachedobject)
 		attachedobject.drag_success(attachedmob, over_location)
-	returnToPool(src) //releasing the drag ends the usage
+	qdel(src) //releasing the drag ends the usage
 
 /obj/proc/drag_mousedown()
 

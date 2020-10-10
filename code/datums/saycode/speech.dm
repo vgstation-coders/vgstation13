@@ -34,7 +34,7 @@
 	..()
 
 /datum/speech/proc/clone()
-	var/datum/speech/clone = getFromPool(/datum/speech)
+	var/datum/speech/clone = new /datum/speech
 
 	clone.name=name
 	clone.as_name=as_name
@@ -92,16 +92,6 @@
 	if(as_name && as_name != name)
 		return " (as [as_name])"
 	return ""
-
-/datum/speech/resetVariables()
-	..("wrapper_classes","message_classes")
-
-	message_classes=list()
-	wrapper_classes=list()
-
-	language = null
-	speaker = null
-	radio = null
 
 /datum/speech/proc/get_real_name()
 	if(ismob(speaker))

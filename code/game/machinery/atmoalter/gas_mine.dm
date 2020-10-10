@@ -217,3 +217,23 @@
   var/rate = AirRate()
   air_contents.adjust_multi(GAS_OXYGEN, 0.5*rate,
   GAS_SLEEPING, 0.5*rate)
+
+/obj/machinery/atmospherics/miner/gas_sink
+	name = "Graviton Gas Sink"
+	desc = "This is a piece of machinery that uses gravitons to draw in molecules of gas a ship passes while moving through space. Due to the nature of gas dispersal in a vacuum, it requires traveling at hyperspace speeds in order to collect substantial gas particles, and the intake is a mixed, requiring filtering."
+
+/obj/machinery/atmospherics/miner/gas_sink/AddAir()
+	var/rate = AirRate()
+	if(!rate)
+		return
+	air_contents.adjust_multi(GAS_CARBON, 0.1*rand(1,2)*rate,
+		GAS_NITROGEN, 0.1*rand(2,3)*rate,
+		GAS_PLASMA, 0.1*rand(4,5)*rate,
+		GAS_OXYGEN, 0.1*rand(4,5)*rate,
+		GAS_SLEEPING, 0.1*rand(1,2)*rate)
+
+/obj/machinery/atmospherics/miner/gas_sink/AirRate()
+	var/datum/zLevel/current_zlevel = get_z_level(src)
+	if(istype(current_zlevel,/datum/zLevel/hyperspace))
+		return ..()
+	return 0

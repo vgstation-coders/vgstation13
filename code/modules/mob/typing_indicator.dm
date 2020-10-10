@@ -9,7 +9,6 @@ I IS TYPIN'!'
 	var/atom/movable/overlay/typing_indicator/typing_indicator = null
 
 /atom/movable/overlay/typing_indicator
-	follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
 	icon = 'icons/mob/talk.dmi'
 	icon_state = "talking"
 
@@ -22,9 +21,6 @@ I IS TYPIN'!'
 	var/mob/M = master
 	M.typing_indicator = null
 	. = ..()
-
-/atom/movable/overlay/typing_indicator/SetInitLoc()
-	forceMove(get_turf(master))
 
 /mob/proc/create_typing_indicator()
 	if(client && !stat && client.prefs.typing_indicator && src.is_visible() && isturf(src.loc))

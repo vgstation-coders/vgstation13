@@ -93,9 +93,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
                     "Voice of Nar-Sie",
                     "")
 		for (var/datum/role/R in members)
-			var/mob/M = R.antag.current
-			if (M && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
-				to_chat(M, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
+			if (R.antag?.current && R.antag.GetRole(CULTIST))//failsafe for cultist brains put in MMIs
+				to_chat(R.antag.current, "<span class='danger'>Nar-Sie</span> murmurs... <span class='sinister'>[message]</span>")
 
 		for(var/mob/dead/observer/O in player_list)
 			to_chat(O, "<span class='game say'><span class='danger'>Nar-Sie</span> murmurs, <span class='sinister'>[message]</span></span>")
@@ -359,7 +358,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 	//Is there blood on our hands?
 	var/mob/living/carbon/human/H_user = user
-	if (istype (H_user) && H_user.bloody_hands)
+	if (istype (H_user) && H_user.blood_DNA?.len)
 		data[BLOODCOST_TARGET_HANDS] = H_user
 		var/blood_gathered = min(amount_needed,H_user.bloody_hands)
 		data[BLOODCOST_AMOUNT_HANDS] = blood_gathered
@@ -594,11 +593,12 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				switch(communion_data[BLOODCOST_RESULT])
 					if (BLOODCOST_TARGET_HANDS)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_USER]
-						blood.data["blood_colour"] = HU.hand_blood_color
+						blood.data["blood_colour"] = HU.bloody_hands_data["blood_colour"]
 						if (HU.blood_DNA && HU.blood_DNA.len)
 							var/blood_DNA = pick(HU.blood_DNA)
 							blood.data["blood_DNA"] = blood_DNA
 							blood.data["blood_type"] = HU.blood_DNA[blood_DNA]
+							//can't get virus data from bloody hands because it'd be a pain in the ass to code for minimal use
 					if (BLOODCOST_TARGET_SPLATTER)
 						var/obj/effect/decal/cleanable/blood/B = communion_data[BLOODCOST_TARGET_SPLATTER]
 						blood = new()
@@ -607,7 +607,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 							var/blood_DNA = pick(B.blood_DNA)
 							blood.data["blood_DNA"] = blood_DNA
 							blood.data["blood_type"] = B.blood_DNA[blood_DNA]
-						blood.data["virus2"] = B.virus2
+						blood.data["virus2"] = virus_copylist(B.virus2)
 					if (BLOODCOST_TARGET_GRAB)
 						var/mob/living/carbon/human/HU = communion_data[BLOODCOST_TARGET_GRAB]
 						blood = get_blood(HU.vessel)
@@ -642,11 +642,12 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if (BLOODCOST_TARGET_HANDS)
 			var/mob/living/carbon/human/H = user
 			blood = new()
-			blood.data["blood_colour"] = H.hand_blood_color
-			if (H.blood_DNA && H.blood_DNA.len)
+			blood.data["blood_colour"] = H.bloody_hands_data["blood_colour"]
+			if (H.blood_DNA?.len && H.bloody_hands > 0)
 				var/blood_DNA = pick(H.blood_DNA)
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = H.blood_DNA[blood_DNA]
+				//can't get virus data from bloody hands because it'd be a pain in the ass to code for minimal use
 			if (!tribute && previous_result != BLOODCOST_TARGET_HANDS)
 				user.visible_message("<span class='warning'>The blood on \the [user]'s hands drips onto the floor!</span>",
 									"<span class='rose'>You let the blood smeared on your hands join the pool of your summoning.</span>",
@@ -659,7 +660,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				var/blood_DNA = pick(B.blood_DNA)
 				blood.data["blood_DNA"] = blood_DNA
 				blood.data["blood_type"] = B.blood_DNA[blood_DNA]
-			blood.data["virus2"] = B.virus2
+			blood.data["virus2"] = virus_copylist(B.virus2)
 			if (!tribute && previous_result != BLOODCOST_TARGET_SPLATTER)
 				user.visible_message("<span class='warning'>The blood on the floor below \the [user] starts moving!</span>",
 									"<span class='rose'>You redirect the flow of blood inside the splatters on the floor toward the pool of your summoning.</span>",
@@ -667,6 +668,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if (BLOODCOST_TARGET_GRAB)
 			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_GRAB]
 			blood = get_blood(H.vessel)
+			if (!blood.data["virus2"])
+				blood.data["virus2"] = list()
+			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
 			if (!tribute && previous_result != BLOODCOST_TARGET_GRAB)
 				user.visible_message("<span class='warning'>\The [user] stabs their nails inside \the [data[BLOODCOST_TARGET_GRAB]], drawing blood from them!</span>",
 									"<span class='rose'>You stab your nails inside \the [data[BLOODCOST_TARGET_GRAB]] to draw some blood from them.</span>",
@@ -678,6 +682,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				user.visible_message("<span class='warning'>\The [user] dips their fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds!</span>",
 									"<span class='rose'>You dip your fingers inside \the [data[BLOODCOST_TARGET_BLEEDER]]'s wounds to draw some blood from them.</span>",
 									"<span class='warning'>You hear a liquid flowing.</span>")
+			if (!blood.data["virus2"])
+				blood.data["virus2"] = list()
+			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
 		if (BLOODCOST_TARGET_HELD)
 			var/obj/item/weapon/reagent_containers/G = data[BLOODCOST_TARGET_HELD]
 			blood = locate() in G.reagents.reagent_list
@@ -709,6 +716,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					to_chat(user, "<span class='warning'>Remove \the [data[BLOODCOST_TARGET_CONTAINER]]'s lid first!</span>")
 			var/mob/living/carbon/human/H = user
 			blood = get_blood(H.vessel)
+			if (!blood.data["virus2"])
+				blood.data["virus2"] = list()
+			blood.data["virus2"] |= filter_disease_by_spread(virus_copylist(H.virus2),required = SPREAD_BLOOD)
 			if (previous_result != BLOODCOST_TARGET_USER)
 				if(!tribute && istype(H))
 					var/obj/item/weapon/W = H.get_active_hand()

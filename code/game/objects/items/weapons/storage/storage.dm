@@ -535,13 +535,13 @@
 	else
 		verbs -= /obj/item/weapon/storage/verb/toggle_gathering_mode
 
-	src.boxes = getFromPool(/obj/abstract/screen/storage)
+	src.boxes = new /obj/abstract/screen/storage
 	src.boxes.name = "storage"
 	src.boxes.master = src
 	src.boxes.icon_state = "block"
 	src.boxes.screen_loc = "7,7 to 10,8"
 	src.boxes.layer = HUD_BASE_LAYER
-	src.closer = getFromPool(/obj/abstract/screen/close)
+	src.closer = new /obj/abstract/screen/close
 	src.closer.master = src
 	src.closer.icon_state = "x"
 	src.closer.layer = HUD_ITEM_LAYER
@@ -601,10 +601,10 @@
 /obj/item/weapon/storage/Destroy()
 	close_all()
 	if(boxes)
-		returnToPool(boxes)
+		qdel(boxes)
 		boxes = null
 	if(closer)
-		returnToPool(closer)
+		qdel(closer)
 		closer = null
 	for(var/atom/movable/AM in contents)
 		qdel(AM)

@@ -539,14 +539,14 @@
 	state = !state
 	update_icon()
 
-/obj/item/weapon/gun/hookshot/whip/windup_box/Fire(atom/target, mob/living/user, params, reflex =0, struggle =0) //4 winds minimum
+/obj/item/weapon/gun/hookshot/whip/windup_box/Fire(atom/target, mob/living/user, params, reflex =0, struggle = 0, use_shooter_turf = FALSE) //4 winds minimum
 	maxlength = lengthDecider
 	if(windUp < minWindUp)
 		playsound(src,'sound/items/metal_impact.ogg', 25,1)
 		to_chat(user, "<span class='notice'>the spring isn't tight enough to fire</span>")
 		return
 	playsound(src, fireSound, fireVolume,1)
-	return..()
+	return ..()
 
 /obj/item/weapon/gun/hookshot/whip/windup_box/bootbox
 	name = "boot-in-a-box"

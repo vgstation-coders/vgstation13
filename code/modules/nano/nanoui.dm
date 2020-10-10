@@ -106,7 +106,6 @@ nanoui is used to open and update nano browser uis
   */
 /datum/nanoui/proc/add_common_assets()
 	add_script("libraries.min.js") // A JS file comprising of jQuery, doT.js and jQuery Timer libraries (compressed together)
-	add_script("JSON_parseMore.js") // Honestly I have no idea how to add to that previous file safely but someone else can do it if they want
 	add_script("nano_utility.js") // The NanoUtility JS, this is used to store utility functions.
 	add_script("nano_template.js") // The NanoTemplate JS, this is used to render templates.
 	add_script("nano_state_manager.js") // The NanoStateManager JS, it handles updates from the server and passes data to the current state
@@ -419,7 +418,7 @@ nanoui is used to open and update nano browser uis
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<head>
 		<script type='text/javascript'>
 			function receiveUpdateData(jsonString)
@@ -561,6 +560,12 @@ nanoui is used to open and update nano browser uis
 /datum/nanoui/proc/process(update = 0)
 	set waitfor = FALSE
 	if (!src_object || !user)
+		close()
+		return
+
+	if(!winexists(user, window_id))
+		var/template = templates.len ? templates[1] : "None"
+		world.log << "BUG: window with ID [window_id] and interface [template] for [key_name(user)] does not exist."
 		close()
 		return
 

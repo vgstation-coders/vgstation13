@@ -37,6 +37,10 @@
 	add_max_amounts()
 	return
 
+/datum/construction/Destroy()
+	holder = null
+	return ..()
+
 /datum/construction/proc/next_step(mob/user as mob)
 	steps.len--
 	if(!steps.len)

@@ -60,7 +60,7 @@
 				var/count = 0
 				for(var/obj/item/stack/ore/I in get_turf(target))
 					if(W.ore_box.try_add_ore(I))
-						returnToPool(I)
+						qdel(I)
 						count += I.amount
 				if(count)
 					log_message("Loaded [count] ore into compatible ore box.")
@@ -176,7 +176,7 @@
 					var/count = 0
 					for(var/obj/item/stack/ore/ore in range(chassis,1))
 						if(get_dir(chassis,ore)&chassis.dir && W.ore_box.try_add_ore(ore))
-							returnToPool(ore)
+							qdel(ore)
 							count += ore.amount
 					if(count)
 						occupant_message("<span class='notice'>[count] ore successfully loaded into cargo compartment.</span>")
@@ -196,7 +196,7 @@
 					if(hydraulic_clamp && ore_box)
 						for(var/obj/item/stack/ore/glass/sandore in get_turf(M))
 							if (ore_box.try_add_ore(sandore))
-								returnToPool(sandore)
+								qdel(sandore)
 								count += sandore.amount
 			log_message("Drilled through [target]")
 			if(count)

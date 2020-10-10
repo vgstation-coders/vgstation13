@@ -8,7 +8,6 @@
 	desc = "A vest designed to comfortably hold interchangable armor plates."
 	icon_state = "tactical_armor"
 	item_state = "tactical_armor"
-	var/event_key
 	var/obj/item/weapon/armor_plate/P
 
 /obj/item/clothing/suit/armor/plate_carrier/get_armor(var/type)
@@ -26,13 +25,12 @@
 /obj/item/clothing/suit/armor/plate_carrier/equipped(var/mob/user, var/slot)
 	..()
 	if(slot == slot_wear_suit)
-		event_key = user.on_damaged.Add(src, "handle_user_damage")
+		user.lazy_register_event(/lazy_event/on_damaged, src, .proc/handle_user_damage)
 
 
 /obj/item/clothing/suit/armor/plate_carrier/unequipped(mob/user, var/from_slot = null)
 	if(from_slot == slot_wear_suit)
-		user.on_damaged.Remove(event_key)
-		event_key = null
+		user.lazy_unregister_event(/lazy_event/on_damaged, src, .proc/handle_user_damage)
 	..()
 
 /obj/item/clothing/suit/armor/plate_carrier/attack_self(mob/user)
@@ -55,15 +53,13 @@
 	if(P)
 		to_chat(user, "<span class = 'notice'>It has \a [P] attached to it. <a HREF='?src=\ref[user];lookitem=\ref[P]'>Take a closer look.</a></span>")
 
-/obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(list/arguments)
+/obj/item/clothing/suit/armor/plate_carrier/proc/handle_user_damage(kind, amount)
 	if(!P)
 		return
-	var/amount = arguments["amount"]
 	if(amount <= 0)
 		return
-	var/type = arguments["type"]
 
-	P.receive_damage(type, amount)
+	P.receive_damage(kind, amount)
 	if(P.gcDestroyed)
 		P = null
 
@@ -92,7 +88,7 @@
 		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
 		var/turf/T = get_turf(src)
 		playsound(T, "shatter", 70, 1)
-		getFromPool(/obj/effect/decal/cleanable/dirt,T)
+		new /obj/effect/decal/cleanable/dirt(T)
 		if(prob(75))
 			var/obj/item/weapon/shard/shrapnel/S = new(T)
 			S.name = "[src] shrapnel"

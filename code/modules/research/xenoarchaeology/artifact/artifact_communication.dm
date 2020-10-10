@@ -56,6 +56,7 @@
 /obj/machinery/communication/Destroy()
 	for(var/stone in contents)
 		qdel(stone)
+	new /datum/artifact_postmortem_data(src)
 	..()
 
 /obj/machinery/communication/proc/get_active_stones()

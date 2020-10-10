@@ -332,8 +332,9 @@
 					return
 				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 				emergency_shuttle.incall()
-				world << sound('sound/AI/shuttlecalled.ogg')
-				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
+				var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+				CA.justification = justification
+				command_alert(CA)
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
 				message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 
@@ -343,8 +344,7 @@
 				switch(emergency_shuttle.direction)
 					if(-1)
 						emergency_shuttle.incall()
-						world << sound('sound/AI/shuttlecalled.ogg')
-						captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+						command_alert(/datum/command_alert/emergency_shuttle_called)
 						log_admin("[key_name(usr)] called the Emergency Shuttle")
 						message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 					if(1)
@@ -608,6 +608,23 @@
 		if(O.locked_to)
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
+
+	else if(href_list["artifactpanel_jumpto"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/turf/T = locate(href_list["artifactpanel_jumpto"])
+
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(T)
 
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
@@ -1470,25 +1487,6 @@
 			message_admins("<span class='notice'>[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)
 			//M.client = null
 			del(M.client)
-/*
-	//Player Notes
-	else if(href_list["notes"])
-		var/ckey = href_list["ckey"]
-		if(!ckey)
-			var/mob/M = locate(href_list["mob"])
-			if(ismob(M))
-				ckey = M.ckey
-
-		switch(href_list["notes"])
-			if("show")
-				notes_show(ckey)
-			if("add")
-				notes_add(ckey,href_list["text"])
-				notes_show(ckey)
-			if("remove")
-				notes_remove(ckey,text2num(href_list["from"]),text2num(href_list["to"]))
-				notes_show(ckey)
-*/
 	else if(href_list["removejobban"])
 		if(!check_rights(R_BAN))
 			return
@@ -1646,7 +1644,7 @@
 			return alert(usr, "The game has already started.", null, null, null, null)
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		var/roundstart_rules = list()
+		var/list/datum/dynamic_ruleset/roundstart/roundstart_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
 			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
 			roundstart_rules[newrule.name] = newrule
@@ -1687,7 +1685,7 @@
 			return alert(usr, "The game must start first.", null, null, null, null)
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
-		var/latejoin_rules = list()
+		var/list/datum/dynamic_ruleset/latejoin/latejoin_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
 			var/datum/dynamic_ruleset/latejoin/newrule = new rule()
 			latejoin_rules[newrule.name] = newrule
@@ -2657,6 +2655,35 @@
 			log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 			message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 
+
+	else if(href_list["syndbeaconpermission"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/obj/machinery/syndicate_beacon/syndbeacon = locate(href_list["syndbeacon"])
+		var/mob/user = locate(href_list["user"])
+		var/answer = text2num(href_list["answer"])
+
+		if (!syndbeacon || !user)
+			return
+
+		switch (answer)
+			if (1)
+				syndbeacon.ready_up()
+				log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (2)
+				syndbeacon.temptext = "<i>We have no need for you at this time. Have a pleasant day.</i><br>"
+				syndbeacon.updateUsrDialog()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (3)
+				syndbeacon.temptext = "<i>The Syndicate has grown tired of you.</i><br>"
+				syndbeacon.updateUsrDialog()
+				syndbeacon.selfdestruct()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+
 	else if(href_list["adminchecklaws"])
 		output_ai_laws()
 
@@ -3588,7 +3615,7 @@
 						lavaturfs += F
 
 				spawn(0)
-					for(var/i = i, i < length, i++) // 180 = 3 minutes
+					for(var/i = 0, i < length, i++) // 180 = 3 minutes
 						if(damage)
 							for(var/mob/living/carbon/L in living_mob_list)
 								if(istype(L.loc, /turf/simulated/floor)) // Are they on LAVA?!
@@ -3710,6 +3737,7 @@
 							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
 						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
 
+					custom.generate_icon()
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
 
@@ -4010,6 +4038,24 @@
 							B.destroy_environnement = 0
 				message_admins("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
 				log_admin("[key_name_admin(usr)] disabled the environnement damage of the Bomberman Bomb Dispensers currently in the world.")
+			if("mechanics_motivator")
+				if(!world.has_round_started())
+					to_chat(usr, "The round has not started yet,")
+					return
+				var/equipped_count = 0
+				for(var/mob/living/dude in player_list)
+					if(dude.mind?.assigned_role != "Mechanic")
+						continue
+					var/obj/item/current_mask = dude.get_item_by_slot(slot_wear_mask)
+					if(current_mask)
+						if(istype(current_mask, /obj/item/clothing/mask/explosive_collar/mechanic))
+							continue
+						dude.drop_item(current_mask, dude.loc, TRUE)
+					var/obj/item/clothing/mask/explosive_collar/mechanic/cool_necklace = new
+					dude.equip_to_slot(cool_necklace, slot_wear_mask)
+					equipped_count++
+				to_chat(usr, "<span class='notice'>Equipped [equipped_count] mechanics with cool necklaces.</span>")
+				log_admin("[key_name(usr)] equipped [equipped_count] Mechanics with cool necklaces.")
 			if("togglebombmethod")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","BM")
@@ -4275,7 +4321,7 @@
 		src.access_news_network()
 
 	else if(href_list["ac_set_channel_name"])
-		src.admincaster_feed_channel.channel_name = utf8_sanitize(input(usr, "Provide a Feed Channel Name", "Network Channel Handler", ""))
+		src.admincaster_feed_channel.channel_name = stripped_input(usr, "Provide a Feed Channel Name", "Network Channel Handler", "")
 		while (findtext(src.admincaster_feed_channel.channel_name," ") == 1)
 			src.admincaster_feed_channel.channel_name = copytext(src.admincaster_feed_channel.channel_name,2,length(src.admincaster_feed_channel.channel_name)+1)
 		src.access_news_network()
@@ -4337,6 +4383,11 @@
 		for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 			NEWSCASTER.newsAlert(src.admincaster_feed_channel.channel_name)
 
+		for(var/obj/item/device/pda/PDA in PDAs)
+			var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+			if(reader)
+				reader.newsAlert(src.admincaster_feed_channel.channel_name)
+
 		log_admin("[key_name_admin(usr)] submitted a feed story to channel: [src.admincaster_feed_channel.channel_name]!")
 		src.access_news_network()
 
@@ -4396,6 +4447,10 @@
 					for(var/obj/machinery/newscaster/NEWSCASTER in allCasters)
 						NEWSCASTER.newsAlert()
 						NEWSCASTER.update_icon()
+					for(var/obj/item/device/pda/PDA in PDAs)
+						var/datum/pda_app/newsreader/reader = locate(/datum/pda_app/newsreader) in PDA.applications
+						if(reader)
+							reader.newsAlert()
 					src.admincaster_screen = 15
 				else
 					news_network.wanted_issue.author = src.admincaster_feed_message.author
@@ -4533,7 +4588,7 @@
 		if(!add)
 			return
 
-		notes_add(key,add,usr)
+		notes_add(key, add)
 		show_player_info(key)
 
 	if(href_list["remove_player_info"])

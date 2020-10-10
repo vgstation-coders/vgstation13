@@ -39,7 +39,7 @@
 	else if(istype(target,/obj/effect/decal/cleanable))
 		user.simple_message("<span class='notice'>You scrub \the [target.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(target)
+		qdel(target)
 
 	else if(istype(target,/turf/simulated))
 		var/turf/simulated/T = target
@@ -66,7 +66,7 @@
 				break
 		user.simple_message("<span class='notice'>You scrub \the [C.name] out.</span>",
 			"<span class='warning'>You destroy [pick("an artwork","a valuable artwork","a rare piece of art","a rare piece of modern art")].</span>")
-		returnToPool(C)
+		qdel(C)
 	else
 		user.simple_message("<span class='notice'>You clean \the [target.name].</span>",
 			"<span class='warning'>You [pick("deface","ruin","stain")] \the [target.name].</span>")

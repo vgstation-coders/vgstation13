@@ -2,6 +2,7 @@
 
 //#define GC_DEBUG
 //#define GC_FINDREF
+//#define GC_REFDEBUG
 
 var/datum/subsystem/garbage/SSgarbage
 
@@ -22,11 +23,34 @@ var/soft_dels = 0
 	// To let them know how hardworking am I :^).
 	var/dels_count = 0
 	var/hard_dels = 0
+	#ifdef GC_REFDEBUG
+	var/list/fakedels = list()
+	#endif
 
 
 /datum/subsystem/garbage/New()
 	NEW_SS_GLOBAL(SSgarbage)
 
+/datum/subsystem/garbage/Shutdown()
+	if(!ghdel_profiling.len)
+		world.log << "There were no hard deletions this round."
+		return
+	world.log << {"
+Deletions this round:
+\tQueue length: [queue.len]
+\tDeletions count: [dels_count]
+\tSoft dels: [soft_dels]
+\tHard dels: [hard_dels]
+List of hard deletions:"}
+	for(var/thing in ghdel_profiling)
+		world.log << "\t[thing] : [ghdel_profiling[thing]]"
+	world.log << json_encode(list(
+		"queue" = queue.len,
+		"dels" = dels_count,
+		"soft_dels" = soft_dels,
+		"hard_dels" = hard_dels,
+		"hd_list" = ghdel_profiling))
+	..()
 
 /datum/subsystem/garbage/stat_entry()
 	var/msg = ""
@@ -35,7 +59,6 @@ var/soft_dels = 0
 		msg += "|QDEL OFF"
 
 	..(msg)
-
 
 /datum/subsystem/garbage/fire(resumed = FALSE)
 	var/collectionTimeScope = world.timeofday - GC_COLLECTION_TIMEOUT
@@ -55,26 +78,7 @@ var/soft_dels = 0
 				continue
 
 			#ifdef GC_FINDREF
-			to_chat(world, "picnic! searching [D]")
-			if(istype(D, /atom/movable))
-				var/atom/movable/A = D
-				testing("GC: Searching references for [A] | [A.type]")
-				if(A.loc != null)
-					testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
-				if(A.contents.len)
-					testing("GC: [A] | [A.type] has contents:")
-					for(var/atom/B in A.contents)
-						testing("[B] | [B.type]")
-			var/found = 0
-			for(var/atom/R in world)
-				found += LookForRefs(R, D)
-			for(var/datum/R)
-				found += LookForRefs(R, D)
-			for(var/client/R)
-				found += LookForRefs(R, D)
-			found += LookForRefs(world, D)
-			found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
-			to_chat(world, "we found [found]")
+			FindRef(D)
 			#endif
 
 
@@ -82,14 +86,22 @@ var/soft_dels = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
+			if(ismovable(D))
 				var/atom/movable/AM = D
 				AM.hard_deleted = 1
 			else
 				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
 				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
 
+			#ifdef GC_REFDEBUG
+			fakedels += D
+			if(ismovable(D))
+				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
+			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+			#undef GC_REFDEBUG
+			#else
 			del D
+			#endif
 			removeTrash(refID)
 
 			hard_dels++
@@ -127,18 +139,40 @@ var/soft_dels = 0
 #ifdef GC_FINDREF
 /world/loop_checks = 0
 
+/datum/subsystem/garbage/proc/FindRef(datum/D)
+	to_chat(world, "picnic! searching [D]")
+	testing("GC: Searching references for [ref(D)] [D] | [D.type]")
+	if(istype(D, /atom/movable))
+		var/atom/movable/A = D
+		if(A.loc != null)
+			testing("GC: [A] | [A.type] is located in [A.loc] instead of null")
+		if(A.contents.len)
+			testing("GC: [A] | [A.type] has contents:")
+			for(var/atom/B in A.contents)
+				testing("[B] | [B.type]")
+	var/found = 0
+	for(var/atom/R in world)
+		found += LookForRefs(R, D)
+	for(var/datum/R)
+		found += LookForRefs(R, D)
+	for(var/client/R)
+		found += LookForRefs(R, D)
+	found += LookForRefs(world, D)
+	found += LookForListRefs(global.vars, D, null, "global.vars") //You can't pretend global is a datum like you can with clients and world. It'll compile, but throw completely nonsensical runtimes.
+	to_chat(world, "we found [found]")
+
 /datum/subsystem/garbage/proc/LookForRefs(var/datum/D, var/datum/targ)
 	. = 0
-	for(var/V in D.vars)
+	var/list/Dvars = D.vars
+	for(var/V in Dvars)
 		if(V == "contents" || V == "vars")
 			continue
-		if(istype(D.vars[V], /datum))
-			var/datum/A = D.vars[V]
-			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D] | [D.type], var [V]")
-				. += 1
-		else if(islist(D.vars[V]))
-			. += LookForListRefs(D.vars[V], targ, D, V)
+		var/datum/A = Dvars[V]
+		if(A == targ)
+			testing("GC: [A] | [A.type] referenced by [ref(D)] [D] | [D.type], var [V]")
+			.++
+		else if(islist(A))
+			. += LookForListRefs(A, targ, D, V)
 
 /datum/subsystem/garbage/proc/LookForListRefs(var/list/L, var/datum/targ, var/datum/D, var/V, var/list/foundcache = list())
 	. = 0
@@ -159,12 +193,12 @@ var/soft_dels = 0
 		if(istype(F, /datum))
 			var/datum/A = F
 			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V]")
 				. += 1
 		if(istype(G, /datum))
 			var/datum/A = G
 			if(A == targ)
-				testing("GC: [A] | [A.type] referenced by [D? "[D] | [D.type]" : "global list"], list [V] at key [F]")
+				testing("GC: [A] | [A.type] referenced by [D? "[ref(D)] [D] | [D.type]" : "global list"], list [V] at key [F]")
 				. += 1
 		if(islist(F))
 			. += LookForListRefs(F, targ, D, "[F] in list [V]", foundcache)
@@ -198,7 +232,7 @@ var/soft_dels = 0
  * NEVER USE THIS FOR /atom OTHER THAN /atom/movable
  * BASE ATOMS CANNOT BE QDEL'D BECAUSE THEIR LOC IS LOCKED.
  */
-/proc/qdel(const/datum/D, ignore_pooling = 0)
+/proc/qdel(const/datum/D)
 	if(isnull(D))
 		return
 
@@ -216,11 +250,6 @@ var/soft_dels = 0
 		SSgarbage.dels_count++
 		return
 
-	//This is broken. The correct index to use is D.type, not "[D.type]"
-	if(("[D.type]" in masterdatumPool) && !ignore_pooling)
-		returnToPool(D)
-		return
-
 	if(isnull(D.gcDestroyed))
 		// Let our friend know they're about to get fucked up.
 		D.Destroy()
@@ -228,6 +257,7 @@ var/soft_dels = 0
 		SSgarbage.addTrash(D)
 
 /datum/proc/Destroy()
+	SHOULD_CALL_PARENT(TRUE)
 	gcDestroyed = "Bye, world!"
 	tag = null
 

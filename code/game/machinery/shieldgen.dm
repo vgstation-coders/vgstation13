@@ -541,6 +541,9 @@
 /obj/machinery/shieldwall/acidable()
 	return 0
 
+/obj/machinery/shieldwall/can_overload()
+	return 0
+
 /obj/machinery/shieldwall/New(var/obj/machinery/shieldwallgen/A, var/obj/machinery/shieldwallgen/B)
 	..()
 	src.gen_primary = A

@@ -4,6 +4,7 @@
 
 /obj/item/ammo_storage/box
 	exact = 1
+	starting_materials = list(MAT_IRON = 2000)
 
 /obj/item/ammo_storage/box/a357
 	name = "ammo box (.357)"

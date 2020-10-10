@@ -54,7 +54,7 @@
 	if(!verb_holder)
 		return
 	if(!path)
-		returnToPool(verb_holder)
+		qdel(verb_holder)
 		verb_holder = null
 		return
 
@@ -208,7 +208,7 @@
 		if(P.isVerb)
 			verb_holder.verbs -= P.verbpath
 
-	returnToPool(verb_holder)
+	qdel(verb_holder)
 	verb_holder = null
 
 

@@ -17,6 +17,7 @@ var/area/space_area
 	var/shuttle_can_crush = TRUE
 	var/project_shadows = FALSE
 	var/obj/effect/narration/narrator = null
+	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 	flags = 0
 

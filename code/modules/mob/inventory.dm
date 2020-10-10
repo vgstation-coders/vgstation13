@@ -207,7 +207,7 @@
 	return put_in_hand(GRASP_RIGHT_HAND, W)
 
 /mob/proc/put_in_hand_check(var/obj/item/W, index)
-	if(lying) //&& !(W.flags & ABSTRACT))
+	if(lying && !W.laying_pickup) //&& !(W.flags & ABSTRACT))
 		return 0
 	if(!isitem(W))
 		return 0

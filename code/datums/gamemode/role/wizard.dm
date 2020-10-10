@@ -46,9 +46,10 @@
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
 		if(GREET_MIDROUND)
 			switch(faction.name)
-				if("The Manajerks","The Quickvillains")
+				if("The Wizardly Peoples' Front","The Peoples' Front for Wizards")
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='info'>You are a Space Wizard!</br></span>")
-					to_chat(antag.current, "<span class='danger'>The Wizard Federation is in civil war! You have 7 minutes to leave your den - choose quickly and leave, you MUST NOT fight here. You are part of [faction]. Enemy wizards will not have a visible wizard icon, but friendly wizards will.</br></span>")
+					to_chat(antag.current, "<span class='danger'>The Wizard Federation is in civil war! Plan your strategy in the den and coordinate with your teammate! You are part of [faction]. Enemy wizards will not have a visible wizard icon, but friendly wizards will.</br></span>")
+					to_chat(antag.current, "<span class='danger' style='font-size:14pt'>The den is neutral ground! Do NOT fight here!</br></span>")
 					to_chat(antag.current, "<span class='info'>[faction.desc]</span>")
 				else
 					to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Space Wizard!!</br></span>")

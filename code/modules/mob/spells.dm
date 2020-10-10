@@ -18,7 +18,7 @@
 					mind.wizard_spells += spell_to_add
 				return 1
 
-	var/obj/abstract/screen/movable/spell_master/new_spell_master = getFromPool(master_type) //we're here because either we didn't find our type, or we have no spell masters to attach to
+	var/obj/abstract/screen/movable/spell_master/new_spell_master = new master_type //we're here because either we didn't find our type(or we have no spell masters to attach t)
 	if(client)
 		src.client.screen += new_spell_master
 	new_spell_master.spell_holder = src

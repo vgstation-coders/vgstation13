@@ -8,7 +8,7 @@
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/centcom
 	desc = "Regal green gloves, with a nice gold trim. Lordy."
@@ -27,7 +27,7 @@
 	icon_state = "black"
 	item_state = "black"
 	siemens_coefficient = 1.0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/swat
 	desc = "These tactical gloves are somewhat fire and impact-resistant."
@@ -38,7 +38,7 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/swat/operator
 	name = "operator gloves"
@@ -94,7 +94,7 @@
 	permeability_coefficient = 0.05
 	heat_conductivity = INS_GLOVES_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = GLOVES_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/latex
 	name = "latex gloves"
@@ -104,7 +104,7 @@
 	siemens_coefficient = 0.30
 	permeability_coefficient = 0.01
 	_color = "medical"				//matches cmo stamp
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	sterility = 100
 
 /obj/item/clothing/gloves/botanic_leather
@@ -114,7 +114,7 @@
 	item_state = "leather"
 	permeability_coefficient = 0.9
 	siemens_coefficient = 0.9
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/batmangloves
 	desc = "Used for handling all things bat related."
@@ -135,28 +135,28 @@
 	name = "DRN-001 Gloves"
 	icon_state = "megagloves"
 	item_state = "megagloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/protogloves
 	desc = "Funcionally identical to the DRN-001 model's, but in red!"
 	name = "Prototype Gloves"
 	icon_state = "protogloves"
 	item_state = "protogloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/megaxgloves
 	desc = "An upgrade to the DRN-001's gauntlets, retains the uncomfortable armor, but comes with white gloves!"
 	name = "Maverick Hunter gloves"
 	icon_state = "megaxgloves"
 	item_state = "megaxgloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/joegloves
 	desc = "Large grey gloves, very similar to the Prototype's."
 	name = "Sniper Gloves"
 	icon_state = "joegloves"
 	item_state = "joegloves"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/doomguy
 	desc = ""
@@ -193,7 +193,7 @@
 	desc = "When you're a jerk, everybody loves you."
 	icon_state = "anchorarms"
 	item_state = "anchorarms"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/gloves/neorussian
 	name = "neo-Russian gloves"
@@ -366,6 +366,10 @@
 	sharpness_added = 2
 	hitsound_added = 'sound/weapons/slice.ogg'
 	attack_verb_override = "claws"
+
+/obj/item/clothing/gloves/warping_claws/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
 
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE

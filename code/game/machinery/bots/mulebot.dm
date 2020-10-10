@@ -79,7 +79,7 @@ var/global/mulebot_count = 0
 
 
 /obj/machinery/bot/mulebot/New()
-	..()
+	. = ..()
 	wires = new(src)
 	botcard = new(src)
 	var/datum/job/cargo_tech/J = new/datum/job/cargo_tech
@@ -87,10 +87,9 @@ var/global/mulebot_count = 0
 	cell = new(src)
 	cell.charge = 2000
 	cell.maxcharge = 2000
-	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
-		initialize()
 
 /obj/machinery/bot/mulebot/initialize()
+	. = ..()
 	mulebot_count += 1
 	if(!suffix)
 		suffix = "#[mulebot_count]"
@@ -109,6 +108,9 @@ var/global/mulebot_count = 0
 	if(wires)
 		qdel(wires)
 		wires = null
+	if(cell)
+		qdel(cell)
+		cell = null
 
 	..()
 
@@ -428,14 +430,31 @@ var/global/mulebot_count = 0
 // can load anything if emagged
 
 /obj/machinery/bot/mulebot/MouseDropTo(var/atom/movable/C, mob/user)
-
-	if(user.stat)
+	if(!istype(C))
 		return
 
-	if (!on || !istype(C)|| C.anchored || get_dist(user, src) > 1 || get_dist(src,C) > 1 )
+	if(user.stat)
+		to_chat(user, "<span class='warning'>Not while you're unconscious.</span>")
+		return
+
+	if(!on)
+		to_chat(user, "<span class='warning'>\The [src] is off, turn it on first.</span>")
+		return
+
+	if(C.anchored)
+		to_chat(user, "<span class='warning'>\The [C] is stuck to the floor!</span>")
+		return
+
+	if(get_dist(user, src) > 1)
+		to_chat(user, "<span class='warning'>You're too far away.</span>")
+		return
+
+	if (get_dist(src, C) > 1)
+		to_chat(user, "<span class='warning'>\The [C] is too far away.</span>")
 		return
 
 	if(is_locking(/datum/locking_category/mulebot))
+		to_chat(user, "<span class='warning'>\The [src] is already full.</span>")
 		return
 
 	load(C)
@@ -553,7 +572,7 @@ var/global/mulebot_count = 0
 
 /obj/machinery/bot/mulebot/proc/request_path(var/new_dest)
 	var/datum/radio_frequency/frequency = radio_controller.return_frequency(beacon_freq)
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	var/list/keyval = list(
@@ -770,7 +789,6 @@ var/global/mulebot_count = 0
 
 	spark(src)
 
-	var/obj/effect/decal/cleanable/blood/oil/O = getFromPool(/obj/effect/decal/cleanable/blood/oil, src.loc)
-	O.New(O.loc)
+	new /obj/effect/decal/cleanable/blood/oil(src.loc)
 	unload(0)
 	qdel(src)

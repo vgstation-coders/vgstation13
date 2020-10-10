@@ -139,16 +139,15 @@
 		if(loadedammo)
 			to_chat(user, "There is already something in the barrel of \the [src].")
 			return
-		if(!user.drop_item(W, src))
-			to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
-			return 1
 		to_chat(user, "You load \a [W] into the barrel of \the [src].")
 		if(istype(W, /obj/item/stack/rods))
 			var/obj/item/stack/rods/R = W
 			R.use(1)
 			loadedammo = new /obj/item/stack/rods(null)
 		else if(istype(W, /obj/item/weapon/nullrod))
-			W.forceMove(src)
+			if(!user.drop_item(W, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [W]!</span>")
+				return 1
 			loadedammo = W
 		else if(istype(W, /obj/item/weapon/coin))
 			var/obj/item/weapon/coin/C = W
@@ -158,9 +157,10 @@
 			if (C.siemens_coefficient == 0)
 				to_chat(user, "That [C.name] won't work.")
 				return
-			else
-				C.forceMove(src)
-				loadedammo = C
+			if(!user.drop_item(C, src))
+				to_chat(user, "<span class='warning'>You can't let go of \the [C]!</span>")
+				return 1
+			loadedammo = C
 		update_icon()
 
 	else if(W.is_screwdriver(user))
@@ -171,6 +171,8 @@
 			to_chat(user, "You tighten the rail assembly inside \the [src].")
 			W.playtoolsound(src, 50)
 		rails_secure = !rails_secure
+	else
+		to_chat(user, "<span class='warning'>\The [W] won't fit inside \the [src].</span>")
 
 /obj/item/weapon/gun/projectile/railgun/examine(mob/user)
 	..()

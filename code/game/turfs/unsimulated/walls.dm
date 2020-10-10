@@ -7,6 +7,8 @@
 	explosion_block = 2
 	blocks_air = 1
 
+	holomap_draw_override = HOLOMAP_DRAW_FULL
+
 	var/walltype = "riveted"
 /turf/unsimulated/wall/canSmoothWith()
 	var/static/list/smoothables = list(/turf/unsimulated/wall)

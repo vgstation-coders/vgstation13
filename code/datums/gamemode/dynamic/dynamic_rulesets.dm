@@ -11,6 +11,7 @@
 	var/list/job_priority = list() //May be used by progressive_job_search for prioritizing some jobs for a role. Order matters.
 	var/list/enemy_jobs = list()//if set, there needs to be a certain amount of players doing those jobs (among the players who won't be drafted) for the rule to be drafted
 	var/required_pop = list(10,10,0,0,0,0,0,0,0,0)//if enemy_jobs was set, this is the amount of population required for the ruleset to fire. enemy jobs count double
+	var/required_enemies = list(0,0,0,0,0,0,0,0,0,0)		//If set, the ruleset requires this many enemy jobs to be filled in order to fire (per threat level)
 	var/required_candidates = 0//the rule needs this many candidates (post-trimming) to be executed (example: Cult need 4 players at round start)
 	var/weight = 5//1 -> 9, probability for this rule to be picked against other rules
 	var/list/weekday_rule_boost = list()
@@ -108,6 +109,10 @@
 	pop_and_enemies += enemies_count // Enemies count twice
 
 	var/threat = round(mode.threat_level/10)
+	if (enemies_count <= required_enemies[threat])
+		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
+		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
+		return FALSE
 	if (pop_and_enemies >= required_pop[threat])
 		return TRUE
 	if (!dead_dont_count)//roundstart check only
@@ -116,15 +121,23 @@
 	return FALSE
 
 /datum/dynamic_ruleset/proc/get_weight()
-	weight *= weight_time_day()
-	if(repeatable && weight > 1)
-		for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
-			if(istype(DR,src.type))
-				weight = max(weight-2,1)
-			if(DR.role_category == src.role_category) // Same kind of antag.
-				weight = max(weight-1,1)
-	message_admins("[name] had [weight] weight (-[initial(weight) - weight]).")
-	return weight
+	var/result = weight
+	result *= weight_time_day()
+	var/halve_result = FALSE
+	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
+		if(DR.role_category == src.role_category) // Same kind of antag.
+			halve_result = TRUE
+			break
+	if(!halve_result)
+		for(var/entry in mode.last_round_executed_rules)
+			var/datum/dynamic_ruleset/DR = entry
+			if(initial(DR.role_category) == src.role_category)
+				halve_result = TRUE
+				break
+	if(halve_result)
+		result /= 2
+	message_admins("[name] had [result] weight (-[initial(weight) - result]).")
+	return result
 
 //Return a multiplicative weight. 1 for nothing special.
 /datum/dynamic_ruleset/proc/weight_time_day()

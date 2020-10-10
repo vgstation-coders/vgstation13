@@ -27,6 +27,12 @@
 
 	..()
 
+/obj/item/clothing/suit/storage/wintercoat/Destroy()
+	if(hood)
+		qdel(hood)
+		hood = null
+	..()
+
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
 	desc = "A hood attached to a heavy winter jacket."
@@ -41,6 +47,12 @@
 		coat = wc
 	else if(!coat)
 		qdel(src)
+
+/obj/item/clothing/head/winterhood/Destroy()
+	if(coat)
+		coat.hood = null
+		coat = null
+	..()
 
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"
@@ -97,7 +109,8 @@
 		/obj/item/device/healthanalyzer,
 		/obj/item/device/flashlight/pen,
 		/obj/item/weapon/minihoe,
-		/obj/item/weapon/switchtool)
+		/obj/item/weapon/switchtool,
+		/obj/item/weapon/autopsy_scanner/healthanalyzerpro)
 
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"
@@ -187,7 +200,7 @@
 		/obj/item/weapon/soap,
 		/obj/item/weapon/reagent_containers/spray,
 		/obj/item/weapon/bikehorn)
-		
+
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
 	icon_state = "coatmime"

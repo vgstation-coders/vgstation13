@@ -1,4 +1,4 @@
-/mob/living/carbon/alien/gib()
+/mob/living/carbon/alien/gib(animation = FALSE, meat = TRUE)
 	death(1)
 	monkeyizing = 1
 	canmove = 0

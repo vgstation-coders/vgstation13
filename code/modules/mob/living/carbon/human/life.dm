@@ -167,7 +167,6 @@ var/global/list/organ_damage_overlays = list(
 		handle_shock()
 		handle_pain()
 		handle_medical_side_effects()
-		handle_equipment()
 	handle_stasis_bag()
 	if(life_tick > 5 && timeofdeath && (timeofdeath < 5 || world.time - timeofdeath > 6000)) //We are long dead, or we're junk mobs spawned like the clowns on the clown shuttle
 		cycle = "DEAD"

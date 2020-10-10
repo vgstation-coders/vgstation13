@@ -560,7 +560,7 @@ var/global/list/airalarm_presets = list(
 	if(!radio_connection)
 		return 0
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.transmission_method = 1 //radio signal
 	signal.source = src
 
@@ -700,7 +700,7 @@ var/global/list/airalarm_presets = list(
 	if(!frequency)
 		return
 
-	var/datum/signal/alert_signal = getFromPool(/datum/signal)
+	var/datum/signal/alert_signal = new /datum/signal
 	alert_signal.source = src
 	alert_signal.transmission_method = 1
 	var/area/this_area = get_area(src)
@@ -1070,7 +1070,7 @@ var/global/list/airalarm_presets = list(
 				update_icon()
 				user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 				W.playtoolsound(src, 50)
-				getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+				new /obj/item/stack/cable_coil(get_turf(user), 5)
 				return
 			if(istype(W, /obj/item/weapon/card/id) || istype(W, /obj/item/device/pda))// trying to unlock the interface with an ID card
 				if(stat & (NOPOWER|BROKEN))
@@ -1274,7 +1274,7 @@ FIRE ALARM
 						buildstage=1
 						user.visible_message("<span class='attack'>[user] has cut the wiring from \the [src]!</span>", "You have cut the last of the wiring from \the [src].")
 						update_icon()
-						getFromPool(/obj/item/stack/cable_coil, get_turf(user), 5)
+						new /obj/item/stack/cable_coil(get_turf(user), 5)
 			if(1)
 				if(iscablecoil(W))
 					var/obj/item/stack/cable_coil/coil = W

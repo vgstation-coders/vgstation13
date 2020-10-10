@@ -28,7 +28,7 @@
 
 /turf/simulated/wall/mineral/wood/ex_act(var/severity)
 	if(severity < 3)
-		getFromPool(/obj/item/stack/sheet/wood, src, 2)
+		new /obj/item/stack/sheet/wood(src, 2)
 	..()
 
 /turf/simulated/wall/mineral/brick

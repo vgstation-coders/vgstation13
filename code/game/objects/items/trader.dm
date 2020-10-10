@@ -862,18 +862,17 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/vachandle/pickup(mob/user)
 	..()
-	event_key = user.on_moved.Add(src, "mob_moved")
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/vachandle/dropped(mob/user)
-	user.on_moved.Remove(event_key)
-	event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 	if(loc != myvac)
 		retract()
 
 /obj/item/vachandle/throw_at()
 	retract()
 
-/obj/item/vachandle/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/vachandle/proc/mob_moved(atom/movable/mover)
 	if(myvac && get_dist(src,myvac) > 2) //Needs a little leeway because dragging isn't instant
 		retract()
 
@@ -983,7 +982,6 @@ var/global/list/alcatraz_stuff = list(
 	icon_state = "pedometer"
 	w_class = W_CLASS_SMALL
 	slot_flags = SLOT_BELT
-	var/event_key = null
 	var/count = 0
 	var/list/approved_areas = list(/area/maintenance,/area/hallway)
 	var/list/special_rewards = list(/obj/item/weapon/pen/tactical)
@@ -997,14 +995,13 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/pedometer/pickup(mob/user)
 	..()
-	event_key = user.on_moved.Add(src, "mob_moved")
+	user.lazy_register_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
 /obj/item/pedometer/dropped(mob/user)
 	..()
-	user.on_moved.Remove(event_key)
-	event_key = null
+	user.lazy_unregister_event(/lazy_event/on_moved, src, .proc/mob_moved)
 
-/obj/item/pedometer/proc/mob_moved(var/list/event_args, var/mob/holder)
+/obj/item/pedometer/proc/mob_moved(atom/movable/mover)
 	var/turf/T = get_turf(src)
 	var/area/A = get_area(T)
 	if(is_type_in_list(A,approved_areas))
@@ -1017,6 +1014,7 @@ var/global/list/alcatraz_stuff = list(
 				path = pick(regular_rewards)
 			if(path)
 				var/obj/item/I = new path(get_turf(src))
-				if(isliving(holder))
-					holder.put_in_hands(I)
-				to_chat(holder,"<span class='good'>\The [src] dispenses a reward!</span>")
+				if(isliving(mover))
+					var/mob/living/living_mover = mover
+					living_mover.put_in_hands(I)
+				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")

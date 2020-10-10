@@ -203,11 +203,13 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	app.onInstall(src)
 	var/datum/pda_app/balance_check/app2 = new /datum/pda_app/alarm()
 	app2.onInstall(src)
-	reply = src
 
 	PDAs += src
 	if(default_cartridge)
 		cartridge = new default_cartridge(src)
+		// PDA being given out to people during the cuck cube
+		if(ticker && ticker.current_state >= GAME_STATE_SETTING_UP)
+			cartridge.initialize()
 	new /obj/item/weapon/pen(src)
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
@@ -216,6 +218,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	currentevent3 = pick(currentevents3)
 	onthisday = pick(history)
 	didyouknow = pick(facts)
+
+/obj/item/device/pda/initialize()
+	. = ..()
+	if (cartridge)
+		cartridge.initialize()
 
 /obj/item/device/pda/medical
 	name = "Medical PDA"
@@ -329,9 +336,17 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	name = "Nanotrasen Navy Captain PDA"
 	ownjob = "Nanotrasen Navy Captain"
 
+/obj/item/device/pda/heads/nt_captain/New()
+	..()
+	get_all_apps()
+
 /obj/item/device/pda/heads/nt_supreme
 	name = "Nanotrasen Supreme Commander PDA"
 	ownjob = "Nanotrasen Supreme Commander"
+
+/obj/item/device/pda/heads/nt_supreme/New()
+	..()
+	get_all_apps()
 
 /obj/item/device/pda/heads/hop
 	name = "Head of Personnel PDA"
@@ -391,11 +406,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 
 /obj/item/device/pda/captain/New()
 	..()
-	for(var/A in applications)
-		qdel(A)
-	for(var/app_type in (typesof(/datum/pda_app) - /datum/pda_app))	//yes, the captain is such a baller that his PDA has all the apps by default.
-		var/datum/pda_app/app = new app_type()						//will have to edit that when emagged/hidden apps get added.
-		app.onInstall(src)
+	get_all_apps()
 
 /obj/item/device/pda/cargo
 	name = "Cargo PDA"
@@ -459,6 +470,12 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	desc = "A portable microcomputer by Thinktronic Systems, LTD. This is model is a WGW-11 series e-reader."
 	note = "Congratulations, your station has chosen the Thinktronic 5290 WGW-11 Series E-reader and Personal Data Assistant!"
 	silent = 1 //Quiet in the library!
+
+
+/obj/item/device/pda/librarian/New()
+	..()
+	var/datum/pda_app/newsreader/app = new /datum/pda_app/newsreader()
+	app.onInstall(src)
 
 /obj/item/device/pda/clear
 	icon_state = "pda-transp"
@@ -632,6 +649,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 /*
  *	The Actual PDA
  */
+
+/obj/item/device/pda/proc/get_all_apps()
+	for(var/A in applications)
+		applications -= A
+		qdel(A)
+	for(var/app_type in subtypesof(/datum/pda_app))
+		var/datum/pda_app/app = new app_type()
+		app.onInstall(src)
 
 /obj/item/device/pda/proc/can_use(mob/user)
 	if(user && ismob(user))
@@ -1121,6 +1146,55 @@ var/global/list/obj/item/device/pda/PDAs = list()
 							<a href='?src=\ref[cartridge.radio];bot=\ref[med];command=switch_power;user=\ref[usr]'>Turn [med.on ? "off" : "on"]</a> <br/>
 							</li>"}
 				dat += "</ul>"
+			if (PDA_APP_NEWSREADER)
+				var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
+				if(app)
+					switch(app.screen)
+						if (NEWSREADER_CHANNEL_LIST)
+							dat += {"<h4>Station Feed Channels</h4>"}
+							if(news_network.wanted_issue)
+								dat+= "<HR><b><A href='?src=\ref[src];choice=viewWanted'>Read Wanted Issue</A></b><HR>"
+							if(isemptylist(news_network.network_channels))
+								dat+="<br><i>No active channels found...</i>"
+							else
+								for(var/datum/feed_channel/channel in news_network.network_channels)
+									if(channel.is_admin_channel)
+										dat+="<b><a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a></b><br>"
+									else
+										dat+="<a href='?src=\ref[src];choice=readNews;channel=\ref[channel]'>[channel.channel_name]</a> [(channel.censored) ? ("***") : ""]<br>"
+						if (NEWSREADER_VIEW_CHANNEL)
+							dat+="<b>[app.viewing_channel.channel_name]: </b><font size=1>\[created by: <b>[app.viewing_channel.author]</b>\]</font><HR>"
+							if(app.viewing_channel.censored)
+								dat += {"<B>ATTENTION: </B></font>This channel has been deemed as threatening to the welfare of the station, and marked with a Nanotrasen D-Notice.<br>
+									No further feed story additions are allowed while the D-Notice is in effect.<br><br>"}
+							else
+								if( isemptylist(app.viewing_channel.messages) )
+									dat+="<i>No feed messages found in channel...</i><br>"
+								else
+									var/i = 0
+									for(var/datum/feed_message/message in app.viewing_channel.messages)
+										i++
+										dat+="-[message.body] <br>"
+										if(message.img)
+											usr << browse_rsc(message.img_pda, "tmp_photo_pda[i].png")
+
+											dat+="<a href='?src=\ref[src];choice=showPhotoInfo;showPhotoInfo=\ref[message]'><img src='tmp_photo_pda[i].png' width = '192'></a><br>"
+										dat+="<font size=1>\[Story by <b>[message.author]</b>\]</font><HR>"
+
+							dat += {"<br><a href='?src=\ref[src];choice=viewChannels'>Back</a>"}
+						if (NEWSREADER_WANTED_SHOW)
+							dat += {"<B>-- STATIONWIDE WANTED ISSUE --</B><BR><FONT SIZE=2>\[Submitted by: <b>[news_network.wanted_issue.backup_author]</b>\]</FONT><HR>
+								<B>Criminal</B>: [news_network.wanted_issue.author]<BR>
+								<B>Description</B>: [news_network.wanted_issue.body]<BR>
+								<B>Photo:</B>: "}
+							if(news_network.wanted_issue.img_pda)
+								usr << browse_rsc(news_network.wanted_issue.img_pda, "tmp_photow_pda.png")
+								dat+="<BR><img src='tmp_photow_pda.png' width = '180'>"
+							else
+								dat+="None"
+
+							dat += {"<br><a href='?src=\ref[src];choice=viewChannels'>Back</a>"}
+
 			if (PDA_APP_SNAKEII)
 				if(user.client) //If we have a client to send to, in reality none of this proc is needed in that case but eh I don't care.
 					var/datum/asset/simple/C = new/datum/asset/simple/pda_snake()
@@ -1621,6 +1695,28 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			qdel(mkr)
 			mkr = null
 		*/
+		if("108")//PDA_APP_NEWSREADER
+			mode = PDA_APP_NEWSREADER
+
+		if("readNews")
+			var/datum/feed_channel/channel = locate(href_list["channel"])
+			if (channel)
+				var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
+				app.viewing_channel = channel
+				app.screen = NEWSREADER_VIEW_CHANNEL
+
+		if("viewChannels")
+			var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
+			app.screen = NEWSREADER_CHANNEL_LIST
+
+		if("viewWanted")
+			var/datum/pda_app/newsreader/app = locate(/datum/pda_app/newsreader) in applications
+			app.screen = NEWSREADER_WANTED_SHOW
+
+		if("showPhotoInfo")
+			var/datum/feed_message/FM = locate(href_list["showPhotoInfo"])
+			if(istype(FM) && FM.img_info)
+				usr.show_message("<span class='info'>[FM.img_info]</span>", MESSAGE_SEE)
 
 //GAME FUNCTIONS====================================
 
@@ -2192,7 +2288,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			id.forceMove(get_turf(src))
 		id = null
 
-/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P,var/multicast_message = null)
+/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P,var/multicast_message = null, obj/item/device/pda/reply_to)
+	if(!reply_to)
+		reply_to = src
 	if (!istype(P)||P.toff)
 		return
 	var/t = multicast_message
@@ -2235,7 +2333,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		useMS.send_pda_message("[P.owner]","[owner]","[t]")
 
 		tnote += "<i><b>&rarr; To [P.owner]:</b></i><br>[t]<br>"
-		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
+		P.tnote += "<i><b>&larr; From <a href='byond://?src=\ref[P];choice=Message;target=\ref[reply_to]'>[owner]</a> ([ownjob]):</b></i><br>[t]<br>"
 		for(var/mob/dead/observer/M in player_list)
 			if(!multicast_message && M.stat == DEAD && M.client && (M.client.prefs.toggles & CHAT_GHOSTPDA)) // src.client is so that ghosts don't have to listen to mice
 				M.show_message("<a href='?src=\ref[M];follow=\ref[U]'>(Follow)</a> <span class='game say'>PDA Message - <span class='name'>\
@@ -2265,7 +2363,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			L = get_holder_of_type(P, /mob/living/silicon)
 
 		if(L)
-			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply]'>Reply</a>)", 2)
+			L.show_message("[bicon(P)] <b>Message from [src.owner] ([ownjob]), </b>\"[t]\" (<a href='byond://?src=\ref[P];choice=Message;skiprefresh=1;target=\ref[reply_to]'>Reply</a>)", 2)
 		U.show_message("[bicon(src)] <span class='notice'>Message for <a href='byond://?src=\ref[src];choice=Message;skiprefresh=1;target=\ref[P]'>[P]</a> has been sent.</span>")
 		log_pda("[key_name(usr)] (PDA: [src.name]) sent \"[t]\" to [P.name]")
 		P.overlays.len = 0
@@ -2417,7 +2515,7 @@ obj/item/device/pda/AltClick()
 		switch(scanmode)
 
 			if(SCANMODE_MEDICAL)
-				healthanalyze(C,user,0)
+				healthanalyze(C,user,1)
 
 			if(SCANMODE_FORENSIC)
 				if (!istype(C:dna, /datum/dna))
@@ -2524,6 +2622,8 @@ obj/item/device/pda/AltClick()
 		pai = null
 
 	if(cartridge)
+		if (cartridge.radio)
+			cartridge.radio.hostpda = null
 		qdel(cartridge)
 		cartridge = null
 

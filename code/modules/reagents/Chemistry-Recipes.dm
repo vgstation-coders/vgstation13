@@ -337,12 +337,12 @@
 	result = KELOTANE
 	required_reagents = list(SILICON = 1, CARBON = 1)
 	result_amount = 2
-	
+
 /datum/chemical_reaction/blisterol
 	name = "Blisterol"
 	id = BLISTEROL
 	result = BLISTEROL
-	required_reagents = list(ALUMINIUM = 1, COPPER = 1, FUEL = 2)
+	required_reagents = list(ALUMINUM = 1, COPPER = 1, FUEL = 2)
 	result_amount = 3
 
 /datum/chemical_reaction/virus_food
@@ -704,14 +704,14 @@
 	result = LIPOZINE
 	required_reagents = list(SODIUMCHLORIDE = 1, ETHANOL = 1, RADIUM = 1)
 	result_amount = 3
-	
+
 /datum/chemical_reaction/dietine
 	name = "Dietine"
 	id = DIETINE
 	result = DIETINE
 	required_reagents = list(SODIUMCHLORIDE = 1, COFFEE = 3, LITHIUM = 1, FUEL = 1)
 	result_amount = 1
-	
+
 /datum/chemical_reaction/gatormix
 	name = "Gator Mix"
 	id = GATORMIX
@@ -860,7 +860,7 @@
 	required_reagents = list(HYDROGEN = 1, CHLORINE = 1, ETHANOL = 1)
 	required_catalysts = list(FLUORINE = 5)
 	result_amount = 1
-	
+
 /datum/chemical_reaction/mannitol
 	name = "Mannitol"
 	id = MANNITOL
@@ -1252,7 +1252,7 @@
 	required_container = /obj/item/slime_extract/metal
 
 /datum/chemical_reaction/slime_extract/slimemetal/on_reaction(var/datum/reagents/holder)
-	var/obj/item/stack/sheet/metal/M = getFromPool(/obj/item/stack/sheet/metal, get_turf(holder.my_atom))
+	var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(holder.my_atom))
 	M.amount = 15
 	var/obj/item/stack/sheet/plasteel/P = new /obj/item/stack/sheet/plasteel
 	P.amount = 5
@@ -1577,8 +1577,10 @@
 			/obj/item/stack/sheet/mineral/silver,
 			/obj/item/stack/sheet/mineral/gold,
 			/obj/item/stack/sheet/mineral/uranium)
-	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
-	getFromPool(pick(paths), get_turf(holder.my_atom), 5)
+	var/path = pick(paths)
+	new path(get_turf(holder.my_atom), 5)
+	path = pick(paths)
+	new path(get_turf(holder.my_atom), 5)
 	..()
 
 //Blue
@@ -3073,14 +3075,14 @@
 	result = FIRERITA
 	required_reagents = list(CINNAMONWHISKY = 1, TRIPLESEC = 1, TEQUILA = 3)
 	result_amount = 5
-	
+
 /datum/chemical_reaction/magica
 	name = "Magica"
 	id = MAGICA
 	result = MAGICA
 	required_reagents = list(CINNAMONWHISKY = 1, BITTERS = 1)
 	result_amount = 2
-	
+
 /datum/chemical_reaction/magicadeluxe
 	name = "Magica Deluxe"
 	id = MAGICADELUXE
@@ -3382,6 +3384,13 @@
 	id = WAIFU
 	result = WAIFU
 	required_reagents = list(SAKE = 1, KARMOTRINE = 4)
+	result_amount = 5
+	
+/datum/chemical_reaction/husbando
+	name = "Husbando"
+	id = HUSBANDO
+	result = HUSBANDO
+	required_reagents = list(MANLYDORF = 1, KARMOTRINE = 4)
 	result_amount = 5
 
 /datum/chemical_reaction/beepskyclassic

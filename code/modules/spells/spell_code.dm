@@ -24,6 +24,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 	var/silenced = 0 //not a binary (though it seems that it is at the moment) - the length of time we can't cast this for, set by the spell_master silence_spells()
 
 	var/price = Sp_BASE_PRICE //How much does it cost to buy this spell from a spellbook
+	var/quicken_price = Sp_BASE_PRICE * 0.5 //How much lowering the spell cooldown costs in the spellbook
 	var/refund_price = 0 //If 0, non-refundable
 
 	var/holder_var_type = "bruteloss" //only used if charge_type equals to "holder_var"
@@ -148,7 +149,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		return (target in options)
 	return ((target in view_or_range(range, user, selection_type)) && istype(target, /mob/living))
 
-/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override) //if recharge is started is important for the trigger spells
+/spell/proc/perform(mob/user = usr, skipcharge = 0, list/target_override)
 	if(!holder)
 		set_holder(user) //just in case
 
@@ -191,7 +192,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		invocation(user, targets)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = targets, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = targets))
 
 		if(prob(critfailchance))
 			critfail(targets, user)
@@ -209,48 +210,36 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		if(!cast_check(skipcharge, user))
 			return 0
 		user.remove_spell_channeling() //In case we're swapping from an older spell to this new one
-		user.spell_channeling = user.on_uattack.Add(src, "channeled_spell")
+		user.lazy_register_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
+		user.spell_channeling = src
 		if(spell_flags & CAN_CHANNEL_RESTRAINED)
-			user.spell_channeling = user.on_ruattack.Add(src, "channeled_spell")
+			user.lazy_register_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
+			user.spell_channeling = src
 		connected_button.name = "(Ready) [name]"
 		currently_channeled = 1
 		connected_button.add_channeling()
 	else
-		var/event/E = user.on_uattack
-		E.handlers.Remove(user.spell_channeling)
-		var/event/ER = user.on_ruattack
-		if(ER)
-			ER.handlers.Remove(user.spell_channeling)
+		user.lazy_unregister_event(/lazy_event/on_uattack, src, .proc/channeled_spell)
+		user.lazy_unregister_event(/lazy_event/on_ruattack, src, .proc/channeled_spell)
 		user.spell_channeling = null
 		currently_channeled = 0
 		connected_button.remove_channeling()
 		connected_button.name = name
 	return 1
 
-/spell/proc/channeled_spell(var/list/args)
-	var/event/E = args["event"]
-	
-	if(!currently_channeled)
-		E.handlers.Remove("\ref[src]:channeled_spell")
-		return 0
-
-	var/atom/A = args["atom"]
-	
-	if(E.holder != holder)
-		E.handlers.Remove("\ref[src]:channeled_spell")
-		return 0
-	var/list/target = list(A)
+/spell/proc/channeled_spell(atom/atom)
+	var/list/target = list(atom)
 	var/mob/user = holder
 	user.attack_delayer.delayNext(0)
 
-	if(cast_check(1, holder) && is_valid_target(A, user))
+	if(cast_check(1, holder) && is_valid_target(atom, user))
 		target = before_cast(target, user) //applies any overlays and effects
 		if(!target.len) //before cast has rechecked what we can target
 			return
 		invocation(user, target)
 
 		user.attack_log += text("\[[time_stamp()]\] <font color='red'>[user.real_name] ([user.ckey]) cast the spell [name].</font>")
-		INVOKE_EVENT(user.on_spellcast, list("spell" = src, "target" = target, "user" = user))
+		user.lazy_invoke_event(/lazy_event/on_spellcast, list("spell" = src, "user" = user, "targets" = target))
 
 		if(prob(critfailchance))
 			critfail(target, holder)
@@ -600,6 +589,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			return empower_spell()
 
 /spell/proc/get_upgrade_price(upgrade_type)
+	if(upgrade_type == Sp_SPEED)
+		return quicken_price
 	return src.price
 
 ///INFO

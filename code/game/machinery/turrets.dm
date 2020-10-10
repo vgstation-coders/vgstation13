@@ -205,20 +205,20 @@
 	if (src.lasers)
 		switch(lasertype)
 			if(1)
-				A = getFromPool(/obj/item/projectile/beam, loc)
+				A = new /obj/item/projectile/beam(loc)
 			if(2)
-				A = getFromPool(/obj/item/projectile/beam/heavylaser, loc)
+				A = new /obj/item/projectile/beam/heavylaser(loc)
 				fire_sound = 'sound/weapons/lasercannonfire.ogg'
 			if(3)
-				A = getFromPool(/obj/item/projectile/beam/pulse, loc)
+				A = new /obj/item/projectile/beam/pulse(loc)
 				fire_sound = 'sound/weapons/pulse.ogg'
 			if(4)
-				A = getFromPool(/obj/item/projectile/change, loc)
+				A = new /obj/item/projectile/change(loc)
 				fire_sound = 'sound/weapons/radgun.ogg'
 			if(5)
-				A = getFromPool(/obj/item/projectile/beam/lasertag/blue, loc)
+				A = new /obj/item/projectile/beam/lasertag/blue(loc)
 			if(6)
-				A = getFromPool(/obj/item/projectile/beam/lasertag/red, loc)
+				A = new /obj/item/projectile/beam/lasertag/red(loc)
 		use_power(500)
 	else
 		A = new /obj/item/projectile/energy/electrode( loc )

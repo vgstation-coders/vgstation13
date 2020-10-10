@@ -412,7 +412,7 @@
 			if(mask_charge >= word_cost)
 				mask_charge -= word_cost
 				playsound(src, "sound/vox_hecu/[words_to_say[i]]!.wav", 30)
-				sleep word_delay
+				sleep(word_delay)
 		words_to_say.Cut()
 
 /obj/item/clothing/mask/gas/hecu/equipped(var/mob/user, var/slot)

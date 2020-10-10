@@ -118,7 +118,7 @@
 		new /obj/item/device/breathalyzer(), \
 		),
 		"Misc_Other"=list(
-		new /obj/item/weapon/rcd_ammo(), \
+		new /obj/item/stack/rcd_ammo(), \
 		new /obj/item/weapon/light/tube(), \
 		new /obj/item/weapon/light/bulb(), \
 		new /obj/item/ashtray/glass(), \
@@ -178,31 +178,44 @@
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/attackby(obj/item/I, mob/user)
 	if(..())
-		return 1
+		return 0
 
 	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
-			return 1
-		else if(I.materials.getAmount(MAT_IRON) + I.materials.getAmount(MAT_GLASS) < I.materials.getVolume())
-			to_chat(user, "\The [src] can only accept objects made out of metal and glass.")
-			return 1
+			return 0
+
+
+		else if(allowed_materials)
+
+			var/allowed_materials_volume = 0
+			for(var/mat_id in allowed_materials)
+				allowed_materials_volume += I.materials.storage[mat_id]
+
+			if (allowed_materials_volume != I.materials.getVolume())
+				var/output = "\The [src] can only accept objects made out of these: "
+				for(var/mat_id in allowed_materials)
+					output += (material_list[mat_id].processed_name + " ")
+				to_chat(user, output)
+				return 0
+
 		else if(isrobot(user))
 			if(isMoMMI(user))
 				var/mob/living/silicon/robot/mommi/M = user
 				if(M.is_in_modules(I))
 					to_chat(user, "You cannot recycle your built in tools.")
-					return 1
+					return 0
 			else
 				to_chat(user, "You cannot recycle your built in tools.")
-				return 1
+				return 0
 		else if(!I.recyclable())
 			to_chat(user, "<span class = 'notice'>You can not recycle /the [I] at this time.</span>")
-			return 1
+			return 0
 
 		if(user.drop_item(I, src))
 			materials.removeFrom(I.materials)
 			user.visible_message("[user] puts \the [I] into \the [src]'s recycling unit.",
 								"You put \the [I] in \the [src]'s recycling unit.")
 			qdel(I)
-		return 1
+			return 1
+	return 0

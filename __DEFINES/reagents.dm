@@ -11,6 +11,8 @@
 #define CHEMFLAG_OBSCURING 2
 
 
+#define EXPLICITLY_INVALID_REAGENT_ID "Use this ID if the reagent is not supposed to be used, like for the base type of other reagents."
+
 //Reagents
 
 #define VAPORSALT			"vaporsalt"
@@ -404,6 +406,7 @@
 #define WEED_EATER		"weed_eater"
 #define RAGSTORICHES	"ragstoriches"
 #define WAIFU			"waifu"
+#define HUSBANDO		"husbando"
 #define BEEPSKY_CLASSIC	"beepsky_classic"
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"

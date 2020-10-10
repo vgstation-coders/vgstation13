@@ -553,7 +553,12 @@ var/list/arcane_tomes = list()
 		for(var/mob/living/simple_animal/shade/A in I)
 			A.forceMove(SB)
 			SB.shade = A
-			A.give_blade_powers()
+			if (A.mind)
+				A.give_blade_powers()
+			else
+				to_chat(user,"<span class='warning'>Although the game appears to hold a shade, it somehow doesn't appear to have a mind capable of manipulating the blade.</span>")
+				to_chat(user,"<span class='danger'>(that's a bug, call Deity, and tell him exactly how you obtained that shade).</span>")
+				message_admins("[key_name(usr)] somehow placed a soul gem containing a shade with no mind inside a soul blade.")
 			break
 		SB.update_icon()
 		qdel(I)
@@ -991,7 +996,7 @@ var/list/arcane_tomes = list()
 	body_parts_visible_override = FACE
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1031,7 +1036,7 @@ var/list/arcane_tomes = list()
 	allowed = list(/obj/item/weapon/melee/cultblade,/obj/item/weapon/melee/soulblade,/obj/item/weapon/tome,/obj/item/weapon/talisman,/obj/item/weapon/blood_tesseract)
 	armor = list(melee = 50, bullet = 30, laser = 30,energy = 20, bomb = 25, bio = 25, rad = 0)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
@@ -1090,7 +1095,7 @@ var/list/arcane_tomes = list()
 	item_state = "culthelmet"
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -1114,7 +1119,7 @@ var/list/arcane_tomes = list()
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 60, bullet = 50, laser = 50,energy = 15, bomb = 50, bio = 30, rad = 30)
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED)
+	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 
@@ -1129,11 +1134,13 @@ var/list/arcane_tomes = list()
 ///////////////////////////////////////I'LL HAVE TO DEAL WITH THIS STUFF LATER////////////////////////////////////////////////
 
 /obj/item/clothing/head/culthood/old
+	name = "forgotten cult hood"
 	icon_state = "culthood_old"
 	item_state = "culthood_old"
 	species_fit = list()
 
 /obj/item/clothing/suit/cultrobes/old
+	name = "forgotten cult robes"
 	icon_state = "cultrobes_old"
 	item_state = "cultrobes_old"
 	species_fit = list()
@@ -1188,6 +1195,14 @@ var/list/arcane_tomes = list()
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_PAMPHLET)
+
+/obj/item/weapon/bloodcult_pamphlet/oneuse/attack_self(var/mob/user)
+	..()
+	qdel(src)
+
+/obj/item/weapon/bloodcult_pamphlet/oneuse/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
 
 //Jaunter: creates a pylon on spawn, lets you teleport to it on use
 /obj/item/weapon/bloodcult_jaunter

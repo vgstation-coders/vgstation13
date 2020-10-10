@@ -12,7 +12,7 @@
 **/
 
 /obj/machinery/suit_modifier
-	name = "Rigsuit modification station"
+	name = "\improper Rigsuit modification station"
 	desc = "A man-sized machine, akin to a coffin, meant to install modifications into a worn rigsuit."
 	icon = 'icons/obj/stationobjs.dmi'
 	icon_state = "suitmodifier"
@@ -40,11 +40,11 @@
 
 /obj/machinery/suit_modifier/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I, /obj/item/rig_module) && user.drop_item(I, src))
-		say("Module installed.", class = "binaryradio")
+		say("\The [I] installed.", class = "binaryradio")
 		modules_to_install.Add(I)
 		return
 	if(istype(I, /obj/item/weapon/cell) && !cell && user.drop_item(I, src))
-		say("Cell installed.", class = "binaryradio")
+		say("\The [I] installed.", class = "binaryradio")
 		cell = I
 		return
 	.=..()
@@ -56,17 +56,30 @@
 		playsound(src, 'sound/machines/buzz-two.ogg', 50, 0)
 		say("Unit Occupied.", class = "binaryradio")
 		return
-	if(!modules_to_install.len)
-		say("No modules available.", class = "binaryradio")
+	if(!modules_to_install.len && !cell)
+		say("No upgrade available.", class = "binaryradio")
 		return
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(!H.is_wearing_item(/obj/item/clothing/suit/space/rig, slot_wear_suit))
-			say("Unable to detect rigsuit on person.", class = "binaryradio")
+			say("Unable to detect rigsuit on [H].", class = "binaryradio")
 			return
 		if(H.loc == loc) //Same turf
 			lock_atom(H)
 			process_module_installation(H)
+			return
+	if((modules_to_install.len || cell) && !activated)
+		var/obj/removed = input(user, "Choose an upgrade to remove from [src].", src) as null|anything in modules_to_install + cell
+		if(!removed || activated || !user.Adjacent(src) || user.incapacitated())
+			return
+		user.put_in_hands(removed)
+		if(removed.loc == src)
+			removed.forceMove(get_turf(src))
+		if(removed == cell)
+			cell = null
+			return
+		modules_to_install -= removed
+		
 
 /obj/machinery/suit_modifier/proc/process_module_installation(var/mob/living/carbon/human/H)
 	if(activated)
@@ -85,7 +98,7 @@
 		if(locate(RM.type) in R.modules) //One already installed
 			continue
 		if(do_after(H, src, 5 SECONDS, needhand = FALSE))
-			say("Module installed to \the [R].", class = "binaryradio")
+			say("Installing [RM] into \the [R].", class = "binaryradio")
 			R.modules.Add(RM)
 			RM.rig = R
 			RM.forceMove(R)
@@ -98,11 +111,15 @@
 	suit_overlay.icon_state = "suitmodifier_closed"
 	overlays.Add(suit_overlay)
 	sleep(20)
-	if(get_cell() && R.cell.charge < cell.charge)
-		R.cell.forceMove(get_turf(src))
-		cell.forceMove(R)
-		R.cell = cell
-		cell = null
+	if(cell) //Can't answer the prompt if you're incapacitated.
+		var/choice = alert(H, "Do you wish to install [cell]?", src, "Yes", "No")
+		if((choice == "Yes") && H.Adjacent(src) && !H.incapacitated())
+			say("Installing [cell] into to \the [R].", class = "binaryradio")
+			if(R.cell)
+				R.cell.forceMove(get_turf(src))
+			cell.forceMove(R)
+			R.cell = cell
+			cell = null
 	playsound(src, 'sound/machines/pressurehiss.ogg', 40, 1)
 	new /obj/effect/effect/smoke(get_turf(src))
 	unlock_atom(H)

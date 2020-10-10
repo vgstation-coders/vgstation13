@@ -33,6 +33,7 @@ var/stacking_limit = 90
 	var/list/candidates = list()
 	var/list/current_rules = list()
 	var/list/executed_rules = list()
+	var/list/last_round_executed_rules = list()
 
 	var/list/living_players = list()
 	var/list/living_antags = list()
@@ -210,7 +211,22 @@ var/stacking_limit = 90
 
 	return 1
 
+/datum/gamemode/dynamic/proc/read_last_round_rulesets()
+	var/list/data = SSpersistence_misc.read_data(/datum/persistence_task/latest_dynamic_rulesets)
+	if(!length(data))
+		return
+	var/list/last_round_rulesets_text = data["latest_rulesets"]
+	if(!length(last_round_rulesets_text))
+		return
+	var/list/last_round_rulesets = list()
+	for(var/entry in last_round_rulesets_text)
+		var/entry_path = text2path(entry)
+		if(entry_path) // It's possible that a ruleset that existed last round doesn't exist anymore
+			last_round_rulesets += entry_path
+	last_round_executed_rules = last_round_rulesets
+
 /datum/gamemode/dynamic/Setup()
+	read_last_round_rulesets()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart) - /datum/dynamic_ruleset/roundstart/delayed/)
 		roundstart_rules += new rule()
 	for (var/rule in subtypesof(/datum/dynamic_ruleset/latejoin))
@@ -241,6 +257,7 @@ var/stacking_limit = 90
 	dynamic_stats.round_start_pop = candidates.len
 	dynamic_stats.round_start_rulesets = starting_rulesets
 	dynamic_stats.measure_threat(threat)
+	candidates.Cut()
 	return 1
 
 /datum/gamemode/dynamic/proc/rigged_roundstart()
@@ -306,7 +323,7 @@ var/stacking_limit = 90
 			rule.candidates = candidates.Copy()
 			rule.trim_candidates()
 			if (rule.ready())
-				drafted_rules[rule] = rule.weight
+				drafted_rules[rule] = rule.get_weight()
 
 	if (classic_secret)
 		message_admins("Classic secret was forced.")
@@ -337,6 +354,7 @@ var/stacking_limit = 90
 	var/datum/dynamic_ruleset/roundstart/starting_rule
 
 	while(!starting_rule && drafted_rules.len > 0)
+		message_admins("Drafted rules: [json_encode(drafted_rules)]")
 		starting_rule = pickweight(drafted_rules)
 		if (threat < stacking_limit && no_stacking)
 			for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)

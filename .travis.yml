@@ -1,21 +1,20 @@
 language: generic
 os: linux
-dist: xenial
-sudo: false
+dist: bionic
 
 env:
   global:
   - BYOND_MAJOR="513"
   - BYOND_MINOR="1523"
-  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny"
+  - ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy"
   - RUST_BACKTRACE="1"
   - RUST_TEST_THREADS=1
 
-matrix:
+jobs:
   include:
     - name: "Run linters"
       env:
-        - SPACEMAN_DMM_GIT_TAG="suite-1.4"
+        - SPACEMAN_DMM_GIT_TAG="suite-1.5"
       addons:
         apt:
           packages:
@@ -31,10 +30,10 @@ matrix:
       - pip install --user PyYaml beautifulsoup4 subprocess32 colorama -q
       - tools/travis/install_spaceman_dmm.sh dreamchecker
       script:
-      - python tools/travis/check_map_files.py maps/
+      - python3 tools/travis/check_map_files.py maps/
       - python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
       - find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
-      - ~/dreamchecker || true
+      - ~/dreamchecker
     - name: "Compile all maps"
       env:
         DM_UNIT_TESTS="0"
@@ -66,8 +65,8 @@ matrix:
             - rustc
             - cargo
             - moreutils
-            - libmariadb-client-lgpl-dev:i386
-            - libmariadbd-dev
+            - libssl1.1:i386
+            - zlib1g:i386
       cache:
         directories:
           - $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}
@@ -76,14 +75,13 @@ matrix:
           - $HOME/libmariadb
       install:
         - tools/travis/install-byond.sh
-        - tools/travis/install_libmariadb.sh
         - source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+        - tools/travis/install_rust_g.sh
         - cd libvg
         # --jobs 1 to prevent threading problems with the BYOND crate.
         - cargo test --jobs 1 --verbose
         - cd -
-        - tools/travis/build.py
-        - tools/travis/build_bsql.sh
+        - tools/travis/build.py 2>&1 | tee /dev/stderr | sponge | awk '/warning:|error:/ { exit 1 }'
         - cp tools/travis/config/config.txt config/
         - tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
 

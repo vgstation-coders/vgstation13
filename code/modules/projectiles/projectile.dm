@@ -61,7 +61,7 @@ var/list/impact_master = list()
 	var/reflected = 0
 
 	var/bounce_sound = 'sound/items/metal_impact.ogg'
-	var/bounce_type = null//BOUNCEOFF_WALLS, BOUNCEOFF_WINDOWS, BOUNCEOFF_OBJS, BOUNCEOFF_MOBS
+	var/bounce_type = null//PROJREACT_WALLS, PROJREACT_WINDOWS, PROJREACT_OBJS, PROJREACT_MOBS, PROJREACT_BLOB
 	var/bounces = 0	//if set to -1, will always bounce off obstacles
 
 	var/phase_type = null//PHASEHTROUGH_WALLS, PHASEHTROUGH_WINDOWS, PHASEHTROUGH_OBJS, PHASEHTROUGH_MOBS
@@ -155,7 +155,7 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/check_fire(var/mob/living/target as mob, var/mob/living/user as mob)  //Checks if you can hit them or not.
 	if(!istype(target) || !istype(user))
 		return 0
-	var/obj/item/projectile/test/in_chamber = getFromPool(/obj/item/projectile/test, get_step_to(user, target)) //Making the test....
+	var/obj/item/projectile/test/in_chamber = new /obj/item/projectile/test(get_step_to(user, target)) //Making the test...)
 	in_chamber.target = target
 	in_chamber.ttarget = target //what the fuck
 	in_chamber.flags = flags //Set the flags...
@@ -163,12 +163,9 @@ var/list/impact_master = list()
 	in_chamber.firer = user
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
-	returnToPool(in_chamber)
+	qdel(in_chamber)
+	in_chamber = null
 	return output //Send it back to the gun!
-
-/obj/item/projectile/resetVariables()
-	..("permutated")
-	permutated = list()
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
 	if(istype(firer, /mob))
@@ -300,19 +297,19 @@ var/list/impact_master = list()
 		var/PixelY = 0
 		switch(get_dir(src,A))
 			if(NORTH)
-				PixelY = WORLD_ICON_SIZE/2
-			if(SOUTH)
 				PixelY = -WORLD_ICON_SIZE/2
+			if(SOUTH)
+				PixelY = WORLD_ICON_SIZE/2
 			if(EAST)
-				PixelX = WORLD_ICON_SIZE/2
-			if(WEST)
 				PixelX = -WORLD_ICON_SIZE/2
+			if(WEST)
+				PixelX = WORLD_ICON_SIZE/2
 
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
 
-		var/turf/T = src.loc
+		var/turf/T = get_turf(A)
 		if(T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
 			T.overlays += impact
 
@@ -540,12 +537,12 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/bullet_die()
 	OnDeath()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
         spawn()
                 OnDeath()
-                returnToPool(src)
+                qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
@@ -575,11 +572,11 @@ var/list/impact_master = list()
 	if(!dir)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	if(kill_count < 1)
 		//del(src)
 		OnDeath()
-		returnToPool(src)
+		qdel(src)
 	kill_count--
 	var/first = 1
 	var/tS = 0
@@ -588,7 +585,8 @@ var/list/impact_master = list()
 			tS = 1
 			timestopped = 0
 		var/turf/T = get_step(src, dir)
-		step_towards(src, T)
+		if(!step_towards(src, T))
+			break
 		if(!bumped && !isturf(original))
 			if(loc == get_turf(original))
 				if(!(original in permutated))

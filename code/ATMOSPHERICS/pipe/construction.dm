@@ -54,33 +54,6 @@ Buildable meters
 var/global/list/unstackable_pipes = list(PIPE_LAYER_MANIFOLD)
 var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION, PIPE_HE_MANIFOLD, PIPE_HE_MANIFOLD4W)
 
-/obj/item/pipe_spawner
-	name = "Pipe Spawner"
-	desc = "Used for placing piping parts on the map."
-
-	var/pipe_type = 0
-	icon = 'icons/obj/pipe-item.dmi'
-	icon_state = "simple"
-	item_state = "buildpipe"
-	flags = FPRINT
-	w_class = W_CLASS_MEDIUM
-	level = 2
-
-/obj/item/pipe_spawner/New()
-	..()
-	var/obj/item/pipe/P = getFromPool(/obj/item/pipe,loc)
-	P.New(src.loc, pipe_type=src.pipe_type, dir=src.dir)
-	P.update()
-	qdel(src)
-
-/obj/item/pipe_spawner/mvalve
-	icon_state="mvalve"
-	pipe_type=PIPE_MVALVE
-
-/obj/item/pipe_spawner/volumepump
-	icon_state="volumepump"
-	pipe_type=PIPE_VOLUME_PUMP
-
 /obj/item/pipe
 	name = "pipe"
 	desc = "A pipe"
@@ -100,13 +73,13 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 /obj/item/pipe/ex_act(severity)
 	switch(severity)
 		if(1)
-			returnToPool(src)
+			qdel(src)
 		if(2)
 			if(prob(40))
-				returnToPool(src)
+				qdel(src)
 		if(3)
 			if(prob(10))
-				returnToPool(src)
+				qdel(src)
 
 /obj/item/pipe/dropped()
 	..()
@@ -114,10 +87,10 @@ var/global/list/heat_pipes = list(PIPE_HE_STRAIGHT, PIPE_HE_BENT, PIPE_JUNCTION,
 		setPipingLayer(piping_layer) //realign us, captain!
 
 /obj/item/pipe/blob_act()
-	returnToPool(src)
+	qdel(src)
 
 /obj/item/pipe/singularity_act()
-	returnToPool(src)
+	qdel(src)
 	return 2
 var/list/bent_dirs = list(NORTH|SOUTH, WEST|EAST)
 /obj/item/pipe/New(var/loc, var/pipe_type as num, var/dir as num, var/obj/machinery/atmospherics/make_from = null)
@@ -546,7 +519,7 @@ var/list/manifold_pipes = list(PIPE_MANIFOLD4W, PIPE_INSUL_MANIFOLD4W, PIPE_HE_M
 			"[user] fastens \the [src].", \
 			"<span class='notice'>You have fastened \the [src].</span>", \
 			"You hear a ratchet.")
-		returnToPool(src)	// remove the pipe item
+		qdel(src)	// remove the pipe item
 		return 0
 	else
 		// If the pipe's still around, nuke it.

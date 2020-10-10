@@ -37,3 +37,8 @@ var/list/qualityByString = list(
 #define GLUE_STATE_NONE 0
 #define GLUE_STATE_TEMP 1
 #define GLUE_STATE_PERMA 2
+
+// Spawners
+
+#define SPAWN_ON_TURF "turf"
+#define SPAWN_ON_LOC "loc"

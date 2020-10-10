@@ -39,6 +39,7 @@
 	overlays.Cut()
 	if((stat & NOPOWER) || buildstage != 2)
 		icon_state = "light-p"
+		set_light(0)
 	else
 		icon_state = on ? "light1" : "light0"
 		overlay.icon_state = "[icon_state]-overlay"

@@ -14,7 +14,7 @@
  */
 /obj/structure/closet/emcloset
 	name = "emergency closet"
-	desc = "It's a storage unit for emergency breathmasks and o2/n2 tanks."
+	desc = "It's a storage unit for emergency breathmasks and O2/N2 tanks."
 	icon_state = "emergency"
 	icon_closed = "emergency"
 	icon_opened = "emergencyopen"

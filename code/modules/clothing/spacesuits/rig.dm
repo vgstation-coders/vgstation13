@@ -8,7 +8,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 
 //Regular rig suits
 /obj/item/clothing/head/helmet/space/rig
-	name = "engineering hardsuit helmet"
+	name = "civilian hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
 	icon_state = "rig0-engineering"
 	item_state = "eng_helm"
@@ -60,7 +60,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		actions_types |= /datum/action/item_action/toggle_rig_light //Make sure we restore the action button
 
 /obj/item/clothing/head/helmet/space/rig/process() //Helmets are directly linked to the suit's power cell, they don't need it to be activated at all.
-	if(on && rig)	
+	if(on && rig)
 		if(!rig.cell.use(1) || rig.loc != loc)
 			toggle_light()
 
@@ -111,7 +111,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 			RS.all_hardsuit_parts.Add(src)
 
 /obj/item/clothing/suit/space/rig
-	name = "engineering hardsuit"
+	name = "civilian hardsuit"
 	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
 	icon_state = "rig-engineering"
 	item_state = "eng_hardsuit"
@@ -169,12 +169,15 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	processing_objects |= src
 
 /obj/item/clothing/suit/space/rig/emp_act(severity)
-	if(activated)
-		deactivate_suit(FALSE)
-	if(cell)
-		cell.emp_act(severity)
+	for(var/obj/item/rig_module/M in modules)
+		if(M.emp_act(severity)) //EMP shielding module returns TRUE if it has charges.
+			return
 	for(var/obj/item/I in all_hardsuit_parts)
 		I.emp_act(severity)
+	if(cell)
+		cell.emp_act(severity)
+	if(activated)
+		deactivate_suit(FALSE)
 	..(severity)
 
 /obj/item/clothing/suit/space/rig/Destroy()
@@ -251,7 +254,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 		if(R.activated && R.active_power_usage)
 			if(!cell.use(R.active_power_usage))
 				R.say_to_wearer("Not enough power available in [src]!")
-				R.deactivate()	
+				R.deactivate()
 				continue
 			R.do_process()
 
@@ -355,7 +358,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	set src = usr.contents
 
 	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
-		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
 	toggle_piece(HARDSUIT_HEADGEAR,wearer)
@@ -369,7 +372,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	set src = usr.contents
 
 	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
-		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
 	toggle_piece(HARDSUIT_BOOTS,wearer)
@@ -383,7 +386,7 @@ var/list/all_hardsuit_pieces = list(HARDSUIT_HEADGEAR,HARDSUIT_GLOVES,HARDSUIT_B
 	set src = usr.contents
 
 	if(!wearer || !wearer.is_wearing_item(src, slot_wear_suit))
-		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>") 
+		to_chat(usr,"<span class='warning'>\The [src] is not being worn.</span>")
 		return
 
 	toggle_piece(HARDSUIT_GLOVES,wearer)

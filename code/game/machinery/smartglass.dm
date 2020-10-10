@@ -23,7 +23,6 @@
 	var/obj/structure/window/Ourwindow //Ref to the window we're in
 
 	//Radio vars
-	var/id_tag
 	var/frequency = 1449
 	var/datum/radio_frequency/radio_connection
 

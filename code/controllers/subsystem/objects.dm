@@ -43,7 +43,7 @@ var/list/processing_objects = list()
 		var/atom/o = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!o || o.gcDestroyed || o.disposed || o.timestopped)
+		if (!o || o.gcDestroyed || o.timestopped)
 			continue
 
 		// > this fucking proc isn't defined on a global level.

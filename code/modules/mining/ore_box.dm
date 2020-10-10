@@ -19,7 +19,7 @@
 		var/obj/item/stack/ore/O = W
 		if(try_add_ore(O))
 			user.u_equip(W,0)
-			returnToPool(W)
+			qdel(W)
 
 	if (istype(W, /obj/item/weapon/storage))
 		var/turf/T=get_turf(src)
@@ -28,7 +28,7 @@
 		for(var/obj/item/stack/ore/O in S.contents)
 			if(try_add_ore(O))
 				S.remove_from_storage(O,T) //This will remove the item.
-				returnToPool(O)
+				qdel(O)
 		to_chat(user, "<span class='notice'>You empty \the [W] into the box.</span>")
 	return
 

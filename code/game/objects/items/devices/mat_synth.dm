@@ -183,15 +183,15 @@
 		to_chat(user, "It currently holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.")
 
 /obj/item/device/material_synth/attackby(var/obj/O, mob/user)
-	if(istype(O, /obj/item/weapon/rcd_ammo))
-		var/obj/item/weapon/rcd_ammo/RA = O
+	if(istype(O, /obj/item/stack/rcd_ammo))
+		var/obj/item/stack/rcd_ammo/RA = O
 		if(matter + 10 > MAX_MATSYNTH_MATTER)
 			to_chat(user, "<span class='warning'>\The [src] can't take any more material right now.</span>")
 			return
 		else
 			matter += 10
 			playsound(src, 'sound/machines/click.ogg', 20, 1)
-			qdel(RA)
+			RA.use(1)
 			to_chat(user, "<span class='notice'>The material synthetizer now holds [matter]/[MAX_MATSYNTH_MATTER] matter-units.</span>")
 	if(istype(O, /obj/item/weapon/card/emag))
 		if(!emagged)

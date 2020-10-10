@@ -1,10 +1,5 @@
 #define DNA_BLOCK_SIZE 3
 
-// Buffer datatype flags.
-#define DNA2_BUF_UI 1
-#define DNA2_BUF_UE 2
-#define DNA2_BUF_SE 4
-
 #define MAX_RADIATION_DURATION 20
 #define MAX_RADIATION_INTENSITY 10
 
@@ -435,7 +430,7 @@
 			connected.connected = null
 		connected = null
 	for(var/datum/block_label/label in labels)
-		returnToPool(label)
+		qdel(label)
 	labels.Cut()
 	buffers.Cut()
 	if(disk)
@@ -463,16 +458,18 @@
 /obj/machinery/computer/scan_consolenew/New()
 	..()
 	for(var/i=1;i<=3;i++)
-		buffers[i] = getFromPool(/datum/dna2/record)
+		buffers[i] = new /datum/dna2/record
 	for(var/i=1;i<=DNA_SE_LENGTH;i++)
-		labels[i] = getFromPool(/datum/block_label)
-	spawn(5)
-		connected = findScanner()
+		labels[i] = new /datum/block_label
+	if(world.has_round_started())
+		initialize()
+	spawn(250)
+		setInjectorReady()
+
+/obj/machinery/computer/scan_consolenew/initialize()
+	connected = findScanner()
+	if(connected)
 		connected.connected = src
-		spawn(250)
-			setInjectorReady()
-		return
-	return
 
 /obj/machinery/computer/scan_consolenew/ex_act(severity)
 	switch(severity)

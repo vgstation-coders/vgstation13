@@ -99,7 +99,7 @@ var/list/navbeacons = list()
 	if(!frequency)
 		return
 
-	var/datum/signal/signal = getFromPool(/datum/signal)
+	var/datum/signal/signal = new /datum/signal
 	signal.source = src
 	signal.transmission_method = 1
 	signal.data["beacon"] = location

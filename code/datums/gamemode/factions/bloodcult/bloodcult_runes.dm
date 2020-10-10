@@ -253,13 +253,22 @@
 
 /obj/effect/rune/attack_paw(var/mob/living/user)
 	if(ismonkey(user))
+		assume_contact_diseases(user)
 		trigger(user)
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
+	assume_contact_diseases(user)
 	trigger(user)
 
 /obj/effect/rune/attack_robot(var/mob/living/user) //Allows for robots to remotely trigger runes, since attack_robot has infinite range.
 	trigger(user)
+
+/obj/effect/rune/proc/assume_contact_diseases(var/mob/living/user)
+	var/block = 0
+	var/bleeding = 0
+	block = user.check_contact_sterility(HANDS)
+	bleeding = user.check_bodypart_bleeding(HANDS)
+	user.assume_contact_diseases(virus2,src,block,bleeding)
 
 /obj/effect/rune/proc/trigger(var/mob/living/user)
 	user.delayNextAttack(5)
@@ -331,6 +340,35 @@
 				conceal_cooldown = 0
 		return 1
 	return 0
+
+/obj/effect/rune/proc/manage_diseases(var/datum/reagent/blood/source)
+	virus2 = list()
+
+	if (blood1)
+		blood1.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood1_diseases = blood1.data["virus2"]
+		for (var/ID in blood1_diseases)
+			var/datum/disease2/disease/V = blood1_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood2)
+		blood2.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood2_diseases = blood2.data["virus2"]
+		for (var/ID in blood2_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood2_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
+	if (blood3)
+		blood3.data["virus2"] = virus_copylist(source.data["virus2"])
+		var/list/datum/disease2/disease/blood3_diseases = blood3.data["virus2"]
+		for (var/ID in blood3_diseases)
+			if (ID in virus2)
+				continue
+			var/datum/disease2/disease/V = blood3_diseases[ID]
+			if(istype(V))
+				virus2["[V.uniqueID]-[V.subID]"] = V.getcopy()
 
 /////////////////////////BLOOD CULT RUNES//////////////////////
 
@@ -529,16 +567,11 @@
 		if (source.data["virus2"])
 			rune.blood3.data["virus2"] = virus_copylist(source.data["virus2"])
 
-	if (rune.blood3) //Viruses spread to the other blood.
-		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"] | rune.blood3.data["virus2"]
-		rune.update_icon()
-		return 1
-	else if (rune.blood2)
-		rune.virus2 = rune.blood1.data["virus2"] | rune.blood2.data["virus2"]
-	else if (rune.blood1)
-		rune.virus2 = rune.blood1.data["virus2"]
+	rune.manage_diseases(source)
 
 	rune.update_icon()
+	if (rune.blood3)
+		return 1
 	return 2
 
 

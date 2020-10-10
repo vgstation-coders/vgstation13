@@ -125,7 +125,6 @@
 	for(var/atom/movable/AM in src.loc)
 		if(insert(AM) == -1) // limit reached
 			break
-		INVOKE_EVENT(AM.on_moved,list("loc"=src))
 
 /obj/structure/closet/proc/open(mob/user)
 	if(src.opened)

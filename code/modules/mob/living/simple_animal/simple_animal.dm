@@ -335,7 +335,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
-		flick(icon_gib, src)
+		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
 	if(meat && meat_type)
 		for(var/i = 0; i < (src.size - meat_taken); i++)
@@ -582,7 +582,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/adjustBruteLoss(damage)
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -598,7 +598,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		return 0
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = damage)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = damage)))
 		return 0
 	if(skinned())
 		damage = damage * 2
@@ -720,9 +720,9 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	if(name != initial(name)) //Not chicken
 		new_animal.name = name
+	if(mind)
+		mind.transfer_to(new_animal)
 	new_animal.inherit_mind(src)
-	new_animal.ckey = src.ckey
-	new_animal.key = src.key
 
 	if(colour)
 		new_animal.colour = colour
@@ -802,9 +802,3 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 
 /datum/locking_category/simple_animal
-
-
-/mob/living/simple_animal/resetVariables()
-	..("emote_hear", "emote_see", args)
-	emote_hear = list()
-	emote_see = list()

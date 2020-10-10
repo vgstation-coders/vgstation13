@@ -92,7 +92,7 @@
 		var/obj/item/weapon/grab/G = W
 		if(iscarbon(G.affecting))
 			MouseDropTo(G.affecting,user)
-			returnToPool(W)
+			qdel(W)
 	else if (istype(W))
 		if(user.a_intent == I_HELP || W.force == 0)
 			visible_message("<span class='warning'>\The [user] gently taps \the [src] with \the [W].</span>")
@@ -297,7 +297,7 @@
 				C.resting = 1
 				C.update_canmove()
 			C.forceMove(loc)
-			returnToPool(G)
+			qdel(G)
 			to_chat(user, "<span class='warning'>You move \the [C] on top of \the [src]</span>")
 			return 1
 	..()
@@ -353,7 +353,11 @@
 		return
 	if (!istype(O))
 		return
-	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(O))
+		return
+	if (user.get_active_hand() == O)
 		if(!user.drop_item(O))
 			return
 	else
@@ -361,13 +365,7 @@
 			return
 		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 			return
-		if(user.incapacitated() || user.lying)
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src))
-			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
-			return
-		if(!user.loc)
 			return
 		var/mob/living/L = O
 		if(!istype(L) || L.locked_to || L == user)

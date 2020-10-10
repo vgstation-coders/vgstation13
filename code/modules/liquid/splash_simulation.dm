@@ -178,7 +178,7 @@ turf/space/can_leave_liquid(from_direction)
 
 turf/simulated/floor/can_accept_liquid(from_direction)
 	for(var/obj/structure/window/W in src)
-		if(W.is_fulltile())
+		if(W.is_fulltile)
 			return 0
 		if(W.dir & from_direction)
 			return 0
@@ -189,7 +189,7 @@ turf/simulated/floor/can_accept_liquid(from_direction)
 
 turf/simulated/floor/can_leave_liquid(to_direction)
 	for(var/obj/structure/window/W in src)
-		if(W.is_fulltile())
+		if(W.is_fulltile)
 			return 0
 		if(W.dir & to_direction)
 			return 0

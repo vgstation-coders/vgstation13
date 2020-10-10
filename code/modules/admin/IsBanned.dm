@@ -59,17 +59,18 @@
 		var/failedcid = 1
 		var/failedip = 1
 
-		var/ipquery = ""
-		var/cidquery = ""
 		if(address)
 			failedip = 0
-			ipquery = " OR ip = '[address]' "
 
 		if(computer_id)
 			failedcid = 0
-			cidquery = " OR computerid = '[computer_id]' "
 
-		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = '[ckeytext]' [ipquery] [cidquery]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
+		var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey, ip, computerid, a_ckey, reason, expiration_time, duration, bantime, bantype FROM erro_ban WHERE (ckey = :ckey [address ? "OR ip = :address" : ""]  [computer_id ? "OR computerid = :computer_id" : ""]) AND (bantype = 'PERMABAN'  OR (bantype = 'TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)",
+			list(
+				"ckey" = "[ckeytext]",
+				"address" = "[address]",
+				"computer_id" = "[computer_id]"
+		))
 
 		if(!query.Execute())
 			message_admins("Error: [query.ErrorMsg()]")

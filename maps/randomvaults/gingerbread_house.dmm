@@ -25,7 +25,7 @@
 "eH" = (/obj/structure/bed/chair{dir = 4},/mob/living/simple_animal/hostile/ginger/gingerfatman,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
 "eN" = (/obj/structure/flora/pottedplant,/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
 "eY" = (/obj/item/device/flashlight/lantern/on/dim,/turf/simulated/floor/mineral/gingerbread_dirt_tile,/area/vault/gingerbread_house)
-"fk" = (/obj/abstract/map/spawner/theater,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
+"fk" = (/obj/abstract/map/spawner/theater/costumes,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
 "fB" = (/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/mineral/gingerbread_floor,/area/vault/gingerbread_house)
 "fQ" = (/mob/living/simple_animal/hostile/gingerbread{wander = 0},/turf/simulated/floor/mineral/gingerbread,/area/vault/gingerbread_house)
 "fR" = (/obj/effect/landmark/corpse/miner/rig,/obj/item/stack/sheet/mineral/diamond,/turf/simulated/floor/mineral/gingerbread_nest,/area/vault/gingerbread_house)

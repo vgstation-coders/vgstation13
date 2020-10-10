@@ -114,15 +114,15 @@
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images += jaunts[A]
-				var/on_moved_holder = target.on_moved
-				target.on_moved = new("owner"=target)
-				target.on_moved.Add(jaunts[target],"update_dir")
+				target.lazy_register_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				ethereal_jaunt(target, duration, enteranim, exitanim, mist)
-				qdel(target.on_moved)
-				target.on_moved = on_moved_holder
+				target.lazy_unregister_event(/lazy_event/on_moved, jaunts[target], /proc/update_dir_on_moved_callback)
 				if(target.client)
 					for(var/A in jaunts)
 						target.client.images -= jaunts[A]
+
+/proc/update_dir_on_moved_callback(atom/movable/mover)
+	mover.update_dir()
 
 /spell/targeted/ethereal_jaunt/jauntgroup
 	name = "Group Jaunt"

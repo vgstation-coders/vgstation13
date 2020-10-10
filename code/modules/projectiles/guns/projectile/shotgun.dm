@@ -28,6 +28,7 @@
 	var/pumped = 0
 	var/obj/item/ammo_casing/current_shell = null
 	gun_flags = 0
+	starting_materials = list(MAT_IRON = 7500, MAT_WOOD = 3750)
 
 /obj/item/weapon/gun/projectile/shotgun/pump/attack_self(mob/living/user as mob)
 	if(recentpump)
@@ -78,7 +79,8 @@
 	max_shells = 8
 	origin_tech = Tc_COMBAT + "=5;" + Tc_MATERIALS + "=2"
 	ammo_type = "/obj/item/ammo_casing/shotgun"
-	
+	silencer_offset = list(28,5)
+
 /obj/item/weapon/gun/projectile/shotgun/pump/combat/shorty //nuke op engineering special
 	name = "combat shorty"
 	desc = "Handy for close encounters."
@@ -86,6 +88,7 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	max_shells = 3
+	silencer_offset = list(22,5)
 
 //this is largely hacky and bad :(	-Pete
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel
@@ -193,6 +196,7 @@
 	load_method = 2
 	slot_flags = 0
 	gun_flags = EMPTYCASINGS
+	silencer_offset = list(28,5)
 
 /obj/item/weapon/gun/projectile/shotgun/nt12/update_icon()
 	..()

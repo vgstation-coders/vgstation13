@@ -199,7 +199,7 @@
 		to_chat(user, "<span class='notice'>You begin to disassemble \the [src].</span>")
 		I.playtoolsound(src, 50)
 		if(do_after(user, src, 3 SECONDS))
-			getFromPool(/obj/item/stack/sheet/metal, loc, 2)
+			new /obj/item/stack/sheet/metal(loc, 2)
 			qdel(src)
 		return
 
@@ -308,16 +308,17 @@
 				if(anchored)
 					src.visible_message("<span class='warning'>[user] unbolts \the [src] from the floor.</span>", \
 								 "<span class='notice'>You unbolt \the [src] from the floor.</span>")
+					on = 0
 					anchored = 0
+					update_icon()
 				else
 					src.visible_message("<span class='warning'>[user] bolts \the [src] to the floor.</span>", \
 								 "<span class='notice'>You bolt \the [src] to the floor.</span>")
 					anchored = 1
-
 /obj/machinery/shower/update_icon()	//This is terribly unreadable, but basically it makes the shower mist up
 	overlays.len = 0 //Once it's been on for a while, in addition to handling the water overlay.
 	if(mymist)
-		returnToPool(mymist)
+		qdel(mymist)
 		mymist = null
 
 	if(on)
@@ -330,16 +331,16 @@
 			spawn(50)
 				if(src && on)
 					ismist = 1
-					mymist = getFromPool(/obj/effect/mist, get_turf(src))
+					mymist = new /obj/effect/mist(get_turf(src))
 		else
 			ismist = 1
-			mymist = getFromPool(/obj/effect/mist, get_turf(src))
+			mymist = new /obj/effect/mist(get_turf(src))
 	else if(ismist)
 		ismist = 1
-		mymist = getFromPool(/obj/effect/mist, get_turf(src))
+		mymist = new /obj/effect/mist(get_turf(src))
 		spawn(250)
 			if(src && !on)
-				returnToPool(mymist)
+				qdel(mymist)
 				mymist = null
 				ismist = 0
 

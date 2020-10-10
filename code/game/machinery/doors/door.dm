@@ -445,6 +445,9 @@ var/list/all_doors = list()
 
 	update_nearby_tiles()
 
+/obj/machinery/door/can_overload()
+	return 0
+
 // Flash denied and such.
 /obj/machinery/door/proc/denied()
 	playsound(loc, 'sound/machines/denied.ogg', 50, 1)
@@ -455,3 +458,5 @@ var/list/all_doors = list()
 	icon = 'icons/obj/doors/morgue.dmi'
 	animation_delay = 15
 	penetration_dampening = 15
+
+

@@ -506,7 +506,7 @@ Pressure: [env.pressure]"}
 		if(A && !(A.type in areas_with_air_alarm))
 			areas_with_air_alarm.Add(A.type)
 
-	for(var/obj/machinery/requests_console/RC in allConsoles)
+	for(var/obj/machinery/requests_console/RC in requests_consoles)
 		var/area/A = get_area(RC)
 		if(A && !(A.type in areas_with_RC))
 			areas_with_RC.Add(A.type)
@@ -710,20 +710,6 @@ Pressure: [env.pressure]"}
 		log_admin("[key_name(src)] has toggled [M.key]'s [blockname] block [state]!")
 	else
 		alert("Invalid mob")
-
-
-/client/proc/cmd_admin_dump_instances()
-	set category = "Debug"
-	set name = "Dump Instance Counts"
-	set desc = "MEMORY PROFILING IS TOO HIGH TECH"
-	var/date_string = time2text(world.realtime, "YYYY-MM-DD")
-	var/F=file("data/logs/profiling/[date_string]_instances.csv")
-	fdel(F)
-	F << "Types,Number of Instances"
-	for(var/key in type_instances)
-		F << "[key],[type_instances[key]]"
-
-	to_chat(usr, "<span class='notice'>Dumped to [F]</span>")
 
 /client/proc/cmd_admin_find_bad_blood_tracks()
 	set category = "Debug"
@@ -1250,7 +1236,7 @@ client/proc/check_convertables()
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1333,6 +1319,18 @@ client/proc/check_convertables()
 
 	error_cache.show_to(src)
 
+/client/proc/add_centcomm_order()
+	set category = "Fun"
+	set name = "Central Command Request"
+	set desc = "Send a Central Command Request"
+
+	if (!check_rights(R_FUN))
+		return
+
+	var/ordertype = input("Select a Request.","Central Command Request",1) as null|anything in (subtypesof(/datum/centcomm_order) - /datum/centcomm_order/per_unit)
+	if (ordertype)
+		SSsupply_shuttle.add_centcomm_order(new ordertype)
+
 /client/proc/emergency_shuttle_panel()
 	set name = "Emergency Shuttle Panel"
 	set category = "Debug"
@@ -1361,7 +1359,14 @@ client/proc/check_convertables()
 		holder.diseases_panel()
 		log_admin("[key_name(usr)] checked the Diseases Panel.")
 	feedback_add_details("admin_verb","DIS")
-	return
+
+/client/proc/artifacts_panel()
+	set name = "Artifacts Panel"
+	set category = "Admin"
+	if(holder)
+		holder.artifacts_panel()
+		log_admin("[key_name(usr)] checked the Artifacts Panel.")
+	feedback_add_details("admin_verb","ART")
 
 /client/proc/climate_panel()
 	set name = "Climate Panel"
@@ -1377,7 +1382,7 @@ client/proc/check_convertables()
 	set name = "Start line profiling"
 	set desc = "Starts tracking line by line profiling for code lines that support it"
 
-	PROFILE_START
+	LINE_PROFILE_START
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] started line by line profiling.</span>")
 	feedback_add_details("admin_verb","Start line profiling")
@@ -1388,7 +1393,7 @@ client/proc/check_convertables()
 	set name = "Stop line profiling"
 	set desc = "Stops tracking line by line profiling for code lines that support it"
 
-	PROFILE_STOP
+	LINE_PROFILE_STOP
 
 	message_admins("<span class='adminnotice'>[key_name_admin(src)] stopped line by line profiling.</span>")
 	feedback_add_details("admin_verb","Stop line profiling")

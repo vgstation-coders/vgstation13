@@ -11,6 +11,7 @@ var/datum/subsystem/plant/SSplant
 	var/list/processing_plants = list()
 	var/list/currentrun
 	var/list/datum/seed/seeds = list() // All seed data stored here.
+	var/roundstart_seeds
 
 /datum/subsystem/plant/New()
 	NEW_SS_GLOBAL(SSplant)
@@ -26,6 +27,7 @@ var/datum/subsystem/plant/SSplant
 		seeds[S.name] = S
 		S.uid = "[seeds.len]"
 		S.roundstart = TRUE
+	roundstart_seeds = seeds.len
 	..()
 
 /datum/subsystem/plant/proc/create_random_seed(var/survive_on_station)
@@ -61,7 +63,7 @@ var/datum/subsystem/plant/SSplant
 		var/obj/effect/plantsegment/plant = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!plant || plant.gcDestroyed || plant.disposed)
+		if (!plant || plant.gcDestroyed)
 			remove_plant(plant)
 			continue
 		if(plant.timestopped)
@@ -72,7 +74,7 @@ var/datum/subsystem/plant/SSplant
 			return
 
 /datum/subsystem/plant/proc/add_plant(var/obj/effect/plantsegment/plant)
-	if(!istype(plant) || plant.gcDestroyed || plant.disposed)
+	if(!istype(plant) || plant.gcDestroyed)
 		return
 	processing_plants |= plant
 

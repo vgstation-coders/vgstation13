@@ -149,20 +149,20 @@ What is the naming convention for planes or layers?
 
 #define HUMAN_PLANE 			9			// For Humans that are standing up.
 
-#define VAMP_ANTAG_HUD_PLANE	10
+//#define THIS_SPACE_FOR_RENT!	10
 
-#define METABUDDY_HUD_PLANE	11
+//#define THIS_SPACE_FOR_RENT! 	11
 
-#define ANTAG_HUD_PLANE		 	12
-
-//#define THIS_SPACE_FOR_RENT!	13
-
-//#define THIS_SPACE_FOR_RENT! 	14
-
-#define MOB_PLANE 				15			// For Mobs.
+#define MOB_PLANE 				12			// For Mobs.
 
 //	#define MOB_LAYER				4
 	#define SLIME_LAYER				5
+
+#define VAMP_ANTAG_HUD_PLANE	13
+
+#define METABUDDY_HUD_PLANE		14
+
+#define ANTAG_HUD_PLANE		 	15
 
 #define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
 
@@ -196,6 +196,7 @@ What is the naming convention for planes or layers?
 	#define ABOVE_SINGULO_LAYER 	7
 	#define GRAVITYGRID_LAYER 		8
 	#define SNOW_OVERLAY_LAYER		9
+	#define HORIZON_EXHAUST_LAYER	10
 
 #define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
 
@@ -324,7 +325,7 @@ var/noir_master = list(new /obj/abstract/screen/plane_master/noir_master(),new /
 	if(ghost_planemaster_dummy)
 		screen -= ghost_planemaster_dummy
 		qdel(ghost_planemaster_dummy)
-	ghost_planemaster = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster)
+	ghost_planemaster = new /obj/abstract/screen/plane_master/ghost_planemaster
 	screen |= ghost_planemaster
-	ghost_planemaster_dummy = getFromPool(/obj/abstract/screen/plane_master/ghost_planemaster_dummy)
+	ghost_planemaster_dummy = new /obj/abstract/screen/plane_master/ghost_planemaster_dummy
 	screen |= ghost_planemaster_dummy

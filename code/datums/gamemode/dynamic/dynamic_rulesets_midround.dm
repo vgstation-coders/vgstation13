@@ -70,7 +70,7 @@
 	return 1
 
 /datum/dynamic_ruleset/midround/from_ghosts/ready(var/forced = 0)
-	if (required_candidates > (dead_players.len + list_observers.len))
+	if (required_candidates > (dead_players.len + list_observers.len) && !forced)
 		return 0
 	return ..()
 
@@ -115,7 +115,7 @@
 		if (makeBody)
 			new_character = generate_ruleset_body(applicant)
 
-		finish_setup(new_character, i)
+		finish_setup(new_character, candidate_checks - (i-1)) // i = N, N - 1.... so that N - (i-1) = 1, 2, ...
 
 	applicants.Cut()
 

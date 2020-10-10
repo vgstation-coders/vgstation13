@@ -168,6 +168,8 @@
 				return FALSE
 			if(target_human.is_wearing_item(/obj/item/clothing/gloves/ninja))
 				return FALSE
+			if(target_human.is_wearing_item(/obj/item/clothing/head/tinfoil))
+				return FALSE
 
 		if(isalien(target))
 			return FALSE

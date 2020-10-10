@@ -523,6 +523,8 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
+		/obj/item/weapon/disk,
+		/obj/item/weapon/disk/hdd,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,
@@ -729,7 +731,7 @@
 		/obj/item/weapon/pickaxe/jackhammer,
 		/obj/item/device/rcd/rpd,
 		/obj/item/device/rcd,
-		/obj/item/weapon/rcd_ammo,
+		/obj/item/stack/rcd_ammo,
 		/obj/item/device/rcd/matter/rsf,
 		/obj/item/weapon/weldingtool/hugetank,
 		/obj/item/weapon/tank/plasma,
@@ -857,6 +859,7 @@
 		if (4)
 			new /obj/item/clothing/suit/space/vox/civ/trader/stealth(src.loc) // black hardsuit. Not capable of any form of stealth systems or shit like that
 			new /obj/item/clothing/head/helmet/space/vox/civ/trader/stealth(src.loc)
+	qdel(src)
 // Mobs ////////////////////////////////////////////////////////
 
 /obj/abstract/map/spawner/mobs/monkeys
@@ -1162,8 +1165,8 @@
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/clothing/under/chameleon,
 		/obj/item/clothing/gloves/anchor_arms,
-		/obj/abstract/loadout/soviet_rigsuit,
-		/obj/abstract/loadout/nazi_rigsuit,
+		/obj/item/clothing/suit/space/rig/soviet,
+		/obj/item/clothing/suit/space/rig/nazi,
 		/obj/item/weapon/reagent_containers/food/snacks/superbiteburger,
 		/obj/item/weapon/reagent_containers/food/snacks/roburger,
 		/obj/item/weapon/reagent_containers/food/snacks/mommispaghetti,
@@ -1238,9 +1241,9 @@
 	/obj/item/clothing/head/HoS/dermal,
 	/obj/item/clothing/under/chameleon,
 	/obj/item/clothing/gloves/anchor_arms,
-	/obj/abstract/loadout/soviet_rigsuit,
-	/obj/abstract/loadout/nazi_rigsuit,
-	/obj/abstract/loadout/dredd_gear
+	/obj/item/clothing/suit/space/rig/soviet,
+	/obj/item/clothing/suit/space/rig/nazi,
+	/obj/abstract/spawn_all/dredd_gear
 )
 
 /obj/abstract/map/spawner/safe/medal
@@ -1409,3 +1412,33 @@
 		if (22)
 			new /obj/item/clothing/mask/gas/sexymime(src.loc)
 			new	/obj/item/clothing/under/sexymime(src.loc)
+	qdel(src)
+
+// Spawn all in the turf
+/obj/abstract/spawn_all
+	var/list/to_spawn = list()
+	var/where_to_spawn = SPAWN_ON_TURF
+
+/obj/abstract/spawn_all/New()
+	. = ..()
+	var/location
+	if (where_to_spawn == SPAWN_ON_TURF)
+		location = get_turf(src)
+	else
+		location = src.loc
+	for (var/thing in to_spawn)
+		new thing(location)
+	qdel(src)
+
+/obj/abstract/spawn_all/dredd_gear
+	to_spawn = list(
+		/obj/item/clothing/under/darkred,
+		/obj/item/clothing/glasses/hud/security,
+		/obj/item/clothing/gloves/combat,
+		/obj/item/clothing/shoes/combat,
+		/obj/item/clothing/head/helmet/dredd,
+		/obj/item/clothing/mask/gas/swat,
+		/obj/item/weapon/storage/belt/security,
+		/obj/item/clothing/suit/armor/xcomsquaddie/dredd,
+		/obj/item/weapon/gun/lawgiver,
+	)

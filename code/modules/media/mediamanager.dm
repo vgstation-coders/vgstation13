@@ -102,10 +102,11 @@ function SetMusic(url, time, volume) {
 
 
 /hook_handler/shuttlejukes/proc/OnEmergencyShuttleDeparture(var/list/args)
-	for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
-		SJ.playing=1
-		SJ.update_music()
-		SJ.update_icon()
+	spawn(0)
+		for(var/obj/machinery/media/jukebox/superjuke/shuttle/SJ in machines)
+			SJ.playing=1
+			SJ.update_music()
+			SJ.update_icon()
 
 /mob/proc/update_music()
 	if (client && client.media && !client.media.forced)
@@ -234,6 +235,7 @@ function SetMusic(url, time, volume) {
 
 // Scan for media sources and use them.
 /datum/media_manager/proc/update_music()
+	set waitfor = FALSE
 	var/targetURL = ""
 	var/targetStartTime = 0
 	var/targetVolume = 0
@@ -263,6 +265,9 @@ function SetMusic(url, time, volume) {
 		targetURL = M.media_url
 		targetStartTime = M.media_start_time
 		targetVolume = M.volume
+		if ((current_url == targetURL) && (volume == targetVolume) && (start_time == targetStartTime))
+			MP_DEBUG("<span class='good'>No cut off because there we're still hearing the same song.<span>")
+			return
 		var/check_samesong = ((targetURL == current_url) && (finish_time != M.media_finish_time))
 		var/check_harsh_skip = ((targetURL != current_url) && (finish_time > 0) && ((world.time - finish_time) < - 10 SECONDS))
 		if (check_samesong || check_harsh_skip) // We caught a music. Let's see if we can make a graceful fadeout for the music currently playing. If not, the other music is killed.

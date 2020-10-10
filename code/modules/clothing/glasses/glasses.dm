@@ -38,10 +38,8 @@ BLIND     // can't see anything
 	if(H.glasses)
 		stored_glasses = H.glasses
 		if(stored_glasses.w_class >= w_class)
-			if(!disable_warning)
-				to_chat(H, "<span class='danger'>You are unable to wear \the [src] as \the [H.glasses] are in the way.</span>")
 			stored_glasses = null
-			return CANNOT_EQUIP
+			return CAN_EQUIP_BUT_SLOT_TAKEN
 		H.remove_from_mob(stored_glasses)
 		stored_glasses.forceMove(src)
 
@@ -634,7 +632,7 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/disable(var/mob/living/mob)
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 	if (emitter)
 		emitter.callOnStartMove -= "\ref[src]"
@@ -647,11 +645,11 @@ var/list/science_goggles_wearers = list()
 /obj/item/clothing/glasses/emitter/proc/update_emitter()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying)
 		if (beam)
-			returnToPool(beam)
+			qdel(beam)
 			beam = null
 		return
 	if (!beam)
-		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)
@@ -662,14 +660,14 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_start()
 	if (beam)
-		returnToPool(beam)
+		qdel(beam)
 		beam = null
 
 /obj/item/clothing/glasses/emitter/proc/update_emitter_end()
 	if (!emitter || !isturf(emitter.loc) || emitter.lying)
 		return
 	if (!beam)
-		beam = getFromPool(/obj/effect/beam/emitter/eyes, emitter.loc)
+		beam = new /obj/effect/beam/emitter/eyes(emitter.loc)
 		beam.dir = emitter.dir
 		if (previous_loc == emitter.loc && previous_dir == emitter.dir)
 			beam.emit(spawn_by=emitter,charged = TRUE)

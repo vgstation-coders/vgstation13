@@ -247,6 +247,8 @@
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
 
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
+
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
 #define islegacycultist(H) (H.mind && H.mind.GetRole(LEGACY_CULTIST))
@@ -265,9 +267,13 @@
 
 #define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
 
+#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -298,7 +304,7 @@
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
@@ -390,3 +396,6 @@ proc/get_space_area()
 
 // strips all newlines from a string, replacing them with null
 #define STRIP_NEWLINE(S) replacetextEx(S, "\n", null)
+
+#define istransformable(A) (isatom(A))
+#define isapperanceeditable(A) (isatom(A))

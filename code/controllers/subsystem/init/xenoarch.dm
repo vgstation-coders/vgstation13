@@ -3,7 +3,7 @@ var/datum/subsystem/xenoarch/SSxenoarch
 
 /datum/subsystem/xenoarch
 	name       = "Xenoarch"
-	init_order = SS_INIT_MORE_INIT
+	init_order = SS_INIT_XENOARCH
 	flags      = SS_NO_FIRE
 
 	var/list/artifact_spawning_turfs = list()
@@ -15,6 +15,7 @@ var/datum/subsystem/xenoarch/SSxenoarch
 
 /datum/subsystem/xenoarch/Initialize(timeofday)
 	SetupXenoarch()
+	..()
 
 
 

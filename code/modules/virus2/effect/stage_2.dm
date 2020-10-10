@@ -103,7 +103,7 @@
 					strength = round(strength/mob.virus2.len)
 					var/i = 1
 					while (strength > 0 && i < 10) //stronger viruses create more clouds at once, max limit of 10 clouds
-						getFromPool(/obj/effect/effect/pathogen_cloud/core,get_turf(src), mob, virus_copylist(mob.virus2))
+						new /obj/effect/effect/pathogen_cloud/core(get_turf(src), mob, virus_copylist(mob.virus2))
 						strength -= 30
 						i++
 
@@ -231,8 +231,7 @@
 		else
 			var/obj/effect/decal/cleanable/blood/D= locate(/obj/effect/decal/cleanable/blood) in get_turf(mob)
 			if(D==null)
-				D = getFromPool(/obj/effect/decal/cleanable/blood, get_turf(mob))
-				D.New(D.loc)
+				D = new /obj/effect/decal/cleanable/blood(get_turf(mob))
 			D.virus2 |= virus_copylist(mob.virus2)
 
 /datum/disease2/effect/viralsputum
@@ -247,8 +246,7 @@
 		mob.emote("cough")
 		var/obj/effect/decal/cleanable/blood/viralsputum/D= locate(/obj/effect/decal/cleanable/blood/viralsputum) in get_turf(mob)
 		if(!D)
-			D = getFromPool(/obj/effect/decal/cleanable/blood/viralsputum, get_turf(mob))
-			D.New(D.loc)
+			D = new /obj/effect/decal/cleanable/blood/viralsputum(get_turf(mob))
 		D.virus2 |= virus_copylist(mob.virus2)
 
 
@@ -260,10 +258,26 @@
 	badness = EFFECT_DANGER_HELPFUL
 	multiplier = 4
 	max_multiplier = 10
+	var/uncolored = 0
+	var/flavortext = 0
+	var/color = rgb(255, 255, 255)
 
 /datum/disease2/effect/lantern/activate(var/mob/living/mob)
-	mob.set_light(multiplier)
-	to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
+	if(mob.reagents.has_reagent(CLEANER))
+		uncolored = 1	//Having spacecleaner in your system when the effect activates will permanently make the color white.
+	if(mob.reagents.reagent_list.len == 0 || uncolored == TRUE)
+		color = rgb(255, 255, 255)
+	else
+		color = mix_color_from_reagents(mob.reagents.reagent_list)
+	if(!flavortext)
+		to_chat(mob, "<span class = 'notice'>You are glowing!</span>")
+		flavortext = 1
+	mob.set_light(multiplier, multiplier/3, l_color = color)
+
+/datum/disease2/effect/lantern/deactivate(var/mob/living/mob)
+	mob.set_light(0, 0, rgb(0,0,0))
+	to_chat(mob, "<span class = 'notice'>You don't feel as bright.</span>")
+	flavortext = 0
 
 
 /datum/disease2/effect/hangman

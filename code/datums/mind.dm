@@ -30,7 +30,6 @@
 	var/key
 	var/name				//replaces mob/var/original_name
 	var/mob/current
-	var/mob/original	//TODO: remove.not used in any meaningful way ~Carn. First I'll need to tweak the way silicon-mobs handle minds.
 	var/active = 0
 
 	var/memory
@@ -56,8 +55,9 @@
 	// the world.time since the mob has been brigged, or -1 if not at all
 	var/brigged_since = -1
 
-		//put this here for easier tracking ingame
+	//put this here for easier tracking ingame
 	var/datum/money_account/initial_account
+	var/initial_wallet_funds = 0
 
 	var/total_TC = 0
 	var/spent_TC = 0
@@ -65,7 +65,6 @@
 	//fix scrying raging mages issue.
 	var/isScrying = 0
 	var/list/heard_before = list()
-	var/event/on_transfer_end
 
 	var/nospells = 0 //Can't cast spells.
 	var/hasbeensacrificed = FALSE
@@ -74,7 +73,6 @@
 
 /datum/mind/New(var/key)
 	src.key = key
-	on_transfer_end = new(owner = src)
 
 /datum/mind/proc/transfer_to(mob/new_character)
 	if (!current)
@@ -109,7 +107,7 @@
 
 	if (hasFactionsWithHUDIcons())
 		update_faction_icons()
-	INVOKE_EVENT(on_transfer_end, list("mind" = src))
+	lazy_invoke_event(/lazy_event/after_mind_transfer, list("mind" = src))
 
 /datum/mind/proc/transfer_to_without_current(var/mob/new_character)
 	new_character.attack_log += "\[[time_stamp()]\]: mind transfer from a body-less observer to [new_character]"
@@ -520,7 +518,6 @@
 		mind.key = key
 	else
 		mind = new /datum/mind(key)
-		mind.original = src
 		if(ticker)
 			ticker.minds += mind
 		else

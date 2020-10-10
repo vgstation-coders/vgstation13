@@ -90,6 +90,8 @@
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
 				base = "glasstable"
+			if (istype(src, /obj/structure/table/plastic))
+				base = "plastictable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -360,7 +362,7 @@
 		if(!ishigherbeing(user) || !Adjacent(user) || user.incapacitated() || user.lying) // Doesn't work if you're not dragging yourself, not a human, not in range or incapacitated
 			return
 		var/mob/living/carbon/M = user
-		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = "[src]")
+		M.apply_damage(2, BRUTE, LIMB_HEAD, used_weapon = name)
 		M.adjustBrainLoss(5)
 		M.Knockdown(1)
 		M.Stun(1)
@@ -397,7 +399,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 			return
 
 	if (W.is_wrench(user) && can_disassemble())
@@ -651,7 +653,7 @@
 				G.affecting.Knockdown(5)
 				G.affecting.Stun(5)
 				visible_message("<span class='warning'>[G.assailant] puts [G.affecting] on \the [src].</span>")
-			returnToPool(W)
+			qdel(W)
 
 	else if (user.a_intent == I_HURT)
 		user.do_attack_animation(src, W)
@@ -688,6 +690,15 @@
 
 /obj/structure/table/reinforced/clockwork/clockworkify()
 	return
+
+/*
+ * Plastic
+ */
+obj/structure/table/plastic
+	name = "plastic table"
+	desc = "A plastic table perfect for on a space patio."
+	icon_state = "plastictable"
+	parts = /obj/item/weapon/table_parts/plastic
 
 /*
  * Racks

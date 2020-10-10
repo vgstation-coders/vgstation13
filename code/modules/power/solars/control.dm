@@ -13,7 +13,7 @@
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
-	var/id_tag = 0
+	id_tag = 0
 	var/cdir = 0
 	var/gen = 0
 	var/lastgen = 0
@@ -89,7 +89,7 @@
 				visible_message("<span class='notice'>[user] clears the broken monitor off of [src].</span>", \
 				"You clear the broken monitor off of [src]")
 				var/obj/structure/computerframe/A = new /obj/structure/computerframe(src.loc)
-				getFromPool(/obj/item/weapon/shard, loc)
+				new /obj/item/weapon/shard(loc)
 				var/obj/item/weapon/circuitboard/solar_control/M = new /obj/item/weapon/circuitboard/solar_control(A)
 				for (var/obj/C in src)
 					C.forceMove(src.loc)

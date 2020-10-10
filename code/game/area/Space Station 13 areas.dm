@@ -189,9 +189,7 @@ proc/process_adminbus_teleport_locs()
 	//haha fuck you we dynamic lights now
 	shuttle_can_crush = FALSE
 	flags = NO_PERSISTENCE
-
-/area/shuttle/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/arrival
 	name = "\improper Arrival Shuttle"
@@ -435,6 +433,13 @@ proc/process_adminbus_teleport_locs()
 	icon_state = "yellow"
 	requires_power = 0
 
+/area/shuttle/lightship
+	name = "\improper Lightspeed Ship"
+	requires_power = 1
+
+/area/shuttle/lightship/start
+	icon_state = "yellow"
+
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
 	icon_state = "yellow"
@@ -597,16 +602,12 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Asteroid - Underground"
 	icon_state = "cave"
 	requires_power = 0
-
-/area/asteroid/cave/holomapDrawOverride()
-	return HOLOMAP_DRAW_FULL
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/asteroid/artifactroom
 	name = "\improper Asteroid - Artifact"
 	icon_state = "cave"
-
-/area/asteroid/artifactroom/holomapDrawOverride()
-	return HOLOMAP_DRAW_FULL
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/planet/clown
 	name = "\improper Clown Planet"
@@ -618,9 +619,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Clown Roid"
 	icon_state = "honk"
 	requires_power = 0
-
-/area/asteroid/clown/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/tdome
 	name = "\improper Thunderdome"
@@ -1902,6 +1901,7 @@ proc/process_adminbus_teleport_locs()
 /area/icebar
 	name = "\improper Ice Bar"
 	icon_state = "ghettobar"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/station/garage
 	name = "\improper Public Garage"
@@ -1944,6 +1944,7 @@ proc/process_adminbus_teleport_locs()
 /area/surface/cave
 	name = "\improper Snow Cave"
 	icon_state = "cave"
+	holomap_draw_override = HOLOMAP_DRAW_FULL
 
 /area/surface/mine
 	name = "\improper Surface Mine"
@@ -1971,9 +1972,7 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Ruskie DJ Station"
 	icon_state = "DJ"
 	shuttle_can_crush = FALSE
-
-/area/djstation/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/djstation/solars
 	name = "\improper DJ Station Solars"
@@ -2024,9 +2023,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/secret
 	name = "\improper Derelict Secret Room"
 	icon_state = "library"
-
-/area/derelict/secret/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/derelict/bridge/access
 	name = "Derelict Control Room Access"
@@ -2084,9 +2081,7 @@ proc/process_adminbus_teleport_locs()
 /area/derelict/ship
 	name = "\improper Abandoned Ship"
 	icon_state = "yellow"
-
-/area/derelict/ship/holomapDrawOverride()
-	return HOLOMAP_DRAW_EMPTY
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/solar/derelict_starboard
 	name = "\improper Derelict Starboard Solar Array"
@@ -2814,3 +2809,36 @@ var/list/the_station_areas = list (
 		/datum/ambience/dorf,
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
+
+/area/maintenance/engine
+	name = "Engine"
+// BEGIN Horizon
+/area/hallway/primary/foreport
+	name = "Fore Port"
+	icon_state = "hallP"
+
+/area/hallway/primary/forestarboard
+	name = "Fore Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperstarboard
+	name = "Upper Starboard"
+	icon_state = "hallS"
+
+/area/hallway/primary/upperport
+	name = "Upper Port"
+	icon_state = "hallP"
+
+/area/hallway/secondary/podescape1
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/podescape2
+	name = "Upper Port"
+	icon_state = "escape"
+
+/area/hallway/secondary/exit2
+	name = "Escape Shuttle Hallway Right"
+	icon_state = "escape"
+
+// END Horizon

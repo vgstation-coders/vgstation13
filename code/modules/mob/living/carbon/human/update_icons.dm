@@ -133,11 +133,17 @@ var/global/list/damage_icon_parts = list()
 
 /mob/living/carbon/human/proc/get_damage_icon_part(damage_state, body_part,species_blood = "")
 	var/icon/I = damage_icon_parts["[damage_state]/[body_part]/[species_blood]"]
-	if(!I)
+	if(!I)//This should never happen anyway since all species damage icons are getting cached at roundstart (see cachedamageicons())
 		var/icon/DI = icon('icons/mob/dam_human.dmi', damage_state)			// the damage icon for whole human
 		DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)	// mask with this organ's pixels
 		if(species_blood)
-			DI.Blend(species_blood, ICON_MULTIPLY)							// mask with this species's blood color
+			var/brute = copytext(damage_state,1,2)
+			var/burn = copytext(damage_state,2)
+			DI = icon('icons/mob/dam_human.dmi', "[brute]0-color")
+			DI.Blend(species_blood, ICON_MULTIPLY)
+			var/icon/DI_burn = icon('icons/mob/dam_human.dmi', "0[burn]")//we don't want burns to blend with the species' blood color
+			DI.Blend(DI_burn, ICON_OVERLAY)
+			DI.Blend(icon('icons/mob/dam_mask.dmi', body_part), ICON_MULTIPLY)
 		damage_icon_parts["[damage_state]/[body_part]/[species_blood]"] = DI
 		return DI
 	else
@@ -257,6 +263,11 @@ var/global/list/damage_icon_parts = list()
 	if(!skeleton && !husk && !hulk)
 		if(species.anatomy_flags & MULTICOLOR)
 			stand_icon.Blend(rgb(multicolor_skin_r, multicolor_skin_g, multicolor_skin_b), ICON_ADD)
+		else if(species.anatomy_flags & RGBSKINTONE)
+			my_appearance.r_hair = clamp(my_appearance.r_hair, 0, 80)	//So we don't get rainbow monkeymen roaches
+			my_appearance.g_hair = clamp(my_appearance.g_hair, 0, 50)
+			my_appearance.b_hair = clamp(my_appearance.b_hair, 0, 35)
+			stand_icon.Blend(rgb(my_appearance.r_hair, my_appearance.g_hair, my_appearance.b_hair), ICON_ADD)
 		else if(species.anatomy_flags & HAS_SKIN_TONE)
 			if(my_appearance.s_tone >= 0)
 				stand_icon.Blend(rgb(my_appearance.s_tone, my_appearance.s_tone, my_appearance.s_tone), ICON_ADD)
@@ -278,7 +289,7 @@ var/global/list/damage_icon_parts = list()
 			stand_icon.Blend(eyes, ICON_OVERLAY)
 
 		//Mouth	(lipstick!)
-		if(lip_style && (species && species.anatomy_flags & HAS_LIPS))	//skeletons are allowed to wear lipstick no matter what you think, agouri.
+		if(lip_style)
 			stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
 
 		if(eye_style)
@@ -286,7 +297,12 @@ var/global/list/damage_icon_parts = list()
 
 
 	//Underwear
-	if(underwear >0 && underwear < 15 && species.anatomy_flags & HAS_UNDERWEAR)
+	var/list/undielist
+	if(gender == MALE)
+		undielist = underwear_m
+	else
+		undielist = underwear_f
+	if(underwear >0 && underwear <= undielist.len && species.anatomy_flags & HAS_UNDERWEAR)
 		if(!fat && !skeleton)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "underwear[underwear]_[g]_s"), ICON_OVERLAY)
 
@@ -699,18 +715,12 @@ var/global/list/damage_icon_parts = list()
 		O.pixel_x = species.inventory_offsets["[slot_gloves]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_gloves]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,GLOVES_LAYER)
-		//overlays_standing[GLOVES_LAYER]	= standing
 	else
-		if(blood_DNA && blood_DNA.len)
+		if(blood_DNA?.len && bloody_hands_data?.len)
 			O.icon = 'icons/effects/blood.dmi'
 			O.icon_state = "bloodyhands"
-			O.color = hand_blood_color
-			//var/image/bloodsies	= image("icon" = 'icons/effects/blood.dmi', "icon_state" = "bloodyhands")
-			//bloodsies.color = hand_blood_color
-			//overlays_standing[GLOVES_LAYER]	= bloodsies
+			O.color = bloody_hands_data["blood_colour"]
 			obj_to_plane_overlay(O,GLOVES_LAYER)
-		//else
-			//overlays_standing[GLOVES_LAYER]	= null
 	if(update_icons)
 		update_icons()
 
@@ -1238,7 +1248,7 @@ var/global/list/damage_icon_parts = list()
 		return
 	var/obj/abstract/Overlays/hand_layer/O = obj_overlays["[HAND_LAYER]-[index]"]
 	if(!O) //theoretically, should only be done once per hand
-		O = getFromPool(/obj/abstract/Overlays/hand_layer)
+		O = new /obj/abstract/Overlays/hand_layer
 		obj_overlays["[HAND_LAYER]-[index]"] = O
 	else
 		overlays.Remove(O)

@@ -464,6 +464,12 @@
 			else
 				to_chat(usr, "<span class = 'notice'>The glow of /the [V] startles [real_name]!</span>")
 
+		if(/obj/item/clothing/head/cowboy)
+			name = "Yeehaw Ian"
+			desc = "Are you really just gonna stroll past without saying howdy?"
+			valid = 1
+
+
 	if(valid)
 		if(usr)
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
@@ -704,7 +710,7 @@
 				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 				heart.plane = ABOVE_HUMAN_PLANE
 				flick_overlay(heart, list(M.client), 20)
-				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to you."))
+				emote("me", EMOTE_AUDIBLE, pick("yaps happily.","yips happily.","gives a hearty bark!","yips and cuddles up to [M]."))
 				playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 				if(prob(5))
 					master = M

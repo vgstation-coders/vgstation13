@@ -164,7 +164,7 @@
 			else if(iswirecutter(W))
 				W.playtoolsound(src, 50)
 				if(do_after(user, src, 10) && buildstage==SYSTEMISKINDADONE)
-					getFromPool(/obj/item/stack/cable_coil,get_turf(src),5)
+					new /obj/item/stack/cable_coil(get_turf(src), 5)
 					buildstage = SYSTEMISNOTDONE
 					update_icon()
 

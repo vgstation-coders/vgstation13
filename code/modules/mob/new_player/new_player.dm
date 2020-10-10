@@ -44,7 +44,7 @@
 			var/isadmin = 0
 			if(src.client && src.client.holder)
 				isadmin = 1
-			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \"[ckey]\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = \"[ckey]\")")
+			var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT id FROM erro_poll_question WHERE [(isadmin ? "" : "adminonly = false AND")] hidden IS NULL AND Now() BETWEEN starttime AND endtime AND id NOT IN (SELECT pollid FROM erro_poll_vote WHERE ckey = \":ckey\") AND id NOT IN (SELECT pollid FROM erro_poll_textreply WHERE ckey = :ckey)", list("ckey" = "\"[ckey]\""))
 			if(!query.Execute())
 				log_sql("Error fetching poll question: [query.ErrorMsg()]")
 				qdel(query)
@@ -60,6 +60,10 @@
 				output += "<p><a href='byond://?src=\ref[src];showpoll=1'>Show Player Polls</A></p>"
 
 	output += "</div>"
+
+	//dumb but doesn't require rewriting this menu
+	if(iscluwnebanned(src))
+		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
 
 	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
@@ -157,6 +161,18 @@
 				return 0
 
 		LateChoices()
+	if(href_list["cluwnebanned"])
+		if(!iscluwnebanned(usr))
+			to_chat(usr, "<span class='warning'>honk</span>")
+			return
+		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
+			return
+		if(!client)
+			return 1
+		sleep(1)
+		create_cluwne()
+
 	if(href_list["predict"])
 		var/dat = {"<html><body>
 		<h4>High Job Preferences</h4>"}
@@ -283,6 +299,8 @@
 		return 0
 	if(jobban_isbanned(src,rank))
 		return 0
+	if(jobban_isbanned(src,"cluwne")) //not totally necessary but prevents someone from joining if they were cluwnebanned in the lobby
+		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
 	. = 1
@@ -316,6 +334,16 @@
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 	mind.transfer_to(observer)
 	qdel(src)
+
+/mob/new_player/proc/create_cluwne()
+	var/mob/living/simple_animal/hostile/retaliate/cluwne/cluwne = new()
+	spawning = 1
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+	close_spawn_windows()
+	cluwne.forceMove(pick(latejoin))
+	mind.transfer_to(cluwne)
+	qdel(src)
+
 
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
 	// 20% of players have bad genetic mutations.
@@ -456,7 +484,7 @@
 		speech.frequency = COMMON_FREQ
 
 		Broadcast_Message(speech, vmask=null, data=0, compression=0, level=list(0,1))
-		returnToPool(speech)
+		qdel(speech)
 
 /mob/new_player/proc/LateChoices()
 	var/mills = world.time // 1/10 of a second, not real milliseconds but whatever
@@ -537,7 +565,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 
 	if (mind)
 		mind.active = 0 // we wish to transfer the key manually
-		mind.original = new_character
 		mind.transfer_to(new_character) // won't transfer key since the mind is not active
 
 	new_character.name = real_name
@@ -559,7 +586,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
-		new_character.mutations += M_OBESITY
 		new_character.overeatduration = 600
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
@@ -616,7 +642,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	//Handles transferring the mind and key manually.
 	if (mind)
 		mind.active = 0 //This prevents mind.transfer_to from setting new_character.key = key
-		mind.original = new_character
 		mind.transfer_to(new_character)
 	new_character.key = key //Do this after. For reasons known only to oldcoders.
 	spawn()

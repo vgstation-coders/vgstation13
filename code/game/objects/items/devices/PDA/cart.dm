@@ -12,6 +12,7 @@
 
 	// -- What we use to communicate with bots
 	var/obj/item/radio/integrated/radio = null
+	var/radio_type = null
 
 	// -- Various "access" crap
 	var/access_security = 0
@@ -54,6 +55,19 @@
 	// Bot destination
 	var/saved_destination = "No destination"
 
+/obj/item/weapon/cartridge/New()
+	. = ..()
+	if (radio_type)
+		radio = new radio_type(src)
+		radio.hostpda = loc
+		if(ticker && ticker.current_state == GAME_STATE_PLAYING)
+			radio.initialize()
+
+/obj/item/weapon/cartridge/initialize()
+	. = ..()
+	if (radio)
+		radio.initialize()
+
 /obj/item/weapon/cartridge/Destroy()
 	if(radio)
 		qdel(radio)
@@ -74,11 +88,7 @@
 	name = "\improper Power-ON Cartridge"
 	icon_state = "cart-e"
 	access_engine = 1
-
-/obj/item/weapon/cartridge/engineering/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize :^)
-		radio = new /obj/item/radio/integrated/signal/bot/floorbot(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
 
 /obj/item/weapon/cartridge/atmos
 	name = "\improper BreatheDeep Cartridge"
@@ -95,11 +105,7 @@
 	name = "\improper Med-U Cartridge"
 	icon_state = "cart-m"
 	access_medical = 1
-
-/obj/item/weapon/cartridge/medical/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize :^)
-		radio = new /obj/item/radio/integrated/signal/bot/medbot(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/item/weapon/cartridge/chemistry
 	name = "\improper ChemWhiz Cartridge"
@@ -115,11 +121,7 @@
 	name = "\improper R.O.B.U.S.T. Cartridge"
 	icon_state = "cart-s"
 	access_security = 1
-
-/obj/item/weapon/cartridge/security/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal/bot/beepsky(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/cartridge/detective
 	name = "\improper D.E.T.E.C.T. Cartridge"
@@ -128,17 +130,12 @@
 	access_medical = 1
 	access_manifest = 1
 
-
 /obj/item/weapon/cartridge/janitor
 	name = "\improper CustodiPRO Cartridge"
 	desc = "The ultimate in clean-room design."
 	icon_state = "cart-j"
 	access_janitor = 1
-
-/obj/item/weapon/cartridge/janitor/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize :^) // The lenny face is because this is an absurd solution to a silly problem, but it fits the rest of the file
-		radio = new /obj/item/radio/integrated/signal/bot/janitor(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/janitor
 
 /obj/item/weapon/cartridge/lawyer
 	name = "\improper P.R.O.V.E. Cartridge"
@@ -178,22 +175,14 @@
 	desc = "Complete with integrated radio signaler!"
 	icon_state = "cart-tox"
 	access_atmos = 1
-
-/obj/item/weapon/cartridge/signal/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal(src)
+	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/quartermaster
 	name = "\improper Space Parts & Space Vendors Cartridge"
 	desc = "Perfect for the Quartermaster on the go!"
 	icon_state = "cart-q"
 	access_quartermaster = 1
-
-/obj/item/weapon/cartridge/quartermaster/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal/bot/mule(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/mule
 
 /obj/item/weapon/cartridge/head
 	name = "\improper Easy-Record DELUXE"
@@ -210,11 +199,7 @@
 	access_janitor = 1
 	access_security = 1
 	fax_pings = TRUE
-
-/obj/item/weapon/cartridge/hop/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal/bot/mule(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/mule
 
 /obj/item/weapon/cartridge/hos
 	name = "\improper R.O.B.U.S.T. DELUXE"
@@ -222,11 +207,7 @@
 	access_manifest = 1
 	access_status_display = 1
 	access_security = 1
-
-/obj/item/weapon/cartridge/hos/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal/bot/beepsky(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/beepsky
 
 /obj/item/weapon/cartridge/ce
 	name = "\improper Power-On DELUXE"
@@ -236,11 +217,7 @@
 	access_status_display = 1
 	access_engine = 1
 	access_atmos = 1
-
-/obj/item/weapon/cartridge/ce/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize :^)
-		radio = new /obj/item/radio/integrated/signal/bot/floorbot(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/floorbot
 
 /obj/item/weapon/cartridge/cmo
 	name = "\improper Med-U DELUXE"
@@ -249,11 +226,7 @@
 	access_status_display = 1
 	access_reagent_scanner = 1
 	access_medical = 1
-
-/obj/item/weapon/cartridge/cmo/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize :^)
-		radio = new /obj/item/radio/integrated/signal/bot/medbot(src)
+	radio_type = /obj/item/radio/integrated/signal/bot/medbot
 
 /obj/item/weapon/cartridge/rd
 	name = "\improper Signal Ace DELUXE"
@@ -262,11 +235,7 @@
 	access_status_display = 1
 	access_robotics = 1
 	access_atmos = 1
-
-/obj/item/weapon/cartridge/rd/New()
-	..()
-	spawn(5)//giving time for the radio_controller to initialize
-		radio = new /obj/item/radio/integrated/signal(src)
+	radio_type = /obj/item/radio/integrated/signal
 
 /obj/item/weapon/cartridge/captain
 	name = "\improper Value-PAK Cartridge"
@@ -329,7 +298,7 @@
 	if(!frequency)
 		return
 
-	var/datum/signal/status_signal = getFromPool(/datum/signal)
+	var/datum/signal/status_signal = new /datum/signal
 	status_signal.source = src
 	status_signal.transmission_method = 1
 	status_signal.data["command"] = command

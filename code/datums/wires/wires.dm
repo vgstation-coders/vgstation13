@@ -50,6 +50,7 @@ var/list/wireColours = list("red", "blue", "green", "black", "orange", "brown", 
 /datum/wires/Destroy()
 	if(holder)
 		holder = null
+	..()
 
 /datum/wires/proc/GenerateWires()
 	var/list/colours_to_pick = wireColours.Copy() // Get a copy, not a reference.

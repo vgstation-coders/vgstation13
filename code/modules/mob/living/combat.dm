@@ -9,7 +9,7 @@
 		to_chat(src, "<span class='notice'>You cannot grab \the [target], \he is buckled in!</span>")
 		return
 
-	var/obj/item/weapon/grab/G = getFromPool(/obj/item/weapon/grab, src, target)
+	var/obj/item/weapon/grab/G = new /obj/item/weapon/grab(src, target)
 	if(!G)	//the grab will delete itself in New if affecting is anchored
 		return
 

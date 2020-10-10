@@ -1,7 +1,31 @@
+//Engineer rig
+/obj/item/clothing/head/helmet/space/rig/engineer
+	name = "engineering hardsuit helmet"
+	desc = "A special helmet designed for work in a hazardous, low-pressure environment. Has radiation shielding."
+	icon_state = "rig0-engineering"
+	item_state = "eng_helm"
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
+	_color = "engineering"
+	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	eyeprot = 3
+
+/obj/item/clothing/suit/space/rig/engineer
+	name = "engineering hardsuit"
+	desc = "A special suit that protects against hazardous, low pressure environments. Has radiation shielding."
+	icon_state = "rig-engineering"
+	item_state = "eng_hardsuit"
+	armor = list(melee = 40, bullet = 5, laser = 20,energy = 5, bomb = 35, bio = 100, rad = 50)
+	allowed = list(/obj/item/device/flashlight, /obj/item/weapon/tank, /obj/item/weapon/storage/bag/ore, /obj/item/device/t_scanner, /obj/item/weapon/pickaxe, /obj/item/device/rcd, /obj/item/weapon/wrench/socket)
+	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	pressure_resistance = 200 * ONE_ATMOSPHERE
+	head_type = /obj/item/clothing/head/helmet/space/rig/engineer
+	initial_modules = list(/obj/item/rig_module/rad_shield)
+
 //Chief Engineer's rig
-/obj/item/clothing/head/helmet/space/rig/elite
+/obj/item/clothing/head/helmet/space/rig/engineer/elite
 	name = "advanced hardsuit helmet"
-	desc = "An advanced helmet designed for work in a hazardous, low pressure environment. Shines with a high polish."
+	desc = "An advanced helmet designed for work in a hazardous, low pressure environment. Shines with a high polish making it plasma proof."
 	icon_state = "rig0-white"
 	item_state = "ce_helm"
 	_color = "white"
@@ -10,29 +34,29 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
 
-/obj/item/clothing/suit/space/rig/elite
-	icon_state = "rig-white"
+/obj/item/clothing/suit/space/rig/engineer/elite
 	name = "advanced hardsuit"
+	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish making it plasma proof."
+	icon_state = "rig-white"
+	item_state = "ce_hardsuit"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
-	desc = "An advanced suit that protects against hazardous, low pressure environments. Shines with a high polish."
-	item_state = "ce_hardsuit"
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	clothing_flags = PLASMAGUARD
 	cell_type = /obj/item/weapon/cell/super
-	head_type = /obj/item/clothing/head/helmet/space/rig/elite
+	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite
 
-/obj/item/clothing/head/helmet/space/rig/elite/test
+/obj/item/clothing/head/helmet/space/rig/engineer/elite/test
 	name = "prototype advanced hardsuit helmet"
 	desc = "A bleeding-edge helmet designed to protect its wearer against extreme environments. The armored padding in this helmet was totally removed to give place for its experimental plasmovsky alloy."
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 100, bomb = 100, bio = 100, rad = 100)
 
 //Self-charging, auto-refiller high-test suit.
-/obj/item/clothing/suit/space/rig/elite/test
+/obj/item/clothing/suit/space/rig/engineer/elite/test
 	name = "prototype advanced hardsuit"
 	desc = "A bleeding-edge prototype designed to protect its wearer against extreme environments. The armored padding in this suit was totally removed to give place for its experimental plasmovsky alloy."
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 100, bomb = 100, bio = 100, rad = 100)
-	head_type = /obj/item/clothing/head/helmet/space/rig/elite/test
+	head_type = /obj/item/clothing/head/helmet/space/rig/engineer/elite/test
 	gloves_type = /obj/item/clothing/gloves/yellow
 	boots_type = /obj/item/clothing/shoes/magboots/elite
 	tank_type = /obj/item/weapon/tank/oxygen
@@ -61,6 +85,13 @@
 	pressure_resistance = 40 * ONE_ATMOSPHERE
 	clothing_flags = GOLIATHREINFORCE
 	head_type = /obj/item/clothing/head/helmet/space/rig/mining
+	allowed = list(
+		/obj/item/device/flashlight,
+		/obj/item/weapon/tank,
+		/obj/item/weapon/storage/bag/ore,
+		/obj/item/device/mining_scanner,
+		/obj/item/weapon/pickaxe,
+		/obj/item/weapon/gun/energy/kinetic_accelerator)
 
 //Syndicate rig
 /obj/item/clothing/head/helmet/space/rig/syndi
@@ -233,7 +264,7 @@
 	head_type = /obj/item/clothing/head/helmet/space/rig/medical
 
 
-	//Security
+//Security
 /obj/item/clothing/head/helmet/space/rig/security
 	name = "security hardsuit helmet"
 	desc = "A special helmet designed for work in a hazardous low pressure environment. Has an additional layer of armor."
@@ -308,7 +339,7 @@
 
 //Atmospherics Rig (BS12)
 /obj/item/clothing/head/helmet/space/rig/atmos
-	desc = "A special helmet designed for work in hazardous low pressure environments. Has reduced radiation shielding to allow for greater mobility."
+	desc = "A special helmet designed for work in hazardous low pressure environments. Trades radiation shielding for plasma proofing compared to engineering hardsuits."
 	name = "atmospherics hardsuit helmet"
 	icon_state = "rig0-atmos"
 	item_state = "atmos_helm"
@@ -320,7 +351,7 @@
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 
 /obj/item/clothing/suit/space/rig/atmos
-	desc = "A special suit that protects against hazardous low pressure environments. Has reduced radiation shielding to allow for greater mobility."
+	desc = "A special suit that protects against hazardous low pressure environments. Trades radiation shielding for plasma proofing compared to engineering hardsuits."
 	icon_state = "rig-atmos"
 	name = "atmos hardsuit"
 	item_state = "atmos_hardsuit"
@@ -519,8 +550,11 @@
 /obj/item/clothing/head/helmet/space/ghetto
 	name = "jury-rigged space-proof fire helmet"
 	desc = "A firefighter helmet and gas mask combined and jury-rigged into being 'space-proof' somehow."
-	icon_state = "ghettorig"
-	item_state = "ghettorig"
+	icon_state = "ghettorig0"
+	item_state = "ghettorig0"
+	light_power = 1.5
+	var/brightness_on = 4 //luminosity when on
+	var/on = 0
 	_color = "ghetto"
 	pressure_resistance = 4 * ONE_ATMOSPHERE
 	armor = list(melee = 30, bullet = 5, laser = 20,energy = 10, bomb = 20, bio = 10, rad = 20)
@@ -529,8 +563,20 @@
 	heat_conductivity = 0
 	gas_transfer_coefficient = 0.01
 	permeability_coefficient = 0.01
+	actions_types = list(/datum/action/item_action/toggle_light)
 	eyeprot = 0
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
+
+/obj/item/clothing/head/helmet/space/ghetto/attack_self(mob/user)
+	on = !on
+	icon_state = "ghettorig[on]"
+	item_state = "ghettorig[on]"
+
+	if(on)
+		set_light(brightness_on)
+	else
+		set_light(0)
 
 /obj/item/clothing/suit/space/ghettorig
 	name = "jury-rigged space-proof firesuit"
@@ -545,7 +591,8 @@
 	heat_conductivity = 0 //thanks, blanket
 	gas_transfer_coefficient = 0.60
 	permeability_coefficient = 0.30
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, GREY_SHAPED)
+	species_restricted = list("exclude", VOX_SHAPED, MUSHROOM_SHAPED)
 
 //RoR survivor Rig
 /obj/item/clothing/suit/space/rig/ror

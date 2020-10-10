@@ -44,15 +44,6 @@
 		to_chat(user, "Plant Yield: <span class='info'>[(seed.yield != -1) ? seed.yield : "<span class='warning'> ERROR</span>"]</span>")
 		to_chat(user, "Plant Potency: <span class='info'>[(seed.potency != -1) ? seed.potency : "<span class='warning'> ERROR</span>"]</span>")
 
-/obj/item/seeds/cutting
-	name = "cuttings"
-	desc = "Some plant cuttings."
-
-/obj/item/seeds/cutting/update_appearance()
-	..()
-	icon = seed.plant_dmi
-	src.name = "packet of [seed.seed_name] cuttings"
-
 /obj/item/seeds/random
 	seed_type = null
 
@@ -824,7 +815,7 @@
 	name = "mold"
 	seed_name = "brown mold"
 	display_name = "brown mold"
-	plant_dmi = "icons/obj/hydroponics/mold.dmi"
+	plant_dmi = 'icons/obj/hydroponics/mold.dmi'
 	products = null
 	mutants = null
 	//mutants = list("wallrot") //TBD.
@@ -1595,25 +1586,6 @@
 	yield = 2
 	potency = 30
 	ideal_light = 0
-
-
-/datum/seed/test
-	name = "test"
-	seed_name = "testing"
-	seed_noun = "data"
-	display_name = "runtimes"
-	products = list(/mob/living/simple_animal/cat/Runtime)
-
-	nutrient_consumption = 0
-	water_consumption = 0
-	pest_tolerance = 11
-	weed_tolerance = 11
-	lifespan = 1000
-	endurance = 100
-	maturation = 1
-	production = 1
-	yield = 1
-	potency = 1
 
 /datum/seed/nofruit
 	name = "nofruit"

@@ -281,7 +281,7 @@ obj/item/asteroid/basilisk_hide/New()
 	pass_flags = PASSTABLE
 
 /mob/living/simple_animal/hostile/asteroid/hivelord/OpenFire(var/the_target)
-	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = getFromPool(/mob/living/simple_animal/hostile/asteroid/hivelordbrood,src.loc)
+	var/mob/living/simple_animal/hostile/asteroid/hivelordbrood/A = new /mob/living/simple_animal/hostile/asteroid/hivelordbrood(src.loc)
 	A.GiveTarget(target)
 	A.friends = friends
 	A.faction = faction
@@ -431,11 +431,11 @@ obj/item/asteroid/basilisk_hide/New()
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/New()
 	..()
 	spawn(100)
-		returnToPool(src)
+		qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/hivelordbrood/death(var/gibbed = FALSE)
 	..(TRUE)
-	returnToPool(src)
+	qdel(src)
 
 /mob/living/simple_animal/hostile/asteroid/goliath
 	name = "goliath"
@@ -886,6 +886,8 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
+	environment_smash_flags = 0
+	response_help = "pets"
 
 /mob/living/simple_animal/hostile/asteroid/pillow/examine(mob/user)
 	..()

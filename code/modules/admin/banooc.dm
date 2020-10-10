@@ -17,7 +17,11 @@ var/oocban_keylist[0]
 		return
 
 	//OOC permabans
-	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey FROM erro_ban WHERE (bantype = 'OOC_PERMABAN'  OR (bantype = 'OOC_TEMPBAN' AND expiration_time > Now())) AND isnull(unbanned)")
+	var/datum/DBQuery/query = SSdbcore.NewQuery("SELECT ckey FROM erro_ban WHERE (bantype = :ooc_perma  OR (bantype = :ooc_temp AND expiration_time > Now())) AND isnull(unbanned)",
+		list(
+			"ooc_perma" = "OOC_PERMABAN",
+			"ooc_temp" = "OOC_TEMPBAN",
+		))
 	if(!query.Execute())
 		message_admins("Error: [query.ErrorMsg()]")
 		log_sql("Error: [query.ErrorMsg()]")

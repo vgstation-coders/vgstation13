@@ -242,7 +242,7 @@ var/global/num_vending_terminals = 1
 				to_chat(user, "<span class='notice'>[bicon(newmachine)] You finish filling the vending machine, and use the stickers inside the pack to decorate the frame.</span>")
 				playsound(newmachine, 'sound/machines/hiss.ogg', 50, 0, 0)
 				newmachine.pack = P.type
-				getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
+				new /obj/item/stack/sheet/cardboard(P.loc, 4)
 				if(istype(P, /obj/structure/vendomatpack/custom))
 					for(var/obj/item/I in P.contents)
 						newmachine.loadCustomItem(I)
@@ -292,7 +292,7 @@ var/global/num_vending_terminals = 1
 		D.amount = D.original_amount
 	for (var/datum/data/vending_product/D in hidden_records)
 		D.amount = D.original_amount
-	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
+	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 	if(user.machine==src)
 		src.attack_hand(user)
@@ -300,7 +300,7 @@ var/global/num_vending_terminals = 1
 /obj/machinery/vending/proc/custom_refill(obj/structure/vendomatpack/P, mob/user)
 	for(var/obj/item/I in P.contents)
 		loadCustomItem(I)
-	getFromPool(/obj/item/stack/sheet/cardboard, P.loc, 4)
+	new /obj/item/stack/sheet/cardboard(P.loc, 4)
 	qdel(P)
 
 /obj/machinery/vending/ex_act(severity)
@@ -452,7 +452,7 @@ var/global/num_vending_terminals = 1
 			stat &= ~BROKEN
 			src.health = 100
 			power_change()
-			getFromPool(/obj/item/weapon/shard, loc)
+			new /obj/item/weapon/shard(loc)
 		else
 			to_chat(user, "<span class='notice'>The glass in \the [src] is broken! Fix it with reinforced glass first.</span>")
 			return
@@ -1198,7 +1198,6 @@ var/global/num_vending_terminals = 1
  */
 
 /*
-
 /obj/machinery/vending/[vendors name here]   // --vending machine template   :)
 	name = ""
 	desc = ""
@@ -1208,7 +1207,6 @@ var/global/num_vending_terminals = 1
 	products = list()
 	contraband = list()
 	premium = list()
-
 */
 
 /*
@@ -1256,12 +1254,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cola = 8,
 		/obj/item/weapon/reagent_containers/food/drinks/soda_cans/sodawater = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/mug = 30,
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 9,
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 10,
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 10,
-		/obj/item/weapon/reagent_containers/food/drinks/mug = 10
+		/obj/item/device/breathalyzer = 1
 		)
 	premium = list(
 		/obj/item/weapon/reagent_containers/food/drinks/bottle/pwine = 1,
@@ -1356,6 +1355,11 @@ var/global/num_vending_terminals = 1
 	vend_delay = 34
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/espresso = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/doppio = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/latte = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soy_latte = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/cappuccino = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 25,
@@ -1365,10 +1369,17 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/chifir = 10,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/espresso = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/doppio = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/latte = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soy_latte = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/cappuccino = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/chifir = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 10,
 		)
@@ -1978,6 +1989,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/head/helmet/siren = 2,
 		/obj/item/clothing/head/helmet/police = 2,
 		/obj/item/clothing/under/police = 2,
+		/obj/item/clothing/under/casualsec = 2,
 		/obj/item/device/modkit/fatsec_rig = 2
 		)
 	vouched = list(
@@ -3473,5 +3485,45 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/gun/energy/taser/team_security = 100,
 	)
 	pack = /obj/structure/vendomatpack/team_security
+
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
+
+/obj/machinery/vending/telecomms
+	name = "\improper Telecommunications Parts Vendor"
+	desc = "A vending machine containing telecommunications parts."
+	icon_state = "telecomms"
+	products = list(
+		/obj/item/weapon/stock_parts/manipulator = 10,
+		/obj/item/weapon/stock_parts/micro_laser = 5,
+		/obj/item/weapon/stock_parts/micro_laser/high = 3,
+		/obj/item/weapon/stock_parts/subspace/ansible = 2,
+		/obj/item/weapon/stock_parts/subspace/filter = 6,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 2,
+		/obj/item/weapon/stock_parts/subspace/treatment = 4,
+		/obj/item/weapon/stock_parts/subspace/analyzer = 2,
+		/obj/item/weapon/stock_parts/subspace/crystal = 2,
+		/obj/item/weapon/stock_parts/subspace/transmitter = 4,
+		/obj/item/weapon/circuitboard/telecomms/receiver = 1,
+		/obj/item/weapon/circuitboard/telecomms/bus = 1,
+		/obj/item/weapon/circuitboard/telecomms/processor = 1,
+		/obj/item/weapon/circuitboard/telecomms/broadcaster = 1,
+		/obj/item/weapon/circuitboard/telecomms/server = 3,
+		/obj/item/weapon/circuitboard/telecomms/hub = 1,
+		/obj/item/weapon/circuitboard/telecomms/relay = 2,
+		/obj/item/weapon/circuitboard/comm_monitor = 1,
+		/obj/item/weapon/circuitboard/comm_server = 1,
+		/obj/item/weapon/storage/bag/gadgets = 2,
+
+
+		)
+	contraband = list(
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED  = 1,
+		/obj/item/weapon/solder/pre_fueled = 2,
+		)
+	premium = list(
+		/obj/item/weapon/circuitboard/message_monitor = 1,
+		/obj/item/weapon/circuitboard/comm_traffic = 1,
+		)
+	pack = /obj/structure/vendomatpack/telecomms
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE

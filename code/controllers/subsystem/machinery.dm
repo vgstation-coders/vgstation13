@@ -37,7 +37,7 @@ var/list/machines = list()
 		var/obj/machinery/M = currentrun[currentrun.len]
 		currentrun.len--
 
-		if (!M || M.gcDestroyed || M.disposed || M.timestopped)
+		if (!M || M.gcDestroyed || M.timestopped)
 			continue
 
 		if (M.process() == PROCESS_KILL)

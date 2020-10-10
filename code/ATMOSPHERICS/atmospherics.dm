@@ -30,7 +30,7 @@ Pipelines + Other Objects -> Pipe network
 	var/initialize_directions = 0
 	var/initialize_directions_he = 0 // Same, but for HE pipes.
 
-	var/can_be_coloured = 0
+	var/can_be_coloured = 1 //set to 0 to blacklist your atmos thing from being colored
 	var/image/centre_overlay = null
 	// Investigation logs
 	var/log
@@ -339,9 +339,8 @@ Pipelines + Other Objects -> Pipe network
 			"[user] unfastens \the [src].", \
 			"<span class='notice'>You have unfastened \the [src].</span>", \
 			"You hear a ratchet.")
-		getFromPool(/obj/item/pipe, loc, null, null, src)
+		new /obj/item/pipe(loc, null, null, src)
 		investigation_log(I_ATMOS,"was removed by [user]/([user.ckey]) at [formatJumpTo(loc)].")
-		//P.New(loc, make_from=src) //new /obj/item/pipe(loc, make_from=src)
 		qdel(src)
 	return 1
 
@@ -395,6 +394,9 @@ Pipelines + Other Objects -> Pipe network
 
 /obj/machinery/atmospherics/is_airtight() //Technically, smoke would be able to pop up from a vent, but enabling ventcrawling mobs to do that still doesn't sound like a good idea
 	return 1
+
+/obj/machinery/atmospherics/can_overload()
+	return 0
 
 // Tiny helper to see if the object is "exposed".
 // Basically whether it's partially covered up by a floor tile or not.

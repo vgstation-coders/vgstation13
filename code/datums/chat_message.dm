@@ -1,8 +1,8 @@
 #define CHAT_MESSAGE_SPAWN_TIME		0.2 SECONDS
 #define CHAT_MESSAGE_LIFESPAN		5 SECONDS
 #define CHAT_MESSAGE_EOL_FADE		0.7 SECONDS
-#define CHAT_MESSAGE_EXP_DECAY		0.7 // Messages decay at pow(factor, idx in stack)
-#define CHAT_MESSAGE_HEIGHT_DECAY	0.6 // Increase message decay based on the height of the message
+#define CHAT_MESSAGE_EXP_DECAY		0.8 // Messages decay at pow(factor, idx in stack)
+#define CHAT_MESSAGE_HEIGHT_DECAY	0.7 // Increase message decay based on the height of the message
 #define CHAT_MESSAGE_APPROX_LHEIGHT	11 // Approximate height in pixels of an 'average' line, used for height decay
 #define CHAT_MESSAGE_WIDTH			96 // pixels
 #define CHAT_MESSAGE_MAX_LENGTH		68 // characters
@@ -46,7 +46,7 @@ var/runechat_icon = null
 		CRASH("Invalid target given for chatmessage")
 	if(!istype(owner) || owner.gcDestroyed || !owner.client)
 		stack_trace("/datum/chatmessage created with [isnull(owner) ? "null" : "invalid"] mob owner")
-		returnToPool(src)
+		qdel(src)
 		return
 	generate_image(text, target, owner, extra_classes, lifespan)
 
@@ -54,6 +54,7 @@ var/runechat_icon = null
 	if (owned_by)
 		owned_by.seen_messages.Remove(src)
 		owned_by.images.Remove(message)
+		owned_by.mob.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	owned_by = null
 	message_loc = null
 	message = null
@@ -70,9 +71,10 @@ var/runechat_icon = null
   * * lifespan - The lifespan of the message in deciseconds
   */
 /datum/chatmessage/proc/generate_image(text, atom/target, mob/owner, list/extra_classes, lifespan)
+	set waitfor = FALSE
 	// Register client who owns this message
 	owned_by = owner.client
-	owner.on_destroyed.Add(src, .proc/qdel_self)
+	owner.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 
 	// Clip message
 	var/maxlen = owned_by.prefs.max_chat_length
@@ -92,12 +94,17 @@ var/runechat_icon = null
 	// Reject whitespace
 	var/static/regex/whitespace = new(@"^\s*$")
 	if (whitespace.Find(text))
-		returnToPool(src)
+		qdel(src)
 		return
 
 	// Non mobs speakers can be small
 	if (!ismob(target))
 		extra_classes |= "small"
+
+	// If we heard our name, it's important
+	var/list/names = splittext(owner.name, " ")
+	for (var/word in names)
+		text = replacetext(text, word, "<b>[word]</b>")
 
 	// Append radio icon if comes from a radio
 	if (extra_classes.Find("spoken_into_radio"))
@@ -157,18 +164,18 @@ var/runechat_icon = null
 	spawn(lifespan - CHAT_MESSAGE_EOL_FADE)
 		end_of_life()
 
-/datum/chatmessage/proc/qdel_self()
-	returnToPool(src)
+/datum/chatmessage/proc/qdel_self(datum/thing)
+	qdel(src)
 
 /**
   * Applies final animations to overlay CHAT_MESSAGE_EOL_FADE deciseconds prior to message deletion
   */
 /datum/chatmessage/proc/end_of_life(fadetime = CHAT_MESSAGE_EOL_FADE)
-	if (gcDestroyed || disposed)
+	if (gcDestroyed)
 		return
 	animate(message, alpha = 0, time = fadetime, flags = ANIMATION_PARALLEL)
 	spawn(fadetime)
-		returnToPool(src)
+		qdel(src)
 
 /**
   * Creates a message overlay at a defined location for a given speaker
@@ -201,11 +208,11 @@ var/runechat_icon = null
 		if (5 to 16)
 			extra_classes += "very_small"
 
-	if (!say_understands(speaker, message_language))
+	if (message_language && !say_understands(speaker, message_language))
 		raw_message = message_language.scramble(raw_message)
 
 	// Display visual above source
-	getFromPool(/datum/chatmessage, raw_message, speaker, src, extra_classes)
+	new /datum/chatmessage(raw_message, speaker, src, extra_classes)
 
 // Tweak these defines to change the available color ranges
 #define CM_COLOR_SAT_MIN	0.6
