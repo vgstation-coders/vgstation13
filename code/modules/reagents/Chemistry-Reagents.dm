@@ -8625,6 +8625,32 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 				H.adjustOxyLoss(60)
 				H.adjustBruteLoss(30)
 
+
+/datum/reagent/ectoplasm
+	name = "ectoplasm"
+	id = ECTOPLASM
+	description = "Pure, distilled spooky"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#21d389b4"
+	density = 0.05
+
+/datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isskellington(M) || isskelevox(M) || islich(M))	//Slightly better than DD for spooks
+		playsound(M, 'sound/effects/rattling_bones.ogg', 100, 1)
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-3)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(3, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 3)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-3)
+	else
+		M.hallucination += 5	//50% mindbreaker
+
+
 //////////////////////
 //					//
 //      INCENSE		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

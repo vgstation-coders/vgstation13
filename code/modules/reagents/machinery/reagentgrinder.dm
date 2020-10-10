@@ -56,6 +56,8 @@ var/global/list/juice_items = list (
 
 		/obj/item/seeds = list(BLACKPEPPER = 5),
 
+		//Other
+		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
 
 		//archaeology!
 		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),
