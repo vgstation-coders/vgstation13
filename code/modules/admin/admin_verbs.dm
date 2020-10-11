@@ -336,6 +336,8 @@ var/list/admin_verbs_mod = list(
 			verbs += admin_verbs_mod
 		if(holder.rights & R_ADMINBUS)
 			verbs += /client/proc/secrets
+	if (isobserver(mob))
+		mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
@@ -378,6 +380,8 @@ var/list/admin_verbs_mod = list(
 		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
+	if (isobserver(mob))
+		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
