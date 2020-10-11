@@ -39,6 +39,7 @@ var/creating_arena = FALSE
 	var/selectedHUD = HUD_NONE // HUD_NONE, HUD_MEDICAL or HUD_SECURITY
 	var/diagHUD = FALSE
 	var/antagHUD = 0
+	var/conversionHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
@@ -231,13 +232,29 @@ Works together with spawning an observer, noted above.
 		return 0
 
 	regular_hud_updates()
+
+	//cleaning up antagHUD and conversionHUD icons
+	if(client)
+		for(var/image/hud in client.images)
+			if(findtext(hud.icon_state, "convertible") || findtext(hud.icon_state, "-logo"))
+				client.images -= hud
+
 	if(antagHUD)
 		var/list/target_list = list()
 		for(var/mob/living/target in oview(src))
 			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
-			assess_targets(target_list, src)
+			assess_antagHUD(target_list, src)
+
+	if(conversionHUD)
+		var/list/target_list = list()
+		for(var/mob/living/carbon/target in oview(src))
+			if(target.mind && target.hud_list[CONVERSION_HUD])
+				target_list += target
+		if(target_list.len)
+			assess_conversionHUD(target_list, src)
+
 	if(selectedHUD == HUD_MEDICAL)
 		process_medHUD(src)
 	else if(selectedHUD == HUD_SECURITY)
@@ -348,7 +365,7 @@ Works together with spawning an observer, noted above.
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
-/mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
+/mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
 	for(var/mob/living/target in target_list)
 		if(target.mind)
 			var/image/I
@@ -378,7 +395,13 @@ Works together with spawning an observer, noted above.
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
-	return 1
+
+/mob/dead/proc/assess_conversionHUD(list/target_list, mob/dead/observer/U)
+	for(var/mob/living/carbon/target in target_list)
+		if(target.mind)
+			U.client.images -= target.hud_list[CONVERSION_HUD]
+			target.update_convertibility()
+			U.client.images += target.hud_list[CONVERSION_HUD]
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
