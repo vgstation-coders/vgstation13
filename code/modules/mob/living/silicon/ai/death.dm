@@ -52,7 +52,7 @@
 
 	if(blackout_active)
 		malf_rcd_disable = FALSE
-		malf_radio_scramble = FALSe
+		malf_radio_blackout = FALSE
 
 	for(var/obj/machinery/ai_status_display/O in machines) //change status
 		spawn( 0 )

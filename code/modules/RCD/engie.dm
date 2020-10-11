@@ -16,7 +16,7 @@
 	rcd_list -= src
 
 /obj/item/device/rcd/matter/engineering/afterattack(var/atom/A, var/mob/user)
-	if(malf_rcd_disabled)
+	if(malf_rcd_disable)
 		return
 
 	return ..()

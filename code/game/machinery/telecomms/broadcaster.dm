@@ -306,7 +306,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	radios = null
 
 	//Scramble messages if radio blackout is enabled
-	if(radio_blackout)
+	if(malf_radio_blackout)
 		speech.message = Gibberish(speech.message, 95)
 	// TODO: Review this usage.
 	var/rendered = virt.render_speech(speech) // always call this on the virtualspeaker to advoid issues
