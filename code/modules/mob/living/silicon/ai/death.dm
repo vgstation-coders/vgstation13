@@ -50,6 +50,10 @@
 		spawn(10)
 			explosion(src.loc, 3, 6, 12, 15)
 
+	if(blackout_active)
+		malf_rcd_disable = FALSE
+		malf_radio_scramble = FALSe
+
 	for(var/obj/machinery/ai_status_display/O in machines) //change status
 		spawn( 0 )
 		O.mode = 2

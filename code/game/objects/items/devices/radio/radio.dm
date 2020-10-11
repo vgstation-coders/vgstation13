@@ -19,7 +19,6 @@
 	var/freerange = 0 // 0 - Sanitize frequencies, 1 - Full range
 	var/list/channels = list() //see communications.dm for full list. First channes is a "default" for :h
 	var/subspace_transmission = 0
-	var/scramble_message = 0   //If enabled, all recieved messages will be incomprehensible.
 	var/syndie = 0//Holder to see if it's a syndicate encrpyed radio
 	var/raider = 0//same as above but for raiders
 	var/maxf = 1499

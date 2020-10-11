@@ -61,6 +61,7 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
+	var/blackout_active = FALSE	
 
 	var/mob/living/silicon/ai/parent = null
 	var/camera_light_on = FALSE

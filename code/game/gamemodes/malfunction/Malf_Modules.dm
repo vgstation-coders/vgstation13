@@ -196,12 +196,18 @@ rcd light flash thingy on matter drain
 	override_base = "malf"
 
 /spell/aoe_turf/blackout/cast(var/list/targets, mob/user)
+	if(!isAI(user))
+		return
+	
+	var/mob/living/silicon/ai/A = user
+	A.blackout_active = TRUE
+
 	for(var/obj/machinery/power/apc/apc in power_machines)
 		apc.overload_lighting()
-	for(var/obj/item/device/radio/R in radio_list)
-		R.scramble_message = 1
-	for(var/obj/item/device/rcd/matter/engineering/rcd in rcd_list)
-		rcd.disabled = 1
+	
+	malf_radio_blackout = TRUE
+	malf_rcd_disable = TRUE
+
 	to_chat(user, "<span class='warning'>Electromagnetic pulse sent.</span>")
 
 
