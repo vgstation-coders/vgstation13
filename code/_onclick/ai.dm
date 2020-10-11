@@ -16,7 +16,9 @@
 
 	if(control_disabled || stat)
 		return
-
+	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] || modifiers["alt"] || modifiers["ctrl"])
+		return
 	if(ismob(A) || ismecha(A))
 		ai_actual_track(A)
 	else
