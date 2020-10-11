@@ -249,6 +249,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		var/data,                // ???
 		var/compression,         // Level of compression
 		var/list/level)          // z-levels that can hear us
+
 #ifdef SAY_DEBUG
 	if(speech.speaker)
 		say_testing(speech.speaker, "broadcast_message start - Sending \"[html_encode(speech.message)]\" to [speech.frequency]")
@@ -304,13 +305,15 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 
 	radios = null
 
+	//Scramble messages if radio blackout is enabled
+	if(malf_radio_blackout)
+		speech.message = Gibberish(speech.message, 95)
 	// TODO: Review this usage.
 	var/rendered = virt.render_speech(speech) // always call this on the virtualspeaker to advoid issues
-	//var/listeners_sent = 0
 	for (var/atom/movable/listener in listeners)
 		if (listener)
-			//listeners_sent++
 			listener.Hear(speech, rendered)
+
 
 	if (length(listeners))
 		listeners = null
@@ -351,6 +354,7 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	if(speech.speaker)
 		say_testing(speech.speaker, "Broadcast_Message finished with [listeners ? listeners.len : 0] listener\s getting our message, [speech.message] lang = [speech.language ? speech.language.name : "none"]")
 #endif
+
 
 	spawn(50)
 		qdel(virt)
