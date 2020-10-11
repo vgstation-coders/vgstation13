@@ -1,3 +1,5 @@
+#define BAGEL_REQUIREMENT 17
+
 //checks if a file exists and contains text
 //returns text as a string if these conditions are met
 /proc/return_file_text(filename)
@@ -97,6 +99,12 @@
 			if(!ticker.revolutionary_victory)
 				message_admins("Skipping map [potential], revolutionaries have not won.")
 				warning("Skipping map [potential], revolutionaries have not won.")
+				binary = null
+				continue
+		if(potential == "Bagelstation/")
+			if(score["bagelscooked"] < BAGEL_REQUIREMENT)
+				message_admins("Skipping map [potential], less than [BAGEL_REQUIREMENT] bagels made.")
+				warning("Skipping map [potential], less than [BAGEL_REQUIREMENT] bagels made.")
 				binary = null
 				continue
 		if(!binary)
