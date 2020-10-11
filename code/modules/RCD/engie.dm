@@ -6,7 +6,6 @@
 	/datum/rcd_schematic/con_airlock
 	)
 
-	var/disabled		= 0
 
 /obj/item/device/rcd/matter/engineering/New()
 	. = ..()
@@ -17,7 +16,7 @@
 	rcd_list -= src
 
 /obj/item/device/rcd/matter/engineering/afterattack(var/atom/A, var/mob/user)
-	if(disabled)
+	if(malf_rcd_disable)
 		return
 
 	return ..()

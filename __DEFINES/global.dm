@@ -399,6 +399,10 @@ var/list/boss_mobs = list(
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
+//Set by Malf AI Blackout
+var/malf_radio_blackout = FALSE
+var/malf_rcd_disable = FALSE
+
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
 

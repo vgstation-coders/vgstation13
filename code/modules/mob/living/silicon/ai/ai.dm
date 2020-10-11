@@ -54,6 +54,7 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
+	var/blackout_active = FALSE	
 	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
 	var/mob/living/silicon/ai/parent = null
