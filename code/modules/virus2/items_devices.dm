@@ -196,7 +196,7 @@ var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish/attack_hand(var/mob/user)
 	..()
-	infection_attempt(user)
+	infection_attempt(user,contained_virus,"attack_hand infection")
 
 /obj/item/weapon/virusdish/attack_self(var/mob/user)
 	open = !open
@@ -211,7 +211,7 @@ var/list/virusdishes = list()
 		if (contained_virus)
 			contained_virus.log += "<br />[timestamp()] Containment Dish closed by [key_name(user)]."
 		processing_objects.Remove(src)
-	infection_attempt(user)
+	infection_attempt(user,contained_virus,"attack_self infection")
 
 /obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
 	..()

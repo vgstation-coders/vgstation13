@@ -1,23 +1,5 @@
 ////////////////////////SPECIAL/////////////////////////////////
 
-
-/*/datum/disease2/effect/alien
-	name = "Unidentified Foreign Body"
-	stage = 4
-	activate(var/mob/living/carbon/mob)
-		to_chat(mob, "<span class='warning'>You feel something tearing its way out of your stomach...</span>")
-		mob.adjustToxLoss(10)
-		mob.updatehealth()
-		if(prob(40))
-			if(mob.client)
-				mob.client.mob = new/mob/living/carbon/alien/larva(mob.loc)
-			else
-				new/mob/living/carbon/alien/larva(mob.loc)
-			var/datum/disease2/disease/D = mob:virus2
-			mob:gib()
-			del D*/
-
-
 //Vampire Diseased Touch
 /datum/disease2/effect/organs/vampire
 	stage = 1
@@ -31,6 +13,7 @@
 	stage = 1
 	restricted = 2//symptoms won't randomly mutate into this one & won't appear in the symptom encyclopedia
 
+
 /datum/disease2/effect/blob_spores
 	name = "Blob Spores"
 	desc = "They seem inert for the most part, but appear to randomly pulsate once in a while."
@@ -41,6 +24,7 @@
 	chance = 100
 	max_chance = 100
 	var/looks = "new"
+
 
 /datum/disease2/effect/blob_spores/on_death(var/mob/living/carbon/mob)
 	//first of all is there a blob on top of us

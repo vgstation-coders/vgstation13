@@ -66,7 +66,7 @@
 
 /obj/machinery/telecomms/receiver/preset_right/initialize()
 	..()
-	freq_listening = list(RESPONSE_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ, COMMON_FREQ) //ert, command, engineering, security
+	freq_listening = list(RESPONSE_FREQ, COMM_FREQ, ENG_FREQ, SEC_FREQ, COMMON_FREQ, AIPRIV_FREQ) //ert, command, engineering, security
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
 
@@ -110,7 +110,7 @@
 
 /obj/machinery/telecomms/bus/preset_four/initialize()
 	..()
-	freq_listening = list(ENG_FREQ, COMMON_FREQ)
+	freq_listening = list(ENG_FREQ, COMMON_FREQ, AIPRIV_FREQ)
 	for(var/i = 1441, i < 1489, i += 2)
 		freq_listening |= i
 
@@ -196,7 +196,7 @@
 
 /obj/machinery/telecomms/server/presets/common/initialize()
 	..()
-	freq_listening = list(COMMON_FREQ)
+	freq_listening = list(COMMON_FREQ, AIPRIV_FREQ)	//just stick AI private frequency in there until somebody gives it its own server
 	//Common and other radio frequencies for people to freely use
 	// 1441 to 1489
 /obj/machinery/telecomms/server/presets/common/New()

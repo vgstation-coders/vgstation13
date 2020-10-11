@@ -393,6 +393,7 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
+	/mob/living/simple_animal/hostile/ginger/gingerbroodmother		// Gingerbominations...
 	)
 
 // Set by traitor item, affects cargo supplies

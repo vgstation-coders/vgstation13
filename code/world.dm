@@ -123,7 +123,6 @@ var/datum/early_init/early_init_datum = new
 	initialize_beespecies()
 	generate_radio_frequencies()
 	//sun = new /datum/sun()
-	radio_controller = new /datum/controller/radio()
 	data_core = new /obj/effect/datacore()
 	paiController = new /datum/paiController()
 

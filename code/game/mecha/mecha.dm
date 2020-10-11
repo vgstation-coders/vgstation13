@@ -1159,6 +1159,9 @@
 		else
 			to_chat(usr, "You stop entering the exosuit.")
 
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
+
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
@@ -1379,6 +1382,9 @@
 		dir = dir_in
 		if(G)
 			G.hud_off()
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark(src, 2, FALSE)

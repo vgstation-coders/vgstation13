@@ -1,8 +1,7 @@
 /mob/living/silicon/ai/Logout()
 	..()
-	if(!is_in_shell)
-		for(var/obj/machinery/ai_status_display/O in machines) //change status
-			O.mode = 0
+	for(var/obj/machinery/ai_status_display/O in machines) //change status
+		O.mode = 0
 	if(!isturf(loc))
 		if (client)
 			client.eye = loc

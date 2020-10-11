@@ -71,3 +71,4 @@
 	L.alphas -= "etheral_jaunt"
 	L.handle_alpha()
 	to_chat(M, "<span class='danger'>\The [L] teleports behind you!</span>")
+	playsound(L, 'sound/misc/teleport_behind.ogg', 100)
