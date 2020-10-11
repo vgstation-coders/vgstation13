@@ -108,6 +108,11 @@
 
 	var/wikiroute
 
+	var/list/purchased_powers = list()
+	var/list/available_powers = list()		//holds instances of each power
+	var/datum/power_holder/power_holder
+	var/powerpoints = 0
+
 	// This datum represents all data that is exported to the statistics file at the end of the round.
 	// If you want to store faction-specific data as statistics, you'll need to define your own datum.
 	// See dynamic_stats.dm

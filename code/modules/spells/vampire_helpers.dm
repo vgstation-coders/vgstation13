@@ -10,7 +10,7 @@
 		world.log << "[src] has vampire spells but isn't a vampire."
 		return 0
 
-	var/fullpower = (VAMP_JAUNT in vampire.powers)
+	var/fullpower = (VAMP_JAUNT in vampire.purchased_powers)
 
 	if(src.stat > max_stat)
 		to_chat(src, "<span class='warning'>You are incapacitated.</span>")

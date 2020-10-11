@@ -14,22 +14,15 @@
 
 	var/lesser_form = !ishuman(src)
 
-	if(!powerinstances.len)
-		for(var/P in powers)
-			powerinstances += new P()
+	if(!C.available_powers.len)
+		for(var/P in subtypesof(/datum/power/changeling))
+			C.available_powers += new P()
 
 	// Code to auto-purchase free powers.
-	for(var/datum/power/changeling/P in powerinstances)
-		if(!P.genomecost) // Is it free?
-			if(!(P in C.power_holder.purchasedpowers)) // Do we not have it already?
+	for(var/datum/power/changeling/P in C.available_powers)
+		if(!P.cost) // Is it free?
+			if(!(P in C.purchased_powers)) // Do we not have it already?
 				C.power_holder.purchasePower(P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
-
-	for(var/datum/power/changeling/P in C.power_holder.purchasedpowers)
-		if(P.isVerb)
-			if(lesser_form && !P.allowduringlesserform)
-				continue
-			if(!(P in src.verbs))
-				verb_holder.verbs += P.verbpath
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text
@@ -376,9 +369,9 @@
 							src.make_changeling()
 
 			changeling.chem_charges += Tchangeling.chem_charges
-			changeling.geneticpoints += Tchangeling.geneticpoints
+			changeling.geneticpoints += Tchangeling.powerpoints
 			Tchangeling.chem_charges = 0
-			Tchangeling.geneticpoints = 0
+			Tchangeling.powerpoints = 0
 			Tchangeling.absorbedcount = 0
 
 	changeling.absorbedcount++

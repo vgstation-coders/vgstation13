@@ -15,7 +15,6 @@
 	required_pref = VAMPIRE
 	protected_traitor_prob = PROB_PROTECTED_RARE
 
-	var/list/powers = list()
 	var/ismenacing = FALSE
 	var/iscloaking = FALSE
 
@@ -240,7 +239,7 @@
 		var/datum/power/vampire/VP_type = i
 		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
 			var/datum/power/vampire/VP = new VP_type
-			if (!(VP.id in powers))
+			if (!(VP in purchased_powers))
 				VP.Give(src)
 
 	var/mob/living/carbon/human/H = antag.current
@@ -427,7 +426,7 @@
 
 /datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	powers.Cut()
+	purchased_powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
 		logo_state = "" // Borgos don't get the vampire icon.
 	else
