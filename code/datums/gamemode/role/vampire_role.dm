@@ -237,7 +237,7 @@
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
-		if (blood_total > initial(VP_type.blood_threeshold) && !(initial(VP_type.id) in powers))
+		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in powers))
 			var/datum/power/vampire/VP = new VP_type
 			if (!(VP in purchased_powers))
 				VP.Give(src)

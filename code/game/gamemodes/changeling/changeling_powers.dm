@@ -6,23 +6,11 @@
 	if(!C)
 		return
 
-	verbs += /datum/role/changeling/proc/EvolutionMenu
-
-	var/obj/item/verbs/changeling/verb_holder = locate() in src
-	if(!verb_holder)
-		verb_holder = new /obj/item/verbs/changeling(src)
-
-	var/lesser_form = !ishuman(src)
-
-	if(!C.available_powers.len)
-		for(var/P in subtypesof(/datum/power/changeling))
-			C.available_powers += new P()
-
 	// Code to auto-purchase free powers.
 	for(var/datum/power/changeling/P in C.available_powers)
 		if(!P.cost) // Is it free?
 			if(!(P in C.purchased_powers)) // Do we not have it already?
-				C.power_holder.purchasePower(P.name, 0)// Purchase it. Don't remake our verbs, we're doing it after this.
+				C.power_holder.purchasePower(P.name)// Purchase it. Don't remake our verbs, we're doing it after this.
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text
@@ -185,24 +173,6 @@
 	delayNextAttack(0)
 	icon = null
 	invisibility = initial(invisibility)
-
-//removes our changeling verbs
-/mob/proc/remove_changeling_powers()
-	if(!mind)
-		return
-	var/datum/role/changeling/changeling = mind.GetRole(CHANGELING)
-	if(!changeling)
-		return
-	var/obj/item/verbs/changeling/verb_holder = locate() in src
-	if(!verb_holder)
-		return
-
-	for(var/datum/power/changeling/P in changeling.power_holder.purchasedpowers)
-		if(P.isVerb)
-			verb_holder.verbs -= P.verbpath
-
-	qdel(verb_holder)
-	verb_holder = null
 
 
 //Helper proc. Does all the checks and stuff for us to avoid copypasta
@@ -448,12 +418,6 @@
 	else
 		to_chat(M, "<span class='warning'>We cannot perform this ability in this form!</span>")
 
-/mob/proc/changeling_can_lesser_form()
-	if(istype(loc, /obj/mecha))
-		return FALSE
-	if(istype(loc, /obj/machinery/atmospherics))
-		return FALSE
-	return TRUE
 
 //Transform into a monkey. 	//TODO replace with monkeyize proc
 /mob/proc/changeling_lesser_form()

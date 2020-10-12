@@ -25,6 +25,8 @@
 /datum/role/changeling/OnPostSetup()
 	. = ..()
 	power_holder = new /datum/power_holder/changeling(src, /datum/power/changeling)
+	for(var/P in subtypesof(/datum/power/changeling))
+		C.available_powers += new P()
 	antag.current.make_changeling()
 	var/honorific
 	if(antag.current.gender == FEMALE)
