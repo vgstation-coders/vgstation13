@@ -12,7 +12,7 @@
 	melee_damage_upper = 15
 	var/obj/structure/candybucket/candy_jack/ourBucket = null
 
-/mob/living/simple_animal/hostile/skeletonjack/proc/trickOrTreat(var/candyAmount)
+/mob/living/simple_animal/hostile/skeletonjack/proc/candyEnhance(var/candyAmount)
 	maxHealth += candyAmount //A bunch of bones glued to a pumpkin powered by halloween energy
 	health = maxHealth
 
@@ -26,7 +26,7 @@
 /mob/living/simple_animal/hostile/skeletonjack/death(var/gibbed = FALSE)
 	..(gibbed)
 	if(ourBucket)
-		ourBucket.forceMove(src.loc)
+		ourBucket.forceMove(loc)
 	else
 		new /obj/item/clothing/head/pumpkinhead(src.loc)
 	qdel(src)
