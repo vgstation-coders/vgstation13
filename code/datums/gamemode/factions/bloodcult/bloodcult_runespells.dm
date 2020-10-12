@@ -1747,6 +1747,7 @@ var/list/blind_victims = list()
 		T.uses++
 		to_chat(M, "<span class='warning'>You are still under the effects of a Seer talisman.</span>")
 		qdel(src)
+		return
 
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
