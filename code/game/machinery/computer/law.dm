@@ -301,7 +301,10 @@
 /obj/machinery/computer/aiupload/update_icon()
 	..()
 	overlays = 0
-
+	
+	if(stat & (BROKEN | NOPOWER))
+		return
+	
 	if (occupant)
 		switch (occupant.stat)
 			if (CONSCIOUS)
@@ -310,3 +313,4 @@
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
 	else if (current)
 		overlays += image('icons/obj/computer.dmi', "upload_wireless")
+
