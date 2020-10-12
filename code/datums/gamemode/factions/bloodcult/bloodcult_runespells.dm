@@ -1751,7 +1751,7 @@ var/list/blind_victims = list()
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
-	new (activator,activator,null,TRUE, talisman_duration)
+	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
 /obj/effect/cult_ritual/seer
