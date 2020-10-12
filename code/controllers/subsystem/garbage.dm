@@ -244,7 +244,7 @@ List of hard deletions:"}
 		return
 
 	if(istype(D, /atom) && !istype(D, /atom/movable))
-		warning("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
+		stack_trace("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
 		del(D)
 		SSgarbage.hard_dels++
 		SSgarbage.dels_count++
