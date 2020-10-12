@@ -6,7 +6,6 @@
 	w_class = 5
 	fire_sound = 'sound/effects/flesh_squelch.ogg'
 	empty_sound = null
-	silenced = 1
 	fire_volume = 250
 	maxlength = 10
 	clumsy_check = 0
@@ -30,6 +29,8 @@
 		parent_borer = p_borer
 	if(!parent_borer)
 		qdel(src)
+	var/obj/item/gun_part/silencer/S = new /obj/item/gun_part/silencer
+	silenced = S
 
 /obj/item/weapon/gun/hookshot/flesh/dropped()
 	..()
