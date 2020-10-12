@@ -4396,6 +4396,8 @@
 		return 1
 
 	if(volume >= 50 && !(locate(/obj/effect/decal/cleanable/salt) in T))
+		if(T.density)
+			return
 		new /obj/effect/decal/cleanable/salt(T)
 
 
