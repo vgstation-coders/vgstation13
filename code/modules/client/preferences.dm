@@ -1351,6 +1351,7 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 			switch(href_list["preference"])
 				if("fps")
 					var/desired_fps = input(user, "Choose your desired frames per second.\n\
+WARNING: BYOND versions earlier than 513.1323 might not work properly with values other than 0.\n\
 Set this to -1 to use the recommended value.\n\
 Set this to 0 to use the server's FPS (currently [world.fps])\n\
 Values up to 1000 are allowed.", "FPS", fps) as null|num
