@@ -14,6 +14,7 @@ var/list/global_diseases = list()
 
 /datum/disease2/disease/predefined
 	var/category = ""
+	type_weight = list(0,0,0,0)
 
 /datum/disease2/disease/predefined/New()
 	antigen = list(pick(antigen_family(ANTIGEN_RARE)))
