@@ -1741,12 +1741,18 @@ var/list/blind_victims = list()
 
 /datum/rune_spell/blood_cult/seer/cast_talisman()
 	var/mob/living/M = activator
+
+	if (locate(/obj/effect/cult_ritual/seer) in M)
+		var/obj/item/weapon/talisman/T = spell_holder
+		T.uses++
+		to_chat(M, "<span class='warning'>You are still under the effects of a Seer talisman.</span>")
+		qdel(src)
+		return
+
 	M.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	M.apply_vision_overrides()
 	anim(target = M, a_icon = 'icons/effects/160x160.dmi', a_icon_state = "rune_seer", lay = ABOVE_OBJ_LAYER, offX = -WORLD_ICON_SIZE*2, offY = -WORLD_ICON_SIZE*2, plane = OBJ_PLANE, invis = INVISIBILITY_OBSERVER, alph = 200, sleeptime = talisman_duration)
-	var/obj/effect/cult_ritual/seer/ritual = new (activator,activator,null,TRUE)
-	spawn(talisman_duration)
-		qdel(ritual)
+	new /obj/effect/cult_ritual/seer(activator,activator,null,TRUE, talisman_duration)
 	qdel(src)
 
 /obj/effect/cult_ritual/seer
@@ -1766,7 +1772,7 @@ var/list/blind_victims = list()
 	var/list/propension = list()
 	var/talisman = FALSE
 
-/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell,var/talisman_ritual = FALSE)
+/obj/effect/cult_ritual/seer/New(var/turf/loc, var/mob/living/user, var/datum/rune_spell/blood_cult/seer/runespell,var/talisman_ritual = FALSE,var/talisman_duration = 60 SECONDS)
 	..()
 	processing_objects.Add(src)
 	talisman = talisman_ritual
@@ -1780,10 +1786,14 @@ var/list/blind_victims = list()
 	caster.see_invisible_override = SEE_INVISIBLE_OBSERVER
 	caster.apply_vision_overrides()
 	to_chat(caster, "<span class='notice'>You find yourself able to see through the gaps in the veil. You can see and interact with the other side, and also find out the crew's propensity to be successfully converted, whether they are <b><font color='green'>Willing</font></b>, <b><font color='orange'>Uncertain</font></b>, or <b><font color='red'>Unconvertible</font></b>.</span>")
+	if (talisman)
+		spawn(talisman_duration)
+			qdel(src)
+
 
 /obj/effect/cult_ritual/seer/Destroy()
 	processing_objects.Remove(src)
-	if (caster)
+	if (caster && caster.client)
 		caster.client.images -= propension
 		caster.see_invisible_override = 0
 		caster.apply_vision_overrides()
@@ -1804,11 +1814,11 @@ var/list/blind_victims = list()
 		caster.client.images -= propension
 		propension.len = 0
 
-	for(var/mob/living/carbon/C in dview(world.view, get_turf(src), INVISIBILITY_MAXIMUM))
-		C.update_convertibility()
-		propension += C.hud_list[CONVERSION_HUD]
+		for(var/mob/living/carbon/C in dview(world.view, get_turf(src), INVISIBILITY_MAXIMUM))
+			C.update_convertibility()
+			propension += C.hud_list[CONVERSION_HUD]
 
-	caster.client.images += propension
+		caster.client.images += propension
 
 
 //RUNE XII
