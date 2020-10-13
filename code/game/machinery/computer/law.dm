@@ -312,5 +312,9 @@
 			if (DEAD)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
 	else if (current)
-		overlays += image('icons/obj/computer.dmi', "upload_wireless")
-
+		if(current.stat == DEAD)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_dead")
+		else if(current.aiRestorePowerRoutine)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_nopower")
+		else
+			overlays += image('icons/obj/computer.dmi', "upload_wireless")
