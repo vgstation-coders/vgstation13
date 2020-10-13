@@ -148,11 +148,9 @@
 		current = occupant
 	else if (current)
 		current = null
-		update_icon()
 		return
 	else
 		current = select_active_ai(user)
-		update_icon()
 
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
@@ -161,6 +159,8 @@
 			to_chat(usr, "AI detected on this terminal. [current.name] selected for law changes.")
 		else
 			to_chat(usr, "[current.name] selected for law changes.")
+
+	update_icon()
 
 /obj/machinery/computer/borgupload
 	name = "Cyborg Upload"
