@@ -122,7 +122,7 @@
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
-	if(silenced && istype(silenced, /obj/item/gun_part/silencer))
+	if(istype(silenced, /obj/item/gun_part/silencer))
 		var/obj/item/gun_part/silencer/A = silenced
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
