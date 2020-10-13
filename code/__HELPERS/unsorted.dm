@@ -867,7 +867,7 @@ proc/GaussRandRound(var/sigma,var/roundto)
 		sleep(delayfraction)
 		var/success
 		if(custom_checks)
-			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location)
+			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
 		else
 			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
 		if(!success)
