@@ -176,6 +176,7 @@
 			set_light(0)
 
 /obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
+	..()
 	if(istype(I, /obj/item/stack/sheet/bone))
 		var/obj/item/stack/sheet/bone/B = I
 		if(B.use(6))

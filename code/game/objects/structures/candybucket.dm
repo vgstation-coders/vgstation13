@@ -25,10 +25,11 @@
 			to_chat(user, "<span class='notice'>You add \the [I] to \the [src].</span>")
 			if(istype(I, /obj/item/weapon/reagent_containers/syringe))
 				log_admin("[key_name(user)] added a [I] to [src] at [formatJumpTo(get_turf(user))], it contains:")
-				message_admins("[key_name(user)] has added [I] to [formatJumpTo(get_turf(user))]")
 				if(I.reagents.reagent_list.len)
 					for(var/datum/reagent/R in I.reagents.reagent_list)
 						log_admin("[R.volume] units of [R.name]")
+						if(R in reagents_to_log)
+							message_admins("[key_name(user)] has added [I] containing [R] to [formatJumpTo(get_turf(user))]")
 				else
 					log_admin("nothing")
 			update_icon()

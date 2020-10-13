@@ -30,3 +30,7 @@
 	else
 		new /obj/item/clothing/head/pumpkinhead(src.loc)
 	qdel(src)
+
+/mob/living/simple_animal/hostile/skeletonjack/Destroy()
+	..()
+	ourBucket = null
