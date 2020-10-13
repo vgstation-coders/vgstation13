@@ -318,3 +318,7 @@
 			overlays += image('icons/obj/computer.dmi', "upload_wireless_nopower")
 		else
 			overlays += image('icons/obj/computer.dmi', "upload_wireless")
+
+/obj/machinery/computer/aiupload/process()
+	..()
+	update_icon()
