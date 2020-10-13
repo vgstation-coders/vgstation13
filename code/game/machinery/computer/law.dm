@@ -148,6 +148,7 @@
 		current = occupant
 	else if (current)
 		current = null
+		update_icon()
 		return
 	else
 		current = select_active_ai(user)
