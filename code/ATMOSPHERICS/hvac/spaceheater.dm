@@ -367,6 +367,7 @@
 
 /obj/machinery/space_heater/campfire/stove/extinguish()
 	on = FALSE
+	update_icon()
 
 
 /obj/machinery/space_heater/campfire/Crossed(mob/user as mob)
