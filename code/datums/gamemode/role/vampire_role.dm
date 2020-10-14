@@ -74,7 +74,8 @@
 	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
-		VP.grant_spell()
+		VP.add_power(src)
+	
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
@@ -266,7 +267,7 @@
 
 /datum/role/vampire/process()
 	..()
-	var/mob/living/carbon/human/H = antag.current
+	var/mob/living/carbon/human/H = antag?.current
 	if (!istype(H))
 		return FALSE // The life() procs only work on humans.
 	handle_cloak(H)

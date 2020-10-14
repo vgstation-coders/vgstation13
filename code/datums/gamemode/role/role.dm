@@ -231,6 +231,12 @@
 		antag.assigned_role="MODE"
 	return 1
 
+//Remove and re-grant role-related power spells
+/datum/role/proc/refreshspells()
+	for(/datum/power/P in current_powers)
+		P.remove_spell()
+		P.grant_spell()
+
 // Return 1 on success, 0 on failure.
 /datum/role/proc/OnPostSetup()
 	return 1

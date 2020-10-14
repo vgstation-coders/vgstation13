@@ -20,8 +20,14 @@
 	if(is_type_in_list(src, R.current_powers))
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
+	if (helptext)
+		to_chat(role.antag.current, "<span class = 'notice'>[helptext]</span>")
+
+	if (store_in_memory)
+		role.antag.store_memory("<font size = '1'>[helptext]</font>")
 	R.current_powers += src
 	role = R
+	grant_spell()
 
 //gives the user the spells if theres one associated with it, seperated from add_power in instances where spells need to be added/removed repeatedly (changelings)
 /datum/power/proc/grant_spell()
@@ -37,11 +43,15 @@
 		var/spell/S = new spellpath
 		role.antag.current.add_spell(S)
 
-	if (helptext)
-		to_chat(role.antag.current, "<span class = 'notice'>[helptext]</span>")
-
-	if (store_in_memory)
-		role.antag.store_memory("<font size = '1'>[helptext]</font>")
+/datum/power/proc/remove_spell()
+	var/mob/M = role.antag.current
+	if (!istype(role) || !istype(M))
+		return FALSE
+	if (spellpath)
+		if(locate(spellpath) in role.antag.current.spell_list)
+			var/spell/S = new spellpath
+			role.antag.current.remove_spell(S)
+			return FALSE
 
 
 /datum/power_holder
