@@ -75,53 +75,6 @@
 /datum/disease2/effect/deaf/activate(var/mob/living/mob)
 	mob.ear_deaf += 20
 
-
-/datum/disease2/effect/monkey
-	name = "Monkism Syndrome"
-	desc = "Causes the infected to rapidly devolve to a lower form of life."
-	stage = 4
-	badness = EFFECT_DANGER_DEADLY
-	var/transformed = FALSE
-
-/datum/disease2/effect/monkey/getcopy(var/datum/disease2/disease/disease)
-	var/datum/disease2/effect/monkey/new_e = ..(disease)
-	new_e.transformed = transformed
-	return new_e
-
-/datum/disease2/effect/monkey/activate(var/mob/living/carbon/human/mob)
-	if(istype(mob))
-		transformed = TRUE
-		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
-		gene.activate(mob, null, null)
-/*
-/datum/disease2/effect/monkey/deactivate(var/mob/living/carbon/monkey/mob)
-	if(istype(mob) && transformed)
-		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
-		gene.deactivate(mob, null, null)
-*/
-
-/datum/disease2/effect/catbeast
-	name = "Kingston Syndrome"
-	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Tajaran."
-	stage = 4
-	badness = EFFECT_DANGER_DEADLY
-	var/old_species = "Human"
-
-/datum/disease2/effect/catbeast/activate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		old_species = h.species.name
-		if(old_species != "Tajaran")
-			if(h.set_species("Tajaran"))
-				h.regenerate_icons()
-/*
-/datum/disease2/effect/catbeast/deactivate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		if(h.species.name == "Tajaran" && old_species != "Tajaran")
-			if(h.set_species(old_species))
-				h.regenerate_icons()
-*/
 /datum/disease2/effect/zombie
 	name = "Stubborn brain syndrome"
 	desc = "UNKNOWN"
@@ -132,30 +85,6 @@
 	if(ishuman(mob))
 		var/mob/living/carbon/human/h = mob
 		h.become_zombie_after_death = 2
-
-
-/datum/disease2/effect/voxpox
-	name = "Vox Pox"
-	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Vox."
-	stage = 4
-	badness = EFFECT_DANGER_DEADLY
-	var/old_species = "Human"
-
-/datum/disease2/effect/voxpox/activate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		old_species = h.species.name
-		if(old_species != "Vox")
-			if(h.set_species("Vox"))
-				h.regenerate_icons()
-/*
-/datum/disease2/effect/voxpox/deactivate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		if(h.species.name == "Vox" && old_species != "Vox")
-			if(h.set_species(old_species))
-				h.regenerate_icons()
-*/
 
 /datum/disease2/effect/suicide
 	name = "Suicidal Syndrome"
@@ -908,20 +837,6 @@
 					for(var/i=0,i<iter,i++)
 						step_towards(S,mob)
 
-/datum/disease2/effect/humanity
-	name = "Forced Humanity Syndrome"
-	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
-	stage = 4
-	badness = EFFECT_DANGER_HINDRANCE
-	var/old_species = "Human"
-
-/datum/disease2/effect/humanity/activate(var/mob/living/mob)
-	if(istype(mob,/mob/living/carbon/human))
-		var/mob/living/carbon/human/h = mob
-		if(!istype(h.species.name, /datum/species/human))
-			h.set_species("Human")
-			h.regenerate_icons()
-
 /datum/disease2/effect/emitter
 	name = "Afflictus Emittus"
 	desc = "The mutations produced by this symptom cause the infected's eyes to constantly regenerate and emit a straight beam."
@@ -929,7 +844,6 @@
 	stage = 4
 	badness = EFFECT_DANGER_HARMFUL
 	max_multiplier = 3
-	restricted = 1//symptoms won't randomly mutate into this one
 	var/announced = FALSE
 	chance = 4
 	max_chance = 12
@@ -1103,3 +1017,154 @@
 		if (!announced)
 			emitter.visible_message("<span class='danger'>Superheated beams begin to stream right out of \the [emitter]'s eyes!</span>","<span class='danger'>Beams are coming out of your eyes, holy shit!</span>")
 			announced = TRUE
+
+
+/datum/disease2/effect/dnaspread
+	name = "Retrotransposis"
+	desc = "This symptom transplants the genetic code of the intial vector into new hosts."
+	badness = EFFECT_DANGER_HARMFUL
+	stage = 4
+	var/dna_saved
+	var/original_name
+	var/list/original_UI = list()
+	var/list/original_SE = list()
+	var/activated = 0
+	
+/datum/disease2/effect/dnaspread/activate(var/mob/living/mob)
+	if(!activated)
+		to_chat(mob, "<span class='warning'>You don't feel like yourself..</span>")
+	if(!iscarbon(mob))
+		return
+	var/mob/living/carbon/C = mob
+	if(!dna_saved)
+		original_name = C.real_name
+		original_UI = C.dna.UI.Copy()
+		original_SE = C.dna.SE.Copy()
+		dna_saved = 1
+	C.UpdateAppearance(original_UI.Copy())
+	C.dna.SE = original_SE.Copy()
+	C.dna.UpdateSE()
+	C.real_name = original_name
+	domutcheck(C)
+	activated = 1
+	
+/datum/disease2/effect/dnaspread/deactivate(var/mob/living/mob)
+	activated = 0
+
+/datum/disease2/effect/dnaspread/getcopy(var/datum/disease2/disease/disease)
+	var/datum/disease2/effect/dnaspread/new_e = ..(disease)
+	new_e.original_name = original_name
+	new_e.original_SE = original_SE
+	new_e.original_UI = original_UI
+	new_e.dna_saved = dna_saved
+	return new_e
+
+////////////////////////////////////////////////
+////////  TRANSFORMATION SYMPTOMS  /////////////
+////////////////////////////////////////////////
+
+
+/datum/disease2/effect/cyborg
+	name = "Silicus Syndrome"
+	desc = "Rapidly replaces the infected's tissue with inorganic matter, causing them to transform into a cyborg."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 2
+
+/datum/disease2/effect/cyborg/activate(var/mob/living/mob)
+	var/mob/M = mob
+	M.Robotize()
+
+
+/datum/disease2/effect/mommi
+	name = "Autismus Syndrome"
+	desc = "Rapidly replaces the infected's tissue with inorganic matter. This particular strain seems to cause severe autism in the infected as well."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 2
+
+/datum/disease2/effect/mommi/activate(var/mob/living/mob)
+	var/mob/M = mob
+	M.MoMMIfy()
+
+
+/datum/disease2/effect/xenomorph
+	name = "Ripley Syndrome"
+	desc = "Causes the infected to mutate into an alien creature."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 2
+
+/datum/disease2/effect/xenomorph/activate(var/mob/living/mob)
+	gibs(mob)
+	to_chat(mob, "<span class = 'danger'>[mob.name] suddenly mutates in a shower of gore!</span>")
+	var/mob/M = mob
+	M.Alienize()
+
+
+/datum/disease2/effect/wendigo
+	name = "Curse of the Wendigo"
+	desc = "UNKNOWN"
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+	restricted = 2
+
+/datum/disease2/effect/wendigo/activate(var/mob/living/mob)
+	if(ishuman(mob) || ismonkey(mob))
+		mob.visible_message("<span class'sinister'>You hear a sickening roar...</span>")
+		gibs(mob)
+		var/mob/living/simple_animal/hostile/wendigo/human/W = new /mob/living/simple_animal/hostile/wendigo/human(mob.loc)
+		W.names += mob.real_name
+		mob.drop_all()
+		qdel(mob)
+
+
+/datum/disease2/effect/catbeast
+	name = "Kingston Syndrome"
+	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Tajaran."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+
+/datum/disease2/effect/catbeast/activate(var/mob/living/mob)
+	if(ishuman(mob) && !iscatbeast(mob))
+		var/mob/living/carbon/human/H = mob
+		H.set_species("Tajaran")
+		H.regenerate_icons()
+
+
+/datum/disease2/effect/monkey
+	name = "Monkism Syndrome"
+	desc = "Causes the infected to rapidly devolve to a lower form of life."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY	
+
+/datum/disease2/effect/monkey/activate(var/mob/living/carbon/human/mob)
+	if(istype(mob))
+		var/datum/dna/gene/gene = dna_genes[/datum/dna/gene/monkey]
+		gene.activate(mob, null, null)
+
+
+/datum/disease2/effect/vox
+	name = "Vox Pox"
+	desc = "A previously experimental syndrome that found its way into the wild. Causes the infected to mutate into a Vox."
+	stage = 4
+	badness = EFFECT_DANGER_DEADLY
+
+/datum/disease2/effect/vox/activate(var/mob/living/mob)
+	if(ishuman(mob) && !isvox(mob))
+		var/mob/living/carbon/human/H = mob
+		H.set_species("Vox")
+		H.regenerate_icons()
+
+
+/datum/disease2/effect/human
+	name = "Forced Humanity Syndrome"
+	desc = "A recent development by human supremacists. Causes non-human infected to mutate into a Human."
+	stage = 4
+	badness = EFFECT_DANGER_HARMFUL
+
+/datum/disease2/effect/human/activate(var/mob/living/mob)
+	if(ishuman(mob) && !isjusthuman(mob))
+		var/mob/living/carbon/human/H = mob
+		H.set_species("Human")
+		H.regenerate_icons()

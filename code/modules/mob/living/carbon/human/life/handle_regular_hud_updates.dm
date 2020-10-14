@@ -117,7 +117,7 @@
 						src.client.images += V.cached_images[i]
 					i++
 
-		if (!V || (!(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.purchased_powers))) // Not a vampire, or a vampire but neither of the spells.
+		if (!V || (!(VAMP_VISION in V.current_powers) && !(VAMP_MATURE in V.purchased_powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
 		if (!V || !(VAMP_MATURE in V.purchased_powers))
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
@@ -141,6 +141,8 @@
 				if("shadow")
 					see_in_dark = 8
 					see_invisible = SEE_INVISIBLE_LEVEL_ONE
+		if(M_THERMALS in mutations)
+			change_sight(adding = SEE_MOBS)
 		if(M_XRAY in mutations)
 			change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			see_in_dark = 8

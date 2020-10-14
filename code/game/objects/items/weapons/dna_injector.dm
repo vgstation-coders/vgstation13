@@ -105,6 +105,7 @@
 				if(!block) //isolated block?
 					M.UpdateAppearance(buf.dna.UI.Copy())
 					if (buf.types & DNA2_BUF_UE) //unique enzymes? yes
+						M.dna.unique_enzymes = buf.dna.unique_enzymes
 						M.real_name = buf.dna.real_name
 						M.flavor_text = buf.dna.flavor_text
 						M.name = buf.dna.real_name

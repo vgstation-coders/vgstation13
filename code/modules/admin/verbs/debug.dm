@@ -1217,6 +1217,24 @@ client/proc/check_convertables()
 
 	to_chat(usr, dat)
 
+
+client/proc/toggle_convertibles()
+	set name = "Toggle Convertibles HUD (Cult 3.0+)"
+	set category = "Debug"
+	set desc = "Displays a marker over crew members showing their propension to get converted."
+
+	var/mob/dead/observer/adminmob = mob
+	if (!isobserver(adminmob))
+		alert("Only observers can use this functionality")
+		return
+
+	if(adminmob.conversionHUD)
+		adminmob.conversionHUD = 0
+		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	else
+		adminmob.conversionHUD = 1
+		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"
 	set desc = "(datum path) Spawn a datum (turfs NOT supported)"
