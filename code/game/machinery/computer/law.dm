@@ -152,7 +152,6 @@
 		return
 	else
 		current = select_active_ai(user)
-		update_icon()
 
 	if(!current)
 		to_chat(usr, "No active AIs detected.")
@@ -161,6 +160,8 @@
 			to_chat(usr, "AI detected on this terminal. [current.name] selected for law changes.")
 		else
 			to_chat(usr, "[current.name] selected for law changes.")
+
+	update_icon()
 
 /obj/machinery/computer/borgupload
 	name = "Cyborg Upload"
@@ -301,7 +302,10 @@
 /obj/machinery/computer/aiupload/update_icon()
 	..()
 	overlays = 0
-
+	
+	if(stat & (BROKEN | NOPOWER))
+		return
+	
 	if (occupant)
 		switch (occupant.stat)
 			if (CONSCIOUS)
@@ -309,4 +313,13 @@
 			if (DEAD)
 				overlays += image('icons/obj/computer.dmi', "ai-fixer-404")
 	else if (current)
-		overlays += image('icons/obj/computer.dmi', "upload_wireless")
+		if(current.stat == DEAD)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_dead")
+		else if(current.aiRestorePowerRoutine)
+			overlays += image('icons/obj/computer.dmi', "upload_wireless_nopower")
+		else
+			overlays += image('icons/obj/computer.dmi', "upload_wireless")
+
+/obj/machinery/computer/aiupload/process()
+	..()
+	update_icon()
