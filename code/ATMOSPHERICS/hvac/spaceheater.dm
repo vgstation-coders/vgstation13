@@ -349,12 +349,14 @@
 
 /obj/machinery/space_heater/campfire/process()
 	..()
-	var/turf/T = get_turf(src)
+	if(!on)
+		return
+	var/turf/simulated/T = get_turf(loc)
 	var/datum/gas_mixture/env = T.return_air()
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2 | env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
+	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
 		extinguish()
 		return
 	lastcharge = Floor(cell.charge/10)
@@ -366,6 +368,8 @@
 	qdel(src)
 
 /obj/machinery/space_heater/campfire/stove/extinguish()
+	if(on)
+		loc.visible_message("<span class='warning'>\The [src] dies down.</span>")
 	on = FALSE
 	update_icon()
 
