@@ -355,12 +355,18 @@
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
 	if(!(cell && cell.charge > 0) && nocell != 2 | env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
-		new /obj/effect/decal/cleanable/campfire(get_turf(src))
-		qdel(src)
+		extinguish()
 		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
+
+/obj/machinery/space_heater/campfire/extinguish()
+	new /obj/effect/decal/cleanable/campfire(get_turf(src))
+	qdel(src)
+
+/obj/machinery/space_heater/campfire/stove/extinguish()
+	on = FALSE
 
 
 /obj/machinery/space_heater/campfire/Crossed(mob/user as mob)
