@@ -80,15 +80,16 @@
 
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
+
 	changeling.chem_charges += 10
-	changeling.geneticpoints += 2
+	changeling.powerpoints += 2
 
 	//Steal all of their languages!
 	for(var/language in T.languages)
 		if(!(language in changeling.absorbed_languages))
 			changeling.absorbed_languages += language
 
-	changeling_update_languages(changeling.absorbed_languages)
+	user.changeling_update_languages(changeling.absorbed_languages)
 
 	//Steal their species!
 	if(T.species && !(T.species.name in changeling.absorbed_species))
@@ -106,27 +107,23 @@
 					changeling.absorbedcount++
 					Tchangeling.absorbed_dna.Remove(dna_data)
 
-			if(Tchangeling.power_holder.purchasedpowers.len)
-				for(var/datum/power/changeling/Tp in Tchangeling.power_holder.purchasedpowers)
-					if(Tp in changeling.power_holder.purchasedpowers)
+			if(Tchangeling.power_holder.purchased_powers.len)
+				for(var/datum/power/changeling/Tp in Tchangeling.power_holder.purchased_powers)
+					if(Tp in changeling.power_holder.purchased_powers)
 						continue
 					else
-						changeling.power_holder.purchasedpowers += Tp
-
-						if(!Tp.isVerb)
-							call(Tp.verbpath)()
-						else
-							user.make_changeling()
+						changeling.power_holder.purchased_powers += Tp
+						user.make_changeling()
 
 			changeling.chem_charges += Tchangeling.chem_charges
-			changeling.geneticpoints += Tchangeling.powerpoints
+			changeling.powerpoints += Tchangeling.powerpoints
 			Tchangeling.chem_charges = 0
 			Tchangeling.powerpoints = 0
 			Tchangeling.absorbedcount = 0
 
 	changeling.absorbedcount++
 	changeling.isabsorbing = 0
-	updateChangelingHUD()
+	user.updateChangelingHUD()
 
 	T.death(0)
 	T.Drain()

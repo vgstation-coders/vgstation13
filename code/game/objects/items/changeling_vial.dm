@@ -26,7 +26,7 @@
 				sleep(100)
 				var/datum/role/changeling/C = new(M)
 				if(C)
-					C.geneticpoints = clamp(genomes_to_give, 0, 100)
+					C.powerpoints = clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
 				to_chat(H, "<B><span class='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</span></B>")
 				var/wikiroute = role_wiki[CHANGELING]

@@ -3,37 +3,35 @@
 	desc = "We transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
 	abbreviation = "HF"
 
-    spell_flags = NEEDSHUMAN
+	spell_flags = NEEDSHUMAN
 
 	chemcost = 30
-    allowhorror = 0
+	horrorallowed = 0
 
 /spell/changeling/horrorform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
-		return 0
+		return 
 
-	var/mob/living/carbon/human/H = user
+	for(var/obj/item/slot in user.get_all_slots())
+		user.u_equip(slot, 1)
 
-	for(var/obj/item/slot in H.get_all_slots())
-		u_equip(slot, 1)
+	user.maxHealth = 800 /* Gonna need more than one egun to kill one of these bad boys*/
+	user.health = 800
+	user.set_species("Horror")
+	user.client.verbs |= user.species.abilities // Force ability equip.
+	user.update_icons()
 
-	H.maxHealth = 800 /* Gonna need more than one egun to kill one of these bad boys*/
-	H.health = 800
-	H.set_species("Horror")
-	H.client.verbs |= H.species.abilities // Force ability equip.
-	H.update_icons()
+	user.monkeyizing = 1
+	user.canmove = 0
+	user.delayNextAttack(50)
+	user.icon = null
+	user.invisibility = 101
 
-	monkeyizing = 1
-	canmove = 0
-	delayNextAttack(50)
-	icon = null
-	invisibility = 101
-
-	var/atom/movable/overlay/animation = new /atom/movable/overlay( loc )
-	H.visible_message("<span class = 'warning'>[user] emits a putrid odor as their torso splits open!</span>")
+	var/atom/movable/overlay/animation = new /atom/movable/overlay( user.loc )
+	user.visible_message("<span class = 'warning'>[user] emits a putrid odor as their torso splits open!</span>")
 	world << sound('sound/effects/greaterling.ogg')
-	to_chat(world, "<span class = 'sinister'>A roar pierces the air and makes your blood curdle. Uh oh.</span>")
+	to_chat(world, "<span class = 'sinister'>A roar pierces the air and makes your blood curdle. Uh ouser.</span>")
 	animation.icon_state = "blank"
 	animation.icon = 'icons/mob/mob.dmi'
 	animation.master = user
@@ -41,11 +39,11 @@
 	sleep(14*2) // Frames * lag
 	qdel(animation)
 
-	monkeyizing = 0
-	canmove = 1
-	delayNextAttack(0)
-	icon = null
-	invisibility = initial(invisibility)
+	user.monkeyizing = 0
+	user.canmove = 1
+	user.delayNextAttack(0)
+	user.icon = null
+	user.invisibility = initial(user.invisibility)
 
 	..()
 

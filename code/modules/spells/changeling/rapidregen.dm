@@ -14,13 +14,13 @@
 
 	var/mob/living/carbon/human/C = user
 
-    for(var/i = 0, i<10,i++)
-        if(C)
-            C.adjustBruteLoss(-10)
-            C.adjustToxLoss(-10)
-            C.adjustOxyLoss(-10)
-            C.adjustFireLoss(-10)
-            sleep(10)
+	for(var/i = 0, i<10,i++)
+		if(C)
+			C.adjustBruteLoss(-10)
+			C.adjustToxLoss(-10)
+			C.adjustOxyLoss(-10)
+			C.adjustFireLoss(-10)
+			sleep(10)
 
 	feedback_add_details("changeling_powers","RR")
 

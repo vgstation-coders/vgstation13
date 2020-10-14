@@ -21,28 +21,28 @@
 	if(!istype(H) || !H.species.primitive)
 		to_chat(user, "<span class='warning'>We cannot perform this ability in this form!</span>")
 		return FALSE
-	if(M_HUSK in H.mutations)
+	if(M_HUSK in user.mutations)
 		to_chat(user, "<span class = 'warning'>This hosts genetic code is too scrambled. We can not change form until we have removed this burden.</span>")
 		return FALSE
 		
 
 /spell/changeling/lesserform/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/mob/living/carbon/human/H = user
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	if(!changeling)
+		return 
 
-	H.remove_changeling_powers()
-	H.visible_message("<span class='warning'>[C] transforms!</span>")
+	user.visible_message("<span class='warning'>[user] transforms!</span>")
 	changeling.geneticdamage = 30
-	to_chat(H, "<span class='warning'>Our genes cry out!</span>")
-	H.remove_changeling_verb() //remove the verb holder
+	to_chat(user, "<span class='warning'>Our genes cry out!</span>")
 	
-	var/mob/living/carbon/monkey/O = H.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
+	var/mob/living/carbon/monkey/O = user.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
 	O.make_changeling(1)
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
 	var/spell/changeling/higherform = new /spell/changeling/higherform
-	O.add_spell(S)
+	O.add_spell(higherform)
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
-	qdel(H)
+	qdel(user)
 
 	..()
 
@@ -74,25 +74,25 @@
 
 
 /spell/changeling/higherform/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/datum/role/changeling/C = user.mind.GetRole(CHANGELING)
-	if(!C)
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	if(!changeling)
 		return
 
 	var/list/names = list()
-	for(var/datum/dna/DNA in C.absorbed_dna)
+	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)
 		return
 
-	var/datum/dna/chosen_dna = C.GetDNA(S)
+	var/datum/dna/chosen_dna = changeling.GetDNA(S)
 	if(!chosen_dna)
 		return
 
 	var/mob/living/carbon/M = src
 
-	M.visible_message("<span class='warning'>[C] transforms!</span>")
+	M.visible_message("<span class='warning'>[user] transforms!</span>")
 	M.dna = chosen_dna.Clone()
 
 	M.monkeyizing = 1
@@ -112,19 +112,19 @@
 	animation = null
 
 	var/mob/living/carbon/human/O = new /mob/living/carbon/human( user, delay_ready_dna=1 )
-	if (C.dna.GetUIState(DNA_UI_GENDER))
+	if (M.dna.GetUIState(DNA_UI_GENDER))
 		O.setGender(FEMALE)
 	else
 		O.setGender(MALE)
-	C.transferImplantsTo(O)
-	C.transferBorers(O)
+	M.transferImplantsTo(O)
+	M.transferBorers(O)
 	O.dna = M.dna.Clone()
-	C.dna = null
+	M.dna = null
 	O.real_name = chosen_dna.real_name
 	O.flavor_text = chosen_dna.flavor_text
 
 	for(var/obj/item/W in src)
-		C.drop_from_inventory(W)
+		M.drop_from_inventory(W)
 	for(var/obj/T in M)
 		qdel(T)
 

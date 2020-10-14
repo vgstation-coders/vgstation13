@@ -6,7 +6,7 @@
 	spell_flags = NEEDSHUMAN
 
 	chemcost = 20
-    required_dna = 1
+	required_dna = 1
 
 /spell/changeling/hivedownload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
@@ -22,7 +22,7 @@
 		to_chat(user., "<span class='notice'>There's no new DNA to absorb from the air.</span>")
 		return
 
-	var/S = user.input("Select a DNA absorb from the air: ", "Absorb DNA", null) as null|anything in names
+	var/S = input("Select a DNA absorb from the air: ", "Absorb DNA", null) as null|anything in names
 	if(!S)
 		return
 	var/datum/dna/chosen_dna = names[S]

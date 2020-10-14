@@ -126,20 +126,20 @@
 	desc = "We silently sting a human, injecting a retrovirus that forces them to transform into another."
 	helptext = "Does not provide a warning to others. The victim will transform much like a changeling would."
 	cost = 3
-	spellpath = /spell/changeling/sting/transform
+	spellpath = /spell/changeling/sting/transformation
 
 /datum/power/changeling/paralysis_sting
 	name = "Paralysis Sting"
 	desc = "We silently sting a human, paralyzing them for a short time."
 	cost = 4
-	spellpath = /spell/changeling/sting/paralysis
+	spellpath = /spell/changeling/sting/paralyse
 
 /datum/power/changeling/LSDSting
 	name = "Hallucination Sting"
 	desc = "We evolve the ability to sting a target with a powerful hallucinogen."
 	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
 	cost = 3
-	spellpath = /spell/changeling/sting/hallucination
+	spellpath = /spell/changeling/sting/hallucinate
 
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"

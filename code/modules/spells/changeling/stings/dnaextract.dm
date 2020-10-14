@@ -5,8 +5,8 @@
 
 	silent = 1
 
-/spell/changeling/sting/dnaextract/lingsting(var/mob/user, var/mob/living/target)
-	if(!target)
+/spell/changeling/sting/dnaextract/lingsting(var/mob/user, var/mob/living/carbon/human/target)
+	if(!target || istype(target))
 		return
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)

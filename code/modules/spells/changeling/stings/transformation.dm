@@ -8,7 +8,7 @@
 
 	var/selected_dna
 
-/spell/changeling/sting/transform/before_channel(mob/user)
+/spell/changeling/sting/transformation/before_channel(mob/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return FALSE
@@ -17,10 +17,11 @@
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
 		names += "[DNA.real_name]"
 
-	var/S = user.input(M, "Select the target DNA: ", "Target DNA", null) as null|anything in names
+	var/S = input(user, "Select the target DNA: ", "Target DNA", null) as null|anything in names
 	if(!S)
 		return
 	selected_dna = S
+
 	..()
 
 /spell/changeling/sting/transformation/lingsting(var/mob/user, var/mob/living/target)

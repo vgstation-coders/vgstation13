@@ -36,9 +36,8 @@
 	user.real_name = chosen_dna.real_name
 	user.flavor_text = chosen_dna.flavor_text
 	user.UpdateAppearance()
-	var/mob/living/carbon/human/H = user
-	if(istype(H) && oldspecies != dna.species)
-		H.set_species(H.dna.species, 0)
+	if(oldspecies != user.dna.species)
+		user.set_species(user.dna.species, 0)
 	domutcheck(user, null)
 	feedback_add_details("changeling_powers","TR")
 

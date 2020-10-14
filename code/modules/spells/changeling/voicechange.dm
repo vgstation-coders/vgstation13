@@ -18,7 +18,7 @@
 		to_chat(user, "<span class='notice'>We return our vocal cords to their original positions.</span>")
 		return
 
-	var/mimic_voice = user.stripped_input(user, "Enter a name to mimic.", "Mimic Voice", null, MAX_NAME_LEN)
+	var/mimic_voice = stripped_input(user, "Enter a name to mimic.", "Mimic Voice", null, MAX_NAME_LEN)
 	if(!mimic_voice)
 		return
 

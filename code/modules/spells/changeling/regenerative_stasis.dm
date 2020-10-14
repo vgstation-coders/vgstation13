@@ -26,7 +26,7 @@
 		if(M_HUSK in C.mutations)
 			to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 			return
-		if(!C.stat && user.alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
+		if(!C.stat && alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
 			return
 
 		to_chat(C, "<span class='notice'>We will attempt to regenerate our form.</span>")
@@ -40,7 +40,7 @@
 		var/time_to_take = rand(800, 1200)
 		to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
 		sleep(time_to_take)
-			to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
+		to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
 
 		feedback_add_details("changeling_powers","FD")
 	else 
@@ -48,7 +48,7 @@
 		to_chat(C, "<span class='notice'>We begin to regenerate. This will take [round((time_to_take/10))] seconds.</span>")	
 		changeling.isreviving = TRUE	
 		sleep(time_to_take)
-			to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
+		to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
 
 	if(C.client && cast_check())
 		to_chat(C, "<span class='sinister'>Your corpse twitches slightly. It's safe to assume nobody noticed.</span>")
@@ -79,9 +79,9 @@
 	C.make_changeling()
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
 		to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
-		if(user.dna in changeling.absorbed_dna)
-			changeling.absorbed_dna.Remove(user.dna)
-	regenerate_icons()
+		if(C.dna in changeling.absorbed_dna)
+			changeling.absorbed_dna.Remove(C.dna)
+	C.regenerate_icons()
 	feedback_add_details("changeling_powers","RJ")
 	changeling.isreviving = FALSE
 	Remove(owner)

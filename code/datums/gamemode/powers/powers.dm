@@ -28,10 +28,10 @@
 	var/mob/M = role.antag.current
 	if (!istype(role) || !istype(M))
 		return FALSE
-	if(!canuse(M))
+	if(!can_use(M))
 		return FALSE
 	if (spellpath)
-		if(locate(spell_path) in role.antag.current.spell_list)
+		if(locate(spellpath) in role.antag.current.spell_list)
 			message_admins("activate power called more times than needed") //remind me to remove this before making the PR
 			return FALSE
 		var/spell/S = new spellpath
@@ -277,7 +277,7 @@
 	for(var/datum/power/P in subtypesof(category))
 		var/ownsthis = 0
 
-		if(P in purchasedpowers)
+		if(P in purchased_powers)
 			ownsthis = 1
 
 		var/color = "#e6e6e6"
@@ -339,7 +339,7 @@
 	if(!thepower)		//ABORT!
 		return 
 
-	if(thepower in purchasedpowers)
+	if(thepower in purchased_powers)
 		to_chat(M.current, "<span class='warning'>You have already purchased this power.</span>")
 		return
 

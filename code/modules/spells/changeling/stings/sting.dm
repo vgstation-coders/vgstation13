@@ -29,9 +29,9 @@
 		return FALSE
 
 	if(silent)
-		to_chat(user, "<span class='warning'>We stealthily sting [:.name].</span>")
+		to_chat(user, "<span class='warning'>We stealthily sting [L.name].</span>")
 	else if(visible)
-		visible_message("<span class='danger'>[user.name] shoots out a stinger from their body!</span>")
+		user.visible_message("<span class='danger'>[user.name] shoots out a stinger from their body!</span>")
 	else 
 		to_chat(user, "<span class='warning'>We sting [L.name].</span>")
 		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")

@@ -8,18 +8,18 @@
 	user_type = USER_TYPE_CHANGELING
 
 	charge_type = Sp_RECHARGE
-	charge_max = 1 SECOND
+	charge_max = 1 SECONDS
 	invocation_type = SpI_NONE
 	range = 0
 
-	cooldown_min = 1 SECOND
+	cooldown_min = 1 SECONDS
 
 	override_base = "changeling"
 	hud_state = "wiz_disint"
 
 	var/chemcost = 0
-    var/max_genedamage = 100
-    var/horrorallowed = 1
+	var/max_genedamage = 100
+	var/horrorallowed = 1
 	var/required_dna = 0
 
 /spell/changeling/cast_check(var/skipcharge = 0, var/mob/user = usr)

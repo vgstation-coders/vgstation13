@@ -33,8 +33,8 @@
 	//purchase the free powers!
 	for(var/datum/power/changeling/P in available_powers)
 		if(!P.cost) // Is it free?
-			if(!(P in purchased_powers)) // Do we not have it already?
-				power_holder.purchasePower(P.name)// Purchase it. Don't remake our verbs, we're doing it after this.
+			if(!(P in current_powers)) // Do we not have it already?
+				power_holder.purchasePower(P.name)// Purchase it.
 
 	antag.current.make_changeling()
 	var/honorific

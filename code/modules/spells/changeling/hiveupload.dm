@@ -6,7 +6,7 @@
 	spell_flags = NEEDSHUMAN
 
 	chemcost = 10
-    required_dna = 1
+	required_dna = 1
 
 /spell/changeling/hiveupload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
@@ -22,7 +22,7 @@
 		to_chat(user, "<span class='notice'>The airwaves already have all of our DNA.</span>")
 		return
 
-	var/S = user.input("Select a DNA to channel: ", "Channel DNA", null) as null|anything in names
+	var/S = input("Select a DNA to channel: ", "Channel DNA", null) as null|anything in names
 	if(!S)
 		return
 

@@ -7,7 +7,7 @@
 
 //Boosts the range of your next sting attack by 1
 /spell/changeling/boost_range/cast(var/list/targets, var/mob/user)
-    var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return 0
 	to_chat(user, "<span class='notice'>Our throat adjusts to launch the sting.</span>")
