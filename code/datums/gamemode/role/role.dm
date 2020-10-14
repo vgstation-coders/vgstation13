@@ -233,7 +233,7 @@
 
 //Remove and re-grant role-related power spells
 /datum/role/proc/refreshspells()
-	for(/datum/power/P in current_powers)
+	for(var/datum/power/P in current_powers)
 		P.remove_spell()
 		P.grant_spell()
 

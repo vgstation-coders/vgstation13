@@ -5,6 +5,8 @@
 	if(!C)
 		return
 
+	verbs += /datum/role/changeling/proc/EvolutionMenu
+
 	var/lesserform = ishuman(src)
 	for(var/datum/power/changeling/power in C.current_powers)
 		if(power.allowduringlesserform && lesserform)

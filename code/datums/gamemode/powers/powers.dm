@@ -2,6 +2,7 @@
 	var/name = "Power"
 	var/desc = "Placeholder"
 	var/helptext = ""
+	var/buytext = ""
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
@@ -20,9 +21,8 @@
 	if(is_type_in_list(src, R.current_powers))
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
-	if (helptext)
-		to_chat(role.antag.current, "<span class = 'notice'>[helptext]</span>")
-
+	if (buytext)
+		to_chat(role.antag.current, "<span class = 'notice'>[buytext]</span>")
 	if (store_in_memory)
 		role.antag.store_memory("<font size = '1'>[helptext]</font>")
 	R.current_powers += src

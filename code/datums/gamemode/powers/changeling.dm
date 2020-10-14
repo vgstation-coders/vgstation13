@@ -28,6 +28,7 @@
 				Absorb genomes to acquire more evolution points"}
 	purchase_word = "Evolve"
 	currency = "Evolution Points"
+	category = /datum/power/changeling
 
 /datum/power/changeling/absorb_dna
 	name = "Absorb DNA"

@@ -23,12 +23,15 @@
 	var/required_dna = 0
 
 /spell/changeling/cast_check(var/skipcharge = 0, var/mob/user = usr)
+	to_chat(world, "cast check ")
 	. = ..()
-	if (!.) 
+	if (!.)
+		to_chat(world, "cast check 1")
 		return FALSE
 	var/datum/role/changeling/C = user.mind.GetRole(CHANGELING)
 	if (!C)     //only changelings allowed
-		return      
+		to_chat(world, "cast check 2")
+		return FALSE
 	if (C.chem_charges < chemcost)
 		to_chat(C.antag.current, "<span class='warning'>We do not have enough chemicals stored! We require at least [chemcost] units of chemicals.</span>")
 		return FALSE

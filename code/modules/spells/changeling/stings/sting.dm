@@ -38,8 +38,8 @@
 
 	..()
 
-	sleep(delay)
-	lingsting(user, L)
+	spawn(delay)
+		lingsting(user, L)
 		
 
 /spell/changeling/sting/proc/lingsting(var/mob/user, var/mob/living/target) //override this with the sting effects
