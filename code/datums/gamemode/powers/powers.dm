@@ -5,28 +5,43 @@
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
+	var/datum/role/role 
 
 	var/store_in_memory = FALSE
 
+//basic proc for limiting powers in monkeys or whatever, override this with checks
+/datum/power/proc/can_use(var/mob/user)
+	return TRUE
 
-/datum/power/vampire/proc/Give(var/datum/role/R)
+//adding the powers to the current ones, override this with passive effects
+/datum/power/proc/add_power(var/datum/role/R)
 	if (!istype(R))
 		return FALSE
-	
-	if(is_type_in_list(src, R.purchased_powers))
+	if(is_type_in_list(src, R.current_powers))
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
+		return FALSE
+	R.current_powers += src
+	role = R
 
-	if (spell_path && !(locate(spell_path) in R.antag.current.spell_list))
-		var/spell/S = new spell_path
-		R.antag.current.add_spell(S)
-
-	R.purchased_powers += src
+//gives the user the spells if theres one associated with it, seperated from add_power in instances where spells need to be added/removed repeatedly (changelings)
+/datum/power/proc/grant_spell()
+	var/mob/M = role.antag.current
+	if (!istype(role) || !istype(M))
+		return FALSE
+	if(!canuse(M))
+		return FALSE
+	if (spellpath)
+		if(locate(spell_path) in role.antag.current.spell_list)
+			message_admins("activate power called more times than needed") //remind me to remove this before making the PR
+			return FALSE
+		var/spell/S = new spellpath
+		role.antag.current.add_spell(S)
 
 	if (helptext)
-		to_chat(R.antag.current, "<span class = 'notice'>[helptext]</span>")
+		to_chat(role.antag.current, "<span class = 'notice'>[helptext]</span>")
 
 	if (store_in_memory)
-		R.antag.store_memory("<font size = '1'>[helptext]</font>")
+		role.antag.store_memory("<font size = '1'>[helptext]</font>")
 
 
 /datum/power_holder
@@ -334,6 +349,8 @@
 
 	R.powerpoints -= thepower.cost
 	purchased_powers += thepower
+	thepower.add_power(R)
+	
 
 
 

@@ -1,7 +1,7 @@
 /spell/targeted/absorb
 	name = "Absorb"
 	desc = "This spell allows you to absorb the magical abilities from fallen wizards. You must be standing over their lifeless or mutilated body in order for the spell to work."
-	abbreviation = "DG"
+	abbreviation = "AB"
 	user_type = USER_TYPE_SPELLBOOK
 
 	school = "evocation"

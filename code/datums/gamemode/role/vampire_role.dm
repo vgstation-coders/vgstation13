@@ -57,14 +57,14 @@
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
 		if (GREET_ADMINTOGGLE)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your current_powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
 			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
-			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
+			to_chat(antag.current, "Drink blood to gain new current_powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
-			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your powers will stop working against them as you go stronger.")
+			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your current_powers will stop working against them as you go stronger.")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
@@ -74,7 +74,7 @@
 	ForgeObjectives()
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
-		VP.Give(src)
+		VP.grant_spell()
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
@@ -237,22 +237,22 @@
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
-		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in powers))
+		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in current_powers))
 			var/datum/power/vampire/VP = new VP_type
-			if (!(VP in purchased_powers))
-				VP.Give(src)
+			if (!(VP in current_powers))
+				VP.grant_spell()
 
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
 
 	// Vision-related changes.
-	if (VAMP_MATURE in powers)
+	if (VAMP_MATURE in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		H.see_in_dark = 8
 		H.see_invisible = SEE_INVISIBLE_MINIMUM
 
-	else if (VAMP_VISION in powers)
+	else if (VAMP_VISION in current_powers)
 		H.change_sight(adding = SEE_MOBS)
 
 
@@ -305,11 +305,11 @@
 
 	if((T.get_lumcount() * 10) <= 2)
 		H.alphas["vampire_cloak"] = round((255 * 0.15))
-		if(VAMP_SHADOW in powers)
+		if(VAMP_SHADOW in current_powers)
 			H.color = "#000000"
 		return TRUE
 	else
-		if(VAMP_SHADOW in powers)
+		if(VAMP_SHADOW in current_powers)
 			H.alphas["vampire_cloak"] = round((255 * 0.15))
 		else
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
@@ -350,7 +350,7 @@
 		if(prob(35))
 			to_chat(H, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if((VAMP_MATURE in powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
+	if((VAMP_MATURE in current_powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
@@ -359,15 +359,15 @@
 			to_chat(src, "<span class='sinister'>Burn, wretch.</span>")
 		*/
 
-	if(!nullified) //Checks to see if you can benefit from your vamp powers here
-		if(!(VAMP_MATURE in powers))
+	if(!nullified) //Checks to see if you can benefit from your vamp current_powers here
+		if(!(VAMP_MATURE in current_powers))
 			smitetemp -= 1
-		if(!(VAMP_SHADOW in powers))
+		if(!(VAMP_SHADOW in current_powers))
 			var/turf/T = get_turf(H)
 			if((T.get_lumcount() * 10) < 2)
 				smitetemp -= 1
 
-		if(!(VAMP_UNDYING in powers))
+		if(!(VAMP_UNDYING in current_powers))
 			smitetemp -= 1
 
 	if(smitetemp <= 0) //if you weren't smote by the tile you're on, remove a little holy
@@ -391,7 +391,7 @@
 			if(prob(35))
 				H.confused = max(5, H.confused)
 				to_chat(H, "<span class='warning'>You feel very sick.</span>")
-		if(60 to 90) //this is where you start barfing and losing your powers
+		if(60 to 90) //this is where you start barfing and losing your current_powers
 			H.dizziness = max(10, H.dizziness + 3)
 			nullified = max(20, nullified)
 			remove_blood(2)
@@ -426,7 +426,7 @@
 
 /datum/role/vampire/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	. = ..()
-	purchased_powers.Cut()
+	current_powers.Cut()
 	if (issilicon(new_character) || isbrain(new_character)) // No, borgs shouldn't be able to spawn bats
 		logo_state = "" // Borgos don't get the vampire icon.
 	else
@@ -439,8 +439,8 @@
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
-			if(VAMP_MATURE in powers)
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
+			if(VAMP_MATURE in current_powers)
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric current_powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
@@ -456,7 +456,7 @@
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
-			if(!(VAMP_UNDYING in powers))
+			if(!(VAMP_UNDYING in current_powers))
 				if(method == TOUCH)
 					if(H.wear_mask)
 						to_chat(H, "<span class='warning'>Your mask protects you from the holy water!</span>")
@@ -470,7 +470,7 @@
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
-								if(!(VAMP_MATURE in powers))
+								if(!(VAMP_MATURE in current_powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									smitecounter += 60 //Equivalent from metabolizing all this holy water normally
 									if(head_organ.take_damage(30, 0))
@@ -478,16 +478,16 @@
 									head_organ.disfigure("burn")
 									H.audible_scream()
 								else
-									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric powers protect you!</span>")
+									to_chat(H, "<span class='warning'>A freezing liquid covers your face. Your vampiric current_powers protect you!</span>")
 									smitecounter += 12 //Ditto above
 
 						else
-							if(!(VAMP_MATURE in powers))
+							if(!(VAMP_MATURE in current_powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
 								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 								smitecounter += volume * 2
 							else
-								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric powers protect you!</span>")
+								to_chat(H, "<span class='warning'>You are doused with a freezing liquid. Your vampiric current_powers protect you!</span>")
 								smitecounter += volume * 0.4
 				else
 					if(H.acidable())

@@ -18,6 +18,8 @@
 	var/changelingID = "Changeling"
 	var/geneticdamage = 0
 	var/isabsorbing = 0
+	var/isreviving = 0
+
 	powerpoints = 5
 
 	var/mimicing = ""
@@ -25,8 +27,15 @@
 /datum/role/changeling/OnPostSetup()
 	. = ..()
 	power_holder = new /datum/power_holder/changeling(src, /datum/power/changeling)
+	//load in available powers
 	for(var/P in subtypesof(/datum/power/changeling))
-		C.available_powers += new P()
+		available_powers += new P()
+	//purchase the free powers!
+	for(var/datum/power/changeling/P in available_powers)
+		if(!P.cost) // Is it free?
+			if(!(P in purchased_powers)) // Do we not have it already?
+				power_holder.purchasePower(P.name)// Purchase it. Don't remake our verbs, we're doing it after this.
+
 	antag.current.make_changeling()
 	var/honorific
 	if(antag.current.gender == FEMALE)

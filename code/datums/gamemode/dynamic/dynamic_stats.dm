@@ -162,7 +162,7 @@
 
 /datum/stat/role/vampire/generate_statistics(var/datum/role/vampire/V)
 	..(V)
-	for(var/datum/power/P in V.powers)
+	for(var/datum/power/P in V.current_powers)
 		powers.Add(P.type)
 	blood_total = V.blood_total
 

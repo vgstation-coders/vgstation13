@@ -1,4 +1,3 @@
-//Restores our verbs. It will only restore verbs allowed during lesser (monkey) form if we are not human
 /mob/proc/make_changeling()
 	if(!mind)
 		return
@@ -6,11 +5,11 @@
 	if(!C)
 		return
 
-	// Code to auto-purchase free powers.
-	for(var/datum/power/changeling/P in C.available_powers)
-		if(!P.cost) // Is it free?
-			if(!(P in C.purchased_powers)) // Do we not have it already?
-				C.power_holder.purchasePower(P.name)// Purchase it. Don't remake our verbs, we're doing it after this.
+	var/lesserform = ishuman(src)
+	for(var/datum/power/changeling/power in C.current_powers)
+		if(power.allowduringlesserform && lesserform)
+			continue
+		power.grant_spell(C)
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text
@@ -18,28 +17,11 @@
 		C.absorbed_dna |= dna
 		if(istype(H))
 			C.absorbed_species |= H.species.name
+
 	for(var/language in languages)
 		C.absorbed_languages |= language
 	updateChangelingHUD()
 	return 1
-
-/mob/proc/add_changeling_verb(path)
-	var/obj/item/verbs/changeling/verb_holder = locate() in src
-	if(!verb_holder)
-		verb_holder = new(src)
-
-	verb_holder.verbs |= path
-
-/mob/proc/remove_changeling_verb(path)
-	var/obj/item/verbs/changeling/verb_holder = locate() in src
-	if(!verb_holder)
-		return
-	if(!path)
-		qdel(verb_holder)
-		verb_holder = null
-		return
-
-	verb_holder.verbs -= path
 
 /mob/proc/updateChangelingHUD()
 	if(hud_used)
@@ -394,10 +376,6 @@
 	domutcheck(src, null)
 	feedback_add_details("changeling_powers","TR")
 
-	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_transform)
-	spawn(10)
-		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_transform)
-
 	return 1
 
 /obj/item/verbs/changeling/proc/changeling_lesser_form()
@@ -528,27 +506,6 @@
 	return 1
 
 
-//Fake our own death and fully heal. You will appear to be dead but regenerate fully after a short delay.
-/mob/verb/check_mob_list()
-	set name = "(Mobs) Check Mob List"
-	set hidden = 1
-	var/yes = 0
-	if(src in mob_list)
-		yes = 1
-	else
-		var/mob/M = locate(src) in mob_list
-		if(M == src)
-			yes = 1
-	to_chat(usr, "[yes ? "<span class='good'>" : "<span class='bad'>"] You are [yes ? "" : "not "]in the mob list</span>")
-	yes = 0
-	if(src in living_mob_list)
-		yes = 1
-	else
-		var/mob/M = locate(src) in living_mob_list
-		if(M == src)
-			yes = 1
-	to_chat(usr, "[yes ? "<span class='good'>" : "<span class='bad'>"] You are [yes ? "" : "not "]in the living mob list</span>")
-
 /obj/item/verbs/changeling/proc/changeling_returntolife()
 	set category = "Changeling"
 	set name = "Return To Life (20)"
@@ -621,7 +578,6 @@
 
 	C.status_flags |= FAKEDEATH		//play dead
 	C.update_canmove()
-	C.remove_changeling_powers()
 
 	C.emote("deathgasp", message = TRUE)
 	C.tod = worldtime2text()
@@ -629,7 +585,6 @@
 	to_chat(C, "<span class='notice'>This will take [round((time_to_take/10))] seconds.</span>")
 	spawn(time_to_take)
 		to_chat(src, "<span class='warning'>We are now ready to regenerate.</span>")
-		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_returntolife)
 
 	feedback_add_details("changeling_powers","FD")
 	return 1
@@ -654,9 +609,6 @@
 	to_chat(src, "<span class='notice'>Your throat adjusts to launch the sting.</span>")
 	changeling.sting_range = 2
 
-	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_boost_range)
-	spawn(5)
-		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_boost_range)
 
 	feedback_add_details("changeling_powers","RS")
 	return 1
@@ -741,9 +693,6 @@
 		C.digitalcamo = !C.digitalcamo
 		to_chat(C, "<span class='notice'>We return to normal.</span>")
 
-	remove_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
-	spawn(5)
-		add_changeling_verb(/obj/item/verbs/changeling/proc/changeling_digitalcamo)
 	feedback_add_details("changeling_powers","CAM")
 	return 1
 

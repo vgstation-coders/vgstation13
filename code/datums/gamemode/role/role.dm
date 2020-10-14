@@ -108,7 +108,7 @@
 
 	var/wikiroute
 
-	var/list/purchased_powers = list()
+	var/list/current_powers = list()
 	var/list/available_powers = list()		//holds instances of each power
 	var/datum/power_holder/power_holder
 	var/powerpoints = 0
