@@ -41,7 +41,7 @@
 		/datum/power/changeling/silence_sting,
 		/datum/power/changeling/blind_sting,
 		/datum/power/changeling/paralysis_sting,
-		/datum/power/changeling/LSDsting,
+		/datum/power/changeling/LSDSting,
 		/datum/power/changeling/extractdna,
 		/datum/power/changeling/transformation_sting,
 		/datum/power/changeling/DigitalCamoflague,
