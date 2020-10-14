@@ -38,6 +38,8 @@
 	var/mob/living/carbon/monkey/O = H.monkeyize(ignore_primitive = 1) // stops us from becoming the monkey version of whoever we were pretending to be
 	O.make_changeling(1)
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
+	var/spell/changeling/higherform = new /spell/changeling/higherform
+	O.add_spell(S)
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	qdel(H)
