@@ -241,7 +241,7 @@
 		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in current_powers))
 			var/datum/power/vampire/VP = new VP_type
 			if (!(VP in current_powers))
-				VP.grant_spell()
+				VP.add_power(src)
 
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))

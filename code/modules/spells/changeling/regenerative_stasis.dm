@@ -76,7 +76,6 @@
 	C.visible_message("<span class='warning'>[owner] appears to wake from the dead, having healed all wounds.</span>")
 	C.status_flags &= ~(FAKEDEATH)
 	C.update_canmove()
-	C.make_changeling()
 	if(M_HUSK in C.mutations) //Yes you can regenerate from being husked if you played dead beforehand, but unless you find a new body, you can not regenerate again.
 		to_chat(C, "<span class='notice'>This host body has become corrupted, either through a mishap, or betrayal by a member of the hivemind. We must find a new form, lest we lose ourselves to the void and become dust.</span>")
 		if(C.dna in changeling.absorbed_dna)

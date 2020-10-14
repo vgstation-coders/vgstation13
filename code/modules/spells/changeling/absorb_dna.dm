@@ -6,7 +6,6 @@
 	spell_flags = NEEDSHUMAN
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
-	to_chat(world, "cast check ABSORB")
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return

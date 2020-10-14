@@ -16,7 +16,7 @@
 
 //adding the powers to the current ones, override this with passive effects
 /datum/power/proc/add_power(var/datum/role/R)
-	if (!istype(R))
+	if (!istype(R) || !R)
 		return FALSE
 	if(is_type_in_list(src, R.current_powers))
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
@@ -31,6 +31,8 @@
 
 //gives the user the spells if theres one associated with it, seperated from add_power in instances where spells need to be added/removed repeatedly (changelings)
 /datum/power/proc/grant_spell()
+	if(!role)
+		return
 	var/mob/M = role.antag.current
 	if (!istype(role) || !istype(M))
 		return FALSE
@@ -57,7 +59,7 @@
 /datum/power_holder
 	var/datum/role/R
 	var/list/purchased_powers = list()
-	var/datum/power/category 
+	var/list/available_powers = list()
 
 	//text stuff
 	var/menu_name = "Power Menu"
@@ -65,9 +67,8 @@
 	var/purchase_word = "Purchase"
 	var/currency = "Points"
 
-/datum/power_holder/New(var/datum/role/newRole, var/datum/power/powercategory)
+/datum/power_holder/New(var/datum/role/newRole)
 	R = newRole
-	category = powercategory
 
 /datum/power_holder/proc/PowerMenu()
 
@@ -284,7 +285,7 @@
 		<table width='560' align='center' cellspacing='0' cellpadding='5' id='maintable_data'>"}
 
 	var/i = 1
-	for(var/datum/power/P in subtypesof(category))
+	for(var/datum/power/P in available_powers)
 		var/ownsthis = 0
 
 		if(P in purchased_powers)

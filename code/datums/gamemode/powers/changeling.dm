@@ -28,7 +28,34 @@
 				Absorb genomes to acquire more evolution points"}
 	purchase_word = "Evolve"
 	currency = "Evolution Points"
-	category = /datum/power/changeling
+	available_powers = list(
+		/datum/power/changeling/absorb_dna,
+		/datum/power/changeling/transform,
+		/datum/power/changeling/change_species,
+		/datum/power/changeling/fakedeath,
+		/datum/power/changeling/hive_upload,
+		/datum/power/changeling/hive_download,
+		/datum/power/changeling/lesser_form,
+		/datum/power/changeling/horror_form,
+		/datum/power/changeling/deaf_sting,
+		/datum/power/changeling/silence_sting,
+		/datum/power/changeling/blind_sting,
+		/datum/power/changeling/paralysis_sting,
+		/datum/power/changeling/LSDsting,
+		/datum/power/changeling/extractdna,
+		/datum/power/changeling/transformation_sting,
+		/datum/power/changeling/DigitalCamoflague,
+		/datum/power/changeling/mimicvoice,
+		/datum/power/changeling/ChemicalSynth,
+		/datum/power/changeling/AdvChemicalSynth,
+		/datum/power/changeling/EngorgedGlands,
+		/datum/power/changeling/Epinephrine,
+		/datum/power/changeling/fat_sting,
+		/datum/power/changeling/unfat_sting,
+		/datum/power/changeling/rapidregeneration,
+		/datum/power/changeling/armblade,
+		/datum/power/changeling/boost_range
+	)
 
 /datum/power/changeling/absorb_dna
 	name = "Absorb DNA"
@@ -159,9 +186,16 @@
 /datum/power/changeling/boost_range
 	name = "Boost Range"
 	desc = "We evolve the ability to shoot our stingers at humans, with some preperation."
+	helptext = "Our throat adjusts to launch the stinger."
 	cost = 2
-	allowduringlesserform = 1
-	spellpath = /spell/changeling/boost_range
+
+/datum/power/changeling/AdvChemicalSynth/add_power(var/datum/role/R)
+	. = ..()
+	if (!.) 
+		return 
+	var/datum/role/changeling/changeling = R
+	if(changeling)
+		changeling.sting_range = 2
 
 /datum/power/changeling/Epinephrine
 	name = "Epinephrine sacs"

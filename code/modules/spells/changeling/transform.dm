@@ -28,8 +28,7 @@
 	if(!chosen_dna)
 		return
 
-	changeling.chem_charges -= 5
-	user.visible_message("<span class='warning'>[user] transforms!</span>")
+	user.visible_message("<span class='danger'>[user] transforms!</span>")
 	changeling.geneticdamage = 30
 	var/oldspecies = user.dna.species
 	user.dna = chosen_dna.Clone()
