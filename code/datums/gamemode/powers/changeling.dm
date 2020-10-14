@@ -136,7 +136,7 @@
 
 /datum/power/changeling/LSDSting
 	name = "Hallucination Sting"
-	desc = "We evolve the ability to sting a target with a powerful hallunicationary chemical."
+	desc = "We evolve the ability to sting a target with a powerful hallucinogen."
 	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
 	cost = 3
 	verbpath = /obj/item/verbs/changeling/proc/changeling_lsdsting
@@ -210,10 +210,16 @@
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
-	helptext = "We cannot be tracked by camera while using this skill. We must constantly expend chemicals to maintain our form like this."
 	cost = 3
 	allowduringlesserform = 1
 	verbpath = /obj/item/verbs/changeling/proc/changeling_digitalcamo
+
+/datum/power/changeling/DigitalCamoflague/add_power(var/datum/role/R)
+	var/mob/living/carbon/human/C = R.antag.current
+	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
+	C.digitalcamo = 1
+
+
 
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"

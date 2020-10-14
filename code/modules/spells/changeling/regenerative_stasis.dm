@@ -26,7 +26,7 @@
 		if(M_HUSK in C.mutations)
 			to_chat(C, "<span class='warning'>We can not regenerate from this. There is not enough left to regenerate.</span>")
 			return
-		if(!C.stat && alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
+		if(!C.stat && user.alert("Are we sure we wish to fake our death?",,"Yes","No") == "No")//Confirmation for living changelings if they want to fake their death
 			return
 
 		to_chat(C, "<span class='notice'>We will attempt to regenerate our form.</span>")
@@ -44,7 +44,8 @@
 
 		feedback_add_details("changeling_powers","FD")
 	else 
-		var/time_to_take = 120	
+		var/time_to_take = 1200
+		to_chat(C, "<span class='notice'>We begin to regenerate. This will take [round((time_to_take/10))] seconds.</span>")	
 		changeling.isreviving = TRUE	
 		sleep(time_to_take)
 			to_chat(C, "<span class='warning'>We are now ready to regenerate.</span>")
@@ -55,6 +56,7 @@
 		var/datum/action/lingrevive/revive_action = new()
 		revive_action.Grant(C)
 
+	..()
 
 /datum/action/lingrevive
 	name = "Return to Life"

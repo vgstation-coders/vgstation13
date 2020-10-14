@@ -27,8 +27,6 @@
 		
 
 /spell/changeling/lesserform/cast(var/list/targets, var/mob/living/carbon/human/user)
-	..()
-
 	var/mob/living/carbon/human/H = user
 
 	H.remove_changeling_powers()
@@ -43,6 +41,8 @@
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	qdel(H)
+
+	..()
 
 
 
@@ -72,8 +72,6 @@
 
 
 /spell/changeling/higherform/cast(var/list/targets, var/mob/living/carbon/human/user)
-	..()
-
 	var/datum/role/changeling/C = user.mind.GetRole(CHANGELING)
 	if(!C)
 		return
@@ -145,4 +143,4 @@
 	feedback_add_details("changeling_powers","HF")
 	qdel(M)
 
-	return 1
+	..()

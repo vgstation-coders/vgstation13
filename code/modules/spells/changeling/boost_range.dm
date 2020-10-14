@@ -14,3 +14,5 @@
 	changeling.sting_range = 2
 	feedback_add_details("changeling_powers","RS")
 
+	..()
+

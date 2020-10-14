@@ -9,6 +9,7 @@
 
 //Recover from stuns.
 /spell/changeling/unstun/cast(var/list/targets, var/mob/living/carbon/human/user)
+	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return 0
 
@@ -22,3 +23,5 @@
 	C.update_canmove()
 
 	feedback_add_details("changeling_powers","UNS")
+
+	..()

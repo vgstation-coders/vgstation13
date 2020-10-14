@@ -42,4 +42,6 @@
 	domutcheck(user, null)
 	feedback_add_details("changeling_powers","TR")
 
+	..()
+
 
