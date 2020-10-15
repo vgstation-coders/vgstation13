@@ -357,17 +357,17 @@
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
 	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
-		extinguish()
+		putOutFire()
 		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
 
-/obj/machinery/space_heater/campfire/extinguish()
+/obj/machinery/space_heater/campfire/proc/putOutFire()
 	new /obj/effect/decal/cleanable/campfire(get_turf(src))
 	qdel(src)
 
-/obj/machinery/space_heater/campfire/stove/extinguish()
+/obj/machinery/space_heater/campfire/stove/putOutFire()
 	if(on)
 		loc.visible_message("<span class='warning'>\The [src] dies down.</span>")
 	on = FALSE
