@@ -1,11 +1,11 @@
 /spell/changeling/sting/fat
-    name = "Fat Sting"
-    desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
-    abbreviation = "FS"
+	name = "Fat Sting"
+	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
+	abbreviation = "FS"
 	hud_state = "fatsting"
 
-    silent = 1
-    delay = 15 SECONDS
+	silent = 1
+	delay = 15 SECONDS
 
 /spell/changeling/sting/fat/lingsting(var/mob/user, var/mob/living/target)
 	if(!target)
