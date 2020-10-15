@@ -57,7 +57,7 @@
 		if (GREET_CUSTOM)
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> [custom]")
 		if (GREET_ADMINTOGGLE)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your current_powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>Your powers are awoken. Your lust for blood grows... You are a Vampire!</span></B>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
 			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
@@ -441,7 +441,7 @@
 			if (!istype(H))
 				return
 			if(VAMP_MATURE in current_powers)
-				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric current_powers fade and your insides burn.</span>")
+				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
 			else
