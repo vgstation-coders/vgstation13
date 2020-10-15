@@ -231,8 +231,13 @@
 		antag.assigned_role="MODE"
 	return 1
 
+//remove all power-related spells
+/datum/role/proc/removespells()
+	for(var/datum/power/P in current_powers)
+		P.remove_spell()
+
 //Remove and re-grant role-related power spells
-/datum/role/proc/refreshspells()
+/datum/role/proc/refreshpowers()
 	for(var/datum/power/P in current_powers)
 		P.remove_spell()
 		P.grant_spell()

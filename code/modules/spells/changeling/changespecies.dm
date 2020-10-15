@@ -28,13 +28,12 @@
 
 	changeling.geneticdamage = 30
 
-	user.visible_message("<span class='warning'>[user] transforms!</span>")
+	user.visible_message("<span class='danger'>[user] transforms!</span>")
 
 	user.set_species(S,1) //Until someone moves body colour into DNA, they're going to have to use the default.
 
-	spawn(10)
-		user.regenerate_icons()
-
+	user.regenerate_icons()
+	user.updateChangelingHUD()
 	user.changeling_update_languages(changeling.absorbed_languages)
 	feedback_add_details("changeling_powers","TR")
 

@@ -61,10 +61,10 @@
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Vampire!<br/></span>")
 			to_chat(antag.current, "To drink blood from somebody, just bite their head (switch to harm intent, enable biting and attack the victim in the head with an empty hand).")
-			to_chat(antag.current, "Drink blood to gain new current_powers and use coffins to regenerate your body if injured.")
+			to_chat(antag.current, "Drink blood to gain new powers and use coffins to regenerate your body if injured.")
 			to_chat(antag.current, "You are weak to holy things and starlight.")
 			to_chat(antag.current, "Don't go into space and avoid the Chaplain, the chapel, and especially Holy Water.")
-			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your current_powers will stop working against them as you go stronger.")
+			to_chat(antag.current, "You will easily recognise the wearers of holy artifacts. Your powers will stop working against them as you go stronger.")
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 	antag.current << sound('sound/effects/vampire_intro.ogg')
 
@@ -240,7 +240,7 @@
 		var/datum/power/vampire/VP_type = i
 		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in current_powers))
 			var/datum/power/vampire/VP = new VP_type
-			if (!(VP in current_powers))
+			if (!is_type_in_list(VP, current_powers))
 				VP.add_power(src)
 
 	var/mob/living/carbon/human/H = antag.current

@@ -2,12 +2,17 @@
 
 /datum/power/changeling
 	var/allowduringlesserform = 0
-	spellmaster = /obj/abstract/screen/movable/spell_master/changeling
-
+	var/allowduringhorrorform = 1
+	spellmaster = /obj/abstract/screen/movable/spell_master/changeling	
 
 /datum/power/changeling/can_use(var/mob/user)
 	if(ismonkey(user))
 		if(allowduringlesserform)
+			return TRUE
+		else
+			return FALSE
+	if(ishorrorform(user))
+		if(allowduringhorrorform)
 			return TRUE
 		else
 			return FALSE
@@ -42,12 +47,14 @@
 	desc = "We take on the apperance and voice of one we have absorbed."
 	cost = 0
 	spellpath = /spell/changeling/transform
+	allowduringhorrorform = 0
 
 /datum/power/changeling/change_species
 	name = "Change Species"
 	desc = "We take on the apperance of a species that we have absorbed."
 	cost = 0
 	spellpath = /spell/changeling/changespecies
+	allowduringhorrorform = 0
 
 /datum/power/changeling/fakedeath
 	name = "Regenerative Stasis"
@@ -79,6 +86,7 @@
 	cost = 1
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/lesserform
+	allowduringhorrorform = 0
 
 /datum/power/changeling/horror_form
 	name = "Horror Form"
@@ -163,7 +171,7 @@
 	helptext = "Our throat adjusts to launch the stinger."
 	cost = 2
 
-/datum/power/changeling/AdvChemicalSynth/add_power(var/datum/role/R)
+/datum/power/changeling/boost_range/add_power(var/datum/role/R)
 	. = ..()
 	if (!.) 
 		return 
@@ -227,6 +235,9 @@
 	allowduringlesserform = 1
 
 /datum/power/changeling/DigitalCamoflague/add_power(var/datum/role/R)
+	. = ..()
+	if (!.) 
+		return 
 	var/mob/living/carbon/human/C = R.antag.current
 	to_chat(C, "<span class='notice'>We distort our form to prevent AI-tracking.</span>")
 	C.digitalcamo = 1

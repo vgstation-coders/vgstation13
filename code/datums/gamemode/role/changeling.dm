@@ -113,4 +113,8 @@ var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon"
 /datum/role/changeling/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	if (!power_holder) // This is for when you spawn as a new_player
 		return
+	if(isbrain(new_character)
+		removespells()
+		return
+		
 	new_character.make_changeling() // Will also restore any & all genomes/powers we have

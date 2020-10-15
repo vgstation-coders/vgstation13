@@ -23,12 +23,13 @@
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
 	if (buytext)
-		to_chat(role.antag.current, "<span class = 'notice'>[buytext]</span>")
+		to_chat(R.antag.current, "<span class = 'notice'>[buytext]</span>")
 	if (store_in_memory)
-		role.antag.store_memory("<font size = '1'>[helptext]</font>")
+		R.antag.store_memory("<font size = '1'>[helptext]</font>")
 	R.current_powers += src
 	role = R
 	grant_spell()
+	return TRUE
 
 //gives the user the spells if theres one associated with it, seperated from add_power in instances where spells need to be added/removed repeatedly (changelings)
 /datum/power/proc/grant_spell()
@@ -58,7 +59,7 @@
 
 
 /datum/power_holder
-	var/datum/role/R
+	var/datum/role/role
 	var/list/purchased_powers = list()
 
 	//text stuff
@@ -68,10 +69,10 @@
 	var/currency = "Points"
 
 /datum/power_holder/New(var/datum/role/newRole)
-	R = newRole
+	role = newRole
 
 /datum/power_holder/proc/PowerMenu()
-	if(!R)
+	if(!role)
 		return
 
 	var/dat = "<html><head><title>[menu_name]</title></head>"
@@ -268,7 +269,7 @@
 				<td align='center'>
 					<font size='5'><b>[menu_name]</b></font><br>
 						[menu_desc]<br>
-						<b>[R.powerpoints] [currency] left.</b>
+						<b>[role.powerpoints] [currency] left.</b>
 					<p>
 				</td>
 			</tr>
@@ -287,7 +288,7 @@
 		<table width='560' align='center' cellspacing='0' cellpadding='5' id='maintable_data'>"}
 
 	var/i = 1
-	for(var/datum/power/P in R.available_powers)
+	for(var/datum/power/P in role.available_powers)
 		var/ownsthis = 0
 
 		if(P in purchased_powers)
@@ -341,10 +342,10 @@
 
 
 /datum/power_holder/proc/purchasePower(var/power_name)
-	var/datum/mind/M = R.antag
+	var/datum/mind/M = role.antag
 	var/datum/power/thepower = power_name
 
-	for (var/datum/power/P in R.available_powers)
+	for (var/datum/power/P in role.available_powers)
 		if(P.name == power_name)
 			thepower = P
 			break
@@ -356,13 +357,13 @@
 		to_chat(M.current, "<span class='warning'>You have already purchased this power.</span>")
 		return
 
-	if(R.powerpoints < thepower.cost)
+	if(role.powerpoints < thepower.cost)
 		to_chat(M.current, "<span class='warning'>You cannot afford this power.</span>")
 		return
 
-	R.powerpoints -= thepower.cost
+	role.powerpoints -= thepower.cost
 	purchased_powers += thepower
-	thepower.add_power(R)
+	thepower.add_power(role)
 	
 
 

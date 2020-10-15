@@ -7,11 +7,7 @@
 
 	verbs += /datum/role/changeling/proc/EvolutionMenu
 
-	var/lesserform = ishuman(src)
-	for(var/datum/power/changeling/power in C.current_powers)
-		if(power.allowduringlesserform && lesserform)
-			continue
-		power.grant_spell(C)
+	C.refreshpowers()
 
 	var/mob/living/carbon/human/H = src
 	dna.flavor_text = H.flavor_text

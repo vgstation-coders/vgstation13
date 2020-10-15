@@ -222,8 +222,8 @@
 	name = "Changeling Abilities"
 	icon_state = "changeling_spell_ready"
 
-	open_state = "ling_open"
-	closed_state = "ling_closed"
+	open_state = "ling-open"
+	closed_state = "ling-closed"
 
 	screen_loc = ui_alien_master
 

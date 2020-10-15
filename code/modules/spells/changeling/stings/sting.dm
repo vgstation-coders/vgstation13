@@ -30,11 +30,18 @@
 
 	if(silent)
 		to_chat(user, "<span class='warning'>We stealthily sting [L.name].</span>")
+		user << 'sound/items/hypospray.ogg'
 	else if(visible)
 		user.visible_message("<span class='danger'>[user.name] shoots out a stinger from their body!</span>")
+		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")
+		playsound(user, 'sound/items/syringeproj.ogg', 50, 1)
 	else 
 		to_chat(user, "<span class='warning'>We sting [L.name].</span>")
 		to_chat(L, "<span class='warning'>You feel a tiny prick!</span>")
+		user << 'sound/items/hypospray.ogg'
+		L << 'sound/items/hypospray.ogg'
+
+
 
 	..()
 

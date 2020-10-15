@@ -63,7 +63,7 @@
 	name = "Return to Life"
 	desc = "Regenerate your body and continue to spread."
 	icon_icon = 'icons/mob/screen_spells.dmi'
-	button_icon_state = "vamp_cheatdeath2"
+	button_icon_state = "ling-open"
 
 /datum/action/lingrevive/Trigger()
 	var/datum/role/changeling/changeling = owner.mind.GetRole(CHANGELING)

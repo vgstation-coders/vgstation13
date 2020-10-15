@@ -10,7 +10,9 @@
 	chemcost = 1
 
 /spell/changeling/lesserform/cast_check(var/skipcharge = 0, var/mob/user = usr)
-	..()
+	. = ..()
+	if (!.) 
+		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
 		return FALSE
@@ -61,7 +63,9 @@
 	required_dna = 1
 
 /spell/changeling/higherform/cast_check(var/skipcharge = 0, var/mob/user = usr)
-	..()
+	. = ..()
+	if (!.) 
+		return FALSE
 	if(istype(user.loc, /obj/mecha))
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
 		return FALSE
