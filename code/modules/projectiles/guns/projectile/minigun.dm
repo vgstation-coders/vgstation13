@@ -146,6 +146,10 @@
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
 				..()
 				return
+			if(current_shells => 50)
+				to_chat(user, "<span class='warning'>\The [src] is already filled to capacity.</span>")
+				..()
+				return
 			to_chat(user, "<span class='notice'>You load \the [thebaton] into \the [src].</span>")
 			current_shells = min(current_shells+10,max_shells)  //Yup, 5 batons for max ammo.
 			if(thebaton.bcell.rigged)
