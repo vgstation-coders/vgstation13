@@ -146,7 +146,7 @@
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
 				..()
 				return
-			if(current_shells => 50)
+			if(current_shells >= 50)
 				to_chat(user, "<span class='warning'>\The [src] is already filled to capacity.</span>")
 				..()
 				return
