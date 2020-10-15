@@ -2189,8 +2189,6 @@
 
 	if(volume >= 1)
 		T.clean_blood()
-		for(var/obj/effect/decal/cleanable/C in src)
-			qdel(C)
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
