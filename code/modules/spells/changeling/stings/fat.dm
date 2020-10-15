@@ -2,6 +2,7 @@
     name = "Fat Sting"
     desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
     abbreviation = "FS"
+	hud_state = "fatsting"
 
     silent = 1
     delay = 15 SECONDS
@@ -19,8 +20,9 @@
 
 /spell/changeling/sting/unfat
 	name = "Unfat Sting"
-	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
+	desc = "We quietly sting a human or ourselves, forcing them to rapidly metabolize their fat."
 	abbreviation = "UF"
+	hud_state = "unfatsting"
 
 	silent = 1
 

@@ -1,7 +1,8 @@
 /spell/changeling/horrorform
-	name = "Horror Form"
+	name = "Horror Form (30)"
 	desc = "We transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
 	abbreviation = "HF"
+	hud_state = "horrorform"
 
 	spell_flags = NEEDSHUMAN
 

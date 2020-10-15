@@ -5,6 +5,8 @@
 
 	spell_flags = NEEDSHUMAN
 
+	hud_state = "absorbdna"
+
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)

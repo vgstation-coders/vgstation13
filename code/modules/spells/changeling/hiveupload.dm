@@ -1,7 +1,8 @@
 /spell/changeling/hiveupload
-	name = "Hivemind Channel"
+	name = "Hivemind Channel (10)"
 	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
 	abbreviation = "HC"
+	hud_state = "hiveupload"
 
 	spell_flags = NEEDSHUMAN
 

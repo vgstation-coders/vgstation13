@@ -1,7 +1,8 @@
 /spell/changeling/changespecies
-	name = "Change Species"
+	name = "Change Species (5)"
 	desc = "We take on the apperance of a species that we have absorbed."
 	abbreviation = "CS"
+	hud_state = "changespecies"
 
 	spell_flags = NEEDSHUMAN
 

@@ -1,7 +1,10 @@
 /spell/changeling/sting/deaf
-	name = "Deaf Sting"
+	name = "Deaf Sting (5)"
 	desc = "We quietly sting a human, completely deafening them for a short time."
 	abbreviation = "DS"
+	hud_state = "deafsting"
+
+	chemcost = 5
 
 
 /spell/changeling/sting/deaf/lingsting(var/mob/user, var/mob/living/target)

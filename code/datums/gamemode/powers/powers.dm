@@ -7,6 +7,7 @@
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
 	var/datum/role/role 
+	var/obj/abstract/screen/movable/spell_master/spellmaster
 
 	var/store_in_memory = FALSE
 
@@ -43,7 +44,7 @@
 			message_admins("activate power called more times than needed") //remind me to remove this before making the PR
 			return FALSE
 		var/spell/S = new spellpath
-		role.antag.current.add_spell(S)
+		role.antag.current.add_spell(S, master_type = spellmaster)
 
 /datum/power/proc/remove_spell()
 	var/mob/M = role.antag.current
@@ -59,7 +60,6 @@
 /datum/power_holder
 	var/datum/role/R
 	var/list/purchased_powers = list()
-	var/list/available_powers = list()
 
 	//text stuff
 	var/menu_name = "Power Menu"
@@ -71,6 +71,8 @@
 	R = newRole
 
 /datum/power_holder/proc/PowerMenu()
+	if(!R)
+		return
 
 	var/dat = "<html><head><title>[menu_name]</title></head>"
 
@@ -285,7 +287,7 @@
 		<table width='560' align='center' cellspacing='0' cellpadding='5' id='maintable_data'>"}
 
 	var/i = 1
-	for(var/datum/power/P in available_powers)
+	for(var/datum/power/P in R.available_powers)
 		var/ownsthis = 0
 
 		if(P in purchased_powers)

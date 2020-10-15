@@ -1,7 +1,8 @@
 /spell/changeling/voicechange
-	name = "Mimic Voice"
+	name = "Mimic Voice (10)"
 	desc = "We shape our vocal glands to sound like a desired voice."
 	abbreviation = "VC"
+	hud_state = "mimicvoice"
 
 	spell_flags = NEEDSHUMAN
 

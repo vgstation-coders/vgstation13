@@ -2,6 +2,8 @@
 
 /datum/power/changeling
 	var/allowduringlesserform = 0
+	spellmaster = /obj/abstract/screen/movable/spell_master/changeling
+
 
 /datum/power/changeling/can_use(var/mob/user)
 	if(ismonkey(user))
@@ -28,34 +30,6 @@
 				Absorb genomes to acquire more evolution points"}
 	purchase_word = "Evolve"
 	currency = "Evolution Points"
-	available_powers = list(
-		/datum/power/changeling/absorb_dna,
-		/datum/power/changeling/transform,
-		/datum/power/changeling/change_species,
-		/datum/power/changeling/fakedeath,
-		/datum/power/changeling/hive_upload,
-		/datum/power/changeling/hive_download,
-		/datum/power/changeling/lesser_form,
-		/datum/power/changeling/horror_form,
-		/datum/power/changeling/deaf_sting,
-		/datum/power/changeling/silence_sting,
-		/datum/power/changeling/blind_sting,
-		/datum/power/changeling/paralysis_sting,
-		/datum/power/changeling/LSDSting,
-		/datum/power/changeling/extractdna,
-		/datum/power/changeling/transformation_sting,
-		/datum/power/changeling/DigitalCamoflague,
-		/datum/power/changeling/mimicvoice,
-		/datum/power/changeling/ChemicalSynth,
-		/datum/power/changeling/AdvChemicalSynth,
-		/datum/power/changeling/EngorgedGlands,
-		/datum/power/changeling/Epinephrine,
-		/datum/power/changeling/fat_sting,
-		/datum/power/changeling/unfat_sting,
-		/datum/power/changeling/rapidregeneration,
-		/datum/power/changeling/armblade,
-		/datum/power/changeling/boost_range
-	)
 
 /datum/power/changeling/absorb_dna
 	name = "Absorb DNA"

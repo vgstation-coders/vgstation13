@@ -1,7 +1,8 @@
 /spell/changeling/rapidregen
-	name = "Rapid Regeneration"
+	name = "Rapid Regeneration (30)"
 	desc = "We evolve the ability to rapidly regenerate, negating the need for stasis."
 	abbreviation = "RR"
+	hud_state = "rapidregen"
 
 	spell_flags = NEEDSHUMAN
 

@@ -1,7 +1,8 @@
 /spell/changeling/transform
-	name = "Transform"
+	name = "Transform (5)"
 	desc = "We take on the apperance and voice of one we have absorbed."
 	abbreviation = "TF"
+	hud_state = "transform"
 
 	spell_flags = NEEDSHUMAN
 

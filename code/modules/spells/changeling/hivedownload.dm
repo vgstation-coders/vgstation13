@@ -1,7 +1,8 @@
 /spell/changeling/hivedownload
-	name = "Hivemind Absorb"
+	name = "Hivemind Absorb (20)"
 	desc = "We can absorb a single DNA from the airwaves, allowing us to use more disguises with help from our fellow changelings."
 	abbreviation = "HA"
+	hud_state = "hivedownload"
 
 	spell_flags = NEEDSHUMAN
 

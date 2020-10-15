@@ -1,7 +1,8 @@
 /spell/changeling/lesserform
-	name = "Lesser Form"
+	name = "Lesser Form (1)"
 	desc = "We debase ourselves and become lesser. We become a monkey."
 	abbreviation = "LF"
+	hud_state = "lesserform"
 
 	spell_flags = NEEDSHUMAN
 	max_genedamage = 0
@@ -49,9 +50,10 @@
 
 
 /spell/changeling/higherform
-	name = "Higher Form"
+	name = "Higher Form (1)"
 	desc = "We rebase ourselves and become greater. We assume a humanoid form."
 	abbreviation = "HF"
+	hud_state = "lesserform"
 
 	max_genedamage = 0
 	horrorallowed = 0	//horrors shouldnt even have this spell available to them

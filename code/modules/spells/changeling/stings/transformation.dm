@@ -1,8 +1,10 @@
 /spell/changeling/sting/transformation
-	name = "DNA Extraction Sting"
+	name = "DNA Extraction Sting (40)"
 	desc = "We silently sting a human, injecting a retrovirus that forces them to transform into another."
 	abbreviation = "TS"
+	hud_state = "transformsting"
 
+	chemcost = 40
 	delay = 15 SECONDS
 	silent = 1
 

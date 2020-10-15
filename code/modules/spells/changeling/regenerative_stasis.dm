@@ -1,7 +1,8 @@
 /spell/changeling/regenerate
-	name = "Regenerative Stasis"
+	name = "Regenerative Stasis (20)"
 	desc = "We become weakened to a death-like state, where we will rise again from death."
 	abbreviation = "RS"
+	hud_state = "regenstasis"
 
 	spell_flags = NEEDSHUMAN | STATALLOWED
 

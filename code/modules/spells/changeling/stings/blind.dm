@@ -1,7 +1,10 @@
 /spell/changeling/sting/blind
-	name = "Blind Sting"
+	name = "Blind Sting (20)"
 	desc = "We quietly sting a human, completely blinding them for a short time."
 	abbreviation = "BS"
+	hud_state = "blindsting"
+
+	chemcost = 20
 
 
 /spell/changeling/sting/blind/lingsting(var/mob/user, var/mob/living/target)

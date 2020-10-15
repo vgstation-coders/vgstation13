@@ -1,7 +1,8 @@
 /spell/changeling/armblade
-	name = "Arm Blade"
+	name = "Arm Blade (20)"
 	desc = "We transform one of our arms into an organic blade that can cut through flesh and bone."
 	abbreviation = "AB"
+	hud_state = "armblade"
 
 	spell_flags = NEEDSHUMAN
 
@@ -11,7 +12,7 @@
 /spell/changeling/armblade/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
-		return 0
+		return 
 
 	for(var/obj/item/weapon/armblade/W in user)
 		user.visible_message("<span class='warning'>With a sickening crunch, [user] reforms their arm blade into an arm!</span>",
@@ -19,7 +20,7 @@
 		"<span class='italics'>You hear organic matter ripping and tearing!</span>")
 		playsound(user, 'sound/weapons/bloodyslice.ogg', 30, 1)
 		qdel(W)
-		return 1
+		return 
 
 	var/good_hand
 	if(user.can_use_hand(user.active_hand))

@@ -1,7 +1,10 @@
 /spell/changeling/sting/paralyse
-	name = "Paralysis Sting"
+	name = "Paralysis Sting (30)"
 	desc = "We quietly sting a human, paralyzing them for a short time."
 	abbreviation = "PS"
+	hud_state = "paralysis"
+
+	chemcost = 30
 
 
 /spell/changeling/sting/paralyse/lingsting(var/mob/user, var/mob/living/target)

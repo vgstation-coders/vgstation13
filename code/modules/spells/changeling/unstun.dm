@@ -1,7 +1,8 @@
 /spell/changeling/unstun
-	name = "Epinephrine Sacs"
-	desc = "We evolve additional sacs of adrenaline throughout our body."
+	name = "Epinephrine Sacs (45)"
+	desc = "We extract extra adrenaline from epinephrine sacs within our body, instantly recovering us from stuns."
 	abbreviation = "ES"
+	hud_state = "unstun"
 
 	spell_flags = NEEDSHUMAN
 
