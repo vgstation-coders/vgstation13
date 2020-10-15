@@ -83,7 +83,7 @@
 				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
 				binary = null
 				continue
-		if(potential == "Lamprey Station/") //Available if the station is wrecked enough
+		if(potential == "Lamprey/") //Available if the station is wrecked enough
 			var/crew_score = score["crewscore"] //So that we can use this in the admin messaging
 			if(crew_score > -20000)
 				message_admins("Skipping map [potential], station requires lower than -20000 score (is [crew_score]).")
