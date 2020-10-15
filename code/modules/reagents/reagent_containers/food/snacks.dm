@@ -756,6 +756,16 @@
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/bagel
+	name = "bagel"
+	desc = "You can almost imagine the center is a black hole."
+	icon_state = "bagel"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bagel/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
 // Eggs
 
 /obj/item/weapon/reagent_containers/food/snacks/friedegg
