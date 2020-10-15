@@ -137,7 +137,7 @@
 /obj/item/weapon/gun/gatling/batling/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/melee/baton))
 		var/obj/item/weapon/melee/baton/thebaton = W
-		if(user.drop_item(thebaton))
+		if(user.drop_item(thebaton) && thebaton.canbehonkified())
 			if(!thebaton.bcell)
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have a cell.</span>")
 				..()
