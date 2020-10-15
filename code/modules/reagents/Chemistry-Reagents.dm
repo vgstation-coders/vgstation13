@@ -7516,6 +7516,51 @@
 	spawn(1)
 		qdel(D)
 
+/datum/reagent/ethanol/drink/monstermash
+	name = "Monster Mash"
+	id = MONSTERMASH
+	description = "It'll be gone in a flash!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b97309"
+	glass_icon_state = "monster_mash"
+	glass_name = "\improper Monster Mash"
+	glass_desc = "Will get you graveyard smashed."
+
+/datum/reagent/ethanol/drink/monstermash/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		if(isskellington(H) || isskelevox(H) || islich(H) || H.is_wearing_item(/obj/item/clothing/under/skelesuit))
+			doTheMash(H)
+		if(H.is_wearing_item(/obj/item/clothing/head/franken_bolt) || istype(H, /mob/living/carbon/human/frankenstein))
+			joltOfMyElectrodes(H)
+		if(H.is_wearing_item(/obj/item/clothing/mask/vamp_fangs) || H.is_wearing_item(/obj/item/clothing/suit/storage/draculacoat) || isvampire(H))
+			draculaAndHisSon(H)
+
+/datum/reagent/ethanol/drink/monstermash/proc/doTheMash(mob/living/carbon/human/H)
+	playsound(H, 'sound/effects/rattling_bones.ogg', 100, 1)
+	if(prob(15))
+		H.emote("spin")
+		H.visible_message("<span class='good'>[H] does the mash!</span>")
+		if(prob(25))
+			spawn(1 SECONDS)
+				H.emote("spin")
+				H.visible_message("<span class='good'>[H] does the monster mash!</span>")
+
+/datum/reagent/ethanol/drink/monstermash/proc/joltOfMyElectrodes(mob/living/carbon/human/H)
+	for(var/turf/simulated/T in orange(1, H))
+		if(prob(volume))
+			spark(T, 1)
+
+/datum/reagent/ethanol/drink/monstermash/proc/draculaAndHisSon(mob/living/carbon/human/H)
+	if(prob(15))
+		var/mob/living/simple_animal/dracson/dSon = new /mob/living/simple_animal/dracson(H.loc)
+		try_move_adjacent(dSon)
+		spawn(5 SECONDS)
+			dSon.death()
+
+
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
 	name = "Vinegar"

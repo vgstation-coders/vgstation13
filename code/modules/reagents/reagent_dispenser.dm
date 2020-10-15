@@ -361,6 +361,17 @@
 	. = ..()
 	reagents.add_reagent(ETHANOL, 1000)
 
+/obj/structure/reagent_dispensers/spooktank
+	name = "spooktank"
+	desc = "A storage tank containing spook."
+	icon = 'icons/obj/halloween.dmi'
+	icon_state = "spooktank"
+	amount_per_transfer_from_this = 10
+
+/obj/structure/reagent_dispensers/spooktank/New()
+	. = ..()
+	reagents.add_reagent(MONSTERMASH, 1000)
+
 /obj/structure/reagent_dispensers/cauldron
 	name = "cauldron"
 	icon_state = "cauldron"

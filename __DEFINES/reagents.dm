@@ -430,6 +430,7 @@
 #define GATORMIX		"gatormix"
 #define BLISTEROL		"blisterol"
 #define ECTOPLASM		"ectoplasm"
+#define MONSTERMASH		"monstermash"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
