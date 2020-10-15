@@ -2,10 +2,11 @@
 	name = "Absorb DNA"
 	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
 	abbreviation = "AD"
-
+	hud_state = "absorbdna"
+	
 	spell_flags = NEEDSHUMAN
 
-	hud_state = "absorbdna"
+	
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
