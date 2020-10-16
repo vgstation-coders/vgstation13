@@ -32,7 +32,7 @@
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
 		return
 
-	if(G.state != GRAB_KILL))
+	if(G.state != GRAB_KILL)
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
