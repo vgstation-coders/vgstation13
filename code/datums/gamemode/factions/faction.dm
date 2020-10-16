@@ -406,6 +406,8 @@ var/list/factions_with_hud_icons = list()
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
 	logo_state = "change-logoa"
+	//changeling hivemind bank
+	var/list/hivemind_bank = list()
 
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/logos.dmi', "change-logoa")

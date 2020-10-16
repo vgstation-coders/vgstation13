@@ -11,12 +11,13 @@
 
 /spell/changeling/hiveupload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 0
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!changeling || !hivemind)
+		return 
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
-		if(!(DNA in hivemind_bank))
+		if(!(DNA in hivemind.hivemind_bank))
 			names += DNA.real_name
 
 	if(names.len <= 0)
@@ -31,7 +32,7 @@
 	if(!chosen_dna)
 		return
 
-	hivemind_bank += chosen_dna
+	hivemind.hivemind_bank += chosen_dna
 	to_chat(user, "<span class='notice'>We channel the DNA of [S] to the air.</span>")
 	feedback_add_details("changeling_powers","HU")
 

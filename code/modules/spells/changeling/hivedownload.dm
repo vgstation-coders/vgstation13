@@ -11,11 +11,12 @@
 
 /spell/changeling/hivedownload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 0
+	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+	if(!changeling || !hivemind)
+		return 
 
 	var/list/names = list()
-	for(var/datum/dna/DNA in hivemind_bank)
+	for(var/datum/dna/DNA in hivemind.hivemind_bank)
 		if(!(DNA in changeling.absorbed_dna))
 			names[DNA.real_name] = DNA
 
@@ -24,6 +25,7 @@
 		return
 
 	var/S = input("Select a DNA absorb from the air: ", "Absorb DNA", null) as null|anything in names
+
 	if(!S)
 		return
 	var/datum/dna/chosen_dna = names[S]
