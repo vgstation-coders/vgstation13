@@ -2,7 +2,7 @@
 	var/name = "Power"
 	var/desc = "Placeholder"
 	var/helptext = ""
-	var/buytext = ""
+	var/granttext = ""
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
@@ -23,9 +23,9 @@
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
 	if (buytext)
-		to_chat(R.antag.current, "<span class = 'notice'>[buytext]</span>")
+		to_chat(R.antag.current, "<span class = 'notice'>[granttext]</span>")
 	if (store_in_memory)
-		R.antag.store_memory("<font size = '1'>[helptext]</font>")
+		R.antag.store_memory("<font size = '1'>[granttext]</font>")
 	R.current_powers += src
 	role = R
 	grant_spell()
