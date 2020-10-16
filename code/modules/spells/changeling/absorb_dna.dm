@@ -32,7 +32,7 @@
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
 		return
 
-	if(!(G.state == GRAB_KILL))
+	if(G.state != GRAB_KILL))
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
@@ -88,15 +88,13 @@
 	changeling.powerpoints += 2
 
 	//Steal all of their languages!
-	for(var/language in T.languages)
-		if(!(language in changeling.absorbed_languages))
-			changeling.absorbed_languages += language
+	changeling.absorbed_languages |= T.languages
 
 	user.changeling_update_languages(changeling.absorbed_languages)
 
 	//Steal their species!
-	if(T.species && !(T.species.name in changeling.absorbed_species))
-		changeling.absorbed_species += T.species.name
+	if(T.species)
+		changeling.absorbed_species |= T.species.name
 
 	if(T.mind)
 		var/datum/role/changeling/Tchangeling = T.mind.GetRole(CHANGELING)
