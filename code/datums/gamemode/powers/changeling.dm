@@ -39,12 +39,14 @@
 /datum/power/changeling/absorb_dna
 	name = "Absorb DNA"
 	desc = "Permits us to syphon the DNA from a human. They become one with us, and we become stronger."
+	id = LING_ABSORB
 	cost = 0
 	spellpath = /spell/changeling/absorbdna
 
 /datum/power/changeling/transform
 	name = "Transform"
 	desc = "We take on the apperance and voice of one we have absorbed."
+	id = LING_TRANSFORM
 	cost = 0
 	spellpath = /spell/changeling/transform
 	allowduringhorrorform = 0
@@ -52,6 +54,7 @@
 /datum/power/changeling/change_species
 	name = "Change Species"
 	desc = "We take on the apperance of a species that we have absorbed."
+	id = LING_SPECIES
 	cost = 0
 	spellpath = /spell/changeling/changespecies
 	allowduringhorrorform = 0
@@ -59,7 +62,8 @@
 /datum/power/changeling/fakedeath
 	name = "Regenerative Stasis"
 	desc = "We become weakened to a death-like state, where we will rise again from death."
-	helptext = "Can be used before or after death. Duration varies greatly."
+	extrainfo = "Can be used before or after death. Duration varies greatly."
+	id = LING_STASIS
 	cost = 0
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/regenerate
@@ -69,20 +73,23 @@
 /datum/power/changeling/hive_upload
 	name = "Hive Channel"
 	desc = "We can channel a DNA into the airwaves, allowing our fellow changelings to absorb it and transform into it as if they acquired the DNA themselves."
-	helptext = "Allows other changelings to absorb the DNA you channel from the airwaves. Will not help them towards their absorb objectives."
+	extrainfo = "Allows other changelings to absorb the DNA you channel from the airwaves. Will not help them towards their absorb objectives."
+	id = LING_UPLOAD
 	cost = 0
 	spellpath = /spell/changeling/hiveupload
 
 /datum/power/changeling/hive_download
 	name = "Hive Absorb"
 	desc = "We can absorb a single DNA from the airwaves, allowing us to use more disguises with help from our fellow changelings."
-	helptext = "Allows you to absorb a single DNA and use it. Does not count towards your absorb objective."
+	extrainfo = "Allows you to absorb a single DNA and use it. Does not count towards your absorb objective."
+	id = LING_DOWNLOAD
 	cost = 0
 	spellpath = /spell/changeling/hivedownload
 
 /datum/power/changeling/lesser_form
 	name = "Lesser Form"
 	desc = "We debase ourselves and become lesser.  We become a monkey."
+	id = LING_LESSER
 	cost = 1
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/lesserform
@@ -91,12 +98,14 @@
 /datum/power/changeling/horror_form
 	name = "Horror Form"
 	desc = "This costly evolution allows us to transform into an all-consuming abomination. We are incredibly strong, to the point that we can force open airlocks, and are immune to conventional stuns."
+	id = LING_HORROR
 	cost = 15
 	spellpath = /spell/changeling/horrorform
 
 /datum/power/changeling/deaf_sting
 	name = "Deaf Sting"
 	desc = "We silently sting a human, completely deafening them for a short time."
+	id = LING_DEAF
 	cost = 1
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/deaf
@@ -104,6 +113,7 @@
 /datum/power/changeling/blind_sting
 	name = "Blind Sting"
 	desc = "We silently sting a human, completely blinding them for a short time."
+	id = LING_BLIND
 	cost = 2
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/blind
@@ -111,7 +121,8 @@
 /datum/power/changeling/silence_sting
 	name = "Silence Sting"
 	desc = "We silently sting a human, completely silencing them for a short time."
-	helptext = "Does not provide a warning to a victim that they have been stung, until they try to speak and cannot."
+	extrainfo = "Does not provide a warning to a victim that they have been stung, until they try to speak and cannot."
+	id = LING_MUTE
 	cost = 2
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/mute
@@ -119,14 +130,16 @@
 /datum/power/changeling/mimicvoice
 	name = "Mimic Voice"
 	desc = "We shape our vocal glands to sound like a desired voice."
-	helptext = "Will turn your voice into the name that you enter."
+	extrainfo = "Will turn your voice into the name that you enter."
+	id = LING_VOICE
 	cost = 3
 	spellpath = /spell/changeling/voicechange
 
 /datum/power/changeling/extractdna
 	name = "Extract DNA"
 	desc = "We stealthily sting a target and extract the DNA from them."
-	helptext = "Will give you the DNA of your target, allowing you to transform into them. Does not count towards absorb objectives."
+	extrainfo = "Will give you the DNA of your target, allowing you to transform into them. Does not count towards absorb objectives."
+	id = LING_DNASTING
 	cost = 3
 	allowduringlesserform = 1
 	spellpath = /spell/changeling/sting/dnaextract
@@ -134,41 +147,47 @@
 /datum/power/changeling/transformation_sting
 	name = "Transformation Sting"
 	desc = "We silently sting a human, injecting a retrovirus that forces them to transform into another."
-	helptext = "Does not provide a warning to others. The victim will transform much like a changeling would."
+	extrainfo = "Does not provide a warning to others. The victim will transform much like a changeling would."
+	id = LING_SHAPESTING
 	cost = 3
 	spellpath = /spell/changeling/sting/transformation
 
 /datum/power/changeling/paralysis_sting
 	name = "Paralysis Sting"
 	desc = "We silently sting a human, paralyzing them for a short time."
+	id = LING_STUN
 	cost = 4
 	spellpath = /spell/changeling/sting/paralyse
 
 /datum/power/changeling/LSDSting
 	name = "Hallucination Sting"
 	desc = "We evolve the ability to sting a target with a powerful hallucinogen."
-	helptext = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
+	extrainfo = "The target does not notice they have been stung.  The effect occurs after 30 to 60 seconds."
+	id = LING_LSD
 	cost = 3
 	spellpath = /spell/changeling/sting/hallucinate
 
 /datum/power/changeling/unfat_sting
 	name = "Unfat Sting"
 	desc = "We silently sting a human or ourselves, forcing them to rapidly metabolize their fat."
-	helptext = "Caution: This can also target you!"
+	extrainfo = "Caution: This can also target you!"
+	id = LING_UNFAT
 	cost = 0
 	spellpath = /spell/changeling/sting/unfat
 
 /datum/power/changeling/fat_sting
 	name = "Fat Sting"
 	desc = "We silently sting a human or ourselves, forcing them to rapidly accumulate fat."
-	helptext = "Caution: This can also target you!"
+	extrainfo = "Caution: This can also target you!"
+	id = LING_FAT
 	cost = 0
 	spellpath = /spell/changeling/sting/fat
 
 /datum/power/changeling/boost_range
 	name = "Boost Range"
 	desc = "We evolve the ability to shoot our stingers at humans, with some preperation."
-	helptext = "Our throat adjusts to launch the stinger."
+	extrainfo = "Our throat adjusts to launch the stinger."
+	id = LING_RANGESTING
 	cost = 2
 
 /datum/power/changeling/boost_range/add_power(var/datum/role/R)
@@ -182,14 +201,16 @@
 /datum/power/changeling/Epinephrine
 	name = "Epinephrine sacs"
 	desc = "We evolve additional sacs of adrenaline throughout our body."
-	helptext = "Gives the ability to instantly recover from stuns.  High chemical cost."
+	extrainfo = "Gives the ability to instantly recover from stuns.  High chemical cost."
+	id = LING_UNSTUN
 	cost = 4
 	spellpath = /spell/changeling/unstun
 
 /datum/power/changeling/ChemicalSynth
 	name = "Rapid Chemical-Synthesis"
 	desc = "We evolve new pathways for producing our necessary chemicals, permitting us to naturally create them faster."
-	helptext = "Doubles the rate at which we naturally recharge chemicals."
+	extrainfo = "Doubles the rate at which we naturally recharge chemicals."
+	id = LING_CHEMSYNTH
 	cost = 4
 
 /datum/power/changeling/ChemicalSynth/add_power(var/datum/role/R)
@@ -203,7 +224,8 @@
 /datum/power/changeling/AdvChemicalSynth
 	name = "Advanced Chemical-Synthesis"
 	desc = "We evolve new pathways for producing our necessary chemicals, permitting us to naturally create them faster."
-	helptext = "Doubles the rate at which we naturally recharge chemicals."
+	extrainfo = "Doubles the rate at which we naturally recharge chemicals."
+	id = LING_CHEMSYNTH2
 	cost = 8
 
 /datum/power/changeling/AdvChemicalSynth/add_power(var/datum/role/R)
@@ -217,7 +239,8 @@
 /datum/power/changeling/EngorgedGlands
 	name = "Engorged Chemical Glands"
 	desc = "Our chemical glands swell, permitting us to store more chemicals inside of them."
-	helptext = "Allows us to store an extra 25 units of chemicals."
+	extrainfo = "Allows us to store an extra 25 units of chemicals."
+	id = LING_CHEMGLANDS
 	cost = 4
 
 /datum/power/changeling/EngorgedGlands/add_power(var/datum/role/R)
@@ -231,6 +254,7 @@
 /datum/power/changeling/DigitalCamoflague
 	name = "Digital Camouflage"
 	desc = "We evolve the ability to distort our form and proportions, defeating common algorithms used to detect lifeforms on cameras."
+	id = LING_CAMERAS
 	cost = 3
 	allowduringlesserform = 1
 
@@ -247,28 +271,30 @@
 /datum/power/changeling/rapidregeneration
 	name = "Rapid Regeneration"
 	desc = "We evolve the ability to rapidly regenerate, negating the need for stasis."
-	helptext = "Heals a moderate amount of damage every tick."
+	extrainfo = "Heals a moderate amount of damage every tick."
+	id = LING_REGEN
 	cost = 8
 	spellpath = /spell/changeling/rapidregen
 
 /datum/power/changeling/armblade
 	name = "Arm Blade"
 	desc = "We transform one of our arms into an organic blade that can cut through flesh and bone."
-	helptext = "The blade can be retracted by using the same verb used to manifest it. It has a chance to deflect projectiles."
+	extrainfo = "The blade can be retracted by using the same verb used to manifest it. It has a chance to deflect projectiles."
+	id = LING_ARMBLADE
 	cost = 5
 	spellpath = /spell/changeling/armblade
 
 // /datum/power/changeling/chemsting
 // 	name = "Chemical Sting"
 // 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to inject into another lifeform or ourselves if needs be."
-// 	helptext = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
+// 	extrainfo = "This can be used to hinder others, or help ourselves, through the application of medicines or poisons."
 // 	cost = 1
 // 	spellpath = /obj/item/verbs/changeling/proc/changeling_chemsting
 
 // /datum/power/changeling/chemspit
 // 	name = "Chemical Spit"
 // 	desc = "We repurpose our internal organs to process and recreate any chemicals we have learned, ready to fire like projectile venom in our facing direction."
-// 	helptext = "Handy for firing acid at enemies, providing we have learned such chemicals."
+// 	extrainfo = "Handy for firing acid at enemies, providing we have learned such chemicals."
 // 	cost = 1
 // 	allowduringlesserform = 1
 // 	spellpath = /obj/item/verbs/changeling/proc/changeling_chemspit

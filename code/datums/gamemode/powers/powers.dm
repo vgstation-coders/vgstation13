@@ -1,15 +1,16 @@
 /datum/power			
 	var/name = "Power"
 	var/desc = "Placeholder"
-	var/helptext = ""
+	var/extrainfo
+	var/notetext = ""
 	var/buytext = ""
+	var/id
 	var/passive = FALSE     //is this a spell or a passive effect?
 	var/spellpath           //Path to a verb that contains the effects.
 	var/cost                //the cost of this power
 	var/datum/role/role 
 	var/obj/abstract/screen/movable/spell_master/spellmaster
 
-	var/store_in_memory = FALSE
 
 //basic proc for limiting powers in monkeys or whatever, override this with checks
 /datum/power/proc/can_use(var/mob/user)
@@ -19,14 +20,20 @@
 /datum/power/proc/add_power(var/datum/role/R)
 	if (!istype(R) || !R)
 		return FALSE
-	if(is_type_in_list(src, R.current_powers))
+	if(locate(src) in R.current_powers)
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
 	if (buytext)
 		to_chat(R.antag.current, "<span class = 'notice'>[buytext]</span>")
-	if (store_in_memory)
-		R.antag.store_memory("<font size = '1'>[helptext]</font>")
-	R.current_powers += src
+	if (notetext)
+		R.antag.store_memory("<font size = '1'>[notetext]</font>")
+
+	if(id) 
+		R.current_powers[id] = src
+	else
+		stack_trace("[src.type] has no ID! Add one before bad things happen.")
+		R.current_powers.Add(src)
+
 	role = R
 	grant_spell()
 	return TRUE
@@ -137,7 +144,7 @@
 
 				}
 
-				function expand(id,name,desc,helptext,power,ownsthis){
+				function expand(id,name,desc,notetext,power,ownsthis){
 
 					clearAll();
 
@@ -147,7 +154,7 @@
 					body = "<table><tr><td>";
 					body +=	"</td><td align='center'>";
 					body +=	"<font size='2'><b>"+desc+"</b></font> <BR>";
-					body +=	"<font size='2'><font color = 'red'><b>"+helptext+"</b></font> <BR>";
+					body +=	"<font size='2'><font color = 'red'><b>"+notetext+"</b></font> <BR>";
 
 					if(!ownsthis)
 					{
@@ -305,7 +312,7 @@
 				<td align='center' bgcolor='[color]'>
 					<span id='notice_span[i]'></span>
 					<a id='link[i]'
-					onmouseover='expand("item[i]","[P.name]","[P.desc]","[P.helptext]","[P]",[ownsthis])'
+					onmouseover='expand("item[i]","[P.name]","[P.desc]","[P.notetext]","[P]",[ownsthis])'
 					>
 					<b id='search[i]'>[purchase_word] [P] - Cost: [ownsthis ? "Purchased" : P.cost]</b>
 					</a>
