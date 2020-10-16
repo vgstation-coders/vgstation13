@@ -146,6 +146,8 @@ var/global/list/disease2_list = list()
 	disease2_list -= ID
 
 /datum/disease2/disease/proc/makerandom(var/list/str = list(), var/list/rob = list(), var/list/anti = list(), var/list/bad = list(), var/atom/source = null)
+	if(istype(src, /datum/disease2/disease/predefined))
+		return
 	//ID
 	uniqueID = rand(0,9999)
 	subID = rand(0,9999)
