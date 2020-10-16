@@ -49,7 +49,8 @@
 		return FALSE
 	if (spellpath)
 		if(locate(spellpath) in role.antag.current.spell_list)
-			message_admins("activate power called more times than needed") //remind me to remove this before making the PR
+			. = FALSE
+			CRASH("grant_spell called more times than needed")
 			return FALSE
 		var/spell/S = new spellpath
 		role.antag.current.add_spell(S, master_type = spellmaster)
@@ -372,7 +373,6 @@
 	purchased_powers += thepower
 	thepower.add_power(role)
 	
-
 
 
 
