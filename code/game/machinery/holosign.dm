@@ -67,6 +67,28 @@ var/list/obj/machinery/holosign/holosigns = list()
 	id_tag = "virology"
 	light_color = "#59FF79"
 
+/obj/machinery/holosign/morgue
+	name = "morgue holosign"
+	desc = "Small wall-mounted holographic projector. This one reads MORGUE."
+	on_icon = "morgue"
+	id_tag = "morgue"
+	var/should_update = FALSE
+
+/obj/machinery/holosign/morgue/process()
+	var/area/this_area = get_area(src)
+	for(var/obj/structure/morgue in morgue_list)
+		var/area/morgue_area = get_area(morgue)
+		if(morgue_area != this_area)
+			continue
+		var/morgue_has_revivable_dude = morgue.icon_state == "morgue4"
+		if(morgue_has_revivable_dude)
+			toggle(TRUE)
+			should_update = FALSE
+			return PROCESS_KILL
+	toggle(FALSE)
+	should_update = FALSE
+	return PROCESS_KILL
+
 ////////////////////SWITCH///////////////////////////////////////
 
 /obj/machinery/holosign_switch
