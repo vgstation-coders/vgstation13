@@ -1044,55 +1044,27 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define CAN_EQUIP_BUT_SLOT_TAKEN 2
 
 // Vampire power defines
-#define VAMP_REJUV    "vamp_rejuv"
-#define VAMP_GLARE    "vamp_glare"
-#define VAMP_HYPNO    "vamp_hypno"
-#define VAMP_SHAPE    "vamp_shapeshift"
-#define VAMP_VISION   "vamp_vision"
-#define VAMP_DISEASE  "vamp_disease"
-#define VAMP_CLOAK    "vamp_cloak"
-#define VAMP_BATS     "vamp_bats"
-#define VAMP_SCREAM   "vamp_scream"
-#define VAMP_HEAL     "vamp_heal"
-#define VAMP_JAUNT    "vamp_jaunt"
-#define VAMP_SLAVE    "vamp_slave"
-#define VAMP_BLINK    "vamp_blink"
-#define VAMP_MATURE   "vamp_mature"
-#define VAMP_SHADOW   "vamp_shadow"
-#define VAMP_CHARISMA "vamp_charisma"
-#define VAMP_UNDYING  "vamp_undying"
-#define VAMP_CAPE	  "vamp_cape"
+#define VAMP_REJUV    1
+#define VAMP_GLARE    2
+#define VAMP_HYPNO    3
+#define VAMP_SHAPE    4
+#define VAMP_VISION   5
+#define VAMP_DISEASE  6
+#define VAMP_CLOAK    7
+#define VAMP_BATS     8
+#define VAMP_SCREAM   9
+#define VAMP_HEAL     10
+#define VAMP_JAUNT    11
+#define VAMP_SLAVE    12
+#define VAMP_BLINK    13
+#define VAMP_MATURE   14
+#define VAMP_SHADOW   15
+#define VAMP_CHARISMA 16
+#define VAMP_UNDYING  17
+#define VAMP_CAPE	  18
 #define STARTING_BLOOD 10
 
 #define VAMP_FAILURE -1
-
-//Changeling Powers
-#define LING_ABSORB 	"ling_absorb"
-#define LING_TRANSFORM	"ling_transform"
-#define LING_UPLOAD		"ling_upload"
-#define LING_DOWNLOAD	"ling_download"
-#define LING_STASIS		"ling_stasis"
-#define LING_SPECIES	"ling_species"
-#define LING_UNSTUN		"ling_unstun"
-#define LING_LESSER		"ling_lesser"
-#define LING_HORROR		"ling_horror"
-#define LING_DEAF		"ling_deaf"
-#define LING_BLIND		"ling_blind"
-#define LING_MUTE		"ling_mute"
-#define LING_VOICE		"ling_voice"
-#define LING_DNASTING	"ling_dnasting"
-#define LING_SHAPESTING	"ling_shapesting"
-#define LING_STUN		"ling_stun"
-#define LING_LSD		"ling_lsd"
-#define LING_FAT		"ling_fat"
-#define LING_UNFAT		"ling_unfat"
-#define LING_CHEMSYNTH	"ling_chemsynth"
-#define LING_CHEMSYNTH2 "ling_chemsynth2"
-#define LING_CHEMGLANDS	"ling_chemglands"
-#define LING_RANGESTING	"ling_rangesting"
-#define LING_CAMERAS	"ling_cameras"
-#define LING_REGEN		"ling_regen"
-#define LING_ARMBLADE	"ling_armblade"
 
 // Moved from machine_interactions.dm
 #define STATION_Z  1

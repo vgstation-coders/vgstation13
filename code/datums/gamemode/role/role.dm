@@ -242,14 +242,6 @@
 		P.remove_spell()
 		P.grant_spell()
 
-//returns 1 if the power exists in current_powers
-/datum/role/proc/checkpower(var/power_id)
-	if(current_powers[power_id])
-		return TRUE
-	return FALSE
-
-
-
 // Return 1 on success, 0 on failure.
 /datum/role/proc/OnPostSetup()
 	return 1
