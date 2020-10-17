@@ -73,17 +73,10 @@
 		return 1
 
 /obj/item/weapon/gun/gatling/update_icon()
-	switch(current_shells)
-		if(150 to INFINITY)
-			icon_state = "[base_icon_state]100"
-		if(100 to 149)
-			icon_state = "[base_icon_state]75"
-		if(50 to 99)
-			icon_state = "[base_icon_state]50"
-		if(1 to 49)
-			icon_state = "[base_icon_state]25"
-		else
-			icon_state = "[base_icon_state]0"
+	if(current_shells)
+		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,25)]"
+	else
+		icon_state = "[base_icon_state]0"
 
 /obj/item/weapon/gun/gatling/attack_self(mob/user)
 	if(wielded)
@@ -116,7 +109,7 @@
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_COMBAT + "=6;" + Tc_BIOTECH + "=5"
 	recoil = 0
 	gatlingbullet = /obj/item/projectile/bullet/beegun
-
+	
 /obj/item/weapon/gun/gatling/beegun/hornetgun
 	name = "hornet gun"
 	desc = "Doesn't actually use .22 Hornet cartridges"
@@ -171,21 +164,17 @@
 		var/obj/item/projectile/bullet/baton/shootbaton = new gatlingbullet()
 		shootbaton.rigged = riggedshot
 		in_chamber = shootbaton
-		new/obj/item/ammo_casing_gatling(get_turf(src))
+		new/obj/item/ammo_casing_gatling/batling(get_turf(src))
 		return 1
 	return 0
 	
 /obj/item/weapon/gun/gatling/batling/update_icon()
-	switch(current_shells)
-		if(41 to INFINITY)
-			icon_state = "batlinggun100"
-		if(31 to 40)
-			icon_state = "batlinggun80"
-		if(21 to 30)
-			icon_state = "batlinggun60"
-		if(11 to 20)
-			icon_state = "batlinggun40"
-		if(1 to 10)
-			icon_state = "batlinggun20"
-		else
-			icon_state = "batlinggun0"
+	if(current_shells)
+		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
+	else
+		icon_state = "[base_icon_state]0"
+			
+/obj/item/ammo_casing_gatling/batling
+	name = "baton casing"
+	desc = "The remains of a stun baton."
+	icon_state = "batling-casing"
