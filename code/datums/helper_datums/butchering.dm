@@ -355,8 +355,6 @@ var/global/list/animal_butchering_products = list(
 
 /////////////////////////////////Butcher procs/////////////////////////////////////////////////
 
-//Unlike the previous butchering version the butcher_product datums no longer need to be in a global list to work.
-//Instead you place them directly in the mob's butcher_products list.
 //butcherCarveStep() can be used to change how long meat takes to butcher from individual mobs
 //butcherMeat() and butcherProduct() are able to be called without the rest of the process.
 //Call butcherProduct() with mod = TRUE to have it search for children of the butcher_product you passed to it in the mob's product list.
