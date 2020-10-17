@@ -139,7 +139,7 @@
 				to_chat(user, "<span class='warning'>\The [thebaton] doesn't have enough charge.</span>")
 				..()
 				return
-			if(current_shells >= 50)
+			if(current_shells >= max_shells)
 				to_chat(user, "<span class='warning'>\The [src] is already filled to capacity.</span>")
 				..()
 				return
@@ -168,12 +168,6 @@
 		return 1
 	return 0
 	
-/obj/item/weapon/gun/gatling/batling/update_icon()
-	if(current_shells)
-		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
-	else
-		icon_state = "[base_icon_state]0"
-			
 /obj/item/ammo_casing_gatling/batling
 	name = "baton casing"
 	desc = "The remains of a stun baton."
