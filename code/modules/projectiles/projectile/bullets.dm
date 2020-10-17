@@ -367,6 +367,8 @@ obj/item/projectile/bullet/suffocationbullet
 	
 /obj/item/projectile/bullet/baton/on_hit(var/atom/target, var/blocked = 0)
 	..()
+	playsound(target.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	playsound(target.loc, "swing_hit", 50, 1, -1)
 	if(ishuman(target))
 		var/mob/living/carbon/human/targethuman = target
 		targethuman.forcesay(hit_appends)
