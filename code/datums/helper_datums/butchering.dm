@@ -377,7 +377,7 @@ var/global/list/animal_butchering_products = list(
 	var/toolName = null
 	var/speed_mod = 0
 	var/list/butchValues = butcherValueStep(user)
-	if(!butchValues?.len)
+	if(!length(butchValues))
 		return
 	if(butchValues[BUTCHER_SPEED])
 		speed_mod = butchValues[BUTCHER_SPEED]
@@ -386,7 +386,7 @@ var/global/list/animal_butchering_products = list(
 	if(butchValues[BUTCHER_TNAME])
 		toolName = butchValues[BUTCHER_TNAME]
 	var/list/butcherOptions = butcherMenuStep(user)
-	if(!butcherOptions?.len)
+	if(!length(butcherOptions))
 		return
 	var/datum/butchering_product/typeOfCarve = butcherChooseStep(user, butcherOptions, butcherTool)
 	if(!typeOfCarve)
@@ -467,7 +467,7 @@ var/global/list/animal_butchering_products = list(
 
 
 /mob/living/proc/butcherChooseStep(mob/user, butcherOptions, butcherTool)
-	var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in butcherOptions
+	var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in null|butcherOptions
 	if(!butcherCheck(user, butcherTool))
 		return 0
 	if(choice == "Cancel")
@@ -532,40 +532,24 @@ var/global/list/animal_butchering_products = list(
 		var/NM = new meat_type(location)
 		return NM
 	var/obj/item/weapon/reagent_containers/food/snacks/meat/M = null
-	if(ishuman(src))
-		M = new meat_type(location, src)
-	else
-		M = new meat_type(location)
-	if(virus2?.len)
+	M = make_meat(location)
+	if(length(virus2))
 		for(var/ID in virus2)
 			var/datum/disease2/disease/D = virus2[ID]
 			if(D.spread & SPREAD_BLOOD)
 				M.infect_disease2(D,1,"(Butchered, from [src])",0)
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
-	if(istype(A))
-		var/mob/living/simple_animal/source_animal = src
-		if(istype(source_animal) && source_animal.species_type)
-			var/mob/living/specimen = source_animal.species_type
-			A.name = "[initial(specimen.name)] meat"
-			A.animal_name = initial(specimen.name)
-		else
-			A.name = "[initial(src.name)] meat"
-			A.animal_name = initial(src.name)
 	if(reagents)
-		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
+		reagents.trans_to(M, round(reagents.total_volume * (meat_amount/meat_taken), 1))
 	return M
 
 
-/mob/living/proc/meatEndStep(mob/user)
-	if(meat_taken < meat_amount)
-		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
-		return
-	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
-	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
-		if(size > SIZE_TINY) //Tiny animals don't produce gibs
-			gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
-		else
-			qdel(src)
+/mob/living/proc/make_meat(location)
+	var/ourMeat = new meat_type(location)
+	return ourMeat
+
+
+/mob/living/proc/meatEndStep(mob/user)	//Exists for simple_animals
+	to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
 
 
 /mob/living/proc/butcherProduct(mob/user, var/datum/butchering_product/theCarve, var/mod = FALSE)

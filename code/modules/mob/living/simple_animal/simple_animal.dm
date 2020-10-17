@@ -801,4 +801,29 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	flick_overlay(heart, list(user.client), 20)
 
 
+/mob/living/simple_animal/make_meat(location)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/ourMeat = new meat_type(location)
+	if(!istype(ourMeat))
+		return
+	if(species_type)
+		var/mob/living/specimen = species_type
+		ourMeat.name = "[initial(specimen.name)] meat"
+		ourMeat.animal_name = initial(specimen.name)
+	else
+		ourMeat.name = "[initial(name)] meat"
+		ourMeat.animal_name = initial(name)
+	return ourMeat
+
+
+/mob/living/simple_animal/meatEndStep(mob/user)
+	if(meat_taken < meat_amount)
+		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
+		return
+	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
+	if(size > SIZE_TINY) //Tiny animals don't produce gibs
+		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+	else
+		qdel(src)
+
+
 /datum/locking_category/simple_animal

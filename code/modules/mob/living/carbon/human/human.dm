@@ -2025,3 +2025,7 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+/mob/living/carbon/human/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat	//Exists due to meat having a special New()
