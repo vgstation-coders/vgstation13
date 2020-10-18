@@ -352,8 +352,7 @@
 	if(!on)
 		return
 	var/turf/simulated/T = loc
-	if(istype(T))
-		var/datum/gas_mixture/env = T.return_air()
+	var/datum/gas_mixture/env = T.return_air()
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
