@@ -1040,11 +1040,12 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube
 	name = "mystery cube"
 	desc = "A portable friend!"
-	var/list/potentialFriends = list()
+	var/static/list/potentialFriends = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/monkeycube/mysterycube/New()
 	..()
-	potentialFriends = existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs)
+	if(!length(potentialFriends))
+		potentialFriends = existing_typesof(/mob/living/simple_animal) - (boss_mobs + blacklisted_mobs)
 	contained_mob = pick(potentialFriends)
 
 
@@ -1127,9 +1128,10 @@ var/global/list/alcatraz_stuff = list(
 		/obj/item/stack/sheet/bone = 50,
 		/obj/item/stack/sheet/mineral/sandstone = 50,
 		/obj/item/stack/sheet/brass = 35,
-		/obj/item/stack/sheet/mineral/gingerbread = 40,
+		/obj/item/stack/sheet/mineral/gingerbread = 25,
 		/obj/item/stack/sheet/animalhide/xeno = 10,
 		/obj/item/stack/sheet/animalhide/human = 20,
+		/obj/item/stack/sheet/snow = 25,
 		/obj/item/stack/sheet/cardboard = 20,
 		/obj/item/stack/telecrystal = 2,	//Emergent gameplay!
 		/obj/item/stack/teeth/gold = 10,
