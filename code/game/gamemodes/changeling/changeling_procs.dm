@@ -7,11 +7,12 @@
 	if(!C)
 		return
 
+
+	C.refreshpowers()
+
 	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
 		var/spell/S = new /spell/changeling/evolve
 		C.antag.current.add_spell(S, master_type = /obj/abstract/screen/movable/spell_master/changeling)
-
-	C.refreshpowers()
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H))

@@ -53,10 +53,11 @@
 	if (!istype(role) || !istype(M))
 		return FALSE
 	if (spellpath)
-		if(locate(spellpath) in role.antag.current.spell_list)
-			var/spell/S = new spellpath
-			role.antag.current.remove_spell(S)
-			return FALSE
+		for(var/targetspell in M.spell_list)
+			if(targetspell.type == spellpath)
+				role.antag.current.remove_spell(targetspell)
+				return TRUE
+		return FALSE
 
 
 /datum/power_holder

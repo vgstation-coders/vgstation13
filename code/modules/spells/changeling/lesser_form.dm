@@ -40,7 +40,7 @@
 	O.make_changeling(1)
 	var/datum/role/changeling/Ochangeling = O.mind.GetRole(CHANGELING)
 	var/spell/changeling/higherform = new /spell/changeling/higherform
-	O.add_spell(higherform)
+	O.add_spell(higherform, master_type = /obj/abstract/screen/movable/spell_master/changeling)
 	O.changeling_update_languages(Ochangeling.absorbed_languages)
 	feedback_add_details("changeling_powers","LF")
 	qdel(user)
@@ -77,7 +77,7 @@
 		return FALSE
 
 
-/spell/changeling/higherform/cast(var/list/targets, var/mob/living/carbon/human/user)
+/spell/changeling/higherform/cast(var/list/targets, var/mob/living/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	if(!changeling)
 		return
@@ -94,7 +94,7 @@
 	if(!chosen_dna)
 		return
 
-	var/mob/living/carbon/M = src
+	var/mob/living/carbon/M = user
 
 	M.visible_message("<span class='warning'>[user] transforms!</span>")
 	M.dna = chosen_dna.Clone()
