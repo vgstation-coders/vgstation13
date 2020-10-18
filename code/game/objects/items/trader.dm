@@ -1064,7 +1064,7 @@ var/global/list/alcatraz_stuff = list(
 	name = "recycled vial"
 	desc = "Slightly scratched and worn, it looks like this wasn't its original purpose. The label has been sloppily peeled off."
 	mech_flags = MECH_SCAN_FAIL	//Nip that in the bud
-	var/list/illegalChems = list(	//Just a bad idea
+	var/static/list/illegalChems = list(	//Just a bad idea
 		ADMINORDRAZINE,
 		BLOCKIZINE,
 		AUTISTNANITES,
