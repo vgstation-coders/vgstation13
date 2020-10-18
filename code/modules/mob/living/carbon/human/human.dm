@@ -385,7 +385,7 @@
 	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (VAMP_SHADOW in V.current_powers) && V.ismenacing)
+	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
 		return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")

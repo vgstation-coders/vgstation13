@@ -13,8 +13,6 @@
 
 /spell/changeling/changespecies/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 0
 
 	if(changeling.absorbed_species.len < 2)
 		to_chat(user, "<span class='warning'>We do not know of any other species genomes to use.</span>")

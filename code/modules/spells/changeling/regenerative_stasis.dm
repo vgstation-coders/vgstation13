@@ -11,8 +11,7 @@
 
 /spell/changeling/regenerate/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return
+
 	if(changeling.isreviving) 
 		to_chat(changeling.antag.current, "<span class='warning'>We are already regenerating!</span>") 
 		return

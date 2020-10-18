@@ -1,23 +1,28 @@
+//Call this proc after changeling mind-transfers (ex. lesserform)
 /mob/proc/make_changeling()
 	if(!mind)
 		return
+
 	var/datum/role/changeling/C = mind.GetRole(CHANGELING)
 	if(!C)
 		return
 
-	verbs += /datum/role/changeling/proc/EvolutionMenu
+	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
+		var/spell/S = new /spell/changeling/evolve
+		C.antag.current.add_spell(S, master_type = /obj/abstract/screen/movable/spell_master/changeling)
 
 	C.refreshpowers()
 
 	var/mob/living/carbon/human/H = src
-	dna.flavor_text = H.flavor_text
-	if(!(M_HUSK in H.mutations))
-		C.absorbed_dna |= dna
-		if(istype(H))
+	if(istype(H))
+		dna.flavor_text = H.flavor_text
+		if(!(M_HUSK in H.mutations))
+			C.absorbed_dna |= dna		
 			C.absorbed_species |= H.species.name
 
 	for(var/language in languages)
 		C.absorbed_languages |= language
+		
 	updateChangelingHUD()
 	return 1
 
@@ -40,12 +45,9 @@
 	return
 
 //Used to dump the languages from the changeling datum into the actual mob.
-/mob/proc/changeling_update_languages(var/updated_languages)
+/mob/proc/changeling_update_languages(var/list/updated_languages)
 
-
-	languages.len = 0
-	for(var/language in updated_languages)
-		languages += language
+	languages = updated_languages.Copy()
 
 	//This isn't strictly necessary but just to be safe...
 	add_language("Changeling")

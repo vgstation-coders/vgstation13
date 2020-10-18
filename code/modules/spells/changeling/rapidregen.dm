@@ -9,9 +9,6 @@
 	chemcost = 30
 
 /spell/changeling/rapidregen/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 0
 
 	var/mob/living/carbon/human/C = user
 

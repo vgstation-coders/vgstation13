@@ -22,7 +22,7 @@
 	if(is_type_in_list(src, R.current_powers))
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
-	if (buytext)
+	if (granttext)
 		to_chat(R.antag.current, "<span class = 'notice'>[granttext]</span>")
 	if (store_in_memory)
 		R.antag.store_memory("<font size = '1'>[granttext]</font>")
@@ -61,8 +61,6 @@
 
 /datum/power_holder
 	var/datum/role/role
-	var/list/purchased_powers = list()
-
 	//text stuff
 	var/menu_name = "Power Menu"
 	var/menu_desc = "Purchase your powers here."
@@ -75,7 +73,7 @@
 /datum/power_holder/proc/PowerMenu()
 	if(!role)
 		return
-
+	var/list/purchased_powers = role.current_powers
 	var/dat = "<html><head><title>[menu_name]</title></head>"
 
 	//javascript, the part that does most of the work~
@@ -354,7 +352,7 @@
 	if(!thepower)		//ABORT!
 		return 
 
-	if(thepower in purchased_powers)
+	if(thepower in role.current_powers)
 		to_chat(M.current, "<span class='warning'>You have already purchased this power.</span>")
 		return
 
@@ -363,7 +361,6 @@
 		return
 
 	role.powerpoints -= thepower.cost
-	purchased_powers += thepower
 	thepower.add_power(role)
 	
 

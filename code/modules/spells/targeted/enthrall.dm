@@ -56,9 +56,9 @@
 		return FALSE
 	
 	user.visible_message("<span class='warning'>[user] bites \the [target]'s neck!</span>", "<span class='warning'>You bite \the [target]'s neck and begin the flow of power.</span>")
-	to_chat(target, "<span class='sinister'>You feel the tendrils of evil [(VAMP_CHARISMA in V.current_powers) ? "aggressively" : "slowly"] invade your mind.</span>")
+	to_chat(target, "<span class='sinister'>You feel the tendrils of evil [(/datum/power/vampire/charisma in V.current_powers) ? "aggressively" : "slowly"] invade your mind.</span>")
 
-	if(do_mob(user, target, (VAMP_CHARISMA in V.current_powers) ? 150 : 300))
+	if(do_mob(user, target, (/datum/power/vampire/charisma in V.current_powers) ? 150 : 300))
 		if(user.vampire_power(blood_cost, 0)) // recheck
 			V.handle_enthrall(target.mind)
 	else

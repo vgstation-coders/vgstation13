@@ -238,22 +238,21 @@
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
-		if (blood_total > initial(VP_type.cost) && !(initial(VP_type.id) in current_powers))
+		if (blood_total > initial(VP_type.cost) && !(VP_type in current_powers))
 			var/datum/power/vampire/VP = new VP_type
-			if (!is_type_in_list(VP, current_powers))
-				VP.add_power(src)
+			VP.add_power(src)
 
 	var/mob/living/carbon/human/H = antag.current
 	if (!istype(H))
 		return
 
 	// Vision-related changes.
-	if (VAMP_MATURE in current_powers)
+	if (/datum/power/vampire/mature in current_powers)
 		H.change_sight(adding = SEE_TURFS|SEE_MOBS|SEE_OBJS)
 		H.see_in_dark = 8
 		H.see_invisible = SEE_INVISIBLE_MINIMUM
 
-	else if (VAMP_VISION in current_powers)
+	else if (/datum/power/vampire/vision in current_powers)
 		H.change_sight(adding = SEE_MOBS)
 
 
@@ -306,11 +305,11 @@
 
 	if((T.get_lumcount() * 10) <= 2)
 		H.alphas["vampire_cloak"] = round((255 * 0.15))
-		if(VAMP_SHADOW in current_powers)
+		if(/datum/power/vampire/shadow in current_powers)
 			H.color = "#000000"
 		return TRUE
 	else
-		if(VAMP_SHADOW in current_powers)
+		if(/datum/power/vampire/shadow in current_powers)
 			H.alphas["vampire_cloak"] = round((255 * 0.15))
 		else
 			H.alphas["vampire_cloak"] = round((255 * 0.80))
@@ -351,7 +350,7 @@
 		if(prob(35))
 			to_chat(H, "<span class='danger'>This ground is blessed. Get away, or splatter it with blood to make it safe for you.</span>")
 
-	if((VAMP_MATURE in current_powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
+	if((/datum/power/vampire/mature in current_powers) && (istype(get_area(H), /area/chapel))) //stay out of the chapel unless you want to turn into a pile of ashes
 		nullified = max(5, nullified + 2)
 		if(prob(35))
 			to_chat(H, "<span class='sinister'>You feel yourself growing weaker.</span>")
@@ -361,14 +360,14 @@
 		*/
 
 	if(!nullified) //Checks to see if you can benefit from your vamp current_powers here
-		if(!(VAMP_MATURE in current_powers))
+		if(!(/datum/power/vampire/mature in current_powers))
 			smitetemp -= 1
-		if(!(VAMP_SHADOW in current_powers))
+		if(!(/datum/power/vampire/shadow in current_powers))
 			var/turf/T = get_turf(H)
 			if((T.get_lumcount() * 10) < 2)
 				smitetemp -= 1
 
-		if(!(VAMP_UNDYING in current_powers))
+		if(!(/datum/power/vampire/undying in current_powers))
 			smitetemp -= 1
 
 	if(smitetemp <= 0) //if you weren't smote by the tile you're on, remove a little holy
@@ -440,7 +439,7 @@
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
-			if(VAMP_MATURE in current_powers)
+			if(/datum/power/vampire/mature in current_powers)
 				to_chat(H, "<span class='danger'>A freezing liquid permeates your bloodstream. Your vampiric powers fade and your insides burn.</span>")
 				H.take_organ_damage(0, 5) //FIRE, MAGIC FIRE THAT BURNS ROBOTIC LIMBS TOO!
 				smitecounter += 10 //50 units to catch on fire. Generally you'll get fucked up quickly
@@ -457,7 +456,7 @@
 			var/mob/living/carbon/human/H = antag.current
 			if (!istype(H))
 				return
-			if(!(VAMP_UNDYING in current_powers))
+			if(!(/datum/power/vampire/undying in current_powers))
 				if(method == TOUCH)
 					if(H.wear_mask)
 						to_chat(H, "<span class='warning'>Your mask protects you from the holy water!</span>")
@@ -471,7 +470,7 @@
 						if(prob(15) && volume >= 30)
 							var/datum/organ/external/head/head_organ = H.get_organ(LIMB_HEAD)
 							if(head_organ)
-								if(!(VAMP_MATURE in current_powers))
+								if(!(/datum/power/vampire/mature in current_powers))
 									to_chat(H, "<span class='danger'>A freezing liquid covers your face. Its melting!</span>")
 									smitecounter += 60 //Equivalent from metabolizing all this holy water normally
 									if(head_organ.take_damage(30, 0))
@@ -483,7 +482,7 @@
 									smitecounter += 12 //Ditto above
 
 						else
-							if(!(VAMP_MATURE in current_powers))
+							if(!(/datum/power/vampire/mature in current_powers))
 								to_chat(H, "<span class='danger'>You are doused with a freezing liquid. You're melting!</span>")
 								H.take_organ_damage(min(15, volume * 2)) //Uses min() and volume to make sure they aren't being sprayed in trace amounts (1 unit != insta rape) -- Doohl
 								smitecounter += volume * 2

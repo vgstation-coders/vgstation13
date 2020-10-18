@@ -18,17 +18,6 @@
 			return FALSE
 	return TRUE
 
-/datum/role/changeling/proc/EvolutionMenu()
-	set category = "Changeling"
-	set desc = "Level up!"
-
-	if(!usr || !usr.mind)
-		return
-
-	src = usr.mind.GetRole(CHANGELING)
-
-	power_holder.PowerMenu()
-
 /datum/power_holder/changeling 
 	menu_name = "Changeling Evolution Menu"
 	menu_desc = {"Hover over a power to see more information<br>

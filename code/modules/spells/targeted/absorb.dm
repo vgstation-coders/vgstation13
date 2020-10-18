@@ -50,7 +50,7 @@
 								if(holderspell.can_improve(Sp_SPEED))
 									to_chat(holder, "<span class='notice'>You asborb the magical energies from your foe and have quickened [targetspell.name]!</span>")
 									holderspell.apply_upgrade(Sp_SPEED)
-						*/			hasAbsorbed = TRUE
+									hasAbsorbed = TRUE	*/
 						if(canAbsorb)
 							to_chat(target, "<span class='warning'>You feel the magical energy being drained from you!</span>")
 							to_chat(target, "<span class='warning'>You forget how to cast [targetspell.name]!</span>")

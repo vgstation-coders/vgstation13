@@ -10,9 +10,6 @@
 	required_dna = 1
 
 /spell/changeling/armblade/cast(var/list/targets, var/mob/living/carbon/human/user)
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 
 
 	for(var/obj/item/weapon/armblade/W in user)
 		user.visible_message("<span class='warning'>With a sickening crunch, [user] reforms their arm blade into an arm!</span>",

@@ -11,9 +11,7 @@
 
 /spell/changeling/voicechange/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 
-
+	
 	if(changeling.mimicing)
 		changeling.mimicing = ""
 		to_chat(user, "<span class='notice'>We return our vocal cords to their original positions.</span>")

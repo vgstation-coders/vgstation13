@@ -10,8 +10,6 @@
 
 /spell/changeling/absorbdna/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return
 
 	//You need to be grabbing the target
 	var/obj/item/weapon/grab/G = user.get_active_hand()
@@ -20,27 +18,25 @@
 		return
 
 	var/mob/living/carbon/human/T = G.affecting
-	if(!istype(T))
+	if(!istype(T))					//Humans only
 		to_chat(user, "<span class='warning'>[T] is not compatible with our biology.</span>")
 		return
-
-	if(M_NOCLONE in T.mutations)
+	if(M_NOCLONE in T.mutations)	//No double-absorbing
 		to_chat(user, "<span class='warning'>This creature's DNA is ruined beyond useability!</span>")
 		return
-
-	if(!T.mind)
+	if(!T.mind)						//No monkeymen
 		to_chat(user, "<span class='warning'>This creature's DNA is useless to us!</span>")
 		return
 
-	if(G.state != GRAB_KILL)
+	if(G.state != GRAB_KILL)		//Kill-Grabs only
 		to_chat(user, "<span class='warning'>We must have a tighter grip to absorb this creature.</span>")
 		return
 
 	if(changeling.isabsorbing)
 		to_chat(user, "<span class='warning'>We are already absorbing!</span>")
 		return
-
 	changeling.isabsorbing = 1
+
 	for(var/stage = 1, stage<=3, stage++)
 		switch(stage)
 			if(1)
@@ -57,7 +53,7 @@
 				var/datum/organ/external/affecting = T.get_organ(user.zone_sel.selecting)
 				if(affecting.take_damage(39,0,1,"large organic needle"))
 					T.UpdateDamageIcon(1)
-					continue
+
 
 		feedback_add_details("changeling_powers","A[stage]")
 		if(!do_mob(user, T, 150))
@@ -75,11 +71,10 @@
 	T.dna.flavor_text = T.flavor_text
 	changeling.absorbed_dna |= T.dna
 
-	if(istype(user,/mob/living/carbon/human))
-		var/mob/living/carbon/human/thechangeling = user
-		var/avail_blood = T.vessel.get_reagent_amount(BLOOD)
-		for(var/datum/reagent/blood/B in thechangeling.vessel.reagent_list)
-			B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
+
+	var/avail_blood = T.vessel.get_reagent_amount(BLOOD)
+	for(var/datum/reagent/blood/B in user.vessel.reagent_list)
+		B.volume = min(BLOOD_VOLUME_MAX, avail_blood + B.volume)
 
 	if(user.nutrition < 400)
 		user.nutrition = min((user.nutrition + T.nutrition), 400)
@@ -101,21 +96,21 @@
 
 		if(Tchangeling)
 			if(Tchangeling.absorbed_dna)
-				for(var/dna_data in Tchangeling.absorbed_dna)	//steal all their loot
+				for(var/dna_data in Tchangeling.absorbed_dna)	
 					if(dna_data in changeling.absorbed_dna)
 						continue
 					changeling.absorbed_dna += dna_data
 					changeling.absorbedcount++
 					Tchangeling.absorbed_dna.Remove(dna_data)
 
-			if(Tchangeling.power_holder.purchased_powers.len)
-				for(var/datum/power/changeling/Tp in Tchangeling.power_holder.purchased_powers)
-					if(Tp in changeling.power_holder.purchased_powers)
+			if(Tchangeling.current_powers.len)
+				for(var/datum/power/changeling/Tp in Tchangeling.current_powers)
+					if(is_type_in_list(Tp, Tchangeling.current_powers))
 						continue
 					else
-						changeling.power_holder.purchased_powers += Tp
-						user.make_changeling()
-
+						Tp.add_power(changeling)
+						
+			user.make_changeling()
 			changeling.chem_charges += Tchangeling.chem_charges
 			changeling.powerpoints += Tchangeling.powerpoints
 			Tchangeling.chem_charges = 0

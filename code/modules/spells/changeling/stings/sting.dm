@@ -18,10 +18,7 @@
 
 /spell/changeling/sting/cast(var/list/targets, mob/user)
 	var/mob/living/L = targets[1]
-	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 
-	if(!changeling)
-		return FALSE
 	if(!istype(L))
 		return FALSE
 	if(user == L && !allowself) 

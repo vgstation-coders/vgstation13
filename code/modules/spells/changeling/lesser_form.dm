@@ -31,8 +31,6 @@
 
 /spell/changeling/lesserform/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return 
 
 	user.visible_message("<span class='warning'>[user] transforms!</span>")
 	changeling.geneticdamage = 30

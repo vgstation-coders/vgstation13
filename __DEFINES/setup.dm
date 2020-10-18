@@ -1043,25 +1043,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define CAN_EQUIP 1
 #define CAN_EQUIP_BUT_SLOT_TAKEN 2
 
-// Vampire power defines
-#define VAMP_REJUV    1
-#define VAMP_GLARE    2
-#define VAMP_HYPNO    3
-#define VAMP_SHAPE    4
-#define VAMP_VISION   5
-#define VAMP_DISEASE  6
-#define VAMP_CLOAK    7
-#define VAMP_BATS     8
-#define VAMP_SCREAM   9
-#define VAMP_HEAL     10
-#define VAMP_JAUNT    11
-#define VAMP_SLAVE    12
-#define VAMP_BLINK    13
-#define VAMP_MATURE   14
-#define VAMP_SHADOW   15
-#define VAMP_CHARISMA 16
-#define VAMP_UNDYING  17
-#define VAMP_CAPE	  18
+
 #define STARTING_BLOOD 10
 
 #define VAMP_FAILURE -1

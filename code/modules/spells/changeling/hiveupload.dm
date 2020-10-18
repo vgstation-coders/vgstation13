@@ -12,7 +12,7 @@
 /spell/changeling/hiveupload/cast(var/list/targets, var/mob/living/carbon/human/user)
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
 	var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
-	if(!changeling || !hivemind)
+	if(!hivemind)
 		return 
 
 	var/list/names = list()

@@ -14,8 +14,6 @@
 /spell/changeling/transform/cast(var/list/targets, var/mob/living/carbon/human/user)
 
 	var/datum/role/changeling/changeling = user.mind.GetRole(CHANGELING)
-	if(!changeling)
-		return
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
