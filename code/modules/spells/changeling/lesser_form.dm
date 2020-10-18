@@ -71,8 +71,7 @@
 		to_chat(user, "<span class='warning'>We cannot transform here!</span>")
 		return FALSE
 
-	var/mob/living/M = user
-	if(!ismonkey(M))
+	if(!ismonkey(user))
 		to_chat(user, "<span class='warning'>We cannot perform this ability in this form!</span>")
 		return FALSE
 

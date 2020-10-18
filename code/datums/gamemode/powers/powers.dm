@@ -43,17 +43,17 @@
 	if (spellpath)
 		if(locate(spellpath) in role.antag.current.spell_list)
 			. = FALSE
-			CRASH("grant_spell called more times than needed")
+			stack_trace("grant_spell called more times than needed")
 			return FALSE
 		var/spell/S = new spellpath
-		role.antag.current.add_spell(S, master_type = spellmaster)
+		role.antag.current.add_spell(S, spell_base = spellmaster.icon_state, master_type = spellmaster)
 
 /datum/power/proc/remove_spell()
 	var/mob/M = role.antag.current
 	if (!istype(role) || !istype(M))
 		return FALSE
 	if (spellpath)
-		for(var/targetspell in M.spell_list)
+		for(var/spell/targetspell in M.spell_list)
 			if(targetspell.type == spellpath)
 				role.antag.current.remove_spell(targetspell)
 				return TRUE
