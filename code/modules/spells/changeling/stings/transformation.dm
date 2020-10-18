@@ -1,5 +1,5 @@
 /spell/changeling/sting/transformation
-	name = "DNA Extraction Sting (40)"
+	name = "Transformation Sting (40)"
 	desc = "We silently sting a human, injecting a retrovirus that forces them to transform into another."
 	abbreviation = "TS"
 	hud_state = "transformsting"
@@ -41,7 +41,7 @@
 	if((M_HUSK in target.mutations) || (!ishuman(target) && !ismonkey(target)))
 		return 
 
-	target.visible_message("<span class='warning'>[target] transforms!</span>")
+	target.visible_message("<span class='danger'>[target] transforms!</span>")
 	target.dna = chosen_dna.Clone()
 	target.real_name = chosen_dna.real_name
 	target.flavor_text = chosen_dna.flavor_text

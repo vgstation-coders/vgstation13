@@ -73,7 +73,6 @@
 	name = "Lesser Form"
 	desc = "We debase ourselves and become lesser.  We become a monkey."
 	cost = 1
-	allowduringlesserform = 1
 	spellpath = /spell/changeling/lesserform
 	allowduringhorrorform = 0
 

@@ -7,12 +7,14 @@
 	if(!C)
 		return
 
+	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
+		C.antag.current.add_spell(new /spell/changeling/evolve, "changeling_spell_ready", /obj/abstract/screen/movable/spell_master/changeling	)
+
+	if(ismonkey(C.antag.current))	//let them un-monkey themself. If they don't have any spare genomes theyre screwed, though
+		C.antag.current.add_spell(new /spell/changeling/higherform, "changeling_spell_base", master_type = /obj/abstract/screen/movable/spell_master/changeling)
 
 	C.refreshpowers()
 
-	if(!(locate(/spell/changeling/evolve) in C.antag.current.spell_list))
-		var/spell/S = new /spell/changeling/evolve
-		C.antag.current.add_spell(S, master_type = /obj/abstract/screen/movable/spell_master/changeling)
 
 	var/mob/living/carbon/human/H = src
 	if(istype(H))

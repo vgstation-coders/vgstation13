@@ -10,7 +10,7 @@
 	horrorallowed = 0
 
 /spell/changeling/horrorform/cast(var/list/targets, var/mob/living/carbon/human/user)
-
+	..()
 	for(var/obj/item/slot in user.get_all_slots())
 		user.u_equip(slot, 1)
 
@@ -44,5 +44,5 @@
 	user.invisibility = initial(user.invisibility)
 	user.make_changeling()
 
-	..()
+	
 
