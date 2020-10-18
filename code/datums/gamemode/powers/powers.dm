@@ -46,7 +46,7 @@
 			stack_trace("grant_spell called more times than needed")
 			return FALSE
 		var/spell/S = new spellpath
-		role.antag.current.add_spell(S, spell_base = spellmaster.icon_state, master_type = spellmaster)
+		role.antag.current.add_spell(S, master_type = spellmaster)
 
 /datum/power/proc/remove_spell()
 	var/mob/M = role.antag.current
