@@ -2472,7 +2472,7 @@
 		return 1
 
 	var/mob/living/carbon/human/H = M
-	if(isplasmaman(H))
+	if(isplasmaman(H) || H.species.flags & PLASMA_IMMUNE)
 		return 1
 	else
 		M.adjustToxLoss(3 * REM)
@@ -3640,19 +3640,20 @@
 	reagent_state = REAGENT_STATE_SOLID
 	dupeable = FALSE
 	color = "#535E66" //rgb: 83, 94, 102
-	var/diseasetype = /datum/disease/robotic_transformation
-/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/disease_type = DISEASE_CYBORG
 
+/datum/reagent/nanites/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
 	if(..())
 		return 1
 
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new diseasetype, 1)
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
-	diseasetype = /datum/disease/robotic_transformation/mommi
+	description = "Microscopic construction robots. They look more autistic than usual."
+	disease_type = DISEASE_MOMMI
 
 /datum/reagent/xenomicrobes
 	name = "Xenomicrobes"
@@ -3665,9 +3666,8 @@
 
 	if(..())
 		return 1
-
 	if((prob(10) && method == TOUCH) || method == INGEST)
-		M.contract_disease(new /datum/disease/xeno_transformation(0), 1)
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -3980,7 +3980,14 @@
 	description = "A powerful sedative."
 	reagent_state = REAGENT_STATE_SOLID
 	color = "#000067" //rgb: 0, 0, 103
-	data = 1 //Used as a tally
+	// There used to be a bug: if someone was injected with chloral once,
+	// and then injected with chloral a second time, this person would
+	// briefly wake up. proc/add_reagent, called by proc/trans_to, sets the
+	// data var of the destination reagent to the one of the source reagent
+	// if the new data was not null. Since this var was set to 1, it ended up
+	// resetting the data var of the existing chloralhydrate in the spessman's
+	// body, waking them up until the following tick.
+	data = null //Used as a tally
 	flags = CHEMFLAG_DISHONORABLE // NO CHEATING
 	density = 11.43
 	specheatcap = 13.79
@@ -3988,13 +3995,18 @@
 /datum/reagent/chloralhydrate/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(isnull(data))
+		// This is technically not needed: the switch could check for
+		// null instead of 0 and "data++" would automatically convert a null
+		// to a 0, then increase it to 1. It would work. But this is clearer.
+		data = 0
 	switch(data)
-		if(1)
+		if(0)
 			M.confused += 2
 			M.drowsyness += 2
-		if(2 to 80)
+		if(1 to 79)
 			M.sleeping++
-		if(81 to INFINITY)
+		if(80 to INFINITY)
 			M.sleeping++
 			M.toxloss += (data - 50)
 	data++
@@ -4185,7 +4197,7 @@
 /datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
-		var/datum/organ/internal/heart/killdney = H.get_kidneys()
+		var/datum/organ/internal/kidney/killdney = H.get_kidneys()
 		killdney.damage++
 
 
@@ -4390,6 +4402,15 @@
 	color = "#FFFFFF" //rgb: 255, 255, 255
 	density = 2.09
 	specheatcap = 1.65
+
+/datum/reagent/sodiumchloride/reaction_turf(var/turf/simulated/T, var/volume)
+	if(..())
+		return 1
+
+	if(volume >= 50 && !(locate(/obj/effect/decal/cleanable/salt) in T))
+		if(!T.density)
+			new /obj/effect/decal/cleanable/salt(T)
+
 
 /datum/reagent/sodiumchloride/on_mob_life(var/mob/living/M)
 
@@ -8189,17 +8210,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 
 	if(volume >= minimal_dosage && prob(30))
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
-			if(locate(/datum/disease/petrification) in H.viruses)
-				return
-
-			var/datum/disease/D = new /datum/disease/petrification
-			D.holder = H
-			D.affected_mob = H
-			H.viruses += D
-		else if(!issilicon(M))
-			if(M.turn_into_statue(1)) //Statue forever
+		if(!issilicon(M))
+			if(M.slow_petrify()) //Statue forever
 				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
 
 //A chemical for curing petrification. It only works after you've been fully petrified
@@ -8633,6 +8645,32 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 				qdel(H.remove_internal_organ(H,heart,H.get_organ(LIMB_CHEST)))
 				H.adjustOxyLoss(60)
 				H.adjustBruteLoss(30)
+
+
+/datum/reagent/ectoplasm
+	name = "ectoplasm"
+	id = ECTOPLASM
+	description = "Pure, distilled spooky"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#21d389b4"
+	density = 0.05
+
+/datum/reagent/ectoplasm/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	if(isskellington(M) || isskelevox(M) || islich(M))	//Slightly better than DD for spooks
+		playsound(M, 'sound/effects/rattling_bones.ogg', 100, 1)
+		if(M.getOxyLoss())
+			M.adjustOxyLoss(-3)
+		if(M.getBruteLoss())
+			M.heal_organ_damage(3, 0)
+		if(M.getFireLoss())
+			M.heal_organ_damage(0, 3)
+		if(M.getToxLoss())
+			M.adjustToxLoss(-3)
+	else
+		M.hallucination += 5	//50% mindbreaker
+
 
 //////////////////////
 //					//

@@ -263,7 +263,11 @@
 */
 
 /mob/proc/MiddleShiftClickOn(var/atom/A)
-	pointed(A)
+	A.MiddleShiftClick(src)
+	
+/atom/proc/MiddleShiftClick(var/mob/user)
+	user.pointed(src)
+
 
 /*
 	Shift click

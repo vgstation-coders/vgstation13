@@ -14,19 +14,15 @@
 	var/faction = null //No shooting our buddies!
 	var/shootsilicons = 0 //You can make turrets that shoot those robot pricks (except AIs)! You can't toggle this at the control console
 	var/lasers = 0
-	var/lasertype = 1
-		// 1 = lasers
-		// 2 = cannons
-		// 3 = pulse
-		// 4 = change (HONK)
-		// 5 = bluetag
-		// 6 = redtag
+	var/lasertype = /obj/item/projectile/beam
 	var/health = 80
 	var/obj/machinery/turretcover/cover = null
 	var/popping = 0
 	var/wasvalid = 0
 	var/lastfired = 0
 	var/shot_delay = 30 //3 seconds between shots
+	var/fire_twice = 0
+
 	use_power = 1
 	idle_power_usage = 50
 	active_power_usage = 300
@@ -89,7 +85,7 @@
 /obj/machinery/turret/proc/check_target(var/atom/movable/T as mob|obj)
 	if(T && (T in protected_area.turretTargets))
 		var/area/area_T = get_area(T)
-		if( !area_T || (area_T.type != protected_area.type) )
+		if(!area_T || (area_T.type != protected_area.type))
 			protected_area.Exited(T)
 			return 0 //If the guy is somehow not in the turret's area (teleportation), get them out the damn list. --NEO
 		if( ismob(T) )
@@ -162,8 +158,12 @@
 			popDown()
 		return
 	if(!check_target(cur_target)) //if current target fails target check
-		cur_target = get_new_target() //get new target
-
+		if(fire_twice)
+			src.dir = get_dir(src, cur_target)
+			shootAt(cur_target)
+			cur_target = get_new_target()
+		else
+			cur_target = get_new_target() 
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
 		if(!isPopping())
@@ -203,22 +203,7 @@
 		return
 	var/obj/item/projectile/A
 	if (src.lasers)
-		switch(lasertype)
-			if(1)
-				A = new /obj/item/projectile/beam(loc)
-			if(2)
-				A = new /obj/item/projectile/beam/heavylaser(loc)
-				fire_sound = 'sound/weapons/lasercannonfire.ogg'
-			if(3)
-				A = new /obj/item/projectile/beam/pulse(loc)
-				fire_sound = 'sound/weapons/pulse.ogg'
-			if(4)
-				A = new /obj/item/projectile/change(loc)
-				fire_sound = 'sound/weapons/radgun.ogg'
-			if(5)
-				A = new /obj/item/projectile/beam/lasertag/blue(loc)
-			if(6)
-				A = new /obj/item/projectile/beam/lasertag/red(loc)
+		A = new lasertype(loc)
 		use_power(500)
 	else
 		A = new /obj/item/projectile/energy/electrode( loc )

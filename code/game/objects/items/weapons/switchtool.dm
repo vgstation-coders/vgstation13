@@ -43,6 +43,26 @@
 					stored_modules[module] = null
 			undeploy(user)
 		return TRUE
+	else
+		if(!proximity_flag)
+			return
+			
+		var/turf/T
+		if(isturf(target.loc))
+			T = target.loc
+		else
+			return 
+
+		var/success = FALSE
+		for(var/obj/item/I in T)
+			if(add_module(I, user, FALSE))
+				success = TRUE
+
+		if(success)
+			to_chat(user, "You load everything into \the [src].")
+
+
+
 
 /obj/item/weapon/switchtool/New()
 	..()
@@ -66,8 +86,12 @@
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
-		return remove_module(user)
+	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
+		if(deployed)
+			return remove_module(user)
+		else
+			return remove_all_modules(user)
+
 	if(add_module(used_item, user))
 		return TRUE
 	else
@@ -92,7 +116,7 @@
 			module_string += "\a [get_module_name(module)], "
 	return module_string
 
-/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
+/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user, var/message = TRUE)
 	if(!used_item || !user)
 		return FALSE
 
@@ -100,12 +124,14 @@
 		var/type_path = text2path(get_module_type(module))
 		if(istype(used_item, type_path))
 			if(stored_modules[module])
-				to_chat(user, "\The [src] already has a [get_module_name(module)].")
+				if(message)
+					to_chat(user, "\The [src] already has a [get_module_name(module)].")
 				return FALSE
 			else
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
-					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
+					if(message)
+						to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
 					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
@@ -119,6 +145,23 @@
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 	undeploy(user)
 	return TRUE
+
+/obj/item/weapon/switchtool/proc/remove_all_modules(mob/user)
+	if(deployed)		//this shouldnt happen but just in case
+		undeploy()
+
+	var/success = FALSE
+	for(var/module in stored_modules)
+		if(stored_modules[module])
+			success = TRUE
+			stored_modules[module].forceMove(get_turf(user))
+			stored_modules[module] = null
+	if(success)
+		to_chat(user, "<span class='notice'>You clear out everything from \the [src].</span>")
+		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+		return TRUE
+	else
+		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
 
 /obj/item/weapon/switchtool/proc/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)

@@ -54,6 +54,7 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
+	var/blackout_active = FALSE	
 	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
 	var/mob/living/silicon/ai/parent = null
@@ -534,6 +535,8 @@ var/list/ai_list = list()
 	#endif
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
+	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
+		return 
 	..(Proj)
 	updatehealth()
 	return 2
@@ -892,6 +895,18 @@ var/list/ai_list = list()
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/attack_hand(mob/user)
+	..()
+	var/mob/living/living_user = user
+	if(!istype(living_user))
+		return
+	if(living_user.a_intent == I_HURT)
+		living_user.unarmed_attack_mob(src)
+	else
+		living_user.visible_message(
+			"<span class='notice'>[living_user] pats [src].</span>",
+			"<span class='notice'>You pat [src].</span>")
 
 
 /mob/living/silicon/ai/get_multitool(var/active_only=0)

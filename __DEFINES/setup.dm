@@ -419,10 +419,10 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_RESIST_COLD	2
 #define M_XRAY			3
 #define M_HULK			4
-#define M_CLUMSY			5
-#define M_FAT				6
+#define M_CLUMSY		5
+#define M_FAT			6
 #define M_HUSK			7
-#define M_NOCLONE			8
+#define M_NOCLONE		8
 
 // Extra powers:
 #define M_LASER			9 	// harm intent - click anywhere to shoot lasers from eyes
@@ -430,6 +430,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_BEAK			11	// Can buther animals without tools
 #define M_TALONS		12  // Bonus kick damage
 #define M_STONE_SKIN	13  // hard skin
+#define M_THERMALS		14	//see mobs through walls
 
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
@@ -905,6 +906,7 @@ SEE_PIXELS	256
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 #define CONSTRUCT_HUD		"const_health" // Artificer HUD
+#define CONVERSION_HUD		"convertibility" // Convertibility HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -1375,6 +1377,7 @@ var/proccalls = 1
 //MALFUNCTION FLAGS
 #define COREFIRERESIST 1
 #define HIGHRESCAMS 2
+#define COREFORTIFY 4
 
 //Mob sizes
 #define SIZE_TINY	1 //Mice, lizards, borers, kittens - mostly things that can fit into a man's palm
@@ -1773,3 +1776,5 @@ var/list/bank_security_text2num_associative = list(
 
 var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))
+
+#define RECOMMENDED_CLIENT_FPS 100

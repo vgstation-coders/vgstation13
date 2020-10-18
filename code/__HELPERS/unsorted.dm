@@ -793,7 +793,43 @@ proc/GaussRandRound(var/sigma,var/roundto)
 
 	return TRUE
 
-/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE)
+
+// Returns TRUE if the checks passed
+/proc/do_after_default_checks(mob/user, use_user_turf, user_original_location, atom/target, target_original_location, needhand, obj/item/originally_held_item)
+	if(!user)
+		return FALSE
+	if(user.isStunned())
+		return FALSE
+	var/user_loc_to_check = use_user_turf ? get_turf(user) : user.loc
+	if(user_loc_to_check != user_original_location)
+		return FALSE
+	if(target.loc != target_original_location)
+		return FALSE
+	if(needhand)
+		if(originally_held_item)
+			if(!user.is_holding_item(originally_held_item))
+				return FALSE
+		else
+			if(user.get_active_hand())
+				return FALSE
+	return TRUE
+
+/**
+  * Used to delay actions.
+  *
+  * Given a mob, a target atom and a duration,
+  * returns TRUE if the mob wasn't interrupted and stayed
+  * at the same position for the specified duration.
+  * Arguments:
+  * * mob/user - the user who will see the progress bar
+  * * atom/target - the atom the progress bar will be attached to
+  * * delay - duration in deciseconds of the delay
+  * * numticks - how many times the failure conditions will be checked throughout the duration
+  * * needhand - if TRUE, the item in the hands of the user needs to stay the same throughout the duration
+  * * use_user_turf - if TRUE, the turf of the user is checked instead of its location
+  * * custom_checks - if specified, the return value of this callback (called every `delay/numticks` seconds) will determine whether the action succeeded
+  */
+/proc/do_after(var/mob/user as mob, var/atom/target, var/delay as num, var/numticks = 10, var/needhand = TRUE, var/use_user_turf = FALSE, callback/custom_checks)
 	if(!user || isnull(user))
 		return 0
 	if(numticks == 0)
@@ -818,10 +854,6 @@ proc/GaussRandRound(var/sigma,var/roundto)
 			progbar.plane = HUD_PLANE
 			progbar.layer = HUD_ABOVE_ITEM_LAYER
 			progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
-		//if(!barbar)
-			//barbar = image("icon" = 'icons/effects/doafter_icon.dmi', "loc" = target, "icon_state" = "none")
-			//barbar.pixel_y = 36
-	//var/oldstate
 	for (var/i = 1 to numticks)
 		if(user && user.client && user.client.prefs.progress_bars && target)
 			if(!progbar)
@@ -830,34 +862,17 @@ proc/GaussRandRound(var/sigma,var/roundto)
 				progbar.plane = HUD_PLANE
 				progbar.layer = HUD_ABOVE_ITEM_LAYER
 				progbar.appearance_flags = RESET_COLOR | RESET_TRANSFORM
-			//oldstate = progbar.icon_state
 			progbar.icon_state = "prog_bar_[round(((i / numticks) * 100), 10)]"
 			user.client.images |= progbar
 		sleep(delayfraction)
-		//if(user.client && progbar.icon_state != oldstate)
-			//user.client.images.Remove(progbar)
-		var/user_loc_to_check
-		if(use_user_turf)
-			user_loc_to_check = get_turf(user)
+		var/success
+		if(custom_checks)
+			success = custom_checks.invoke(user, use_user_turf, Location, target, target_location, needhand, holding)
 		else
-			user_loc_to_check = user.loc
-		if(!user || user.isStunned() || !(user_loc_to_check == Location) || !(target.loc == target_location))
+			success = do_after_default_checks(user, use_user_turf, Location, target, target_location, needhand, holding)
+		if(!success)
 			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
-			return 0
-		if(needhand && ((holding && !user.is_holding_item(holding)) || (!holding && user.get_active_hand())))	//Sometimes you don't want the user to have to use any hands
-			if(progbar)
-				progbar.icon_state = "prog_bar_stopped"
-				spawn(2)
-					if(user && user.client)
-						user.client.images -= progbar
-					if(progbar)
-						progbar.loc = null
+				stop_progress_bar(user, progbar)
 			return 0
 	if(user && user.client)
 		user.client.images -= progbar
@@ -1568,7 +1583,7 @@ var/mob/dview/tview/tview_mob = new()
 
 /proc/get_random_potion()	//Pulls up a random potion, excluding minor-types
 	return pick(subtypesof(/obj/item/potion) - /obj/item/potion/mutation)
-			
+
 //We check if a specific game mode is currently undergoing.
 //First by checking if it is the current main mode,
 //Secondly by checking if it is part of a Mixed game mode.
