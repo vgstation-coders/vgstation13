@@ -9,7 +9,3 @@
 	lockcharge = TRUE
 	canmove = FALSE
 	
-/mob/living/silicon/robot/dummy/New()
-	..()
-	UnlinkSelf()
-	
