@@ -160,6 +160,9 @@
 		return
 	//user.drop_item(W, src.loc) why?
 
+/obj/machinery/optable/can_overload()
+	return 0
+
 /obj/machinery/optable/npc_tamper_act(mob/living/user)
 	//Messages are overridden for this proc
 	. = NPC_TAMPER_ACT_NOMSG

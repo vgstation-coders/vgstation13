@@ -166,7 +166,7 @@
 			inserted_battery.stored_charge = 0
 			harvesting = 0
 			if(inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
-				inserted_battery.battery_effect.ToggleActivate()
+				inserted_battery.battery_effect.ToggleActivate(0)
 			src.visible_message("<b>[name]</b> states, \"Battery dump completed.\"")
 		update_icon()
 
@@ -207,7 +207,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","activation_sound"))
 							E.vars[varname] = isolated_primary.vars[varname]
 
 						//duplicate any effect-specific settings
@@ -256,7 +256,7 @@
 						var/datum/artifact_effect/E = new effecttype(inserted_battery)
 
 						//duplicate it's unique settings
-						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type"))
+						for(var/varname in list("chargelevelmax","artifact_id","effect","effectrange","effect_type","activation_sound"))
 							E.vars[varname] = isolated_secondary.vars[varname]
 
 						//duplicate any effect-specific settings
@@ -276,7 +276,7 @@
 	if (href_list["stopharvest"])
 		if(harvesting)
 			if(harvesting < 0 && inserted_battery.battery_effect && inserted_battery.battery_effect.activated)
-				inserted_battery.battery_effect.ToggleActivate()
+				inserted_battery.battery_effect.ToggleActivate(0)
 			harvesting = 0
 			src.visible_message("<b>[name]</b> states, \"Activity interrupted.\"")
 			update_icon()

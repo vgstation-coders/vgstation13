@@ -927,8 +927,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		return
 
 	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
-	world << sound('sound/AI/shuttlecalled.ogg')
+	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+	if(justification)
+		CA.justification = justification
+	command_alert(CA)
 	feedback_add_details("admin_verb","CSHUT") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	log_admin("[key_name(usr)] admin-called the emergency shuttle.")
 	message_admins("<span class='notice'>[key_name_admin(usr)] admin-called the emergency shuttle.</span>", 1)

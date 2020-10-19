@@ -75,7 +75,8 @@
 		attached_to.set_light(2, l_color = color)
 
 /obj/item/clothing/accessory/glowstick/on_removed(mob/user)
-	attached_to.set_light(0)
+	if (attached_to)
+		attached_to.set_light(0)
 	..()
 
 /obj/item/clothing/accessory/glowstick/suicide_act(mob/user)

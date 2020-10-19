@@ -309,6 +309,56 @@
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 
+/obj/item/weapon/reagent_containers/food/drinks/latte
+	name = "Smooth Latte"
+	desc = "A pleasant soft taste of latte will sooth any and all pain, while relaxing music plays in your head."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/latte/New()
+	..()
+	reagents.add_reagent(CAFE_LATTE, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/soy_latte
+	name = "Soy Latte"
+	desc = "Soy version of a latte for soy people."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/soy_latte/New()
+	..()
+	reagents.add_reagent(SOY_LATTE, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/cappuccino
+	name = "Cappuccino"
+	desc = "You will ask yourself: how is cappuccino different from latte? It tastes the same; and you will be right."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/cappuccino/New()
+	..()
+	reagents.add_reagent(CAPPUCCINO, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/espresso
+	name = "Zip Espresso"
+	desc = "When you need a small and quick kick."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/espresso/New()
+	..()
+	reagents.add_reagent(ESPRESSO, 15)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/doppio
+	name = "Doppio x2"
+	desc = "Double espresso made only out of the finest twin coffee beans."
+	icon_state = "coffee"
+/obj/item/weapon/reagent_containers/food/drinks/doppio/New()
+	..()
+	reagents.add_reagent(DOPPIO, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
 /obj/item/weapon/reagent_containers/food/drinks/tea
 	name = "Tea"
 	icon_state = "tea"
@@ -328,6 +378,17 @@
 			name = "Hippie Farms Eco-Tea"
 			desc = "Remember when the station was powered by solar panels instead of raping space for its plasma, then creating an engine of destruction? Hippie Farms remembers, maaaan."
 			reagents.add_reagent(GREENTEA, 30)
+	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
+	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+/obj/item/weapon/reagent_containers/food/drinks/chifir
+	name = "Siberian Chifir"
+	desc = "Only a true siberian can appreciate its deep and rich flavor. Embrace siberian tradition!"
+	icon_state = "tea"
+	item_state = "mug_empty"
+/obj/item/weapon/reagent_containers/food/drinks/chifir/New()
+	..()
+	reagents.add_reagent(CHIFIR, 30)
 	src.pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	src.pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
 

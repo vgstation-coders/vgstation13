@@ -756,6 +756,16 @@
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/bagel
+	name = "bagel"
+	desc = "You can almost imagine the center is a black hole."
+	icon_state = "bagel"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bagel/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
 // Eggs
 
 /obj/item/weapon/reagent_containers/food/snacks/friedegg
@@ -1117,6 +1127,18 @@
 	..()
 	reagents.add_reagent(NUTRIMENT, 6)
 	reagents.add_reagent(SILENCER, 6)
+	bitesize = 2
+
+/obj/item/weapon/reagent_containers/food/snacks/donutburger
+	name = "donut burger"
+	desc = "Illegal to have out on code green."
+	icon_state = "donutburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SPRINKLES, 6)
 	bitesize = 2
 
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
@@ -3260,7 +3282,7 @@
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
 	var/list/anti = list(

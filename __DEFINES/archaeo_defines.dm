@@ -4,6 +4,7 @@
 #define ARCHAEO_STATUETTE "statuette"
 #define ARCHAEO_INSTRUMENT "instrument"
 #define ARCHAEO_KNIFE "knife"
+#define ARCHAEO_RITUALKNIFE "ritualknife"
 #define ARCHAEO_COIN "coin"
 #define ARCHAEO_HANDCUFFS "handcuffs"
 #define ARCHAEO_BEARTRAP "beartrap"

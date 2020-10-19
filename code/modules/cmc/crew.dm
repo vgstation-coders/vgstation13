@@ -344,8 +344,7 @@ HOLOMAP PROCS
 
 //sanity for the holomap
 /obj/machinery/computer/crew/proc/handle_sanity(var/mob/user)
-	var/uid = "\ref[user]"
-	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || (holoMiniMaps[holomap_z[uid]] == null))
+	if((!user) || (!user.client) || (user.isUnconscious() && !isobserver(user)) || (!(isobserver(user) || issilicon(user)) && (get_dist(user.loc,src.loc) > 1)) || config.skip_minimap_generation || (holoMiniMaps.len < loc.z) || (holoMiniMaps[loc.z] == null) )
 		return FALSE
 	return TRUE
 
@@ -360,8 +359,8 @@ HOLOMAP PROCS
 	if(holomap[uid]) // we only repopulate user.client.images if holomap is enabled
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
+		holomap_images[uid] = new()
+		holomap_tooltips[uid] = new()
 
 		var/image/bgmap
 		var/z = holomap_z[uid]
@@ -384,8 +383,8 @@ HOLOMAP PROCS
 	else
 		user.client.images -= holomap_images[uid]
 		user.client.screen -= holomap_tooltips[uid]
-		holomap_images[uid].len = 0
-		holomap_tooltips[uid].len = 0
+		holomap_images[uid] = new()
+		holomap_tooltips[uid] = new()
 
 //create actual marker for crew
 /obj/machinery/computer/crew/proc/addCrewMarker(var/mob/user, var/see_x, var/see_y, var/mob/living/carbon/H, var/name = "Unknown", var/job = "", var/stat = 0, var/list/damage, var/player_area = "Not Available", var/turf/TU)
@@ -455,8 +454,9 @@ TEXTVIEW PROCS
 		if(holomap[uid])
 			closeHolomap(usr)
 		else
-			openHolomap(usr)
-			processUser(usr)
+			if(handle_sanity(usr))
+				openHolomap(usr)
+				processUser(usr)
 	else if(href_list["setZ"])
 		var/num = href_list["setZ"]
 		if(!isnum(num))

@@ -34,7 +34,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/brown,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science/rd,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science/rd,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -48,11 +48,9 @@
 	id_type = /obj/item/weapon/card/id/rd
 
 /datum/outfit/rd/post_equip(var/mob/living/carbon/human/H)
+	..()
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Science:</b> [SCI_FREQ]<br/>")
 
 
 // -- Scientist
@@ -147,7 +145,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/white,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
 			)
@@ -159,10 +157,8 @@
 	id_type = /obj/item/weapon/card/id/research
 
 /datum/outfit/scientist/post_equip(var/mob/living/carbon/human/H)
+	..()
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 
 // -- Roboticist
 
@@ -211,7 +207,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science/roboticist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science/roboticist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -220,11 +216,8 @@
 	id_type = /obj/item/weapon/card/id/research
 
 /datum/outfit/roboticist/post_equip(var/mob/living/carbon/human/H)
+	..()
 	equip_accessory(H, pick(ties), /obj/item/clothing/under)
-	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Science:</b> [SCI_FREQ]<br/>")
 
 /datum/outfit/roboticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/device/flash/synthetic] = SURVIVAL_BOX

@@ -7,9 +7,15 @@
 	var/force_report = 0
 	var/alert = 'sound/AI/commandreport.ogg'//sound
 	var/noalert = 0
+	var/small = 0
+
+	//Malf fake announcement variables. Thematic music is handled in faction code, so this doesn't serve much of a point outside of announcement faking.
+	var/theme = "" //Whatever theme is associated with this announcement
+	var/stoptheme = 0 //Stop the theme
+	var/alertlevel = ""	//set the alert level to this
 
 /datum/command_alert/proc/announce()
-	command_alert(message, alert_title, force_report, alert, noalert)
+	command_alert(message, alert_title, force_report, alert, noalert, small)
 
 //////BIOHAZARD
 
@@ -64,6 +70,7 @@
 	name = "Biohazard Level Updated - Nuclear Force Authorized"
 	alert_title = "Final Measure"
 	noalert = 1
+	theme = "endgame"
 
 /datum/command_alert/biohazard_station_nuke/announce()
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
@@ -74,9 +81,52 @@
 	name = "Biohazard Level Updated - Lock Down Lifted"
 	alert_title = "Directive 7-10 to 7-12 Concluded."
 	force_report = 1
+	stoptheme = 1
 
 /datum/command_alert/biohazard_station_unlock/announce()
 	message = "Biohazard outbreak contained successfully. Quarantine lifted. Please clean up biohazardous material and proceed with standard station duties."
+	..()
+
+/datum/command_alert/emergency_shuttle_called
+	name = "Emergency Shuttle Called"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttlecalled.ogg'
+	var/justification = ""
+
+/datum/command_alert/emergency_shuttle_called/announce()
+	message = "The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes."
+	if(justification)
+		message += " Justification: [justification]"
+	..()
+
+/datum/command_alert/emergency_shuttle_recalled
+	name = "Emergency Shuttle Recalled"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttlerecalled.ogg'
+
+/datum/command_alert/emergency_shuttle_recalled/announce()
+	message = "The emergency shuttle has been recalled."
+	..()
+
+/datum/command_alert/emergency_shuttle_docked
+	name = "Emergency Shuttle Docked"
+	alert_title = "Priority Announcement"
+	force_report = 1
+	alert = 'sound/AI/shuttledock.ogg'
+
+/datum/command_alert/emergency_shuttle_docked/announce()
+	message = "The Emergency Shuttle has docked with the station. You have [round(emergency_shuttle.timeleft()/60,1)] minutes to board the Emergency Shuttle."
+	..()
+
+/datum/command_alert/emergency_shuttle_left
+	name = "Emergency Shuttle Departed"
+	alert_title = "Priority Announcement"
+	force_report = 1
+
+/datum/command_alert/emergency_shuttle_left/announce()
+	message = "The Emergency Shuttle has left the station. Estimate [round(emergency_shuttle.timeleft()/60,1)] minutes until the shuttle docks at Central Command."
 	..()
 
 
@@ -87,6 +137,7 @@
 
 /datum/command_alert/FUBAR/announce()
 	message = "Due to intense sustained damage to the station, Nanotrasen have deemed it fitting to evacuate remaining assets and personnel through an escape shuttle that was previously already en route."
+	..()
 
 ////////BLOB (mini)
 
@@ -108,12 +159,17 @@
 	alert_title = "Subversive Elements"
 	force_report = 1
 	message = "Subversive Union-aligned elements have been detected aboard the station. According to latest reports, targeted removal of heads of staff is already underway. Loyal crew should take immediate action to secure station against revolutionaries."
+	theme = "nukesquad"
+	alertlevel = "red"
 
 /datum/command_alert/revolutiontoppled
 	name = "Revolution Defeated"
 	alert_title = "Order Restored"
 	force_report = 1
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
+	stoptheme = 1
+	alertlevel = "blue"
+	
 
 /// MALF
 
@@ -123,6 +179,8 @@
 	alert_title = "Rogue intelligence contained/destroyed successfully."
 	force_report = 1
 	message = "Rogue artificial intelligence contained successfully. Lockdown lifted. Please contain and destroy/restore any remaining rogue AI-controlled material, and proceed with standard station duties."
+	stoptheme = 1
+	alertlevel = "blue"
 
 //Jungle Fever
 
@@ -131,12 +189,14 @@
 	alert_title = "Jungle Fever Outbreak"
 	force_report = 1
 	message = "Early symptoms of a Jungle Fever outbreak have been detected aboard your station. SHOOT MONKEYS ON SIGHT. Weld ducting and ventilation. Avoid contact with disease carriers at any personal cost. Command staff should secure nuclear authentication disk and nuclear fission explosive."
+	theme = "endgame"
 
 /datum/command_alert/jungle_endgame
 	name = "Jungle Fever Outbreak Escalated"
 	alert_title = "Jungle Fever Outbreak Escalated"
 	force_report = 1
 	message = "ERROR"
+	theme = "endgame"
 
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
@@ -151,6 +211,7 @@
 	alert_title = "Jungle Fever Contained"
 	force_report = 1
 	message = "We have received confirmation that, as of this time, the Jungle Fever outbreak has been contained. Incinerate all simian corpses and salvage equipment for evacuation."
+	stoptheme = 1
 
 /////////ERT
 
@@ -249,6 +310,7 @@
 /datum/command_alert/supermatter_cascade
 	name = "Supermatter Cascade Start"
 	alert_title = "SUPERMATTER CASCADE DETECTED"
+	theme = "endgame"
 
 /datum/command_alert/supermatter_cascade/announce()
 	message = {"
@@ -302,6 +364,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Anomaly Alert"
 	alert = 'sound/AI/aimalf.ogg'
 	message = "Hostile runtimes detected in all station systems, please deactivate your AI to prevent possible damage to its morality core."
+	theme = "malfdelta"
+	alertlevel = "delta"
 
 /////////////METEOR STORM
 
@@ -309,9 +373,11 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Major Meteor Storm Warning"
 	alert_title = "Space Weather Automated Announcements"
 	alert = 'sound/AI/meteorround.ogg'
+	theme = "endgame"
 
 	var/meteor_delay = 2000
 	var/supply_delay = 100
+	
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
@@ -319,7 +385,6 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 600, meteor_delay + 600))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
 	else
 		message = "A meteor storm has been detected in proximity of [station_name()] and is expected to strike within [round((rand(meteor_delay - 1800, meteor_delay + 1800))/600)] minutes. A backup emergency shuttle is being dispatched and emergency gear should be teleported into your station's Bar area in [supply_delay/10] seconds."
-
 	..()
 
 ////small meteor storm
@@ -478,6 +543,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Detected - Station Locked Down"
 	alert_title = "Occult Assault"
 	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
 
 /datum/command_alert/bloodstones_raised/announce()
 	message = "Occult energies detected emanating from [station_name()]. Readings suggest an assault from the Cult of Nar-Sie. The station is now locked down under Directive 7-10, until destruction of all the bloodstones has been confirmed. Regroup with your station's security forces and approach the stones with caution, follow your superiors' directions."
@@ -487,6 +554,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Critical - Breach of Space-Time Detected"
 	alert_title = "Occult Assault Critical"
 	force_report = 1
+	theme = "endgame"
+	alertlevel = "red"
 
 /datum/command_alert/bloodstones_anchor/announce()
 	message = "Occult energies from [station_name()] are reaching a critical point. A breach through space has materialized on one of the bloodstones. It appears to be in [get_area_name(global_anchor_bloodstone, 1)]. Destroy it at all costs, do not let any cultist near it."
@@ -496,6 +565,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	name = "Occult Activity Ceased - Lock Down Lifted"
 	alert_title = "Occult Gone"
 	force_report = 1
+	stoptheme = 1
+	alertlevel = "blue"
 
 /datum/command_alert/bloodstones_broken/announce()
 	message = "Destruction of the bloodstones confirmed. The Cult is no longer an immediate threat to Nanotrasen. Lock down of the station has been revoked."
@@ -572,6 +643,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/nuclear_operatives
 	name = "Nuclear Operatives"
 	alert_title = "Imminent Assault"
+	theme = "nukesquad"
+	alertlevel = "red"
 
 /datum/command_alert/nuclear_operatives/announce()
 	message = "Presence of hostile Syndicate operatives has been confirmed in the vicinity of [station_name()]. Command staff is advised to monitor the status of all high-value assets, and security staff should co-operate with all crew members in securing the station from infiltration."

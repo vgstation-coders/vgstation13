@@ -16,6 +16,11 @@
 
 	machine_flags = WRENCHMOVE
 
+
+/obj/machinery/auto_cloner/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/machinery/auto_cloner/New()
 	..()
 

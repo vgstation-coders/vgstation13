@@ -130,6 +130,16 @@ var/VOX_AVAILABLE_VOICES = list(
 	<span class='bad'><strong>WARNING:</strong> Misuse of the announcement system <em>will</em> get you job banned.</span>\
 	</fieldset>")
 
+	if(cancorruptvox())
+		dat += "<fieldset><legend>Corruption</legend><ul>"
+		dat += "<li>"
+		if(vox_corrupted)
+			dat += "<strong>"
+		dat += "<a href=;?src=\ref[src];voice_corrupted=[!vox_corrupted]>[vox_corrupted ? "On" : "Off"]</a>"
+		if (vox_corrupted)
+			dat += "</strong>"
+		dat += "</li></ul><p>Your laws are corrupted, this option allows you to speak in a befitting manner.</p></fieldset>"
+
 	dat += "<fieldset><legend>Voice</legend><ul>"
 	for(var/voice_id in VOX_AVAILABLE_VOICES)
 		dat += "<li>"
@@ -165,14 +175,17 @@ var/VOX_AVAILABLE_VOICES = list(
 	//text2file(popup.get_content(), "AISAYTEST.htm")
 	popup.open()
 
+/mob/living/silicon/ai/proc/cancorruptvox()
+	if(ismalf(src))
+		return TRUE
+	if(!isemptylist(laws.ion))
+		return TRUE
+	return FALSE
+
 /mob/living/silicon/ai/proc/announcement_checks()
 	//I am kill but here
 	if(isUnconscious())
-		return FALSE
-
-	// If we're in an APC, and APC is ded, ABORT
-	if(parent && istype(parent) && parent.stat)
-		to_chat(usr, "You're in a dead APC, no")
+		to_chat(usr, "Not while you're incapacitated.")
 		return FALSE
 
 	if(istype(usr,/mob/living/silicon/ai))
@@ -190,7 +203,6 @@ var/VOX_AVAILABLE_VOICES = list(
 /mob/living/silicon/ai/proc/play_announcement(var/message)
 	set waitfor = FALSE
 	last_announcement = message
-
 	if(!message || announcing_vox > world.time)
 		return
 
@@ -223,6 +235,7 @@ var/VOX_AVAILABLE_VOICES = list(
 
 	announcing_vox = world.time + VOX_DELAY
 
+
 	log_game("[key_name_admin(src)] made a vocal announcement with the following message: [message].")
 
 	// Same logic as play_vox_sound, so everyone that can hear the sound sees this.
@@ -233,9 +246,28 @@ var/VOX_AVAILABLE_VOICES = list(
 			if(T.z == src.z)
 				to_chat(M, "<span class='notice'>[src] announces: <span class='big'>\"[message]\"</span>.</span>")
 	*/
+	if(!cancorruptvox())
+		vox_corrupted = FALSE // this is to stop a sudden malf/ion making the announcement corrupt if it was on previously.
+	var/freq = 1
+
+	var/turf/T = get_turf(src)
 
 	for(var/word in words)
-		play_vox_word(word, vox_voice, src.z, null, TRUE)
+		if(vox_corrupted && cancorruptvox())
+
+			freq = rand(11000,21000) // mas/fem VOX standard bit rate is 16000.
+			if(freq>20450)
+				for(var/i=0,i<rand(2,4),i++) //repeat hig pitched words and then say it in low pitch like shodan
+					freq = freq + (freq/5)
+					play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
+				freq = rand(11000,14000)
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
+		else
+			//play it normally
+			play_vox_word(word, vox_voice, T.z, null, TRUE, freq)
+
+
+
 #endif // DISABLE_VOX
 
 var/list/vox_digits=list(
@@ -283,21 +315,21 @@ var/list/vox_units=list(
 /proc/vox_num2list(var/number)
 	return num2words(number, zero='sound/AI/zero.ogg', minus='sound/AI/minus.ogg', hundred='sound/AI/hundred.ogg', digits=vox_digits, tens=vox_tens, units=vox_units)
 
-/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE)
+/proc/play_vox_word(var/word, var/voice, var/z_level, var/mob/only_listener, var/do_sleep=FALSE, var/frequency=1)
 	. = TRUE
 
 	word = lowertext(word)
 	var/soundFile = vox_sounds[voice][word]
 	if(soundFile)
-		. = play_vox_sound(soundFile,z_level,only_listener)
+		. = play_vox_sound(soundFile,z_level,only_listener, frequency)
 		if (do_sleep)
 			//sleep(vox_sound_lengths[soundFile] SECONDS)
 			sleep(vox_sound_lengths[soundFile])
 
-/proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener)
+/proc/play_vox_sound(var/sound_file, var/z_level, var/mob/only_listener, var/frequency=1)
 	var/sound/voice = sound(sound_file, wait = 1, channel = VOX_CHANNEL)
 	voice.status = SOUND_STREAM
-
+	voice.frequency = frequency
 	// If there is no single listener, broadcast to everyone in the same z level
 	if(!only_listener)
 		// Play voice for all mobs in the z level

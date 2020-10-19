@@ -42,7 +42,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_s_store_str = /obj/item/weapon/gun/energy/gun,
 		),
 	)
@@ -58,11 +58,6 @@
 	pda_type = /obj/item/device/pda/heads/hos
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/hos
-
-/datum/outfit/hos/post_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ]<br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/hos/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX
@@ -115,7 +110,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = /obj/item/device/flash,
 		),
 	)
@@ -132,11 +127,6 @@
 	pda_type = /obj/item/device/pda/warden
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
-
-/datum/outfit/warden/post_equip(var/mob/living/carbon/human/H)
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/warden/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX
@@ -231,7 +221,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = /obj/item/weapon/lighter/zippo,
 		),
 	)
@@ -250,15 +240,13 @@
 	id_type = /obj/item/weapon/card/id/security
 
 /datum/outfit/detective/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.dna.SetSEState(SOBERBLOCK,1)
 	H.mutations += M_SOBER
 	if (H.mind.role_alt_title == "Gumshoe" || H.mind.role_alt_title == "Private Eye")
 		H.mutations += M_NOIR
 		H.dna.SetSEState(NOIRBLOCK,1)
 	H.check_mutations = 1
-	if (H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
 
 /datum/outfit/detective/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
@@ -300,7 +288,6 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/security,
-			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
 			slot_l_store_str = /obj/item/device/flash,
 		),
@@ -312,8 +299,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/security,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/security,
-			slot_s_store_str = /obj/item/weapon/gun/energy/taser,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = /obj/item/device/flash,
 		),
 	)
@@ -330,11 +316,6 @@
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/security
 
-/datum/outfit/officer/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <b>Security:</b> [SEC_FREQ]<br/>")
-
 /datum/outfit/officer/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee] = SURVIVAL_BOX
 	return ..()
@@ -342,3 +323,9 @@
 /datum/outfit/officer/post_equip_priority(var/mob/living/carbon/human/H)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/tactical, /obj/item/clothing/shoes, 5)
 	return ..()
+
+/datum/outfit/officer/species_final_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	switch (H.species.type)
+		if (/datum/species/vox, /datum/species/plasmaman)
+			H.equip_or_collect(new /obj/item/weapon/gun/energy/taser(H.back), slot_in_backpack)

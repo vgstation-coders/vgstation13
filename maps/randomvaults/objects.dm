@@ -870,4 +870,4 @@
 /obj/machinery/turret/russian
 	faction = "russian"
 	lasers = 1
-	lasertype = 2
+	lasertype = /obj/item/projectile/beam/heavylaser

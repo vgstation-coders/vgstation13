@@ -27,6 +27,10 @@
 	status_flags = CANSTUN|CANKNOCKDOWN|CANPARALYSE|CANPUSH
 	var/obj/item/device/station_map/displayed_holomap = null
 
+/mob/living/carbon/New(var/new_loc, var/new_species_name = null, var/delay_ready_dna=0)
+	..()
+	hud_list[CONVERSION_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
+
 /mob/living/carbon/Destroy()
 	if (mutual_handcuffs && mutual_handcuffed_to)
 		mutual_handcuffs.remove_mutual_cuff_events(mutual_handcuffed_to)

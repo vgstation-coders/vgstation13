@@ -58,6 +58,7 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define MAGICIAN_ARTIFACT "Magical Archeologist"
 #define POTION "Potion Seller"
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
@@ -173,6 +174,13 @@
 #define CONVERSION_REFUSE	-1
 #define CONVERSION_NOCHOICE	0
 #define CONVERSION_ACCEPT	1
+
+#define CONVERTIBLE_ALWAYS	1
+#define CONVERTIBLE_CHOICE	2
+#define CONVERTIBLE_NEVER	3
+#define CONVERTIBLE_NOMIND	4
+#define CONVERTIBLE_ALREADY	5
+#define CONVERTIBLE_IMPLANT	6
 
 ////////////////////////////////////////////////////////////////////////////////
 
