@@ -99,7 +99,7 @@
 		for (var/mob/M in mode.candidates)
 			if (M.mind && M.mind.assigned_role && (M.mind.assigned_role in enemy_jobs) && (!(M in candidates) || (M.mind.assigned_role in restricted_from_jobs)))
 				enemies_count++//checking for "enemies" (such as sec officers). To be counters, they must either not be candidates to that rule, or have a job that restricts them from it
-	
+
 	var/pop_and_enemies
 	if (ticker && ticker.current_state == GAME_STATE_PLAYING)
 		pop_and_enemies += mode.living_players.len
@@ -110,8 +110,8 @@
 
 	var/threat = round(mode.threat_level/10)
 	if (enemies_count <= required_enemies[threat])
-		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies])")
-		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies])")
+		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
+		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		return FALSE
 	if (pop_and_enemies >= required_pop[threat])
 		return TRUE

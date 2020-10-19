@@ -156,6 +156,7 @@
 /datum/subsystem/proc/Initialize(start_timeofday)
 	var/time = (world.timeofday - start_timeofday) / 10
 	var/msg = "Initialized [name] subsystem within [time] seconds!"
+	log_debug(msg)
 	to_chat(world, "<span class='danger'>[msg]</span>")
 	initialized = TRUE
 	return time

@@ -31,7 +31,7 @@
 		if(prefs.muted & MUTE_OOC)
 			to_chat(src, "<span class='warning'>You cannot use OOC (muted).</span>")
 			return
-		if(oocban_isbanned(ckey))
+		if(oocban_isbanned(ckey) || iscluwnebanned(mob))
 			to_chat(src, "<span class='warning'>You cannot use OOC (banned).</span>")
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))
@@ -61,7 +61,7 @@
 				display_colour = "#b82e00"	//orange
 
 	for(var/client/C in clients)
-		if(C.prefs.toggles & CHAT_OOC)
+		if((C.prefs.toggles & CHAT_OOC) && !iscluwnebanned(C.mob))
 			var/display_name = src.key
 			if(holder)
 				if(holder.fakekey)
@@ -128,7 +128,7 @@
 		if(prefs.muted & MUTE_OOC)
 			to_chat(src, "<span class='warning'>You cannot use LOOC (muted).</span>")
 			return
-		if(oocban_isbanned(ckey))
+		if(oocban_isbanned(ckey) || iscluwnebanned(mob))
 			to_chat(src, "<span class='warning'>You cannot use LOOC (banned).</span>")
 			return
 		if(handle_spam_prevention(msg,MUTE_OOC))

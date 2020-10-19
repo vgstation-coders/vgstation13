@@ -23,8 +23,8 @@ var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mob
 
 //Preferences stuff
 	//Underwear
-var/global/list/underwear_m = list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers") //Curse whoever made male/female underwear different colours
-var/global/list/underwear_f = list("None", "White", "Green", "Blue", "Black", "Yellow", "Thong", "Baby-Blue", "Babydoll", "Red", "Pink", "Kinky", "Freedom", "Tea", "Communist", "Cowprint")
+var/global/list/underwear_m = list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers", "Green Wifebeater", "White Wifebeater", "Black Wifebeater") //Curse whoever made male/female underwear different colours
+var/global/list/underwear_f = list("None", "White", "Green", "Blue", "Black", "Yellow", "Thong", "Baby-Blue", "Babydoll", "Red", "Pink", "Kinky", "Freedom", "Tea", "Communist", "Cowprint", "Pink Husbandbeater", "White Husbandbeater", "Black Husbandbeater")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt", "Messenger Bag")
 
@@ -75,7 +75,7 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 var/global/list/escape_list = list()
 var/list/bots_list = list()
 
-
+var/list/radio_list = list()
 var/list/rcd_list = list()
 var/list/red_tool_list = list()
 var/list/brig_lockers = list()

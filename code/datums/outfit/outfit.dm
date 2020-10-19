@@ -157,7 +157,7 @@
 		if (isnull(obj_type))
 			continue
 		slot = text2num(slot)
-		H.equip_to_slot_or_del(new obj_type(get_turf(H)), slot, TRUE)
+		H.equip_to_slot_if_possible(new obj_type(get_turf(H)), slot, TRUE)
 
 // -- Give out backbag and items to be collected in the backpack
 /datum/outfit/proc/equip_backbag(var/mob/living/carbon/human/H, var/species)
@@ -269,9 +269,23 @@
 		pda.name = "PDA-[H.real_name] ([pda.ownjob])"
 		H.equip_or_collect(pda, pda_slot)
 
+/mob/living/proc/store_frequency_list_in_memory()
+	if(!mind)
+		return
+	var/obj/item/device/radio/headset/earpiece = get_item_by_slot(slot_ears)
+	var/list/frequency_list = earpiece?.secure_radio_connections
+	if(!frequency_list)
+		return
+	var/list/text = list("You remember the frequencies of the radio channels: <br>")
+	for(var/channel in frequency_list)
+		var/frequency = frequency_list[channel]
+		text += "<b>[channel]:</b> [format_frequency(frequency)] <br>"
+	mind.store_memory(jointext(text, null))
+
 // -- Things to do AFTER all the equipment is given (ex: accessories)
 /datum/outfit/proc/post_equip(var/mob/living/carbon/human/H)
-	return // Empty
+	SHOULD_CALL_PARENT(TRUE)
+	H.store_frequency_list_in_memory()
 
 // -- Same as above, for priority arrivals
 /datum/outfit/proc/post_equip_priority(var/mob/living/carbon/human/H)

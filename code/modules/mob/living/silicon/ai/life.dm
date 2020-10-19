@@ -26,7 +26,7 @@
 	malfhack = null
 
 /mob/living/silicon/ai/proc/life_handle_power_damage()
-	if(aiRestorePowerRoutine != 0)
+	if(aiRestorePowerRoutine != 0 || ai_flags & COREFORTIFY)
 		// Lost power
 		adjustOxyLoss(1)
 	else
@@ -152,12 +152,17 @@
 /mob/living/silicon/ai/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
-
 	if (stat == DEAD)
 		return
-
+	if(client)
+		handle_regular_hud_updates()
 	if(life_handle_health())
 		return
+
+	if(ai_flags & COREFORTIFY)
+		brute_damage_modifier = 0.25
+	else
+		brute_damage_modifier = 1
 
 	life_handle_camera()
 	life_handle_malf()
@@ -181,10 +186,19 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else
+		var/damage_taken
 		if(ai_flags & COREFIRERESIST)
-			health = maxHealth - getOxyLoss() - getToxLoss() - getBruteLoss()
-		else
-			health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss()
+			damage_taken = getToxLoss() + getBruteLoss() + getOxyLoss()
+		else 
+			damage_taken = getToxLoss() + getFireLoss() + getBruteLoss() + getOxyLoss()
+ 
+		health = maxHealth - damage_taken
 
 /mob/living/silicon/ai/update_canmove() //If the AI dies, mobs won't go through it anymore
 	return FALSE
+
+/mob/living/silicon/ai/handle_regular_hud_updates()
+	if(malfhacking)
+		throw_alert(SCREEN_ALARM_APC_HACKING, /obj/abstract/screen/alert/robot/apc_hacking)
+	else 
+		clear_alert(SCREEN_ALARM_APC_HACKING)

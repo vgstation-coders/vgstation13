@@ -27,6 +27,12 @@
 
 	..()
 
+/obj/item/clothing/suit/storage/wintercoat/Destroy()
+	if(hood)
+		qdel(hood)
+		hood = null
+	..()
+
 /obj/item/clothing/head/winterhood
 	name = "winter hood"
 	desc = "A hood attached to a heavy winter jacket."
@@ -41,6 +47,12 @@
 		coat = wc
 	else if(!coat)
 		qdel(src)
+
+/obj/item/clothing/head/winterhood/Destroy()
+	if(coat)
+		coat.hood = null
+		coat = null
+	..()
 
 /obj/item/clothing/suit/storage/wintercoat/security/captain
 	name = "captain's winter coat"

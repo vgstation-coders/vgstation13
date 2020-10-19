@@ -237,7 +237,7 @@
 	origin_tech = Tc_COMBAT + "=2"
 	ammo_type = "/obj/item/ammo_casing/lr22"
 	max_ammo = 10
-	sprite_modulo = 10
+	sprite_modulo = 1
 	multiple_sprites = 1
 
 /obj/item/ammo_storage/magazine/lr22/empty

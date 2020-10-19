@@ -38,7 +38,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/cmo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/cmo,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -51,8 +51,8 @@
 	id_type = /obj/item/weapon/card/id/cmo
 
 /datum/outfit/cmo/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -116,7 +116,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -149,10 +149,8 @@
 						H.equip_or_collect(new /obj/item/clothing/head/nursehat(H), slot_head)
 
 /datum/outfit/doctor/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/firstaid/regular(get_turf(H)))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -205,18 +203,13 @@
 			slot_glasses_str = /obj/item/clothing/glasses/science,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/chemist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/chemist,
-			slot_wear_mask_str = /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str = /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
 	pda_type = /obj/item/device/pda/chemist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-/datum/outfit/chemist/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/chemist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/bag/chem] = GRASP_LEFT_HAND
@@ -266,7 +259,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/paramedic,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic,
 			slot_l_store_str = /obj/item/weapon/reagent_containers/hypospray/autoinjector/biofoam_injector,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -284,11 +277,6 @@
 	pda_type = /obj/item/device/pda/medical
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-/datum/outfit/paramedic/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/paramedic/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -333,18 +321,13 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/geneticist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
 	pda_type = /obj/item/device/pda/geneticist
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/medical
-
-/datum/outfit/geneticist/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ] <br/><b>Science:</b> [SCI_FREQ] <br/>")
 
 /datum/outfit/geneticist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
@@ -389,7 +372,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/medical/virologist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/medical/virologist,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath/,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -398,10 +381,8 @@
 	id_type = /obj/item/weapon/card/id/medical
 
 /datum/outfit/virologist/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/book/manual/virology_guide(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Medical:</b> [MED_FREQ]")
 
 /datum/outfit/virologist/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/virusdish/random] = GRASP_LEFT_HAND

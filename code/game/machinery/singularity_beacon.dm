@@ -106,6 +106,7 @@
 		attached = null //Reset attached cable
 
 /obj/machinery/singularity_beacon/Destroy()
+	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
 	if(active)
 		deactivate()
 	if(cell)

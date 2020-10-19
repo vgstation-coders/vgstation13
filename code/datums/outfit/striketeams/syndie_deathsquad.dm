@@ -53,6 +53,7 @@
 		items_to_collect += /obj/item/energy_magazine/osipr
 
 /datum/outfit/striketeam/syndie_deathsquad/post_equip(var/mob/living/carbon/human/H)
+	..()
 	equip_accessory(H, /obj/item/clothing/accessory/holomap_chip/elite,  /obj/item/clothing/under, 5)
 	var/obj/item/clothing/suit/space/rig/R = H.wear_suit
 	R.toggle_suit()

@@ -118,3 +118,8 @@
 
 	if(client)
 		client.CAN_MOVE_DIAGONALLY = 0
+
+	if(iscluwnebanned(src) && (timeofdeath > 0 || !iscluwne(src)))
+		log_admin("Cluwnebanned player [key_name(src)] attempted to join and was kicked.")
+		message_admins("<span class='notice'>Cluwnebanned player [key_name(src)] attempted to join and was kicked.</span>", 1)
+		del(client)

@@ -88,6 +88,7 @@ var/list/admin_verbs_admin = list(
 	/client/proc/credits_panel,			/*allows you to customize the roundend credits before they happen*/
 	/client/proc/persistence_panel,			/*lets you check out the kind of shit that will persist to the next round and say "holy fuck no"*/
 	/client/proc/diseases_panel,
+	/client/proc/artifacts_panel,
 	/client/proc/climate_panel
 )
 var/list/admin_verbs_ban = list(
@@ -130,6 +131,7 @@ var/list/admin_verbs_fun = list(
 	/client/proc/set_teleport_pref,
 	/client/proc/deadchat_singularity,
 	/client/proc/view_all_rods,
+	/client/proc/add_centcomm_order,
 	)
 var/list/admin_verbs_spawn = list(
 	/datum/admins/proc/spawn_atom, // Allows us to spawn instances
@@ -194,6 +196,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cure_disease,
 	/client/proc/check_bomb,
 	/client/proc/check_convertables,
+	/client/proc/toggle_convertibles,
 	/client/proc/check_spiral,
 	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
@@ -334,6 +337,8 @@ var/list/admin_verbs_mod = list(
 			verbs += admin_verbs_mod
 		if(holder.rights & R_ADMINBUS)
 			verbs += /client/proc/secrets
+	if (isobserver(mob))
+		mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
@@ -376,6 +381,8 @@ var/list/admin_verbs_mod = list(
 		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
+	if (isobserver(mob))
+		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"
@@ -566,7 +573,7 @@ var/list/admin_verbs_mod = list(
 	var/warn_reason = input("Reason for warning?", "Admin abuuuuuuuse") as null|text
 	if(!warn_reason)
 		return
-	notes_add(warned_ckey,warn_reason,src.mob)
+	holder.notes_add(warned_ckey, warn_reason)
 	if(++D.warns >= MAX_WARNS)					//uh ohhhh...you'reee iiiiin trouuuubble O:)
 		var/bantime = AUTOBANTIME//= (++D.warnbans * AUTOBANTIME)
 		D.warns = 0
@@ -590,7 +597,10 @@ var/list/admin_verbs_mod = list(
 			message_admins("[key_name_admin(src)] has warned [key_name_admin(C)] - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
 		else
 			message_admins("[key_name_admin(src)] has warned [warned_ckey] (DC) - [warn_reason]. They have [MAX_WARNS-D.warns] strikes remaining. And have been warn banned [D.warnbans] [D.warnbans == 1 ? "time" : "times"]")
-		D.save_preferences_sqlite(C, C.ckey)
+			D.show_warning_next_time = 1
+			D.last_warned_message = warn_reason
+			D.warning_admin = ckey
+		D.save_preferences_sqlite(C, warned_ckey)
 	feedback_add_details("admin_verb","WARN") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/unwarn(warned_ckey)

@@ -33,7 +33,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/brown,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/cargo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/cargo,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -48,11 +48,6 @@
 	pda_type = /obj/item/device/pda/heads/hop
 	pda_slot = slot_l_store
 	id_type = /obj/item/weapon/card/id/silver
-
-/datum/outfit/hop/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/>")
 
 // -- QM
 
@@ -91,7 +86,7 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/cargo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/cargo,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -100,10 +95,8 @@
 	id_type = /obj/item/weapon/card/id/supply
 
 /datum/outfit/qm/post_equip(var/mob/living/carbon/human/H)
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/clipboard(H))
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
 
 // -- Cargo techie
 
@@ -139,7 +132,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/cargo,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/cargo,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -148,9 +141,7 @@
 	id_type = /obj/item/weapon/card/id/supply
 
 /datum/outfit/cargo_tech/post_equip(var/mob/living/carbon/human/H)
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/>")
-	if (!H.mind)
-		return
+	..()
 	H.put_in_hands(new /obj/item/weapon/storage/bag/plasticbag(H))
 
 // -- Shaft Miner
@@ -187,7 +178,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/mining,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/mining,
-			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 		),
 	)
 
@@ -206,11 +197,6 @@
 	pda_type = /obj/item/device/pda/shaftminer
 	pda_slot = slot_belt
 	id_type = /obj/item/weapon/card/id/supply
-
-/datum/outfit/mining/post_equip(var/mob/living/carbon/human/H)
-	if (!H.mind)
-		return
-	H.mind.store_memory("Frequencies list: <br/> <b>Cargo:</b> [SUP_FREQ]<br/> <b>Science:</b> [SCI_FREQ] <br/>")
 
 /datum/outfit/mining/post_equip_priority(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/pickaxe/drill(get_turf(H)))

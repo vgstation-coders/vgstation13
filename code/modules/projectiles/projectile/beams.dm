@@ -424,8 +424,12 @@ var/list/beam_master = list()
 	name = "weak laser"
 	damage = 15
 
+/obj/item/projectile/beam/weakerlaser
+	name = "mini laser"
+	damage = 10
+
 /obj/item/projectile/beam/veryweaklaser
-	name = "very weak laser"
+	name = "micro laser"
 	damage = 5
 
 /obj/item/projectile/beam/heavylaser

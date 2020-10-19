@@ -3,13 +3,13 @@
 	desc = "A horrible combination of steel and sweets. Custom made to weaponize candy canes with questionable success."
 	icon = 'icons/obj/gun.dmi'
 	icon_state = "lolly_lobber"
-	item_state = "lolly_lobber"
+	item_state = "redtag"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	recoil = 0
 	slot_flags = SLOT_BELT
 	flags = FPRINT
 	w_class = W_CLASS_MEDIUM
-	fire_delay = 0
+	fire_delay = 3
 	fire_sound = 'sound/items/syringeproj.ogg'
 	var/max_ammo = 13 //baker's dozen
 	var/current_ammo = 13

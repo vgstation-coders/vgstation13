@@ -444,6 +444,6 @@ var/list/map_dimension_cache = list()
 	target_path = path
 
 /dmm_suite/preloader/proc/load(atom/what)
-	for(var/attribute in attributes)
+	for(var/attribute in attributes - lockedvars)
 		what.vars[attribute] = attributes[attribute]
 	Del()

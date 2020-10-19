@@ -69,7 +69,9 @@
 		header = "ERROR"
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
-	if(destination)
+	// If a disk is destroyed before initialize() runs, `destination` could
+	// be a type path instead of an instance.
+	if(istype(destination))
 		destination.disk_references.Remove(src)
 		destination = null
 

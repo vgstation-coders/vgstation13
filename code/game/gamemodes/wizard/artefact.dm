@@ -196,7 +196,6 @@
 	icon = 'icons/obj/wizard.dmi'
 	icon_state = "phylactery_empty_noglow"
 	var/charges = 0
-	var/mindbound
 	var/mob/bound_soul
 	var/datum/mind/bound_mind
 
@@ -296,29 +295,27 @@
 	bound_soul = to_bind
 
 /obj/item/phylactery/proc/unbind_mind()
-	if(bound_mind.on_transfer_end)
-		bound_mind.on_transfer_end.Remove(mindbound)
-	mindbound = null
+	if(bound_mind)
+		bound_mind.lazy_unregister_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
 	bound_mind = null
 
 /obj/item/phylactery/proc/bind_mind(var/datum/mind/to_bind)
-	mindbound = to_bind.on_transfer_end.Add(src, "follow_mind")
+	to_bind.lazy_register_event(/lazy_event/after_mind_transfer, src, .proc/follow_mind)
 	bound_mind = to_bind
 
-/obj/item/phylactery/proc/follow_mind(list/arguments)
+/obj/item/phylactery/proc/follow_mind(datum/mind/mind)
 	unbind()
 	bind(bound_mind.current)
 	update_icon()
 
-/obj/item/phylactery/proc/z_block(list/arguments)
-	var/mob/user = arguments["user"]
+/obj/item/phylactery/proc/z_block(mob/user, to_z, from_z)
 	if(user != bound_soul)
 		unbind()
 		return
 	if(is_holder_of(user, src))
 		return //We're in their pocket, you ash-happy bottle of soul!
 	var/turf/T = get_turf(src)
-	if(arguments["to_z"] != T.z)
+	if(to_z != T.z)
 		to_chat(user, "<span class = 'warning'><b>As you stray further and further away from \the [src], you feel your form unravel!</b></span>")
 		spawn(rand(5 SECONDS, 15 SECONDS)) //Mr. Wizman, I don't feel so good
 			if(user.gcDestroyed)

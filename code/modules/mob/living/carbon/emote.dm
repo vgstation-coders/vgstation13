@@ -239,13 +239,12 @@
 	emote_type = EMOTE_AUDIBLE
 
 /datum/emote/living/carbon/sound
-	var/list/science_sounds = null
-	var/list/male_sounds = null
-	var/list/female_sounds = null
-	var/list/birb_sounds = null
-	var/list/insect_sounds = null
 	var/sound_message = null
 
+//Depending on the sound will run a bunch of arbitrary checks checking for the user's specifications
+//Since all audible emotes are currently human-only, this only supports humans (for now)
+/datum/emote/living/carbon/sound/proc/choose_sound(var/mob/living/carbon/human/H, var/key)
+	return
 
 /datum/emote/living/carbon/sound/scream
 	key = "scream"
@@ -253,12 +252,20 @@
 	message = "screams!"
 	message_mime = "acts out a scream!"
 	emote_type = EMOTE_AUDIBLE
-	science_sounds = list('sound/misc/science_scream1.ogg', 'sound/misc/science_scream2.ogg', 'sound/misc/science_scream3.ogg', 'sound/misc/science_scream4.ogg', 'sound/misc/science_scream5.ogg', 'sound/misc/science_scream6.ogg')
-	male_sounds =  list('sound/misc/malescream1.ogg', 'sound/misc/malescream2.ogg', 'sound/misc/malescream3.ogg', 'sound/misc/malescream4.ogg', 'sound/misc/malescream5.ogg', 'sound/misc/wilhelm.ogg', 'sound/misc/goofy.ogg')
-	female_sounds = list('sound/misc/femalescream1.ogg', 'sound/misc/femalescream2.ogg', 'sound/misc/femalescream3.ogg', 'sound/misc/femalescream4.ogg', 'sound/misc/femalescream5.ogg')
 	sound_message = "screams in agony!"
 	voxemote = FALSE
 	insectoidemote = FALSE
+
+/datum/emote/living/carbon/sound/scream/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Vox")
+		return vox_shriek_sound
+	if(H.species.name == "Insectoid")
+		return insectoid_chitter_sound
+	if(H.gender == FEMALE)
+		return female_scream_sound
+	return male_scream_sound
 
 /datum/emote/living/carbon/sound/shriek
 	key = "shriek"
@@ -266,10 +273,15 @@
 	message = "shrieks!"
 	message_mime = "acts out a shriek!"
 	emote_type = EMOTE_AUDIBLE
-	birb_sounds = list('sound/misc/shriek1.ogg')
 	sound_message = "shrieks in agony!"
 	voxemote = TRUE
 	voxrestrictedemote = TRUE
+
+/datum/emote/living/carbon/sound/shriek/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Vox")
+		return vox_shriek_sound
 
 /datum/emote/living/carbon/sound/chitter
 	key = "chitter"
@@ -277,11 +289,15 @@
 	message = "chitters!"
 	message_mime = "chitters silently!"
 	emote_type = EMOTE_AUDIBLE
-	insect_sounds = list('sound/misc/hiss1.ogg', 'sound/misc/hiss2.ogg', 'sound/misc/hiss3.ogg')
 	sound_message = "chitters in agony!"
 	insectoidemote = TRUE
 	insectoidrestrictedemote = TRUE
 
+/datum/emote/living/carbon/sound/chitter/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.species.name == "Insectoid")
+		return insectoid_chitter_sound
 
 /datum/emote/living/carbon/sound/cough
 	key = "cough"
@@ -289,8 +305,13 @@
 	message = "coughs!"
 	message_mime = "coughs silently!"
 	emote_type = EMOTE_AUDIBLE
-	male_sounds = list('sound/misc/cough/cough_m1.ogg', 'sound/misc/cough/cough_m2.ogg', 'sound/misc/cough/cough_m3.ogg', 'sound/misc/cough/cough_m4.ogg')
-	female_sounds = list('sound/misc/cough/cough_f1.ogg', 'sound/misc/cough/cough_f2.ogg', 'sound/misc/cough/cough_f3.ogg', 'sound/misc/cough/cough_f4.ogg')
+
+/datum/emote/living/carbon/sound/cough/choose_sound(var/mob/living/carbon/human/H, key)
+	if(!istype(H))
+		return
+	if(H.gender == FEMALE)
+		return female_cough_sound
+	return male_cough_sound
 
 /datum/emote/living/carbon/sound/run_emote(mob/user, params)
 	var/mob/living/carbon/human/H = user
@@ -306,21 +327,12 @@
 				var/obj/item/clothing/C = search_sound_clothing(H, key)
 				var/sound
 				if(!C)
-					if(isvox(H) || isskelevox(H))
-						sound = pick(birb_sounds)
-					if(isinsectoid(H))
-						sound = pick(insect_sounds)
-
-					else
-						switch(H.gender)
-							if(MALE)
-								sound = pick(male_sounds)//AUUUUHHHHHHHHOOOHOOHOOHOOOOIIIIEEEEEE
-							if(FEMALE)
-								sound = pick(female_sounds)
+					sound = pick(choose_sound(H, key))
 				else
 					sound = pick(C.sound_file)
-				playsound(user, sound, 50, 0)
-				H.last_emote_sound = world.time
+				if(sound) //Sanity
+					playsound(user, sound, 50, 0)
+					H.last_emote_sound = world.time
 
 	else
 		message = "makes a very loud noise."
@@ -337,7 +349,9 @@
 	for(var/obj/item/clothing/C in user.get_equipped_items())
 		if(!C.sound_file)
 			continue
-		if(user.species && (user.species.name in C.sound_respect_species))
+		if(!(user.species.name in C.sound_species_whitelist))
+			continue
+		if(!(user.gender in C.sound_genders_allowed))
 			continue
 		if(!(sound_key in C.sound_change))
 			continue

@@ -56,7 +56,6 @@ var/global/list/mineralSpawnChance[]
 //	var/next_rock = 0
 	var/archaeo_overlay = ""
 	var/excav_overlay = ""
-	var/obj/item/weapon/last_find
 	var/datum/artifact_find/artifact_find
 	var/busy = 0 //Used for a bunch of do_after actions, because we can walk into the rock to trigger them
 	var/mineral_overlay
@@ -482,6 +481,14 @@ turf/unsimulated/mineral/ChangeTurf(var/turf/N, var/tell_universe=1, var/force_l
 	//destroyed artifacts have weird, unpleasant effects
 	//make sure to destroy them before changing the turf though
 	if(artifact_find && artifact_fail)
+		var/datum/artifact_postmortem_data/destroyed = new(null, FALSE, TRUE)
+		destroyed.artifact_id = artifact_find.artifact_id
+		destroyed.last_loc = src
+		destroyed.artifact_type = artifact_find.artifact_find_type
+		if (artifact_find.artifact_find_type == /obj/machinery/artifact)
+			destroyed.primary_effect = "???"
+			destroyed.secondary_effect = "???"
+		razed_large_artifacts[artifact_find.artifact_id] += destroyed
 		ArtifactRepercussion(src, usr, "", "[artifact_find.artifact_find_type]")
 
 	if(artifact_fail && !mineral)
