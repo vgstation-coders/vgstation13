@@ -25,6 +25,9 @@ var/list/global_diseases = list()
 
 	..()
 
+/datum/disease2/disease/predefined/makerandom(var/list/str = list(), var/list/rob = list(), var/list/anti = list(), var/list/bad = list(), var/atom/source = null)
+	return
+
 /datum/disease2/disease/predefined/cyborg
 	form = "Robotic Nanites"
 	category = DISEASE_CYBORG

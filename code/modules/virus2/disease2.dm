@@ -156,6 +156,7 @@ var/global/list/disease2_list = list()
 	roll_antigen(anti)
 
 	//effects
+	effects = list()
 	for(var/i = 1; i <= max_stage; i++)
 		var/selected_badness = pick(
 			bad[EFFECT_DANGER_HELPFUL];EFFECT_DANGER_HELPFUL,
@@ -302,7 +303,7 @@ var/global/list/disease2_list = list()
 	D.origin = "Badmin"
 
 	var/list/known_forms = list()
-	for (var/disease_type in subtypesof(/datum/disease2/disease))
+	for (var/disease_type in subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 		var/datum/disease2/disease/d_type = disease_type
 		known_forms[initial(d_type.form)] = d_type
 

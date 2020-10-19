@@ -29,7 +29,7 @@
 
 /obj/item/weapon/reagent_containers/glass/xenoviral/New()
 	..()
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
 	var/list/anti = list(
