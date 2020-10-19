@@ -465,3 +465,9 @@
 
 /obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
 	return
+
+/obj/item/weapon/gun/proc/changesilencer() //debug and/or adminbus command to quickly change the mounting point
+	var/newsilencerx = input(usr,"x coord, curr is [silencer_offset[SILENCER_OFFSET_X]]","silencer x coord",null)
+	var/newsilencery = input(usr,"y coord, curr is [silencer_offset[SILENCER_OFFSET_Y]]","silencer y coord",null)
+	silencer_offset = list(newsilencerx,newsilencery)
+	

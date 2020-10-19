@@ -95,7 +95,7 @@
 
 /obj/item/ammo_casing/lr22
 	desc = "A .22LR bullet casing."
-	caliber = LR22
+	caliber = NTLR22
 	projectile_type = /obj/item/projectile/bullet/LR22
 	icon_state = "p22-casing"
 

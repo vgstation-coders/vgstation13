@@ -33,6 +33,8 @@
 /obj/item/weapon/gun/projectile/isHandgun() //fffuuuuuuck non-abstract base types
 	return TRUE
 
+/obj/item/weapon/gun/projectile/changesilencermountpoint
+
 /obj/item/weapon/gun/projectile/New()
 	..()
 	if(mag_type && load_method == 2 && spawn_mag)
@@ -186,6 +188,7 @@
 				overlays += silence_overlay
 				gun_part_overlays += silence_overlay
 			update_icon()
+			user.update_inv_hands()
 			return 1
 
 	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
