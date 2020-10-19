@@ -1914,6 +1914,7 @@
 #include "code\modules\mob\living\silicon\robot\robot_modules.dm"
 #include "code\modules\mob\living\silicon\robot\robot_movement.dm"
 #include "code\modules\mob\living\silicon\robot\robot_verbs.dm"
+#include "code\modules\mob\living\silicon\robot\robot_subtypes\dummy.dm"
 #include "code\modules\mob\living\silicon\robot\robot_subtypes\hug.dm"
 #include "code\modules\mob\living\silicon\robot\robot_subtypes\NT.dm"
 #include "code\modules\mob\living\silicon\robot\robot_subtypes\starman.dm"
