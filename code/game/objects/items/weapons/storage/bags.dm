@@ -579,7 +579,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 /obj/item/weapon/storage/bag/xenobio
 	icon = 'icons/obj/storage/storage.dmi'
 	icon_state = "slimebag"
-	name = "Extract Bag"
+	name = "extract bag"
 	desc = "A bag designed to hold slime extract and other slime-related products."
 	item_state = "satchel"
 	origin_tech = Tc_BLUESPACE + "=2" + Tc_MATERIALS + "=2" + Tc_ENGINEERING + "=2"
