@@ -1704,6 +1704,7 @@ var/proccalls = 1
 #define MAX_PAPER_MESSAGE_LEN 3072
 #define MAX_BOOK_MESSAGE_LEN 9216
 #define MAX_NAME_LEN 26
+#define MAX_SPECIAL_NAME_LEN MAX_NAME_LEN * 2
 #define MAX_BROADCAST_LEN		512
 
 #define shuttle_time_in_station 1800 // 3 minutes in the station
