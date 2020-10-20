@@ -221,7 +221,7 @@
 		switch(which)
 
 			if("Name")
-				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name") as null|text), 1, 52)	//52 characters
+				var/stagename = copytext(sanitize(input(targ, "Pick a name","Name") as null|text), 1, MAX_SPECIAL_NAME_LEN)
 				targ.real_name = stagename
 				targ.name = stagename
 
