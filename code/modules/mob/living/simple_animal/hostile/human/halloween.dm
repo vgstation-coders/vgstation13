@@ -654,7 +654,7 @@
 	icon_state = "scarybat-dance"
 	mob_property_flags = MOB_UNDEAD | MOB_SUPERNATURAL
 
-/mob/living/simple_animal/death(var/gibbed = FALSE)
+/mob/living/simple_animal/dracson/death(var/gibbed = FALSE)
 	..(TRUE)
 	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "batify", sleeptime = 15)
 	qdel(src)
