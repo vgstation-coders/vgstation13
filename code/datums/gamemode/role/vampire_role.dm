@@ -238,7 +238,7 @@
 
 	for (var/i in subtypesof(/datum/power/vampire))
 		var/datum/power/vampire/VP_type = i
-		if (blood_total > initial(VP_type.cost) && !is_type_in_list(VP_type, current_powers))
+		if (blood_total > initial(VP_type.cost) && !(locate(VP_type) in current_powers))
 			var/datum/power/vampire/VP = new VP_type
 			VP.add_power(src)
 

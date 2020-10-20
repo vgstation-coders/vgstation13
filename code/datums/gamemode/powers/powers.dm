@@ -19,7 +19,7 @@
 /datum/power/proc/add_power(var/datum/role/R)
 	if (!istype(R) || !R)
 		return FALSE
-	if(is_type_in_list(src, R.current_powers))
+	if(locate(src) in R.current_powers)
 		to_chat(R.antag.current, "<span class='warning'>You already have that power.</span>")
 		return FALSE
 	if (granttext)
