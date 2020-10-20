@@ -36,7 +36,6 @@
 			return
 		if(!hud_used.vampire_blood_display)
 			hud_used.changeling_hud()
-			//hud_used.human_hud(hud_used.ui_style)
 		hud_used.vampire_blood_display.maptext_width = WORLD_ICON_SIZE*2
 		hud_used.vampire_blood_display.maptext_height = WORLD_ICON_SIZE
 		var/C = round(changeling.chem_charges)
