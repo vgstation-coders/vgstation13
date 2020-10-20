@@ -231,7 +231,7 @@
 	var/wizard_name_first = pick(wizard_first)
 	var/wizard_name_second = pick(wizard_second)
 	wizard_mob.fully_replace_character_name(wizard_mob.real_name, "[wizard_name_first] [wizard_name_second]")
-	mob_rename_self(wizard_mob, role_name, length = 52)
+	mob_rename_self(wizard_mob, role_name, length = 52)	//52 characters in name
 
 
 /proc/equip_highlander(var/mob/living/carbon/human/highlander_human)
