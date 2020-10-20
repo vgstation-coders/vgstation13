@@ -351,7 +351,7 @@
 	H.mutations.Add(M_CLUMSY)
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
-	mob_rename_self(H,"clown")
+	mob_rename_self(H,"clown", length = 52)
 
 /datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX

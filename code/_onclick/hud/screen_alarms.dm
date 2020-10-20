@@ -383,16 +383,18 @@ so as to remain in compliance with the most up-to-date laws."
 	var/namepick_message
 	var/role
 	var/allow_numbers
+	var/maxlength
 
 /obj/abstract/screen/alert/name_pick/Click()
 	..()
 	var/mob/living/L = usr
 	if(L.alerts[SCREEN_ALARM_NAMEPICK] == src)
 		L.clear_alert(SCREEN_ALARM_NAMEPICK)
-		L.rename_self(role, allow_numbers, namepick_message)
+		L.rename_self(role, allow_numbers, namepick_message, maxlength)
 
-/proc/mob_rename_self(mob/user, role, namepick_message, allow_numbers = FALSE)
+/proc/mob_rename_self(mob/user, role, namepick_message, allow_numbers = FALSE, length = MAX_NAME_LEN)
 	var/obj/abstract/screen/alert/name_pick/name_pick = user.throw_alert(SCREEN_ALARM_NAMEPICK, /obj/abstract/screen/alert/name_pick)
 	name_pick.namepick_message = namepick_message
 	name_pick.role = role
 	name_pick.allow_numbers = allow_numbers
+	name_pick.maxlength = length
