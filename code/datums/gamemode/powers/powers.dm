@@ -43,8 +43,7 @@
 	if (spellpath)
 		if(locate(spellpath) in role.antag.current.spell_list)
 			. = FALSE
-			stack_trace("grant_spell called more times than needed")
-			return FALSE
+			CRASH("grant_spell called more times than needed")
 		var/spell/S = new spellpath
 		role.antag.current.add_spell(S, master_type = spellmaster)
 
