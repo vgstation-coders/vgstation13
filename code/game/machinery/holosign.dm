@@ -81,7 +81,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 		var/area/morgue_area = get_area(morgue)
 		if(morgue_area != this_area)
 			continue
-		var/morgue_has_revivable_dude = morgue.icon_state == "morgue4"
+		var/morgue_has_revivable_dude = (morgue.icon_state == "morgue4")
 		if(morgue_has_revivable_dude)
 			toggle(TRUE)
 			should_update = FALSE
