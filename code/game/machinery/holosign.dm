@@ -8,7 +8,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "base"
 	layer = ABOVE_DOOR_LAYER
-
+	power_channel = LIGHT
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 	var/lit = 0
@@ -48,6 +48,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	set_light(2,2)
 
 /obj/machinery/holosign/power_change()
+	..()
 	update_icon()
 
 /obj/machinery/holosign/Destroy()
