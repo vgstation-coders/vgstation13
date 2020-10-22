@@ -341,6 +341,7 @@ rcd light flash thingy on matter drain
 		if(M)
 			if(M.stage < FACTION_ENDGAME)
 				if(announcement.theme && !announcement.stoptheme)
+					ticker.StopThematic()
 					ticker.StartThematic(initial(announcement.theme))					
 				if(announcement.alertlevel)
 					set_security_level(announcement.alertlevel)
