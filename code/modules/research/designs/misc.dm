@@ -54,6 +54,6 @@
 	id = "extract_bag"
 	build_type = PROTOLATHE
 	build_path = /obj/item/weapon/storage/bag/xenobio
-	req_tech = list(Tc_ENGINEERING = 2, Tc_MATERIALS = 2, Tc_BLUESPACE = 2)
+	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 750)
 	category = "Misc"
