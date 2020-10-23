@@ -25,6 +25,7 @@
 		CRASH("A window already exists here")
 
 	if(initial(window_path.is_fulltile))
+		new window_path(loc)
 		return
 
 	var/list/neighbours = list()
