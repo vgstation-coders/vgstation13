@@ -92,6 +92,9 @@
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/science,
 			slot_s_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
+			),
+			slot_l_store_str = list(
+				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
 			)
 		),
 		/datum/species/plasmaman = list(
@@ -120,6 +123,7 @@
 			slot_wear_mask_str = /obj/item/clothing/mask/breath,
 			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
+				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
 			)
 		),
 		/datum/species/vox = list(
@@ -148,6 +152,7 @@
 			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
 			slot_l_store_str = list(
 				"Research Botanist" = /obj/item/device/analyzer/plant_analyzer,
+				"Xenobiologist" = /obj/item/weapon/storage/bag/xenobio,
 			)
 		),
 	)
