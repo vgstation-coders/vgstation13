@@ -271,8 +271,8 @@
 
 /obj/machinery/computer/robotics/proc/start_sequence()
 	speak("Emergency self-destruct sequence initiatied.")
-	icon_state = "robot-alert"
 	status = 1
+	update_icon()
 
 	for(var/mob/living/silicon/ai/A in mob_list)
 		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
@@ -294,8 +294,8 @@
 	timeleft = DEFAULT_SEQUENCE_TIME
 	temp = null
 	status = 0
-	if(icon_state == "robot-alert")
-		icon_state = "robot"
+	update_icon()
+	if(!(stat & (BROKEN | NOPOWER)))
 		speak("Emergency self-destruct sequence completed.")
 
 /obj/machinery/computer/robotics/proc/stop_sequence()
@@ -314,3 +314,15 @@
 		to_chat(user, "You disable the console's access requirement.")
 
 #undef DEFAULT_SEQUENCE_TIME
+
+
+/obj/machinery/computer/robotics/update_icon()
+	..()
+
+	if(stat & (BROKEN | NOPOWER))
+		return
+
+	if (status)
+		icon_state = "robot-alert"
+	else
+		icon_state = "robot"
