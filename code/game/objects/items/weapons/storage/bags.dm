@@ -583,7 +583,7 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	desc = "A bag designed to hold slime extract and other slime-related products."
 	item_state = "satchel"
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
-	storage_slots = 50; 
+	storage_slots = 50
 	fits_max_w_class = 3
 	max_combined_w_class = 200 
 	w_class = W_CLASS_TINY
