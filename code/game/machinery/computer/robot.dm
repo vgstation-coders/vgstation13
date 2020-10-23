@@ -93,6 +93,12 @@
 					<BR>"}
 			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
 		if(screen == 2)
+
+			var/killcount = 0
+			for(var/mob/living/silicon/robot/R in mob_list)
+				if (R.killswitch)
+					killcount++
+
 			if(!status)
 				dat += {"<BR><B>Emergency Robot Self-Destruct</B><HR>\nStatus: Off<BR>
 				\n<BR>
@@ -105,9 +111,12 @@
 				dat = {"<B>Emergency Robot Self-Destruct</B><HR>\nStatus: Activated<BR>
 				\n<BR>
 				\nCountdown: [timeleft]/[DEFAULT_SEQUENCE_TIME]<BR>
-				\n<BR>\n<A href='?src=\ref[src];stop=1'>Stop Sequence</A><BR>
 				\n<BR>
 				\n<A href='?src=\ref[user];mach_close=computer'>Close</A>"}
+
+
+			dat += "<BR>There are <B>[killcount]</B> cyborgs primed for detonation"
+			dat += "<BR>\n<A href='?src=\ref[src];stop=1'>Cancel all Self-Destruct sequences.</A><BR>"
 			dat += "<A href='?src=\ref[src];screen=0'>(Return to Main Menu)</A><BR>"
 
 	user << browse(dat, "window=computer;size=400x500")
@@ -290,7 +299,6 @@
 	while(timeleft)
 
 
-	
 	timeleft = DEFAULT_SEQUENCE_TIME
 	temp = null
 	status = 0
@@ -299,9 +307,10 @@
 		speak("Emergency self-destruct sequence completed.")
 
 /obj/machinery/computer/robotics/proc/stop_sequence()
-	speak("Emergency self-destruct sequence halted.")
+	if(status)
+		speak("Emergency self-destruct sequence halted.")
 	status = 0
-	icon_state = "robot"
+	update_icon()
 	for(var/mob/living/silicon/robot/R in mob_list)
 		R.stop_destruction_sequence()
 
