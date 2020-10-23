@@ -196,6 +196,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cure_disease,
 	/client/proc/check_bomb,
 	/client/proc/check_convertables,
+	/client/proc/toggle_convertibles,
 	/client/proc/check_spiral,
 	/client/proc/check_striketeams,
 	/client/proc/cmd_admin_find_bad_blood_tracks,
@@ -336,6 +337,8 @@ var/list/admin_verbs_mod = list(
 			verbs += admin_verbs_mod
 		if(holder.rights & R_ADMINBUS)
 			verbs += /client/proc/secrets
+	if (isobserver(mob))
+		mob.verbs |= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/remove_admin_verbs()
 	verbs.Remove(
@@ -378,6 +381,8 @@ var/list/admin_verbs_mod = list(
 		/proc/generateMiniMaps,
 		/client/proc/maprender
 		)
+	if (isobserver(mob))
+		mob.verbs -= /mob/dead/observer/verb/toggle_antagHUD
 
 /client/proc/hide_most_verbs()//Allows you to keep some functionality while hiding some verbs
 	set name = "Adminverbs - Hide Most"

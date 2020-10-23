@@ -1,3 +1,5 @@
+#define BAGEL_REQUIREMENT 17
+
 //checks if a file exists and contains text
 //returns text as a string if these conditions are met
 /proc/return_file_text(filename)
@@ -83,20 +85,23 @@
 				warning("Skipping map [potential] due to  it being too hot outside. Ideal temp is below 40F, found [temperature].")
 				binary = null
 				continue
-//Lamprey currently has a tendency to crash for no real reason, uncomment this when it stops being broken
-/*
-		if(potential == "Lamprey Station/") //Available if the station is wrecked enough
-			var/crew_score = score["crewscore"] //So that we can use this in the chat
-			if(crew_score >= -20000)
-				message_admins("Skipping map [potential], stationrequires lower than -20000 score (is [score]).")
-				warning("Skipping map [potential], station requires lower than -20000 score (is [score]).")
+		if(potential == "Lamprey/") //Available if the station is wrecked enough
+			var/crew_score = score["crewscore"] //So that we can use this in the admin messaging
+			if(crew_score > -20000)
+				message_admins("Skipping map [potential], station requires lower than -20000 score (is [crew_score]).")
+				warning("Skipping map [potential], station requires lower than -20000 score (is [crew_score]).")
 				binary = null
 				continue
-*/
 		if(potential == "Castle Station/") //Available if revolutionaries won
 			if(!ticker.revolutionary_victory)
 				message_admins("Skipping map [potential], revolutionaries have not won.")
 				warning("Skipping map [potential], revolutionaries have not won.")
+				binary = null
+				continue
+		if(potential == "Bagel Station/")
+			if(score["bagelscooked"] < BAGEL_REQUIREMENT)
+				message_admins("Skipping map [potential], less than [BAGEL_REQUIREMENT] bagels made.")
+				warning("Skipping map [potential], less than [BAGEL_REQUIREMENT] bagels made.")
 				binary = null
 				continue
 		if(!binary)
@@ -158,3 +163,4 @@
 	fileaccess_timer = world.time + FTPDELAY
 	return 0
 #undef FTPDELAY
+#undef BAGEL_REQUIREMENT

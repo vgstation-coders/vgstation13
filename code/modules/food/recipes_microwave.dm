@@ -33,6 +33,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 
+/datum/recipe/bagel
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bagel
+
+/datum/recipe/bagel/make_food(obj/container)
+	score["bagelscooked"]++
+	return ..()
+
 // Burgers /////////////////////////////////////////////////////
 
 /datum/recipe/customizable_bun

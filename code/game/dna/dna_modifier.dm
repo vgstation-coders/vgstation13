@@ -1046,6 +1046,7 @@
 
 			if ((buf.types & DNA2_BUF_UI))
 				if ((buf.types & DNA2_BUF_UE))
+					src.connected.occupant.dna.unique_enzymes = buf.dna.unique_enzymes
 					src.connected.occupant.real_name = buf.dna.real_name
 					src.connected.occupant.name = buf.dna.real_name
 					src.connected.occupant.flavor_text = buf.dna.flavor_text

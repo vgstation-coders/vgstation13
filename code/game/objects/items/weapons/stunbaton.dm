@@ -286,8 +286,7 @@
 			R.cell.use(hitcost)
 
 /obj/item/weapon/melee/baton/harm
-	name = "harm baton"
-	desc = "A harm baton for incapacitating people with."
+	desc = "A baton for permanently incapacitating people with."
 	icon_state = "harmbaton"
 	item_state = "baton0"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/swords_axes.dmi', "right_hand" = 'icons/mob/in-hand/right/swords_axes.dmi')
