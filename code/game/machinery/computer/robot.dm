@@ -269,7 +269,7 @@
 	cyborg_detonation_time = world.time + DEFAULT_SEQUENCE_TIME
 	update_icon()
 
-	for(var/mob/living/silicon/ai/A in mob_list)
+	for(var/mob/living/silicon/ai/A in cyborg_list)
 		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
 		A << 'sound/machines/warning-buzzer.ogg'
 	for(var/mob/living/silicon/robot/R in mob_list)
