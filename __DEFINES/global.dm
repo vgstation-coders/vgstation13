@@ -403,6 +403,9 @@ var/station_does_not_tip = FALSE
 var/malf_radio_blackout = FALSE
 var/malf_rcd_disable = FALSE
 
+//Cyborg killswitch time. If set at a time other than zero, cyborgs will self destruct at that time
+var/cyborg_detonation_time = 0
+
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
 
