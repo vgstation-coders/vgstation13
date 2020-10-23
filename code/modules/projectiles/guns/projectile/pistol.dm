@@ -8,6 +8,7 @@
 	max_shells = 10
 	caliber = list(POINT45  = 1)
 	silenced = 1
+	fire_volume = 10
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"

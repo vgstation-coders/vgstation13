@@ -203,7 +203,6 @@ var/list/impact_master = list()
 	if(bumped)
 		return 0
 	var/forcedodge = 0 // force the projectile to pass
-
 	bumped = 1
 	if(firer && istype(A, /mob))
 		var/mob/M = A
@@ -356,6 +355,11 @@ var/list/impact_master = list()
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
 				T.overlays += trace
+		//work around for penetration bug
+		var/turf/newT = get_turf(src)
+		if(newT.penetration_dampening > 0)
+			bumped = 0
+			src.to_bump(newT)
 		return 1
 
 	bullet_die()

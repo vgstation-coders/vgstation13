@@ -377,7 +377,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced || scoped)
+	if(istype(silenced, /obj/item/gun_part/silencer) || scoped)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")
