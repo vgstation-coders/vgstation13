@@ -225,6 +225,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/no_goonchat_for_obj = FALSE
 
 	var/tgui_fancy = TRUE
+	var/fps = 0
 
 	var/client/client
 	var/saveloaded = 0
@@ -362,6 +363,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<h1>General Settings</h1>
 <div id="container" style="border:1px solid #000; width:96; padding-left:2%; padding-right:2%; overflow:auto; padding-top:5px; padding-bottom:5px;">
   <div id="leftDiv" style="width:50%;height:100%;float:left;">
+	<b>FPS:</b>
+	<a href='?_src_=prefs;preference=fps'><b>[fps]</b></a><br>
 	<b>Space Parallax:</b>
 	<a href='?_src_=prefs;preference=parallax'><b>[space_parallax ? "Enabled" : "Disabled"]</b></a><br>
 	<b>Parallax Speed:</b>
@@ -1346,6 +1349,19 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 
 		else
 			switch(href_list["preference"])
+				if("fps")
+					var/desired_fps = input(user, "Choose your desired frames per second.\n\
+WARNING: BYOND versions earlier than 513.1523 might not work properly with values other than 0.\n\
+Set this to -1 to use the recommended value.\n\
+Set this to 0 to use the server's FPS (currently [world.fps])\n\
+Values up to 1000 are allowed.", "FPS", fps) as null|num
+					if(isnull(desired_fps))
+						return
+					if(desired_fps < 0)
+						desired_fps = -1
+					desired_fps = sanitize_integer(desired_fps, -1, 1000, fps)
+					fps = desired_fps
+					client.fps = (fps < 0) ? RECOMMENDED_CLIENT_FPS : fps
 				if("gender")
 					if(gender == MALE)
 						gender = FEMALE
