@@ -460,6 +460,8 @@
 	else if (istype(receptacle, /obj/item/weapon/melee/soulblade))
 		shadeMob.give_blade_powers()
 		var/obj/item/weapon/melee/soulblade/sblade = receptacle
+		if (suicide)
+			sblade.blood = max(sblade.blood, 50)
 		sblade.shade = shadeMob
 		sblade.dir = NORTH
 		sblade.update_icon()
