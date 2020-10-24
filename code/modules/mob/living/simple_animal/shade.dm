@@ -6,8 +6,8 @@
 	icon_state = "shade"
 	icon_living = "shade"
 	icon_dead = "shade_dead"
-	maxHealth = 40
-	health = 40
+	maxHealth = 50
+	health = 50
 	speak_emote = list("hisses")
 	emote_hear = list("wails","screeches")
 	response_help  = "puts their hand through"
@@ -99,8 +99,12 @@
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)
-	if(istype(O, /obj/item/device/soulstone) || istype(O, /obj/item/weapon/melee/soulblade))
-		O.transfer_soul("SHADE", src, user)
+	if(istype(O, /obj/item/soulstone))
+		var/obj/item/soulstone/stone = O
+		stone.capture_shade(src, user)
+	else if (istype(O, /obj/item/weapon/melee/soulblade))
+		var/obj/item/weapon/melee/soulblade/blade = O
+		blade.capture_shade(src, user)
 	else
 		if(O.force)
 			var/damage = O.force
@@ -115,12 +119,10 @@
 		else
 			to_chat(usr, "<span class='warning'> This weapon is ineffective, it does no damage.</span>")
 			visible_message("<span class='warning'> [user] gently taps [src] with [O].</span>")
-	return
 
 /mob/living/simple_animal/shade/shuttle_act()
 	if(!(src.flags & INVULNERABLE))
 		health -= rand(5,45) //These guys are like ghosts, a collision with a shuttle wouldn't destroy one outright
-	return
 
 /mob/living/simple_animal/shade/examine(mob/user)
 	..()

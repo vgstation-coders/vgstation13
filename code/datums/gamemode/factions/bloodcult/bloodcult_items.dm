@@ -538,7 +538,7 @@ var/list/arcane_tomes = list()
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
 		I.ashify_item(user)
 		return 1
-	if(istype(I,/obj/item/device/soulstone/gem))
+	if(istype(I,/obj/item/soulstone/gem))
 		if (user.get_inactive_hand() != src)
 			to_chat(user,"<span class='warning'>You must hold \the [src] in your hand to properly place \the [I] in its socket.</span>")
 			return 1
@@ -564,7 +564,7 @@ var/list/arcane_tomes = list()
 		qdel(I)
 		qdel(src)
 		return 1
-	if(istype(I,/obj/item/device/soulstone))
+	if(istype(I,/obj/item/soulstone))
 		to_chat(user,"<span class='warning'>\The [I] doesn't fit in \the [src]'s socket.</span>")
 		return 1
 	..()
@@ -580,7 +580,7 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/nocult/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
 		return 1
-	if(istype(I,/obj/item/device/soulstone/gem))
+	if(istype(I,/obj/item/soulstone/gem))
 		to_chat(user,"<span class='warning'>The [src]'s damage doesn't allow it to hold \a [I] any longer.</span>")
 		return 1
 	..()
@@ -634,7 +634,7 @@ var/list/arcane_tomes = list()
 		B.Move(get_step_rand(T))
 		if (fingerprints)
 			B.fingerprints = fingerprints.Copy()
-		new /obj/item/device/soulstone(T)
+		new /obj/item/soulstone(T)
 	shade = null
 	..()
 
@@ -675,7 +675,7 @@ var/list/arcane_tomes = list()
 			playsound(T, 'sound/items/Deconstruct.ogg', 50, 0, -3)
 			user.drop_item(src,T)
 			var/obj/item/weapon/melee/cultblade/CB = new (T)
-			var/obj/item/device/soulstone/gem/SG = new (T)
+			var/obj/item/soulstone/gem/SG = new (T)
 			if (fingerprints)
 				CB.fingerprints = fingerprints.Copy()
 			user.put_in_active_hand(CB)
@@ -685,7 +685,7 @@ var/list/arcane_tomes = list()
 				shade.remove_blade_powers()
 				SG.icon_state = "soulstone2"
 				SG.item_state = "shard-soulstone2"
-				SG.name = "Soul Stone: [shade.real_name]"
+				SG.name = "Soul Gem: [shade.real_name]"
 				shade = null
 			loc = null//so we won't drop a broken blade and shard
 			qdel(src)
@@ -706,7 +706,23 @@ var/list/arcane_tomes = list()
 			return
 	..()
 	if (!shade && istype(target, /mob/living/carbon))
-		transfer_soul("VICTIM", target, user,1)
+		//Making sure we're not soulstoning a sacrifice target for any version of cult
+		var/datum/faction/cult/narsie/old_cult = find_active_faction_by_type(/datum/faction/cult/narsie)
+		if(old_cult?.is_sacrifice_target(target.mind))
+			to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
+			return
+
+		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+		if (cult)
+			var/datum/objective/bloodcult_sacrifice/O = locate() in cult.objective_holder.objectives
+			if (O && (target == O.sacrifice_target || (target.mind && target.mind == O.sacrifice_mind)))
+				to_chat(user, "<span class='warning'>\The [src] is unable to rip this soul. Such a powerful soul, it must be coveted by some powerful being.</span>")
+				return
+
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.init_datum(user, target, src)
+		qdel(capture_datum)
+
 		update_icon()
 
 /obj/item/weapon/melee/soulblade/afterattack(var/atom/A, var/mob/living/user, var/proximity_flag, var/click_parameters)
@@ -867,6 +883,34 @@ var/list/arcane_tomes = list()
 	..()
 	takeDamage(P.damage)
 
+/obj/item/weapon/melee/soulblade/proc/capture_shade(var/mob/living/simple_animal/shade/target, var/mob/user)
+	if(shade)
+		to_chat(user, "<span class='danger'>Capture failed!: </span>\The [src] already has a shade! Remove its soul gem if you wish to harm this shade nonetheless.")
+	else
+		target.forceMove(src) //put shade in blade
+		target.status_flags |= GODMODE
+		target.canmove = 0
+		target.health = target.maxHealth//full heal
+		target.give_blade_powers()
+		shade = target
+		dir = NORTH
+		update_icon()
+		user.update_inv_hands()
+		to_chat(target, "Your soul has been captured by the soul blade, its arcane energies are reknitting your ethereal form, healing you.")
+		to_chat(user, "<span class='notice'><b>Capture successful!</b>: </span>[target.real_name]'s has been captured and stored within the gem on your blade.")
+
+		//Is our user a cultist? Then you're a cultist too now!
+		if (iscultist(user) && !iscultist(target))
+			var/datum/role/cultist/newCultist = new
+			newCultist.AssignToRole(target.mind,1)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (!cult)
+				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+			cult.HandleRecruitedRole(newCultist)
+			newCultist.OnPostSetup()
+			newCultist.Greet(GREET_SOULSTONE)
+			newCultist.conversion["soulstone"] = user
+
 ///////////////////////////////////////BLOOD DAGGER////////////////////////////////////////////////
 
 /obj/item/weapon/melee/blood_dagger
@@ -964,25 +1008,6 @@ var/list/arcane_tomes = list()
 					to_chat(user, "<span class='warning'>\The [src] steals a bit of their blood.</span>")
 				else if (!locate(/obj/effect/decal/cleanable/blood/splatter) in get_turf(C))
 					blood_splatter(C,B,1)//no room in the dagger? let's splatter their stolen blood on the floor.
-
-///////////////////////////////////////SOULSTONE////////////////////////////////////////////////
-/obj/item/device/soulstone/gem
-	name = "Soul Gem"
-	desc = "A freshly cut stone which appears to hold the same soul catching properties as shards of the Soul Stone. This one however is cut to perfection."
-	icon = 'icons/obj/cult.dmi'
-	icon_state = "soulstone"
-	item_state = "shard-soulstone"
-	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
-
-/obj/item/device/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
-	..()
-	var/obj/item/device/soulstone/S = new(loc)
-	for(var/mob/living/simple_animal/shade/A in src)
-		A.forceMove(S)
-		S.icon_state = "soulstone2"
-		S.item_state = "shard-soulstone2"
-	playsound(S, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	qdel(src)
 
 ///////////////////////////////////////CULT HOOD////////////////////////////////////////////////
 
