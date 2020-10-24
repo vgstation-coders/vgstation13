@@ -16,6 +16,7 @@ var/list/arcane_tomes = list()
 	w_class = W_CLASS_SMALL
 	flags = FPRINT
 	slot_flags = SLOT_BELT
+	mech_flags = MECH_SCAN_FAIL
 	var/state = TOME_CLOSED
 	var/can_flick = 1
 	var/list/talismans = list()
@@ -320,6 +321,7 @@ var/list/arcane_tomes = list()
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
+	mech_flags = MECH_SCAN_FAIL
 	var/blood_text = ""
 	var/obj/effect/rune/attuned_rune = null
 	var/spell_type = null
@@ -537,6 +539,7 @@ var/list/arcane_tomes = list()
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = "sound/weapons/bladeslice.ogg"
+	mech_flags = MECH_SCAN_FAIL
 	var/checkcult = 1
 
 /obj/item/weapon/melee/cultblade/cultify()
@@ -613,6 +616,7 @@ var/list/arcane_tomes = list()
 	item_state = "cultblade-broken"
 	checkcult = 0
 	force = 15
+	mech_flags = 0
 
 /obj/item/weapon/melee/cultblade/nocult/attackby(var/obj/item/I, var/mob/user)
 	if(istype(I,/obj/item/weapon/talisman) || istype(I,/obj/item/weapon/paper))
@@ -641,6 +645,7 @@ var/list/arcane_tomes = list()
 	sharpness_flags = SHARP_TIP | SHARP_BLADE
 	attack_verb = list("attacks", "slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = "sound/weapons/bladeslice.ogg"
+	mech_flags = MECH_SCAN_FAIL
 	var/mob/living/simple_animal/shade/shade = null
 	var/blood = 0
 	var/maxregenblood = 8//the maximum amount of blood you can regen by waiting around.
@@ -981,6 +986,7 @@ var/list/arcane_tomes = list()
 	w_class = W_CLASS_GIANT//don't want it stored anywhere
 	attack_verb = list("slashes", "stabs", "slices", "tears", "rips", "dices", "cuts")
 	hitsound = 'sound/weapons/bladeslice.ogg'
+	mech_flags = MECH_SCAN_FAIL//not that you should be able to drop it in the first place BUT just in case
 	var/mob/originator = null
 	var/stacks = 0
 	var/absorbed = 0
@@ -1080,6 +1086,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/clothing/head/culthood/get_cult_power()
 	return 20
@@ -1100,6 +1107,7 @@ var/list/arcane_tomes = list()
 	heat_conductivity = INS_SHOE_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = SHOE_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_fit = list(VOX_SHAPED)
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/clothing/shoes/cult/get_cult_power()
 	return 10
@@ -1121,6 +1129,7 @@ var/list/arcane_tomes = list()
 	siemens_coefficient = 0
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/clothing/suit/cultrobes/get_cult_power()
 	return 50
@@ -1136,6 +1145,7 @@ var/list/arcane_tomes = list()
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/cultstuff.dmi', "right_hand" = 'icons/mob/in-hand/right/cultstuff.dmi')
 	icon_state = "cultpack_0skull"
 	item_state = "cultpack"
+	mech_flags = MECH_SCAN_FAIL
 	var/skulls = 0
 
 /obj/item/weapon/storage/backpack/cultpack/attack_self(var/mob/user)
@@ -1181,6 +1191,7 @@ var/list/arcane_tomes = list()
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
+	mech_flags = MECH_SCAN_FAIL
 
 
 /obj/item/clothing/head/helmet/space/cult/get_cult_power()
@@ -1205,6 +1216,7 @@ var/list/arcane_tomes = list()
 	species_fit = list(VOX_SHAPED, UNDEAD_SHAPED, INSECT_SHAPED)
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN|ONESIZEFITSALL
 	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROTECTION_TEMPERATURE
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/clothing/suit/space/cult/get_cult_power()
 	return 60
@@ -1267,6 +1279,7 @@ var/list/arcane_tomes = list()
 	attack_verb = list("slaps")
 	autoignition_temperature = AUTOIGNITION_PAPER
 	fire_fuel = 1
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
 	var/datum/role/cultist/newCultist = new
@@ -1320,6 +1333,7 @@ var/list/arcane_tomes = list()
 	item_state = "syringe_kit"
 	starting_materials = list(MAT_IRON = 3750)
 	w_type=RECYK_METAL
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/storage/cult/sponsored
 	name = "sponsored coffer"
@@ -1343,6 +1357,7 @@ var/list/arcane_tomes = list()
 	volume = 60
 	force = 5
 	throwforce = 7
+	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/reagent_containers/food/drinks/cult/examine(var/mob/user)
 	..()
@@ -1390,6 +1405,7 @@ var/list/arcane_tomes = list()
 	throwforce = 2
 	w_class = W_CLASS_TINY
 	layer = ABOVE_DOOR_LAYER
+	mech_flags = MECH_SCAN_FAIL
 
 	var/discarded_types = list(
 		/obj/item/clothing/head/culthood,

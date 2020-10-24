@@ -5,6 +5,7 @@
 	icon_state = "secure_vial"
 	flags = FPRINT
 	w_class = 1
+	mech_flags = MECH_SCAN_FAIL
 	var/genomes_to_give = 10 //seeing as the new changeling won't have had a whole round to prepare, they get some genomes free
 
 /obj/item/changeling_vial/Destroy()
