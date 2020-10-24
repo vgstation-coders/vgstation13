@@ -34,6 +34,7 @@
 /mob/living/simple_animal/shade/New()
 	..()
 	add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_HUMAN)
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
