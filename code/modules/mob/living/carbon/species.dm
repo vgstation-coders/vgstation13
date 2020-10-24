@@ -343,7 +343,7 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
-	H.dust()
+	H.dust(TRUE)
 
 /datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
 	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")

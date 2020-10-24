@@ -24,6 +24,22 @@
 	eject_shade()
 	..()
 
+/obj/item/soulstone/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] swallows \the [src] and begins to choke on it! [(contents.len > 0) ? "It looks like they are trying to commit suicide" : ""].</span>")
+	user.drop_from_inventory(src)
+	if (ishuman(user))
+		var/datum/organ/external/chest/C = user.get_organ(LIMB_CHEST)
+		C.hidden = src//just in case the capture doesn't go through, the gem will have to be extracted from the chest through surgery.
+		user.update_inv_hands()
+	src.forceMove(user)
+	if((locate(/mob/living/simple_animal/shade) in src) || !iscarbon(user))
+		return (SUICIDE_ACT_OXYLOSS)
+	else//allows wielder to captures their own soul
+		sleep(10)
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.suicide(user, user, src)
+		qdel(capture_datum)
+
 /obj/item/soulstone/examine(mob/user)
 	..()
 	for(var/mob/living/simple_animal/shade/A in src)
@@ -171,7 +187,12 @@
 /datum/soul_capture
 	var/gem = FALSE//gem captures gather the target's equipment inside a coffer for the sake of convenience
 	var/blade = FALSE//soul blade do a few more things differently, we also don't want soul blades to return a message after every hit
+	var/suicide = FALSE
 	var/obj/item/receptacle //the stone, gem or blade
+
+/datum/soul_capture/Destroy()
+	receptacle = null
+	..()
 
 /datum/soul_capture/proc/init_datum(var/mob/user, var/atom/target, var/obj/item/soul_receptacle)
 	receptacle = soul_receptacle
@@ -186,6 +207,20 @@
 
 	if (istype(target, /obj/item/organ/external/head))
 		init_head(target,user)
+
+/datum/soul_capture/proc/suicide(var/mob/user, var/atom/target, var/obj/item/soul_receptacle)
+	suicide = TRUE
+	receptacle = soul_receptacle
+	if (istype(receptacle, /obj/item/weapon/melee/soulblade))
+		gem = TRUE
+		blade = TRUE
+	if (istype(receptacle, /obj/item/soulstone/gem))
+		gem = TRUE
+
+	if (iscarbon(target))
+		var/mob/M = target
+		if (M.client)
+			capture_soul(target, M.client, target)
 
 /datum/soul_capture/proc/init_body(var/mob/living/carbon/target, var/mob/user)
 	//first of all, let's check that our target has a soul, somewhere
@@ -299,6 +334,9 @@
 
 	if(!targetClient)
 		return
+
+	if (suicide)
+		receptacle.forceMove(get_turf(target))
 
 	var/mob/living/carbon/human/body = null
 	var/datum/mind/mind = null
@@ -426,26 +464,30 @@
 		sblade.dir = NORTH
 		sblade.update_icon()
 	user.update_inv_hands()
-	to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
-	to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within the soul stone.</span>")
-
-	//Is our user a cultist? Then you're a cultist too now!
-	if (iscultist(user))
-		var/datum/role/cultist/newCultist = new
-		newCultist.AssignToRole(shadeMob.mind,1)
-		var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-		if (!cult)
-			cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-		cult.HandleRecruitedRole(newCultist)
-		newCultist.OnPostSetup()
-		newCultist.Greet(GREET_SOULSTONE)
-		newCultist.conversion["soulstone"] = user
-
+	if (!suicide)
+		to_chat(shadeMob, "<span class='notice'>Your soul has been captured! You are now bound to [user.name]'s will, help them succeed in their goals at all costs.</span>")
+		to_chat(user, "<span class='notice'>[true_name]'s soul has been ripped from their body and stored within \the [receptacle].</span>")
 	else
-		if (iscultist(shadeMob))
-			to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
-			to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
-			shadeMob.mind.decult()
+		to_chat(shadeMob, "<span class='notice'>You have ripped your own soul from your body and now reside within \the [receptacle]. What's the next step of your master plan?</span>")
+
+	if (!suicide)
+		//Is our user a cultist? Then you're a cultist too now!
+		if (iscultist(user))
+			var/datum/role/cultist/newCultist = new
+			newCultist.AssignToRole(shadeMob.mind,1)
+			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+			if (!cult)
+				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+			cult.HandleRecruitedRole(newCultist)
+			newCultist.OnPostSetup()
+			newCultist.Greet(GREET_SOULSTONE)
+			newCultist.conversion["soulstone"] = user
+
+		else
+			if (iscultist(shadeMob))
+				to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
+				to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
+				shadeMob.mind.decult()
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)

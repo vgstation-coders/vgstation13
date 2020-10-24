@@ -33,6 +33,35 @@ var/list/arcane_tomes = list()
 	talismans = list()
 	..()
 
+/obj/item/weapon/tome/suicide_act(mob/living/user)
+	if (iscultist(user))
+		anim(target = user, a_icon = 'icons/obj/cult.dmi', a_icon_state = "build", lay = BELOW_OBJ_LAYER, plane = OBJ_PLANE, sleeptime = 20)
+		user.Stun(10)
+		icon_state = "tome-open"
+		item_state = "tome-open"
+		flick("tome-flickopen",src)
+		playsound(user, "pageturn", 50, 1, -2)
+		state = TOME_OPEN
+		if(iscarbon(user))
+			var/mob/living/carbon/M = user
+			M.update_inv_hands()
+		to_chat(viewers(user), "<span class='danger'>[user] starts repeating arcane words while holding \the [src] open. Blood begins to spill from their nose, their eyes, ears, and every other orfices! It looks like \he's trying to commit suicide.</span>")
+		for (var/i = 1 to 5)
+			user.take_organ_damage(15)
+			blood_splatter(user,user)
+			user.UpdateDamageIcon()
+			sleep(2)
+		if (ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.bloody_body(H)
+			H.bloody_hands(H)
+		sleep(10)
+		anim(target = user, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_sac", lay = ABOVE_SINGULO_LAYER, plane = EFFECTS_PLANE)
+		to_chat(user, "<span class='sinister'>You offer this shell of flesh to Nar-Sie.</span>")
+		sleep(4)
+		user.gib()
+	else
+		return ..()
 
 
 /obj/item/weapon/tome/proc/tome_text()
@@ -310,6 +339,10 @@ var/list/arcane_tomes = list()
 	else
 		return "\[blank\]"
 
+/obj/item/weapon/talisman/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] swallows \a [src] and appears to be choking on it! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_OXYLOSS)
+
 /obj/item/weapon/talisman/examine(var/mob/user)
 	..()
 	if (blood_text)
@@ -509,6 +542,10 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/cultblade/cultify()
 	return
 
+/obj/item/weapon/melee/cultblade/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his stomach open with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BRUTELOSS)
+
 /obj/item/weapon/melee/cultblade/attack(var/mob/living/target, var/mob/living/carbon/human/user)
 	if(!checkcult)
 		return ..()
@@ -648,6 +685,23 @@ var/list/arcane_tomes = list()
 /obj/item/weapon/melee/soulblade/cultify()
 	return
 
+/obj/item/weapon/melee/soulblade/suicide_act(mob/living/user)
+	to_chat(viewers(user), "<span class='danger'>[user] stabs \his stomach open with \the [src]! [shade ? "It looks like they're trying to commit suicide" : "The gem above the handle begins to glow..."].</span>")
+	if(shade || !iscarbon(user))
+		return (SUICIDE_ACT_BRUTELOSS)
+	else//allows wielder to captures their own soul
+		playsound(user, 'sound/weapons/bloodyslice.ogg', 50, 1)
+		user.overlays += image('icons/obj/cult.dmi', "altar-soulblade")
+		user.drop_from_inventory(src)
+		if (ishuman(user))
+			var/datum/organ/external/chest/C = user.get_organ(LIMB_CHEST)
+			C.hidden = src
+			user.update_inv_hands()
+		src.forceMove(user)
+		sleep(10)
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.suicide(user, user, src)
+		qdel(capture_datum)
 
 /obj/item/weapon/melee/soulblade/attack_self(var/mob/user)
 	var/choices = list(
@@ -940,6 +994,10 @@ var/list/arcane_tomes = list()
 			S.basecolor = color
 			S.update_icon()
 	..()
+
+/obj/item/weapon/melee/blood_dagger/suicide_act(mob/user)
+	to_chat(viewers(user), "<span class='danger'>[user] is slitting \his throat with \the [src]! It looks like \he's trying to commit suicide.</span>")
+	return (SUICIDE_ACT_BRUTELOSS)
 
 /obj/item/weapon/melee/blood_dagger/dropped(var/mob/user)
 	..()
