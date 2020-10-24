@@ -304,10 +304,8 @@ var/list/lawgiver_modes = list(
 		Fire(target, user, params, struggle)
 		recoil = 0
 		silenced = 1
-		fire_volume *= 5
 	recoil = 1
 	silenced = 0
-	fire_volume /= 5
 	rapidFirecheck = 0
 
 /obj/item/weapon/gun/lawgiver/proc/fire_double_whammy(var/atom/target, var/mob/living/user, var/list/params, var/struggle)

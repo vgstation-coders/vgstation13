@@ -4197,7 +4197,7 @@
 /datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
-		var/datum/organ/internal/heart/killdney = H.get_kidneys()
+		var/datum/organ/internal/kidney/killdney = H.get_kidneys()
 		killdney.damage++
 
 

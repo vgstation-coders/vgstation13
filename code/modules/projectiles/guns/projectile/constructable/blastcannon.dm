@@ -13,7 +13,7 @@
 	caliber = null
 	ammo_type = null
 	fire_sound = null
-	fire_volume = 500
+	fire_volume = 100
 	conventional_firearm = 0
 	silenced = 1
 	var/obj/item/device/transfer_valve/bomb = null

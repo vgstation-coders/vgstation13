@@ -56,6 +56,7 @@
 	mutations = list(M_CLUMSY)
 
 	var/datum/speech_filter/speech_filter
+	var/bookgib = 1
 
 /mob/living/simple_animal/hostile/retaliate/cluwne/New()
 	..()
@@ -97,7 +98,7 @@
 	playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 	health = currenthealth
 	//only knowledge can kill a cluwne
-	if(istype(O,/obj/item/weapon/book))
+	if(istype(O,/obj/item/weapon/book)&&(bookgib))
 		gib()
 		return
 	/*if(O.force)
@@ -240,3 +241,10 @@
 	new /obj/item/clothing/mask/gas/clownmaskpsyche(src.loc)
 	new /obj/item/clothing/shoes/clownshoespsyche(src.loc)
 	qdel(src)
+
+
+/mob/living/simple_animal/hostile/retaliate/cluwne/tempcluwne
+	//this version of a cluwne  is for when someone is temporarily turned into a cluwne but you don't intend for them to die before the transformation is finished
+	maxHealth = 500
+	health = 500
+	bookgib = 0
