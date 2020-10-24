@@ -167,7 +167,7 @@
 	range = 0
 	cast_delay = 30
 
-	summon_type = list(/obj/item/device/soulstone)
+	summon_type = list(/obj/item/soulstone)
 
 	hud_state = "const_stone"
 	override_base = "cult"

@@ -640,7 +640,7 @@
 					sleep (gem_delay/3)
 					altar_task = ALTARTASK_NONE
 					update_icon()
-					var/obj/item/device/soulstone/gem/gem = new (loc)
+					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
 
 /obj/structure/cult/altar/proc/replace_target(var/mob/user)
@@ -754,6 +754,7 @@
 			blade.forceMove(loc)
 			blade.blood = blade.maxblood
 			new_shade.forceMove(blade)
+			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
 

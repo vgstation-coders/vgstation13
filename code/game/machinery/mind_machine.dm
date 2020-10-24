@@ -137,7 +137,7 @@
 			qdel(B)
 			nanomanager.update_uis(src)
 			return
-	if(istype(A, /obj/item/device/soulstone))
+	if(istype(A, /obj/item/soulstone))
 		if(soulShardSafety != FALSE)
 			to_chat(user, "<span class='notice'>That slot is already full!</span>")
 			return

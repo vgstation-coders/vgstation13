@@ -287,17 +287,17 @@
 	item_state = "soulstonebelt"
 	storage_slots = 6
 	can_only_hold = list(
-		"/obj/item/device/soulstone"
+		"/obj/item/soulstone"
 		)
 
 /obj/item/weapon/storage/belt/soulstone/full/New()
 	..()
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
-	new /obj/item/device/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
+	new /obj/item/soulstone(src)
 
 
 /obj/item/weapon/storage/belt/champion

@@ -178,7 +178,7 @@
 				//var/obj/item/weapon/paper/talisman/T = new /obj/item/weapon/paper/talisman(get_turf(usr))
 				//T.imbue = "armor"
 			if("soulstone")
-				new /obj/item/device/soulstone(get_turf(usr))
+				new /obj/item/soulstone(get_turf(usr))
 			if("construct")
 				new /obj/structure/constructshell/cult(get_turf(usr))
 		src.uses--
