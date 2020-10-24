@@ -32,6 +32,8 @@
 //#define MAP_OVERRIDE 8
 // nrvhorizon.dm
 //#define MAP_OVERRIDE 9
+// synergy.dm
+//#define MAP_OVERRIDE 10
 
 // Toggles several features, explained in their respective comments.
 // You can turn those on and off manually if you prefer, instead of setting this
