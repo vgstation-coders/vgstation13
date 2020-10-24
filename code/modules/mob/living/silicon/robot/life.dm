@@ -161,6 +161,8 @@
 			see_in_dark = 4
 
 /mob/living/silicon/robot/proc/process_killswitch()
+	if(scrambledcodes)
+		return
 	if(cyborg_detonation_time != 0 && world.time >= cyborg_detonation_time)
 		self_destruct()
 

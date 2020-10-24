@@ -1,5 +1,3 @@
-var/list/cyborg_list = list()
-
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"

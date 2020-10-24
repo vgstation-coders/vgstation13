@@ -272,8 +272,8 @@
 	for(var/mob/living/silicon/ai/A in mob_list)
 		to_chat(A, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Cyborg Self-Destruct Sequence Activated. Signal traced to [get_area(src).name].</b></span>")
 		A << 'sound/machines/warning-buzzer.ogg'
-	for(var/mob/living/silicon/robot/R in mob_list)
-		if(!R.scrambledcodes)
+	for(var/mob/living/silicon/robot/R in cyborg_list)
+		if(!R.scrambledcodes && !isMoMMI(R))
 			to_chat(R, "<span style=\"font-family:Courier\"><b>\[<span class='danger'>ALERT</span>\] Emergency Self-Destruct sequence initiated. This unit will self-destruct in [formatTimeDuration(cyborg_detonation_time-world.time)] unless a termination signal is recieved.</b></span>")
 			R << 'sound/machines/warning-buzzer.ogg'
 
