@@ -88,6 +88,25 @@
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
 	return
+	
+	
+/obj/item/weapon/gun/projectile/pistol/NT22
+	name = "\improper NT-22 pistol"
+	desc = "A tiny pocket gun with the logo of the Corp laser-engraved on the slide. Uses .22LR rounds."
+	icon_state = "NT22"
+	item_state = "NT22"
+	w_class = W_CLASS_TINY
+	max_shells = 10
+	caliber = list(NTLR22 = 1)
+	silencer_offset = list(19,8)
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	mag_type = "/obj/item/ammo_storage/magazine/lr22"
+
+/obj/item/weapon/gun/projectile/pistol/NT22/update_icon()
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
+	item_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
 
 /obj/item/weapon/gun/projectile/handgun //mime fingergun
 	name = "hand-gun"
@@ -311,3 +330,5 @@
 /obj/item/weapon/gun/projectile/automag/prestige/update_icon()
 	..()
 	icon_state = "automag-prestige[chambered ? "" : "-e"]"
+
+

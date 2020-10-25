@@ -29,9 +29,17 @@
 	projectile_type = /obj/item/projectile/beam/lightlaser
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	charge_cost = 100 // holds less "ammo" then the rifle variant.
-
+	
 /obj/item/weapon/gun/energy/laser/pistol/isHandgun()
 	return TRUE
+
+/obj/item/weapon/gun/energy/laser/pistol/NT22L
+	name = "pocket laser pistol"
+	desc = "A sleek, tiny laser pistol,not unlike those found under the coats of politicians or particulaly tech-minded hookers."
+	icon_state = "NT22L"
+	item_state = "NT22L"
+	projectile_type = /obj/item/projectile/beam/weakerlaser
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 
 /obj/item/weapon/gun/energy/laser/rifle
 	name = "laser rifle"
