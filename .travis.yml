@@ -14,7 +14,7 @@ jobs:
   include:
     - name: "Run linters"
       env:
-        - SPACEMAN_DMM_GIT_TAG="suite-1.5"
+        - SPACEMAN_DMM_GIT_TAG="suite-1.6"
       addons:
         apt:
           packages:

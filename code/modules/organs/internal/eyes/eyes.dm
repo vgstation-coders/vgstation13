@@ -41,10 +41,6 @@
 
 /datum/organ/internal/eyes/vox
 	name = "bird eyes"
-//	colourmatrix = list(1,0.0,0.0,0,\
-		 				0,0.5,0.5,0,\
-						0,0.5,0.5,0,\
-						0,0.0,0.0,1,)
 	removed_type = /obj/item/organ/internal/eyes/vox
 
 /datum/organ/internal/eyes/grue
@@ -59,7 +55,7 @@
 /datum/organ/internal/eyes/mushroom
 	name = "mushroom eyes"
 	see_in_dark = 8
-	removed_type = /obj/item/organ/internal/eyes/mushroom	
+	removed_type = /obj/item/organ/internal/eyes/mushroom
 
 ///////////////
 // BIONIC EYES
