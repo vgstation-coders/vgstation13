@@ -185,7 +185,6 @@
 	prefs.client = src
 	prefs.initialize_preferences(client_login = 1)
 
-
 	. = ..()	//calls mob.Login()
 	chatOutput.start()
 
@@ -284,6 +283,7 @@
 		verbs += /client/proc/readmin
 		deadmins += ckey
 		to_chat(src, "<span class='interface'>You are now de-admined.</span>")
+	fps = (prefs.fps < 0) ? RECOMMENDED_CLIENT_FPS : prefs.fps
 	//////////////
 	//DISCONNECT//
 	//////////////

@@ -175,6 +175,13 @@
 	penetration = 0
 	projectile_speed = 1
 
+/obj/item/projectile/bullet/LR22
+	damage = 10
+	weaken = 3
+	embed = 1
+	penetration = 1
+	projectile_speed = 1
+
 /obj/item/projectile/bullet/stunshot
 	name = "stunshot"
 	icon_state = "sshell"
@@ -349,7 +356,37 @@ obj/item/projectile/bullet/suffocationbullet
 	icon_state = "minigun"
 	damage = 30
 	fire_sound = 'sound/weapons/gatling_fire.ogg'
-
+	
+/obj/item/projectile/bullet/baton
+	name = "stun baton"
+	icon = 'icons/obj/projectiles_experimental.dmi'
+	icon_state = "baton"
+	damage = 10
+	fire_sound = 'sound/weapons/railgun_lowpower.ogg'
+	phase_type = null
+	penetration = 0
+	projectile_speed = 1
+	stun = 10
+	weaken = 10
+	stutter = 10
+	agony = 10
+	var/rigged = null //if a rigged baton is loaded, it'll fire an explosive burst
+	
+/obj/item/projectile/bullet/baton/on_hit(var/atom/target, var/blocked = 0)
+	..()
+	playsound(target.loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	playsound(target.loc, "swing_hit", 50, 1, -1)
+	if(ishuman(target))
+		var/mob/living/carbon/human/targethuman = target
+		targethuman.forcesay(hit_appends)
+	if(rigged) //vars taken from a standard cell explosion
+		var/devastation_range = -1
+		var/heavy_impact_range = 0.5
+		var/light_impact_range = 1
+		var/flash_range = light_impact_range
+		explosion(target.loc, devastation_range, heavy_impact_range, light_impact_range, flash_range)
+	qdel(src)
+	
 /obj/item/projectile/bullet/osipr
 	name = "\improper OSIPR bullet"
 	icon = 'icons/obj/projectiles_experimental.dmi'

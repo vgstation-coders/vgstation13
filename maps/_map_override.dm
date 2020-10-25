@@ -50,5 +50,9 @@
 		#undef MAP_OVERRIDE
 		#include "nrvhorizon.dm"
 		#define MAP_OVERRIDE 9
+	#elif MAP_OVERRIDE == 10
+		#undef MAP_OVERRIDE
+		#include "synergy.dm"
+		#define MAP_OVERRIDE 10
 	#endif
 #endif

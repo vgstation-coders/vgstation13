@@ -48,10 +48,6 @@
 	var/mob/pointer_caller
 	var/mob/master //Obtained randomly when petting him. Can be overriden.
 
-//	colourmatrix = list(1,0.0,0.0,0,\
-						0,0.5,0.5,0,\
-						0,0.5,0.5,0,\
-						0,0.0,0.0,1,)
 	held_items = list()
 	var/time_between_directed_steps = 6
 

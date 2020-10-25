@@ -231,6 +231,18 @@
 /obj/item/ammo_storage/magazine/m380auto/extended/empty
 	starting_ammo = 0
 
+/obj/item/ammo_storage/magazine/lr22
+	name = "magazine (22LR)"
+	icon_state = "22LR"
+	origin_tech = Tc_COMBAT + "=2"
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	max_ammo = 10
+	sprite_modulo = 1
+	multiple_sprites = 1
+
+/obj/item/ammo_storage/magazine/lr22/empty
+	starting_ammo = 0
+
 /obj/item/ammo_storage/magazine/uzi45 //Uzi mag
 	name = "magazine (.45)"
 	icon_state = "uzi45"

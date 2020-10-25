@@ -186,6 +186,7 @@
 				overlays += silence_overlay
 				gun_part_overlays += silence_overlay
 			update_icon()
+			user.update_inv_hands()
 			return 1
 
 	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
@@ -374,7 +375,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced || scoped)
+	if(istype(silenced, /obj/item/gun_part/silencer) || scoped)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

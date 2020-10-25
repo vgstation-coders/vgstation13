@@ -2189,8 +2189,6 @@
 
 	if(volume >= 1)
 		T.clean_blood()
-		for(var/obj/effect/decal/cleanable/C in src)
-			qdel(C)
 
 		for(var/mob/living/carbon/slime/M in T)
 			M.adjustToxLoss(rand(5, 10))
@@ -4197,7 +4195,7 @@
 /datum/reagent/drink/gatormix/on_overdose(var/mob/living/M)
 	if(ishuman(M) && prob(5))
 		var/mob/living/carbon/human/H = M
-		var/datum/organ/internal/heart/killdney = H.get_kidneys()
+		var/datum/organ/internal/kidney/killdney = H.get_kidneys()
 		killdney.damage++
 
 

@@ -8,6 +8,7 @@
 	max_shells = 10
 	caliber = list(POINT45  = 1)
 	silenced = 1
+	fire_volume = 10
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;" + Tc_SYNDICATE + "=8"
 	ammo_type = "/obj/item/ammo_casing/c45"
 	mag_type = "/obj/item/ammo_storage/magazine/c45"
@@ -87,6 +88,25 @@
 	..()
 	icon_state = "[initial(icon_state)][silenced ? "-silencer" : ""][chambered ? "" : "-e"]"
 	return
+	
+	
+/obj/item/weapon/gun/projectile/pistol/NT22
+	name = "\improper NT-22 pistol"
+	desc = "A tiny pocket gun with the logo of the Corp laser-engraved on the slide. Uses .22LR rounds."
+	icon_state = "NT22"
+	item_state = "NT22"
+	w_class = W_CLASS_TINY
+	max_shells = 10
+	caliber = list(NTLR22 = 1)
+	silencer_offset = list(19,8)
+	origin_tech = Tc_COMBAT + "=2;" + Tc_MATERIALS + "=2;"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	ammo_type = "/obj/item/ammo_casing/lr22"
+	mag_type = "/obj/item/ammo_storage/magazine/lr22"
+
+/obj/item/weapon/gun/projectile/pistol/NT22/update_icon()
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
+	item_state = "[initial(icon_state)][silenced ? "-silencer" : ""]"
 
 /obj/item/weapon/gun/projectile/handgun //mime fingergun
 	name = "hand-gun"
@@ -167,13 +187,13 @@
 	for(var/image/ol in gun_part_overlays)
 		if(ol.icon_state == "auto_attach")
 			var/oldpixelx = ol.pixel_x
-			var/newpixelx = chambered ? 0 : -4	
+			var/newpixelx = chambered ? 0 : -4
 			if(oldpixelx != newpixelx)
-				overlays -= ol	
-				ol.pixel_x = chambered ? 0 : -4	
+				overlays -= ol
+				ol.pixel_x = chambered ? 0 : -4
 				overlays += ol
-						
-		
+
+
 /obj/item/weapon/gun/projectile/glock/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(!conversionkit && istype(A, /obj/item/gun_part/glock_auto_conversion_kit))
 		if(user.drop_item(A, src)) //full auto time
@@ -186,7 +206,7 @@
 			fire_delay = 0
 			desc += "<br>This one seems to have something screwed into it."
 			return 1
-		
+
 	if(conversionkit && A.is_screwdriver(user))
 		to_chat(user, "<span class='notice'>You screw [conversionkit] loose.</span>")
 		user.put_in_hands(conversionkit)
@@ -199,7 +219,7 @@
 		fire_delay = initial(fire_delay)
 		return 1
 	..()
-	
+
 /obj/item/weapon/gun/projectile/glock/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
 	if(conversionkit)
 		var/shots_fired = 0
@@ -310,3 +330,5 @@
 /obj/item/weapon/gun/projectile/automag/prestige/update_icon()
 	..()
 	icon_state = "automag-prestige[chambered ? "" : "-e"]"
+
+
