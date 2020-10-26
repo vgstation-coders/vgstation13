@@ -1,0 +1,5 @@
+---
+author: Allspice
+changes:
+  - bugfix: Emagging the message monitor console no longer makes it invisible.
+delete-after: true

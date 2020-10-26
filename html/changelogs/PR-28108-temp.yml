@@ -1,0 +1,5 @@
+---
+author: PrimeDSS13
+changes:
+  - bugfix: You now only notice the weight difference of the SMG briefcase if holding it.
+delete-after: true
