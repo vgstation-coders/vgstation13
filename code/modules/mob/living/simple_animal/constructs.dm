@@ -88,6 +88,7 @@
 /mob/living/simple_animal/construct/New()
 	..()
 	add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
@@ -98,8 +99,6 @@
 		//Determine construct color	and set languages
 		if(!iscultist(creator))
 			universal_understand = 1
-			add_language(LANGUAGE_GALACTIC_COMMON)
-			remove_language(LANGUAGE_CULT)
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
 
 			if(iswizard(creator) || isapprentice(creator))
@@ -114,9 +113,16 @@
 					construct_color = rgb(235,0,0)
 				else
 					construct_color = rgb(30,255,30)
-			else	
+			else
 				construct_color = rgb(235,0,0)
 	setupglow()
+
+/mob/living/simple_animal/construct/Login()
+	..()
+	if (default_language == all_languages[LANGUAGE_GALACTIC_COMMON])
+		to_chat(src,"<span class='notice'>You can speak in cult chants by using :5.</span>")
+	else
+		to_chat(src,"<span class='notice'>To be understood by non-cult speaking humans, use :1.</span>")
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -368,7 +374,7 @@
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
-	
+
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
 	if(glowcolor)
 		glowicon.Blend(glowcolor, ICON_ADD)
