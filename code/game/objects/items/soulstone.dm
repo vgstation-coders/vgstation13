@@ -613,7 +613,7 @@
 
 		for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 			qdel(A)
+		qdel(stone)
 		qdel(src)
-
 	else
 		to_chat(user, "<span class='warning'>\The [stone] is empty! The shell doesn't react.</span>")
