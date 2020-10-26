@@ -3421,6 +3421,13 @@
 	required_reagents = list(LIMEJUICE = 1, LEMONJUICE = 1, SODAWATER = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/monstermash
+	name = "monstermash"
+	id = MONSTERMASH
+	result = MONSTERMASH
+	required_reagents = list(ECTOPLASM = 1, CARAMEL = 1, TOMATOJUICE = 1)
+	result_amount = 3
+
 /datum/chemical_reaction/diy_soda
 	name = "Dr. Pecker's DIY Soda"
 	id = DIY_SODA
