@@ -280,6 +280,10 @@ proc/process_adminbus_teleport_locs()
 
 //SHOULD YOU ADD NEW ESCAPE PODS, REMEMBER TO UPDATE shuttle_controller.dm
 
+/area/shuttle/bagel
+	name = "bagel ferry"
+	icon_state = "shuttle"
+
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
