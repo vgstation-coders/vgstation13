@@ -91,7 +91,7 @@
 
 	if (alert(user,"Release the Shade?","[name]","Yes","No") == "Yes")
 
-		if (!shade || !in_range(src, user))
+		if (!shade || user.stat || user.restrained() || !in_range(src, user))
 			return
 
 		eject_shade(user)
