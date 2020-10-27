@@ -590,18 +590,20 @@ var/list/arcane_tomes = list()
 			SB.fingerprints = fingerprints.Copy()
 		spawn(1)
 			user.put_in_active_hand(SB)
-		for(var/mob/living/simple_animal/shade/A in I)
-			A.forceMove(SB)
-			SB.shade = A
-			if (A.mind)
-				A.give_blade_powers()
+		var/obj/item/soulstone/gem/sgem = I
+		if (sgem.shade)
+			var/mob/living/simple_animal/shade/shadeMob = sgem.shade
+			shadeMob.forceMove(SB)
+			SB.shade = shadeMob
+			sgem.shade = null
+			if (shadeMob.mind)
+				shadeMob.give_blade_powers()
 			else
 				to_chat(user,"<span class='warning'>Although the game appears to hold a shade, it somehow doesn't appear to have a mind capable of manipulating the blade.</span>")
 				to_chat(user,"<span class='danger'>(that's a bug, call Deity, and tell him exactly how you obtained that shade).</span>")
 				message_admins("[key_name(usr)] somehow placed a soul gem containing a shade with no mind inside a soul blade.")
-			break
 		SB.update_icon()
-		qdel(I)
+		qdel(sgem)
 		qdel(src)
 		return 1
 	if(istype(I,/obj/item/soulstone))
@@ -741,6 +743,7 @@ var/list/arcane_tomes = list()
 			user.put_in_inactive_hand(SG)
 			if (shade)
 				shade.forceMove(SG)
+				SG.shade = shade
 				shade.remove_blade_powers()
 				SG.icon_state = "soulstone2"
 				SG.item_state = "shard-soulstone2"
