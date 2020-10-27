@@ -17,7 +17,7 @@
 	icon_state = "riot_helm"
 	item_state = "riot_helm"
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
-	initial_armor = list()
+	var/list/initial_armor = list()
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	body_parts_visible_override = EYES|BEARD
