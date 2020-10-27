@@ -17,6 +17,7 @@
 	icon_state = "riot_helm"
 	item_state = "riot_helm"
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
+	var/list/initial_armor = list()
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	body_parts_visible_override = EYES|BEARD
@@ -24,6 +25,7 @@
 
 /obj/item/clothing/head/helmet/visor/New()
 	..()
+	initial_armor = armor.Copy()
 	update_icon()
 
 /obj/item/clothing/head/helmet/visor/attack_self(mob/user)
@@ -39,7 +41,7 @@
 /obj/item/clothing/head/helmet/visor/update_icon(mob/user)
 	switch(state)
 		if(1) //FACE COVERED
-			armor = initial(armor)
+			armor = initial_armor
 			icon_state = "[initial(icon_state)]_down"
 			item_state = "[initial(item_state)]_down"
 		if(0)
