@@ -280,7 +280,7 @@ var/list/headset_modes = list(
 	// Runechat messages
 	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf() && !(isinvisible(user)))
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
-	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf()  && !(isinvisible(user)))
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf() && !(isinvisible(user)))
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
 	if (ismob(speech.speaker))
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
