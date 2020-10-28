@@ -76,6 +76,7 @@
 			hivemind.OnPostSetup()
 		hivemind?.HandleRecruitedRole(newChangeling) 
 
+		newChangeling.ForgeObjectives()
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
 

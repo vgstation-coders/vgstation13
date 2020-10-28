@@ -17,6 +17,8 @@
 
 	var/list/names = list()
 	for(var/datum/dna/DNA in changeling.absorbed_dna)
+		if(DNA == user.dna)
+			continue
 		names += "[DNA.real_name]"
 
 	var/S = input("Select the target DNA: ", "Target DNA", null) as null|anything in names

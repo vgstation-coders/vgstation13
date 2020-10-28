@@ -16,8 +16,8 @@
 		return
 
 	to_chat(target, "<span class='notice'>The world around you suddenly becomes quiet.</span>")
-	target.disabilities |= DEAF
+	target.sdisabilities |= DEAF
 	spawn(300)
-		target.disabilities &= ~DEAF
+		target.sdisabilities &= ~DEAF
 
 	feedback_add_details("changeling_powers", "DS")

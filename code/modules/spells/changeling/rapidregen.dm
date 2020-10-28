@@ -11,6 +11,7 @@
 /spell/changeling/rapidregen/cast(var/list/targets, var/mob/living/carbon/human/user)
 
 	var/mob/living/carbon/human/C = user
+	..()
 
 	for(var/i = 0, i<10,i++)
 		if(C)
@@ -22,4 +23,4 @@
 
 	feedback_add_details("changeling_powers","RR")
 
-	..()
+	

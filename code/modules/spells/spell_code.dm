@@ -155,7 +155,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/list/targets = target_override
 
-	if(before_channel(user))
+	if(before_channel(user) && !currently_channeled)
 		return
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)

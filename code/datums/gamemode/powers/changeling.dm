@@ -242,7 +242,7 @@
 /datum/power/changeling/armblade
 	name = "Arm Blade"
 	desc = "We transform one of our arms into an organic blade that can cut through flesh and bone."
-	helptext = "The blade can be retracted by using the same verb used to manifest it. It has a chance to deflect projectiles."
+	helptext = "The blade can be retracted by using the same spell used to manifest it. It has a chance to deflect projectiles."
 	cost = 5
 	spellpath = /spell/changeling/armblade
 
