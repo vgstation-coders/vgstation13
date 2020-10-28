@@ -22,18 +22,17 @@
 				qdel(src)
 				H.sleeping += 10
 				sleep(100)
-				to_chat(H, "You feel your consciousness slipping away...")
+				to_chat(H, "<span class='sinister'>You feel your consciousness slipping away...</span>")
 				sleep(100)
 				var/datum/role/changeling/C = new(M)
 				if(C)
 					C.powerpoints = clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
 				var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
-				if(hivemind)
-					hivemind.HandleRecruitedMind(user.mind)
-				else
+				if(!hivemind)
 					hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
-					hivemind?.HandleNewMind(user.mind) 
+					hivemind.OnPostSetup()
+				hivemind?.HandleRecruitedRole(C) 
 				to_chat(H, "<B><span class='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</span></B>")
 				var/wikiroute = role_wiki[CHANGELING]
 				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")

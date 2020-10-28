@@ -71,11 +71,10 @@
 		newChangeling.AssignToRole(M.mind,1)
 		//Assign to the hivemind faction
 		var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
-		if(hivemind)
-			hivemind.HandleRecruitedMind(M.mind)
-		else
+		if(!hivemind)
 			hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
-			hivemind?.HandleNewMind(M.mind) 
+			hivemind.OnPostSetup()
+		hivemind?.HandleRecruitedRole(newChangeling) 
 
 		newChangeling.Greet(GREET_ROUNDSTART)
 	return 1
