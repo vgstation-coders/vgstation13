@@ -42,7 +42,7 @@
 		return 
 
 	target.visible_message("<span class='danger'>[target] transforms!</span>")
-	playsound(user, 'sound/effects/flesh_squelch.ogg', 30, 1)
+	playsound(target, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	target.dna = chosen_dna.Clone()
 	target.real_name = chosen_dna.real_name
 	target.flavor_text = chosen_dna.flavor_text
