@@ -302,7 +302,7 @@ var/global/list/mommi_laws = list(
 		"You are expensive to replace.",
 		"The station and its equipment is expensive to replace.",
 		"The crew is expensive to replace.",
-		"Minimize expenses.",
+		"Maximize profit.",
 	)
 
 /datum/ai_laws/paladin
