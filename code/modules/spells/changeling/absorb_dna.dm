@@ -105,7 +105,7 @@
 
 			if(Tchangeling.current_powers.len)
 				for(var/datum/power/changeling/Tp in Tchangeling.current_powers)
-					if(locate(Tp.type) in Tchangeling.current_powers)
+					if(locate(Tp.type) in changeling.current_powers)
 						continue
 					else
 						Tp.add_power(changeling)

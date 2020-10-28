@@ -28,6 +28,12 @@
 				if(C)
 					C.powerpoints = clamp(genomes_to_give, 0, 100)
 					C.OnPostSetup()
+				var/datum/faction/changeling/hivemind = find_active_faction_by_type(/datum/faction/changeling)
+				if(hivemind)
+					hivemind.HandleRecruitedMind(user.mind)
+				else
+					hivemind = ticker.mode.CreateFaction(/datum/faction/changeling)
+					hivemind?.HandleNewMind(user.mind) 
 				to_chat(H, "<B><span class='red'>Finally, we once again have a suitable body. We are once again a proper changeling!</span></B>")
 				var/wikiroute = role_wiki[CHANGELING]
 				to_chat(H, "<span class='info'><a HREF='?src=\ref[H];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
