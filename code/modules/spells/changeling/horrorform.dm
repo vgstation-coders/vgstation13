@@ -27,7 +27,7 @@
 	user.invisibility = 101
 
 	var/atom/movable/overlay/animation = new /atom/movable/overlay( user.loc )
-	user.visible_message("<span class = 'warning'>[user] emits a putrid odor as their torso splits open!</span>")
+	user.visible_message("<span class = 'danger'>[user] emits a putrid odor as their torso splits open!</span>")
 	world << sound('sound/effects/greaterling.ogg')
 	to_chat(world, "<span class = 'sinister'>A roar pierces the air and makes your blood curdle. Uh ouser.</span>")
 	animation.icon_state = "m-none"

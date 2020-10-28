@@ -28,6 +28,7 @@
 		return
 
 	user.visible_message("<span class='danger'>[user] transforms!</span>")
+	playsound(user, 'sound/effects/flesh_squelch.ogg', 30, 1)
 	changeling.geneticdamage = 30
 	var/oldspecies = user.dna.species
 	user.dna = chosen_dna.Clone()
