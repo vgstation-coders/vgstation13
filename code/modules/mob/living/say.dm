@@ -278,9 +278,9 @@ var/list/headset_modes = list(
 				rendered_message = replacetext(rendered_message, ai.real_name, "<i style='color: blue;'>[ai.real_name]</i>")
 
 	// Runechat messages
-	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf() && !(isinvisible(speech.speaker)))
+	if (ismob(speech.speaker) && client?.prefs.mob_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
-	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf() && !(isinvisible(speech.speaker)))
+	else if (client?.prefs.obj_chat_on_map && stat != UNCONSCIOUS && !is_deaf())
 		create_chat_message(speech.speaker, speech.language, speech.message, speech.mode, speech.wrapper_classes)
 	if (ismob(speech.speaker))
 		show_message(rendered_message, type, deaf_message, deaf_type, src)
