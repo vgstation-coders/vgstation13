@@ -127,7 +127,7 @@
 	O.real_name = chosen_dna.real_name
 	O.flavor_text = chosen_dna.flavor_text
 
-	for(var/obj/item/W in src)
+	for(var/obj/item/W in M)
 		M.drop_from_inventory(W)
 	for(var/obj/T in M)
 		qdel(T)
