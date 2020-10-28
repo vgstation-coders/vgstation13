@@ -110,13 +110,11 @@
 
 var/list/possible_changeling_IDs = list("Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega")
 
-
-
 /datum/role/changeling/PostMindTransfer(var/mob/living/new_character, var/mob/living/old_character)
 	if (!power_holder) // This is for when you spawn as a new_player
 		return
 	if(isbrain(new_character))
-		removespells()
+		removespells()		//The changeling spells will get removed if you get decapitated. Removing this line will allow changelings to use their 'regenerative stasis' skill while decapitated, giving them a brand new body after it completes.
 		return
 
 	new_character.make_changeling() // Will also restore any & all genomes/powers we have
