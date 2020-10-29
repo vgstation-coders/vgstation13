@@ -8247,16 +8247,19 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	dupeable = FALSE
 
 	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	var/is_being_petrified = FALSE
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-
-	if(volume >= minimal_dosage && prob(30))
+	if(M.reagents.has_reagent(SACID) || M.reagents.has_reagent(PACID) || M.reagents.has_reagent(ACIDSPIT) || M.reagents.has_reagent(ACIDTEA))
+		return		//no need to go further
+	if(volume >= minimal_dosage && !is_being_petrified)
 		if(!issilicon(M))
+			is_being_petrified = TRUE
 			if(M.slow_petrify()) //Statue forever
 				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
-
+			is_being_petrified = FALSE
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
 /datum/reagent/apetrine
