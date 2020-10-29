@@ -8261,9 +8261,9 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
-		if(M.has_any_reagents(PETRICINCURES))
+		if(holder.has_any_reagents(PETRITRICINCURES))
 			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
-			C.pain_shock_stage = max(0, pain_shock_stage - 300)
+			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
 			is_being_petrified = FALSE
 			holder.del_reagent(PETRITRICIN)
 			return
