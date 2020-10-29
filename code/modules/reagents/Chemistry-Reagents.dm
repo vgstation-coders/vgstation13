@@ -8256,21 +8256,28 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 		return 1
 	if(issilicon(M))
 		return
+	var/mob/living/carbon/C
+	if(iscarbon(M))
+		C = M
+		oldpain = C.pain_shock_stage
 	if(volume >= minimal_dosage && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)	
 		switch(stage)
 			if(1)
 				//Second message is shown to hallucinating mobs
-				simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+				M.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
 				"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
+				if(istype(C))
+					C.pain_shock_stage += 300
+				M.audible_scream()
 			if(2)
-				simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
+				M.simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
 				"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
-				Stun(3)
+				M.Stun(3)
 			if(3)
-				if(turn_into_statue(1))
-					simple_message("<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>",\
+				if(M.turn_into_statue(1))
+					M.simple_message("<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>",\
 					"<span class='notice'>You've created a masterwork statue of David!</span>")
 					is_being_petrified = FALSE
 		stage = stage + 1
