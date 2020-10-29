@@ -8248,7 +8248,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 	var/min_to_start = 1 //At least 1 unit is needed for petriication to start
 	var/min_to_finish = 0.5	//0.5 units are needed for the process to complete
-	var/oldpain			   //restore their pain to this if cured
 	var/is_being_petrified = FALSE
 	var/stage
 
@@ -8260,11 +8259,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	var/mob/living/carbon/C
 	if(iscarbon(M))
 		C = M
-		oldpain = C.pain_shock_stage
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
 		if(volume < min_to_finish)
+			C.pain_shock_stage = max(0, pain_shock_stage - 300)
 			is_being_petrified = FALSE
 			return
 		switch(stage)
