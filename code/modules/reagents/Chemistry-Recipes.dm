@@ -3260,6 +3260,13 @@
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
 
+/datum/chemical_reaction/petritricinnull
+	name = "Petritricin Nullification"
+	id = PETRITRICINCURE
+	result = WATER
+	required_reagents = list(PETRITRICINCURES = 1, PETRITRICIN = 1)
+	result_amount = 1
+
 /datum/chemical_reaction/potassiumcarbonate
 	name = "Potassium Carbonate"
 	id = POTASSIUMCARBONATE

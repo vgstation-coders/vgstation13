@@ -8247,19 +8247,38 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	dupeable = FALSE
 
 	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	var/oldpain			   //restore their pain to this if cured
 	var/is_being_petrified = FALSE
+	var/stage
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	if(M.reagents.has_reagent(SACID) || M.reagents.has_reagent(PACID) || M.reagents.has_reagent(ACIDSPIT) || M.reagents.has_reagent(ACIDTEA))
-		return		//no need to go further
+	if(issilicon(M))
+		return
 	if(volume >= minimal_dosage && !is_being_petrified)
-		if(!issilicon(M))
-			is_being_petrified = TRUE
-			if(M.slow_petrify()) //Statue forever
-				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
-			is_being_petrified = FALSE
+		is_being_petrified = TRUE
+	if(is_being_petrified)	
+		switch(stage)
+			if(1)
+				//Second message is shown to hallucinating mobs
+				simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+				"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
+			if(2)
+				simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
+				"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
+				Stun(3)
+			if(3)
+				if(turn_into_statue(1))
+					simple_message("<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>",\
+					"<span class='notice'>You've created a masterwork statue of David!</span>")
+					is_being_petrified = FALSE
+		stage = stage + 1
+
+
+
+			
+
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
 /datum/reagent/apetrine
