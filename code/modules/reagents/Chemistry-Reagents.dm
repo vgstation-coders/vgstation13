@@ -8246,7 +8246,8 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
 
-	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	var/min_to_start = 1 //At least 1 unit is needed for petriication to start
+	var/min_to_finish = 0.5	//0.5 units are needed for the process to complete
 	var/oldpain			   //restore their pain to this if cured
 	var/is_being_petrified = FALSE
 	var/stage
@@ -8260,9 +8261,12 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(iscarbon(M))
 		C = M
 		oldpain = C.pain_shock_stage
-	if(volume >= minimal_dosage && !is_being_petrified)
+	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
-	if(is_being_petrified)	
+	if(is_being_petrified)
+		if(volume < min_to_finish)
+			is_being_petrified = FALSE
+			return
 		switch(stage)
 			if(1)
 				//Second message is shown to hallucinating mobs
