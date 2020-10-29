@@ -8247,7 +8247,6 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	dupeable = FALSE
 
 	var/min_to_start = 1 //At least 1 unit is needed for petriication to start
-	var/min_to_finish = 0.5	//0.5 units are needed for the process to complete
 	var/is_being_petrified = FALSE
 	var/stage
 
@@ -8262,9 +8261,11 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	if(volume >= min_to_start && !is_being_petrified)
 		is_being_petrified = TRUE
 	if(is_being_petrified)
-		if(volume < min_to_finish)
+		if(M.has_any_reagents(PETRICINCURES))
+			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
 			C.pain_shock_stage = max(0, pain_shock_stage - 300)
 			is_being_petrified = FALSE
+			holder.del_reagent(PETRITRICIN)
 			return
 		switch(stage)
 			if(1)

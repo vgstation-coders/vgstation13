@@ -3259,21 +3259,7 @@
 	result = APETRINE
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
-
-/datum/chemical_reaction/petritricinnull
-	name = "Petritricin Nullification"
-	id = "petricin nullfiication"
-	result = WATER
-	required_reagents = list(PETRITRICINCURES = 1, PETRITRICIN = 1)
-	result_amount = 1
-
-
-/datum/chemical_reaction/petritricinnull/on_reaction(var/datum/reagents/holder, var/created_volume)
-	var/mob/living/M = holder.my_atom
-	if(istype(M))
-		to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
-
-
+	
 /datum/chemical_reaction/potassiumcarbonate
 	name = "Potassium Carbonate"
 	id = POTASSIUMCARBONATE
