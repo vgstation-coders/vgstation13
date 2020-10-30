@@ -240,6 +240,7 @@
 	if(!skip_freq_search)
 		if(channel && channels && channels.len > 0)
 			if(channel == "department")
+                        // Common channel is the first channel added to headsets, so it needs to be removed (unless it's the only channel available).
 				if(channels.len > 1)
 					channel = (channels - COMMON)[1]
 				else
