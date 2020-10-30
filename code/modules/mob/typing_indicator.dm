@@ -12,7 +12,7 @@ var/atom/movable/typing_indicator/typing_indicator
 	icon_state = "talking"
 	vis_flags = VIS_INHERIT_ID
 
-/atom/movable/overlay/typing_indicator/Destroy()
+/atom/movable/typing_indicator/Destroy()
 	stack_trace("Something deleted the global typing indicator. Probably not intended.")
 	return ..()
 
