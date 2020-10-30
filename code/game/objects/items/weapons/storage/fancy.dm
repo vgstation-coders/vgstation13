@@ -747,6 +747,5 @@
 	if(empty)
 		update_icon()
 		return
-	for(var/i = 1; i <= storage_slots; i++)
+	for(var/i in 1 to storage_slots)
 		new /obj/item/weapon/reagent_containers/food/drinks/beer(src)
-	return
