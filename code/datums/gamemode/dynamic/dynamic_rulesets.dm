@@ -122,7 +122,7 @@
 
 /datum/dynamic_ruleset/proc/get_weight()
 	var/result = weight
-	result *= map.rulset_multiplier(src)
+	result *= map.ruleset_multiplier(src)
 	result *= weight_time_day()
 	var/halve_result = FALSE
 	for(var/datum/dynamic_ruleset/DR in mode.executed_rules)
