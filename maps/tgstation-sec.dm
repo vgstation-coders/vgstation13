@@ -76,6 +76,10 @@
 	center_x = 226
 	center_y = 254
 
+/datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
+	if(ispath(DR.role_category, /datum/role/malfAI))
+		return FALSE
+
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
 #endif
