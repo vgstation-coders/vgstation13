@@ -53,6 +53,13 @@
 	typepath = /obj/item/stack/package_wrap/gift
 	cost = 5
 
+/datum/storeitem/swiss_army_knife
+	name = "Swiss Army Knife"
+	desc = "A multitool for everyday tasks."
+	typepath = /obj/item/weapon/switchtool/swiss_army_knife
+	cost = 50
+
+
 /////////////////////////////
 // Electronics
 /////////////////////////////
@@ -60,7 +67,7 @@
 	name = "Boombox"
 	desc = "I ask you a question: is a man not entitled to the beats of his own smooth jazz?"
 	typepath = /obj/machinery/media/receiver/boombox
-	cost = 40  
+	cost = 40
 
 /datum/storeitem/diskettebox
 	name = "Diskette Box"
@@ -87,7 +94,7 @@
 	name = "Crayons"
 	desc = "Let security know how they're doing by scrawling lovenotes all over their hallways."
 	typepath = /obj/item/weapon/storage/fancy/crayons
-	cost = 15 
+	cost = 15
 
 /datum/storeitem/beachball
 	name = "Beach Ball"
@@ -121,13 +128,13 @@
 	name = "Robotnik's Research Labcoat"
 	desc = "Join the empire and display your hatred for woodland animals."
 	typepath = /obj/item/clothing/suit/storage/labcoat/custom/N3X15/robotics
-	cost = 20  
+	cost = 20
 
 /datum/storeitem/robotnik_jumpsuit
 	name = "Robotics Interface Suit"
 	desc = "A modern black and red design with reinforced seams and brass neural interface fittings."
 	typepath = /obj/item/clothing/under/custom/N3X15/robotics
-	cost = 20  
+	cost = 20
 
 /////////////////////////////
 // Luxury
@@ -148,13 +155,13 @@
 	name = "Poster"
 	desc = "A random poster from Centcom's prints division. For those with bad taste in art."
 	typepath = /obj/item/mounted/poster
-	cost = 20 
+	cost = 20
 
 /datum/storeitem/painting
 	name = "Painting"
 	desc = "A random painting from Centcom's museum. For those with good taste in art."
 	typepath = /obj/item/mounted/frame/painting
-	cost = 50 
+	cost = 50
 
 /datum/storeitem/critter_cage
 	name = "small cage"
