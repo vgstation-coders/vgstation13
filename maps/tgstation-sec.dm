@@ -76,6 +76,14 @@
 	center_x = 226
 	center_y = 254
 
+/datum/map/proc/ruleset_mutliplier(var/datum/dynamic_ruleset/DR)
+	if(istype(DR, /datum/dynamic_ruleset/roundstart/nuclear))
+		return 3
+	if(istype(DR, /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear))
+		return 3
+	return 1
+
+
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
 #endif
