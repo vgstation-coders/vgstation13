@@ -355,6 +355,7 @@ var/list/tag_suits_list = list()
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	wizard_garb = 1 //Allows lightning to be used
 	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/melee/energy/sword/dualsaber) //Fits e-swords
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -376,6 +377,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "imperium_monk"
 	item_state = "imperium_monk"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/vamphunter
 	name = "vampire hunter armor"

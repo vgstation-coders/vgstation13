@@ -237,6 +237,7 @@
 	name = "druid winter robes"
 	icon_state = "druid_snow"
 	wizard_garb = 1
+	species_fit = list(INSECT_SHAPED)
 
 
 #define HAS_HOOD 1
