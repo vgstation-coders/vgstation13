@@ -2,9 +2,9 @@
 "cw" = (/obj/structure/table,/obj/machinery/faxmachine{department = "Internal Affairs"},/obj/machinery/light{dir = 1},/turf/simulated/floor/dark,/area/vault/anomalylab)
 "cW" = (/turf/simulated/floor{dir = 1; icon_state = "darkredcorners"; tag = "icon-darkredcorners (NORTH)"},/area/vault/anomalylab)
 "dp" = (/obj/structure/filingcabinet/chestdrawer,/turf/simulated/floor/dark,/area/vault/anomalylab)
+"dL" = (/obj/structure/bed/chair/comfy{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "darkredcorners"; tag = "icon-darkredcorners (WEST)"},/area/vault/anomalylab)
 "eO" = (/obj/structure/sign/goldenplaque,/turf/simulated/wall/r_wall,/area/vault/anomalylab)
-"gd" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 6; icon_state = "darkred"},/area/vault/anomalylab)
-"gp" = (/turf/simulated/floor{dir = 6; icon_state = "darkred"},/area/vault/anomalylab)
+"fU" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred (NORTH)"},/area/vault/anomalylab)
 "hy" = (/obj/structure/table,/obj/item/device/flashlight/lamp{pixel_y = -10},/obj/item/weapon/pen/red{pixel_x = 4; pixel_y = 10},/obj/item/weapon/pen/blue{pixel_x = 1; pixel_y = 9},/turf/simulated/floor{dir = 8; icon_state = "darkblue"},/area/vault/anomalylab)
 "hJ" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "is" = (/turf/space,/area)
@@ -15,6 +15,7 @@
 "lq" = (/obj/structure/rack{dir = 8},/obj/item/weapon/storage/briefcase/false_bottomed/smg,/turf/simulated/floor{dir = 10; icon_state = "darkblue"},/area/vault/anomalylab)
 "lt" = (/obj/machinery/light,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "na" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 5},/turf/simulated/floor/dark,/area/vault/anomalylab)
+"ng" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "pq" = (/obj/effect/decal/cleanable/blood/stattrack,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "ql" = (/obj/structure/coatrack/full,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "qn" = (/obj/machinery/door/airlock/glass_command{name = "Office"},/obj/effect/decal/cleanable/blood/stattrack,/turf/simulated/floor/dark,/area/vault/anomalylab)
@@ -25,19 +26,18 @@
 "rc" = (/obj/machinery/vending/sovietsoda,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/anomalylab)
 "rd" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/anomalylab)
 "ri" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/anomalylab)
-"rD" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "rG" = (/obj/machinery/door/airlock/vault,/turf/simulated/floor/engine,/area/vault/anomalylab)
 "sz" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/anomalylab)
 "sF" = (/turf/space,/area/vault/anomalylab)
 "tv" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/turf/simulated/floor/plating,/area/vault/anomalylab)
 "tw" = (/obj/machinery/vending/snack,/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/vault/anomalylab)
 "uG" = (/turf/simulated/floor/engine,/area/vault/anomalylab)
-"uK" = (/obj/structure/table,/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "uO" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/anomalylab)
 "vJ" = (/turf/simulated/floor{dir = 4; icon_state = "darkred"; tag = "icon-darkred (EAST)"},/area/vault/anomalylab)
 "wC" = (/turf/simulated/floor{dir = 1; icon_state = "darkred"},/area/vault/anomalylab)
 "wI" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma{dir = 4; icon_state = "plasmarwindow"; tag = "icon-plasmarwindow (EAST)"},/turf/simulated/floor/engine,/area/vault/anomalylab)
-"wL" = (/obj/structure/table,/obj/abstract/map/spawner/space/weapons2,/turf/simulated/floor/dark,/area/vault/anomalylab)
+"wL" = (/obj/structure/table,/obj/abstract/map/spawner/security/weapons,/turf/simulated/floor/dark,/area/vault/anomalylab)
+"wY" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "xh" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 9; icon_state = "darkred"; tag = "icon-darkred (NORTHWEST)"},/area/vault/anomalylab)
 "xQ" = (/obj/structure/bed/chair/office{dir = 8},/turf/simulated/floor/dark,/area/vault/anomalylab)
 "xY" = (/obj/machinery/light{dir = 8; icon_state = "ltube1"},/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/vault/anomalylab)
@@ -51,9 +51,9 @@
 "As" = (/obj/effect/landmark/corpse/researchdirector,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "Ax" = (/obj/machinery/light{dir = 4},/obj/effect/landmark/corpse/securityofficer,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "AZ" = (/obj/structure/sign/securearea,/turf/simulated/wall/r_wall,/area/vault/anomalylab)
+"Ba" = (/obj/structure/bed/chair/comfy,/turf/simulated/floor{dir = 8; icon_state = "darkredcorners"; tag = "icon-darkredcorners (WEST)"},/area/vault/anomalylab)
 "BH" = (/turf/simulated/floor{dir = 8; icon_state = "darkred"; tag = "icon-darkred (WEST)"},/area/vault/anomalylab)
 "Ca" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area/vault/anomalylab)
-"Cj" = (/obj/structure/bed/chair/comfy{dir = 8},/turf/simulated/floor{dir = 8; icon_state = "darkredcorners"; tag = "icon-darkredcorners (WEST)"},/area/vault/anomalylab)
 "Co" = (/obj/machinery/door/airlock/vault,/obj/structure/window/barricade/full/block,/turf/simulated/floor/engine,/area/vault/anomalylab)
 "CC" = (/obj/effect/decal/cleanable/blood{icon_state = "floor5-old"; tag = "icon-floor5-old"},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "CL" = (/obj/effect/decal/cleanable/blood,/turf/simulated/floor/engine,/area/vault/anomalylab)
@@ -61,8 +61,9 @@
 "DL" = (/mob/living/simple_animal/hostile/humanoid/russian,/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "DO" = (/obj/machinery/door/airlock/hatch,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "Fs" = (/obj/effect/mist{icon = 'icons/effects/static.dmi'; icon_state = "1 moderate"},/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/anomalylab)
+"Fu" = (/obj/structure/table,/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "FA" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/anomalylab)
-"Go" = (/obj/structure/reagent_dispensers/water_cooler,/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
+"GA" = (/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred (NORTH)"},/area/vault/anomalylab)
 "Hq" = (/obj/effect/decal/cleanable/blood,/obj/effect/mist{icon = 'icons/effects/static.dmi'; icon_state = "1 moderate"},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "HT" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "Ia" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/dark,/area/vault/anomalylab)
@@ -77,15 +78,15 @@
 "JQ" = (/obj/machinery/door/airlock/vault,/obj/effect/decal/cleanable/blood/stattrack{dir = 8},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "Ko" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 8},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "KM" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 8},/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/anomalylab)
-"KS" = (/obj/machinery/light,/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred (NORTH)"},/area/vault/anomalylab)
 "KT" = (/obj/machinery/door/airlock/vault,/obj/effect/decal/cleanable/blood/stattrack{dir = 8},/obj/structure/window/barricade/full/block,/turf/simulated/floor/engine,/area/vault/anomalylab)
 "LE" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 8},/obj/effect/mist{icon = 'icons/effects/static.dmi'; icon_state = "1 moderate"},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "LG" = (/obj/machinery/chem_dispenser/scp_294,/obj/effect/decal/cleanable/blood,/obj/effect/mist{icon = 'icons/effects/static.dmi'; icon_state = "1 moderate"},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "Me" = (/obj/effect/mist{icon = 'icons/effects/static.dmi'; icon_state = "1 moderate"},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "MP" = (/obj/machinery/light/small{dir = 1},/turf/simulated/floor/engine,/area/vault/anomalylab)
 "Ou" = (/obj/effect/landmark/anomalylab/statue_spawn,/turf/simulated/floor/dark,/area/vault/anomalylab)
+"Oy" = (/obj/effect/landmark/anomalylab/viscerator_spawn,/turf/simulated/floor{dir = 6; icon_state = "darkred"},/area/vault/anomalylab)
 "OI" = (/obj/structure/sign/securearea{desc = "A warning sign which reads 'SPACE'"; icon_state = "space"; name = "SPACE"; pixel_x = 32},/turf/simulated/floor{dir = 4; icon_state = "darkred"; tag = "icon-darkred (EAST)"},/area/vault/anomalylab)
-"Py" = (/obj/structure/bed/chair/comfy,/turf/simulated/floor{dir = 8; icon_state = "darkredcorners"; tag = "icon-darkredcorners (WEST)"},/area/vault/anomalylab)
+"QD" = (/turf/simulated/floor{dir = 6; icon_state = "darkred"},/area/vault/anomalylab)
 "QL" = (/obj/effect/decal/cleanable/blood/gibs/limb,/turf/simulated/floor/engine,/area/vault/anomalylab)
 "Ra" = (/obj/effect/decal/cleanable/blood/gibs/body,/turf/simulated/floor/engine,/area/vault/anomalylab)
 "RB" = (/obj/structure/grille/broken,/obj/structure/window/reinforced/plasma{dir = 8},/obj/item/weapon/shard/plasma{icon_state = "plasmamedium"},/obj/item/stack/rods,/obj/effect/decal/cleanable/blood/drip,/turf/simulated/floor/engine,/area/vault/anomalylab)
@@ -102,7 +103,6 @@
 "Xq" = (/obj/machinery/light{dir = 4},/turf/simulated/floor/dark,/area/vault/anomalylab)
 "XK" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/turf/simulated/floor/plating,/area/vault/anomalylab)
 "Yh" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 4; icon_state = "plasmarwindow"; tag = "icon-plasmarwindow (EAST)"},/obj/structure/window/reinforced/plasma,/turf/simulated/floor/engine,/area/vault/anomalylab)
-"YQ" = (/turf/simulated/floor{icon_state = "darkred"; tag = "icon-darkred (NORTH)"},/area/vault/anomalylab)
 "YS" = (/obj/structure/table,/turf/simulated/floor/dark,/area/vault/anomalylab)
 "YV" = (/turf/simulated/floor{dir = 10; icon_state = "darkred"},/area/vault/anomalylab)
 "Zl" = (/turf/simulated/wall/r_wall,/area/vault/anomalylab)
@@ -133,10 +133,10 @@ WnQLRaRBSySEUfUtUtUfVfVVWzUiWnWnWnMeXaMeWnWnWnUiyEhJvJHTIaHT
 WnyMyTzdyEXqWnUiWnWnBHyEyEXKsFsFWnWnCoWnWnsFsFXKyEyEvJWnWnUi
 WnuGuGYhYSyEWnisisWnxYyEyEuOtvsFsFWnxZWnsFsFFArdyEyEytWnisis
 WnWnZlWnWnWnWnisisWnBHyEyEyEuOtvsFWnuGWnsFFArdyEyEyEvJWnisis
-isisisisisisisisisWnYVZryEyEyEuOZvUirGUiZvrdyEyEyEZxgpWnisis
-isisisisisisisisisWnWnrDPyyEyEyEyEyEyEyEyEyEyEyEZxgdWnWnisis
-isisisisisisisisisisWnWnuKCjyEyEyEhJyEhJyEyEyEZxgdWnWnisisis
-isisisisisisisisisisisWnWnGoYQKSYQYQYQYQYQKSYQgpWnWnisisisis
+isisisisisisisisisWnYVZryEyEyEuOZvUirGUiZvrdyEyEyEZxQDWnisis
+isisisisisisisisisWnWnwYBayEyEyEyEyEyEyEyEyEyEyEZxOyWnWnisis
+isisisisisisisisisisWnWnFudLyEyEyEhJyEhJyEyEyEZxOyWnWnisisis
+isisisisisisisisisisisWnWnngGAfUGAGAGAGAGAfUGAQDWnWnisisisis
 isisisisisisisisisisisisWnWnWnWnWnWnWnWnWnWnWnWnWnisisisisis
 isisisisisisisisisisisisisisisisisisisisisisisisisisisisisis
 isisisisisisisisisisisisisisisisisisisisisisisisisisisisisis
