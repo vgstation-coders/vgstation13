@@ -1,3 +1,5 @@
+
+/*
 //scp_173
 //SCP-173, nothing more need be said
 /mob/living/simple_animal/scp_173
@@ -294,3 +296,5 @@
 
 //You cannot destroy SCP-173, fool!
 /mob/living/simple_animal/scp_173/ex_act(var/severity)
+
+*/
