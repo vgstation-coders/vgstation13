@@ -176,15 +176,7 @@
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)
-	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
-	var/damage = 0
-	var/attacktype = "bitten"
-
-	if(T.amount > 0)
-		damage = rand(1, 5)
-	else //no teeth time to GUM
-		damage = 1
-		attacktype = "gummed"
+	var/damage = rand(1, 5)
 
 	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		damage += 4
@@ -196,7 +188,7 @@
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
 
 	add_logs(M, src, "bit", admin=0, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
