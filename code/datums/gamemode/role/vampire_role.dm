@@ -151,7 +151,7 @@
 // -- Vampire mechanics --
 
 /datum/role/vampire/proc/can_suck(var/mob/living/carbon/human/H)
-	var/mob/living/M = antag.current
+	var/mob/M = antag.current
 	if(M.lying || M.incapacitated())
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
@@ -169,7 +169,6 @@
 			else
 				to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return TRUE
-
 
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
 	draining = target
