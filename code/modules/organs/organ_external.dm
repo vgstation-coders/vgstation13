@@ -1928,8 +1928,10 @@ obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 					..()
 		else
 			to_chat(user, "<span class='warning'>That head has no brain to remove!</span>")
-	else if(istype(W,/obj/item/device/soulstone))
-		W.capture_soul_head(src,user)
+	else if(istype(W,/obj/item/soulstone) || istype(W,/obj/item/weapon/melee/soulblade))
+		var/datum/soul_capture/capture_datum = new()
+		capture_datum.init_datum(user, src, W)
+		qdel(capture_datum)
 		return
 	else if(istype(W,/obj/item/device/healthanalyzer))
 		to_chat(user, "<span class='notice'>You use \the [W] to induce a small electric shock into \the [src].</span>")

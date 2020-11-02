@@ -513,7 +513,7 @@
 	responsive_reagent = NITROGEN
 
 /datum/find/soulstone/spawn_item()
-	return new /obj/item/device/soulstone
+	return new /obj/item/soulstone
 
 /datum/find/shard
 	find_ID = ARCHAEO_SHARD
