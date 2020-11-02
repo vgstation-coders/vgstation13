@@ -170,6 +170,7 @@
 	desc = "God wills it!"
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/plain
 	icon_state = "knight_grey"

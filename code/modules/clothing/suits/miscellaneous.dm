@@ -370,6 +370,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "cassock"
 	item_state = "cassock"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/imperium_monk
 	name = "Imperium monk"
@@ -385,6 +386,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "vamphunter"
 	item_state = "vamphunter"
 	body_parts_covered = FULL_TORSO|FEET
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/chickensuit
@@ -409,6 +411,7 @@ obj/item/clothing/suit/cassock
 	desc = "This is a nice holiday my son."
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/highlanderkilt
 	name = "highlander's kilt"
@@ -816,6 +819,7 @@ obj/item/clothing/suit/cassock
 	desc = "A black and plain looking kimono."
 	icon_state = "ronin_kimono"
 	item_state = "ronin_kimono"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
@@ -838,6 +842,7 @@ obj/item/clothing/suit/cassock
 	desc = "This inquisitor attire was made for new recruits, and has excellent straightforward defense. But not nearly enough to allow an ordinary man to stand any real chance against the the wicked."
 	icon_state = "coat-church"
 	item_state = "coat-church"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
