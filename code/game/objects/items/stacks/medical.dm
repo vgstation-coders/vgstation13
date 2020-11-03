@@ -54,6 +54,7 @@
 		use(1)
 
 	M.updatehealth()
+
 /obj/item/stack/medical/bruise_pack
 	name = "roll of gauze"
 	singular_name = "gauze length"
@@ -61,6 +62,7 @@
 	icon_state = "brutepack"
 	origin_tech = Tc_BIOTECH + "=1"
 	restraint_resist_time = 20 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/stack/medical/bruise_pack/bandaid
 	name = "small bandage"

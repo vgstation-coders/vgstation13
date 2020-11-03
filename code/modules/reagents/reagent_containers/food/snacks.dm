@@ -2346,6 +2346,7 @@
 	icon_state = "spaghettiboiled"
 	trash = /obj/item/trash/plate
 	restraint_resist_time = 1 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/New()
 	..()
