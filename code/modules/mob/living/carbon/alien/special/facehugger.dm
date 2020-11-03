@@ -31,6 +31,7 @@
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
 	var/sterile = FALSE
+	var/sterile_message = "It looks like \the [src]'s proboscis has been removed."
 
 	var/strength = 5
 
@@ -39,6 +40,7 @@
 	var/walk_speed = 1
 	var/nextwalk = FALSE
 	var/mob/living/target = null
+
 
 
 /obj/item/clothing/mask/facehugger/can_contaminate()
@@ -167,7 +169,7 @@
 		if(CONSCIOUS)
 			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
 	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
+		to_chat(user, "<span class='danger'>[sterile_message]</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
@@ -446,8 +448,23 @@
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
 	cant_remove_msg = " is latched on tight!"
+	sterile_message = "It looks like \the [src]'s has been de-beaked."
 	var/is_being_resisted = 0
 	var/escaping = 0 	//If enabled the crab will try to escape.
+
+/obj/item/clothing/mask/facehugger/headcrab/process()
+	..()
+	if(stat == DEAD || !real || sterile)
+		return
+	if(istype(loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/L = loc
+		var/obj/item/clothing/mask/facehugger/headcrab/H = L.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
+		if (H == src)
+			return
+		L.drop_from_inventory(src)
+		to_chat(L, "\The [src] escapes from your grasp!")
+		escaping = 1
+		GoActive()
 
 /obj/item/clothing/mask/facehugger/headcrab/equipped(mob/living/carbon/human/H)
 	if(stat == CONSCIOUS)
@@ -457,12 +474,26 @@
 		Assimilate(H)
 
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
-	if(ishuman(user))
+	if(ishuman(user) && stat != DEAD && real)
 		var/mob/living/carbon/human/target = user
 		if(target && target.head == src)
 			target.resist()
 		else
 			..()
+
+
+/obj/item/clothing/mask/facehugger/headcrab/death()
+	if(stat == DEAD || !real)
+		return
+	target = null
+	processing_objects.Remove(src)
+	icon_state = "[initial(icon_state)]_dead"
+	stat = DEAD
+	sterile = TRUE 
+	canremove = 1
+
+	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
+	
 
 /obj/item/clothing/mask/facehugger/headcrab/findtarget()
 	if(!real)
@@ -477,7 +508,7 @@
 
 
 /obj/item/clothing/mask/facehugger/headcrab/attackby(obj/item/weapon/W, mob/user)
-	if(ishuman(user))
+	if(ishuman(user) && stat != DEAD)
 		var/mob/living/carbon/human/U = user
 		var/obj/item/clothing/mask/facehugger/headcrab/H = U.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
 		if(H == src)
@@ -523,17 +554,7 @@
 					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 						Attach(target)
 						return
-/obj/item/clothing/mask/facehugger/headcrab/examine(mob/user)
-	if(!real) //Toy facehuggers are a child, avoid confusing examine text.
-		return
-	switch(stat)
-		if(DEAD,UNCONSCIOUS)
-			to_chat(user, "<span class='deadsay'>\The [src] is not moving.</span>")
-		if(CONSCIOUS)
-			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
-	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
-	return
+
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(escaping)
 		return FALSE
@@ -609,6 +630,8 @@
 
 /obj/item/clothing/mask/facehugger/headcrab/proc/Assimilate(mob/living/L)
 	if(!ishuman(L))
+		return
+	if(sterile || !real)
 		return
 	var/mob/living/carbon/human/target = L
 	if(target.head != src) //was taken off or something

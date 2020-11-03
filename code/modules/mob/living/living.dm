@@ -1064,7 +1064,7 @@ Thanks.
 						crab.escaping = 1
 						crab.GoActive()
 				else
-					to_chat(L, "The [crab] is latched on tight! Keep struggling!")
+					to_chat(L, "\The [crab] is latched on tight! Keep struggling!")
 					crab.is_being_resisted = 0
 					return
 			crab.is_being_resisted = 0 //If the do_after is cancelled.
