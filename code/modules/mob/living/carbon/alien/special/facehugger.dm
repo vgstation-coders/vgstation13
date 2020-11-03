@@ -640,12 +640,11 @@
 		to_chat(target, "<span class='sinister'>You feel your consciousness slipping away...</span>")
 		target.Jitter(500)
 		sleep(150)
-		if(!target.isDead() || !target.isInCrit())	//something healed them, start over
-			target.remove_jitter()
-			Assimilate()
-			return
 		target.remove_jitter()
 		if(target && target.head == src)
+			if(!target.isDead() || !target.isInCrit())	//something healed them, start over
+				Assimilate()
+				return
 			target.death(0)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
