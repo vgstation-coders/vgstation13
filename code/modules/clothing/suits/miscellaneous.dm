@@ -641,6 +641,7 @@ obj/item/clothing/suit/cassock
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list (/obj/item/weapon/gun)
 
 /obj/item/clothing/suit/raincoat
