@@ -203,7 +203,7 @@
 		if (M)
 			assigned += M
 			candidates -= M
-			var/datum/role/wizard/newWizard = new		
+			var/datum/role/wizard/newWizard = new
 			newWizard.AssignToRole(M.mind,1)
 			if(wizards_number % 2)
 				WPF.HandleRecruitedRole(newWizard)//this will give the wizard their icon
@@ -314,13 +314,13 @@
 	role_category = /datum/role/nuclear_operative
 	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
-	required_pop = list(25, 25, 25, 25, 25, 20, 15, 15, 10, 10)
+	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 5 //This value is useless, see operative_cap
-	required_enemies = list(3,3,3,3,3,3,3,3,3,3)
+	required_enemies = list(2,2,2,2,2,2,2,2,2,2)
 	weight = 1
-	cost = 40
-	requirements = list(90, 90, 90, 80, 60, 40, 30, 20, 10, 10)
-	high_population_requirement = 60
+	cost = 30
+	requirements = list(90, 80, 60, 30, 20, 10, 10, 10, 10, 10)
+	high_population_requirement = 40
 	var/operative_cap = list(2, 2, 3, 3, 4, 5, 5, 5, 5, 5)
 
 /datum/dynamic_ruleset/roundstart/nuclear/ready(var/forced = 0)
