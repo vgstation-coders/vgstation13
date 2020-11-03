@@ -82,7 +82,7 @@
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/bomb_hood/security
 	icon_state = "bombsuitsec"
@@ -119,6 +119,7 @@
 	slowdown = HARDSUIT_SLOWDOWN_MED
 	armor = list(melee = 80, bullet = 80, laser = 40,energy = 20, bomb = 100, bio = 0, rad = 0)
 	max_heat_protection_temperature = ARMOR_MAX_HEAT_PROTECTION_TEMPERATURE
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	siemens_coefficient = 0
 

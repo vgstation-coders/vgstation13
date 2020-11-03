@@ -30,7 +30,7 @@
 	icon_state = "captunic"
 	item_state = "bio_suit"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/capjacket
 	name = "captain's uniform jacket"
@@ -38,7 +38,7 @@
 	icon_state = "capjacket"
 	item_state = "bio_suit"
 	body_parts_covered = FULL_TORSO|ARMS
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	max_combined_w_class = 6
 	storage_slots = 3
 
