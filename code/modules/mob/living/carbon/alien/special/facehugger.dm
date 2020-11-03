@@ -458,20 +458,6 @@
 		canremove = 1
 
 
-/obj/item/clothing/mask/facehugger/headcrab/process()
-	..()
-	if(stat == DEAD || !real || sterile)
-		return
-	if(istype(loc, /mob/living/carbon/human))
-		var/mob/living/carbon/human/L = loc
-		var/obj/item/clothing/mask/facehugger/headcrab/H = L.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
-		if (H == src)
-			return
-		L.drop_from_inventory(src)
-		to_chat(L, "\The [src] escapes from your grasp!")
-		escaping = 1
-		GoActive()
-
 /obj/item/clothing/mask/facehugger/headcrab/equipped(mob/living/carbon/human/H)
 	if(stat == CONSCIOUS)
 		Assimilate(H)
