@@ -642,7 +642,7 @@
 		sleep(150)
 		target.remove_jitter()
 		if(target && target.head == src)
-			if(!target.isDead() || !target.isInCrit())	//something healed them, start over
+			if(!target.isDead() && !target.isInCrit())	//something healed them, start over
 				Assimilate()
 				return
 			target.death(0)
