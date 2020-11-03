@@ -31,7 +31,7 @@
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
 	var/sterile = FALSE
-	var/sterile_message = "It looks like \the [src]'s proboscis has been removed."
+	var/sterile_message = "had its proboscis removed."
 
 	var/strength = 5
 
@@ -169,7 +169,7 @@
 		if(CONSCIOUS)
 			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
 	if (sterile)
-		to_chat(user, "<span class='danger'>[sterile_message]</span>")
+		to_chat(user, "<span class='danger'>It looks like \the [src] [sterile_message]</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
@@ -448,9 +448,15 @@
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
 	cant_remove_msg = " is latched on tight!"
-	sterile_message = "It looks like \the [src]'s has been de-beaked."
+	sterile_message = "has been de-beaked."
 	var/is_being_resisted = 0
 	var/escaping = 0 	//If enabled the crab will try to escape.
+
+/obj/item/clothing/mask/facehugger/headcrab/New()
+	..()
+	if(!real)	//Toys shouldn't be difficult to remove
+		canremove = 1
+
 
 /obj/item/clothing/mask/facehugger/headcrab/process()
 	..()
@@ -474,9 +480,9 @@
 		Assimilate(H)
 
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
-	if(ishuman(user) && stat != DEAD && real)
+	if(ishuman(user))
 		var/mob/living/carbon/human/target = user
-		if(target && target.head == src)
+		if(target && target.head == src && stat != DEAD && real)
 			target.resist()
 		else
 			..()
@@ -611,16 +617,16 @@
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s head!</span>")
 
 		forceMove(target)
-		target.audible_scream()
 		target.equip_to_slot(src, slot_head)
 		target.update_inv_head()
-		target.movement_speed_modifier -= 0.75			//Slow them down like a taser
-		spawn(30)
-			target.movement_speed_modifier += 0.75
+		if(real)
+			target.audible_scream()
+			target.movement_speed_modifier -= 0.75			//Slow them down like a taser
+			spawn(30)
+				target.movement_speed_modifier += 0.75
 		target.update_inv_head()			//Sometimes it doesnt work the first time
-		if(!sterile)
-			Assimilate(target)
-			return TRUE
+		Assimilate(target)
+		return TRUE
 
 	
 	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
