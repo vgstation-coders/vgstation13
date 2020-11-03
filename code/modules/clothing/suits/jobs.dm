@@ -101,6 +101,7 @@
 	desc = "Ah, your trusty coat. There's a few tears here and there, giving it a more timely look. Or at least, that's what you told yourself when you found out gettin' it repaired would set you back 200 credits."
 	icon_state = "noir_detective"
 	item_state = "noir_detective"
+	species_fit = list(INSECT_SHAPED)
 
 //Forensics
 /obj/item/clothing/suit/storage/forensics
@@ -114,11 +115,13 @@
 	name = "red jacket"
 	desc = "A red forensics technician jacket."
 	icon_state = "forensics_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/forensics/blue
 	name = "blue jacket"
 	desc = "A blue forensics technician jacket."
 	icon_state = "forensics_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/secdressjacket
 	body_parts_covered = FULL_TORSO|ARMS
@@ -237,6 +240,7 @@
 	icon_state = "bridgeofficer_jacket"
 	item_state = "bridgeofficer_jacket"
 	blood_overlay_type = "coat"
+	species_fit = list(INSECT_SHAPED)
 
 //Internal Affairs
 /obj/item/clothing/suit/storage/internalaffairs
@@ -273,6 +277,7 @@
 	desc = "A high-visibility jacket worn by medical first responders."
 	icon_state = "fr_jacket_open"
 	item_state = "fr_jacket"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "armor"
 	allowed = list(/obj/item/stack/medical, /obj/item/weapon/reagent_containers/dropper, /obj/item/weapon/reagent_containers/hypospray, /obj/item/weapon/reagent_containers/syringe, \
 	/obj/item/device/healthanalyzer, /obj/item/device/flashlight, /obj/item/device/radio, /obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/roller, /obj/item/weapon/autopsy_scanner/healthanalyzerpro)
@@ -323,6 +328,7 @@
 	desc = "A flash black jacket, it seems oddly heavy."
 	icon_state = "ia_jacket_open"
 	item_state = "ia_jacket"
+	species_fit = list(INSECT_SHAPED)
 	blood_overlay_type = "coat"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
