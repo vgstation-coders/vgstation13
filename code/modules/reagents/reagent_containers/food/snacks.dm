@@ -108,6 +108,9 @@
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
+	if(restraint_resist_time > 0)
+		if(restraint_apply_check(M, user))
+			return attempt_apply_restraints(M, user)
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
 	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
