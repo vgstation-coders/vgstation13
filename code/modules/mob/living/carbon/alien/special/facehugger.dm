@@ -445,7 +445,7 @@
 	slot_flags = SLOT_HEAD
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
-	cant_remove_msg = "The headcrab is latched on tight!"
+	cant_remove_msg = " is latched on tight!"
 	var/is_being_resisted = 0
 	var/escaping = 0 	//If enabled the crab will try to escape.
 
