@@ -640,6 +640,10 @@
 		to_chat(target, "<span class='sinister'>You feel your consciousness slipping away...</span>")
 		target.Jitter(500)
 		sleep(150)
+		if(!target.isDead() || !target.isInCrit())	//something healed them.loc
+			target.remove_jitter()
+			Assimilate()
+			return
 		target.remove_jitter()
 		if(target && target.head == src)
 			target.death(0)
