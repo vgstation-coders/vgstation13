@@ -150,6 +150,7 @@
 	desc = "Forged long ago, in a distant land."
 	icon_state = "samurai"
 	item_state = "samurai"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
 

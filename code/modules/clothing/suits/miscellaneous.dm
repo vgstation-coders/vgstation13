@@ -255,7 +255,7 @@ var/list/tag_suits_list = list()
 	desc = "Yarr."
 	icon_state = "pirate"
 	flags = FPRINT
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/hgpirate
@@ -303,6 +303,7 @@ var/list/tag_suits_list = list()
 	desc = "This robe commands authority."
 	icon_state = "judge"
 	item_state = "judge"
+	species_fit = list(INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
 
@@ -323,6 +324,7 @@ var/list/tag_suits_list = list()
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/syndicatefake
@@ -394,6 +396,7 @@ obj/item/clothing/suit/cassock
 	desc = "A suit made long ago by the ancient empire KFC."
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	siemens_coefficient = 2.0
 
@@ -402,6 +405,7 @@ obj/item/clothing/suit/cassock
 	name = "Monkey Suit"
 	desc = "A suit that looks like a primate."
 	icon_state = "monkeysuit"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -426,6 +430,7 @@ obj/item/clothing/suit/cassock
 	desc = "An ordinary cardboard box with holes cut in the sides."
 	icon_state = "cardborg"
 	item_state = "cardborg"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 11250)
 	w_type=RECYK_MISC
 
@@ -541,6 +546,7 @@ obj/item/clothing/suit/cassock
 	desc = "A suit made out of chitinous alien hide."
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -629,6 +635,7 @@ obj/item/clothing/suit/cassock
 	desc = "Perfect for doing up the house."
 	icon_state = "doshjacket"
 	body_parts_covered = FULL_TORSO|ARMS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/lordadmiral
 	name = "Lord Admiral's Coat"
@@ -653,6 +660,7 @@ obj/item/clothing/suit/cassock
 	name = "Liberty Coat"
 	desc = "Smells faintly of freedom."
 	icon_state = "libertycoat"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
 
 /obj/item/clothing/suit/storage/draculacoat
@@ -668,6 +676,7 @@ obj/item/clothing/suit/cassock
 	name = "Apron"
 	desc = "Simple white apron."
 	icon_state = "maidapron"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO
 
 /obj/item/clothing/suit/clownpiece
@@ -799,6 +808,7 @@ obj/item/clothing/suit/cassock
 	desc = "A traditional Japanese kimono."
 	icon_state = "fancy_kimono"
 	item_state = "fancy_kimono"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
@@ -826,6 +836,7 @@ obj/item/clothing/suit/cassock
 	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
@@ -860,6 +871,7 @@ obj/item/clothing/suit/cassock
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/red_suit
 	name = "red suit"
@@ -867,6 +879,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "red_suit"
 	item_state = "red_suit"
 	body_parts_covered = 0
+	species_fit = list(INSECT_SHAPED)
 
 obj/item/clothing/suit/poncho
 	name = "poncho"
