@@ -12,6 +12,9 @@
 	var/heal_burn = 0
 
 /obj/item/stack/medical/attack(mob/living/carbon/M as mob, mob/user as mob)
+	if(restraint_resist_time > 0)
+		if(restraint_apply_check(M, user))
+			return attempt_apply_restraints(M, user)
 
 	if(!istype(M))
 		to_chat(user, "<span class='warning'>\The [src] cannot be applied to [M]!</span>")
@@ -54,13 +57,15 @@
 		use(1)
 
 	M.updatehealth()
+
 /obj/item/stack/medical/bruise_pack
 	name = "roll of gauze"
 	singular_name = "gauze length"
 	desc = "Some sterile gauze to wrap around bloody stumps."
 	icon_state = "brutepack"
 	origin_tech = Tc_BIOTECH + "=1"
-	restraint_resist_time = 20 SECONDS
+	restraint_resist_time = 2 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/stack/medical/bruise_pack/bandaid
 	name = "small bandage"
@@ -68,6 +73,7 @@
 	icon_state = "bandaid"
 	amount = 1
 	max_amount = 1
+	restraint_resist_time = 1 SECONDS
 
 /obj/item/stack/medical/bruise_pack/attack(mob/living/carbon/M as mob, mob/user as mob)
 	if(..())
