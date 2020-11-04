@@ -492,7 +492,7 @@
 
 			if (href_list["search"])
 				var/norange = (usr.mutations && usr.mutations.len && (M_TK in usr.mutations))
-				var/t1 = copytext(sanitize(input("Search String: (Name, DNA, or ID)", "Med. records", null, null)  as text),1,MAX_MESSAGE_LEN)
+				var/t1 = copytext(sanitize(input("Search String: (Name, DNA, Fingerprints, or ID)", "Med. records", null, null)  as text),1,MAX_MESSAGE_LEN)
 				if ((!( t1 ) || usr.stat || !( authenticated ) || usr.restrained() || ((!in_range(src, usr)) && (!istype(usr, /mob/living/silicon)) && !norange)))
 					return
 				active1 = null
@@ -503,6 +503,14 @@
 						active2 = R
 					else
 						//Foreach continue //goto(3229)
+
+				for(var/datum/data/record/F in data_core.general)
+					if (( F.fields["fingerprint"] == t1 ))
+						active1 = F
+						for(var/datum/data/record/M in data_core.medical)
+							if (( M.fields["name"] == active1.fields["name"] ))
+								active2 = M
+
 				if (!( active2 ))
 					temp = text("Could not locate record [].", sanitize(t1))
 				else
