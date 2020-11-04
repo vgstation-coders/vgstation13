@@ -845,6 +845,7 @@ obj/item/clothing/suit/cassock
 	desc = "A set of armored robes worn by the followers of Ratvar"
 	icon_state = "clockwork"
 	item_state = "clockwork"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
