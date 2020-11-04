@@ -16,8 +16,8 @@
 	var/authenticated = null
 	var/rank = null
 	var/screen = null
-	var/datum/data/record/active1 = null
-	var/datum/data/record/active2 = null
+	var/datum/data/record/active1 = null // General Record
+	var/datum/data/record/active2 = null // Medical Record
 	var/a_id = null
 	var/temp = null
 	var/printing = null
@@ -505,11 +505,13 @@
 						//Foreach continue //goto(3229)
 
 				for(var/datum/data/record/F in data_core.general)
-					if (( F.fields["fingerprint"] == t1 ))
+					if (F.fields["fingerprint"] == t1)
 						active1 = F
 						for(var/datum/data/record/M in data_core.medical)
-							if (( M.fields["name"] == active1.fields["name"] ))
+							if (M.fields["name"] == active1.fields["name"])
 								active2 = M
+								break
+						break
 
 				if (!( active2 ))
 					temp = text("Could not locate record [].", sanitize(t1))
