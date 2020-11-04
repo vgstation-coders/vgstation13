@@ -1,5 +1,0 @@
----
-author: DamianX
-changes:
-  - tweak: Changed maximum name length from 26 to 52.
-delete-after: true

@@ -1,7 +1,0 @@
----
-author: DeityLink
-changes:
-  - imageadd: "After SEVEN FUCKING YEARS, cable cuffs finally appear like cable cuffs instead of metallic handcuffs on cuffed mobs."
-  - imageadd: "...and as I just learned that belts, bedsheets, gauze, and a few more can be used as ghetto cuffs as well, I just had to make sprites for all of those as well."
-  - bugfix: Also fixed spaghetti cuffs and gauze cuffs.
-delete-after: true

@@ -1,5 +1,0 @@
----
-author: DamianX
-changes:
-  - bugfix: Typing indicators (say bubbles) should no longer show up in the right-click menu or prevent people from riding MULEbots. Yeah.
-delete-after: true

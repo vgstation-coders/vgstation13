@@ -1,5 +1,0 @@
----
-author: boy2mantwicethefam
-changes:
-  - bugfix: "Fixed a bug where you could roll a malfunctioning AI on Castle, a map that did not have any AIs, promptly returning you back to the lobby when the game realized there was nowhere to spawn the malf AI on"
-delete-after: true

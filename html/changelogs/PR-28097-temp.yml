@@ -1,5 +1,0 @@
----
-author: Zth--
-changes:
-  - bugfix: Fixes visor helmet runtime possibly causing head damage invulnerability
-delete-after: true
