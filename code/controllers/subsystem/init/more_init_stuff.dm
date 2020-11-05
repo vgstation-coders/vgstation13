@@ -44,9 +44,10 @@ var/datum/subsystem/more_init/SSmore_init
 		S.init_cams()
 
 	create_global_diseases()
-	
+
 	init_wizard_apprentice_setups()
 	machinery_rating_cache = cache_machinery_components_rating()
+	typing_indicator = new
 
 /proc/cache_machinery_components_rating()
 	var/list/cache = list()

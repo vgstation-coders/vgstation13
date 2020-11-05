@@ -205,8 +205,8 @@
 		to_chat(user, "<span class='sinister'>You can use charged soulstones to refill it. The more charges you have, the faster you will revive.</span>")
 
 /obj/item/phylactery/attackby(obj/item/I, mob/user)
-	if(istype(I, /obj/item/device/soulstone))
-		var/obj/item/device/soulstone/S = I
+	if(istype(I, /obj/item/soulstone))
+		var/obj/item/soulstone/S = I
 		var/mob/living/simple_animal/shade/sacrifice = locate() in S
 		if(sacrifice)
 			visible_message("<span class = 'warning'>The soul within \the [I] is released unto \the [src].</span>")

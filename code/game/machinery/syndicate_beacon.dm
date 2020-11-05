@@ -14,6 +14,7 @@
 
 	anchored = 0
 	density = 1
+	mech_flags = MECH_SCAN_FAIL
 
 	var/temptext = ""
 	var/selfdestructing = FALSE

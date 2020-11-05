@@ -1,8 +1,8 @@
 //////////////////////////////Construct Spells/////////////////////////
 
 /spell/aoe_turf/conjure/construct
-	name = "Artificer"
-	desc = "This spell conjures a construct which may be controlled by Shades"
+	name = "Conjure Shell"
+	desc = "This spell conjures a construct shell which may then be controlled by a shade. A human is needed to capture the shade inside a soul stone, and set it inside the shell."
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "conjuration"
@@ -36,8 +36,8 @@
 	. = ..()
 
 /spell/aoe_turf/conjure/floor
-	name = "Floor Construction"
-	desc = "This spell constructs a cult floor"
+	name = "Conjure Floor"
+	desc = "This spell conjures a cult floor. You can also click existing floors up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 50
@@ -75,8 +75,8 @@
 		animation = null
 
 /spell/aoe_turf/conjure/wall
-	name = "Lesser Construction"
-	desc = "This spell constructs a cult wall"
+	name = "Conjure Wall"
+	desc = "This spell conjures a cult wall. You can also click existing non-reinforced walls up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 100
@@ -114,8 +114,8 @@
 		animation = null
 
 /spell/aoe_turf/conjure/door
-	name = "Cult Door"
-	desc = "This spell constructs a cult wall"
+	name = "Conjure Door"
+	desc = "This spell conjures a cult door. Those automatically open and close upon the passage of a cultist, construct or shade."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 100
@@ -140,10 +140,10 @@
 		qdel(animation)
 		animation = null
 
-/spell/aoe_turf/conjure/wall/reinforced
+/spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
 	desc = "This spell constructs a reinforced metal wall"
-	user_type = USER_TYPE_CULT
+	user_type = USER_TYPE_CULT//why?
 
 	charge_max = 300
 	spell_flags = Z2NOCAST
@@ -153,11 +153,11 @@
 	cast_delay = 50
 	cast_sound = 'sound/items/welder.ogg'
 
-	summon_type = list(/turf/simulated/wall/r_wall)
+	summon_type = list(/turf/simulated/wall/r_wall)//it's not even a cult wall?
 
 /spell/aoe_turf/conjure/soulstone
-	name = "Summon Soulstone"
-	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space"
+	name = "Conjure Soul Stone Shard"
+	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space. An altar would let you let you conjure a perfect Soul Gem instead, producing better constructs."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 3000
@@ -167,7 +167,7 @@
 	range = 0
 	cast_delay = 30
 
-	summon_type = list(/obj/item/device/soulstone)
+	summon_type = list(/obj/item/soulstone)
 
 	hud_state = "const_stone"
 	override_base = "cult"
@@ -179,8 +179,8 @@
 	. = ..()
 
 /spell/aoe_turf/conjure/pylon
-	name = "Red Pylon"
-	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source."
+	name = "Conjure Pylon"
+	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source, or a weak obstacle."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200
@@ -403,7 +403,7 @@
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
-	desc = "Raise a cult structure that you may then operate."
+	desc = "Raise a cult structure that you may then operate, such as an altar, a forge, or a spire."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200

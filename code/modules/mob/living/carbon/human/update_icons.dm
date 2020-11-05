@@ -1200,8 +1200,8 @@ var/global/list/damage_icon_parts = list()
 		drop_hands()
 		stop_pulling()	//TODO: should be handled elsewhere
 		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
-		O.icon = 'icons/mob/mob.dmi'
-		O.icon_state = "handcuff1"
+		O.icon = 'icons/obj/cuffs.dmi'
+		O.icon_state = handcuffed.icon_state
 		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
@@ -1214,8 +1214,8 @@ var/global/list/damage_icon_parts = list()
 	if (mutual_handcuffs && mutual_handcuffs.is_visible())
 		stop_pulling()	//TODO: should be handled elsewhere
 		var/obj/abstract/Overlays/O = obj_overlays[HANDCUFF_LAYER]
-		O.icon = 'icons/mob/mob.dmi'
-		O.icon_state = "singlecuff1"
+		O.icon = 'icons/obj/cuffs.dmi'
+		O.icon_state = "singlecuff1"//TODO: procedurally generated single-cuffs
 		O.pixel_x = species.inventory_offsets["[slot_handcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_handcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER
 		obj_to_plane_overlay(O,HANDCUFF_LAYER)
@@ -1227,7 +1227,7 @@ var/global/list/damage_icon_parts = list()
 	overlays -= obj_overlays[LEGCUFF_LAYER]
 	if(legcuffed && legcuffed.is_visible())
 		var/obj/abstract/Overlays/O = obj_overlays[LEGCUFF_LAYER]
-		O.icon = 'icons/mob/mob.dmi'
+		O.icon = 'icons/obj/cuffs.dmi'
 		O.icon_state = "legcuff1"
 		O.pixel_x = species.inventory_offsets["[slot_legcuffed]"]["pixel_x"] * PIXEL_MULTIPLIER
 		O.pixel_y = species.inventory_offsets["[slot_legcuffed]"]["pixel_y"] * PIXEL_MULTIPLIER

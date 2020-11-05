@@ -90,6 +90,8 @@
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
 				base = "glasstable"
+			if (istype(src, /obj/structure/table/glass/plasma))
+				base = "plasma_table"
 			if (istype(src, /obj/structure/table/plastic))
 				base = "plastictable"
 

@@ -5381,7 +5381,6 @@
 	description = "An opaque white liquid made from soybeans."
 	color = "#e8e8d8" //rgb: 232, 232, 216
 	nutriment_factor = 5 * REAGENTS_METABOLISM
-	glass_icon_state = "glass_white"
 	glass_desc = "White and nutritious soy goodness!"
 
 /datum/reagent/drink/milk/cream
