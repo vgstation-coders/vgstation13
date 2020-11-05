@@ -139,6 +139,7 @@
 	desc = "A classic suit of plate armour, highly effective at stopping melee attacks."
 	icon_state = "knight_green"
 	item_state = "knight_green"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	slowdown = HARDSUIT_SLOWDOWN_LOW
 	armor = list(melee = 40, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
@@ -150,26 +151,31 @@
 	desc = "Forged long ago, in a distant land."
 	icon_state = "samurai"
 	item_state = "samurai"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 5, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/armor/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/blue
 	icon_state = "knight_blue"
 	item_state = "knight_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/templar
 	name = "crusader armour"
 	desc = "God wills it!"
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/armor/knight/plain
 	icon_state = "knight_grey"
@@ -190,6 +196,7 @@
 	desc = "A suit of armor with heavy padding to protect against projectile attacks. Distributed to shadow organization squaddies."
 	icon_state = "xcomarmor2"
 	item_state = "xcomarmor2"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 10, bullet = 50, laser = 10, energy = 10, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 0.5
@@ -206,6 +213,7 @@
 	desc = "A suit of armor with heavy plating to protect against melee attacks. Distributed to shadow organization squaddies."
 	icon_state = "xcomarmor1"
 	item_state = "xcomarmor1"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	armor = list(melee = 50, bullet = 10, laser = 10, energy = 0, bomb = 0, bio = 0, rad = 0)
 	slowdown = HARDSUIT_SLOWDOWN_LOW

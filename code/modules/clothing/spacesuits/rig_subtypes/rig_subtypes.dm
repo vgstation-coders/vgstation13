@@ -211,7 +211,7 @@
 	desc = "A bizarre gem-encrusted suit that radiates magical energies."
 	item_state = "wiz_hardsuit"
 	w_class = W_CLASS_MEDIUM
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
@@ -406,7 +406,7 @@
 	desc = "The attire of a true krieger. All shall fall, and only das vaterland will remain."
 	item_state = "rig-nazi"
 	icon_state = "rig-nazi"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
@@ -430,7 +430,7 @@
 	item_state = "rig-soviet"
 	icon_state = "rig-soviet"
 	slowdown = 1
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	allowed = list(/obj/item/weapon/gun,/obj/item/device/flashlight,/obj/item/weapon/tank,/obj/item/weapon/melee/)
@@ -600,6 +600,7 @@
 	desc = "...and so he left the asteroid, with everything but his humanity."
 	icon_state = "rorsuit"
 	item_state = "rorsuit"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	clothing_flags = GOLIATHREINFORCE
 	head_type = /obj/item/clothing/head/helmet/space/rig/ror
