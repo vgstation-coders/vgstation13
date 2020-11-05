@@ -109,7 +109,7 @@
 	pop_and_enemies += enemies_count // Enemies count twice
 
 	var/threat = round(mode.threat_level/10)
-	if (enemies_count <= required_enemies[threat])
+	if (enemies_count < required_enemies[threat] && !map.ignore_enemy_requirement(src))
 		message_admins("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		log_admin("Dynamic Mode: There are not enough enemy jobs ready for [name]. ([enemies_count] out of [required_enemies[threat]])")
 		return FALSE
