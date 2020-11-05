@@ -4,24 +4,27 @@
 	icon_state = "wizard"
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
-
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/head/wizard/red
 	name = "red wizard hat"
 	desc = "Strange-looking red hat-wear that most certainly belongs to a real magic user."
 	icon_state = "redwizard"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/fake
 	name = "wizard hat"
 	desc = "It has WIZZARD written across it in sequins. Comes with a cool beard."
 	icon_state = "wizard-fake"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/wizard/marisa
 	name = "Witch Hat"
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
 	icon_state = "marisa"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/magus
@@ -29,6 +32,7 @@
 	desc = "A mysterious helmet that hums with an unearthly power."
 	icon_state = "magus"
 	item_state = "magus"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/magus/fake
@@ -40,6 +44,7 @@
 	desc = "Strange-looking purple hat-wear that most certainly belongs to a real magic user."
 	icon_state = "wizhatclown"
 	item_state = "wizhatclown" // cheating
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/clown/fake
@@ -50,6 +55,7 @@
 	name = "psychic amplifier"
 	desc = "A crown-of-thorns psychic amplifier. Kind of looks like a tiara having sex with an industrial robot."
 	icon_state = "amp"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/necro
@@ -57,6 +63,7 @@
 	desc = "An elegant hood woven with the souls of the undying."
 	icon_state = "necromancer"
 	item_state = "necrohood"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/necro/fake
@@ -78,6 +85,7 @@
 	desc = "Get the Lich a crown, Liches love crowns."
 	icon_state = "lichcrown_fancy"
 	item_state = "lichcrown_fancy"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/skelelich
@@ -85,6 +93,7 @@
 	desc = "Turns out you CAN take it with you."
 	icon_state = "lichcrown"
 	item_state = "lichcrown"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/wizard/hallowiz
@@ -92,12 +101,14 @@
 	desc = "Pumpkins scream in the dead of night!"
 	icon_state = "hallowiz"
 	item_state = "hallowiz"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/wizard/mystic
 	name = "mystic hat"
 	desc = "A strange pointed hat imbued with runic energies."
 	icon_state = "mystichat"
 	item_state = "mystichat"
+	species_fit = list(INSECT_SHAPED)
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/head/wizard/winter
@@ -105,6 +116,7 @@
 	desc = "A clever enchantment on this hat keeps your head warm in harsh winter weather."
 	icon_state = "wizard_snow"
 	item_state = "wizard_snow"
+	species_fit = list(INSECT_SHAPED)
 	heat_conductivity = SNOWGEAR_HEAT_CONDUCTIVITY
 
 /obj/item/clothing/suit/wizrobe
@@ -183,6 +195,7 @@
 	name = "Witch Hat"
 	desc = "Strange-looking hat-wear, makes you want to cast fireballs."
 	icon_state = "marisa"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	siemens_coefficient = 1.0
 
@@ -258,4 +271,5 @@
 	name = "sinterklaas mitre"
 	desc = "Strange-looking red head-wear that most certainly belongs to a real saint."
 	icon_state = "sinterklaasmitre"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8

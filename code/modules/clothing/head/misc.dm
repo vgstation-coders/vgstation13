@@ -26,6 +26,7 @@
 	desc = "It's an amish looking hat."
 	icon_state = "tophat"
 	item_state = "that"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
 	wizard_garb = 5 //Treat this as a % chance to be a magic hat to start. It becomes TRUE/FALSE later.
@@ -573,6 +574,7 @@
 	desc = "An ornate golden headpiece worn by the ancient rulers of Space Egypt."
 	icon_state = "pharaoh"
 	item_state = "pharaoh"
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = TRUE
 	body_parts_covered = FULL_HEAD|HEAD|EARS|MASKHEADHAIR
 
