@@ -8245,16 +8245,49 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 	color = "#002000" //rgb: 0, 32, 0
 	dupeable = FALSE
 
-	var/minimal_dosage = 1 //At least 1 unit is needed for petriication
+	var/min_to_start = 1 //At least 1 unit is needed for petriication to start
+	var/is_being_petrified = FALSE
+	var/stage
 
 /datum/reagent/petritricin/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
+	if(issilicon(M))
+		return
+	var/mob/living/carbon/C
+	if(iscarbon(M))
+		C = M
+	if(volume >= min_to_start && !is_being_petrified)
+		is_being_petrified = TRUE
+	if(is_being_petrified)
+		if(holder.has_any_reagents(PETRITRICINCURES))
+			to_chat(M, "<span class='notice'>You feel a wave of relief as your muscles loosen up.</span>")
+			C.pain_shock_stage = max(0, C.pain_shock_stage - 300)
+			is_being_petrified = FALSE
+			holder.del_reagent(PETRITRICIN)
+			return
+		switch(stage)
+			if(1)
+				//Second message is shown to hallucinating mobs
+				M.simple_message("<span class='userdanger'>You are slowing down. Moving is extremely painful for you.</span>",\
+				"<span class='notice'>You feel like Michelangelo di Lodovico Buonarroti Simoni trapped in a foreign body.</span>")
+				if(istype(C))
+					C.pain_shock_stage += 300
+				M.audible_scream()
+			if(2)
+				M.simple_message("<span class='userdanger'>Your skin starts losing color and cracking. Your body becomes numb.</span>",\
+				"<span class='notice'>You decide to channel your inner Italian sculptor to create a beautiful statue.</span>")
+				M.Stun(3)
+			if(3)
+				if(M.turn_into_statue(1))
+					M.simple_message("<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>",\
+					"<span class='notice'>You've created a masterwork statue of David!</span>")
+					is_being_petrified = FALSE
+		stage = stage + 1
 
-	if(volume >= minimal_dosage && prob(30))
-		if(!issilicon(M))
-			if(M.slow_petrify()) //Statue forever
-				to_chat(M, "<span class='userdanger'>You have been turned to stone by ingesting petritricin.</span>")
+
+
+			
 
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning
