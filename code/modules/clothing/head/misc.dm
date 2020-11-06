@@ -246,6 +246,7 @@
 	name = "beaver hat"
 	icon_state = "beaver_hat"
 	item_state = "beaver_hat"
+	species_fit = list(INSECT_SHAPED)
 	desc = "Like a top hat, but made of beavers."
 	flags = FPRINT
 
