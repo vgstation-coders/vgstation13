@@ -16,6 +16,7 @@
 	desc = "For when you need to protect your face from the backblast of your pepperspray"
 	icon_state = "riot_helm"
 	item_state = "riot_helm"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
 	var/list/initial_armor = list()
 	actions_types = list(/datum/action/item_action/toggle_helmet)

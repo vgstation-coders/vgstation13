@@ -5,6 +5,7 @@
 /obj/item/clothing/head/collectable
 	name = "collectable hat"
 	desc = "A rare collectable hat."
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/collectable/petehat
 	name = "ultra rare Pete's hat!"

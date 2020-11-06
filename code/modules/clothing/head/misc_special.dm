@@ -138,6 +138,7 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
 
 /obj/item/clothing/head/ushanka/hos

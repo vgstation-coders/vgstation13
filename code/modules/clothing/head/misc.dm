@@ -139,6 +139,7 @@
 	desc = "It's a green bandana with some fine nanotech lining."
 	icon_state = "greenbandana"
 	item_state = "greenbandana"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/beret/highlander
@@ -299,11 +300,13 @@
 /obj/item/clothing/head/fedora/white
 	name = "white fedora"
 	icon_state = "fedora_white"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A great white hat ruined by being within fifty yards of you."
 
 /obj/item/clothing/head/fedora/brown
 	name = "brown fedora"
 	icon_state = "fedora_brown"
+	species_fit = list(INSECT_SHAPED)
 	desc = "Don't you even think about losing it."
 
 /obj/item/clothing/head/fez
@@ -431,6 +434,7 @@
 	desc = "Show everyone just how patriotic you are."
 	icon_state = "libertyhat"
 	item_state = "libertyhat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -466,6 +470,7 @@
 	desc = "You wear this around your head."
 	icon_state = "headband"
 	item_state = "headband"
+	species_fit = list(INSECT_SHAPED)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/metalgear.dmi', "right_hand" = 'icons/mob/in-hand/right/metalgear.dmi')
 
 /obj/item/clothing/head/cowboy
@@ -473,6 +478,7 @@
 	desc = "Perfect for the closet botanist."
 	icon_state = "cowboy"
 	item_state = "cowboy"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 10, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 
 /obj/item/clothing/head/christmas/santahat/red
@@ -480,12 +486,14 @@
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatred"
 	item_state = "santahatred"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/christmas/santahat/green
 	name = "green santa hat"
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatgreen"
 	item_state = "santahatgreen"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/festive
 	name = "festive paper hat"
@@ -520,6 +528,7 @@
 	desc = "A conical paper hat which used to be used as a punishment in schools. Misbehaving children had to wear it while standing in a corner. The writing on it says \"DUNCE\"."
 	icon_state = "duncecap"
 	item_state = "duncecap"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/party_hat
 	name = "party hat"
@@ -532,11 +541,13 @@
 	desc = "Reenact acts of violence against reptiles, or sneak into a swamp unnoticed."
 	icon_state = "snakehead"
 	item_state = "snakehead"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/clockwork_hood
 	name = "clockwork hood"
 	icon_state = "clockwork"
 	item_state = "clockwork"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A hood worn by the followers of Ratvar."
 	flags = FPRINT
 
@@ -545,6 +556,7 @@
 	desc = "The result of extreme medical malpractice to save a patient, or a trip to the robotics lab."
 	icon_state = "neckbolts"
 	item_state = "neckbolts"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/alien_antenna
@@ -552,6 +564,7 @@
 	desc = "Take us to your leader/captain/clown."
 	icon_state = "antennae"
 	item_state = "antennae"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/elfhat
