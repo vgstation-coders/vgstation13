@@ -4,6 +4,7 @@
 	desc = "a stylish hat for a stylish stylist."
 	icon_state = "barber"
 	item_state = "barber"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
 
@@ -96,6 +97,7 @@
 	name = "chaplain's hood"
 	desc = "It's hood that covers the head. It keeps you warm during the space winters."
 	icon_state = "chaplain_hood"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
@@ -104,6 +106,7 @@
 	name = "nun hood"
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
@@ -139,12 +142,14 @@
 	desc = "A red peaked cap, with a corporate logo on it."
 	icon_state = "peaked"
 	item_state = "peaked"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/garrison
 	name = "garrison cap"
 	desc = "A squat garrison cap, for officers made of sterner stuff."
 	icon_state = "garrison"
 	item_state = "garrison"
+	species_fit = list(INSECT_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery

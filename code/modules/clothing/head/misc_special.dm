@@ -295,3 +295,4 @@
 	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
 	icon_state = "energy_dome"
 	item_state = "energy_dome"
+	species_fit = list(INSECT_SHAPED)

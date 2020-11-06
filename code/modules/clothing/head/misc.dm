@@ -11,6 +11,7 @@
 /obj/item/clothing/head/hairflower
 	name = "hair flower pin"
 	icon_state = "hairflower"
+	species_fit = list(INSECT_SHAPED)
 	desc = "Smells nice."
 	item_state = "hairflower"
 	flags = FPRINT
@@ -20,6 +21,7 @@
 	desc = "A powdered wig."
 	icon_state = "pwig"
 	item_state = "pwig"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/that
 	name = "top hat"
@@ -75,6 +77,7 @@
 	name = "plague doctor's hat"
 	desc = "These were once used by Plague doctors. They're pretty much useless."
 	icon_state = "plaguedoctor"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	permeability_coefficient = 0.01
 	siemens_coefficient = 0.9
@@ -84,6 +87,7 @@
 	name = "hastur's hood"
 	desc = "It's unspeakably stylish."
 	icon_state = "hasturhood"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	body_parts_visible_override = FACE
 
@@ -92,6 +96,7 @@
 	desc = "A golden chain circlet which gives the impression of a halo."
 	icon_state = "vamphunter"
 	item_state = "vamphunter"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = NONE
 
 /obj/item/clothing/head/nursehat
@@ -124,6 +129,7 @@
 	name = "cueball helmet"
 	desc = "A large, featureless white orb mean to be worn on your head. How do you even see out of this thing?"
 	icon_state = "cueball"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHEADHAIR
 	item_state="cueball"
@@ -147,6 +153,7 @@
 	desc = "A helmet made out of a box."
 	icon_state = "cardborg_h"
 	item_state = "cardborg_h"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -184,6 +191,7 @@
 	name = "rabbit ears"
 	desc = "Wearing these makes you looks useless, and only good for your sex appeal."
 	icon_state = "bunny"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/flatcap
@@ -191,6 +199,7 @@
 	desc = "A working man's cap."
 	icon_state = "flat_cap"
 	item_state = "detective"
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.9
 
 /obj/item/clothing/head/pirate
@@ -198,6 +207,7 @@
 	desc = "Yarr."
 	icon_state = "pirate"
 	item_state = "pirate"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/hgpiratecap
 	name = "pirate hat"
@@ -211,12 +221,14 @@
 	desc = "Yarr."
 	icon_state = "bandana"
 	item_state = "bandana"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/sith
 	name = "Sith Cowl"
 	desc = "UNLIMITED POWER!"
 	icon_state = "sith"
 	item_state = "sith"
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1 //Allows lightning to be used
 
 //stylish bs12 hats
@@ -248,6 +260,7 @@
 	name = "slav squatter hat"
 	icon_state = "squatter_hat"
 	item_state = "squatter_hat"
+	species_fit = list(INSECT_SHAPED)
 	desc = "Cyka blyat."
 	flags = FPRINT
 
@@ -324,6 +337,7 @@
 	desc = "Not as fuzzy as the real thing."
 	icon_state = "bearpelt"
 	item_state = "bearpelt"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -362,6 +376,7 @@
 	desc = "Ein Helm, um die Nazi-Interesse an fremden Raumstationen zu sichern."
 	icon_state = "stalhelm"
 	item_state = "stalhelm"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/panzer
@@ -369,6 +384,7 @@
 	desc = "Ein Hut passen nur für die größten Tanks."
 	icon_state = "panzercap"
 	item_state = "panzercap"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/naziofficer
@@ -376,6 +392,7 @@
 	desc = "Ein Hut von Offizieren in der Nazi-Partei getragen."
 	icon_state = "officercap"
 	item_state = "officercap"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/russobluecamohat
@@ -383,6 +400,7 @@
 	desc = "A symbol of discipline, honor, and lots and lots of removal of some type of skewered food."
 	icon_state = "russobluecamohat"
 	item_state = "russobluecamohat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/russofurhat
@@ -390,6 +408,7 @@
 	desc = "Russian winter got you down? Maybe your enemy, but not you!"
 	icon_state = "russofurhat"
 	item_state = "russofurhat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/lordadmiralhat
@@ -397,12 +416,14 @@
 	desc = "A hat suitable for any man of high and exalted rank."
 	icon_state = "lordadmiralhat"
 	item_state = "lordadmiralhat"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/jesterhat
 	name = "jester hat"
 	desc = "A hat fit for a fool."
 	icon_state = "jesterhat"
 	item_state = "jesterhat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/libertyhat
@@ -431,12 +452,14 @@
 	desc = "A funny hat worn by extremely boring people."
 	icon_state = "mitre"
 	item_state = "mitre"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/clownpiece
 	name = "Clownpiece's jester hat"
 	desc = "A purple polka-dotted jester's hat with yellow pompons."
 	icon_state = "clownpiece"
 	item_state = "clownpiece"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/headband
 	name = "head band"
@@ -560,6 +583,7 @@
 	desc = "A round wide-brimmed hat worn by more traditional Roman Catholic clergy."
 	icon_state = "brim-hat"
 	item_state = "brim-hat"
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = TRUE
 	armor = list(melee = 0, bullet = 0, laser = 15, energy = 15, bomb = 0, bio = 0, rad = 0)
 
@@ -568,6 +592,7 @@
 	desc = "A red fancy looking wide-brimmed hat. It's even got a feather in it."
 	icon_state = "widehat_red"
 	item_state = "widehat_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/pharaoh
 	name = "pharaoh's headpiece"

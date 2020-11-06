@@ -118,6 +118,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/roman/legionaire
@@ -126,6 +127,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 25, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman_c"
 	item_state = "roman_c"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS
 
 /obj/item/clothing/head/helmet/samurai
@@ -134,6 +136,7 @@
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "kabuto"
 	item_state = "kabuto"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/aviatorhelmet
@@ -142,6 +145,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	item_state = "aviator_helmet"
 	icon_state = "aviator_helmet"
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/piratelord
@@ -178,6 +182,7 @@
 	name = "Prototype Helmet"
 	desc = "Shiny red helmet with white accents and a built in shaded visor that does absolutely nothing, nothing but look rad as hell."
 	icon_state = "protohelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "protohelmet"
 	siemens_coefficient = 1
@@ -186,6 +191,7 @@
 	name = "Broken Helmet"
 	desc = "The product of twelve years of work by an eccentric and brilliant loner. A helmet belonging to the perfect man; an unbeatable machine."
 	icon_state = "breakhelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "breakhelmet"
@@ -214,6 +220,7 @@
 	name = "Sniper Helmet"
 	desc = "Helmet belonging to one of the many mass produced 'Joe' type robots."
 	icon_state = "joehelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "joehelmet"
@@ -243,6 +250,7 @@
 	desc = "A classic metal helmet."
 	icon_state = "knight_green"
 	item_state = "knight_green"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 20, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
@@ -251,20 +259,24 @@
 /obj/item/clothing/head/helmet/knight/blue
 	icon_state = "knight_blue"
 	item_state = "knight_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/templar
 	name = "crusader helmet"
 	desc = "Deus Vult."
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/interrogator
 	name = "interrogator helmet"
@@ -286,6 +298,7 @@
 	desc = "A fancy helmet for a fancy policeman."
 	icon_state = "police_helmet"
 	item_state = "police_helmet"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD
 
 /obj/item/clothing/head/helmet/chainmail
@@ -312,5 +325,5 @@
 	desc = "Attention, ground units. Anti-citizen reported in this community."
 	icon_state = "metrocop_helmet"
 	item_state = "helmet"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD
-	species_fit = list()
