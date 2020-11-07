@@ -147,6 +147,7 @@
 	desc = "Don't lose your head!"
 	icon_state = "highlanderberet"
 	item_state = "highlanderberet"
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1 //required for the spell in the highlander syndicate bundle
 
 /obj/item/clothing/head/cardborg

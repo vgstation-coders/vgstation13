@@ -79,6 +79,7 @@
 	desc = "The large grinning clown face on the front of the helmet is equal parts funny and creepy."
 	icon_state = "clown-eva-helmet"
 	item_state = "clown-eva-helmet"
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/suit/space/clown
