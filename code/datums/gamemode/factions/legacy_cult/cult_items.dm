@@ -76,6 +76,7 @@
 	name = "magus helm"
 	icon_state = "magus"
 	item_state = "magus"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A helm worn by the followers of Nar-Sie."
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD

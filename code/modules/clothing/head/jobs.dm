@@ -4,6 +4,7 @@
 	desc = "a stylish hat for a stylish stylist."
 	icon_state = "barber"
 	item_state = "barber"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
 
@@ -50,7 +51,7 @@
 	body_parts_covered = HEAD|EARS
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
-	species_fit = list()
+	species_fit = list(INSECT_SHAPED)
 	siemens_coefficient = 0.8
 
 /obj/item/clothing/head/HoS/dermal
@@ -64,6 +65,7 @@
 	name = "formal Head of Security beret"
 	desc = "A navy beret with a Head of Security rank insignia on it. For formal occasions."
 	icon_state = "hosberet"
+	species_fit = list(INSECT_SHAPED)
 
 //Warden
 /obj/item/clothing/head/warden
@@ -80,6 +82,7 @@
 	name = "formal warden beret"
 	desc = "A navy beret with a Warden rank insignia on it. For formal occasions."
 	icon_state = "wardenberet"
+	species_fit = list(INSECT_SHAPED)
 
 //Head of Personnel
 /obj/item/clothing/head/hopcap
@@ -96,6 +99,7 @@
 	name = "chaplain's hood"
 	desc = "It's hood that covers the head. It keeps you warm during the space winters."
 	icon_state = "chaplain_hood"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
@@ -104,6 +108,7 @@
 	name = "nun hood"
 	desc = "Maximum piety in this star system."
 	icon_state = "nun_hood"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 0.9
 
@@ -128,42 +133,50 @@
 	name = "security beret"
 	desc = "A beret with the security insignia emblazoned on it. For officers that are more inclined towards style than safety."
 	icon_state = "beret_badge"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beret/officer
 	name = "formal security officer beret"
 	desc = "A navy beret with a Security Officer rank insignia on it. For formal occasions."
 	icon_state = "officerberet"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/peaked
 	name = "peaked cap"
 	desc = "A red peaked cap, with a corporate logo on it."
 	icon_state = "peaked"
 	item_state = "peaked"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/garrison
 	name = "garrison cap"
 	desc = "A squat garrison cap, for officers made of sterner stuff."
 	icon_state = "garrison"
 	item_state = "garrison"
+	species_fit = list(INSECT_SHAPED)
 
 //Medical
 /obj/item/clothing/head/surgery
 	name = "surgical cap"
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs."
 	icon_state = "surgcap_blue"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 
 /obj/item/clothing/head/surgery/purple
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is deep purple."
 	icon_state = "surgcap_purple"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/surgery/blue
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is baby blue."
 	icon_state = "surgcap_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/surgery/green
 	desc = "A cap surgeons wear during operations. Keeps their hair from tickling your internal organs. This one is dark green."
 	icon_state = "surgcap_green"
+	species_fit = list(INSECT_SHAPED)
 
  // Reference: http://www.teuse.net/personal/harrington/hh_bible.htm
  // http://www.trmn.org/portal/images/uniforms/rmn/rmn_officer_srv_dress_lrg.png
@@ -174,11 +187,13 @@
 	name = "officers beret"
 	desc = "A black beret adorned with the shield (a silver kite shield with an engraved sword) of the Nanotrasen security forces, announcing to the world that the wearer is a defender of Nanotrasen."
 	icon_state = "centcomofficerberet"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beret/centcom/captain
 	name = "captains beret"
 	desc = "A white beret adorned with the shield (a cobalt kite shield with an engraved sword) of the Nanotrasen security forces, worn only by those captaining a vessel of the Nanotrasen Navy."
 	icon_state = "centcomcaptain"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/shoes/centcom
 	name = "dress shoes"

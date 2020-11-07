@@ -901,9 +901,7 @@
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "cone"
 	item_state = "cone"
-
-	species_fit = list(VOX_SHAPED)
-
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = HEAD
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD

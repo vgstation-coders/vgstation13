@@ -4,7 +4,7 @@
 	icon_state = "wizard"
 	//Not given any special protective value since the magic robes are full-body protection --NEO
 	siemens_coefficient = 0.8
-
+	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
 
 /obj/item/clothing/head/wizard/red
