@@ -181,6 +181,7 @@
 	desc = "This hat's been with you for some time now. It was a gift from your ex, and you wore it during the war. Thinking back on it, the war was prettier."
 	icon_state = "detective_noir"
 	item_state = "detective_noir"
+	species_fit = list(INSECT_SHAPED)
 /*
  * Head of Security
  */

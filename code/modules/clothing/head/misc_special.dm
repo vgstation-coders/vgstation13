@@ -64,6 +64,7 @@
 	name = "cake-hat"
 	desc = "It's tasty looking!"
 	icon_state = "cake0"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EYES
 	light_power = 0.5
@@ -156,6 +157,7 @@
 	desc = "A jack o' lantern! Believed to ward off evil spirits."
 	icon_state = "hardhat0_pumpkin"//Could stand to be renamed
 	item_state = "hardhat0_pumpkin"
+	species_fit = list(INSECT_SHAPED)
 	_color = "pumpkin"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
@@ -235,6 +237,7 @@
 	desc = "So many butts, so little time."
 	icon_state = "butt"
 	item_state = "butt"
+	species_fit = list(INSECT_SHAPED)
 	flags = 0
 	force = 4.0
 	w_class = W_CLASS_TINY
@@ -257,7 +260,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"

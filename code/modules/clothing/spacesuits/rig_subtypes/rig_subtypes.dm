@@ -193,7 +193,7 @@
 	icon_state = "rig0-wiz"
 	item_state = "wiz_helm"
 	_color = "wiz"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 	armor = list(melee = 40, bullet = 20, laser = 20,energy = 20, bomb = 35, bio = 100, rad = 60)
 	siemens_coefficient = 0.7
@@ -394,7 +394,7 @@
 	desc = "This is the face of das vaterland's top elite. Gas or energy are your only escapes."
 	item_state = "rig0-nazi"
 	icon_state = "rig0-nazi"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//GAS THE VOX
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "nazi"
@@ -418,7 +418,7 @@
 	desc = "Crafted with the pride of the proletariat. The vengeful gaze of the visor roots out all fascists and capitalists."
 	item_state = "rig0-soviet"
 	icon_state = "rig0-soviet"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)//HET
 	armor = list(melee = 40, bullet = 30, laser = 30, energy = 15, bomb = 35, bio = 100, rad = 20)
 	_color = "soviet"
@@ -610,6 +610,7 @@
 	desc = "...and so he left the asteroid, with everything but his humanity."
 	icon_state = "rorhelm"
 	item_state = "rorhelm"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 40, bullet = 0, laser = 0,energy = 0, bomb = 65, bio = 100, rad = 50)
 	clothing_flags = GOLIATHREINFORCE
 

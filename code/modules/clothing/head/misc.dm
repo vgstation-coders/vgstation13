@@ -3,6 +3,7 @@
 /obj/item/clothing/head/centhat
 	name = "\improper CentComm. hat"
 	icon_state = "centcom"
+	species_fit = list(INSECT_SHAPED)
 	desc = "It's good to be emperor."
 	flags = FPRINT
 	item_state = "centhat"
@@ -103,6 +104,7 @@
 	name = "nurse's hat"
 	desc = "It allows quick identification of trained medical personnel."
 	icon_state = "nursehat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	siemens_coefficient = 0.9
 
@@ -326,6 +328,7 @@
 	desc = "Eeeee~heheheheheheh!"
 	icon_state = "witch"
 	item_state = "witch"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = EARS|HEAD|HIDEHEADHAIR
 	siemens_coefficient = 2.0
 
@@ -334,6 +337,7 @@
 	desc = "Bkaw!"
 	icon_state = "chickenhead"
 	item_state = "chickensuit"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
 
@@ -364,6 +368,7 @@
 	name = "xenos helmet"
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A helmet made out of chitinous alien hide."
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
 	siemens_coefficient = 2.0
@@ -373,6 +378,7 @@
 	desc = "No one cares who you are until you put on the mask."
 	icon_state = "bmhead"
 	item_state = "bmhead"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|EYES
 
@@ -444,6 +450,7 @@
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/maidhat
@@ -451,6 +458,7 @@
 	desc = "Do these even do anything besides look cute?"
 	icon_state = "maidhat"
 	item_state = "maidhat"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 
 /obj/item/clothing/head/mitre
@@ -501,6 +509,7 @@
 	name = "festive paper hat"
 	icon_state = "xmashat"
 	item_state = "xmashat"
+	species_fit = list(INSECT_SHAPED)
 	desc = "A crappy paper hat that you are REQUIRED to wear."
 	flags = FPRINT
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -513,10 +522,12 @@
 /obj/item/clothing/head/pajamahat/red
 	icon_state = "pajamahat_red"
 	item_state = "pajamahat_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/pajamahat/blue
 	icon_state = "pajamahat_blue"
 	item_state = "pajamahat_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/mummy_rags
 	name = "mummy rags"
@@ -537,6 +548,7 @@
 	desc = "A party cone. Not useful to disguise one's self as a unicorn or to impale one's foes."
 	icon_state = "birthdayhat"
 	item_state = "birthdayhat"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/snake
 	name = "snake head"
@@ -574,8 +586,8 @@
 	desc = "Wear this hat, and become one of Santa's little helpers!"
 	icon_state = "elf_hat"
 	item_state = "elf_hat"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS
-
 	wizard_garb = 1 //being elf cursed wont prevent you casting robed spells if wizard
 
 /obj/item/clothing/head/elfhat/stickymagic
@@ -586,6 +598,7 @@
 	desc = "Welcome to the rice fields, motherfucker."
 	icon_state = "rice_hat"
 	item_state = "rice_hat"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
 	name = "Roningasa"
@@ -623,8 +636,10 @@
 	desc = "Meanwhile in Neo Space Mexico."
 	icon_state = "sombrero"
 	item_state = "sombrero"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/donitos_pope
 	name = "\improper Donitos Pope hat"
 	desc = "An oversized Donitos promotional plastic donut-shaped hat."
 	icon_state = "donitos_pope"
+	species_fit = list(INSECT_SHAPED)

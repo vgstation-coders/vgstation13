@@ -46,36 +46,29 @@
 /obj/item/clothing/head/beanie/christmas
 	name = "christmas beanie"
 	icon_state = "beaniechristmas"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/striped
 	name = "striped beanie"
 	icon_state = "beaniestriped"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/stripedred
 	name = "red striped beanie"
 	icon_state = "beaniestripedred"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/stripedblue
 	name = "blue striped beanie"
 	icon_state = "beaniestripedblue"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/stripedgreen
 	name = "green striped beanie"
 	icon_state = "beaniestripedgreen"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/waldo
 	name = "red striped bobble hat"
 	desc = "If you're going on a worldwide hike, you'll need some cold protection."
 	icon_state = "waldo_hat"
-	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/beanie/rasta
 	name = "rastacap"
 	desc = "Perfect for tucking in those dreadlocks."
 	icon_state = "beanierasta"
-	species_fit = list(INSECT_SHAPED)

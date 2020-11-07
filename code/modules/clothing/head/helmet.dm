@@ -9,7 +9,7 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"
@@ -100,6 +100,7 @@
 	name = "\improper Thunderdome helmet"
 	desc = "<i>'Let the battle commence!'</i>"
 	icon_state = "thunderdome"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "thunderdome"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
@@ -109,6 +110,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "gladiator"
 	siemens_coefficient = 1
@@ -160,6 +162,7 @@
 	desc = "This helmet should protect you from russians and masked vigilantes."
 	armor = list(melee = 25, bullet = 15, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "biker_helmet"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/richard
@@ -174,6 +177,7 @@
 	name = "DRN-001 Helmet"
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"
@@ -308,6 +312,7 @@
 	desc = "chains fashioned together to be a hood to wear over your head"
 	icon_state = "chainmail_head"
 	item_state = "chainmail_head"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 15, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -317,6 +322,7 @@
 	desc = "You feel arrogant and important just by wearing it."
 	icon_state = "snail_helm"
 	item_state = "snail_helm"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hats.dmi', "right_hand" = 'icons/mob/in-hand/right/hats.dmi')
 	flags = FPRINT
