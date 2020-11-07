@@ -1636,9 +1636,6 @@ Use this proc preferably at the end of an equipment loadout
 	..()
 	EndMoving()
 
-/mob/proc/IsAdvancedToolUser()//This might need a rename but it should replace the can this mob use things check
-	return 0
-
 /mob/proc/isGoodPickpocket() //If the mob gets bonuses when pickpocketing and such. Currently only used for humans with the Pickpocket's Gloves.
 	return 0
 
@@ -1826,8 +1823,8 @@ mob/proc/assess_threat()
 mob/proc/on_foot()
 	return !(lying || flying || locked_to)
 
-/mob/proc/dexterity_check()
-	return 0
+/mob/proc/dexterity_check()//can the mob use computers, guns, and other fine technologies
+	return FALSE
 
 /mob/proc/isTeleViewing(var/client_eye)
 	if(istype(client_eye,/obj/machinery/camera))
