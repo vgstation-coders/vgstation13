@@ -111,6 +111,8 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		clumsy = (tool.clumsy_check(H) && prob(50))
+	if (!user.dexterity_check())
+		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
 
