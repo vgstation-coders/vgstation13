@@ -250,6 +250,8 @@
 /obj/effect/rune/attack_animal(var/mob/living/simple_animal/user)
 	if(istype(user, /mob/living/simple_animal/construct))
 		trigger(user)
+	if(istype(user, /mob/living/simple_animal/shade))
+		trigger(user)
 
 /obj/effect/rune/attack_paw(var/mob/living/user)
 	if(ismonkey(user))
