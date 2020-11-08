@@ -279,6 +279,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		H = src
 	if (H?.species)
 		blood_data["blood_colour"] = H.species.blood_color
+	else if(isalien(src))
+		blood_data["blood_colour"] = ALIEN_BLOOD
+	else if(isrobot(src))
+		blood_data["blood_colour"] = ROBOT_OIL
 	else
 		blood_data["blood_colour"] = DEFAULT_BLOOD
 

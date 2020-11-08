@@ -394,12 +394,12 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 						data[BLOODCOST_TARGET_GRAB] = H
 						data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
 						amount_gathered += blood_gathered
-		if(ismonkey(Grab.affecting))//Unlike humans, monkeys take oxy damage when blood is taken from them.
-			var/mob/living/carbon/monkey/M = Grab.affecting
-			if(!M.isDead())
-				var/blood_volume = round(max(0,M.health))
+		if(ismonkey(Grab.affecting) || isalien(Grab.affecting))//Unlike humans, monkeys take oxy damage when blood is taken from them.
+			var/mob/living/carbon/C = Grab.affecting
+			if(!C.isDead())
+				var/blood_volume = round(max(0,C.health))
 				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data[BLOODCOST_TARGET_GRAB] = M
+				data[BLOODCOST_TARGET_GRAB] = C
 				data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
 				amount_gathered += blood_gathered
 
@@ -543,12 +543,12 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			data[BLOODCOST_AMOUNT_USER] = blood_gathered
 			amount_gathered += blood_gathered
 	else//non-human trying to draw runes eh? let's see...
-		if (ismonkey(user))
-			var/mob/living/carbon/monkey/M_user = user
-			if (!M_user.isDead())
-				var/blood_volume = round(max(0,M_user.health))//Unlike humans, monkeys take oxy damage when blood is taken from them.
+		if (ismonkey(user) || isalien(user))
+			var/mob/living/carbon/C_user = user
+			if (!C_user.isDead())
+				var/blood_volume = round(max(0,C_user.health))//Unlike humans, monkeys take oxy damage when blood is taken from them.
 				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-				data[BLOODCOST_TARGET_USER] = M_user
+				data[BLOODCOST_TARGET_USER] = C_user
 				data[BLOODCOST_AMOUNT_USER] = blood_gathered
 				amount_gathered += blood_gathered
 		else if (isconstruct(user))
@@ -787,6 +787,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			else if (ismonkey(data[BLOODCOST_TARGET_GRAB]))
 				var/mob/living/carbon/monkey/M = data[BLOODCOST_TARGET_GRAB]
 				M.adjustOxyLoss(data[BLOODCOST_AMOUNT_GRAB])
+			else if (isalien(data[BLOODCOST_TARGET_GRAB]))
+				var/mob/living/carbon/alien/A = data[BLOODCOST_TARGET_GRAB]
+				A.adjustBruteLoss(data[BLOODCOST_AMOUNT_GRAB])
 		if (data[BLOODCOST_TARGET_BLEEDER])
 			data[BLOODCOST_TOTAL] += data[BLOODCOST_AMOUNT_BLEEDER]
 			var/mob/living/carbon/human/H = data[BLOODCOST_TARGET_BLEEDER]
@@ -822,23 +825,25 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 				else if (blood_before > BLOOD_VOLUME_SURVIVE && blood_after < BLOOD_VOLUME_SURVIVE)
 					to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
 				H.take_overall_damage(data[BLOODCOST_AMOUNT_USER] ? 0.1 : 0)
-			else if (ismonkey(user))
-				var/mob/living/carbon/monkey/M = user
-				var/blood_before = M.health
-				M.adjustOxyLoss(data[BLOODCOST_AMOUNT_USER])
-				M.updatehealth()
-				var/blood_after = M.health
-				if (blood_before > (M.maxHealth*5/6) && blood_after < (M.maxHealth*5/6))
+			else if (ismonkey(user) || isalien(user))
+				var/mob/living/carbon/C = user
+				var/blood_before = C.health
+				if (ismonkey(C))
+					C.adjustOxyLoss(data[BLOODCOST_AMOUNT_USER])
+				else if (isalien(C))
+					C.adjustBruteLoss(data[BLOODCOST_AMOUNT_USER])
+				C.updatehealth()
+				var/blood_after = C.health
+				if (blood_before > (C.maxHealth*5/6) && blood_after < (C.maxHealth*5/6))
 					to_chat(user, "<span class='sinister'>You start looking pale.</span>")
-				else if (blood_before > (M.maxHealth*4/6) && blood_after < (M.maxHealth*4/6))
+				else if (blood_before > (C.maxHealth*4/6) && blood_after < (C.maxHealth*4/6))
 					to_chat(user, "<span class='sinister'>You feel weak from the lack of blood.</span>")
-				else if (blood_before > (M.maxHealth*3/6) && blood_after < (M.maxHealth*3/6))
+				else if (blood_before > (C.maxHealth*3/6) && blood_after < (C.maxHealth*3/6))
 					to_chat(user, "<span class='sinister'>You are about to pass out from the lack of blood.</span>")
-				else if (blood_before > (M.maxHealth*2/6) && blood_after < (M.maxHealth*2/6))
+				else if (blood_before > (C.maxHealth*2/6) && blood_after < (C.maxHealth*2/6))
 					to_chat(user, "<span class='sinister'>You have trouble focusing, things will go bad if you keep using your blood.</span>")
-				else if (blood_before > (M.maxHealth*1/6) && blood_after < (M.maxHealth*1/6))
+				else if (blood_before > (C.maxHealth*1/6) && blood_after < (C.maxHealth*1/6))
 					to_chat(user, "<span class='sinister'>It will be all over soon.</span>")
-				//monkeys don't take brute damage on top since they don't easily heal that
 
 
 	if (communion && data[BLOODCOST_TOTAL] + total_accumulated >= amount_needed)

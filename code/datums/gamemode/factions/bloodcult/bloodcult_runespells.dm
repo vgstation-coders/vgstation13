@@ -877,6 +877,8 @@
 	victim.Silent(5)
 	victim.Knockdown(5)
 	victim.Stun(5)
+	if (isalien(victim))
+		victim.Paralyse(5)
 	victim.overlay_fullscreen("conversionborder", /obj/abstract/screen/fullscreen/conversion_border)
 	victim.overlay_fullscreen("conversionred", /obj/abstract/screen/fullscreen/conversion_red)
 	victim.update_fullscreen_alpha("conversionred", 255, 5)
@@ -936,6 +938,8 @@
 				victim.Silent(5)
 				victim.Knockdown(5)
 				victim.Stun(5)
+				if (isalien(victim))
+					victim.Paralyse(5)
 				var/progress = 10//10 seconds to reach second phase for a naked cultist
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
@@ -980,6 +984,8 @@
 		victim.Silent(15)
 		victim.Knockdown(15)
 		victim.Stun(15)
+		if (isalien(victim))
+			victim.Paralyse(15)
 
 		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
 			acceptance = get_role_desire_str(victim.client.prefs.roles[CULTIST])
@@ -1052,6 +1058,8 @@
 				victim.SetKnockdown(0)
 				victim.SetStunned(0)
 				victim.SetSilent(0)
+				if (isalien(victim))
+					victim.SetParalysis(0)
 				//and their loyalty implants are removed, so they can't mislead security
 				for(var/obj/item/weapon/implant/loyalty/I in victim)
 					I.forceMove(T)
@@ -1235,6 +1243,8 @@
 			C.Silent(15)
 		C.Knockdown(15)//used to be 25
 		C.Stun(15)//used to be 25
+		if (isalien(C))
+			C.Paralyse(15)
 
 	if (!(locate(/obj/effect/stun_indicator) in M))
 		new /obj/effect/stun_indicator(M)
@@ -1280,6 +1290,8 @@
 					C.stuttering = 1
 				C.Knockdown(duration)
 				C.Stun(duration)
+				if (isalien(C))
+					C.Paralyse(duration)
 
 			else if(issilicon(L))
 				var/mob/living/silicon/S = L
@@ -1684,11 +1696,15 @@ var/list/blind_victims = list()
 	duration = dur
 	victim.Stun(duration)
 	victim.Mute(duration/2)
+	if (isalien(victim))
+		victim.Paralyse(duration)
 	spawn (duration*10)
 		if (src && loc && victim && victim.loc == loc && !victim.knockdown)
 			to_chat(victim, "<span class='warning'>You come back to your senses.</span>")
 			victim.AdjustStunned(-duration)
 			victim.AdjustMute(-duration/2)
+			if (isalien(victim))
+				victim.AdjustParalysis(-duration)
 			victim = null
 		qdel(src)
 
@@ -1703,6 +1719,8 @@ var/list/blind_victims = list()
 				to_chat(victim, "<span class='warning'>You come back to your senses as \the [victim.pulledby] drags you away.</span>")
 			victim.AdjustStunned(-duration)
 			victim.AdjustMute(-duration/2)
+			if (isalien(victim))
+				victim.AdjustParalysis(-duration)
 			victim = null
 		qdel(src)
 

@@ -258,6 +258,10 @@
 		assume_contact_diseases(user)
 		trigger(user)
 
+/obj/effect/rune/attack_alien(var/mob/living/user)
+	if(isalien(user))
+		trigger(user)
+
 /obj/effect/rune/attack_hand(var/mob/living/user)
 	assume_contact_diseases(user)
 	trigger(user)
