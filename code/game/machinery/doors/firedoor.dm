@@ -636,7 +636,7 @@ var/global/list/alert_overlays_global = list()
 		return 0
 	if(!isturf(user.loc))
 		return 0
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 

@@ -653,10 +653,6 @@
 
 	return clamp(., -2, 2)
 
-
-/mob/living/carbon/human/IsAdvancedToolUser()
-	return 1//Humans can use guns and such
-
 /mob/living/carbon/human/isGoodPickpocket()
 	var/obj/item/clothing/gloves/G = gloves
 	if(istype(G))
@@ -1449,20 +1445,15 @@
 
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
-		return 0
-
-	if(reagents.has_reagent(METHYLIN))
-		return 1
-
-	if(getBrainLoss() >= 60)
-		return 0
-
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
-
-		return G.dexterity_check()
-
-	return 1
+		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
+			return FALSE
+	if(getBrainLoss() >= 60)
+		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+			return FALSE
+	return TRUE//humans are dexterous enough by default
 
 /mob/living/carbon/human/spook(mob/dead/observer/ghost)
 	if(!..(ghost, TRUE) || !client)

@@ -145,7 +145,7 @@
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
-		if (!user.IsAdvancedToolUser())
+		if (!user.dexterity_check())
 			firing_dexterity = 0
 	if(MoMMI_check)
 		if(isMoMMI(user))

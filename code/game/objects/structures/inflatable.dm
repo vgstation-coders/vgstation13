@@ -237,7 +237,7 @@
 	set category = "Object"
 	set src in oview(1)
 
-	if(!isliving(usr) || usr.incapacitated() || !usr.Adjacent(src) || !usr.IsAdvancedToolUser() || deflating)
+	if(!isliving(usr) || usr.incapacitated() || !usr.Adjacent(src) || !usr.dexterity_check() || deflating)
 		return
 
 	verbs -= /obj/structure/inflatable/verb/hand_deflate
