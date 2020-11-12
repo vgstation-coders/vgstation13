@@ -241,7 +241,7 @@ Works together with spawning an observer, noted above.
 
 	if(antagHUD)
 		var/list/target_list = list()
-		for(var/mob/living/target in oview(src))
+		for(var/mob/living/target in oview(client.view+7, src))
 			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
@@ -249,7 +249,7 @@ Works together with spawning an observer, noted above.
 
 	if(conversionHUD)
 		var/list/target_list = list()
-		for(var/mob/living/carbon/target in oview(src))
+		for(var/mob/living/carbon/target in oview(client.view+7, src))
 			if(target.mind && target.hud_list[CONVERSION_HUD])
 				target_list += target
 		if(target_list.len)
@@ -294,7 +294,7 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/patient in oview(M))
+	for(var/mob/living/carbon/patient in oview(client.view+7, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -339,7 +339,7 @@ Works together with spawning an observer, noted above.
 
 			C.images += holder
 
-	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+	for(var/mob/living/simple_animal/mouse/patient in oview(client.view+7, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
