@@ -1628,7 +1628,6 @@ var/list/blind_victims = list()
 				image_intruder.pixel_y = delta_y*WORLD_ICON_SIZE
 				seers += seer
 				seer.client.images += image_intruder // see the mover for a set period of time
-				anim(location = get_turf(seer), target = seer, a_icon = 'icons/effects/224x224.dmi', flick_anim = "rune_reveal", lay = NARSIE_GLOW, offX = -delta_x, offY = -delta_y, plane = LIGHTING_PLANE)
 				spawn(3)
 					seer.client.images -= image_intruder // see the mover for a set period of time
 					qdel(image_intruder)
