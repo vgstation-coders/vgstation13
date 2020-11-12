@@ -50,11 +50,6 @@
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-	antag.store_memory("A couple of runes appear clearly in your mind:")
-	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
-	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
-	antag.store_memory("<B>Summon Tome:</B> SEE, BLOOD, HELL.")
-	antag.store_memory("<hr>")
 
 /datum/mind/proc/decult()
 	antag_roles -= CULTIST
