@@ -17,6 +17,7 @@
 		"Tools" = list(
 			/datum/storeitem/pen,
 			/datum/storeitem/wrapping_paper,
+			/datum/storeitem/swiss_army_knife,
 			),
 		"Electronics" = list(
 			/datum/storeitem/boombox,
