@@ -117,6 +117,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 /datum/faction/bloodcult/OnPostSetup()
 	initialize_runesets()
 	AppendObjective(/datum/objective/bloodcult_reunion)
+	..()
 
 
 /datum/faction/bloodcult/minorVictoryText()
