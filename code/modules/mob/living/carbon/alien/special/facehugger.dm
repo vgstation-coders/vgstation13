@@ -31,6 +31,7 @@
 	var/stat = CONSCIOUS //UNCONSCIOUS is the idle state in this case
 
 	var/sterile = FALSE
+	var/sterile_message = "had its proboscis removed."
 
 	var/strength = 5
 
@@ -39,6 +40,7 @@
 	var/walk_speed = 1
 	var/nextwalk = FALSE
 	var/mob/living/target = null
+
 
 
 /obj/item/clothing/mask/facehugger/can_contaminate()
@@ -167,7 +169,7 @@
 		if(CONSCIOUS)
 			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
 	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s proboscis has been removed.</span>")
+		to_chat(user, "<span class='danger'>It looks like \the [src] [sterile_message]</span>")
 	return
 
 /obj/item/clothing/mask/facehugger/attackby(obj/item/weapon/W)
@@ -445,9 +447,16 @@
 	slot_flags = SLOT_HEAD
 	clothing_flags = null
 	canremove = 0  //You need to resist out of it.
-	cant_remove_msg = "The headcrab is latched on tight!"
+	cant_remove_msg = " is latched on tight!"
+	sterile_message = "has been de-beaked."
 	var/is_being_resisted = 0
 	var/escaping = 0 	//If enabled the crab will try to escape.
+
+/obj/item/clothing/mask/facehugger/headcrab/New()
+	..()
+	if(!real)	//Toys shouldn't be difficult to remove
+		canremove = 1
+
 
 /obj/item/clothing/mask/facehugger/headcrab/equipped(mob/living/carbon/human/H)
 	if(stat == CONSCIOUS)
@@ -459,10 +468,24 @@
 /obj/item/clothing/mask/facehugger/headcrab/attack_hand(mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/target = user
-		if(target && target.head == src)
+		if(target && target.head == src && stat != DEAD && real)
 			target.resist()
 		else
 			..()
+
+
+/obj/item/clothing/mask/facehugger/headcrab/death()
+	if(stat == DEAD || !real)
+		return
+	target = null
+	processing_objects.Remove(src)
+	icon_state = "[initial(icon_state)]_dead"
+	stat = DEAD
+	sterile = TRUE 
+	canremove = 1
+
+	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
+	
 
 /obj/item/clothing/mask/facehugger/headcrab/findtarget()
 	if(!real)
@@ -477,7 +500,7 @@
 
 
 /obj/item/clothing/mask/facehugger/headcrab/attackby(obj/item/weapon/W, mob/user)
-	if(ishuman(user))
+	if(ishuman(user) && stat != DEAD)
 		var/mob/living/carbon/human/U = user
 		var/obj/item/clothing/mask/facehugger/headcrab/H = U.is_wearing_item(/obj/item/clothing/mask/facehugger/headcrab, slot_head)
 		if(H == src)
@@ -523,17 +546,7 @@
 					if(CanHug(target, src) && isturf(target.loc)) //Fix for hugging through mechs and closets
 						Attach(target)
 						return
-/obj/item/clothing/mask/facehugger/headcrab/examine(mob/user)
-	if(!real) //Toy facehuggers are a child, avoid confusing examine text.
-		return
-	switch(stat)
-		if(DEAD,UNCONSCIOUS)
-			to_chat(user, "<span class='deadsay'>\The [src] is not moving.</span>")
-		if(CONSCIOUS)
-			to_chat(user, "<span class='danger'>\The [src] seems active.</span>")
-	if (sterile)
-		to_chat(user, "<span class='danger'>It looks like \the [src]'s has been de-beaked.</span>")
-	return
+
 /obj/item/clothing/mask/facehugger/headcrab/Attach(mob/living/L)
 	if(escaping)
 		return FALSE
@@ -590,16 +603,16 @@
 			target.visible_message("<span class='danger'>\The [src] tears \the [W] off of [target]'s head!</span>")
 
 		forceMove(target)
-		target.audible_scream()
 		target.equip_to_slot(src, slot_head)
 		target.update_inv_head()
-		target.movement_speed_modifier -= 0.75			//Slow them down like a taser
-		spawn(30)
-			target.movement_speed_modifier += 0.75
+		if(real)
+			target.audible_scream()
+			target.movement_speed_modifier -= 0.75			//Slow them down like a taser
+			spawn(30)
+				target.movement_speed_modifier += 0.75
 		target.update_inv_head()			//Sometimes it doesnt work the first time
-		if(!sterile)
-			Assimilate(target)
-			return TRUE
+		Assimilate(target)
+		return TRUE
 
 	
 	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
@@ -609,6 +622,8 @@
 
 /obj/item/clothing/mask/facehugger/headcrab/proc/Assimilate(mob/living/L)
 	if(!ishuman(L))
+		return
+	if(sterile || !real)
 		return
 	var/mob/living/carbon/human/target = L
 	if(target.head != src) //was taken off or something
@@ -627,6 +642,9 @@
 		sleep(150)
 		target.remove_jitter()
 		if(target && target.head == src)
+			if(!target.isDead() && !target.isInCrit())	//something healed them, start over
+				Assimilate()
+				return
 			target.death(0)
 			visible_message("<span class='danger'>[target.real_name]'s flesh is violently torn apart!</span>")
 			hgibs(target.loc, target.virus2, target.dna)
