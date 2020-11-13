@@ -149,6 +149,12 @@
 
 	return TRUE //If false, fails Ready()
 
+/datum/map/proc/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
+	return 1
+
+/datum/map/proc/ignore_enemy_requirement(var/datum/dynamic_ruleset/DR)
+	return 0
+
 /datum/map/proc/loadZLevels(list/levelPaths)
 
 
