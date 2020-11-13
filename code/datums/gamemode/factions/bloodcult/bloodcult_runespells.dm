@@ -1814,7 +1814,7 @@ var/list/blind_victims = list()
 		caster.client.images -= propension
 		propension.len = 0
 
-		for(var/mob/living/carbon/C in dview(caster.client.view+7, get_turf(src), INVISIBILITY_MAXIMUM))
+		for(var/mob/living/carbon/C in dview(caster.client.view+DATAHUD_RANGE_OVERHEAD, get_turf(src), INVISIBILITY_MAXIMUM))
 			C.update_convertibility()
 			propension += C.hud_list[CONVERSION_HUD]
 

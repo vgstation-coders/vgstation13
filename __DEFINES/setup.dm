@@ -136,6 +136,9 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
 #define ROLE_SELECT_AFK_BUFFER  1 // Default value.
 
+#define DATAHUD_RANGE_OVERHEAD	7	//how many tiles away from the edge of the client's view do the HUD icons start appearing
+									//necessary due to them only being updated on Life()
+
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
