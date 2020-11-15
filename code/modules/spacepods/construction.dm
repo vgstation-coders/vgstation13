@@ -43,7 +43,7 @@
 			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
 		else if(istype(W, /obj/item/pod_parts/armor/taxi))
 			construct = new /datum/construction/reversible/pod/unarmored/taxi(src)
-..()
+	..()
 
 /////////////////////////////////
 // CONSTRUCTION STEPS
