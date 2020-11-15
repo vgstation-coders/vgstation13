@@ -1,6 +1,7 @@
 #if UNIT_TESTS_ENABLED
 #include "_unit_test.dm"
 #include "autolathe.dm"
+#include "borer.dm"
 #include "circuitboards.dm"
 #include "dna_and_disabilities.dm"
 #include "hexadecimal.dm"
