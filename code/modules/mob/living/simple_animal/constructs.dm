@@ -41,6 +41,8 @@
 
 	var/list/healers = list()
 
+	var/construct_color = rgb(0,0,0)
+
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (healers.len > 0)
@@ -85,12 +87,42 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
-	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
+/mob/living/simple_animal/construct/proc/setup_type(var/mob/living/carbon/creator)
+	if(istype(creator, /mob/living/carbon))
+		//Determine construct color	and set languages
+		if(!iscultist(creator))
+			universal_understand = 1
+			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+
+			if(iswizard(creator) || isapprentice(creator))
+				construct_color = rgb(157, 1, 196)
+			else
+				construct_color = rgb(0, 153, 255)
+		else
+
+			var/datum/role/streamer/streamer_role = creator.mind.GetRole(STREAMER)
+			if(streamer_role && streamer_role.team == ESPORTS_CULTISTS)
+				if(streamer_role.followers.len == 0 && streamer_role.subscribers.len == 0) //No followers and subscribers, use normal cult colors.
+					construct_color = rgb(235,0,0)
+				else
+					construct_color = rgb(30,255,30)
+			else
+				construct_color = rgb(235,0,0)
 	setupglow()
+
+/mob/living/simple_animal/construct/Login()
+	..()
+	if (default_language == all_languages[LANGUAGE_GALACTIC_COMMON])
+		to_chat(src,"<span class='notice'>You can speak in cult chants by using :5.</span>")
+	else
+		to_chat(src,"<span class='notice'>To be understood by non-cult speaking humans, use :1.</span>")
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -209,8 +241,10 @@
 			visible_message("<span class='danger'>\The [P.name] gets reflected by \the [src]'s shell!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
 
-			P.reflected = 1
-			P.rebound(src)
+
+			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+				P.reflected = 1
+				P.rebound(src)
 
 			return -1 // complete projectile permutation
 
@@ -333,7 +367,7 @@
 	change_sight(adding = SEE_MOBS)
 
 ////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/setupglow()
+/mob/living/simple_animal/construct/proc/setupglow(glowcolor)
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
@@ -341,7 +375,12 @@
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
 
-	var/image/glow = image(icon,"glow-[icon_state]",overlay_layer)
+	var/icon/glowicon = icon(icon,"glow-[icon_state]")
+	if(glowcolor)
+		glowicon.Blend(glowcolor, ICON_ADD)
+	else
+		glowicon.Blend(construct_color, ICON_ADD)
+	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
 

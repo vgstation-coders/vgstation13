@@ -81,9 +81,8 @@
 	return 1
 
 /mob/living/carbon/complex/martian/dexterity_check()
-	return TRUE
-
-/mob/living/carbon/complex/martian/IsAdvancedToolUser()
+	if (stat != CONSCIOUS)
+		return FALSE
 	return TRUE
 
 /mob/living/carbon/complex/martian/Process_Spaceslipping()

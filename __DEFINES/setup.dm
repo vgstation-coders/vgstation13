@@ -136,6 +136,9 @@ var/MAX_EXPLOSION_RANGE = 14
 #define ALIEN_SELECT_AFK_BUFFER 1 // How many minutes that a person can be AFK before not being allowed to be an alien.
 #define ROLE_SELECT_AFK_BUFFER  1 // Default value.
 
+#define DATAHUD_RANGE_OVERHEAD	7	//how many tiles away from the edge of the client's view do the HUD icons start appearing
+									//necessary due to them only being updated on Life()
+
 //WEIGHT CLASSES
 #define W_CLASS_TINY 1
 #define W_CLASS_SMALL 2
@@ -277,6 +280,30 @@ var/MAX_EXPLOSION_RANGE = 14
 #define slot_legcuffed 17
 #define slot_legs 18
 
+//slots, but in string format.
+#define slot_back_str "1"
+#define slot_wear_mask_str "2"
+#define slot_handcuffed_str "3"
+#define slot_belt_str "4"
+#define slot_wear_id_str "5"
+#define slot_ears_str "6"
+#define slot_glasses_str "7"
+#define slot_gloves_str "8"
+#define slot_head_str "9"
+#define slot_shoes_str "10"
+#define slot_wear_suit_str "11"
+#define slot_w_uniform_str "12"
+#define slot_l_store_str "13"
+#define slot_r_store_str "14"
+#define slot_s_store_str "15"
+#define slot_in_backpack_str "16"
+#define slot_legcuffed_str "17"
+#define slot_legs_str "18"
+
+#define ACCESSORY_ITEM "accessory item"
+#define SURVIVAL_BOX "Survival Box"
+
+
 #define is_valid_hand_index(index) ((index > 0) && (index <= held_items.len))
 
 //Cant seem to find a mob bitflags area other than the powers one
@@ -395,10 +422,10 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_RESIST_COLD	2
 #define M_XRAY			3
 #define M_HULK			4
-#define M_CLUMSY			5
-#define M_FAT				6
+#define M_CLUMSY		5
+#define M_FAT			6
 #define M_HUSK			7
-#define M_NOCLONE			8
+#define M_NOCLONE		8
 
 // Extra powers:
 #define M_LASER			9 	// harm intent - click anywhere to shoot lasers from eyes
@@ -406,6 +433,7 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_BEAK			11	// Can buther animals without tools
 #define M_TALONS		12  // Bonus kick damage
 #define M_STONE_SKIN	13  // hard skin
+#define M_THERMALS		14	//see mobs through walls
 
 //#define HEAL			12 	// (Not implemented) healing people with hands
 //#define SHADOW		13 	// (Not implemented) shadow teleportation (create in/out portals anywhere) (25%)
@@ -437,7 +465,6 @@ var/global/list/BODY_COVER_VALUE_LIST=list("[HEAD]" = COVER_PROTECTION_HEAD,"[EY
 #define M_UNBURNABLE	111		// can't get set on fire
 
 // Goon muts
-#define M_OBESITY       200		// Decreased metabolism
 #define M_TOXIC_FARTS   201		// Duh
 #define M_STRONG        202		// (Nothing)
 #define M_SOBER         203		// Increased alcohol metabolism
@@ -734,6 +761,7 @@ SEE_PIXELS	256
 #define VERM_MUSHMEN 15
 #define VERM_FROGS 14
 #define VERM_SNAILS 15
+#define VERM_HEADCRABS 16
 
 
 #define MONSTER_BEAR    0
@@ -881,6 +909,7 @@ SEE_PIXELS	256
 #define DIAG_HEALTH_HUD		"diag_health" // Diagnostic HUD - health bar
 #define DIAG_CELL_HUD		"diag_cell" // Diagnostic HUD - power cell status for cyborgs, mechs
 #define CONSTRUCT_HUD		"const_health" // Artificer HUD
+#define CONVERSION_HUD		"convertibility" // Convertibility HUD
 
 // Hypothermia - using the swiss staging system. - called by the proc undergoing_hypothermia() in handle_hypothermia.dm
 #define NO_HYPOTHERMIA			0	// >35C   - Fine
@@ -941,6 +970,7 @@ var/list/RESTRICTED_CAMERA_NETWORKS = list( //Those networks can only be accesse
 #define MULTICOLOR 2048	//skin color is unique rather than tone variation
 #define ACID4WATER 4096 //Acid now acts like water, and vice versa.
 #define NO_BALD 8192 //cannot lose hair through being shaved/radiation/etc
+#define RGBSKINTONE 16384
 
 var/default_colour_matrix = list(1,0,0,0,\
 								 0,1,0,0,\
@@ -1232,9 +1262,14 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define PDA_APP_SNAKEII			105
 #define PDA_APP_MINESWEEPER		106
 #define PDA_APP_SPESSPETS		107
+#define PDA_APP_NEWSREADER		108
 
 #define PDA_APP_SNAKEII_MAXSPEED		9
 #define PDA_APP_SNAKEII_MAXLABYRINTH	8
+
+#define NEWSREADER_CHANNEL_LIST	0
+#define NEWSREADER_VIEW_CHANNEL	1
+#define NEWSREADER_WANTED_SHOW	2
 
 //Some alien checks for reagents for alien races.
 #define IS_DIONA 1
@@ -1345,6 +1380,7 @@ var/proccalls = 1
 //MALFUNCTION FLAGS
 #define COREFIRERESIST 1
 #define HIGHRESCAMS 2
+#define COREFORTIFY 4
 
 //Mob sizes
 #define SIZE_TINY	1 //Mice, lizards, borers, kittens - mostly things that can fit into a man's palm
@@ -1506,16 +1542,20 @@ var/proccalls = 1
 #define BOMBERMAN "bomberman"
 
 // /proc/is_honorable() flags.
-#define HONORABLE_BOMBERMAN  1
-#define HONORABLE_HIGHLANDER 2
-#define HONORABLE_NINJA      4
-#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA
+#define HONORABLE_BOMBERMAN  262144
+#define HONORABLE_HIGHLANDER 524288
+#define HONORABLE_NINJA      1048576
+#define HONORABLE_NOGUNALLOWED	2097152
+#define HONORABLE_ALL        HONORABLE_BOMBERMAN|HONORABLE_HIGHLANDER|HONORABLE_NINJA|HONORABLE_NOGUNALLOWED
 
 #define SPELL_ANIMATION_TTL 2 MINUTES
 
 //Grasp indexes
 #define GRASP_RIGHT_HAND 1
 #define GRASP_LEFT_HAND 2
+
+#define GRASP_RIGHT_HAND_STR "1"
+#define GRASP_LEFT_HAND_STR "2"
 
 #define BLOB_CORE_PROPORTION 20
 
@@ -1570,6 +1610,11 @@ var/proccalls = 1
 
 #define HUMAN_DNA	1
 #define XENO_DNA	2
+
+// Buffer datatype flags.
+#define DNA2_BUF_UI 1
+#define DNA2_BUF_UE 2
+#define DNA2_BUF_SE 4
 
 #define DEFAULT_BLOOD "#A10808"
 #define DEFAULT_FLESH "#FFC896"
@@ -1642,5 +1687,97 @@ var/proccalls = 1
 #define ESPORTS_CULTISTS "Team Geometer"
 #define ESPORTS_SECURITY "Team Security"
 
+#define DNA_SE_LENGTH 58
+
+#define VOX_SHAPED "Vox","Skeletal Vox"
+#define GREY_SHAPED "Grey"
+#define UNATHI_SHAPED "Unathi"
+#define SKRELL_SHAPED "Skrell"
+#define TAJARAN_SHAPED "Tajaran"
+#define PLASMAMAN_SHAPED "Plasmaman"
+#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
+#define MUSHROOM_SHAPED "Mushroom"
+#define INSECT_SHAPED "Insectoid"
+
+#define FIRE_DAMAGE_MODIFIER 0.0215 //Higher values result in more external fire damage to the skin (default 0.0215)
+#define AIR_DAMAGE_MODIFIER 2.025 //More means less damage from hot air scalding lungs, less = more damage. (default 2.025)
+
+	//Don't set this very much higher then 1024 unless you like inviting people in to dos your server with message spam
+#define MAX_MESSAGE_LEN 1024
+#define MAX_PAPER_MESSAGE_LEN 3072
+#define MAX_BOOK_MESSAGE_LEN 9216
+#define MAX_NAME_LEN 52
+#define MAX_BROADCAST_LEN		512
+
+#define shuttle_time_in_station 1800 // 3 minutes in the station
+#define shuttle_time_to_arrive 6000 // 10 minutes to arrive
+
+// ECONOMY
+// Account default values
+#define DEPARTMENT_START_FUNDS 500
+#define DEPARTMENT_START_WAGE 100
+
+//Staff of change
+#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
+#define SOC_MONKEY "Primate"
+#define SOC_MARTIAN "Martian"
+#define SOC_CYBORG "Robot"
+#define SOC_MOMMI "MoMMI"
+#define SOC_SLIME "Slime"
+#define SOC_XENO "Xenomorph"
+#define SOC_HUMAN "Human"
+#define SOC_CATBEAST "Furry"
+#define SOC_FRANKENSTEIN "Frankenstein"
+
+var/list/available_staff_transforms = list(
+	SOC_MONKEY,SOC_MARTIAN,
+	SOC_CYBORG,
+	SOC_SLIME,
+	SOC_XENO,
+	SOC_HUMAN,
+	SOC_CATBEAST,
+	SOC_FRANKENSTEIN
+	)
+
+#define CARD_CAPTURE_SUCCESS 0 // Successful charge
+#define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
+#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
+#define CARD_CAPTURE_ACCOUNT_DISABLED 3 // Account locked.
+#define CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT 4 // Destination account disabled.
+#define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 5 // Bad account/pin combo
+#define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 6 // Security level didn't allow current authorization or another exception occurred
+#define CARD_CAPTURE_FAILURE_USER_CANCELED 7 // The user canceled the transaction
+#define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
+#define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
+
+#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
+Vendors will try to subtract from your virtual wallet if possible.
+If you're too broke, they'll try to access your bank account directly.
+This setting decides how much info you have to enter to allow for that.
+Zero; Only your account number is required to deduct funds.
+One; Your account number and PIN are required.
+Two; Your ID card, account number and PIN are required.
+You can change this mid-game at an ATM."}
+
+proc/bank_security_num2text(var/num)
+	switch(num)
+		if(0)
+			return "Zero"
+		if(1)
+			return "One"
+		if(2)
+			return "Two"
+		else
+			return "OUT OF RANGE"
+
+var/list/bank_security_text2num_associative = list(
+	"Zero" = 0,
+	"One" = 1,
+	"Two" = 2
+) // Can't use a zero. Throws a fit about out of bounds indices if you do.
+// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+
 var/list/weekend_days = list("Friday", "Saturday", "Sunday")
 #define IS_WEEKEND (weekend_days.Find(time2text(world.timeofday, "Day")))
+
+#define RECOMMENDED_CLIENT_FPS 100

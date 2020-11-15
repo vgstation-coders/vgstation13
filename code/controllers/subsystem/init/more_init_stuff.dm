@@ -43,7 +43,21 @@ var/datum/subsystem/more_init/SSmore_init
 	for (var/obj/machinery/computer/security/S in tv_monitors)
 		S.init_cams()
 
+	create_global_diseases()
+
 	init_wizard_apprentice_setups()
+	machinery_rating_cache = cache_machinery_components_rating()
+	typing_indicator = new
+
+/proc/cache_machinery_components_rating()
+	var/list/cache = list()
+	for(var/obj/machinery/machine in all_machines)
+		if(!cache[machine.type])
+			var/rating = 0
+			for(var/obj/item/weapon/stock_parts/SP in machine.component_parts)
+				rating += SP.rating
+			cache[machine.type] = rating
+	return cache
 
 /proc/init_wizard_apprentice_setups()
 	for (var/setup_type in subtypesof(/datum/wizard_apprentice_setup))

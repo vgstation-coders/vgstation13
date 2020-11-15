@@ -18,9 +18,6 @@
 
 	immune_system = new (src)
 
-	on_resist = new(owner = src)
-	on_life = new(owner = src)
-
 /mob/living/Destroy()
 	for(var/mob/living/silicon/robot/mommi/MoMMI in player_list)
 		for(var/image/I in static_overlays)
@@ -44,14 +41,6 @@
 	if(immune_system)
 		qdel(immune_system)
 		immune_system = null
-
-	if(on_resist)
-		qdel(on_resist)
-		on_resist = null
-
-	if(on_life)
-		qdel(on_life)
-		on_life = null
 
 	. = ..()
 
@@ -109,28 +98,6 @@
 			mutations.Remove(M_HARDCORE)
 			to_chat(src, "<span class='notice'>You feel like a pleb.</span>")
 	handle_beams()
-
-	INVOKE_EVENT(on_life, list())
-
-	/*if(mind)
-		if(mind in ticker.mode.implanted)
-			if(implanting)
-				return 0
-//			to_chat(world, "[src.name]")
-			var/datum/mind/head = ticker.mode.implanted[mind]
-			//var/list/removal
-			if(!(locate(/obj/item/weapon/implant/traitor) in src.contents))
-//				to_chat(world, "doesn't have an implant")
-				ticker.mode.remove_traitor_mind(mind, head)
-
-				if((head in ticker.mode.implanters))
-					ticker.mode.implanter[head] -= src.mind
-				ticker.mode.implanted -= src.mind
-				if(src.mind in ticker.mode.traitors)
-					ticker.mode.traitors -= src.mind
-					special_role = null
-					to_chat(current, "<span class='danger'><FONT size = 3>The fog clouding your mind clears. You remember nothing from the moment you were implanted until now..(You don't remember who enslaved you)</FONT></span>")
-				*/
 	return 1
 
 // Apply connect damage
@@ -277,7 +244,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRUTE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRUTE, "amount" = amount)))
 		return 0
 
 	bruteloss = min(max(bruteloss + (amount * brute_damage_modifier), 0),(maxHealth*2))
@@ -289,7 +256,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = OXY, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = OXY, "amount" = amount)))
 		return 0
 
 	oxyloss = min(max(oxyloss + (amount * oxy_damage_modifier), 0),(maxHealth*2))
@@ -306,7 +273,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = TOX, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = TOX, "amount" = amount)))
 		return 0
 
 	var/mult = 1
@@ -330,7 +297,7 @@
 		return 0	//godmode
 	if(mutations.Find(M_RESIST_HEAT))
 		return 0
-	if(INVOKE_EVENT(on_damaged, list("type" = BURN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BURN, "amount" = amount)))
 		return 0
 
 	fireloss = min(max(fireloss + (amount * burn_damage_modifier), 0),(maxHealth*2))
@@ -342,7 +309,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = CLONE, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = CLONE, "amount" = amount)))
 		return 0
 
 	if(ishuman(src))
@@ -364,7 +331,7 @@
 	if(status_flags & GODMODE)
 		return 0	//godmode
 
-	if(INVOKE_EVENT(on_damaged, list("type" = BRAIN, "amount" = amount)))
+	if(lazy_invoke_event(/lazy_event/on_damaged, list("kind" = BRAIN, "amount" = amount)))
 		return 0
 
 	brainloss = min(max(brainloss + (amount * brain_damage_modifier), 0),(maxHealth*2))
@@ -804,9 +771,6 @@ Thanks.
 				hook.override_starting_X--
 				hook.override_target_X--
 
-/mob/living
-	var/event/on_resist
-
 /mob/living/verb/resist()
 	set name = "Resist"
 	set category = "IC"
@@ -814,7 +778,7 @@ Thanks.
 	if(!isliving(usr) || usr.special_delayer.blocked())
 		return
 
-	INVOKE_EVENT(on_resist, list())
+	lazy_invoke_event(/lazy_event/on_resist, list("user" = src))
 
 	delayNextSpecial(10) // Special delay, a cooldown to prevent spamming too much.
 
@@ -1077,6 +1041,33 @@ Thanks.
 						var/obj/item/delivery/large/BD = C.loc
 						BD.attack_hand(usr)
 					C.open()
+
+	//Removing a headcrab
+	if(ishuman(L))
+		var/on_head = L.get_item_by_slot(slot_head)
+		if(istype(on_head, /obj/item/clothing/mask/facehugger/headcrab))
+			var/obj/item/clothing/mask/facehugger/headcrab/crab = on_head
+			if(crab.is_being_resisted)
+				return
+			crab.is_being_resisted = 1
+			L.visible_message("<span class='danger'>[L.real_name] starts struggling to tear \the [crab] off of their head!</span>")
+			if(do_after(L, crab, 3 SECONDS))
+				var/rng = 50
+				if(crab.stat == DEAD)
+					rng = 100
+				if(prob(rng))
+					if(L.get_item_by_slot(slot_head) == crab)
+						L.drop_from_inventory(crab)
+						crab.GoIdle(10 SECONDS)
+						L.visible_message("<span class='danger'>[L.real_name] successfully tears \the [crab] off of their head!</span>")
+						crab.is_being_resisted = 0
+						crab.escaping = 1
+						crab.GoActive()
+				else
+					to_chat(L, "\The [crab] is latched on tight! Keep struggling!")
+					crab.is_being_resisted = 0
+					return
+			crab.is_being_resisted = 0 //If the do_after is cancelled.
 
 	// Breaking out of a cage
 	if (src.locked_to && istype(src.locked_to, /obj/structure/cage))
@@ -1422,170 +1413,6 @@ Thanks.
 
 /mob/living/is_open_container()
 	return 1
-
-/mob/living/proc/drop_meat(location)
-	if(!meat_type)
-		return 0
-
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/M
-	if(istype(src, /mob/living/carbon/human))
-		M = new meat_type(location, src)
-	else
-		M = new meat_type(location)
-	meat_taken++
-
-	if (virus2?.len)
-		for (var/ID in virus2)
-			var/datum/disease2/disease/D = virus2[ID]
-			if (D.spread & SPREAD_BLOOD)
-				M.infect_disease2(D,1,"(Butchered, from [src])",0)
-
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/A = M
-
-	if(istype(A))
-		var/mob/living/simple_animal/source_animal = src
-		if(istype(source_animal) && source_animal.species_type)
-			var/mob/living/specimen = source_animal.species_type
-			A.name = "[initial(specimen.name)] meat"
-			A.animal_name = initial(specimen.name)
-		else
-			A.name = "[initial(src.name)] meat"
-			A.animal_name = initial(src.name)
-
-	if(reagents)
-		reagents.trans_to(A,round (reagents.total_volume * (meat_amount/meat_taken), 1))
-	return M
-
-/mob/living/proc/butcher()
-	set category = "Object"
-	set name = "Butcher"
-	set src in oview(1)
-
-	var/mob/living/user = usr
-	if(!istype(user))
-		return
-
-	if(user.isUnconscious() || user.restrained())
-		return
-
-	if(being_butchered)
-		to_chat(user, "<span class='notice'>[src] is already being butchered.</span>")
-		return
-
-	if(!can_butcher)
-		to_chat(user, "<span class='notice'>You can't butcher [src]!")
-		return
-
-	var/obj/item/tool = null	//The tool that is used for butchering
-	var/speed_mod = 1.0			//The higher it is, the faster you butcher
-	var/butchering_time = 20 * size //2 seconds for tiny animals, 4 for small ones, 6 for normal sized ones (+ humans), 8 for big guys and 10 for biggest guys
-	var/tool_name = null
-
-	if(ishuman(user))
-		var/mob/living/carbon/human/H = user
-
-		tool = H.get_active_hand()
-		if(tool)
-			tool_name = tool.name
-		if(tool)
-			speed_mod = tool.is_sharp()
-			if(!speed_mod)
-				to_chat(user, "<span class='notice'>You can't butcher \the [src] with this!</span>")
-				return
-		else
-			speed_mod = 0.0
-
-		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
-			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
-			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
-				speed_mod += 0.25
-				if(!tool_name)
-					tool_name = "beak"
-
-		if(H.organ_has_mutation(H.get_active_hand_organ(), M_CLAWS))
-			if(!istype(H.gloves))
-				speed_mod += 0.25
-				if(!tool_name)
-					tool_name = "claws"
-
-		if(isgrue(H))
-			tool_name = "grue"
-			speed_mod += 0.5
-	else
-		speed_mod = 0.5
-
-	if(!speed_mod)
-		return
-
-	if(src.butchering_drops && src.butchering_drops.len)
-		var/list/actions = list()
-		if(meat_taken < meat_amount)
-			actions += "Butcher"
-		for(var/datum/butchering_product/B in src.butchering_drops)
-			if(B.amount <= 0)
-				continue
-			actions |= capitalize(B.verb_name)
-			actions[capitalize(B.verb_name)] = B
-		if(!actions.len)
-			to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-			return
-		actions += "Cancel"
-
-		var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in actions
-		if(!Adjacent(user) || !(usr.get_active_hand() == tool))
-			return
-
-		if(choice == "Cancel")
-			return 0
-		else if(choice != "Butcher")
-			var/datum/butchering_product/our_product = actions[choice]
-			if(!istype(our_product))
-				return
-
-			user.visible_message("<span class='notice'>[user] starts [our_product.verb_gerund] \the [src][tool ? "with \the [tool]" : ""].</span>",\
-				"<span class='info'>You start [our_product.verb_gerund] \the [src].</span>")
-			src.being_butchered = 1
-			if(!do_after(user,src,(our_product.butcher_time * size) / speed_mod))
-				to_chat(user, "<span class='warning'>Your attempt to [our_product.verb_name] \the [src] has been interrupted.</span>")
-				src.being_butchered = 0
-			else
-				to_chat(user, "<span class='info'>You finish [our_product.verb_gerund] \the [src].</span>")
-				src.being_butchered = 0
-				our_product.spawn_result(get_turf(src), src)
-				src.update_icons()
-			return
-
-	else if(meat_taken >= meat_amount)
-		to_chat(user, "<span class='notice'>[src] has already been butchered.</span>")
-		return
-
-	user.visible_message("<span class='notice'>[user] starts butchering \the [src][tool ? " with \the [tool]" : ""].</span>",\
-		"<span class='info'>You start butchering \the [src].</span>")
-	src.being_butchered = 1
-
-	if(!do_after(user,src,butchering_time / speed_mod))
-		to_chat(user, "<span class='warning'>Your attempt to butcher \the [src] was interrupted.</span>")
-		src.being_butchered = 0
-		return
-
-	src.drop_meat(get_turf(src))
-	src.being_butchered = 0
-	if(tool_name)
-		if(!advanced_butchery)
-			advanced_butchery = new()
-		advanced_butchery.Add(tool_name)
-
-	if(src.meat_taken < src.meat_amount)
-		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
-		return
-
-	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
-
-	if(istype(src, /mob/living/simple_animal)) //Animals can be butchered completely, humans - not so
-		if(src.size > SIZE_TINY) //Tiny animals don't produce gibs
-			gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
-		else
-			qdel(src)
 
 /mob/living/proc/scoop_up(mob/M) //M = mob who scoops us up!
 	if(!holder_type)

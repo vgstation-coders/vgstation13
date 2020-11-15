@@ -109,7 +109,6 @@ var/list/blob_overminds = list()
 		return 1
 	if(istype(mover) && mover.checkpass(PASSBLOB))
 		return 1
-	mover.to_bump(src) //Only automatic for dense objects
 	return 0
 
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)

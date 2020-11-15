@@ -3,13 +3,12 @@
 	var/mob/controller
 	var/atom/movable/controlled
 	var/control_flags = 0
-	var/damaged_event_key
 	var/is_controlled = FALSE //Whether we're in strict control
 
 /datum/control/New(var/mob/new_controller, var/atom/new_controlled)
 	..()
 	controller = new_controller
-	damaged_event_key = controller.on_damaged.Add(src, "user_damaged")
+	controller.lazy_register_event(/lazy_event/on_damaged, src, .proc/user_damaged)
 	controlled = new_controlled
 
 /datum/control/Destroy()
@@ -20,8 +19,7 @@
 	controlled = null
 	..()
 
-/datum/control/proc/user_damaged(list/arguments)
-	var/amount = arguments["amount"]
+/datum/control/proc/user_damaged(kind, amount)
 	if(amount > 0 && control_flags & REVERT_ON_CONTROLLER_DAMAGED)
 		break_control()
 

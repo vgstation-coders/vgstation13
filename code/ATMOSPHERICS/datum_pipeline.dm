@@ -15,8 +15,9 @@
 	if(network) //For the pipenet rebuild
 		qdel(network)
 		network = null
-	if(air && air.volume) //For the pipeline rebuild next tick
-		temporarily_store_air()
+	if(air) //For the pipeline rebuild next tick
+		if(air.total_moles)
+			temporarily_store_air()
 		qdel(air)
 		air = null
 	//Null the fuck out of all these references
@@ -72,7 +73,11 @@
 
 			if(result.len>0)
 				for(var/obj/machinery/atmospherics/pipe/item in result)
-					if(!members.Find(item))
+					if(item.parent != src)
+						if(item.parent)
+							//Destroy the old pipeline so that the air is stored in the pipes
+							//This could be optimized significantly by making it merge item.parent into this pipeline instead (or vice versa) but I'm just fixing a bug here
+							qdel(item.parent)
 						members += item
 						possible_expansions += item
 
@@ -97,8 +102,11 @@
 /datum/pipeline/proc/network_expand(datum/pipe_network/new_network, obj/machinery/atmospherics/pipe/reference)
 
 
-	if(new_network.line_members.Find(src))
+	if(src in new_network.line_members)
 		return 0
+
+	if(network && (network != new_network))
+		return new_network.merge(network)
 
 	new_network.line_members += src
 

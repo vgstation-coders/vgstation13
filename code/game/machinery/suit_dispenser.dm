@@ -269,7 +269,7 @@ var/list/dispenser_presets = list()
 
 /datum/suit/dorf/head/chiefengie
 	name = "Chief Engineer"
-	to_spawn = (/obj/item/clothing/suit/space/rig/elite,/obj/item/clothing/shoes/magboots/elite)*/
+	to_spawn = (/obj/item/clothing/suit/space/rig/engineer/elite,/obj/item/clothing/shoes/magboots/elite)*/
 
 
 /obj/machinery/suit_dispenser/dorf

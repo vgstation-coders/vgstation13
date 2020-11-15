@@ -27,7 +27,6 @@
 	if((ishuman(antag.current) || ismonkey(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-
 	antag.store_memory("A couple of runes appear clearly in your mind:")
 	antag.store_memory("<B>Raise Structure:</B> BLOOD, TECHNOLOGY, JOIN.")
 	antag.store_memory("<B>Communication:</B> SELF, OTHER, TECHNOLOGY.")
@@ -150,11 +149,13 @@
 	to_chat(antag.current, "<span class='sinister'>A couple of runes linger vividly in your mind.</span><span class='info'> (check your notes).</span>")
 
 
+
 	spawn(1)
 		if (faction)
 			var/datum/objective_holder/OH = faction.objective_holder
-			var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
-			to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
+			if (OH.objectives.len > 0)
+				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
+				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 

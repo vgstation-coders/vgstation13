@@ -7,6 +7,9 @@
 
 #define REASON_LEN 140 // max length for reason message, nanoui appears to not like long strings.
 
+#define CENTCOMM_ORDER_DELAY_MIN (20 MINUTES)
+#define CENTCOMM_ORDER_DELAY_MAX (40 MINUTES)
+
 var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 /datum/subsystem/supply_shuttle
@@ -34,6 +37,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/datum/materials/materials_list
 	var/restriction = 1 //Who can approve orders? 0 = autoapprove; 1 = has access; 2 = has an ID (omits silicons); 3 = actions require PIN
 	var/requisition = 0 //Are orders being paid for by the department? 0 = no; 1 = auto; possible future: allow with pin?
+	var/centcomm_order_cooldown = 9999
+	var/centcomm_last_order = 0
 
 /datum/subsystem/supply_shuttle/New()
 	NEW_SS_GLOBAL(SSsupply_shuttle)
@@ -47,6 +52,10 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		var/datum/supply_packs/P = new typepath
 		supply_packs[P.name] = P
 
+	add_centcomm_order(new /datum/centcomm_order/per_unit/plasma)
+
+	centcomm_last_order = world.time
+	centcomm_order_cooldown = rand(CENTCOMM_ORDER_DELAY_MIN,CENTCOMM_ORDER_DELAY_MAX)
 	..()
 
 /datum/subsystem/supply_shuttle/fire(resumed = FALSE)
@@ -58,6 +67,27 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		else
 			eta = 0
 			send()
+
+	if (world.time > (centcomm_last_order + centcomm_order_cooldown))
+
+
+		//1 more simultaneous order for every 10 players.
+		//Centcomm uses the crew manifest to determine how many people actually are on the station.
+		var/new_orders = 1 + round(data_core.general.len / 10)
+		for (var/i = 1 to new_orders)
+			create_weighted_order()
+
+		//If the are less than 1 order per 5 crew members, the next order will come sooner, otherwise later.
+		var/new_cooldown = 1 + round(data_core.general.len / 5)
+		var/modified_min = CENTCOMM_ORDER_DELAY_MIN
+		var/modified_max = CENTCOMM_ORDER_DELAY_MAX
+
+		var/delta = (centcomm_orders.len - new_cooldown)// Sign tells us if we need to add or substract time
+		new_cooldown = centcomm_orders.len
+		modified_max = max(modified_min, modified_max - 5 * delta MINUTES)
+
+		centcomm_last_order = world.time
+		centcomm_order_cooldown = rand(modified_min,modified_max)
 
 /datum/supply_order
 	var/ordernum
@@ -108,19 +138,22 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	return 1
 
-/datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate)
+/datum/subsystem/supply_shuttle/proc/SellObjToOrders(var/atom/A,var/in_crate,var/preserve = FALSE)
+	if (istype(A,/obj/item/weapon/storage/lockbox))
+		for (var/atom/A2 in A)
+			SellObjToOrders(A2, 1)
+			if(A2 && !preserve)
+				qdel(A2)
 	// Per-unit orders run last so they don't steal shit.
-	var/list/deferred_order_checks=list()
-	var/order_idx=0
+	var/list/deferred_orders = list()
 	for(var/datum/centcomm_order/O in centcomm_orders)
-		order_idx++
 		if(istype(O,/datum/centcomm_order/per_unit))
-			deferred_order_checks += order_idx
-		if(O.CheckShuttleObject(A,in_crate))
+			deferred_orders += O
+			continue
+		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
-	for(var/oid in deferred_order_checks)
-		var/datum/centcomm_order/O = centcomm_orders[oid]
-		if(O.CheckShuttleObject(A,in_crate))
+	for(var/datum/centcomm_order/O in deferred_orders)
+		if(O.CheckShuttleObject(A,in_crate,preserve))
 			return
 
 /datum/subsystem/supply_shuttle/proc/sell()
@@ -131,51 +164,22 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 
 	var/datum/money_account/cargo_acct = department_accounts["Cargo"]
 
+	var/recycled_crates = 0
 	for(var/atom/movable/MA in shuttle)
-		if(MA.anchored)
+		if(MA.anchored && !ismecha(MA))
 			continue
 
-		if(istype(MA, /obj/item/stack/sheet/mineral/plasma))
-			var/obj/item/stack/sheet/mineral/plasma/P = MA
-			if(P.redeemed)
-				continue
-			var/datum/material/mat = materials_list.getMaterial(P.mat_type)
-			var/amount = (mat.value * 10) * P.amount
-			cargo_acct.money += amount
-			var/datum/transaction/T = new()
-			T.target_name = cargo_acct.owner_name
-			T.purpose = "Central Command Plasma sale"
-			T.amount = amount
-			T.date = current_date_string
-			T.time = worldtime2text()
-			cargo_acct.transaction_log.Add(T)
-		// Must be in a crate!
-		else if(istype(MA,/obj/structure/closet/crate))
-			cargo_acct.money += credits_per_crate
-			var/find_slip = 1
+		if(istype(MA,/obj/structure/closet/crate))
+			recycled_crates++
 
+			var/find_slip = 1
 			for(var/obj/A in MA)
-				if(istype(A, /obj/item/stack/sheet/mineral/plasma))
-					var/obj/item/stack/sheet/mineral/plasma/P = A
-					if(P.redeemed)
-						continue
-					var/datum/material/mat = materials_list.getMaterial(P.mat_type)
-					var/amount = (mat.value * 10) * P.amount
-					cargo_acct.money += amount
-					var/datum/transaction/T = new()
-					T.target_name = cargo_acct.owner_name
-					T.purpose = "Central Command Plasma sale"
-					T.amount = amount
-					T.date = current_date_string
-					T.time = worldtime2text()
-					cargo_acct.transaction_log.Add(T)
-					continue
 				if(find_slip && istype(A,/obj/item/weapon/paper/manifest))
 					var/obj/item/weapon/paper/slip = A
 					if(slip.stamped && slip.stamped.len) //yes, the clown stamp will work. clown is the highest authority on the station, it makes sense
 						var/datum/transaction/T = new()
-						T.target_name = cargo_acct.owner_name
-						T.purpose = "Central Command purchase confirmation (Stamped Slip) [A]"
+						T.target_name = "Central Command Administration"
+						T.purpose = "Purchase confirmation (Stamped Slip) [A]"
 						T.amount = credits_per_slip
 						T.date = current_date_string
 						T.time = worldtime2text()
@@ -195,10 +199,24 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 		// PAY UP BITCHES
 		for(var/datum/centcomm_order/O in centcomm_orders)
 			if(O.CheckFulfilled())
-				O.Pay()
+				if (!istype(O, /datum/centcomm_order/per_unit))
+					O.Pay()//per_unit payments are handled by CheckFulfilled()
 				centcomm_orders.Remove(O)
-		qdel(MA)
+				for(var/obj/machinery/computer/supplycomp/S in supply_consoles)//juiciness!
+					S.say("Central Command request fulfilled!")
+					playsound(S, 'sound/machines/info.ogg', 50, 1)
+		if(MA)
+			qdel(MA)
 
+	if (recycled_crates)
+		var/datum/transaction/T = new()
+		T.target_name = "Central Command Recycling"
+		T.purpose = "[recycled_crates] recycled crate[recycled_crates > 1 ? "s" : ""]"
+		T.amount = credits_per_crate*recycled_crates
+		T.date = current_date_string
+		T.time = worldtime2text()
+		cargo_acct.transaction_log.Add(T)
+		cargo_acct.money += credits_per_crate*recycled_crates
 
 /datum/subsystem/supply_shuttle/proc/buy()
 	if(!shoppinglist.len)
@@ -333,17 +351,38 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 /datum/subsystem/supply_shuttle/proc/add_centcomm_order(var/datum/centcomm_order/C)
 	centcomm_orders.Add(C)
 	var/name = "External order form - [C.name] order number [C.id]"
-	var/info = {"<h3>Central command supply requisition form</h3<><hr>
+	var/info = {"<h3>Central Command supply requisition form</h3<><hr>
 	 			INDEX: #[C.id]<br>
 	 			REQUESTED BY: [C.name]<br>
-	 			MUST BE IN CRATE: [C.must_be_in_crate ? "YES" : "NO"]<br>
+	 			MUST BE IN CRATE(S): [C.must_be_in_crate ? "YES" : "NO"]<br>
 	 			REQUESTED ITEMS:<br>
 	 			[C.getRequestsByName(1)]
 	 			WORTH: [C.worth] credits TO [C.acct_by_string]
 	 			"}
+	if (C.silent)
+		return
 	for(var/obj/machinery/computer/supplycomp/S in supply_consoles)
 		var/obj/item/weapon/paper/reqform = new /obj/item/weapon/paper(S.loc)
 		reqform.name = name
 		reqform.info = info
 		reqform.update_icon()
-		S.say("New central command request available")
+		S.say("New Central Command request available!")
+		playsound(S, 'sound/machines/twobeep.ogg', 50, 1)
+
+	for (var/obj/machinery/message_server/MS in message_servers)
+		if(MS.is_functioning())
+			for (var/obj/machinery/requests_console/Console in requests_consoles)
+				if (Console.department in C.request_consoles_to_notify)
+					Console.screen = 8
+					if(Console.newmessagepriority < 1)
+						Console.newmessagepriority = 1
+						Console.icon_state = "req_comp2"
+					if(!Console.silent)
+						playsound(Console.loc, 'sound/machines/request.ogg', 50, 1)
+						Console.visible_message("The [src] beeps; New Order from [C.name]")
+					Console.messages += "<B>[name]</B><BR>[info]"
+					Console.set_light(2)
+
+
+#undef CENTCOMM_ORDER_DELAY_MIN
+#undef CENTCOMM_ORDER_DELAY_MAX

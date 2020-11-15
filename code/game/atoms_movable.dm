@@ -53,11 +53,12 @@
 	var/ignore_blocking = 0
 
 	var/last_explosion_push = 0
+	var/mob/virtualhearer/virtualhearer
 
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
-		new /mob/virtualhearer(src)
+		virtualhearer = new /mob/virtualhearer(src)
 
 	if(starting_materials)
 		materials = new /datum/materials(src)
@@ -65,8 +66,9 @@
 			materials.addAmount(matID, starting_materials[matID])
 
 /atom/movable/Destroy()
-	var/turf/T = loc
-	if (opacity && istype(T))
+	var/turf/T
+	if (opacity && isturf(loc))
+		T = loc // recalc_atom_opacity() is called later on this
 		T.reconsider_lights()
 
 	if(materials)
@@ -74,10 +76,6 @@
 		materials = null
 
 	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
-
-	var/turf/un_opaque
-	if (opacity && isturf(loc))
-		un_opaque = loc
 
 	for (var/atom/movable/AM in locked_atoms)
 		unlock_atom(AM)
@@ -94,13 +92,12 @@
 
 	forceMove(null, harderforce = TRUE)
 
-	if (un_opaque)
-		un_opaque.recalc_atom_opacity()
+	if (T)
+		T.recalc_atom_opacity()
 
-	if(flags & HEAR|HEAR_ALWAYS)
-		for(var/mob/virtualhearer/VH in virtualhearers)
-			if(VH.attached == src)
-				qdel(VH)
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 	for(var/atom/movable/AM in src)
 		qdel(AM)
@@ -384,13 +381,23 @@
 /atom/movable/Crossed(atom/movable/AM)
 	return
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(src.throwing)
-		src.throw_impact(Obstacle)
-		src.throwing = 0
-
-	if (Obstacle)
-		Obstacle.Bumped(src)
+// Always override this proc instead of BYOND-provided Bump().
+// This is a workaround for some dumb BYOND behavior:
+// The `Obstacle` argument passed to Bump() is the first dense object
+// in the turf's `contents`. The argument we provide to this proc
+// is instead the actual object that's blocking movement.
+/atom/movable/proc/to_bump(atom/Obstacle)
+	if(airflow_speed > 0 && airflow_dest)
+		airflow_hit(Obstacle)
+	else
+		airflow_speed = 0
+		airflow_time = 0
+		if(src.throwing)
+			src.throw_impact(Obstacle)
+			src.throwing = 0
+		if(Obstacle)
+			Obstacle.Bumped(src)
+	sound_override = 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
@@ -635,10 +642,13 @@
 		src.throw_impact(get_turf(src), speed, user)
 
 //Overlays
+
+/datum/locking_category/overlay
+
 /atom/movable/overlay
 	var/atom/master = null
-	var/follow_proc = /atom/movable/overlay/proc/move_to_turf_or_null
 	anchored = 1
+	lockflags = 0 //Neither dense when locking or dense when locked to something
 
 /atom/movable/overlay/New()
 	. = ..()
@@ -652,8 +662,7 @@
 
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.lazy_register_event(/lazy_event/on_moved, src, follow_proc)
-		SetInitLoc()
+		AM.lock_atom(src, /datum/locking_category/overlay)
 	if (istype(master, /atom/movable))
 		var/atom/movable/AM = master
 		AM.lazy_register_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
@@ -665,13 +674,10 @@
 /atom/movable/overlay/Destroy()
 	if(istype(master, /atom/movable))
 		var/atom/movable/AM = master
-		AM.lazy_unregister_event(/lazy_event/on_moved, src, follow_proc)
+		AM.unlock_atom(src)
 		AM.lazy_unregister_event(/lazy_event/on_destroyed, src, .proc/qdel_self)
 	master = null
 	return ..()
-
-/atom/movable/overlay/proc/SetInitLoc()
-	forceMove(master.loc)
 
 /atom/movable/overlay/blob_act()
 	return
@@ -722,13 +728,13 @@
 ////////////
 /atom/movable/proc/addHear()
 	flags |= HEAR
-	new /mob/virtualhearer(src)
+	virtualhearer = new /mob/virtualhearer(src)
 
 /atom/movable/proc/removeHear()
 	flags &= ~HEAR
-	for(var/mob/virtualhearer/VH in virtualhearers)
-		if(VH.attached == src)
-			qdel(VH)
+	if(virtualhearer)
+		qdel(virtualhearer)
+		virtualhearer = null
 
 //Can it be moved by a shuttle?
 /atom/movable/proc/can_shuttle_move(var/datum/shuttle/S)

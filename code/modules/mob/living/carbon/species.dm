@@ -192,6 +192,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
 		H.grasp_organs.len = 0
+	H.bad_external_organs.Cut()
 
 
 /datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
@@ -251,7 +252,7 @@ var/global/list/whitelisted_species = list("Human")
 		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
 	else
 		//testing("  ratio < 1, adding oxyLoss.")
-		H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
 		H.failed_last_breath = 1
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
@@ -275,7 +276,8 @@ var/global/list/whitelisted_species = list("Human")
 
 /datum/species/proc/OutOfCrit(var/mob/living/carbon/human/H)
 
-/datum/species/proc/equip(var/mob/living/carbon/human/H)
+// -- Outfit datums --
+/datum/species/proc/final_equip(var/mob/living/carbon/human/H)
 
 /datum/species/proc/get_inventory_offsets()	//This is what you override if you want to give your species unique inventory offsets.
 	var/static/list/offsets = list(
@@ -341,7 +343,7 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
-	H.dust()
+	H.dust(TRUE)
 
 /datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
 	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")
@@ -402,7 +404,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = IS_WHITELISTED | NO_BREATHE
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
+	anatomy_flags = NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
@@ -702,11 +704,10 @@ var/global/list/whitelisted_species = list("Human")
 
 	move_speed_mod = 1
 
-/datum/species/muton/equip(var/mob/living/carbon/human/H)
+/datum/species/muton/final_equip(var/mob/living/carbon/human/H)
 	// Unequip existing suits and hats.
 	H.u_equip(H.wear_suit,1)
 	H.u_equip(H.head,1)
-
 	move_speed_mod = 1
 
 /datum/species/muton/gib(mob/living/carbon/human/H)
@@ -789,110 +790,10 @@ var/global/list/whitelisted_species = list("Human")
 					You have talons with which you can slice others in a fist fight, and a beak which can be used to butcher corpses without the need for finer tools.<br>\
 					However, Oxygen is incredibly toxic to you, in breathing it or consuming it. You can only breathe nitrogen."
 
-/datum/species/vox/equip(var/mob/living/carbon/human/H)
-	// Unequip existing suits and hats.
-	if(H.mind.assigned_role != "MODE")
-		H.u_equip(H.wear_suit,1)
-		H.u_equip(H.head,1)
-	if(H.mind.assigned_role!="Clown")
-		H.u_equip(H.wear_mask,1)
-
-	H.equip_or_collect(new /obj/item/clothing/mask/breath/vox(H), slot_wear_mask)
-	var/suit=/obj/item/clothing/suit/space/vox/civ
-	var/helm=/obj/item/clothing/head/helmet/space/vox/civ
+// -- Outfit datums --
+/datum/species/vox/final_equip(var/mob/living/carbon/human/H)
 	var/tank_slot = slot_s_store
 	var/tank_slot_name = "suit storage"
-	switch(H.mind.assigned_role)
-
-		if("Bartender")
-			suit=/obj/item/clothing/suit/space/vox/civ/bartender
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/bartender
-		if("Chef")
-			suit=/obj/item/clothing/suit/space/vox/civ/chef
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chef
-		if("Botanist")
-			suit=/obj/item/clothing/suit/space/vox/civ/botanist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/botanist
-		if("Janitor")
-			suit=/obj/item/clothing/suit/space/vox/civ/janitor
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/janitor
-		if("Cargo Technician","Quartermaster")
-			suit=/obj/item/clothing/suit/space/vox/civ/cargo
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/cargo
-		if("Shaft Miner")
-			suit=/obj/item/clothing/suit/space/vox/civ/mining
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/mining
-		if("Mechanic")
-			suit=/obj/item/clothing/suit/space/vox/civ/mechanic
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/mechanic
-		if("Chaplain")
-			suit=/obj/item/clothing/suit/space/vox/civ/chaplain
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/chaplain
-		if("Librarian")
-			suit=/obj/item/clothing/suit/space/vox/civ/librarian
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/librarian
-
-		if("Chief Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/ce
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/ce
-		if("Station Engineer")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer
-		if("Atmospheric Technician")
-			suit=/obj/item/clothing/suit/space/vox/civ/engineer/atmos
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/engineer/atmos
-
-		if("Scientist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science
-		if("Research Director")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/rd
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/rd
-		if("Roboticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/science/roboticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/science/roboticist
-
-		if("Medical Doctor")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical
-		if("Paramedic")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/paramedic
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/paramedic
-		if("Geneticist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/geneticist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/geneticist
-		if("Virologist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/virologist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/virologist
-		if("Chemist")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/chemist
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/chemist
-		if("Chief Medical Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/medical/cmo
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/medical/cmo
-
-		if("Head of Security","Warden","Detective","Security Officer")
-			suit=/obj/item/clothing/suit/space/vox/civ/security
-			helm=/obj/item/clothing/head/helmet/space/vox/civ/security
-
-//		if("Clown","Mime")
-//			tank_slot=null
-//			tank_slot_name = "hand"
-		if("Trader")
-			suit = /obj/item/clothing/suit/space/vox/civ/trader
-			helm = /obj/item/clothing/head/helmet/space/vox/civ/trader
-
-		if("MODE") // Gamemode stuff
-			switch(H.mind.special_role)
-				if("Wizard")
-					suit = null
-					helm = null
-					tank_slot = null
-					tank_slot_name = "hand"
-	if(suit)
-		H.equip_or_collect(new suit(H), slot_wear_suit)
-	if(helm)
-		H.equip_or_collect(new helm(H), slot_head)
 	if(tank_slot)
 		H.equip_or_collect(new/obj/item/weapon/tank/nitrogen(H), tank_slot)
 	else
@@ -1291,7 +1192,7 @@ var/list/has_died_as_golem = list()
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1

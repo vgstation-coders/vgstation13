@@ -538,10 +538,8 @@
 			list("Toggle Reagent Disposal", (reagent_disposal ? "radial_chem_notrash" : "radial_chem_trash")),
 			list("Examine", "radial_examine")
 		)
-		var/event/menu_event = new(owner = usr)
-		menu_event.Add(src, "radial_check_handler")
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
 		if(!radial_check(usr))
 			return
 
@@ -557,10 +555,6 @@
 				usr.examination(src)
 		return
 	return ..()
-
-/obj/machinery/microwave/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
 
 /obj/machinery/microwave/proc/radial_check(mob/living/user)
 	if(!istype(user))

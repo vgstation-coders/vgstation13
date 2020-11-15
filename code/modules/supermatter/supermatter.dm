@@ -101,6 +101,7 @@
 	set_frequency(frequency) //also broadcasts
 
 /obj/machinery/power/supermatter/Destroy()
+	new /datum/artifact_postmortem_data(src,TRUE)//we only archive those that were excavated
 	qdel(radio)
 	radio = null
 	radio_controller.remove_object(src, frequency)

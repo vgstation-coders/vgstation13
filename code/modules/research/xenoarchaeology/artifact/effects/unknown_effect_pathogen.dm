@@ -9,7 +9,7 @@
 	..()
 	effect_type = pick(6,7)
 
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	pathogen = new virus_choice
 
 	var/list/anti = list(

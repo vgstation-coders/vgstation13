@@ -124,7 +124,7 @@ var/const/RADIO_MULEBOT = "8"
 var/const/RADIO_MAGNETS = "9" //for the firing range "magnet" target mover
 var/const/RADIO_CONVEYORS = "10"
 
-var/global/datum/controller/radio/radio_controller
+var/global/datum/controller/radio/radio_controller = new
 
 /datum/controller/radio
 	var/list/datum/radio_frequency/frequencies = new

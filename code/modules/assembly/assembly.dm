@@ -51,8 +51,8 @@ var/global/list/assembly_short_name_to_type = list() //Please, I beg you, don't 
 	// List of variables that can be READ / WRITTEN TO by other assemblies.
 		// Format of the list:
 		//
-		// accessible_values = list("Time" = "time;number",\
-		//	"Frequency" = "freq;number",\
+		// accessible_values = list("Time" = "time;number",
+		//	"Frequency" = "freq;number",
 		//	"Code" = "code;number")
 		//
 		// "Time" - name of this value. Can be anything

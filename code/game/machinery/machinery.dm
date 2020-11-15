@@ -28,6 +28,7 @@ Class Variables:
          1 -- machine is using power at its idle power level
          2 -- machine is using power at its active power level
 
+
    active_power_usage (num)
       Value for the amount of power to use when in active power mode
 
@@ -136,6 +137,9 @@ Class Procs:
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
 
+	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
+	var/battery_dependent = 0	//Requires a battery to run
+
 	//These are some values to automatically set the light power/range on machines if they have power
 	var/light_range_on = 0
 	var/light_power_on = 0
@@ -166,6 +170,7 @@ Class Procs:
 	..()
 
 /obj/machinery/New()
+	all_machines += src // Machines are only removed from this upon destruction
 	machines += src
 	//if(ticker) initialize()
 	return ..()
@@ -181,7 +186,7 @@ Class Procs:
 		to_chat(user, "<span class='info'>Its maintenance panel is open.</span>")
 
 /obj/machinery/Destroy()
-
+	all_machines -= src
 	machines.Remove(src)
 
 	power_machines.Remove(src)
@@ -242,7 +247,7 @@ Class Procs:
 		qdel(src)
 
 /obj/machinery/proc/auto_use_power()
-	if(!powered(power_channel))
+	if(!powered(power_channel) && !connected_cell)
 		return 0
 
 	switch (use_power)
@@ -377,7 +382,7 @@ Class Procs:
 
 /obj/machinery/Topic(href, href_list)
 	..()
-	if(stat & (NOPOWER|BROKEN))
+	if(stat & (BROKEN|NOPOWER))
 		return 1
 	if(href_list["close"])
 		return
@@ -643,7 +648,7 @@ Class Procs:
 	return 1
 
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
-	return(src in machines)
+	return 1
 
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock

@@ -30,13 +30,6 @@ var/list/wizard_apprentice_setups_by_name = list()
 		/spell/area_teleport,
 	)
 
-/datum/wizard_apprentice_setup/robeless
-	name = "Robeless"
-	spells = list(
-		/spell/passive/noclothes,
-		/spell/targeted/mind_transfer,
-	)
-
 /datum/wizard_apprentice_setup/clown_magic
 	name = "Clown magic"
 	spells = list(

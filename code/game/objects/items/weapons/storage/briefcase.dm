@@ -65,7 +65,6 @@
 
 /obj/item/weapon/storage/briefcase/false_bottomed
 	name = "briefcase"
-	desc = "It's made of AUTHENTIC faux-leather and has a price-tag still attached. This one feels a bit heavier than normal for how much fits in it."
 	icon_state = "briefcase"
 	force = 8.0
 	throw_speed = 1
@@ -77,6 +76,11 @@
 	var/busy_hunting = 0
 	var/bottom_open = 0 //is the false bottom open?
 	var/obj/item/stored_item = null //what's in the false bottom. If it's a gun, we can fire it
+
+/obj/item/weapon/storage/briefcase/false_bottomed/examine(mob/user)
+	..()
+	if(user.is_holding_item(src))
+		to_chat(user, "<span class='notice'>This one feels a bit heavier than normal for how much fits in it.</span>")
 
 /obj/item/weapon/storage/briefcase/false_bottomed/Destroy()
 	if(stored_item)//since the stored_item isn't in the briefcase' contents we gotta remind the game to delete it here.

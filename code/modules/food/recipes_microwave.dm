@@ -33,6 +33,15 @@
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/egg)
 	result = /obj/item/weapon/reagent_containers/food/snacks/donut/chaos
 
+/datum/recipe/bagel
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/butter)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bagel
+
+/datum/recipe/bagel/make_food(obj/container)
+	score["bagelscooked"]++
+	return ..()
+
 // Burgers /////////////////////////////////////////////////////
 
 /datum/recipe/customizable_bun
@@ -93,6 +102,14 @@
 	reagents = list(FLOUR = 5)
 	items = list(/obj/item/clothing/head/beret)
 	result = /obj/item/weapon/reagent_containers/food/snacks/mimeburger
+
+/datum/recipe/donutburger
+	items = list(
+		/obj/item/weapon/reagent_containers/food/snacks/meat/animal,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal,
+		/obj/item/weapon/reagent_containers/food/snacks/donut/normal
+		)
+	result = /obj/item/weapon/reagent_containers/food/snacks/donutburger
 
 /datum/recipe/assburger
 	reagents = list(FLOUR = 5)
@@ -169,6 +186,12 @@
 	reagents = list(FLOUR = 5, CARAMEL = 5)
 	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat)
 	result = /obj/item/weapon/reagent_containers/food/snacks/caramelburger
+
+/datum/recipe/bearburger
+	reagents = list(FLOUR = 5)
+	items = list(/obj/item/weapon/reagent_containers/food/snacks/meat/bearmeat)
+	result = /obj/item/weapon/reagent_containers/food/snacks/bearburger
+
 
 // Burger sliders //////////////////////////////////////////////
 

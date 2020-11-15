@@ -58,14 +58,14 @@
 /obj/machinery/suit_storage_unit/engie
 	name = "Engineering Suit Storage Unit"
 	department = "engie"
-	suit_type = /obj/item/clothing/suit/space/rig
+	suit_type = /obj/item/clothing/suit/space/rig/engineer
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots
 
 /obj/machinery/suit_storage_unit/elite
 	name = "Advanced Suit Storage Unit"
 	department = "ce"
-	suit_type = /obj/item/clothing/suit/space/rig/elite
+	suit_type = /obj/item/clothing/suit/space/rig/engineer/elite
 	mask_type = /obj/item/clothing/mask/breath
 	boot_type = /obj/item/clothing/shoes/magboots/elite
 

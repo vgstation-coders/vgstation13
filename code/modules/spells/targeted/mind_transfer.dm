@@ -27,15 +27,16 @@
 
 	for(var/mob/living/target in targets)
 		if(target.stat == DEAD)
-			to_chat(user, "You didn't study necromancy back at the Space Wizard Federation academy.")
+			to_chat(user, "<span class='notice>You didn't study necromancy back at the Space Wizard Federation academy.<span class='notice>")
 			continue
-
 		else if(!target.key || !target.mind)
-			to_chat(user, "They appear to be catatonic. Not even magic can affect their vacant mind.")
+			to_chat(user, "<span class='notice>They appear to be catatonic. Not even magic can affect their vacant mind.<span class='notice>")
 			continue
-
 		else if(target.mind.special_role in protected_roles)
 			to_chat(user, "Their mind is resisting your spell.")
+			continue
+		else if(iscluwnebanned(target))
+			to_chat(user, "<span class='notice>A powerful curse is anchoring their soul to their body.<span class='notice>")
 			continue
 		else
 			var/mob/living/victim = target//The target of the spell whos body will be transferred to.

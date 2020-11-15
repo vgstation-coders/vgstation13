@@ -49,4 +49,5 @@
 		/obj/item/device/flash,
 		/obj/item/weapon/switchtool/holo,
 		/obj/item/weapon/card/debit/preferred/department/science,
+		/obj/item/device/artifact_finder,
 	)

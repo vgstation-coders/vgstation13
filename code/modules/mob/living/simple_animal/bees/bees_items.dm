@@ -71,6 +71,7 @@
 			if (!B.bee_species.angery || prob(max(0,100-B.bees.len*5)))
 				for (var/datum/bee/BEES in B.bees)
 					caught_bees.Add(BEES)
+					B.bees.Remove(BEES)
 					BEES.home = null
 					if (B.home)
 						B.home.bees_outside_hive.Remove(BEES)
@@ -169,6 +170,7 @@
 	name = "honeycomb"
 	icon_state = "honeycomb"
 	desc = "Dripping with sugary sweetness. Grind it to separate the honey."
+	var/list/authentic = list()
 
 /obj/item/weapon/reagent_containers/food/snacks/honeycomb/New()
 	. = ..()
@@ -198,6 +200,22 @@
 	I.color = mix_color_from_reagents(reagents.reagent_list)
 	icon_state = "chill_honeycomb-base"
 	overlays += I
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/authentify()
+	authentic = list()
+	for (var/datum/reagent/R in reagents.reagent_list)
+		authentic[R.id] = R.volume
+
+/obj/item/weapon/reagent_containers/food/snacks/honeycomb/proc/verify()
+	for (var/datum/reagent/R in reagents.reagent_list)
+		if (!(R.id in authentic) || (authentic[R.id] != R.volume))//making sure that no reagent has been added or changed
+			return FALSE
+		else
+			authentic -= R.id
+
+	if (authentic.len <= 0)//are we sure no reagent has been removed shomehow
+		return TRUE
+	return FALSE
 
 /obj/item/weapon/book/manual/hydroponics_beekeeping
 	name = "The Ins and Outs of Apiculture - A Precise Art"

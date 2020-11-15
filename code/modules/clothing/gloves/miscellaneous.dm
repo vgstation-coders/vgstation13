@@ -367,6 +367,10 @@
 	hitsound_added = 'sound/weapons/slice.ogg'
 	attack_verb_override = "claws"
 
+/obj/item/clothing/gloves/warping_claws/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
 

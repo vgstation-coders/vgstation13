@@ -348,7 +348,6 @@ var/global/resethearers = 0
 		sethearing()
 
 	. = new/list()
-
 	for(var/obj/item/device/radio/radio in radios)
 		if(radio)
 			var/turf/turf = get_turf(radio)

@@ -209,15 +209,6 @@ atom/movable/GotoAirflowDest(n)
 		if(od)
 			setDensity(FALSE)
 
-/atom/movable/to_bump(atom/Obstacle)
-	if(airflow_speed > 0 && airflow_dest)
-		airflow_hit(Obstacle)
-	else
-		airflow_speed = 0
-		airflow_time = 0
-		. = ..()
-	sound_override = 0
-
 /atom/movable/proc/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null

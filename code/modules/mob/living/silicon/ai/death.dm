@@ -3,7 +3,8 @@
 		return
 	if(!gibbed)
 		emote("deathgasp", message = TRUE)
-		playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
+		if(!explosive)
+			playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
 	stat = DEAD
 	update_icon()
 
@@ -43,9 +44,17 @@
 	if(callshuttle == 3) //if all three conditions are met
 		shuttle_autocall()
 
-	if(explosive)
-		spawn(10)
-			explosion(src.loc, 3, 6, 12, 15)
+	if(explosive && !gibbed && !istype(loc, /obj/machinery/power/apc))
+		visible_message("<span class='danger'>[name] begins to spark violently!</span>")
+		playsound(src, 'sound/machines/Alarm_short.ogg', 75, FALSE)
+		spawn(30)
+			explosion(src.loc, 2, 5, 8, 10)
+			gibbed = TRUE
+			gib()
+
+	if(blackout_active)
+		malf_rcd_disable = FALSE
+		malf_radio_blackout = FALSE
 
 	for(var/obj/machinery/ai_status_display/O in machines) //change status
 		spawn( 0 )

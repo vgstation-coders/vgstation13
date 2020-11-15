@@ -9,9 +9,7 @@
 	var/list/allowed_species = null
 	var/list/disallowed_species = null
 
-	// duration of the step
-	var/min_duration = 0
-	var/max_duration = 0
+	var/duration = 0
 
 	var/list/mob/doing_surgery = list() //who's doing this RIGHT NOW
 
@@ -79,7 +77,7 @@
 
 	if(istype(tool,/obj/item/weapon/scalpel/laser) || istype(tool,/obj/item/weapon/retractor/manager))
 		tool.icon_state = "[initial(tool.icon_state)]_on"
-		spawn(max_duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
+		spawn(duration * tool.toolspeed)//in case the player doesn't go all the way through the step (if he moves away, puts the tool away,...)
 			tool.icon_state = "[initial(tool.icon_state)]_off"
 	return
 
@@ -113,6 +111,8 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		clumsy = (tool.clumsy_check(H) && prob(50))
+	if (!user.dexterity_check())
+		clumsy = 1
 
 	var/target_area = user.zone_sel ? user.zone_sel.selecting : get_random_zone_sel()
 
@@ -134,7 +134,7 @@ proc/do_surgery(mob/living/M, mob/living/user, obj/item/tool)
 
 				var/selection = user.zone_sel ? user.zone_sel.selecting : null //Check if the zone selection hasn't changed
 				//We had proper tools! (or RNG smiled.) and user did not move or change hands.
-				if(do_mob(user, M, rand(S.min_duration, S.max_duration) * tool.toolspeed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
+				if(do_mob(user, M, S.duration * tool.toolspeed) && (prob(S.tool_quality(tool) / (sleep_fail + clumsy + 1))) && (!user.zone_sel || selection == user.zone_sel.selecting)) //Last part checks whether the zone selection hasn't changed
 					M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has had surgery [S.type] with \the [tool] successfully completed by [user.name] ([user.ckey])</font>")
 					user.attack_log += text("\[[time_stamp()]\] <font color='red'>Successfully completed surgery [S.type] with \the [tool] on [M.name] ([M.ckey])</font>")
 					log_attack("<font color='red'>[user.name] ([user.ckey]) used \the [tool] to successfully complete surgery type [S.type] on [M.name] ([M.ckey])</font>")

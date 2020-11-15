@@ -230,6 +230,8 @@
 
 #define isrighelmet(O) (istype(O, /obj/item/clothing/head/helmet/space/rig))
 
+#define isinvisible(A) (A.invisibility || A.alpha <= 1)
+
 #define format_examine(A,B) "<span class = 'info'><a HREF='?src=\ref[user];lookitem=\ref[A]'>[B].</a></span>"
 
 //Macros for roles/antags
@@ -246,6 +248,8 @@
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
 #define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+
+#define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
 #define isvoxraider(H) (H.mind && H.mind.GetRole(VOXRAIDER))
 
@@ -265,9 +269,13 @@
 
 #define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
 
+#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
+
+#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -298,7 +306,7 @@
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))
 
-
+#define iscluwnebanned(H) (jobban_isbanned(H, "Cluwne"))
 
 //Macro for AREAS!
 
