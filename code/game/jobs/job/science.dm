@@ -35,7 +35,7 @@
 	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 	alt_titles = list("Xenoarcheologist", "Anomalist", "Plasma Researcher", "Xenobiologist", "Research Botanist")
-	
+
 	outfit_datum = /datum/outfit/scientist
 
 /datum/job/roboticist
@@ -53,7 +53,3 @@
 	alt_titles = list("Biomechanical Engineer","Mechatronic Engineer")
 
 	outfit_datum = /datum/outfit/roboticist
-
-/datum/job/roboticist/priority_reward_equip(var/mob/living/carbon/human/H)
-	. = ..()
-	H.equip_or_collect(new /obj/item/device/flash/synthetic(H.back), slot_in_backpack)

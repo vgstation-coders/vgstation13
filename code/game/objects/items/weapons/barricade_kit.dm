@@ -26,7 +26,7 @@
 	if(istype(user.loc, /turf/space))
 		to_chat(user, "<span class='warning'>You can't build barricades out in space.</span>")
 		return
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 	switch(alert("What do you want ([kit_uses] use\s left)", "Barricade Kit", "Directional", "Full Tile", "Cancel", null))

@@ -112,7 +112,7 @@
 	if(handcuffed)
 		drop_hands()
 		stop_pulling()	//TODO: should be handled elsewhere
-		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/mob/mob.dmi', icon_state = "handcuff1")
+		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/obj/cuffs.dmi', icon_state = "[handcuffed.icon_state]")
 	else
 		overlays_standing[X_HANDCUFF_LAYER]	= null
 	if(update_icons)
@@ -121,7 +121,7 @@
 /mob/living/carbon/alien/humanoid/update_inv_mutual_handcuffed(var/update_icons = TRUE)
 	if(mutual_handcuffs)
 		stop_pulling()
-		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/mob/mob.dmi', icon_state = "singlecuff1")
+		overlays_standing[X_HANDCUFF_LAYER]	= image(icon = 'icons/obj/cuffs.dmi', icon_state = "singlecuff1")//TODO: procedurally generated single-cuffs
 	else
 		overlays_standing[X_HANDCUFF_LAYER]	= null
 	if(update_icons)

@@ -10,6 +10,10 @@
 	density = 1
 	layer = ABOVE_OBJ_LAYER
 
+/obj/machinery/giga_drill/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/machinery/giga_drill/attack_hand(mob/user as mob)
 	if(active)
 		active = 0

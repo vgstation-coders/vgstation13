@@ -4,6 +4,7 @@
 	fire_sound = 'sound/weapons/rocket.ogg'
 	icon_state = "rpg"
 	item_state = "rpg"
+	var/initial_icon = "rpg"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 25000, MAT_GLASS = 7500, MAT_PLASTIC = 12500, MAT_GOLD = 3000)
@@ -22,16 +23,51 @@
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
 
+/obj/item/weapon/gun/projectile/rocketlauncher/New()
+	..()
+	update_icon()
+
 /obj/item/weapon/gun/projectile/rocketlauncher/isHandgun()
 	return FALSE
 
 /obj/item/weapon/gun/projectile/rocketlauncher/update_icon()
-	if(!getAmmo())
-		icon_state = "rpg_e"
-		item_state = "rpg_e"
-	else
-		icon_state = "rpg"
-		item_state = "rpg"
+	if(!getAmmo()) //empty
+		overlays.len = 0 //remove missile overlays
+		item_state = initial_icon
+		item_state = "[item_state]_e"
+	else //not empty
+		overlays.len = 0
+		var/obj/item/ammo_casing/rocket_rpg/projectile = loaded[1]
+		overlays += image(icon, src, icon_state = "rpg_[projectile.icon_suffix]") //for(var/obj/item/ammo_casing/AC in loaded)
+		item_state = initial_icon
+	return
+
+/obj/item/weapon/gun/projectile/rocketlauncher/attack_self(mob/user)
+	..()
+	update_icon()
+	user.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/rocketlauncher/attackby(var/obj/item/A as obj, mob/user as mob)
+	..()
+	user.update_inv_hands()
+
+/obj/item/weapon/gun/projectile/rocketlauncher/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
+	..()
+	if(!chambered && stored_magazine && !stored_magazine.ammo_count() && gun_flags &AUTOMAGDROP) //auto_mag_drop decides whether or not the mag is dropped once it empties
+		var/drop_me = stored_magazine // prevents dropping a fresh/different mag.
+		spawn(automagdrop_delay_time)
+			if((stored_magazine == drop_me) && (loc == user))	//prevent dropping the magazine if we're no longer holding the gun
+				RemoveMag(user)
+				if(mag_drop_sound)
+					playsound(user, mag_drop_sound, 40, 1)
+	update_icon()
+	user.update_inv_hands()
+	return
+
+/obj/item/weapon/gun/projectile/rocketlauncher/Fire(atom/target, mob/living/user, params, reflex = 0, struggle = 0, var/use_shooter_turf = FALSE)
+	..()
+	update_icon()
+	user.update_inv_hands()
 
 /obj/item/weapon/gun/projectile/rocketlauncher/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
 	if(M == user && user.zone_sel.selecting == "mouth") //Are we trying to suicide by shooting our head off ?
@@ -60,6 +96,7 @@
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
 	icon_state = "rpg_nt"
 	item_state = "rpg_nt"
+	initial_icon = "rpg_nt"
 	max_shells = 1
 	w_class = W_CLASS_LARGE
 	starting_materials = list(MAT_IRON = 50000, MAT_GLASS = 50000, MAT_GOLD = 6000)
@@ -77,14 +114,6 @@
 	ammo_type = "/obj/item/ammo_casing/rocket_rpg/blank"
 	attack_verb = list("strikes", "hits", "bashes")
 	gun_flags = 0
-
-/obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/update_icon()
-	if(!getAmmo())
-		icon_state = "rpg_nt_e"
-		item_state = "rpg_nt_e"
-	else
-		icon_state = "rpg_nt"
-		item_state = "rpg_nt"
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen/lockbox
 	spawn_mag = TRUE
@@ -154,3 +183,20 @@
 	..()
 	pixel_x = rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y = rand(-10, 10) * PIXEL_MULTIPLIER
+
+
+/obj/item/weapon/gun/projectile/rocketlauncher/clown
+	//currently this is identical to an rpg in everything but a lack of clumsy check. I plan to repurpose it in the future to fire nonlethal clown missiles possibly
+	name = "shoulder mounted gag launcher"
+	desc = "Tactical clown rocket launcher that fires specialized Jettisonned Armor Piercing & Explosive (J.A.P.E) missiles. It's believed to be the very same design used during the Great Mime and Clown War of 2222"
+	fire_sound = 'sound/weapons/rocket.ogg'
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns.dmi', "right_hand" = 'icons/mob/in-hand/right/guns.dmi')
+	icon_state = "rpg_clown"
+	item_state = "rpg_clown"
+	initial_icon = "rpg_clown"
+	max_shells = 1
+	clumsy_check = 0
+	loaded = list()
+
+/obj/item/weapon/gun/projectile/rocketlauncher/clown/New() //spawn empty
+	update_icon()

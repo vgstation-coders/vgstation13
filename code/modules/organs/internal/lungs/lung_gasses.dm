@@ -147,7 +147,7 @@
 	..()
 	var/pp = get_pp()
 	var/mob/living/carbon/human/H=lungs.owner
-	if(pp > max_pp) // Too much toxins
+	if(pp > max_pp && !(H.species.flags & PLASMA_IMMUNE)) // Too much toxins
 		//testing("TOXIC: gasid=[id];pp=[pp]")
 		var/ratio = (pp/max_pp) * reagent_mult // WAS: (moles/max_moles) * 10
 		//adjustToxLoss(clamp(ratio, MIN_PLASMA_DAMAGE, MAX_PLASMA_DAMAGE))	//Limit amount of damage toxin exposure can do per second

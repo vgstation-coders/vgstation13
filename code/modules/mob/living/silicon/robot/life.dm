@@ -161,12 +161,10 @@
 			see_in_dark = 4
 
 /mob/living/silicon/robot/proc/process_killswitch()
-	if(killswitch)
-		killswitch_time--
-		if(killswitch_time <= 0)
-			to_chat(src, "<span class='warning' style=\"font-family:Courier\"><B>Killswitch Activated</span>")
-			spawn(5)
-				gib()
+	if(scrambledcodes)
+		return
+	if(cyborg_detonation_time != 0 && world.time >= cyborg_detonation_time)
+		self_destruct()
 
 /mob/living/silicon/robot/proc/process_locks()
 	if(modulelock)

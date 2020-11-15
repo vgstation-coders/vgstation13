@@ -65,6 +65,12 @@ var/global/list/wizard_cards_normal = list(
 	char_image = image('icons/obj/wiz_cards.dmi',cardname)
 	update_icon()
 
+/obj/item/toy/singlecard/wizard/Destroy()
+	if(card_use)
+		qdel(card_use)
+		card_use = null
+	..()
+
 /obj/item/toy/singlecard/wizard/update_icon()
 	if(flipped)
 		overlays -= char_image

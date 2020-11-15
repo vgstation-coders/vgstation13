@@ -645,3 +645,16 @@
 			timestop(src, duration, magic_range, TRUE)
 			spawn(duration)
 				flags &= ~TIMELESS
+
+
+/mob/living/simple_animal/dracson
+	name = "Young Vampire Bat"
+	desc = "Whatever happened to my Transylvania Twist?"
+	icon = 'icons/mob/animal.dmi'
+	icon_state = "scarybat-dance"
+	mob_property_flags = MOB_UNDEAD | MOB_SUPERNATURAL
+
+/mob/living/simple_animal/dracson/death(var/gibbed = FALSE)
+	..(TRUE)
+	anim(target = src, a_icon = 'icons/mob/mob.dmi', flick_anim = "batify", sleeptime = 15)
+	qdel(src)

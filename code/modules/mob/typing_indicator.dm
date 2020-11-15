@@ -5,32 +5,23 @@ I IS TYPIN'!'
 
 // Ported from Baystation12 : https://github.com/Baystation12/Baystation12
 
-/mob
-	var/atom/movable/overlay/typing_indicator/typing_indicator = null
+var/atom/movable/typing_indicator/typing_indicator
 
-/atom/movable/overlay/typing_indicator
+/atom/movable/typing_indicator
 	icon = 'icons/mob/talk.dmi'
 	icon_state = "talking"
+	vis_flags = VIS_INHERIT_ID
 
-/atom/movable/overlay/typing_indicator/New()
-	. = ..()
-	if(!istype(master, /mob))
-		CRASH("Master of typing_indicator has invalid type: [master.type].")
-
-/atom/movable/overlay/typing_indicator/Destroy()
-	var/mob/M = master
-	M.typing_indicator = null
-	. = ..()
+/atom/movable/typing_indicator/Destroy()
+	stack_trace("Something deleted the global typing indicator. Probably not intended.")
+	return ..()
 
 /mob/proc/create_typing_indicator()
 	if(client && !stat && client.prefs.typing_indicator && src.is_visible() && isturf(src.loc))
-		if(!typing_indicator)
-			typing_indicator = new(src)
-		typing_indicator.invisibility = 0
+		vis_contents |= typing_indicator
 
-/mob/proc/remove_typing_indicator() // A bit excessive, but goes with the creation of the indicator I suppose
-	if(typing_indicator)
-		typing_indicator.invisibility = INVISIBILITY_MAXIMUM
+/mob/proc/remove_typing_indicator()
+	vis_contents -= typing_indicator
 
 /mob/Logout()
 	remove_typing_indicator()

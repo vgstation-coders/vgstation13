@@ -6,25 +6,25 @@
 /datum/surgery_step/generic/
 	can_infect = 1
 	var/painful=1
-	can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		if (isslime(target))
-			return 0
-		if (target_zone == "eyes")	//there are specific steps for eye surgery
-			return 0
-		if (!hasorgans(target))
-			return 0
-		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (affected == null)
-			return 0
-		if (affected.status & ORGAN_DESTROYED)
-			return 0
-		if (affected.status & ORGAN_PEG)
-			return 0
-		// N3X:  Patient must be sleeping, dead, or unconscious.
-		if(!check_anesthesia(target) && painful)
-			return -1
-		return 1
 
+/datum/surgery_step/generic/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+	if (isslime(target))
+		return 0
+	if (target_zone == "eyes")	//there are specific steps for eye surgery
+		return 0
+	if (!hasorgans(target))
+		return 0
+	var/datum/organ/external/affected = target.get_organ(target_zone)
+	if (affected == null)
+		return 0
+	if (affected.status & ORGAN_DESTROYED)
+		return 0
+	if (affected.status & ORGAN_PEG)
+		return 0
+	// N3X:  Patient must be sleeping, dead, or unconscious.
+	if(!check_anesthesia(target) && painful)
+		return -1
+	return 1
 
 
 //////CUT WITH LASER(cut+clamp)//////////

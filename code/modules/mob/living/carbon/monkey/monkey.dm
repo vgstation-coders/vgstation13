@@ -405,9 +405,6 @@
 		return
 
 
-/mob/living/carbon/monkey/IsAdvancedToolUser()//Unless its monkey mode monkeys cant use advanced tools
-	return dexterity_check()
-
 // Get ALL accesses available.
 /mob/living/carbon/monkey/GetAccess()
 	var/list/ACL=list()
@@ -455,12 +452,12 @@
 
 /mob/living/carbon/monkey/dexterity_check()
 	if(stat != CONSCIOUS)
-		return 0
-	if(ticker.mode.name == "monkey")
-		return 1
+		return FALSE
+	if(ticker.mode.name == "monkey")//monkey mode override
+		return TRUE
 	if(reagents.has_reagent(METHYLIN))
-		return 1
-	return 0
+		return TRUE
+	return FALSE//monkeys can't use complex things by default unless they're high on methylin
 
 /mob/living/carbon/monkey/reset_layer()
 	if(lying)

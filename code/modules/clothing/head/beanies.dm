@@ -4,6 +4,7 @@
 	name = "white beanie"
 	desc = "A stylish beanie. The perfect winter accessory for those with a keen fashion sense, and those who just can't handle a cold breeze on their heads."
 	icon_state = "beanie" //Default white
+	species_fit = list(INSECT_SHAPED)
 	clothing_flags = COLORS_OVERLAY
 
 /obj/item/clothing/head/beanie/black

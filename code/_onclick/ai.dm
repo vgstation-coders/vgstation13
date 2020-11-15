@@ -16,7 +16,9 @@
 
 	if(control_disabled || stat)
 		return
-
+	var/list/modifiers = params2list(params)
+	if(modifiers["shift"] || modifiers["alt"] || modifiers["ctrl"])
+		return
 	if(ismob(A) || ismecha(A))
 		ai_actual_track(A)
 	else
@@ -37,8 +39,12 @@
 
 	var/list/modifiers = params2list(params)
 	if(modifiers["middle"])
-		MiddleClickOn(A)
-		return
+		if(modifiers["shift"])
+			MiddleShiftClickOn(A)
+			return
+		else
+			MiddleClickOn(A)
+			return
 	if(modifiers["shift"])
 		ShiftClickOn(A)
 		return
@@ -63,7 +69,7 @@
 		RestrainedClickOn(A)
 	else
 	*/
-	if(INVOKE_EVENT(on_uattack,list("atom"=A))) //This returns 1 when doing an action intercept
+	if(lazy_invoke_event(/lazy_event/on_uattack, list("atom" = A))) //This returns 1 when doing an action intercept
 		return
 	A.add_hiddenprint(src)
 	A.attack_ai(src)
@@ -93,11 +99,16 @@
 	A.AICtrlClick(src)
 /mob/living/silicon/ai/AltClickOn(var/atom/A)
 	A.AIAltClick(src)
+/mob/living/silicon/ai/MiddleShiftClickOn(var/atom/A)
+	A.AIMiddleShiftClick(src)
 
 /*
 	The following criminally helpful code is just the previous code cleaned up;
 	I have no idea why it was in atoms.dm instead of respective files.
 */
+
+/atom/proc/AIMiddleShiftClick()
+	return
 
 /atom/proc/AIShiftClick()
 	return

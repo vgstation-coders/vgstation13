@@ -132,6 +132,7 @@
 	name = "xeno necklace"
 	desc = "A necklace made out of some cable coils and a xenomorph's claws."
 	icon_state = "xeno_necklace"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/necklace/teeth
 	name = "teeth necklace"

@@ -192,8 +192,6 @@ For vending packs, see vending_packs.dm*/
 		to_chat(user, "<span class='notice'>Special supplies unlocked.</span>")
 		hacked = 1
 		can_order_contraband = 1
-		var/obj/item/weapon/circuitboard/supplycomp/C = circuit
-		C.contraband_enabled = 1
 		return
 	if(I.is_screwdriver(user))
 		I.playtoolsound(loc, 50)
@@ -269,7 +267,10 @@ For vending packs, see vending_packs.dm*/
 
 	var/centcomm_list[0]
 	for(var/datum/centcomm_order/O in SSsupply_shuttle.centcomm_orders)
-		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = O.worth, "to" = O.acct_by_string)))
+		var/displayworth = O.worth
+		if (isnum(O.worth))
+			displayworth = "[O.worth]$"
+		centcomm_list.Add(list(list("id" = O.id, "requested" = O.getRequestsByName(), "extra" = O.extra_requirements, "fulfilled" = O.getFulfilledByName(), "name" = O.name, "worth" = displayworth, "to" = O.acct_by_string)))
 	data["centcomm_orders"] = centcomm_list
 
 	var/datum/money_account/account = current_acct["account"]

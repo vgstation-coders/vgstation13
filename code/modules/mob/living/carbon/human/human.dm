@@ -228,8 +228,7 @@
 
 	update_colour(0)
 
-	spawn()
-		update_mutantrace()
+	update_mutantrace()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -256,9 +255,9 @@
 	if(statpanel("Status"))
 		stat(null, "Intent: [a_intent]")
 		stat(null, "Move Mode: [m_intent]")
-		for(var/datum/faction/F in ticker.mode.factions)
+		for(var/datum/faction/F in ticker.mode?.factions)
 			var/F_stat = F.get_statpanel_addition()
-			if(F_stat && F_stat != null)
+			if(F_stat)
 				stat(null, "[F_stat]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
@@ -653,10 +652,6 @@
 		. += E.eyeprot
 
 	return clamp(., -2, 2)
-
-
-/mob/living/carbon/human/IsAdvancedToolUser()
-	return 1//Humans can use guns and such
 
 /mob/living/carbon/human/isGoodPickpocket()
 	var/obj/item/clothing/gloves/G = gloves
@@ -1169,7 +1164,7 @@
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
 /mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour)
-
+	set waitfor = FALSE
 
 	if(new_species_name)
 		if(src.species && src.species.name && (src.species.name == new_species_name))
@@ -1232,13 +1227,13 @@
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
-	spawn()
-		src.movement_speed_modifier = species.move_speed_multiplier
-		src.dna.species = new_species_name
-		src.species.handle_post_spawn(src)
-		src.update_icons()
-		if(species.species_intro)
-			to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
+	src.movement_speed_modifier = species.move_speed_multiplier
+	if(dna)
+		dna.species = new_species_name
+	src.species.handle_post_spawn(src)
+	src.update_icons()
+	if(species.species_intro)
+		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1450,20 +1445,15 @@
 
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
-		return 0
-
-	if(reagents.has_reagent(METHYLIN))
-		return 1
-
-	if(getBrainLoss() >= 60)
-		return 0
-
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
-
-		return G.dexterity_check()
-
-	return 1
+		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
+			return FALSE
+	if(getBrainLoss() >= 60)
+		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+			return FALSE
+	return TRUE//humans are dexterous enough by default
 
 /mob/living/carbon/human/spook(mob/dead/observer/ghost)
 	if(!..(ghost, TRUE) || !client)
@@ -1881,13 +1871,23 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
-	T.virus2 = virus_copylist(virus2)
-	T.get_clothes(src, T)
-	T.name = real_name
-	T.host = src
-	forceMove(null)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	if(crabzombie)
+		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
+	else
+		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -2016,3 +2016,7 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+/mob/living/carbon/human/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat	//Exists due to meat having a special New()

@@ -88,24 +88,23 @@
 /obj/machinery/bot/medbot/New()
 	..()
 	icon_state = "[icon_initial][on]"
-	spawn(4)
-		if(skin)
-			overlays += image('icons/obj/aibots.dmi', "medskin_[skin]")
-			switch(skin)
-				if("tox")
-					treatment_tox = ANTI_TOXIN
-				if("ointment")
-					treatment_fire = KELOTANE
-				if("o2")
-					treatment_oxy = DEXALIN
-		else
-			treatment_brute = BICARIDINE
-		botcard = new /obj/item/weapon/card/id(src)
-		if(isnull(botcard_access) || (botcard_access.len < 1))
-			var/datum/job/doctor/J = new/datum/job/doctor
-			botcard.access = J.get_access()
-		else
-			botcard.access = botcard_access
+	if(skin)
+		overlays += image('icons/obj/aibots.dmi', "medskin_[skin]")
+		switch(skin)
+			if("tox")
+				treatment_tox = ANTI_TOXIN
+			if("ointment")
+				treatment_fire = KELOTANE
+			if("o2")
+				treatment_oxy = DEXALIN
+	else
+		treatment_brute = BICARIDINE
+	botcard = new /obj/item/weapon/card/id(src)
+	if(isnull(botcard_access) || (botcard_access.len < 1))
+		var/datum/job/doctor/J = new/datum/job/doctor
+		botcard.access = J.get_access()
+	else
+		botcard.access = botcard_access
 
 /obj/machinery/bot/medbot/turn_on()
 	. = ..()

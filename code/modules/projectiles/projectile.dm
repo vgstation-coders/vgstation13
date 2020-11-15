@@ -61,7 +61,7 @@ var/list/impact_master = list()
 	var/reflected = 0
 
 	var/bounce_sound = 'sound/items/metal_impact.ogg'
-	var/bounce_type = null//BOUNCEOFF_WALLS, BOUNCEOFF_WINDOWS, BOUNCEOFF_OBJS, BOUNCEOFF_MOBS
+	var/bounce_type = null//PROJREACT_WALLS, PROJREACT_WINDOWS, PROJREACT_OBJS, PROJREACT_MOBS, PROJREACT_BLOB
 	var/bounces = 0	//if set to -1, will always bounce off obstacles
 
 	var/phase_type = null//PHASEHTROUGH_WALLS, PHASEHTROUGH_WINDOWS, PHASEHTROUGH_OBJS, PHASEHTROUGH_MOBS
@@ -164,6 +164,7 @@ var/list/impact_master = list()
 	var/output = in_chamber.process() //Test it!
 	//del(in_chamber) //No need for it anymore
 	qdel(in_chamber)
+	in_chamber = null
 	return output //Send it back to the gun!
 
 /obj/item/projectile/proc/admin_warn(mob/living/M)
@@ -202,7 +203,6 @@ var/list/impact_master = list()
 	if(bumped)
 		return 0
 	var/forcedodge = 0 // force the projectile to pass
-
 	bumped = 1
 	if(firer && istype(A, /mob))
 		var/mob/M = A
@@ -296,19 +296,19 @@ var/list/impact_master = list()
 		var/PixelY = 0
 		switch(get_dir(src,A))
 			if(NORTH)
-				PixelY = WORLD_ICON_SIZE/2
-			if(SOUTH)
 				PixelY = -WORLD_ICON_SIZE/2
+			if(SOUTH)
+				PixelY = WORLD_ICON_SIZE/2
 			if(EAST)
-				PixelX = WORLD_ICON_SIZE/2
-			if(WEST)
 				PixelX = -WORLD_ICON_SIZE/2
+			if(WEST)
+				PixelX = WORLD_ICON_SIZE/2
 
 		var/image/impact = image('icons/obj/projectiles_impacts.dmi',loc,impact_icon)
 		impact.pixel_x = PixelX
 		impact.pixel_y = PixelY
 
-		var/turf/T = src.loc
+		var/turf/T = get_turf(A)
 		if(T) //Trying to fix a runtime that happens when a flare hits a window, T somehow becomes null.
 			T.overlays += impact
 
@@ -355,6 +355,11 @@ var/list/impact_master = list()
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
 				T.overlays += trace
+		//work around for penetration bug
+		var/turf/newT = get_turf(src)
+		if(newT.penetration_dampening > 0)
+			bumped = 0
+			src.to_bump(newT)
 		return 1
 
 	bullet_die()

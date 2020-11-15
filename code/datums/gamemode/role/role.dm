@@ -579,8 +579,8 @@
 
 	if(istype(antag.current,/mob/living/silicon/ai))
 		var/mob/living/silicon/ai/malfAI = antag.current
-		malfAI.add_spell(new /spell/aoe_turf/module_picker, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
-		malfAI.add_spell(new /spell/aoe_turf/takeover, "grey_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.add_spell(new /spell/aoe_turf/module_picker, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
+		malfAI.add_spell(new /spell/aoe_turf/takeover, "malf_spell_ready",/obj/abstract/screen/movable/spell_master/malf)
 		malfAI.laws_sanity_check()
 		var/datum/ai_laws/laws = malfAI.laws
 		laws.malfunction()

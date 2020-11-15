@@ -27,7 +27,7 @@
 	min_harm_label = 20
 	harm_label_examine = list("<span class='info'>A label is stuck to the trigger, but it is too small to get in the way.</span>", "<span class='warning'>A label firmly sticks the trigger to the guard!</span>")
 	ghost_read = 0
-
+	hitsound = 'sound/weapons/smash.ogg'
 	var/fire_sound = 'sound/weapons/Gunshot.ogg'
 	var/fire_action = "fire"
 	var/empty_sound = 'sound/weapons/empty.ogg'
@@ -70,6 +70,12 @@
 
 	// Tells is_honorable() which special_roles to respect.
 	var/honorable = HONORABLE_BOMBERMAN | HONORABLE_HIGHLANDER | HONORABLE_NINJA
+
+/obj/item/weapon/gun/Destroy()
+	if(in_chamber)
+		qdel(in_chamber)
+		in_chamber = null
+	..()
 
 /obj/item/weapon/gun/proc/ready_to_fire()
 	if(world.time >= last_fired + fire_delay)
@@ -116,24 +122,30 @@
 	return FALSE //Make this proc return TRUE for handgun-shaped weapons (or in general, small enough weapons I guess)
 
 /obj/item/weapon/gun/proc/play_firesound(mob/user, var/reflex)
-	if(silenced)
+	if(istype(silenced, /obj/item/gun_part/silencer))
+		var/obj/item/gun_part/silencer/A = silenced
 		if(fire_sound)
-			playsound(user, fire_sound, fire_volume/5, 1)
+			playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 		else if (in_chamber.fire_sound)
-			playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+			playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
+		if(A.volume_mult <= 1)
+			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 	else
 		if(fire_sound)
 			playsound(user, fire_sound, fire_volume, 1)
 		else if (in_chamber.fire_sound)
 			playsound(user, in_chamber.fire_sound, fire_volume, 1)
-		user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
-		"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
-		"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
+		if(!silenced)
+			user.visible_message("<span class='warning'>[user] fires [src][reflex ? " by reflex":""]!</span>", \
+			"<span class='warning'>You [fire_action] [src][reflex ? "by reflex":""]!</span>", \
+			"You hear a [istype(in_chamber, /obj/item/projectile/beam) ? "laser blast" : "gunshot"]!")
 
 /obj/item/weapon/gun/proc/can_Fire(mob/user, var/display_message = 0)
 	var/firing_dexterity = 1
 	if(advanced_tool_user_check)
-		if (!user.IsAdvancedToolUser())
+		if (!user.dexterity_check())
 			firing_dexterity = 0
 	if(MoMMI_check)
 		if(isMoMMI(user))
@@ -346,10 +358,11 @@
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")
 			if(silenced)
+				var/obj/item/gun_part/silencer/A = silenced
 				if(fire_sound)
-					playsound(user, fire_sound, fire_volume/5, 1)
+					playsound(user, fire_sound, fire_volume/A.volume_mult, 1)
 				else if (in_chamber.fire_sound)
-					playsound(user, in_chamber.fire_sound, fire_volume/5, 1)
+					playsound(user, in_chamber.fire_sound, fire_volume/A.volume_mult, 1)
 			else
 				if(fire_sound)
 					playsound(user, fire_sound, fire_volume, 1)

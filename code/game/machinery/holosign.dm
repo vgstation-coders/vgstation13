@@ -8,7 +8,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	icon = 'icons/obj/holosign.dmi'
 	icon_state = "base"
 	layer = ABOVE_DOOR_LAYER
-
+	power_channel = LIGHT
 	ghost_read = 0 // Deactivate ghost touching.
 	ghost_write = 0
 	var/lit = 0
@@ -48,6 +48,7 @@ var/list/obj/machinery/holosign/holosigns = list()
 	set_light(2,2)
 
 /obj/machinery/holosign/power_change()
+	..()
 	update_icon()
 
 /obj/machinery/holosign/Destroy()
@@ -66,6 +67,28 @@ var/list/obj/machinery/holosign/holosigns = list()
 	on_icon = "virology"
 	id_tag = "virology"
 	light_color = "#59FF79"
+
+/obj/machinery/holosign/morgue
+	name = "morgue holosign"
+	desc = "Small wall-mounted holographic projector. This one reads MORGUE."
+	on_icon = "morgue"
+	id_tag = "morgue"
+	var/should_update = FALSE
+
+/obj/machinery/holosign/morgue/process()
+	var/area/this_area = get_area(src)
+	for(var/obj/structure/morgue in morgue_list)
+		var/area/morgue_area = get_area(morgue)
+		if(morgue_area != this_area)
+			continue
+		var/morgue_has_revivable_dude = (morgue.icon_state == "morgue4")
+		if(morgue_has_revivable_dude)
+			toggle(TRUE)
+			should_update = FALSE
+			return PROCESS_KILL
+	toggle(FALSE)
+	should_update = FALSE
+	return PROCESS_KILL
 
 ////////////////////SWITCH///////////////////////////////////////
 

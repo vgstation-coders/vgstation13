@@ -64,6 +64,7 @@
 	name = "cake-hat"
 	desc = "It's tasty looking!"
 	icon_state = "cake0"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EYES
 	light_power = 0.5
@@ -138,6 +139,7 @@
 	desc = "Davai, tovarish. Let us catch the capitalist greyshirt, and show him why it is that we proudly wear red!"
 	icon_state = "ushankared"
 	item_state = "ushankared"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 30, bullet = 15, laser = 25, energy = 10, bomb = 20, bio = 0, rad = 0)
 
 /obj/item/clothing/head/ushanka/hos
@@ -155,6 +157,7 @@
 	desc = "A jack o' lantern! Believed to ward off evil spirits."
 	icon_state = "hardhat0_pumpkin"//Could stand to be renamed
 	item_state = "hardhat0_pumpkin"
+	species_fit = list(INSECT_SHAPED)
 	_color = "pumpkin"
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|HIDEHAIR
@@ -175,6 +178,13 @@
 		else
 			set_light(0)
 
+/obj/item/clothing/head/pumpkinhead/attackby(var/obj/item/I, var/mob/user)
+	..()
+	if(istype(I, /obj/item/stack/sheet/bone))
+		var/obj/item/stack/sheet/bone/B = I
+		if(B.use(6))
+			new /obj/structure/candybucket/candy_jack(src.loc)
+			qdel(src)
 /*
  * Kitty ears
  */
@@ -227,6 +237,7 @@
 	desc = "So many butts, so little time."
 	icon_state = "butt"
 	item_state = "butt"
+	species_fit = list(INSECT_SHAPED)
 	flags = 0
 	force = 4.0
 	w_class = W_CLASS_TINY
@@ -249,7 +260,7 @@
 	icon_state = "foilhat"
 	item_state = "paper"
 	siemens_coefficient = 2
-	species_fit = list(GREY_SHAPED,VOX_SHAPED)
+	species_fit = list(GREY_SHAPED,VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/celtic
 	name = "\improper Celtic crown"
@@ -288,3 +299,4 @@
 	desc = "According to the manufacturer it was designed according to ancient ziggurat mound proportions used in votive worship. Like the mounds it collects energy and recirculates it. In this case the Dome collects energy that escapes from the crown of the human head and pushes it back into the medulla oblongata for increased mental energy."
 	icon_state = "energy_dome"
 	item_state = "energy_dome"
+	species_fit = list(INSECT_SHAPED)

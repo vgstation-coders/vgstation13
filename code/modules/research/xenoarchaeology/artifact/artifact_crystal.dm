@@ -17,6 +17,7 @@
 	"It's mesmerizing to behold.")
 
 /obj/structure/crystal/Destroy()
+	new /datum/artifact_postmortem_data(src)
 	src.visible_message("<span class='danger'>[src] shatters!</span>")
 	src.investigation_log(I_ARTIFACT, "|| shattered by [key_name(usr)].")
 	if(prob(75))

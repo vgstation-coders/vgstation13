@@ -93,6 +93,15 @@ var/global/list/ghdel_profiling = list()
 					contents.Add(new_value)
 					return 1
 
+/atom/proc/shake_animation(pixelshiftx = 3, pixelshifty = 3, duration = 0.2 SECONDS)
+	var/initialpixelx = pixel_x
+	var/initialpixely = pixel_y
+	var/shiftx = rand(-pixelshiftx,pixelshiftx)
+	var/shifty = rand(-pixelshifty,pixelshifty)
+	animate(src, pixel_x = pixel_x + shiftx, pixel_y = pixel_y + shifty, time = 0.2, loop = duration)
+	pixel_x = initialpixelx
+	pixel_y = initialpixely
+
 /atom/proc/shake(var/xy, var/intensity, mob/user) //Zth. SHAKE IT. Vending machines' kick uses this
 	var/old_pixel_x = pixel_x
 	var/old_pixel_y = pixel_y
@@ -177,7 +186,9 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/on_reagent_change()
 	return
 
-/atom/proc/Bumped(AM as mob|obj)
+// This proc is intended to be called by `to_bump` whenever a movable
+// object bumps into this atom.
+/atom/proc/Bumped(atom/movable/AM)
 	return
 
 /atom/proc/setDensity(var/density)
@@ -830,8 +841,6 @@ its easier to just keep the beam vertical.
 	else
 		return TRUE
 
-/atom/proc/to_bump()
-	return
 
 /atom/proc/get_last_player_touched()	//returns a reference to the mob of the ckey that last touched the atom
 	for(var/client/C in clients)

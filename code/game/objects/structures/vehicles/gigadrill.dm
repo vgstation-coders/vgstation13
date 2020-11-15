@@ -14,6 +14,7 @@
 	var/obj/structure/ore_box/OB //The orebox contained within
 
 /obj/structure/bed/chair/vehicle/gigadrill/Destroy()
+	new /datum/artifact_postmortem_data(src)
 	if(OB)
 		OB.forceMove(get_turf(src))
 		OB = null

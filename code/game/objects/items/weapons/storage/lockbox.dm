@@ -342,6 +342,7 @@
 	icon_state = "map_diskbox"
 	item_state = "diskbox"
 	can_only_hold = list("/obj/item/weapon/disk")
+	cant_hold = list("/obj/item/weapon/disk/harddiskdrive")
 	fits_max_w_class = 3
 	w_class = W_CLASS_MEDIUM
 	max_combined_w_class = 14 //The sum of the w_classes of all the items in this storage item.
@@ -516,8 +517,9 @@
 /obj/item/weapon/storage/lockbox/advanced/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		visible_message("<span class='danger'>The [P.name] gets reflected by [src]'s ablative plating!</span>")
-		P.reflected = 1
-		P.rebound(src)
+		if(!istype(P, /obj/item/projectile/beam))
+			P.reflected = 1
+			P.rebound(src)
 		return -1
 	react()
 	return ..()

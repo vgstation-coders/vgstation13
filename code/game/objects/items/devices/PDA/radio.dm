@@ -8,6 +8,13 @@
 	var/on = 0 //Are we currently active?
 	var/menu_message = ""
 
+/obj/item/radio/integrated/Destroy()
+	. = ..()
+	hostpda = null
+
+/obj/item/radio/integrated/Adjacent(var/atom/neighbor)
+	return hostpda.Adjacent(neighbor)
+
 /*
  *	Radio Cartridge, essentially a signaler.
  */

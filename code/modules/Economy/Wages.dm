@@ -2,38 +2,123 @@ var/global/wages_enabled = 0
 var/global/roundstart_enable_wages = 0
 
 var/global/requested_payroll_amount = 0
-var/payroll_reduction_modifier = 1
+var/payroll_modifier = 1
 var/adjusted_wage_gain = 0
 
 /proc/wageSetup()
 	if(roundstart_enable_wages)
 		wages_enabled = 1
+		stationAllowance()
 	WageLoop()
+
+/*
+
+Things that increase wages:
+
+* shipping plasma to centcom increases all wages.
+* reducing the salary of one account will increase the other accounts'
+
+
+Things that decrease wages:
+
+* creating a new station account with some starting funds, and a salary, will decease
+* increasing the salary of one account will decrease the other accounts'
+
+
+All wages are increased by 10% by default thanks to the overhead Nanotrasen gives for every job.
+If all wages are increased further, for example by shipping plasma, the wage increase announcement will be used.
+If all wages are decreased bellow 100%, for example due to the AI spending all the station funds on monkey cube crates, the wage reduction announcement will be used
+
+*/
 
 /datum/command_alert/wages
 	name = "wage payout"
+	alert_title = "Quarter-Hourly Salary"
 	message = "Payroll has been processed. All eligible accounts have received their paycheck as a direct deposit."
 	noalert = 1
+	small = 1
+
+/datum/command_alert/wage/announce()
+	message = "Payroll has been processed. All eligible accounts have received their paycheck as a direct deposit."
+	..()
+
+/datum/command_alert/wage_increase
+	name = "wage raise"
+	alert_title = "Quarter-Hourly Salary"
+	message = "Payroll has been processed. Thanks to the high productivity of the station staff, all wages have been increased by ERROR."
+	noalert = 1
+	small = 1
+
+/datum/command_alert/wage_increase/announce()
+	message = "Payroll has been processed. Thanks to the high productivity of the station staff, all wages have been increased by [round(100*payroll_modifier - 100)]%."
+	..()
 
 /datum/command_alert/wage_reduction
 	name = "wage reduction"
-	message = "Payroll has been processed. Financial mismanagement has resulted in a average wage reduction. All eligible accounts have received the remainder of their paycheck as a direct deposit."
+	alert_title = "Quarter-Hourly Salary"
+	message = "Payroll has been processed. Financial mismanagement has resulted in all wages being reduced by ERROR."
 	noalert = 1
+	small = 1
+
+/datum/command_alert/wage_reduction/announce()
+	message = "Payroll has been processed. Financial mismanagement has resulted in all wages being reduced by [round(100*payroll_modifier - 100)]%."
+	..()
+
+/proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
+	station_account.money += station_allowance
+
+	var/datum/transaction/T = new()
+	T.purpose = "Nanotrasen station allowance"
+	T.target_name = station_account.owner_name
+	T.amount = "[station_allowance]"
+	T.date = current_date_string
+	T.time = worldtime2text()
+	T.source_terminal = "Nanotrasen Payroll Server"
+	station_account.transaction_log.Add(T)
+
 
 /proc/wagePayout()
+	//adding extra allowance due to latejoiners
+	if (latejoiner_allowance > 0)
+		station_allowance += latejoiner_allowance
+		station_account.money += latejoiner_allowance
+
+		var/datum/transaction/allowance = new()
+		allowance.purpose = "Nanotrasen new employee allowance"
+		allowance.target_name = station_account.owner_name
+		allowance.amount = "[latejoiner_allowance]"
+		allowance.date = current_date_string
+		allowance.time = worldtime2text()
+		allowance.source_terminal = "Nanotrasen Payroll Server"
+		station_account.transaction_log.Add(allowance)
+
+		latejoiner_allowance = 0
+
+	//checking for wage raises/decreases and emptying station account
 	requested_payroll_amount = 0
 	for(var/datum/money_account/Acc in all_money_accounts)
 		if(Acc.wage_gain)
 			requested_payroll_amount += Acc.wage_gain
 
-	if(requested_payroll_amount > global.allowable_payroll_amount)
-		payroll_reduction_modifier = global.allowable_payroll_amount / requested_payroll_amount
-	else
-		payroll_reduction_modifier = 1
+	payroll_modifier = station_account.money / requested_payroll_amount
+	message_admins("Wages: Payroll Modifier is [round(100*payroll_modifier - 100)]%.")
 
+	var/datum/transaction/salaries = new()
+	salaries.purpose = "Employee and Department salaries"
+	salaries.target_name = station_account.owner_name
+	salaries.amount = "-[station_account.money]"
+	salaries.date = current_date_string
+	salaries.time = worldtime2text()
+	salaries.source_terminal = "Account Database"//todo: destroying the account database fucks up salaries? Sounds a bit easy to abuse, at least until the database gets moved to somwhere safe.
+	station_account.transaction_log.Add(salaries)
+
+	station_account.money = 0
+
+
+	//actually paying the departments and employees
 	for(var/datum/money_account/Acc in all_money_accounts)
 		if(Acc.wage_gain)
-			adjusted_wage_gain = round((Acc.wage_gain)*payroll_reduction_modifier)
+			adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
 			Acc.money += adjusted_wage_gain
 
 			if(adjusted_wage_gain > 0)
@@ -43,13 +128,19 @@ var/adjusted_wage_gain = 0
 				T.amount = "[adjusted_wage_gain]"
 				T.date = current_date_string
 				T.time = worldtime2text()
-				T.source_terminal = "Nanotrasen Payroll Server"
+				T.source_terminal = station_account.owner_name
 				Acc.transaction_log.Add(T)
 
-	if(payroll_reduction_modifier == 1)
-		command_alert(/datum/command_alert/wages)
-	else
+	//telling the crew
+	if(payroll_modifier > 1.1)//taking the overhead into account
+		command_alert(/datum/command_alert/wage_increase)
+	else if(payroll_modifier < 1)
 		command_alert(/datum/command_alert/wage_reduction)
+	else
+		command_alert(/datum/command_alert/wages)
+
+	//refuelling the station account for the next salary
+	stationAllowance()
 
 /proc/WageLoop()
 	set waitfor = 0

@@ -87,26 +87,14 @@
 		if(!L.turn_into_statue(1)) //Statue forever
 			return 0
 
-		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s touch.</span>")
+		to_chat(L, "<span class='userdanger'>You have been turned to stone by \the [src]'s bite.</span>")
 		add_logs(src, L, "instantly petrified", admin = L.ckey ? TRUE : FALSE)
 
 	else if(ishuman(L))
-		var/mob/living/carbon/human/H = L
-
 		add_logs(src, L, "petrified", admin = L.ckey ? TRUE : FALSE)
 
-		var/found_virus = FALSE
-		for(var/datum/disease/petrification/P in H.viruses) //If already petrifying, speed up the process!
-			P.stage = P.max_stages
-			P.stage_act()
-			found_virus = TRUE
-			break
+		L.reagents.add_reagent(PETRITRICIN, 1)
 
-		if(!found_virus)
-			var/datum/disease/D = new /datum/disease/petrification
-			D.holder = H
-			D.affected_mob = H
-			H.viruses += D
 
 	var/msg = pick("\The [src] hisses at [L]!", "\The [src] hisses angrily at [L]!")
 	visible_message("<span class='userdanger'>[msg]</span>", "<span class='notice'>You touch [L].</span>", "<span class='sinister'>You hear an eerie hiss.</span>")
@@ -193,7 +181,7 @@
 	for(var/mob/living/L in loc)
 		movement_touch_check(L)
 
-/mob/living/simple_animal/hostile/retaliate/cockatrice/Bump(mob/living/L)
+/mob/living/simple_animal/hostile/retaliate/cockatrice/to_bump(mob/living/L)
 	spawn()
 		movement_touch_check(L)
 

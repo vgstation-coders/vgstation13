@@ -506,6 +506,12 @@
 	title = "Engineering Textbook"
 	wiki_page = "Guide_to_Engineering"
 
+/obj/item/weapon/book/manual/rust
+	name = "R-UST User Manual"
+	icon_state = "bookEngineering2"
+	author = "NanoTrasen"
+	title = "R-UST User Manual"
+	wiki_page = "R-UST"
 
 /obj/item/weapon/book/manual/chef_recipes
 	name = "Chef Recipes"

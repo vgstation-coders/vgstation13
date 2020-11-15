@@ -544,7 +544,7 @@
 	corpseidaccess = "Station Engineer"
 
 /obj/effect/landmark/corpse/engineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 
@@ -591,7 +591,7 @@
 	corpseidaccess = "Chief Engineer"
 
 /obj/effect/landmark/corpse/chiefengineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig/elite
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer/elite
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 

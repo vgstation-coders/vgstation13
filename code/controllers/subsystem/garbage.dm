@@ -2,6 +2,7 @@
 
 //#define GC_DEBUG
 //#define GC_FINDREF
+//#define GC_REFDEBUG
 
 var/datum/subsystem/garbage/SSgarbage
 
@@ -22,11 +23,34 @@ var/soft_dels = 0
 	// To let them know how hardworking am I :^).
 	var/dels_count = 0
 	var/hard_dels = 0
+	#ifdef GC_REFDEBUG
+	var/list/fakedels = list()
+	#endif
 
 
 /datum/subsystem/garbage/New()
 	NEW_SS_GLOBAL(SSgarbage)
 
+/datum/subsystem/garbage/Shutdown()
+	if(!ghdel_profiling.len)
+		world.log << "There were no hard deletions this round."
+		return
+	world.log << {"
+Deletions this round:
+\tQueue length: [queue.len]
+\tDeletions count: [dels_count]
+\tSoft dels: [soft_dels]
+\tHard dels: [hard_dels]
+List of hard deletions:"}
+	for(var/thing in ghdel_profiling)
+		world.log << "\t[thing] : [ghdel_profiling[thing]]"
+	world.log << json_encode(list(
+		"queue" = queue.len,
+		"dels" = dels_count,
+		"soft_dels" = soft_dels,
+		"hard_dels" = hard_dels,
+		"hd_list" = ghdel_profiling))
+	..()
 
 /datum/subsystem/garbage/stat_entry()
 	var/msg = ""
@@ -62,14 +86,22 @@ var/soft_dels = 0
 			WARNING("gc process force delete [D.type]")
 			#endif
 
-			if(istype(D, /atom/movable))
+			if(ismovable(D))
 				var/atom/movable/AM = D
 				AM.hard_deleted = 1
 			else
 				delete_profile("[D.type]", 1) //This is handled in Del() for movables.
 				//There's not really a way to make the other kinds of delete profiling work for datums without defining /datum/Del(), but this is the most important one.
 
+			#ifdef GC_REFDEBUG
+			fakedels += D
+			if(ismovable(D))
+				delete_profile("[D.type]", 1) //Del() doesn't get called in this case so it's not, in fact, handled for movables
+			to_chat(world, "<a href='?_src_=vars;Vars=[refID]'>["[D]" || "(Blank name)"]</a>")
+			#undef GC_REFDEBUG
+			#else
 			del D
+			#endif
 			removeTrash(refID)
 
 			hard_dels++
@@ -212,11 +244,10 @@ var/soft_dels = 0
 		return
 
 	if(istype(D, /atom) && !istype(D, /atom/movable))
-		warning("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
 		del(D)
 		SSgarbage.hard_dels++
 		SSgarbage.dels_count++
-		return
+		CRASH("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
 
 	if(isnull(D.gcDestroyed))
 		// Let our friend know they're about to get fucked up.

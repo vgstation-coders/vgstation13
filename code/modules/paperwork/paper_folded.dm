@@ -145,6 +145,7 @@
 	desc = "What looks like an ordinary paper hat, IS actually an ordinary paper hat, in no way collectible. Wow!"
 	icon = 'icons/obj/clothing/hats.dmi'
 	icon_state = "paper"
+	species_fit = list(INSECT_SHAPED)
 	slot_flags = SLOT_HEAD
 	body_parts_covered = HEAD
 

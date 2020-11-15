@@ -4,6 +4,7 @@
 #include "circuitboards.dm"
 #include "dna_and_disabilities.dm"
 #include "hexadecimal.dm"
+#include "highscores.dm"
 #include "icons.dm"
 #include "lazy_events.dm"
 #include "names.dm"
@@ -12,4 +13,7 @@
 #include "turretid.dm"
 #include "lazy_events.dm"
 #include "outfit_datums.dm"
+#include "ray.dm"
+#include "vector.dm"
+#include "reagent_ids.dm"
 #endif

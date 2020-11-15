@@ -45,7 +45,7 @@
 
 /obj/item/device/radio/New()
 	wires = new(src)
-
+	radio_list += src
 	if(prison_radio)
 		wires.CutWireIndex(WIRE_TRANSMIT)
 
@@ -56,9 +56,10 @@
 
 /obj/item/device/radio/Destroy()
 	wires = null
+	radio_list -= src
 	remove_radio_all(src) //Just to be sure
 	..()
-
+	
 /obj/item/device/radio/initialize()
 	. = ..()
 	frequency = COMMON_FREQ //common chat
@@ -239,7 +240,11 @@
 	if(!skip_freq_search)
 		if(channel && channels && channels.len > 0)
 			if(channel == "department")
-				channel = channels[1]
+                        // Common channel is the first channel added to headsets, so it needs to be removed (unless it's the only channel available).
+				if(channels.len > 1)
+					channel = (channels - COMMON)[1]
+				else
+					channel = channels[1]
 			speech.frequency = secure_radio_connections[channel]
 			if(!channels[channel])
 				say_testing(loc, "\[Radio\] - Unable to find channel \"[channel]\".")

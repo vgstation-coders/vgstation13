@@ -45,6 +45,7 @@
 		items_to_collect += /obj/item/weapon/card/shuttle_pass/ert
 
 /datum/outfit/striketeam/ert/post_equip(var/mob/living/carbon/human/H)
+	..()
 	if (is_leader)
 		equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)
 	else

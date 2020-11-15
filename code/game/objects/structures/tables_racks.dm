@@ -90,6 +90,10 @@
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
 				base = "glasstable"
+			if (istype(src, /obj/structure/table/glass/plasma))
+				base = "plasma_table"
+			if (istype(src, /obj/structure/table/plastic))
+				base = "plastictable"
 
 			icon_state = "[base]flip[type]"
 			if (type==1)
@@ -688,6 +692,15 @@
 
 /obj/structure/table/reinforced/clockwork/clockworkify()
 	return
+
+/*
+ * Plastic
+ */
+obj/structure/table/plastic
+	name = "plastic table"
+	desc = "A plastic table perfect for on a space patio."
+	icon_state = "plastictable"
+	parts = /obj/item/weapon/table_parts/plastic
 
 /*
  * Racks

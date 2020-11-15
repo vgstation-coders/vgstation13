@@ -372,7 +372,7 @@
 
 /obj/item/clothing/accessory/rad_patch/on_removed(mob/user)
 	..()
-	user.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
+	user?.lazy_unregister_event(/lazy_event/on_irradiate, src, .proc/check_rads)
 
 /obj/item/clothing/accessory/rad_patch/examine(mob/user)
 	..(user)

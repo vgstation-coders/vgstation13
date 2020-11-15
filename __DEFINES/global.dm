@@ -23,18 +23,6 @@ var/list/protected_global_vars = list(
 		return "Cannot read variable."
 	return global.vars[which]
 
-#define DNA_SE_LENGTH 58
-
-#define VOX_SHAPED "Vox","Skeletal Vox"
-#define GREY_SHAPED "Grey"
-#define UNATHI_SHAPED "Unathi"
-#define SKRELL_SHAPED "Skrell"
-#define TAJARAN_SHAPED "Tajaran"
-#define PLASMAMAN_SHAPED "Plasmaman"
-#define UNDEAD_SHAPED "Skellington","Undead","Plasmaman"
-#define MUSHROOM_SHAPED "Mushroom"
-#define INSECT_SHAPED "Insectoid"
-
 
 //Content of the Round End Information window
 var/round_end_info = ""
@@ -177,19 +165,6 @@ var/polarstar = 0 //1 means that the polar star has been found, 2 means that the
 // nanomanager, the manager for Nano UIs
 var/datum/nanomanager/nanomanager = new()
 
-#define FIRE_DAMAGE_MODIFIER 0.0215 //Higher values result in more external fire damage to the skin (default 0.0215)
-#define AIR_DAMAGE_MODIFIER 2.025 //More means less damage from hot air scalding lungs, less = more damage. (default 2.025)
-
-	//Don't set this very much higher then 1024 unless you like inviting people in to dos your server with message spam
-#define MAX_MESSAGE_LEN 1024
-#define MAX_PAPER_MESSAGE_LEN 3072
-#define MAX_BOOK_MESSAGE_LEN 9216
-#define MAX_NAME_LEN 26
-#define MAX_BROADCAST_LEN		512
-
-#define shuttle_time_in_station 1800 // 3 minutes in the station
-#define shuttle_time_to_arrive 6000 // 10 minutes to arrive
-
 	// MySQL configuration
 
 var/sqladdress = "localhost"
@@ -233,7 +208,8 @@ var/recall_time_limit = 72000
 //NO FUCKING EXCUSE FOR THE ATROCITY THAT WAS
 var/list/score=list(
 	"crewscore"      = 0, //This is the overall var/score for the whole round
-	"stuffshipped"   = 0, //How many useful items have cargo shipped out? Currently broken
+	"plasmashipped"   = 0,//How much plasma has been sent to centcom?
+	"stuffshipped"   = 0, //How many centcom orders have cargo fulfilled?
 	"stuffharvested" = 0, //How many harvests have hydroponics done (per crop)?
 	"oremined"       = 0, //How many chunks of ore were smelted
 	"eventsendured"  = 0, //How many random events did the station endure?
@@ -245,6 +221,7 @@ var/list/score=list(
 	"mess"           = 0, //How much messes on the floor went uncleaned
 	"litter"		 = 0, //How much trash is laying on the station floor
 	"meals"          = 0, //How much food was actively cooked that day
+	"artifacts"      = 0, //How many large artifacts were analyzed and activated
 	"disease_good"        = 0, //How many unique diseases currently affecting living mobs of cumulated danger <3
 	"disease_vaccine"	= null, //Which many vaccine antibody isolated
 	"disease_vaccine_score"	= 0, //the associated score
@@ -290,6 +267,8 @@ var/list/score=list(
 
 	"arenafights"   = 0,
 	"arenabest"		= null,
+
+	"money_leaderboard" = list(),
 )
 
 var/list/isolated_antibodies = list(
@@ -374,11 +353,6 @@ var/adminblob_icon = null
 var/adminblob_size = 64
 var/adminblob_beat = 'sound/effects/blob_pulse.ogg'
 
-// ECONOMY
-// Account default values
-#define DEPARTMENT_START_FUNDS 500
-#define DEPARTMENT_START_WAGE 50
-
 //HUD MINIMAPS
 var/list/holoMiniMaps = list()
 var/list/centcommMiniMaps = list()
@@ -387,28 +361,6 @@ var/list/extraMiniMaps = list()
 var/list/holomap_markers = list()
 
 var/holomaps_initialized = 0
-
-//Staff of change
-#define SOC_CHANGETYPE_COOLDOWN 2 MINUTES
-#define SOC_MONKEY "Primate"
-#define SOC_MARTIAN "Martian"
-#define SOC_CYBORG "Robot"
-#define SOC_MOMMI "MoMMI"
-#define SOC_SLIME "Slime"
-#define SOC_XENO "Xenomorph"
-#define SOC_HUMAN "Human"
-#define SOC_CATBEAST "Furry"
-#define SOC_FRANKENSTEIN "Frankenstein"
-
-var/list/available_staff_transforms = list(
-	SOC_MONKEY,SOC_MARTIAN,
-	SOC_CYBORG,
-	SOC_SLIME,
-	SOC_XENO,
-	SOC_HUMAN,
-	SOC_CATBEAST,
-	SOC_FRANKENSTEIN
-	)
 
 //Broken mob list
 var/list/blacklisted_mobs = list(
@@ -426,6 +378,7 @@ var/list/blacklisted_mobs = list(
 		/mob/living/simple_animal/bee,									// Aren't set up to be playable
 		/mob/living/simple_animal/hostile/asteroid/goliath/david/dave,	// Isn't supposed to be spawnable by xenobio
 		/mob/living/simple_animal/hostile/bunnybot,						// See viscerator
+		/mob/living/carbon/human/NPC,									// Unfinished, with its own AI that conflicts with player movements.
 		)
 
 //Boss monster list
@@ -440,48 +393,18 @@ var/list/boss_mobs = list(
 	/mob/living/simple_animal/hostile/humanoid/surgeon/skeleton,	// Second stage of Doctor Placeholder
 	/mob/living/simple_animal/hostile/roboduck,						// The bringer of the end times
 	/mob/living/simple_animal/hostile/bear/spare,					// Captain bear
+	/mob/living/simple_animal/hostile/ginger/gingerbroodmother		// Gingerbominations...
 	)
 
 // Set by traitor item, affects cargo supplies
 var/station_does_not_tip = FALSE
 
-#define CARD_CAPTURE_SUCCESS 0 // Successful charge
-#define CARD_CAPTURE_FAILURE_GENERAL 1 // General error
-#define CARD_CAPTURE_FAILURE_NOT_ENOUGH_FUNDS 2 // Not enough funds in the account.
-#define CARD_CAPTURE_ACCOUNT_DISABLED 3 // Account locked.
-#define CARD_CAPTURE_ACCOUNT_DISABLED_MERCHANT 4 // Destination account disabled.
-#define CARD_CAPTURE_FAILURE_BAD_ACCOUNT_PIN_COMBO 5 // Bad account/pin combo
-#define CARD_CAPTURE_FAILURE_SECURITY_LEVEL 6 // Security level didn't allow current authorization or another exception occurred
-#define CARD_CAPTURE_FAILURE_USER_CANCELED 7 // The user canceled the transaction
-#define CARD_CAPTURE_FAILURE_NO_DESTINATION 8 // There was no linked account to send funds to.
-#define CARD_CAPTURE_FAILURE_NO_CONNECTION 9 // Account database not available.
+//Set by Malf AI Blackout
+var/malf_radio_blackout = FALSE
+var/malf_rcd_disable = FALSE
 
-#define BANK_SECURITY_EXPLANATION {"Choose your bank account security level.
-Vendors will try to subtract from your virtual wallet if possible.
-If you're too broke, they'll try to access your bank account directly.
-This setting decides how much info you have to enter to allow for that.
-Zero; Only your account number is required to deduct funds.
-One; Your account number and PIN are required.
-Two; Your ID card, account number and PIN are required.
-You can change this mid-game at an ATM."}
-
-proc/bank_security_num2text(var/num)
-	switch(num)
-		if(0)
-			return "Zero"
-		if(1)
-			return "One"
-		if(2)
-			return "Two"
-		else
-			return "OUT OF RANGE"
-
-var/list/bank_security_text2num_associative = list(
-	"Zero" = 0,
-	"One" = 1,
-	"Two" = 2
-) // Can't use a zero. Throws a fit about out of bounds indices if you do.
-// Also if you add more security levels, please also update the above BANK_SECURITY_EXPLANATION
+//Cyborg killswitch time. If set at a time other than zero, cyborgs will self destruct at that time
+var/cyborg_detonation_time = 0
 
 //Radial menus currently existing in the world.
 var/global/list/radial_menus = list()
@@ -489,10 +412,8 @@ var/global/list/radial_menus = list()
 // Copying atoms is stupid and this is a stupid solution
 var/list/variables_not_to_be_copied = list(
 	"type","loc","locs","vars","parent","parent_type","verbs","ckey","key",
-	"group","on_density_change","registered_events",
-	"on_resist",
-	"on_spellcast","on_uattack","on_ruattack","on_logout","on_damaged",
-	"on_death","on_clickon","on_attackhand","on_attackby",
+	"group","registered_events",
+	"on_attackby",
 	"on_explode","on_projectile","in_chamber","power_supply","contents",
 	"x","y","z"
 )
