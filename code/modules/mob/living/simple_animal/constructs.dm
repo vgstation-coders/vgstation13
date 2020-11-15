@@ -28,7 +28,6 @@
 	supernatural = 1
 	flying = 1
 	treadmill_speed = 0 //It floats!
-	var/nullblock = 0
 	mutations = list(M_NO_SHOCK)
 
 	mob_property_flags = MOB_CONSTRUCT

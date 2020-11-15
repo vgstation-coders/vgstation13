@@ -279,6 +279,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		H = src
 	if (H?.species)
 		blood_data["blood_colour"] = H.species.blood_color
+	else if(isalien(src))
+		blood_data["blood_colour"] = ALIEN_BLOOD
+	else if(isrobot(src))
+		blood_data["blood_colour"] = ROBOT_OIL
 	else
 		blood_data["blood_colour"] = DEFAULT_BLOOD
 
@@ -313,6 +317,22 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (data["immunity"])
 		blood_data["immunity"] = data["immunity"].Copy()
 	return blood_data
+
+/datum/reagent/blood/proc/apply_blood_data(var/list/list/blood_data)
+	data = list(
+		"viruses"		=null,
+		"blood_DNA"		=blood_data["blood_DNA"],
+		"blood_colour"	=blood_data["blood_colour"],
+		"blood_type"	=blood_data["blood_type"],
+		"resistances"	=null,
+		"trace_chem"	=blood_data["trace_chem"],
+		"virus2" 		=virus_copylist(blood_data["virus2"]),
+		"immunity" 		=null,
+		)
+	if (blood_data["resistances"])
+		data["resistances"] = blood_data["resistances"].Copy()
+	if (blood_data["immunity"])
+		data["immunity"] = blood_data["immunity"].Copy()
 
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)

@@ -250,10 +250,16 @@
 /obj/effect/rune/attack_animal(var/mob/living/simple_animal/user)
 	if(istype(user, /mob/living/simple_animal/construct))
 		trigger(user)
+	if(istype(user, /mob/living/simple_animal/shade))
+		trigger(user)
 
 /obj/effect/rune/attack_paw(var/mob/living/user)
 	if(ismonkey(user))
 		assume_contact_diseases(user)
+		trigger(user)
+
+/obj/effect/rune/attack_alien(var/mob/living/user)
+	if(isalien(user))
 		trigger(user)
 
 /obj/effect/rune/attack_hand(var/mob/living/user)
