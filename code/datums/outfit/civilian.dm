@@ -563,7 +563,7 @@
 			slot_ears_str = list(
 				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -592,7 +592,7 @@
 			slot_ears_str = list(
 				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -616,7 +616,7 @@
 			slot_ears_str = list(
 				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
