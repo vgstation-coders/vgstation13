@@ -561,7 +561,7 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
 				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
@@ -590,7 +590,7 @@
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
 				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
@@ -614,7 +614,7 @@
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Lawyer" = /obj/item/device/radio/headset/headset_iaa,
 				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
 				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
