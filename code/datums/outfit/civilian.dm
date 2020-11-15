@@ -561,9 +561,9 @@
 	items_to_spawn = list(
 		"Default" = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -590,9 +590,9 @@
 		),
 		/datum/species/plasmaman/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
@@ -614,9 +614,9 @@
 		),
 		/datum/species/vox/ = list(
 			slot_ears_str = list(
-				"Lawyer" = /obj/item/device/radio/headset,
-				"Bridge Officer" = /obj/item/device/radio/headset/headset_com,
-				"Internal Affairs Agent" = /obj/item/device/radio/headset,
+				"Lawyer" = /obj/item/device/radio/headset_iaa,
+				"Bridge Officer" = /obj/item/device/radio/headset/headset_iaa,
+				"Internal Affairs Agent" = /obj/item/device/radio/headset_iaa,
 			),
 			slot_w_uniform_str = list(
 				"Lawyer" = /obj/item/clothing/under/lawyer/bluesuit,
