@@ -149,17 +149,14 @@
 			user.visible_message("<span class='danger'>The shotgun goes off!</span>", "<span class='danger'>The shotgun goes off in your face!</span>")
 			return
 		if(do_after(user, src, 30))	//SHIT IS STEALTHY EYYYYY
-			var/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/itssmallnow = new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff(src.loc)
-			for(var/obj/item/ammo_casing/shotgun/loaded_shell in itssmallnow)
-				qdel(loaded_shell)
-			itssmallnow.loaded = null
+			var/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/itssmallnow = new /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/empty(src.loc)
 			to_chat(user, "<span class='warning'>You shorten the barrel of \the [src]!</span>")
 			if(istype(user, /mob/living/carbon/human) && src.loc == user)
 				var/mob/living/carbon/human/H = user
 				H.drop_item(src, force_drop = 1)
 				H.put_in_hands(itssmallnow)
 				H.update_inv_hands()
-				src.transfer_fingerprints_to(itssmallnow)
+			src.transfer_fingerprints_to(itssmallnow)
 			qdel(src)
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff
@@ -170,6 +167,9 @@
 	w_class = W_CLASS_MEDIUM
 	slot_flags = SLOT_BELT
 	ammo_type = "/obj/item/ammo_casing/shotgun/buckshot"
+	
+/obj/item/weapon/gun/projectile/shotgun/doublebarrel/sawnoff/empty
+	ammo_type = null
 
 /obj/item/weapon/gun/projectile/shotgun/doublebarrel/super
 	name = "super shotgun"
