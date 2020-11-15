@@ -31,7 +31,7 @@
 	var/datum/gas_mixture/cabin_air
 	var/obj/machinery/portable_atmospherics/canister/internal_tank
 	var/datum/effect/effect/system/trail/space_trail/ion_trail
-	var/use_internal_tank = TRUE
+	var/use_internal_tank = 0
 	var/datum/global_iterator/pr_int_temp_processor //normalizes internal air mixture temperature
 	var/datum/global_iterator/pr_give_air //moves air from tank to cabin
 	var/datum/global_iterator/pr_lights_battery_use //passive battery use for the lights
@@ -77,6 +77,7 @@
 	src.ion_trail = new /datum/effect/effect/system/trail/space_trail()
 	src.ion_trail.set_up(src)
 	src.ion_trail.start()
+	src.use_internal_tank = 1
 	pr_int_temp_processor = new /datum/global_iterator/pod_preserve_temp(list(src))
 	pr_give_air = new /datum/global_iterator/pod_tank_give_air(list(src))
 	pr_lights_battery_use = new /datum/global_iterator/pod_lights_use_charge(list(src))
@@ -344,14 +345,10 @@
 	set category = "Spacepod"
 	set src = usr.loc
 	set popup_menu = 0
-	var/mob/pilot = src.get_pilot()
-	if(usr != pilot)
-		return
-	if(!cabin_air)
-		to_chat(pilot, "<span class='notice'>You hunt for the cabin's oxygen mask but you don't find it.</span>")
+	if(usr!=src.get_pilot())
 		return
 	src.use_internal_tank = !src.use_internal_tank
-	to_chat(pilot, "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
+	to_chat(src.get_pilot(), "<span class='notice'>Now taking air from [use_internal_tank?"internal airtank":"environment"].</span>")
 	return
 
 /obj/spacepod/proc/add_cabin()
@@ -759,55 +756,6 @@
 /obj/spacepod/taxi/New()
 	..()
 	ES.weapons_allowed = 0
-
-// too much effort for a meme
-/obj/spacepod/empty
-	desc = "A space pod meant for space travel?"
-	icon_state = "pod_civ"
-	actions_types = list(/datum/action/spacepod/pilot/toggle_lights) // I'm okay with a 4-tile lantern
-	use_internal_tank = FALSE
-
-/obj/spacepod/empty/attackby(obj/item/W, mob/user)
-	if(iscrowbar(W))
-		hatch_open = !hatch_open
-		to_chat(user, "<span class='notice'>You [hatch_open ? "open" : "close"] the maintenance hatch. [hatch_open ? "There's nothing inside." : ""]</span>")
-		return
-
-	if(istype(W, /obj/item/weapon/cell))
-		if(!hatch_open)
-			return
-		else
-			to_chat(user, "<span class='notice'>You stare at the hatch. There's no circuits here.</span>")
-			return
-	if(W.force)
-		visible_message("<span class = 'warning'>\The [user] hits \the [src] with \the [W]</span>")
-		adjust_health(W.force)
-		W.on_attack(src, user)
-
-/obj/spacepod/empty/attack_hand(mob/user)
-	user.visible_message("<span class='notice'>[user] pets [src]!</span>", \
-		"<span class='notice'>You pet [src]! You are so proud of yourself.</span>")
-
-/obj/spacepod/empty/emag_act()
-	return
-
-/obj/spacepod/empty/move_into_pod(var/mob/living/L)
-	if(..())
-		to_chat(L, "<span class='notice'>As you sit on the pod you notice something is odd. Seems like you forgot something.</span>")
-
-/obj/spacepod/empty/relaymove(mob/user)
-	to_chat(user, "<span class = 'warning'>You slam the pedal but nothing happens!</span>")
-
-/obj/spacepod/empty/adjust_health(var/damage)
-	health = clamp(health-damage, 0, maxHealth)
-	if(health <= 0)
-		qdel(src)
-
-/obj/spacepod/empty/add_cabin()
-	return
-
-/obj/spacepod/empty/add_airtank()
-	return
 
 #undef DAMAGE
 #undef FIRE

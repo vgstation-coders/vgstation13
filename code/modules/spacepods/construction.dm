@@ -37,17 +37,13 @@
 	qdel(construct)
 	construct = null
 
-/obj/structure/spacepod_frame/unarmored/attackby(obj/item/W, mob/user)
+/obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
 	if(!construct || !construct.action(W, user))
 		if(istype(W,/obj/item/pod_parts/armor/civ))
 			construct = new /datum/construction/reversible/pod/unarmored/civ(src)
 		else if(istype(W, /obj/item/pod_parts/armor/taxi))
 			construct = new /datum/construction/reversible/pod/unarmored/taxi(src)
-
-/obj/structure/spacepod_frame/attackby(obj/item/W, mob/user)
-	if(!construct || !construct.action(W, user))
-		if(istype(W,/obj/item/pod_parts/armor/civ))
-			construct = new /datum/construction/reversible/pod/unarmored/civ/empty(src)
+	..()
 
 /////////////////////////////////
 // CONSTRUCTION STEPS
@@ -241,9 +237,6 @@
 					)
 			)
 		)
-
-/datum/construction/reversible/pod/unarmored/civ/empty
-	result = /obj/spacepod/empty
 
 /datum/construction/reversible/pod/unarmored/taxi
 	result = /obj/spacepod/taxi
