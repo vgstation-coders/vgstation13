@@ -218,6 +218,15 @@
 	override_icon = 'icons/mecha/mecha.dmi'
 	screen_loc = ui_alien_master
 
+/obj/abstract/screen/movable/spell_master/changeling
+	name = "Changeling Abilities"
+	icon_state = "changeling_spell_ready"
+
+	open_state = "ling-open"
+	closed_state = "ling-closed"
+
+	screen_loc = ui_alien_master
+
 //////////////ACTUAL SPELLS//////////////
 //This is what you click to cast things//
 /////////////////////////////////////////

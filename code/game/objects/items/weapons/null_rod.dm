@@ -49,7 +49,7 @@
 		var/datum/role/vampire/V = isvampire(H)
 
 		if(V && isReligiousLeader(user)) //Fuck up vampires by smiting the shit out of them. Shock and Awe!
-			if(VAMP_MATURE in V.powers)
+			if(/datum/power/vampire/mature in V.current_powers)
 				to_chat(H, "<span class='warning'>\The [src]'s power violently interferes with your own!</span>")
 				if(V.nullified < 5) //Don't actually reduce their debuff if it's over 5
 					V.nullified = min(5, V.nullified + 2)
@@ -87,7 +87,7 @@
 			to_chat(user, "<span class='notice'>\The [src] is teeming with divine power. You feel like you could [fluff_pickup] a horde of undead with this.</span>")
 		if(ishuman(user)) //Typecasting, only humans can be vampires
 			var/datum/role/vampire/V = isvampire(user)
-			if(V && !(VAMP_UNDYING in V.powers))
+			if(V && !(/datum/power/vampire/undying in V.current_powers))
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>You feel an unwanted presence as you pick up the rod. Your body feels like it is burning from the inside!</span>")
 

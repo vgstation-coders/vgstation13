@@ -49,7 +49,9 @@
 		var/atom/movable/overlay/animation = new(loc)
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
+		animation.plane = ABOVE_HUMAN_PLANE
 		animation.master = src
+		invisibility = 101
 		var/moneky_anim = get_monkey_anim()
 		flick(moneky_anim, animation)
 		sleep(MONKEY_ANIM_TIME)

@@ -33,7 +33,7 @@
 
 /obj/structure/mirror/proc/vampire_check(mob/living/user, mob/living/carbon/human/target)
 	var/datum/role/vampire/V = isvampire(target)
-	if(V && !(VAMP_MATURE in V.powers))
+	if(V && !(/datum/power/vampire/mature in V.current_powers))
 		to_chat(user, "<span class='notice'>You don't see anything in \the [src].</span>")
 		return FALSE
 	return TRUE

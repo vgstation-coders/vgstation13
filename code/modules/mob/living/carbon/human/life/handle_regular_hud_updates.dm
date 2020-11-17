@@ -117,9 +117,9 @@
 						src.client.images += V.cached_images[i]
 					i++
 
-		if (!V || !(VAMP_VISION in V.powers) && !(VAMP_MATURE in V.powers)) // Not a vampire, or a vampire but neither of the spells.
+		if (!V || (!(/datum/power/vampire/vision in V.current_powers) && !(/datum/power/vampire/mature in V.current_powers))) // Not a vampire, or a vampire but neither of the spells.
 			change_sight(removing = SEE_MOBS)
-		if (!V || !(VAMP_MATURE in V.powers))
+		if (!V || !(/datum/power/vampire/mature in V.current_powers))
 			change_sight(removing = SEE_TURFS|SEE_OBJS)
 			var/datum/organ/internal/eyes/E = src.internal_organs_by_name["eyes"]
 			if(E)

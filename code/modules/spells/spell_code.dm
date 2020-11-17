@@ -155,7 +155,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	var/list/targets = target_override
 
-	if(before_channel(user))
+	if(before_channel(user) && !currently_channeled)
 		return
 	if(!targets && (spell_flags & WAIT_FOR_CLICK))
 		channel_spell(user, skipcharge)
@@ -165,6 +165,8 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 			gradual_casting = FALSE
 			stop_casting(targets, user)
 			return
+	else
+		return
 	if(!cast_check(skipcharge, user))
 		return
 	if(cast_delay && !spell_do_after(user, cast_delay))
@@ -185,6 +187,7 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 
 	if(!cast_check(skipcharge, user))
 		return //Prevent queueing of spells by opening several choose target windows.
+
 	if(targets && targets.len)
 		targets = before_cast(targets, user) //applies any overlays and effects
 		if(!targets.len) //before cast has rechecked what we can target
@@ -302,7 +305,6 @@ var/list/spells = typesof(/spell) //needed for the badmin verb for now
 		// Check range again (fixes long-range EI NATH)
 		if(!is_valid_target(target, user, options))
 			continue
-
 		valid_targets += target
 
 		if(overlay)
