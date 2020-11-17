@@ -80,6 +80,12 @@
 	desc = "An encryption key for a radio headset.  Contains cypherkeys."
 	icon_state = "com_cypherkey"
 	channels = list("Command" = 1)
+	
+/obj/item/device/encryptionkey/headset_iaa
+	name = "Internal Affairs Radio Encryption Key"
+	desc = "An encryption key for a radio headset.  Contains cypherkeys."
+	icon_state = "com_cypherkey"
+	channels = list("Command" = 1, "Security" = 1)
 
 /obj/item/device/encryptionkey/heads/captain
 	name = "Captain's Encryption Key"
