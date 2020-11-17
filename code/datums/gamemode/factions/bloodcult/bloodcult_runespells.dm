@@ -270,6 +270,7 @@
 				to_chat(activator, "<span class='danger'>Perform more conversions.</span>")
 			if(CULT_ACT_II)
 				to_chat(activator, "<span class='danger'>Perform the Sacrifice.</span>")
+		qdel(src)
 		return
 	if(istype(spell_holder,/obj/effect/rune))
 		if((rune_flags & RUNE_STAND) && (activator.loc != spell_holder.loc))
@@ -807,8 +808,8 @@
 	talisman_absorb = RUNE_CAN_ATTUNE
 	page = "The cult needs many followers to properly thrive, but the teachings of Nar-Sie are extensive, and most cultists learned them over the course of many years. \
 		You won't always have that sort of time however, this is what the Conversion ritual is for. By making an unbeliever appear before Nar-Sie, their eyes will open \
-		in a matter of seconds, that is, if their mind can handle it. Those either too weak, or of an impenetrable mind will be purged, and devoured by Nar-Sie. \
-		In this case, their remains will be converted into a container where to retrieve their belongings, along with a portion of their blood. \
+		in a matter of seconds, that is, if their mind can handle it. Those either too weak, or of an impenetrable mind will be restrained by ghastly bindings. \
+		In this case, it is up to you to deal with them. You may kill them, keep them prisonner, or release them, the latter being ill-advised. \
 		Also, know that you can quicken the ritual by wearing formal cult attire, and that the vessel will remain incapacitated for the duration of the ritual."
 	var/remaining = 100
 	var/mob/living/carbon/victim = null
@@ -892,19 +893,18 @@
 
 	if (victim.mind)
 		if (victim.mind.assigned_role in impede_medium)
-			to_chat(victim, "<span class='warning'>Your sense of duty impedes down the ritual.</span>")
-			to_chat(activator, "<span class='warning'>Their will is strong, the ritual will take longer.</span>")
+			to_chat(victim, "<span class='warning'>Your devotion to Nanotrasen slows down the ritual.</span>")
+			to_chat(activator, "<span class='warning'>Their devotion to Nanotrasen is strong, the ritual will take longer.</span>")
 
 		if (victim.mind.assigned_role in impede_hard)
-			to_chat(victim, "<span class='warning'>Your devotion to higher causes impedes the ritual.</span>")
-			to_chat(activator, "<span class='warning'>Their willpower is amazing, the ritual will be exhausting.</span>")
-
-	for(var/obj/item/weapon/implant/loyalty/I in victim)
-		if(I.implanted)
-			to_chat(victim, "<span class='warning'>Your loyalty implants drastically slows down the ritual's progression.</span>")
-			to_chat(activator, "<span class='warning'>Their mind seems to reject the ritual by reflex. The ritual will take much longer.</span>")
-			break
-
+			var/higher_cause = "Space Jesus"
+			switch(victim.mind.assigned_role)
+				if ("Captain")
+					higher_cause = "Nanotrasen"
+				if ("Chaplain")
+					higher_cause = [victim.mind.faith ? "[victim.mind.faith.deity_name]" : "Space Jesus"]
+			to_chat(victim, "<span class='warning'>Your devotion to [higher_cause] slows down the ritual.</span>")
+			to_chat(activator, "<span class='warning'>Their devotion to [higher_cause] is amazing, the ritual will be lengthy.</span>")
 
 	spawn()
 		while (remaining > 0)
