@@ -3,7 +3,7 @@
 	req_access = list(access_armory)
 	icon = 'icons/obj/guncabinet.dmi'
 	icon_state = "base"
-	icon_off ="base"
+	icon_off = "base"
 	icon_broken ="base"
 	icon_locked ="base"
 	icon_closed ="base"
@@ -13,7 +13,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/New()
 	..()
-	cabinet_door = icon(icon, "door_locked")
+	cabinet_door = icon(icon, "door_locked_[icon_state]")
 	update_icon()
 
 /obj/structure/closet/secure_closet/guncabinet/toggle()
@@ -29,14 +29,14 @@
 	overlays -= cabinet_door
 	overlays.Remove("welded")
 	if(opened)
-		cabinet_door = icon(icon, "door_open")
+		cabinet_door = icon(icon, "door_open_[icon_state]")
 	else
 		if(broken)
-			cabinet_door = icon(icon, "door_broken")
+			cabinet_door = icon(icon, "door_broken_[icon_state]")
 		else if (locked)
-			cabinet_door = icon(icon, "door_locked")
+			cabinet_door = icon(icon, "door_locked_[icon_state]")
 		else
-			cabinet_door = icon(icon, "door")
+			cabinet_door = icon(icon, "door_[icon_state]")
 
 	if(contents_change)
 		overlays.len = 0
@@ -67,3 +67,43 @@
 	overlays += cabinet_door
 	if(welded)
 		overlays += image(icon = icon, icon_state = "welded")
+
+/obj/structure/closet/secure_closet/guncabinet/medical
+	name = "medical gun cabinet"
+	req_access = list(access_medical)
+	icon_state = "med"
+	icon_off = "med"
+	icon_broken ="med"
+	icon_locked ="med"
+	icon_closed ="med"
+	icon_opened = "med"
+
+/obj/structure/closet/secure_closet/guncabinet/engineering
+	name = "engineering gun cabinet"
+	req_access = list(access_engine)
+	icon_state = "eng"
+	icon_off = "eng"
+	icon_broken ="eng"
+	icon_locked ="eng"
+	icon_closed ="eng"
+	icon_opened = "eng"
+
+/obj/structure/closet/secure_closet/guncabinet/science
+	name = "science gun cabinet"
+	req_access = list(access_science)
+	icon_state = "sci"
+	icon_off = "sci"
+	icon_broken ="sci"
+	icon_locked ="sci"
+	icon_closed ="sci"
+	icon_opened = "sci"
+
+/obj/structure/closet/secure_closet/guncabinet/cargo
+	name = "cargo gun cabinet"
+	req_access = list(access_cargo)
+	icon_state = "cargo"
+	icon_off = "cargo"
+	icon_broken ="cargo"
+	icon_locked ="cargo"
+	icon_closed ="cargo"
+	icon_opened = "cargo"
