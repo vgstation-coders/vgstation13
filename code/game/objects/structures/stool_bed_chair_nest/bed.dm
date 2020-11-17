@@ -69,6 +69,10 @@
 	if(user.isStunned())
 		return FALSE
 
+	if (user.restrained())
+		to_chat(user, "<span class='warning'>Uncuff yourself first!</span>")
+		return FALSE
+
 	if(user.size <= SIZE_TINY)
 		to_chat(user, "<span class='warning'>You are too small to do that.</span>")
 		return FALSE
