@@ -168,6 +168,12 @@
 		return 1
 	return 0
 	
+/obj/item/weapon/gun/gatling/batling/update_icon()
+	if(current_shells)
+		icon_state = "[base_icon_state][Ceiling(current_shells/max_shells*100,20)]"
+	else
+		icon_state = "[base_icon_state]0"	
+	
 /obj/item/ammo_casing_gatling/batling
 	name = "baton casing"
 	desc = "The remains of a stun baton."
