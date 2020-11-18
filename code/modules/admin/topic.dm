@@ -1646,12 +1646,14 @@
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
 		var/list/datum/dynamic_ruleset/roundstart/roundstart_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
-			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
-			roundstart_rules[newrule.name] = newrule
+			var/datum/dynamic_ruleset/roundstart/newrule = rule
+			roundstart_rules += initial(newrule.name)
+		roundstart_rules -= forced_roundstart_ruleset
+		if (!roundstart_rules?.len)
+			return alert(usr, "There are no rulesets left to force. Quite the joker aren't you?", null, null, null, null)
 		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
 		if (added_rule)
-			roundstart_rules[added_rule].calledBy = "[key_name(usr)]"
-			forced_roundstart_ruleset += roundstart_rules[added_rule]
+			forced_roundstart_ruleset[added_rule] = "[key_name(usr)]"
 			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
 			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
 			Game()
@@ -1670,7 +1672,7 @@
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/dynamic_ruleset/roundstart/rule = locate(href_list["f_dynamic_roundstart_remove"])
+		var/rule = href_list["f_dynamic_roundstart_remove"]
 		forced_roundstart_ruleset -= rule
 		Game()
 		log_admin("[key_name(usr)] removed [rule] from the forced roundstart rulesets.")

@@ -679,8 +679,8 @@ var/global/floorIsLava = 0
 			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
 			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>(Dynamic mode options)</A><br>"
 			if (forced_roundstart_ruleset.len > 0)
-				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
-					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
+				for(var/rule in forced_roundstart_ruleset)
+					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=[rule]'>-> [rule] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
 			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
 		else
