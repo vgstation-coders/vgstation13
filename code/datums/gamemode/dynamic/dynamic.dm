@@ -268,37 +268,36 @@ var/stacking_limit = 90
 	log_admin("DYNAMIC MODE: [forced_roundstart_ruleset.len] rulesets being forced. Will now attempt to draft players for them.")
 	var/forced_rules = 0
 
-	for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
-		if (rule.name in forced_roundstart_ruleset)
-			rule.candidates = candidates.Copy()
-			rule.trim_candidates()
-			if (rule.ready(TRUE))
-				forced_rules++
-				rule.calledBy = forced_roundstart_ruleset[rule.name]
+	for (var/datum/forced_ruleset/forced_rule in forced_roundstart_ruleset)//By checking in this order we allow admins to set up priorities among the forced rulesets.
+		for (var/datum/dynamic_ruleset/roundstart/rule in roundstart_rules)
+			if (forced_rule.name == rule.name)
+				rule.candidates = candidates.Copy()
+				rule.trim_candidates()
+				if (rule.ready(TRUE))
+					forced_rules++
+					rule.calledBy = forced_rule.calledBy
 
-				message_admins("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
-				log_admin("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
+					message_admins("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
+					log_admin("DYNAMIC MODE: <font size='3'>[rule.name]</font> successfully forced!")
 
-				roundstart_rules -= rule
+					//we don't spend threat on forced rulesets
+					threat_log += "[worldtime2text()]: Roundstart [rule.name] forced"
 
-				//we don't spend threat on forced rulesets
-				threat_log += "[worldtime2text()]: Roundstart [rule.name] forced"
+					if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
+						message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
+						log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
+						return pick_delay(rule)
 
-				if (istype(rule, /datum/dynamic_ruleset/roundstart/delayed/))
-					message_admins("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-					log_admin("DYNAMIC MODE: with a delay of [rule:delay/10] seconds.")
-					return pick_delay(rule)
-
-				if (rule.execute())//this should never fail since ready() returned 1
-					executed_rules += rule
-					if (rule.persistent)
-						current_rules += rule
-					for(var/mob/M in rule.assigned)
-						candidates -= M
-					return 1
-				else
-					message_admins("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
-					log_admin("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+					if (rule.execute())//this should never fail since ready() returned 1
+						executed_rules += rule
+						if (rule.persistent)
+							current_rules += rule
+						for(var/mob/M in rule.assigned)
+							candidates -= M
+						return 1
+					else
+						message_admins("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
+						log_admin("DYNAMIC MODE: ....except not because whomever coded that ruleset forgot some cases in ready() apparently! execute() returned 0.")
 
 	if (forced_rules == 0)
 		message_admins("DYNAMIC MODE: Not a single forced ruleset could be executed. Sad! Will now start a regular round of dynamic.")
