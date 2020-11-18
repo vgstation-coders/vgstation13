@@ -285,7 +285,6 @@
 /obj/item/device/assembly_holder/timer_igniter/verb/configure()
 	set name = "Set Timer"
 	set category = "Object"
-	set src in usr
 
 	if ( !(usr.isUnconscious() || usr.restrained()) )
 		var/obj/item/device/assembly_holder/holder
