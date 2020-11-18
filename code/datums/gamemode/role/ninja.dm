@@ -593,7 +593,7 @@ Suit and assorted
 	species_fit = list("Human")
 	species_restricted = list("Human")
 	eyeprot = 3
-	body_parts_covered = FULL_HEAD|HIDEHAIR
+	body_parts_covered = HEAD|EARS|HIDEHAIR
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
@@ -711,6 +711,7 @@ Suit and assorted
 	actions_types = list()
 	species_fit = list("Human")
 	species_restricted = list("Human")
+	body_parts_covered = FACE
 
 /*******************************************
 ****          WEEABOO VARIANTS          ****
