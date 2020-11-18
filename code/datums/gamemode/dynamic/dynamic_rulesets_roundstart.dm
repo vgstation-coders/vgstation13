@@ -7,7 +7,6 @@
 
 /datum/dynamic_ruleset/roundstart/traitor
 	name = "Syndicate Traitors"
-	persistent = 0
 	role_category = /datum/role/traitor
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
@@ -36,6 +35,66 @@
 				mode.spend_threat(additional_cost)
 			else
 				break
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//              DOUBLE AGENTS               ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/doubleagents
+	name = "Double Agents"
+	role_category = /datum/role/traitor/rogue
+	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
+							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
+	restricted_from_jobs = list("AI","Mobile MMI")
+	required_candidates = 2
+	weight = 1
+	cost = 15
+	var/traitor_threshold = 3
+	var/additional_cost = 5
+	requirements = list(10,10,10,10,10,10,10,10,10,10)
+	high_population_requirement = 15
+
+/datum/dynamic_ruleset/roundstart/doubleagents/execute()
+	var/traitor_scaling_coeff = 10 - max(0,round(mode.threat_level/10)-5)//above 50 threat level, coeff goes down by 1 for every 10 levels
+	var/num_traitors = min(round(mode.roundstart_pop_ready / traitor_scaling_coeff) + 1, candidates.len)
+	num_traitors = max(required_candidates,num_traitors)
+
+	var/list/double_agents = list()
+
+	for (var/i = 1 to num_traitors)
+		var/mob/M = pick(candidates)
+		assigned += M
+		candidates -= M
+		var/datum/role/traitor/rogue/newTraitor = new
+		double_agents += newTraitor
+		newTraitor.AssignToRole(M.mind,1)
+		newTraitor.Greet(GREET_ROUNDSTART)
+		// Above 3 traitors, we start to cost a bit more.
+		if (i > traitor_threshold)
+			if ((mode.threat > additional_cost))
+				mode.spend_threat(additional_cost)
+			else
+				break
+
+	if (double_agents.len > 1)
+		for (var/i = 1,i < double_agents.len, i++)
+			var/datum/role/traitor/rogue/myAgent = double_agents[i]
+			var/datum/role/traitor/rogue/myTarget = double_agents[i+1]
+
+			myAgent.assassination_target = myTarget
+
+		var/datum/role/traitor/rogue/myAgent = double_agents[double_agents.len]
+		var/datum/role/traitor/rogue/myTarget = double_agents[1]
+
+		myAgent.assassination_target = myTarget
+
+		//the objectives are properly created during ForgeObjectives() on the mode's PostSetup()
+
+	//TODO: have objectives update when an assassination is complete so they obtain their target's target until they are the last one standing.
+
 	return 1
 
 //////////////////////////////////////////////

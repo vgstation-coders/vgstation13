@@ -135,57 +135,33 @@
 /datum/role/traitor/rogue//double agent
 	name = ROGUE
 	id = ROGUE
+	wikiroute = ROGUE
 	logo_state = "synd-logo"
+	var/datum/role/traitor/rogue/assassination_target = null
 
 /datum/role/traitor/rogue/ForgeObjectives()
-	var/datum/role/traitor/rogue/rival
-	var/list/potential_rivals = list()
-	if(faction && faction.members)
-		potential_rivals = faction.members-src
-	else
-		for(var/datum/role/traitor/rogue/R in ticker.mode.orphaned_roles) //It'd be awkward if you ended up with your rival being a vampire.
-			if(R != src)
-				potential_rivals.Add(R)
-	if(potential_rivals.len)
-		rival = pick(potential_rivals)
-	if(!rival) //Fuck it, you're now a regular traitor
-		return ..()
-
-	var/datum/objective/target/assassinate/kill_rival = new(auto_target = FALSE)
-	if(kill_rival.set_target(rival.antag))
-		AppendObjective(kill_rival)
-	else
-		qdel(kill_rival)
-
-	if(prob(70)) //Your target knows!
-		var/datum/objective/target/assassinate/kill_new_rival = new(auto_target = FALSE)
-		if(kill_new_rival.set_target(antag))
-			rival.AppendObjective(kill_new_rival)
+	if (assassination_target && assassination_target.antag)
+		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
+		if(kill_target.set_target(assassination_target.antag))
+			AppendObjective(kill_target)
+			return
 		else
-			qdel(kill_new_rival)
+			qdel(kill_target)
+	to_chat(antag.current, "<span class='danger'>It would appear that your enemies never in fact made it to the station. Looks like you're safe this time around.</span>")
+	//that should never appear though since the ruleset requires 2 players minimum but you know just in case
 
-	if(prob(50)) //Spy v Spy
-		var/datum/objective/target/assassinate/A = new()
-		if(A.target)
-			AppendObjective(A)
+/datum/role/traitor/rogue/Greet(var/greeting,var/custom)
+	if(!greeting)
+		return
 
-			var/datum/objective/target/protect/P = new(auto_target = FALSE)
-			if(P.set_target(A.target))
-				rival.AppendObjective(P)
-
-	if(prob(30))
-		AppendObjective(/datum/objective/target/steal)
-
-	switch(rand(1,3))
-		if(1)
-			if(!locate(/datum/objective/target/steal) in objectives.GetObjectives())
-				AppendObjective(/datum/objective/die)
-			else
-				AppendObjective(/datum/objective/escape)
-		if(2)
-			AppendObjective(/datum/objective/hijack)
+	var/icon/logo = icon('icons/logos.dmi', logo_state)
+	switch(greeting)
+		if (GREET_ROUNDSTART)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Rogue Syndicate agent. Relations with the other groups in the Syndicate Coalition have gone south, take the other agents out before they do the same to you.</span>")
 		else
-			AppendObjective(/datum/objective/escape)
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Rogue Syndicate agent.</span>")
+
+	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
 //________________________________________________
 
