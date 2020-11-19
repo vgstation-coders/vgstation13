@@ -211,7 +211,7 @@ var/global/list/disease2_list = list()
 	var/list/to_choose = subtypesof(/datum/disease2/effect)
 	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
-		if(!f.restricted && f.stage == stage && text2num(f.badness) == badness)
+		if(!f.restricted && f.stage == stage && f.badness == badness)
 			list += f
 	if (list.len <= 0)
 		return new_random_effect(badness+1,badness-1,stage)
@@ -227,7 +227,7 @@ var/global/list/disease2_list = list()
 		to_choose.Remove(old_effect)
 	for(var/e in to_choose)
 		var/datum/disease2/effect/f = new e
-		if(!f.restricted && f.stage == stage && text2num(f.badness) <= max_badness && text2num(f.badness) >= min_badness)
+		if(!f.restricted && f.stage == stage && f.badness <= max_badness && f.badness >= min_badness)
 			list += f
 	if (list.len <= 0)
 		return new_random_effect(min(max_badness+1,5),max(0,min_badness-1),stage)
@@ -737,9 +737,9 @@ var/global/list/disease2_list = list()
 	var/datum/disease2/effect/e = effects[i]
 	var/datum/disease2/effect/f
 	if (inBody)//mutations that occur directly in a body don't cause helpful symptoms to become deadly instantly.
-		f = new_random_effect(min(5,text2num(e.badness)+1), max(0,text2num(e.badness)-1), e.stage, e.type)
+		f = new_random_effect(min(5,e.badness+1), max(0,e.badness-1), e.stage, e.type)
 	else
-		f = new_random_effect(min(5,text2num(e.badness)+2), max(0,text2num(e.badness)-3), e.stage, e.type)//badness is slightly more likely to go down than up.
+		f = new_random_effect(min(5,e.badness+2), max(0,e.badness-3), e.stage, e.type)//badness is slightly more likely to go down than up.
 	effects[i] = f
 	log_debug("[form] [uniqueID]-[subID] has mutated [e.name] into [f.name].")
 	log += "<br />[timestamp()] Mutated effect [e.name] [e.chance]% into [f.name] [f.chance]%."

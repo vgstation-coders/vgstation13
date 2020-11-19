@@ -122,7 +122,7 @@
 			if (D.strength >= 80)
 				var/total_badness = 0
 				for(var/datum/disease2/effect/e in D.effects)
-					total_badness += text2num(e.badness)
+					total_badness += e.badness
 				if (total_badness >= 13)
 					return 1
 
@@ -155,7 +155,7 @@
 			var/datum/disease2/disease/D = blood_viruses[ID]
 			var/total_badness = 0
 			for(var/datum/disease2/effect/e in D.effects)
-				total_badness += text2num(e.badness)
+				total_badness += e.badness
 			if (total_badness <= 2)
 				return 1
 
