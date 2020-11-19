@@ -10,6 +10,7 @@
 	clothing_flags = PLASMAGUARD
 	pressure_resistance = 200 * ONE_ATMOSPHERE
 	eyeprot = 3
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/time/equipped(mob/living/carbon/human/H, equipped_slot)
 	..()

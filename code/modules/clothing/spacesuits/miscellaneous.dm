@@ -75,6 +75,7 @@
 	desc = "Take your protein pills and put your helmet on."
 	armor = list(melee = 10, bullet = 10, laser = 10,energy = 10, bomb = 50, bio = 100, rad = 100)
 	species_restricted =list("Human", "Insectoid")
+	body_parts_visible_override = 0
 
 //Clown Space Suit
 /obj/item/clothing/head/helmet/space/clown
@@ -84,6 +85,7 @@
 	item_state = "clown-eva-helmet"
 	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
+	body_parts_visible_override = 0
 
 /obj/item/clothing/suit/space/clown
 	name = "clown spacesuit"

@@ -594,6 +594,7 @@ Suit and assorted
 	species_restricted = list("Human")
 	eyeprot = 3
 	body_parts_covered = HEAD|EARS|HIDEHAIR
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/ninja/apprentice
 	name = "ninja hood"
