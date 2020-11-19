@@ -1195,6 +1195,7 @@ var/list/arcane_tomes = list()
 	clothing_flags = PLASMAGUARD|CONTAINPLASMAMAN
 	max_heat_protection_temperature = FIRE_HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	mech_flags = MECH_SCAN_FAIL
+	body_parts_visible_override = 0
 
 
 /obj/item/clothing/head/helmet/space/cult/get_cult_power()
