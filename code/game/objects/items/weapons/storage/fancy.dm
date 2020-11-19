@@ -336,17 +336,32 @@
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M, /mob))
 		return
-
-	if(equip_from_box && M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
-		var/obj/item/clothing/mask/cigarette/W = new /obj/item/clothing/mask/cigarette(user)
-		reagents.trans_to(W, (reagents.total_volume/contents.len))
-		user.equip_to_slot_if_possible(W, slot_wear_mask)
-		reagents.maximum_volume = 15 * contents.len
-		contents.len--
+	var/list/cigs = list()
+	for(var/obj/item/clothing/mask/cigarette/cig in contents)
+		cigs.Add(cig)
+	if(!cigs.len && user.a_intent == I_HELP)
+		to_chat(user, "<span class='notice'>There are no cigarettes left in the pack.</span>")
+		return
+	if (user.a_intent != I_HELP || user.zone_sel.selecting != "mouth")
+		..()
+		return
+	var/obj/item/clothing/mask/cigarette/mycig = cigs[cigs.len]
+	if(equip_from_box && M == user && !user.wear_mask)
+		mycig.forceMove(user)
+		user.equip_to_slot_if_possible(mycig, slot_wear_mask)
 		to_chat(user, "<span class='notice'>You take a cigarette out of the pack.</span>")
 		update_icon()
-	else
-		..()
+		return
+	if(equip_from_box && contents.len > 0 && !M.wear_mask)
+		user.visible_message("<span class='notice'>[user] tries to pass [M] a cigarette.</span>", \
+									"<span class='notice'>You try to pass [M] a cigarette.</span>")
+		if(do_after(user, M, 35))
+			mycig.forceMove(M)
+			M.equip_to_slot_if_possible(mycig, slot_wear_mask)
+			to_chat(user, "<span class='notice'>You give [M] a cigarette out of the pack.</span>")
+			update_icon()
+		return
+	..()
 
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco
 	name = "\improper DromedaryCo packet"
