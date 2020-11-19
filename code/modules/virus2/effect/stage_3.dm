@@ -616,7 +616,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	max_chance = 50
 
 /datum/disease2/effect/damage_converter/activate(var/mob/living/mob)
-	if(mob.getFireLoss() < mob.getMaxHealth() || mob.getBruteLoss() < mob.getMaxHealth())
+	if(mob.getFireLoss() > 0 || mob.getBruteLoss() > 0)
 		var/get_damage = rand(1, 3)
 		mob.adjustFireLoss(-get_damage)
 		mob.adjustBruteLoss(-get_damage)
@@ -646,8 +646,8 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		if(I.name != "brain" && !I.robotic)
 			valid_internal_organs += I
 
-	if(prob(75) || valid_external_organs.len) 
-		
+	if(prob(75) || valid_external_organs.len)
+
 		var/datum/organ/external/E = pick(valid_external_organs)
 		E.robotize()
 		H.update_body()
@@ -670,7 +670,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		mob << sound('sound/effects/supermatter.ogg')
 
 	var/mob/living/silicon/robot/mommi/mommi = /mob/living/silicon/robot/mommi
-	for(var/mob/living/M in viewers(mob))	
+	for(var/mob/living/M in viewers(mob))
 		if(M == mob)
 			continue
 
@@ -685,10 +685,10 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 		if(C)
 			C.images += crab
 		var/duration = rand(60 SECONDS, 120 SECONDS)
-		
+
 		spawn(duration)
 			if(C)
-				C.images.Remove(crab) 
+				C.images.Remove(crab)
 
 	var/list/turf_list = list()
 	for(var/turf/T in spiral_block(get_turf(mob), 40))
@@ -702,7 +702,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 			if(C)
 				C.images += supermatter
 			var/duration = rand(60 SECONDS, 120 SECONDS)
-			
+
 			spawn(duration)
 				if(C)
 					C.images.Remove(supermatter)
@@ -767,7 +767,7 @@ datum/disease2/effect/lubefoot/deactivate(var/mob/living/mob)
 	var/activated = 0
 
 /datum/disease2/effect/wendigo_hallucination/activate(var/mob/living/mob)
-	if(!ishuman(mob))	
+	if(!ishuman(mob))
 		return
 	var/mob/living/carbon/human/H = mob
 	H.Jitter(100)
