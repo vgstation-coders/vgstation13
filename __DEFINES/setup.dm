@@ -998,12 +998,12 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define SPREAD_MEMETIC 16 //spreads on hearing, doesn't appear on goggles
 
 
-#define EFFECT_DANGER_HELPFUL	0
-#define EFFECT_DANGER_FLAVOR	1
-#define EFFECT_DANGER_ANNOYING	2
-#define EFFECT_DANGER_HINDRANCE	3
-#define EFFECT_DANGER_HARMFUL	4
-#define EFFECT_DANGER_DEADLY	5
+#define EFFECT_DANGER_HELPFUL	"0"
+#define EFFECT_DANGER_FLAVOR	"1"
+#define EFFECT_DANGER_ANNOYING	"2"
+#define EFFECT_DANGER_HINDRANCE	"3"
+#define EFFECT_DANGER_HARMFUL	"4"
+#define EFFECT_DANGER_DEADLY	"5"
 
 #define	ANTIGEN_BLOOD	"blood"
 #define	ANTIGEN_COMMON	"common"
