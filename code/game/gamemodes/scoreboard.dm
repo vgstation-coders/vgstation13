@@ -69,7 +69,7 @@
 		var/datum/disease2/disease/D = disease2_list[ID]
 		var/disease_score = 0
 		for (var/datum/disease2/effect/E in D.effects)
-			disease_score += text2num(E.badness)
+			disease_score += E.badness
 
 		//diseases only count if the mob is still alive
 		if (disease_score <3)
@@ -360,7 +360,7 @@
 	//Bad Things
 	score["crewscore"] -= deathpoints
 
-	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good	
+	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good
 	score["crewscore"] += (siliconpoints*multi)
 	if(score["deadaipenalty"])
 		score["crewscore"] += (1000*multi) //Give a harsh punishment for killing the AI
