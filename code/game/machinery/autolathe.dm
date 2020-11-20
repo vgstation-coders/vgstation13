@@ -72,7 +72,6 @@
 		new /obj/item/device/assembly/randomizer(), \
 		new /obj/item/device/assembly/read_write(), \
 		new /obj/item/device/assembly/math(), \
-		new /obj/item/weapon/grenade/chem_grenade/timer(), \
 		),
 		"Stock_Parts"=list(
 		new /obj/item/weapon/stock_parts/console_screen(), \
@@ -145,6 +144,7 @@
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
 		new /obj/item/weapon/beartrap(),\
 		new /obj/item/gun_part/scope(),\
+		new /obj/item/weapon/grenade/chem_grenade/timer(), \
 		)
 	)
 
