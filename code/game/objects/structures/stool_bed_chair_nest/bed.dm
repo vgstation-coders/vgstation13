@@ -65,11 +65,11 @@
 			return
 		buckle_mob(usr, usr)
 
-/obj/structure/bed/proc/manual_unbuckle(var/mob/user)
+/obj/structure/bed/proc/manual_unbuckle(var/mob/user, var/resisting = FALSE)
 	if(user.isStunned())
 		return FALSE
 
-	if (user.restrained())
+	if (user.restrained() && !resisting)
 		to_chat(user, "<span class='warning'>Uncuff yourself first!</span>")
 		return FALSE
 
