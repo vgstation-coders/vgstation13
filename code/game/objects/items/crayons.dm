@@ -61,11 +61,11 @@ var/global/list/all_graffitis = list(
 	shadeColour = "#0082A8"
 	colourName = "blue"
 
-/obj/item/toy/crayon/violet
+/obj/item/toy/crayon/purple
 	icon_state = "crayonpurple"
 	colour = "#DA00FF"
 	shadeColour = "#810CFF"
-	colourName = "violet"
+	colourName = "purple"
 
 /obj/item/toy/crayon/black
 	icon_state = "crayonblack"
