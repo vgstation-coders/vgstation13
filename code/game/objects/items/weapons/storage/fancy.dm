@@ -339,11 +339,10 @@
 	var/list/cigs = list()
 	for(var/obj/item/clothing/mask/cigarette/cig in contents)
 		cigs.Add(cig)
-	if(!cigs.len && user.a_intent == I_HELP)
-		to_chat(user, "<span class='notice'>There are no cigarettes left in the pack.</span>")
-		return
 	if (user.a_intent != I_HELP || user.zone_sel.selecting != "mouth")
-		..()
+		return ..()
+	if(!cigs.len)
+		to_chat(user, "<span class='notice'>There are no cigarettes left in the pack.</span>")
 		return
 	var/obj/item/clothing/mask/cigarette/mycig = cigs[cigs.len]
 	if(equip_from_box && M == user && !user.wear_mask)
