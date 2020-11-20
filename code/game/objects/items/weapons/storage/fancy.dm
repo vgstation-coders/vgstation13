@@ -336,31 +336,61 @@
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M, /mob))
 		return
+	if(!equip_from_box)
+		return ..()
+	if (user.zone_sel.selecting != "mouth")
+		return ..()
 	var/list/cigs = list()
 	for(var/obj/item/clothing/mask/cigarette/cig in contents)
 		cigs.Add(cig)
-	if (user.a_intent != I_HELP || user.zone_sel.selecting != "mouth")
-		return ..()
 	if(!cigs.len)
 		to_chat(user, "<span class='notice'>There are no cigarettes left in the pack.</span>")
 		return
 	var/obj/item/clothing/mask/cigarette/mycig = cigs[cigs.len]
-	if(equip_from_box && M == user && !user.wear_mask)
-		mycig.forceMove(user)
-		user.equip_to_slot_if_possible(mycig, slot_wear_mask)
-		to_chat(user, "<span class='notice'>You take a cigarette out of the pack.</span>")
-		update_icon()
+	if(M.wear_mask)
+		to_chat(user, "<span class='notice'>There's no space for a cigarette.</span>")
 		return
-	if(equip_from_box && contents.len > 0 && !M.wear_mask)
-		user.visible_message("<span class='notice'>[user] tries to pass [M] a cigarette.</span>", \
-									"<span class='notice'>You try to pass [M] a cigarette.</span>")
-		if(do_after(user, M, 35))
-			mycig.forceMove(M)
-			M.equip_to_slot_if_possible(mycig, slot_wear_mask)
-			to_chat(user, "<span class='notice'>You give [M] a cigarette out of the pack.</span>")
+	if(M == user)
+		if(user.equip_to_slot_if_possible(mycig, slot_wear_mask))
+			to_chat(user, "<span class='notice'>You take a cigarette out of the pack.</span>")
 			update_icon()
 		return
-	..()
+	else
+		to_chat(user, "<span class='notice'>You try to pass [M] a cigarette.</span>")
+		pass(M,user,mycig)
+		return
+
+/obj/item/weapon/storage/fancy/cigarettes/proc/pass(mob/living/carbon/M as mob, mob/living/carbon/user as mob, var/obj/item/clothing/mask/cigarette/mycig) //appropriated from give_item()
+	if(!istype(user))
+		return
+	if(M.stat == 2 || user.stat == 2 || M.client == null)
+		to_chat(user, "<span class='warning'>That's not gonna work.</span>")
+		return
+	if(M.give_check)
+		to_chat(user, "<span class='warning'>\The [M] is currently being passed something by somebody else.</span>")
+		return
+	if(!mycig)
+		return
+	M.give_check = TRUE
+	switch(alert(M, "[user] wants to pass you \a [mycig]?", , "Yes", "No"))
+		if("Yes")
+			M.give_check = FALSE
+			if(!mycig)
+				return
+			if(!user.Adjacent(M))
+				to_chat(user, "<span class='warning'>You need to stay still while passing a smoke.</span>")
+				to_chat(M, "<span class='warning'>[user] moved away.</span>")//What an asshole
+				return
+			if(user.get_active_hand() != src)
+				to_chat(user, "<span class='warning'>You need to keep \the [src] in your hand.</span>")
+				to_chat(M, "<span class='warning'>[user] has put \the [src] away!</span>")
+				return
+			if(M.equip_to_slot_if_possible(mycig, slot_wear_mask))
+				user.visible_message("<span class='notice'>[user] passed \the [mycig] to [M].</span>")
+				update_icon()
+		if("No")
+			M.give_check = FALSE
+			M.visible_message("<span class='warning'>[user] tried to pass \the [mycig] to [M] but \he didn't want it.</span>")
 
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco
 	name = "\improper DromedaryCo packet"
