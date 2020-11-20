@@ -338,7 +338,7 @@
 			add_fingerprint(user)
 			playsound(src, 'sound/machines/hiss.ogg', 50, 0, 0)
 
-/obj/structure/bed/chair/vehicle/adminbus/manual_unbuckle(mob/user as mob)
+/obj/structure/bed/chair/vehicle/adminbus/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(occupant && occupant == user)	//Are you the driver?
 		var/mob/living/M = occupant
 		M.visible_message(
