@@ -969,7 +969,7 @@ Thanks.
 								C.visible_message("<span class='danger'>[C] manages to unbuckle themself!</span>",\
 								                  "<span class='notice'>You successfully unbuckle yourself.</span>",\
 								self_drugged_message="<span class='notice'>You successfully regain control of your legs and stand up.</span>")
-								B.manual_unbuckle(C)
+								B.manual_unbuckle(C, resisting = TRUE)
 							else
 								C.simple_message("<span class='warning'>Your unbuckling attempt was interrupted.</span>", \
 									"<span class='warning'>Your attempt to regain control of your legs was interrupted. Damn it!</span>")
