@@ -112,12 +112,12 @@
 	max_heat_protection_temperature = SPACE_SUIT_MAX_HEAT_PROTECTION_TEMPERATURE
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
-	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/vox
 	armor = list(melee = 60, bullet = 50, laser = 30, energy = 15, bomb = 30, bio = 30, rad = 30)
 	species_restricted = list(VOX_SHAPED)
 	species_fit = list(VOX_SHAPED)
+	body_parts_visible_override = 0
 
 /obj/item/clothing/head/helmet/space/vox/pressure
 	name = "alien helmet"
