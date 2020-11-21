@@ -9,6 +9,7 @@
 	var/name = "Barack Obama"
 	test_subject.real_name = name
 	test_subject.name = name
+	test_subject.gender = MALE
 
 	assert_eq(test_subject.name, "Barack Obama")
 	test_subject.equip_to_appropriate_slot(new /obj/item/clothing/mask/balaclava, TRUE)
