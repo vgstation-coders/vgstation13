@@ -4,6 +4,7 @@
 #include "borer.dm"
 #include "circuitboards.dm"
 #include "dna_and_disabilities.dm"
+#include "examine.dm"
 #include "hexadecimal.dm"
 #include "highscores.dm"
 #include "icons.dm"
