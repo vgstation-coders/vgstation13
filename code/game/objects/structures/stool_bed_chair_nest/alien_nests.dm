@@ -16,7 +16,7 @@
 	nest_locations -= src
 	..()
 
-/obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
+/obj/structure/bed/nest/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(istype(user, /mob/living/silicon/pai)) //added istype(user, /mob/living/silicon/pai) cause it was in buckle_mob, dunno why tho
 		return
 

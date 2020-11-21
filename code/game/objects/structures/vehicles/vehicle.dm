@@ -257,7 +257,7 @@
 			action.Remove(action.owner)
 		action.Grant(user)
 
-/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+/obj/structure/bed/chair/vehicle/manual_unbuckle(mob/user, var/resisting = FALSE)
 	..()
 	for (var/datum/action/action in vehicle_actions)
 		action.Remove(user)

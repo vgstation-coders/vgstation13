@@ -196,7 +196,7 @@
 
 		i++
 
-/obj/structure/bed/chair/vehicle/wheelchair/multi_people/manual_unbuckle(mob/user)
+/obj/structure/bed/chair/vehicle/wheelchair/multi_people/manual_unbuckle(mob/user, var/resisting)
 	..()
 
 	update_mob() //Update the rest
