@@ -122,6 +122,30 @@
 /mob/living/simple_animal/hostile/bear/spare/GetAccess()
 	return get_all_accesses()
 
+/mob/living/simple_animal/hostile/bear/castle
+	name = "castle station space bear"
+	desc = "Drawing circles won't work this time!"
+	icon_state = "bear"
+	icon_dead = "bear_dead"
+	default_icon_floor = "bear"
+	default_icon_space = "bear"
+
+	minimum_distance = 3
+	ranged = 1
+	casingtype = /obj/item/ammo_casing/shotgun/buckshot
+	projectilesound = 'sound/weapons/Gunshot_smg.ogg'
+	projectiletype = /obj/item/projectile/bullet/buckshot
+
+/mob/living/simple_animal/hostile/bear/castle/New()
+	. = ..()
+	var/image/shotty = image('icons/mob/animal.dmi', "arms")
+	overlays += shotty
+
+/mob/living/simple_animal/hostile/bear/castle/death(var/gibbed)
+	new /obj/item/weapon/gun/projectile/shotgun/pump(get_turf(src))
+	overlays.Cut()
+	return ..()
+
 /mob/living/simple_animal/hostile/bear/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 	..()
 	if(stat != DEAD)
