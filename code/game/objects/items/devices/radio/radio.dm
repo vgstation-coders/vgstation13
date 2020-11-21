@@ -510,6 +510,13 @@
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 	user.set_machine(src)
+	if (!(W.is_screwdriver(user)))
+		return
+	b_stat = !(b_stat)
+	if (b_stat)
+		user.show_message("<span class = 'notice'>\The [src] can now be attached and modified!</span>")
+	else
+		user.show_message("<span class = 'notice'>\The [src] can no longer be modified or attached!</span>")
 	updateDialog()
 	update_icon()
 	add_fingerprint(user)
