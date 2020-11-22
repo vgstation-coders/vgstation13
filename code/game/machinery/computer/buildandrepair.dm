@@ -118,7 +118,7 @@
 	desc = "A circuit board for running a computer used for viewing security records."
 	build_path = /obj/machinery/computer/secure_data
 /obj/item/weapon/circuitboard/security_alerts
-	name = "Circuit board (Security Records)"
+	name = "Circuit board (Security Alerts)"
 	desc = "A circuit board for running a computer used for viewing security alerts."
 	build_path = /obj/machinery/computer/security_alerts
 /obj/item/weapon/circuitboard/stationalert
