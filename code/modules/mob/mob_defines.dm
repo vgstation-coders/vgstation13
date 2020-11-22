@@ -99,6 +99,7 @@
 	var/canmove = 1
 	var/candrop = 1
 	var/tazed = 0
+	var/can_wear_as_hat = FALSE
 
 	var/size = SIZE_NORMAL
 	//SIZE_TINY for tiny animals like mice and borers

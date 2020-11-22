@@ -106,7 +106,9 @@
 
 		throw_range = 6 - w_class
 
-		if(w_class > W_CLASS_SMALL)
+		if(w_class > W_CLASS_SMALL && M.can_wear_as_hat)
+			flags |= (TWOHANDABLE)
+		else if(w_class > W_CLASS_SMALL)
 			flags |= (TWOHANDABLE | MUSTTWOHAND)
 
 //MICE

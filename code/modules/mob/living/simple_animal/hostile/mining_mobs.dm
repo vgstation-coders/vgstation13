@@ -883,6 +883,7 @@ obj/item/asteroid/basilisk_hide/New()
 	size = SIZE_SMALL
 	var/pacify_aura = TRUE
 	var/image/eyes
+	can_wear_as_hat = TRUE
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify
 	pacify_aura = FALSE
