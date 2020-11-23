@@ -5,7 +5,7 @@
 	icon_state = "barber"
 	item_state = "barber"
 	_color = "barber"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/rank/bartender
 	desc = "It looks like it could use some more flair."
@@ -114,7 +114,7 @@
 	_color = "botany"
 	permeability_coefficient = 0.50
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/beekeeper
@@ -125,7 +125,7 @@
 	_color = "beekeeper"
 	permeability_coefficient = 0.50
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/gardener
@@ -136,7 +136,7 @@
 	_color = "gardener"
 	permeability_coefficient = 0.50
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/internalaffairs
@@ -168,13 +168,13 @@
 	icon_state = "lawyer_black"
 	item_state = "lawyer_black"
 	_color = "lawyer_black"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/female
 	icon_state = "black_suit_fem"
 	item_state = "black_suit_fem"
 	_color = "black_suit_fem"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/red
 	icon_state = "lawyer_red"
@@ -194,14 +194,14 @@
 	icon_state = "bluesuit"
 	item_state = "bluesuit"
 	_color = "bluesuit"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/purpsuit
 	name = "Purple Suit"
 	icon_state = "lawyer_purp"
 	item_state = "lawyer_purp"
 	_color = "lawyer_purp"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/lawyer/oldman
 	name = "Old Man's Suit"
@@ -209,7 +209,7 @@
 	icon_state = "oldman"
 	item_state = "oldman"
 	_color = "oldman"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/librarian
@@ -229,7 +229,7 @@
 	item_state = "mime"
 	_color = "mime"
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, INSECT_SHAPED)
 
 
 /obj/item/clothing/under/rank/miner
@@ -248,3 +248,4 @@
 	item_state = "bridgeofficer"
 	_color = "bridgeofficer"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED)
