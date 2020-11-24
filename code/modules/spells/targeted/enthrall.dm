@@ -70,7 +70,7 @@
 		if(ghost)
 			var/mob/ghostmob = ghost.get_top_transmogrification()
 			if(ghostmob) //A ghost has been found, and it still belongs to this corpse. There's nothing preventing them from being revived.
-				to_chat(ghostmob, "<span class='interface big'><span class='bold'>The vampire has enthralled your corpse.  You will be its servant when you return to the living.  Blood and power to your Lord.</span>")
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>The vampire has enthralled your corpse.  You will be its servant when you return to the living.  Blood and power to your Lord.  (Check your notes for the current identity of your master upon revival.)</span>")
 	
 	V.remove_blood(blood_cost)
 
