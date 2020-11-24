@@ -2691,6 +2691,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
 		/obj/item/clothing/under/sl_suit = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/red = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/green = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/purple = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
