@@ -105,10 +105,10 @@
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
+							emote("me", 1, "barks at [movement_target], as if begging it to go into his mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags \his tail.")
+							emote("me", 1, "barks at [movement_target] and wags his tail.")
 							corgi_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")
@@ -188,7 +188,7 @@
 				for (var/mob/M in viewers(src, null))
 					M.show_message("<span class='danger'>[user] hits [src] with [O], however [src] is too armored.</span>")
 			else
-				to_chat(usr, "<span class='warning'>[src] is wearing too much armor. You can't reach \his skin.</span>")
+				to_chat(usr, "<span class='warning'>[src] is wearing too much armor. You can't reach his skin.</span>")
 				for (var/mob/M in viewers(src, null))
 					M.show_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 			if(health>0 && prob(15))
@@ -469,7 +469,7 @@
 	if(valid)
 		if(usr)
 			usr.visible_message("[usr] puts [item_to_add] on [real_name]'s head.  [src] looks at [usr] and barks once.",
-				"You put [item_to_add] on [real_name]'s head.  [src] gives you a peculiar look, then wags \his tail once and barks.",
+				"You put [item_to_add] on [real_name]'s head.  [src] gives you a peculiar look, then wags his tail once and barks.",
 				"You hear a friendly-sounding bark.")
 			usr.drop_item(item_to_add, src, force_drop = 1)
 		else
