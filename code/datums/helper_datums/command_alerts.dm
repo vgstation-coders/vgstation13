@@ -318,7 +318,7 @@ There's been a galaxy-wide electromagnetic pulse.  All of our systems are heavil
 
 [station_name()], you are the only facility nearby a bluespace rift, which is near your research outpost.  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
 
-You have five minutes before the universe collapses. Good l\[\[###!!!-
+You have eight minutes before the universe collapses. Good l\[\[###!!!-
 
 AUTOMATED ALERT: Link to [command_name()] lost.
 
