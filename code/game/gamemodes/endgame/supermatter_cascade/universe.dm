@@ -83,7 +83,7 @@
 			if(istype(C.shuttle,/datum/shuttle/mining) || istype(C.shuttle,/datum/shuttle/research))
 				C.req_access = null
 
-		sleep(5 MINUTES)
+		sleep(8 MINUTES)
 		ticker.declare_completion()
 		ticker.station_explosion_cinematic(0,null) // TODO: Custom cinematic
 
