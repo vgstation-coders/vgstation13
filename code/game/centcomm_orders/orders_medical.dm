@@ -208,7 +208,7 @@
 	)
 	worth = 100 * requested[requested[1]]
 
-/datum/centcomm_order/department/medical/vaccine/ExtraChecks(var/obj/item/weapon/dnainjector/I)
+/datum/centcomm_order/department/medical/clean_se/ExtraChecks(var/obj/item/weapon/dnainjector/I)
 	if (!istype(I))
 		return 0
 	if (!I.block && I.buf)//Not a block injector
