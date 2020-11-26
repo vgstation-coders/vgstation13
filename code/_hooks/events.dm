@@ -165,6 +165,18 @@
 // datum/mind/mind: the mind that just got transferred.
 /lazy_event/after_mind_transfer
 
+// Called when mob equips an item
+// Arguments:
+// atom/item: the item
+// slot: the slot
+/lazy_event/on_equipped
+
+// Called when mob unequippes an item
+// Arguments:
+// atom/item: the item
+/lazy_event/on_unequipped
+
+
 /datum
 	/// Associative list of type path -> list(),
 	/// where the type path is a descendant of /event_type.

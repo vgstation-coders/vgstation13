@@ -97,7 +97,7 @@
 		ignore_slot = (equipped == wear_mask) ? MOUTH : 0
 		if(!equipped)
 			continue
-		else if(is_slot_hidden(equipped.body_parts_covered,(hidden_flags),ignore_slot,equipped.body_parts_visible_override))
+		else if(is_slot_hidden(equipped.body_parts_covered, hidden_flags, ignore_slot, equipped.body_parts_visible_override))
 			return 1
 	return 0
 
@@ -499,6 +499,7 @@
 	W.equipped(src, slot)
 	if(client)
 		client.screen |= W
+	lazy_invoke_event(/lazy_event/on_equipped, list(W, slot))
 
 /mob/living/carbon/human/get_multitool(var/active_only=0)
 	if(istype(get_active_hand(),/obj/item/device/multitool))
