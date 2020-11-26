@@ -46,7 +46,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/xenoarch
@@ -58,7 +58,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/plasmares
@@ -70,7 +70,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/xenobio
@@ -82,7 +82,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/anomalist
@@ -94,7 +94,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 10)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /*
@@ -157,7 +157,7 @@
 	permeability_coefficient = 0.50
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 10, rad = 0)
 	clothing_flags = ONESIZEFITSALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	sterility = 20
 
 /obj/item/clothing/under/rank/orderly
