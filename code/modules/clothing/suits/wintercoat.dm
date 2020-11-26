@@ -312,3 +312,44 @@
 		coat.hooddown(user,unequip = 0)
 		user.drop_from_inventory(src)
 		forceMove(coat)
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie
+	name = "Grey hoodie"
+	desc = "A casual hoodie to keep you warm and comfy."
+	icon_state = "hoodie"
+	item_state = "hoodie"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+	clothing_flags = COLORS_OVERLAY
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/black
+	name = "Black hoodie"
+	color = "#4A4A4B" //Grey but it looks black
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/red
+	name = "Red hoodie"
+	color = "#D91414"
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/green
+	name = "Green hoodie"
+	color = "#5C9E54" //Green
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue
+	name = "Dark blue hoodie"
+	color = "#1E85BC" //Blue
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/purple
+	name = "Purple hoodie"
+	color = "#9557C5" //purple
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow
+	name = "Yellow hoodie"
+	color = "#E0C14F" //Yellow
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/orange
+	name = "Orange hoodie"
+	color = "#C67A4B" //orange
+
+/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan
+	name = "Cyan hoodie"
+	color = "#00ffff" //Cyan (Or close to it)
