@@ -64,7 +64,14 @@
 	else
 		to_chat(user, "<span class='warning'>Either you or your target moved, and you couldn't finish enthralling them!</span>")
 		return FALSE
-
+	
+	if(!target.client) //There is not a player "in control" of this corpse, so there is no one to inform.
+		var/mob/dead/observer/ghost = mind_can_reenter(target.mind)
+		if(ghost)
+			var/mob/ghostmob = ghost.get_top_transmogrification()
+			if(ghostmob) //A ghost has been found, and it still belongs to this corpse. There's nothing preventing them from being revived.
+				to_chat(ghostmob, "<span class='interface big'><span class='bold'>The vampire has enthralled your corpse.  You will be their servant when you return to the living.  Blood and power to your Lord.  (Check your notes for the current identity of your master upon revival.)</span>")
+	
 	V.remove_blood(blood_cost)
 
 /spell/targeted/enthrall/critfail(var/list/targets, var/mob/user)
