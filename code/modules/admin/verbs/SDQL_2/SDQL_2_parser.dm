@@ -556,7 +556,7 @@
 	return i + 1
 
 
-//value:	variable | string | number | 'null'
+//value:	variable | string | number | 'null' | typepath
 /datum/SDQL_parser/proc/value(i, list/node)
 	if(token(i) == "null")
 		node += "null"
