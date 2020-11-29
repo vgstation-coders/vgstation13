@@ -88,7 +88,7 @@
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 		),
 		/datum/species/plasmaman/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/bartender,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/service,
@@ -96,7 +96,7 @@
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/service,
 		),
 		/datum/species/vox/ = list(
-			slot_ears_str = /obj/item/device/radio/headset,
+			slot_ears_str = /obj/item/device/radio/headset/headset_service,
 			slot_w_uniform_str = /obj/item/clothing/under/rank/bartender,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/bartender,
