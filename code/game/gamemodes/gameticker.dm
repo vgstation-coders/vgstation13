@@ -384,14 +384,17 @@ var/datum/controller/gameticker/ticker
 		if(player.ready && player.mind)
 			if(player.mind.assigned_role=="AI")
 				player.close_spawn_windows()
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.AIize()
 			else if(player.mind.assigned_role=="Cyborg")
+				log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				player.create_roundstart_cyborg()
 
 			else if(!player.mind.assigned_role)
 				continue
 			else
-
+				if(player.mind.assigned_role=="Mobile MMI")
+					log_admin("([player.ckey]) started the game as a [player.mind.assigned_role].")
 				var/mob/living/carbon/human/new_character = player.create_character()
 				switch(new_character.mind.assigned_role)
 					if("MODE","Mobile MMI","Trader")

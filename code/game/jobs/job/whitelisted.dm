@@ -36,6 +36,8 @@
 		trader_account = create_trader_account
 	M.mind.store_memory("<b>The joint trader account is:</b> #[trader_account.account_number]<br><b>Your shared account pin is:</b> [trader_account.remote_access_pin]<br>")
 
+	log_admin("([M.ckey]/[M]) started the game as a [job_title].")
+
 	to_chat(M, "<B>You are a [job_title].</B>")
 
 	to_chat(M, "<b>You should do your best to sell what you can to fund new product sales. Ultimately, the mark of a good trader is profit -- but public relations are an important component of that end goal.</b>")
