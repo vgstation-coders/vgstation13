@@ -41,6 +41,9 @@
 	var/list/barsigns=list()
 	var/cult = 0
 
+/obj/structure/sign/double/barsign/ghetto
+	req_access = null
+
 /obj/structure/sign/double/barsign/attack_ai(mob/user as mob)
 	return src.attack_hand(user)
 
