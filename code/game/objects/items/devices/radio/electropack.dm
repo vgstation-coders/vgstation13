@@ -57,11 +57,6 @@
 
 /obj/item/device/radio/electropack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
-	if (W.is_screwdriver())
-		b_stat = !b_stat
-		if (b_stat)
-			to_chat(user, "<span class='notice'>[src] is now ready to be attached!</span>")
-		return
 	if(istype(W, /obj/item/clothing/head/helmet))
 		if(!b_stat)
 			to_chat(user, "<span class='notice'>[src] is not ready to be attached!</span>")
