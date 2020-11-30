@@ -17,9 +17,9 @@ var/datum/subsystem/daynightcycle/SSDayNight
 	wait          = 10 MINUTES
 	flags         = SS_BACKGROUND|SS_FIRE_IN_LOBBY
 
-	var/timeOfDay = TOD_AFTERNOON
-	var/outside_light_power = 10
-	var/outside_light_range = 1
+	var/next_timeOfday = TOD_AFTERNOON
+	var/next_light_power = 10
+	var/next_light_range = 1
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
@@ -31,7 +31,7 @@ var/datum/subsystem/daynightcycle/SSDayNight
 								TOD_AFTERNOON,
 								TOD_SUNSET,
 								TOD_NIGHTTIME)
-	timeOfDay = pick(timestwopick) RNG starter unneeded*/
+	next_timeOfday = pick(timestwopick) RNG starter unneeded*/
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
@@ -41,27 +41,36 @@ var/datum/subsystem/daynightcycle/SSDayNight
 		flags |= SS_NO_FIRE
 		pause()
 	else
-		switch(timeOfDay)
-			if(TOD_MORNING)
-				timeOfDay = TOD_DAYTIME
-			if(TOD_DAYTIME)
-				timeOfDay = TOD_AFTERNOON
-			if(TOD_AFTERNOON)
-				timeOfDay = TOD_NIGHTTIME
-			if(TOD_NIGHTTIME)
-				timeOfDay = TOD_MORNING
+		
 		time2fire()
-
+		
+		switch(next_timeOfday)
+			if(TOD_MORNING)
+				next_light_power = 10
+				next_light_power = 1
+				next_timeOfday = TOD_DAYTIME
+			if(TOD_DAYTIME)
+				next_timeOfday = TOD_AFTERNOON
+			if(TOD_AFTERNOON)
+				next_light_power = 0
+				next_light_range = 0
+				next_timeOfday = TOD_NIGHTTIME
+			if(TOD_NIGHTTIME)
+				next_timeOfday = TOD_MORNING
+		
 /datum/subsystem/daynightcycle/proc/time2fire()
-	for(var/turf/T in block(locate(1, 1, 1), locate(world.maxx, world.maxy, 1)))
-		if(IsEven(T.x)) //If we are also even.
-			if(IsEven(T.y)) //If we are also even.
-				if(istype(T, /turf/unsimulated/floor/snow)) //If we are outside.
-					T.set_light(outside_light_range,outside_light_power,timeOfDay)
-				else //If We aren't we need to make sure we handle the outside segment
-					for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
-						var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
-						if(istype(T1, /turf/unsimulated/floor/snow)) //If we are outside.
-							T1.set_light(outside_light_range,outside_light_power,timeOfDay) //Set it, starlighto scanno
-							break
+	if(next_light_power >= 1) //Theres no point to set lights if power isn't above a 0
+		for(var/turf/T in block(locate(1, 1, map.daynight_cycle), locate(world.maxx, world.maxy, map.daynight_cycle)))
+			if(IsEven(T.x)) //If we are also even.
+				if(IsEven(T.y)) //If we are also even.
+					var/area/A = get_area(T)
+					if(istype(A, /area/surface)) //If we are outside.
+						T.set_light(next_light_range,next_light_power,next_timeOfday)
+					else //If We aren't we need to make sure we handle the outside segment
+						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
+							var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
+							var/area/A1 = get_area(T1)
+							if(istype(A1, /area/surface)) //If we are outside.
+								T1.set_light(next_light_range,next_light_power,next_timeOfday) //Set it, starlighto scanno
+								break
 							
