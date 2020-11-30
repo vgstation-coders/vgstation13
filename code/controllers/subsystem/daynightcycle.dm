@@ -17,7 +17,7 @@ var/datum/subsystem/daynightcycle/SSDayNight
 	wait          = 10 MINUTES
 	flags         = SS_BACKGROUND|SS_FIRE_IN_LOBBY
 
-	var/timeOfDay = TOD_DAYTIME
+	var/timeOfDay = TOD_AFTERNOON
 	var/outside_light_power = 10
 	var/outside_light_range = 1
 
