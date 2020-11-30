@@ -7,7 +7,6 @@ var/datum/subsystem/daynightcycle/SSDayNight
 #define TOD_SUNSET 		5
 #define TOD_NIGHTTIME 	6
 
-//Basically this keeps timing, we dump it onto a datum really.
 /datum/subsystem/daynightcycle
 	name          = "Day Night Cycle"
 	init_order    = SS_INIT_DAYNIGHT
