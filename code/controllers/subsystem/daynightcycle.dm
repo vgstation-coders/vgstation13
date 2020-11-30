@@ -20,7 +20,6 @@ var/datum/subsystem/daynightcycle/SSDayNight
 	var/timeOfDay = TOD_MORNING
 	var/asspower = 10
 	var/assrange = 1
-	var/outside_lights = FALSE
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
@@ -46,27 +45,21 @@ var/datum/subsystem/daynightcycle/SSDayNight
 			if(TOD_MORNING)
 				current_color = "#4d6f86"
 				timeOfDay = TOD_SUNRISE
-				outside_lights = TRUE
 			if(TOD_SUNRISE)
 				current_color = "#fdc5a0"
 				timeOfDay = TOD_DAYTIME
-				outside_lights = FALSE
 			if(TOD_DAYTIME)
 				current_color = "#FFFFFF"
 				timeOfDay = TOD_AFTERNOON
-				outside_lights = FALSE
 			if(TOD_AFTERNOON)
 				current_color = "#ffeedf"
 				timeOfDay = TOD_SUNSET
-				outside_lights = FALSE
 			if(TOD_SUNSET)
 				current_color = "#75497e"
 				timeOfDay = TOD_NIGHTTIME
-				outside_lights = TRUE
 			if(TOD_NIGHTTIME)
 				current_color = "#002235"
 				timeOfDay = TOD_MORNING
-				outside_lights = TRUE
 		
 		time2fire()
 
