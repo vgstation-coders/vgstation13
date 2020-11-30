@@ -28,6 +28,7 @@
 #define SS_INIT_MINIMAP           -23
 #define SS_INIT_PERSISTENCE_MAP	  -98
 #define SS_INIT_PERSISTENCE_MISC  -99
+#define SS_INIT_DAYNIGHT		  -200
 
 #define SS_PRIORITY_WEATHER        210
 #define SS_PRIORITY_TICKER         200
@@ -56,6 +57,7 @@
 #define SS_PRIORITY_SUN            3
 #define SS_PRIORITY_GARBAGE        2
 #define SS_PRIORITY_INACTIVITY     1
+#define SS_PRIORITY_DAYNIGHT	  -200
 
 #define SS_WAIT_WEATHER         	2 SECONDS
 #define SS_WAIT_MACHINERY           2 SECONDS //TODO move the rest of these to defines
@@ -84,6 +86,7 @@
 #define SS_DISPLAY_ENGINES		   6
 #define SS_DISPLAY_SUN             10
 #define SS_DISPLAY_DBCORE		   15
+#define SS_DISPLAY_DAYNIGHT		   20
 
 #define SS_TRASH                  "trash"
 #define SS_CLEANABLE              "cleanable_decals"

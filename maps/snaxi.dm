@@ -42,9 +42,10 @@
 
 	snow_theme = TRUE
 	can_enlarge = FALSE
-
+	daynight_cycle = TRUE // TURN IT ON
+ 
 /datum/map/active/New()
-	.=..()
+	. = ..()
 
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()
