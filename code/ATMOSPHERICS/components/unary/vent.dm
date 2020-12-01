@@ -1,8 +1,8 @@
 /obj/machinery/atmospherics/unary/vent
 	icon = 'icons/obj/atmospherics/pipe_vent.dmi'
-	icon_state = "base_pas"
-	name = "Passive Vent"
-	desc = "A large air vent."
+	icon_state = "base"
+	name = "Vent"
+	desc = "A large air vent"
 	level = 1
 	var/volume = 500
 	dir = SOUTH
