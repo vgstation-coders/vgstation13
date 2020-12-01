@@ -24,7 +24,7 @@ var/list/processing_objects = list()
 			object.initialize()
 			var/time = (world.timeofday - time_start)
 			if(time > 1 SECONDS)
-				log_debug("Slow object initialize. [object] at [object.x],[object.y],[object.z] took [time] seconds to initialize.")
+				log_debug("Slow object initialize. [object] ([object.type]) at [object.x],[object.y],[object.z] took [time] seconds to initialize.")
 		else
 			stack_trace("[object.type] initialized twice")
 		CHECK_TICK
