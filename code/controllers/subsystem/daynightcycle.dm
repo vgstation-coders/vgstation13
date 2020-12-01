@@ -1,23 +1,26 @@
 var/datum/subsystem/daynightcycle/SSDayNight
-
-//#define TOD_MORNING 	"#4d6f86" Old Aesthetic Value
-#define TOD_MORNING 	"#202e36"
-//#define TOD_SUNRISE 	"#fdc5a0" Pretty but unneeded
-#define TOD_DAYTIME 	"#FFFFFF"
-#define TOD_AFTERNOON 	"#ffeedf"
-//#define TOD_SUNSET 		"#75497e" Pretty but unneeded
-#define TOD_NIGHTTIME	"#001927"
-//#define TOD_NIGHTTIME 	"#002235" Old Aesthetic Value
+								//Ticker:2 MINUTES - 1 TICK
+#define TOD_MORNING 	"#4d6f86" //  2 minutes  - 1 ticks
+#define TOD_SUNRISE 	"#fdc5a0" //  2 minutes  - 1 ticks
+#define TOD_DAYTIME 	"#FFFFFF" //  16 minutes - 8 ticks
+#define TOD_AFTERNOON 	"#ffeedf" //  16 minutes - 8 ticks
+#define TOD_SUNSET 		"#75497e" //  2 minutes  - 1 ticks
+#define TOD_NIGHTTIME 	"#001522" //  36 minutes - 18 ticks
+								//Total 92 Minutes
 
 /datum/subsystem/daynightcycle
 	name          = "Day Night Cycle"
 	init_order    = SS_INIT_DAYNIGHT
 	display_order = SS_DISPLAY_DAYNIGHT
 	priority      = SS_PRIORITY_DAYNIGHT
-	wait          = 10 MINUTES
+	wait          = 2 MINUTES
 	flags         = SS_BACKGROUND|SS_FIRE_IN_LOBBY
 
-	var/next_timeOfday = TOD_AFTERNOON
+	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
+	var/two_minute_ticker = 6669
+	var/next_firetime = 420 
+	
+	var/next_timeOfday = TOD_DAYTIME //We start tickers maxed out, and start on afternoon
 	var/next_light_power = 10
 	var/next_light_range = 1
 
@@ -25,13 +28,6 @@ var/datum/subsystem/daynightcycle/SSDayNight
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	/*var/list/timestwopick = list(TOD_MORNING,
-								TOD_SUNRISE,
-								TOD_DAYTIME,
-								TOD_AFTERNOON,
-								TOD_SUNSET,
-								TOD_NIGHTTIME)
-	next_timeOfday = pick(timestwopick) RNG starter unneeded*/
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
@@ -41,36 +37,57 @@ var/datum/subsystem/daynightcycle/SSDayNight
 		flags |= SS_NO_FIRE
 		pause()
 	else
+		two_minute_ticker++
+	
+		if(two_minute_ticker >= next_firetime)	
+			switch(next_timeOfday) //Then set the next segment up.
+				if(TOD_MORNING)
+					next_timeOfday = TOD_SUNRISE
+					next_firetime = 1
+					play_globalsound()
+				if(TOD_SUNRISE)
+					next_timeOfday = TOD_DAYTIME
+					next_firetime = 1
+				if(TOD_DAYTIME)
+					next_timeOfday = TOD_AFTERNOON
+					next_firetime = 8
+				if(TOD_AFTERNOON)
+					next_timeOfday = TOD_SUNSET
+					next_firetime = 8
+				if(TOD_SUNSET)
+					next_timeOfday = TOD_NIGHTTIME
+					next_firetime = 1
+					play_globalsound()
+				if(TOD_NIGHTTIME)
+					next_timeOfday = TOD_MORNING
+					next_firetime = 18
+
+			time2fire() //We fire
+			two_minute_ticker = 0
 		
-		time2fire()
-		
-		switch(next_timeOfday)
-			if(TOD_MORNING)
-				next_light_power = 10
-				next_light_power = 1
-				next_timeOfday = TOD_DAYTIME
-			if(TOD_DAYTIME)
-				next_timeOfday = TOD_AFTERNOON
-			if(TOD_AFTERNOON)
-				next_light_power = 0
-				next_light_range = 0
-				next_timeOfday = TOD_NIGHTTIME
-			if(TOD_NIGHTTIME)
-				next_timeOfday = TOD_MORNING
-		
+/datum/subsystem/daynightcycle/proc/play_globalsound()
+	for(var/mob/M in player_list)
+		if(!M.client)
+			continue
+		else
+			switch(next_timeOfday)
+				if(TOD_SUNRISE)
+					M << 'sound/misc/6amRooster.wav'
+				if(TOD_NIGHTTIME)
+					M << 'sound/misc/6pmWolf.wav'
+
 /datum/subsystem/daynightcycle/proc/time2fire()
-	if(next_light_power >= 1) //Theres no point to set lights if power isn't above a 0
-		for(var/turf/T in block(locate(1, 1, map.daynight_cycle), locate(world.maxx, world.maxy, map.daynight_cycle)))
-			if(IsEven(T.x)) //If we are also even.
-				if(IsEven(T.y)) //If we are also even.
-					var/area/A = get_area(T)
-					if(istype(A, /area/surface)) //If we are outside.
-						T.set_light(next_light_range,next_light_power,next_timeOfday)
-					else //If We aren't we need to make sure we handle the outside segment
-						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
-							var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
-							var/area/A1 = get_area(T1)
-							if(istype(A1, /area/surface)) //If we are outside.
-								T1.set_light(next_light_range,next_light_power,next_timeOfday) //Set it, starlighto scanno
-								break
+	for(var/turf/T in block(locate(1, 1, map.daynight_cycle), locate(world.maxx, world.maxy, map.daynight_cycle)))
+		if(IsEven(T.x)) //If we are also even.
+			if(IsEven(T.y)) //If we are also even.
+				var/area/A = get_area(T)
+				if(istype(A, /area/surface)) //If we are outside.
+					T.set_light(next_light_range,next_light_power,next_timeOfday)
+				else //If We aren't we need to make sure we handle the outside segment
+					for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
+						var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
+						var/area/A1 = get_area(T1)
+						if(istype(A1, /area/surface)) //If we are outside.
+							T1.set_light(next_light_range,next_light_power,next_timeOfday) //Set it, starlighto scanno
+							break
 							
