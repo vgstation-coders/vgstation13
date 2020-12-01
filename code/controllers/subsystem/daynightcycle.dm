@@ -20,7 +20,7 @@ var/datum/subsystem/daynightcycle/SSDayNight
 	var/two_minute_ticker = 6669
 	var/next_firetime = 420 
 	
-	var/next_timeOfday = TOD_DAYTIME //We start tickers maxed out, and start on afternoon
+	var/current_timeOfDay = TOD_DAYTIME //We start tickers maxed out, and start on afternoon
 	var/next_light_power = 10
 	var/next_light_range = 1
 
@@ -40,27 +40,27 @@ var/datum/subsystem/daynightcycle/SSDayNight
 		two_minute_ticker++
 	
 		if(two_minute_ticker >= next_firetime)	
-			switch(next_timeOfday) //Then set the next segment up.
+			switch(current_timeOfDay) //Then set the next segment up.
 				if(TOD_MORNING)
-					next_timeOfday = TOD_SUNRISE
+					current_timeOfDay = TOD_SUNRISE
 					next_firetime = 1
 					play_globalsound()
 				if(TOD_SUNRISE)
-					next_timeOfday = TOD_DAYTIME
-					next_firetime = 1
+					current_timeOfDay = TOD_DAYTIME
+					next_firetime = 8
 				if(TOD_DAYTIME)
-					next_timeOfday = TOD_AFTERNOON
+					current_timeOfDay = TOD_AFTERNOON
 					next_firetime = 8
 				if(TOD_AFTERNOON)
-					next_timeOfday = TOD_SUNSET
-					next_firetime = 8
-				if(TOD_SUNSET)
-					next_timeOfday = TOD_NIGHTTIME
+					current_timeOfDay = TOD_SUNSET
 					next_firetime = 1
+				if(TOD_SUNSET)
+					current_timeOfDay = TOD_NIGHTTIME
+					next_firetime = 18
 					play_globalsound()
 				if(TOD_NIGHTTIME)
-					next_timeOfday = TOD_MORNING
-					next_firetime = 18
+					current_timeOfDay = TOD_MORNING
+					next_firetime = 1
 
 			time2fire() //We fire
 			two_minute_ticker = 0
@@ -70,7 +70,7 @@ var/datum/subsystem/daynightcycle/SSDayNight
 		if(!M.client)
 			continue
 		else
-			switch(next_timeOfday)
+			switch(current_timeOfDay)
 				if(TOD_SUNRISE)
 					M << 'sound/misc/6amRooster.wav'
 				if(TOD_NIGHTTIME)
@@ -82,12 +82,12 @@ var/datum/subsystem/daynightcycle/SSDayNight
 			if(IsEven(T.y)) //If we are also even.
 				var/area/A = get_area(T)
 				if(istype(A, /area/surface)) //If we are outside.
-					T.set_light(next_light_range,next_light_power,next_timeOfday)
+					T.set_light(next_light_range,next_light_power,current_timeOfDay)
 				else //If We aren't we need to make sure we handle the outside segment
 					for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
 						var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
 						var/area/A1 = get_area(T1)
 						if(istype(A1, /area/surface)) //If we are outside.
-							T1.set_light(next_light_range,next_light_power,next_timeOfday) //Set it, starlighto scanno
+							T1.set_light(next_light_range,next_light_power,current_timeOfDay) //Set it, starlighto scanno
 							break
 							
