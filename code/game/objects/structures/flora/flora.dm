@@ -85,6 +85,8 @@
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
 
+	var/obj/structure/tree_shadow/myshadow
+
 /obj/structure/flora/tree/New()
 	..()
 
@@ -109,6 +111,11 @@
 	var/rangevalue = 0.1 //Range over which the values spread. We don't want it to collide with "true" layer differences
 
 	layer += rangevalue * (1 - (y + 0.5 * (x & 1)) / world.maxy)
+	myshadow = new(src)
+
+/obj/structure/snow_flora/tree/Destroy()
+	qdel(myshadow)
+	..()
 
 /obj/structure/flora/tree/examine(mob/user)
 	.=..()

@@ -279,7 +279,7 @@ var/list/snowsound = list('sound/misc/snow1.ogg', 'sound/misc/snow2.ogg', 'sound
 
 /obj/item/stack/sheet/snow/emag_act(mob/user)
 	to_chat(user, "<span class='warning'>You slide the emag across the snowball. Holy fuck. You are probably the most stupid person you've ever met.</span>")
-	
+
 /obj/item/stack/sheet/snow/proc/remove_snowball()
 	if(src && (src.loc == spawn_loc) && istype(src.loc,/turf))
 		qdel(src)
@@ -503,6 +503,40 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	*/
 	return
 
+/obj/structure/tree_shadow
+	name = "tree shadow"
+	desc = "I am a shadow, the true self."
+	bound_height = WORLD_ICON_SIZE * 3
+	density = 0
+	icon = null
+	icon_state = null
+	var/atom/my_atom
+	var/transparency = 0
+
+/obj/structure/tree_shadow/New()
+	..()
+	my_atom = loc
+	forceMove(my_atom.loc)
+
+/obj/structure/tree_shadow/Crossed(atom/movable/AM)
+	..()
+	if((AM == my_atom) || (AM == src))
+		return
+	update_atom(1)
+
+/obj/structure/tree_shadow/Uncrossed(atom/movable/AM)
+	if((AM == my_atom) || (AM == src))
+		loc = my_atom.loc
+		return
+	update_atom(-1)
+
+/obj/structure/tree_shadow/proc/update_atom(var/change)
+	transparency = max(transparency+change,0) //Do not fall below 0
+	if(transparency)
+		my_atom.color = "#ffffff7f" //50% transparent
+	else
+		my_atom.color = "#ffffffff" //100% visible
+
 /obj/structure/snow_flora/tree
 	name = "tree"
 	desc = "Where's my axe when I need it?"
@@ -514,6 +548,7 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 	icon_state = "tree_1"
 
 	var/axe_hits = 0
+	var/obj/structure/tree_shadow/myshadow
 
 	pixel_y = 21 * PIXEL_MULTIPLIER//regular dead trees appear slightly to the north east, so we can justify that they don't block players.
 
@@ -527,22 +562,11 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"tree_5",
 		"tree_6",
 		)
-	spawn()
-		idle()
+	myshadow = new(src)
 
-/obj/structure/snow_flora/tree/proc/idle()
-	/* Performance
-	while(src && !src.gcDestroyed)
-
-		if(!(locate(/obj/structure/snow) in get_turf(src)))
-			axe_hits++
-			if(axe_hits >= 3)
-				new/obj/item/weapon/grown/log(get_turf(src))
-				qdel(src)
-
-		sleep(TICK_JIGGLE(50 * snowTickMod))
-	*/
-	return
+/obj/structure/snow_flora/tree/Destroy()
+	qdel(myshadow)
+	..()
 
 /obj/structure/snow_flora/tree/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
@@ -573,13 +597,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 		"pine_2",
 		"pine_3",
 		)
-	/* No
-	if((snow_tiles >= COSMICFREEZE_LEVEL_3) && prob(20))
-		new /mob/living/simple_animal/hostile/giant_spider/spiderling(get_turf(src))
-
-	if((snow_tiles >= COSMICFREEZE_LEVEL_5) && prob(20))
-		new /mob/living/simple_animal/hostile/bear(get_turf(src))
-	*/
 
 /obj/structure/snow_flora/tree/pine/attackby(obj/item/W,mob/user)
 	var/list/cutting = list(
@@ -594,21 +611,6 @@ var/global/list/datum/stack_recipe/snow_recipes = list (
 			new/obj/item/weapon/grown/log(get_turf(src))
 			new/obj/item/weapon/grown/log(get_turf(src))
 			qdel(src)
-
-/obj/structure/snow_flora/tree/pine/idle()
-	/* Performance
-	while(src && !src.gcDestroyed)
-		if(!(locate(/obj/structure/snow) in get_turf(src)))
-			axe_hits++
-			if(axe_hits >= 5)
-				new/obj/item/weapon/grown/log(get_turf(src))
-				new/obj/item/weapon/grown/log(get_turf(src))
-				new/obj/item/weapon/grown/log(get_turf(src))
-				qdel(src)
-				return
-		sleep(TICK_JIGGLE(50 * snowTickMod))
-	*/
-	return
 
 /obj/structure/snow_flora/tree/pine/xmas
 	name = "christmas tree"
