@@ -65,9 +65,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	..()
 
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
-	for (var/datum/money_account/M in all_station_accounts)
-		if (M.recieves)
-	station_account.money += station_allowance + (WageBonuses() * all_station_accounts.len)
+	station_account.money += station_allowance + WageBonuses()
 
 	var/datum/transaction/T = new()
 	T.purpose = "Nanotrasen station allowance"
@@ -159,10 +157,10 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 /proc/WageBonuses()		//Add any conditions that increase wages here
 	var/bonus = 0
 
-	//+100 to all station wages for having a prisoner alive and on board the station.
-	for(var/datum/role/prisoner/P in current_prisoners) 
-		if(P.AliveAndOnStation())
-			bonus += P.moneyBonus
+	//1000 bonus per prisoner
+	for(var/mob/living/carbon/human/H in current_prisoners) 
+		if(H.z == STATION_Z && !isspace(get_area(H)) && !H.isDead())
+			bonus += 1000
 
 	return bonus
 
@@ -170,6 +168,6 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	set waitfor = 0
 	usr = null
 	while(1) //looping
-		sleep(15 MINUTES)
+		sleep(1 MINUTES)
 		if(wages_enabled)
 			wagePayout()

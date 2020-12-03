@@ -1537,6 +1537,7 @@
 #include "code\modules\events\organ_failure.dm"
 #include "code\modules\events\powercreeper.dm"
 #include "code\modules\events\prison_break.dm"
+#include "code\modules\events\prisonershipment.dm"
 #include "code\modules\events\radiation_storm.dm"
 #include "code\modules\events\rogue_drones.dm"
 #include "code\modules\events\spacevine.dm"

@@ -50,7 +50,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
 	var/prisonerAuth = 0 //Will be set to 1 when you authenticate yourself for prisoner shipments.
-	var/datum/recruiter/recruiter = null //for prisoner shit
 	var/msgVerified = "" //Will contain the name of the person who varified it
 	var/msgStamped = "" //If a message is stamped, this will contain the stamp name
 	var/message = "";
@@ -220,8 +219,10 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 			if(11)  //request prisoner		
 				dat += text("<B>Request Prisoner Shipment</B><BR><BR>")
-				if (!can_request_prisoner)
-					dat += text("You are currently requesting a prisoner shipment or already have enough prisoners at your station.")
+				if (current_prisoners.len >= MAX_PRISONER_LIMIT)
+					dat += text("Your station is currently at capacity. You may not request additional prisoners.")
+				else if (!can_request_prisoner)
+					dat += text("You are currently requesting a prisoner shipment. Please wait before requesting another.")
 				else
 					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
 					dat += text("Reward: 100 bonus credits to all station salaries.<BR>")
@@ -238,6 +239,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			else	//main menu
 				screen = 0
 				announceAuth = 0
+				prisonerAuth = 0
 				if (newmessagepriority == 1)
 					dat += text("<FONT COLOR='RED'>There are new messages</FONT><BR>")
 				if (newmessagepriority == 2)
@@ -306,26 +308,14 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		make_announcement(message)
 
 	if(href_list["requestPrisoner"])
-		if(!prisonerAuth || !can_request_prisoner)
+		if(!prisonerAuth || !can_request_prisoner || current_prisoners.len >= MAX_PRISONER_LIMIT)
 			return
-
-		can_request_prisoner = FALSE
-
+	
 		visible_message("<span class='notice'>\The [src] beeps.</span>")
-		if(!recruiter)
-			recruiter = new(src)
-			recruiter.display_name = name
-			recruiter.role = ROLE_MINOR 
-			recruiter.jobban_roles = list("minor roles") //has anyone even been banned from minor roles?
+		to_chat(usr, "<span class='notice'>You send a request for a prisoner shipment.</span")
+		new /datum/event/prisontransfer
 
-		// Role set to Yes or Always
-		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
-		// Role set to No or Never
-		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
-
-		recruiter.recruited.Add(src, "recruiter_recruited")
-
-		recruiter.request_player()
+		prisonerAuth = 0
 
 
 
@@ -552,39 +542,3 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	name = "\improper Mechanics requests console"
 	department = "Mechanics"
 	departmentType = 4
-
-
-/obj/machinery/requests_console/proc/recruiter_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. You have been added to the list of potential ghosts. ([controls])</span>")
-
-/obj/machinery/requests_console/proc/recruiter_not_recruiting(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. ([controls])</span>")
-
-
-/obj/machinery/requests_console/proc/recruiter_recruited(var/list/args)
-	var/mob/dead/observer/O = args["player"]
-	can_request_prisoner = TRUE		//This is set to false by the prisoner role if we exceed the limit.
-	if(O)
-		qdel(recruiter)
-		recruiter = null
-
-		say("The request for a prisoner transfer has been approved!")
-
-		var/mob/living/carbon/human/H = new /mob/living/carbon/human
-		H.ckey = O.ckey
-		var/datum/role/prisoner/P = new /datum/role/prisoner(H.mind)
-		P.OnPostSetup()
-		P.Greet()
-		P.ForgeObjectives()
-
-		H.randomise_appearance_for()
-		var/name = random_name(H.gender, H.species)
-		H.name = name
-		H.real_name = name
-
-	else
-		say("The request for a prisoner transfer has been denied. Please try again at a later time.")
