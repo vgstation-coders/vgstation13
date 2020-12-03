@@ -21,6 +21,10 @@
 		H.setGender(MALE)
 	else
 		H.setGender(FEMALE)
+
+	var/name = random_name(H.gender)
+	H.name = name
+	H.real_name = name
 	H.my_appearance.h_style = random_hair_style(H.gender)
 	H.my_appearance.f_style = random_facial_hair_style(H.gender)
 	H.my_appearance.s_tone = random_skin_tone()
