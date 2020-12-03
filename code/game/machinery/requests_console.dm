@@ -39,15 +39,19 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		// 8 = view messages
 		// 9 = authentication before sending
 		// 10 = send announcement
+		// 11 = req. prisoner (security)
 	var/silent = 0 // set to 1 for it not to beep all the time
 	var/hackState = 0
 		// 0 = not hacked
 		// 1 = hacked
 	var/announcementConsole = 0
 		// 0 = This console cannot be used to send department announcements
-		// 1 = This console can send department announcementsf
+		// 1 = This console can send department announcements
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
+	var/prisonerAuth = 0 //Will be set to 1 when you authenticate yourself for prisoner shipments.
+	var/requestedPrisoner = 0 //cooldown for spamming the prisoner button, only allows for one prisoner
+	var/datum/recruiter/recruiter = null //for prisoner shit
 	var/msgVerified = "" //Will contain the name of the person who varified it
 	var/msgStamped = "" //If a message is stamped, this will contain the stamp name
 	var/message = "";
@@ -212,7 +216,20 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				dat += text("<b>Message: </b>[message] <A href='?src=\ref[src];writeAnnouncement=1'>Write</A><BR><BR>")
 				if (announceAuth && message)
-					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>");
+					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+
+			if(11)  //request prisoner
+				dat += text("<B>Request Prisoner Shipment</B><BR><BR>")
+				dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
+
+				dat += text("Reward: 1000 Credits to Security Department<BR><BR>")
+				if (prisonerAuth)
+					dat += text("<B>Authentication Accepted</B><BR>")
+					dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Recieve Prisoner</A><BR>")
+				else 
+					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
+				
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
@@ -230,6 +247,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR><BR>")
 				if(announcementConsole)
 					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
+				if(department == "Security" || department == "Head of Security's Desk")
+					dat += text("<A href='?src=\ref[src];setScreen=11'>Request Prisoner Transfer</A><BR><BR>")
 				if (silent)
 					dat += text("Speaker <A href='?src=\ref[src];setSilent=0'>OFF</A>")
 				else
@@ -282,6 +301,26 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 	if(href_list["sendAnnouncement"])
 		make_announcement(message)
+
+	if(href_list["requestPrisoner"])
+		requestedPrisoner = TRUE
+		visible_message("<span class='notice'>\The [src] beeps.</span>")
+		if(!recruiter)
+			recruiter = new(src)
+			recruiter.display_name = name
+			recruiter.role = ROLE_MINOR 
+			recruiter.jobban_roles = list("minor roles") //has anyone even been banned from minor roles?
+
+		// Role set to Yes or Always
+		recruiter.player_volunteering.Add(src, "recruiter_recruiting")
+		// Role set to No or Never
+		recruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+
+		recruiter.recruited.Add(src, "recruiter_recruited")
+
+		recruiter.request_player()
+
+
 
 	if( href_list["department"] && message )
 		var/log_msg = message
@@ -375,6 +414,10 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			if(!announcementConsole)
 				return
 			screen = 10
+		if(11)
+			if(!(department == "Security" || department == "Head of Security's Desk"))
+				return
+			screen = 11
 		else		//main menu
 			dpt = ""
 			msgVerified = ""
@@ -478,8 +521,19 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			else
 				announceAuth = FALSE
 				to_chat(user, "<span class='warning'>You are not authorized to send announcements.</span>")
+			updateUsrDialog()
+
+		if (screen == 11)
+			var/obj/item/weapon/card/id/ID = O.GetID()
+
+			if (!isnull(ID) && ID.access.Find(access_armory) || hackState)
+				prisonerAuth = TRUE
+			else
+				prisonerAuth = FALSE
+				to_chat(user, "<span class='warning'>You are not authorized to request prisoners.</span>")
 
 			updateUsrDialog()
+
 	if (istype(O, /obj/item/weapon/stamp))
 		if(screen == 9)
 			var/obj/item/weapon/stamp/T = O
@@ -491,3 +545,37 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	name = "\improper Mechanics requests console"
 	department = "Mechanics"
 	departmentType = 4
+
+
+/obj/machinery/requests_console/proc/recruiter_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. You have been added to the list of potential ghosts. ([controls])</span>")
+
+/obj/machinery/requests_console/proc/recruiter_not_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. ([controls])</span>")
+
+
+/obj/machinery/requests_console/proc/recruiter_recruited(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	if(O)
+		qdel(recruiter)
+		recruiter = null
+
+		say("The request for a prisoner transfer has been approved! 1000 credits have been deposited into the security account.")
+
+		var/datum/money_account/acct = department_accounts["Security"]
+		acct.charge(-1000,null,"Prisoner Transfer",dest_name = name)
+
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human
+		H.ckey = O.ckey
+		var/datum/role/prisoner/P = new /datum/role/prisoner(H.mind)
+		P.OnPostSetup()
+		P.Greet()
+		P.ForgeObjectives()
+
+	else
+		requestedPrisoner = FALSE
+		say("The request for a prisoner transfer has been denied. Please try again at a later time.")

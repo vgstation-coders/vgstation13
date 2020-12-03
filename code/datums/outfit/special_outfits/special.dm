@@ -602,3 +602,15 @@
 /datum/outfit/special/marisa_wizard/post_equip(var/mob/living/carbon/human/H)
 	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))
+
+
+/datum/outfit/special/prisoner
+	equip_survival_gear = list() // Default survival gear
+	outfit_name = "Prisoner"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_ears_str = /obj/item/device/radio/headset,
+		),
+	)

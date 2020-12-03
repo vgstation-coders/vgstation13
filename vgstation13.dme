@@ -451,6 +451,7 @@
 #include "code\datums\gamemode\role\madmonkey.dm"
 #include "code\datums\gamemode\role\ninja.dm"
 #include "code\datums\gamemode\role\plague_mouse.dm"
+#include "code\datums\gamemode\role\prisoner.dm"
 #include "code\datums\gamemode\role\rambler.dm"
 #include "code\datums\gamemode\role\rev.dm"
 #include "code\datums\gamemode\role\role.dm"
