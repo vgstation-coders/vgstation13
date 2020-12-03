@@ -9,9 +9,6 @@ var/list/current_prisoners = list()
 /datum/event/prisontransfer/can_start()        //Can't fire randomly for now. Must be forced by a security RC console.
 	return 0
 
-/datum/event/prisontransfer/announce()
-	command_alert(/datum/command_alert/prisoner_transfer)
-
 /datum/event/prisontransfer/start()
 	can_request_prisoner = FALSE
 
@@ -49,6 +46,8 @@ var/list/current_prisoners = list()
 		qdel(recruiter)
 		recruiter = null
 
+		command_alert(/datum/command_alert/prisoner_transfer)
+
 		//Make the prisoner
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
@@ -85,7 +84,7 @@ var/list/current_prisoners = list()
 			to_chat(H, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
 			to_chat(H, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
 			to_chat(H, "You were transferred to this station through a request by the station's security team. You know nothing about this station or the people aboard it.")
-			to_chat(H, "<span class='danger'>Remember that you are not affiliated with the syndicate. Protect yourself and work towards freedom, but remember that you have no place left to go.</span>")
+			to_chat(H, "<span class='danger'>Remember that you are not affiliated with the Syndicate. Protect yourself and work towards freedom, but remember that you have no place left to go.</span>")
 
 		//Update prisoner availability.
 		current_prisoners += H

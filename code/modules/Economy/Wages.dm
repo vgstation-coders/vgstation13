@@ -168,6 +168,6 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	set waitfor = 0
 	usr = null
 	while(1) //looping
-		sleep(1 MINUTES)
+		sleep(15 MINUTES)
 		if(wages_enabled)
 			wagePayout()

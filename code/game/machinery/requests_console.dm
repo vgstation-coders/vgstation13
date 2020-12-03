@@ -225,7 +225,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("You are currently requesting a prisoner shipment. Please wait before requesting another.")
 				else
 					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
-					dat += text("Reward: 100 bonus credits to all station salaries.<BR>")
+					dat += text("Reward: 1000 bonus credits to the station allowance.<BR>")
 					dat += text("<b>The reward will only apply so long as the prisoner is alive and on station.</b><BR><BR> ")
 
 					if (prisonerAuth)
