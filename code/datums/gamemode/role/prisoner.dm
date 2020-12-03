@@ -11,6 +11,8 @@ var/list/current_prisoners = list()
 	wikiroute = ROLE_MINOR
 	logo_state = "prisoner-logo"
 
+	var/moneyBonus = 100
+
 /datum/role/prisoner/Greet()
 	to_chat(antag.current, "<B><span class='warning'>You are a syndicate prisoner!</span></B>")
 	to_chat(antag.current, "You were transferred to this station through a request by the station's security team. You know nothing about this station or the people aboard it.")
@@ -51,11 +53,22 @@ var/list/current_prisoners = list()
 	spawn(59 SECONDS)	//its secretly 59 seconds to make sure they cant unbuckle themselves beforehand
 		transport_shuttle.move_to_dock(dock)
 
-	current_prisoners += antag.current
+	current_prisoners += src
 	if (current_prisoners.len >= MAX_PRISONER_LIMIT)
 		can_request_prisoner = FALSE
 
 	return TRUE
+
+/datum/role/prisoner/proc/AliveAndOnStation()
+	if(antag.current.isDead())	
+		return FALSE	
+	if(antag.current.z != STATION_Z)
+		return FALSE
+	var/area/A = get_area(antag.current)
+	if (isspace(A))
+		return FALSE
+	return TRUE
+
 
 /datum/role/prisoner/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)

@@ -224,7 +224,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("You are currently requesting a prisoner shipment or already have enough prisoners at your station.")
 				else
 					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
-					dat += text("Reward: 1000 Credits to Security Department<BR><BR>")
+					dat += text("Reward: 100 bonus credits to all station salaries.<BR>")
+					dat += text("<b>The reward will only apply so long as the prisoner is alive and on station.</b><BR><BR> ")
 
 					if (prisonerAuth)
 						dat += text("<B>Authentication Accepted</B><BR>")
@@ -568,10 +569,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		qdel(recruiter)
 		recruiter = null
 
-		say("The request for a prisoner transfer has been approved! 1000 credits have been deposited into the security account.")
-
-		var/datum/money_account/acct = department_accounts["Security"]
-		acct.charge(-1000,null,"Prisoner Transfer",dest_name = name)
+		say("The request for a prisoner transfer has been approved!")
 
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
