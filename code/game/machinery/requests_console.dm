@@ -311,6 +311,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		if(!prisonerAuth || !can_request_prisoner || current_prisoners.len >= MAX_PRISONER_LIMIT)
 			return
 	
+		message_admins("[key_name_admin(usr)] requested a prisoner shipment via a request console.")
+		log_game("[key_name(usr)] requested a prisoner shipment via a request console.")
 		visible_message("<span class='notice'>\The [src] beeps.</span>")
 		to_chat(usr, "<span class='notice'>You send a request for a prisoner shipment.</span")
 		new /datum/event/prisontransfer

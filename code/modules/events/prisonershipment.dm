@@ -51,6 +51,15 @@ var/list/current_prisoners = list()
 		//Make the prisoner
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
+		var/species = pickweight(
+			"Human" 	= 4,
+			"Vox"		= 1,
+			"Plasmaman" = 1,
+			"Grey"		= 1,
+			"Insectoid"	= 1,
+			)
+
+		H.set_species("Vox")
 
 		//Give them their outfit
 		var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
@@ -58,7 +67,7 @@ var/list/current_prisoners = list()
 
 		//Randomize their looks (but let them pick a name)
 		H.randomise_appearance_for()
-		var/name = random_name(H.gender, H.species)
+		var/name = random_name(H.gender, H.species.name)
 		H.name = name
 		H.real_name = name
 		H.regenerate_icons()
@@ -80,6 +89,8 @@ var/list/current_prisoners = list()
 			P.OnPostSetup()
 			P.Greet()
 			P.ForgeObjectives()
+			P.AnnounceObjectives()
+
 		else	//20% for a special 'innocent' prisoner without antag freedums
 			to_chat(H, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
 			to_chat(H, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
