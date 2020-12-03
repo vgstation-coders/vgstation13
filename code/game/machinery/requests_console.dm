@@ -233,7 +233,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					else 
 						dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 					
-					dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
 				screen = 0
@@ -308,6 +308,8 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	if(href_list["requestPrisoner"])
 		if(!prisonerAuth || !can_request_prisoner)
 			return
+
+		can_request_prisoner = FALSE
 
 		visible_message("<span class='notice'>\The [src] beeps.</span>")
 		if(!recruiter)
@@ -565,6 +567,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 /obj/machinery/requests_console/proc/recruiter_recruited(var/list/args)
 	var/mob/dead/observer/O = args["player"]
+	can_request_prisoner = TRUE		//This is set to false by the prisoner role if we exceed the limit.
 	if(O)
 		qdel(recruiter)
 		recruiter = null
@@ -577,6 +580,11 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		P.OnPostSetup()
 		P.Greet()
 		P.ForgeObjectives()
+
+		H.randomise_appearance_for()
+		var/name = random_name(H.gender, H.species)
+		H.name = name
+		H.real_name = name
 
 	else
 		say("The request for a prisoner transfer has been denied. Please try again at a later time.")

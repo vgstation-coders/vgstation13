@@ -65,6 +65,8 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 	..()
 
 /proc/stationAllowance()//grants the station the allowance it'll need to pay the next salary
+	for (var/datum/money_account/M in all_station_accounts)
+		if (M.recieves)
 	station_account.money += station_allowance + (WageBonuses() * all_station_accounts.len)
 
 	var/datum/transaction/T = new()
@@ -119,7 +121,7 @@ If all wages are decreased bellow 100%, for example due to the AI spending all t
 		if(locate(Acc) in all_station_accounts)
 			if(Acc.wage_gain)
 				adjusted_wage_gain = round((Acc.wage_gain)*payroll_modifier)
-				Acc.money += adjusted_wage_gain + WageBonuses()
+				Acc.money += adjusted_wage_gain
 
 				if(adjusted_wage_gain > 0)
 					var/datum/transaction/T = new()

@@ -23,20 +23,11 @@ var/list/current_prisoners = list()
 	var/mob/living/carbon/human/H = antag.current
 	var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner
 	outfit.equip(H)
-	
-	if(prob(50))
-		H.setGender(MALE)
-	else
-		H.setGender(FEMALE)
 
-	var/name = random_name(H.gender)
 	H.name = name
 	H.real_name = name
-	H.my_appearance.h_style = random_hair_style(H.gender)
-	H.my_appearance.f_style = random_facial_hair_style(H.gender)
-	H.my_appearance.s_tone = random_skin_tone()
+	H.randomise_appearance_for()
 
-	H.UpdateAppearance()
 	H.regenerate_icons()
 
 	var/obj/structure/bed/chair/chair = pick(prisonerstart)
@@ -72,5 +63,7 @@ var/list/current_prisoners = list()
 
 /datum/role/prisoner/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)
+	AppendObjective(/datum/objective/escape_prisoner)
+	AppendObjective(/datum/objective/minimize_casualties)
 
 #undef MAX_PRISONER_LIMIT
