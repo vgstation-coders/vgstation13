@@ -1,3 +1,8 @@
+#define MAX_PRISONER_LIMIT 1
+
+var/global/can_request_prisoner = TRUE
+var/list/current_prisoners = list()
+
 /datum/role/prisoner
 	name = PRISONER
 	id = PRISONER
@@ -46,7 +51,13 @@
 	spawn(59 SECONDS)	//its secretly 59 seconds to make sure they cant unbuckle themselves beforehand
 		transport_shuttle.move_to_dock(dock)
 
+	current_prisoners += antag.current
+	if (current_prisoners.len >= MAX_PRISONER_LIMIT)
+		can_request_prisoner = FALSE
+
 	return TRUE
 
 /datum/role/prisoner/ForgeObjectives()
 	AppendObjective(/datum/objective/survive)
+
+#undef MAX_PRISONER_LIMIT

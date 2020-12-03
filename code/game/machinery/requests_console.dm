@@ -50,7 +50,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
 	var/prisonerAuth = 0 //Will be set to 1 when you authenticate yourself for prisoner shipments.
-	var/requestedPrisoner = 0 //cooldown for spamming the prisoner button, only allows for one prisoner
 	var/datum/recruiter/recruiter = null //for prisoner shit
 	var/msgVerified = "" //Will contain the name of the person who varified it
 	var/msgStamped = "" //If a message is stamped, this will contain the stamp name
@@ -219,18 +218,21 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
-			if(11)  //request prisoner
+			if(11)  //request prisoner		
 				dat += text("<B>Request Prisoner Shipment</B><BR><BR>")
-				dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
+				if (!can_request_prisoner)
+					dat += text("You are currently requesting a prisoner shipment or already have enough prisoners at your station.")
+				else
+					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
+					dat += text("Reward: 1000 Credits to Security Department<BR><BR>")
 
-				dat += text("Reward: 1000 Credits to Security Department<BR><BR>")
-				if (prisonerAuth)
-					dat += text("<B>Authentication Accepted</B><BR>")
-					dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Request Prisoner</A><BR>")
-				else 
-					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
-				
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
+					if (prisonerAuth)
+						dat += text("<B>Authentication Accepted</B><BR>")
+						dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Request Prisoner</A><BR>")
+					else 
+						dat += text("Swipe your card to authenticate yourself.<BR><BR>")
+					
+					dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
 			else	//main menu
 				screen = 0
@@ -303,7 +305,9 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		make_announcement(message)
 
 	if(href_list["requestPrisoner"])
-		requestedPrisoner = TRUE
+		if(!prisonerAuth || !can_request_prisoner)
+			return
+
 		visible_message("<span class='notice'>\The [src] beeps.</span>")
 		if(!recruiter)
 			recruiter = new(src)
@@ -577,5 +581,4 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		P.ForgeObjectives()
 
 	else
-		requestedPrisoner = FALSE
 		say("The request for a prisoner transfer has been denied. Please try again at a later time.")
