@@ -226,7 +226,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("Reward: 1000 Credits to Security Department<BR><BR>")
 				if (prisonerAuth)
 					dat += text("<B>Authentication Accepted</B><BR>")
-					dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Recieve Prisoner</A><BR>")
+					dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Request Prisoner</A><BR>")
 				else 
 					dat += text("Swipe your card to authenticate yourself.<BR><BR>")
 				
