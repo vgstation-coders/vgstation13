@@ -59,7 +59,7 @@ var/list/current_prisoners = list()
 			"Insectoid"	= 1,
 			)
 
-		H.set_species("Vox")
+		H.set_species(species)
 
 		//Give them their outfit
 		var/datum/outfit/special/prisoner/outfit = new /datum/outfit/special/prisoner

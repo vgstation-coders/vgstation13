@@ -634,10 +634,4 @@
 /datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
 
-//workaround for not getting internals set up
-/datum/outfit/special/prisoner/post_equip(var/mob/living/carbon/human/H)
-	if(isvox(H)) 
-		var/obj/item/weapon/tank/nitrogen/TN = H.is_wearing_item(/obj/item/weapon/tank/nitrogen/, slot_back)
-		H.internals = TN
-
 	
