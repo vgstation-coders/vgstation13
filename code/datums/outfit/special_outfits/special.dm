@@ -605,7 +605,7 @@
 
 
 /datum/outfit/special/prisoner
-	equip_survival_gear = list() // Default survival gear
+	equip_survival_gear = list() //no backpack, no gear
 	outfit_name = "Prisoner"
 	items_to_spawn = list(
 		"Default" = list(
