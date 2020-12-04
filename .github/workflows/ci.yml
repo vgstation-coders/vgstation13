@@ -1,0 +1,48 @@
+name: CI
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the Bleeding-Edge branch
+  push:
+    branches: [ Bleeding-Edge ]
+  pull_request:
+    branches: [ Bleeding-Edge ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Run dreamchecker
+        run: |
+          SPACEMAN_DMM_GIT_TAG="suite-1.6" tools/travis/install_spaceman_dmm.sh dreamchecker
+          ~/dreamchecker
+
+      - name: Compile all maps
+        run: |
+          export BYOND_MAJOR="513"
+          export BYOND_MINOR="1523"
+          export ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation"
+          export DM_UNIT_TESTS="0"
+          tools/travis/install-byond.sh
+          source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+          tools/travis/build.py
+      - name: Compile and test
+        run: |
+           export BYOND_MAJOR="513"
+           export BYOND_MINOR="1523"
+           export DM_UNIT_TESTS="1"
+           tools/travis/install-byond.sh
+           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+           tools/travis/build.py
+           tools/travis/run_tests.py
