@@ -1,0 +1,82 @@
+name: CI
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push or pull request events but only for the Bleeding-Edge branch
+  push:
+    branches: [ Bleeding-Edge ]
+  pull_request:
+    branches: [ Bleeding-Edge ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  BYOND_MAJOR: 513
+  BYOND_MINOR: 1523
+
+  #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
+  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  lint:
+    name: Run linters
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+        #TODO: Cache Dreamchecker install
+      - name: Run dreamchecker
+        run: |
+          SPACEMAN_DMM_GIT_TAG="suite-1.6" tools/travis/install_spaceman_dmm.sh dreamchecker
+          ~/dreamchecker
+
+      - name: Run map checker
+        run: python tools/travis/check_map_files.py maps/
+
+        #TODO: Cache pip directory
+      - name: Validhunt DMIs
+        run: |
+          pip install Pillow
+          python tools/dmi-validhunt/dmi-validhunt.py icons/ || true
+
+      - name: Make sure test maps aren't ticked
+        run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+
+  build:
+    name: ${{matrix.job-name}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - dm-unit-tests: 0
+            job-name: Compile all maps
+
+          - dm-unit-tests: 1
+            job-name: Compile and run tests
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        name: Cache BYOND installation
+        with:
+          path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
+          key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
+
+      - name: ${{matrix.job-name}}
+        env:
+          DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
+        run: |
+          tools/travis/install-byond.sh
+          source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
+          tools/travis/build.py 2>&1 | tee /dev/stderr | awk '/warning:|error:/ { exit 1 }'
+          cp tools/travis/config/config.txt config/
+          tools/travis/run_tests.py 2>&1 | tee /dev/stderr | awk '/UNIT TEST FAIL/ { exit 1 }'
