@@ -266,7 +266,7 @@ var/list/impact_master = list()
 				else
 					BM.LAssailant = firer
 
-	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act
+	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
 	if (!forcedodge)
 		forcedodge = A.bullet_act(src, def_zone) // searches for return value
