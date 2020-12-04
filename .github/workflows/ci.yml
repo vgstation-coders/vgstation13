@@ -28,6 +28,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+          with:
+            python-version: '3.x'
 
       - name: Run dreamchecker
         run: |
@@ -35,7 +38,7 @@ jobs:
           ~/dreamchecker
 
       - name: Run map checker
-        run: python3 tools/travis/check_map_files.py maps/
+        run: python tools/travis/check_map_files.py maps/
 
       - name: Validhunt DMIs
         run: |
