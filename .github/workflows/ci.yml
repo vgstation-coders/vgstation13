@@ -13,11 +13,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+  lint:
+    name: Run linters
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -27,6 +26,12 @@ jobs:
         run: |
           SPACEMAN_DMM_GIT_TAG="suite-1.6" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker
+
+  build:
+    name: Compile and run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
       - name: Compile all maps
         run: |
