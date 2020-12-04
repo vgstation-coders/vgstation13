@@ -41,11 +41,14 @@ jobs:
       matrix:
         include:
           - dm-unit-tests: 0
+            job-name: Compile all maps
+
           - dm-unit-tests: 1
+            job-name: Compile and run tests
     steps:
       - uses: actions/checkout@v2
 
-      - name: Compile all maps
+      - name: ${{matrix.job-name}}
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
         run: |
