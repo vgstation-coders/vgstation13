@@ -15,6 +15,9 @@ env:
   BYOND_MAJOR: 513
   BYOND_MINOR: 1523
 
+  #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
+  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   lint:
@@ -34,20 +37,18 @@ jobs:
   build:
     name: Compile and run tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - dm-unit-tests: 0
+          - dm-unit-tests: 1
     steps:
       - uses: actions/checkout@v2
 
       - name: Compile all maps
+        env:
+          DM_UNIT_TESTS: ${{dm-unit-tests}}
         run: |
-          export ALL_MAPS="tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation"
-          export DM_UNIT_TESTS="0"
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
           tools/travis/build.py
-      - name: Compile and test
-        run: |
-           export DM_UNIT_TESTS="1"
-           tools/travis/install-byond.sh
-           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-           tools/travis/build.py
-           tools/travis/run_tests.py
