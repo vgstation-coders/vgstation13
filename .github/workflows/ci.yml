@@ -77,5 +77,5 @@ jobs:
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
-          tools/travis/build.py
-          tools/travis/run_tests.py
+          tools/travis/build.py 2>&1 | tee /dev/stderr | sponge | awk '/warning:|error:/ { exit 1 }'
+          tools/travis/run_tests.py 2>&1 | tee /dev/stderr | sponge | awk '/UNIT TEST FAIL/ { exit 1 }'
