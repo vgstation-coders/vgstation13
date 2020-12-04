@@ -153,7 +153,9 @@ var/list/datum/stack_recipe/plasma_recipes = list ( \
 	new/datum/stack_recipe("plasma floor tile", /obj/item/stack/tile/mineral/plasma, 1, 4, 20), \
 	new/datum/stack_recipe("plasma door", /obj/machinery/door/mineral/transparent/plasma, 10, one_per_turf = 1, on_floor = 1), \
 	new/datum/stack_recipe/dorf("dorf chair",/obj/structure/bed/chair, 20, one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
-	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE)
+	new/datum/stack_recipe/dorf("training sword", /obj/item/weapon/melee/training_sword,	12, time = 12,	on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	blacksmithing_recipes,
 	)
 
 /obj/item/stack/sheet/mineral/plasma/New(var/loc, var/amount=null)
