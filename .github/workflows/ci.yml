@@ -47,7 +47,7 @@ jobs:
 
       - name: Compile all maps
         env:
-          DM_UNIT_TESTS: ${{dm-unit-tests}}
+          DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
