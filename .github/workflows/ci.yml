@@ -61,7 +61,7 @@ jobs:
       - uses: actions/cache@v2
         name: Cache BYOND installation
         with:
-          path: $HOME/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
+          path: ${{env.HOME}}/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
           key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
 
       - name: ${{matrix.job-name}}
