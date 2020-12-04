@@ -52,13 +52,13 @@ var/list/current_prisoners = list()
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
 		H.client.changeView()
-		var/species = pickweight(
+		var/species = pickweight(list(
 			"Human" 	= 4,
 			"Vox"		= 1,
 			"Plasmaman" = 1,
 			"Grey"		= 1,
 			"Insectoid"	= 1,
-		)
+		))
 
 		H.set_species(species)
 
@@ -74,7 +74,6 @@ var/list/current_prisoners = list()
 		H.regenerate_icons()
 		mob_rename_self(H, "prisoner")
 
-
 		//Send them to the starting location.
 		var/obj/structure/bed/chair/chair = pick(prisonerstart)
 		H.forceMove(get_turf(chair))
@@ -84,7 +83,7 @@ var/list/current_prisoners = list()
 		var/obj/item/weapon/handcuffs/C = new /obj/item/weapon/handcuffs(H)
 		H.equip_to_slot(C, slot_handcuffed)
 
-		//80% Normal Syndicate Prisoners with antag status
+		//80% are Normal Syndicate Prisoners with antag status
 		if(prob(80))
 			var/datum/role/prisoner/P = new /datum/role/prisoner(H.mind)
 			P.OnPostSetup()
@@ -104,7 +103,34 @@ var/list/current_prisoners = list()
 			can_request_prisoner = FALSE
 
 		//Send the shuttle that they spawned on.
-		var/obj/docking_port/destination/transport/station/dock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
+		var/obj/docking_port/destination/transport/station/stationdock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
+		var/obj/docking_port/destination/transport/centcom/centcomdock = locate(/obj/docking_port/destination/transport/centcom) in all_docking_ports
+
 		spawn(59 SECONDS)	//its secretly 59 seconds to make sure they cant unbuckle themselves beforehand
-			transport_shuttle.move_to_dock(dock)
+			if(!transport_shuttle.move_to_dock(stationdock))
+				message_admins("PRISONER TRANSFER SHUTTLE FAILED TO MOVE! PANIC!")
+				return
+
+			//Try to send the shuttle back every 15 seconds
+			while(transport_shuttle.current_port == stationdock)
+				sleep(150)
+
+				var/contents = get_contents_in_object(transport_shuttle.linked_area)
+
+				if (locate(/mob/living) in contents)
+					continue
+				if (locate(/obj/item/weapon/disk/nuclear) in contents)
+					continue
+				if (locate(/obj/machinery/nuclearbomb) in contents)
+					continue
+				if (locate(/obj/item/beacon) in contents)
+					continue
+				if (locate(/obj/effect/portal) in contents)
+					continue
+
+				sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
+				if(!transport_shuttle.move_to_dock(centcomdock))
+					message_admins("PRISONER TRANSFER SHUTTLE FAILED TO MOVE! PANIC!")
+					return
+				
 

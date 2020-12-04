@@ -221,7 +221,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("<B>Request Prisoner Shipment</B><BR><BR>")
 				if (current_prisoners.len >= MAX_PRISONER_LIMIT)
 					dat += text("Your station is currently at capacity. You may not request additional prisoners.")
-				else if (!can_request_prisoner)
+				else if (!can_request_prisoner || transport_shuttle.current_port == locate(/obj/docking_port/destination/transport/station) in all_docking_ports)
 					dat += text("You are currently requesting a prisoner shipment. Please wait before requesting another.")
 				else
 					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
@@ -308,7 +308,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		make_announcement(message)
 
 	if(href_list["requestPrisoner"])
-		if(!prisonerAuth || !can_request_prisoner || current_prisoners.len >= MAX_PRISONER_LIMIT)
+		if(!prisonerAuth || !can_request_prisoner || current_prisoners.len >= MAX_PRISONER_LIMIT || transport_shuttle.current_port == locate(/obj/docking_port/destination/transport/station) in all_docking_ports)
 			return
 	
 		message_admins("[key_name_admin(usr)] requested a prisoner shipment via a request console.")
