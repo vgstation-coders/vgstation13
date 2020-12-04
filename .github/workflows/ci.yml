@@ -45,8 +45,15 @@ jobs:
 
           - dm-unit-tests: 1
             job-name: Compile and run tests
+
     steps:
       - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        name: Cache BYOND installation
+        with:
+          path: $HOME/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
+          key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
 
       - name: ${{matrix.job-name}}
         env:
