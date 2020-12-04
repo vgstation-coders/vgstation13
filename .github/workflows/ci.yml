@@ -34,6 +34,9 @@ jobs:
           SPACEMAN_DMM_GIT_TAG="suite-1.6" tools/travis/install_spaceman_dmm.sh dreamchecker
           ~/dreamchecker
 
+      - name: Run map checker
+        run: python3 tools/travis/check_map_files.py maps/
+
   build:
     name: ${{matrix.job-name}}
     runs-on: ubuntu-latest
