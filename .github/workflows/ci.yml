@@ -37,6 +37,12 @@ jobs:
       - name: Run map checker
         run: python3 tools/travis/check_map_files.py maps/
 
+      - name: Validhunt DMIs
+        run: python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
+
+      - name: Make sure test maps aren't ticked
+        run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+
   build:
     name: ${{matrix.job-name}}
     runs-on: ubuntu-latest
