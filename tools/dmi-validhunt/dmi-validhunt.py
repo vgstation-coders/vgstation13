@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
-from PIL import Image
+from Pillow import Image
 
 """
 Find duplicate icon states in DMI files.

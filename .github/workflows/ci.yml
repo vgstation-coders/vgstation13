@@ -39,7 +39,7 @@ jobs:
 
       - name: Validhunt DMIs
         run: |
-          pip install pil
+          pip install Pillow
           python3 tools/dmi-validhunt/dmi-validhunt.py icons/ || true
 
       - name: Make sure test maps aren't ticked
