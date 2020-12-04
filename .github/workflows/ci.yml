@@ -71,14 +71,11 @@ jobs:
           path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
           key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
 
-      - name: Compile
+      - name: ${{matrix.job-name}}
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
           tools/travis/build.py
-
-      - name: Run tests
-        if: ${{matrix.dm-unit-tests}}
-        run: tools/travis/run_tests.py
+          tools/travis/run_tests.py
