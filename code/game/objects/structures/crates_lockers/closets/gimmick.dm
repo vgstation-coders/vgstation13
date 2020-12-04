@@ -55,9 +55,12 @@
 		to_chat(user,"<span class='notice'>You remove a pair of boots and a coat from the hanger.</span>")
 		add_fingerprint(user)
 		var/winterboots = new /obj/item/clothing/shoes/winterboots(get_turf(src))
-		user.put_in_inactive_hand(winterboots)
+		user.put_in_hands(winterboots)
 		var/wintercoat = new /obj/item/clothing/suit/storage/wintercoat(get_turf(src))
-		user.put_in_active_hand(wintercoat)
+		user.put_in_hands(wintercoat)
+		var/scarfcolor = pick(list(/obj/item/clothing/mask/scarf/blue,/obj/item/clothing/mask/scarf/red,/obj/item/clothing/mask/scarf/green))
+		var/scarf = new scarfcolor(get_turf(src))
+		user.put_in_hands(scarf)
 		coats--
 		update_icon()
 
