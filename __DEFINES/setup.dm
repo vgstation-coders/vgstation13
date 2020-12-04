@@ -503,7 +503,6 @@ var/global/list/NOIRMATRIX = list(0.33,0.33,0.33,0,\
 #define NERVOUS			16
 #define ASTHMA		32
 #define LACTOSE		64
-#define LISP 		128
 
 //sdisabilities
 #define BLIND			1
