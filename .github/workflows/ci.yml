@@ -32,6 +32,7 @@ jobs:
         with:
           python-version: '3.x'
 
+        #TODO: Cache Dreamchecker install
       - name: Run dreamchecker
         run: |
           SPACEMAN_DMM_GIT_TAG="suite-1.6" tools/travis/install_spaceman_dmm.sh dreamchecker
@@ -40,6 +41,7 @@ jobs:
       - name: Run map checker
         run: python tools/travis/check_map_files.py maps/
 
+        #TODO: Cache pip directory
       - name: Validhunt DMIs
         run: |
           pip install Pillow
@@ -69,10 +71,14 @@ jobs:
           path: ~/BYOND-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
           key: BYOND-${{runner.os}}-${{env.BYOND_MAJOR}}.${{env.BYOND_MINOR}}
 
-      - name: ${{matrix.job-name}}
+      - name: Compile
         env:
           DM_UNIT_TESTS: ${{matrix.dm-unit-tests}}
         run: |
           tools/travis/install-byond.sh
           source $HOME/BYOND-${BYOND_MAJOR}.${BYOND_MINOR}/byond/bin/byondsetup
           tools/travis/build.py
+
+      - name: Run tests
+        if: ${{matrix.dm-unit-tests}}
+        run: tools/travis/run_tests.py
