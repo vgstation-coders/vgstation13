@@ -58,7 +58,7 @@ var/list/current_prisoners = list()
 			"Plasmaman" = 1,
 			"Grey"		= 1,
 			"Insectoid"	= 1,
-			)
+		)
 
 		H.set_species(species)
 
