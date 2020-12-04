@@ -35,7 +35,7 @@ jobs:
           ~/dreamchecker
 
   build:
-    name: Compile and run tests
+    name: ${{matrix.job-name}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
