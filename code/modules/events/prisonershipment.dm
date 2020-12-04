@@ -51,6 +51,7 @@ var/list/current_prisoners = list()
 		//Make the prisoner
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
+		H.client.changeView()
 		var/species = pickweight(
 			"Human" 	= 4,
 			"Vox"		= 1,
