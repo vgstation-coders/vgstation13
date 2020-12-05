@@ -1351,6 +1351,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/toy/xmas_cracker,
 					/obj/item/clothing/head/christmas/santahat/red,
 					/obj/item/clothing/head/christmas/santahat/green,
+					/obj/item/clothing/head/christmas/santahat/blue,
 					/obj/item/clothing/suit/jumper/christmas/red,
 					/obj/item/clothing/suit/jumper/christmas/green,
 					/obj/item/clothing/suit/jumper/christmas/blue,
