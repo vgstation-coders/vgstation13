@@ -740,6 +740,11 @@ obj/item/clothing/suit/cassock
 	icon_state = "cjumper-blue"
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
+/obj/item/clothing/suit/jumper/christmas/green
+	desc = "Made by professional knitting nanas to truly fit the festive mood. This one is green in colour, and has a reindeer with a red nose on the front. At least you think it's a reindeer."
+	icon_state = "cjumper-green"
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
+
 /obj/item/clothing/suit/spaceblanket
 	plane = ABOVE_OBJ_PLANE
 	layer = BLANKIES_LAYER
