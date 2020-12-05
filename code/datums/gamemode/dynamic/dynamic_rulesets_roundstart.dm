@@ -320,7 +320,6 @@
 /datum/dynamic_ruleset/roundstart/nuclear
 	name = "Nuclear Emergency"
 	role_category = /datum/role/nuclear_operative
-	restricted_from_jobs = list("Head of Security", "Captain") //Just to be sure that a nukie getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain")
 	required_pop = list(25,25,20,20,20,20,20,15,15,10)
 	required_candidates = 5 //This value is useless, see operative_cap
