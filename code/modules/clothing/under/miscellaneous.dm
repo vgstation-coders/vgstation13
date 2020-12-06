@@ -802,11 +802,25 @@
 	_color = "onesiered"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
+/obj/item/clothing/under/onesie/pink
+	name = "pink christmas onesie"
+	icon_state = "onesiepink"
+	item_state = "onesiepink"
+	_color = "onesiepink"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/onesie/white
 	name = "white christmas onesie"
 	icon_state = "onesiewhite"
 	item_state = "onesiewhite"
 	_color = "onesiewhite"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/grey
+	name = "grey christmas onesie"
+	icon_state = "onesiegrey"
+	item_state = "onesiegrey"
+	_color = "onesiegrey"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/under/onesie/black
