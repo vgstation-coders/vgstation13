@@ -3,8 +3,8 @@
 	name = PLAGUEMOUSE
 	id = PLAGUEMOUSE
 	special_role = PLAGUEMOUSE
-	required_pref = ROLE_MINOR
-	wikiroute = ROLE_MINOR
+	required_pref = ROLE_PLAGUEMOUSE
+	wikiroute = ROLE_PLAGUEMOUSE
 	logo_state = "plague-logo"
 	greets = list(GREET_DEFAULT)
 

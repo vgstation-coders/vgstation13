@@ -875,7 +875,9 @@ SEE_PIXELS	256
 #define ROLE_PAI        	"pAI"
 #define ROLE_PLANT      	"Dionaea"
 #define ROLE_POSIBRAIN  	"posibrain"
-#define ROLE_MINOR			"minor roles"
+#define ROLE_CATBEAST		"catbeast"
+#define ROLE_PLAGUEMOUSE	"plaguemouse"
+#define ROLE_RAMBLER		"rambler"
 #define ROLE_ALIEN			"xenomorph"
 #define ROLE_STRIKE			"striketeam"
 

@@ -23,7 +23,9 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
-	ROLE_MINOR		= 1,
+	ROLE_CATBEAST	= 1,
+	ROLE_PLAGUEMOUSE= 1,
+	ROLE_RAMBLER	= 1,
 )
 
 /var/list/antag_roles = list(
@@ -41,7 +43,9 @@ var/global/list/special_roles = list(
 	ROLE_STRIKE	  	= 1,
 	GRINCH			= 1,
 	NINJA			= 1,
-	ROLE_MINOR		= 1,
+	ROLE_CATBEAST	= 1,
+	ROLE_PLAGUEMOUSE= 1,
+	ROLE_RAMBLER	= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -69,7 +73,9 @@ var/list/role_wiki=list(
 	WIZARD					= "Wizard",
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
-	ROLE_MINOR				= "Minor_Roles",
+	ROLE_CATBEAST			= "Minor_Roles",
+	ROLE_PLAGUEMOUSE		= "Minor_Roles",
+	ROLE_RAMBLER			= "Minor_Roles",
 )
 
 var/list/special_popup_text2num = list(

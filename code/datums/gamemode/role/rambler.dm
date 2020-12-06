@@ -1,10 +1,10 @@
 /datum/role/rambler
 	name = RAMBLER
 	id = RAMBLER
-	required_pref = ROLE_MINOR
+	required_pref = ROLE_RAMBLER
 	special_role = RAMBLER
 	logo_state = "rambler-logo"
-	wikiroute = ROLE_MINOR
+	wikiroute = ROLE_RAMBLER
 	var/remaining_vows = 3
 
 /datum/role/rambler/OnPostSetup()

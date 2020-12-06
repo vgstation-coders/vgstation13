@@ -2,8 +2,8 @@
 	name = CATBEAST
 	id = CATBEAST
 	special_role = CATBEAST
-	required_pref = ROLE_MINOR
-	wikiroute = ROLE_MINOR
+	required_pref = ROLE_CATBEAST
+	wikiroute = ROLE_CATBEAST
 	logo_state = "catbeast-logo"
 	var/ticks_survived = 0
 	var/threat_generated = 0
