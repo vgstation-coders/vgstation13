@@ -15,7 +15,7 @@ var/list/current_prisoners = list()
 	if(!recruiter)
 		recruiter = new(src)
 		recruiter.display_name = "prisoner"
-		recruiter.role = ROLE_MINOR 
+		recruiter.role = ROLE_PRISONER
 		recruiter.jobban_roles = list("minor roles") //has anyone even been banned from minor roles?
 
 		// Role set to Yes or Always
