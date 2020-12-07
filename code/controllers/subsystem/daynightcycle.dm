@@ -1,14 +1,12 @@
 var/datum/subsystem/daynightcycle/SSDayNight
 var/list/daynight_turfs = list()
 /* Original Plan
-Ticker:   2 MINUTES - 1 TICK
-Morning	  - 2 Mins - 1 Ticks
-Sunrise   - 2 Mins - 1 Ticks
-Daytime   - 16 Minutes - 8 Ticks
-Afternoon - 16 Minutes - 8 Ticks
-Sunset    - 2 Minutes - 1 Ticks
-Nighttime - 16 Minutes - 18 Ticks
-Total: 92 Minutes
+Morning	  - 2 Mins
+Sunrise   - 2 Mins
+Daytime   - 16 Minutes
+Afternoon - 16 Minutes
+Sunset    - 2 Minutes
+Nighttime - 36 Minutes
 */
 					
 #define TOD_MORNING 	"#4d6f86" 
@@ -52,24 +50,24 @@ Total: 92 Minutes
 			switch(current_timeOfDay) //Then set the next segment up.
 				if(TOD_MORNING)
 					current_timeOfDay = TOD_SUNRISE
-					next_firetime = world.time + 2 MINUTES
+					next_firetime = world.time + 3 MINUTES
 					play_globalsound()
 				if(TOD_SUNRISE)
 					current_timeOfDay = TOD_DAYTIME
-					next_firetime = world.time + 8 MINUTES
+					next_firetime = world.time + 14 MINUTES
 				if(TOD_DAYTIME)
 					current_timeOfDay = TOD_AFTERNOON
-					next_firetime = world.time + 8 MINUTES
+					next_firetime = world.time + 15 MINUTES
 				if(TOD_AFTERNOON)
 					current_timeOfDay = TOD_SUNSET
-					next_firetime = world.time + 2 MINUTES
+					next_firetime = world.time + 3 MINUTES
 				if(TOD_SUNSET)
 					current_timeOfDay = TOD_NIGHTTIME
-					next_firetime = world.time + 16 MINUTES
+					next_firetime = world.time + 36 MINUTES
 					play_globalsound()
 				if(TOD_NIGHTTIME)
 					current_timeOfDay = TOD_MORNING
-					next_firetime = world.time + 2 MINUTES
+					next_firetime = world.time + 5 MINUTES
 				
 
 			currentrun = daynight_turfs.Copy()
