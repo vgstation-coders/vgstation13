@@ -102,7 +102,7 @@
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
 	var/has_engines = FALSE // Is the map a space ship with big engines?
-	var/daynight_cycle = STATION_Z // Does it got day and night firin?
+	var/daynight_cycle = FALSE // Does it got day and night firin?
 
 	var/list/holodeck_rooms = list(
 		"Basketball Court",

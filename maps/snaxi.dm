@@ -42,7 +42,7 @@
 
 	snow_theme = TRUE
 	can_enlarge = FALSE
-	daynight_cycle = TRUE // TURN IT ON
+	daynight_cycle = STATION_Z // TURN IT ON
  
 /datum/map/active/New()
 	. = ..()
