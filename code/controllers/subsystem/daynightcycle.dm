@@ -48,7 +48,6 @@ Total: 92 Minutes
 		flags |= SS_NO_FIRE
 		pause()
 	else
-
 		if(world.time >= next_firetime)
 			switch(current_timeOfDay) //Then set the next segment up.
 				if(TOD_MORNING)
@@ -72,7 +71,7 @@ Total: 92 Minutes
 					current_timeOfDay = TOD_MORNING
 					next_firetime = world.time + 2 MINUTES
 				
-		if(!resumed)
+
 			currentrun = daynight_turfs.Copy()
 
 		while(currentrun.len)
