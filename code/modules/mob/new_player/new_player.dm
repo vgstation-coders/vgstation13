@@ -600,6 +600,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
 
+	if(client.prefs.disabilities & DISABILITY_FLAG_LISP)
+		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
+
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)
 

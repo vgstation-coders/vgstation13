@@ -265,15 +265,15 @@ var/list/impact_master = list()
 						BM.LAssailant = null
 				else
 					BM.LAssailant = firer
+
+	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
+
 	if (!forcedodge)
 		forcedodge = A.bullet_act(src, def_zone) // searches for return value
 	if(forcedodge == -1) // the bullet passes through a dense object!
 		bumped = 0 // reset bumped variable!
 
-		if(istype(A, /turf))
-			loc = A
-		else
-			loc = A.loc
+		forceMove(get_turf(A))
 
 		if(permutated)
 			permutated.Add(A)
@@ -339,11 +339,6 @@ var/list/impact_master = list()
 			return 1
 		if(penetration_message)
 			A.visible_message("<span class='warning'>\The [src] goes right through \the [A]!</span>")
-		src.forceMove(get_step(src.loc,dir))
-		if(linear_movement)
-			update_pixel()
-			pixel_x = PixelX
-			pixel_y = PixelY
 		if(penetration > 0)//a negative penetration value means that the projectile can keep moving through obstacles
 			penetration = max(0, penetration - A.penetration_dampening)
 		if(isturf(A))				//if the bullet goes through a wall, we leave a nice mark on it
@@ -355,11 +350,29 @@ var/list/impact_master = list()
 				trace.Turn(target_angle+45)									//then we rotate it so it matches the bullet's angle
 				trace.Crop(WORLD_ICON_SIZE+1-pixel_x,WORLD_ICON_SIZE+1-pixel_y,WORLD_ICON_SIZE*2-pixel_x,WORLD_ICON_SIZE*2-pixel_y)		//lastly we crop a 32x32 square in the icon whose offset matches the projectile's pixel offset *-1
 				T.overlays += trace
-		//work around for penetration bug
-		var/turf/newT = get_turf(src)
-		if(newT.penetration_dampening > 0)
-			bumped = 0
-			src.to_bump(newT)
+
+		var/turf/target = get_step(loc, dir)
+		if(loc == A_turf) //Special case where we collided with something while exiting a turf, instead of while entering.
+			var/atom/to_hit
+			if(!target.Cross(src))
+				to_hit = target
+			else
+				for(var/atom/movable/AM in target)
+					if(!AM.Cross(src))
+						to_hit = AM
+						break
+
+			if(to_hit)
+				bumped = FALSE
+				to_bump(to_hit)
+				return 1
+
+		forceMove(target)
+		if(linear_movement)
+			update_pixel()
+			pixel_x = PixelX
+			pixel_y = PixelY
+
 		return 1
 
 	bullet_die()
@@ -544,9 +557,9 @@ var/list/impact_master = list()
 	qdel(src)
 
 /obj/item/projectile/beam/lightning/spell/bullet_die()
-        spawn()
-                OnDeath()
-                qdel(src)
+	spawn()
+		OnDeath()
+		qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
 	if(!bumped && !isturf(original))
