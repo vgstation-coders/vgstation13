@@ -114,23 +114,27 @@ var/list/current_prisoners = list()
 			//Try to send the shuttle back every 15 seconds
 			while(transport_shuttle.current_port == stationdock)
 				sleep(150)
-
-				var/contents = get_contents_in_object(transport_shuttle.linked_area)
-
-				if (locate(/mob/living) in contents)
+				if(!can_move_shuttle())
 					continue
-				if (locate(/obj/item/weapon/disk/nuclear) in contents)
-					continue
-				if (locate(/obj/machinery/nuclearbomb) in contents)
-					continue
-				if (locate(/obj/item/beacon) in contents)
-					continue
-				if (locate(/obj/effect/portal) in contents)
-					continue
-
+			
 				sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
+				if(!can_move_shuttle())	
+					continue
 				if(!transport_shuttle.move_to_dock(centcomdock))
-					message_admins("PRISONER TRANSFER SHUTTLE FAILED TO MOVE! PANIC!")
+					message_admins("The transport shuttle couldn't return to centcomm for some reason.")
 					return
 				
-
+//putting it in a proc like this just cleans things up, this is identical to the checks for the cargo shuttle except mimics arent allowed
+/datum/event/prisontransfer/proc/can_move_shuttle() 
+	var/contents = get_contents_in_object(transport_shuttle.linked_area)	
+	if (locate(/mob/living) in contents)
+		return FALSE
+	if (locate(/obj/item/weapon/disk/nuclear) in contents)
+		return FALSE
+	if (locate(/obj/machinery/nuclearbomb) in contents)
+		return FALSE
+	if (locate(/obj/item/beacon) in contents)
+		return FALSE
+	if (locate(/obj/effect/portal) in contents)
+		return FALSE
+	return TRUE
