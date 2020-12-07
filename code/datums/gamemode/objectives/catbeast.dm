@@ -16,4 +16,4 @@
 	if (..())
 		return TRUE
 	var/datum/role/catbeast/C = owner.GetRole(CATBEAST)
-	return C.areas_defiled.len > 30
+	return C.areas_defiled.len >= 30
