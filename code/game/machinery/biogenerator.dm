@@ -144,6 +144,12 @@
 	name="Handgun Holster"
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
+/datum/biogen_recipe/leather/fannypack
+	cost=350
+	id="fannypack"
+	name="Fanny Pack"
+	result=/obj/item/clothing/accessory/storage/fannypack
+
 /datum/biogen_recipe/leather/ore
 	cost=350
 	id="ore"
