@@ -96,6 +96,10 @@
 	icon_state = "fannypack"
 	_color = "fannypack"
 	storage_slots = 1
+	
+/obj/item/clothing/accessory/storage/fannypack/preloaded/assistant/New()
+	..()
+	new /obj/item/clothing/accessory/assistantcard(hold)
 
 /obj/item/clothing/accessory/storage/bandolier
 	name = "bandolier"
