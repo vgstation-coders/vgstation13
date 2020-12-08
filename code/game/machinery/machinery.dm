@@ -638,7 +638,9 @@ Class Procs:
 		return 1
 
 	if(istype(O, /obj/item/weapon/storage/bag/gadgets/part_replacer))
-		return exchange_parts(user, O)
+		if(user.a_intent != I_HURT)
+			return exchange_parts(user, O)
+		return 0
 
 /obj/machinery/proc/wirejack(var/mob/living/silicon/pai/P)
 	if(!(machine_flags & WIREJACK))
