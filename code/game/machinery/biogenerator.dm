@@ -145,7 +145,7 @@
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
 /datum/biogen_recipe/leather/fannypack
-	cost=350
+	cost=100
 	id="fannypack"
 	name="Fanny Pack"
 	result=/obj/item/clothing/accessory/storage/fannypack
