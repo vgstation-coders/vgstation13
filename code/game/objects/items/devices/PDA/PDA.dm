@@ -2385,7 +2385,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if(P.show_overlays)
 			P.overlays += image('icons/obj/pda.dmi', "pda-r")
 	else
-		to_chat(world,"unstable")
 		to_chat(U, "[bicon(src)] <span class='notice'>ERROR: Messaging server is not responding.</span>")
 
 
