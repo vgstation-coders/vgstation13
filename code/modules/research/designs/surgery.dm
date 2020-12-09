@@ -78,6 +78,16 @@
 	category = "Surgery"
 	build_path = /obj/item/weapon/surgicaldrill/diamond
 
+/datum/design/bluespace_surgicaldrill
+	name = "Bluespace Surgical Drill"
+	desc = "A drill capable of inserting almost any item, careful!"
+	id = "bluespace_surgicaldrill"
+	req_tech = list(Tc_MATERIALS = 6, Tc_ENGINEERING = 4, Tc_BIOTECH = 5, Tc_BLUESPACE = 6)
+	build_type = PROTOLATHE
+	materials = list (MAT_IRON = 10000, MAT_GLASS = 5000, MAT_DIAMOND = 2000)
+	category = "Surgery"
+	build_path = /obj/item/weapon/surgicaldrill/bluespace
+
 /datum/design/switchtool
 	name = "Surgeon's Switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."

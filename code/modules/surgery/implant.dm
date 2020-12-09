@@ -44,7 +44,13 @@
 
 /datum/surgery_step/cavity/make_space/can_use(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	if(!istype(target))
-		to_chat(user, "<span class='warning'>This isn't a human!.</span>")
+		to_chat(user, "<span class='warning'>This isn't a human!</span>")
+		return 0
+	if(istype(tool, /obj/item/weapon/surgicaldrill/bluespace))
+		var/obj/item/weapon/surgicaldrill/bluespace/bsDrill = tool
+		if(!bsDrill.operating_mode)
+			to_chat(user, "<span class='warning'>\The [bsDrill] is in the wrong mode!</span>")
+			return 0
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	return ..() && !affected.cavity && !affected.hidden
 
@@ -128,28 +134,44 @@
 		return 0
 	var/datum/organ/external/affected = target.get_organ(target_zone)
 	var/can_fit = !affected.hidden && affected.cavity && tool.w_class <= get_max_wclass(affected)
+	if(istype(tool, /obj/item/weapon/surgicaldrill/bluespace))
+		can_fit = TRUE
 	return ..() && can_fit
 
 /datum/surgery_step/cavity/place_item/begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)
-	user.visible_message("[user] starts putting \the [tool] inside [target]'s [get_cavity(affected)] cavity.",
-	"You start putting \the [tool] inside [target]'s [get_cavity(affected)] cavity." )
+	if(!istype(tool, /obj/item/weapon/surgicaldrill/bluespace))
+		user.visible_message("[user] starts putting \the [tool] inside [target]'s [get_cavity(affected)] cavity.",
+		"You start putting \the [tool] inside [target]'s [get_cavity(affected)] cavity." )
+	else
+		var/obj/item/weapon/surgicaldrill/bluespace/bsDrill = tool
+		user.visible_message("[user] starts putting \the [bsDrill]'s' retrieved item into [target]'s [get_cavity(affected)] cavity.",
+		"You start putting \the [tool]'s retrieved item inside [target]'s [get_cavity(affected)] cavity." )
 	target.custom_pain("The pain in your chest is living hell!",1, scream=TRUE)
 	..()
 
 /datum/surgery_step/cavity/place_item/end_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/chest/affected = target.get_organ(target_zone)
 
-	user.visible_message("<span class='notice'>[user] puts \the [tool] inside [target]'s [get_cavity(affected)] cavity.</span>",
-	"<span class='notice'>You put \the [tool] inside [target]'s [get_cavity(affected)] cavity.</span>" )
-	if (tool.w_class > get_max_wclass(affected)/2 && prob(50))
-		to_chat(user, "<span class='warning'>You tear some vessels trying to fit such big object in this cavity.")
-		var/datum/wound/internal_bleeding/I = new (15)
-		affected.wounds += I
-		affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
-	user.drop_item()
-	affected.hidden = tool
-	tool.forceMove(target)
+	if(!istype(tool, /obj/item/weapon/surgicaldrill/bluespace))
+		user.visible_message("<span class='notice'>[user] puts \the [tool] inside [target]'s [get_cavity(affected)] cavity.</span>",
+		"<span class='notice'>You put \the [tool] inside [target]'s [get_cavity(affected)] cavity.</span>" )
+		if (tool.w_class > get_max_wclass(affected)/2 && prob(50))
+			to_chat(user, "<span class='warning'>You tear some vessels trying to fit such big object in this cavity.")
+			var/datum/wound/internal_bleeding/I = new (15)
+			affected.wounds += I
+			affected.owner.custom_pain("You feel something rip in your [affected.display_name]!", 1, scream=TRUE)
+		user.drop_item()
+		affected.hidden = tool
+		tool.forceMove(target)
+	else
+		var/obj/item/weapon/surgicaldrill/bluespace/bsDrill = tool
+		if(bsDrill.contents.len <= 0)
+			to_chat(user, "\The [bsDrill] does not have anything retrieved.")
+			return 0
+		for(var/atom/movable/amTarget in bsDrill.contents)
+			amTarget.forceMove(get_turf(bsDrill))
+			amTarget.forceMove(target)
 
 	if(istype(tool, /obj/item/weapon/implant))
 		var/obj/item/weapon/implant/disobj = tool

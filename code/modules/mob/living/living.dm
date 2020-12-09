@@ -825,6 +825,20 @@ Thanks.
 			qdel(package)
 			playsound(src.loc, 'sound/items/poster_ripped.ogg', 100, 1)
 		return
+	//escaping from a bluespace surgical drill
+	else if(istype(src.loc, /obj/item/weapon/surgicaldrill/bluespace))
+		var/obj/item/weapon/surgicaldrill/bluespace/bsDrill = src.loc
+		L.visible_message("<span class='danger'>[L] successfully breaks out of \the [bsDrill]!</span>",\
+						  "<span class='notice'>You successfully break out!</span>")
+		forceMove(get_turf(src))
+		return
+	//escaping from within a nested person
+	else if(istype(src.loc, /mob/living/carbon/human))
+		var/mob/living/carbon/human/humanLOC = src.loc
+		L.visible_message("<span class='danger'>[L] successfully pops out of [humanLOC]!</span>",\
+						  "<span class='notice'>You successfully pop out!</span>")
+		forceMove(get_turf(src))
+		return
 
 	//Detaching yourself from a tether
 	if(L.tether)

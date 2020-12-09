@@ -139,12 +139,85 @@
 	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4"
 	toolspeed = 0.1 //It's near instant like the mining one.
 
-
 /obj/item/weapon/surgicaldrill/suicide_act(mob/user)
 	to_chat(viewers(user), pick("<span class='danger'>[user] is pressing the [src.name] to \his temple and activating it! It looks like \he's trying to commit suicide.</span>", \
 						"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS)
 
+/obj/item/weapon/surgicaldrill/bluespace
+	name = "bluespace surgical drill"
+	desc = "A drill capable of inserting almost any item, careful!"
+	icon_state = "bluespace_drill"
+	item_state = "bs_surgicaldrill"
+	starting_materials = list(MAT_IRON = 15000, MAT_GLASS = 10000, MAT_DIAMOND = 2000)
+	origin_tech = Tc_MATERIALS + "=5;" + Tc_BIOTECH + "=5;" + Tc_ENGINEERING + "=4;" + Tc_BLUESPACE + "=6"
+	//this variable is either true or false
+	//when true, it functions like a normal surgical drill
+	//when false, it becomes capable of inserting items into it
+	var/operating_mode = TRUE
+	//when true, allows even anchored items to be pulled in
+	var/emagged = FALSE
+
+/obj/item/weapon/surgicaldrill/bluespace/examine(mob/user, size, show_name)
+	. = ..()
+	to_chat(user, "<span class='info'>Click to change operating modes.</span>")
+	to_chat(user, "<span class='info'>Alt-Click to remove items from \the [src].</span>")
+	to_chat(user, "<span class='info'>It is [operating_mode ? "in drill mode." : "in retrieval mode."]</span>")
+
+/obj/item/weapon/surgicaldrill/bluespace/attack_self(mob/user)
+	operating_mode = !operating_mode
+	to_chat(user, "\The [src] is now [operating_mode ? "in drill mode." : "in retrieval mode."]")
+
+/obj/item/weapon/surgicaldrill/bluespace/AltClick(mob/user)
+	if(contents.len > 0)
+		for(var/atom/movable/amTarget in contents)
+			amTarget.forceMove(get_turf(src))
+			to_chat(user, "\The [amTarget] drops to the floor.")
+		return
+	else
+		return ..()
+
+/obj/item/weapon/surgicaldrill/bluespace/preattack(atom/target, mob/user, proximity_flag, click_parameters)
+	if(!proximity_flag)
+		return 1
+	if(!operating_mode)
+		if(contents.len > 0)
+			to_chat(user, "\The [src] already has something retrieved!")
+			return 1
+		if(istype(target, /turf) || istype(target, /obj/machinery) || istype(target, /obj/structure))
+			to_chat(user, "You cannot retrieve \the [target]!")
+			return 1
+		else if(target == src)
+			return 1
+		else if(target == user)
+			to_chat(user, "You cannot retrieve yourself.")
+			return 1
+		else if(istype(target, /atom/movable))
+			var/atom/movable/amTarget = target
+			if(amTarget.anchored && !emagged)
+				to_chat(user, "You cannot retrieve [amTarget] as it is anchored!")
+				return 1
+			var/retrieve_time = 5 SECONDS
+			if(istype(amTarget, /mob/living))
+				retrieve_time = 10 SECONDS
+				to_chat(amTarget, "[user] is attempting to retrieve you with \the [src]!")
+			if(!do_after(user, amTarget, retrieve_time))
+				to_chat(user, "The retrieval process was interrupted!")
+				return 1
+			if(contents.len > 0)
+				to_chat(user, "\The [src] already has something retrieved!")
+				return 1
+			amTarget.forceMove(src)
+			to_chat(user, "\The [amTarget] moves suddenly into \the [src].")
+			return 1
+	else
+		return ..()
+
+/obj/item/weapon/surgicaldrill/bluespace/emag_act(var/mob/user)
+	if(emagged)
+		return FALSE
+	to_chat(user, "You emag \the [src], disabling the anchor safeties!")
+	emagged = TRUE
 
 /obj/item/weapon/scalpel
 	name = "scalpel"
