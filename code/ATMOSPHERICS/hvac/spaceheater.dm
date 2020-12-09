@@ -27,7 +27,7 @@
 	desc = "Named for the Roman goddess of fire and the hearth, this heater takes in more air and warms it faster. It's immobile and expends 5x as much power, drawn from the local APC."
 
 	intake_rate = 1
-	heating_power = 400000 //that's a spicy heater!
+	heating_power = 1200000 //that's a spicy heater!
 	light_power_on = 2
 	set_temperature = 35 //so powerful, let's shut off early
 	icon_state = "vheater0"
@@ -44,6 +44,7 @@
 	if(G.temperature >= set_temperature + T0C)
 		on = FALSE
 		loc.visible_message("\The [src] clicks loudly as it shuts off.")
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		update_icon()
 
 /obj/machinery/space_heater/get_cell()
