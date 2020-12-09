@@ -804,6 +804,13 @@ obj/item/clothing/suit/cassock
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
 
+/obj/item/clothing/suit/mino
+	name = "mino"
+	desc = "A raincoat made of straw."
+	icon_state = "mino"
+	item_state = "mino"
+	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
+
 /obj/item/clothing/suit/kimono
 	name = "kimono"
 	desc = "A traditional Japanese kimono."
