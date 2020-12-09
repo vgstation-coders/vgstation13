@@ -728,23 +728,22 @@ obj/item/clothing/suit/cassock
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_TORSO|ARMS
 	icon_state = "cjumper-red"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/red
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a tasteful red colour to it, and a festive Fir tree."
 	icon_state = "cjumper-red"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/blue
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a nice light blue colouring to it, and has a snowman on it."
 	icon_state = "cjumper-blue"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/green
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one is green in colour, and has a reindeer with a red nose on the front. At least you think it's a reindeer."
 	icon_state = "cjumper-green"
-	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
-
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/spaceblanket
 	plane = ABOVE_OBJ_PLANE

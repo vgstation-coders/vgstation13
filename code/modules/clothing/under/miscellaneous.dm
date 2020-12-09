@@ -780,6 +780,70 @@
 /obj/item/clothing/under/elf/stickymagic
 	canremove = 0
 
+/obj/item/clothing/under/onesie
+	name = "green christmas onesie"
+	desc = "Festive pyjamas for the comfy crewman"
+	icon_state = "onesiegreen"
+	item_state = "onesiegreen"
+	_color = "onesiegreen"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/blue
+	name = "blue christmas onesie"
+	icon_state = "onesieblue"
+	item_state = "onesieblue"
+	_color = "onesieblue"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/red
+	name = "red christmas onesie"
+	icon_state = "onesiered"
+	item_state = "onesiered"
+	_color = "onesiered"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/pink
+	name = "pink christmas onesie"
+	icon_state = "onesiepink"
+	item_state = "onesiepink"
+	_color = "onesiepink"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/white
+	name = "white christmas onesie"
+	icon_state = "onesiewhite"
+	item_state = "onesiewhite"
+	_color = "onesiewhite"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/grey
+	name = "grey christmas onesie"
+	icon_state = "onesiegrey"
+	item_state = "onesiegrey"
+	_color = "onesiegrey"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/black
+	name = "black christmas onesie"
+	icon_state = "onesieblack"
+	item_state = "onesieblack"
+	_color = "onesieblack"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/redgreen
+	name = "striped red and green christmas onesie"
+	icon_state = "onesieredgreen"
+	item_state = "onesieredgreen"
+	_color = "onesieredgreen"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
+/obj/item/clothing/under/onesie/bluenavy
+	name = "striped blue and navy christmas onesie"
+	icon_state = "onesiebluenavy"
+	item_state = "onesiebluenavy"
+	_color = "onesiebluenavy"
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/under/police
 	name = "police uniform"
 	desc = "A policeman's lot is not a happy one."
