@@ -169,7 +169,6 @@
 
 /obj/structure/bed/Destroy()
 	if(current_glue_state == GLUE_STATE_PERMA && is_locking(mob_lock_type))//Don't de-ass someone if it was temporary glue.
-		current_glue_state = GLUE_STATE_NONE
 		var/mob/living/carbon/human/locked = get_locked(mob_lock_type)[1]
 		if(istype(locked) && locked.remove_butt())
 			playsound(src, 'sound/items/poster_ripped.ogg', 100, TRUE)
@@ -177,6 +176,7 @@
 			locked.apply_damage(10, BRUTE, LIMB_GROIN)
 			locked.apply_damage(10, BURN, LIMB_GROIN)
 			locked.audible_scream()
+	current_glue_state = GLUE_STATE_NONE
 	..()
 
 /obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
