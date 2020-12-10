@@ -649,6 +649,7 @@
 		playsound(src, 'sound/effects/snap.ogg', 60, 1)
 		armed = 0
 		anchored = FALSE
+		update_icon()
 	..()
 
 /obj/item/weapon/beartrap/Crossed(AM)
