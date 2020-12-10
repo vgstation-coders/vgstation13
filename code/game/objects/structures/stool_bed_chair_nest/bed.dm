@@ -176,8 +176,7 @@
 			locked.apply_damage(10, BRUTE, LIMB_GROIN)
 			locked.apply_damage(10, BURN, LIMB_GROIN)
 			locked.audible_scream()
-	if(current_glue_state > GLUE_STATE_NONE)
-		current_glue_state = GLUE_STATE_NONE
+	current_glue_state = GLUE_STATE_NONE
 	..()
 
 /obj/structure/bed/attackby(obj/item/weapon/W, mob/user)
