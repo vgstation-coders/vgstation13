@@ -35,12 +35,13 @@ Basically, you are going to overwrite the flags.
 	flags 		  = SS_NO_FIRE | SS_NO_INIT
 	var/daynight_z_lvl = FALSE
 
-	var/current_timeOfDay = TOD_DAYTIME //We start tickers maxed out, and start on afternoon
-	var/next_light_power = 10
-	var/next_light_range = 1
+	var/current_timeOfDay = TOD_DAYTIME //This is more or less the color and duration since its in a switch.
+	var/next_light_power = 10 // As much as you would want to change these for cool factor.
+	var/next_light_range = 1 //	They basically are at the maximum values to not have overlapping light. 
+							// Along with mesh evenly that is, the dir scan handles missed diagonals stylishly.
 
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
-	var/next_firetime = 0
+	var/next_firetime = 0 //In essence this is world.time + the time you want. Ex: world.time + 3 MINUTES
 	var/list/currentrun
 
 /datum/subsystem/daynightcycle/New()
