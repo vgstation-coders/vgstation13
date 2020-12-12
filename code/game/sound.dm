@@ -30,6 +30,7 @@ var/list/mop_sound = list('sound/effects/mop1.ogg', 'sound/effects/mop2.ogg', 's
 var/list/voice_sound = list('sound/misc/Vocal1.ogg','sound/misc/Vocal2.ogg','sound/misc/Vocal3.ogg','sound/misc/Vocal4.ogg','sound/misc/Vocal5.ogg')
 var/list/windows_error = list('sound/machines/WXP_error.ogg', 'sound/machines/W95_error.ogg', 'sound/machines/W98_error.ogg', 'sound/machines/W7_error.ogg')
 var/list/fuckup_step = list('sound/effects/fuckupstep1.ogg', 'sound/effects/fuckupstep2.ogg')
+var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jinglebell2.ogg', 'sound/items/jinglebell3.ogg')
 //var/list/gun_sound = list('sound/weapons/Gunshot.ogg', 'sound/weapons/Gunshot2.ogg','sound/weapons/Gunshot3.ogg','sound/weapons/Gunshot4.ogg')
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
@@ -217,5 +218,7 @@ var/const/SURROUND_CAP = 7
 				soundin = pick(windows_error)
 			if ("fuckupstep")
 				soundin = fuckup_step
+			if ("jinglebell")
+				soundin = jingle_sound
 			//if ("gunshot") soundin = pick(gun_sound)
 	return soundin

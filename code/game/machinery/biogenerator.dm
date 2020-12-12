@@ -271,6 +271,18 @@
 	cost = 300
 	result = /obj/item/clothing/head/rice_hat
 
+/datum/biogen_recipe/misc/roningasa
+	name = "Wickerwork Hat"
+	id = "wickerwork_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat/ronin
+
+/datum/biogen_recipe/misc/mino
+	name = "Grass Coat"
+	id = "grass_coat"
+	cost = 500
+	result = /obj/item/clothing/suit/mino
+
 /datum/biogen_recipe/flooring
 	category="Flooring"
 

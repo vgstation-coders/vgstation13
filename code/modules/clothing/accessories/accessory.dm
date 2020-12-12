@@ -379,6 +379,37 @@
 	qdel(src)
 
 
+/obj/item/clothing/accessory/jinglebells
+	name = "jingle bells"
+	desc = "A festive jingley bell, can be attached to shoes!"
+	icon_state = "jinglebells"
+	item_state = "jinglebells"
+	_color =  "jinglebells"
+
+/obj/item/clothing/accessory/jinglebells/pickup(mob/user)
+	user.callOnFace["\ref[src]"] = "jingle"
+	jingle()
+
+/obj/item/clothing/accessory/jinglebells/dropped(mob/user)
+	user.callOnFace -= "\ref[src]"
+
+/obj/item/clothing/accessory/jinglebells/proc/jingle()
+	var/turf/T = get_turf(src)
+	playsound(T, "jinglebell", 50, 1)
+
+/obj/item/clothing/accessory/jinglebells/can_attach_to(obj/item/clothing/C)
+	return istype(C, /obj/item/clothing/shoes)
+
+/obj/item/clothing/accessory/jinglebells/on_attached(obj/item/clothing/shoes/jingleshoe)
+	..()
+	attached_to = jingleshoe
+	jingleshoe.step_sound = "jinglebell"
+
+/obj/item/clothing/accessory/jinglebells/on_removed(mob/user)
+	var/obj/item/clothing/shoes/shoes_attached_to = attached_to
+	shoes_attached_to.step_sound = null
+	..()
+
 /obj/item/clothing/accessory/rad_patch
 	name = "radiation detection patch"
 	desc = "A paper patch that you can attach to your clothing. Changes color to black when it absorbs over a certain amount of radiation"
