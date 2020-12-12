@@ -36,53 +36,50 @@ Nighttime - 36 Minutes
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	get_turflist()
+	can_fire = map.daynight_cycle
+	if(can_fire)
+		get_turflist()
+	
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
-	if(flags & SS_NO_FIRE)
-		return
-	if(!map.daynight_cycle)
-		flags |= SS_NO_FIRE
-		pause()
-	else
-		if(world.time >= next_firetime)
-			switch(current_timeOfDay) //Then set the next segment up.
-				if(TOD_MORNING)
-					current_timeOfDay = TOD_SUNRISE
-					next_firetime = world.time + 3 MINUTES
-					play_globalsound()
-				if(TOD_SUNRISE)
-					current_timeOfDay = TOD_DAYTIME
-					next_firetime = world.time + 14 MINUTES
-				if(TOD_DAYTIME)
-					current_timeOfDay = TOD_AFTERNOON
-					next_firetime = world.time + 15 MINUTES
-				if(TOD_AFTERNOON)
-					current_timeOfDay = TOD_SUNSET
-					next_firetime = world.time + 3 MINUTES
-				if(TOD_SUNSET)
-					current_timeOfDay = TOD_NIGHTTIME
-					next_firetime = world.time + 36 MINUTES
-					play_globalsound()
-				if(TOD_NIGHTTIME)
-					current_timeOfDay = TOD_MORNING
-					next_firetime = world.time + 5 MINUTES
-				
-			if(!resumed)
-				currentrun = daynight_turfs.Copy()
+	if(world.time >= next_firetime)
+		switch(current_timeOfDay) //Then set the next segment up.
+			if(TOD_MORNING)
+				current_timeOfDay = TOD_SUNRISE
+				next_firetime = world.time + 3 MINUTES
+				play_globalsound()
+			if(TOD_SUNRISE)
+				current_timeOfDay = TOD_DAYTIME
+				next_firetime = world.time + 14 MINUTES
+			if(TOD_DAYTIME)
+				current_timeOfDay = TOD_AFTERNOON
+				next_firetime = world.time + 15 MINUTES
+			if(TOD_AFTERNOON)
+				current_timeOfDay = TOD_SUNSET
+				next_firetime = world.time + 3 MINUTES
+			if(TOD_SUNSET)
+				current_timeOfDay = TOD_NIGHTTIME
+				next_firetime = world.time + 36 MINUTES
+				play_globalsound()
+			if(TOD_NIGHTTIME)
+				current_timeOfDay = TOD_MORNING
+				next_firetime = world.time + 5 MINUTES
+			
+		if(!resumed)
+			currentrun = daynight_turfs.Copy()
 
-		while(currentrun.len)
-			var/turf/T = currentrun[currentrun.len]
-			currentrun.len--
+	while(currentrun.len)
+		var/turf/T = currentrun[currentrun.len]
+		currentrun.len--
 
-			if(!T || T.gcDestroyed)
-				continue
+		if(!T || T.gcDestroyed)
+			continue
 
-			T.set_light(next_light_range,next_light_power,current_timeOfDay)
+		T.set_light(next_light_range,next_light_power,current_timeOfDay)
 
-			if(MC_TICK_CHECK)
-				return
+		if(MC_TICK_CHECK)
+			return
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
 	if(map.daynight_cycle)
