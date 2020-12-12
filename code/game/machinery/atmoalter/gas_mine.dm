@@ -30,6 +30,19 @@
 	air_contents.update_values()
 	update_icon()
 
+/obj/machinery/atmospherics/miner/examine(mob/user)
+	. = ..()
+	if(stat & NOPOWER)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Lack of power.</span>")
+		return
+	if (!on)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
+		return
+	if(stat & BROKEN)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
+		return
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating.</span>")
+
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
 	if(!.)
@@ -120,7 +133,6 @@
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
 
 		loc.assume_air(removed)
-
 
 //Controls how fast gas comes out (in total)
 /obj/machinery/atmospherics/miner/proc/AirRate()
