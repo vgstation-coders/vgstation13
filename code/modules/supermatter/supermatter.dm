@@ -71,6 +71,12 @@
 	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/power/supermatter/airflow_hit(atom/A)
+	if(ismovable(A))
+		var/atom/movable/movingA = A
+		Bumped(movingA)
+	. = ..()
+
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
 	name = "\improper Supermatter Shard"
 	short_name = "Shard"
