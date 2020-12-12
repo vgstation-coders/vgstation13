@@ -22,7 +22,16 @@ Nighttime - 36 Minutes
 	display_order = SS_DISPLAY_DAYNIGHT
 	priority      = SS_PRIORITY_DAYNIGHT
 	wait          = 1 MINUTES
-	flags         = SS_FIRE_IN_LOBBY
+/*
+On the map dm file, append the following to activate day/night lighting.
+Basically, you are going to overwrite the flags.
+
+/datum/subsystem/daynightcycle
+	flags = SS_FIRE_IN_LOBBY       This is basically how you want it to run.
+	var/fire_on_zlvl = STATION_Z   This basically is the z level it will be on.
+
+*/
+	flags 		  = SS_NO_FIRE | SS_NO_INIT
 
 	var/current_timeOfDay = TOD_DAYTIME //We start tickers maxed out, and start on afternoon
 	var/next_light_power = 10
@@ -30,16 +39,15 @@ Nighttime - 36 Minutes
 
 	//The initial values don't matter, it just needs to fire initially, then set itself into the cycle.
 	var/next_firetime = 0
+	var/daynight_z_lvl = FALSE
 	var/list/currentrun
 
 /datum/subsystem/daynightcycle/New()
 	NEW_SS_GLOBAL(SSDayNight)
 
 /datum/subsystem/daynightcycle/Initialize()
-	can_fire = map.daynight_cycle
-	if(can_fire)
+	if(daynight_z_lvl)
 		get_turflist()
-	
 	..()
 
 /datum/subsystem/daynightcycle/fire(resumed = FALSE)
@@ -82,19 +90,18 @@ Nighttime - 36 Minutes
 			return
 
 /datum/subsystem/daynightcycle/proc/get_turflist()
-	if(map.daynight_cycle)
-		for(var/turf/T in block(locate(1, 1, map.daynight_cycle), locate(world.maxx, world.maxy, map.daynight_cycle)))
-			if(IsEven(T.x)) //If we are also even.
-				if(IsEven(T.y)) //If we are also even.
-					var/area/A = get_area(T)
-					if(istype(A, /area/surface)) //If we are outside.
-						daynight_turfs += T
-					else //If We aren't we need to make sure we handle the outside segment
-						for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
-							var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
-							var/area/A1 = get_area(T1)
-							if(istype(A1, /area/surface)) //If we are outside.
-								daynight_turfs += T
+	for(var/turf/T in block(locate(1, 1, daynight_z_lvl), locate(world.maxx, world.maxy, daynight_z_lvl)))
+		if(IsEven(T.x)) //If we are also even.
+			if(IsEven(T.y)) //If we are also even.
+				var/area/A = get_area(T)
+				if(istype(A, /area/surface)) //If we are outside.
+					daynight_turfs += T
+				else //If We aren't we need to make sure we handle the outside segment
+					for(var/cdir in cardinal)//Ironically, this part didn't work correctly but....
+						var/turf/T1 = get_step(T,cdir)// It also ironically produced better looking day/night lighting
+						var/area/A1 = get_area(T1)
+						if(istype(A1, /area/surface)) //If we are outside.
+							daynight_turfs += T
 
 /datum/subsystem/daynightcycle/proc/play_globalsound()
 	for(var/mob/M in player_list)

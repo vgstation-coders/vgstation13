@@ -42,8 +42,15 @@
 
 	snow_theme = TRUE
 	can_enlarge = FALSE
-	daynight_cycle = STATION_Z // TURN IT ON
- 
+
+/*****************************
+**  Day and Night Lighting  **
+**	See: daynightcycle.dm   **
+****************************/
+/datum/subsystem/daynightcycle
+    flags = SS_FIRE_IN_LOBBY
+	daynight_z_lvl = STATION_Z
+
 /datum/map/active/New()
 	. = ..()
 
