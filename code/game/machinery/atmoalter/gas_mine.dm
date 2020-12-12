@@ -20,8 +20,6 @@
 
 	machine_flags = WRENCHMOVE | FIXED2WORK
 
-	var/examine_flavor = "Operating normally"
-
 /obj/machinery/atmospherics/miner/New()
 	..()
 	air_contents = new
@@ -32,20 +30,18 @@
 	air_contents.update_values()
 	update_icon()
 
-/obj/machinery/atmospherics/miner/proc/flavor_examine(num)
-	switch(num)
-		if(1)
-			examine_flavor = "Lack of power"
-		if(2)
-			examine_flavor = "Turned off"
-		if(3)
-			examine_flavor = "Broken"
-		if(4)
-			examine_flavor = "Operating normally"
-
 /obj/machinery/atmospherics/miner/examine(mob/user)
 	. = ..()
-	to_chat(user, "<span class='info'>\The [src]'s debug reads: [examine_flavor].</span>")
+	if(stat & NOPOWER)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Lack of power.</span>")
+		return
+	if (!on)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Turned off.</span>")
+		return
+	if(stat & BROKEN)
+		to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Broken.</span>")
+		return
+	to_chat(user, "<span class='info'>\The [src]'s status terminal reads: Functional and operating.</span>")
 
 /obj/machinery/atmospherics/miner/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()
@@ -104,10 +100,8 @@
 
 /obj/machinery/atmospherics/miner/process()
 	if(stat & NOPOWER)
-		flavor_examine(1)
 		return
 	if (!on)
-		flavor_examine(2)
 		return
 
 	var/oldstat=stat
@@ -118,7 +112,6 @@
 	if(stat!=oldstat)
 		update_icon()
 	if(stat & BROKEN)
-		flavor_examine(3)
 		return
 
 	var/datum/gas_mixture/environment = loc.return_air()
@@ -140,8 +133,6 @@
 		var/datum/gas_mixture/removed = pumping.remove(transfer_moles)
 
 		loc.assume_air(removed)
-
-	flavor_examine(4)
 
 //Controls how fast gas comes out (in total)
 /obj/machinery/atmospherics/miner/proc/AirRate()
