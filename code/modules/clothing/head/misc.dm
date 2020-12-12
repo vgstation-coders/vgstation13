@@ -609,7 +609,7 @@
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
-	name = "Roningasa"
+	name = "roningasa"
 	desc = "A conical amigasa with a flat top, often worn by ronin."
 	icon_state = "kasa"
 	item_state = "kasa"
