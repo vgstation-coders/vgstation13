@@ -69,8 +69,8 @@ Nighttime - 36 Minutes
 					current_timeOfDay = TOD_MORNING
 					next_firetime = world.time + 5 MINUTES
 				
-
-			currentrun = daynight_turfs.Copy()
+			if(!resumed)
+				currentrun = daynight_turfs.Copy()
 
 		while(currentrun.len)
 			var/turf/T = currentrun[currentrun.len]
