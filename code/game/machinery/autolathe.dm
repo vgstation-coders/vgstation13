@@ -180,31 +180,6 @@
 	if(..())
 		return 0
 
-	else if(istype(I, /obj/item/weapon/storage/bag/gadgets/part_replacer))
-		if(user.a_intent != I_HURT)
-			return 0
-		var/obj/item/weapon/storage/bag/gadgets/part_replacer/partReplacer = I
-		if(partReplacer.contents.len <= 0)
-			return 0
-		for(var/obj/item/weapon/stock_parts/stockParts in partReplacer.contents)
-			if(!stockParts.materials)
-				continue
-			else if(stockParts.materials.getVolume() + src.materials.getVolume() > max_material_storage)
-				to_chat(user, "\The [src]'s material bin is too full to continue recycling.")
-				return 0
-			else if(allowed_materials)
-				var/allowed_materials_volume = 0
-				for(var/mat_id in allowed_materials)
-					allowed_materials_volume += stockParts.materials.storage[mat_id]
-				if (allowed_materials_volume != stockParts.materials.getVolume())
-					continue
-			else if(!stockParts.recyclable())
-				continue
-			materials.removeFrom(stockParts.materials)
-			qdel(stockParts)
-		to_chat(user, "You dump as much as you can into \The [src]")
-		return 1
-
 	else if(I.materials && (research_flags & FAB_RECYCLER))
 		if(I.materials.getVolume() + src.materials.getVolume() > max_material_storage)
 			to_chat(user, "\The [src]'s material bin is too full to recycle \the [I].")
@@ -244,3 +219,30 @@
 			qdel(I)
 			return 1
 	return 0
+
+/obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/MouseDropTo(atom/over_object, mob/user)
+	if(istype(over_object, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		var/obj/item/weapon/storage/bag/gadgets/part_replacer/partReplacer = over_object
+		if(partReplacer.contents.len <= 0)
+			return 0
+		for(var/obj/item/weapon/stock_parts/stockParts in partReplacer.contents)
+			if(!stockParts.materials)
+				continue
+			else if(stockParts.materials.getVolume() + src.materials.getVolume() > max_material_storage)
+				to_chat(user, "\The [src]'s material bin is too full to continue recycling.")
+				return 0
+			else if(allowed_materials)
+				var/allowed_materials_volume = 0
+				for(var/mat_id in allowed_materials)
+					allowed_materials_volume += stockParts.materials.storage[mat_id]
+				if (allowed_materials_volume != stockParts.materials.getVolume())
+					continue
+			else if(!stockParts.recyclable())
+				continue
+			materials.removeFrom(stockParts.materials)
+			qdel(stockParts)
+		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		to_chat(user, "You dump as much as you can into \The [src]")
+		return 1
+	else
+		..()
