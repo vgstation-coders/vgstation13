@@ -18,6 +18,9 @@ var/list/pathogen_clouds = list()
 	var/lifetime = 10 SECONDS//how long until we naturally disappear, humans breath about every 8 seconds, so it has to survive at least this long to have a chance to infect
 	var/turf/target = null//when created, we'll slowly move toward this turf
 	var/image/pathogen
+	var/core = TRUE
+	var/modified = FALSE
+	var/moving = TRUE
 
 /obj/effect/effect/pathogen_cloud/New(var/turf/loc, var/mob/sourcemob, var/list/virus, var/isCarrier = TRUE)
 	..()
@@ -72,9 +75,35 @@ var/list/pathogen_clouds = list()
 		sleep (1 SECONDS)
 		while (src && src.loc)
 			if (src.loc != target)
-				new /obj/effect/effect/pathogen_cloud(src.loc, source, viruses, sourceIsCarrier)
-			if (prob(75))
-				step_towards(src,target)
+
+				//If we come across other pathogenic clouds, we absorb their diseases that we don't have, then delete those clouds
+				//This should prevent mobs breathing in hundreds of clouds at once
+				for (var/obj/effect/effect/pathogen_cloud/other_C in src.loc)
+					if (!other_C.core)
+						for (var/ID in other_C.viruses)
+							if (!(ID in viruses))
+								var/datum/disease2/disease/V = other_C.viruses[ID]
+								viruses[ID] = V.getcopy()
+								modified = TRUE
+						qdel(other_C)
+
+				var/obj/effect/effect/pathogen_cloud/C = new /obj/effect/effect/pathogen_cloud(src.loc, source, viruses, sourceIsCarrier)
+				C.core = FALSE
+				C.modified = modified
+				C.moving = FALSE
+
+				if (prob(75))
+					step_towards(src,target)
+				else
+					step_rand(src)
+				sleep (1 SECONDS)
 			else
-				step_rand(src)
-			sleep (1 SECONDS)
+				for (var/obj/effect/effect/pathogen_cloud/core/other_C in src.loc)
+					if (!other_C.moving)
+						for (var/ID in other_C.viruses)
+							if (!(ID in viruses))
+								var/datum/disease2/disease/V = other_C.viruses[ID]
+								viruses[ID] = V.getcopy()
+								modified = TRUE
+						qdel(other_C)
+				moving = FALSE
