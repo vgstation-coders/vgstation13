@@ -188,6 +188,11 @@
 	desc = "\"To be robust is not an action or a way of life, but a mental state. Only those with the force of will strong enough to act during a crisis, saving friend from foe, acting when everyone else may think and act against you, are truly robust. Stay robust, my friends.\""
 	icon_state = "goldenplaque"
 
+/obj/structure/sign/shiggymemorial
+	name = "Shiggypiggy Memorial"
+	desc = "Rest in Peace"
+	icon_state = "goldenplaque"
+
 /obj/structure/sign/kiddieplaque
 	name = "\improper AI developer's plaque"
 	desc = "Next to the extremely long list of names and job titles, there is a drawing of a little child. The child appears to be retarded. Beneath the image, someone has scratched the word \"PACKETS\"."

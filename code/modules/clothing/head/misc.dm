@@ -496,14 +496,22 @@
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatred"
 	item_state = "santahatred"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/christmas/santahat/green
 	name = "green santa hat"
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatgreen"
 	item_state = "santahatgreen"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+
+/obj/item/clothing/head/christmas/santahat/blue
+	name = "blue santa hat"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
+	icon_state = "santahatblue"
+	item_state = "santahatblue"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+
 
 /obj/item/clothing/head/festive
 	name = "festive paper hat"
@@ -601,7 +609,7 @@
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
-	name = "Roningasa"
+	name = "roningasa"
 	desc = "A conical amigasa with a flat top, often worn by ronin."
 	icon_state = "kasa"
 	item_state = "kasa"

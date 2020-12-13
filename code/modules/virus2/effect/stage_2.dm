@@ -587,7 +587,7 @@
 /datum/disease2/effect/cyborg_vomit
 	name = "Oleum Syndrome"
 	desc = "Causes the infected to internally synthesize oil and other inorganic material."
-	stage = 3
+	stage = 2
 	badness = EFFECT_DANGER_ANNOYING 
 	restricted = 2
 

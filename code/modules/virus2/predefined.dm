@@ -1,8 +1,4 @@
 //Pre-Defined Global Diseases for use by nanites/wendigo/xenomicrobes/ect.
-
-
-
-
 var/list/global_diseases = list()
 
 /proc/create_global_diseases()

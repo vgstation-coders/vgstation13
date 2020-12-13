@@ -41,12 +41,6 @@ It also must be positive. Technically it can be 0 without breaking physics, but 
 	machine_flags = MULTITOOL_MENU
 
 
-/obj/machinery/atmospherics/binary/heat_pump/New()
-	..()
-	if(ticker)
-		initialize()
-
-
 /obj/machinery/atmospherics/binary/heat_pump/process()
 	. = ..()
 	if(!on || stat & (NOPOWER | BROKEN))
