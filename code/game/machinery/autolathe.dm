@@ -222,6 +222,9 @@
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/MouseDropTo(atom/over_object, mob/user)
 	if(istype(over_object, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		if(get_dist(user, src) > 1)
+			return
+		var/turf/src_turf = get_turf(src)
 		var/obj/item/weapon/storage/bag/gadgets/part_replacer/partReplacer = over_object
 		if(partReplacer.contents.len <= 0)
 			return 0
@@ -239,9 +242,10 @@
 					continue
 			else if(!stockParts.recyclable())
 				continue
+			stockParts.forceMove(src_turf)
 			materials.removeFrom(stockParts.materials)
 			qdel(stockParts)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(src_turf, 'sound/machines/click.ogg', 50, 1)
 		to_chat(user, "You dump as much as you can into \The [src]")
 		return 1
 	else
