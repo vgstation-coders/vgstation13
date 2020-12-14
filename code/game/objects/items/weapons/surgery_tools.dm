@@ -144,6 +144,15 @@
 						"<span class='danger'>[user] is pressing [src.name] to \his chest and activating it! It looks like \he's trying to commit suicide.</span>"))
 	return (SUICIDE_ACT_BRUTELOSS)
 
+/obj/item/weapon/surgicaldrill/diamond/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/weapon/subspacetunneler))
+		qdel(W)
+		new /obj/item/weapon/surgicaldrill/bluespace(get_turf(src))
+		qdel(src)
+		return
+	else
+		return ..()
+
 /obj/item/weapon/surgicaldrill/bluespace
 	name = "bluespace surgical drill"
 	desc = "A drill capable of inserting almost any item, careful!"
@@ -155,8 +164,6 @@
 	//when true, it functions like a normal surgical drill
 	//when false, it becomes capable of inserting items into it
 	var/operating_mode = TRUE
-	//when true, allows even anchored items to be pulled in
-	var/emagged = FALSE
 
 /obj/item/weapon/surgicaldrill/bluespace/examine(mob/user, size, show_name)
 	. = ..()
@@ -194,7 +201,7 @@
 			return 1
 		else if(istype(target, /atom/movable))
 			var/atom/movable/amTarget = target
-			if(amTarget.anchored && !emagged)
+			if(amTarget.anchored)
 				to_chat(user, "You cannot retrieve [amTarget] as it is anchored!")
 				return 1
 			var/retrieve_time = 5 SECONDS
@@ -212,12 +219,6 @@
 			return 1
 	else
 		return ..()
-
-/obj/item/weapon/surgicaldrill/bluespace/emag_act(var/mob/user)
-	if(emagged)
-		return FALSE
-	to_chat(user, "You emag \the [src], disabling the anchor safeties!")
-	emagged = TRUE
 
 /obj/item/weapon/scalpel
 	name = "scalpel"
