@@ -243,7 +243,7 @@
 				continue
 			materials.removeFrom(stockParts.materials)
 			qdel(stockParts)
-		playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
+		playsound(src, 'sound/machines/click.ogg', 50, 1)
 		to_chat(user, "You dump as much as you can into \The [src]")
 		return 1
 	else
