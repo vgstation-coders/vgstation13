@@ -14,7 +14,7 @@ Nighttime - 36 Minutes
 #define TOD_DAYTIME 	"#FFFFFF"
 #define TOD_AFTERNOON 	"#ffeedf"
 #define TOD_SUNSET 		"#75497e"
-#define TOD_NIGHTTIME 	"#001522"
+#define TOD_NIGHTTIME 	"#000b11"
 
 /datum/subsystem/daynightcycle
 	name          = "Day Night Cycle"
@@ -70,10 +70,12 @@ Basically, you are going to overwrite the flags.
 				next_firetime = world.time + 3 MINUTES
 			if(TOD_SUNSET)
 				current_timeOfDay = TOD_NIGHTTIME
+				next_light_power = 3
 				next_firetime = world.time + 36 MINUTES
 				play_globalsound()
 			if(TOD_NIGHTTIME)
 				current_timeOfDay = TOD_MORNING
+				next_light_power = 10
 				next_firetime = world.time + 5 MINUTES
 			
 		if(!resumed)
