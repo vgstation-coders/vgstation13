@@ -882,6 +882,17 @@ obj/item/weapon/circuitboard/rdserver
 							/obj/item/weapon/stock_parts/matter_bin = 1,
 							/obj/item/weapon/stock_parts/capacitor = 2)
 
+/obj/item/weapon/circuitboard/item_transporter
+	name = "Circuit Board (Transporter)"
+	desc = "A circuit board used to run a machine that transports goods around the station."
+	build_path = /obj/machinery/item_transporter
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=5;" + Tc_ENGINEERING + "=5;" + Tc_BLUESPACE + "=5"
+	req_components = list(
+							/obj/item/weapon/stock_parts/matter_bin = 1,
+							/obj/item/weapon/stock_parts/manipulator = 2,
+							/obj/item/weapon/stock_parts/micro_laser = 1)
+
 /obj/item/weapon/circuitboard/box_cloner
 	name = "Circuit Board (Box Cloner)"
 	build_path = /obj/machinery/egg_incubator/box_cloner

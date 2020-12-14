@@ -656,6 +656,7 @@
 #include "code\game\machinery\hologram.dm"
 #include "code\game\machinery\holosign.dm"
 #include "code\game\machinery\igniter.dm"
+#include "code\game\machinery\item_transporter.dm"
 #include "code\game\machinery\iv_drip.dm"
 #include "code\game\machinery\keyfab.dm"
 #include "code\game\machinery\kinetic_accelerator.dm"
