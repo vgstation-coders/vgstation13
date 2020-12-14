@@ -353,3 +353,62 @@
 /obj/item/clothing/suit/storage/wintercoat/hoodie/cyan
 	name = "Cyan hoodie"
 	color = "#00ffff" //Cyan (Or close to it)
+
+/obj/item/clothing/suit/storage/wintercoat/fur // think one of those big vintage fur coats you find in your grandmothers closet
+	name = "A heavy fur coat"
+//	icon_state = "furcoat"
+	item_state = "furcoat"
+	var/base_icon_state = "labcoat"
+	base_icon_state = "furcoat"
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS //the sprite extends down to the ankles, it can protect the legs
+	species_fit = list(INSECT_SHAPED)
+	desc = "A thick fur coat. Your not sure what animal its fur from."
+	nohood = 1 //most fur coats dont have a hood
+	var/belted = 1
+	armor = list(melee = 10, bullet = 5, laser = 10, energy = 10, bomb = 5, bio = 0, rad = 0) //its a big thick frontiersman fur coat, putting it on as partially protective
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS|IGNORE_INV
+	allowed = list(
+		/obj/item/weapon/tank/emergency_oxygen,
+		/obj/item/weapon/tank/emergency_nitrogen,
+		/obj/item/device/flashlight,
+		/obj/item/weapon/gun/energy,
+		/obj/item/weapon/gun/projectile,
+		/obj/item/ammo_storage,
+		/obj/item/ammo_casing,
+		/obj/item/weapon/melee/baton,
+		/obj/item/weapon/handcuffs,
+		/obj/item/weapon/storage/fancy/cigarettes,
+		/obj/item/weapon/lighter,
+		/obj/item/device/detective_scanner,
+		/obj/item/device/taperecorder)
+
+obj/item/clothing/suit/storage/wintercoat/fur/update_icon()
+	if(!belted)
+		icon_state="[base_icon_state]_beltless"
+	else
+		icon_state="[base_icon_state]"
+
+/obj/item/clothing/suit/storage/wintercoat/fur/verb/toggle()
+	set name = "Toggle Coat Belt"
+	set category = "Object"
+	set src in usr
+
+	if(usr.incapacitated())
+		return 0
+
+	if(belted)
+		to_chat(usr, "You remove the coat's belt.")
+		src.body_parts_covered |= IGNORE_INV
+		sterility = initial(sterility)+30
+	else
+		to_chat(usr, "You fasten the coat's belt.")
+		src.body_parts_covered ^= IGNORE_INV
+		sterility = initial(sterility)
+	belted=!belted
+	update_icon()
+	usr.update_inv_wear_suit()	//so our overlays update
+
+/obj/item/clothing/suit/storage/wintercoat/fur/New()
+	. = ..()
+	update_icon()
+
