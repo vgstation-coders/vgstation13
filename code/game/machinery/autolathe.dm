@@ -222,6 +222,8 @@
 
 /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/MouseDropTo(atom/over_object, mob/user)
 	if(istype(over_object, /obj/item/weapon/storage/bag/gadgets/part_replacer))
+		if(user.stat != CONSCIOUS)
+			return
 		if(get_dist(user, src) > 1)
 			return
 		var/turf/src_turf = get_turf(src)
