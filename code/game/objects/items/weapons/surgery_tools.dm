@@ -173,6 +173,7 @@
 
 /obj/item/weapon/surgicaldrill/bluespace/attack_self(mob/user)
 	operating_mode = !operating_mode
+	playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 	to_chat(user, "\The [src] is now [operating_mode ? "in drill mode." : "in retrieval mode."]")
 
 /obj/item/weapon/surgicaldrill/bluespace/AltClick(mob/user)
@@ -215,6 +216,7 @@
 				to_chat(user, "\The [src] already has something retrieved!")
 				return 1
 			amTarget.forceMove(src)
+			playsound(get_turf(src), 'sound/machines/click.ogg', 50, 1)
 			to_chat(user, "\The [amTarget] moves suddenly into \the [src].")
 			return 1
 	else
