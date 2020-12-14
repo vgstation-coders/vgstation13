@@ -443,6 +443,12 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/pinpointer/pdapinpointer
 	cost = 4
 
+/datum/uplink_item/device_tools/radio_jammer
+	name = "Radio Jammer"
+	desc = "A radio jammer disguised as a taperecorder. It will jam all radio output within a seven tile radius, this means you can still receive communication. Be warned that the radios will make sounds when it fails to send the message due to being jammed."
+	item = /obj/item/device/radio_jammer
+	cost = 4
+
 
 // LOUD SABOTAGE
 // Any Syndicate item that helps with high-level, destructive station-wide sabotage (Ex: Does Not Tip backdoor, Singularity Beacon, Power Sink, C-4)
@@ -633,7 +639,7 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
-	
+
 /datum/uplink_item/jobspecific/command_security/batlinggun
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
@@ -1039,7 +1045,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/dart_cartridge
 	cost = 2
 	jobs_exclusive = list("Trader")
-	
+
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."

@@ -59,7 +59,7 @@
 	radio_list -= src
 	remove_radio_all(src) //Just to be sure
 	..()
-	
+
 /obj/item/device/radio/initialize()
 	. = ..()
 	frequency = COMMON_FREQ //common chat
@@ -218,6 +218,10 @@
 	/*
 		be prepared to disregard any comments in all of tcomms code. i tried my best to keep them somewhat up-to-date, but eh
 	*/
+	for(var/obj/item/device/radio_jammer/rJammer in radio_jammers)
+		if(get_dist(src, rJammer) <= rJammer.jam_radius)
+			playsound(src, 'sound/effects/sparks1.ogg', 50, 1)
+			return //you are too close to a jammer
 	var/datum/speech/speech=speech_orig.clone()
 	speech.radio=src
 	#ifdef SAY_DEBUG
