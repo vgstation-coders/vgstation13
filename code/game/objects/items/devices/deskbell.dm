@@ -62,7 +62,7 @@
 	ring(user)
 	..()
 
-/obj/item/device/deskbell/disassemble()
+/obj/item/device/deskbell/proc/disassemble()
 	var/obj/item/device/deskbell_assembly/A = new /obj/item/device/deskbell_assembly(get_turf(src))
 	A.frequency = frequency
 	A.code = code
