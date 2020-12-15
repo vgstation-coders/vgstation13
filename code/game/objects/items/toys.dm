@@ -37,6 +37,7 @@
 /obj/item/toy/waterballoon/New()
 	. = ..()
 	create_reagents(10)
+	flags |= OPENCONTAINER
 
 /obj/item/toy/waterballoon/attack(mob/living/carbon/human/M as mob, mob/user as mob)
 	return
@@ -50,22 +51,9 @@
 	return
 
 /obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
-	if(istype(O, /obj/item/weapon/reagent_containers/glass))
-		if(O.reagents)
-			if(O.reagents.total_volume < 1)
-				to_chat(user, "The [O] is empty.")
-			else if(O.reagents.total_volume >= 1)
-				if(O.reagents.has_reagent(PACID, 1))
-					to_chat(user, "The acid chews through the balloon!")
-					O.reagents.reaction(user)
-					qdel(src)
-					return
-				else
-					src.desc = "A translucent balloon with some form of liquid sloshing around in it."
-					to_chat(user, "<span class = 'info'>You fill the balloon with the contents of \the [O].</span>")
-					O.reagents.trans_to(src, 10)
-	src.update_icon()
-	return
+	if(..())
+		update_icon()
+		return
 
 /obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
