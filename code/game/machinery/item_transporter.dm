@@ -40,6 +40,7 @@ var/global/list/current_transporters = list()
 	current_transporters += src
 
 	component_parts = newlist(
+		/obj/item/weapon/circuitboard/item_transporter,
 		/obj/item/weapon/stock_parts/matter_bin,
 		/obj/item/weapon/stock_parts/manipulator,
 		/obj/item/weapon/stock_parts/manipulator,
@@ -50,6 +51,13 @@ var/global/list/current_transporters = list()
 /obj/machinery/item_transporter/Destroy()
 	current_transporters -= src
 	. = ..()
+
+/obj/machinery/item_transporter/spillContents(destroy_chance)
+	for(var/obj/I in component_parts)
+		if(istype(I, /obj/item/weapon/circuitboard/item_transporter))
+			qdel(I)
+			continue
+		I.forceMove(src.loc)
 
 /obj/machinery/item_transporter/RefreshParts()
 	var/mb_rating = 0
@@ -88,8 +96,14 @@ var/global/list/current_transporters = list()
 		return
 	if(user.incapacitated() || !user.Adjacent(src))
 		return
-	if(decon_stage)
+	if(panel_open)
 		to_chat(user, "<span class='warning'>\The [src] has its wire panel open, close it before using.</span>")
+		return
+	if(stat & NOPOWER)
+		to_chat(user, "<span class='warning'>\The [src] has no power, power it before using.</span>")
+		return
+	if(stat & BROKEN)
+		to_chat(user, "<span class='warning'>\The [src] is broken, it will require repairs before using.</span>")
 		return
 	if(world.time < timed_cooldown)
 		var/time_remaining = round((timed_cooldown - world.time) / 10)
