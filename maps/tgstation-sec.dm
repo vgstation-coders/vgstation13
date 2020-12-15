@@ -93,6 +93,7 @@
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category, /datum/role/malfAI))
 		return FALSE
+	return TRUE
 
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
