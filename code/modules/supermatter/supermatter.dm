@@ -449,11 +449,7 @@
 
 		//Some poor sod got eaten, go ahead and irradiate people nearby.
 	for(var/mob/living/l in range(10,src))
-		if(l in view())
-			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
-				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
-		else
-			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
+		l.show_message("<span class=\"warning\">You hear an unearthly ringing and notice that you feel a bit toasty.</span>", 2)
 		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
 		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
 
