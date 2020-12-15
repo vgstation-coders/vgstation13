@@ -51,8 +51,7 @@
 	for(var/path in to_spawn)
 		var/amount = to_spawn[path] || 1
 		for(var/i in 1 to amount)
-			var/atom/A = new path(src)
-			A.initialize()  // recursive
+			new path(src)
 
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
@@ -71,8 +70,7 @@
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
-
-	initialize()
+	take_contents()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
