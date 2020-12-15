@@ -178,6 +178,8 @@
 	var/times_charged_sword = 0
 	var/stealth_posters_posted = 0
 
+/datum/stat/role/xenomorph
+
 /datum/stat/role/catbeast
 	var/ticks_survived = 0
 	var/threat_generated = 0

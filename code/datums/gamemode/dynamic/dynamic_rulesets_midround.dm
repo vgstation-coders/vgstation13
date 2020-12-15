@@ -611,13 +611,13 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice
 	name = "Plague Mice Invasion"
 	role_category = /datum/role/plague_mouse
-	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
 	required_pop = list(15,15,15,15,15,15,15,15,15,15)
 	required_candidates = 1
 	max_candidates = 5
 	weight = 1
 	cost = 25
-	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	requirements = list(90,50,30,20,20,10,10,0,0,0)
 	high_population_requirement = 40
 	flags = MINOR_RULESET
 	my_fac = /datum/faction/plague_mice
@@ -633,3 +633,55 @@
 	my_fac.HandleRecruitedRole(new_role)
 	new_role.Greet(GREET_DEFAULT)
 	new_role.AnnounceObjectives()
+
+
+
+//////////////////////////////////////////////
+//                                          //
+//             XENOMORPHS                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs
+	name = "Alien Infestation"
+	role_category = /datum/role/xenomorph
+	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	required_pop = list(25,20,20,15,15,15,10,10,10,10)
+	required_candidates = 1
+	max_candidates = 4
+	weight = 1
+	cost = 20
+	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	high_population_requirement = 35
+	logo = "xeno-logo"
+	var/list/vents = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/ready()
+	..()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
+			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
+				vents += temp_vent
+	
+
+	if (vents.len == 0)
+		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
+		return
+	return 1
+
+/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/generate_ruleset_body(var/mob/applicant)
+	var/obj/vent = pick(vents)
+	var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
+
+	new_xeno.key = applicant.key
+	new_xeno << sound('sound/voice/alienspawn.ogg')
+	vents -= vent
+
+	return new_xeno
+
+/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/execute()
+	..()
+	var/time = pick(5 MINUTES, 10 MINUTES)
+	sleep(time)
+		command_alert(/datum/command_alert/xenomorphs)
+

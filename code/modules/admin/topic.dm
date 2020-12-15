@@ -3293,13 +3293,13 @@
 
 				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_storm
-			*/
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","Aliens")
 				log_admin("[key_name(usr)] spawned an alien infestation", 1)
 				message_admins("<span class='notice'>[key_name_admin(usr)] attempted an alien infestation</span>", 1)
 				new /datum/event/alien_infestation
+			*/
 
 
 			if("power")
@@ -3497,6 +3497,7 @@
 				//can be found in code\game\game_modes\events\wormholes.dm
 				wormhole_event()
 
+			/*		Use dynamic mode instead
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
@@ -3508,6 +3509,7 @@
 				feedback_add_details("admin_secrets_fun_used","ALS")
 				if(aliens_allowed)
 					create_xeno()
+			*/
 			if("spiders")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SL")
@@ -3576,12 +3578,15 @@
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
+			
+			/*			Use dynamic mode instead
 			if("aliens")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","AL")
 				message_admins("[key_name_admin(usr)] has spawned aliens", 1)
 				//makeAliens()
 				new /datum/event/alien_infestation
+			*/
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")

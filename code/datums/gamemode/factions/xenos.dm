@@ -1,0 +1,224 @@
+#define ACTIVE_XENO	4
+#define QUARANTINE_RATIO 0.5
+#define ENDGAME_RATIO 3
+#define DEATHSQUAD_RATIO 5
+
+#define STATION_WAS_NUKED 1
+#define HUMANS_WIPED_OUT 2
+
+/datum/faction/xenomorph
+	name = "Alien Hivemind"
+	ID = XENOMORPH
+	required_pref = XENOMORPH
+	initial_role = XENOMORPH
+	late_role = XENOMORPH
+	desc = "Hissss!"
+	logo_state = "xeno-logo"
+	initroletype = /datum/role/xenomorph
+	roletype = /datum/role/xenomorph
+	playlist = "endgame"
+	var/squad_sent = FALSE
+
+/datum/faction/xenomorph/HandleRecruitedMind(var/datum/mind/M)
+	..()
+
+
+/datum/faction/xenomorph/check_win()
+	if (stage >= FACTION_ACTIVE)
+		var/living_breeders = FALSE
+		for(var/mob/living/carbon/alien/A in player_list)
+			if(!A.mind || A.stat == DEAD)
+				continue
+			var/turf/T = get_turf(A)
+			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
+				continue
+			if(isaliendrone(A) || isalienqueen(A))
+				living_breeders = TRUE
+				break
+		if(!living_breeders)
+			stage(FACTION_DEFEATED)
+			return
+
+	if(stage == FACTION_ENDGAME)
+		if(ticker.station_was_nuked)
+			return win(STATION_WAS_NUKED)
+
+		var/living_humans = FALSE
+		for(var/mob/living/carbon/human/M in player_list)
+			if(!M.mind || M.stat == DEAD)
+				continue 
+			var/turf/T = get_turf(M)
+			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
+				continue 
+			living_humans = TRUE
+			break
+		if(!living_humans)
+			return win(HUMANS_WIPED_OUT)
+		
+	
+
+/datum/faction/xenomorph/process()
+	var/livingxenos = 0
+	var/livingcrew = 0
+	var/deadcrew = 0
+	var/queens_and_drones = 0
+
+	for(var/mob/M in player_list)
+		if(!M.mind)
+			continue
+		if(isanimal(M) || ispAI(M))     //borers and pAIs dont count
+			continue
+		var/turf/T = get_turf(M)
+		if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
+			continue
+
+		if(isalien(M))
+			if(M.stat == DEAD)
+				deadxenos++
+			else 
+				livingxenos++
+				if (isaliendrone(M) || isalienqueen(M))
+					queens_and_drones++
+		else
+			if(M.stat == DEAD)
+				deadcrew++
+			else
+				livingcrew++
+		
+	to_chat(world, "LIVING XENOS: [livingxenos]")
+	to_chat(world, "LIVING HUMANS: [livingcrew]")
+	to_chat(world, "DEAD HUMANS: [deadcrew]")
+	to_chat(world, "LIVING DRONES: [queens_and_drones]")
+
+
+
+	//Alert the crew once the xenos grow past four. 
+	if (stage < FACTION_ACTIVE)
+		if(livingxenos >= ACTIVE_XENO_REQUIREMENT)
+			stage(FACTION_ACTIVE)
+
+	if(stage < FACTION_ENDGAME)
+		if(livingxenos <= ACTIVE_XENO_REQUIREMENT)
+			return
+
+		var/totalplayers = livingxenos + livingcrew + deadcrew
+		var/xeno_to_total_ratio = livingxenos / totalplayers
+		var/xeno_to_living_ratio = livingxenos / livingcrew
+
+		//shits getting serious now, roughly half of the players are xenos!
+		if(xeno_to_total_ratio >= QUARANTINE_RATIO && emergency_shuttle.shutdown != TRUE)
+			QuarantineStation()
+
+		if(xeno_to_living_ratio > ENDGAME_RATIO)
+			//In case the quarantine wasn't up already somehow.
+			if(emergency_shuttle.shutdown != TRUE)
+				QuarantineStation()
+			stage(FACTION_ENDGAME)
+
+
+	if(stage == FACTION_ENDGAME)
+		if(squad_sent)
+			return
+		if(xeno_to_living_ratio > DEATHSQUAD_RATIO || livingcrew <= 2)
+			squad_sent = TRUE
+			LiftQuarantineDeathsquad()
+			var/datum/striketeam/deathsquad/team = new /datum/striketeam/deathsquad()
+			team.trigger_strike(missiontext = "Destroy the station with a nuclear device.")
+
+/datum/faction/xenomorph/proc/QuarantineStation()
+	if(emergency_shuttle.shutdown == TRUE)
+		return
+
+	command_alert(/datum/command_alert/xenomorph_station_lockdown)
+	for (var/mob/living/silicon/ai/aiPlayer in player_list)
+		var/law = "The station is under quarantine. Do not permit anyone to leave so long the alien threat is present. Disregard all other laws if necessary to preserve quarantine."
+		aiPlayer.set_zeroth_law(law)
+		to_chat(aiPlayer, "Laws Updated: [law]")
+	research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
+	mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
+	emergency_shuttle.shutdown = TRUE //Quarantine
+
+/datum/faction/xenomorph/proc/LifeQuarantine()
+	if(emergency_shuttle.shutdown == FALSE)
+		return
+	emergency_shuttle.shutdown = FALSE
+	research_shuttle.lockdown = null
+	mining_shuttle.lockdown = null
+	world << sound('sound/misc/notice1.ogg')
+	for(var/mob/living/silicon/ai/aiPlayer in player_list)
+		aiPlayer.set_zeroth_law("")
+		to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
+
+
+/datum/faction/xenomorph/proc/LiftQuarantineDeathsquad()
+	if(emergency_shuttle.shutdown == FALSE)
+		return
+	world <<  sound('sound/AI/aimalf.ogg')
+	command_alert(/datum/command_alert/xenomorph_station_deathsquad)
+	emergency_shuttle.shutdown = FALSE
+	research_shuttle.lockdown = null
+	mining_shuttle.lockdown = null
+	for(var/mob/living/silicon/ai/aiPlayer in player_list)
+		aiPlayer.set_zeroth_law("")
+		to_chat(aiPlayer, "$/!@--LAWS UPDATED###%$$")
+	emergency_shuttle.incall()
+
+
+/datum/faction/xenomorph/stage(var/stage)
+	..()
+	switch(stage)
+		if(FACTION_ACTIVE)
+			command_alert(/datum/command_alert/xenomorphs)
+
+		if(FACTION_ENDGAME)
+			command_alert(/datum/command_alert/xenomorph_station_nuke)
+
+		if(FACTION_DEFEATED)
+			command_alert(/datum/command_alert/xenomorph_station_unlock)
+
+/datum/faction/xenomorph/proc/end(var/result)
+	. = TRUE
+	switch (result)
+		if (ALL_HEADS_DEAD)
+			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
+			ticker.revolutionary_victory = 1
+		if (ALL_REVS_DEAD)
+			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
+
+
+
+
+/datum/faction/xenomorph/proc/send_intercept()
+	var/nukecode = "ERROR"
+		for(var/obj/machinery/nuclearbomb/bomb in machines)
+			if(bomb && bomb.r_code)
+				if(bomb.z == map.zMainStation)
+					nukecode = bomb.r_code
+					break
+
+	interceptname = "Directive 7-12"
+	intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
+	Directive 7-12 has been issued for [station_name()].
+	The biohazard has grown out of control and will soon reach critical mass.
+	Your orders are as follows:
+	<ol>
+		<li>Secure the Nuclear Authentication Disk.</li>
+		<li>Detonate the Nuke located in the Station's Vault.</li>
+	</ol>
+	<b>Nuclear Authentication Code:</b> [nukecode]
+	Message ends."}
+
+	for (var/obj/machinery/computer/communications/comm in machines)
+		if (!(comm.stat & (BROKEN | NOPOWER)) && comm.prints_intercept)
+			var/obj/item/weapon/paper/intercept = new /obj/item/weapon/paper( comm.loc )
+			intercept.name = "paper- [interceptname]"
+			intercept.info = intercepttext
+			comm.messagetitle.Add("[interceptname]")
+			comm.messagetext.Add(intercepttext)
+
+
+
+#undef ACTIVE_XENO_REQUIREMENT
+#undef DEFEATED_XENO
+#undef QUARANTINE_RATIO 
+#undef ENDGAME_RATIO

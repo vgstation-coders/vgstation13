@@ -60,6 +60,10 @@
 
 #define isalienadult(A) istype(A, /mob/living/carbon/alien/humanoid)
 
+#define isalienqueen(A)	istype(A, /mob/living/carbon/alien/humanoid/queen)
+
+#define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
+
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)

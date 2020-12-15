@@ -19,6 +19,7 @@
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
 #define SPIDERCLAN "spider clan"
+#define XENOMORPH "alien hivemind"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -67,6 +68,7 @@
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"
+#define XENOMORPH "xenomorph"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"

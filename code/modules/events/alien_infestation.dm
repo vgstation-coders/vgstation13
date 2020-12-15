@@ -1,3 +1,4 @@
+/*
 /var/global/sent_aliens_to_station = 0
 
 /datum/event/alien_infestation
@@ -46,3 +47,6 @@
 		spawncount--
 		successSpawn = 1
 	return successSpawn
+
+
+*/
