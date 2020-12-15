@@ -1200,15 +1200,15 @@ About the new airlock wires panel:
 		var/breaktime = 6 SECONDS //Same amount of time as drilling a wall, then a girder
 		if(welded)
 			breaktime += 3 SECONDS //Welding buys you a little time
-		src.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
+		user.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
 		if(do_after(user,src, breaktime, 3, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after)))
 			//Calculate bolts separtely, in case they dropped in the last 6-9 seconds.
 			if(src.locked == 1)
-				src.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
+				user.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
 				if(!do_after(user, src, 19 SECONDS, 6, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after))) //Same amount as drilling an R-wall, longer if it was welded
 					return //If they moved, cancel us out
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
+			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
 			bashed_in(user)
 		return
 
