@@ -20,6 +20,8 @@ var/global/list/current_transporters = list()
 	//so that multiple people can't use it
 	var/busy = FALSE
 
+	machine_flags = SCREWTOGGLE | CROWDESTROY
+
 /obj/machinery/item_transporter/examine(mob/user)
 	. = ..()
 	if(stat & NOPOWER)
@@ -63,11 +65,7 @@ var/global/list/current_transporters = list()
 
 /obj/machinery/item_transporter/attack_ghost(mob/user)
 	if(isAdminGhost(user))
-		var/choice_list = list(
-			"Reset Cooldown",
-			"Set Cooldown"
-		)
-		var/choice = input(user, "Choose which action to do") as null|anything in choice_list
+		var/choice = input(user, "Choose which action to do") as null|anything in list("Reset Cooldown", "Set Cooldown")
 		switch(choice)
 			if("Reset Cooldown")
 				timed_cooldown = 0
@@ -76,8 +74,8 @@ var/global/list/current_transporters = list()
 				var/num_choice = input(user, "How many seconds should the cooldown be?") as num
 				if(!num_choice)
 					return
-				if(num_choice <= 0)
-					num_choice = 1
+				if(num_choice < 0)
+					num_choice = 0
 				cooldown_time = num_choice SECONDS
 				return
 	var/obj/machinery/item_transporter/tele_choice = input(user, "Which transporter would you like to go to?") as null|anything in current_transporters
@@ -129,28 +127,3 @@ var/global/list/current_transporters = list()
 		choice.timed_cooldown = world.time + choice.cooldown_time
 		playsound(choice, 'sound/machines/chime.ogg', 50, 1)
 		busy = FALSE
-
-/obj/machinery/item_transporter/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_screwdriver(user))
-		W.playtoolsound(src, 50)
-		switch(decon_stage)
-			if(0)
-				to_chat(user, "<span class='notice'>You open the wire panel for \the [src].</span>")
-				decon_stage = 1
-				return
-			if(1)
-				to_chat(user, "<span class='notice'>You close the wire panel for \the [src].</span>")
-				decon_stage = 0
-				return
-	else if(iscrowbar(W) && decon_stage)
-		W.playtoolsound(src, 50)
-		var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
-		M.amount = 5
-		for(var/obj/item/weapon/stock_parts/sParts in component_parts)
-			sParts.forceMove(src.loc)
-		qdel(src)
-		return
-	else if(istype(W, /obj/item/weapon/storage/bag/gadgets/part_replacer))
-		return exchange_parts(user, W)
-	else
-		..()
