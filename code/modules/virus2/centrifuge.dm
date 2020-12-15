@@ -68,7 +68,7 @@
 		return FALSE
 
 	if (stat & (NOPOWER))
-		to_chat(user, "<span class='warning'>\The [src] is not powered, please check area to the power before continuing.</span>")
+		to_chat(user, "<span class='warning'>\The [src] is not powered, please check the area power controller before continuing.</span>")
 		return FALSE
 
 	if (.)
