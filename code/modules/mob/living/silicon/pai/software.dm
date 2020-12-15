@@ -393,7 +393,7 @@
 
 /mob/living/silicon/pai/proc/CheckDNA(var/mob/M, var/mob/living/silicon/pai/P)
 	if(M.stat == DEAD)
-		to_chat(P, "<span class='warning'>DNA is denaturing due to bodies medical death, aborting operation.</span>")
+		to_chat(P, "<span class='warning'>DNA is denaturing due to the body's death, aborting operation.</span>")
 		return
 	var/answer = input(M, "[P] is requesting a DNA sample from you. Will you allow it to confirm your identity?", "[P] Check DNA", "No") in list("Yes", "No")
 	if(answer == "Yes")
