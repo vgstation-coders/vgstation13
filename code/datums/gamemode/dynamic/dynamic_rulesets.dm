@@ -62,6 +62,8 @@
 	//by default, a rule is acceptable if it satisfies the threat level/population requirements.
 	//If your rule has extra checks, such as counting security officers, do that in ready() instead
 	if (!map.map_ruleset(src))
+		message_admins("Dynamic Mode: Skipping [name] due to map blacklist.")
+		log_admin("Dynamic Mode: Skipping [name] due to map blacklist")
 		return 0
 
 	if (player_list.len >= mode.high_pop_limit)
