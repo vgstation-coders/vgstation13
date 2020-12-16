@@ -61,6 +61,8 @@
 
 	var/headlights = FALSE
 
+	var/recently_driving = null
+
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 
@@ -153,11 +155,13 @@
 	if(occupant && occupant == user)
 		return ..()
 	if(heldkey && !user.incapacitated() && Adjacent(user) && user.dexterity_check())
-		to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
-		user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
-		heldkey.forceMove(get_turf(user))
-		user.put_in_hands(heldkey)
-		heldkey = null
+		user.visible_message("<span class='warning'>[user] is pulling the keys out of \the [src]'s ignition.</span>", "<span class='notice'>You reach to remove the keys.</span>")
+		if(user == recently_driving || do_after(user, src, 4 SECONDS))
+			to_chat(user, "<span class='notice'>You remove \the [heldkey] from \the [src]'s ignition.</span>")
+			user.visible_message("<span class='notice'>\The [src]'s engine shuts off.</span>")
+			heldkey.forceMove(get_turf(user))
+			user.put_in_hands(heldkey)
+			heldkey = null
 	else
 		..()
 
@@ -261,6 +265,11 @@
 	..()
 	for (var/datum/action/action in vehicle_actions)
 		action.Remove(user)
+
+	recently_driving = user
+	spawn(4 SECONDS)
+		if(recently_driving == user)
+			recently_driving = null
 
 /obj/structure/bed/chair/vehicle/handle_layer()
 	if(dir == SOUTH)
