@@ -30,14 +30,14 @@
 			icon_state ="blackglass"
 			name = "international drink of mystery"
 			desc = "The identity of this drink has been concealed for its protection."
-			viewcontents = 0 
+			viewcontents = 0
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
 			R.handle_special_behavior(src)
 
 			if(R.light_color)
 				light_color = R.light_color
-			
+
 			if(R.flammable)
 				if(!lit)
 					flammable = 1
