@@ -3429,11 +3429,18 @@
 	result_amount = 3
 
 /datum/chemical_reaction/eggnog
-	name = "eggnog"
+	name = "Eggnog"
 	id = EGGNOG
 	result = EGGNOG
-	required_reagents = list(MILK = 2, CREAM = 1, SUGAR = 1, EGG_YOLK = 0.8)
-	result_amount = 5
+	required_reagents = list(MILK = 2, CREAM = 1, EGG_YOLK = 0.4)
+	result_amount = 3
+
+/datum/chemical_reaction/festive_eggnog
+	name = "Festive Eggnog"
+	id = FESTIVE_EGGNOG
+	result = FESTIVE_EGGNOG
+	required_reagents = list(EGGNOG = 1, WHISKEY = 1, CINNAMON = 0.1)
+	result_amount = 2
 
 /datum/chemical_reaction/diy_soda
 	name = "Dr. Pecker's DIY Soda"
