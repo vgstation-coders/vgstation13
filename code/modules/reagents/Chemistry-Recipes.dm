@@ -3439,7 +3439,7 @@
 	name = "Festive Eggnog"
 	id = FESTIVE_EGGNOG
 	result = FESTIVE_EGGNOG
-	required_reagents = list(EGGNOG = 1, WHISKEY = 1, CINNAMON = 0.1)
+	required_reagents = list(EGGNOG = 1, RUM = 1, CINNAMON = 0.1)
 	result_amount = 2
 
 /datum/chemical_reaction/diy_soda
