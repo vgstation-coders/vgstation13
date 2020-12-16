@@ -233,7 +233,4 @@
 				MM.visible_message("<span class='danger'>\The [teleatom] bounces off the portal!</span>", "<span class='warning'>You're unable to go to that destination!</span>")
 				return FALSE
 
-	if(!isemptylist(recursive_type_check(teleatom, /obj/item/clothing/head/tinfoil)))
-		return FALSE
-
 	return TRUE

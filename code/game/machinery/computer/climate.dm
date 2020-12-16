@@ -8,6 +8,10 @@ var/list/climatecomps = list()
 	light_color = LIGHT_COLOR_CYAN
 	circuit = "/obj/item/weapon/circuitboard/labor"
 
+/obj/machinery/computer/climate/wall
+	density = FALSE
+	icon_state = "climate-wall"
+
 /obj/machinery/computer/climate/New()
 	..()
 	climatecomps += src

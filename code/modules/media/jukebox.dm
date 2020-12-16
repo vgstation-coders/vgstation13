@@ -306,6 +306,7 @@ var/global/list/loopModeNames=list(
 			else if(current_song > playlist.len)
 				current_song = playlist.len
 			var/datum/song_info/song=playlist[current_song]
+			t += "<b>Playlist:<b> [playlists[playlist_id]]<br />"
 			t += "<b>Current song:</b> [song.artist] - [song.title]<br />"
 		if(next_song)
 			var/datum/song_info/song=playlist[next_song]
