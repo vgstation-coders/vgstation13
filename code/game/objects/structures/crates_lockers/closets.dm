@@ -51,7 +51,8 @@
 	for(var/path in to_spawn)
 		var/amount = to_spawn[path] || 1
 		for(var/i in 1 to amount)
-			new path(src)
+			var/atom/A = new path(src)
+			A.initialize()  // recursive
 
 /obj/structure/closet/basic
 	has_lock_type = /obj/structure/closet/secure_closet/basic
