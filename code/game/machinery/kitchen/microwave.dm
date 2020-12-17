@@ -556,13 +556,6 @@
 		return
 	return ..()
 
-/obj/machinery/microwave/proc/radial_check(mob/living/user)
-	if(!istype(user))
-		return FALSE
-	if(user.incapacitated() || !user.Adjacent(src))
-		return FALSE
-	return TRUE
-
 /obj/machinery/microwave/Topic(href, href_list)
 	if(..())
 		return

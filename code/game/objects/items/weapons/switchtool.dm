@@ -46,12 +46,12 @@
 	else
 		if(!proximity_flag)
 			return
-			
+
 		var/turf/T
 		if(isturf(target.loc))
 			T = target.loc
 		else
-			return 
+			return
 
 		var/success = FALSE
 		for(var/obj/item/I in T)
@@ -73,6 +73,7 @@
 /obj/item/weapon/switchtool/examine(mob/user)
 	..()
 	to_chat(user, "This one is capable of holding [get_formatted_modules()].")
+	to_chat(user, "\The [hmodule] is currently selected.")
 
 /obj/item/weapon/switchtool/attack_self(mob/user)
 	if(!user)
@@ -213,12 +214,14 @@
 
 /obj/item/weapon/switchtool/proc/choose_deploy(mob/user)
 	var/list/potential_modules = list()
+	var/list/choices = list()
 	for(var/module in stored_modules)
 		if(stored_modules[module])
 			if(get_module_name(module) == stored_modules[module].name) //same name so listing actually name in parentheses is redundant
 				potential_modules += "[get_module_name(module)]"
 			else
 				potential_modules += "[get_module_name(module)] \[[stored_modules[module].name]\]"
+			choices += list(list("[get_module_name(module)]", "[capitalize(get_module_name(module))]"))
 
 	if(!potential_modules.len)
 		to_chat(user, "No modules to deploy.")
@@ -233,8 +236,10 @@
 		return
 
 	else
-		var/chosen_module = input(user,"What do you want to deploy?", "[src]", "Cancel") as anything in potential_modules
-		if(chosen_module != "Cancel")
+		var/chosen_module = show_radial_menu(user,src,choices,custom_check = new /callback(src, .proc/radial_check, user))
+		if(!radial_check(user))
+			return
+		if(chosen_module)
 			var/true_module = ""
 			for(var/checkmodule in stored_modules)
 				if(findtext(chosen_module, " \[") && get_module_name(checkmodule) == copytext(chosen_module, 1, findtext(chosen_module, " \[")))
@@ -250,7 +255,6 @@
 				edit_deploy(1)
 			return TRUE
 		return
-
 
 /obj/item/weapon/switchtool/surgery
 	name = "surgeon's switchtool"

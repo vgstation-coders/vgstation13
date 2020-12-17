@@ -205,13 +205,6 @@
 		if("Examine")
 			user.examination(src)
 
-/obj/machinery/bunsen_burner/proc/radial_check(mob/living/user)
-	if(!istype(user))
-		return FALSE
-	if(user.incapacitated() || !user.Adjacent(src))
-		return FALSE
-	return TRUE
-
 /obj/machinery/bunsen_burner/verb/verb_toggle_fuelport()
 	set src in view(1)
 	set name = "Toggle Bunsen burner fuelport"

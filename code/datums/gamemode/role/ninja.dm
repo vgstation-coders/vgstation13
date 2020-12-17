@@ -295,13 +295,6 @@
 	cooldown = world.time + 10 SECONDS
 	return TRUE
 
-/obj/item/clothing/gloves/ninja/proc/radial_check(mob/living/user)
-	if(!istype(user))
-		return FALSE
-	if(user.incapacitated() || !user.Adjacent(src))
-		return FALSE
-	return TRUE
-
 #define MAKE_SHURIKEN_COST 1000
 #define CHARGE_COST_MULTIPLIER 4
 

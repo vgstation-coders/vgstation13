@@ -304,13 +304,6 @@ var/global/list/juice_items = list (
 		return
 	return ..()
 
-/obj/machinery/reagentgrinder/proc/radial_check(mob/living/user)
-	if(!istype(user))
-		return FALSE
-	if(user.incapacitated() || !user.Adjacent(src))
-		return FALSE
-	return TRUE
-
 /obj/machinery/reagentgrinder/CtrlClick(mob/user)
 	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && !inuse && holdingitems.len && anchored)
 		grind() //Checks for beaker and power/broken internally
