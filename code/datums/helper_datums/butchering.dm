@@ -192,6 +192,12 @@
 	..()
 	parent.dust()
 
+/datum/butchering_product/skin/bear/brownbear
+	result = /obj/item/clothing/head/bearpelt/brown/real
+
+/datum/butchering_product/skin/bear/polarbear
+	result = /obj/item/clothing/head/bearpelt/polar
+
 /datum/butchering_product/skin/xeno
 	result = /obj/item/stack/sheet/xenochitin
 	verb_name = "remove chitin"
@@ -327,6 +333,9 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/simple_animal/hostile/bear/spare		= list(/datum/butchering_product/skin/bear/spare, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/polarbear	= list(/datum/butchering_product/skin/bear/polarbear, TEETH_LOTS), // all bears have lots of teeth
+	/mob/living/simple_animal/hostile/bear/brownbear	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/panda	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
 	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk

@@ -364,6 +364,30 @@
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
 	return get_all_accesses()
 
+/obj/item/clothing/head/bearpelt/black
+	name = "bear pelt hat"
+	desc = "Just like the pelt of a space bear without as much space."
+	icon_state = "blackbearpelt"
+	item_state = "blackbearpelt"
+
+/obj/item/clothing/head/bearpelt/brown
+	name = "brown bear pelt hat"
+	desc = "Faded and rough, it almost passes as a real pelt."
+	icon_state = "brownbearpeltfake"
+	item_state = "brownbearpeltfake"
+
+/obj/item/clothing/head/bearpelt/brown/real
+	name = "brown bear pelt hat"
+	desc = "Now that's what I call fuzzy."
+	icon_state = "brownbearpelt"
+	item_state = "brownbearpelt"
+
+/obj/item/clothing/head/bearpelt/polar
+	name = "bear pelt hat"
+	desc = "For those polar chills."
+	icon_state = "polarbearpelt"
+	item_state = "polarbearpelt"
+
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
 	icon_state = "xenos"
