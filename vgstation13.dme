@@ -1512,7 +1512,6 @@
 #include "code\modules\Economy\Wages.dm"
 #include "code\modules\error_handler\error_handler.dm"
 #include "code\modules\error_handler\error_viewer.dm"
-#include "code\modules\events\alien_infestation.dm"
 #include "code\modules\events\blizzard.dm"
 #include "code\modules\events\bluespaceanomaly.dm"
 #include "code\modules\events\brand_intelligence.dm"
