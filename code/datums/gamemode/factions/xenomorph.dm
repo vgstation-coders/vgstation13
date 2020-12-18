@@ -41,7 +41,7 @@
 
 	if(stage == FACTION_ENDGAME)
 		if(ticker.station_was_nuked)
-			return win(STATION_WAS_NUKED)
+			return win(XENO_STATION_WAS_NUKED)
 
 		var/living_humans = FALSE
 		for(var/mob/living/carbon/human/M in mob_list)
@@ -101,7 +101,7 @@
 		if(xeno_to_living_ratio >= QUARANTINE_RATIO && emergency_shuttle.shutdown != TRUE)
 			QuarantineStation()
 
-		if(xeno_to_living_ratio > ENDGAME_RATIO)
+		if(xeno_to_living_ratio > XENO_ENDGAME_RATIO)
 			//In case the quarantine wasn't up already somehow.
 			if(emergency_shuttle.shutdown != TRUE)
 				QuarantineStation()
