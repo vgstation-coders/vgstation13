@@ -88,10 +88,6 @@
 		xeno_to_living_ratio = livingxenos / livingcrew
 
 
-	to_chat(world, "LIVING XENOS: [livingxenos]")
-	to_chat(world, "LIVING HUMANS: [livingcrew]")
-	to_chat(world, "DEAD HUMANS: [deadcrew]")
-	to_chat(world, "LIVING DRONES: [breeders]")
 
 	//Alert the crew once the xenos grow past four. 
 	if (stage < FACTION_ACTIVE)
