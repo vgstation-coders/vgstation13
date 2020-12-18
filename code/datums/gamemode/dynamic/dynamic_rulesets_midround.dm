@@ -676,7 +676,8 @@
 
 	new_xeno.key = applicant.key
 	new_xeno << sound('sound/voice/alienspawn.ogg')
-	vents -= vent
+	if(vents.len > 1)
+		vents -= vent
 
 	return new_xeno
 
