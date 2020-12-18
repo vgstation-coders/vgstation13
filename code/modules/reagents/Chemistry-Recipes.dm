@@ -3259,7 +3259,7 @@
 	result = APETRINE
 	required_reagents = list(PETRITRICIN = 2, PACID = 3)
 	result_amount = 1
-	
+
 /datum/chemical_reaction/potassiumcarbonate
 	name = "Potassium Carbonate"
 	id = POTASSIUMCARBONATE
@@ -3427,6 +3427,20 @@
 	result = MONSTERMASH
 	required_reagents = list(ECTOPLASM = 1, CARAMEL = 1, TOMATOJUICE = 1)
 	result_amount = 3
+
+/datum/chemical_reaction/eggnog
+	name = "Eggnog"
+	id = EGGNOG
+	result = EGGNOG
+	required_reagents = list(MILK = 2, CREAM = 1, EGG_YOLK = 0.4)
+	result_amount = 3
+
+/datum/chemical_reaction/festive_eggnog
+	name = "Festive Eggnog"
+	id = FESTIVE_EGGNOG
+	result = FESTIVE_EGGNOG
+	required_reagents = list(EGGNOG = 1, RUM = 1, CINNAMON = 0.1)
+	result_amount = 2
 
 /datum/chemical_reaction/diy_soda
 	name = "Dr. Pecker's DIY Soda"
