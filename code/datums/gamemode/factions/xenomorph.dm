@@ -63,7 +63,6 @@
 
 	var/livingxenos = 0
 	var/livingcrew = 0
-	var/breeders = 0
 
 	for(var/mob/living/M in mob_list)
 		if(!M.mind)
@@ -77,8 +76,6 @@
 		if(isalien(M))
 			if(M.stat != DEAD)
 				livingxenos++
-				if (isaliendrone(M) || isalienqueen(M) || islarva(M))
-					breeders++
 		else
 			if(M.stat != DEAD)
 				livingcrew++
