@@ -624,6 +624,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	HTML += {"</td'></tr></table>
 		</center></table>"}
 	switch(alternate_option)
+		if(GET_EMPTY_JOB)
+			HTML += "<center><br><a href='?_src_=prefs;preference=job;task=random'>Get unique job</a></center><br>"
 		if(GET_RANDOM_JOB)
 			HTML += "<center><br><a href='?_src_=prefs;preference=job;task=random'>Get random job if preferences unavailable</a></center><br>"
 		if(BE_ASSISTANT)
@@ -1025,9 +1027,9 @@ NOTE:  The change will take effect AFTER any current recruiting periods."}
 				ResetJobs()
 				SetChoices(user)
 			if("random")
-				if(alternate_option == GET_RANDOM_JOB || alternate_option == BE_ASSISTANT)
+				if(alternate_option == GET_RANDOM_JOB || alternate_option == BE_ASSISTANT || alternate_option == RETURN_TO_LOBBY)
 					alternate_option += 1
-				else if(alternate_option == RETURN_TO_LOBBY)
+				else if(alternate_option == GET_EMPTY_JOB)
 					alternate_option = 0
 				else
 					return 0

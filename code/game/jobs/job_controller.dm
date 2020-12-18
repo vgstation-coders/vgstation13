@@ -281,6 +281,8 @@ var/global/datum/controller/occupations/job_master
 
 		// Loop through all unassigned players
 		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				continue //This player doesn't want to share a job title. We need to deal with them last.
 
 			// Loop through all jobs
 			for(var/datum/job/job in shuffledoccupations)
@@ -294,23 +296,6 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
-	/*
-	Old job system
-	for(var/level = 1 to 3)
-		for(var/datum/job/job in occupations)
-			Debug("Checking job: [job]")
-			if(!job)
-				continue
-			if(!unassigned.len)
-				break
-			if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
-				continue
-			var/list/candidates = FindOccupationCandidates(job, level)
-			while(candidates.len && ((job.current_positions < job.spawn_positions) || job.spawn_positions == -1))
-				var/mob/new_player/candidate = pick(candidates)
-				Debug("Selcted: [candidate], for: [job.title]")
-				AssignRole(candidate, job.title)
-				candidates -= candidate*/
 
 	Debug("DO, Standard Check end")
 
@@ -356,9 +341,18 @@ var/global/datum/controller/occupations/job_master
 				UnassignRole(player)
 				AssignRole(player, "Assistant")
 
-	//For ones returning to lobby
-	for(var/mob/new_player/player in unassigned)
-		if(player.client.prefs.alternate_option == RETURN_TO_LOBBY)
+	//Final pass - first deal with the empty job group, otherwise send any leftovers to the lobby
+	final_pass: //this is a loop label
+		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				for(var/level = 1 to 3)
+					for(var/datum/job/job in shuffledoccupations)
+						if(job.current_positions) //already someone in this job title
+							continue
+						if(TryAssignJob(player,level,job))
+							unassigned -= player
+							continue final_pass //move on to the next player entirely
+
 			to_chat(player, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 			player.ready = 0
 			unassigned -= player
