@@ -650,7 +650,7 @@
 	required_candidates = 1
 	max_candidates = 4
 	weight = 1
-	cost = 20
+	cost = 30
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 35
 	logo = "xeno-logo"
