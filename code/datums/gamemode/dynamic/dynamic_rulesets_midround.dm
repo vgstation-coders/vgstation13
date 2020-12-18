@@ -642,7 +642,7 @@
 //                                          //
 //////////////////////////////////////////////
 
-/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs
 	name = "Alien Infestation"
 	role_category = /datum/role/xenomorph
 	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
@@ -654,9 +654,10 @@
 	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 35
 	logo = "xeno-logo"
+	my_fac = /datum/faction/xenomorph
 	var/list/vents = list()
 
-/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/ready()
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
 	..()
 	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
 		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
@@ -669,7 +670,7 @@
 		return
 	return 1
 
-/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/generate_ruleset_body(var/mob/applicant)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
 	var/obj/vent = pick(vents)
 	var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
 
@@ -679,9 +680,7 @@
 
 	return new_xeno
 
-/datum/dynamic_ruleset/midround/from_ghosts/xenomorphs/execute()
-	..()
-	var/time = pick(5 MINUTES, 10 MINUTES)
-	sleep(time)
-		command_alert(/datum/command_alert/xenomorphs)
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+
 

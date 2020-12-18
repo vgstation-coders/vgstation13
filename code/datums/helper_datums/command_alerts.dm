@@ -87,7 +87,6 @@
 /datum/command_alert/xenomorph_station_deatsquad
 	name = "Xenomorph Deathsquad"
 	alert_title = "!@$$#ERROR-- S##SHUTTLE@LOCKDOWN LIFTED%%@##"
-	noalert = 1
 	theme = "endgame"
 
 /datum/command_alert/xenomorph_station_deathsquad/announce()

@@ -1,5 +1,5 @@
 #define ACTIVE_XENO	4
-#define QUARANTINE_RATIO 0.5
+#define QUARANTINE_RATIO 1
 #define ENDGAME_RATIO 3
 #define DEATHSQUAD_RATIO 5
 
@@ -26,13 +26,13 @@
 /datum/faction/xenomorph/check_win()
 	if (stage >= FACTION_ACTIVE)
 		var/living_breeders = FALSE
-		for(var/mob/living/carbon/alien/A in player_list)
+		for(var/mob/living/carbon/alien/A in mob_list)
 			if(!A.mind || A.stat == DEAD)
 				continue
 			var/turf/T = get_turf(A)
 			if(!(T.z == STATION_Z || T.z == CENTCOMM_Z))
 				continue
-			if(isaliendrone(A) || isalienqueen(A))
+			if(isaliendrone(A) || isalienqueen(A) || islarva(A))
 				living_breeders = TRUE
 				break
 		if(!living_breeders)
@@ -44,7 +44,7 @@
 			return win(STATION_WAS_NUKED)
 
 		var/living_humans = FALSE
-		for(var/mob/living/carbon/human/M in player_list)
+		for(var/mob/living/carbon/human/M in mob_list)
 			if(!M.mind || M.stat == DEAD)
 				continue 
 			var/turf/T = get_turf(M)
@@ -58,12 +58,14 @@
 	
 
 /datum/faction/xenomorph/process()
+	if(stage == FACTION_DEFEATED)
+		return
+
 	var/livingxenos = 0
 	var/livingcrew = 0
-	var/deadcrew = 0
-	var/queens_and_drones = 0
+	var/breeders = 0
 
-	for(var/mob/M in player_list)
+	for(var/mob/living/M in mob_list)
 		if(!M.mind)
 			continue
 		if(isanimal(M) || ispAI(M))     //borers and pAIs dont count
@@ -73,40 +75,35 @@
 			continue
 
 		if(isalien(M))
-			if(M.stat == DEAD)
-				deadxenos++
-			else 
+			if(M.stat != DEAD)
 				livingxenos++
-				if (isaliendrone(M) || isalienqueen(M))
-					queens_and_drones++
+				if (isaliendrone(M) || isalienqueen(M) || islarva(M))
+					breeders++
 		else
-			if(M.stat == DEAD)
-				deadcrew++
-			else
+			if(M.stat != DEAD)
 				livingcrew++
 		
+	var/xeno_to_living_ratio = 0
+	if(livingcrew > 0)
+		xeno_to_living_ratio = livingxenos / livingcrew
+
+
 	to_chat(world, "LIVING XENOS: [livingxenos]")
 	to_chat(world, "LIVING HUMANS: [livingcrew]")
 	to_chat(world, "DEAD HUMANS: [deadcrew]")
-	to_chat(world, "LIVING DRONES: [queens_and_drones]")
-
-
+	to_chat(world, "LIVING DRONES: [breeders]")
 
 	//Alert the crew once the xenos grow past four. 
 	if (stage < FACTION_ACTIVE)
-		if(livingxenos >= ACTIVE_XENO_REQUIREMENT)
+		if(livingxenos > ACTIVE_XENO)
 			stage(FACTION_ACTIVE)
 
 	if(stage < FACTION_ENDGAME)
-		if(livingxenos <= ACTIVE_XENO_REQUIREMENT)
+		if(livingxenos <= ACTIVE_XENO)
 			return
 
-		var/totalplayers = livingxenos + livingcrew + deadcrew
-		var/xeno_to_total_ratio = livingxenos / totalplayers
-		var/xeno_to_living_ratio = livingxenos / livingcrew
-
 		//shits getting serious now, roughly half of the players are xenos!
-		if(xeno_to_total_ratio >= QUARANTINE_RATIO && emergency_shuttle.shutdown != TRUE)
+		if(xeno_to_living_ratio >= QUARANTINE_RATIO && emergency_shuttle.shutdown != TRUE)
 			QuarantineStation()
 
 		if(xeno_to_living_ratio > ENDGAME_RATIO)
@@ -117,7 +114,7 @@
 
 
 	if(stage == FACTION_ENDGAME)
-		if(squad_sent)
+		if(squad_sent || livingxenos <= ACTIVE_XENO)
 			return
 		if(xeno_to_living_ratio > DEATHSQUAD_RATIO || livingcrew <= 2)
 			squad_sent = TRUE
@@ -171,33 +168,25 @@
 			command_alert(/datum/command_alert/xenomorphs)
 
 		if(FACTION_ENDGAME)
+			send_intercept()
 			command_alert(/datum/command_alert/xenomorph_station_nuke)
 
 		if(FACTION_DEFEATED)
-			command_alert(/datum/command_alert/xenomorph_station_unlock)
+			if(emergency_shuttle.shutdown == TRUE)
+				command_alert(/datum/command_alert/xenomorph_station_unlock)
 
-/datum/faction/xenomorph/proc/end(var/result)
-	. = TRUE
-	switch (result)
-		if (ALL_HEADS_DEAD)
-			to_chat(world, "<font size = 3><b>The revolution has won!</b></font><br/><font size = 2>All heads are either dead or have fled the station!</font>")
-			ticker.revolutionary_victory = 1
-		if (ALL_REVS_DEAD)
-			to_chat(world, "<font size = 3><b>The crew has won!</b></h1><br/><font size = 2>All revolutionaries are either dead or have fled the station!</font>")
-
-
-
+/datum/faction/xenomorph/proc/win(var/result)
 
 /datum/faction/xenomorph/proc/send_intercept()
 	var/nukecode = "ERROR"
-		for(var/obj/machinery/nuclearbomb/bomb in machines)
-			if(bomb && bomb.r_code)
-				if(bomb.z == map.zMainStation)
-					nukecode = bomb.r_code
-					break
+	for(var/obj/machinery/nuclearbomb/bomb in machines)
+		if(bomb && bomb.r_code)
+			if(bomb.z == map.zMainStation)
+				nukecode = bomb.r_code
+				break
 
-	interceptname = "Directive 7-12"
-	intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
+	var/interceptname = "Directive 7-12"
+	var/intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
 	Directive 7-12 has been issued for [station_name()].
 	The biohazard has grown out of control and will soon reach critical mass.
 	Your orders are as follows:
