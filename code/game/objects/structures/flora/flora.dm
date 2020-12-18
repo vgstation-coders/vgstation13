@@ -113,15 +113,17 @@
 
 	update_transparency()
 
-	for(var/turf/T in range(2,src))
-		T.lazy_register_event(/lazy_event/on_entered, src, .proc/give_transparency)
-		T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.lazy_register_event(/lazy_event/on_entered, src, .proc/give_transparency)
+			T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
 
 
 /obj/structure/flora/tree/Destroy()
-	for(var/turf/T in range(2,src))
-		T.lazy_unregister_event(/lazy_event/on_entered, src, .proc/give_transparency)
-		T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.lazy_unregister_event(/lazy_event/on_entered, src, .proc/give_transparency)
+			T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
 	..()
 
 /obj/structure/flora/tree/proc/update_transparency()
