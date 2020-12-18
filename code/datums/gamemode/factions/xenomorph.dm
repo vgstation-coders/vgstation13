@@ -186,7 +186,7 @@
 	var/interceptname = "Directive 7-12"
 	var/intercepttext = {"<FONT size = 3><B>Nanotrasen Update</B>: Biohazard Alert.</FONT><HR>
 	Directive 7-12 has been issued for [station_name()].
-	The biohazard has grown out of control and will soon reach critical mass.
+	The infestation has grown out of control and will soon reach critical mass.
 	Your orders are as follows:
 	<ol>
 		<li>Secure the Nuclear Authentication Disk.</li>
