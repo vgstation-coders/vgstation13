@@ -76,12 +76,22 @@
 
 /datum/command_alert/xenomorph_station_unlock
 	name = "Xenomorphs destroyed"
-	alert_title = "Directive 7-10 to 7-12 Concluded."
+	alert_title = "Directives 7-10 to 7-12 Concluded."
 	force_report = 1
 	stoptheme = 1
 
 /datum/command_alert/xenomorph_station_unlock/announce()
 	message = "External scanners indicate that all hostile lifeforms capable of reproduction have been destroyed. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
+	..()
+
+/datum/command_alert/xenomorph_station_unlock_2
+	name = "Xenomorphs destroyed mostly"
+	alert_title = "Directives 7-10 to 7-12 Concluded."
+	force_report = 1
+	stoptheme = 1
+
+/datum/command_alert/xenomorph_station_unlock/announce()
+	message = "External scanners indicate that the number of hostile lifeforms on your station has fallen back to reasonable levels. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
 	..()
 
 /datum/command_alert/xenomorph_station_deatsquad

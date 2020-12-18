@@ -1,14 +1,14 @@
 #define ACTIVE_XENO	4
 #define QUARANTINE_RATIO 1
-#define ENDGAME_RATIO 3
+#define XENO_ENDGAME_RATIO 3
 #define DEATHSQUAD_RATIO 5
 
-#define STATION_WAS_NUKED 1
+#define XENO_STATION_WAS_NUKED 1
 #define HUMANS_WIPED_OUT 2
 
 /datum/faction/xenomorph
 	name = "Alien Hivemind"
-	ID = XENOMORPH
+	ID = XENOMORPH_HIVE
 	required_pref = XENOMORPH
 	initial_role = XENOMORPH
 	late_role = XENOMORPH
@@ -88,15 +88,21 @@
 		xeno_to_living_ratio = livingxenos / livingcrew
 
 
+	to_chat(world, "LIVING XENOS: [livingxenos]")
+	to_chat(world, "LIVING HUMANS: [livingcrew]")
+	to_chat(world, "LIVING DRONES: [breeders]")
 
 	//Alert the crew once the xenos grow past four. 
 	if (stage < FACTION_ACTIVE)
 		if(livingxenos > ACTIVE_XENO)
 			stage(FACTION_ACTIVE)
+		return
 
 	if(stage < FACTION_ENDGAME)
 		if(livingxenos <= ACTIVE_XENO)
-			return
+			if(emergency_shuttle.shutdown == TRUE)
+				stage(FACTION_DORMANT)
+				return
 
 		//shits getting serious now, roughly half of the players are xenos!
 		if(xeno_to_living_ratio >= QUARANTINE_RATIO && emergency_shuttle.shutdown != TRUE)
@@ -131,7 +137,7 @@
 	mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 	emergency_shuttle.shutdown = TRUE //Quarantine
 
-/datum/faction/xenomorph/proc/LifeQuarantine()
+/datum/faction/xenomorph/proc/LiftQuarantine()
 	if(emergency_shuttle.shutdown == FALSE)
 		return
 	emergency_shuttle.shutdown = FALSE
@@ -162,6 +168,8 @@
 	switch(stage)
 		if(FACTION_ACTIVE)
 			command_alert(/datum/command_alert/xenomorphs)
+		if(FACTION_DORMANT)
+			LiftQuarantine()
 
 		if(FACTION_ENDGAME)
 			send_intercept()
@@ -169,6 +177,7 @@
 
 		if(FACTION_DEFEATED)
 			if(emergency_shuttle.shutdown == TRUE)
+				LiftQuarantine()
 				command_alert(/datum/command_alert/xenomorph_station_unlock)
 
 /datum/faction/xenomorph/proc/win(var/result)
@@ -203,7 +212,10 @@
 
 
 
-#undef ACTIVE_XENO_REQUIREMENT
-#undef DEFEATED_XENO
+#undef ACTIVE_XENO	
 #undef QUARANTINE_RATIO 
-#undef ENDGAME_RATIO
+#undef XENO_ENDGAME_RATIO 
+#undef DEATHSQUAD_RATIO 
+
+#undef XENO_STATION_WAS_NUKED 
+#undef HUMANS_WIPED_OUT 

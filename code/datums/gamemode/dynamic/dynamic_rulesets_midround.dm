@@ -611,7 +611,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/plague_mice
 	name = "Plague Mice Invasion"
 	role_category = /datum/role/plague_mouse
-	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
+	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
 	required_pop = list(15,15,15,15,15,15,15,15,15,15)
 	required_candidates = 1
 	max_candidates = 5
@@ -645,7 +645,7 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs
 	name = "Alien Infestation"
 	role_category = /datum/role/xenomorph
-	enemy_jobs = list("Chief Medical Officer", "Medical Doctor", "Virologist")
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
 	max_candidates = 4
