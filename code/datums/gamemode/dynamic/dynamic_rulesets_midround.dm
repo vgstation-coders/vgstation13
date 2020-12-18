@@ -617,7 +617,7 @@
 	max_candidates = 5
 	weight = 1
 	cost = 25
-	requirements = list(90,50,30,20,20,10,10,0,0,0)
+	requirements = list(90,70,50,40,30,20,10,10,10,10)
 	high_population_requirement = 40
 	flags = MINOR_RULESET
 	my_fac = /datum/faction/plague_mice
