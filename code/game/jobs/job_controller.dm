@@ -112,6 +112,18 @@ var/global/datum/controller/occupations/job_master
 		return 1
 	return 0
 
+/datum/controller/occupations/proc/CloseRole(var/rank, mob/user)	//eliminating xtra_positions
+	var/datum/job/job = GetJob(rank)
+	if(job && job.current_positions < job.get_total_positions() && job.xtra_positions > 0)
+		job.remove_xtra_position()
+		if(user)
+			log_admin("[key_name(user)] has closed a slot for the [rank] job.")
+			message_admins("[key_name_admin(user)] has closed a slot for the [rank] job.")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is now closed.</span>")
+		return 1
+	return 0
+
 /datum/controller/occupations/proc/CheckPriorityFulfilled(var/rank)
 	var/datum/job/job = GetJob(rank)
 	if(job.current_positions >= job.get_total_positions() && job.priority)
