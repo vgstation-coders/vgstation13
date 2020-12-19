@@ -1,5 +1,10 @@
 var/global/datum/controller/occupations/job_master
 
+#define FREE_ASSISTANTS 2
+
+// The logic requires a shift of 1. The technical reason is that the way it is written, it boils to if (0 > 0) {"reject the assistants"}. Unfortunately, 0 is not > 0.
+#define FREE_ASSISTANTS_BRUT (FREE_ASSISTANTS-1)
+
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -313,8 +318,8 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				if(master_assistant.current_positions-1 > (config.assistantratio * count))
-					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
@@ -333,8 +338,8 @@ var/global/datum/controller/occupations/job_master
 		if (player.ckey in assistant_second_chance)
 			var/assistant_pref = assistant_second_chance[player.ckey]
 			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions-1 > (config.assistantratio * count))
-				if(count < 5)
+			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+				if(count < 5) // And less than 5 seccies...
 					Debug("AC3: [player] failed the lottery.")
 			if (assistant_pref < player.mind.job_priority)
 				Debug("AC3: got made an assistant as a second chance.")
@@ -387,8 +392,8 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
-	if(enough_sec && (count < 5))
+	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
+	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
 		for (var/datum/job/J in occupations)
