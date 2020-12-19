@@ -2635,7 +2635,6 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
-		/obj/item/clothing/head/bearpelt/brown = 5,
 		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
@@ -2710,7 +2709,6 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
 		/obj/item/clothing/suit/red_suit = 1,
-		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -3140,6 +3138,13 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/fakeposter_kit = 1,
 		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 1,
 		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 1,
+		/obj/item/weapon/storage/box/mysterycubes = 2,
+		/obj/item/weapon/storage/box/mystery_vial = 5,
+		/obj/item/weapon/storage/box/mystery_circuit = 1,
+		/obj/item/weapon/storage/box/large/mystery_material = 5,
+		/obj/item/weapon/storage/box/large/mystery_material/odd = 5,
+		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
+		/obj/structure/vendomatpack/trader = 1,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3179,7 +3184,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/fakeposter_kit = 50,
 		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 100,
 		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 100,
+		/obj/item/weapon/storage/box/mysterycubes = 75,
+		/obj/item/weapon/storage/box/mystery_vial = 25,
+		/obj/item/weapon/storage/box/mystery_circuit = 25,
+		/obj/item/weapon/storage/box/large/mystery_material = 50,
+		/obj/item/weapon/storage/box/large/mystery_material/odd = 25,
+		/obj/structure/closet/crate/freezer/bootlegpicnic = 50,
+		/obj/structure/vendomatpack/trader = 500,
 		)
+	pack = /obj/structure/vendomatpack/trader
 
 /obj/machinery/vending/trader/New()
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
