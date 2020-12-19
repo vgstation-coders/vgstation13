@@ -7,6 +7,7 @@
 #include "examine.dm"
 #include "hexadecimal.dm"
 #include "highscores.dm"
+#include "human.dm"
 #include "icons.dm"
 #include "lazy_events.dm"
 #include "names.dm"
