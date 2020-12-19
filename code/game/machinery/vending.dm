@@ -2635,6 +2635,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
+		/obj/item/clothing/head/bearpelt/brown = 5,
 		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
@@ -2709,6 +2710,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
 		/obj/item/clothing/suit/red_suit = 1,
+		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
