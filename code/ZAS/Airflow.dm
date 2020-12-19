@@ -212,6 +212,7 @@ atom/movable/GotoAirflowDest(n)
 /atom/movable/proc/airflow_hit(atom/A)
 	airflow_speed = 0
 	airflow_dest = null
+	A.Bumped(src)
 
 /mob/airflow_hit(atom/A)
 	if(size == SIZE_TINY)
