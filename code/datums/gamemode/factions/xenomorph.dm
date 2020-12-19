@@ -1,3 +1,4 @@
+/*
 #define ACTIVE_XENO	4
 #define QUARANTINE_RATIO 1
 #define XENO_ENDGAME_RATIO 3
@@ -5,6 +6,7 @@
 
 #define XENO_STATION_WAS_NUKED 1
 #define HUMANS_WIPED_OUT 2
+*/
 
 /datum/faction/xenomorph
 	name = "Alien Hivemind"
@@ -19,10 +21,7 @@
 	playlist = "endgame"
 	var/squad_sent = FALSE
 
-/datum/faction/xenomorph/HandleRecruitedMind(var/datum/mind/M)
-	..()
-
-
+/*
 /datum/faction/xenomorph/check_win()
 	if (stage >= FACTION_ACTIVE)
 		var/living_breeders = FALSE
@@ -54,11 +53,11 @@
 			break
 		if(!living_humans)
 			return win(HUMANS_WIPED_OUT)
-		
+*/
 	
 
 /datum/faction/xenomorph/process()
-	if(stage == FACTION_DEFEATED)
+	if(stage != FACTION_DORMANT)
 		return
 
 	var/livingxenos = 0
@@ -90,7 +89,7 @@
 		if(livingxenos > ACTIVE_XENO)
 			stage(FACTION_ACTIVE)
 		return
-
+/*
 	if(stage < FACTION_ENDGAME)
 		if(livingxenos <= ACTIVE_XENO)
 			if(emergency_shuttle.shutdown == TRUE)
@@ -154,13 +153,14 @@
 		aiPlayer.set_zeroth_law("")
 		to_chat(aiPlayer, "$/!@--LAWS UPDATED###%$$")
 	emergency_shuttle.incall()
-
+*/
 
 /datum/faction/xenomorph/stage(var/stage)
 	..()
 	switch(stage)
 		if(FACTION_ACTIVE)
 			command_alert(/datum/command_alert/xenomorphs)
+/*
 		if(FACTION_DORMANT)
 			LiftQuarantine()
 
@@ -172,7 +172,9 @@
 			if(emergency_shuttle.shutdown == TRUE)
 				LiftQuarantine()
 				command_alert(/datum/command_alert/xenomorph_station_unlock)
+*/
 
+/*
 /datum/faction/xenomorph/proc/win(var/result)
 
 /datum/faction/xenomorph/proc/send_intercept()
@@ -212,3 +214,4 @@
 
 #undef XENO_STATION_WAS_NUKED 
 #undef HUMANS_WIPED_OUT 
+*/
