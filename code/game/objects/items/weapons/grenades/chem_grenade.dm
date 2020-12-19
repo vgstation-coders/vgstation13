@@ -533,3 +533,16 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 	icon_state = null
 	volume = 1000
 	flags = FPRINT  | OPENCONTAINER | NOREACT
+
+/obj/item/weapon/grenade/chem_grenade/timer  //grenade casing with a 5 second timer+ignitor installed. no beakers.
+											// can be configured via a right click verb. can be done before being assembled and after being assembled
+	name = "grenade casing (timer)"
+	desc = "A hand made chemical grenade. This one seems to have a dial on the top"
+	starting_materials = list(MAT_IRON = 4750, MAT_GLASS = 100)
+	stage = 1		//these are marked as 1 because inserting any parts into an empty grenade casing raises the value from 0 to 1
+	path = 1		//since the act of inserting an assembly hasnt technically occured these two values must be set to 1 to prevent derping
+
+
+/obj/item/weapon/grenade/chem_grenade/timer/New()
+	..()
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)
