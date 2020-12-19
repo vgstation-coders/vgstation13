@@ -59,7 +59,7 @@
 		return
 
 	var/livingxenos = 0
-	var/livingcrew = 0
+//	var/livingcrew = 0
 
 	for(var/mob/living/M in mob_list)
 		if(!M.mind)
@@ -73,13 +73,16 @@
 		if(isalien(M))
 			if(M.stat != DEAD)
 				livingxenos++
-		else
+/*		else
 			if(M.stat != DEAD)
 				livingcrew++
-		
+*/
+
+/*		
 	var/xeno_to_living_ratio = 0
 	if(livingcrew > 0)
 		xeno_to_living_ratio = livingxenos / livingcrew
+*/
 
 
 	//Alert the crew once the xenos grow past four. 
