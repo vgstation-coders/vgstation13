@@ -651,7 +651,7 @@
 	max_candidates = 4
 	weight = 1
 	cost = 30
-	requirements = list(90,70,50,40,30,20,10,10,10,10)
+	requirements = list(90,90,70,60,50,40,20,10,10,10)
 	high_population_requirement = 35
 	logo = "xeno-logo"
 	my_fac = /datum/faction/xenomorph
