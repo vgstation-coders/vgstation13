@@ -1,4 +1,3 @@
-/*
 #define ACTIVE_XENO	4
 #define QUARANTINE_RATIO 1
 #define XENO_ENDGAME_RATIO 3
@@ -6,7 +5,6 @@
 
 #define XENO_STATION_WAS_NUKED 1
 #define HUMANS_WIPED_OUT 2
-*/
 
 /datum/faction/xenomorph
 	name = "Alien Hivemind"
@@ -206,7 +204,7 @@
 			comm.messagetext.Add(intercepttext)
 
 
-
+*/
 #undef ACTIVE_XENO	
 #undef QUARANTINE_RATIO 
 #undef XENO_ENDGAME_RATIO 
@@ -214,4 +212,3 @@
 
 #undef XENO_STATION_WAS_NUKED 
 #undef HUMANS_WIPED_OUT 
-*/
