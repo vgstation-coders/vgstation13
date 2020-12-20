@@ -686,10 +686,6 @@
 
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/execute()
 	..()
-	var/time = rand(2.5 MINUTES, 5 MINUTES)
-	spawn(time)
-		command_alert(/datum/command_alert/xenomorphs)
-	return 1
 
 
 

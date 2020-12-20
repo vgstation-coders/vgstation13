@@ -18,6 +18,11 @@
 	roletype = /datum/role/xenomorph
 	playlist = "endgame"
 	var/squad_sent = FALSE
+	var/announceWhen = 0
+
+/datum/faction/xenomorph/OnPostSetup()
+	..()
+	announceWhen = world.time + rand(2.5 MINUTES, 5 MINUTES)
 
 /*
 /datum/faction/xenomorph/check_win()
@@ -53,10 +58,12 @@
 			return win(HUMANS_WIPED_OUT)
 
 	
-
+*/
 /datum/faction/xenomorph/process()
+	if(world.time >= announceWhen && stage < FACTION_ACTIVE)
+		stage(FACTION_ACTIVE)
 
-
+/*
 	if(stage != FACTION_DORMANT)
 		return
 
@@ -157,13 +164,14 @@
 		to_chat(aiPlayer, "$/!@--LAWS UPDATED###%$$")
 	emergency_shuttle.incall()
 
-
+*/
 /datum/faction/xenomorph/stage(var/stage)
 	..()
 	switch(stage)
 		if(FACTION_ACTIVE)
 			command_alert(/datum/command_alert/xenomorphs)
 
+/*
 		if(FACTION_DORMANT)
 			LiftQuarantine()
 
