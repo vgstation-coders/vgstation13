@@ -648,7 +648,7 @@
 	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
 	required_pop = list(25,20,20,15,15,15,10,10,10,10)
 	required_candidates = 1
-	max_candidates = 4
+	max_candidates = 3
 	weight = 1
 	cost = 30
 	requirements = list(90,90,70,60,50,40,20,10,10,10)
