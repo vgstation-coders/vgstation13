@@ -51,15 +51,17 @@
 			break
 		if(!living_humans)
 			return win(HUMANS_WIPED_OUT)
-*/
+
 	
 
 /datum/faction/xenomorph/process()
+
+
 	if(stage != FACTION_DORMANT)
 		return
 
 	var/livingxenos = 0
-//	var/livingcrew = 0
+	var/livingcrew = 0
 
 	for(var/mob/living/M in mob_list)
 		if(!M.mind)
@@ -73,16 +75,16 @@
 		if(isalien(M))
 			if(M.stat != DEAD)
 				livingxenos++
-/*		else
+		else
 			if(M.stat != DEAD)
 				livingcrew++
-*/
 
-/*		
+
+		
 	var/xeno_to_living_ratio = 0
 	if(livingcrew > 0)
 		xeno_to_living_ratio = livingxenos / livingcrew
-*/
+
 
 
 	//Alert the crew once the xenos grow past four. 
@@ -90,7 +92,7 @@
 		if(livingxenos > ACTIVE_XENO)
 			stage(FACTION_ACTIVE)
 		return
-/*
+
 	if(stage < FACTION_ENDGAME)
 		if(livingxenos <= ACTIVE_XENO)
 			if(emergency_shuttle.shutdown == TRUE)
@@ -154,14 +156,14 @@
 		aiPlayer.set_zeroth_law("")
 		to_chat(aiPlayer, "$/!@--LAWS UPDATED###%$$")
 	emergency_shuttle.incall()
-*/
+
 
 /datum/faction/xenomorph/stage(var/stage)
 	..()
 	switch(stage)
 		if(FACTION_ACTIVE)
 			command_alert(/datum/command_alert/xenomorphs)
-/*
+
 		if(FACTION_DORMANT)
 			LiftQuarantine()
 
@@ -173,9 +175,9 @@
 			if(emergency_shuttle.shutdown == TRUE)
 				LiftQuarantine()
 				command_alert(/datum/command_alert/xenomorph_station_unlock)
-*/
 
-/*
+
+
 /datum/faction/xenomorph/proc/win(var/result)
 
 /datum/faction/xenomorph/proc/send_intercept()

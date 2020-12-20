@@ -684,4 +684,12 @@
 /datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
 	my_fac.HandleRecruitedRole(new_role)
 
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/execute()
+	..()
+	var/time = rand(5 MINUTES, 10 MINUTES)
+	spawn(time)
+		command_alert(/datum/command_alert/xenomorphs)
+	return 1
+
+
 
