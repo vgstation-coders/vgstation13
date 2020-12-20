@@ -68,7 +68,7 @@
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"
-#define XENOMORPH "alien"
+#define XENOMORPH "aliens"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
