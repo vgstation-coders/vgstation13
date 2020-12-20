@@ -37,17 +37,16 @@
 		return //Not on a turf
 	//If we're on a simulated turf, just heat the air.
 	if(istype(T,/turf/simulated))
-		var/turf/simulated/L
+		var/turf/simulated/L = loc
 		var/datum/gas_mixture/env = L.return_air()
 		if(env.temperature != max_temperature + T0C)
 			var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
 			if(removed)
 				var/heat_capacity = removed.heat_capacity()
-				if(heat_capacity) // Added check to avoid divide by zero (oshi-) runtime errors -- TLE
+				if(heat_capacity)
 					if(removed.temperature < max_temperature + T0C)
-						removed.temperature = min(removed.temperature + GEYSER_POWER/heat_capacity, 1000) // Added min() check to try and avoid wacky superheating issues in low gas scenarios -- TLE
-					else
-						removed.temperature = max(removed.temperature - GEYSER_POWER/heat_capacity, TCMB)
+						removed.temperature = min(removed.temperature + warm_rate*GEYSER_POWER/heat_capacity, 1000)
+				env.merge(removed)
 	//Not simulated? Heat things near us directly.
 	else
 		for(var/mob/living/M in view(heat_range,src))
