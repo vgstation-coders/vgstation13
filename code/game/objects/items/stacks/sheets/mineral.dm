@@ -69,6 +69,14 @@ var/list/datum/stack_recipe/sandstone_recipes = list ( \
 	melt_temperature = 2473.15
 	sheettype = "brick"
 
+var/list/datum/stack_recipe/brick_recipes = list ( \
+	new/datum/stack_recipe("fireplace", /obj/machinery/space_heater/campfire/stove/fireplace, 15, time = 10 SECONDS, one_per_turf = 1, on_floor = 1)
+	)
+
+/obj/item/stack/sheet/mineral/brick/New(var/loc, var/amount=null)
+	recipes = brick_recipes
+	..()
+
 /*
  * Diamond
  */
