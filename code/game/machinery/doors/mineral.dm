@@ -209,6 +209,44 @@
 	qdel(src)
 	return
 
+/obj/machinery/door/mineral/wood/log
+	prefix = "log"
+	icon_state = "logdoor_closed"
+	soundeffect = 'sound/effects/wood_door_slam.ogg'
+	animation_delay = 0
+	var/try_closing = FALSE //while true, repeatedly try to close
+
+/obj/machinery/door/mineral/wood/log/New()
+	..()
+	fast_machines += src
+
+/obj/machinery/door/mineral/wood/log/Destroy()
+	fast_machines -= src
+	..()
+
+/obj/machinery/door/mineral/wood/log/open()
+	..()
+	spawn(5) //Don't attempt closing until half a second after it opens
+		if(!try_closing)
+			try_closing = TRUE
+			process()
+
+/obj/machinery/door/mineral/wood/log/close()
+	..()
+	if(density) //successful, cease processing
+		try_closing = FALSE
+
+/obj/machinery/door/mineral/wood/log/process()
+	if(!density && try_closing)
+		close()
+		visible_message("\The [src] slams shut!", "You hear a slamming of wood.")
+
+/obj/machinery/door/mineral/wood/log/Dismantle(devestated = 0)
+	if(!devestated)
+		new /obj/item/weapon/grown/log/tree(src)
+		new /obj/item/weapon/grown/log/tree(src)
+	qdel(src)
+
 /obj/machinery/door/mineral/resin
 	prefix = "resin"
 	icon_state = "resindoor_closed"

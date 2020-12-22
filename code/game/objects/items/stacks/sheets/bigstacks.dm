@@ -38,3 +38,9 @@
 	..()
 	new /obj/item/stack/sheet/ralloy(loc, 50)
 	qdel(src)
+/obj/item/stack/sheet/mineral/brick/bigstack
+	name = "stack of bricks"
+/obj/item/stack/sheet/mineral/brick/bigstack/New()
+	..()
+	new /obj/item/stack/sheet/mineral/brick(loc,20)
+	qdel(src)

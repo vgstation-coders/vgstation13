@@ -331,6 +331,12 @@
 
 	..()
 
+/obj/machinery/atmospherics/pipe/ex_act(severity)
+	if(isturf(loc))
+		var/turf/T = loc
+		if(T.protect_infrastructure)
+			return
+	..()
 
 /obj/machinery/atmospherics/pipe/simple/pipeline_expansion()
 	return list(node1, node2)

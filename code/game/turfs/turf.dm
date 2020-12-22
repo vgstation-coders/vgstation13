@@ -36,6 +36,8 @@
 	// Powernet /datum/power_connections.  *Uninitialized until used to conserve memory*
 	var/list/power_connections = null
 
+	var/protect_infrastructure = FALSE //protect cables/pipes from explosive damage
+
 	// holy water
 	var/holy = 0
 
@@ -373,7 +375,7 @@
 
 	//Rebuild turf
 	var/turf/T = src
-	env = T.air //Get the air before the change
+	env = T.return_air() //Better than just getting the air var because this factors in unsimmed turfs
 	if(istype(src,/turf/simulated))
 		var/turf/simulated/S = src
 		if(S.zone)
