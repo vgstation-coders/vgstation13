@@ -257,8 +257,8 @@
 		H.adjustOxyLoss(max(175 - H.getToxLoss() - H.getFireLoss() - H.getBruteLoss() - H.getOxyLoss(), 0))
 		H.updatehealth()
 	else
-		if(world.time-H.lastDab >= 10 SECONDS)
-			for(var/mob/living/M in view(0))
+		if(world.time - H.lastDab >= 10 SECONDS)
+			for(var/mob/living/M in view(0, src))
 				if(M != H && M.loc == H.loc)
 					H.visible_message("<span class = 'warning'><b>[H]</b> dabs on <b>[M]</b>!</span>")
 			message = "<b>[H]</b> dabs."
