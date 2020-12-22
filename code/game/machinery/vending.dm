@@ -3574,6 +3574,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/pickaxe/shovel = 6,
 		/obj/item/weapon/lighter = 6,
 		/obj/machinery/cart/cargo/toboggan = 2,
+		/obj/item/blueprints/construction_permit = 4,
+		/obj/item/weapon/cell/high = 4
 		)
 	contraband = list(
 		/obj/item/clothing/mask/balaclava/skimask = 2,

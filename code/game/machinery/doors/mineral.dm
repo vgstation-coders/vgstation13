@@ -220,6 +220,10 @@
 	..()
 	fast_machines += src
 
+/obj/machinery/door/mineral/wood/log/Destroy()
+	fast_machines -= src
+	..()
+
 /obj/machinery/door/mineral/wood/log/open()
 	..()
 	spawn(5) //Don't attempt closing until half a second after it opens
@@ -229,10 +233,11 @@
 
 /obj/machinery/door/mineral/wood/log/close()
 	..()
-	try_closing = FALSE
+	if(density) //successful, cease processing
+		try_closing = FALSE
 
 /obj/machinery/door/mineral/wood/log/process()
-	if(!density)
+	if(!density && try_closing)
 		close()
 		visible_message("\The [src] slams shut!", "You hear a slamming of wood.")
 
