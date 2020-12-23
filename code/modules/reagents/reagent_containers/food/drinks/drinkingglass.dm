@@ -123,9 +123,8 @@
 
 		var/datum/reagent/R = reagents.get_master_reagent()
 
-		name = R.mug_name ? R.mug_name : "\improper [R.name]"
+		name = R.mug_name ? R.mug_name : "mug of " + R.name
 		desc = R.mug_desc ? R.mug_desc : R.description
-		isGlass = R.glass_isGlass
 
 		if(R.mug_icon_state)
 			icon_state = R.mug_icon_state
