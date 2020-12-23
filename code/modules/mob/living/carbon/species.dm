@@ -799,7 +799,10 @@ var/global/list/whitelisted_species = list("Human")
 	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
 	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
-	H.internal = H.get_item_by_slot(tank_slot)
+	var/obj/item/weapon/tank/nitrogen/N = H.get_item_by_slot(tank_slot)
+	if(!N)
+		N = H.get_item_by_slot(slot_back)
+	H.internal = N
 	if (H.internals)
 		H.internals.icon_state = "internal1"
 

@@ -24,6 +24,7 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	ROLE_MINOR		= 1,
+	ROLE_PRISONER   = 1,
 )
 
 /var/list/antag_roles = list(
@@ -42,6 +43,7 @@ var/global/list/special_roles = list(
 	GRINCH			= 1,
 	NINJA			= 1,
 	ROLE_MINOR		= 1,
+	ROLE_PRISONER	= 1,
 )
 
 var/list/nonantag_roles = list(
@@ -70,6 +72,7 @@ var/list/role_wiki=list(
 	GRINCH					= "Grinch",
 	NINJA					= "Space_Ninja",
 	ROLE_MINOR				= "Minor_Roles",
+	ROLE_PRISONER			= "Minor_Roles",
 )
 
 var/list/special_popup_text2num = list(

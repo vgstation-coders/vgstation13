@@ -64,6 +64,13 @@
 			prisonsecuritywarp += loc
 			qdel(src)
 
+		//the ACTUAL prisoners
+		if("Prisoner")
+			var/turf/T = get_turf(src)
+			var/obj/structure/bed/chair/chair = locate(/obj/structure/bed/chair) in T.contents
+			prisonerstart += chair	//the prisoners start buckled in chairs that are on shuttles, add those to the list
+			qdel(src)
+
 		if("blobstart")
 			blobstart += loc
 			qdel(src)
