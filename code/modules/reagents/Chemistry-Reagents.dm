@@ -6178,10 +6178,10 @@
 					imageloc = M.current.loc
 					imagelocB = M.current.loc
 				var/image/I = image('icons/mob/HUD.dmi', loc = imageloc, icon_state = "metaclub")
-				I.plane = METABUDDY_HUD_PLANE
+				I.plane = MISC_HUD_MARKERS_PLANE
 				M.current.client.images += I
 				var/image/J = image('icons/mob/HUD.dmi', loc = imagelocB, icon_state = "metaclub")
-				J.plane = METABUDDY_HUD_PLANE
+				J.plane = MISC_HUD_MARKERS_PLANE
 				new_buddy.current.client.images += J
 
 /datum/reagent/ethanol/waifu
@@ -7557,6 +7557,25 @@
 		spawn(5 SECONDS)
 			dSon.death()
 
+/datum/reagent/ethanol/drink/eggnog
+	name = "Eggnog"
+	id = EGGNOG
+	description = "Milk, cream and egg."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "eggnog"
+	glass_name = "\improper eggnog"
+	glass_desc = "Celebrate the holidays with practically liquid custard. Something is missing though."
+
+/datum/reagent/ethanol/drink/festive_eggnog
+	name = "Festive Eggnog"
+	id = FESTIVE_EGGNOG
+	description = "Eggnog, complete with booze and a dusting of cinnamon."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#F0DFD1" //rgb: 240, 223, 209
+	glass_icon_state = "festive_eggnog"
+	glass_name = "\improper festive eggnog"
+	glass_desc = "Eggnog, complete with booze and a dusting of cinnamon for that winter warmth."
 
 //Eventually there will be a way of making vinegar.
 /datum/reagent/vinegar
@@ -8287,7 +8306,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 
-			
+
 
 //A chemical for curing petrification. It only works after you've been fully petrified
 //Items on corpses will survive the process, but the corpses itself will be damaged and uncloneable after unstoning

@@ -36,6 +36,8 @@
 	// Powernet /datum/power_connections.  *Uninitialized until used to conserve memory*
 	var/list/power_connections = null
 
+	var/protect_infrastructure = FALSE //protect cables/pipes from explosive damage
+
 	// holy water
 	var/holy = 0
 
@@ -120,6 +122,10 @@
 				return 0
 	return 1
 
+/turf/Exited(atom/movable/mover, atom/newloc)
+	..()
+	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
+
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	if (!mover)
 		return 1
@@ -155,7 +161,7 @@
 	return 1 //Nothing found to block so return success!
 
 
-/turf/Entered(atom/movable/A as mob|obj)
+/turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
@@ -168,6 +174,7 @@
 		A.inertia_dir = 0
 
 	..()
+	lazy_invoke_event(/lazy_event/on_entered, list("mover" = A, "location" = src, "oldloc" = OldLoc))
 	var/objects = 0
 	if(A && A.flags & PROXMOVE)
 		for(var/atom/Obj in range(1, src))
@@ -368,7 +375,7 @@
 
 	//Rebuild turf
 	var/turf/T = src
-	env = T.air //Get the air before the change
+	env = T.return_air() //Better than just getting the air var because this factors in unsimmed turfs
 	if(istype(src,/turf/simulated))
 		var/turf/simulated/S = src
 		if(S.zone)

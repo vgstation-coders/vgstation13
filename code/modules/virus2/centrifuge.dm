@@ -67,6 +67,10 @@
 		to_chat(user, "<span class='warning'>\The [src] is broken. Some components will have to be replaced before it can work again.</span>")
 		return FALSE
 
+	if (stat & NOPOWER)
+		to_chat(user, "<span class='warning'>\The [src] is not powered, please check the area power controller before continuing.</span>")
+		return FALSE
+
 	if (.)
 		return
 

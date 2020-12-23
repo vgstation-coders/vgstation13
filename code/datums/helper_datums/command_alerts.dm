@@ -169,7 +169,7 @@
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
 	stoptheme = 1
 	alertlevel = "blue"
-	
+
 
 /// MALF
 
@@ -377,7 +377,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	var/meteor_delay = 2000
 	var/supply_delay = 100
-	
+
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
@@ -657,6 +657,10 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/blizzard_start
 	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
 	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
+
+/datum/command_alert/blizzard_extended
+	alert_title = "Automated Meteorological Update - Inaccurate Forecast"
+	message = "ROKER-class storm analysis systems have detected an incongruity in blizzard forecasting. The current blizzard's estimated active period has been re-evaluated and extended."
 
 /datum/command_alert/omega_blizzard
 	alert_title = "Urgent Warning - Dark Season"

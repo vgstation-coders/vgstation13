@@ -281,6 +281,10 @@ By design, d1 is the smallest direction and d2 is the highest
 
 // explosion handling
 /obj/structure/cable/ex_act(severity)
+	if(isturf(loc))
+		var/turf/T = loc
+		if(T.protect_infrastructure)
+			return
 	switch(severity)
 		if(1.0)
 			qdel(src)

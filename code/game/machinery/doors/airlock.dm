@@ -1188,9 +1188,7 @@ About the new airlock wires panel:
 			"<span class='notice'>You slice through \the [src].</span>", \
 			"<span class='warning'>You hear slicing noises.</span>")
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			locked = 0
-			open()
-			operating = -1
+			bashed_in(user, FALSE)
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
@@ -1200,16 +1198,16 @@ About the new airlock wires panel:
 		var/breaktime = 6 SECONDS //Same amount of time as drilling a wall, then a girder
 		if(welded)
 			breaktime += 3 SECONDS //Welding buys you a little time
-		src.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
+		user.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
 		if(do_after(user,src, breaktime, 3, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after)))
 			//Calculate bolts separtely, in case they dropped in the last 6-9 seconds.
 			if(src.locked == 1)
-				src.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
+				user.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
 				if(!do_after(user, src, 19 SECONDS, 6, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after))) //Same amount as drilling an R-wall, longer if it was welded
 					return //If they moved, cancel us out
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
-			bashed_in(user)
+			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
+			bashed_in(user, TRUE)
 		return
 
 	if (iswelder(I))
@@ -1287,10 +1285,10 @@ About the new airlock wires panel:
 	add_fingerprint(user)
 	return
 
-/obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
+/obj/machinery/door/airlock/proc/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
-	var/obj/structure/door_assembly/DA = revert(user,user.dir)
+	var/obj/structure/door_assembly/DA = revert(user,throw_circuit ? user.dir : null)
 	DA.anchored = 0
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()

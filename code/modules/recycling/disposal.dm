@@ -922,7 +922,10 @@
 
 // pipe affected by explosion
 /obj/structure/disposalpipe/ex_act(severity)
-
+	if(isturf(loc))
+		var/turf/T = loc
+		if(T.protect_infrastructure)
+			return
 	for(var/atom/movable/A in src)
 		A.ex_act(severity)
 	switch(severity)

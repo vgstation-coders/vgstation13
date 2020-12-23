@@ -2635,6 +2635,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
+		/obj/item/clothing/head/bearpelt/brown = 5,
 		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
@@ -2709,6 +2710,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
 		/obj/item/clothing/suit/red_suit = 1,
+		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -3539,3 +3541,48 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/telecomms
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
+
+
+/obj/machinery/vending/snowgear
+	name = "\improper Snow Man's Land"
+	desc = "A vending machine for the intrepid snow-settler or pioneer."
+	icon_state = "snow"
+	vend_reply = "To the Pole!"
+	product_ads = list(
+		"You wouldn't let a little snow stop you.",
+		"Beware the yeti.",
+		"I fear no bear.",
+		"Ride out in style. Now cross-promoting with snowmobiles!"
+	)
+	product_slogans = list(
+		"Winter is coming.",
+		"Become strong enough to survive.",
+		"Bobsled teams from Jamaica need not apply.",
+		"Is that all you can hit me with, a moose and a blizzard?",
+		"Beware the yeti that stalks these snows!"
+	)
+	products = list(
+		/obj/item/clothing/shoes/winterboots = 10,
+		/obj/item/clothing/suit/storage/wintercoat = 10,
+		/obj/item/clothing/head/ushanka = 10,
+		/obj/item/clothing/mask/scarf/blue = 6,
+		/obj/item/clothing/mask/scarf/red = 6,
+		/obj/item/clothing/mask/scarf/green = 6,
+		/obj/item/clothing/gloves/black = 6,
+		/obj/item/device/flashlight/lantern = 6,
+		/obj/item/weapon/hatchet = 6,
+		/obj/item/weapon/pickaxe/shovel = 6,
+		/obj/item/weapon/lighter = 6,
+		/obj/machinery/cart/cargo/toboggan = 2,
+		/obj/item/blueprints/construction_permit = 4,
+		/obj/item/weapon/cell/high = 4
+		)
+	contraband = list(
+		/obj/item/clothing/mask/balaclava/skimask = 2,
+		/obj/item/clothing/mask/neorussian = 2,
+		)
+	premium = list(
+		/obj/item/stack/sheet/mineral/brick/bigstack = 1,
+		/obj/item/binoculars = 2,
+		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
+		)

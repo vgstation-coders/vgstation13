@@ -266,6 +266,23 @@
 		/obj/item/weapon/reagent_containers/syringe/giant/chloral = 2,
 	)
 
+var/sec_key_lockup
+/obj/structure/closet/secure_closet/sec_snowmobile_keys
+	name = "Snowmobile Key Lockup"
+	req_access = list(access_brig)
+	anchored = 1
+	icon_state = "sec1"
+	icon_closed = "sec"
+	icon_locked = "sec1"
+	icon_opened = "secopen"
+	icon_broken = "secbroken"
+	icon_off = "secoff"
+
+/obj/structure/closet/secure_closet/sec_snowmobile_keys/New()
+	..()
+	if(sec_key_lockup)
+		message_admins("There was already a security key lockup. The new one will be used.")
+	sec_key_lockup = src
 
 /obj/structure/closet/secure_closet/brig
 	name = "Brig Locker"
