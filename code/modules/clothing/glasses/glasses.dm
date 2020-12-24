@@ -492,7 +492,7 @@ var/list/science_goggles_wearers = list()
 	item_state = "glasses"
 	species_fit = list(GREY_SHAPED)
 	origin_tech = Tc_MAGNETS + "=3"
-	vision_flags = SEE_MOBS|SEE_TURFS
+	vision_flags = SEE_MOBS
 	see_invisible = SEE_INVISIBLE_MINIMUM
 	invisa_view = 2 
 	eyeprot = -2 //prepare for your eyes to get shit on
