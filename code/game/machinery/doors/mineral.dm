@@ -226,11 +226,11 @@
 
 /obj/machinery/door/mineral/wood/log/open()
 	..()
-	spawn(5) //Don't attempt closing until half a second after it opens
+	spawn(1 SECONDS) //Don't attempt closing until a second after it opens
 		if(!try_closing)
 			try_closing = TRUE
 			process()
-
+ 
 /obj/machinery/door/mineral/wood/log/close()
 	..()
 	if(density) //successful, cease processing
@@ -239,6 +239,7 @@
 /obj/machinery/door/mineral/wood/log/process()
 	if(!density && try_closing)
 		close()
+		playsound(src, 'sound/machines/wood_door_slam.ogg', 50, 1)
 		visible_message("\The [src] slams shut!", "You hear a slamming of wood.")
 
 /obj/machinery/door/mineral/wood/log/Dismantle(devestated = 0)
