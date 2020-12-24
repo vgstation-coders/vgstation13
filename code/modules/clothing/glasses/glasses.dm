@@ -529,11 +529,11 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/thermal/monocle/harm_label_update()
 	if(harm_labeled < min_harm_label)
-		vision_flags |= SEE_MOBS|SEE_TURFS
+		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
 		invisa_view = 2
 	else
-		vision_flags &= ~SEE_MOBS|SEE_TURFS
+		vision_flags &= ~SEE_MOBS
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
 		invisa_view = 0
 
@@ -548,11 +548,11 @@ var/list/science_goggles_wearers = list()
 
 /obj/item/clothing/glasses/thermal/eyepatch/harm_label_update()
 	if(harm_labeled < min_harm_label)
-		vision_flags |= SEE_MOBS|SEE_TURFS
+		vision_flags |= SEE_MOBS
 		see_invisible |= SEE_INVISIBLE_MINIMUM
 		invisa_view = 2
 	else
-		vision_flags &= ~SEE_MOBS|SEE_TURFS
+		vision_flags &= ~SEE_MOBS
 		see_invisible &= ~SEE_INVISIBLE_MINIMUM
 		invisa_view = 0
 
