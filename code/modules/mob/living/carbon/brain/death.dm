@@ -72,6 +72,7 @@
 			qdel(H)
 		if (M)
 			M.icon_state = "mmi_empty"
+			M.name = "\improper Man-Machine Interface"
 
 		//Finally getting rid of the brainmob itself
 		qdel(src)
