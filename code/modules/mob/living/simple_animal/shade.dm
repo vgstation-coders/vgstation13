@@ -30,6 +30,7 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
+	var/space_damage_warned = FALSE
 
 /mob/living/simple_animal/shade/New()
 	..()
@@ -98,7 +99,13 @@
 				SB.blood++//no cap on blood regen when held by a cultist, no blood regen when held by a non-cultist (but there's a spell to take care of that)
 		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
-
+	else
+		var/turf/T = get_loc(src)
+		if (istype(T,/turf/space))
+			if (!space_damage_warned)
+				space_damage_warned = TRUE
+				to_chat(src,"<span class='danger'>Your ghostly form suffers from the star's radiations. Remaining in space will slowly erase you.</span>")
+			adjustBruteLoss(1)
 
 /mob/living/simple_animal/shade/attackby(var/obj/item/O as obj, var/mob/user as mob)  //Marker -Agouri
 	user.delayNextAttack(8)
