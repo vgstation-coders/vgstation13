@@ -100,7 +100,7 @@
 		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
 	else
-		var/turf/T = get_loc(src)
+		var/turf/T = get_turf(src)
 		if (istype(T,/turf/space))
 			if (!space_damage_warned)
 				space_damage_warned = TRUE
