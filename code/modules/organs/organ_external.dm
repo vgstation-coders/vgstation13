@@ -766,16 +766,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
 
-	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
-		//spawning a skull where the head would have been
-		var/obj/item/weapon/skull/sk = new (get_turf(owner))
-		var/randomdir = pick(cardinal)
-		step(sk, randomdir)
-		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
-		status |= ORGAN_DESTROYED
-		owner.dust(TRUE)
-		return
-
 	var/datum/species/species = src.species || owner.species
 	var/obj/item/organ/external/organ //Dropped limb object
 
