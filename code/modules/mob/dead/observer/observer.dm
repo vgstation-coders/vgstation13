@@ -424,7 +424,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE)
+	var/timetocheck = timeofdeath
+	if (isbrain(src))
+		var/mob/living/carbon/brain/brainmob = src
+		timetocheck = brainmob.timeofhostdeath
+
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE && (timetocheck == 0 || timetocheck >= world.time - 60 SECONDS))
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")

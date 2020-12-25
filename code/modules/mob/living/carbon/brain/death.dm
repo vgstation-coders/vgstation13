@@ -36,11 +36,14 @@
 
 /mob/living/carbon/brain/dust()
 	var/turf/T = get_turf(loc)
-	if(T && client && iscultist(src) && veil_thickness > CULT_PROLOGUE)
+	if(T && client && iscultist(src) && veil_thickness > CULT_PROLOGUE && timeofhostdeath >= world.time - 60 SECONDS)
 		var/obj/item/organ/internal/brain/B
 		var/obj/item/organ/external/head/H
+		var/obj/item/device/mmi/M
 
-		if (loc && istype(loc,/obj/item/organ/external/head))
+		if (loc && istype(loc,/obj/item/device/mmi))
+			M = loc
+		else if (loc && istype(loc,/obj/item/organ/external/head))
 			H = loc
 		else if(loc && istype(loc,/obj/item/organ/internal/brain))
 			B = loc
@@ -59,7 +62,7 @@
 		//Spawning a skull, or just ashes if there was only a brain
 		if (H)
 			new/obj/item/weapon/skull(T)
-		else if (B)
+		else if (B || M)
 			new /obj/effect/decal/cleanable/ash(T)
 
 		//Getting rid of the brain/head objects
@@ -67,6 +70,8 @@
 			qdel(B)
 		if (H)
 			qdel(H)
+		if (M)
+			M.icon_state = "mmi_empty"
 
 		//Finally getting rid of the brainmob itself
 		qdel(src)

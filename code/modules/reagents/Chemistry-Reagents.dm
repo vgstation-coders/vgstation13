@@ -1104,8 +1104,8 @@
 	..()
 
 	if(volume >= 5)
-		if(istype(M,/mob/living/simple_animal/construct))
-			var/mob/living/simple_animal/construct/C = M
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
