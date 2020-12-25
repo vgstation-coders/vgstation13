@@ -580,9 +580,6 @@
 
 	if(istype(O, /obj/item/toy/waterballoon))
 		var/obj/item/toy/waterballoon/waterB = O
-		if(waterB.reagents.total_volume >= waterB.reagents.maximum_volume)
-			to_chat(user, "<span class='warning'>\The [waterB] is full.</span>")
-			return
 		waterB.reagents.add_reagent(WATER, min(10 - waterB.reagents.total_volume, 10))
 		user.visible_message("<span class='notice'>[user] fills \the [waterB] using \the [src].</span>","<span class='notice'>You fill the [waterB] using \the [src].</span>")
 		waterB.update_icon()
