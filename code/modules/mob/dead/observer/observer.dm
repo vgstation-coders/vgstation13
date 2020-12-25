@@ -673,7 +673,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 
 /mob/dead/observer/AltClick(mob/user)
 	if(isAdminGhost(user))
-		var/choice_one = input(user, "Do you wish to spawn in a human?", "IC Spawning") as null|anything in list("Yes", "No")
+		var/choice_one = alert(user, "Do you wish to spawn a human?", "IC Spawning", "Yes", "No")
 		if(!choice_one)
 			return ..()
 		if(choice_one == "Yes")
