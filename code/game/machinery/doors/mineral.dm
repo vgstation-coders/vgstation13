@@ -226,11 +226,11 @@
 
 /obj/machinery/door/mineral/wood/log/open()
 	..()
-	spawn(5) //Don't attempt closing until half a second after it opens
+	spawn(1 SECONDS) //Don't attempt closing until a second after it opens
 		if(!try_closing)
 			try_closing = TRUE
 			process()
-
+ 
 /obj/machinery/door/mineral/wood/log/close()
 	..()
 	if(density) //successful, cease processing
