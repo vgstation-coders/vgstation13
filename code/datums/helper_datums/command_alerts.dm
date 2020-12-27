@@ -665,3 +665,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/omega_blizzard
 	alert_title = "Urgent Warning - Dark Season"
 	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."
+
+/datum/command_alert/prisoner_transfer
+	alert_title = "Prisoner Transfer"
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately one minute. Crew payrolls have recieved a bonus as a result."

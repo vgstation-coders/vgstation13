@@ -205,9 +205,6 @@
 			if (ispath(equip_survival_gear[species]))
 				pack = new equip_survival_gear(H)
 				H.put_in_hand(GRASP_RIGHT_HAND, pack)
-		else
-			pack = new H.species.survival_gear(H)
-			H.put_in_hand(GRASP_RIGHT_HAND, pack)
 		for (var/item in items_to_collect)
 			if (items_to_collect[item] == "Surival Box" && pack)
 				new item(pack)
