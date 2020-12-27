@@ -617,6 +617,37 @@
 	..()
 	H.put_in_hands(new /obj/item/weapon/staff(H))
 
+
+/datum/outfit/special/prisoner
+	equip_survival_gear = list() //no backpack, no gear
+	outfit_name = "Prisoner"
+	use_pref_bag = FALSE
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_ears_str = /obj/item/device/radio/headset,
+		),
+		/datum/species/plasmaman = list(
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/prisoner,
+			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/prisoner,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath,
+		),
+		/datum/species/vox = list(
+			slot_ears_str = /obj/item/device/radio/headset,
+			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
+			slot_shoes_str = /obj/item/clothing/shoes/orange,
+			slot_wear_mask_str =  /obj/item/clothing/mask/breath/vox,
+			slot_back_str = /obj/item/weapon/tank/nitrogen,
+		),
+	)
+
+/datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
 /datum/outfit/special/prisoneralt //no headset + soap
 	outfit_name = "Prisoner Alternative"
 	items_to_spawn = list(
