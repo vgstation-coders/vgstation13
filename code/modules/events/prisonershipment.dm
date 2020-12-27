@@ -73,6 +73,7 @@ var/list/current_prisoners = list()
 		H.real_name = name
 		H.regenerate_icons()
 		mob_rename_self(H, "prisoner")
+		H.dna.ready_dna(H)
 
 		//Send them to the starting location.
 		var/obj/structure/bed/chair/chair = pick(prisonerstart)
