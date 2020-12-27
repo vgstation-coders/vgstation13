@@ -24,6 +24,8 @@ obj/machinery/cryopod
 /obj/machinery/cryopod/attack_hand(mob/user as mob)
 	if(thawing)
 		return
+	message_admins("[key_name_admin(user)] has activated an ancient cryopod.")
+	log_game("[key_name(user)] has activated an ancient cryopod.")
 	var/turf/location = get_turf(src)
 	var/datum/gas_mixture/environment = location.return_air()
 	var/pressure = environment.return_pressure()
@@ -75,6 +77,8 @@ obj/machinery/cryopod
 		visible_message("<span class='notice'>\The [name] quietly beeps and displays an error message. Try again later.</span>")
 
 /datum/cryorole/proc/gear_occupant(var/mob/living/carbon/human/M)
+	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")
+	log_game("[key_name(M)] has spawned as a [title] from an ancient cryopod.")
 	var/datum/outfit/roleoutfit = new outfit_datum
 	roleoutfit.equip(M)
 	to_chat(M, "<b>You are the [title].</b>")
