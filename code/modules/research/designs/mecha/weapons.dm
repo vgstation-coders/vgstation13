@@ -132,7 +132,7 @@
 	category = "Exosuit_Weapons"
 	locked = 1
 	req_lock_access = list(access_armory)
-	materials = list(MAT_IRON=10000)
+	materials = list(MAT_IRON=10000,MAT_URANIUM=10000,MAT_GOLD=6000,MAT_PLASMA=2000,MAT_SILVER=500)
 
 /datum/design/mech_grenade_launcher
 	name = "Weapon Design (SGL-6 Grenade Launcher)"
