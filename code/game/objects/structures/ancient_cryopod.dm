@@ -1,4 +1,4 @@
-obj/machinery/cryopod
+/obj/machinery/cryopod
 	name = "ancient cryogenic pod"
 	desc = "An ancient looking cryogenic stasis pod. You can faintly see a human figure inside..."
 	icon = 'icons/obj/cryogenics.dmi'
