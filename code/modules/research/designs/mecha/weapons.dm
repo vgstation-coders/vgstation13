@@ -122,6 +122,18 @@
 	req_lock_access = list(access_armory)
 	materials = list(MAT_IRON=10000)
 
+/datum/design/mech_ion_cannon
+	name = "Weapon Design (mkIV Ion Heavy Cannon)"
+	desc = "Allows for the construction of the mkIV Ion Heavy Cannon"
+	id = "mech_ion_cannon"
+	build_type = MECHFAB
+	req_tech = list(Tc_COMBAT = 3, Tc_MAGNETS = 3)
+	build_path = /obj/item/mecha_parts/mecha_equipment/weapon/energy/ion
+	category = "Exosuit_Weapons"
+	locked = 1
+	req_lock_access = list(access_armory)
+	materials = list(MAT_IRON=10000,MAT_URANIUM=10000,MAT_GOLD=6000,MAT_PLASMA=2000,MAT_SILVER=500)
+
 /datum/design/mech_grenade_launcher
 	name = "Weapon Design (SGL-6 Grenade Launcher)"
 	desc = "Allows for the construction of SGL-6 Grenade Launcher."
