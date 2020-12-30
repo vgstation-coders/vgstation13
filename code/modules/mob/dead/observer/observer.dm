@@ -670,3 +670,24 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/can_reenter_corpse()
 	var/mob/M = get_top_transmogrification()
 	return (M && M.client && can_reenter_corpse)
+
+/mob/dead/observer/AltClick(mob/user)
+	if(isAdminGhost(user))
+		var/choice_one = alert(user, "Do you wish to spawn a human?", "IC Spawning", "Yes", "No")
+		if(!choice_one)
+			return ..()
+		if(choice_one == "Yes")
+			var/choose_outfit = select_loadout()
+			if(choose_outfit)
+				var/datum/outfit/concrete_outfit = new choose_outfit
+				var/mob/living/carbon/human/sHuman = new /mob/living/carbon/human(get_turf(src))
+				sHuman.name = name
+				sHuman.real_name = real_name
+				concrete_outfit.equip(sHuman, TRUE)
+				client?.prefs.copy_to(sHuman)
+				sHuman.dna.UpdateSE()
+				sHuman.dna.UpdateUI()
+				sHuman.ckey = ckey
+				qdel(src)
+			return
+	return ..()
