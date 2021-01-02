@@ -1,5 +1,10 @@
 var/global/datum/controller/occupations/job_master
 
+#define FREE_ASSISTANTS 2
+
+// The logic requires a shift of 1. The technical reason is that the way it is written, it boils to if (0 > 0) {"reject the assistants"}. Unfortunately, 0 is not > 0.
+#define FREE_ASSISTANTS_BRUT (FREE_ASSISTANTS-1)
+
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -109,6 +114,18 @@ var/global/datum/controller/occupations/job_master
 			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
 		for(var/mob/new_player/player in player_list)
 			to_chat(player, "<span class='notice'>The [rank] job is now available!</span>")
+		return 1
+	return 0
+
+/datum/controller/occupations/proc/CloseRole(var/rank, mob/user)	//eliminating xtra_positions
+	var/datum/job/job = GetJob(rank)
+	if(job && job.current_positions < job.get_total_positions() && job.xtra_positions > 0)
+		job.remove_xtra_position()
+		if(user)
+			log_admin("[key_name(user)] has closed a slot for the [rank] job.")
+			message_admins("[key_name_admin(user)] has closed a slot for the [rank] job.")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is now closed.</span>")
 		return 1
 	return 0
 
@@ -269,6 +286,8 @@ var/global/datum/controller/occupations/job_master
 
 		// Loop through all unassigned players
 		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				continue //This player doesn't want to share a job title. We need to deal with them last.
 
 			// Loop through all jobs
 			for(var/datum/job/job in shuffledoccupations)
@@ -282,23 +301,6 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
-	/*
-	Old job system
-	for(var/level = 1 to 3)
-		for(var/datum/job/job in occupations)
-			Debug("Checking job: [job]")
-			if(!job)
-				continue
-			if(!unassigned.len)
-				break
-			if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
-				continue
-			var/list/candidates = FindOccupationCandidates(job, level)
-			while(candidates.len && ((job.current_positions < job.spawn_positions) || job.spawn_positions == -1))
-				var/mob/new_player/candidate = pick(candidates)
-				Debug("Selcted: [candidate], for: [job.title]")
-				AssignRole(candidate, job.title)
-				candidates -= candidate*/
 
 	Debug("DO, Standard Check end")
 
@@ -316,8 +318,8 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				if(master_assistant.current_positions-1 > (config.assistantratio * count))
-					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
@@ -336,17 +338,26 @@ var/global/datum/controller/occupations/job_master
 		if (player.ckey in assistant_second_chance)
 			var/assistant_pref = assistant_second_chance[player.ckey]
 			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions-1 > (config.assistantratio * count))
-				if(count < 5)
+			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+				if(count < 5) // And less than 5 seccies...
 					Debug("AC3: [player] failed the lottery.")
 			if (assistant_pref < player.mind.job_priority)
 				Debug("AC3: got made an assistant as a second chance.")
 				UnassignRole(player)
 				AssignRole(player, "Assistant")
 
-	//For ones returning to lobby
-	for(var/mob/new_player/player in unassigned)
-		if(player.client.prefs.alternate_option == RETURN_TO_LOBBY)
+	//Final pass - first deal with the empty job group, otherwise send any leftovers to the lobby
+	final_pass: //this is a loop label
+		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				for(var/level = 1 to 3)
+					for(var/datum/job/job in shuffledoccupations)
+						if(job.current_positions) //already someone in this job title
+							continue
+						if(TryAssignJob(player,level,job))
+							unassigned -= player
+							continue final_pass //move on to the next player entirely
+
 			to_chat(player, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 			player.ready = 0
 			unassigned -= player
@@ -381,8 +392,8 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
-	if(enough_sec && (count < 5))
+	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
+	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
 		for (var/datum/job/J in occupations)

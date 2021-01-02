@@ -130,7 +130,6 @@
 /datum/dynamic_ruleset/roundstart/wizard
 	name = "Wizard"
 	role_category = /datum/role/wizard
-	restricted_from_jobs = list("Head of Security", "Captain")//just to be sure that a wizard getting picked won't ever imply a Captain or HoS not getting drafted
 	enemy_jobs = list("Security Officer","Detective","Head of Security", "Captain")
 	required_pop = list(15,15,15,10,10,10,10,5,5,0)
 	required_candidates = 1

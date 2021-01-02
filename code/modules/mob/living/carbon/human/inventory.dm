@@ -215,7 +215,7 @@
 		if(slot_glasses)
 			return has_organ(LIMB_HEAD)
 		if(slot_gloves)
-			return has_organ(LIMB_LEFT_HAND) && has_organ(LIMB_RIGHT_HAND)
+			return has_organ(LIMB_LEFT_HAND) || has_organ(LIMB_RIGHT_HAND)
 		if(slot_head)
 			return has_organ(LIMB_HEAD)
 		if(slot_shoes)

@@ -1819,6 +1819,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1957,6 +1958,13 @@ mob/living/carbon/human/isincrit()
 		crawlcounter = 1
 	else
 		crawlcounter++
+	for(var/obj/effect/overlay/puddle/P in target)
+		if(P.wet == TURF_WET_WATER && prob(20))
+			to_chat(src, "<span class='warning'>Your hands slip and make no progress!</span>")
+			return FALSE
+		if(P.wet == TURF_WET_LUBE && prob(75))
+			to_chat(src, "<span class='warning'>You lose your grip on the extremely slippery floor and make no progress!</span>")
+			return FALSE
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive = 1)
 

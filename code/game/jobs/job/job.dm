@@ -75,6 +75,9 @@
 /datum/job/proc/bump_position_limit()
 	xtra_positions++
 
+/datum/job/proc/remove_xtra_position()
+	xtra_positions--
+
 /datum/job/proc/reject_new_slots()
 	return FALSE
 

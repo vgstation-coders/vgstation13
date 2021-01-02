@@ -187,8 +187,10 @@
 				"Mechatronic Engineer" = /obj/item/clothing/under/rank/mechatronic,
 				"Biomechanical Engineer" = /obj/item/clothing/under/rank/biomechanical,
 			),
+			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat,
+
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_sci,
@@ -197,6 +199,7 @@
 				"Mechatronic Engineer" = /obj/item/clothing/under/rank/mechatronic,
 				"Biomechanical Engineer" = /obj/item/clothing/under/rank/biomechanical,
 			),
+			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/plasmaman/science,
 			slot_head_str = /obj/item/clothing/head/helmet/space/plasmaman/science,
@@ -209,6 +212,7 @@
 				"Mechatronic Engineer" = /obj/item/clothing/under/rank/mechatronic,
 				"Biomechanical Engineer" = /obj/item/clothing/under/rank/biomechanical,
 			),
+			slot_belt_str = /obj/item/weapon/storage/belt/utility/complete,
 			slot_shoes_str = /obj/item/clothing/shoes/black,
 			slot_wear_suit_str = /obj/item/clothing/suit/space/vox/civ/science/roboticist,
 			slot_head_str = /obj/item/clothing/head/helmet/space/vox/civ/science/roboticist,

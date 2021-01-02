@@ -176,6 +176,20 @@
 // atom/item: the item
 /lazy_event/on_unequipped
 
+//Called when movable moves into a new turf
+// Arguments:
+// atom/movable/mover: thing that moved
+// location: turf it entered
+// oldloc: atom it exited
+/lazy_event/on_entered
+
+//Called when movable moves from a turf
+// Arguments:
+// atom/movable/mover: thing that moved
+// location: turf it exited
+// newloc: atom it is entering
+/lazy_event/on_exited
+
 
 /datum
 	/// Associative list of type path -> list(),

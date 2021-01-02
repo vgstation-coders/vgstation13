@@ -431,6 +431,8 @@
 #define BLISTEROL		"blisterol"
 #define ECTOPLASM		"ectoplasm"
 #define MONSTERMASH		"monstermash"
+#define EGGNOG			"eggnog"
+#define FESTIVE_EGGNOG	"festive_eggnog"
 
 #define TUNGSTEN 			"tungsten"
 #define LITHIUMSODIUMTUNGSTATE 			"lithiumsodiumtungstate"
