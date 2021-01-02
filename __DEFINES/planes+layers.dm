@@ -70,30 +70,28 @@ What is the naming convention for planes or layers?
 	FLOAT_PLANE = -32767
 */
 
-#define PLATING_PLANE 			-4
+#define PLATING_PLANE 			-20
 
-#define ABOVE_PLATING_PLANE		-3
+#define ABOVE_PLATING_PLANE		-19
 
-	#define CATWALK_LAYER			2
-	#define DISPOSALS_PIPE_LAYER	3
-	#define LATTICE_LAYER			4
-	#define PIPE_LAYER				5
-	#define WIRE_LAYER				6
-	#define VENT_BEZEL_LAYER		7
-	#define WIRE_TERMINAL_LAYER		8
+	#define CATWALK_LAYER				2
+	#define DISPOSALS_PIPE_LAYER		3
+	#define LATTICE_LAYER				4
+	#define PIPE_LAYER					5
+	#define WIRE_LAYER					6
+	#define VENT_BEZEL_LAYER			7
+	#define WIRE_TERMINAL_LAYER			8
 
-#define FLOOR_PLANE -2
+#define FLOOR_PLANE 			-18
 
-#define BELOW_TURF_PLANE 		-1 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
-	#define CORNER_LAYER 		2
-	#define SIDE_LAYER			3
+#define BELOW_TURF_PLANE 		-17 		// objects that are below turfs and darkness but above platings. Useful for asteroid smoothing or other such magic.
+	#define CORNER_LAYER 				2
+	#define SIDE_LAYER					3
 
-#define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
+#define TURF_PLANE				-16
+	#define MAPPING_TURF_LAYER			-999
 
-#define TURF_PLANE				1
-	#define MAPPING_TURF_LAYER		-999
-
-#define ABOVE_TURF_PLANE 		2			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
+#define ABOVE_TURF_PLANE 		-15			// For items which should appear above turfs but below other objects and hiding mobs, eg: wires & pipes
 
 	#define HOLOMAP_LAYER				1
 	#define RUNE_LAYER					2
@@ -116,128 +114,124 @@ What is the naming convention for planes or layers?
 	#define CREEPER_LAYER				19
 	#define WEED_LAYER					420
 
-#define NOIR_BLOOD_PLANE 		3		 	// For blood which is red, will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
+#define NOIR_BLOOD_PLANE 		-14		 	// Contains BLOOD, (ALSO) will appear to people under the influence of the noir colour matrix. -if changing this, make sure that the blood layer changes too.
 
-#define HIDING_MOB_PLANE 		4			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
+#define HIDING_MOB_PLANE 		-13			// for hiding mobs like MoMMIs or spiders or whatever, under most objects but over pipes & such.
 
-#define OBJ_PLANE 				5			// For objects which appear below humans.
+#define OBJ_PLANE 				-12			// For objects which appear below humans.
 
-	#define BELOW_TABLE_LAYER		0
-	#define TABLE_LAYER				0.5
-	#define OPEN_DOOR_LAYER			1
-	#define BELOW_OBJ_LAYER			2
-	#define MACHINERY_LAYER			2.5
-	// OBJ_LAYER 	 				3
-	#define ABOVE_OBJ_LAYER			4
-	#define SIDE_WINDOW_LAYER		5
-	#define FULL_WINDOW_LAYER		6
-	#define ABOVE_WINDOW_LAYER		7
-	#define TURRET_LAYER			8
-	#define TURRET_COVER_LAYER		9
-	#define BELOW_CLOSED_DOOR_LAYER	10
-	#define CLOSED_DOOR_LAYER  		11
-	#define ABOVE_DOOR_LAYER		12
-	#define CHAIR_LEG_LAYER			13
+	#define BELOW_TABLE_LAYER			0
+	#define TABLE_LAYER					0.5
+	#define OPEN_DOOR_LAYER				1
+	#define BELOW_OBJ_LAYER				2
+	#define MACHINERY_LAYER				2.5
+	// OBJ_LAYER 	 					3
+	#define ABOVE_OBJ_LAYER				4
+	#define SIDE_WINDOW_LAYER			5
+	#define FULL_WINDOW_LAYER			6
+	#define ABOVE_WINDOW_LAYER			7
+	#define TURRET_LAYER				8
+	#define TURRET_COVER_LAYER			9
+	#define BELOW_CLOSED_DOOR_LAYER		10
+	#define CLOSED_DOOR_LAYER  			11
+	#define ABOVE_DOOR_LAYER			12
+	#define CHAIR_LEG_LAYER				13
 
-#define LYING_MOB_PLANE			6			// other mobs that are lying down.
+#define LYING_MOB_PLANE			-11			// other mobs that are lying down.
 
-#define LYING_HUMAN_PLANE 		7			// humans that are lying down
+#define LYING_HUMAN_PLANE 		-10			// humans that are lying down
 
-#define ABOVE_OBJ_PLANE			8			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
-	#define BLANKIES_LAYER			0
-	#define FACEHUGGER_LAYER		1
+#define ABOVE_OBJ_PLANE			-9			// for objects that are below humans when they are standing but above them when they are not. - eg, blankets.
+	#define BLANKIES_LAYER				0
+	#define FACEHUGGER_LAYER			1
 
-#define HUMAN_PLANE 			9			// For Humans that are standing up.
+#define HUMAN_PLANE 			-8			// For Humans that are standing up.
 
-//#define THIS_SPACE_FOR_RENT!	10
+#define MOB_PLANE 				-7			// For Mobs.
 
-//#define THIS_SPACE_FOR_RENT! 	11
+//	#define MOB_LAYER					4
+	#define SLIME_LAYER					5
 
-#define MOB_PLANE 				12			// For Mobs.
+#define ABOVE_HUMAN_PLANE 		-6			// For things that should appear above humans.
 
-//	#define MOB_LAYER				4
-	#define SLIME_LAYER				5
+	#define SHADOW_LAYER				0
+	#define VEHICLE_LAYER 				0
+	#define CHAIR_ARMREST_LAYER 		0
+	#define WINDOOR_LAYER 				1
+	#define OPEN_CURTAIN_LAYER			2
+	// BELOW_OBJ_LAYER					2
+	// OBJ_LAYER 	 					3
+	// ABOVE_OBJ_LAYER					4
+	#define CLOSED_CURTAIN_LAYER		5
+	#define CHAT_LAYER					6
 
-#define VAMP_ANTAG_HUD_PLANE	13
+#define BLOB_PLANE 				-5			// For Blobs, which are above humans.
 
-#define METABUDDY_HUD_PLANE		14
+	#define BLOB_BASE_LAYER				0
+	#define BLOB_SHIELD_LAYER			1
+	#define BLOB_RESOURCE_LAYER			2
+	#define BLOB_FACTORY_LAYER			3
+	#define BLOB_NODE_LAYER				4
+	#define BLOB_CORE_LAYER				5
+	#define BLOB_SPORE_LAYER			6
 
-#define ANTAG_HUD_PLANE		 	15
+#define EFFECTS_PLANE 			-4			// For special effects.
 
-#define ABOVE_HUMAN_PLANE 		16			// For things that should appear above humans.
+	#define BELOW_PROJECTILE_LAYER 		3
+	#define PROJECTILE_LAYER 			4
+	#define ABOVE_PROJECTILE_LAYER 		5
+	#define SINGULARITY_LAYER 			6
+	#define ABOVE_SINGULO_LAYER 		7
+	#define GRAVITYGRID_LAYER 			8
+	#define SNOW_OVERLAY_LAYER			9
+	#define HORIZON_EXHAUST_LAYER		10
 
-	#define SHADOW_LAYER			0
-	#define VEHICLE_LAYER 			0
-	#define CHAIR_ARMREST_LAYER 	0
-	#define WINDOOR_LAYER 			1
-	#define OPEN_CURTAIN_LAYER		2
-	// BELOW_OBJ_LAYER				2
-	// OBJ_LAYER 	 				3
-	// ABOVE_OBJ_LAYER				4
-	#define CLOSED_CURTAIN_LAYER	5
-	#define CHAT_LAYER				6
+#define GHOST_PLANE 			-3			// Ghosts show up under lighting, HUD etc.
 
-#define BLOB_PLANE 				17			// For Blobs, which are above humans.
+	#define GHOST_LAYER 				1
 
-	#define BLOB_BASE_LAYER			0
-	#define BLOB_SHIELD_LAYER		1
-	#define BLOB_RESOURCE_LAYER		2
-	#define BLOB_FACTORY_LAYER		3
-	#define BLOB_NODE_LAYER			4
-	#define BLOB_CORE_LAYER			5
-	#define BLOB_SPORE_LAYER		6
+#define LIGHTING_PLANE 			-2
 
-#define EFFECTS_PLANE 			18			// For special effects.
+	#define LIGHTBULB_LAYER 			0
+	#define POINTER_LAYER 				1
+	#define LIGHTING_LAYER 				2
+	#define ABOVE_LIGHTING_LAYER 		3
+	#define SUPERMATTER_WALL_LAYER 		4
+	#define SUPER_PORTAL_LAYER			5
+	#define NARSIE_GLOW 				6
 
-	#define BELOW_PROJECTILE_LAYER 	3
-	#define PROJECTILE_LAYER 		4
-	#define ABOVE_PROJECTILE_LAYER 	5
-	#define SINGULARITY_LAYER 		6
-	#define ABOVE_SINGULO_LAYER 	7
-	#define GRAVITYGRID_LAYER 		8
-	#define SNOW_OVERLAY_LAYER		9
-	#define HORIZON_EXHAUST_LAYER	10
+#define ABOVE_LIGHTING_PLANE	-1
+	#define MAPPING_AREA_LAYER			999
 
-#define GHOST_PLANE 			19			// Ghosts show up under lighting, HUD etc.
+#define BASE_PLANE 				0		//  this is where darkness is! see "how planes work" - needs SEE_BLACKNESS or SEE_PIXEL (see blackness is better for ss13)
 
-	#define GHOST_LAYER 			1
+#define MISC_HUD_MARKERS_PLANE	1
 
-#define LIGHTING_PLANE 			20
+#define ANTAG_HUD_PLANE		 	2
 
-	#define LIGHTBULB_LAYER 		0
-	#define POINTER_LAYER 			1
-	#define LIGHTING_LAYER 			2
-	#define ABOVE_LIGHTING_LAYER 	3
-	#define SUPERMATTER_WALL_LAYER 	4
-	#define SUPER_PORTAL_LAYER		5
-	#define NARSIE_GLOW 			6
+#define STATIC_PLANE 			3		// For AI's static.
 
-#define ABOVE_LIGHTING_PLANE		21
-	#define MAPPING_AREA_LAYER	999
+	#define STATIC_LAYER				1
+	#define REACTIVATE_CAMERA_LAYER		2
 
-#define STATIC_PLANE 			22		// For AI's static.
+#define FULLSCREEN_PLANE		4		// for fullscreen overlays that do not cover the hud.
 
-	#define STATIC_LAYER			1
-	#define REACTIVATE_CAMERA_LAYER	2
-
-#define FULLSCREEN_PLANE		23		// for fullscreen overlays that do not cover the hud.
-
-	#define FULLSCREEN_LAYER	 	0
+	#define FULLSCREEN_LAYER	 		0
 	#define DAMAGE_HUD_LAYER 			1
-	#define IMPAIRED_LAYER 			2
-	#define BLIND_LAYER				3
-	#define CRIT_LAYER 				4
-	#define HALLUCINATION_LAYER 	5
+	#define IMPAIRED_LAYER 				2
+	#define BLIND_LAYER					3
+	#define CRIT_LAYER 					4
+	#define HALLUCINATION_LAYER 		5
 
-#define HUD_PLANE 				24		// For the Head-Up Display
+#define HUD_PLANE 				5		// For the Head-Up Display
 
-	#define UNDER_HUD_LAYER 		0
-	#define HUD_BASE_LAYER		 	1
-	#define HUD_ITEM_LAYER 			2
-	#define HUD_ABOVE_ITEM_LAYER 	3
-	#define ABOVE_HUD_LAYER 		4
+	#define UNDER_HUD_LAYER 			0
+	#define HUD_BASE_LAYER		 		1
+	#define HUD_ITEM_LAYER 				2
+	#define HUD_ABOVE_ITEM_LAYER 		3
+	#define ABOVE_HUD_LAYER 			4
 
-#define ABOVE_HUD_PLANE 				25		// For being above the Head-Up Display
+#define ABOVE_HUD_PLANE 		6		// For being above the Head-Up Display
 
 
 /atom/proc/hud_layerise()

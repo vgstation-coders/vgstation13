@@ -46,6 +46,7 @@
 	if(keytype && !vin)
 		heldkey = new keytype(src)
 
+var/list/security_cruisers = list()
 /obj/structure/bed/chair/vehicle/snowmobile/security
 	name = "security snowmobile"
 	desc = "An armored security snowmobile. Take note, it does not use a universal key."
@@ -65,6 +66,14 @@
 			light_color = "#0000FF"
 		else
 			light_color = "#FF0000"
+
+/obj/structure/bed/chair/vehicle/snowmobile/security/set_keys()
+	..()
+	name += " (#[vehicle_list.Find(src)])"
+	mykey.name = "security snowmobile key (#[vehicle_list.Find(src)])"
+	mykey.icon_state = "keysec"
+	if(sec_key_lockup)
+		mykey.forceMove(sec_key_lockup)
 
 /obj/structure/bed/chair/vehicle/snowmobile/getMovementDelay()
 	var/turf/T = loc

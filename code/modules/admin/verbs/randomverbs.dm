@@ -1108,3 +1108,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 	message_admins("<span class='notice'>[key_name(usr)] has equipped an loadout of type [outfit_type] to [key_name(M)].</span>", 1)
 
 	feedback_add_details("admin_verb","ELO") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/proc/select_loadout()
+	var/list/outfits = (subtypesof(/datum/outfit/) - /datum/outfit/striketeam/)
+	var/outfit_type = input(usr,"Outfit Type","Equip Outfit","") as null|anything in outfits
+	if(!outfit_type || !ispath(outfit_type))
+		return
+	return outfit_type

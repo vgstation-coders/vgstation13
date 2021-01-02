@@ -65,6 +65,7 @@
 
 /datum/outfit/assistant/post_equip_priority(var/mob/living/carbon/human/H)
 	H.put_in_hands(new /obj/item/weapon/storage/toolbox/mechanical(get_turf(H)))
+	equip_accessory(H, /obj/item/clothing/accessory/storage/fannypack/preloaded/assistant, /obj/item/clothing/under, 5)
 	return ..()
 
 // -- Bartender

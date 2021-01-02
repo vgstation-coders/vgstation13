@@ -69,6 +69,7 @@
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
+#define PRISONER "prisoner"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -172,6 +173,7 @@
 #define	MAX_TALISMAN_PER_TOME	5
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
+#define DEATH_SHADEOUT_TIMER	60 SECONDS
 
 #define CONVERSION_REFUSE	-1
 #define CONVERSION_NOCHOICE	0

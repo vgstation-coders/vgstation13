@@ -73,6 +73,183 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.01.02</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cultists no longer auto-shade on Act 1+ when beheaded.</li>
+				<li class="tweak">Cultists that have been decapitated/de-brained can now choose to shade when using the Ghost verb.</li>
+				<li class="tweak">However whether they try to shade while still in their body or after they&#39;ve been decapitated/debrained/mmi&#39;d, they can only do so up to 60 seconds after the time of death. (living cultists can still shade out anytime they want of course)</li>
+				<li class="tweak">Shades now take 1hp of damage per Life() tick while in space, killing them in about one or two minutes. So no more sitting in space breaking windows.</li>
+				<li class="tweak">Shades also now take damage and get slowed by holy water just like constructs do.</li>
+			</ul>
+			<h3 class="author">IThe-TI updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Added eggnog</li>
+				<li class="bugfix">Fixes missing pear tree sprite</li>
+			</ul>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Firefighters (An offshoot of ripleys) now have the same brute resist as ripleys</li>
+				<li class="rscadd">Various snaxi tweaks/bugfixes, Pun Pun is now a penguin.</li>
+				<li class="rscadd">Roboticists now start with full toolbelts.</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Snaxi brig now has a private snowmobile storage/impound yard. The keys spawn in a locker.</li>
+				<li class="rscadd">Snaxi now hosts the new snow gear vendors. A number of other small quality of life changes as well.</li>
+				<li class="tweak">Blizzards should be shorter on average.</li>
+				<li class="rscdel">Dark Season / Omega Blizzard is now adminbus only.</li>
+				<li class="tweak">When slicing a door open with an esword (harm intent), it now dismantles the door like a ram.</li>
+				<li class="rscadd">Players may now use the &#34;Get unique job&#34; preference. This means it will not assign you to any job where someone else shares the same job slot. For example, if you high-pref botanist and there is already a botanist, it will try your medium preferences. If none of your preferences are empty, you will return to the lobby.</li>
+				<li class="rscadd">Trees (such as those on Snaxi) become transparent when you are within 2 tiles</li>
+				<li class="rscadd">The labor console can now close extra slots if they have not been filled yet.</li>
+				<li class="rscadd">You can now build fireplaces out of bricks.</li>
+				<li class="rscadd">There is now a snow gear vendor. Gear up to settle the snow, or just pick your favorite color scarf. It even has contraband and premium items...</li>
+				<li class="rscadd">You can now build log walls by using a log on the snowy ground. It will try to use any logs on the ground before the one in your hand. It builds twice as fast if you clear the snow first.</li>
+				<li class="tweak">When you build a new turf on unsimulated terrain, it will keep the same air mix, preventing ZAS while building.</li>
+				<li class="rscadd">You can use one log on another to construct a storm door. Storm doors are wood doors that shut by themselves fairly quickly, keeping out the cold.</li>
+				<li class="tweak">Pine logs are now worth 4 planks of wood, instead of just 2.</li>
+				<li class="tweak">Asphalt roads now protect wires and pipes from being destroyed by explosions.</li>
+				<li class="bugfix">Geysers now properly smoke (vents do not smoke) and heat you up based on your proximity to the geyser. Unstable geysers can burn you fairly easily, so be careful!</li>
+				<li class="rscadd">Geysers can now melt nearby snow in a circle. Unstable geysers do it the fastest - melted snow? take it slow!</li>
+				<li class="rscadd">You can shovel a geyser to fill it in and reduce the rate it puts out heat. Do it enough and you can seal it completely. Shovel a sealed geyser to completely remove it.</li>
+				<li class="rscadd">Geysers hit by explosions can get sealed, but unstable geysers could go critical and spew out extreme heat. Call a suited atmospheric technician to seal it if this happens. Do not be tempted to build a thermoelectric generator around the critical geyser.</li>
+				<li class="bugfix">Fixed a bug where geysers wouldn&#39;t transfer heat to simulated turfs.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Detomatix: Rather than blowing YOU up, failing a chance roll now outs you with a PDA message.</li>
+				<li class="tweak">Detomatix: Trying to blow up a fellow syndie still fails, but sends them a code word and shows you a code response instead of a blank error.</li>
+			</ul>
+			<h3 class="author">Zth-- updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Players missing one arm or hand can wear gloves</li>
+			</ul>
+			<h3 class="author">ancientpower updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">The ability to dab has been re-added.</li>
+			</ul>
+			<h3 class="author">beesil updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Mugs no longer become breakable when filled with certain reagents.</li>
+			</ul>
+			<h3 class="author">boy2mantwicethefam updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">It is more difficult to crawl on wet floor and very difficult to crawl on lubed floor.</li>
+			</ul>
+			<h3 class="author">giraffism updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds pelts for polar bears and grizzly bears</li>
+				<li class="rscdel">Adds a new fur coat from the premium section of the suitvendor</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Security Request Consoles can now request syndicate prisoner shipments. The security department receives a nice bonus, but they have a new prisoner to deal with.</li>
+				<li class="tweak">Head of Security and Captain players can now roll roundstart wizard, with low chances</li>
+			</ul>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">The SM now appropriately dusts you if it runs into you</li>
+				<li class="tweak">lockers in vaults and away missions will no longer contain twice the amount of things they&#39;re supposed to.</li>
+				<li class="bugfix">isolation centrifuges now have an error message if unpowered.</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Cyborgs and mobs that are immune to radiation shouldn&#39;t get their &#39;skin&#39; burned anymore.</li>
+			</ul>
+			<h3 class="author">toomykins updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">ghosts can now check PAI directives on examine.</li>
+				<li class="tweak">reverted change to turf air rebuilding</li>
+			</ul>
+			<h2 class="date">2020.12.16</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">There is now a wall variety of climate computers.</li>
+			</ul>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Packed: Added a lightswitch to botany</li>
+				<li class="bugfix">Farmbots now ignore empty plots when ignoreEmpty is set to true rather than false.</li>
+			</ul>
+			<h2 class="date">2020.12.15</h2>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Rolling the random blizzard event while a blizzard is active will no longer cause a permanent blizzard. Instead, it will extend the current blizzard by a few minutes with an announcement.</li>
+				<li class="rscadd">The jukebox now shows current playlist above current song.</li>
+				<li class="bugfix">Blind description of battering down a door is now correct</li>
+				<li class="bugfix">Fixed a bug where you couldn&#39;t be teleported when a tinfoil hat was anywhere on your person, not just on your head.</li>
+				<li class="bugfix">Fixed a bug that allowed you to wrench down a deskbell anywhere, even right onto your hand.</li>
+			</ul>
+			<h3 class="author">gurfan updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Castlestation has been dragged out of extended hell.</li>
+			</ul>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="spellcheck">fixed higest to highest in a porn spam.</li>
+				<li class="bugfix">pAI&#39;s can no longer request the DNA of a dead being.</li>
+			</ul>
+			<h2 class="date">2020.12.14</h2>
+			<h3 class="author">Kharkov72 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The Ninja Intro now gives a basic overview of the antag.</li>
+			</ul>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Packedstation: Moved the singularity containment field so it&#39;s aligned with the PA.</li>
+				<li class="tweak">Defficiency: added two lights to the SME room</li>
+				<li class="tweak">removed a double lightswitch for interrogation on roidstation</li>
+			</ul>
+			<h2 class="date">2020.12.13</h2>
+			<h3 class="author">DeityLink updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="experiment">Pathogenic Clouds have been vastly optimized. They now merge together instead of stacking on top of one another on a single tile which should prevent the lag from many infected mobs in an enclosed space from increasing exponentially.</li>
+			</ul>
+			<h2 class="date">2020.12.12</h2>
+			<h3 class="author">Lakue-Bit updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Enables in-hands for Excellent Plasma Gladius Sword and gives the obj icon the proper sprite.</li>
+			</ul>
+			<h3 class="author">SonixApache updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">added fannypack accessories, available from biogenerators and for priority assistants</li>
+			</ul>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Gas miners will now tell you their operating state when examined. No power? On? Broken? the miner will tell you</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds the roningasa(rice hat variant) to the bio generator</li>
+			</ul>
+			<h2 class="date">2020.12.10</h2>
+			<h3 class="author">jjpark-kb updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">you no longer get stuck in glued chairs/beds if they get deconstructed/destroyed.</li>
+				<li class="bugfix">baby carp will not grow up if dead</li>
+				<li class="bugfix">fixes the bear trap failing to update icon when set off when an item</li>
+			</ul>
+			<h3 class="author">jknpj updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds grass coats to the bio generator</li>
+			</ul>
+			<h2 class="date">2020.12.09</h2>
+			<h3 class="author">Arthurdentistss13 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a small memorial to the DDR vault for a former admin who has recently passed away. RIP Shiggypiggy</li>
+			</ul>
+			<h3 class="author">Kurfursten updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Vesta heaters are now 3x more powerful than they were previously, for a total of 30x more powerful. They also make an audible click when shutting off automatically due to heat.</li>
+			</ul>
+			<h3 class="author">PlausibleDeniability updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Created a jingle bell that makes noise like maracas, or attached to shoes to make noise like clown shoes!</li>
+				<li class="rscadd">Created several Christmas onesies, available in the festive supplies crate!</li>
+				<li class="rscadd">Created a blue santa hat to go along with the others!</li>
+				<li class="rscadd">The ugly Christmas sweaters are now animated and have a vox variant!</li>
+			</ul>
 			<h2 class="date">2020.12.07</h2>
 			<h3 class="author">mpowell88 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1401,210 +1578,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<h3 class="author">twirling-jesters updated:</h3>
 			<ul class="changes bgimages16">
 				<li class="tweak">Punching walls when hulked out will now produce a loud smashing noise.</li>
-			</ul>
-			<h2 class="date">2020.07.23</h2>
-			<h3 class="author">9percents updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Glock is big again, but can still fit into a pocket.</li>
-				<li class="tweak">Security belt now holds more small stuff on it. Rejoice, donut munchers.</li>
-			</ul>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Horizon: Horizon now has holsters, bandoliers, and a warden&#39;s locker.</li>
-				<li class="bugfix">Horizon: Fixed some missing areas and provided the Vox shuttle with a reinforced floor to land on. Fully tested.</li>
-				<li class="bugfix">Horizon: Horizon&#39;s bloodbank is now filled and a false door has been opened up to Morgue maintenance.</li>
-			</ul>
-			<h3 class="author">Kurfursten updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Horizon won&#39;t be plasmaflooded at roundstart anymore.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Added a universal magwell expansion kit that removes magazine restrictions from guns, and a full-auto conversion kit for glocks. Both are unobtainable for now.</li>
-				<li class="tweak">Loading and unloading magazines now tells you the name of the magazine. Silencers now have descriptions. Fixed a grammar issue with jammed guns.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Wizards now pay half the spell&#39;s cost when upgrading the spell&#39;s cooldown instead of the entire spell cost, except for Blink and Summon Pitbulls which had their cooldown reduction price intact.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Carded AI&#39;s can now be inserted into an AI Upload for law changes. Dead AI&#39;s can now have their laws changed this way.</li>
-				<li class="rscadd">Added a new (currently bus-only) spell to the game: Absorb.</li>
-				<li class="tweak">You can now solder fishtank boards to convert them between their large and small sizes.</li>
-				<li class="rscadd">The matter replicator from xenoarcheology can now produce some more interesting items.</li>
-			</ul>
-			<h2 class="date">2020.07.22</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The implant removal surgery now lasts 2-3 seconds per-item (down from 8-10 seconds per-item) and starts removing the items from the last, rather than the first. This means that loyalty implants don&#39;t necessarily have to be extracted in order to remove shrapnel.</li>
-			</ul>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Horizon: Re-organized Medbay to improve the flow and make the department feel less stretched-out and awkward. Added a bell to the back entrance so Doctors get pinged and don&#39;t forget about people waiting there.</li>
-				<li class="rscadd">Horizon: Security has been overhauled. The Armory has been re-organized. The Brig only has two cells, but there&#39;s a guillotine in case it gets overcrowded.</li>
-				<li class="bugfix">Horizon: Disposals and pipes have been rerouted to avoid going under walls wherever possible.</li>
-				<li class="rscadd">Horizon:  The ship is now actually moving. Entering space is risky, as a misstep can send you hurtling off into space. Some areas of the station, particularly those inside the meteor shields, are relatively safe.</li>
-				<li class="rscadd">Horizon:  The ship now utilizes a new &#34;gas sink&#34; to pull gas molecules in from hyperspace. All gases must be filtered out in Atmos before they can be used.</li>
-				<li class="bugfix">Horizon: A whole ton of bug-fixes. Missing pipes have been replaced, lost wires have been found, forgotten areas and APCs have been remembered, broken windows have been repaired.</li>
-				<li class="rscadd">A new Z-level, &#34;Hyperspace,&#34; which represents a ship moving forward through space.</li>
-			</ul>
-			<h2 class="date">2020.07.20</h2>
-			<h3 class="author">Allspice updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Add a Common channel mode to headsets, .o, function identical to ;. Makes it more convenient to e.g. use custom telecomms channels.</li>
-			</ul>
-			<h3 class="author">Buchse updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">added insectoid cult gear</li>
-				<li class="bugfix">Fixed gloves on vox and insectoids using human hand sprites</li>
-				<li class="tweak">got rid of giant gap in bug sec armor</li>
-				<li class="rscadd">New mosin sprites added, mosins changed to use them</li>
-			</ul>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Examining a spaceman with open body parts now shows a list of things that are inside those body parts.</li>
-				<li class="rscadd">Click-dragging someone into a mirror now lets you change their hair, beard or underwear.</li>
-				<li class="rscadd">You can now choose whether to use tgui or NanoUI for GPSs, by changing the &#34;Fancy tgui&#34; option under &#34;General Settings&#34;.</li>
-				<li class="rscadd">Implemented a potential workaround for a BYOND bug that prevents nanoui and tgui windows from opening.</li>
-				<li class="tweak">Dynamic rulesets will have their weight (chance to fire relative to others) halved if they already fired during the current or last round.</li>
-				<li class="bugfix">Deaf spacemen (through ear damage, genetics, earmuffs or other) will no longer hear instruments or be affected by Shakashuri.</li>
-				<li class="bugfix">AIs will no longer be able to track people after they changed identity. AI tracking now looks for the name that was used in radio messages instead.</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="imageadd">Holosign switches finally have their own sprite, allowing to easily distinguish them from light switches.</li>
-				<li class="tweak">Holosigns now emit a bit of light when activated.</li>
-				<li class="rscadd">Virology airlocks now feature holosigns as well. If you see them on, consider wearing a biosuit before coming in.</li>
-				<li class="bugfix">Added the missing light switch to snaxi&#39;s Virology.</li>
-				<li class="bugfix">Ghosts now share the same poltergeist cooldown that lets them interact with light switches with holosign switches.</li>
-				<li class="bugfix">Fixed light switches not glowing in the dark like they were meant to were they not missing a couple icons.</li>
-				<li class="soundadd">Added missing clicking sounds for a few buttons, specifically the crematorium&#39;s, mass driver&#39;s, flasher&#39;s, and igniter&#39;s.</li>
-				<li class="bugfix">Cultists turning into shades now properly drop all their items</li>
-				<li class="tweak">Beheading cultists or otherwise destroying their heads now also turns them into shades</li>
-				<li class="imageadd">Added a bunch more in-hand icons for a few manuals, as well as spell books (all one-use spell books share the same one)</li>
-			</ul>
-			<h3 class="author">Hatterhat updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Plasma cutters (the ones that shoot, from experimental tech) now have a safety; for when you want to hit rocks, not shoot them. Toggle it by using it in your hand.</li>
-				<li class="tweak">Alt-click can now be used to activate a mining scanner.</li>
-			</ul>
-			<h3 class="author">ShiftyRail updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Changed yet again the system we use to communicate with the game&#39;s database for more stability and less crashes.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Defficiency&#39;s abandoned medbay&#39;s resident spider has been replaced by a big roach. thank you duny.</li>
-				<li class="rscadd">New verb for AIs: Toggle Holopad Overlays.</li>
-			</ul>
-			<h3 class="author">bathosbathtime updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds 30 mugs to the regular area of the boozevender</li>
-				<li class="rscadd">Adds the breathalyzer to the contraband section of the boozevender</li>
-			</ul>
-			<h3 class="author">beesil updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Increases the playing card hand size from 5 to 7. Go fish.</li>
-			</ul>
-			<h3 class="author">boy2mantwicethefam updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">You can now buckle other people to the strange wheelchairs that can fit multiple people.</li>
-				<li class="tweak">Telepads can now be upgraded. The amount of teleports before recalibration is required depends on the quality of the components.</li>
-				<li class="rscadd">The telepad console now tells you if it needs to recalibrate or not.</li>
-			</ul>
-			<h3 class="author">drawsstuff updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Nanotrasen has updated the appearance of their Ion Rifle and Lawgiver. The Syndicate has countered by updating the design of their flare gun.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Rechargers, chemical heaters, and chemical coolers can now be slid onto tables.</li>
-			</ul>
-			<h3 class="author">hbycyl updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Firelock Frames can now be deconstructed with a wrench.</li>
-				<li class="bugfix">Dedicated greytiders with no other jobprefs now properly join at roundstart</li>
-				<li class="rscadd">Mushmen now have proper name generation</li>
-			</ul>
-			<h3 class="author">twirling-jesters updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vampires will no longer teleport into holy tiles (e.g.: chapel).</li>
-				<li class="bugfix">Fixed sheet amount in aux storage on packed.</li>
-				<li class="bugfix">Farmbot no longer just sits around and does nothing.</li>
-			</ul>
-			<h2 class="date">2020.07.13</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Vampires turning to dust from burning will now drop all their items.</li>
-			</ul>
-			<h2 class="date">2020.07.12</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Ghosts can now properly haunt Virology&#39;s disease analyzer, without preventing the Virologist from using the machine or getting their name known.</li>
-				<li class="rscadd">Ian can now wear cowboy hats.</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">You can now read pipe meters from far away.</li>
-			</ul>
-			<h2 class="date">2020.07.11</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">GPSs use NanoUI once again.</li>
-			</ul>
-			<h3 class="author">jknpj updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">You can now remove upgrades from suit modifiers</li>
-				<li class="bugfix">Fixed suit modifiers not installing cell upgrades if the modifier had no rig module installed</li>
-				<li class="tweak">You may now choose if you want to apply any cell upgrade while the machine is upgrading your suit</li>
-				<li class="rscadd">Adds two new rig modules: The EMP dissipation module and the R.A.D.(radiation absorption device)</li>
-				<li class="rscadd">SSUs will now clean the suit&#39;s R.A.D. radiation filter on</li>
-				<li class="rscadd">The new modules will be added to cargo/science in a later PR.</li>
-			</ul>
-			<h2 class="date">2020.07.10</h2>
-			<h3 class="author">Allspice updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixes a bug where changing headset freq to a department freq while that headset has an encryption key for the department, would make that department&#39;s chat key (.e, .s, etc.) stop working.</li>
-			</ul>
-			<h3 class="author">Dacendeth updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Can now strip your targets ID and Belt if they are wearing a hardsuit</li>
-			</ul>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="bugfix">Fixed space vine and biomass random infestation being borked and never actually firing for A WHOLE FUCKING YEAR. I mean, did anyone actually notice? Like come on...</li>
-				<li class="rscadd">Space Vines spawned during infestations (or by admins) now have a random strength factor that substantially increases their chance to possess dangerous traits, such as carnivorous, hematophage, ligneous, etc...</li>
-				<li class="rscadd">Space Vines appear now blood red if they have the hematophage trait, and grey if they have the ligneous trait. They&#39;ll appear dark red if they have both.</li>
-			</ul>
-			<h3 class="author">GeneralVeers25 updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Roidstation: Surgery has been reorganized. All tools and equipment should be more visible.</li>
-				<li class="rscadd">Roidstation: The Supermatter Engine has been made slightly less braindead. A little more elbow grease is required now. To compensate, the SMES have been given some additional starting charge.</li>
-				<li class="rscadd">Roidstation: Engineering has been granted some additional starting materials.</li>
-				<li class="rscadd">Roidstation: The Forgotten Cafeteria has been provided with some cooking supplies, recently pilfered by maint goblins.</li>
-				<li class="rscadd">Roidstation: The Armory now has an additional shutter.</li>
-				<li class="bugfix">Roidstation: A broken vent in Chemistry can now be used properly for vent-crawling.</li>
-				<li class="bugfix">Roidstation: An intercomm outside the Chapel is no longer always on.</li>
-				<li class="bugfix">Roidstation: The Supermatter Monitoring Computer is now on the correct frequency.</li>
-				<li class="bugfix">Roidstation: Cargo Bay now has an air alarm and some incorrect areas have been updated.</li>
-				<li class="bugfix">Roidstation: A missing window has been fixed.</li>
-				<li class="bugfix">Roidstation: Did other stuff!</li>
-			</ul>
-			<h3 class="author">SonixApache updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Pipe coloring is now a blacklist instead of a whitelist; you should be able to color more stuff now.</li>
-			</ul>
-			<h2 class="date">2020.07.09</h2>
-			<h3 class="author">DamianX updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">The GPS now uses a new UI framework from TG (no longer NanoUI).</li>
-			</ul>
-			<h3 class="author">toomykins updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">allow dionae to wear ghetto spacesuit</li>
-				<li class="rscadd">greys now have a fitting ghetto spacesuit head sprite</li>
-				<li class="rscadd">the light on the ghetto spacesuit head now somewhat works.</li>
 			</ul>
 		</div>
 		<!--

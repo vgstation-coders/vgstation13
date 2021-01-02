@@ -364,6 +364,30 @@
 /obj/item/clothing/head/bearpelt/real/spare/GetAccess()
 	return get_all_accesses()
 
+/obj/item/clothing/head/bearpelt/black
+	name = "bear pelt hat"
+	desc = "Just like the pelt of a space bear without as much space."
+	icon_state = "blackbearpelt"
+	item_state = "blackbearpelt"
+
+/obj/item/clothing/head/bearpelt/brown
+	name = "brown bear pelt hat"
+	desc = "Faded and rough, it almost passes as a real pelt."
+	icon_state = "brownbearpeltfake"
+	item_state = "brownbearpeltfake"
+
+/obj/item/clothing/head/bearpelt/brown/real
+	name = "brown bear pelt hat"
+	desc = "Now that's what I call fuzzy."
+	icon_state = "brownbearpelt"
+	item_state = "brownbearpelt"
+
+/obj/item/clothing/head/bearpelt/polar
+	name = "bear pelt hat"
+	desc = "For those polar chills."
+	icon_state = "polarbearpelt"
+	item_state = "polarbearpelt"
+
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
 	icon_state = "xenos"
@@ -496,14 +520,22 @@
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatred"
 	item_state = "santahatred"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/head/christmas/santahat/green
 	name = "green santa hat"
 	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
 	icon_state = "santahatgreen"
 	item_state = "santahatgreen"
-	species_fit = list(INSECT_SHAPED)
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+
+/obj/item/clothing/head/christmas/santahat/blue
+	name = "blue santa hat"
+	desc = "Not quite as magical as the real thing, but it flops over one ear and itches your head just the same."
+	icon_state = "santahatblue"
+	item_state = "santahatblue"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+
 
 /obj/item/clothing/head/festive
 	name = "festive paper hat"
@@ -601,7 +633,7 @@
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/rice_hat/ronin
-	name = "Roningasa"
+	name = "roningasa"
 	desc = "A conical amigasa with a flat top, often worn by ronin."
 	icon_state = "kasa"
 	item_state = "kasa"

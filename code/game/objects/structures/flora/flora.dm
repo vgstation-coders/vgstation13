@@ -84,6 +84,7 @@
 	var/const/randomize_on_creation = 1
 	var/const/log_type = /obj/item/weapon/grown/log/tree
 	var/holo = FALSE
+	var/image/transparent
 
 /obj/structure/flora/tree/New()
 	..()
@@ -109,6 +110,44 @@
 	var/rangevalue = 0.1 //Range over which the values spread. We don't want it to collide with "true" layer differences
 
 	layer += rangevalue * (1 - (y + 0.5 * (x & 1)) / world.maxy)
+
+	update_transparency()
+
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.lazy_register_event(/lazy_event/on_entered, src, .proc/give_transparency)
+			T.lazy_register_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+
+
+/obj/structure/flora/tree/Destroy()
+	for(var/turf/T in circlerange(src,2))
+		if(T.y > y)
+			T.lazy_unregister_event(/lazy_event/on_entered, src, .proc/give_transparency)
+			T.lazy_unregister_event(/lazy_event/on_exited, src, .proc/remove_transparency)
+	..()
+
+/obj/structure/flora/tree/proc/update_transparency()
+	transparent = image(icon,src,icon_state)
+	transparent.color = "[color ? color : "#FFFFFF"]"+"7F"
+	transparent.override = TRUE
+
+/obj/structure/flora/tree/proc/give_transparency(mover, location, oldloc)
+	if(!ismob(mover))
+		return
+	var/mob/M = mover
+	if(!M.client)
+		return
+	var/client/C = M.client
+	C.images += transparent
+
+/obj/structure/flora/tree/proc/remove_transparency(mover, location, newloc)
+	if(!ismob(mover))
+		return
+	var/mob/M = mover
+	if(!M.client)
+		return
+	var/client/C = M.client
+	C.images -= transparent
 
 /obj/structure/flora/tree/examine(mob/user)
 	.=..()
@@ -191,6 +230,7 @@
 /obj/structure/flora/tree/pine/New()
 	..()
 	icon_state = "pine_[rand(1, 3)]"
+	update_transparency()
 
 /obj/structure/flora/tree/pine/xmas
 	name = "xmas tree"
@@ -203,6 +243,8 @@
 /obj/structure/flora/tree/pine/xmas/New()
 	..()
 	icon_state = "pine_c"
+	update_transparency()
+
 
 /obj/structure/flora/tree/dead
 	name = "dead tree"
@@ -215,6 +257,7 @@
 /obj/structure/flora/tree/dead/New()
 	..()
 	icon_state = "tree_[rand(1, 6)]"
+	update_transparency()
 
 /obj/structure/flora/tree_stump
 	name = "tree stump"

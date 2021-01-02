@@ -71,6 +71,12 @@
 	var/list/message_exclusions = list(/obj/effect/effect/sparks,/obj/effect/overlay/hologram)
 	machine_flags = MULTITOOL_MENU
 
+/obj/machinery/power/supermatter/airflow_hit(atom/A)
+	if(ismovable(A))
+		var/atom/movable/movingA = A
+		Bumped(movingA)
+	. = ..()
+
 /obj/machinery/power/supermatter/shard //Small subtype, less efficient and more sensitive, but less boom.
 	name = "\improper Supermatter Shard"
 	short_name = "Shard"
@@ -435,28 +441,23 @@
 				new /obj/machinery/power/supermatter(T)
 
 
-/obj/machinery/power/supermatter/proc/Consume(var/mob/living/user)
-	if(istype(user))
-		. = user.supermatter_act(src, SUPERMATTER_DUST)
-		if(istype(user,/mob/living/simple_animal/mouse)) //>implying mice are going to follow the rules
-			return
+/obj/machinery/power/supermatter/proc/Consume(atom/A)
+	if(isliving(A))
+		. = A.supermatter_act(src, SUPERMATTER_DUST)
+		if(ismouse(A)) //>implying mice are going to follow the rules
+			return .
 		power += 200
-	else if(istype(user, /atom))
-		var/atom/A = user
+	else
 		. = A.supermatter_act(src, SUPERMATTER_DELETE)
 
 	power += 200
 
-		//Some poor sod got eaten, go ahead and irradiate people nearby.
-	for(var/mob/living/l in range(10,src))
-		if(l in view())
-			l.show_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find your skin covered in new radiation burns.</span>", 1,\
-				"<span class=\"warning\">The unearthly ringing subsides and you notice you have new radiation burns.</span>", 2)
-		else
-			l.show_message("<span class=\"warning\">You hear an uneartly ringing and notice your skin is covered in fresh radiation burns.</span>", 2)
+	for(var/mob/living/l in range(10,src)) //Some poor sod got eaten, go ahead and irradiate people nearby.
+		if(l == A) //It's the guy that just died.
+			continue
 		var/rads = 75 * sqrt( 1 / (get_dist(l, src) + 1) )
-		l.apply_radiation(rads, RAD_EXTERNAL) // Permit blocking
-
+		if(l.apply_radiation(rads, RAD_EXTERNAL))
+			visible_message("<span class=\"warning\">As \the [src] slowly stops resonating, you find yourself covered in fresh radiation burns.</span>", "<span class=\"warning\">The unearthly ringing subsides and you notice you have fresh radiation burns.</span>")
 
 /obj/machinery/power/supermatter/blob_act()
 	explode()

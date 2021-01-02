@@ -220,7 +220,7 @@
 	message = "Based on long-range psychic scans, we have determined that revolutionary activity aboard the station has been contained. An evacuation shuttle has been dispatched to recover crew for further loyalty screening at Central Command."
 	stoptheme = 1
 	alertlevel = "blue"
-	
+
 
 /// MALF
 
@@ -428,7 +428,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 	var/meteor_delay = 2000
 	var/supply_delay = 100
-	
+
 
 /datum/command_alert/meteor_round/announce()
 	meteor_delay = rand(4500, 6000)
@@ -709,6 +709,14 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 	alert_title = "Automated Meteorological Update - Unforecasted Blizzard"
 	message = "ROKER-class storm early warning systems have detected unforecasted, sudden-onset snowstorm approaching in the next two to four minutes. Crew members are encouraged to follow standard safety procedures and wear protective snow gear at all times."
 
+/datum/command_alert/blizzard_extended
+	alert_title = "Automated Meteorological Update - Inaccurate Forecast"
+	message = "ROKER-class storm analysis systems have detected an incongruity in blizzard forecasting. The current blizzard's estimated active period has been re-evaluated and extended."
+
 /datum/command_alert/omega_blizzard
 	alert_title = "Urgent Warning - Dark Season"
 	message = "ROKER-class storm warning has determined that the Dark Season on your planet's surface has started early. It is anticipated that the oncoming blizzard will last no more than two hours and the season itself will last sixteen months. As space may soon become inaccessible from surface, crew should migrate valuables from orbital outpost in the next eight to ten minutes."
+
+/datum/command_alert/prisoner_transfer
+	alert_title = "Prisoner Transfer"
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately one minute. Crew payrolls have recieved a bonus as a result."

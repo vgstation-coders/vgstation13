@@ -30,14 +30,14 @@
 			icon_state ="blackglass"
 			name = "international drink of mystery"
 			desc = "The identity of this drink has been concealed for its protection."
-			viewcontents = 0 
+			viewcontents = 0
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
 			R.handle_special_behavior(src)
 
 			if(R.light_color)
 				light_color = R.light_color
-			
+
 			if(R.flammable)
 				if(!lit)
 					flammable = 1
@@ -123,9 +123,8 @@
 
 		var/datum/reagent/R = reagents.get_master_reagent()
 
-		name = R.mug_name ? R.mug_name : "\improper [R.name]"
+		name = R.mug_name ? R.mug_name : "mug of " + R.name
 		desc = R.mug_desc ? R.mug_desc : R.description
-		isGlass = R.glass_isGlass
 
 		if(R.mug_icon_state)
 			icon_state = R.mug_icon_state

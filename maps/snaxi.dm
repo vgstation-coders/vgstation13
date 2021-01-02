@@ -43,8 +43,16 @@
 	snow_theme = TRUE
 	can_enlarge = FALSE
 
+/****************************
+**	Day and Night Lighting **
+**	See: daynightcycle.dm  **
+****************************/
+/datum/subsystem/daynightcycle
+	flags = SS_FIRE_IN_LOBBY
+	daynight_z_lvl = STATION_Z
+
 /datum/map/active/New()
-	.=..()
+	. = ..()
 
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()

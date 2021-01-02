@@ -32,7 +32,7 @@
 	health = 250
 	light_range_on = 10
 	light_brightness_on = 3
-	damage_absorption = list("fire"=0.5,"bullet"=0.8,"bomb"=0.5)
+	damage_absorption = list("brute"=0.8,"fire"=0.5,"bullet"=0.8,"bomb"=0.5)
 	wreckage = /obj/effect/decal/mecha_wreckage/ripley/firefighter
 	paintable = 1
 	mech_sprites = list(

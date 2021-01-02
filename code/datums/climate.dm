@@ -200,7 +200,7 @@ var/list/snowstorm_ambience_volumes = list(30,40,60,80)
 /datum/weather/snow/blizzard
 	name = "<font color='red'>blizzard</font>"
 	snow_intensity = SNOW_BLIZZARD
-	next_weather = list(/datum/weather/snow/heavy = 50, /datum/weather/snow/blizzard = 50)
+	next_weather = list(/datum/weather/snow/heavy = 65, /datum/weather/snow/blizzard = 35)
 	tile_interval = 3
 	snowfall_prob = 12
 	snowfall_rate = list(3,20)
