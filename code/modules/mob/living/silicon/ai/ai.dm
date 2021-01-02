@@ -492,6 +492,7 @@ var/list/ai_list = list()
 
 	if(href_list["track"])
 		var/name_to_track = href_list["track"]
+		name_to_track = replacetext(name_to_track,"&#39;","'")
 		for(var/mob/some_mob in mob_list)
 			if(some_mob.name != name_to_track)
 				continue
