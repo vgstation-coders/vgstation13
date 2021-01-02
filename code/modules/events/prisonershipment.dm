@@ -6,7 +6,7 @@ var/list/current_prisoners = list()
 /datum/event/prisontransfer
 	var/datum/recruiter/recruiter = null //for prisoner shit
 
-/datum/event/prisontransfer/can_start()  
+/datum/event/prisontransfer/can_start(var/list/active_with_role)  
 	if(active_with_role["Security"] > 2)
 		return 15
 	return 0
