@@ -17,8 +17,7 @@
 		virt_speaker = src
 	if(speech.speaker != src && M != src)
 		if(M)
-			var/htmlproofname = replacetext(speech.name,"'","&#39;")
-			var/track_link = "byond://?src=\ref[src];track=[htmlproofname]"
+			var/track_link = "byond://?src=\ref[src];track=[url_encode(speech.name)]"
 			return "<a href='byond://?src=\ref[virt_speaker];open2=\ref[src];open=\ref[M]'>\[OPEN\]</a> <a href='[track_link]'>"
 	return ""
 
