@@ -257,28 +257,28 @@
 	//Bonus Modifiers
 	//--General--
 	//var/traitorwins = score["traitorswon"]
-	var/deathpoints = score["deadcrew"] * 250 //Human beans aren't free
+	var/deathpoints = score["deadcrew"] * 500 //Human beans aren't free
 	var/siliconpoints = score["deadsilicon"] * 500 //Silicons certainly aren't either
 	//var/researchpoints = score["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
 	var/eventpoints = score["eventsendured"] * 200 //Events fine every 10 to 15 and are uncommon
-	var/escapoints = score["escapees"] * 100 //Two rescued human beans are worth a dead one
+	var/escapoints = score["escapees"] * 250 //Two rescued human beans are worth a dead one
 
 	//--Service--
 	var/harvests = score["stuffharvested"] * 1 //One harvest is one product. So 5 wheat is 5 points
 	var/meals = score["meals"] * 5 //Every item cooked (needs to fire make_food()) awards five points
 	//var/drinks = score["drinks"] * 5 //All drinks that ever existed award five points. No better way to do it yet
-	var/litter = score["litter"] //Every item listed under /obj/item/trash will cost one point if it exists
+	var/litter = score["litter"] * 5 //Every item listed under /obj/item/trash will cost one point if it exists
 	var/messpoints
 	if(score["mess"] != 0)
-		messpoints = score["mess"] //If there are any messes, let's count them
+		messpoints = score["mess"] * 5 //If there are any messes, let's count them
 
 	//--Supply--
-	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
-	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
+	var/shipping = score["stuffshipped"] * 1000 //Centcom Orders fulfilled
+	var/plasmashipped = score["plasmashipped"] * 10 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
 	//--Engineering--
-	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
+	var/power = score["powerloss"] * 100 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	//var/atmos
 	//if(score["airloss"] != 0)
@@ -307,7 +307,7 @@
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	//--Science--
-	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
+	var/artifacts = score["artifacts"] * 1500 //How many large artifacts were analyzed and activated
 
 
 	/*//Mode Specific
