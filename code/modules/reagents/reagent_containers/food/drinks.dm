@@ -974,7 +974,48 @@
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/cannedcopcoffee/New()
 	..()
 	reagents.add_reagent(SECCOFFEE, 50)
-
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white
+	name = "Picomed: White edition"
+	desc = "Good for the body and good for the bones."
+	icon_state = "lifeline_white"
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_white/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(MILK, 2)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red
+	name = "Picomed: Red edition"
+	desc = "I need 50ccs of coffee, stat!"
+	icon_state = "lifeline_red"
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_red/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(REDTEA, 2)
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo
+	name = "Picomed: Cryo edition"
+	desc = "Remember to strip before consuming."
+	icon_state = "lifeline_cryo"
+	var/list/tubeoverlay = list() 
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/on_reagent_change()
+	..()
+	for(var/image/ol in tubeoverlay)
+		overlays -= ol
+		tubeoverlay -= ol
+	var/remaining = Ceiling(reagents.total_volume/reagents.maximum_volume*100,20)
+	var/image/status_overlay = image("icon" = 'icons/obj/drinks.dmi', "icon_state" = "cryoverlay_[remaining]")
+	overlays += status_overlay
+	tubeoverlay += status_overlay
+	
+/obj/item/weapon/reagent_containers/food/drinks/soda_cans/lifeline_cryo/New()
+	..()
+	reagents.add_reagent(MEDCOFFEE, 48)
+	reagents.add_reagent(LEPORAZINE, 1)
+	reagents.add_reagent(FROSTOIL, 1)
 
 /obj/item/weapon/reagent_containers/food/drinks/soda_cans/bear
 	name = "bear arms beer"
