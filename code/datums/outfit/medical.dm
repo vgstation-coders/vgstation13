@@ -56,7 +56,7 @@
 
 /datum/outfit/cmo/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/weapon/switchtool/surgery] = SURVIVAL_BOX
+	
 	return ..()
 	
 /datum/outfit/cmo/post_equip_priority(var/mob/living/carbon/human/H)
@@ -161,7 +161,7 @@
 
 /datum/outfit/doctor/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/storage/belt/medical] = GRASP_LEFT_HAND
-	items_to_collect[/obj/item/weapon/switchtool/surgery] = SURVIVAL_BOX
+	
 	return ..()
 	
 /datum/outfit/doctor/post_equip_priority(var/mob/living/carbon/human/H)
