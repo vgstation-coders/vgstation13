@@ -770,3 +770,20 @@
 
 /datum/outfit/special/cosmonaut/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
+
+datum/outfit/special/sports
+	outfit_name = "Sports Fan"
+	items_to_spawn = list(
+		"Default" = list(
+			slot_w_uniform_str = /obj/item/clothing/under/football,
+			slot_shoes_str = /obj/item/clothing/shoes/black,
+			slot_r_store_str = /obj/item/weapon/reagent_containers/food/drinks/soda_cans/gibness,
+		)
+	)
+
+/datum/outfit/special/sports/equip_backbag(var/mob/living/carbon/human/H)
+	return FALSE
+
+/datum/outfit/special/sports/post_equip(var/mob/living/carbon/human/H)
+	..()
+	equip_accessory(H, /obj/item/clothing/accessory/storage/fannypack, /obj/item/clothing/under, 5)

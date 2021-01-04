@@ -983,3 +983,12 @@
 	clothing_flags = ONESIZEFITSALL
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/football
+	name ="\improper Red football shirt"
+	desc = "The perfect shirt to show support for your favourite team."
+	icon_state = "redfootball"
+	item_state = "redfootball"
+	_color = "redfootball"
+	clothing_flags = ONESIZEFITSALL
+

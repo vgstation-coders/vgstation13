@@ -197,6 +197,14 @@ obj/item/device/mmi/Destroy()
 		brainmob.dna = H.dna.Clone()
 	brainmob.container = src
 
+	if (isbrain(H))
+		var/mob/living/carbon/brain/otherbrain = H
+		brainmob.timeofhostdeath = otherbrain.timeofhostdeath
+	else if (H.timeofdeath == 0)//happens when the human gets decapitated while still alive
+		brainmob.timeofhostdeath = world.time
+	else
+		brainmob.timeofhostdeath = H.timeofdeath
+
 	name = "Man-Machine Interface: [brainmob.real_name]"
 	icon_state = "mmi_full"
 	locked = 1

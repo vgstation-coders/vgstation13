@@ -375,7 +375,7 @@
 
 	//Rebuild turf
 	var/turf/T = src
-	env = T.return_air() //Better than just getting the air var because this factors in unsimmed turfs
+	env = T.air //Get the air before the change
 	if(istype(src,/turf/simulated))
 		var/turf/simulated/S = src
 		if(S.zone)

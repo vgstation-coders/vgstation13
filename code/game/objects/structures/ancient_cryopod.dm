@@ -6,8 +6,6 @@
 	mech_flags = MECH_SCAN_FAIL
 	var/datum/recruiter/recruiter = null
 	var/thawing = FALSE
-	var/last_ping_time = 0
-	var/ping_cooldown = 5 SECONDS
 	density = 1
 	var/datum/cryorole/role
 	var/possible_roles = list(
@@ -19,7 +17,8 @@
 		/datum/cryorole/tourist,
 		/datum/cryorole/cosmonaut,
 		/datum/cryorole/gangster,
-		/datum/cryorole/pizzaman)
+		/datum/cryorole/pizzaman,
+		/datum/cryorole/sportsfan)
 
 /obj/machinery/cryopod/attack_hand(mob/user as mob)
 	if(thawing)
@@ -72,6 +71,7 @@
 		S.ckey = O.ckey
 		S.randomise_appearance_for()
 		role.gear_occupant(S)
+		role.special_behavior(S)
 	else
 		thawing = FALSE
 		visible_message("<span class='notice'>\The [name] quietly beeps and displays an error message. Try again later.</span>")
@@ -79,6 +79,7 @@
 /datum/cryorole/proc/gear_occupant(var/mob/living/carbon/human/M)
 	var/datum/outfit/roleoutfit = new outfit_datum
 	roleoutfit.equip(M)
+
 	to_chat(M, "<b>You are the [title].</b>")
 	to_chat(M, "You remember being frozen in a cryogenic stasis pod. How long has it been, decades, centuries?")
 	to_chat(M, "You are dazed and disoriented when you awake to the bright lights and monotonous hum of a station in deep space.")
@@ -97,9 +98,14 @@
 	message_admins("[key_name_admin(M)] has spawned as a [title] from an ancient cryopod.")
 	log_game("[key_name(M)] has spawned as a [title] from an ancient cryopod.")
 
+// TO ADD ROLES: create cryorole datum below, add role to possible_roles list in cryopod definition above
+
 /datum/cryorole
 	var/title
 	var/outfit_datum
+
+/datum/cryorole/proc/special_behavior(var/mob/living/carbon/human/M) //for special behavior like giving roles genetic mutations
+	return
 
 /datum/cryorole/cowboy
 	title = "cowboy"
@@ -136,3 +142,16 @@
 /datum/cryorole/pizzaman
 	title = "pizza delivery guy"
 	outfit_datum = /datum/outfit/special/pizzaman
+
+/datum/cryorole/sportsfan
+	title = "sports fan"
+	outfit_datum = /datum/outfit/special/sports
+
+/datum/cryorole/sportsfan/special_behavior(var/mob/living/carbon/human/M)
+	if(prob(50))
+		M.mutations += M_FAT
+		M.overeatduration = 600
+		M.update_mutantrace()
+		M.update_mutations()
+		M.regenerate_icons()
+	return

@@ -45,6 +45,11 @@ MATCHBOXES ARE ALSO IN FANCY.DM
 
 	processing_objects -= src
 
+/obj/item/weapon/match/is_hot()
+	if(lit==1)
+		return source_temperature
+	return 0
+
 /obj/item/weapon/match/ignite(temperature)
 	. = ..()
 	light()
