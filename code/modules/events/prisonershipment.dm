@@ -68,10 +68,11 @@ var/list/current_prisoners = list()
 
 		//Randomize their looks (but let them pick a name)
 		H.randomise_appearance_for()
-		var/name = random_name(H.gender, H.species.name)
-		H.name = name
-		H.real_name = name
+		var/randname = random_name(H.gender, H.species.name)
+		H.fully_replace_character_name(null,randname)
 		H.regenerate_icons()
+		H.dna.ResetUIFrom(H)
+		H.dna.ResetSE()
 		mob_rename_self(H, "prisoner")
 
 		//Send them to the starting location.
