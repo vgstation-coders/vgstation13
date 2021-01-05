@@ -180,7 +180,7 @@
 	var/damage = 0
 	var/attacktype = "bitten"
 
-	if(T.amount > 0)
+	if(T?.amount > 0)
 		damage = rand(1, 5)
 	else //no teeth time to GUM
 		damage = 1
