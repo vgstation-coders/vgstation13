@@ -162,7 +162,7 @@
 		to_chat(M, "<span class='warning'>Remove their mask!</span>")
 		return FALSE
 
-	if(vampire_teeth.amount == 0)
+	if(vampire_teeth?.amount == 0)
 		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
 		return FALSE
 
