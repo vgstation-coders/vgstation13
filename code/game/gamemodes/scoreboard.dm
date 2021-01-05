@@ -278,7 +278,13 @@
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
 	//--Engineering--
-	var/power = score["powerloss"] * 200 //Power issues are BAD, they mean the Engineers aren't doing their job at all
+	var/power // Penalties for power loss scale up if more areas are powerless
+	if(score["powerloss"] <= 10)
+		power = score["powerloss"] * 50
+	else if (score["powerloss"] > 10 & score["powerloss"] < 60)
+		power = score ["powerloss"] * 150
+	else if (score["powerloss"] >= 60) //Per-area penalty removed at 60+ areas unpowered, in favor of a huge penalty listed later on
+		power = 0
 	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	//var/atmos
 	//if(score["airloss"] != 0)
@@ -345,9 +351,14 @@
 	score["crewscore"] += score["disease_vaccine_score"]
 	score["crewscore"] += score["disease_effects"]
 
-	if(!power) //No APCs with bad power
+	if(!score["powerloss"]) //No APCs with bad power
 		score["crewscore"] += 2500 //Give the Engineers a pat on the back for bothering
 		score["powerbonus"] = 1
+	if(score["powerloss"] >= 60) //If more than 60 areas are unpowered, give the score the boot
+		score["crewscore"] -= 10000
+		score["powerpoints"] = 10000
+	if(score["powerloss"] < 60) //If fewer than 60 areas are unpowered, count each area individually
+		score["powerpoints"] = power
 	if(!messpoints && !litter) //Not a single mess or litter on station
 		score["crewscore"] += 10000 //Congrats, not even a dirt patch or chips bag anywhere
 		score["messbonus"] = 1
@@ -537,7 +548,7 @@
 	<B>AIs Destroyed:</B> [score["deadaipenalty"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadaipenalty"] * 1000 : score["deadaipenalty"] * -1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
-	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
+	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerpoints"]] Points)<BR>
 	<B>Bad diseases in living mobs:</B> [score["disease_bad"]] (-[score["disease_bad"] * 50] Points)<BR><BR>
 
 	<U>THE WEIRD</U><BR>"}
