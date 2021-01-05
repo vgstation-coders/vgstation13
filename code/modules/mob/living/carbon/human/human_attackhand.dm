@@ -119,7 +119,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(M.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
@@ -238,7 +238,7 @@
 				if(do_after(M, src, 2 SECONDS))
 					if(head == crab)
 						drop_from_inventory(crab)
-						crab.GoIdle(15 SECONDS) 
+						crab.GoIdle(15 SECONDS)
 						visible_message("[M] pulls the headcrab off of [src]'s head!")
 			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)
