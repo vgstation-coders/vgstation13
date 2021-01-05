@@ -97,7 +97,7 @@ TODO: literally every alarm but SPS alarms.
 	user << browse(listing, "window=security_alert")
 	onclose(user, "security_alert")
 
-/obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = 1)
+/obj/machinery/computer/security_alerts/proc/receive_alert(var/alerttype, var/newdata, var/verbose = FALSE)
 	if(stat & (BROKEN|NOPOWER))
 		return
 	if(saved_security_alerts.Find(newdata)) //no need for duplicate entries
