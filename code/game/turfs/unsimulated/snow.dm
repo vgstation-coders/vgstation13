@@ -89,13 +89,21 @@
 
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
-	if(istype(A,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs && !H.flying)
-			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
-			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+	
+	var/mob/living/carbon/human/H
+	if(ismecha(A))
+		var/obj/mecha/mecha = A
+		if(ishuman(mecha.occupant))
+			H = mecha.occupant
+	
+	if(ishuman(A))
+		if(!H)
+			H = A
+			if(snowprint_parent && snowballs && !H.flying)
+				if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+					snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+				else //Our human is down on his ass or in a vehicle, create tracks
+					snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
 
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
@@ -103,16 +111,24 @@
 			H.clear_fullscreen("snowfall_blizzard",0)
 			H << sound(null, 0, 0, channel = CHANNEL_WEATHER)
 
-
 /turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)
 	..()
-	if(istype(A,/mob/living/carbon/human))
-		var/mob/living/carbon/human/H = A
-		if(snowprint_parent && snowballs && !H.flying)
-			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
-			else //Our human is down on his ass or in a vehicle, create tracks
-				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+
+	var/mob/living/carbon/human/H
+	if(ismecha(A))
+		var/obj/mecha/mecha = A
+		if(ishuman(mecha.occupant))
+			H = mecha.occupant
+
+	if(ishuman(A))
+		if(!H)
+			H = A
+			if(snowprint_parent && snowballs && !H.flying)
+				if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+					snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+				else //Our human is down on his ass or in a vehicle, create tracks
+					snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+		
 		switch(snow_state)
 			if(SNOW_CALM)
 				H.clear_fullscreen("snowfall_average",0)
@@ -129,13 +145,13 @@
 				H.clear_fullscreen("snowfall_average",0)
 				H.clear_fullscreen("snowfall_hard",0)
 				H.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
+		
 		if(H.client)
 			if(!istype(OL,/turf/unsimulated/floor/snow))
 				H << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
 				if(snowsound?.len)
 					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
-
 
 /turf/unsimulated/floor/snow/cultify()
 	return //It's already pretty red out in nar-sie universe.
