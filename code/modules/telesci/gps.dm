@@ -237,6 +237,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
+	deathsound(TRUE)
 	send_signal(wearer, src, "SPS [gpstag]: Code Red")
 
 /obj/item/device/gps/secure/get_gps_list()
@@ -246,6 +247,7 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
+	deathsound(FALSE)
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
@@ -256,23 +258,20 @@ var/list/SPS_list = list()
 	var/alerttype = code
 	var/alertarea = get_area(SPS)
 	var/alerttime = worldtime2text()
-	var/verbose = TRUE
+	var/verbose = FALSE
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)
 			receiver.receive_alert(alerttype, transmission_data, verbose)
-			boop = TRUE
-
-	deathsound(TRUE)
 
 	for(var/E in gps_list)
 		var/obj/item/device/gps/secure/S = E
+		if(S == src)
+			continue
 		var/mob/living/L = get_holder_of_type(S, /mob/living)
 		if(L)
-			L.show_message("\icon[src] <span class='danger'>[gpstag] beeps loudly!</span>", MESSAGE_HEAR)
-		else if(isturf(loc))
-			visible_message("\icon[src] <span class='danger'>[gpstag] beeps loudly!</span>")
-		S.deathsound(FALSE)
+			L.show_message("\icon[S] <span class='danger'>[S.gpstag] beeps loudly!</span>", MESSAGE_HEAR)
+			S.deathsound(FALSE)
 
 
 /obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)
@@ -287,22 +286,19 @@ var/list/SPS_list = list()
 	if(prob(50))
 		playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
 		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	if(prob(25) && dead) // 25% chance if dead, 0% chance if stripped
-		playsound(src, 'sound/items/unitdeserviced.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
-		playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playnum(pos.z,sound_channel,src)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-	else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
-		playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
-		playnum(gps_list.Find(src),sound_channel,src)
-		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+	switch(rand(1,3))
+		if(1)
+			playsound(src, 'sound/items/unitdeserviced.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(2)
+			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(gps_list.Find(src),sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(3)
+			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(gps_list.Find(src),sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
 	if(prob(50))
 		playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
 		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
