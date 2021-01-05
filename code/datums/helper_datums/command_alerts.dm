@@ -669,3 +669,8 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 /datum/command_alert/prisoner_transfer
 	alert_title = "Prisoner Transfer"
 	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately one minute. Crew payrolls have recieved a bonus as a result."
+
+/datum/command_alert/ancientpod
+	name = "Ancient Cryogenic Pod"
+	alert_title = "Abnormal Life Sign Report"
+	message = "An abnormal life sign has been detected in promiximity of the station. Long range scans determine signal to be human life. Approach with caution."
