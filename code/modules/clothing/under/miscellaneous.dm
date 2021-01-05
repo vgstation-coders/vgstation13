@@ -991,4 +991,19 @@
 	item_state = "redfootball"
 	_color = "redfootball"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/under/football/New()
+	var/shirt_number = "23"
+	switch(rand(1,4))
+		if(1)
+			shirt_number = "23"
+		if(2)
+			shirt_number = "13"
+		if(3)
+			shirt_number = "69"
+		if(4)
+			shirt_number = "56"
+	icon_state = "redfootball_[shirt_number]"
+	item_state = "redfootball_[shirt_number]"
+	_color = "redfootball_[shirt_number]"
