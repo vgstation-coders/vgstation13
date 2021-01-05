@@ -42,6 +42,19 @@
 	max_combined_w_class = 6
 	storage_slots = 3
 
+/obj/item/clothing/suit/storage/armorjacketcapt
+	name = "Captain's Jacketed Armor"
+	desc = "A naval officer's jacket atop a vest of armor. The shoulderboards denote a Captain's rank."
+	icon_state = "armorjacket_capt"
+	item_state = "armorjacket_capt"
+	body_parts_covered = FULL_TORSO
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	max_combined_w_class = 6
+	storage_slots = 3
+	armor = list(melee = 50, bullet = 15, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
+	clothing_flags = ONESIZEFITSALL
+	allowed = list(/obj/item/weapon/tank/emergency_oxygen,/obj/item/weapon/tank/emergency_nitrogen, /obj/item/device/flashlight,/obj/item/weapon/gun/energy,/obj/item/weapon/gun/projectile,/obj/item/ammo_storage,/obj/item/ammo_casing,/obj/item/weapon/melee/baton,/obj/item/weapon/handcuffs,/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/lighter,/obj/item/device/detective_scanner,/obj/item/device/taperecorder)
+
 //Chaplain
 /obj/item/clothing/suit/chaplain_hoodie
 	name = "chaplain hoodie"
