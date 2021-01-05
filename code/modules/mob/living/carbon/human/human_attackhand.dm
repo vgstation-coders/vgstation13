@@ -44,14 +44,22 @@
 		if(2) //Full block
 			damage = 0
 
+	var/attacktype = "bitten"
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
+
 	damage = run_armor_absorb(affecting, "melee", damage)
+
+	if(T.amount == 0)
+		attacktype = "gummed"
+		damage = 1
+
 	if(!damage && dam_check)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
 	M.do_attack_animation(src, M)
 
 	for(var/datum/disease/D in M.viruses)
