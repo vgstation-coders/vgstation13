@@ -90,44 +90,38 @@
 /turf/unsimulated/floor/snow/Exited(atom/A, atom/newloc)
 	..()
 	
-	var/mob/living/carbon/human/H
-	if(ismecha(A))
-		var/obj/mecha/mecha = A
-		if(ishuman(mecha.occupant))
-			H = mecha.occupant
-	
 	if(ishuman(A))
-		if(!H)
-			H = A
-			if(snowprint_parent && snowballs && !H.flying)
-				if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-					snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
-				else //Our human is down on his ass or in a vehicle, create tracks
-					snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
-
+		var/mob/living/carbon/human/H = A
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintGoing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintGoing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+		
 		if(!istype(newloc,/turf/unsimulated/floor/snow))
 			H.clear_fullscreen("snowfall_average",0)
 			H.clear_fullscreen("snowfall_hard",0)
 			H.clear_fullscreen("snowfall_blizzard",0)
 			H << sound(null, 0, 0, channel = CHANNEL_WEATHER)
+	
+	else
+		for(var/mob/living/L in A.contents)
+			if(!istype(newloc,/turf/unsimulated/floor/snow))
+				L.clear_fullscreen("snowfall_average",0)
+				L.clear_fullscreen("snowfall_hard",0)
+				L.clear_fullscreen("snowfall_blizzard",0)
+				L << sound(null, 0, 0, channel = CHANNEL_WEATHER)
 
 /turf/unsimulated/floor/snow/Entered(atom/A, atom/OL)
 	..()
 
-	var/mob/living/carbon/human/H
-	if(ismecha(A))
-		var/obj/mecha/mecha = A
-		if(ishuman(mecha.occupant))
-			H = mecha.occupant
-
 	if(ishuman(A))
-		if(!H)
-			H = A
-			if(snowprint_parent && snowballs && !H.flying)
-				if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
-					snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
-				else //Our human is down on his ass or in a vehicle, create tracks
-					snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
+		var/mob/living/carbon/human/H = A
+		if(snowprint_parent && snowballs && !H.flying)
+			if(!H.locked_to && !H.lying) //Our human is walking or at least standing upright, create footprints
+				snowprint_parent.AddSnowprintComing(H.get_footprint_type(), H.dir)
+			else //Our human is down on his ass or in a vehicle, create tracks
+				snowprint_parent.AddSnowprintComing(/obj/effect/decal/cleanable/blood/tracks/wheels, H.dir)
 		
 		switch(snow_state)
 			if(SNOW_CALM)
@@ -152,6 +146,32 @@
 			if(isliving(H) && !H.locked_to && !H.lying && !H.flying)
 				if(snowsound?.len)
 					playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
+
+	else
+		for(var/mob/living/L in A.contents)
+			switch(snow_state)
+				if(SNOW_CALM)
+					L.clear_fullscreen("snowfall_average",0)
+					L.clear_fullscreen("snowfall_hard",0)
+					L.clear_fullscreen("snowfall_blizzard",0)
+				if(SNOW_AVERAGE)
+					L.overlay_fullscreen("snowfall_average", /obj/abstract/screen/fullscreen/snowfall_average)
+					L.clear_fullscreen("snowfall_hard",0)
+					L.clear_fullscreen("snowfall_blizzard",0)
+				if(SNOW_HARD)
+					L.clear_fullscreen("snowfall_average",0)
+					L.overlay_fullscreen("snowfall_hard", /obj/abstract/screen/fullscreen/snowfall_hard)
+				if(SNOW_BLIZZARD)
+					L.clear_fullscreen("snowfall_average",0)
+					L.clear_fullscreen("snowfall_hard",0)
+					L.overlay_fullscreen("snowfall_blizzard", /obj/abstract/screen/fullscreen/snowfall_blizzard)
+			
+			if(L.client)
+				if(!istype(OL,/turf/unsimulated/floor/snow))
+					L << sound(snowstorm_ambience[snow_state+1], repeat = 1, wait = 0, channel = CHANNEL_WEATHER, volume = snowstorm_ambience_volumes[snow_state+1])
+				if(!L.locked_to && !L.lying && !L.flying)
+					if(snowsound?.len)
+						playsound(src, pick(snowsound), 10, 1, -1, channel = 123)
 
 /turf/unsimulated/floor/snow/cultify()
 	return //It's already pretty red out in nar-sie universe.
