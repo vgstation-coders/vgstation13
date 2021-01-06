@@ -76,7 +76,7 @@
 		return
 
 	for (var/atom/movable/AM in range(effectrange, get_turf(holder)))
-		if (AM.RecallCanRegister() || !isturf(AM.loc))
+		if (!AM.RecallCanRegister() || !isturf(AM.loc))
 			continue
 
 		var/datum/recall_effect_item/item = new
@@ -92,7 +92,7 @@
 
 
 // Can this object be CONSIDERED by the recall artifact?
-/atom/proc/RecallCanRegister()
+/atom/movable/proc/RecallCanRegister()
 	return anchored || locked_to
 
 /obj/mecha/RecallCanRegister()
