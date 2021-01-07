@@ -13,6 +13,7 @@
 
 /obj/machinery/singularity/narsie/large/exit/New()
 	..()
+	global_cascade_portal = src
 	processing_objects.Add(src)
 
 /obj/machinery/singularity/narsie/large/exit/update_icon()
