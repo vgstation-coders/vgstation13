@@ -235,7 +235,7 @@
 	if((istype(M, /mob/living/)) && (!src.anchored) && !(bot_flags & BOT_DENSE))
 		src.forceMove(M:loc)
 		src.frustration = 0
-
+	..()
 // Proc called on a regular patrol step.
 /obj/machinery/bot/proc/on_path_step(var/turf/next)
 

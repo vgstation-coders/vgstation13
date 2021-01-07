@@ -44,14 +44,22 @@
 		if(2) //Full block
 			damage = 0
 
+	var/attacktype = "bitten"
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
+
 	damage = run_armor_absorb(affecting, "melee", damage)
+
+	if(T.amount == 0)
+		attacktype = "gummed"
+		damage = 1
+
 	if(!damage && dam_check)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='danger'>\The [M] has attempted to bite \the [src]!</span>")
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
 	M.do_attack_animation(src, M)
 
 	for(var/datum/disease/D in M.viruses)
@@ -119,7 +127,7 @@
 	if(istype(S))
 		damage += S.bonus_kick_damage
 		S.on_kick(M, src)
-	else if(organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
+	else if(M.organ_has_mutation(foot_organ, M_TALONS)) //Not wearing shoes and having talons = bonus 1-6 damage
 		damage += rand(1,6)
 
 	playsound(loc, "punch", 30, 1, -1)
@@ -238,7 +246,7 @@
 				if(do_after(M, src, 2 SECONDS))
 					if(head == crab)
 						drop_from_inventory(crab)
-						crab.GoIdle(15 SECONDS) 
+						crab.GoIdle(15 SECONDS)
 						visible_message("[M] pulls the headcrab off of [src]'s head!")
 			else if(health >= config.health_threshold_crit)
 				help_shake_act(M)

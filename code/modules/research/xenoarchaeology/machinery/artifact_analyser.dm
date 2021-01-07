@@ -236,6 +236,8 @@ var/anomaly_report_num = 0
 			return "Cult Pamphlet - Unable to identify the type of creature whose skin was used to produce this parchment, likewise the ink used appears to be blood but the DNA doesn't match any creature currently known in the galaxy. Potentially huge breakthrough."
 		if(/mob/living/simple_animal/hostile/roboduck)
 			return "Robot Duck - Scans shows an unreal amount of bullets inside it. Presence of an AI chip might indicate that the robot won't attack unless provoked. Also identified what looks like a digestive system, indicating that it might be able to process its preys into some other forms."
+		if(/obj/machinery/cryopod)
+			return "Ancient Cryogenic Pod - A machine able to freeze a single occupant in cryogenic suspension for a near indefinite amount of time. Contains equipment to freeze, as well as to thaw the occupant, powered by a nuclear battery."
 		if(/obj/machinery/artifact)
 			//the fun one
 			var/obj/machinery/artifact/A = AM
