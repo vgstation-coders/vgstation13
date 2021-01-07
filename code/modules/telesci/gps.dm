@@ -238,7 +238,7 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	deathsound(TRUE)
-	send_signal(wearer, src, "SPS [gpstag]: Code Red")
+	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE)
 
 /obj/item/device/gps/secure/get_gps_list()
 	return SPS_list
@@ -248,9 +248,9 @@ var/list/SPS_list = list()
 		return
 	. = ..()
 	deathsound(FALSE)
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
 
-/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead)
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -258,21 +258,16 @@ var/list/SPS_list = list()
 	var/alerttype = code
 	var/alertarea = get_area(SPS)
 	var/alerttime = worldtime2text()
-	var/verbose = FALSE
+	var/verbose = TRUE
+	var/boop = TRUE
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)
 			receiver.receive_alert(alerttype, transmission_data, verbose)
-
-	for(var/E in gps_list)
-		var/obj/item/device/gps/secure/S = E
-		if(S == src)
-			continue
-		var/mob/living/L = get_holder_of_type(S, /mob/living)
-		if(L)
-			L.show_message("\icon[S] <span class='danger'>[S.gpstag] beeps loudly!</span>", MESSAGE_HEAR)
-			S.deathsound(FALSE)
-
+			boop = TRUE
+	
+	if(boop)
+		deathsound(isdead)
 
 /obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)
 	var/sound_channel = 300
