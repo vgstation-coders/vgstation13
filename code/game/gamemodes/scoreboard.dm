@@ -80,6 +80,8 @@
 						score["disease_good"]++
 		else
 			for (var/mob/living/L in mob_list)
+				if(!L.mind) //No ballooning the negative score with infected monkeymen
+					continue
 				if (ID in L.virus2)
 					disease_spread_count++
 					if (L.stat != DEAD)
@@ -360,7 +362,7 @@
 	//Bad Things
 	score["crewscore"] -= deathpoints
 
-	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good	
+	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good
 	score["crewscore"] += (siliconpoints*multi)
 	if(score["deadaipenalty"])
 		score["crewscore"] += (1000*multi) //Give a harsh punishment for killing the AI
