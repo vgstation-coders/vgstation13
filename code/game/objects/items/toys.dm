@@ -53,7 +53,6 @@
 /obj/item/toy/waterballoon/attackby(obj/O as obj, mob/user as mob)
 	if(..())
 		update_icon()
-		return
 
 /obj/item/toy/waterballoon/throw_impact(atom/hit_atom)
 	if(src.reagents.total_volume >= 1)
