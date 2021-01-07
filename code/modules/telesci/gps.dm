@@ -268,6 +268,7 @@ var/list/SPS_list = list()
 		deathsound(isdead)
 
 /obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)
+	var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
 	var/sound_channel = 300
 	var/num = gps_list.Find(src)
 	var/turf/pos = get_turf(src)
