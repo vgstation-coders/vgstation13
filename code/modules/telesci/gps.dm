@@ -237,7 +237,6 @@ var/list/SPS_list = list()
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
-	deathsound(TRUE)
 	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE)
 
 /obj/item/device/gps/secure/get_gps_list()
@@ -247,7 +246,6 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	deathsound(FALSE)
 	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
 
 /obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead)
