@@ -151,13 +151,19 @@
 // -- Vampire mechanics --
 
 /datum/role/vampire/proc/can_suck(var/mob/living/carbon/human/H)
-	var/mob/M = antag.current
+	var/mob/living/M = antag.current
+	var/datum/butchering_product/teeth/vampire_teeth = locate(/datum/butchering_product/teeth) in M.butchering_drops
+
 	if(M.lying || M.incapacitated())
 		to_chat(M, "<span class='warning'> You cannot do this while on the ground!</span>")
 		return FALSE
 
 	if(H.check_body_part_coverage(MOUTH))
 		to_chat(M, "<span class='warning'>Remove their mask!</span>")
+		return FALSE
+
+	if(vampire_teeth?.amount == 0)
+		to_chat(M, "<span class='warning'>You cannot suck blood with no teeth!</span>")
 		return FALSE
 
 	if(ishuman(M))
@@ -169,6 +175,7 @@
 			else
 				to_chat(H, "<span class='notice'>With practiced ease, you shift aside your mask for each gulp of blood.</span>")
 	return TRUE
+
 
 /datum/role/vampire/proc/handle_bloodsucking(var/mob/living/carbon/human/target)
 	draining = target

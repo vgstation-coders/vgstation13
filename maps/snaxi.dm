@@ -137,31 +137,21 @@
 			CHECK_TICK
 
 /proc/gaussian_geyser(var/x, var/y)
-	var/turf/T = locate(x, y, 1)
-	if (!istype(T,/turf/unsimulated/floor/snow/))
-		return
-	if (locate(/obj/structure/snow_flora/tree/pine) in T)
-		return
-	if (istype(T, /turf/unsimulated/floor/snow/asphalt))
-		return
 	if (prob(30))
 		return
 	var/dx = round(16*GaussRand(1))
 	var/dy = round(16*GaussRand(1))
-	var/turf/T2 = locate(x + dx, y + dy, 1)
-	if (!istype(T2,/turf/unsimulated/floor/snow/))
+	var/turf/T = locate(x + dx, y + dy, 1)
+	if (!istype(T,/turf/unsimulated/floor/snow/))
 		return
-	if (istype(T2, /turf/unsimulated/floor/snow/asphalt))
+	if (istype(T, /turf/unsimulated/floor/snow/asphalt))
 		return
-	if (locate(/obj/structure/snow_flora/tree/pine) in T2)
+	if (locate(/obj/structure/snow_flora/tree/pine) in T)
 		return
-	switch (rand(100))
-		if (0 to 60)
-			new /obj/structure/geyser(T2)
-		if (60 to 80)
-			new /obj/structure/geyser/unstable(T2)
-		else
-			new /obj/structure/geyser/vent(T2)
+	if (locate(/obj/glacier) in T)
+		return
+	var/area/A = get_area(T)
+	A.make_geyser(T)
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))

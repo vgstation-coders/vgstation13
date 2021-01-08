@@ -144,6 +144,7 @@
 		new /obj/item/ammo_casing/shotgun/buckshot(),\
 		new /obj/item/weapon/beartrap(),\
 		new /obj/item/gun_part/scope(),\
+		new /obj/item/weapon/grenade/chem_grenade/timer(), \
 		)
 	)
 

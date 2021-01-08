@@ -15,7 +15,7 @@ on:
 
 env:
   BYOND_MAJOR: 513
-  BYOND_MINOR: 1523
+  BYOND_MINOR: 1528
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
   ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation

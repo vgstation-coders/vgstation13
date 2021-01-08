@@ -1580,7 +1580,7 @@
 		return 1
 
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-	if(T && T.amount >= 2)
+	if(T && T.amount >= -1)
 		return 1
 
 	return 0

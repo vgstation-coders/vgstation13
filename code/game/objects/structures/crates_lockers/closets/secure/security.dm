@@ -20,6 +20,7 @@
 		/obj/item/clothing/head/cap,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
+		/obj/item/clothing/suit/storage/armorjacketcapt,
 		/obj/item/weapon/cartridge/captain,
 		/obj/item/clothing/head/helmet/tactical/swat,
 		/obj/item/clothing/shoes/brown,

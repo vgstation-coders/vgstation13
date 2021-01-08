@@ -991,4 +991,9 @@
 	item_state = "redfootball"
 	_color = "redfootball"
 	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
 
+/obj/item/clothing/under/football/New()
+	icon_state = "redfootball_[pick(23,13,69,56)]"
+	item_state = icon_state
+	_color = icon_state
