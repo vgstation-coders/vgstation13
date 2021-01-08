@@ -274,7 +274,7 @@
 	a_right = ign
 	secured = 1
 	update_icon()
-	name = initial(name) + " ([tmr.time] secs)"
+	name = initial(name)
 
 	loc.verbs += /obj/item/device/assembly_holder/timer_igniter/verb/configure
 
@@ -285,7 +285,6 @@
 /obj/item/device/assembly_holder/timer_igniter/verb/configure()
 	set name = "Set Timer"
 	set category = "Object"
-	set src in usr
 
 	if ( !(usr.isUnconscious() || usr.restrained()) )
 		var/obj/item/device/assembly_holder/holder
