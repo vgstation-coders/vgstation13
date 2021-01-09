@@ -144,6 +144,7 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 			),
+		/obj/item/weapon/gun/projectile/glock/fancy,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,
