@@ -417,6 +417,7 @@ Auto Patrol: []"},
 	if(!lasercolor)
 		var/obj/item/weapon/gun/energy/taser/G = new /obj/item/weapon/gun/energy/taser(Tsec)
 		G.power_supply.charge = 0
+		G.update_icon()
 	else if(lasercolor == "b")
 		var/obj/item/weapon/gun/energy/tag/blue/G = new /obj/item/weapon/gun/energy/tag/blue(Tsec)
 		G.power_supply.charge = 0
