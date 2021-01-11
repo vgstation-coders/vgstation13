@@ -235,7 +235,7 @@ steam.start() -- spawns the effect
 	name = "smoke"
 	icon_state = "smoke"
 	opacity = 1
-	anchored = 0
+	anchored = 1
 	var/amount = 6.0
 	var/time_to_live = 100
 
