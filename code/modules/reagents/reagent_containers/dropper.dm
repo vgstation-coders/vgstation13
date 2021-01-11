@@ -22,7 +22,7 @@
 /obj/item/weapon/reagent_containers/dropper/update_icon()
 	icon_state = "dropper[(reagents.total_volume ? 1 : 0)]"
 
-/obj/item/weapon/reagent_containers/dropper/attack(mob/M as mob, mob/user as mob)
+/obj/item/weapon/reagent_containers/dropper/attack(var/mob/M, var/mob/user)
 	if(!reagents.total_volume && M.is_open_container())
 		to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
 		return
@@ -33,17 +33,20 @@
 		M.LAssailant = null
 	else
 		M.LAssailant = user
+	if (!do_mob(user, M, 2 SECONDS))
+		user.visible_message("<span class='danger'>[user] tries to squirt something into [M]'s eyes, but fails!</span>", "<span class='danger'>You try to squirt something into [M]'s eyes, but fails!</span>")
+		return
 	if(ishuman(M))
 		var/mob/living/carbon/human/victim = M
 		var/obj/item/safe_thing = victim.get_body_part_coverage(EYES)
 		if(safe_thing)
-			user.visible_message("<span class='danger'>[user] tries to squirt something into [M]'s eyes, but fails!</span>")
-			src.reagents.reaction(safe_thing, TOUCH)
+			user.visible_message("<span class='danger'>[user] tries to squirt something into [M]'s eyes, but fails!</span>", "<span class='danger'>You try to squirt something into [M]'s eyes, but fails!</span>")
+			src.reagents.reaction_dropper(safe_thing)
 			src.reagents.remove_any(amount_per_transfer_from_this)
 			update_icon()
 			return
-	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>")
-	src.reagents.reaction(M, TOUCH)
+	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>", "<span class='danger'>You squirt something into [M]'s eyes!</span>")
+	src.reagents.reaction_dropper(M)
 	src.reagents.remove_any(amount_per_transfer_from_this)
 	update_icon()
 	return
