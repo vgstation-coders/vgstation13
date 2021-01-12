@@ -201,7 +201,7 @@
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
-		if(bomb && bomb.r_code && bomb.z == STATION_Z)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z && bomb.nt_aligned)
 			nukecode = bomb.r_code
 	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
 	..()
