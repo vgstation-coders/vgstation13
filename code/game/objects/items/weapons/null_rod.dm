@@ -280,10 +280,10 @@
 /obj/item/weapon/nullrod/mosinnagant
 	name = "mosin nagant"
 	desc = "Many centuries later, it's still drenched in cosmoline, just like the Murdercube intended. This one cannot be fired."
-	icon = 'icons/obj/gun.dmi'
-	icon_override = "mosin"
-	icon_state = "mosin"
-	item_state = "mosin"
+	icon = 'icons/obj/biggun.dmi'
+	icon_override = "mosinlarge"
+	icon_state = "mosinlarge"
+	item_state = "mosinlarge"
 	slot_flags = SLOT_BELT | SLOT_BACK
 	w_class = W_CLASS_LARGE
 	attack_verb = list("bashes", "smashes", "buttstrokes")
@@ -301,10 +301,10 @@
 /obj/item/weapon/nullrod/mosinnagant/obrez
 	name = "obrez"
 	desc = "Holding this makes you feel like you want to obtain an SKS and go deeper in space. This one cannot be fired."
-	icon = 'icons/obj/gun.dmi'
-	icon_override = "obrez"
-	icon_state = "obrez"
-	item_state = "obrez"
+	icon = 'icons/obj/biggun.dmi'
+	icon_override = "obrezlarge"
+	icon_state = "obrezlarge"
+	item_state = "obrezlarge"
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_MEDIUM
 	attack_verb = list("bashes", "smashes", "pistol-whips", "clubs")
