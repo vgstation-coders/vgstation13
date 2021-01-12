@@ -26,13 +26,9 @@
 	if(!reagents.total_volume && M.is_open_container())
 		to_chat(user, "<span class='warning'>That doesn't make much sense.</span>")
 		return
-	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
-	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
-	msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
-	if(!iscarbon(user))
-		M.LAssailant = null
-	else
-		M.LAssailant = user
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Squirt attempt with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Attempted to use the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	user.visible_message("<span class='notice'>[user] tries to squirt something into [M]'s eyes.</span>", "<span class='notice'>You try to squirt something into [M]'s eyes.</span>")
 	if (!do_mob(user, M, 2 SECONDS))
 		user.visible_message("<span class='danger'>[user] tries to squirt something into [M]'s eyes, but fails!</span>", "<span class='danger'>You try to squirt something into [M]'s eyes, but fails!</span>")
 		return
@@ -45,9 +41,16 @@
 			src.reagents.remove_any(amount_per_transfer_from_this)
 			update_icon()
 			return
-	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>", "<span class='danger'>You squirt something into [M]'s eyes!</span>")
+	user.visible_message("<span class='danger'>[user] squirts something into [M]'s eyes!</span>", "<span class='notice'>You squirt something into [M]'s eyes.</span>")
 	src.reagents.reaction_dropper(M)
 	src.reagents.remove_any(amount_per_transfer_from_this)
+	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been squirted with [src.name] by [user.name] ([user.ckey]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to squirt [M.name] ([M.key]). Reagents: [reagents.get_reagent_ids(1)]</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) squirted [M.name] ([M.key]) with [src.name]. Reagents: [reagents.get_reagent_ids(1)] (INTENT: [uppertext(user.a_intent)]) (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[user.x];Y=[user.y];Z=[user.z]'>JMP</a>)")
+	if(!iscarbon(user))
+		M.LAssailant = null
+	else
+		M.LAssailant = user
 	update_icon()
 	return
 
