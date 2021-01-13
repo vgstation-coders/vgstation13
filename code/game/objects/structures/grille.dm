@@ -247,7 +247,6 @@
 	reset_vars_after_duration(resettable_vars, duration)
 
 /obj/structure/grille/AltClick(var/mob/user)
-	. = ..()
 	var/turf/T = loc
 	if (istype(T))
 		if (user.listed_turf == T)
