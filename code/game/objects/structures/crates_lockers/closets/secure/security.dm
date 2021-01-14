@@ -110,6 +110,7 @@
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
 			/obj/item/clothing/suit/armor/hos/sundowner),
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,

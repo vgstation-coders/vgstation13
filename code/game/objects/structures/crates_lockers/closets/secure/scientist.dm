@@ -35,6 +35,7 @@
 
 /obj/structure/closet/secure_closet/RD/atoms_to_spawn()
 	return list(
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/head/bio_hood/scientist,
 		/obj/item/clothing/suit/bio_suit/scientist,
 		/obj/item/clothing/under/rank/research_director,
