@@ -45,7 +45,7 @@
 
 /obj/item/weapon/grenade/holy/dropped(mob/user)
 	if(!active)
-		..()
+		return ..()
 	var/thrown_when = world.time - activated_at
 	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
 		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
