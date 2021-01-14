@@ -5,7 +5,7 @@
 	name = "holy hand grenade"
 	desc = "One of the many sacred relics made for blowing thine enemies to tiny bits."
 	icon_state = "holy_grenade"
-	det_time = 3.0 SECONDS
+	det_time = 3.5 SECONDS
 	armsound = 'sound/weapons/vampkiller.ogg'
 	var/activated_at 
 
