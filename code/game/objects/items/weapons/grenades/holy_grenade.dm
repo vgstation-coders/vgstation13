@@ -33,9 +33,22 @@
 	qdel(src)
 
 /obj/item/weapon/grenade/holy/throw_at(var/atom/A, throw_range, throw_speed)
+	if(!active)
+		..()
 	var/thrown_when = world.time - activated_at
 	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
 		to_chat(usr, "<span class='warning'>You didn't count to three.</span>")
+		explosion(get_turf(src), 0, 0, 1, 2)
+		qdel(src)
+	else
+		..()
+
+/obj/item/weapon/grenade/holy/dropped(mob/user)
+	if(!active)
+		..()
+	var/thrown_when = world.time - activated_at
+	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
+		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
 		explosion(get_turf(src), 0, 0, 1, 2)
 		qdel(src)
 	else
@@ -49,14 +62,7 @@
 		return
 	..()
 
-/obj/item/weapon/grenade/holy/dropped(mob/user)
-	var/thrown_when = world.time - activated_at
-	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
-		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
-		explosion(get_turf(src), 0, 0, 1, 2)
-		qdel(src)
-	else
-		..()
+
 
 #undef COUNT_TO
-#undef WIGGLE_ROOm
+#undef WIGGLE_ROOM
