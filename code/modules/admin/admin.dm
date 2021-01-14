@@ -682,7 +682,7 @@ var/global/floorIsLava = 0
 				for(var/datum/forced_ruleset/rule in forced_roundstart_ruleset)
 					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
-			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>Dynamic mode options</A><br/>"
 		else
 			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
 			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
