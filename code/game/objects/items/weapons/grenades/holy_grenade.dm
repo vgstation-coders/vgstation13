@@ -1,3 +1,6 @@
+#define WIGGLE_ROOM 0.4 SECONDS
+#define COUNT_TO 3 SECONDS 	
+
 /obj/item/weapon/grenade/holy
 	name = "holy hand grenade"
 	desc = "One of the many sacred relics made for blowing thine enemies to tiny bits."
@@ -31,7 +34,7 @@
 
 /obj/item/weapon/grenade/holy/throw_at(var/atom/A, throw_range, throw_speed)
 	var/thrown_when = world.time - activated_at
-	if(thrown_when > 3.4 SECONDS || thrown_when < 2.6 SECONDS)
+	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
 		to_chat(usr, "<span class='warning'>You didn't count to three.</span>")
 		explosion(get_turf(src), 0, 0, 1, 2)
 		qdel(src)
@@ -48,10 +51,12 @@
 
 /obj/item/weapon/grenade/holy/dropped(mob/user)
 	var/thrown_when = world.time - activated_at
-	if(thrown_when > 3.4 SECONDS || thrown_when < 2.6 SECONDS)
+	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
 		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
 		explosion(get_turf(src), 0, 0, 1, 2)
 		qdel(src)
 	else
 		..()
-	
+
+#undef COUNT_TO
+#undef WIGGLE_ROOm
