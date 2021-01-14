@@ -635,6 +635,57 @@
 	new_role.Greet(GREET_DEFAULT)
 	new_role.AnnounceObjectives()
 
+//////////////////////////////////////////////
+//                                          //
+//             XENOMORPHS                   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs
+	name = "Alien Infestation"
+	role_category = /datum/role/xenomorph
+	enemy_jobs = list("AI", "Cyborg", "Security Officer", "Warden","Detective","Head of Security", "Captain", "Roboticist")
+	required_pop = list(25,20,20,15,15,15,10,10,10,10)
+	required_candidates = 1
+	max_candidates = 3
+	weight = 1
+	cost = 30
+	requirements = list(90,90,70,60,50,40,20,10,10,10)
+	high_population_requirement = 35
+	logo = "xeno-logo"
+	my_fac = /datum/faction/xenomorph
+	var/list/vents = list()
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/ready()
+	..()
+	for(var/obj/machinery/atmospherics/unary/vent_pump/temp_vent in atmos_machines)
+		if(temp_vent.loc.z == map.zMainStation && !temp_vent.welded && temp_vent.network)
+			if(temp_vent.network.normal_members.len > 50)	//Stops Aliens getting stuck in small networks. See: Security, Virology
+				vents += temp_vent
+	
+
+	if (vents.len == 0)
+		message_admins("A suitable vent couldn't be found for alien larva. That's bad.")
+		return
+	return 1
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorphs/generate_ruleset_body(var/mob/applicant)
+	var/obj/vent = pick(vents)
+	var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
+
+	new_xeno.key = applicant.key
+	new_xeno << sound('sound/voice/alienspawn.ogg')
+	if(vents.len > 1)
+		vents -= vent
+
+	return new_xeno
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/setup_role(var/datum/role/new_role)
+	my_fac.HandleRecruitedRole(new_role)
+
+/datum/dynamic_ruleset/midround/from_ghosts/faction_based/xenomorph/execute()
+	..()
+
 
 //////////////////////////////////////////////
 //                                          //
@@ -719,6 +770,3 @@
 		return FALSE
 	return TRUE
 
-
-
-	

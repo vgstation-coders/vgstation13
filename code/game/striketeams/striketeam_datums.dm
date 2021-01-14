@@ -23,7 +23,9 @@ var/list/sent_strike_teams = list()
 
 	var/datum/outfit/outfit_datum
 
-/datum/striketeam/proc/trigger_strike(var/mob/user)
+/datum/striketeam/proc/trigger_strike(var/mob/user, var/missiontext)
+	mission = missiontext
+	
 	//Is the game started
 	if(!ticker)
 		if(user)
@@ -41,19 +43,21 @@ var/list/sent_strike_teams = list()
 	//Logging
 	message_admins("<span class='notice'>[key_name(user)] is preparing a [striketeam_name].</span>", 1)
 
+
 	if(user)
 		if(alert("Do you really want [faction_name] to send in the [striketeam_name]?",,"Yes","No")!="Yes")
 			qdel(src)
 			return
 
-		mission = input(user, "Please specify which mission the [striketeam_name] shall undertake.", "Specify Mission", "")
+		if(!missiontext)
+			mission = input(user, "Please specify which mission the [striketeam_name] shall undertake.", "Specify Mission", "")
 
-		if(!mission)
-			if(alert("Error, no mission set. Do you want to exit the setup process?",,"Yes","No")=="Yes")
-				qdel(src)
-				return
-			else
-				mission = initial(mission)
+			if(!mission)
+				if(alert("Error, no mission set. Do you want to exit the setup process?",,"Yes","No")=="Yes")
+					qdel(src)
+					return
+				else
+					mission = initial(mission)
 
 		if(sentStrikeTeams(striketeam_name) || (custom && sentStrikeTeams(TEAM_CUSTOM)))
 			to_chat(user, "Looks like someone beat you to it.")

@@ -52,6 +52,58 @@
 	level_max = 7
 	level_min = 5
 
+///////HISS
+
+/datum/command_alert/xenomorph_station_lockdown
+	name = "Xenomorphs Confirmed"
+	alert_title = "Infestation Confirmed - Directive 7-10 Initiated"
+	alert = 'sound/AI/directive710_generic.ogg'
+	force_report = 1
+
+/datum/command_alert/xenomorph_station_lockdown/announce()
+	message = "The presence of hostile alien lifeforms has been confirmed aboard [station_name()]. Under Directive 7-10, this station is now locked down until further notice."
+	..()
+
+/datum/command_alert/xenomorph_station_nuke
+	name = "Xenomorphs Nuke"
+	alert_title = "Infestation Outbreak Critical"
+	noalert = 1
+	theme = "endgame"
+
+/datum/command_alert/xenomorph_station_nuke/announce()
+	message = "Hostile lifeforms are continuing to spread unchecked throughout [station_name()], total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized."
+	..()
+
+/datum/command_alert/xenomorph_station_unlock
+	name = "Xenomorphs destroyed"
+	alert_title = "Directives 7-10 to 7-12 Concluded."
+	force_report = 1
+	stoptheme = 1
+
+/datum/command_alert/xenomorph_station_unlock/announce()
+	message = "External scanners indicate that all hostile lifeforms capable of reproduction have been destroyed. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
+	..()
+
+/datum/command_alert/xenomorph_station_unlock_2
+	name = "Xenomorphs destroyed mostly"
+	alert_title = "Directives 7-10 to 7-12 Concluded."
+	force_report = 1
+	stoptheme = 1
+
+/datum/command_alert/xenomorph_station_unlock/announce()
+	message = "External scanners indicate that the number of hostile lifeforms on your station has fallen back to reasonable levels. Quarantine lifted. Proceed with standard station duties, but excercise increased caution in case of any remaining entities."
+	..()
+
+/datum/command_alert/xenomorph_station_deatsquad
+	name = "Xenomorph Deathsquad"
+	alert_title = "!@$$#ERROR-- S##SHUTTLE@LOCKDOWN LIFTED%%@##"
+	theme = "endgame"
+
+/datum/command_alert/xenomorph_station_deathsquad/announce()
+	message = Gibberish("Directive 7-13 has been authorized for [station_name()]. Squad [pick("Alpha", "Bravo", "Charlie", "Delta")] has been mobilized.", 90)
+	..()
+
+
 
 ///////BIOHAZARD UPDATED
 
@@ -74,7 +126,6 @@
 
 /datum/command_alert/biohazard_station_nuke/announce()
 	message = "Biohazard outbreak containment status reaching critical mass, total quarantine failure is now possibile. As such, Directive 7-12 has now been authorized for [station_name()]."
-
 	..()
 
 /datum/command_alert/biohazard_station_unlock
