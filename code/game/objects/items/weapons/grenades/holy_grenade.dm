@@ -3,6 +3,7 @@
 	desc = "One of the many sacred relics made for blowing thine enemies to tiny bits."
 	icon_state = "holy_grenade"
 	det_time = 3 SECONDS
+	armsound = 'sound/weapons/vampkiller.ogg'
 
 /obj/item/weapon/grenade/holy/attackby(obj/item/weapon/W, mob/user)
 	if(W.is_screwdriver(user))
