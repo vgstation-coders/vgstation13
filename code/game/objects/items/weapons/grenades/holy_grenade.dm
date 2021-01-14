@@ -38,9 +38,20 @@
 	else
 		..()
 
-/obj/item/weapon/grenade/attack_self(mob/user as mob)
+/obj/item/weapon/grenade/holy/attack_self(mob/user as mob)
 	if(iscultist(user) || isvampire(user))
+		playsound(src, 'sound/misc/adminspawn.ogg', 75, 0, 1)
 		to_chat(usr, "<span class='warning'>The holy hand grenade is too sacred for you to use!</span>")
 		user.dust()
 		return
 	..()
+
+/obj/item/weapon/grenade/holy/dropped(mob/user)
+	var/thrown_when = world.time - activated_at
+	if(thrown_when > 3.4 SECONDS || thrown_when < 2.6 SECONDS)
+		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
+		explosion(get_turf(src), 0, 0, 1, 2)
+		qdel(src)
+	else
+		..()
+	
