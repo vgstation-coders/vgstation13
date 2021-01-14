@@ -1,11 +1,11 @@
-#define WIGGLE_ROOM 0.4 SECONDS
+#define WIGGLE_ROOM 0.5 SECONDS
 #define COUNT_TO 3 SECONDS 	
 
 /obj/item/weapon/grenade/holy
 	name = "holy hand grenade"
 	desc = "One of the many sacred relics made for blowing thine enemies to tiny bits."
 	icon_state = "holy_grenade"
-	det_time = 3.5 SECONDS
+	det_time = 3.0 SECONDS
 	armsound = 'sound/weapons/vampkiller.ogg'
 	var/activated_at 
 
