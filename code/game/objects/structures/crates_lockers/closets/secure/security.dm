@@ -20,6 +20,7 @@
 		/obj/item/clothing/head/cap,
 		/obj/item/clothing/under/rank/captain,
 		/obj/item/clothing/suit/armor/vest,
+		/obj/item/clothing/suit/storage/armorjacketcapt,
 		/obj/item/weapon/cartridge/captain,
 		/obj/item/clothing/head/helmet/tactical/swat,
 		/obj/item/clothing/shoes/brown,
@@ -109,6 +110,7 @@
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
 			/obj/item/clothing/suit/armor/hos/sundowner),
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,
 		/obj/item/weapon/cartridge/hos,
@@ -143,6 +145,7 @@
 			/obj/item/weapon/storage/backpack/satchel_sec,
 			/obj/item/weapon/storage/backpack/messenger/sec,
 			),
+		/obj/item/weapon/gun/projectile/glock/fancy,
 		/obj/item/clothing/under/rank/warden,
 		/obj/item/clothing/suit/armor/vest/warden,
 		/obj/item/clothing/suit/armor/vest/wardenshort,

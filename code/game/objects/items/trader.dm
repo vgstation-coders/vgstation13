@@ -230,8 +230,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
-	icon_state = "helmet_sec"
-	item_state = "helmet"
+	icon_state = "donutgiver"
+	item_state = "helmet_donuts"
 	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null

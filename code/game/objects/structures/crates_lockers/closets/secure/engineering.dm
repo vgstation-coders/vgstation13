@@ -16,6 +16,7 @@
 			/obj/item/weapon/storage/backpack/messenger/engi,
 			),
 		/obj/item/blueprints/primary,
+		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/under/rank/chief_engineer,
 		/obj/item/clothing/head/hardhat/white,
 		/obj/item/clothing/head/welding,

@@ -252,7 +252,7 @@
 /datum/command_alert/jungle_endgame/announce()
 	var/nukecode = "ERROR"
 	for(var/obj/machinery/nuclearbomb/bomb in machines)
-		if(bomb && bomb.r_code && bomb.z == STATION_Z)
+		if(bomb && bomb.r_code && bomb.z == STATION_Z && bomb.nt_aligned)
 			nukecode = bomb.r_code
 	message = "Central Command has deemed the situation beyond salvageable, and is releasing the nuclear fission explosive authorization code. Your authorization key is [nukecode]. Send them to Ape Hell."
 	..()
@@ -367,7 +367,7 @@
 	message = {"
 There's been a galaxy-wide electromagnetic pulse.  All of our systems are heavily damaged and many personnel are dead or dying. We are seeing increasing indications of the universe itself beginning to unravel.
 
-[station_name()], you are the only facility nearby a bluespace rift, which is near your research outpost.  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
+[station_name()], you are the only facility nearby a bluespace rift, which is near the [get_area_name(global_cascade_portal, 1)].  You are hereby directed to enter the rift using all means necessary, quite possibly as the last humans alive.
 
 You have five minutes before the universe collapses. Good l\[\[###!!!-
 
@@ -719,7 +719,7 @@ The access requirements on the Asteroid Shuttles' consoles have now been revoked
 
 /datum/command_alert/prisoner_transfer
 	alert_title = "Prisoner Transfer"
-	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately one minute. Crew payrolls have recieved a bonus as a result."
+	message = "A suspected agent of the syndicate has been assigned to your station. The transport shuttle will dock at your station in approximately three minutes. Crew payrolls will recieve a bonus as long as the prisoner is alive."
 
 /datum/command_alert/ancientpod
 	name = "Ancient Cryogenic Pod"

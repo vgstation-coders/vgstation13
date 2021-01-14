@@ -22,7 +22,14 @@
 	_color = "chief"	//Exists for washing machines. Is not different from brown shoes in any way.
 
 /obj/item/clothing/shoes/brown/rd
-	_color = "director"	//Exists for washing machines. Is not different from brown shoes in any way.
+	name = "research director's steel-toed derbys"
+	desc = "You need to kick more cyborgs at research conferences than you would think."
+	icon_state = "director"
+	_color = "director"
+	bonus_kick_damage = 5
+
+/obj/item/clothing/shoes/brown/rd/impact_dampen(atom/source, damage)
+	return 0
 
 /obj/item/clothing/shoes/brown/cmo
 	sterility = 100

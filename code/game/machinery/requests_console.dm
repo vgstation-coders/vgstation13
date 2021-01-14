@@ -39,7 +39,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		// 8 = view messages
 		// 9 = authentication before sending
 		// 10 = send announcement
-		// 11 = req. prisoner (security)
 	var/silent = 0 // set to 1 for it not to beep all the time
 	var/hackState = 0
 		// 0 = not hacked
@@ -49,7 +48,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		// 1 = This console can send department announcements
 	var/open = 0 // 1 if open
 	var/announceAuth = 0 //Will be set to 1 when you authenticate yourself for announcements
-	var/prisonerAuth = 0 //Will be set to 1 when you authenticate yourself for prisoner shipments.
 	var/msgVerified = "" //Will contain the name of the person who varified it
 	var/msgStamped = "" //If a message is stamped, this will contain the stamp name
 	var/message = "";
@@ -217,29 +215,9 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 					dat += text("<A href='?src=\ref[src];sendAnnouncement=1'>Announce</A><BR>")
 				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
 
-			if(11)  //request prisoner		
-				dat += text("<B>Request Prisoner Shipment</B><BR><BR>")
-				if (current_prisoners.len >= MAX_PRISONER_LIMIT)
-					dat += text("Your station is currently at capacity. You may not request additional prisoners.")
-				else if (!can_request_prisoner || transport_shuttle.current_port == locate(/obj/docking_port/destination/transport/station) in all_docking_ports)
-					dat += text("You are currently requesting a prisoner shipment. Please wait before requesting another.")
-				else
-					dat += text("Request a prisoner shipment from centcomm. A Syndicate Prisoner will be shipped to your auxilary docking port a few minutes after the request is approved.<BR><BR>")
-					dat += text("Reward: 1000 bonus credits to the station allowance.<BR>")
-					dat += text("<b>The reward will only apply so long as the prisoner is alive and on station.</b><BR><BR> ")
-
-					if (prisonerAuth)
-						dat += text("<B>Authentication Accepted</B><BR>")
-						dat += text("<A href='?src=\ref[src];requestPrisoner=1'>Request Prisoner</A><BR>")
-					else 
-						dat += text("Swipe your card to authenticate yourself.<BR><BR>")
-					
-				dat += text("<BR><A href='?src=\ref[src];setScreen=0'>Back</A><BR>")
-
 			else	//main menu
 				screen = 0
 				announceAuth = 0
-				prisonerAuth = 0
 				if (newmessagepriority == 1)
 					dat += text("<FONT COLOR='RED'>There are new messages</FONT><BR>")
 				if (newmessagepriority == 2)
@@ -252,8 +230,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 				dat += text("<A href='?src=\ref[src];setScreen=5'>Configure Panel</A><BR><BR>")
 				if(announcementConsole)
 					dat += text("<A href='?src=\ref[src];setScreen=10'>Send station-wide announcement</A><BR><BR>")
-				if(department == "Security" || department == "Head of Security's Desk")
-					dat += text("<A href='?src=\ref[src];setScreen=11'>Request Prisoner Transfer</A><BR><BR>")
 				if (silent)
 					dat += text("Speaker <A href='?src=\ref[src];setSilent=0'>OFF</A>")
 				else
@@ -306,20 +282,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 
 	if(href_list["sendAnnouncement"])
 		make_announcement(message)
-
-	if(href_list["requestPrisoner"])
-		if(!prisonerAuth || !can_request_prisoner || current_prisoners.len >= MAX_PRISONER_LIMIT || transport_shuttle.current_port == locate(/obj/docking_port/destination/transport/station) in all_docking_ports)
-			return
-	
-		message_admins("[key_name_admin(usr)] requested a prisoner shipment via a request console.")
-		log_game("[key_name(usr)] requested a prisoner shipment via a request console.")
-		visible_message("<span class='notice'>\The [src] beeps.</span>")
-		to_chat(usr, "<span class='notice'>You send a request for a prisoner shipment.</span")
-		new /datum/event/prisontransfer
-
-		prisonerAuth = 0
-
-
 
 	if( href_list["department"] && message )
 		var/log_msg = message
@@ -412,11 +374,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		if(10)		//send announcement
 			if(!announcementConsole)
 				return
-			screen = 10
-		if(11)
-			if(!(department == "Security" || department == "Head of Security's Desk"))
-				return
-			screen = 11
 		else		//main menu
 			dpt = ""
 			msgVerified = ""
@@ -520,17 +477,6 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 			else
 				announceAuth = FALSE
 				to_chat(user, "<span class='warning'>You are not authorized to send announcements.</span>")
-			updateUsrDialog()
-
-		if (screen == 11)
-			var/obj/item/weapon/card/id/ID = O.GetID()
-
-			if (!isnull(ID) && ID.access.Find(access_armory) || hackState)
-				prisonerAuth = TRUE
-			else
-				prisonerAuth = FALSE
-				to_chat(user, "<span class='warning'>You are not authorized to request prisoners.</span>")
-
 			updateUsrDialog()
 
 	if (istype(O, /obj/item/weapon/stamp))

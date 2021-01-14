@@ -172,9 +172,9 @@ var/global/list/obj/machinery/light/alllights = list()
 
 /obj/machinery/light/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
-	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
+	if(H.foot_impact(src,rand(1,2)))
+		to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 
-	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
 	return SPECIAL_ATTACK_FAILED
 
 /obj/machinery/light/can_overload()

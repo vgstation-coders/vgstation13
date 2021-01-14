@@ -569,6 +569,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
 
+/datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)
+
+	if(ismob(A))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_mob(A)
+
+	if(istype(A, /obj))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_obj(A, R.volume+volume_modifier)
+
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)
 		return 0

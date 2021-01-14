@@ -104,10 +104,13 @@
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
+		OnToggleActivate()
+
 /datum/artifact_effect/proc/DoEffectTouch(var/mob/user)
 /datum/artifact_effect/proc/DoEffectAura(var/atom/holder)
 /datum/artifact_effect/proc/DoEffectPulse(var/atom/holder)
 /datum/artifact_effect/proc/UpdateMove()
+/datum/artifact_effect/proc/OnToggleActivate()
 
 /datum/artifact_effect/proc/process()
 	if(chargelevel < chargelevelmax)
@@ -119,6 +122,7 @@
 		else if(effect == ARTIFACT_EFFECT_PULSE && chargelevel >= chargelevelmax)
 			chargelevel = 0
 			DoEffectPulse()
+
 
 //returns 0..1, with 1 being no protection and 0 being fully protected
 proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
@@ -189,6 +193,19 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
 
 	trigger = new triggertype(src)
+
+/datum/artifact_effect/proc/ForceDeactivate()
+	if (!activated)
+		return
+
+	if (istype(holder, /obj/machinery/artifact))
+		var/obj/machinery/artifact/A = holder
+		ToggleActivate(A.primary_effect == src ? 1 : 2)
+
+	else if (istype(holder, /obj/item/weapon/anobattery))
+		var/obj/item/weapon/anobattery/B = holder
+		if (B.inserted_device)
+			B.inserted_device.shutdown_emission()
 
 /datum/artifact_effect/Destroy()
 	if(trigger)

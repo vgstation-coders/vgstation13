@@ -627,6 +627,7 @@
 			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
 			slot_shoes_str = /obj/item/clothing/shoes/orange,
 			slot_ears_str = /obj/item/device/radio/headset,
+			slot_head_str = /obj/item/clothing/head/beanie/black,
 		),
 		/datum/species/plasmaman = list(
 			slot_w_uniform_str = /obj/item/clothing/under/color/prisoner,
@@ -647,7 +648,7 @@
 
 /datum/outfit/special/prisoner/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
-
+  
 /datum/outfit/special/prisoneralt //no headset + soap
 	outfit_name = "Prisoner Alternative"
 	items_to_spawn = list(
@@ -771,7 +772,7 @@
 /datum/outfit/special/cosmonaut/equip_backbag(var/mob/living/carbon/human/H)
 	return FALSE
 
-datum/outfit/special/sports
+/datum/outfit/special/sports
 	outfit_name = "Sports Fan"
 	items_to_spawn = list(
 		"Default" = list(
