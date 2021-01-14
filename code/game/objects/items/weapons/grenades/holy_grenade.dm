@@ -34,7 +34,7 @@
 
 /obj/item/weapon/grenade/holy/throw_at(var/atom/A, throw_range, throw_speed)
 	if(!active)
-		..()
+		return ..()
 	var/thrown_when = world.time - activated_at
 	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
 		to_chat(usr, "<span class='warning'>You didn't count to three.</span>")
