@@ -42,7 +42,7 @@
 		/obj/item/clothing/under/dress/dress_rd,
 		/obj/item/clothing/suit/storage/labcoat/rd,
 		/obj/item/weapon/cartridge/rd,
-		/obj/item/clothing/shoes/white,
+		/obj/item/clothing/shoes/brown/rd,
 		/obj/item/clothing/gloves/latex,
 		/obj/item/device/radio/headset/heads/rd,
 		/obj/item/weapon/tank/air,

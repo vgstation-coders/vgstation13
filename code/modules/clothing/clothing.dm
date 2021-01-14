@@ -490,6 +490,10 @@
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
 
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
+
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(user.equip_to_slot_if_possible(src, slot_shoes))
 		user.visible_message("<span class='notice'>[user] kicks \the [src] and slips them on!</span>", "<span class='notice'>You kick \the [src] and slip them on!</span>")
