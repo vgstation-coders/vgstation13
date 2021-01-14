@@ -37,3 +37,10 @@
 		qdel(src)
 	else
 		..()
+
+/obj/item/weapon/grenade/attack_self(mob/user as mob)
+	if(iscultist(user) || isvampire(user))
+		to_chat(usr, "<span class='warning'>The holy hand grenade is too sacred for you to use!</span>")
+		user.dust()
+		return
+	..()
