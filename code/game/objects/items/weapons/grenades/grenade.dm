@@ -12,6 +12,7 @@
 	slot_flags = SLOT_BELT
 	var/active = 0
 	var/det_time = 5 SECONDS
+	var/armsound = 'sound/weapons/armbomb.ogg'
 	mech_flags = MECH_SCAN_ILLEGAL
 
 /obj/item/weapon/grenade/proc/clown_check(var/mob/living/user)
@@ -78,7 +79,7 @@
 
 	icon_state = initial(icon_state) + "_active"
 	active = 1
-	playsound(loc, 'sound/weapons/armbomb.ogg', 75, 1, -3)
+	playsound(loc, armsound, 75, 1, -3)
 
 	spawn(det_time)
 		if(gcDestroyed)
