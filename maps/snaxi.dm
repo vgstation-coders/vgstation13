@@ -20,10 +20,10 @@
 		/datum/zLevel/space{
 			name = "derelict" ;
 			},
-		/datum/zLevel/mining,
 		/datum/zLevel/space{
 			name = "spacePirateShip" ;
 			},
+		/datum/zLevel/mining,
 		)
 	enabled_jobs = list(/datum/job/trader)
 
