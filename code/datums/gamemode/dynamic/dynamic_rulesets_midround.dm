@@ -634,3 +634,91 @@
 	my_fac.HandleRecruitedRole(new_role)
 	new_role.Greet(GREET_DEFAULT)
 	new_role.AnnounceObjectives()
+
+
+//////////////////////////////////////////////
+//                                          //
+//             Prisoner                     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner
+	name = "Prisoner Transfer"
+	role_category = /datum/role/prisoner
+	restricted_from_jobs = list()
+	enemy_jobs = list("Warden","Head of Security")
+	required_enemies = list(1,1,1,1,1,1,1,1,1,1)
+	required_pop = list(0,0,10,10,15,15,20,20,20,25)
+	required_candidates = 1
+	weight = 1
+	cost = 0
+	requirements = list(5,5,15,15,20,20,20,20,40,70) 
+	high_population_requirement = 10
+	flags = MINOR_RULESET
+	makeBody = FALSE
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/setup_role(var/datum/role/new_role)
+	new_role.OnPostSetup()
+	if(prob(80))
+		new_role.Greet(GREET_DEFAULT)
+		new_role.ForgeObjectives()
+		new_role.AnnounceObjectives()
+	else
+		to_chat(new_role.antag.current, "<B>You are an <span class='warning'>innocent</span> prisoner!</B>")
+		to_chat(new_role.antag.current, "You are a Nanotrasen Employee that has been wrongfully accused of espionage! The exact details of your situation are hazy, but you know that you are innocent.")
+		to_chat(new_role.antag.current, "You were transferred to this station through a request by the station's security team. You know nothing about this station or the people aboard it.")
+		to_chat(new_role.antag.current, "<span class='danger'>Remember that you are not affiliated with the Syndicate. Protect yourself and work towards freedom, but remember that you have no place left to go.</span>")
+		new_role.Drop()
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/finish_setup(mob/new_character, index)
+	command_alert(/datum/command_alert/prisoner_transfer)
+	sleep(2 MINUTES)
+
+	//the applicant left or something
+	if(!new_character)
+		return
+
+	new_character = generate_ruleset_body(new_character)
+	var/datum/role/new_role = new role_category
+	new_role.AssignToRole(new_character.mind,1)
+	setup_role(new_role)
+
+	//Send the shuttle that they spawned on.
+	var/obj/docking_port/destination/transport/station/stationdock = locate(/obj/docking_port/destination/transport/station) in all_docking_ports
+	var/obj/docking_port/destination/transport/centcom/centcomdock = locate(/obj/docking_port/destination/transport/centcom) in all_docking_ports
+
+	spawn(59 SECONDS)	//its 59 seconds to make sure they cant unbuckle themselves beforehand
+		if(!transport_shuttle.move_to_dock(stationdock))
+			message_admins("PRISONER TRANSFER SHUTTLE FAILED TO MOVE! PANIC!")
+			return
+
+		//Try to send the shuttle back every 15 seconds
+		while(transport_shuttle.current_port == stationdock)
+			sleep(150)
+			if(!can_move_shuttle())
+				continue
+		
+			sleep(50)	//everyone is off, wait 5 more seconds so people don't get ZAS'd out the airlock
+			if(!can_move_shuttle())	
+				continue
+			if(!transport_shuttle.move_to_dock(centcomdock))
+				message_admins("The transport shuttle couldn't return to centcomm for some reason.")
+				return
+
+/datum/dynamic_ruleset/midround/from_ghosts/prisoner/proc/can_move_shuttle()
+	var/contents = get_contents_in_object(transport_shuttle.linked_area)	
+	if (locate(/mob/living) in contents)
+		return FALSE
+	if (locate(/obj/item/weapon/disk/nuclear) in contents)
+		return FALSE
+	if (locate(/obj/machinery/nuclearbomb) in contents)
+		return FALSE
+	if (locate(/obj/item/beacon) in contents)
+		return FALSE
+	if (locate(/obj/effect/portal) in contents)
+		return FALSE
+	return TRUE
+
+
+
+	
