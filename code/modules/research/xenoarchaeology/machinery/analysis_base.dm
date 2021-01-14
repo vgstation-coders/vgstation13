@@ -1,15 +1,3 @@
-//Handles how much the temperature changes on power use. (Joules/Kelvin)
-//Equates to as much heat energy per kelvin as a quarter tile of air.
-#define XENOARCH_HEAT_CAPACITY 5000
-
-//How many joules of electrical energy produce how many joules of heat energy?
-#define XENOARCH_HEAT_COEFFICIENT 100
-
-#define XENOARCH_SAFETY_TEMP 350
-#define XENOARCH_MAX_TEMP 400
-// I literally don't even know why this one is different from XENOARCH_MAX_TEMP.
-#define XENOARCH_MAX_HEAT_INCREASE_TEMP 450
-
 /obj/machinery/anomaly
 	name = "Analysis machine"
 	desc = "A specialised, complex analysis machine."
@@ -29,8 +17,6 @@
 	// How far into a scan we are.
 	// If it's zero we're not scanning.
 	var/scan_process = 0
-
-	var/temperature = T20C//spawns at room temperature
 
 /obj/machinery/anomaly/Destroy()
 	if (held_container)
@@ -61,59 +47,12 @@
 			use_power = MACHINE_POWER_USE_ACTIVE
 			if(scan_process++ > target_scan_ticks)
 				FinishScan()
-			else if(temperature > XENOARCH_MAX_TEMP)
-				visible_message("<span class='notice'>[bicon(src)] shuts down from the heat!</span>")
-				alert_noise("beep")
-				stop()
-			else if(temperature > XENOARCH_SAFETY_TEMP && prob(10))
-				visible_message("<span class='notice'>[bicon(src)] bleets plaintively.</span>")
 
 			//show we're busy if we're still going
 			if(scan_process && prob(5))
 				visible_message("<span class='notice'>[bicon(src)] [pick("whirrs","chuffs","clicks")][pick(" quietly"," softly"," sadly"," excitedly"," energetically"," angrily"," plaintively")].</span>")
 	else
 		use_power = MACHINE_POWER_USE_IDLE
-
-	//Next, temperature management. First we automatically heat up as long as we're powered, depending on how much power we're using.
-	//Only if we're powered of course.
-	if (!(stat & (NOPOWER|BROKEN)))
-		var/heat_added
-		switch (use_power)
-			if (MACHINE_POWER_USE_IDLE)
-				heat_added = idle_power_usage * XENOARCH_HEAT_COEFFICIENT
-			if (MACHINE_POWER_USE_ACTIVE)
-				heat_added = active_power_usage * XENOARCH_HEAT_COEFFICIENT
-
-		if(temperature < XENOARCH_MAX_HEAT_INCREASE_TEMP)
-			temperature += heat_added / XENOARCH_HEAT_CAPACITY
-
-	//But whether we are powered or not, our temperature and that of the air around us will still average out, which will eventually lead to the heat death of our universe.
-	var/datum/gas_mixture/env = loc.return_air()
-	var/environmental_temp = env.temperature
-	if (temperature != environmental_temp)
-		var/temperature_difference = abs(environmental_temp - temperature)
-		var/datum/gas_mixture/removed = env.remove_volume(0.25 * CELL_VOLUME)
-		var/heat_capacity = removed.heat_capacity()
-
-		var/entropy = temperature_difference * heat_capacity
-
-		if(temperature > environmental_temp)
-			//cool down to match the air
-			temperature = max(environmental_temp, temperature - entropy / XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature + entropy / heat_capacity)
-
-			if(temperature_difference > 10 && prob(5))
-				visible_message("<span class='notice'>[bicon(src)] hisses softly.</span>", "You hear a soft hiss.")
-
-		else if(temperature < environmental_temp)
-			//heat up to match the air
-			temperature = min(environmental_temp, temperature + entropy / XENOARCH_HEAT_CAPACITY)
-			removed.temperature = max(TCMB, removed.temperature - entropy / heat_capacity)
-
-			if(temperature_difference > 10 && prob(5))
-				visible_message("<span class='notice'>[bicon(src)] plinks quietly.</span>", "You hear a quiet plink.")
-
-		env.merge(removed)
 
 	nanomanager.update_uis(src)
 
@@ -181,11 +120,6 @@ obj/machinery/anomaly/Topic(href, href_list)
 	nanomanager.update_uis(src)
 
 /obj/machinery/anomaly/proc/start(var/mob/user)
-	if (temperature >= XENOARCH_SAFETY_TEMP)
-		var/proceed = input("Unsafe internal temperature detected, enter YES below to continue.","Warning")
-		if (proceed != "YES" || user.incapacitated() || !user.Adjacent(src))
-			return FALSE
-
 	scan_process = 1
 	use_power = MACHINE_POWER_USE_ACTIVE
 	update_icon()
@@ -226,9 +160,6 @@ obj/machinery/anomaly/Topic(href, href_list)
 		return
 
 	var/list/data[0]
-	data["max_temperature"] = XENOARCH_MAX_TEMP
-	data["safety_temperature"] = XENOARCH_SAFETY_TEMP
-	data["temperature"] = temperature
 
 	data["target_ticks"] = target_scan_ticks
 	data["scan_process"] = scan_process
