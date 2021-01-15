@@ -4,8 +4,8 @@
 //**************************************************************
 
 /datum/map/active
-	nameShort = "bawks"
-	nameLong = "Bawks Station"
+	nameShort = "box"
+	nameLong = "Box Station"
 	map_dir = "boxstation"
 	tDomeX = 128
 	tDomeY = 58
