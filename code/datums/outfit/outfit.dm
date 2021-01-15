@@ -128,6 +128,10 @@
 		to_chat(H, "Thank you for supporting BYOND!")
 		items_to_collect[/obj/item/weapon/storage/box/byond] = GRASP_LEFT_HAND
 
+	if (H.client?.ivoted)
+		to_chat(H, "Thank you for voting!")
+		items_to_collect[/obj/item/clothing/accessory/voter_pin] = GRASP_RIGHT_HAND
+
 	if (!give_disabilities_equipment)
 		return
 	if (H.disabilities & ASTHMA)

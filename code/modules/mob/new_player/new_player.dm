@@ -291,6 +291,9 @@
 					if(!isnull(href_list["option_[optionid]"]))	//Test if this optionid was selected
 						vote_on_poll(pollid, optionid, 1)
 
+		to_chat(src, "<span class='notice'>Thank you for voting!</span>")
+		client.ivoted = TRUE
+
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)
