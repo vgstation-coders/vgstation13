@@ -82,6 +82,7 @@
 
 		add_language(languagetoadd)
 		default_language = all_languages[languagetoadd]
+		init_language = default_language
 
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")

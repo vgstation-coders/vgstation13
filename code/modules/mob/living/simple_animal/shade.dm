@@ -37,6 +37,7 @@
 	add_language(LANGUAGE_CULT)
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)

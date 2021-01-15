@@ -140,7 +140,7 @@
 
 	if(cyborg_detonation_time < world.time)	//Reset the global cyborg killswitch if it was already triggered, so an activated killswitch + missing robot consoles doesnt prevent all new borgs from instantly exploding. This probably isn't the best place for it but it should work.
 		cyborg_detonation_time = 0
-		
+
 	if(mind && !stored_freqs)
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
@@ -166,6 +166,7 @@
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	init_language = default_language
 
 /mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
 	if(istype(new_AI))

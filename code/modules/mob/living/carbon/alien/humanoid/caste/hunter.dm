@@ -21,6 +21,7 @@
 	..()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
+	init_language = default_language
 
 /mob/living/carbon/alien/humanoid/hunter
 	handle_regular_hud_updates()
