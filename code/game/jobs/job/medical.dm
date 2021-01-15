@@ -11,7 +11,7 @@
 	req_admin_notify = 1
 	access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
-			access_keycard_auth, access_sec_doors, access_paramedic, access_eva)
+			access_keycard_auth, access_sec_doors, access_paramedic, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_heads,
 			access_chemistry, access_virology, access_biohazard, access_cmo, access_surgery, access_RC_announce,
 			access_keycard_auth, access_sec_doors, access_paramedic)
@@ -30,7 +30,7 @@
 	supervisors = "the chief medical officer"
 	wage_payout = 65
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_morgue, access_surgery, access_virology)
 	alt_titles = list("Emergency Physician", "Nurse", "Surgeon")
 	outfit_datum = /datum/outfit/doctor
@@ -46,7 +46,7 @@
 	supervisors = "the chief medical officer"
 	wage_payout = 65
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_chemistry)
 	alt_titles = list("Pharmacist")
 	outfit_datum = /datum/outfit/chemist
@@ -61,7 +61,7 @@
 	supervisors = "the chief medical officer and research director"
 	wage_payout = 55
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_genetics, access_science, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_morgue, access_genetics, access_science)
 	outfit_datum = /datum/outfit/geneticist
 
@@ -75,7 +75,7 @@
 	supervisors = "the chief medical officer"
 	wage_payout = 55
 	selection_color = "#ffeef0"
-	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva)
+	access = list(access_medical, access_morgue, access_surgery, access_chemistry, access_virology, access_biohazard, access_genetics, access_eva, access_maint_tunnels)
 	minimal_access = list(access_medical, access_virology, access_biohazard)
 	alt_titles = list("Pathologist", "Microbiologist")
 	outfit_datum = /datum/outfit/virologist

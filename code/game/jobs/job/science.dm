@@ -12,7 +12,7 @@
 	access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue,
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
-			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic)
+			            access_RC_announce, access_keycard_auth, access_tcomsat, access_gateway, access_mechanic, access_maint_tunnels)
 	minimal_access = list(access_rd, access_heads, access_rnd, access_genetics, access_morgue,
 			            access_tox_storage, access_teleporter, access_sec_doors,
 			            access_science, access_robotics, access_xenobiology, access_ai_upload,
@@ -32,7 +32,7 @@
 	wage_payout = 55
 	selection_color = "#ffeeff"
 	idtype = /obj/item/weapon/card/id/research
-	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology)
+	access = list(access_robotics, access_rnd, access_tox_storage, access_science, access_xenobiology, access_maint_tunnels)
 	minimal_access = list(access_rnd, access_tox_storage, access_science, access_xenobiology)
 	alt_titles = list("Xenoarcheologist", "Anomalist", "Plasma Researcher", "Xenobiologist", "Research Botanist")
 
@@ -48,7 +48,7 @@
 	supervisors = "research director"
 	wage_payout = 55
 	selection_color = "#ffeeff"
-	access = list(access_robotics, access_tech_storage, access_morgue, access_science, access_rnd) //As a job that handles so many corpses, it makes sense for them to have morgue access.
+	access = list(access_robotics, access_tech_storage, access_morgue, access_science, access_rnd, access_maint_tunnels) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	minimal_access = list(access_robotics, access_tech_storage, access_morgue, access_science) //As a job that handles so many corpses, it makes sense for them to have morgue access.
 	alt_titles = list("Biomechanical Engineer","Mechatronic Engineer")
 
