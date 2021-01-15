@@ -87,6 +87,10 @@
 
 	user.changeling_update_languages(changeling.absorbed_languages)
 
+	//Steal their memories! (using this instead of mind.store_memory so the lings own notes and stuff are always at the bottom)
+	var/newmemory = "<B>[T.real_name]'s memories:</B><BR>[T.mind.memory]<BR>[user.mind.memory]"
+	user.mind.memory = newmemory
+
 	//Steal their species!
 	if(T.species)
 		changeling.absorbed_species |= T.species.name
