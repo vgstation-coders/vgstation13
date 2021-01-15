@@ -90,7 +90,7 @@
 	ask_verb = "warbles"
 	exclaim_verb = "warbles"
 	colour = "skrell"
-	key = "k"
+	key = "/"
 	syllables = list("qr","qrr","xuq","qil","quum","xuqm","vol","xrim","zaoo","qu-uu","qix","qoo","zix","*","!")
 
 /datum/language/vox
