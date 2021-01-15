@@ -4,7 +4,7 @@
 		var/datum/language/L = new language
 
 		// 1. Check the list
-		var/dupes = list()
+		var/list/dupes = list()
 		for (var/name in keys_used)
 			if (keys_used[name] == L.key)
 				dupes += name
