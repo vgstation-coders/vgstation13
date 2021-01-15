@@ -54,8 +54,8 @@
 	supervisors = "the head of personnel"
 	wage_payout = 65
 	selection_color = "#dddddd"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	access = list(access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
+	minimal_access = list(access_mailsorting, access_cargo, access_cargo_bot, access_qm, access_mint, access_mining, access_mining_station)
 	outfit_datum = /datum/outfit/qm
 
 /datum/job/cargo_tech
@@ -68,8 +68,8 @@
 	supervisors = "the quartermaster and the head of personnel"
 	wage_payout = 20
 	selection_color = "#dddddd"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
-	minimal_access = list(access_maint_tunnels, access_cargo, access_cargo_bot, access_mailsorting)
+	access = list(access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	minimal_access = list(access_cargo, access_cargo_bot, access_mailsorting)
 	outfit_datum = /datum/outfit/cargo_tech
 
 /datum/job/mining
@@ -82,7 +82,7 @@
 	supervisors = "the quartermaster and the head of personnel"
 	wage_payout = 30
 	selection_color = "#dddddd"
-	access = list(access_maint_tunnels, access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
+	access = list(access_mailsorting, access_cargo, access_cargo_bot, access_mint, access_mining, access_mining_station)
 	minimal_access = list(access_mining, access_mint, access_mining_station, access_mailsorting)
 	outfit_datum = /datum/outfit/mining
 
@@ -96,7 +96,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 15
 	selection_color = "#dddddd"
-	access = list(access_clown, access_theatre, access_maint_tunnels)
+	access = list(access_clown, access_theatre)
 	minimal_access = list(access_clown, access_theatre)
 	alt_titles = list("Jester")
 	outfit_datum = /datum/outfit/clown
@@ -128,7 +128,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 15
 	selection_color = "#dddddd"
-	access = list(access_mime, access_theatre, access_maint_tunnels)
+	access = list(access_mime, access_theatre)
 	minimal_access = list(access_mime, access_theatre)
 	outfit_datum = /datum/outfit/mime
 
@@ -194,7 +194,7 @@
 	supervisors = "the head of personnel"
 	wage_payout = 25
 	selection_color = "#dddddd"
-	access = list(access_library, access_maint_tunnels)
+	access = list(access_library)
 	minimal_access = list(access_library)
 	alt_titles = list("Journalist", "Game Master")
 	outfit_datum = /datum/outfit/librarian
@@ -224,7 +224,7 @@
 	supervisors = "The God(s), the Head of Personnel too"
 	wage_payout = 35
 	selection_color = "#dddddd"
-	access = list(access_morgue, access_chapel_office, access_crematorium, access_maint_tunnels)
+	access = list(access_morgue, access_chapel_office, access_crematorium)
 	minimal_access = list(access_morgue, access_chapel_office, access_crematorium)
 	outfit_datum = /datum/outfit/chaplain
 	var/datum/religion/chap_religion

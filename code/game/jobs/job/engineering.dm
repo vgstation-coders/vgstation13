@@ -59,7 +59,7 @@
 	supervisors = "the research director and the chief engineer"
 	wage_payout = 45
 	selection_color = "#fff5cc"
-	access = list(access_eva, access_engine_equip, access_tech_storage, access_maint_tunnels, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
-	minimal_access = list(access_maint_tunnels, access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
+	access = list(access_eva, access_engine_equip, access_tech_storage, access_external_airlocks, access_construction, access_mechanic, access_tcomsat, access_science)
+	minimal_access = list(access_emergency_storage, access_construction, access_engine_equip, access_external_airlocks, access_mechanic, access_tcomsat, access_science)
 	alt_titles = list("Telecommunications Technician", "Spacepod Mechanic", "Greasemonkey")
 	outfit_datum = /datum/outfit/mechanic

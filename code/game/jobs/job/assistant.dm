@@ -17,9 +17,6 @@
 	outfit_datum = /datum/outfit/assistant
 
 /datum/job/assistant/get_access()
-	if(config.assistant_maint)
-		return list(access_maint_tunnels)
-	else
 		return list()
 
 /datum/job/assistant/get_total_positions()

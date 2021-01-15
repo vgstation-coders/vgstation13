@@ -10,11 +10,11 @@
 	selection_color = "#ffdddd"
 	req_admin_notify = 1
 	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court,
-			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
+			            access_forensics_lockers, access_morgue, access_all_personal_lockers,
 			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway, access_eva)
 	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court,
-			            access_forensics_lockers, access_morgue, access_maint_tunnels, access_all_personal_lockers,
+			            access_forensics_lockers, access_morgue, access_all_personal_lockers,
 			            access_science, access_engine, access_mining, access_medical, access_construction, access_mailsorting,
 			            access_heads, access_hos, access_RC_announce, access_keycard_auth, access_gateway)
 	minimal_player_age = 30
@@ -39,8 +39,8 @@
 	supervisors = "the head of security"
 	wage_payout = 65
 	selection_color = "#ffeeee"
-	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels, access_morgue, access_eva)
-	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_maint_tunnels)
+	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court, access_morgue, access_eva)
+	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_armory, access_court)
 	outfit_datum = /datum/outfit/warden
 	minimal_player_age = 7
 
@@ -54,8 +54,8 @@
 	supervisors = "the head of security"
 	wage_payout = 55
 	selection_color = "#ffeeee"
-	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court, access_eva)
-	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_maint_tunnels, access_court)
+	access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_court, access_eva)
+	minimal_access = list(access_weapons, access_security, access_sec_doors, access_forensics_lockers, access_morgue, access_court)
 	alt_titles = list("Forensic Technician","Gumshoe", "Private Eye")
 	outfit_datum = /datum/outfit/detective
 	minimal_player_age = 7
@@ -70,8 +70,8 @@
 	supervisors = "the head of security"
 	wage_payout = 55
 	selection_color = "#ffeeee"
-	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels, access_morgue, access_eva)
-	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_maint_tunnels)
+	access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court, access_morgue, access_eva)
+	minimal_access = list(access_weapons, access_security, access_sec_doors, access_brig, access_court)
 	minimal_player_age = 7
 	outfit_datum = /datum/outfit/officer
 
