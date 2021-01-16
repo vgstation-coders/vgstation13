@@ -841,7 +841,19 @@ var/list/ai_list = list()
 		to_chat(src, "AI mentions deactivated.")
 	else
 		to_chat(src, "AI mentions activated.")
-
+		
+/mob/living/silicon/ai/verb/list_connected_robots()
+	set name = "List Connected Robots"
+	set desc = "Lists the robots currently under your command"
+	set category = "AI Commands"
+	if(isUnconscious())
+		return
+	if(connected_robots.len>0)
+		to_chat(src,"<b>Robots currently under your command:</b>")
+		for(var/mob/living/silicon/robot/RoUC in connected_robots)
+			to_chat(src,"[RoUC] | [(RoUC.module)?(RoUC.module.module_holder):"No module selected"]")
+	else
+		to_chat(src,"There are no robots under your command.")
 
 /mob/living/silicon/ai/verb/toggle_station_map()
 	set name = "Toggle Station Holomap"
