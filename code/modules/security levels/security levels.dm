@@ -19,6 +19,10 @@
 		if("delta")
 			level = SEC_LEVEL_DELTA
 
+	if(level != SEC_LEVEL_RED)
+		if(maint_sec_access_only)
+			spawn(10 SECONDS) revoke_maint_sec_special_access_only()
+
 	//Will not be announced if you try to set to the same level as it already is
 	if(level >= SEC_LEVEL_RAINBOW && level <= SEC_LEVEL_DELTA && level != security_level)
 		switch(level)

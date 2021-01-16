@@ -62,7 +62,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 				to_chat(user, "<span class='notice'>You swipe your ID card to request the [event].</span>")
 
 				event_triggered_by = usr
-				broadcast_request() //This is the device making the initial event request. It needs to broadcast to other devices
+				if(event == "Revoke Emergency Maintenance Access" || event == "Cancel Maintenance Security Override")
+					trigger_event(event)
+				else
+					broadcast_request() //This is the device making the initial event request. It needs to broadcast to other devices
 
 /obj/machinery/keycard_auth/power_change()
 	if(powered(ENVIRON))
@@ -97,8 +100,10 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 			<li><A href='?src=\ref[src];triggerevent=Red alert'>Red alert</A></li>"}
 		if((get_security_level() in list("red", "delta")))
 			dat += "<li><A href='?src=\ref[src];triggerevent=Emergency Response Team'>Emergency Response Team</A></li>"
+			dat += "<li><A href='?src=\ref[src];triggerevent=[maint_sec_access_only?"Cancel ":""]Maintenance Security Override'>[maint_sec_access_only?"Cancel ":""]Maintenance Security Override</A></li>"
 		else
 			dat += "<li>Emergency Response Team (Disabled while below Code Red)</li>"
+			dat += "<li>Maintenance Security Override (Disabled while below Code Red)</li>"
 		dat += {"<li><A href='?src=\ref[src];triggerevent=Grant Emergency Maintenance Access'>Grant Emergency Maintenance Access</A></li>
 			<li><A href='?src=\ref[src];triggerevent=Revoke Emergency Maintenance Access'>Revoke Emergency Maintenance Access</A></li>
 			</ul>"}
@@ -179,6 +184,12 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		if("Red alert")
 			set_security_level(SEC_LEVEL_RED)
 			feedback_inc("alert_keycard_auth_red",1)
+		if("Maintenance Security Override")
+			if(!maint_sec_access_only)
+				allow_maint_sec_special_access_only()
+		if("Cancel Maintenance Security Override")
+			if(maint_sec_access_only)
+				revoke_maint_sec_special_access_only()
 		if("Grant Emergency Maintenance Access")
 			make_maint_all_access()
 			feedback_inc("alert_keycard_auth_maintGrant",1)
@@ -199,6 +210,7 @@ var/global/list/obj/machinery/keycard_auth/authenticators = list()
 		KA.reset()
 
 var/global/maint_all_access = 0
+var/global/maint_sec_access_only = 0
 
 /proc/make_maint_all_access()
 	maint_all_access = 1
@@ -210,7 +222,27 @@ var/global/maint_all_access = 0
 	to_chat(world, "<font size=4 color='red'>Attention!</font>")
 	to_chat(world, "<span class='red'>The maintenance access requirement has been readded on all maintenance airlocks.</span>")
 
+/proc/allow_maint_sec_special_access_only()
+	world << sound('sound/misc/maintseccontrol.ogg')
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<span class='red'>Maintenance Security Override now in effect.</span>")
+	spawn(10 SECONDS) maint_sec_access_only = 1
+
+/proc/revoke_maint_sec_special_access_only()
+	to_chat(world, "<font size=4 color='red'>Attention!</font>")
+	to_chat(world, "<span class='red'>Maintenance Security Override no longer in effect.</span>")
+	maint_sec_access_only = 0
+
 /obj/machinery/door/airlock/allowed(mob/M)
 	if(maint_all_access && src.check_access_list(list(access_maint_tunnels)))
 		return 1
+	if(islist(req_access) && access_maint_tunnels in req_access)// denies access to doors without access reqs otherwise
+		if(maint_sec_access_only && src.check_access_list(list(access_maint_tunnels)))
+			if(access_security in M.GetAccess())
+				return 1
+			else
+				return 0
+		if(security_level > 0 && src.check_access_list(list(access_maint_tunnels)) && access_security in M.GetAccess())
+			return 1
+
 	return ..(M)
