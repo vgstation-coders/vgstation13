@@ -87,7 +87,11 @@ var/list/tag_mode_non_used_spawns = list()
 			our_ling.Drop()
 			var/datum/role/tag_mode_mime = user.mind.GetRole(TAG_MIME)
 			tag_mode_mime.Drop()
-
+			user.mind.miming = 0
+			for(var/spell/aoe_turf/conjure/forcewall/mime/spell in H.spell_list)
+				user.remove_spell(spell)
+			for(var/spell/targeted/oathbreak/spell in H.spell_list)
+				user.remove_spell(spell)
 			// Long live the new ling
 			var/datum/role/changeling/changeling_clown/CC = new
 			CC.AssignToRole(user.mind, 1)
