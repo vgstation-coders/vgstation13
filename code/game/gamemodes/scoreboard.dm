@@ -259,34 +259,28 @@
 	//Bonus Modifiers
 	//--General--
 	//var/traitorwins = score["traitorswon"]
-	var/deathpoints = score["deadcrew"] * 500 //Human beans aren't free
+	var/deathpoints = score["deadcrew"] * 250 //Human beans aren't free
 	var/siliconpoints = score["deadsilicon"] * 500 //Silicons certainly aren't either
 	//var/researchpoints = score["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
 	var/eventpoints = score["eventsendured"] * 200 //Events fine every 10 to 15 and are uncommon
-	var/escapoints = score["escapees"] * 250 //Two rescued human beans are worth a dead one
+	var/escapoints = score["escapees"] * 100 //Two rescued human beans are worth a dead one
 
 	//--Service--
 	var/harvests = score["stuffharvested"] * 1 //One harvest is one product. So 5 wheat is 5 points
 	var/meals = score["meals"] * 5 //Every item cooked (needs to fire make_food()) awards five points
 	//var/drinks = score["drinks"] * 5 //All drinks that ever existed award five points. No better way to do it yet
-	var/litter = score["litter"] * 1 //Every item listed under /obj/item/trash will cost one point if it exists
+	var/litter = score["litter"] //Every item listed under /obj/item/trash will cost one point if it exists
 	var/messpoints
 	if(score["mess"] != 0)
-		messpoints = score["mess"] * 5 //If there are any messes, let's count them
+		messpoints = score["mess"] //If there are any messes, let's count them
 
 	//--Supply--
-	var/shipping = score["stuffshipped"] * 1000 //Centcom Orders fulfilled
+	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
 	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
 	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 
 	//--Engineering--
-	var/power // Penalties for power loss scale up if more areas are powerless
-	if(score["powerloss"] <= 10)
-		power = score["powerloss"] * 50
-	else if (score["powerloss"] > 10 & score["powerloss"] < 60)
-		power = score ["powerloss"] * 150
-	else if (score["powerloss"] >= 60) //Per-area penalty removed at 60+ areas unpowered, in favor of a huge penalty listed later on
-		power = 0
+	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	//var/atmos
 	//if(score["airloss"] != 0)
@@ -312,7 +306,7 @@
 	if (score["disease_vaccine_score"] == 580)
 		score["disease_vaccine_score"] = 1000
 
-	var/plaguepoints = score["disease_bad"] * 100 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
+	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
 
 	//--Science--
 	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
@@ -353,14 +347,9 @@
 	score["crewscore"] += score["disease_vaccine_score"]
 	score["crewscore"] += score["disease_effects"]
 
-	if(!score["powerloss"]) //No APCs with bad power
+	if(!power) //No APCs with bad power
 		score["crewscore"] += 2500 //Give the Engineers a pat on the back for bothering
 		score["powerbonus"] = 1
-	if(score["powerloss"] >= 60) //If more than 60 areas are unpowered, give the score the boot
-		score["crewscore"] -= 10000
-		score["powerpoints"] = 10000
-	if(score["powerloss"] < 60) //If fewer than 60 areas are unpowered, count each area individually
-		score["powerpoints"] = power
 	if(!messpoints && !litter) //Not a single mess or litter on station
 		score["crewscore"] += 10000 //Congrats, not even a dirt patch or chips bag anywhere
 		score["messbonus"] = 1
@@ -550,7 +539,7 @@
 	<B>AIs Destroyed:</B> [score["deadaipenalty"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadaipenalty"] * 1000 : score["deadaipenalty"] * -1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
-	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerpoints"]] Points)<BR>
+	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
 	<B>Bad diseases in living mobs:</B> [score["disease_bad"]] (-[score["disease_bad"] * 50] Points)<BR><BR>
 
 	<U>THE WEIRD</U><BR>"}
