@@ -422,7 +422,7 @@
 		new /obj/item/weapon/skull(get_turf(target))
 
 	//Scary sound
-	playsound(get_turf(receptacle), get_sfx("soulstone"), 50,1)
+	playsound(receptacle, get_sfx("soulstone"), 50,1)
 
 	//Are we capturing a cult-banned player as a cultist? Sucks for them!
 	if (iscultist(user) && (jobban_isbanned(body, CULTIST) || isantagbanned(body)))

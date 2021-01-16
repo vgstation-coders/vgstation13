@@ -6149,7 +6149,7 @@
 		return 1
 	if(!M.loc || prob(70))
 		return
-	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	playsound(M, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 	dispense_cash(rand(5,15),get_turf(M))
 
 /datum/reagent/ethanol/bad_touch
@@ -6322,11 +6322,11 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
-			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+			playsound(H, 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
 			H.Stun(10)
-			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+			playsound(H, 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
 	name = "Spiders"
@@ -7667,7 +7667,7 @@
 
 	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
-		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
+		playsound(M, 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"

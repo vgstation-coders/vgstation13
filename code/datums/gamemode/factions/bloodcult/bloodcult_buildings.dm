@@ -55,7 +55,7 @@
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		update_icon()
@@ -80,7 +80,7 @@
 			takeDamage(4)
 
 /obj/structure/cult/blob_act()
-	playsound(get_turf(src), sound_damaged, 75, 1)
+	playsound(src, sound_damaged, 75, 1)
 	takeDamage(20)
 
 /obj/structure/cult/bullet_act(var/obj/item/projectile/Proj)
@@ -103,7 +103,7 @@
 			if (W.hitsound)
 				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
-				playsound(get_turf(src), sound_damaged, 75, 1)
+				playsound(src, sound_damaged, 75, 1)
 			takeDamage(W.force)
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
@@ -124,7 +124,7 @@
 							"You hear stone cracking.")
 		takeDamage(user.get_unarmed_damage(src))
 		if (sound_damaged)
-			playsound(get_turf(src), sound_damaged, 75, 1)
+			playsound(src, sound_damaged, 75, 1)
 	else if(iscultist(user))
 		cultist_act(user)
 	else
@@ -775,7 +775,7 @@
 			new_shade.name = "[M.real_name] the Shade"
 			new_shade.real_name = "[M.real_name]"
 			new_shade.give_blade_powers()
-			playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
 		var/turf/T = loc
@@ -1547,7 +1547,7 @@ var/list/bloodstone_list = list()
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))

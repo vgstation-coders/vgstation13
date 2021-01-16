@@ -414,7 +414,7 @@
 	user.visible_message("<span class='notice'>[user] injects biofoam into [target]'s [affected.display_name] with \the [tool].</span>", \
 	"<span class='notice'>You inject biofoam in [target] with \the [tool].</span>")
 	target.reagents.add_reagent(BIOFOAM, amount)
-	playsound(get_turf(target), 'sound/items/hypospray.ogg', 50, 1)
+	playsound(target, 'sound/items/hypospray.ogg', 50, 1)
 	tool.attack_self(user)
 	tool.foam = 0
 

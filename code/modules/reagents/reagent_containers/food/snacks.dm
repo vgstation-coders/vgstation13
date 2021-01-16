@@ -1248,7 +1248,7 @@
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
-		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment

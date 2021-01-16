@@ -1299,7 +1299,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(news_network.wanted_issue)
 		printed_issue.important_message = news_network.wanted_issue.NewspaperCopy()
 	anim(target = src, a_icon = icon, flick_anim = "newscaster_print", sleeptime = 30, offX = pixel_x, offY = pixel_y)
-	playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
+	playsound(src, "sound/effects/fax.ogg", 50, 1)
 	paper_remaining--
 	spawn(0.8 SECONDS)
 		printed_issue.forceMove(get_turf(src))
