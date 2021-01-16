@@ -236,13 +236,13 @@ var/global/maint_sec_access_only = 0
 /obj/machinery/door/airlock/allowed(mob/M)
 	if(maint_all_access && src.check_access_list(list(access_maint_tunnels)))
 		return 1
-	if(islist(req_access) && access_maint_tunnels in req_access)// denies access to doors without access reqs otherwise
+	if(islist(req_access) && (access_maint_tunnels in req_access))// denies access to doors without access reqs otherwise
 		if(maint_sec_access_only && src.check_access_list(list(access_maint_tunnels)))
 			if(access_security in M.GetAccess())
 				return 1
 			else
 				return 0
-		if(security_level > 0 && src.check_access_list(list(access_maint_tunnels)) && access_security in M.GetAccess())
+		if(security_level > 0 && src.check_access_list(list(access_maint_tunnels)) && (access_security in M.GetAccess()))
 			return 1
 
 	return ..(M)
