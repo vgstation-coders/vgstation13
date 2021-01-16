@@ -42,7 +42,7 @@
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 
-/datum/role/revolutionary/OnPostSetup()
+/datum/role/revolutionary/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	AnnounceObjectives()
 
@@ -57,7 +57,7 @@
 
 	stat_datum_type = /datum/stat/role/revolutionary/leader
 
-/datum/role/revolutionary/leader/OnPostSetup()
+/datum/role/revolutionary/leader/OnPostSetup(var/laterole = FALSE)
 	.=..()
 	if(!.)
 		return

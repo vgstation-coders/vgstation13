@@ -45,7 +45,7 @@
 		restricted_from_jobs += protected_from_jobs
 	if (istype(ticker.mode, /datum/gamemode/dynamic))
 		mode = ticker.mode
-	else
+	else if (master_mode != "Dynamic Mode")
 		message_admins("A dynamic ruleset was created but server isn't on Dynamic Mode!")
 		qdel(src)
 

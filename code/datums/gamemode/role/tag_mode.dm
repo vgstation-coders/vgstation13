@@ -11,6 +11,9 @@ var/list/tag_mode_non_used_spawns = list()
 
 // -- Clown ling
 
+/datum/controller/gameticker
+	var/tag_mode_ling_iterations = 0
+
 /datum/role/changeling/changeling_clown
 	name = "Changeling Clown"
 	disallow_job = TRUE
@@ -35,6 +38,7 @@ var/list/tag_mode_non_used_spawns = list()
 	ForgeObjectives()
 
 	// Make their mask special and liked to them
+	ticker.tag_mode_ling_iterations++
 	var/list/gas_mask = recursive_type_check(antag.current, /obj/item/clothing/mask/gas/clown_hat/ling_mask) // (a bit ugly but I don't see how else to do it)
 	for (var/obj/item/clothing/mask/gas/clown_hat/ling_mask/LM in gas_mask)
 		LM.our_ling = src
@@ -62,6 +66,15 @@ var/list/tag_mode_non_used_spawns = list()
 	AnnounceObjectives()
 	antag.current << sound('sound/effects/ling_intro.ogg')
 
+/datum/role/changeling/changeling_clown/check_win()
+	for(var/datum/role/tag_mode_mime/R in ticker.mode.orphaned_roles)
+		if (!R.antag.current.stat) // alive
+			return FALSE
+
+	to_chat(world, "<h2>The changeling clown has won!</h2>")
+	to_chat(world, "<span class='notice'>All mimes are dead. The changeling clown was [antag.key], with [ticker.tag_mode_ling_iterations] changes from the original clown changeling.</span>")
+	return TRUE
+
 // -- Clown cursed mask item
 
 /obj/item/clothing/mask/gas/clown_hat/ling_mask
@@ -69,16 +82,18 @@ var/list/tag_mode_non_used_spawns = list()
 
 /obj/item/clothing/mask/gas/clown_hat/ling_mask/equipped(var/mob/user, var/slot, hand_index = 0)
 	. = ..()
-	if (slot == slot_head)
-		if (!our_ling.antag.current.stat && istagmime(user)) // Our ling is dead...
+	if (slot == slot_wear_mask)
+		if (our_ling.antag.current.stat && istagmime(user)) // Our ling is dead...
+			our_ling.Drop()
 			var/datum/role/tag_mode_mime = user.mind.GetRole(TAG_MIME)
 			tag_mode_mime.Drop()
 
 			// Long live the new ling
 			var/datum/role/changeling/changeling_clown/CC = new
 			CC.AssignToRole(user.mind, 1)
-			CC.OnPostSetup(FALSE)
+			CC.OnPostSetup(TRUE)
 			CC.Greet(GREET_LATEJOIN)
+			our_ling = CC
 
 // -- Mimes
 
@@ -94,11 +109,10 @@ var/spawned_mimes_tag_mode = 1
 	if (tag_mode_non_used_spawns.len == 0)
 		init_tag_mode_spawns()
 
-	var/index = pick(tag_mode_non_used_spawns)
-	antag.current.forceMove(tag_mode_spawns[index])
-	tag_mode_non_used_spawns -= index
-
-	antag.current.forceMove()
+	if (!laterole)
+		var/index = pick(tag_mode_non_used_spawns)
+		antag.current.forceMove(tag_mode_spawns[index])
+		tag_mode_non_used_spawns -= index
 
 	// Give them the outfit
 	var/datum/outfit/mime/concrete_outfit = new
@@ -111,7 +125,7 @@ var/spawned_mimes_tag_mode = 1
 /datum/role/tag_mode_mime/ForgeObjectives()
 	AppendObjective(/datum/objective/survive/tag_mode_mime)
 
-/datum/role/ctag_mode_mime/Greet(var/greeting,var/custom)
+/datum/role/tag_mode_mime/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 

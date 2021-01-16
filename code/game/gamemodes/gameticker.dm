@@ -744,8 +744,12 @@ var/datum/controller/gameticker/ticker
 	to_chat(world, "<span class='notice'>Tag mode is a 'gamemode' about a changeling clown infiltrated in a station populated by Mimes. His goal is to destroy it. Any mime killing the clown will in turn become the changeling.</span>")
 	to_chat(world, "<span class='notice'>The game ends when all mimes are dead, or when the shuttle is called.</span>")
 	to_chat(world, "<span class='notice'>Have fun!</span>")
-	
 
+	// This is /datum/forced_ruleset thing. This shit exists ONLY for pre-roundstart rulesets. Yes. This is a thing.
+	var/datum/forced_ruleset/tag_mode = new
+	tag_mode.name = "Tag mode"
+	tag_mode.calledBy = "[key_name(user)]"
+	forced_roundstart_ruleset += tag_mode
 	dynamic_forced_extended = TRUE
 
 /datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)

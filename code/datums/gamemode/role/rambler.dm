@@ -7,7 +7,7 @@
 	wikiroute = ROLE_MINOR
 	var/remaining_vows = 3
 
-/datum/role/rambler/OnPostSetup()
+/datum/role/rambler/OnPostSetup(var/laterole = FALSE)
 	. =..()
 	if(ishuman(antag.current))
 		equip_rambler(antag.current)

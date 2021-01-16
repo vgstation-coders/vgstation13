@@ -19,7 +19,7 @@
 	to_chat(antag.current, "<span class='danger'>The diseases you are carrying were added to your notes.</span>")
 
 
-/datum/role/catbeast/OnPostSetup()
+/datum/role/catbeast/OnPostSetup(var/laterole = FALSE)
 	var/mob/living/carbon/human/H = antag.current
 	H.set_species("Tajaran", force_organs=1)
 	H.my_appearance.s_tone = CATBEASTBLACK

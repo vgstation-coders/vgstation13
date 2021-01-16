@@ -613,6 +613,8 @@
 			A = null
 			continue
 
+	init_tag_mode_spawns()
+
 	// Spawn the clown...
 	var/mob/M = pick(candidates)
 	assigned += M
@@ -620,12 +622,10 @@
 	var/datum/role/changeling/changeling_clown/clown = new
 	clown.AssignToRole(M.mind,1)
 	clown.Greet(GREET_ROUNDSTART)
-	clown.OnPostSetup()
 
 	// And everyone else as mimes.
 	for (var/mob/M2 in (mode.get_ready_players() - M))
 		var/datum/role/tag_mode_mime/mime = new
 		mime.AssignToRole(M2.mind,1)
 		mime.Greet(GREET_ROUNDSTART)
-		mime.OnPostSetup()
 	return 1

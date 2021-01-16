@@ -13,7 +13,7 @@
 
 	stat_datum_type = /datum/stat/role/ninja
 
-/datum/role/ninja/OnPostSetup()
+/datum/role/ninja/OnPostSetup(var/laterole = FALSE)
 	. =..()
 	if(!.)
 		return
