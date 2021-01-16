@@ -70,6 +70,8 @@
 #define STREAMER "streamer"
 #define XENOMORPH "alien"
 #define PRISONER "prisoner"
+#define CLOWN_LING "clown ling"
+#define TAG_MIME "tag mime"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
