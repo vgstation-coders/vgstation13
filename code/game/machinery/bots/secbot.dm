@@ -267,7 +267,7 @@ Auto Patrol: []"},
 		if(!istype(target.loc, /turf))
 			return
 
-		if (Adjacent(target))		// if right next to perp, arrerst them
+		if (Adjacent(target))		// if right next to perp, arrest them
 			var/mob/living/carbon/M = target
 			path = list() // Kill our path
 			target = null // Don't teabag them
