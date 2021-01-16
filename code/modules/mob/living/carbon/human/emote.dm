@@ -115,7 +115,7 @@
 
 	// Process toxic farts first.
 	if(M_TOXIC_FARTS in H.mutations)
-		playsound(get_turf(src), 'sound/effects/superfart.ogg', 50, -1)
+		playsound(src, 'sound/effects/superfart.ogg', 50, -1)
 		has_farted = TRUE
 		if(wearing_suit)
 			if(!wearing_mask)

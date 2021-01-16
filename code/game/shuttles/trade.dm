@@ -46,7 +46,7 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 		P.name = "NT Port Opened - [worldtime2text()]"
 		P.info = "This is official notification that sanctioned arrival of Vox trading vessels has resumed as normal."
 		P.update_icon()
-		playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
+		playsound(src, "sound/effects/fax.ogg", 50, 1)
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.icon_state = "paper_stamp-cent"
 		P.stamped += /obj/item/weapon/stamp
@@ -57,7 +57,7 @@ var/global/datum/shuttle/trade/trade_shuttle = new(starting_area = /area/shuttle
 		P.name = "NT Port Closure - [worldtime2text()]"
 		P.info = "This is official notification that sanctioned arrival of Vox trading vessels has been indefinitely suspended with no guarantee of appeal. The provided justification was:<BR><BR>[reason]"
 		P.update_icon()
-		playsound(get_turf(src), "sound/effects/fax.ogg", 50, 1)
+		playsound(src, "sound/effects/fax.ogg", 50, 1)
 		var/image/stampoverlay = image('icons/obj/bureaucracy.dmi')
 		stampoverlay.icon_state = "paper_stamp-cent"
 		P.stamped += /obj/item/weapon/stamp

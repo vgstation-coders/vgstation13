@@ -285,7 +285,7 @@
 /obj/item/clothing/gloves/ninja/proc/draincell(var/obj/item/weapon/cell/C,mob/user)
 	if(C.charge<100)
 		return FALSE
-	playsound(get_turf(src), pick(lightning_sound), 100, 1, "vary" = 0)
+	playsound(src, pick(lightning_sound), 100, 1, "vary" = 0)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		var/obj/item/weapon/cell/CC = H.get_cell()
@@ -460,7 +460,7 @@
 /obj/structure/sign/poster/stealth/relaymove(mob/user as mob)
 	if(user.stat)
 		return
-	playsound(get_turf(src), 'sound/items/poster_ripped.ogg', 100, 1)
+	playsound(src, 'sound/items/poster_ripped.ogg', 100, 1)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(!entry_turf)

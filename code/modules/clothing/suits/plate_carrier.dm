@@ -85,7 +85,7 @@
 /obj/item/weapon/armor_plate/proc/receive_damage(var/type, var/amount)
 	if(type == BRUTE || type == BURN)
 		health -= amount
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 70, 1)
 	if(health <= 0)
 		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
 		var/turf/T = get_turf(src)

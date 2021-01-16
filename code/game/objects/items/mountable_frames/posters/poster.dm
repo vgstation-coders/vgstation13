@@ -36,7 +36,7 @@
 /obj/item/mounted/poster/proc/poster_animation(obj/D,mob/user)
 	to_chat(user, "<span class='notice'>You start placing the poster on the wall...</span>")
 	flick("poster_being_set",D)
-	playsound(get_turf(D), 'sound/items/poster_being_created.ogg', 100, 1)
+	playsound(D, 'sound/items/poster_being_created.ogg', 100, 1)
 
 /obj/item/mounted/poster/goldstar/pick_design()
 	design = new /datum/poster/special/goldstar

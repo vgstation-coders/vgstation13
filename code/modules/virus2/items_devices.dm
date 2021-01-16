@@ -351,7 +351,7 @@ var/list/virusdishes = list()
 		dish.contained_virus = contained_virus.getcopy()
 	dish.last_openner = key_name(user)
 	src.transfer_fingerprints_to(dish)
-	playsound(get_turf(src), "shatter", 70, 1)
+	playsound(src, "shatter", 70, 1)
 	var/image/I1
 	var/image/I2
 	if (contained_virus)
