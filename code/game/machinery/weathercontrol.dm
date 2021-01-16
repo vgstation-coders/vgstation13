@@ -86,7 +86,7 @@
 
 #define NOFIRE 2
 #define NEED_CRYSTALS -3
-#define POWEROFF -4
+#define POWER_ERROR -4
 /obj/machinery/weathercontrol/Topic(href, href_list)
 	if(..())
 		return
@@ -104,7 +104,7 @@
 	var/usedcost = 0
 
 	if(stat & NOPOWER)
-		feedback = POWEROFF
+		feedback = POWER_ERROR
 	else
 		if(href_list["disrupt"])
 			feedback = TRUE
@@ -134,7 +134,7 @@
 
 	var/soundpath = 'sound/machines/warning-buzzer.ogg'
 	switch(feedback)
-		if(POWEROFF)
+		if(POWER_ERROR)
 			error_message = "Error: Unpowered."
 		if(NEED_CRYSTALS)
 			error_message = "Error: Refraction index low. Load new bluespace crystals."
