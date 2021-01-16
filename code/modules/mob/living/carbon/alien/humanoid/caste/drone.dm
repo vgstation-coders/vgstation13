@@ -18,9 +18,6 @@
 		src.name = text("alien drone ([rand(1, 1000)])")
 	src.real_name = src.name
 	..()
-	add_language(LANGUAGE_XENO)
-	default_language = all_languages[LANGUAGE_XENO]
-	init_language = default_language
 
 /mob/living/carbon/alien/humanoid/drone/add_spells_and_verbs()
 	..()
