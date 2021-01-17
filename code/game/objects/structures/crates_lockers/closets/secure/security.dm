@@ -125,6 +125,8 @@
 		/obj/item/weapon/card/debit/preferred/department/security,
 		/obj/item/weapon/pinpointer,
 		/obj/item/weapon/storage/box/large/securitygear,
+		/obj/item/clothing/suit/armor/hos/surveyor,
+		/obj/item/clothing/head/HoS/surveyor,
 	)
 
 /obj/structure/closet/secure_closet/warden
