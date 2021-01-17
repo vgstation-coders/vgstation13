@@ -91,6 +91,8 @@
 				warning("Skipping map [potential], revolutionaries have not won.")
 				binary = null
 				continue
+		if(potential == "Lamprey Station/") 
+			continue
 		if(potential == "Bagel Station/")
 			if(score["bagelscooked"] < BAGEL_REQUIREMENT)
 				message_admins("Skipping map [potential], less than [BAGEL_REQUIREMENT] bagels made.")
