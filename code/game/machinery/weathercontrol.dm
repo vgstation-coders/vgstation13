@@ -7,8 +7,8 @@
 	density = 1
 	anchored = 1
 	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | FIXED2WORK
-	req_access = list(access_rd)
-	idle_power_usage = 1500
+	req_access = list(access_rnd)
+	idle_power_usage = 100
 	var/error_message = null
 	var/efficiency_modifier = 0 //Subtract from crystal costs
 	var/crystal_reserve = 0 //Powered by bluespace crystals, this represents how much.
@@ -84,6 +84,7 @@
 #define INTENSIFY_COST 1
 #define ABATE_COST 2
 
+#define SUCCESS 1
 #define NOFIRE 2
 #define NEED_CRYSTALS -3
 #define POWER_ERROR -4
@@ -107,7 +108,7 @@
 		feedback = POWER_ERROR
 	else
 		if(href_list["disrupt"])
-			feedback = TRUE
+			feedback = SUCCESS
 			usedcost = DISRUPT_COST
 			if(!burn_crystals(DISRUPT_COST))
 				feedback = NEED_CRYSTALS
@@ -118,14 +119,14 @@
 					CW.timeleft = min(1 MINUTES, CW.timeleft)
 					C.forecast()
 		if(href_list["intensify"])
-			feedback = TRUE
+			feedback = SUCCESS
 			usedcost = INTENSIFY_COST
 			if(!burn_crystals(INTENSIFY_COST))
 				feedback = NEED_CRYSTALS
 			else
 				feedback = C.weather_shift(INTENSIFY)
 		if(href_list["abate"])
-			feedback = TRUE
+			feedback = SUCCESS
 			usedcost = ABATE_COST
 			if(!burn_crystals(ABATE_COST))
 				feedback = NEED_CRYSTALS
@@ -147,10 +148,9 @@
 		if(FALSE)
 			error_message = "Error: Weather already present."
 			refund(usedcost)
-		if(TRUE)
+		if(SUCCESS)
 			error_message = "Success: Atmoforming climate."
 			soundpath = 'sound/machines/hiss.ogg'
-			use_power(1500)
 		if(NOFIRE)
 			return
 	playsound(src, soundpath, vol = 50, vary = FALSE)
