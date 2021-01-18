@@ -344,7 +344,6 @@
 	)
 	if(veil_thickness >= CULT_ACT_I)
 		choices[2] = list("Spire", "radial_spire", "Lets human cultists acquire Arcane Tattoos, providing various buffs. New tattoos are available at each subsequent Act.")
-	if(veil_thickness >= CULT_ACT_II)
 		choices[3] = list("Forge", "radial_forge", "Can be used to forge of cult blades and armor, as well as construct shells. Standing close for too long without proper cult attire can be a searing experience.")
 
 	var/structure = show_radial_menu(user,R.loc,choices,'icons/obj/cult_radial3.dmi',"radial-cult")
@@ -370,7 +369,7 @@
 			abort()
 			return
 		if("Forge (locked)")
-			to_chat(user,"Reach Act 2 to unlock the Forge. It enables the forging of cult blades and armor, as well as new construct shells.")
+			to_chat(user,"Reach Act 1 to unlock the Forge. It enables the forging of cult blades and armor, as well as new construct shells.")
 			abort()
 			return
 
@@ -1843,7 +1842,7 @@ var/list/blind_victims = list()
 	name = "Summon Robes"
 	desc = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes."
 	desc_talisman = "Swap your clothes for the robes of Nar-Sie's followers. Significantly improves the efficiency of some rituals. Provides a tesseract to instantly swap back to your old clothes. Using the tesseract will also give you the talisman back, granted it has some uses left."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Sa tatha najin"
 	word1 = /datum/runeword/blood_cult/hell
 	word2 = /datum/runeword/blood_cult/destroy
@@ -1925,7 +1924,7 @@ var/list/blind_victims = list()
 	name = "Door"
 	desc = "Raise a door to impede your enemies. It automatically opens and closes behind you, but the others may eventually break it down."
 	desc_talisman = "Use to remotely trigger the rune and have it spawn a door to block your enemies."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Khari'd! Eske'te tannin!"
 	word1 = /datum/runeword/blood_cult/destroy
 	word2 = /datum/runeword/blood_cult/travel
@@ -1952,7 +1951,7 @@ var/list/blind_victims = list()
 	name = "Fervor"
 	desc = "Inspire nearby cultists to purge their stuns and raise their movement speed."
 	desc_talisman = "Use to inspire nearby cultists to purge their stuns and raise their movement speed."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Khari'd! Gual'te nikka!"
 	word1 = /datum/runeword/blood_cult/travel
 	word2 = /datum/runeword/blood_cult/technology
@@ -2001,7 +2000,7 @@ var/list/blind_victims = list()
 	name = "Blood Magnetism"
 	desc = "Bring forth one of your fellow believers, no matter how far they are, as long as their heart beats"
 	desc_talisman = "Use to begin the Blood Magnetism ritual where you stand."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "N'ath reth sh'yro eth d'rekkathnor!"
 	word1 = /datum/runeword/blood_cult/join
 	word2 = /datum/runeword/blood_cult/other
@@ -2237,7 +2236,7 @@ var/list/blind_victims = list()
 	name = "Path Entrance"
 	desc = "Take a shortcut through the veil between this world and the other one."
 	desc_talisman = "Use to remotely trigger the rune and force objects and creatures on top through the Path."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Sas'so c'arta forbici!"
 	word1 = /datum/runeword/blood_cult/travel
 	word2 = /datum/runeword/blood_cult/self
@@ -2333,7 +2332,7 @@ var/list/bloodcult_exitportals = list()
 	name = "Path Exit"
 	desc = "We hope you enjoyed your flight with Air Nar-Sie"//might change it later or not.
 	desc_talisman = "Use to immediately jaunt through the Path."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Sas'so c'arta forbici!"
 	word1 = /datum/runeword/blood_cult/travel
 	word2 = /datum/runeword/blood_cult/other
@@ -2452,7 +2451,7 @@ var/list/bloodcult_exitportals = list()
 	name = "Pulse"
 	desc = "Scramble the circuits of nearby devices"
 	desc_talisman = "Use to scramble the circuits of nearby devices."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Ta'gh fara'qha fel d'amar det!"
 	word1 = /datum/runeword/blood_cult/destroy
 	word2 = /datum/runeword/blood_cult/see
@@ -2474,7 +2473,7 @@ var/list/bloodcult_exitportals = list()
 	name = "Astral Journey"
 	desc = "Leave your body so you can go spy on your enemies."
 	desc_talisman = "Leave your body so you can go spy on your enemies."
-	Act_restriction = CULT_ACT_II
+	Act_restriction = CULT_ACT_I
 	invocation = "Fwe'sh mah erl nyag r'ya!"
 	word1 = /datum/runeword/blood_cult/hell
 	word2 = /datum/runeword/blood_cult/travel
@@ -2570,7 +2569,7 @@ var/list/bloodcult_exitportals = list()
 	name = "Resurrect"
 	desc = "Create a strong body for your fallen allies to inhabit."
 	desc_talisman = "Create a strong body for your fallen allies to inhabit."
-	Act_restriction = CULT_ACT_III
+	Act_restriction = CULT_ACT_I
 	invocation = "Pasnar val'keriam usinar. Savrae ines amutan. Yam'toth remium il'tarat!"
 	word1 = /datum/runeword/blood_cult/blood
 	word2 = /datum/runeword/blood_cult/join
