@@ -19,9 +19,7 @@
 		name = text("alien hunter ([rand(1, 1000)])")
 	real_name = name
 	..()
-	add_language(LANGUAGE_XENO)
-	default_language = all_languages[LANGUAGE_XENO]
-
+	
 /mob/living/carbon/alien/humanoid/hunter
 	handle_regular_hud_updates()
 

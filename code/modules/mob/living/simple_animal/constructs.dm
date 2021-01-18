@@ -89,6 +89,7 @@
 	add_language(LANGUAGE_CULT)
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
@@ -99,7 +100,7 @@
 		if(!iscultist(creator))
 			universal_understand = 1
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-
+			init_language = default_language
 			if(iswizard(creator) || isapprentice(creator))
 				construct_color = rgb(157, 1, 196)
 			else

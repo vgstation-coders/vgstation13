@@ -588,7 +588,7 @@
 	name = "Oleum Syndrome"
 	desc = "Causes the infected to internally synthesize oil and other inorganic material."
 	stage = 2
-	badness = EFFECT_DANGER_ANNOYING 
+	badness = EFFECT_DANGER_ANNOYING
 	restricted = 2
 
 /datum/disease2/effect/cyborg_vomit/activate(var/mob/living/mob)
@@ -639,7 +639,7 @@
 	mob.pixel_y = -4 * PIXEL_MULTIPLIER
 
 	mob.pass_flags |= PASSTABLE
-	
+
 	activated = 1
 
 /datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
@@ -700,7 +700,7 @@
 /datum/disease2/effect/wendigo_vomit/activate(var/mob/living/mob)
 	if(!ishuman(mob))
 		return
-	
+
 	var/mob/living/carbon/human/H = mob
 	if(prob(33))
 		H.vomit(instant = 1)
