@@ -813,7 +813,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team!</A><BR>
 			<BR>
 			<BR>
 			"}
