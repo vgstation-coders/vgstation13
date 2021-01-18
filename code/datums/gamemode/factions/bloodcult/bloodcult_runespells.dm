@@ -951,13 +951,9 @@
 				var/progress = 10//10 seconds to reach second phase for a naked cultist
 				progress += activator.get_cult_power()//down to 1-2 seconds when wearing cult gear
 				var/delay = 0
-				for(var/obj/item/weapon/implant/loyalty/I in victim)
-					if(I.implanted)
-						delay = 1
-						progress = progress/4
-						break
 				if (victim.mind)
 					if (victim.mind.assigned_role in impede_medium)
+						delay = 1
 						progress = progress/2
 
 					if (victim.mind.assigned_role in impede_hard)
@@ -995,8 +991,15 @@
 		if (isalien(victim))
 			victim.Paralyse(15)
 
-		if (victim.client && victim.mind.assigned_role != "Chaplain")//Chaplains can never be converted
-			acceptance = get_role_desire_str(victim.client.prefs.roles[CULTIST])
+		if (victim.client)
+			if(victim.mind.assigned_role == "Chaplain")
+				acceptance = "Chaplain"
+			else
+				acceptance = get_role_desire_str(victim.client.prefs.roles[CULTIST])
+
+				for(var/obj/item/weapon/implant/loyalty/I in victim)
+					if(I.implanted)
+						acceptance = "Implanted"
 		if (jobban_isbanned(victim, CULTIST) || isantagbanned(victim))
 			acceptance = "Banned"
 
@@ -1021,6 +1024,20 @@
 						else
 							to_chat(victim, "<span class='danger'>THAT IS ALSO GOOD, FOR YOU WILL ENTERTAIN US</span>")
 							success = CONVERSION_REFUSE
+				else//converting a braindead carbon will always lead to them being captured
+					to_chat(activator, "<span class='sinister'>\The [victim] doesn't really seem to have all their wits about them. Letting the ritual conclude will let you restrain them.</span>")
+			if ("Implanted")
+				if (victim.client)
+					to_chat(activator, "<span class='sinister'>A loyalty implant interferes with the ritual. They will not be able to accept the conversion.</span>")
+					to_chat(victim, "<span class='danger'>Your loyalty implant prevents you from hearing any more of what they have to say.</span>")
+					success = CONVERSION_REFUSE
+				else//converting a braindead carbon will always lead to them being captured
+					to_chat(activator, "<span class='sinister'>\The [victim] doesn't really seem to have all their wits about them. Letting the ritual conclude will let you restrain them.</span>")
+			if ("Chaplain")//Chaplains can never be converted
+				if (victim.client)
+					to_chat(activator, "<span class='sinister'>Chaplains won't ever let themselves be converted. They will be restrained.</span>")
+					to_chat(victim, "<span class='danger'>Your devotion to [victim.mind.faith ? "[victim.mind.faith.deity_name]" : "Space Jesus"] shields you from Nar-Sie's temptations.</span>")
+					success = CONVERSION_REFUSE
 				else//converting a braindead carbon will always lead to them being captured
 					to_chat(activator, "<span class='sinister'>\The [victim] doesn't really seem to have all their wits about them. Letting the ritual conclude will let you restrain them.</span>")
 			if ("Banned")
@@ -1074,7 +1091,7 @@
 				//let's also remove cult cuffs if they have them
 				if (istype(victim.handcuffed,/obj/item/weapon/handcuffs/cult))
 					victim.drop_from_inventory(victim.handcuffed)
-				//and their loyalty implants are removed, so they can't mislead security
+				//and their loyalty implants are removed, so they can't mislead security, not that the conversion should even go through
 				victim.implant_pop()
 				convert(convertee, converter)
 				conversion.icon_state = ""
