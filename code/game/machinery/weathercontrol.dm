@@ -1,8 +1,8 @@
 /obj/machinery/weathercontrol
 	name = "weather control device"
 	desc = "A device which uses weather control techniques such as cloud seeding to manipulate atmospheric conditions. It runs on bluespace crystals."
-	icon = 'icons/obj/device.dmi'
-	icon_state = "wishgranter"
+	icon = 'icons/obj/stationobjs_32x64.dmi'
+	icon_state = "wcd0"
 	use_power = 1
 	density = 1
 	anchored = 1
@@ -43,7 +43,7 @@
 	//Both tier 3: 0; one tier 4: 0.5, both tier 4: 1
 
 /obj/machinery/weathercontrol/update_icon()
-	return
+	icon_state = "wcd[crystal_reserve > 0]"
 
 /obj/machinery/weathercontrol/attack_hand(mob/user)
 	return ui_interact(user)
@@ -181,3 +181,4 @@
 			to_chat(user, "<span class='notice'>You insert \the [B] into \the [src].")
 			nanomanager.update_uis(src)
 			qdel(B)
+			update_icon()
