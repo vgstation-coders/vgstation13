@@ -1403,9 +1403,30 @@ var/list/arcane_tomes = list()
 	desc = ""
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "cultcuff"
-	restraint_resist_time = 30 SECONDS
+	restraint_resist_time = 60 SECONDS
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = null
+	var/datum/role/cultist/gaoler
+
+/obj/item/weapon/handcuffs/cult/New()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings += src
+
+/obj/item/weapon/handcuffs/cult/Destroy()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings -= src
 
 /obj/item/weapon/handcuffs/cult/examine(var/mob/user)
 	..()
@@ -1424,6 +1445,8 @@ var/list/arcane_tomes = list()
 		var/turf/T = get_turf(src)
 		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
 		anim(target = T, a_icon = 'icons/obj/cult.dmi', flick_anim = "cuffbreak")
+		if (gaoler && gaoler.antag && gaoler.antag.current)
+			to_chat(gaoler.antag.current, "<span class='sinister'>Bindings you placed upon someone have been shattered</span>")
 		qdel(src)
 
 /obj/item/weapon/handcuffs/cult/on_restraint_apply(var/mob/living/carbon/C)

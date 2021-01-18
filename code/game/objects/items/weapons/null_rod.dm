@@ -20,7 +20,7 @@
 	user.visible_message("<span class='danger'>[user] is impaling \himself with \the [src]! It looks like \he's trying to commit suicide.</span>")
 	return (SUICIDE_ACT_BRUTELOSS|SUICIDE_ACT_FIRELOSS)
 
-/obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob) //Paste from old-code to decult with a null rod.
+/obj/item/weapon/nullrod/attack(mob/M as mob, mob/living/user as mob)
 
 	M.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been attacked with [src.name] by [user.name] ([user.ckey])</font>")
 	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to attack [M.name] ([M.ckey])</font>")
@@ -128,7 +128,7 @@
 		M.drop_item(src, force_drop = TRUE)
 		M.put_in_active_hand(holy_weapon)
 		qdel(src)
-		
+
 /obj/item/weapon/nullrod/sword
 	name = "holy avenger"
 	desc = "DEUS VULT!"

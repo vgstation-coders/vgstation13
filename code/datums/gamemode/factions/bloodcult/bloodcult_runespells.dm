@@ -155,9 +155,15 @@
 		if (RITUALABORT_CONVERT)
 			if (activator)
 				to_chat(activator, "<span class='notice'>The conversion ritual successfully brought a new member to the cult. Inform them of the current situation so they can take action.</span>")
+		if (RITUALABORT_REFUSED)
+			if (activator)
+				to_chat(activator, "<span class='notice'>The conversion ritual ended with the target being restrained by some eldritch contraption. Deal with them how you see fit so their life may serve our plans.</span>")
+		if (RITUALABORT_NOCHOICE)
+			if (activator)
+				to_chat(activator, "<span class='notice'>The target never manifested any clear reaction to the ritual. As such they were automatically restrained.</span>")
 		if (RITUALABORT_SACRIFICE)
 			if (activator)
-				to_chat(activator, "<span class='warning'>Whether because of their defiance, or Nar-Sie's thirst for their blood, the ritual ends leaving behind nothing but a creepy chest.</span>")
+				to_chat(activator, "<span class='warning'>The ritual ends leaving behind nothing but a creepy chest, filled with your lost soul's belongings.</span>")
 		if (RITUALABORT_CONCEAL)
 			if (activator)
 				to_chat(activator, "<span class='warning'>The ritual is disrupted by the rune's sudden phasing out.</span>")
@@ -869,6 +875,8 @@
 		qdel(src)
 		return
 
+	var/mob/convertee = victim//trying to fix logs showing the victim as *null*
+
 	update_progbar()
 	if (activator.client)
 		activator.client.images |= progbar
@@ -902,7 +910,7 @@
 				if ("Captain")
 					higher_cause = "Nanotrasen"
 				if ("Chaplain")
-					higher_cause = [victim.mind.faith ? "[victim.mind.faith.deity_name]" : "Space Jesus"]
+					higher_cause = "[victim.mind.faith ? "[victim.mind.faith.deity_name]" : "Space Jesus"]"
 			to_chat(victim, "<span class='warning'>Your devotion to [higher_cause] slows down the ritual.</span>")
 			to_chat(activator, "<span class='warning'>Their devotion to [higher_cause] is amazing, the ritual will be lengthy.</span>")
 
@@ -966,13 +974,13 @@
 				var/threshold = min(100,round((100-remaining), 10))
 				if (flavor_text < 3)
 					if (flavor_text == 0 && threshold > 10)//it's ugly but gotta account for the possibility of several messages appearing at once
-						to_chat(victim, "<span class='sinister'>Your blood pulses.</span>")
+						to_chat(victim, "<span class='sinister'>WE ARE THE BLOOD PUMPING THROUGH THE FABRIC OF SPACE</span>")
 						flavor_text++
 					if (flavor_text == 1 && threshold > 40)
-						to_chat(victim, "<span class='sinister'>Your head throbs.</span>")
+						to_chat(victim, "<span class='sinister'>THE GEOMETER CALLS FOR YET ANOTHER FEAST</span>")
 						flavor_text++
 					if (flavor_text == 2 && threshold > 70)
-						to_chat(victim, "<span class='sinister'>The world goes red.</span>")
+						to_chat(victim, "<span class='sinister'>FRIEND OR FOE, YOU TOO SHALL JOIN THE FESTIVITIES</span>")
 						flavor_text++
 			sleep(10)
 
@@ -994,32 +1002,35 @@
 
 		//Players with cult enabled in their preferences will always get converted.
 		//Others get a choice, unless they're cult-banned or have their preferences set to Never (or disconnected), in which case they always die.
+		var/conversion_delay = 100
 		switch (acceptance)
 			if ("Always","Yes")
 				conversion.icon_state = "rune_convert_good"
-				to_chat(activator, "<span class='sinister'>\The [victim] effortlessly opens himself to the teachings of Nar-Sie. They will undoubtedly become one of us when the ritual concludes.</span>")
-				to_chat(victim, "<span class='sinister'>Your begin hearing strange words, straight into your mind. Somehow you think you can understand their meaning. A sense of dread and fascination comes over you.</span>")
+				to_chat(activator, "<span class='sinister'>The ritual immediately stabilizes, \the [victim] appears eager help prepare the festivities.</span>")
+				to_chat(victim, "<span class='sinister'>YOU HAVE BEEN WAITING FOR US. OUR CULT WELCOMES YOU</span>")
 				success = CONVERSION_ACCEPT
-			if ("No","???")
-				to_chat(activator, "<span class='sinister'>The ritual arrives in its final phase. How it ends depends now of \the [victim].</span>")
-				spawn()
-					if (alert(victim, "You feel the gaze of an alien entity, it speaks into your mind. It has much to share with you, but time is of the essence. Will you open your mind to it? Or will you become its sustenance? Decide now!","You have 10 seconds","Join the Cult","Be Devoured") == "Join the Cult")
-						conversion.icon_state = "rune_convert_good"
-						success = CONVERSION_ACCEPT
-						to_chat(victim, "<span class='sinister'>As you let the strange words into your mind, you find yourself suddenly understanding their meaning. A sense of dread and fascination comes over you.</span>")
-					else
-						conversion.icon_state = "rune_convert_bad"
-						to_chat(victim, "<span class='danger'>You won't let it have its way with you! Better die now as a human, than serve them.</span>")
-						success = CONVERSION_REFUSE
-
-			if ("Never","Banned")
+				conversion_delay = 50
+			if ("No","???","Never")
+				if (victim.client)
+					to_chat(activator, "<span class='sinister'>The ritual arrives in its final phase. How it ends depends now of \the [victim]. You do not have to remain adjacent for the remainder of the ritual.</span>")
+					spawn()
+						if (alert(victim, "The Cult of Nar-Sie has much in store for you, but what specifically?","You have 10 seconds to decide","Join the Cult","Become Prisoner") == "Join the Cult")
+							conversion.icon_state = "rune_convert_good"
+							success = CONVERSION_ACCEPT
+							to_chat(victim, "<span class='sinister'>THAT IS GOOD. COME CLOSER. THERE IS MUCH TO TEACH YOU</span>")
+						else
+							to_chat(victim, "<span class='danger'>THAT IS ALSO GOOD, FOR YOU WILL ENTERTAIN US</span>")
+							success = CONVERSION_REFUSE
+				else//converting a braindead carbon will always lead to them being captured
+					to_chat(activator, "<span class='sinister'>\The [victim] doesn't really seem to have all their wits about them. Letting the ritual conclude will let you restrain them.</span>")
+			if ("Banned")
 				conversion.icon_state = "rune_convert_bad"
-				to_chat(activator, "<span class='sinister'>\The [victim]'s mind appears to be completely impervious to the Geometer of Blood's words of power. If they won't become one of us, they won't need their body any longer.</span>")
-				to_chat(victim, "<span class='danger'>A sense of dread comes over you, as you feel under the gaze of a cosmic being. You cannot hear its voice, but you can feel its thirst...for your blood!</span>")
-				success = CONVERSION_REFUSE
+				to_chat(activator, "<span class='sinister'>Given how unstable the ritual is becoming, \The [victim] will surely be consumed entirely by it. They weren't meant to become one of us.</span>")
+				to_chat(victim, "<span class='danger'>Except your past actions have displeased us. You will be our snack before the feast begins. \[You are banned from this role\]</span>")
+				success = CONVERSION_BANNED
 
 		//since we're no longer checking for the cultist's adjacency, let's finish this ritual without a loop
-		sleep(100)
+		sleep(conversion_delay)
 
 		if (destroying_self || !spell_holder || !activator || !victim)
 			return
@@ -1060,17 +1071,16 @@
 				victim.SetSilent(0)
 				if (isalien(victim))
 					victim.SetParalysis(0)
+				//let's also remove cult cuffs if they have them
+				if (istype(victim.handcuffed,/obj/item/weapon/handcuffs/cult))
+					victim.drop_from_inventory(victim.handcuffed)
 				//and their loyalty implants are removed, so they can't mislead security
-				for(var/obj/item/weapon/implant/loyalty/I in victim)
-					I.forceMove(T)
-					I.implanted = 0
-					spell_holder.visible_message("<span class='warning'>\The [I] pops out of \the [victim]'s head.</span>")
-				convert(victim, converter)
+				victim.implant_pop()
+				convert(convertee, converter)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)
-				abort(RITUALABORT_CONVERT)
-				message_admins("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
-				log_admin("BLOODCULT: [key_name(victim)] has been converted by [key_name(converter)].")
+				message_admins("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
+				log_admin("BLOODCULT: [key_name(convertee)] has been converted by [key_name(converter)].")
 				if (issilicon(victim))
 					var/mob/living/silicon/S = victim
 					S.laws = new /datum/ai_laws/cultimov
@@ -1085,53 +1095,51 @@
 					gondola.icon_state_lying = "[gondola.icon_state_standing]_lying"
 					gondola.icon_state_dead = "gondola_skull"
 					gondola.icon_state = gondola.icon_state_standing
+				abort(RITUALABORT_CONVERT)
 				return
-			if (CONVERSION_NOCHOICE)
-				to_chat(victim, "<span class='danger'>As you stood there, unable to make a choice for yourself, the Geometer of Blood ran out of patience and chose for you.</span>")
-			if (CONVERSION_REFUSE)
-				to_chat(victim, "<span class='danger'>Your mind was impervious to the teachings of Nar-Sie. Being of no use for the cult, your body was be devoured when the ritual ended. Your blood and equipment now belong to the cult.</span>")
-				switch(acceptance)
-					if ("Never")
-						to_chat(victim, "The conversion automatically failed due to your cult preferences being set to Never. By setting them to No, you may instead choose whether to accept or refuse a conversion.")
-					if ("Banned")
-						to_chat(victim, "The conversion automatically failed due to your account being banned from the cultist role.")
+			if (CONVERSION_NOCHOICE, CONVERSION_REFUSE)
+				conversion.icon_state = ""
+				flick("rune_convert_refused",conversion)
+				playsound(T, 'sound/effects/convert_abort.ogg', 75, 0, -4)
 
-		cult.send_flavour_text_refuse(victim, converter)
-		message_admins("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
-		log_admin("BLOODCULT: [key_name(victim)] refused conversion by [key_name(converter)], and died.")
-		to_chat(converter, "<span class='sinister'>\The [victim] was pulled through the veil, their body was devoured by Nar-Sie and their possession stored inside this coffer.</span>")
+				victim.Silent(8)
+				victim.Knockdown(7)
+				victim.Stun(6)
+				victim.Jitter(5)
+				if (isalien(victim))
+					victim.Paralyse(8)
 
-		playsound(R, 'sound/effects/convert_failure.ogg', 75, 0, -4)
-		conversion.icon_state = ""
-		flick("rune_convert_failure",conversion)
+				var/obj/item/weapon/handcuffs/cult/restraints = new(victim)
+				victim.handcuffed = restraints
+				restraints.on_restraint_apply(victim)//a jolt of pain to slow them down
+				restraints.gaoler = converter.mind.GetRole(CULTIST)
+				victim.update_inv_handcuffed()	//update handcuff overlays
 
-		//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
-		var/obj/item/weapon/storage/cult/coffer = new(T)
-		var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
-		if (istype(victim,/mob/living/carbon/human) && victim.dna)
-			victim.take_blood(cup, cup.volume)//Up to 60u
-			cup.on_reagent_change()//so we get the reagentsfillings overlay
-			new/obj/item/weapon/skull(coffer)
-			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a portion of the blood left in their body, along with their skull to potentially use in a resurrection ritual.</span>")
-		if (isslime(victim))
-			cup.reagents.add_reagent(SLIMEJELLY, 50)
-			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a slimy substance.</span>")
-		if (isalien(victim))//w/e
-			cup.reagents.add_reagent(RADIUM, 50)
-			to_chat(converter, "<span class='sinister'>Inside you may also find a cup filled with a green radioactive liquid.</span>")
+				if (success == CONVERSION_NOCHOICE)
+					if (convertee.mind)//no need to generate logs when capturing mindless monkeys
+						to_chat(victim, "<span class='danger'>Because you didn't give your answer in time, you were automatically made prisoner.</span>")
+						message_admins("BLOODCULT: [key_name(convertee)] has timed-out during conversion by [key_name(converter)].")
+						log_admin("BLOODCULT: [key_name(convertee)] has timed-out during conversion by [key_name(converter)].")
 
-		for(var/obj/item/weapon/implant/loyalty/I in victim)
-			I.implanted = 0
-		for(var/obj/item/I in victim)
-			victim.u_equip(I)
-			if(I)
-				I.forceMove(victim.loc)
-				I.reset_plane_and_layer()
-				I.dropped(victim)
-				I.forceMove(coffer)
+					abort(RITUALABORT_NOCHOICE)
+				else
+					message_admins("BLOODCULT: [key_name(convertee)] has refused conversion by [key_name(converter)].")
+					log_admin("BLOODCULT: [key_name(convertee)] has refused conversion by [key_name(converter)].")
 
-		qdel(victim)
-		abort(RITUALABORT_SACRIFICE)
+					abort(RITUALABORT_REFUSED)
+
+			if (CONVERSION_BANNED)
+
+				//cult.send_flavour_text_refuse(convertee, converter) Disabling those for now, I'll rewrite them at a later date
+
+				message_admins("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
+				log_admin("BLOODCULT: [key_name(convertee)] died because they were converted by [key_name(converter)] while cult-banned.")
+				conversion.icon_state = ""
+				flick("rune_convert_failure",conversion)
+
+				//sacrificed victims have all their stuff stored in a coffer that also contains their skull and a cup of their blood, should they have either
+				victim.boxify(TRUE, FALSE, "cult")
+				abort(RITUALABORT_SACRIFICE)
 
 /datum/rune_spell/blood_cult/conversion/proc/convert(var/mob/M, var/mob/converter)
 	var/datum/role/cultist/newCultist = new
@@ -1142,7 +1150,7 @@
 	cult.HandleRecruitedRole(newCultist)
 	newCultist.OnPostSetup()
 	newCultist.Greet(GREET_CONVERTED)
-	cult.send_flavour_text_accept(victim, converter)
+	//cult.send_flavour_text_accept(victim, converter)  Disabling those for now, I'll rewrite them at a later date
 	newCultist.conversion["converted"] = activator
 
 /datum/rune_spell/blood_cult/conversion/Removed(var/mob/M)
@@ -1379,7 +1387,7 @@ var/list/blind_victims = list()
 			shadow(C,T)//shadow trail moving from the spell_holder to the victim
 			anim(target = C, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_blind", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 			if (!(C in blind_victims))
-				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+				C.overlay_fullscreen("blindborder", /obj/abstract/screen/fullscreen/confusion_border)//victims DO still get blinded for a second
 				C.overlay_fullscreen("blindblack", /obj/abstract/screen/fullscreen/black)//which will allow us to subtly reveal the surprise
 				C.update_fullscreen_alpha("blindblack", 255, 5)
 			else
@@ -1425,7 +1433,7 @@ var/list/blind_victims = list()
 					my_hallucinated_stuff.Add(blind_victims[C])
 					C.client.images.Remove(blind_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
 				blind_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
-				C.client.images.Add(blind_victims[C])
+				C.client.images.Add(my_hallucinated_stuff)
 				var/hallenght = my_hallucinated_stuff.len
 				spawn(duration-5)
 					if (C in blind_victims)
@@ -1444,6 +1452,8 @@ var/list/blind_victims = list()
 							C.client.images.Remove(my_hallucinated_stuff)//removing images caused by every blind rune used consecutively on that mob
 							sleep(15)
 							C.clear_fullscreen("blindwhite", animate = 0)
+		while (blind_victims.len > 0)//if the ritual atom stops existing while people are still confused, weird shit can occurs such as people remaining blinded forever.
+			sleep(10 SECONDS)
 		qdel(src)
 
 //RUNE VIII
@@ -1470,7 +1480,7 @@ var/list/blind_victims = list()
 	for(var/mob/living/M in range(effect_range,get_turf(spell_holder)))
 		if (iscultist(M))
 			continue
-		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/conversion_border)//victims DO still get blinded for a second
+		M.overlay_fullscreen("deafborder", /obj/abstract/screen/fullscreen/deafmute_border)//victims see a red overlay fade in-out for a second
 		M.update_fullscreen_alpha("deafborder", 100, 5)
 		M.Deafen(deaf_duration)
 		M.Mute(mute_duration)
@@ -1968,6 +1978,10 @@ var/list/blind_victims = list()
 
 	if (pay_blood())
 		for(var/mob/living/L in range(effect_range,get_turf(spell_holder)))
+			if (iscarbon(L))
+				var/mob/living/carbon/C = L
+				if (C.muted())
+					continue
 			if(L.stat != DEAD && iscultist(L))
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)
 				anim(target = L, a_icon = 'icons/effects/effects.dmi', flick_anim = "rune_fervor", lay = NARSIE_GLOW, plane = LIGHTING_PLANE, direction = L.dir)
@@ -2042,10 +2056,18 @@ var/list/blind_victims = list()
 	rejoin = alert(activator, "Will you pull them toward you, or pull yourself toward them?","Blood Magnetism","Summon Cultist","Rejoin Cultist") == "Rejoin Cultist"
 
 	var/list/possible_targets = list()
-	var/datum/faction/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
+	var/list/prisoners = list()
+	var/datum/faction/bloodcult/bloodcult = find_active_faction_by_member(activator.mind.GetRole(CULTIST))
 	for(var/datum/role/cultist/C in bloodcult.members)
 		var/datum/mind/M = C.antag
 		possible_targets.Add(M.current)
+
+	//Prisoners are valid Blood Magnetism targets!
+	for(var/obj/item/weapon/handcuffs/cult/cuffs in bloodcult.bindings)
+		if (iscarbon(cuffs.loc))
+			var/mob/living/carbon/C = cuffs.loc
+			if (C.handcuffed == cuffs)
+				prisoners.Add(C)
 
 	var/list/annotated_targets = list()
 	var/list/visible_mobs = viewers(activator)
@@ -2059,6 +2081,10 @@ var/list/blind_victims = list()
 		else if(M.isDead())
 			status = " (Dead)"
 		annotated_targets["\Roman[i]-[M.real_name][status]"] = M
+		i++
+
+	for(var/mob/M in prisoners)
+		annotated_targets["\Roman[i]-[M.real_name] (Prisoner)"] = M
 		i++
 
 	var/choice = input(activator, "Choose who you wish to [rejoin ? "rejoin" : "summon"]", "Blood Magnetism") as null|anything in annotated_targets
@@ -2171,7 +2197,7 @@ var/list/blind_victims = list()
 					flick("cult_jaunt_land",landing_animation)
 	else
 		if(target.locked_to || !isturf(target.loc))
-			to_chat(target, "<span class='warning'>You feel that some force wants to pull you through the veil, but cannot proceed while buckled or inside something.</span>")
+			to_chat(target, "<span class='warning'>You feel that some force wants to pull you through the veil, but cannot proceed while you are buckled or inside something.</span>")
 			for(var/mob/living/L in contributors)
 				to_chat(activator, "<span class='warning'>The ritual failed, the target seems to be anchored to where they are.</span>")
 		else
