@@ -296,7 +296,7 @@
 /obj/item/clothing/accessory/holobadge/attack(mob/living/carbon/human/M, mob/living/user)
 	if(isliving(user))
 		user.visible_message("<span class='warning'>[user] invades [M]'s personal space, thrusting [src] into their face insistently.</span>","<span class='warning'>You invade [M]'s personal space, thrusting [src] into their face insistently. You are the law.</span>")
-		
+
 /obj/item/clothing/accessory/assistantcard
 	name = "assistant card"
 	desc = "This nanopaper slip marks the holder as HELPFUL."
@@ -484,3 +484,11 @@
 		return istype(C, /obj/item/clothing/under)
 	else
 		return FALSE
+
+// -- Voter pin
+
+/obj/item/clothing/accessory/voter_pin
+	name = "voter pin"
+	desc = "This little pin proves the holder takes their civic duty very seriously."
+	icon_state = "voting_pin"
+	_color = "voting_pin"
