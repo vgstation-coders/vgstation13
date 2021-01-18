@@ -56,7 +56,7 @@
 
 /obj/item/clothing/head/HoS/surveyor
 	name = "surveyor cap"
-	desc = "You bring me the man, I'll find you the crime"
+	desc = "You bring me the man, I'll find you the crime."
 	icon_state = "surveyorcap"
 	item_state = "surveyorcap"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)

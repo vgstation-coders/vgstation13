@@ -219,7 +219,7 @@
 
 /obj/item/clothing/suit/armor/hos/surveyor
 	name = "surveyor coat"
-	desc = "Man is by nature a curious animal. You can hide the truth from him temporarily, but not for ever."
+	desc = "Man is by nature a curious animal. You can hide the truth from him temporarily, but not forever."
 	icon_state = "surveyorcoat"
 	item_state = "surveyorcoat"
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
