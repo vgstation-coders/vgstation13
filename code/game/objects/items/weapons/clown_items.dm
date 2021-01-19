@@ -15,12 +15,14 @@
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
 
+/datum/locking_category/banana_peel
+
 /obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
 	if(!M.Slip(2,2,1))
 		return 0
 	var/tiles_to_slip = rand(0,3)
 	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
-		M.lock_atom(src)
+		M.lock_atom(src, /datum/locking_category/banana_peel)
 		for(var/i = 1 to tiles_to_slip)
 			if(!M.locked_to)
 				step(M, M.dir)
