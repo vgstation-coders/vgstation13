@@ -265,7 +265,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 /mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
 	var/turf/T = get_turf(src)
-	playsound(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
+	for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if (M.client)
+			M.playsound_local(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
 	if (new_anim)
 		var/obj/effect/cult_ritual/conversion/anim = new(T)
 		anim.icon_state = ""

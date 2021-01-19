@@ -894,7 +894,9 @@
 	victim.update_fullscreen_alpha("conversionborder", 255, 5)
 	conversion = new(T)
 	flick("rune_convert_start",conversion)
-	playsound(R, 'sound/effects/convert_start.ogg', 75, 0, -4)
+	for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if (M.client)
+			M.playsound_local(T, 'sound/effects/convert_start.ogg', 75, 0, -4)
 
 	for(var/obj/item/device/gps/secure/SPS in get_contents_in_object(victim))
 		SPS.OnMobDeath(victim)//Think carefully before converting a sec officer
@@ -922,7 +924,9 @@
 			if (victim.loc != T)//Removed() should take care of it, but just in case
 				victim.clear_fullscreen("conversionred", 10)
 				victim.clear_fullscreen("conversionborder", 10)
-				playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
+				for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(T, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 				conversion.icon_state = ""
 				flick("rune_convert_abort",conversion)
 				abort(RITUALABORT_REMOVED)
@@ -934,14 +938,18 @@
 				if (cancelling <= 0)
 					victim.clear_fullscreen("conversionred", 10)
 					victim.clear_fullscreen("conversionborder", 10)
-					playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
+					for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+						if (M.client)
+							M.playsound_local(T, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 					conversion.icon_state = ""
 					flick("rune_convert_abort",conversion)
 					abort(RITUALABORT_GONE)
 					return
 
 			else
-				playsound(R, 'sound/effects/convert_process.ogg', 10, 0, -4)
+				for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(T, 'sound/effects/convert_process.ogg', 10, 0, -4)
 				//then progress through the ritual
 				victim.Silent(5)
 				victim.Knockdown(5)
@@ -1055,7 +1063,9 @@
 		if (victim.loc != T)//Removed() should take care of it, but just in case
 			victim.clear_fullscreen("conversionred", 10)
 			victim.clear_fullscreen("conversionborder", 10)
-			playsound(R, 'sound/effects/convert_abort.ogg', 50, 0, -4)
+			for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+				if (M.client)
+					M.playsound_local(T, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 			conversion.icon_state = ""
 			flick("rune_convert_abort",conversion)
 			abort(RITUALABORT_REMOVED)
@@ -1081,7 +1091,9 @@
 				conversion.plane = OBJ_PLANE
 				victim.clear_fullscreen("conversionred", 10)
 				victim.clear_fullscreen("conversionborder", 10)
-				playsound(R, 'sound/effects/convert_success.ogg', 75, 0, -4)
+				for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(T, 'sound/effects/convert_success.ogg', 75, 0, -4)
 				//new cultists get purged of the debuffs
 				victim.SetKnockdown(0)
 				victim.SetStunned(0)
@@ -1120,7 +1132,9 @@
 			if (CONVERSION_NOCHOICE, CONVERSION_REFUSE)
 				conversion.icon_state = ""
 				flick("rune_convert_refused",conversion)
-				playsound(T, 'sound/effects/convert_abort.ogg', 75, 0, -4)
+				for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+					if (M.client)
+						M.playsound_local(T, 'sound/effects/convert_abort.ogg', 75, 0, -4)
 
 				victim.Silent(8)
 				victim.Knockdown(7)
@@ -1175,7 +1189,9 @@
 
 /datum/rune_spell/blood_cult/conversion/Removed(var/mob/M)
 	if (victim == M)
-		playsound(spell_holder, 'sound/effects/convert_abort.ogg', 50, 0, -4)
+		for(var/mob/living/M in dview(world.view, spell_holder.loc, INVISIBILITY_MAXIMUM))
+			if (M.client)
+				M.playsound_local(spell_holder.loc, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
 		abort(RITUALABORT_REMOVED)
