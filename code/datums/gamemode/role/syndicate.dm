@@ -132,14 +132,15 @@
 //________________________________________________
 
 
-/datum/role/traitor/rogue//double agent
-	name = ROGUE
-	id = ROGUE
-	wikiroute = ROGUE
+/datum/role/traitor/challenger
+	name = CHALLENGER
+	id = CHALLENGER
+	required_pref = CHALLENGER
+	wikiroute = CHALLENGER
 	logo_state = "synd-logo"
-	var/datum/role/traitor/rogue/assassination_target = null
+	var/datum/role/traitor/challenger/assassination_target = null
 
-/datum/role/traitor/rogue/ForgeObjectives()
+/datum/role/traitor/challenger/ForgeObjectives()
 	if (assassination_target && assassination_target.antag)
 		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
 		if(kill_target.set_target(assassination_target.antag))
@@ -150,18 +151,42 @@
 	to_chat(antag.current, "<span class='danger'>It would appear that your enemies never in fact made it to the station. Looks like you're safe this time around.</span>")
 	//that should never appear though since the ruleset requires 2 players minimum but you know just in case
 
-/datum/role/traitor/rogue/Greet(var/greeting,var/custom)
+/datum/role/traitor/challenger/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
 
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Volunteer Syndicate agent. You have been pitched along with other volunteers into a battle royale aboard of one of Nanotrasen's space stations for the priviledge of becoming a fully fledged Syndicate agent. Take the other agents out before they do the same to you.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate Challenger. You have been pitched along with other volunteers into a battle royale aboard of one of Nanotrasen's space stations for the priviledge of becoming a fully fledged Syndicate agent. Take the other agents out before they do the same to you.</span>")
 		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Volunteer Syndicate agent.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate Challenger.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
+
+
+/datum/role/traitor/challenger/OnPostSetup()
+	..()
+	maybe_equip(new /obj/item/device/camera(get_turf(antag.current)))
+
+/datum/role/traitor/challenger/proc/maybe_equip(obj/item/thing)
+	var/mob/living/carbon/human/mob = antag.current
+	if(ishuman(mob))
+		var/list/slots = list(
+			"backpack" = slot_in_backpack,
+			"left pocket" = slot_l_store,
+			"right pocket" = slot_r_store,
+		)
+		var/where = mob.equip_in_one_of_slots(thing, slots, put_in_hand_if_fail = 1)
+
+		if (!where)
+			to_chat(mob, "\The Syndicate was unfortunately unable to get you \a [thing].")
+		else
+			to_chat(mob, "To assist you in this trial, the Syndicate has provided you with a regular [thing] in your [where].")
+	else
+		thing.forceMove(get_turf(mob))
+		to_chat(mob, "\The Syndicate was able to get you \a [thing], but could not find anywhere to slip it onto you, so it is now on the floor.")
+
 
 //________________________________________________
 

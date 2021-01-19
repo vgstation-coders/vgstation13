@@ -490,8 +490,9 @@
 		P.blueprints = TRUE
 		blueprints = FALSE
 
-	if (double_agent_completion_ids)
+	if (double_agent_completion_ids.len > 0)
 		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
+		double_agent_completion_ids = list()
 
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()

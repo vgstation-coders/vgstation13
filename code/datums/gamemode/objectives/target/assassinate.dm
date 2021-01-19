@@ -5,7 +5,7 @@ var/list/assassination_objectives = list()
 	var/double_agent_completion_id
 	var/syndicate_checked = 0
 
-/datum/objective/target/assassinate/New()
+/datum/objective/target/assassinate/New(var/text,var/auto_target = TRUE, var/mob/user = null)
 	..()
 	double_agent_completion_id = generate_artifact_id()//guarranted to be unique, will let us check for completion when taking pictures
 	assassination_objectives += src
@@ -73,13 +73,13 @@ var/list/assassination_objectives = list()
 	//The syndicate has confirmed that the double agent has taken out their target.
 	//They will now assign the new objective of assassinating their old target's target.
 	//Unless said target is themselves, which then means that all other agents have been eliminated and they have won.
-	var/datum/role/traitor/rogue/self = owner.GetRole(ROGUE)
-	var/datum/role/traitor/rogue/enemy = target.GetRole(ROGUE)
+	var/datum/role/traitor/challenger/self = owner.GetRole(CHALLENGER)
+	var/datum/role/traitor/challenger/enemy = target.GetRole(CHALLENGER)
 	if (!self ||!enemy)
 		message_admins("a double agent syndicate certification has failed. call deity.")//not that this should ever happen
 		return
 
-	for (var/datum/objective/target/assassinate/A in enemy.objectives)
+	for (var/datum/objective/target/assassinate/A in enemy.objectives.objectives)
 		if (A.syndicate_checked)
 			continue
 		if (A.target == owner)

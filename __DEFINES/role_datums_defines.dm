@@ -30,7 +30,7 @@
 #define WIZARD_CONTRACT "wizard contract"
 // Role IDs
 #define TRAITOR "traitor"
-#define ROGUE "syndicate volunteer"
+#define CHALLENGER "challenger"
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
 #define THRALL "thrall"

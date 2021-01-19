@@ -20,11 +20,6 @@
 /datum/faction/syndicate/traitor/auto
 	accept_latejoiners = TRUE
 
-/datum/faction/syndicate/traitor/dagent
-	roletype = /datum/role/traitor/rogue
-	initroletype = /datum/role/traitor/rogue
-
-
 /datum/faction/syndicate/greytide
 	name = "Greytide link"
 	ID = GREYTIDE_FAC
