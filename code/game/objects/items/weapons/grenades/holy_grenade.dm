@@ -25,11 +25,12 @@
 	sleep(15)
 	for(var/mob/living/carbon/human/H in view(4,get_turf(src)))
 		if(isvampire(H) || iscultist(H))    
-			H.dust()
+			H.reagents.add_reagent(HOLYWATER, 2)
+			H.Stun(10)
 	for(var/mob/living/simple_animal/C in view(4,get_turf(src)))
 		if(C.supernatural)
 			C.death()
-	explosion(get_turf(src), 0, 0, 2, 3)
+	explosion(get_turf(src), 0, 0, 4, 3)
 	qdel(src)
 
 /obj/item/weapon/grenade/holy/throw_at(var/atom/A, throw_range, throw_speed)
@@ -57,8 +58,8 @@
 /obj/item/weapon/grenade/holy/attack_self(mob/user as mob)
 	if(iscultist(user) || isvampire(user))
 		playsound(src, 'sound/misc/adminspawn.ogg', 75, 0, 1)
-		to_chat(usr, "<span class='warning'>The holy hand grenade is too sacred for you to use!</span>")
-		user.dust()
+		to_chat(user, "<span class='warning'>The holy hand grenade is too sacred for you to use!</span>")
+		user.Stun(10)
 		return
 	..()
 
