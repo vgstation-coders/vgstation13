@@ -25,31 +25,22 @@
 	sleep(15)
 	for(var/mob/living/carbon/human/H in view(4,get_turf(src)))
 		if(isvampire(H) || iscultist(H))    
-			H.reagents.add_reagent(HOLYWATER, 2)
+			H.reagents.add_reagent(HOLYWATER, 3)
 			H.Stun(10)
+			H.Knockdown(10)
+			H.flash_eyes(visual = 1)
 	for(var/mob/living/simple_animal/C in view(4,get_turf(src)))
 		if(C.supernatural)
 			C.death()
 	explosion(get_turf(src), 0, 0, 4, 3)
 	qdel(src)
 
-/obj/item/weapon/grenade/holy/throw_at(var/atom/A, throw_range, throw_speed)
-	if(!active)
-		return ..()
-	var/thrown_when = world.time - activated_at
-	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
-		to_chat(usr, "<span class='warning'>You didn't count to three.</span>")
-		explosion(get_turf(src), 0, 0, 1, 2)
-		qdel(src)
-	else
-		..()
-
 /obj/item/weapon/grenade/holy/dropped(mob/user)
 	if(!active)
 		return ..()
 	var/thrown_when = world.time - activated_at
 	if(thrown_when > COUNT_TO + WIGGLE_ROOM || thrown_when < COUNT_TO - WIGGLE_ROOM)
-		to_chat(user, "<span class='warning'>You didn't count to three.</span>")
+		to_chat(user, "<span class='warning'>You didn't count to [num2text(COUNT_TO/10)].</span>")
 		explosion(get_turf(src), 0, 0, 1, 2)
 		qdel(src)
 	else
@@ -60,6 +51,10 @@
 		playsound(src, 'sound/misc/adminspawn.ogg', 75, 0, 1)
 		to_chat(user, "<span class='warning'>The holy hand grenade is too sacred for you to use!</span>")
 		user.Stun(10)
+		user.Knockdown(10)
+		if(ishuman(user))
+			var/mob/living/carbon/human/H = user
+			H.flash_eyes(visual = 1)
 		return
 	..()
 
