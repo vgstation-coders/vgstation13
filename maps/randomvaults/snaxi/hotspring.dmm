@@ -48,15 +48,35 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/wood,
 /turf/simulated/floor/beach/sand,
 /area/vault/hotspring)
+"q" = (
+/mob/living/simple_animal/capybara{
+	dir = 4
+	},
+/turf/unsimulated/beach/water,
+/area/vault/hotspring)
 "r" = (
 /turf/simulated/floor/wood,
+/area/vault/hotspring)
+"u" = (
+/mob/living/simple_animal/capybara{
+	icon_state = "capybara-rest";
+	lying = 1
+	},
+/turf/unsimulated/beach/water,
 /area/vault/hotspring)
 "x" = (
 /obj/effect/decal/warning_stripes{
 	icon = 'icons/turf/floors.dmi';
 	icon_state = "wood_siding5"
 	},
+/mob/living/simple_animal/capybara{
+	dir = 8
+	},
 /turf/simulated/floor/wood,
+/area/vault/hotspring)
+"B" = (
+/mob/living/simple_animal/capybara,
+/turf/unsimulated/beach/water,
 /area/vault/hotspring)
 "C" = (
 /obj/structure/geyser/vent{
@@ -70,6 +90,12 @@
 	icon = 'icons/obj/hydroponics/orange.dmi'
 	},
 /turf/unsimulated/beach/water,
+/area/vault/hotspring)
+"H" = (
+/mob/living/simple_animal/capybara{
+	dir = 8
+	},
+/turf/simulated/floor/beach/sand,
 /area/vault/hotspring)
 "I" = (
 /obj/effect/decal/warning_stripes{
@@ -192,7 +218,7 @@ Y
 Y
 N
 C
-T
+q
 T
 F
 x
@@ -210,7 +236,7 @@ Y
 N
 T
 T
-T
+u
 T
 c
 g
@@ -228,7 +254,7 @@ p
 F
 C
 T
-T
+u
 F
 g
 r
@@ -260,7 +286,7 @@ a
 Y
 Y
 C
-T
+B
 F
 F
 C
@@ -279,7 +305,7 @@ Y
 N
 F
 c
-N
+H
 N
 o
 N

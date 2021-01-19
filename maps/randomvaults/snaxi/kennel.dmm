@@ -99,7 +99,7 @@
 	},
 /area/vault/kennel)
 "R" = (
-/mob/living/simple_animal/hostile/wolf,
+/mob/living/simple_animal/hostile/wolf/pliable,
 /turf/simulated/floor/engine/concrete,
 /area/vault/kennel)
 "S" = (

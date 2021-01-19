@@ -100,6 +100,42 @@ Included in this file
 	..()
 	reagents.add_reagent(BAHAMA_MAMA, 30)
 
+/mob/living/simple_animal/capybara
+	name = "capybara"
+	desc = "The capybara is the largest of the rodents. This one looks rather peaceful."
+	pacify_aura = TRUE
+	icon_state = "capybara"
+	icon_living = "capybara"
+	icon_dead = "capybara-dead"
+	response_help = "pets"
+
+/mob/living/simple_animal/capybara/examine(mob/user)
+	..()
+	if(!isDead() && pacify_aura)
+		to_chat(user, "<span class = 'notice'>It looks so comforting, you feel like the world, at least in the general vicinity, is at peace.</span>")
+
+/mob/living/simple_animal/capybara/update_icons()
+	if(isDead())
+		icon_state = "capybara-dead"
+		return
+	icon_state = "capybara[lying ? "-rest" : ""]"
+
+/mob/living/simple_animal/capybara/wander_move()
+	if(prob(15)) //15% chance that instead of wandering, he'll rest for a minute
+		lying = TRUE
+		wander = FALSE
+		spawn(1 MINUTES)
+			lying = FALSE
+			wander = TRUE
+	else
+		..()
+
+/mob/living/simple_animal/capybara/Move(loc, dir)
+	if(lying && !isDead()) //He'll get up if something moves him
+		lying = FALSE
+		wander = TRUE
+	..()
+
 /area/vault/cabin
 	name = "cabin"
 

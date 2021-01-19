@@ -397,7 +397,7 @@ var/global/list/alcatraz_stuff = list(
 	req_access = list(access_brig)
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
-	var/mob_path = /mob/living/simple_animal/hostile/wolf
+	var/mob_path = /mob/living/simple_animal/hostile/wolf/pliable
 	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)
