@@ -1,11 +1,81 @@
+/obj/structure/snowman
+	name = "snowman"
+	desc = "Just an inanimate facsimile of a human. It looks like it could use a nose and a hat."
+	icon_state = "snowman"
+	icon='icons/mob/snowman.dmi'
+	anchored = TRUE
+	density = TRUE
+	var/obj/item/clothing/hat = null
+	var/obj/item/carrot = null
+	var/health = 40
+
+/obj/structure/snowman/Destroy()
+	qdel(hat)
+	hat = null
+	qdel(carrot)
+	carrot = null
+	..()
+
+/obj/structure/snowman/attackby(obj/item/weapon/W, mob/user)
+	if(!carrot && istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot))
+		if(user.drop_item(W, src))
+			carrot = W
+			overlays += image(icon = icon, icon_state = "snowman_carrot")
+			come_to_life()
+	else if(!hat && istype(W,/obj/item/clothing/head/))
+		if(user.drop_item(W, src))
+			hat = W
+			overlays += image('icons/mob/head.dmi', hat.icon_state)
+			come_to_life()
+	else if(isshovel(W))
+		for(var/i = 1 to 5)
+			new /obj/item/stack/sheet/snow(loc, 4)
+		dropall()
+		playsound(loc, 'sound/items/shovel.ogg', 50, 1)
+		qdel(src)
+	else
+		visible_message("<span class='danger'>[user] hits \the [src] with \a [W].</span>")
+		user.delayNextAttack(8)
+		user.do_attack_animation(src, W)
+		if (W.hitsound)
+			playsound(src, W.hitsound, 50, 1, -1)
+		takedamage(W.force)
+
+/obj/structure/snowman/bullet_act(var/obj/item/projectile/Proj)
+	takedamage(Proj.damage)
+
+/obj/structure/snowman/proc/takedamage(var/dam)
+	health -= dam
+	if(health<=0)
+		dropall()
+		new /obj/item/stack/sheet/snow(loc, 4)
+		qdel(src)
+
+/obj/structure/snowman/proc/dropall()
+	if(carrot)
+		carrot.forceMove(loc)
+		carrot = null
+	if(hat)
+		hat.forceMove(loc)
+		hat = null
+
+/obj/structure/snowman/proc/come_to_life()
+	if(hat && hat.wizard_garb && carrot)
+		say("Ah, most excellent!")
+		for(var/i = 1 to 6)
+			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(loc)
+		new /mob/living/simple_animal/hostile/retaliate/snowman(loc, hat)
+		hat = null //to avoid deletion
+		qdel(src)
+
 /mob/living/simple_animal/hostile/retaliate/snowman
 	name = "snowman"
-	desc = "Good day sir."
-	icon_state = "snowman"
-	icon_living = "snowman"
+	desc = "It's alive! There must have been some magic in that hat the crew found."
+	icon_state = "snowman-full"
+	icon_living = "snowman-full"
 	icon_dead = ""
 	icon='icons/mob/snowman.dmi'
-	speak = list("Good day sir.","Would you happen to have a carrot for my nose?","Cold day, isn't it?","What a pleasant weather.")
+	speak = list("Good day sir.","Cold day, isn't it?","What a pleasant weather.")
 	speak_emote = list("says")
 	emote_hear = list("says")
 	emote_see = list("hums")
@@ -32,7 +102,17 @@
 	bodytemperature = 270
 
 	var/obj/item/hat = null
-	var/obj/item/carrot = null
+
+/mob/living/simple_animal/hostile/retaliate/snowman/New(loc,nhat)
+	..()
+	hat = nhat
+	overlays += image('icons/mob/head.dmi', hat.icon_state)
+
+/mob/living/simple_animal/hostile/retaliate/snowman/Destroy()
+	overlays.Cut()
+	qdel(hat)
+	hat = null
+	..()
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Life()
 	if(timestopped)
@@ -58,10 +138,9 @@
 		new /obj/item/stack/sheet/snow(T, 1)
 		new /obj/item/stack/sheet/snow(T, 1)
 		new /obj/item/stack/sheet/snow(T, 1)
+		new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(T)
 		if(hat)
 			hat.forceMove(T)
-		if(carrot)
-			carrot.forceMove(T)
 		qdel(src)
 
 	else if(fire_alert)
@@ -73,32 +152,6 @@
 	..()
 	if(!stat)
 		src.say(pick("You, come fight me!","I say!","Coward!"))
-
-/mob/living/simple_animal/hostile/retaliate/snowman/attackby(var/obj/item/W, var/mob/user)
-	if(!carrot && istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/carrot))
-		if(user.drop_item(W, src))
-			visible_message("<span class='notice'>[user] puts \a [W] on \the [src]'s nose.</span>")
-			carrot = W
-			overlays += image(icon = icon, icon_state = "snowman_carrot")
-			speak -= "Would you happen to have a carrot for my nose?"
-			src.say("Ah, most excellent!")
-			if(prob(30))
-				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(src.loc)
-
-	else if(istype(W,/obj/item/clothing/head/))
-		if(hat)
-			hat.forceMove(get_turf(src))
-			overlays -= image('icons/mob/head.dmi', hat.icon_state)
-			hat = null
-		else
-			speak += "I feel so dandy!"
-		if(user.drop_item(W, src))
-			hat = W
-
-			overlays += image('icons/mob/head.dmi', hat.icon_state)
-
-	else
-		..()
 
 /obj/item/projectile/snowball
 	name = "flying snowball"
