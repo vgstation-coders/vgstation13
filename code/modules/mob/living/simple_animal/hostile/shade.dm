@@ -10,7 +10,7 @@
 	health = 20
 	speak_chance = 5
 	turns_per_move = 5
-	speak = list("...ego...","...veri...","...karazet...")
+	speak = list("...blood...","...destroy...","...others...")
 	speak_emote = list("hisses")
 	emote_hear = list("wails","screeches")
 	response_help  = "puts their hand through"
@@ -32,7 +32,7 @@
 	flying = TRUE
 	meat_type = /obj/item/weapon/ectoplasm
 	mob_property_flags = MOB_SUPERNATURAL
-	alpha = 200
+	alpha = 180
 
 /mob/living/simple_animal/hostile/shade/New()
 	..()
@@ -49,6 +49,14 @@
 
 /mob/living/simple_animal/hostile/shade/say(var/message)
 	. = ..(message, "C")
+
+/mob/living/simple_animal/hostile/shade/proc/buff()
+	//same damage and health as regular shades
+	melee_damage_lower = 8
+	melee_damage_upper = 8
+	maxHealth = 50
+	health = 50
+	alpha = 255
 
 /mob/living/simple_animal/hostile/shade/gib(var/animation = 0, var/meat = 1)
 	death(TRUE)

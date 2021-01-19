@@ -1093,6 +1093,9 @@
 					victim.drop_from_inventory(victim.handcuffed)
 				//and their loyalty implants are removed, so they can't mislead security, not that the conversion should even go through
 				victim.implant_pop()
+				for(var/obj/item/weapon/implant/holy/H in victim)
+					to_chat(victim, "<span class='warning'>The ritual's energies have completely fried the holy implant that was lodged in your skull.</span>")
+					qdel(H)
 				convert(convertee, converter)
 				conversion.icon_state = ""
 				flick("rune_convert_success",conversion)

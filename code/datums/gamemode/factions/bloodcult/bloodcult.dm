@@ -431,13 +431,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
 			if(!(H.species.anatomy_flags & NO_BLOOD))
-				for(var/datum/organ/external/org in H.organs)
-					if(org.status & ORGAN_BLEEDING)
-						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
-						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-						data[BLOODCOST_TARGET_GRAB] = H
-						data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
-						amount_gathered += blood_gathered
+				var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
+				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+				data[BLOODCOST_TARGET_GRAB] = H
+				data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
+				amount_gathered += blood_gathered
 		if(ismonkey(Grab.affecting) || isalien(Grab.affecting))//Unlike humans, monkeys take oxy damage when blood is taken from them.
 			var/mob/living/carbon/C = Grab.affecting
 			if(!C.isDead())

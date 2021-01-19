@@ -296,12 +296,13 @@
 	anim(target = deconvertee, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 	var/mob/living/simple_animal/hostile/shade/redshade_A = new(T)
 	var/mob/living/simple_animal/hostile/shade/redshade_B = new(T)
+	if (!bible.my_rel.leadsThisReligion(user))//the shades are a bit stronger if it's not an actual chaplain doing the deconversion, or they're not using a bible of their religion.
+		redshade_A.buff()
+		redshade_B.buff()
 	var/list/adjacent_turfs = list()
 	for (var/turf/U in orange(1,T))
 		adjacent_turfs += U
-	spawn(1)
-		redshade_A.forceMove(get_turf(pick(adjacent_turfs)))
-		redshade_B.forceMove(get_turf(pick(adjacent_turfs)))
+	var/mob/target
 	switch(success)
 		if (DECONVERSION_ACCEPT)
 			playsound(deconvertee, 'sound/effects/deconversion_complete.ogg', 50, 0, -4)
@@ -309,18 +310,25 @@
 			deconvertee.visible_message("<span class='notice'>You see [deconvertee]'s eyes become clear. Through the blessing of [lol ? "some fanfic headcanon version of [bible.my_rel.deity_name]" : "[bible.my_rel.deity_name]"] they have renounced Nar-Sie.</span>","<span class='notice'>You were forgiven by [bible.my_rel.deity_name]</span><span class='sinister'>[lol ? " (YEAH RIGHT...)" : ""]</span><span class='notice'>. You no longer share the cult's goals.</span>")
 			deconvertee.visible_message("<span class='userdanger'>A pair of shades manifests from the occult energies that left them and start attacking them.</span>")
 			cultist.Drop()
-			redshade_A.GiveTarget(deconvertee)
-			redshade_A.MoveToTarget()
-			redshade_B.GiveTarget(deconvertee)
-			redshade_B.MoveToTarget()
+			var/list/speak = list("...you shall give back the blood we gave you [deconvertee]...","...one does not simply turn their back on our gift...","...if you won't dedicate your heart to Nar-Sie, you don't need it anymore...")
+			redshade_A.speak = speak
+			redshade_B.speak = speak
+			target = deconvertee
 		if (DECONVERSION_REFUSE)
 			playsound(deconvertee, 'sound/effects/deconversion_failed.ogg', 50, 0, -4)
 			to_chat(deconvertee,"<span class='notice'>You manage to block out the exorcism.</span>")
 			deconvertee.visible_message("<span class='userdanger'>The ritual was resisted, a pair of shades manifest and start attacking all nearby.</span>","<span class='warning'>The energies you mustered take their toll on your body, and manifest into a couple or red shades that start attacking whoever tried to deconvert you.</span>")
-			redshade_A.GiveTarget(deconverter)
-			redshade_A.MoveToTarget()
-			redshade_B.GiveTarget(deconverter)
-			redshade_B.MoveToTarget()
+			var/list/speak = list("...how dare you try and harass [deconvertee]...","...this is a blatant disregard of the freedom of religion...","...[deconvertee] has pledged their blood to Nar-Sie and we demand that you respect their choice...")
+			redshade_A.speak = speak
+			redshade_B.speak = speak
+			target = deconverter
+	spawn(1)
+		redshade_A.forceMove(get_turf(pick(adjacent_turfs)))
+		redshade_B.forceMove(get_turf(pick(adjacent_turfs)))
+		redshade_A.GiveTarget(target)
+		redshade_B.GiveTarget(target)
+		redshade_A.MoveToTarget()
+		redshade_B.MoveToTarget()
 	deconvertee.overlays -= image('icons/effects/effects.dmi',src,"deconversion")
 	qdel(src)
 
