@@ -1189,9 +1189,9 @@
 
 /datum/rune_spell/blood_cult/conversion/Removed(var/mob/M)
 	if (victim == M)
-		for(var/mob/living/M in dview(world.view, spell_holder.loc, INVISIBILITY_MAXIMUM))
-			if (M.client)
-				M.playsound_local(spell_holder.loc, 'sound/effects/convert_abort.ogg', 50, 0, -4)
+		for(var/mob/living/L in dview(world.view, spell_holder.loc, INVISIBILITY_MAXIMUM))
+			if (L.client)
+				L.playsound_local(spell_holder.loc, 'sound/effects/convert_abort.ogg', 50, 0, -4)
 		conversion.icon_state = ""
 		flick("rune_convert_abort",conversion)
 		abort(RITUALABORT_REMOVED)
