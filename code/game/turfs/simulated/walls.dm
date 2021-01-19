@@ -141,7 +141,7 @@
 		var/datum/cult_tattoo/CT = user.checkTattoo(TATTOO_SHORTCUT)
 		if (CT)
 			var/mob/living/carbon/C = user
-			if (C.muted())
+			if (C.occult_muted())
 				to_chat(user, "<span class='warning'>The holy aura preying upon your body prevents you from correctly drawing the sigil.</span>")
 				return
 			var/data = use_available_blood(user, CT.blood_cost)

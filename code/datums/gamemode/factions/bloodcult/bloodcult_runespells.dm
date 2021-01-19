@@ -2016,7 +2016,7 @@ var/list/blind_victims = list()
 		for(var/mob/living/L in range(effect_range,get_turf(spell_holder)))
 			if (iscarbon(L))
 				var/mob/living/carbon/C = L
-				if (C.muted())
+				if (C.occult_muted())
 					continue
 			if(L.stat != DEAD && iscultist(L))
 				playsound(L, 'sound/effects/fervor.ogg', 50, 0, -2)

@@ -76,7 +76,7 @@ var/list/uristrune_cache = list()
 		cast_delay = 5
 
 	var/mob/living/carbon/C = user
-	var/muted = C.muted()
+	var/muted = C.occult_muted()
 	if (muted)
 		to_chat(user,"<span class='danger'>You find yourself unable to focus your mind on the words of Nar-Sie.</span>")
 	return muted
@@ -264,7 +264,7 @@ var/list/uristrune_cache = list()
 
 /spell/cult/blood_dagger/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
-	if (user.muted())
+	if (user.occult_muted())
 		to_chat(user, "<span class='warning'>You try grasping your blood but you can't quite will it into the shape of a dagger.</span>")
 		return 0
 	var/mob/living/carbon/human/H = user
@@ -328,7 +328,7 @@ var/list/arcane_pockets = list()
 
 /spell/cult/arcane_dimension/cast(var/list/targets, var/mob/living/carbon/user)
 	..()
-	if (user.muted())
+	if (user.occult_muted())
 		to_chat(user, "<span class='warning'>You can't seem to remember how to access your arcane dimension right now.</span>")
 		return 0
 	if (stored_tome)

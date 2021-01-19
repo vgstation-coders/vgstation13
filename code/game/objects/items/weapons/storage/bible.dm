@@ -249,7 +249,7 @@
 
 /datum/deconversion_ritual
 	var/datum/role/cultist/cultist = null
-	var/lol = FALSE
+	var/cult_chaplain = FALSE
 	var/last_cultist = FALSE
 	var/success = DECONVERSION_ACCEPT
 
@@ -271,7 +271,7 @@
 	deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
-		lol = TRUE
+		cult_chaplain = TRUE
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	var/living_cultists = 0
 	for(var/datum/role/cultist/C in cult.members)
@@ -282,10 +282,10 @@
 
 	spawn()
 		spawn()
-			if (alert(deconvertee, "You are being compelled by the powers of [bible.my_rel.deity_name][lol ? " (wait what?)" : ""] to give up on serving the Cult of Nar-Sie[lol ? " (huh!?)" : ""]","You have 10 seconds to decide","[!lol ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]","[!lol ? "Resist!" : "This is obviously a trick! Resist!"]") == "[!lol ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]")
+			if (alert(deconvertee, "You are being compelled by the powers of [bible.my_rel.deity_name][cult_chaplain ? " (wait what?)" : ""] to give up on serving the Cult of Nar-Sie[cult_chaplain ? " (huh!?)" : ""]","You have 10 seconds to decide","[!cult_chaplain ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]","[!cult_chaplain ? "Resist!" : "This is obviously a trick! Resist!"]") == "[!cult_chaplain ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]")
 				success = DECONVERSION_ACCEPT
 				if (!target && !last_cultist)//no threats if nobody remains to carry them out.
-					to_chat(deconvertee, "<span class='sinister'>[lol ? "WERE YOU DECEIVED THAT EASILY? SO BE IT THEN." : "THERE WILL BE A PRICE."]</span>")
+					to_chat(deconvertee, "<span class='sinister'>[cult_chaplain ? "WERE YOU DECEIVED THAT EASILY? SO BE IT THEN." : "THERE WILL BE A PRICE."]</span>")
 			else
 				success = DECONVERSION_REFUSE
 				if (!target)
@@ -309,7 +309,7 @@
 			if (DECONVERSION_ACCEPT)
 				playsound(deconvertee, 'sound/effects/deconversion_complete.ogg', 50, 0, -4)
 				to_chat(deconvertee,)
-				deconvertee.visible_message("<span class='notice'>You see [deconvertee]'s eyes become clear. Through the blessing of [lol ? "some fanfic headcanon version of [bible.my_rel.deity_name]" : "[bible.my_rel.deity_name]"] they have renounced Nar-Sie.</span>","<span class='notice'>You were forgiven by [bible.my_rel.deity_name]</span><span class='sinister'>[lol ? " (YEAH RIGHT...)" : ""]</span><span class='notice'>. You no longer share the cult's goals.</span>")
+				deconvertee.visible_message("<span class='notice'>You see [deconvertee]'s eyes become clear. Through the blessing of [cult_chaplain ? "some fanfic headcanon version of [bible.my_rel.deity_name]" : "[bible.my_rel.deity_name]"] they have renounced Nar-Sie.</span>","<span class='notice'>You were forgiven by [bible.my_rel.deity_name]</span><span class='sinister'>[cult_chaplain ? " (YEAH RIGHT...)" : ""]</span><span class='notice'>. You no longer share the cult's goals.</span>")
 				deconvertee.visible_message("<span class='userdanger'>A pair of shades manifests from the occult energies that left them and start attacking them.</span>")
 				cultist.Drop()
 				var/list/speak = list("...you shall give back the blood we gave you [deconvertee]...","...one does not simply turn their back on our gift...","...if you won't dedicate your heart to Nar-Sie, you don't need it anymore...")
@@ -321,7 +321,7 @@
 				to_chat(deconvertee,"<span class='notice'>You manage to block out the exorcism.</span>")
 				deconvertee.visible_message("<span class='userdanger'>The ritual was resisted, a pair of shades manifest and start attacking all nearby.</span>","<span class='warning'>The energies you mustered take their toll on your body, and manifest into a couple or red shades that start attacking whoever tried to deconvert you.</span>")
 				var/list/speak = list("...how dare you try and harass [deconvertee]...","...this is a blatant disregard of the freedom of religion...","...[deconvertee] has pledged their blood to Nar-Sie and we demand that you respect their choice...")
-				if (lol)
+				if (cult_chaplain)
 					speak = list("...cut it out with the weird fanfictions [deconverter]...","...that is why we don't want you among us...","...go back to do word research where no one can hear about you [deconverter]...")
 				redshade_A.speak = speak
 				redshade_B.speak = speak

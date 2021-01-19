@@ -159,7 +159,7 @@
 			to_chat(user, "<span class='warning'>The blood jaunt fails to grasp you as you are currently anchored.</span>")
 		if (iscarbon(user))
 			var/mob/living/carbon/C = user
-			if (C.muted())
+			if (C.occult_muted())
 				muted = TRUE
 				to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
 		if (!muted && !user.anchored)
@@ -181,7 +181,7 @@
 			var/muted = FALSE
 			if (iscarbon(AM))
 				var/mob/living/carbon/C = AM
-				if (C.muted())
+				if (C.occult_muted())
 					muted = TRUE
 					to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
 			if (!AM.anchored && !muted)

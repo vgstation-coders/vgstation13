@@ -580,14 +580,14 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 /obj/item/weapon/implant/holy
 	name = "holy implant"
-	desc = "Submits its user to the chants of a thousand chaplains."
+	desc = "Subjects its user to the chants of a thousand chaplains."
 
 /obj/item/weapon/implant/holy/get_data()
 	var/dat = {"
 <b>Implant Specifications:</b><BR>
 <b>Name:</b> Holy Dogmatic Interference Implant<BR>
 <b>Life:</b> Anywhere from ten days to ten years depending on the strain placed upon the implant by the subject.<BR>
-<b>Important Notes:</b> This device was commissioned by Nanotrasen after it proved able to distract occult practitioners, making the unable to practice their dark arts.<BR>
+<b>Important Notes:</b> This device was commissioned by Nanotrasen after it proved able to distract occult practitioners, making them unable to practice their dark arts.<BR>
 <HR>
 <b>Implant Details:</b><BR>
 <b>Function:</b> Submits its subject to the chants of a thousand chaplains.<BR>
@@ -604,7 +604,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	H << sound('sound/ambience/ambicha3.ogg')
 	H << sound('sound/ambience/ambicha4.ogg')
 	if(iscultist(H))
-		to_chat(H, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacopony religious chants. You find yourself unable to perform any ritual.</span>")
+		to_chat(H, "<span class='danger'>You feel uneasy as you suddenly start hearing a cacophony of religious chants. You find yourself unable to perform any ritual.</span>")
 	else
-		to_chat(H, "<span class = 'notice'>You hear the millenia-old soothing gregorian chants of the clergy.</span>")
+		to_chat(H, "<span class = 'notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 	return 1
