@@ -974,7 +974,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 		else if(href_list["refresh"])
 			updateUsrDialog()
 
-/obj/machinery/newscaster/assassination_check(var/obj/item/weapon/photo/P)
+/obj/machinery/newscaster/proc/assassination_check(var/obj/item/weapon/photo/P)
 	if (assassination_objectives.len > 0)
 		for (var/datum/objective/target/assassinate/ass in assassination_objectives)
 			if (ass.double_agent_completion_id in P.double_agent_completion_ids)

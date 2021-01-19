@@ -96,4 +96,4 @@ var/list/assassination_objectives = list()
 				self.AppendObjective(new_kill_target)
 				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
 			A.syndicate_checked = SYNDICATE_CANCELED
-			to_chat(enemy.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")
+			to_chat(target.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")

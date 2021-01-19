@@ -157,9 +157,9 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Rogue Syndicate agent. Relations with the other groups in the Syndicate Coalition have gone south, take the other agents out before they do the same to you.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Volunteer Syndicate agent. You have been pitched along with other volunteers into a battle royale aboard of one of Nanotrasen's space stations for the priviledge of becoming a fully fledged Syndicate agent. Take the other agents out before they do the same to you.</span>")
 		else
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Rogue Syndicate agent.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Volunteer Syndicate agent.</span>")
 
 	to_chat(antag.current, "<span class='info'><a HREF='?src=\ref[antag.current];getwiki=[wikiroute]'>(Wiki Guide)</a></span>")
 

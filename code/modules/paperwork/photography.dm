@@ -135,6 +135,9 @@
 	var/icon_on = "camera"
 	var/icon_off = "camera_off"
 	var/blueprints = FALSE	//are blueprints visible in the current photo being created?
+
+	var/list/double_agent_completion_ids = list()
+
 	var/list/aipictures = list() //Allows for storage of pictures taken by AI, in a similar manner the datacore stores info
 
 	var/photo_size = 3 //Default is 3x3. 1x1, 5x5, 7x7 are also options
@@ -486,6 +489,9 @@
 	if(blueprints)
 		P.blueprints = TRUE
 		blueprints = FALSE
+
+	if (double_agent_completion_ids)
+		P.double_agent_completion_ids = double_agent_completion_ids.Copy()
 
 /obj/item/device/camera/sepia/printpicture(mob/user, icon/temp, mobs, flag) //Creates photos in sepia
 	var/obj/item/weapon/photo/P = new/obj/item/weapon/photo()
