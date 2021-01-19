@@ -296,7 +296,7 @@
 	anim(target = deconvertee, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
 	var/mob/living/simple_animal/hostile/shade/redshade_A = new(T)
 	var/mob/living/simple_animal/hostile/shade/redshade_B = new(T)
-	if (!bible.my_rel.leadsThisReligion(user))//the shades are a bit stronger if it's not an actual chaplain doing the deconversion, or they're not using a bible of their religion.
+	if (!bible.my_rel.leadsThisReligion(deconverter))//the shades are a bit stronger if it's not an actual chaplain doing the deconversion, or they're not using a bible of their religion.
 		redshade_A.buff()
 		redshade_B.buff()
 	var/list/adjacent_turfs = list()
