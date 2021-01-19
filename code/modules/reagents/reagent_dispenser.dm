@@ -448,6 +448,7 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	..()
 	if(W.is_wrench(user))
 		return
 	if(istype(W,/obj/item/weapon/grab))
