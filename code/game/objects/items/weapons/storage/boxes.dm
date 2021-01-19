@@ -1407,3 +1407,10 @@
 	new /obj/item/clothing/shoes/sandal(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset
+	name = "hos surveyor outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset/New()
+	new /obj/item/clothing/suit/armor/hos/surveyor(src)
+	new /obj/item/clothing/head/HoS/surveyor(src)
+	..()
