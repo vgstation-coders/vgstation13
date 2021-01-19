@@ -8,7 +8,7 @@
 	icon_dead = "shade_dead"
 	maxHealth = 20
 	health = 20
-	speak_chance = 5
+	speak_chance = 33
 	turns_per_move = 5
 	speak = list("...blood...","...destroy...","...others...")
 	speak_emote = list("hisses")
@@ -76,6 +76,13 @@
 	. = ..()
 	if(.)
 		emote("me",,"wails at [.]!")
+
+/mob/living/simple_animal/hostile/faithless/cult/CanAttack(var/atom/the_target)
+	if(ismob(the_target))
+		var/mob/M = the_target
+		if(isanycultist(M))
+			return 0
+	return ..(the_target)
 
 /mob/living/simple_animal/hostile/shade/cultify()
 	return
