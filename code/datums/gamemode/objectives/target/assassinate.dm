@@ -1,5 +1,14 @@
+var/list/assassination_objectives = list()
+
 /datum/objective/target/assassinate
 	name = "Assassinate <target>"
+	var/double_agent_completion_id
+	var/syndicate_checked = 0
+
+/datum/objective/target/assassinate/New()
+	..()
+	double_agent_completion_id = generate_artifact_id()//guarranted to be unique, will let us check for completion when taking pictures
+	assassination_objectives += src
 
 /datum/objective/target/assassinate/find_target()
 	..()
@@ -44,8 +53,47 @@
 		return TRUE
 	//Borgs/brains/AIs count as dead for traitor objectives. --NeoFite
 	// If they're in an away mission/custom z-level by the time you're checking this might as well count them as MIA
+	switch (syndicate_checked)
+		if (SYNDICATE_VALIDATED)
+			return TRUE
+		if (SYNDICATE_CANCELED)
+			return FALSE
 	if(target && target.current)
 		if(target.current.stat == DEAD || issilicon(target.current) || isbrain(target.current) || target.current.z > 6 || !target.current.ckey || isborer(target.current))
 			return TRUE
 		return FALSE
 	return TRUE
+
+/datum/objective/target/assassinate/proc/SyndicateCertification()
+	if (syndicate_checked == SYNDICATE_CANCELED)//if your death was reported prior, you're out of the race. Better luck next time.
+		return
+
+	syndicate_checked = SYNDICATE_VALIDATED
+
+	//The syndicate has confirmed that the double agent has taken out their target.
+	//They will now assign the new objective of assassinating their old target's target.
+	//Unless said target is themselves, which then means that all other agents have been eliminated and they have won.
+	var/datum/role/traitor/rogue/self = owner.GetRole(ROGUE)
+	var/datum/role/traitor/rogue/enemy = target.GetRole(ROGUE)
+	if (!self ||!enemy)
+		message_admins("a double agent syndicate certification has failed. call deity.")//not that this should ever happen
+		return
+
+	for (var/datum/objective/target/assassinate/A in enemy.objectives)
+		if (A.syndicate_checked)
+			continue
+		if (A.target == owner)
+			to_chat(owner.current, "<span class='notice'>The Syndicate congratulates you on your Victory. Look forward to be assigned on higher risk operations another day.</span>")
+		else
+			var/obj/item/device/uplink/hidden/guplink = owner.find_syndicate_uplink()
+			if (guplink)
+				guplink.uses += DOUBLE_AGENT_TC_REWARD
+				to_chat(owner.current, "<span class='notice'>Good work agent. [DOUBLE_AGENT_TC_REWARD] additional tele-crystals have been sent to your uplink.</span>")
+			else
+				to_chat(owner.current, "<span class='notice'>Good work agent. Unfortunately we couldn't find your uplink on your person, so no additional tele-crystals could be distributed.</span>")
+			var/datum/objective/target/assassinate/new_kill_target = new(auto_target = FALSE)
+			if(new_kill_target.set_target(A.target))
+				self.AppendObjective(new_kill_target)
+				to_chat(owner.current, "<b>New Objective</b>: [new_kill_target.explanation_text]<br>")
+			A.syndicate_checked = SYNDICATE_CANCELED
+			to_chat(enemy.current, "<span class='warning'>The Syndicate has taken note of your demise. You are therefore ineligible for victory this time around. Better luck next time!</span>")

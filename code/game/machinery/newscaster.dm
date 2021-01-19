@@ -702,6 +702,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 						var/obj/item/weapon/photo/P = photo
 						newMsg.img = P.img
 						newMsg.img_info = P.info
+						assassination_check(P)
 					else if(istype(photo,/datum/picture))
 						var/datum/picture/P = photo
 						newMsg.img = P.fields["img"]
@@ -972,6 +973,12 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 
 		else if(href_list["refresh"])
 			updateUsrDialog()
+
+/obj/machinery/newscaster/assassination_check(var/obj/item/weapon/photo/P)
+	if (assassination_objectives.len > 0)
+		for (var/datum/objective/target/assassinate/ass in assassination_objectives)
+			if (ass.double_agent_completion_id in P.double_agent_completion_ids)
+				ass.SyndicateCertification()
 
 /obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)
 	switch(buildstage)

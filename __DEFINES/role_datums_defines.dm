@@ -246,3 +246,10 @@
 #define DIRAC "Rigged threat number"
 #define EXPONENTIAL "Peaceful bias"
 #define UNIFORM "Uniform distribution"
+
+// -- Double Agents
+
+#define SYNDICATE_VALIDATED	1
+#define SYNDICATE_CANCELED	2
+
+#define DOUBLE_AGENT_TC_REWARD	5

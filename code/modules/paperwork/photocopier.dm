@@ -115,6 +115,7 @@
 					p.photo_size = photocopy.photo_size
 					p.blueprints = photocopy.blueprints //a copy of a picture is still good enough for the syndicate
 					p.info = photocopy.info
+					p.double_agent_completion_ids = photocopy.double_agent_completion_ids.Copy()
 
 					sleep(15)
 				else
