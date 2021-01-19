@@ -11,9 +11,24 @@
 /obj/item/weapon/bananapeel/Crossed(AM as mob|obj)
 	if (istype(AM, /mob/living/carbon))
 		var/mob/living/carbon/M = AM
-		if (M.Slip(2, 2, 1))
+		if(slip_n_slide(M))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+
+/datum/locking_category/banana_peel
+
+/obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
+	if(!M.Slip(2,2,1))
+		return 0
+	var/tiles_to_slip = rand(0,3)
+	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
+		M.lock_atom(src, /datum/locking_category/banana_peel)
+		for(var/i = 1 to tiles_to_slip)
+			if(!M.locked_to)
+				step(M, M.dir)
+				sleep(1)
+		spawn(1) M.unlock_atom(src)
+	return 1
 
 /*
  * Soap
