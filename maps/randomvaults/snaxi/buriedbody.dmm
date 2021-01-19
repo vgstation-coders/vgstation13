@@ -1,0 +1,33 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/obj/structure/window/barricade/snow,
+/turf/unsimulated/floor/snow,
+/area)
+"c" = (
+/turf/unsimulated/floor/snow,
+/area)
+"t" = (
+/obj/effect/landmark/corpse/assistant,
+/obj/structure/window/barricade/snow,
+/turf/unsimulated/floor/snow,
+/area)
+"B" = (
+/obj/structure/flora/rock/pile/snow,
+/turf/unsimulated/floor/snow,
+/area)
+
+(1,1,1) = {"
+c
+c
+a
+"}
+(2,1,1) = {"
+a
+t
+B
+"}
+(3,1,1) = {"
+B
+a
+B
+"}

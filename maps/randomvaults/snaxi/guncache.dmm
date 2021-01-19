@@ -1,0 +1,40 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"u" = (
+/obj/item/weapon/gun/projectile/hecate/hunting,
+/obj/item/ammo_storage/speedloader/c38,
+/obj/item/ammo_storage/speedloader/c38,
+/obj/item/weapon/bedsheet{
+	pixel_x = -1
+	},
+/obj/item/weapon/bedsheet{
+	pixel_x = 10
+	},
+/obj/item/weapon/bedsheet{
+	pixel_x = 4;
+	pixel_y = 8
+	},
+/turf/unsimulated/floor/snow,
+/area)
+"F" = (
+/obj/structure/flora/tree/pine,
+/turf/unsimulated/floor/snow,
+/area)
+
+(1,1,1) = {"
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+u
+F
+"}
+(3,1,1) = {"
+a
+a
+a
+"}

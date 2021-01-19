@@ -147,6 +147,7 @@
 			if(POPULATION_DENSE)
 				//Copy the list of all turfs
 				valid_spawn_points = area_turfs.Copy()
+				message_admins("TESTING: Starting with [valid_spawn_points.len] turfs.")
 
 				//While going through every already spawned map element - remove all potential locations which would cause the new element to overlap the already spawned one
 				for(var/datum/map_element/conflict in spawned)
@@ -178,15 +179,18 @@
 			continue
 		var/sanity = 0
 		var/turf/new_spawn_point
+		var/filter_counter = 0
 		do
 			sanity++
 			new_spawn_point = pick(valid_spawn_points)
 			valid_spawn_points.Remove(new_spawn_point)
 			if(filter_function && !call(filter_function)(ME, new_spawn_point))
 				new_spawn_point = null
+				filter_counter++
 				continue
 			break
 		while(sanity < 100)
+		message_admins("TESTING: Filtered [filter_counter] turfs.")
 		if(!new_spawn_point)
 			continue
 		var/vault_x = new_spawn_point.x

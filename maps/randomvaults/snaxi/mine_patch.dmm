@@ -1,0 +1,59 @@
+//MAP CONVERTED BY dmm2tgm.py THIS HEADER COMMENT PREVENTS RECONVERSION, DO NOT REMOVE
+"a" = (
+/turf/unsimulated/floor/snow,
+/area)
+"i" = (
+/turf/unsimulated/mineral/random/high_chance/snow,
+/area)
+"N" = (
+/turf/unsimulated/mineral/random/high_chance_clown/snow,
+/area)
+
+(1,1,1) = {"
+a
+a
+i
+a
+a
+a
+"}
+(2,1,1) = {"
+a
+i
+i
+i
+i
+a
+"}
+(3,1,1) = {"
+i
+i
+N
+N
+i
+i
+"}
+(4,1,1) = {"
+a
+i
+N
+i
+i
+a
+"}
+(5,1,1) = {"
+a
+i
+i
+i
+i
+a
+"}
+(6,1,1) = {"
+a
+a
+i
+i
+a
+a
+"}
