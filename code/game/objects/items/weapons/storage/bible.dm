@@ -321,6 +321,8 @@
 				to_chat(deconvertee,"<span class='notice'>You manage to block out the exorcism.</span>")
 				deconvertee.visible_message("<span class='userdanger'>The ritual was resisted, a pair of shades manifest and start attacking all nearby.</span>","<span class='warning'>The energies you mustered take their toll on your body, and manifest into a couple or red shades that start attacking whoever tried to deconvert you.</span>")
 				var/list/speak = list("...how dare you try and harass [deconvertee]...","...this is a blatant disregard of the freedom of religion...","...[deconvertee] has pledged their blood to Nar-Sie and we demand that you respect their choice...")
+				if (lol)
+					speak = list("...cut it out with the weird fanfictions [deconverter]...","...that is why we don't want you among us...","...go back to do word research where no one can hear about you [deconverter]...")
 				redshade_A.speak = speak
 				redshade_B.speak = speak
 				target = deconverter
