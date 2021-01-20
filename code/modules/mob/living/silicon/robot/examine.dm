@@ -38,8 +38,8 @@
 		if(UNCONSCIOUS)
 			msg += "<span class='warning'>It doesn't seem to be responding.</span>\n"
 		if(DEAD)
-			msg += "<span class='warning'>It is broken, please check internal components.</span>\n"
-			msg += "<spn class='deadsay'>A cyborg emergency restart board will be required once the necessary components are replaced.</span>\n"
+			msg += "<span class='warning'>It is broken, 'Please Check Internal Components' is flashing on its diagnostics display.</span>\n"
+			msg += "<spn class='deadsay'>'Emergency Restart Required' is scrolling repeatedly across the top of its diagnostics display.</span>\n"
 	msg += "*---------*</span>"
 
 	to_chat(user, msg)
