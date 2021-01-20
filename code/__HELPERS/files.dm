@@ -87,9 +87,14 @@
 				continue
 		if(potential == "Lamprey/") //Available if the station is wrecked enough
 			var/crew_score = score["crewscore"] //So that we can use this in the admin messaging
-			if(crew_score > -20000)
-				message_admins("Skipping map [potential], station requires lower than -20000 score (is [crew_score]).")
-				warning("Skipping map [potential], station requires lower than -20000 score (is [crew_score]).")
+			if(crew_score > -50000)
+				message_admins("Skipping map [potential], station requires lower than -50000 score (is [crew_score]).")
+				warning("Skipping map [potential], station requires lower than -50000 score (is [crew_score]).")
+				binary = null
+				continue
+			if(map.nameShort == "lamprey")
+				message_admins("Skipping map [potential], [map.nameLong] cannot happen more than once in a row.")
+				warning("Skipping map [potential], [map.nameLong] cannot happen more than once in a row.")
 				binary = null
 				continue
 		if(potential == "Castle Station/") //Available if revolutionaries won
