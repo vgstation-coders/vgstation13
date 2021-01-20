@@ -141,6 +141,7 @@
 	var/datum/role/traitor/challenger/assassination_target = null
 
 /datum/role/traitor/challenger/ForgeObjectives()
+	AppendObjective(/datum/objective/survive)
 	if (assassination_target && assassination_target.antag)
 		var/datum/objective/target/assassinate/kill_target = new(auto_target = FALSE)
 		if(kill_target.set_target(assassination_target.antag))

@@ -80,7 +80,7 @@
 				break
 
 	if (double_agents.len > 1)
-		for (var/i = 1 to double_agents.len)
+		for (var/i = 1 to (double_agents.len - 1))
 			var/datum/role/traitor/challenger/myAgent = double_agents[i]
 			var/datum/role/traitor/challenger/myTarget = double_agents[i+1]
 
