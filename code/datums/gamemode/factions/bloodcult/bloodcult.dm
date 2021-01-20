@@ -866,7 +866,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			var/turf/T = get_turf(pick(range(j*3,locate(map.center_x+j*4*(((round(i/2) % 2) == 0) ? -1 : 1 ),map.center_y+j*4*(((i % 2) == 0) ? -1 : 1 ),map.zMainStation))))
 			if(!is_type_in_list(T,list(/turf/space,/turf/unsimulated,/turf/simulated/shuttle)))
 				//Adding some blacklisted areas, specifically solars
-				if (!istype(T.loc,/area/solar))
+				if (!istype(T.loc,/area/solar) && is_type_in_list(T.loc,the_station_areas))
 					places_to_spawn += T
 					break
 	//A 5th bloodstone will spawn if a proper turf was given as arg (up to 100 tiles from the station center, and not in space or on a shuttle)
