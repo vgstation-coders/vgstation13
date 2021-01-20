@@ -1076,3 +1076,9 @@ var/list/uplink_items = list()
 	cost = 60
 	discounted_cost = 100
 	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/codebreaker
+	name = "Codebreaker"
+	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
+	item = /obj/item/device/codebreaker
+	cost = 100
