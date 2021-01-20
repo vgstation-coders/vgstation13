@@ -356,6 +356,11 @@ var/list/uplink_items = list()
 	item = /obj/item/toy/balloon/decoy
 	cost = 1
 
+/datum/uplink_item/stealthy_tools/faux_implant
+	name = "Faux Loyalty Implant"
+	desc = "An implant that broadcasts a loyalty implant signal for nanotransen standard security hud's, does not influence the loyalty or alignment of the user. Activated upon implantation"
+	item = /obj/item/weapon/implanter/faux
+	cost = 2
 // DEVICE AND TOOLS
 // Any Syndicate item that helps with hacking, low-key sabotage, damaging or subverting equipment (ex: Emag, camera bugs, EMP flashlight)
 
@@ -633,7 +638,7 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
-	
+
 /datum/uplink_item/jobspecific/command_security/batlinggun
 	name = "Batling gun"
 	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
@@ -1039,7 +1044,7 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/dart_cartridge
 	cost = 2
 	jobs_exclusive = list("Trader")
-	
+
 /datum/uplink_item/jobspecific/trader/cratesender
 	name = "Modified Crate Sender"
 	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."

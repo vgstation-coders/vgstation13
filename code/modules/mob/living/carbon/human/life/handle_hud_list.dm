@@ -93,14 +93,16 @@
 						break
 		hud_list[WANTED_HUD] = holder
 
-	if(hud_updateflag & 1 << IMPLOYAL_HUD || hud_updateflag & 1 << IMPCHEM_HUD || hud_updateflag & 1 << IMPTRACK_HUD)
+	if(hud_updateflag & 1 << IMPLOYAL_HUD || hud_updateflag & 1 << IMPCHEM_HUD || hud_updateflag & 1 << IMPTRACK_HUD & 1 << IMPFAUX_HUD)
 		var/image/holder1 = hud_list[IMPTRACK_HUD]
 		var/image/holder2 = hud_list[IMPLOYAL_HUD]
 		var/image/holder3 = hud_list[IMPCHEM_HUD]
+		var/image/holder4 = hud_list[IMPFAUX_HUD]
 
 		holder1.icon_state = "hudblank"
 		holder2.icon_state = "hudblank"
 		holder3.icon_state = "hudblank"
+		holder4.icon_state = "hudblank"
 
 		for(var/obj/item/weapon/implant/I in src)
 			if(I.implanted)
@@ -110,10 +112,13 @@
 					holder2.icon_state = "hud_imp_loyal"
 				if(istype(I,/obj/item/weapon/implant/chem))
 					holder3.icon_state = "hud_imp_chem"
+				if(istype(I,/obj/item/weapon/implant/faux))
+					holder4.icon_state = "hud_imp_loyal_faux"
 
 		hud_list[IMPTRACK_HUD] = holder1
 		hud_list[IMPLOYAL_HUD] = holder2
 		hud_list[IMPCHEM_HUD] = holder3
+		hud_list[IMPFAUX_HUD] = holder4
 
 	/*if(hud_updateflag & 1 << SPECIALROLE_HUD)
 		var/image/holder = hud_list[SPECIALROLE_HUD]

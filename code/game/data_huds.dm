@@ -186,6 +186,11 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else if(istype(I,/obj/item/weapon/implant/loyalty))
 						holder = perp.hud_list[IMPLOYAL_HUD]
 						holder.icon_state = "hud_imp_loyal"
+					else if(istype(I,/obj/item/weapon/implant/faux))
+						var/obj/item/weapon/implant/faux/faux_implant = I
+						if(!faux_implant.inactive)
+							holder = perp.hud_list[IMPFAUX_HUD]
+							holder.icon_state = "hud_imp_loyal_faux"
 					else if(istype(I,/obj/item/weapon/implant/chem))
 						holder = perp.hud_list[IMPCHEM_HUD]
 						holder.icon_state = "hud_imp_chem"
