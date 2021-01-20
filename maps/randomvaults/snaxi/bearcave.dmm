@@ -1,0 +1,41 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"c" = (/obj/item/trash/candy,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"e" = (/obj/item/trash/danitos,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"g" = (/obj/item/weapon/storage/backpack/satchel/withwallet,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"k" = (/obj/item/weapon/reagent_containers/food/snacks/grown/berries{icon = 'icons/obj/hydroponics/berry.dmi'},/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"l" = (/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"o" = (/obj/item/trash/chicken_bucket,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"p" = (/obj/item/weapon/reagent_containers/food/snacks/grown/berries{icon = 'icons/obj/hydroponics/berry.dmi'},/obj/item/weapon/reagent_containers/food/snacks/grown/berries{icon = 'icons/obj/hydroponics/berry.dmi'},/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"s" = (/obj/item/weapon/storage/backpack,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"x" = (/obj/item/weapon/reagent_containers/food/snacks/honeycomb,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"y" = (/obj/item/trash/discountchocolate,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"z" = (/obj/item/weapon/storage/bag/food/menu2,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"A" = (/obj/item/trash/candy,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"B" = (/obj/item/trash/pietin,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"C" = (/mob/living/simple_animal/cow{health = 0; icon_state = "cow_dead"; stat = 2},/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"E" = (/obj/item/trash/plate,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"G" = (/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"H" = (/obj/item/trash/chips,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
+"I" = (/turf/unsimulated/wall/rock/ice,/area/vault/bearcave)
+"K" = (/obj/item/clothing/accessory/storage/fannypack/preloaded/assistant,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"N" = (/obj/abstract/map/spawner/mobs/bear,/obj/item/weapon/reagent_containers/food/snacks/honeycomb,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"U" = (/mob/living/simple_animal/hostile/bear/polarbear,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"V" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/obj/item/weapon/reagent_containers/food/snacks/honeycomb,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"W" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+
+(1,1,1) = {"
+aaaIaIlllIaaaaa
+aaIIIIlllIIIaaa
+aIIIIllHllIIIIa
+aIIIlllllllIIIa
+IIIllllWllllIII
+lllyelNCUllllll
+lllygWWxVElllll
+llllBxUxklollll
+IIIlGspWGlllIIa
+IIGGGAKGGllIIaa
+IGGzGGlGllIIaaa
+IGUGGIlllIIIIaa
+IIIGIIlclIIaaaa
+aIIIIIlllIaaaaa
+"}

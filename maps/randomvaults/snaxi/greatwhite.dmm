@@ -1,0 +1,21 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"q" = (/mob/living/simple_animal/hostile/asteroid/goliath/snow/great,/turf/unsimulated/floor/snow,/area)
+"z" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaa
+aaaazaaaaaaaaaa
+aaaaaaaazaaaaaa
+aaaaaaaaaaaaaaa
+aaaaaaaaaaaazaa
+azaaaaaaaaaaaaa
+aaaaaaaqaaaaaaa
+aaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaa
+aaaaaaaaaaazaaa
+aaazaaaaaaaaaaa
+aaaaaaaaaaaaaaa
+aaaaaaazaaaaaaa
+aaaaaaaaaaaaaaa
+"}

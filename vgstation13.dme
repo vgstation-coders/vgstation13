@@ -2686,6 +2686,7 @@
 #include "maps\randomvaults\objects.dm"
 #include "maps\randomvaults\sokoban.dm"
 #include "maps\randomvaults\spessmart.dm"
+#include "maps\randomvaults\snaxi\snaxivault_defines.dm"
 #include "maps\RandomZLevels\Academy.dm"
 #include "maps\RandomZLevels\challenge.dm"
 #include "maps\RandomZLevels\hive.dm"
