@@ -427,7 +427,7 @@
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
 	health = max(0, health - damage)
 	if(sound_effect)
-		playsound(loc, 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
 	if(health <= 0)
 		spawn(1)
 			Destroy()
@@ -448,7 +448,6 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	..()
 	if(W.is_wrench(user))
 		return
 	if(istype(W,/obj/item/weapon/grab))
@@ -458,12 +457,9 @@
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time
 			enter_barrel(target)
 	else
+		take_damage(W.force)
+		user.delayNextAttack(10)
 		..()
-
-/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W, mob/user, params)
-	take_damage(W.force)
-	user.delayNextAttack(10)
-
 
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/enter_barrel(mob/user)
 	user.forceMove(src)
