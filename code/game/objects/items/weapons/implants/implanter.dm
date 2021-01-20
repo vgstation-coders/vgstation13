@@ -83,7 +83,7 @@
 
 /obj/item/weapon/implanter/faux
 	name = "implanter-loyalty"
-	imp_type = /obj/item/weapon/implant/faux
+	imp_type = /obj/item/weapon/implant/faux // fake loyalty implant
 
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
