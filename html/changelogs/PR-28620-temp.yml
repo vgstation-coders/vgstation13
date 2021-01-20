@@ -1,5 +1,0 @@
----
-author: Kurfursten
-changes:
-  - bugfix: "Fixed a bug where random bloodstones could sometimes spawn off station randomly as long as it was still on Z-1 (for example, in the caves on Snaxi or in the Vox outpost on Roid)"
-delete-after: true

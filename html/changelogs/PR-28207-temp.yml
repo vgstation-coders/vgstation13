@@ -1,8 +1,0 @@
----
-author: DeityLink
-changes:
-  - experiment: "New antag role! \"Syndicate Challengers\". Roughly based on the old double-agents game mode. Remember to update your preferences to try it out."
-  - rscadd: "Challengers are fairly similar to traitors in that they have an uplink, some TCs, even code words, however their single objective is to assassinate another challenger aboard the station, henceforth there's always at least 2 of them tasked with killing each others. When there are more than 2 challengers, their assassination orders are chained so that the first one hunts the second one, the second one hunts the third one, etc, until the last one who hunts the first one. Once an assassination has been successfully carried out and reported to the Syndicate, you take on your victim's target (unless it was you in which case no more objectives are given) and receive 5 additional TCs."
-  - rscadd: "For a successful assassination to be permanently secured by the Syndicate, you must take a photo of your victim's dead (crit is enough) body, severed head, or brain, and publish it on any newscaster channel for all the crew to see their dead body. You can use any channel, but you may want to use your victim's ID to create one so as to keep the crew guessing as to your identity, or send the message with another stolen ID to send security on a red herring."
-  - experiment: "This variant on traitor puts the emphasis on robustness and direct confrontation between traitors, but the Syndicate doesn't care how the deed is performed so long as the kill is reported. Once it has, your victim's own assassination objective is forever marked as failed even if they get revived and their target dies later."
-delete-after: true
