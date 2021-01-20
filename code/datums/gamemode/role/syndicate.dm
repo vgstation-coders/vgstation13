@@ -166,7 +166,7 @@
 
 
 /datum/role/traitor/challenger/OnPostSetup()
-	..()
+	. = ..()
 	maybe_equip(new /obj/item/device/camera(get_turf(antag.current)))
 
 /datum/role/traitor/challenger/proc/maybe_equip(obj/item/thing)

@@ -80,7 +80,7 @@
 				break
 
 	if (double_agents.len > 1)
-		for (var/i = 1,i < double_agents.len, i++)
+		for (var/i = 1 to double_agents.len)
 			var/datum/role/traitor/challenger/myAgent = double_agents[i]
 			var/datum/role/traitor/challenger/myTarget = double_agents[i+1]
 
@@ -92,8 +92,6 @@
 		myAgent.assassination_target = myTarget
 
 		//the objectives are properly created during ForgeObjectives() on the mode's PostSetup()
-
-	//TODO: have objectives update when an assassination is complete so they obtain their target's target until they are the last one standing.
 
 	return 1
 
