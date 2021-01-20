@@ -242,7 +242,5 @@ var/global/maint_sec_access_only = 0
 				return 1
 			else
 				return 0
-		if(security_level > 0 && src.check_access_list(list(access_maint_tunnels)) && (access_security in M.GetAccess()))
-			return 1
 
 	return ..(M)
