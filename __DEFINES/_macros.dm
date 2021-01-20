@@ -279,7 +279,7 @@
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind && H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
