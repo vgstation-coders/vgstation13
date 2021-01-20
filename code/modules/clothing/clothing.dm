@@ -388,6 +388,7 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE

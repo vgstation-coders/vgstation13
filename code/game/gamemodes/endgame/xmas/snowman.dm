@@ -5,7 +5,7 @@
 	icon='icons/mob/snowman.dmi'
 	anchored = TRUE
 	density = TRUE
-	var/obj/item/clothing/hat = null
+	var/obj/item/clothing/head/hat = null
 	var/obj/item/carrot = null
 	var/health = 40
 
@@ -61,9 +61,11 @@
 
 /obj/structure/snowman/proc/come_to_life()
 	if(hat && hat.wizard_garb && carrot)
-		say("Ah, most excellent!")
-		for(var/i = 1 to 6)
-			call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(loc)
+		say(pick("Happy birthday! Hey... I said my first words!","I can make words, I can move!","Could... could I really be alive?"))
+		if(!hat.gave_out_gifts)
+			hat.gave_out_gifts = TRUE
+			for(var/i = 1 to 6)
+				call(/obj/item/weapon/winter_gift/proc/pick_a_gift)(loc)
 		new /mob/living/simple_animal/hostile/retaliate/snowman(loc, hat)
 		hat = null //to avoid deletion
 		qdel(src)
@@ -106,12 +108,21 @@
 /mob/living/simple_animal/hostile/retaliate/snowman/New(loc,nhat)
 	..()
 	hat = nhat
-	overlays += image('icons/mob/head.dmi', hat.icon_state)
+	if(hat)
+		hat.forceMove(src)
+	else
+		for(var/obj/item/clothing/head/H in loc)
+			hat = H
+			H.forceMove(src)
+			break
+	if(hat)
+		overlays += image('icons/mob/head.dmi', hat.icon_state)
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Destroy()
+	if(hat)
+		hat.forceMove(get_turf(src))
+		hat = null
 	overlays.Cut()
-	qdel(hat)
-	hat = null
 	..()
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Life()
@@ -119,34 +130,30 @@
 		return 0 //under effects of time magick
 
 	..()
-	if(!ckey && !stat)
-		if(isturf(src.loc) && !resting && !locked_to)		//This is so it only moves if it's not inside a closet, gentics machine, etc.
-			turns_since_move++
-			if(turns_since_move >= turns_per_move)
-				Move(get_step(src,pick(4,8)))
-				turns_since_move = 0
-
-	if(!stat && enemies.len && prob(5))
-		enemies = list()
-		LoseTarget()
-		src.say("Whatever.")
 
 	if(stat)
-		visible_message("<span class='game say'><span class='name'>[src.name]</span> murmurs, [pick("Oh my snowballs...","I will...be back...")]</span>")
-		visible_message("\the [src] collapses in a pile of snow.")
-		var/turf/T = get_turf(src)
-		new /obj/item/stack/sheet/snow(T, 1)
-		new /obj/item/stack/sheet/snow(T, 1)
-		new /obj/item/stack/sheet/snow(T, 1)
-		new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(T)
-		if(hat)
-			hat.forceMove(T)
-		qdel(src)
+		death(1)
 
-	else if(fire_alert)
-		src.say(pick("Oh god the heat...","I'm meltiiinggg...","Someone turn off the heater!"))
+	if(enemies.len && prob(5))
+		enemies = list()
+		LoseTarget()
+		say("Whatever.")
+
+	if(fire_alert)
+		say(pick("Oh god the heat...","I'm meltiiinggg...","Someone turn off the heater!"))
 
 	regenerate_icons()
+
+/mob/living/simple_animal/hostile/retaliate/snowman/death(gibbed)
+	visible_message("<span class='game say'><span class='name'>[name]</span> murmurs, \"[pick("Oh my snowballs...","I will...be back...")]\"</span>")
+	visible_message("\the [src] collapses in a pile of snow.")
+	var/turf/T = get_turf(src)
+	new /obj/item/stack/sheet/snow(T, 1)
+	new /obj/item/stack/sheet/snow(T, 1)
+	new /obj/item/stack/sheet/snow(T, 1)
+	new /obj/item/weapon/reagent_containers/food/snacks/grown/carrot(T)
+	animal_count[src.type]--
+	qdel(src)
 
 /mob/living/simple_animal/hostile/retaliate/snowman/Retaliate()
 	..()
