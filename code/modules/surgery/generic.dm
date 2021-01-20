@@ -140,6 +140,7 @@
 /datum/surgery_step/generic/cut_open
 	allowed_tools = list(
 		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
 		)
@@ -187,6 +188,7 @@
 	allowed_tools = list(
 		/obj/item/weapon/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
+		/obj/item/weapon/talisman = 70,
 		/obj/item/device/assembly/mousetrap = 20,
 		)
 

@@ -146,6 +146,8 @@
 #define RITUALABORT_TOOLS	"moved talisman"
 #define RITUALABORT_REMOVED	"victim removed"
 #define RITUALABORT_CONVERT	"convert success"
+#define RITUALABORT_REFUSED	"convert refused"
+#define RITUALABORT_NOCHOICE	"convert nochoice"
 #define RITUALABORT_SACRIFICE	"convert failure"
 #define RITUALABORT_FULL	"no room"
 #define RITUALABORT_CONCEAL	"conceal"
@@ -178,6 +180,7 @@
 #define CONVERSION_REFUSE	-1
 #define CONVERSION_NOCHOICE	0
 #define CONVERSION_ACCEPT	1
+#define CONVERSION_BANNED	2
 
 #define CONVERTIBLE_ALWAYS	1
 #define CONVERTIBLE_CHOICE	2
@@ -185,6 +188,9 @@
 #define CONVERTIBLE_NOMIND	4
 #define CONVERTIBLE_ALREADY	5
 #define CONVERTIBLE_IMPLANT	6
+
+#define DECONVERSION_ACCEPT	1
+#define DECONVERSION_REFUSE 2
 
 ////////////////////////////////////////////////////////////////////////////////
 

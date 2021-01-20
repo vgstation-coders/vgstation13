@@ -68,6 +68,39 @@
 
 	var/datum/role/vampire/V = isvampire(user)
 
+	//they have holy water in them? deconversion mode activate! anyone can do it.
+	if (M.reagents?.has_reagent(HOLYWATER) && user.a_intent == I_HELP)
+		if (M.stat == DEAD)
+			to_chat(user,"<span class='warning'>You cannot deconvert the dead!</span>")
+			return 1
+		if (M.health < 20)
+			to_chat(user,"<span class='warning'>\The [M] is too weak to handle the deconversion ritual, patch them up a bit first.</span>")
+			return 1
+		if(iscultist(M))
+			var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+			if (cultist.deconversion)
+				to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
+				return 1
+			else
+				playsound(src, "punch", 25, 1, -1)
+				if (istype(my_rel, /datum/religion/cult))
+					user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src] and they begin to radiate with light.</span>",
+					"<span class='warning'>You bless [M]'s head with \the [src]. In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
+				else
+					user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src] and they begin to radiate with light.</span>",
+					"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+				new /datum/deconversion_ritual(user, M, src)
+				return 1
+		else
+			playsound(src, "punch", 25, 1, -1)
+			if (istype(my_rel, /datum/religion/cult))
+				user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
+				"<span class='warning'>You bless [M]'s head with \the [src]. In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
+			else
+				user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
+				"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+			user.visible_message("<span class='warning'>...but nothing unusal happens.</span>")
+		return 1
 	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
 		if(V) //Vampire trying to use it
@@ -213,3 +246,98 @@
 	else
 		owner.mind.faith.convertAct(owner, subject, B) // usr = preacher ; target = subject
 		return TRUE
+
+/datum/deconversion_ritual
+	var/datum/role/cultist/cultist = null
+	var/cult_chaplain = FALSE
+	var/last_cultist = FALSE
+	var/success = DECONVERSION_ACCEPT
+
+/datum/deconversion_ritual/New(var/mob/living/deconverter, var/mob/living/deconvertee, var/obj/item/weapon/storage/bible/bible)
+	..()
+	if (!bible||!bible.my_rel||!deconverter||!deconvertee||!iscultist(deconvertee))
+		qdel(src)
+		return
+	var/mob/target
+	deconvertee.overlays += image('icons/effects/effects.dmi',src,"deconversion")
+	playsound(deconvertee, 'sound/effects/deconversion_start.ogg', 50, 0, -4)
+	cultist = deconvertee.mind.GetRole(CULTIST)
+	cultist.deconversion = src
+
+	deconvertee.eye_blurry = max(deconvertee.eye_blurry, 10)
+	deconvertee.Dizzy(30)
+	deconvertee.stuttering = max(deconvertee.stuttering, 10)
+	deconvertee.Jitter(30)
+	deconvertee.Knockdown(10)
+
+	if (istype(bible.my_rel, /datum/religion/cult))
+		cult_chaplain = TRUE
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	var/living_cultists = 0
+	for(var/datum/role/cultist/C in cult.members)
+		if (C.antag && C.antag.current && C.antag.current.stat != DEAD)
+			living_cultists++
+	if (living_cultists <= 1)
+		last_cultist = TRUE
+
+	spawn()
+		spawn()
+			if (alert(deconvertee, "You are being compelled by the powers of [bible.my_rel.deity_name][cult_chaplain ? " (wait what?)" : ""] to give up on serving the Cult of Nar-Sie[cult_chaplain ? " (huh!?)" : ""]","You have 10 seconds to decide","[!cult_chaplain ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]","[!cult_chaplain ? "Resist!" : "This is obviously a trick! Resist!"]") == "[!cult_chaplain ? "Abandon the Cult" : "I am so confused right now, ok I guess?"]")
+				success = DECONVERSION_ACCEPT
+				if (!target && !last_cultist)//no threats if nobody remains to carry them out.
+					to_chat(deconvertee, "<span class='sinister'>[cult_chaplain ? "WERE YOU DECEIVED THAT EASILY? SO BE IT THEN." : "THERE WILL BE A PRICE."]</span>")
+			else
+				success = DECONVERSION_REFUSE
+				if (!target)
+					to_chat(deconvertee, "<span class='warning'>You block the sweet promises of forgiveness from your mind.</span>")
+		sleep(100)
+		if (!deconvertee || !iscultist(deconvertee))
+			qdel(src)
+			return
+		deconvertee.take_overall_damage(10)//it's a painful process no matter what.
+		var/turf/T = get_turf(deconvertee)
+		anim(target = deconvertee, a_icon = 'icons/effects/effects.dmi', flick_anim = "cult_jaunt_land", lay = SNOW_OVERLAY_LAYER, plane = EFFECTS_PLANE)
+		var/mob/living/simple_animal/hostile/shade/redshade_A = new(T)
+		var/mob/living/simple_animal/hostile/shade/redshade_B = new(T)
+		if (!bible.my_rel.leadsThisReligion(deconverter))//the shades are a bit stronger if it's not an actual chaplain doing the deconversion, or they're not using a bible of their religion.
+			redshade_A.buff()
+			redshade_B.buff()
+		var/list/adjacent_turfs = list()
+		for (var/turf/U in orange(1,T))
+			adjacent_turfs += U
+		switch(success)
+			if (DECONVERSION_ACCEPT)
+				playsound(deconvertee, 'sound/effects/deconversion_complete.ogg', 50, 0, -4)
+				to_chat(deconvertee,)
+				deconvertee.visible_message("<span class='notice'>You see [deconvertee]'s eyes become clear. Through the blessing of [cult_chaplain ? "some fanfic headcanon version of [bible.my_rel.deity_name]" : "[bible.my_rel.deity_name]"] they have renounced Nar-Sie.</span>","<span class='notice'>You were forgiven by [bible.my_rel.deity_name]</span><span class='sinister'>[cult_chaplain ? " (YEAH RIGHT...)" : ""]</span><span class='notice'>. You no longer share the cult's goals.</span>")
+				deconvertee.visible_message("<span class='userdanger'>A pair of shades manifests from the occult energies that left them and start attacking them.</span>")
+				cultist.Drop()
+				var/list/speak = list("...you shall give back the blood we gave you [deconvertee]...","...one does not simply turn their back on our gift...","...if you won't dedicate your heart to Nar-Sie, you don't need it anymore...")
+				redshade_A.speak = speak
+				redshade_B.speak = speak
+				target = deconvertee
+			if (DECONVERSION_REFUSE)
+				playsound(deconvertee, 'sound/effects/deconversion_failed.ogg', 50, 0, -4)
+				to_chat(deconvertee,"<span class='notice'>You manage to block out the exorcism.</span>")
+				deconvertee.visible_message("<span class='userdanger'>The ritual was resisted, a pair of shades manifest and start attacking all nearby.</span>","<span class='warning'>The energies you mustered take their toll on your body, and manifest into a couple or red shades that start attacking whoever tried to deconvert you.</span>")
+				var/list/speak = list("...how dare you try and harass [deconvertee]...","...this is a blatant disregard of the freedom of religion...","...[deconvertee] has pledged their blood to Nar-Sie and we demand that you respect their choice...")
+				if (cult_chaplain)
+					speak = list("...cut it out with the weird fanfictions [deconverter]...","...that is why we don't want you among us...","...go back to do word research where no one can hear about you [deconverter]...")
+				redshade_A.speak = speak
+				redshade_B.speak = speak
+				target = deconverter
+		spawn(1)
+			redshade_A.forceMove(get_turf(pick(adjacent_turfs)))
+			redshade_B.forceMove(get_turf(pick(adjacent_turfs)))
+			redshade_A.GiveTarget(target)
+			redshade_B.GiveTarget(target)
+			redshade_A.MoveToTarget()
+			redshade_B.MoveToTarget()
+		deconvertee.overlays -= image('icons/effects/effects.dmi',src,"deconversion")
+		qdel(src)
+
+/datum/deconversion_ritual/Destroy()
+	if (cultist)
+		cultist.deconversion = null
+	cultist = null
+	..()

@@ -77,6 +77,10 @@
 	desc = "An implanter containing a pax implant"
 	imp_type = /obj/item/weapon/implant/peace
 
+/obj/item/weapon/implanter/holy
+	name = "implanter-holy"
+	imp_type = /obj/item/weapon/implant/holy
+
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
 	icon_state = "cimplanter1"

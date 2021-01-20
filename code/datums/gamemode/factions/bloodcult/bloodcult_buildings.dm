@@ -557,10 +557,22 @@
 					var/extra = ""
 					if (H && istype(H))
 						if (H.isInCrit())
-							extra = " - <span style='color:#FF0000'>CRITICAL</span>"
+							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
 					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
+				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
+					if (iscarbon(cuffs.loc))
+						var/mob/living/carbon/C = cuffs.loc
+						if (C.handcuffed == cuffs && cuffs.gaoler && cuffs.gaoler.antag)
+							var/datum/mind/gaoler = cuffs.gaoler.antag
+							var/extra = ""
+							if (C && istype(C))
+								if (C.isInCrit())
+									extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
+								else if (C.isDead())
+									extra = " - <span style='color:#FF0000'>DEAD</span>"
+							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
 				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")

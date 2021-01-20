@@ -62,6 +62,8 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 
 	var/list/cult_reminders = list()
 
+	var/list/bindings = list()
+
 /datum/faction/bloodcult/check_win()
 	return cult_win
 
@@ -188,10 +190,9 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 					new_obj = new /datum/objective/bloodcult_sacrifice
 					for(var/datum/role/cultist/C in members)
 						var/mob/M = C.antag.current
-						for(var/obj/item/weapon/implant/loyalty/I in M)
-							I.forceMove(get_turf(M))
-							I.implanted = 0
-							M.visible_message("<span class='warning'>\The [I] pops out of \the [M]'s head.</span>")
+						if (iscarbon(M))
+							var/mob/living/carbon/CARB = M
+							CARB.implant_pop()
 		if (CULT_ACT_III)
 			var/datum/objective/bloodcult_sacrifice/O = locate() in objective_holder.objectives
 			minor_victory = TRUE // At any rate, we achieve a minor win.
@@ -252,6 +253,50 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 			O.max_bloodspill = max(O.max_bloodspill,bloody_floors.len)
 			if (O.IsFulfilled())
 				stage(CULT_ACT_IV)
+
+/mob/living/carbon/proc/implant_pop()
+	for(var/obj/item/weapon/implant/loyalty/I in src)
+		if (I.implanted)
+			to_chat(src, "<span class='sinister'>Your blood pushes back against the loyalty implant, it will visibly pop out within seconds!</span>")
+			spawn(10 SECONDS)
+				I.forceMove(get_turf(src))
+				I.implanted = 0
+				visible_message("<span class='warning'>\The [I] pops out of \the [src]'s head.</span>")
+
+/mob/living/carbon/proc/boxify(var/delete_body = TRUE, var/new_anim = TRUE, var/box_state = "cult")//now its own proc so admins may atomProcCall it if they so desire.
+	var/turf/T = get_turf(src)
+	for(var/mob/living/M in dview(world.view, T, INVISIBILITY_MAXIMUM))
+		if (M.client)
+			M.playsound_local(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
+	if (new_anim)
+		var/obj/effect/cult_ritual/conversion/anim = new(T)
+		anim.icon_state = ""
+		flick("rune_convert_failure",anim)
+		anim.Die()
+	var/obj/item/weapon/storage/cult/coffer = new(T)
+	coffer.icon_state = box_state
+	var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
+	if (istype(src,/mob/living/carbon/human) && dna)
+		take_blood(cup, cup.volume)//Up to 60u
+		cup.on_reagent_change()//so we get the reagentsfillings overlay
+		new/obj/item/weapon/skull(coffer)
+	if (isslime(src))
+		cup.reagents.add_reagent(SLIMEJELLY, 50)
+	if (isalien(src))//w/e
+		cup.reagents.add_reagent(RADIUM, 50)
+
+	for(var/obj/item/weapon/implant/loyalty/I in src)
+		I.implanted = 0
+
+	for(var/obj/item/I in src)
+		u_equip(I)
+		if(I)
+			I.forceMove(T)
+			I.reset_plane_and_layer()
+			I.dropped(src)
+			I.forceMove(coffer)
+	if (delete_body)
+		qdel(src)
 
 /datum/faction/bloodcult/proc/add_bloody_floor(var/turf/T)
 	if (!istype(T))
@@ -388,13 +433,11 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 		if(ishuman(Grab.affecting))
 			var/mob/living/carbon/human/H = Grab.affecting
 			if(!(H.species.anatomy_flags & NO_BLOOD))
-				for(var/datum/organ/external/org in H.organs)
-					if(org.status & ORGAN_BLEEDING)
-						var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
-						var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
-						data[BLOODCOST_TARGET_GRAB] = H
-						data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
-						amount_gathered += blood_gathered
+				var/blood_volume = round(H.vessel.get_reagent_amount(BLOOD))
+				var/blood_gathered = min(amount_needed-amount_gathered,blood_volume)
+				data[BLOODCOST_TARGET_GRAB] = H
+				data[BLOODCOST_AMOUNT_GRAB] = blood_gathered
+				amount_gathered += blood_gathered
 		if(ismonkey(Grab.affecting) || isalien(Grab.affecting))//Unlike humans, monkeys take oxy damage when blood is taken from them.
 			var/mob/living/carbon/C = Grab.affecting
 			if(!C.isDead())
