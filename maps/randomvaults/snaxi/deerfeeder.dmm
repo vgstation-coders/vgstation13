@@ -11,7 +11,6 @@
 "I" = (/obj/structure/fence/cut/large{dir = 4},/turf/unsimulated/floor/snow,/area)
 "M" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/snow,/area)
 "Q" = (/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'; pixel_x = 3; pixel_y = 4},/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'; pixel_x = -2; pixel_y = 3},/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'},/turf/unsimulated/floor/snow,/area)
-"U" = (/obj/item/weapon/corncob,/obj/abstract/map/spawner/mobs/deer,/turf/unsimulated/floor/snow,/area)
 "V" = (/obj/item/weapon/corncob,/turf/unsimulated/floor/snow,/area)
 "W" = (/obj/structure/fence/corner{dir = 4},/turf/unsimulated/floor/snow,/area)
 
@@ -20,7 +19,7 @@ aaaaaaaa
 aCMMMIWa
 arVaaVra
 arawEaAa
-araaQUra
+araaQVra
 aAVaaara
 apIlttba
 aaaaaVaa

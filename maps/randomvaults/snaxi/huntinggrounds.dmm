@@ -2,21 +2,21 @@
 "h" = (/obj/structure/flora/tree/pine,/turf/unsimulated/floor/snow,/area)
 "A" = (/obj/abstract/map/spawner/mobs/deer,/turf/unsimulated/floor/snow,/area)
 "E" = (/turf/unsimulated/wall/rock/ice,/area)
-"S" = (/obj/abstract/map/spawner/mobs/wolf,/turf/unsimulated/floor/snow,/area)
+"S" = (/mob/living/simple_animal/hostile/wolf,/turf/unsimulated/floor/snow,/area)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaa
 ahaaaahaaaaaaaa
 aaaaaaaaahaahaa
-aaaAaaaaaaaaaaa
+aaaaaaaaaaaaaaa
 aaaaaaaaaaahEEa
 ahaaaaaahaaEEEa
 aaaahaaaaaEEEaa
-aaaaaaaaaaEEaSa
-aaAaaaaaaaEEaaa
+aaaaAaaaaaEESaa
+aaaaaaaaaaEEaaa
 aaaaaahaaaEEEaa
 ahaaaaaaahaEEEa
-aaaaaaAaaaaaEEa
+aaaaaaaaaaaaEEa
 aaaaaaaaaaaaaha
 aahaaaaaahaaaaa
 aaaaaaaaaaaaaaa

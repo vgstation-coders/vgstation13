@@ -19,7 +19,7 @@
 "I" = (/turf/unsimulated/wall/rock/ice,/area/vault/bearcave)
 "K" = (/obj/item/clothing/accessory/storage/fannypack/preloaded/assistant,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "N" = (/obj/abstract/map/spawner/mobs/bear,/obj/item/weapon/reagent_containers/food/snacks/honeycomb,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
-"U" = (/obj/abstract/map/spawner/mobs/bear,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"U" = (/mob/living/simple_animal/hostile/bear/polarbear,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "V" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/obj/item/weapon/reagent_containers/food/snacks/honeycomb,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "W" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 
