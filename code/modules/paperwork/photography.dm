@@ -347,19 +347,19 @@
 			if (A.mind && A.health < 0)//well they might be in crit but that's good enough I guess
 				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
 					if (ass.target == A.mind)
-						double_agent_completion_ids += "[\ref[ass]]"
+						double_agent_completion_ids += "\ref[ass]"
 		for(var/obj/item/organ/external/head/H in the_turf)
 			var/mob/living/carbon/brain/brainmob = H.brainmob
 			if (brainmob && brainmob.mind)
 				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
 					if (ass.target == brainmob.mind)
-						double_agent_completion_ids += "[\ref[ass]]"
+						double_agent_completion_ids += "\ref[ass]"
 		for(var/obj/item/organ/internal/brain/B in the_turf)
 			var/mob/living/carbon/brain/brainmob = B.brainmob
 			if (brainmob && brainmob.mind)
 				for(var/datum/objective/target/assassinate/ass in assassination_objectives)
 					if (ass.target == brainmob.mind)
-						double_agent_completion_ids += "[\ref[ass]]"
+						double_agent_completion_ids += "\ref[ass]"
 
 
 
