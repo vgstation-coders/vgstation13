@@ -978,7 +978,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 	if (assassination_objectives.len > 0)
 		for (var/datum/objective/target/assassinate/ass in assassination_objectives)
 			for(var/ass_id in P.double_agent_completion_ids)
-				if (ass.double_agent_completion_id == ass_id)
+				if ("[\ref[ass]]" == ass_id)
 					ass.SyndicateCertification()
 
 /obj/machinery/newscaster/attackby(obj/item/I as obj, mob/user as mob)

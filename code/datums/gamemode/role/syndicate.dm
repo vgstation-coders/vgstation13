@@ -158,7 +158,7 @@
 	var/icon/logo = icon('icons/logos.dmi', logo_state)
 	switch(greeting)
 		if (GREET_ROUNDSTART)
-			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate Challenger. You have been pitched along with other volunteers into a battle royale aboard of one of Nanotrasen's space stations for the priviledge of becoming a fully fledged Syndicate agent. Take the other agents out before they do the same to you.</span>")
+			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate Challenger. You have been pitched along with other volunteers into a battle royale aboard of one of Nanotrasen's space stations for the privilege of becoming a fully fledged Syndicate agent. Take the other agents out before they do the same to you.</span>")
 		else
 			to_chat(antag.current, "<img src='data:image/png;base64,[icon2base64(logo)]' style='position: relative; top: 10;'/> <span class='danger'>You are a Syndicate Challenger.</span>")
 
@@ -180,12 +180,12 @@
 		var/where = mob.equip_in_one_of_slots(thing, slots, put_in_hand_if_fail = 1)
 
 		if (!where)
-			to_chat(mob, "\The Syndicate was unfortunately unable to get you \a [thing].")
+			to_chat(mob, "The Syndicate was unfortunately unable to get you \a [thing].")
 		else
 			to_chat(mob, "To assist you in this trial, the Syndicate has provided you with a regular [thing] in your [where].")
 	else
 		thing.forceMove(get_turf(mob))
-		to_chat(mob, "\The Syndicate was able to get you \a [thing], but could not find anywhere to slip it onto you, so it is now on the floor.")
+		to_chat(mob, "The Syndicate was able to get you \a [thing], but could not find anywhere to slip it onto you, so it is now on the floor.")
 
 
 //________________________________________________
