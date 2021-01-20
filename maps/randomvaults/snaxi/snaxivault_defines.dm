@@ -81,6 +81,27 @@ Included in this file
 /datum/map_element/snowvault/lostsnowmobile
 	file_path = "maps/randomvaults/snaxi/lostsnowmobile.dmm"
 
+/datum/map_element/snowvault/bearcave
+	file_path = "maps/randomvaults/snaxi/bearcave.dmm"
+
+/datum/map_element/snowvault/trees
+	file_path = "maps/randomvaults/snaxi/trees.dmm"
+
+/datum/map_element/snowvault/geysercluster
+	file_path = "maps/randomvaults/snaxi/geysercluster.dmm"
+
+/datum/map_element/snowvault/unfrozen_pond
+	file_path = "maps/randomvaults/snaxi/unfrozen_pond.dmm"
+
+/datum/map_element/snowvault/greatwhite
+	file_path = "maps/randomvaults/snaxi/greatwhite.dmm"
+
+/datum/map_element/snowvault/witchsabbath
+	file_path = "maps/randomvaults/snaxi/witchsabbath.dmm"
+
+/datum/map_element/snowvault/huntinggrounds
+	file_path = "maps/randomvaults/snaxi/huntinggrounds.dmm"
+
 //Vault atoms
 
 /area/vault/thermalplant
@@ -124,9 +145,11 @@ Included in this file
 	if(prob(15)) //15% chance that instead of wandering, he'll rest for a minute
 		lying = TRUE
 		wander = FALSE
+		update_icons()
 		spawn(1 MINUTES)
 			lying = FALSE
 			wander = TRUE
+			update_icons()
 	else
 		..()
 
@@ -134,6 +157,7 @@ Included in this file
 	if(lying && !isDead()) //He'll get up if something moves him
 		lying = FALSE
 		wander = TRUE
+		update_icons()
 	..()
 
 /area/vault/cabin
@@ -143,3 +167,31 @@ Included in this file
 	..()
 	new /obj/item/clothing/shoes(src) //create stockings
 	cell.charge = cell.maxcharge
+	update_icon()
+
+/obj/structure/reagent_dispensers/cauldron/witch/New()
+	..()
+	name = "witch's cauldron"
+	reagents.add_reagent(MUTAGEN, 100)
+
+/area/vault/bearcave
+	name = "bear cave"
+
+/mob/living/simple_animal/hostile/asteroid/goliath/snow/great
+	name = "great white goliath"
+	size = SIZE_HUGE
+	maxHealth = 400
+	health = 400
+	pixel_y = 16 * PIXEL_MULTIPLIER
+
+/mob/living/simple_animal/hostile/asteroid/goliath/snow/great/New()
+	..()
+	appearance_flags |= PIXEL_SCALE
+	var/matrix/M = matrix()
+	M.Scale(2,2)
+	transform = M
+
+/mob/living/simple_animal/hostile/asteroid/goliath/snow/great/death(gibbed)
+	..()
+	for(var/amount = 1 to 3)
+		new /obj/item/bluespace_crystal(src)

@@ -142,7 +142,9 @@
 #define MAX_REGIONAL_VAULTS 4
 /datum/map/active/generate_mapvaults()
 	var/list/list_of_vaults = get_map_element_objects(/datum/map_element/snowvault)
-	var/list/areas_to_vault = init_subtypes(/area/surface/outer)
+	var/list/areas_to_vault = list()
+	for(var/area/surface/outer/O in areas)
+		areas_to_vault += O //first, collect all the outer reaches
 	var/result
 	for(var/area/A in areas_to_vault)
 		var/amount = rand(MIN_REGIONAL_VAULTS,MAX_REGIONAL_VAULTS)

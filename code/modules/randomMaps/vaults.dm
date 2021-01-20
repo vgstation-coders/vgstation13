@@ -147,7 +147,6 @@
 			if(POPULATION_DENSE)
 				//Copy the list of all turfs
 				valid_spawn_points = area_turfs.Copy()
-				message_admins("TESTING: Starting with [valid_spawn_points.len] turfs.")
 
 				//While going through every already spawned map element - remove all potential locations which would cause the new element to overlap the already spawned one
 				for(var/datum/map_element/conflict in spawned)
