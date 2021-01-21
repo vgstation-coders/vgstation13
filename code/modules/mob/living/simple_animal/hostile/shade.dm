@@ -77,7 +77,7 @@
 	if(.)
 		emote("me",,"wails at [.]!")
 
-/mob/living/simple_animal/hostile/faithless/cult/CanAttack(var/atom/the_target)
+/mob/living/simple_animal/hostile/shade/cult/CanAttack(var/atom/the_target)
 	if(ismob(the_target))
 		var/mob/M = the_target
 		if(isanycultist(M))
