@@ -81,7 +81,7 @@ var/list/assassination_objectives = list()
 			continue
 
 		var/obj/item/device/uplink/hidden/owner_uplink = owner.find_syndicate_uplink()
-		var/obj/item/device/uplink/hidden/enemy_uplink = enemy.find_syndicate_uplink(enemy.uplink)
+		var/obj/item/device/uplink/hidden/enemy_uplink = target.find_syndicate_uplink(enemy.uplink)
 		//chances are the target's uplink is no longer on their mind.current especially if they got decapitated or such.
 		//by associating the uplink with the role we can at least try and get the TCs out of it.
 
