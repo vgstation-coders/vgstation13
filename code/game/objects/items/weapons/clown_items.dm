@@ -20,7 +20,7 @@
 /obj/item/weapon/bananapeel/proc/slip_n_slide(var/mob/living/carbon/M)
 	if(!M.Slip(2,2,1))
 		return 0
-	var/tiles_to_slip = rand(0,3)
+	var/tiles_to_slip = rand(round(potency/20, 1),round(potency/10, 1))
 	if(tiles_to_slip && !locked_to) //The banana peel will not be dragged along so stop the ride
 		M.lock_atom(src, /datum/locking_category/banana_peel)
 		for(var/i = 1 to tiles_to_slip)
