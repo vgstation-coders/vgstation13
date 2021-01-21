@@ -413,6 +413,7 @@
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
 	var/list/exiting = list() // Manages people leaving the barrel
+	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
