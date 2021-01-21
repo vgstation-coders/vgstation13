@@ -412,16 +412,28 @@
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of metal."
 	layer = TABLE_LAYER
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND // If I end up being coherent enough to make it holdable in-hand
-	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
 	var/list/exiting = list() // Manages people leaving the barrel
+	throwforce = 40 // Ends up dealing 20~ brute when thrown because thank you, based throw damage formula
+	var/health = 50
 
 /obj/structure/reagent_dispensers/cauldron/barrel/wood
 	name = "wooden barrel"
 	icon_state = "woodenbarrel"
 	desc = "Originally used to store liquids & powder. It is now used as a source of comfort. This one is made of wood."
+	health = 30
 
 /obj/structure/reagent_dispensers/cauldron/barrel/update_icon()
 	return
+
+/obj/structure/reagent_dispensers/cauldron/barrel/proc/take_damage(var/damage, var/sound_effect = 1)
+	health = max(0, health - damage)
+	if(sound_effect)
+		playsound(loc, 'sound/effects/grillehit.ogg', 75, 1)
+	if(health <= 0)
+		spawn(1)
+			Destroy()
+		return 1
+	return 0
 
 /obj/structure/reagent_dispensers/cauldron/barrel/kick_act(mob/living/carbon/human/H)
 	..()
@@ -446,9 +458,9 @@
 		if(do_after_many(user,list(target,src),10)) //Twice the normal time
 			enter_barrel(target)
 	else
+		take_damage(W.force)
+		user.delayNextAttack(10)
 		..()
-
-/obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/W, mob/user, params)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/proc/enter_barrel(mob/user)
 	user.forceMove(src)
@@ -504,3 +516,29 @@
 	for(var/atom/movable/AM in src)
 		AM.forceMove(loc)
 	..()
+
+/obj/structure/reagent_dispensers/cauldron/barrel/bullet_act(var/obj/item/projectile/Proj)
+	..()
+	if(Proj.damage)
+		take_damage(Proj.damage)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/ex_act(severity)
+	switch(severity)
+		if(1)
+			Destroy()
+		if(2)
+			Destroy()
+		if(3)
+			take_damage(rand(15,45), 0)
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_animal(var/mob/living/simple_animal/M)
+	if(take_damage(rand(M.melee_damage_lower, M.melee_damage_upper)))
+		M.visible_message("<span class='danger'>[M] tears open \the [src]!</span>")
+	else
+		M.visible_message("<span class='danger'>[M] [M.attacktext] \the [src]!</span>")
+	M.delayNextAttack(10)
+	return 1
+
+/obj/structure/reagent_dispensers/cauldron/barrel/attack_alien(mob/user)
+	user.visible_message("<span class='danger'>[user] rips \the [src] apart!</span>")
+	Destroy()
