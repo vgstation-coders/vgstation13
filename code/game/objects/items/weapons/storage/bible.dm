@@ -68,8 +68,8 @@
 
 	var/datum/role/vampire/V = isvampire(user)
 
-	//they have holy water in them? deconversion mode activate! anyone can do it.
-	if (M.reagents?.has_reagent(HOLYWATER) && user.a_intent == I_HELP)
+	//they have holy water in them? deconversion mode activate! anyone can do it. 'cept cultists O B V I O U S L Y
+	if (!isanycultist(user) && M.reagents?.has_reagent(HOLYWATER) && user.a_intent == I_HELP)
 		if (M.stat == DEAD)
 			to_chat(user,"<span class='warning'>You cannot deconvert the dead!</span>")
 			return 1
