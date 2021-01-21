@@ -5429,6 +5429,15 @@
 	T.adjust_nutrient(0.1)
 	T.adjust_water(0.9)
 
+
+/datum/reagent/drink/milk/mommimilk
+	name = "MoMMI Milk"
+	id = MOMMIMILK
+	description = "Milk from a MoMMI, but how is it produced?"
+	color = "#eaeaea" //rgb(234, 234, 234)
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Artificially white nutrition!"
+
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
