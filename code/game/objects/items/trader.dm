@@ -1,4 +1,4 @@
-/*
+oc/*
  *	Here defined the boxes contained in the trader vending machine.
  *	Feel free to add stuff. Don't forget to add them to the vmachine afterwards.
 */
@@ -59,6 +59,8 @@
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
 	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
 	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
+	list(/obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hos),
+	list(/obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/head/helmet/space/plasmaman/security/hop),
 	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
 	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
