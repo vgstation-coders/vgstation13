@@ -82,7 +82,7 @@
 "kn" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/full/plasma,/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/structure/window/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/black_site_prism)
 "ku" = (/obj/effect/decal/cleanable/dirt,/obj/item/stack/teeth,/obj/effect/decal/cleanable/blood/stattrack{dir = 4},/mob/living/simple_animal/hostile/humanoid/tajaran,/turf/simulated/floor/grass,/area/vault/black_site_prism)
 "kK" = (/obj/structure/table,/obj/item/weapon/reagent_containers/glass/beaker/mednanobots,/obj/item/weapon/storage/box/syringes{pixel_x = 7; pixel_y = 7},/obj/abstract/map/spawner/floorpill,/obj/machinery/atmospherics/pipe/simple/yellow/visible{dir = 4},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
-"kL" = (/turf/simulated/floor/engine,/area/vault/black_site_prism)
+"kL" = (/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/engine,/area/vault/black_site_prism)
 "kT" = (/obj/machinery/door/airlock/centcom{name = "Quiznark the Infallible"; opacity = 1; req_access_txt = "101"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "kV" = (/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/plating,/area/vault/black_site_prism)
 "li" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 8; name = "reinforced one-way window"; one_way = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
@@ -116,7 +116,7 @@
 "oM" = (/obj/structure/grille,/obj/structure/window/reinforced,/obj/structure/window/reinforced{dir = 4},/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor/plating,/area/vault/black_site_prism)
 "oQ" = (/obj/machinery/shower{dir = 4},/obj/structure/window/reinforced{name = "reinforced one-way window"; one_way = 1},/obj/machinery/door/window,/obj/structure/curtain/open/shower/left,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "oU" = (/obj/effect/decal/cleanable/blood/stattrack,/obj/effect/decal/cleanable/blood/stattrack{dir = 5},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
-"oX" = (/mob/living/simple_animal/hostile/necromorph{health = 500; melee_damage_lower = 50; name = "Necromorph Specimen Alpha"},/obj/item/changeling_vial,/obj/structure/safe/floor,/turf/simulated/floor/engine,/area/vault/black_site_prism)
+"oX" = (/mob/living/simple_animal/hostile/necromorph{health = 500; melee_damage_lower = 50; name = "Necromorph Specimen Alpha"},/obj/structure/safe/floor,/obj/abstract/map/spawner/space/weapons,/obj/effect/decal/cleanable/dirt,/obj/effect/decal/cleanable/dirt,/turf/simulated/floor/engine,/area/vault/black_site_prism)
 "pl" = (/obj/structure/grille,/obj/structure/window/full/plasma,/obj/structure/window/plasma{dir = 1},/obj/structure/window/plasma,/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/structure/window/plasma{dir = 8},/turf/space,/area/vault/black_site_prism)
 "pm" = (/obj/structure/window/reinforced{dir = 4; pixel_x = 2; tag = ""},/turf/unsimulated/floor{dir = 8; icon_state = "darkredcorners"},/area/vault/black_site_prism)
 "po" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/full/plasma,/obj/structure/window/plasma{dir = 1},/obj/structure/cable/yellow{d2 = 4; icon_state = "0-4"},/obj/structure/window/plasma{dir = 8},/turf/simulated/floor/engine,/area/vault/black_site_prism)
@@ -162,7 +162,7 @@
 "uc" = (/obj/machinery/station_map/strategic,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "ud" = (/obj/structure/grille,/obj/structure/window/full/plasma,/obj/structure/window/plasma{dir = 1},/obj/structure/window/plasma,/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/obj/structure/cable/yellow{d1 = 4; d2 = 8; icon_state = "4-8"},/turf/simulated/floor/engine,/area/vault/black_site_prism)
 "ui" = (/obj/structure/window/reinforced{dir = 1},/turf/unsimulated/floor{dir = 1; icon_state = "carpetside"},/area/vault/black_site_prism)
-"ur" = (/obj/effect/alien/weeds,/obj/effect/alien/weeds/node,/mob/living/simple_animal/hostile/alien/queen/large{desc = "A hulking Xenomorph, better called an Empress than a Queen."; health = 500; melee_damage_lower = 50; melee_damage_upper = 50; name = "Xenomorph Specimen Omega"},/obj/item/weapon/reagent_containers/glass/xenoviral,/obj/structure/safe/floor,/turf/simulated/floor/engine,/area/vault/black_site_prism)
+"ur" = (/obj/effect/alien/weeds,/obj/effect/alien/weeds/node,/mob/living/simple_animal/hostile/alien/queen/large{desc = "A hulking Xenomorph, better called an Empress than a Queen."; health = 500; melee_damage_lower = 50; melee_damage_upper = 50; name = "Xenomorph Specimen Omega"},/obj/structure/safe/floor,/obj/abstract/map/spawner/space/weapons,/turf/simulated/floor/engine,/area/vault/black_site_prism)
 "ut" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 4},/turf/unsimulated/floor{dir = 10; icon_state = "darkred"; tag = "icon-darkred (SOUTHWEST)"},/area/vault/black_site_prism)
 "uu" = (/mob/living/simple_animal/hostile/monster/cyber_horror/Tajaran,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "uw" = (/turf/unsimulated/floor{dir = 4; icon_state = "darkblue"},/area/vault/black_site_prism)
@@ -356,7 +356,6 @@
 "NO" = (/obj/effect/landmark/corpse/syndicatecommando{name = "Black Site Prism Commando"},/turf/simulated/floor/wood,/area/vault/black_site_prism)
 "NU" = (/mob/living/simple_animal/hostile/humanoid/surgeon{faction = "syndicate"; name = "Doctor Jans Petersen"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "NY" = (/obj/structure/bed,/obj/item/weapon/bedsheet/orange,/turf/simulated/floor/vox{icon_state = "asteroidplating"},/area/vault/black_site_prism)
-"Ob" = (/obj/structure/safe/floor,/obj/abstract/map/spawner/space/weapons,/obj/abstract/map/spawner/space/weapons2,/turf/simulated/floor/carpet{icon_state = "carpetnoconnect"},/area/vault/black_site_prism)
 "Od" = (/obj/machinery/door/airlock/centcom{name = "Garrious the Unpleasant"; opacity = 1; req_access_txt = "101"},/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "Og" = (/obj/structure/table,/obj/item/weapon/hemostat{pixel_y = 4},/obj/item/weapon/cautery{pixel_y = 4},/obj/item/weapon/FixOVein{pixel_x = -6; pixel_y = 1},/obj/item/weapon/surgicaldrill,/obj/item/device/antibody_scanner,/turf/unsimulated/floor{icon_state = "dark"},/area/vault/black_site_prism)
 "Oi" = (/obj/effect/decal/cleanable/blood/stattrack{dir = 10},/obj/machinery/light{color = "#FF0000"; dir = 8; light_color = "#FF0000"},/turf/unsimulated/floor{dir = 8; icon_state = "darkred"},/area/vault/black_site_prism)
@@ -483,7 +482,7 @@ nhuwcCbSgKrKpRHhtsvdTKBenhBRdbkLkLkLdbxPnhsaiQiQnEtylniQiQRDnhBRpolFwKwKpoxPnhOg
 nhuwcCOuNUiQiQAjcNPOiQiQnhBRaLkLoXkLaLxPKAloiQiQiQeZiQiQiQmVIGBRknwKurMGknxPnhxYiQuuLlFniQFnNuiQiQRrnh
 nhuwcCgFQwsqwJexstFuJzQBnhBRBfkLkLkLBfxPnhDhiQXEmLhMiQnhIMnhnhBRHvSfwKwKHvxPnhiQsSLohjfPtTPVVUiQnlJXnh
 nhBYcCwsxkxkxkQAizwsxkJtnhHEKhMqudFaKhwdnhTRiQbhiQNoiQGHPEUSnhHEKhqLVJyVKhwdnhIIywxkxkxkxkxkoMiQbMeSnh
-nhKRYcQNQNQNnyQNNliQiQRrnhuXzuomomomzuYvnhcUiQZXNducrpnhObxwnhuXzuomomomzuYvnhAWZDiQiQiQiQiQiQiQZURrnh
+nhKRYcQNQNQNnyQNNliQiQRrnhuXzuomomomzuYvnhcUiQZXNducrpnhPExwnhuXzuomomomzuYvnhAWZDiQiQiQiQiQiQiQZURrnh
 nhnhnhnhnhnhnhnhnhnhnhlMnhnhnhnhnhnhnhnhnhnhnwnhnhnhnhnhWYnhnhnhnhnhnhnhnhnhnhwynhnhnhnhnhnhnhnhnhnhnh
 KrKrKrKrKrKrKrKrKrKrnhGCiCdFOPklELXCTtTtTtnhBROdwSvbiOIaxPnhHmjJHmtZjJNOAsdTPEnTnhKrKrKrKrKrKrKrKrKrKr
 KrKrKrKrKrKrKrKrKrKrnhMNBRzhAMxVxVxVYRmxEKnhwocCmPXmLicCDKnhPMHmHmtZHmZqeMdTPEdTnhKrKrKrKrKrKrKrKrKrKr
