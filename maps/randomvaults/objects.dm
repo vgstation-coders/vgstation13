@@ -83,6 +83,8 @@
 
 /area/vault/black_site_prism
 
+/area/vault/wuhan
+
 //prison vault
 
 /area/vault/prison_ship

@@ -176,6 +176,9 @@ var/list/existing_vaults = list()
 
 /datum/map_element/vault/black_site_prism
 	file_path = "maps/randomvaults/black_site_prism.dmm"
+	
+/datum/map_element/vault/black_site_prism
+	file_path = "maps/randomvaults/wuhan.dmm"
 
 /datum/map_element/vault/skeleton_den
 	file_path = "maps/randomvaults/rattlemebones.dmm"
