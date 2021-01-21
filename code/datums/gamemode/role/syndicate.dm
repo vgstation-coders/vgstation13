@@ -5,6 +5,7 @@
 	logo_state = "synd-logo"
 	wikiroute = TRAITOR
 	var/can_be_smooth = TRUE //Survivors can't be smooth because they get nothing.
+	var/obj/item/device/uplink/hidden/uplink//so we keep track of where the uplink they spawn with ends up
 
 /datum/role/traitor/OnPostSetup()
 	..()
@@ -14,7 +15,7 @@
 		add_law_zero(antag.current)
 		antag.current << sound('sound/voice/AISyndiHack.ogg')
 	else
-		equip_traitor(antag.current, 20)
+		equip_traitor(antag.current, 20, src)
 		antag.current << sound('sound/voice/syndicate_intro.ogg')
 
 /datum/role/traitor/Drop()
@@ -88,7 +89,7 @@
 
 /datum/role/traitor/RoleTopic(href, href_list, var/datum/mind/M, var/admin_auth)
 	if(href_list["giveuplink"])
-		equip_traitor(antag.current, 20)
+		equip_traitor(antag.current, 20, src)
 	if(href_list["telecrystalsSet"])
 		var/obj/item/device/uplink/hidden/guplink = M.find_syndicate_uplink()
 		var/amount = input("What would you like to set their crystal count to?", "Their current count is [guplink.uses]") as null|num

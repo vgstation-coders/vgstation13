@@ -212,10 +212,14 @@ A list of items and costs is stored under the datum of every game mode, alongsid
 /obj/item/device/uplink/hidden
 	name = "Hidden Uplink."
 	desc = "There is something wrong if you're examining this."
+	var/datum/role/traitor/associated_role
 
 /obj/item/device/uplink/hidden/Destroy()
 	var/obj/item/I = loc
 	I.hidden_uplink = null
+	if (associated_role)
+		associated_role.uplink = null
+		associated_role = null
 	..()
 
 /obj/item/device/uplink/hidden/Topic(href, href_list)
