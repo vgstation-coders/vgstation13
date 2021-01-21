@@ -65,7 +65,13 @@
 	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
-	/obj/item/clothing/under/newclothes
+	/obj/item/clothing/under/newclothes,
+	/obj/item/clothing/suit/storage/draculacoat,
+	list(/obj/item/clothing/head/helmet/richard, /obj/item/clothing/under/jacketsuit),
+	list(/obj/item/clothing/under/rank/security/sneaksuit, /obj/item/clothing/head/headband),
+	/obj/item/clothing/under/galo,
+	/obj/item/clothing/suit/raincoat,
+	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/med)
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
