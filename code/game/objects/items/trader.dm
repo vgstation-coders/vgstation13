@@ -71,7 +71,7 @@
 	list(/obj/item/clothing/under/rank/security/sneaksuit, /obj/item/clothing/head/headband),
 	/obj/item/clothing/under/galo,
 	/obj/item/clothing/suit/raincoat,
-	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/med)
+	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/medgreen)
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
