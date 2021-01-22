@@ -1,4 +1,4 @@
-oc/*
+/*
  *	Here defined the boxes contained in the trader vending machine.
  *	Feel free to add stuff. Don't forget to add them to the vmachine afterwards.
 */
