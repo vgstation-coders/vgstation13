@@ -177,7 +177,7 @@
 	icon_state = "detective_noir"
 	item_state = "detective_noir"
 	_color = "detective_noir"
-	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/det_hat
 	name = "hat"
