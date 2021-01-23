@@ -54,7 +54,7 @@ var/list/ai_list = list()
 
 	var/obj/machinery/power/apc/malfhack = null
 	var/explosive = FALSE //does the AI explode when it dies?
-	var/blackout_active = FALSE	
+	var/blackout_active = FALSE
 	var/explosive_cyborgs = FALSE	//Will any cyborgs slaved to the AI exploe when they die?
 
 	var/mob/living/silicon/ai/parent = null
@@ -95,6 +95,7 @@ var/list/ai_list = list()
 	//But gal common is restricted so let's add it manually.
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	init_language = default_language
 
 	real_name = pickedName
 	name = real_name
@@ -536,7 +537,7 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
-		return 
+		return
 	..(Proj)
 	updatehealth()
 	return 2

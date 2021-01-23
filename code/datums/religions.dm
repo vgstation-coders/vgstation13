@@ -1069,6 +1069,9 @@
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	bookstyle = "Tome"
 
+/datum/religion/cult/equip_chaplain(var/mob/living/carbon/human/H)
+	H.add_language(LANGUAGE_CULT)
+
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
 	if (!rune)
@@ -1502,7 +1505,7 @@
 /datum/religion/anprim
 	name = "Primitivism"
 	deity_name = "Grug"
-	bible_name = "Industrial Society and Its Future" 
+	bible_name = "Industrial Society and Its Future"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
 	female_adept = "Primitive"

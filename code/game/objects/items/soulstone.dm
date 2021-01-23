@@ -20,6 +20,7 @@
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 
 	var/mob/living/simple_animal/shade/shade = null
 
@@ -122,16 +123,23 @@
 			to_chat(user, "<span class='notice'><b>Capture successful!</b>: </span>[target.real_name]'s has been captured and stored within the soul stone.")
 
 			//Is our user a cultist? Then you're a cultist too now!
-			if (iscultist(user) && !iscultist(target))
-				var/datum/role/cultist/newCultist = new
-				newCultist.AssignToRole(target.mind,1)
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (!cult)
-					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-				cult.HandleRecruitedRole(newCultist)
-				newCultist.OnPostSetup()
-				newCultist.Greet(GREET_SOULSTONE)
-				newCultist.conversion["soulstone"] = user
+			if (iscultist(user))
+				if(!iscultist(target))
+					var/datum/role/cultist/newCultist = new
+					newCultist.AssignToRole(target.mind,1)
+					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+					if (!cult)
+						cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+					cult.HandleRecruitedRole(newCultist)
+					newCultist.OnPostSetup()
+					newCultist.Greet(GREET_SOULSTONE)
+					newCultist.conversion["soulstone"] = user
+			else
+				if (iscultist(target))
+					var/datum/role/cultist = target.mind.GetRole(CULTIST)
+					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+					cultist.Drop()
+					target.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
 
 /obj/item/soulstone/proc/eject_shade(var/mob/user)
 	if (!shade)
@@ -163,6 +171,7 @@
 	icon_state = "soulstone"
 	item_state = "shard-soulstone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
+	sharpness_flags = 0
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
 	..()
@@ -356,32 +365,7 @@
 		var/turf/T = get_turf(body)
 
 		if (gem)//if we're using a gem, let's store everything in a neat coffer along with some of the victim's blood
-			var/obj/effect/cult_ritual/conversion/anim = new(T)
-			anim.icon_state = ""
-			playsound(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
-			flick("rune_convert_failure",anim)
-			anim.Die()
-			var/obj/item/weapon/storage/cult/coffer = new(T)
-			var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
-			if (istype(body,/mob/living/carbon/human) && body.dna)
-				body.take_blood(cup, cup.volume)//Up to 60u
-				cup.on_reagent_change()//so we get the reagentsfillings overlay
-				new/obj/item/weapon/skull(coffer)
-			if (isslime(body))
-				cup.reagents.add_reagent(SLIMEJELLY, 50)
-			if (isalien(body))//w/e
-				cup.reagents.add_reagent(RADIUM, 50)
-
-			for(var/obj/item/weapon/implant/loyalty/I in body)
-				I.implanted = 0
-
-			for(var/obj/item/I in body)
-				body.u_equip(I)
-				if(I)
-					I.forceMove(body.loc)
-					I.reset_plane_and_layer()
-					I.dropped(body)
-					I.forceMove(coffer)
+			body.boxify(FALSE, TRUE, "cult")
 
 		else//otherwise just drop it on the ground
 			for(var/obj/item/W in body)
@@ -477,21 +461,25 @@
 	if (!suicide)
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user))
-			var/datum/role/cultist/newCultist = new
-			newCultist.AssignToRole(shadeMob.mind,1)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (!cult)
-				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-			cult.HandleRecruitedRole(newCultist)
-			newCultist.OnPostSetup()
-			newCultist.Greet(GREET_SOULSTONE)
-			newCultist.conversion["soulstone"] = user
+			if (!iscultist(shadeMob))
+				var/datum/role/cultist/newCultist = new
+				newCultist.AssignToRole(shadeMob.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (!cult)
+					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+				cult.HandleRecruitedRole(newCultist)
+				newCultist.OnPostSetup()
+				newCultist.Greet(GREET_SOULSTONE)
+				newCultist.conversion["soulstone"] = user
 
 		else
 			if (iscultist(shadeMob))
-				to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
-				to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
-				shadeMob.mind.decult()
+				var/datum/role/cultist = shadeMob.mind.GetRole(CULTIST)
+				to_chat(shadeMob, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+				cultist.Drop()
+				shadeMob.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
+
+
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)

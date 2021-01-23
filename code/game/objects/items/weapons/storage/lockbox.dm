@@ -221,6 +221,17 @@
 	new /obj/item/weapon/reagent_containers/syringe(src)
 	new /obj/item/weapon/implanter(src)
 
+/obj/item/weapon/storage/lockbox/holy
+	name = "lockbox (holy implants)"
+	req_one_access = list(access_security)
+
+/obj/item/weapon/storage/lockbox/holy/New()
+	..()
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implantcase/holy(src)
+	new /obj/item/weapon/implanter/holy(src)
+
 /obj/item/weapon/storage/lockbox/clusterbang
 	name = "lockbox (clusterbang)"
 	desc = "You have a bad feeling about opening this."

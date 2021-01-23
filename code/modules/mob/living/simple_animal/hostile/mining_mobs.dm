@@ -881,7 +881,7 @@ obj/item/asteroid/basilisk_hide/New()
 	icon_dead = "pillow_dead"
 	holder_type = /obj/item/weapon/holder/animal/pillow
 	size = SIZE_SMALL
-	var/pacify_aura = TRUE
+	pacify_aura = TRUE
 	var/image/eyes
 
 /mob/living/simple_animal/hostile/asteroid/pillow/no_pacify

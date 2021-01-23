@@ -1,0 +1,26 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"b" = (/obj/structure/fence/corner,/turf/unsimulated/floor/snow,/area)
+"l" = (/obj/structure/fence/door/opened,/turf/unsimulated/floor/snow,/area)
+"p" = (/obj/structure/fence/corner{dir = 1},/turf/unsimulated/floor/snow,/area)
+"r" = (/obj/structure/fence,/turf/unsimulated/floor/snow,/area)
+"t" = (/obj/item/stack/rods,/turf/unsimulated/floor/snow,/area)
+"w" = (/obj/abstract/map/spawner/mobs/deer,/turf/unsimulated/floor/snow,/area)
+"A" = (/obj/structure/fence/cut/large,/turf/unsimulated/floor/snow,/area)
+"C" = (/obj/structure/fence/corner{dir = 8},/turf/unsimulated/floor/snow,/area)
+"E" = (/obj/machinery/atmospherics/unary/tank/empty{desc = "An old pressure tank repressurized to store corn."; name = "deer feeder"},/turf/unsimulated/floor/snow,/area)
+"I" = (/obj/structure/fence/cut/large{dir = 4},/turf/unsimulated/floor/snow,/area)
+"M" = (/obj/structure/fence{dir = 4},/turf/unsimulated/floor/snow,/area)
+"Q" = (/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'; pixel_x = 3; pixel_y = 4},/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'; pixel_x = -2; pixel_y = 3},/obj/item/weapon/reagent_containers/food/snacks/grown/corn{icon = 'icons/obj/hydroponics/corn.dmi'},/turf/unsimulated/floor/snow,/area)
+"V" = (/obj/item/weapon/corncob,/turf/unsimulated/floor/snow,/area)
+"W" = (/obj/structure/fence/corner{dir = 4},/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aaaaaaaa
+aCMMMIWa
+arVaaVra
+arawEaAa
+araaQVra
+aAVaaara
+apIlttba
+aaaaaVaa
+"}

@@ -19,4 +19,5 @@
 #include "vector.dm"
 #include "reagent_ids.dm"
 #include "supermatter_airflow.dm"
+#include "languages.dm"
 #endif

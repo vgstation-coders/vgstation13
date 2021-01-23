@@ -285,7 +285,7 @@
 
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
-		if (C.muted())
+		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 
@@ -418,7 +418,7 @@
 
 	if(iscarbon(user))
 		var/mob/living/carbon/C = user
-		if (C.muted())
+		if (C.occult_muted())
 			to_chat(user, "<span class='danger'>You find yourself unable to focus your mind on the arcane words of the rune.</span>")
 			return
 

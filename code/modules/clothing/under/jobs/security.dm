@@ -217,6 +217,13 @@
 	siemens_coefficient = 0.6
 	species_fit = list(INSECT_SHAPED)
 
+/obj/item/clothing/suit/armor/hos/surveyor
+	name = "surveyor coat"
+	desc = "Man is by nature a curious animal. You can hide the truth from him temporarily, but not forever."
+	icon_state = "surveyorcoat"
+	item_state = "surveyorcoat"
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
+
 //Jensen cosplay gear
 /obj/item/clothing/under/rank/head_of_security/jensen
 	desc = "You never asked for anything that stylish."

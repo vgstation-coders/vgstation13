@@ -396,7 +396,12 @@
 	if(!agent.mind)
 		message_admins("tried to call share_syndicate_codephrase() on [agent] but it had no mind!")
 		return 0
-	var/words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
+	var/words
+	if (ischallenger(agent))
+		words = "<b>For the Syndicate to validate your assassination, you must take a photo of your target's corpse, severed head, or brain, and publish it publicly via newscaster for all to see.</b><br>"
+		words += "As is tradition the Syndicate has provided you and other agents with code words, but be mindful that using them in this context is akin to painting a target on your back:<br>"
+	else
+		words = "The Syndicate provided you with the following information on how to identify their agents:<br>"
 	if (syndicate_code_phrase)
 		var/phrases = syndicate_code_phrase.Join(", ")
 		words += "<span class='warning'>Code Phrases: </span>[phrases].<br>"
@@ -410,7 +415,7 @@
 	else
 		words += "Unfortunately, the Syndicate did not provide you with a code response.<br>"
 
-	if(syndicate_code_phrase || syndicate_code_response)
+	if(!ischallenger(agent) && (syndicate_code_phrase || syndicate_code_response))
 		words += "Use the code words in the order provided, during regular conversation, to identify other agents. Proceed with caution, however, as everyone is a potential foe.<br>"
 	else
 		words += "Trust nobody.<br>"

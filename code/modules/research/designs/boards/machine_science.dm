@@ -112,3 +112,13 @@
 	materials = list(MAT_GLASS = 2000, SACID = 20)
 	category = "Console Boards"
 	build_path = /obj/item/weapon/circuitboard/suspension_gen
+
+/datum/design/weathercontroldevice
+	name = "Circuit Design (Weather Control Device)"
+	desc = "The circuitboard for a weather control device."
+	id = "weathercontrol"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/weathercontrol

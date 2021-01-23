@@ -94,5 +94,8 @@
 	var/list/seen_messages = list()
 	var/toggle_runechat_outlines = TRUE
 
+	// Voting & civic duty
+	var/ivoted = FALSE
+
 var/list/person_animation_viewers = list()
 var/list/item_animation_viewers = list()

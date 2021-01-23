@@ -121,6 +121,8 @@
 /datum/map/active/map_specific_init()
 	climate = new /datum/climate/arctic()
 
+	generate_mapvaults()
+
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
 		for (var/y = center_y; y <= center_y + center_y/3; y = y + 10)
 			gaussian_geyser(x, y)
@@ -135,6 +137,42 @@
 		for (var/y = center_y; y >= center_y - center_y/3; y = y - 10)
 			gaussian_geyser(x, y)
 			CHECK_TICK
+
+#define MIN_REGIONAL_VAULTS 2
+#define MAX_REGIONAL_VAULTS 4
+/datum/map/active/generate_mapvaults()
+	var/list/list_of_vaults = get_map_element_objects(/datum/map_element/snowvault)
+	var/list/areas_to_vault = list()
+	for(var/area/surface/outer/O in areas)
+		areas_to_vault += O //first, collect all the outer reaches
+	var/result
+	for(var/area/A in areas_to_vault)
+		var/amount = rand(MIN_REGIONAL_VAULTS,MAX_REGIONAL_VAULTS)
+		result = populate_area_with_vaults(A, list_of_vaults, amount, 1, filter_function=/proc/just_snow)
+		message_admins("<span class='info'>Loaded [result] vaults in [A].</span>")
+	return TRUE
+
+/proc/just_snow(var/datum/map_element/E, var/turf/start_turf)
+	var/list/dimensions = E.get_dimensions()
+	var/result = check_surface_placement(start_turf,dimensions[1], dimensions[2])
+	return result
+
+/proc/check_surface_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0)
+	var/list/surroundings = list()
+
+	surroundings |= range(2, locate(T.x,T.y,T.z))
+	surroundings |= range(2, locate(T.x+size_x,T.y,T.z))
+	surroundings |= range(2, locate(T.x,T.y+size_y,T.z))
+	surroundings |= range(2, locate(T.x+size_x,T.y+size_y,T.z))
+
+	for(var/area/A in surroundings)
+		if(!istype(A,/area/surface/outer))
+			return 0
+
+	if(locate(/turf/unsimulated/wall/rock/ice) in surroundings)
+		return 0
+
+	return 1
 
 /proc/gaussian_geyser(var/x, var/y)
 	if (prob(30))

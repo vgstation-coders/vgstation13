@@ -1046,4 +1046,33 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
 	jobs_exclusive = list("Trader")
+	
+// SYNDICATE COOP
+// Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 
+/datum/uplink_item/syndie_coop
+	category = "Cooperative Cell"
+
+/datum/uplink_item/syndie_coop/stone
+	name = "SG-VPR-23 Pathogenic Medium"
+	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
+	item = /obj/item/clothing/mask/stone
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/changeling_vial
+	name = "CH-L1-NG Bioweapon Sample"
+	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
+	item = /obj/item/changeling_vial
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/bloodcult_pamphlet
+	name = "Esoteric Propaganda Pamphlet"
+	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
+	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
