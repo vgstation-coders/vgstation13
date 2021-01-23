@@ -171,7 +171,7 @@
 		LAssailant = null
 	else
 		LAssailant = M
-	log_attack("[M.name] ([M.ckey]) kicked by [src.name] ([src.ckey])")
+	log_attack("[src.name] ([src.ckey]) kicked by [M.name] ([M.ckey])")
 
 /mob/living/carbon/human/attack_hand(var/mob/living/carbon/human/M)
 	//M.delayNextAttack(10)
