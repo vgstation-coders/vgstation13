@@ -85,6 +85,7 @@
 			synd_mind.current.real_name = "[syndicate_name()] Operative #[agent_number]"
 			agent_number++
 		spawnpos++
+		N.antag.current.flavor_text = null
 
 		spawn()
 			concrete_outfit.chosen_spec = equip_nuke_loadout(synd_mind.current)
