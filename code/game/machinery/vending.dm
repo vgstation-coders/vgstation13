@@ -3146,7 +3146,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/large/mystery_material = 5,
 		/obj/item/weapon/storage/box/large/mystery_material/odd = 5,
 		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
-		/obj/structure/vendomatpack/trader = 1
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3192,7 +3191,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/storage/box/large/mystery_material = 50,
 		/obj/item/weapon/storage/box/large/mystery_material/odd = 25,
 		/obj/structure/closet/crate/freezer/bootlegpicnic = 50,
-		/obj/structure/vendomatpack/trader = 500
 		)
 	pack = /obj/structure/vendomatpack/trader
 
