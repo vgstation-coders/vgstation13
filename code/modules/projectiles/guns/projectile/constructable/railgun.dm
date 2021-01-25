@@ -309,7 +309,3 @@
 	ammotype = /obj/item/weapon/nullrod
 	capacitortype = /obj/item/weapon/stock_parts/capacitor/adv/super/ultra
 
-#undef MEGAWATT
-#undef TEN_MEGAWATTS
-#undef HUNDRED_MEGAWATTS
-#undef GIGAWATT
