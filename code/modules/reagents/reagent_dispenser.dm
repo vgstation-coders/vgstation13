@@ -449,7 +449,7 @@
 		AM.forceMove(loc)
 
 /obj/structure/reagent_dispensers/cauldron/barrel/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(W.is_wrench(user))
+	if(W.is_wrench(user) || istype(W,/obj/item/weapon/reagent_containers))
 		return
 	if(istype(W,/obj/item/weapon/grab))
 		var/obj/item/weapon/grab/G = W
