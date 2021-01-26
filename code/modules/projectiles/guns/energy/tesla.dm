@@ -110,7 +110,7 @@
 			update_icon()
 			return 1
 
-		sleep(1.5 SECONDS)
+		sleep(4 SECONDS)
 
 
 /obj/item/weapon/gun/tesla/update_icon()
