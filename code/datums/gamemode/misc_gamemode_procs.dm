@@ -310,7 +310,7 @@
 			roles += player.mind.assigned_role
 	return roles
 
-/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20)
+/proc/equip_traitor(mob/living/carbon/human/traitor_mob, var/uses = 20, var/datum/role/traitor/role)
 	if (!istype(traitor_mob))
 		return
 	. = 1
@@ -326,6 +326,7 @@
 		to_chat(traitor_mob, "Unfortunately, the Syndicate wasn't able to get you a radio.")
 		. = 0
 	else
+		var/obj/item/device/uplink/hidden/T
 		if (istype(R, /obj/item/device/radio))
 			// generate list of radio freqs
 			var/obj/item/device/radio/target_radio = R
@@ -339,7 +340,7 @@
 					freq += 1
 			freq = freqlist[rand(1, freqlist.len)]
 
-			var/obj/item/device/uplink/hidden/T = new(R)
+			T = new(R)
 			T.uses = uses
 			target_radio.hidden_uplink = T
 			target_radio.traitor_frequency = freq
@@ -350,7 +351,7 @@
 			// generate a passcode if the uplink is hidden in a PDA
 			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
 
-			var/obj/item/device/uplink/hidden/T = new(R)
+			T = new(R)
 			R.hidden_uplink = T
 			var/obj/item/device/pda/P = R
 			P.lock_code = pda_pass
@@ -358,14 +359,20 @@
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply enter the code \"[pda_pass]\" into the ringtone select to unlock its hidden features.")
 			traitor_mob.mind.store_memory("<B>Uplink Passcode:</B> [pda_pass] ([R.name] [loc]).")
 			traitor_mob.mind.total_TC += R.hidden_uplink.uses
+		if (role && T)
+			role.uplink = T
 
-/datum/mind/proc/find_syndicate_uplink()
+
+/datum/mind/proc/find_syndicate_uplink(var/obj/item/device/uplink/true_uplink)
 	var/uplink = null
 
 	for (var/obj/item/I in get_contents_in_object(current, /obj/item))
 		if (I && I.hidden_uplink)
 			uplink = I.hidden_uplink
 			break
+
+	if (!uplink && true_uplink)
+		return true_uplink//returns the uplink they spawned with rather than the one they are currently carrying
 
 	return uplink
 
