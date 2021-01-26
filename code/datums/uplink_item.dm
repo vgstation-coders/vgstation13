@@ -754,7 +754,7 @@ var/list/uplink_items = list()
 	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be wrenched to a wire knot to recharge, and the power of the energy ball scales with the power in the grid."
 	item = /obj/item/weapon/gun/tesla
 	cost = 22
-	discounted_cost = 16
+	discounted_cost = 18
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
