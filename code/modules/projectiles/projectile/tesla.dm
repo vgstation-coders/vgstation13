@@ -31,7 +31,7 @@
 /obj/item/projectile/teslaball/OnDeath()
 	for(var/mob/living/M in view(LIGHTNING_RANGE,src))
 		Zap(M)
-	empulse(get_turf(src),2,3)
+	empulse(get_turf(src),2,3))
  	..()
 
 /obj/item/projectile/teslaball/proc/Pulse() 
