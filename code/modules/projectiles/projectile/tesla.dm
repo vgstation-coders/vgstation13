@@ -34,9 +34,6 @@
 	empulse(get_turf(src),2,3)
  	..()
 
-
-
-
 /obj/item/projectile/teslaball/proc/Pulse() 
 	var/fired_bolts = 0
 	var/list/victims = list()
