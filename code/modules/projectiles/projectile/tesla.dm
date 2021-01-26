@@ -9,7 +9,7 @@
 	icon_state = "teslaball_normal"
 	damage = 0
 	fire_sound = 'sound/weapons/wave.ogg'
-	phase_type = PROJREACT_OBJS|PROJREACT_MOBS
+	phase_type = PROJREACT_WINDOWS|PROJREACT_OBJS|PROJREACT_MOBS
 	penetration = -1
 	kill_count = 30
 	projectile_speed = 3
@@ -21,7 +21,7 @@
 
 /obj/item/projectile/teslaball/New()
 	..()
-	spawn(1.5 SECONDS)  
+	spawn(1.3 SECONDS)  
 		Pulse()
 
 /obj/item/projectile/teslaball/to_bump(atom/A)
@@ -105,7 +105,10 @@
 	var/knockdown_time = min(energy_force / 2, 15)
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
-		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST)
+		if(istype(H.gloves, /obj/item/clothing/gloves/yellow))	//they're magic
+			energy_force *= 0.5
+			knockdown_time *= 0.5
+		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST, ignore_siemens = 1)
 	else if(isliving(target))
 		var/mob/living/M = target
 		M.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS)
