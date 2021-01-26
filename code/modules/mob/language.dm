@@ -77,7 +77,7 @@
 	ask_verb = "slips"
 	exclaim_verb = "farts"
 	whisper_verb = "bwoinks"
-	colour = "slime"
+	colour = "clown"
 	native=1
 	key = "!"
 	space_chance = 65
