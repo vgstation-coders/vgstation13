@@ -111,7 +111,7 @@
 		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST, ignore_siemens = 1)
 	else if(isliving(target))
 		var/mob/living/M = target
-		M.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS)
+		M.electrocute_act(energy_force, src)
 	if(bolt)
 		ShootLightning(target)
 
