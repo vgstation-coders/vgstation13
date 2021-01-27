@@ -58,10 +58,8 @@
 
 	var/obs_pass = TRUE
 	// Don't hear simple mobs without a client.
-	if (istype(user, /mob/living/simple_animal))
-		var/mob/living/simple_animal/animal = source
-		if (!animal.client)
-			obs_pass = FALSE
+	if (istype(user, /mob/living/simple_animal) && !user.client)
+		obs_pass = FALSE
 
 	if (obs_pass)
 		for(var/mob/M in dead_mob_list)
