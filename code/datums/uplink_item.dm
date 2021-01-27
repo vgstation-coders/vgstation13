@@ -751,7 +751,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/engineering/teslagun
 	name = "Tesla Cannon"
-	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be wrenched to a wire knot to recharge, and the power of the energy ball scales with the power in the grid."
+	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
 	item = /obj/item/weapon/gun/tesla/preloaded
 	cost = 18
 	discounted_cost = 14

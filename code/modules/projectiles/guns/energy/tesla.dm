@@ -53,14 +53,15 @@
 /obj/item/weapon/gun/tesla/attackby(obj/item/weapon/W, mob/user)
 	if(istype(W, /obj/item/weapon/stock_parts/capacitor))
 		if(do_after(user, src, 5 SECONDS))
-			to_chat("<span class='notice'>You load the [W.name] into the [src].")
+			to_chat(user, "<span class='notice'>You load the [W.name] into the [src].")
+			playsound(src,'sound/mecha/powerup.ogg',100)
 			loaded_capacitor = W
 			W.forceMove(src)
 			update_icon()
 
 /obj/item/weapon/gun/tesla/attack_self(mob/user)
 	if(loaded_capacitor)
-		to_chat("<span class='notice'>You remove the [loaded_capacitor.name] from the [src].")
+		to_chat(user, "<span class='notice'>You remove the [loaded_capacitor.name] from the [src].")
 		user.put_in_hands(loaded_capacitor)
 		loaded_capacitor = null
 		update_icon()
