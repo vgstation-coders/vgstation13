@@ -1,3 +1,5 @@
+#define MIN_TO_FIRE 1000000
+
 /obj/item/weapon/gun/tesla
 	name = "\improper Telsa Cannon"
 	desc = "It's a tesla cannon."
@@ -15,29 +17,33 @@
 
 	var/connected = 0
 	var/charging = 0
-	var/charge = MEGAWATT
-	var/maxcharge = 5 * GIGAWATT
-	var/min_to_fire = MEGAWATT
+	
+	var/obj/item/weapon/stock_parts/capacitor/loaded_capacitor = null
 
 /obj/item/weapon/gun/tesla/examine(mob/user, size, show_name)
 	..()
-	to_chat(user, "<span class='notice'>\The [src.name] is charged to [round(charge / MEGAWATT, 0.01)] MW.</span>")
-	if(charge >= min_to_fire)
-		to_chat(user, "<span class='notice'>\The [src.name] is ready to fire!</span>")
+	if(!loaded_capacitor)
+		to_chat(user, "<span class='warning'>\The [src.name] is missing a capacitor.</span>")
+	else
+		to_chat(user, "<span class='notice'>\The [src.name] is charged to [round(loaded_capacitor.stored_charge / MEGAWATT, 0.01)] MW.</span>")
+		if(loaded_capacitor.stored_charge >= MIN_TO_FIRE)
+			to_chat(user, "<span class='notice'>\The [src.name] is ready to fire!</span>")
 
 /obj/item/weapon/gun/tesla/process_chambered()
 	if(in_chamber)
 		return 1
-	if(charge < min_to_fire)
+	if(!loaded_capacitor)
+		return 0
+	if(loaded_capacitor.stored_charge < MIN_TO_FIRE)
 		return 0
 	var/obj/item/projectile/teslaball/T 
-	if(charge >= GIGAWATT)
+	if(loaded_capacitor.stored_charge >= GIGAWATT)
 		T = new /obj/item/projectile/teslaball/yellow()
 	else
 		T = new /obj/item/projectile/teslaball()
 	in_chamber = T
-	T.charge = charge
-	charge = 0
+	T.charge = loaded_capacitor.stored_charge
+	loaded_capacitor.stored_charge = 0
 	return 1
 
 /obj/item/weapon/gun/tesla/afterattack(atom/A, mob/living/user, flag, params, struggle = 0)
@@ -45,90 +51,40 @@
 	..()
 
 /obj/item/weapon/gun/tesla/attackby(obj/item/weapon/W, mob/user)
-	if(W.is_wrench(user))
-		if(!anchored)
-			if(!istype(src.loc, /turf))
-				to_chat(user, "<span class='warning'>\The [src] needs to be on the ground to be secured.</span>")
-				return
-			if(!istype(src.loc, /turf/simulated/floor)) //Prevent from anchoring this to shuttles / space
-				to_chat(user, "<span class='notice'>You can't secure \the [src] to [istype(src.loc,/turf/space) ? "space" : "this"]!</span>")
-				return
-			var/obj/structure/cable/C = AttemptConnect()
-			if(C)
-				to_chat(user, "You discharge \the [src] and secure it to the floor.")
-				anchored = 1
-				charge = 0
-				W.playtoolsound(src, 50)
-				Charge(C)	
-		else
-			to_chat(user, "You unsecure \the [src].")
-			W.playtoolsound(src, 50)
-			anchored = 0
-			connected = 0
+	if(istype(W, /obj/item/weapon/stock_parts/capacitor))
+		if(do_after(user, src, 5 SECONDS))
+			to_chat("<span class='notice'>You load the [W.name] into the [src].")
+			loaded_capacitor = W
+			W.forceMove(src)
 			update_icon()
 
-/obj/item/weapon/gun/tesla/proc/AttemptConnect()
-	var/turf/T = get_turf(src)
-	var/obj/structure/cable/C = T.get_cable_node()
-	var/datum/powernet/P = C.get_powernet()
-	if(!C || !P)
-		visible_message("<span class='warning'>\The [src.name] buzzes. It won't charge if it's not secured to a wire knot.</span>","<span class='warning'>You hear a buzz.</span>")
-		return 
-	if(P.avail <= 0)
-		visible_message("<span class='warning'>\The [src.name] buzzes. There doesn't seem to be any power in the wire.</span>","<span class='warning'>You hear a buzz.</span>")
-		return
-	connected = 1
-	return C
-
-//nearly identical to capacitor charging code
-/obj/item/weapon/gun/tesla/proc/Charge(var/obj/structure/cable/C)
-	var/list/power_states = list()
-	if(!connected || !anchored)
-		return 0
-
-	charging = 1
-	update_icon()
-	while(power_states.len < 10)
-		power_states += C.avail()
-
-		var/total = 0
-		for(var/i = 1; i <= power_states.len; i++)
-			total += power_states[i]
-
-		if(!connected || !anchored)
-			charging = 0
-			return 0
-
-		charge = round((total/power_states.len) * (power_states.len/10))
-
-		if(power_states.len >= 10 || charge > maxcharge)
-			if(charge > maxcharge)
-				charge = maxcharge
-			visible_message("<span class='notice'>[bicon(src)] \The [src] pings.</span>")
-			playsound(src, 'sound/machines/notify.ogg', 50, 0)
-			charging = 0
-			update_icon()
-			return 1
-
-		sleep(4 SECONDS)
+/obj/item/weapon/gun/tesla/attack_self(mob/user)
+	if(loaded_capacitor)
+		to_chat("<span class='notice'>You remove the [loaded_capacitor.name] from the [src].")
+		user.put_in_hands(loaded_capacitor)
+		loaded_capacitor = null
+		update_icon()
 
 
 /obj/item/weapon/gun/tesla/update_icon()
-	if(anchored)
-		if(charging)
-			icon_state = "teslacannon_charging"
-		else
-			if(charge >= GIGAWATT && icon_state != "teslacannon_strong_wrenched")
-				flick("teslacannon_powerup", src)
-				spawn(5)
-					icon_state = "teslacannon_strong_wrenched"
-			else
-				icon_state = "teslacannon_wrenched"
-	else		
-		if(charge >= min_to_fire)
-			if(charge >= GIGAWATT)
+	if(loaded_capacitor) 
+		if(loaded_capacitor.stored_charge >= MIN_TO_FIRE)	
+			if(loaded_capacitor.stored_charge >= GIGAWATT)
 				icon_state = "teslacannon_strong_ready"
 			else
 				icon_state = "teslacannon_ready"
 		else
 			icon_state = "teslacannon"
+	else
+		icon_state = "teslacannon"
+
+
+/obj/item/weapon/gun/tesla/preloaded/New()
+	..()
+	loaded_capacitor = new /obj/item/weapon/stock_parts/capacitor/adv/super/pre_charged
+
+/obj/item/weapon/stock_parts/capacitor/adv/super/pre_charged
+	stored_charge = MEGAWATT
+
+
+#undef MIN_TO_FIRE
