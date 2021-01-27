@@ -195,6 +195,10 @@
 	desc = "This looks similar to contraptions from earth. Could aliens be stealing our technology?"
 	icon_state = "abed"
 
+/obj/structure/bed/racecar
+	name = "racecar bed"
+	desc = "Vroom Vroom!"
+	icon_state = "racecarbed"
 
 //therapy couch
 //beach ambience found in ambience_datums.dm
