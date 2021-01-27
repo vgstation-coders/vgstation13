@@ -199,6 +199,11 @@
 
 	return TRUE
 
+/datum/map/active/map_equip(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
+
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"
 #endif
