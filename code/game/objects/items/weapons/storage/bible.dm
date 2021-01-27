@@ -99,7 +99,7 @@
 			else
 				user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
 				"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
-			user.visible_message("<span class='warning'>...but nothing unusal happens.</span>")
+			user.visible_message("<span class='warning'>...but nothing unusual happens.</span>")
 		return 1
 	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
