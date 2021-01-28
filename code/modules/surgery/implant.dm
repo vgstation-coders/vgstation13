@@ -155,11 +155,11 @@
 		var/obj/item/weapon/implant/timp = tool
 		timp.part = affected
 		affected.implants += timp
-		timp.implanted(target, user)
-		timp.forceMove(target)
-		timp.imp_in = target
-		timp.implanted = 1
-		timp.part = affected
+		if(timp.implanted(target, user))
+			timp.forceMove(target)
+			timp.imp_in = target
+			timp.implanted = 1
+			timp.part = affected
 	affected.cavity = 0
 
 /datum/surgery_step/cavity/place_item/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

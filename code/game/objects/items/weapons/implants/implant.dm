@@ -48,7 +48,7 @@
 	
 /obj/item/weapon/implant/proc/makeunusable(var/probability=50)
 	if(prob(probability))
-		visible_message("<span class='warning'>\The [src] fizzles and sparks as you remove it!</span>")
+		visible_message("<span class='warning'>\The [src] fizzles and sparks!</span>")
 		name = "melted " + initial(name)
 		desc = "Charred circuit in melted plastic case."
 		icon_state = "implant_melted"
@@ -114,6 +114,8 @@
 		qdel(src)
 
 /obj/item/weapon/implant/explosive/implanted(mob/source as mob)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	phrase = input("Choose activation phrase:") as text
 	var/list/replacechars = list("'" = "", "\"" = "", ">" = "", "<" = "", "(" = "", ")" = "")
 	phrase = sanitize_simple(phrase, replacechars)
@@ -208,6 +210,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 /obj/item/weapon/implant/chem/activate(var/cause)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	if((!cause) || (!src.imp_in))
 		return 0
 	var/mob/living/carbon/R = src.imp_in
@@ -254,6 +258,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 
 /obj/item/weapon/implant/loyalty/implanted(mob/M)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M
@@ -298,6 +304,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return dat
 
 /obj/item/weapon/implant/traitor/implanted(mob/M, mob/user)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	if(!iscarbon(M))
 		to_chat(user, "<span class='danger'>The implant doesn't seem to be compatible with [M]!</span>")
 		return 0
@@ -369,6 +377,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return dat
 
 /obj/item/weapon/implant/adrenalin/trigger(emote, mob/source as mob)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	if (src.uses < 1)
 		return 0
 	if (emote == "pale")
@@ -495,6 +505,9 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return dat
 
 /obj/item/weapon/implant/compressed/trigger(emote, mob/source as mob)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
+		
 	if (src.scanned == null)
 		return 0
 
@@ -613,6 +626,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	return dat
 
 /obj/item/weapon/implant/holy/implanted(mob/M)
+	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+		return 0
 	if(!iscarbon(M))
 		return 0
 	var/mob/living/carbon/H = M

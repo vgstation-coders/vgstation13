@@ -23,6 +23,9 @@
 		set_tiny_label(user, " - '", "'")
 	else if (istype(I, /obj/item/weapon/implant) && !imp)
 		var/obj/item/weapon/implant/timp = I
+		if(timp.malfunction == IMPLANT_MALFUNCTION_PERMANENT)
+			user.show_message("<span class='warning'>You can't load a broken implant back into a case.</span>")
+			return 0
 		user.drop_item(timp, force_drop = 1)
 		if(timp.implanted) 
 			timp.implanted = null
