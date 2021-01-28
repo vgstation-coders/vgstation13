@@ -723,7 +723,7 @@
 	name = "Sasha"
 	real_name = "Sasha"
 	gender = FEMALE
-	desc = "It's a doberman, how intimidating!"
+	desc = "It's a doberman, how intimidating! She has a thousand yard stare..."
 	icon_state = "doby"
 	icon_living = "doby"
 	icon_dead = "doby_dead"
