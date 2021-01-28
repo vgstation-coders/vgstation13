@@ -70,7 +70,7 @@
 
 	//they have holy water in them? deconversion mode activate! anyone can do it. 'cept cultists O B V I O U S L Y
 	if (!isanycultist(user) && M.reagents?.has_reagent(HOLYWATER) && user.a_intent == I_HELP)
-		user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
+		user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>")
 		playsound(src, "punch", 25, 1, -1)
 		if (M.stat == DEAD)
 			to_chat(user,"<span class='warning'>You cannot deconvert the dead!</span>")
