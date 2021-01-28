@@ -78,20 +78,23 @@
 		if (M.health < 20)
 			to_chat(user,"<span class='warning'>\The [M] is too weak to handle the deconversion ritual, patch them up a bit first.</span>")
 			return 1
+		var/datum/role/cultist/cultist
+		if(iscultist(M))
+			cultist = M.mind.GetRole(CULTIST)
+			if (cultist.deconversion)
+				to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
+				return 1
+			else
+				to_chat(M,"<span class='userdanger'>They are trying to deconvert you!</span>")
+
 		if (do_after(user, M, 5 SECONDS))
-			if(iscultist(M))
-				var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
-				if (cultist.deconversion)
-					to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
-					return 1
+			if(cultist)
+				if (istype(my_rel, /datum/religion/cult))
+					to_chat(user,"<span class='warning'>In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
 				else
-					if (istype(my_rel, /datum/religion/cult))
-						to_chat(user,"<span class='warning'>In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
-					else
-						to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
-					user.visible_message("<span class='warning'>\The [M] begins to radiate with light.</span>")
-					new /datum/deconversion_ritual(user, M, src)
-					return 1
+					to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+				user.visible_message("<span class='warning'>\The [M] begins to radiate with light.</span>")
+				new /datum/deconversion_ritual(user, M, src)
 			else
 				if (istype(my_rel, /datum/religion/cult))
 					to_chat(user,"<span class='warning'>In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
