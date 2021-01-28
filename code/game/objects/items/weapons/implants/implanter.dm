@@ -1,5 +1,6 @@
 /obj/item/weapon/implanter
 	name = "implanter"
+	desc = "A small device used to apply implants to people."
 	icon = 'icons/obj/items.dmi'
 	icon_state = "implanter0"
 	item_state = "syringe_0"
@@ -10,12 +11,31 @@
 	var/imp_type = null
 
 /obj/item/weapon/implanter/proc/update()
+	desc = initial(desc)
 	icon_state = "implanter[imp? 1:0]"
+	if(imp)
+		desc += "<br>It is loaded with a [imp.name]."
 
-/obj/item/weapon/implanter/attack(mob/M as mob, mob/user as mob)
-	if(!istype(M, /mob/living/carbon))
+/obj/item/weapon/implanter/attack(var/atom/target, mob/user as mob)
+	if(!user)
 		return
-	if(user && imp)
+	var/mob/living/carbon/M = null
+	if(istype(target, /mob/living/carbon))
+		M = target
+	if(!imp)
+		if(istype(target, /obj/item/weapon/implant/))
+			var/obj/item/weapon/implant/timp = target
+			timp.forceMove(src)
+			user.show_message("<span class='warning'>You load \the [timp] into \the [src].</span>")
+			imp = timp
+			imp.implanted = null
+			imp.imp_in = null
+			update()
+			return
+		if(ismob(target))
+			user.show_message("<span class='warning'>There is no implant in \the [src].</span>")
+			return
+	if(M)
 		for (var/mob/O in viewers(M, null))
 			O.show_message("<span class='warning'>[user] is attempting to implant [M].</span>", 1)
 
@@ -59,31 +79,35 @@
 	desc = "Any humanoid injected with this implant will become loyal to the injector and the greytide, unless of course the host is already loyal to someone else."
 	imp_type = /obj/item/weapon/implant/traitor
 
-
 /obj/item/weapon/implanter/loyalty
 	name = "implanter-loyalty"
+	desc = "Any humanoid injected with this implant will become somewhat loyal to Nanotrasen and the local Heads of Staff."
 	imp_type = /obj/item/weapon/implant/loyalty
 
 /obj/item/weapon/implanter/explosive
 	name = "implanter (E)"
+	desc = "A small device used to apply implants to people. This one has a microphone and some circuitry attached for some reason."
 	imp_type = /obj/item/weapon/implant/explosive
 
 /obj/item/weapon/implanter/adrenalin
 	name = "implanter-adrenalin"
+	desc = "A small device used to apply implants to people. This one has a microphone and some circuitry attached for some reason."
 	imp_type = /obj/item/weapon/implant/adrenalin
 
 /obj/item/weapon/implanter/peace
 	name = "implanter-pax"
-	desc = "An implanter containing a pax implant"
+	desc = "Any humanoid injected with this implant will become unable to perform most physical acts of aggression."
 	imp_type = /obj/item/weapon/implant/peace
 
 /obj/item/weapon/implanter/holy
 	name = "implanter-holy"
+	desc = "This microscripture implanter helps those affected by the Occult from manifesting unwanted abilities."
 	imp_type = /obj/item/weapon/implant/holy
 
 /obj/item/weapon/implanter/compressed
 	name = "implanter (C)"
 	icon_state = "cimplanter1"
+	desc = "A small device used to apply implants to people. This one has a microphone and some circuitry attached for some reason."
 	imp_type = /obj/item/weapon/implant/compressed
 
 	var/list/forbidden_types=list(

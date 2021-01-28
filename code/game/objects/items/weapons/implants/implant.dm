@@ -160,7 +160,7 @@
 
 /obj/item/weapon/implant/chem
 	name = "chem implant"
-	desc = "Injects things."
+	desc = "Injects chemicals."
 	allow_reagents = 1
 
 /obj/item/weapon/implant/chem/get_data()
