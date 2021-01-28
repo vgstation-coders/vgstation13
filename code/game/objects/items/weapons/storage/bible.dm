@@ -266,7 +266,7 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	if (!checkTattoo(TATTOO_HOLY))
+	if (!deconvertee.checkTattoo(TATTOO_HOLY))
 		if (!bible.my_rel.leadsThisReligion(deconverter))
 			deconvertee.Knockdown(5)
 		else
