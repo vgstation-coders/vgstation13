@@ -45,7 +45,15 @@
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
 	malfunction = IMPLANT_MALFUNCTION_PERMANENT
-
+	
+/obj/item/weapon/implant/proc/makeunusable(var/probability=50)
+	if(prob(probability))
+		visible_message("<span class='warning'>\The [src] fizzles and sparks as you remove it!</span>")
+		name = "melted " + initial(name)
+		desc = "Charred circuit in melted plastic case."
+		icon_state = "implant_melted"
+		malfunction = IMPLANT_MALFUNCTION_PERMANENT
+	
 /obj/item/weapon/implant/Destroy()
 	if(part)
 		part.implants.Remove(src)
@@ -137,6 +145,9 @@
 
 /obj/item/weapon/implant/explosive/islegal()
 	return 0
+	
+/obj/item/weapon/implant/explosive/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/explosive/proc/small_boom()
 	if(iscarbon(imp_in))
@@ -265,8 +276,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 
 	to_chat(H, "<span class = 'notice'>You feel a surge of loyalty towards Nanotrasen.</span>")
 	return 1
-
-
+/obj/item/weapon/implant/loyalty/handle_removal(var/mob/remover)
+	makeunusable(15)
 
 /obj/item/weapon/implant/traitor
 	name = "greytide implant"
@@ -336,6 +347,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return
 	log_admin("[key_name(remover)] has removed a greytide implant from [key_name(imp_in)].")
 	R.Drop(FALSE)
+	
+	makeunusable(90)
 
 /obj/item/weapon/implant/adrenalin
 	name = "adrenalin implant"
@@ -372,8 +385,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		to_chat(source, "The implanted freedom implant can be activated by using the pale emote, <B>say *pale</B> to attempt to activate.")
 		return 1
 
-
-
+/obj/item/weapon/implant/adrenalin/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/death_alarm
 	name = "death alarm implant"
@@ -458,7 +471,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	processing_objects.Add(src)
 	return 1
 
-
+/obj/item/weapon/implant/death_alarm/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/compressed
 	name = "compressed matter implant"
@@ -506,7 +520,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/compressed/islegal()
 	return 0
 
-
+/obj/item/weapon/implant/compressed/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/cortical
 	name = "cortical stack"
@@ -577,6 +592,8 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	else
 		return 0
 
+/obj/item/weapon/implant/peace/handle_removal(var/mob/remover)
+	meltdown()
 
 /obj/item/weapon/implant/holy
 	name = "holy implant"
@@ -592,7 +609,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 <b>Implant Details:</b><BR>
 <b>Function:</b> Submits its subject to the chants of a thousand chaplains.<BR>
 <b>Special Features:</b> Prevents cultists from using their runes and talismans, or from being the target of some of their peers' rituals.<BR>
-<b>Integrity:</b> Implant anchors itself inside the subject's bones to prevent blood pressure induced ejections."}
+<b>Integrity:</b> Implant anchors itself against the subject's bones to prevent blood pressure induced ejections."}
 	return dat
 
 /obj/item/weapon/implant/holy/implanted(mob/M)
@@ -608,3 +625,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	else
 		to_chat(H, "<span class = 'notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 	return 1
+	
+/obj/item/weapon/implant/holy/handle_removal(var/mob/remover)
+	makeunusable(15)
