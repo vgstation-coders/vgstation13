@@ -266,7 +266,11 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	deconvertee.Knockdown(10)
+	if (!checkTattoo(TATTOO_HOLY))
+		if (!bible.my_rel.leadsThisReligion(deconverter))
+			deconvertee.Knockdown(5)
+		else
+			deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
 		cult_chaplain = TRUE
