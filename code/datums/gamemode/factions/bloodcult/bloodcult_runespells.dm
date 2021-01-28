@@ -1469,6 +1469,7 @@ var/list/blind_victims = list()
 					C.client.images.Remove(blind_victims[C])//removing the images from client.images after adding them to my_hallucinated_stuff
 				blind_victims[C] = my_hallucinated_stuff//allows us to seamlessly refresh their duration.
 				C.client.images.Add(my_hallucinated_stuff)
+				C.regular_hud_updates()//data huds are disabled for the duration of the confusion
 				var/hallenght = my_hallucinated_stuff.len
 				spawn(duration-5)
 					if (C in blind_victims)
