@@ -16,7 +16,6 @@
 
 	var/yellow = 0
 	var/charge = 0
-	var/list/shocked_people = list()    //each person only gets shocked once
 	
 
 /obj/item/projectile/teslaball/New()
