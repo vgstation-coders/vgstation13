@@ -109,7 +109,9 @@
 		/obj/item/clothing/under/rank/head_of_security/jensen,
 		pick(
 			/obj/item/clothing/suit/armor/hos/jensen,
-			/obj/item/clothing/suit/armor/hos/sundowner),
+			/obj/item/clothing/suit/armor/hos/sundowner,
+			/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset,
+			),
 		/obj/item/weapon/paper/demotion_key,
 		/obj/item/clothing/suit/armor/hos,
 		/obj/item/clothing/head/HoS/dermal,

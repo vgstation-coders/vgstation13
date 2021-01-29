@@ -248,7 +248,7 @@
 			if(chefcount > 2)
 				episode_names += new /datum/episode_name/rare("Too Many Cooks", "There were [chefcount] chefs on the shuttle.", min(1500, chefcount*450)) //intentionally not capitalized, as the theme will customize it
 				theme = "cooks"
-			
+
 			if(human_escapees.len)
 				if(assistantcount / human_escapees.len > 0.6 && human_escapees.len > 3)
 					episode_names += new /datum/episode_name/rare("[pick("GREY GOO", "RISE OF THE GREYTIDE")]", "Most of the survivors were Assistants, or at least dressed like one.", min(1500, assistantcount*200))
@@ -272,7 +272,7 @@
 			if(human_escapees.len == 1)
 				var/mob/living/carbon/human/H = human_escapees[1]
 
-				if(istraitor(H) || isdoubleagent(H) || isnukeop(H))
+				if(istraitor(H) || ischallenger(H) || isnukeop(H) || iselitesyndie(H))
 					theme = "syndie"
 
 				if(isloosecatbeast(H))
@@ -467,9 +467,9 @@
 
 				for(var/mob/living/M in mob_list)
 					if(istraitor(M))
-						adjectives |= "TRAITOROUS"
-					if(isdoubleagent(M))
-						adjectives |= "DOUBLE-CROSSING"
+						adjectives |= pick("TRAITOROUS","DOUBLE-CROSSING")
+					if(ischallenger(M))
+						adjectives |= "CHAOTIC"
 					if(isvampire(M))
 						adjectives |= "BLOOD-SUCKING"
 					if(isrev(M))

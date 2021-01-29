@@ -320,7 +320,7 @@
 	throwforce = 15.0
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
-	if(istype(hit_atom, /mob/living) && prob(85))
+	if(istype(hit_atom, /mob/living))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
 		L.Knockdown(5)

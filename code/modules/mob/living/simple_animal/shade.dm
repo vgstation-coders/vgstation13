@@ -37,6 +37,7 @@
 	add_language(LANGUAGE_CULT)
 	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 
 /mob/living/simple_animal/shade/death(var/gibbed = FALSE)
 	var/turf/T = get_turf(src)
@@ -100,8 +101,7 @@
 		else if (SB.blood < SB.maxregenblood)
 			SB.blood++
 	else
-		var/turf/T = get_turf(src)
-		if (istype(T,/turf/space))
+		if (istype(loc,/turf/space))
 			if (!space_damage_warned)
 				space_damage_warned = TRUE
 				to_chat(src,"<span class='danger'>Your ghostly form suffers from the star's radiations. Remaining in space will slowly erase you.</span>")

@@ -1,0 +1,19 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"d" = (/obj/structure/flora/rock,/turf/unsimulated/floor/snow,/area)
+"g" = (/obj/item/weapon/lobster,/turf/unsimulated/beach/shallows,/area)
+"n" = (/mob/living/simple_animal/crab/snowy{name = "snow crab"},/turf/unsimulated/floor/snow,/area)
+"q" = (/turf/unsimulated/beach/shallows,/area)
+"H" = (/obj/item/weapon/fish/salmon,/turf/unsimulated/beach/shallows,/area)
+"I" = (/obj/structure/geyser,/turf/unsimulated/floor/snow,/area)
+"U" = (/obj/glacier,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+Uaaaaa
+UUaIda
+UqHqna
+qgqHqU
+qHIqqa
+UqaqUU
+dUaUUU
+aaadUa
+"}

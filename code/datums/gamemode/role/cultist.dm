@@ -11,6 +11,7 @@
 	var/holywarning_cooldown = 0
 	var/list/conversion = list()
 	var/second_chance = 1
+	var/datum/deconversion_ritual/deconversion = null
 
 /datum/role/cultist/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id)
 	..()
@@ -35,31 +36,44 @@
 
 /datum/role/cultist/RemoveFromRole(var/datum/mind/M)
 	antag.current.remove_language(LANGUAGE_CULT)
+	remove_cult_hud()
 	for(var/spell/cult/spell_to_remove in antag.current.spell_list)
 		antag.current.remove_spell(spell_to_remove)
 	if (src in blood_communion)
 		blood_communion.Remove(src)
+	if (conversion.len > 0)
+		var/conv = pick(conversion)
+		switch (conv)
+			if ("converted")
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You remember getting converted by [conversion[conv]], but nothing else.</span>")
+			if ("resurrected")
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You remember getting resurrected by [conversion[conv]], but nothing else.</span>")
+			if ("soulstone")
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You remember having your soul captured by [conversion[conv]], but nothing else.</span>")
+			if ("altar")
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You do not remember anything, not even who you were prior.</span>")
+			if ("sacrifice")
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You do not remember anything other than having had your body sacrificed at some point.</span>")
+			else
+				to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You do not remember anything.</span>")
+	else
+		to_chat(antag.current, "<span class='sinister'>Your memories of the cult gradually fade away. You do not remember anything.</span>")
 	..()
+	if (faction)
+		faction.members -= src
+	update_faction_icons()
 
 /datum/role/cultist/PostMindTransfer(var/mob/living/new_character)
 	. = ..()
 	if (issilicon(new_character))
-		antag.decult()
+		to_chat(new_character, "<span class='userdanger'>As the silicon directives override your free will, your connection to the cult is shattered. You are to follow your new master's commands and help them in their goal.</span>")
+		Drop()
+		return
 	update_cult_hud()
 	antag.current.add_language(LANGUAGE_CULT)
 	if((ishuman(antag.current) || ismonkey(antag.current) || isalien(antag.current)) && !(locate(/spell/cult) in antag.current.spell_list))
 		antag.current.add_spell(new /spell/cult/trace_rune/blood_cult, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 		antag.current.add_spell(new /spell/cult/erase_rune, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
-
-/datum/mind/proc/decult()
-	antag_roles -= CULTIST
-	current.remove_language(LANGUAGE_CULT)
-	for(var/spell/cult/spell_to_remove in current.spell_list)
-		current.remove_spell(spell_to_remove)
-	var/datum/role/cultist/C = GetRole(CULTIST)
-	if (C in blood_communion)
-		blood_communion.Remove(C)
-	update_faction_icons()
 
 /datum/role/cultist/process()
 	..()
@@ -156,6 +170,7 @@
 			if (OH.objectives.len > 0)
 				var/datum/objective/O = OH.objectives[OH.objectives.len] //Gets the latest objective.
 				to_chat(antag.current,"<span class='danger'>[O.name]</span><b>: [O.explanation_text]</b>")
+
 /datum/role/cultist/update_antag_hud()
 	update_cult_hud()
 
@@ -222,10 +237,21 @@
 				M.healths2,
 				)
 
-/mob/living/carbon/proc/muted()
+/datum/role/cultist/proc/remove_cult_hud()
+	var/mob/M = antag?.current
+	if(M && M.client && M.hud_used)
+		qdel(M.hud_used.cult_Act_display)
+		qdel(M.hud_used.cult_tattoo_display)
+
+/mob/living/carbon/proc/occult_muted()
 	if (checkTattoo(TATTOO_HOLY))
 		return 0
-	return (iscultist(src) && reagents && reagents.has_reagent(HOLYWATER))
+	if (reagents && reagents.has_reagent(HOLYWATER))
+		return 1
+	for(var/obj/item/weapon/implant/holy/I in src)
+		if (I.implanted)
+			return 1
+	return 0
 
 /datum/role/cultist/AdminPanelEntry(var/show_logo = FALSE,var/datum/admins/A)
 	var/dat = ..()

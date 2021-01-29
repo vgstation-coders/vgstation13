@@ -60,7 +60,7 @@
 /obj/item/clothing/under/rank/chaplain
 	desc = "It's a black jumpsuit, often worn by religious folk."
 	name = "chaplain's jumpsuit"
-	icon_state = "chaplain"
+	icon_state = "chapblack"
 	item_state = "bl_suit"
 	_color = "chapblack"
 	clothing_flags = ONESIZEFITSALL

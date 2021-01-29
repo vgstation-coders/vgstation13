@@ -271,15 +271,15 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+#define ischallenger(H) (H.mind && H.mind.GetRole(CHALLENGER))
 
-#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+#define iselitesyndie(H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
 
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 

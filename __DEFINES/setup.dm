@@ -905,6 +905,7 @@ SEE_PIXELS	256
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPHOLY_HUD		    "impholy" // holy implant
 #define IMPTRACK_HUD		"imptrack" // tracking implant
 #define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
@@ -1294,6 +1295,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MARTIAN "Martian"
 #define LANGUAGE_INSECT "Insectoid"
 #define LANGUAGE_DEATHSQUAD "Deathsquad"
+#define LANGUAGE_CLOWN "Clown"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG
