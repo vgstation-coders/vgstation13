@@ -76,12 +76,11 @@
 	center_x = 226
 	center_y = 254
 
+// -- Traitors & challenjours only
 /datum/map/active/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
-	if(istype(DR, /datum/dynamic_ruleset/roundstart/nuclear))
-		return 3
-	if(istype(DR, /datum/dynamic_ruleset/midround/from_ghosts/faction_based/nuclear))
-		return 3
-	return 1
+	if(ispath(DR.role_category, /datum/role/traitor))
+		return 1
+	return 0
 
 /datum/map/active/ignore_enemy_requirement(var/datum/dynamic_ruleset/DR)
 	if(istype(DR, /datum/dynamic_ruleset/roundstart/nuclear))
