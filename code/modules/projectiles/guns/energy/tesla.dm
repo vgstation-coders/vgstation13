@@ -55,7 +55,7 @@
 		if(do_after(user, src, 5 SECONDS))
 			if(user.drop_item(W, src))
 				to_chat(user, "<span class='notice'>You load the [W.name] into the [src].")
-				playsound(src,'sound/mecha/powerup.ogg',100)
+				playsound(src,'sound/mecha/powerup.ogg',75)
 				loaded_capacitor = W
 				W.forceMove(src)
 				update_icon()
