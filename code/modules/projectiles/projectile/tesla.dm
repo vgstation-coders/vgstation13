@@ -104,10 +104,7 @@
 	var/knockdown_time = min(energy_force / 2, 15)
 	if(ishuman(target))
 		var/mob/living/carbon/human/H = target
-		if(istype(H.gloves, /obj/item/clothing/gloves/yellow))	//they're magic
-			energy_force *= 0.5
-			knockdown_time *= 0.5
-		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST, ignore_siemens = 1)
+		H.electrocute_act(shock_damage = energy_force, source = src, incapacitation_duration = knockdown_time SECONDS, def_zone = LIMB_CHEST)
 	else if(isliving(target))
 		var/mob/living/M = target
 		M.electrocute_act(energy_force, src)
