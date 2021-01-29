@@ -6,6 +6,7 @@
 	icon = 'icons/obj/gun_experimental.dmi'
 	icon_state = "teslacannon_ready"
 	item_state = "gravitywell"
+	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT
 	origin_tech = Tc_MATERIALS + "=7;" + Tc_POWERSTORAGE + "=7;" + Tc_MAGNETS + "=5" + Tc_SYNDICATE + "=4;"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guns_experimental.dmi', "right_hand" = 'icons/mob/in-hand/right/guns_experimental.dmi')
@@ -54,10 +55,11 @@
 	if(istype(W, /obj/item/weapon/stock_parts/capacitor))
 		if(do_after(user, src, 5 SECONDS))
 			if(user.drop_item(W, src))
-				to_chat(user, "<span class='notice'>You load the [W.name] into the [src].")
-				playsound(src,'sound/mecha/powerup.ogg', 50)
+				to_chat(user, "<span class='notice'>You load the [W.name] into the [src].")	
 				loaded_capacitor = W
 				W.forceMove(src)
+				if(loaded_capacitor.stored_charge >= MIN_TO_FIRE)
+					playsound(src,'sound/mecha/powerup.ogg', 50)
 				update_icon()
 
 /obj/item/weapon/gun/tesla/attack_self(mob/user)
