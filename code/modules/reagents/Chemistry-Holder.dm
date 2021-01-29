@@ -970,12 +970,6 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 		var/datum/reagent/R = y
 		R.send_to_past(duration)
 
-	spawn(duration + 1)
-		if(my_atom)
-			var/atom/A = my_atom
-			A.reagents = src
-
-
 //written for ethylredoxrazine, but might be fun for turning water into wine or something
 /datum/reagents/proc/convert_some_of_type(var/datum/reagent/convert_from_type, var/datum/reagent/convert_to_type,var/convert_amount)
 	var/total_amount_converted = 0

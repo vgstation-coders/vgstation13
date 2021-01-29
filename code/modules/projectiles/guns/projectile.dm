@@ -379,3 +379,11 @@
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")
+
+/obj/item/weapon/gun/projectile/send_to_past(var/duration)
+	..()
+	var/static/list/resettable_vars = list(
+		"chambered",
+		"stored_magazine",
+		"loaded")
+	reset_vars_after_duration(resettable_vars, duration)

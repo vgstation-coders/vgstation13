@@ -65,6 +65,7 @@
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
+#define TIMEAGENT "time agent"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"

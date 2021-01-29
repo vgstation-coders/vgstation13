@@ -6,8 +6,6 @@
 	wikiroute = ROLE_MINOR
 	logo_state = "catbeast-logo"
 	var/ticks_survived = 0
-	var/threat_generated = 0
-	var/threat_level_inflated = 0
 	var/list/areas_defiled = list()
 	var/current_disease_tier = 1
 
@@ -166,19 +164,6 @@ var/list/catbeast_names = list("Meowth","Fluffy","Subject 246","Experiment 35a",
 	if (isspace(A))
 		return FALSE
 	return A
-
-/datum/role/catbeast/proc/increment_threat(var/amount)
-	var/datum/gamemode/dynamic/D = ticker.mode
-	if(!istype(D))
-		return //It's not dynamic!
-	threat_generated += amount
-	if(D.threat >= D.threat_level)
-		D.create_threat(amount)
-		if(!threat_level_inflated) //Our first time raising the cap
-			D.threat_log += "[worldtime2text()]: A catbeast started increasing the threat cap."
-		threat_level_inflated += amount
-	else
-		D.refund_threat(amount)
 
 /datum/role/catbeast/GetScoreboard()
 	. = ..()

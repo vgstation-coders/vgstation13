@@ -643,7 +643,6 @@
 	..()
 	var/static/list/resettable_vars = list(
 		"gender",
-		"antibodies",
 		"last_eating",
 		"life_tick",
 		"number_wounds",
@@ -652,6 +651,8 @@
 		"pulse")
 
 	reset_vars_after_duration(resettable_vars, duration)
+	if(immune_system)
+		immune_system.send_to_past(duration)
 
 /mob/living/carbon/movement_tally_multiplier()
 	. = ..()

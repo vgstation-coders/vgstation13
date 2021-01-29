@@ -1785,18 +1785,6 @@ mob/living/carbon/human/isincrit()
 /mob/living/carbon/human/send_to_past(var/duration)
 	..()
 	var/static/list/resettable_vars = list(
-		"my_appearance.r_hair",
-		"my_appearance.g_hair",
-		"my_appearance.b_hair",
-		"my_appearance.h_style",
-		"my_appearance.r_facial",
-		"my_appearance.g_facial",
-		"my_appearance.b_facial",
-		"my_appearance.f_style",
-		"my_appearance.r_eyes",
-		".my_appearance.g_eyes",
-		".my_appearance.b_eyes",
-		"my_appearance.s_tone",
 		"lip_style",
 		"eye_style",
 		"wear_suit",
@@ -1836,8 +1824,10 @@ mob/living/carbon/human/isincrit()
 		O.send_to_past(duration)
 	for(var/datum/organ/external/O in organs)
 		O.send_to_past(duration)
-	if(vessel)
-		vessel.send_to_past(duration)
+	 if(vessel)
+	 	vessel.send_to_past(duration)
+	if(my_appearance)
+		my_appearance.send_to_past(duration)
 
 	updatehealth()
 

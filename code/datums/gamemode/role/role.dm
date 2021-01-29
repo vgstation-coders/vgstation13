@@ -107,6 +107,8 @@
 	var/list/greets = list(GREET_DEFAULT,GREET_CUSTOM)
 
 	var/wikiroute
+	var/threat_generated = 0
+	var/threat_level_inflated = 0
 
 	var/list/current_powers = list()
 	var/list/available_powers = list()		//holds instances of each power
@@ -516,6 +518,19 @@
 // What do they display on the player StatPanel ?
 /datum/role/proc/StatPanel()
 	return ""
+
+/datum/role/proc/increment_threat(var/amount)
+	var/datum/gamemode/dynamic/D = ticker.mode
+	if(!istype(D))
+		return //It's not dynamic!
+	threat_generated += amount
+	if(D.threat >= D.threat_level)
+		D.create_threat(amount)
+		if(!threat_level_inflated) //Our first time raising the cap
+			D.threat_log += "[worldtime2text()]: [name] started increasing the threat cap."
+		threat_level_inflated += amount
+	else
+		D.refund_threat(amount)
 
 /////////////////////////////THESE ROLES SHOULD GET MOVED TO THEIR OWN FILES ONCE THEY'RE GETTING ELABORATED/////////////////////////
 
