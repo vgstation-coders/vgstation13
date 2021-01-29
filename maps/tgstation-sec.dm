@@ -78,7 +78,7 @@
 
 // -- Traitors & challenjours only
 /datum/map/active/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
-	if(ispath(DR.role_category, /datum/role/traitor))
+	if(ispath(DR.role_category, /datum/role/traitor) || (DR.flags & MINOR_RULESET))
 		return 1
 	return 0
 
