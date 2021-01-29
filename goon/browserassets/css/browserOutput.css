@@ -126,6 +126,7 @@ h1.alert, h2.alert		{color: #000000;}
 .orange					{color: #ffa500;}
 .borange				{color: #ffa500; font-weight: bold;}
 .maroon					{color: #800000;}
+.clown 					{color: #FBFF35; font-family: Comic Sans MS, Comic Sans, cursive;}
 
 .good					{color: green;}
 .average				{color: #FF8000;}

@@ -353,6 +353,9 @@
 	H.fully_replace_character_name(H.real_name,pick(clown_names))
 	H.dna.real_name = H.real_name
 	mob_rename_self(H,"clown")
+	H.add_language(LANGUAGE_CLOWN)
+	to_chat(H, "<span class = 'notice'>You can perfectly paint Her colourbook blindfolded and have learned how to communicate with in the holiest of languages, honk. Praise be her Honkmother.</span>")
+
 
 /datum/outfit/clown/pre_equip_priority(var/mob/living/carbon/human/H, var/species)
 	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
