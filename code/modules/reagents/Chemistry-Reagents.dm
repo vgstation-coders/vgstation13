@@ -631,6 +631,9 @@
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
 		campfire.snuff()
+	else if(istype(O, /obj/item/weapon/book/manual/snow))
+		var/obj/item/weapon/book/manual/snow/S = O
+		S.trigger()
 	else if(O.on_fire) // For extinguishing objects on fire
 		O.extinguish()
 	else if(O.molten) // Molten shit.

@@ -109,6 +109,7 @@
 	species_final_equip(H)
 	spawn_id(H)
 	post_equip(H) // Accessories, IDs, etc.
+	map.map_equip(H) //Does this map give special gear?
 	if (priority)
 		post_equip_priority(H)
 	give_disabilities_equipment(H)
