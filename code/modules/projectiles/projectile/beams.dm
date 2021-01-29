@@ -175,6 +175,8 @@ var/list/beam_master = list()
 	layer = PROJECTILE_LAYER
 	var/turf/last = null
 	kill_count = 12
+	var/mob/firer_mob = null
+	var/yellow = 0
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -191,6 +193,31 @@ var/list/beam_master = list()
 		angle = round(angle) + 45*/
 	return angle
 
+
+/obj/item/projectile/beam/lightning/admin_warn(mob/living/M)
+	if(firer_mob && istype(firer_mob, /mob))
+		if(firer_mob == M)
+			log_attack("<font color='red'>[key_name(firer_mob)] shot himself with a [type].</font>")
+			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
+			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
+			msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
+			if(!iscarbon(firer_mob))
+				M.LAssailant = null
+			else
+				M.LAssailant = firer_mob
+		else
+			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
+			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
+			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
+			if(firer_mob.client || M.client)
+				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
+			if(!iscarbon(firer_mob))
+				M.LAssailant = null
+			else
+				M.LAssailant = firer_mob
+	else
+		..()
+		
 /obj/item/projectile/beam/lightning/process()
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
@@ -198,9 +225,9 @@ var/list/beam_master = list()
 	var/broken
 	var/atom/curr = current
 	var/Angle=round(Get_Angle(firer,curr))
-	var/icon/I=new('icons/obj/lightning.dmi',icon_state)
-	var/icon/Istart=new('icons/obj/lightning.dmi',"[icon_state]start")
-	var/icon/Iend=new('icons/obj/lightning.dmi',"[icon_state]end")
+	var/icon/I=new('icons/obj/lightning.dmi',"[icon_state][yellow ? "_yellow" : ""]")
+	var/icon/Istart=new('icons/obj/lightning.dmi',"[icon_state]start[yellow ? "_yellow" : ""]")
+	var/icon/Iend=new('icons/obj/lightning.dmi',"[icon_state]end[yellow ? "_yellow" : ""]")
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)

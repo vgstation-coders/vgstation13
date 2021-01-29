@@ -60,7 +60,7 @@
 				new /obj/machinery/power/secured_capacitor(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv)
 				new /obj/machinery/power/secured_capacitor/adv(get_turf(src.loc))
-			if(/obj/item/weapon/stock_parts/capacitor/adv/super)
+			if(/obj/item/weapon/stock_parts/capacitor/adv/super, /obj/item/weapon/stock_parts/capacitor/adv/super/pre_charged)
 				new /obj/machinery/power/secured_capacitor/adv/super(get_turf(src.loc))
 			if(/obj/item/weapon/stock_parts/capacitor/adv/super/ultra)
 				new /obj/machinery/power/secured_capacitor/adv/super/ultra(get_turf(src.loc))
