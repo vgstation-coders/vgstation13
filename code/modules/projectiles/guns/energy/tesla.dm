@@ -68,17 +68,10 @@
 
 
 /obj/item/weapon/gun/tesla/update_icon()
-	if(loaded_capacitor) 
-		if(loaded_capacitor.stored_charge >= MIN_TO_FIRE)	
-			if(loaded_capacitor.stored_charge >= GIGAWATT)
-				icon_state = "teslacannon_strong_ready"
-			else
-				icon_state = "teslacannon_ready"
-		else
-			icon_state = "teslacannon"
+	if(loaded_capacitor && loaded_capacitor.stored_charge >= MIN_TO_FIRE)
+		icon_state = "teslacannon[loaded_capacitor.stored_charge >= GIGAWATT ? "_strong" : ""]_ready"
 	else
 		icon_state = "teslacannon"
-
 
 /obj/item/weapon/gun/tesla/preloaded/New()
 	..()
