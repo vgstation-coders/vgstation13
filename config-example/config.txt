@@ -247,6 +247,9 @@ RESPAWN_AS_MOMMI
 ## Uncomment to use the paperwork library
 #PAPERWORK_LIBRARY
 
+## Uncomment to allow tgstation-sec.dmm to be voted after a rev victory
+#CASTLE_STATION_ALLOWED
+
 ## Uncomment to enable sending data to the IRC bot.
 #USE_IRC_BOT
 

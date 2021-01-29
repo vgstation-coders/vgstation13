@@ -93,9 +93,9 @@
 				binary = null
 				continue
 		if(potential == "Castle Station/") //Available if revolutionaries won
-			if(!ticker.revolutionary_victory)
-				message_admins("Skipping map [potential], revolutionaries have not won.")
-				warning("Skipping map [potential], revolutionaries have not won.")
+			if(!ticker.revolutionary_victory && !config.castle_station_allowed)
+				message_admins("Skipping map [potential], revolutionaries have not won/not enabled in config file.")
+				warning("Skipping map [potential], revolutionaries have not won/not enabled in config file.")
 				binary = null
 				continue
 		if(potential == "Bagel Station/")

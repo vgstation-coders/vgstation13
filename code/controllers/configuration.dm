@@ -135,6 +135,8 @@
 	var/revival_cloning = 1
 	var/revival_brain_life = -1
 
+	var/castle_station_allowed = 0 // Can you vote for tgstation-sec.dmm after a rev victory ? Off by
+
 	//Used for modifying movement speed for mobs.
 	//Unversal modifiers
 	var/run_speed = 0
@@ -675,6 +677,8 @@
 					hardcore_mode = value
 				if("humans_speak")
 					voice_noises = 1
+				if("castle_station_allowed")
+					castle_station_allowed = 1
 				else
 					diary << "Unknown setting in configuration: '[name]'"
 
