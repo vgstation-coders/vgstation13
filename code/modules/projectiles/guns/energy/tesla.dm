@@ -1,4 +1,4 @@
-#define MIN_TO_FIRE 1000000
+#define MIN_TO_FIRE MEGAWATT
 
 /obj/item/weapon/gun/tesla
 	name = "\improper Telsa Cannon"
