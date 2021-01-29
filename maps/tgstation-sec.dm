@@ -95,6 +95,29 @@
 		return FALSE
 	return TRUE
 
+/datum/map/active/setup_gamemode()
+	for (var/mob/living/L in player_list)
+		if (!L.mind?.antag_roles.len) // No antag roles
+			var/datum/role/survivor/S = new
+			S.AssignToRole(L.mind)
+			S.Greet()
+			S.OnPostSetup()
+			S.ForgeObjectives()
+			S.AnnounceObjectives()
+
+	return ..()
+
+/datum/map/active/handle_latejoiner(var/mob/M)
+	if (!M.mind?.antag_roles.len) // No antag roles
+		var/datum/role/survivor/S = new
+		S.AssignToRole(M.mind)
+		S.Greet()
+		S.OnPostSetup()
+		S.ForgeObjectives()
+		S.AnnounceObjectives()
+
+	return ..()
+
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
 #endif

@@ -200,6 +200,9 @@ var/global/list/accessable_z_levels = list()
 	L += using
 	return L
 
+// -- Special gamemode(s) for special maps
+/datum/map/proc/setup_gamemode()
+/datum/map/proc/handle_latejoiner(var/mob/M)
 
 ////////////////////////////////////////////////////////////////
 

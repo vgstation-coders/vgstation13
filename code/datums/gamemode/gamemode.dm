@@ -202,6 +202,8 @@
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 		R.OnPostSetup()
+
+	map.setup_gamemode()
 	return 1
 
 /datum/gamemode/proc/TearDown()

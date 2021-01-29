@@ -376,7 +376,8 @@
 
 	job_master.AssignRole(src, rank, 1)
 
-	ticker.mode.latespawn(src)//can we make them a latejoin antag?
+	ticker.mode.latespawn(src) //can we make them a latejoin antag?
+	map.handle_latejoiner(src) //Map-related latejoin
 
 	var/mob/living/carbon/human/character = create_character()	//creates the human and transfers vars and mind
 	if(character.client.prefs.randomslot)
