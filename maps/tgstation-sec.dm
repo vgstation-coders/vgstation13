@@ -98,7 +98,7 @@
 /datum/map/active/setup_gamemode()
 	for (var/mob/living/L in player_list)
 		if (!L.mind?.antag_roles.len) // No antag roles
-			var/datum/role/survivor/S = new
+			var/datum/role/survivor/castle/S = new
 			S.AssignToRole(L.mind)
 			S.Greet()
 			S.OnPostSetup()
@@ -109,7 +109,7 @@
 
 /datum/map/active/handle_latejoiner(var/mob/M)
 	if (!M.mind?.antag_roles.len) // No antag roles
-		var/datum/role/survivor/S = new
+		var/datum/role/survivor/castle/S = new
 		S.AssignToRole(M.mind)
 		S.Greet()
 		S.OnPostSetup()

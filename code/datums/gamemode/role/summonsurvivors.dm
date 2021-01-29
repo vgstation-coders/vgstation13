@@ -72,8 +72,17 @@
 
 /datum/role/wizard/summon_potions/OnPostSetup()
 	return TRUE
-  
+
 /datum/role/wizard/summon_potions/GetScoreboard()
 	. = ..()
 	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"
 
+// -- Castle station
+
+
+/datum/role/survivor/castle
+
+/datum/role/survivor/castle/ForgeObjectives()
+	. = ..()
+	var/datum/objective/nap/N = new
+	AppendObjective(N)
