@@ -374,6 +374,7 @@ var/list/obj/machinery/requests_console/requests_consoles = list()
 		if(10)		//send announcement
 			if(!announcementConsole)
 				return
+			screen = 10
 		else		//main menu
 			dpt = ""
 			msgVerified = ""

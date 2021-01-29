@@ -18,8 +18,6 @@
 		name = text("alien sentinel ([rand(1, 1000)])")
 	real_name = name
 	..()
-	add_language(LANGUAGE_XENO)
-	default_language = all_languages[LANGUAGE_XENO]
 
 /mob/living/carbon/alien/humanoid/sentinel/add_spells_and_verbs()
 	..()

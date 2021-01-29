@@ -140,6 +140,10 @@
 	if (iscultist(user) && !(locate(/obj/effect/cult_shortcut) in src))
 		var/datum/cult_tattoo/CT = user.checkTattoo(TATTOO_SHORTCUT)
 		if (CT)
+			var/mob/living/carbon/C = user
+			if (C.occult_muted())
+				to_chat(user, "<span class='warning'>The holy aura preying upon your body prevents you from correctly drawing the sigil.</span>")
+				return
 			var/data = use_available_blood(user, CT.blood_cost)
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 				if(do_after(user, src, 30))

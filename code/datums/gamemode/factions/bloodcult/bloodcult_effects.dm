@@ -154,17 +154,37 @@
 		qdel(src)
 		return
 	if (user)
-		user.forceMove(src)
-		rider = user
-		if (ismob(rider))
-			var/mob/M = rider
-			M.see_invisible = SEE_INVISIBLE_CULTJAUNT
-			M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
-			M.apply_vision_overrides()
-			M.flags |= INVULNERABLE
+		var/muted = FALSE
+		if (user.anchored)
+			to_chat(user, "<span class='warning'>The blood jaunt fails to grasp you as you are currently anchored.</span>")
+		if (iscarbon(user))
+			var/mob/living/carbon/C = user
+			if (C.occult_muted())
+				muted = TRUE
+				to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
+		if (!muted && !user.anchored)
+			user.forceMove(src)
+			rider = user
+			if (ismob(rider))
+				var/mob/M = rider
+				M.see_invisible = SEE_INVISIBLE_CULTJAUNT
+				M.see_invisible_override = SEE_INVISIBLE_CULTJAUNT
+				M.apply_vision_overrides()
+				M.flags |= INVULNERABLE
 	if (packup)
 		for (var/atom/movable/AM in packup)
-			if (!AM.anchored)
+			if (AM.anchored)
+				if (ismob(AM))
+					var/mob/M = AM
+					to_chat(M, "<span class='warning'>The blood jaunt fails to grasp you as you are currently anchored.</span>")
+				continue
+			var/muted = FALSE
+			if (iscarbon(AM))
+				var/mob/living/carbon/C = AM
+				if (C.occult_muted())
+					muted = TRUE
+					to_chat(C, "<span class='warning'>The holy energies upon your body repel the blood jaunt.</span>")
+			if (!AM.anchored && !muted)
 				AM.forceMove(src)
 				packed.Add(AM)
 				if (ismob(AM))
@@ -362,6 +382,11 @@
 				M.see_invisible = SEE_INVISIBLE_LIVING
 				M.see_invisible_override = 0
 				M.apply_vision_overrides()
+				if (iscarbon(rider))
+					var/mob/living/carbon/C = rider
+					if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+						C.pain_shock_stage = max(C.pain_shock_stage, 100)
+						to_chat(C,"<span class='danger'>Traveling through the veil seems to have a recharging effect on the ghastly bindings as they begin to hurt you anew.</span>")
 			rider = null
 		if (packed.len > 0)
 			for(var/atom/movable/AM in packed)
@@ -372,6 +397,11 @@
 					M.see_invisible = SEE_INVISIBLE_LIVING
 					M.see_invisible_override = 0
 					M.apply_vision_overrides()
+					if (iscarbon(AM))
+						var/mob/living/carbon/C = AM
+						if (istype(C.handcuffed,/obj/item/weapon/handcuffs/cult))
+							C.pain_shock_stage = max(C.pain_shock_stage, 100)
+							to_chat(C,"<span class='danger'>Traveling through the veil seems to have a recharging effect on the ghastly bindings as they begin to hurt you anew.</span>")
 			packed = list()
 
 		if (landing_animation)
@@ -418,7 +448,10 @@ var/bloodstone_backup = 0
 					2;/mob/living/simple_animal/hostile/creature/cult,
 					1;/mob/living/simple_animal/hostile/faithless/cult,
 					)
-		new mobtype(get_turf(src))
+		var/mob/living/simple_animal/hostile/backup = new mobtype(get_turf(src))
+		var/new_target = backup.FindTarget()
+		backup.GiveTarget(new_target)
+		backup.MoveToTarget()//no time to dilly dally
 		qdel(src)
 
 ///////////////////////////////////////STUN INDICATOR////////////////////////////////////////////////

@@ -70,6 +70,19 @@
 	key = "*"
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
+/datum/language/clown
+	name = LANGUAGE_CLOWN
+	desc = "The forbidden language of clowns. Taught at the clown planet. Only native clowns can weave sentences in such a complex system. Composed of honking and clownish noises."
+	speech_verb = "honks"
+	ask_verb = "slips"
+	exclaim_verb = "farts"
+	whisper_verb = "bwoinks"
+	colour = "clown"
+	native=1
+	key = "!"
+	space_chance = 65
+	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn", "!", "?")
+
 /datum/language/tajaran
 	name = LANGUAGE_CATBEAST
 	desc = "An expressive language that combines yowls and chirps with posture, tail and ears. Native to the Tajaran."
@@ -77,7 +90,7 @@
 	ask_verb = "mrowls"
 	exclaim_verb = "yowls"
 	colour = "tajaran"
-	key = "%"
+	key = "+"
 	syllables = list("rr","rr","tajr","kir","raj","kii","mir","kra","ahk","nal","vah","khaz","jri","ran","darr", \
 	"mi","jri","dynh","manq","rhe","zar","rrhaz","kal","chur","eech","thaa","dra","jurl","mah","sanu","dra","ii'r", \
 	"ka","aasi","far","wa","baq","ara","qara","zir","sam","mak","hrar","nja","rir","khan","jun","dar","rik","kah", \
@@ -90,7 +103,7 @@
 	ask_verb = "warbles"
 	exclaim_verb = "warbles"
 	colour = "skrell"
-	key = "k"
+	key = "/"
 	syllables = list("qr","qrr","xuq","qil","quum","xuqm","vol","xrim","zaoo","qu-uu","qix","qoo","zix","*","!")
 
 /datum/language/vox

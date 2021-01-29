@@ -1,0 +1,12 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"i" = (/turf/unsimulated/mineral/random/high_chance/snow,/area)
+"N" = (/turf/unsimulated/mineral/random/high_chance_clown/snow,/area)
+
+(1,1,1) = {"
+aaiaaa
+aiiiia
+iiNNii
+aiNiii
+aiiiia
+aaiaaa
+"}

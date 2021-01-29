@@ -1,0 +1,31 @@
+"a" = (/turf/simulated/wall/mineral/wood/log,/area)
+"c" = (/obj/item/weapon/bedsheet/blue,/obj/structure/bed,/obj/structure/curtain/open/bed,/turf/simulated/floor/carpet,/area)
+"d" = (/obj/structure/table/woodentable,/obj/item/weapon/paper_bin{pixel_y = 8},/turf/simulated/floor/wood,/area)
+"g" = (/obj/structure/table/woodentable,/turf/simulated/floor/wood,/area)
+"h" = (/turf/simulated/floor/wood,/area)
+"i" = (/obj/machinery/space_heater/campfire/stove/fireplace/preset,/turf/simulated/floor{icon_state = "dark"},/area)
+"k" = (/obj/structure/flora/tree_stump,/turf/unsimulated/floor/snow,/area)
+"u" = (/obj/structure/bed/chair/comfy/couch/right/red{dir = 1},/turf/simulated/floor/wood,/area)
+"w" = (/obj/structure/rack,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/item/weapon/grown/log/tree,/obj/structure/closet/fireaxecabinet{pixel_y = 30},/turf/simulated/floor{icon_state = "dark"},/area)
+"x" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area)
+"E" = (/turf/simulated/floor/carpet,/area)
+"G" = (/obj/structure/closet/cabinet/snow,/obj/item/weapon/lighter/zippo,/obj/item/device/multitool,/turf/simulated/floor/wood,/area)
+"I" = (/obj/structure/filingcabinet/chestdrawer,/turf/simulated/floor/carpet,/area)
+"O" = (/obj/structure/grille,/obj/structure/window/reinforced{dir = 8},/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced,/turf/simulated/floor/plating,/area)
+"S" = (/obj/structure/bed/chair/comfy/black{dir = 1},/turf/simulated/floor/wood,/area)
+"T" = (/turf/unsimulated/floor/snow,/area)
+"V" = (/obj/structure/bed/chair/comfy/couch/left/red{dir = 1},/turf/simulated/floor/wood,/area)
+"W" = (/obj/machinery/door/mineral/wood/log,/turf/simulated/floor/wood,/area)
+
+(1,1,1) = {"
+kTTTTTTTTT
+TkTTTTTTTT
+TTaaaOxaTT
+TTaiwdgakT
+kTaVuhSaTT
+TTaEEhhaTT
+TTacIGhaTk
+TTaaaaWaTT
+TTTTTTTTTT
+kkTTTTTTkT
+"}

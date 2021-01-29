@@ -1397,6 +1397,64 @@ var/list/arcane_tomes = list()
 	name = "gamer goblet"
 	desc = "A plastic cup in the shape of a skull. Typically full of Geometer-Fuel."
 
+///////////////////////////////////////CULT CUFFS////////////////////////////////////////////////
+/obj/item/weapon/handcuffs/cult
+	name = "ghastly bindings"
+	desc = ""
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "cultcuff"
+	restraint_resist_time = 60 SECONDS
+	mech_flags = MECH_SCAN_FAIL
+	origin_tech = null
+	var/datum/role/cultist/gaoler
+
+/obj/item/weapon/handcuffs/cult/New()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings += src
+
+/obj/item/weapon/handcuffs/cult/Destroy()
+	..()
+
+	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+	if (!cult)
+		cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+		cult.OnPostSetup()
+
+	cult.bindings -= src
+
+/obj/item/weapon/handcuffs/cult/examine(var/mob/user)
+	..()
+	if (!isliving(loc))//shouldn't happen unless they get admin spawned
+		to_chat(user, "<span class='info'>The tentacles flailing out of this egg-like object seem like they're trying to grasp at their surroundings.</span>")
+	else
+		var/mob/living/carbon/C = loc
+		if (C.handcuffed == src)
+			to_chat(user, "<span class='info'>These restrict your arms and inflict tremendous pain upon both your body and psyche. But given some time you should be able to break them.</span>")
+		else
+			to_chat(user, "<span class='info'>\The [C] seems to be in pain as these restrict their arms.</span>")
+
+/obj/item/weapon/handcuffs/cult/on_restraint_removal(var/mob/living/carbon/C)
+	C.pain_shock_stage = max(C.pain_shock_stage-50, 0)
+	spawn(1)
+		var/turf/T = get_turf(src)
+		playsound(T, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
+		anim(target = T, a_icon = 'icons/obj/cult.dmi', flick_anim = "cuffbreak")
+		if (gaoler && gaoler.antag && gaoler.antag.current)
+			to_chat(gaoler.antag.current, "<span class='sinister'>Bindings you placed upon someone have been shattered</span>")
+		qdel(src)
+
+/obj/item/weapon/handcuffs/cult/on_restraint_apply(var/mob/living/carbon/C)
+	C.pain_shock_stage = max(C.pain_shock_stage, 100)
+	to_chat(C, "<span class='danger'>[pick("It hurts so much!", "You really need some painkillers.", "Dear god, the pain!")]</span>")
+
+
+
 ///////////////////////////////////////BLOOD TESSERACT////////////////////////////////////////////////
 
 /obj/item/weapon/blood_tesseract

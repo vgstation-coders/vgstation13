@@ -1,0 +1,96 @@
+"aq" = (/obj/machinery/computer/general_air_control/large_tank_control{frequency = 1666; input_tag = "inc_in"; output_tag = "inc_out"; sensors = list("inc_sensor" = "Tank")},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"bk" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 6},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"bR" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue,/obj/machinery/portable_atmospherics/canister/old/oxygen,/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/blue,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"cy" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"cF" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 4},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"cX" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 5},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 1; tag = "icon-pathmarker (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"ds" = (/obj/structure/window/reinforced{dir = 8},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"eU" = (/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{dir = 1},/obj/effect/decal/warning_stripes/pathmarkers/blue,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"gq" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 1},/turf/simulated/wall/r_wall,/area/vault/thermalplant)
+"hz" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 9},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"jQ" = (/obj/structure/geyser/critical,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"kA" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 10},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"kD" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/turf/unsimulated/floor/snow,/area)
+"kJ" = (/obj/item/weapon/wrench,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"lQ" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 6},/turf/unsimulated/floor/snow,/area)
+"mS" = (/obj/machinery/atmospherics/binary/volume_pump{dir = 1; name = "Cold Gas Circulator"},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"na" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 5},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"ng" = (/obj/machinery/atmospherics/unary/portables_connector{dir = 8},/obj/effect/decal/warning_stripes{icon_state = "bot"},/obj/machinery/portable_atmospherics/canister/old/oxygen,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"np" = (/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 9},/obj/machinery/portable_atmospherics/canister/old/oxygen,/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 1; tag = "icon-pathmarker (NORTH)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"nq" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 8},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/plating,/area/vault/thermalplant)
+"nA" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 6},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"nM" = (/obj/machinery/atmospherics/binary/valve/digital{dir = 1; name = "Hot Loop Release Valve"},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"od" = (/obj/item/weapon/storage/toolbox/mechanical,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"ol" = (/obj/machinery/atmospherics/pipe/manifold/insulated/hidden{dir = 4},/obj/effect/decal/warning_stripes/pathmarkers/red,/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"ov" = (/obj/machinery/door/airlock/engineering{name = "Thermal Plant"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"oG" = (/obj/structure/cable/yellow{d1 = 1; d2 = 2; icon_state = "1-2"},/obj/structure/cable{d1 = 1; d2 = 4; icon_state = "1-4"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"pC" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 5},/turf/unsimulated/floor/snow,/area)
+"qr" = (/obj/structure/cable/yellow,/obj/machinery/power/monitor,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"qC" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 1},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"qF" = (/obj/machinery/power/apc{dir = 1; pixel_y = 24},/obj/structure/cable{d2 = 2; icon_state = "0-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"qJ" = (/obj/structure/table,/obj/machinery/meter{name = "Fuel Meter"},/obj/machinery/atmospherics/pipe/simple/yellow/hidden{dir = 5},/obj/item/clothing/gloves/yellow,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"qR" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 6},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"rt" = (/obj/machinery/power/generator{anchored = 1; dir = 4},/obj/structure/cable/yellow{d2 = 2; icon_state = "0-2"; pixel_y = 1},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"sf" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 1},/obj/structure/reagent_dispensers/degreaser,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"uG" = (/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"wN" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/unsimulated/floor/snow,/area)
+"xl" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 10},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue,/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"xr" = (/obj/machinery/atmospherics/binary/volume_pump{name = "Hot Gas Circulator"},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"xY" = (/obj/machinery/door/poddoor{id_tag = "thermalplant"; name = "Burn Chamber Vent"},/turf/simulated/floor/engine{name = "vacuum floor"; nitrogen = 0.01; oxygen = 0.01},/area/vault/thermalplant)
+"zf" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 9},/turf/unsimulated/floor/snow,/area)
+"zL" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 10},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"Ag" = (/obj/machinery/atmospherics/binary/circulator{anchored = 1; dir = 1},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"BI" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/obj/machinery/atmospherics/pipe/simple/yellow/hidden,/turf/simulated/floor/plating,/area/vault/thermalplant)
+"CN" = (/obj/machinery/light/he,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Et" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/obj/machinery/atmospherics/pipe/manifold/insulated/hidden{dir = 8},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"Fo" = (/obj/machinery/atmospherics/unary/vent_scrubber/on/burn_chamber{dir = 4},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"Ho" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/turf/simulated/floor/plating,/area/vault/thermalplant)
+"Ij" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 9},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Ip" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/obj/structure/geyser/critical,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"JV" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 10},/obj/machinery/light/he{dir = 4},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"Kz" = (/turf/simulated/wall/r_wall,/area/vault/thermalplant)
+"KA" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction{dir = 1},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"Li" = (/obj/machinery/door/airlock/external,/turf/simulated/floor/plating,/area/vault/thermalplant)
+"LF" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"LO" = (/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/effect/decal/warning_stripes/pathmarkers/red,/obj/machinery/atmospherics/pipe/manifold/insulated/hidden{dir = 4},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"MB" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"MG" = (/obj/machinery/computer/general_air_control/atmos_automation/burnchamber{frequency = 1666},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"PH" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 4},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/red{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Qp" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 5},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/structure/cable{d1 = 1; d2 = 8; icon_state = "1-8"; tag = ""},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"QV" = (/obj/machinery/space_heater/vesta,/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Ra" = (/obj/structure/window/reinforced{dir = 8},/obj/effect/decal/warning_stripes{icon_state = "warning"; tag = "icon-warning"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden/blue{dir = 4},/obj/machinery/portable_atmospherics/canister/old/oxygen,/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 8; tag = "icon-pathmarker (WEST)"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Rm" = (/obj/machinery/atmospherics/binary/circulator{anchored = 1},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"RN" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 9},/obj/machinery/atmospherics/unary/outlet_injector{frequency = 1666; id_tag = "inc_in"},/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"RQ" = (/obj/structure/grille,/obj/structure/window/reinforced/plasma{dir = 4},/obj/structure/window/reinforced/plasma{dir = 1},/obj/structure/window/reinforced/plasma,/obj/structure/window/full/reinforced/plasma,/obj/machinery/meter{name = "Vent Gas Meter"},/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 1},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"Sh" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 4},/turf/unsimulated/floor/snow,/area)
+"SM" = (/obj/machinery/light/he{dir = 8},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"SN" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/obj/effect/decal/warning_stripes{icon_state = "bot"},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"SZ" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 5},/obj/machinery/air_sensor{frequency = 1666; id_tag = "sensor"; output = 63},/obj/structure/geyser/critical,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"UL" = (/turf/simulated/floor/plating,/area/vault/thermalplant)
+"Vb" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging,/obj/structure/geyser/critical,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"VN" = (/obj/structure/rack,/obj/item/weapon/storage/toolbox/electrical,/obj/item/weapon/storage/toolbox/mechanical{pixel_x = 3; pixel_y = -3},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"VP" = (/obj/machinery/atmospherics/pipe/simple/insulated/hidden{dir = 5},/turf/simulated/floor/plating,/area/vault/thermalplant)
+"VU" = (/obj/machinery/atmospherics/pipe/simple/heat_exchanging{dir = 10},/turf/simulated/floor/engine,/area/vault/thermalplant)
+"Xb" = (/obj/item/weapon/storage/toolbox/syndicate,/turf/simulated/floor/engine,/area/vault/thermalplant)
+"YS" = (/obj/machinery/door_control{desc = "Lets all the hot gas out very quickly."; id_tag = "thermalplant"; name = "Burn Chamber Vent"; pixel_x = -7; pixel_y = 32},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Zl" = (/obj/machinery/atmospherics/pipe/manifold/insulated/hidden/blue{dir = 8},/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 4; tag = "icon-pathmarker (EAST)"},/obj/effect/decal/warning_stripes/pathmarkers/blue,/obj/effect/decal/warning_stripes/pathmarkers/blue{dir = 1; tag = "icon-pathmarker (NORTH)"},/obj/structure/cable{d1 = 1; d2 = 2; icon_state = "1-2"},/turf/simulated/floor{icon_state = "dark"},/area/vault/thermalplant)
+"Zn" = (/turf/simulated/floor/engine,/area/vault/thermalplant)
+"ZS" = (/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+KzKzKzKzKzKzKzKzKzlQShShShShkD
+KznAIpnAVUjQZnXbKzwNlQShShShzf
+KzVbLFLFLFjQZnZnKzwNpCShShShkD
+KzSNSZRNKAFozLZnxYwNlQShShShzf
+KznqHoBIEtkARQKzKzKzgqKzZSZSZS
+KzaqMGqJngsfnMYSqFdsbRKzZSZSZS
+KzSMuGuGuGnaLObkcyRanpKzZSZSZS
+KzuGuGuGuGuGqCcXxlkJuGKzZSZSZS
+KzuGuGuGqRcFolodZlMBJVKzZSZSZS
+KzuGuGuGxruGAgrtRmuGmSKzZSZSZS
+KzuGuGuGVPPHIjoGQpeUhzKzZSZSZS
+KzKzovKzKzKzKzqruGnguGKzZSZSZS
+KzuGuGuGVNQVKzKzKzKzKzKzZSZSZS
+KzuGuGuGuGCNuGuGuGLiULLiZSZSZS
+KzKzKzKzKzKzKzKzKzKzKzKzZSZSZS
+"}

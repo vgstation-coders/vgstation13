@@ -1,0 +1,13 @@
+"a" = (/obj/structure/geyser/unstable,/turf/unsimulated/floor/snow,/area)
+"e" = (/obj/structure/geyser,/turf/unsimulated/floor/snow,/area)
+"U" = (/obj/structure/geyser/critical,/turf/unsimulated/floor/snow,/area)
+"Y" = (/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+aYYYYe
+YYaYYY
+YaUYaY
+YYYYYY
+YYYUYa
+aaYaYY
+"}

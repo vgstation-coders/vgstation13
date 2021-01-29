@@ -160,6 +160,7 @@
 	movement_speed_modifier = species.move_speed_multiplier
 
 	default_language = get_default_language()
+	init_language = default_language
 
 	create_reagents(1000)
 
@@ -175,6 +176,7 @@
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPHOLY_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")

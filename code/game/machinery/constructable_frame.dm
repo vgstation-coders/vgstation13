@@ -1496,3 +1496,15 @@ obj/item/weapon/circuitboard/rdserver
 		/obj/item/weapon/stock_parts/manipulator = 1,
 		/obj/item/weapon/stock_parts/capacitor = 1,
 	)
+
+/obj/item/weapon/circuitboard/weathercontrol
+	name = "Circuit Board (Weather Control Device)"
+	desc = "A circuit board used to operate a weather control device."
+	build_path = /obj/machinery/weathercontrol
+	board_type = MACHINE
+	origin_tech = Tc_PROGRAMMING + "=4"
+	req_components = list(
+		/obj/item/weapon/stock_parts/matter_bin/adv/super/bluespace = 1,
+		/obj/item/weapon/stock_parts/micro_laser/high/ultra = 2,
+		/obj/item/weapon/cell/rad = 1,
+	)

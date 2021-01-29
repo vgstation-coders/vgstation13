@@ -441,7 +441,7 @@
 /obj/item/clothing/under/simonpants
 	name = "Simon's Pants"
 	desc = "Simon's pants, clad with belt and whatever the fuck that thing is around his neck."
-	icon_state = "spants"
+	icon_state = "simonpants"
 	_color = "simonpants"
 	item_state = "spants"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)

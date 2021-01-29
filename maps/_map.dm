@@ -203,6 +203,11 @@ var/global/list/accessable_z_levels = list()
 // -- Special gamemode(s) for special maps
 /datum/map/proc/setup_gamemode()
 /datum/map/proc/handle_latejoiner(var/mob/M)
+/datum/map/proc/generate_mapvaults()
+	return FALSE
+
+/datum/map/proc/map_equip(var/mob/living/carbon/human/H)
+	return
 
 ////////////////////////////////////////////////////////////////
 

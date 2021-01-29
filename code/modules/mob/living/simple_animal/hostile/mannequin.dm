@@ -140,6 +140,7 @@
 	..()
 	add_language(LANGUAGE_CULT)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 
 /mob/living/simple_animal/hostile/mannequin/cult/cultify()
 	return

@@ -1,0 +1,10 @@
+"a" = (/obj/structure/window/barricade/snow,/turf/unsimulated/floor/snow,/area)
+"c" = (/turf/unsimulated/floor/snow,/area)
+"t" = (/obj/effect/landmark/corpse/assistant,/obj/structure/window/barricade/snow,/turf/unsimulated/floor/snow,/area)
+"B" = (/obj/structure/flora/rock/pile/snow,/turf/unsimulated/floor/snow,/area)
+
+(1,1,1) = {"
+caB
+cta
+aBB
+"}

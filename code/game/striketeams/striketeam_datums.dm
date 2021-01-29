@@ -25,7 +25,7 @@ var/list/sent_strike_teams = list()
 
 /datum/striketeam/proc/trigger_strike(var/mob/user, var/missiontext)
 	mission = missiontext
-	
+
 	//Is the game started
 	if(!ticker)
 		if(user)
@@ -357,7 +357,12 @@ var/list/sent_strike_teams = list()
 		if(customsquad)
 			customsquad.HandleNewMind(new_commando.mind) //First come, first served
 
-	var/datum/outfit/concrete_outfit = new outfit_datum
-	concrete_outfit.equip(new_commando)
+	if (outfit_datum)
+		var/datum/outfit/concrete_outfit = new outfit_datum
+		concrete_outfit.equip(new_commando)
+	else
+		message_admins("Striketeam member created without an outfit selected.")
+		var/datum/outfit/concrete_outfit = new /datum/outfit/striketeam/death_commando
+		concrete_outfit.equip(new_commando)
 
 	return new_commando

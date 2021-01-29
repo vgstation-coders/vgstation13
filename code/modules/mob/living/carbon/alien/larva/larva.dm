@@ -25,6 +25,7 @@
 	regenerate_icons()
 	add_language(LANGUAGE_XENO)
 	default_language = all_languages[LANGUAGE_XENO]
+	init_language = default_language
 	..()
 
 	add_spell(new /spell/aoe_turf/alien_hide, "alien_spell_ready", /obj/abstract/screen/movable/spell_master/alien)

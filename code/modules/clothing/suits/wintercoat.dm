@@ -6,6 +6,7 @@
 	icon_state = "coatwinter"
 	item_state = "labcoat"
 	species_fit = list(INSECT_SHAPED)
+	clothing_flags = ONESIZEFITSALL
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS
 	heat_conductivity = SPACESUIT_HEAT_CONDUCTIVITY
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
@@ -59,6 +60,7 @@
 	name = "captain's winter coat"
 	desc = "You guys gonna listen to Garry? You gonna let him give the orders? I mean, he could BE one of those things!"
 	icon_state = "coatcaptain"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 20, bullet = 15, laser = 20, energy = 10, bomb = 15, bio = 5, rad = 2)
 
@@ -87,6 +89,7 @@
 /obj/item/clothing/suit/storage/wintercoat/security/hos
 	name = "Head of Security's winter coat"
 	icon_state = "coathos"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 65, bullet = 30, laser = 50, energy = 10, bomb = 25, bio = 0, rad = 0)
 	nohood = 1
@@ -102,6 +105,7 @@
 /obj/item/clothing/suit/storage/wintercoat/medical
 	name = "medical winter coat"
 	icon_state = "coatmedical"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 50, rad = 0)
 	allowed = list(
@@ -121,12 +125,14 @@
 /obj/item/clothing/suit/storage/wintercoat/medical/science //normal labcoats all have the same allowed item list
 	name = "science winter coat"
 	icon_state = "coatscience"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 10, bio = 0, rad = 0)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering
 	name = "engineering winter coat"
 	icon_state = "coatengineer"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 20)
 	allowed = list (
@@ -153,6 +159,7 @@
 /obj/item/clothing/suit/storage/wintercoat/hydro
 	name = "hydroponics winter coat"
 	icon_state = "coathydro"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	allowed = list (
 		/obj/item/weapon/reagent_containers/spray/plantbgone,
@@ -165,16 +172,19 @@
 /obj/item/clothing/suit/storage/wintercoat/cargo
 	name = "cargo winter coat"
 	icon_state = "coatcargo"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/prisoner
 	name = "prisoner winter coat"
 	icon_state = "coatprisoner"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/hop
 	name = "Head of Personnel's winter coat"
 	icon_state = "coathop"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	desc = "A slightly armoured fur-lined greatcoat. It looks like it's mostly ceremonial."
 	armor = list(melee = 30, bullet = 10, laser = 10, energy = 10, bomb = 15, bio = 0, rad = 0)
@@ -197,6 +207,7 @@
 /obj/item/clothing/suit/storage/wintercoat/miner
 	name = "mining winter coat"
 	icon_state = "coatminer"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	allowed = list(
@@ -208,6 +219,7 @@
 /obj/item/clothing/suit/storage/wintercoat/clown
 	name = "Elfen winter coat"
 	icon_state = "coatclown"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	allowed = list(
 		/obj/item/weapon/reagent_containers/food/snacks/grown/banana,
@@ -219,6 +231,7 @@
 /obj/item/clothing/suit/storage/wintercoat/mime
 	name = "mime winter coat"
 	icon_state = "coatmime"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/storage/wintercoat/engineering/ce
@@ -246,6 +259,7 @@
 /obj/item/clothing/suit/storage/wintercoat/bartender
 	name = "bartender winter coat"
 	icon_state = "coatbar"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	desc = "A heavy jacket made from 'synthetic' animal furs. Reinforced to avoid tearing when breaking up bar fights."
 	armor = list(melee = 20, bullet = 10, laser = 10, energy = 0, bomb = 10, bio = 0, rad = 0)
@@ -257,6 +271,7 @@
 /obj/item/clothing/suit/storage/wintercoat/druid
 	name = "druid winter robes"
 	icon_state = "druid_snow"
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	wizard_garb = 1
 
@@ -319,6 +334,7 @@
 	icon_state = "hoodie"
 	item_state = "hoodie"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED, VOX_SHAPED)
 	clothing_flags = COLORS_OVERLAY
 
@@ -361,6 +377,7 @@
 	var/base_icon_state = "labcoat"
 	base_icon_state = "furcoat"
 	body_parts_covered = UPPER_TORSO|LOWER_TORSO|ARMS|LEGS //the sprite extends down to the ankles, it can protect the legs
+	clothing_flags = 0
 	species_fit = list(INSECT_SHAPED)
 	desc = "A thick fur coat. Your not sure what animal its fur from."
 	nohood = 1 //most fur coats dont have a hood
