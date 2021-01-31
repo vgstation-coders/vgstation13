@@ -45,7 +45,8 @@
 
 
 /datum/role/time_agent/process()
-	if(!objectives.GetObjectives().len || locate(/datum/objective/time_agent_extract) in objectives.GetObjectives())
+	var/list/datum/objective/jecties = objectives.GetObjectives()
+	if(!jecties.len || locate(/datum/objective/time_agent_extract) in objectives.GetObjectives())
 		return //Not set up yet
 	var/finished = TRUE
 	for(var/datum/objective/O in objectives.GetObjectives())
