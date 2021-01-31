@@ -81,8 +81,6 @@
 
 /area/vault/syndiecargo
 
-/area/vault/black_site_prism
-
 //prison vault
 
 /area/vault/prison_ship
