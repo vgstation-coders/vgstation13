@@ -130,7 +130,9 @@ var/list/one_way_windows
 	health -= Proj.damage
 	..()
 	healthcheck(Proj.firer)
-	return
+	if (health > 0)
+		return PROJECTILE_COLLISION_BLOCKED
+	return PROJECTILE_COLLISION_DEFAULT
 
 //This ex_act just removes health to be fully modular with "bomb-proof" windows
 /obj/structure/window/ex_act(severity)
