@@ -66,8 +66,11 @@
 	priority = 2
 	allowed_tools = list(
 		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
+		/obj/item/soulstone/gem = 0,
+		/obj/item/soulstone = 50,
 		)
 
 	can_infect = 1
