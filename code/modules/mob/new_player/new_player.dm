@@ -385,6 +385,15 @@
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
+	// Very hacky. Sorry about that
+	if(ticker.tag_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		var/datum/outfit/mime/mime_outfit = new
+		mime_outfit.equip(character)
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(character.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
+
 	if(character.mind.assigned_role != "MODE")
 		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
 
@@ -393,7 +402,7 @@
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup()
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 
@@ -418,7 +427,7 @@
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that // (they did not do that)
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)

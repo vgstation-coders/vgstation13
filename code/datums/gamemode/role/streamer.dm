@@ -24,7 +24,7 @@
 			to_chat(antag.current, "Entertain your audience to obtain followers and subscribers!")
 	antag.current << sound('sound/machines/lawsync.ogg')
 
-/datum/role/streamer/OnPostSetup()
+/datum/role/streamer/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	update_streamer_hud()
 	ForgeObjectives()

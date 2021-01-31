@@ -21,7 +21,7 @@
 	AppendObjective(/datum/objective/escape_prisoner)
 	AppendObjective(/datum/objective/minimize_casualties)
 
-/datum/role/prisoner/OnPostSetup()
+/datum/role/prisoner/OnPostSetup(var/laterole = FALSE)
 	..()
 	//Make the prisoner
 	var/mob/living/carbon/human/H = antag.current

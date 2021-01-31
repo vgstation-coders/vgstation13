@@ -749,6 +749,14 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/engineering/teslagun
+	name = "Tesla Cannon"
+	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
+	item = /obj/item/weapon/gun/tesla/preloaded
+	cost = 18
+	discounted_cost = 14
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
@@ -1076,3 +1084,9 @@ var/list/uplink_items = list()
 	cost = 60
 	discounted_cost = 100
 	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/codebreaker
+	name = "Codebreaker"
+	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
+	item = /obj/item/device/codebreaker
+	cost = 100

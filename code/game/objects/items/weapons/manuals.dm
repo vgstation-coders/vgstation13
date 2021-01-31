@@ -920,3 +920,28 @@ var/virology_encyclopedia = ""
 				</html>"}
 
 	dat = virology_encyclopedia
+
+/obj/item/weapon/book/manual/snow
+	name = "\improper Snow Survival Guide"
+	icon_state ="triangulate"
+	author = "The Abominable Snowman"
+	title = "Snow Survival Guide"
+	wiki_page = "Guide_to_Snow_Map"
+	desc = "A guide to surviving on the surface of a snow planet. It even comes with a magnesium strip to ignite for emergency heating when applied to snow!</span>"
+
+/obj/item/weapon/book/manual/snow/afterattack(atom/A, mob/user as mob)
+	if(!user.Adjacent(A) || !istype(A,/turf/unsimulated/floor/snow))
+		return
+	trigger(user)
+
+/obj/item/weapon/book/manual/snow/proc/trigger(var/mob/living/L)
+	if(!L)
+		L = get_holder_of_type(src,/mob/living)
+	visible_message("<span class='danger'>The magnesium in \the [src]'s emergency strip flash-ignites!</span>")
+	var/turf/T = get_turf(src)
+	new /obj/effect/decal/cleanable/ash(T)
+	playsound(src, 'sound/items/lighter1.ogg', 50, 1)
+	if(L)
+		L.bodytemperature = L.bodytemperature + 10 //This is enough to push someone from the edge of passing out to safe
+		to_chat(L, "<span class='warning'>You feel a jolt of warmth from the flash-incineration of \the [src].")
+	qdel(src)

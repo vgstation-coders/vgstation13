@@ -70,6 +70,19 @@
 	key = "*"
 	syllables = list("ss","ss","ss","ss","skak","seeki","resh","las","esi","kor","sh")
 
+/datum/language/clown
+	name = LANGUAGE_CLOWN
+	desc = "The forbidden language of clowns. Taught at the clown planet. Only native clowns can weave sentences in such a complex system. Composed of honking and clownish noises."
+	speech_verb = "honks"
+	ask_verb = "slips"
+	exclaim_verb = "farts"
+	whisper_verb = "bwoinks"
+	colour = "clown"
+	native=1
+	key = "!"
+	space_chance = 65
+	syllables = list("honk", "henk", "nk", "ho", "ha", "hunke", "hunk", "hu", "ba", "nana", "bwo", "bwoink", "ink", "fart", "peel", "banana", "poot", "toot", "cluwn", "!", "?")
+
 /datum/language/tajaran
 	name = LANGUAGE_CATBEAST
 	desc = "An expressive language that combines yowls and chirps with posture, tail and ears. Native to the Tajaran."

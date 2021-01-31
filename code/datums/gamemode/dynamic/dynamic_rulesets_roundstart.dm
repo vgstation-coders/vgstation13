@@ -48,7 +48,7 @@
 	role_category = /datum/role/traitor/challenger
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
-	restricted_from_jobs = list("AI","Mobile MMI")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
 	weight = 1
 	cost = 15
@@ -639,4 +639,50 @@
 	var/datum/role/grinch/G = new
 	G.AssignToRole(M.mind,1)
 	G.Greet(GREET_ROUNDSTART)
+	return 1
+
+//////////////////////////////////////////////
+//                                          //
+//               TAG MODE (speical)      	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                          //
+//////////////////////////////////////////////
+
+/datum/dynamic_ruleset/roundstart/tag_mode
+	name = "Tag mode"
+	role_category = /datum/role/changeling/changeling_clown
+	restricted_from_jobs = list()
+	enemy_jobs = list()
+	required_pop = list(0,0,0,0,0,0,0,0,0,0)
+	required_candidates = 1
+	weight = 10
+	cost = 10
+	requirements = list(101,101,101,101,101,101,101,101,101,101) // So that's not possible to roll it naturally
+	high_population_requirement = 10
+	flags = MINOR_RULESET
+
+/datum/dynamic_ruleset/roundstart/tag_mode/execute()
+
+	// Populate tagmode spawn list
+	for(var/obj/effect/landmark/A in landmarks_list)
+		if(A.name in valid_landmark_lists)
+			tag_mode_spawns += get_turf(A)
+			qdel(A)
+			A = null
+			continue
+
+	init_tag_mode_spawns()
+
+	// Spawn the clown...
+	var/mob/M = pick(candidates)
+	assigned += M
+	candidates -= M
+	var/datum/role/changeling/changeling_clown/clown = new
+	clown.AssignToRole(M.mind,1)
+	clown.Greet(GREET_ROUNDSTART)
+
+	// And everyone else as mimes.
+	for (var/mob/M2 in (mode.get_ready_players() - M))
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(M2.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
 	return 1

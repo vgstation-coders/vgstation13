@@ -284,7 +284,7 @@
 				if (joined)
 					joined.HandleRecruitedRole(newRole)
 
-		newRole.OnPostSetup(FALSE)
+		newRole.OnPostSetup()
 		if ((chosen_greeting && chosen_greeting != "custom") || (chosen_greeting == "custom" && custom_greeting))
 			newRole.Greet(chosen_greeting,custom_greeting)
 

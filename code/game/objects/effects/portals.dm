@@ -40,14 +40,18 @@
 /obj/effect/portal/Crossed(AM as mob|obj,var/no_tp=0)
 	if(no_tp)
 		return
-	if(istype(AM,/obj/item/projectile/beam))
-		var/obj/item/projectile/beam/B = AM
-		B.wait = 1
 	spawn()
 		teleport(AM)
 
+
+/obj/effect/portal/bullet_act(var/obj/item/projectile/Proj)
+	if (!target)
+		return PROJECTILE_COLLISION_MISS
+
+	return PROJECTILE_COLLISION_PORTAL
+
 /obj/effect/portal/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover,/obj/effect/beam))
+	if(istype(mover,/obj/effect/beam) || istype(mover,/obj/item/projectile/beam))
 		return 0
 	else
 		return ..()

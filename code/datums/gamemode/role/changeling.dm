@@ -24,7 +24,7 @@
 
 	var/mimicing = ""
 
-/datum/role/changeling/OnPostSetup()
+/datum/role/changeling/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	power_holder = new /datum/power_holder/changeling(src)
 	antag.current.add_spell(new /spell/changeling/evolve, "changeling_spell_ready", /obj/abstract/screen/movable/spell_master/changeling	)

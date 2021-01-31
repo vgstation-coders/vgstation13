@@ -22,11 +22,11 @@ emp_act
 					P.reflected = 1
 					P.rebound(src)
 
-				return -1 // complete projectile permutation
+				return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
 	if(check_shields(P.damage, P))
 		P.on_hit(src, 100)
-		return 2
+		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P , def_zone))
 
 

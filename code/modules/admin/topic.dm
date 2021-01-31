@@ -5674,6 +5674,13 @@
 
 		mass_delete_in_zone() // Refreshes the window
 
+	else if(href_list["tag_mode"])
+		if (!check_rights(R_FUN))
+			to_chat(usr, "You don't have the necessary permissions to do this.")
+			return
+		else
+			toggle_tag_mode(usr)
+
 /datum/admins/proc/updateRelWindow()
 	var/text = list()
 	text += "<h3>Religions in game</h3>"

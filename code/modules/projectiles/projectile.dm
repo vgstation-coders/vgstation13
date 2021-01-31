@@ -8,6 +8,7 @@
 #define ADD "add"
 #define SET "set"
 */
+
 var/list/bullet_master = list()
 var/list/impact_master = list()
 
@@ -108,6 +109,7 @@ var/list/impact_master = list()
 	var/rotate = 1 //whether the projectile is rotated based on angle or not
 	var/travel_range = 0	//if set, the projectile will be deleted when its distance from the firing location exceeds this
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
+	var/special_collision = PROJECTILE_COLLISION_DEFAULT
 
 /obj/item/projectile/New()
 	..()
@@ -202,7 +204,7 @@ var/list/impact_master = list()
 
 	if(bumped)
 		return 0
-	var/forcedodge = 0 // force the projectile to pass
+	special_collision = PROJECTILE_COLLISION_DEFAULT
 	bumped = 1
 	if(firer && istype(A, /mob))
 		var/mob/M = A
@@ -236,7 +238,7 @@ var/list/impact_master = list()
 
 		if(!def_zone)
 			visible_message("<span class='notice'>\The [src] misses [M] narrowly!</span>")
-			forcedodge = -1
+			special_collision = PROJECTILE_COLLISION_MISS
 		else
 			if(!custom_impact)
 				if(silenced)
@@ -268,9 +270,9 @@ var/list/impact_master = list()
 
 	var/turf/A_turf = get_turf(A) //Store the location of A for later use in case it is destroyed in bullet_act()
 
-	if (!forcedodge)
-		forcedodge = A.bullet_act(src, def_zone) // searches for return value
-	if(forcedodge == -1) // the bullet passes through a dense object!
+	if (special_collision != PROJECTILE_COLLISION_MISS)
+		special_collision = A.bullet_act(src, def_zone) // searches for return value
+	if(special_collision != PROJECTILE_COLLISION_DEFAULT && special_collision != PROJECTILE_COLLISION_BLOCKED) // the bullet is still flying, either from missing its target, bouncing off it, or going through a portal
 		bumped = 0 // reset bumped variable!
 
 		forceMove(get_turf(A))
@@ -562,7 +564,7 @@ var/list/impact_master = list()
 		qdel(src)
 
 /obj/item/projectile/proc/bump_original_check()
-	if(!bumped && !isturf(original))
+	if(!bumped && !isturf(original) && !istype(original, /obj/effect/portal) && !istype(original, /obj/machinery/teleport/hub))
 		if(loc == get_turf(original))
 			if(!(original in permutated))
 				to_bump(original)
