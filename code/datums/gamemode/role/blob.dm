@@ -15,7 +15,7 @@
 	..()
 	wikiroute = role_wiki[BLOBOVERMIND]
 
-/datum/role/blob_overmind/OnPostSetup()
+/datum/role/blob_overmind/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	AnnounceObjectives()
 

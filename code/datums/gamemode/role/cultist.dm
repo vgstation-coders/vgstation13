@@ -17,7 +17,7 @@
 	..()
 	wikiroute = role_wiki[CULTIST]
 
-/datum/role/cultist/OnPostSetup()
+/datum/role/cultist/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	if(!.)
 		return

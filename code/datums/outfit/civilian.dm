@@ -420,15 +420,29 @@
 
 /datum/outfit/mime/post_equip(var/mob/living/carbon/human/H)
 	..()
-	H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
-	H.add_spell(new /spell/targeted/oathbreak/)
-	mob_rename_self(H,"mime")
-	if (H.mind)
-		H.mind.miming = MIMING_OUT_OF_CHOICE
+	if (type == /datum/outfit/mime) // A bit hacky but post_equip should always call its parent.
+		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
+		H.add_spell(new /spell/targeted/oathbreak/)
+		mob_rename_self(H,"mime")
+		if (H.mind)
+			H.mind.miming = MIMING_OUT_OF_CHOICE
 
 /datum/outfit/mime/post_equip_priority(var/mob/living/carbon/human/H)
 	items_to_collect[/obj/item/weapon/coin/clown] = SURVIVAL_BOX
 	return ..()
+
+// -- Clown ling (aka fake mime)
+/datum/outfit/mime/clown_ling
+	items_to_collect = list(
+		/obj/item/weapon/bikehorn = null,
+		/obj/item/weapon/stamp/clown = null,
+		/obj/item/clothing/under/rank/clown = null,
+		/obj/item/clothing/mask/gas/clown_hat/ling_mask = null,
+	)
+
+/datum/outfit/mime/clown_ling/post_equip(var/mob/living/carbon/human/H)
+	. = ..()
+	mob_rename_self(H,"clown")
 
 // -- Janitor
 

@@ -46,6 +46,9 @@ var/datum/controller/gameticker/ticker
 	// Hack
 	var/obj/machinery/media/jukebox/superjuke/thematic/theme = null
 
+	// Tag mode!
+	var/tag_mode_enabled = FALSE
+
 #define LOBBY_TICKING 1
 #define LOBBY_TICKING_RESTARTED 2
 /datum/controller/gameticker/proc/pregame()
@@ -733,6 +736,27 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
+// -- Tag mode!
+
+/datum/controller/gameticker/proc/tag_mode(var/mob/user)
+	tag_mode_enabled = TRUE
+	to_chat(world, "<h1>Tag mode enabled!<h1>")
+	to_chat(world, "<span class='notice'>Tag mode is a 'gamemode' about a changeling clown infiltrated in a station populated by Mimes. His goal is to destroy it. Any mime killing the clown will in turn become the changeling.</span>")
+	to_chat(world, "<span class='notice'>The game ends when all mimes are dead, or when the shuttle is called.</span>")
+	to_chat(world, "<span class='notice'>Have fun!</span>")
+
+	// This is /datum/forced_ruleset thing. This shit exists ONLY for pre-roundstart rulesets. Yes. This is a thing.
+	var/datum/forced_ruleset/tag_mode = new
+	tag_mode.name = "Tag mode"
+	tag_mode.calledBy = "[key_name(user)]"
+	forced_roundstart_ruleset += tag_mode
+	dynamic_forced_extended = TRUE
+
+/datum/controller/gameticker/proc/cancel_tag_mode(var/mob/user)
+	tag_mode_enabled = FALSE
+	to_chat(world, "<h1>Tag mode has been cancelled.<h1>")
+	dynamic_forced_extended = FALSE
+	forced_roundstart_ruleset = list()
 
 /world/proc/has_round_started()
 	return ticker && ticker.current_state >= GAME_STATE_PLAYING

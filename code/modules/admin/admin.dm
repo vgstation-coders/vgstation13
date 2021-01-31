@@ -713,6 +713,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
 		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
 		<hr />
+		<A href='?src=\ref[src];tag_mode=1'>Toggle tag mode! (it is currently [ticker?.tag_mode_enabled ? "On" : "Off"])</A><br>
 		"}
 
 	if(wages_enabled)
