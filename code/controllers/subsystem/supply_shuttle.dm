@@ -133,6 +133,9 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	if(moving)
 		return 0
 
+	if (!map.supply_shuttle_check())
+		return 0
+
 	if(forbidden_atoms_check(cargo_shuttle.linked_area))
 		return 0
 

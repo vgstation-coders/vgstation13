@@ -206,6 +206,10 @@ var/global/list/accessable_z_levels = list()
 /datum/map/proc/map_equip(var/mob/living/carbon/human/H)
 	return
 
+// -- Can we move the supply shuttle around?
+/datum/map/proc/supply_shuttle_check()
+	return TRUE
+
 ////////////////////////////////////////////////////////////////
 
 /datum/zLevel

@@ -95,6 +95,10 @@
 		return FALSE
 	return TRUE
 
+// -- Castle doesn't have a centcomm connection because they separated
+/datum/map/active/supply_shuttle_check()
+	return FALSE
+
 ////////////////////////////////////////////////////////////////
 #include "tgstation-sec.dmm"
 #endif
