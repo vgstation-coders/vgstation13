@@ -48,7 +48,7 @@
 	role_category = /datum/role/traitor/challenger
 	protected_from_jobs = list("Security Officer", "Merchant", "Warden", "Head of Personnel", "Cyborg", "Detective",
 							"Head of Security", "Captain", "Chief Engineer", "Chief Medical Officer", "Research Director")
-	restricted_from_jobs = list("AI","Mobile MMI")
+	restricted_from_jobs = list("AI","Cyborg","Mobile MMI")
 	required_candidates = 2
 	weight = 1
 	cost = 15
