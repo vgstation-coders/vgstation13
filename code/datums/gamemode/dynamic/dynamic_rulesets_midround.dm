@@ -522,7 +522,7 @@
 	var/player_count = mode.living_players.len
 	var/antag_count = mode.living_antags.len
 	var/max_traitors = round(player_count / 10) + 1
-	if ((antag_count < max_traitors) && prob(mode.threat_level))
+	if ((antag_count < max_traitors))
 		return ..()
 	else
 		return 0
