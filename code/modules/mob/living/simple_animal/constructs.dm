@@ -246,7 +246,7 @@
 				P.reflected = 1
 				P.rebound(src)
 
-			return -1 // complete projectile permutation
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
 	return (..(P))
 

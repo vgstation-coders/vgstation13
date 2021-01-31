@@ -17,6 +17,8 @@ var/list/beam_master = list()
 
 #define RAY_CAST_REBOUND 1.5
 
+#define RAY_CAST_PORTAL 1.6
+
 //overriding the filter function of an inherited beam
 /ray/beam_ray
 	var/obj/item/projectile/beam/fired_beam
@@ -45,12 +47,18 @@ var/list/beam_master = list()
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
-		var/p_len = fired_beam.permutated.len
 		var/ret = fired_beam.to_bump(A)
 		if(ret)
 			return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-		else if(p_len != fired_beam.permutated.len) //check if we reflected on anything... yes, there is not better (easy) way
-			return new /rayCastHit(info, RAY_CAST_REBOUND)
+		else
+			switch(fired_beam.special_collision)
+				if (PROJECTILE_COLLISION_REBOUND)
+					return new /rayCastHit(info, RAY_CAST_REBOUND)
+				if (PROJECTILE_COLLISION_MISS)
+					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
+					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
+				if (PROJECTILE_COLLISION_PORTAL)
+					return new /rayCastHit(info, RAY_CAST_PORTAL)
 
 	return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
@@ -114,6 +122,11 @@ var/list/beam_master = list()
 			spawn()
 				rebound(last_hit.hit_atom)
 
+		if(last_hit.hit_type == RAY_CAST_PORTAL)
+			ASSERT(!gcDestroyed)
+			spawn()
+				portal(last_hit.hit_atom)
+
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
 	var/vector/direction = atoms2vector(starting, original)
@@ -140,6 +153,25 @@ var/list/beam_master = list()
 
 	fireto(origin, direction)
 	shot_from = A //temporary
+
+/obj/item/projectile/beam/proc/portal(var/atom/A)
+	var/atom/dest
+	if (istype(A, /obj/effect/portal))
+		var/obj/effect/portal/P = A
+		dest = P.target
+	else if (istype(A, /obj/machinery/teleport/hub))
+		var/obj/machinery/teleport/hub/H = A
+		dest = H.get_target_lock()
+
+	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
+
+	//make new ray
+	var/vector/origin = atom2vector(dest)
+	var/vector/direction = latest_ray.direction
+
+	fireto(origin, direction)
+	shot_from = dest
+
 
 /obj/item/projectile/beam/dumbfire(var/dir)
 	src.dir = dir || src.dir
