@@ -221,10 +221,15 @@
 //Medical Stuff
 /obj/item/borg/upgrade/medical
 	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools."
+	desc = "Used to give a medical cyborg advanced care tools. Also increases storage capacity for medical consumables."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+
+/obj/item/borg/upgrade/medical/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
 
 /obj/item/borg/upgrade/medical/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
