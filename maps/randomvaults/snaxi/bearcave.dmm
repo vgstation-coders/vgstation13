@@ -13,6 +13,7 @@
 "A" = (/obj/item/trash/candy,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "B" = (/obj/item/trash/pietin,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "C" = (/mob/living/simple_animal/cow{health = 0; icon_state = "cow_dead"; stat = 2},/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
+"D" = (/obj/abstract/map/nest/polarbear,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "E" = (/obj/item/trash/plate,/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "G" = (/turf/unsimulated/floor/snow/cave/rock,/area/vault/bearcave)
 "H" = (/obj/item/trash/chips,/turf/unsimulated/floor/snow/cave,/area/vault/bearcave)
@@ -35,7 +36,7 @@ llllBxUxklollll
 IIIlGspWGlllIIa
 IIGGGAKGGllIIaa
 IGGzGGlGllIIaaa
-IGUGGIlllIIIIaa
+IGDGGIlllIIIIaa
 IIIGIIlclIIaaaa
 aIIIIIlllIaaaaa
 "}

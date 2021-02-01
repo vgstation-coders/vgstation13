@@ -79,6 +79,6 @@
 /turf/proc/count_objs()
 	var/count = 0
 	for(var/atom/A in contents)
-		if(isrealobject(A))
+		if(isrealobject(A) && !A.invisibility)
 			count++
 	return count
