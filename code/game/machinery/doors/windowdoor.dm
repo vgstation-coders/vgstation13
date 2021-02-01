@@ -24,7 +24,7 @@
 	var/obj/machinery/smartglass_electronics/smartwindow
 	var/window_is_opaque = FALSE //The var that helps darken the glass when the door opens/closes
 	var/assembly_type = /obj/structure/windoor_assembly
-	 
+
 
 /obj/machinery/door/window/New()
 	..()
@@ -196,6 +196,9 @@
 	if(Proj.damage)
 		take_damage(round(Proj.damage / 2))
 	..()
+	if (health > 0)
+		return PROJECTILE_COLLISION_BLOCKED
+	return PROJECTILE_COLLISION_DEFAULT
 
 //When an object is thrown at the window
 /obj/machinery/door/window/hitby(atom/movable/AM)
