@@ -5,6 +5,7 @@
 	effect_type = 1
 
 	var/pull_strength
+	var/touch_pull_cooldown = FALSE
 	copy_for_battery = list("pull_strength")
 
 /datum/artifact_effect/gravity/New()
@@ -13,7 +14,11 @@
 	pull_strength = pick(STAGE_ONE,STAGE_TWO,STAGE_THREE,STAGE_FOUR,10;STAGE_FIVE)
 
 /datum/artifact_effect/gravity/DoEffectTouch()
-	gravitypull(effectrange)
+	if (!touch_pull_cooldown)
+		touch_pull_cooldown = TRUE
+		gravitypull(effectrange)
+		spawn(10)
+			touch_pull_cooldown = FALSE
 
 /datum/artifact_effect/gravity/DoEffectAura()
 	gravitypull(round(effectrange/3))
