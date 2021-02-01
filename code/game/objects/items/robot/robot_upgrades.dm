@@ -229,6 +229,8 @@
 /obj/item/borg/upgrade/medical/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
+	if(src in subtypesof(/obj/item/borg/upgrade/medical))
+		return
 	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
 
 /obj/item/borg/upgrade/medical/organ_gripper
