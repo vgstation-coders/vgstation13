@@ -225,13 +225,13 @@
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+	var/increases_storage = 1
 
 /obj/item/borg/upgrade/medical/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
 	if(..())
 		return FAILED_TO_ADD
-	if(src in subtypesof(/obj/item/borg/upgrade/medical))
-		return
-	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
+	if(increases_storage)
+		R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
 
 /obj/item/borg/upgrade/medical/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
@@ -239,6 +239,7 @@
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
+	increases_storage = 0
 
 //Engineering stuff
 /obj/item/borg/upgrade/engineering
