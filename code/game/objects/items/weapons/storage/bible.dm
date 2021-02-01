@@ -70,36 +70,37 @@
 
 	//they have holy water in them? deconversion mode activate! anyone can do it. 'cept cultists O B V I O U S L Y
 	if (!isanycultist(user) && M.reagents?.has_reagent(HOLYWATER) && user.a_intent == I_HELP)
+		user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>")
+		playsound(src, "punch", 25, 1, -1)
 		if (M.stat == DEAD)
 			to_chat(user,"<span class='warning'>You cannot deconvert the dead!</span>")
 			return 1
 		if (M.health < 20)
 			to_chat(user,"<span class='warning'>\The [M] is too weak to handle the deconversion ritual, patch them up a bit first.</span>")
 			return 1
+		var/datum/role/cultist/cultist
 		if(iscultist(M))
-			var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
+			cultist = M.mind.GetRole(CULTIST)
 			if (cultist.deconversion)
 				to_chat(user,"<span class='warning'>There is already a deconversion attempt undergoing!</span>")
 				return 1
 			else
-				playsound(src, "punch", 25, 1, -1)
+				to_chat(M,"<span class='userdanger'>They are trying to deconvert you!</span>")
+
+		if (do_after(user, M, 5 SECONDS))
+			if(cultist)
 				if (istype(my_rel, /datum/religion/cult))
-					user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src] and they begin to radiate with light.</span>",
-					"<span class='warning'>You bless [M]'s head with \the [src]. In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
+					to_chat(user,"<span class='warning'>In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
 				else
-					user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src] and they begin to radiate with light.</span>",
-					"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+					to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+				user.visible_message("<span class='warning'>\The [M] begins to radiate with light.</span>")
 				new /datum/deconversion_ritual(user, M, src)
-				return 1
-		else
-			playsound(src, "punch", 25, 1, -1)
-			if (istype(my_rel, /datum/religion/cult))
-				user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
-				"<span class='warning'>You bless [M]'s head with \the [src]. In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
 			else
-				user.visible_message("<span class='warning'>[user] [pick(attack_verb)] [M]'s head with \the [src].</span>",
-				"<span class='warning'>You bless [M]'s head with \the [src]. In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
-			user.visible_message("<span class='warning'>...but nothing unusual happens.</span>")
+				if (istype(my_rel, /datum/religion/cult))
+					to_chat(user,"<span class='warning'>In the name of this [my_rel.deity_name] fanfiction headcanon, Nar-Sie forsake this body and soul!</span>")
+				else
+					to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
+				user.visible_message("<span class='warning'>...but nothing unusual happens.</span>")
 		return 1
 	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
@@ -268,7 +269,11 @@
 	deconvertee.Dizzy(30)
 	deconvertee.stuttering = max(deconvertee.stuttering, 10)
 	deconvertee.Jitter(30)
-	deconvertee.Knockdown(10)
+	if (!deconvertee.checkTattoo(TATTOO_HOLY))
+		if (!bible.my_rel.leadsThisReligion(deconverter))
+			deconvertee.Knockdown(5)
+		else
+			deconvertee.Knockdown(10)
 
 	if (istype(bible.my_rel, /datum/religion/cult))
 		cult_chaplain = TRUE
