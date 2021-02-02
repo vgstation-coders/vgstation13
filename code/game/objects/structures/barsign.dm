@@ -16,6 +16,7 @@
  * An ID scanner that will makes sound and
  *		output something that's the access has been granted
  */
+var/list/barsigns = list()
 
 /datum/barsign
 	var/icon = "empty"
@@ -49,7 +50,6 @@
 	req_access = list(access_bar)
 
 	var/sign_name = ""
-	var/list/barsigns=list()
 	var/cult = 0
 
 /obj/structure/sign/double/barsign/Destroy()
@@ -66,21 +66,21 @@
 	return attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
-	if (!allowed(user))
+	if(!allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
-	barsigns.len = 0
-	for(var/bartype in typesof(/datum/barsign))
-		var/datum/barsign/signinfo = new bartype
-		barsigns[signinfo.name] = signinfo
+	if(!barsigns.len)
+		for(var/bartype in typesof(/datum/barsign))
+			var/datum/barsign/signinfo = new bartype
+			barsigns[signinfo.name] = signinfo
 
 	pick_sign(user)
 
 /obj/structure/sign/double/barsign/proc/pick_sign(mob/user)
 	vis_contents.Cut()
 	
-	var/picked_name = input("Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
+	var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
 	if(!picked_name)
 		return
 
@@ -98,7 +98,7 @@
 		ass.maptext_height = 29
 		ass.maptext_x = 4
 		ass.maptext_y = 4
-		ass.maptext = "<span style=color:'[colorhex]';font-size:'[font_size]'>[sign_text]</span>"
+		ass.maptext = "<span style=\"color:[colorhex];font-size:[font_size]px;\">[sign_text]</span>"
 	else
 		name = picked.name
 		if(picked.pixel_x)
