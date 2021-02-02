@@ -36,13 +36,11 @@ var/list/jingle_sound = list('sound/items/jinglebell1.ogg', 'sound/items/jingleb
 
 //gas_modified controls if a sound is affected by how much gas there is in the atmosphere of the source
 //space sounds have no gas modification, for example. Though >space sounds
-/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE)
+/proc/playsound(var/atom/source, soundin, vol as num, vary = 0, extrarange as num, falloff, var/gas_modified = 1, var/channel = 0,var/wait = FALSE, var/frequency = 0)
 	var/turf/turf_source = get_turf(source)
 
 	ASSERT(!isnull(turf_source))
 	ASSERT(!(isnull(soundin) && channel == 0)) // Unless a channel is specified, prevent null sounds.
-
-	var/frequency = vary ? get_rand_frequency() : 1 // Same frequency for everybody
 
 /* What's going on in this block?
 	If the proc isn't set to not be modified by air, the following steps occur:
@@ -122,9 +120,9 @@ var/const/SURROUND_CAP = 7
 
 	soundin = get_sfx(soundin)
 
-	var/sound/S = sound(soundin, 0, wait, channel, vol,)
+	var/sound/S = sound(soundin, 0, wait, channel, vol)
 
-	if (vary)
+	if(vary)
 		if(frequency)
 			S.frequency = frequency
 		else
