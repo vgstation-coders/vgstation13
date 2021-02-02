@@ -177,7 +177,6 @@
 	if (blade)
 		return blade.hitby(AM)
 
-SHOULD_CALL_PARENT(FALSE)
 /obj/item/projectile/soulbullet/bullet_act(var/obj/item/projectile/P)
 	if (blade)
 		return blade.bullet_act(P)
