@@ -46,16 +46,15 @@ var/list/barsigns = list()
 	icon = 'icons/obj/barsigns.dmi'
 	icon_state = "empty"
 	req_access = list(access_bar)
-	//var/sign_name = ""
 	var/cult = 0
 //Custom Barsign Var shit
 	var/obj/effect/overlay/kustom_barsign/ass = null
-	var/list/sound_selection = list("Nothing",
-									"Rooster",
-									"Wolf",
-									"Male Scream",
-									"Female Scream",
-									"Bike Horn"
+	var/list/sound_selection = list("Nothing" = null,
+									"Rooster" = 'sound/misc/6amRooster.wav',
+									"Wolf" = 'sound/misc/6pmWolf.wav',
+									"Male Scream" = 'sound/misc/malescream5.ogg',
+									"Female Scream" = 'sound/misc/femalescream5.ogg',
+									"Bike Horn" = 'sound/items/bikehorn.ogg'
 									)
 	var/sound_string = "Nothing"
 //Custom Barsign Configurable Shit
@@ -68,7 +67,6 @@ var/list/barsigns = list()
 	var/second_letter_color = "#f51b1b"
 	var/second_letter_size = "12"
 	var/interval_ticker_end = 0
-	var/current_sound = null //Must be a sound
 	var/current_tone = 40000
 	var/sound_volume = 50
 //To help keep track of where process() at
@@ -221,19 +219,6 @@ var/list/barsigns = list()
 		if(href_list["set_sound"])
 			var/picked_sound = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in sound_selection
 			if(picked_sound)
-				switch(picked_sound)
-					if("Nothing")
-						current_sound = null
-					if("Rooster")
-						current_sound = 'sound/misc/6amRooster.wav'
-					if("Wolf")
-						current_sound = 'sound/misc/6pmWolf.wav'
-					if("Male Scream")
-						current_sound = 'sound/misc/malescream5.ogg'
-					if("Female Scream")
-						current_sound = 'sound/misc/femalescream5.ogg'
-					if("Bike Horn")
-						current_sound = 'sound/items/bikehorn.ogg'
 				sound_string = picked_sound
 
 		if(href_list["set_sound_tone"])
@@ -261,7 +246,6 @@ var/list/barsigns = list()
 		processing_objects -= src
 		interval_ticker = 0
 		interval_ticker_end = 0
-		current_sound = null
 		ass.maptext = "<span style=\"color:[letter_color];font-size:[letter_size]px;\">[letter_message]</span>"
 		return
 	
@@ -272,8 +256,8 @@ var/list/barsigns = list()
 			ass.maptext = "<span style=\"color:[letter_color];font-size:[letter_size]px;\">[letter_message]</span>"
 		else
 			ass.maptext = "<span style=\"color:[second_letter_color];font-size:[second_letter_size]px;\">[second_letter_message]</span>"
-		if(current_sound)
-			playsound(src, current_sound, sound_volume, 1,frequency = current_tone)
+		if(sound_string)
+			playsound(src, sound_selection["[sound_string]"], sound_volume, 1,frequency = current_tone)
 		other_tick = !other_tick
 		interval_ticker = 0
 
@@ -286,7 +270,6 @@ var/list/barsigns = list()
 		processing_objects -= src
 		interval_ticker = 0
 		interval_ticker_end = 0
-		current_sound = null
 	vis_contents.Cut()
 
 /obj/structure/sign/double/barsign/cultify()
