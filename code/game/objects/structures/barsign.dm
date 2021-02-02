@@ -287,7 +287,7 @@ var/list/barsigns = list()
 		interval_ticker = 0
 		interval_ticker_end = 0
 		current_sound = null
-		vis_contents.Cut()
+	vis_contents.Cut()
 
 /obj/structure/sign/double/barsign/cultify()
 	if(!cult)
