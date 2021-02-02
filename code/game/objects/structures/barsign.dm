@@ -198,7 +198,7 @@ var/list/barsigns = list()
 		if(href_list["set_letter_size"])
 			var/font_size = input(user, "What size are the letters", "Letter Size", letter_size) as num|null
 			if(font_size)
-				letter_size = font_size
+				letter_size = font_size //This shit can't go outside of the maptext box anyways, so they get disappointment
 
 		if(href_list["set_second_letter_size"])
 			var/font_size = input(user, "What size are the secondary letters", "Letter Size", second_letter_size) as num|null
@@ -211,7 +211,7 @@ var/list/barsigns = list()
 		if(href_list["set_interval_tick_end"])
 			var/tick_interval = input(user, "What is the tick interval ending?", "Tick Interval End", interval_ticker_end) as num|null
 			if(tick_interval)
-				interval_ticker_end = tick_interval
+				interval_ticker_end = clamp(tick_interval,0,30) //30 is like a minute, since process ticks every 2 secs
 		
 		if(href_list["set_second_color"])
 			var/colorhex = input(user, "Choose your secondary text color:", "Sign Color Selection 2", second_letter_color) as color|null
