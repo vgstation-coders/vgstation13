@@ -191,17 +191,17 @@ var/list/barsigns = list()
 				second_letter_message = sign_text
 		
 		if(href_list["set_letter_color"])
-			var/colorhex = input(user, "Choose your text color:", "Sign Color Selection") as color|null
+			var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",letter_color) as color|null
 			if(colorhex)
 				letter_color = colorhex
 		
 		if(href_list["set_letter_size"])
-			var/font_size = input(user, "What size are the letters", "Letter Size", 12) as num|null
+			var/font_size = input(user, "What size are the letters", "Letter Size", letter_size) as num|null
 			if(font_size)
 				letter_size = font_size
 
 		if(href_list["set_second_letter_size"])
-			var/font_size = input(user, "What size are the secondary letters", "Letter Size", 12) as num|null
+			var/font_size = input(user, "What size are the secondary letters", "Letter Size", second_letter_size) as num|null
 			if(font_size)
 				second_letter_size = font_size
 		
@@ -209,12 +209,12 @@ var/list/barsigns = list()
 			interval_mode = !interval_mode
 		
 		if(href_list["set_interval_tick_end"])
-			var/tick_interval = input(user, "What is the tick interval ending?", "Tick Interval End", 2) as num|null
+			var/tick_interval = input(user, "What is the tick interval ending?", "Tick Interval End", interval_ticker_end) as num|null
 			if(tick_interval)
 				interval_ticker_end = tick_interval
 		
 		if(href_list["set_second_color"])
-			var/colorhex = input(user, "Choose your secondary text color:", "Sign Color Selection 2") as color|null
+			var/colorhex = input(user, "Choose your secondary text color:", "Sign Color Selection 2", second_letter_color) as color|null
 			if(colorhex)
 				second_letter_color = colorhex
 		
@@ -237,12 +237,12 @@ var/list/barsigns = list()
 				sound_string = picked_sound
 
 		if(href_list["set_sound_tone"])
-			var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu") as null|num
+			var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", current_tone) as null|num
 			if(new_soundtone)
 				current_tone = clamp(new_soundtone,12000,55000)
 		
 		if(href_list["set_sound_volume"])
-			var/new_volume = input("Choose a new sound volume 1-100:", "Sound Tone Menu",50) as null|num
+			var/new_volume = input("Choose a new sound volume 1-100:", "Sound Tone Menu",sound_volume) as null|num
 			if(new_volume)
 				sound_volume = clamp(new_volume,1,100)
 		
