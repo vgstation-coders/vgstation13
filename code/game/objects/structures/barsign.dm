@@ -179,17 +179,17 @@ var/list/barsigns = list()
 			if(sign_text)
 				name = sign_text 
 				letter_message = sign_text
-		
+				log_game("[key_name(user)] changed barsign name to [letter_message]")
 		if(href_list["set_sign_description"])
 			var/desc_text = copytext(sanitize(input(user, "What would you like to have as the description?", "Custom Barsign Desc", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(desc_text)
 				desc = desc_text
-
+				log_game("[key_name(user)] changed barsign desc to [desc]")
 		if(href_list["set_second_message"])
 			var/sign_text = copytext(sanitize(input(user, "What would you like to on the interval message?", "Custom Barsign", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(sign_text)
 				second_letter_message = sign_text
-		
+				log_game("[key_name(user)] changed barsign second name to [desc]")
 		if(href_list["set_letter_color"])
 			var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",letter_color) as color|null
 			if(colorhex)
