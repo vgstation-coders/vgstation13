@@ -60,8 +60,7 @@
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/table/proc/destroy()
 	if(parts)
@@ -731,8 +730,7 @@ obj/structure/table/plastic
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/rack/ex_act(severity)
 	switch(severity)

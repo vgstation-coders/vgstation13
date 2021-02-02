@@ -138,10 +138,9 @@ var/list/apiaries_list = list()
 		else if (prob(1/(yieldmod * yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
 			yieldmod += 1
 	else
-		..()
 		if(src)
 			angry_swarm()
-		return
+	return ..()
 
 /obj/machinery/apiary/hitby(AM as mob|obj)
 	. = ..()
@@ -539,7 +538,7 @@ var/list/apiaries_list = list()
 
 
 /obj/structure/wild_apiary/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()
@@ -573,7 +572,7 @@ var/list/apiaries_list = list()
 	var/health = 100
 
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()

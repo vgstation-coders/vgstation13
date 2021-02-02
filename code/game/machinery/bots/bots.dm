@@ -675,7 +675,7 @@
 	if(flags & INVULNERABLE)
 		return
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 /obj/machinery/bot/blob_act()

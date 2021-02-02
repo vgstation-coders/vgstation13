@@ -202,9 +202,10 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damtype == HALLOSS)
-		return
+		return ..()
 
 	take_damage(Proj.damage)
+	return ..()
 
 /obj/machinery/camera/proc/dismantle()
 	if(assembly)
@@ -540,7 +541,7 @@ var/list/camera_messages = list()
 	return
 
 /obj/machinery/camera/arena/bullet_act(var/obj/item/projectile/Proj)
-	return
+	return ..()
 
 /obj/machinery/camera/arena/spesstv
 	name = "\improper Spess.TV camera"

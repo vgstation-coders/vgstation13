@@ -40,7 +40,7 @@
 	if(Proj.flag != "bullet" && parent)
 		parent.AddEnergy(Proj.damage * 100, 0, 1)
 		update_icon()
-	return 0
+	return ..()
 
 /obj/effect/rust_particle_catcher/Bumped(atom/AM)
 	if(ismob(AM) && density && prob(10))

@@ -188,6 +188,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 
 /obj/machinery/artifact/bullet_act(var/obj/item/projectile/P)
 	on_projectile.Invoke(list(P.firer, "PROJECTILE",P))
+	return ..()
 
 /obj/machinery/artifact/beam_connect(var/obj/effect/beam/B)
 	..()
@@ -245,6 +246,6 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 			if(prob(50))
 				M.Stun(5)
 		M.apply_radiation(25, RAD_EXTERNAL)
-		
+
 /obj/machinery/artifact/can_overload()
 	return 0

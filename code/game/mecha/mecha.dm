@@ -649,8 +649,7 @@
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
-	..()
-	return
+	return ..()
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))

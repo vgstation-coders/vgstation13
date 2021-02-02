@@ -212,7 +212,7 @@
 
 /obj/machinery/meteor_battery/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
-	..()
+	. = ..()
 	if(prob(45) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	if (src.health <= 0)
