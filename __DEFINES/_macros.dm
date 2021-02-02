@@ -305,7 +305,7 @@
 
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
-#define istimeagent(H) (H.mind && H.mind.GetRole(TIMEAGENT))
+#define istimeagent(H) (H.mind && (H.mind.GetRole(TIMEAGENT) || (H.mind.GetRole(TIMEAGENTTWIN))))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
 

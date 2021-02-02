@@ -66,6 +66,7 @@
 #define GRINCH "The Grinch"
 #define CATBEAST "loose catbeast"
 #define TIMEAGENT "time agent"
+#define TIMEAGENTTWIN "time agent twin"
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"

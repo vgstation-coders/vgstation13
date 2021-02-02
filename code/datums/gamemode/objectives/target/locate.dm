@@ -1,6 +1,8 @@
 /datum/objective/target/locate
 	name = "locate objects"
 	var/list/objects_to_locate = list() //Formatted as String(name) = Path
+	var/object_min = 3
+	var/object_max = -1
 
 /datum/objective/target/locate/IsFulfilled()
 	.=..()
@@ -8,7 +10,7 @@
 		return FALSE
 	return TRUE
 
-/datum/objective/target/locate/random/find_target()
+/datum/objective/target/locate/find_target()
 	var/list/potential_objects = list("rubber duck" = /obj/item/weapon/bikehorn/rubberducky,
 			"hand teleporter" = /obj/item/weapon/hand_tele,
 			"captains laser pistol" = /obj/item/weapon/gun/energy/laser/captain,
@@ -16,7 +18,9 @@
 			"bucket" = /obj/item/weapon/reagent_containers/glass/bucket,
 			)
 	potential_objects = shuffle(potential_objects)
-	for(var/i = 0 to rand(3,potential_objects.len-1))
+	var/min = object_min - 1
+	var/max = (object_max >= object_min) ? object_max : (potential_objects.len-1)
+	for(var/i = 0 to rand(min,max))
 		var/pick = pick(potential_objects)
 		objects_to_locate.Add(pick)
 		objects_to_locate[pick] = potential_objects[pick]

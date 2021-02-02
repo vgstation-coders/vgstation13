@@ -14,10 +14,12 @@
 /datum/role/time_agent
 	name = TIMEAGENT
 	id = TIMEAGENT
-	required_pref = ROLE_MINOR
+	required_pref = TIMEAGENT
 	logo_state = "time-logo"
 	var/list/objects_to_delete = list()
-
+	var/timer = 1
+	var/distortion_timer = 60
+	var/datum/recruiter/eviltwinrecruiter = null
 
 /datum/role/time_agent/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -38,7 +40,7 @@
 
 
 /datum/role/time_agent/ForgeObjectives()
-	AppendObjective(/datum/objective/target/locate/random)
+	AppendObjective(/datum/objective/target/locate)
 	if(prob(30))
 		AppendObjective(/datum/objective/target/assassinate)
 	AppendObjective(/datum/objective/freeform/aid)
@@ -56,6 +58,76 @@
 	if(finished)
 		to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
 		AppendObjective(/datum/objective/time_agent_extract)
+	timer++
+	if(timer % distortion_timer == 0)
+		timeline_distortion(timer / distortion_timer)
+	if (antag && antag.current.hud_used)
+		if(antag.current.hud_used.countdown_display)
+			antag.current.hud_used.countdown_display.overlays.len = 0
+			var/time_until_next_distortion = distortion_timer - (timer % distortion_timer)
+			var/first = round(time_until_next_distortion/10)
+			var/second = time_until_next_distortion % 10
+			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
+			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
+			I1.pixel_x += 10 * PIXEL_MULTIPLIER
+			I2.pixel_x += 17 * PIXEL_MULTIPLIER
+			I1.pixel_y -= 11 * PIXEL_MULTIPLIER
+			I2.pixel_y -= 11 * PIXEL_MULTIPLIER
+			antag.current.hud_used.countdown_display.overlays += I1
+			antag.current.hud_used.countdown_display.overlays += I2
+		else
+			antag.current.hud_used.countdown_hud()
+
+/datum/role/time_agent/proc/timeline_distortion(severity)
+	switch(severity)
+		if(1)
+			return
+		if(2)
+			return
+		if(3)
+			eviltwinrecruiter = new(src)
+			eviltwinrecruiter.display_name = "time agent twin"
+			eviltwinrecruiter.role = TIMEAGENT
+			eviltwinrecruiter.jobban_roles = list("syndicate")
+			eviltwinrecruiter.logging = TRUE
+
+			// A player has their role set to Yes or Always
+			eviltwinrecruiter.player_volunteering.Add(src, "recruiter_recruiting")
+			// ", but No or Never
+			eviltwinrecruiter.player_not_volunteering.Add(src, "recruiter_not_recruiting")
+
+			eviltwinrecruiter.recruited.Add(src, "recruiter_recruited")
+
+			eviltwinrecruiter.request_player()
+		if(4 to INFINITY)
+			return
+
+/datum/role/time_agent/proc/recruiter_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	to_chat(O, "<span class=\"recruit\">You are a possible candidate for \a [src]'s evil twin. Get ready. ([controls])</span>")
+
+/datum/role/time_agent/proc/recruiter_not_recruiting(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	var/controls = args["controls"]
+	if(O.client && get_role_desire_str(O.client.prefs.roles[TIMEAGENT]) != "Never")
+		to_chat(O, "<span class=\"recruit\">\a [src] is going to get shot by his evil twin. ([controls])</span>")
+
+
+/datum/role/time_agent/proc/recruiter_recruited(var/list/args)
+	var/mob/dead/observer/O = args["player"]
+	if(O)
+		qdel(eviltwinrecruiter)
+		eviltwinrecruiter = null
+		var/mob/living/carbon/human/H = new /mob/living/carbon/human
+		H.ckey = O.ckey
+		H.client.changeView()
+		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind)
+		twin.erase_target = src
+		twin.OnPostSetup()
+		twin.Greet(GREET_DEFAULT)
+	else
+		eviltwinrecruiter.request_player()
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
@@ -163,3 +235,42 @@
 	new /obj/item/weapon/grenade/chronogrenade/future(src)
 	new /obj/item/weapon/grenade/smokebomb(src)
 	new /obj/item/weapon/grenade/empgrenade(src)
+
+/obj/item/device/timeline_eraser
+	name = "timeline eraser"
+	desc = "Erase someone from the timeline. It has an unusual affinity against time travellers..."
+	icon_state = "jump_charge"
+	w_class = W_CLASS_SMALL
+	var/channeling = FALSE
+
+
+
+/obj/item/device/timeline_eraser/afterattack(atom/target, mob/user, proximity_flag, click_parameters)
+	var/duration = 100
+	// TODO: Make the timestop, properly stop when the process is done
+	if(istype(target, /mob))
+		var/mob/M = target
+		if(istimeagent(M))
+			duration = 0
+
+	if(proximity_flag && !(target.flags & TIMELESS))
+		channeling = TRUE
+		spawn()
+			while(channeling)
+				//make the process obvious, but don't impede people interfering with it too much
+				timestop(src, 30, 7, 0, /mob/living/carbon/)
+				sleep(60)
+		if(do_after(user, target, duration))
+			delete_from_timeline(target, user)
+		channeling = FALSE
+	if(target.flags & TIMELESS)
+		to_chat(user, "<span class = 'warning'>The target is currently immune to temporal meddling.</span>")
+
+/obj/item/device/timeline_eraser/proc/delete_from_timeline(atom/target, mob/user)
+	if(istimeagent(user))
+		var/datum/role/R = user.mind.GetRole(TIMEAGENT)
+		if(R)
+			var/datum/objective/target/assassinate/erase/E = locate() in R.objectives.GetObjectives()
+			if(E)
+				E.check(target)
+	qdel(target)
