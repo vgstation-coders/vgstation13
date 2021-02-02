@@ -914,6 +914,7 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/bullet_act()
 	if(metal==1 || prob(50))
 		qdel(src)
+	return ..()
 
 /obj/structure/foamedmetal/attack_paw(var/mob/user)
 	attack_hand(user)

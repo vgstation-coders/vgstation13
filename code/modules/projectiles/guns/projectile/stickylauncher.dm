@@ -95,7 +95,7 @@
 
 /obj/item/weapon/gun/stickybomb/can_discharge()
 	return loaded.len
-	
+
 /obj/item/stickybomb
 	name = "anti-personnel stickybomb"
 	desc = "Ammo for a stickybomb launcher. Only affects living beings, produces a decent amount of knockback."
@@ -254,5 +254,6 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
+	return ..()
 
 #undef MAX_STICKYBOMBS

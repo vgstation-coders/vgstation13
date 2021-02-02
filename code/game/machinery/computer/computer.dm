@@ -67,7 +67,7 @@
 /obj/machinery/computer/bullet_act(var/obj/item/projectile/Proj)
 	if(prob(Proj.damage))
 		set_broken()
-	..()
+	return ..()
 
 /obj/machinery/computer/attack_construct(var/mob/user)
 	if (!Adjacent(user))

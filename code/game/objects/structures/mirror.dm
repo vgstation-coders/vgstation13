@@ -129,7 +129,7 @@
 			shatter()
 		else
 			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	..()
+	return ..()
 
 
 /obj/structure/mirror/attackby(obj/item/I as obj, mob/living/user as mob)
@@ -230,5 +230,5 @@
 
 			if("Appearance")
 				targ.pick_appearance(M)
-				
+
 		to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")

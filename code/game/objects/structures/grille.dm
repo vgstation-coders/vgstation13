@@ -157,7 +157,7 @@
 		return
 	health -= Proj.damage //Just use the projectile damage, it already has high odds of "missing"
 	healthcheck(hitsound = 1)
-	return 0
+	return ..()
 
 /obj/structure/grille/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	user.delayNextAttack(8)

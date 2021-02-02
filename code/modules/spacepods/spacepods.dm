@@ -135,6 +135,7 @@
 /obj/spacepod/bullet_act(var/obj/item/projectile/P)
 	if(P.damage && !P.nodamage)
 		adjust_health(P.damage)
+	return ..()
 
 /obj/spacepod/proc/adjust_health(var/damage)
 	var/oldhealth = health

@@ -210,8 +210,7 @@
 
 /obj/structure/mannequin/bullet_act(var/obj/item/projectile/Proj)
 	getDamage(Proj.damage)
-	..()
-
+	return ..()
 
 /obj/structure/mannequin/blob_act()
 	if (prob(75))

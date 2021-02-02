@@ -407,7 +407,7 @@
 
 /obj/structure/bed/chair/vehicle/adminbus/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("<span class='warning'>The projectile harmlessly bounces off the bus.</span>")
-	return
+	return ..()
 
 /obj/structure/bed/chair/vehicle/adminbus/ex_act(severity)
 	visible_message("<span class='warning'>The bus withstands the explosion with no damage.</span>")

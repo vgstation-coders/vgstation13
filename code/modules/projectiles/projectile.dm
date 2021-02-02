@@ -621,7 +621,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/bullet_act(/obj/item/projectile/bullet)
-	return -1
+	return PROJECTILE_COLLISION_MISS
 
 /obj/item/projectile/proc/reset()
 	starting = get_turf(src)

@@ -324,8 +324,7 @@
 /obj/structure/girder/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(2)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/girder/ex_act(severity)
 	switch(severity)

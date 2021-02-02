@@ -117,7 +117,7 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) && !Proj.nodamage)
 			health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		for(var/atom/movable/A in src)
 			remove_from_storage(A, get_turf(src))

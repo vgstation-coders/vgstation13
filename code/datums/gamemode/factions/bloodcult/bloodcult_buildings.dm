@@ -85,7 +85,7 @@
 
 /obj/structure/cult/bullet_act(var/obj/item/projectile/Proj)
 	takeDamage(Proj.damage)
-	..()
+	return ..()
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/weapon/grab))
