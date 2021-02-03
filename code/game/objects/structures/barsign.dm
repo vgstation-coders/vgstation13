@@ -96,7 +96,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/attack_ai(mob/user)
 	return attack_hand(user)
 
-/obj/machinery/shieldwallgen/attack_ghost(mob/user)
+/obj/structure/sign/double/barsign/attack_ghost(mob/user)
 	if(isAdminGhost(user))
 		attack_hand(user)
 
