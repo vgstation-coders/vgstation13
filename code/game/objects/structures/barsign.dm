@@ -82,8 +82,12 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Destroy()
 	if(ass)
 		vis_contents -= ass
+		ass.filters = null
 		qdel(ass)
 		ass = null
+	current_preview = null
+	if(interval_mode)
+		processing_objects -= src
 	..()
 
 /obj/structure/sign/double/barsign/ghetto
