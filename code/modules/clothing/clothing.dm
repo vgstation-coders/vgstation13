@@ -459,8 +459,7 @@
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 
-	var/chained = 0
-	var/chaintype = null // Type of chain.
+	var/obj/item/weapon/chain = null // handcuffs attached
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
