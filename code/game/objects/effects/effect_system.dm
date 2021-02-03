@@ -235,7 +235,7 @@ steam.start() -- spawns the effect
 	name = "smoke"
 	icon_state = "smoke"
 	opacity = 1
-	anchored = 0
+	anchored = 1
 	var/amount = 6.0
 	var/time_to_live = 100
 
@@ -914,6 +914,7 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/bullet_act()
 	if(metal==1 || prob(50))
 		qdel(src)
+	return ..()
 
 /obj/structure/foamedmetal/attack_paw(var/mob/user)
 	attack_hand(user)

@@ -81,6 +81,9 @@
 
 /area/vault/syndiecargo
 
+/area/vault/black_site_prism
+	jammed = 2
+
 //prison vault
 
 /area/vault/prison_ship

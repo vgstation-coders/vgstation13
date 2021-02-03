@@ -388,6 +388,7 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
@@ -489,6 +490,10 @@
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(user.equip_to_slot_if_possible(src, slot_shoes))

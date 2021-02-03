@@ -200,6 +200,11 @@ var/global/list/accessable_z_levels = list()
 	L += using
 	return L
 
+/datum/map/proc/generate_mapvaults()
+	return FALSE
+
+/datum/map/proc/map_equip(var/mob/living/carbon/human/H)
+	return
 
 ////////////////////////////////////////////////////////////////
 

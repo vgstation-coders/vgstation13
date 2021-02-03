@@ -35,6 +35,7 @@
 	antag.current.forceMove(pick(wizardstart))
 	equip_wizard(antag.current)
 	name_wizard(antag.current)
+	antag.current.flavor_text = null
 
 /datum/role/wizard/Greet(var/greeting,var/custom)
 	if(!greeting)

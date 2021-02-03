@@ -71,16 +71,16 @@
 				if(M == user)
 					continue
 				M.show_message("[user.name] smashed the pylon!", 1, "You hear a tinkle of crystal shards.", 2)
-			playsound(get_turf(src), 'sound/effects/Glassbr3.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glassbr3.ogg', 75, 1)
 			isbroken = 1
 			setDensity(FALSE)
 			icon_state = "pylon-broken"
 			set_light(0)
 		else
 			to_chat(user, "You hit the pylon!")
-			playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+			playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 	else
-		playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 75, 1)
+		playsound(src, 'sound/effects/Glasshit.ogg', 75, 1)
 		if(prob(damage * 2))
 			to_chat(user, "You pulverize what was left of the pylon!")
 			qdel(src)

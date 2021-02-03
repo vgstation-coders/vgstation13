@@ -1,3 +1,14 @@
+#define GRENADE_STAGE_EMPTY 0
+#define GRENADE_STAGE_ASSEMBLY_INSERTED 1
+#define GRENADE_STAGE_COMPLETE 2
+
+#define PATH_STAGE_EMPTY 0
+#define PATH_STAGE_CONTAINER_INSERTED 1
+#define PATH_STAGE_COMPLETE 2
+
+
+
+
 /obj/item/weapon/grenade/chem_grenade
 	name = "grenade casing"
 	icon_state = "chemg"
@@ -5,9 +16,9 @@
 	desc = "A hand made chemical grenade."
 	w_class = W_CLASS_SMALL
 	force = 2.0
-	var/stage = 0
+	var/stage = GRENADE_STAGE_EMPTY
 	var/state = 0
-	var/path = 0
+	var/path = PATH_STAGE_EMPTY
 	var/obj/item/device/assembly_holder/detonator = null
 	var/list/beakers = new/list()
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle, /obj/item/weapon/reagent_containers/food/drinks)
@@ -22,14 +33,14 @@
 	det_time =0 //recycling this variable to be used by the grenade launcher's timer override function since chemnades use their assembly's timer instead.
 
 /obj/item/weapon/grenade/chem_grenade/attack_self(mob/user as mob)
-	if(!stage || stage==1)
+	if(!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED)
 		if(detonator)
 //				detonator.loc=src.loc
 			detonator.detached()
 			usr.put_in_hands(detonator)
 			detonator.master = null
 			detonator=null
-			stage=0
+			stage=GRENADE_STAGE_EMPTY
 			icon_state = initial(icon_state)
 		else if(beakers.len)
 			for(var/obj/B in beakers)
@@ -40,7 +51,7 @@
 					secondExtract = null
 					inserted_cores = 0
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-	if(stage > 1 && !active && clown_check(user))
+	if(stage > GRENADE_STAGE_ASSEMBLY_INSERTED  && !active && clown_check(user))
 		to_chat(user, "<span class='attack'>You prime \the [name]!</span>")
 
 		log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src].</font>")
@@ -72,7 +83,7 @@
 		reservoir = null
 
 /obj/item/weapon/grenade/chem_grenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
+	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED ) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
 			to_chat(user, "<span class='warning'> Assembly must contain one igniter.</span>")
@@ -80,7 +91,7 @@
 		if(!det.secured)
 			to_chat(user, "<span class='warning'> Assembly must be secured with screwdriver.</span>")
 			return
-		path = 1
+		path = PATH_STAGE_CONTAINER_INSERTED
 		to_chat(user, "<span class='notice'>You add [W] to the metal casing.</span>")
 		W.playtoolsound(src, 25, TRUE, -3)
 		user.remove_from_mob(det)
@@ -89,7 +100,7 @@
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-		stage = 1
+		stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 	else if(istype(W,/obj/item/stack/cable_coil) && !beakers.len)
 		var/obj/item/stack/cable_coil/coil = W
 		if(coil.amount < 2)
@@ -101,9 +112,9 @@
 		user.before_take_item(src)
 		user.put_in_hands(E)
 		qdel(src)
-	else if(W.is_screwdriver(user) && path != 2)
-		if(stage == 1)
-			path = 1
+	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
+		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED )
+			path = PATH_STAGE_CONTAINER_INSERTED
 			if(beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
 				var/temp_reagents = new/list()
@@ -125,8 +136,8 @@
 				name = "fake grenade"
 			W.playtoolsound(src, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
-			stage = 2
-		else if(stage == 2)
+			stage = GRENADE_STAGE_COMPLETE
+		else if(stage == GRENADE_STAGE_COMPLETE)
 			if(active && prob(95))
 				to_chat(user, "<span class='warning'>You trigger the assembly!</span>")
 				prime()
@@ -136,10 +147,10 @@
 				W.playtoolsound(src, 25, -3)
 				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
-				stage = 1
+				stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 				active = 0
-	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
-		path = 1
+	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
+		path = PATH_STAGE_CONTAINER_INSERTED
 		if(beakers.len == 2)
 			to_chat(user, "<span class='warning'> The grenade can not hold more containers.</span>")
 			return
@@ -153,13 +164,13 @@
 						inserted_cores++
 						firstExtract = W
 						beakers += W
-						stage = 1
+						stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			else if(W.reagents.total_volume)
 				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 					beakers += W
-					stage = 1
+					stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 					name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			else
 				to_chat(user, "<span class='warning'> \the [W] is empty.</span>")
@@ -228,7 +239,7 @@
 		icon_state = initial(icon_state) + (primed?"_primed":"_active")
 
 /obj/item/weapon/grenade/chem_grenade/prime()
-	if(!stage || stage<2)
+	if(!stage || stage<GRENADE_STAGE_COMPLETE)
 		return
 
 	//if(prob(reliability))
@@ -327,7 +338,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade
 	affected_area = 4
 
 obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj, mob/user as mob)
-	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
+	if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
 		var/obj/item/device/assembly_holder/det = W
 		if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
 			to_chat(user, "<span class='warning'> Assembly must contain one igniter.</span>")
@@ -335,7 +346,7 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		if(!det.secured)
 			to_chat(user, "<span class='warning'> Assembly must be secured with screwdriver.</span>")
 			return
-		path = 1
+		path = PATH_STAGE_CONTAINER_INSERTED
 		to_chat(user, "<span class='notice'>You insert [W] into the grenade.</span>")
 		W.playtoolsound(src, 25, TRUE, -3)
 		user.remove_from_mob(det)
@@ -344,10 +355,10 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 		detonator = det
 		icon_state = initial(icon_state) +"_ass"
 		name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
-		stage = 1
-	else if(W.is_screwdriver(user) && path != 2)
-		if(stage == 1)
-			path = 1
+		stage = GRENADE_STAGE_ASSEMBLY_INSERTED
+	else if(W.is_screwdriver(user) && path != PATH_STAGE_COMPLETE)
+		if(stage == GRENADE_STAGE_ASSEMBLY_INSERTED)
+			path = PATH_STAGE_CONTAINER_INSERTED
 			if(beakers.len)
 				to_chat(user, "<span class='notice'>You lock the assembly.</span>")
 				name = "EX Grenade"
@@ -356,8 +367,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				name = "fake grenade"
 			W.playtoolsound(src, 25, -3)
 			icon_state = initial(icon_state) +"_locked"
-			stage = 2
-		else if(stage == 2)
+			stage = GRENADE_STAGE_COMPLETE
+		else if(stage == GRENADE_STAGE_COMPLETE)
 			if(active && prob(95))
 				to_chat(user, "<span class='attack'>You trigger the assembly!</span>")
 				prime()
@@ -367,10 +378,10 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 				W.playtoolsound(src, 25, -3)
 				name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				icon_state = initial(icon_state) + (detonator?"_ass":"")
-				stage = 1
+				stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 				active = 0
-	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==1) && path != 2)
-		path = 1
+	else if(is_type_in_list(W, allowed_containers) && (!stage || stage==GRENADE_STAGE_ASSEMBLY_INSERTED) && path != PATH_STAGE_COMPLETE)
+		path = PATH_STAGE_CONTAINER_INSERTED
 		if(beakers.len == 3)
 			to_chat(user, "<span class='warning'> The grenade can not hold more containers.</span>")
 			return
@@ -387,13 +398,13 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 						else
 							secondExtract = W
 						inserted_cores++
-						stage = 1
+						stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 						name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			else if(W.reagents.total_volume)
 				if(user.drop_item(W, src))
 					to_chat(user, "<span class='notice'>You add \the [W] to the assembly.</span>")
 					beakers += W
-					stage = 1
+					stage = GRENADE_STAGE_ASSEMBLY_INSERTED
 					name = "unsecured EX grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			else
 				to_chat(user, "<span class='warning'> \the [W] is empty.</span>")
@@ -401,8 +412,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/metalfoam
 	name = "Metal-Foam Grenade"
 	desc = "Used for emergency sealing of air breaches."
-	path = 1
-	stage = 2
+	path = PATH_STAGE_CONTAINER_INSERTED
+	stage = GRENADE_STAGE_COMPLETE
 
 /obj/item/weapon/grenade/chem_grenade/metalfoam/New()
 	..()
@@ -422,8 +433,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/ironfoam
 	name = "Iron-Foam Grenade"
 	desc = "Used for emergency sealing of air breaches."
-	path = 1
-	stage = 2
+	path = PATH_STAGE_CONTAINER_INSERTED
+	stage = GRENADE_STAGE_COMPLETE
 
 /obj/item/weapon/grenade/chem_grenade/ironfoam/New()
 	..()
@@ -443,8 +454,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/incendiary
 	name = "Incendiary Grenade"
 	desc = "Used for clearing rooms of living things."
-	path = 1
-	stage = 2
+	path = PATH_STAGE_CONTAINER_INSERTED
+	stage = GRENADE_STAGE_COMPLETE
 
 /obj/item/weapon/grenade/chem_grenade/incendiary/New()
 	..()
@@ -466,8 +477,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/antiweed
 	name = "weedkiller grenade"
 	desc = "Used for purging large areas of invasive plant species. Contents under pressure. Do not directly inhale contents."
-	path = 1
-	stage = 2
+	path = PATH_STAGE_CONTAINER_INSERTED
+	stage = GRENADE_STAGE_COMPLETE
 
 /obj/item/weapon/grenade/chem_grenade/antiweed/New()
 	..()
@@ -488,8 +499,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/cleaner
 	name = "Cleaner Grenade"
 	desc = "BLAM!-brand foaming space cleaner. In a special applicator for rapid cleaning of wide areas."
-	stage = 2
-	path = 1
+	stage = GRENADE_STAGE_COMPLETE
+	path = PATH_STAGE_CONTAINER_INSERTED
 
 /obj/item/weapon/grenade/chem_grenade/cleaner/New()
 	..()
@@ -509,8 +520,8 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 /obj/item/weapon/grenade/chem_grenade/wind
 	name = "wind grenade"
 	desc = "Designed to perfectly bring an empty five-by-five room back into a filled, breathable state. Larger rooms will require additional gas sources."
-	stage = 2
-	path = 1
+	stage = GRENADE_STAGE_COMPLETE
+	path = PATH_STAGE_CONTAINER_INSERTED
 
 /obj/item/weapon/grenade/chem_grenade/wind/New()
 	..()
@@ -533,3 +544,16 @@ obj/item/weapon/grenade/chem_grenade/exgrenade/attackby(obj/item/weapon/W as obj
 	icon_state = null
 	volume = 1000
 	flags = FPRINT  | OPENCONTAINER | NOREACT
+
+/obj/item/weapon/grenade/chem_grenade/timer  //grenade casing with a 5 second timer+ignitor installed. no beakers.
+											// can be configured via a right click verb. can be done before being assembled and after being assembled
+	name = "grenade casing (timer)"
+	desc = "A hand made chemical grenade. This one seems to have a dial on the top"
+	starting_materials = list(MAT_IRON = 4750, MAT_GLASS = 100)
+	stage = GRENADE_STAGE_ASSEMBLY_INSERTED		//these are marked as 1 because inserting any parts into an empty grenade casing raises the value from 0 to 1
+	path = PATH_STAGE_CONTAINER_INSERTED		//since the act of inserting an assembly hasnt technically occured these two values must be set to 1 to prevent derping
+
+
+/obj/item/weapon/grenade/chem_grenade/timer/New()
+	..()
+	detonator = new/obj/item/device/assembly_holder/timer_igniter(src)

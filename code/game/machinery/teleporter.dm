@@ -247,15 +247,27 @@
 /obj/machinery/teleport/hub/Crossed(AM as mob|obj)
 	if(AM == src)
 		return//DUH
-	if(istype(AM,/obj/item/projectile/beam))
-		var/obj/item/projectile/beam/B = AM
-		B.wait = 1
 	if(istype(AM,/obj/effect/beam))
 		src.to_bump(AM)
 		return
 	spawn()
 		if (src.engaged && teleport(AM))
 			use_power(teleport_power_usage)
+
+
+/obj/machinery/teleport/hub/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover,/obj/item/projectile/beam))
+		return 0
+	else
+		return ..()
+
+/obj/machinery/teleport/hub/bullet_act(var/obj/item/projectile/Proj)
+	var/atom/locked = get_target_lock()
+	if(!locked)
+		return PROJECTILE_COLLISION_MISS
+
+	return PROJECTILE_COLLISION_PORTAL
+
 
 /obj/machinery/teleport/hub/proc/teleport(atom/movable/M as mob|obj)
 	var/atom/locked = get_target_lock()

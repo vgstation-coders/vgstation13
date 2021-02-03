@@ -171,8 +171,8 @@
 
 /obj/structure/popout_cake/bullet_act(var/obj/item/projectile/Proj)
 	slices_amount -= clamp(round(Proj.damage / 3), 1, 4)
-
 	check_slices()
+	return ..()
 
 //When spawned, stuffs the corpse underneath it inside
 /obj/structure/popout_cake/corpse_grabber/New()

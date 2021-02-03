@@ -1,0 +1,15 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"j" = (/turf/unsimulated/floor/snow/dirt,/area)
+"t" = (/obj/structure/flora/rock,/turf/unsimulated/floor/snow/dirt,/area)
+"x" = (/obj/structure/flora/rock/pile,/turf/unsimulated/floor/snow/dirt,/area)
+"E" = (/obj/structure/flora/rock/pile,/mob/living/simple_animal/hostile/retaliate/goat/wooly,/turf/unsimulated/floor/snow/dirt,/area)
+"Q" = (/mob/living/simple_animal/hostile/retaliate/goat/wooly,/turf/unsimulated/floor/snow/dirt,/area)
+
+(1,1,1) = {"
+aajtaa
+atjQQj
+jjQxta
+aQjQQj
+jtEjja
+aajjaa
+"}

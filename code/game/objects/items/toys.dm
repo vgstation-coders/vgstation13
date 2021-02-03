@@ -1269,6 +1269,7 @@
 
 /obj/item/toy/balloon/inflated/bullet_act()
 	pop()
+	return ..()
 
 /obj/item/toy/balloon/inflated/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > T0C+100)

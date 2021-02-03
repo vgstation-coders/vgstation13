@@ -154,7 +154,7 @@
 	..()
 
 /obj/structure/inflatable/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(Proj.damage)
 		take_damage(Proj.damage)
 

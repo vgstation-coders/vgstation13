@@ -78,6 +78,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
+				if (iscultist(src) && (mind.GetRole(CULTIST) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+					if(M_REGEN in mutations)
+						B.volume += 0.6
+					else
+						B.volume += 0.3
 				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
 					if(M_REGEN in mutations)
 						B.volume += 1.2

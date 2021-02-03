@@ -237,7 +237,7 @@ var/list/SPS_list = list()
 /obj/item/device/gps/secure/OnMobDeath(mob/wearer)
 	if(!transmitting)
 		return
-	send_signal(wearer, src, "SPS [gpstag]: Code Red")
+	send_signal(wearer, src, "SPS [gpstag]: Code Red", TRUE)
 
 /obj/item/device/gps/secure/get_gps_list()
 	return SPS_list
@@ -246,10 +246,9 @@ var/list/SPS_list = list()
 	if(!transmitting)
 		return
 	. = ..()
-	send_signal(wearer, src, "SPS [gpstag]: Code Yellow")
+	send_signal(wearer, src, "SPS [gpstag]: Code Yellow", FALSE)
 
-/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code)
-	var/boop = FALSE
+/obj/item/device/gps/secure/proc/send_signal(var/mob/wearer, var/obj/item/device/gps/secure/SPS, var/code, var/isdead)
 	var/turf/pos = get_turf(SPS)
 	var/x0 = pos.x-WORLD_X_OFFSET[pos.z]
 	var/y0 = pos.x-WORLD_Y_OFFSET[pos.z]
@@ -258,10 +257,61 @@ var/list/SPS_list = list()
 	var/alertarea = get_area(SPS)
 	var/alerttime = worldtime2text()
 	var/verbose = TRUE
+	var/boop = FALSE
 	var/transmission_data = "[alerttype] - [alerttime] - [alertarea] ([x0],[y0],[z0])"
 	for(var/obj/machinery/computer/security_alerts/receiver in security_alerts_computers)
 		if(receiver && !receiver.stat)
 			receiver.receive_alert(alerttype, transmission_data, verbose)
 			boop = TRUE
-	if (boop)
-		playsound(src,'sound/machines/radioboop.ogg',40,1)
+	
+	if(boop)
+		deathsound(isdead)
+
+/obj/item/device/gps/secure/proc/deathsound(var/dead=FALSE)
+	var/list/deathsound = list('sound/items/die1.wav', 'sound/items/die2.wav', 'sound/items/die3.wav','sound/items/die4.wav')
+	var/sound_channel = 300
+	var/num = gps_list.Find(src)
+	var/turf/pos = get_turf(src)
+
+	if(dead)
+		playsound(src, pick(deathsound), 100, 0,channel = sound_channel,wait = TRUE)
+	if(prob(75))
+		playsound(src, 'sound/items/on3.wav',100, 0,channel = sound_channel,wait = TRUE)
+		playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(50))
+			playsound(src, 'sound/items/attention.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(25) && dead) // 25% chance if dead, 0% chance if stripped
+			playsound(src, 'sound/items/unitdeserviced.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else if(prob(33) && dead) // 25% chance if dead, 0% chance if stripped
+			playsound(src, 'sound/items/unitdownat.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.x-WORLD_X_OFFSET[pos.z],sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.y-WORLD_Y_OFFSET[pos.z],sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(pos.z,sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else if(prob(50)) 	// 25% chance if dead, 50% chance if stripped
+			playsound(src, 'sound/items/lostbiosignalforunit.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playnum(num,sound_channel,src)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		else	// 25% chance if dead, 50% chance if stripped
+			playsound(src, 'sound/items/allteamsrespondcode3.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		if(prob(50))
+			playsound(src, 'sound/items/investigateandreport.wav',100, 0,channel = sound_channel,wait = TRUE)
+			playsound(src, 'sound/items/_comma.wav',100, 0,channel = sound_channel,wait = TRUE)
+		playsound(src, 'sound/items/off2.wav',100, 0,channel = sound_channel,wait = TRUE)
+
+var/list/nums_to_hl_num = list("1" = 'sound/items/one.wav', "2" = 'sound/items/two.wav', "3" = 'sound/items/three.wav',"4" = 'sound/items/four.wav',"5" = 'sound/items/five.wav',"6" = 'sound/items/six.wav',"7" = 'sound/items/seven.wav',"8" = 'sound/items/eight.wav',"9" = 'sound/items/nine.wav',"0" = 'sound/items/zero.wav')
+/proc/playnum(var/num,var/sound_channel,var/source)
+	var/list/splitnumber = list()
+	if(num)
+		var/base = round(log(10,num))
+		for(var/n = 0 to base)
+			splitnumber += num2text(num/(10**(base-n)) % 10)
+	else splitnumber += "0"
+	for(var/n in splitnumber)
+		playsound(source, nums_to_hl_num[n], 100, 0, channel = sound_channel, wait = TRUE)

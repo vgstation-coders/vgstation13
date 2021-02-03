@@ -441,7 +441,7 @@
 /obj/item/clothing/under/simonpants
 	name = "Simon's Pants"
 	desc = "Simon's pants, clad with belt and whatever the fuck that thing is around his neck."
-	icon_state = "spants"
+	icon_state = "simonpants"
 	_color = "simonpants"
 	item_state = "spants"
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
@@ -983,3 +983,17 @@
 	clothing_flags = ONESIZEFITSALL
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/clothing.dmi', "right_hand" = 'icons/mob/in-hand/right/clothing.dmi')
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/under/football
+	name ="\improper Red football shirt"
+	desc = "The perfect shirt to show support for your favourite team."
+	icon_state = "redfootball"
+	item_state = "redfootball"
+	_color = "redfootball"
+	clothing_flags = ONESIZEFITSALL
+	species_fit = list(INSECT_SHAPED, VOX_SHAPED, GREY_SHAPED)
+
+/obj/item/clothing/under/football/New()
+	icon_state = "redfootball_[pick(23,13,69,56)]"
+	item_state = icon_state
+	_color = icon_state

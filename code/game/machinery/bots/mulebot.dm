@@ -190,7 +190,7 @@ var/global/mulebot_count = 0
 	if(prob(25))
 		src.visible_message("<span class='warning'>Something shorts out inside [src]!</span>")
 		wires.RandomCut()
-	..()
+	return ..()
 
 
 /obj/machinery/bot/mulebot/attack_ai(var/mob/user)

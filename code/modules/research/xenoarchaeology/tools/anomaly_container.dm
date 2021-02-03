@@ -104,7 +104,7 @@
 
 /obj/structure/anomaly_container/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(!broken && health <= 0)
 		breakdown()
 

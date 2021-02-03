@@ -5,6 +5,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the Bleeding-Edge branch
   push:
     branches: [ Bleeding-Edge ]
+    paths-ignore:
+    - 'html/changelogs/**'
   pull_request:
     branches: [ Bleeding-Edge ]
 
@@ -13,7 +15,7 @@ on:
 
 env:
   BYOND_MAJOR: 513
-  BYOND_MINOR: 1523
+  BYOND_MINOR: 1528
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
   ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation

@@ -266,7 +266,8 @@ Auto Patrol: []"},
 	if (target)		// make sure target exists
 		if(!istype(target.loc, /turf))
 			return
-		if (Adjacent(target))		// if right next to perp
+
+		if (Adjacent(target))		// if right next to perp, arrest them
 			var/mob/living/carbon/M = target
 			path = list() // Kill our path
 			target = null // Don't teabag them
@@ -300,6 +301,8 @@ Auto Patrol: []"},
 						playsound(src, pick('sound/voice/bgod.ogg', 'sound/voice/biamthelaw.ogg', 'sound/voice/bsecureday.ogg', 'sound/voice/bradio.ogg', 'sound/voice/binsult.ogg', 'sound/voice/bcreep.ogg'), 50, 0)
 						spawn (1.5 SECONDS)
 							cuffing = 0
+					else
+						cuffing = 0
 			if(declare_arrests)
 				var/area/location = get_area(src)
 				broadcast_security_hud_message("[name] is [arrest_type ? "detaining" : "arresting"] level [threatlevel] suspect <b>[M]</b> in <b>[location]</b>", src)

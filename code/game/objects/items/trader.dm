@@ -55,17 +55,28 @@
 	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
-	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee),
+	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee, /obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/suit/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/suit/space/plasmaman/security/hop),
 	list(/obj/item/clothing/head/wizard/lich, /obj/item/clothing/suit/wizrobe/lich, /obj/item/clothing/suit/wizrobe/skelelich),
-	list(/obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist),
-	list(/obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain),
 	/obj/item/clothing/under/skelesuit,
 	list(/obj/item/clothing/suit/storage/wintercoat/engineering/ce, /obj/item/clothing/suit/storage/wintercoat/medical/cmo, /obj/item/clothing/suit/storage/wintercoat/security/hos, /obj/item/clothing/suit/storage/wintercoat/hop, /obj/item/clothing/suit/storage/wintercoat/security/captain, /obj/item/clothing/suit/storage/wintercoat/clown, /obj/item/clothing/suit/storage/wintercoat/slimecoat),
 	list(/obj/item/clothing/suit/space/rig/wizard, /obj/item/clothing/gloves/purple/wizard, /obj/item/clothing/shoes/sandal),
-	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/suit/space/ancient),
+	list(/obj/item/clothing/suit/space/ancient, /obj/item/clothing/head/helmet/space/ancient),
 	list(/obj/item/clothing/shoes/clockwork_boots, /obj/item/clothing/head/clockwork_hood, /obj/item/clothing/suit/clockwork_robes),
 	/obj/item/clothing/mask/necklace/xeno_claw,
-	/obj/item/clothing/under/newclothes
+	/obj/item/clothing/under/newclothes,
+	/obj/item/clothing/suit/storage/draculacoat,
+	list(/obj/item/clothing/head/helmet/richard, /obj/item/clothing/under/jacketsuit),
+	list(/obj/item/clothing/under/rank/security/sneaksuit, /obj/item/clothing/head/headband),
+	/obj/item/clothing/under/galo,
+	/obj/item/clothing/suit/raincoat,
+	list(/obj/item/clothing/accessory/armband, /obj/item/clothing/accessory/armband/cargo, /obj/item/clothing/accessory/armband/engine, /obj/item/clothing/accessory/armband/science, /obj/item/clothing/accessory/armband/hydro, /obj/item/clothing/accessory/armband/medgreen),
+	list(/obj/item/clothing/head/helmet/space/grey, /obj/item/clothing/suit/space/grey),
+	list(/obj/item/clothing/under/bikersuit, /obj/item/clothing/gloves/bikergloves, /obj/item/clothing/head/helmet/biker, /obj/item/clothing/shoes/mime/biker),
+	list(/obj/item/clothing/monkeyclothes/space, /obj/item/clothing/head/helmet/space),
+	/obj/item/device/radio/headset/headset_earmuffs,
+	/obj/item/clothing/under/vault13,
+	list(/obj/item/clothing/head/leather/xeno, /obj/item/clothing/suit/leather/xeno),
+	/obj/item/clothing/accessory/rabbit_foot
 	)
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
@@ -230,8 +241,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/clothing/head/helmet/donutgiver
 	name = "donutgiver"
 	desc = "The Donutgiver III. A twenty-five sprinkle headgear with mission-variable voice-programmed confections. It has the words SPRINKLE, JELLY, CHAOS and FAVORITE etched onto its sides."
-	icon_state = "helmet_sec"
-	item_state = "helmet"
+	icon_state = "donutgiver"
+	item_state = "helmet_donuts"
 	species_fit = list(INSECT_SHAPED)
 	flags = HEAR | FPRINT
 	var/dna_profile = null
@@ -397,7 +408,7 @@ var/global/list/alcatraz_stuff = list(
 	req_access = list(access_brig)
 	icon = 'icons/obj/cage.dmi'
 	icon_state = "cage_secure"
-	var/mob_path = /mob/living/simple_animal/hostile/wolf
+	var/mob_path = /mob/living/simple_animal/hostile/wolf/pliable
 	var/bonus_path = /obj/item/weapon/reagent_containers/food/snacks/meat/syntiflesh
 
 /obj/structure/largecrate/secure/attackby(obj/item/weapon/W as obj, mob/user as mob)

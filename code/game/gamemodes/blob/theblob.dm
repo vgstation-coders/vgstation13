@@ -172,7 +172,7 @@ var/list/blob_overminds = list()
 	return
 
 /obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	switch(Proj.damage_type)
 		if(BRUTE)
 			health -= (Proj.damage/brute_resist)
@@ -181,7 +181,7 @@ var/list/blob_overminds = list()
 
 	update_health()
 	update_icon()
-	return 0
+	return
 
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.do_attack_animation(src, W)

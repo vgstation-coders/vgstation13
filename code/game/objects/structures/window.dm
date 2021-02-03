@@ -128,9 +128,8 @@ var/list/one_way_windows
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
 
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck(Proj.firer)
-	return
 
 //This ex_act just removes health to be fully modular with "bomb-proof" windows
 /obj/structure/window/ex_act(severity)

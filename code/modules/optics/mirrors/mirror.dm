@@ -255,9 +255,9 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 
 /obj/machinery/mirror/bullet_act(var/obj/item/projectile/P, var/def_zone)
 	if(!istype(P, /obj/item/projectile/beam))
-		return
+		return ..()
 	if(P.damage < initial(P.damage)/4)  //Can only be reflected 5 times, let's say
-		return
+		return ..()
 	var/list/deflections = get_deflections(get_dir(src,P))
 	var/turf/T = get_turf(src)
 	for(var/i=1 to nsplits)
@@ -275,3 +275,4 @@ var/global/list/obj/machinery/mirror/mirror_list = list()
 		B.damage = P.damage/2
 		spawn()
 			B.process()
+	return ..()

@@ -85,4 +85,4 @@
 		head_organ.droplimb(1,1)
 
 	H.drop_all()
-	qdel(src)
+	qdel(H)

@@ -82,7 +82,10 @@
 
 			chance = chance * 100
 
-			if(prob(chance) && !block)
+			if(self.id == HOLYWATER && istype(self.holder.my_atom, /obj/item/weapon/reagent_containers/food/drinks/bottle/holywater))
+				if(M.reagents)
+					M.reagents.add_reagent(self.id, min(5,self.volume/2)) //holy water flasks only splash 5u at a time. But for deconversion purposes they will always be ingested.
+			else if(prob(chance) && !block)
 				if(M.reagents)
 					M.reagents.add_reagent(self.id, self.volume/2) //Hardcoded, transfer half of volume
 
@@ -90,6 +93,20 @@
 		for (var/role in M.mind.antag_roles)
 			var/datum/role/R = M.mind.antag_roles[role]
 			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+	var/datum/reagent/self = src //Note : You need to declare self again (before the parent call) to use it in your chemical, see blood
+	src = null
+	if(M.reagents)
+		M.reagents.add_reagent(self.id, self.volume) //Hardcoded, transfer half of volume
+
+	if (M.mind)
+		for (var/role in M.mind.antag_roles)
+			var/datum/role/R = M.mind.antag_roles[role]
+			R.handle_splashed_reagent(self.id)
+
+/datum/reagent/proc/reaction_dropper_obj(var/obj/O, var/volume)
+	reaction_obj(O, volume)
 
 /datum/reagent/proc/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	set waitfor = 0
@@ -614,6 +631,9 @@
 	else if(istype(O,/obj/machinery/space_heater/campfire))
 		var/obj/machinery/space_heater/campfire/campfire = O
 		campfire.snuff()
+	else if(istype(O, /obj/item/weapon/book/manual/snow))
+		var/obj/item/weapon/book/manual/snow/S = O
+		S.trigger()
 	else if(O.on_fire) // For extinguishing objects on fire
 		O.extinguish()
 	else if(O.molten) // Molten shit.
@@ -1104,8 +1124,8 @@
 	..()
 
 	if(volume >= 5)
-		if(istype(M,/mob/living/simple_animal/construct))
-			var/mob/living/simple_animal/construct/C = M
+		if(istype(M,/mob/living/simple_animal/construct) || istype(M,/mob/living/simple_animal/shade))
+			var/mob/living/simple_animal/C = M
 			C.purge = 3
 			C.adjustBruteLoss(5)
 			C.visible_message("<span class='danger'>The holy water erodes \the [src].</span>")
@@ -2911,6 +2931,22 @@
 						E.damage = 0 //cosmic technologies
 					to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
 
+/datum/reagent/imidazoline/reaction_dropper_mob(var/mob/living/M)
+	. = ..()
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		var/obj/item/eyes_covered = H.get_body_part_coverage(EYES)
+		if(eyes_covered)
+			return
+		else //eyedrops, why not
+			var/datum/organ/internal/eyes/E = H.internal_organs_by_name["eyes"]
+			if(istype(E) && !E.robotic)
+				M.eye_blurry = 0
+				M.eye_blind = 0
+				if(E.damage > 0)
+					E.damage = 0 //cosmic technologies
+				to_chat(H,"<span class='notice'>Your eyes feel better.</span>")
+
 /datum/reagent/inacusiate
 	name = "Inacusiate"
 	id = INACUSIATE
@@ -3647,6 +3683,11 @@
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
 
+/datum/reagent/nanites/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(disease_type, 1, "Robotic Nanites")
+	return ..()
+
 /datum/reagent/nanites/autist
 	name = "Autist nanites"
 	id = AUTISTNANITES
@@ -3666,6 +3707,11 @@
 		return 1
 	if((prob(10) && method == TOUCH) || method == INGEST)
 		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+
+/datum/reagent/xenomicrobes/reaction_dropper_mob(var/mob/living/M)
+	if(prob(30))
+		M.infect_disease2_predefined(DISEASE_XENO, 1, "Xenimicrobes")
+	return ..()
 
 /datum/reagent/nanobots
 	name = "Nanobots"
@@ -4290,11 +4336,22 @@
 				return
 			else //Oh dear
 				H.audible_scream()
-				H << "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>"
+				to_chat(H, "<span class='danger'>You are sprayed directly in the eyes with pepperspray!</span>")
 				H.eye_blurry = max(M.eye_blurry, 25)
 				H.eye_blind = max(M.eye_blind, 10)
 				H.Paralyse(1)
 				H.drop_item()
+
+/datum/reagent/condensedcapsaicin/reaction_dropper_mob(var/mob/living/M)
+	M.audible_scream()
+	to_chat(M, "<span class='danger'>Pure solid peppespray is dropped directly in your eyes!</span>")
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+		H.eye_blurry = max(M.eye_blurry, 25)
+		H.eye_blind = max(M.eye_blind, 10)
+		H.Paralyse(1)
+		H.drop_item()
+	return ..()
 
 /datum/reagent/condensedcapsaicin/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6098,7 +6155,7 @@
 		return 1
 	if(!M.loc || prob(70))
 		return
-	playsound(get_turf(M), pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
+	playsound(M, pick('sound/items/polaroid1.ogg','sound/items/polaroid2.ogg'), 50, 1)
 	dispense_cash(rand(5,15),get_turf(M))
 
 /datum/reagent/ethanol/bad_touch
@@ -6271,11 +6328,11 @@
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
 		if(H.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
-			playsound(get_turf(H), 'sound/voice/halt.ogg', 100, 1, 0)
+			playsound(H, 'sound/voice/halt.ogg', 100, 1, 0)
 		else
 			H.Knockdown(10)
 			H.Stun(10)
-			playsound(get_turf(H), 'sound/weapons/Egloves.ogg', 100, 1, -1)
+			playsound(H, 'sound/weapons/Egloves.ogg', 100, 1, -1)
 
 /datum/reagent/ethanol/spiders
 	name = "Spiders"
@@ -7616,7 +7673,7 @@
 
 	if(prob(5))
 		M.say(pick("Honk", "HONK", "Hoooonk", "Honk?", "Henk", "Hunke?", "Honk!"))
-		playsound(get_turf(M), 'sound/items/bikehorn.ogg', 50, -1)
+		playsound(M, 'sound/items/bikehorn.ogg', 50, -1)
 
 /datum/reagent/hamserum
 	name = "Ham Serum"
@@ -8701,7 +8758,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/diabeetusol
-	name = "diabeetusol"
+	name = "Diabeetusol"
 	id = DIABEETUSOL
 	description = "The mistaken byproduct of confectionery science. Targets the beta pancreatic cells, or equivalent, in carbon based life to not only cease insulin production but begin producing what medical science can only describe as 'the concept of obesity given tangible form'."
 	reagent_state = REAGENT_STATE_LIQUID
@@ -8742,7 +8799,7 @@ var/global/list/tonio_doesnt_remove=list("tonio", "blood")
 
 
 /datum/reagent/ectoplasm
-	name = "ectoplasm"
+	name = "Ectoplasm"
 	id = ECTOPLASM
 	description = "Pure, distilled spooky"
 	reagent_state = REAGENT_STATE_LIQUID

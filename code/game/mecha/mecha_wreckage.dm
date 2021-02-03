@@ -55,7 +55,7 @@
 		qdel(E)
 
 /obj/effect/decal/mecha_wreckage/bullet_act(var/obj/item/projectile/Proj)
-	return
+	return null
 
 /obj/effect/decal/mecha_wreckage/examine(var/mob/user)
 	..()

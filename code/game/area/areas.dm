@@ -752,3 +752,6 @@ var/list/transparent_icons = list("diagonalWall3","swall_f5","swall_f6","swall_f
 
 	for(var/obj/machinery/door/D in doors)
 		D.update_nearby_tiles()
+
+/area/proc/make_geyser(turf/T)
+	return

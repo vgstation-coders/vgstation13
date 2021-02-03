@@ -105,6 +105,7 @@
 			explosion(get_turf(src), 1, 2, 3, 3)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
+	return ..()
 
 /obj/machinery/auto_cloner/attackby(var/obj/item/O, var/mob/user)
 	if(O.is_wrench(user))

@@ -263,7 +263,8 @@ function changeZoom(offset){
 	var uiMapWidth = uiMapObject.width() * defaultzoom;
 	var uiMapHeight = uiMapObject.height() * defaultzoom;
 	var ourpos = uiMapObject.position();
-
+	$('.mapIcon16').css({ zoom: 1/(defaultzoom) });
+	
 	uiMapObject.css({
 		zoom: defaultzoom,
 		left: ourpos["left"],

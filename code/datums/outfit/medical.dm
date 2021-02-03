@@ -128,6 +128,12 @@
 		"Default" = list(
 			"Nurse" = list(slot_w_uniform_str, slot_head_str),
 		),
+		/datum/species/vox = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
+		/datum/species/plasmaman = list(
+			"Nurse" = list(slot_w_uniform_str),
+		),
 	)
 
 // This right here is the proof that the female gender should be removed from the codebase. Fucking snowflakes
