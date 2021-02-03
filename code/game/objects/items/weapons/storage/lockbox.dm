@@ -553,4 +553,5 @@
 	req_access = list(access_security)
 
 /obj/item/weapon/storage/lockbox/advanced/ricochettaser/New()
+	..()
 	new /obj/item/weapon/gun/energy/taser/ricochet(src)
