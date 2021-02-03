@@ -241,7 +241,7 @@ var/list/barsigns = list()
 				interval_queue -= interval_queue[safety]
 		
 		if(href_list["add_block"])
-			if(interval_queue.len < 31) //Max of 30 entries I guess
+			if(interval_queue.len =< MAX_QUEUE_LIMIT)
 				interval_queue["[interval_queue.len+1]"] = list("letter_message" = "BAR",
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
@@ -253,7 +253,7 @@ var/list/barsigns = list()
 			var/sign_text = copytext(sanitize(input(user, "What would you like to write on this barsign?", "Custom Barsign", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(sign_text)
 				var/safety = text2num(href_list["set_message"])
-				if(safety < MAX_QUEUE_LIMIT)
+				if(safety =< MAX_QUEUE_LIMIT)
 					name = sign_text 
 					interval_queue["[safety]"]["letter_message"] = sign_text
 					log_game("[key_name(user)] changed barsign name to [sign_text]")
@@ -266,14 +266,14 @@ var/list/barsigns = list()
 
 		if(href_list["set_letter_color"])
 			var/safety = text2num(href_list["set_letter_color"])
-			if(safety < MAX_QUEUE_LIMIT)
+			if(safety =< MAX_QUEUE_LIMIT)
 				var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
 				if(colorhex)
 					interval_queue["[safety]"]["letter_color"] = colorhex
 
 		if(href_list["set_letter_size"])
 			var/safety = text2num(href_list["set_letter_size"])
-			if(safety < MAX_QUEUE_LIMIT)
+			if(safety =< MAX_QUEUE_LIMIT)
 				var/font_size = input(user, "What size are the letters", "Letter Size", interval_queue["[safety]"]["letter_size"]) as num|null
 				if(font_size)
 					interval_queue["[safety]"]["letter_size"] = font_size //This shit can't go outside of the maptext box anyways, so they get disappointment
@@ -283,21 +283,21 @@ var/list/barsigns = list()
 		
 		if(href_list["set_sound"])
 			var/safety = text2num(href_list["set_sound"])
-			if(safety < MAX_QUEUE_LIMIT)
+			if(safety =< MAX_QUEUE_LIMIT)
 				var/picked_sound = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in sound_selection
 				if(picked_sound)
 					interval_queue["[safety]"]["sound_key"] = picked_sound
 
 		if(href_list["set_sound_tone"])
 			var/safety = text2num(href_list["set_sound_tone"])
-			if(safety < MAX_QUEUE_LIMIT)
+			if(safety =< MAX_QUEUE_LIMIT)
 				var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", interval_queue["[safety]"]["sound_tone"]) as null|num
 				if(new_soundtone)
 					interval_queue["[safety]"]["sound_tone"] = clamp(new_soundtone,12000,55000)
 		
 		if(href_list["set_sound_volume"])
 			var/safety = text2num(href_list["set_sound_volume"])
-			if(safety < MAX_QUEUE_LIMIT)
+			if(safety =< MAX_QUEUE_LIMIT)
 				var/new_volume = input("Choose a new sound volume 1-100:", "Sound Tone Menu",interval_queue["[safety]"]["sound_volume"]) as null|num
 				if(new_volume)
 					interval_queue["[safety]"]["sound_volume"] = clamp(new_volume,1,100)
