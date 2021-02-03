@@ -26,6 +26,17 @@
 		/obj/structure/bed/chair/vehicle,
 		)
 
+/obj/item/projectile/ricochet/taser
+	name = "electrode"
+	nodamage = 1
+	stun = 10
+	weaken = 10
+	stutter = 10
+	jittery = 20
+	agony = 10
+	hitsound = 'sound/weapons/taserhit.ogg'
+	icon_state = "ricochet_head_t"
+
 /obj/item/projectile/ricochet/OnFired()	//The direction and position of the projectile when it spawns depends heavily on where the player clicks.
 	var/turf/T1 = get_turf(shot_from)	//From a single turf, a player can fire the ricochet rifle in 8 different directions.
 	var/turf/T2 = get_turf(original)
@@ -175,6 +186,8 @@
 /obj/item/projectile/ricochet/proc/bounce()
 	bouncin = 1
 	var/obj/structure/ricochet_bump/bump = new(loc)
+	if(nodamage)
+		bump.icon_state += "_t"
 	bump.dir = pos_to
 	playsound(src, 'sound/items/metal_impact.ogg', 50, 1)
 	switch(pos_to)
@@ -215,7 +228,7 @@
 				impact.pixel_x = WORLD_ICON_SIZE/2
 			if(WEST)
 				impact.pixel_x = -WORLD_ICON_SIZE/2
-	impact.icon_state = "ricochet_hit"
+	impact.icon_state = "ricochet_hit[nodamage ? "_t" : ""]"
 	playsound(impact, 'sound/weapons/pierce.ogg', 30, 1)
 
 	spawn()
@@ -280,6 +293,8 @@
 
 /obj/item/projectile/ricochet/proc/ricochet_step(var/phase=1)
 	var/obj/structure/ricochet_trail/trail = new(loc)
+	if(nodamage)
+		trail.icon_state += "_t"
 	switch(pos_to)
 		if(NORTH)
 			if(pos_from == WEST)

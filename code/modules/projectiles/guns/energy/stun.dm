@@ -12,6 +12,11 @@
 /obj/item/weapon/gun/energy/taser/isHandgun()
 	return TRUE
 
+/obj/item/weapon/gun/energy/taser/ricochet
+	name = "ricochet taser gun"
+	desc = "The nightmare-creation of Alcatraz IV. Who let it free?"
+	projectile_type = "/obj/item/projectile/ricochet/taser"
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."

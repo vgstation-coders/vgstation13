@@ -3121,6 +3121,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/crackerbox = 1,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
+		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
 		/obj/structure/largecrate/secure = 1,
 		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
