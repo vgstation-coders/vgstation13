@@ -48,6 +48,7 @@ var/list/barsigns = list()
 									"Wolf" = 'sound/misc/6pmWolf.wav',
 									"Male Scream" = 'sound/misc/malescream5.ogg',
 									"Female Scream" = 'sound/misc/femalescream5.ogg',
+									"Vox Scream" = 'sound/misc/shriek1.ogg',
 									"Bike Horn" = 'sound/items/bikehorn.ogg'
 									)
 //Custom Barsign Configurable Shit
