@@ -96,10 +96,15 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/attack_ai(mob/user)
 	return attack_hand(user)
 
+/obj/structure/sign/double/barsign/attack_ghost(mob/user)
+	if(isAdminGhost(user))
+		attack_hand(user)
+
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
-	if(!allowed(user))
-		to_chat(user, "<span class='warning'>Access denied.</span>")
-		return
+	if(!isAdminGhost(user))
+		if(!allowed(user))
+			to_chat(user, "<span class='warning'>Access denied.</span>")
+			return
 
 	if(!barsigns.len)
 		for(var/bartype in typesof(/datum/barsign))
@@ -181,8 +186,8 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr))
-		var/mob/living/user = usr
+	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr))
+		var/mob/user = usr
 		
 		if(href_list["direct_select"])
 			var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
