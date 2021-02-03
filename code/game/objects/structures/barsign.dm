@@ -1,8 +1,5 @@
 /*
  * TODO: 2/2/2021
-
- -FILTER EFFECTS
-
  */
 var/list/barsigns = list()
 
@@ -10,6 +7,7 @@ var/list/barsigns = list()
 #define CUSTOM_SCREEN 1
 
 #define MAX_QUEUE_LIMIT 31 //Max amount of entries we can make
+#define MAX_FILTER_LIMIT 3 //You only get 3
 
 /datum/barsign
 	var/icon = "empty"
@@ -51,6 +49,12 @@ var/list/barsigns = list()
 									"Vox Scream" = 'sound/misc/shriek1.ogg',
 									"Bike Horn" = 'sound/items/bikehorn.ogg'
 									)
+	
+	//Dropshadows are safe, waves... might brutalize clients but they have a v limited amount of filters to use
+	var/list/filter_selection = list("Nothing",
+									"Dropshadow" = list("color" = "#1bf555"),
+										"Waves")
+	var/current_filter = "Nothing"
 //Custom Barsign Configurable Shit
 //Basically its a list, each index number is the current tick,
 //So you could make a shitty song I guess.
@@ -102,6 +106,9 @@ var/list/barsigns = list()
 		for(var/fuckyou in barsigns)
 			current_preview = barsigns[fuckyou]
 			break
+	
+	if(!ass)
+		ass = new()
 
 	barsign_menu(user)
 
@@ -119,7 +126,12 @@ var/list/barsigns = list()
 		if(interval_mode)
 			interval_mode_string = "ON"
 		
-		dat += "<b>Interval Mode:</b><a href=\"?src=\ref[src];interval_mode=1\">[interval_mode_string]</a><br><hr>"
+		dat += "Screen Filter: <a href=\"?src=\ref[src];set_filter=choose\">[current_filter]</a>"
+		if(current_filter == "Dropshadow")
+			dat += "<a href=\"?src=\ref[src];set_filter=dshadow_color\"><span style='border:1px solid #161616; background-color: [filter_selection["Dropshadow"]["color"]];'>&nbsp;&nbsp;&nbsp;</span></a>"
+		
+		dat += "<a href=\"?src=\ref[src];set_filter=[current_filter]\">Apply Filter</a>"
+		dat += "<br><b>Interval Mode:</b><a href=\"?src=\ref[src];interval_mode=1\">[interval_mode_string]</a><br><hr>"
 		
 		for(var/i in interval_queue)
 			dat += {"
@@ -198,7 +210,6 @@ var/list/barsigns = list()
 
 		if(href_list["apply_settings"])
 			vis_contents.Cut()
-			
 			switch(href_list["apply_settings"])
 				if("premade")
 					clean_me_up()
@@ -217,8 +228,6 @@ var/list/barsigns = list()
 					else
 						desc = "It displays \"[name]\"."					
 				if("custom_screen")
-					if(!ass)
-						ass = new()
 					icon_state = "kustom"
 					vis_contents += ass
 					ass.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
@@ -235,6 +244,25 @@ var/list/barsigns = list()
 						if(string)
 							ass.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
 		
+		if(href_list["set_filter"])
+			switch(href_list["set_filter"])
+				if("choose")
+					var/picked_filter = input(user,"Available Filters", "Filters", "Cancel") as null|anything in filter_selection
+					if(picked_filter)
+						current_filter = picked_filter
+				if("Nothing")
+					ass.filters = null //SPECIAL LIST, IT CANNOT BE CUT NOOOOOOOOO
+				if("Dropshadow")
+					if(ass.filters.len <= MAX_FILTER_LIMIT)
+						ass.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
+				if("dshadow_color")
+					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
+					if(colorhex)
+						filter_selection["Dropshadow"]["color"] = colorhex					
+				if("Waves")
+					if(ass.filters.len <= MAX_FILTER_LIMIT)
+						summon_shitty_example_waves()
+
 		if(href_list["delete_block"])
 			var/safety = text2num(href_list["delete_block"])
 			if(safety > 1)
@@ -329,6 +357,34 @@ var/list/barsigns = list()
 		interval_mode = FALSE
 		already_fired = FALSE
 		interval_ticker = 0
+
+/*
+	Don't hate on me, its literally the example for waves in the byond ref
+*/
+/obj/structure/sign/double/barsign/proc/summon_shitty_example_waves()
+	var/start = ass.filters.len
+	var/X
+	var/Y
+	var/rsq
+	var/i
+	var/waves
+	for(i=1, i<=7, ++i)
+		// choose a wave with a random direction and a period between 10 and 30 pixels
+		do
+			X = 60*rand() - 30
+			Y = 60*rand() - 30
+			rsq = X*X + Y*Y
+		while(rsq<100 || rsq>900)   // keep trying if we don't like the numbers
+		// keep distortion (size) small, from 0.5 to 3 pixels
+		// choose a random phase (offset)
+		ass.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
+	for(i=1, i<=7, ++i)
+		// animate phase of each wave from its original phase to phase-1 and then reset;
+		// this moves the wave forward in the X,Y direction
+		waves = ass.filters[start+i]
+		animate(waves, offset=waves:offset, time=0, loop=-1, flags=ANIMATION_PARALLEL)
+		animate(offset=waves:offset-1, time=rand()*20+10)
+
 
 /obj/structure/sign/double/barsign/cultify()
 	if(!cult)
