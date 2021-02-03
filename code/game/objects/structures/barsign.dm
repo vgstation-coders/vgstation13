@@ -407,3 +407,4 @@ var/list/barsigns = list()
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN
 #undef MAX_QUEUE_LIMIT
+#undef MAX_FILTER_LIMIT
