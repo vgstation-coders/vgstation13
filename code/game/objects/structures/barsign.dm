@@ -1,22 +1,15 @@
 /*
- * TODO:
- * Decide if we need fingerprints on this obj
- * Decide which other mob can use this
- * Sprite bar sign that is destroyed
- * Sprite bar sign that is unpowered
- * Add this obj to power consumers
- * Decide how much power this uses
- * Make this constructable with a decided step how to construct it
- * Make this deconstructable with a decided step how to deconstruct it
- * Decide what materials are used for this obj
- * Logic for area because it's a two tile consuming obj
- * Is this obj can be emagged? if yes what can be the trace that this obj is emagged?
- *									(I suggest broken ID authentication wiring)
- * Need more frames for existing bar signs (icons/obj/barsigns.dmi)
- * An ID scanner that will makes sound and
- *		output something that's the access has been granted
+ * TODO: 2/2/2021
+
+ -FILTER EFFECTS
+
  */
 var/list/barsigns = list()
+
+#define PREMADE_SCREEN 0
+#define CUSTOM_SCREEN 1
+
+#define MAX_QUEUE_LIMIT 31 //Max amount of entries we can make
 
 /datum/barsign
 	var/icon = "empty"
@@ -30,15 +23,10 @@ var/list/barsigns = list()
 	icon = "maltesefalcon"
 	desc = "Play it again, sam."
 
-/obj/effect/overlay/kustom_barsign
+/obj/effect/overlay/custom_barsign
 	name = "Wowee"
 	desc = "Its a error, If you see this"
 	vis_flags = VIS_INHERIT_ID|VIS_INHERIT_LAYER|VIS_INHERIT_PLANE
-
-/datum/barsign/kkustom/custom_barsign
-	name = "Custom Barsign"
-	icon = "kustom"
-	desc = "A barsign of custom variety"
 
 /obj/structure/sign/double/barsign	// The sign is 64x32, so it needs two tiles. ;3
 	name = "--------"
@@ -47,8 +35,14 @@ var/list/barsigns = list()
 	icon_state = "empty"
 	req_access = list(access_bar)
 	var/cult = 0
+
+	var/current_screen = PREMADE_SCREEN
+//Predef Barsign Var Shit
+	var/datum/barsign/current_preview = null //What are we on, the drop down still exists tho
+	var/current_position = 1
+
 //Custom Barsign Var shit
-	var/obj/effect/overlay/kustom_barsign/ass = null
+	var/obj/effect/overlay/custom_barsign/ass = null
 	var/list/sound_selection = list("Nothing" = null,
 									"Rooster" = 'sound/misc/6amRooster.wav',
 									"Wolf" = 'sound/misc/6pmWolf.wav',
@@ -56,23 +50,29 @@ var/list/barsigns = list()
 									"Female Scream" = 'sound/misc/femalescream5.ogg',
 									"Bike Horn" = 'sound/items/bikehorn.ogg'
 									)
-	var/sound_string = "Nothing"
 //Custom Barsign Configurable Shit
-	var/letter_message = "BAR"
-	var/letter_color = "#1bf555"
-	var/letter_size = "12"
+//Basically its a list, each index number is the current tick,
+//So you could make a shitty song I guess.
+//Also If you are asking why the numbers are strings, then I think its safer/less problematic(?)
+	var/list/interval_queue = list("1" = list("letter_message" = "JTGSZ",
+											"letter_color" = "#1bf555",
+											"letter_size" = "12",
+											"sound_key" = "Nothing",
+											"sound_tone" = 40000,
+											"sound_volume" = 50),
+									"2" = list("letter_message" = "THE BEST",
+											"letter_color" = "#f51b1b",
+											"letter_size" = "12",
+											"sound_key" = "Nothing",
+											"sound_tone" = 40000,
+											"sound_volume" = 50))
+
 //Interval Mode Shit for Custom Barsigns
 	var/interval_mode = FALSE
-	var/second_letter_message = "GRILL"
-	var/second_letter_color = "#f51b1b"
-	var/second_letter_size = "12"
-	var/interval_ticker_end = 0
-	var/current_tone = 40000
-	var/sound_volume = 50
 //To help keep track of where process() at
 	var/interval_ticker = 0
 	var/already_fired = FALSE
-	var/other_tick = FALSE
+
 
 /obj/structure/sign/double/barsign/Destroy()
 	if(ass)
@@ -97,72 +97,67 @@ var/list/barsigns = list()
 			var/datum/barsign/signinfo = new bartype
 			barsigns[signinfo.name] = signinfo
 
-	pick_sign(user)
+	if(!current_preview)
+		for(var/fuckyou in barsigns)
+			current_preview = barsigns[fuckyou]
+			break
 
-/obj/structure/sign/double/barsign/proc/pick_sign(mob/user)
-	vis_contents.Cut()
-	
-	var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
-	if(!picked_name)
-		return
+	barsign_menu(user)
 
-	var/datum/barsign/picked = barsigns[picked_name]
-	icon_state = picked.icon
-	if(istype(picked,/datum/barsign/kkustom))	
-		if(!ass)
-			ass = new()
-		vis_contents += ass
-		ass.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
-		ass.maptext_height = 29
-		ass.maptext_x = 4
-		ass.maptext_y = 4
-		custom_barsign_menu(user)
-
-	else
-		clean_me_up()
-		name = picked.name
-		if(picked.pixel_x)
-			pixel_x = picked.pixel_x * PIXEL_MULTIPLIER
-		else
-			pixel_x = 0
-		if(picked.pixel_y)
-			pixel_y = picked.pixel_y * PIXEL_MULTIPLIER
-		else
-			pixel_y = 0
-		if(picked.desc)
-			desc = picked.desc
-		else
-			desc = "It displays \"[name]\"."
-
-
-/obj/structure/sign/double/barsign/proc/custom_barsign_menu(mob/user)
+/obj/structure/sign/double/barsign/proc/barsign_menu(mob/user)
 	var/dat
-	var/interval_mode_string = "OFF"
-	if(interval_mode)
-		interval_mode_string = "ON"
-	
+	//SCREEN SELECTION
 	dat += {"
-		<ul>
-			<li><b>Set Sign Message:</b><a href="?src=\ref[src];set_sign_message=1">[letter_message]</a></li>
-			<li><b>Set Sign Description:</b><a href="?src=\ref[src];set_sign_description=1">[desc]</a></li>
-			<li><b>Set Letter Color:</b><a href="?src=\ref[src];set_letter_color=1"><span style='border:1px solid #161616; background-color: [letter_color];'>&nbsp;&nbsp;&nbsp;</span></a></li>
-			<li><b>Set Letter Size:</b><a href="?src=\ref[src];set_letter_size=1">[letter_size]</a></li>
-			<br><hr>
-			<li><b>Interval Mode:</b><a href="?src=\ref[src];interval_mode=1">[interval_mode_string]</a></li>
-			<li><b>Interval Mode Settings:</b>Interval needs to be above 0 to function.</li>
-			<li><b>Set Intervals:</b><a href="?src=\ref[src];set_interval_tick_end=1">[interval_ticker_end]</a></li>
-			<li><b>Set Secondary Color:</b><a href="?src=\ref[src];set_second_color=1"><span style='border:1px solid #161616; background-color: [second_letter_color];'>&nbsp;&nbsp;&nbsp;</span></a></li>
-			<li><b>Set Secondary Message:</b><a href="?src=\ref[src];set_second_message=1">[second_letter_message]</a></li>
-			<li><b>Set Secondary Size:</b><a href="?src=\ref[src];set_second_letter_size=1">[second_letter_size]</a></li>
-			<li><b>Set Sound:</b><a href="?src=\ref[src];set_sound=1">[sound_string]</a></li>
-			<li><b>Set Sound Tone:</b><a href="?src=\ref[src];set_sound_tone=1">[current_tone]</a></li>
-			<li><b>Set Sound Volume:</b><a href="?src=\ref[src];set_sound_volume=1">[sound_volume]</a></li>
-		</ul>
-		<br><br><a href="?src=\ref[src];apply_settings=1">Apply Settings</a>
-		"}
+			<b>Menus Available:
+			<a href='?src=\ref[src];current_screen=premade'>Pre-Defined</a>
+			<a href='?src=\ref[src];current_screen=custom_screen'>Custom Menu</a>
+			<hr>
+			"}
+	if(current_screen == CUSTOM_SCREEN) //CUSTOM SCREEN
+		var/interval_mode_string = "OFF"
+		if(interval_mode)
+			interval_mode_string = "ON"
+		
+		dat += "<b>Interval Mode:</b><a href=\"?src=\ref[src];interval_mode=1\">[interval_mode_string]</a><br><hr>"
+		
+		for(var/i in interval_queue)
+			dat += {"
+					<div style="width:100%; background-color:#1f1c1c; border-style:solid; border-color: #999797">
+						Msg: <a href="?src=\ref[src];set_message=[i]">[interval_queue[i]["letter_message"]]</a>
+						Color: <a href="?src=\ref[src];set_letter_color=[i]"><span style='border:1px solid #161616; background-color: [interval_queue[i]["letter_color"]];'>&nbsp;&nbsp;&nbsp;</span></a>
+						Size: <a href="?src=\ref[src];set_letter_size=[i]">[interval_queue[i]["letter_size"]]</a>
+						<br>Sound: <a href="?src=\ref[src];set_sound=[i]">[interval_queue[i]["sound_key"]]</a>
+						Sound Tone: <a href="?src=\ref[src];set_sound_tone=[i]">[interval_queue[i]["sound_tone"]]</a>
+						Sound Vol: <a href="?src=\ref[src];set_sound_volume=[i]">[interval_queue[i]["sound_volume"]]</a>
+						<a href='?src=\ref[src];delete_block=[i]'>Delete</a>
+					</div>
+					"}
+			
+		dat += "<br><a href='?src=\ref[src];add_block=1'>Add Block</a>"
+		dat += "<br><a href=\"?src=\ref[src];apply_settings=custom_screen\">Apply Settings</a>"
 
+				 
+	if(current_screen == PREMADE_SCREEN) //PRE-DEFINED SCREEN
+		user << browse_rsc(icon('icons/obj/barsigns.dmi', "[current_preview.icon]"), "cur_barsign.png")
+		dat += {"<div id="fuck" style="width:100%; height:100%; display:flex;">
+					<div style="float: left; width: 50%">
+						<b>Current Selection</b><br>
+						<b>Name:</b>[current_preview.name]<br>
+						<b>Desc:</b>[current_preview.desc]<br>
+					</div>
+					<div style="float:right; width:50%; background-color:#1f1c1c; border-style:solid; border-color: #999797">
+						<img src="cur_barsign.png">
+						<a href="?src=\ref[src];change_img=prev" title="Previous">["&larr;"]</a>
+						<a href="?src=\ref[src];change_img=next" title="Next">["&rarr;"]</a>
+					</div>
+				</div>
+				<div id="fuuuuuuck">
+					<a href="?src=\ref[src];direct_select=1">Direct Select</a>
+					<a href="?src=\ref[src];apply_settings=premade">Apply Settings</a><br>
+				</div>
+				"}
 
-	var/datum/browser/popup = new(user, "barsignmenu", "Custom Barsign Menu",400,460)
+	var/datum/browser/popup = new(user, "barsignmenu", "Custom Barsign Menu",500,500)
 	popup.set_content(dat)
 	popup.open()
 
@@ -171,106 +166,168 @@ var/list/barsigns = list()
 		return
 	if(in_range(src, usr) && isliving(usr))
 		var/mob/living/user = usr
+		
+		if(href_list["direct_select"])
+			var/picked_name = input(user,"Available Signage", "Bar Sign", "Cancel") as null|anything in barsigns
+			if(!picked_name)
+				return
+			
+			current_preview = barsigns[picked_name]
+			
+		if(href_list["change_img"])
+			var/name_string //ah man i am still unsure if i should be keeping barsigns as a assc list at this point.
+			switch(href_list["change_img"])
+				if("next")
+					if(current_position+1 <= barsigns.len)
+						name_string = barsigns[current_position+1]
+						current_position = current_position+1
+				if("prev")
+					if(current_position-1 > 0)
+						name_string = barsigns[current_position-1]
+						current_position = current_position-1
+			current_preview = barsigns[name_string]
 
-		if(href_list["set_sign_message"])
+		if(href_list["current_screen"])
+			switch(href_list["current_screen"])
+				if("premade")
+					current_screen = PREMADE_SCREEN
+				if("custom_screen")
+					current_screen = CUSTOM_SCREEN
+		
+
+		if(href_list["apply_settings"])
+			vis_contents.Cut()
+			
+			switch(href_list["apply_settings"])
+				if("premade")
+					clean_me_up()
+					icon_state = current_preview.icon
+					name = current_preview.name
+					if(current_preview.pixel_x)
+						pixel_x = current_preview.pixel_x * PIXEL_MULTIPLIER
+					else
+						pixel_x = 0
+					if(current_preview.pixel_y)
+						pixel_y = current_preview.pixel_y * PIXEL_MULTIPLIER
+					else
+						pixel_y = 0
+					if(current_preview.desc)
+						desc = current_preview.desc
+					else
+						desc = "It displays \"[name]\"."					
+				if("custom_screen")
+					if(!ass)
+						ass = new()
+					icon_state = "kustom"
+					vis_contents += ass
+					ass.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
+					ass.maptext_height = 29
+					ass.maptext_x = 4
+					ass.maptext_y = 4
+					if(interval_mode)
+						if(!already_fired)
+							already_fired = TRUE
+							processing_objects += src
+					else
+						interval_ticker = 0
+						var/string = interval_queue["1"]["letter_message"]
+						if(string)
+							ass.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
+		
+		if(href_list["delete_block"])
+			var/safety = text2num(href_list["delete_block"])
+			if(safety > 1)
+				interval_queue -= interval_queue[safety]
+		
+		if(href_list["add_block"])
+			if(interval_queue.len < 31) //Max of 30 entries I guess
+				interval_queue["[interval_queue.len+1]"] = list("letter_message" = "BAR",
+															"letter_color" = "#1bf555",
+															"letter_size" = "12",
+															"sound_key" = "Nothing",
+															"sound_tone" = 40000,
+															"sound_volume" = 50)
+
+		if(href_list["set_message"])
 			var/sign_text = copytext(sanitize(input(user, "What would you like to write on this barsign?", "Custom Barsign", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(sign_text)
-				name = sign_text 
-				letter_message = sign_text
-				log_game("[key_name(user)] changed barsign name to [letter_message]")
-		if(href_list["set_sign_description"])
+				var/safety = text2num(href_list["set_message"])
+				if(safety < MAX_QUEUE_LIMIT)
+					name = sign_text 
+					interval_queue["[safety]"]["letter_message"] = sign_text
+					log_game("[key_name(user)] changed barsign name to [sign_text]")
+		
+		if(href_list["set_description"])
 			var/desc_text = copytext(sanitize(input(user, "What would you like to have as the description?", "Custom Barsign Desc", null) as text|null), 1, MAX_NAME_LEN*3)
 			if(desc_text)
 				desc = desc_text
 				log_game("[key_name(user)] changed barsign desc to [desc]")
-		if(href_list["set_second_message"])
-			var/sign_text = copytext(sanitize(input(user, "What would you like to on the interval message?", "Custom Barsign", null) as text|null), 1, MAX_NAME_LEN*3)
-			if(sign_text)
-				second_letter_message = sign_text
-				log_game("[key_name(user)] changed barsign second name to [desc]")
-		if(href_list["set_letter_color"])
-			var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",letter_color) as color|null
-			if(colorhex)
-				letter_color = colorhex
-		
-		if(href_list["set_letter_size"])
-			var/font_size = input(user, "What size are the letters", "Letter Size", letter_size) as num|null
-			if(font_size)
-				letter_size = font_size //This shit can't go outside of the maptext box anyways, so they get disappointment
 
-		if(href_list["set_second_letter_size"])
-			var/font_size = input(user, "What size are the secondary letters", "Letter Size", second_letter_size) as num|null
-			if(font_size)
-				second_letter_size = font_size
-		
+		if(href_list["set_letter_color"])
+			var/safety = text2num(href_list["set_letter_color"])
+			if(safety < MAX_QUEUE_LIMIT)
+				var/colorhex = input(user, "Choose your text color:", "Sign Color Selection",interval_queue["[safety]"]["letter_color"]) as color|null
+				if(colorhex)
+					interval_queue["[safety]"]["letter_color"] = colorhex
+
+		if(href_list["set_letter_size"])
+			var/safety = text2num(href_list["set_letter_size"])
+			if(safety < MAX_QUEUE_LIMIT)
+				var/font_size = input(user, "What size are the letters", "Letter Size", interval_queue["[safety]"]["letter_size"]) as num|null
+				if(font_size)
+					interval_queue["[safety]"]["letter_size"] = font_size //This shit can't go outside of the maptext box anyways, so they get disappointment
+
 		if(href_list["interval_mode"])
 			interval_mode = !interval_mode
 		
-		if(href_list["set_interval_tick_end"])
-			var/tick_interval = input(user, "What is the tick interval ending?", "Tick Interval End", interval_ticker_end) as num|null
-			if(tick_interval)
-				interval_ticker_end = clamp(tick_interval,0,30) //30 is like a minute, since process ticks every 2 secs
-		
-		if(href_list["set_second_color"])
-			var/colorhex = input(user, "Choose your secondary text color:", "Sign Color Selection 2", second_letter_color) as color|null
-			if(colorhex)
-				second_letter_color = colorhex
-		
 		if(href_list["set_sound"])
-			var/picked_sound = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in sound_selection
-			if(picked_sound)
-				sound_string = picked_sound
+			var/safety = text2num(href_list["set_sound"])
+			if(safety < MAX_QUEUE_LIMIT)
+				var/picked_sound = input(user,"Available Sounds", "Sounds", "Cancel") as null|anything in sound_selection
+				if(picked_sound)
+					interval_queue["[safety]"]["sound_key"] = picked_sound
 
 		if(href_list["set_sound_tone"])
-			var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", current_tone) as null|num
-			if(new_soundtone)
-				current_tone = clamp(new_soundtone,12000,55000)
+			var/safety = text2num(href_list["set_sound_tone"])
+			if(safety < MAX_QUEUE_LIMIT)
+				var/new_soundtone = input("Choose a new sound frequency 12000-55000:", "Sound Tone Menu", interval_queue["[safety]"]["sound_tone"]) as null|num
+				if(new_soundtone)
+					interval_queue["[safety]"]["sound_tone"] = clamp(new_soundtone,12000,55000)
 		
 		if(href_list["set_sound_volume"])
-			var/new_volume = input("Choose a new sound volume 1-100:", "Sound Tone Menu",sound_volume) as null|num
-			if(new_volume)
-				sound_volume = clamp(new_volume,1,100)
-		
-		if(href_list["apply_settings"])
-			if(interval_mode && interval_ticker_end)
-				if(!already_fired)
-					already_fired = TRUE
-					processing_objects += src
-			ass.maptext = "<span style=\"color:[letter_color];font-size:[letter_size]px;\">[letter_message]</span>"
-		
-		custom_barsign_menu(user)
+			var/safety = text2num(href_list["set_sound_volume"])
+			if(safety < MAX_QUEUE_LIMIT)
+				var/new_volume = input("Choose a new sound volume 1-100:", "Sound Tone Menu",interval_queue["[safety]"]["sound_volume"]) as null|num
+				if(new_volume)
+					interval_queue["[safety]"]["sound_volume"] = clamp(new_volume,1,100)
+
+		barsign_menu(user)
 
 /obj/structure/sign/double/barsign/process()
 	if(!interval_mode)
-		already_fired = FALSE
 		processing_objects -= src
 		interval_ticker = 0
-		interval_ticker_end = 0
-		ass.maptext = "<span style=\"color:[letter_color];font-size:[letter_size]px;\">[letter_message]</span>"
+		already_fired = FALSE
 		return
 	
 	interval_ticker++
-	
-	if(interval_ticker >= interval_ticker_end)
-		if(other_tick)
-			ass.maptext = "<span style=\"color:[letter_color];font-size:[letter_size]px;\">[letter_message]</span>"
-		else
-			ass.maptext = "<span style=\"color:[second_letter_color];font-size:[second_letter_size]px;\">[second_letter_message]</span>"
-		if(sound_string)
-			playsound(src, sound_selection["[sound_string]"], sound_volume, 1,frequency = current_tone)
-		other_tick = !other_tick
+	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
+	if(check_sound)
+		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
+	ass.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
+	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
 
 /*
 	Cleans up the object for the emp/cult shit if interval mode on
 */
 /obj/structure/sign/double/barsign/proc/clean_me_up()
-	if(interval_mode)
-		already_fired = FALSE
-		processing_objects -= src
-		interval_ticker = 0
-		interval_ticker_end = 0
 	vis_contents.Cut()
+	if(interval_mode)
+		processing_objects -= src
+		interval_mode = FALSE
+		already_fired = FALSE
+		interval_ticker = 0
 
 /obj/structure/sign/double/barsign/cultify()
 	if(!cult)
@@ -289,3 +346,7 @@ var/list/barsigns = list()
 	desc = "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4#*?"
 	pixel_x = 0
 	pixel_y = 0
+
+#undef PREMADE_SCREEN
+#undef CUSTOM_SCREEN
+#undef MAX_QUEUE_LIMIT
