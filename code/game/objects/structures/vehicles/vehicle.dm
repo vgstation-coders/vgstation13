@@ -148,6 +148,8 @@
 		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 		H.adjustBrainLoss(10)
+	else
+		return ..()
 
 /obj/structure/bed/chair/vehicle/attack_hand(mob/user)
 	if(occupant && occupant == user)

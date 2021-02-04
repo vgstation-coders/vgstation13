@@ -201,15 +201,88 @@ var/global/list/alcatraz_stuff = list(
 	/obj/item/clothing/accessory/bangerboy,
 	/obj/item/key/security/spare,
 	/obj/item/weapon/ram_kit,
-	/obj/item/device/vampirehead,)
+	/obj/item/device/vampirehead,
+	/obj/item/weapon/storage/lockbox/unlockable/peace,
+	/obj/item/clothing/head/helmet/stun,
+	/obj/item/weapon/secway_kit,
+	)
 
 /obj/structure/closet/crate/chest/alcatraz/New()
 	..()
-	for(var/i = 1 to 6)
+	for(var/i = 1 to 7)
 		if(!alcatraz_stuff.len)
 			return
 		var/path = pick_n_take(alcatraz_stuff)
 		new path(src)
+
+/obj/item/clothing/head/helmet/stun
+	name = "stun helmet"
+	desc = "For the experimental program of deploying armless security officers. Its complex wiring is known to block out psychic powers and 5G signals."
+	icon_state = "helmetstun"
+	light_power = 2.5
+	light_range = 4
+	light_color = LIGHT_COLOR_ORANGE
+	mech_flags = MECH_SCAN_FAIL
+	var/obj/item/weapon/cell/bcell
+
+/obj/item/clothing/head/helmet/stun/New()
+	..()
+	bcell = new(src)
+	bcell.charge = bcell.maxcharge
+	update_icon()
+
+/obj/item/clothing/head/helmet/stun/Destroy()
+	if (bcell)
+		qdel(bcell)
+		bcell = null
+
+	return ..()
+
+/obj/item/clothing/head/helmet/stun/get_cell()
+	return bcell
+
+/obj/item/clothing/head/helmet/stun/examine(mob/user)
+	..()
+	if(bcell)
+		to_chat(user, "<span class='info'>The helmet is [round(bcell.percent())]% charged.</span>")
+
+/obj/item/clothing/head/helmet/stun/mob_can_equip(mob/M, slot, disable_warning = 0, automatic = 0)
+	if(!..() || !ishuman(M))
+		return CANNOT_EQUIP
+	if(clumsy_check(M))
+		to_chat(M, "<span class='warning'>You get stunned trying to don \the [src].</span>")
+		return CANNOT_EQUIP
+	var/mob/living/carbon/human/C = M
+	if(!C.head)
+		return CAN_EQUIP
+	if(C.head.canremove)
+		return CAN_EQUIP_BUT_SLOT_TAKEN
+	return CAN_EQUIP
+
+/obj/item/clothing/head/helmet/stun/proc/use(var/amount)
+	if(!bcell || bcell.charge < amount)
+		return FALSE
+	bcell.use(amount)
+	return TRUE
+
+#define STUN_HELMET_STRENGTH 10
+/obj/item/clothing/head/helmet/stun/bite_action(mob/target)
+	if(!isliving(loc) || !isliving(target) || !use(STUN_HELMET_STRENGTH**2))
+		return FALSE
+	var/mob/living/user = loc
+	var/mob/living/L = target
+	if(iscarbon(target))
+		var/mob/living/carbon/C = L
+		if(C.check_shields(0,src))
+			return FALSE
+		L.apply_effect(STUN_HELMET_STRENGTH, STUTTER)
+	playsound(loc, 'sound/weapons/Egloves.ogg', 50, 1, -1)
+	L.Knockdown(STUN_HELMET_STRENGTH)
+	L.Stun(STUN_HELMET_STRENGTH)
+	user.attack_log += "\[[time_stamp()]\]<font color='red'> Stunned [L.name] ([L.ckey]) with [name]</font>"
+	L.attack_log += "\[[time_stamp()]\]<font color='orange'> Stunned by [user.name] ([user.ckey]) with [name]</font>"
+	log_attack("<font color='red'>[user.name] ([user.ckey]) stunned [L.name] ([L.ckey]) with [name]</font>" )
+	return TRUE
 
 /obj/item/clothing/accessory/bangerboy
 	name = "\improper Banger Boy Advance"
@@ -475,7 +548,8 @@ var/global/list/alcatraz_stuff = list(
 
 /obj/item/key/security/spare/New()
 	..()
-	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station")
+	var/list/map_names = list("Defficiency","Bagelstation","Meta Club","Packed Station","Asteroid Station","Box Station",
+		 "Snow Station", "NRV Horizon", "Synergy Station", "Lamprey Station")
 	map_names -= map.nameLong
 	home_map = pick(map_names)
 

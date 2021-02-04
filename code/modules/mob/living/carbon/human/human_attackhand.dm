@@ -28,6 +28,11 @@
 			return
 	//end vampire code
 
+	if(M.head && istype(M.head,/obj/item/clothing/head))
+		var/obj/item/clothing/head/H = M.head
+		if(H.bite_action(src))
+			return //Head slot item overrode the bite
+
 	var/armor_modifier = 30
 	var/damage = rand(1, 5)*dam_check
 
