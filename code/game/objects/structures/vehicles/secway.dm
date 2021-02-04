@@ -6,7 +6,6 @@
 	can_have_carts = FALSE
 	wreckage_type = /obj/effect/decal/mecha_wreckage/vehicle/secway
 	var/clumsy_check = 1
-	var/spawn_keys = FALSE
 
 /obj/item/key/security
 	name = "secway key"
@@ -14,8 +13,7 @@
 	icon_state = "keysec"
 
 /obj/structure/bed/chair/vehicle/secway/set_keys() //doesn't spawn with keys, mapped in
-	if(spawn_keys)
-		..()
+	return
 
 /obj/structure/bed/chair/vehicle/secway/make_offsets()
 	offsets = list(
@@ -200,12 +198,14 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 	req_access = list(63)
 	health = 200
 	max_health = 200
-	spawn_keys = TRUE
 	var/knockdown_time = 1
 	var/hit_damage = 0
 	var/impact_sound = null
 	var/explodes = TRUE
 	var/siren = FALSE
+
+/obj/structure/bed/chair/vehicle/secway/set_keys()
+	new /obj/item/key/security/spare(loc)
 
 /obj/structure/bed/chair/vehicle/secway/custom/process()
 	..()
