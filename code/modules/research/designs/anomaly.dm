@@ -95,7 +95,7 @@
 	name = "Alden-Saraspova Counter"
 	desc = "Aids in triangulation of exotic particles. Useful to locate large alien artifacts."
 	id = "ano_scanner"
-	req_tech = list(Tc_MATERIALS = 6, Tc_BLUESPACE = 7, Tc_ANOMALY = 5)
+	req_tech = list(Tc_MATERIALS = 6, Tc_BLUESPACE = 4, Tc_ANOMALY = 7)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2500, MAT_GLASS = 2500, MAT_GOLD = 200, MAT_URANIUM = 200)
 	category = "Anomaly"
