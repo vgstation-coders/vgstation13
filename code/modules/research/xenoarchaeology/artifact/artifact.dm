@@ -15,15 +15,10 @@
 	artifact_id = generate_artifact_id()
 
 	artifact_find_type = pick(
-	5;/obj/machinery/syndicate_beacon,
-	5;/obj/item/clothing/mask/stone,
-	5;/obj/item/changeling_vial,
-	5;/obj/item/weapon/bloodcult_pamphlet/oneuse,
 	25;/obj/machinery/singularity_beacon,
 	25;/obj/machinery/power/supermatter,
 	50;/obj/structure/constructshell,
 	100;/obj/machinery/cryopod,
-	100;/obj/item/clothing/gloves/warping_claws,
 	100;/obj/machinery/auto_cloner,
 	100;/obj/structure/bed/chair/vehicle/gigadrill,
 	100;/obj/mecha/working/hoverpod,
