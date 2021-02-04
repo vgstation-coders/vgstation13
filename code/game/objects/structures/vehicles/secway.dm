@@ -216,7 +216,7 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 			light_color = "#FF0000"
 
 /obj/structure/bed/chair/vehicle/secway/custom/to_bump(var/atom/obstacle)
-	if(ismachinery(obstacle) && !istype(obstacle,/obj/machinery/door))
+	if(istype(obstacle,/obj/machinery) && !istype(obstacle,/obj/machinery/door))
 		playsound(src, 'sound/effects/grillehit.ogg', 50, 1)
 		obstacle.shake(1, 3)
 	if(isliving(obstacle))
