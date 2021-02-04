@@ -5,7 +5,7 @@ var/anomaly_report_num = 0
 /obj/item/weapon/disk/hdd/anomaly
 	name = "Encrypted HDD"
 	desc = "Additional Anomaly data has been encrypted into this HDD, pertaining to the Alden-Saraspova equation. A Deconstructive Analyzer can decipher it."
-	origin_tech = Tc_ANOMALY+"=5"
+	origin_tech = Tc_ANOMALY+"=6"
 	mech_flags = MECH_SCAN_FAIL
 
 //////////////////////////////////////////////////////////////////////////////////

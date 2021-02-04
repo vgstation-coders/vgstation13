@@ -70,17 +70,6 @@
 	category = "Anomaly"
 	build_path = /obj/item/device/xenoarch_scanner
 
-//ANOMALY LEVEL 4
-/datum/design/xenoarch_scanner_adv//lets you find large artifacts buried in view
-	name = "Advanced xenoarchaeology digsite locator"
-	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their material via highlighting them a specific colour"
-	id = "xenoarch_scanner_adv"
-	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 4)
-	build_type = PROTOLATHE
-	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
-	category = "Anomaly"
-	build_path = /obj/item/device/xenoarch_scanner/adv
-
 /datum/design/anodevice
 	name = "Anomaly power utilizer"
 	desc = "Offers a measure of control over the exotic energies extracted from alien artifacts."
@@ -101,14 +90,24 @@
 	category = "Anomaly"
 	build_path = /obj/item/weapon/anobattery
 
-//ANOMALY LEVEL 5
+//ANOMALY LEVEL 7
 /datum/design/ano_scanner//easily lets you quickly find every large artifact buried on the Z-Level
 	name = "Alden-Saraspova Counter"
 	desc = "Aids in triangulation of exotic particles. Useful to locate large alien artifacts."
 	id = "ano_scanner"
-	req_tech = list(Tc_MATERIALS = 6, Tc_BLUESPACE = 4, Tc_ANOMALY = 5)
+	req_tech = list(Tc_MATERIALS = 6, Tc_BLUESPACE = 7, Tc_ANOMALY = 5)
 	build_type = PROTOLATHE
 	materials = list(MAT_IRON = 2500, MAT_GLASS = 2500, MAT_GOLD = 200, MAT_URANIUM = 200)
 	category = "Anomaly"
 	build_path = /obj/item/device/ano_scanner
+
+/datum/design/xenoarch_scanner_adv//lets you find large artifacts buried in view
+	name = "Advanced xenoarchaeology digsite locator"
+	desc = "Shows digsites in vicinity, whether they're hidden or not. Shows you their material via highlighting them a specific colour"
+	id = "xenoarch_scanner_adv"
+	req_tech  =list(Tc_MAGNETS = 3, Tc_ANOMALY = 7)
+	build_type = PROTOLATHE
+	materials = list(MAT_GLASS=2500, MAT_IRON = 2500, MAT_PLASMA = 300)
+	category = "Anomaly"
+	build_path = /obj/item/device/xenoarch_scanner/adv
 
