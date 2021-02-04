@@ -260,7 +260,7 @@ datum/tech/anomaly
 	name = "Anomaly Research"
 	desc = "The study of high energy materials and technology reconstruction."
 	id = "anomaly"
-	max_level=6
+	max_level=7
 
 /*
 datum/tech/arcane
