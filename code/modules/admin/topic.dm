@@ -3691,6 +3691,7 @@
 
 					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr), null, 0)
 					custom.primary_effect = new custom_primary_effect(custom)
+					custom.primary_effect.artifact_id = "[custom.artifact_id]a"
 					if(answer2 == "Random")
 						custom.primary_effect.GenerateTrigger()
 					else
@@ -3700,6 +3701,7 @@
 
 					if(custom_secondary_effect)
 						custom.secondary_effect = new custom_secondary_effect(custom)
+						custom.secondary_effect.artifact_id = "[custom.artifact_id]b"
 						if(answer2 == "Random")
 							custom.secondary_effect.GenerateTrigger()
 						else
