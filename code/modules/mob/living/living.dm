@@ -604,6 +604,9 @@ Thanks.
 			IO.status = 0
 			IO.robotic = 0
 		H.updatehealth()
+		H.op_stage.butt = SURGERY_HAS_A_BUTT
+		H.op_stage.butt_replace = SURGERY_BEGIN_BUTT_REPLACE
+
 	for(var/datum/disease/D in viruses)
 		D.cure(0)
 	for (var/ID in virus2)
