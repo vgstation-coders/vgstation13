@@ -18,10 +18,13 @@ var/savefile/panicfile
 var/datum/early_init/early_init_datum = new
 
 #if AUXTOOLS_DEBUGGER
-var/auxtools_path = world.system_type == MS_WINDOWS ? "debug_server.dll" : "libdebug_server.so" //I guess?
+var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 
 /proc/enable_debugging(mode, port) //Hooked by auxtools
 	CRASH("auxtools not loaded")
+
+/proc/auxtools_stack_trace(msg)
+	CRASH(msg)
 #endif
 
 /datum/early_init/New()
@@ -33,7 +36,7 @@ var/auxtools_path = world.system_type == MS_WINDOWS ? "debug_server.dll" : "libd
 	else
 		// warn on missing library
 		// auxtools on linux does not exist and is not in the repository as of yet
-		warning("There is no auxtools library for this system included with this build. Debugging will not work. This warning will not show if [auxtools_path] is added to the root of the game directory.")
+		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
 	#endif
 
 /world/New()
