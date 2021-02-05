@@ -77,10 +77,15 @@
 
 	H.maxHealth = round(previous.maxHealth/2)
 
-	// Prevent vox from dying in an O2 atmosphere.
-	// Because the body is created and has anywhere from 30 to 60 seconds to soak up JUICY oxygen.
+	// Prevent nonhumans from dying immediately in non-ideal atmospheres.
 	if (isvox(H))
+		// Nitrogen heals tox damage from O2 in environment and is also what cloner uses.
 		H.reagents.add_reagent(NITROGEN, 60)
+
+	else if (isplasmaman(H))
+		// Plasmamen both catch on fire AND have no plasma to breathe, so...
+		H.reagents.add_reagent(LEPORAZINE, 60)
+		H.reagents.add_reagent(DEXALIN, 60)
 
 	spawn(rand(30 SECONDS,60 SECONDS))
 		do_flick(src,"Essence_imprinter_scan_complete",8)
