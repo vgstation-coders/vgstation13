@@ -16,7 +16,6 @@
 	density = FALSE
 	dir = NORTH
 
-	var/ini_dir
 	var/obj/item/weapon/circuitboard/airlock/electronics = null
 	var/windoor_type = /obj/machinery/door/window
 	var/secure_type = /obj/machinery/door/window/brigdoor
@@ -33,9 +32,8 @@
 	if(anchored && wired && electronics) //We're almost there bros
 		name = "near finished [secure ? "secure ":""][initial(name)]"
 
-/obj/structure/windoor_assembly/New(dir=NORTH)
+/obj/structure/windoor_assembly/New()
 	..()
-	ini_dir = dir
 	update_nearby_tiles()
 
 obj/structure/windoor_assembly/Destroy()
@@ -240,7 +238,6 @@ obj/structure/windoor_assembly/Destroy()
 		return FALSE
 	dir = turn(dir, 270)
 	update_nearby_tiles()
-	ini_dir = dir
 	update_icon()
 
 //Flips the windoor assembly, determines whather the door opens to the left or the right

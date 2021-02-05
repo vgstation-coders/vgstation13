@@ -169,7 +169,6 @@
 				if(S)
 					S.forceMove(get_turf(src))
 					S.dir = get_dir(src, user)
-					S.ini_dir = S.dir
 					return
 		return
 	if(iswirecutter(W))

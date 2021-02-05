@@ -19,7 +19,6 @@ var/list/one_way_windows
 	pressure_resistance = 4*ONE_ATMOSPHERE
 	anchored = 1
 	var/health = 10 //This window is so bad blowing on it would break it, sucks for it
-	var/ini_dir = null //This really shouldn't exist, but it does and I don't want to risk deleting it because it's likely mapping-related
 	var/d_state = WINDOWLOOSEFRAME //Normal windows have one step (unanchor), reinforced windows have three
 	var/shardtype = /obj/item/weapon/shard
 	var/reinforcetype = /obj/item/stack/rods
@@ -43,7 +42,6 @@ var/list/one_way_windows
 
 	..(loc)
 	flow_flags |= ON_BORDER
-	ini_dir = dir
 
 	update_nearby_tiles()
 	update_nearby_icons()
@@ -356,7 +354,6 @@ var/list/one_way_windows
 				else
 					change_dir(turn(dir,315))
 			update_nearby_tiles()
-			ini_dir = dir
 		var/obj/item/stack/sheet/mineral/plastic/P = W
 		toggle_one_way()
 		P.use(1)
@@ -537,7 +534,6 @@ var/list/one_way_windows
 	update_nearby_tiles() //Compel updates before
 	dir = turn(dir, 90)
 	update_nearby_tiles()
-	ini_dir = dir
 	return
 
 /obj/structure/window/verb/revrotate()
@@ -552,7 +548,6 @@ var/list/one_way_windows
 	update_nearby_tiles() //Compel updates before
 	dir = turn(dir, 270)
 	update_nearby_tiles()
-	ini_dir = dir
 	return
 
 /obj/structure/window/Destroy()
@@ -579,6 +574,7 @@ var/list/one_way_windows
 /obj/structure/window/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, glide_size_override = 0)
 
 	update_nearby_tiles()
+	Dir = dir
 	..()
 	update_nearby_tiles()
 
