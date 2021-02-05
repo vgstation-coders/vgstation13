@@ -35,7 +35,6 @@ var/auxtools_path = world.GetConfig("env", "AUXTOOLS_DEBUG_DLL")
 		enable_debugging()
 	else
 		// warn on missing library
-		// auxtools on linux does not exist and is not in the repository as of yet
 		warning("There is no auxtools library for this system included with SpacemanDMM. Debugging will not work. Pester them to add one.")
 	#endif
 
