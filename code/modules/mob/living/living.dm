@@ -553,7 +553,7 @@ Thanks.
 	ear_damage = 0
 	say_mute = 0
 	said_last_words = 0
-	mutations &= ~M_HUSK
+	mutations.Remove(M_HUSK)
 	if(!reagents)
 		create_reagents(1000)
 	else
