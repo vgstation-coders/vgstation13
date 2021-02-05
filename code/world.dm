@@ -17,21 +17,24 @@ var/savefile/panicfile
 
 var/datum/early_init/early_init_datum = new
 
+#if AUXTOOLS_DEBUGGER
+var/auxtools_path = world.system_type == MS_WINDOWS ? "debug_server.dll" : "libdebug_server.so" //I guess?
+
+/proc/enable_debugging(mode, port) //Hooked by auxtools
+	CRASH("auxtools not loaded")
+#endif
+
 /datum/early_init/New()
 	..()
-	var/extools_path = world.system_type == MS_WINDOWS ? "byond-extools.dll" : "libbyond-extools.so"
-	if(fexists(extools_path))
-		#if EXTOOLS_DEBUGGER
-		call(extools_path, "debug_initialize")()
-		#endif
-		call(extools_path, "maptick_initialize")()
-		#if EXTOOLS_REFERENCE_TRACKING
-		call(extools_path, "ref_tracking_initialize")()
-		#endif
+	#if AUXTOOLS_DEBUGGER
+	if(fexists(auxtools_path))
+		call(auxtools_path, "auxtools_init")()
+		enable_debugging()
 	else
 		// warn on missing library
-		// extools on linux does not exist and is not in the repository as of yet
-		warning("There is no extools library for this system included with this build. Performance may differ significantly than if it were present. This warning will not show if [extools_path] is added to the root of the game directory.")
+		// auxtools on linux does not exist and is not in the repository as of yet
+		warning("There is no auxtools library for this system included with this build. Debugging will not work. This warning will not show if [auxtools_path] is added to the root of the game directory.")
+	#endif
 
 /world/New()
 	world_startup_time = world.timeofday
@@ -298,6 +301,10 @@ var/datum/early_init/early_init_datum = new
 
 		else
 			C << link("byond://[world.address]:[world.port]")
+
+	#if AUXTOOLS_DEBUGGER
+	call(auxtools_path, "auxtools_shutdown")()
+	#endif
 
 #define INACTIVITY_KICK	6000	//10 minutes in ticks (approx.)
 /world/proc/KickInactiveClients()
