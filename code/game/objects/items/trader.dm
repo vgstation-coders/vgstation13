@@ -669,8 +669,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/weapon/autocuffer
 	name = "autocuffer"
 	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
-	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "labeler0"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "autocuffer"
 	siemens_coefficient = 0
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
