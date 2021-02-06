@@ -496,19 +496,19 @@
 
 	if(healths)
 		switch(health)
-			if(50 to INFINITY)
+			if(100 to INFINITY)
 				healths.icon_state = "artificer_health0"
-			if(42 to 49)
+			if(84 to 99)
 				healths.icon_state = "artificer_health1"
-			if(34 to 41)
+			if(68 to 83)
 				healths.icon_state = "artificer_health2"
-			if(26 to 33)
+			if(52 to 67)
 				healths.icon_state = "artificer_health3"
-			if(18 to 25)
+			if(36 to 51)
 				healths.icon_state = "artificer_health4"
-			if(10 to 17)
+			if(20 to 35)
 				healths.icon_state = "artificer_health5"
-			if(1 to 9)
+			if(1 to 19)
 				healths.icon_state = "artificer_health6"
 			else
 				healths.icon_state = "artificer_health7"
