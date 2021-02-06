@@ -15,6 +15,8 @@
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/undergoing_deletion = 0
+	var/connects_atmos = TRUE//Set to FALSE to prevent portals from linking atmos
+	var/marke_sparks = TRUE//Set to FALSE to prevent portals from linking atmos
 	var/atmos_connected = FALSE
 	var/connection/atmos_connection
 
@@ -67,8 +69,9 @@
 		qdel(src)
 		return
 
-	spawn(5)
-		connect_atmospheres()
+	if (connects_atmos)
+		spawn(5)
+			connect_atmospheres()
 
 	make_lifespan(lifespan)
 
@@ -125,7 +128,8 @@
 			else if(src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
-	spark(loc, 5)
+	if (marke_sparks)
+		spark(loc, 5)
 	..()
 
 /obj/effect/portal/cultify()
@@ -250,10 +254,12 @@ var/list/portal_cache = list()
 	close_sound = 'sound/effects/flesh_squelch.ogg'
 	icon_state = "bloodytear"
 	mask = "bloodytear_mask"
+	connects_atmos = FALSE
+	marke_sparks = FALSE
 
 /obj/effect/portal/tear/blood/New(turf/loc,var/lifespan=300)
 	..()
-	if (!locate(/obj/effect/decal/cleanable/blood/splatter) in loc)
+	if (loc && !istype(loc, /turf/space) && (!locate(/obj/effect/decal/cleanable/blood/splatter) in loc))
 		var/obj/effect/decal/cleanable/blood/splatter/S = new (loc)
 		S.amount = 1
 

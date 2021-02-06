@@ -270,8 +270,8 @@
 	icon_living = "floating"
 	maxHealth = 75
 	health = 75
-	melee_damage_lower = 25
-	melee_damage_upper = 25
+	melee_damage_lower = 15
+	melee_damage_upper = 15
 	attacktext = "slashes"
 	speed = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK

@@ -500,9 +500,12 @@
 							"Oh just fuck off",)].</span></span>")
 
 
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/caster = null)
+/proc/write_rune_word(var/turf/T, var/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
 		return 0
+
+	if (!source)
+		source = new
 
 	//Add word to a rune if there is one, otherwise create one. However, there can be no more than 3 words.
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.

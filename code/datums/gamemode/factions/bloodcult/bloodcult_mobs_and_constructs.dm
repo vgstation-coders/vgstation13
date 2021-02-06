@@ -110,6 +110,8 @@
 	construct_spells = list(
 		/spell/targeted/ethereal_jaunt/shift/alt,
 		/spell/wraith_warp,
+		/spell/aoe_turf/conjure/path_entrance,
+		/spell/aoe_turf/conjure/path_exit,
 		)
 	var/warp_ready = FALSE
 
