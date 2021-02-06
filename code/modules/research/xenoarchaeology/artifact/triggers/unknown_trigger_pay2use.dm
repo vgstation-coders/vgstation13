@@ -23,7 +23,7 @@
 		if (CREDIT)
 			my_artifact.desc += " There appears to be what looks like a bill acceptor [where]."
 		if (BANK_CARD)
-			my_artifact.desc += " There appears to be a card slot [where]."
+			my_artifact.desc += " There appears to be a card reader [where]."
 	reconnect_database()
 
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
