@@ -61,7 +61,6 @@ proc/findNullRod(var/atom/target)
 /spell/wraith_warp/channel_spell(mob/user = usr, skipcharge = 0, force_remove = 0)
 	if(!..())
 		return 0
-		to_chat(user,"<span class='notice'>Click on a turf in range to warp there.</span>")
 	return 1
 
 /spell/wraith_warp/is_valid_target(var/target, mob/user, options)
