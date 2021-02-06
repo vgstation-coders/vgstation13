@@ -115,6 +115,11 @@
 					construct_color = rgb(30,255,30)
 			else
 				construct_color = rgb(235,0,0)
+	else if (istype(creator, /mob/living/simple_animal/shade))//shade beacon
+		if (iscultist(creator))
+			construct_color = rgb(235,0,0)
+		else
+			construct_color = rgb(0, 153, 255)
 	setupglow()
 
 /mob/living/simple_animal/construct/Login()
@@ -289,8 +294,8 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
-	maxHealth = 50
-	health = 50
+	maxHealth = 100
+	health = 100
 	response_harm = "viciously beats"
 	harm_intent_damage = 5
 	melee_damage_lower = 5

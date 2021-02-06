@@ -452,6 +452,7 @@
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
 
+
 /obj/effect/artificer_underlay
 	icon = 'icons/obj/cult.dmi'
 	icon_state = "build"
