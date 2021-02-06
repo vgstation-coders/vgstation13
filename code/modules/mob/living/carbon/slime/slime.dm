@@ -213,7 +213,7 @@
 /mob/living/carbon/slime/bullet_act(var/obj/item/projectile/Proj)
 	attacked += 10
 	..(Proj)
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 
 /mob/living/carbon/slime/emp_act(severity)

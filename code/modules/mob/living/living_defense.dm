@@ -66,7 +66,7 @@
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
 		P.on_hit(src,2)
-		return 2
+		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
@@ -75,7 +75,7 @@
 	if(istype(P, /obj/item/projectile/beam/lightning))
 		if(P.damage >= 200)
 			src.dust()
-	return absorb
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
 	. = ..()

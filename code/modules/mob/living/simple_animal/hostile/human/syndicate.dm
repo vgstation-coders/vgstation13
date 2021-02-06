@@ -54,12 +54,12 @@
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
+		return PROJECTILE_COLLISION_DEFAULT
 	if(prob(65))
 		src.health -= Proj.damage
 	else
 		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 
 /mob/living/simple_animal/hostile/humanoid/syndicate/melee/space
