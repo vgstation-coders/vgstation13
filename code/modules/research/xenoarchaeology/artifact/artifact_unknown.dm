@@ -51,7 +51,7 @@ var/list/razed_large_artifacts = list()//destroyed while still inside a rock wal
 		//75% chance to have a secondary effect
 		if(prob(75))
 			effecttype = pick(typesof(/datum/artifact_effect) - /datum/artifact_effect)
-			secondary_effect = new effecttype(src, 1)
+			secondary_effect = new effecttype(src, 1, FALSE)
 			secondary_effect.artifact_id = "[artifact_id]b"
 			spawn(1)
 				if(secondary_effect)	//incase admin tools or something deleted the secondary
