@@ -42,14 +42,15 @@ var/list/barsigns = list()
 //Custom Barsign Var shit
 	var/obj/effect/overlay/custom_barsign/ass = null
 	var/list/sound_selection = list("Nothing" = null,
-									"Rooster" = 'sound/misc/6amRooster.wav',
-									"Wolf" = 'sound/misc/6pmWolf.wav',
-									"Male Scream" = 'sound/misc/malescream5.ogg',
-									"Female Scream" = 'sound/misc/femalescream5.ogg',
-									"Vox Scream" = 'sound/misc/shriek1.ogg',
-									"Bike Horn" = 'sound/items/bikehorn.ogg'
+									"bass_drum_1"	= 'sound/items/bsign_1.ogg',
+									"bass_drum_2"	= 'sound/items/bsign_4.ogg',
+									"bass_drum_3"	= 'sound/items/bsign_6.ogg',
+									"slap_bass"		= 'sound/items/bsign_7.ogg',
+									"bongo"		= 'sound/items/bsign_2.ogg',
+									"ohyeah"	= 'sound/items/bsign_3.ogg',
+									"clap"	= 'sound/items/bsign_5.ogg',
+									"snare" = 'sound/items/bsign_8.ogg'
 									)
-	
 	//Dropshadows are safe, waves... might brutalize clients but they have a v limited amount of filters to use
 	var/list/filter_selection = list("Nothing",
 									"Dropshadow" = list("color" = "#1bf555"),
@@ -63,13 +64,13 @@ var/list/barsigns = list()
 											"letter_color" = "#1bf555",
 											"letter_size" = "12",
 											"sound_key" = "Nothing",
-											"sound_tone" = 40000,
+											"sound_tone" = 15000,
 											"sound_volume" = 50),
 									"2" = list("letter_message" = "THE BEST",
 											"letter_color" = "#f51b1b",
 											"letter_size" = "12",
 											"sound_key" = "Nothing",
-											"sound_tone" = 40000,
+											"sound_tone" = 15000,
 											"sound_volume" = 50))
 
 //Interval Mode Shit for Custom Barsigns
@@ -97,11 +98,10 @@ var/list/barsigns = list()
 	return attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_ghost(mob/user)
-	if(isAdminGhost(user))
-		attack_hand(user)
+	attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
-	if(!isAdminGhost(user))
+	if(!isAdminGhost(user) || !isAI(user))
 		if(!allowed(user))
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 			return
@@ -186,7 +186,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr))
+	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr) || isAI(usr))
 		var/mob/user = usr
 		
 		if(href_list["direct_select"])
@@ -283,7 +283,7 @@ var/list/barsigns = list()
 															"letter_color" = "#1bf555",
 															"letter_size" = "12",
 															"sound_key" = "Nothing",
-															"sound_tone" = 40000,
+															"sound_tone" = 15000,
 															"sound_volume" = 50)
 
 		if(href_list["set_message"])
@@ -412,6 +412,17 @@ var/list/barsigns = list()
 	desc = "ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4#*?"
 	pixel_x = 0
 	pixel_y = 0
+
+//You get actual annoying sounds If its emag'd
+/obj/structure/sign/double/barsign/emag_act(mob/user)
+	sound_selection["Rooster"] = 'sound/misc/6amRooster.wav'
+	sound_selection["Wolf"] = 'sound/misc/6pmWolf.wav'
+	sound_selection["Male Scream"] = 'sound/misc/malescream5.ogg'
+	sound_selection["Female Scream"] = 'sound/misc/femalescream5.ogg'
+	sound_selection["Vox Scream"] = 'sound/misc/shriek1.ogg'
+	sound_selection["Bike Horn"] = 'sound/items/bikehorn.ogg'
+
+	
 
 #undef PREMADE_SCREEN
 #undef CUSTOM_SCREEN
