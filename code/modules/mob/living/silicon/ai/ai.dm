@@ -537,10 +537,10 @@ var/list/ai_list = list()
 
 /mob/living/silicon/ai/bullet_act(var/obj/item/projectile/Proj)
 	if((ai_flags & COREFORTIFY) && Proj.damage_type == BURN)
-		return
+		return PROJECTILE_COLLISION_DEFAULT // Does nothing
 	..(Proj)
 	updatehealth()
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/ai/attack_alien(mob/living/carbon/alien/humanoid/M)
 	switch(M.a_intent)
