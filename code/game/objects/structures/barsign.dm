@@ -42,14 +42,14 @@ var/list/barsigns = list()
 //Custom Barsign Var shit
 	var/obj/effect/overlay/custom_barsign/ass = null
 	var/list/sound_selection = list("Nothing" = null,
-									"bass_drum_1"	= 'sound/items/bsign_1.ogg',
-									"bass_drum_2"	= 'sound/items/bsign_4.ogg',
-									"bass_drum_3"	= 'sound/items/bsign_6.ogg',
-									"slap_bass"		= 'sound/items/bsign_7.ogg',
-									"bongo"		= 'sound/items/bsign_2.ogg',
-									"ohyeah"	= 'sound/items/bsign_3.ogg',
-									"clap"	= 'sound/items/bsign_5.ogg',
-									"snare" = 'sound/items/bsign_8.ogg'
+									"bass_drum_1"	= 'sound/items/barsign/bsign_bassdrum_1.ogg',
+									"bass_drum_2"	= 'sound/items/barsign/bsign_bassdrum_2.ogg',
+									"bass_drum_3"	= 'sound/items/barsign/bsign_bassdrum_3.ogg',
+									"slap_bass"		= 'sound/items/barsign/bsign_slapbass.ogg',
+									"bongo"		= 'sound/items/barsign/bsign_bongo_1.ogg',
+									"ohyeah"	= 'sound/items/barsign/bsign_oh_yeah.ogg',
+									"clap"	= 'sound/items/barsign/bsign_clap.ogg',
+									"snare" = 'sound/items/barsign/bsign_snare.ogg'
 									)
 	//Dropshadows are safe, waves... might brutalize clients but they have a v limited amount of filters to use
 	var/list/filter_selection = list("Nothing",
