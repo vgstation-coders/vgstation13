@@ -214,7 +214,7 @@
 /obj/item/weapon/gun/energy/shotgun/examine(mob/user)
 	..()
 	if(is_holder_of(user, src) && !user.incapacitated())
-		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode.</span>")
+		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode. Toggle with alt-click.</span>")
 
 /obj/item/weapon/gun/energy/shotgun/attack_self(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())

@@ -488,6 +488,7 @@ var/global/list/alcatraz_stuff = list(
 	desc = "Depocketers were invented by thieves to read pocket contents and identify marks, then force them to drop those items for muggings. This one has been permanently peace-bonded so that it can only check pocket contents."
 	icon_state = "telebaton_1"
 	item_state = "telebaton_1"
+	w_class = W_CLASS_SMALL
 
 /obj/item/weapon/depocket_wand/attack(mob/living/M, mob/living/user)
 
@@ -509,6 +510,7 @@ var/global/list/alcatraz_stuff = list(
 
 
 #define VAMP_FLASH_CD 50
+#define VAMP_SCREAM_CD 600
 
 /obj/item/device/vampirehead
 	name = "shrunken vampire head"
@@ -516,8 +518,10 @@ var/global/list/alcatraz_stuff = list(
 	w_class = W_CLASS_TINY
 	icon_state = "vamphead0"
 	flags = HEAR | FPRINT
+	force = 7
 	var/obj/effect/decal/cleanable/blood/located_blood
-	var/last_used = 0
+	var/flash_last_used = 0
+	var/scream_last_used = 0
 
 /obj/item/device/vampirehead/New()
 	..()
@@ -592,6 +596,29 @@ var/global/list/alcatraz_stuff = list(
 			to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
 		return FALSE
 
+/obj/item/device/vampirehead/attack_self(mob/user)
+	if(!istype(user) || !genecheck(user))
+		return
+
+	if(scream_last_used + VAMP_SCREAM_CD > world.timeofday)
+		var/list/reject_phrases = list("Bah. You can't be serious.",
+										"Again? You work me harder than I beat my slaves.",
+										"Enough. I must recover, first.",
+										"Cease your incessant squeezing, mortal.",
+										"I am not a flashbang, you blithering idiot."
+										)
+		to_chat(user,"<B>[src]</B> [pick("murmurs","insults","mocks","groans","complains")], \"<span class='sinister'>[pick(reject_phrases)]</span>\"")
+		return
+
+	user.attack_log += "\[[time_stamp()]\] <font color='red'>Used the [name] to perform a vampire screech.</font>"
+	log_attack("<font color='red'>[key_name(user)] Used the [name] to perform a vampire screech.</font>")
+	for(var/obj/structure/window/W in view(1))
+		W.shatter()
+
+	playsound(user, 'sound/effects/creepyshriek.ogg', 100, 1)
+
+	scream_last_used = world.timeofday
+
 /obj/item/device/vampirehead/attack(mob/living/M as mob, mob/user as mob)
 	if(!user || !M) //sanity
 		return
@@ -599,7 +626,7 @@ var/global/list/alcatraz_stuff = list(
 	if(!genecheck(user))
 		return
 
-	if(last_used + VAMP_FLASH_CD > world.timeofday)
+	if(flash_last_used + VAMP_FLASH_CD > world.timeofday)
 		var/list/reject_phrases = list("Bah. You can't be serious.",
 										"Again? You work me harder than I beat my slaves.",
 										"Enough. I must recover, first.",
@@ -623,12 +650,10 @@ var/global/list/alcatraz_stuff = list(
 		return
 	var/mob/living/carbon/Subject = M
 
-	if(Subject.eyecheck() > 0)
-		return
 	Subject.Knockdown(Subject.eyecheck() * 5 * -1 +10)
 
 	visible_message("<span class='danger'>The eyes of [user]'s [name] emit a blinding flash toward [M]!</span>")
-	last_used = world.timeofday
+	flash_last_used = world.timeofday
 
 /obj/item/device/vampirehead/afterattack(atom/A, mob/user)
 	..()
@@ -644,8 +669,8 @@ var/global/list/alcatraz_stuff = list(
 /obj/item/weapon/autocuffer
 	name = "autocuffer"
 	desc = "An experimental prototype handcuff dispenser that mysteriously went missing from a research facility on Alcatraz VI."
-	icon = 'icons/obj/bureaucracy.dmi'
-	icon_state = "labeler0"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "autocuffer"
 	siemens_coefficient = 0
 	slot_flags = SLOT_BELT
 	w_class = W_CLASS_SMALL
