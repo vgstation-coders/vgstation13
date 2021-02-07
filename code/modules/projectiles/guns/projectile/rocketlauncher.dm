@@ -79,15 +79,14 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/suicide_act(var/mob/user)
 	if(!src.process_chambered()) //No rocket in the rocket launcher
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
-		return(SUICIDE_ACT_BRUTELOSS)
+		return SUICIDE_ACT_BRUTELOSS
 	else //Needed to get that shitty default suicide_act out of the way
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
-		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, -1, 1, 4, 8)
-			if(src) //Is the rocket launcher somehow still here ?
-				qdel(src) //This never happened
-			return(SUICIDE_ACT_BRUTELOSS)
-	return
+		sleep(1 SECONDS) //RUN YOU IDIOT, RUN
+		explosion(src.loc, -1, 1, 4, 8)
+		if(src) //Is the rocket launcher somehow still here ?
+			qdel(src) //This never happened
+		return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nanotrasen
 	name = "rocket launcher"
@@ -149,13 +148,12 @@
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/suicide_act(var/mob/user)
 	if(!loaded)
 		user.visible_message("<span class='danger'>[user] jams down \the [src]'s trigger before noticing it isn't loaded and starts bashing \his head in with it! It looks like \he's trying to commit suicide.</span>")
-		return(SUICIDE_ACT_BRUTELOSS)
+		return SUICIDE_ACT_BRUTELOSS
 	else
 		user.visible_message("<span class='danger'>[user] fiddles with \the [src]'s safeties and suddenly aims it at \his feet! It looks like \he's trying to commit suicide.</span>")
-		spawn(10) //RUN YOU IDIOT, RUN
-			explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
-			return(SUICIDE_ACT_BRUTELOSS)
-	return
+		sleep(1 SECONDS) //RUN YOU IDIOT, RUN
+		explosion(src.loc, 1, 3, 5, 8) //Using the actual rocket damage, instead of the very old, super nerfed value
+		return SUICIDE_ACT_BRUTELOSS
 
 /obj/item/weapon/gun/projectile/rocketlauncher/nikita/attackby(var/obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/weapon/card/emag) && !emagged)

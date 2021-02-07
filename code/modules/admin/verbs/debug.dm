@@ -75,7 +75,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
 			message_admins("[key_name(usr)] used atom proc call on the db controller.")
 			log_admin("[key_name(usr)] used atom proc call on the db controller.")
-			return FALSE
+			return
 
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
@@ -274,10 +274,11 @@ Pressure: [env.pressure]"}
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		log_admin("[key_name(src)] has alienized [M.key].")
+		var/mob/living/carbon/human/H = M
+		log_admin("[key_name(src)] has alienized [H.key].")
 		spawn(10)
 			feedback_add_details("admin_verb","MKAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-			return M:Alienize()
+			H.Alienize()
 
 		log_admin("[key_name(usr)] made [key_name(M)] into an alien.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into an alien.</span>", 1)
@@ -292,10 +293,12 @@ Pressure: [env.pressure]"}
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		log_admin("[key_name(src)] has slimeized [M.key].")
+		var/mob/living/carbon/human/H = M
+		log_admin("[key_name(src)] has slimeized [H.key].")
 		spawn(10)
 			feedback_add_details("admin_verb","MKMET") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-			return M:slimeize()
+			H.slimeize()
+
 		log_admin("[key_name(usr)] made [key_name(M)] into a slime.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a slime.</span>", 1)
 	else
