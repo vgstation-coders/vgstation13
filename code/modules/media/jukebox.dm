@@ -216,9 +216,8 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/examine(mob/user)
 	..()
 	if (current_song)
-		var/datum/song_info/song = playlist[current_song]
-		if (!song.emagged)
-			to_chat("<span class='info'>It is playing [song.display()].</span>")
+		if (!current_song_info.emagged)
+			to_chat("<span class='info'>It is playing [current_song_info.display()].</span>")
 		else
 			to_chat("<span class='info'>What is that hellish noise?.</span>")
 	else
@@ -734,12 +733,12 @@ var/global/list/loopModeNames=list(
 	if(current_song > playlist.len)
 		current_song = 0
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		media_finish_time = world.time + song.length
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""
@@ -895,12 +894,12 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		media_finish_time = world.time + song.length
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""

@@ -14,10 +14,21 @@ var/global/media_receivers=list()
 	..()
 	connect_frequency()
 
-/obj/machinery/media/receiver/proc/receive_broadcast(var/url="", var/start_time=0, var/finish_time=0)
+/obj/machinery/media/jukebox/examine(mob/user)
+	..()
+	if (current_song_info)
+		if (!current_song_info.emagged)
+			to_chat("<span class='info'>It is playing [current_song_info.display()].</span>")
+		else
+			to_chat("<span class='info'>What is that hellish noise?.</span>")
+	else
+		to_chat("<span class='info'>It is currently silent.</span>")
+
+/obj/machinery/media/receiver/proc/receive_broadcast(var/url="", var/start_time=0, var/finish_time=0, var/datum/song_info/song_info=null)
 	media_url = url
 	media_start_time = start_time
 	media_finish_time = finish_time
+	current_song_info = song_info
 	update_music()
 
 /obj/machinery/media/receiver/proc/connect_frequency()
