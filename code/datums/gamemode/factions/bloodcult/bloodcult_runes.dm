@@ -510,16 +510,21 @@
 	//Add word to a rune if there is one, otherwise create one. However, there can be no more than 3 words.
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.
 
+	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
 		var/datum/runeword/rune_typecast = word
-		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
+		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.//WHYYYYYYYYYYY
 			rune = new /obj/effect/rune/blood_cult(T)
+			newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
 		return 0
 
 	if (caster)
+		if (newrune)
+			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+			message_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
 		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)

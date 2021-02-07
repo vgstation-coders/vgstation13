@@ -273,6 +273,8 @@
 				nail.stick_to(A)
 				var/mob/living/L = A
 				L.take_overall_damage(damage,0)
+				to_chat(L, "<span class='warning'>\The [src] stabs your body, and a pointy red nail appears in its place, seemingly anchoring your body to this point in space.</span>")
+				to_chat(L, "<span class='danger'>Resist or click the nail to dislodge it.</span>")
 			else if(loc)
 				var/turf/T = get_turf(src)
 				nail.stick_to(T,get_dir(src,A))

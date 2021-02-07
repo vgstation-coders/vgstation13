@@ -448,7 +448,18 @@
 /spell/aoe_turf/conjure/path_entrance/choose_targets(mob/user = usr)
 	return list(get_turf(user))
 
+/spell/aoe_turf/conjure/path_entrance/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
 /spell/aoe_turf/conjure/path_entrance/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
 	var/datum/runeset/rune_set = global_runesets["blood_cult"]
 	write_rune_word(R.loc, rune_set.words["travel"])
 	write_rune_word(R.loc, rune_set.words["self"])
@@ -476,7 +487,18 @@
 /spell/aoe_turf/conjure/path_exit/choose_targets(mob/user = usr)
 	return list(get_turf(user))
 
+/spell/aoe_turf/conjure/path_exit/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
 /spell/aoe_turf/conjure/path_exit/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
 	var/datum/runeset/rune_set = global_runesets["blood_cult"]
 	write_rune_word(R.loc, rune_set.words["travel"])
 	write_rune_word(R.loc, rune_set.words["other"])
