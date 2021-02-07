@@ -11,6 +11,7 @@
 	var/list/required_modules = list()
 	var/list/required_upgrades = list()
 	var/list/modules_to_add = list()
+	var/list/modules_to_remove = list() //Use this if you want to replace or disable items that the borg might already have
 	var/multi_upgrades = FALSE
 	w_type = RECYK_ELECTRONIC
 
@@ -62,6 +63,13 @@
 		for(var/module_to_add in modules_to_add)
 			if(!locate_component(module_to_add, R))
 				R.module.modules += new module_to_add(R.module)
+
+	if(modules_to_remove.len)
+		for(var/module_to_remove in modules_to_remove)
+			var/delete_object = locate_component(module_to_remove, R)
+			if(delete_object)
+				R.module.modules -= delete_object
+				qdel(delete_object)
 
 	to_chat(user, "<span class='notice'>You successfully apply \the [src] to \the [R].</span>")
 	user.drop_item(src, R)
@@ -225,6 +233,16 @@
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
+
+/obj/item/borg/upgrade/medical/surgery
+	name = "medical cyborg advanced surgery pack"
+	desc = "Enables a medical cyborg to have advanced surgery tools."
+	modules_to_add = list(/obj/item/weapon/scalpel/laser/tier2, /obj/item/weapon/circular_saw/plasmasaw,
+	/obj/item/weapon/retractor/manager, /obj/item/weapon/hemostat/pico, /obj/item/weapon/surgicaldrill/diamond,
+	/obj/item/weapon/bonesetter/bone_mender, /obj/item/weapon/FixOVein/clot)
+	modules_to_remove = list(/obj/item/weapon/scalpel, /obj/item/weapon/hemostat, /obj/item/weapon/retractor,
+	/obj/item/weapon/circular_saw, /obj/item/weapon/cautery, /obj/item/weapon/surgicaldrill, /obj/item/weapon/bonesetter,
+	/obj/item/weapon/FixOVein)
 
 /obj/item/borg/upgrade/medical/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
