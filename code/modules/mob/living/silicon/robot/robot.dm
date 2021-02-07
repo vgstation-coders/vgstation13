@@ -487,7 +487,7 @@
 			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/robot/emp_act(severity)
 	..()

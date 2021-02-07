@@ -155,5 +155,5 @@
 			Bruise()
 
 /mob/living/simple_animal/hostile/mushroom/bullet_act()
-	..()
+	. = ..()
 	Bruise()

@@ -388,14 +388,14 @@
 		return 0
 
 /mob/living/simple_animal/mouse/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(!Proj)
 		return
 	var/mob/living/simple_animal/mouse/M = src
 	if((Proj.stun + Proj.weaken + Proj.paralyze + Proj.agony) > M.maxHealth)
 		to_chat(M, "<span class='warning'>The force of the projectile completely overwhelms your tiny body...</span>")
 		M.splat()
-		return 0
+		return PROJECTILE_COLLISION_DEFAULT
 
 /*
  * Common mouse types

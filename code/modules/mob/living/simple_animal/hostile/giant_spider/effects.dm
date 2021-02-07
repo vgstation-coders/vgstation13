@@ -63,7 +63,7 @@
 
 
 /obj/effect/spider/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	health -= Proj.damage
 	healthcheck()
 
@@ -109,7 +109,7 @@
 	pixel_x = rand(3,-3) * PIXEL_MULTIPLIER
 	pixel_y = rand(3,-3) * PIXEL_MULTIPLIER
 	processing_objects.Add(src)
-	
+
 /obj/effect/spider/eggcluster/Destroy()
 	processing_objects.Remove(src)
 	..()

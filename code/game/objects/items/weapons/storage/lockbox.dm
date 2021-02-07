@@ -531,7 +531,7 @@
 		if(!istype(P, /obj/item/projectile/beam))
 			P.reflected = 1
 			P.rebound(src)
-		return -1
+		return PROJECTILE_COLLISION_BLOCKED
 	react()
 	return ..()
 
