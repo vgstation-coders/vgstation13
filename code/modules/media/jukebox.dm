@@ -213,6 +213,17 @@ var/global/list/loopModeNames=list(
 		return
 	attack_hand(user)
 
+/obj/machinery/media/jukebox/examine(mob/user)
+	..()
+	if (current_song)
+		var/datum/song_info/song = playlist[current_song]
+		if (!song.emagged)
+			to_chat("<span class='info'>It is playing [song.display()].</span>")
+		else
+			to_chat("<span class='info'>What is that hellish noise?.</span>")
+	else
+		to_chat("<span class='info'>It is currently silent.</span>")
+
 /obj/machinery/media/jukebox/power_change()
 	..()
 	if(emagged && !(stat & (NOPOWER|BROKEN)) && !any_power_cut())
