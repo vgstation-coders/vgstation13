@@ -524,7 +524,7 @@
 	if (caster)
 		if (newrune)
 			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
-			message_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
 		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
