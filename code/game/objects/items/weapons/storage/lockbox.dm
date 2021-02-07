@@ -540,7 +540,18 @@
 	visible_message("<span class='danger'>\The [src] displaces itself with its reactive teleport system!</span>")
 	playsound(src, 'sound/effects/teleport.ogg', 50, 1)
 
+/obj/item/weapon/storage/lockbox/advanced/energyshotgun
+	name = "advanced lockbox (energy shotgun)"
+	req_access = list(access_security)
+
 /obj/item/weapon/storage/lockbox/advanced/energyshotgun/New()
 	..()
-	req_one_access = list(access_security)
 	new /obj/item/weapon/gun/energy/shotgun(src)
+
+/obj/item/weapon/storage/lockbox/advanced/ricochettaser
+	name = "advanced lockbox (ricochet taser)"
+	req_access = list(access_security)
+
+/obj/item/weapon/storage/lockbox/advanced/ricochettaser/New()
+	..()
+	new /obj/item/weapon/gun/energy/taser/ricochet(src)
