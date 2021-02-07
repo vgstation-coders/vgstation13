@@ -424,6 +424,8 @@
 		H.add_spell(new /spell/aoe_turf/conjure/forcewall/mime, "grey_spell_ready")
 		H.add_spell(new /spell/targeted/oathbreak/)
 		mob_rename_self(H,"mime")
+		H.add_language(LANGUAGE_CLOWN)
+		to_chat(H, "<span class = 'notice'>The Clown-Mime war may have ended, but you were still taught their language. You can understand clownspeak as well as speak it, but a Mime wouldn't stoop so low, right?</span>")
 		if (H.mind)
 			H.mind.miming = MIMING_OUT_OF_CHOICE
 

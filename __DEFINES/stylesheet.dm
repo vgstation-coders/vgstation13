@@ -83,7 +83,7 @@ h1.alert, h2.alert		{color: #000000;}
 .slime					{color: #34A7Af;}
 .orange					{color: #ffa500;}
 .maroon					{color: #800000;}
-.clown 					{color: #FBFF35; font-family: Comic Sans MS, Comic Sans, cursive;}
+.clown 					{color: #ff9fef; font-family: Comic Sans MS, Comic Sans, cursive;}
 /* If you're adding a new class here, add it to browserOutput.css too! */
 
 /* /vg/ */
