@@ -14,7 +14,7 @@ var/global/media_receivers=list()
 	..()
 	connect_frequency()
 
-/obj/machinery/media/jukebox/examine(mob/user)
+/obj/machinery/media/receiver/examine(mob/user)
 	..()
 	if (current_song_info)
 		if (!current_song_info.emagged)
