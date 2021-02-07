@@ -711,6 +711,8 @@ a {
 
 //Return true if thrown object misses
 /obj/PreImpact(atom/movable/A, speed)
+	if(flow_flags & ON_BORDER) //If the object should hit this, it will just by normal collision detection.
+		return ..()
 	if(density && !throwpass)
 		return FALSE
 	return TRUE
