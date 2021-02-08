@@ -270,6 +270,17 @@
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
+	
+/mob/living/simple_animal/construct/wraith/mode()
+	set name = "Ethereal Jaunt"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	
+	var/mob/living/simple_animal/construct/wraith/W = src
+	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
+	E.perform(W)
+	return 1
 
 
 /////////////////////////////Artificer/////////////////////////
