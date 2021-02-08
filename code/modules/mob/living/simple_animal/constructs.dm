@@ -278,7 +278,7 @@
 	set hidden = TRUE
 	
 	var/mob/living/simple_animal/construct/wraith/W = src
-	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
+	var/spell/targeted/ethereal_jaunt/E = locate() in W.construct_spells
 	E.perform(W)
 	return 1
 
