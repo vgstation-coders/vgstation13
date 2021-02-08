@@ -22,11 +22,11 @@
 /obj/item/weapon/storage/bible/suicide_act(mob/living/user)
 	user.visible_message("<span class='danger'>[user] is farting on \the [src]! It looks like \he's trying to commit suicide!</span>")
 	user.emote("fart")
-	spawn(10) //Wait for it
-		user.fire_stacks += 5
-		user.IgniteMob()
-		user.audible_scream()
-		return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
+	sleep(1 SECONDS) //Wait for it
+	user.fire_stacks += 5
+	user.IgniteMob()
+	user.audible_scream()
+	return SUICIDE_ACT_FIRELOSS //Set ablaze and burned to crisps
 
 //"Special" Bible with a little gift on introduction
 /obj/item/weapon/storage/bible/booze
