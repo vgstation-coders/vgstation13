@@ -283,6 +283,15 @@
 	icon_state = "pestspray"
 	pest_kill_str = 6
 
+/obj/item/weapon/plantspray/pests/attack(mob/living/M, mob/living/user, def_zone, originator)
+	if(..() && isinsectoid(M))
+		var/mob/living/carbon/human/H = M
+		visible_message("<span class='warning'>[user] sprays [H] with \the [src]!</span>")
+		to_chat("span_class='danger'>[user] sprayed you with \the [src]! It burns!</span>")
+		H.adjustFireLoss(15)
+		H.audible_scream()
+		use(1)
+
 /obj/item/weapon/plantspray/pests/proc/use(amount = 1)
 	if(pest_kill_str >= amount)
 		pest_kill_str -= amount
