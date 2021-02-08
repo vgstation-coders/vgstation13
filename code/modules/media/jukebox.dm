@@ -734,6 +734,7 @@ var/global/list/loopModeNames=list(
 		current_song = 0
 	if(current_song && playing)
 		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
 		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
@@ -743,6 +744,7 @@ var/global/list/loopModeNames=list(
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 	..()
 
 /obj/machinery/media/jukebox/proc/stop_playing()
