@@ -101,7 +101,7 @@ var/list/barsigns = list()
 	attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
-	if(!isAdminGhost(user) || !isAI(user) && !allowed(user))
+	if((!isAdminGhost(user) || !isAI(user)) && !allowed(user))
 		to_chat(user, "<span class='warning'>Access denied.</span>")
 		return
 
@@ -185,7 +185,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr) || isAI(usr) || allowed(usr))
+	if(in_range(src, usr) && isliving(usr) && allowed(usr) || isAdminGhost(usr) || isAI(usr))
 		var/mob/user = usr
 		
 		if(href_list["direct_select"])
