@@ -103,6 +103,7 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
+<<<<<<< HEAD
 	if(!mover)
 		return 1
 	// First, make sure it can leave its square
@@ -119,44 +120,16 @@
 				mover.to_bump(obstacle, 1)
 				return 0
 	return 1
+=======
+	return TRUE
+>>>>>>> da8a8ff543 (This stuff)
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
 	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
-	if (!mover)
-		return 1
-
-	var/list/large_dense = list()
-	//Next, check objects to block entry that are on the border
-	for(var/atom/movable/border_obstacle in src)
-		if(border_obstacle.flow_flags&ON_BORDER)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>Target(border): checking Cross of [border_obstacle]"*/
-			if(!border_obstacle.Cross(mover, mover.loc) && (forget != border_obstacle) && mover != border_obstacle)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>ENTER</span>Target(border): We are bumping into [border_obstacle]"*/
-				mover.to_bump(border_obstacle, 1)
-				return 0
-		else
-			large_dense += border_obstacle
-
-	//Then, check the turf itself
-	if (!src.Cross(mover, src))
-		mover.to_bump(src, 1)
-		return 0
-
-	//Finally, check objects/mobs to block entry that are not on the border
-	for(var/atom/movable/obstacle in large_dense)
-		/*if(ismob(mover) && mover:client)
-			world << "<span class='danger'>ENTER</span>target(large_dense): [mover] checking Cross of [obstacle]"*/
-		if(!obstacle.Cross(mover, mover.loc) && (forget != obstacle) && mover != obstacle)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>ENTER</span>target(large_dense): checking: We are bumping into [obstacle]"*/
-			mover.to_bump(obstacle, 1)
-			return 0
-	return 1 //Nothing found to block so return success!
+	return Cross(mover, src)
 
 
 /turf/Entered(atom/movable/A as mob|obj, atom/OldLoc)
