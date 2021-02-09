@@ -279,8 +279,9 @@
 	
 	var/mob/living/simple_animal/construct/wraith/W = src
 	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
-	E.perform(W)
-	E.connected_button.update_charge(1)
+	if(E)
+		E.perform(W)
+		E.connected_button.update_charge(1)
 
 
 /////////////////////////////Artificer/////////////////////////
