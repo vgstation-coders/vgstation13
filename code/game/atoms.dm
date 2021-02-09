@@ -40,7 +40,7 @@ var/global/list/ghdel_profiling = list()
 	var/ignoreinvert = 0
 	var/timestopped
 
-	appearance_flags = TILE_BOUND|LONG_GLIDE
+	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 
 	var/slowdown_modifier //modified on how fast a person can move over the tile we are on, see turf.dm for more info
 	/// Last name used to calculate a color for the chatmessage overlays

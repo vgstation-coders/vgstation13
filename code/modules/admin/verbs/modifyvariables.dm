@@ -209,12 +209,6 @@ var/list/forbidden_varedit_object_types = list(
 			else
 				to_chat(user, "Unknown type: [selected_type]")
 
-	switch(edited_variable)
-		if("bound_width", "bound_height", "bound_x", "bound_y")
-			if(new_value % world.icon_size) //bound_width/height must be a multiple of 32, otherwise movement breaks - BYOND issue
-				to_chat(usr, "[edited_variable] can only be a multiple of [world.icon_size]!")
-				return
-
 	if(edited_datum && edited_variable)
 		if(isdatum(edited_datum) && edited_datum.variable_edited(edited_variable, old_value, new_value))
 		//variable_edited() can block the edit in case there's special behavior for a variable (for example, updating lights after they're changed)

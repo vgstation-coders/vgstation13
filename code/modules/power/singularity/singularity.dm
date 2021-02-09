@@ -28,7 +28,7 @@ var/list/global_singularity_pool
 	var/last_movement_dir = 0 //Log the singularity's last movement to produce biased movement (singularity prefers constant movement due to inertia)
 	var/last_failed_movement = 0 //Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing.
 	var/last_warning
-	appearance_flags = LONG_GLIDE
+	appearance_flags = LONG_GLIDE|TILE_MOVER
 	var/chained = 0 //Adminbus chain-grab
 	var/modifier = "" //for memes
 
@@ -691,7 +691,7 @@ var/list/global_singularity_pool
 	var/democracy_cooldown = 120
 	var/list/inputs = list("UP","DOWN","LEFT","RIGHT")
 	var/deadchat_active = 1
-	appearance_flags = 0
+	appearance_flags = TILE_MOVER
 
 /obj/machinery/singularity/deadchat_controlled/Destroy()
 	..()

@@ -15,7 +15,7 @@ var/global/list/blood_list = list()
 	random_icon_states = list("mfloor1", "mfloor2", "mfloor3", "mfloor4", "mfloor5", "mfloor6", "mfloor7")
 	plane = ABOVE_TURF_PLANE
 	layer = BLOOD_LAYER
-	appearance_flags = TILE_BOUND|LONG_GLIDE
+	appearance_flags = TILE_BOUND|LONG_GLIDE|TILE_MOVER
 	throwforce = 0
 	var/base_icon = 'icons/effects/blood.dmi'
 
