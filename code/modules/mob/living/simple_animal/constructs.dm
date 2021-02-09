@@ -218,15 +218,6 @@
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
 
-/mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(O.force && O.force < 11)
-		user.delayNextAttack(8)
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
-	else
-		..()
-
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		var/reflectchance = 80 - round(P.damage/3)
