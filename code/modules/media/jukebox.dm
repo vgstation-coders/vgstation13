@@ -215,11 +215,11 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/examine(mob/user)
 	..()
-	if (current_song)
+	if (current_song_info)
 		if (!current_song_info.emagged)
 			to_chat(user, "<span class='info'>It is playing [current_song_info.display()].</span>")
 		else
-			to_chat(user, "<span class='info'>What is that hellish noise?.</span>")
+			to_chat(user, "<span class='info'>What is that hellish noise?</span>")
 	else
 		to_chat(user, "<span class='info'>It is currently silent.</span>")
 
@@ -897,6 +897,7 @@ var/global/list/loopModeNames=list(
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)
 		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
 		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
@@ -906,6 +907,7 @@ var/global/list/loopModeNames=list(
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 
 	// Send update to clients.
 	for(var/mob/M in mob_list)

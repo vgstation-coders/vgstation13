@@ -20,7 +20,7 @@ var/global/media_receivers=list()
 		if (!current_song_info.emagged)
 			to_chat(user, "<span class='info'>It is playing [current_song_info.display()].</span>")
 		else
-			to_chat(user, "<span class='info'>What is that hellish noise?.</span>")
+			to_chat(user, "<span class='info'>What is that hellish noise?</span>")
 	else
 		to_chat(user, "<span class='info'>It is currently silent.</span>")
 
