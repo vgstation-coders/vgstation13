@@ -40,7 +40,7 @@ var/list/barsigns = list()
 	var/current_position = 1
 
 //Custom Barsign Var shit
-	var/obj/effect/overlay/custom_barsign/ass = null
+	var/obj/effect/overlay/custom_barsign/viscon = null
 	var/list/sound_selection = list("Nothing" = null,
 									"bass_drum_1"	= 'sound/items/barsign/bsign_bassdrum_1.ogg',
 									"bass_drum_2"	= 'sound/items/barsign/bsign_bassdrum_2.ogg',
@@ -60,7 +60,7 @@ var/list/barsigns = list()
 //Basically its a list, each index number is the current tick,
 //So you could make a shitty song I guess.
 //Also If you are asking why the numbers are strings, then I think its safer/less problematic(?)
-	var/list/interval_queue = list("1" = list("letter_message" = "JTGSZ",
+	var/list/interval_queue = list("1" = list("letter_message" = "BAR",
 											"letter_color" = "#1bf555",
 											"letter_size" = "12",
 											"sound_key" = "Nothing",
@@ -81,11 +81,11 @@ var/list/barsigns = list()
 
 
 /obj/structure/sign/double/barsign/Destroy()
-	if(ass)
-		vis_contents -= ass
-		ass.filters = null
-		qdel(ass)
-		ass = null
+	if(viscon)
+		vis_contents -= viscon
+		viscon.filters = null
+		qdel(viscon)
+		viscon = null
 	current_preview = null
 	if(interval_mode)
 		processing_objects -= src
@@ -101,10 +101,9 @@ var/list/barsigns = list()
 	attack_hand(user)
 
 /obj/structure/sign/double/barsign/attack_hand(mob/user)
-	if(!isAdminGhost(user) || !isAI(user))
-		if(!allowed(user))
-			to_chat(user, "<span class='warning'>Access denied.</span>")
-			return
+	if(!isAdminGhost(user) || !isAI(user) && !allowed(user))
+		to_chat(user, "<span class='warning'>Access denied.</span>")
+		return
 
 	if(!barsigns.len)
 		for(var/bartype in typesof(/datum/barsign))
@@ -116,8 +115,8 @@ var/list/barsigns = list()
 			current_preview = barsigns[fuckyou]
 			break
 	
-	if(!ass)
-		ass = new()
+	if(!viscon)
+		viscon = new()
 
 	barsign_menu(user)
 
@@ -186,7 +185,7 @@ var/list/barsigns = list()
 /obj/structure/sign/double/barsign/Topic(href, href_list)
 	if(..())
 		return
-	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr) || isAI(usr))
+	if(in_range(src, usr) && isliving(usr) || isAdminGhost(usr) || isAI(usr) || allowed(usr))
 		var/mob/user = usr
 		
 		if(href_list["direct_select"])
@@ -238,11 +237,11 @@ var/list/barsigns = list()
 						desc = "It displays \"[name]\"."					
 				if("custom_screen")
 					icon_state = "kustom"
-					vis_contents += ass
-					ass.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
-					ass.maptext_height = 29
-					ass.maptext_x = 4
-					ass.maptext_y = 4
+					vis_contents += viscon
+					viscon.maptext_width = 62 //Yeah guess what, it doesn't exit the actual icon
+					viscon.maptext_height = 29
+					viscon.maptext_x = 4
+					viscon.maptext_y = 4
 					if(interval_mode)
 						if(!already_fired)
 							already_fired = TRUE
@@ -251,7 +250,7 @@ var/list/barsigns = list()
 						interval_ticker = 0
 						var/string = interval_queue["1"]["letter_message"]
 						if(string)
-							ass.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
+							viscon.maptext = "<span style=\"color:[interval_queue["1"]["letter_color"]];font-size:[interval_queue["1"]["letter_size"]]px;\">[interval_queue["1"]["letter_message"]]</span>"
 		
 		if(href_list["set_filter"])
 			switch(href_list["set_filter"])
@@ -260,16 +259,16 @@ var/list/barsigns = list()
 					if(picked_filter)
 						current_filter = picked_filter
 				if("Nothing")
-					ass.filters = null //SPECIAL LIST, IT CANNOT BE CUT NOOOOOOOOO
+					viscon.filters = null //SPECIAL LIST, IT CANNOT BE CUT NOOOOOOOOO
 				if("Dropshadow")
-					if(ass.filters.len <= MAX_FILTER_LIMIT)
-						ass.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
+					if(viscon.filters.len <= MAX_FILTER_LIMIT)
+						viscon.filters += filter(type="drop_shadow", x=0, y=0, size=3, offset=2, color="[filter_selection["Dropshadow"]["color"]]")
 				if("dshadow_color")
 					var/colorhex = input(user, "Choose your dropshadow color:", "Sign Color Selection",filter_selection["Dropshadow"]["color"]) as color|null
 					if(colorhex)
 						filter_selection["Dropshadow"]["color"] = colorhex					
 				if("Waves")
-					if(ass.filters.len <= MAX_FILTER_LIMIT)
+					if(viscon.filters.len <= MAX_FILTER_LIMIT)
 						summon_shitty_example_waves()
 
 		if(href_list["delete_block"])
@@ -352,7 +351,7 @@ var/list/barsigns = list()
 	var/check_sound = sound_selection["[interval_queue["[interval_ticker]"]["sound_key"]]"]
 	if(check_sound)
 		playsound(src, check_sound, interval_queue["[interval_ticker]"]["sound_volume"], 1, frequency = interval_queue["[interval_ticker]"]["sound_tone"])
-	ass.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
+	viscon.maptext = "<span style=\"color:[interval_queue["[interval_ticker]"]["letter_color"]];font-size:[interval_queue["[interval_ticker]"]["letter_size"]]px;\">[interval_queue["[interval_ticker]"]["letter_message"]]</span>"
 	if(interval_ticker >= interval_queue.len)
 		interval_ticker = 0
 
@@ -371,7 +370,7 @@ var/list/barsigns = list()
 	Don't hate on me, its literally the example for waves in the byond ref
 */
 /obj/structure/sign/double/barsign/proc/summon_shitty_example_waves()
-	var/start = ass.filters.len
+	var/start = viscon.filters.len
 	var/X
 	var/Y
 	var/rsq
@@ -386,11 +385,11 @@ var/list/barsigns = list()
 		while(rsq<100 || rsq>900)   // keep trying if we don't like the numbers
 		// keep distortion (size) small, from 0.5 to 3 pixels
 		// choose a random phase (offset)
-		ass.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
+		viscon.filters += filter(type="wave", x=X, y=Y, size=rand()*2.5+0.5, offset=rand())
 	for(i=1, i<=7, ++i)
 		// animate phase of each wave from its original phase to phase-1 and then reset;
 		// this moves the wave forward in the X,Y direction
-		waves = ass.filters[start+i]
+		waves = viscon.filters[start+i]
 		animate(waves, offset=waves:offset, time=0, loop=-1, flags=ANIMATION_PARALLEL)
 		animate(offset=waves:offset-1, time=rand()*20+10)
 
