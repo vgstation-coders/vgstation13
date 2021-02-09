@@ -414,3 +414,14 @@
 
 			message_admins("Admin [key_name_admin(usr)] has talked with the Voice of Nar-Sie.")
 			log_narspeak("[key_name(usr)] Voice of Nar-Sie (privately to [mob.real_name]): [message]")
+
+/datum/role/cultist/chief
+	id = CHIEF_CULTIST
+	name = "Chief cultist"
+	logo_state = "cult-chief-logo"
+
+/datum/role/cultist/chief/Greet(var/greeting,var/custom)
+	. = ..()
+	if (greeting)
+		to_chat(antag.current, "<span class='notice'>You are the chief cultist. You have been chosen by Nar-Sie to lead this cult to victory. Coordinate with your fellow acolytes, establish a plan, construct a base. Tear down the veil.</span>")
+		to_chat(antag.current, "<span class='notice'>You may speak with your fellow cultists by using ':x'.</span>")

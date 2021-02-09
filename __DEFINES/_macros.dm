@@ -251,7 +251,11 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
+
+#define isnewcultist(H) (iscultist(H) || ischiefcultist(H))
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
