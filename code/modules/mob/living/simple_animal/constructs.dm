@@ -272,15 +272,15 @@
 	return 1.5
 	
 /mob/living/simple_animal/construct/wraith/mode()
-	set name = "Ethereal Jaunt"
+	set name = "Activate Held Object"
 	set category = "IC"
 	set src = usr
 	set hidden = TRUE
 	
 	var/mob/living/simple_animal/construct/wraith/W = src
-	var/spell/targeted/ethereal_jaunt/E = locate() in W.construct_spells
+	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
 	E.perform(W)
-	return 1
+	E.connected_button.update_charge(1)
 
 
 /////////////////////////////Artificer/////////////////////////
