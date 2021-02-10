@@ -98,3 +98,9 @@
 	name = "The Hungry Bug"
 	icon = "hungrybug"
 	desc = "Stop by and enjoy some of the Hole's famous gyoza!"
+
+/datum/barsign/vg/paddys
+	name = "Paddy's Pub"
+	icon = "paddyspub"
+	desc = "Let the record show, the greatest place to go is that bar called Paddy's Pub!"
+
