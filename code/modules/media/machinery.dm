@@ -11,6 +11,8 @@
 	var/list/obj/machinery/media/transmitter/hooked = list()
 	var/exclusive_hook=null // Disables output to the room
 
+	var/datum/song_info/current_song_info = null
+
 	// Media system autolink.
 	id_tag = "???"
 
@@ -32,7 +34,7 @@
 	// Broadcasting shit
 	for(var/obj/machinery/media/transmitter/T in hooked)
 //		testing("[src] Writing media to [T].")
-		T.broadcast(media_url,media_start_time, media_finish_time)
+		T.broadcast(media_url,media_start_time, media_finish_time, current_song_info)
 
 	if(exclusive_hook)
 		disconnect_media_source() // Just to be sure.
