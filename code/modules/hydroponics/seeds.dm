@@ -756,7 +756,7 @@
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris)
 	mutants = list("ambrosiadeus")
 	harvest_repeat = 1
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1))
 
 	lifespan = 60
 	maturation = 6
@@ -778,7 +778,7 @@
 	production = 6
 	yield = 6
 	potency = 5
-	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10))
+	chems = list(NUTRIMENT = list(1), MESCALINE = list(1,8), TANNIC_ACID = list(1,8,1), OPIUM = list(1,10,1), SOLANINE = list(1,5), SPIRITBREAKER = list(10),  CYTISINE = list(1))
 
 
 /datum/seed/ambrosia/deus
@@ -788,7 +788,7 @@
 	plant_dmi = 'icons/obj/hydroponics/ambrosiadeus.dmi'
 	products = list(/obj/item/weapon/reagent_containers/food/snacks/grown/ambrosiavulgaris/deus)
 	mutants = null
-	chems = list(NUTRIMENT = list(1), OPIUM = list(1,8), CYTISINE = list(1), COCAINE = list(1,10,1), MESCALINE = list(1,10))
+	chems = list(NUTRIMENT = list(1), PHYTOCARISOL = list(1,8), KATHALAI = list(1,8), COCAINE = list(1,10,1), MESCALINE = list(1,10))
 
 //Mushrooms/varieties.
 /datum/seed/mushroom
