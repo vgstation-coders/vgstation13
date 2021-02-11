@@ -273,7 +273,7 @@
 				nail.stick_to(A)
 				var/mob/living/L = A
 				L.take_overall_damage(damage,0)
-				to_chat(L, "<span class='warning'>\The [src] stabs your body, and a pointy red nail appears in its place, seemingly anchoring your body to this point in space.</span>")
+				to_chat(L, "<span class='warning'>\The [src] stabs your body, sticking you in place.</span>")
 				to_chat(L, "<span class='danger'>Resist or click the nail to dislodge it.</span>")
 			else if(loc)
 				var/turf/T = get_turf(src)
@@ -347,21 +347,9 @@
 	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
 	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
 	var/turf/T = get_turf(A)
-	loc = T
 	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
 
-	if(isturf(A))
-		switch(side)
-			if(NORTH)
-				pixel_y = WORLD_ICON_SIZE/2
-			if(SOUTH)
-				pixel_y = -WORLD_ICON_SIZE/2
-			if(EAST)
-				pixel_x = WORLD_ICON_SIZE/2
-			if(WEST)
-				pixel_x = -WORLD_ICON_SIZE/2
-
-	else if(isliving(A) && !isspace(T))
+	if(isliving(A) && !isspace(T))//can't nail people down unless there's a turf to nail them to.
 		stuck_to = A
 		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
 		lock_atom(A, /datum/locking_category/buckle)

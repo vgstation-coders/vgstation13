@@ -502,7 +502,7 @@
 
 /proc/write_rune_word(var/turf/T, var/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
-		return 0
+		return RUNE_WRITE_CANNOT
 
 	if (!source)
 		source = new
@@ -519,12 +519,12 @@
 			newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
-		return 0
+		return RUNE_WRITE_CANNOT
 
 	if (caster)
 		if (newrune)
 			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
-			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [formatJumpTo(T)].")
 		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
@@ -585,8 +585,8 @@
 
 	rune.update_icon()
 	if (rune.blood3)
-		return 1
-	return 2
+		return RUNE_WRITE_COMPLETE
+	return RUNE_WRITE_CONTINUE
 
 
 /proc/erase_rune_word(var/turf/T)
