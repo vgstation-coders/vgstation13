@@ -386,7 +386,7 @@
 	name = "Recycling Sorting Machine"
 
 	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics")
-	var/list/types[6]
+	var/list/types[7]
 
 /obj/machinery/sorting_machine/recycling/New()
 	. = ..()
@@ -433,7 +433,7 @@
 		if(items_moved >= max_items_moved)
 			break
 
-		if(S.contents)
+		if(S.contents.len > 0)
 			S.mass_remove(in_T)
 			items_moved++
 
