@@ -276,6 +276,18 @@
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
+	
+/mob/living/simple_animal/construct/wraith/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	
+	var/mob/living/simple_animal/construct/wraith/W = src
+	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
+	if(E)
+		E.perform(W)
+		E.connected_button.update_charge(1)
 
 
 /////////////////////////////Artificer/////////////////////////
