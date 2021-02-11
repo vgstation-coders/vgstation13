@@ -159,17 +159,16 @@
 	var/triggered = FALSE
 
 /obj/item/device/chronocapture/afterattack(atom/target, mob/user)
-	if(!triggered)
-		triggered = TRUE
-		playsound(loc, "polaroid", 75, 1, -3)
-		spawn(3 SECONDS)
-			triggered = FALSE
-		if(istimeagent(user))
-			var/datum/role/R = user.mind.GetRole(TIMEAGENT)
-			if(R)
-				var/datum/objective/target/locate/L = locate() in R.objectives.GetObjectives()
-				if(L)
-					L.check(view(target,2))
+	var/datum/role/R = user.mind.GetRole(TIMEAGENT)
+	if(triggered || !istype(R))
+		return
+	triggered = TRUE
+	playsound(loc, "polaroid", 75, 1, -3)
+	spawn(3 SECONDS)
+		triggered = FALSE
+	var/datum/objective/target/locate/L = locate() in R.objectives.GetObjectives()
+	if(L)
+		L.check(view(target,2))
 
 /obj/item/weapon/gun/projectile/automatic/rewind
 	name = "rewind rifle"
