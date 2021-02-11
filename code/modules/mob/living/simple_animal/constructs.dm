@@ -203,7 +203,7 @@
 /////////////////Juggernaut///////////////
 
 
-
+#define JUGG_SHELL 150
 /mob/living/simple_animal/construct/armoured
 	name = "\improper Juggernaut"
 	real_name = "\improper Juggernaut"
@@ -223,13 +223,32 @@
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
+	var/image/mantle
+
+/mob/living/simple_animal/construct/armoured/New()
+	..()
+	mantle = image("icon"='icons/obj/cult.dmi', "icon_state"="jugg-mantle")
+
+/mob/living/simple_animal/construct/armoured/Destroy()
+	qdel(mantle)
+	mantle = null
+	..()
+
+/mob/living/simple_animal/construct/armoured/Life()
+	..()
+	update_icon()
+
+/mob/living/simple_animal/construct/armoured/update_icon()
+	..()
+	overlays -= mantle
+	if(health > JUGG_SHELL)
+		overlays += mantle
+
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(O.force && O.force < 11)
+	if(health > JUGG_SHELL && O.force < 11)
 		user.delayNextAttack(8)
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
+		visible_message("<span class='danger'>[O] bounces harmlessly off of \the [src]'s shell. </span>")
 	else
 		..()
 
@@ -250,6 +269,12 @@
 
 	return (..(P))
 
+
+/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O)
+	if(health > 150 && O.throwforce < 11)
+		visible_message("<span class='danger'>[O] bounces harmlessly off of \the [src]'s shell. </span>")
+		return 0
+	return 1
 
 
 ////////////////////////Wraith/////////////////////////////////////////////
