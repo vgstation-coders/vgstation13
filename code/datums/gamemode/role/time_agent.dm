@@ -178,10 +178,11 @@
 	caliber = list(MM12 = 1)
 
 /obj/item/weapon/gun/projectile/automatic/rewind/send_to_past(var/duration)
-	var/mob/owner = loc
 	..()
-	spawn(duration)
-		owner.put_in_hands(src)
+	if(istype(loc, /mob))
+		var/mob/owner = loc
+		spawn(duration)
+			owner.put_in_hands(src)
 
 /obj/item/weapon/gun/projectile/automatic/rewind/special_check(var/mob/M)
 	return istimeagent(M)
