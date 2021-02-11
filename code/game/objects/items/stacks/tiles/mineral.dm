@@ -13,6 +13,8 @@
 	max_amount = 60
 
 	material = "plasma"
+	starting_materials = list(MAT_PLASMA = CC_PER_SHEET_PLASMA / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL // I've no idea if it counts as one
 
 /obj/item/stack/tile/mineral/uranium
 	name = "uranium tile"
@@ -27,6 +29,8 @@
 	max_amount = 60
 
 	material = "uranium"
+	starting_materials = list(MAT_URANIUM = CC_PER_SHEET_URANIUM / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/uranium/safe
 	name = "isolated uranium tile"
@@ -35,6 +39,11 @@
 	icon_state = "tile_uraniumsafe"
 
 	material = "uranium_safe"
+	starting_materials = list(// Recipe requires 1 uranium sheet per 4 tiles, and 1 reinforced glass sheet per tile
+		MAT_URANIUM = CC_PER_SHEET_URANIUM / 4,
+		MAT_GLASS = CC_PER_SHEET_GLASS,
+		MAT_METAL = CC_PER_SHEET_METAL / 2)
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/uranium/safe/attackby(obj/item/W as obj, mob/user as mob)
 	if(iscrowbar(W))
@@ -67,6 +76,8 @@
 	max_amount = 60
 
 	material = "gold"
+	starting_materials = list(MAT_GOLD = CC_PER_SHEET_GOLD / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/silver
 	name = "silver tile"
@@ -81,6 +92,8 @@
 	max_amount = 60
 
 	material = "silver"
+	starting_materials = list(MAT_SILVER = CC_PER_SHEET_SILVER / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/diamond
 	name = "diamond tile"
@@ -95,6 +108,8 @@
 	max_amount = 60
 
 	material = "diamond"
+	starting_materials = list(MAT_DIAMOND = CC_PER_SHEET_DIAMOND / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/clown
 	name = "bananium tile"
@@ -109,6 +124,8 @@
 	max_amount = 60
 
 	material = "bananium"
+	starting_materials = list(MAT_CLOWN = CC_PER_SHEET_CLOWN / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 	var/spam_flag = 0
 
 /obj/item/stack/tile/mineral/plastic
@@ -140,6 +157,8 @@
 	origin_tech = Tc_MATERIALS + "=9"
 
 	material = "phazon"
+	starting_materials = list(MAT_PHAZON = CC_PER_SHEET_PHAZON / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/phazon/adjust_slowdown(mob/living/L, current_slowdown)
 	current_slowdown *= 0.75
@@ -158,6 +177,8 @@
 	max_amount = 60
 
 	material = "brass"
+	starting_materials = list(MAT_BRASS = CC_PER_SHEET_BRASS / 4) // Recipe requires 1 sheet for 4 tiles
+	w_type = RECYK_METAL
 
 /obj/item/stack/tile/mineral/gingerbread
 	name = "gingerbread tile"
