@@ -71,6 +71,8 @@
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
 	var/last_beam_damage = 0
+	var/list/border_objects //Only exists when there are border objects on the turf.
+	var/atom/movable/bump_target //If this var is not null, bumping this turf bumps this object instead. Used for border objects. Unset immediately when bumped.
 
 /turf/examine(mob/user)
 	..()
@@ -103,30 +105,15 @@
 	return 0
 
 /turf/Exit(atom/movable/mover, atom/target)
-<<<<<<< HEAD
-	if(!mover)
-		return 1
-	// First, make sure it can leave its square
-	if(mover.loc == src)
-		// Nothing but border objects stop you from leaving a tile, only one loop is needed
-		for(var/obj/obstacle in src)
-			/*if(ismob(mover) && mover:client)
-				world << "<span class='danger'>EXIT</span>origin: checking exit of mob [obstacle]"*/
-			if(obstacle in target) //If target is a turf and obstacle is a multitile object so that it covers target as well.
-				continue
-			if(!obstacle.Uncross(mover, target) && obstacle != mover && obstacle != target)
-				/*if(ismob(mover) && mover:client)
-					world << "<span class='danger'>EXIT</span>Origin: We are bumping into [obstacle]"*/
-				mover.to_bump(obstacle, 1)
-				return 0
-	return 1
-=======
 	return TRUE
->>>>>>> da8a8ff543 (This stuff)
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
-	INVOKE_EVENT(src, /event/exited, "mover" = mover, "location" = src, "newloc" = newloc)
+	if(border_objects)
+		border_objects -= mover //Don't bother checking for the flag, in case it lost it.
+		if(!border_objects.len)
+			border_objects = null
+	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
 	return Cross(mover, src)
@@ -136,6 +123,12 @@
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
+	if(A.flow_flags & ON_BORDER)
+		if(!border_objects)
+			border_objects = list()
+		border_objects += A
+
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 
