@@ -28,6 +28,7 @@
 
 /obj/machinery/door/window/New()
 	..()
+	setup_border_dummy()
 	if((istype(req_access) && req_access.len) || istext(req_access))
 		icon_state = "[icon_state]"
 		base_state = icon_state
