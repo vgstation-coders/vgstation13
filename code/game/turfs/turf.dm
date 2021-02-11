@@ -75,6 +75,9 @@
 
 	var/holomap_draw_override = HOLOMAP_DRAW_NORMAL
 
+	var/list/border_objects //Only exists when there are border objects on the turf.
+	var/atom/movable/bump_target //If this var is not null, bumping this turf bumps this object instead. Used for border objects. Unset immediately when bumped.
+
 /turf/examine(mob/user)
 	..()
 	if(bullet_marks)
@@ -111,6 +114,10 @@
 
 /turf/Exited(atom/movable/mover, atom/newloc)
 	..()
+	if(border_objects)
+		border_objects -= mover //Don't bother checking for the flag, in case it lost it.
+		if(!border_objects.len)
+			border_objects = null
 	lazy_invoke_event(/lazy_event/on_exited, list("mover" = mover, "location" = src, "newloc" = newloc))
 
 /turf/Enter(atom/movable/mover as mob|obj, atom/forget as mob|obj|turf|area)
@@ -121,6 +128,12 @@
 	if(movement_disabled)
 		to_chat(usr, "<span class='warning'>Movement is admin-disabled.</span>")//This is to identify lag problems
 		return
+
+	if(A.flow_flags & ON_BORDER)
+		if(!border_objects)
+			border_objects = list()
+		border_objects += A
+
 	//THIS IS OLD TURF ENTERED CODE
 	var/loopsanity = 100
 

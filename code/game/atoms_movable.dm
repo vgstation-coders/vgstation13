@@ -55,6 +55,8 @@
 	var/last_explosion_push = 0
 	var/mob/virtualhearer/virtualhearer
 
+	var/can_bump //Workaround to make things only bump one object per movement
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -122,7 +124,7 @@
 	if(!glide_size_override || glide_size_override > max)
 		glide_size = 0
 	else
-		glide_size = max(min, glide_size_override)
+		glide_size = max(min, glide_size_override) * step_size / WORLD_ICON_SIZE //This should probably go in DELAY2GLIDESIZE() instead but that would be a lot of changed macros
 
 /atom/movable/Move(NewLoc, Dir = 0, step_x = 0, step_y = 0, var/glide_size_override = 0)
 	if(!loc || !NewLoc)
@@ -164,6 +166,7 @@
 		set_glide_size(glide_size_override)
 
 	var/atom/oldloc = loc
+	can_bump = TRUE
 	if((bound_height != WORLD_ICON_SIZE || bound_width != WORLD_ICON_SIZE) && (loc == NewLoc))
 		. = ..()
 
@@ -398,6 +401,17 @@
 		if(Obstacle)
 			Obstacle.Bumped(src)
 	sound_override = 0
+
+/atom/movable/Bump(atom/Obstacle)
+	if(!can_bump)
+		return
+	if(isturf(Obstacle))
+		var/turf/T = Obstacle
+		if(T.bump_target)
+			Obstacle = T.bump_target
+			T.bump_target = null
+	to_bump(Obstacle)
+	can_bump = FALSE
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
