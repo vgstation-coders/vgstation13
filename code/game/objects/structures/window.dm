@@ -42,6 +42,7 @@ var/list/one_way_windows
 
 	..(loc)
 	flow_flags |= ON_BORDER
+	setup_border_dummy()
 
 	update_nearby_tiles()
 	update_nearby_icons()

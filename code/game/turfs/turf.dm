@@ -257,6 +257,10 @@
 		has_opaque_atom = TRUE // Make sure to do this before reconsider_lights(), incase we're on instant updates. Guaranteed to be on in this case.
 		reconsider_lights()
 
+/turf/get_bump_target()
+	. = bump_target || ..()
+	bump_target = null
+
 /turf/proc/is_plating()
 	return 0
 /turf/proc/can_place_cables()

@@ -191,6 +191,10 @@ var/global/list/ghdel_profiling = list()
 /atom/proc/Bumped(atom/movable/AM)
 	return
 
+//When this object is bumped by BYOND, what should actually get bumped? Usually itself but there are some cases where it differs.
+/atom/proc/get_bump_target()
+	return src
+
 /atom/proc/setDensity(var/density)
 	if (density == src.density)
 		return FALSE // No need to invoke the event when we're not doing any actual change

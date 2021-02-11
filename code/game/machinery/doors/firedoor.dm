@@ -591,6 +591,10 @@ var/global/list/alert_overlays_global = list()
 	air_properties_vary_with_direction = 1
 	flow_flags = ON_BORDER
 
+/obj/machinery/door/firedoor/border_only/New()
+	..()
+	setup_border_dummy()
+
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
 		return 1

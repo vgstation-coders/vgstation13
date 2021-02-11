@@ -29,10 +29,11 @@
 	)
 
 /obj/machinery/power/treadmill/New()
+	..()
+	setup_border_dummy()
 	if(anchored)
 		connect_to_network()
 	RefreshParts()
-	..()
 
 /obj/machinery/power/treadmill/RefreshParts()
 	var/calc = 0
@@ -86,7 +87,6 @@
 	if(istype(mover) && mover.checkpass(PASSGLASS))
 		return 1
 	if((flow_flags & ON_BORDER) && (mover.dir == dir))
-		powerwalk(mover)
 		return !density
 	return 1
 
@@ -99,6 +99,10 @@
 		return 0
 	else
 		return 1
+
+/obj/machinery/power/treadmill/Bumped(atom/movable/AM)
+	if(AM.loc == loc)
+		powerwalk(AM)
 
 /obj/machinery/power/treadmill/wrenchAnchor(var/mob/user, var/obj/item/I)
 	. = ..()

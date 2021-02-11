@@ -57,6 +57,8 @@
 
 	var/can_bump //Workaround to make things only bump one object per movement
 
+	var/atom/movable/border_dummy/border_dummy //Used for border objects. The old Uncross() method fails miserably with pixel movement or large hitboxes.
+
 /atom/movable/New()
 	. = ..()
 	if((flags & HEAR) && !ismob(src))
@@ -76,6 +78,8 @@
 	if(materials)
 		qdel(materials)
 		materials = null
+
+	remove_border_dummy()
 
 	lazy_invoke_event(/lazy_event/on_destroyed, list("thing" = src))
 
@@ -402,16 +406,24 @@
 			Obstacle.Bumped(src)
 	sound_override = 0
 
+//As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead.
 /atom/movable/Bump(atom/Obstacle)
 	if(!can_bump)
 		return
-	if(isturf(Obstacle))
-		var/turf/T = Obstacle
-		if(T.bump_target)
-			Obstacle = T.bump_target
-			T.bump_target = null
-	to_bump(Obstacle)
+	to_bump(Obstacle.get_bump_target())
 	can_bump = FALSE
+
+/atom/movable/proc/setup_border_dummy()
+	if(border_dummy)
+		return
+	border_dummy = new()
+	lock_atom(border_dummy, /datum/locking_category/border_dummy)
+
+/atom/movable/proc/remove_border_dummy()
+	if(border_dummy)
+		unlock_atom(border_dummy)
+		qdel(border_dummy)
+		border_dummy = null
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
@@ -1152,6 +1164,29 @@
 	else
 		return
 	forceMove(picked)
+
+
+/atom/movable/border_dummy
+	//invisibility = 101
+	icon = 'icons/obj/structures.dmi'
+	icon_state = "window"
+	color = "red"
+
+/atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(!istype(mover))
+		return TRUE //The parent object will handle airflow calculations.
+	if(!locked_to)
+		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
+	return (mover == locked_to) || locked_to.Uncross(mover, target) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
+
+/atom/movable/border_dummy/get_bump_target()
+	return locked_to //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
+
+
+/datum/locking_category/border_dummy
+	y_offset = 1
+	rotate_offsets = TRUE
+
 
 // -- trackers
 

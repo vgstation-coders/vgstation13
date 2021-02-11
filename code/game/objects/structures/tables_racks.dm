@@ -505,6 +505,7 @@
 		plane = ABOVE_HUMAN_PLANE
 	flipped = 1
 	flow_flags |= ON_BORDER
+	setup_border_dummy()
 	for(var/D in list(turn(direction, 90), turn(direction, -90)))
 		var/obj/structure/table/T = locate() in get_step(src,D)
 		if(T && !T.flipped)
@@ -521,6 +522,7 @@
 	reset_plane_and_layer()
 	flipped = 0
 	flow_flags &= ~ON_BORDER
+	remove_border_dummy()
 	for(var/D in list(turn(dir, 90), turn(dir, -90)))
 		var/obj/structure/table/T = locate() in get_step(src.loc,D)
 		if(T && T.flipped && T.dir == src.dir)

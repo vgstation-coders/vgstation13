@@ -20,6 +20,9 @@
 	..(loc)
 	flow_flags |= ON_BORDER
 
+/obj/structure/window/full/setup_border_dummy()
+	return
+
 /obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
 
 	return 1

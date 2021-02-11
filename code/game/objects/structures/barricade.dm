@@ -139,6 +139,9 @@
 	..(loc)
 	flow_flags &= ~ON_BORDER
 
+/obj/structure/window/barricade/full/setup_border_dummy()
+	return
+
 /obj/structure/window/barricade/full/blocks_doors()
 	return TRUE
 
