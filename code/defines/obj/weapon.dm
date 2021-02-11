@@ -852,7 +852,7 @@
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_HEAD
 	starting_materials = list(MAT_PLASTIC = 2*CC_PER_SHEET_MISC) //Recipe calls for 2 sheets
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/caution/attackby(obj/item/I as obj, mob/user as mob)
 	if(I.is_wirecutter(user))

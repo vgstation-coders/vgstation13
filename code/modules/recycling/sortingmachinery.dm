@@ -406,6 +406,7 @@
 	types[RECYK_ELECTRONIC] = "Electronics"
 	types[RECYK_GLASS]      = "Glasses"
 	types[RECYK_METAL]      = "Metals/Minerals"
+	types[RECYK_PLASTIC]    = "Plastic"
 	types[RECYK_MISC]       = "Miscellaneous"
 
 /obj/machinery/sorting_machine/recycling/process()

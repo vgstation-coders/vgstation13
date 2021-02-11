@@ -30,7 +30,7 @@
 	req_access = null
 	opened = 0
 	flags = FPRINT
-	w_type = RECYK_MISC //This one's plastic, not metal!
+	w_type = RECYK_PLASTIC //This one's plastic, not metal!
 
 //	mouse_drag_pointer = MOUSE_ACTIVE_POINTER	//???
 	var/rigged = 0

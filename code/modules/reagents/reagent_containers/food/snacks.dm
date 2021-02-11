@@ -5230,7 +5230,7 @@
 	slot_flags = SLOT_MASK
 	throwforce = 1
 	autoignition_temperature = 0
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 	starting_materials = list(MAT_PLASTIC = 100)
 
 /obj/item/weapon/reagent_containers/food/snacks/chococoin/wrapped

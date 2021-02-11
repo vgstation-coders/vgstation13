@@ -108,7 +108,7 @@
 	no_storage_slot = list(slot_head)
 	foldable = /obj/item/folded_bag
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/storage/bag/plasticbag/can_quick_store(var/obj/item/I)
 	return can_be_inserted(I,1)

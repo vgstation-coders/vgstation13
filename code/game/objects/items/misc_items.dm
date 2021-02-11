@@ -65,7 +65,7 @@
 	icon_state = "folded_bag"
 	w_class = W_CLASS_TINY
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_PLASTIC)//Same as plastic bag
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/folded_bag/attack_self(mob/user)
 	to_chat(user, "<span class = 'notice'>You unfold \the [src].</span>")

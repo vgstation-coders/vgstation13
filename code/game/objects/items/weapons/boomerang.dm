@@ -32,6 +32,7 @@
 
 	starting_materials = list(MAT_PLASTIC = 1200)
 	melt_temperature = MELTPOINT_PLASTIC
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/boomerang/throw_at(atom/target, range, speed, override = 1)
 	if(!usr)

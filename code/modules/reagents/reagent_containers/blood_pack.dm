@@ -13,7 +13,7 @@
 	var/mode = BLOODPACK_NORMAL
 
 	starting_materials = list(MAT_PLASTIC = 3*CC_PER_SHEET_MISC) //Recipe calls for 3 sheets
-	w_type = RECYK_MISC
+	w_type = RECYK_PLASTIC
 
 /obj/item/weapon/reagent_containers/blood/New()
 	..()
