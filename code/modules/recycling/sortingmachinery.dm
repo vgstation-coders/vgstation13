@@ -302,6 +302,9 @@
 	var/items_moved = 0
 
 	for(var/atom/movable/A in affecting)
+		if(items_moved >= max_items_moved)
+			break
+
 		if(A.anchored)
 			continue
 
@@ -311,8 +314,6 @@
 			A.forceMove(out_T)
 
 		items_moved++
-		if(items_moved >= max_items_moved)
-			break
 
 /obj/machinery/sorting_machine/attack_ai(mob/user)
 	interact(user)
@@ -375,7 +376,7 @@
 		return MT_UPDATE
 		//Honestly I didn't expect that to fit in, what, 10 lines of code?
 
-//Return 1 if the atom is to be filtered of the line.
+//Return 1 if the atom is to be filtered off the line.
 /obj/machinery/sorting_machine/proc/sort(var/atom/movable/A)
 	return prob(50) //Henk because the base sorting machine shouldn't ever exist anyways.
 
@@ -406,6 +407,38 @@
 	types[RECYK_GLASS]      = "Glasses"
 	types[RECYK_METAL]      = "Metals/Minerals"
 	types[RECYK_MISC]       = "Miscellaneous"
+
+/obj/machinery/sorting_machine/recycling/process()
+	//Before sorting, we'll try and open any box and crate we find
+	if(stat & (BROKEN | NOPOWER))
+		return
+
+	var/turf/in_T = get_step(src, input_dir)
+	var/items_moved = 0
+
+	//Open any closets/crates
+	for(var/obj/structure/closet/C in in_T.contents)
+		//Only open a limited number of closets
+		if(items_moved >= max_items_moved)
+			break
+
+		if(C.open())
+			C.dump_contents()
+			items_moved++
+
+	//Open any storage items (including those that were in closets/cages)
+	for(var/obj/item/weapon/storage/S in in_T.contents)
+		//Only open a limited number of boxes
+		if(items_moved >= max_items_moved)
+			break
+
+		if(S.contents)
+			S.mass_remove(in_T)
+			items_moved++
+
+	//We can't start sorting items until we've made sure we've emptied every box and closet
+	if(items_moved == 0)
+		..()
 
 /obj/machinery/sorting_machine/recycling/Topic(href, href_list)
 	. = ..()
