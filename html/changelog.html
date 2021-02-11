@@ -73,6 +73,15 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.02.11</h2>
+			<h3 class="author">Allspice updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Let wraiths use their jaunt spell by pressing the &#34;use inhand item&#34; button.</li>
+			</ul>
+			<h3 class="author">beesil updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Changes threshold for flavor text to show a &#34;more&#34; button from 32 characters -&gt; 64 characters.</li>
+			</ul>
 			<h2 class="date">2021.02.10</h2>
 			<h3 class="author">Kharkov72 updated:</h3>
 			<ul class="changes bgimages16">
@@ -1517,48 +1526,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 			<ul class="changes bgimages16">
 				<li class="tweak">Roulette revolvers can now be placed in buildable turrets.</li>
 				<li class="rscadd">Headcrabs have finally snuck their way into the solar system. Thankfully, the station is still safe from them, at least for now.</li>
-			</ul>
-			<h2 class="date">2020.08.28</h2>
-			<h3 class="author">DeityLink updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="experiment">Big Xenoarchaeology update!</li>
-				<li class="imageadd">The depth scanner, digsite locators, core sampler, rock sliver, as well as the solution trays all have new sprites.</li>
-				<li class="tweak">The core sampler now works without the need for sample bags, but takes one second to extract a sample. It&#39;s got sounds now too.</li>
-				<li class="rscadd">You can use a pen on a rock sliver to label it.</li>
-				<li class="rscadd">Edited the description of rock slivers, some of the xenoarch-related reagents, as well as the xenoarch sample analysis machines to help players understand each of their purposes.</li>
-				<li class="tweak">Removed the beacon, and locater device from Excavation Tools closets due to their utmost uselessness in regard to the job. The locater (renamed locator) device however can now be acquired from the Protolathe at Bluespace Tech Level 2. It still looks just like the disk pinpointer though.</li>
-				<li class="tweak">The xenoarchaeological digsite locator has been buffed to always show digsite material colors (requires Anomaly Tech Level 3)</li>
-				<li class="tweak">The advanced xenoarchaeological digsite locator has been buffed to also highlight turfs with buried large artifacts (requires Anomaly Tech Level 4)</li>
-				<li class="rscadd">The Alden-Saraspova Counter is FINALLY available from RnD, barely 4 years after I added the fucking tech tree, and gives you the distance to the closest Large Artifact. You can also fit them in your excavation belt (requires Anomaly Tech Level 5)</li>
-				<li class="rscadd">Added Hard Disk Drives. As useless as Corrupted Data Disks, and both may now be found in maint loot spawners</li>
-				<li class="rscadd">Added Encrypted HDD (Anomaly Tech 5), now spawned by Anomaly Analysers when a large artifact gets analyzed for the first time. Replaces that anomaly tech data that used to be in the Anomaly Report. Deconstructing one of those is enough to get the advanced xenoarchaeological digsite locator which will highlight buried large artifacts.</li>
-				<li class="tweak">The distance to the nearest artifact given by the Fourier transform spectroscope is a lot more reliable now that it counts distance in a circle rather than a square.</li>
-				<li class="rscadd">You can slap Artifact Analysis reports onto Anomaly Containers, allowing people who examine the container to read the report.</li>
-				<li class="tweak">Anomaly Containers are now access restricted to science. You can break them open still using an emag, guns, or explosions.</li>
-				<li class="imageadd">Anomaly Containers have a slightly different appearance when containing a large artifact, or when broken.</li>
-				<li class="tweak">Placing a Large Artifact into an anomaly container automatically toggles off its effects.</li>
-				<li class="rscadd">Large Artifacts that have both been analyzed and had their primary effect activated at least once now add points to the crew score (wow, scientists can finally contribute to the crew score lol)</li>
-				<li class="rscadd">You once again have a very small chance of finding a Syndicate Beacon instead of a Large Artifact in Xenoarch. You can use it to become a traitor, but the beacon will explode after a short delay if you were already part of another faction, or antag banned.</li>
-				<li class="rscadd">Unlike the old Syndicate Beacon, it can be re-used, but subsequent traitorifications will require admin approval, so you&#39;ll be able to write a cover letter to the Syndicate for why they should hire you. If you bother admins too much, they will detonate the beacon.</li>
-				<li class="imageadd">The Syndicate Beacon now has its own sprite that looks a bit like a laptop, separating it for good from the wish granter.</li>
-				<li class="rscadd">Since I was confused at first between the Syndicate Beacon and the Singularity Beacon, I judged a good idea to have a regular non-syndicate Singularity Beacon spawn as well among the large finds. It has the same rarity as a large Supermatter Crystal, given its round-ending potential.</li>
-				<li class="tweak">Upped the rarity of Construct Shells so they&#39;re more common than the round ending items.</li>
-				<li class="bugfix">Fixed a few large artifacts such as the Warping Claws, the Essence Printer and the Communication Crystal being deemed mundane by the Anomaly Analyzer.</li>
-				<li class="rscadd">A new edition of the Out on the Dig manual is out! Now with information actually relevant to the job of xenoarchaeology!</li>
-				<li class="rscadd">Added a new item to the RD&#39;s locker. The Anomalous Energies Locator, which locates the closest currently activated Artifact or Anomaly Power Utilizer on the current Z Level. Something to help deal with rogue Xenoarchaeologists.</li>
-				<li class="bugfix">Fixed large artifacts with a touch effect not visibly activating, or being logged.</li>
-				<li class="rscadd">a single use Cult Pamphlet can now spawn instead of a large artifact, just like Vampire stone masks and Changeling vials. Same rarity too, which is to say, extremely low.</li>
-				<li class="bugfix">Fixed the Core Sampler not ejecting the extracted sliver when clicked.</li>
-			</ul>
-			<h3 class="author">GreatBigFailure updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Mind Machine&#39;s blacklist is now less cruel</li>
-				<li class="rscadd">New Wizard Spell: Summon Snacks</li>
-				<li class="tweak">Diabeetusol V2: Full Fat</li>
-			</ul>
-			<h3 class="author">PaulRitter updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Lasers no longer freak out when hitting blobs</li>
 			</ul>
 		</div>
 		<!--
