@@ -397,32 +397,14 @@
 	killer.laws.zeroth_lock = TRUE
 	to_chat(killer, "New law: 0. [law]")
 
-/proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T)
+/proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
 	H.delete_all_equipped_items()
-	var/under = new /obj/item/clothing/under/rank/scientist(H)
-	H.equip_to_slot_or_del(under, slot_w_uniform)
-	var/helmet = new /obj/item/clothing/head/helmet/space/time(H)
-	H.equip_to_slot_or_del(helmet, slot_head)
-	var/backpack = new /obj/item/weapon/storage/backpack/satchel_tox(H)
-	H.equip_to_slot_or_del(backpack, slot_back)
-	var/suit = new /obj/item/clothing/suit/space/time(H)
-	H.equip_to_slot_or_del(suit, slot_wear_suit)
-	var/mask = new /obj/item/clothing/mask/gas/death_commando(H)
-	H.equip_to_slot_or_del(mask, slot_wear_mask)
-	var/jackboots = new /obj/item/clothing/shoes/jackboots(H)
-	H.equip_to_slot_or_del(jackboots, slot_shoes)
-	var/camera = new /obj/item/device/chronocapture(H)
-	H.equip_to_slot_or_del(camera, slot_l_store)
-	var/jump_charge = new /obj/item/device/jump_charge(H)
-	H.equip_to_slot_or_del(jump_charge, slot_r_store)
-	var/belt = new /obj/item/weapon/storage/belt/grenade/chrono(H)
-	H.equip_to_slot_or_del(belt, slot_belt)
-	new /obj/item/device/timeline_eraser(backpack)
-	new /obj/item/weapon/pinpointer/advpinpointer(backpack)
-	var/gun = new /obj/item/weapon/gun/projectile/automatic/rewind(H)
-	H.put_in_hands(gun)
+
+	var/datum/outfit/time_agent/concrete_outfit = new /datum/outfit/time_agent
+	concrete_outfit.is_twin = is_twin
+	concrete_outfit.equip(H)
 	if(T)
-		T.objects_to_delete = list(under, helmet, suit, mask, camera, jump_charge, belt, gun)
+		T.objects_to_delete = get_contents_in_object(H)
 	H.fully_replace_character_name(newname = "John Beckett")
 	H.make_all_robot_parts_organic()
 

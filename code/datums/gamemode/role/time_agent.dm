@@ -20,6 +20,7 @@
 	var/timer = 1
 	var/distortion_timer = 60
 	var/datum/recruiter/eviltwinrecruiter = null
+	var/is_twin = FALSE
 
 /datum/role/time_agent/Greet(var/greeting,var/custom)
 	if(!greeting)
@@ -131,11 +132,11 @@
 
 /datum/role/time_agent/OnPostSetup()
 	.=..()
-	if(istype(antag.current, /mob/living/carbon/human))
-		equip_time_agent(antag.current)
-		spawn_rand_maintenance(antag.current)
-		spawn()
-			showrift(antag.current,1)
+	var/mob/living/carbon/human/H = antag.current
+	equip_time_agent(H, src, is_twin)
+	spawn_rand_maintenance(H)
+	spawn()
+		showrift(H,1)
 
 
 /datum/role/time_agent/proc/extract()

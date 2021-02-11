@@ -9,6 +9,7 @@
 	name = TIMEAGENTTWIN
 	id = TIMEAGENTTWIN
 	var/datum/role/time_agent/erase_target = null
+	is_twin = TRUE
 
 
 /datum/role/time_agent/eviltwin/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/time_agent/target)
@@ -44,11 +45,3 @@
 	// 	if(3)
 	// 		evil_twin()
 	// 	if(4 to INFINITY)
-
-/datum/role/time_agent/eviltwin/OnPostSetup()
-	.=..()
-	for(var/obj/item/device/jump_charge/J in get_contents_in_object(antag.current))
-		qdel(J)
-	for(var/obj/item/weapon/storage/backpack/B in get_contents_in_object(antag.current))
-		// lets them disappear airlocks to compensate for the missing jump charge
-		new /obj/item/weapon/storage/box/chrono_grenades/future(B)
