@@ -64,7 +64,7 @@ var/list/random_tool_sounds = list('sound/items/Ratchet.ogg','sound/items/Screwd
 	'sound/items/Wirecutter.ogg', 'sound/weapons/toolhit.ogg','sound/items/Welder.ogg', 'sound/items/Welder2.ogg',
 	'sound/items/Crowbar.ogg')
 
-var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A Rottweiler combat cyborg", "I'm the head honcho", "A valkyrie's chariot")
+var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A Rottweiler combat cyborg", "I'm the head honcho", "A winged chariot", "A goofy steed")
 
 /obj/item/weapon/secway_kit
 	name = "custom secway kit"
@@ -93,25 +93,26 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		to_chat(user,"<span class='info'>There's space for a cart hook made of metal sheeting.</span>")
 	if(baby.max_health < 300)
 		to_chat(user,"<span class='info'>It hasn't been upgraded with plasteel for armoring.</span>")
-	if(!(baby.pass_flags & PASSMOB))
+	if(!(baby.pass_flags & PASSMOB) || baby.knockdown_time > 1 || baby.impact_sound)
+		//Don't suggest if already adding impact upgrades
 		to_chat(user,"<span class='info'>If you rubbed ectoplasm on it, it would cruise through people instead of bumping them.</span>")
 	if(!is_type_in_list(/datum/action/vehicle/toggle_headlights,baby.vehicle_actions))
 		to_chat(user,"<span class='info'>Noone has added a flashlight for headlights or a siren helmet for police lights.</span>")
-	if(baby.knockdown_time < 3)
+	if(baby.knockdown_time < 3 || baby.pass_flags & PASSMOB)
+		//Note: you can't use this upgrade if you already don't bump targets
 		to_chat(user,"<span class='info'>A sheet of plastic would make a good bumper for knocking people over.</span>")
-	if(baby.hit_damage < 5)
-		to_chat(user,"<span class='info'>You could probably stick on a knife to jab people you run into.</span>")
 	if(baby.can_take_pai == FALSE)
 		to_chat(user,"<span class='info'>With an unprinted circuitboard you could slot in a personal AI.</span>")
-	if(!baby.impact_sound)
+	if(!baby.impact_sound || baby.pass_flags & PASSMOB)
+		//Don't suggest if already ethereal
 		to_chat(user,"<span class='info'>There's a good spot for a hailer to make legal noises when you hit stuff.</span>")
 	if(!baby.can_spacemove)
 		to_chat(user,"<span class='info'>A spacepod core is just what this thing needs to move in space.</span>")
-	if(baby.movement_delay > 0.9)
+	if(baby.movement_delay > 0.8)
 		to_chat(user,"<span class='info'>If it had an RTG cell, this thing could go a little faster.</span>")
 	if(baby.explodes)
-		to_chat(user,"<span class='info'>With an energy gun, it could be rigged to fire a countermeasure if destroyed up.</span>")
-	if(baby.buckle_range < 3)
+		to_chat(user,"<span class='info'>With a taser, it could be rigged to fire a countermeasure if destroyed.</span>")
+	if(baby.buckle_range < 7)
 		to_chat(user,"<span class='info'>Just needs a bluespace crystal and you could buckle in remotely!</span>")
 
 /obj/item/weapon/secway_kit/attack_self(mob/user)
@@ -135,10 +136,13 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 					baby.icon_state = "secway-custom-HoS"
 				if("A winged chariot")
 					baby.icon_state = "secway-custom-chariot"
+				if("A goofy steed")
+					baby.icon_state = "secway-custom-steed"
 
 		if("Finish")
 			if(remaining_upgrades < 1 && named)
-				baby.forceMove(loc)
+				baby.forceMove(get_turf(loc))
+				new /obj/item/key/security/spare(baby.loc)
 				qdel(src)
 			else
 				to_chat(user,"<span class='warning'>It isn't done yet!</span>")
@@ -148,7 +152,6 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		return ..()
 	if(istype(W, /obj/item/stack/sheet/metal) && !baby.can_have_carts)
 		baby.can_have_carts = TRUE
-		to_chat("")
 	else if(istype(W, /obj/item/stack/sheet/plasteel) && baby.max_health < 300)
 		baby.max_health = 300
 		baby.health = 300
@@ -161,23 +164,22 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		baby.siren = TRUE
 	else if(istype(W,/obj/item/stack/sheet/mineral/plastic) && baby.knockdown_time < 3)
 		baby.knockdown_time = 3
-	else if(istype(W,/obj/item/weapon/kitchen/utensil/knife) && baby.hit_damage < 5)
-		baby.hit_damage = 5
 	else if(istype(W,/obj/item/device/hailer) && !baby.impact_sound)
 		baby.impact_sound = 'sound/voice/halt.ogg'
 	else if(istype(W,/obj/item/weapon/circuitboard/blank) && !baby.can_take_pai)
 		baby.can_take_pai = TRUE
 	else if(istype(W,/obj/item/pod_parts/core) && !baby.can_spacemove)
 		baby.can_spacemove = TRUE
-	else if(istype(W,/obj/item/weapon/cell/rad) && baby.movement_delay > 0.9)
-		baby.movement_delay = 0.9
-	else if(istype(W,/obj/item/bluespace_crystal) && baby.buckle_range < 3)
-		baby.buckle_range = 3
-	else if(W.type == /obj/item/weapon/gun/energy && baby.explodes) //strict type check
+	else if(istype(W,/obj/item/weapon/cell/rad) && baby.movement_delay > 0.8)
+		baby.movement_delay = 0.8
+	else if(istype(W,/obj/item/bluespace_crystal) && baby.buckle_range < 7)
+		baby.buckle_range = 7
+	else if(istype(W,/obj/item/weapon/gun/energy/taser) && baby.explodes)
 		baby.explodes = FALSE
 	else
 		return ..()
 	playsound(src, pick(random_tool_sounds), 50, 1)
+	to_chat(user,"<span class='notice'>You add \the [W] to \the [src].")
 	use(W, user)
 	remaining_upgrades--
 	return TRUE //cancel attack
@@ -203,9 +205,6 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 	var/impact_sound = null
 	var/explodes = TRUE
 	var/siren = FALSE
-
-/obj/structure/bed/chair/vehicle/secway/set_keys()
-	new /obj/item/key/security/spare(loc)
 
 /obj/structure/bed/chair/vehicle/secway/custom/process()
 	..()
@@ -248,8 +247,10 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		while(fire_shots.len)
 			var/target_dir = pick_n_take(fire_shots)
 			var/obj/item/projectile/energy/electrode/E = new(src.loc)
+			E.starting = E.loc
 			var/throwturf = get_ranged_target_turf(src, target_dir, 7)
 			E.OnFired(throwturf)
+			E.process()
 
 	unlock_atom(occupant)
 	if(wreckage_type)
@@ -265,16 +266,21 @@ var/list/descriptive_sprites = list("I go for the classics", "A big donut", "A R
 		return
 	step(src, dir)
 
+/obj/structure/bed/chair/vehicle/secway/custom/Process_Spacemove(var/check_drift = 0)
+	return can_spacemove
+
+/obj/structure/bed/chair/vehicle/secway/custom/can_apply_inertia()
+	return !can_spacemove
+
 /obj/structure/bed/chair/vehicle/secway/custom/everything
 	name = "The Towberman"
 	icon_state = "secway-custom-HoS"
 	health = 300
 	max_health = 300
 	knockdown_time = 3
-	hit_damage = 5
 	impact_sound = 'sound/voice/halt.ogg'
 	explodes = FALSE
-	buckle_range = 3
+	buckle_range = 7
 	movement_delay = 0.9
 	can_take_pai = TRUE
 	can_spacemove = TRUE

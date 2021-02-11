@@ -232,7 +232,9 @@
 	return 1
 
 /obj/structure/bed/chair/vehicle/proc/can_buckle(mob/M, mob/user)
-	if(M != user || !ishigherbeing(user) || !Adjacent(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
+	if(M != user || !ishigherbeing(user) || user.restrained() || user.lying || user.stat || user.locked_to || occupant)
+		return 0
+	if(!Adjacent(user) && buckle_range <= 1)
 		return 0
 	if(ishuman(M))
 		var/mob/living/carbon/human/H = M
@@ -249,6 +251,9 @@
 	M.visible_message(\
 		"<span class='notice'>[M] climbs onto \the [nick]!</span>",\
 		"<span class='notice'>You climb onto \the [nick]!</span>")
+
+	if(!Adjacent(M))
+		playsound(src, 'sound/weapons/emitter2.ogg', 50, 1)
 
 	lock_atom(M, /datum/locking_category/buckle/chair/vehicle)
 
