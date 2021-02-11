@@ -40,7 +40,16 @@
 
 	var/list/healers = list()
 
-	var/construct_color = rgb(0,0,0)
+	var/construct_color = rgb(255,255,255)
+
+
+/mob/living/simple_animal/construct/New()
+	..()
+
+	//Floating!
+	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
+
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
@@ -120,7 +129,7 @@
 			construct_color = rgb(235,0,0)
 		else
 			construct_color = rgb(0, 153, 255)
-	setupglow()
+	update_icons()
 
 /mob/living/simple_animal/construct/Login()
 	..()
@@ -184,6 +193,7 @@
 		health = min(maxHealth, health + 5) // Constraining health to maxHealth
 		anim(target = src, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		M.visible_message("[M] mends some of \the <EM>[src]'s</EM> wounds.","You mend some of \the <em>[src]'s</em> wounds.")
+		update_icons()
 	else
 		M.unarmed_attack_mob(src)
 
@@ -383,8 +393,13 @@
 	..()
 	change_sight(adding = SEE_MOBS)
 
-////////////////Glow//////////////////
-/mob/living/simple_animal/construct/proc/setupglow(glowcolor)
+////////////////Glow & Damage//////////////////
+
+/mob/living/simple_animal/construct/adjustBruteLoss(damage)
+	..()
+	update_icons()
+
+/mob/living/simple_animal/construct/update_icons()
 	overlays = 0
 	var/overlay_layer = ABOVE_LIGHTING_LAYER
 	var/overlay_plane = LIGHTING_PLANE
@@ -392,20 +407,27 @@
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
 
+	//Damage
+	var/damage = maxHealth - health
+	var/icon/damageicon
+	if (damage > (2*maxHealth/3))
+		damageicon = icon(icon,"[icon_state]_damage_high")
+	else if (damage > (maxHealth/3))
+		damageicon = icon(icon,"[icon_state]_damage_low")
+	if (damageicon)
+		damageicon.Blend(construct_color, ICON_ADD)
+		var/image/damage_overlay = image(icon = damageicon, layer = overlay_layer)
+		damage_overlay.plane = overlay_plane
+		overlays += damage_overlay
+
+
+	//Eyes
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
-	if(glowcolor)
-		glowicon.Blend(glowcolor, ICON_ADD)
-	else
-		glowicon.Blend(construct_color, ICON_ADD)
+	glowicon.Blend(construct_color, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)
 	glow.plane = overlay_plane
 	overlays += glow
 
-
-////////////////Float//////////////////
-/mob/living/simple_animal/construct/proc/setupfloat()
-	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
-	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 
 ////////////////Powers//////////////////
 
