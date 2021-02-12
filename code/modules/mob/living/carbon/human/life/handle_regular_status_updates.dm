@@ -151,12 +151,12 @@
 			druggy = max(druggy - 1, 0)
 			if(!druggy)
 				to_chat(src, "It looks like you are back in Kansas.")
-/*
+
 		// Increase germ_level regularly
 		if(prob(40))
 			germ_level += 1
 		// If you're dirty, your gloves will become dirty, too.
 		if(gloves && germ_level > gloves.germ_level && prob(10))
 			gloves.germ_level += 1
-*/
+
 	return 1
