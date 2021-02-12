@@ -115,6 +115,11 @@
 					construct_color = rgb(30,255,30)
 			else
 				construct_color = rgb(235,0,0)
+	else if (istype(creator, /mob/living/simple_animal/shade))//shade beacon
+		if (iscultist(creator))
+			construct_color = rgb(235,0,0)
+		else
+			construct_color = rgb(0, 153, 255)
 	setupglow()
 
 /mob/living/simple_animal/construct/Login()
@@ -265,8 +270,8 @@
 	icon_living = "floating"
 	maxHealth = 75
 	health = 75
-	melee_damage_lower = 25
-	melee_damage_upper = 25
+	melee_damage_lower = 15
+	melee_damage_upper = 15
 	attacktext = "slashes"
 	speed = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
@@ -301,8 +306,8 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
-	maxHealth = 50
-	health = 50
+	maxHealth = 100
+	health = 100
 	response_harm = "viciously beats"
 	harm_intent_damage = 5
 	melee_damage_lower = 5
@@ -503,19 +508,19 @@
 
 	if(healths)
 		switch(health)
-			if(50 to INFINITY)
+			if(100 to INFINITY)
 				healths.icon_state = "artificer_health0"
-			if(42 to 49)
+			if(84 to 99)
 				healths.icon_state = "artificer_health1"
-			if(34 to 41)
+			if(68 to 83)
 				healths.icon_state = "artificer_health2"
-			if(26 to 33)
+			if(52 to 67)
 				healths.icon_state = "artificer_health3"
-			if(18 to 25)
+			if(36 to 51)
 				healths.icon_state = "artificer_health4"
-			if(10 to 17)
+			if(20 to 35)
 				healths.icon_state = "artificer_health5"
-			if(1 to 9)
+			if(1 to 19)
 				healths.icon_state = "artificer_health6"
 			else
 				healths.icon_state = "artificer_health7"
