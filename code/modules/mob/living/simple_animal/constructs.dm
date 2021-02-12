@@ -8,7 +8,6 @@
 	response_help  = "thinks better of touching"
 	response_disarm = "flails at"
 	response_harm   = "punches"
-	icon_dead = "shade_dead"
 	speed = 1
 	a_intent = I_HURT
 	stop_automated_movement = 1
@@ -50,6 +49,14 @@
 	//Floating!
 	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
+
+	add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_GALACTIC_COMMON)
+	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
+	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
+	for(var/spell in construct_spells)
+		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
@@ -93,16 +100,6 @@
 
 /mob/living/simple_animal/construct/cultify()
 	return
-
-/mob/living/simple_animal/construct/New()
-	..()
-	add_language(LANGUAGE_CULT)
-	add_language(LANGUAGE_GALACTIC_COMMON)
-	default_language = all_languages[LANGUAGE_CULT]
-	init_language = default_language
-	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
-	for(var/spell in construct_spells)
-		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 /mob/living/simple_animal/construct/proc/setup_type(var/mob/living/carbon/creator)
 	if(istype(creator, /mob/living/carbon))
@@ -227,6 +224,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "behemoth"
 	icon_living = "behemoth"
+	icon_dead = "behemoth"
 	maxHealth = 250
 	health = 250
 	response_harm   = "harmlessly punches"
@@ -296,6 +294,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "floating"
 	icon_living = "floating"
+	icon_dead = "floating"
 	maxHealth = 75
 	health = 75
 	melee_damage_lower = 15
@@ -309,13 +308,13 @@
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
-	
+
 /mob/living/simple_animal/construct/wraith/mode()
 	set name = "Activate Held Object"
 	set category = "IC"
 	set src = usr
 	set hidden = TRUE
-	
+
 	var/mob/living/simple_animal/construct/wraith/W = src
 	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
 	if(E)
@@ -334,6 +333,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
+	icon_dead = "artificer"
 	maxHealth = 100
 	health = 100
 	response_harm = "viciously beats"
@@ -363,6 +363,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "behemoth"
 	icon_living = "behemoth"
+	icon_dead = "behemoth"
 	maxHealth = 750
 	health = 750
 	speak_emote = list("rumbles")
@@ -391,6 +392,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "harvester"
 	icon_living = "harvester"
+	icon_dead = "harvester"
 	maxHealth = 150
 	health = 150
 	melee_damage_lower = 25
