@@ -269,6 +269,20 @@
 /obj/machinery/recharger/self_powered	//ideal for the Thunderdome
 	self_powered = 1
 
+/obj/machinery/recharger/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(charging)
+		if(prob(25))
+			visible_message("<span class='notice'>\The [charging] pops out of \the [src]!</span>")
+			charging.appearance = appearance_backup
+			charging.update_icon()
+			charging.forceMove(get_turf(src))
+			charging = null
+		if(!self_powered)
+			use_power = 1
+		appearance_backup=null
+		update_icon()
+
 /obj/machinery/recharger/wallcharger
 	name = "wall recharger"
 	icon = 'icons/obj/stationobjs.dmi'
