@@ -45,6 +45,7 @@
 
 /mob/living/simple_animal/construct/New()
 	..()
+	update_icons()//adds glowing eyes and bars
 
 	//Floating!
 	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
@@ -141,7 +142,7 @@
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
 	for(var/i=0;i<3;i++)
-		new /obj/item/weapon/ectoplasm (src.loc)
+		new /obj/item/weapon/ectoplasm (src.loc, construct_color)
 	for(var/mob/M in viewers(src, null))
 		if((M.client && !( M.blinded )))
 			M.show_message("<span class='warning'>[src] collapses in a shattered heap. </span>")
@@ -238,20 +239,28 @@
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
+	var/damageblock = 10
+
+/mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 and bellow if they aren't showing cracks yet (which happens when they are at 66% hp)
+	var/hurt = maxHealth - health
+	if (hurt <= (maxHealth/3) && (!damage || damage <= damageblock))//when cracks start to appear
+		if (A)
+			visible_message("<span class='danger'>\The [A] bounces harmlessly off of \the [src]'s shell. </span>")
+		anim(target = src, a_icon = 'icons/effects/64x64.dmi', flick_anim = "juggernaut_armor", lay = NARSIE_GLOW, offX = -WORLD_ICON_SIZE/2, offY = -WORLD_ICON_SIZE/2 + 4, plane = LIGHTING_PLANE)
+		playsound(src, 'sound/items/metal_impact.ogg', 25)
+		return TRUE
+	return FALSE
 
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
-	if(O.force && O.force < 11)
+	if(juggerblock(O.force, O))
 		user.delayNextAttack(8)
-		for(var/mob/M in viewers(src, null))
-			if ((M.client && !( M.blinded )))
-				M.show_message("<span class='danger'>[O] bounces harmlessly off of \the [src]. </span>")
 	else
 		..()
 
 /mob/living/simple_animal/construct/armoured/bullet_act(var/obj/item/projectile/P)
 	if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam) || istype(P, /obj/item/projectile/forcebolt) || istype(P, /obj/item/projectile/change))
 		var/reflectchance = 80 - round(P.damage/3)
-		if(prob(reflectchance))
+		if(P.damage <= damageblock || prob(reflectchance))//low damage lasers always get reflected
 			adjustBruteLoss(P.damage * 0.5)
 			visible_message("<span class='danger'>\The [P.name] gets reflected by \the [src]'s shell!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
@@ -262,10 +271,19 @@
 				P.rebound(src)
 
 			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
-
+	else if (juggerblock(P.damage,P))
+		return PROJECTILE_COLLISION_BLOCKED
 	return (..(P))
 
+/mob/living/simple_animal/construct/armoured/thrown_defense(var/obj/O)
+	if(juggerblock(O.throwforce,O))
+		return FALSE
+	return TRUE
 
+/mob/living/simple_animal/construct/armoured/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, sharp, edge, var/used_weapon = null, ignore_events = 0)
+	if (juggerblock(damage))
+		return 0
+	return ..()
 
 ////////////////////////Wraith/////////////////////////////////////////////
 

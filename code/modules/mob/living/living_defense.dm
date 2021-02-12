@@ -77,6 +77,10 @@
 			src.dust()
 	return PROJECTILE_COLLISION_DEFAULT
 
+//Multiplier for damage when an object has hit.
+/mob/living/proc/thrown_defense(var/obj/O)
+	return 1
+
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
 	. = ..()
 	if(.)
@@ -107,7 +111,7 @@
 				zone_normal_name = zone
 		var/armor = run_armor_check(zone, "melee", "Your armor has protected your [zone_normal_name].", "Your armor has softened the blow to your [zone_normal_name].", armor_penetration = O.throwforce*(speed/5)*O.sharpness)
 		if(armor < 100) //Stop the damage if the person is immune
-			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5))
+			var/damage = run_armor_absorb(zone, "melee", O.throwforce*(speed/5) * thrown_defense(O))
 			apply_damage(damage, dtype, zone, armor, O.is_sharp(), O)
 
 		// Begin BS12 momentum-transfer code.
