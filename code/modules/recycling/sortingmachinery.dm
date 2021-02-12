@@ -385,7 +385,7 @@
 /obj/machinery/sorting_machine/recycling
 	name = "Recycling Sorting Machine"
 
-	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics")
+	var/list/selected_types = list("Glasses", "Metals/Minerals", "Electronics", "Plastic")
 	var/list/types[7]
 
 /obj/machinery/sorting_machine/recycling/New()
