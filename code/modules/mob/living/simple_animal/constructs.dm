@@ -42,6 +42,8 @@
 
 	var/construct_color = rgb(0,0,0)
 
+	var/spell/spell_on_use_inhand = /spell
+
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
 	if (healers.len > 0)
@@ -199,6 +201,18 @@
 		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
+/mob/living/simple_animal/construct/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+
+	var/mob/living/simple_animal/construct/C = src
+	var/spell/S = locate(C.spell_on_use_inhand) in C.spell_list
+	if(S)
+		S.perform(C)
+		S.connected_button.update_charge(1)
+
 
 /////////////////Juggernaut///////////////
 
@@ -318,6 +332,9 @@
 							/spell/aoe_turf/conjure/pylon,
 							///obj/effect/proc_holder/spell/targeted/projectile/magic_missile/lesser
 							)
+
+	// tactically deploy a wall under you and become immune to projectiles, I guess
+	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
 
 
 /////////////////////////////Behemoth/////////////////////////
