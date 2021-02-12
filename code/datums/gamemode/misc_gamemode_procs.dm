@@ -400,7 +400,7 @@
 /proc/equip_time_agent(var/mob/living/carbon/human/H, var/datum/role/time_agent/T, var/is_twin = FALSE)
 	H.delete_all_equipped_items()
 
-	var/datum/outfit/time_agent/concrete_outfit = new /datum/outfit/time_agent
+	var/datum/outfit/special/time_agent/concrete_outfit = new /datum/outfit/special/time_agent
 	concrete_outfit.is_twin = is_twin
 	concrete_outfit.equip(H)
 	if(T)
