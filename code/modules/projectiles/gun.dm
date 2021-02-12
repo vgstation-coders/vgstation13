@@ -466,3 +466,12 @@
 
 /obj/item/weapon/gun/proc/bullet_hitting(var/obj/item/projectile/P,var/atom/atarget)
 	return
+
+/obj/item/weapon/gun/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(prob(5))
+		var/list/targets = list()
+		for(var/turf/t in view(6))
+			targets += t
+		var/target = pick(targets)
+		src.Fire(target,H,0,0,1)
