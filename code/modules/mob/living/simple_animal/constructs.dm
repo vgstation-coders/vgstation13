@@ -42,6 +42,7 @@
 
 	var/construct_color = rgb(0,0,0)
 
+	// for constructs with one spell, locate() that spell and use it.
 	var/spell/spell_on_use_inhand = /spell
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
