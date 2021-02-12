@@ -65,7 +65,7 @@
 	if(Proj.damage)
 		health -= Proj.damage
 		healthcheck()
-	..()
+	return ..()
 
 /obj/machinery/power/solar/panel/proc/healthcheck()
 	if(health <= 0)

@@ -243,13 +243,16 @@
 		P.grant_spell()
 
 // Return 1 on success, 0 on failure.
-/datum/role/proc/OnPostSetup()
+/datum/role/proc/OnPostSetup(var/laterole = FALSE)
 	return 1
 
 /datum/role/proc/update_antag_hud()
 	return
 
 /datum/role/proc/process()
+	return
+
+/datum/role/proc/check_win()
 	return
 
 // Create objectives here.
@@ -574,7 +577,7 @@
 /datum/role/highlander/ForgeObjectives()
 	AppendObjective(/datum/objective/hijack)
 
-/datum/role/highlander/OnPostSetup()
+/datum/role/highlander/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	if(!.)
 		return
@@ -588,7 +591,7 @@
 	required_pref = MALF
 	logo_state = "malf-logo"
 
-/datum/role/malfAI/OnPostSetup()
+/datum/role/malfAI/OnPostSetup(var/laterole = FALSE)
 	. = ..()
 	if(!.)
 		return
@@ -620,7 +623,7 @@ Once done, you will be able to interface with all systems, notably the onboard n
 	required_jobs = list("Cyborg")
 	logo_state = "malf-logo"
 
-/datum/role/malfbot/OnPostSetup()
+/datum/role/malfbot/OnPostSetup(var/laterole = FALSE)
 	if(!isrobot(antag.current))
 		return FALSE
 	Greet()

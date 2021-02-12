@@ -28,13 +28,8 @@ var/list/sqrtTable = list(1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 
 /proc/Ceiling(x, y = 1)
 	. = -round(-x / y) * y
 
-/proc/sgn(const/i)
-	if(i > 0)
-		return 1
-	else if(i < 0)
-		return -1
-	else
-		return 0
+// Returns the sign of the given number (1 or -1)
+#define sgn(x) ((x) != 0 ? (x) / abs(x) : 0)
 
 // -- Returns a Lorentz-distributed number.
 // -- The probability density function has centre x0 and width s.

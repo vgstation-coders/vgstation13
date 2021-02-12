@@ -140,8 +140,11 @@
 /datum/surgery_step/generic/cut_open
 	allowed_tools = list(
 		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
+		/obj/item/soulstone/gem = 0,
+		/obj/item/soulstone = 50,
 		)
 
 	priority = 0
@@ -187,6 +190,7 @@
 	allowed_tools = list(
 		/obj/item/weapon/hemostat = 100,
 		/obj/item/stack/cable_coil = 75,
+		/obj/item/weapon/talisman = 70,
 		/obj/item/device/assembly/mousetrap = 20,
 		)
 
@@ -414,7 +418,7 @@
 	user.visible_message("<span class='notice'>[user] injects biofoam into [target]'s [affected.display_name] with \the [tool].</span>", \
 	"<span class='notice'>You inject biofoam in [target] with \the [tool].</span>")
 	target.reagents.add_reagent(BIOFOAM, amount)
-	playsound(get_turf(target), 'sound/items/hypospray.ogg', 50, 1)
+	playsound(target, 'sound/items/hypospray.ogg', 50, 1)
 	tool.attack_self(user)
 	tool.foam = 0
 

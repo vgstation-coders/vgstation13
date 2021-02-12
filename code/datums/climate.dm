@@ -10,6 +10,9 @@
 //Forecast will stay unchanged until there are less than PREDICTION_MINIMUM weathers, at which point it will make a new forecast
 //Every forecast is freshly generated, which means forecasts change!
 
+#define INTENSIFY 1
+#define ABATE -1
+
 var/list/weathertracker = list() //associative list, gathers time spent one each weather for scoreboard
 
 /datum/climate
@@ -38,6 +41,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		else
 			var/datum/weather/future = new path(src)
 			forecasts += future
+		if(W.next_weather.len == 1)
+			break //Forecast no further.
 		cycle++
 	forecasts -= current_weather //remove it from our future weather
 
@@ -56,6 +61,29 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 		forecasts -= forecasts[1]
 	if(forecasts.len < PREDICTION_MINIMUM)
 		forecast()
+
+#define INVALID_STEP -1
+#define CANNOT_CHANGE -2
+//step -1 to go down a step, 1 to go up a step
+/datum/climate/proc/weather_shift(var/direction = INTENSIFY)
+	if(direction**2 != 1)
+		return INVALID_STEP //must be 1 or -1
+	if(current_weather)
+		var/weathers = current_weather.next_weather.len
+		if(weathers == 1)
+			return CANNOT_CHANGE
+		var/preferred_weather
+		if(direction == INTENSIFY)
+			preferred_weather = current_weather.next_weather[weathers] //the last value
+		else if(direction == ABATE)
+			preferred_weather = current_weather.next_weather[1] //the first value
+		if(preferred_weather == current_weather.type)
+			return FALSE
+		current_weather.timeleft = min(1 MINUTES, current_weather.timeleft)
+		current_weather.next_weather.Cut()
+		current_weather.next_weather[preferred_weather] = 100
+		forecast()
+		return TRUE
 
 /datum/climate/proc/change_weather(weather)
 	if(ispath(weather))
@@ -89,6 +117,8 @@ var/list/weathertracker = list() //associative list, gathers time spent one each
 /datum/weather
 	var/name = "weather"
 	var/list/next_weather = list() //associative list
+	//for next_weather, order matters: put in order of weather intensity, so that step() will work
+	//only one in list means it can't be changed by the weather control device
 	var/timeleft = 1
 	var/datum/climate/parent
 	var/temperature = T20C

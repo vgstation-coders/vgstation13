@@ -32,8 +32,9 @@
 	if(!P.nodamage)
 		visible_message("<span class='warning'>[P] tears \the [src] down!</span>")
 		qdel(src)
+		return // Blank, nothing happening
 	else
-		..()
+		return ..()
 
 /obj/structure/curtain/attack_hand(mob/user)
 	playsound(loc, "rustle", 15, 1, -5)

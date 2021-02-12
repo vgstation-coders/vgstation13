@@ -123,8 +123,7 @@ var/global/list/obj/machinery/field_generator/field_gen_list = list()
 	if(Proj.flag != "bullet")
 		power += Proj.damage
 		update_icon()
-	return 0
-
+	return ..()
 
 /obj/machinery/field_generator/Destroy()
 	src.cleanup()

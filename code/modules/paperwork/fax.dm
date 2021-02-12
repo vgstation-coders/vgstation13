@@ -1,7 +1,7 @@
 //Updated by Cutelildick
 
 var/list/obj/machinery/faxmachine/allfaxes = list()
-var/list/alldepartments = list("Central Command")
+var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine
 	name = "fax machine"
@@ -187,13 +187,9 @@ var/list/alldepartments = list("Central Command")
 		if ( (!( authenticated ) && (scan)) )
 			if (check_access(scan))
 				authenticated = 1
-				if(access_lawyer in scan.access)
-					alldepartments += "Nanotrasen HR"
 
 	if(href_list["logout"])
 		authenticated = 0
-		if(access_lawyer in scan.access)
-			alldepartments -= "Nanotrasen HR"
 
 	updateUsrDialog()
 

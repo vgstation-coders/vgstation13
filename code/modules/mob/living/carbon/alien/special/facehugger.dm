@@ -181,6 +181,7 @@
 	if(Proj.damage)
 		health -= Proj.damage
 		healthcheck()
+	return PROJECTILE_COLLISION_DEFAULT
 
 /obj/item/clothing/mask/facehugger/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)
 	if(exposed_temperature > 300)
@@ -219,7 +220,7 @@
 	..()
 	if(stat == CONSCIOUS)
 		icon_state = "[initial(icon_state)]"
-		if(ishuman(hit_atom))	
+		if(ishuman(hit_atom))
 			var/mob/living/carbon/human/H = hit_atom
 			if(!H.isUnconscious())
 				Attach(H)
@@ -422,7 +423,7 @@
 
 	if(F && (!F.sterile || hugger.sterile) && F != hugger) // Lamarr won't fight over faces and neither will normal huggers.
 		return FALSE
-	if(F2 && (!F2.sterile || hugger.sterile) && F2 != hugger) 
+	if(F2 && (!F2.sterile || hugger.sterile) && F2 != hugger)
 		return FALSE
 
 	return TRUE
@@ -433,8 +434,8 @@
 
 
 
-//////////////////////////////////////////////////// 
-////////////////  HEADCRABS  /////////////////////// 
+////////////////////////////////////////////////////
+////////////////  HEADCRABS  ///////////////////////
 ////////////////////////////////////////////////////
 
 /obj/item/clothing/mask/facehugger/headcrab
@@ -481,11 +482,11 @@
 	processing_objects.Remove(src)
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
-	sterile = TRUE 
+	sterile = TRUE
 	canremove = 1
 
 	visible_message("<span class='danger'>\The [src] curls up into a ball!</span>")
-	
+
 
 /obj/item/clothing/mask/facehugger/headcrab/findtarget()
 	if(!real)
@@ -561,7 +562,7 @@
 	if(stat != CONSCIOUS)
 		return FALSE
 	if(!CanHug(L, src))
-		return FALSE	
+		return FALSE
 	if(!sterile)
 		L.take_organ_damage(strength, 0) //done here so that even borgs and humans in helmets take damage
 
@@ -614,8 +615,8 @@
 		Assimilate(target)
 		return TRUE
 
-	
-	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED) 
+
+	GoIdle(TIME_IDLE_AFTER_ATTACH_DENIED)
 
 
 	return FALSE
@@ -650,7 +651,7 @@
 			hgibs(target.loc, target.virus2, target.dna)
 			var/mob/living/simple_animal/hostile/necro/zombie/headcrab/Z = target.make_zombie(retain_mind = 1, crabzombie = 1)
 			Z.crab = src
-		
-	
 
-	
+
+
+

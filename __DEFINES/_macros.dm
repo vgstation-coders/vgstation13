@@ -60,6 +60,10 @@
 
 #define isalienadult(A) istype(A, /mob/living/carbon/alien/humanoid)
 
+#define isalienqueen(A)	istype(A, /mob/living/carbon/alien/humanoid/queen)
+
+#define isaliendrone(A)	istype(A, /mob/living/carbon/alien/humanoid/drone)
+
 #define islarva(A) istype(A, /mob/living/carbon/alien/larva)
 
 #define iszombie(A) istype(A, /mob/living/simple_animal/hostile/necro/zombie)
@@ -267,15 +271,15 @@
 
 #define istraitor(H) (H.mind && H.mind.GetRole(TRAITOR))
 
-#define isdoubleagent(H) (H.mind && H.mind.GetRole(ROGUE))
+#define ischallenger(H) (H.mind && H.mind.GetRole(CHALLENGER))
 
-#define iselitesyndie (H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
+#define iselitesyndie(H) (H.mind && H.mind.GetRole(SYNDIESQUADIE))
 
 #define ismalf(H) (H.mind && H.mind.GetRole(MALF))
 
 #define isnukeop(H) (H.mind && H.mind.GetRole(NUKE_OP))
 
-#define issyndicate(H) ((H.mind && H.mind.GetRole(TRAITOR)) || (H.mind && H.mind.GetRole(SYNDIESQUADIE)) || (H.mind && H.mind.GetRole(NUKE_OP)))
+#define issyndicate(H) (H.mind && (H.mind.GetRole(TRAITOR) ||  H.mind.GetRole(SYNDIESQUADIE) || H.mind.GetRole(NUKE_OP) || H.mind.GetRole(CHALLENGER)))
 
 #define iswizard(H) (H.mind && H.mind.GetRole(WIZARD))
 
@@ -302,6 +306,10 @@
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+#define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
+
+#define istagmime(H) (H.mind && H.mind.GetRole(TAG_MIME))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))

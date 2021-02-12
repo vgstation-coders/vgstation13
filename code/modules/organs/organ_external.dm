@@ -766,16 +766,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(body_part == (UPPER_TORSO || LOWER_TORSO)) //We can't lose either, those cannot be amputated and will cause extremely serious problems
 		return
 
-	if(body_part == HEAD && iscultist(owner) && veil_thickness > CULT_PROLOGUE)
-		//spawning a skull where the head would have been
-		var/obj/item/weapon/skull/sk = new (get_turf(owner))
-		var/randomdir = pick(cardinal)
-		step(sk, randomdir)
-		//turning the body into skull-less remains, the dusting will take care of the shade's creation.
-		status |= ORGAN_DESTROYED
-		owner.dust(TRUE)
-		return
-
 	var/datum/species/species = src.species || owner.species
 	var/obj/item/organ/external/organ //Dropped limb object
 
@@ -1823,7 +1813,7 @@ obj/item/organ/external/head/New(loc, mob/living/carbon/human/H)
 				hair.Blend(icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_acc"), ICON_OVERLAY)
 
 			overlays.Add(hair) //icon.Blend(hair, ICON_OVERLAY)
-	spawn(5)
+
 	if(brainmob && brainmob.client)
 		brainmob.client.screen.len = null //clear the hud
 
@@ -1861,10 +1851,20 @@ obj/item/organ/external/head/proc/transfer_identity(var/mob/living/carbon/human/
 	brainmob.name = H.real_name
 	brainmob.real_name = H.real_name
 	brainmob.dna = H.dna.Clone()
+
+	if (isbrain(H))
+		var/mob/living/carbon/brain/otherbrain = H
+		brainmob.timeofhostdeath = otherbrain.timeofhostdeath
+	else if (H.timeofdeath == 0)//happens when the human gets decapitated while still alive
+		brainmob.timeofhostdeath = world.time
+	else
+		brainmob.timeofhostdeath = H.timeofdeath
+
 	if(H.mind)
 		H.mind.transfer_to(brainmob)
 	brainmob.languages = H.languages
 	brainmob.default_language = H.default_language
+	brainmob.init_language = brainmob.default_language
 	brainmob.container = src
 
 obj/item/organ/external/head/attackby(obj/item/weapon/W as obj, mob/user as mob)

@@ -255,7 +255,7 @@
 	if(Proj.damage)
 		src.health -= round(Proj.damage / 2)
 		healthcheck()
-	..()
+	return ..()
 
 /obj/machinery/portable_atmospherics/canister/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(iswelder(W) && src.destroyed)

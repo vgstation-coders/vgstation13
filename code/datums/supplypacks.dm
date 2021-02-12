@@ -437,6 +437,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "airbag crate"
 	group = "Supplies"
 
+/datum/supply_packs/religious//you can only order default-looking bibles for now
+	name = "Religious Paraphernelia"
+	contains = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
+					/obj/item/weapon/storage/bible,
+					/obj/item/weapon/storage/fancy/incensebox/harebells,
+					/obj/item/weapon/thurible)
+	cost = 100
+	containertype = /obj/structure/closet/crate/basic
+	containername = "religious stuff crate"
+	group = "Supplies"
+
 //////CLOTHING//////
 
 /datum/supply_packs/costume
@@ -1071,6 +1082,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 50
 	containertype = /obj/structure/closet/crate/secure/basic
 	containername = "chemical implant crate"
+	access = list(access_armory)
+	group = "Security"
+
+/datum/supply_packs/holy
+	name = "Holy implants"
+	contains = list (/obj/item/weapon/storage/lockbox/holy)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "holy implant crate"
 	access = list(access_armory)
 	group = "Security"
 

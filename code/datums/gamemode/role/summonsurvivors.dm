@@ -42,7 +42,7 @@
 /datum/role/wizard/summon_magic/Greet()
 	to_chat(antag.current, "<B>You are a Magician!</B><BR>Your own safety matters above all else, trust no one and kill anyone who gets in your way. However, armed as you are, now would be the perfect time to settle that score or grab that pair of yellow gloves you've been eyeing...")
 
-/datum/role/wizard/summon_magic/OnPostSetup()
+/datum/role/wizard/summon_magic/OnPostSetup(var/laterole = FALSE)
 	return TRUE
 
 /datum/role/wizard/summon_magic/GetScoreboard()
@@ -70,9 +70,9 @@
 /datum/role/wizard/summon_potions/Greet()
 	to_chat(antag.current, "<B>You are a Potion Seller!</B><BR>Your own safety matters abov- Fuck that, GO SELL SOME POTIONS!")
 
-/datum/role/wizard/summon_potions/OnPostSetup()
+/datum/role/wizard/summon_potions/OnPostSetup(var/laterole = FALSE)
 	return TRUE
-  
+
 /datum/role/wizard/summon_potions/GetScoreboard()
 	. = ..()
 	. += "The [name] received the following as a result of a summoning spell: [summons_received]<BR>"

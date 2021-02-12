@@ -149,6 +149,16 @@
 	layer = HALLUCINATION_LAYER
 	alpha = 0
 
+/obj/abstract/screen/fullscreen/confusion_border
+	icon_state = "conversionoverlay"
+	layer = HALLUCINATION_LAYER
+	alpha = 0
+
+/obj/abstract/screen/fullscreen/deafmute_border
+	icon_state = "conversionoverlay"
+	layer = HALLUCINATION_LAYER
+	alpha = 0
+
 /obj/abstract/screen/fullscreen/conversion_red
 	icon = 'icons/mob/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"

@@ -1,3 +1,4 @@
+var/global/global_cascade_portal
 
 /datum/universal_state/supermatter_cascade
   name = "Supermatter Cascade"

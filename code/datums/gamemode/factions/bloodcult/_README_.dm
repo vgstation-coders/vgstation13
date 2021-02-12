@@ -271,7 +271,7 @@
 					* unstick
 
 			* /artificerray
-				-> visual ray that appears when artificers
+				-> visual ray that appears when artificers heal mobs
 
 [bloodcult_narsie.dm]
 

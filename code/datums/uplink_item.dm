@@ -749,6 +749,14 @@ var/list/uplink_items = list()
 	discounted_cost = 8
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
+/datum/uplink_item/jobspecific/engineering/teslagun
+	name = "Tesla Cannon"
+	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
+	item = /obj/item/weapon/gun/tesla/preloaded
+	cost = 18
+	discounted_cost = 14
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
 	name = "Powercreep Packet"
 	desc = "A packet that creates a dangerous mutated version of kudzu vines. The vines will repeatedly shock people and connect themselves to any cables near them, rapidly growing and spreading out of control if left unchecked."
@@ -853,7 +861,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/service/meatcleaver
 	name = "Meat Cleaver"
-	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also has a strong to stun when thrown."
+	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also stuns when thrown."
 	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	cost = 12
 	discounted_cost = 10
@@ -1046,4 +1054,39 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
 	cost = 6
 	jobs_exclusive = list("Trader")
+	
+// SYNDICATE COOP
+// Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
 
+/datum/uplink_item/syndie_coop
+	category = "Cooperative Cell"
+
+/datum/uplink_item/syndie_coop/stone
+	name = "SG-VPR-23 Pathogenic Medium"
+	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
+	item = /obj/item/clothing/mask/stone
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/changeling_vial
+	name = "CH-L1-NG Bioweapon Sample"
+	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
+	item = /obj/item/changeling_vial
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/bloodcult_pamphlet
+	name = "Esoteric Propaganda Pamphlet"
+	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
+	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/codebreaker
+	name = "Codebreaker"
+	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
+	item = /obj/item/device/codebreaker
+	cost = 100

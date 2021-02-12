@@ -14,6 +14,9 @@
 
 /obj/abstract/map/nest/perform_spawn()
 
+	if(islist(mob_type))
+		mob_type = pick(mob_type)
+
 	for(var/i = 1, i <= pop, i++)
 		new mob_type(loc)
 
@@ -79,6 +82,34 @@
 	breed_time = 9000
 	pop = 5
 	pop_max = 5
+
+/obj/abstract/map/nest/deer
+	name = "deer feeder"
+	pop_min = 0
+	pop_max = 6
+	icon_state = "deer"
+	mob_type = /mob/living/simple_animal/hostile/deer
+
+/obj/abstract/map/nest/polarbear
+	name = "polar bear lair"
+	pop_min = 0
+	pop_max = 4
+	icon_state = "bear"
+	mob_type = /mob/living/simple_animal/hostile/bear/polarbear
+
+/obj/abstract/map/nest/wolf
+	name = "wolf lair"
+	icon_state = "wolf"
+	pop_min = 0
+	pop_max = 8
+	mob_type = list(
+		/mob/living/simple_animal/hostile/wolf/pliable,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf,
+		/mob/living/simple_animal/hostile/wolf/alpha
+		)
 
 /obj/abstract/map/nest/necrozombie
 	name = "necro zombie breeding ground" //Yep

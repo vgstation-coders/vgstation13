@@ -64,6 +64,8 @@ var/latejoiner_allowance = 0//Added to station_allowance and reset before every 
 	department_account.transaction_log.Add(T)
 	all_money_accounts.Add(department_account)
 
+	all_station_accounts.Add(department_account)
+
 	department_accounts[department] = department_account
 
 //the current ingame time (hh:mm) can be obtained by calling:

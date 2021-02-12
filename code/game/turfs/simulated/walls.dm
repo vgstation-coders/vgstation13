@@ -140,6 +140,10 @@
 	if (iscultist(user) && !(locate(/obj/effect/cult_shortcut) in src))
 		var/datum/cult_tattoo/CT = user.checkTattoo(TATTOO_SHORTCUT)
 		if (CT)
+			var/mob/living/carbon/C = user
+			if (C.occult_muted())
+				to_chat(user, "<span class='warning'>The holy aura preying upon your body prevents you from correctly drawing the sigil.</span>")
+				return
 			var/data = use_available_blood(user, CT.blood_cost)
 			if (data[BLOODCOST_RESULT] != BLOODCOST_FAILURE)
 				if(do_after(user, src, 30))
@@ -409,9 +413,8 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))
-		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
-
-		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		if(H.foot_impact(src,rand(5,7)))
+			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 /turf/simulated/wall/acidable()
 	return !(flags & INVULNERABLE)

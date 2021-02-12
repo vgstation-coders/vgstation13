@@ -20,6 +20,7 @@
 	slot_flags = SLOT_BELT
 	mech_flags = MECH_SCAN_FAIL
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=4"
+	sharpness_flags = SHARP_TIP | SHARP_BLADE
 
 	var/mob/living/simple_animal/shade/shade = null
 
@@ -122,16 +123,23 @@
 			to_chat(user, "<span class='notice'><b>Capture successful!</b>: </span>[target.real_name]'s has been captured and stored within the soul stone.")
 
 			//Is our user a cultist? Then you're a cultist too now!
-			if (iscultist(user) && !iscultist(target))
-				var/datum/role/cultist/newCultist = new
-				newCultist.AssignToRole(target.mind,1)
-				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-				if (!cult)
-					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-				cult.HandleRecruitedRole(newCultist)
-				newCultist.OnPostSetup()
-				newCultist.Greet(GREET_SOULSTONE)
-				newCultist.conversion["soulstone"] = user
+			if (iscultist(user))
+				if(!iscultist(target))
+					var/datum/role/cultist/newCultist = new
+					newCultist.AssignToRole(target.mind,1)
+					var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+					if (!cult)
+						cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+					cult.HandleRecruitedRole(newCultist)
+					newCultist.OnPostSetup()
+					newCultist.Greet(GREET_SOULSTONE)
+					newCultist.conversion["soulstone"] = user
+			else
+				if (iscultist(target))
+					var/datum/role/cultist = target.mind.GetRole(CULTIST)
+					to_chat(target, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+					cultist.Drop()
+					target.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
 
 /obj/item/soulstone/proc/eject_shade(var/mob/user)
 	if (!shade)
@@ -163,6 +171,7 @@
 	icon_state = "soulstone"
 	item_state = "shard-soulstone"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/shards.dmi', "right_hand" = 'icons/mob/in-hand/right/shards.dmi')
+	sharpness_flags = 0
 
 /obj/item/soulstone/gem/throw_impact(var/atom/hit_atom, var/speed, var/mob/user)
 	..()
@@ -356,32 +365,7 @@
 		var/turf/T = get_turf(body)
 
 		if (gem)//if we're using a gem, let's store everything in a neat coffer along with some of the victim's blood
-			var/obj/effect/cult_ritual/conversion/anim = new(T)
-			anim.icon_state = ""
-			playsound(T, 'sound/effects/convert_failure.ogg', 75, 0, -4)
-			flick("rune_convert_failure",anim)
-			anim.Die()
-			var/obj/item/weapon/storage/cult/coffer = new(T)
-			var/obj/item/weapon/reagent_containers/food/drinks/cult/cup = new(coffer)
-			if (istype(body,/mob/living/carbon/human) && body.dna)
-				body.take_blood(cup, cup.volume)//Up to 60u
-				cup.on_reagent_change()//so we get the reagentsfillings overlay
-				new/obj/item/weapon/skull(coffer)
-			if (isslime(body))
-				cup.reagents.add_reagent(SLIMEJELLY, 50)
-			if (isalien(body))//w/e
-				cup.reagents.add_reagent(RADIUM, 50)
-
-			for(var/obj/item/weapon/implant/loyalty/I in body)
-				I.implanted = 0
-
-			for(var/obj/item/I in body)
-				body.u_equip(I)
-				if(I)
-					I.forceMove(body.loc)
-					I.reset_plane_and_layer()
-					I.dropped(body)
-					I.forceMove(coffer)
+			body.boxify(FALSE, TRUE, "cult")
 
 		else//otherwise just drop it on the ground
 			for(var/obj/item/W in body)
@@ -422,7 +406,7 @@
 		new /obj/item/weapon/skull(get_turf(target))
 
 	//Scary sound
-	playsound(get_turf(receptacle), get_sfx("soulstone"), 50,1)
+	playsound(receptacle, get_sfx("soulstone"), 50,1)
 
 	//Are we capturing a cult-banned player as a cultist? Sucks for them!
 	if (iscultist(user) && (jobban_isbanned(body, CULTIST) || isantagbanned(body)))
@@ -477,21 +461,25 @@
 	if (!suicide)
 		//Is our user a cultist? Then you're a cultist too now!
 		if (iscultist(user))
-			var/datum/role/cultist/newCultist = new
-			newCultist.AssignToRole(shadeMob.mind,1)
-			var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
-			if (!cult)
-				cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
-			cult.HandleRecruitedRole(newCultist)
-			newCultist.OnPostSetup()
-			newCultist.Greet(GREET_SOULSTONE)
-			newCultist.conversion["soulstone"] = user
+			if (!iscultist(shadeMob))
+				var/datum/role/cultist/newCultist = new
+				newCultist.AssignToRole(shadeMob.mind,1)
+				var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
+				if (!cult)
+					cult = ticker.mode.CreateFaction(/datum/faction/bloodcult, null, 1)
+				cult.HandleRecruitedRole(newCultist)
+				newCultist.OnPostSetup()
+				newCultist.Greet(GREET_SOULSTONE)
+				newCultist.conversion["soulstone"] = user
 
 		else
 			if (iscultist(shadeMob))
-				to_chat(shadeMob, "<span class='userdanger'>Your master is NOT a cultist, but you are. You are still to follow their commands and help them in their goal.</span>")
-				to_chat(shadeMob, "<span class='sinister'>Your loyalty to Nar-Sie temporarily wanes, but the God takes his toll on your treacherous mind. You only remember of who converted you.</span>")
-				shadeMob.mind.decult()
+				var/datum/role/cultist = shadeMob.mind.GetRole(CULTIST)
+				to_chat(shadeMob, "<span class='userdanger'>Your new master is NOT a cultist, you are henceforth disconnected from the rest of the cult. You are to follow your new master's commands and help them in their goal.</span>")
+				cultist.Drop()
+				shadeMob.add_language(LANGUAGE_CULT)//re-adding cult languages, as all shades can speak it
+
+
 
 	//Pretty particles
 	var/turf/T1 = get_turf(target)
@@ -537,9 +525,36 @@
 	else
 		return ..()
 
+
+/obj/structure/constructshell/attack_construct(var/mob/user)
+	if (istype(user, /mob/living/simple_animal/construct/builder))
+		for (var/obj/item/soulstone/gem/gem in range(1,user))
+			create_construct(gem, user)
+			return 1
+		to_chat(user, "<span class='warning'>If there was a soul gem near you, you could set it inside this shell.</span>")
+		return 1
+	return 0
+
+/obj/structure/constructshell/proc/make_shade_beacon(var/obj/item/soulstone/stone, var/mob/user)
+	return FALSE
+
+
+/obj/structure/constructshell/cult/alt/make_shade_beacon(var/obj/item/soulstone/gem/gem, var/mob/user)
+	if (istype(gem))
+		qdel(gem)
+		var/obj/structure/shadebeacon/newbeacon = new (loc)
+		if (fingerprints)
+			newbeacon.fingerprints = fingerprints.Copy()
+		to_chat(user, "<span class='notice'>You've set \the [gem] onto \the [src]. A wandering shade can use it to become a construct by itself.</span>")
+		return TRUE
+	return FALSE
+
 //Making a Construct
 /obj/structure/constructshell/proc/create_construct(var/obj/item/soulstone/stone, var/mob/user)
 	if (!stone.shade)
+		if (make_shade_beacon(stone,user))
+			qdel(src)
+			return
 		to_chat(user, "<span class='warning'>\The [stone] is empty! The shell doesn't react.</span>")
 		return
 
@@ -553,11 +568,11 @@
 	var/list/choices = list(
 		list("Artificer", "radial_artificer[perfect ? "2" : ""]", "Though fragile, this construct can reshape its surroundings, conjuring walls, floors, and most importantly, repair other constructs. Additionally, they may operate some cult structures.[perfect ? " <b>Can open gateways to summon eldritch monsters from the realm of Nar-Sie.</b>" : ""]"),
 		list("Wraith", "radial_wraith[perfect ? "2" : ""]", "The fastest of deadliest of constructs, at the cost of a relatively fragile build. Can easily scout and escape by phasing through the veil. Its claws can pry open unpowered airlocks.[perfect ? " <b>Can fire bolts that nail their victims to the floor.</b>" : ""]"),
-		list("Juggernaut", "radial_juggernaut[perfect ? "2" : ""]", "Sturdy, powerful, at the cost of a snail's pace. However, its fists can break walls apart, along with some machinery. Can conjure a temporary forcefield.[perfect ? " <b>Can dash forward over a large distance, knocking down anyone in front of them.</b>" : ""]"),
+		list("Juggernaut", "radial_juggernaut[perfect ? "2" : ""]", "Sturdy, powerful, at the cost of a snail's pace. However, its fists can break walls apart, along with some machinery. Can conjure a temporary forcefield.[perfect ? " <b>Can dash forward over a small distance, knocking down anyone in front of them for a second.</b>" : ""]"),
 	)
 	var/construct_class = show_radial_menu(user,src,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
 
-	if (!Adjacent(user) || (stone != user.get_active_hand()) || !construct_class || soul.loc != stone)
+	if (!Adjacent(user) || (!isconstruct(user) && stone != user.get_active_hand())  || (isconstruct(user) && !stone.Adjacent(user)) || !construct_class || soul.loc != stone)
 		return//sanity check after we've picked a construct class
 
 	switch(construct_class)
@@ -571,7 +586,7 @@
 			to_chat(new_construct, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
 			if (perfect)
 				flick("make_juggernaut2", new_construct)
-				to_chat(new_construct, "<B>You can dash over a large distance, knocking down anyone on your path.</B>")
+				to_chat(new_construct, "<B>You can dash over a small distance, knocking down anyone on your path for a second.</B>")
 			to_chat(new_construct, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
 			new_construct.cancel_camera()
 
@@ -617,4 +632,102 @@
 	for(var/atom/A in stone)//we get rid of the empty shade once we've transferred its mind to the construct, so it isn't dropped on the floor when the soulstone is destroyed.
 		qdel(A)
 	qdel(stone)
+	qdel(src)
+
+
+/////////////////////////////////////////SHADE BEACONS//////////////////////////////////////////////
+
+//cult 3.0 shells with a gem already set on them, allowing shades to become constructs by themselves.
+/obj/structure/shadebeacon
+	name = "shade beacon"
+	icon = 'icons/obj/cult.dmi'
+	icon_state = "beacon"
+	desc = "This shell has been fit with an empty soul gem. Maybe a shade could make use of it."
+	flags = FPRINT
+
+
+/obj/structure/shadebeacon/cultify()
+	return
+
+/obj/structure/shadebeacon/attack_hand(var/mob/user)
+	if (iscarbon(user))
+		user.put_in_active_hand(new /obj/item/soulstone/gem(loc))
+		var/obj/structure/constructshell/cult/alt/newshell = new (loc)
+		if (fingerprints)
+			newshell.fingerprints = fingerprints.Copy()
+		qdel(src)
+		return 1
+	return ..()
+
+
+/obj/structure/shadebeacon/attack_animal(var/mob/user)
+	if (istype(user, /mob/living/simple_animal/construct/builder))
+		new /obj/item/soulstone/gem(loc)
+		var/obj/structure/constructshell/cult/alt/newshell = new (loc)
+		newshell.fingerprints = fingerprints.Copy()
+		qdel(src)
+		return 1
+	if (istype(user, /mob/living/simple_animal/shade))
+		create_construct(user)
+	return 0
+
+
+/obj/structure/shadebeacon/proc/create_construct(var/mob/living/simple_animal/shade/user)
+	var/mob/living/simple_animal/construct/new_construct
+
+	var/list/choices = list(
+		list("Artificer", "radial_artificer2", "Though fragile, this construct can reshape its surroundings, conjuring walls, floors, and most importantly, repair other constructs. Additionally, they may operate some cult structures. <b>Can open gateways to summon eldritch monsters from the realm of Nar-Sie.</b>"),
+		list("Wraith", "radial_wraith2", "The fastest of deadliest of constructs, at the cost of a relatively fragile build. Can easily scout and escape by phasing through the veil. Its claws can pry open unpowered airlocks. <b>Can fire bolts that nail their victims to the floor.</b>"),
+		list("Juggernaut", "radial_juggernaut2", "Sturdy, powerful, at the cost of a snail's pace. However, its fists can break walls apart, along with some machinery. Can conjure a temporary forcefield. <b>Can dash forward over a small distance, knocking down anyone in front of them for a second.</b>"),
+	)
+	var/construct_class = show_radial_menu(user,src,choices,'icons/obj/cult_radial3.dmi',"radial-cult2")
+
+	if (!Adjacent(user) || !construct_class)
+		return
+
+	switch(construct_class)
+		if("Juggernaut")
+			new_construct = new /mob/living/simple_animal/construct/armoured/perfect(get_turf(src.loc))
+			new_construct.setup_type(user)
+			new_construct.real_name = user.real_name
+			user.mind.transfer_to(new_construct)
+			to_chat(new_construct, "<B>You are a Juggernaut. Though slow, your shell can withstand extreme punishment, your body can reflect energy and laser weapons, and you can create temporary shields that blocks pathing and projectiles. You fists can punch people and regular walls apart.</B>")
+			flick("make_juggernaut2", new_construct)
+			to_chat(new_construct, "<B>You can dash over a small distance, knocking down anyone on your path for a second.</B>")
+			to_chat(new_construct, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
+			if (!iscultist(new_construct))
+				to_chat(new_construct, "<B>As a self-made construct, you are unbounded from anyone's will.</B>")
+			new_construct.cancel_camera()
+
+		if("Wraith")
+			new_construct = new /mob/living/simple_animal/construct/wraith/perfect(get_turf(src.loc))
+			new_construct.setup_type(user)
+			new_construct.real_name = user.real_name
+			user.mind.transfer_to(new_construct)
+			to_chat(new_construct, "<B>You are a Wraith. Though relatively fragile, you are fast, deadly, and even able to phase through walls for a few seconds. Use it both for surprise attacks and strategic retreats.</B>")
+			flick("make_wraith2", new_construct)
+			to_chat(new_construct, "<B>You can fire red bolts that can temporarily prevent their victims from moving. You recharge a bolt every 5 seconds, up to 3 bolts.</B>")
+			to_chat(new_construct, "<B>You are still bound to serve your creator, follow their orders and help them complete their goals at all costs.</B>")
+			if (!iscultist(new_construct))
+				to_chat(new_construct, "<B>As a self-made construct, you are unbounded from anyone's will.</B>")
+			new_construct.cancel_camera()
+
+		if("Artificer")
+			new_construct = new /mob/living/simple_animal/construct/builder/perfect(get_turf(src.loc))
+			new_construct.setup_type(user)
+			new_construct.real_name = user.real_name
+			user.mind.transfer_to(new_construct)
+			to_chat(new_construct, "<B>You are an Artificer. You are incredibly weak and fragile, but you can heal both yourself and other constructs (by clicking on yourself/them). You can build (and deconstruct) new walls and floors, or replace existing ones by clicking on them, as well as place pylons that act as light source (these block paths but can be easily broken),</B><I>and most important of all you can produce the tools to create new constructs</I><B> (remember to periodically produce new soulstones for your master, and place empty shells in your hideout or when asked.).</B>")
+			flick("make_artificer2", new_construct)
+			to_chat(new_construct, "<B>You can channel a gateway from the realm of Nar-Sie to summon a minion to protect an area.</B>")
+			if (!iscultist(new_construct))
+				to_chat(new_construct, "<B>As a self-made construct, you are unbounded from anyone's will.</B>")
+			new_construct.cancel_camera()
+
+	if (!new_construct)
+		return
+
+	new_construct.name = "[new_construct.real_name] the [construct_class]"
+
+	qdel(user)
 	qdel(src)

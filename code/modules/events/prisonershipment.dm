@@ -6,7 +6,9 @@ var/list/current_prisoners = list()
 /datum/event/prisontransfer
 	var/datum/recruiter/recruiter = null //for prisoner shit
 
-/datum/event/prisontransfer/can_start()        //Can't fire randomly for now. Must be forced by a security RC console.
+/datum/event/prisontransfer/can_start(var/list/active_with_role)  
+	if(active_with_role["Security"] > 2)
+		return 15
 	return 0
 
 /datum/event/prisontransfer/start()
@@ -31,12 +33,12 @@ var/list/current_prisoners = list()
 /datum/event/prisontransfer/proc/recruiter_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. You have been added to the list of potential ghosts. ([controls])</span>")
+	to_chat(O, "<span class='recruit'>A prisoner is about to be sent to the station. You have been added to the list of potential ghosts. ([controls])</span>")
 
 /datum/event/prisontransfer/proc/recruiter_not_recruiting(var/list/args)
 	var/mob/dead/observer/O = args["player"]
 	var/controls = args["controls"]
-	to_chat(O, "<span class='recruit'>The security department is requesting a prisoner transfer. ([controls])</span>")
+	to_chat(O, "<span class='recruit'>A prisoner is about to be sent to the station. ([controls])</span>")
 
 
 /datum/event/prisontransfer/proc/recruiter_recruited(var/list/args)
@@ -68,10 +70,11 @@ var/list/current_prisoners = list()
 
 		//Randomize their looks (but let them pick a name)
 		H.randomise_appearance_for()
-		var/name = random_name(H.gender, H.species.name)
-		H.name = name
-		H.real_name = name
+		var/randname = random_name(H.gender, H.species.name)
+		H.fully_replace_character_name(null,randname)
 		H.regenerate_icons()
+		H.dna.ResetUIFrom(H)
+		H.dna.ResetSE()
 		mob_rename_self(H, "prisoner")
 
 		//Send them to the starting location.

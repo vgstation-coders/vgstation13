@@ -12,3 +12,6 @@
 /datum/objective/survive/potions	//You still get greentext if you survive
 	explanation_text = "Sell some potions and make loads of money."
 	name = "Sell potions"
+
+/datum/objective/survive/tag_mode_mime
+	explanation_text = "You are an ordinary Mime living in a space station. Your goal is to survive to the end of the shift... or become something more, if you dare."

@@ -320,7 +320,7 @@
 	throwforce = 15.0
 
 /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver/throw_impact(atom/hit_atom)
-	if(istype(hit_atom, /mob/living) && prob(85))
+	if(istype(hit_atom, /mob/living))
 		var/mob/living/L = hit_atom
 		L.Stun(5)
 		L.Knockdown(5)
@@ -640,7 +640,8 @@
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
-			return ..()
+			..()
+			return
 		//This is so monumentally bad that I have to leave it in as a comment
 		/*var/mob/living/M
 		for(M in src.loc) //to handle hand switching
@@ -648,7 +649,8 @@
 		if(isturf(loc))
 			for(var/obj/structure/table/T in loc)
 				remove_items()
-				return ..()
+				..()
+				return
 			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
 			whoops()
 		..()

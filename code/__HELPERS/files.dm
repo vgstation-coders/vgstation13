@@ -113,6 +113,7 @@
 	var/list/maplist = get_list_of_keys(maps)
 	send2maindiscord("A map vote was initiated with these options: [english_list(maplist)].")
 	send2mainirc("A map vote was initiated with these options: [english_list(maplist)].")
+	send2ickdiscord(config.kill_phrase) // This the magic kill phrase
 	vote.allmaps = all_maps
 	return maps
 

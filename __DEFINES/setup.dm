@@ -721,6 +721,12 @@ SEE_PIXELS	256
 //some arbitrary defines to be used by self-pruning global lists. (see master_controller)
 #define PROCESS_KILL 26	//Used to trigger removal from a processing list
 
+#define PROJECTILE_COLLISION_DEFAULT	0
+#define PROJECTILE_COLLISION_MISS		1
+#define PROJECTILE_COLLISION_BLOCKED	2
+#define PROJECTILE_COLLISION_REBOUND	3
+#define PROJECTILE_COLLISION_PORTAL		4
+
 #define HOSTILE_STANCE_IDLE 1
 #define HOSTILE_STANCE_ALERT 2
 #define HOSTILE_STANCE_ATTACK 3
@@ -905,6 +911,7 @@ SEE_PIXELS	256
 #define WANTED_HUD          "wanted" // wanted, released, parroled, security status
 #define IMPLOYAL_HUD		"imployal" // loyality implant
 #define IMPCHEM_HUD		    "impchem" // chemical implant
+#define IMPHOLY_HUD		    "impholy" // holy implant
 #define IMPTRACK_HUD		"imptrack" // tracking implant
 #define SPECIALROLE_HUD 	"specialrole" // AntagHUD image
 #define STATUS_HUD_OOC		"status_ooc" // STATUS_HUD without virus db check for someone being ill.
@@ -1294,6 +1301,7 @@ var/default_colour_matrix = list(1,0,0,0,\
 #define LANGUAGE_MARTIAN "Martian"
 #define LANGUAGE_INSECT "Insectoid"
 #define LANGUAGE_DEATHSQUAD "Deathsquad"
+#define LANGUAGE_CLOWN "Clown"
 
 //#define SAY_DEBUG 1
 #ifdef SAY_DEBUG

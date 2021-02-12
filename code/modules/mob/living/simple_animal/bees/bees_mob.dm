@@ -188,7 +188,7 @@ var/bee_mobs_count = 0
 	panic_attack(M)
 
 /mob/living/simple_animal/bee/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P && P.firer)
 		panic_attack(P.firer)
 

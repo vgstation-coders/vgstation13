@@ -368,7 +368,7 @@
 	var/sleeptime = min(5 SECONDS, 4*max(occupant.sleeping, occupant.paralysis))
 	spawn(sleeptime)
 		if(!src || !on) //the !src check is redundant from the nature of spawn() if I understand correctly, but better be safe than sorry
-			return 0
+			return
 		if(occupant)
 			occupant.sleeping = 0
 			occupant.paralysis = 0

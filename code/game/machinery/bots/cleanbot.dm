@@ -38,7 +38,7 @@
 
 	//for attack code
 	var/coolingdown = FALSE
-	var/attackcooldown = 10 SECONDS // for admin cancer
+	var/attackcooldown = 5 SECONDS // for admin cancer
 	locked = FALSE
 	can_take_pai = TRUE
 	commanding_radio = /obj/item/radio/integrated/signal/bot/janitor

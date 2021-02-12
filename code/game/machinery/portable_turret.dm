@@ -296,7 +296,7 @@ Status: []<BR>"},
 		attacked += 5
 
 	src.health -= Proj.damage
-	..()
+	. = ..()
 	if(prob(45) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 	if (src.health <= 0)

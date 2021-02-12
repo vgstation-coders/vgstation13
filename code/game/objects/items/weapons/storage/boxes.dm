@@ -1407,13 +1407,21 @@
 	new /obj/item/clothing/shoes/sandal(src)
 	..()
 
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset
+	name = "hos surveyor outfit box"
+
+/obj/item/weapon/storage/box/smartbox/clothing_box/surveyorset/New()
+	new /obj/item/clothing/suit/armor/hos/surveyor(src)
+	new /obj/item/clothing/head/HoS/surveyor(src)
+	..()
+
 /obj/item/weapon/storage/box/chemistry_kit
 	name = "basic chemistry set"
 	desc = "A box containing the basics for chemistry."
 
 /obj/item/weapon/storage/box/chemistry_kit/New()
-	..()
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer(src)
 	new /obj/item/weapon/reagent_containers/glass/beaker/erlenmeyer(src)
 	new /obj/item/weapon/electrolyzer(src)
 	new /obj/item/weapon/cell/high(src) 
+	..()

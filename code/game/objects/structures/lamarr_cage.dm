@@ -27,7 +27,7 @@
 
 /obj/structure/lamarr/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	src.healthcheck()
 	return
 
