@@ -249,6 +249,23 @@
 		return TRUE
 	return FALSE
 
+/mob/living/simple_animal/construct/armoured/ex_act(severity)
+	if(flags & INVULNERABLE)
+		return
+
+	switch (severity)
+		if (1.0)
+			adjustBruteLoss(220)//we can survive point blank devastation if we weren't previously damaged
+
+		if (2.0)
+			adjustBruteLoss(60 + max(0,round(health-(2*maxHealth/3))-59))//will actually deal a tiny bit more damage if we were full HP to ensure that we'll reach the first "cracking" threshold
+
+		if (3.0)
+			if (juggerblock())
+				visible_message("<span class='danger'>\The [src]'s shell fully resists the weak explosion.</span>")
+			else
+				adjustBruteLoss(30)
+
 /mob/living/simple_animal/construct/armoured/attackby(var/obj/item/O as obj, var/mob/user as mob)
 	if(juggerblock(O.force, O))
 		user.delayNextAttack(8)
