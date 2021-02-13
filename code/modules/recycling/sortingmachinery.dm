@@ -434,8 +434,12 @@
 			break
 
 		if(S.contents.len > 0)
+			var/S_old_contents = S.contents.len
 			S.mass_remove(in_T)
-			items_moved++
+
+			//If you just can't empty it out, treat it as normal rubbish
+			if(S.contents.len < S_old_contents)
+				items_moved++
 
 	//We can't start sorting items until we've made sure we've emptied every box and closet
 	if(items_moved == 0)
