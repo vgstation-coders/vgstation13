@@ -172,11 +172,19 @@
 	if(inherit_material)
 		var/datum/material/mat
 		var/datum/materials/materials_list = new
+
+		//Figure out the material
 		if(istype(S, /obj/item/stack/sheet/))
 			var/obj/item/stack/sheet/SS = S
 			mat = materials_list.getMaterial(SS.mat_type)
 		else if(S.material_type)
 			mat = S.material_type
+
+		//Make it recyclable back into the material it's made out of
+		if (R.materials == null)
+			R.materials = new /datum/materials(src)
+		R.materials.addAmount(mat.id, S.perunit * req_amount/res_amount)
+
 		R.dorfify(mat)
 	return 1
 
