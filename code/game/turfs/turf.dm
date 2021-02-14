@@ -258,7 +258,7 @@
 		reconsider_lights()
 
 /turf/get_bump_target()
-	. = bump_target || ..()
+	. = bump_target?.get_bump_target() || ..()
 	bump_target = null
 
 /turf/proc/is_plating()

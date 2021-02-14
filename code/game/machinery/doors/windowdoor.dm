@@ -106,31 +106,22 @@
 		close()
 
 /obj/machinery/door/window/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(can_pass(mover))
 		return TRUE
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
+	if(istype(mover))
+		return !density || (bounds_dist(border_dummy, mover) >= 0)
+	else if(get_dir(loc, target) == dir)
 		if(air_group)
 			return FALSE
 		return !density
-	else
-		return TRUE
+	return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/window/CanAStarPass(var/obj/item/weapon/card/id/ID, var/to_dir)
 	return !density || (dir != to_dir) || check_access(ID)
 
-/obj/machinery/door/window/Uncross(atom/movable/mover, turf/target)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return TRUE
-	if(flow_flags & ON_BORDER) //but it will always be on border tho
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return TRUE
+/obj/machinery/door/window/can_pass(atom/movable/mover)
+	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
 
 /obj/machinery/door/window/open()
 	if(!density) //it's already open you silly cunt

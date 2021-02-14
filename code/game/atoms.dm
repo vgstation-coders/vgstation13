@@ -192,6 +192,8 @@ var/global/list/ghdel_profiling = list()
 	return
 
 //When this object is bumped by BYOND, what should actually get bumped? Usually itself but there are some cases where it differs.
+//When not returning src, it should generally be called recursively on the found target in case that one also returns something else. Just don't make a cycle.
+//Yes it would be more logical to handle that elsewhere but it would also be more complicated
 /atom/proc/get_bump_target()
 	return src
 
@@ -757,6 +759,9 @@ its easier to just keep the beam vertical.
 
 /atom/movable/proc/checkpass(passflag)
 	return pass_flags&passflag
+
+/atom/proc/can_pass(atom/movable/mover) //Can mover pass through src regardless of density, etc.?
+	return istype(mover)
 
 /datum/proc/setGender(gend = FEMALE)
 	if(!("gender" in vars))

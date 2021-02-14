@@ -23,15 +23,12 @@
 /obj/structure/window/full/setup_border_dummy()
 	return
 
-/obj/structure/window/full/Uncross(atom/movable/O as mob|obj, target as turf)
-
-	return 1
 
 /obj/structure/window/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(can_pass(mover))
 		return 1
-	return 0
+	return !density
 
 /obj/structure/window/full/can_be_reached(mob/user)
 

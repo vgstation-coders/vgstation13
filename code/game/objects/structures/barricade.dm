@@ -145,15 +145,11 @@
 /obj/structure/window/barricade/full/blocks_doors()
 	return TRUE
 
-/obj/structure/window/barricade/full/Uncross(atom/movable/O as mob|obj, target as turf)
-
-	return 1
-
 /obj/structure/window/barricade/full/Cross(atom/movable/mover, turf/target, height = 1.5, air_group = 0)
 
 	if(air_group || !height) //The mover is an airgroup
 		return 1 //We aren't airtight, only exception to PASSGLASS
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(can_pass(mover))
 		return 1
 	return 0
 

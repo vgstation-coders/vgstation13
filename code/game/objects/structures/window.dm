@@ -173,30 +173,24 @@ var/list/one_way_windows
 		health -= damage
 		healthcheck()
 
-/obj/structure/window/Uncross(var/atom/movable/mover, var/turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
+/obj/structure/window/can_pass(atom/movable/mover)
+	return ..() && mover.checkpass(PASSGLASS)
 
 /obj/structure/window/Cross(atom/movable/mover, turf/target, height = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
+	if(can_pass(mover))
 		if(istype(mover,/obj/item/projectile/beam))
 			var/obj/item/projectile/beam/B = mover
 			B.damage *= disperse_coeff
 			if(B.damage <= 1)
 				B.bullet_die()
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
+		return TRUE
+	if(!density)
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 //Someone threw something at us, please advise
 /obj/structure/window/hitby(var/atom/movable/AM)
@@ -533,7 +527,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 90)
+	change_dir(turn(dir, 90))
 	update_nearby_tiles()
 	return
 
@@ -547,7 +541,7 @@ var/list/one_way_windows
 		return 0
 
 	update_nearby_tiles() //Compel updates before
-	dir = turn(dir, 270)
+	change_dir(turn(dir, 270))
 	update_nearby_tiles()
 	return
 

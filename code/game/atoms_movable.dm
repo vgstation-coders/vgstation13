@@ -207,10 +207,9 @@
 
 
 	if(. && locked_atoms && locked_atoms.len)	//The move was succesful, update locked atoms.
-		spawn(0)
-			for(var/atom/movable/AM in locked_atoms)
-				var/datum/locking_category/category = locked_atoms[AM]
-				category.update_lock(AM)
+		for(var/atom/movable/AM in locked_atoms)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 	update_dir()
 
@@ -246,6 +245,8 @@
 	for(var/atom/movable/AM in locked_atoms)
 		if(dir != AM.dir)
 			AM.change_dir(dir, src)
+			var/datum/locking_category/category = locked_atoms[AM]
+			category.update_lock(AM)
 
 //Like forceMove(), but for dirs!
 /atom/movable/proc/change_dir(new_dir, var/changer)
@@ -389,10 +390,7 @@
 	return
 
 // Always override this proc instead of BYOND-provided Bump().
-// This is a workaround for some dumb BYOND behavior:
-// The `Obstacle` argument passed to Bump() is the first dense object
-// in the turf's `contents`. The argument we provide to this proc
-// is instead the actual object that's blocking movement.
+// This gives us better control over what actually gets bumped instead of being stuck with BYOND's decision.
 /atom/movable/proc/to_bump(atom/Obstacle)
 	if(airflow_speed > 0 && airflow_dest)
 		airflow_hit(Obstacle)
@@ -408,6 +406,7 @@
 
 //As it says above, don't override this. Override to_bump() and/or Obstacle's get_bump_target() instead.
 /atom/movable/Bump(atom/Obstacle)
+	to_chat(src, "[Obstacle]")
 	if(!can_bump)
 		return
 	to_bump(Obstacle.get_bump_target())
@@ -424,6 +423,13 @@
 		unlock_atom(border_dummy)
 		qdel(border_dummy)
 		border_dummy = null
+
+/atom/movable/proc/border_dummy_Cross(atom/movable/mover) //border_dummy calls this in its own Cross() to detect collision
+	if(can_pass(mover))
+		return TRUE
+	if(!density)
+		return TRUE
+	return bounds_dist(src, mover) >= 0
 
 // harderforce is for things like lighting overlays which should only be moved in EXTREMELY specific sitations.
 /atom/movable/proc/forceMove(atom/destination,var/no_tp=0, var/harderforce = FALSE, glide_size_override = 0)
@@ -1171,16 +1177,17 @@
 	icon = 'icons/obj/structures.dmi'
 	icon_state = "window"
 	color = "red"
+	flow_flags = ON_BORDER
 
 /atom/movable/border_dummy/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
 	if(!istype(mover))
 		return TRUE //The parent object will handle airflow calculations.
 	if(!locked_to)
 		CRASH("border_dummy was collision checked while not locked to anything! ([x], [y], [z])")
-	return (mover == locked_to) || locked_to.Uncross(mover, target) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
+	return (mover == locked_to) || locked_to.border_dummy_Cross(mover) //An object will hit its own border_dummy if the (mover == locked_to) isn't included.
 
 /atom/movable/border_dummy/get_bump_target()
-	return locked_to //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
+	return locked_to.get_bump_target() //I don't think it's possible for this line to execute if locked_to is null due to Cross() above.
 
 
 /datum/locking_category/border_dummy

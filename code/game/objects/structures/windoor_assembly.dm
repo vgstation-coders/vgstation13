@@ -35,6 +35,7 @@
 /obj/structure/windoor_assembly/New()
 	..()
 	update_nearby_tiles()
+	setup_border_dummy() //I guess? It's not dense anyway but whatever
 
 obj/structure/windoor_assembly/Destroy()
 	setDensity(FALSE)
@@ -45,27 +46,18 @@ obj/structure/windoor_assembly/Destroy()
 	icon_state = "[facing]_[secure ? "secure_":""]windoor_assembly[wired ? "02":"01"]"
 
 /obj/structure/windoor_assembly/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
+	if(can_pass(mover))
 		return TRUE
-	if(get_dir(target, mover) == dir) //Make sure looking at appropriate border
+	if(istype(mover))
+		return !density || (bounds_dist(border_dummy, mover) >= 0)
+	else if(get_dir(loc, target) == dir)
 		if(air_group)
-			return FALSE
+			return FALSE //There's no especially compelling reason for this here but it's copied from windoors
 		return !density
-	else
-		return TRUE
-
-/obj/structure/windoor_assembly/Uncross(atom/movable/mover, turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return TRUE
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
 	return TRUE
+
+/obj/structure/windoor_assembly/can_pass(atom/movable/mover)
+	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
 
 /obj/structure/windoor_assembly/proc/make_windoor(var/mob/user)
 	var/spawn_type = secure ? secure_type : windoor_type

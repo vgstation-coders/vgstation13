@@ -83,22 +83,19 @@
 	else
 		to_chat(runner,"<span class='warning'>You're exhausted! You can't run anymore!</span>")
 
-/obj/machinery/power/treadmill/Uncross(var/atom/movable/mover, var/turf/target)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if((flow_flags & ON_BORDER) && (mover.dir == dir))
-		return !density
-	return 1
+/obj/machinery/power/treadmill/can_pass(var/atom/movable/mover)
+	return ..() && mover.checkpass(PASSGLASS)
 
 /obj/machinery/power/treadmill/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && mover.checkpass(PASSGLASS))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		if(air_group)
-			return 1
-		return 0
-	else
-		return 1
+	if(can_pass(mover))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 /obj/machinery/power/treadmill/Bumped(atom/movable/AM)
 	if(AM.loc == loc)

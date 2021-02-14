@@ -595,12 +595,19 @@ var/global/list/alert_overlays_global = list()
 	..()
 	setup_border_dummy()
 
+/obj/machinery/door/firedoor/border_only/can_pass(atom/movable/mover)
+	return ..() && mover.checkpass(PASSDOOR | PASSGLASS)
+
 /obj/machinery/door/firedoor/border_only/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-		return !density
-	return 1
+	if(can_pass(mover))
+		return TRUE
+	if(!density)
+		return TRUE
+	if(istype(mover))
+		return bounds_dist(border_dummy, mover) >= 0
+	else if(get_dir(loc, target) == dir)
+		return FALSE
+	return TRUE
 
 //used in the AStar algorithm to determinate if the turf the door is on is passable
 /obj/machinery/door/firedoor/CanAStarPass()
@@ -611,19 +618,6 @@ var/global/list/alert_overlays_global = list()
 		open()
 	else
 		close()
-
-/obj/machinery/door/firedoor/border_only/Uncross(atom/movable/mover as mob|obj, turf/target as turf)
-	if(istype(mover) && (mover.checkpass(PASSDOOR|PASSGLASS)))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
-	return 1
 
 /obj/machinery/door/firedoor/border_only/is_fulltile()
 	return 0
