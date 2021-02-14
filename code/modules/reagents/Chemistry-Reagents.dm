@@ -709,8 +709,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
@@ -2472,6 +2472,51 @@
 		T.health -= 20
 		T.mutation_mod += 0.1
 
+/datum/reagent/toxin/insecticide
+	name = "Insecticide"
+	id = INSECTICIDE
+	description = "A broad pesticide. Do not ingest!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#49002E" //rgb: 73, 0, 46
+	density = 1.08
+	specheatcap = 4.18
+
+/datum/reagent/toxin/insecticide/reaction_mob(var/mob/living/M, var/method = TOUCH, var/volume)
+
+	if(..())
+		return 1
+	if(iscarbon(M))
+		var/mob/living/carbon/C = M
+		if(!C.wear_mask) //If not wearing a mask
+			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
+		if(ishuman(M) || ismonkey(M))
+			var/mob/living/carbon/human/H = M
+			if(H.dna)
+				if(H.species.flags & isinsectoid(M)) //Insecticide being poisonous to bugmen, who'd've thunk
+					H.adjustToxLoss(10 * REM)
+			if(H.species.flags & isroach(M))
+				H.adjustToxLoss(10 * REM)
+					
+/datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+	..()
+
+	if(istype(M,/mob/living/simple_animal/cockroach))
+		M.gib()
+	
+/datum/reagent/toxin/insecticide/reaction_obj(var/obj/O, var/volume)
+
+	if(..())
+		return 1
+	if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
+		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
+		tray.pestlevel -= 2
+		
+/datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+
+	T.pestlevel -= 8
+
+
 /datum/reagent/plasma
 	name = "Plasma"
 	id = PLASMA
@@ -3385,8 +3430,8 @@
 		return 1
 
 	M.drowsyness = max(M.drowsyness - 2 * REM, 0)
-	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, SOLANINE)))
-		holder.remove_reagents(list(TOXIN, PLANTBGONE, SOLANINE), 2 * REM)
+	if(holder.has_any_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE)))
+		holder.remove_reagents(list(TOXIN, PLANTBGONE, INSECTICIDE, SOLANINE), 2 * REM)
 	if(holder.has_any_reagents(STOXINS))
 		holder.remove_reagents(STOXINS, 2 * REM)
 	if(holder.has_reagent(PLASMA))
