@@ -315,10 +315,7 @@
 	if(istype(mover) && mover.checkpass(pass_flags_self))
 		return 1
 	if(flipped)
-		if(get_dir(loc, target) == dir || get_dir(loc, mover) == dir)
-			return !density
-		else
-			return 1
+		return bounds_dist(border_dummy, mover) >= 0
 	return 0
 
 /obj/structure/table/Bumped(atom/movable/AM)
@@ -348,21 +345,6 @@
 			visible_message("<span class='warning'>[src] breaks down!</span>")
 			destroy()
 			return 1
-	return 1
-
-/obj/structure/table/Uncross(atom/movable/mover as mob|obj, target as turf)
-	if(locate(/obj/effect/unwall_field) in loc) //Annoying workaround for this -kanef
-		return 1
-	if(istype(mover) && mover.checkpass(pass_flags_self))
-		return 1
-	if(flow_flags & ON_BORDER)
-		if(target) //Are we doing a manual check to see
-			if(get_dir(loc, target) == dir)
-				return !density
-		else if(mover.dir == dir) //Or are we using move code
-			if(density)
-				mover.to_bump(src)
-			return !density
 	return 1
 
 /obj/structure/table/MouseDropTo(atom/movable/O,mob/user,src_location,over_location,src_control,over_control,params)
