@@ -61,7 +61,7 @@ var/list/factions_with_hud_icons = list()
 		factions_with_hud_icons.Add(src)
 
 	for (var/datum/faction/F in factions_with_hud_icons)
-		update_hud_icons()
+		F.update_hud_icons()
 
 	stat_datum = new stat_datum_type()
 
@@ -259,7 +259,10 @@ var/list/factions_with_hud_icons = list()
 	if(emergency_shuttle.location || emergency_shuttle.direction) //If traveling or docked somewhere other than idle at command, don't call.
 		return
 	emergency_shuttle.incall()
-	captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes. Justification: Recovery of assets.")
+	var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+	CA.justification = "Recovery of Assets."
+	command_alert(CA)
+
 
 /datum/faction/proc/check_win()
 	return
@@ -403,6 +406,9 @@ var/list/factions_with_hud_icons = list()
 	or simply wandering malignant vagrants happening upon a meal of identity that can carry them to further feeding grounds."
 	roletype = /datum/role/changeling
 	logo_state = "change-logoa"
+	
+	//Hivemind Bank, contains a list of DNA that changelings can share and use.
+	var/list/hivemind_bank = list()
 
 /datum/faction/changeling/GetObjectivesMenuHeader()
 	var/icon/logo_left = icon('icons/logos.dmi', "change-logoa")

@@ -308,7 +308,8 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/wendigo/consume(mob/living/carbon/eater, messages = 0)
 	. = ..()
 	if(ishuman(eater))
-		eater.contract_disease(new /datum/disease/wendigo_transformation)
+		var/mob/living/carbon/human/H = eater
+		H.infect_disease2_predefined(DISEASE_WENDIGO, 1, "Wendigo Meat")
 
 /obj/item/weapon/reagent_containers/food/snacks/meat/slime
 	name = "gelatin"

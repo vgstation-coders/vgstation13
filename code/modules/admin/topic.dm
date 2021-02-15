@@ -332,8 +332,9 @@
 					return
 				var/justification = stripped_input(usr, "Please input a reason for the shuttle call. You may leave it blank to not have one.", "Justification")
 				emergency_shuttle.incall()
-				world << sound('sound/AI/shuttlecalled.ogg')
-				captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.[justification ? " Justification : '[justification]'" : ""]")
+				var/datum/command_alert/emergency_shuttle_called/CA = new /datum/command_alert/emergency_shuttle_called
+				CA.justification = justification
+				command_alert(CA)
 				log_admin("[key_name(usr)] called the Emergency Shuttle")
 				message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 
@@ -343,8 +344,7 @@
 				switch(emergency_shuttle.direction)
 					if(-1)
 						emergency_shuttle.incall()
-						world << sound('sound/AI/shuttlecalled.ogg')
-						captain_announce("The emergency shuttle has been called. It will arrive in [round(emergency_shuttle.timeleft()/60)] minutes.")
+						command_alert(/datum/command_alert/emergency_shuttle_called)
 						log_admin("[key_name(usr)] called the Emergency Shuttle")
 						message_admins("<span class='notice'>[key_name_admin(usr)] called the Emergency Shuttle to the station</span>", 1)
 					if(1)
@@ -608,6 +608,23 @@
 		if(O.locked_to)
 			O.manual_stop_follow(O.locked_to)
 		O.forceMove(get_turf(dish))
+
+	else if(href_list["artifactpanel_jumpto"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/turf/T = locate(href_list["artifactpanel_jumpto"])
+
+		var/client/C = usr.client
+		if(!isobserver(usr))
+			C.admin_ghost()
+		sleep(2)
+		if(!isobserver(C.mob))
+			return
+		var/mob/dead/observer/O = C.mob
+		if(O.locked_to)
+			O.manual_stop_follow(O.locked_to)
+		O.forceMove(T)
 
 	else if(href_list["climate_timeleft"])
 		if(!check_rights(R_ADMIN))
@@ -1470,25 +1487,6 @@
 			message_admins("<span class='notice'>[key_name_admin(usr)] booted [key_name_admin(M)].</span>", 1)
 			//M.client = null
 			del(M.client)
-/*
-	//Player Notes
-	else if(href_list["notes"])
-		var/ckey = href_list["ckey"]
-		if(!ckey)
-			var/mob/M = locate(href_list["mob"])
-			if(ismob(M))
-				ckey = M.ckey
-
-		switch(href_list["notes"])
-			if("show")
-				notes_show(ckey)
-			if("add")
-				notes_add(ckey,href_list["text"])
-				notes_show(ckey)
-			if("remove")
-				notes_remove(ckey,text2num(href_list["from"]),text2num(href_list["to"]))
-				notes_show(ckey)
-*/
 	else if(href_list["removejobban"])
 		if(!check_rights(R_BAN))
 			return
@@ -1646,14 +1644,18 @@
 			return alert(usr, "The game has already started.", null, null, null, null)
 		if(master_mode != "Dynamic Mode")
 			return alert(usr, "The game mode has to be Dynamic Mode!", null, null, null, null)
+		if (forced_roundstart_ruleset.len > 30)
+			return alert(usr, "Haven't you already forced enough rulesets?", null, null, null, null)
 		var/list/datum/dynamic_ruleset/roundstart/roundstart_rules = list()
 		for (var/rule in subtypesof(/datum/dynamic_ruleset/roundstart))
-			var/datum/dynamic_ruleset/roundstart/newrule = new rule()
-			roundstart_rules[newrule.name] = newrule
+			var/datum/dynamic_ruleset/roundstart/newrule = rule
+			roundstart_rules += initial(newrule.name)
 		var/added_rule = input(usr,"What ruleset do you want to force? This will bypass threat level and population restrictions.", "Rigging Roundstart", null) as null|anything in roundstart_rules
 		if (added_rule)
-			roundstart_rules[added_rule].calledBy = "[key_name(usr)]"
-			forced_roundstart_ruleset += roundstart_rules[added_rule]
+			var/datum/forced_ruleset/forcedrule = new
+			forcedrule.name = added_rule
+			forcedrule.calledBy = "[key_name(usr)]"
+			forced_roundstart_ruleset += forcedrule
 			log_admin("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.")
 			message_admins("[key_name(usr)] set [added_rule] to be a forced roundstart ruleset.", 1)
 			Game()
@@ -1662,6 +1664,8 @@
 		if(!check_rights(R_ADMIN))
 			return
 
+		for (var/datum/forced_ruleset/rule in forced_roundstart_ruleset)
+			qdel(rule)
 		forced_roundstart_ruleset = list()
 		Game()
 		log_admin("[key_name(usr)] cleared the rigged roundstart rulesets. The mode will pick them as normal.")
@@ -1672,8 +1676,9 @@
 		if(!check_rights(R_ADMIN))
 			return
 
-		var/datum/dynamic_ruleset/roundstart/rule = locate(href_list["f_dynamic_roundstart_remove"])
+		var/datum/forced_ruleset/rule = locate(href_list["f_dynamic_roundstart_remove"])
 		forced_roundstart_ruleset -= rule
+		qdel(rule)
 		Game()
 		log_admin("[key_name(usr)] removed [rule] from the forced roundstart rulesets.")
 		message_admins("[key_name(usr)] removed [rule] from the forced roundstart rulesets.", 1)
@@ -2657,6 +2662,35 @@
 			log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 			message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to fly their [shuttle.name] to [D.areaname]")
 
+
+	else if(href_list["syndbeaconpermission"])
+		if(!check_rights(R_ADMIN))
+			return
+
+		var/obj/machinery/syndicate_beacon/syndbeacon = locate(href_list["syndbeacon"])
+		var/mob/user = locate(href_list["user"])
+		var/answer = text2num(href_list["answer"])
+
+		if (!syndbeacon || !user)
+			return
+
+		switch (answer)
+			if (1)
+				syndbeacon.ready_up()
+				log_admin("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] granted permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (2)
+				syndbeacon.temptext = "<i>We have no need for you at this time. Have a pleasant day.</i><br>"
+				syndbeacon.updateUsrDialog()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon")
+			if (3)
+				syndbeacon.temptext = "<i>The Syndicate has grown tired of you.</i><br>"
+				syndbeacon.updateUsrDialog()
+				syndbeacon.selfdestruct()
+				log_admin("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+				message_admins("[key_name_admin(usr)] denied permission to [key_name(user)] to make use of an already used syndicate beacon and destroyed it.")
+
 	else if(href_list["adminchecklaws"])
 		output_ai_laws()
 
@@ -3211,8 +3245,7 @@
 			if("striketeam-custom")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","CustomStrikeTeam")
-				var/datum/striketeam/custom/team = new /datum/striketeam/custom()
-				team.trigger_strike(usr)
+				custom_strike_team(usr)
 			if("tripleAI")
 				usr.client.triple_ai()
 				feedback_inc("admin_secrets_fun_used",1)
@@ -3249,25 +3282,6 @@
 
 				if(alert(usr, "Spawn a blob cluster? (meteor blob, medium intensity, no Overminds)", "Blob Cluster", "Yes", "No") == "Yes")
 					new /datum/event/thing_storm/blob_shower
-
-			/* Use dyanmic mode instead.
-			if("blobstorm")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","Blob Storm")
-				log_admin("[key_name(usr)] spawned a blob conglomerate", 1)
-				message_admins("<span class='notice'>[key_name_admin(usr)] spawned a blob conglomerate.</span>", 1)
-
-				if(alert(usr, "Spawn a blob conglomerate? (meteor blob, high intensity, possible Overmind spawn)", "Blob Cluster", "Yes", "No") == "Yes")
-					new /datum/event/thing_storm/blob_storm
-			*/
-			if("aliens")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","Aliens")
-				log_admin("[key_name(usr)] spawned an alien infestation", 1)
-				message_admins("<span class='notice'>[key_name_admin(usr)] attempted an alien infestation</span>", 1)
-				new /datum/event/alien_infestation
-
-
 			if("power")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","P")
@@ -3462,18 +3476,6 @@
 				//moved to its own dm so I could split it up and prevent the spawns copying variables over and over
 				//can be found in code\game\game_modes\events\wormholes.dm
 				wormhole_event()
-
-			if("aliens")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","AL")
-				if(aliens_allowed)
-					new /datum/event/alien_infestation
-					message_admins("[key_name_admin(usr)] has spawned aliens", 1)
-			if("alien_silent")								//replaces the spawn_xeno verb
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","ALS")
-				if(aliens_allowed)
-					create_xeno()
 			if("spiders")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","SL")
@@ -3542,12 +3544,6 @@
 				for(var/obj/machinery/light/L in alllights)
 					L.fix()
 				message_admins("[key_name_admin(usr)] fixed all lights", 1)
-			if("aliens")
-				feedback_inc("admin_secrets_fun_used",1)
-				feedback_add_details("admin_secrets_fun_used","AL")
-				message_admins("[key_name_admin(usr)] has spawned aliens", 1)
-				//makeAliens()
-				new /datum/event/alien_infestation
 			if("radiation")
 				feedback_inc("admin_secrets_fun_used",1)
 				feedback_add_details("admin_secrets_fun_used","RAD")
@@ -3695,6 +3691,7 @@
 
 					var/obj/machinery/artifact/custom = new /obj/machinery/artifact(get_turf(usr), null, 0)
 					custom.primary_effect = new custom_primary_effect(custom)
+					custom.primary_effect.artifact_id = "[custom.artifact_id]a"
 					if(answer2 == "Random")
 						custom.primary_effect.GenerateTrigger()
 					else
@@ -3704,12 +3701,14 @@
 
 					if(custom_secondary_effect)
 						custom.secondary_effect = new custom_secondary_effect(custom)
+						custom.secondary_effect.artifact_id = "[custom.artifact_id]b"
 						if(answer2 == "Random")
 							custom.secondary_effect.GenerateTrigger()
 						else
 							custom.secondary_effect.trigger = new custom_secondary_trigger(custom.secondary_effect)
 						custom.investigation_log(I_ARTIFACT, "|| admin-spawned by [key_name_admin(usr)] with a secondary effect [custom.secondary_effect.artifact_id]: [custom.secondary_effect] || range: [custom.secondary_effect.effectrange] || charge time: [custom.secondary_effect.chargelevelmax] || trigger: [custom.secondary_effect.trigger].")
 
+					custom.generate_icon()
 
 					message_admins("[key_name_admin(usr)] has created a custom artifact")
 
@@ -4560,7 +4559,7 @@
 		if(!add)
 			return
 
-		notes_add(key,add,usr)
+		notes_add(key, add)
 		show_player_info(key)
 
 	if(href_list["remove_player_info"])
@@ -5676,6 +5675,13 @@
 				to_chat(usr, "<span class='notice'>Deleted [number] atoms in [total_time] seconds.</span>")
 
 		mass_delete_in_zone() // Refreshes the window
+
+	else if(href_list["tag_mode"])
+		if (!check_rights(R_FUN))
+			to_chat(usr, "You don't have the necessary permissions to do this.")
+			return
+		else
+			toggle_tag_mode(usr)
 
 /datum/admins/proc/updateRelWindow()
 	var/text = list()

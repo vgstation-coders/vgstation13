@@ -331,3 +331,47 @@
 
 /obj/effect/decal/cleanable/virusdish/persistent/post_mapsave2atom(var/list/L)
 	icon_state = "brokendish-persistent"
+
+
+/obj/effect/decal/cleanable/salt
+	name = "salt"
+	desc = "Guaranteed to ward off ghouls, ghosts, geists, and low blood pressure."
+	gender = PLURAL
+	reagent = SODIUMCHLORIDE
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "salt"
+	anchored = 1
+
+/obj/effect/decal/cleanable/salt/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	..()
+	if(isliving(mover))
+		var/mob/living/L = mover
+		if(checkUndead(L))
+			to_chat(L, "<span class=danger>The salty ward repels you!</span>")
+			return 0
+		if(checkVamp(L))
+			to_chat(L, "<span class=danger>The salty ward repels you!</span>")
+			return 0
+		if(isborer(L))
+			saltTheWorm(L)
+			return 0
+	return 1
+
+/obj/effect/decal/cleanable/salt/proc/checkUndead(var/mob/living/theGhoul)
+	if(theGhoul.mob_property_flags & (MOB_UNDEAD|MOB_SUPERNATURAL))
+		return TRUE
+	if(isskellington(theGhoul) || isskelevox(theGhoul) || islich(theGhoul) || istype(theGhoul, /mob/living/carbon/monkey/skellington))
+		return TRUE
+	return FALSE
+
+/obj/effect/decal/cleanable/salt/proc/checkVamp(var/mob/living/theVamp)
+	if(isvampire(theVamp))
+		var/datum/role/vampire/V = isvampire(theVamp)
+		if(/datum/power/vampire/charisma in V.current_powers)	//He's already a powerful vamp, the check is no longer meta
+			return TRUE
+	return FALSE
+
+/obj/effect/decal/cleanable/salt/proc/saltTheWorm(var/mob/living/theBorer)
+	to_chat(theBorer, "<span class=danger>The salt, it burns!</span>")
+	theBorer.health -= rand(5,25)	//Borers have 20 health
+	theBorer.Stun(50)

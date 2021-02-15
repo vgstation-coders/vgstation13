@@ -633,6 +633,14 @@ var/list/uplink_items = list()
 	cost = 12
 	discounted_cost = 9
 	jobs_with_discount = list("Security Officer", "Warden", "Head of Security")
+	
+/datum/uplink_item/jobspecific/command_security/batlinggun
+	name = "Batling gun"
+	desc = "A gatling gun modified to fire stun batons. The batons are launched in such a way that guarantees the stunning end always connects, and the launch velocity is high enough to cause injuries. Can be reloaded with stun batons."
+	item = /obj/item/weapon/gun/gatling/batling
+	cost = 18
+	discounted_cost = 12
+	jobs_with_discount = list("Warden", "Head of Security")
 
 /datum/uplink_item/jobspecific/command_security/evidenceforger
 	name = "Evidence Forger"
@@ -722,10 +730,10 @@ var/list/uplink_items = list()
 	discounted_cost = 12
 	jobs_with_discount = list("Geneticist", "Chief Medical Officer")
 
-/datum/uplink_item/jobspecific/medical/zombievirus
-	name = "Zombie Virus Syndrome"
-	desc = "This syndrome will cause people to turn into zombies when the virus hits Stage 4. Comes in a virus data disk, requires full virus splicing and growth to deploy. Avoid ingesting end results if possible, and ensure you create spare virus data disks if needed."
-	item = /obj/item/weapon/disk/disease/zombie
+/datum/uplink_item/jobspecific/medical/viruscollection
+	name = "Deadly Syndrome Collection"
+	desc = "A diskette box filled with 3 random Deadly stage 4 syndromes GNA disks (the same syndrome won't show up twice) on top of a Waiting Syndrome GNA disk to help your disease spread undetected."
+	item = /obj/item/weapon/storage/lockbox/diskettebox/syndisease
 	cost = 20
 	discounted_cost = 12
 	jobs_with_discount = list("Virologist", "Chief Medical Officer")
@@ -739,6 +747,14 @@ var/list/uplink_items = list()
 	item = /obj/item/clothing/gloves/yellow/power
 	cost = 14
 	discounted_cost = 8
+	jobs_with_discount = list("Station Engineer", "Chief Engineer")
+
+/datum/uplink_item/jobspecific/engineering/teslagun
+	name = "Tesla Cannon"
+	desc = "This device uses stored power to create a devastating orb of electricity that shocks nearly everyone in its path. The device must be loaded with capacitors in order to fire, each charged to at least 1 MW. The amount of damage scales with the power stored in the capacitor. The cannon comes with one free, pre-charged capacitor."
+	item = /obj/item/weapon/gun/tesla/preloaded
+	cost = 18
+	discounted_cost = 14
 	jobs_with_discount = list("Station Engineer", "Chief Engineer")
 
 /datum/uplink_item/jobspecific/engineering/powercreeper_packet
@@ -845,7 +861,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/jobspecific/service/meatcleaver
 	name = "Meat Cleaver"
-	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also has a strong to stun when thrown."
+	desc = "A mean looking meat cleaver that does damage comparable to an Energy Sword but with the added benefit of chopping your victim into hunks of meat after they've died. It also stuns when thrown."
 	item = /obj/item/weapon/kitchen/utensil/knife/large/butch/meatcleaver
 	cost = 12
 	discounted_cost = 10
@@ -1014,3 +1030,63 @@ var/list/uplink_items = list()
 	cost = 20
 	discounted_cost = 14
 	jobs_with_discount = list("Captain", "Head of Personnel")
+
+/datum/uplink_item/jobspecific/trader
+	category = "Trader Specials"
+
+/datum/uplink_item/jobspecific/trader/dartgun
+	name = "Chemical Dart Gun"
+	desc = "A staple in vox weaponry. This dart gun starts loaded with darts containing sleep toxin and chloral hydrate. The beaker inside can be swapped out to create your own deadly mixes."
+	item = /obj/item/weapon/gun/dartgun/vox/raider
+	cost = 16
+	jobs_exclusive = list("Trader")
+
+/datum/uplink_item/jobspecific/trader/dart_cartridge
+	name = "Dart Cartridge"
+	desc = "A spare cartridge to refill your dart gun."
+	item = /obj/item/weapon/dart_cartridge
+	cost = 2
+	jobs_exclusive = list("Trader")
+	
+/datum/uplink_item/jobspecific/trader/cratesender
+	name = "Modified Crate Sender"
+	desc = "A modified salvage crate sender that has been modified to bypass the security protocols, allowing it to teleport crates from onboard the station and allowing it to teleport crates to random destinations. Comes with a cargo telepad you can send your stolen goods to."
+	item = /obj/item/weapon/storage/box/syndie_kit/cratesender
+	cost = 6
+	jobs_exclusive = list("Trader")
+	
+// SYNDICATE COOP
+// Any high cost items that are intended to only be purchasable when three syndies come together to change the narrative.
+
+/datum/uplink_item/syndie_coop
+	category = "Cooperative Cell"
+
+/datum/uplink_item/syndie_coop/stone
+	name = "SG-VPR-23 Pathogenic Medium"
+	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
+	item = /obj/item/clothing/mask/stone
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/changeling_vial
+	name = "CH-L1-NG Bioweapon Sample"
+	desc = "A securely contained vial of the experimental mutagen 'CH-L1-NG'.  Originally designed as a transhumanist super-soldier serum, the mutagen was reclassified as a bioweapon when research showed that the afflicted would completely dissociate from their identity and loyalties.  Victims of 'CH-L1-NG' were found to be the perfect killing machines to be released upon enemies of the Syndicate."
+	item = /obj/item/changeling_vial
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/bloodcult_pamphlet
+	name = "Esoteric Propaganda Pamphlet"
+	desc = "A pamphlet found within the controlled literature archives detailing what appears to be a communication ritual to contact the celestial NRS-1.  Exposure to NRS-1 is known to induce the formation of a hive-like social structure among the afflicted, delusions of grandeur, and collective suicidal tendencies.  An operative cell wishing to weaponize contact with NRS-1 should proceed with extreme caution."
+	item = /obj/item/weapon/bloodcult_pamphlet/oneuse
+	cost = 60
+	discounted_cost = 100
+	jobs_with_discount = list("Nuclear Operative")
+	
+/datum/uplink_item/syndie_coop/codebreaker
+	name = "Codebreaker"
+	desc = "The be-all-end-all solution to halting Nanotrasen's expansion into free space.  This piece of Gorlex tech will allow a cell that is sufficiently large enough to decrypt the authentication key for their target station's failsafe thermonuclear warhead.  Good luck, operatives."
+	item = /obj/item/device/codebreaker
+	cost = 100

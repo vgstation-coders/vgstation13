@@ -101,6 +101,8 @@
 	var/snow_theme = FALSE
 	var/can_enlarge = TRUE //can map elements expand this map? turn off for surface maps
 	var/datum/climate/climate = null //use for weather cycle
+	var/has_engines = FALSE // Is the map a space ship with big engines?
+
 	var/list/holodeck_rooms = list(
 		"Basketball Court",
 		"Beach",
@@ -147,6 +149,12 @@
 
 	return TRUE //If false, fails Ready()
 
+/datum/map/proc/ruleset_multiplier(var/datum/dynamic_ruleset/DR)
+	return 1
+
+/datum/map/proc/ignore_enemy_requirement(var/datum/dynamic_ruleset/DR)
+	return 0
+
 /datum/map/proc/loadZLevels(list/levelPaths)
 
 
@@ -192,6 +200,11 @@ var/global/list/accessable_z_levels = list()
 	L += using
 	return L
 
+/datum/map/proc/generate_mapvaults()
+	return FALSE
+
+/datum/map/proc/map_equip(var/mob/living/carbon/human/H)
+	return
 
 ////////////////////////////////////////////////////////////////
 

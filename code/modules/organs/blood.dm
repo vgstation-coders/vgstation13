@@ -37,7 +37,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		return
 
 	vessel.add_reagent(BLOOD,560)
+
 	spawn(1)
+		//This lets DNA stuff properly initialize first, otherwise the blood in the vessels won't have any DNA.
+		//To safely remove this spawn(), find where dna.unique_enzymes/b_type are created and call fixblood() right after.
+		//Also test that blood driping when you cut yourself with a knife carries DNA properly using the detective scanner to be sure.
 		fixblood()
 
 //Resets blood data
@@ -74,6 +78,11 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 				B.volume += 0.1 // regenerate blood VERY slowly
 				if(M_REGEN in mutations)
 					B.volume += 0.4 //A big chunky boost. If you have nutriment and iron you can regenerate 4.1 blood per tick
+				if (iscultist(src) && (mind.GetRole(CULTIST) in blood_communion))//cultists that take on the blood communion tattoo get a slight blood regen bonus
+					if(M_REGEN in mutations)
+						B.volume += 0.6
+					else
+						B.volume += 0.3
 				if (reagents.has_reagent(NUTRIMENT))	//Getting food speeds it up
 					if(M_REGEN in mutations)
 						B.volume += 1.2
@@ -275,6 +284,10 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 		H = src
 	if (H?.species)
 		blood_data["blood_colour"] = H.species.blood_color
+	else if(isalien(src))
+		blood_data["blood_colour"] = ALIEN_BLOOD
+	else if(isrobot(src))
+		blood_data["blood_colour"] = ROBOT_OIL
 	else
 		blood_data["blood_colour"] = DEFAULT_BLOOD
 
@@ -309,6 +322,22 @@ var/const/BLOOD_VOLUME_SURVIVE = 122
 	if (data["immunity"])
 		blood_data["immunity"] = data["immunity"].Copy()
 	return blood_data
+
+/datum/reagent/blood/proc/apply_blood_data(var/list/list/blood_data)
+	data = list(
+		"viruses"		=null,
+		"blood_DNA"		=blood_data["blood_DNA"],
+		"blood_colour"	=blood_data["blood_colour"],
+		"blood_type"	=blood_data["blood_type"],
+		"resistances"	=null,
+		"trace_chem"	=blood_data["trace_chem"],
+		"virus2" 		=virus_copylist(blood_data["virus2"]),
+		"immunity" 		=null,
+		)
+	if (blood_data["resistances"])
+		data["resistances"] = blood_data["resistances"].Copy()
+	if (blood_data["immunity"])
+		data["immunity"] = blood_data["immunity"].Copy()
 
 //For humans, blood does not appear from blue, it comes from vessels.
 /mob/living/carbon/human/take_blood(obj/item/weapon/reagent_containers/container, var/amount)

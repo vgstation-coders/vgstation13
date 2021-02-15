@@ -60,8 +60,7 @@
 /obj/structure/table/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/table/proc/destroy()
 	if(parts)
@@ -90,6 +89,8 @@
 				base = "rtable"
 			if (istype(src, /obj/structure/table/glass))
 				base = "glasstable"
+			if (istype(src, /obj/structure/table/glass/plasma))
+				base = "plasma_table"
 			if (istype(src, /obj/structure/table/plastic))
 				base = "plastictable"
 
@@ -99,7 +100,7 @@
 					icon_state = icon_state+"-"
 				if (tabledirs & turn(dir,-90))
 					icon_state = icon_state+"+"
-			return 1
+			return
 
 		var/dir_sum = 0
 		for(var/direction in alldirs)
@@ -729,8 +730,7 @@ obj/structure/table/plastic
 /obj/structure/rack/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.destroy)
 		src.ex_act(1)
-	..()
-	return 0
+	return ..()
 
 /obj/structure/rack/ex_act(severity)
 	switch(severity)

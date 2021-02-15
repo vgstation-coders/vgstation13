@@ -19,6 +19,7 @@
 #define CLOCKWORK "clockwork"
 #define PLAGUEMICE "plague mice invasion"
 #define SPIDERCLAN "spider clan"
+#define XENOMORPH_HIVE "alien hivemind"
 //-------
 #define HIVEMIND "changeling hivemind"
 #define WIZFEDERATION "wizard federation"
@@ -29,7 +30,7 @@
 #define WIZARD_CONTRACT "wizard contract"
 // Role IDs
 #define TRAITOR "traitor"
-#define ROGUE "rogue agent"//double agents
+#define CHALLENGER "challenger"
 #define CHANGELING "changeling"
 #define VAMPIRE "vampire"
 #define THRALL "thrall"
@@ -58,6 +59,8 @@
 #define SURVIVOR "Survivor"
 #define CRUSADER "Crusader"
 #define MAGICIAN "Magician"
+#define MAGICIAN_ARTIFACT "Magical Archeologist"
+#define POTION "Potion Seller"
 #define IMPLANTLEADER "Grey Leader"
 #define CLOCKWORK_GRAVEKEEPER "clockwork gravekeeper"
 #define GRINCH "The Grinch"
@@ -65,6 +68,10 @@
 #define RAMBLER "soul rambler"
 #define PLAGUEMOUSE "plague mouse"
 #define STREAMER "streamer"
+#define XENOMORPH "alien"
+#define PRISONER "prisoner"
+#define CLOWN_LING "clown ling"
+#define TAG_MIME "tag mime"
 
 #define GREET_DEFAULT		"default"
 #define GREET_ROUNDSTART	"roundstart"
@@ -75,6 +82,7 @@
 #define GREET_MASTER		"master"
 
 #define GREET_AUTOTATOR		"autotator"
+#define GREET_SYNDBEACON	"syndbeacon"
 
 #define GREET_CONVERTED		"converted"
 #define GREET_PAMPHLET		"pamphlet"
@@ -140,6 +148,8 @@
 #define RITUALABORT_TOOLS	"moved talisman"
 #define RITUALABORT_REMOVED	"victim removed"
 #define RITUALABORT_CONVERT	"convert success"
+#define RITUALABORT_REFUSED	"convert refused"
+#define RITUALABORT_NOCHOICE	"convert nochoice"
 #define RITUALABORT_SACRIFICE	"convert failure"
 #define RITUALABORT_FULL	"no room"
 #define RITUALABORT_CONCEAL	"conceal"
@@ -160,6 +170,10 @@
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
 
+#define RUNE_WRITE_CANNOT	0
+#define RUNE_WRITE_COMPLETE	1
+#define RUNE_WRITE_CONTINUE	2
+
 #define	RUNE_CAN_ATTUNE	0
 #define	RUNE_CAN_IMBUE	1
 #define	RUNE_CANNOT		2
@@ -167,10 +181,22 @@
 #define	MAX_TALISMAN_PER_TOME	5
 
 #define SACRIFICE_CHANGE_COOLDOWN	30 MINUTES
+#define DEATH_SHADEOUT_TIMER	60 SECONDS
 
 #define CONVERSION_REFUSE	-1
 #define CONVERSION_NOCHOICE	0
 #define CONVERSION_ACCEPT	1
+#define CONVERSION_BANNED	2
+
+#define CONVERTIBLE_ALWAYS	1
+#define CONVERTIBLE_CHOICE	2
+#define CONVERTIBLE_NEVER	3
+#define CONVERTIBLE_NOMIND	4
+#define CONVERTIBLE_ALREADY	5
+#define CONVERTIBLE_IMPLANT	6
+
+#define DECONVERSION_ACCEPT	1
+#define DECONVERSION_REFUSE 2
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -232,3 +258,10 @@
 #define DIRAC "Rigged threat number"
 #define EXPONENTIAL "Peaceful bias"
 #define UNIFORM "Uniform distribution"
+
+// -- Double Agents
+
+#define SYNDICATE_VALIDATED	1
+#define SYNDICATE_CANCELED	2
+
+#define DOUBLE_AGENT_TC_REWARD	5

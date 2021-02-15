@@ -61,6 +61,10 @@
 
 	output += "</div>"
 
+	//dumb but doesn't require rewriting this menu
+	if(iscluwnebanned(src))
+		output = "<div align='center'><p><a href='byond://?src=\ref[src];cluwnebanned=1'>cluwne</a></p></div>"
+
 	var/datum/browser/popup = new(src, "playersetup", "<div align='center'>New Player Options</div>", 210, 250)
 	popup.set_content(output)
 	popup.set_window_options("focus=0;can_close=0;can_minimize=1;can_maximize=0;can_resize=1;titlebar=1;")
@@ -157,6 +161,18 @@
 				return 0
 
 		LateChoices()
+	if(href_list["cluwnebanned"])
+		if(!iscluwnebanned(usr))
+			to_chat(usr, "<span class='warning'>honk</span>")
+			return
+		if(!ticker || ticker.current_state <= GAME_STATE_PREGAME)
+			to_chat(usr, "<span class='warning'>The round is either not ready, or has already finished...</span>")
+			return
+		if(!client)
+			return 1
+		sleep(1)
+		create_cluwne()
+
 	if(href_list["predict"])
 		var/dat = {"<html><body>
 		<h4>High Job Preferences</h4>"}
@@ -275,6 +291,9 @@
 					if(!isnull(href_list["option_[optionid]"]))	//Test if this optionid was selected
 						vote_on_poll(pollid, optionid, 1)
 
+		to_chat(src, "<span class='notice'>Thank you for voting!</span>")
+		client.ivoted = TRUE
+
 /mob/new_player/proc/IsJobAvailable(rank)
 	var/datum/job/job = job_master.GetJob(rank)
 	if(!job)
@@ -282,6 +301,8 @@
 	if(job.current_positions >= job.get_total_positions())
 		return 0
 	if(jobban_isbanned(src,rank))
+		return 0
+	if(jobban_isbanned(src,"cluwne")) //not totally necessary but prevents someone from joining if they were cluwnebanned in the lobby
 		return 0
 	if(!job.player_old_enough(src.client))
 		return 0
@@ -316,6 +337,16 @@
 		observer.verbs -= /mob/dead/observer/verb/toggle_antagHUD        // Poor guys, don't know what they are missing!
 	mind.transfer_to(observer)
 	qdel(src)
+
+/mob/new_player/proc/create_cluwne()
+	var/mob/living/simple_animal/hostile/retaliate/cluwne/cluwne = new()
+	spawning = 1
+	src << sound(null, repeat = 0, wait = 0, volume = 85, channel = CHANNEL_LOBBY)
+	close_spawn_windows()
+	cluwne.forceMove(pick(latejoin))
+	mind.transfer_to(cluwne)
+	qdel(src)
+
 
 /mob/new_player/proc/FuckUpGenes(var/mob/living/carbon/human/H)
 	// 20% of players have bad genetic mutations.
@@ -354,6 +385,15 @@
 	if(character.client.prefs.randomslot)
 		character.client.prefs.random_character_sqlite(character, character.ckey)
 
+	// Very hacky. Sorry about that
+	if(ticker.tag_mode_enabled == TRUE)
+		character.mind.assigned_role = "MODE"
+		var/datum/outfit/mime/mime_outfit = new
+		mime_outfit.equip(character)
+		var/datum/role/tag_mode_mime/mime = new
+		mime.AssignToRole(character.mind,1)
+		mime.Greet(GREET_ROUNDSTART)
+
 	if(character.mind.assigned_role != "MODE")
 		job_master.EquipRank(character, rank, 1) //Must come before OnPostSetup for uplinks
 
@@ -362,7 +402,7 @@
 	var/turf/T = character.loc
 	for(var/role in character.mind.antag_roles)
 		var/datum/role/R = character.mind.antag_roles[role]
-		R.OnPostSetup()
+		R.OnPostSetup(TRUE) // Latejoiner post-setup.
 		R.ForgeObjectives()
 		R.AnnounceObjectives()
 
@@ -387,7 +427,7 @@
 	character.store_position()
 
 	// WHY THE FUCK IS THIS HERE
-	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that
+	// FOR GOD'S SAKE USE EVENTS	TODO: use latejoin dynamic rulesets to deal with that // (they did not do that)
 	if(bomberman_mode)
 		character.client << sound('sound/bomberman/start.ogg')
 		if(character.wear_suit)
@@ -558,7 +598,6 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	chosen_species = all_species[client.prefs.species]
 	if( (client.prefs.disabilities & DISABILITY_FLAG_FAT) && (chosen_species.anatomy_flags & CAN_BE_FAT) )
 		new_character.mutations += M_FAT
-		new_character.mutations += M_OBESITY
 		new_character.overeatduration = 600
 
 	if(client.prefs.disabilities & DISABILITY_FLAG_EPILEPTIC)
@@ -572,6 +611,9 @@ Round Duration: [round(hours)]h [round(mins)]m<br>"}
 	if(client.prefs.disabilities & DISABILITY_FLAG_MUTE)
 		new_character.dna.SetSEState(MUTEBLOCK,1,1)
 		new_character.sdisabilities |= MUTE
+
+	if(client.prefs.disabilities & DISABILITY_FLAG_LISP)
+		new_character.dna.SetSEState(LISPBLOCK, 1, 1)
 
 	new_character.dna.UpdateSE()
 	domutcheck(new_character, null, MUTCHK_FORCED)

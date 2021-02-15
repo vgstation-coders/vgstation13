@@ -16,7 +16,7 @@
 	nest_locations -= src
 	..()
 
-/obj/structure/bed/nest/manual_unbuckle(mob/user as mob)
+/obj/structure/bed/nest/manual_unbuckle(mob/user, var/resisting = FALSE)
 	if(istype(user, /mob/living/silicon/pai)) //added istype(user, /mob/living/silicon/pai) cause it was in buckle_mob, dunno why tho
 		return
 
@@ -82,7 +82,7 @@
 
 /obj/structure/bed/nest/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	healthcheck()
 
 /obj/structure/bed/nest/fire_act(datum/gas_mixture/air, exposed_temperature, exposed_volume)

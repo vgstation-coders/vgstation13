@@ -1,4 +1,7 @@
-//Actual butchering code is handled in living.dm
+///////////////Butcher Datums////////////////////////////////////////////////////////////////
+
+//When giving a mob a special butcher product, like goliath plates, it must be added to the animal_butchering_products list lower in this dm.
+//The mob's butchering_drops list is made from animal_butchering_products when it dies. Humans get it when they're created.
 
 /datum/butchering_product
 	var/obj/item/result
@@ -189,6 +192,12 @@
 	..()
 	parent.dust()
 
+/datum/butchering_product/skin/bear/brownbear
+	result = /obj/item/clothing/head/bearpelt/brown/real
+
+/datum/butchering_product/skin/bear/polarbear
+	result = /obj/item/clothing/head/bearpelt/polar
+
 /datum/butchering_product/skin/xeno
 	result = /obj/item/stack/sheet/xenochitin
 	verb_name = "remove chitin"
@@ -324,6 +333,9 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/hostile/giant_spider		= list(/datum/butchering_product/spider_legs),
 	/mob/living/simple_animal/hostile/bear				= list(/datum/butchering_product/skin/bear, TEETH_LOTS),
 	/mob/living/simple_animal/hostile/bear/spare		= list(/datum/butchering_product/skin/bear/spare, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/polarbear	= list(/datum/butchering_product/skin/bear/polarbear, TEETH_LOTS), // all bears have lots of teeth
+	/mob/living/simple_animal/hostile/bear/brownbear	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
+	/mob/living/simple_animal/hostile/bear/panda	= list(/datum/butchering_product/skin/bear/brownbear, TEETH_LOTS),
 	/mob/living/carbon/alien/humanoid					= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH),
 	/mob/living/simple_animal/hostile/alien				= list(/datum/butchering_product/xeno_claw, /datum/butchering_product/skin/xeno, TEETH_BUNCH), //Same as the player-controlled aliens
 	/mob/living/simple_animal/hostile/retaliate/cluwne	= list(TEETH_BUNCH), //honk
@@ -349,3 +361,231 @@ var/global/list/animal_butchering_products = list(
 #undef TEETH_BUNCH
 #undef TEETH_LOTS
 #undef TEETH_HUMAN
+
+/////////////////////////////////Butcher procs/////////////////////////////////////////////////
+
+//butcherCarveStep() can be used to change how long meat takes to butcher from individual mobs
+//butcherMeat() and butcherProduct() are able to be called without the rest of the process.
+//Call butcherProduct() with mod = TRUE to have it search for children of the butcher_product you passed to it in the mob's product list.
+//modMeat() and modProduct() can be easily used to add properties to butcher results based off the mob it came from.
+
+#define BUTCHER_MEAT 1
+#define BUTCHER_SPEED "bSpeed"
+#define BUTCHER_TOOL "bTool"
+#define BUTCHER_TNAME "bTName"
+
+/mob/living/proc/butcher()
+	set category = "Object"
+	set name = "Butcher"
+	set src in oview(1)
+
+	var/mob/living/user = usr
+	if(!butcherCheck(user))
+		return
+	var/butcherTool = null
+	var/toolName = null
+	var/speed_mod = 0
+	var/list/butchValues = butcherValueStep(user)
+	if(!length(butchValues))
+		return
+	if(butchValues[BUTCHER_SPEED])
+		speed_mod = butchValues[BUTCHER_SPEED]
+	if(butchValues[BUTCHER_TOOL])
+		butcherTool = butchValues[BUTCHER_TOOL]
+	if(butchValues[BUTCHER_TNAME])
+		toolName = butchValues[BUTCHER_TNAME]
+	var/list/butcherOptions = butcherMenuStep(user)
+	if(!length(butcherOptions))
+		return
+	var/datum/butchering_product/typeOfCarve = butcherChooseStep(user, butcherOptions, butcherTool)
+	if(!typeOfCarve)
+		return
+	if(butcherCarveStep(user, speed_mod, typeOfCarve, toolName))
+		if(typeOfCarve != BUTCHER_MEAT)
+			butcherProduct(user, typeOfCarve)
+		else
+			butcherMeat(user, toolName)
+
+
+/mob/living/proc/butcherCheck(mob/user, var/ourTool = null)
+	if(!istype(user))
+		return FALSE
+	if(user.isUnconscious() || user.restrained())
+		return FALSE
+	if(!Adjacent(user))
+		return FALSE
+	if(being_butchered)
+		to_chat(user, "<span class='notice'>[src] is already being butchered.</span>")
+		return FALSE
+	if(!can_butcher)
+		to_chat(user, "<span class='notice'>You can't butcher [src]!")
+		return FALSE
+	if(ourTool && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(ourTool != H.get_active_hand())
+			return FALSE
+	return TRUE
+
+
+/mob/living/proc/butcherValueStep(mob/user)
+	var/butchSpeed = 0
+	var/obj/item/theTool = null
+	var/toolName = null
+	if(ishuman(user))
+		var/mob/living/carbon/human/H = user
+		theTool = H.get_active_hand()
+		if(theTool)
+			butchSpeed = theTool.is_sharp()
+			toolName = theTool.name
+			if(!butchSpeed)
+				to_chat(user, "<span class='notice'>You can't butcher \the [src] with this!</span>")
+				return
+		if(H.organ_has_mutation(LIMB_HEAD, M_BEAK))
+			var/obj/item/mask = H.get_item_by_slot(slot_wear_mask)
+			if(!mask || !(mask.body_parts_covered & MOUTH)) //If our mask doesn't cover mouth, we can use our beak to help us while butchering
+				butchSpeed += 0.25
+				if(!toolName)
+					toolName = "beak"
+		if(H.organ_has_mutation(H.get_active_hand_organ(), M_CLAWS))
+			if(!istype(H.gloves))
+				butchSpeed += 0.25
+				if(!toolName)
+					toolName = "claws"
+		if(isgrue(H))
+			toolName = "grue"
+			butchSpeed += 0.5
+	else
+		butchSpeed = 0.5
+	if(!butchSpeed)
+		return
+	return list(BUTCHER_SPEED = butchSpeed, BUTCHER_TOOL = theTool, BUTCHER_TNAME = toolName)
+
+
+/mob/living/proc/butcherMenuStep(mob/user)
+	var/list/butcherType = list()
+	if(meat_type && meat_amount > meat_taken)
+		butcherType += "Butcher"
+	for(var/datum/butchering_product/BP in butchering_drops)
+		if(BP.amount)
+			butcherType += BP.verb_name
+	if(!butcherType.len)
+		to_chat(user, "<span class='notice'>There's nothing to butcher.</span>")
+		return
+	butcherType += "Cancel"
+	return butcherType
+
+
+/mob/living/proc/butcherChooseStep(mob/user, butcherOptions, butcherTool)
+	var/choice = input(user,"What would you like to do with \the [src]?","Butchering") in null|butcherOptions
+	if(!butcherCheck(user, butcherTool))
+		return 0
+	if(choice == "Cancel")
+		return 0
+	if(choice == "Butcher")
+		return BUTCHER_MEAT
+	if(!choice || !butchering_drops.len)
+		return 0
+	var/theProduct = getProduct(choice)
+	return theProduct
+
+
+/mob/living/proc/getProduct(choice)
+	for(var/datum/butchering_product/BP in butchering_drops)
+		if(BP.verb_name == choice)
+			return BP
+
+
+/mob/living/proc/butcherCarveStep(mob/user, speed_mod, datum/butchering_product/typeOfCarve, toolName, var/butcherTime = 20)
+	var/butcherWord = null
+	if(typeOfCarve == BUTCHER_MEAT)
+		butcherWord = "butchering"
+		butcherTime *= size
+		if(meat_taken >= meat_amount)
+			to_chat(user, "<span class='info'>There's no meat left!.</span>")
+			return
+	else
+		butcherWord = typeOfCarve.verb_gerund
+		butcherTime = typeOfCarve.butcher_time
+	if(!butcherWord)
+		return FALSE
+	user.visible_message("<span class='notice'>[user] starts [butcherWord] \the [src][toolName ? " with \the [toolName]" : ""].</span>",\
+		"<span class='info'>You start [butcherWord] \the [src].</span>")
+	being_butchered = TRUE
+	if(!do_after(user, src, butcherTime / speed_mod))
+		to_chat(user, "<span class='warning'>You stop [butcherWord] \the [src].</span>")
+		being_butchered = FALSE
+		return FALSE
+	being_butchered = FALSE
+	to_chat(user, "<span class='info'>You finish [butcherWord] \the [src].</span>")
+	return TRUE
+
+
+/mob/living/proc/butcherMeat(mob/user, var/tool_name)
+	var/theMeat = drop_meat(loc)
+	if(theMeat)
+		if(tool_name)
+			if(!advanced_butchery)
+				advanced_butchery = new()
+			advanced_butchery.Add(tool_name)
+		modMeat(user, theMeat)
+	meatEndStep(user)
+
+
+/mob/living/proc/drop_meat(location)
+	if(!meat_type)
+		return
+	if(meat_taken >= meat_amount)
+		return
+	meat_taken++
+	if(!ispath(meat_type, /obj/item/weapon/reagent_containers/food/snacks/meat))	//For 2 years sheet/bone thought "skeleton" was a number
+		var/NM = new meat_type(location)
+		return NM
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/M = null
+	M = make_meat(location)
+	if(length(virus2))
+		for(var/ID in virus2)
+			var/datum/disease2/disease/D = virus2[ID]
+			if(D.spread & SPREAD_BLOOD)
+				M.infect_disease2(D,1,"(Butchered, from [src])",0)
+	if(reagents)
+		reagents.trans_to(M, round(reagents.total_volume * (meat_amount/meat_taken), 1))
+	return M
+
+
+/mob/living/proc/make_meat(location)
+	var/ourMeat = new meat_type(location)
+	return ourMeat
+
+
+/mob/living/proc/meatEndStep(mob/user)	//Exists for simple_animals
+	to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
+
+
+/mob/living/proc/butcherProduct(mob/user, var/datum/butchering_product/theCarve, var/mod = FALSE)
+	var/datum/butchering_product/toCarve = null
+	if(mod)	//This is here so things can directly call this proc without needing to be overly specific
+		for(var/datum/butchering_product/BP in butchering_drops)
+			if(istype(BP, theCarve) && BP.amount)
+				toCarve = BP
+		if(!toCarve)
+			return FALSE
+	else
+		toCarve = theCarve
+	toCarve.spawn_result(loc, src)
+	update_icons()
+	modProduct(user, toCarve)
+
+
+/mob/living/proc/modProduct(mob/user, theProduct)	//These procs can easily be used to give features to meat/products based on the animal
+	return
+
+/mob/living/proc/modMeat(mob/user, theMeat)
+	return
+
+
+#undef BUTCHER_MEAT
+#undef BUTCHER_SPEED
+#undef BUTCHER_TOOL
+#undef BUTCHER_TNAME
+
+///////////////////////END PROCS///////////////////////////////////////////////////

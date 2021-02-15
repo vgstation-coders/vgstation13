@@ -128,6 +128,11 @@
 	pai = null
 	overlays.Cut()
 
+/obj/item/device/paicard/examine(mob/user)
+	..()
+	if(pai)
+		pai.examine(user)
+
 /obj/item/device/paicard/proc/setEmotion(var/emotion)
 
 	var/static/list/possible_choices = list(
@@ -163,7 +168,7 @@
 	var/mutable_appearance/pai_icon = new(src) //we also update the mob's appearance so it appears properly on the scoreboard.
 	pai_icon.name = pai.name //But don't override their name
 	pai_icon.verbs = pai.verbs //THANKS, LUMMOX
-	pai.appearance = pai_icon 
+	pai.appearance = pai_icon
 
 /obj/item/device/paicard/proc/alertUpdate()
 	visible_message("<span class='notice'>[src] flashes a message across its screen, \"Additional personalities available for download.\"</span>", 1, "<span class='notice'>[src] bleeps electronically.</span>", 2)

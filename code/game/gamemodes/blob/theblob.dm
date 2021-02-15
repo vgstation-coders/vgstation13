@@ -109,7 +109,6 @@ var/list/blob_overminds = list()
 		return 1
 	if(istype(mover) && mover.checkpass(PASSBLOB))
 		return 1
-	mover.to_bump(src) //Only automatic for dense objects
 	return 0
 
 /obj/effect/blob/beam_connect(var/obj/effect/beam/B)
@@ -173,7 +172,7 @@ var/list/blob_overminds = list()
 	return
 
 /obj/effect/blob/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	switch(Proj.damage_type)
 		if(BRUTE)
 			health -= (Proj.damage/brute_resist)
@@ -182,7 +181,7 @@ var/list/blob_overminds = list()
 
 	update_health()
 	update_icon()
-	return 0
+	return
 
 /obj/effect/blob/attackby(var/obj/item/weapon/W, var/mob/living/user)
 	user.do_attack_animation(src, W)

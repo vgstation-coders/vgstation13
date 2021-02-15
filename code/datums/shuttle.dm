@@ -331,7 +331,7 @@
 						to_chat(user, "[A.name] is preventing the shuttle from departing.")
 				moving = 0
 				destination_port = null
-				return 0
+				return
 			for(var/atom/movable/AA in linked_area)
 				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 
@@ -709,6 +709,19 @@
 		new_turf.dir = old_turf.dir
 		new_turf.icon_state = old_turf.icon_state
 		new_turf.icon = old_turf.icon
+		new_turf.plane = old_turf.plane
+		new_turf.layer = old_turf.layer
+
+		// Hack: transfer the ownership of old_turf's floor_tile to new_tile.
+		// Floor turfs create their `floor_tile` in New() if it's null.
+		// The better solution would be to not do that at all in New(), or use
+		// something like the map loader's atom preloader to transfer the
+		// floor_tile before New().
+		if(istype(old_turf, /turf/simulated/floor))
+			var/turf/simulated/floor/ancient = old_turf
+			var/turf/simulated/floor/modern = new_turf
+			modern.floor_tile = ancient.floor_tile
+			ancient.floor_tile = null
 		if(rotate)
 			new_turf.shuttle_rotate(rotate)
 

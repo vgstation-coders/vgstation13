@@ -56,6 +56,8 @@ var/global/list/juice_items = list (
 
 		/obj/item/seeds = list(BLACKPEPPER = 5),
 
+		//Other
+		/obj/item/weapon/ectoplasm = list(ECTOPLASM = 5),
 
 		//archaeology!
 		/obj/item/weapon/rocksliver = list(GROUND_ROCK = 30),
@@ -285,11 +287,9 @@ var/global/list/juice_items = list (
 			list("Eject Ingredients", "radial_eject"),
 			list("Detach Beaker", "radial_detachbeaker")
 		)
-		var/event/menu_event = new(owner = usr)
-		menu_event.Add(src, "radial_check_handler")
 
-		var/task = show_radial_menu(usr,loc,choices,custom_check = menu_event)
-		if(!radial_check(usr))
+		var/task = show_radial_menu(usr,loc,choices,custom_check = new /callback(src, .proc/radial_check, user))
+		if(!radial_check(user))
 			return
 
 		switch(task)
@@ -303,10 +303,6 @@ var/global/list/juice_items = list (
 				detach()
 		return
 	return ..()
-
-/obj/machinery/reagentgrinder/proc/radial_check_handler(list/arguments)
-	var/event/E = arguments["event"]
-	return radial_check(E.holder)
 
 /obj/machinery/reagentgrinder/proc/radial_check(mob/living/user)
 	if(!istype(user))

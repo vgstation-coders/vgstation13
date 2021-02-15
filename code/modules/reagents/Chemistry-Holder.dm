@@ -25,6 +25,8 @@ var/const/INGEST = 2
 
 		for (var/path in typesof(/datum/reagent) - /datum/reagent)
 			var/datum/reagent/D = new path()
+			if(D.id == EXPLICITLY_INVALID_REAGENT_ID)
+				continue
 			chemical_reagents_list[D.id] = D
 
 	if (!chemical_reactions_list)
@@ -82,6 +84,16 @@ var/const/INGEST = 2
 
 	handle_reactions()
 	return total_transfered
+
+/datum/reagents/proc/get_master_reagent()
+	var/the_reagent = null
+	var/the_volume = 0
+
+	for(var/datum/reagent/A in reagent_list)
+		if(A.volume > the_volume)
+			the_volume = A.volume
+			the_reagent = A
+	return the_reagent
 
 /datum/reagents/proc/get_master_reagent_name()
 	var/the_name = null
@@ -556,6 +568,16 @@ trans_to_atmos(var/datum/gas_mixture/target, var/amount=1, var/multiplier=1, var
 				if(istype(A, /obj) && R)
 					R.reaction_obj(A, R.volume+volume_modifier)
 	return
+
+/datum/reagents/proc/reaction_dropper(var/atom/A, var/volume_modifier=0)
+
+	if(ismob(A))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_mob(A)
+
+	if(istype(A, /obj))
+		for(var/datum/reagent/R in reagent_list)
+			R.reaction_dropper_obj(A, R.volume+volume_modifier)
 
 /datum/reagents/proc/add_reagent(var/reagent, var/amount, var/list/data=null, var/reagtemp = T0C+20)
 	if(!my_atom)

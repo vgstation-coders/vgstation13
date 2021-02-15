@@ -58,7 +58,6 @@
 		else
 			to_chat(H, "<span class = 'warning'>It seems you couldn't complete the spell.</span>")
 			V.reviving = FALSE
-			return FALSE
 
 // Action button for actual revival
 

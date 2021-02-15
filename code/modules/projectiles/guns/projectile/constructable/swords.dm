@@ -298,7 +298,7 @@
 	icon = 'icons/obj/blacksmithing/gladius.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/gladius_left.dmi', "right_hand" = 'icons/mob/in-hand/right/gladius_right.dmi')
 	icon_state = "gladius"
-	item_state = "sword"
+	item_state = "gladius"
 
 /obj/item/weapon/sword/sabre
 	name = "sabre"
@@ -306,7 +306,7 @@
 	icon = 'icons/obj/blacksmithing/sabre.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/sabre_left.dmi', "right_hand" = 'icons/mob/in-hand/right/sabre_right.dmi')
 	icon_state = "sabre"
-	item_state = "sword"
+	item_state = "sabre"
 
 /obj/item/weapon/sword/scimitar
 	name = "scimitar"
@@ -314,4 +314,4 @@
 	icon = 'icons/obj/blacksmithing/scimitar.dmi'
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/scimitar_left.dmi', "right_hand" = 'icons/mob/in-hand/right/scimitar_right.dmi')
 	icon_state = "scimitar"
-	item_state = "sword"
+	item_state = "scimitar"

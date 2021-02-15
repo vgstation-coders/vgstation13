@@ -71,8 +71,7 @@
 
 /obj/structure/closet/spawned_by_map_element()
 	..()
-
-	initialize()
+	take_contents()
 
 // Fix for #383 - C4 deleting fridges with corpses
 /obj/structure/closet/Destroy()
@@ -359,7 +358,7 @@
 
 /obj/structure/closet/bullet_act(var/obj/item/projectile/Proj)
 	health -= Proj.damage
-	..()
+	. = ..()
 	if(health <= 0)
 		broken = 1
 		if(has_electronics)

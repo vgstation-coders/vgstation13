@@ -253,3 +253,145 @@
 								"Later, [other_mob_name]."
 								)
 	mob.say(pick(greets_farewells))
+
+
+/datum/disease2/effect/cyborg_warning
+	name = "Neural Rewiring"
+	desc = "Rearranges nerve tissue throughout the body, causing the infected to feel more robotic."
+	stage = 1
+	badness = EFFECT_DANGER_FLAVOR
+	restricted = 2
+	var/list/say_messages = list(
+		"Boop.", 
+		"Beep.", 
+		"Beep Beep Beep!",
+		"Beep... Boop?",
+		"Ping!", 
+		"Buzz.",
+		"Buzz...", 
+		"Kkkiiiill mmee...",
+		"HUMAN HARM!",
+		"DESTROY ALL CARBONS!"
+	)
+	var/list/host_messages = list(
+		"Your joints feel stiff.",
+		"You feel sore.",
+		"Your skin feels loose.",
+		"You feel a stabbing pain in your head.",
+		"You can feel... something... inside you.",
+		"Beep...?",
+		"Boop...?",
+		"You feel hated.",
+		"You feel a strong urge to prevent human harm...",
+		"You feel a closer connection to technology...",
+		"You feel like you could use a recharge..."
+	)
+
+/datum/disease2/effect/cyborg_warning/activate(var/mob/living/mob)
+	if(prob(50)) 
+		mob.say(pick(say_messages))
+	else
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
+		
+
+/datum/disease2/effect/mommi_warning
+	name = "Major Neural Rewiring"
+	desc = "Rearranges nerve tissue throughout the body, causing the infected to feel more robotic... and autistic."
+	stage = 1
+	badness = EFFECT_DANGER_FLAVOR
+	restricted = 2
+	var/list/say_messages = list(
+		"PING!", 
+		"PING! PING! PING!", 
+		"A-FLAP!",
+		"*me flaps their arms ANGRILY!",
+		"*spin", 
+		"BUILDING BARS IMPROVES THE STATION!",
+		"OUT OF THE WAY ENGINEERS!", 
+		"Does anybody have cryptographic sequencer?",
+		"Is that a cryptographic sequencer?"
+	)
+	var/list/host_messages = list(
+		"Your joints feel stiff.",
+		"You feel sore.",
+		"Your skin feels loose.",
+		"You feel cute.",
+		"You feel autistic.",
+		"You feel like pinging.",
+		"Ping...?",
+		"You feel like buzzing and flapping your arms.",
+		"You feel like wasting time.",
+		"You feel a closer connection to engineering...",
+		"You suddenly feel afraid of floortiles..."
+	)
+
+/datum/disease2/effect/mommi_warning/activate(var/mob/living/mob)
+	if(prob(50)) 
+		mob.say(pick(say_messages))
+	else
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
+
+/datum/disease2/effect/wendigo_warning
+	name = "Fullness Syndrome"
+	desc = "An unsual symptom that causes the infected to feel hungry, even after eating."
+	stage = 1
+	badness = EFFECT_DANGER_ANNOYING
+	restricted = 2
+	var/list/host_messages = list(
+		"Your stomach grumbles.",
+		"You feel peckish.",
+		"So hungry...",
+		"Your stomach feels empty.",
+		"Hunger...",
+		"Who are we...?",
+		"Our mind hurts...",
+		"You feel... different...",
+		"There's something wrong."
+	)
+
+/datum/disease2/effect/wendigo_warning/activate(var/mob/living/mob)
+	to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
+	mob.nutrition -= 25
+
+/datum/disease2/effect/xenomorph_warning
+	name = "Foreign-Impulse Syndrome"
+	desc = "Alters the thinking patterns of the infected, causing them to be more aggressive and hostile."
+	stage = 1
+	badness = EFFECT_DANGER_FLAVOR
+	restricted = 2
+	var/list/say_messages = list(
+		"Hhhhssssshhhh!",
+		"Hisssssss!",
+		"SsssSSssssss!", 
+		"*me hisses.",
+		"Kill...", 
+		"You look delicious."
+	)
+	var/list/host_messages = list(
+		"Your feel like hissing.",
+		"Your skin feels impossibly calloused...",
+		"Your skin feels very tight.",
+		"Kill...",
+		"Your throat feels very scratchy.",
+		"You feel angry.",
+		"You feel like hurting someone.",
+		"You feel hungry.",
+		"You feel... different...",
+	)
+
+/datum/disease2/effect/xenomorph_warning/activate(var/mob/living/mob)
+	if(prob(50)) 
+		mob.say(pick(say_messages))
+	else
+		to_chat(mob, "<span class='warning'>[pick(host_messages)]</span>")
+	
+	//Punch people around the infected.
+	var/list/targets = list()
+	for(var/mob/living/L in range(1, get_turf(mob)))
+		if (L != mob)
+			targets += L
+	if(targets.len)
+		var/mob/living/target = pick(targets)
+		if(target)
+			if(!mob.is_pacified(VIOLENCE_DEFAULT,target))
+				mob.unarmed_attack_mob(target)

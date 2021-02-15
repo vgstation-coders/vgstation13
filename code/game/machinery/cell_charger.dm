@@ -303,7 +303,7 @@
 		if(!transfer) //since we already ruled out no charge here, if min() = 0 that means the diff is 0
 			to_chat(user,"<span class='good'>That already has full charge!</span>")
 			return
-		playsound(get_turf(src), pick(lightning_sound), 25, 1, "vary" = 0)
+		playsound(src, pick(lightning_sound), 25, 1, "vary" = 0)
 		stored.use(transfer)
 		C.give(transfer)
 

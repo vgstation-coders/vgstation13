@@ -48,10 +48,6 @@
 	var/mob/pointer_caller
 	var/mob/master //Obtained randomly when petting him. Can be overriden.
 
-//	colourmatrix = list(1,0.0,0.0,0,\
-						0,0.5,0.5,0,\
-						0,0.5,0.5,0,\
-						0,0.0,0.0,1,)
 	held_items = list()
 	var/time_between_directed_steps = 6
 
@@ -105,14 +101,17 @@
 							failedsteps++
 						sleep(time_between_directed_steps)
 
+					var/corg_her = "her"
+					if(gender == MALE)
+						corg_her = "his"
 					if(movement_target)
 						step_towards(src,movement_target,1)
 						playsound(loc, 'sound/voice/corgibark.ogg', 80, 1)
 						if(istype(movement_target,/obj/item/weapon/reagent_containers/food/snacks))
-							emote("me", 1, "barks at [movement_target], as if begging it to go into \his mouth.")
+							emote("me", 1, "barks at [movement_target], as if begging it to go into [corg_her] mouth.")
 							corgi_status = BEGIN_FOOD_HUNTING
 						else if(ishuman(movement_target))
-							emote("me", 1, "barks at [movement_target] and wags \his tail.")
+							emote("me", 1, "barks at [movement_target] and wags [corg_her] tail.")
 							corgi_status = IDLE
 						else
 							emote("me", 1, "barks with an attitude!")

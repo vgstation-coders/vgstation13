@@ -108,6 +108,9 @@
 	..()
 
 /obj/item/weapon/reagent_containers/food/snacks/attack(mob/living/M, mob/user, def_zone, eat_override = 0)	//M is target of attack action, user is the one initiating it
+	if(restraint_resist_time > 0)
+		if(restraint_apply_check(M, user))
+			return attempt_apply_restraints(M, user)
 	if(!eatverb)
 		eatverb = pick("bite", "chew", "nibble", "gnaw", "gobble", "chomp")
 	if(!reagents.total_volume)	//Are we done eating (determined by the amount of reagents left, here 0)
@@ -756,6 +759,16 @@
 		name = "Frosted Jelly Donut"
 		reagents.add_reagent(SPRINKLES, 2)
 
+/obj/item/weapon/reagent_containers/food/snacks/bagel
+	name = "bagel"
+	desc = "You can almost imagine the center is a black hole."
+	icon_state = "bagel"
+	food_flags = FOOD_ANIMAL
+
+/obj/item/weapon/reagent_containers/food/snacks/bagel/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 3)
+
 // Eggs
 
 /obj/item/weapon/reagent_containers/food/snacks/friedegg
@@ -1119,6 +1132,18 @@
 	reagents.add_reagent(SILENCER, 6)
 	bitesize = 2
 
+/obj/item/weapon/reagent_containers/food/snacks/donutburger
+	name = "donut burger"
+	desc = "Illegal to have out on code green."
+	icon_state = "donutburger"
+	food_flags = FOOD_MEAT
+
+/obj/item/weapon/reagent_containers/food/snacks/donutburger/New()
+	..()
+	reagents.add_reagent(NUTRIMENT, 6)
+	reagents.add_reagent(SPRINKLES, 6)
+	bitesize = 2
+
 /obj/item/weapon/reagent_containers/food/snacks/avocadoburger
 	name = "avocado burger"
 	desc = "Blurring the line between ingredient and condiment."
@@ -1223,7 +1248,7 @@
 		new/obj/effect/decal/cleanable/pie_smudge(src.loc)
 		if(trash)
 			new trash(src.loc)
-		playsound(get_turf(src), pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
+		playsound(src, pick('sound/effects/splat_pie1.ogg','sound/effects/splat_pie2.ogg'), 100, 1)
 		qdel(src)
 
 /obj/item/weapon/reagent_containers/food/snacks/pie/empty //so the H.O.N.K. cream pie mortar can't generate free nutriment
@@ -2321,6 +2346,7 @@
 	icon_state = "spaghettiboiled"
 	trash = /obj/item/trash/plate
 	restraint_resist_time = 1 SECONDS
+	toolsounds = list('sound/weapons/cablecuff.ogg')
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledspaghetti/New()
 	..()
@@ -3260,7 +3286,7 @@
 	var/original_total_volume = reagents.total_volume
 	reagents.clear_reagents()
 
-	var/virus_choice = pick(subtypesof(/datum/disease2/disease))
+	var/virus_choice = pick(subtypesof(/datum/disease2/disease) - typesof(/datum/disease2/disease/predefined))
 	var/datum/disease2/disease/new_virus = new virus_choice
 
 	var/list/anti = list(
@@ -4671,7 +4697,7 @@
 /obj/item/weapon/reagent_containers/food/snacks/sweet/strange/New()
 	..()
 	var/list/possible_reagents=list(ZOMBIEPOWDER=5, MINDBREAKER=5, PACID=5, HYPERZINE=5, CHLORALHYDRATE=5, TRICORDRAZINE=5, DOCTORSDELIGHT=5, MUTATIONTOXIN=5, MERCURY=5, ANTI_TOXIN=5, SPACE_DRUGS=5, HOLYWATER=5,  RYETALYN=5, CRYPTOBIOLIN=5, DEXALINP=5, HAMSERUM=1,
-	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5)
+	LEXORIN=5, GRAVY=5, DETCOFFEE=5, AMUTATIONTOXIN=5, GYRO=5, SILENCER= 5, URANIUM=5, WATER=5, DIABEETUSOL =5, SACID=5, LITHIUM=5, CHILLWAX=5, OXYCODONE=5, VOMIT=5, BLEACH=5, HEARTBREAKER=5, NANITES=5, CORNOIL=5, NOVAFLOUR=5, DEGENERATECALCIUM = 5, COLORFUL_REAGENT = 5, LIQUIDBUTTER = 5)
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
 

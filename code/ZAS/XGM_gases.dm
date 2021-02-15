@@ -13,6 +13,7 @@
 //This should probably be in a different file, but currently it's only used here.
 /image/effect
 	plane = EFFECTS_PLANE
+	mouse_opacity = 0
 
 /datum/gas/proc/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
 	return TRUE

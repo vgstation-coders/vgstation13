@@ -365,7 +365,7 @@
 	..()
 
 /obj/structure/piano/attack_hand(mob/user)
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 1
 	if(broken)
@@ -427,6 +427,7 @@
 	else if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 		if(prob(Proj.damage))
 			src.ex_act(2)
+	return ..()
 
 /obj/structure/piano/xylophone
 	name = "xylophone"

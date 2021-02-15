@@ -13,6 +13,8 @@
 	var/effect_type = 0
 	var/isolated = 0
 	var/list/valid_style_types = list(ARTIFACT_STYLE_ANOMALY)
+	var/triggered = 0 //set to 1 if it has been activated at least once
+	var/activation_sound = null
 
 //0 = Unknown / none detectable
 //1 = Concentrated energy
@@ -24,13 +26,25 @@
 //7 = Atomic synthesis
 
 //send 1 after location to generate a trigger for the effect, only do this on objects that have the required events!
-/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0)
+/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0, var/primary_effect = TRUE)
 	..()
 	holder = location
 	effect = pick(effect) //If effect is defined as a list, pick one of the options from the list. If it's defined specifically, pick that.
 
 	//this will be replaced by the excavation code later, but it's here just in case
 	artifact_id = "[pick("kappa","sigma","antaeres","beta","omicron","iota","epsilon","omega","gamma","delta","tau","alpha")]-[rand(100,999)]"
+
+	if (effecttype != "unknown")
+		activation_sound = pick(
+			'sound/machines/alien_artifacts/artifact_activation_1.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_2.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_3.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_4.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_5.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_6.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_7.ogg',
+			'sound/machines/alien_artifacts/artifact_activation_8.ogg',
+			)
 
 	//random charge time and distance
 	switch(pick(100;1, 50;2, 25;3))
@@ -48,7 +62,7 @@
 			effectrange = rand(20, 200)
 
 	if(generate_trigger)
-		GenerateTrigger()
+		GenerateTrigger(primary_effect)
 
 /datum/artifact_effect/proc/ToggleActivate(var/reveal_toggle = 1)
 	//so that other stuff happens first
@@ -58,10 +72,19 @@
 		else
 			activated = 1
 			isolated = 1
+			if (!triggered)
+				triggered = 1
+				if(istype(holder, /obj/machinery/artifact))
+					var/obj/machinery/artifact/A = holder
+					if (A.analyzed)
+						score["artifacts"]++
+
 			spawn(20 SECONDS)
 				isolated = 0
 
 		if(reveal_toggle == 1 && holder)
+			if(activated && (!istype(holder, /obj/machinery/artifact) || holder:primary_effect == src))
+				playsound(holder, activation_sound, 20, 0, -3, FALLOFF_SOUNDS, 0)
 			if(istype(holder, /obj/machinery/artifact))
 				var/obj/machinery/artifact/A = holder
 				A.update_icon()
@@ -81,10 +104,13 @@
 			var/atom/toplevelholder = get_holder_at_turf_level(holder)
 			toplevelholder.visible_message("<span class='warning'>[bicon(toplevelholder)] [toplevelholder] [display_msg]</span>")
 
+		OnToggleActivate()
+
 /datum/artifact_effect/proc/DoEffectTouch(var/mob/user)
 /datum/artifact_effect/proc/DoEffectAura(var/atom/holder)
 /datum/artifact_effect/proc/DoEffectPulse(var/atom/holder)
 /datum/artifact_effect/proc/UpdateMove()
+/datum/artifact_effect/proc/OnToggleActivate()
 
 /datum/artifact_effect/proc/process()
 	if(chargelevel < chargelevelmax)
@@ -96,6 +122,7 @@
 		else if(effect == ARTIFACT_EFFECT_PULSE && chargelevel >= chargelevelmax)
 			chargelevel = 0
 			DoEffectPulse()
+
 
 //returns 0..1, with 1 being no protection and 0 being fully protected
 proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
@@ -156,16 +183,31 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 			return 1
 	return 0
 
-/datum/artifact_effect/proc/GenerateTrigger()
+/datum/artifact_effect/proc/GenerateTrigger(var/primary_effect = TRUE)
 	if(trigger)
 		qdel(trigger); trigger = null
 	var/triggertype
 	if(effect == ARTIFACT_EFFECT_TOUCH)
 		triggertype = /datum/artifact_trigger/touch
-	else
+	else if (primary_effect)
 		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+	else
+		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger - /datum/artifact_trigger/pay2use)
 
 	trigger = new triggertype(src)
+
+/datum/artifact_effect/proc/ForceDeactivate()
+	if (!activated)
+		return
+
+	if (istype(holder, /obj/machinery/artifact))
+		var/obj/machinery/artifact/A = holder
+		ToggleActivate(A.primary_effect == src ? 1 : 2)
+
+	else if (istype(holder, /obj/item/weapon/anobattery))
+		var/obj/item/weapon/anobattery/B = holder
+		if (B.inserted_device)
+			B.inserted_device.shutdown_emission()
 
 /datum/artifact_effect/Destroy()
 	if(trigger)

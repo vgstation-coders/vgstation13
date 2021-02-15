@@ -33,7 +33,7 @@
 
 /obj/structure/mirror/proc/vampire_check(mob/living/user, mob/living/carbon/human/target)
 	var/datum/role/vampire/V = isvampire(target)
-	if(V && !(VAMP_MATURE in V.powers))
+	if(V && !(/datum/power/vampire/mature in V.current_powers))
 		to_chat(user, "<span class='notice'>You don't see anything in \the [src].</span>")
 		return FALSE
 	return TRUE
@@ -129,7 +129,7 @@
 			shatter()
 		else
 			playsound(src, 'sound/effects/hit_on_shattered_glass.ogg', 70, 1)
-	..()
+	return ..()
 
 
 /obj/structure/mirror/attackby(obj/item/I as obj, mob/living/user as mob)
@@ -230,5 +230,5 @@
 
 			if("Appearance")
 				targ.pick_appearance(M)
-				
+
 		to_chat(targ, "<span class='notice'>You gaze into the [src].</span>")

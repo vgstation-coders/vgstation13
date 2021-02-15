@@ -1007,8 +1007,8 @@
 		to_chat(preacher, "<span class='warning'>You need to hold a flashbang to begin the conversion.</span>")
 		return FALSE
 	var/held_screwdriver = null
-	for(var/obj/item/I in preacher.held_items)
-		if(I.is_screwdriver(preacher))
+	for(var/obj/item/I in subject.held_items)
+		if(I.is_screwdriver(subject))
 			held_screwdriver = I
 			break
 	if (!held_screwdriver)
@@ -1068,6 +1068,9 @@
 	convert_method = "performing a ritual with a paper. The subject will need to stand a crayon-drawn rune."
 	preferred_incense = /obj/item/weapon/storage/fancy/incensebox/moonflowers
 	bookstyle = "Tome"
+
+/datum/religion/cult/equip_chaplain(var/mob/living/carbon/human/H)
+	H.add_language(LANGUAGE_CULT)
 
 /datum/religion/cult/convertCeremony(var/mob/living/preacher, var/mob/living/subject)
 	var/obj/effect/decal/cleanable/crayon/rune = locate(/obj/effect/decal/cleanable/crayon/, subject.loc)
@@ -1502,7 +1505,7 @@
 /datum/religion/anprim
 	name = "Primitivism"
 	deity_name = "Grug"
-	bible_name = "Industrial Society and Its Future" 
+	bible_name = "Industrial Society and Its Future"
 	bible_type = /obj/item/weapon/storage/bible/booze
 	male_adept = "Primitive"
 	female_adept = "Primitive"

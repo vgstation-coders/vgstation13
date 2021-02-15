@@ -75,7 +75,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 			to_chat(usr, "<span class='red'>Never use atom proc call to inject SQL.</span>")
 			message_admins("[key_name(usr)] used atom proc call on the db controller.")
 			log_admin("[key_name(usr)] used atom proc call on the db controller.")
-			return FALSE
+			return
 
 		if(target && !hascall(target, procname))
 			to_chat(usr, "<span class='red'>Error: callproc(): target has no such call [procname].</span>")
@@ -274,10 +274,11 @@ Pressure: [env.pressure]"}
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		log_admin("[key_name(src)] has alienized [M.key].")
+		var/mob/living/carbon/human/H = M
+		log_admin("[key_name(src)] has alienized [H.key].")
 		spawn(10)
 			feedback_add_details("admin_verb","MKAL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-			return M:Alienize()
+			H.Alienize()
 
 		log_admin("[key_name(usr)] made [key_name(M)] into an alien.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into an alien.</span>", 1)
@@ -292,10 +293,12 @@ Pressure: [env.pressure]"}
 		alert("Wait until the game starts")
 		return
 	if(ishuman(M))
-		log_admin("[key_name(src)] has slimeized [M.key].")
+		var/mob/living/carbon/human/H = M
+		log_admin("[key_name(src)] has slimeized [H.key].")
 		spawn(10)
 			feedback_add_details("admin_verb","MKMET") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-			return M:slimeize()
+			H.slimeize()
+
 		log_admin("[key_name(usr)] made [key_name(M)] into a slime.")
 		message_admins("<span class='notice'>[key_name_admin(usr)] made [key_name(M)] into a slime.</span>", 1)
 	else
@@ -1217,6 +1220,24 @@ client/proc/check_convertables()
 
 	to_chat(usr, dat)
 
+
+client/proc/toggle_convertibles()
+	set name = "Toggle Convertibles HUD (Cult 3.0+)"
+	set category = "Debug"
+	set desc = "Displays a marker over crew members showing their propension to get converted."
+
+	var/mob/dead/observer/adminmob = mob
+	if (!isobserver(adminmob))
+		alert("Only observers can use this functionality")
+		return
+
+	if(adminmob.conversionHUD)
+		adminmob.conversionHUD = 0
+		to_chat(src, "<span class='notice'><B>conversionHUD Disabled</B></span>")
+	else
+		adminmob.conversionHUD = 1
+		to_chat(src, "<span class='notice'><B>conversionHUD Enabled</B></span>")
+
 /client/proc/spawn_datum(var/object as text)
 	set category = "Debug"
 	set desc = "(datum path) Spawn a datum (turfs NOT supported)"
@@ -1236,7 +1257,7 @@ client/proc/check_convertables()
 		object = copytext(object, 1, variables_start)
 
 
-	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area) //Exclude non-movable atoms
+	var/list/matches = get_matching_types(object, /datum) - typesof(/turf, /area, /datum/admins) //Exclude non-movable atoms
 
 	if(matches.len == 0)
 		to_chat(usr, "Unable to find any matches.")
@@ -1319,6 +1340,18 @@ client/proc/check_convertables()
 
 	error_cache.show_to(src)
 
+/client/proc/add_centcomm_order()
+	set category = "Fun"
+	set name = "Central Command Request"
+	set desc = "Send a Central Command Request"
+
+	if (!check_rights(R_FUN))
+		return
+
+	var/ordertype = input("Select a Request.","Central Command Request",1) as null|anything in (subtypesof(/datum/centcomm_order) - /datum/centcomm_order/per_unit)
+	if (ordertype)
+		SSsupply_shuttle.add_centcomm_order(new ordertype)
+
 /client/proc/emergency_shuttle_panel()
 	set name = "Emergency Shuttle Panel"
 	set category = "Debug"
@@ -1347,7 +1380,14 @@ client/proc/check_convertables()
 		holder.diseases_panel()
 		log_admin("[key_name(usr)] checked the Diseases Panel.")
 	feedback_add_details("admin_verb","DIS")
-	return
+
+/client/proc/artifacts_panel()
+	set name = "Artifacts Panel"
+	set category = "Admin"
+	if(holder)
+		holder.artifacts_panel()
+		log_admin("[key_name(usr)] checked the Artifacts Panel.")
+	feedback_add_details("admin_verb","ART")
 
 /client/proc/climate_panel()
 	set name = "Climate Panel"

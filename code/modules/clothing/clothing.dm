@@ -21,7 +21,8 @@
 	var/list/sound_change //Clothing can change audible emotes, this will determine what is affected
 	var/sound_priority //The priority of the clothing when it comes to playing sounds, higher priority means it will always play first otherwise it will randomly pick
 	var/list/sound_file //The actual files to be played, it will pick from the list
-	var/list/sound_respect_species //Species will not play sounds from clothing
+	var/list/sound_species_whitelist
+	var/list/sound_genders_allowed //Checks for what gender it is allowed to play the sound for
 
 /obj/item/clothing/Destroy()
 	for(var/obj/item/clothing/accessory/A in accessories)
@@ -387,6 +388,7 @@
 	body_parts_covered = HEAD
 	slot_flags = SLOT_HEAD
 	species_restricted = list("exclude","Muton")
+	var/gave_out_gifts = FALSE //for snowman animation
 
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
@@ -457,8 +459,7 @@
 	desc = "Comfortable-looking shoes."
 	gender = PLURAL //Carn: for grammarically correct text-parsing
 
-	var/chained = 0
-	var/chaintype = null // Type of chain.
+	var/obj/item/weapon/chain = null // handcuffs attached
 	var/bonus_kick_damage = 0
 	var/footprint_type = /obj/effect/decal/cleanable/blood/tracks/footprints //The type of footprint left by someone wearing these
 	var/mag_slow = MAGBOOTS_SLOWDOWN_HIGH //how slow are they when the magpulse is on?
@@ -488,6 +489,10 @@
 
 /obj/item/clothing/shoes/proc/on_kick(mob/living/user, mob/living/victim)
 	return
+
+//Called from human_defense.dm proc foot_impact
+/obj/item/clothing/shoes/proc/impact_dampen(atom/source, var/damage)
+	return damage
 
 /obj/item/clothing/shoes/kick_act(mob/living/carbon/human/user)
 	if(user.equip_to_slot_if_possible(src, slot_shoes))

@@ -56,7 +56,7 @@
 				to_chat(usr, "<span class='notice'>You load [AM] into \the [src].</span>")
 			else
 				return
-		
+
 		stored_magazine = AM
 		chamber_round()
 		AM.update_icon()
@@ -180,12 +180,13 @@
 			silenced = A	//dodgy?
 			w_class = W_CLASS_MEDIUM
 			if(silencer_offset.len)
-				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "silencer_mounted")
+				var/image/silence_overlay = image("icon" = 'icons/obj/gun_part.dmi', "icon_state" = "[A.icon_state]_mounted")
 				silence_overlay.pixel_x += silencer_offset[SILENCER_OFFSET_X]
 				silence_overlay.pixel_y += silencer_offset[SILENCER_OFFSET_Y]
 				overlays += silence_overlay
 				gun_part_overlays += silence_overlay
 			update_icon()
+			user.update_inv_hands()
 			return 1
 
 	if(mag_type_restricted.len && istype(A, /obj/item/gun_part/universal_magwell_expansion_kit))
@@ -244,7 +245,7 @@
 			actions_types += /datum/action/item_action/toggle_scope
 			update_icon()
 			return
-	
+
 	if(A.is_screwdriver(user))
 		if(magwellmod.len)
 			mag_type_restricted = magwellmod
@@ -313,7 +314,8 @@
 //		if(in_chamber && loaded.len)
 //			to_chat(usr, "It also has a chambered round." {R})
 	if(istype(silenced, /obj/item/gun_part/silencer))
-		to_chat(user, "<span class='warning'>It has a suppressor attached to the barrel.</span>")
+		var/obj/item/gun_part/silencer/A = silenced
+		to_chat(user, "<span class='warning'>It has \a [A] attached to the barrel.</span>")
 
 /obj/item/weapon/gun/projectile/proc/getAmmo()
 	var/bullets = 0
@@ -344,13 +346,14 @@
 
 /obj/item/weapon/gun/projectile/proc/RemoveAttach(var/mob/user)
 	if(silenced)
+		var/obj/item/gun_part/silencer/A = silenced
+		for(var/image/ol in gun_part_overlays)
+			if(ol.icon_state == "[A.icon_state]_mounted")
+				overlays -= ol
+				gun_part_overlays -= ol
 		to_chat(user, "<span class='notice'>You unscrew [silenced] from [src].</span>")
 		user.put_in_hands(silenced)
 		silenced = 0
-		for(var/image/ol in gun_part_overlays)
-			if(ol.icon_state == "silencer_mounted")
-				overlays -= ol
-				gun_part_overlays -= ol
 		w_class = W_CLASS_SMALL
 	if(scoped)
 		to_chat(user, "<span class='notice'>You release \the [scoped] from \the [src].</span>")
@@ -372,7 +375,7 @@
 	if(usr.incapacitated())
 		to_chat(usr, "<span class='rose'>You can't do this!</span>")
 		return
-	if(silenced || scoped)
+	if(istype(silenced, /obj/item/gun_part/silencer) || scoped)
 		RemoveAttach(usr)
 	else
 		to_chat(usr, "<span class='rose'>There are no attachments to remove!</span>")

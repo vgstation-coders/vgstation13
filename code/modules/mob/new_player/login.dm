@@ -56,8 +56,7 @@
 					'html/changelog.html'
 					)
 				src << browse('html/changelog.html', "window=changes;size=675x650")
-				client.prefs.lastchangelog = changelog_hash
-				client.prefs.save_preferences()
+				client.prefs.SetChangelog(ckey, changelog_hash)
 				winset(client, "rpane.changelog", "background-color=none;font-style=;")
 			client.playtitlemusic()
 #endif

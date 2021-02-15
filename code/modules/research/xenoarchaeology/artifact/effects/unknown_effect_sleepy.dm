@@ -24,7 +24,7 @@
 
 /datum/artifact_effect/sleepy/DoEffectAura()
 	if(holder)
-		for (var/mob/living/carbon/human/H in range(src.effectrange,holder))
+		for (var/mob/living/carbon/human/H in range(src.effectrange,get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(H)
 			if(prob(weakness * 100))
 				if(prob(10))
@@ -37,7 +37,7 @@
 
 /datum/artifact_effect/sleepy/DoEffectPulse()
 	if(holder)
-		for(var/mob/living/carbon/human/H in range(src.effectrange, holder))
+		for(var/mob/living/carbon/human/H in range(src.effectrange, get_turf(holder)))
 			var/weakness = GetAnomalySusceptibility(H)
 			if(prob(weakness * 100))
 				to_chat(H, pick("<span class='notice'>You feel like taking a nap.</span>","<span class='notice'>You feel a yawn coming on.</span>","<span class='notice'>You feel a little tired.</span>"))

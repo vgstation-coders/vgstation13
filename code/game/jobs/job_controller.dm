@@ -1,5 +1,10 @@
 var/global/datum/controller/occupations/job_master
 
+#define FREE_ASSISTANTS 2
+
+// The logic requires a shift of 1. The technical reason is that the way it is written, it boils to if (0 > 0) {"reject the assistants"}. Unfortunately, 0 is not > 0.
+#define FREE_ASSISTANTS_BRUT (FREE_ASSISTANTS-1)
+
 /datum/controller/occupations
 		//List of all jobs
 	var/list/occupations = list()
@@ -109,6 +114,18 @@ var/global/datum/controller/occupations/job_master
 			message_admins("[key_name_admin(user)] has freed up a slot for the [rank] job.")
 		for(var/mob/new_player/player in player_list)
 			to_chat(player, "<span class='notice'>The [rank] job is now available!</span>")
+		return 1
+	return 0
+
+/datum/controller/occupations/proc/CloseRole(var/rank, mob/user)	//eliminating xtra_positions
+	var/datum/job/job = GetJob(rank)
+	if(job && job.current_positions < job.get_total_positions() && job.xtra_positions > 0)
+		job.remove_xtra_position()
+		if(user)
+			log_admin("[key_name(user)] has closed a slot for the [rank] job.")
+			message_admins("[key_name_admin(user)] has closed a slot for the [rank] job.")
+		for(var/mob/new_player/player in player_list)
+			to_chat(player, "<span class='notice'>The [rank] job is now closed.</span>")
 		return 1
 	return 0
 
@@ -269,6 +286,8 @@ var/global/datum/controller/occupations/job_master
 
 		// Loop through all unassigned players
 		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				continue //This player doesn't want to share a job title. We need to deal with them last.
 
 			// Loop through all jobs
 			for(var/datum/job/job in shuffledoccupations)
@@ -282,23 +301,6 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == GET_RANDOM_JOB)
 			GiveRandomJob(player)
-	/*
-	Old job system
-	for(var/level = 1 to 3)
-		for(var/datum/job/job in occupations)
-			Debug("Checking job: [job]")
-			if(!job)
-				continue
-			if(!unassigned.len)
-				break
-			if((job.current_positions >= job.spawn_positions) && job.spawn_positions != -1)
-				continue
-			var/list/candidates = FindOccupationCandidates(job, level)
-			while(candidates.len && ((job.current_positions < job.spawn_positions) || job.spawn_positions == -1))
-				var/mob/new_player/candidate = pick(candidates)
-				Debug("Selcted: [candidate], for: [job.title]")
-				AssignRole(candidate, job.title)
-				candidates -= candidate*/
 
 	Debug("DO, Standard Check end")
 
@@ -316,8 +318,8 @@ var/global/datum/controller/occupations/job_master
 	for(var/mob/new_player/player in unassigned)
 		if(player.client.prefs.alternate_option == BE_ASSISTANT)
 			if(config.assistantlimit)
-				if(master_assistant.current_positions-1 > (config.assistantratio * count))
-					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide
+				if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+					if(count < 5) // if theres more than 5 security on the station just let assistants join regardless, they should be able to handle the tide ; this block then doesn't get checked.
 						to_chat(player, "You have been returned to lobby because there's not enough security to make you an assistant.")
 						player.ready = 0
 						unassigned -= player
@@ -336,17 +338,26 @@ var/global/datum/controller/occupations/job_master
 		if (player.ckey in assistant_second_chance)
 			var/assistant_pref = assistant_second_chance[player.ckey]
 			Debug("AC3: [player] running the second chances for priority [assistant_pref]")
-			if(master_assistant.current_positions-1 > (config.assistantratio * count))
-				if(count < 5)
+			if(master_assistant.current_positions-FREE_ASSISTANTS_BRUT > (config.assistantratio * count)) // Not enough sec...
+				if(count < 5) // And less than 5 seccies...
 					Debug("AC3: [player] failed the lottery.")
 			if (assistant_pref < player.mind.job_priority)
 				Debug("AC3: got made an assistant as a second chance.")
 				UnassignRole(player)
 				AssignRole(player, "Assistant")
 
-	//For ones returning to lobby
-	for(var/mob/new_player/player in unassigned)
-		if(player.client.prefs.alternate_option == RETURN_TO_LOBBY)
+	//Final pass - first deal with the empty job group, otherwise send any leftovers to the lobby
+	final_pass: //this is a loop label
+		for(var/mob/new_player/player in unassigned)
+			if(player.client.prefs.alternate_option == GET_EMPTY_JOB)
+				for(var/level = 1 to 3)
+					for(var/datum/job/job in shuffledoccupations)
+						if(job.current_positions) //already someone in this job title
+							continue
+						if(TryAssignJob(player,level,job))
+							unassigned -= player
+							continue final_pass //move on to the next player entirely
+
 			to_chat(player, "<span class='danger'>You have been returned to lobby due to your job preferences being filled.")
 			player.ready = 0
 			unassigned -= player
@@ -381,8 +392,8 @@ var/global/datum/controller/occupations/job_master
 	count = (officer.current_positions + warden.current_positions + hos.current_positions)
 	Debug("DO, Running Assistant Check 1 for [player]")
 	var/datum/job/master_assistant = GetJob("Assistant")
-	var/enough_sec = (master_assistant.current_positions - 1) > (config.assistantratio * count)
-	if(enough_sec && (count < 5))
+	var/not_enough_sec = (master_assistant.current_positions - FREE_ASSISTANTS_BRUT) > (config.assistantratio * count)
+	if(not_enough_sec && (count < 5))
 		Debug("AC1 failed, not enough sec.")
 		// Does he want anything else...?
 		for (var/datum/job/J in occupations)
@@ -402,6 +413,7 @@ var/global/datum/controller/occupations/job_master
 	var/datum/job/job = GetJob(rank)
 	if(!joined_late)
 		var/obj/S = null
+		// Find a spawn point that wasn't given to anyone
 		for(var/obj/effect/landmark/start/sloc in landmarks_list)
 			if(sloc.name != rank)
 				continue
@@ -410,9 +422,23 @@ var/global/datum/controller/occupations/job_master
 			S = sloc
 			break
 		if(!S)
-			S = locate("start*[rank]") // use old stype
-		if(istype(S, /obj/effect/landmark/start) && istype(S.loc, /turf))
+			// Find a spawn point that was already given to someone else
+			for(var/obj/effect/landmark/start/sloc in landmarks_list)
+				if(sloc.name != rank)
+					continue
+				S = sloc
+				stack_trace("not enough spawn points for [rank]")
+				break
+		if(!S)
+			// Find a spawn point that's using the ancient landmarks. Do we even have these anymore?
+			S = locate("start*[rank]")
+		if(S)
+			// Use the given spawn point
 			H.forceMove(S.loc)
+		else
+			// Use the arrivals shuttle spawn point
+			stack_trace("no spawn points for [rank]")
+			H.forceMove(pick(latejoin))
 
 	if(job && !job.no_starting_money)
 		//give them an account in the station database
@@ -423,7 +449,12 @@ var/global/datum/controller/occupations/job_master
 		var/bank_pref = bank_security_num2text(bank_pref_number)
 		if(centcomm_account_db)
 			var/datum/money_account/M = create_account(H.real_name, balance_bank, null, wage_payout = job.wage_payout, security_pref = bank_pref_number)
-			global.allowable_payroll_amount += job.wage_payout + 10 //Adding an overhead of 10 credits per crew member
+
+			if (joined_late)
+				latejoiner_allowance += job.wage_payout + round(job.wage_payout/10)
+			else
+				station_allowance += job.wage_payout + round(job.wage_payout/10)//overhead of 10%
+
 			if(H.mind)
 				var/remembered_info = ""
 				remembered_info += "<b>Your account number is:</b> #[M.account_number]<br>"
@@ -459,7 +490,7 @@ var/global/datum/controller/occupations/job_master
 	var/alt_title = null
 
 	if(job)
-		job.equip(H) // Outfit datum.
+		job.equip(H, job.priority) // Outfit datum.
 	else
 		to_chat(H, "Your job is [rank] and the game just can't handle it! Please report this bug to an administrator.")
 
@@ -481,9 +512,8 @@ var/global/datum/controller/occupations/job_master
 		if(job.req_admin_notify)
 			to_chat(H, "<b>You are playing a job that is important for Game Progression. If you have to disconnect, please notify the admins via adminhelp.</b>")
 
-	if(job && job.priority)
-		job.priority_reward_equip(H)
-
+	if(job.priority)
+		to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
 	return 1
 
 /datum/controller/occupations/proc/LoadJobs(jobsfile) //ran during round setup, reads info from jobs.txt -- Urist

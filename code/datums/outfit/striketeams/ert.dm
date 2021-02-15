@@ -10,7 +10,7 @@
 		"Default" = list(
 			slot_ears_str = /obj/item/device/radio/headset/ert,
 			slot_w_uniform_str = /obj/item/clothing/under/ert,
-			slot_l_store_str = /obj/item/device/flashlight,
+			slot_l_store_str = /obj/item/device/flashlight/tactical,
 			slot_belt_str = /obj/item/weapon/gun/energy/gun/nuclear,
 			slot_glasses_str = /obj/item/clothing/glasses/sunglasses/sechud,
 			slot_shoes_str = /obj/item/clothing/shoes/swat,
@@ -45,7 +45,8 @@
 		items_to_collect += /obj/item/weapon/card/shuttle_pass/ert
 
 /datum/outfit/striketeam/ert/post_equip(var/mob/living/carbon/human/H)
+	..()
 	if (is_leader)
 		equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP/fancy, /obj/item/clothing/under, 5)
 	else
-		equip_accessory(src, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)
+		equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/NTUSP, /obj/item/clothing/under, 5)

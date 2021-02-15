@@ -58,7 +58,7 @@
 	item_state = "gas_mask"
 	armor = list(melee = 0, bullet = 0, laser = 2,energy = 2, bomb = 0, bio = 75, rad = 0)
 	body_parts_covered = FULL_HEAD | BEARD
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 	sterility = 100
@@ -68,7 +68,7 @@
 	desc = "A close-fitting tactical mask that can be connected to an air supply."
 	icon_state = "swat"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -77,7 +77,7 @@
 	desc = "A face-covering mask that can be connected to an air supply."
 	icon_state = "ert"
 	siemens_coefficient = 0.7
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	w_class = W_CLASS_SMALL
 	can_flip = 0
 	canstage = 0
@@ -171,6 +171,7 @@
 	icon_state = "fake-moustache"
 	w_class = W_CLASS_TINY
 	actions_types = list(/datum/action/item_action/toggle_voicechanger)
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/gas/clown_hat
 	name = "clown wig and mask"
@@ -201,7 +202,7 @@
 	item_state = "wizzclown"
 	can_flip = 0
 	canstage = 0
-	//TODO species_fit = list("Vox")
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/gas/clown_hat/virus //why isn't this just a subtype of clown_hat??????? //Is now
 	desc = "A true prankster's facial attire. A clown is incomplete without his wig and mask. <span class = 'notice'>On second look, it looks like it's coming out of the wearers skin!</span>"
@@ -222,7 +223,7 @@
 	desc = "A feminine clown mask for the dabbling crossdressers or female entertainers."
 	icon_state = "sexyclown"
 	item_state = "sexyclown"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -231,6 +232,7 @@
 	desc = "Honk!"
 	icon_state = "lola"
 	item_state = "lola"
+	species_fit = list(INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -260,7 +262,7 @@
 	desc = "A mask used when acting as a monkey."
 	icon_state = "monkeymask"
 	item_state = "monkeymask"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -278,7 +280,7 @@
 	icon_state = "death"
 	item_state = "death"
 	siemens_coefficient = 0.2
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -297,12 +299,13 @@
 	item_state = "onimask"
 	can_flip = 0
 	canstage = 0
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/gas/owl_mask
 	name = "owl mask"
 	desc = "Twoooo!"
 	icon_state = "owl"
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -311,7 +314,7 @@
 	desc = "A true prankster's groovy facial attire. A clown is incomplete without his wig and mask."
 	icon_state = "clownmaskpsyche"
 	item_state = "clownmaskpsyche"
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 
@@ -326,6 +329,7 @@
 	name = "HECU gas mask"
 	desc = "An ancient gas mask with the letters HECU stamped on the side. Comes with a shouting-activated voice modulator that slowly recharges."
 	icon_state = "hecu"
+	species_fit = list(INSECT_SHAPED)
 	can_flip = 0
 	canstage = 0
 	ignore_flip = 1

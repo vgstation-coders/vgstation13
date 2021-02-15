@@ -144,6 +144,12 @@
 	name="Handgun Holster"
 	result=/obj/item/clothing/accessory/holster/handgun/biogenerator
 
+/datum/biogen_recipe/leather/fannypack
+	cost=100
+	id="fannypack"
+	name="Fanny Pack"
+	result=/obj/item/clothing/accessory/storage/fannypack
+
 /datum/biogen_recipe/leather/ore
 	cost=350
 	id="ore"
@@ -264,6 +270,18 @@
 	id = "rice_hat"
 	cost = 300
 	result = /obj/item/clothing/head/rice_hat
+
+/datum/biogen_recipe/misc/roningasa
+	name = "Wickerwork Hat"
+	id = "wickerwork_hat"
+	cost = 300
+	result = /obj/item/clothing/head/rice_hat/ronin
+
+/datum/biogen_recipe/misc/mino
+	name = "Grass Coat"
+	id = "grass_coat"
+	cost = 500
+	result = /obj/item/clothing/suit/mino
 
 /datum/biogen_recipe/flooring
 	category="Flooring"

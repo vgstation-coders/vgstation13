@@ -27,7 +27,7 @@
 	desc = "Named for the Roman goddess of fire and the hearth, this heater takes in more air and warms it faster. It's immobile and expends 5x as much power, drawn from the local APC."
 
 	intake_rate = 1
-	heating_power = 400000 //that's a spicy heater!
+	heating_power = 1200000 //that's a spicy heater!
 	light_power_on = 2
 	set_temperature = 35 //so powerful, let's shut off early
 	icon_state = "vheater0"
@@ -44,6 +44,7 @@
 	if(G.temperature >= set_temperature + T0C)
 		on = FALSE
 		loc.visible_message("\The [src] clicks loudly as it shuts off.")
+		playsound(src, 'sound/machines/click.ogg', 20, 1)
 		update_icon()
 
 /obj/machinery/space_heater/get_cell()
@@ -349,18 +350,29 @@
 
 /obj/machinery/space_heater/campfire/process()
 	..()
-	var/turf/T = get_turf(src)
+	if(!on)
+		return
+	var/turf/simulated/T = loc
 	var/datum/gas_mixture/env = T.return_air()
 	var/list/comfyfire = list('sound/misc/comfyfire1.ogg','sound/misc/comfyfire2.ogg','sound/misc/comfyfire3.ogg',)
 	if(Floor(cell.charge/10) != lastcharge)
 		update_icon()
-	if(!(cell && cell.charge > 0) && nocell != 2 | env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME)
-		new /obj/effect/decal/cleanable/campfire(get_turf(src))
-		qdel(src)
+	if((!(cell && cell.charge > 0) && nocell != 2) || !istype(T) || (env.molar_density(GAS_OXYGEN) < 5 / CELL_VOLUME))
+		putOutFire()
 		return
 	lastcharge = Floor(cell.charge/10)
 	if(on)
 		playsound(src, pick(comfyfire), (cell.charge/250)*5, 1, -1,channel = 124)
+
+/obj/machinery/space_heater/campfire/proc/putOutFire()
+	new /obj/effect/decal/cleanable/campfire(get_turf(src))
+	qdel(src)
+
+/obj/machinery/space_heater/campfire/stove/putOutFire()
+	if(on)
+		visible_message("<span class='warning'>\The [src] dies down.</span>")
+	on = FALSE
+	update_icon()
 
 
 /obj/machinery/space_heater/campfire/Crossed(mob/user as mob)

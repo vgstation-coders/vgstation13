@@ -31,6 +31,12 @@
 	var/source = speech.speaker.GetSource()
 	var/source_turf = get_turf(source)
 
+	// Don't hear simple mobs without a client.
+	if (istype(source, /mob/living/simple_animal) && (get_dist(source_turf, src) > get_view_range()))
+		var/mob/living/simple_animal/animal = source
+		if (!animal.client)
+			return
+
 	say_testing(src, "/mob/dead/observer/Hear(): source=[source], frequency=[speech.frequency], source_turf=[formatJumpTo(source_turf)]")
 
 	if (get_dist(source_turf, src) <= get_view_range())

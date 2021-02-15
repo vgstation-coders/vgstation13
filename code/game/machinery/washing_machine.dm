@@ -220,10 +220,10 @@
 						G.desc = new_desc
 			if(new_shoe_icon_state && new_shoe_name)
 				for(var/obj/item/clothing/shoes/S in contents)
-					if (S.chained == 1)
-						S.chained = 0
+					if (S.chain)
+						S.chain.forceMove(src)
+						S.chain = null
 						S.slowdown = NO_SLOWDOWN
-						new /obj/item/weapon/handcuffs( src )
 					S.icon_state = new_shoe_icon_state
 					S._color = color
 					S.name = new_shoe_name

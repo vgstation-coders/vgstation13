@@ -111,7 +111,7 @@ var/list/apiaries_list = list()
 			else
 				to_chat(user, "<span class='danger'>The [species_name] are violent and exhausted, the hive's toxicity is reaching critical levels.</span>")
 
-	if (species.worker_product)
+	if (species?.worker_product)
 		switch(reagents.total_volume)
 			if(30 to 60)
 				to_chat(user, "<span class='info'>Looks like there's a bit of [reagent_name(species.worker_product)] in it.</span>")
@@ -138,10 +138,9 @@ var/list/apiaries_list = list()
 		else if (prob(1/(yieldmod * yieldmod) *100))//This formula gives you diminishing returns based on yield. 100% with 1 yield, decreasing to 25%, 11%, 6, 4, 2...
 			yieldmod += 1
 	else
-		..()
 		if(src)
 			angry_swarm()
-		return
+	return ..()
 
 /obj/machinery/apiary/hitby(AM as mob|obj)
 	. = ..()
@@ -331,6 +330,7 @@ var/list/apiaries_list = list()
 		H.icon_state = "[species.prefix]honeycomb-base"
 		H.overlays += I
 		reagents.trans_to(H,reagents_per_honeycomb)
+		H.authentify()
 
 	return 1
 
@@ -490,6 +490,9 @@ var/list/apiaries_list = list()
 
 		consume.reagents.clear_reagents()
 
+/obj/machinery/apiary/can_overload()
+	return 0
+
 ///////////////////////////WILD BEEHIVES////////////////////////////
 
 /obj/structure/wild_apiary
@@ -535,7 +538,7 @@ var/list/apiaries_list = list()
 
 
 /obj/structure/wild_apiary/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()
@@ -569,7 +572,7 @@ var/list/apiaries_list = list()
 	var/health = 100
 
 /obj/machinery/apiary/wild/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	if(P.damage && P.damtype != HALLOSS)
 		health -= P.damage
 		updateHealth()

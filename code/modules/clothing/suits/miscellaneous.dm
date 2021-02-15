@@ -255,7 +255,7 @@ var/list/tag_suits_list = list()
 	desc = "Yarr."
 	icon_state = "pirate"
 	flags = FPRINT
-	species_fit = list(VOX_SHAPED)
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 
 /obj/item/clothing/suit/hgpirate
@@ -303,6 +303,7 @@ var/list/tag_suits_list = list()
 	desc = "This robe commands authority."
 	icon_state = "judge"
 	item_state = "judge"
+	species_fit = list(INSECT_SHAPED)
 	clothing_flags = ONESIZEFITSALL
 	allowed = list(/obj/item/weapon/storage/fancy/cigarettes,/obj/item/weapon/spacecash)
 
@@ -323,6 +324,7 @@ var/list/tag_suits_list = list()
 	icon_state = "overalls"
 	item_state = "overalls"
 	body_parts_covered = FULL_TORSO|LEGS
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/syndicatefake
@@ -355,6 +357,7 @@ var/list/tag_suits_list = list()
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET
 	wizard_garb = 1 //Allows lightning to be used
 	allowed = list(/obj/item/weapon/melee/energy/sword, /obj/item/weapon/melee/energy/sword/dualsaber) //Fits e-swords
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/hastur
 	name = "Hastur's Robes"
@@ -369,6 +372,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "cassock"
 	item_state = "cassock"
 	body_parts_covered = ARMS|LEGS|FULL_TORSO
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/imperium_monk
 	name = "Imperium monk"
@@ -376,6 +380,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "imperium_monk"
 	item_state = "imperium_monk"
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/vamphunter
 	name = "vampire hunter armor"
@@ -383,6 +388,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "vamphunter"
 	item_state = "vamphunter"
 	body_parts_covered = FULL_TORSO|FEET
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/suit/chickensuit
@@ -390,6 +396,7 @@ obj/item/clothing/suit/cassock
 	desc = "A suit made long ago by the ancient empire KFC."
 	icon_state = "chickensuit"
 	item_state = "chickensuit"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|LEGS|FEET|ARMS
 	siemens_coefficient = 2.0
 
@@ -398,6 +405,7 @@ obj/item/clothing/suit/cassock
 	name = "Monkey Suit"
 	desc = "A suit that looks like a primate."
 	icon_state = "monkeysuit"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -407,6 +415,7 @@ obj/item/clothing/suit/cassock
 	desc = "This is a nice holiday my son."
 	icon_state = "holidaypriest"
 	item_state = "holidaypriest"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/highlanderkilt
 	name = "highlander's kilt"
@@ -421,6 +430,7 @@ obj/item/clothing/suit/cassock
 	desc = "An ordinary cardboard box with holes cut in the sides."
 	icon_state = "cardborg"
 	item_state = "cardborg"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_CARDBOARD = 11250)
 	w_type=RECYK_MISC
 
@@ -441,6 +451,7 @@ obj/item/clothing/suit/cassock
 	name = "worn shirt"
 	desc = "A worn out, curiously comfortable t-shirt with a picture of Ian. You wouldn't go so far as to say it feels like being hugged when you wear it but it's pretty close. Good for sleeping in."
 	icon_state = "ianshirt"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|FULL_TORSO
 
 //Blue suit jacket toggle
@@ -536,6 +547,7 @@ obj/item/clothing/suit/cassock
 	desc = "A suit made out of chitinous alien hide."
 	icon_state = "xenos"
 	item_state = "xenos_helm"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|FEET|HANDS
 	siemens_coefficient = 2.0
 
@@ -624,11 +636,13 @@ obj/item/clothing/suit/cassock
 	desc = "Perfect for doing up the house."
 	icon_state = "doshjacket"
 	body_parts_covered = FULL_TORSO|ARMS
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/lordadmiral
 	name = "Lord Admiral's Coat"
 	desc = "You'll be the Ruler of the King's Navy in no time."
 	icon_state = "lordadmiral"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list (/obj/item/weapon/gun)
 
 /obj/item/clothing/suit/raincoat
@@ -648,6 +662,7 @@ obj/item/clothing/suit/cassock
 	name = "Liberty Coat"
 	desc = "Smells faintly of freedom."
 	icon_state = "libertycoat"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO|ARMS
 
 /obj/item/clothing/suit/storage/draculacoat
@@ -663,6 +678,7 @@ obj/item/clothing/suit/cassock
 	name = "Apron"
 	desc = "Simple white apron."
 	icon_state = "maidapron"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_TORSO
 
 /obj/item/clothing/suit/clownpiece
@@ -712,23 +728,22 @@ obj/item/clothing/suit/cassock
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 	body_parts_covered = FULL_TORSO|ARMS
 	icon_state = "cjumper-red"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/red
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a tasteful red colour to it, and a festive Fir tree."
 	icon_state = "cjumper-red"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/blue
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one has a nice light blue colouring to it, and has a snowman on it."
 	icon_state = "cjumper-blue"
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/jumper/christmas/green
 	desc = "Made by professional knitting nanas to truly fit the festive mood. This one is green in colour, and has a reindeer with a red nose on the front. At least you think it's a reindeer."
 	icon_state = "cjumper-green"
-	species_fit = list(GREY_SHAPED)
-
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED, VOX_SHAPED)
 
 /obj/item/clothing/suit/spaceblanket
 	plane = ABOVE_OBJ_PLANE
@@ -789,31 +804,55 @@ obj/item/clothing/suit/cassock
 		return
 	M.visible_message("<span class='notice'>\The [M] opens \his [src.name], allowing you to see inside. <a HREF='?src=\ref[M];listitems=\ref[hold]'>Take a closer look.</a></span>","<span class='notice'>You flash the contents of your [src.name].</span>")
 
+/obj/item/clothing/suit/mino
+	name = "mino"
+	desc = "A raincoat made of straw."
+	icon_state = "mino"
+	item_state = "mino"
+	body_parts_covered = ARMS|FULL_TORSO|IGNORE_INV
+	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
+
 /obj/item/clothing/suit/kimono
 	name = "kimono"
 	desc = "A traditional Japanese kimono."
 	icon_state = "fancy_kimono"
 	item_state = "fancy_kimono"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
+
+/obj/item/clothing/suit/kimono/happi
+	name = "haori"
+	desc = "A traditional Japanese jacket worn over a kimono. The symbol on their backs referred to the group with which they were associated."
+	icon_state = "haori"
+	item_state = "haori"
+
+/obj/item/clothing/suit/jack
+	name = "white kimono"
+	desc = "A white and plain looking kimono."
+	icon_state = "jack_robe"
+	item_state = "jack_robe"
 
 /obj/item/clothing/suit/kimono/ronin
 	name = "black kimono"
 	desc = "A black and plain looking kimono."
 	icon_state = "ronin_kimono"
 	item_state = "ronin_kimono"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/kimono/sakura
 	name = "sakura kimono"
 	desc = "A pale-pink, nearly white, kimono with a red and gold obi. There is a embroidered design of cherry blossom flowers covering the kimono."
 	icon_state = "sakura_kimono"
 	item_state = "sakura_kimono"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/clockwork_robes
 	name = "clockwork robes"
 	desc = "A set of armored robes worn by the followers of Ratvar"
 	icon_state = "clockwork"
 	item_state = "clockwork"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/storage/bible, /obj/item/weapon/nullrod/spear)
@@ -824,6 +863,7 @@ obj/item/clothing/suit/cassock
 	desc = "This inquisitor attire was made for new recruits, and has excellent straightforward defense. But not nearly enough to allow an ordinary man to stand any real chance against the the wicked."
 	icon_state = "coat-church"
 	item_state = "coat-church"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = ARMS|LEGS|FULL_TORSO|IGNORE_INV
 	allowed = list(/obj/item/weapon/nullrod, /obj/item/weapon/storage/bible)
@@ -841,6 +881,7 @@ obj/item/clothing/suit/cassock
 	allowed = list(/obj/item/weapon/hammer)
 	armor = list(melee = 10, bullet = 5, laser = 20, energy = 0, bomb = 10, bio = 0, rad = 0)
 	max_heat_protection_temperature = 800
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/suit/red_suit
 	name = "red suit"
@@ -848,6 +889,7 @@ obj/item/clothing/suit/cassock
 	icon_state = "red_suit"
 	item_state = "red_suit"
 	body_parts_covered = 0
+	species_fit = list(INSECT_SHAPED)
 
 obj/item/clothing/suit/poncho
 	name = "poncho"

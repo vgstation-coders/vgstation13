@@ -202,9 +202,10 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.damtype == HALLOSS)
-		return
+		return ..()
 
 	take_damage(Proj.damage)
+	return ..()
 
 /obj/machinery/camera/proc/dismantle()
 	if(assembly)
@@ -540,7 +541,7 @@ var/list/camera_messages = list()
 	return
 
 /obj/machinery/camera/arena/bullet_act(var/obj/item/projectile/Proj)
-	return
+	return ..()
 
 /obj/machinery/camera/arena/spesstv
 	name = "\improper Spess.TV camera"
@@ -573,9 +574,8 @@ var/list/camera_messages = list()
 
 /obj/machinery/camera/kick_act(mob/living/carbon/human/H)
 	H.visible_message("<span class='danger'>[H] attempts to kick \the [src].</span>", "<span class='danger'>You attempt to kick \the [src].</span>")
-	to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
-
-	H.apply_damage(rand(1,2), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+	if(H.foot_impact(src,rand(1,2)))
+		to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 	return SPECIAL_ATTACK_FAILED
 
 /obj/machinery/camera/npc_tamper_act(mob/living/L)

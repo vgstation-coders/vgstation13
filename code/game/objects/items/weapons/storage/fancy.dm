@@ -62,7 +62,8 @@
 	name = "donut box"
 	storage_slots = 6
 	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/donut", \
-					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut")
+					"/obj/item/weapon/reagent_containers/food/snacks/customizable/candy/donut", \
+					"/obj/item/weapon/reagent_containers/food/snacks/donutiron")
 
 	foldable = /obj/item/stack/sheet/cardboard
 	starting_materials = list(MAT_CARDBOARD = 3750)
@@ -188,7 +189,7 @@
 	new /obj/item/toy/crayon/yellow(src)
 	new /obj/item/toy/crayon/green(src)
 	new /obj/item/toy/crayon/blue(src)
-	new /obj/item/toy/crayon/violet(src)
+	new /obj/item/toy/crayon/purple(src)
 	new /obj/item/toy/crayon/black(src)
 	update_icon()
 
@@ -336,17 +337,61 @@
 /obj/item/weapon/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!istype(M, /mob))
 		return
-
-	if(equip_from_box && M == user && user.zone_sel.selecting == "mouth" && contents.len > 0 && !user.wear_mask)
-		var/obj/item/clothing/mask/cigarette/W = new /obj/item/clothing/mask/cigarette(user)
-		reagents.trans_to(W, (reagents.total_volume/contents.len))
-		user.equip_to_slot_if_possible(W, slot_wear_mask)
-		reagents.maximum_volume = 15 * contents.len
-		contents.len--
-		to_chat(user, "<span class='notice'>You take a cigarette out of the pack.</span>")
-		update_icon()
+	if(!equip_from_box)
+		return ..()
+	if (user.zone_sel.selecting != "mouth")
+		return ..()
+	var/list/cigs = list()
+	for(var/obj/item/clothing/mask/cigarette/cig in contents)
+		cigs.Add(cig)
+	if(!cigs.len)
+		to_chat(user, "<span class='notice'>There are no cigarettes left in the pack.</span>")
+		return
+	var/obj/item/clothing/mask/cigarette/mycig = cigs[cigs.len]
+	if(M.wear_mask)
+		to_chat(user, "<span class='notice'>There's no space for a cigarette.</span>")
+		return
+	if(M == user)
+		if(user.equip_to_slot_if_possible(mycig, slot_wear_mask))
+			to_chat(user, "<span class='notice'>You take a cigarette out of the pack.</span>")
+			update_icon()
+		return
 	else
-		..()
+		to_chat(user, "<span class='notice'>You try to pass [M] a cigarette.</span>")
+		pass(M,user,mycig)
+		return
+
+/obj/item/weapon/storage/fancy/cigarettes/proc/pass(mob/living/carbon/M as mob, mob/living/carbon/user as mob, var/obj/item/clothing/mask/cigarette/mycig) //appropriated from give_item()
+	if(!istype(user))
+		return
+	if(M.stat == 2 || user.stat == 2 || M.client == null)
+		to_chat(user, "<span class='warning'>That's not gonna work.</span>")
+		return
+	if(M.give_check)
+		to_chat(user, "<span class='warning'>\The [M] is currently being passed something by somebody else.</span>")
+		return
+	if(!mycig)
+		return
+	M.give_check = TRUE
+	switch(alert(M, "[user] wants to pass you \a [mycig]?", , "Yes", "No"))
+		if("Yes")
+			M.give_check = FALSE
+			if(!mycig)
+				return
+			if(!user.Adjacent(M))
+				to_chat(user, "<span class='warning'>You need to stay still while passing a smoke.</span>")
+				to_chat(M, "<span class='warning'>[user] moved away.</span>")//What an asshole
+				return
+			if(user.get_active_hand() != src)
+				to_chat(user, "<span class='warning'>You need to keep \the [src] in your hand.</span>")
+				to_chat(M, "<span class='warning'>[user] has put \the [src] away!</span>")
+				return
+			if(M.equip_to_slot_if_possible(mycig, slot_wear_mask))
+				user.visible_message("<span class='notice'>[user] passed \the [mycig] to [M].</span>")
+				update_icon()
+		if("No")
+			M.give_check = FALSE
+			M.visible_message("<span class='warning'>[user] tried to pass \the [mycig] to [M] but \he didn't want it.</span>")
 
 /obj/item/weapon/storage/fancy/cigarettes/dromedaryco
 	name = "\improper DromedaryCo packet"
@@ -720,3 +765,32 @@
 	storage_slots = 10
 	can_only_hold = list("/obj/item/weapon/spacecash", "/obj/item/weapon/coin")
 
+/*
+ * Beer Box
+ */
+
+/obj/item/weapon/storage/fancy/beer_box
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "beerbox6"
+	icon_type = "beer"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/boxes_and_storage.dmi', "right_hand" = 'icons/mob/in-hand/right/boxes_and_storage.dmi')
+	item_state = "beerbox"
+	name = "beer box"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/drinks/beer")
+
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_MISC
+
+/obj/item/weapon/storage/fancy/beer_box/empty
+	empty = 1
+	icon_state = "beerbox0"
+
+/obj/item/weapon/storage/fancy/beer_box/New()
+	..()
+	if(empty)
+		update_icon()
+		return
+	for(var/i in 1 to storage_slots)
+		new /obj/item/weapon/reagent_containers/food/drinks/beer(src)

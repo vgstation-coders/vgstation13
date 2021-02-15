@@ -486,7 +486,7 @@
 		var/mob/living/carbon/human/H = M
 		var/datum/role/vampire/V = isvampire(H)
 		if(V)
-			if(VAMP_MATURE in V.powers)
+			if(/datum/power/vampire/mature in V.current_powers)
 				V.smitecounter += 30 //Smithe the shit out of him. Four strikes and he's out
 
 	if(istype(M,/mob/living/simple_animal))
@@ -500,7 +500,7 @@
 	if(user.mind)
 		if(ishuman(user))
 			var/datum/role/vampire/V = isvampire(user)
-			if(V && !(VAMP_UNDYING in V.powers))
+			if(V && !(/datum/power/vampire/undying in V.current_powers))
 				V.smitecounter += 60
 				to_chat(user, "<span class='danger'>\The [src] sears your hand!</span>")
 

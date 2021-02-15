@@ -48,6 +48,7 @@
 	return ..()
 
 /datum/outfit/striketeam/death_commando/post_equip(var/mob/living/carbon/human/H)
+	..()
 	// Accesories.
 	equip_accessory(H, /obj/item/clothing/accessory/holster/handgun/preloaded/mateba, /obj/item/clothing/under, 5)
 	equip_accessory(H, /obj/item/clothing/accessory/holster/knife/boot/preloaded/energysword, /obj/item/clothing/shoes, 5)

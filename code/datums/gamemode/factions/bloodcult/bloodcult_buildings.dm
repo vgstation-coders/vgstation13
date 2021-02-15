@@ -55,7 +55,7 @@
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		update_icon()
@@ -80,12 +80,12 @@
 			takeDamage(4)
 
 /obj/structure/cult/blob_act()
-	playsound(get_turf(src), sound_damaged, 75, 1)
+	playsound(src, sound_damaged, 75, 1)
 	takeDamage(20)
 
 /obj/structure/cult/bullet_act(var/obj/item/projectile/Proj)
 	takeDamage(Proj.damage)
-	..()
+	return ..()
 
 /obj/structure/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if (istype(W, /obj/item/weapon/grab))
@@ -103,7 +103,7 @@
 			if (W.hitsound)
 				playsound(src, W.hitsound, 50, 1, -1)
 			if (sound_damaged)
-				playsound(get_turf(src), sound_damaged, 75, 1)
+				playsound(src, sound_damaged, 75, 1)
 			takeDamage(W.force)
 			if (W.attack_verb)
 				visible_message("<span class='warning'>\The [user] [pick(W.attack_verb)] \the [src] with \the [W].</span>")
@@ -124,7 +124,7 @@
 							"You hear stone cracking.")
 		takeDamage(user.get_unarmed_damage(src))
 		if (sound_damaged)
-			playsound(get_turf(src), sound_damaged, 75, 1)
+			playsound(src, sound_damaged, 75, 1)
 	else if(iscultist(user))
 		cultist_act(user)
 	else
@@ -353,7 +353,11 @@
 		return
 	if (!istype(O))
 		return
-	if (!O.anchored && (istype(O, /obj/item) || user.get_active_hand() == O))
+	if(user.incapacitated() || user.lying)
+		return
+	if(O.anchored || !Adjacent(user) || !user.Adjacent(O))
+		return
+	if (user.get_active_hand() == O)
 		if(!user.drop_item(O))
 			return
 	else
@@ -361,13 +365,7 @@
 			return
 		if(O.loc == user || !isturf(O.loc) || !isturf(user.loc))
 			return
-		if(user.incapacitated() || user.lying)
-			return
-		if(O.anchored || !Adjacent(user) || !user.Adjacent(src))
-			return
 		if(istype(O, /mob/living/simple_animal) || istype(O, /mob/living/silicon))
-			return
-		if(!user.loc)
 			return
 		var/mob/living/L = O
 		if(!istype(L) || L.locked_to || L == user)
@@ -559,10 +557,22 @@
 					var/extra = ""
 					if (H && istype(H))
 						if (H.isInCrit())
-							extra = " - <span style='color:#FF0000'>CRITICAL</span>"
+							extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
 						else if (H.isDead())
 							extra = " - <span style='color:#FF0000'>DEAD</span>"
 					dat += "<li><b>[M.name]</b></li> - [origin_text][extra]"
+				for(var/obj/item/weapon/handcuffs/cult/cuffs in cult.bindings)
+					if (iscarbon(cuffs.loc))
+						var/mob/living/carbon/C = cuffs.loc
+						if (C.handcuffed == cuffs && cuffs.gaoler && cuffs.gaoler.antag)
+							var/datum/mind/gaoler = cuffs.gaoler.antag
+							var/extra = ""
+							if (C && istype(C))
+								if (C.isInCrit())
+									extra = " - <span style='color:#FFFF00'>CRITICAL</span>"
+								else if (C.isDead())
+									extra = " - <span style='color:#FF0000'>DEAD</span>"
+							dat += "<li><span style='color:#FFFF00'><b>[C.real_name]</b></span></li> - Prisoner of [gaoler.name][extra]"
 				dat += {"</ul></body>"}
 				user << browse("<TITLE>Cult Roster</TITLE>[dat]", "window=cultroster;size=500x300")
 				onclose(user, "cultroster")
@@ -642,7 +652,7 @@
 					sleep (gem_delay/3)
 					altar_task = ALTARTASK_NONE
 					update_icon()
-					var/obj/item/device/soulstone/gem/gem = new (loc)
+					var/obj/item/soulstone/gem/gem = new (loc)
 					gem.pixel_y = 4
 
 /obj/structure/cult/altar/proc/replace_target(var/mob/user)
@@ -707,6 +717,7 @@
 			to_chat(usr, "<span class='warning'>Another shade was faster, and is currently possessing \the [blade].</span>")
 			return
 		var/mob/living/simple_animal/shade/shadeMob = new(blade)
+		blade.shade = shadeMob
 		shadeMob.status_flags |= GODMODE
 		shadeMob.canmove = 0
 		var/datum/role/cultist/cultist = M.mind.GetRole(CULTIST)
@@ -756,6 +767,7 @@
 			blade.forceMove(loc)
 			blade.blood = blade.maxblood
 			new_shade.forceMove(blade)
+			blade.shade = new_shade
 			blade.update_icon()
 			blade = null
 
@@ -775,7 +787,7 @@
 			new_shade.name = "[M.real_name] the Shade"
 			new_shade.real_name = "[M.real_name]"
 			new_shade.give_blade_powers()
-			playsound(get_turf(src), get_sfx("soulstone"), 50,1)
+			playsound(src, get_sfx("soulstone"), 50,1)
 		else
 			M.gib()
 		var/turf/T = loc
@@ -1547,7 +1559,7 @@ var/list/bloodstone_list = list()
 	health -= damage
 	if (health <= 0)
 		if (sound_destroyed)
-			playsound(get_turf(src), sound_destroyed, 100, 1)
+			playsound(src, sound_destroyed, 100, 1)
 		qdel(src)
 	else
 		if (backup > (health > (2*maxHealth/3)) + (health > (maxHealth/3)))

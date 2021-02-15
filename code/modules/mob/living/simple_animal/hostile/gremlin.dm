@@ -178,7 +178,5 @@ var/list/bad_gremlin_items = list()
 				divide()
 
 /mob/living/simple_animal/hostile/gremlin/dexterity_check()
-	return 1
+	return TRUE
 
-/mob/living/simple_animal/hostile/gremlin/IsAdvancedToolUser()
-	return 1

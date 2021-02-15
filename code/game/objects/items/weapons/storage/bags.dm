@@ -66,7 +66,7 @@
 	icon = 'icons/obj/trash.dmi'
 	icon_state = "plasticbag"
 	item_state = "plasticbag"
-
+	species_fit = list(INSECT_SHAPED)
 	w_class = W_CLASS_LARGE
 	fits_max_w_class = W_CLASS_SMALL
 	storage_slots = 21
@@ -568,3 +568,24 @@ var/global/list/plantbag_colour_choices = list("plantbag", "green red stripe", "
 	storage_slots = 3
 	w_class = W_CLASS_LARGE
 	slot_flags = SLOT_BELT | SLOT_POCKET
+
+
+
+// -----------------------------
+//          Xenobiology Bag
+// -----------------------------
+
+
+/obj/item/weapon/storage/bag/xenobio
+	icon = 'icons/obj/storage/storage.dmi'
+	icon_state = "slimebag"
+	name = "extract bag"
+	desc = "A bag designed to hold slime extract and other slime-related products."
+	item_state = "satchel"
+	origin_tech = Tc_MATERIALS + "=1;" + Tc_ENGINEERING + "=1"
+	storage_slots = 50
+	fits_max_w_class = 3
+	max_combined_w_class = 200
+	w_class = W_CLASS_TINY
+	can_only_hold = list("/obj/item/slime_extract","/obj/item/weapon/slimenutrient","/obj/item/weapon/slimesteroid", "/obj/item/weapon/slimepotion", "/obj/item/weapon/slimepotion2", "/obj/item/weapon/slimesteroid2", "/obj/item/weapon/slimeres", "/obj/item/weapon/slimedupe")
+	display_contents_with_number = TRUE

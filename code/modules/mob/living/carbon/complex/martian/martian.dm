@@ -57,6 +57,7 @@
 	"bolitaenides","belemnites","astrocanthoteuthis","octodad","ocotillo","kalamarian")
 	add_language(LANGUAGE_MARTIAN)
 	default_language = all_languages[LANGUAGE_MARTIAN]
+	init_language = default_language
 	hud_list[STATUS_HUD]      = image('icons/mob/hud.dmi', src, "hudhealthy")
 	hud_list[HEALTH_HUD]      = image('icons/mob/hud.dmi', src, "hudhealth100")
 	..()
@@ -81,9 +82,8 @@
 	return 1
 
 /mob/living/carbon/complex/martian/dexterity_check()
-	return TRUE
-
-/mob/living/carbon/complex/martian/IsAdvancedToolUser()
+	if (stat != CONSCIOUS)
+		return FALSE
 	return TRUE
 
 /mob/living/carbon/complex/martian/Process_Spaceslipping()

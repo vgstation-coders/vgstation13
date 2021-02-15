@@ -12,6 +12,7 @@
 	set_light(3,5,LIGHT_COLOR_RED)
 
 /obj/structure/essence_printer/Destroy()
+	new /datum/artifact_postmortem_data(src)
 	if(bound_soul)
 		bound_soul.lazy_unregister_event(/lazy_event/on_death, src, .proc/print)
 		bound_soul = null
@@ -75,6 +76,17 @@
 	H.flavor_text = H.dna.flavor_text
 
 	H.maxHealth = round(previous.maxHealth/2)
+
+	// Prevent nonhumans from dying immediately in non-ideal atmospheres.
+	if (isvox(H))
+		// Nitrogen heals tox damage from O2 in environment and is also what cloner uses.
+		H.reagents.add_reagent(NITROGEN, 60)
+
+	else if (isplasmaman(H))
+		// Plasmamen both catch on fire AND have no plasma to breathe, so...
+		H.reagents.add_reagent(LEPORAZINE, 60)
+		H.reagents.add_reagent(DEXALIN, 60)
+
 	spawn(rand(30 SECONDS,60 SECONDS))
 		do_flick(src,"Essence_imprinter_scan_complete",8)
 		icon_state = "Essence_imprinter_idle"

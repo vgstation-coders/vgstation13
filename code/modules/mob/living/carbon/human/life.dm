@@ -176,7 +176,6 @@ var/global/list/organ_damage_overlays = list(
 	handle_regular_status_updates()	//Optimized a bit
 	update_canmove()
 	//Update our name based on whether our face is obscured/disfigured
-	name = get_visible_name()
 	handle_regular_hud_updates()
 	pulse = handle_pulse()
 	for(var/obj/item/weapon/grab/G in src)

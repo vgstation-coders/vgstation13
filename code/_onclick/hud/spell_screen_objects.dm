@@ -177,7 +177,7 @@
 
 /obj/abstract/screen/movable/spell_master/malf
 	name = "Malfunction Modules"
-	icon_state = "grey_spell_ready"
+	icon_state = "malf_spell_ready"
 
 	open_state = "malf_open"
 	closed_state = "malf_closed"
@@ -216,6 +216,15 @@
 
 	//open and close states are defined later
 	override_icon = 'icons/mecha/mecha.dmi'
+	screen_loc = ui_alien_master
+
+/obj/abstract/screen/movable/spell_master/changeling
+	name = "Changeling Abilities"
+	icon_state = "changeling_spell_ready"
+
+	open_state = "ling-open"
+	closed_state = "ling-closed"
+
 	screen_loc = ui_alien_master
 
 //////////////ACTUAL SPELLS//////////////

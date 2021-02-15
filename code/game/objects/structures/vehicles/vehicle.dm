@@ -14,6 +14,11 @@
 				paired_to = V
 				V.mykey = src
 
+/obj/item/key/Destroy()
+	if(paired_to)
+		paired_to.mykey = null
+		paired_to = null
+	..()
 
 /obj/structure/bed/chair/vehicle
 	name = "vehicle"
@@ -85,6 +90,12 @@
 
 /obj/structure/bed/chair/vehicle/Destroy()
 	vehicle_list.Remove(src)
+	if(mykey)
+		mykey.paired_to = null
+		mykey = null
+	if(heldkey)
+		qdel(heldkey)
+		heldkey = null
 	..()
 
 /obj/structure/bed/chair/vehicle/proc/set_keys()
@@ -99,7 +110,7 @@
 		empstun = 0
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if(iswelder(W))
+	if(iswelder(W) && health < max_health)
 		var/obj/item/weapon/weldingtool/WT = W
 		if (WT.remove_fuel(0))
 			add_fingerprint(user)
@@ -246,7 +257,7 @@
 			action.Remove(action.owner)
 		action.Grant(user)
 
-/obj/structure/bed/chair/vehicle/manual_unbuckle(user)
+/obj/structure/bed/chair/vehicle/manual_unbuckle(mob/user, var/resisting = FALSE)
 	..()
 	for (var/datum/action/action in vehicle_actions)
 		action.Remove(user)

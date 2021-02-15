@@ -12,11 +12,14 @@
 	invisibility = 101
 	var/strength = 0
 
+	var/explosion_block = 20
+
 /obj/effect/energy_field/ex_act(var/severity)
 	Stress(0.5 + severity)
 
 /obj/effect/energy_field/bullet_act(var/obj/item/projectile/Proj)
 	Stress(Proj.damage / 10)
+	return ..()
 
 /obj/effect/energy_field/proc/Stress(var/severity)
 	strength -= severity

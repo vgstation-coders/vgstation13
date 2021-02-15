@@ -49,7 +49,9 @@
 		var/atom/movable/overlay/animation = new(loc)
 		animation.icon_state = "blank"
 		animation.icon = 'icons/mob/mob.dmi'
+		animation.plane = ABOVE_HUMAN_PLANE
 		animation.master = src
+		invisibility = 101
 		var/moneky_anim = get_monkey_anim()
 		flick(moneky_anim, animation)
 		sleep(MONKEY_ANIM_TIME)
@@ -171,7 +173,8 @@
 	O.forceMove(loc)
 	O.mmi = new /obj/item/device/mmi(O)
 	O.mmi.transfer_identity(src)//Does not transfer key/client.
-	if(jobban_isbanned(O, "Cyborg") || !job_master.GetJob("Cyborg").player_old_enough(O.client)) //You somehow managed to get borged, congrats.
+	var/datum/job/job_datum = job_master.GetJob("Cyborg")
+	if(jobban_isbanned(O, "Cyborg") || (job_datum ? !job_datum.player_old_enough(O.client) : 0)) //You somehow managed to get borged, congrats.
 		to_chat(src, "<span class='warning' style=\"font-family:Courier\">WARNING: Illegal operation detected.</span>")
 		to_chat(src, "<span class='danger'>Self-destruct mechanism engaged.</span>")
 		O.self_destruct()

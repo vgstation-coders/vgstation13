@@ -192,6 +192,7 @@ var/global/list/whitelisted_species = list("Human")
 		H.internal_organs_by_name.len=0
 	if(H.grasp_organs)
 		H.grasp_organs.len = 0
+	H.bad_external_organs.Cut()
 
 
 /datum/species/proc/create_organs(var/mob/living/carbon/human/H) //Handles creation of mob organs.
@@ -251,7 +252,7 @@ var/global/list/whitelisted_species = list("Human")
 		return moles/GAS_CONSUME_TO_WASTE_DENOMINATOR
 	else
 		//testing("  ratio < 1, adding oxyLoss.")
-		H.adjustOxyLoss(min(5*ratio, HUMAN_MAX_OXYLOSS)) // Don't fuck them up too fast (space only does HUMAN_MAX_OXYLOSS after all!)
+		H.adjustOxyLoss(HUMAN_MAX_OXYLOSS * (1 - ratio)) //Damage proportional to how much gas you didn't get
 		H.failed_last_breath = 1
 		H.oxygen_alert = 1
 		return moles*ratio/GAS_CONSUME_TO_WASTE_DENOMINATOR
@@ -342,7 +343,7 @@ var/global/list/whitelisted_species = list("Human")
 	flesh_color = "#C3C1BE"
 
 /datum/species/manifested/handle_death(var/mob/living/carbon/human/H)
-	H.dust()
+	H.dust(TRUE)
 
 /datum/species/manifested/OnCrit(var/mob/living/carbon/human/H)
 	H.overlays |= image('icons/mob/human.dmi',src,"CritPale")
@@ -403,7 +404,7 @@ var/global/list/whitelisted_species = list("Human")
 	deform = 'icons/mob/human_races/r_skeleton.dmi'  // TODO: Need deform.
 	known_languages = list(LANGUAGE_CLATTER)
 	flags = IS_WHITELISTED | NO_BREATHE
-	anatomy_flags = HAS_LIPS | NO_SKIN | NO_BLOOD
+	anatomy_flags = NO_SKIN | NO_BLOOD
 	meat_type = /obj/item/stack/sheet/bone
 	chem_flags = NO_EAT | NO_INJECT
 
@@ -798,7 +799,10 @@ var/global/list/whitelisted_species = list("Human")
 	else
 		H.put_in_hands(new/obj/item/weapon/tank/nitrogen(H))
 	to_chat(H, "<span class='info'>You are now running on nitrogen internals from the [H.s_store] in your [tank_slot_name].</span>")
-	H.internal = H.get_item_by_slot(tank_slot)
+	var/obj/item/weapon/tank/nitrogen/N = H.get_item_by_slot(tank_slot)
+	if(!N)
+		N = H.get_item_by_slot(slot_back)
+	H.internal = N
 	if (H.internals)
 		H.internals.icon_state = "internal1"
 
@@ -1098,6 +1102,7 @@ var/list/has_died_as_golem = list()
 		)
 
 /datum/species/slime/handle_death(var/mob/living/carbon/human/H) //Handles any species-specific death events (such as dionaea nymph spawns).
+	H.dropBorers()
 	for(var/atom/movable/I in H.contents)
 		I.forceMove(H.loc)
 	anim(target = H, a_icon = 'icons/mob/mob.dmi', flick_anim = "liquify", sleeptime = 15)
@@ -1191,7 +1196,7 @@ var/list/has_died_as_golem = list()
 	primitive = /mob/living/carbon/monkey/roach
 
 	flags = IS_WHITELISTED
-	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD
+	anatomy_flags = HAS_LIPS | HAS_SWEAT_GLANDS | NO_BALD | RGBSKINTONE
 
 	default_mutations=list(RAD_IMMUNE)
 	burn_mod = 1.1

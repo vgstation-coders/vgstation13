@@ -69,7 +69,9 @@
 		header = "ERROR"
 
 /obj/item/weapon/disk/shuttle_coords/Destroy()
-	if(destination)
+	// If a disk is destroyed before initialize() runs, `destination` could
+	// be a type path instead of an instance.
+	if(istype(destination))
 		destination.disk_references.Remove(src)
 		destination = null
 
@@ -572,6 +574,7 @@
 
 /obj/machinery/computer/shuttle_control/bullet_act(var/obj/item/projectile/Proj)
 	visible_message("[Proj] ricochets off [src]!")
+	return ..() // Nothing happens (?)
 
 /obj/machinery/computer/shuttle_control/proc/link_to(var/datum/shuttle/S, var/add_to_list = 1)
 	if(shuttle)

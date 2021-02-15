@@ -332,11 +332,19 @@
 	item_state = "nr_boots"
 	heat_conductivity = INS_ARMOUR_HEAT_CONDUCTIVITY
 
-obj/item/clothing/shoes/jackboots/cowboy
+/obj/item/clothing/shoes/jackboots/cowboy
 	name = "cowboy boots"
 	desc = "No snake in these boots."
 	icon_state = "cowboy"
 	item_state = "cowboy"
+
+/obj/item/clothing/shoes/jackboots/steeltoe
+	name = "steel-toed boots"
+	desc = "In the ever-evolving arms-race of ass kicking, these boots are ready to kick any number of steel plated hides."
+	bonus_kick_damage = 5 //2 more than normal jackboots
+
+/obj/item/clothing/shoes/jackboots/steeltoe/impact_dampen(atom/source, damage)
+	return 0
 
 /obj/item/clothing/shoes/cult_legacy
 	name = "boots"

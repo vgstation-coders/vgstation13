@@ -6,4 +6,4 @@
 	spell_flags = NO_BUTTON
 
 /spell/passive/nogunallowed/on_added(mob/user)
-	user.flags += HONORABLE_NOGUNALLOWED
+	user.flags |= HONORABLE_NOGUNALLOWED

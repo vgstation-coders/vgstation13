@@ -59,7 +59,7 @@
 
 	var/no_random_roll = 0 //If 1, don't select this job randomly!
 
-	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority_reward_equip on spawn.
+	var/priority = FALSE //If TRUE, job will display in red in the latejoin menu and grant a priority reward equip on spawn. (cf outfit.dm)
 
 	var/outfit_datum = null
 
@@ -75,21 +75,19 @@
 /datum/job/proc/bump_position_limit()
 	xtra_positions++
 
+/datum/job/proc/remove_xtra_position()
+	xtra_positions--
+
 /datum/job/proc/reject_new_slots()
 	return FALSE
 
 // -- If there's an outfit datum, let's use it.
-/datum/job/proc/equip(var/mob/living/carbon/human/H)
+/datum/job/proc/equip(var/mob/living/carbon/human/H, var/job_priority)
 	if (outfit_datum)
 		var/datum/outfit/concrete_outfit = new outfit_datum
-		concrete_outfit.equip(H)
+		concrete_outfit.equip(H, priority = job_priority)
 	else
 		CRASH("[type] has no outfit datum, and the proc is not overriden.")
-
-/datum/job/proc/priority_reward_equip(var/mob/living/carbon/human/H)
-	to_chat(H, "<span class='notice'>You've been granted a little bonus for filling a high-priority job. Enjoy!</span>")
-	H.equip_or_collect(new /obj/item/weapon/storage/box/priority_care(H.back), slot_in_backpack)
-	return 1
 
 /datum/job/proc/get_access()
 	if(!config)	//Needed for robots.

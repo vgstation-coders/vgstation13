@@ -221,3 +221,6 @@
 			to_chat(user, "<span class='info'>Attached is \an empty [beaker].</span>")
 	else
 		to_chat(user, "<span class='info'>No chemicals are attached.</span>")
+
+/obj/machinery/iv_drip/can_overload()
+	return 0

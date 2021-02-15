@@ -28,6 +28,7 @@ Class Variables:
          1 -- machine is using power at its idle power level
          2 -- machine is using power at its active power level
 
+
    active_power_usage (num)
       Value for the amount of power to use when in active power mode
 
@@ -135,7 +136,7 @@ Class Procs:
 	var/custom_aghost_alerts=0
 	var/panel_open = 0
 	var/state = 0 //0 is unanchored, 1 is anchored and unwelded, 2 is anchored and welded for most things
-	
+
 	var/obj/item/weapon/cell/connected_cell = null 		//The battery connected to this machine
 	var/battery_dependent = 0	//Requires a battery to run
 
@@ -647,7 +648,7 @@ Class Procs:
 	return 1
 
 /obj/machinery/proc/can_overload(mob/user) //used for AI machine overload
-	return(src in machines)
+	return 1
 
 /obj/machinery/proc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(stat & (BROKEN|NOPOWER))		// unpowered, no shock
@@ -742,14 +743,14 @@ Class Procs:
 
 	H.visible_message("<span class='danger'>[H] kicks \the [src].</span>", "<span class='danger'>You kick \the [src].</span>")
 	if(prob(70))
-		H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		H.foot_impact(src, rand(2,4))
 
 	if(!anchored && !locked_to) //What could go wrong
 		var/strength = H.get_strength()
 		var/kick_dir = get_dir(H, src)
 
 		if(!Move(get_step(loc, kick_dir))) //The structure that we kicked is up against a wall - this hurts our foot
-			H.apply_damage(rand(2,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+			H.foot_impact(src, rand(2,4))
 
 		if(strength > 1) //Strong - kick further
 			spawn()

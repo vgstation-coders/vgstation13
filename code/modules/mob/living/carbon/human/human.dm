@@ -160,6 +160,7 @@
 	movement_speed_modifier = species.move_speed_multiplier
 
 	default_language = get_default_language()
+	init_language = default_language
 
 	create_reagents(1000)
 
@@ -175,6 +176,7 @@
 	hud_list[WANTED_HUD]      = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPLOYAL_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPCHEM_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
+	hud_list[IMPHOLY_HUD]     = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[IMPTRACK_HUD]    = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[SPECIALROLE_HUD] = image('icons/mob/hud.dmi', src, "hudblank")
 	hud_list[STATUS_HUD_OOC]  = image('icons/mob/hud.dmi', src, "hudhealthy")
@@ -228,8 +230,13 @@
 
 	update_colour(0)
 
-	spawn()
-		update_mutantrace()
+	update_mutantrace()
+
+	lazy_register_event(/lazy_event/on_equipped, src, .proc/update_name)
+	lazy_register_event(/lazy_event/on_unequipped, src, .proc/update_name)
+
+/mob/living/carbon/human/proc/update_name()
+	name = get_visible_name()
 
 /mob/living/carbon/human/player_panel_controls()
 	var/html=""
@@ -386,7 +393,7 @@
 	if( head && head.is_hidden_identity())
 		return get_id_name("Unknown")	//Likewise for hats
 	var/datum/role/vampire/V = isvampire(src)
-	if(V && (VAMP_SHADOW in V.powers) && V.ismenacing)
+	if(V && (/datum/power/vampire/shadow in V.current_powers) && V.ismenacing)
 		return get_id_name("Unknown")
 	var/face_name = get_face_name()
 	var/id_name = get_id_name("")
@@ -653,10 +660,6 @@
 		. += E.eyeprot
 
 	return clamp(., -2, 2)
-
-
-/mob/living/carbon/human/IsAdvancedToolUser()
-	return 1//Humans can use guns and such
 
 /mob/living/carbon/human/isGoodPickpocket()
 	var/obj/item/clothing/gloves/G = gloves
@@ -1169,7 +1172,7 @@
 		to_chat(usr, "<span class='info'>You moved while counting. Try again.</span>")
 
 /mob/living/carbon/human/proc/set_species(var/new_species_name, var/force_organs, var/default_colour)
-
+	set waitfor = FALSE
 
 	if(new_species_name)
 		if(src.species && src.species.name && (src.species.name == new_species_name))
@@ -1232,13 +1235,13 @@
 	if((src.species.default_mutations.len > 0) || (src.species.default_blocks.len > 0))
 		src.do_deferred_species_setup = 1
 	meat_type = species.meat_type
-	spawn()
-		src.movement_speed_modifier = species.move_speed_multiplier
-		src.dna.species = new_species_name
-		src.species.handle_post_spawn(src)
-		src.update_icons()
-		if(species.species_intro)
-			to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
+	src.movement_speed_modifier = species.move_speed_multiplier
+	if(dna)
+		dna.species = new_species_name
+	src.species.handle_post_spawn(src)
+	src.update_icons()
+	if(species.species_intro)
+		to_chat(src, "<span class = 'notice'>[species.species_intro]</span>")
 	return 1
 
 /mob/living/carbon/human/proc/bloody_doodle()
@@ -1450,20 +1453,15 @@
 
 /mob/living/carbon/human/dexterity_check()
 	if (stat != CONSCIOUS)
-		return 0
-
-	if(reagents.has_reagent(METHYLIN))
-		return 1
-
-	if(getBrainLoss() >= 60)
-		return 0
-
+		return FALSE
 	if(gloves && istype(gloves, /obj/item/clothing/gloves))
 		var/obj/item/clothing/gloves/G = gloves
-
-		return G.dexterity_check()
-
-	return 1
+		if(!G.dexterity_check())//some gloves might make it harder to interact with complex technologies, or fit your index in a gun's trigger
+			return FALSE
+	if(getBrainLoss() >= 60)
+		if(!reagents.has_reagent(METHYLIN))//methylin supercedes brain damage, but not uncomfortable gloves
+			return FALSE
+	return TRUE//humans are dexterous enough by default
 
 /mob/living/carbon/human/spook(mob/dead/observer/ghost)
 	if(!..(ghost, TRUE) || !client)
@@ -1584,7 +1582,7 @@
 		return 1
 
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in src.butchering_drops
-	if(T && T.amount >= 2)
+	if(T && T.amount >= -1)
 		return 1
 
 	return 0
@@ -1823,6 +1821,7 @@ mob/living/carbon/human/isincrit()
 		"meatleft",
 		"check_mutations",
 		"lastFart",
+		"lastDab",
 		"last_shush",
 		"last_emote_sound",
 		"decapitated",
@@ -1881,13 +1880,23 @@ mob/living/carbon/human/isincrit()
 	// ...means no flavor text for you. Otherwise, good to go.
 	return TRUE
 
-/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE)
-	var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
-	T.virus2 = virus_copylist(virus2)
-	T.get_clothes(src, T)
-	T.name = real_name
-	T.host = src
-	forceMove(null)
+/mob/living/carbon/human/proc/make_zombie(mob/master, var/retain_mind = TRUE, var/crabzombie = FALSE)
+	if(crabzombie)
+		var/mob/living/simple_animal/hostile/necro/zombie/headcrab/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
+	else
+		var/mob/living/simple_animal/hostile/necro/zombie/turned/T = new(get_turf(src), master, (retain_mind ? src : null))
+		T.virus2 = virus_copylist(virus2)
+		T.get_clothes(src, T)
+		T.name = real_name
+		T.host = src
+		forceMove(null)
+		return T
 
 /mob/living/carbon/human/throw_item(var/atom/target,var/atom/movable/what=null)
 	var/atom/movable/item = get_active_hand()
@@ -1951,6 +1960,13 @@ mob/living/carbon/human/isincrit()
 		crawlcounter = 1
 	else
 		crawlcounter++
+	for(var/obj/effect/overlay/puddle/P in target)
+		if(P.wet == TURF_WET_WATER && prob(20))
+			to_chat(src, "<span class='warning'>Your hands slip and make no progress!</span>")
+			return FALSE
+		if(P.wet == TURF_WET_LUBE && prob(75))
+			to_chat(src, "<span class='warning'>You lose your grip on the extremely slippery floor and make no progress!</span>")
+			return FALSE
 	. = Move(target, get_dir(src, target), glide_size_override = crawldelay)
 	delayNextMove(crawldelay, additive = 1)
 
@@ -2016,3 +2032,7 @@ mob/living/carbon/human/isincrit()
 		return list(/datum/ambience/beach)
 	else
 		return ..()
+
+/mob/living/carbon/human/make_meat(location)
+	var/ourMeat = new meat_type(location, src)
+	return ourMeat	//Exists due to meat having a special New()

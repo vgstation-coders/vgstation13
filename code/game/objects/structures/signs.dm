@@ -88,9 +88,8 @@
 	H.visible_message("<span class='danger'>[H] kicks \the [src]!</span>", "<span class='danger'>You kick \the [src]!</span>")
 
 	if(prob(70))
-		to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
-
-		H.apply_damage(rand(5,7), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+		if(H.foot_impact(src,rand(5,7)))
+			to_chat(H, "<span class='userdanger'>Ouch! That hurts!</span>")
 
 /obj/structure/sign/double/map
 	name = "station map"
@@ -186,6 +185,11 @@
 /obj/structure/sign/goldenplaque
 	name = "The Most Robust Men Award for Robustness"
 	desc = "\"To be robust is not an action or a way of life, but a mental state. Only those with the force of will strong enough to act during a crisis, saving friend from foe, acting when everyone else may think and act against you, are truly robust. Stay robust, my friends.\""
+	icon_state = "goldenplaque"
+
+/obj/structure/sign/shiggymemorial
+	name = "Shiggypiggy Memorial"
+	desc = "Rest in Peace"
 	icon_state = "goldenplaque"
 
 /obj/structure/sign/kiddieplaque

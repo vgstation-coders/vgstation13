@@ -20,22 +20,42 @@
 	var/obj/structure/m_tray/connected = null
 	anchored = 1.0
 
-/obj/structure/morgue/proc/update()
+/obj/structure/morgue/New()
+	..()
+	morgue_list += src
+
+/obj/structure/morgue/Destroy()
+	..()
+	morgue_list -= src
+
+/obj/structure/morgue/update_icon()
 	if(connected)
 		icon_state = "morgue0"
-	else
-		if(contents.len > 0)
-			var/list/inside = recursive_type_check(src, /mob)
-			if(!inside.len)
-				icon_state = "morgue3" // no mobs at all, but objects inside
-			else
-				for(var/mob/living/body in inside)
-					if(body && body.client && !body.suiciding)
-						icon_state = "morgue4" // clone that mofo
-						return
-				icon_state = "morgue2" // dead no-client mob
-		else
-			icon_state = "morgue1"
+		return
+	if(!contents.len)
+		icon_state = "morgue1"
+		return
+	var/list/inside = recursive_type_check(src, /mob)
+	if(!inside.len)
+		icon_state = "morgue3" // no mobs at all, but objects inside
+		return
+	for(var/mob/living/body in inside)
+		if(body && body.client && !body.suiciding)
+			icon_state = "morgue4" // clone that mofo
+			return
+	icon_state = "morgue2" // dead no-client mob
+
+/obj/structure/morgue/proc/update()
+	update_icon()
+	var/area/this_area = get_area(src)
+	for(var/obj/machinery/holosign/morgue/sign in holosigns)
+		var/area/sign_area = get_area(sign)
+		if(this_area != sign_area)
+			continue
+		if(sign.should_update)
+			continue
+		sign.should_update = TRUE
+		processing_objects += sign
 
 /obj/structure/morgue/examine(mob/user)
 	..()

@@ -55,6 +55,7 @@
 	desc = "A blue neck scarf."
 	icon_state = "blue_scarf"
 	item_state = "blue_scarf"
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/red
@@ -62,6 +63,7 @@
 	desc = "A red neck scarf."
 	icon_state = "red_scarf"
 	item_state = "red_scarf"
+	species_fit = list(INSECT_SHAPED)
 
 
 /obj/item/clothing/mask/scarf/green
@@ -69,6 +71,7 @@
 	desc = "A green and red line patterned scarf."
 	icon_state = "green_scarf"
 	item_state = "green_scarf"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/balaclava
 	name = "balaclava"
@@ -78,8 +81,7 @@
 	flags = FPRINT
 	body_parts_covered = HIDEHAIR | MOUTH
 	w_class = W_CLASS_SMALL
-	species_fit = list(VOX_SHAPED, GREY_SHAPED)
-	species_restricted = list("exclude", INSECT_SHAPED)
+	species_fit = list(VOX_SHAPED, GREY_SHAPED, INSECT_SHAPED)
 	hides_identity = HIDES_IDENTITY_ALWAYS
 
 /obj/item/clothing/mask/balaclava/skimask
@@ -92,6 +94,7 @@
 	desc = "Somehow, it makes you act and look way more polite than usual."
 	icon_state = "nr_mask"
 	item_state = "nr_mask"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FACE
 	heat_conductivity = INS_MASK_HEAT_CONDUCTIVITY
 
@@ -100,6 +103,7 @@
 	desc = "A rubber pig mask."
 	icon_state = "pig"
 	item_state = "pig"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
@@ -144,6 +148,7 @@
 	desc = "A plain porcelain mask that covers the entire face. Standard attire for particularly unspeakable religions. The eyes are wide shut."
 	icon_state = "chapmask"
 	item_state = "chapmask"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FACE
 	w_class = W_CLASS_SMALL
@@ -159,11 +164,13 @@
 obj/item/clothing/mask/bandana/red
 	name = "red bandana"
 	icon_state = "bandred"
+	species_fit = list(INSECT_SHAPED)
 
 obj/item/clothing/mask/joy
 	name = "joy mask"
 	desc = "Express your happiness or hide your sorrows with this laughing face with crying tears of joy cutout."
 	icon_state = "joy"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/vamp_fangs
 	name = "false fangs"
@@ -219,6 +226,7 @@ obj/item/clothing/mask/joy
 	desc = "Previously used in strange pantomimes, after one of the actors went mad on stage these masks have avoided use. You swear its face contorts when you're not looking."
 	icon_state = "goldenmask"
 	item_state = "goldenmask"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/mask/goldface/equipped()
 	..()

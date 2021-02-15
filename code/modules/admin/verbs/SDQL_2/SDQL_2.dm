@@ -366,7 +366,7 @@
 	else if(expression[i] == "null")
 		val = null
 
-	else if(isnum(expression[i]))
+	else if(isnum(expression[i]) || ispath(expression[i]))
 		val = expression[i]
 
 	else if(copytext(expression[i], 1, 2) in list("'", "\""))

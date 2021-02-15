@@ -93,6 +93,12 @@
 	projectile_type = /obj/item/projectile/bullet/auto380/rubber
 	icon_state = "s-r-casing"
 
+/obj/item/ammo_casing/lr22
+	desc = "A .22LR bullet casing."
+	caliber = NTLR22
+	projectile_type = /obj/item/projectile/bullet/LR22
+	icon_state = "p22-casing"
+
 /obj/item/ammo_casing/a12mm
 	desc = "A 12mm bullet casing."
 	caliber = MM12

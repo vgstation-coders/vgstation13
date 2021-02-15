@@ -28,7 +28,6 @@
 	supernatural = 1
 	flying = 1
 	treadmill_speed = 0 //It floats!
-	var/nullblock = 0
 	mutations = list(M_NO_SHOCK)
 
 	mob_property_flags = MOB_CONSTRUCT
@@ -88,7 +87,9 @@
 /mob/living/simple_animal/construct/New()
 	..()
 	add_language(LANGUAGE_CULT)
+	add_language(LANGUAGE_GALACTIC_COMMON)
 	default_language = all_languages[LANGUAGE_CULT]
+	init_language = default_language
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
@@ -98,11 +99,9 @@
 		//Determine construct color	and set languages
 		if(!iscultist(creator))
 			universal_understand = 1
-			add_language(LANGUAGE_GALACTIC_COMMON)
-			remove_language(LANGUAGE_CULT)
 			default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
-
-			if(iswizard(creator))
+			init_language = default_language
+			if(iswizard(creator) || isapprentice(creator))
 				construct_color = rgb(157, 1, 196)
 			else
 				construct_color = rgb(0, 153, 255)
@@ -114,9 +113,21 @@
 					construct_color = rgb(235,0,0)
 				else
 					construct_color = rgb(30,255,30)
-			else	
+			else
 				construct_color = rgb(235,0,0)
+	else if (istype(creator, /mob/living/simple_animal/shade))//shade beacon
+		if (iscultist(creator))
+			construct_color = rgb(235,0,0)
+		else
+			construct_color = rgb(0, 153, 255)
 	setupglow()
+
+/mob/living/simple_animal/construct/Login()
+	..()
+	if (default_language == all_languages[LANGUAGE_GALACTIC_COMMON])
+		to_chat(src,"<span class='notice'>You can speak in cult chants by using :5.</span>")
+	else
+		to_chat(src,"<span class='notice'>To be understood by non-cult speaking humans, use :1.</span>")
 
 /mob/living/simple_animal/construct/death(var/gibbed = FALSE)
 	..(TRUE) //If they qdel, they gib regardless
@@ -235,10 +246,12 @@
 			visible_message("<span class='danger'>\The [P.name] gets reflected by \the [src]'s shell!</span>", \
 							"<span class='userdanger'>\The [P.name] gets reflected by \the [src]'s shell!</span>")
 
-			P.reflected = 1
-			P.rebound(src)
 
-			return -1 // complete projectile permutation
+			if(!istype(P, /obj/item/projectile/beam)) //has seperate logic
+				P.reflected = 1
+				P.rebound(src)
+
+			return PROJECTILE_COLLISION_REBOUND // complete projectile permutation
 
 	return (..(P))
 
@@ -257,8 +270,8 @@
 	icon_living = "floating"
 	maxHealth = 75
 	health = 75
-	melee_damage_lower = 25
-	melee_damage_upper = 25
+	melee_damage_lower = 15
+	melee_damage_upper = 15
 	attacktext = "slashes"
 	speed = 1
 	environment_smash_flags = SMASH_LIGHT_STRUCTURES | SMASH_CONTAINERS | OPEN_DOOR_WEAK
@@ -268,6 +281,18 @@
 
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
+	
+/mob/living/simple_animal/construct/wraith/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+	
+	var/mob/living/simple_animal/construct/wraith/W = src
+	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
+	if(E)
+		E.perform(W)
+		E.connected_button.update_charge(1)
 
 
 /////////////////////////////Artificer/////////////////////////
@@ -281,8 +306,8 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "artificer"
 	icon_living = "artificer"
-	maxHealth = 50
-	health = 50
+	maxHealth = 100
+	health = 100
 	response_harm = "viciously beats"
 	harm_intent_damage = 5
 	melee_damage_lower = 5
@@ -366,7 +391,7 @@
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
-	
+
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
 	if(glowcolor)
 		glowicon.Blend(glowcolor, ICON_ADD)
@@ -483,19 +508,19 @@
 
 	if(healths)
 		switch(health)
-			if(50 to INFINITY)
+			if(100 to INFINITY)
 				healths.icon_state = "artificer_health0"
-			if(42 to 49)
+			if(84 to 99)
 				healths.icon_state = "artificer_health1"
-			if(34 to 41)
+			if(68 to 83)
 				healths.icon_state = "artificer_health2"
-			if(26 to 33)
+			if(52 to 67)
 				healths.icon_state = "artificer_health3"
-			if(18 to 25)
+			if(36 to 51)
 				healths.icon_state = "artificer_health4"
-			if(10 to 17)
+			if(20 to 35)
 				healths.icon_state = "artificer_health5"
-			if(1 to 9)
+			if(1 to 19)
 				healths.icon_state = "artificer_health6"
 			else
 				healths.icon_state = "artificer_health7"

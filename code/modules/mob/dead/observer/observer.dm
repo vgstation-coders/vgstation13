@@ -39,6 +39,7 @@ var/creating_arena = FALSE
 	var/selectedHUD = HUD_NONE // HUD_NONE, HUD_MEDICAL or HUD_SECURITY
 	var/diagHUD = FALSE
 	var/antagHUD = 0
+	var/conversionHUD = 0
 	incorporeal_move = INCORPOREAL_GHOST
 	var/movespeed = 0.75
 	var/lastchairspin
@@ -231,13 +232,29 @@ Works together with spawning an observer, noted above.
 		return 0
 
 	regular_hud_updates()
+
+	//cleaning up antagHUD and conversionHUD icons
+	if(client)
+		for(var/image/hud in client.images)
+			if(findtext(hud.icon_state, "convertible") || findtext(hud.icon_state, "-logo"))
+				client.images -= hud
+
 	if(antagHUD)
 		var/list/target_list = list()
-		for(var/mob/living/target in oview(src))
+		for(var/mob/living/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
 			if( target.mind&&(target.mind.antag_roles.len > 0 || issilicon(target) || target.hud_list[SPECIALROLE_HUD]) )
 				target_list += target
 		if(target_list.len)
-			assess_targets(target_list, src)
+			assess_antagHUD(target_list, src)
+
+	if(conversionHUD)
+		var/list/target_list = list()
+		for(var/mob/living/carbon/target in oview(client.view+DATAHUD_RANGE_OVERHEAD, src))
+			if(target.mind && target.hud_list[CONVERSION_HUD])
+				target_list += target
+		if(target_list.len)
+			assess_conversionHUD(target_list, src)
+
 	if(selectedHUD == HUD_MEDICAL)
 		process_medHUD(src)
 	else if(selectedHUD == HUD_SECURITY)
@@ -277,7 +294,7 @@ Works together with spawning an observer, noted above.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client
 	var/image/holder
-	for(var/mob/living/carbon/patient in oview(M))
+	for(var/mob/living/carbon/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -322,7 +339,7 @@ Works together with spawning an observer, noted above.
 
 			C.images += holder
 
-	for(var/mob/living/simple_animal/mouse/patient in oview(M))
+	for(var/mob/living/simple_animal/mouse/patient in oview(client.view+DATAHUD_RANGE_OVERHEAD, M))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -348,7 +365,7 @@ Works together with spawning an observer, noted above.
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
-/mob/dead/proc/assess_targets(list/target_list, mob/dead/observer/U)
+/mob/dead/proc/assess_antagHUD(list/target_list, mob/dead/observer/U)
 	for(var/mob/living/target in target_list)
 		if(target.mind)
 			var/image/I
@@ -378,7 +395,13 @@ Works together with spawning an observer, noted above.
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalborg")
 				else
 					U.client.images += image('icons/mob/hud.dmi',silicon_target,"hudmalai")
-	return 1
+
+/mob/dead/proc/assess_conversionHUD(list/target_list, mob/dead/observer/U)
+	for(var/mob/living/carbon/target in target_list)
+		if(target.mind)
+			U.client.images -= target.hud_list[CONVERSION_HUD]
+			target.update_convertibility()
+			U.client.images += target.hud_list[CONVERSION_HUD]
 
 /mob/proc/ghostize(var/flags = GHOST_CAN_REENTER,var/deafmute = 0)
 	if(key && !(copytext(key,1,2)=="@"))
@@ -401,7 +424,12 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	set name = "Ghost"
 	set desc = "Relinquish your life and enter the land of the dead."
 
-	if(iscultist(src) && (ishuman(src)||isconstruct(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE)
+	var/timetocheck = timeofdeath
+	if (isbrain(src))
+		var/mob/living/carbon/brain/brainmob = src
+		timetocheck = brainmob.timeofhostdeath
+
+	if(iscultist(src) && (ishuman(src)||isconstruct(src)||isbrain(src)||istype(src,/mob/living/carbon/complex/gondola)) && veil_thickness > CULT_PROLOGUE && (timetocheck == 0 || timetocheck >= world.time - DEATH_SHADEOUT_TIMER))
 		var/response = alert(src, "It doesn't have to end here, the veil is thin and the dark energies in you soul cling to this plane. You may forsake this body and materialize as a Shade.","Sacrifice Body","Shade","Ghost","Stay in body")
 		switch (response)
 			if ("Shade")
@@ -647,3 +675,24 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 /mob/dead/observer/proc/can_reenter_corpse()
 	var/mob/M = get_top_transmogrification()
 	return (M && M.client && can_reenter_corpse)
+
+/mob/dead/observer/AltClick(mob/user)
+	if(isAdminGhost(user))
+		var/choice_one = alert(user, "Do you wish to spawn a human?", "IC Spawning", "Yes", "No")
+		if(!choice_one)
+			return ..()
+		if(choice_one == "Yes")
+			var/choose_outfit = select_loadout()
+			if(choose_outfit)
+				var/datum/outfit/concrete_outfit = new choose_outfit
+				var/mob/living/carbon/human/sHuman = new /mob/living/carbon/human(get_turf(src))
+				sHuman.name = name
+				sHuman.real_name = real_name
+				concrete_outfit.equip(sHuman, TRUE)
+				client?.prefs.copy_to(sHuman)
+				sHuman.dna.UpdateSE()
+				sHuman.dna.UpdateUI()
+				sHuman.ckey = ckey
+				qdel(src)
+			return
+	return ..()

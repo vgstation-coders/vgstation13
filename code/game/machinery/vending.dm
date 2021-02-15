@@ -1198,7 +1198,6 @@ var/global/num_vending_terminals = 1
  */
 
 /*
-
 /obj/machinery/vending/[vendors name here]   // --vending machine template   :)
 	name = ""
 	desc = ""
@@ -1208,7 +1207,6 @@ var/global/num_vending_terminals = 1
 	products = list()
 	contraband = list()
 	premium = list()
-
 */
 
 /*
@@ -1357,6 +1355,11 @@ var/global/num_vending_terminals = 1
 	vend_delay = 34
 	products = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/espresso = 30,
+		/obj/item/weapon/reagent_containers/food/drinks/doppio = 25,
+		/obj/item/weapon/reagent_containers/food/drinks/latte = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/soy_latte = 15,
+		/obj/item/weapon/reagent_containers/food/drinks/cappuccino = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 25,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 25,
@@ -1366,10 +1369,17 @@ var/global/num_vending_terminals = 1
 		)
 	contraband = list(
 		/obj/item/weapon/reagent_containers/food/drinks/ice = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/chifir = 10,
 		)
 	prices = list(
 		/obj/item/weapon/reagent_containers/food/drinks/coffee = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/espresso = 3,
+		/obj/item/weapon/reagent_containers/food/drinks/doppio = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/latte = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/soy_latte = 10,
+		/obj/item/weapon/reagent_containers/food/drinks/cappuccino = 15,
 		/obj/item/weapon/reagent_containers/food/drinks/tea = 5,
+		/obj/item/weapon/reagent_containers/food/drinks/chifir = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/h_chocolate = 5,
 		/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/irishcoffee/ = 10,
 		)
@@ -1974,6 +1984,9 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/glasses/sunglasses/security = 2,
 		/obj/item/weapon/storage/fancy/donut_box = 2,
+		/obj/item/clothing/head/helmet/metrocop = 2,
+		/obj/item/clothing/under/rank/metrocop = 2,
+		/obj/item/clothing/suit/armor/vest/metrocop = 2
 		)
 	premium = list(
 		/obj/item/clothing/head/helmet/siren = 2,
@@ -1984,10 +1997,23 @@ var/global/num_vending_terminals = 1
 		)
 	vouched = list(
 		/obj/item/ammo_storage/magazine/m380auto = 10,
-		/obj/item/ammo_storage/magazine/m380auto/rubber = 10
+		/obj/item/ammo_storage/magazine/m380auto/rubber = 10,
+		/obj/item/clothing/accessory/armoredvestshoulderstrap = 2
 		)
 
 	pack = /obj/structure/vendomatpack/security
+
+/obj/machinery/vending/security/attackby(obj/item/W, mob/user)
+	..()
+	if(istype(W, /obj/item/clothing/suit/armor/vest))
+		to_chat(user, "<span class='notice'>You tap \the [W] onto [src].</span>")
+		var/obj/item/voucher/free_item/armorstrap/voucher = new /obj/item/voucher/free_item/armorstrap(src)
+		if(can_accept_voucher(voucher, user))
+			return voucher_act(voucher,user)
+		else
+			to_chat(user, "<span class='notice'>Nothing happens.</span>")
+			qdel(voucher)
+			return 1
 
 /obj/machinery/vending/security/used
 	req_access = "0"
@@ -2622,6 +2648,7 @@ var/global/num_vending_terminals = 1
 	contraband = list(
 		/obj/item/clothing/mask/balaclava = 5,
 		/obj/item/clothing/head/bearpelt = 5,
+		/obj/item/clothing/head/bearpelt/brown = 5,
 		/obj/item/clothing/head/energy_dome = 5,
 		)
 	premium = list(
@@ -2678,6 +2705,15 @@ var/global/num_vending_terminals = 1
 		/obj/item/clothing/under/dress/plaid_blue = 10,
 		/obj/item/clothing/under/greaser = 10,
 		/obj/item/clothing/under/sl_suit = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/black = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/red = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/green = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/darkblue = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/purple = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/yellow = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/orange = 10,
+		/obj/item/clothing/suit/storage/wintercoat/hoodie/cyan = 10,
 		)
 	contraband = list(
 		/obj/item/clothing/under/syndicate/tacticool = 5,
@@ -2687,6 +2723,7 @@ var/global/num_vending_terminals = 1
 	premium = list(
 		/obj/item/clothing/under/rainbow = 1,
 		/obj/item/clothing/suit/red_suit = 1,
+		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
 		)
 
 	pack = /obj/structure/vendomatpack/suitdispenser
@@ -3097,6 +3134,7 @@ var/global/num_vending_terminals = 1
 		/obj/item/crackerbox = 1,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
+		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
 		/obj/structure/largecrate/secure = 1,
 		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
@@ -3116,6 +3154,12 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/fakeposter_kit = 1,
 		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 1,
 		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 1,
+		/obj/item/weapon/storage/box/mysterycubes = 2,
+		/obj/item/weapon/storage/box/mystery_vial = 5,
+		/obj/item/weapon/storage/box/mystery_circuit = 1,
+		/obj/item/weapon/storage/box/large/mystery_material = 5,
+		/obj/item/weapon/storage/box/large/mystery_material/odd = 5,
+		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
 		)
 	prices = list(
 		/obj/item/clothing/suit/storage/trader = 100,
@@ -3135,6 +3179,7 @@ var/global/num_vending_terminals = 1
 		/obj/machinery/power/antiquesynth = 150,
 		/obj/structure/closet/crate/chest/alcatraz = 150,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 100,
+		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 25,
 		/obj/structure/largecrate/secure = 100,
 		/obj/structure/largecrate/secure/magmaw = 100,
 		/obj/structure/largecrate/secure/frankenstein = 100,
@@ -3155,7 +3200,14 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/fakeposter_kit = 50,
 		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 100,
 		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 100,
+		/obj/item/weapon/storage/box/mysterycubes = 75,
+		/obj/item/weapon/storage/box/mystery_vial = 25,
+		/obj/item/weapon/storage/box/mystery_circuit = 25,
+		/obj/item/weapon/storage/box/large/mystery_material = 50,
+		/obj/item/weapon/storage/box/large/mystery_material/odd = 25,
+		/obj/structure/closet/crate/freezer/bootlegpicnic = 50,
 		)
+	pack = /obj/structure/vendomatpack/trader
 
 /obj/machinery/vending/trader/New()
 	load_dungeon(/datum/map_element/dungeon/mecha_graveyard)
@@ -3477,3 +3529,88 @@ var/global/num_vending_terminals = 1
 	pack = /obj/structure/vendomatpack/team_security
 
 	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
+
+/obj/machinery/vending/telecomms
+	name = "\improper Telecommunications Parts Vendor"
+	desc = "A vending machine containing telecommunications parts."
+	icon_state = "telecomms"
+	products = list(
+		/obj/item/weapon/stock_parts/manipulator = 10,
+		/obj/item/weapon/stock_parts/micro_laser = 5,
+		/obj/item/weapon/stock_parts/micro_laser/high = 3,
+		/obj/item/weapon/stock_parts/subspace/ansible = 2,
+		/obj/item/weapon/stock_parts/subspace/filter = 6,
+		/obj/item/weapon/stock_parts/subspace/amplifier = 2,
+		/obj/item/weapon/stock_parts/subspace/treatment = 4,
+		/obj/item/weapon/stock_parts/subspace/analyzer = 2,
+		/obj/item/weapon/stock_parts/subspace/crystal = 2,
+		/obj/item/weapon/stock_parts/subspace/transmitter = 4,
+		/obj/item/weapon/circuitboard/telecomms/receiver = 1,
+		/obj/item/weapon/circuitboard/telecomms/bus = 1,
+		/obj/item/weapon/circuitboard/telecomms/processor = 1,
+		/obj/item/weapon/circuitboard/telecomms/broadcaster = 1,
+		/obj/item/weapon/circuitboard/telecomms/server = 3,
+		/obj/item/weapon/circuitboard/telecomms/hub = 1,
+		/obj/item/weapon/circuitboard/telecomms/relay = 2,
+		/obj/item/weapon/circuitboard/comm_monitor = 1,
+		/obj/item/weapon/circuitboard/comm_server = 1,
+		/obj/item/weapon/storage/bag/gadgets = 2,
+
+
+		)
+	contraband = list(
+		/obj/item/weapon/storage/bag/gadgets/part_replacer/basic_PED  = 1,
+		/obj/item/weapon/solder/pre_fueled = 2,
+		)
+	premium = list(
+		/obj/item/weapon/circuitboard/message_monitor = 1,
+		/obj/item/weapon/circuitboard/comm_traffic = 1,
+		)
+	pack = /obj/structure/vendomatpack/telecomms
+
+	machine_flags = SCREWTOGGLE | WRENCHMOVE | FIXED2WORK | CROWDESTROY | EJECTNOTDEL | EMAGGABLE
+
+
+/obj/machinery/vending/snowgear
+	name = "\improper Snow Man's Land"
+	desc = "A vending machine for the intrepid snow-settler or pioneer."
+	icon_state = "snow"
+	vend_reply = "To the Pole!"
+	product_ads = list(
+		"You wouldn't let a little snow stop you.",
+		"Beware the yeti.",
+		"I fear no bear.",
+		"Ride out in style. Now cross-promoting with snowmobiles!"
+	)
+	product_slogans = list(
+		"Winter is coming.",
+		"Become strong enough to survive.",
+		"Bobsled teams from Jamaica need not apply.",
+		"Is that all you can hit me with, a moose and a blizzard?",
+		"Beware the yeti that stalks these snows!"
+	)
+	products = list(
+		/obj/item/clothing/shoes/winterboots = 10,
+		/obj/item/clothing/suit/storage/wintercoat = 10,
+		/obj/item/clothing/head/ushanka = 10,
+		/obj/item/clothing/mask/scarf/blue = 6,
+		/obj/item/clothing/mask/scarf/red = 6,
+		/obj/item/clothing/mask/scarf/green = 6,
+		/obj/item/clothing/gloves/black = 6,
+		/obj/item/device/flashlight/lantern = 6,
+		/obj/item/weapon/hatchet = 6,
+		/obj/item/weapon/pickaxe/shovel = 6,
+		/obj/item/weapon/lighter = 6,
+		/obj/machinery/cart/cargo/toboggan = 2,
+		/obj/item/blueprints/construction_permit = 4,
+		/obj/item/weapon/cell/high = 4
+		)
+	contraband = list(
+		/obj/item/clothing/mask/balaclava/skimask = 2,
+		/obj/item/clothing/mask/neorussian = 2,
+		)
+	premium = list(
+		/obj/item/stack/sheet/mineral/brick/bigstack = 1,
+		/obj/item/binoculars = 2,
+		/obj/item/clothing/suit/storage/wintercoat/fur = 1,
+		)

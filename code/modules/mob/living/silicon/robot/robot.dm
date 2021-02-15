@@ -1,5 +1,3 @@
-var/list/cyborg_list = list()
-
 /mob/living/silicon/robot
 	name = "Cyborg"
 	real_name = "Cyborg"
@@ -71,8 +69,6 @@ var/list/cyborg_list = list()
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail = null
 	var/jeton = FALSE
 
-	var/killswitch = FALSE
-	var/killswitch_time = 60
 	var/modulelock = FALSE
 	var/modulelock_time = 120
 	var/lawupdate = TRUE //Cyborgs will sync their laws with their AI by default
@@ -142,7 +138,10 @@ var/list/cyborg_list = list()
 
 	..()
 
-	if (mind && !stored_freqs)
+	if(cyborg_detonation_time < world.time)	//Reset the global cyborg killswitch if it was already triggered, so an activated killswitch + missing robot consoles doesnt prevent all new borgs from instantly exploding. This probably isn't the best place for it but it should work.
+		cyborg_detonation_time = 0
+
+	if(mind && !stored_freqs)
 		spawn(1)
 			mind.store_memory("Frequencies list: <br/><b>Command:</b> [COMM_FREQ] <br/> <b>Security:</b> [SEC_FREQ] <br/> <b>Medical:</b> [MED_FREQ] <br/> <b>Science:</b> [SCI_FREQ] <br/> <b>Engineering:</b> [ENG_FREQ] <br/> <b>Service:</b> [SER_FREQ] <b>Cargo:</b> [SUP_FREQ]<br/> <b>AI private:</b> [AIPRIV_FREQ]<br/>")
 		stored_freqs = 1
@@ -167,6 +166,7 @@ var/list/cyborg_list = list()
 			add_language(lang.name, can_speak = FALSE)
 
 	default_language = all_languages[LANGUAGE_GALACTIC_COMMON]
+	init_language = default_language
 
 /mob/living/silicon/robot/proc/connect_AI(var/mob/living/silicon/ai/new_AI)
 	if(istype(new_AI))
@@ -487,7 +487,7 @@ var/list/cyborg_list = list()
 			last_high_damage_taken_timeofday = world.timeofday
 	if(prob(75) && Proj.damage > 0)
 		spark(src, 5, FALSE)
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/robot/emp_act(severity)
 	..()
@@ -1175,9 +1175,10 @@ var/list/cyborg_list = list()
 
 /mob/living/silicon/robot/proc/self_destruct()
 	if(istraitor(src) && emagged)
-		to_chat(src, "<span class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
+		to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Termination signal detected. Scrambling security and identification codes.</span>")
 		UnlinkSelf()
 		return FALSE
+	to_chat(src, "<span style=\"font-family:Courier\" class='danger'>Self-Destruct signal recieved.</span>")
 	gib()
 	return TRUE
 

@@ -20,10 +20,10 @@
 		/datum/zLevel/space{
 			name = "derelict" ;
 			},
-		/datum/zLevel/mining,
 		/datum/zLevel/space{
 			name = "spacePirateShip" ;
 			},
+		/datum/zLevel/mining,
 		)
 	enabled_jobs = list(/datum/job/trader)
 
@@ -43,8 +43,16 @@
 	snow_theme = TRUE
 	can_enlarge = FALSE
 
+/****************************
+**	Day and Night Lighting **
+**	See: daynightcycle.dm  **
+****************************/
+/datum/subsystem/daynightcycle
+	flags = SS_FIRE_IN_LOBBY
+	daynight_z_lvl = STATION_Z
+
 /datum/map/active/New()
-	.=..()
+	. = ..()
 
 	research_shuttle.name = "Southern Station Shuttle"
 	research_shuttle.req_access = list()
@@ -113,6 +121,8 @@
 /datum/map/active/map_specific_init()
 	climate = new /datum/climate/arctic()
 
+	generate_mapvaults()
+
 	for (var/x = center_x; x <= center_x + center_x/3; x = x + 10)
 		for (var/y = center_y; y <= center_y + center_y/3; y = y + 10)
 			gaussian_geyser(x, y)
@@ -128,40 +138,69 @@
 			gaussian_geyser(x, y)
 			CHECK_TICK
 
+#define MIN_REGIONAL_VAULTS 2
+#define MAX_REGIONAL_VAULTS 4
+/datum/map/active/generate_mapvaults()
+	var/list/list_of_vaults = get_map_element_objects(/datum/map_element/snowvault)
+	var/list/areas_to_vault = list()
+	for(var/area/surface/outer/O in areas)
+		areas_to_vault += O //first, collect all the outer reaches
+	var/result
+	for(var/area/A in areas_to_vault)
+		var/amount = rand(MIN_REGIONAL_VAULTS,MAX_REGIONAL_VAULTS)
+		result = populate_area_with_vaults(A, list_of_vaults, amount, 1, filter_function=/proc/just_snow)
+		message_admins("<span class='info'>Loaded [result] vaults in [A].</span>")
+	return TRUE
+
+/proc/just_snow(var/datum/map_element/E, var/turf/start_turf)
+	var/list/dimensions = E.get_dimensions()
+	var/result = check_surface_placement(start_turf,dimensions[1], dimensions[2])
+	return result
+
+/proc/check_surface_placement(var/turf/T,var/size_x,var/size_y,var/ignore_walls=0)
+	var/list/surroundings = list()
+
+	surroundings |= range(2, locate(T.x,T.y,T.z))
+	surroundings |= range(2, locate(T.x+size_x,T.y,T.z))
+	surroundings |= range(2, locate(T.x,T.y+size_y,T.z))
+	surroundings |= range(2, locate(T.x+size_x,T.y+size_y,T.z))
+
+	for(var/area/A in surroundings)
+		if(!istype(A,/area/surface/outer))
+			return 0
+
+	if(locate(/turf/unsimulated/wall/rock/ice) in surroundings)
+		return 0
+
+	return 1
+
 /proc/gaussian_geyser(var/x, var/y)
-	var/turf/T = locate(x, y, 1)
-	if (!istype(T,/turf/unsimulated/floor/snow/))
-		return
-	if (locate(/obj/structure/snow_flora/tree/pine) in T)
-		return
-	if (istype(T, /turf/unsimulated/floor/snow/asphalt))
-		return
 	if (prob(30))
 		return
 	var/dx = round(16*GaussRand(1))
 	var/dy = round(16*GaussRand(1))
-	var/turf/T2 = locate(x + dx, y + dy, 1)
-	if (!istype(T2,/turf/unsimulated/floor/snow/))
+	var/turf/T = locate(x + dx, y + dy, 1)
+	if (!istype(T,/turf/unsimulated/floor/snow/))
 		return
-	if (istype(T2, /turf/unsimulated/floor/snow/asphalt))
+	if (istype(T, /turf/unsimulated/floor/snow/asphalt))
 		return
-	if (locate(/obj/structure/snow_flora/tree/pine) in T2)
+	if (locate(/obj/structure/snow_flora/tree/pine) in T)
 		return
-	switch (rand(100))
-		if (0 to 60)
-			new /obj/structure/geyser(T2)
-		if (60 to 80)
-			new /obj/structure/geyser/unstable(T2)
-		else
-			new /obj/structure/geyser/vent(T2)
+	if (locate(/obj/glacier) in T)
+		return
+	var/area/A = get_area(T)
+	A.make_geyser(T)
 
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
-	if(ispath(DR.role_category,/datum/role/changeling))
-		return FALSE
 
-	return TRUE
+	return ..()
+
+/datum/map/active/map_equip(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
 
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"

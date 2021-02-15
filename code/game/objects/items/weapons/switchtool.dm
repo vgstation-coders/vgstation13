@@ -2,6 +2,7 @@
 	name = "switchtool"
 	icon = 'icons/obj/switchtool.dmi'
 	icon_state = "switchtool"
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/switchtool.dmi', "right_hand" = 'icons/mob/in-hand/right/switchtool.dmi')
 	desc = "A multi-deployable, multi-instrument, finely crafted multi-purpose tool. The envy of engineers everywhere."
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -40,8 +41,28 @@
 			for(var/module in stored_modules)
 				if(stored_modules[module] == deployed)
 					stored_modules[module] = null
-			undeploy()
+			undeploy(user)
 		return TRUE
+	else
+		if(!proximity_flag)
+			return
+			
+		var/turf/T
+		if(isturf(target.loc))
+			T = target.loc
+		else
+			return 
+
+		var/success = FALSE
+		for(var/obj/item/I in T)
+			if(add_module(I, user, FALSE))
+				success = TRUE
+
+		if(success)
+			to_chat(user, "You load everything into \the [src].")
+
+
+
 
 /obj/item/weapon/switchtool/New()
 	..()
@@ -60,13 +81,17 @@
 	if(deployed)
 		edit_deploy(0)
 		to_chat(user, "You store \the [deployed].")
-		undeploy()
+		undeploy(user)
 	else
 		choose_deploy(user)
 
 /obj/item/weapon/switchtool/attackby(var/obj/item/used_item, mob/user)
-	if(istype(used_item, removing_item) && deployed) //if it's the thing that lets us remove tools and we have something to remove
-		return remove_module(user)
+	if(istype(used_item, removing_item)) //if it's the thing that lets us remove tools and we have something to remove
+		if(deployed)
+			return remove_module(user)
+		else
+			return remove_all_modules(user)
+
 	if(add_module(used_item, user))
 		return TRUE
 	else
@@ -91,7 +116,7 @@
 			module_string += "\a [get_module_name(module)], "
 	return module_string
 
-/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user)
+/obj/item/weapon/switchtool/proc/add_module(var/obj/item/used_item, mob/user, var/message = TRUE)
 	if(!used_item || !user)
 		return FALSE
 
@@ -99,12 +124,14 @@
 		var/type_path = text2path(get_module_type(module))
 		if(istype(used_item, type_path))
 			if(stored_modules[module])
-				to_chat(user, "\The [src] already has a [get_module_name(module)].")
+				if(message)
+					to_chat(user, "\The [src] already has a [get_module_name(module)].")
 				return FALSE
 			else
 				if(user.drop_item(used_item, src))
 					stored_modules[module] = used_item
-					to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
+					if(message)
+						to_chat(user, "You successfully load \the [used_item] into \the [src]'s [get_module_name(module)] slot.")
 					return TRUE
 
 /obj/item/weapon/switchtool/proc/remove_module(mob/user)
@@ -116,18 +143,38 @@
 			break
 	to_chat(user, "You successfully remove \the [deployed] from \the [src].")
 	playsound(src, "sound/items/screwdriver.ogg", 10, 1)
-	undeploy()
+	undeploy(user)
 	return TRUE
 
-/obj/item/weapon/switchtool/proc/undeploy()
+/obj/item/weapon/switchtool/proc/remove_all_modules(mob/user)
+	if(deployed)		//this shouldnt happen but just in case
+		undeploy()
+
+	var/success = FALSE
+	for(var/module in stored_modules)
+		if(stored_modules[module])
+			success = TRUE
+			stored_modules[module].forceMove(get_turf(user))
+			stored_modules[module] = null
+	if(success)
+		to_chat(user, "<span class='notice'>You clear out everything from \the [src].</span>")
+		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
+		return TRUE
+	else
+		to_chat(user, "<span class='warning'>\The [src] is empty.</span>")
+
+/obj/item/weapon/switchtool/proc/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)
 	edit_deploy(0)
 	deployed = null
 	overlays.len = 0
 	w_class = initial(w_class)
 	update_icon()
+	dynamic_overlay.len = 0
+	user.update_inv_hands()
 
-/obj/item/weapon/switchtool/proc/deploy(var/module)
+/obj/item/weapon/switchtool/proc/deploy(var/module, mob/user)
+
 	if(!(module in stored_modules))
 		return FALSE
 	if(!stored_modules[module])
@@ -138,9 +185,14 @@
 	playsound(src, deploy_sound, 10, 1)
 	deployed = stored_modules[module]
 	hmodule = get_module_name(module)
+	var/image/inhand_overlayr = image('icons/mob/in-hand/right/switchtool.dmi', src, "[hmodule]")
+	var/image/inhand_overlayl = image('icons/mob/in-hand/left/switchtool.dmi', src, "[hmodule]")
 	overlays += hmodule
 	w_class = max(w_class, deployed.w_class)
 	update_icon()
+	dynamic_overlay["[HAND_LAYER]-[GRASP_RIGHT_HAND]"] = inhand_overlayr
+	dynamic_overlay["[HAND_LAYER]-[GRASP_LEFT_HAND]"] = inhand_overlayl
+	user.update_inv_hands()
 	return TRUE
 
 /obj/item/weapon/switchtool/proc/edit_deploy(var/doedit)
@@ -148,7 +200,7 @@
 		sharpness = deployed.sharpness
 		deployed.name = name
 		deployed.icon = icon
-		deployed.icon_state = icon_state
+		//deployed.icon_state = icon_state
 		deployed.overlays = overlays
 		deployed.cant_drop = TRUE
 	else //Revert the changes to the deployed item.
@@ -175,7 +227,7 @@
 	else if(potential_modules.len == 1)
 		for(var/m in stored_modules)
 			if(stored_modules[m])
-				deploy(m)
+				deploy(m,user)
 				edit_deploy(1)
 				return TRUE
 		return
@@ -193,16 +245,17 @@
 					// no bracket in name
 					true_module = checkmodule
 					break
-			if(deploy(true_module))
+			if(deploy(true_module,user))
 				to_chat(user, "You deploy \the [deployed].")
 				edit_deploy(1)
 			return TRUE
 		return
 
+
 /obj/item/weapon/switchtool/surgery
 	name = "surgeon's switchtool"
-
 	icon_state = "surg_switchtool"
+	item_state = "surg_switchtool"
 	desc = "A switchtool containing most of the necessary items for impromptu surgery. For the surgeon on the go."
 
 	origin_tech = Tc_MATERIALS + "=4;" + Tc_BLUESPACE + "=3;" + Tc_BIOTECH + "=3"
@@ -216,7 +269,7 @@
 						"/obj/item/weapon/FixOVein:fixovein" = null,
 						"/obj/item/weapon/bonegel:bonegel"= null)
 
-/obj/item/weapon/switchtool/surgery/undeploy()
+/obj/item/weapon/switchtool/surgery/undeploy(mob/user)
 	playsound(src, undeploy_sound, 10, 1)
 	edit_deploy(0)
 	if(istype(deployed, /obj/item/weapon/scalpel/laser))
@@ -227,13 +280,16 @@
 		M.icon_state += "_off"
 	deployed = null
 	overlays.len = 0
+	dynamic_overlay.len = 0
 	w_class = initial(w_class)
 	update_icon()
+	user.update_inv_hands()
 
 /obj/item/weapon/switchtool/swiss_army_knife
 	name = "swiss army knife"
 	sharpness_flags = 0
 	icon_state = "s_a_k"
+	item_state = "s_a_k"
 	desc = "Crafted by the Space Swiss for everyday use in military campaigns. Nonpareil."
 
 	stored_modules = list("/obj/item/weapon/screwdriver:screwdriver" = null,
@@ -253,7 +309,7 @@
 		lighter.lit = 0
 	..()
 
-/obj/item/weapon/switchtool/swiss_army_knife/deploy(var/module)
+/obj/item/weapon/switchtool/swiss_army_knife/deploy(var/module,mob/user)
 	..()
 	if(istype(deployed, /obj/item/weapon/lighter))
 		var/obj/item/weapon/lighter/lighter = deployed
@@ -264,8 +320,8 @@
 	. = ..()
 	if(. && deployed)
 		sharpness_flags = deployed.sharpness_flags
-	
-/obj/item/weapon/switchtool/swiss_army_knife/undeploy()
+
+/obj/item/weapon/switchtool/swiss_army_knife/undeploy(mob/user)
 	. = ..()
 	sharpness_flags = 0
 
@@ -439,6 +495,7 @@
 /obj/item/weapon/switchtool/holo/deploy(var/module)
 	if(!..())
 		return FALSE
+	dynamic_overlay.len = 0
 	set_light(brightness_min)
 	hmodule = capitalize(hmodule)
 	overlays += "[hmodule]"
@@ -486,6 +543,9 @@
 /obj/item/weapon/switchtool/holo/maxed/add_module()
 	return
 
+
+
+
 /obj/item/weapon/switchtool/surgery/maxed
 	stored_modules = list(
 						"/obj/item/weapon/scalpel/laser/tier2:scalpel" = null,
@@ -515,7 +575,7 @@
 		"/obj/item/device/silicate_sprayer:silicate sprayer" = null
 		)
 
-/obj/item/weapon/switchtool/engineering/deploy(var/module)
+/obj/item/weapon/switchtool/engineering/deploy(var/module,mob/user)
 	if(!..())
 		return FALSE
 	if(iswelder(deployed))
@@ -526,7 +586,7 @@
 		var/obj/item/device/t_scanner/T = deployed
 		T.attack_self()
 
-/obj/item/weapon/switchtool/engineering/undeploy()
+/obj/item/weapon/switchtool/engineering/undeploy(mob/user)
 	if(istype(deployed, /obj/item/device/t_scanner))
 		var/obj/item/device/t_scanner/T = deployed
 		T.attack_self()

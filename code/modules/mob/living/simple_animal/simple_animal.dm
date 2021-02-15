@@ -106,6 +106,8 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 	var/is_pet = FALSE //We're somebody's precious, precious pet.
 
+	var/pacify_aura = FALSE
+
 /mob/living/simple_animal/apply_beam_damage(var/obj/effect/beam/B)
 	var/lastcheck=last_beamchecks["\ref[B]"]
 
@@ -335,7 +337,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/gib(var/animation = 0, var/meat = 1)
 	if(icon_gib)
-		flick(icon_gib, src)
+		anim(target = src, a_icon = icon, flick_anim = icon_gib, sleeptime = 15)
 
 	if(meat && meat_type)
 		for(var/i = 0; i < (src.size - meat_taken); i++)
@@ -406,10 +408,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 
 /mob/living/simple_animal/bullet_act(var/obj/item/projectile/Proj)
 	if(!Proj)
-		return
+		return PROJECTILE_COLLISION_DEFAULT
 	Proj.on_hit(src, 0)
 	adjustBruteLoss(Proj.damage)
-	return 0
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/attack_hand(mob/living/carbon/human/M as mob)
 	. = ..()
@@ -799,6 +801,31 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 	var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
 	heart.plane = ABOVE_HUMAN_PLANE
 	flick_overlay(heart, list(user.client), 20)
+
+
+/mob/living/simple_animal/make_meat(location)
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/animal/ourMeat = new meat_type(location)
+	if(!istype(ourMeat))
+		return
+	if(species_type)
+		var/mob/living/specimen = species_type
+		ourMeat.name = "[initial(specimen.name)] meat"
+		ourMeat.animal_name = initial(specimen.name)
+	else
+		ourMeat.name = "[initial(name)] meat"
+		ourMeat.animal_name = initial(name)
+	return ourMeat
+
+
+/mob/living/simple_animal/meatEndStep(mob/user)
+	if(meat_taken < meat_amount)
+		to_chat(user, "<span class='info'>You cut a chunk of meat out of \the [src].</span>")
+		return
+	to_chat(user, "<span class='info'>You butcher \the [src].</span>")
+	if(size > SIZE_TINY) //Tiny animals don't produce gibs
+		gib(meat = 0) //"meat" argument only exists for mob/living/simple_animal/gib()
+	else
+		qdel(src)
 
 
 /datum/locking_category/simple_animal

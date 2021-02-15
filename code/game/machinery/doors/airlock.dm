@@ -643,6 +643,11 @@ About the new airlock wires panel:
 			// disable/6 is not in Topic; disable/5 disables both temporary and permenant shock
 			Topic("aiDisable=5", list("aiDisable"="5"), 1)
 
+/turf/AIAltClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AIAltClick()
+		break
+
 /obj/machinery/door/airlock/AICtrlClick() // Bolts doors
 	if(allowed(usr))
 		if(locked)
@@ -657,15 +662,39 @@ About the new airlock wires panel:
 		else
 			Topic("aiDisable=7", list("aiDisable"="7"), 1)
 
+
+/turf/AIShiftClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AIShiftClick()
+		break
+
+/obj/machinery/door/airlock/AIMiddleShiftClick()  // Turn safeties on and off
+	if(allowed(usr))
+		if(!safe)
+			Topic("aiEnable=8", list("aiEnable"="8"), 1)
+		else
+			Topic("aiDisable=8", list("aiDisable"="8"), 1)
+
 /obj/machinery/door/airlock/CtrlClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
 		AICtrlClick()
 	else
 		..()
 
+/turf/AICtrlClick()
+	for(var/obj/machinery/door/airlock/A in contents)
+		A.AICtrlClick()
+		break
+
 /obj/machinery/door/airlock/ShiftClick(mob/user)
 	if(isrobot(user) || isAdminGhost(user))
 		AIShiftClick()
+	else
+		..()
+
+/obj/machinery/door/airlock/MiddleShiftClick(mob/user)
+	if(isrobot(user) || isAdminGhost(user))
+		AIMiddleShiftClick()
 	else
 		..()
 
@@ -842,6 +871,7 @@ About the new airlock wires panel:
 							to_chat(usr, "<span class='warning'>Nope.</span>")
 							return 0
 						safe = 0
+						to_chat(usr, "Door safeties disabled.")
 						investigation_log(I_WIRES, "|| safeties removed via robot interface by [key_name(usr)]")
 						add_attacklogs(usr, null, " disabled door-crush safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 					else
@@ -982,6 +1012,7 @@ About the new airlock wires panel:
 							to_chat(usr, "<span class='warning'>Nope.</span>")
 							return 0
 						safe = 1
+						to_chat(usr, "Door safeties re-enabled.")
 						investigation_log(I_WIRES, "|| safeties re-enabled via robot interface by [key_name(usr)]")
 						add_attacklogs(usr, null, " enabled safeties on [src] at [x] [y] [z]", admin_warn = FALSE)
 						src.updateUsrDialog()
@@ -1157,30 +1188,26 @@ About the new airlock wires panel:
 			"<span class='notice'>You slice through \the [src].</span>", \
 			"<span class='warning'>You hear slicing noises.</span>")
 			playsound(src, 'sound/items/Welder2.ogg', 100, 1)
-			locked = 0
-			open()
-			operating = -1
+			bashed_in(user, FALSE)
 
 	if(istype(I, /obj/item/weapon/batteringram))
 		var/obj/item/weapon/batteringram/B = I
 		if(!B.can_ram(user))
 			return
-		user.delayNextAttack(30)
-		var/breaktime = 60 //Same amount of time as drilling a wall, then a girder
+		user.delayNextAttack(3 SECONDS)
+		var/breaktime = 6 SECONDS //Same amount of time as drilling a wall, then a girder
 		if(welded)
-			breaktime += 30 //Welding buys you a little time
-		src.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
-		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
-		if(do_after(user,src, breaktime))
+			breaktime += 3 SECONDS //Welding buys you a little time
+		user.visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
+		if(do_after(user,src, breaktime, 3, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after)))
 			//Calculate bolts separtely, in case they dropped in the last 6-9 seconds.
 			if(src.locked == 1)
-				playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
-				src.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
-				if(!do_after(user, src,190)) //Same amount as drilling an R-wall, longer if it was welded
+				user.visible_message("<span class='warning'>[user] is battering the bolts!</span>", "<span class='warning'>You begin to smash the bolts...</span>")
+				if(!do_after(user, src, 19 SECONDS, 6, custom_checks = new /callback(I, /obj/item/weapon/batteringram/proc/on_do_after))) //Same amount as drilling an R-wall, longer if it was welded
 					return //If they moved, cancel us out
 				playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
-			src.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
-			bashed_in(user)
+			user.visible_message("<span class='warning'>[user] broke down the door!</span>", "<span class='warning'>You broke the door!</span>")
+			bashed_in(user, TRUE)
 		return
 
 	if (iswelder(I))
@@ -1258,10 +1285,10 @@ About the new airlock wires panel:
 	add_fingerprint(user)
 	return
 
-/obj/machinery/door/airlock/proc/bashed_in(var/mob/user)
+/obj/machinery/door/airlock/proc/bashed_in(var/mob/user, var/throw_circuit = TRUE)
 	playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 	operating = -1
-	var/obj/structure/door_assembly/DA = revert(user,user.dir)
+	var/obj/structure/door_assembly/DA = revert(user,throw_circuit ? user.dir : null)
 	DA.anchored = 0
 	DA.state = 0 //Completely smash the door here; reduce it to its lowest state, eject electronics smoked
 	DA.update_state()

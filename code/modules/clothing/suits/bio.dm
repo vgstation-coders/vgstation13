@@ -59,6 +59,7 @@
 	name = "security bio suit"
 	desc = "A suit that protects against biological contamination. It has a reinforced synthetic lining to protect against tearing."
 	icon_state = "bio_security"
+	species_fit = list(INSECT_SHAPED)
 	allowed = list(
 		/obj/item/weapon/gun/energy,
 		/obj/item/weapon/reagent_containers/spray/pepper,
@@ -106,6 +107,7 @@
 /obj/item/clothing/suit/bio_suit/beekeeping
 	name = "beekeeping suit"
 	icon_state = "bio_beekeeping"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 70, rad = 0)
 	sterility = 50
 
@@ -125,3 +127,4 @@
 	desc = "It protected doctors from the Black Death, back then. You bet your arse it's gonna help you against viruses."
 	icon_state = "plaguedoctor"
 	item_state = "bio_suit"
+	species_fit = list(INSECT_SHAPED)

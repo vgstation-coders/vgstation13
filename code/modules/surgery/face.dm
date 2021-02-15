@@ -24,8 +24,11 @@
 /datum/surgery_step/generic/cut_face
 	allowed_tools = list(
 		/obj/item/weapon/scalpel = 100,
+		/obj/item/weapon/melee/blood_dagger = 90,
 		/obj/item/weapon/kitchen/utensil/knife/large = 75,
 		/obj/item/weapon/shard = 50,
+		/obj/item/soulstone/gem = 0,
+		/obj/item/soulstone = 50,
 		)
 
 	duration = 9 SECONDS
@@ -151,6 +154,7 @@
 		target.visible_message("<span class='notice'>[target]'s face has been repaired.</span>")
 	target.op_stage.face = 0
 	target.op_stage.tooth_replace = 0
+	target.name = target.get_visible_name()
 
 /datum/surgery_step/face/cauterize/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 	var/datum/organ/external/affected = target.get_organ(target_zone)

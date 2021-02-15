@@ -277,6 +277,22 @@ var/global/list/alert_overlays_global = list()
 	if(operating)
 		return//Already doing something.
 
+	if(istype(C, /obj/item/weapon/batteringram))
+		var/obj/item/weapon/batteringram/ram = C
+		if(!ram.can_ram(user))
+			return
+		user.delayNextAttack(3 SECONDS)
+		var/breaktime = 4 SECONDS
+		visible_message("<span class='warning'>[user] is battering down [src]!</span>", "<span class='warning'>You begin to batter [src].</span>")
+		if(!do_after(user, src, breaktime, 2, custom_checks = new /callback(ram, /obj/item/weapon/batteringram/proc/on_do_after)))
+			return
+		playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
+		visible_message("<span class='warning'>[user] breaks down \the [src]!</span>", "<span class='warning'>You broke \the [src]!</span>")
+		var/obj/item/firedoor_frame/frame = new(get_turf(src))
+		frame.add_fingerprint(user)
+		qdel(src)
+		return
+
 	if(iswelder(C))
 		var/obj/item/weapon/weldingtool/W = C
 		if(W.remove_fuel(0, user))
@@ -307,13 +323,19 @@ var/global/list/alert_overlays_global = list()
 									"<span class='warning'>You hear slicing noises.</span>")
 				playsound(src, 'sound/items/Welder2.ogg', 100, 1)
 				blocked = !blocked
-				open(user)
+				force_open(user, C)
+				sleep(8)
+				blocked = TRUE
+				update_icon()
 			return
 		else
 			user.visible_message("<span class='warning'>[user] swiftly slices \the [src] open!</span>",\
 								"You slice \the [src] open in one clean cut!",\
 								"You hear the sound of a swift, sharp slice.")
-			open(user)
+			force_open(user, C)
+			sleep(8)
+			blocked = TRUE
+			update_icon()
 			return
 
 	if(C.is_wrench(user))
@@ -321,7 +343,8 @@ var/global/list/alert_overlays_global = list()
 			user.visible_message("<span class='attack'>\The [user] starts to deconstruct \the [src] with \a [C].</span>",\
 			"You begin to deconstruct \the [src] with \the [C].")
 			if(do_after(user, src, 5 SECONDS))
-				new/obj/item/firedoor_frame(get_turf(src))
+				var/obj/item/firedoor_frame/frame = new(get_turf(src))
+				frame.add_fingerprint(user)
 				qdel(src)
 			return
 		else
@@ -619,7 +642,7 @@ var/global/list/alert_overlays_global = list()
 		return 0
 	if(!isturf(user.loc))
 		return 0
-	if(!user.IsAdvancedToolUser())
+	if(!user.dexterity_check())
 		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return 0
 

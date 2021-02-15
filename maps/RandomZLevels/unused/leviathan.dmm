@@ -14,7 +14,7 @@
 "an" = (/obj/item/weapon/ectoplasm,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "ao" = (/obj/effect/decal/remains/xeno,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "ap" = (/mob/living/simple_animal/hostile/asteroid/basilisk,/turf/simulated/floor/engine/cult,/area/mine/explored)
-"aq" = (/obj/item/device/soulstone,/turf/simulated/floor/engine/cult,/area/mine/explored)
+"aq" = (/obj/item/soulstone,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "ar" = (/mob/living/simple_animal/hostile/asteroid/goliath,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "as" = (/obj/effect/gateway,/turf/simulated/floor/engine/cult,/area/mine/explored)
 "at" = (/obj/effect/decal/cleanable/blood{icon_state = "floor2"},/turf/simulated/floor/engine/cult,/area/mine/explored)

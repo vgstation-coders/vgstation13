@@ -89,6 +89,7 @@
 
 	var/list/never_deflect = list(
 		/obj/item/projectile/ion,
+		/obj/item/projectile/bullet/APS,
 	)
 
 	var/list/mech_sprites = list() //sprites alternatives for a given mech. Only have to enter the name of the paint scheme
@@ -648,8 +649,7 @@
 /obj/mecha/bullet_act(var/obj/item/projectile/Proj) //wrapper
 	src.log_message("Hit by projectile. Type: [Proj.name]([Proj.flag]).",1)
 	call((proc_res["dynbulletdamage"]||src), "dynbulletdamage")(Proj) //calls equipment
-	..()
-	return
+	return ..()
 
 /obj/mecha/proc/dynbulletdamage(var/obj/item/projectile/Proj)
 	if(prob(src.deflect_chance) && !is_type_in_list(Proj, never_deflect))
@@ -1158,6 +1158,9 @@
 		else
 			to_chat(usr, "You stop entering the exosuit.")
 
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
+
 /obj/mecha/proc/moved_inside(var/mob/living/carbon/human/H as mob)
 	if(!isnull(src.loc) && H && H.client && (H in range(1)))
 		H.reset_view(src)
@@ -1378,6 +1381,9 @@
 		dir = dir_in
 		if(G)
 			G.hud_off()
+
+	for (var/datum/faction/F in factions_with_hud_icons)
+		F.update_hud_icons()
 
 /obj/mecha/proc/shock_n_boot(var/exit = loc)
 	spark(src, 2, FALSE)

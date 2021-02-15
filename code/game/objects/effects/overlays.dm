@@ -21,11 +21,13 @@
 	icon='icons/effects/beam.dmi'
 	icon_state="b_beam"
 	mouse_opacity = 0
+	anchored = 1
 	var/tmp/atom/BeamSource
 
-/obj/effect/overlay/beam/New(turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi')
+/obj/effect/overlay/beam/New(var/turf/loc, var/lifetime = 10, var/fade = 0, var/src_icon = 'icons/effects/beam.dmi', var/icon_state = "b_beam")
 	..()
 	icon = src_icon
+	src.icon_state = icon_state
 	spawn if(fade)
 		animate(src, alpha=0, time=lifetime)
 	spawn(lifetime)
@@ -121,3 +123,5 @@
 	..()
 	pixel_x += rand(-10, 10) * PIXEL_MULTIPLIER
 	pixel_y += rand(-10, 10) * PIXEL_MULTIPLIER
+
+

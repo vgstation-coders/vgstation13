@@ -102,3 +102,23 @@
 	name = "Circuit Design (Hyperspectral Imager)"
 	id = "hyperspectral"
 	build_path = /obj/item/weapon/circuitboard/anom/hyper
+
+/datum/design/suspensionfieldgen
+	name = "Circuit Design (Suspension Field Generator)"
+	desc = "The circuit board for a suspension field generator"
+	id = "suspensionfieldgen"
+	req_tech = list(Tc_ENGINEERING = 3, Tc_POWERSTORAGE = 1, Tc_MAGNETS = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/suspension_gen
+
+/datum/design/weathercontroldevice
+	name = "Circuit Design (Weather Control Device)"
+	desc = "The circuitboard for a weather control device."
+	id = "weathercontrol"
+	req_tech = list(Tc_PROGRAMMING = 4)
+	build_type = IMPRINTER
+	materials = list(MAT_GLASS = 2000, SACID = 20)
+	category = "Console Boards"
+	build_path = /obj/item/weapon/circuitboard/weathercontrol

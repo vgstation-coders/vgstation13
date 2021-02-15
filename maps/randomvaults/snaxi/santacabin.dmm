@@ -1,0 +1,28 @@
+"a" = (/turf/unsimulated/floor/snow,/area)
+"c" = (/obj/structure/flora/grass/both,/turf/unsimulated/floor/snow,/area)
+"g" = (/obj/machinery/door/mineral/wood,/turf/simulated/floor/wood,/area/vault/cabin)
+"h" = (/obj/structure/window/reinforced{dir = 1},/obj/structure/window/reinforced{dir = 4},/obj/structure/window/reinforced{dir = 8},/obj/structure/grille,/obj/structure/window/reinforced/tinted,/turf/simulated/floor/plating,/area/vault/cabin)
+"o" = (/obj/structure/bed/chair/comfy/brown{dir = 1},/turf/simulated/floor/wood,/area/vault/cabin)
+"s" = (/obj/structure/hanging_lantern,/turf/simulated/floor/wood,/area/vault/cabin)
+"v" = (/obj/item/stack/sheet/wood,/obj/item/stack/sheet/wood,/obj/item/weapon/lighter/zippo,/turf/simulated/floor/wood,/area/vault/cabin)
+"z" = (/mob/living/simple_animal/corgi/Ian/santa,/turf/simulated/floor/wood,/area/vault/cabin)
+"A" = (/obj/structure/flora/tree/pine/xmas,/turf/unsimulated/floor/snow,/area)
+"C" = (/turf/simulated/floor/wood,/area/vault/cabin)
+"I" = (/obj/structure/closet/cabinet/snow,/turf/simulated/floor/wood,/area/vault/cabin)
+"P" = (/turf/simulated/wall/mineral/wood,/area/vault/cabin)
+"Q" = (/obj/machinery/space_heater/campfire/stove/fireplace,/turf/simulated/floor/wood,/area/vault/cabin)
+"S" = (/obj/item/clothing/head/helmet/space/santahat,/obj/item/clothing/suit/space/santa,/obj/item/weapon/storage/backpack/santabag,/turf/simulated/floor/wood,/area/vault/cabin)
+"V" = (/obj/machinery/door/airlock/external,/turf/unsimulated/floor/snow,/area/vault/cabin)
+
+(1,1,1) = {"
+aaaaaaaaaa
+aaaaaaaaaa
+aaPPPPPaAa
+AaPvQzPaaa
+aahSoChaaa
+aaPsCsPaca
+aaPPgPPaaa
+aahICshaaa
+aaPPVPPaaa
+aaaaaaaaAa
+"}

@@ -1,8 +1,8 @@
 //////////////////////////////Construct Spells/////////////////////////
 
 /spell/aoe_turf/conjure/construct
-	name = "Artificer"
-	desc = "This spell conjures a construct which may be controlled by Shades"
+	name = "Conjure Shell"
+	desc = "This spell conjures a construct shell which may then be controlled by a shade. A human is needed to capture the shade inside a soul stone, and set it inside the shell."
 	user_type = USER_TYPE_ARTIFACT
 
 	school = "conjuration"
@@ -36,8 +36,8 @@
 	. = ..()
 
 /spell/aoe_turf/conjure/floor
-	name = "Floor Construction"
-	desc = "This spell constructs a cult floor"
+	name = "Conjure Floor"
+	desc = "This spell conjures a cult floor. You can also click existing floors up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 50
@@ -75,8 +75,8 @@
 		animation = null
 
 /spell/aoe_turf/conjure/wall
-	name = "Lesser Construction"
-	desc = "This spell constructs a cult wall"
+	name = "Conjure Wall"
+	desc = "This spell conjures a cult wall. You can also click existing non-reinforced walls up to 3 tiles away to convert them."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 100
@@ -114,8 +114,8 @@
 		animation = null
 
 /spell/aoe_turf/conjure/door
-	name = "Cult Door"
-	desc = "This spell constructs a cult wall"
+	name = "Conjure Door"
+	desc = "This spell conjures a cult door. Those automatically open and close upon the passage of a cultist, construct or shade."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 100
@@ -140,10 +140,10 @@
 		qdel(animation)
 		animation = null
 
-/spell/aoe_turf/conjure/wall/reinforced
+/spell/aoe_turf/conjure/wall/reinforced//what?
 	name = "Greater Construction"
 	desc = "This spell constructs a reinforced metal wall"
-	user_type = USER_TYPE_CULT
+	user_type = USER_TYPE_CULT//why?
 
 	charge_max = 300
 	spell_flags = Z2NOCAST
@@ -153,11 +153,11 @@
 	cast_delay = 50
 	cast_sound = 'sound/items/welder.ogg'
 
-	summon_type = list(/turf/simulated/wall/r_wall)
+	summon_type = list(/turf/simulated/wall/r_wall)//it's not even a cult wall?
 
 /spell/aoe_turf/conjure/soulstone
-	name = "Summon Soulstone"
-	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space"
+	name = "Conjure Soul Stone Shard"
+	desc = "This spell reaches into Nar-Sie's realm, summoning one of the legendary fragments across time and space. An altar would let you let you conjure a perfect Soul Gem instead, producing better constructs."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 3000
@@ -167,7 +167,7 @@
 	range = 0
 	cast_delay = 30
 
-	summon_type = list(/obj/item/device/soulstone)
+	summon_type = list(/obj/item/soulstone)
 
 	hud_state = "const_stone"
 	override_base = "cult"
@@ -179,8 +179,8 @@
 	. = ..()
 
 /spell/aoe_turf/conjure/pylon
-	name = "Red Pylon"
-	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source."
+	name = "Conjure Pylon"
+	desc = "This spell conjures a fragile crystal from Nar-Sie's realm. Makes for a convenient light source, or a weak obstacle."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200
@@ -336,32 +336,6 @@
 	side2 = null
 	..()
 
-/spell/juggerdash
-	name = "Jugger-Dash"
-	desc = "Charge in a line and knock down anything in your way, even some walls."
-	user_type = USER_TYPE_CULT
-	hud_state = "const_juggdash"
-	override_base = "cult"
-	charge_max = 150
-	spell_flags = 0
-	var/dash_range = 4
-
-/spell/juggerdash/choose_targets(var/mob/user = usr)
-	return list(user)
-
-/spell/juggerdash/cast_check(var/skipcharge = FALSE, var/mob/user = usr)
-	if(user.throwing)
-		return FALSE
-	else
-		return ..()
-
-/spell/juggerdash/cast(var/list/targets, var/mob/user)
-	playsound(user, 'sound/effects/juggerdash.ogg', 100, 1)
-	var/mob/living/simple_animal/construct/armoured/perfect/jugg = user
-	jugg.crashing = null
-	var/landing = get_distant_turf(get_turf(user), jugg.dir, dash_range)
-	jugg.throw_at(landing, dash_range , 2)
-
 /spell/aoe_turf/conjure/hex
 	name = "Conjure Hex"
 	desc = "Build a lesser construct to defend an area."
@@ -403,7 +377,7 @@
 
 /spell/aoe_turf/conjure/struct
 	name = "Conjure Structure"
-	desc = "Raise a cult structure that you may then operate."
+	desc = "Raise a cult structure that you may then operate, such as an altar, a forge, or a spire."
 	user_type = USER_TYPE_CULT
 
 	charge_max = 200
@@ -451,6 +425,86 @@
 		if("Forge")
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
+
+
+/spell/aoe_turf/conjure/path_entrance
+	name = "Path Entrance"
+	desc = "Place a shortcut through the veil between this world and the other one."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 600
+	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 1
+	summon_type = list(/obj/effect/rune/blood_cult)
+
+	override_base = "cult"
+	hud_state = "const_entrance"
+	cast_sound = null
+
+	var/chosen_path = ""
+
+/spell/aoe_turf/conjure/path_entrance/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/path_entrance/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
+/spell/aoe_turf/conjure/path_entrance/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	write_rune_word(R.loc, rune_set.words["travel"])
+	write_rune_word(R.loc, rune_set.words["self"])
+	write_rune_word(R.loc, rune_set.words["other"])
+	R.one_pulse()
+
+/spell/aoe_turf/conjure/path_exit
+	name = "Path Entrance"
+	desc = "Place a shortcut through the veil between this world and the other one."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 600
+	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 1
+	summon_type = list(/obj/effect/rune/blood_cult)
+
+	override_base = "cult"
+	hud_state = "const_exit"
+	cast_sound = null
+
+	var/chosen_path = ""
+
+/spell/aoe_turf/conjure/path_exit/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/path_exit/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
+/spell/aoe_turf/conjure/path_exit/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	write_rune_word(R.loc, rune_set.words["travel"])
+	write_rune_word(R.loc, rune_set.words["other"])
+	write_rune_word(R.loc, rune_set.words["self"])
+	R.one_pulse()
+
 
 /obj/effect/artificer_underlay
 	icon = 'icons/obj/cult.dmi'

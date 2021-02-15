@@ -8,6 +8,7 @@
 	desc = "A vest designed to comfortably hold interchangable armor plates."
 	icon_state = "tactical_armor"
 	item_state = "tactical_armor"
+	species_fit = list(INSECT_SHAPED)
 	var/obj/item/weapon/armor_plate/P
 
 /obj/item/clothing/suit/armor/plate_carrier/get_armor(var/type)
@@ -68,6 +69,7 @@
 	desc = "A robust vest designed to comfortably hold interchangable armor plates."
 	icon_state = "security_armor"
 	item_state = "security_armor"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 15, laser = 25, energy = 15, bomb = 5, bio = 0, rad = 0)
 
 /obj/item/weapon/armor_plate
@@ -83,7 +85,7 @@
 /obj/item/weapon/armor_plate/proc/receive_damage(var/type, var/amount)
 	if(type == BRUTE || type == BURN)
 		health -= amount
-	playsound(get_turf(src), 'sound/effects/Glasshit.ogg', 70, 1)
+	playsound(src, 'sound/effects/Glasshit.ogg', 70, 1)
 	if(health <= 0)
 		visible_message("<span class = 'warning'>\The [src] breaks apart!</span>")
 		var/turf/T = get_turf(src)

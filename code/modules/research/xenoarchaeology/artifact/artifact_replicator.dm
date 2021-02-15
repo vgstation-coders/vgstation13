@@ -17,6 +17,10 @@
 	var/list/construction = list()
 	var/list/spawning_types = list()
 
+/obj/machinery/replicator/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/machinery/replicator/New()
 	..()
 
@@ -58,7 +62,7 @@
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/hatchet,
 		/obj/item/device/hailer,
-		/obj/item/weapon/storage/fancy/donut_box,	
+		/obj/item/weapon/storage/fancy/donut_box,
 		/obj/item/clothing/accessory/holomap_chip, //Too far?
 
 		//Toys
@@ -93,7 +97,7 @@
 		/obj/item/pizzabox/vegetable,
 		/obj/item/pizzabox/mushroom,
 		/obj/item/weapon/beartrap,
-		/obj/item/stack/package_wrap/syndie,	
+		/obj/item/stack/package_wrap/syndie,
 		/obj/item/device/handtv,
 		/obj/item/device/wormhole_jaunter,
 		/obj/item/mounted/poster,
@@ -143,6 +147,7 @@
 			explosion(get_turf(src), -1, 2, 3, 3)
 			src.investigation_log(I_ARTIFACT, "|| blew up after taking damage from || [Proj.type] || fired by [Proj.firer ? "[key_name(Proj.firer)]" : "something"].")
 			qdel(src)
+	return ..()
 
 /obj/machinery/replicator/attackby(var/obj/item/O, var/mob/user)
 	if(O.is_wrench(user))

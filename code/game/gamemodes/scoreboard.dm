@@ -80,6 +80,8 @@
 						score["disease_good"]++
 		else
 			for (var/mob/living/L in mob_list)
+				if(!L.mind) //No ballooning the negative score with infected monkeymen
+					continue
 				if (ID in L.virus2)
 					disease_spread_count++
 					if (L.stat != DEAD)
@@ -102,6 +104,8 @@
 				if(findtext(thing, "<font color='orange'>")) //I just dropped 10 IQ points from seeing this
 					score["clownabuse"]++
 
+	score["money_leaderboard"] = SSpersistence_misc.tasks[/datum/persistence_task/highscores]
+	var/list/rich_escapes = list()
 	for(var/mob/living/player in player_list)
 		if(player.stat != DEAD)
 			var/turf/T = get_turf(player)
@@ -110,27 +114,20 @@
 
 			if(istype(T.loc, /area/shuttle/escape/centcom) || istype(T.loc, /area/shuttle/escape_pod1/centcom) || istype(T.loc, /area/shuttle/escape_pod2/centcom) || istype(T.loc, /area/shuttle/escape_pod3/centcom) || istype(T.loc, /area/shuttle/escape_pod5/centcom))
 				score["escapees"]++
-//					player.unlock_medal("100M Dash", 1)
-//				player.unlock_medal("Survivor", 1)
-//				for(var/obj/item/weapon/gnomechompski/G in player.get_contents())
-//					player.unlock_medal("Guardin' gnome", 1)
-
 				var/cashscore = 0
 				var/dmgscore = 0
 
-
 				for(var/obj/item/weapon/card/id/C1 in get_contents_in_object(player, /obj/item/weapon/card/id))
 					cashscore += C1.GetBalance() //From bank account
-
 					if(istype(C1.virtual_wallet))
 						cashscore += C1.virtual_wallet.money
 
 				for(var/obj/item/weapon/spacecash/C2 in get_contents_in_object(player, /obj/item/weapon/spacecash))
 					cashscore += (C2.amount * C2.worth)
 
-//					for(var/datum/data/record/Ba in data_core.bank)
-//						if(Ba.fields["name"] == E.real_name)
-//							cashscore += Ba.fields["current_money"]
+				var/datum/record/money/record = new(player.key, player.job, cashscore)
+				rich_escapes += record
+
 				if(cashscore > score["richestcash"])
 					score["richestcash"] = cashscore
 					score["richestname"] = player.real_name
@@ -143,6 +140,8 @@
 					score["dmgestjob"] = player.job
 					score["dmgestkey"] = player.key
 
+	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
+	leaderboard.insert_records(rich_escapes)
 
 	/*
 
@@ -258,30 +257,38 @@
 			score["deadpets"]++
 
 	//Bonus Modifiers
+	//--General--
 	//var/traitorwins = score["traitorswon"]
 	var/deathpoints = score["deadcrew"] * 250 //Human beans aren't free
 	var/siliconpoints = score["deadsilicon"] * 500 //Silicons certainly aren't either
 	//var/researchpoints = score["researchdone"] * 20 //One discovered design is 20 points. You'll usually find hundreds
 	var/eventpoints = score["eventsendured"] * 200 //Events fine every 10 to 15 and are uncommon
 	var/escapoints = score["escapees"] * 100 //Two rescued human beans are worth a dead one
+
+	//--Service--
 	var/harvests = score["stuffharvested"] * 1 //One harvest is one product. So 5 wheat is 5 points
-	//var/shipping = score["stuffshipped"] * 5 //Does not work currently
-	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
 	var/meals = score["meals"] * 5 //Every item cooked (needs to fire make_food()) awards five points
 	//var/drinks = score["drinks"] * 5 //All drinks that ever existed award five points. No better way to do it yet
-	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
 	var/litter = score["litter"] //Every item listed under /obj/item/trash will cost one point if it exists
-	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
 	var/messpoints
-	//var/atmos
 	if(score["mess"] != 0)
 		messpoints = score["mess"] //If there are any messes, let's count them
+
+	//--Supply--
+	var/shipping = score["stuffshipped"] * 100 //Centcom Orders fulfilled
+	var/plasmashipped = score["plasmashipped"] * 0.5 //Plasma Sheets shipped
+	var/mining = score["oremined"] * 1 //Not actually counted at mining, but at processing. One ore smelted is one point
+
+	//--Engineering--
+	var/power = score["powerloss"] * 50 //Power issues are BAD, they mean the Engineers aren't doing their job at all
+	var/time = round(score["time"] * 0.2) //Every five seconds the station survives is one point. One minute is 12, one hour 720
+	//var/atmos
 	//if(score["airloss"] != 0)
 		//atmos = score["airloss"] * 20 //Air issues are bad, but since it's space, don't stress it too much
+
+	//--Medical--
 	//var/beneficialpoints = score["disease_good"] * 20
-
 	score["disease_vaccine"] = ""
-
 	for (var/antigen in all_antigens)
 		if (isolated_antibodies[antigen] == 1)
 			score["disease_vaccine"] += "[antigen]"
@@ -300,6 +307,10 @@
 		score["disease_vaccine_score"] = 1000
 
 	var/plaguepoints = score["disease_bad"] * 50 //A diseased crewman is half-dead, as they say, and a double diseased is double half-dead
+
+	//--Science--
+	var/artifacts = score["artifacts"] * 400 //How many large artifacts were analyzed and activated
+
 
 	/*//Mode Specific
 	if(ticker.mode.config_tag == "nuclear")
@@ -323,13 +334,15 @@
 		score["crewscore"] -= comdeadpts*/
 
 	//Good Things
-	//score["crewscore"] += shipping
+	score["crewscore"] += plasmashipped
+	score["crewscore"] += shipping
 	score["crewscore"] += harvests
 	score["crewscore"] += mining
 	score["crewscore"] += eventpoints
 	score["crewscore"] += escapoints
 	score["crewscore"] += meals
 	score["crewscore"] += time
+	score["crewscore"] += artifacts
 	//score["crewscore"] += beneficialpoints
 	score["crewscore"] += score["disease_vaccine_score"]
 	score["crewscore"] += score["disease_effects"]
@@ -348,9 +361,12 @@
 
 	//Bad Things
 	score["crewscore"] -= deathpoints
-	score["crewscore"] -= siliconpoints
+
+	var/multi = find_active_faction_by_type(/datum/faction/malf) ? 1 : -1 //Dead silicons on malf are good
+	score["crewscore"] += (siliconpoints*multi)
 	if(score["deadaipenalty"])
-		score["crewscore"] -= 1000 //Give a harsh punishment for killing the AI
+		score["crewscore"] += (1000*multi) //Give a harsh punishment for killing the AI
+
 	score["crewscore"] -= power
 	//score["crewscore"] -= atmos
 	//if(score["crewscore"] != 0) //Dont divide by zero!
@@ -504,20 +520,23 @@
 
 	<U>THE GOOD:</U><BR>
 	<B>Length of Shift:</B> [round(world.time/600)] Minutes ([round(score["time"] * 0.2)] Points)<BR>
-	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
-	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
-	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
 	<B>Shuttle Escapees:</B> [score["escapees"]] ([score["escapees"] * 100] Points)<BR>
 	<B>Random Events Endured:</B> [score["eventsendured"]] ([score["eventsendured"] * 200] Points)<BR>
-	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
+	<B>Meals Prepared:</B> [score["meals"]] ([score["meals"] * 5] Points)<BR>
+	<B>Hydroponics Harvests:</B> [score["stuffharvested"]] ([score["stuffharvested"] * 1] Points)<BR>
 	<B>Ultra-Clean Station:</B> [score["messbonus"] ? "Yes" : "No"] ([score["messbonus"] * 10000] Points)<BR>
+	<B>Plasma Shipped:</B> [score["plasmashipped"]] ([score["plasmashipped"] * 0.5] Points)<BR>
+	<B>Centcom Orders Fulfilled:</B> [score["stuffshipped"]] ([score["stuffshipped"] * 100] Points)<BR>
+	<B>Ore Smelted:</B> [score["oremined"]] ([score["oremined"] * 1] Points)<BR>
+	<B>Whole Station Powered:</B> [score["powerbonus"] ? "Yes" : "No"] ([score["powerbonus"] * 2500] Points)<BR>
 	<B>Isolated Vaccines:</B> [score["disease_vaccine"]] ([score["disease_vaccine_score"]] Points)<BR>
-	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR><BR>
+	<B>Extracted Symptoms:</B> [score["disease_extracted"]] ([score["disease_effects"]] Points)<BR>
+	<B>Analyzed & Activated Large Artifacts:</B> [score["artifacts"]] ([score["artifacts"] * 400] Points)<BR><BR>
 
 	<U>THE BAD:</U><BR>
 	<B>Dead Crewmen:</B> [score["deadcrew"]] (-[score["deadcrew"] * 250] Points)<BR>
-	<B>Destroyed Silicons:</B> [score["deadsilicon"]] (-[score["deadsilicon"] * 500] Points)<BR>
-	<B>AIs Destroyed:</B> [score["deadaipenalty"]] (-[score["deadaipenalty"] * 1000] Points)<BR>
+	<B>Destroyed Silicons:</B> [score["deadsilicon"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadsilicon"] * 500 : score["deadsilicon"] * -500] Points)<BR>
+	<B>AIs Destroyed:</B> [score["deadaipenalty"]] ([find_active_faction_by_type(/datum/faction/malf) ? score["deadaipenalty"] * 1000 : score["deadaipenalty"] * -1000] Points)<BR>
 	<B>Uncleaned Messes:</B> [score["mess"]] (-[score["mess"]] Points)<BR>
 	<B>Trash on Station:</B> [score["litter"]] (-[score["litter"]] Points)<BR>
 	<B>Station Power Issues:</B> [score["powerloss"]] (-[score["powerloss"] * 50] Points)<BR>
@@ -592,9 +611,15 @@
 		if(score["dmgestdamage"])
 			dat += "<B>Most Battered Escapee:</B> [score["dmgestname"]], [score["dmgestjob"]]: [score["dmgestdamage"]] damage ([score["dmgestkey"]])<BR>"
 		if(score["richestcash"])
-			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: [score["richestcash"]] space credits ([score["richestkey"]])<BR>"
+			dat += "<B>Richest Escapee:</B> [score["richestname"]], [score["richestjob"]]: $[score["richestcash"]] ([score["richestkey"]])<BR>"
 	else
 		dat += "The station wasn't evacuated or there were no survivors!<BR>"
+
+	dat += "<B>Department Leaderboard:</B><BR>"
+	var/list/dept_leaderboard = get_dept_leaderboard()
+	for (var/i = 1 to dept_leaderboard.len)
+		dat += "<B>#[i] - </B>[dept_leaderboard[i]] ($[dept_leaderboard[dept_leaderboard[i]]])<BR>"
+
 	dat += {"<HR><BR>
 
 	<B><U>FINAL SCORE: [score["crewscore"]]</U></B><BR>"}
@@ -637,7 +662,17 @@
 			score["rating"] = "The Pride of Science Itself"
 		if(50000 to INFINITY)
 			score["rating"] = "Nanotrasen's Finest"
-	dat += "<B><U>RATING:</U></B> [score["rating"]]"
+	dat += "<B><U>RATING:</U></B> [score["rating"]]<br><br>"
+
+	var/datum/persistence_task/highscores/leaderboard = score["money_leaderboard"]
+	dat += "<b>TOP 5 RICHEST ESCAPEES:</b><br>"
+	if(!leaderboard.data.len)
+		dat += "Nobody has set up a rich escape yet."
+	else
+		var/i = 1
+		for(var/datum/record/money/entry in leaderboard.data)
+			var/cash = num2text(entry.cash, 12)
+			dat += "[i++]) <b>$[cash]</b> by <b>[entry.ckey]</b> ([entry.role]). That shift lasted [entry.shift_duration]. Date: [entry.date]<br>"
 
 	for(var/i = 1; i <= end_icons.len; i++)
 		src << browse_rsc(end_icons[i],"logo_[i].png")

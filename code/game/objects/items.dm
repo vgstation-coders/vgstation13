@@ -40,8 +40,9 @@
 	var/cant_remove_msg = " cannot be taken off!"
 	var/cant_drop = FALSE //If 1, can't drop it from hands!
 	var/cant_drop_msg = " sticks to your hand!"
+	var/laying_pickup = FALSE //Allows things to be placed in hands while the owner of those hands is laying
 
-	var/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
+	var/list/armor = list(melee = 0, bullet = 0, laser = 0,energy = 0, bomb = 0, bio = 0, rad = 0)
 	var/armor_absorb = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 
 	var/list/allowed = null //suit storage stuff.
@@ -1211,9 +1212,8 @@ var/global/list/image/blood_overlays = list()
 	if(anchored || w_class > W_CLASS_MEDIUM + H.get_strength())
 		H.visible_message("<span class='danger'>[H] attempts to kick \the [src]!</span>", "<span class='danger'>You attempt to kick \the [src]!</span>")
 		if(prob(70))
-			to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
-
-			H.apply_damage(rand(1,4), BRUTE, pick(LIMB_RIGHT_LEG, LIMB_LEFT_LEG, LIMB_RIGHT_FOOT, LIMB_LEFT_FOOT))
+			if(H.foot_impact(src,rand(1,4)))
+				to_chat(H, "<span class='danger'>Dumb move! You strain a muscle.</span>")
 		return
 
 	var/kick_dir = get_dir(H, src)

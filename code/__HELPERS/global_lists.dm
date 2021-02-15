@@ -10,6 +10,7 @@ var/list/mixed_modes = list()							//Set when admins wish to force specific mod
 var/global/list/player_list = list()				//List of all mobs **with clients attached**. Excludes /mob/new_player
 var/global/list/mob_list = list()					//List of all mobs, including clientless
 var/global/list/living_mob_list = list()			//List of all alive mobs, including clientless. Excludes /mob/new_player
+var/global/list/cyborg_list = list()						//List of all living cyborgs, including clientless cyborgs and mommis
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless. Excludes /mob/new_player
 var/list/observers = new/list()
 var/global/list/areas = list()
@@ -23,8 +24,8 @@ var/global/list/mechas_list = list()				//list of all mechs. Used by hostile mob
 
 //Preferences stuff
 	//Underwear
-var/global/list/underwear_m = list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers") //Curse whoever made male/female underwear different colours
-var/global/list/underwear_f = list("None", "White", "Green", "Blue", "Black", "Yellow", "Thong", "Baby-Blue", "Babydoll", "Red", "Pink", "Kinky", "Freedom", "Tea", "Communist", "Cowprint")
+var/global/list/underwear_m = list("None", "White Briefs", "Green Briefs", "Blue Briefs", "Black Briefs", "Grey Briefs", "Mankini", "Love-Hearts Boxers", "Black Boxers", "Grey Boxers", "Stripey Boxers", "Kinky", "Freedom Boxers", "Tea Boxers", "Communist Boxers", "Cowprint Boxers", "Green Wifebeater", "White Wifebeater", "Black Wifebeater") //Curse whoever made male/female underwear different colours
+var/global/list/underwear_f = list("None", "White", "Green", "Blue", "Black", "Yellow", "Thong", "Baby-Blue", "Babydoll", "Red", "Pink", "Kinky", "Freedom", "Tea", "Communist", "Cowprint", "Pink Husbandbeater", "White Husbandbeater", "Black Husbandbeater")
 	//Backpacks
 var/global/list/backbaglist = list("Nothing", "Backpack", "Satchel", "Satchel Alt", "Messenger Bag")
 
@@ -75,7 +76,7 @@ var/list/diagnostic_hud_users = list() // list of all entities using a diagnosti
 var/global/list/escape_list = list()
 var/list/bots_list = list()
 
-
+var/list/radio_list = list()
 var/list/rcd_list = list()
 var/list/red_tool_list = list()
 var/list/brig_lockers = list()
@@ -93,3 +94,4 @@ var/list/janikeys_list = list()
 var/list/vehicle_list = list()
 var/list/paicard_list = list()
 var/list/effects_list = list()
+var/list/obj/structure/morgue/morgue_list = list()

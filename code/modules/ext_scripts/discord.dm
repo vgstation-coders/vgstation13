@@ -8,6 +8,9 @@
 /proc/send2admindiscord(var/msg, var/ping = FALSE)
 	send2discord(msg, "adminhelp", ping)
 
+/proc/send2ickdiscord(var/msg, var/ping = FALSE)
+	send2discord(msg, "ick", ping)
+
 // Meta argument here is the MoMMI meta argument to send to the gamenudge route.
 // AKA the MoMMI config file chooses where to send it based on this key.
 /proc/send2discord(var/msg, var/meta, var/ping = FALSE)

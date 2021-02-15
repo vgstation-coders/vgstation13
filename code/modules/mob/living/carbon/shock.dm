@@ -19,7 +19,7 @@
 	for(var/datum/reagent/R in reagents.reagent_list)
 		pain_level -= R.pain_resistance
 
-	if(src.slurring) //I'm not sure why this is here.
+	if(src.slurring) //We're drunk, dulls the pain a bit
 		pain_level -= 20
 
 	// broken or ripped off organs will add quite a bit of pain

@@ -215,7 +215,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	if(prob(25/source.quality))
 		source.visible_message("<span class = 'warning'>\The [source] shatters!</span>")
 		new /obj/item/weapon/shard(get_turf(source))
-		playsound(get_turf(source), "shatter", 70, 1)
+		playsound(source, "shatter", 70, 1)
 		qdel(source)
 
 /datum/material/diamond
@@ -331,7 +331,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 	if(!..())
 		return
 	if(prob(10*source.quality))
-		playsound(get_turf(source), 'sound/items/bikehorn.ogg', 100, 1)
+		playsound(source, 'sound/items/bikehorn.ogg', 100, 1)
 
 /datum/material/phazon
 	name="Phazon"
@@ -359,7 +359,7 @@ var/global/list/initial_materials	//Stores all the matids = 0 in helping New
 				var/atom/movable/victim = pick(target,user)
 				if(victim)
 					do_teleport(victim, get_turf(victim), 1*source.quality, asoundin = 'sound/effects/phasein.ogg')
-		if(prob(20*source.quality))
+		if(prob(20/source.quality))
 			to_chat(user, "<span class = 'warning'>\The [source] phases out of reality!</span>")
 			qdel(source)
 

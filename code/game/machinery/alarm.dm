@@ -1210,7 +1210,8 @@ FIRE ALARM
 	return src.attack_hand(user)
 
 /obj/machinery/firealarm/bullet_act(BLAH)
-	return src.alarm()
+	src.alarm()
+	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))

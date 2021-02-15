@@ -66,6 +66,10 @@ would spawn and follow the beaker, even if it is carried or thrown.
 	var/atom/holder
 	var/setup = 0
 
+/datum/effect/effect/system/Destroy()
+	holder = null
+	..()
+
 /datum/effect/effect/system/proc/set_up(n = 3, c = 0, turf/loc)
 	if(n > 10)
 		n = 10
@@ -231,7 +235,7 @@ steam.start() -- spawns the effect
 	name = "smoke"
 	icon_state = "smoke"
 	opacity = 1
-	anchored = 0
+	anchored = 1
 	var/amount = 6.0
 	var/time_to_live = 100
 
@@ -760,7 +764,7 @@ steam.start() -- spawns the effect
 		savedtemp = old_air.temperature
 		if(istype(T) && savedtemp > lowest_temperature)
 			var/datum/gas_mixture/lowertemp = old_air.remove_volume(CELL_VOLUME)
-			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/10)))
+			lowertemp.add_thermal_energy(max(lowertemp.get_thermal_energy_change(lowest_temperature), -(15*CELL_VOLUME)*max(1,lowertemp.return_temperature()/2)))
 			T.assume_air(lowertemp)
 	spawn(3)
 		process()
@@ -910,6 +914,7 @@ steam.start() -- spawns the effect
 /obj/structure/foamedmetal/bullet_act()
 	if(metal==1 || prob(50))
 		qdel(src)
+	return ..()
 
 /obj/structure/foamedmetal/attack_paw(var/mob/user)
 	attack_hand(user)

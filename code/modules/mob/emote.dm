@@ -84,9 +84,14 @@
 
 	if (emote_type == EMOTE_VISIBLE)
 		user.visible_message(msg)
+		for(var/mob/O in viewers(world.view, user))
+			if (O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
+				O.create_chat_message(user, null, message, "", list("italics"))
 	else
 		for(var/mob/O in get_hearers_in_view(world.view, user))
 			O.show_message(msg)
+			if (O.client && O?.client?.prefs.mob_chat_on_map && get_dist(O, user) < O?.client.view)
+				O.create_chat_message(user, null, message, "", list("italics"))
 
 	var/location = T ? "[T.x],[T.y],[T.z]" : "nullspace"
 	log_emote("[user.name]/[user.key] (@[location]): [message]")

@@ -9,14 +9,16 @@
 	heat_conductivity = HELMET_HEAT_CONDUCTIVITY
 	max_heat_protection_temperature = HELMET_MAX_HEAT_PROTECTION_TEMPERATURE
 	siemens_coefficient = 0.7
-	species_fit = list(GREY_SHAPED)
+	species_fit = list(GREY_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/visor
 	name = "visor helmet"
 	desc = "For when you need to protect your face from the backblast of your pepperspray"
 	icon_state = "riot_helm"
 	item_state = "riot_helm"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 50, bullet = 25, laser = 45, energy = 15, bomb = 30, bio = 0, rad = 0)
+	var/list/initial_armor = list()
 	actions_types = list(/datum/action/item_action/toggle_helmet)
 	body_parts_covered = FULL_HEAD|MASKHEADHAIR
 	body_parts_visible_override = EYES|BEARD
@@ -24,6 +26,7 @@
 
 /obj/item/clothing/head/helmet/visor/New()
 	..()
+	initial_armor = armor.Copy()
 	update_icon()
 
 /obj/item/clothing/head/helmet/visor/attack_self(mob/user)
@@ -39,7 +42,7 @@
 /obj/item/clothing/head/helmet/visor/update_icon(mob/user)
 	switch(state)
 		if(1) //FACE COVERED
-			armor = initial(armor)
+			armor = initial_armor
 			icon_state = "[initial(icon_state)]_down"
 			item_state = "[initial(item_state)]_down"
 		if(0)
@@ -97,6 +100,7 @@
 	name = "\improper Thunderdome helmet"
 	desc = "<i>'Let the battle commence!'</i>"
 	icon_state = "thunderdome"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "thunderdome"
 	armor = list(melee = 80, bullet = 60, laser = 50,energy = 10, bomb = 25, bio = 10, rad = 0)
@@ -106,6 +110,7 @@
 	name = "gladiator helmet"
 	desc = "Ave, Imperator, morituri te salutant."
 	icon_state = "gladiator"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "gladiator"
 	siemens_coefficient = 1
@@ -116,6 +121,7 @@
 	armor = list(melee = 20, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman"
 	item_state = "roman"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/roman/legionaire
@@ -124,6 +130,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 25, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "roman_c"
 	item_state = "roman_c"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS
 
 /obj/item/clothing/head/helmet/samurai
@@ -132,6 +139,7 @@
 	armor = list(melee = 40, bullet = 0, laser = 10, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "kabuto"
 	item_state = "kabuto"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/aviatorhelmet
@@ -140,6 +148,7 @@
 	armor = list(melee = 25, bullet = 0, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	item_state = "aviator_helmet"
 	icon_state = "aviator_helmet"
+	species_fit = list(INSECT_SHAPED)
 	species_restricted = list("exclude",VOX_SHAPED)
 
 /obj/item/clothing/head/helmet/piratelord
@@ -153,6 +162,7 @@
 	desc = "This helmet should protect you from russians and masked vigilantes."
 	armor = list(melee = 25, bullet = 15, laser = 20, energy = 10, bomb = 10, bio = 0, rad = 0)
 	icon_state = "biker_helmet"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/richard
@@ -160,12 +170,14 @@
 	desc = "Do you like hurting people?"
 	armor = list(melee = 0, bullet = 0, laser = 0, energy = 0, bomb = 0, bio = 0, rad = 0)
 	icon_state = "richard"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 
 /obj/item/clothing/head/helmet/megahelmet
 	name = "DRN-001 Helmet"
 	desc = "The helmet of the DRN-001 model. A simple, sturdy blue helmet."
 	icon_state = "megahelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = HEAD|EARS|MASKHEADHAIR
 	item_state = "megahelmet"
@@ -176,6 +188,7 @@
 	name = "Prototype Helmet"
 	desc = "Shiny red helmet with white accents and a built in shaded visor that does absolutely nothing, nothing but look rad as hell."
 	icon_state = "protohelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	item_state = "protohelmet"
 	siemens_coefficient = 1
@@ -184,6 +197,7 @@
 	name = "Broken Helmet"
 	desc = "The product of twelve years of work by an eccentric and brilliant loner. A helmet belonging to the perfect man; an unbeatable machine."
 	icon_state = "breakhelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "breakhelmet"
@@ -212,6 +226,7 @@
 	name = "Sniper Helmet"
 	desc = "Helmet belonging to one of the many mass produced 'Joe' type robots."
 	icon_state = "joehelmet"
+	species_fit = list(INSECT_SHAPED)
 	flags = FPRINT
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	item_state = "joehelmet"
@@ -241,6 +256,7 @@
 	desc = "A classic metal helmet."
 	icon_state = "knight_green"
 	item_state = "knight_green"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = FULL_HEAD|BEARD|MASKHEADHAIR
 	armor = list(melee = 20, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
@@ -249,20 +265,24 @@
 /obj/item/clothing/head/helmet/knight/blue
 	icon_state = "knight_blue"
 	item_state = "knight_blue"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/yellow
 	icon_state = "knight_yellow"
 	item_state = "knight_yellow"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/red
 	icon_state = "knight_red"
 	item_state = "knight_red"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/templar
 	name = "crusader helmet"
 	desc = "Deus Vult."
 	icon_state = "knight_templar"
 	item_state = "knight_templar"
+	species_fit = list(INSECT_SHAPED)
 
 /obj/item/clothing/head/helmet/knight/interrogator
 	name = "interrogator helmet"
@@ -284,6 +304,7 @@
 	desc = "A fancy helmet for a fancy policeman."
 	icon_state = "police_helmet"
 	item_state = "police_helmet"
+	species_fit = list(INSECT_SHAPED)
 	body_parts_covered = HEAD
 
 /obj/item/clothing/head/helmet/chainmail
@@ -291,6 +312,7 @@
 	desc = "chains fashioned together to be a hood to wear over your head"
 	icon_state = "chainmail_head"
 	item_state = "chainmail_head"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 15, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	flags = FPRINT
 	siemens_coefficient = 1
@@ -300,7 +322,16 @@
 	desc = "You feel arrogant and important just by wearing it."
 	icon_state = "snail_helm"
 	item_state = "snail_helm"
+	species_fit = list(INSECT_SHAPED)
 	armor = list(melee = 10, bullet = 5, laser = 2,energy = 2, bomb = 2, bio = 2, rad = 0)
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/hats.dmi', "right_hand" = 'icons/mob/in-hand/right/hats.dmi')
 	flags = FPRINT
 	siemens_coefficient = 1
+
+/obj/item/clothing/head/helmet/metrocop
+	name = "civil protection helmet"
+	desc = "Attention, ground units. Anti-citizen reported in this community."
+	icon_state = "metrocop_helmet"
+	item_state = "helmet"
+	species_fit = list(INSECT_SHAPED)
+	body_parts_covered = FULL_HEAD

@@ -15,6 +15,8 @@ mob/proc/regular_hud_updates() //Used in the life.dm of mobs that can use HUDs.
 	diagnostic_hud_users -= src
 
 proc/check_HUD_visibility(var/atom/target, var/mob/user)
+	if (user in blind_victims)//cult confusion
+		return FALSE
 	if(user.see_invisible < target.invisibility)
 		return FALSE
 	if(target.alpha <= 1)
@@ -46,7 +48,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/simple_animal/mouse/patient in range(T))
+	for(var/mob/living/simple_animal/mouse/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -72,7 +74,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 						holder.icon_state = "hudhealthy"
 			C.images += holder
 
-	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in range(T))
+	for(var/mob/living/simple_animal/hostile/necro/zombie/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(patient, M))
 			continue
 		if(!C)
@@ -85,7 +87,7 @@ proc/process_med_hud(var/mob/M, var/mob/eye)
 				holder.icon_state = "hudundead"
 			C.images += holder
 
-	for(var/mob/living/carbon/patient in range(T))
+	for(var/mob/living/carbon/patient in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if (ishuman(patient))
 			var/mob/living/carbon/human/H = patient
 			if(H.head && istype(H.head,/obj/item/clothing/head/tinfoil)) //Tinfoil hat? Move along.
@@ -162,7 +164,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/carbon/human/perp in range(T))
+	for(var/mob/living/carbon/human/perp in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(perp, M))
 			continue
 		holder = perp.hud_list[ID_HUD]
@@ -189,6 +191,9 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 					else if(istype(I,/obj/item/weapon/implant/chem))
 						holder = perp.hud_list[IMPCHEM_HUD]
 						holder.icon_state = "hud_imp_chem"
+					else if(istype(I,/obj/item/weapon/implant/holy))
+						holder = perp.hud_list[IMPHOLY_HUD]
+						holder.icon_state = "hud_imp_holy"
 					else
 						continue
 					C.images += holder
@@ -224,7 +229,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 	var/image/holder
 	var/turf/T = eye ? get_turf(eye) : get_turf(M)
 
-	for(var/mob/living/silicon/robot/borg in range(T))
+	for(var/mob/living/silicon/robot/borg in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(borg, M))
 			continue
 
@@ -246,7 +251,7 @@ proc/process_sec_hud(var/mob/M, var/advanced_mode,var/mob/eye)
 				var/charge_ratio = borg_cell.charge / borg_cell.maxcharge
 				holder.icon_state = power_cell_charge_to_icon_state(charge_ratio)
 
-	for(var/obj/mecha/exosuit in range(T))
+	for(var/obj/mecha/exosuit in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(exosuit, M))
 			continue
 
@@ -309,7 +314,7 @@ proc/process_construct_hud(var/mob/M, var/mob/eye)
 		T = get_turf(eye)
 	else
 		T = get_turf(M)
-	for(var/mob/living/simple_animal/construct/construct in range(T))
+	for(var/mob/living/simple_animal/construct/construct in range(C.view+DATAHUD_RANGE_OVERHEAD,T))
 		if(!check_HUD_visibility(construct, M))
 			continue
 

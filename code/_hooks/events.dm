@@ -70,7 +70,15 @@
 // rads: The amount of radiation.
 /lazy_event/on_irradiate
 
+// Called whenever an atom's z-level changes.
+// Seems to be invoked all over the place, actually. Someone should sort this out.
+// Arguments:
+// atom/movable/user: The atom that moved.
+// to_z: The new z.
+// from_z: The old z.
 /lazy_event/on_z_transition
+
+// TODO: docs
 /lazy_event/on_post_z_transition
 
 // Called whenever an /atom/movable moves.
@@ -151,6 +159,37 @@
 // mob/user: the guy who is bumping.
 // atom/target: the atom that's being bumped into.
 /lazy_event/on_bumped
+
+// Called when mind/transfer_to() finishes.
+// Arguments:
+// datum/mind/mind: the mind that just got transferred.
+/lazy_event/after_mind_transfer
+
+// Called when mob equips an item
+// Arguments:
+// atom/item: the item
+// slot: the slot
+/lazy_event/on_equipped
+
+// Called when mob unequippes an item
+// Arguments:
+// atom/item: the item
+/lazy_event/on_unequipped
+
+//Called when movable moves into a new turf
+// Arguments:
+// atom/movable/mover: thing that moved
+// location: turf it entered
+// oldloc: atom it exited
+/lazy_event/on_entered
+
+//Called when movable moves from a turf
+// Arguments:
+// atom/movable/mover: thing that moved
+// location: turf it exited
+// newloc: atom it is entering
+/lazy_event/on_exited
+
 
 /datum
 	/// Associative list of type path -> list(),

@@ -679,10 +679,10 @@ var/global/floorIsLava = 0
 			dat += "<A href='?src=\ref[src];f_dynamic_roundstart=1'>(Force Roundstart Rulesets)</A><br>"
 			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>(Dynamic mode options)</A><br>"
 			if (forced_roundstart_ruleset.len > 0)
-				for(var/datum/dynamic_ruleset/roundstart/rule in forced_roundstart_ruleset)
+				for(var/datum/forced_ruleset/rule in forced_roundstart_ruleset)
 					dat += {"<A href='?src=\ref[src];f_dynamic_roundstart_remove=\ref[rule]'>-> [rule.name] <-</A><br>"}
 				dat += "<A href='?src=\ref[src];f_dynamic_roundstart_clear=1'>(Clear Rulesets)</A><br>"
-			dat += "<A href='?src=\ref[src];f_dynamic_options=1>Dynamic mode options</a><br/>"
+			dat += "<A href='?src=\ref[src];f_dynamic_options=1'>Dynamic mode options</A><br/>"
 		else
 			dat += "<A href='?src=\ref[src];f_dynamic_latejoin=1'>(Force Next Latejoin Ruleset)</A><br>"
 			if (ticker && ticker.mode && istype(ticker.mode,/datum/gamemode/dynamic))
@@ -713,6 +713,7 @@ var/global/floorIsLava = 0
 		<A href='?src=\ref[src];xgm_panel=1'>XGM Panel</A><br>
 		<A href='?src=\ref[src];toggle_light=1'>Slow down lighting (Forces MC to crash, do not panic.)</A><br>
 		<hr />
+		<A href='?src=\ref[src];tag_mode=1'>Toggle tag mode! (it is currently [ticker?.tag_mode_enabled ? "On" : "Off"])</A><br>
 		"}
 
 	if(wages_enabled)
@@ -813,7 +814,7 @@ var/global/floorIsLava = 0
 			<A href='?src=\ref[src];secretsfun=striketeam-deathsquad'>Send in a Death Squad!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-ert'>Send in an Emergency Response Team!</A><BR>
 			<A href='?src=\ref[src];secretsfun=striketeam-syndi'>Send in a Syndicate Elite Strike Team!</A><BR>
-			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team! (Work in Progress!)</A><BR>
+			<A href='?src=\ref[src];secretsfun=striketeam-custom'>Send in a Custom Strike Team!</A><BR>
 			<BR>
 			<BR>
 			"}

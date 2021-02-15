@@ -190,6 +190,9 @@
 /datum/action/item_action/toggle_hood
 	name = "Toggle Hood"
 
+/datum/action/item_action/toggle_belt
+	name = "Toggle Belt"
+
 //toggle_helmet_mask has to have its own functions as to not conflict with plasmamen lights
 /datum/action/item_action/toggle_helmet_mask
 	name = "Toggle Helmet Mask"

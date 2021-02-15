@@ -280,6 +280,10 @@ proc/process_adminbus_teleport_locs()
 
 //SHOULD YOU ADD NEW ESCAPE PODS, REMEMBER TO UPDATE shuttle_controller.dm
 
+/area/shuttle/bagel
+	name = "bagel ferry"
+	icon_state = "shuttle"
+
 /area/shuttle/supply
 	name = "supply shuttle"
 	icon_state = "shuttle3"
@@ -1915,6 +1919,13 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Planet Surface"
 	icon_state = "sno2"
 
+/area/surface/snow/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		else
+			new /obj/structure/geyser/vent(T)
+
 /area/surface/blizzard
 	name = "The Blizzard"
 	icon_state = "sno"
@@ -1928,6 +1939,15 @@ proc/process_adminbus_teleport_locs()
 	name = "\improper Junk Yard"
 	icon_state = "disposal"
 	construction_zone = FALSE
+
+/area/surface/forest/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 59)
+			new /obj/structure/geyser(T)
+		if (60 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/vent(T)
 
 /area/surface/forest/deer
 	name = "\improper Enclosed Forest"
@@ -1949,6 +1969,15 @@ proc/process_adminbus_teleport_locs()
 /area/surface/mine
 	name = "\improper Surface Mine"
 	icon_state = "mine"
+
+/area/surface/outer/make_geyser(turf/T)
+	switch (rand(99))
+		if (0 to 39)
+			new /obj/structure/geyser(T)
+		if (40 to 79)
+			new /obj/structure/geyser/unstable(T)
+		else
+			new /obj/structure/geyser/critical(T)
 
 /area/surface/outer/nw
 	name = "\improper Northwest Reaches"
@@ -2810,6 +2839,8 @@ var/list/the_station_areas = list (
 		/datum/ambience/minecraft,
 		/datum/ambience/torvusmusic)
 
+/area/maintenance/engine
+	name = "Engine"
 // BEGIN Horizon
 /area/hallway/primary/foreport
 	name = "Fore Port"

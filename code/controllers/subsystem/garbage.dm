@@ -31,6 +31,26 @@ var/soft_dels = 0
 /datum/subsystem/garbage/New()
 	NEW_SS_GLOBAL(SSgarbage)
 
+/datum/subsystem/garbage/Shutdown()
+	if(!ghdel_profiling.len)
+		world.log << "There were no hard deletions this round."
+		return
+	world.log << {"
+Deletions this round:
+\tQueue length: [queue.len]
+\tDeletions count: [dels_count]
+\tSoft dels: [soft_dels]
+\tHard dels: [hard_dels]
+List of hard deletions:"}
+	for(var/thing in ghdel_profiling)
+		world.log << "\t[thing] : [ghdel_profiling[thing]]"
+	world.log << json_encode(list(
+		"queue" = queue.len,
+		"dels" = dels_count,
+		"soft_dels" = soft_dels,
+		"hard_dels" = hard_dels,
+		"hd_list" = ghdel_profiling))
+	..()
 
 /datum/subsystem/garbage/stat_entry()
 	var/msg = ""
@@ -224,11 +244,10 @@ var/soft_dels = 0
 		return
 
 	if(istype(D, /atom) && !istype(D, /atom/movable))
-		warning("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
 		del(D)
 		SSgarbage.hard_dels++
 		SSgarbage.dels_count++
-		return
+		CRASH("qdel() passed object of type [D.type]. qdel() cannot handle unmovable atoms.")
 
 	if(isnull(D.gcDestroyed))
 		// Let our friend know they're about to get fucked up.

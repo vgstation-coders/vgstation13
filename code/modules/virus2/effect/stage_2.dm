@@ -583,3 +583,126 @@
 	var/message=speech.message
 	message = uppertext(message + "!")
 	speech.message = message
+
+/datum/disease2/effect/cyborg_vomit
+	name = "Oleum Syndrome"
+	desc = "Causes the infected to internally synthesize oil and other inorganic material."
+	stage = 2
+	badness = EFFECT_DANGER_ANNOYING
+	restricted = 2
+
+/datum/disease2/effect/cyborg_vomit/activate(var/mob/living/mob)
+	if(prob(90))		//90% chance for just oil
+		mob.visible_message("<span class='danger'>[mob.name] vomits up some oil!</span>")
+		mob.adjustToxLoss(-3)
+		var/obj/effect/decal/cleanable/blood/oil/O = new /obj/effect/decal/cleanable/blood/oil(get_turf(mob))
+		playsound(O, 'sound/effects/splat.ogg', 50, 1)
+		mob.Stun(5)
+	else				//10% chance for a random bot!
+		to_chat(mob, "<span class='danger'>You feel like something's about to burst out of you!</span>")
+		sleep(100)
+		var/list/possible_bots = list(
+			/obj/machinery/bot/cleanbot,
+			/obj/machinery/bot/cleanbot/roomba,
+			/obj/machinery/bot/bloodbot,
+			/obj/machinery/bot/medbot,
+			/obj/machinery/bot/secbot,
+			/obj/machinery/bot/floorbot,
+			/obj/machinery/bot/buttbot
+		)
+		var/chosen_bot = pick(possible_bots)
+		var/obj/machinery/bot/B = new chosen_bot(get_turf(mob))
+		new /obj/effect/decal/cleanable/blood(get_turf(mob))
+		mob.visible_message("<span class ='danger'>A [B.name] bursts out of [mob.name]'s mouth!</span>")
+		playsound(B, 'sound/effects/splat.ogg', 50, 1)
+		mob.audible_scream()
+		mob.adjustBruteLoss(15)
+		mob.Stun(10)
+
+
+/datum/disease2/effect/mommi_shrink
+	name = "Dysplasia Syndrome"
+	desc = "Rapidly restructures the body of the infected, causing them to shrink in size."
+	badness = EFFECT_DANGER_FLAVOR
+	stage = 2
+	restricted = 2
+	var/activated = 0
+
+/datum/disease2/effect/mommi_shrink/activate(var/mob/living/mob)
+	if(activated)
+		return
+	to_chat(mob, "<span class = 'warning'>You feel small...</span>")
+	var/matrix/M = matrix()
+	M.Scale(1,0.7)
+	mob.transform = M
+
+	mob.pixel_y = -4 * PIXEL_MULTIPLIER
+
+	mob.pass_flags |= PASSTABLE
+
+	activated = 1
+
+/datum/disease2/effect/mommi_shrink/deactivate(var/mob/living/mob)
+	to_chat(mob, "<span class = 'warning'>You feel like an adult again.</span>")
+	var/matrix/M = matrix()
+	M.Scale(1,1)
+	mob.transform = M
+
+	mob.pixel_y = 0 * PIXEL_MULTIPLIER
+
+	mob.pass_flags &= ~PASSTABLE
+	activated = 0
+
+/datum/disease2/effect/xenomorph_babel
+	name = "Mega Laryngitis"
+	desc = "Warps the vocal cords of the infected, resulting in normal speech turning into incoherent hisses. In addition, the infected loses the ability to understand normal language."
+	badness = EFFECT_DANGER_HINDRANCE
+	stage = 2
+	restricted = 2
+	var/list/original_languages = list()
+	var/old_default
+	var/activated = 0
+
+/datum/disease2/effect/xenomorph_babel/activate(var/mob/living/mob)
+	if(activated)
+		return
+	for(var/datum/language/L in mob.languages)
+		original_languages += L.name
+		mob.remove_language(L.name)
+
+	mob.add_language(LANGUAGE_XENO)
+	old_default = mob.default_language
+	mob.default_language = mob.languages[1]
+
+	to_chat(mob, "<span class='warning'>You feel an off-sensation in your throat.</span>")
+	activated = 1
+
+/datum/disease2/effect/xenomorph_babel/deactivate(var/mob/living/mob)
+	if(original_languages.len)
+		for(var/forgotten in original_languages)
+			mob.add_language(forgotten)
+		mob.remove_language(LANGUAGE_XENO)
+		mob.default_language = old_default
+
+		to_chat(mob, "<span class='warning'>Your throat feels normal again.</span>")
+	activated = 0
+
+
+/datum/disease2/effect/wendigo_vomit
+	name = "Gastrointestinal Inflammation"
+	desc = "Inflames the GI tract of the infected, causing relentless vomitting."
+	stage = 2
+	badness = EFFECT_DANGER_HINDRANCE
+	restricted = 2
+	chance = 6
+	max_chance = 12
+
+/datum/disease2/effect/wendigo_vomit/activate(var/mob/living/mob)
+	if(!ishuman(mob))
+		return
+
+	var/mob/living/carbon/human/H = mob
+	if(prob(33))
+		H.vomit(instant = 1)
+	else
+		H.vomit()

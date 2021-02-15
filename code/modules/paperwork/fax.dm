@@ -1,7 +1,7 @@
 //Updated by Cutelildick
 
 var/list/obj/machinery/faxmachine/allfaxes = list()
-var/list/alldepartments = list("Central Command")
+var/list/alldepartments = list("Central Command", "Nanotrasen HR")
 
 /obj/machinery/faxmachine
 	name = "fax machine"
@@ -97,7 +97,7 @@ var/list/alldepartments = list("Central Command")
 			dat += "<a href='byond://?src=\ref[src];remove=1'>Remove Paper</a><br><br>"
 
 			if(faxtime>world.time)
-				dat += "<b>Transmitter arrays realigning. Please stand by for [(faxtime - world.time) / 10] second\s.</b><br>"
+				dat += "<b>Transmitter arrays realigning. Please stand by for [round((faxtime - world.time) / 10)] second\s.</b><br>"
 
 			else
 				dat += "<a href='byond://?src=\ref[src];send=1'>Send</a><br>"
@@ -133,7 +133,22 @@ var/list/alldepartments = list("Central Command")
 				if(!map.linked_to_centcomm)
 					to_chat(usr, "<span class='danger'>\The [src] displays a 404 error: Central Command not found.</span>")
 					return
-				Centcomm_fax(tofax, tofax.name, usr, dpt)
+				if(dpt == "Central Command")
+					Centcomm_fax(tofax, tofax.name, usr, dpt)
+				else
+					if(findtext(tofax.stamps,"magnetic"))
+						flick("faxreceive",src)
+						playsound(loc, "sound/effects/fax.ogg", 50, 1)
+						spawn(2 SECONDS)
+							var/obj/item/RW
+							if(findtext(tofax.name,"Demotion"))
+								RW = new /obj/item/demote_chip(loc)
+							if(findtext(tofax.name,"Commendation"))
+								RW = new /obj/item/mounted/poster(loc,new /datum/poster/special/goldstar)
+							if(RW)
+								log_game("[usr]/([usr.ckey]) received [RW.name] as an automated fax response.") //born to code, forced to log.
+					else
+						Centcomm_fax(tofax, tofax.name, usr, dpt)
 			else
 				SendFax(tofax.info, tofax.name, usr, dpt, 0, tofax.display_x, tofax.display_y)
 			log_game("([usr]/([usr.ckey]) sent a fax titled [tofax] to [dpt] - contents: [tofax.info]")
@@ -172,13 +187,9 @@ var/list/alldepartments = list("Central Command")
 		if ( (!( authenticated ) && (scan)) )
 			if (check_access(scan))
 				authenticated = 1
-				if(access_lawyer in scan.access)
-					alldepartments += "Nanotrasen HR"
 
 	if(href_list["logout"])
 		authenticated = 0
-		if(access_lawyer in scan.access)
-			alldepartments -= "Nanotrasen HR"
 
 	updateUsrDialog()
 
@@ -237,7 +248,7 @@ var/list/alldepartments = list("Central Command")
 			P.name = "[sentname]"
 			P.info = "[sent.info]"
 			playsound(fax.loc, "sound/effects/fax.ogg", 50, 1)
-	
+
 
 /proc/SendFax(var/sent, var/sentname, var/mob/Sender, var/dpt, var/centcomm, var/xdim, var/ydim)
 

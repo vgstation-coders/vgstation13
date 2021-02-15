@@ -523,6 +523,8 @@
 		/obj/item/weapon/coin/silver,
 		/obj/item/weapon/coin/uranium,
 		/obj/item/weapon/dice,
+		/obj/item/weapon/disk,
+		/obj/item/weapon/disk/hdd,
 		/obj/item/weapon/handcuffs,
 		/obj/item/weapon/handcuffs/cable,
 		/obj/item/weapon/hatchet,
@@ -918,6 +920,7 @@
 	icon_state = "mob_wolf"
 	amount = 7
 	to_spawn = list(
+		/mob/living/simple_animal/hostile/wolf/pliable,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,
 		/mob/living/simple_animal/hostile/wolf,

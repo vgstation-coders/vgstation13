@@ -16,6 +16,14 @@
 	my_artifact.lazy_register_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 	mode = rand(0,2)
+	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
+	switch(mode)
+		if (COIN)
+			my_artifact.desc += " There appears to be a coin slot [where]."
+		if (CREDIT)
+			my_artifact.desc += " There appears to be what looks like a bill acceptor [where]."
+		if (BANK_CARD)
+			my_artifact.desc += " There appears to be a card reader [where]."
 	reconnect_database()
 
 /datum/artifact_trigger/pay2use/proc/reconnect_database()
@@ -38,10 +46,14 @@
 		if(my_effect.activated)
 			Triggered(0, "NOMONEY", 0)
 
-/datum/artifact_trigger/pay2use/proc/owner_attackhand(var/list/event_args, var/source)
-	var/toucher = event_args[1]
-	var/context = event_args[2]
 
+/datum/artifact_trigger/pay2use/proc/owner_bumped(mob/user, atom/target)
+	activate(user, "BUMPED")
+
+/datum/artifact_trigger/pay2use/proc/owner_attackhand(mob/user, atom/target)
+	activate(user, "TOUCH")
+
+/datum/artifact_trigger/pay2use/proc/activate(mob/user, context)
 	if(context != "TOUCH" || mode != BANK_CARD)
 		return
 
@@ -65,7 +77,7 @@
 		dat += "1 Hour - $500 - "
 		dat += "<A href='?src=\ref[src];pay1h=1'>Pay</a><BR>"
 
-		var/datum/browser/popup = new(toucher, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
+		var/datum/browser/popup = new(user, "\ref[src]", "[my_artifact.artifact_id]", 575, 400, src)
 		popup.set_content(dat)
 		popup.open()
 

@@ -196,7 +196,7 @@ var/list/virusdishes = list()
 
 /obj/item/weapon/virusdish/attack_hand(var/mob/user)
 	..()
-	infection_attempt(user)
+	infection_attempt(user,contained_virus,"attack_hand infection")
 
 /obj/item/weapon/virusdish/attack_self(var/mob/user)
 	open = !open
@@ -211,7 +211,7 @@ var/list/virusdishes = list()
 		if (contained_virus)
 			contained_virus.log += "<br />[timestamp()] Containment Dish closed by [key_name(user)]."
 		processing_objects.Remove(src)
-	infection_attempt(user)
+	infection_attempt(user,contained_virus,"attack_self infection")
 
 /obj/item/weapon/virusdish/attackby(var/obj/item/weapon/W as obj,var/mob/living/carbon/user as mob)
 	..()
@@ -351,7 +351,7 @@ var/list/virusdishes = list()
 		dish.contained_virus = contained_virus.getcopy()
 	dish.last_openner = key_name(user)
 	src.transfer_fingerprints_to(dish)
-	playsound(get_turf(src), "shatter", 70, 1)
+	playsound(src, "shatter", 70, 1)
 	var/image/I1
 	var/image/I2
 	if (contained_virus)
@@ -442,7 +442,38 @@ var/list/virusdishes = list()
 		to_chat(user, "<span class='info'>Strength: [effect.multiplier]</span>")
 		to_chat(user, "<span class='info'>Occurrence: [effect.chance]</span>")
 
+/////////////TRAITOR STUFF//////////////////
+
+/obj/item/weapon/storage/lockbox/diskettebox/syndisease/New()
+	..()
+	new /obj/item/weapon/disk/disease/invisible(src)
+
+	var/list/potential_deadly_symptoms = list()
+
+	for (var/diseasetype in subtypesof(/datum/disease2/effect))
+		var/datum/disease2/effect/E = diseasetype
+		if (initial(E.restricted))
+			continue
+		if (initial(E.stage) == 4 && initial(E.badness) == EFFECT_DANGER_DEADLY)
+			potential_deadly_symptoms += diseasetype
+
+	for(var/i = 1 to 3)
+		if (potential_deadly_symptoms.len < 1)
+			break
+		var/obj/item/weapon/disk/disease/syndisk = new(src)
+		var/effect_type = pick(potential_deadly_symptoms)
+		syndisk.effect = new effect_type()
+		syndisk.name = "\improper [syndisk.effect.name] GNA disk (Stage: [syndisk.effect.stage])"
+		syndisk.stage = syndisk.effect.stage
+		potential_deadly_symptoms -= effect_type
+	update_icon()
+
+/obj/item/weapon/disk/disease/invisible
+	name = "\improper Waiting Syndrome GNA disk (Stage 1)"
+	effect = new /datum/disease2/effect/invisible
+	stage = 1
+
 /obj/item/weapon/disk/disease/zombie
-	name = "\improper Stubborn Brain Syndrome (Stage 4)"
+	name = "\improper Stubborn Brain Syndrome GNA disk (Stage 4)"
 	effect = new /datum/disease2/effect/zombie
 	stage = 4

@@ -29,7 +29,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 			continue
 		var/atom/movable/AM = new path()
 		manifest += "<li>[AM.name]</li>"
-		AM.forceMove(null)	//just to make sure they're deleted by the garbage collector
+		qdel(AM)
 	manifest += "</ul>"
 
 // Called after a crate containing the items specified by this datum is created
@@ -356,7 +356,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/weapon/reagent_containers/glass/paint/green,
 	/obj/item/weapon/reagent_containers/glass/paint/blue,
 	/obj/item/weapon/reagent_containers/glass/paint/yellow,
-	/obj/item/weapon/reagent_containers/glass/paint/violet,
+	/obj/item/weapon/reagent_containers/glass/paint/purple,
 	/obj/item/weapon/reagent_containers/glass/paint/black,
 	/obj/item/weapon/reagent_containers/glass/paint/white,
 	/obj/item/weapon/reagent_containers/glass/paint/remover,
@@ -435,6 +435,17 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 25
 	containertype = /obj/structure/closet/crate/basic
 	containername = "airbag crate"
+	group = "Supplies"
+
+/datum/supply_packs/religious//you can only order default-looking bibles for now
+	name = "Religious Paraphernelia"
+	contains = list(/obj/item/weapon/reagent_containers/food/drinks/bottle/holywater,
+					/obj/item/weapon/storage/bible,
+					/obj/item/weapon/storage/fancy/incensebox/harebells,
+					/obj/item/weapon/thurible)
+	cost = 100
+	containertype = /obj/structure/closet/crate/basic
+	containername = "religious stuff crate"
 	group = "Supplies"
 
 //////CLOTHING//////
@@ -730,7 +741,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/basic
 	containername = "contacts crate"
 	group = "Clothing"
-	
+
 /datum/supply_packs/security_formal_wear
 	var/Blue = list(/obj/item/clothing/suit/secdressjacket/hos_blue,
 					/obj/item/clothing/suit/secdressjacket/warden_blue,
@@ -762,7 +773,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "Security Formalwear"
 	access = list(access_security)
 	group = "Clothing"
-	
+
 /datum/supply_packs/security_formal_wear/New()
 	selection_from = list(Blue, Navy, Tan)
 
@@ -1074,6 +1085,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_armory)
 	group = "Security"
 
+/datum/supply_packs/holy
+	name = "Holy implants"
+	contains = list (/obj/item/weapon/storage/lockbox/holy)
+	cost = 60
+	containertype = /obj/structure/closet/crate/secure/basic
+	containername = "holy implant crate"
+	access = list(access_armory)
+	group = "Security"
+
 /datum/supply_packs/ballistic
 	name = "Ballistic gear"
 	contains = list(/obj/item/clothing/suit/armor/bulletproof,
@@ -1351,9 +1371,19 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/weapon/toy/xmas_cracker,
 					/obj/item/clothing/head/christmas/santahat/red,
 					/obj/item/clothing/head/christmas/santahat/green,
+					/obj/item/clothing/head/christmas/santahat/blue,
 					/obj/item/clothing/suit/jumper/christmas/red,
 					/obj/item/clothing/suit/jumper/christmas/green,
 					/obj/item/clothing/suit/jumper/christmas/blue,
+					/obj/item/clothing/under/onesie,
+					/obj/item/clothing/under/onesie/blue,
+					/obj/item/clothing/under/onesie/red,
+					/obj/item/clothing/under/onesie/pink,
+					/obj/item/clothing/under/onesie/white,
+					/obj/item/clothing/under/onesie/grey,
+					/obj/item/clothing/under/onesie/black,
+					/obj/item/clothing/under/onesie/redgreen,
+					/obj/item/clothing/under/onesie/bluenavy,
 					/obj/item/clothing/mask/scarf/red,
 					/obj/item/clothing/mask/scarf/blue,
 					/obj/item/clothing/mask/scarf/green,
@@ -2497,3 +2527,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/stackopacks
 	containername = "Team Security stack of packs"
 	group = "Vending Machine packs"
+
+/datum/supply_packs/telecomms
+	name = "Telecommunications Parts stack of packs"
+	contains = list(/obj/structure/vendomatpack/telecomms, /obj/structure/vendomatpack/telecomms)
+	cost = 50
+	containertype = /obj/structure/stackopacks
+	containername = "Telecommunications Parts stack of packs"
+	group = "Vending Machine packs"
+

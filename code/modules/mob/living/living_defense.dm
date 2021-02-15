@@ -66,7 +66,7 @@
 	var/absorb = run_armor_check(def_zone, P.flag, armor_penetration = P.armor_penetration)
 	if(absorb >= 100)
 		P.on_hit(src,2)
-		return 2
+		return PROJECTILE_COLLISION_BLOCKED
 	if(!P.nodamage)
 		var/damage = run_armor_absorb(def_zone, P.flag, P.damage)
 		apply_damage(damage, P.damage_type, def_zone, absorb, P.is_sharp(), used_weapon = P)
@@ -75,7 +75,7 @@
 	if(istype(P, /obj/item/projectile/beam/lightning))
 		if(P.damage >= 200)
 			src.dust()
-	return absorb
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/hitby(atom/movable/AM as mob|obj,var/speed = 5,var/dir)//Standardization and logging -Sieve
 	. = ..()
@@ -176,7 +176,15 @@
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)
-	var/damage = rand(1, 5)
+	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
+	var/damage = 0
+	var/attacktype = "bitten"
+
+	if(T?.amount > 0)
+		damage = rand(1, 5)
+	else //no teeth time to GUM
+		damage = 1
+		attacktype = "gummed"
 
 	if(M.organ_has_mutation(LIMB_HEAD, M_BEAK)) //Beaks = stronger bites
 		damage += 4
@@ -184,13 +192,13 @@
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='borange'>\The [M] has attempted to bite \the [src]!</span>")
-		add_logs(M, src, "miss-bit", admin=0, object=null, addition=null)
+		add_logs(M, src, "miss-bit", admin=1, object=null, addition=null)
 		return 0
 
 	playsound(loc, 'sound/weapons/bite.ogg', 50, 1, -1)
-	src.visible_message("<span class='danger'>\The [M] has bitten \the [src]!</span>", "<span class='userdanger'>You were bitten by \the [M]!</span>")
+	src.visible_message("<span class='danger'>\The [M] has [attacktype] \the [src]!</span>", "<span class='userdanger'>You were [attacktype] by \the [M]!</span>")
 
-	add_logs(M, src, "bit", admin=0, object=null, addition="DMG: [damage]")
+	add_logs(M, src, "bit", admin=1, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
 	return
 
@@ -226,7 +234,7 @@
 	if(!damage)
 		playsound(loc, 'sound/weapons/punchmiss.ogg', 25, 1, -1)
 		visible_message("<span class='borange'>\The [M] attempts to kick \the [src]!</span>")
-		add_logs(M, src, "miss-kicked", admin=0, object=null, addition=null)
+		add_logs(M, src, "miss-kicked", admin=1, object=null, addition=null)
 		return 0
 
 	//Handle shoes
@@ -244,7 +252,7 @@
 	if(M.size != size) //The bigger the kicker, the more damage
 		damage = max(damage + (rand(1,5) * (1 + M.size - size)), 0)
 
-	add_logs(M, src, "kicked", admin=0, object=null, addition="DMG: [damage]")
+	add_logs(M, src, "kicked", admin=1, object=null, addition="DMG: [damage]")
 	adjustBruteLoss(damage)
 
 /mob/living/proc/near_wall(var/direction,var/distance=1)

@@ -12,6 +12,11 @@
 /obj/item/weapon/gun/energy/taser/isHandgun()
 	return TRUE
 
+/obj/item/weapon/gun/energy/taser/ricochet
+	name = "ricochet taser gun"
+	desc = "The nightmare-creation of Alcatraz IV. Who let it free?"
+	projectile_type = "/obj/item/projectile/ricochet/taser"
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
@@ -109,6 +114,7 @@
 	w_type = RECYK_ELECTRONIC
 	origin_tech = Tc_COMBAT + "=2;" + Tc_MAGNETS + "=2;" + Tc_SYNDICATE + "=5"
 	silenced = 1
+	fire_volume = 10
 	fire_sound = 'sound/weapons/ebow.ogg'
 	projectile_type = "/obj/item/projectile/energy/bolt"
 	cell_type = "/obj/item/weapon/cell/crap"
@@ -208,7 +214,7 @@
 /obj/item/weapon/gun/energy/shotgun/examine(mob/user)
 	..()
 	if(is_holder_of(user, src) && !user.incapacitated())
-		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode.</span>")
+		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode. Toggle with alt-click.</span>")
 
 /obj/item/weapon/gun/energy/shotgun/attack_self(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())

@@ -367,6 +367,10 @@
 	hitsound_added = 'sound/weapons/slice.ogg'
 	attack_verb_override = "claws"
 
+/obj/item/clothing/gloves/warping_claws/Destroy()
+	new /datum/artifact_postmortem_data(src)
+	..()
+
 /obj/item/clothing/gloves/warping_claws/dexterity_check()
 	return FALSE
 
@@ -397,7 +401,7 @@
 	if(proximity && istype(A, /turf/unsimulated/mineral))
 		var/turf/unsimulated/mineral/M = A
 		if(do_after(user, A, max(M.minimum_mine_time,4 SECONDS*M.mining_difficulty)))
-			playsound(get_turf(src), hitsound_added, 100, 1, vary = 0)
+			playsound(src, hitsound_added, 100, 1, vary = 0)
 			user.do_attack_animation(M, src)
 			M.GetDrilled(0)
 

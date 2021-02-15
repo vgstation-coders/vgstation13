@@ -249,6 +249,23 @@
 
 
 
+/obj/effect/landmark/corpse/syndicateexec
+    name = "Syndicate Executive"
+    corpseuniform = /obj/item/clothing/under/syndicate/executive
+    corpsesuit = /obj/item/clothing/suit/storage/syndicateexec
+    corpseshoes = /obj/item/clothing/shoes/swat
+    corpsehelmet = /obj/item/clothing/head/beret/centcom
+    corpseid = 1
+    corpseidjob = "Executive"
+    corpseidaccess = "Syndicate"
+
+/obj/effect/landmark/corpse/syndicateexec/space
+    corpsesuit =  /obj/item/clothing/suit/space/rig/syndicate_elite
+    corpsemask = /obj/item/clothing/mask/gas/syndicate
+    corpseback = /obj/item/weapon/tank/jetpack/oxygen
+
+
+
 /////////////////Crew//////////////////////
 
 /obj/effect/landmark/corpse/assistant
@@ -544,7 +561,7 @@
 	corpseidaccess = "Station Engineer"
 
 /obj/effect/landmark/corpse/engineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 
@@ -591,7 +608,7 @@
 	corpseidaccess = "Chief Engineer"
 
 /obj/effect/landmark/corpse/chiefengineer/rig
-	corpsesuit = /obj/item/clothing/suit/space/rig/elite
+	corpsesuit = /obj/item/clothing/suit/space/rig/engineer/elite
 	corpseback = /obj/item/weapon/tank/oxygen
 	corpsemask = /obj/item/clothing/mask/breath
 

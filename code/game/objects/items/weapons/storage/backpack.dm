@@ -34,8 +34,9 @@
 	storage_slots = 7
 	fits_max_w_class = W_CLASS_LARGE
 	max_combined_w_class = 400 // can store a ton of shit!
+	flags = MECH_SCAN_FAIL
 
-/obj/item/weapon/storage/backpack/santabag/attack_hand(user)
+/obj/item/weapon/storage/backpack/santabag/admin/attack_hand(user)
 	if(contents.len < storage_slots)
 		var/empty_slots = clamp((storage_slots - contents.len),0,storage_slots)
 		to_chat(user,"<span class='notice'>You look into the bag, and find it filled with [empty_slots] new presents!</span>")

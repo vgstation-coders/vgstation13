@@ -354,6 +354,7 @@
 	icon = 'icons/obj/janitor.dmi'
 	icon_state = "bucket"
 	item_state = "bucket"
+	species_fit = list(INSECT_SHAPED)
 	starting_materials = list(MAT_IRON = 200)
 	w_type = RECYK_METAL
 	w_class = W_CLASS_MEDIUM

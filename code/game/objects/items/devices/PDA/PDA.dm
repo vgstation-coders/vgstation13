@@ -207,6 +207,9 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	PDAs += src
 	if(default_cartridge)
 		cartridge = new default_cartridge(src)
+		// PDA being given out to people during the cuck cube
+		if(ticker && ticker.current_state >= GAME_STATE_SETTING_UP)
+			cartridge.initialize()
 	new /obj/item/weapon/pen(src)
 	MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
 	DD = text2num(time2text(world.timeofday, "DD")) 	// get the day
@@ -215,6 +218,11 @@ var/global/list/obj/item/device/pda/PDAs = list()
 	currentevent3 = pick(currentevents3)
 	onthisday = pick(history)
 	didyouknow = pick(facts)
+
+/obj/item/device/pda/initialize()
+	. = ..()
+	if (cartridge)
+		cartridge.initialize()
 
 /obj/item/device/pda/medical
 	name = "Medical PDA"
@@ -2120,7 +2128,6 @@ var/global/list/obj/item/device/pda/PDAs = list()
 						to_chat(U, "<span class='notice'>ERROR: Messaging server is not responding.</span>")
 					else
 						if (!P.toff && cartridge:shock_charges > 0)
-							cartridge:shock_charges--
 
 							var/difficulty = 0
 
@@ -2133,19 +2140,31 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								difficulty += P.cartridge.access_manifest * 2
 							else
 								difficulty += 2
-
-							if(prob(difficulty * 12) || (P.hidden_uplink))
-								U.show_message("<span class='warning'>An error flashes on your [src].</span>", 1)
-							else if (prob(difficulty * 3))
-								U.show_message("<span class='warning'>Energy feeds back into your [src]!</span>", 1)
+							
+							if(P.hidden_uplink)
+								U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
 								U << browse(null, "window=pda")
-								explode()
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge but failed, blowing themselves up", 1)
+								create_message(null, P, null, null, pick(syndicate_code_phrase)) //friendly fire
+								log_admin("[key_name(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed")
+								message_admins("[key_name_admin(U)] attempted to blow up syndicate [P] with the Detomatix cartridge but failed", 1)
+								cartridge:shock_charges--
+							else if (!P.detonate || prob(difficulty * 2))
+								U.show_message("<span class='warning'>An error flashes on your [src]; [pick("Encryption","Connection","Verification","Handshake","Detonation","Injection")] error!</span>", 1)
+								U << browse(null, "window=pda")
+								var/list/garble = list()
+								var/randomword
+								for(garble = list(), garble.len<10,garble.Add(randomword))
+									randomword = pick("stack.Insert","KillProcess(","-DROP TABLE","kernel = "," / 0",";",";;","{","(","((","<"," ","-", "null", " * 1.#INF")
+								var/message = english_list(garble, "", "", "", "")
+								create_message(null, P, null, null, message) //the jig is up
+								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge but failed")
+								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge but failed", 1)
+								cartridge:shock_charges--
 							else
 								U.show_message("<span class='notice'>Success!</span>", 1)
-								log_admin("[key_name(U)] just attempted to blow up [P] with the Detomatix cartridge and succeeded")
-								message_admins("[key_name_admin(U)] just attempted to blow up [P] with the Detomatix cartridge and succeded", 1)
+								log_admin("[key_name(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded")
+								message_admins("[key_name_admin(U)] attempted to blow up [P] with the Detomatix cartridge and succeeded", 1)
+								cartridge:shock_charges--
 								P.explode()
 			else
 				U.unset_machine()
@@ -2280,12 +2299,16 @@ var/global/list/obj/item/device/pda/PDAs = list()
 			id.forceMove(get_turf(src))
 		id = null
 
-/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P,var/multicast_message = null, obj/item/device/pda/reply_to)
+/obj/item/device/pda/proc/create_message(var/mob/living/U = usr, var/obj/item/device/pda/P, var/multicast_message = null, obj/item/device/pda/reply_to, var/overridemessage)
 	if(!reply_to)
 		reply_to = src
 	if (!istype(P)||P.toff)
 		return
-	var/t = multicast_message
+	var/t = null
+	if(overridemessage)
+		t = overridemessage
+	if(multicast_message)
+		t = multicast_message
 	if(!t)
 		t = input(U, "Please enter message", "Message to [P]", null) as text|null
 		t = copytext(parse_emoji(sanitize(t)), 1, MAX_MESSAGE_LEN)
@@ -2586,8 +2609,6 @@ obj/item/device/pda/AltClick()
 					return dev_analys.preattack(A, user, 1)
 
 /obj/item/device/pda/proc/explode() //This needs tuning.
-	if(!src.detonate)
-		return
 	var/turf/T = get_turf(src.loc)
 
 	if (ismob(loc))
@@ -2614,6 +2635,8 @@ obj/item/device/pda/AltClick()
 		pai = null
 
 	if(cartridge)
+		if (cartridge.radio)
+			cartridge.radio.hostpda = null
 		qdel(cartridge)
 		cartridge = null
 

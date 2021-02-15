@@ -81,6 +81,9 @@
 
 /area/vault/syndiecargo
 
+/area/vault/black_site_prism
+	jammed = 2
+
 //prison vault
 
 /area/vault/prison_ship
@@ -451,7 +454,6 @@
 
 /obj/item/projectile/beam/retro/weak
 	damage = 15
-	linear_movement = 0
 
 /turf/simulated/floor/engine/old
 	icon_state = "engineold"
@@ -871,4 +873,4 @@
 /obj/machinery/turret/russian
 	faction = "russian"
 	lasers = 1
-	lasertype = 2
+	lasertype = /obj/item/projectile/beam/heavylaser

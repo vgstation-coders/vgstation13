@@ -91,7 +91,7 @@
 	if(!isDead() && (istype(W, /obj/item/weapon/reagent_containers/food/snacks/grown/apple) || (istype (W, /obj/item/weapon/reagent_containers/food/snacks/grown/goldapple))))
 		var/obj/item/weapon/reagent_containers/food/snacks/grown/apple/A = W
 
-		playsound(get_turf(src),'sound/items/eatfood.ogg', rand(10,50), 1)
+		playsound(src,'sound/items/eatfood.ogg', rand(10,50), 1)
 		visible_message("<span class='info'>\The [src] gobbles up \the [W]!")
 		//user.drop_item(A, force_drop = 1)
 
