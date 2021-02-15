@@ -2493,7 +2493,6 @@
 			var/mob/living/carbon/human/H = M
 			if(isinsectoid(H) || istype(M, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 				H.adjustToxLoss(10 * REM)
-			var/mob/living/carbon/human/H = M
 			if(H.dna)
 				if(H.species.flags & isinsectoid(M)) //Insecticide being poisonous to bugmen, who'd've thunk
 					H.adjustToxLoss(10 * REM)
