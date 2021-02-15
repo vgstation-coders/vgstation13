@@ -41,13 +41,15 @@
 
 	var/construct_color = rgb(255,255,255)
 
+	var/floating_amplitude = 4
+
 
 /mob/living/simple_animal/construct/New()
 	..()
 	update_icons()//adds glowing eyes and bars
 
 	//Floating!
-	animate(src, pixel_y = 6 * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
+	animate(src, pixel_y = (2 + floating_amplitude) * PIXEL_MULTIPLIER , time = 7, loop = -1, easing = SINE_EASING)
 	animate(pixel_y = 2 * PIXEL_MULTIPLIER, time = 7, loop = -1, easing = SINE_EASING)
 
 	add_language(LANGUAGE_CULT)
@@ -237,6 +239,7 @@
 	attack_sound = 'sound/weapons/heavysmash.ogg'
 	status_flags = 0
 	construct_spells = list(/spell/aoe_turf/conjure/forcewall/lesser)
+	floating_amplitude = 2
 	var/damageblock = 10
 
 /mob/living/simple_animal/construct/armoured/proc/juggerblock(var/damage, var/atom/A)//juggernauts ignore damage of 10 and bellow if they aren't showing cracks yet (which happens when they are at 66% hp)
@@ -368,6 +371,7 @@
 							/spell/aoe_turf/conjure/pylon,
 							///obj/effect/proc_holder/spell/targeted/projectile/magic_missile/lesser
 							)
+	floating_amplitude = 3
 
 
 /////////////////////////////Behemoth/////////////////////////
