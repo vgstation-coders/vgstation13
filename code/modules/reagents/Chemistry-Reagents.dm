@@ -2497,11 +2497,12 @@
 			if(H.dna)
 				if(H.species.flags & isinsectoid(M)) //Insecticide being poisonous to bugmen, who'd've thunk
 					H.adjustToxLoss(10 * REM)
-			if(H.species.flags & isroach(M))
+			if(istype(M, /mob/living/carbon/monkey/roach))
 				H.adjustToxLoss(10 * REM)
 					
 /datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
-	..()
+	if(..())
+		return 1
 
 	if(istype(M,/mob/living/simple_animal/cockroach))
 		M.gib()
