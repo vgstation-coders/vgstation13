@@ -1063,7 +1063,7 @@ var/list/uplink_items = list()
 	
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
-	desc = "A Syndicate bundle designed for a team two agents."
+	desc = "A Syndicate bundle designed for a team of two agents."
 	item = /obj/item/weapon/storage/box/syndicate_team
 	cost = 28
 
