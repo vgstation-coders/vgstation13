@@ -384,6 +384,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/clothing/glasses/thermal/syndi(src)
 	return
 	
 /obj/item/weapon/storage/box/syndie_kit/spotter
@@ -396,6 +397,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/gun/projectile/deagle/camo(src)
 	new /obj/item/clothing/accessory/holster/handgun(src)
 	new /obj/item/ammo_storage/box/a50(src)
+	new /obj/item/clothing/glasses/thermal/syndi(src)
 	return
 
 /obj/item/weapon/storage/box/syndicate_team/New()
