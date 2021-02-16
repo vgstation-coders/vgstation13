@@ -1066,6 +1066,8 @@ var/list/uplink_items = list()
 	desc = "A Syndicate bundle designed for a team of two agents."
 	item = /obj/item/weapon/storage/box/syndicate_team
 	cost = 28
+	discounted_cost = 40
+	jobs_with_discount = list("Nuclear Operative")
 
 /datum/uplink_item/syndie_coop/stone
 	name = "SG-VPR-23 Pathogenic Medium"
