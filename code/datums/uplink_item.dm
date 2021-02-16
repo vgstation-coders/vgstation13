@@ -1067,12 +1067,6 @@ var/list/uplink_items = list()
 	item = /obj/item/weapon/storage/box/syndicate_team
 	cost = 28
 
-/datum/uplink_item/syndie_coop/elite_bundle/new_uplink_item(new_item, location, user)
-	var/list/conditions = list()
-	if(isplasmaman(user))
-		conditions += "plasmaman"
-	return new new_item(location, conditions)
-
 /datum/uplink_item/syndie_coop/stone
 	name = "SG-VPR-23 Pathogenic Medium"
 	desc = "A closely guarded artifact leveraged from the Vampire Lords.  It possesses an active sample of the SG-VPR-23 strain that is the source of all known cases of vampirism within the galaxy.  This piece is only to be granted to an operative cell that wishes to execute, and accepts the risk, of an SG-VPR-23 outbreak.  It is brittle in its old age, and may only survive one use."
