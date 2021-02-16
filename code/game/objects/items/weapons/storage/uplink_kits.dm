@@ -378,7 +378,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 
 /obj/item/weapon/storage/box/syndie_kit/sniper/New()
 	..()
-	new /obj/item/device/radio/headset/syndie_headset_earmuffs(src)
+	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
 	new /obj/item/weapon/gun/projectile/hecate(src)
 	new /obj/item/clothing/accessory/storage/webbing(src)
 	new /obj/item/ammo_storage/box/BMG50(src)
@@ -392,7 +392,7 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 
 /obj/item/weapon/storage/box/syndie_kit/spotter/New()
 	..()
-	new /obj/item/device/radio/headset/syndie_headset_earmuffs(src)
+	new /obj/item/device/radio/headset/headset_earmuffs/syndie(src)
 	new /obj/item/binoculars(src)
 	new /obj/item/weapon/gun/projectile/deagle/camo(src)
 	new /obj/item/clothing/accessory/holster/handgun(src)

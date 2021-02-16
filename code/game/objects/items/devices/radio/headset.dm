@@ -213,7 +213,7 @@
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
 
-/obj/item/device/radio/headset/syndie_headset_earmuffs
+/obj/item/device/radio/headset/headset_earmuffs/syndie
 	name = "headset earmuffs"
 	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels."
 	icon = 'icons/obj/items.dmi'
