@@ -1060,6 +1060,18 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
+	
+/datum/uplink_item/syndie_coop/elite_bundle
+	name = "Elite Syndicate Bundle"
+	desc = "A Syndicate bundle designed for a team two agents."
+	item = /obj/item/weapon/storage/box/syndicate_team
+	cost = 28
+
+/datum/uplink_item/syndie_coop/elite_bundle/new_uplink_item(new_item, location, user)
+	var/list/conditions = list()
+	if(isplasmaman(user))
+		conditions += "plasmaman"
+	return new new_item(location, conditions)
 
 /datum/uplink_item/syndie_coop/stone
 	name = "SG-VPR-23 Pathogenic Medium"

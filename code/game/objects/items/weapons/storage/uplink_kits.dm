@@ -368,3 +368,40 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	..()
 	new /obj/item/device/telepad_beacon(src)
 	new /obj/item/weapon/rcs/salvage/syndicate(src)
+
+
+//Elite Syndicate Bundles
+//for all of the team bundles
+
+/obj/item/weapon/storage/box/syndie_kit/sniper
+	name = "Sniper"
+
+/obj/item/weapon/storage/box/syndie_kit/sniper/New()
+	..()
+	new /obj/item/device/radio/headset/syndie_headset_earmuffs(src)
+	new /obj/item/weapon/gun/projectile/hecate(src)
+	new /obj/item/clothing/accessory/storage/webbing(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	new /obj/item/ammo_storage/box/BMG50(src)
+	return
+	
+/obj/item/weapon/storage/box/syndie_kit/spotter
+	name = "Spotter"
+
+/obj/item/weapon/storage/box/syndie_kit/spotter/New()
+	..()
+	new /obj/item/device/radio/headset/syndie_headset_earmuffs(src)
+	new /obj/item/binoculars(src)
+	new /obj/item/weapon/gun/projectile/deagle/camo(src)
+	new /obj/item/clothing/accessory/holster/handgun(src)
+	new /obj/item/ammo_storage/box/a50(src)
+	return
+
+/obj/item/weapon/storage/box/syndicate_team/New()
+	..()
+	var/team_kit = pick("sniperspotter")
+	switch(team_kit)
+		if("sniperspotter")
+			new /obj/item/weapon/storage/box/syndie_kit/sniper(src)
+			new /obj/item/weapon/storage/box/syndie_kit/spotter(src)
