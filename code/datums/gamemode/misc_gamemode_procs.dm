@@ -342,6 +342,7 @@
 
 			T = new(R)
 			T.uses = uses
+			T.job = role.name_for_uplink
 			target_radio.hidden_uplink = T
 			target_radio.traitor_frequency = freq
 			to_chat(traitor_mob, "The Syndicate have cunningly disguised a Syndicate Uplink as your [R.name] [loc]. Simply dial the frequency [format_frequency(freq)] to unlock its hidden features.")
@@ -352,6 +353,7 @@
 			var/pda_pass = "[rand(100,999)] [pick("Alpha","Bravo","Delta","Omega")]"
 
 			T = new(R)
+			T.job = role.name_for_uplink
 			R.hidden_uplink = T
 			var/obj/item/device/pda/P = R
 			P.lock_code = pda_pass

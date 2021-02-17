@@ -136,6 +136,7 @@
 /datum/role/traitor/challenger
 	name = CHALLENGER
 	id = CHALLENGER
+	name_for_uplink = "Challenger"
 	required_pref = CHALLENGER
 	wikiroute = CHALLENGER
 	logo_state = "synd-logo"
