@@ -95,9 +95,10 @@
 		return FALSE
 	return ..()
 
-/datum/map/active/map_specific_conditions(text)
-	if("robot check") //Cannot build robots on Castle
-		return 0
+/datum/map/active/map_specific_conditions(condition)
+	switch(condition)
+		if("robot check") //Cannot build robots on Castle
+			return 0
 	return ..()
 
 ////////////////////////////////////////////////////////////////
