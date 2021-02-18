@@ -1357,7 +1357,7 @@ FIRE ALARM
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
 		return
 
-	if (ismouse(user)) // Squeak
+	if (!(ishigherbeing(user) || ismonkey(user))) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)
