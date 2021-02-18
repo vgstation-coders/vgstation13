@@ -164,6 +164,9 @@
 	if(suicide_set)
 		suiciding = 1
 
+	adjustBruteLoss(2*maxHealth) // kill it dead
+	updatehealth()
+
 	visible_message(pick("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is force-deleting \his system files. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is turning off \his runtime safety. It looks like \he's trying to commit suicide.</span>", \
