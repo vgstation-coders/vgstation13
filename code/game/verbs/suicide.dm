@@ -164,7 +164,7 @@
 	if(suicide_set)
 		suiciding = 1
 
-	adjustBruteLoss(2*maxHealth) // kill it dead
+	adjustBruteLoss(-(maxHealth - health) + 2*maxHealth) // kill it dead; set our health to -100 instantly
 	updatehealth()
 
 	visible_message(pick("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
