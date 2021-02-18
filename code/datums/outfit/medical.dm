@@ -361,6 +361,7 @@
 			slot_glasses_str = /obj/item/clothing/glasses/hud/health,
 			slot_wear_suit_str = /obj/item/clothing/suit/storage/labcoat/virologist,
 			slot_s_store_str = /obj/item/device/flashlight/pen,
+			slot_wear_mask_str =  /obj/item/clothing/mask/surgical,
 		),
 		/datum/species/plasmaman = list(
 			slot_ears_str = /obj/item/device/radio/headset/headset_med,
