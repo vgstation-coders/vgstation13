@@ -6,6 +6,8 @@
 		if(!explosive)
 			playsound(src, 'sound/machines/WXP_shutdown.ogg', 75, FALSE)
 	stat = DEAD
+	adjustBruteLoss(2*maxHealth) // kill it dead
+	updatehealth()
 	update_icon()
 
 	update_canmove()
