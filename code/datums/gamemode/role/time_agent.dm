@@ -285,4 +285,24 @@
 			var/datum/objective/target/assassinate/erase/E = locate() in R.objectives.GetObjectives()
 			if(E)
 				E.check(target)
+	if(istype(target, /mob))
+		var/mob/M = target
+		var/name = M.mind.name
+		for (var/list/L in list(data_core.general, data_core.medical, data_core.security,data_core.locked))
+			if (L)
+				var/datum/data/record/R = find_record("name", name, L)
+				qdel(R)
+				R = null
+		for(var/obj/machinery/telecomms/server/S in telecomms_list)
+			for(var/datum/comm_log_entry/C in S.log_entries)
+				if(C.parameters["realname"] == name)
+					S.log_entries.Remove(C)
+					qdel(C)
+					C = null
+		for(var/obj/machinery/message_server/S in message_servers)
+			for(var/datum/data_pda_msg/P in S.pda_msgs)
+				if((P.sender == name) || (P.recipient == name))
+					S.pda_msgs.Remove(P)
+					qdel(P)
+					P = null
 	qdel(target)
