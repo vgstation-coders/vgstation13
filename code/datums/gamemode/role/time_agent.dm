@@ -82,9 +82,20 @@
 /datum/role/time_agent/proc/timeline_distortion(severity)
 	switch(severity)
 		if(1)
+			// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
 			return
 		if(2)
-			return
+			switch(pick(list(1,2)))
+				if(1)
+					wormhole_event()
+					antag.current.teleportitis += 30
+				if(2)
+					// what could possibly go wrong
+					generate_ion_law()
+					generate_ion_law()
+					generate_ion_law()
+					command_alert(/datum/command_alert/ion_storm)
+					// also maybe make the AI actively malicious to time travellers
 		if(3)
 			eviltwinrecruiter = new(src)
 			eviltwinrecruiter.display_name = "time agent twin"

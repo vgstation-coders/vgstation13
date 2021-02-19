@@ -151,6 +151,11 @@
 			druggy = max(druggy - 1, 0)
 			if(!druggy)
 				to_chat(src, "It looks like you are back in Kansas.")
+
+		if(teleportitis)
+			teleportitis = max(teleportitis - 1, 0)
+			if(prob(10))
+				do_teleport(src, get_turf(src), 7)
 /*
 		// Increase germ_level regularly
 		if(prob(40))
