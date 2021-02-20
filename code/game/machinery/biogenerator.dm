@@ -233,19 +233,21 @@
 	category="Misc."
 
 /datum/biogen_recipe/misc/pest
-	cost=150
 	id="pest"
 	name="Insecticide"
+	reagent=INSECTICIDE
+	cost=35
+	amount_per_unit=10
 	other_amounts=list(5)
-	result=/obj/item/weapon/reagent_containers/glass/bottle/insecticide
-
+	
 /datum/biogen_recipe/misc/plantbgone
-	cost=150
 	id="plantbgone"
 	name="Plant-B-Gone"
+	reagent=PLANTBGONE
+	cost=35
+	amount_per_unit=10
 	other_amounts=list(5)
-	result=/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
-
+	
 /datum/biogen_recipe/misc/candle
 	cost=50
 	id="candle"
