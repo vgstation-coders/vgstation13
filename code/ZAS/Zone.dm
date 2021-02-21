@@ -36,6 +36,10 @@ Class Procs:
 
 */
 
+//Colors the turfs in each zone to make zone boundaries, changes, rebuilds, etc. visible.
+//Do not expect it to play nice with anything else that changes turf color.
+//It specifically behaves like gas tile_overlays with regards to when the color is added and removed.
+//#define ZAS_COLOR
 
 /zone
 	var/name
@@ -48,10 +52,17 @@ Class Procs:
 	var/list/graphic_add = list()
 	var/list/graphic_remove = list()
 
+	#ifdef ZAS_COLOR
+	var/turf_color
+	#endif
+
 /zone/New()
 	SSair.add_zone(src)
 	air.temperature = TCMB
 	air.volume = 0
+	#ifdef ZAS_COLOR
+	turf_color = rgb(rand(255), rand(255), rand(255))
+	#endif
 
 /zone/proc/add(turf/simulated/T)
 #ifdef ZASDBG
@@ -66,6 +77,9 @@ Class Procs:
 	T.zone = src
 	contents.Add(T)
 	T.update_graphic(air.graphic)
+	#ifdef ZAS_COLOR
+	T.color = turf_color
+	#endif
 
 /zone/proc/remove(turf/simulated/T)
 #ifdef ZASDBG
@@ -81,6 +95,9 @@ Class Procs:
 	air.volume -= turf_air.volume
 	contents.Remove(T)
 	T.update_graphic(graphic_remove = air.graphic)
+	#ifdef ZAS_COLOR
+	T.color = null
+	#endif
 	if(!contents.len)
 		c_invalidate()
 
@@ -120,6 +137,9 @@ Class Procs:
 	c_invalidate()
 	for(var/turf/simulated/T in contents)
 		T.update_graphic(graphic_remove = air.graphic) //we need to remove the overlays so they're not doubled when the zone is rebuilt
+		#ifdef ZAS_COLOR
+		T.color = null
+		#endif
 		//T.dbg(invalid_zone)
 		T.needs_air_update = 0 //Reset the marker so that it will be added to the list.
 		SSair.mark_for_update(T)
@@ -176,3 +196,7 @@ Class Procs:
 
 	//for(var/turf/T in unsimulated_contents)
 //		to_chat(M, "[T] at ([T.x],[T.y])")
+
+#ifdef ZAS_COLOR
+#undef ZAS_COLOR
+#endif
