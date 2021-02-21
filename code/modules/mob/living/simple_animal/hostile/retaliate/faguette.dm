@@ -113,6 +113,10 @@
 /mob/living/simple_animal/hostile/retaliate/faguette/AttackingTarget()
 	if(isliving(target))
 		var/mob/living/L = target
+		if(L.reagents)
+			if(prob(30))
+				visible_message("<b><span class='warning'>[src] injects something into [L]!</span>")
+				L.reagents.add_reagent(NOTHING, 1)
 		if(prob(10))
 			L.visible_message("<span class='danger'>\The [src.name] mimes an invisible wall!</span>")
 			var/obj/effect/forcefield/mime/wall = new(get_turf(src))
