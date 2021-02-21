@@ -640,7 +640,8 @@
 /obj/item/weapon/tray/dropped(mob/user)
 	spawn() //because throwing drops items before setting their throwing var, and a lot of other zany bullshit
 		if(throwing)
-			return ..()
+			..()
+			return
 		//This is so monumentally bad that I have to leave it in as a comment
 		/*var/mob/living/M
 		for(M in src.loc) //to handle hand switching
@@ -648,7 +649,8 @@
 		if(isturf(loc))
 			for(var/obj/structure/table/T in loc)
 				remove_items()
-				return ..()
+				..()
+				return
 			// if no table, presume that the person just shittily dropped the tray on the ground and made a mess everywhere!
 			whoops()
 		..()

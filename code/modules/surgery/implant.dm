@@ -152,9 +152,14 @@
 	tool.forceMove(target)
 
 	if(istype(tool, /obj/item/weapon/implant))
-		var/obj/item/weapon/implant/disobj = tool
-		disobj.part = affected
-		affected.implants += disobj
+		var/obj/item/weapon/implant/timp = tool
+		timp.part = affected
+		affected.implants += timp
+		if(timp.implanted(target, user))
+			timp.forceMove(target)
+			timp.imp_in = target
+			timp.implanted = 1
+			timp.part = affected
 	affected.cavity = 0
 
 /datum/surgery_step/cavity/place_item/fail_step(mob/living/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

@@ -164,7 +164,7 @@
 	if(!Proj.nodamage)
 		adjustBruteLoss(Proj.damage)
 	Proj.on_hit(src,2)
-	return 2
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/silicon/apply_effect(var/effect = 0,var/effecttype = STUN, var/blocked = 0)
 	return 0//The only effect that can hit them atm is flashes and they still directly edit so this works for now

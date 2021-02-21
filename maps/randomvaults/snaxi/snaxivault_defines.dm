@@ -153,12 +153,12 @@ Included in this file
 	else
 		..()
 
-/mob/living/simple_animal/capybara/Move(loc, dir)
+/mob/living/simple_animal/capybara/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	if(lying && !isDead()) //He'll get up if something moves him
 		lying = FALSE
 		wander = TRUE
 		update_icons()
-	..()
+	return ..()
 
 /area/vault/cabin
 	name = "cabin"

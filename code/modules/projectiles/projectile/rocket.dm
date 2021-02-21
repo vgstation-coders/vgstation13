@@ -32,8 +32,9 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
+	var/A_turf = get_turf(A)
 	..()
-	explosion(A, exdev, exheavy, exlight, exflash)
+	explosion(A_turf, exdev, exheavy, exlight, exflash)
 	if(!gcDestroyed)
 		qdel(src)
 
@@ -149,6 +150,7 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
+	return ..()
 
 /obj/item/projectile/rocket/nikita/Destroy()
 	reset_view()

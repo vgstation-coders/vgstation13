@@ -681,7 +681,7 @@ Auto Patrol: []"},
 			sleep(100)
 			disabled = 0
 		else
-			..()
+			. = ..()
 	else if((lasercolor == "r") && (disabled == 0))
 		if(istype(Proj, /obj/item/projectile/beam/lasertag/blue))
 			disabled = 1
@@ -690,9 +690,9 @@ Auto Patrol: []"},
 			sleep(100)
 			disabled = 0
 		else
-			..()
+			. = ..()
 	else
-		..()
+		return ..()
 
 /obj/machinery/bot/ed209/proc/check_for_weapons(var/obj/item/slot_item) //Unused anywhere, copypasted in secbot.dm
 	if(istype(slot_item, /obj/item/weapon/gun) || istype(slot_item, /obj/item/weapon/melee))

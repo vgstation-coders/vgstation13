@@ -107,123 +107,21 @@
 	icon_living = "wraith2"
 	icon_dead = "wraith2"
 	see_in_dark = 7
-	construct_spells = list(/spell/targeted/ethereal_jaunt/shift/alt)
-	var/ranged_cooldown = 0
-	var/ammo = 3
-	var/ammo_recharge = 0
+	construct_spells = list(
+		/spell/targeted/ethereal_jaunt/shift/alt,
+		/spell/wraith_warp,
+		/spell/aoe_turf/conjure/path_entrance,
+		/spell/aoe_turf/conjure/path_exit,
+		)
+	var/warp_ready = FALSE
 
 /mob/living/simple_animal/construct/wraith/perfect/New()
 	..()
 	setupfloat()
 
-/mob/living/simple_animal/construct/wraith/perfect/Life()
-	if(timestopped)
-		return 0
-	. = ..()
-	ranged_cooldown = max(0,ranged_cooldown-1)
-	if (ammo < 3)
-		ammo_recharge++
-		if (ammo_recharge >= 3)
-			ammo_recharge = 0
-			ammo++
-
-/mob/living/simple_animal/construct/wraith/perfect/RangedAttack(var/atom/A, var/params)
-	if(ranged_cooldown <= 0 && ammo)
-		ammo--
-		generic_projectile_fire(A, src, /obj/item/projectile/wraithnail, 'sound/weapons/hivehand.ogg', src)
-	return ..()
-
-/obj/item/projectile/wraithnail
-	icon = 'icons/obj/projectiles_experimental.dmi'
-	icon_state = "wraithnail"
-	damage = 5
-
-
-/obj/item/projectile/wraithnail/to_bump(var/atom/A)
-	if(bumped)
-		return 0
-	bumped = 1
-
-	if(A)
-		setDensity(FALSE)
-		invisibility = 101
-		kill_count = 0
-		var/obj/effect/overlay/wraithnail/nail = new (A.loc)
-		nail.transform = transform
-		if(isliving(A))
-			nail.stick_to(A)
-			var/mob/living/L = A
-			L.take_overall_damage(damage,0)
-		else if(loc)
-			var/turf/T = get_turf(src)
-			nail.stick_to(T,get_dir(src,A))
-		bullet_die()
-
-/obj/item/projectile/wraithnail/bump_original_check()
-	if(!bumped)
-		if(loc == get_turf(original))
-			if(!(original in permutated))
-				to_bump(original)
-
-/obj/effect/overlay/wraithnail
-	name = "red bolt"
-	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
-	icon = 'icons/effects/effects.dmi'
-	icon_state = "wraithnail"
-	anchored = 1
-	density = 0
-	plane = ABOVE_HUMAN_PLANE
-	layer = CLOSED_CURTAIN_LAYER
-	var/atom/stuck_to = null
-	var/duration = 100
-
-/obj/effect/overlay/wraithnail/New()
-	..()
-	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
-	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
-
-/obj/effect/overlay/wraithnail/Destroy()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	stuck_to = null
-	..()
-
-/obj/effect/overlay/wraithnail/proc/stick_to(var/atom/A, var/side = null)
-	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
-	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
-	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
-	var/turf/T = get_turf(A)
-	loc = T
-	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
-
-	if(isturf(A))
-		switch(side)
-			if(NORTH)
-				pixel_y = WORLD_ICON_SIZE/2
-			if(SOUTH)
-				pixel_y = -WORLD_ICON_SIZE/2
-			if(EAST)
-				pixel_x = WORLD_ICON_SIZE/2
-			if(WEST)
-				pixel_x = -WORLD_ICON_SIZE/2
-
-	else if(isliving(A) && !isspace(T))
-		stuck_to = A
-		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
-		lock_atom(A, /datum/locking_category/buckle)
-
-	spawn(duration)
-		qdel(src)
-
-
-/obj/effect/overlay/wraithnail/attack_hand(var/mob/user)
-	if (do_after(user,src,15))
-		unstick()
-
-/obj/effect/overlay/wraithnail/proc/unstick()
-	if(stuck_to)
-		unlock_atom(stuck_to)
-	qdel(src)
+/mob/living/simple_animal/construct/wraith/perfect/toggle_throw_mode()
+	var/spell/wraith_warp/WW = locate() in spell_list
+	WW.perform(src)
 
 
 ////////////////////Artificer/////////////////////////
@@ -405,7 +303,7 @@
 	if(layer != MOB_LAYER) // ie it's hiding
 		overlay_layer = FLOAT_LAYER
 		overlay_plane = FLOAT_PLANE
-	
+
 	var/icon/glowicon = icon(icon,"glow-[icon_state]")
 	glowicon.Blend(glowcolor, ICON_ADD)
 	var/image/glow = image(icon = glowicon, layer = overlay_layer)

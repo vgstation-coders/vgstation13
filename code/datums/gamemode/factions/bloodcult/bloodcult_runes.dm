@@ -500,23 +500,31 @@
 							"Oh just fuck off",)].</span></span>")
 
 
-/proc/write_rune_word(var/turf/T,var/datum/reagent/blood/source, var/word = null, var/mob/caster = null)
+/proc/write_rune_word(var/turf/T, var/word = null, var/datum/reagent/blood/source, var/mob/caster = null)
 	if (!word)
-		return 0
+		return RUNE_WRITE_CANNOT
+
+	if (!source)
+		source = new
 
 	//Add word to a rune if there is one, otherwise create one. However, there can be no more than 3 words.
 	//Returns 0 if failure, 1 if finished a rune, 2 if success but rune still has room for words.
 
+	var/newrune = FALSE
 	var/obj/effect/rune/rune = locate() in T
 	if(!rune)
 		var/datum/runeword/rune_typecast = word
-		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.
+		if(rune_typecast.identifier == "blood_cult") //Lazy fix because I'm not sure how to modularize this automatically. Fix if you want to.//WHYYYYYYYYYYY
 			rune = new /obj/effect/rune/blood_cult(T)
+			newrune = TRUE
 
 	if (rune.word1 && rune.word2 && rune.word3)
-		return 0
+		return RUNE_WRITE_CANNOT
 
 	if (caster)
+		if (newrune)
+			log_admin("BLOODCULT: [key_name(caster)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+			message_admins("BLOODCULT: [key_name(caster)] has created a new rune at [formatJumpTo(T)].")
 		rune.add_hiddenprint(caster)
 
 	if (!rune.word1)
@@ -577,8 +585,8 @@
 
 	rune.update_icon()
 	if (rune.blood3)
-		return 1
-	return 2
+		return RUNE_WRITE_COMPLETE
+	return RUNE_WRITE_CONTINUE
 
 
 /proc/erase_rune_word(var/turf/T)

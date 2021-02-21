@@ -42,3 +42,6 @@
 		if(W.loc == src.loc && params)
 			W.setPixelOffsetsFromParams(params, user)
 			return 1
+
+/obj/item/anvil/attack_tk(mob/user)
+	return attack_hand(user)

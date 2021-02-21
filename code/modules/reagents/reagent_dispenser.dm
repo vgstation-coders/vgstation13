@@ -178,6 +178,7 @@
 			else
 				msg_admin_attack("[src] was shot by a [Proj.type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[src.x];Y=[src.y];Z=[src.z]'>JMP</a>)") //BS12 EDIT ALG
 			explode()
+	return ..()
 
 /obj/structure/reagent_dispensers/fueltank/blob_act()
 	explode()
@@ -518,7 +519,7 @@
 	..()
 
 /obj/structure/reagent_dispensers/cauldron/barrel/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(Proj.damage)
 		take_damage(Proj.damage)
 

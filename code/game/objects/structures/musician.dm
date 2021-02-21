@@ -427,6 +427,7 @@
 	else if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 		if(prob(Proj.damage))
 			src.ex_act(2)
+	return ..()
 
 /obj/structure/piano/xylophone
 	name = "xylophone"

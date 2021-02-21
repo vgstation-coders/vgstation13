@@ -58,7 +58,7 @@
 		take_damage(W.force, W.damtype)
 
 /obj/machinery/deployable/barrier/bullet_act(var/obj/item/projectile/Proj)
-	..()
+	. = ..()
 	if(Proj.damage)
 		take_damage(Proj.damage, Proj.damage_type)
 

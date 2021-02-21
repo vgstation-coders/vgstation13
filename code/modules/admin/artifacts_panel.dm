@@ -5,7 +5,9 @@
 	var/turf/last_loc = null
 	var/artifact_type = null
 	var/primary_effect = ""
+	var/primary_trigger
 	var/secondary_effect = ""
+	var/secondary_trigger
 
 /datum/artifact_postmortem_data/New(var/atom/artifact,var/ignore = FALSE,var/error = FALSE)
 	if (!artifact)
@@ -32,8 +34,12 @@
 		var/obj/machinery/artifact/A = artifact
 		if (A.primary_effect)
 			primary_effect = A.primary_effect.effecttype
+			if (A.primary_effect.trigger)
+				primary_trigger = A.primary_effect.trigger.triggertype
 		if (A.secondary_effect)
 			secondary_effect = A.secondary_effect.effecttype
+			if (A.secondary_effect.trigger)
+				secondary_trigger = A.secondary_effect.trigger.triggertype
 
 	destroyed_large_artifacts[artifact_id] = src
 
@@ -87,25 +93,29 @@
 				corrupted.artifact_id = ID
 				corrupted.last_loc = "not_a_turf"
 				corrupted.artifact_type = "error: no postmortem artifact data generated"
-				corrupted.primary_effect = ""
-				corrupted.secondary_effect = ""
 				destroyed_large_artifacts[ID] += corrupted
 			continue
 		var/turf/T = get_turf(A)
 		var/prim = ""
+		var/prim_t = ""
 		var/sec = ""
+		var/sec_t = ""
 		if (istype(A, /obj/machinery/artifact))
 			var/obj/machinery/artifact/artifact = A
 			if (artifact.primary_effect)
 				prim = artifact.primary_effect.effecttype
+				if (artifact.primary_effect.trigger)
+					prim_t = artifact.primary_effect.trigger.triggertype
 			if (artifact.secondary_effect)
 				sec = artifact.secondary_effect.effecttype
+				if (artifact.secondary_effect.trigger)
+					sec_t = artifact.secondary_effect.trigger.triggertype
 		dat += {"<tr>
 			<td>[ID]</td>
 			<td><font color='green'><b>Excavated</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
 			<td>[A.type] <a href='?_src_=vars;Vars=\ref[A]'>\[VV\]</a> <a href='?_src_=vars;mark_object=\ref[A]'>\[mark datum\]</a></td>
-			<td>[prim]</td>
-			<td>[sec]</td>
+			<td>[prim][prim_t ? " ([prim_t])" : ""]</td>
+			<td>[sec][sec_t ? " ([sec_t])" : ""]</td>
 			</tr>
 			"}
 
@@ -119,8 +129,8 @@
 			<td>[data.artifact_id]</td>
 			<td><font color='red'><b>Destroyed</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
 			<td>[data.artifact_type]</td>
-			<td>[data.primary_effect]</td>
-			<td>[data.secondary_effect]</td>
+			<td>[data.primary_effect][data.primary_trigger ? " ([data.primary_trigger])" : ""]</td>
+			<td>[data.secondary_effect][data.secondary_trigger ? " ([data.secondary_trigger])" : ""]</td>
 			</tr>
 			"}
 	for(var/ID in razed_large_artifacts)
@@ -132,8 +142,8 @@
 			<td>[data.artifact_id]</td>
 			<td><font color='red'><b>Razed</b><font> [istype(T)?"(<a href='?src=\ref[src];artifactpanel_jumpto=\ref[T]'>[T.x],[T.y],[T.z]</a>)":"(Unknown)"]</td>
 			<td>[data.artifact_type]</td>
-			<td>[data.primary_effect]</td>
-			<td>[data.secondary_effect]</td>
+			<td>[data.primary_effect][data.primary_trigger ? " ([data.primary_trigger])" : ""]</td>
+			<td>[data.secondary_effect][data.secondary_trigger ? " ([data.secondary_trigger])" : ""]</td>
 			</tr>
 			"}
 

@@ -1,11 +1,11 @@
 "a" = (/turf/unsimulated/floor/snow,/area)
-"o" = (/obj/abstract/map/spawner/mobs/wolf,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
+"o" = (/mob/living/simple_animal/hostile/wolf/alpha,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
 "q" = (/turf/unsimulated/wall/rock/ice,/area/vault/wolfcave)
 "u" = (/obj/item/stack/sheet/bone,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
 "H" = (/turf/unsimulated/floor/snow/cave,/area/vault/wolfcave)
 "M" = (/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
 "S" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
-"T" = (/obj/item/weapon/skull,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
+"T" = (/obj/item/weapon/skull,/obj/abstract/map/nest/wolf,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
 "U" = (/obj/item/weapon/reagent_containers/food/snacks/meat/animal,/obj/effect/gibspawner/generic,/turf/unsimulated/floor/snow/cave/rock,/area/vault/wolfcave)
 
 (1,1,1) = {"
@@ -16,10 +16,10 @@ aaqHHqHHHHHHqaa
 aaqHHqHHqqqqqaa
 aaqHHqHqHHHHqqa
 aqqHHqHqHHHHHqa
-aqHHHHHHHUouHqq
-qqHHHHHHSTMMHqq
-qqHHqqHHuMSoHqq
-qqHHHqqHHoMHHqa
+aqHHHHHHHUMuHqq
+qqHHHHHHSToMHqq
+qqHHqqHHuMSMHqq
+qqHHHqqHHMMHHqa
 aqqHHHqqHHHHHqa
 aqqqHHHqqHHHqqa
 aaqqqHHqqqqqqaa

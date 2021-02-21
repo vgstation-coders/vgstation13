@@ -15,6 +15,8 @@
 	anchored = 1.0
 	w_type=NOT_RECYCLABLE
 	var/undergoing_deletion = 0
+	var/connects_atmos = TRUE//Set to FALSE to prevent portals from linking atmos
+	var/marke_sparks = TRUE//Set to FALSE to prevent portals from linking atmos
 	var/atmos_connected = FALSE
 	var/connection/atmos_connection
 
@@ -67,8 +69,9 @@
 		qdel(src)
 		return
 
-	spawn(5)
-		connect_atmospheres()
+	if (connects_atmos)
+		spawn(5)
+			connect_atmospheres()
 
 	make_lifespan(lifespan)
 
@@ -125,7 +128,8 @@
 			else if(src == P.red_portal)
 				P.red_portal = null
 				P.sync_portals()
-	spark(loc, 5)
+	if (marke_sparks)
+		spark(loc, 5)
 	..()
 
 /obj/effect/portal/cultify()
@@ -135,6 +139,9 @@
 	return
 
 /obj/effect/portal/singularity_pull()
+	return
+
+/obj/effect/portal/proc/portal_sickness(var/atom/movable/AM)
 	return
 
 var/list/portal_cache = list()
@@ -167,6 +174,7 @@ var/list/portal_cache = list()
 			qdel(src)
 		else
 			do_teleport(M, target, 0, 1, 1, 1, enter_sound, exit_sound)
+			portal_sickness(M)
 			if(ismob(M))
 				var/mob/target = M
 				if(target.mind && owner)
@@ -240,6 +248,51 @@ var/list/portal_cache = list()
 	enter_sound = 'sound/effects/fall2.ogg'
 	exit_sound = 'sound/effects/fall2.ogg'
 
+/obj/effect/portal/tear/blood
+	name = "bloody tear"
+	desc = "There's no shortcuts like ones that go through literal hellscapes."
+	close_sound = 'sound/effects/flesh_squelch.ogg'
+	icon_state = "bloodytear"
+	mask = "bloodytear_mask"
+	connects_atmos = FALSE
+	marke_sparks = FALSE
+
+/obj/effect/portal/tear/blood/New(turf/loc,var/lifespan=300)
+	..()
+	if (loc && !istype(loc, /turf/space) && (!locate(/obj/effect/decal/cleanable/blood/splatter) in loc))
+		var/obj/effect/decal/cleanable/blood/splatter/S = new (loc)
+		S.amount = 1
+
+/obj/effect/portal/tear/blood/Destroy()
+	if (loc)
+		anim(target = loc, a_icon = 'icons/obj/stationobjs.dmi', flick_anim = "bloodytear_close")
+	..()
+
+/obj/effect/portal/tear/blood/portal_sickness(var/atom/movable/AM)
+	if (isliving(AM))
+		var/mob/living/L = AM
+		if (!iscultist(L) && iscarbon(L))
+			var/mob/living/carbon/C = L
+			new /obj/effect/cult_ritual/confusion(C,30,25,C)
+			C.reagents.add_reagent(TOXIN, 0.2)
+			C.reagents.add_reagent(INCENSE_MOONFLOWERS, 0.5)
+			C.hallucination = max(10,C.hallucination)
+			C.Dizzy(3)
+			C.Jitter(3)
+			C.reagents.update_total()
+
+/obj/effect/portal/tear/blood/blend_icon(var/obj/effect/portal/P)
+	flick("bloodytear_open",src)
+	var/turf/T = P.loc
+	spawn(7)
+		if (!gcDestroyed && !P.gcDestroyed)
+			if(!("icon[initial(T.icon)]_iconstate[T.icon_state]_[type]" in portal_cache))//If the icon has not been added yet
+				var/icon/I1 = icon(icon,mask)//Generate it.
+				var/icon/I2 = icon(initial(T.icon),T.icon_state)
+				I1.Blend(I2,ICON_MULTIPLY)
+				portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]_[type]"] = I1 //And cache it!
+
+			overlays += portal_cache["icon[initial(T.icon)]_iconstate[T.icon_state]_[type]"]
 
 /obj/effect/portal/permanent
 	name = "stabilized portal"

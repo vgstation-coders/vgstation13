@@ -243,6 +243,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			else
 				playsound(src, 'sound/effects/Glasshit.ogg', 100, 1)
 			update_icon()
+	return ..()
 
 /obj/machinery/newscaster/attack_ai(mob/user as mob)
 	add_hiddenprint(user)

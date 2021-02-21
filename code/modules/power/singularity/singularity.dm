@@ -52,17 +52,17 @@ var/list/global_singularity_pool
 	if(!global_singularity_pool)
 		global_singularity_pool = list()
 	global_singularity_pool += src
-	
+
 /obj/machinery/singularity/attack_hand(mob/user as mob)
 	consume(user)
 	return 1
 
 /obj/machinery/singularity/blob_act(severity)
 	return
-	
+
 /obj/machinery/singularity/supermatter_act(atom/source, severity)
 	return
-	
+
 /obj/machinery/singularity/ex_act(severity)
 	if(current_size > 10) //IT'S UNSTOPPABLE
 		return
@@ -77,9 +77,6 @@ var/list/global_singularity_pool
 		if(2.0 to 3.0)
 			energy += round((rand(20, 60)/2), 1)
 			return
-
-/obj/machinery/singularity/bullet_act(obj/item/projectile/P)
-	return 0 //Will there be an impact? Who knows. Will we see it? No.
 
 /obj/machinery/singularity/to_bump(atom/A)
 	consume(A)
@@ -289,7 +286,7 @@ var/list/global_singularity_pool
 			if(chained)
 				overlays += image(icon = icon, icon_state = "chain_s9")
 			visible_message("<span class='sinister'><font size='3'>You witness the creation of a destructive force that cannot possibly be stopped by human hands.</font></span>")
-		
+
 		if(STAGE_SSGSS) //SUPER SINGULO GOD SUPER SINGULO
 			name = "[name] god [name]" //it gets worse
 			desc = "The true final form of Lord Singuloth. <b>It has the power to destroy galaxies.</b> It can most likely still be used to power arcades too, <b>if you dare.</b>"
@@ -396,13 +393,13 @@ var/list/global_singularity_pool
 	if(current_size == STAGE_SSGSS)
 		return 1
 	return 0
-	
+
 /obj/machinery/singularity/proc/makeSuperMatterSea(atom/A)
 	if(isturf(A.loc))
 		var/turf/newsea = A.loc
 		if(!istype(newsea, /turf/unsimulated/wall/supermatter))
 			newsea.ChangeTurf(/turf/unsimulated/wall/supermatter)
-	
+
 /obj/machinery/singularity/proc/consume(const/atom/A)
 	var/gain = A.singularity_act(current_size,src)
 	src.energy += gain
@@ -680,18 +677,18 @@ var/list/global_singularity_pool
 	name = "deadchat-controlled singularity listener"
 	var/obj/machinery/singularity/deadchat_controlled/parent
 
-/datum/deadchat_listener/singulo_listener/deadchat_event(var/ckey, var/message) 
+/datum/deadchat_listener/singulo_listener/deadchat_event(var/ckey, var/message)
 	parent.process_deadchat(ckey,message)
-	
+
 /obj/machinery/singularity/deadchat_controlled
 	desc = "The destructive, murderous Lord Singuloth, patron saint of Engineering. This one seems... unstable. Oh god."
 	var/deadchat_mode = "Anarchy"
 	var/list/ckey_to_cooldown = list()
 	var/datum/deadchat_listener/singulo_listener/listener
 	move_self = 0
-	
+
 	var/input_cooldown = 60 //In deca-seconds
-	var/democracy_cooldown = 120 
+	var/democracy_cooldown = 120
 	var/list/inputs = list("UP","DOWN","LEFT","RIGHT")
 	var/deadchat_active = 1
 	appearance_flags = 0
@@ -711,7 +708,7 @@ var/list/global_singularity_pool
 			var/mob/living/carbon/brain/B = M
 			if(B.brain_dead_chat())
 				to_chat(M, message)
-	global_deadchat_listeners -= listener	
+	global_deadchat_listeners -= listener
 	global_singularity_pool -= src
 	qdel(listener)
 
@@ -757,8 +754,8 @@ var/list/global_singularity_pool
 		message = uppertext(message)
 		if(inputs.Find(message))
 			ckey_to_cooldown[ckey] = message
-			
-/obj/machinery/singularity/deadchat_controlled/proc/eat_no_pull() //Copied from proc/eat() and altered		
+
+/obj/machinery/singularity/deadchat_controlled/proc/eat_no_pull() //Copied from proc/eat() and altered
 	for(var/atom/X in orange(consume_range, src))
 		if(X.type == /atom/movable/lighting_overlay)
 			continue
@@ -771,7 +768,7 @@ var/list/global_singularity_pool
 		democracy_cooldown = 1 //setting it to 0 kills the serb so let's not ever let that happen again
 	spawn(democracy_cooldown)
 		if(!deadchat_active) //Bit gunky but I'm not entirely certain how src/self works in byond, would if(src == null) work?
-			return 
+			return
 		var/result = count_democracy_votes()
 		if(result != 5)
 			set_glide_size(DELAY2GLIDESIZE(0.1 SECONDS))
@@ -796,7 +793,7 @@ var/list/global_singularity_pool
 				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
-						to_chat(M, message)		
+						to_chat(M, message)
 		else
 			var/message = "<span class='recruit'>No votes were cast this cycle. Remember, type UP, DOWN, LEFT, or RIGHT to cast a vote!"
 			for(var/mob/M in player_list)
@@ -811,7 +808,7 @@ var/list/global_singularity_pool
 					if(B.brain_dead_chat())
 						to_chat(M, message)
 		begin_democracy_loop()
-			
+
 /obj/machinery/singularity/deadchat_controlled/proc/count_democracy_votes()	//Will return 5 if empty list
 	var/list/votes = list(0,0,0,0)
 	var/found_vote = 0
@@ -838,8 +835,8 @@ var/list/global_singularity_pool
 		return WEST
 	else
 		return EAST
-	
-				
+
+
 /client/proc/deadchat_singularity()
 	set category = "Fun"
 	set name = "Spawn Deadchat-Controlled Singularity"
@@ -856,7 +853,7 @@ var/list/global_singularity_pool
 		organized_list[organized_hash] = singularity
 	if(!global_singularity_pool.len)
 		to_chat(holder, "There are no singularities to be transformed into a deadchat-controlled one. Spawn one first... if you dare.")
-		return 0		
+		return 0
 	var/singulo_name = input(src,"Select a singularity.", "Confirm", null) as null|anything in organized_list
 	var/obj/machinery/singularity/target_singulo = organized_list[singulo_name]
 	if(target_singulo)
@@ -891,7 +888,7 @@ var/list/global_singularity_pool
 				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
-						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")	
+						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
 		else if(option_chosen == "Democracy")
 			var/interval = input("Please enter the interval that the singulo makes a move in seconds.", "Interval") as num
 			if(!interval)
@@ -925,7 +922,7 @@ var/list/global_singularity_pool
 				else if(M.client && istype(M,/mob/living/carbon/brain) && (M.client.prefs.toggles & CHAT_DEAD))
 					var/mob/living/carbon/brain/B = M
 					if(B.brain_dead_chat())
-						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")	
+						to_chat(M, message + "<a href='?src=\ref[M];follow=\ref[new_singulo]'>(Follow)</a>")
 
 /obj/machinery/singularity/special
 	name = "specialarity"

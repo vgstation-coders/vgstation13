@@ -108,3 +108,13 @@
 	freebies = list(/obj/item/weapon/medbot_cube)
 	vend_amount = 1
 	single_items = 1
+	
+
+/obj/item/voucher/free_item/armorstrap
+	name = "reinforced strap voucher"
+	desc = "Redeem at a SECtech vending machine to get a set of reinforced armor straps for an armored vest."
+	icon_state = "secvoucher"
+	freebies = list(/obj/item/clothing/accessory/armoredvestshoulderstrap)
+	vend_amount = 1
+	single_items = 1
+	shred_on_use = 1
