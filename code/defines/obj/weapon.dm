@@ -1124,6 +1124,14 @@
 	icon_state = "ectoplasm"
 	w_type = RECYK_BIOLOGICAL
 
+
+/obj/item/weapon/ectoplasm/New(turf/loc, var/alt_color)
+	..()
+	if (alt_color)
+		var/icon/color_icon = icon(icon,"[icon_state]_blank")
+		color_icon.Blend(alt_color, ICON_ADD)
+		icon = color_icon
+
 /////////Random shit////////
 
 /obj/item/weapon/lightning

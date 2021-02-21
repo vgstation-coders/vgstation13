@@ -12,10 +12,6 @@
 	var/dash_dir = null
 	var/turf/crashing = null
 
-/mob/living/simple_animal/construct/armoured/perfect/New()
-	..()
-	setupfloat()
-
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)
 		var/breakthrough = 0
@@ -115,10 +111,6 @@
 		)
 	var/warp_ready = FALSE
 
-/mob/living/simple_animal/construct/wraith/perfect/New()
-	..()
-	setupfloat()
-
 /mob/living/simple_animal/construct/wraith/perfect/toggle_throw_mode()
 	var/spell/wraith_warp/WW = locate() in spell_list
 	WW.perform(src)
@@ -146,16 +138,13 @@
 	var/heal_range = 2
 	var/list/minions = list()
 
-/mob/living/simple_animal/construct/builder/perfect/New()
-	..()
-	setupfloat()
-
 /mob/living/simple_animal/construct/builder/perfect/Life()
 	if(timestopped)
 		return 0
 	. = ..()
 	if(. && heal_target)
 		heal_target.health = min(heal_target.maxHealth, heal_target.health + round(heal_target.maxHealth/10))
+		heal_target.update_icons()
 		anim(target = heal_target, a_icon = 'icons/effects/effects.dmi', flick_anim = "const_heal", lay = NARSIE_GLOW, plane = LIGHTING_PLANE)
 		move_ray()
 		process_construct_hud(src)
