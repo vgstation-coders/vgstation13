@@ -2492,11 +2492,20 @@
 		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
 					
-/datum/reagent/water/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
+/datum/reagent/toxin/insecticide/reaction_animal(var/mob/living/simple_animal/M, var/method=TOUCH, var/volume)
 	if(..())
 		return 1
-
+		
+	if(istype(M,/mob/living/simple_animal/hostile/bigroach))
+		M.gib()
+		
 	if(istype(M,/mob/living/simple_animal/cockroach))
+		M.gib()
+	
+	if(istype(M,/mob/living/simple_animal/bee))
+		M.gib()
+
+	if(istype(M,/mob/living/simple_animal/hostile/giant_spider))
 		M.gib()
 	
 /datum/reagent/toxin/insecticide/reaction_obj(var/obj/O, var/volume)
