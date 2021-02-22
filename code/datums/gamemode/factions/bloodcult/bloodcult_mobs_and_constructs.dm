@@ -11,6 +11,7 @@
 	see_in_dark = 7
 	var/dash_dir = null
 	var/turf/crashing = null
+	spell_on_use_inhand = /spell/juggerdash //standard jug gets forcewall, but this seems better for perfect
 
 /mob/living/simple_animal/construct/armoured/perfect/to_bump(var/atom/obstacle)
 	if(src.throwing)

@@ -43,6 +43,9 @@
 
 	var/floating_amplitude = 4
 
+	// for constructs with one spell, locate() that spell and use it.
+	var/spell/spell_on_use_inhand = /spell
+
 
 /mob/living/simple_animal/construct/New()
 	..()
@@ -59,6 +62,7 @@
 	hud_list[CONSTRUCT_HUD] = image('icons/mob/hud.dmi', src, "consthealth100")
 	for(var/spell in construct_spells)
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
+
 
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
@@ -222,6 +226,18 @@
 		user.visible_message("<span class='warning'>[user] gently taps [src] with [O]. </span>")
 
 
+/mob/living/simple_animal/construct/mode()
+	set name = "Activate Held Object"
+	set category = "IC"
+	set src = usr
+	set hidden = TRUE
+
+	var/mob/living/simple_animal/construct/C = src
+	var/spell/S = locate(C.spell_on_use_inhand) in C.spell_list
+	if(S)
+		S.perform(C)
+		S.connected_button.update_charge(1)
+
 
 /////////////////Juggernaut///////////////
 
@@ -337,19 +353,6 @@
 /mob/living/simple_animal/construct/wraith/get_unarmed_sharpness(mob/living/victim)
 	return 1.5
 
-/mob/living/simple_animal/construct/wraith/mode()
-	set name = "Activate Held Object"
-	set category = "IC"
-	set src = usr
-	set hidden = TRUE
-
-	var/mob/living/simple_animal/construct/wraith/W = src
-	var/spell/targeted/ethereal_jaunt/E = locate() in W.spell_list
-	if(E)
-		E.perform(W)
-		E.connected_button.update_charge(1)
-
-
 /////////////////////////////Artificer/////////////////////////
 
 
@@ -380,6 +383,9 @@
 							///obj/effect/proc_holder/spell/targeted/projectile/magic_missile/lesser
 							)
 	floating_amplitude = 3
+
+	// tactically deploy a wall under you and become immune to projectiles, I guess
+	spell_on_use_inhand = /spell/aoe_turf/conjure/wall
 
 
 /////////////////////////////Behemoth/////////////////////////
