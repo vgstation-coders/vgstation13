@@ -1060,7 +1060,7 @@ var/list/uplink_items = list()
 
 /datum/uplink_item/syndie_coop
 	category = "Cooperative Cell"
-	jobs_excluded = list("Nuclear Operative", "Challenger")
+	jobs_excluded = list("Nuclear Operative", "challenger")
 	
 /datum/uplink_item/syndie_coop/elite_bundle
 	name = "Elite Syndicate Bundle"
