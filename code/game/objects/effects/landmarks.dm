@@ -97,6 +97,9 @@
 			
 		if("ninjastart")
 			ninjastart += loc
+
+		if("timeagentstart")
+			timeagentstart += loc
 	return 1
 
 /obj/effect/landmark/Destroy()

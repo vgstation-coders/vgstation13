@@ -2691,6 +2691,7 @@
 #include "maps\tgstation.dm"
 #include "maps\defficiency\areas.dm"
 #include "maps\lampreystation\lamprey.dm"
+#include "maps\misc\timevoid.dmm"
 #include "maps\packedstation\telecomms.dm"
 #include "maps\randomvaults\dance_revolution.dm"
 #include "maps\randomvaults\objects.dm"

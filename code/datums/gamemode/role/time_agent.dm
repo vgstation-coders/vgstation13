@@ -22,6 +22,15 @@
 	var/datum/recruiter/eviltwinrecruiter = null
 	var/is_twin = FALSE
 
+/datum/role/time_agent/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
+	if(!fac)
+		timeagent_fac = new
+		timeagent_fac.addPrimary(src)
+	else if (istype(fac, /datum/faction/time_agent))
+		timeagent_fac = fac
+		timeagent_fac.addEvilTwin(src)
+	wikiroute = role_wiki[TIMEAGENT]
+
 /datum/role/time_agent/Greet(var/greeting,var/custom)
 	if(!greeting)
 		return
