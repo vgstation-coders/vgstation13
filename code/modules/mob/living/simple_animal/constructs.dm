@@ -43,6 +43,9 @@
 
 	var/floating_amplitude = 4
 
+	// for constructs with one spell, locate() that spell and use it.
+	var/spell/spell_on_use_inhand = /spell
+
 
 /mob/living/simple_animal/construct/New()
 	..()
@@ -61,8 +64,6 @@
 		src.add_spell(new spell, "cult_spell_ready", /obj/abstract/screen/movable/spell_master/bloodcult)
 
 
-	// for constructs with one spell, locate() that spell and use it.
-	var/spell/spell_on_use_inhand = /spell
 
 /mob/living/simple_animal/construct/Move(NewLoc,Dir=0,step_x=0,step_y=0,var/glide_size_override = 0)
 	. = ..()
