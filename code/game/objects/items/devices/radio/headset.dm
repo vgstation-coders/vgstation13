@@ -213,6 +213,11 @@
 	icon_state = "headset_earmuffs"
 	item_state = "earmuffs"
 
+/obj/item/device/radio/headset/headset_earmuffs/syndie
+	origin_tech = Tc_SYNDICATE + "=3"
+	syndie = 1
+	init_keyslot1_type = /obj/item/device/encryptionkey/syndicate
+
 /obj/item/device/radio/headset/deathsquad
 	name = "Deathsquad headset"
 	desc = "A headset used by the dark side of Nanotrasen's Spec Ops. Channels are as follows: :0 - Deathsquad :c - command, :s - security, :e - engineering, :d - mining, :q - cargo, :m - medical, :n - science."
