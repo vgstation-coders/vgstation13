@@ -214,11 +214,6 @@
 	item_state = "earmuffs"
 
 /obj/item/device/radio/headset/headset_earmuffs/syndie
-	name = "headset earmuffs"
-	desc = "Protective earmuffs for sound technicians that allow one to speak on radio channels."
-	icon = 'icons/obj/items.dmi'
-	icon_state = "headset_earmuffs"
-	item_state = "earmuffs"
 	origin_tech = Tc_SYNDICATE + "=3"
 	syndie = 1
 	init_keyslot1_type = /obj/item/device/encryptionkey/syndicate

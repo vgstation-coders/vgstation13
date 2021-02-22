@@ -385,7 +385,6 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/ammo_storage/box/BMG50(src)
 	new /obj/item/clothing/glasses/thermal/syndi(src)
-	return
 	
 /obj/item/weapon/storage/box/syndie_kit/spotter
 	name = "Spotter"
@@ -398,7 +397,6 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/clothing/accessory/holster/handgun(src)
 	new /obj/item/ammo_storage/box/a50(src)
 	new /obj/item/clothing/glasses/thermal/syndi(src)
-	return
 
 /obj/item/weapon/storage/box/syndie_kit/scammer
 	name = "Legitimate Businessman"
@@ -413,7 +411,6 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/clothing/glasses/sunglasses/sechud/syndishades(src)
 	new /obj/item/device/reportintercom(src)
 	dispense_cash(10000, src)
-	return
 	
 /obj/item/weapon/storage/box/syndie_kit/shootershotty
 	name = "Shotgun"
@@ -435,8 +432,6 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	
-	return
 
 /obj/item/weapon/storage/box/syndie_kit/shooteruzis
 	name = "Dual Uzis"
@@ -461,8 +456,6 @@ obj/item/weapon/storage/box/syndie_kit/cheaptide
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
 	new /obj/item/weapon/grenade/iedcasing/preassembled/withshrapnel(src)
-	
-	return
 
 /obj/item/weapon/storage/box/syndicate_team/New()
 	..()
