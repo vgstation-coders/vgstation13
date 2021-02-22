@@ -619,7 +619,10 @@ Note that amputating the affected organ does in fact remove the infection from t
 				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
 
 			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
-				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
+				if(owner.reagents.has_reagent(HYPERZINE))
+					owner.vessel.remove_reagent(BLOOD, 0.022 * W.damage * wound_update_accuracy) //hyperzine = 10% more bleeding
+				else
+					owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
