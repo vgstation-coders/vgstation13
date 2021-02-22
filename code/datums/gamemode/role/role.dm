@@ -50,7 +50,6 @@
 
 	var/plural_name = null
 
-
 	// Various flags and things.
 	var/flags = 0
 
