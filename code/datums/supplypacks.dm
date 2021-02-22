@@ -1606,6 +1606,12 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	access = list(access_engine)
 	group = "Engineering"
 
+/datum/supply_packs/engine/amrcontainment/big
+	name = "Large Antimatter Containment Jar"
+	contains = list(/obj/item/weapon/am_containment/big)
+	cost = 200	//10x the fuel, 10x the cost + 50 for convenience
+	containername = "Large antimatter containment jar crate"
+
 /datum/supply_packs/rust_gyrotron
 	contains = list(/obj/machinery/rust/gyrotron)
 	name = "R-UST Mk. 7 gyrotron"
