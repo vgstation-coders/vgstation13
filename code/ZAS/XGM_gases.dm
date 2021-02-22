@@ -10,12 +10,14 @@
 
 	var/flags = 0
 
-//This should probably be in a different file, but currently it's only used here.
-/image/effect
+/obj/effect/overlay/gas_overlay
+	name = "gas"
 	plane = EFFECTS_PLANE
+	layer = FLY_LAYER
+	icon = 'icons/effects/tile_effects.dmi'
 	mouse_opacity = 0
 
-/datum/gas/proc/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/proc/is_human_safe(moles, datum/gas_mixture/mixture)
 	return TRUE
 
 /datum/gas/oxygen
@@ -27,7 +29,7 @@
 
 	flags = XGM_GAS_OXIDIZER
 
-/datum/gas/oxygen/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/oxygen/is_human_safe(moles, datum/gas_mixture/mixture)
 	return abs(moles/mixture.total_moles() - O2STANDARD) < 0.02
 
 /datum/gas/nitrogen
@@ -37,7 +39,7 @@
 	specific_heat = 20	// J/(mol*K)
 	molar_mass = 0.028	// kg/mol
 
-/datum/gas/nitrogen/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/nitrogen/is_human_safe(moles, datum/gas_mixture/mixture)
 	return abs(moles/mixture.total_moles() - N2STANDARD) < 0.2
 
 /datum/gas/carbon_dioxide
@@ -49,7 +51,7 @@
 
 	flags = XGM_GAS_LOGGED
 
-/datum/gas/carbon_dioxide/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/carbon_dioxide/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/plasma
@@ -65,12 +67,16 @@
 	//and following a N/Z ratio of 1.5, the molar mass of a monatomic gas is:
 	molar_mass = 0.405	// kg/mol
 
-	tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "plasma", FLY_LAYER)
+	tile_overlay = new /obj/effect/overlay/gas_overlay/plasma()
 	overlay_limit = MOLES_PLASMA_VISIBLE / CELL_VOLUME
 	flags = XGM_GAS_FUEL | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
 
-/datum/gas/plasma/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/plasma/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
+
+/obj/effect/overlay/gas_overlay/plasma
+	name = "plasma"
+	icon_state = "plasma"
 
 /datum/gas/sleeping_agent
 	id = GAS_SLEEPING
@@ -79,12 +85,16 @@
 	specific_heat = 40	// J/(mol*K)
 	molar_mass = 0.044	// kg/mol. N₂O
 
-	tile_overlay = new /image/effect('icons/effects/tile_effects.dmi', "sleeping_agent", FLY_LAYER)
+	tile_overlay = new /obj/effect/overlay/gas_overlay/sleeping_agent()
 	overlay_limit = 1 / CELL_VOLUME
 	flags = XGM_GAS_OXIDIZER | XGM_GAS_LOGGED // N₂O is a powerful oxidizer
 
-/datum/gas/sleeping_agent/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/sleeping_agent/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
+
+/obj/effect/overlay/gas_overlay/sleeping_agent
+	name = "sleeping agent"
+	icon_state = "sleeping_agent"
 
 /datum/gas/volatile_fuel
 	id = GAS_VOLATILE
@@ -95,7 +105,7 @@
 
 	flags = XGM_GAS_FUEL | XGM_GAS_LOGGED
 
-/datum/gas/volatile_fuel/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/volatile_fuel/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01
 
 /datum/gas/oxygen_agent_b
@@ -107,5 +117,5 @@
 
 	flags = XGM_GAS_FUEL | XGM_GAS_OXIDIZER | XGM_GAS_CONTAMINANT | XGM_GAS_LOGGED
 
-/datum/gas/oxygen_agent_b/is_human_safe(var/moles, var/datum/gas_mixture/mixture)
+/datum/gas/oxygen_agent_b/is_human_safe(moles, datum/gas_mixture/mixture)
 	return moles/mixture.total_moles() < 0.01

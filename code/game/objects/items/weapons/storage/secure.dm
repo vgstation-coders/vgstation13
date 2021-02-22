@@ -189,9 +189,9 @@
 
 /obj/item/weapon/storage/secure/briefcase/update_icon()
 	if(locked || emagged)
-		item_state = "secure-g"
-	else
 		item_state = "secure-r"
+	else
+		item_state = "secure-g"
 
 	if(ismob(loc))
 		var/mob/M = loc

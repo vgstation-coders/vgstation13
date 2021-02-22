@@ -36,6 +36,7 @@
 #define THRALL "thrall"
 #define WIZARD "wizard"
 #define CULTIST "cultist"
+#define CHIEF_CULTIST "chief cultist"
 #define LEGACY_CULTIST "legacy cultist"
 #define NUKE_OP "nuclear operative"
 #define NUKE_OP_LEADER "nuclear operative leader"
@@ -169,6 +170,10 @@
 
 #define	TOME_CLOSED	1
 #define	TOME_OPEN	2
+
+#define RUNE_WRITE_CANNOT	0
+#define RUNE_WRITE_COMPLETE	1
+#define RUNE_WRITE_CONTINUE	2
 
 #define	RUNE_CAN_ATTUNE	0
 #define	RUNE_CAN_IMBUE	1

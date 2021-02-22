@@ -5,7 +5,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "shade"
 	icon_living = "shade"
-	icon_dead = "shade_dead"
+	icon_dead = "shade"
 	maxHealth = 50
 	health = 50
 	speak_emote = list("hisses")

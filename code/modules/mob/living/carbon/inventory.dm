@@ -68,6 +68,13 @@
 	set desc = "Get what is currently on your backslot"
 
 	attack_ui(slot_back)
+	
+/mob/living/carbon/verb/get_belt()
+	set name = "Get belt"
+	set category = "IC"
+	set desc = "Get what is currently on your beltslot"
+
+	attack_ui(slot_belt)
 
 /mob/living/carbon/proc/hotkey_box_slot(var/slot)
 	if (slot <= 0 || slot > 9)

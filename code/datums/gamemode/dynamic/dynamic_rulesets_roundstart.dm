@@ -321,7 +321,11 @@
 		var/mob/M = pick(candidates)
 		assigned += M
 		candidates -= M
-		var/datum/role/cultist/newCultist = new
+		var/datum/role/cultist/newCultist
+		if (cultists_number == 1) // First of the gang
+			newCultist = new /datum/role/cultist/chief
+		else
+			newCultist = new
 		newCultist.AssignToRole(M.mind,1)
 		cult.HandleRecruitedRole(newCultist)
 		newCultist.Greet(GREET_ROUNDSTART)

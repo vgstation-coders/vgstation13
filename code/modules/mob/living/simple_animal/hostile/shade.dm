@@ -5,7 +5,7 @@
 	icon = 'icons/mob/mob.dmi'
 	icon_state = "red shade"
 	icon_living = "red shade"
-	icon_dead = "shade_dead"
+	icon_dead = "shade"
 	maxHealth = 20
 	health = 20
 	speak_chance = 33

@@ -365,7 +365,7 @@
 			loaded_seed.modified = 101
 
 		for(var/datum/plantgene/gene in loaded_disk.genes)
-			loaded_seed.seed.apply_gene(gene, mode)
+			loaded_seed.seed.apply_gene(gene, mode, usr)
 
 	else if(href_list["toggle_mode"])
 		switch(mode)
