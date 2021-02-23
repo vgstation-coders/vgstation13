@@ -197,6 +197,10 @@
 	name = "Parted"
 	icon_state = "hair_parted"
 
+/datum/sprite_accessory/hair/partedalt
+	name = "Parted Alt"
+	icon_state = "hair_partedalt"
+
 /datum/sprite_accessory/hair/pompadour
 	name = "Pompadour"
 	icon_state = "hair_pompadour"
