@@ -264,6 +264,7 @@
 #define IRISHCREAM 			"irishcream"
 #define MANLYDORF 			"manlydorf"
 #define LONGISLANDICEDTEA 			"longislandicedtea"
+#define MUDSLIDE			"mudslide"
 #define MOONSHINE 			"moonshine"
 #define MIDNIGHTKISS	"midnightkiss"
 #define COSMOPOLITAN	"cosmopolitan"
