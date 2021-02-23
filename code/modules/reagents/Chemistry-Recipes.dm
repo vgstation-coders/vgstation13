@@ -2708,6 +2708,12 @@
 	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
 	result_amount = 2
 
+	/datum/chemical_reaction/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	result = MUDSLIDE
+	required_reagents = list(ANTIFREEZE = 1, BLACKRUSSIAN = 1, IRISHCREAM = 1)
+	result_amount = 3
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
