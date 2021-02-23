@@ -120,8 +120,8 @@
 /obj/machinery/light_switch/attack_hand(mob/user)
 	toggle_switch()
 
-/obj/machinery/light_switch/toggle_switch(var/newstate = null)
-	if(newstate && on == newstate)
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
+	if(!isnull(newstate) && on == newstate)
 		return
 	if(buildstage != 2)
 		return
