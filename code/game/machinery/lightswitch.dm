@@ -122,7 +122,7 @@
 
 /obj/machinery/light_switch/toggle_switch(var/newstate = null)
 	if(newstate && on == newstate)
-      return
+		return
 	if(buildstage != 2)
 		return
 	on = !on
