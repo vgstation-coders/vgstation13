@@ -2708,7 +2708,7 @@
 	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
 	result_amount = 2
 
-	/datum/chemical_reaction/mudslide
+/datum/chemical_reaction/mudslide
 	name = "Mudslide"
 	id = MUDSLIDE
 	result = MUDSLIDE
