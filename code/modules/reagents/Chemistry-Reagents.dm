@@ -6860,6 +6860,15 @@
 	glass_icon_state = "longislandicedteaglass"
 	glass_name = "\improper Long Island Iced Tea"
 
+/datum/reagent/ethanol/drink/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	description = "Like a milkshake, but for irresponsible adults."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b6ac94" //rgb: 182, 172, 148
+	glass_icon_state = "mudslide"
+	glass_name = "\improper Mudslide"
+
 /datum/reagent/ethanol/drink/moonshine
 	name = "Moonshine"
 	id = MOONSHINE
