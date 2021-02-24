@@ -534,3 +534,20 @@ proc/isInSight(var/atom/A, var/atom/B)
 	//	return 0
 	// that's not the kind of operation we are running here, nerd
 	return clamp(round(mixedcolor), 0, 255)
+
+//Gets all areas within a department
+/proc/get_department_areas(atom/AM)
+	var/department_type
+	var/area/our_area = get_area(AM)
+	var/all_master_types = direct_subtypesof(/area)
+	for(var/checkable in all_master_types)
+		if(istype(our_area,checkable))
+			department_type = checkable
+			break
+	if(!department_type)
+		department_type = our_area.type
+	var/list/department_areas = list()
+	for(var/area/A in areas)
+		if(istype(A,department_type))
+			department_areas += A
+	return department_areas
