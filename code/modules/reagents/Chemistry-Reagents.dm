@@ -4685,6 +4685,8 @@
 	reagent_state = REAGENT_STATE_LIQUID
 	nutriment_factor = 2 * FOOD_METABOLISM
 	color = "#403010" //rgb: 64, 48, 16
+	glass_icon_state = "creamyhotchocolate"
+	glass_name = "\improper Creamy Hot Chocolate"
 	adj_temp = 5
 	density = 1.2
 	specheatcap = 4.18
@@ -6881,18 +6883,18 @@
 	glass_icon_state = "mudslide"
 	glass_name = "\improper Mudslide"
 
-/datum/reagent/ethanol/drink/sacrificialmary
+/datum/reagent/ethanol/drink/sacrificial_mary
 	name = "Sacrificial Mary"
-	id = SACRIFICIALMARY
+	id = SACRIFICIAL_MARY
 	description = "Fresh Altar-To-Table taste in every sip."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#bd1c1e" //rgb: 189, 28, 30
 	glass_icon_state = "sacrificialmary"
 	glass_name = "\improper Sacrificial Mary"
 
-/datum/reagent/ethanol/drink/boysenberryblizzard
+/datum/reagent/ethanol/drink/boysenberry_blizzard
 	name = "Boysenberry Blizzard"
-	id = BOYSENBERRYBLIZZARD
+	id = BOYSENBERRY_BLIZZARD
 	description = "Don't stick your tongue out for these snowflakes!"
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#aa4cbd" //rgb: 170, 76, 189

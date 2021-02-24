@@ -2733,7 +2733,7 @@
 	name = "Boysenberry Blizzard"
 	id = BOYSENBERRY_BLIZZARD
 	result = BOYSENBERRY_BLIZZARD
-	required_reagents = list(PLASMA = 1, SNOWWHITE = 4)
+	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
 	result_amount = 5
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
