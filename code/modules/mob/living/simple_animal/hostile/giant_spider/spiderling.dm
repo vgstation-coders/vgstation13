@@ -55,6 +55,17 @@
 	..(TRUE)
 	qdel(src)
 
+/mob/living/simple_animal/giant_spider/spiderling/reagent_act(id, method, volume)
+	if(isDead())
+		return
+
+	.=..()
+
+	switch(id)
+		if(INSECTICIDE)
+			if(method != INGEST)
+				death(gore = 0)
+
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Aggro()
 	..()
 
