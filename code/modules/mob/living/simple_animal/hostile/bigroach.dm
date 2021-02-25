@@ -134,4 +134,4 @@
 	switch(id)
 		if(INSECTICIDE)
 			if(method != INGEST)
-				death(gore = 0)
+				death(FALSE)
