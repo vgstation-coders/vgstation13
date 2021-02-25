@@ -64,7 +64,7 @@
 	switch(id)
 		if(INSECTICIDE)
 			if(method != INGEST)
-				death(gore = 0)
+				death(FALSE)
 
 /mob/living/simple_animal/hostile/giant_spider/spiderling/Aggro()
 	..()
