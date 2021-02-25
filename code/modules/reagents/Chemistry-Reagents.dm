@@ -2491,14 +2491,6 @@
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
-	
-/datum/reagent/toxin/insecticide/reaction_obj(var/obj/O, var/volume)
-
-	if(..())
-		return 1
-	if(istype(O,/obj/machinery/portable_atmospherics/hydroponics))
-		var/obj/machinery/portable_atmospherics/hydroponics/tray = O
-		tray.pestlevel -= 2
 		
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
