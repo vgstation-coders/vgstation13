@@ -91,7 +91,8 @@
 /datum/chemical_reaction/explosion_potassium/holy
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
-
+	result_amount = 2.4
+	
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
