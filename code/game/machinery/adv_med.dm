@@ -200,18 +200,15 @@
 
 /obj/machinery/bodyscanner/emag(mob/user)
 	if(!emagged)
-		if(user)
-			to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
+		to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
 		to_chat(user, "<span class='notice'>\The [src] emits an ominous hum.</span>")
 		emagged = 1
 		return 1
 	else if (emagged)
-		if(user)
-			to_chat(user, "<span class='warning'>You re-enable the dosage limiter on \the [src].</span>")
+		to_chat(user, "<span class='warning'>You re-enable the dosage limiter on \the [src].</span>")
 		to_chat(user, "<span class='notice'>\The [src] emits a quiet whine.</span>")
 		emagged = 0
 		return 0
-	return -1
 
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
