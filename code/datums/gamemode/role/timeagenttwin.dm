@@ -37,7 +37,7 @@
 		AppendObjective(kill_target)
 
 
-/datum/role/time_agent/eviltwin/timeline_distortion(severity)
+/datum/role/time_agent/eviltwin/timer_action(severity)
 	return
 	// switch(severity)
 	// 	if(1)

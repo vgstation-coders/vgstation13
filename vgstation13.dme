@@ -353,7 +353,7 @@
 #include "code\datums\gamemode\factions\plague_mice.dm"
 #include "code\datums\gamemode\factions\spider_clan.dm"
 #include "code\datums\gamemode\factions\vampire_faction.dm"
-#include "code\datums\gamemode\factions\timeagency.dm"
+#include "code\datums\gamemode\factions\time_agency.dm"
 #include "code\datums\gamemode\factions\vox_shoal.dm"
 #include "code\datums\gamemode\factions\wizard.dm"
 #include "code\datums\gamemode\factions\wizard_apprenticeship.dm"
