@@ -1,0 +1,17 @@
+"a" = (/turf/simulated/wall/invulnerable,/area/timevoid)
+"b" = (/turf/simulated/floor/arcade,/area/timevoid)
+"c" = (/obj/effect/landmark{name = "timeagentstart"; step_x = 0},/turf/simulated/floor/arcade,/area/timevoid)
+
+(1,1,1) = {"
+aaaaaaaaaaa
+abbbbbbbbba
+abbbbbbbbba
+abbbbbbbbba
+abbbbbbbbba
+abbbbcbbbba
+abbbbbbbbba
+abbbbbbbbba
+abbbbbbbbba
+abbbbbbbbba
+aaaaaaaaaaa
+"}

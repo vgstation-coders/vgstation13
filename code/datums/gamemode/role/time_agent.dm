@@ -17,12 +17,13 @@
 	required_pref = TIMEAGENT
 	logo_state = "time-logo"
 	var/list/objects_to_delete = list()
-	var/timer = 1
-	var/distortion_timer = 60
+	var/time_elapsed = -59
+	var/action_timer = 60
 	var/datum/recruiter/eviltwinrecruiter = null
 	var/is_twin = FALSE
 
 /datum/role/time_agent/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE)
+	var/datum/faction/time_agent/timeagent_fac
 	if(!fac)
 		timeagent_fac = new
 		timeagent_fac.addPrimary(src)
@@ -62,21 +63,21 @@
 		return //Not set up yet
 	var/finished = TRUE
 	for(var/datum/objective/O in objectives.GetObjectives())
-		if(!O.IsFulfilled())
-			finished = FALSE
+		if(O.IsFulfilled())
+			stage(FACTION_ENDGAME)
 			break
 	if(finished)
 		to_chat(antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
 		AppendObjective(/datum/objective/time_agent_extract)
-	timer++
-	if(timer % distortion_timer == 0)
-		timeline_distortion(timer / distortion_timer)
+	time_elapsed++
+	if(time_elapsed % action_timer == 0)
+		timer_action(time_elapsed / action_timer)
 	if (antag && antag.current.hud_used)
 		if(antag.current.hud_used.countdown_display)
 			antag.current.hud_used.countdown_display.overlays.len = 0
-			var/time_until_next_distortion = distortion_timer - (timer % distortion_timer)
-			var/first = round(time_until_next_distortion/10)
-			var/second = time_until_next_distortion % 10
+			var/time_until_next_action = action_timer - (time_elapsed % action_timer)
+			var/first = round(time_until_next_action/10)
+			var/second = time_until_next_action % 10
 			var/image/I1 = new('icons/obj/centcomm_stuff.dmi',src,"[first]",30)
 			var/image/I2 = new('icons/obj/centcomm_stuff.dmi',src,"[second]",30)
 			I1.pixel_x += 10 * PIXEL_MULTIPLIER
@@ -88,8 +89,13 @@
 		else
 			antag.current.hud_used.countdown_hud()
 
-/datum/role/time_agent/proc/timeline_distortion(severity)
+/datum/role/time_agent/proc/timer_action(severity)
+	var/mob/living/carbon/human/H = antag.current
 	switch(severity)
+		if(0)
+			spawn_rand_maintenance(H)
+			spawn()
+				showrift(H,1)
 		if(1)
 			// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
 			return
@@ -97,7 +103,7 @@
 			switch(pick(list(1,2)))
 				if(1)
 					wormhole_event()
-					antag.current.teleportitis += 30
+					H.teleportitis += 30
 				if(2)
 					// what could possibly go wrong
 					generate_ion_law()
@@ -154,9 +160,7 @@
 	.=..()
 	var/mob/living/carbon/human/H = antag.current
 	equip_time_agent(H, src, is_twin)
-	spawn_rand_maintenance(H)
-	spawn()
-		showrift(H,1)
+	H.forceMove(pick(timeagentstart))
 
 
 /datum/role/time_agent/proc/extract()
