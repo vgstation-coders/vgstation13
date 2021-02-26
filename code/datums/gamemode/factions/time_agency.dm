@@ -16,20 +16,39 @@
 	..()
 	load_dungeon(/datum/map_element/dungeon/timevoid)
 
-/datum/faction/time_agent/proc/addPrimary(/datum/role/time_agent/T)
+/datum/faction/time_agent/proc/addPrimary(datum/role/time_agent/T)
 	primary_agent = T
 
-/datum/faction/time_agent/proc/addEvilTwin(/datum/role/time_agent/T)
+/datum/faction/time_agent/proc/addEvilTwin(datum/role/time_agent/T)
 	eviltwins += T
 
 /datum/faction/time_agent/forgeObjectives()
 	return
 
+/datum/faction/time_agent/process()
+	if(stage < FACTION_ACTIVE)
+		for(var/datum/role/time_agent/T in members)
+			var/list/datum/objective/jecties = T.objectives.GetObjectives()
+			if(!jecties.len || locate(/datum/objective/time_agent_extract) in jecties)
+				return //not set up yet
+			var/finished = TRUE
+			for(var/datum/objective/O in T.objectives.GetObjectives())
+				if(!(O.IsFulfilled()))
+					finished = FALSE
+					break
+			if(finished)
+				stage(FACTION_ACTIVE)
+
+
 /datum/faction/time_agent/stage(var/stage)
 	..()
 	switch(stage)
 		if(FACTION_ACTIVE)
-		// spawn in the time anomaly, adjust agents' jecties
+			for(var/datum/role/time_agent/T in members)
+				to_chat(T.antag.current, "<span class = 'notice'>Objectives complete. Triangulating anomaly location.</span>")
+				for(var/datum/objective/O in T.objectives.GetObjectives())
+					O.force_success = TRUE
+			AppendObjective(/datum/objective/time_agent_extract)
 			return
 		if(FACTION_ENDGAME)
 			return

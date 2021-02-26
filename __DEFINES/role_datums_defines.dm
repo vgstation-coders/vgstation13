@@ -28,6 +28,7 @@
 #define LEGACY_CULT "Ancient Cult of Nar-Sie"
 #define GREYTIDE_FAC "Greytide mindlink"
 #define WIZARD_CONTRACT "wizard contract"
+#define TIMEAGENCY "time agency"
 // Role IDs
 #define TRAITOR "traitor"
 #define CHALLENGER "challenger"
