@@ -2,7 +2,7 @@
 "b" = (/turf/simulated/floor/arcade,/area/timevoid)
 "c" = (/obj/effect/landmark{name = "timeagentstart"; step_x = 0},/turf/simulated/floor/arcade,/area/timevoid)
 "v" = (/obj/effect/decal/ninjaporter,/turf/simulated/floor/arcade,/area/timevoid)
-"L" = (/obj/structure/button/timeagent,/turf/simulated/wall/invulnerable,/area/timevoid)
+"L" = (/obj/structure/button/time_agent,/turf/simulated/wall/invulnerable,/area/timevoid)
 
 (1,1,1) = {"
 aaaaaLaaaaa

@@ -794,7 +794,7 @@
 	var/is_twin = FALSE
 	outfit_name = "Time Agent"
 	give_disabilities_equipment = TRUE
-	equip_survival_gear = TRUE
+	equip_survival_gear = list() // default gear
 	backpack_types = list(
 		BACKPACK_STRING = /obj/item/weapon/storage/backpack/satchel_tox,
 	)

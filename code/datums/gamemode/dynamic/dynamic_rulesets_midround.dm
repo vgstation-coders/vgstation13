@@ -527,6 +527,14 @@
 	else
 		return 0
 
+/datum/dynamic_ruleset/midround/from_ghosts/time_agent/setup_role(var/datum/role/newagent)
+	var/datum/faction/time_agent/agency = find_active_faction_by_type(/datum/faction/time_agent)
+	if (!agency)
+		agency = ticker.mode.CreateFaction(/datum/faction/time_agent, null, 1)
+	agency.HandleRecruitedRole(newagent)
+
+	return ..()
+
 /datum/dynamic_ruleset/midround/from_ghosts/time_agent/ready(var/forced=0)
 	if(required_candidates > (dead_players.len + list_observers.len))
 		return 0

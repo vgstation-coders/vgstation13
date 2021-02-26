@@ -17,7 +17,7 @@
 	required_pref = TIMEAGENT
 	logo_state = "time-logo"
 	var/list/objects_to_delete = list()
-	var/time_elapsed = -59
+	var/time_elapsed = 0
 	var/action_timer = 60
 	var/datum/recruiter/eviltwinrecruiter = null
 	var/is_twin = FALSE
@@ -95,14 +95,14 @@
 /datum/role/time_agent/proc/timer_action(severity)
 	var/mob/living/carbon/human/H = antag.current
 	switch(severity)
-		if(0)
+		if(1)
 			spawn_rand_maintenance(H)
 			spawn()
 				showrift(H,1)
-		if(1)
+		if(2)
 			// send the time agent specifically to the past, future, and stop time on him for 30 sec or so
 			return
-		if(2)
+		if(3)
 			switch(pick(list(1,2)))
 				if(1)
 					wormhole_event()
@@ -114,7 +114,7 @@
 					generate_ion_law()
 					command_alert(/datum/command_alert/ion_storm)
 					// also maybe make the AI actively malicious to time travellers
-		if(3)
+		if(4)
 			eviltwinrecruiter = new(src)
 			eviltwinrecruiter.display_name = "time agent twin"
 			eviltwinrecruiter.role = TIMEAGENT
@@ -129,7 +129,7 @@
 			eviltwinrecruiter.recruited.Add(src, "recruiter_recruited")
 
 			eviltwinrecruiter.request_player()
-		if(4 to INFINITY)
+		if(5 to INFINITY)
 			return
 
 /datum/role/time_agent/proc/recruiter_recruiting(var/list/args)
@@ -152,7 +152,7 @@
 		var/mob/living/carbon/human/H = new /mob/living/carbon/human
 		H.ckey = O.ckey
 		H.client.changeView()
-		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind)
+		var/datum/role/time_agent/eviltwin/twin = new /datum/role/time_agent/eviltwin(H.mind, fac = src.faction)
 		twin.erase_target = src
 		twin.OnPostSetup()
 		twin.Greet(GREET_DEFAULT)

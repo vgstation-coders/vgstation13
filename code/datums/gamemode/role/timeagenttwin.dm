@@ -14,6 +14,7 @@
 
 /datum/role/time_agent/eviltwin/New(var/datum/mind/M, var/datum/faction/fac=null, var/new_id, var/override = FALSE, var/datum/role/time_agent/target)
 	..()
+	fac.eviltwins += src
 
 
 /datum/role/time_agent/eviltwin/Greet(var/greeting,var/custom)

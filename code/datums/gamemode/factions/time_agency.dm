@@ -16,16 +16,12 @@
 	..()
 	load_dungeon(/datum/map_element/dungeon/timevoid)
 
-/datum/faction/time_agent/proc/addPrimary(datum/role/time_agent/T)
-	primary_agent = T
-
-/datum/faction/time_agent/proc/addEvilTwin(datum/role/time_agent/T)
-	eviltwins += T
-
 /datum/faction/time_agent/forgeObjectives()
 	return
 
 /datum/faction/time_agent/process()
+	for(var/datum/role/time_agent/T in members)
+		T.process()
 	if(stage < FACTION_ACTIVE)
 		for(var/datum/role/time_agent/T in members)
 			var/list/datum/objective/jecties = T.objectives.GetObjectives()
@@ -69,7 +65,7 @@
 	visible_message("<span class='info'>[user] presses \the [src].</span>")
 	activate(user)
 
-/obj/structure/button/timeagent/activate(mob/user)
+/obj/structure/button/time_agent/activate(mob/user)
 	var/mob/living/carbon/human/H = user
 	var/datum/role/time_agent/R = H.mind.GetRole(TIMEAGENT)
 	if(R)
