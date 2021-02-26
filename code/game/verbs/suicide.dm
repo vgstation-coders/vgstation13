@@ -150,7 +150,7 @@
 /mob/living/silicon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
-		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and reving you might be difficult for humans. It may also go against your laws.", "Confirm Suicide", "Yes", "No")
+		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and reviving you might be difficult for humans. It may also go against your laws.", "Confirm Suicide", "Yes", "No")
 
 		if(confirm != "Yes")
 			return
