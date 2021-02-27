@@ -275,6 +275,7 @@ Status: []<BR>"},
 				TurretFrame.build_step = 7 // Reset to final step
 				TurretFrame.icon_state = "turret_frame2" // Update icon
 				I.forceMove(TurretFrame)
+				installed = null
 				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
