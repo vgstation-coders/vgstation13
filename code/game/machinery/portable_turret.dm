@@ -267,7 +267,7 @@ Status: []<BR>"},
 			to_chat(user, "<span class='notice'>You begin unwelding the turret's armor.</span>")
 			if(WT.do_weld(user, src, 30,5))
 				to_chat(user, "<span class='notice'>You unweld the turret's armor.</span>")
-			
+
 				// Deconstruct into frame
 				var/obj/machinery/porta_turret_construct/TurretFrame = new/obj/machinery/porta_turret_construct(locate(x,y,z))
 				TurretFrame.name = src.name
@@ -276,7 +276,7 @@ Status: []<BR>"},
 				TurretFrame.installed = I // Keep installed gun
 				TurretFrame.build_step = 7 // Reset to final step
 				TurretFrame.icon_state = "turret_frame2" // Update icon
-				installed.forceMove(TurretFrame)
+				I.forceMove(TurretFrame)
 				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
