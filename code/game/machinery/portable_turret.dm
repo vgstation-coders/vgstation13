@@ -247,19 +247,34 @@ Status: []<BR>"},
 
 	..()
 
-	if(W.is_wrench(user) && !on && !raised && wrenchAnchor(user, W))
-		// This code handles moving the turret around. After all, it's a portable turret!
+	if(!on && !raised)
+		if(W.is_wrench(user) && wrenchAnchor(user, W))
+			// This code handles moving the turret around. After all, it's a portable turret!
 
-		if(anchored)
-			invisibility = INVISIBILITY_LEVEL_TWO
-			icon_state = "[lasercolor]grey_target_prism"
-			cover=new/obj/machinery/porta_turret_cover(src.loc) // create a new turret cover. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
-			cover.Parent_Turret = src // make the cover's parent src
-			power_change()
-		else
-			icon_state = "turretCover"
-			invisibility = 0
-			qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+			if(anchored)
+				invisibility = INVISIBILITY_LEVEL_TWO
+				icon_state = "[lasercolor]grey_target_prism"
+				cover=new/obj/machinery/porta_turret_cover(src.loc) // create a new turret cover. While this is handled in process(), this is to workaround a bug where the turret becomes invisible for a split second
+				cover.Parent_Turret = src // make the cover's parent src
+				power_change()
+			else
+				icon_state = "turretCover"
+				invisibility = 0
+				qdel(cover) // deletes the cover, and the turret instance itself becomes its own cover.
+
+		else if(iswelder(W))
+			var/obj/item/weapon/weldingtool/WT = W
+			if(WT.do_weld(user, src, 30,5))
+				to_chat(user, "<span class='notice'>You unweld the turret's armor.</span>")
+			
+				// Deconstruct into frame
+				var/obj/machinery/porta_turret_construct/TurretFrame = new/obj/machinery/porta_turret_construct(locate(x,y,z))
+				TurretFrame.name = src.name
+				TurretFrame.finish_name = src.name
+				TurretFrame.installed = src.installed // Keep installed gun
+				TurretFrame.build_step = 7 // Reset to final step
+				installed.forceMove(TurretFrame)
+				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
 		// Behavior lock/unlock mangement
