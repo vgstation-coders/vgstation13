@@ -2166,8 +2166,8 @@ var/global/num_vending_terminals = 1
 		/obj/item/seeds/eggyseed = 2,
 		/obj/item/seeds/nofruitseed = 2,
 		/obj/item/seeds/glowshroom = 2,
-		/obj/item/seeds/shand = 2,
-		/obj/item/seeds/mtear = 2
+		/obj/item/seeds/shandseed = 2,
+		/obj/item/seeds/mtearseed = 2
 		)
 	premium = list(
 		/obj/item/weapon/storage/box/boxen = 1
