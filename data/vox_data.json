@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "compiled": 1613996013.2899618,
+  "compiled": 1614384443.7134376,
   "voices": {
     "fem": {
       "id": "us-clb",
@@ -393,6 +393,29 @@
       "phrase": [
         "_doop"
       ]
+    },
+    "_doorstuck": {
+      "wordlen": 1,
+      "files": {
+        "fem": {
+          "filename": "sound/vox_sfx/_doorstuck.ogg",
+          "voice": "sfx",
+          "checksum": "512f4d4e790ba909098e264bbfa5b7f9",
+          "duration": 0.776438,
+          "size": 6121
+        },
+        "mas": {
+          "filename": "sound/vox_sfx/_doorstuck.ogg",
+          "voice": "sfx",
+          "checksum": "512f4d4e790ba909098e264bbfa5b7f9",
+          "duration": 0.776438,
+          "size": 6121
+        }
+      },
+      "flags": [
+        "sfx"
+      ],
+      "input-filename": "samples/door-stuck.wav"
     },
     "_excellent": {
       "wordlen": 1,

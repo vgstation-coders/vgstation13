@@ -19,14 +19,14 @@ var/list/vox_sound_lengths = list()
 
 // This class is necessary because we have so many assignments to take it crashes the compiler over a certain limit.
 // STATS:
-//  238775 instructions spread over 4 procs.
+//  238833 instructions spread over 4 procs.
 //
 #ifndef DISABLE_VOX
 /__vox_sound_meta_init/New()
   src.__init_1() // 65527 instructions
   src.__init_2() // 65527 instructions
   src.__init_3() // 65532 instructions
-  src.__init_4() // 42209 instructions
+  src.__init_4() // 42267 instructions
 /__vox_sound_meta_init/proc/__init_1()
   vox_sounds["fem"] = list()
   vox_sounds["fem"]["'cause"] = 'sound/vox_fem/_cause.ogg'
@@ -59,6 +59,8 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_fem/_daisy.ogg'] = 30.64
   vox_sounds["fem"]["_doop"] = 'sound/vox/_doop.wav'
   vox_sound_lengths['sound/vox/_doop.wav'] = 11.46
+  vox_sounds["fem"]["_doorstuck"] = 'sound/vox_sfx/_doorstuck.ogg'
+  vox_sound_lengths['sound/vox_sfx/_doorstuck.ogg'] = 7.764
   vox_sounds["fem"]["_excellent"] = 'sound/vox_sfx/_excellent.ogg'
   vox_sound_lengths['sound/vox_sfx/_excellent.ogg'] = 27.44
   vox_sounds["fem"]["_fart"] = 'sound/vox_sfx/_fart.ogg'
@@ -4545,9 +4547,9 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_fem/malf.ogg'] = 9.68
   vox_sounds["fem"]["malfunction"] = 'sound/vox_fem/malfunction.ogg'
   vox_sound_lengths['sound/vox_fem/malfunction.ogg'] = 16.08
+/__vox_sound_meta_init/proc/__init_2()
   vox_sounds["fem"]["malfunctioned"] = 'sound/vox_fem/malfunctioned.ogg'
   vox_sound_lengths['sound/vox_fem/malfunctioned.ogg'] = 16.08
-/__vox_sound_meta_init/proc/__init_2()
   vox_sounds["fem"]["malfunctioning"] = 'sound/vox_fem/malfunctioning.ogg'
   vox_sound_lengths['sound/vox_fem/malfunctioning.ogg'] = 17.84
   vox_sounds["fem"]["malfunctions"] = 'sound/vox_fem/malfunctions.ogg'
@@ -8271,6 +8273,8 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/_daisy.ogg'] = 31.12
   vox_sounds["mas"]["_doop"] = 'sound/vox/_doop.wav'
   vox_sound_lengths['sound/vox/_doop.wav'] = 11.46
+  vox_sounds["mas"]["_doorstuck"] = 'sound/vox_sfx/_doorstuck.ogg'
+  vox_sound_lengths['sound/vox_sfx/_doorstuck.ogg'] = 7.764
   vox_sounds["mas"]["_excellent"] = 'sound/vox_sfx/_excellent.ogg'
   vox_sound_lengths['sound/vox_sfx/_excellent.ogg'] = 27.44
   vox_sounds["mas"]["_fart"] = 'sound/vox_sfx/_fart.ogg'
@@ -9063,11 +9067,11 @@ var/list/vox_sound_lengths = list()
   vox_sound_lengths['sound/vox_mas/blitzes.ogg'] = 11.12
   vox_sounds["mas"]["blitzing"] = 'sound/vox_mas/blitzing.ogg'
   vox_sound_lengths['sound/vox_mas/blitzing.ogg'] = 11.28
+/__vox_sound_meta_init/proc/__init_3()
   vox_sounds["mas"]["blizzard"] = 'sound/vox_mas/blizzard.ogg'
   vox_sound_lengths['sound/vox_mas/blizzard.ogg'] = 10.48
   vox_sounds["mas"]["blizzards"] = 'sound/vox_mas/blizzards.ogg'
   vox_sound_lengths['sound/vox_mas/blizzards.ogg'] = 11.92
-/__vox_sound_meta_init/proc/__init_3()
   vox_sounds["mas"]["blob"] = 'sound/vox_mas/blob.ogg'
   vox_sound_lengths['sound/vox_mas/blob.ogg'] = 8.4
   vox_sounds["mas"]["blobbed"] = 'sound/vox_mas/blobbed.ogg'
@@ -13583,11 +13587,11 @@ var/list/vox_sound_lengths = list()
   vox_sounds["mas"]["picturing"] = 'sound/vox_mas/picturing.ogg'
   vox_sound_lengths['sound/vox_mas/picturing.ogg'] = 11.6
   vox_sounds["mas"]["pillar"] = 'sound/vox_mas/pillar.ogg'
+/__vox_sound_meta_init/proc/__init_4()
   vox_sound_lengths['sound/vox_mas/pillar.ogg'] = 8.88
   vox_sounds["mas"]["pillars"] = 'sound/vox_mas/pillars.ogg'
   vox_sound_lengths['sound/vox_mas/pillars.ogg'] = 9.84
   vox_sounds["mas"]["ping"] = 'sound/vox_mas/ping.ogg'
-/__vox_sound_meta_init/proc/__init_4()
   vox_sound_lengths['sound/vox_mas/ping.ogg'] = 7.92
   vox_sounds["mas"]["pinged"] = 'sound/vox_mas/pinged.ogg'
   vox_sound_lengths['sound/vox_mas/pinged.ogg'] = 9.2
