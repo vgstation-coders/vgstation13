@@ -6312,7 +6312,7 @@
 				glass_name = "\improper Scientist's Serendipity"
 				glass_desc = "Knock back a cold glass of R&D."
 				D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
-			if(50 to INFINITY) //Infinity on the offchance you somehow acquire a glass with more than 50 max volume
+			if(50 to INFINITY) //Infinity on the offchance you somehow acquire a glass with more than 50 max volume.
 				glass_icon_state = "scientists_serendipity"
 				glass_name = \improper Scientist's Lucky Datadisk"
 				glass_desc = "Why research what has already been catalogued?"
