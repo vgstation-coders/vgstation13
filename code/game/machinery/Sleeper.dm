@@ -13,7 +13,7 @@
 	var/available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin")
 	var/amounts = list(5, 10)
 	var/sedativeblock = FALSE //To prevent people from being surprisesoporific'd
-	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL
+	machine_flags = SCREWTOGGLE | CROWDESTROY | WRENCHMOVE | EJECTNOTDEL | EMAGGABLE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/sleeper,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -55,7 +55,7 @@
 	var/T = 0
 	for(var/obj/item/weapon/stock_parts/SP in component_parts)
 		T += SP.rating
-	if(T >= 12) //Congrats you got T4 components
+	if(T >= 12 || (emagged)) //Congrats you got T4 components... or an emag.
 		works_in_crit = TRUE
 	else
 		works_in_crit = FALSE
@@ -66,6 +66,13 @@
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine")
 		else
 			available_options = list(INAPROVALINE = "Inaprovaline", STOXIN2 = "Soporific Rejuvenant", DERMALINE = "Dermaline", BICARIDINE = "Bicaridine", DEXALIN = "Dexalin", IMIDAZOLINE = "Imidazoline" , INACUSIATE = "Inacusiate" ,  TRICORDRAZINE = "Tricordrazine" , ALKYSINE = "Alkysine" , TRAMADOL = "Tramadol" , PEPTOBISMOL  = "Peptobismol")
+
+/obj/machinery/sleeper/emag(mob/user)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You short out the overdose prevention system on \the [src].</span>")
+		emagged = 1
+		return 1
+	return
 
 /obj/machinery/sleeper/interact(var/mob/user)
 	var/dat = list()
@@ -101,11 +108,17 @@
 			dat += "<a href='?src=\ref[src];wakeup=1'>Begin wake-up cycle</a><br>"
 			if(occupant.reagents)
 				for(var/chemical in available_options)
-					dat += "<span style='float: left'>[available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
+					if (emagged && (occupant.reagents.get_reagent_amount(chemical) > 20))
+						dat += "<span style='float: left'>[available_options[chemical]]: 20 units</span><span style='float: right'>"
+					else
+						dat += "<span style='float: left'>[available_options[chemical]]: [round(occupant.reagents.get_reagent_amount(chemical), 0.1)] units</span><span style='float: right'>"
+
 					for(var/amount in amounts)
 						dat += " <a href='?src=\ref[src];chemical=[chemical];amount=[amount]'>Inject [amount]u</a>"
 					dat += "</span><br>"
+
 			dat += "<HR><A href='?src=\ref[src];refresh=1'>Refresh</A><BR>"
+
 		else
 			dat += "The sleeper is empty."
 	dat = jointext(dat,"")
@@ -409,10 +422,18 @@
 	if(isnull(occupant.reagents))
 		to_chat(user, "<span class='warning'>The occupant appears to somehow lack a bloodstream. Please consult a shrink.</span>")
 		return
-	if(occupant.reagents.get_reagent_amount(chemical) + amount > 20)
+	if(!emagged && occupant.reagents.get_reagent_amount(chemical) + amount > 20)
 		to_chat(user, "<span class='warning'>Overdose Prevention System: The occupant already has enough [available_options[chemical]] in their system.</span>")
 		return
 	occupant.reagents.add_reagent(chemical, amount)
+
+	if(emagged) // Fake reagent chat reports if over 20 units.
+		if(occupant.reagents.get_reagent_amount(chemical) < 20)
+			to_chat(user, "<span class='notice'>Occupant now has [occupant.reagents.get_reagent_amount(chemical)] units of [available_options[chemical]] in their bloodstream.</span>")
+			return
+		to_chat(user, "<span class='notice'>Occupant now has 20 units of [available_options[chemical]] in their bloodstream.</span>")
+		return
+
 	to_chat(user, "<span class='notice'>Occupant now has [occupant.reagents.get_reagent_amount(chemical)] units of [available_options[chemical]] in their bloodstream.</span>")
 	return
 

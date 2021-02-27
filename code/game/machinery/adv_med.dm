@@ -312,8 +312,6 @@
 		dat = format_occupant_data(get_occupant_data(occupant),scanning)
 		dat += "<HR><a href='?src=\ref[src];immunity=1'>View Immune System scan</a><br>"
 		dat += "<HR><A href='?src=\ref[src];print=1'>Print</A><BR>"
-		if (emagged)
-			dat+= "<HR><a href='?src=\ref[src];safety=1'>Re-enable Safeties</a><br>"
 
 	dat += text("<BR><A href='?src=\ref[];mach_close=scanconsole'>Close</A>", user)
 	user << browse(dat, "window=scanconsole;size=430x600")
@@ -337,11 +335,6 @@
 		var/obj/item/weapon/paper/R = new(loc)
 		R.name = "paper - 'body scan report'"
 		R.info = format_occupant_data(get_occupant_data(occupant),scanning)
-
-	else if(href_list["safety"])
-		emagged = 0
-		to_chat(usr, "<span class='warning'>You re-enable the dosage limiter on \the [src].</span>")
-		to_chat(usr, "<span class='notice'>\The [src] emits a quiet whine.</span>")
 
 	else if(href_list["immunity"])
 		if(!immune)
