@@ -275,7 +275,7 @@ Status: []<BR>"},
 				TurretFrame.build_step = 7 // Reset to final step
 				TurretFrame.icon_state = "turret_frame2" // Update icon
 				I.forceMove(TurretFrame)
-				installed = null
+				installed = null // Workaround for qdel() deleting references to the installed gun too in the process
 				qdel(src)
 
 	else if (istype(W, /obj/item/weapon/card/id)||istype(W, /obj/item/device/pda))
@@ -695,6 +695,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/stack/sheet/metal))
 				var/obj/item/stack/sheet/metal/stack = W
 				if(stack.use(2)) // requires 2 metal sheets
+					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 					to_chat(user, "<span class='notice'>You add some metal armor to the interior frame.</span>")
 					build_step = 2
 					icon_state = "turret_frame2"
@@ -771,6 +772,7 @@ Status: []<BR>"},
 			if(istype(W, /obj/item/stack/sheet/metal))
 				var/obj/item/stack/sheet/metal/stack = W
 				if(stack.use(2))
+					playsound(src, 'sound/items/Deconstruct.ogg', 100, 1)
 					to_chat(user, "<span class='notice'>You add some metal armor to the exterior frame.</span>")
 					build_step = 7
 					return
@@ -787,6 +789,7 @@ Status: []<BR>"},
 		if(7)
 			if(iswelder(W))
 				var/obj/item/weapon/weldingtool/WT = W
+				to_chat(user, "<span class='notice'>You begin welding the turret's armor down.</span>")
 				if(WT.do_weld(user, src, 30,5))
 					build_step = 8
 					to_chat(user, "<span class='notice'>You weld the turret's armor down.</span>")
