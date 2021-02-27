@@ -270,8 +270,6 @@ Status: []<BR>"},
 
 				// Deconstruct into frame
 				var/obj/machinery/porta_turret_construct/TurretFrame = new/obj/machinery/porta_turret_construct(locate(x,y,z))
-				TurretFrame.name = src.name
-				TurretFrame.finish_name = src.name
 				var/obj/item/I = installed
 				TurretFrame.installed = I // Keep installed gun
 				TurretFrame.build_step = 7 // Reset to final step
