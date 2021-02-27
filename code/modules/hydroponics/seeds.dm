@@ -1161,7 +1161,7 @@
 	display_name = "Messa's tear leaves"
 	plant_dmi = 'icons/obj/hydroponics/mtear.dmi'
 	products = list(/obj/item/stack/medical/ointment/tajaran)
-	chems = list(HONEY = list(1,10), TANNIC_ACID = list(3,5))
+	chems = list(TANNIC_ACID = list(3,5))
 
 	lifespan = 50
 	maturation = 3
