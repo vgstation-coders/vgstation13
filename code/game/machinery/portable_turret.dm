@@ -264,6 +264,7 @@ Status: []<BR>"},
 
 		else if(iswelder(W))
 			var/obj/item/weapon/weldingtool/WT = W
+			to_chat(user, "<span class='notice'>You begin unwelding the turret's armor.</span>")
 			if(WT.do_weld(user, src, 30,5))
 				to_chat(user, "<span class='notice'>You unweld the turret's armor.</span>")
 			
@@ -273,6 +274,7 @@ Status: []<BR>"},
 				TurretFrame.finish_name = src.name
 				TurretFrame.installed = src.installed // Keep installed gun
 				TurretFrame.build_step = 7 // Reset to final step
+				TurretFrame.icon_state = "turret_frame2" // Update icon
 				installed.forceMove(TurretFrame)
 				qdel(src)
 
