@@ -272,7 +272,8 @@ Status: []<BR>"},
 				var/obj/machinery/porta_turret_construct/TurretFrame = new/obj/machinery/porta_turret_construct(locate(x,y,z))
 				TurretFrame.name = src.name
 				TurretFrame.finish_name = src.name
-				TurretFrame.installed = src.installed // Keep installed gun
+				var/obj/item/I = installed
+				TurretFrame.installed = I // Keep installed gun
 				TurretFrame.build_step = 7 // Reset to final step
 				TurretFrame.icon_state = "turret_frame2" // Update icon
 				installed.forceMove(TurretFrame)
