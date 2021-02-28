@@ -109,14 +109,14 @@
 
 	if(!hud_used.spider_queen_counter)
 		hud_used.spider_hud()
-	hud_used.spider_queen_counter.maptext_width = WORLD_ICON_SIZE*2
+	hud_used.spider_queen_counter.maptext_width = WORLD_ICON_SIZE
 	hud_used.spider_queen_counter.maptext_height = WORLD_ICON_SIZE
 	var/spider_count = get_spider_count()
 	var/queen_req = get_queen_req(MIN_SPIDERS_PER_PLAYER_QUEEN)
 	if (spider_count >= queen_req)
-		hud_used.spider_queen_counter.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><br><font color='#33FF33'>[spider_count]/[queen_req]</font></div>"
+		hud_used.spider_queen_counter.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><br><font color='#33FF33'>[spider_count]/[queen_req]</font></div>"
 	else
-		hud_used.spider_queen_counter.maptext = "<div align='left' valign='top' style='position:relative; top:0px; left:6px'><br><font color='#FFFF00'>[spider_count]/[queen_req]</font></div>"
+		hud_used.spider_queen_counter.maptext = "<div align='center' valign='middle' style='position:relative; top:0px; left:6px'><br><font color='#FFFF00'>[spider_count]/[queen_req]</font></div>"
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/proc/spin_web(var/turf/T)
 	if(!T.has_gravity(src))
