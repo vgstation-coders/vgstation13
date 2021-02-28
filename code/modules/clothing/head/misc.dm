@@ -394,7 +394,7 @@
 	icon_state = "wolfpelt"
 	item_state = "wolfpelt"
 	armor = list(melee = 10, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
-	body_parts_covered = HIDEHEADHAIR
+	body_parts_covered =  EARS|HEAD|HIDEHEADHAIR
 
 
 /obj/item/clothing/head/xenos
