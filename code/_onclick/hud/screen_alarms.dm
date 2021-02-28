@@ -287,8 +287,14 @@ var/global/list/screen_alarms_locs = list(
 	icon_state = "alien_burn"
 
 //Cult Alarms
-/obj/abstract/screen/alert/carbon/burn/fire/cult
-	icon_state = "cult_burn"
+/obj/abstract/screen/alert/carbon/burn/fire/construct
+	icon_state = "construct_burn"
+	desc = "The heat is too intense even for your obsidian body."
+
+//Spider Alarms
+/obj/abstract/screen/alert/carbon/burn/fire/spider
+	icon_state = "spider_burn"
+	desc = "You are on fire."
 
 //Silicon Alarms
 /obj/abstract/screen/alert/robot
@@ -345,7 +351,7 @@ var/global/list/screen_alarms_locs = list(
 		return
 	var/mob/living/silicon/ai/A = usr
 	if(A.alerts[SCREEN_ALARM_APC_HACKING] == src)
-		if(A.eyeobj && A.malfhacking && A.malfhack)	
+		if(A.eyeobj && A.malfhacking && A.malfhack)
 			A.eyeobj.forceMove(A.malfhack.loc)
 
 /obj/abstract/screen/alert/robot/hacked

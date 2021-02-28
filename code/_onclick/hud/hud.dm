@@ -20,6 +20,9 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 
 	var/obj/abstract/screen/lingchemdisplay
 	var/obj/abstract/screen/vampire_blood_display // /vg/
+	var/obj/abstract/screen/spider_food_display // /vg/
+	var/obj/abstract/screen/spiderling_growth_display // /vg/
+	var/obj/abstract/screen/spider_queen_counter // /vg/
 	var/obj/abstract/screen/countdown_display // /vg/
 	var/obj/abstract/screen/cult_Act_display // /vg/
 	var/obj/abstract/screen/cult_tattoo_display // /vg/
@@ -234,6 +237,8 @@ var/global/obj/abstract/screen/clicker/catcher = new()
 		borer_hud()
 	else if(isconstruct(mymob))
 		construct_hud()
+	else if(isspider(mymob))
+		spider_hud()
 	else if(ispAI(mymob))
 		pai_hud()
 	else if(ismartian(mymob))

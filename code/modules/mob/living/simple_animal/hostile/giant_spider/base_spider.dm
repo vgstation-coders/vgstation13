@@ -63,6 +63,11 @@
 	minbodytemp = 0
 	held_items = list()
 
+/mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
+		return 1
+	return ..()
+
 /mob/living/simple_animal/hostile/giant_spider/update_icons()
 	.=..()
 
@@ -119,3 +124,39 @@
 	..()
 	if(icon_aggro)
 		icon_state = icon_living
+
+/mob/living/simple_animal/hostile/giant_spider/Life()
+	if(timestopped)
+		return 0 //under effects of time magick
+	. = ..()
+	if(client)
+		client.color = list(0.8,0,0,1,
+							0,0.8,0,1,
+	 						0,0,0.8,1,
+		 					0.2,0.2,0.2,0.5,
+		 					0.15,0.15,0.15,0)
+	regular_hud_updates()
+
+/mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
+	if (!client)
+		return
+
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/spider)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
+	update_pull_icon()
+
+	if(hud_used && healths)
+		if (health >= maxHealth)//I tried using a switch() and BYOND told me to go fuck myself basically so here we go
+			healths.icon_state = "health0"
+		else if (health >= 3*maxHealth/4)
+			healths.icon_state = "health1"
+		else if (health >= maxHealth/2)
+			healths.icon_state = "health2"
+		else if (health >= maxHealth/4)
+			healths.icon_state = "health3"
+		else if (health > 0)
+			healths.icon_state = "health4"
+		else
+			healths.icon_state = "health5"
