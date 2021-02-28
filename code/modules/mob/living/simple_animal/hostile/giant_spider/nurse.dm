@@ -138,7 +138,7 @@
 			E = locate() in get_turf(src)
 			if(!E)
 				new /obj/effect/spider/eggcluster(loc)
-			stop_automated_movement = 0
+		stop_automated_movement = 0
 	else
 		to_chat(src,"<span class='warning'>There are already some eggs on this tile, space them out.</span>")
 
@@ -182,7 +182,7 @@
 		if(large_cocoon)
 			C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
 			C.health = initial(C.health)*2
-		stop_automated_movement = 0
+	stop_automated_movement = 0
 
 
 /mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider
