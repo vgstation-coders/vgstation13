@@ -138,6 +138,8 @@
 			E = locate() in get_turf(src)
 			if(!E)
 				new /obj/effect/spider/eggcluster(loc)
+		else
+			fed++
 		stop_automated_movement = 0
 	else
 		to_chat(src,"<span class='warning'>There are already some eggs on this tile, space them out.</span>")
