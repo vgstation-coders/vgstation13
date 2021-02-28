@@ -6302,21 +6302,22 @@
 	dupeable = FALSE
 
 /datum/reagent/ethanol/scientists_serendipity/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D)
-		switch(volume)
-			if(1 to 9)
-				glass_icon_state = "scientists_surprise"
-				glass_name = "\improper Scientist's Surprise"
-				glass_desc = "There is as yet insufficient data for a meaningful answer."
-			if(10 to 49)
-				glass_icon_state = "scientists_serendipity"
-				glass_name = "\improper Scientist's Serendipity"
-				glass_desc = "Knock back a cold glass of R&D."
-				D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
-			if(50 to INFINITY) //Infinity on the offchance you somehow acquire a glass with more than 50 max volume.
-				glass_icon_state = "scientists_serendipity"
-				glass_name = \improper Scientist's Lucky Datadisk"
-				glass_desc = "Why research what has already been catalogued?"
-				D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5" //Maxes everything but NT, Illegal and anomaly
+	if(volume < 10)
+		glass_icon_state = "scientists_surprise"
+		glass_name = "\improper Scientist's Surprise"
+		glass_desc = "There is as yet insufficient data for a meaningful answer."
+
+	if(volume > 10) && (volume < 50)
+		glass_icon_state = "scientists_serendipity"
+		glass_name = "\improper Scientist's Serendipity"
+		glass_desc = "Knock back a cold glass of R&D."
+		D.origin_tech = "materials=7;engineering=3;plasmatech=2;powerstorage=4;bluespace=6;combat=3;magnets=6;programming=3"
+
+	else
+		glass_icon_state = "scientists_serendipity"
+		glass_name = \improper Scientist's Lucky Datadisk"
+		glass_desc = "Why research what has already been catalogued?"
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5" //Maxes everything but NT, Illegal and anomaly
 				
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
