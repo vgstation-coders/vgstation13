@@ -834,6 +834,7 @@ Status: []<BR>"},
 			build_step = 3
 
 			if(!installed) // Skip to build_step 3 if no gun
+				to_chat(user, "<span class='notice'>Somehow, this turret had no gun???</span>")
 				return
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
