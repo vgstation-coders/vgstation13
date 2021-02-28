@@ -134,7 +134,7 @@
 	if(!E)
 		visible_message("<span class='notice'>\the [src] begins to lay a cluster of eggs.</span>")
 		stop_automated_movement = 1
-		spawn(50)
+		if(do_after(src,loc, 50))
 			E = locate() in get_turf(src)
 			if(!E)
 				new /obj/effect/spider/eggcluster(loc)
@@ -148,40 +148,40 @@
 	if(locate(/obj/effect/spider/cocoon) in cocoon_target.loc)
 		return
 	visible_message("<span class='notice'>\the [src] begins to secrete a sticky substance around \the [cocoon_target].</span>")
-	spawn(50)
-		if(cocoon_target && istype(cocoon_target.loc, /turf) && get_dist(src,cocoon_target) <= 1)
-			var/obj/effect/spider/cocoon/C = new(cocoon_target.loc)
-			var/large_cocoon = 0
-			C.pixel_x = cocoon_target.pixel_x
-			C.pixel_y = cocoon_target.pixel_y
-			for(var/mob/living/M in C.loc)
-				if(istype(M, /mob/living/simple_animal/hostile/giant_spider))
-					continue
-				for (var/atom/movable/AM in M.locked_atoms)
-					M.unlock_atom(AM)
-				if (M.locked_to)
-					M.locked_to.unlock_atom(M)
+	stop_automated_movement = 1
+	if(do_after(src,cocoon_target, 50))
+		var/obj/effect/spider/cocoon/C = new(cocoon_target.loc)
+		var/large_cocoon = 0
+		C.pixel_x = cocoon_target.pixel_x
+		C.pixel_y = cocoon_target.pixel_y
+		for(var/mob/living/M in C.loc)
+			if(istype(M, /mob/living/simple_animal/hostile/giant_spider))
+				continue
+			for (var/atom/movable/AM in M.locked_atoms)
+				M.unlock_atom(AM)
+			if (M.locked_to)
+				M.locked_to.unlock_atom(M)
+			large_cocoon = 1
+			if(M.getCloneLoss() < 125)
+				fed++
+				visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
+				M.adjustCloneLoss(30 * size)
+			M.forceMove(C)
+			C.pixel_x = M.pixel_x
+			C.pixel_y = M.pixel_y
+		for(var/obj/item/I in C.loc)
+			I.forceMove(C)
+		for(var/obj/structure/S in C.loc)
+			if(!S.anchored)
+				S.forceMove(C)
 				large_cocoon = 1
-				if(M.getCloneLoss() < 125)
-					fed++
-					visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
-					M.adjustCloneLoss(30 * size)
+		for(var/obj/machinery/M in C.loc)
+			if(!M.anchored)
 				M.forceMove(C)
-				C.pixel_x = M.pixel_x
-				C.pixel_y = M.pixel_y
-			for(var/obj/item/I in C.loc)
-				I.forceMove(C)
-			for(var/obj/structure/S in C.loc)
-				if(!S.anchored)
-					S.forceMove(C)
-					large_cocoon = 1
-			for(var/obj/machinery/M in C.loc)
-				if(!M.anchored)
-					M.forceMove(C)
-					large_cocoon = 1
-			if(large_cocoon)
-				C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
-				C.health = initial(C.health)*2
+				large_cocoon = 1
+		if(large_cocoon)
+			C.icon_state = pick("cocoon_large1","cocoon_large2","cocoon_large3")
+			C.health = initial(C.health)*2
 		stop_automated_movement = 0
 
 
