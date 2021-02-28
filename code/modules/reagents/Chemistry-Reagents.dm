@@ -6307,7 +6307,7 @@
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
 
-	if(volume > 10) && (volume < 50)
+	else if(volume < 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
 		glass_desc = "Knock back a cold glass of R&D."
