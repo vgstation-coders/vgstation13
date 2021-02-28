@@ -6315,7 +6315,7 @@
 
 	else
 		glass_icon_state = "scientists_serendipity"
-		glass_name = \improper Scientist's Lucky Datadisk"
+		glass_name = "\improper Scientist's Lucky Datadisk"
 		glass_desc = "Why research what has already been catalogued?"
 		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5" //Maxes everything but NT, Illegal and anomaly
 				
