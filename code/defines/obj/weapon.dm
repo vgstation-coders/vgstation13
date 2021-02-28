@@ -75,35 +75,6 @@
 	throw_speed = 4
 	throw_range = 20
 
-/obj/item/weapon/soap
-	name = "soap"
-	desc = "A cheap bar of soap. Doesn't smell."
-	gender = PLURAL
-	icon = 'icons/obj/items.dmi'
-	icon_state = "soap"
-	w_class = W_CLASS_TINY
-	siemens_coefficient = 0 //no conduct
-	throwforce = 0
-	throw_speed = 4
-	throw_range = 20
-	flags = FPRINT | NO_ATTACK_MSG
-
-/obj/item/weapon/soap/nanotrasen
-	desc = "A Nanotrasen brand bar of soap. Smells of plasma."
-	icon_state = "soapnt"
-
-/obj/item/weapon/soap/deluxe
-	desc = "A deluxe Waffle Co. brand bar of soap. Smells of condoms."
-	icon_state = "soapdeluxe"
-
-/obj/item/weapon/soap/syndie
-	desc = "An untrustworthy bar of soap. Smells of fear."
-	icon_state = "soapsyndie"
-
-/obj/item/weapon/soap/holo
-	name = "UV sterilizer"
-	desc = "This shouldn't exist."
-
 /obj/item/weapon/c_tube
 	name = "cardboard tube"
 	desc = "A tube... of cardboard."
