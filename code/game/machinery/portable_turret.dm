@@ -831,9 +831,10 @@ Status: []<BR>"},
 /obj/machinery/porta_turret_construct/attack_hand(mob/user as mob)
 	switch(build_step)
 		if(4)
-			if(!installed)	// if for some reason the frame has no gun, it resorts to containing a basic taser
-				installed = new /obj/item/weapon/gun/energy/taser(src)
 			build_step = 3
+
+			if(!installed) // Skip to build_step 3 if no gun
+				return
 
 			to_chat(user, "You remove \the [installed] from the turret frame.")
 			var/obj/item/I = installed
