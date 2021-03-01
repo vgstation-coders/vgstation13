@@ -601,6 +601,7 @@
 				opened = 1
 			update_icon()
 	else if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && opened) // Sticking fork in open APC shocks you
+		to_chat(user, "<span class='warning'>That was really, really dumb of you.</span>") // Why would you even do this
 		shock(user, 75, W.siemens_coefficient)
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
