@@ -37,8 +37,9 @@
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
-	if(length(recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)) > 0) // Things carrying bag of holding inserted cause bagulooses too
-		singulocreate(W, user)
+	var/recursive_list = recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)
+	if(length(recursive_list) > 0) // Things carrying bag of holding inserted cause bagulooses too
+		singulocreate(recursive_list[1], user)
 		return
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
 	if(H)
