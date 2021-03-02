@@ -38,7 +38,7 @@
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
 	if(length(recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)) > 0) // Things carrying bag of holding inserted cause bagulooses too
-		singulocreate(B, user)
+		singulocreate(W, user)
 		return
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
 	if(H)
