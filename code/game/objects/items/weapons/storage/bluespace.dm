@@ -37,12 +37,9 @@
 		return // HOLY FUCKING SHIT WHY STORAGE CODE, WHY - pomf
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
-	if(istype(W, /obj/item/weapon/holder/diona)) // Dionas wearing bags of holding cause bagulooses too
-		var/obj/item/weapon/holder/diona/D = W
-		var/obj/item/weapon/storage/backpack/holding/B = locate(/obj/item/weapon/storage/backpack/holding) in D.stored_mob
-		if(B)
-			singulocreate(B, user)
-			return
+	if(length(recursive_type_check(W, /obj/item/weapon/storage/backpack/holding)) > 0) // Things carrying bag of holding inserted cause bagulooses too
+		singulocreate(B, user)
+		return
 	var/obj/item/weapon/storage/backpack/holding/H = locate(/obj/item/weapon/storage/backpack/holding) in W
 	if(H)
 		singulocreate(H, user)
