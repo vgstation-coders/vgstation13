@@ -623,6 +623,7 @@ turf/simulated/floor/update_icon()
 					spam_flag = 1
 					set_light(3)
 					icon_state = "uranium_inactive"
+					emitted_harvestable_radiation(src, 2, range = 5)
 					for(var/mob/living/L in range(2,src)) //Weak radiation
 						L.apply_radiation(3,RAD_EXTERNAL)
 					flick("uranium_active",src)
