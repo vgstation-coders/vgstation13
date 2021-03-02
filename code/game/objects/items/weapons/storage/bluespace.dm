@@ -38,12 +38,8 @@
 	if(istype(W, /obj/item/weapon/storage/backpack/holding/grinch))
 		return
 	if(istype(W, /obj/item/weapon/holder/diona)) // Dionas wearing bags of holding cause bagulooses too
-<<<<<<< HEAD
-		var/obj/item/weapon/storage/backpack/holding/B = locate(/obj/item/weapon/storage/backpack/holding) in W.stored_mob
-=======
 		var/obj/item/weapon/holder/diona/D = W
 		var/obj/item/weapon/storage/backpack/holding/B = locate(/obj/item/weapon/storage/backpack/holding) in D.stored_mob
->>>>>>> parent of 68fafdfd2a (Trying out recursive_type_check to comply with ancientpowerer's review)
 		if(B)
 			singulocreate(B, user)
 			return
