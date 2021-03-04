@@ -19,14 +19,15 @@
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
 		typecount = prune_list_to_type(input, types[1]).len
-		currentName = types[1].name
-		return "[typecount == 1 ? "" : typecount] [currentName][typecount != 1 ? "s" : ""]"
+		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
+		return "[typecount == 1 ? "" : typecount] [currentName]"
 	else if (uniquetotal == 2)
 		typecount = prune_list_to_type(input, types[1]).len
-		currentName = types[1].name
+		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
 		var/typecount2 = prune_list_to_type(input, types[2]).len
-		var/currentName2 = types[2].name
-		return "[typecount == 1 ? "" : typecount] [currentName][typecount != 1 ? "s" : ""][and_text][typecount2 == 1 ? "" : typecount2] [currentName2][typecount2 != 1 ? "s" : ""]"
+		var/currentName2 = ""
+		currentName2 = typecount2 == 1 ? "\a [types[2].name]" : "[types[2].name]\s"
+		return "[typecount == 1 ? "" : typecount] [currentName][and_text][typecount2 == 1 ? "" : typecount2] [currentName2]"
 	else
 		var/output = ""
 		var/index = 1
@@ -35,13 +36,13 @@
 				comma_text = final_comma_text
 
 			typecount = prune_list_to_type(input, types[index]).len
-			currentName = types[index].name
-			output += "[typecount == 1 ? "" : typecount] [currentName][typecount != 1 ? "s" : ""][comma_text]"
+			currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
+			output += "[typecount == 1 ? "" : typecount] [currentName][comma_text]"
 			index++
 
 		typecount = prune_list_to_type(input, types[index]).len
-		currentName = types[index].name
-		return "[output][and_text][typecount == 1 ? "" : typecount] [currentName][typecount != 1 ? "s" : ""]"
+		currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
+		return "[output][and_text][typecount == 1 ? "" : typecount] [currentName]"
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
