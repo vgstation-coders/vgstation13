@@ -40,9 +40,9 @@
 	max_uses--
 	if (max_uses <= 0 && prob(10 + (-max_uses * 5)))
 		if (user)
-			to_chat(user,"<span class='warning'>The bar of soap disintegrate between your fingers as you scrub the last of it.</span>")
+			to_chat(user,"<span class='warning'>The bar of soap disintegrates between your fingers as you scrub the last of it.</span>")
 		else
-			visible_message("<span class='warning'>The bar of soap disintegrate.</span>")
+			visible_message("<span class='warning'>The bar of soap disintegrates.</span>")
 		qdel(src)
 
 
