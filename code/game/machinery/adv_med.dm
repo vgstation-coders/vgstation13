@@ -7,7 +7,7 @@
 	idle_power_usage = 125
 	active_power_usage = 250
 	var/scanning = 1
-	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK
+	machine_flags = SCREWTOGGLE | CROWDESTROY | EJECTNOTDEL | WRENCHMOVE | FIXED2WORK | EMAGGABLE
 	component_parts = newlist(
 		/obj/item/weapon/circuitboard/fullbodyscanner,
 		/obj/item/weapon/stock_parts/scanning_module,
@@ -198,6 +198,18 @@
 	update_icon()
 	set_light(0)
 
+/obj/machinery/bodyscanner/emag(mob/user)
+	if(!emagged)
+		to_chat(user, "<span class='warning'>You disable the X-ray dosage limiter on \the [src].</span>")
+		to_chat(user, "<span class='notice'>\The [src] emits an ominous hum.</span>")
+		emagged = 1
+		return 1
+	else if (emagged)
+		to_chat(user, "<span class='warning'>You re-enable the dosage limiter on \the [src].</span>")
+		to_chat(user, "<span class='notice'>\The [src] emits a quiet whine.</span>")
+		emagged = 0
+		return 0
+
 /obj/machinery/bodyscanner/crowbarDestroy(mob/user, obj/item/weapon/crowbar/I)
 	if(occupant)
 		to_chat(user, "<span class='warning'>You cannot disassemble \the [src], it's occupado.</span>")
@@ -268,6 +280,9 @@
 		return
 	if (occupant)
 		use_power = 2
+		if (emagged)
+			occupant.apply_radiation(12,RAD_EXTERNAL)
+
 	else
 		use_power = 1
 
