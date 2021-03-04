@@ -18,7 +18,7 @@
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
 		typecount = prune_list_to_type(input, types[1]).len
-		return "[typecount != 1 ? "a" : typecount] [types[1].name][typecount != 1 ? "s" : ""]"
+		return "[typecount == 1 ? "a" : typecount] [types[1].name][typecount != 1 ? "s" : ""]"
 	else if (uniquetotal == 2)
 		typecount = prune_list_to_type(input, types[1]).len
 		var/typecount2 = prune_list_to_type(input, types[2]).len
