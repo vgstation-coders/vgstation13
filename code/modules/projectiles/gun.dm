@@ -472,7 +472,7 @@
 	. = ..()
 	if(prob(kick_fire_chance))
 		var/list/targets = list()
-		for(var/turf/t in view(6))
+		for(var/turf/t in oview(6))
 			targets += t
 		var/target = pick(targets)
 		src.Fire(target,H,0,0,1)
