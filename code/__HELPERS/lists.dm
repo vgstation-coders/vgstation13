@@ -11,24 +11,31 @@
 
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-	var/total = input.len
-	if (!total)
+	var/list/types = uniquetypelist(input)
+	var/uniquetotal = types.len
+	var/typecount = 0
+	if (!uniquetotal)
 		return "[nothing_text]"
-	else if (total == 1)
-		return "[input[1]]"
-	else if (total == 2)
-		return "[input[1]][and_text][input[2]]"
+	else if (uniquetotal == 1)
+		typecount = prune_list_to_type(input, types[1]).len
+		return "[typecount] [types[1]]"
+	else if (uniquetotal == 2)
+		typecount = prune_list_to_type(input, types[1]).len
+		var/typecount2 = prune_list_to_type(input, types[2]).len
+		return "[typecount] [types[1]][and_text][typecount2] [types[2]]"
 	else
 		var/output = ""
 		var/index = 1
-		while (index < total)
-			if (index == total - 1)
+		while (index < uniquetotal)
+			if (index == uniquetotal - 1)
 				comma_text = final_comma_text
 
-			output += "[input[index]][comma_text]"
+			typecount = prune_list_to_type(input, types[index]).len
+			output += "[typecount] [types[index]][comma_text]"
 			index++
 
-		return "[output][and_text][input[index]]"
+		typecount = prune_list_to_type(input, types[index]).len
+		return "[output][and_text][typecount] [types[index]]"
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
@@ -242,6 +249,14 @@
 	var/list/K = list()
 	for(var/item in L)
 		if(!(item in K))
+			K += item
+	return K
+
+//Return a list with no duplicate types
+/proc/uniquetypelist(list/L)
+	var/list/K = list()
+	for(var/datum/item in L)
+		if(!(is_type_in_list(item.type,K)))
 			K += item
 	return K
 
