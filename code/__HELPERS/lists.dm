@@ -256,9 +256,9 @@
 /proc/uniquetypelist(list/L)
 	var/list/K = list()
 	for(var/datum/item in L)
-		if(!(is_type_in_list(item.type,K)))
+		if(!(is_type_in_list(item,K)))
 			K += item
-	return K
+	return K &= L
 
 //for sorting clients or mobs by ckey
 /proc/sortKey(list/L, order=1)
