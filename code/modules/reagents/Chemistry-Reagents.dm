@@ -4678,6 +4678,20 @@
 	if(prob(1))
 		to_chat(M, "<span class='notice'>You are suddenly reminded that you are subhuman.</span>")
 
+/datum/reagent/drink/creamy_hot_coco
+	name = "Creamy Hot Chocolate"
+	id = CREAMY_HOT_COCO
+	description = "Never ever let it cool."
+	reagent_state = REAGENT_STATE_LIQUID
+	nutriment_factor = 2 * FOOD_METABOLISM
+	color = "#403010" //rgb: 64, 48, 16
+	glass_icon_state = "creamyhotchocolate"
+	glass_name = "\improper Creamy Hot Chocolate"
+	adj_temp = 5
+	density = 1.2
+	specheatcap = 4.18
+	mug_desc = "A delicious warm brew of milk and chocolate. Never ever let it cool."
+
 /datum/reagent/amatoxin
 	name = "Amatoxin"
 	id = AMATOXIN
@@ -6859,6 +6873,33 @@
 	color = "#664300" //rgb: 102, 67, 0
 	glass_icon_state = "longislandicedteaglass"
 	glass_name = "\improper Long Island Iced Tea"
+
+/datum/reagent/ethanol/drink/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	description = "Like a milkshake, but for irresponsible adults."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#b6ac94" //rgb: 182, 172, 148
+	glass_icon_state = "mudslide"
+	glass_name = "\improper Mudslide"
+
+/datum/reagent/ethanol/drink/sacrificial_mary
+	name = "Sacrificial Mary"
+	id = SACRIFICIAL_MARY
+	description = "Fresh Altar-To-Table taste in every sip."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#bd1c1e" //rgb: 189, 28, 30
+	glass_icon_state = "sacrificialmary"
+	glass_name = "\improper Sacrificial Mary"
+
+/datum/reagent/ethanol/drink/boysenberry_blizzard
+	name = "Boysenberry Blizzard"
+	id = BOYSENBERRY_BLIZZARD
+	description = "Don't stick your tongue out for these snowflakes!"
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#aa4cbd" //rgb: 170, 76, 189
+	glass_icon_state = "boysenberryblizzard"
+	glass_name = "\improper Boysenberry Blizzard"
 
 /datum/reagent/ethanol/drink/moonshine
 	name = "Moonshine"

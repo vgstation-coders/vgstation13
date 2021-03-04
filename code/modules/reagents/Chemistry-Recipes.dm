@@ -2708,6 +2708,33 @@
 	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	result = MUDSLIDE
+	required_reagents = list(ANTIFREEZE = 1, BLACKRUSSIAN = 1, IRISHCREAM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/creamy_hot_coco
+	name = "Creamy Hot Chocolate"
+	id = CREAMY_HOT_COCO
+	result = CREAMY_HOT_COCO
+	required_reagents = list(HOT_COCO = 1, CREAM = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/sacrificialmary
+	name = "Sacrificial Mary"
+	id = SACRIFICIAL_MARY
+	result = SACRIFICIAL_MARY
+	required_reagents = list(VODKA = 1, BLOOD = 2, LIMEJUICE = 1)
+	result_amount = 4
+
+/datum/chemical_reaction/boysenberryblizzard
+	name = "Boysenberry Blizzard"
+	id = BOYSENBERRY_BLIZZARD
+	result = BOYSENBERRY_BLIZZARD
+	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
+	result_amount = 5
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 
