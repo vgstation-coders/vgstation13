@@ -18,11 +18,11 @@
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
 		typecount = prune_list_to_type(input, types[1]).len
-		return "[typecount] [types[1]]"
+		return "[typecount != 1 ? "a" : typecount] [types[1].name][typecount != 1 ? "s" : ""]"
 	else if (uniquetotal == 2)
 		typecount = prune_list_to_type(input, types[1]).len
 		var/typecount2 = prune_list_to_type(input, types[2]).len
-		return "[typecount] [types[1]][and_text][typecount2] [types[2]]"
+		return "[typecount == 1 ? "a" : typecount] [types[1].name][typecount != 1 ? "s" : ""][and_text][typecount2 == 1 ? "a" : typecount2] [types[2].name][typecount2 != 1 ? "s" : ""]"
 	else
 		var/output = ""
 		var/index = 1
@@ -31,11 +31,11 @@
 				comma_text = final_comma_text
 
 			typecount = prune_list_to_type(input, types[index]).len
-			output += "[typecount] [types[index]][comma_text]"
+			output += "[typecount == 1 ? "a" : typecount] [types[index].name][typecount != 1 ? "s" : ""][comma_text]"
 			index++
 
 		typecount = prune_list_to_type(input, types[index]).len
-		return "[output][and_text][typecount] [types[index]]"
+		return "[output][and_text][typecount == 1 ? "a" : typecount] [types[index].name][typecount != 1 ? "s" : ""]"
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
