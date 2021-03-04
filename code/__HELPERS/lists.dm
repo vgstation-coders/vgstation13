@@ -20,15 +20,15 @@
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
 		pruneList = prune_list_to_type(input, types[1])
-		typecount = pruneList.len
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
 		return "[typecount == 1 ? "" : typecount] [currentName]"
 	else if (uniquetotal == 2)
 		pruneList = prune_list_to_type(input, types[1])
-		typecount = pruneList.len
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
 		pruneList = prune_list_to_type(input, types[2])
-		var/typecount2 = pruneList.len
+		var/typecount2 = L.len
 		var/currentName2 = ""
 		currentName2 = typecount2 == 1 ? "\a [types[2].name]" : "[types[2].name]\s"
 		return "[typecount == 1 ? "" : typecount] [currentName][and_text][typecount2 == 1 ? "" : typecount2] [currentName2]"
@@ -40,13 +40,13 @@
 				comma_text = final_comma_text
 
 			pruneList = prune_list_to_type(input, types[index])
-			typecount = pruneList.len
+			typecount = L.len
 			currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
 			output += "[typecount == 1 ? "" : typecount] [currentName][comma_text]"
 			index++
 
 		pruneList = prune_list_to_type(input, types[index])
-		typecount = pruneList.len
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
 		return "[output][and_text][typecount == 1 ? "" : typecount] [currentName]"
 
