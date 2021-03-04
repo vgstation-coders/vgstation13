@@ -70,7 +70,7 @@
 	name = "Water Potassium Explosion"
 	id = "explosion_potassium"
 	result = null
-	required_reagents = list(WATER = 1, POTASSIUM = 1)
+	required_reagents = list(POTASSIUM = 1, WATER = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
 	secondary = 1
@@ -87,6 +87,15 @@
 	e.start()
 	holder.clear_reagents()
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+
+/datum/chemical_reaction/explosion_potassium/holy
+	id = "holy_explosion_potassium"
+	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
+	result_amount = 2.4
+	
+/datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
