@@ -12,19 +12,23 @@
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
 	var/list/types = uniquetypelist(input)
+	var/list/pruneList
 	var/uniquetotal = types.len
 	var/typecount = 0
 	var/currentName = ""
 	if (!uniquetotal)
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
-		typecount = prune_list_to_type(input, types[1]).len
+		pruneList = prune_list_to_type(input, types[1])
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
 		return "[typecount == 1 ? "" : typecount] [currentName]"
 	else if (uniquetotal == 2)
-		typecount = prune_list_to_type(input, types[1]).len
+		pruneList = prune_list_to_type(input, types[1])
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
-		var/typecount2 = prune_list_to_type(input, types[2]).len
+		pruneList = prune_list_to_type(input, types[2])
+		var/typecount2 = L.len
 		var/currentName2 = ""
 		currentName2 = typecount2 == 1 ? "\a [types[2].name]" : "[types[2].name]\s"
 		return "[typecount == 1 ? "" : typecount] [currentName][and_text][typecount2 == 1 ? "" : typecount2] [currentName2]"
@@ -35,12 +39,14 @@
 			if (index == uniquetotal - 1)
 				comma_text = final_comma_text
 
-			typecount = prune_list_to_type(input, types[index]).len
+			pruneList = prune_list_to_type(input, types[index])
+			typecount = L.len
 			currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
 			output += "[typecount == 1 ? "" : typecount] [currentName][comma_text]"
 			index++
 
-		typecount = prune_list_to_type(input, types[index]).len
+		pruneList = prune_list_to_type(input, types[index])
+		typecount = L.len
 		currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
 		return "[output][and_text][typecount == 1 ? "" : typecount] [currentName]"
 
