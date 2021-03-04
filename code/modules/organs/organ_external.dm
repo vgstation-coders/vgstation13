@@ -614,12 +614,19 @@ Note that amputating the affected organ does in fact remove the infection from t
 	for(var/datum/wound/W in wounds)
 		//Internal wounds get worse over time. Low temperatures (cryo) stop them.
 		if(W.internal && !W.is_treated() && owner.bodytemperature >= 170 && !(species && species.anatomy_flags & NO_BLOOD))
-			if(!owner.reagents.has_any_reagents(list(BICARIDINE,INAPROVALINE,CLOTTING_AGENT,BIOFOAM)))	//Bicard, inaprovaline, clotting agent, and biofoam stop internal wounds from growing bigger with time, and also slow bleeding
-				W.open_wound(0.1 * wound_update_accuracy)
-				owner.vessel.remove_reagent(BLOOD, 0.05 * W.damage * wound_update_accuracy)
+			var/blood_factor = 1
 
-			if(!owner.reagents.has_reagent(CLOTTING_AGENT) && !owner.reagents.has_reagent(BIOFOAM))	//Clotting agent and biofoam stop bleeding entirely.
-				owner.vessel.remove_reagent(BLOOD, 0.02 * W.damage * wound_update_accuracy)
+			if(owner.reagents.has_reagent(INAPROVALINE) || owner.reagents.has_reagent(BICARIDINE)) //Inaprovaline and bicaridine slow bleeding by 30%
+				blood_factor -= 0.3
+
+			if(owner.reagents.has_reagent(HYPERZINE)) //On the other hand, hyperzine speeds up bleeding by 30%
+				blood_factor += 0.3
+
+			if(owner.reagents.has_reagent(CLOTTING_AGENT) || owner.reagents.has_reagent(BIOFOAM)) //Clotting agent and biofoam stop bleeding entirely.
+				blood_factor = 0
+
+			owner.vessel.remove_reagent(BLOOD, W.damage * wound_update_accuracy * 0.07 * blood_factor)
+
 			if(prob(1 * wound_update_accuracy))
 				owner.custom_pain("You feel a stabbing pain in your [display_name]!", 1)
 
