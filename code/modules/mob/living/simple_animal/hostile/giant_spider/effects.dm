@@ -193,7 +193,7 @@
 	plane = ABOVE_HUMAN_PLANE
 	layer = CLOSED_CURTAIN_LAYER
 	var/atom/stuck_to = null
-	var/duration = 100
+	var/duration = 10 SECONDS
 
 /obj/effect/overlay/stickyweb/Destroy()
 	if(stuck_to)
@@ -214,7 +214,7 @@
 		qdel(src)
 
 /obj/effect/overlay/stickyweb/attack_hand(var/mob/user)
-	if (do_after(user,src,15))
+	if (do_after(user,src,1.5 SECONDS))
 		unstick()
 
 /obj/effect/overlay/stickyweb/proc/unstick()
