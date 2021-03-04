@@ -11,7 +11,7 @@
 
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-	var/list/datum/types = uniquetypelist(input)
+	var/list/types = uniquetypelist(input)
 	var/list/pruneList
 	var/uniquetotal = types.len
 	var/typecount = 0
