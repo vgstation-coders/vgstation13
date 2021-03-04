@@ -41,6 +41,8 @@
 	if (max_uses <= 0 && prob(10 + (-max_uses * 5)))
 		if (user)
 			to_chat(user,"<span class='warning'>The bar of soap disintegrate between your fingers as you scrub the last of it.</span>")
+		else
+			visible_message("<span class='warning'>The bar of soap disintegrate.</span>")
 		qdel(src)
 
 
@@ -50,6 +52,7 @@
 		if (M.Slip(3, 2, 1))
 			M.simple_message("<span class='notice'>You slipped on the [name]!</span>",
 				"<span class='userdanger'>Something is scratching at your feet! Oh god!</span>")
+			on_successful_use()
 
 /obj/item/weapon/soap/afterattack(var/atom/target, var/mob/user)
 	if(!user.Adjacent(target))
