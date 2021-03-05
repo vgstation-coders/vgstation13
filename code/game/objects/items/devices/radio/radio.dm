@@ -509,6 +509,8 @@
 
 /obj/item/device/radio/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
+	if(hidden_uplink && hidden_uplink.active && hidden_uplink.refund(user, W))
+		return
 	user.set_machine(src)
 	if (!(W.is_screwdriver(user)))
 		return
