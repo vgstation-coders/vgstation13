@@ -11,27 +11,23 @@
 
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-	var/list/atom/types = uniquetypelist(input)
-	var/list/pruneList
-	var/uniquetotal = types.len
-	var/typecount = 0
+	var/list/names = uniquenamelist(input)
+	var/uniquetotal = names.len
+	var/namecount = 0
 	var/currentName = ""
 	if (!uniquetotal)
 		return "[nothing_text]"
 	else if (uniquetotal == 1)
-		pruneList = prune_list_to_type(input, types[1])
-		typecount = pruneList.len
-		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
-		return "[typecount == 1 ? "" : typecount] [currentName]"
+		namecount = count_by_name(input, names[1])
+		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s"
+		return "[namecount == 1 ? "" : namecount] [currentName]"
 	else if (uniquetotal == 2)
-		pruneList = prune_list_to_type(input, types[1])
-		typecount = pruneList.len
-		currentName = typecount == 1 ? "\a [types[1].name]" : "[types[1].name]\s"
-		pruneList = prune_list_to_type(input, types[2])
-		var/typecount2 = pruneList.len
+		namecount = count_by_name(input, names[1])
+		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s"
+		var/namecount2 = count_by_name(input, names[2])
 		var/currentName2 = ""
-		currentName2 = typecount2 == 1 ? "\a [types[2].name]" : "[types[2].name]\s"
-		return "[typecount == 1 ? "" : typecount] [currentName][and_text][typecount2 == 1 ? "" : typecount2] [currentName2]"
+		currentName2 = namecount2 == 1 ? "\a [names[2]]" : "[names[2]]\s"
+		return "[namecount == 1 ? "" : namecount] [currentName][and_text][namecount2 == 1 ? "" : namecount2] [currentName2]"
 	else
 		var/output = ""
 		var/index = 1
@@ -39,16 +35,14 @@
 			if (index == uniquetotal - 1)
 				comma_text = final_comma_text
 
-			pruneList = prune_list_to_type(input, types[index])
-			typecount = pruneList.len
-			currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
-			output += "[typecount == 1 ? "" : typecount] [currentName][comma_text]"
+			namecount = count_by_name(input, names[index])
+			currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s"
+			output += "[namecount == 1 ? "" : namecount] [currentName][comma_text]"
 			index++
 
-		pruneList = prune_list_to_type(input, types[index])
-		typecount = pruneList.len
-		currentName = typecount == 1 ? "\a [types[index].name]" : "[types[index].name]\s"
-		return "[output][and_text][typecount == 1 ? "" : typecount] [currentName]"
+		namecount = count_by_name(input, names[index])
+		currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s"
+		return "[output][and_text][namecount == 1 ? "" : namecount] [currentName]"
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
@@ -265,13 +259,13 @@
 			K += item
 	return K
 
-//Return a list with no duplicate types
-/proc/uniquetypelist(list/L)
+//Return a list with no duplicate names
+/proc/uniquenamelist(var/list/atom/L)
 	var/list/K = list()
-	for(var/datum/item in L)
-		if(!(is_type_in_list(item,K)))
-			K += item
-	return K &= L
+	for(var/atom/item in L)
+		if(!(item.name in K))
+			K += item.name
+	return K
 
 //for sorting clients or mobs by ckey
 /proc/sortKey(list/L, order=1)
@@ -343,6 +337,13 @@
 	var/i = 0
 	for(var/T in L)
 		if(istype(T, type))
+			i++
+	return i
+
+/proc/count_by_name(var/list/atom/L, name)
+	var/i = 0
+	for(var/atom/T in L)
+		if(T.name == name)
 			i++
 	return i
 
