@@ -6306,7 +6306,8 @@
 		glass_icon_state = "scientists_surprise"
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
-
+		D.origin_tech = ""
+		
 	else if(volume < 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
@@ -6315,9 +6316,9 @@
 
 	else
 		glass_icon_state = "scientists_serendipity"
-		glass_name = "\improper Scientist's Lucky Datadisk"
+		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
-		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5" //Maxes everything but NT, Illegal and anomaly
+		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
 				
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
