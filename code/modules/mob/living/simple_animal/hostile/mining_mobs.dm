@@ -37,7 +37,7 @@
 	if(P.damage < 30)
 		P.damage = (P.damage / 2)
 		visible_message("<span class='danger'>\The [P] has a reduced effect on \the [src]!</span>")
-	..()
+	return ..()
 
 /mob/living/simple_animal/hostile/asteroid/hitby(atom/movable/AM, speed)//No floor tiling them to death, wiseguy
 	. = ..()
@@ -243,7 +243,7 @@ obj/item/asteroid/basilisk_hide/New()
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/bullet_act(var/obj/item/projectile/P)
 	visible_message("<span class='danger'>\The [P] was repelled by \the [src]'s girth!</span>")
-	return
+	return PROJECTILE_COLLISION_DEFAULT
 
 /mob/living/simple_animal/hostile/asteroid/goldgrub/death(var/gibbed = FALSE)
 	alerted = 0

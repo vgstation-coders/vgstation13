@@ -17,6 +17,8 @@ var/list/beam_master = list()
 
 #define RAY_CAST_REBOUND 1.5
 
+#define RAY_CAST_PORTAL 1.6
+
 //overriding the filter function of an inherited beam
 /ray/beam_ray
 	var/obj/item/projectile/beam/fired_beam
@@ -45,12 +47,18 @@ var/list/beam_master = list()
 		return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
 	if(!A.Cross(fired_beam, T) || (!isturf(fired_beam.original) && A == fired_beam.original))
-		var/p_len = fired_beam.permutated.len
 		var/ret = fired_beam.to_bump(A)
 		if(ret)
 			return new /rayCastHit(info, RAY_CAST_HIT_EXIT)
-		else if(p_len != fired_beam.permutated.len) //check if we reflected on anything... yes, there is not better (easy) way
-			return new /rayCastHit(info, RAY_CAST_REBOUND)
+		else
+			switch(fired_beam.special_collision)
+				if (PROJECTILE_COLLISION_REBOUND)
+					return new /rayCastHit(info, RAY_CAST_REBOUND)
+				if (PROJECTILE_COLLISION_MISS)
+					A.visible_message("<span class='notice'>\The [fired_beam] misses \the [A] narrowly!</span>")
+					return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
+				if (PROJECTILE_COLLISION_PORTAL)
+					return new /rayCastHit(info, RAY_CAST_PORTAL)
 
 	return new /rayCastHit(info, RAY_CAST_NO_HIT_CONTINUE)
 
@@ -114,6 +122,11 @@ var/list/beam_master = list()
 			spawn()
 				rebound(last_hit.hit_atom)
 
+		if(last_hit.hit_type == RAY_CAST_PORTAL)
+			ASSERT(!gcDestroyed)
+			spawn()
+				portal(last_hit.hit_atom)
+
 /obj/item/projectile/beam/process()
 	var/vector/origin = atom2vector(starting)
 	var/vector/direction = atoms2vector(starting, original)
@@ -140,6 +153,25 @@ var/list/beam_master = list()
 
 	fireto(origin, direction)
 	shot_from = A //temporary
+
+/obj/item/projectile/beam/proc/portal(var/atom/A)
+	var/atom/dest
+	if (istype(A, /obj/effect/portal))
+		var/obj/effect/portal/P = A
+		dest = P.target
+	else if (istype(A, /obj/machinery/teleport/hub))
+		var/obj/machinery/teleport/hub/H = A
+		dest = H.get_target_lock()
+
+	var/ray/beam_ray/latest_ray = past_rays[past_rays.len]
+
+	//make new ray
+	var/vector/origin = atom2vector(dest)
+	var/vector/direction = latest_ray.direction
+
+	fireto(origin, direction)
+	shot_from = dest
+
 
 /obj/item/projectile/beam/dumbfire(var/dir)
 	src.dir = dir || src.dir
@@ -175,6 +207,8 @@ var/list/beam_master = list()
 	layer = PROJECTILE_LAYER
 	var/turf/last = null
 	kill_count = 12
+	var/mob/firer_mob = null
+	var/yellow = 0
 
 /obj/item/projectile/beam/lightning/proc/adjustAngle(angle)
 	angle = round(angle) + 45
@@ -191,6 +225,31 @@ var/list/beam_master = list()
 		angle = round(angle) + 45*/
 	return angle
 
+
+/obj/item/projectile/beam/lightning/admin_warn(mob/living/M)
+	if(firer_mob && istype(firer_mob, /mob))
+		if(firer_mob == M)
+			log_attack("<font color='red'>[key_name(firer_mob)] shot himself with a [type].</font>")
+			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
+			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot himself with a <b>[type]</b>"
+			msg_admin_attack("[key_name(firer_mob)] shot himself with a [type], [pick("top kek!","for shame.","he definitely meant to do that","probably not the last time either.")] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
+			if(!iscarbon(firer_mob))
+				M.LAssailant = null
+			else
+				M.LAssailant = firer_mob
+		else
+			log_attack("<font color='red'>[key_name(firer_mob)] shot [key_name(M)] with a [type]</font>")
+			M.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
+			firer_mob.attack_log += "\[[time_stamp()]\] <b>[key_name(firer_mob)]</b> shot <b>[key_name(M)]</b> with a <b>[type]</b>"
+			if(firer_mob.client || M.client)
+				msg_admin_attack("[key_name(firer_mob)] shot [key_name(M)] with a [type] (<A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[firer_mob.x];Y=[firer_mob.y];Z=[firer_mob.z]'>JMP</a>)")
+			if(!iscarbon(firer_mob))
+				M.LAssailant = null
+			else
+				M.LAssailant = firer_mob
+	else
+		..()
+		
 /obj/item/projectile/beam/lightning/process()
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
@@ -198,9 +257,9 @@ var/list/beam_master = list()
 	var/broken
 	var/atom/curr = current
 	var/Angle=round(Get_Angle(firer,curr))
-	var/icon/I=new('icons/obj/lightning.dmi',icon_state)
-	var/icon/Istart=new('icons/obj/lightning.dmi',"[icon_state]start")
-	var/icon/Iend=new('icons/obj/lightning.dmi',"[icon_state]end")
+	var/icon/I=new('icons/obj/lightning.dmi',"[icon_state][yellow ? "_yellow" : ""]")
+	var/icon/Istart=new('icons/obj/lightning.dmi',"[icon_state]start[yellow ? "_yellow" : ""]")
+	var/icon/Iend=new('icons/obj/lightning.dmi',"[icon_state]end[yellow ? "_yellow" : ""]")
 	I.Turn(Angle+45)
 	Istart.Turn(Angle+45)
 	Iend.Turn(Angle+45)

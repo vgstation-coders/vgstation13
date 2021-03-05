@@ -194,10 +194,13 @@
 /datum/map/active/map_ruleset(var/datum/dynamic_ruleset/DR)
 	if(ispath(DR.role_category,/datum/role/blob_overmind))
 		return FALSE
-	if(ispath(DR.role_category,/datum/role/changeling))
-		return FALSE
 
-	return TRUE
+	return ..()
+
+/datum/map/active/map_equip(var/mob/living/carbon/human/H)
+	if(!istype(H))
+		return
+	H.equip_or_collect(new /obj/item/weapon/book/manual/snow(H.back), slot_in_backpack)
 
 ////////////////////////////////////////////////////////////////
 #include "snaxi.dmm"

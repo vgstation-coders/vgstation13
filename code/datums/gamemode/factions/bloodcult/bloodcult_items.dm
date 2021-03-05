@@ -942,7 +942,7 @@ var/list/arcane_tomes = list()
 		takeDamage(O.throwforce)
 
 /obj/item/weapon/melee/soulblade/bullet_act(var/obj/item/projectile/P)
-	..()
+	. = ..()
 	takeDamage(P.damage)
 
 /obj/item/weapon/melee/soulblade/proc/capture_shade(var/mob/living/simple_animal/shade/target, var/mob/user)
@@ -1287,7 +1287,7 @@ var/list/arcane_tomes = list()
 	mech_flags = MECH_SCAN_FAIL
 
 /obj/item/weapon/bloodcult_pamphlet/attack_self(var/mob/user)
-	var/datum/role/cultist/newCultist = new
+	var/datum/role/cultist/chief/newCultist = new
 	newCultist.AssignToRole(user.mind,1)
 	var/datum/faction/bloodcult/cult = find_active_faction_by_type(/datum/faction/bloodcult)
 	if (!cult)

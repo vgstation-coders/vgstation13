@@ -26,7 +26,7 @@
 //7 = Atomic synthesis
 
 //send 1 after location to generate a trigger for the effect, only do this on objects that have the required events!
-/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0)
+/datum/artifact_effect/New(var/atom/location, var/generate_trigger = 0, var/primary_effect = TRUE)
 	..()
 	holder = location
 	effect = pick(effect) //If effect is defined as a list, pick one of the options from the list. If it's defined specifically, pick that.
@@ -62,7 +62,7 @@
 			effectrange = rand(20, 200)
 
 	if(generate_trigger)
-		GenerateTrigger()
+		GenerateTrigger(primary_effect)
 
 /datum/artifact_effect/proc/ToggleActivate(var/reveal_toggle = 1)
 	//so that other stuff happens first
@@ -183,14 +183,16 @@ proc/GetAnomalySusceptibility(var/mob/living/carbon/human/H)
 			return 1
 	return 0
 
-/datum/artifact_effect/proc/GenerateTrigger()
+/datum/artifact_effect/proc/GenerateTrigger(var/primary_effect = TRUE)
 	if(trigger)
 		qdel(trigger); trigger = null
 	var/triggertype
 	if(effect == ARTIFACT_EFFECT_TOUCH)
 		triggertype = /datum/artifact_trigger/touch
-	else
+	else if (primary_effect)
 		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger)
+	else
+		triggertype = pick(typesof(/datum/artifact_trigger) - /datum/artifact_trigger - /datum/artifact_trigger/pay2use)
 
 	trigger = new triggertype(src)
 

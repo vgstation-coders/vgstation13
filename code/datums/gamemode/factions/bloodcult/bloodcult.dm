@@ -53,7 +53,7 @@ var/global/global_anchor_bloodstone // Keeps track of what stone becomes the anc
 	Nar-Sie's goal is to tear open a breach through reality so he can pull the station into his realm and feast on the crew's blood and souls."
 	roletype = /datum/role/cultist
 	logo_state = "cult-logo"
-	hud_icons = list("cult-logo")
+	hud_icons = list("cult-chief-logo", "cult-logo")
 	var/list/bloody_floors = list()
 	//var/target_change = FALSE
 	//var/change_cooldown = 0

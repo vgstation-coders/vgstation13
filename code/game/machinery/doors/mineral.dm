@@ -230,7 +230,7 @@
 		if(!try_closing)
 			try_closing = TRUE
 			process()
- 
+
 /obj/machinery/door/mineral/wood/log/close()
 	..()
 	if(density) //successful, cease processing
@@ -263,6 +263,7 @@
 	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 		hardness -= Proj.damage/100
 		CheckHardness()
+	return ..()
 
 /obj/machinery/door/mineral/resin/open()
 	..()
@@ -370,6 +371,7 @@
 	if(Proj.damage_type == BRUTE || Proj.damage_type == BURN)
 		health -= Proj.damage
 		CheckHardness()
+	return ..()
 
 /obj/machinery/door/mineral/cult/attackby(var/obj/item/weapon/W, var/mob/user)
 	if(istype(W, /obj/item/weapon/card))

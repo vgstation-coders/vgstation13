@@ -331,7 +331,7 @@
 						to_chat(user, "[A.name] is preventing the shuttle from departing.")
 				moving = 0
 				destination_port = null
-				return 0
+				return
 			for(var/atom/movable/AA in linked_area)
 				AA.lazy_invoke_event(/lazy_event/on_z_transition, list("user" = AA, "to_z" = D.z, "from_z" = linked_port.z))
 

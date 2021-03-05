@@ -32,7 +32,7 @@
 /obj/item/clothing/under/sl_suit
 	desc = "It's a very amish looking suit."
 	name = "amish suit"
-	icon_state = "sl_suit"
+	icon_state = "detective_noir"
 	_color = "sl_suit"
 	clothing_flags = ONESIZEFITSALL
 	species_fit = list(GREY_SHAPED, INSECT_SHAPED)

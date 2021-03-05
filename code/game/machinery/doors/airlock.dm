@@ -264,6 +264,7 @@
 	..()
 
 /obj/machinery/door/airlock/uranium/proc/radiate()
+	emitted_harvestable_radiation(get_turf(src), 3, range = 5)
 	for(var/mob/living/L in range (3,src))
 		L.apply_radiation(15,RAD_EXTERNAL)
 	return

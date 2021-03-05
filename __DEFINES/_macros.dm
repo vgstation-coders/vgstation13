@@ -251,7 +251,11 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define iscultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
+
+#define isnewcultist(H) (iscultist(H) || ischiefcultist(H))
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 
@@ -306,6 +310,10 @@
 #define isloosecatbeast(H) (H.mind && H.mind.GetRole(CATBEAST))
 
 #define isERT(H) (H.mind && H.mind.GetRole(RESPONDER))
+
+#define isclownling(H) (H.mind && H.mind.GetRole(CLOWN_LING))
+
+#define istagmime(H) (H.mind && H.mind.GetRole(TAG_MIME))
 
 //Banning someone from the Syndicate role bans them from all antagonist roles
 #define isantagbanned(H) (jobban_isbanned(H, "Syndicate"))

@@ -195,6 +195,27 @@
 	desc = "This looks similar to contraptions from earth. Could aliens be stealing our technology?"
 	icon_state = "abed"
 
+/obj/structure/bed/racecar
+	name = "race car bed"
+	desc = "Vroom Vroom!"
+	icon_state = "racecarbed"
+	sheet_type = /obj/item/stack/sheet/plasteel
+	sheet_amt = 2
+
+/obj/structure/bed/racecar/classic
+	name = "race car bed"
+	desc = "Only fits one driver."
+	icon_state = "racecarclassic"
+
+/obj/structure/bed/racecar/shuttle
+	name = "shuttle bed"
+	desc = "The Emergency Shuttle has docked with dreamland."
+	icon_state = "eshuttle"
+
+/obj/structure/bed/racecar/firetruck
+	name = "fire truck bed"
+	desc = "Excellent at stopping oven fires."
+	icon_state = "firetruck"
 
 //therapy couch
 //beach ambience found in ambience_datums.dm

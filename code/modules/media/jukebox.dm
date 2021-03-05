@@ -213,6 +213,16 @@ var/global/list/loopModeNames=list(
 		return
 	attack_hand(user)
 
+/obj/machinery/media/jukebox/examine(mob/user)
+	..()
+	if (current_song_info)
+		if (!current_song_info.emagged)
+			to_chat(user, "<span class='info'>It is playing [current_song_info.display()].</span>")
+		else
+			to_chat(user, "<span class='info'>What is that hellish noise?</span>")
+	else
+		to_chat(user, "<span class='info'>It is currently silent.</span>")
+
 /obj/machinery/media/jukebox/power_change()
 	..()
 	if(emagged && !(stat & (NOPOWER|BROKEN)) && !any_power_cut())
@@ -513,11 +523,14 @@ var/global/list/loopModeNames=list(
 		screen = JUKEBOX_SCREEN_MAIN
 
 /obj/machinery/media/jukebox/proc/rad_pulse() //Called by pulsing the transmit wire
+	emitted_harvestable_radiation(get_turf(src), 20, range = 5)	//Standing by a juke applies a dose of 17 rads to humans so we'll round based on that. 1/5th the power of a freshly born stage 1 singularity.
 	for(var/mob/living/carbon/M in view(src,3))
 		var/rads = 50 * sqrt( 1 / (get_dist(M, src) + 1) ) //It's like a transmitter, but 1/3 as powerful.
 		M.apply_radiation(round(rads/2),RAD_EXTERNAL) //Distance/rads: 1 = 18, 2 = 14, 3 = 12
 
 /obj/machinery/media/jukebox/Topic(href, href_list)
+	if(wires.interference)
+		return
 	if(isobserver(usr) && !isAdminGhost(usr))
 		to_chat(usr, "<span class='warning'>You can't push buttons when your fingers go right through them, dummy.</span>")
 		return
@@ -723,16 +736,18 @@ var/global/list/loopModeNames=list(
 	if(current_song > playlist.len)
 		current_song = 0
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		media_finish_time = world.time + song.length
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 	..()
 
 /obj/machinery/media/jukebox/proc/stop_playing()
@@ -884,16 +899,18 @@ var/global/list/loopModeNames=list(
 
 /obj/machinery/media/jukebox/superjuke/thematic/update_music()
 	if(current_song && playing)
-		var/datum/song_info/song = playlist[current_song]
-		media_url = song.url
+		current_song_info = playlist[current_song]
+		current_song_info.emagged = emagged
+		media_url = current_song_info.url
 		last_song = current_song
 		media_start_time = world.time
-		media_finish_time = world.time + song.length
-		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [song.display()].</span>","<em>You hear music.</em>")
+		media_finish_time = world.time + current_song_info.length
+		visible_message("<span class='notice'>[bicon(src)] \The [src] begins to play [current_song_info.display()].</span>","<em>You hear music.</em>")
 		//visible_message("<span class='notice'>[bicon(src)] \The [src] warbles: [song.length/10]s @ [song.url]</notice>")
 	else
 		media_url=""
 		media_start_time = 0
+		current_song_info = null
 
 	// Send update to clients.
 	for(var/mob/M in mob_list)

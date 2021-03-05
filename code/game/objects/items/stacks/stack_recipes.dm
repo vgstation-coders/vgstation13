@@ -345,6 +345,13 @@ var/list/datum/stack_recipe/plasteel_recipes = list (
 	null,
 	new/datum/stack_recipe("Vault Door assembly",			/obj/structure/door_assembly/door_assembly_vault,	8,	time = 50,	one_per_turf = 1,	on_floor = 1),
 	new/datum/stack_recipe/dorf("dorf chair",              /obj/structure/bed/chair,                 one_per_turf = 1, on_floor = 1, inherit_material = TRUE, gen_quality = TRUE),
+	null,
+	new/datum/stack_recipe_list("Vehicle Beds",list(
+		new/datum/stack_recipe("race car bed",                      /obj/structure/bed/racecar,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("classic race car bed",                      /obj/structure/bed/racecar/classic,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("shuttle bed",                      /obj/structure/bed/racecar/shuttle,                    2, one_per_turf = 1, on_floor = 1),
+		new/datum/stack_recipe("fire truck bed",                      /obj/structure/bed/racecar/firetruck,                    2, one_per_turf = 1, on_floor = 1),
+		)),
 	)
 
 /* ====================================================================

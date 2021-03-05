@@ -252,6 +252,9 @@
 	for(var/datum/faction/F in factions)
 		if (F.check_win())
 			return 1
+	for(var/datum/role/R in orphaned_roles)
+		if (R.check_win())
+			return 1
 	if(emergency_shuttle.location==2 || ticker.station_was_nuked)
 		return 1
 	return 0

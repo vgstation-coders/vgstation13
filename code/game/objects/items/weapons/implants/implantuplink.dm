@@ -16,6 +16,8 @@
 	to_chat(source, "The implanted uplink implant can be activated by using the [src.activation_emote] emote, <B>say *[src.activation_emote]</B> to attempt to activate.")
 	return 1
 
+/obj/item/weapon/implant/uplink/handle_removal(var/mob/remover)
+	makeunusable(75)
 
 /obj/item/weapon/implant/uplink/trigger(emote, mob/source as mob)
 	if(hidden_uplink && usr == source) // Let's not have another people activate our uplink
