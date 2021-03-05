@@ -11,38 +11,32 @@
 
 //Returns a list in plain english as a string
 /proc/english_list(var/list/input, nothing_text = "nothing", and_text = " and ", comma_text = ", ", final_comma_text = "" )
-	var/list/names = uniquenamelist(input)
-	var/uniquetotal = names.len
-	var/namecount = 0
-	var/currentName = ""
-	if (!uniquetotal)
-		return "[nothing_text]"
-	else if (uniquetotal == 1)
-		namecount = count_by_name(input, names[1])
-		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s"
-		return "[namecount == 1 ? "" : namecount] [currentName]"
-	else if (uniquetotal == 2)
-		namecount = count_by_name(input, names[1])
-		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s"
-		var/namecount2 = count_by_name(input, names[2])
-		var/currentName2 = ""
-		currentName2 = namecount2 == 1 ? "\a [names[2]]" : "[names[2]]\s"
-		return "[namecount == 1 ? "" : namecount] [currentName][and_text][namecount2 == 1 ? "" : namecount2] [currentName2]"
-	else
-		var/output = ""
-		var/index = 1
-		while (index < uniquetotal)
-			if (index == uniquetotal - 1)
-				comma_text = final_comma_text
+	var/list/names = uniquenamelist(input) // First, get the items to list
+	var/uniquetotal = names.len // And the amount
+	var/namecount = 0 // Variable for how often an item occurs
+	var/currentName = "" // Current name worked with in loop
+	
+	if (!uniquetotal) // If the list of names is empty
+		return "[nothing_text]" // Return "nothing"
+	else if (uniquetotal == 1) // If there is only one item
+		namecount = count_by_name(input, names[1]) // Count how many of this item occurs
+		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s" // Make it say "an item" or "x items" if singular or plural
+		return "[namecount == 1 ? "" : namecount] [currentName]" // Return this
+	else // If more than one item
+		var/output = "" // Output string to work on
+		var/index = 1 // Loop index
+		while (index < uniquetotal) // While in loop
+			if (index == uniquetotal - 1) // If second to last element
+				comma_text = final_comma_text // Remove the comma
 
-			namecount = count_by_name(input, names[index])
-			currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s"
-			output += "[namecount == 1 ? "" : namecount] [currentName][comma_text]"
-			index++
+			namecount = count_by_name(input, names[index]) // Count as before
+			currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // And make grammatically correct
+			output += "[namecount == 1 ? "" : namecount] [currentName][comma_text]" // And put together as before, with comma this time
+			index++ // Iterate
 
-		namecount = count_by_name(input, names[index])
-		currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s"
-		return "[output][and_text][namecount == 1 ? "" : namecount] [currentName]"
+		namecount = count_by_name(input, names[index]) // Count again on last one
+		currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // Singular or plural
+		return "[output][and_text][namecount == 1 ? "" : namecount] [currentName]" // Put "and" before very last item in list
 
 //Returns list element or null. Should prevent "index out of bounds" error.
 /proc/listgetindex(list/L, index)
