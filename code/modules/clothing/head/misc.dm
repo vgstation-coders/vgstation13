@@ -388,6 +388,15 @@
 	icon_state = "polarbearpelt"
 	item_state = "polarbearpelt"
 
+/obj/item/clothing/head/wolfpelt
+	name = "wolf pelt hat"
+	desc = "Atop your head is one wolf."
+	icon_state = "wolfpelt"
+	item_state = "wolfpelt"
+	armor = list(melee = 10, bullet = 5, laser = 5, energy = 5, bomb = 0, bio = 0, rad = 0)
+	body_parts_covered =  EARS|HEAD|HIDEHEADHAIR
+
+
 /obj/item/clothing/head/xenos
 	name = "xenos helmet"
 	icon_state = "xenos"
