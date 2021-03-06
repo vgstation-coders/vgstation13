@@ -349,8 +349,6 @@ var/global/list/animal_butchering_products = list(
 	/mob/living/simple_animal/rabbit					= list(/datum/butchering_product/rabbit_ears, /datum/butchering_product/rabbit_foot),
 	/mob/living/simple_animal/snail						= list(/datum/butchering_product/snail_carapace),
 	/mob/living/simple_animal/hostile/wolf				= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/wolf/pliable		= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
-	/mob/living/simple_animal/hostile/wolf/alpha		= list(/datum/butchering_product/skin/wolf, TEETH_LOTS),
 
 	/mob/living/carbon/human							= list(TEETH_HUMAN, /datum/butchering_product/skin/human),
 	/mob/living/carbon/human/unathi						= list(TEETH_LOTS, /datum/butchering_product/skin/lizard/lots),
