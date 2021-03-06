@@ -262,7 +262,6 @@ var/global/datum/controller/vote/vote = new()
 			if (user.client.has_voted_map)
 				to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
 				return 0
-			user.client.has_voted_map = TRUE
 			if(!user.client.holder)
 				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
@@ -272,6 +271,7 @@ var/global/datum/controller/vote/vote = new()
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
+			user.client.has_voted_map = TRUE
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
 		if(vote && 1<=vote && vote<=choices.len)
