@@ -81,7 +81,8 @@
 				var/tempPos = findtext(String, "\"temp_min\":")+11
 				temperature = text2num(copytext(String, tempPos, tempPos+4))
 			var/MM = text2num(time2text(world.timeofday, "MM")) 	// get the current month
-			if (MM != 1 && MM != 12)
+			var/allowed_months = list(1, 2, 7, 12)
+			if (!(MM in allowed_months))
 				message_admins("Skipping map [potential] as this is no longer the Christmas season.")
 				warning("Skipping map [potential] as this is no longer the Christmas season.")
 				binary = null
