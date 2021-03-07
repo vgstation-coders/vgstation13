@@ -20,7 +20,7 @@
 		return "[nothing_text]" // Return "nothing"
 	else if (uniquetotal == 1) // If there is only one item
 		namecount = count_by_name(input, names[1]) // Count how many of this item occurs
-		currentName = namecount == 1 ? "\a [names[1]]" : "[names[1]]\s" // Make it say "an item" or "x items" if singular or plural
+		currentName = namecount == 1 ? "[names[1]]" : "[names[1]]\s" // Make it say "an item" or "x items" if singular or plural
 		return "[namecount == 1 ? "" : namecount] [currentName]" // Return this
 	else // If more than one item
 		var/output = "" // Output string to work on
@@ -30,12 +30,12 @@
 				comma_text = final_comma_text // Remove the comma
 
 			namecount = count_by_name(input, names[index]) // Count as before
-			currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // And make grammatically correct
+			currentName = namecount == 1 ? "[names[index]]" : "[names[index]]\s" // And make grammatically correct
 			output += "[namecount == 1 ? "" : namecount] [currentName][comma_text]" // And put together as before, with comma this time
 			index++ // Iterate
 
 		namecount = count_by_name(input, names[index]) // Count again on last one
-		currentName = namecount == 1 ? "\a [names[index]]" : "[names[index]]\s" // Singular or plural
+		currentName = namecount == 1 ? "[names[index]]" : "[names[index]]\s" // Singular or plural
 		return "[output][and_text][namecount == 1 ? "" : namecount] [currentName]" // Put "and" before very last item in list
 
 //Returns list element or null. Should prevent "index out of bounds" error.
