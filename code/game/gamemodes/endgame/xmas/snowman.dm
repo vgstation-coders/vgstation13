@@ -43,6 +43,7 @@
 
 /obj/structure/snowman/bullet_act(var/obj/item/projectile/Proj)
 	takedamage(Proj.damage)
+	return ..()
 
 /obj/structure/snowman/proc/takedamage(var/dam)
 	health -= dam

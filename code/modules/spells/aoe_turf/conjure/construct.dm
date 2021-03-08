@@ -336,32 +336,6 @@
 	side2 = null
 	..()
 
-/spell/juggerdash
-	name = "Jugger-Dash"
-	desc = "Charge in a line and knock down anything in your way, even some walls."
-	user_type = USER_TYPE_CULT
-	hud_state = "const_juggdash"
-	override_base = "cult"
-	charge_max = 150
-	spell_flags = 0
-	var/dash_range = 4
-
-/spell/juggerdash/choose_targets(var/mob/user = usr)
-	return list(user)
-
-/spell/juggerdash/cast_check(var/skipcharge = FALSE, var/mob/user = usr)
-	if(user.throwing)
-		return FALSE
-	else
-		return ..()
-
-/spell/juggerdash/cast(var/list/targets, var/mob/user)
-	playsound(user, 'sound/effects/juggerdash.ogg', 100, 1)
-	var/mob/living/simple_animal/construct/armoured/perfect/jugg = user
-	jugg.crashing = null
-	var/landing = get_distant_turf(get_turf(user), jugg.dir, dash_range)
-	jugg.throw_at(landing, dash_range , 2)
-
 /spell/aoe_turf/conjure/hex
 	name = "Conjure Hex"
 	desc = "Build a lesser construct to defend an area."
@@ -451,6 +425,86 @@
 		if("Forge")
 			summon_type = list(/obj/structure/cult/forge)
 	return 0
+
+
+/spell/aoe_turf/conjure/path_entrance
+	name = "Path Entrance"
+	desc = "Place a shortcut through the veil between this world and the other one."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 600
+	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 1
+	summon_type = list(/obj/effect/rune/blood_cult)
+
+	override_base = "cult"
+	hud_state = "const_entrance"
+	cast_sound = null
+
+	var/chosen_path = ""
+
+/spell/aoe_turf/conjure/path_entrance/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/path_entrance/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
+/spell/aoe_turf/conjure/path_entrance/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	write_rune_word(R.loc, rune_set.words["travel"])
+	write_rune_word(R.loc, rune_set.words["self"])
+	write_rune_word(R.loc, rune_set.words["other"])
+	R.one_pulse()
+
+/spell/aoe_turf/conjure/path_exit
+	name = "Path Entrance"
+	desc = "Place a shortcut through the veil between this world and the other one."
+	user_type = USER_TYPE_CULT
+
+	charge_max = 600
+	spell_flags = Z2NOCAST | CONSTRUCT_CHECK
+	invocation = "none"
+	invocation_type = SpI_NONE
+	range = 1
+	summon_type = list(/obj/effect/rune/blood_cult)
+
+	override_base = "cult"
+	hud_state = "const_exit"
+	cast_sound = null
+
+	var/chosen_path = ""
+
+/spell/aoe_turf/conjure/path_exit/choose_targets(mob/user = usr)
+	return list(get_turf(user))
+
+/spell/aoe_turf/conjure/path_exit/before_channel(var/mob/user)
+	var/turf/T = get_turf(user)
+	var/obj/effect/rune/rune = locate() in T
+	if (rune)
+		to_chat(user,"<span class='warning'>You cannot draw on top of an already existing rune.</span>")
+		return 1
+	return 0
+
+/spell/aoe_turf/conjure/path_exit/on_creation(var/obj/effect/rune/R, var/mob/user)
+	var/turf/T = R.loc
+	log_admin("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] (@[T.x],[T.y],[T.z]).")
+	message_admins("BLOODCULT: [key_name(user)] has created a new rune at [T.loc] <A HREF='?_src_=holder;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>(JMP)</a>.")
+	var/datum/runeset/rune_set = global_runesets["blood_cult"]
+	write_rune_word(R.loc, rune_set.words["travel"])
+	write_rune_word(R.loc, rune_set.words["other"])
+	write_rune_word(R.loc, rune_set.words["self"])
+	R.one_pulse()
+
 
 /obj/effect/artificer_underlay
 	icon = 'icons/obj/cult.dmi'

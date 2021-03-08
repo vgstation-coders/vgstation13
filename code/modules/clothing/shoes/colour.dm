@@ -101,24 +101,23 @@
 	species_fit = list(VOX_SHAPED, INSECT_SHAPED)
 
 /obj/item/clothing/shoes/orange/attack_self(mob/user as mob)
-	if (src.chained)
-		src.chained = null
-		src.slowdown = NO_SLOWDOWN
-		new chaintype( user.loc )
-		src.icon_state = "orange"
-	return
+	if(chain)
+		slowdown = NO_SLOWDOWN
+		chain.forceMove(user.loc)
+		chain.on_restraint_removal(user)
+		chain = null
+		icon_state = "orange"
 
-/obj/item/clothing/shoes/orange/attackby(var/obj/O, loc)
+/obj/item/clothing/shoes/orange/attackby(var/obj/O, mob/user)
 	..()
-	if ((istype(O, /obj/item/weapon/handcuffs) && !( src.chained )))
-		var/obj/item/weapon/handcuffs/H=O
-		//H = null
-		if (src.icon_state != "orange")
+	if(!chain)
+		if(istype(O, /obj/item/weapon/handcuffs) && user.drop_item(O,src))
+			chain = O
+		else if(istype(O, /obj/item/weapon/autocuffer))
+			chain = new /obj/item/weapon/handcuffs/cyborg(src)
+		else
 			return
-		src.chained = 1
-		src.chaintype = H.type
-		src.slowdown = SHACKLE_SHOES_SLOWDOWN
-		src.icon_state = "orange1"
-		qdel(H)
-		H = null
-	return
+
+		slowdown = SHACKLE_SHOES_SLOWDOWN
+		icon_state = "orange1"
+		chain.forceMove(src)

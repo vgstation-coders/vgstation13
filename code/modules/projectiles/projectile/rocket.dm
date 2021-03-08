@@ -149,6 +149,7 @@
 	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(!istype(Proj ,/obj/item/projectile/beam/lasertag) && !istype(Proj ,/obj/item/projectile/beam/practice) )
 			detonate()
+	return ..()
 
 /obj/item/projectile/rocket/nikita/Destroy()
 	reset_view()

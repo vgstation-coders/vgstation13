@@ -230,7 +230,7 @@
 
 //////////////////////////////
 //                          //
-//       BLOOD DAGGER       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//        BLOOD NAIL        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                          //Used when a cultist throws a blood dagger
 //////////////////////////////
 
@@ -260,7 +260,26 @@
 		forceMove(A.loc)
 		var/mob/living/M = A
 		if (!iscultist(M))
-			..()
+			setDensity(FALSE)
+			invisibility = 101
+			kill_count = 0
+			var/obj/effect/overlay/bloodnail/nail = new (A.loc)
+			nail.transform = transform
+			if (color)
+				nail.color = color
+			else
+				nail.color = DEFAULT_BLOOD
+			if(isliving(A))
+				nail.stick_to(A)
+				var/mob/living/L = A
+				L.take_overall_damage(damage,0)
+				to_chat(L, "<span class='warning'>\The [src] stabs your body, sticking you in place.</span>")
+				to_chat(L, "<span class='danger'>Resist or click the nail to dislodge it.</span>")
+			else if(loc)
+				var/turf/T = get_turf(src)
+				nail.stick_to(T,get_dir(src,A))
+			bullet_die()
+			return
 		else if (ishuman(M))
 			var/mob/living/carbon/human/H = M
 			var/datum/reagent/blood/B = get_blood(H.vessel)
@@ -286,5 +305,64 @@
 			return 0
 	return 1
 
+
+/obj/item/projectile/blooddagger/bump_original_check()
+	if(!bumped)
+		if(loc == get_turf(original))
+			if(!(original in permutated))
+				to_bump(original)
+
 /obj/item/projectile/blooddagger/cultify()
 	return
+
+
+/obj/effect/overlay/bloodnail
+	name = "blood nail"
+	desc = "A pointy red nail, appearing to pierce not through what it rests upon, but through the fabric of reality itself."
+	icon = 'icons/effects/effects.dmi'
+	icon_state = "bloodnail"
+	anchored = 1
+	density = 0
+	plane = ABOVE_HUMAN_PLANE
+	layer = CLOSED_CURTAIN_LAYER
+	var/atom/stuck_to = null
+	var/duration = 100
+
+/obj/effect/overlay/bloodnail/New()
+	..()
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+
+/obj/effect/overlay/bloodnail/Destroy()
+	if(stuck_to)
+		unlock_atom(stuck_to)
+	stuck_to = null
+	..()
+
+/obj/effect/overlay/bloodnail/cultify()
+	return
+
+/obj/effect/overlay/bloodnail/proc/stick_to(var/atom/A, var/side = null)
+	pixel_x = rand(-4, 4) * PIXEL_MULTIPLIER
+	pixel_y = rand(-4, 4) * PIXEL_MULTIPLIER
+	playsound(A, 'sound/items/metal_impact.ogg', 30, 1)
+	var/turf/T = get_turf(A)
+	playsound(T, 'sound/weapons/hivehand_empty.ogg', 75, 1)
+
+	if(isliving(A) && !isspace(T))//can't nail people down unless there's a turf to nail them to.
+		stuck_to = A
+		visible_message("<span class='warning'>\the [src] nails \the [A] to \the [T].</span>")
+		lock_atom(A, /datum/locking_category/buckle)
+
+	spawn(duration)
+		qdel(src)
+
+
+/obj/effect/overlay/bloodnail/attack_hand(var/mob/user)
+	if (do_after(user,src,15))
+		unstick()
+
+/obj/effect/overlay/bloodnail/proc/unstick()
+	if(stuck_to)
+		unlock_atom(stuck_to)
+	qdel(src)

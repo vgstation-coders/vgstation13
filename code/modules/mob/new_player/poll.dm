@@ -265,7 +265,7 @@
 					qdel(option_query)
 				src << browse(output,"window=playerpoll;size=500x500")
 			if("MULTICHOICE")
-				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
+				var/datum/DBQuery/voted_query = SSdbcore.NewQuery("SELECT optionid FROM erro_poll_vote WHERE pollid = :id AND ckey = :ckey", list("id" = pollid, "ckey" = "[usr.ckey]"))
 				if(!voted_query.Execute())
 					message_admins("Error: [voted_query.ErrorMsg()]")
 					log_sql("Error: [voted_query.ErrorMsg()]")

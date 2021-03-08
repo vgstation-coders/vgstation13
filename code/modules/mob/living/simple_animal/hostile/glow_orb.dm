@@ -114,7 +114,7 @@ If hit by lightning, overpowers and explodes like a flashbang, blinding everyone
 			detonate()
 		return
 
-	..()
+	return ..()
 
 /mob/living/simple_animal/hostile/glow_orb/DestroySurroundings()
 	if(!melee_damage_lower)

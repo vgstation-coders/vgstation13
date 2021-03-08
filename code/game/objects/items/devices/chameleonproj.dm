@@ -160,6 +160,7 @@
 
 /obj/effect/dummy/chameleon/bullet_act()
 	disrupt()
+	return ..()
 
 /obj/effect/dummy/chameleon/relaymove(var/mob/user, direction)
 	if(istype(loc, /turf/space))

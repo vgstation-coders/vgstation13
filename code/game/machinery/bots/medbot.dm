@@ -417,7 +417,7 @@
 /obj/machinery/bot/medbot/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag == "taser")
 		stunned = min(stunned+10,20)
-	..()
+	return ..()
 
 /obj/machinery/bot/medbot/explode()
 	on = 0

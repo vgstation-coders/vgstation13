@@ -163,7 +163,7 @@
 			shootAt(cur_target)
 			cur_target = get_new_target()
 		else
-			cur_target = get_new_target() 
+			cur_target = get_new_target()
 	if(cur_target) //if it's found, proceed
 //		to_chat(world, "[cur_target]")
 		if(!isPopping())
@@ -251,7 +251,7 @@
 
 /obj/machinery/turret/bullet_act(var/obj/item/projectile/Proj)
 	src.health -= Proj.damage
-	..()
+	. = ..()
 	if(prob(45) && Proj.damage > 0)
 		spark(src, 5, FALSE)
 
@@ -542,9 +542,7 @@
 
 /obj/structure/turret/gun_turret/bullet_act(var/obj/item/projectile/Proj)
 	src.take_damage(Proj.damage)
-	..()
-	return
-
+	return ..()
 
 /obj/structure/turret/gun_turret/attack_hand(mob/user as mob)
 	user.set_machine(src)

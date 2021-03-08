@@ -435,7 +435,7 @@ var/list/impact_master = list()
 	if(linear_movement)
 		var/matrix/projectile_matrix = turn(matrix(),target_angle+45)
 		transform = projectile_matrix
-		icon_state = "[initial(icon_state)]_pixel"
+		icon_state = "[icon_state]_pixel"
 		/*
 		//If the icon has not been added yet
 		if( !("[icon_state]_angle[target_angle]" in bullet_master) )
@@ -621,7 +621,7 @@ var/list/impact_master = list()
 	return
 
 /obj/item/projectile/bullet_act(/obj/item/projectile/bullet)
-	return -1
+	return PROJECTILE_COLLISION_MISS
 
 /obj/item/projectile/proc/reset()
 	starting = get_turf(src)

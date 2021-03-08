@@ -95,7 +95,7 @@ proc/cardinalrange(var/center)
 			if(!priorscan)
 				sleep(20)
 				controllerscan(1)
-				return 
+				return
 
 // Find surrounding unconnected shielding and add them to our controller
 /obj/machinery/am_shielding/proc/assimilate()
@@ -153,7 +153,7 @@ proc/cardinalrange(var/center)
 /obj/machinery/am_shielding/bullet_act(var/obj/item/projectile/Proj)
 	if(Proj.flag != "bullet")
 		stability -= Proj.force/2
-	return 0
+	return ..()
 
 
 /obj/machinery/am_shielding/update_icon()

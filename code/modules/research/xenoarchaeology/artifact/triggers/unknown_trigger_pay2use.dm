@@ -16,6 +16,14 @@
 	my_artifact.lazy_register_event(/lazy_event/on_attackhand, src, .proc/owner_attackhand)
 	key_attackby = my_artifact.on_attackby.Add(src, "owner_attackby")
 	mode = rand(0,2)
+	var/where = pick("on one of its sides","at the top","hidden underneath", "on the front")
+	switch(mode)
+		if (COIN)
+			my_artifact.desc += " There appears to be a coin slot [where]."
+		if (CREDIT)
+			my_artifact.desc += " There appears to be what looks like a bill acceptor [where]."
+		if (BANK_CARD)
+			my_artifact.desc += " There appears to be a card reader [where]."
 	reconnect_database()
 
 /datum/artifact_trigger/pay2use/proc/reconnect_database()

@@ -12,6 +12,11 @@
 /obj/item/weapon/gun/energy/taser/isHandgun()
 	return TRUE
 
+/obj/item/weapon/gun/energy/taser/ricochet
+	name = "ricochet taser gun"
+	desc = "The nightmare-creation of Alcatraz IV. Who let it free?"
+	projectile_type = "/obj/item/projectile/ricochet/taser"
+
 /obj/item/weapon/gun/energy/taser/cyborg
 	name = "taser gun"
 	desc = "A small, low capacity gun used for non-lethal takedowns."
@@ -209,7 +214,7 @@
 /obj/item/weapon/gun/energy/shotgun/examine(mob/user)
 	..()
 	if(is_holder_of(user, src) && !user.incapacitated())
-		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode.</span>")
+		to_chat(user,"<span class='info'>It is in the [mode ? "SWEEPER" : "HUNTER"] mode. Toggle with alt-click.</span>")
 
 /obj/item/weapon/gun/energy/shotgun/attack_self(mob/user)
 	if(is_holder_of(user, src) && !user.incapacitated())
