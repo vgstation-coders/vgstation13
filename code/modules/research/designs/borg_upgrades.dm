@@ -95,7 +95,7 @@
 	req_tech = list(Tc_BIOTECH = 3, Tc_ENGINEERING = 3)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=80000, MAT_GLASS=20000, MAT_SILVER=5000)
-	build_path = /obj/item/borg/upgrade/medical
+	build_path = /obj/item/borg/upgrade/medical_upgrade
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/medical_module_surgery
@@ -105,7 +105,7 @@
 	req_tech = list(Tc_MATERIALS = 5, Tc_ENGINEERING = 4, Tc_BIOTECH = 5, Tc_PLASMATECH = 3) //Same as a plasma saw
 	build_type = MECHFAB
 	materials = list(MAT_IRON = 70000, MAT_GLASS = 38000, MAT_SILVER = 1750, MAT_GOLD = 500, MAT_URANIUM = 750, MAT_PLASMA = 580) //Diamonds are on the house
-	build_path = /obj/item/borg/upgrade/medical/surgery
+	build_path = /obj/item/borg/upgrade/surgery
 	category = "Robotic_Upgrade_Modules"
 
 /datum/design/borg_organ_gripper_board
@@ -114,7 +114,7 @@
 	id = "borg_organ_gripper_board"
 	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_ANOMALY = 3)
 	build_type = MECHFAB
-	build_path = /obj/item/borg/upgrade/medical/organ_gripper
+	build_path = /obj/item/borg/upgrade/organ_gripper
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=80000, MAT_PLASMA=50000, MAT_SILVER=5000, MAT_GOLD=5000, MAT_PLASTIC=5000)
 
