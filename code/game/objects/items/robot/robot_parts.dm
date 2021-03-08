@@ -181,7 +181,7 @@
 			if(!istype(loc,/turf))
 				to_chat(user, "<span class='warning'>You can't put the [W] in, the frame has to be standing on the ground to be perfectly precise.</span>")
 				return
-			if(!map.map_specific_conditions("robot check"))
+			if(!map.map_specific_conditions(ROBOT_CHECK))
 				to_chat(user, "<span class='warning'>The station will not allow you to create oppressive mechanical minions!</span>")
 				return
 			if(!M.brainmob)

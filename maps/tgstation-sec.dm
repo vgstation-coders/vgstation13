@@ -97,7 +97,7 @@
 
 /datum/map/active/map_specific_conditions(condition)
 	switch(condition)
-		if("robot check") //Cannot build robots on Castle
+		if(ROBOT_CHECK) //Cannot build robots on Castle
 			return 0
 	return ..()
 
