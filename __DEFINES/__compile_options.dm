@@ -58,3 +58,6 @@
 
 #define EXTOOLS_REFERENCE_TRACKING DEVELOPER_MODE
 #define EXTOOLS_DEBUGGER DEVELOPER_MODE
+
+//Map-specific defines
+#define ROBOT_CHECK "robot check"
