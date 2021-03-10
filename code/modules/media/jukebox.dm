@@ -832,6 +832,7 @@ var/global/list/loopModeNames=list(
 		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
 		"thunderdome" = "Thunderdome"
