@@ -164,7 +164,7 @@
 			if (M.locked_to)
 				M.locked_to.unlock_atom(M)
 			large_cocoon = 1
-			if(M.getCloneLoss() < 125)
+			if(M.getCloneLoss() < (1.25*M.maxHealth))
 				fed++
 				visible_message("<span class='warning'>\the [src] sticks a proboscis into \the [cocoon_target] and sucks a viscous substance out.</span>")
 				M.adjustCloneLoss(30 * size)
@@ -237,8 +237,10 @@
 	bullet_die()
 	qdel(src)
 
-/obj/item/projectile/web/bump_original_check()
-	if(!bumped)
-		if(loc == get_turf(original))
-			if(!(original in permutated))
-				to_bump(original)
+//This override of bump_original_check() causes the projectile to land on turfs clicked instead of flying past them.
+//This is often desirable when the projectile has some specific behaviour upon expiration. Such as, in this instance, the spawning of a sticky web
+/obj/item/projectile/web/bump_original_check()//Because the proc looks a bit confusing I'll explain what each line does here:
+	if(!bumped)								//<-- if we haven't yet bumped into something
+		if(loc == get_turf(original))		//<-- and are located on the turf that was 'original'ly clicked (yes the var name is confusing I know, screw projectile code)
+			if(!(original in permutated))	//<-- and haven't for some reason bounced-off/portal'd through, etc, off that turf
+				to_bump(original)			//<--then let's immediately bump into that turf (even if it's a floor). to_bump() then does the rest.
