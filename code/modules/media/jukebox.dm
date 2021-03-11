@@ -73,8 +73,11 @@ var/global/global_playlists = list()
 				if (("track" in record) && record["track"])
 					//sorted playlist
 					if (playlist == list())
-						var/M[songdata.len]
-						playlist = M//turns playlist into an empty list of size songdata.len
+						var/length = 0
+						for(var/list/record in songdata)
+							length++
+						var/M[length]
+						playlist = M//turns "playlist" into an empty list of size of the actual playlist
 					var/track = text2num(record["track"])
 					playlist.Insert(track, new /datum/song_info(record))
 				else
