@@ -209,6 +209,13 @@
 	open_state = "cult_open"
 	closed_state = "cult_closed"
 
+/obj/abstract/screen/movable/spell_master/spider
+	name = "Spider"
+	icon_state = "spider_spell_ready"
+
+	open_state = "spider_open"
+	closed_state = "spider_closed"
+
 /obj/abstract/screen/movable/spell_master/mech
 	name = "Mech Modules"
 	icon_state = "mech_spell_ready"

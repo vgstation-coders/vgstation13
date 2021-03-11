@@ -65,6 +65,7 @@
 #define ui_internal "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-0.5:[17*PIXEL_MULTIPLIER]"
 #define ui_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-1.5:[15*PIXEL_MULTIPLIER]"
 #define ui_under_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-2.5:[13*PIXEL_MULTIPLIER]"
+#define ui_more_under_health "EAST-1:[28*PIXEL_MULTIPLIER],CENTER-3.5:[11*PIXEL_MULTIPLIER]"
 #define ui_more_under_health_and_to_the_left "EAST-2:[14*PIXEL_MULTIPLIER],CENTER-5:[24*PIXEL_MULTIPLIER]"
 //borgs
 #define ui_borg_health "EAST-1:[28*PIXEL_MULTIPLIER],SOUTH+5:[7*PIXEL_MULTIPLIER]"

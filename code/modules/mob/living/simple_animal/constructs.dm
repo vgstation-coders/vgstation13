@@ -528,7 +528,7 @@
 
 /mob/living/simple_animal/construct/regular_hud_updates()
 	if(fire_alert)
-		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/cult)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/construct)
 	else
 		clear_alert(SCREEN_ALARM_FIRE)
 	update_pull_icon()

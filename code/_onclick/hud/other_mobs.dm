@@ -234,3 +234,54 @@
 	animate(color = list(1.375,0.19,0,0,0,1.375,0.19,0,0.19,0,1.375,0,0,0,0,1,0,0,0,0), time = 1)
 	animate(color = list(1.25,0.12,0,0,0,1.25,0.12,0,0.12,0,1.25,0,0,0,0,1,0,0,0,0), time = 1)
 	animate(color = list(1.125,0.06,0,0,0,1.125,0.06,0,0.06,0,1.125,0,0,0,0,1,0,0,0,0), time = 1)
+
+
+/datum/hud/proc/spider_hud()
+
+	mymob.healths = new /obj/abstract/screen
+	mymob.healths.icon = 'icons/mob/screen1_spider.dmi'
+	mymob.healths.icon_state = "health0"
+	mymob.healths.name = "health"
+	mymob.healths.screen_loc = ui_construct_health
+
+	mymob.pullin = new /obj/abstract/screen
+	mymob.pullin.icon = 'icons/mob/screen1_spider.dmi'
+	mymob.pullin.icon_state = "pull0"
+	mymob.pullin.name = "pull"
+	mymob.pullin.screen_loc = ui_construct_pull
+
+	mymob.zone_sel = new /obj/abstract/screen/zone_sel
+	mymob.zone_sel.icon = 'icons/mob/screen1_spider.dmi'
+	mymob.zone_sel.overlays.len = 0
+	mymob.zone_sel.overlays += image('icons/mob/zone_sel.dmi', "[mymob.zone_sel.selecting]")
+
+	mymob.client.screen += list(mymob.healths, mymob.pullin, mymob.zone_sel)
+
+	//Nurse
+	if (istype(mymob,/mob/living/simple_animal/hostile/giant_spider/nurse))
+		spider_food_display = new /obj/abstract/screen
+		spider_food_display.icon = 'icons/mob/screen_spells.dmi'
+		spider_food_display.icon_state = "spider_spell_base"
+		spider_food_display.name = "Food"
+		spider_food_display.screen_loc = ui_under_health
+
+		mymob.client.screen += list(spider_food_display)
+
+		if (!istype(mymob,/mob/living/simple_animal/hostile/giant_spider/nurse/queen_spider))
+			spider_queen_counter = new /obj/abstract/screen
+			spider_queen_counter.icon = 'icons/mob/screen_spells.dmi'
+			spider_queen_counter.icon_state = "spider_spell_base"
+			spider_queen_counter.name = "Queen Requirement"
+			spider_queen_counter.screen_loc = ui_more_under_health
+
+			mymob.client.screen += list(spider_queen_counter)
+
+	//Spiderling
+	if (istype(mymob,/mob/living/simple_animal/hostile/giant_spider/spiderling))
+		spiderling_growth_display = new /obj/abstract/screen
+		spiderling_growth_display.icon = 'icons/mob/screen_spells.dmi'
+		spiderling_growth_display.icon_state = "spider_spell_base"
+		spiderling_growth_display.name = "Growth"
+		spiderling_growth_display.screen_loc = ui_under_health
+
+		mymob.client.screen += list(spiderling_growth_display)
