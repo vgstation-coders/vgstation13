@@ -185,6 +185,9 @@
 			R.materials = new /datum/materials(src)
 		R.materials.addAmount(mat.id, S.perunit * req_amount/res_amount)
 
+		for (var/obj/item/stack/req in other_reqs)
+			R.materials.addAmount(req.material_type, other_reqs[req]*req.perunit)
+
 		R.dorfify(mat)
 	return 1
 
@@ -200,6 +203,15 @@
 	//Yeah nah let's put you in a blacksmith_placeholder
 	var/obj/item/I = new /obj/item/smithing_placeholder(usr.loc,S, R, req_strikes)
 	I.name = "unforged [R.name]"
+
+	//Make it recyclable back into the material it's made out of
+	if (R.materials == null)
+		R.materials = new /datum/materials(src)
+	R.materials.addAmount(S.material_type, S.perunit * req_amount/res_amount)
+
+	for (var/obj/item/stack/req in other_reqs)
+		R.materials.addAmount(req.material_type, other_reqs[req]*req.perunit)
+
 	return 0
 
 var/datum/stack_recipe_list/blacksmithing_recipes = new("blacksmithing recipes", list(
