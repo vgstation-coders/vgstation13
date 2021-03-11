@@ -1393,6 +1393,15 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(shorted || (!cell && !charging))
 		return FALSE
+	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
+		siemenspassed = 0.7
+	//Process the shocking via powernet
+	if(terminal)
+		if(electrocute_mob(user, terminal.get_powernet(), terminal, siemenspassed))
+			spark(src)
+			return TRUE
+		else
+			return FALSE
 	return ..()
 
 /obj/machinery/power/apc/npc_tamper_act(mob/living/L)
