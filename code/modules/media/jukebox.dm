@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
