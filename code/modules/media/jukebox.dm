@@ -8,7 +8,7 @@ var/global/global_playlists = list()
 /proc/load_juke_playlists()
 	if(!config.media_base_url)
 		return
-	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
+	for(var/playlist_id in list("lilslugger", "bar", "jazzswing", "bomberman", "depresso", "echoes", "electronica", "emagged", "endgame", "filk", "funk", "folk", "malfdelta", "medbay", "metal", "muzakjazz", "nukesquad", "rap", "rock", "shoegaze", "security", "shuttle", "thunderdome", "upbeathypedancejam", "SCOTLANDFOREVER", "halloween", "christmas"))
 		var/url="[config.media_base_url]/index.php?playlist=[playlist_id]"
 		//testing("Updating playlist from [url]...")
 
@@ -829,6 +829,7 @@ var/global/list/loopModeNames=list(
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
@@ -860,6 +861,7 @@ var/global/list/loopModeNames=list(
 		"depresso" ="Depresso",
 		"electronica" = "Electronica",
 		"filk" = "Filk",
+		"funk" = "Funk",
 		"folk" = "Folk",
 		"medbay" = "Medbay",
 		"metal" = "Heavy Metal",
@@ -1039,6 +1041,10 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - filk"
 	unformatted = "filk"
 	formatted = "Filk"
+/obj/item/weapon/vinyl/funk
+	name = "nanovinyl - funk"
+	unformatted = "funk"
+	formatted = "Funk"
 /obj/item/weapon/vinyl/folk
 	name = "nanovinyl - folk"
 	unformatted = "folk"
