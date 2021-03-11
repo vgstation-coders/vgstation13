@@ -103,8 +103,6 @@ var/global/global_playlists = list()
 	var/artist = ""
 	var/album  = ""
 
-	var/track = 0
-
 	var/url    = ""
 	var/length = 0 // decaseconds
 	var/crossfade_time = 0 // decaseconds, if the song ends up with a decresendo/fadeout so we can crossfade into the next one.
