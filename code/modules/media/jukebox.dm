@@ -70,7 +70,7 @@ var/global/global_playlists = list()
 			reader.i = 1
 			var/songdata = reader.read_value()
 			for(var/list/record in songdata)
-				if (record["track"])
+				if (("track" in record) && record["track"])
 					//sorted playlist
 					if (playlist == list())
 						var/M[songdata.len]
