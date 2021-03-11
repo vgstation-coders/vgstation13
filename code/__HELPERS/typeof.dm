@@ -123,6 +123,5 @@ var/global/list/existing_typesof_cache = list()
 proc/direct_subtypesof(path)
 	var/list/out = subtypesof(path)
 	for(var/type in out)
-		for(var/stype in subtypesof(type))
-			out -= stype //remove any subtypes of our current entry from the list
+		out -= subtypesof(type) //remove any subtypes of our current entry from the list
 	return out
