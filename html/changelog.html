@@ -84,6 +84,15 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="soundadd">Added a Funk playlist to the jukebox, courtesy of Dickwrath.</li>
 				<li class="soundadd">Added a brand new Shoegaze playlist to the jukebox. With lots of reverb for that big old bar feel.</li>
 				<li class="imageadd">Revamped the vinyl sprite. The label in the center is still red by default but can be customized for each different playlist.</li>
+				<li class="experiment">Player-controlled Giant Spiders now have some sort of color-matrix powered night vision that lets them see quite well in the dark while still being able to identify lit areas, and therefore to seek lights to destroy. Might refine later. Feedback welcome.</li>
+				<li class="rscadd">Player-controlled Giant Spiders have a brand new HUD, featuring a health indicator, a fire warning, and a zone selection (for choosing which limb to target on humans). Spiderlings also have an indicator for their growth, while Nurse have indicators for both how many eggs they can lay, and how many spiders there are in total, as well as how many are needed before they can evolve into a Queen.</li>
+				<li class="rscadd">Player-controlled spiderlings are now able to ventcrawl (turns out they couldn&#39;t until now, despite NPC spiderlings being one of the only mob actually having an AI that lets it ventcrawl)</li>
+				<li class="rscadd">Player-controlled Giant Spiders now have spells for all their abilities that can be cast by players should they end up controlling one. This includes Spiderlings growing up (they get to choose whether to become Guard, Nurse or Hunter), as well as Nurse spinning webs, cocoons, laying eggs, and evolving into queens</li>
+				<li class="tweak">Spider hunters are now twice faster, still slower than carps though.</li>
+				<li class="rscadd">Changed the requirements and logic behind spider nurses evolving into queens. Before nurses would instantly become queens if there were less than 5 queens in the world. Now there has to be at least 10 spiders total (including spiderlings) per queen in the world for an NPC nurse to evolve. It will then have a 10% chance per second to evolve. Player-controlled nurses only require 6 spiders per queen, ensuring that NPC nurses shouldn&#39;t cuck players out of becoming queens. As a side-effect, non-queen nurses will become more common once again.</li>
+				<li class="rscadd">Spider queen projectiles no longer deal 5 brute damage, instead they root mobs to the floor just like blood nails do. As for those, resisting or clicking the webs will let you break out after one or two seconds. The queen can fire her projectile about every three or four seconds at best (BYOND time is uncertain).</li>
+				<li class="bugfix">Fixed the giant spider queen&#39;s projectile being invisible</li>
+				<li class="bugfix">Fixed NPC spider nurses laying two egg clusters when they should only be able to lay one, causing them to birth twice as many spiderlings as normal.</li>
 			</ul>
 			<h2 class="date">2021.03.09</h2>
 			<h3 class="author">boy2mantwicethefam updated:</h3>
