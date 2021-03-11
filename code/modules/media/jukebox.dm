@@ -836,6 +836,7 @@ var/global/list/loopModeNames=list(
 		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
 		"thunderdome" = "Thunderdome"
@@ -868,6 +869,7 @@ var/global/list/loopModeNames=list(
 		"muzakjazz" = "Muzak",
 		"rap" = "Rap",
 		"rock" = "Rock",
+		"shoegaze" = "Shoegaze",
 		"shuttle" = "Shuttle",
 		"security" = "Security",
 		"upbeathypedancejam" = "Dance",
@@ -999,6 +1001,7 @@ var/global/list/loopModeNames=list(
 	attack_verb = list("plays out", "records", "frisbees") //Fuck it, we'll do it live. Fucking thing sucks!
 	var/unformatted
 	var/formatted
+	var/mask = "#FF0000"//red
 
 /obj/item/weapon/vinyl/New(loc,U,F)
 	..(loc)
@@ -1007,20 +1010,32 @@ var/global/list/loopModeNames=list(
 	if(F)
 		formatted = F
 	name = "nanovinyl - [formatted]"
+	for (var/vinyl_type in subtypesof(/obj/item/weapon/vinyl))
+		var/obj/item/weapon/vinyl/V = vinyl_type
+		if (initial(V.unformatted) == U)
+			mask = initial(V.mask)
+			break
+
+	var/image/label = image(icon, src, "vinyl-mask")
+	label.icon += mask
+	overlays += label
 
 //Premades
 /obj/item/weapon/vinyl/bar
 	name = "nanovinyl - bar"
 	unformatted = "bar"
 	formatted = "Bar"
+	mask = "#800000"//maroon
 /obj/item/weapon/vinyl/bomberman
 	name = "nanovinyl - bomberman"
 	unformatted = "bomberman"
 	formatted = "Bomberman"
+	mask = "#00FFFF"//cyan
 /obj/item/weapon/vinyl/depresso
 	name = "nanovinyl - depresso"
 	unformatted = "depresso"
 	formatted = "Depresso"
+	mask = "#000000"//black
 /obj/item/weapon/vinyl/echoes
 	name = "nanovinyl - echoes"
 	unformatted = "echoes"
@@ -1029,6 +1044,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - electronic"
 	unformatted = "electronica"
 	formatted = "Electronic"
+	mask = "#FFFFFF"//white
 /obj/item/weapon/vinyl/emagged
 	name = "nanovinyl - syndicate"
 	unformatted = "emagged"
@@ -1081,6 +1097,12 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - rock"
 	unformatted = "rock"
 	formatted = "Rock"
+/obj/item/weapon/vinyl/shoegaze
+	name = "nanovinyl - shoegaze"
+	desc = "More reverb than you can handle."
+	unformatted = "shoegaze"
+	formatted = "Shoegaze"
+	mask = "#FF00FF"//magenta
 /obj/item/weapon/vinyl/security
 	name = "nanovinyl - security"
 	unformatted = "security"
@@ -1089,6 +1111,7 @@ var/global/list/loopModeNames=list(
 	name = "nanovinyl - shuttle"
 	unformatted = "shuttle"
 	formatted = "Shuttle"
+	mask = "#000080"//navy
 /obj/item/weapon/vinyl/thunderdome
 	name = "nanovinyl - thunderdome"
 	unformatted = "thunderdome"
@@ -1102,6 +1125,7 @@ var/global/list/loopModeNames=list(
 	desc = "Oh no."
 	unformatted = "SCOTLANDFOREVER"
 	formatted = "Highlander"
+	mask = "#0000FF"//blue
 /obj/item/weapon/vinyl/halloween
 	name = "nanovinyl - halloween"
 	unformatted = "halloween"
