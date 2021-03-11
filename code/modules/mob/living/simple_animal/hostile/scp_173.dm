@@ -294,12 +294,3 @@
 
 //You cannot destroy SCP-173, fool!
 /mob/living/simple_animal/scp_173/ex_act(var/severity)
-
-/mob/living/simple_animal/scp_173/impostor
-	name = "impostor"
-	desc = "A small creature in what seems to be a space suit. It looks very suspicious."
-	icon = 'icons/mob/scp.dmi'
-	icon_state = "impostor"
-	icon_living = "impostor"
-	icon_dead = "impostor"
-

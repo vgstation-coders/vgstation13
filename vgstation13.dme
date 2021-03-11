@@ -2503,6 +2503,7 @@
 #include "code\modules\spells\helpers.dm"
 #include "code\modules\spells\spell_code.dm"
 #include "code\modules\spells\spell_projectile.dm"
+#include "code\modules\spells\spider_spells.dm"
 #include "code\modules\spells\vampire_helpers.dm"
 #include "code\modules\spells\aoe_turf\aoe_turf.dm"
 #include "code\modules\spells\aoe_turf\blink.dm"

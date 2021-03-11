@@ -36,6 +36,7 @@
 	response_help = "pets"
 	response_disarm = "gently pushes aside"
 	response_harm = "hits"
+	species_type = /mob/living/simple_animal/hostile/wolf
 
 	speed = 1
 	health = 75

@@ -736,6 +736,16 @@ var/datum/controller/gameticker/ticker
 				to_chat(R, R.connected_ai?"<b>You have synchronized with an AI. Their name will be stated shortly. Other AIs can be ignored.</b>":"<b>You are not synchronized with an AI, and therefore are not required to heed the instructions of any unless you are synced to them.</b>")
 			R.lawsync()
 
+	//Toggle lightswitches on in occupied departments
+	var/discrete_areas = list()
+	for(var/mob/living/carbon/human/H in player_list)
+		var/area/A = get_area(H)
+		if(!(A in discrete_areas)) //We've already added their department
+			discrete_areas += get_department_areas(H)
+	for(var/area/DA in discrete_areas)
+		for(var/obj/machinery/light_switch/LS in DA)
+			LS.toggle_switch(1)
+
 // -- Tag mode!
 
 /datum/controller/gameticker/proc/tag_mode(var/mob/user)

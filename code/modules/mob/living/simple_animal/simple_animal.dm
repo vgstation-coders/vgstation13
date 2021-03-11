@@ -125,6 +125,7 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		T.turf_animation('icons/effects/64x64.dmi',"rejuvinate",-16,0,MOB_LAYER+1,'sound/effects/rejuvinate.ogg',anim_plane = EFFECTS_PLANE)
 	src.health = src.maxHealth
 	return 1
+
 /mob/living/simple_animal/New()
 	..()
 	if(!(mob_property_flags & (MOB_UNDEAD|MOB_CONSTRUCT|MOB_ROBOTIC|MOB_HOLOGRAPHIC)))
@@ -134,6 +135,11 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		real_name = name
 
 	animal_count[src.type]++
+
+/mob/living/simple_animal/Destroy()
+	if (stat != DEAD)
+		animal_count[src.type]--//dealing with mobs getting deleted while still alive
+	..()
 
 /mob/living/simple_animal/Login()
 	if(src && src.client)
@@ -174,12 +180,12 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 			icon_state = icon_living
 			src.resurrect()
 			stat = CONSCIOUS
+			animal_count[src.type]++//re-added to the count
 			setDensity(TRUE)
 			update_canmove()
 		if(canRegenerate && !isRegenerating)
 			src.delayedRegen()
 		return 0
-
 
 	if(health < 1 && stat != DEAD)
 		death()
