@@ -74,7 +74,7 @@ var/global/global_playlists = list()
 					//sorted playlist
 					if (playlist == list())
 						var/length = 0
-						for(var/list/record in songdata)
+						for(var/list/entry in songdata)
 							length++
 						var/M[length]
 						playlist = M//turns "playlist" into an empty list of size of the actual playlist
