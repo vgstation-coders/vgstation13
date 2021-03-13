@@ -260,7 +260,7 @@ var/list/headset_modes = list(
 		rendered_message = render_speech(speech)
 
 	//checking for syndie codephrases if person is a tator
-	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP))
+	if(src.mind.GetRole(TRAITOR) || src.mind.GetRole(NUKE_OP) || src.mind.GetRole(CHALLENGER))
 		//is tator
 		for(var/T in syndicate_code_phrase)
 			rendered_message = replacetext(rendered_message, T, "<b style='color: red;'>[T]</b>")
