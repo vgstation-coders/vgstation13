@@ -36,16 +36,17 @@ var/global/gourmonger_saturation = 0
 	kcalPower += rand(0, 50)
 
 /mob/living/simple_animal/hostile/gourmonger/Life()
-	if(..())
-		if(kcalPower > 0)
-			kcalPower -= GOURMONGER_METABOLISM
-		radBurst(kcalPower/3)
-		hungerCheck()
-		if(hangry && !target)
-			if(sniffTarget)
-				chargeToPrey()
-			else
-				findPrey()
+	if(!..())
+		return
+	if(kcalPower > 0)
+		kcalPower -= GOURMONGER_METABOLISM
+	radBurst(kcalPower/3)
+	hungerCheck()
+	if(hangry && !target)
+		if(sniffTarget)
+			chargeToPrey()
+		else
+			findPrey()
 
 /mob/living/simple_animal/hostile/gourmonger/death()
 	gourmonger_saturation--
@@ -76,7 +77,7 @@ var/global/gourmonger_saturation = 0
 				var/mob/living/carbon/human/H = L
 				if((isslimeperson(H)) || (isgolem(H)))
 					return 0
-		if((istype(L,/mob/living/simple_animal/corgi/Ian) || istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
+		if((istype(L,/mob/living/carbon/human/dummy)) && (faction == "adminbus mob"))
 			return 0
 		if(friends.Find(L))
 			return 0
@@ -145,7 +146,7 @@ var/global/gourmonger_saturation = 0
 	flick("gourmonger_eat", src)
 	currentlyMunching = TRUE
 	canmove = 0
-	sleep(munchTime)	//do_after was overkill, especially if there's a lot of them
+	sleep(munchTime)
 	currentlyMunching = FALSE
 	canmove = 1
 	if(Adjacent(T) && !stat)
@@ -207,7 +208,7 @@ var/global/gourmonger_saturation = 0
 	for(var/client/C in clients)
 		if(isliving(C.mob))
 			var/mob/living/L = C.mob
-			if(get_dist(src, L) < sniffDist)
+			if(get_dist(src, L) < sniffDist && z == L.z)
 				sniffMeal = L
 				sniffDist = get_dist(src, L)
 	if(sniffMeal)
