@@ -4,9 +4,6 @@ var/global/datum/controller/vote/vote = new()
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-/client
-	var/has_voted_map = 0
-
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
@@ -259,7 +256,7 @@ var/global/datum/controller/vote/vote = new()
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
 		if(mode == "map")
-			if (user.client.has_voted_map)
+			if (mob_ckey in voted)
 				to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
 				return 0
 			if(!user.client.holder)
@@ -271,7 +268,6 @@ var/global/datum/controller/vote/vote = new()
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
-			user.client.has_voted_map = TRUE
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
 		if(vote && 1<=vote && vote<=choices.len)
