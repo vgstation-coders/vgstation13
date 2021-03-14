@@ -184,8 +184,43 @@ var/global/list/available_paintings = list(
 
 	qdel(src)
 
+
+
 /obj/item/mounted/frame/painting/blank
 	paint = "blank"
+
+	var/height = 12
+	var/width = 12
+	var/bitmap[height*width]
+
+/obj/item/mounted/frame/painting/blank/new()
+	..()
+	for (var/i = 0, i < height*width, i++)
+		bitmap[i] = rgb(255,255,255)
+
+/obj/item/mounted/frame/painting/blank/attack_hand(mob/user as mob)
+	ui_interact()//TODO ing
+
+/obj/item/mounted/frame/painting/blank/ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = NANOUI_FOCUS)
+	// this is the data which will be sent to the ui
+	var/list/data = list()
+	data["bitmap"] = bitmap
+	data["color_palette"] = [rgb(0,0,0), rgb(255, 0, 0), rgb(0, 255, 0), rgb(0, 0, 255), rgb(255, 255, 255)];
+	data["paint_tool_strength"] = 0.2
+
+	// update the ui if it exists, returns null if no ui is passed/found
+	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+	if (!ui)
+		// the ui does not exist, so we'll create a new() one
+        // for a list of parameters and their descriptions see the code docs in \code\\modules\nano\nanoui.dm
+		ui = new(user, src, ui_key, "dna_modifier.tmpl", "DNA Modifier Console", 660, 700)
+		// when the ui is first opened this is the data it will use
+		ui.set_initial_data(data)
+		// open the new ui window
+		ui.open()
+
+/obj/item/mounted/frame/painting/blank/Topic(href, href_list)
+	if (href == "print")
 
 /obj/item/mounted/frame/painting/cultify()
 	new /obj/item/mounted/frame/painting/narsie(loc)
