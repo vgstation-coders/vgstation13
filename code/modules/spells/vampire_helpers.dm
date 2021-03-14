@@ -89,7 +89,6 @@
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
-			to_chat(world, "null rod found.")
 			if (locate(/datum/power/vampire/undying) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")
 				return VAMP_FAILURE
