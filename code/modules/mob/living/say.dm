@@ -540,7 +540,7 @@ var/list/headset_modes = list(
 	if(setting == SPEAK_OVER_GENERAL_CULT_CHAT) //overridden for constructs
 		return
 
-	var/datum/role/cultist/culto = isnewcultist(src)
+	var/datum/role/cultist/culto = iscultist(src)
 	if (culto)
 		if(setting == SPEAK_OVER_CHANNEL_INTO_CULT_CHAT)
 			if (checkTattoo(TATTOO_CHAT) || istype(culto, /datum/role/cultist/chief))
