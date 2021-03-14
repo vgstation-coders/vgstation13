@@ -4,7 +4,6 @@ var/global/datum/controller/vote/vote = new()
 #define VOTE_SCREEN_WIDTH 400
 #define VOTE_SCREEN_HEIGHT 400
 
-
 /datum/html_interface/nanotrasen/vote/registerResources()
 	. = ..()
 
@@ -251,27 +250,30 @@ var/global/datum/controller/vote/vote = new()
 		log_game("Rebooting due to restart vote")
 		world.Reboot()
 
-/datum/controller/vote/proc/submit_vote(var/ckey, var/vote)
+/datum/controller/vote/proc/submit_vote(var/mob/user, var/vote)
+	var/mob_ckey = user.ckey
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
 		if(mode == "map")
-			if(!usr.client.holder)
-				var/mob/M = usr
-				if(isnewplayer(M))
+			if (mob_ckey in voted)
+				to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
+				return 0
+			if(!user.client.holder)
+				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 					return 0
-				if(isobserver(M))
-					var/mob/dead/observer/O = M
+				if(isobserver(user))
+					var/mob/dead/observer/O = user
 					if(O.started_as_observer)
 						to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
 						return 0
-		if(current_votes[ckey])
-			choices[choices[current_votes[ckey]]]--
+		if(current_votes[mob_ckey])
+			choices[choices[current_votes[mob_ckey]]]--
 		if(vote && 1<=vote && vote<=choices.len)
-			voted += usr.ckey
+			voted += mob_ckey
 			choices[choices[vote]]++	//check this
-			current_votes[ckey] = vote
+			current_votes[mob_ckey] = vote
 			return vote
 	return 0
 
@@ -469,7 +471,7 @@ var/global/datum/controller/vote/vote = new()
 			if(usr.client.holder)
 				initiate_vote("custom",usr.key)
 		else
-			submit_vote(usr.ckey, round(text2num(href_list["vote"])))
+			submit_vote(usr, round(text2num(href_list["vote"])))
 	usr.vote()
 
 
