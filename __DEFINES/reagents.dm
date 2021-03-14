@@ -83,6 +83,7 @@
 #define EZNUTRIENT 			"eznutrient"
 #define ROBUSTHARVEST 			"robustharvest"
 #define PLANTBGONE 			"plantbgone"
+#define INSECTICIDE 			"insecticide"
 #define PLASMA 			"plasma"
 #define LEPORAZINE 			"leporazine"
 #define CRYPTOBIOLIN 			"cryptobiolin"

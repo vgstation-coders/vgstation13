@@ -1105,6 +1105,13 @@
 	required_reagents = list(TOXINS = 1, WATER = 4)
 	result_amount = 5
 
+/datum/chemical_reaction/insecticide
+	name = "Insecticide"
+	id = INSECTICIDE
+	result = INSECTICIDE
+	required_reagents = list(TOXIN = 1, SALTWATER = 4)
+	result_amount = 5
+
 // Special Reactions for Plasma Beaker
 /datum/chemical_reaction/plasmabeakerdexalin
 	name = "Plasma Beaker Dexalin"

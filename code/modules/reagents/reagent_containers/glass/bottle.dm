@@ -643,6 +643,24 @@ var/datum/disease2/disease/wizarditis = null
 	..()
 	reagents.add_reagent(ROBUSTHARVEST, 30)
 
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide
+	name = "Insecticide Bottle"
+	desc = "A bottle of highly toxic insecticide. There's a small, almost unreadable label warning against consumption."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/insecticide/New()
+	..()
+	reagents.add_reagent(INSECTICIDE, 30)
+	
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone
+	name = "Plant-B-Gone Bottle"
+	desc = "A bottle of broad spectrum herbicide. A small decal shows a diona nymph with a no symbol on top."
+	icon = 'icons/obj/chemical.dmi'
+
+/obj/item/weapon/reagent_containers/glass/bottle/plantbgone/New()
+	..()
+	reagents.add_reagent(PLANTBGONE, 30)
+
 /obj/item/weapon/reagent_containers/glass/bottle/carbon/New()
 	..()
 	reagents.add_reagent(CARBON, 30)
