@@ -946,7 +946,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/white/to_bump(atom/A)
+/obj/item/projectile/beam/white/New(atom/A)
 	if(!A)
 		return
 	..()
