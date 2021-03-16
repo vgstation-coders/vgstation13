@@ -909,11 +909,11 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		for(var/datum/reagent/R in reagents.reagent_list)
 			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
 		if(istype(A, /mob))
-			if(def_zone = TARGET_MOUTH && ishuman(A)) //if aiming at mouth and is humanoid
+			if(def_zone == TARGET_MOUTH && ishuman(A)) //if aiming at mouth and is humanoid
 				var/mob/living/carbon/human/victim = A
 				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
-					victim.visible_message("<span class='warning'>\The [src] gets some [english_list(reagants)] down [A]'s throat!</span>",
-										"<span class='warning'>\The [src] gets some [english_list(reagants)] down your throat!</span>")
+					victim.visible_message("<span class='warning'>\The [src] gets some [english_list(reagents)] down [A]'s throat!</span>",
+										"<span class='warning'>\The [src] gets some [english_list(reagents)] down your throat!</span>")
 					reagents.trans_to(A, reagents.total_volume/2)
 			else
 				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
