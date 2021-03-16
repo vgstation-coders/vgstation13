@@ -914,7 +914,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
 					victim.visible_message("<span class='warning'>\The [src] gets [english_list(get_reagent_names())] down [A]'s throat!</span>",
 										"<span class='warning'>\The [src] gets [english_list(get_reagent_names())] down your throat!</span>")
-					reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system
+					reagents.trans_to(A, reagents.total_volume) //20% chance to get in mouth and in system, if mouth targeting was possible at all with projectiles this chance should be scrapped
 			else
 				var/splash_verb = pick("douses","completely soaks","drenches","splashes")
 				A.visible_message("<span class='warning'>\The [src] [splash_verb] [A]!</span>",
