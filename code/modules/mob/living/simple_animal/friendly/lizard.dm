@@ -95,3 +95,15 @@
 	speak_emote = list("ribbits")
 	holder_type = /obj/item/weapon/holder/animal/frog
 
+/mob/living/simple_animal/hostile/lizard/frog/proc/react_to_touch(mob/M)
+	if(M && !isUnconscious())
+		switch(M.a_intent)
+			if(I_HELP)
+				var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+				heart.plane = ABOVE_HUMAN_PLANE
+				flick_overlay(heart, list(M.client), 20)
+				emote("me", EMOTE_AUDIBLE, "ribbits.")
+				playsound(loc, 'sound/voice/frogcroak.ogg', 50, 1)
+			if(I_HURT)
+				emote("me", EMOTE_AUDIBLE, "croaks.")
+
