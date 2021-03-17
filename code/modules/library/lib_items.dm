@@ -209,16 +209,16 @@
 	var/runestun = 0	//Does it have a stun talisman in it?
 	var/occult = 0 //Does this book contain forbidden and occult writings?
 
-	var/book_width = 400
-	var/book_height = 400
+	var/book_width = 600
+	var/book_height = 800
 
 /obj/item/weapon/book/New()
 	..()
 	if(wiki_page)
 		dat = {"
 		<html>
-			<body>
-				<iframe width='100%' height='100%' src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
+			<body style="margin:5px;padding:0px;overflow:hidden">
+				<iframe width='100%' height='100%' frameborder="0" style="overflow:hidden;height:100%;width:100%" src="http://ss13.moe/wiki/index.php?title=[wiki_page]&printable=yes"></iframe>
 			</body>
 		</html>
 		"}
