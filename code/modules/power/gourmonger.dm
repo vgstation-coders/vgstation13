@@ -32,8 +32,8 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/New()
 	..()
 	gourmonger_saturation++
-	growToSplit += rand(0, 15)	//For funsies
-	kcalPower += rand(0, 50)
+	growToSplit += rand(0, 15) + gourmonger_saturation	//For funsies
+	kcalPower += rand(0, 25)
 
 /mob/living/simple_animal/hostile/gourmonger/Life()
 	if(!..())
@@ -105,9 +105,9 @@ var/global/gourmonger_saturation = 0
 		hangry = FALSE
 
 /mob/living/simple_animal/hostile/gourmonger/proc/radBurst(var/radVal)
-	emitted_harvestable_radiation(get_turf(src), radVal, 10)
-	for(var/mob/living/L in view(get_turf(src), 10))
-		L.apply_radiation(radVal/5, RAD_EXTERNAL)
+	emitted_harvestable_radiation(get_turf(src), radVal, 8)
+	for(var/mob/living/L in view(get_turf(src), 8))
+		L.apply_radiation(radVal/25, RAD_EXTERNAL)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourSplit(var/mouthsToFeed = 2)
 	if(gourmonger_saturation >= TOO_MANY_GOURS)
@@ -119,9 +119,9 @@ var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger/proc/divideMeat()
 	var/nToDiv = kcalPower/15	//1u nutriment is worth about 15kcalPower
-	meat_amount = round(1, nToDiv/100)
+	meat_amount = round(1, nToDiv/20)
 	for(var/i=0, i<meat_amount, i++)
-		var/nToAdd = min(100, nToDiv)
+		var/nToAdd = min(20, nToDiv)
 		var/obj/item/weapon/reagent_containers/food/snacks/firstMeal = drop_meat(loc)
 		firstMeal.reagents.add_reagent(NUTRIMENT, nToAdd)
 		nToDiv -= nToAdd
@@ -190,7 +190,7 @@ var/global/gourmonger_saturation = 0
 	if(iscarbon(theMeal))
 		var/mob/living/carbon/C = theMeal
 		mealValue = C.nutrition/5	//arms, legs, and torso since the head isn't eaten
-	if(isanimal(theMeal))
+	else if(isanimal(theMeal))
 		var/mob/living/simple_animal/A = theMeal
 		mealValue = A.maxHealth
 	return mealValue
@@ -206,7 +206,7 @@ var/global/gourmonger_saturation = 0
 	var/sniffMeal = null
 	var/sniffDist = 50	//Easy way to make 50 the max range and avoids needing to use get_dist twice per loop
 	for(var/client/C in clients)
-		if(isliving(C.mob))
+		if(isliving(C.mob) && !issilicon(C.mob))
 			var/mob/living/L = C.mob
 			if(get_dist(src, L) < sniffDist && z == L.z)
 				sniffMeal = L
@@ -231,7 +231,8 @@ var/global/gourmonger_saturation = 0
 	if(!step(src, chargeDir))
 		var/turf/T = get_step(src, chargeDir)
 		chargeThrough(T)
-		forceMove(T)
+		if(Adjacent(T))
+			forceMove(T)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/chargeThrough(var/turf/cT)
 	if(istype(cT, /turf/simulated/wall))
@@ -252,6 +253,8 @@ var/global/gourmonger_saturation = 0
 		gourThroughMob(L)
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMachine(var/obj/machinery/M)
+	for(var/mob/living/L in M.contents)
+		L.forceMove(M.loc)
 	if(M.machine_flags & CROWDESTROY)
 		M.dropFrame()
 		M.spillContents()
@@ -264,7 +267,7 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMob(var/mob/living/L)
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		H.Knockdown(5)
+		H.Knockdown(3)
 	L.adjustBruteLoss(30)
 	if(!issilicon(L))
 		target = L	//Oh hey meat. Also lets them eat each other if they're too hungry, but not specifically seek to.
