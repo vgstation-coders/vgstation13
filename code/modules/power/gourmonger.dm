@@ -101,7 +101,7 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/hungerCheck()
 	if(!hangry && kcalPower < GOURMONGER_STARVING)
 		hangry = TRUE
-	if(hangry && kcalPower > GOURMONGER_SATISFIED)
+	else if(hangry && kcalPower > GOURMONGER_SATISFIED)
 		hangry = FALSE
 
 /mob/living/simple_animal/hostile/gourmonger/proc/radBurst(var/radVal)
