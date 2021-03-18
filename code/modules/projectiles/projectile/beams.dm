@@ -108,9 +108,9 @@ var/list/beam_master = list()
 
 	if(isnull(hits) || hits.len == 0)
 		if(travel_range)
-			shot_ray.draw(travel_range, icon, icon_state)
+			shot_ray.draw(travel_range, icon, icon_state, color_override = beam_color)
 		else
-			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state)
+			shot_ray.draw(MAX_BEAM_DISTANCE, icon, icon_state, color_override = beam_color)
 
 	else
 		var/rayCastHit/last_hit = hits[hits.len]
@@ -249,7 +249,7 @@ var/list/beam_master = list()
 				M.LAssailant = firer_mob
 	else
 		..()
-		
+
 /obj/item/projectile/beam/lightning/process()
 	icon_state = "lightning"
 	var/first = 1 //So we don't make the overlay in the same tile as the firer
