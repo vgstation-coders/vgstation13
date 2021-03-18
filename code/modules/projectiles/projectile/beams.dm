@@ -946,16 +946,15 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 /obj/item/projectile/beam/white
 	icon_state = "whitelaser"
 
-/obj/item/projectile/beam/white/New(atom/A)
-	if(!A)
-		return
-	..()
+/obj/item/projectile/beam/white/to_bump(atom/A)
 	if(istype(A, /mob))
 		A.reagents.add_reagent(SPACE_DRUGS, 1)
 		A.reagents.add_reagent(HONKSERUM, 10)
 		var/hit_verb = pick("covers","completely soaks","fills","splashes")
 		A.visible_message("<span class='warning'>\The [src] [hit_verb] [A] with love!</span>",
 			"<span class='warning'>\The [src] [hit_verb] you with love!</span>")
+	else
+		return ..()
 
 /obj/item/projectile/beam/liquid_stream
 	name = "stream of liquid"
