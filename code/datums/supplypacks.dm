@@ -1794,6 +1794,15 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/flatpack/suit_modifier
 	group = "Engineering"
 
+/datum/supply_packs/gourmonger
+	name = "dehydrated gourmonger"
+	contains = list(/obj/item/weapon/reagent_containers/food/snacks/monkeycube/gourmonger)
+	cost = 75
+	containertype = /obj/structure/closet/crate/secure/engisec
+	containername = "Gourmonger Crate"
+	access = list(access_engine_equip)
+	group = "Engineering"
+
 //////MEDICAL//////
 
 /datum/supply_packs/medical

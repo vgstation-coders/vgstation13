@@ -2112,6 +2112,7 @@
 #include "code\modules\power\components.dm"
 #include "code\modules\power\engine.dm"
 #include "code\modules\power\generator.dm"
+#include "code\modules\power\gourmonger.dm"
 #include "code\modules\power\gravitygenerator.dm"
 #include "code\modules\power\monitor.dm"
 #include "code\modules\power\port_gen.dm"
