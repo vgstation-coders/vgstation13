@@ -70,6 +70,21 @@
 				return 1
 		else
 			return 1
+	if(iscrowbar(G))
+		if(charging)
+			to_chat(usr, "You begin to pry out \the [charging].")
+			if(do_after(user, src, 10))
+				charging.appearance = appearance_backup
+				charging.update_icon()
+				charging.forceMove(loc)
+				charging = null
+				appearance_backup=null
+				G.playtoolsound(src, 50)
+				update_icon()
+				return 1
+		else
+			to_chat(usr, "You can't pry anything out of \the [src]!")
+			return 1
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
