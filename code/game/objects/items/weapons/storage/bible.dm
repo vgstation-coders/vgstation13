@@ -86,6 +86,7 @@
 				return 1
 			else
 				to_chat(M,"<span class='userdanger'>They are trying to deconvert you!</span>")
+				cultist.deconversion = 1//arbitrary non-null value to prevent deconversion-shade spam, will get replaced with a /datum/deconversion_ritual 5 seconds later
 
 		if (do_after(user, M, 5 SECONDS))
 			if(cultist)
@@ -101,6 +102,8 @@
 				else
 					to_chat(user,"<span class='warning'>In the name of [my_rel.deity_name], Nar-Sie forsake this body and soul!</span>")
 				user.visible_message("<span class='warning'>...but nothing unusual happens.</span>")
+		else
+			cultist.deconversion = null//deconversion attempt got interrupted, you can now try again
 		return 1
 	if (!my_rel.leadsThisReligion(user)) //The user is not the leader of this religon. BLASPHEMY !
 		//Using the Bible as a member of the occult will get you smithed, aka holy cleansing fire. You'd have to be stupid to remotely consider it
