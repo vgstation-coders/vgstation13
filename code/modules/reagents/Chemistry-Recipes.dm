@@ -70,7 +70,7 @@
 	name = "Water Potassium Explosion"
 	id = "explosion_potassium"
 	result = null
-	required_reagents = list(WATER = 1, POTASSIUM = 1)
+	required_reagents = list(POTASSIUM = 1, WATER = 1)
 	result_amount = 2
 	alert_admins = ALERT_AMOUNT_ONLY
 	secondary = 1
@@ -87,6 +87,15 @@
 	e.start()
 	holder.clear_reagents()
 	holder.add_reagent(POTASSIUM_HYDROXIDE, created_volume)
+
+/datum/chemical_reaction/explosion_potassium/holy
+	id = "holy_explosion_potassium"
+	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
+	result_amount = 2.4
+	
+/datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
+	..()
+	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
@@ -1094,6 +1103,13 @@
 	id = PLANTBGONE
 	result = PLANTBGONE
 	required_reagents = list(TOXINS = 1, WATER = 4)
+	result_amount = 5
+
+/datum/chemical_reaction/insecticide
+	name = "Insecticide"
+	id = INSECTICIDE
+	result = INSECTICIDE
+	required_reagents = list(TOXIN = 1, SALTWATER = 4)
 	result_amount = 5
 
 // Special Reactions for Plasma Beaker
@@ -2708,6 +2724,33 @@
 	required_reagents = list(ATOMICBOMB = 1, SYNDICATEBOMB = 1)
 	result_amount = 2
 
+/datum/chemical_reaction/mudslide
+	name = "Mudslide"
+	id = MUDSLIDE
+	result = MUDSLIDE
+	required_reagents = list(ANTIFREEZE = 1, BLACKRUSSIAN = 1, IRISHCREAM = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/creamy_hot_coco
+	name = "Creamy Hot Chocolate"
+	id = CREAMY_HOT_COCO
+	result = CREAMY_HOT_COCO
+	required_reagents = list(HOT_COCO = 1, CREAM = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/sacrificialmary
+	name = "Sacrificial Mary"
+	id = SACRIFICIAL_MARY
+	result = SACRIFICIAL_MARY
+	required_reagents = list(VODKA = 1, BLOOD = 2, LIMEJUICE = 1)
+	result_amount = 4
+
+/datum/chemical_reaction/boysenberryblizzard
+	name = "Boysenberry Blizzard"
+	id = BOYSENBERRY_BLIZZARD
+	result = BOYSENBERRY_BLIZZARD
+	required_reagents = list(PLASMA = 1, SNOWWHITE = 4, BERRYJUICE = 1)
+	result_amount = 5
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
 

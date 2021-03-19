@@ -215,7 +215,7 @@
 		var/datum/dna2/record/R = I.buf
 		if (R.types & DNA2_BUF_SE)//SE Injector
 			for (var/block in R.dna.SE)
-				if (I.buf.dna.SE >= 2050)
+				if (block >= 2050)
 					return 0
 		return 1
 	return 0

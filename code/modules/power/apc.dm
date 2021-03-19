@@ -600,6 +600,9 @@
 			if (opened==2)
 				opened = 1
 			update_icon()
+	else if(istype(W, /obj/item/weapon/kitchen/utensil/fork) && opened) // Sticking fork in open APC shocks you
+		to_chat(user, "<span class='warning'>That was really, really dumb of you.</span>") // Why would you even do this
+		shock(user, 75, W.siemens_coefficient)
 	else
 		// The extra crowbar thing fixes MoMMIs not being able to remove APCs.
 		// They can just pop them off with a crowbar.
@@ -1390,6 +1393,15 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 /obj/machinery/power/apc/shock(mob/user, prb, var/siemenspassed = -1)
 	if(shorted || (!cell && !charging))
 		return FALSE
+	if(siemenspassed == -1) //this means it hasn't been set by proc arguments, so we can set it ourselves safely
+		siemenspassed = 0.7
+	//Process the shocking via powernet
+	if(terminal)
+		if(electrocute_mob(user, terminal.get_powernet(), terminal, siemenspassed))
+			spark(src)
+			return TRUE
+		else
+			return FALSE
 	return ..()
 
 /obj/machinery/power/apc/npc_tamper_act(mob/living/L)

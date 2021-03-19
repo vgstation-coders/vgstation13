@@ -24,7 +24,7 @@ env:
   BYOND_MINOR: 1528
 
   #This can be declared here because build.py will ignore it if DM_UNIT_TESTS is true.
-  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation
+  ALL_MAPS: tgstation metaclub defficiency packedstation roidstation nrvhorizon test_box test_tiny snaxi tgstation-sec LampreyStation xoq boxesstation synergy bagelstation lowfatbagel
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

@@ -150,7 +150,7 @@
 /mob/living/silicon/attempt_suicide(forced = 0, suicide_set = 1)
 
 	if(!forced)
-		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and you will not able to be revived.", "Confirm Suicide", "Yes", "No")
+		var/confirm = alert("Are you sure you want to commit suicide? This action cannot be undone and reviving you might be difficult for humans. It may also go against your laws.", "Confirm Suicide", "Yes", "No")
 
 		if(confirm != "Yes")
 			return
@@ -163,6 +163,9 @@
 
 	if(suicide_set)
 		suiciding = 1
+
+	adjustBruteLoss(-(maxHealth - health) + 2*maxHealth) // kill it dead; set our health to -100 instantly
+	updatehealth()
 
 	visible_message(pick("<span class='danger'>[src] is powering down. It looks like \he's trying to commit suicide.</span>", \
 						 "<span class='danger'>[src] is force-deleting \his system files. It looks like \he's trying to commit suicide.</span>", \

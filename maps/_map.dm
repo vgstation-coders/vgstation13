@@ -182,6 +182,10 @@ var/global/list/accessable_z_levels = list()
 
 /datum/map/proc/map_specific_init()
 
+//Set map-specific conditions here
+/datum/map/proc/map_specific_conditions(var/condition)
+	return 1
+
 //For any map-specific UI, like AI jumps
 /datum/map/proc/special_ui(var/obj/abstract/screen/S, mob/user)
 	return FALSE

@@ -92,6 +92,8 @@
 
 #define iscarp(A) istype(A, /mob/living/simple_animal/hostile/carp)
 
+#define isspider(A) istype(A, /mob/living/simple_animal/hostile/giant_spider)
+
 #define isclown(A) istype(A, /mob/living/simple_animal/hostile/retaliate/clown)
 
 #define iscluwne(A) istype(A, /mob/living/simple_animal/hostile/retaliate/cluwne)
@@ -251,7 +253,11 @@
 
 #define isthrall(H) (H.mind ? H.mind.GetRole(THRALL) : FALSE)
 
-#define iscultist(H) (H.mind && H.mind.GetRole(CULTIST))
+#define isnewcultist(H) (H.mind ? H.mind.GetRole(CULTIST) : FALSE)
+
+#define ischiefcultist(H) (H.mind ? H.mind.GetRole(CHIEF_CULTIST) : FALSE)
+
+#define iscultist(H) (isnewcultist(H) || ischiefcultist(H))
 
 #define isstreamer(H) (H.mind && H.mind.GetRole(STREAMER))
 

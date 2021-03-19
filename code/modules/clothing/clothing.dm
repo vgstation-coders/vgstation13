@@ -428,6 +428,7 @@
 			src.icon_state = initial(icon_state)
 			gas_transfer_coefficient = initial(gas_transfer_coefficient)
 			permeability_coefficient = initial(permeability_coefficient)
+			sterility = initial(sterility)
 			flags = initial(flags)
 			body_parts_covered = initial(body_parts_covered)
 			to_chat(usr, "You push \the [src] back into place.")
@@ -437,6 +438,7 @@
 			to_chat(usr, "You push \the [src] out of the way.")
 			gas_transfer_coefficient = null
 			permeability_coefficient = null
+			sterility = 0
 			flags = 0
 			src.is_flipped = 2
 			body_parts_covered &= ~(MOUTH|HEAD|BEARD|FACE)

@@ -227,16 +227,23 @@
 	R.SetEmagged()
 
 //Medical Stuff
-/obj/item/borg/upgrade/medical
+/obj/item/borg/upgrade/medical_upgrade
 	name = "medical cyborg MK-2 upgrade board"
-	desc = "Used to give a medical cyborg advanced care tools."
+	desc = "Used to give a medical cyborg advanced care tools. Also increases storage capacity for medical consumables."
 	icon_state = "cyborg_upgrade"
 	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/melee/defibrillator,/obj/item/weapon/reagent_containers/borghypo/upgraded)
 
-/obj/item/borg/upgrade/medical/surgery
+/obj/item/borg/upgrade/medical_upgrade/attempt_action(var/mob/living/silicon/robot/R, var/mob/living/user)
+	if(..())
+		return FAILED_TO_ADD
+	R.module.respawnables_max_amount = MEDICAL_MAX_KIT * 2
+
+/obj/item/borg/upgrade/surgery
 	name = "medical cyborg advanced surgery pack"
 	desc = "Enables a medical cyborg to have advanced surgery tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/scalpel/laser/tier2, /obj/item/weapon/circular_saw/plasmasaw,
 	/obj/item/weapon/retractor/manager, /obj/item/weapon/hemostat/pico, /obj/item/weapon/surgicaldrill/diamond,
 	/obj/item/weapon/bonesetter/bone_mender, /obj/item/weapon/FixOVein/clot)
@@ -244,11 +251,12 @@
 	/obj/item/weapon/circular_saw, /obj/item/weapon/cautery, /obj/item/weapon/surgicaldrill, /obj/item/weapon/bonesetter,
 	/obj/item/weapon/FixOVein)
 
-/obj/item/borg/upgrade/medical/organ_gripper
+/obj/item/borg/upgrade/organ_gripper
 	name = "medical cyborg organ gripper upgrade"
 	desc = "Used to give a medical cyborg a organ gripper."
 	icon = 'icons/obj/device.dmi'
 	icon_state = "gripper-medical"
+	required_modules = list(MEDICAL_MODULE, SYNDIE_CRISIS_MODULE)
 	modules_to_add = list(/obj/item/weapon/gripper/organ)
 
 //Engineering stuff

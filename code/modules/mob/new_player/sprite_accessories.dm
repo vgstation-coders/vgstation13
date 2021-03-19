@@ -76,10 +76,6 @@
 	name = "Shoulder-length Hair"
 	icon_state = "hair_b"
 
-/datum/sprite_accessory/hair/longalt
-	name = "Shoulder-length Hair Alt"
-	icon_state = "hair_longfringe"
-
 /*/datum/sprite_accessory/hair/longish
 	name = "Longer Hair"
 	icon_state = "hair_b2"*/
@@ -201,6 +197,10 @@
 	name = "Parted"
 	icon_state = "hair_parted"
 
+/datum/sprite_accessory/hair/partedalt
+	name = "Parted Alt"
+	icon_state = "hair_partedalt"
+
 /datum/sprite_accessory/hair/pompadour
 	name = "Pompadour"
 	icon_state = "hair_pompadour"
@@ -270,6 +270,10 @@
 /datum/sprite_accessory/hair/dreadlocks
 	name = "Dreadlocks"
 	icon_state = "hair_dreads"
+
+/datum/sprite_accessory/hair/dreadlockslong
+	name = "Long Dreadlocks"
+	icon_state = "hair_dreads_long"	
 
 /datum/sprite_accessory/hair/curls
 	name = "Curls"

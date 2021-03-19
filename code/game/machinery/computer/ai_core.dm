@@ -101,6 +101,9 @@
 				if(!prison.brainmob)
 					to_chat(user, "<span class='warning'>Sticking an empty [P] into the frame would sort of defeat the purpose.</span>")
 					return
+				if(!map.map_specific_conditions(ROBOT_CHECK))
+					to_chat(user, "<span class='warning'>The station prevents you from kickstarting the tyranny of the AI!</span>")
+					return
 				if(prison.brainmob.stat == DEAD)
 					to_chat(user, "<span class='warning'>Sticking a dead [P] into the frame would sort of defeat the purpose.</span>")
 					return
@@ -299,7 +302,7 @@ That prevents a few funky behaviors.
 							else if (C.contents.len)
 								to_chat(U, "<span class='danger'>ERROR:</span> Artificial intelligence detected on terminal.")
 							else if (!T.occupant)
-								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")		
+								to_chat(U, "<span class='danger'>ERROR:</span> Unable to locate artificial intelligence.")
 	else
 		to_chat(U, "<span class='danger'>ERROR:</span> AI flush is in progress, cannot execute transfer protocol.")
 	return

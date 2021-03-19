@@ -32,8 +32,9 @@
 		sleep(picked_up_speed)
 
 /obj/item/projectile/rocket/to_bump(var/atom/A)
+	var/A_turf = get_turf(A)
 	..()
-	explosion(A, exdev, exheavy, exlight, exflash)
+	explosion(A_turf, exdev, exheavy, exlight, exflash)
 	if(!gcDestroyed)
 		qdel(src)
 

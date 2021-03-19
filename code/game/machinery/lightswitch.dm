@@ -16,6 +16,7 @@
 
 /obj/machinery/light_switch/initialize()
 	add_self_to_holomap()
+	toggle_switch(newstate = 0)
 
 /obj/machinery/light_switch/New(var/loc, var/ndir, var/building = 2)
 	..()
@@ -105,7 +106,7 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_paw(mob/user)
-	src.attack_hand(user)
+	toggle_switch()
 
 /obj/machinery/light_switch/attack_ghost(var/mob/dead/observer/ghost)
 	if(!can_spook())
@@ -117,6 +118,11 @@
 	return ..()
 
 /obj/machinery/light_switch/attack_hand(mob/user)
+	toggle_switch()
+
+/obj/machinery/light_switch/proc/toggle_switch(var/newstate = null)
+	if(!isnull(newstate) && on == newstate)
+		return
 	if(buildstage != 2)
 		return
 	on = !on

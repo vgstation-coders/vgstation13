@@ -63,6 +63,35 @@
 	minbodytemp = 0
 	held_items = list()
 
+	//keeping this here for later color matrix testing
+	var/a_matrix_testing_override = FALSE
+	var/a_11 = 1
+	var/a_12 = 0
+	var/a_13 = 0
+	var/a_14 = 0
+	var/a_21 = 0
+	var/a_22 = 1
+	var/a_23 = 0
+	var/a_24 = 0
+	var/a_31 = 0
+	var/a_32 = 0
+	var/a_33 = 1
+	var/a_34 = 0
+	var/a_41 = 0
+	var/a_42 = 0
+	var/a_43 = 0
+	var/a_44 = 1
+	var/a_51 = 0
+	var/a_52 = 0
+	var/a_53 = 0
+	var/a_54 = 0
+
+
+/mob/living/simple_animal/hostile/giant_spider/Cross(atom/movable/mover, turf/target, height=1.5, air_group = 0)
+	if(istype(mover, /obj/item/projectile/web))//Queen Spider webs pass through other spiders
+		return 1
+	return ..()
+
 /mob/living/simple_animal/hostile/giant_spider/update_icons()
 	.=..()
 
@@ -119,3 +148,47 @@
 	..()
 	if(icon_aggro)
 		icon_state = icon_living
+
+/mob/living/simple_animal/hostile/giant_spider/Life()
+	if(timestopped)
+		return 0 //under effects of time magick
+	. = ..()
+	if(client)
+		client.color = list(0.8,0,0,1,
+							0,0.8,0,1,
+	 						0,0,0.8,1,
+		 					0.2,0.2,0.2,0.5,
+		 					0.15,0.15,0.15,0)
+
+		if(a_matrix_testing_override)
+			client.color = list(a_11,a_12,a_13,a_14,
+								a_21,a_22,a_23,a_24,
+		 						a_31,a_32,a_33,a_34,
+			 					a_41,a_42,a_43,a_44,
+			 					a_51,a_52,a_53,a_54)
+
+	regular_hud_updates()
+
+/mob/living/simple_animal/hostile/giant_spider/regular_hud_updates()
+	if (!client)
+		return
+
+	if(fire_alert)
+		throw_alert(SCREEN_ALARM_FIRE, /obj/abstract/screen/alert/carbon/burn/fire/spider)
+	else
+		clear_alert(SCREEN_ALARM_FIRE)
+	update_pull_icon()
+
+	if(hud_used && healths)
+		if (health >= maxHealth)//I tried using a switch() and BYOND told me to go fuck myself basically so here we go
+			healths.icon_state = "health0"
+		else if (health >= 3*maxHealth/4)
+			healths.icon_state = "health1"
+		else if (health >= maxHealth/2)
+			healths.icon_state = "health2"
+		else if (health >= maxHealth/4)
+			healths.icon_state = "health3"
+		else if (health > 0)
+			healths.icon_state = "health4"
+		else
+			healths.icon_state = "health5"
