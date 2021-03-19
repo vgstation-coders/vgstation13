@@ -5,6 +5,9 @@
 	icon_closed = "coffin"
 	icon_opened = "coffin_open"
 
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 2
+
 	starting_materials = list(MAT_WOOD = 5*CC_PER_SHEET_MISC)
 	var/mob_lock_type = /datum/locking_category/buckle/closet/coffin
 
@@ -12,7 +15,7 @@
 /obj/structure/closet/coffin/Destroy()
 	new /obj/item/stack/sheet/wood(loc,3) //This will result in 3 dropped if destroyed, or 5 if deconstructed
 	if (is_locking(mob_lock_type)) //if someone is strapped in and this gets destroyed make them visible again
-		var/mob/locked = get_locked(mob_lock_type)[1]	
+		var/mob/locked = get_locked(mob_lock_type)[1]
 		locked.alphas["coffin_invis"] = 255
 		locked.handle_alpha()
 	..()
@@ -45,7 +48,7 @@
 /obj/structure/closet/coffin/proc/handle_buckle(var/mob/user) //needs src.opened otherwise bugs might occur because closet eats the items when its closed
 	if (src.opened && is_locking(mob_lock_type)) //only unbuckle if you are buckled in in the first place
 		manual_unbuckle(user)
-		setDensity(FALSE) //this is needed for some reason 
+		setDensity(FALSE) //this is needed for some reason
 		return
 	var/mob/closet_dweller = locate() in src.loc
 	if (src.opened && closet_dweller) //buckle only the mob inside the closet
@@ -54,11 +57,11 @@
 /obj/structure/closet/coffin/proc/handle_user_visibility() //after each open/close action assert the correct user visibility
 	if (!is_locking(mob_lock_type))
 		return
-	var/mob/locked = get_locked(mob_lock_type)[1]	
-	if (src.opened)  
+	var/mob/locked = get_locked(mob_lock_type)[1]
+	if (src.opened)
 		locked.alphas["coffin_invis"] = 255
 		locked.handle_alpha()
-	else 
+	else
 		locked.alphas["coffin_invis"] = 1
 		locked.handle_alpha()
 

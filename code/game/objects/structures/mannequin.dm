@@ -690,6 +690,8 @@
 	health = 30
 	maxHealth = 30
 	trueForm = /mob/living/simple_animal/hostile/mannequin/wood
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 2.5
 
 /obj/structure/mannequin/wood/breakDown()
 	new /obj/item/stack/sheet/wood(loc, 5)//You get half the materials used to make a block bac)
@@ -808,6 +810,8 @@
 		"monkey"	=	/obj/structure/mannequin/wood/monkey,
 		"vox"		=	/obj/structure/mannequin/wood/vox,
 		)
+	autoignition_temperature = AUTOIGNITION_WOOD
+	fire_fuel = 5
 
 
 
