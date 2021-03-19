@@ -293,8 +293,8 @@
 			charging.update_icon()
 			charging.forceMove(get_turf(src))
 			charging = null
-		if(!self_powered)
-			use_power = 1
+			if(!self_powered)
+				use_power = 1
 		appearance_backup=null
 		update_icon()
 
