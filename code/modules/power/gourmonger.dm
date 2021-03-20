@@ -16,7 +16,7 @@ var/global/gourmonger_saturation = 0
 	maxHealth = 125
 	melee_damage_lower = 5
 	melee_damage_upper = 10	//The rads are the real danger
-	stat_attack = 2	//So it attacks corpses.
+	stat_attack = DEAD	//So it attacks corpses.
 	search_objects = 1	//Searches objects but doesn't ignore people. The ignoring before hanger is in its CanAttack()
 	environment_smash_flags = SMASH_CONTAINERS
 	wanted_objects = list(/obj/item/weapon/reagent_containers/food/snacks)
@@ -170,15 +170,16 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/AttackingTarget()
 	if(currentlyMunching)
 		return
-	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
-		eatFood(target)
-	if(isliving(target))
-		var/mob/living/M = target
-		if(M.isDeadorDying())
-			eatCorpse(M)
-		else if(hangry)
-			radBurst(kcalPower*2)	//Inherently limited by GOURMONGER_SATISFIED
-			..()
+	spawn()
+		if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+			eatFood(target)
+		if(isliving(target))
+			var/mob/living/M = target
+			if(M.isDeadorDying())
+				eatCorpse(M)
+			else if(hangry)
+				radBurst(kcalPower*2)	//Inherently limited by GOURMONGER_SATISFIED
+				..()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/T, var/munchTime)
 	flick("gourmonger_eat", src)	//This is a 2.8 second animation
@@ -255,6 +256,8 @@ var/global/gourmonger_saturation = 0
 	if(sniffMeal)
 		sniffTarget = sniffMeal
 		return TRUE
+	if(istype(loc, /obj/structure))	//Really? No players in 50 tiles? Maybe our z is 0, let's check
+		gourEscape()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/findPrey()
 	flick("gourmonger_sniff", src)
@@ -266,8 +269,13 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/chargeToPrey(var/mob/living/cTarg = sniffTarget)
 	if(currentlyMunching)
 		return
+	if(!cTarg || cTarg.gcDestroyed)
+		sniffTarget = null
+		return
 	if(cTarg.loc == loc)
 		return
+	if(istype(loc, /obj/structure))
+		gourEscape()
 	var/chargeDir = get_dir_cardinal(src, cTarg)
 	if(!step(src, chargeDir))
 		var/turf/T = get_step(src, chargeDir)
@@ -313,6 +321,11 @@ var/global/gourmonger_saturation = 0
 	if(!issilicon(L))
 		target = L	//Oh hey meat. Also lets them eat each other if they're too hungry, but not specifically seek to.
 
+/mob/living/simple_animal/hostile/gourmonger/proc/gourEscape()
+	var/obj/structure/S = loc
+	var/turf/T = get_turf(S)
+	forceMove(T)
+	S.ex_act(1)
 
 //His cube////////
 
