@@ -18,6 +18,16 @@
 	materials = list(MAT_IRON=10000)
 	category = "Misc"
 
+/datum/design/spraybottle
+	name = "Spray Bottle"
+	desc = "A regular run of the mill spray bottle. Fun for the whole family. Spray away!"
+	id = "spraybottle"
+	build_type = PROTOLATHE
+	build_path = /obj/item/weapon/reagent_containers/spray
+	req_tech = list(Tc_ENGINEERING = 2, Tc_MATERIALS = 3)
+	materials = list(MAT_GLASS = 3000, MAT_IRON=1500)
+	category = "Misc"
+
 /datum/design/chempack
 	name = "Chemical Pack"
 	desc = "Useful for the storage and transport of large volumes of chemicals. Can be used in conjunction with a wide range of chemical-dispensing devices."
