@@ -128,7 +128,7 @@
 	build_path = /obj/item/borg/upgrade/xenoarch
 	category = "Robotic_Upgrade_Modules"
 
-/datum/design/borg_xenoarch_upgrade
+/datum/design/borg_xenoarch_upgrade_adv
 	name = "Supply cyborg advanced xenoarchaeology upgrade"
 	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
 	id = "borg_adv_xenoarch_module"
