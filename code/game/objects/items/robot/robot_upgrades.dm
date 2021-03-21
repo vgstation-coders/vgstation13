@@ -493,4 +493,11 @@
 	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
 
+/obj/item/borg/upgrade/xenoarch
+	name = "xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	modules_to_add = list()
+
 #undef FAILED_TO_ADD
