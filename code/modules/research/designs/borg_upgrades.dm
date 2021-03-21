@@ -122,7 +122,7 @@
 	name = "Supply cyborg xenoarchaeology upgrade"
 	desc = "Used to give a supply cyborg xenoarchaeology tools."
 	id = "borg_xenoarch_module"
-	req_tech = list(Tc_BIOTECH = 5, Tc_ENGINEERING = 4, Tc_ANOMALY = 3)
+	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 4, Tc_ANOMALY = 2)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=70000, MAT_GLASS=20000, MAT_URANIUM=2500)
 	build_path = /obj/item/borg/upgrade/xenoarch
