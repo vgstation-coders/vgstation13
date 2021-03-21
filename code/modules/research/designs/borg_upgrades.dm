@@ -128,6 +128,16 @@
 	build_path = /obj/item/borg/upgrade/xenoarch
 	category = "Robotic_Upgrade_Modules"
 
+/datum/design/borg_xenoarch_upgrade
+	name = "Supply cyborg advanced xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
+	id = "borg_xenoarch_module"
+	req_tech = list(Tc_MATERIALS = 4, Tc_MAGNETS = 4, Tc_ENGINEERING = 5, Tc_ANOMALY = 4)
+	build_type = MECHFAB
+	materials = list(MAT_IRON=80000, MAT_GLASS=40000, MAT_URANIUM=10000)
+	build_path = /obj/item/borg/upgrade/xenoarch_adv
+	category = "Robotic_Upgrade_Modules"
+
 /datum/design/borg_service_upgrade
 	name = "Service cyborg cooking upgrade"
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
