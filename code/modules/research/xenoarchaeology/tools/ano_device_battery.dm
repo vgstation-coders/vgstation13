@@ -304,3 +304,4 @@ var/list/anomaly_power_utilizers = list()
 		qdel(inserted_battery)
 		inserted_battery = null
 	..()
+	
