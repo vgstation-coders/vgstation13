@@ -90,7 +90,7 @@
 	id = "stasis_spray"
 	req_tech = list(Tc_BLUESPACE = 5, Tc_MATERIALS = 6)
 	build_type = PROTOLATHE
-	materials = list(MAT_DIAMOND = 2500, MAT_IRON = 3750, MAT_GLASS = 3750, MAT_URANIUM = 1500, MAT_PLASTIC = 2500)
+	materials = list(MAT_DIAMOND = 2500, MAT_IRON = 3750, MAT_GLASS = 4000, MAT_URANIUM = 2000)
 	reliability = 100
 	category = "Bluespace"
 	build_path = /obj/item/weapon/reagent_containers/spray/noreact
