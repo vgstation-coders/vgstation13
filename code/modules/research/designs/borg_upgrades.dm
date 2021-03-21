@@ -131,7 +131,7 @@
 /datum/design/borg_xenoarch_upgrade
 	name = "Supply cyborg advanced xenoarchaeology upgrade"
 	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
-	id = "borg_xenoarch_module"
+	id = "borg_adv_xenoarch_module"
 	req_tech = list(Tc_MATERIALS = 4, Tc_MAGNETS = 4, Tc_ENGINEERING = 5, Tc_ANOMALY = 4)
 	build_type = MECHFAB
 	materials = list(MAT_IRON=80000, MAT_GLASS=40000, MAT_URANIUM=10000)
