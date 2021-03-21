@@ -228,7 +228,8 @@
 	A disclaimer towards the bottom states <span class = 'warning'>Warning: Do not use around the house, or in proximity of dogs|children|clowns</span>"
 	flags = OPENCONTAINER|FPRINT|NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=5"
-	amount_per_transfer_from_this = 25
+	amount_per_transfer_from_this = 10
+	volume = 150
 
 
 /obj/item/weapon/reagent_containers/spray/noreact/make_puff(var/atom/target, var/mob/user)
