@@ -64,7 +64,7 @@
 
 /datum/design/stasisbeaker
 	name = "Stasis Beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	id = "stasisbeaker_small"
 	req_tech = list(Tc_BLUESPACE = 3, Tc_MATERIALS = 4)
 	build_type = PROTOLATHE
@@ -75,7 +75,7 @@
 
 /datum/design/stasisbeaker_large
 	name = "Large Stasis Beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 200 units."
 	id = "stasisbeaker_large"
 	req_tech = list(Tc_BLUESPACE = 4, Tc_MATERIALS = 6)
 	build_type = PROTOLATHE
@@ -83,6 +83,17 @@
 	reliability = 100
 	category = "Bluespace"
 	build_path = /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
+
+/datum/design/stasis_spray
+	name = "Stasis Spray"
+	desc = "A bluespace powered spraybottle. Chemicals are held in stasis and do not react inside of it. Can hold up to 150 units."
+	id = "stasis_spray"
+	req_tech = list(Tc_BLUESPACE = 5, Tc_MATERIALS = 6)
+	build_type = PROTOLATHE
+	materials = list(MAT_DIAMOND = 2500, MAT_IRON = 3750, MAT_GLASS = 3750, MAT_URANIUM = 1500, MAT_PLASTIC = 2500)
+	reliability = 100
+	category = "Bluespace"
+	build_path = /obj/item/weapon/reagent_containers/spray/noreact
 
 /datum/design/gps
 	name = "Global Positioning System"
