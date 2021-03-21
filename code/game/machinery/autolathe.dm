@@ -48,7 +48,6 @@
 		new /obj/item/device/analyzer(), \
 		new /obj/item/weapon/pickaxe/shovel/spade(), \
 		new /obj/item/device/silicate_sprayer/empty(), \
-		new /obj/item/weapon/reagent_containers/spray(), \
 		),
 		"Containers"=list(
 		new /obj/item/weapon/reagent_containers/glass/beaker(), \
