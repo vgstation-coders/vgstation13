@@ -506,7 +506,7 @@
 	icon_state = "cyborg_upgrade"
 	required_modules = list(SUPPLY_MODULE)
 	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
-	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder,/obj/item/weapon/anodevice)
+	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder,/obj/item/weapon/anodevice/borg)
 	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
 
 #undef FAILED_TO_ADD

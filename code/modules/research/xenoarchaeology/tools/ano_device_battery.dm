@@ -304,3 +304,18 @@ var/list/anomaly_power_utilizers = list()
 		qdel(inserted_battery)
 		inserted_battery = null
 	..()
+
+/obj/item/weapon/anodevice/borg
+	name = "anomaly power battery gripper"
+
+/obj/item/weapon/anodevice/borg/afterattack(atom/A, mob/user)
+	..()
+	if(istype(A, /obj/item/weapon/anobattery))
+		if(!inserted_battery)
+			if(user.drop_item(A, src))
+				to_chat(user, "<span class='notice'>You insert the battery.</span>")
+				playsound(src, 'sound/items/Deconstruct.ogg', 40, 0, -2)
+				inserted_battery = A
+				var/obj/item/weapon/anobattery/B = A
+				B.inserted_device = src
+				update_icon()
