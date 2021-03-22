@@ -384,4 +384,5 @@ var/global/list/valid_random_food_types = existing_typesof(/obj/item/weapon/reag
 /obj/item/weapon/reagent_containers/food/snacks/meat/plasmaman/New()
 	..()
 	reagents.remove_reagent(NUTRIMENT, 2.5)
+	reagents.add_reagent(PLASMA, 5)
 	bitesize = 1
