@@ -1,4 +1,3 @@
-#define GOURMONGER_METABOLISM 1
 #define GOURMONGER_STARVING 50
 #define GOURMONGER_SATISFIED 500
 #define TOO_MANY_GOURS 30
@@ -17,45 +16,54 @@ var/global/gourmonger_saturation = 0
 	maxHealth = 125
 	melee_damage_lower = 5
 	melee_damage_upper = 10	//The rads are the real danger
-	stat_attack = 2
-	search_objects = 1
+	stat_attack = DEAD	//So it attacks corpses.
+	search_objects = 1	//Searches objects but doesn't ignore people. The ignoring before hanger is in its CanAttack()
 	environment_smash_flags = SMASH_CONTAINERS
 	wanted_objects = list(/obj/item/weapon/reagent_containers/food/snacks)
-	min_oxy = 0	//I dunno it breathes food or something
+	meat_amount = 1
+	speed = 1.2	//Able to just barely outrun them
+	min_oxy = 0	//I dunno it breathes food or something. Makes the shard room usable.
 	max_co2 = 0
-	var/hangry = FALSE
-	var/kcalPower = 75
-	var/growToSplit = 15
-	var/currentlyMunching = FALSE
-	var/mob/living/sniffTarget = null	//because using hostile's target var led to too many issues
+	var/hangry = FALSE	//True = loose
+	var/kcalPower = 100	//Banked nutrition
+	var/growToSplit = 20	//How many meals (not nutrition, instances of eating) it takes to split into another gour
+	var/mealCount = 0	//How close to splitting we are
+	var/fastingTime = 0	//Goes up every tick. Decides how much kcal we lose and how close to losing a mealCount we are.
+	var/currentlyMunching = FALSE	//If it's currently eating so it doesn't keep trying.
+	var/mob/living/sniffTarget = null	//The target we're hunting while loose.
+
 
 /mob/living/simple_animal/hostile/gourmonger/New()
 	..()
 	gourmonger_saturation++
-	growToSplit += rand(0, 15) + gourmonger_saturation	//For funsies
-	kcalPower += rand(0, 25)
+	growToSplit += gourmonger_saturation	//Adding on spawn so one doesn't die and cause an unexpected chain reaction
+	kcalPower += rand(0, 50)	//For funsies
 
 /mob/living/simple_animal/hostile/gourmonger/Life()
 	if(!..())
 		return
-	if(kcalPower > 0)
-		kcalPower -= GOURMONGER_METABOLISM
-	radBurst(kcalPower/3)
-	hungerCheck()
+	metabolizeTick()	//Process kcal/meal loss over time
+	radBurst(kcalPower/3)	//Generate power every tick
+	hungerCheck()	//Are we loose?
 	if(hangry && !target)
 		if(sniffTarget)
-			chargeToPrey()
+			chargeToPrey()	//Hunt man down
 		else
-			findPrey()
+			findPrey()	//Find man to hunt
 
 /mob/living/simple_animal/hostile/gourmonger/death()
 	gourmonger_saturation--
-	radBurst(kcalPower*3)
-	divideMeat()
+	divideMeat()	//Just an easier way to do it than tinkering with dropMeat().
 	gibs(get_turf(src))
 	..()
 	qdel(src)
 
+/mob/living/simple_animal/hostile/gourmonger/examine(mob/user)
+	..()
+	if(kcalPower < 150)
+		to_chat(user, "<span class='warning'>The [src] looks absolutely famished. It is drooling slightly.</span>")
+	else if(kcalPower > 1000)
+		to_chat(user, "<span class='notice'>The [src] is even fatter than usual.</span>")
 
 /mob/living/simple_animal/hostile/gourmonger/CanAttack(var/atom/the_target) //My hands are tied. I swear I had a reason for this copy paste. It also trims some weight from targeting.
 	if(currentlyMunching)
@@ -83,7 +91,7 @@ var/global/gourmonger_saturation = 0
 			return 0
 		if(!L.stat && !hangry)	//So we attack corpses but not living creatures unless we're starving
 			return 0
-		if(sniffTarget)
+		if(sniffTarget)	//Why are we running across the station if there's food right in front of us?
 			sniffTarget = null
 		return 1
 	if(isobj(the_target))
@@ -95,8 +103,18 @@ var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger/Goto(var/target, var/delay, var/minimum_distance)
 	if(hangry)
-		chargeToPrey(target)
+		chargeToPrey(target)	//Chases people at normal speed + 1 tile a tick. Call it a runner's kick. If they put a window between them and it it will still break it.
 	..()
+
+/mob/living/simple_animal/hostile/gourmonger/proc/metabolizeTick()
+	if(kcalPower > 0)
+		kcalPower -= fastingTime/5	//Longer without a meal, hungrier they get
+	if(mealCount && prob((fastingTime + mealCount)/10))	//Higher chance based on time and how full they are.
+		mealCount--
+		fastingTime = 0
+		glowCheck()
+	else
+		fastingTime++
 
 /mob/living/simple_animal/hostile/gourmonger/proc/hungerCheck()
 	if(!hangry && kcalPower < GOURMONGER_STARVING)
@@ -106,21 +124,41 @@ var/global/gourmonger_saturation = 0
 
 /mob/living/simple_animal/hostile/gourmonger/proc/radBurst(var/radVal)
 	emitted_harvestable_radiation(get_turf(src), radVal, 8)
-	for(var/mob/living/L in view(get_turf(src), 8))
+	for(var/mob/living/L in view(get_turf(src), 5))
 		L.apply_radiation(radVal/25, RAD_EXTERNAL)
+
+/mob/living/simple_animal/hostile/gourmonger/proc/glowCheck() //Visible indicator of how close to splitting they are
+	var/mealPerc = (mealCount / growToSplit) * 100
+	switch(mealPerc)
+		if(0 to 25)
+			set_light(0)
+		if(25 to 49)
+			set_light(1, 2, "#c0e280")
+		if(50 to 69)
+			set_light(1, 3, "#86d46e")
+		if(70 to 84)
+			set_light(1, 4, "#5ad35a")
+		if(85 to 94)
+			set_light(2, 5, "#1cc446")
+		if(95 to 100)
+			set_light(2, 6, "#00af2c")
+
+
 
 /mob/living/simple_animal/hostile/gourmonger/proc/gourSplit(var/mouthsToFeed = 2)
 	if(gourmonger_saturation >= TOO_MANY_GOURS)
 		return
 	for(var/i in 1 to mouthsToFeed)
 		var/mob/living/simple_animal/hostile/gourmonger/gourBaby = new /mob/living/simple_animal/hostile/gourmonger(loc)
+		gourBaby.kcalPower += kcalPower*0.1	//Causes splitting to effectively multiply nutrients when combined with divideMeat(). Also prevents babies from starving too fast.
 		try_move_adjacent(gourBaby)
+	radBurst(kcalPower*3)
 	death()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/divideMeat()
 	var/nToDiv = kcalPower/15	//1u nutriment is worth about 15kcalPower
-	meat_amount = round(1, nToDiv/20)
-	for(var/i=0, i<meat_amount, i++)
+	meat_amount += nToDiv/20
+	for(var/i=0, i<meat_amount, i++)	//Basically making one piece of meat for every 20u nutriment then making another if we still have some left.
 		var/nToAdd = min(20, nToDiv)
 		var/obj/item/weapon/reagent_containers/food/snacks/firstMeal = drop_meat(loc)
 		firstMeal.reagents.add_reagent(NUTRIMENT, nToAdd)
@@ -132,18 +170,19 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/AttackingTarget()
 	if(currentlyMunching)
 		return
-	if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
-		eatFood(target)
-	if(isliving(target))
-		var/mob/living/M = target
-		if(M.isDeadorDying())
-			eatCorpse(M)
-		else if(hangry)
-			radBurst(kcalPower*2)	//Inherently limited by GOURMONGER_SATISFIED
-			..()
+	spawn()
+		if(istype(target, /obj/item/weapon/reagent_containers/food/snacks))
+			eatFood(target)
+		if(isliving(target))
+			var/mob/living/M = target
+			if(M.isDeadorDying())
+				eatCorpse(M)
+			else if(hangry)
+				radBurst(kcalPower*2)	//Inherently limited by GOURMONGER_SATISFIED
+				..()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/T, var/munchTime)
-	flick("gourmonger_eat", src)
+	flick("gourmonger_eat", src)	//This is a 2.8 second animation
 	currentlyMunching = TRUE
 	canmove = 0
 	sleep(munchTime)
@@ -189,7 +228,7 @@ var/global/gourmonger_saturation = 0
 	var/mealValue = 0
 	if(iscarbon(theMeal))
 		var/mob/living/carbon/C = theMeal
-		mealValue = C.nutrition/5	//arms, legs, and torso since the head isn't eaten
+		mealValue = C.nutrition/3	//5 meals per corpse. So you, probably, get more out of an obese corpse than you would just feeding the food to the gour.
 	else if(isanimal(theMeal))
 		var/mob/living/simple_animal/A = theMeal
 		mealValue = A.maxHealth
@@ -198,8 +237,11 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/eatOutcome(var/passToRad, var/passToKcal, var/growMod = 1)
 	radBurst(passToRad)
 	kcalPower += passToKcal
-	growToSplit -= growMod
-	if(growToSplit <= 0)
+	maxHealth += growMod //Raise your gour with love, tatorman
+	health += growMod
+	mealCount += growMod
+	glowCheck()
+	if(mealCount > growToSplit)
 		gourSplit()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/sniffForPrey()
@@ -214,6 +256,8 @@ var/global/gourmonger_saturation = 0
 	if(sniffMeal)
 		sniffTarget = sniffMeal
 		return TRUE
+	if(istype(loc, /obj/structure))	//Really? No players in 50 tiles? Maybe our z is 0, let's check
+		gourEscape()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/findPrey()
 	flick("gourmonger_sniff", src)
@@ -225,8 +269,13 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/chargeToPrey(var/mob/living/cTarg = sniffTarget)
 	if(currentlyMunching)
 		return
+	if(!cTarg || cTarg.gcDestroyed)
+		sniffTarget = null
+		return
 	if(cTarg.loc == loc)
 		return
+	if(istype(loc, /obj/structure))
+		gourEscape()
 	var/chargeDir = get_dir_cardinal(src, cTarg)
 	if(!step(src, chargeDir))
 		var/turf/T = get_step(src, chargeDir)
@@ -267,11 +316,16 @@ var/global/gourmonger_saturation = 0
 /mob/living/simple_animal/hostile/gourmonger/proc/gourThroughMob(var/mob/living/L)
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
-		H.Knockdown(3)
-	L.adjustBruteLoss(30)
+		H.Knockdown(2)
+	L.adjustBruteLoss(20)
 	if(!issilicon(L))
 		target = L	//Oh hey meat. Also lets them eat each other if they're too hungry, but not specifically seek to.
 
+/mob/living/simple_animal/hostile/gourmonger/proc/gourEscape()
+	var/obj/structure/S = loc
+	var/turf/T = get_turf(S)
+	forceMove(T)
+	S.ex_act(1)
 
 //His cube////////
 
