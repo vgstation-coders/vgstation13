@@ -134,7 +134,7 @@
 	id = "borg_adv_xenoarch_module"
 	req_tech = list(Tc_MATERIALS = 4, Tc_MAGNETS = 4, Tc_ENGINEERING = 5, Tc_ANOMALY = 4)
 	build_type = MECHFAB
-	materials = list(MAT_IRON=80000, MAT_GLASS=40000, MAT_URANIUM=10000)
+	materials = list(MAT_IRON=80000, MAT_GLASS=40000, MAT_PLASMA=2500, MAT_URANIUM=5000, MAT_DIAMOND=2500)
 	build_path = /obj/item/borg/upgrade/xenoarch_adv
 	category = "Robotic_Upgrade_Modules"
 
