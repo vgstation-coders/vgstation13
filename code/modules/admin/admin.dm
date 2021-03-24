@@ -1543,7 +1543,7 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
 	dat += "<center><B>Screenshot:</b></center>"
-	dat += "Chosen Screenshot: [end_credits.customized_ss || end_credits.ss] <A href='?src=\ref[src];credits=setss'>(Set Link)</A> "
+	dat += "Chosen Screenshot: [end_credits.customized_ss && end_credits.ss] <A href='?src=\ref[src];credits=setss'>(Set Link)</A> "
 	if(end_credits.customized_ss != "" && !end_credits.drafted)
 		dat += "<A href='?src=\ref[src];credits=resetss'>(Reset)</A> "
 	if(!end_credits.drafted)
