@@ -1130,6 +1130,95 @@ var/global/list/alcatraz_stuff = list(
 					living_mover.put_in_hands(I)
 				to_chat(mover,"<span class='good'>\The [src] dispenses a reward!</span>")
 
+#define AT_SEED 0
+#define AT_PLANTED 1
+#define AT_SAPLING 2
+#define AT_MATURE 3
+#define AT_FLOWERING 4
+
+/obj/structure/ammotree
+	name = "ammo tree seed"
+	desc = "The seed of an ammo tree. A gene-modified plant that was developed to synthesize metals. <B>If it was rammed in with enough force, you could get it to grow.</B>"
+	icon = 'icons/obj/flora/big_pots.dmi'
+	icon_state = "ammotree-0"
+	density = FALSE
+	anchored = FALSE
+	pixel_x = -16
+	plane = ABOVE_HUMAN_PLANE
+	var/state = AT_SEED
+
+/obj/structure/ammotree/attackby(obj/item/I, mob/user)
+	if(state == AT_SEED && istype(I, /obj/item/weapon/batteringram))
+		state = AT_PLANTED
+		playsound(src, 'sound/effects/shieldbash.ogg', 50, 1)
+		processing_objects += src
+	else
+		..()
+	update_icon()
+
+/obj/structure/ammotree/attack_hand(mob/user)
+	if(state != AT_FLOWERING)
+		return
+	visible_message("<span class='notice>[user] picks some ammo fruit from \the [src].</span>")
+	state = AT_MATURE
+	update_icon()
+	processing_objects += src
+	playsound(loc, "sound/effects/plant_rustle.ogg", 50, 1, -1)
+	for(var/i = 1 to 4)
+		new /obj/item/ammofruit(user.loc)
+
+/obj/structure/ammotree/update_icon()
+	icon_state = "ammotree-[state]"
+	switch(state)
+		if(AT_PLANTED)
+			name = "strange pot"
+			desc = "Something is clearly putting down roots below."
+		if(AT_SAPLING)
+			name = "ammo tree sapling"
+			desc = "An ammo tree sapling. It looks thin enough to snap like a twig."
+		if(AT_MATURE)
+			name = "ammo tree"
+			desc = "A gene-modified plant that was developed to synthesize metals."
+
+/obj/structure/ammotree/process()
+	if(state >= AT_FLOWERING)
+		processing_objects -= src
+		return
+	if(prob(1))
+		state++
+		update_icon()
+
+/obj/item/ammofruit
+	name = "ammofruit"
+	desc = "Not edible. Feed it into your local ammolathe."
+	icon = 'icons/obj/ammo.dmi'
+	icon_state = "ammofruit"
+	w_class = W_CLASS_SMALL
+
+/obj/item/ammofruit/New()
+	..()
+	pixel_x = rand(-3,3)
+	pixel_y = rand(-3,3)
+	materials = new /datum/materials(src)
+	materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL*2)
+	if(prob(25))
+		if(prob(60))
+			materials.addAmount(MAT_PLASMA,CC_PER_SHEET_MISC*2)
+			name = "dragonbreath ammofruit"
+			icon_state = "ammofruit_plasma"
+		else
+			materials.addAmount(MAT_GLASS,CC_PER_SHEET_GLASS)
+			materials.addAmount(MAT_PLASTIC,CC_PER_SHEET_MISC)
+			materials.addAmount(MAT_WOOD, CC_PER_SHEET_MISC)
+			name = "gunstock ammofruit"
+			icon_state = "ammofruit_glass"
+	else
+		materials.addAmount(MAT_IRON,CC_PER_SHEET_METAL)
+
+/obj/item/ammofruit/recyclable(var/obj/machinery/r_n_d/fabricator/F)
+	if(!istype(F, /obj/machinery/r_n_d/fabricator/mechanic_fab/autolathe/ammolathe))
+		return FALSE
+	return TRUE
 
 //Mystery mob cubes//////////////
 
