@@ -171,7 +171,7 @@
 /datum/global_iterator/mech_bay_recharger/process(var/obj/machinery/mech_bay_recharge_port/port, var/obj/O)
 	if(!port)
 		return 0
-	if(O && port.recharge_floor in get_turf(O))
+	if(O && (port.recharge_floor in get_turf(O)))
 		var/obj/item/weapon/cell/C = O.get_cell()
 		if(!C)
 			return
