@@ -23,7 +23,7 @@ var/global/datum/credits/end_credits = new
 	var/star_string = ""
 	var/ss_string = ""
 
-	//If any of the following four are modified, the episode is considered "not a rerun".
+	//If any of the following five are modified, the episode is considered "not a rerun".
 	var/customized_name = ""
 	var/customized_star = ""
 	var/customized_ss = ""
@@ -197,7 +197,7 @@ var/global/datum/credits/end_credits = new
 	var/episode_count_data = SSpersistence_misc.read_data(/datum/persistence_task/round_count)
 	var/episodenum = episode_count_data[season]
 	episode_string = "<h1><span id='episodenumber'>SEASON [season] EPISODE [episodenum]</span><br><span id='episodename'>[episode_name]</span></h1><br><div style='padding-bottom: 75px;'></div>"
-	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name]")
+	log_game("So ends [is_rerun() ? "another rerun of " : ""]SEASON [season] EPISODE [episodenum] - [episode_name] ... [customized_ss]")
 
 /datum/credits/proc/finalize_disclaimerstring()
 	disclaimers_string = "<div class='disclaimers'>"
