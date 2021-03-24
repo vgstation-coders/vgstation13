@@ -11,6 +11,7 @@ var/global/datum/credits/end_credits = new
 	var/director = "Pomf Chicken Productions"
 	var/list/producers = list()
 	var/star = ""
+	var/ss = ""
 	var/list/disclaimers = list()
 	var/list/datum/episode_name/episode_names = list()
 
@@ -20,10 +21,12 @@ var/global/datum/credits/end_credits = new
 	var/cast_string = ""
 	var/disclaimers_string = ""
 	var/star_string = ""
+	var/ss_string = ""
 
 	//If any of the following four are modified, the episode is considered "not a rerun".
 	var/customized_name = ""
 	var/customized_star = ""
+	var/customized_ss = ""
 	var/rare_episode_name = FALSE
 	var/theme = "NT"
 
@@ -53,7 +56,7 @@ var/global/datum/credits/end_credits = new
 		)
 
 /datum/credits/proc/is_rerun()
-	if(customized_name != "" || customized_star != "" || rare_episode_name == TRUE || theme != initial(theme))
+	if(customized_name != "" || customized_star != "" || customized_ss !="" || rare_episode_name == TRUE || theme != initial(theme))
 		return FALSE
 	else
 		return TRUE
@@ -89,9 +92,10 @@ var/global/datum/credits/end_credits = new
 	finalize_name()
 	finalize_episodestring()
 	finalize_starstring()
+	finalize_ssstring()
 	finalize_disclaimerstring() //finalize it after the admins have had time to edit them
 
-	var/scrollytext = episode_string + cast_string + disclaimers_string
+	var/scrollytext = ss_string + episode_string + cast_string + disclaimers_string
 	var/splashytext = producers_string + star_string
 
 	js_args = list(scrollytext, splashytext, theme, scroll_speed, splash_time) //arguments for the makeCredits function back in the javascript
@@ -238,6 +242,11 @@ var/global/datum/credits/end_credits = new
 	if(customized_star == "" && star == "")
 		return
 	star_string = "<h1>Starring<br>[customized_star != "" ? customized_star : star]</h1><br>%<splashbreak>" //%<splashbreak> being an arbitrary "new splash card" char we use to split this string back in the javascript
+
+/datum/credits/proc/finalize_ssstring()
+	if(customized_ss == "" && ss == "")
+		return
+	ss_string = "<div style='max-height:600px;overflow:hidden;text-align:center;'><img src='[customized_ss]' style='max-height:600px;'></div>"
 
 /datum/credits/proc/draft_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
