@@ -246,7 +246,7 @@ var/global/datum/credits/end_credits = new
 /datum/credits/proc/finalize_ssstring()
 	if(customized_ss == "" && ss == "")
 		return
-	ss_string = "<div style='max-height:600px;overflow:hidden;text-align:center;'><img src='[customized_ss]' style='max-height:600px;'></div>"
+	ss_string = "<div align='center'><div style='max-height:600px;overflow:hidden;max-width:600px;padding-bottom:20px;'><img src='[customized_ss]' style='max-height:600px;max-width:600px;'></div></div>"
 
 /datum/credits/proc/draft_caststring()
 	cast_string = "<h1>CAST:</h1><br><h2>(in order of appearance)</h2><br>"
