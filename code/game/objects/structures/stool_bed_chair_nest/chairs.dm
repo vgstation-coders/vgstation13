@@ -173,7 +173,7 @@
 	if(!istype(M))
 		return
 
-	var/effective_buckle_range = (override_buckle_range ? override_buckle_range : buckle_range)
+	var/effective_buckle_range = (isnull(override_buckle_range) ? buckle_range : override_buckle_range)
 
 	var/mob/living/carbon/human/target = null
 	if(ishuman(M))
