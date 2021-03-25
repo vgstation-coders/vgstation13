@@ -85,7 +85,7 @@
 	if(!anchored)
 		to_chat(user, "<span class='warning'>You must secure \the [src] before you can make use of it!</span>")
 		return 1
-	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs))
+	if(istype(G, /obj/item/weapon/gun/energy) || istype(G, /obj/item/weapon/melee/baton) || istype(G, /obj/item/energy_magazine) || istype(G, /obj/item/ammo_storage/magazine/lawgiver) || istype(G, /obj/item/weapon/rcs) || istype(G, /obj/item/clothing/head/helmet/stun))
 		if (istype(G, /obj/item/weapon/gun/energy/gun/nuclear) || istype(G, /obj/item/weapon/gun/energy/crossbow))
 			to_chat(user, "<span class='notice'>Your gun's recharge port was removed to make room for a miniaturized reactor.</span>")
 			return 1

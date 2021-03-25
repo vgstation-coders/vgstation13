@@ -390,6 +390,9 @@
 	species_restricted = list("exclude","Muton")
 	var/gave_out_gifts = FALSE //for snowman animation
 
+/obj/item/clothing/head/proc/bite_action(mob/target)
+	return
+
 /obj/item/proc/islightshielded() // So as to avoid unneeded casts.
 	return FALSE
 

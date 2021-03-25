@@ -1360,7 +1360,7 @@ var/global/list/image/blood_overlays = list()
 /obj/item/proc/remote_attack(atom/target, mob/user, atom/movable/eye)
 	return
 
-/obj/item/proc/recyclable() //Called by RnD machines, for added object-specific sanity.
+/obj/item/proc/recyclable(var/obj/machinery/r_n_d/fabricator/F) //Called by RnD machines, for added object-specific sanity.
 	return TRUE
 
 /obj/item/proc/on_mousedrop_to_inventory_slot()

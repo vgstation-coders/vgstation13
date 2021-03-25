@@ -180,6 +180,11 @@
 
 //BITES
 /mob/living/bite_act(mob/living/carbon/human/M as mob)
+	if(M.head && istype(M.head,/obj/item/clothing/head))
+		var/obj/item/clothing/head/H = M.head
+		if(H.bite_action(src))
+			return //Head slot item overrode the bite
+
 	var/datum/butchering_product/teeth/T = locate(/datum/butchering_product/teeth) in M.butchering_drops
 	var/damage = 0
 	var/attacktype = "bitten"

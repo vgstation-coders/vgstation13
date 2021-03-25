@@ -177,7 +177,10 @@
 	if(ishuman(M))
 		target = M
 
-	if(!user.Adjacent(M) || !user.Adjacent(src))
+	if(user!=M && (!user.Adjacent(M) || !user.Adjacent(src)))
+		return
+
+	if(get_dist(src,user) > buckle_range)
 		return
 
 	if(target && target.op_stage.butt == 4 && Adjacent(target) && user.Adjacent(src) && !user.incapacitated()) //Butt surgery is at stage 4
