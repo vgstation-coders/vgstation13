@@ -64,6 +64,9 @@
 /obj/structure/bed/chair/vehicle/proc/getMovementDelay()
 	return movement_delay
 
+/obj/structure/bed/chair/AltClick(mob/user as mob)
+	buckle_chair(user,user, 1) // Can drag self to it.
+
 /obj/structure/bed/chair/vehicle/proc/delayNextMove(var/delay, var/additive=0)
 	move_delayer.delayNext(delay,additive)
 
