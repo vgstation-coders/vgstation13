@@ -101,6 +101,20 @@ var/global/gourmonger_saturation = 0
 			return 1
 	return 0
 
+/mob/living/simple_animal/hostile/gourmonger/PickTarget(var/list/Targets)	//Removed fuzzyrules eval as it was hindering their targeting priority
+	if(target)
+		for(var/atom/A in Targets)
+			var/target_dist = get_dist(src, target)
+			var/possible_target_distance = get_dist(src, A)
+			if(target_dist < possible_target_distance)
+				Targets -= A
+	if(!Targets.len)
+		return
+	var/chosen_target = pick(Targets)	//Gours pick a random target rather than the top priority target. The latter had them all starve trying to eat the same pumpkin.
+	return chosen_target
+
+
+
 /mob/living/simple_animal/hostile/gourmonger/Goto(var/target, var/delay, var/minimum_distance)
 	if(hangry)
 		chargeToPrey(target)	//Chases people at normal speed + 1 tile a tick. Call it a runner's kick. If they put a window between them and it it will still break it.
@@ -181,18 +195,24 @@ var/global/gourmonger_saturation = 0
 				radBurst(kcalPower*2)	//Inherently limited by GOURMONGER_SATISFIED
 				..()
 
-/mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/T, var/munchTime)
+/mob/living/simple_animal/hostile/gourmonger/proc/munchOn(var/atom/T, var/munchTime = 3)
 	flick("gourmonger_eat", src)	//This is a 2.8 second animation
 	currentlyMunching = TRUE
 	canmove = 0
-	sleep(munchTime)
+	for(var/i = 0, i<munchTime, i++)
+		if(T.gcDestroyed)
+			target = null
+			currentlyMunching = FALSE
+			canmove = 1
+			return
+		sleep(1 SECONDS)
 	currentlyMunching = FALSE
 	canmove = 1
 	if(Adjacent(T) && !stat)
 		return TRUE
 
 /mob/living/simple_animal/hostile/gourmonger/proc/eatFood(var/obj/item/weapon/reagent_containers/food/snacks/toEat)
-	if(!munchOn(toEat, 3 SECONDS))
+	if(!munchOn(toEat))
 		return
 	var/nValue = 0
 	for(var/datum/reagent/R in toEat.reagents.reagent_list)
@@ -205,14 +225,14 @@ var/global/gourmonger_saturation = 0
 	if(ishuman(L))
 		eatLimb(L)
 	else
-		if(!munchOn(L, 3 SECONDS))
+		if(!munchOn(L))
 			return
 		var/nValue = decideNutrition(L)
 		eatOutcome(nValue, nValue, 2)
 		L.gib()
 
 /mob/living/simple_animal/hostile/gourmonger/proc/eatLimb(var/mob/living/carbon/human/H)
-	if(!munchOn(H, 3 SECONDS))
+	if(!munchOn(H))
 		return
 	var/nValue = decideNutrition(H)
 	var/datum/organ/external/toEat = H.pick_usable_organ(LIMB_LEFT_ARM, LIMB_RIGHT_ARM, LIMB_LEFT_LEG, LIMB_RIGHT_LEG)
@@ -231,7 +251,7 @@ var/global/gourmonger_saturation = 0
 		mealValue = C.nutrition/3	//5 meals per corpse. So you, probably, get more out of an obese corpse than you would just feeding the food to the gour.
 	else if(isanimal(theMeal))
 		var/mob/living/simple_animal/A = theMeal
-		mealValue = A.maxHealth
+		mealValue = A.maxHealth*2
 	return mealValue
 
 /mob/living/simple_animal/hostile/gourmonger/proc/eatOutcome(var/passToRad, var/passToKcal, var/growMod = 1)
