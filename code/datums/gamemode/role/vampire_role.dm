@@ -75,7 +75,7 @@
 	for(var/type_VP in roundstart_powers)
 		var/datum/power/vampire/VP = new type_VP
 		VP.add_power(src)
-	
+
 	if(faction && istype(faction, /datum/faction/vampire) && faction.leader == src)
 		var/datum/faction/vampire/V = faction
 		V.name_clan(src)
@@ -342,7 +342,7 @@
 		var/datum/role/thrall/role_thrall = isthrall(C)
 		if (role_thrall && role_thrall.master == src)
 			continue // We don't terrify our underlings
-		if (C.vampire_affected(antag) < 0)
+		if (C.vampire_affected(antag) <= 0)
 			continue
 		C.stuttering += 20
 		C.Jitter(20)
