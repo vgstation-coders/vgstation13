@@ -65,6 +65,13 @@
 /datum/chemical_reaction/proc/required_condition_check(var/datum/reagents/holder)
 	return 1
 
+/datum/chemical_reaction/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	result = LOCUTOGEN
+	required_reagents = list(INACUSIATE = 1, TUNGSTEN = 1, FLUORINE = 1)
+	result_amount = 3
+
 //I recommend you set the result amount to the total volume of all components.
 /datum/chemical_reaction/explosion_potassium
 	name = "Water Potassium Explosion"
@@ -92,7 +99,7 @@
 	id = "holy_explosion_potassium"
 	required_reagents = list(POTASSIUM = 1, HOLYWATER = 1)
 	result_amount = 2.4
-	
+
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
 	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
