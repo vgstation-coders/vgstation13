@@ -243,6 +243,42 @@
 /datum/reagent/proc/handle_special_behavior(var/obj/item/weapon/reagent_containers/food/drinks/drinkingglass/D) //rip steve
 	return
 
+/datum/reagent/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	reagent_state = REAGENT_STATE_LIQUID
+	custom_metabolism = 0.01
+	data = list("msg" = "")
+
+/datum/reagent/locutogen/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	if(!data["msg"])
+		return 1
+
+	if(!M.isUnconscious())
+		to_chat(M, "<span class='info'>You hear a voice in your head saying: '[data["msg"]]'.</span>")
+		holder.del_reagent(LOCUTOGEN)
+
+/datum/reagent/locutogen/proc/set_msg(var/msg)
+	if(!data["msg"])
+		data["msg"] = msg
+
+/datum/reagent/locutogen/on_introduced()
+	..()
+	var/atom/movable/AM = holder.my_atom
+	if(istype(AM) && !(AM.flags & HEAR))
+		AM.addHear()
+
+/obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
+	if(reagents.has_reagent(LOCUTOGEN))
+		var/datum/reagent/locutogen/L = reagents.get_reagent(LOCUTOGEN)
+		L.set_msg(speech.message)
+		if(!(initial(flags) & HEAR))
+			removeHear()
+	return ..()
+
 /datum/reagent/piccolyn
 	name = "Piccolyn"
 	id = PICCOLYN
@@ -2491,7 +2527,7 @@
 			C.adjustToxLoss(REM) //4 toxic damage per application, doubled for some reason
 		if(isinsectoid(C) || istype(C, /mob/living/carbon/monkey/roach)) //Insecticide being poisonous to bugmen, who'd've thunk
 			M.adjustToxLoss(10 * REM)
-		
+
 /datum/reagent/toxin/insecticide/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
 	..()
 
@@ -6347,7 +6383,7 @@
 		glass_name = "\improper Scientist's Surprise"
 		glass_desc = "There is as yet insufficient data for a meaningful answer."
 		D.origin_tech = ""
-		
+
 	else if(volume < 50)
 		glass_icon_state = "scientists_serendipity"
 		glass_name = "\improper Scientist's Serendipity"
@@ -6359,7 +6395,7 @@
 		glass_name = "\improper Scientist's Sapience"
 		glass_desc = "Why research what has already been catalogued?"
 		D.origin_tech = "materials=10;engineering=5;plasmatech=4;powerstorage=5;bluespace=10;biotech=5;combat=6;magnets=6;programming=5;illegal=1;nanotrasen=1;syndicate=2" //Maxes everything but Illegal and Anomaly
-				
+
 /datum/reagent/ethanol/beepskyclassic
 	name = "Beepsky Classic"
 	id = BEEPSKY_CLASSIC
