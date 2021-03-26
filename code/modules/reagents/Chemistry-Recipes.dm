@@ -65,6 +65,13 @@
 /datum/chemical_reaction/proc/required_condition_check(var/datum/reagents/holder)
 	return 1
 
+/datum/chemical_reaction/locutogen
+	name = "Locutogen"
+	id = LOCUTOGEN
+	result = LOCUTOGEN
+	required_reagents = list(INACUSIATE = 1, TUNGSTEN = 1, FLUORINE = 1)
+	result_amount = 3
+	
 //I recommend you set the result amount to the total volume of all components.
 /datum/chemical_reaction/explosion_potassium
 	name = "Water Potassium Explosion"
