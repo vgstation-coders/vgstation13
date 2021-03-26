@@ -151,6 +151,8 @@
 		to_chat(user, "<span class='warning'>You jam \the [W] into \the [src]'s ignition and feel like a genius as you try turning it!</span>")
 		playsound(src, "sound/items/screwdriver.ogg", 10, 1)
 		H.adjustBrainLoss(10)
+	else if(W.is_wrench(user))
+		return
 	else
 		return ..()
 
