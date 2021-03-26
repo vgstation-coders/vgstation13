@@ -15,6 +15,7 @@
 
 //Reagents
 
+#define LOCUTOGEN			"locutogen"
 #define VAPORSALT			"vaporsalt"
 #define BUSTANUT 			"bustanut"
 #define ROGAN 			"rogan"
