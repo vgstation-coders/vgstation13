@@ -16,8 +16,6 @@
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
 	name += spellname
-	var/spell/SP = spell
-	SP.refund_price = 0 // So that they can't be refunded
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user as mob)
 	var/spell/S = new spell(user)
@@ -32,6 +30,7 @@
 	if(used)
 		recoil(user)
 	else
+		S.refund_price = 0 // So that they can't be refunded
 		user.add_spell(S)
 		to_chat(user, "<span class='notice'>you rapidly read through the arcane book. Suddenly you realize you understand [spellname]!</span>")
 		user.attack_log += text("\[[time_stamp()]\] <font color='orange'>[user.real_name] ([user.ckey]) learned the spell [spellname] ([S]).</font>")
