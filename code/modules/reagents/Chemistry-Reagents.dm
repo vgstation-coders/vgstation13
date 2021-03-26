@@ -267,9 +267,10 @@
 
 /datum/reagent/locutogen/on_introduced()
 	..()
-	var/atom/movable/AM = holder.my_atom
-	if(istype(AM) && !(AM.flags & HEAR))
-		AM.addHear()
+	if(!data["msg"])
+		var/atom/movable/AM = holder.my_atom
+		if(istype(AM) && !(AM.flags & HEAR))
+			AM.addHear()
 
 /obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(reagents.has_reagent(LOCUTOGEN))
