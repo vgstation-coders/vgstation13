@@ -16,6 +16,8 @@
 /obj/item/weapon/spellbook/oneuse/New()
 	..()
 	name += spellname
+	var/spell/SP = spell
+	SP.refund_price = 0 // So that they can't be refunded
 
 /obj/item/weapon/spellbook/oneuse/attack_self(mob/user as mob)
 	var/spell/S = new spell(user)
