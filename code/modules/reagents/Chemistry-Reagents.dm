@@ -272,12 +272,13 @@
 		if(istype(AM) && !(AM.flags & HEAR))
 			AM.addHear()
 
+//This proc will only fire if the container has the HEAR flag, or if something else gives it a virtualhearer (currently only Locutogen does).
 /obj/item/weapon/reagent_containers/Hear(var/datum/speech/speech, var/rendered_speech="")
 	if(reagents.has_reagent(LOCUTOGEN))
 		var/datum/reagent/locutogen/L = reagents.get_reagent(LOCUTOGEN)
 		L.set_msg(speech.message)
-		if(!(initial(flags) & HEAR))
-			removeHear()
+	if(!(initial(flags) & HEAR))
+		removeHear()
 	return ..()
 
 /datum/reagent/piccolyn
