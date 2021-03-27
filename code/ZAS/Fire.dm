@@ -269,11 +269,13 @@ Attach to transfer valve and open. BOOM.
 	dir = pick(cardinal)
 	set_light(3)
 	SSair.add_hotspot(src)
+	score["turfsonfire"]++
 
 /obj/effect/fire/Destroy()
 	SSair.remove_hotspot(src)
 
 	set_light(0)
+	score["turfsonfire"]--
 	..()
 
 turf/simulated/var/fire_protection = 0 //Protects newly extinguished tiles from being overrun again.
