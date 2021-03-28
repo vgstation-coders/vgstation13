@@ -86,12 +86,12 @@ var/global/list/turf/simulated/floor/mineral/phazon/phazontiles = list()
 
 /turf/simulated/floor/mineral/phazon/New()
 	floor_tile = new /obj/item/stack/tile/mineral/phazon(null)
-	phazontiles += src
 	..()
+	phazontiles += src
 
 /turf/simulated/floor/mineral/phazon/Destroy()
-	phazontiles -= src
 	..()
+	phazontiles -= src
 
 //BRASS
 
