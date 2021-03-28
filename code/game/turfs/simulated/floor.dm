@@ -74,15 +74,24 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	//set src in oview(1)
 	switch(severity)
 		if(1.0)
+			//No longer phazon, not a teleport destination
+			if(material=="phazon")
+				phazontiles -= src
 			src.ChangeTurf(get_underlying_turf())
 		if(2.0)
 			switch(pick(1,75;2,3))
 				if (1)
+					//No longer phazon, not a teleport destination
+					if(material=="phazon")
+						phazontiles -= src
 					src.ReplaceWithLattice()
 					if(prob(33))
 						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(get_turf(src))
 						M.amount = 1
 				if(2)
+					//No longer phazon, not a teleport destination
+					if(material=="phazon")
+						phazontiles -= src
 					src.ChangeTurf(get_underlying_turf())
 				if(3)
 					if(prob(80))
@@ -385,6 +394,9 @@ turf/simulated/floor/update_icon()
 	intact = 0
 	broken = 0
 	burnt = 0
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
 	material = "metal"
 	plane = PLATING_PLANE
 
