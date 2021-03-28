@@ -32,6 +32,9 @@
 
 			playsound(master, 'sound/items/Deconstruct.ogg', 50, 1)
 			add_gamelogs(user, "deconstructed \the [T] with \the [master]", admin = TRUE, tp_link = TRUE, tp_link_short = FALSE, span_class = "danger")
+			//No longer phazon, not a teleport destination
+			if(T.material=="phazon")
+				phazontiles -= src
 			T.ChangeTurf(T.get_underlying_turf())
 			return 0
 
