@@ -78,7 +78,7 @@
 
 //PHAZON
 
-var/global/list/turf/simulated/floor/mineral/phazon/phazontiles = list()
+var/global/list/turf/simulated/floor/phazontiles = list()
 
 /turf/simulated/floor/mineral/phazon
 	name = "phazon floor"
