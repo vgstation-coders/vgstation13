@@ -698,9 +698,6 @@ turf/simulated/floor/update_icon()
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
 /turf/simulated/floor/clockworkify()
-	//No longer phazon, not a teleport destination
-	if(material=="phazon")
-		phazontiles -= src
 	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
 	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 
