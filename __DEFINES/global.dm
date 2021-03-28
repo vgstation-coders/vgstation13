@@ -259,7 +259,6 @@ var/list/score=list(
 	"deadpets"		= 0, //Only counts 'special' simple_mobs, like Ian, Poly, Runtime, Sasha etc
 	"buttbotfarts"  = 0, //Messages mimicked by buttbots.
 	"turfssingulod" = 0, //Amount of turfs eaten by singularities.
-	"turfsonfire" = 0, //Amount of turfs on fire.
 	"shardstouched" = 0, //+1 for each pair of shards that bump into eachother.
 	"kudzugrowth"   = 0, //Amount of kudzu tiles successfully grown, even if they were later eradicated.
 	"nukedefuse"	= 9999, //Seconds the nuke had left when it was defused.
