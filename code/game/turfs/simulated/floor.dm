@@ -385,6 +385,9 @@ turf/simulated/floor/update_icon()
 	intact = 0
 	broken = 0
 	burnt = 0
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
 	material = "metal"
 	plane = PLATING_PLANE
 
