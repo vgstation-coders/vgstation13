@@ -17,6 +17,10 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
 var/list/wood_icons = list("wood","wood-broken")
+
+//For phazon tile teleportation
+var/global/list/turf/simulated/floor/phazontiles = list()
+
 /turf/simulated/floor
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
@@ -395,6 +399,8 @@ turf/simulated/floor/update_icon()
 	floor_tile = null
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	if(material=="phazon")
+		phazontiles += src
 	intact = 1
 	plane = TURF_PLANE
 	if(istype(T,/obj/item/stack/tile/light))
@@ -541,6 +547,8 @@ turf/simulated/floor/update_icon()
 				floor_tile.forceMove(src)
 				floor_tile = null
 			else
+				if(material=="phazon")
+					phazontiles -= src
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
 				floor_tile.forceMove(src)
 				floor_tile = null
@@ -675,12 +683,16 @@ turf/simulated/floor/update_icon()
 
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+		if(material=="phazon")
+			phazontiles -= src
 		name = "engraved floor"
 		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
 /turf/simulated/floor/clockworkify()
+	if(material=="phazon")
+		phazontiles -= src
 	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
 	turf_animation('icons/effects/effects.dmi',CLOCKWORK_GENERIC_GLOW, 0, 0, MOB_LAYER-1, anim_plane = TURF_PLANE)
 
