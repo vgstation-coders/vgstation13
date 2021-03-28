@@ -144,7 +144,7 @@
 		episode_names += new /datum/episode_name/rare("[pick("REAP WHAT YOU SOW", "OUT OF THE WOODS", "SEEDY BUSINESS", "[uppr_name] AND THE BEANSTALK", "IN THE GARDEN OF EDEN")]", "[score["kudzugrowth"]] tiles worth of Kudzu were grown in total this round.", min(1500, score["kudzugrowth"]*2))
 	if(score["disease"] >= score["escapees"] && score["escapees"] > 5)
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW GETS DOWN WITH THE SICKNESS", "THE CREW GETS AN INCURABLE DISEASE", "THE CREW'S SICK PUNS")]", "[score["disease"]] disease points this round.", min(500, (score["disease"]*25) * (score["disease"]/score["escapees"])))
-	var/list/p_hotspot = processing_parts[SSAIR_HOTSPOT]
+	var/list/p_hotspot = SSair.processing_parts[SSAIR_HOTSPOT]
 	if(p_hotspot.len > 200) // List of turfs on fire length
 		episode_names += new /datum/episode_name/rare("[pick("THE CREW LOSES THEIR CHILL", "DISCO INFERNO", "ASHES TO ASHES", "BURNING DOWN THE HOUSE")]", "[score["turfsonfire"]] turfs were on fire by the end of the round.", min(1000, score["turfsonfire"]/2))
 	//future idea: "a cold day in hell" if most of the station was freezing and threat was high
