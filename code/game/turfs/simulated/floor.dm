@@ -218,6 +218,14 @@ turf/simulated/floor/update_icon()
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				spawn(20)
 					spam_flag = 0
+		if("phazon")
+			if(!spam_flag)
+				spam_flag = 1
+				if(prob(5))
+					var/turf/simulated/floor/mineral/phazon/destination = pick(phazontiles)
+					do_teleport(user, destination)
+				spawn(20)
+					spam_flag = 0
 	..()
 
 /turf/simulated/floor/proc/gets_drilled()
@@ -632,14 +640,6 @@ turf/simulated/floor/update_icon()
 					spawn(200)
 						spam_flag = 0
 						update_icon()
-			if("phazon")
-				if(!spam_flag)
-					spam_flag = 1
-					if(prob(5))
-						var/turf/simulated/floor/mineral/phazon/destination = pick(phazontiles)
-						do_teleport(AM, destination)
-					spawn(20)
-						spam_flag = 0
 
 
 /turf/simulated/proc/is_wet() //Returns null if no puddle, otherwise returns the puddle
