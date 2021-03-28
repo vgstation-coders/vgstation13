@@ -221,9 +221,8 @@ turf/simulated/floor/update_icon()
 		if("phazon")
 			if(!spam_flag)
 				spam_flag = 1
-				if(prob(5))
-					var/turf/simulated/floor/mineral/phazon/destination = pick(phazontiles)
-					do_teleport(user, destination)
+				var/turf/simulated/floor/mineral/phazon/destination = pick(phazontiles)
+				do_teleport(user, destination)
 				spawn(20)
 					spam_flag = 0
 	..()
