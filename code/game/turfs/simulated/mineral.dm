@@ -78,12 +78,19 @@
 
 //PHAZON
 
+var/global/list/turf/simulated/floor/mineral/phazon/phazontiles = list()
+
 /turf/simulated/floor/mineral/phazon
 	name = "phazon floor"
 	icon_state = "phazon"
 
 /turf/simulated/floor/mineral/phazon/New()
 	floor_tile = new /obj/item/stack/tile/mineral/phazon(null)
+	phazontiles += src
+	..()
+
+/turf/simulated/floor/mineral/phazon/Destroy()
+	phazontiles -= src
 	..()
 
 //BRASS
