@@ -95,7 +95,7 @@
 	
 /datum/chemical_reaction/explosion_potassium/holy/on_reaction(var/datum/reagents/holder, var/created_volume)
 	..()
-	playsound('sound/misc/holyhandgrenade.ogg', 100, 1)
+	playsound(src, 'sound/misc/holyhandgrenade.ogg', 100, 1)
 
 /datum/chemical_reaction/soap //Potassium Hydroxide is used in making liquid soap not bar soap but that will not stop me
 	name = "Soap"
