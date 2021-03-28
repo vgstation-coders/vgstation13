@@ -222,6 +222,7 @@ turf/simulated/floor/update_icon()
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				spawn(20)
 					spam_flag = 0
+		//Phazon tiles teleport to another random one in the world when clicked
 		if("phazon")
 			if(!spam_flag)
 				spam_flag = 1
@@ -399,6 +400,7 @@ turf/simulated/floor/update_icon()
 	floor_tile = null
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	//Becomes a teleport destination for other phazon tiles
 	if(material=="phazon")
 		phazontiles += src
 	intact = 1
@@ -547,6 +549,7 @@ turf/simulated/floor/update_icon()
 				floor_tile.forceMove(src)
 				floor_tile = null
 			else
+				//No longer phazon, not a teleport destination
 				if(material=="phazon")
 					phazontiles -= src
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
@@ -683,6 +686,7 @@ turf/simulated/floor/update_icon()
 
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+		//No longer phazon, not a teleport destination
 		if(material=="phazon")
 			phazontiles -= src
 		name = "engraved floor"
@@ -691,6 +695,7 @@ turf/simulated/floor/update_icon()
 		turf_animation('icons/effects/effects.dmi',"cultfloor",0,0,MOB_LAYER-1,anim_plane = OBJ_PLANE)
 
 /turf/simulated/floor/clockworkify()
+	//No longer phazon, not a teleport destination
 	if(material=="phazon")
 		phazontiles -= src
 	ChangeTurf(/turf/simulated/floor/mineral/clockwork)
