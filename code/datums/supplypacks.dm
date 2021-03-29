@@ -127,6 +127,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containername = "janitorial supplies crate"
 	group = "Supplies"
 
+/datum/supply_packs/janicart
+	name = "Janicart"
+	contains = list(/obj/structure/bed/chair/vehicle/janicart,
+					/obj/item/key/janicart)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "janicart crate"
+	access = list(access_janitor)
+	group = "Supplies"
+
 /datum/supply_packs/trashcompactor
 	name = "Trash compactor"
 	contains = list(/obj/machinery/disposal/compactor/unplugged)
@@ -1431,6 +1441,16 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	cost = 500
 	containertype = /obj/structure/largecrate
 	containername = "big band musical instruments crate"
+	group = "Hospitality"
+
+/datum/supply_packs/clowncart
+	name = "Clowncart"
+	contains = list(/obj/structure/bed/chair/vehicle/clowncart,
+					/obj/item/weapon/bikehorn)
+	cost = 150
+	containertype = /obj/structure/closet/crate/secure/large
+	containername = "clowncart crate"
+	access = list(access_clown)
 	group = "Hospitality"
 
 //////ENGINEERING//////
