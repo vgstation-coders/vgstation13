@@ -1447,7 +1447,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	name = "Clowncart"
 	contains = list(/obj/structure/bed/chair/vehicle/clowncart,
 					/obj/item/weapon/bikehorn)
-	cost = 150
+	cost = 250
 	containertype = /obj/structure/closet/crate/secure/large
 	containername = "clowncart crate"
 	access = list(access_clown)
