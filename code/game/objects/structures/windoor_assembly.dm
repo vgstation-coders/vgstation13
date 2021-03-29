@@ -264,15 +264,6 @@ obj/structure/windoor_assembly/Destroy()
 	to_chat(usr, "The windoor will now slide to the [facing == "l" ? "left":"right"].")
 	update_icon()
 
-
-/obj/structure/windoor_assembly/proc/update_nearby_tiles()
-	if(!SS_READY(SSair))
-		return FALSE
-	var/T = loc
-	if (isturf(T))
-		SSair.mark_for_update(T)
-	return TRUE
-
 /obj/structure/windoor_assembly/clockworkify()
 	GENERIC_CLOCKWORK_CONVERSION(src, /obj/structure/windoor_assembly/clockwork, BRASS_WINDOOR_GLOW)
 
