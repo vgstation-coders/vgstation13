@@ -243,7 +243,7 @@
 	verbs -= /obj/structure/inflatable/verb/hand_deflate
 	deflate()
 
-/proc/update_nearby_tiles(var/turf/T)
+/atom/proc/update_nearby_tiles(var/turf/T)
 	if(!SS_READY(SSair))
 		return 0
 
