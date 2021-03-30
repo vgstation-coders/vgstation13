@@ -8,6 +8,7 @@
 	var/mob/living/loadedMob = null
 	var/wFuel = 0
 	var/maxFuel = 20
+	var/maxSize = W_CLASS_LARGE	//Anything bigger won't fit.
 
 /obj/structure/siege_cannon/Destroy()
 	unloadCannon()
@@ -24,28 +25,33 @@
 /obj/structure/siege_cannon/AltClick(var/mob/user)
 	if(user.incapacitated() || !in_range(user, src) || user.loc == src)
 		return
+	to_chat(user,"<span class='notice'>You unload the [src].</span>" )
 	unloadCannon()
 
 /obj/structure/siege_cannon/attackby(obj/item/W as obj, mob/user as mob)
-	if(istype(W, /obj/item/weapon/reagent_containers/glass))
+	if(istype(W, /obj/item/weapon/reagent_containers))
 		fillCannon(W, user)
 		return 1
+	if(W.is_wrench())
+		wrenchAnchor(user, W, 5)	//Half a second to wrench. Being able to turn it via verb while anchored is intentional.
 	else
 		loadCannon(W, user)
-
 
 /obj/structure/siege_cannon/attack_hand(mob/user)
 	siegeFire(user)
 
-/obj/structure/siege_cannon/proc/fillCannon(var/obj/item/weapon/reagent_containers/glass/G, mob/user)
-	if(!G.is_open_container() || G.is_empty() || G.reagents.reagent_list.len > 1)
+/obj/structure/siege_cannon/proc/fillCannon(var/obj/item/weapon/reagent_containers/G, mob/user)
+	if(G.is_empty() || G.reagents.reagent_list.len > 1)
+		return
+	if(!G.is_open_container())
+		loadCannon(G, user)
 		return
 	if(wFuel >= maxFuel)
-		to_chat(user,"<span class='notice'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
-			to_chat(user,"<span class='notice'>The [src] can't accept that as fuel.</span>" )
+			to_chat(user,"<span class='warning'>The [src] can't accept that as fuel.</span>" )
 		else
 			var/tF = clamp(G.amount_per_transfer_from_this, 0, maxFuel - wFuel)
 			G.reagents.remove_reagent(FUEL, tF)
@@ -58,18 +64,22 @@
 /obj/structure/siege_cannon/proc/loadCannon(var/obj/item/cAmmo, var/mob/user)
 	if(loadedItem || loadedMob)
 		return
+	if(cAmmo.w_class > maxSize)
+		to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in the [src].</span>")
+		return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
+		to_chat(user,"<span class='notice'>You load \the [cAmmo] into the [src].</span>" )
 
 /obj/structure/siege_cannon/MouseDropTo(var/atom/movable/C, mob/user)
-	if(user.incapacitated() || !in_range(user, src) || !in_range(src, C) || C.anchored)	//Copy pasted from chairs because sanity is hard
+	if(user.incapacitated() || !in_range(user, src) || !in_range(user, C) || C.anchored)	//Copy pasted from chairs because sanity is hard
 		return
 	if(!isliving(C))
 		return
 	if(loadedMob || loadedItem)
-		to_chat(user,"<span class='notice'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
 		return
-	visible_message("<span class='notice'>[user] is stuffing [C] into \the [src].</span>")
+	visible_message("<span class='warning'>[user] is stuffing [C] into \the [src].</span>")
 	if(do_after(user, C, 3 SECONDS))
 		loadMob(C, user)
 
@@ -103,7 +113,7 @@
 
 /obj/structure/siege_cannon/proc/itemFire()
 	var/atom/target = get_edge_target_turf(src, dir)
-	if(istype(loadedItem, /obj/item/cannonball))
+	if(istype(loadedItem, /obj/item/cannonball) && wFuel == maxFuel)
 		var/obj/item/cannonball/CB = loadedItem
 		CB.cannonAdjust()
 	var/fireSpeed = calcSpeed()
