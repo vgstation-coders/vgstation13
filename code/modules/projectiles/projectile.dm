@@ -111,6 +111,8 @@ var/list/impact_master = list()
 	var/decay_type = null	//if set, along with travel range, will drop a new item of this type when the projectile exceeds its course
 	var/special_collision = PROJECTILE_COLLISION_DEFAULT
 
+	var/is_crit = FALSE
+
 /obj/item/projectile/New()
 	..()
 	initial_pixel_x = pixel_x
@@ -120,6 +122,9 @@ var/list/impact_master = list()
 	return damage
 
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
+	// Random crits
+	if (firer && X.client)
+		firer.crit_rampup[text2num(world.time)] = damage
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
 /obj/item/projectile/proc/on_hit(var/atom/atarget, var/blocked = 0)
@@ -195,6 +200,28 @@ var/list/impact_master = list()
 		msg_admin_attack("UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]. Wait what the fuck?")
 		log_attack("<font color='red'>UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]</font>")
 
+/obj/item/projectile/proc/damage_falloff(var/atom/impact)
+	if (!firer)
+		return FALSE
+	if (is_crit)
+		return FALSE
+
+	var/total_falloff = calculate_falloff(impact)
+	do_falloff(total_falloff)
+
+/obj/item/projectile/proc/calculate_falloff(var/atom/impact)
+	var/dist_falloff = (get_dist(firer, impact) - 2) // 10% per tile past 3 tiles, capped at 0.5. Firing close gives bonus damage !
+	var/total_falloff = max(0.5, (1 - dist_falloff/10))
+	return total_falloff
+
+/obj/item/projectile/proc/do_falloff(var/total_falloff)
+	damage *= total_falloff
+	stun *= total_falloff
+	weaken *= total_falloff
+	stutter *= total_falloff
+	jittery *= total_falloff
+	agony *= total_falloff
+
 /obj/item/projectile/to_bump(atom/A as mob|obj|turf|area)
 	if (!A)	//This was runtiming if by chance A was null.
 		return 0
@@ -206,6 +233,18 @@ var/list/impact_master = list()
 		return 0
 	special_collision = PROJECTILE_COLLISION_DEFAULT
 	bumped = 1
+	if (is_crit)
+		playsound(A, 'sound/weapons/criticalshit.ogg', 75, 0, -1, channel = CHANNEL_CRITSOUNDS)
+		var/atom/movable/overlay/crit/animation = new(get_turf(A))
+		animation.master = A
+		animate(animation, alpha = 255, time = 2)
+		animate(alpha = 0, time = 6)
+		spawn(8)
+			animation.master = null
+			qdel(animation)
+
+	damage_falloff(A)
+
 	if(firer && istype(A, /mob))
 		var/mob/M = A
 		if(!istype(A, /mob/living))
@@ -215,7 +254,7 @@ var/list/impact_master = list()
 		//Lower accurancy/longer range tradeoff. Distance matters a lot here, so at
 		// close distance, actually RAISE the chance to hit.
 		var/distance = get_dist(starting,loc)
-		var/miss_modifier = -30
+		var/miss_modifier = (is_crit ? -99999 : -30) // Crits never miss
 		if (istype(shot_from,/obj/item/weapon/gun))	//If you aim at someone beforehead, it'll hit more often.
 			var/obj/item/weapon/gun/daddy = shot_from //Kinda balanced by fact you need like 2 seconds to aim
 			if (daddy.target && (original in daddy.target)) //As opposed to no-delay pew pew
@@ -394,8 +433,20 @@ var/list/impact_master = list()
 /obj/item/projectile/proc/OnDeath()	//if assigned, allows for code when the projectile disappears
 	return 1
 
+/obj/item/projectile/proc/become_crit()
+	var/matrix/M = matrix()*3
+	animate(src, transform = M, time = 0.5 SECONDS)
+	is_crit = TRUE
+	damage *= 3
+	projectile_speed = max(1, projectile_speed - 3)
+	penetration++
+
 /obj/item/projectile/proc/OnFired(var/proj_target = original)	//if assigned, allows for code when the projectile gets fired
 	target = get_turf(proj_target)
+
+	// 2 % chance to crit
+	if (firer && is_ranged_crit(src, firer))
+		become_crit()
 
 	if (tracking)
 		if (istype(proj_target, /atom/movable))
