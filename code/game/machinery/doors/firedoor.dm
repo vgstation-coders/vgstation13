@@ -250,10 +250,10 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
-	else
-		..()
+    if(isrobot(user) || isAdminGhost(user))
+        attack_ai(user, TRUE)
+    else
+        ..()
 
 /obj/machinery/door/firedoor/attack_hand(mob/user as mob)
 	return do_interaction(user)
