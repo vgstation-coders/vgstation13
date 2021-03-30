@@ -3331,6 +3331,7 @@
 	id = ALBUTEROL
 	result = ALBUTEROL
 	required_reagents = list(TRAMADOL = 1, HYPERZINES = 1)
+	required_temp = T0C + 210
 	result_amount = 2
 
 /datum/chemical_reaction/saltwater
