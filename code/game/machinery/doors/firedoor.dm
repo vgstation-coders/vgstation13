@@ -222,7 +222,6 @@ var/global/list/alert_overlays_global = list()
 		var/obj/item/I = M.get_active_hand()
 		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
 			attackby(I,M)
-			isrobot(user)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
