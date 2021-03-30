@@ -222,6 +222,7 @@ var/global/list/alert_overlays_global = list()
 		var/obj/item/I = M.get_active_hand()
 		if((iscrowbar(I)||istype(I,/obj/item/weapon/fireaxe)) && M.a_intent == I_HURT)
 			attackby(I,M)
+			isrobot(user)
 	return 0
 
 /obj/machinery/door/firedoor/power_change()
@@ -667,6 +668,8 @@ var/global/list/alert_overlays_global = list()
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
 
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*
