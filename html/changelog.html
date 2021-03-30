@@ -73,6 +73,11 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 		*** DO NOT FUCK WITH THIS FILE OR YOU WILL CAUSE MERGE CONFLICTS. ***
 		-->
 		<div class="commit sansserif">
+			<h2 class="date">2021.03.30</h2>
+			<h3 class="author">kane-f updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Sparks from nearby items (including other teleportations) no longer get caught up in nearby teleporters</li>
+			</ul>
 			<h2 class="date">2021.03.26</h2>
 			<h3 class="author">GreatBigFailure updated:</h3>
 			<ul class="changes bgimages16">
@@ -1534,23 +1539,6 @@ ADDING CREDITS?  EDIT templates/changelog.tmpl.html
 				<li class="tweak">Raised Department wages from 50 to 100.</li>
 				<li class="tweak">Reworked the way wages are processed. Salaries are now drawn directly from the station funds, with Nanotrasen then recharging it for the next payroll based on the default salaries (with an additional recharge before the payroll to take latejoiners into account), with an overhead of 10%. Effectively, that means all salaries are being increased by 10%. This also means that all salaries across the station will tank should the AI spend all the station funds on monkey cube crates, or get raised should miners ship lots of Plasma to Centcom.</li>
 				<li class="tweak">salary payout announcements now take much less space in the chat window.</li>
-			</ul>
-			<h2 class="date">2020.09.22</h2>
-			<h3 class="author">Buchse updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Vox tail-regen tech surges forwards.</li>
-			</ul>
-			<h3 class="author">gurfan updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Malfunctioning AIs will now get a screen alarm while hacking an APC.</li>
-				<li class="bugfix">Fixed Malfunctioning AIs being stuck hacking forever if the target APC got destroyed.</li>
-				<li class="tweak">The hack time for Malfunctioning AIs has been reverted to a flat 60 seconds.</li>
-				<li class="rscadd">AI&#39;s can now swap between a cyborg shell and their main core!</li>
-				<li class="rscadd">AI&#39;s can now create cyborg shells from completed cyborg skeletons that are visible to the AI. The AI can only have one shell at a time; the previous one must be destroyed before a new one can be made. The AI can gib their shell at any time using an action button. (Even while the shell is dead!)</li>
-				<li class="rscadd">AI-Cyborg Shells have a unique title on the radio and a white glow to their eyes, unlike normal cyborgs. When emagged, they will gib instead of receiving a syndicate lawset.</li>
-				<li class="rscadd">Completed cyborg exoskeletons can be touched with an empty hand to prevent/allow the AI to turn it into a shell.</li>
-				<li class="rscadd">Cyborg exoskeletons can now be smashed apart with anything as strong as a toolbox. Doing so will destroy the exoskeleton but drop any attached parts (arms, legs, torso, head) on the ground. It will also make a good mess for the janitor to clean up.</li>
-				<li class="tweak">Dead silicons will improve the crew score instead of penalizing it when there&#39;s a Malfunctioning AI.</li>
 			</ul>
 		</div>
 		<!--
