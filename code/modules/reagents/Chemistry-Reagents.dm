@@ -6522,7 +6522,7 @@
 			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
-				M.adjustBruteLoss(1)
+			M.adjustBruteLoss(1)
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
@@ -6567,7 +6567,7 @@
 			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
-				M.adjustBruteLoss(1)
+			M.adjustBruteLoss(1)
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
