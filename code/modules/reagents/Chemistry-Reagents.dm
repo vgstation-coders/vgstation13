@@ -6504,14 +6504,22 @@
 	if(..())
 		return 1
 	
+	var/pullsize = 0
+	var/pullforce = 0
 	switch(data)
 		if(0 to 65)
+			pullsize = 1
+			pullforce = 4
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
+			pullsize = 3
+			pullforce = 6
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
+			pullsize = 5
+			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 				M.adjustBruteLoss(1)
@@ -6521,10 +6529,10 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(data/20, src))
+	for(var/atom/X in orange(pullforce, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, data/20)
+		X.singularity_pull(M, pullsize)
 	data++
 
 /datum/reagent/drink/tea/gravsingularitea
@@ -6541,14 +6549,22 @@
 	if(..())
 		return 1
 	
+	var/pullsize = 0
+	var/pullforce = 0
 	switch(data)
 		if(0 to 65)
+			pullsize = 1
+			pullforce = 4
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
+			pullsize = 3
+			pullforce = 6
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
+			pullsize = 5
+			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 				M.adjustBruteLoss(1)
@@ -6558,10 +6574,10 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(data/20, src))
+	for(var/atom/X in orange(pullforce, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, data/20)
+		X.singularity_pull(M, pullsize)
 	data++
 
 /datum/reagent/ethanol/drink
