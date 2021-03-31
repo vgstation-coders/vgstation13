@@ -373,6 +373,8 @@
 /datum/asset/simple/power_chart
 	assets = list("powerChart.js" = 'code/modules/power/powerChart.js')
 
+/datum/asset/simple/paint_tool
+	assets = list("paintTool.js" = 'code/modules/html_interface/paintTool/paintTool.js')
 /datum/asset/simple/util
 	assets = list(
 		"href_multipart_handler.js" =  'code/modules/html_interface/href_multipart_handler.js'

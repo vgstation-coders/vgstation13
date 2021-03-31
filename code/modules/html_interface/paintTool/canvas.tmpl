@@ -1,0 +1,31 @@
+<!-- Canvas to draw on -->
+
+<input type="button" style="background: #000000" id="current_color"/>
+<canvas
+	id="canvas"
+	width="480" height="480"
+	style="border: 2px solid black;"}
+	onmousedown="is_mouse_down = true;"
+	onmousemove="draw_on_bitmap();">
+</canvas>
+
+<!-- Color list -->
+<div id="palette_buttons">
+	<!-- Example. Replace with actual color list "interface.updateContent(...)"; -->
+	<input type="button" onclick="setColor('#000000');" style="background: #000000"/>
+</div>
+
+<!-- Bitmap data to be sent back to BYOND -->
+<form>
+	<div id="canvas_data_inputs">
+		<!-- Example. Replace with actual values using "interface.updateContent(...)"; -->
+		<input type="text" id="width" value="2"/>
+		<input type="text" id="height" value="2"/>
+		<input type="textarea" id="bitmap" value="#ffffff #ff0000 #00ff00 #0000ff"/>
+	</div>
+	<div id="tool_data_inputs">
+		<!-- Example. Replace with actual value using "interface.updateContent(...)"; -->
+		<input type="text" id="paint_strength" value="0.5"/>
+	</div>
+	<input type="submit" value="save" onclick="init();"/><!--TODO-->
+</form>

@@ -1585,6 +1585,7 @@
 #include "code\modules\html_interface\map\station_map.dm"
 #include "code\modules\html_interface\map\adv_sec\adv_camera.dm"
 #include "code\modules\html_interface\nanotrasen\nanotrasen.dm"
+#include "code\modules\html_interface\paintTool\blank_canvas.dm"
 #include "code\modules\html_interface\RCD\RCD.dm"
 #include "code\modules\html_interface\voting\voting.dm"
 #include "code\modules\hydroponics\eggincubator.dm"
