@@ -6506,13 +6506,13 @@
 	switch(data)
 		if(0 to 65)
 			if(prob(5))
-				to_chat(M,"<span class='notice'>You feel dense.</span>")
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
 			if(prob(5))
-				to_chat(M,"<span class='notice'>You feel like the world revolves around you.</span>")
+				to_chat(M,"<span class='notice'>You feel like [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
 			if(prob(5))
-				to_chat(M,"<span class='warning'>You feel like your insides are being pulled in!</span>")
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 				M.adjustBruteLoss(1)
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
@@ -6534,7 +6534,6 @@
 	mug_icon_state = "singularitea"
 	mug_name = "\improper Gravitational Singularitea"
 	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
-	overdose_am = REAGENTS_OVERDOSE * 3
 
 /datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6543,13 +6542,13 @@
 	switch(data)
 		if(0 to 65)
 			if(prob(5))
-				to_chat(M,"<span class='notice'>You feel dense.</span>")
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
 			if(prob(5))
-				to_chat(M,"<span class='notice'>You feel like the world revolves around you.</span>")
+				to_chat(M,"<span class='notice'>You feel like [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
 			if(prob(5))
-				to_chat(M,"<span class='warning'>You feel like your insides are being pulled in!</span>")
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 				M.adjustBruteLoss(1)
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
