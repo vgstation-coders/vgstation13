@@ -6529,7 +6529,7 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(pullforce, src))
+	for(var/atom/X in orange(pullforce, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, pullsize)
@@ -6574,7 +6574,7 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(pullforce, src))
+	for(var/atom/X in orange(pullforce, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
 		X.singularity_pull(M, pullsize)
