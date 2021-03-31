@@ -6492,6 +6492,7 @@
 	description = "A true gravitational anomaly."
 	reagent_state = REAGENT_STATE_LIQUID
 	color = "#2E6671" //rgb: 46, 102, 113
+	custom_metabolism = 0.5 // A bit faster to prevent easy singuloosing
 	dizzy_adj = 15
 	slurr_adj = 15
 	data = 1 //Used as a tally
@@ -6530,6 +6531,7 @@
 	name = "Gravitational Singularitea"
 	id = GRAVSINGULARITEA
 	description = "Spirally!"
+	custom_metabolism = 0.5 // A bit faster to prevent easy singuloosing
 	data = 1 //Used as a tally
 	mug_icon_state = "gravsingularitea"
 	mug_name = "\improper Gravitational Singularitea"
