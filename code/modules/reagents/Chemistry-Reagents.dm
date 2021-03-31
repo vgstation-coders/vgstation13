@@ -6486,6 +6486,75 @@
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
 
+/datum/reagent/ethanol/drink/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	description = "A true gravitational anomaly."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2E6671" //rgb: 46, 102, 113
+	dizzy_adj = 15
+	slurr_adj = 15
+	data = 1 //Used as a tally
+	glass_icon_state = "singulo"
+	glass_name = "\improper Gravitational Singulo"
+	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+
+/datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	switch(data)
+		if(1)
+			to_chat(M,"<span class='notice'>You feel dense.</span>")
+		if(65)
+			to_chat(M,"<span class='notice'>You feel like the world revolves around you.</span>")
+		if(130)
+			to_chat(M,"<span class='warning'>You feel like your insides are being pulled in!</span>")
+		if(250 to INFINITY)
+			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			var/obj/machinery/singularity/S = new (T)
+			S.consume(M)
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange(data/20, src))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/20, data/40)
+	data++
+
+/datum/reagent/drink/tea/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	description = "Spirally!"
+	data = 1 //Used as a tally
+	mug_icon_state = "singularitea"
+	mug_name = "\improper Gravitational Singularitea"
+	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+	overdose_am = REAGENTS_OVERDOSE * 3
+
+/datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	switch(data)
+		if(1)
+			to_chat(M,"<span class='notice'>You feel dense.</span>")
+		if(65)
+			to_chat(M,"<span class='notice'>You feel like the world revolves around you.</span>")
+		if(130)
+			to_chat(M,"<span class='warning'>You feel like your insides are being pulled in!</span>")
+		if(250 to INFINITY)
+			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			var/obj/machinery/singularity/S = new (T)
+			S.consume(M)
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange(data/20, src))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/20, data/40)
+	data++
+
 /datum/reagent/ethanol/drink
 	id = EXPLICITLY_INVALID_REAGENT_ID
 	pass_out = 250
