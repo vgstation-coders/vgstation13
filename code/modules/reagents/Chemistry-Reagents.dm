@@ -6524,7 +6524,7 @@
 	for(var/atom/X in orange(data/20, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, data/20, data/40)
+		X.singularity_pull(M, data/20)
 	data++
 
 /datum/reagent/drink/tea/gravsingularitea
@@ -6561,7 +6561,7 @@
 	for(var/atom/X in orange(data/20, src))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, data/20, data/40)
+		X.singularity_pull(M, data/20)
 	data++
 
 /datum/reagent/ethanol/drink
