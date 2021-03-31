@@ -6531,7 +6531,7 @@
 	id = GRAVSINGULARITEA
 	description = "Spirally!"
 	data = 1 //Used as a tally
-	mug_icon_state = "singularitea"
+	mug_icon_state = "gravsingularitea"
 	mug_name = "\improper Gravitational Singularitea"
 	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
 
