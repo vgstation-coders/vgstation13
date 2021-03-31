@@ -6499,8 +6499,6 @@
 	glass_icon_state = "gravsingulo"
 	glass_name = "\improper Gravitational Singulo"
 	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
-	var/pullsize = 0 // For singulo pulling
-	var/pullforce = 0 // For range
 
 /datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6508,18 +6506,12 @@
 	
 	switch(data)
 		if(0 to 65)
-			pullsize = 1
-			pullforce = 4
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
-			pullsize = 3
-			pullforce = 6
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
-			pullsize = 5
-			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
@@ -6529,10 +6521,10 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(pullforce, M))
+	for(var/atom/X in orange((data+30)/50, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, pullsize)
+		X.singularity_pull(M, data/50, data/50)
 	data++
 
 /datum/reagent/drink/tea/gravsingularitea
@@ -6544,8 +6536,6 @@
 	mug_icon_state = "gravsingularitea"
 	mug_name = "\improper Gravitational Singularitea"
 	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
-	var/pullsize = 0 // For singulo pulling
-	var/pullforce = 0 // For range
 
 /datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
 	if(..())
@@ -6553,18 +6543,12 @@
 
 	switch(data)
 		if(0 to 65)
-			pullsize = 1
-			pullforce = 4
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
 		if(65 to 130)
-			pullsize = 3
-			pullforce = 6
 			if(prob(5))
 				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
 		if(130 to 250)
-			pullsize = 5
-			pullforce = 8
 			if(prob(5))
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
@@ -6574,10 +6558,10 @@
 			var/obj/machinery/singularity/S = new (T)
 			S.consume(M)
 	//Will pull items in a range based on time in system
-	for(var/atom/X in orange(pullforce, M))
+	for(var/atom/X in orange((data+30)/50, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
 			continue
-		X.singularity_pull(M, pullsize)
+		X.singularity_pull(M, data/50, data/50)
 	data++
 
 /datum/reagent/ethanol/drink
