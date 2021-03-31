@@ -25,7 +25,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	startup_sound = 'sound/misc/interference.ogg'
 
 	//mommi milkie
-	var/gives_milk = TRUE
+	var/gives_milk = FALSE
 	var/datum/reagents/udder = null
 
 	//This is no cyborg boy, no cyborg!
@@ -181,7 +181,7 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 		help_shake_act(user)
 		return FALSE
 
-	else if(stat == CONSCIOUS && istype(W, /obj/item/weapon/reagent_containers/glass))
+	else if(gives_milk && udder && stat == CONSCIOUS && istype(W, /obj/item/weapon/reagent_containers/glass))
 		user.visible_message("<span class='notice'>[user] milks [src] using \the [W].</span>")
 		var/obj/item/weapon/reagent_containers/glass/G = W
 		var/transfered = udder.trans_id_to(G, MOMMIMILK, rand(5,10))
@@ -332,6 +332,8 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 	return
 
 /mob/living/silicon/robot/mommi/New()
+	if(Holiday == APRIL_FOOLS_DAY)
+		gives_milk = TRUE
 	udder = new(50)
 	udder.my_atom = src
 	..()
@@ -339,6 +341,6 @@ They can only use one tool at a time, they can't choose modules, and they have 1
 /mob/living/silicon/robot/mommi/Life()
 	if(timestopped)
 		return 0 //under effects of time magick
-	if(udder && prob(5))
+	if(gives_milk && udder && prob(5))
 		udder.add_reagent(MOMMIMILK, rand(5, 10))
 	..()
