@@ -6495,7 +6495,7 @@
 	dizzy_adj = 15
 	slurr_adj = 15
 	data = 1 //Used as a tally
-	glass_icon_state = "singulo"
+	glass_icon_state = "gravsingulo"
 	glass_name = "\improper Gravitational Singulo"
 	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
 
