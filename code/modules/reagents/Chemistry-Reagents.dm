@@ -6499,13 +6499,13 @@
 	glass_icon_state = "gravsingulo"
 	glass_name = "\improper Gravitational Singulo"
 	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+	var/pullsize = 0 // For singulo pulling
+	var/pullforce = 0 // For range
 
 /datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
 	
-	var/pullsize = 0
-	var/pullforce = 0
 	switch(data)
 		if(0 to 65)
 			pullsize = 1
@@ -6544,13 +6544,13 @@
 	mug_icon_state = "gravsingularitea"
 	mug_name = "\improper Gravitational Singularitea"
 	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+	var/pullsize = 0 // For singulo pulling
+	var/pullforce = 0 // For range
 
 /datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
 	if(..())
 		return 1
-	
-	var/pullsize = 0
-	var/pullforce = 0
+
 	switch(data)
 		if(0 to 65)
 			pullsize = 1
