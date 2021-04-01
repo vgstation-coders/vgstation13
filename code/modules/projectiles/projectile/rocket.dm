@@ -35,7 +35,7 @@
 /obj/item/projectile/rocket/become_crit()
 	exdev += 2
 	exheavy += 2
- 	exlight += 2
+	exlight += 2
 	..()
 
 /obj/item/projectile/rocket/calculate_falloff(var/atom/impact)
