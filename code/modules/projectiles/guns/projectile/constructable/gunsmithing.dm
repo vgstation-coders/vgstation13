@@ -73,6 +73,16 @@
 			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_reservoir_assembly")
 		qdel(src)
 		qdel(W)
+	if(istype(W, /obj/item/device/crank_charger))
+		to_chat(user, "You loosely affix \the [W] to \the [src].")
+		if(src.loc == user)
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/gun_assembly/I = new (get_turf(user), "stock_crank_assembly")
+			user.put_in_hands(I)
+		else
+			new /obj/item/weapon/gun_assembly(get_turf(src.loc), "stock_crank_assembly")
+		qdel(src)
+		qdel(W)
 	if(istype(W, /obj/item/pipe))
 		var/obj/item/pipe/P = W
 		if(P.pipe_type == 1) //bent pipes only
@@ -165,6 +175,13 @@
 			w_class = W_CLASS_MEDIUM
 			complete = 1
 
+/obj/item/weapon/lens_assembly
+	name = "lens assembly"
+	desc = "A set of focusing lenses mounted on metal rails."
+	icon = 'icons/obj/weaponsmithing.dmi'
+	icon_state = "lens_assembly"
+	var/durability = 100 //After a certain number of shots, the lenses will degrade and will need to be replaced.
+
 /obj/item/weapon/rail_assembly
 	name = "rail assembly"
 	desc = "A set of metal rails."
@@ -174,6 +191,20 @@
 	var/stage = 0
 
 /obj/item/weapon/rail_assembly/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/stack/sheet/glass))
+		var/obj/item/stack/sheet/glass/C = W
+
+		if(C.amount<5)
+			to_chat(user, "You don't have enough glass to make a lens assembly.")
+			return
+		else if(user.drop_item(src) && C.use(5))
+			var/obj/item/weapon/lens_assembly/I = new (get_turf(user))
+			user.put_in_hands(I)
+			to_chat(user, "You add glass focusing lenses to \the [src].")
+			qdel(src)
+		else //failsafe
+			to_chat(user, "You are unable to make a lens assembly.")
+
 	if(istype(W, /obj/item/weapon/newspaper))
 		to_chat(user, "You add \the [W] to \the [src] as padding.")
 		stage = 1
@@ -316,6 +347,27 @@
 			desc = "It looks like it could be some type of gun. It seems to be missing an ignition source."
 			icon_state = "stock_reservoir_barrel"
 			w_class = W_CLASS_LARGE
+
+		if("stock_crank_assembly")
+			name = "gun stock"
+			desc = "A metal gun stock. There is a crank charger loosely fitted to it."
+			icon_state = "stock_crank_assembly"
+		if("stock_crank")
+			name = "gun stock"
+			desc = "A metal gun stock. There is a crank charger securely fastened to it."
+			icon_state = "stock_crank_assembly"
+		if("lasmusket_barrel_assembly")
+			name = "gun assembly"
+			desc = "It looks like it could be some type of gun. The lens assembly doesn't seem very secure."
+			icon_state = "lasmusket_barrel_assembly"
+		if("lasmusket_barrel")
+			name = "gun assembly"
+			desc = "It looks like it could be some type of gun. It seems to be missing a triggering mechanism."
+		if("lasmusket_assembly")
+			name = "gun assembly"
+			desc = "It looks like it could be some type of gun. The triggering mechanism is unsecured."
+			icon_state = "lasmusket_assembly"
+
 		if("blunderbuss_assembly")
 			name = "gun assembly"
 			desc = "It looks like it could be some type of gun. The firing mechanism doesn't seem to be securely tightened."
@@ -412,6 +464,20 @@
 			var/obj/item/weapon/gun_barrel/I = new (get_turf(user.loc))
 			user.put_in_hands(I)
 			state = "stock_capacitorbank"
+			update_assembly()
+		if("stock_crank_assembly")
+			to_chat(user, "You detach the crank charger from \the [src].")
+			user.drop_item(src, force_drop = 1)
+			var/obj/item/weapon/metal_gun_stock/I = new (get_turf(src.loc))
+			var/obj/item/device/crank_charger/Q = new (get_turf(src.loc))
+			user.put_in_hands(I)
+			user.put_in_hands(Q)
+			qdel(src)
+		if("lasmusket_barrel_assembly")
+			to_chat(user, "You detach the lens assembly from \the [src].")
+			var/obj/item/weapon/lens_assembly/I = new (get_turf(user.loc))
+			user.put_in_hands(I)
+			state = "stock_crank"
 			update_assembly()
 
 /obj/item/weapon/gun_assembly/attackby(obj/item/weapon/W, mob/user)
@@ -611,6 +677,54 @@
 				qdel(W)
 				qdel(src)
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//LASERMUSKET BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		if("stock_crank_assembly")
+			if(W.is_wrench(user))
+				to_chat(user, "You tighten the bolts securing \the [src]'s crank charger.")
+				W.playtoolsound(src, 50)
+				state = "stock_crank"
+				update_assembly()
+		if("stock_crank")
+			if(istype(W, /obj/item/weapon/lens_assembly))
+				to_chat(user, "You attach \the [W] to \the [src].")
+				state = "lasmusket_barrel_assembly"
+				update_assembly()
+				qdel(W)
+			if(W.is_wrench(user))
+				to_chat(user, "You loosen the bolts securing \the [src]'s crank charger.")
+				W.playtoolsound(src, 50)
+				state = "stock_crank_assembly"
+				update_assembly()
+		if("lasmusket_barrel_assembly")
+			if(W.is_screwdriver(user))
+				to_chat(user, "You securely fasten the lens assembly to \the [src].")
+				W.playtoolsound(src, 50)
+				state = "lasmusket_barrel"
+				update_assembly()
+		if("lasmusket_barrel")
+			if(W.is_screwdriver(user))
+				to_chat(user, "You loosen the screws securing the lens assembly to \the [src].")
+				W.playtoolsound(src, 50)
+				state = "lasmusket_barrel_assembly"
+				update_assembly()
+			if(istype(W, /obj/item/mounted/frame/light_switch) || istype(W, /obj/item/mounted/frame/access_button) || istype(W, /obj/item/mounted/frame/driver_button))
+				to_chat(user, "You attach \the [W] to \the [src].")
+				state = "lasmusket_assembly"
+				update_assembly()
+				qdel(W)
+		if("lasmusket_assembly")
+			if(W.is_screwdriver(user))
+				to_chat(user, "You secure \the [src]'s triggering mechanism.")
+				W.playtoolsound(src, 50)
+				if(src.loc == user)
+					user.drop_item(src, force_drop = 1)
+					var/obj/item/weapon/gun/energy/lasmusket/I = new (get_turf(user))
+					user.put_in_hands(I)
+				else
+					new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc))
+				qdel(src)
+//LASERMUSKET END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GUN ASSEMBLY END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
