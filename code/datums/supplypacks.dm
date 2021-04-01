@@ -528,6 +528,22 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	manifest += "Contains any [num_contained] of:"
 	..()
 
+/datum/supply_packs/mann_co_key
+	name = "Mann Co. key"
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	contains = list(/obj/item/mann_co_key)
+	containername = "crate"
+	group = "Clothing"
+
+/datum/supply_packs/mann_co_crate
+	name = "Mann Co. crate"
+	cost = 200
+	containertype = /obj/structure/mann_co_crate
+	contains = list()
+	containername = "crate"
+	group = "Clothing"
+
 /datum/supply_packs/randomised/cheap_hats
 	name = "Cheap hats"
 	cost = 50
@@ -564,6 +580,8 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	/obj/item/clothing/head/wizard/clown/fake,
 	/obj/item/clothing/head/wizard/necro/fake
 	)
+
+/datum/supply
 
 /datum/supply_packs/randomised/cheap_glasses
 	name = "Cheap glasses"
@@ -2216,8 +2234,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "exotic fish crate"
 	group = "Hydroponics"
-
-
 
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow
