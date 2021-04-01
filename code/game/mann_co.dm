@@ -3,7 +3,7 @@
 	desc = "There's a comically large padlock on it, with a comically large key-shaped hole"
 	anchored = 0
 	icon = 'icons/obj/april_fools.dmi'
-	icon_state = "mann_co_crate"
+	icon_state = "mannco_crate"
 	var/opening = 0
 
 /obj/structure/mann_co_crate/New()
@@ -28,12 +28,12 @@
 		1;/obj/item/clothing/head/bteamcaptain
 		)
 	new item_type(get_turf(src))
-	qdel(src)
 	qdel(W)
+	icon_state = "mannco_crate_lockless"
 
 /obj/item/mann_co_key
 	name = "golden key"
 	desc = "A comically large key. These used to be highly sought after a few centuries ago."
 	icon = 'icons/obj/april_fools.dmi'
-	icon_state = "mann_co_key"
+	icon_state = "mannco_key"
 	force = 0
