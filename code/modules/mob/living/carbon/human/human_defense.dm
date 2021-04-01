@@ -184,9 +184,13 @@ emp_act
 	..()
 
 
-/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null)
+/mob/living/carbon/human/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone, var/originator = null, var/crit = FALSE)
 	if(!..())
 		return
+
+	var/power = I.force
+	if (crit)
+		power *= CRIT_MULTIPLIER
 
 	var/target_zone = null
 	if(def_zone)
@@ -232,7 +236,7 @@ emp_act
 		knock_teeth = 1
 
 	var/armor = run_armor_check(affecting, "melee", quiet = 1)
-	var/final_force = run_armor_absorb(affecting, "melee", I.force)
+	var/final_force = run_armor_absorb(affecting, "melee", power)
 	if(knock_teeth) //You can't actually hit people in the mouth - this checks if the user IS targetting mouth, and if he didn't miss!
 		if((!armor) && (final_force >= 8 || I.w_class >= W_CLASS_SMALL) && (I.is_sharp() < 1))//Minimum force=8, minimum w_class=2. Sharp items can't knock out teeth. Armor prevents this completely!
 			var/chance = min(final_force * I.w_class, 40) //an item with w_class = W_CLASS_MEDIUM and force of 10 has a 30% chance of knocking a few teeth out. Chance is capped at 40%
