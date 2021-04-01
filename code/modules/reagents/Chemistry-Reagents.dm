@@ -6523,7 +6523,7 @@
 				var/obj/machinery/singularity/S = new (T)
 				S.consume(M)
 			else
-				new obj/item/toy/spinningtoy/SP(T)
+				new obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
@@ -6565,7 +6565,7 @@
 				var/obj/machinery/singularity/S = new (T)
 				S.consume(M)
 			else
-				new obj/item/toy/spinningtoy/SP(T)
+				new obj/item/toy/spinningtoy(T)
 				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
