@@ -287,3 +287,5 @@
 
 	var/forced_density = 0 // If the mob was made non-dense by an admin.
 	var/old_assigned_role // If they ghosted, what role did they have?
+
+	var/list/crit_rampup = list() // Of the form timestamp/damage

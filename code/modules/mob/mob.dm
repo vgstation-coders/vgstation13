@@ -436,6 +436,10 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
+
+	for (var/time in crit_rampup)
+		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+			crit_rampup -= time
 	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
