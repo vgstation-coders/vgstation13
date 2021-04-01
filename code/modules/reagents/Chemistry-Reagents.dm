@@ -6518,8 +6518,13 @@
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
-			var/obj/machinery/singularity/S = new (T)
-			S.consume(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				var/obj/item/toy/spinningtoy/SP = new (T)
+				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
@@ -6555,8 +6560,13 @@
 		if(250 to INFINITY)
 			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
-			var/obj/machinery/singularity/S = new (T)
-			S.consume(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				var/obj/item/toy/spinningtoy/SP = new (T)
+				M.gib()
 	//Will pull items in a range based on time in system
 	for(var/atom/X in orange((data+30)/50, M))
 		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
