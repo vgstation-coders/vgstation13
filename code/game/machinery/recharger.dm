@@ -92,7 +92,7 @@
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return 1
-		if (istype(G, obj/item/weapon/gun/energy/gun/lasmusket))
+		if (istype(G, /obj/item/weapon/gun/energy/lasmusket))
 			to_chat(user, "<span class='notice'>The makeshift gun lacks a recharge port.</span>")
 			return 1
 
