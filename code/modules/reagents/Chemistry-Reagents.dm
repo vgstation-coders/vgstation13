@@ -6516,7 +6516,7 @@
 				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
 			M.adjustBruteLoss(1)
 		if(250 to INFINITY)
-			to_chat(M,"<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
 			var/turf/T = get_turf(M)
 			//Can only make a singulo if active mind, otherwise a singulo toy
 			if(M.mind)
