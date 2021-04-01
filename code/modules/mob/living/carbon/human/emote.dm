@@ -220,10 +220,12 @@
 
 /datum/emote/living/carbon/human/dab/can_run_emote(mob/user, var/status_check = TRUE)
 	var/mob/living/carbon/human/H = user
-	if (iswizard(H))
+	if(iswizard(H))
 		to_chat(user, "<span class='warning'>The Wizard Federation has banned usage of the [key].</span>")
 		return FALSE
 	if(H.has_organ(LIMB_LEFT_ARM) && H.has_organ(LIMB_RIGHT_ARM))
+		if((Holiday == APRIL_FOOLS_DAY) || (IS_WEEKEND))
+			return TRUE
 		if(user.stat > stat_allowed)
 			to_chat(user, "<span class='warning'>You cannot [key] while unconscious.</span>")
 			return FALSE
