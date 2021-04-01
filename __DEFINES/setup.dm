@@ -608,6 +608,7 @@ var/list/global_mutations = list() // list of hidden mutation things
 #define GODMODE		4096
 #define FAKEDEATH	8192	//Replaces stuff like changeling.changeling_fakedeath
 #define XENO_HOST	32768	//Tracks whether we're gonna be a baby alien's mummy.
+#define ALWAYS_CRIT 65536
 
 var/static/list/scarySounds = list('sound/weapons/thudswoosh.ogg','sound/weapons/Taser.ogg','sound/weapons/armbomb.ogg','sound/voice/hiss1.ogg','sound/voice/hiss2.ogg','sound/voice/hiss3.ogg','sound/voice/hiss4.ogg','sound/voice/hiss5.ogg','sound/voice/hiss6.ogg','sound/effects/Glassbr1.ogg','sound/effects/Glassbr2.ogg','sound/effects/Glassbr3.ogg','sound/items/Welder.ogg','sound/items/Welder2.ogg','sound/machines/airlock.ogg','sound/effects/clownstep1.ogg','sound/effects/clownstep2.ogg')
 
@@ -1358,6 +1359,7 @@ var/proccalls = 1
 #define CHANNEL_AMBIENCE			1023
 #define CHANNEL_ADMINMUSIC			1024
 #define CHANNEL_STARMAN				1025
+#define CHANNEL_CRITSOUNDS			1026
 
 //incorporeal_move values
 #define INCORPOREAL_DEACTIVATE	0

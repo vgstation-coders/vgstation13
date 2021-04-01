@@ -1,3 +1,5 @@
+#define NORMAL_HIT 0
+#define CRITICAL_HIT 1
 
 // Called when the item is in the active hand, and clicked; alternately, there is an 'activate held object' verb or you can hit pagedown.
 /obj/item/proc/attack_self(mob/user)
@@ -93,6 +95,7 @@ obj/item/proc/get_clamped_volume()
 	/////////////////////////
 
 	var/power = I.force
+
 	if(M_HULK in user.mutations)
 		power *= 2
 
@@ -208,14 +211,15 @@ obj/item/proc/get_clamped_volume()
 						to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
 				else
 					to_chat(user, "<span class='warning'>You attack [M] with [I]!</span>")
-
-	I.on_attack(M,user)
+	var/is_crit = I.on_attack(M,user)
+	if (is_crit == CRITICAL_HIT)
+		power *= CRIT_MULTIPLIER
 	if(istype(M, /mob/living/carbon))
 		var/mob/living/carbon/C = M
 		if(originator)
-			. = C.attacked_by(I, user, def_zone, originator)
+			. = C.attacked_by(I, user, def_zone, originator, crit = is_crit)
 		else
-			. = C.attacked_by(I, user, def_zone)
+			. = C.attacked_by(I, user, def_zone, crit = is_crit)
 	else
 		switch(I.damtype)
 			if("brute")
@@ -244,10 +248,58 @@ obj/item/proc/get_clamped_volume()
 
 
 /obj/item/proc/on_attack(var/atom/attacked, var/mob/user)
+	. = NORMAL_HIT
 	if (!user.gcDestroyed)
 		user.do_attack_animation(attacked, src)
 		user.delayNextAttack(attack_delay)
+
+	// Critical hits!
+	if (istype(attacked, /mob))
+		var/mob/M = attacked
+		if (M.client)
+			user.crit_rampup[num2text(world.time)] = src.force
+
+	if (is_melee_crit_hit(src, user))
+		playsound(attacked.loc, 'sound/weapons/criticalshit.ogg', 75, 0, -1, channel = CHANNEL_CRITSOUNDS)
+		. = CRITICAL_HIT
+		var/atom/movable/overlay/crit/animation = new(get_turf(attacked))
+		animation.master = attacked
+		animate(animation, alpha = 255, time = 2)
+		animate(alpha = 0, time = 6)
+		spawn(8)
+			animation.master = null
+			qdel(animation)
+
 	if(hitsound)
 		playsound(attacked.loc, hitsound, 50, 1, -1)
 	if(material_type)
 		material_type.on_use(src,attacked, user)
+
+/proc/is_melee_crit_hit(var/obj/item/I, var/mob/attacker)
+	if (attacker.status_flags & ALWAYS_CRIT)
+		return 1
+
+	var/base_chance = I.crit_chance_melee
+	var/total_damage = 0
+	for (var/time in attacker.crit_rampup)
+		total_damage += attacker.crit_rampup[time]
+	var/bonus_chance = RULE_OF_THREE(MAX_DAMAGE_FOR_RAMPUP_MELEE, MAX_PROB_RAMPUP_MELEE, total_damage) // 80 damage in the last 20 minutes for 80 bonus chance
+	bonus_chance = clamp(bonus_chance, 0, MAX_PROB_RAMPUP_MELEE) // capped at MAX_PROB_RAMPUP
+
+	return (prob(base_chance + bonus_chance))
+
+/proc/is_ranged_crit(var/obj/item/I, var/mob/attacker)
+	if (attacker.status_flags & ALWAYS_CRIT)
+		return 1
+
+	var/base_chance = I.crit_chance
+	var/total_damage = 0
+	for (var/time in attacker.crit_rampup)
+		total_damage += attacker.crit_rampup[time]
+	var/bonus_chance = RULE_OF_THREE(MAX_DAMAGE_FOR_RAMPUP_DIST, MAX_PROB_RAMPUP_DIST, total_damage) // 80 damage in the last 20 minutes for 80 bonus chance
+	bonus_chance = clamp(bonus_chance, 0, MAX_PROB_RAMPUP_DIST) // capped at MAX_PROB_RAMPUP
+
+	return (prob(base_chance + bonus_chance))
+
+#undef NORMAL_HIT
+#undef CRITICAL_HIT

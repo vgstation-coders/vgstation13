@@ -517,7 +517,10 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/collectable/police,
 					/obj/item/clothing/head/collectable/slime,
 					/obj/item/clothing/head/collectable/xenom,
-					/obj/item/clothing/head/collectable/petehat)
+					/obj/item/clothing/head/collectable/petehat,
+					/obj/item/clothing/head/bteamcaptain,
+					/obj/item/stack/rods,
+					/obj/item/stack/sheet/metal)
 	name = "Collectable hats!"
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
