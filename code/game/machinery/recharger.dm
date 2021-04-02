@@ -219,13 +219,13 @@
 			else
 				icon_state = "recharger0"
 		
-		else if(istype(charging, /obj/item/clothing/head/helmet/stun)) //100e charged, 150e wasted. Takes aprox 25 sec from empty.
+		else if(istype(charging, /obj/item/clothing/head/helmet/stun))
 			var/obj/item/clothing/head/helmet/stun/B = charging
 			if(B.bcell)
-				if(B.bcell.give(100*charging_speed_modifier))
+				if(B.bcell.give(175*charging_speed_modifier))
 					icon_state = "recharger1"
 					if(!self_powered)
-						use_power(150*charging_speed_modifier)
+						use_power(200*charging_speed_modifier)
 				else
 					icon_state = "recharger2"
 					if(!has_beeped)
