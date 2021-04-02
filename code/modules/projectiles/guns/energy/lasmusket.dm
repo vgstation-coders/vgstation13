@@ -2,7 +2,7 @@
 	name = "laser musket"
 	desc = "An improvised, crank-charged laser weapon."
 	icon = 'icons/obj/gun.dmi'
-	icon_state = "lasmusket-e"
+	icon_state = "lasmusket-glass"
 	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
 	item_state = null
 	w_class = W_CLASS_LARGE
@@ -19,6 +19,7 @@
 	var/crankstate = 0 //for crank overlay; 0 for up, 1 for down
 	var/obj/item/weapon/cell/loadedcell = null //The power cell
 	var/strength = 0
+	var/flawless = 0
 
 /obj/item/weapon/gun/energy/lasmusket/isHandgun()
 	return FALSE
@@ -58,29 +59,38 @@
 	else
 		var/image/crank = image('icons/obj/gun.dmi', src, "lasmusket-crank0")
 		overlays += crank
-	if(!cell_secure && !loadedassembly) //assembly state
-		icon_state = "lasmusket-assembly"
-		return
-	if(!cell_secure)
-		icon_state = "lasmusket-cell"
-		return
-	if(!loadedassembly)
+	if(!cell_secure) //cell state
+		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-cell")
+		overlays += charge
+	else
+		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-e")
+		overlays += charge
+	if(!loadedassembly) //body state
 		icon_state = "lasmusket-lens"
 		return
-	else //charge state
-		switch(round(loadedcell.charge))
-			if(0 to 4999)
-				icon_state = "lasmusket-e"
-			if(5000 to 9999)
-				icon_state = "lasmusket-crap"
-			if(10000 to 19999)
-				icon_state = "lasmusket-hc"
-			if(20000 to 29999)
-				icon_state = "lasmusket-super"
-			if(30000 to 49999)
-				icon_state = "lasmusket-hyper"
-			if(50000 to INFINITY)
-				icon_state = "lasmusket-ultra"
+	if(!loadedassembly.plasma)
+		icon_state = "lasmusket-glass"
+	if(loadedassembly.plasma)
+		icon_state = "lasmusket-plasma"
+	switch(round(loadedcell.charge)) //charge state
+		if(0 to 4999)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-e")
+			overlays += charge
+		if(5000 to 9999)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-crap")
+			overlays += charge
+		if(10000 to 19999)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hc")
+			overlays += charge
+		if(20000 to 29999)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-super")
+			overlays += charge
+		if(30000 to 49999)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hyper")
+			overlays += charge
+		if(50000 to INFINITY)
+			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-ultra")
+			overlays += charge
 
 /obj/item/weapon/gun/energy/lasmusket/proc/zap(var/mob/user)
 	if (loadedcell.charge > 0)
@@ -95,11 +105,11 @@
 			L.delayNextAttack(1)
 			loadedcell.charge += 500 * L.get_strength()
 			crankstate = !crankstate
-			update_icon()
-			loadedcell.updateicon()
 			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(loadedcell.charge>loadedcell.maxcharge)
 				loadedcell.charge = loadedcell.maxcharge
+			update_icon()
+			loadedcell.updateicon()
 
 /obj/item/weapon/gun/energy/lasmusket/proc/remove_cell(var/mob/user)
 	if(!loadedcell)
@@ -120,6 +130,7 @@
 	update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/attackby(obj/item/weapon/W, mob/user)
+
 	if(istype(W, /obj/item/weapon/lens_assembly))
 		if(loadedassembly)
 			to_chat(user, "There is already a set of lenses in \the [src].")
@@ -145,6 +156,9 @@
 		update_icon()
 		return
 	else if(W.is_screwdriver(user))
+		if(flawless)
+			to_chat(user, "\The [src] is too flawless to dismantle!")
+			return
 		if(!loadedassembly)
 			to_chat(user, "There is no lens assembly to attach.")
 			return
@@ -156,6 +170,9 @@
 			W.playtoolsound(src, 50)
 		lens_secure = !lens_secure
 	else if(iswirecutter(W))
+		if(flawless)
+			to_chat(user, "\The [src] is too flawless to dismantle!")
+			return
 		if(!loadedcell)
 			to_chat(user, "You can't connect the wiring without a power cell.")
 			return
@@ -199,7 +216,7 @@
 		return
 	else if (locate (/obj/structure/table, src.loc))
 		return
-	if(!loadedcell || !loadedassembly)
+	if(!loadedcell || !lens_secure)
 		click_empty(user)
 		return
 	else if(loadedcell)
@@ -211,6 +228,9 @@
 	if(harm_labeled >= min_harm_label)
 		to_chat(user, "<span class='warning'>A label sticks the trigger to the trigger guard!</span>")//Such a new feature, the player might not know what's wrong if it doesn't tell them.
 		return
+	if(round(loadedcell.charge < 5000))
+		to_chat(user, "<span class = 'warning'>\The [src] doesn't have enough energy to fire!</span>")
+		return
 	calculate_strength(A,user,params, "struggle" = struggle)
 
 /obj/item/weapon/gun/energy/lasmusket/proc/calculate_strength(atom/A as mob|obj|turf|area, mob/living/user as mob|obj, flag, params, struggle = 0)
@@ -219,10 +239,6 @@
 	var/strength = round(loadedcell.charge)
 	if(strength)
 		switch(strength)
-			if(0 to 1999)
-				projectile_type = /obj/item/projectile/beam/veryweaklaser
-			if(0 to 4999)
-				projectile_type = /obj/item/projectile/beam/weakerlaser
 			if(5000 to 9999)
 				projectile_type = /obj/item/projectile/beam/weaklaser
 			if(10000 to 19999)
@@ -235,7 +251,7 @@
 				projectile_type = /obj/item/projectile/beam/heavylaser
 
 		if(Fire(A,user,params, "struggle" = struggle))
-			if(strength > 50000)
+			if(strength > 50000 && !flawless)
 				to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] melts!</span>")
 				to_chat(user, "<span class='warning'>\The [loadedcell] inside \the [src]'s power bank ruptures!</span>")
 				qdel(loadedassembly)
@@ -244,7 +260,7 @@
 				qdel(loadedcell)
 				loadedcell = null
 				cell_secure = 0
-			else
+			else if (!flawless)
 				loadedassembly.durability -= (strength/2000) //Lens assembly degrades with each shot. Ultra cell gives 4 shots.
 				if(loadedassembly.durability <= 0)
 					to_chat(user, "<span class='warning'>\The [loadedassembly] inside \the [src] [strength > 100 ? "shatters under" : "finally fractures from"] the stress!</span>")
@@ -262,8 +278,6 @@
 
 /obj/item/weapon/gun/energy/lasmusket/New()
 	..()
-	loadedassembly = new /obj/item/weapon/lens_assembly(src)
-	lens_secure = 1
 	update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/preloaded
@@ -271,8 +285,22 @@
 /obj/item/weapon/gun/energy/lasmusket/preloaded/New()
 	..()
 	loadedassembly = new /obj/item/weapon/lens_assembly(src)
-	lens_secure = 1
-	cell_secure = 1
 	loadedcell = new /obj/item/weapon/cell/ultra(src)
 	loadedcell.charge = loadedcell.maxcharge
+	lens_secure = 1
+	cell_secure = 1
+	update_icon()
+
+/obj/item/weapon/gun/energy/lasmusket/flawless
+	name = "flawless laser musket"
+	desc = "An improvised, crank-charged laser weapon. This one is of exceptionally high quality, and will never fail."
+
+/obj/item/weapon/gun/energy/lasmusket/flawless/New()
+	..()
+	loadedassembly = new /obj/item/weapon/lens_assembly/plasma(src)
+	loadedcell = new /obj/item/weapon/cell/ultra(src)
+	loadedcell.charge = loadedcell.maxcharge
+	lens_secure = 1
+	cell_secure = 1
+	flawless = 1
 	update_icon()
