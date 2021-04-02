@@ -890,6 +890,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 	penetration = 0
 	pass_flags = PASSTABLE
 	var/has_splashed = FALSE
+	var/mob/firer_mob = null
 
 /obj/item/projectile/beam/liquid_stream/New(atom/A, var/t_range)
 	..(A)
