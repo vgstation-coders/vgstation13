@@ -147,7 +147,7 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		if (Holiday == APRIL_FOOLS_DAY)
 			if (findtext(name, "Keloderm"))
 				name = replacetext(name, "Keloderm", "Derkel")
-			if (findtext(name, "Derkel"))
+			else if (findtext(name, "Derkel"))
 				name = replacetext(name, "Derkel", "Keloderm")
 
 		if(name)
