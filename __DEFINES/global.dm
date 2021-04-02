@@ -421,7 +421,7 @@ var/list/variables_not_to_be_copied = list(
 )
 
 //Item lists
-var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible)
+var/global/list/ties = list(/obj/item/clothing/accessory/tie/blue,/obj/item/clothing/accessory/tie/red,/obj/item/clothing/accessory/tie/horrible,/obj/item/clothing/accessory/tie/bolo)
 
 //Observers
 var/global_poltergeist_cooldown = 300 //30s by default, badmins can var-edit this to reduce the poltergeist cooldown globally
