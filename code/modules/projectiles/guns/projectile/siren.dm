@@ -14,7 +14,7 @@
 	fire_sound = 'sound/weapons/shotgun.ogg'
 	var/hard = 1 //When toggled on, the gun's shots will deal damage. When off, they deal no damage, but deliver five times the reagents.
 	var/max_reagents = 50
-	var/projectile_type = /obj/item/projectile/bullet/liquid_blob
+	var/obj/item/projectile/projectile_type = /obj/item/projectile/bullet/liquid_blob
 
 /obj/item/weapon/gun/siren/isHandgun()
 	return FALSE
@@ -146,6 +146,7 @@
 	if(!in_chamber)
 		in_chamber = new projectile_type(src, max(3+(round(pumps/2)),15))
 		reagents.trans_to(in_chamber, 10)
+	projectile_type.firer = user
 	Fire(A,user,params, struggle = struggle)
 	if(reagents.total_volume >= 10)
 		in_chamber = new projectile_type(src)
