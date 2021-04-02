@@ -169,7 +169,7 @@
 		explode()
 
 /obj/structure/reagent_dispensers/fueltank/bullet_act(var/obj/item/projectile/Proj)
-	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet)&&!istype(Proj,/obj/item/projectile/ricochet/taser))
+	if(istype(Proj ,/obj/item/projectile/beam)||istype(Proj,/obj/item/projectile/bullet)||istype(Proj,/obj/item/projectile/ricochet))
 		if(Proj.get_damage())
 			log_attack("<font color='red'>[key_name(Proj.firer)] shot [src]/([formatJumpTo(src)]) with a [Proj.type]</font>")
 			if(Proj.firer)//turrets don't have "firers"
