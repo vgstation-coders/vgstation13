@@ -1542,6 +1542,13 @@ proc/formatPlayerPanel(var/mob/U,var/text="PP")
 		return
 
 	var/dat = "<center><B>Credits Panel</B></center><hr>"
+	dat += "<center><B>Screenshot:</b></center>"
+	dat += "Chosen Screenshot: [end_credits.customized_ss && end_credits.ss] <A href='?src=\ref[src];credits=setss'>(Set Link)</A> "
+	if(end_credits.customized_ss != "" && !end_credits.drafted)
+		dat += "<A href='?src=\ref[src];credits=resetss'>(Reset)</A> "
+	if(!end_credits.drafted)
+		dat += "<span style='color:red'><br>The round isn't over, so the featured screenshot can still be set. Screenshots do not generate automatically.</span>"
+	dat += "<hr>"
 	dat += "<center><B>Star Of The Show:</b></center>"
 	dat += "Chosen Star: [end_credits.customized_star == "" && end_credits.star == "" ? "(Will Select Automatically)" : end_credits.customized_star || end_credits.star] <A href='?src=\ref[src];credits=setstartext'>(Set Plaintext)</A> <A href='?src=\ref[src];credits=setstarmob'>(Set Mob From List)</A> "
 	if(end_credits.customized_star != "" && !end_credits.drafted)

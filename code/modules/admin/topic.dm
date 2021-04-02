@@ -5322,6 +5322,18 @@
 					log_admin("[key_name(usr)] forced the current round's featured star to be '[newstar]'")
 					message_admins("[key_name_admin(usr)] forced the current round's featured star to be '[newstar]'")
 
+			if("resetss")
+				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
+					end_credits.customized_ss = ""
+					log_admin("[key_name(usr)] reset the current round's screenshot.")
+					message_admins("[key_name_admin(usr)] reset the current round's featured screenshot.")
+			if("setss")
+				var/newss = input(usr,"Please insert a direct image link. The maximum size is 600x600.") as text|null
+				if(newss)
+					end_credits.customized_ss = newss
+					log_admin("[key_name(usr)] forced the current round's featured screenshot to be '[newss]'")
+					message_admins("[key_name_admin(usr)] forced the current round's featured screenshot to be '[newss]'")
+
 			if("resetname")
 				if(!end_credits.drafted) //Just in case the button somehow gets clicked when it shouldn't
 					end_credits.customized_name = ""
