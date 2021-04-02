@@ -493,4 +493,20 @@
 	required_modules = list(SUPPLY_MODULE, SOVIET_MOMMI)
 	modules_to_add = list(/obj/item/weapon/storage/bag/ore/furnace)
 
+/obj/item/borg/upgrade/xenoarch
+	name = "supply cyborg xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	modules_to_add = list(/obj/item/device/depth_scanner,/obj/item/weapon/pickaxe/excavationdrill,/obj/item/device/measuring_tape,/obj/item/device/core_sampler)
+
+/obj/item/borg/upgrade/xenoarch_adv
+	name = "supply cyborg advanced xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
+	icon_state = "cyborg_upgrade"
+	required_modules = list(SUPPLY_MODULE)
+	required_upgrades = list(/obj/item/borg/upgrade/xenoarch)
+	modules_to_add = list(/obj/item/weapon/pickaxe/excavationdrill/adv,/obj/item/device/xenoarch_scanner/adv,/obj/item/device/artifact_finder)
+	modules_to_remove = list(/obj/item/weapon/pickaxe/excavationdrill)
+
 #undef FAILED_TO_ADD
