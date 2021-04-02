@@ -254,7 +254,7 @@ obj/item/proc/get_clamped_volume()
 		user.delayNextAttack(attack_delay)
 
 	// Critical hits!
-	if (istype(attacked, /mob))
+	if ((Holiday == APRIL_FOOLS_DAY) && istype(attacked, /mob))
 		var/mob/M = attacked
 		if (M.client)
 			user.crit_rampup[num2text(world.time)] = src.force
@@ -276,6 +276,9 @@ obj/item/proc/get_clamped_volume()
 		material_type.on_use(src,attacked, user)
 
 /proc/is_melee_crit_hit(var/obj/item/I, var/mob/attacker)
+	if (Holiday != APRIL_FOOLS_DAY)
+		return 0
+
 	if (attacker.status_flags & ALWAYS_CRIT)
 		return 1
 
@@ -289,6 +292,9 @@ obj/item/proc/get_clamped_volume()
 	return (prob(base_chance + bonus_chance))
 
 /proc/is_ranged_crit(var/obj/item/I, var/mob/attacker)
+	if (Holiday != APRIL_FOOLS_DAY)
+		return 0
+
 	if (attacker.status_flags & ALWAYS_CRIT)
 		return 1
 
