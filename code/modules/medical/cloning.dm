@@ -267,6 +267,12 @@
 		if (H.mind.miming == MIMING_OUT_OF_CHOICE)
 			H.add_spell(new /spell/targeted/oathbreak/)
 
+	// Check for any powers that goes missing after cloning, in case of reviving after ashing
+	if (isvampire(H))
+		var/datum/role/vampire/V = isvampire(H)
+		V.check_vampire_upgrade()
+		V.update_vamp_hud()
+
 	H.UpdateAppearance()
 	H.set_species(R.dna.species)
 	if(!upgraded)
