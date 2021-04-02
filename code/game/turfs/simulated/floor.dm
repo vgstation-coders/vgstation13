@@ -58,6 +58,12 @@ var/global/list/turf/simulated/floor/phazontiles = list()
 	else
 		icon_regular_floor = icon_state
 
+/turf/simulated/floor/Destroy()
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
+	..()
+
 /turf/simulated/floor/ashify()
 	burn_tile()
 
