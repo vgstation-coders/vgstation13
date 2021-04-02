@@ -835,6 +835,27 @@
 /datum/chemical_reaction/solidification/uranium/product_to_spawn()
 	return /obj/item/stack/sheet/mineral/uranium
 
+/datum/chemical_reaction/solidification/clown
+	name = "Solid Bananium"
+	id = "solidbananium"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, BANANA = 20)
+	required_catalysts = list(PHAZON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/clown/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/clown
+	
+/datum/chemical_reaction/solidification/phazon
+	name = "Solid Phazon"
+	id = "solidphazon"
+	result = null
+	required_reagents = list(SILICATE = 10, FROSTOIL = 10, PHAZON = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/solidification/phazon/product_to_spawn()
+	return /obj/item/stack/sheet/mineral/phazon
+
 /datum/chemical_reaction/solidification/plasteel
 	name = "Solid Plasteel"
 	id = "solidplasteel"
