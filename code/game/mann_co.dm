@@ -19,7 +19,7 @@
 		return
 	if (istype(W,/obj/item/mann_co_key) && !opening)
 		opening = 1//preventing key spamming
-		playsound(src, 'sound/items/mann_co_crate_open.ogg', 100, 1, 1)
+		playsound(src, 'sound/items/mann_co_crate_open.ogg', 100, 0, 1)
 		icon_state = "mannco_crate_lockless"
 		if(do_after(user, src, 5 SECONDS))
 			open_crate(W)
@@ -31,7 +31,7 @@
 
 /obj/structure/mann_co_crate/proc/open_crate(var/obj/item/weapon/W)
 	looted = 1
-	playsound(src, 'sound/misc/achievement.ogg', 100, 1, 1)
+	playsound(src, 'sound/misc/achievement.ogg', 100, 0, 1)
 	var/item_type = pick(
 		10;/obj/item/weapon/gun/energy/bison,
 		10;/obj/item/weapon/gun/stickybomb,
