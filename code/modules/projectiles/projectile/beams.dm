@@ -909,7 +909,7 @@ var/list/laser_tag_vests = list(/obj/item/clothing/suit/tag/redtag, /obj/item/cl
 		for(var/datum/reagent/R in reagents.reagent_list)
 			reagents.add_reagent(R.id, reagents.get_reagent_amount(R.id))//so here we're just doubling our quantity of reagents from 10 to 20
 		if(istype(A, /mob))
-			if(firer_mob.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A) && prob(20)) //if aiming at head and is humanoid
+			if(firer_mob.zone_sel.selecting == TARGET_MOUTH && def_zone == LIMB_HEAD && ishuman(A)) //if aiming at head and is humanoid
 				var/mob/living/carbon/human/victim = A
 				if(!victim.check_body_part_coverage(MOUTH)) //if not covered with mask or something
 					victim.visible_message("<span class='warning'>[A] swallows \the [src]!</span>",
