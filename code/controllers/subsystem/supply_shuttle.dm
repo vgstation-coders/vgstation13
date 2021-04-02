@@ -50,6 +50,8 @@ var/datum/subsystem/supply_shuttle/SSsupply_shuttle
 	var/list/supply_packs = src.supply_packs
 	for(var/typepath in subtypesof(/datum/supply_packs))
 		var/datum/supply_packs/P = new typepath
+		if (P.require_holiday && (Holiday != P.require_holiday))
+			continue
 		supply_packs[P.name] = P
 
 	add_centcomm_order(new /datum/centcomm_order/per_unit/plasma)

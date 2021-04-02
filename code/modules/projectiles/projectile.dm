@@ -123,7 +123,7 @@ var/list/impact_master = list()
 
 /obj/item/projectile/proc/hit_apply(var/mob/living/X, var/blocked) // this is relevant because of projectile/energy/electrode
 	// Random crits
-	if (firer && X.client)
+	if ((Holiday == APRIL_FOOLS_DAY) && firer && X.client)
 		firer.crit_rampup[text2num(world.time)] = damage
 	X.apply_effects(stun, weaken, paralyze, irradiate, stutter, eyeblur, drowsy, agony, blocked)
 
@@ -201,6 +201,8 @@ var/list/impact_master = list()
 		log_attack("<font color='red'>UNKNOWN/(no longer exists) shot UNKNOWN/(no longer exists) with a [type]</font>")
 
 /obj/item/projectile/proc/damage_falloff(var/atom/impact)
+	if (Holiday != APRIL_FOOLS_DAY)
+		return FALSE
 	if (!firer)
 		return FALSE
 	if (is_crit)

@@ -144,10 +144,11 @@ var/global/list/pillIcon2Name = list("oblong purple-pink", "oblong green-white",
 		B.icon_state = "pill"+pillsprite
 		var/name = stripped_input(user,"Name:","Name your pill!","[B.reagents.get_master_reagent_name()] ([B.reagents.total_volume] units)")
 		// April funs
-		if (findtext(name, "Keloderm"))
-			name = replacetext(name, "Keloderm", "Derkel")
-		if (findtext(name, "Derkel"))
-			name = replacetext(name, "Derkel", "Keloderm")
+		if (Holiday == APRIL_FOOLS_DAY)
+			if (findtext(name, "Keloderm"))
+				name = replacetext(name, "Keloderm", "Derkel")
+			else if (findtext(name, "Derkel"))
+				name = replacetext(name, "Derkel", "Keloderm")
 
 		if(name)
 			B.name = "[name] pill"
