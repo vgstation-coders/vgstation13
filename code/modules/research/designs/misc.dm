@@ -57,3 +57,13 @@
 	req_tech = list(Tc_ENGINEERING = 1, Tc_MATERIALS = 1)
 	materials = list(MAT_GLASS = 500, MAT_IRON = 750)
 	category = "Misc"
+
+/datum/design/minicham
+	name = "Mini-Chameleon-Projector"
+	desc = "A device that can scan an object's appearance and cloak an item."
+	id = "mini_chameleon"
+	build_type = PROTOLATHE
+	build_path = /obj/item/device/chameleon/mini
+	req_tech = list(Tc_SYNDICATE = 4, Tc_MAGNETS = 4)
+	materials = list(MAT_GLASS = 5000, MAT_IRON = 2500, MAT_DIAMOND = 2500)
+	category = "Misc"
