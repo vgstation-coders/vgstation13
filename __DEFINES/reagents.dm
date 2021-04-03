@@ -417,6 +417,8 @@
 #define SMOKYROOM		"smokyroom"
 #define BAD_TOUCH		"bad_touch"
 #define SUICIDE			"suicide"
+#define GRAVSINGULO 			"gravitationalsingulo"
+#define GRAVSINGULARITEA 			"gravitationalsingularitea"
 #define KARMOTRINE		"karmotrine"
 #define DEGENERATECALCIUM "degeneratecalcium"
 #define GRAPEJUICE		"grapejuice"

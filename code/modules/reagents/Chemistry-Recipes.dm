@@ -3478,6 +3478,20 @@
 	required_reagents = list(SPACE_DRUGGS = 1, AMATOXIN = 1, PSILOCYBIN = 1, KARMOTRINE = 2)
 	result_amount = 5
 
+/datum/chemical_reaction/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	result = GRAVSINGULO
+	required_reagents = list(SINGULO = 1, KARMOTRINE = 4)
+	result_amount = 1
+
+/datum/chemical_reaction/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	result = GRAVSINGULARITEA
+	required_reagents = list(SINGULARITEA = 1, KARMOTRINE = 4)
+	result_amount = 1
+
 /datum/chemical_reaction/lemonlime
 	name = "Lemon Lime"
 	id = LEMON_LIME
