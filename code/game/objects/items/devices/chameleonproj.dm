@@ -112,8 +112,9 @@
 
 /obj/item/device/chameleon/mini
 	name = "mini-chameleon-projector"
-	desc = "A device that can scan an object's appearance and cloak itself."
+	desc = "A device that can scan an object's appearance and cloak an item."
 	origin_tech = Tc_SYNDICATE + "=3;" + Tc_MAGNETS + "=3"
+	var/atom/movable/attached_item = null
 
 /obj/item/device/chameleon/mini/toggle()
 	if(!can_use || !saved_item)
@@ -138,7 +139,10 @@
 		if(!O)
 			return
 		var/obj/effect/dummy/chameleon/mini/C = new/obj/effect/dummy/chameleon/mini(usr.loc)
-		C.activate(O, src, saved_icon, saved_icon_state, saved_overlays, src)
+		if(!attached_item)
+			C.activate(O, src, saved_icon, saved_icon_state, saved_overlays, src)
+		else
+			C.activate(O, attached_item, saved_icon, saved_icon_state, saved_overlays, src)
 		qdel(O)
 		O = null
 		to_chat(usr, "<span class='notice'>You activate [src].</span>")
