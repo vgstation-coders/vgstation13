@@ -25,10 +25,10 @@
 /obj/structure/siege_cannon/AltClick(var/mob/user)
 	if(user.incapacitated() || !in_range(user, src) || user.loc == src)
 		return
-	to_chat(user,"<span class='notice'>You unload the [src].</span>" )
+	to_chat(user,"<span class='notice'>You unload \the [src].</span>" )
 	unloadCannon()
 
-/obj/structure/siege_cannon/attackby(obj/item/W as obj, mob/user as mob)
+/obj/structure/siege_cannon/attackby(obj/item/W, mob/user)
 	if(istype(W, /obj/item/weapon/reagent_containers))
 		fillCannon(W, user)
 		return 1
@@ -38,6 +38,8 @@
 		loadCannon(W, user)
 
 /obj/structure/siege_cannon/attack_hand(mob/user)
+	if(user.stat)
+		return
 	siegeFire(user)
 
 /obj/structure/siege_cannon/proc/fillCannon(var/obj/item/weapon/reagent_containers/G, mob/user)
@@ -57,7 +59,7 @@
 			G.reagents.remove_reagent(FUEL, tF)
 			wFuel += tF
 			if(wFuel == maxFuel)
-				to_chat(user,"<span class='notice'>You completely fill the [src] with [tF] units of fuel.</span>" )
+				to_chat(user,"<span class='notice'>You completely fill \the [src] with [tF] units of fuel.</span>" )
 			else
 				to_chat(user,"<span class='notice'>You add [tF] units of fuel to \the [src].</span>" )
 
@@ -65,11 +67,11 @@
 	if(loadedItem || loadedMob)
 		return
 	if(cAmmo.w_class > maxSize)
-		to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in the [src].</span>")
+		to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
 		return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
-		to_chat(user,"<span class='notice'>You load \the [cAmmo] into the [src].</span>" )
+		to_chat(user,"<span class='notice'>You load \the [cAmmo] into \the [src].</span>" )
 
 /obj/structure/siege_cannon/MouseDropTo(var/atom/movable/C, mob/user)
 	if(user.incapacitated() || !in_range(user, src) || !in_range(user, C) || C.anchored)	//Copy pasted from chairs because sanity is hard
@@ -79,7 +81,7 @@
 	if(loadedMob || loadedItem)
 		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
 		return
-	visible_message("<span class='warning'>[user] is stuffing [C] into \the [src].</span>")
+	visible_message("<span class='warning'>\The [user] is stuffing [C] into \the [src].</span>")
 	if(do_after(user, C, 3 SECONDS))
 		loadMob(C, user)
 
@@ -166,13 +168,16 @@
 	w_type = RECYK_METAL
 	flags = FPRINT | TWOHANDABLE | MUSTTWOHAND
 	var/cannonFired = FALSE
+	var/adjRange = 50
+	var/adjSpeed = 4
+	var/adjForce = 15
 
 /obj/item/cannonball/proc/cannonAdjust()
 	if(!cannonFired)
 		cannonFired = TRUE
-		throw_range = 50
-		throw_speed = 4
-		throwforce = 15
+		throw_range = adjRange
+		throw_speed = adjSpeed
+		throwforce = adjForce
 	else
 		cannonFired = FALSE
 		throw_range = 2
@@ -185,6 +190,11 @@
 		cannonEffect(hit_atom)
 
 /obj/item/cannonball/proc/cannonEffect(var/atom/cTarg)
+	return
+
+//Iron///////////////
+
+/obj/item/cannonball/iron/cannonEffect(atom/cTarg)
 	if(!isliving(cTarg) && !isfloor(cTarg))
 		if(istype(cTarg, /obj/machinery) && !istype(cTarg, /obj/machinery/door))	//ex_act() for machines other than doors is a bit too destructive
 			siegeMachine(cTarg)
@@ -198,7 +208,7 @@
 		siegeMob(cTarg)
 	cannonAdjust()
 
-/obj/item/cannonball/proc/siegeMachine(var/obj/machinery/M)
+/obj/item/cannonball/iron/proc/siegeMachine(var/obj/machinery/M)
 	if(prob(50))	//Let's just do a coin flip
 		for(var/mob/living/L in M.contents)
 			L.forceMove(M.loc)
@@ -213,7 +223,7 @@
 	else
 		spark(M)
 
-/obj/item/cannonball/proc/siegeMob(var/mob/living/L)
+/obj/item/cannonball/iron/proc/siegeMob(var/mob/living/L)
 	if(ishuman(L))
 		var/mob/living/carbon/human/H = L
 		H.Knockdown(5)
