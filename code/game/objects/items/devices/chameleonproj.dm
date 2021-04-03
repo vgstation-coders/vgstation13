@@ -110,6 +110,51 @@
 			M.layer = MOB_LAYER //Reset the mob's layer
 			M.plane = MOB_PLANE
 
+/obj/item/device/chameleon/mini
+	name = "mini-chameleon-projector"
+	desc = "A device that can scan an object's appearance and cloak itself."
+	origin_tech = Tc_SYNDICATE + "=3;" + Tc_MAGNETS + "=3"
+
+/obj/item/device/chameleon/mini/toggle()
+	if(!can_use || !saved_item)
+		return
+	if(active_dummy)
+		eject_all()
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
+		qdel(active_dummy)
+		active_dummy = null
+		to_chat(usr, "<span class='notice'>You deactivate [src].</span>")
+		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
+		T.icon = 'icons/effects/effects.dmi'
+		flick("emppulse",T)
+		spawn(8)
+			qdel(T)
+		can_use = 0
+		spawn(20) //Stop spamming this shit
+			can_use = 1
+	else
+		//playsound(src, 'sound/effects/pop.ogg', 100, 1, -6)
+		var/obj/O = new saved_item(src)
+		if(!O)
+			return
+		var/obj/effect/dummy/chameleon/mini/C = new/obj/effect/dummy/chameleon/mini(usr.loc)
+		C.activate(O, src, saved_icon, saved_icon_state, saved_overlays, src)
+		qdel(O)
+		O = null
+		to_chat(usr, "<span class='notice'>You activate [src].</span>")
+		var/obj/effect/overlay/T = new/obj/effect/overlay(get_turf(src))
+		T.icon = 'icons/effects/effects.dmi'
+		flick("emppulse",T)
+		spawn(8)
+			qdel(T)
+		can_use = 0
+		spawn(20) //Stop spamming this shit
+			can_use = 1
+
+/obj/item/device/chameleon/mini/eject_all()
+	for(var/atom/movable/A in active_dummy)
+		A.forceMove(active_dummy.loc)
+
 /obj/effect/dummy/chameleon
 	name = ""
 	desc = ""
@@ -193,3 +238,30 @@
 /obj/effect/dummy/chameleon/Destroy()
 	master.disrupt(0)
 	..()
+
+/obj/effect/dummy/chameleon/mini
+	can_move = 0
+
+/obj/effect/dummy/chameleon/mini/activate(var/obj/O, var/obj/I, new_icon, new_iconstate, new_overlays, var/obj/item/device/chameleon/mini/C)
+	name = O.name
+	desc = O.desc
+	icon = new_icon
+	icon_state = new_iconstate
+	overlays = new_overlays
+	dir = O.dir
+	unlock_from()
+	I.forceMove(src)
+	master = C
+	master.active_dummy = src
+
+/obj/effect/dummy/chameleon/mini/disrupt()
+	master.disrupt()
+
+/obj/effect/dummy/chameleon/mini/ex_act()
+	disrupt()
+
+/obj/effect/dummy/chameleon/mini/emp_act()
+	disrupt()
+
+/obj/effect/dummy/chameleon/mini/relaymove()
+	return
