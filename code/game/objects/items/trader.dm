@@ -214,7 +214,7 @@ var/global/list/shoal_stuff = list(
 	/obj/item/weapon/storage/gachabox,
 	/obj/item/weapon/storage/bluespace_crystal,
 )
-/obj/structure/closet/create/shoaljunk
+/obj/structure/closet/crate/shoaljunk
 	name = "Shoal junk crate"
 	desc = "What? It fell off a spacetruck."
 
