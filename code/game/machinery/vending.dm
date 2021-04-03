@@ -3098,10 +3098,38 @@ var/global/num_vending_terminals = 1
 		)
 	pack = /obj/structure/vendomatpack/chapelvend
 
+/obj/machinery/vending/tradeoutfitter
+	name = "\improper Trade Outfitter"
+	desc = "Like the Trader Supply, its wiring has been modified to prevent hacking."
+	unhackable = TRUE
+	req_access = list(access_trade)
+	product_slogans = list(
+		"Be prepared!"
+	)
+	product_ads = list(
+		"Go in with a plan, and don't forget your wallet!"
+	)
+	vend_reply = "Time to shine!"
+	icon_state = "voxoutfitter"
+	products = list (
+		/obj/item/clothing/suit/storage/trader = 3,
+		/obj/item/device/pda/trader = 3,
+		/obj/item/weapon/card/id/vox/extra = 3,
+		/obj/item/weapon/stamp/trader = 3,
+		/obj/item/crackerbox = 1,
+		/obj/item/weapon/storage/box/biscuit = 2,
+		)
+
+	prices = list(
+		/obj/item/clothing/suit/storage/trader = 100,
+		/obj/item/device/pda/trader = 100,
+		/obj/item/weapon/card/id/vox/extra = 100,
+		/obj/item/weapon/stamp/trader = 20,
+		/obj/item/crackerbox = 200,
+		)
 
 /obj/machinery/vending/trader	// Boxes are defined in trader.dm
 	name = "\improper Trader Supply"
-	desc = "Its wiring has been modified to prevent hacking."
 	unhackable = TRUE
 	dont_render_OOS = TRUE
 	desc = "Make much coin."
@@ -3115,38 +3143,20 @@ var/global/num_vending_terminals = 1
 	vend_reply = "Money money money!"
 	icon_state = "voxseed"
 	products = list (
-		/obj/item/weapon/storage/fancy/donut_box = 2,
-		/obj/item/clothing/suit/storage/trader = 3,
-		/obj/item/device/pda/trader = 3,
-		/obj/item/weapon/card/id/vox/extra = 3,
-		/obj/item/weapon/stamp/trader = 3,
-		/obj/item/weapon/capsule = 60,
 		/obj/item/vaporizer = 1,
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/secure_closet/wonderful = 1,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 1,
-		/obj/item/weapon/storage/bluespace_crystal = 1,
-		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 1,
-		/obj/item/clothing/shoes/clown_shoes/advanced = 1,
-		/obj/item/fish_eggs/seadevil = 1,
 		/obj/machinery/power/antiquesynth = 1,
-		/obj/item/crackerbox = 1,
+		/obj/structure/closet/crate/shoaljunk = 3,
 		/obj/structure/closet/crate/chest/alcatraz = 3,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 1,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 1,
 		/obj/structure/largecrate/secure = 1,
 		/obj/structure/largecrate/secure/magmaw = 1,
 		/obj/structure/largecrate/secure/frankenstein = 1,
-		/obj/item/weapon/boxofsnow = 3,
-		/obj/item/weapon/vinyl/echoes = 1,
-		/obj/item/stack/sheet/brass/bigstack = 3,
-		/obj/item/stack/sheet/ralloy/bigstack = 3,
 		/obj/item/weapon/mech_expansion_kit = 3,
-		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 10,
-		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 4,
 		/obj/structure/wetdryvac = 1,
-		/obj/structure/bed/therapy = 1,
-		/obj/item/weapon/hair_dye/skin_dye/discount = 5,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 2,
 		/obj/item/weapon/grenade/station/discount = 1,
 		/obj/item/device/crank_charger/generous = 1,
@@ -3161,41 +3171,21 @@ var/global/num_vending_terminals = 1
 		/obj/structure/closet/crate/freezer/bootlegpicnic = 3,
 		)
 	prices = list(
-		/obj/item/clothing/suit/storage/trader = 100,
-		/obj/item/device/pda/trader = 100,
-		/obj/item/weapon/card/id/vox/extra = 100,
-		/obj/item/weapon/stamp/trader = 20,
-		/obj/item/weapon/capsule = 10,
-		/obj/item/weapon/implantcase/peace = 10,
 		/obj/item/vaporizer = 10,
 		/obj/item/weapon/storage/trader_chemistry = 50,
 		/obj/structure/closet/secure_closet/wonderful = 150,
 		/obj/item/weapon/disk/shuttle_coords/vault/mecha_graveyard = 100,
-		/obj/item/weapon/storage/bluespace_crystal = 150,
-		/obj/item/weapon/reagent_containers/food/snacks/borer_egg = 50,
-		/obj/item/clothing/shoes/clown_shoes/advanced = 50,
-		/obj/item/fish_eggs/seadevil = 10,
 		/obj/machinery/power/antiquesynth = 150,
+		/obj/structure/closet/crate/shoaljunk = 100,
 		/obj/structure/closet/crate/chest/alcatraz = 150,
 		/obj/item/weapon/storage/lockbox/advanced/energyshotgun = 100,
 		/obj/item/weapon/storage/lockbox/advanced/ricochettaser = 25,
 		/obj/structure/largecrate/secure = 100,
 		/obj/structure/largecrate/secure/magmaw = 100,
 		/obj/structure/largecrate/secure/frankenstein = 100,
-		/obj/item/weapon/boxofsnow = 50,
-		/obj/item/crackerbox = 200,
-		/obj/item/weapon/vinyl/echoes = 50,
-		/obj/item/stack/sheet/brass/bigstack = 50,
-		/obj/item/stack/sheet/ralloy/bigstack = 50,
 		/obj/item/weapon/mech_expansion_kit = 50,
-		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector = 15,
-		/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super = 50,
 		/obj/structure/wetdryvac = 50,
-		/obj/structure/bed/therapy = 50,
-		/obj/item/weapon/hair_dye/skin_dye/discount = 10,
 		/obj/item/weapon/gun/projectile/hecate/hunting = 100,
-		/obj/item/weapon/grenade/station/discount = 100,
-		/obj/item/device/crank_charger/generous = 50,
 		/obj/item/weapon/fakeposter_kit = 50,
 		/obj/structure/closet/crate/flatpack/ancient/condiment_dispenser = 100,
 		/obj/structure/closet/crate/flatpack/ancient/chemmaster_electrolyzer = 100,
