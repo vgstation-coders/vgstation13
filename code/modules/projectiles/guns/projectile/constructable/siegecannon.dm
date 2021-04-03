@@ -79,7 +79,7 @@
 	if(!isliving(C))
 		return
 	if(loadedMob || loadedItem)
-		to_chat(user,"<span class='warning'>The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
 		return
 	visible_message("<span class='warning'>\The [user] is stuffing [C] into \the [src].</span>")
 	if(do_after(user, C, 3 SECONDS))
