@@ -65,7 +65,7 @@ var/global/list/pda_app_menus = list(
 /datum/pda_app/alarm/proc/alarm()
 	if(!status || world.time < target)
 		return //End the loop if it was disabled or if the target isn't here yet. e.g.: target changed
-	playsound(pda_device, 'sound/machines/chime.ogg', 200, FALSE)
+	playsound(pda_device, 'sound/machines/chime.ogg', 40, FALSE, -2)
 	var/mob/living/L = get_holder_of_type(pda_device,/mob/living)
 	if(L)
 		to_chat(usr, "[bicon(pda_device)]<span class='info'>Timer for [lasttimer] seconds has finished. <a href='byond://?src=\ref[pda_device];choice=restartAlarm'>(Restart?)</a></span>")
