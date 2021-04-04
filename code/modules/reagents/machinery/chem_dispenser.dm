@@ -286,7 +286,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 /obj/machinery/chem_dispenser/proc/can_insert(var/obj/item/I)
 	return istype(I, /obj/item/weapon/reagent_containers/glass) || istype(I, /obj/item/weapon/reagent_containers/food/drinks)
 
-/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob) //to be worked on
+/obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/D as obj, var/mob/user as mob, params) //to be worked on
 
 	if(..())
 		return 1
@@ -308,6 +308,7 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 				return
 
 			container =  D
+			D.pixel_x = x_coord_to_nozzle(text2num(params2list(params)["icon-x"]) * PIXEL_MULTIPLIER)
 			to_chat(user, "You add \the [D] to the machine!")
 			update_icon()
 
@@ -350,8 +351,26 @@ USE THIS CHEMISTRY DISPENSER FOR MAPS SO THEY START AT 100 ENERGY
 			overlay = image('icons/obj/chemical.dmi', src, "dispenser_overlay_glassb")
 
 		overlay.pixel_y = beaker_height * PIXEL_MULTIPLIER //used for children
-		overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
+		if(container.pixel_x)
+			overlay.pixel_x = container.pixel_x
+		else
+			overlay.pixel_x = pick(-7,-3, 1, 5, 8) * PIXEL_MULTIPLIER //puts the beaker under a random nozzle
 		overlays += overlay
+
+//Returns the pixel_x that our beaker overlay should have to match up with where the user clicked.
+/obj/machinery/chem_dispenser/proc/x_coord_to_nozzle(x_coord)
+	switch(x_coord)
+		if(0 to 10)
+			return -7
+		if(11 to 14)
+			return -3
+		if(15 to 18)
+			return 1
+		if(19 to 21)
+			return 5
+		if(22 to INFINITY)
+			return 8
+	return 0
 
 //Cafe stuff
 
