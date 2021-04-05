@@ -20,7 +20,6 @@
 	var/obj/item/weapon/cell/loadedcell = null //The power cell
 	var/strength = 0
 	var/flawless = 0
-
 /obj/item/weapon/gun/energy/lasmusket/isHandgun()
 	return FALSE
 
@@ -59,12 +58,6 @@
 	else
 		var/image/crank = image('icons/obj/gun.dmi', src, "lasmusket-crank0")
 		overlays += crank
-	if(!cell_secure) //cell state
-		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-cell")
-		overlays += charge
-	else
-		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-e")
-		overlays += charge
 	if(!loadedassembly) //body state
 		icon_state = "lasmusket-lens"
 		return
@@ -72,25 +65,29 @@
 		icon_state = "lasmusket-glass"
 	if(loadedassembly.plasma)
 		icon_state = "lasmusket-plasma"
-	switch(round(loadedcell.charge)) //charge state
-		if(0 to 4999)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-e")
-			overlays += charge
-		if(5000 to 9999)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-crap")
-			overlays += charge
-		if(10000 to 19999)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hc")
-			overlays += charge
-		if(20000 to 29999)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-super")
-			overlays += charge
-		if(30000 to 49999)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hyper")
-			overlays += charge
-		if(50000 to INFINITY)
-			var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-ultra")
-			overlays += charge
+	if(!cell_secure) //cell state
+		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-cell")
+		overlays += charge
+	else
+		switch(round(loadedcell.charge)) //charge state
+			if(0 to 4999)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-e")
+				overlays += charge
+			if(5000 to 9999)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-crap")
+				overlays += charge
+			if(10000 to 19999)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hc")
+				overlays += charge
+			if(20000 to 29999)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-super")
+				overlays += charge
+			if(30000 to 49999)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-hyper")
+				overlays += charge
+			if(50000 to INFINITY)
+				var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-ultra")
+				overlays += charge
 
 /obj/item/weapon/gun/energy/lasmusket/proc/zap(var/mob/user)
 	if (loadedcell.charge > 0)
@@ -103,7 +100,10 @@
 	if(loadedcell)
 		if(loadedcell.charge<loadedcell.maxcharge)
 			L.delayNextAttack(1)
-			loadedcell.charge += 500 * L.get_strength()
+			if(flawless)
+				loadedcell.charge += 1000 * L.get_strength()
+			else
+				loadedcell.charge += 500 * L.get_strength()
 			crankstate = !crankstate
 			playsound(src, 'sound/items/crank.ogg',50,1)
 			if(loadedcell.charge>loadedcell.maxcharge)
@@ -130,7 +130,6 @@
 	update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/attackby(obj/item/weapon/W, mob/user)
-
 	if(istype(W, /obj/item/weapon/lens_assembly))
 		if(loadedassembly)
 			to_chat(user, "There is already a set of lenses in \the [src].")
@@ -216,10 +215,10 @@
 		return
 	else if (locate (/obj/structure/table, src.loc))
 		return
-	if(!loadedcell || !lens_secure)
+	if(!cell_secure || !lens_secure)
 		click_empty(user)
 		return
-	else if(loadedcell)
+	else if(cell_secure)
 		if(loadedcell.charge <=0)
 			click_empty(user)
 			return
@@ -293,7 +292,7 @@
 
 /obj/item/weapon/gun/energy/lasmusket/flawless
 	name = "flawless laser musket"
-	desc = "An improvised, crank-charged laser weapon. This one is of exceptionally high quality, and will never fail."
+	desc = "An improvised, crank-charged laser weapon. This one is of exceptionally high quality, and will never fail. The crank is astonishingly efficient."
 
 /obj/item/weapon/gun/energy/lasmusket/flawless/New()
 	..()
