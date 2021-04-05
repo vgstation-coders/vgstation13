@@ -2230,6 +2230,7 @@
 #include "code\modules\projectiles\guns\projectile\constructable\hivehand.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\railgun.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\revialver.dm"
+#include "code\modules\projectiles\guns\projectile\constructable\siegecannon.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\subspacetunneler.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\swords.dm"
 #include "code\modules\projectiles\guns\projectile\constructable\tomahawk.dm"

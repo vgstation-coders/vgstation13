@@ -702,6 +702,7 @@
 	icon = 'icons/obj/weaponsmithing.dmi'
 	icon_state = "wheelchair_assembly"
 	var/cannon_assembly = 0
+	var/siege_assembly = FALSE
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/proc/update_wheelchair_assembly()
 	if(cannon_assembly)
@@ -727,13 +728,30 @@
 	qdel(src)
 
 /obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/attackby(obj/item/weapon/W, mob/user)
-	if(cannon_assembly)
+	if(siege_assembly)
+		if(istype(W, /obj/item/stack/sheet/plasteel))
+			var/obj/item/stack/sheet/PS = W
+			if(do_after(user, src, 3 SECONDS))
+				if(PS.use(10))	//Heavy duty
+					to_chat(user, "<span class='notice'>You reinforce the [src]'s barrel.</span>")
+					var/obj/structure/siege_cannon/SC = new /obj/structure/siege_cannon(loc)
+					SC.dir = dir
+					qdel(src)
+	if(cannon_assembly && !siege_assembly)
 		if(istype(W, /obj/item/device/assembly/igniter))
 			to_chat(user, "You attach \the [W] to \the [src].")
 			var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/I = new (get_turf(src.loc))
 			I.dir = dir
 			qdel(src)
 			qdel(W)
+		if(istype(W, /obj/item/weapon/barricade_kit))
+			var/obj/item/weapon/barricade_kit/BK = W
+			if(!BK.kit_uses >= 3)
+				return
+			if(do_after(user, src, 3 SECONDS))
+				to_chat(user, "<span class='notice'>You create a wooden frame for the [src].</span>")
+				siege_assembly = TRUE
+				qdel(BK)
 	else if(iswelder(W))
 		var/obj/item/weapon/weldingtool/WT = W
 		to_chat(user, "You begin welding the barrel onto \the [src].")
