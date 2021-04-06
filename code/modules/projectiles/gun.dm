@@ -52,6 +52,7 @@
 	var/tmp/list/mob/living/target //List of who yer targeting.
 	var/tmp/lock_time = -100
 	var/mouthshoot = 0 ///To stop people from suiciding twice... >.>
+	var/canceled = 0 //flags if a suicide was canceled
 	var/automatic = 0 //Used to determine if you can target multiple people.
 	var/tmp/mob/living/last_moved_mob //Used to fire faster at more than one person.
 	var/tmp/told_cant_shoot = 0 //So that it doesn't spam them with the fact they cannot hit them.
@@ -351,10 +352,12 @@
 			to_chat(M, "<span class='sinister'>BUT WHY? I'M SO HAPPY!</span>")
 			return
 		mouthshoot = 1
+		canceled = 0
 		M.visible_message("<span class='warning'>[user] sticks their gun in their mouth, ready to pull the trigger...</span>")
 		if(!do_after(user,src, 40))
 			M.visible_message("<span class='notice'>[user] decided life was worth living.</span>")
 			mouthshoot = 0
+			canceled = 1
 			return
 		if (process_chambered())
 			user.visible_message("<span class = 'warning'>[user] pulls the trigger.</span>")

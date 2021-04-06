@@ -292,14 +292,13 @@
 
 /obj/item/weapon/gun/energy/lasmusket/attack(mob/living/M, mob/living/user, def_zone) //Suicide handling to make sure the gun's empty afterward.
 	..()
-	loadedcell.charge = 0
-	update_icon()
+	if(!canceled)
+		loadedcell.charge = 0
+		update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/New()
 	..()
 	update_icon()
-
-/obj/item/weapon/gun/energy/lasmusket/preloaded
 
 /obj/item/weapon/gun/energy/lasmusket/preloaded/New()
 	..()
