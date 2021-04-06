@@ -17,6 +17,10 @@ var/list/plating_icons = list("plating","platingdmg1","platingdmg2","platingdmg3
 				"ironsand8", "ironsand9", "ironsand10", "ironsand11",
 				"ironsand12", "ironsand13", "ironsand14", "ironsand15")
 var/list/wood_icons = list("wood","wood-broken")
+
+//For phazon tile teleportation
+var/global/list/turf/simulated/floor/phazontiles = list()
+
 /turf/simulated/floor
 
 	//Note to coders, the 'intact' var can no longer be used to determine if the floor is a plating or not.
@@ -53,6 +57,12 @@ var/list/wood_icons = list("wood","wood-broken")
 		icon_regular_floor = "floor"
 	else
 		icon_regular_floor = icon_state
+
+/turf/simulated/floor/Destroy()
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
+	..()
 
 /turf/simulated/floor/ashify()
 	burn_tile()
@@ -218,6 +228,14 @@ turf/simulated/floor/update_icon()
 				playsound(src, 'sound/items/bikehorn.ogg', 50, 1)
 				spawn(20)
 					spam_flag = 0
+		//Phazon tiles teleport to another random one in the world when clicked
+		if("phazon")
+			if(!spam_flag)
+				spam_flag = 1
+				var/turf/simulated/floor/destination = pick(phazontiles)
+				do_teleport(user, destination)
+				spawn(20)
+					spam_flag = 0
 	..()
 
 /turf/simulated/floor/proc/gets_drilled()
@@ -373,6 +391,9 @@ turf/simulated/floor/update_icon()
 	intact = 0
 	broken = 0
 	burnt = 0
+	//No longer phazon, not a teleport destination
+	if(material=="phazon")
+		phazontiles -= src
 	material = "metal"
 	plane = PLATING_PLANE
 
@@ -388,6 +409,9 @@ turf/simulated/floor/update_icon()
 	floor_tile = null
 	floor_tile = new T.type(null)
 	material = floor_tile.material
+	//Becomes a teleport destination for other phazon tiles
+	if(material=="phazon")
+		phazontiles += src
 	intact = 1
 	plane = TURF_PLANE
 	if(istype(T,/obj/item/stack/tile/light))
@@ -534,6 +558,9 @@ turf/simulated/floor/update_icon()
 				floor_tile.forceMove(src)
 				floor_tile = null
 			else
+				//No longer phazon, not a teleport destination
+				if(material=="phazon")
+					phazontiles -= src
 				to_chat(user, "<span class='notice'>You remove the [floor_tile.name].</span>")
 				floor_tile.forceMove(src)
 				floor_tile = null
@@ -668,6 +695,9 @@ turf/simulated/floor/update_icon()
 
 /turf/simulated/floor/cultify()
 	if((icon_state != "cult")&&(icon_state != "cult-narsie"))
+		//No longer phazon, not a teleport destination
+		if(material=="phazon")
+			phazontiles -= src
 		name = "engraved floor"
 		icon = 'icons/turf/floors.dmi'
 		icon_state = "cult"

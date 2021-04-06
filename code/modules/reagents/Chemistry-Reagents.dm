@@ -5472,6 +5472,26 @@
 	T.adjust_nutrient(0.1)
 	T.adjust_water(0.9)
 
+
+/datum/reagent/drink/milk/mommimilk
+	name = "MoMMI Milk"
+	id = MOMMIMILK
+	description = "Milk from a MoMMI, but how is it produced?"
+	color = "#eaeaea" //rgb(234, 234, 234)
+	nutriment_factor = 5 * REAGENTS_METABOLISM
+	glass_desc = "Artificially white nutrition!"
+
+
+/datum/reagent/drink/milk/mommimilk/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	M.adjustToxLoss(1)
+/datum/reagent/drink/milk/mommimilk/on_plant_life(obj/machinery/portable_atmospherics/hydroponics/T)
+	..()
+	T.toxins += 10
+	if(T.seed && !T.dead)
+		T.health -= 20
+
 /datum/reagent/drink/milk/soymilk
 	name = "Soy Milk"
 	id = SOYMILK
@@ -6465,6 +6485,94 @@
 			thisisdumb.charge_max = 1
 			H.cast_spell(thisisdumb,list(H))
 		holder.remove_reagent(MAGICADELUXE,5)
+
+/datum/reagent/ethanol/drink/gravsingulo
+	name = "Gravitational Singulo"
+	id = GRAVSINGULO
+	description = "A true gravitational anomaly."
+	reagent_state = REAGENT_STATE_LIQUID
+	color = "#2E6671" //rgb: 46, 102, 113
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	dizzy_adj = 15
+	slurr_adj = 15
+	data = 1 //Used as a tally
+	glass_icon_state = "gravsingulo"
+	glass_name = "\improper Gravitational Singulo"
+	glass_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in grape flavor!"
+
+/datum/reagent/ethanol/drink/gravsingulo/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+	
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
+
+/datum/reagent/drink/tea/gravsingularitea
+	name = "Gravitational Singularitea"
+	id = GRAVSINGULARITEA
+	description = "Spirally!"
+	custom_metabolism = 1 // A bit faster to prevent easy singuloosing
+	data = 1 //Used as a tally
+	mug_icon_state = "gravsingularitea"
+	mug_name = "\improper Gravitational Singularitea"
+	mug_desc = "The destructive, murderous Lord Singuloth, patron saint of Bargineering, now in herbal flavour!"
+
+/datum/reagent/drink/tea/gravsingularitea/on_mob_life(var/mob/living/M)
+	if(..())
+		return 1
+
+	switch(data)
+		if(0 to 65)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("dense", "heavy", "attractive")].</span>")
+		if(65 to 130)
+			if(prob(5))
+				to_chat(M,"<span class='notice'>You feel [pick("like the world revolves around you", "like your own centre of gravity", "others drawn to you")].</span>")
+		if(130 to 250)
+			if(prob(5))
+				to_chat(M,"<span class='warning'>You feel [pick("like your insides are being pulled in", "torn apart", "sucked in")]!</span>")
+			M.adjustBruteLoss(1)
+		if(250 to INFINITY)
+			M.visible_message("<span class='alert'>[M]'s entire mass collapses inwards, leaving a singularity behind!</span>","<span class='alert'>Your entire mass collapses inwards, leaving a singularity behind!</span>")
+			var/turf/T = get_turf(M)
+			//Can only make a singulo if active mind, otherwise a singulo toy
+			if(M.mind)
+				var/obj/machinery/singularity/S = new (T)
+				S.consume(M)
+			else
+				new /obj/item/toy/spinningtoy(T)
+				M.gib()
+	//Will pull items in a range based on time in system
+	for(var/atom/X in orange((data+30)/50, M))
+		if(X.type == /atom/movable/lighting_overlay)//since there's one on every turf
+			continue
+		X.singularity_pull(M, data/50, data/50)
+	data++
 
 /datum/reagent/ethanol/drink
 	id = EXPLICITLY_INVALID_REAGENT_ID

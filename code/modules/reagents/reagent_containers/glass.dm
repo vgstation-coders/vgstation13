@@ -250,20 +250,20 @@
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact
 	name = "stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 50 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
 	icon_state = "beakernoreact"
-	starting_materials = list(MAT_GLASS = 500)
-	volume = 50
+	starting_materials = list(MAT_GLASS = 1000)
+	volume = 100
 	flags = FPRINT  | OPENCONTAINER | NOREACT
 	origin_tech = Tc_BLUESPACE + "=3;" + Tc_MATERIALS + "=4"
 	opaque = TRUE
 
 /obj/item/weapon/reagent_containers/glass/beaker/noreact/large
 	name = "large stasis beaker"
-	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 100 units."
+	desc = "A beaker powered by experimental bluespace technology. Chemicals are held in stasis and do not react inside of it. Can hold up to 200 units."
 	icon_state = "beakernoreactlarge"
-	starting_materials = list(MAT_GLASS = 1500)
-	volume = 100
+	starting_materials = list(MAT_GLASS = 3000)
+	volume = 200
 	origin_tech = Tc_BLUESPACE + "=4;" + Tc_MATERIALS + "=6"
 
 /obj/item/weapon/reagent_containers/glass/beaker/bluespace

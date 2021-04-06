@@ -119,6 +119,13 @@
 	_color = "horribletie"
 	accessory_exclusion = TIE
 
+/obj/item/clothing/accessory/tie/bolo
+	name = "bolo tie"
+	desc = "Feels more like a millstone."
+	icon_state = "bolotie"
+	_color = "bolotie"
+	accessory_exclusion = TIE
+
 /obj/item/clothing/accessory/stethoscope
 	name = "stethoscope"
 	desc = "An outdated medical apparatus for listening to the sounds of the human body. It also makes you look like you know what you're doing."

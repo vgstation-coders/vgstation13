@@ -290,6 +290,7 @@
 	origin_tech = Tc_MATERIALS + "=1;" + Tc_BIOTECH + "=1"
 	attack_verb = list("attacks", "slashes", "saws", "cuts")
 
+	crit_chance = 2*CRIT_CHANCE_MELEE
 
 /obj/item/weapon/circular_saw/plasmasaw //Orange transparent chainsaw!
 	name = "plasma saw"

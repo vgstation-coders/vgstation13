@@ -67,7 +67,7 @@
 	while(cans.len>0 && beaker.reagents.reagent_list.len>0)
 		var/obj/item/weapon/reagent_containers/C = cans[1]
 		var/datum/reagent/R = beaker.reagents.reagent_list[1]
-		beaker.reagents.trans_id_to(C,R.id,50)
+		beaker.reagents.trans_id_to(C,R.id,R.volume)
 		C.forceMove(src.loc)
 		cans -= C
 	if(!cans.len&&beaker.reagents.reagent_list.len)

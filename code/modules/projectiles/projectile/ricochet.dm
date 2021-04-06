@@ -28,6 +28,7 @@
 
 /obj/item/projectile/ricochet/taser
 	name = "electrode"
+	damage = 0
 	nodamage = 1
 	stun = 10
 	weaken = 10

@@ -540,7 +540,7 @@ Subject's pulse: ??? BPM"})
 		if(O.reagents.reagent_list.len)
 			for(var/datum/reagent/R in O.reagents.reagent_list)
 				var/reagent_percent = (R.volume/O.reagents.total_volume)*100
-				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%)" : ""]</span>"
+				dat += "<br><span class='notice'>[R] [details ? "([R.volume] units, [reagent_percent]%[R.data && !istype(R,/datum/reagent/citalopram) && !istype(R,/datum/reagent/paroxetine) && !istype(R,/datum/reagent/incense) && !istype(R,/datum/reagent/antipathogenic) && !istype(R,/datum/reagent/vaccine) ? ", time in system: [R.data*2] seconds" : ""])" : ""]</span>"
 		if(dat)
 			to_chat(user, "<span class='notice'>Chemicals found in \the [O]:[dat]</span>")
 		else

@@ -118,6 +118,26 @@
 	category = "Robotic_Upgrade_Modules"
 	materials = list(MAT_IRON=80000, MAT_PLASMA=50000, MAT_SILVER=5000, MAT_GOLD=5000, MAT_PLASTIC=5000)
 
+/datum/design/borg_xenoarch_upgrade
+	name = "Supply cyborg xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg xenoarchaeology tools."
+	id = "borg_xenoarch_module"
+	req_tech = list(Tc_MATERIALS = 2, Tc_ENGINEERING = 4, Tc_ANOMALY = 2)
+	build_type = MECHFAB
+	materials = list(MAT_IRON=70000, MAT_GLASS=20000, MAT_URANIUM=2500)
+	build_path = /obj/item/borg/upgrade/xenoarch
+	category = "Robotic_Upgrade_Modules"
+
+/datum/design/borg_xenoarch_upgrade_adv
+	name = "Supply cyborg advanced xenoarchaeology upgrade"
+	desc = "Used to give a supply cyborg even better xenoarchaeology tools."
+	id = "borg_adv_xenoarch_module"
+	req_tech = list(Tc_MATERIALS = 4, Tc_MAGNETS = 4, Tc_ENGINEERING = 5, Tc_ANOMALY = 4)
+	build_type = MECHFAB
+	materials = list(MAT_IRON=80000, MAT_GLASS=40000, MAT_PLASMA=2500, MAT_URANIUM=5000, MAT_DIAMOND=2500)
+	build_path = /obj/item/borg/upgrade/xenoarch_adv
+	category = "Robotic_Upgrade_Modules"
+
 /datum/design/borg_service_upgrade
 	name = "Service cyborg cooking upgrade"
 	desc = "Used to give a service cyborg cooking tools and upgrade their service gripper to be able to handle food."
