@@ -270,7 +270,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && 1<=vote && vote<=choices.len)
+		if(vote && vote != "Cancel" && 1<=vote && vote<=choices.len)
 			voted += mob_ckey
 			choices[choices[vote]]++	//check this
 			current_votes[mob_ckey] = vote
@@ -445,6 +445,13 @@ var/global/datum/controller/vote/vote = new()
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
+		if ("cancel_vote")
+			var/mob_ckey = usr.ckey
+			voted -= mob_ckey
+			choices[choices[current_votes[mob_ckey]]]--
+			current_votes[mob_ckey] = null
+			src.updateFor(usr.client)
+			return 0
 		if("cancel")
 			if(usr.client.holder)
 				reset()

@@ -45,7 +45,7 @@
 	desc = "Charred circuit in melted plastic case. Wonder what that used to be..."
 	icon_state = "implant_melted"
 	malfunction = IMPLANT_MALFUNCTION_PERMANENT
-	
+
 /obj/item/weapon/implant/proc/makeunusable(var/probability=50)
 	if(prob(probability))
 		visible_message("<span class='warning'>\The [src] fizzles and sparks!</span>")
@@ -53,7 +53,7 @@
 		desc = "Charred circuit in melted plastic case."
 		icon_state = "implant_melted"
 		malfunction = IMPLANT_MALFUNCTION_PERMANENT
-	
+
 /obj/item/weapon/implant/Destroy()
 	if(part)
 		part.implants.Remove(src)
@@ -147,7 +147,7 @@
 
 /obj/item/weapon/implant/explosive/islegal()
 	return 0
-	
+
 /obj/item/weapon/implant/explosive/handle_removal(var/mob/remover)
 	makeunusable(75)
 
@@ -355,7 +355,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 		return
 	log_admin("[key_name(remover)] has removed a greytide implant from [key_name(imp_in)].")
 	R.Drop(FALSE)
-	
+
 	makeunusable(90)
 
 /obj/item/weapon/implant/adrenalin
@@ -507,7 +507,7 @@ the implant may become unstable and either pre-maturely inject the subject or si
 /obj/item/weapon/implant/compressed/trigger(emote, mob/source as mob)
 	if(malfunction == IMPLANT_MALFUNCTION_PERMANENT)
 		return 0
-		
+
 	if (src.scanned == null)
 		return 0
 
@@ -640,6 +640,6 @@ the implant may become unstable and either pre-maturely inject the subject or si
 	else
 		to_chat(H, "<span class = 'notice'>You hear the soothing millennia-old Gregorian chants of the clergy.</span>")
 	return 1
-	
+
 /obj/item/weapon/implant/holy/handle_removal(var/mob/remover)
 	makeunusable(15)
