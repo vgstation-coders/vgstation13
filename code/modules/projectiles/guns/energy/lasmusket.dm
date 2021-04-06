@@ -17,6 +17,7 @@
 	var/lens_secure = 0
 	var/cell_secure = 0
 	var/crankstate = 0 //for crank overlay; 0 for up, 1 for down
+	var/wood = 0
 	var/obj/item/weapon/cell/loadedcell = null //The power cell
 	var/strength = 0
 	var/flawless = 0
@@ -58,13 +59,22 @@
 	else
 		var/image/crank = image('icons/obj/gun.dmi', src, "lasmusket-crank0")
 		overlays += crank
-	if(!loadedassembly) //body state
-		icon_state = "lasmusket-lens"
-		return
-	if(!loadedassembly.plasma)
-		icon_state = "lasmusket-glass"
-	if(loadedassembly.plasma)
-		icon_state = "lasmusket-plasma"
+	if (wood)
+		if(!loadedassembly) //wood bodies
+			icon_state = "lasmusket-wood-lens"
+			return
+		if(!loadedassembly.plasma)
+			icon_state = "lasmusket-wood-glass"
+		if(loadedassembly.plasma)
+			icon_state = "lasmusket-wood-plasma"
+	else
+		if(!loadedassembly) //body state
+			icon_state = "lasmusket-lens"
+			return
+		if(!loadedassembly.plasma)
+			icon_state = "lasmusket-glass"
+		if(loadedassembly.plasma)
+			icon_state = "lasmusket-plasma"
 	if(!cell_secure) //cell state
 		var/image/charge = image('icons/obj/gun.dmi', src, "lasmusket-cell")
 		overlays += charge
@@ -130,6 +140,16 @@
 	update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/attackby(obj/item/weapon/W, mob/user)
+	if(istype(W, /obj/item/stack/sheet/wood))
+		if(wood)
+			to_chat(user, "You can't make the stock any more wooden than it already is!")
+			return
+		var/obj/item/stack/sheet/wood/C = W
+		wood = 1
+		if(C.use(1))
+			to_chat(user, "You replace the stock on \the [src] with a wooden set.")
+		update_icon()
+
 	if(istype(W, /obj/item/weapon/lens_assembly))
 		if(loadedassembly)
 			to_chat(user, "There is already a set of lenses in \the [src].")
@@ -301,5 +321,6 @@
 	loadedcell.charge = loadedcell.maxcharge
 	lens_secure = 1
 	cell_secure = 1
+	wood = 1
 	flawless = 1
 	update_icon()
