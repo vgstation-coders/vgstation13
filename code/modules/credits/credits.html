@@ -19,6 +19,13 @@
 			display: table-cell;
 			height: 100vh;
 		}
+		#soundplayer {
+			position: absolute;
+			bottom: 0%;
+	        left: 0%;
+			z-index: 999;
+			width: 15%;
+		}
 		.crewtable{
 			width: 100%;
 			table-layout: fixed;
@@ -111,10 +118,10 @@
 	function setAudio(link, autoplay){
 		var sound = document.getElementById("sounddiv");
 		if(autoplay == 1){
-			sound.innerHTML = "<audio id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
+			sound.innerHTML = "<audio controls autoplay id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
 		}
 		else{
-			sound.innerHTML = "<audio id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
+			sound.innerHTML = "<audio controls autoplay id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
 		}
 	}
 
