@@ -287,14 +287,14 @@
 					loadedassembly = null
 					lens_secure = 0
 			fire_sound = initial(fire_sound)
-			loadedcell.charge = 0 //Drain the cell after firing
 		update_icon()
 
-/obj/item/weapon/gun/energy/lasmusket/attack(mob/living/M, mob/living/user, def_zone) //Suicide handling to make sure the gun's empty afterward.
-	..()
-	if(!canceled)
-		loadedcell.charge = 0
-		update_icon()
+/obj/item/weapon/gun/energy/lasmusket/process_chambered()
+	if(!lens_secure || !cell_secure || loadedcell.charge < 5000)
+		return 0
+	. = ..()
+	loadedcell.charge = 0
+	update_icon()
 
 /obj/item/weapon/gun/energy/lasmusket/New()
 	..()
