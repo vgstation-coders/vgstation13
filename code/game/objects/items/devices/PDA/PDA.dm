@@ -1591,9 +1591,14 @@ var/global/list/obj/item/device/pda/PDAs = list()
 		if("setAlarm")
 			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
 			if(app)
-				var/nutime = round(input("How long before the alarm triggers, in minutes?", "Alarm", 1) as num)
+				var/nutime = round(input("How long before the alarm triggers, in seconds?", "Alarm", 1) as num)
 				if(app.set_alarm(nutime))
-					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] minute timer.</span>")
+					to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [nutime] second timer.</span>")
+		if("restartAlarm")
+			var/datum/pda_app/alarm/app = locate(/datum/pda_app/alarm) in applications
+			if(app && app.restart_alarm())
+				to_chat(usr, "[bicon(src)]<span class='info'>The PDA confirms your [app.lasttimer] second timer.</span>")
+				no_refresh = 1
 		if("101")//PDA_APP_RINGER
 			mode = PDA_APP_RINGER
 		if("toggleDeskRinger")
@@ -2140,7 +2145,7 @@ var/global/list/obj/item/device/pda/PDAs = list()
 								difficulty += P.cartridge.access_manifest * 2
 							else
 								difficulty += 2
-							
+
 							if(P.hidden_uplink)
 								U.show_message("<span class='warning'>An error flashes on your [src]; [pick(syndicate_code_response)]</span>", 1)
 								U << browse(null, "window=pda")
