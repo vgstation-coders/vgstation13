@@ -118,10 +118,10 @@
 	function setAudio(link, autoplay){
 		var sound = document.getElementById("sounddiv");
 		if(autoplay == 1){
-			sound.innerHTML = "<audio controls autoplay id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
+			sound.innerHTML = "<audio controls id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
 		}
 		else{
-			sound.innerHTML = "<audio controls autoplay id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
+			sound.innerHTML = "<audio controls id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
 		}
 	}
 
