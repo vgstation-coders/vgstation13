@@ -21,6 +21,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	var/hidden = 0 //Emaggable
 	var/contraband = 0 //Hackable via tools
 	var/group = "Supplies"
+	var/require_holiday = null
 
 /datum/supply_packs/New()
 	manifest += "<ul>"
@@ -517,7 +518,7 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 					/obj/item/clothing/head/collectable/police,
 					/obj/item/clothing/head/collectable/slime,
 					/obj/item/clothing/head/collectable/xenom,
-					/obj/item/clothing/head/collectable/petehat)
+					/obj/item/clothing/head/collectable/petehat,)
 	name = "Collectable hats!"
 	cost = 200
 	containertype = /obj/structure/closet/crate/basic
@@ -527,6 +528,24 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 /datum/supply_packs/randomised/New()
 	manifest += "Contains any [num_contained] of:"
 	..()
+
+/datum/supply_packs/mann_co_key
+	name = "Mann Co. key"
+	cost = 200
+	containertype = /obj/structure/closet/crate/basic
+	contains = list(/obj/item/mann_co_key)
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
+
+/datum/supply_packs/mann_co_crate
+	name = "Mann Co. crate"
+	cost = 200
+	containertype = /obj/structure/mann_co_crate
+	contains = list()
+	containername = "crate"
+	group = "Clothing"
+	require_holiday = APRIL_FOOLS_DAY
 
 /datum/supply_packs/randomised/cheap_hats
 	name = "Cheap hats"
@@ -2216,8 +2235,6 @@ var/list/all_supply_groups = list("Supplies","Clothing","Security","Hospitality"
 	containertype = /obj/structure/closet/crate/hydroponics
 	containername = "exotic fish crate"
 	group = "Hydroponics"
-
-
 
 //farm animals - useless and annoying, but potentially a good source of food
 /datum/supply_packs/cow

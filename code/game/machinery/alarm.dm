@@ -1584,6 +1584,11 @@ var/global/list/firealarms = list() //shrug
 	if(wires)
 		wires.npc_tamper(L)
 
-
+/obj/machinery/alarm/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
 
 #undef CHECKED_GAS

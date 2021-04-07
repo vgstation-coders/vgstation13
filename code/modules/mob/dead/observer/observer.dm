@@ -268,28 +268,6 @@ Works together with spawning an observer, noted above.
 		else
 			visible.icon_state = "visible0"
 
-// Direct copied from medical HUD glasses proc, used to determine what health bar to put over the targets head.
-/mob/dead/proc/RoundHealth(var/health)
-	switch(health)
-		if(100 to INFINITY)
-			return "health100"
-		if(70 to 100)
-			return "health80"
-		if(50 to 70)
-			return "health60"
-		if(30 to 50)
-			return "health40"
-		if(18 to 30)
-			return "health25"
-		if(5 to 18)
-			return "health10"
-		if(1 to 5)
-			return "health1"
-		if(-99 to 0)
-			return "health0"
-		else
-			return "health-100"
-
 // Pretty much a direct copy of Medical HUD stuff, except will show ill if they are ill instead of also checking for known illnesses.
 /mob/dead/proc/process_medHUD(var/mob/M)
 	var/client/C = M.client

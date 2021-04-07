@@ -70,7 +70,20 @@ var/global/global_playlists = list()
 			reader.i = 1
 			var/songdata = reader.read_value()
 			for(var/list/record in songdata)
-				playlist += new /datum/song_info(record)
+				if (("track" in record) && record["track"])
+					//sorted playlist
+					if (playlist == list())
+						var/length = 0
+						for(var/list/entry in songdata)
+							length++
+						var/M[length]
+						playlist = M//turns "playlist" into an empty list of size of the actual playlist
+					var/track = text2num(record["track"])
+					playlist.Insert(track, new /datum/song_info(record))
+				else
+					//unsorted playlist
+					playlist += new /datum/song_info(record)
+
 			if(playlist.len==0)
 				visible_message("<span class='warning'>[bicon(src)] \The [src] buzzes, unable to update its playlist.</span>","<em>You hear a buzz.</em>")
 				stat &= BROKEN

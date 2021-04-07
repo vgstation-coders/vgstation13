@@ -70,7 +70,7 @@
 	if (implanted)
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>You feel a strange sensation in your skull that quickly dissipates.</span>")
 		return FALSE
-	if(H.vampire_affected(mind) < 0)
+	if(H.vampire_affected(mind) <= 0)
 		H.visible_message("<span class='warning'>[H] seems to resist the takeover!</span>", "<span class='notice'>Your faith of [ticker.Bible_deity_name] has kept your mind clear of all evil!</span>")
 	return TRUE
 
@@ -89,10 +89,10 @@
 		var/datum/role/vampire/V = M.GetRole(VAMPIRE)
 		var/obj/item/weapon/nullrod/N = locate(/obj/item/weapon/nullrod) in get_contents_in_object(src)
 		if (N)
-			if (/datum/power/vampire/undying in V.current_powers)
+			if (locate(/datum/power/vampire/undying) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact has turned our powers against us!</span>")
 				return VAMP_FAILURE
-			if (/datum/power/vampire/jaunt in V.current_powers)
+			if (locate(/datum/power/vampire/jaunt) in V.current_powers)
 				to_chat(M.current, "<span class='warning'>An holy artifact protects [src]!</span>")
 				return 0
 		return 1

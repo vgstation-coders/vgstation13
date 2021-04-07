@@ -436,6 +436,10 @@
 	if(spell_masters && spell_masters.len)
 		for(var/obj/abstract/screen/movable/spell_master/spell_master in spell_masters)
 			spell_master.update_spells(0, src)
+
+	for (var/time in crit_rampup)
+		if (world.time > num2text(time) + 20 SECONDS) // clear out the items older than 20 seconds
+			crit_rampup -= time
 	return
 
 /mob/proc/see_narsie(var/obj/machinery/singularity/narsie/large/N, var/dir)
@@ -2211,16 +2215,9 @@ mob/proc/on_foot()
 		//to_chat(world, "[target] has psy resist")
 		to_chat(src, "The target mind is resisting!")
 		return 0
-	if(ishuman(target))
-		var/mob/living/carbon/human/H = target
-		if(H.is_wearing_item(/obj/item/clothing/head/tinfoil, slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
-	if(ismartian(target))
-		var/mob/living/carbon/complex/martian/MR = target
-		if(MR.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian, /obj/item/clothing/head/tinfoil), slot_head))
-			to_chat(src, "Interference is disrupting the connection with the target mind.")
-			return 0
+	if(target.is_wearing_any(list(/obj/item/clothing/head/helmet/space/martian,/obj/item/clothing/head/tinfoil,/obj/item/clothing/head/helmet/stun), slot_head))
+		to_chat(src, "Interference is disrupting the connection with the target mind.")
+		return 0
 	return 1
 
 /mob/proc/get_personal_ambience()

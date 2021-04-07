@@ -3121,7 +3121,6 @@ var/global/num_vending_terminals = 1
 		/obj/item/weapon/card/id/vox/extra = 3,
 		/obj/item/weapon/stamp/trader = 3,
 		/obj/item/weapon/capsule = 60,
-		/obj/item/weapon/implantcase/peace = 5,
 		/obj/item/vaporizer = 1,
 		/obj/item/weapon/storage/trader_chemistry = 1,
 		/obj/structure/closet/secure_closet/wonderful = 1,

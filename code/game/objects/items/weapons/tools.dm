@@ -49,6 +49,8 @@
 	attack_verb = list("bashes", "batters", "bludgeons", "whacks")
 	toolsounds = list('sound/items/Ratchet.ogg')
 
+	crit_chance_melee = 2*CRIT_CHANCE_MELEE
+
 /obj/item/weapon/wrench/is_wrench(mob/user)
 	return TRUE
 

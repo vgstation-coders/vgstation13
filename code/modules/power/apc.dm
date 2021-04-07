@@ -1410,5 +1410,13 @@ obj/machinery/power/apc/proc/autoset(var/val, var/on)
 	if(wires)
 		wires.npc_tamper(L)
 
+/obj/machinery/power/apc/AltClick(mob/user)
+	if(!user.incapacitated() && Adjacent(user) && user.dexterity_check() && allowed(user))
+		locked = !locked
+		to_chat(user, "You [locked ? "" : "un"]lock \the [src] interface.")
+		update_icon()
+	return ..()
+
+
 
 #undef APC_UPDATE_ICON_COOLDOWN

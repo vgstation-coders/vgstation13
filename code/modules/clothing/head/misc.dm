@@ -684,3 +684,20 @@
 	desc = "An oversized Donitos promotional plastic donut-shaped hat."
 	icon_state = "donitos_pope"
 	species_fit = list(INSECT_SHAPED)
+
+/obj/item/clothing/head/bteamcaptain
+    name = "\improper Burning Team Captain"
+    icon_state = "bteamcaptain"
+    desc = "For the man who can get his team to actually push the payload on Hightower."
+    flags = FPRINT
+    item_state = "bteamcaptain"
+    siemens_coefficient = 0.9
+
+var/image/unusual_overlay = image('icons/mob/head.dmi', "unusual_overlay", pixel_y = 15)
+/obj/item/clothing/head/bteamcaptain/equipped(mob/user)
+    user.overlays += unusual_overlay
+    return ..()
+
+/obj/item/clothing/head/bteamcaptain/unequipped(mob/user)
+    user.overlays -= unusual_overlay
+    return ..()

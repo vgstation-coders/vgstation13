@@ -714,6 +714,11 @@
 			return null
 		return src.forceMove(U)
 
+/atom/movable/overlay/crit
+	icon = 'icons/random_krit.dmi'
+	icon_state = "randomcrit"
+	plane = ABOVE_HUMAN_PLANE
+
 /////////////////////////////
 // SINGULOTH PULL REFACTOR
 /////////////////////////////
