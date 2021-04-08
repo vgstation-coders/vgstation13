@@ -117,7 +117,7 @@ CREATE TABLE client (
     credits        TEXT,
     jingle         TEXT,
     hear_voicesound INTEGER,
-    hear_radiosound INTEGER,
+    hear_radiosound TEXT,
     hear_instruments INTEGER,
     ambience_volume INTEGER,
     credits_volume INTEGER,

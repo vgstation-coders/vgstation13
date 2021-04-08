@@ -1632,6 +1632,9 @@ var/proccalls = 1
 #define JINGLE_NEVER "Never"
 #define JINGLE_CLASSIC "Classics"
 #define JINGLE_ALL "All"
+#define RADIO_NEVER "Never"
+#define RADIO_DEPARTMENT "Only Departments"
+#define RADIO_ALL "All"
 
 #define GOLEM_RESPAWN_TIME 10 MINUTES	//how much time must pass before someone who dies as an adamantine golem can use the golem rune again
 
