@@ -38,9 +38,9 @@
 			result_time = replacetext(result_time, old_hours, new_hours, 1, 3)
 			// Replace the minutes
 			new_minutes = (new_minutes % 60)
+			new_minutes_txt = num2text(new_minutes)
 			if (new_minutes < 10)
 				new_minutes_txt = add_zero(new_minutes_txt, 2)
-			new_minutes_txt = num2text(new_minutes)
 			result_time = replacetext(result_time, old_minutes_txt, new_minutes_txt, length(result_time)-1)
 
 	return result_time

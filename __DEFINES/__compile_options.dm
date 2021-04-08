@@ -40,9 +40,9 @@
 #define DEVELOPER_MODE 0
 
 // If 1, unit tests will be compiled
-#define UNIT_TESTS_ENABLED 0
+#define UNIT_TESTS_ENABLED 1
 // If 1, unit tests run automatically
-#define UNIT_TESTS_AUTORUN 0
+#define UNIT_TESTS_AUTORUN 1
 // If 1, the server stops after the tests are done
 #define UNIT_TESTS_STOP_SERVER_WHEN_DONE 0
 
