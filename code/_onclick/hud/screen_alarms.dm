@@ -414,9 +414,5 @@ so as to remain in compliance with the most up-to-date laws."
 /obj/abstract/screen/alert/robot/reset_self/Click()
 	..()
 	var/mob/living/silicon/robot/R = usr
-	if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
-		R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
-	qdel(R.module)
-	R.set_module_sprites(list("Default" = "robot"))
+	R.install_upgrade(R, /obj/item/borg/upgrade/reset)
 	qdel(src)
-
