@@ -125,7 +125,7 @@ var/list/shuttle_log = list()
 
 			last_transfer_time = world.time
 			last_shipment_time = worldtime2text()
-			get_next_shipment_time()
+			next_shipment_time = add_minutes(last_shipment_time, 5)
 			send_supplies(href_list["supplies"])
 
 		// ALART LAVUL
@@ -719,12 +719,6 @@ var/list/shuttle_log = list()
 	..()
 
 // -- Blob defcon 1 things
-
-/obj/machinery/computer/communications/proc/get_next_shipment_time()
-	var/minutes = num2text(blob_transfer_delay/(1 MINUTES)) // 60 seconds in a minute * 10 deciseconds in a second
-	var/last_digit = last_shipment_time[length(last_shipment_time)]
-	next_shipment_time = last_shipment_time
-	next_shipment_time = replacetext(next_shipment_time, last_digit, minutes, length(next_shipment_time))
 
 /obj/machinery/computer/communications/proc/send_supplies(var/supplies)
 	// Find a suitable place

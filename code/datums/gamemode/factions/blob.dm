@@ -11,9 +11,9 @@
 #define AI_VICTORY 1 // Station was nuked.
 #define BLOB_VICTORY 2
 
-#define BLOB_DEFCON_1 "defcon1" // Instant code red
+#define BLOB_DEFCON_1 "defcon1" // Free access for all, allow the crew to order cargo things using the arrivals shuttle.
 #define BLOB_DEFCON_2 "defcon2" // Borgs have a free reset, ERT can be summoned again
-#define BLOB_DEFCON_3 "defcon3" // Free access for all, allow the crew to order cargo things using the arrivals shuttle.
+#define BLOB_DEFCON_3 "defcon3" // Instant code red
 
 /datum/faction/blob_conglomerate
 	name = BLOBCONGLOMERATE
@@ -151,14 +151,8 @@
 			for (var/mob/living/silicon/robot/R in player_list)
 				if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE)) // Clownborgs & al
 					continue
-
-				if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
-					R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
-
+				R.throw_alert(SCREEN_ALARM_ROBOT_RESET, /obj/abstract/screen/alert/robot/reset_self, 0)
 				to_chat(R, "<span class='notice'>DEFCON Procedure triggered. Emergency Reset System remotely uploaded.</span>")
-				qdel(R.module)
-				R.set_module_sprites(list("Default" = "robot"))
-				R.updatename("Default")
 			sent_strike_teams -= "ERT"
 
 		if (BLOB_DEFCON_1)
@@ -166,6 +160,7 @@
 			// Egalitarian mode
 			for(var/obj/machinery/door/airlock/W in all_doors)
 				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+					W.backup_access = W.req_access
 					W.req_access = list()
 			for (var/obj/machinery/computer/communications/comm in machines)
 				comm.defcon_1_enabled = TRUE
@@ -196,6 +191,14 @@
 			if(stage >= FACTION_ENDGAME)
 				..() //Set thematic, send shuttle
 				command_alert(/datum/command_alert/FUBAR)
+
+			// DEFCON
+			for(var/obj/machinery/door/airlock/W in all_doors)
+				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+					W.req_access = W.backup_access
+			for (var/obj/machinery/computer/communications/comm in machines)
+				comm.defcon_1_enabled = FALSE
+
 			for(var/mob/living/silicon/ai/aiPlayer in player_list)
 				aiPlayer.set_zeroth_law("")
 				to_chat(aiPlayer, "Laws Updated. Lockdown has been lifted.")
