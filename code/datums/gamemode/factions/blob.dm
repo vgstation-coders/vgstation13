@@ -194,7 +194,7 @@
 
 			// DEFCON
 			for(var/obj/machinery/door/airlock/W in all_doors)
-				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison) && W.backup_access)
 					W.req_access = W.backup_access
 			for (var/obj/machinery/computer/communications/comm in machines)
 				comm.defcon_1_enabled = FALSE
