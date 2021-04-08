@@ -124,6 +124,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	var/tooltips = 1
 	var/stumble = 0						//whether the player pauses after their first step
 	var/hear_voicesound = 0				//Whether the player hears noises when somebody speaks.
+	var/hear_radiosound = 0				//Whether the player hears noises when somebody speaks on the radio.
 	//character preferences
 	var/real_name						//our character's name
 	var/be_random_name = 0				//whether we are a random name every round
@@ -393,6 +394,8 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
 	<b>Hear player voices</b>
 	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
+	<b>Hear radio department voices</b>
+	<a href='?_src_=prefs;preference=hear_radiosound'><b>[(hear_radiosound) ? "Yes" : "No"]</b></a><br>
 	<b>Hear instruments</b>
 	<a href='?_src_=prefs;preference=hear_instruments'><b>[(hear_instruments) ? "Yes":"No"]</b></a><br>
 	<b>Progress Bars:</b>
@@ -1479,6 +1482,8 @@ Values up to 1000 are allowed.", "FPS", fps) as null|num
 					stumble = !stumble
 				if("hear_voicesound")
 					hear_voicesound = !hear_voicesound
+				if("hear_radiosound")
+					hear_radiosound = !hear_radiosound
 				if("hear_instruments")
 					hear_instruments = !hear_instruments
 				if("pulltoggle")
