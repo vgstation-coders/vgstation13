@@ -744,6 +744,16 @@
 	for (var/i; i < BOX_SPACE; i++)
 		new /obj/item/weapon/reagent_containers/hypospray/autoinjector(src)
 
+/obj/item/weapon/storage/box/antiviral_syringes
+	name = "box of anti-viral syringes"
+	desc = "Contains anti-viral syringes."
+	icon_state = "syringe"
+
+/obj/item/weapon/storage/box/antiviral_syringes/New()
+	..()
+	for (var/i; i < BOX_SPACE; i++)
+		new /obj/item/weapon/reagent_containers/syringe/antiviral(src)
+
 /obj/item/weapon/storage/box/mugs
 	name = "box of mugs"
 	desc = "It's a box of mugs."

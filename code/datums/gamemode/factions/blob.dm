@@ -11,6 +11,10 @@
 #define AI_VICTORY 1 // Station was nuked.
 #define BLOB_VICTORY 2
 
+#define BLOB_DEFCON_1 "defcon1" // Instant code red
+#define BLOB_DEFCON_2 "defcon2" // Borgs have a free reset, ERT can be summoned again
+#define BLOB_DEFCON_3 "defcon3" // Free access for all, allow the crew to order cargo things using the arrivals shuttle.
+
 /datum/faction/blob_conglomerate
 	name = BLOBCONGLOMERATE
 	ID = BLOBCONGLOMERATE
@@ -65,6 +69,12 @@
 	if(outbreak_announcement && world.time >= outbreak_announcement && detect_overminds()) //Must be alive to advance.
 		outbreak_announcement = 0
 		stage(FACTION_ACTIVE)
+	if (declared && 0.20*blobwincount)
+		stage(BLOB_DEFCON_3)
+	if (declared && 0.30*blobwincount)
+		stage(BLOB_DEFCON_2)
+	if (declared && 0.40*blobwincount)
+		stage(BLOB_DEFCON_1)
 	if(declared && 0.66*blobwincount <= blobs.len && stage<FACTION_ENDGAME) // Blob almost won !
 		stage(FACTION_ENDGAME)
 
@@ -129,6 +139,37 @@
 			research_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice." //LOCKDOWN THESE SHUTTLES
 			mining_shuttle.lockdown = "Under directive 7-10, [station_name()] is quarantined until further notice."
 			emergency_shuttle.shutdown = TRUE //Quarantine
+
+		// Different levels of defcons to help the crew.
+
+		if (BLOB_DEFCON_3) // 20% blob count: code red
+			set_security_level("red")
+			command_alert(/datum/command_alert/blob_defcon_3)
+
+		if (BLOB_DEFCON_2) // 30% blob count: free borg reset and allow the ERT to be called
+			command_alert(/datum/command_alert/blob_defcon_2)
+			for (var/mob/living/silicon/robot/R in player_list)
+				if(HAS_MODULE_QUIRK(R, MODULE_IS_DEFINITIVE)) // Clownborgs & al
+					continue
+
+				if(/obj/item/borg/upgrade/vtec in R.module.upgrades)
+					R.movement_speed_modifier -= SILICON_VTEC_SPEED_BONUS
+
+				to_chat(R, "<span class='notice'>DEFCON Procedure triggered. Emergency Reset System remotely uploaded.</span>")
+				qdel(R.module)
+				R.set_module_sprites(list("Default" = "robot"))
+				R.updatename("Default")
+			sent_strike_teams -= "ERT"
+
+		if (BLOB_DEFCON_1)
+			command_alert(/datum/command_alert/blob_defcon_1)
+			// Egalitarian mode
+			for(var/obj/machinery/door/airlock/W in all_doors)
+				if(W.z == map.zMainStation && !istype(get_area(W), /area/bridge) && !istype(get_area(W), /area/crew_quarters) && !istype(get_area(W), /area/security/prison))
+					W.req_access = list()
+			for (var/obj/machinery/computer/communications/comm in machines)
+				comm.defcon_1_enabled = TRUE
+
 		if(FACTION_ENDGAME)
 			command_alert(/datum/command_alert/biohazard_station_nuke)
 			for(var/mob/camera/blob/B in player_list)
@@ -143,7 +184,7 @@
 				var/law = "Directive 7-12 has been authorized. Allow no sentient being to escape the purge. The nuclear failsafe must be activated at any cost, the code is: [nukecode]."
 				aiPlayer.set_zeroth_law(law)
 				to_chat(aiPlayer, "Laws Updated: [law]")
-			..() //Set thematic, set alert
+			..() //Set thematic
 		if (FACTION_DEFEATED) //Cleanup time
 			command_alert(/datum/command_alert/biohazard_station_unlock)
 			send_intercept(FACTION_DEFEATED)
