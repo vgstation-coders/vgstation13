@@ -1684,6 +1684,7 @@
 #include "code\modules\migrations\SS13_Prefs\024-add-tgui-fancy.dm"
 #include "code\modules\migrations\SS13_Prefs\025-warning_notif.dm"
 #include "code\modules\migrations\SS13_Prefs\026-add-fps.dm"
+#include "code\modules\migrations\SS13_Prefs\026-add-radio-voice.dm"
 #include "code\modules\migrations\SS13_Prefs\_base.dm"
 #include "code\modules\mining\abandonedcrates.dm"
 #include "code\modules\mining\debug_shit.dm"
