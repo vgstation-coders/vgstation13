@@ -59,7 +59,7 @@
 	attack_animation=	text2num(preference_list_client["attack_animation"])
 	pulltoggle		=	text2num(preference_list_client["pulltoggle"])
 	hear_voicesound = 	text2num(preference_list_client["hear_voicesound"])
-	hear_radiosound = 	preference_list_client["hear_radiosound"])
+	hear_radiosound = 	preference_list_client["hear_radiosound"]
 	hear_instruments =	text2num(preference_list_client["hear_instruments"])
 	ambience_volume	=	text2num(preference_list_client["ambience_volume"])
 	credits_volume	=	text2num(preference_list_client["credits_volume"])
