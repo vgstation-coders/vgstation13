@@ -163,7 +163,6 @@
 	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/syringe
-	req_lock_access = list(access_medical, access_cmo)
 
 /datum/design/rapidsyringe
 	name = "Rapid Syringe Gun"
@@ -174,6 +173,7 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/syringe/rapidsyringe
+	locked = TRUE
 	req_lock_access = list(access_medical, access_cmo)
 
 /datum/design/largecrossbow
