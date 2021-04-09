@@ -313,8 +313,8 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 	for (var/atom/movable/listener in listeners)
 		if (listener)
 			listener.Hear(speech, rendered)
-			var/list/speakers = hearers(listener,null) // mobs in hearing range of listener
-			if(!speech.speaker in speakers && istype(listener,/mob)) // so that they aren't the same mobs that are talking
+			var/list/nearby = hearers(speech.speaker,null) // mobs in hearing range of speaker
+			if(!listener in nearby && istype(listener,/mob)) // so that they aren't the same mobs that are talking
 				var/mob/L = listener
 				if(!L.is_deaf() && L.client)
 					L.client.handle_radio_voice(L,speech.frequency) // handle clientside based on prefs
