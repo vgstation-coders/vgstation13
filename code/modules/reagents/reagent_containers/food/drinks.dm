@@ -23,7 +23,6 @@
 	var/bottleheight = 23 //To offset the molotov rag and fire - beer and ale are 23
 	var/smashtext = "bottle of " //To handle drinking glasses and the flask of holy water
 	var/smashname = "broken bottle" //As above
-	var/viewcontents = 1
 	var/flammable = 0
 	var/flammin = 0
 	var/flammin_color = null
