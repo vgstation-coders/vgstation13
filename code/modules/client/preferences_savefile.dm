@@ -59,7 +59,6 @@
 	attack_animation=	text2num(preference_list_client["attack_animation"])
 	pulltoggle		=	text2num(preference_list_client["pulltoggle"])
 	hear_voicesound = 	text2num(preference_list_client["hear_voicesound"])
-	hear_radiosound = 	preference_list_client["hear_radiosound"]
 	hear_instruments =	text2num(preference_list_client["hear_instruments"])
 	ambience_volume	=	text2num(preference_list_client["ambience_volume"])
 	credits_volume	=	text2num(preference_list_client["credits_volume"])
@@ -77,6 +76,7 @@
 	last_warned_message = preference_list_client["last_warned_message"]
 	warning_admin = preference_list_client["warning_admin"]
 	fps = preference_list_client["fps"]
+	hear_radiosound = 	preference_list_client["hear_radiosound"]
 
 	ooccolor		= 	sanitize_hexcolor(ooccolor, initial(ooccolor))
 	lastchangelog	= 	sanitize_text(lastchangelog, initial(lastchangelog))
@@ -101,7 +101,6 @@
 	credits			= 	sanitize_inlist(credits, list(CREDITS_NEVER, CREDITS_ALWAYS, CREDITS_NO_RERUNS), initial(credits))
 	jingle			= 	sanitize_inlist(jingle, list(JINGLE_NEVER, JINGLE_CLASSIC, JINGLE_ALL), initial(jingle))
 	hear_voicesound = 	sanitize_integer(hear_voicesound, 0, 1, initial(hear_voicesound))
-	hear_radiosound = 	sanitize_inlist(hear_radiosound, list(RADIO_NEVER, RADIO_DEPARTMENT, RADIO_ALL), initial(hear_radiosound))
 	hear_instruments =	sanitize_integer(hear_instruments, 0, 1, initial(hear_instruments))
 	ambience_volume = sanitize_integer(ambience_volume, 0, 100, initial(ambience_volume))
 	credits_volume  = sanitize_integer(credits_volume, 0, 100, initial(credits_volume))
@@ -115,6 +114,7 @@
 	tgui_fancy           =  sanitize_integer(tgui_fancy, 0, 1, initial(tgui_fancy))
 	show_warning_next_time = sanitize_integer(show_warning_next_time, 0, 1, initial(show_warning_next_time))
 	fps = sanitize_integer(fps, -1, 1000, initial(fps))
+	hear_radiosound = 	sanitize_inlist(hear_radiosound, list(RADIO_NEVER, RADIO_DEPARTMENT, RADIO_ALL), initial(hear_radiosound))
 	initialize_preferences()
 	return 1
 
