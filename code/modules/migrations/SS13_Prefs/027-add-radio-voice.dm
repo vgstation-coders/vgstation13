@@ -4,7 +4,7 @@
 
 /datum/migration/sqlite/ss13_prefs/_014/up()
 	if(!hasColumn("client","hear_radiosound"))
-		return execute("ALTER TABLE `client` ADD COLUMN hear_radiosound TEXT DEFAULT 'Always'")
+		return execute("ALTER TABLE `client` ADD COLUMN hear_radiosound TEXT DEFAULT 'Never'")
 	return TRUE
 
 /datum/migration/sqlite/ss13_prefs/_014/down()
