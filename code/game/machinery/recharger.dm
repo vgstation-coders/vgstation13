@@ -92,9 +92,6 @@
 		if (istype(G, /obj/item/weapon/gun/energy/staff))
 			to_chat(user, "<span class='notice'>The recharger rejects the magical apparatus.</span>")
 			return 1
-		if (istype(G, /obj/item/weapon/gun/energy/lasmusket))
-			to_chat(user, "<span class='notice'>The makeshift gun lacks a recharge port.</span>")
-			return 1
 
 		if(!user.drop_item(G, src))
 			user << "<span class='warning'>You can't let go of \the [G]!</span>"
@@ -222,7 +219,7 @@
 					has_beeped = TRUE
 			else
 				icon_state = "recharger0"
-		
+
 		else if(istype(charging, /obj/item/clothing/head/helmet/stun))
 			var/obj/item/clothing/head/helmet/stun/B = charging
 			if(B.bcell)

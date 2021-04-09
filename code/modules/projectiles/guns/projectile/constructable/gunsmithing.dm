@@ -681,37 +681,6 @@
 				qdel(src)
 //SUBSPACE TUNNELER END////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//LASERMUSKET BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		if("stock_crank_assembly")
-			if(W.is_wrench(user))
-				to_chat(user, "You tighten the bolts securing \the [src]'s crank charger.")
-				W.playtoolsound(src, 50)
-				state = "stock_crank"
-				update_assembly()
-		if("stock_crank")
-			if(W.is_wrench(user))
-				to_chat(user, "You loosen the bolts securing \the [src]'s crank charger.")
-				W.playtoolsound(src, 50)
-				state = "stock_crank_assembly"
-				update_assembly()
-			if(istype(W, /obj/item/mounted/frame/light_switch) || istype(W, /obj/item/mounted/frame/access_button) || istype(W, /obj/item/mounted/frame/driver_button))
-				to_chat(user, "You attach \the [W] to \the [src].")
-				state = "lasmusket_assembly"
-				update_assembly()
-				qdel(W)
-		if("lasmusket_assembly")
-			if(W.is_screwdriver(user))
-				to_chat(user, "You secure \the [src]'s triggering mechanism.")
-				W.playtoolsound(src, 50)
-				if(src.loc == user)
-					user.drop_item(src, force_drop = 1)
-					var/obj/item/weapon/gun/energy/lasmusket/I = new (get_turf(user))
-					user.put_in_hands(I)
-				else
-					new /obj/item/weapon/gun/energy/lasmusket(get_turf(src.loc))
-				qdel(src)
-//LASERMUSKET END//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //GUN ASSEMBLY END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -794,72 +763,6 @@
 		update_wired_wrench_assembly()
 		qdel(W)
 //TOMAHAWK END/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//CANNON BEGIN/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly
-	name = "wheelchair assembly"
-	desc = "A wheelchair with an unsecured barrel on it."
-	icon = 'icons/obj/weaponsmithing.dmi'
-	icon_state = "wheelchair_assembly"
-	var/cannon_assembly = 0
-	var/siege_assembly = FALSE
-
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/proc/update_wheelchair_assembly()
-	if(cannon_assembly)
-		name = "cannon assembly"
-		desc = "A makeshift cannon, created by welding a barrel onto a wheelchair. It lacks an ignition source."
-		icon_state = "cannon_assembly"
-	else
-		name = "wheelchair assembly"
-		desc = "A wheelchair with an unsecured barrel on it."
-		icon_state = "wheelchair_assembly"
-
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/buckle_mob(mob/M as mob, mob/user as mob)
-	return	//This isn't actually a vehicle, it's just the child of one.
-
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/attack_hand()
-	if(cannon_assembly)
-		return
-	to_chat(usr, "You remove the barrel from \the [src].")
-	var/obj/item/weapon/gun_barrel/I = new (get_turf(usr))
-	usr.put_in_hands(I)
-	var/obj/structure/bed/chair/vehicle/wheelchair/Q = new (get_turf(src.loc))
-	Q.dir = dir
-	qdel(src)
-
-/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/attackby(obj/item/weapon/W, mob/user)
-	if(siege_assembly)
-		if(istype(W, /obj/item/stack/sheet/plasteel))
-			var/obj/item/stack/sheet/PS = W
-			if(do_after(user, src, 3 SECONDS))
-				if(PS.use(10))	//Heavy duty
-					to_chat(user, "<span class='notice'>You reinforce the [src]'s barrel.</span>")
-					var/obj/structure/siege_cannon/SC = new /obj/structure/siege_cannon(loc)
-					SC.dir = dir
-					qdel(src)
-	if(cannon_assembly && !siege_assembly)
-		if(istype(W, /obj/item/device/assembly/igniter))
-			to_chat(user, "You attach \the [W] to \the [src].")
-			var/obj/structure/bed/chair/vehicle/wheelchair/wheelchair_assembly/cannon/I = new (get_turf(src.loc))
-			I.dir = dir
-			qdel(src)
-			qdel(W)
-		if(istype(W, /obj/item/weapon/barricade_kit))
-			var/obj/item/weapon/barricade_kit/BK = W
-			if(!BK.kit_uses >= 3)
-				return
-			if(do_after(user, src, 3 SECONDS))
-				to_chat(user, "<span class='notice'>You create a wooden frame for the [src].</span>")
-				siege_assembly = TRUE
-				qdel(BK)
-	else if(iswelder(W))
-		var/obj/item/weapon/weldingtool/WT = W
-		to_chat(user, "You begin welding the barrel onto \the [src].")
-		if(WT.do_weld(user, src, 80, 0))
-			to_chat(user, "You weld the barrel onto \the [src].")
-			cannon_assembly = 1
-			update_wheelchair_assembly()
-//CANNON END///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //WIND-UP BEGIN////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
