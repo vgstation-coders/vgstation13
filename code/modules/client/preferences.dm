@@ -394,7 +394,7 @@ var/const/MAX_SAVE_SLOTS = 16
 	<a href='?_src_=prefs;preference=volume'><b>[volume]</b></a><br>
 	<b>Hear player voices</b>
 	<a href='?_src_=prefs;preference=hear_voicesound'><b>[(hear_voicesound) ? "Yes" : "No"]</b></a><br>
-	<b>Hear radio department voices</b>
+	<b>Hear radio voices</b>
 	<a href='?_src_=prefs;preference=hear_radiosound'><b>[hear_radiosound]</b></a><br>
 	<b>Hear instruments</b>
 	<a href='?_src_=prefs;preference=hear_instruments'><b>[(hear_instruments) ? "Yes":"No"]</b></a><br>
