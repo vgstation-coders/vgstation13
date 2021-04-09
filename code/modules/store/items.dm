@@ -30,13 +30,19 @@
 	name = "Fast-Food Menu"
 	desc = "The normal sized average american meal. Courtesy of Nanotrasen."
 	typepath = /obj/item/weapon/storage/bag/food/menu1
-	cost = 25
+	cost = 40
 
 /datum/storeitem/menu2
 	name = "Fast-Food Menu (XL)"
 	desc = "For when you're 100% starved and want to become fat in 1 easy step."
 	typepath = /obj/item/weapon/storage/bag/food/menu2
-	cost = 50
+	cost = 75
+
+/datum/storeitem/diy_soda
+	name = "Dr. Pecker's DIY Soda"
+	desc = "A fun and tasty chemical experiment for the curious child! Vials and beakers included."
+	typepath = /obj/item/weapon/storage/box/diy_soda
+	cost = 45
 
 /////////////////////////////
 // Tools
