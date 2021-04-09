@@ -614,3 +614,10 @@ NOTE:  You will only be polled about this role once per round. To change your ch
 			mob.playsound_local(get_turf(origin), get_sfx("voice-silicon"),50,1)
 		else
 			mob.playsound_local(get_turf(origin), get_sfx("voice-human"),50,1)
+
+/client/proc/handle_radio_voice(var/mob/origin,var/frequency)
+	if(prefs.hear_radiosound == RADIO_ALL) // radio sounds for player preferences, starting with all radios
+		mob.playsound_local(get_turf(origin), get_sfx("voice-radio"),50,1)
+	else if(prefs.hear_radiosound == RADIO_DEPARTMENT) // and for department radios
+		if(frequency != COMMON_FREQ) // do not play on common frequency
+			mob.playsound_local(get_turf(origin), get_sfx("voice-radio"),50,1)

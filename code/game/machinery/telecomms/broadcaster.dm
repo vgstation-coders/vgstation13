@@ -314,12 +314,9 @@ var/message_delay = 0 // To make sure restarting the recentmessages list is kept
 		if (listener)
 			listener.Hear(speech, rendered)
 			var/list/speakers = hearers(listener,null)
-			if(!speech.speaker in speakers)
-				if(prefs.hear_radiosound == RADIO_ALL) // radio sounds for player preferences, starting with all radios
-					listener.playsound_local(get_turf(listener), get_sfx("voice-radio"),50,1)
-				else if(prefs.hear_radiosound == RADIO_DEPARTMENT) // and for department radios
-					if(speech.frequency != COMMON_FREQ) // do not play on common frequency
-						listener.playsound_local(get_turf(listener), get_sfx("voice-radio"),50,1)
+			if(!speech.speaker in speakers && istype(listener,/mob))
+				var/mob/L = listener
+				L.client.handle_radio_voice(L,speech.frequency)
 
 
 	if (length(listeners))
