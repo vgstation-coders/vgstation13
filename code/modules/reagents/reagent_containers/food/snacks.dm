@@ -4684,7 +4684,7 @@
 
 /obj/item/weapon/reagent_containers/food/snacks/sweet/New()
 	..()
-	var/list/possible_reagents=list(NUTRIMENT=5, SUGAR=10, CORNOIL=5, BANANA=15, LIQUIDBUTTER=5, NUTRIMENT=10, CARAMEL=10, LEMONJUICE=10, APPLEJUICE=10, WATERMELONJUICE=10, GRAPEJUICE=10, ORANGEJUICE=10, TOMATOJUICE=10, LIMEJUICE=10, CARROTJUICE=10, BERRYJUICE=10, GGRAPEJUICE=10)
+	var/list/possible_reagents=list(NUTRIMENT=5, SUGAR=10, CORNOIL=5, BANANA=15, LIQUIDBUTTER=5, NUTRIMENT=10, CARAMEL=10, LEMONJUICE=10, APPLEJUICE=10, WATERMELONJUICE=10, GRAPEJUICE=10, ORANGEJUICE=10, TOMATOJUICE=10, LIMEJUICE=10, CARROTJUICE=10, BERRYJUICE=10, GGRAPEJUICE=10, POTATO=10, PLUMPHJUICE=10, COCO=10, SPRINKLES=10, NUTRIMENT=20)
 	var/list/flavors = list("\improper strawberry","\improper lime","\improper blueberry","\improper banana","\improper grape","\improper lemonade","\improper bubblegum","\improper raspberry","\improper orange","\improper liquorice","\improper apple","\improper cranberry")
 	var/reagent=pick(possible_reagents)
 	reagents.add_reagent(reagent, possible_reagents[reagent])
