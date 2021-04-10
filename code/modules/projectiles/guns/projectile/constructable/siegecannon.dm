@@ -64,11 +64,14 @@
 				to_chat(user,"<span class='notice'>You add [tF] units of fuel to \the [src].</span>" )
 
 /obj/structure/siege_cannon/proc/loadCannon(var/obj/item/cAmmo, var/mob/user)
-	if(loadedItem || loadedMob)
+	if(loadedItem || loadedMob || istype(cAmmo, /obj/item/weapon/grab))
 		return
 	if(cAmmo.w_class > maxSize)
-		to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
-		return
+		if(istype(cAmmo, /obj/item/anvil))
+			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
+		else
+			to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
+			return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
 		to_chat(user,"<span class='notice'>You load \the [cAmmo] into \the [src].</span>" )
@@ -86,6 +89,9 @@
 		loadMob(C, user)
 
 /obj/structure/siege_cannon/proc/loadMob(var/mob/living/mLoad, mob/user)
+	if(loadedMob || loadedItem)
+		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
+		return
 	mLoad.forceMove(src)
 	loadedMob = mLoad
 
@@ -153,7 +159,7 @@
 	return 1
 
 
-//Cannonball////////
+//CANNONBALLS/////
 
 /obj/item/cannonball
 	name = "cannonball"
