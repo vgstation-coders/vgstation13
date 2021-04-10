@@ -16,7 +16,7 @@ h1, h2, h3, h4, h5, h6 {color: #a4bad6;}
 h1.alert, h2.alert {color: #a4bad6;}
 
 a {color: #397ea5;}
-a:visited {color: #7c00e6;}
+a:visited {color: #b76ff5;}
 
 .motd {color: #98971a;}
 .motd h1, .motd h2, .motd h3, .motd h4, .motd h5, .motd h6 {color: #98971a;}
@@ -68,6 +68,8 @@ a:visited {color: #7c00e6;}
 .whisper {color:#cccccc;}
 
 .newscaster {color: #c05d5d;}
+
+.recruit {color: #986cdb; font-weight: bold; font-style: italic;}
 
 #newMessages {background: #222222; color: #cccccc;}
 #ping {background: #222222;}
