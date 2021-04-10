@@ -440,9 +440,12 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/lightship
 	name = "\improper Lightspeed Ship"
 	requires_power = 1
+	icon_state = "firingrange"
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship/start
-	icon_state = "yellow"
+	icon_state = "firingrange"
 
 /area/shuttle/salvage
 	name = "\improper Salvage Ship"
