@@ -13,6 +13,7 @@ var/global/list/obj/item/beacon/beacons = list()
 
 /obj/item/beacon/New()
 	..()
+	frequency = format_frequency(sanitize_frequency(frequency))
 	beacons += src
 
 /obj/item/beacon/Destroy()
