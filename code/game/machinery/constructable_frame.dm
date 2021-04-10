@@ -795,16 +795,20 @@ obj/item/weapon/circuitboard/rdserver
 		"Refrigerated Blood Bank" = /obj/item/weapon/circuitboard/smartfridge/bloodbank
 	)
 
-	var/choice = input(usr, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...") in smartfridge_choices
-	if(choice)
-		var/to_spawn = smartfridge_choices[choice]
-		if(src.type == to_spawn)
-			to_chat(user, "<span class = 'notice'>This board is already this type</span>")
-			return
-		if(do_after(user, src, 25))
-			var/spawned = new to_spawn(get_turf(src))
-			visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned]</span>")
-			qdel(src)
+	var/choice = input(user, "Which configuration would you like to set this board?", "According to the manual, if I disconnect this node, and connect this node...", "Cancel") as null|anything in smartfridge_choices
+	if(!choice)
+		return
+	if(!Adjacent(user) || user.incapacitated())
+		return
+	
+	var/to_spawn = smartfridge_choices[choice]
+	if(src.type == to_spawn)
+		to_chat(user, "<span class = 'notice'>This board is already this type.</span>")
+		return
+	if(do_after(user, src, 25))
+		var/spawned = new to_spawn(get_turf(src))
+		visible_message("<span class = 'notice'>\The [user] refashions \the [src] into \the [spawned].</span>")
+		qdel(src)
 
 /obj/item/weapon/circuitboard/smartfridge/medbay
 	name = "Circuit Board (Medbay SmartFridge)"
