@@ -435,7 +435,8 @@ proc/process_adminbus_teleport_locs()
 /area/shuttle/vox/station
 	name = "\improper Vox Skipjack"
 	icon_state = "yellow"
-	requires_power = 0
+	dynamic_lighting = 1
+	holomap_draw_override = HOLOMAP_DRAW_EMPTY
 
 /area/shuttle/lightship
 	name = "\improper Lightspeed Ship"
