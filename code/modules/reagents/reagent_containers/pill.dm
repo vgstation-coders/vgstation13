@@ -311,6 +311,7 @@
 /obj/item/weapon/reagent_containers/pill/random
 	name = "unknown pill"
 	desc = "Dare you enter my chemical realm?"
+	var/hidereagents = FALSE
 	/* Possible choices:
 	Good: Hyperzine, Oxycodone, Doctor's Delight, Leporazine
 	Neutral: Corn Oil, Ryetalyn, Tonio, Space Drugs
@@ -336,10 +337,13 @@
 	var/list/to_spawn = pickweight(possible_combinations)
 	for(var/index in to_spawn)
 		reagents.add_reagent(index, to_spawn[index])
+	if(hidereagents)
+		reagents.add_reagent(BLACKCOLOR, 1)
 
 
 /obj/item/weapon/reagent_containers/pill/random/maintenance
 	flags = FPRINT | NOREACT
+	hidereagents = TRUE
 	possible_combinations = list(
 		list(SYNTHOCARISOL = 10, BICARIDINE = 10) = 2, // = 2 means 2 times as common, = 0.5 means 50% as common
 		list(KELOTANE = 10, DERMALINE = 10) = 2,
