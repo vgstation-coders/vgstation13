@@ -491,7 +491,8 @@
 
 			if(istype(P, /obj/item/stack/sheet/glass))
 				var/obj/item/stack/sheet/glass/G = P
-				if(istype(G, /obj/item/stack/sheet/glass/rglass) || istype(G, /obj/item/stack/sheet/glass/plasmarglass)) // Don't use t hese
+				if(istype(G, /obj/item/stack/sheet/glass/rglass) || istype(G, /obj/item/stack/sheet/glass/plasmarglass)) // Don't use these
+					to_chat(user, "<span class='warning'>Sheets of glass must not have rods in them!</span>")
 					return
 				if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
 					empproof = TRUE
