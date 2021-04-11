@@ -211,8 +211,8 @@
 		col_count = 6 //Show 7 inventory slots instead of breaking the inventory
 	if(adjusted_contents > 7)
 		row_num = round((adjusted_contents-1) / 7) // 7 is the maximum allowed width.
-		if((adjusted_contents % 7 == 0) && !is_full())
-			row_num++
+	if(adjusted_contents && (adjusted_contents % 7 == 0) && !is_full())
+		row_num++ //If we have a full row of items, but we still have leftover space... Don't collapse the row, so people can still put stuff inside
 	src.standard_orient_objs(row_num, col_count, numbered_contents)
 
 //This proc return 1 if the item can be picked up and 0 if it can't.
