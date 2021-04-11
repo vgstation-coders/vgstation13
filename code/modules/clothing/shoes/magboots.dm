@@ -100,19 +100,23 @@
 /obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
 	..()
 	if(isEmag(O))
-		emagged = !emagged
+		emagged = TRUE
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		clothing_flags &= ~(NOSLIP | MAGPULSE)
-		if(emagged)
-			slowdown = SHACKLE_SHOES_SLOWDOWN
-			icon_state = "[base_state]1"
-			to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
-		else
+		slowdown = SHACKLE_SHOES_SLOWDOWN
+		icon_state = "[base_state]1"
+		to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
+		user.update_inv_shoes()	//so our mob-overlays update
+	if(issolder(O) && emagged)
+		var/obj/item/weapon/solder/S = O
+		if(S.remove_fuel(10,user))
+			O.playtoolsound(user.loc, 25)
+			emagged = FALSE
 			slowdown = NO_SLOWDOWN
 			icon_state = "[base_state]0"
 			to_chat(user, "<span class='notice'>You restore the mag-pulse traction system.</span>")
-		user.update_inv_shoes()	//so our mob-overlays update
+			user.update_inv_shoes()	//so our mob-overlays update
 
 /obj/item/clothing/shoes/magboots/togglemagpulse(var/mob/user = usr)
 	if(user.isUnconscious())
