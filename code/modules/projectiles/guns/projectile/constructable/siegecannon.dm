@@ -44,6 +44,7 @@
 
 /obj/structure/siege_cannon/proc/fillCannon(var/obj/item/weapon/reagent_containers/G, mob/user)
 	if(G.is_empty() || G.reagents.reagent_list.len > 1)
+		loadCannon(G, user)
 		return
 	if(!G.is_open_container())
 		loadCannon(G, user)
@@ -53,7 +54,8 @@
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
-			to_chat(user,"<span class='warning'>The [src] can't accept that as fuel.</span>" )
+			loadCannon(G, user)
+			break //Just in case
 		else
 			var/tF = clamp(G.amount_per_transfer_from_this, 0, maxFuel - wFuel)
 			G.reagents.remove_reagent(FUEL, tF)
