@@ -125,8 +125,8 @@
 		return
 
 	if(href_list["freq"])
-		change_freq()
-		say("Frequency set")
+		if(change_freq())
+			say("Frequency set")
 		updateUsrDialog()
 		return 1
 
@@ -185,10 +185,29 @@
 	. = L
 
 /obj/machinery/computer/teleporter/proc/change_freq(var/mob/user)
-	var/newfreq = input("Input a new frequency for the teleporter", "Frequency", null) as num
-	if(!newfreq)
-		return
+	var/newfreq = input("Input a new frequency for the teleporter", "Frequency", null) as null|num
+	if(stat & (BROKEN|NOPOWER))
+		return 0
+	var/ghost_flags=0
+	if(ghost_write)
+		ghost_flags |= PERMIT_ALL
+	if(!canGhostWrite(usr,src,"",ghost_flags))
+		if(usr.restrained() || usr.lying || usr.stat)
+			return 0
+		if (!usr.dexterity_check())
+			to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
+			return 0
+		if(!is_on_same_z(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Unable to interface with \the [src.name].</span>")
+			return 0
+		if(!is_in_range(usr))
+			to_chat(usr, "<span class='warning'>WARNING: Connection failure. Reduce range.</span>")
+			return 0
+	else if(!newfreq)
+		return 0
+
 	frequency = format_frequency(sanitize_frequency(newfreq))
+	return 1
 
 /obj/machinery/computer/teleporter/verb/set_id(t as text)
 	set category = "Object"
