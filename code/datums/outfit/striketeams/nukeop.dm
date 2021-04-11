@@ -145,8 +145,12 @@
 		),
 	)
 
-	items_to_collect = list(
-		/obj/item/weapon/reagent_containers/pill/laststand,
+	equip_survival_gear = list(
+		/datum/species/human = /obj/item/weapon/storage/box/survival/nuke/human,
+		/datum/species/plasmaman = /obj/item/weapon/storage/box/survival/nuke/human,
+		/datum/species/diona = /obj/item/weapon/storage/box/survival/nuke/human,
+		/datum/species/insectoid = /obj/item/weapon/storage/box/survival/nuke/human,
+		/datum/species/vox = /obj/item/weapon/storage/box/survival/nuke/vox,
 	)
 
 	implant_types = list(
