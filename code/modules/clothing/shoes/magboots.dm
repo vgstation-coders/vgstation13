@@ -104,7 +104,7 @@
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
 		clothing_flags &= ~(NOSLIP | MAGPULSE)
-		if(!emagged)
+		if(emagged)
 			slowdown = SHACKLE_SHOES_SLOWDOWN
 			icon_state = "[base_state]1"
 			to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
