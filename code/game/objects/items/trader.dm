@@ -1267,17 +1267,20 @@ var/global/list/alcatraz_stuff = list(
 	name = "Cloud IX engineering crate"
 	desc = "The Cloud IX engineering facility hangs in the atmosphere of the eponymous gas giant. But are the workers happy? Nein."
 
-//3+4+3=10
+//3+8+4=15
 var/global/list/cloudnine_stuff = list(
 	//3 of a kind
 	/obj/item/airshield_projector,/obj/item/airshield_projector,/obj/item/airshield_projector,
 	//2 of a kind
 	/obj/item/vaporizer,/obj/item/vaporizer,
 	/obj/item/device/multitool/omnitool,/obj/item/device/multitool/omnitool,
+	/obj/item/supermatter_shielding/frass,/obj/item/supermatter_shielding/frass,
+	/mob/living/simple_animal/hamster,/mob/living/simple_animal/hamster,
 	//1 of a kind
 	/obj/item/clothing/gloves/golden,
 	/obj/machinery/power/antiquesynth,
-	/obj/item/weapon/am_containment/decelerator
+	/obj/item/weapon/am_containment/decelerator,
+	/obj/structure/largecrate/secure/magmaw,
 	)
 
 /obj/structure/closet/crate/internals/cloudnine/New()
@@ -1287,6 +1290,63 @@ var/global/list/cloudnine_stuff = list(
 			return
 		var/path = pick_n_take(cloudnine_stuff)
 		new path(src)
+
+/obj/item/supermatter_shielding/frass
+	name = "\improper F.R.A.S.S. sphere"
+	desc = "Frequency-reticulated anti-supermatter safeguard. A refinement of the S.A.S.S. design that is reusable but dazes its user more. It should prevent you from getting annihilated by supermatter. It looks like a brown marble floating in a vibrating gas inside a glass orb."
+	stunforce = 40
+	infinite = TRUE
+
+#define HAMSTER_MOVEDELAY 1
+/mob/living/simple_animal/hamster
+	name = "colossal hamster"
+	desc = "Cricetus robustus. Roughly the size of a capybara, this species of hamster was bred to power treadmill engines."
+	icon_state = "capybara"
+	icon_living = "capybara"
+	icon_dead = "capybara-dead"
+	response_help = "pets"
+	treadmill_speed = 8
+	health = 100
+	maxHealth = 100
+	min_oxy = 0
+	speak_chance = 2
+	emote_hear = list("squeaks deeply")
+	var/obj/my_wheel
+
+/mob/living/simple_animal/hamster/Life()
+	if(!..())
+		return 0
+	if(!my_wheel && isturf(loc))
+		var/obj/machinery/power/treadmill/T = locate(/obj/machinery/power/treadmill) in loc
+		if(T)
+			wander = FALSE
+			my_wheel = T
+		else
+			wander = TRUE
+	if(my_wheel)
+		hamsterwheel(20)
+
+/mob/living/simple_animal/hamster/proc/hamsterwheel(var/repeat)
+	if(repeat < 1 || stat)
+		return
+	if(!my_wheel || my_wheel.loc != loc) //no longer share a tile with our wheel
+		wander = TRUE
+		my_wheel = null
+		return
+	dir = my_wheel.dir
+	my_wheel.Uncross(src)
+	delayNextMove(HAMSTER_MOVEDELAY)
+	sleep(HAMSTER_MOVEDELAY)
+	hamsterwheel(repeat-1)
+
+/mob/living/simple_animal/hamster/attack_hand(mob/living/carbon/human/M)
+	. = ..()
+	if(M && !isUnconscious() && M.a_intent == I_HELP)
+		M.delayNextAttack(2 SECONDS)
+		var/image/heart = image('icons/mob/animal.dmi',src,"heart-ani2")
+		heart.plane = ABOVE_HUMAN_PLANE
+		flick_overlay(heart, list(M.client), 20)
+		emote("me", EMOTE_AUDIBLE, pick("flattens amicably.","fluffs up.","puffs out her cheeks.","shuts his eyes contentedly."))
 
 /obj/item/clothing/gloves/golden
 	name = "golden gloves"
