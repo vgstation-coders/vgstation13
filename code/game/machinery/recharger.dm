@@ -83,7 +83,7 @@
 				update_icon()
 				return 1
 		else
-			to_chat(usr, "You can't pry anything out of \the [src]!")
+			to_chat(user, "You can't pry anything out of \the [src]!")
 			return 1
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
