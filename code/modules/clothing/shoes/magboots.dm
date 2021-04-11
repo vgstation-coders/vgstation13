@@ -99,7 +99,7 @@
 
 /obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
 	..()
-	if(isemag(O))
+	if(isEmag(O))
 		emagged = TRUE
 		new/obj/effect/effect/sparks(get_turf(src))
 		playsound(loc,"sparks",50,1)
