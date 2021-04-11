@@ -1414,3 +1414,19 @@
 	new /obj/item/clothing/suit/armor/hos/surveyor(src)
 	new /obj/item/clothing/head/HoS/surveyor(src)
 	..()
+
+/obj/item/weapon/storage/box/biscuit
+	name = "biscuit box"
+	desc = "Just the right way to start your day."
+	icon = 'icons/obj/food_container.dmi'
+	icon_state = "biscuitbox"
+	storage_slots = 6
+	can_only_hold = list("/obj/item/weapon/reagent_containers/food/snacks/risenshiny")
+	foldable = /obj/item/stack/sheet/cardboard
+	starting_materials = list(MAT_CARDBOARD = 3750)
+	w_type = RECYK_MISC
+
+/obj/item/weapon/storage/box/biscuit/New()
+	..()
+	for(var/i = 1 to 6)
+		new /obj/item/weapon/reagent_containers/food/snacks/risenshiny(src)
