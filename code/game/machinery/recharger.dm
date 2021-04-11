@@ -72,7 +72,7 @@
 			return 1
 	if(iscrowbar(G))
 		if(charging)
-			to_chat(usr, "You begin to pry out \the [charging].")
+			to_chat(user, "You begin to pry out \the [charging].")
 			if(do_after(user, src, 10))
 				charging.appearance = appearance_backup
 				charging.update_icon()
