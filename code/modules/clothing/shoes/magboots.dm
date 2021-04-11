@@ -14,7 +14,7 @@
 	var/stomp_boot = "magboot"
 	var/stomp_hit = "crushes"
 	var/anchoring_system_examine = "Its mag-pulse traction system appears to be"
-	var/emagged = 0
+	var/emagged = FALSE
 
 	var/obj/item/clothing/shoes/stored_shoes = null	//Shoe holder
 
@@ -97,17 +97,18 @@
 	..()
 	return
 
+/obj/item/clothing/shoes/magboots/emag_act(var/mob/user)
+	emagged = TRUE
+	new/obj/effect/effect/sparks(get_turf(src))
+	playsound(loc,"sparks",50,1)
+	clothing_flags &= ~(NOSLIP | MAGPULSE)
+	slowdown = SHACKLE_SHOES_SLOWDOWN
+	icon_state = "[base_state]1"
+	to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
+	user.update_inv_shoes()	//so our mob-overlays update
+
 /obj/item/clothing/shoes/magboots/attackby(var/obj/item/O, var/mob/user)
 	..()
-	if(isEmag(O))
-		emagged = TRUE
-		new/obj/effect/effect/sparks(get_turf(src))
-		playsound(loc,"sparks",50,1)
-		clothing_flags &= ~(NOSLIP | MAGPULSE)
-		slowdown = SHACKLE_SHOES_SLOWDOWN
-		icon_state = "[base_state]1"
-		to_chat(user, "<span class='danger'>You override the mag-pulse traction system!</span>")
-		user.update_inv_shoes()	//so our mob-overlays update
 	if(issolder(O) && emagged)
 		var/obj/item/weapon/solder/S = O
 		if(S.remove_fuel(10,user))
