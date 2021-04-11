@@ -739,7 +739,7 @@
 	name = "whisperphone"
 	desc = "A device used to project your voice. Quietly."
 	icon_state = "megaphone"
-	item_state = "radio"
+	item_state = "megaphone"
 	w_class = W_CLASS_TINY
 	flags = FPRINT
 	siemens_coefficient = 1
