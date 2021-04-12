@@ -66,8 +66,14 @@
 				to_chat(user,"<span class='notice'>You add [tF] units of fuel to \the [src].</span>" )
 
 /obj/structure/siege_cannon/proc/loadCannon(var/obj/item/cAmmo, var/mob/user)
-	if(loadedItem || loadedMob || istype(cAmmo, /obj/item/weapon/grab))
+	if(loadedItem || loadedMob)
+		to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
 		return
+	if(istype(cAmmo, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = cAmmo
+		if(G.affecting)
+			loadMob(G.affecting, user)
+			return
 	if(cAmmo.w_class > maxSize)
 		if(istype(cAmmo, /obj/item/anvil))
 			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
@@ -83,19 +89,19 @@
 		return
 	if(!isliving(C))
 		return
-	if(loadedMob || loadedItem)
-		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
-		return
-	visible_message("<span class='warning'>\The [user] is stuffing [C] into \the [src].</span>")
-	if(do_after(user, C, 3 SECONDS))
-		loadMob(C, user)
+	loadMob(C, user)
 
 /obj/structure/siege_cannon/proc/loadMob(var/mob/living/mLoad, mob/user)
 	if(loadedMob || loadedItem)
-		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
+		to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
 		return
-	mLoad.forceMove(src)
-	loadedMob = mLoad
+	visible_message("<span class='warning'>\The [user] is stuffing [mLoad] into \the [src].</span>")
+	if(do_after(user, mLoad, 3 SECONDS))
+		if(loadedMob || loadedItem)
+			to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
+			return
+		mLoad.forceMove(src)
+		loadedMob = mLoad
 
 /obj/structure/siege_cannon/relaymove(mob/user)
 	if(do_after(user, src, 1 SECONDS))
