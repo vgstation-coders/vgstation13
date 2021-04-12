@@ -44,6 +44,7 @@
 
 /obj/structure/siege_cannon/proc/fillCannon(var/obj/item/weapon/reagent_containers/G, mob/user)
 	if(G.is_empty() || G.reagents.reagent_list.len > 1)
+		loadCannon(G, user)
 		return
 	if(!G.is_open_container())
 		loadCannon(G, user)
@@ -53,7 +54,8 @@
 		return
 	for(var/datum/reagent/R in G.reagents.reagent_list)
 		if(R.id != FUEL)
-			to_chat(user,"<span class='warning'>The [src] can't accept that as fuel.</span>" )
+			loadCannon(G, user)
+			break //Just in case
 		else
 			var/tF = clamp(G.amount_per_transfer_from_this, 0, maxFuel - wFuel)
 			G.reagents.remove_reagent(FUEL, tF)
@@ -65,10 +67,19 @@
 
 /obj/structure/siege_cannon/proc/loadCannon(var/obj/item/cAmmo, var/mob/user)
 	if(loadedItem || loadedMob)
+		to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
 		return
+	if(istype(cAmmo, /obj/item/weapon/grab))
+		var/obj/item/weapon/grab/G = cAmmo
+		if(G.affecting)
+			loadMob(G.affecting, user)
+			return
 	if(cAmmo.w_class > maxSize)
-		to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
-		return
+		if(istype(cAmmo, /obj/item/anvil))
+			to_chat(user,"<span class='warning'>You force \the [cAmmo] into \the [src], somehow.</span>")	//Terrifying
+		else
+			to_chat(user,"<span class='warning'>The [cAmmo] is too large to fit in \the [src].</span>")
+			return
 	if(user.drop_item(cAmmo, src))
 		loadedItem = cAmmo
 		to_chat(user,"<span class='notice'>You load \the [cAmmo] into \the [src].</span>" )
@@ -78,16 +89,19 @@
 		return
 	if(!isliving(C))
 		return
-	if(loadedMob || loadedItem)
-		to_chat(user,"<span class='warning'>\The [src] is already full.</span>" )
-		return
-	visible_message("<span class='warning'>\The [user] is stuffing [C] into \the [src].</span>")
-	if(do_after(user, C, 3 SECONDS))
-		loadMob(C, user)
+	loadMob(C, user)
 
 /obj/structure/siege_cannon/proc/loadMob(var/mob/living/mLoad, mob/user)
-	mLoad.forceMove(src)
-	loadedMob = mLoad
+	if(loadedMob || loadedItem)
+		to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
+		return
+	visible_message("<span class='warning'>\The [user] is stuffing [mLoad] into \the [src].</span>")
+	if(do_after(user, mLoad, 3 SECONDS))
+		if(loadedMob || loadedItem)
+			to_chat(user,"<span class='warning'>\The [src] is already loaded.</span>")
+			return
+		mLoad.forceMove(src)
+		loadedMob = mLoad
 
 /obj/structure/siege_cannon/relaymove(mob/user)
 	if(do_after(user, src, 1 SECONDS))
@@ -153,7 +167,7 @@
 	return 1
 
 
-//Cannonball////////
+//CANNONBALLS/////
 
 /obj/item/cannonball
 	name = "cannonball"
