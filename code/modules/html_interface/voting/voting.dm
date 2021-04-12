@@ -270,7 +270,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && vote != "Cancel" && 1<=vote && vote<=choices.len)
+		if(vote && vote != "cancel_vote" && 1<=vote && vote<=choices.len)
 			voted += mob_ckey
 			choices[choices[vote]]++	//check this
 			current_votes[mob_ckey] = vote
