@@ -139,6 +139,7 @@
 	icon_state = "lamp"
 	item_state = "lamp"
 	brightness_on = 5
+	slot_flags = 0
 	w_class = W_CLASS_LARGE
 	flags = FPRINT
 	siemens_coefficient = 1
