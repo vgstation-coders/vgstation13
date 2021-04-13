@@ -258,6 +258,9 @@ var/global/datum/controller/vote/vote = new()
 		if (mob_ckey in voted)
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 			return 0
+		if ((1>vote) || (vote > choices.len))
+			to_chat(user, "<span class='warning'>Illegal vote.</span>")
+			return 0
 		if(mode == "map")
 			if(!user.client.holder)
 				if(isnewplayer(user))
@@ -270,7 +273,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && vote != "cancel_vote" && 1<=vote && vote<=choices.len)
+		if(vote && vote != "cancel_vote")
 			voted += mob_ckey
 			choices[choices[vote]]++	//check this
 			current_votes[mob_ckey] = vote
