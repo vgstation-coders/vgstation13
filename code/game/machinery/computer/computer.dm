@@ -130,6 +130,7 @@
 			to_chat(user, "<span class='notice'>[bicon(src)] The broken glass falls out.</span>")
 			if(empproof) // Return plasma or normal glass shard if variable is set or not
 				new /obj/item/weapon/shard/plasma(loc)
+				A.empproof = FALSE // Since there's no type of glass now
 			else
 				new /obj/item/weapon/shard(loc)
 			A.state = 3
