@@ -494,8 +494,6 @@
 				if(istype(G, /obj/item/stack/sheet/glass/rglass) || istype(G, /obj/item/stack/sheet/glass/plasmarglass)) // Don't use these
 					to_chat(user, "<span class='warning'>Sheets of glass must not have rods in them!</span>")
 					return
-				if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
-					empproof = TRUE
 				if (G.amount < 2)
 					to_chat(user, "<span class='warning'>You need at least 2 sheets of glass for this!</span>")
 					return 1
@@ -503,7 +501,9 @@
 				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					G.use(2)
-					user.visible_message("[user] installs the glass panel onto the frame.", "You install the glass panel onto the frame.", "You hear metallic sounds.")
+					user.visible_message("[user] installs the [empproof ? "reinforced" : ""] glass panel onto the frame.", "You install the [empproof ? "reinforced" : ""] glass panel onto the frame.", "You hear metallic sounds.")	
+					if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
+						empproof = TRUE
 					src.state = 4
 					src.icon_state = "4"
 
