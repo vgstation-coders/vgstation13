@@ -1214,7 +1214,7 @@ FIRE ALARM
 	return ..()
 
 /obj/machinery/firealarm/CtrlClick(var/mob/user)
-	if (ismouse(user)) // Squeak
+	if (!(user.dexterity_check())) // Squeak
 		return
 	if(user.incapacitated() || (!in_range(src, user) && !issilicon(user)))
 		return
@@ -1357,7 +1357,7 @@ FIRE ALARM
 	if((user.stat && !isobserver(user)) || stat & (NOPOWER|BROKEN))
 		return
 
-	if (!(ishigherbeing(user) || ismonkey(user))) // No squeaks or moos allowed.
+	if (!(user.dexterity_check())) // No squeaks or moos allowed.
 		return
 
 	if (buildstage != 2)
