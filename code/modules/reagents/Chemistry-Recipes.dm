@@ -182,7 +182,7 @@
 	result_amount = 3
 
 /datum/chemical_reaction/anti_toxin
-	name = "Anti-Toxin (Dylovene)"
+	name = "Dylovene"
 	id = ANTI_TOXIN
 	result = ANTI_TOXIN
 	required_reagents = list(SILICON = 1, POTASSIUM = 1, NITROGEN = 1)
