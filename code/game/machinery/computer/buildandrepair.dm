@@ -501,7 +501,7 @@
 				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					G.use(2)
-					user.visible_message("[user] installs the [empproof ? "reinforced" : ""] glass panel onto the frame.", "You install the [empproof ? "reinforced" : ""] glass panel onto the frame.", "You hear metallic sounds.")	
+					user.visible_message("[user] installs the [empproof ? "plasma" : ""] glass panel onto the frame.", "You install the [empproof ? "plasma" : ""] glass panel onto the frame.", "You hear metallic sounds.")	
 					if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
 						empproof = TRUE
 					src.state = 4
