@@ -258,7 +258,7 @@ var/global/datum/controller/vote/vote = new()
 		if (mob_ckey in voted)
 			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 			return 0
-		if ((1>vote) || (vote > choices.len))
+		if (isnum(vote) && (1>vote) || (vote > choices.len))
 			to_chat(user, "<span class='warning'>Illegal vote.</span>")
 			return 0
 		if(mode == "map")
