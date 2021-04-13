@@ -2550,9 +2550,9 @@
 		if(!threatadd)
 			return
 		if(threatadd>0)
-			D.create_threat(threatadd)
+			D.create_midround_threat(threatadd)
 		else
-			D.spend_threat(-threatadd) //Spend a positive value. Negative the negative.
+			D.spend_midround_threat(-threatadd) //Spend a positive value. Negative the negative.
 		D.threat_log += "[worldtime2text()]: Admin [key_name(usr)] adjusted threat by [threatadd]."
 		message_admins("[key_name(usr)] adjusted threat by [threatadd].")
 		check_antagonists()
