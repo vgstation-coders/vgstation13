@@ -10,8 +10,9 @@
 		if(O.is_organic() && O.is_existing())
 			total_brute	+= O.brute_dam
 			total_burn	+= O.burn_dam
+	var/prevhealth = health
 	health = maxHealth - getOxyLoss() - getToxLoss() - getCloneLoss() - total_burn - total_brute
-
+	critlog(health,prevhealth)
 	if((maxHealth - total_burn) < config.health_threshold_dead)
 		death(FALSE)
 		ChangeToHusk()

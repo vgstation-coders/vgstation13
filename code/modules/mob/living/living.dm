@@ -179,8 +179,9 @@
 		health = maxHealth
 		stat = CONSCIOUS
 	else if(!(flags & INVULNERABLE))
+		var/prevhealth = health
 		health = maxHealth - getOxyLoss() - getToxLoss() - getFireLoss() - getBruteLoss() - getCloneLoss() - halloss
-
+		critlog(health,prevhealth)
 
 //This proc is used for mobs which are affected by pressure to calculate the amount of pressure that actually
 //affects them once clothing is factored in. ~Errorage
