@@ -256,7 +256,7 @@ var/global/datum/controller/vote/vote = new()
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
 		if (mob_ckey in voted)
-			to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
 			return 0
 		if(mode == "map")
 			if(!user.client.holder)
