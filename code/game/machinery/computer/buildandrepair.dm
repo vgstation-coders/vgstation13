@@ -516,7 +516,7 @@
 				src.icon_state = "3"
 				if(empproof) // Return plasma or normal glass if variable is set or not
 					new /obj/item/stack/sheet/glass/plasmaglass( src.loc, 2 )
-					empproof = FALSE // No glass, set to
+					empproof = FALSE // No glass, set to false
 				else
 					new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
