@@ -501,9 +501,9 @@
 				if(do_after(user, src, 20) && state == 3 && G.amount >= 2)
 					playsound(src, 'sound/items/Deconstruct.ogg', 50, 1)
 					G.use(2)
-					user.visible_message("[user] installs the [empproof ? "plasma" : ""] glass panel onto the frame.", "You install the [empproof ? "plasma" : ""] glass panel onto the frame.", "You hear metallic sounds.")	
 					if(istype(G, /obj/item/stack/sheet/glass/plasmaglass)) // For EMP proofing
 						empproof = TRUE
+					user.visible_message("[user] installs the [empproof ? "plasma" : ""] glass panel onto the frame.", "You install the [empproof ? "plasma" : ""] glass panel onto the frame.", "You hear metallic sounds.")
 					src.state = 4
 					src.icon_state = "4"
 
@@ -516,6 +516,7 @@
 				src.icon_state = "3"
 				if(empproof) // Return plasma or normal glass if variable is set or not
 					new /obj/item/stack/sheet/glass/plasmaglass( src.loc, 2 )
+					empproof = FALSE // No glass, set to
 				else
 					new /obj/item/stack/sheet/glass/glass( src.loc, 2 )
 				return 1
