@@ -121,10 +121,17 @@
 	for(var/atom/A in src)
 		qdel(A)
 	new /obj/item/clothing/mask/gas/syndicate(src)
-	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 	new /obj/item/stack/medical/bruise_pack/bandaid(src)
 	new /obj/item/weapon/reagent_containers/pill/cyanide(src) //For those who hate fun
 	new /obj/item/weapon/reagent_containers/pill/laststand(src) //HOOOOOO HOOHOHOHOHOHO - N3X
+
+/obj/item/weapon/storage/box/survival/nuke/vox/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_nitrogen(src)
+
+/obj/item/weapon/storage/box/survival/nuke/human/New()
+	. = ..()
+	new /obj/item/weapon/tank/emergency_oxygen/double(src)
 
 /obj/item/weapon/storage/box/priority_care
 	name = "priority care parcel"
