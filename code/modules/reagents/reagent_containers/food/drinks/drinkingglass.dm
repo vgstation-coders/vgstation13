@@ -15,8 +15,6 @@
 
 /obj/item/weapon/reagent_containers/food/drinks/drinkingglass/on_reagent_change()
 	..()
-
-	viewcontents = 1
 	overlays.len = 0
 	flammable = 0
 	if(!molotov)
@@ -30,7 +28,6 @@
 			icon_state ="blackglass"
 			name = "international drink of mystery"
 			desc = "The identity of this drink has been concealed for its protection."
-			viewcontents = 0
 		else
 			var/datum/reagent/R = reagents.get_master_reagent()
 			R.handle_special_behavior(src)
