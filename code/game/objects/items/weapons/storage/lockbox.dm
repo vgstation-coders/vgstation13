@@ -223,7 +223,7 @@
 
 /obj/item/weapon/storage/lockbox/remote
 	name = "lockbox (chemical implants)"
-	req_one_access = list()
+	req_one_access = null
 	storage_slots = 5
 
 /obj/item/weapon/storage/lockbox/remote/New()
