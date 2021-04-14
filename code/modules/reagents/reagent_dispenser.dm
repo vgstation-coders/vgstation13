@@ -203,8 +203,10 @@
 		explosion(src.loc,1,2,4)
 	else if (reagents.total_volume > 100)
 		explosion(src.loc,0,1,3)
-	else
+	else if (reagents.total_volume > 0)
 		explosion(src.loc,-1,1,2)
+	else
+		return
 	if(src)
 		qdel(src)
 
