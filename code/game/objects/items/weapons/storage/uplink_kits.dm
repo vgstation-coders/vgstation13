@@ -220,16 +220,6 @@
 	O.update()
 	return
 
-/obj/item/weapon/storage/box/syndie_kit/imp_remote_explosive
-	name = "Remote Explosive Implant (with injector)"
-
-/obj/item/weapon/storage/box/syndie_kit/imp_remote_explosive/New()
-	..()
-	var/obj/item/weapon/implanter/O = new(src)
-	O.imp = new /obj/item/weapon/implant/explosive/remote(O)
-	O.update()
-	return
-
 /obj/item/weapon/storage/box/syndie_kit/space
 	name = "Space Suit and Helmet"
 
