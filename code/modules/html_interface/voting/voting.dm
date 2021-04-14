@@ -255,10 +255,10 @@ var/global/datum/controller/vote/vote = new()
 	if(mode)
 		if(config.vote_no_dead && usr.stat == DEAD && !usr.client.holder)
 			return 0
+		if (mob_ckey in voted)
+			to_chat(user, "<span class='warning'>You may only vote once.</span>")
+			return 0
 		if(mode == "map")
-			if (mob_ckey in voted)
-				to_chat(user, "<span class='warning'>You may only vote for the map once.</span>")
-				return 0
 			if(!user.client.holder)
 				if(isnewplayer(user))
 					to_chat(usr, "<span class='warning'>Only players that have joined the round may vote for the next map.</span>")
@@ -270,7 +270,7 @@ var/global/datum/controller/vote/vote = new()
 						return 0
 		if(current_votes[mob_ckey])
 			choices[choices[current_votes[mob_ckey]]]--
-		if(vote && 1<=vote && vote<=choices.len)
+		if(vote && vote != "cancel_vote" && 1<=vote && vote<=choices.len)
 			voted += mob_ckey
 			choices[choices[vote]]++	//check this
 			current_votes[mob_ckey] = vote
@@ -445,6 +445,13 @@ var/global/datum/controller/vote/vote = new()
 	if(!usr || !usr.client)
 		return	//not necessary but meh...just in-case somebody does something stupid
 	switch(href_list["vote"])
+		if ("cancel_vote")
+			var/mob_ckey = usr.ckey
+			voted -= mob_ckey
+			choices[choices[current_votes[mob_ckey]]]--
+			current_votes[mob_ckey] = null
+			src.updateFor(usr.client)
+			return 0
 		if("cancel")
 			if(usr.client.holder)
 				reset()

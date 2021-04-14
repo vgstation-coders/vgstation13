@@ -475,6 +475,7 @@
 #define SODIUMSILICATE	"sodiumsilicate"
 #define COLORFUL_REAGENT "colorful_reagent"
 #define AMINOMICIN		"aminomicin"
+#define AMINOMICIAN		"aminomician"
 #define AMINOCYPRINIDOL	"aminocyprinidol"
 #define TOMATO_SOUP		"tomato_soup"
 #define LUMINOL			"luminol"

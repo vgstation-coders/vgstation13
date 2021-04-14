@@ -154,6 +154,16 @@
 	build_path = /obj/item/weapon/reagent_containers/spray/chemsprayer
 	req_lock_access = list(access_medical, access_cmo)
 
+/datum/design/syringegun
+	name = "Basic Syringe Gun"
+	desc = "A gun that fires a single syringe."
+	id = "syringegun"
+	req_tech = list(Tc_COMBAT = 2, Tc_MATERIALS = 2, Tc_ENGINEERING = 2, Tc_BIOTECH = 2)
+	build_type = PROTOLATHE
+	materials = list(MAT_IRON = 2000, MAT_GLASS = 500)
+	category = "Weapons"
+	build_path = /obj/item/weapon/gun/syringe
+
 /datum/design/rapidsyringe
 	name = "Rapid Syringe Gun"
 	desc = "A gun that fires many syringes."
@@ -163,6 +173,8 @@
 	materials = list(MAT_IRON = 5000, MAT_GLASS = 1000)
 	category = "Weapons"
 	build_path = /obj/item/weapon/gun/syringe/rapidsyringe
+	locked = TRUE
+	req_lock_access = list(access_medical, access_cmo)
 
 /datum/design/largecrossbow
 	name = "Energy Crossbow"

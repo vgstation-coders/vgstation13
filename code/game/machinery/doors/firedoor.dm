@@ -250,8 +250,8 @@ var/global/list/alert_overlays_global = list()
 		investigation_log(I_ATMOS, "[density ? "closed" : "opened"] [alarmed ? "while alarming" : ""] by [user.real_name] ([formatPlayerPanel(user, user.ckey)]) at [formatJumpTo(get_turf(src))]")
 
 /obj/machinery/door/firedoor/CtrlClick(mob/user)
-	if(isAdminGhost(user))
-		attack_ai(user,TRUE)
+	if(isrobot(user) || isAdminGhost(user))
+		attack_ai(user, TRUE)
 	else
 		..()
 
@@ -667,6 +667,8 @@ var/global/list/alert_overlays_global = list()
 		drop_stack(/obj/item/stack/sheet/metal, get_turf(src), 5, user)
 		qdel(src)
 
+/obj/machinery/door/firedoor/AICtrlClick(mob/user)
+	attack_ai(user,TRUE)
 
 //Removed pending a fix for atmos issues caused by full tile firelocks.
 /*

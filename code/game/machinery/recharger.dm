@@ -70,6 +70,21 @@
 				return 1
 		else
 			return 1
+	if(iscrowbar(G))
+		if(charging)
+			to_chat(user, "You begin to pry out \the [charging].")
+			if(do_after(user, src, 10))
+				charging.appearance = appearance_backup
+				charging.update_icon()
+				charging.forceMove(loc)
+				charging = null
+				appearance_backup=null
+				G.playtoolsound(src, 50)
+				update_icon()
+				return 1
+		else
+			to_chat(user, "You can't pry anything out of \the [src]!")
+			return 1
 	if(stat & (NOPOWER | BROKEN))
 		to_chat(user, "<span class='notice'>[src] isn't connected to a power source.</span>")
 		return 1
@@ -287,6 +302,20 @@
 
 /obj/machinery/recharger/self_powered	//ideal for the Thunderdome
 	self_powered = 1
+
+/obj/machinery/recharger/kick_act(mob/living/carbon/human/H)
+	. = ..()
+	if(charging)
+		if(prob(25))
+			visible_message("<span class='notice'>\The [charging] pops out of \the [src]!</span>")
+			charging.appearance = appearance_backup
+			charging.update_icon()
+			charging.forceMove(get_turf(src))
+			charging = null
+			if(!self_powered)
+				use_power = 1
+		appearance_backup=null
+		update_icon()
 
 /obj/machinery/recharger/wallcharger
 	name = "wall recharger"

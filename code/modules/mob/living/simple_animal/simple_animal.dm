@@ -201,7 +201,10 @@ var/global/list/animal_count = list() //Stores types, and amount of animals of t
 		AdjustKnockdown(-1)
 	if(paralysis)
 		AdjustParalysis(-1)
+	update_canmove()
+
 	handle_jitteriness()
+	jitteriness = max(0, jitteriness - 1)
 
 	//Eyes
 	if(sdisabilities & BLIND)	//disabled-blind, doesn't get better on its own

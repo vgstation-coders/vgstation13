@@ -57,8 +57,8 @@ jobs:
           pip install Pillow
           python tools/dmi-validhunt/dmi-validhunt.py icons/ || true
 
-      - name: Make sure test maps aren't ticked
-        run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*/ { exit 1 }'
+      - name: Make sure test maps or vaults aren't ticked
+        run: find -name '*.dme' -exec cat {} \; | awk '/maps\\test.*|\.dmm/ { exit 1 }'
 
   build:
     name: ${{matrix.job-name}}

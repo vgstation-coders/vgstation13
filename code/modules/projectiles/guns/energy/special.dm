@@ -141,6 +141,19 @@
 			changetype=selected
 	next_changetype=world.time+SOC_CHANGETYPE_COOLDOWN
 
+/obj/item/weapon/gun/energy/mouser
+	name = "mouser pistol"
+	desc = "This gun isn't Kafka-esque because it transforms people. It's Kafka-esque because it represents an indifferent faceless authority which subjugates the confused, disoriented common man."
+	icon_state = "mauser"
+	item_state = null
+	inhand_states = list("left_hand" = 'icons/mob/in-hand/left/guninhands_left.dmi', "right_hand" = 'icons/mob/in-hand/right/guninhands_right.dmi')
+	fire_sound = 'sound/effects/stealthoff.ogg'
+	projectile_type = "/obj/item/projectile/mouse"
+	charge_cost = 100
+
+/obj/item/weapon/gun/energy/mouser/update_icon()
+	return
+
 /obj/item/weapon/gun/energy/staff/sinterklaas
 	name = "staff of sinterklaas"
 	desc = "There's a knock on the door, a hard knock, a soft knock, there's a knock on the door, who could it be?"

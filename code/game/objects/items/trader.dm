@@ -39,6 +39,20 @@
 		new /obj/item/bluespace_crystal(src)
 	new /obj/item/weapon/reagent_containers/food/snacks/grown/bluespacetomato(src)
 
+/obj/item/weapon/storage/gachabox
+	name = "wholesale capsule kit"
+	can_only_hold = list(/obj/item/weapon/capsule)
+	storage_slots = 60
+	max_combined_w_class = ARBITRARILY_LARGE_NUMBER
+	display_contents_with_number = TRUE
+	allow_quick_empty = TRUE
+	allow_quick_gather = TRUE
+
+/obj/item/weapon/storage/gachabox/New()
+	..()
+	for(var/amount = 1 to 60)
+		new /obj/item/weapon/capsule(src)
+
 /obj/structure/closet/secure_closet/wonderful
 	name = "wonderful wardrobe"
 	desc = "Stolen from Space Narnia."
@@ -52,7 +66,6 @@
 	var/wonder_whitelist = list(
 	/obj/item/clothing/mask/morphing/corgi,
 	/obj/item/clothing/under/rank/vice,
-	/obj/item/clothing/shoes/clown_shoes/advanced,
 	list(/obj/item/clothing/suit/space/clown, /obj/item/clothing/head/helmet/space/clown),
 	/obj/item/clothing/shoes/magboots/magnificent,
 	list(/obj/item/clothing/suit/space/plasmaman/bee, /obj/item/clothing/head/helmet/space/plasmaman/bee, /obj/item/clothing/suit/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/cultist, /obj/item/clothing/head/helmet/space/plasmaman/security/captain, /obj/item/clothing/suit/space/plasmaman/security/captain, /obj/item/clothing/head/helmet/space/plasmaman/security/hos, /obj/item/clothing/suit/space/plasmaman/security/hos, /obj/item/clothing/head/helmet/space/plasmaman/security/hop, /obj/item/clothing/suit/space/plasmaman/security/hop),
@@ -81,6 +94,7 @@
 
 /obj/structure/closet/secure_closet/wonderful/spawn_contents()
 	..()
+	new /obj/item/clothing/shoes/clown_shoes/advanced(src)
 	for(var/amount = 1 to 10)
 		var/wonder_clothing = pick_n_take(wonder_whitelist)
 		if(islist(wonder_clothing))
@@ -181,6 +195,36 @@
 		qdel(S)
 		return
 	..()
+
+//15+3+8 = 26
+var/global/list/shoal_stuff = list(
+	//5 of a kind
+	/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,/obj/item/weapon/hair_dye/skin_dye/discount,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector,
+	/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,/obj/item/weapon/storage/bag/gadgets/part_replacer/injector/super,
+	//3 of a kind
+	/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,/obj/item/weapon/boxofsnow,
+	//1 of a kind
+	/obj/item/weapon/reagent_containers/food/snacks/borer_egg,
+	/obj/item/weapon/vinyl/echoes,
+	/obj/item/fish_eggs/seadevil,
+	/obj/structure/bed/therapy,
+	/obj/item/weapon/grenade/station/discount,
+	/obj/item/device/crank_charger/generous,
+	/obj/item/weapon/storage/gachabox,
+	/obj/item/weapon/storage/bluespace_crystal,
+)
+/obj/structure/closet/crate/shoaljunk
+	name = "Shoal junk crate"
+	desc = "What? It fell off a spacetruck."
+
+/obj/structure/closet/crate/shoaljunk/New()
+	..()
+	for(var/i = 1 to 9)
+		if(!shoal_stuff.len)
+			return
+		var/path = pick_n_take(shoal_stuff)
+		new path(src)
 
 /obj/structure/closet/crate/chest/alcatraz
 	name = "Alcatraz IV security crate"
@@ -1329,6 +1373,7 @@ var/global/list/alcatraz_stuff = list(
 		/obj/item/stack/sheet/bone = 50,
 		/obj/item/stack/sheet/mineral/sandstone = 50,
 		/obj/item/stack/sheet/brass = 35,
+		/obj/item/stack/sheet/ralloy = 35,
 		/obj/item/stack/sheet/mineral/gingerbread = 25,
 		/obj/item/stack/sheet/animalhide/xeno = 10,
 		/obj/item/stack/sheet/animalhide/human = 20,

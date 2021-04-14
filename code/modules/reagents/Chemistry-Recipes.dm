@@ -182,7 +182,7 @@
 	result_amount = 3
 
 /datum/chemical_reaction/anti_toxin
-	name = "Anti-Toxin (Dylovene)"
+	name = "Dylovene"
 	id = ANTI_TOXIN
 	result = ANTI_TOXIN
 	required_reagents = list(SILICON = 1, POTASSIUM = 1, NITROGEN = 1)
@@ -3590,6 +3590,41 @@
 	for(var/i=1 to created_volume)
 		new /mob/living/simple_animal/mouse/common(location)
 
+/datum/chemical_reaction/aminomician
+	name = "Aminomician"
+	id = AMINOMICIAN
+	result = AMINOMICIAN
+	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcorgi
+	name = "Synthcorgi"
+	id = "synthcorgi"
+	result = null
+	required_reagents = list(NUTRIMENT = 3, AMINOMICIAN = 1)
+	result_amount = 1
+
+/datum/chemical_reaction/synthcorgi/on_reaction(var/datum/reagents/holder, var/created_volume)
+	set waitfor = FALSE //makes sleep() work like spawn()
+	if(ishuman(holder.my_atom))
+		//This is intended to be an appendicitis fake-out using the same messages. And I guess an alien embryo message at the end.
+		var/mob/living/carbon/human/H = holder.my_atom
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stinging pain in your abdomen!</span>")
+		H.emote("me",1,"winces slightly.")
+		sleep(rand(10 SECONDS, 20 SECONDS))
+		to_chat(H, "<span class='warning'>You feel a stabbing pain in your abdomen!</span>")
+		H.emote("me",1,"winces painfully.")
+		H.adjustToxLoss(1)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		to_chat(H, "<span class='danger'>You feel something tearing its way out of your stomach...</span>")
+		H.apply_damage(2*created_volume, BRUTE, LIMB_CHEST)
+		sleep(rand(5 SECONDS, 10 SECONDS))
+		H.vomit(instant = TRUE) //mouse spawning continues below
+	var/location = get_turf(holder.my_atom)
+	for(var/i=1 to created_volume)
+		new /mob/living/simple_animal/corgi/puppy(location)
+
 /datum/chemical_reaction/aminocyprinidol
 	name = "Aminocyprinidol"
 	id = AMINOCYPRINIDOL
@@ -3659,7 +3694,7 @@
 	name = "Ectoplasm"
 	id = ECTOPLASM
 	result = ECTOPLASM
-	required_reagents = list(AMINOMICIN = 1, BONEMARROW = 3, FROSTOIL = 1)
+	required_reagents = list(AMINOMICIAN = 1, FROSTOIL = 1)
 	result_amount = 1
 
 /datum/chemical_reaction/synthskeleton
