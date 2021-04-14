@@ -19,11 +19,12 @@
 			display: table-cell;
 			height: 100vh;
 		}
-		#soundplayer {
+		#sounddiv {
 			position: absolute;
 			bottom: 0%;
-	        left: -67px;
+			left: 0%;
 			z-index: 999;
+			padding-left: 5px;
 			width: 15%;
 		}
 		.crewtable{
@@ -64,8 +65,24 @@
 	</style>
 </head>
 <body>
+	<script type="text/javascript">
+		function ToggleAudio() {
+			var img1 = "https://files.catbox.moe/h09wz7.png",
+			img2 = "https://files.catbox.moe/36wa0s.png";
+			var imgElement = document.getElementById('test');
+
+			if (imgElement.src == img1) {
+				imgElement.src = img2;
+				document.getElementById("soundplayer").muted = true;
+			}
+			else {
+				imgElement.src = img1;
+				document.getElementById("soundplayer").muted = false;
+			}
+		}
+	</script>
 	<div id="sounddiv">
-		<!-- the soundplayer gets added here via javascript! !-->
+		<img src="https://files.catbox.moe/h09wz7.png" id="test" onclick="ToggleAudio();"/>
 	</div>
 	<table id="container"> <!-- Yes we use a table to center ourselves. StackOverflow says this is not acceptable practice past 2012 but we're operating with 2009 tech so... !-->
 		<tr>
@@ -115,15 +132,6 @@
 		splashyText = text.split("%<splashbreak>");
 		splashyText = splashyText.slice(0, -1); //get rid of the last %<splashbreak>
 	}
-	function setAudio(link, autoplay){
-		var sound = document.getElementById("sounddiv");
-		if(autoplay == 1){
-			sound.innerHTML = "<audio controls id='soundplayer' autoplay=''><source src='" + link + "' type='audio/mpeg'></audio>";
-		}
-		else{
-			sound.innerHTML = "<audio controls id='soundplayer' preload='auto'><source src='" + link + "' type='audio/mpeg'></audio>";
-		}
-	}
 
 	function setupCredits(scrollyString, splashyString, theme, newScrollSpeed, newSplashTime){
 		if(newSplashTime !== undefined) {splashTime = parseInt(newSplashTime)}
@@ -138,6 +146,17 @@
 	function startAudio(){
 		var sound = document.getElementById("soundplayer");
 		sound.play();
+	}
+
+	function setAudio(link, autoplay){
+		var sound = document.getElementById("sounddiv");
+		if(autoplay == 1){
+			sound.innerHTML = "<audio id='soundplayer' autoplay=''>"
+		}
+		else{
+			sound.innerHTML = "<audio id='soundplayer' preload='auto'>"
+		}
+		sound.innerHTML = sound.innerHTML + "<source src='" + link + "' type='audio/mpeg'></audio><img src='https://files.catbox.moe/h09wz7.png' id='test' onclick='ToggleAudio();'/>";
 	}
 
 	function setVolume(newVolume){
